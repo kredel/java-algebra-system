@@ -40,6 +40,10 @@ public class testbr
       System.out.println( "b = " + b );
       System.out.println( "a-b = " + BigRational.RNDIF(a,b) );
 
+      System.out.print( "decimal = " );
+      BigRational.RNDWR( a, 10 );
+      System.out.println();
+
 
       long t = System.currentTimeMillis();
       verbose = true;
