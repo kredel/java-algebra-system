@@ -5,6 +5,7 @@
 package edu.jas.poly;
 
 import java.util.TreeMap;
+import java.util.Map;
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
@@ -176,11 +177,11 @@ public class testbip
                              new ExpVector(rl) );
       System.out.println("B = " + B ); 
       System.out.println("B.NOV = " + B.NOV() ); 
-      System.out.println("B.NOV = " + Polynomial.DIPNOV(B) ); 
+      System.out.println("B.NOV = " + IntPolynomial.DIPNOV(B) ); 
       System.out.println("B.LBC = " + B.LBC() ); 
-      System.out.println("B.LBC = " + Polynomial.DIPLBC(B) ); 
+      System.out.println("B.LBC = " + IntPolynomial.DIPLBC(B) ); 
       System.out.println("B.LEV = " + B.LEV() ); 
-      System.out.println("B.LEV = " + Polynomial.DIPLEV(B) ); 
+      System.out.println("B.LEV = " + IntPolynomial.DIPLEV(B) ); 
 
       A = IntPolynomial.DIIRAS(rl, kl, ll, el, q );
       System.out.println("A = " + A ); 
@@ -238,9 +239,9 @@ public class testbip
       t = D.equals( C );
       System.out.println("D = C " + t ); 
 
-      TreeMap m1, m2;
-      m1 = C.getval();
-      m2 = D.getval();
+      Map m1, m2;
+      m1 = C.getMap();
+      m2 = D.getMap();
       System.out.println("m1 =    " + m1 ); 
       System.out.println("m2 =    " + m2 ); 
       t = m1.equals(m2);

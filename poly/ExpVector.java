@@ -13,10 +13,9 @@ import java.util.Vector;
  */
 
 
-public class ExpVector {
+public class ExpVector implements Cloneable {
 
     private final long[] val;
-    public final int length;
 
     public static final int LEX = 1;
     public static final int INVLEX = 2;
@@ -27,36 +26,31 @@ public class ExpVector {
     public static final int REVTDEG = 7;
     public static final int REVITDG = 8;
 
-    private String[] vars = null;
+    public static final int DEFAULT_EVORD = IGRLEX;
+
 
     private final static Random random = new Random();
 
 
     public ExpVector(int n) {
-	this( new long[n], null);
+	this( new long[n] );
     }
 
     public ExpVector(int n, int i, long e) {
-	this( new long[n], null);
+	this( new long[n] );
         val[i] = e;
     }
 
     public ExpVector() {
-	this( new long[0], null);
+	this( new long[0] );
     }
 
     public ExpVector(long[] v) {
-	this(v,null);
+	val = v;
     }
 
     public ExpVector(String[] v) {
-	this( new long[v.length], v);
-    }
-
-    public ExpVector(long[] v, String[] s) {
-	val = v;
-        length = v.length;
-        vars = s;
+	this( new long[v.length] );
     }
 
     public ExpVector(String s) throws NumberFormatException {
@@ -81,7 +75,7 @@ public class ExpVector {
 		a = Long.parseLong( teil );
 		exps.add( new Long( a ) ); 
 	    }
-	    length = exps.size();
+	    int length = exps.size();
 	    val = new long[ length ];
 	    for ( int j = 0; j < length; j++ ) {
 		val[j] = ((Long)exps.elementAt(j)).longValue();
@@ -89,12 +83,19 @@ public class ExpVector {
 	} else {
 	// not implemented
 	val = null;
-        length = -1;
+        // length = -1;
 	//Vector names = new Vector();
         //vars = s;
 	}
     }
 
+    public Object clone() {
+	long[] w = new long[ val.length ];
+        for (int i = 0; i < w.length; i++ ) {
+            w[i] = val[i];
+        }
+        return new ExpVector( w );
+    }
 
     public long[] getval() {
         return val;
@@ -104,12 +105,16 @@ public class ExpVector {
 	val[i] = e;
     } 
 
+    public int length() {
+        return val.length; 
+    } 
+
     public String toString() {
-        if ( vars != null ) return toString(vars);
+	// if ( vars != null ) return toString(vars);
         StringBuffer s = new StringBuffer("(");
-        for (int i = 0; i < length; i++ ) {
+        for (int i = 0; i < val.length; i++ ) {
             s.append(val[i]);
-	    if ( i < length-1 ) s.append(",");
+	    if ( i < val.length-1 ) s.append(",");
 	}
         s.append(")");
         return s.toString();
@@ -118,39 +123,47 @@ public class ExpVector {
     public String toString(String[] vars) {
         String s = "";
 	boolean pit;
-        for (int i = 0; i < (length-1); i++ ) {
+        for (int i = 0; i < (val.length-1); i++ ) {
 	    if ( val[i] != 0 ) { 
-               s += vars[length-1-i];
+               s += vars[val.length-1-i];
 	       if ( val[i] != 1 ) {
                   s += "^" + val[i];
 	       }
 	       pit = false;
-	       for ( int j = i+1; j < length; j++ ) {
+	       for ( int j = i+1; j < val.length; j++ ) {
 		   if ( val[j] != 0 ) pit = true;
 	       }
                if ( pit ) s += " * ";
 	    }
         }
-        if ( val[length-1] != 0 ) { 
-	    s += vars[length-1-(length-1)];
-	       if ( val[length-1] != 1 ) {
-                  s += "^" + val[length-1] + "";
+        if ( val[val.length-1] != 0 ) { 
+	    s += vars[val.length-1-(val.length-1)];
+	       if ( val[val.length-1] != 1 ) {
+                  s += "^" + val[val.length-1] + "";
 	       }
 	}
         return s; 
     }
 
+    public boolean equals( Object B ) { 
+       if ( ! ( B instanceof ExpVector) ) return false;
+       return (0 == EVILCP( this, (ExpVector)B ) );
+    }
+
+    public boolean isZERO() { 
+       return (0 == EVSIGN( this ) );
+    }
 
     public String[] getVars() {
-        return vars;
+        return null; // vars;
     } 
 
     public void setVars(String[] v) {
-	vars = v;
+	// vars = v;
     } 
 
     public void setStdVars() {
-	vars = stdVars();
+	//	vars = stdVars();
     } 
 
     /**
@@ -158,7 +171,7 @@ public class ExpVector {
      */
 
     public String[] stdVars() {
-	return STDVARS(length);
+	return STDVARS(val.length);
     }
 
     public static String[] STDVARS(int n) {
@@ -209,7 +222,7 @@ public class ExpVector {
      */
 
     public static ExpVector EVRAND( int r, int k, float q ) {
-	long[] w = new long[r];
+ 	long[] w = new long[r];
         long e;
         float f;
         for (int i = 0; i < w.length; i++ ) {
@@ -331,7 +344,6 @@ public class ExpVector {
 
     public static int EVCOMP( int evord, ExpVector U, ExpVector V ) {
 	int t = 0;
-
         switch ( evord ) {
             case LEX:    { t = ( -EVILCP( U, V ) );  break; }
             case INVLEX: { t =    EVILCP( U, V )  ;  break; }

@@ -69,6 +69,19 @@ public class RatGBase  {
         return ! ( s == 0 );
     }
 
+    public static boolean DIGBC4(RatPolynomial A, 
+                                 RatPolynomial B) {  
+        if ( A.evord != B.evord ) { logger.error("evord mismatch"); }
+        ExpVector ei = RatPolynomial.DIRPEV(A);
+        ExpVector ej = RatPolynomial.DIRPEV(B);
+        ExpVector g = ExpVector.EVSUM(ei,ej);
+        ExpVector e = ExpVector.EVLCM(ei,ej);
+	//        boolean t =  g == e ;
+        ExpVector h = ExpVector.EVDIF(g,e);
+        int s = ExpVector.EVSIGN(h);
+        return ! ( s == 0 );
+    }
+
 
     /**
      * Normalform.
@@ -117,15 +130,16 @@ public class RatGBase  {
 		 logger.debug("irred");
                  T = new RatPolynomial( a, e );
                  R = RatPolynomial.DIRPSM( R, T );
-                 S = RatPolynomial.DIRPDF( S, T ); // bad performance
-		 //		 System.out.println(" S = " + S);
+                 S = RatPolynomial.DIRPDF( S, T ); // performance?
+		 // System.out.println(" S = " + S);
 	      }
               else { 
 		 logger.debug("red");
 		 e = ExpVector.EVDIF( e, htl[i] );
                  a = BigRational.RNQ( a, lbc[i] );
-                 T = new RatPolynomial( a, e );
-                 Q = RatPolynomial.DIRPPR( p[i], T );
+                 //T = new RatPolynomial( a, e );
+                 //Q = RatPolynomial.DIRPPR( p[i], T );
+                 Q = (RatPolynomial) RatPolynomial.DIPRP( p[i], a, e );
                  S = RatPolynomial.DIRPDF( S, Q );
               }
 	}
@@ -184,13 +198,33 @@ public class RatGBase  {
 
 
     /**
+     * Groebner base test
+     */
+
+    public static boolean isDIRPGB(List Pp) {  
+        RatPolynomial pi, pj, s, h;
+	for ( int i = 0; i < Pp.size(); i++ ) {
+	    pi = (RatPolynomial) Pp.get(i);
+            for ( int j = i+1; j < Pp.size(); j++ ) {
+                pj = (RatPolynomial) Pp.get(j);
+		if ( ! DIGBC4( pi, pj ) ) continue;
+		s = DIRPSP( pi, pj );
+		if ( s.isZERO() ) continue;
+		h = DIRPNF( Pp, s );
+		if ( ! h.isZERO() ) return false;
+	    }
+	}
+	return true;
+    }
+
+    /**
      * Groebner base using pairlist class.
      */
 
     public static ArrayList DIRPGB(List Pp) {  
         RatPolynomial p;
         ArrayList P = new ArrayList();
-        Pairlist pairlist = new Pairlist( RatPolynomial.ordm );
+        Pairlist pairlist = null; 
         int l = Pp.size();
         ListIterator it = Pp.listIterator();
         while ( it.hasNext() ) { 
@@ -202,6 +236,8 @@ public class RatGBase  {
                   return P;
 	       }
                P.add( (Object) p );
+	       if ( pairlist == null ) 
+                  pairlist = new Pairlist( p.lorder );
                pairlist.put( p );
 	    }
             else l--;
@@ -241,18 +277,19 @@ public class RatGBase  {
 	}
 	//        P = DIRLIS(P);
 	P = DIGBMI(P);
-        System.out.println();
+        //System.out.println();
 	return P;
     }
 
     /**
      * Parallel Groebner base using pairlist class.
+     * master maintains pairlist
      */
 
     public static ArrayList DIRPGBparallel1(List Pp, int threads) {  
         RatPolynomial p;
         ArrayList P = new ArrayList();
-        Pairlist pairlist = new Pairlist( RatPolynomial.ordm );
+        Pairlist pairlist = null; 
         int l = Pp.size();
         ListIterator it = Pp.listIterator();
         while ( it.hasNext() ) { 
@@ -264,6 +301,8 @@ public class RatGBase  {
                   return P;
 	       }
                P.add( (Object) p );
+	       if ( pairlist == null ) 
+                  pairlist = new Pairlist( p.lorder );
                pairlist.put( p );
 	    }
             else l--;
@@ -314,7 +353,7 @@ public class RatGBase  {
 	P = DIGBMIparallel(P,T);
 	//	R.done.P();
 	T.terminate();
-        System.out.println();
+        //System.out.println();
 	return P;
     }
 
@@ -344,11 +383,11 @@ public class RatGBase  {
 	   int l = 0;
 	   int plen = 0;
 	   do {
-              logger.info("ht(S|H) = " + Polynomial.DIPLEV(H));
+              logger.info("ht(S|H) = " + TreePolynomial.DIPLEV(H));
 	      if ( P.size() > plen ) { // only new polynomials
 		 plen = P.size();
                  H = DIRPNF( P, H );
-                 logger.info("ht(H) = " + Polynomial.DIPLEV(H));
+                 logger.info("ht(H) = " + TreePolynomial.DIPLEV(H));
 	         H = RatPolynomial.DIRPMC( H );
 	      } else {
 		  //System.out.println();
@@ -376,7 +415,7 @@ public class RatGBase  {
 	   } while ( ! proceeding.done() && ! sema );
 
 	   if ( H != null && ! H.isZERO() ) {
-	       // System.out.println("add(H) = " + Polynomial.DIPLEV(H));
+	       // System.out.println("add(H) = " + TreePolynomial.DIPLEV(H));
               synchronized (P) {
                   P.add( H );
 	      }
@@ -393,12 +432,13 @@ public class RatGBase  {
 
     /**
      * Parallel Groebner base using pairlist class.
+     * slaves maintain pairlist
      */
 
     public static ArrayList DIRPGBparallel(List Pp, int threads) {  
         RatPolynomial p;
         ArrayList P = new ArrayList();
-        Pairlist pairlist = new Pairlist( RatPolynomial.ordm );
+        Pairlist pairlist = null; 
         int l = Pp.size();
         ListIterator it = Pp.listIterator();
         while ( it.hasNext() ) { 
@@ -410,6 +450,8 @@ public class RatGBase  {
                   return P;
 	       }
                P.add( (Object) p );
+	       if ( pairlist == null ) 
+                  pairlist = new Pairlist( p.lorder );
                pairlist.put( p );
 	    }
             else l--;
@@ -428,7 +470,7 @@ public class RatGBase  {
 	// System.out.println("\n main loop ended \n");
 	P = DIGBMIparallel(P,T);
 	T.terminate();
-        System.out.println();
+        //System.out.println();
 	return P;
     }
 
@@ -491,10 +533,10 @@ public class RatGBase  {
               //System.out.println("S   = " + S);
               if ( S.isZERO() ) continue;
 
-              logger.info("ht(S) = " + Polynomial.DIPLEV(S));
+              logger.info("ht(S) = " + TreePolynomial.DIPLEV(S));
               H = DIRPNF( P, S );
 	      red++;
-              logger.info("ht(H) = " + Polynomial.DIPLEV(H));
+              logger.info("ht(H) = " + TreePolynomial.DIPLEV(H));
               H = RatPolynomial.DIRPMC( H );
               // System.out.println("H   = " + H);
 	      if ( H.isONE() ) {
@@ -505,7 +547,7 @@ public class RatGBase  {
                   return;
 	      }
 	      if ( H != null && ! H.isZERO() ) {
-	         // System.out.println("add(H) = " + Polynomial.DIPLEV(H));
+	         // System.out.println("add(H) = " + TreePolynomial.DIPLEV(H));
                  synchronized (P) {
                      P.add( H );
 	         }
@@ -715,12 +757,12 @@ public class RatGBase  {
 
 	public void run() {
 	      if ( logger.isDebugEnabled() )
-                 logger.debug("ht(S) = " + Polynomial.DIPLEV(S));
+                 logger.debug("ht(S) = " + TreePolynomial.DIPLEV(S));
               H = DIRPNF( P, H );
               H = DIRPNF( Q, H );
 	      done.V();
 	      if ( logger.isDebugEnabled() )
-                 logger.debug("ht(H) = " + Polynomial.DIPLEV(H));
+                 logger.debug("ht(H) = " + TreePolynomial.DIPLEV(H));
 	      // H = RatPolynomial.DIRPMC( H );
 	}
 

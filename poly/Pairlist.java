@@ -31,9 +31,9 @@ public class Pairlist {
 
     private static Logger logger = Logger.getLogger(Pairlist.class);
 
-    public Pairlist(Comparator ordm) {
+    public Pairlist(Comparator lorder) {
          P = new ArrayList();
-         pairlist = new TreeMap(ordm);
+         pairlist = new TreeMap(lorder);
          red = new ArrayList();
     }
 
@@ -63,12 +63,6 @@ public class Pairlist {
                f = RatPolynomial.DIRPEV( (RatPolynomial)P.get(j) ); 
                g = ExpVector.EVLCM( e, f );
                pair = new Pair( P.get(j), p, j, l);
-	       /*
-               pair[0] = (Object) P.get(j);
-               pair[1] = (Object) p;
-               pair[2] = (Object) new Integer(j);
-               pair[3] = (Object) new Integer(l);
-	       */
 	       // redi = (BitSet)red.get(j);
 	       ///if ( j < l ) redi.set( l );
 	       // System.out.println("bitset."+j+" = " + redi );  
@@ -113,12 +107,10 @@ public class Pairlist {
 	   while ( !c & xl.size() > 0 ) {
                  pair = (Pair) xl.removeFirst();
                  // xl is also modified in pairlist 
-                 i = pair.i; //((Integer) pair[2]).intValue();
-                 j = pair.j; //((Integer) pair[3]).intValue();
+                 i = pair.i; 
+                 j = pair.j; 
                  //System.out.println("pair(" + j + "," +i+") ");
-                 c = RatGBase.DIGBC4( pair.pi, //(RatPolynomial) pair[0], 
-                                      pair.pj, //(RatPolynomial) pair[1], 
-                                      g ); 
+                 c = RatGBase.DIGBC4( pair.pi, pair.pj, g ); 
                  //System.out.println("c4  = " + c);  
 		 if ( c ) {
                     c = DIGBC3( i, j, g );

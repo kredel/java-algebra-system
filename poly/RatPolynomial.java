@@ -1,9 +1,6 @@
 /*
  * $Id$
  */
-/*
- * $Id$
- */
 
 package edu.jas.poly;
 
@@ -11,15 +8,29 @@ import java.util.TreeMap;
 import java.util.Comparator;
 import java.util.Set;
 import java.util.Map;
+import java.util.SortedMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.LinkedList;
+import java.util.LinkedHashMap;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.apache.log4j.Logger;
+
 import edu.jas.arith.BigRational;
 
-public class RatPolynomial extends Polynomial {
+public class RatPolynomial extends TreePolynomial {
+
+    private static Logger logger = Logger.getLogger(RatPolynomial.class);
+
+    public RatPolynomial() { 
+	super();
+    }
+
+    public RatPolynomial(int eo, Comparator ho, Comparator lo) { 
+	super(eo,ho,lo);
+    }
 
     public RatPolynomial(int r) { 
 	super(r);
@@ -33,7 +44,15 @@ public class RatPolynomial extends Polynomial {
 	super(t,eo);
     }
 
+    public RatPolynomial(Map t, int eo) { 
+	super(t,eo);
+    }
+
     public RatPolynomial(TreeMap t, int eo, String[] v) { 
+	super(t,eo,v);
+    }
+
+    public RatPolynomial(Map t, int eo, String[] v) { 
 	super(t,eo,v);
     }
 
@@ -45,12 +64,21 @@ public class RatPolynomial extends Polynomial {
 	super(t);
     }
 
+    public RatPolynomial(Map t) { 
+	super(t);
+    }
+
     public RatPolynomial( BigRational a, ExpVector e) { 
 	super(a,e);
     }
 
     public Object clone() { 
-       return new RatPolynomial( (TreeMap)val.clone(), evord, vars); 
+       Map c = null;
+       if ( val instanceof TreeMap ) 
+          c = (Map)((TreeMap)val).clone();
+       if ( val instanceof LinkedHashMap ) 
+          c = (Map)((LinkedHashMap)val).clone();
+       return new RatPolynomial( c, evord, vars); 
     }
 
     public Polynomial getZERO() { 
@@ -61,13 +89,14 @@ public class RatPolynomial extends Polynomial {
        return (Polynomial) ONE.clone(); 
     }
 
-    public static final RatPolynomial ZERO = new RatPolynomial(0);
+    public static final RatPolynomial ZERO = new RatPolynomial();
     public static final RatPolynomial ONE = new RatPolynomial(
 			                        BigRational.RNONE,
 						new ExpVector()
                                                 );
 
     public RatPolynomial(String s) { 
+	this();
 	// format  p/q (1,2) r/s (3,4) ...
 	RatPolynomial erg = null;
 	RatPolynomial mon = null;
@@ -104,9 +133,9 @@ public class RatPolynomial extends Polynomial {
 	       erg = DIRPSM( erg, mon );
 	    }
 	}
-        ord = erg.ord;
-        ordm = erg.ordm;
-	val = erg.getval();
+        horder = erg.horder;
+        lorder = erg.lorder;
+	val = erg.getMap();
     }
 
     public String toString(String[] v) { 
@@ -147,11 +176,19 @@ public class RatPolynomial extends Polynomial {
      */
 
     public static RatPolynomial DIRPSM(RatPolynomial Ap, RatPolynomial Bp) {  
-        if ( Ap.evord != Bp.evord ) { System.out.println("ERROR"); }
+        if ( Ap.evord != Bp.evord ) { 
+           logger.error("orderings not equal"); 
+        }
 
-        TreeMap C = (TreeMap) (Ap.getval()).clone();
+        Map cp = null;
+	Map vp = Ap.getMap();
+        if ( vp instanceof TreeMap ) 
+           cp = (Map)((TreeMap)vp).clone();
+        if ( vp instanceof LinkedHashMap ) 
+           cp = (Map)((LinkedHashMap)vp).clone();
+        Map C = cp; 
 
-        TreeMap B = Bp.getval();
+        Map B = Bp.getMap();
         Set Bk = B.entrySet();
         Iterator bi = Bk.iterator();
         while ( bi.hasNext() ) {
@@ -184,11 +221,19 @@ public class RatPolynomial extends Polynomial {
      */
 
     public static RatPolynomial DIRPDF(RatPolynomial Ap, RatPolynomial Bp) {  
-        if ( Ap.evord != Bp.evord ) { System.out.println("ERROR"); }
+        if ( Ap.evord != Bp.evord ) { 
+           logger.error("orderings not equal"); 
+        }
 
-        TreeMap C = (TreeMap) (Ap.getval()).clone();
+        Map cp = null;
+	Map vp = Ap.getMap();
+        if ( vp instanceof TreeMap ) 
+           cp = (Map)((TreeMap)vp).clone();
+        if ( vp instanceof LinkedHashMap ) 
+           cp = (Map)((LinkedHashMap)vp).clone();
+        Map C = cp; 
 
-        TreeMap B = Bp.getval();
+        Map B = Bp.getMap();
         Set Bk = B.entrySet();
         Iterator bi = Bk.iterator();
         while ( bi.hasNext() ) {
@@ -219,16 +264,18 @@ public class RatPolynomial extends Polynomial {
      */
 
     public static RatPolynomial DIRPPR(RatPolynomial Ap, RatPolynomial Bp) {  
-        if ( Ap.evord != Bp.evord ) { System.out.println("ERROR"); }
+        if ( Ap.evord != Bp.evord ) { 
+           logger.error("orderings not equal"); 
+        }
 
-        RatPolynomial Cp = new RatPolynomial( (TreeMap)null, Ap.evord);
-        TreeMap C = new TreeMap(Cp.ord);
+        RatPolynomial Cp = new RatPolynomial( Ap.evord, Ap.horder, Ap.lorder );
+        Map C = Cp.getMap();
 
-        TreeMap A = Ap.getval();
+        Map A = Ap.getMap();
         Set Ak = A.entrySet();
         Iterator ai = Ak.iterator();
 
-        TreeMap B = Bp.getval();
+        Map B = Bp.getMap();
         Set Bk = B.entrySet();
 
         while ( ai.hasNext() ) {
@@ -253,10 +300,20 @@ public class RatPolynomial extends Polynomial {
   
                 BigRational c = BigRational.RNPROD(a,b);
                 //System.out.println("c = " + c);
-                C.put( (Object) g, (Object) c );
+
+                BigRational d = (BigRational) C.get(g);
+                //System.out.println("d = " + d);
+		if ( d == null ) { 
+                     d = c; 
+		} else { 
+                     d = d.add(c); 
+                }
+                //System.out.println("d+c = " + d);
+
+                C.put( (Object) g, (Object) d );
             }
         }
-        return new RatPolynomial(C,Ap.evord);
+        return Cp; //new RatPolynomial(C,Ap.evord);
     }
 
 
@@ -266,10 +323,10 @@ public class RatPolynomial extends Polynomial {
 
     public static RatPolynomial DIRPRP(RatPolynomial Ap, BigRational b) {  
 
-        RatPolynomial Cp = new RatPolynomial( (TreeMap)null, Ap.evord);
-        TreeMap C = new TreeMap(Cp.ord);
+        RatPolynomial Cp = new RatPolynomial( Ap.evord, Ap.horder, Ap.lorder );
+        Map C = Cp.getMap();
 
-        TreeMap A = Ap.getval();
+        Map A = Ap.getMap();
         Set Ak = A.entrySet();
         Iterator ai = Ak.iterator();
 
@@ -285,7 +342,7 @@ public class RatPolynomial extends Polynomial {
             //System.out.println("c = " + c);
             C.put( (Object) e, (Object) c );
         }
-        return new RatPolynomial(C,Ap.evord);
+        return Cp; //new RatPolynomial(C,Ap.evord);
     }
 
 
@@ -295,10 +352,10 @@ public class RatPolynomial extends Polynomial {
 
     public static RatPolynomial DIRPNG(RatPolynomial Ap) {  
 
-        RatPolynomial Cp = new RatPolynomial( (TreeMap)null, Ap.evord);
-        TreeMap C = new TreeMap(Cp.ord);
+        RatPolynomial Cp = new RatPolynomial( Ap.evord, Ap.horder, Ap.lorder );
+        Map C = Cp.getMap();
 
-        TreeMap A = Ap.getval();
+        Map A = Ap.getMap();
         Set Ak = A.entrySet();
         Iterator ai = Ak.iterator();
 
@@ -314,7 +371,7 @@ public class RatPolynomial extends Polynomial {
             //System.out.println("c = " + c);
             C.put( (Object) e, (Object) c );
         }
-        return new RatPolynomial(C,Ap.evord);
+        return Cp; //new RatPolynomial(C,Ap.evord);
     }
 
 
@@ -324,12 +381,12 @@ public class RatPolynomial extends Polynomial {
 
     public static RatPolynomial DIRPMC(RatPolynomial Ap) {  
 
-        RatPolynomial Cp = new RatPolynomial( (TreeMap)null, Ap.evord);
-        TreeMap C = new TreeMap(Cp.ord);
+        RatPolynomial Cp = new RatPolynomial( Ap.evord, Ap.horder, Ap.lorder );
+        Map C = Cp.getMap();
 
         BigRational b = null; // replaced by 1/lbcf
 
-        TreeMap A = Ap.getval();
+        Map A = Ap.getMap();
         Set Ak = A.entrySet();
         Iterator ai = Ak.iterator();
 
@@ -347,7 +404,7 @@ public class RatPolynomial extends Polynomial {
             //System.out.println("c = " + c);
             C.put( (Object) e, (Object) c );
         }
-        return new RatPolynomial(C,Ap.evord);
+        return Cp; //new RatPolynomial(C,Ap.evord);
     }
 
 
@@ -399,17 +456,19 @@ public class RatPolynomial extends Polynomial {
      */
 
     public static RatPolynomial DIRRAS(int r, int k, int l, int e, float q) {  
-
-        RatPolynomial x = new RatPolynomial(r,ExpVector.INVLEX);
-        Comparator ord = x.ord;
-        TreeMap C = new TreeMap(ord);
-
+        RatPolynomial x = new RatPolynomial(r);
+        Map C = x.getMap(); 
+	if ( ! (C instanceof SortedMap) ) C = new TreeMap( x.horder );
         for (int i = 0; i < l; i++ ) { 
             ExpVector U = ExpVector.EVRAND(r,e,q);
             BigRational a = BigRational.RNRAND(k);
             if ( ! a.isZERO() ) C.put( U, a );
         }
-        return new RatPolynomial(C,ExpVector.INVLEX);
+	if ( x.getMap() instanceof LinkedHashMap) {
+           C = new LinkedHashMap( C );
+	   x.setMap( C );
+	}
+        return x; 
     }
 
 }

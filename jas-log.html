@@ -30,6 +30,41 @@ pre  { background-color: silver; }
 </dd>
 -->
 
+<dt>2003, September</dt>
+<dd>
+  <p>experimented with LinkedHashMap instead of TreeMap (SortedMap) 
+  for the representation of polynomials. 
+  Algorithms which work also with LinkedHaspMap have 1 or 2 in their names.
+  LinkedHashMap has the property of using the insertion order for 
+  the iterator order.
+  With LinkedhAspMap the add() and subtract() can be reformulated to 
+  use a merging algorithm as in the original DIP implementation.
+  Assuming the Map insertion order is the the same as the polynomial
+  term order.
+  </p>
+  <p>
+  However the merging add/subtact implementation is a factor of 
+  2 slower than the TreeMap implementation. 
+  Complexity for a+b is 
+  length(a)+length(b) for merging pre sorted polynomials and 
+  length(a)+length(b)*log2(length(a+b)) for TreeMap clone and insertion.
+  </p>
+  <p>
+  The merging multiplication implementation is by a factor of 
+  10 slower than the TreeMap implementation. 
+  Polynomial size was ~100 terms and the product contained ~8000 terms.
+  Complexity for a*b is 
+  lab = length(a)*length(b) coefficient multiplications for both implementations
+  plus length(a*b)*length(b) for merging summands respectively 
+  lab*log2(length(a*b)) for TreeMap insertion.
+  Since for sparse polynomials length(a*b) = lab, the TreeMap complexity 
+  is asymptotically better in this case.
+  If for dense polynomials length(a*b) ~ length(a)[+length(b)], then 
+  the LinkedHashMap complexity is asymptotically better.
+  </p>
+
+</dd>
+
 <dt>2003, 3, 15</dt>
 <dd>
   <p>some testing with new 
@@ -515,7 +550,7 @@ CPU TIME (ms) END
 <p>
 <!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
 <!-- hhmts start -->
-Last modified: Sat Mar 15 17:16:25 CET 2003
+Last modified: Tue Sep 16 13:36:52 CEST 2003
 <!-- hhmts end -->
 </p>
 <p align="right" >

@@ -59,7 +59,7 @@ public class PolynomialTokenizer  {
 
     public RatPolynomial nextRatPolynomial() throws IOException {
 	RatPolynomial a = new RatPolynomial(vars.length,evord);
-	ExpVector leer = new ExpVector(vars);
+	ExpVector leer = new ExpVector(vars.length);
 	RatPolynomial a1 = new RatPolynomial( BigRational.RNONE, leer );
 	RatPolynomial b = a1;
 	RatPolynomial c;

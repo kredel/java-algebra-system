@@ -5,8 +5,9 @@
   <property name="src"      value="." />
   <property name="build"    value="." />
   <property name="doc"      value="doc" />
+  <property name="test"     value="test" />
 
-  <property name="libs"     value="/home/kredel/java/lib" />
+  <property name="libs"     value="/home/heinz/java/lib" />
   <property name="log4j"    value="${libs}/log4j.jar" />
   <property name="junit"    value="${libs}/junit.jar" />
   <property name="jomp"     value="${libs}/jomp1.0b.jar" />
@@ -18,6 +19,7 @@
   <!-- set properties DSTAMP, TSTAMP -->
   <tstamp />
   <mkdir dir="edu/jas"  />
+  <mkdir dir="${test}"  />
 </target>
 
 <target name="usage" >
@@ -51,11 +53,46 @@
   </jdepend>
 </target>
 
-<target name="junit" depends="compile" >
+<target name="Test" depends="vorher" >
+  <java  classname="edu.jas.SemaphoreTest" 
+         classpath="${cp}" 
+         fork="yes" />
+  <java  classname="edu.jas.arith.BigRationalTest" 
+         classpath="${cp}" 
+         fork="yes" />
+  <java  classname="edu.jas.arith.BigIntegerTest" 
+         classpath="${cp}" 
+         fork="yes" />
+  <java  classname="edu.jas.poly.ExpVectorTest" 
+         classpath="${cp}" 
+         fork="yes" />
+  <java  classname="edu.jas.poly.PolynomialTest" 
+         classpath="${cp}" 
+         fork="yes" />
+  <java  classname="edu.jas.poly.RatPolynomialTest" 
+         classpath="${cp}" 
+         fork="yes" />
+  <java  classname="edu.jas.poly.IntPolynomialTest" 
+         classpath="${cp}" 
+         fork="yes" />
+  <java  classname="edu.jas.poly.RatGBaseTest" 
+         classpath="${cp}" 
+         fork="yes" />
+</target>
+
+<target name="junit" depends="vorher" >
   <!-- does not work: optional for junit missing -->
   <junit printsummary="yes" fork="yes" haltonfailure="yes" >
      <formatter type="plain" />
-     <test name="edu.jas.SemaphoreTest" />
+
+     <!--test name="edu.jas.SemaphoreTest" /-->
+
+     <batchtest todir="${test}">
+        <fileset dir="${src}">
+          <include name="**/*Test.java"/>
+        </fileset>
+     </batchtest>
+
   </junit>
 </target>
 
