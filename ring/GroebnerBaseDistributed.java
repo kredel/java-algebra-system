@@ -62,8 +62,9 @@ public class GroebnerBaseDistributed  {
                             throws IOException {  
 
 	ChannelFactory cf = new ChannelFactory(port);
-	DistributedListServer dls = new DistributedListServer(cf);
+	DistributedListServer dls = new DistributedListServer(port+100);
 	dls.init();
+        logger.debug("list server running");
 
         OrderedPolynomial p;
         ArrayList P = new ArrayList();
@@ -75,9 +76,11 @@ public class GroebnerBaseDistributed  {
             if ( p.length() > 0 ) {
                p = p.monic();
                if ( p.isONE() ) {
-		  P.clear(); P.add( p );
-                  dls.terminate();
-                  return P;
+		  P.clear(); 
+                  //P.add( p );
+                  //cf.terminate();
+                  //dls.terminate();
+                  //return P;
 	       }
                P.add( (Object) p );
 	       if ( pairlist == null ) 
@@ -87,20 +90,27 @@ public class GroebnerBaseDistributed  {
             else l--;
 	}
         if ( l <= 1 ) {
-           dls.terminate();
-           return P;
+	   //cf.terminate();
+	   //dls.terminate();
+	   //return P;
 	}
 
+        logger.debug("looking for clients");
 	if ( threads < 1 ) threads = 1;
-	while ( dls.size() < threads ) {
-	    try {
+	while ( dls.size()< threads ) {
+	    try { 
+		System.out.print("*");
 		Thread.currentThread().sleep(100);
 	    } catch (InterruptedException e) {
-              dls.terminate();
+              e.printStackTrace();
+              cf.terminate();
+	      dls.terminate();
               return null;
 	    }
 	}
-	DistributedList theList = new DistributedList( "localhost" );
+        logger.info("all clients seen");
+
+	DistributedList theList = new DistributedList( "localhost", port+100 );
 	Iterator il = P.iterator();
 	while ( il.hasNext() ) {
 	    theList.add( il.next() );
@@ -113,12 +123,25 @@ public class GroebnerBaseDistributed  {
 	      R = new ReducerServer( fin, cf, theList, P, pairlist );
 	      T.addJob( R );
 	}
+	logger.debug("main loop waiting");
 	fin.done();
 	// System.out.println("\n main loop ended \n");
+        logger.info("#distributed list = "+theList.size());
+	// make sure all polynomials arrived
+	P = (ArrayList)theList.getList();
+	int ps = P.size();
+	P = pairlist.getList();
+        logger.info("#pairlist list = "+P.size());
+	if ( ps != P.size() ) {
+           logger.error("#distributed list = "+theList.size() 
+                      + " #pairlist list = "+P.size() );
+	}
 	P = DIGBMI(P,T);
+	cf.terminate();
 	T.terminate();
-        //System.out.println();
+	theList.terminate();
 	dls.terminate();
+        //System.out.println();
 	return P;
     }
 
@@ -134,7 +157,7 @@ public class GroebnerBaseDistributed  {
 	private DistributedList theList;
 	private List P;
 	private OrderedPairlist pairlist;
-        private static Logger logger = Logger.getLogger(ReducerClient.class);
+        private static Logger logger = Logger.getLogger(ReducerServer.class);
 
 	ReducerServer(Terminator fin, ChannelFactory cf, DistributedList dl, List P, OrderedPairlist L) {
 	    pool = fin;
@@ -145,14 +168,17 @@ public class GroebnerBaseDistributed  {
 	} 
 
 	public void run() {
+           logger.debug("reducer server running");
 	   try {
 	        pairChannel = cf.getChannel();
 	   } catch (InterruptedException e) {
                 logger.info("get pair channel interrupted");
+                e.printStackTrace();
 		return;
 	   } 
+           logger.debug("pairChannel = "+pairChannel);
 
-           OrderedPairlist.Pair pair;
+           Pair pair;
            OrderedPolynomial pi;
            OrderedPolynomial pj;
            OrderedPolynomial S;
@@ -165,17 +191,23 @@ public class GroebnerBaseDistributed  {
 	   // while more requests
 
 	   while ( goon ) {
+	       // receive request
+	       logger.debug("receive request");
 	       Object dummy = null;
 	       try {
                    dummy = pairChannel.receive();
 	       } catch (IOException e) {
                    goon = false;
+		   e.printStackTrace();
 	       } catch (ClassNotFoundException e) {
                    goon = false;
+		   e.printStackTrace();
 	       }
-	       if ( dummy == null ) continue;
+	       logger.debug("received request, dummy = "+dummy+" goon = "+goon);
+	       // if ( dummy == null ) continue;
 
-	       // receive request
+	       // find pair
+	       logger.debug("find pair");
 	       while ( pairlist.hasNext() || pool.hasJobs() ) {
 		   while ( ! pairlist.hasNext() ) {
 		       // wait
@@ -193,46 +225,88 @@ public class GroebnerBaseDistributed  {
 		       }
 		       if ( ! pool.hasJobs() ) break;
 		   }
-		   if ( ! pairlist.hasNext() && ! pool.hasJobs() ) break;
+		   if ( ! pairlist.hasNext() && ! pool.hasJobs() ) {
+		      goon = false;
+                      break;
+		   }
 		   if ( set ) pool.notIdle();
 
-		   pair = (OrderedPairlist.Pair) pairlist.removeNext();
-		   if ( pair == null ) continue; 
+		   pair = (Pair) pairlist.removeNext();
+		   // if ( pair == null ) continue; 
 
 		   /*
 		    * send pair to client, receive H
 		    */
+                   logger.debug("send pair = " + pair );
 		   try {
 		       pairChannel.send( pair );
 		   } catch (IOException e) {
 		       goon = false;
+		       e.printStackTrace();
 		   }
+                   logger.info("#distributed list = "+theList.size());
+                   logger.debug("receive H polynomial");
 		   Object rh = null;
 		   try {
 		       rh = pairChannel.receive();
 		   } catch (IOException e) {
 		       goon = false;
+                       e.printStackTrace();
 		   } catch (ClassNotFoundException e) {
 		       goon = false;
+		       e.printStackTrace();
 		   }
-		   if ( rh == null ) continue;
-
-		   /*
-		    * update pair list
-		    */
-		   H = (OrderedPolynomial)rh;
-		   logger.info("H   = " + H);
-		   if ( H.isONE() ) {
-		       synchronized (P) {
-			   P.clear(); P.add( H );
+                   logger.debug("received H polynomial = " + rh);
+		   if ( rh != null ) {
+		       /*
+			* update pair list
+			*/
+		       red++;
+		       H = (OrderedPolynomial)rh;
+		       logger.info("H   = " + H);
+		       if ( ! H.isZERO() ) {
+			   if ( H.isONE() ) {
+			       // pool.allIdle();
+			       pairlist.clear();
+			       goon = false;
+			   } 
+                           pairlist.put( H );
 		       }
-		       pool.allIdle();
-		       return;
 		   }
-		   pairlist.put( H );
+
+		   if ( ! pairlist.hasNext() && ! pool.hasJobs() ) {
+		      goon = false;
+                      break;
+		   }
+	       // receive request
+	       logger.debug("receive request");
+	       dummy = null;
+	       try {
+                   dummy = pairChannel.receive();
+	       } catch (IOException e) {
+                   goon = false;
+		   e.printStackTrace();
+	       } catch (ClassNotFoundException e) {
+                   goon = false;
+		   e.printStackTrace();
+	       }
+	       logger.debug("received request, dummy = "+dummy+" goon = "+goon);
+
 	       }
 	   }
            logger.info( "terminated, done " + red + " reductions");
+
+		   /*
+		    * send end mark pair to client
+		    */
+                   logger.debug("send pair = " + new Integer(-1) );
+		   try {
+		       pairChannel.send( new Integer(-1) );
+		   } catch (IOException e) {
+		       goon = false;
+		       e.printStackTrace();
+		   }
+		   pairChannel.close();
 	}
 
     }
@@ -246,15 +320,17 @@ public class GroebnerBaseDistributed  {
     public static void DIRPGBClient(String host, int port) 
                             throws IOException {  
 
-	ChannelFactory cf = new ChannelFactory(port);
-
-	DistributedList theList = new DistributedList( host );
-
+	ChannelFactory cf = new ChannelFactory(port+10);
 	SocketChannel pairChannel = cf.getChannel(host,port);
+
+	DistributedList theList = new DistributedList(host, port+100 );
 
         ReducerClient R = new ReducerClient(pairChannel,theList);
 	R.run();
 
+	pairChannel.close();
+	theList.terminate();
+	cf.terminate();
 	return;
     }
 
@@ -265,7 +341,7 @@ public class GroebnerBaseDistributed  {
     static class ReducerClient implements Runnable {
 	private SocketChannel pairChannel;
 	private DistributedList theList;
-        private static Logger logger = Logger.getLogger(ReducerServer.class);
+        private static Logger logger = Logger.getLogger(ReducerClient.class);
 
 	ReducerClient(SocketChannel pc, DistributedList dl) {
  	     pairChannel = pc;
@@ -273,7 +349,9 @@ public class GroebnerBaseDistributed  {
 	} 
 
 	public void run() {
-           OrderedPairlist.Pair pair = null;
+           logger.debug("pairChannel = "+pairChannel);
+           logger.debug("reducer client running");
+           Pair pair = null;
            OrderedPolynomial pi;
            OrderedPolynomial pj;
            OrderedPolynomial S;
@@ -287,25 +365,38 @@ public class GroebnerBaseDistributed  {
 	       /*
 		* request pair and process, send result
 		*/
-	       // pair = (OrderedPairlist.Pair) pairlist.removeNext();
+	       // pair = (Pair) pairlist.removeNext();
 
-	       Object dummy = new Object();
+	       Object dummy = new Integer(5);
+	       logger.info("send request, dummy = "+dummy);
 	       try {
 		    pairChannel.send(dummy);
 	       } catch (IOException e) {
-		      goon = false;
+		   goon = false;
+ 		   e.printStackTrace();
                }
+	       logger.debug("receive pair, goon = "+goon);
 	       Object pp = null;
 	       try {
 		   pp = pairChannel.receive();
 	       } catch (IOException e) {
 		   goon = false;
+		   e.printStackTrace();
 	       } catch (ClassNotFoundException e) {
 		   goon = false;
+		   e.printStackTrace();
 	       }
+	       logger.info("received pair = " + pp + " goon = "+goon);
 	       H = null;
+	       if ( pp instanceof Integer) {
+		   Integer done = (Integer) pp;
+		   if ( done.intValue() == -1 ) {
+		       goon = false;
+		       continue;
+		   }
+	       }
 	       if ( pp != null ) {
-		   pair = (OrderedPairlist.Pair)pp;
+		   pair = (Pair)pp;
 
 		   pi = pair.pi; 
 		   pj = pair.pj; 
@@ -320,7 +411,7 @@ public class GroebnerBaseDistributed  {
 		       }
 		       H = Reduction.Normalform( theList.getList(), S );
 		       red++;
-		       if ( H.isZERO() ) {
+		       if ( ! H.isZERO() ) {
 			   if ( logger.isDebugEnabled() ) {
 			       logger.debug("ht(H) = " + H.leadingExpVector() );
 			   }
@@ -334,10 +425,13 @@ public class GroebnerBaseDistributed  {
 	       }
 
 	       // send H or null
+               logger.info("#distributed list = "+theList.size());
+	       logger.debug("send H polynomial = " + H);
 	       try {
 		    pairChannel.send(H);
 	       } catch (IOException e) {
-		      goon = false;
+		    goon = false;
+		    e.printStackTrace();
                }
 	   }
 	   pairChannel.close();
@@ -482,7 +576,7 @@ public class GroebnerBaseDistributed  {
 
 	public OrderedPolynomial getNF() {
 	    try { done.P();
-	    } catch (InterruptedException e) { }
+	    } catch (InterruptedException unused) { }
 	    return H;
 	}
 
