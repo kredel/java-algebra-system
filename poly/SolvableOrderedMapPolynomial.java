@@ -135,13 +135,13 @@ public abstract class SolvableOrderedMapPolynomial
         // this.val != empty
         int rl = numberOfVariables();
         ExpVector Z = new ExpVector( rl ); // = 0
-        OrderedPolynomial Cp = getZERO(table,order); 
+        SolvablePolynomial Cp = getZERO(table,order); 
 	Cp.setVars( vars ); 
-        OrderedPolynomial zero = getZERO(table,order);
+        SolvablePolynomial zero = getZERO(table,order);
 	zero.setVars( vars ); 
         Coefficient one = null;
-        OrderedPolynomial C1 = null;
-        OrderedPolynomial C2 = null;
+        SolvablePolynomial C1 = null;
+        SolvablePolynomial C2 = null;
         //Map C = Cp.getMap();
         Map A = val; //this.getMap();
         Iterator ai = A.entrySet().iterator();
@@ -152,7 +152,7 @@ public abstract class SolvableOrderedMapPolynomial
             Coefficient a = (Coefficient) y.getValue(); 
             //logger.debug("a = " + a);
 	    ExpVector e = (ExpVector) y.getKey(); 
-            //logger.debug("e = " + e);
+            logger.debug("e = " + e);
             int[] ep = e.dependencyOnVariables();
             int el1 = rl + 1;
             if ( ep.length > 0 ) {
@@ -168,19 +168,19 @@ public abstract class SolvableOrderedMapPolynomial
                 Coefficient b = (Coefficient) x.getValue(); 
                 //logger.debug("b = " + b);
 	        ExpVector f = (ExpVector) x.getKey(); 
-                //logger.debug("f = " + f);
+                logger.debug("f = " + f);
                 int[] fp = f.dependencyOnVariables();
                 int fl1 = 0; 
                 if ( fp.length > 0 ) {
                    fl1 = fp[fp.length-1];
                 }
                 int fl1s = rl+1-fl1; 
-                //logger.debug("el1s = " + el1s + " fl1s = " + fl1s);
-                OrderedPolynomial Cs = null;
+                logger.debug("el1s = " + el1s + " fl1s = " + fl1s);
+                SolvablePolynomial Cs = null;
                 if ( el1s <= fl1s ) { // symmetric
 	            ExpVector g = ExpVector.EVSUM(e,f); 
-                    //logger.debug("g = " + g);
-                    Cs = zero.add( one, g ); // symmetric!
+                    logger.debug("g = " + g);
+                    Cs = (SolvablePolynomial)zero.add( one, g ); // symmetric!
                 } else { // unsymmetric
                     // split e = e1 * e2, f = f1 * f2
                     ExpVector e1 = e.subst(el1,0);
@@ -191,11 +191,11 @@ public abstract class SolvableOrderedMapPolynomial
                     logger.debug("e1 = " + e1 + " e2 = " + e2);
                     logger.debug("f1 = " + f1 + " f2 = " + f2);
                     TableRelation rel = table.lookup(e2,f2,this); 
-                    //logger.debug("relation = " + rel);
-                    Cs = rel.p; 
+                    //logger.info("relation = " + rel);
+                    Cs = (SolvablePolynomial)rel.p; 
                     if ( rel.f != null ) {
-                       C2 = zero.add( one, rel.f );
-                       Cs = Cs.multiply( C2 );
+                       C2 = (SolvablePolynomial)zero.add( one, rel.f );
+                       Cs = (SolvablePolynomial)Cs.multiply( C2 );
                        if ( rel.e == null ) {
                           e4 = e2;
                        } else {
@@ -204,26 +204,26 @@ public abstract class SolvableOrderedMapPolynomial
                        table.update(e4,f2,Cs);
                     }
                     if ( rel.e != null ) {
-                       C1 = zero.add( one, rel.e );
-                       Cs = C1.multiply( Cs );
+                       C1 = (SolvablePolynomial)zero.add( one, rel.e );
+                       Cs = (SolvablePolynomial)C1.multiply( Cs );
                        table.update(e2,f2,Cs);
                     }
                     if ( !f1.isZERO() ) {
-                       C2 = zero.add( one, f1 );
-                       Cs = Cs.multiply( C2 ); 
+                       C2 = (SolvablePolynomial)zero.add( one, f1 );
+                       Cs = (SolvablePolynomial)Cs.multiply( C2 ); 
                        //table.update(?,f1,Cs)
                     }
                     if ( !e1.isZERO() ) {
-                       C1 = zero.add( one, e1 );
-                       Cs = C1.multiply( Cs ); 
+                       C1 = (SolvablePolynomial)zero.add( one, e1 );
+                       Cs = (SolvablePolynomial)C1.multiply( Cs ); 
                        //table.update(e1,?,Cs)
                     }
                 }
                 Coefficient c = a.multiply(b);
                 //logger.debug("c = " + c);
-                Cs = Cs.multiply( c ); // symmetric!
-                //logger.debug("Cs = " + Cs);
-                Cp = Cp.add( Cs );
+                Cs = (SolvablePolynomial)Cs.multiply( c ); // symmetric!
+                logger.debug("Cs = " + Cs);
+                Cp = (SolvablePolynomial)Cp.add( Cs );
             }
         }
         return Cp;
@@ -329,7 +329,8 @@ public abstract class SolvableOrderedMapPolynomial
             return Cp;
         }
         Cp = (SolvablePolynomial)Cp.add(b,e);
-        return (SolvablePolynomial)Cp.multiply(this);
+        Cp = (SolvablePolynomial)Cp.multiply(this);
+        return Cp;
     }
 
 

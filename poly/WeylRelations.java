@@ -21,7 +21,7 @@ public class WeylRelations {
 
     private static Logger logger = Logger.getLogger(WeylRelations.class);
 
-    public RelationTable generate(int r) {
+    public RelationTable nogenerate(int r) {
         RelationTable table = new RelationTable();
         if ( r <= 1 || (r % 2) != 0 ) {
            throw new IllegalArgumentException("WeylRelations, wrong r = "+r);
@@ -52,16 +52,24 @@ public class WeylRelations {
         }
         int m = r / 2;
         ExpVector z = new ExpVector(r);
-        OrderedPolynomial one = ref.getONE(table);
-        OrderedPolynomial zero = ref.getZERO(table);
+        SolvablePolynomial one = ref.getONE(table);
+        SolvablePolynomial zero = ref.getZERO(table);
         // Coefficient one = a.leadingBaseCoefficient();
         for ( int i = m; i < r; i++ ) {
             ExpVector f = new ExpVector(r,i,1); 
             int j = i - m;
             ExpVector e = new ExpVector(r,j,1);
             ExpVector ef = ExpVector.EVSUM(e,f);
-            OrderedPolynomial b = one.multiply(ef);
-            OrderedPolynomial rel = one.add(b);
+            SolvablePolynomial b = (SolvablePolynomial)one.multiply(ef);
+            SolvablePolynomial rel = (SolvablePolynomial)one.add(b);
+            if ( rel.isZERO() ) {
+               logger.info("ref  = " + ref);
+               logger.info("one  = " + one);
+               logger.info("zero = " + zero);
+               logger.info("b    = " + b);
+               logger.info("rel  = " + rel);
+               System.exit(1);
+            }
             table.update(e,f,rel);
         }
         if ( logger.isDebugEnabled() ) {
