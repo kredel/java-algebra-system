@@ -24,6 +24,24 @@ LOG4JPATH=$(LIBPATH)/log4j.jar
 JOMPPATH=$(LIBPATH)/jomp1.0b.jar
 TNJPATH=$(LIBPATH)/tnj.jar
 
+# --- syncing ----------
+DRY=--dry-run
+DELETE=
+RSYNC=rsync -e ssh -avuz $(DRY) $(DELETE) --exclude=*~ --exclude=*/.jxta/ --exclude=*.log* --exclude=*.txt*
+PART=jas
+
+all:
+
+home:
+	$(RSYNC) krum:java/$(PART)/     .
+
+heinz:
+	$(RSYNC) ./                heinz@heinz2:$(PART)
+
+krum:
+	$(RSYNC) ./                krum:java/$(PART)
+
+
 # no need to change below this line
 
 # command line arguments
@@ -40,10 +58,9 @@ DOCOPTS=-package
 
 MYCLASSPATH = .:$(DEFS):$(JUNITPATH):$(LOG4JPATH):$(JOMPPATH):$(TNJPATH)
 
-JAVAC=$(JDK)/javac -classpath $(MYCLASSPATH) -d . 
+JAVAC=$(JDK)/javac -classpath $(MYCLASSPATH) -d .
 #-Xlint:unchecked
-JAVA=$(JDK)/java -classpath $(MYCLASSPATH)  
-#-verbose:gc
+JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -Xms100M -Xmx600M -verbose:gc
 #JAVA=$(JDK)/java -classpath $(MYCLASSPATH)  -verbose:gc -Xrunhprof:cpu=times,format=a
 #JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -verbose:gc -verbose:class -verbose:jni
 DOC=$(JDK)/javadoc -classpath $(DOCCLASSES)
