@@ -5,6 +5,8 @@
 package edu.jas.poly;
 
 //import edu.jas.poly.RatPolynomial;
+import edu.jas.arith.BigRational;
+import edu.jas.arith.Coefficient;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -134,6 +136,27 @@ public class RatOrderedMapPolynomialTest extends TestCase {
      assertEquals("a+(b+c) = (a+b)+c",d,e);
      assertTrue("a+(b+c) = (a+b)+c", d.equals(e) );
 
+     ExpVector u = ExpVector.EVRAND(rl,el,q);
+     BigRational x = BigRational.RNRAND(kl);
+
+     b = new RatOrderedMapPolynomial(x, u);
+     c = a.add(b);
+     d = a.add(x,u);
+     assertEquals("a+p(x,u) = a+(x,u)",c,d);
+
+     c = a.subtract(b);
+     d = a.subtract(x,u);
+     assertEquals("a-p(x,u) = a-(x,u)",c,d);
+
+     a = new RatOrderedMapPolynomial();
+     b = new RatOrderedMapPolynomial(x, u);
+     c = b.add(a);
+     d = a.add(x,u);
+     assertEquals("a+p(x,u) = a+(x,u)",c,d);
+
+     c = a.subtract(b);
+     d = a.subtract(x,u);
+     assertEquals("a-p(x,u) = a-(x,u)",c,d);
  }
 
 
@@ -202,6 +225,23 @@ public class RatOrderedMapPolynomialTest extends TestCase {
      assertEquals("a(bc) = (ab)c",d,e);
      assertTrue("a(bc) = (ab)c", d.equals(e) );
 
+     Coefficient x = a.leadingBaseCoefficient().inverse();
+     c = a.monic();
+     d = a.multiply(x);
+     assertEquals("a.monic() = a(1/ldcf(a))",c,d);
+
+     ExpVector u = new ExpVector(rl);
+     Coefficient y = b.leadingBaseCoefficient().inverse();
+     c = b.monic();
+     d = b.multiply(y,u);
+     assertEquals("b.monic() = b(1/ldcf(b))",c,d);
+
+     e = new RatOrderedMapPolynomial(y,u);
+     d = b.multiply(e);
+     assertEquals("b.monic() = b(1/ldcf(b))",c,d);
+
+     d = e.multiply(b);
+     assertEquals("b.monic() = (1/ldcf(b) (0))*b",c,d);
  }
 
 /**
