@@ -67,7 +67,7 @@ public class RatGBaseTest extends TestCase {
    int kl = 10;
    int ll = 7;
    int el = 3;
-   float q = 0.4f;
+   float q = 0.2f; //0.4f;
 
    protected void setUp() {
        a = b = c = d = e = null;
