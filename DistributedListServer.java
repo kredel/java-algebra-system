@@ -83,6 +83,7 @@ public class DistributedListServer extends Thread {
           logger.debug("list server " + this + " go on");
           try {
                channel = cf.getChannel();
+	       logger.debug("dls channel = "+channel);
 	       if ( mythread.isInterrupted() ) {
 		   goon = false;
 	           //logger.info("list server " + this + " interrupted");
@@ -106,8 +107,8 @@ public class DistributedListServer extends Thread {
 
     public void terminate() {
 	goon = false;
-        //logger.debug("terminating ListServer");
-	cf.terminate();
+        logger.debug("terminating ListServer");
+        if ( cf != null ) cf.terminate();
 	if ( servers != null ) {
 	   Iterator it = servers.iterator();
 	   while ( it.hasNext() ) {
@@ -115,24 +116,28 @@ public class DistributedListServer extends Thread {
               x.channel.close();
               try { 
                   while ( x.isAlive() ) {
+                          System.out.print(".");
                           x.interrupt(); 
                           x.join(100);
                   }
-	          //logger.debug("server " + x + " terminated");
+	          logger.debug("server " + x + " terminated");
               } catch (InterruptedException e) { 
               }
 	   }
 	   servers = null;
 	}
+        logger.debug("Broadcasters terminated");
 	if ( mythread == null ) return;
         try { 
             while ( mythread.isAlive() ) {
+                    System.out.print("-");
                     mythread.interrupt(); 
                     mythread.join(100);
             }
             //logger.debug("server " + mythread + " terminated");
         } catch (InterruptedException e) { 
         }
+        logger.debug("ListServer terminated");
     }
 
 
@@ -161,24 +166,26 @@ class Broadcaster extends Thread /*implements Runnable*/ {
     } 
 
     void broadcast(Object o) {
-	Iterator it = list.iterator();
-	while ( it.hasNext() ) {
-	    Broadcaster x = (Broadcaster) it.next();
-	    try {
-                if ( x.channel != channel ) {
-                   x.channel.send(o);
-		   //System.out.println("bcast: "+o+" to "+x.channel);
-		} 
-	    } catch (IOException e) {
-              try { 
-                  x.channel.close();
-                  while ( x.isAlive() ) {
-                          x.interrupt(); 
-                          x.join(100);
-                  }
-              } catch (InterruptedException unused) { 
-              }
-              list.remove( x );
+	synchronized (list) {
+	    Iterator it = list.iterator();
+	    while ( it.hasNext() ) {
+		Broadcaster x = (Broadcaster) it.next();
+		try {
+		    if ( x.channel != channel ) {
+			x.channel.send(o);
+			//System.out.println("bcast: "+o+" to "+x.channel);
+		    } 
+		} catch (IOException e) {
+		    try { 
+			x.channel.close();
+			while ( x.isAlive() ) {
+			    x.interrupt(); 
+			    x.join(100);
+			}
+		    } catch (InterruptedException unused) { 
+		    }
+		    list.remove( x );
+		}
 	    }
 	}
     }
