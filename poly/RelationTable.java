@@ -177,7 +177,78 @@ public class RelationTable implements Serializable {
         return s;
     }
 
+
+    /**
+     * Extend variables. Used e.g. in module embedding.
+     * Extend all ExpVectors by i elements.
+     */
+
+    public RelationTable extend(int i, String[] v) {  
+        RelationTable tab = new RelationTable();
+        if ( size() == 0 ) {
+            return tab;
+        }
+        int j = 0;
+        long k = 0l;
+        Object key, val;
+        for (Iterator it = table.keySet().iterator(); it.hasNext(); ) { 
+            key = it.next();
+            val = table.get( key );
+            List l = (List)val;
+            for (Iterator jt = l.iterator(); jt.hasNext(); ) { 
+                ExpVectorPair ep = (ExpVectorPair)jt.next();
+                ExpVector e = ep.getFirst();
+                ExpVector f = ep.getSecond();
+                OrderedMapPolynomial p = (OrderedMapPolynomial)jt.next();
+                ExpVector ex = e.extend(i,j,k);
+                ExpVector fx = f.extend(i,j,k);
+                OrderedPolynomial px = p.extend(i,j,k,v);
+                tab.update( ex, fx, px );
+            }
+        }
+        return tab;
+    }
+
+
+    /**
+     * Contract variables. Used e.g. in module embedding.
+     * remove i elements of each ExpVector.
+     */
+
+    public RelationTable contract(int i) { 
+        RelationTable tab = new RelationTable();
+        if ( size() == 0 ) {
+            return tab;
+        }
+        Object key, val;
+        for (Iterator it = table.keySet().iterator(); it.hasNext(); ) { 
+            key = it.next();
+            val = table.get( key );
+            List l = (List)val;
+            for (Iterator jt = l.iterator(); jt.hasNext(); ) { 
+                ExpVectorPair ep = (ExpVectorPair)jt.next();
+                ExpVector e = ep.getFirst();
+                ExpVector f = ep.getSecond();
+                OrderedMapPolynomial p = (OrderedMapPolynomial)jt.next();
+                ExpVector ec = e.contract(i,e.length()-i);
+                ExpVector fc = f.contract(i,f.length()-i);
+                Map mc = p.contract(i);
+                OrderedPolynomial pc = null;
+                if ( mc.size() == 1 ) {
+                   pc = (OrderedPolynomial)(mc.values().toArray())[0];
+                } else {
+                   // should not happen
+                   throw new RuntimeException("Map.size() != 1 = " + mc.size());
+                }
+                tab.update( ec, fc, pc );
+            }
+        }
+        return tab;
+    }
+
 }
+
+
 
 
 /**
