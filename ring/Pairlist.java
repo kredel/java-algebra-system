@@ -133,7 +133,7 @@ public class Pairlist {
 
     /**
      * GB criterium 3.
-     * @returns true if the S-polynomial(i,j) is required.
+     * @return true if the S-polynomial(i,j) is required.
      */
 
     public boolean DIGBC3(int i, int j, ExpVector eij) {  

@@ -46,8 +46,8 @@ public class ThreadPool {
  * @param strategy for job processing
  */ 
 
-    public ThreadPool(StrategyEnumeration s) {
-        this(s,DEFAULT_SIZE);
+    public ThreadPool(StrategyEnumeration strategy) {
+        this(strategy,DEFAULT_SIZE);
     }
 
 

@@ -57,7 +57,7 @@ public class RatGBase  {
 
     /**
      * GB criterium 4.
-     * @returns true if the S-polynomial(i,j) is required.
+     * @return true if the S-polynomial(i,j) is required.
      */
 
     public static boolean DIGBC4(RatPolynomial A, 
