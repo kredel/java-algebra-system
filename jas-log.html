@@ -65,7 +65,7 @@ Some UML class diagramms as produced by ArgoUML:
 </dd>
 -->
 
-<dt>2005, 1, 9-12</dt>
+<dt>2005, 1, 9-13</dt>
 <dd> 
   Introduced all improvements in util classes found so far.
   (ChannelFactory and others)
@@ -89,53 +89,73 @@ Some UML class diagramms as produced by ArgoUML:
 <caption>Parallel computation timings, Katsura examples</caption>
 <tr>
 <th># Threads<br />CPUs</th>
-<th>Katsura 6 TO(G)</th>
-<th>Katsura 7 TO(G)</th>
+<th>Katsura 6 TO(G) <br />load*</th>
+<th>Katsura 6 TO(G) <br />empty*</th>
+<th>Katsura 7 TO(G) <br />load*</th>
+<th>Katsura 7 TO(G) <br />empty*</th>
 </tr>
 <tr align="right">
 <td>seq</td>
 <td>184.5</td>
+<td>153.3</td>
+<td></td>
 <td></td>
 </tr>
 <tr align="right">
 <td>1</td>
 <td>181.5</td>
+<td>159.7</td>
+<td></td>
 <td></td>
 </tr>
 <tr align="right">
 <td>2</td>
 <td>118.6</td>
+<td>75.6</td>
+<td></td>
 <td></td>
 </tr>
 <tr align="right">
 <td>4</td>
 <td>76.8</td>
+<td>40.4</td>
 <td>6256.9</td>
+<td></td>
 </tr>
 <tr align="right">
 <td>8</td>
 <td>43.2</td>
+<td>21.3</td>
 <td>3240.7</td>
+<td>3318.8</td>
 </tr>
 <tr align="right">
 <td>10</td>
-<td>42,5</td>
+<td>42.5</td>
+<td></td>
+<td></td>
 <td></td>
 </tr>
 <tr align="right">
 <td>12</td>
 <td>40.5</td>
+<td></td>
 <td>2288.1</td>
+<td></td>
 </tr>
 <tr align="right">
 <td>14</td>
 <td>31.2</td>
 <td></td>
+<td></td>
+<td></td>
 </tr>
 <tr align="right">
 <td>16</td>
 <td>51.9</td>
-<td>* 5376.4</td>
+<td>18.7</td>
+<td>5376.4</td>
+<td>2258.1</td>
 </tr>
 <!--
 <tr align="right">
@@ -151,6 +171,7 @@ Some UML class diagramms as produced by ArgoUML:
    JVM 1.4.2 started with AggressiveHeap and UseParallelGC. 
    <br />
   *) timing taken with other load on the CPUs.
+  +) timing taken with no other load on the CPUs.
 </p>
 </dd>
 
@@ -1009,7 +1030,7 @@ CPU TIME (ms) END
 <p>
 <!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
 <!-- hhmts start -->
-Last modified: Wed Jan 12 21:35:30 CET 2005
+Last modified: Thu Jan 13 17:17:36 CET 2005
 <!-- hhmts end -->
 </p>
 <p align="right" >
