@@ -487,6 +487,9 @@ public abstract class OrderedMapPolynomial /* extends MapPolynomial */
 
         OrderedPolynomial Cp = getZERO(order); 
         Cp.setVars(vars);
+        if ( b.isZERO() ) { 
+            return Cp;
+        }
         Map C = Cp.getMap();
         Map A = val; //this.getMap();
         Iterator ai = A.entrySet().iterator();
@@ -540,6 +543,9 @@ public abstract class OrderedMapPolynomial /* extends MapPolynomial */
     public OrderedPolynomial multiply(Coefficient b, ExpVector e) {  
         OrderedPolynomial Cp = getZERO(order); 
         Cp.setVars(vars);
+        if ( b.isZERO() ) { 
+            return Cp;
+        }
         Map C = Cp.getMap();
         Map A = val; //this.getMap();
         Iterator ai = A.entrySet().iterator();
