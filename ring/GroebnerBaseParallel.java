@@ -22,7 +22,7 @@ import edu.jas.poly.OrderedPolynomial;
 
 /**
  * Groebner Base Parallel class.
- * Implements a parallel implementation of Groebner bases.
+ * Implements a shared memory parallel version of Groebner bases.
  * @author Heinz Kredel
  */
 
