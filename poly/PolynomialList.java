@@ -4,6 +4,7 @@
 
 package edu.jas.poly;
 
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -17,15 +18,15 @@ public class PolynomialList {
 
     public final String[] vars;
     public final TermOrder tord;
-    public final ArrayList list;
+    public final List list;
 
-    public PolynomialList( String[] v, int eo, ArrayList l ) {
+    public PolynomialList( String[] v, int eo, List l ) {
 	vars = v;
 	tord = new TermOrder(eo);
 	list = l;
     }
 
-    public PolynomialList( String[] v, TermOrder to, ArrayList l ) {
+    public PolynomialList( String[] v, TermOrder to, List l ) {
 	vars = v;
 	tord = to;
 	list = l;
@@ -39,7 +40,11 @@ public class PolynomialList {
 	    if ( i < vars.length-1 ) erg.append(","); 
         }
         erg.append(")");
-        erg.append(" "+tord);
+        if ( tord.getWeight() == null ) {
+           erg.append(" "+tord);
+        } else {
+           erg.append(" "+tord.weightToString());
+        }
         erg.append("\n");
 
         // Polynomial a;

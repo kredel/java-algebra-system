@@ -5,7 +5,7 @@
 package edu.jas.ring;
 
 import java.util.ArrayList;
-//import java.util.List;
+import java.util.List;
 //import java.util.Iterator;
 import java.io.IOException;
 import java.io.FileNotFoundException;
@@ -142,8 +142,8 @@ public class RunGB {
 
 
   static void runMaster(PolynomialList S, int threads, String mfile, int port) {
-      ArrayList L = S.list; 
-      ArrayList G = null;
+      List L = S.list; 
+      List G = null;
       long t;
 
       t = System.currentTimeMillis();
@@ -169,8 +169,8 @@ public class RunGB {
 
 
   static void runParallel(PolynomialList S, int threads) {
-      ArrayList L = S.list; 
-      ArrayList G;
+      List L = S.list; 
+      List G;
       long t;
 
       t = System.currentTimeMillis();
@@ -186,8 +186,8 @@ public class RunGB {
 
 
   static void runSequential(PolynomialList S) {
-      ArrayList L = S.list; 
-      ArrayList G;
+      List L = S.list; 
+      List G;
       long t;
 
       t = System.currentTimeMillis();
