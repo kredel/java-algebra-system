@@ -10,6 +10,8 @@ import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.Map;
 
+import java.io.Serializable;
+
 import org.apache.log4j.Logger;
 
 import edu.jas.arith.Coefficient;
@@ -438,4 +440,95 @@ public class SolvableSyzygy  {
         return V;
     }
 
+
+
+    /**
+     * Resolution of a module.
+     * Only with direct GBs.
+     */
+    public static List resolution(ModuleList M) {  
+        List R = new ArrayList();
+        ModuleList MM = M;
+        ModuleList GM;
+        ModuleList Z;
+        while (true) {
+          GM = ModSolvableGroebnerBase.leftGB(MM);
+          Z = leftZeroRelations(GM);
+          R.add( new SolvResPart(MM,GM,Z) );
+          if ( Z == null || Z.list == null || Z.list.size() == 0 ) {
+              break;
+          }
+          MM = Z;
+        }
+        return R;
+    }
+
+
+    /**
+     * Resolution of a polynomial list.
+     * Only with direct GBs.
+     */
+    public static List resolution(PolynomialList F) {  
+        List Z;
+        ModuleList Zm;
+        List G;
+        PolynomialList Gl;
+
+        G = SolvableGroebnerBase.leftGB( F.list );
+        Z = leftZeroRelations( G );
+        Gl = new PolynomialList(F.coeff,F.vars,F.tord, G, F.table);
+        Zm = new ModuleList(F.coeff,F.vars,F.tord, Z, F.table);
+
+        List R = resolution(Zm);
+        R.add( 0, new SolvResPolPart( F, Gl, Zm ) );
+        return R;
+    }
+
 }
+
+
+class SolvResPart implements Serializable {
+
+    public final ModuleList module;
+    public final ModuleList GB;
+    public final ModuleList syzygy;
+
+    public SolvResPart(ModuleList m, ModuleList g, ModuleList z) {
+        module = m;
+        GB = g;
+        syzygy = z;
+    }
+
+    public String toString() {
+        StringBuffer s = new StringBuffer("SolvResPart(\n");
+        s.append("module = " + module);
+        s.append("\n GB = " + GB);
+        s.append("\n syzygy = " + syzygy);
+        s.append(")");
+        return s.toString();
+    }
+}
+
+class SolvResPolPart implements Serializable {
+
+    public final PolynomialList ideal;
+    public final PolynomialList GB;
+    public final ModuleList syzygy;
+
+    public SolvResPolPart(PolynomialList m, PolynomialList g, ModuleList z) {
+        ideal = m;
+        GB = g;
+        syzygy = z;
+    }
+
+    public String toString() {
+        StringBuffer s = new StringBuffer("SolvResPolPart(\n");
+        s.append("ideal = " + ideal);
+        s.append("\n GB = " + GB);
+        s.append("\n syzygy = " + syzygy);
+        s.append(")");
+        return s.toString();
+    }
+
+}
+

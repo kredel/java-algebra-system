@@ -10,6 +10,8 @@ import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.Map;
 
+import java.io.Serializable;
+
 import org.apache.log4j.Logger;
 
 import edu.jas.arith.Coefficient;
@@ -437,6 +439,95 @@ public class Syzygy  {
             V.add( pi );
         }
         return V;
+    }
+
+
+    /**
+     * Resolution of a module.
+     * Only with direct GBs.
+     */
+    public static List resolution(ModuleList M) {  
+        List R = new ArrayList();
+        ModuleList MM = M;
+        ModuleList GM;
+        ModuleList Z;
+        while (true) {
+          GM = ModGroebnerBase.GB(MM);
+          Z = zeroRelations(GM);
+          R.add( new ResPart(MM,GM,Z) );
+          if ( Z == null || Z.list == null || Z.list.size() == 0 ) {
+              break;
+          }
+          MM = Z;
+        }
+        return R;
+    }
+
+
+    /**
+     * Resolution of a polynomial list.
+     * Only with direct GBs.
+     */
+    public static List resolution(PolynomialList F) {  
+        List Z;
+        ModuleList Zm;
+        List G;
+        PolynomialList Gl;
+
+        G = GroebnerBase.DIRPGB( F.list );
+        Z = zeroRelations( G );
+        Gl = new PolynomialList(F.coeff,F.vars,F.tord, G, F.table);
+        Zm = new ModuleList(F.coeff,F.vars,F.tord, Z, F.table);
+
+        List R = resolution(Zm);
+        R.add( 0, new ResPolPart( F, Gl, Zm ) );
+        return R;
+    }
+
+}
+
+
+class ResPart implements Serializable {
+
+    public final ModuleList module;
+    public final ModuleList GB;
+    public final ModuleList syzygy;
+
+    public ResPart(ModuleList m, ModuleList g, ModuleList z) {
+        module = m;
+        GB = g;
+        syzygy = z;
+    }
+
+    public String toString() {
+        StringBuffer s = new StringBuffer("ResPart(\n");
+        s.append("module = " + module);
+        s.append("\n GB = " + GB);
+        s.append("\n syzygy = " + syzygy);
+        s.append(")");
+        return s.toString();
+    }
+}
+
+class ResPolPart implements Serializable {
+
+    public final PolynomialList ideal;
+    public final PolynomialList GB;
+    public final ModuleList syzygy;
+
+    public ResPolPart(PolynomialList m, PolynomialList g, ModuleList z) {
+        ideal = m;
+        GB = g;
+        syzygy = z;
+    }
+
+    public String toString() {
+        StringBuffer s = new StringBuffer("ResPolPart(\n");
+        s.append("ideal = " + ideal);
+        s.append("\n GB = " + GB);
+        s.append("\n syzygy = " + syzygy);
+        s.append(")");
+        return s.toString();
     }
 
 }
