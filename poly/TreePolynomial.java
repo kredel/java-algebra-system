@@ -393,7 +393,7 @@ public abstract class TreePolynomial implements Polynomial, Cloneable {
     }
 
     public static Polynomial DIPDIF(Polynomial a, Polynomial b) {  
-	if ( a == null ) return b;
+	if ( a == null ) return b.negate();
         return a.subtract(b);
     }
 
