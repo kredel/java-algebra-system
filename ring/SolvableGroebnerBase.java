@@ -261,7 +261,7 @@ public class SolvableGroebnerBase  {
      */
 
     public static ArrayList twosidedGB(List Fp) {  
-        if ( Fp == null || Fp.size() <= 1 ) {
+        if ( Fp == null || Fp.size() <= 0 ) { // 0 not 1
             return new ArrayList( Fp );
         }
         List X = generateUnivar( Fp );
@@ -273,7 +273,10 @@ public class SolvableGroebnerBase  {
             for ( int j = 0; j < X.size(); j++ ) {
                 x = (SolvablePolynomial) X.get(j);
                 p = (SolvablePolynomial) p.multiply( x );
-                F.add( p );
+                p = Reduction.leftNormalform( F, p );
+                if ( !p.isZERO() ) {
+                   F.add( p );
+                }
             }
         }
         ArrayList G = new ArrayList();
@@ -298,7 +301,7 @@ public class SolvableGroebnerBase  {
                l--;
             }
 	}
-        if ( l <= 1 ) {
+        if ( l <= 1 ) { // 1 ok
            return G; // since no threads are activated
         }
 
