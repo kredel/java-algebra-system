@@ -440,6 +440,9 @@ public abstract class OrderedMapPolynomial /* extends MapPolynomial */
         }
         OrderedPolynomial Cp = getZERO(order); 
 	Cp.setVars( vars ); //Cp.setord( evord );
+        if ( this.isZERO() || Bp.isZERO() ) {
+            return Cp;
+        }
         Map C = Cp.getMap();
         Map A = val; //this.getMap();
         Iterator ai = A.entrySet().iterator();
@@ -470,7 +473,11 @@ public abstract class OrderedMapPolynomial /* extends MapPolynomial */
                      d = d.add(c); 
                 }
                 //System.out.println("d+c = " + d);
-                C.put( g, d );
+                if ( d.isZERO() ) {
+                   C.remove( g );
+                } else {
+                   C.put( g, d );
+                }
             }
         }
         return Cp;
@@ -664,12 +671,12 @@ public abstract class OrderedMapPolynomial /* extends MapPolynomial */
         if ( val.size() == 0 ) return true;
         if ( val.size() != 1 ) return t;
         Map.Entry y = (Map.Entry) val.entrySet().iterator().next();
-        ExpVector e = (ExpVector) y.getKey(); 
-        //System.out.println("e = " + e);
-        if ( ExpVector.EVTDEG(e) != 0 ) return t;
         Coefficient a = (Coefficient) y.getValue(); 
         //System.out.println("a = " + a);
         if ( ! a.isZERO() ) return t;
+        ExpVector e = (ExpVector) y.getKey(); 
+        //System.out.println("e = " + e);
+        if ( ExpVector.EVTDEG(e) != 0 ) return t;
         return true;
     }
 
