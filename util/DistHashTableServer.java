@@ -145,21 +145,23 @@ public class DistHashTableServer extends Thread {
         logger.debug("terminating ListServer");
         if ( cf != null ) cf.terminate();
 	if ( servers != null ) {
-	   Iterator it = servers.iterator();
-	   while ( it.hasNext() ) {
-	      DHTBroadcaster br = (DHTBroadcaster) it.next();
-              br.closeChannel();
-              try { 
-                  while ( br.isAlive() ) {
-		          //System.out.print(".");
-                          br.interrupt(); 
-                          br.join(100);
-                  }
-	          logger.debug("server " + br + " terminated");
-              } catch (InterruptedException e) { 
-              }
-	   }
-	   servers = null;
+           synchronized (servers) {
+	      Iterator it = servers.iterator();
+	      while ( it.hasNext() ) {
+	         DHTBroadcaster br = (DHTBroadcaster) it.next();
+                 br.closeChannel();
+                 try { 
+                     while ( br.isAlive() ) {
+		           //System.out.print(".");
+                           br.interrupt(); 
+                           br.join(100);
+                     }
+	             logger.debug("server " + br + " terminated");
+                 } catch (InterruptedException e) { 
+                 }
+	      }
+           }
+	   //? servers = null;
 	}
         logger.debug("DHTBroadcasters terminated");
 	if ( mythread == null ) {
@@ -182,7 +184,9 @@ public class DistHashTableServer extends Thread {
  * number of servers
  */ 
     public int size() {
-	return servers.size();
+        synchronized (servers) {
+	   return servers.size();
+        }
     }
 
 }
@@ -250,11 +254,11 @@ class DHTBroadcaster extends Thread /*implements Runnable*/ {
 
 
     public DHTBroadcaster(SocketChannel s, 
-                          List p, 
+                          List bc, 
                           DHTCounter le, 
                           SortedMap sm) {
 	channel = s;
-	bcaster = p;
+	bcaster = bc;
 	listElem = le;
         theList = sm;
     } 
@@ -306,7 +310,7 @@ class DHTBroadcaster extends Thread /*implements Runnable*/ {
 			}
 		    } catch (InterruptedException unused) { 
 		    }
-		    bcaster.remove( br );
+		    it.remove( /*br*/ ); //ConcurrentModificationException
                     logger.debug("bcaster.remove() " + br);
 		}
 	    }
