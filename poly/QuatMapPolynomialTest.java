@@ -46,6 +46,7 @@ public class QuatMapPolynomialTest extends TestCase {
    UnorderedPolynomial c;
    UnorderedPolynomial d;
    UnorderedPolynomial e;
+   UnorderedPolynomial f;
 
    int rl = 7; 
    int kl = 10;
@@ -145,7 +146,6 @@ public class QuatMapPolynomialTest extends TestCase {
 
      a = QuatMapPolynomial.DIQRAS(rl, kl, ll, el, q );
      assertTrue("not isZERO( a )", !a.isZERO() );
-     //a = QuatMapPolynomial.DIQRAS(1, kl, 4, el, q );
 
      b = QuatMapPolynomial.DIQRAS(rl, kl, ll, el, q );
      assertTrue("not isZERO( b )", !b.isZERO() );
@@ -156,17 +156,19 @@ public class QuatMapPolynomialTest extends TestCase {
      assertTrue("not isZERO( d )", !d.isZERO() );
 
      e = QuatMapPolynomial.DIPDIF(d,c);
-     assertTrue("isZERO( a*b-b*a ) " + e, e.isZERO() );
+     assertTrue("!isZERO( a*b-b*a ) " + e, !e.isZERO() );
 
-     assertEquals("a*b = b*a",c,d);
-     assertTrue("a*b = b*a", c.equals(d) );
+     assertTrue("a*b != b*a", !c.equals(d) );
 
      c = QuatMapPolynomial.DIQRAS(rl, kl, ll, el, q );
+     assertTrue("not isZERO( c )", !c.isZERO() );
+
      d = QuatMapPolynomial.DIPPR(a,QuatMapPolynomial.DIPPR(b,c));
      e = QuatMapPolynomial.DIPPR(QuatMapPolynomial.DIPPR(a,b),c);
 
+     f = QuatMapPolynomial.DIPDIF(d,e);
      assertEquals("a(bc) = (ab)c",d,e);
-     assertTrue("a(bc) = (ab)c", d.equals(e) );
+     assertTrue("a(bc) = (ab)c "+f, f.isZERO() );
 
  }
 

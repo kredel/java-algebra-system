@@ -156,10 +156,10 @@ public class QuatOrderedMapPolynomialTest extends TestCase {
      assertTrue("not isZERO( d )", !d.isZERO() );
 
      e = QuatOrderedMapPolynomial.DIPDIF(d,c);
-     assertTrue("isZERO( a*b-b*a ) " + e, e.isZERO() );
+     assertTrue("!isZERO( a*b-b*a ) " + e, !e.isZERO() );
 
-     assertEquals("a*b = b*a",c,d);
-     assertTrue("a*b = b*a", c.equals(d) );
+     //assertEquals("a*b != b*a",c,d);
+     assertTrue("a*b != b*a", !c.equals(d) );
 
      c = QuatOrderedMapPolynomial.DIQRAS(rl, kl, ll, el, q );
      d = QuatOrderedMapPolynomial.DIPPR(a,QuatOrderedMapPolynomial.DIPPR(b,c));
@@ -190,10 +190,10 @@ public class QuatOrderedMapPolynomialTest extends TestCase {
      assertTrue("not isZERO( d )", !d.isZERO() );
 
      e = d.subtract(c);
-     assertTrue("isZERO( a*b-b*a ) " + e, e.isZERO() );
+     assertTrue("!isZERO( a*b-b*a ) " + e, !e.isZERO() );
 
-     assertEquals("a*b = b*a",c,d);
-     assertTrue("a*b = b*a", c.equals(d) );
+     //assertEquals("a*b = b*a",c,d);
+     assertTrue("a*b != b*a", !c.equals(d) );
 
      c = QuatOrderedMapPolynomial.DIQRAS(rl, kl, ll, el, q );
      d = a.multiply( b.multiply(c) );
@@ -225,10 +225,10 @@ public class QuatOrderedMapPolynomialTest extends TestCase {
      assertTrue("not isZERO( d )", !d.isZERO() );
 
      e = d.subtract(c);
-     assertTrue("isZERO( a*b-b*a ) " + e, e.isZERO() );
+     assertTrue("!isZERO( a*b-b*a ) " + e, !e.isZERO() );
 
-     assertEquals("a*b = b*a",c,d);
-     assertTrue("a*b = b*a", c.equals(d) );
+     //assertEquals("a*b != b*a",c,d);
+     assertTrue("a*b != b*a", !c.equals(d) );
 
      c = QuatOrderedMapPolynomial.DIQRAS(rl, kl, ll, el, q );
      d = a.multiplyA( b.multiplyA(c) );
