@@ -53,6 +53,13 @@ public class RatSolvableOrderedMapPolynomial
     }
 
     public RatSolvableOrderedMapPolynomial(RelationTable table, 
+                                           TermOrder to,
+                                           Coefficient a, 
+                                           ExpVector e) { 
+        super(table, to, a, e );
+    }
+
+    public RatSolvableOrderedMapPolynomial(RelationTable table, 
                                            TermOrder to) { 
 	super(table,to);
     }
@@ -93,11 +100,11 @@ public class RatSolvableOrderedMapPolynomial
     }
 
     public OrderedPolynomial getZERO() { 
-       return new RatSolvableOrderedMapPolynomial(table);
+        return new RatSolvableOrderedMapPolynomial(table,order);
     }
 
     public OrderedPolynomial getZERO(TermOrder to) { 
-       return new RatSolvableOrderedMapPolynomial(table,to);
+       return new RatSolvableOrderedMapPolynomial(table,order);
     }
 
     public SolvablePolynomial getZERO(RelationTable table, 
@@ -106,11 +113,12 @@ public class RatSolvableOrderedMapPolynomial
     }
 
     public SolvablePolynomial getZERO(RelationTable table) { 
-       return new RatSolvableOrderedMapPolynomial(table);
+        return new RatSolvableOrderedMapPolynomial(table,order);
     }
 
     public OrderedPolynomial getONE() {
        return new RatSolvableOrderedMapPolynomial(table,
+                                                  order,
                                                   BigRational.ONE,
                                      new ExpVector(numberOfVariables())); 
     }
@@ -123,6 +131,7 @@ public class RatSolvableOrderedMapPolynomial
 
     public SolvablePolynomial getONE(RelationTable table) { 
        return new RatSolvableOrderedMapPolynomial(table,
+                                                  order,
                                                   getONE()); 
     }
 
