@@ -71,7 +71,7 @@ public class RatOrderedMapPolynomial extends OrderedMapPolynomial {
     }
 
     public OrderedPolynomial getZERO() { 
-       return new RatOrderedMapPolynomial();
+       return new RatOrderedMapPolynomial(order);
     }
 
     public OrderedPolynomial getZERO(TermOrder to) { 
@@ -79,8 +79,10 @@ public class RatOrderedMapPolynomial extends OrderedMapPolynomial {
     }
 
     public OrderedPolynomial getONE() {
-       return new RatOrderedMapPolynomial(BigRational.ONE,
-                                          new ExpVector(numberOfVariables())); 
+        return getZERO().add(BigRational.ONE,
+                             new ExpVector(numberOfVariables())); 
+        // return new RatOrderedMapPolynomial(BigRational.ONE,
+        //                new ExpVector(numberOfVariables())); 
     }
 
     public OrderedPolynomial getONE(TermOrder to) { 
