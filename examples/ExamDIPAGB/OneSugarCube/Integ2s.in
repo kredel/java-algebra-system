@@ -1,0 +1,64 @@
+(* ----------------------------------------------------------------------------
+ * $Id$
+ * ----------------------------------------------------------------------------
+ * This file is part of MAS.
+ * ----------------------------------------------------------------------------
+ * Copyright (c) 1989 - 1994 Universitaet Passau
+ * ----------------------------------------------------------------------------
+ * $Log$
+ * Revision 1.1  2000/06/17 20:40:56  kredel
+ * Initial revision
+ *
+ * Revision 1.1.1.1  2000/06/17 20:40:56  kredel
+ * Clean import of MAS 1.0 from Uni Passau
+ *
+ * Revision 1.1  1994/11/24 15:56:17  rose
+ * Initial revision.
+ * DIPAGB test example with domain INT, inverse lexicographical term order
+ * INVLEX and normal with sugar strategy with variable weight list (1,...,1).
+ *
+ * ! No result up to now (exponent vector out of range) !
+ *
+ * ----------------------------------------------------------------------------
+ *)
+
+
+(* Integ2s.in.
+   Example with normal with sugar strategy and inverse lexicographical term
+   ordering.
+   from: Giovini, A., Mora, T., Niesi, G., Robbiano, L. and Traverso, C.,
+         "One sugar cube, please" or Selection strategies in the Buchberger
+         algorithm, J. of the ACM 1991, pp. 49-54,
+         3.7 Another example from integer programming *)
+
+   OUT("Integ2s.out").
+
+   SWRITE("Example from 'One Sugar Cube, please': integer programming 2").
+
+   DomainDescriptor := ADDDREAD(). INT.
+   VariableList := LIST("e","d","c","b","a","t","z","y","x").
+   V := DIPVDEF(VariableList).
+   TermOrder := DIPTODEF(2).
+
+   F := DILRD(VariableList,DomainDescriptor).
+
+   ( ( -y**82 a + x**32 z**23 )
+     ( x**45 - y**13 z**21 b )
+     ( y**33 z**12 - x**41 c )
+     ( -y**33 z**12 d + x**22 )
+     ( x**5 y**17 z**22 e - 1 )
+     ( x y z t - 1 ) )
+ 
+   DILWR(F,VariableList).
+
+   (* Groebner basis computation with DIPAGB, normal with sugar strategy
+      and dummy variable weight list (1,...,1): *)
+
+   SetDIPAGBTraceFlag(2).
+   SetDIPAGBStrategy(1).
+   DILWR(DIPAGB(F),VariableList).
+
+   SHUT("Integ2s.out").
+   EXIT.
+
+(* -EOF- *)

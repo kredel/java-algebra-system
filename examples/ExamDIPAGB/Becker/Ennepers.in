@@ -1,0 +1,60 @@
+(* ----------------------------------------------------------------------------
+ * $Id$
+ * ----------------------------------------------------------------------------
+ * This file is part of MAS.
+ * ----------------------------------------------------------------------------
+ * Copyright (c) 1989 - 1994 Universitaet Passau
+ * ----------------------------------------------------------------------------
+ * $Log$
+ * Revision 1.1  2000/06/17 20:40:56  kredel
+ * Initial revision
+ *
+ * Revision 1.1.1.1  2000/06/17 20:40:56  kredel
+ * Clean import of MAS 1.0 from Uni Passau
+ *
+ * Revision 1.1  1994/12/22 12:44:23  rose
+ * Initial revision.
+ * DIPAGB test example with domain INT, a special term order given by
+ * linear forms and normal with sugar strategy with variable weight list
+ * (1,...,1).
+ *
+ * ----------------------------------------------------------------------------
+ *)
+
+	
+(* Enneper surface, term order given by linear forms with v>u > x>y>z.
+   D.Cox, J.Little, D.O'Shea: Ideals, Varieties, and Algorithms,
+   Springer, New York 1992, p.133 *)
+
+   OUT("Ennepers.out").
+
+   SWRITE("Enneper surface:").
+
+   L := PREAD().
+        ( z,y,x,u,v )
+	( T**3 +1, T**3 + T, T**3 + T**2, T**6 + T**4, T**6 + T**5 )
+	( ( z ) )
+
+   VariableList := LIST("z","y","x","u","v").
+   V := DIPVDEF(VariableList).
+   DomainDescriptor := ADDDREAD(). INT.
+
+   P := DILRD(VariableList,DomainDescriptor).
+
+         ( ( x - 3 u - 3 u v**2 + u**3 )
+           ( y - 3 v - 3 u**2 v + v**3 )
+           ( z - 3 u**2 + 3 v**2 ) )
+
+   DILWR(P,VariableList).
+
+   (* Groebner basis computation with DIPAGB, normal with sugar strategy
+      and variable weight list (1,...,1): *)
+
+      SetDIPAGBTraceFlag(3).
+      SetDIPAGBStrategy(1).
+      DILWR(DIPAGB(P),VariableList).
+
+   SHUT("Ennepers.out").
+   EXIT.
+
+(* -EOF- *)

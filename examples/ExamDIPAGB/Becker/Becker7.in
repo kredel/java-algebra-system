@@ -1,0 +1,79 @@
+(* ----------------------------------------------------------------------------
+ * $Id$
+ * ----------------------------------------------------------------------------
+ * This file is part of MAS.
+ * ----------------------------------------------------------------------------
+ * Copyright (c) 1989 - 1994 Universitaet Passau
+ * ----------------------------------------------------------------------------
+ * $Log$
+ * Revision 1.1  2000/06/17 20:40:56  kredel
+ * Initial revision
+ *
+ * Revision 1.1.1.1  2000/06/17 20:40:56  kredel
+ * Clean import of MAS 1.0 from Uni Passau
+ *
+ * Revision 1.1  1994/12/22 12:40:36  rose
+ * Initial revision.
+ * A comparison of the normal strategy and the normal with sugar strategy
+ *                 with variable weight list (0,...,0) and (1,...,1) in DIPAGB
+ *          and of the functions DIPAGB and DIPGB/DIIFGB.
+ *
+ * ----------------------------------------------------------------------------
+ *)
+
+
+(* Example 7 from Prof. Becker, Dortmund. *)
+
+
+   OUT("Becker7.out").
+
+   SWRITE("Example 7 from Prof. Becker, Dortmund:").
+
+   VariableList := LIST("x4","x2","x5","x3","x1").
+   V := DIPVDEF(VariableList).
+   DomainDescriptor := ADDDREAD(). INT.
+   TermOrder := DIPTODEF(8).
+
+   P := DILRD(VariableList,DomainDescriptor).
+
+         ( ( x1 x2 + 2 x3**2 - 3 )
+           ( x2 x3 + 2 x4**2 - 3 )
+           ( x3 x4 + 2 x5**2 - 3 )
+           ( x4 x5 + 2 x1**2 - 3 )
+           ( x5 x1 + 2 x2**2 - 3 ) )
+
+   DILWR(P,VariableList).
+
+   SetDIPAGBTraceFlag(2).
+
+   (* Groebner basis computation with DIPAGB and normal strategy: *)
+
+      SetDIPAGBStrategy(0).
+      WriteDIPAGBOptions.
+      DILWR(DIPAGB(P),VariableList).
+
+   (* Groebner basis computation with DIPAGB, normal with sugar strategy
+      and variable weight list (0,...,0): *)
+
+      SetDIPAGBStrategy(1).
+      SetDIPAGBVariableWeight(LIST(0,0,0,0,0)).
+      WriteDIPAGBOptions.
+      DILWR(DIPAGB(P),VariableList).
+
+   (* Groebner basis computation with DIPAGB, normal with sugar strategy
+      and variable weight list (1,...,1): *)
+
+      r:=RNINT(1).
+      SetDIPAGBVariableWeight(LIST(r,r,r,r,r)).
+      WriteDIPAGBOptions.
+      DILWR(DIPAGB(P),VariableList).
+
+   (* Groebner basis computation with DIIFGB: *)
+
+      SWRITE("Groebner Basis Computation with DIIFGB:").
+      DILWR(DIIFGB(P,1),VariableList).
+
+   SHUT("Becker7.out").
+   EXIT.
+
+(* -EOF- *)

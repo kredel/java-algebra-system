@@ -1,0 +1,55 @@
+(* ----------------------------------------------------------------------------
+ * $Id$
+ * ----------------------------------------------------------------------------
+ * This file is part of MAS.
+ * ----------------------------------------------------------------------------
+ * Copyright (c) 1996 Universitaet Passau
+ * ----------------------------------------------------------------------------
+ * $Log$
+ * Revision 1.1  2000/06/17 20:40:56  kredel
+ * Initial revision
+ *
+ * Revision 1.1.1.1  2000/06/17 20:40:56  kredel
+ * Clean import of MAS 1.0 from Uni Passau
+ *
+ * Revision 1.1  1996/06/08 18:16:00  pesch
+ * Renamed *.test to *.mas and added new tests.
+ *
+ * ----------------------------------------------------------------------------
+ *)
+
+V := LIST("x").  (* Variable list *)
+
+t := DIPTODEF(2).   (* Termorder: 2: invers lexicographic
+                                   4: total degree invers lexicographic *)
+
+(* Generating polynomials *)
+F := DIILRD(V).
+(
+( (x**2 + 1) * (x - 1) * (x - 2) )
+( ( x**4 + 3 x**2 + 1 ) * (x - 2) * (x - 3) )
+)
+
+(* Side conditions *)
+H := DIILRD(V).      
+(
+( x**3 + x - 1 )
+) 
+
+G:= DIIPGB(F,0).     (* Groebner basis *)
+
+BEGIN 
+BLINES(0); CLOUT("______________________________________________________________________________"); BLINES(1);
+CLOUT("Example"); BLINES(0);
+CLOUT("Generating polynomials:"); BLINES(0);
+DIILWR(F,V); BLINES(1);
+CLOUT("Side conditions:"); BLINES(0);
+DIILWR(H,V); BLINES(1);
+CLOUT("Groebner basis:"); BLINES(0);
+DIILWR(G,V); BLINES(1);
+IF RRZDIM(G) = 1 THEN ZNL := RRUICOUNT(FIRST(G),H,NIL,1) 
+                 ELSE CLOUT("Not zero-dimensional.") END;
+BLINES(0); CLOUT("______________________________________________________________________________"); BLINES(1);
+END.
+
+(* -EOF- *)

@@ -1,0 +1,56 @@
+(* ----------------------------------------------------------------------------
+ * $Id$
+ * ----------------------------------------------------------------------------
+ * This file is part of MAS.
+ * ----------------------------------------------------------------------------
+ * Copyright (c) 1989 - 1992 Universitaet Passau
+ * ----------------------------------------------------------------------------
+ * $Log$
+ * Revision 1.1  2000/06/17 20:40:56  kredel
+ * Initial revision
+ *
+ * Revision 1.1.1.1  2000/06/17 20:40:56  kredel
+ * Clean import of MAS 1.0 from Uni Passau
+ *
+ * Revision 1.1  1992/01/30 12:20:03  kredel
+ * Initial revision
+ *
+ * ----------------------------------------------------------------------------
+ *)
+
+(* Non-commuative Groebner bases. *)
+
+(* Commutator relations: *)
+t:=PREAD().
+(a,x,y) L
+(
+( y ), ( x ), ( x y + a ), 
+)
+PWRITE(t). 
+
+(* Non-commutative polynomials: *)
+p:=NPREAD(t).
+(
+( y**3 + x**2 y + x y ),
+( x**2 + x )
+)
+PWRITE(p).
+
+(* Left Normalform: *)
+tp:=t.
+c:=LIRRSET(tp,p). 
+PWRITE(c).
+
+
+(* Left G-base: *)
+tp:=t.
+c:=LGBASE(tp,p,1). 
+PWRITE(c).
+
+
+(* Two sided G-base: *)
+tp:=t.
+c:=TSGBASE(tp,p,1). 
+PWRITE(c).
+
+(* -EOF- *)

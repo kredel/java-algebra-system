@@ -1,0 +1,42 @@
+(* ----------------------------------------------------------------------------
+ * $Id$
+ * ----------------------------------------------------------------------------
+ * This file is part of MAS.
+ * ----------------------------------------------------------------------------
+ * Copyright (c) 1996 Universitaet Passau
+ * ----------------------------------------------------------------------------
+ * $Log$
+ * Revision 1.1  2000/06/17 20:40:56  kredel
+ * Initial revision
+ *
+ * Revision 1.1.1.1  2000/06/17 20:40:56  kredel
+ * Clean import of MAS 1.0 from Uni Passau
+ *
+ * Revision 1.1  1996/06/08 18:15:56  pesch
+ * Renamed *.test to *.mas and added new tests.
+ *
+ * ----------------------------------------------------------------------------
+ *)
+
+(* Ex. from: Involutive Bases of Zero-Dimensional Ideals, Ex.2, 
+             A.Yu. Zharkov, Yu.A.Blinkov,
+             Saratov University, Astrakhanskaya 83, 410071 Saratov, Russia.
+ 
+*)
+
+DIPTODEF(4). 
+dp:=ADDDREAD().
+INT 
+V:=LIST("z","y","x").    
+F:=DILRD(V,dp).
+(
+(x**3 + y**2 + z - 3),
+(y**3 + z**2 + x - 3),
+(z**3 + x**2 + y -3)
+) 
+CLOUT("Computing the involutive base... "). 
+SetDIPIBTraceLevel(3). 
+I:=DIPIB(F). 
+DILWR(I,V). 
+
+(* -EOF- *)

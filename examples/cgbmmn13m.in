@@ -1,0 +1,72 @@
+(* ----------------------------------------------------------------------------
+ * $Id$
+ * ----------------------------------------------------------------------------
+ * This file is part of MAS.
+ * ----------------------------------------------------------------------------
+ * Copyright (c) 1989 - 1992 Universitaet Passau
+ * ----------------------------------------------------------------------------
+ * $Log$
+ * Revision 1.1  2000/06/17 20:40:56  kredel
+ * Initial revision
+ *
+ * Revision 1.1.1.1  2000/06/17 20:40:56  kredel
+ * Clean import of MAS 1.0 from Uni Passau
+ *
+ * Revision 1.1  1992/01/30 12:19:43  kredel
+ * Initial revision
+ *
+ * ----------------------------------------------------------------------------
+ *)
+
+OUT("cgbmmnm.out"). 
+
+
+CGBIN(). 
+
+IP (alpha,beta,gamma,epsilon,theta,eta)
+(c1,c2,c3) /L/
+F N P
+
+0 
+() 
+1 
+( ( epsilon + theta ), ( epsilon ) )
+. 
+
+(
+( ( alpha ) c1 - ( beta ) c1 - ( gamma ) c1 c2 + ( epsilon ) c3 ), 
+( ( gamma ) c1 c2 - ( epsilon + theta ) c3 - ( eta ) c2 )
+).
+
+EXEC CGB ..
+
+(*    -----------------    *)
+
+CGBIN(). 
+
+IP (alpha,beta,gamma,epsilon,theta,eta)
+(c1,c2,c3) /L/
+F N P
+
+0 
+() 
+1 
+()
+. 
+
+(
+( ( alpha ) c1 - ( beta ) c1 - ( gamma ) c1 c2 + ( epsilon ) c3 ), 
+( ( gamma ) c1 c2 - ( epsilon + theta ) c3 - ( eta ) c2 )
+).
+
+EXEC CGB ..
+
+
+(*EXEC CGB CGBD CGBQ ..*)
+
+
+SHUT("cgbmmnm.out").
+
+EXIT.
+
+(* -EOF- *)

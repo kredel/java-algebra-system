@@ -1,0 +1,101 @@
+(* ----------------------------------------------------------------------------
+ * $Id$
+ * ----------------------------------------------------------------------------
+ * This file is part of MAS.
+ * ----------------------------------------------------------------------------
+ * Copyright (c) 1989 - 1992 Universitaet Passau
+ * ----------------------------------------------------------------------------
+ * $Log$
+ * Revision 1.1  2000/06/17 20:40:56  kredel
+ * Initial revision
+ *
+ * Revision 1.1.1.1  2000/06/17 20:40:56  kredel
+ * Clean import of MAS 1.0 from Uni Passau
+ *
+ * Revision 1.1  1992/01/30 12:20:17  kredel
+ * Initial revision
+ *
+ * ----------------------------------------------------------------------------
+ *)
+
+(*test syzygien programme, dec 1991 hk *) 
+
+(*example 1 by J. Philipp. ------------ *) 
+ 
+VL:=LIST("w","x","y","z").  xxx:=DIPVDEF(VL). 
+
+PM := MREAD(VL).
+
+(  
+ ( 3 x**3- w, -1/23 w z - x, 4 w y**2 - x**2 ) 
+) 
+
+PMWR(PM, VL).
+
+SY:=SYHC(PM, 1, 0).
+
+PMWR(SY, VL).
+ 
+SYTHC(SY, PM, VL).
+
+
+(*example 6.17 from Buchberger (ch 6). ------------ *) 
+
+VL:=LIST("x","y").  xxx:=DIPVDEF(VL). 
+
+PM := MREAD(VL).
+
+(  
+ ( x**2 y - x y, x y**2 - x**2, x**3 y - x**2 y + x**3 - x**2 ) 
+) 
+
+PMWR(PM, VL).
+
+SY:=SYHC(PM, 1, 0).
+
+PMWR(SY, VL).
+ 
+SYTHC(SY, PM, VL).
+
+ 
+(*example 1 from Apel Lassner (1988). -------------- *) 
+
+VL:=LIST("x1","x2","x3").  xxx:=DIPVDEF(VL). 
+
+T := DIRLRD(VL).
+
+(
+ ( x2 ), ( x1 ), ( x1 x2 - x3 ), 
+ ( x3 ), ( x2 ), ( x2 x3 - x1 ), 
+ ( x3 ), ( x1 ), ( x1 x3 + x2 ), 
+)
+
+PLWR(T, VL).
+
+PM := NMREAD(VL, T).
+
+( 
+ ( x1 x2, x1 ) 
+)
+
+PMWR(PM, VL).
+
+SY:=SYHNL(PM, 1, 0, T).
+
+PMWR(SY, VL).
+ 
+SYTHNL(SY, PM, VL, T).
+
+(* with ore condition algorithm. *)
+
+P:=FIRST(PM). p1:=FIRST(P). p2:=FIRST(RED(P)). 
+
+OREC(p1,p2, q1, q2, T). 
+
+Q:=LIST(LIST(q1,q2)).
+
+PMWR(Q,VL). 
+
+SYTHNL(Q, PM, VL, T).
+
+(* -EOF- *)

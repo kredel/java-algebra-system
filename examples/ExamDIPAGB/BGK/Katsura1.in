@@ -1,0 +1,123 @@
+(* ----------------------------------------------------------------------------
+ * $Id$
+ * ----------------------------------------------------------------------------
+ * This file is part of MAS.
+ * ----------------------------------------------------------------------------
+ * Copyright (c) 1989 - 1994 Universitaet Passau
+ * ----------------------------------------------------------------------------
+ * $Log$
+ * Revision 1.1  2000/06/17 20:40:56  kredel
+ * Initial revision
+ *
+ * Revision 1.1.1.1  2000/06/17 20:40:56  kredel
+ * Clean import of MAS 1.0 from Uni Passau
+ *
+ * Revision 1.1  1994/11/03 16:43:10  rose
+ * Initial revision.
+ * A comparison of the term orders INVLEX and REVITDG,
+ *              of the normal strategy and the normal with sugar strategy
+ *                 with variable weight list (0,0) and (1,1) in DIPAGB
+ *          and of the functions DIPAGB and DIPGB.
+ *
+ * ----------------------------------------------------------------------------
+ *)
+
+
+(* Katsura, Laurent Series Case 1, 18. Feb. 1985
+   from: Boege, W., Gebauer, R., Kredel, H.,
+         Some Examples for Solving Systems of Algebraic Equations
+         by Calculating Groebner Bases,
+         J. Symbolic Computation (1986) 1, 83-96. *)
+
+
+   OUT("Katsura1.out").
+
+   SWRITE("Example from BGK: Katsura, Laurent Series Case 1, 18. Feb. 1985").
+
+   DomainDescriptor := ADDDREAD(). RN.
+   VariableList := LIST("U0","U1").
+   V := DIPVDEF(VariableList).
+
+   SWRITE("Calculations with inverse lexicographical term order INVLEX:").
+
+      TermOrder := DIPTODEF(2).
+
+      F := DILRD(VariableList,DomainDescriptor).
+
+      ( ( U0**2 - U0 + 2 U1**2 )
+        ( U0 + 2 U1 - 1 ) )
+
+      DILWR(F,VariableList).
+
+      SetDIPAGBTraceFlag(2).
+
+      (* Groebner basis computation with DIPAGB and normal strategy: *)
+
+         SetDIPAGBStrategy(0).
+         WriteDIPAGBOptions.
+         DILWR(DIPAGB(F),VariableList).
+
+      (* Groebner basis computation with DIPAGB, normal with sugar strategy
+         and variable weight list (0,0): *)
+
+         SetDIPAGBStrategy(1).
+         SetDIPAGBVariableWeight(LIST(0,0)).
+         WriteDIPAGBOptions.
+         DILWR(DIPAGB(F),VariableList).
+
+      (* Groebner basis computation with DIPAGB, normal with sugar strategy
+         and variable weight list (1,1): *)
+
+         SetDIPAGBVariableWeight(LIST(RNINT(1),RNINT(1))).
+         WriteDIPAGBOptions.
+         DILWR(DIPAGB(F),VariableList).
+
+      (* Groebner basis computation with DIPGB: *)
+
+         SWRITE("Groebner Basis Computation with DIPGB:").
+         DILWR(DIPGB(F,1),VariableList).
+
+
+   SWRITE("Calculations with total degree term order REVITDG:").
+
+      TermOrder := DIPTODEF(8).
+
+      F := DILRD(VariableList,DomainDescriptor).
+
+      ( ( U0**2 - U0 + 2 U1**2 )
+        ( U0 + 2 U1 - 1 ) )
+
+      DILWR(F,VariableList).
+
+      SetDIPAGBTraceFlag(2).
+
+      (* Groebner basis computation with DIPAGB and normal strategy: *)
+
+         SetDIPAGBStrategy(0).
+         WriteDIPAGBOptions.
+         DILWR(DIPAGB(F),VariableList).
+
+      (* Groebner basis computation with DIPAGB, normal with sugar strategy
+         and variable weight list (0,0): *)
+
+         SetDIPAGBStrategy(1).
+         SetDIPAGBVariableWeight(LIST(0,0)).
+         WriteDIPAGBOptions.
+         DILWR(DIPAGB(F),VariableList).
+
+      (* Groebner basis computation with DIPAGB, normal with sugar strategy
+         and variable weight list (1,1): *)
+
+         SetDIPAGBVariableWeight(LIST(RNINT(1),RNINT(1))).
+         WriteDIPAGBOptions.
+         DILWR(DIPAGB(F),VariableList).
+
+      (* Groebner basis computation with DIPGB: *)
+
+         SWRITE("Groebner Basis Computation with DIPGB:").
+         DILWR(DIPGB(F,1),VariableList).
+
+   SHUT("Katsura1.out").
+   EXIT.
+
+(* -EOF- *)

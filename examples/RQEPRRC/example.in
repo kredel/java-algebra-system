@@ -1,0 +1,70 @@
+(* ----------------------------------------------------------------------------
+ * $Id$
+ * ----------------------------------------------------------------------------
+ * Copyright (c) 1994 Andreas Dolzmann
+ * ----------------------------------------------------------------------------
+ * This file is part of MAS.
+ * ----------------------------------------------------------------------------
+ * $Log$
+ * Revision 1.1  2000/06/17 20:40:56  kredel
+ * Initial revision
+ *
+ * Revision 1.1.1.1  2000/06/17 20:40:56  kredel
+ * Clean import of MAS 1.0 from Uni Passau
+ *
+ * Revision 1.1  1994/11/29 06:24:50  dolzmann
+ * Examples for the real quantifier elimination with paramteric real root count.
+ *
+ * ----------------------------------------------------------------------------
+ *)
+
+(* *** This is not a example but the common part of all examples. *** *)
+PRAGMA(TIME).
+(* Chose a term order *)
+ev:=4. 
+(* Term orders are: 
+   2: inverse lexicographical term order  
+   4: total degree term order
+   7: Buchbergers total degree term oder 
+*)
+(* The behavior of the the CGB module is controlled by some options. *) 
+CGBOPT(LIST(0,1,0,2,0,ev,ev)). 
+(* The individual entries have the following meaning:
+   1st entry: 0: no verbose output, > 0 verbose output
+   2nd entry: 0: do not factorize coefficients, 1: factorize coefficients
+   3rd entry: 0: to reductions only, 1: complete reductions
+   4th entry: evaluation of conditions
+	      0: simple evaluation, 1: evaluation using reduced sets,  
+	      2: evaluation using groebner bases
+   5th entry: 0: characteristic of the field is zero, 
+              1: arbitrary characteristic
+   6th entry: term order for polynomials
+   7th entry: term order for coefficients
+*)
+(* The domain of the polynomial ring must be the domain INT. *)
+d:=ADDDREAD(). INT 
+(* We must fix the used polynomial ring with a call of PQPRING. *)
+PQPRING(LIST(d,V,ev)).
+(* Chose the options of the RQE-SYSTEM. *)
+RQEOPTSET(LIST(0,0)).
+(* The individual entries have the following meaning:
+   1st entry: 0: no verbose output, 1 minimal verbose output, 
+              2: long verbose output without intermediate results
+             >2: long verbose output with intermediate results
+   2nd entry: 0: complete quantifier elimination, 
+              1: partial quantifier elimination
+*)           
+(* Read the formula with a call of PQIREAD. *)
+BEGIN
+  phi:=PQIREAD();
+  (* Call the quantifier elimination. *)
+  ws:=RQEQE(phi);
+  PQPPRT(ws);
+  BLINES(0);
+  BLINES(0);SWRITE("Input:");BLINES(0);
+  PQTEXW(phi);
+  BLINES(0);SWRITE("Output:");BLINES(0);
+  PQTEXW(ws);
+  BLINES(0);SWRITE("Number of atomic formulas: ");
+  FORCOUNTAF(ws);
+END.

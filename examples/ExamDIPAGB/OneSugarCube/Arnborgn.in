@@ -1,0 +1,57 @@
+(* ----------------------------------------------------------------------------
+ * $Id$
+ * ----------------------------------------------------------------------------
+ * This file is part of MAS.
+ * ----------------------------------------------------------------------------
+ * Copyright (c) 1989 - 1994 Universitaet Passau
+ * ----------------------------------------------------------------------------
+ * $Log$
+ * Revision 1.1  2000/06/17 20:40:56  kredel
+ * Initial revision
+ *
+ * Revision 1.1.1.1  2000/06/17 20:40:56  kredel
+ * Clean import of MAS 1.0 from Uni Passau
+ *
+ * Revision 1.1  1994/11/24 15:44:46  rose
+ * Initial revision.
+ * DIPAGB test example with domain INT, inverse lexicographical term order
+ * INVLEX and normal strategy.
+ *
+ * ----------------------------------------------------------------------------
+ *)
+
+
+(* Arnborgn.in.
+   Example with normal strategy and inverse lexicographical term ordering.
+   from: Giovini, A., Mora, T., Niesi, G., Robbiano, L. and Traverso, C.,
+         "One sugar cube, please" or Selection strategies in the Buchberger
+         algorithm, J. of the ACM 1991, pp. 49-54,
+         3.3 Arnborg-Lazard system *)
+
+   OUT("Arnborgn.out").
+
+   SWRITE("Example from 'One Sugar Cube, please': Arnborg-Lazard system").
+
+   DomainDescriptor := ADDDREAD(). INT.
+   VariableList := LIST("z","y","x").
+   V := DIPVDEF(VariableList).
+   TermOrder := DIPTODEF(2).
+
+   F := DILRD(VariableList,DomainDescriptor).
+
+   ( ( x**2 y z + x y**2 z + x y z**2 + x y z + x y + x z + y z )
+     ( x**2 y**2 z + x**2 y z + x y**2 z**2 + x y z + x + y z + z )
+     ( x**2 y**2 z**2 + x**2 y**2 z + x y**2 z + x y z + x z + z + 1 ) )
+
+   DILWR(F,VariableList).
+
+   (* Groebner basis computation with DIPAGB and normal strategy: *)
+
+      SetDIPAGBTraceFlag(2).
+      SetDIPAGBStrategy(0).
+      DILWR(DIPAGB(F),VariableList).
+
+   SHUT("Arnborgn.out").
+   EXIT.
+
+(* -EOF- *)

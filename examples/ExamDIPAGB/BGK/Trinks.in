@@ -1,0 +1,138 @@
+(* ----------------------------------------------------------------------------
+ * $Id$
+ * ----------------------------------------------------------------------------
+ * This file is part of MAS.
+ * ----------------------------------------------------------------------------
+ * Copyright (c) 1989 - 1994 Universitaet Passau
+ * ----------------------------------------------------------------------------
+ * $Log$
+ * Revision 1.1  2000/06/17 20:40:56  kredel
+ * Initial revision
+ *
+ * Revision 1.1.1.1  2000/06/17 20:40:56  kredel
+ * Clean import of MAS 1.0 from Uni Passau
+ *
+ * Revision 1.1  1994/11/24 15:22:06  rose
+ * Initial revision.
+ * Two DIPAGB test examples with inverse lexicographical term order INVLEX.
+ * A comparison of the normal strategy and the normal with sugar strategy
+ *                 with variable weight list (0,...,0) and (1,...,1) in DIPAGB
+ *          and of the functions DIPAGB and DIIFGB/DIPGB.
+ *
+ * ----------------------------------------------------------------------------
+ *)
+
+
+(* Examples from Trinks (1978)
+   from: Boege, W., Gebauer, R., Kredel, H.,
+         Some Examples for Solving Systems of Algebraic Equations
+         by Calculating Groebner Bases,
+         J. Symbolic Computation (1986) 1, 83-96. *)
+
+
+   OUT("Trinks.out").
+
+   SWRITE("Example from BGK: Examples from Trinks (1978)").
+
+   VariableList := LIST("B","S","T","Z","P","W").
+   V := DIPVDEF(VariableList).
+   TermOrder := DIPTODEF(2).
+   r:=RNINT(1).
+
+   SetDIPAGBTraceFlag(2).
+
+
+   (* Trinks 1, Ideal A. 09.12.1983 *)
+
+      SWRITE("Trinks 1, Ideal A. 09.12.1983:").
+      DomainDescriptor := ADDDREAD(). INT.
+      F1 := DILRD(VariableList,DomainDescriptor).
+
+      ( ( + 45 P + 35 S - 165 B - 36 )
+        ( + 35 P + 40 Z + 25 T - 27 S )
+        ( + 15 W + 25 P S + 30 Z - 18 T - 165 B**2 )
+        ( -9 W + 15 P T + 20 Z S )
+        ( W P + 2 Z T - 11 B**3 )
+        ( 99 W - 11 S B + 3 B**2 ) )
+
+      DILWR(F1,VariableList).
+
+      (* Groebner basis computation with DIPAGB and normal strategy: *)
+
+         SetDIPAGBStrategy(0).
+         WriteDIPAGBOptions.
+         DILWR(DIPAGB(F1),VariableList).
+
+      (* Groebner basis computation with DIPAGB, normal with sugar strategy
+         and variable weight list (0,...,0): *)
+
+         SetDIPAGBStrategy(1).
+         SetDIPAGBVariableWeight(LIST(0,0,0,0,0,0)).
+         WriteDIPAGBOptions.
+         DILWR(DIPAGB(F1),VariableList).
+
+      (* Groebner basis computation with DIPAGB, normal with sugar strategy
+         and variable weight list (1,...,1): *)
+
+         SetDIPAGBVariableWeight(LIST(r,r,r,r,r,r)).
+         WriteDIPAGBOptions.
+         DILWR(DIPAGB(F1),VariableList).
+
+      (* Groebner basis computation with DIIFGB: *)
+
+         SWRITE("Groebner Basis Computation with DIIFGB:").
+         DILWR(DIIFGB(F1,1),VariableList).
+
+
+   (* Trinks 2, Ideal P = A + F7 R. 10.12.1983 *)
+
+      SWRITE("Trinks 2, Ideal P = A + F7 R. 10.12.1983:").
+      DomainDescriptor := ADDDREAD(). RN.
+      F2 := DILRD(VariableList,DomainDescriptor).
+
+      ( ( + 45 P + 35 S - 165 B - 36 )
+        ( + 35 P + 40 Z + 25 T - 27 S )
+        ( + 15 W + 25 P S + 30 Z - 18 T - 165 B**2 )
+        ( -9 W + 15 P T + 20 Z S )
+        ( W P + 2 Z T - 11 B**3 )
+        ( 99 W - 11 S B + 3 B**2 )
+        ( B**2 + 33/50 B + 2673/10000 ) )
+
+      DILWR(F2,VariableList).
+
+      (* Groebner basis computation with DIPAGB and normal strategy: *)
+
+         SetDIPAGBStrategy(0).
+         WriteDIPAGBOptions.
+         DILWR(DIPAGB(F2),VariableList).
+
+      (* Groebner basis computation with DIPAGB, normal with sugar strategy
+         and variable weight list (0,...,0): *)
+
+         SetDIPAGBStrategy(1).
+         SetDIPAGBVariableWeight(LIST(0,0,0,0,0,0)).
+         WriteDIPAGBOptions.
+         DILWR(DIPAGB(F2),VariableList).
+
+      (* Groebner basis computation with DIPAGB, normal with sugar strategy
+         and variable weight list (1,...,1): *)
+
+         SetDIPAGBVariableWeight(LIST(r,r,r,r,r,r)).
+         WriteDIPAGBOptions.
+         DILWR(DIPAGB(F2),VariableList).
+
+      (* Groebner basis computation with DIPGB: *)
+
+         SWRITE("Groebner Basis Computation with DIPGB:").
+         DILWR(DIPGB(F2,1),VariableList).
+
+   SHUT("Trinks.out").
+   EXIT.
+
+(* -EOF- *)
+
+
+
+
+
+

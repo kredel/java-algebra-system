@@ -1,0 +1,99 @@
+(* ----------------------------------------------------------------------------
+ * $Id$
+ * ----------------------------------------------------------------------------
+ * This file is part of MAS.
+ * ----------------------------------------------------------------------------
+ * Copyright (c) 1989 - 1994 Universitaet Passau
+ * ----------------------------------------------------------------------------
+ * $Log$
+ * Revision 1.1  2000/06/17 20:40:56  kredel
+ * Initial revision
+ *
+ * Revision 1.1.1.1  2000/06/17 20:40:56  kredel
+ * Clean import of MAS 1.0 from Uni Passau
+ *
+ * Revision 1.2  1994/11/24 15:16:04  rose
+ * Corrected comment.
+ *
+ * Revision 1.1  1994/11/24  15:10:18  rose
+ * Initial revision.
+ * DIPAGB test example with domain RN and the inverse lexicographical term
+ * order INVLEX.
+ * A comparison of the normal strategy and the normal with sugar strategy
+ *                 with variable weight list (0,0,0) and (1,1,1) in DIPAGB
+ *          and of the functions DIPAGB and DIPGB.
+ *
+ * ! No terminated run up to now !
+ *
+ * ----------------------------------------------------------------------------
+ *)
+
+
+(* Rose, General Equilibrium Model, 1984
+   Example arising in general economic equilibrium model (Shoven,
+   1983) and discussed in Rose et al. (1984)
+   from: Boege, W., Gebauer, R., Kredel, H.,
+         Some Examples for Solving Systems of Algebraic Equations
+         by Calculating Groebner Bases,
+         J. Symbolic Computation (1986) 1, 83-96. *)
+
+
+   OUT("Rose.out").
+
+   SWRITE("Example from BGK: Rose, General Equilibrium Model, 1984").
+
+   DomainDescriptor := ADDDREAD(). RN.
+   VariableList := LIST("U3","U4","A46").
+   V := DIPVDEF(VariableList).
+   TermOrder := DIPTODEF(2).
+
+   F := DILRD(VariableList,DomainDescriptor).
+
+   ( ( U4**4 - 20/7 A46**2 )
+     ( A46**2 U3**4 + 7/10 A46 U3**4 + 7/48 U3**4 - 50/27
+       A46**2 - 35/27 A46 - 49/216 )
+     ( A46**5 U4**3 + 7/5 A46**4 U4**3 + 609/1000 A46**3
+       U4**3 + 49/1250 A46**2 U4**3 - 27391/800000 A46 U4**3
+       - 1029/160000 U4**3 + 3/7 A46**5 U3 U4**2 + 3/5 A46**6
+       U3 U4**2 + 63/200 A46**3 U3 U4**2 + 147/2000 A46**2
+       U3 U4**2 + 4137/800000 A46 U3 U4**2 - 7/20 A46**4
+       U3**2 U4 - 77/125 A46**3 U3**2 U4 - 23863/60000 A46**2
+       U3**2 U4 - 1078/9375 A46 U3**2 U4 - 24353/1920000
+       U3**2 U4 - 3/20 A46**4 U3**3 - 21/100 A46**3 U3**3
+       - 91/800 A46**2 U3**3 - 5887/200000 A46 U3**3
+       - 343/128000 U3**3 ) )
+
+   DILWR(F,VariableList).
+
+   SetDIPAGBTraceFlag(2).
+
+   (* Groebner basis computation with DIPAGB and normal strategy: *)
+
+      SetDIPAGBStrategy(0).
+      WriteDIPAGBOptions.
+      DILWR(DIPAGB(F),VariableList).
+
+   (* Groebner basis computation with DIPAGB, normal with sugar strategy
+      and variable weight list (0,0,0): *)
+
+      SetDIPAGBStrategy(1).
+      SetDIPAGBVariableWeight(LIST(0,0,0)).
+      WriteDIPAGBOptions.
+      DILWR(DIPAGB(F),VariableList).
+
+   (* Groebner basis computation with DIPAGB, normal with sugar strategy
+      and variable weight list (1,1,1): *)
+
+      SetDIPAGBVariableWeight(LIST(RNINT(1),RNINT(1),RNINT(1))).
+      WriteDIPAGBOptions.
+      DILWR(DIPAGB(F),VariableList).
+
+   (* Groebner basis computation with DIPGB: *)
+
+      SWRITE("Groebner Basis Computation with DIPGB:").
+      DILWR(DIPGB(F,1),VariableList).
+
+   SHUT("Rose.out").
+   EXIT.
+
+(* -EOF- *)
