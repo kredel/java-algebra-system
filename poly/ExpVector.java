@@ -6,6 +6,7 @@ package edu.jas.poly;
 
 import java.util.Random;
 import java.util.Vector;
+import java.io.Serializable;
 
 
 /**
@@ -15,22 +16,21 @@ import java.util.Vector;
  */
 
 
-public class ExpVector implements Cloneable {
+public class ExpVector implements Cloneable, Serializable {
 
     private final long[] val;
 
-    public static final int LEX = 1;
-    public static final int INVLEX = 2;
-    public static final int GRLEX = 3;
-    public static final int IGRLEX = 4;
-    public static final int REVLEX = 5;
-    public static final int REVILEX = 6;
-    public static final int REVTDEG = 7;
-    public static final int REVITDG = 8;
+    // @deprecated:
+    public static final int LEX     = TermOrder.LEX;
+    public static final int INVLEX  = TermOrder.INVLEX;
+    public static final int GRLEX   = TermOrder.GRLEX;
+    public static final int IGRLEX  = TermOrder.IGRLEX;
+    public static final int REVLEX  = TermOrder.REVLEX;
+    public static final int REVILEX = TermOrder.REVILEX;
+    public static final int REVTDEG = TermOrder.REVTDEG;
+    public static final int REVITDG = TermOrder.REVITDG;
 
-    //public static final int DEFAULT_EVORD = INVLEX;
-    public static final int DEFAULT_EVORD = IGRLEX;
-
+    public static final int DEFAULT_EVORD = TermOrder.DEFAULT_EVORD;
 
     private final static Random random = new Random();
 
@@ -351,10 +351,10 @@ public class ExpVector implements Cloneable {
     public static int EVCOMP( int evord, ExpVector U, ExpVector V ) {
         int t = 0;
         switch ( evord ) {
-            case LEX:    { t = ( -EVILCP( U, V ) );  break; }
-            case INVLEX: { t =    EVILCP( U, V )  ;  break; }
-            case GRLEX:  { t = ( -EVIGLC( U, V ) );  break; }
-            case IGRLEX: { t =    EVIGLC( U, V )  ;  break; }
+            case TermOrder.LEX:    { t = ( -EVILCP( U, V ) );  break; }
+            case TermOrder.INVLEX: { t =    EVILCP( U, V )  ;  break; }
+            case TermOrder.GRLEX:  { t = ( -EVIGLC( U, V ) );  break; }
+            case TermOrder.IGRLEX: { t =    EVIGLC( U, V )  ;  break; }
             default:     { System.out.println("EVCOMP, undefined term order.");
             }
         }
