@@ -20,17 +20,7 @@ public class ExpVector implements Cloneable, Serializable {
 
     private final long[] val;
 
-    // @deprecated:
-    public static final int LEX     = TermOrder.LEX;
-    public static final int INVLEX  = TermOrder.INVLEX;
-    public static final int GRLEX   = TermOrder.GRLEX;
-    public static final int IGRLEX  = TermOrder.IGRLEX;
-    public static final int REVLEX  = TermOrder.REVLEX;
-    public static final int REVILEX = TermOrder.REVILEX;
-    public static final int REVTDEG = TermOrder.REVTDEG;
-    public static final int REVITDG = TermOrder.REVITDG;
-
-    public static final int DEFAULT_EVORD = TermOrder.DEFAULT_EVORD;
+    //public static final int DEFAULT_EVORD = TermOrder.DEFAULT_EVORD;
 
     private final static Random random = new Random();
 

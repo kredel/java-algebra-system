@@ -84,10 +84,10 @@ public final class TermOrder implements Serializable {
     public String toString() {
 	StringBuffer erg = new StringBuffer();
 	switch ( evord ) {
-	case ExpVector.INVLEX: erg.append("INVLEX("+evord+")"); break ;
-	case ExpVector.IGRLEX: erg.append("IGRLEX("+evord+")"); break ;
-	case ExpVector.LEX:    erg.append("LEX("+evord+")");    break ;
-	case ExpVector.GRLEX:  erg.append("GRLEX("+evord+")");  break ;
+	case INVLEX: erg.append("INVLEX("+evord+")"); break ;
+	case IGRLEX: erg.append("IGRLEX("+evord+")"); break ;
+	case LEX:    erg.append("LEX("+evord+")");    break ;
+	case GRLEX:  erg.append("GRLEX("+evord+")");  break ;
 	}
         return erg.toString();
     }

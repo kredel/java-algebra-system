@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 
 import edu.jas.poly.RatPolynomial;
 import edu.jas.poly.ExpVector;
+import edu.jas.poly.TermOrder;
 import edu.jas.poly.RatOrderedMapPolynomial;
 
   /**
@@ -178,11 +179,11 @@ public class GBTrinksTest extends TestCase {
       logger.info("time = " + t + " milliseconds" ); 
 
       int evord = p1.getOrd();
-      if ( evord == ExpVector.IGRLEX ) {
+      if ( evord == TermOrder.IGRLEX ) {
          assertTrue("#(trinks)=6", La.size() == 6 );
          assertTrue("#GB(trinks)=14", Ga.size() == 14 );
       }
-      if ( evord == ExpVector.INVLEX ) {
+      if ( evord == TermOrder.INVLEX ) {
          assertTrue("#(trinks)=6", La.size() == 6 );
          assertTrue("#GB(trinks)=6", Ga.size() == 6 );
       }
@@ -210,11 +211,11 @@ public class GBTrinksTest extends TestCase {
       logger.info("time = " + t + " milliseconds" ); 
 
       int evord = q1.getTermOrder().getEvord();
-      if ( evord == ExpVector.IGRLEX ) {
+      if ( evord == TermOrder.IGRLEX ) {
          assertTrue("#(trinks)=6", Lb.size() == 6 );
          assertTrue("#GB(trinks)=14", Gb.size() == 14 );
       }
-      if ( evord == ExpVector.INVLEX ) {
+      if ( evord == TermOrder.INVLEX ) {
          assertTrue("#(trinks)=6", Lb.size() == 6 );
          assertTrue("#GB(trinks)=6", Gb.size() == 6 );
       }

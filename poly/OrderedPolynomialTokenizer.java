@@ -294,7 +294,7 @@ public class OrderedPolynomialTokenizer  {
      * syntax: termOrderName = L, IL, LEX, G, IG, GRLEX
      */
     public TermOrder nextExpOrd() throws IOException {
-	int evord = ExpVector.DEFAULT_EVORD;
+	int evord = TermOrder.DEFAULT_EVORD;
 	int tt;
         tt = tok.nextToken();
         if ( tt == StreamTokenizer.TT_EOF ) { /* nop */
@@ -303,17 +303,17 @@ public class OrderedPolynomialTokenizer  {
 	    //	   System.out.println("TT_WORD: " + tok.sval);
 	   if ( tok.sval != null ) {
 	      if ( tok.sval.equalsIgnoreCase("L") ) 
-                 evord = ExpVector.INVLEX;
+                 evord = TermOrder.INVLEX;
 	      if ( tok.sval.equalsIgnoreCase("IL") ) 
-                 evord = ExpVector.INVLEX;
+                 evord = TermOrder.INVLEX;
 	      if ( tok.sval.equalsIgnoreCase("LEX") ) 
-                 evord = ExpVector.LEX;
+                 evord = TermOrder.LEX;
 	      if ( tok.sval.equalsIgnoreCase("G") ) 
-                 evord = ExpVector.IGRLEX;
+                 evord = TermOrder.IGRLEX;
 	      if ( tok.sval.equalsIgnoreCase("IG") ) 
-                 evord = ExpVector.IGRLEX;
+                 evord = TermOrder.IGRLEX;
 	      if ( tok.sval.equalsIgnoreCase("GRLEX") ) 
-                 evord = ExpVector.GRLEX;
+                 evord = TermOrder.GRLEX;
 	   }
 	}
 	return new TermOrder(evord);
