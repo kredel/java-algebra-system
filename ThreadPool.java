@@ -11,7 +11,7 @@ import java.util.LinkedList;
 import org.apache.log4j.Logger;
 
 /**
- * Thread Pool using stack workpile
+ * Thread Pool using stack / list workpile
  * @author Akitoshi Yoshida 
  * @author Heinz Kredel.
  */
@@ -19,30 +19,62 @@ import org.apache.log4j.Logger;
 public class ThreadPool {
     static final int DEFAULT_SIZE = 3;
     protected PoolThread[] workers;
-    protected int nojobs = 0;
+    protected int idleworkers = 0; 
+    // should be expressed using strategy pattern
     // List or Collection is not appropriate
-    //   Stack jobstack; // LIFO strategy for recursion
-    LinkedList jobstack; // FIFO strategy for GB
+                                   // LIFO strategy for recursion
+    protected LinkedList jobstack; // FIFO strategy for GB
+
+    protected StrategyEnumeration strategy = StrategyEnumeration.LIFO;
 
     private static Logger logger = Logger.getLogger(ThreadPool.class);
 
+/**
+ * Constructs a new ThreadPool
+ * with strategy StrategyEnumeration.FIFO
+ * and size DEFAULT_SIZE
+ */ 
+
     public ThreadPool() {
-        this(DEFAULT_SIZE);
+        this(StrategyEnumeration.FIFO,DEFAULT_SIZE);
     }
 
 
 /**
- * Constructs a new PoolThread
+ * Constructs a new ThreadPool
+ * with size DEFAULT_SIZE
+ * @param strategy for job processing
+ */ 
+
+    public ThreadPool(StrategyEnumeration s) {
+        this(s,DEFAULT_SIZE);
+    }
+
+
+/**
+ * Constructs a new ThreadPool
+ * with strategy StrategyEnumeration.FIFO
  * @param size of the pool
  */ 
+
     public ThreadPool(int size) {
-        // jobstack = new Stack();
-        jobstack = new LinkedList();
+        this(StrategyEnumeration.FIFO,size);
+    }
+
+/**
+ * Constructs a new ThreadPool
+ * @param strategy for job processing
+ * @param size of the pool
+ */ 
+    public ThreadPool(StrategyEnumeration strategy, int size) {
+        this.strategy = strategy;
+        jobstack = new LinkedList(); // ok for all strategies ?
         workers = new PoolThread[size];
         for (int i=0; i < workers.length; i++) {
             workers[i] = new PoolThread(this);
             workers[i].start();
         }
+        logger.info("strategy = " + strategy);
     }
 
 /**
@@ -53,24 +85,30 @@ public class ThreadPool {
     }
 
 /**
+ * get used strategy
+ */
+    public StrategyEnumeration getStrategy() {
+        return strategy; 
+    }
+
+/**
  * Terminates the threads
  */
     public void terminate() {
         while ( hasJobs() ) {
             try {
                 Thread.currentThread().sleep(100);
-            }
-            catch (InterruptedException e) {
+            } catch (InterruptedException e) {
             }
         }
         for (int i=0; i < workers.length; i++) {
             try { 
                 while ( workers[i].isAlive() ) {
-                    workers[i].interrupt(); 
-                    workers[i].join(100);
+                        workers[i].interrupt(); 
+                        workers[i].join(100);
                 }
+            } catch (InterruptedException e) { 
             }
-            catch (InterruptedException e) { }
         }
     }
 
@@ -78,10 +116,9 @@ public class ThreadPool {
  * adds a job to the workpile
  */
     public synchronized void addJob(Runnable job) {
-        //        jobstack.push(job);
         jobstack.addLast(job);
         logger.debug("adding job" );
-        if (nojobs > 0) {
+        if (idleworkers > 0) {
             logger.debug("notifying a jobless worker");
             notify();
         }
@@ -93,18 +130,22 @@ public class ThreadPool {
  */
     protected synchronized Runnable getJob() throws InterruptedException {
         while (jobstack.isEmpty()) {
-            nojobs++;
+            idleworkers++;
             logger.debug("waiting");
             wait();
-            nojobs--;
+            idleworkers--;
         }
-        //        return (Runnable)jobstack.pop();
-        return (Runnable)jobstack.removeFirst();
+        // is expressed using strategy enumeration
+        if (strategy == StrategyEnumeration.LIFO) { 
+             return (Runnable)jobstack.removeLast(); // LIFO
+        } else {
+             return (Runnable)jobstack.removeFirst(); // FIFO
+        }
     }
 
 
 /**
- * check if there are jobs processed
+ * check if there are jobs for processing
  */
     public boolean hasJobs() {
         if ( jobstack.size() > 0 ) return true;
@@ -116,7 +157,7 @@ public class ThreadPool {
 
 
 /**
- * check if there are more than n jobs 
+ * check if there are more than n jobs for processing
  */
     public boolean hasJobs(int n) {
         int j = jobstack.size();
@@ -148,7 +189,7 @@ class PoolThread extends Thread {
 
 
 /**
- * Runs the thread.
+ * Run the thread.
  */
     public void run() {
         logger.info( "ready" );
@@ -169,8 +210,9 @@ class PoolThread extends Thread {
                 time += System.currentTimeMillis() - t;
                 done++;
                 logger.info( "done" );
+            } catch (InterruptedException e) { 
+              running = false; 
             }
-            catch (InterruptedException e) { running = false; }
         }
         logger.info( "terminated, done "+done+" jobs in " 
                         + time + " milliseconds");

@@ -102,6 +102,7 @@ public class ThreadPoolTest extends TestCase {
      boolean j = p1.hasJobs();
      assertTrue( "more than 0 jobs ", (j | true) ); // stupid
      p1.terminate();
+     assertFalse( "no jobs ", p1.hasJobs() );
  }
 
 
@@ -116,6 +117,32 @@ public class ThreadPoolTest extends TestCase {
      }
      assertTrue( "more than 10 jobs ", p1.hasJobs(JOBS) );
      p1.terminate();
+     assertFalse( "no jobs ", p1.hasJobs() );
+ }
+
+
+/**
+ * Tests if the created ThreadPool has correct strategy
+ */
+ public void testThreadPool6() {
+     p1 = new ThreadPool(StrategyEnumeration.LIFO);
+     assertTrue( "FIFO strategy ", 
+          p1.getStrategy() == StrategyEnumeration.LIFO );
+   }
+
+/**
+ * Tests if the created ThreadPool has jobs and correct strategy.
+ */
+ public void testThreadPool7() {
+     p1 = new ThreadPool(StrategyEnumeration.LIFO);
+     assertFalse( "no jobs ", p1.hasJobs() );
+     for (int i = 0; i < JOBS*p1.getNumber(); i++ ) {
+         p1.addJob( new FastWorker() );
+     }
+     boolean j = p1.hasJobs();
+     assertTrue( "more than 0 jobs ", (j | true) ); // stupid
+     p1.terminate();
+     assertFalse( "no jobs ", p1.hasJobs() );
  }
 
 }
