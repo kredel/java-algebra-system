@@ -30,11 +30,16 @@ public class SolvableGroebnerBase  {
      */
 
     public static boolean isLeftGB(List F) {  
+        return isLeftGB(0,F);
+    }
+
+    public static boolean isLeftGB(int modv, List F) {  
         SolvablePolynomial pi, pj, s, h;
 	for ( int i = 0; i < F.size(); i++ ) {
 	    pi = (SolvablePolynomial) F.get(i);
             for ( int j = i+1; j < F.size(); j++ ) {
                 pj = (SolvablePolynomial) F.get(j);
+		if ( ! Reduction.ModuleCriterion( modv, pi, pj ) ) continue;
 		// if ( ! Reduction.GBCriterion4( pi, pj ) ) continue;
 		s = Reduction.leftSPolynomial( pi, pj );
 		if ( s.isZERO() ) continue;
@@ -51,10 +56,14 @@ public class SolvableGroebnerBase  {
      */
 
     public static boolean isTwosidedGB(List Fp) {  
+        return isTwosidedGB(0,Fp);
+    }
+
+    public static boolean isTwosidedGB(int modv, List Fp) {  
         if ( Fp == null || Fp.size() <= 1 ) {
             return true;
         }
-        List X = generateUnivar( Fp );
+        List X = generateUnivar( modv, Fp );
         List F = new ArrayList( Fp.size() * (1+X.size()) );
         F.addAll( Fp );
         SolvablePolynomial p, x, pi, pj, s, h;
@@ -70,6 +79,7 @@ public class SolvableGroebnerBase  {
 	    pi = (SolvablePolynomial) F.get(i);
             for ( int j = i+1; j < F.size(); j++ ) {
                 pj = (SolvablePolynomial) F.get(j);
+		if ( ! Reduction.ModuleCriterion( modv, pi, pj ) ) continue;
 		// if ( ! Reduction.GBCriterion4( pi, pj ) ) continue;
 		s = Reduction.leftSPolynomial( pi, pj );
 		if ( s.isZERO() ) continue;
@@ -88,14 +98,21 @@ public class SolvableGroebnerBase  {
      * Generate solvable polynomials in each variable.
      */
     protected static List generateUnivar(List F) {
+        return generateUnivar(0,F);
+    }
+
+    protected static List generateUnivar(int modv, List F) {
         OrderedPolynomial p = (OrderedPolynomial)F.get(0);
         OrderedPolynomial zero = p.getZERO( p.getTermOrder() );
         Coefficient one = p.leadingBaseCoefficient().fromInteger(1l);
-        int r = p.numberOfVariables();
+        int r = p.numberOfVariables()-modv;
         ExpVector e;
         List pols = new ArrayList(r);
         for ( int i = 0; i < r; i++ ) {
             e = new ExpVector(r,i,1);
+            if ( modv > 0 ) {
+                e = e.extend(modv,0,0l);
+            }
             p = zero.add(one,e);
             pols.add( p );
         }
@@ -108,6 +125,10 @@ public class SolvableGroebnerBase  {
      */
 
     public static ArrayList leftGB(List F) {  
+        return leftGB(0,F);
+    }
+
+    public static ArrayList leftGB(int modv, List F) {  
         SolvablePolynomial p;
         ArrayList G = new ArrayList();
         OrderedPairlist pairlist = null; 
@@ -123,7 +144,7 @@ public class SolvableGroebnerBase  {
 	       }
                G.add( p );
 	       if ( pairlist == null ) {
-                  pairlist = new OrderedPairlist( p.getTermOrder() );
+                   pairlist = new OrderedPairlist( modv, p.getTermOrder() );
                }
                // putOne not required
                pairlist.put( p );
@@ -264,10 +285,14 @@ public class SolvableGroebnerBase  {
      */
 
     public static ArrayList twosidedGB(List Fp) {  
+        return twosidedGB(0,Fp);
+    }
+
+    public static ArrayList twosidedGB(int modv, List Fp) {  
         if ( Fp == null || Fp.size() <= 0 ) { // 0 not 1
             return new ArrayList( Fp );
         }
-        List X = generateUnivar( Fp );
+        List X = generateUnivar( modv, Fp );
         List F = new ArrayList( Fp.size() * (1+X.size()) );
         F.addAll( Fp );
         SolvablePolynomial p, x;
@@ -296,7 +321,7 @@ public class SolvableGroebnerBase  {
 	       }
                G.add( p );
 	       if ( pairlist == null ) {
-                  pairlist = new OrderedPairlist( p.getTermOrder() );
+                  pairlist = new OrderedPairlist( modv, p.getTermOrder() );
                }
                // putOne not required
                pairlist.put( p );
