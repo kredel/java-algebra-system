@@ -162,66 +162,6 @@ public class GroebnerBaseParallel  {
 
 
     /**
-     * Minimal ordered groebner basis.
-     */
-
-    public static ArrayList DIGBMI(List Pp) {  
-        OrderedPolynomial a;
-        ArrayList P = new ArrayList();
-        ListIterator it = Pp.listIterator();
-        while ( it.hasNext() ) { 
-            a = (OrderedPolynomial) it.next();
-            if ( a.length() != 0 ) { // always true
-	       // already monic  a = a.monic();
-               P.add( (Object) a );
-	    }
-	}
-        if ( P.size() <= 1 ) return P;
-
-        ExpVector e;        
-        ExpVector f;        
-        OrderedPolynomial p;
-        ArrayList Q = new ArrayList();
-	boolean mt;
-
-        while ( P.size() > 0 ) {
-            a = (OrderedPolynomial) P.remove(0);
-	    e = a.leadingExpVector();
-
-            it = P.listIterator();
-	    mt = false;
-	    while ( it.hasNext() && ! mt ) {
-               p = (OrderedPolynomial) it.next();
-               f = p.leadingExpVector();
-	       mt = ExpVector.EVMT( e, f );
-	    }
-            it = Q.listIterator();
-	    while ( it.hasNext() && ! mt ) {
-               p = (OrderedPolynomial) it.next();
-               f = p.leadingExpVector();
-	       mt = ExpVector.EVMT( e, f );
-	    }
-	    if ( ! mt ) {
-		Q.add( (Object)a );
-	    } else {
-		// System.out.println("dropped " + a.length());
-	    }
-	}
-	P = Q;
-        if ( P.size() <= 1 ) return P;
-
-        Q = new ArrayList();
-        while ( P.size() > 0 ) {
-            a = (OrderedPolynomial) P.remove(0);
-	    // System.out.println("doing " + a.length());
-            a = Reduction.Normalform( P, a );
-            a = Reduction.Normalform( Q, a );
-            Q.add( (Object)a );
-	}
-	return Q;
-    }
-
-    /**
      * Minimal ordered groebner basis, parallel.
      */
 
