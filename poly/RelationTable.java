@@ -95,7 +95,7 @@ public class RelationTable implements Serializable {
         List part = (List)table.get( key );
         if ( part == null ) { // symmetric product
             ExpVector ef = ExpVector.EVSUM( e, f );
-            OrderedPolynomial p = one.getONE().multiply( ef );
+            OrderedPolynomial p = (SolvablePolynomial)one.getONE().multiply( ef );
             return new TableRelation(null,null,p);
         }
         ExpVectorPair evp = new ExpVectorPair( e, f );
