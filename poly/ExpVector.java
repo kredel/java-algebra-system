@@ -89,9 +89,6 @@ public class ExpVector implements Cloneable, Serializable {
     public Object clone() {
         long[] w = new long[ val.length ];
         System.arraycopy(val,0,w,0,val.length);
-        //for (int i = 0; i < w.length; i++ ) {
-        //    w[i] = val[i];
-        //}
         return new ExpVector( w );
     }
 
@@ -118,7 +115,9 @@ public class ExpVector implements Cloneable, Serializable {
         StringBuffer s = new StringBuffer("(");
         for (int i = 0; i < val.length; i++ ) {
             s.append(val[i]);
-            if ( i < val.length-1 ) s.append(",");
+            if ( i < val.length-1 ) {
+               s.append(",");
+            }
         }
         s.append(")");
         return s.toString();
@@ -249,9 +248,13 @@ public class ExpVector implements Cloneable, Serializable {
         float f;
         for (int i = 0; i < w.length; i++ ) {
             f = random.nextFloat(); 
-            if ( f > q ) { e = 0; }
-            else { e = random.nextLong() % k; 
-                   if ( e < 0 ) e = -e; 
+            if ( f > q ) { 
+               e = 0; 
+            } else { 
+               e = random.nextLong() % k; 
+               if ( e < 0 ) {
+                  e = -e;
+               } 
             }
             w[i] = e;
         }
@@ -271,8 +274,12 @@ public class ExpVector implements Cloneable, Serializable {
         int t = 0;
         long[] u = U.getval();
         for (int i = 0; i < u.length; i++ ) {
-            if ( u[i] < 0 ) return -1;
-            if ( u[i] > 0 ) t = 1;
+            if ( u[i] < 0 ) {
+               return -1;
+            }
+            if ( u[i] > 0 ) {
+               t = 1;
+            }
         }
         return t;
     }
@@ -282,11 +289,28 @@ public class ExpVector implements Cloneable, Serializable {
      * Total degree.
      */
 
-    public static int EVTDEG( ExpVector U ) {
-        int t = 0;
+    public static long EVTDEG( ExpVector U ) {
+        long t = 0;
         long[] u = U.getval();
         for (int i = 0; i < u.length; i++ ) {
             t += u[i];
+        }
+        return t;
+    }
+
+
+    /**
+     * Weighted degree.
+     */
+
+    public static long EVWDEG( long[] w, ExpVector U ) {
+        if ( w == null ) { 
+            return EVTDEG( U ); // assume weight 1 
+        }
+        long t = 0;
+        long[] u = U.getval();
+        for (int i = 0; i < u.length; i++ ) {
+            t += w[i] * u[i];
         }
         return t;
     }
@@ -373,6 +397,21 @@ public class ExpVector implements Cloneable, Serializable {
         return t;
     }
 
+    /**
+     * Inverse lexicographical compare part.
+     */
+
+    public static int EVILCP( ExpVector U, ExpVector V, int begin, int end ) {
+        long[] u = U.getval();
+        long[] v = V.getval();
+        int t = 0;
+        for (int i = begin; i < end; i++ ) {
+            if ( u[i] > v[i] ) return 1;
+            if ( u[i] < v[i] ) return -1;
+        }
+        return t;
+    }
+
 
     /**
      * Inverse graded lexicographical compare.
@@ -384,14 +423,132 @@ public class ExpVector implements Cloneable, Serializable {
         int t = 0;
         int i;
         for ( i = 0; i < u.length; i++ ) {
-            if ( u[i] > v[i] ) { t = 1; break; }
-            if ( u[i] < v[i] ) { t = -1; break; }
+            if ( u[i] > v[i] ) { 
+               t = 1; break; 
+            }
+            if ( u[i] < v[i] ) { 
+               t = -1; break; 
+            }
         }
-        if ( t == 0 ) return t;
+        if ( t == 0 ) { 
+           return t;
+        }
         long up = 0; 
         long vp = 0; 
         for (int j = i; j < u.length; j++ ) {
-            up += u[j]; vp += v[j]; 
+            up += u[j]; 
+            vp += v[j]; 
+        }
+        if ( up > vp ) { 
+           t = 1; 
+        } else { 
+           if ( up < vp ) { 
+              t = -1; 
+           }
+        }
+        return t;
+    }
+
+
+    /**
+     * Inverse weighted lexicographical compare.
+     */
+
+    public static int EVIWLC( long[] w, ExpVector U, ExpVector V ) {
+        long[] u = U.getval();
+        long[] v = V.getval();
+        int t = 0;
+        int i;
+        for ( i = 0; i < u.length; i++ ) {
+            if ( u[i] > v[i] ) { 
+               t = 1; break; 
+            }
+            if ( u[i] < v[i] ) { 
+               t = -1; break; 
+            }
+        }
+        if ( t == 0 ) {
+           return t;
+        }
+        long up = 0; 
+        long vp = 0; 
+        for (int j = i; j < u.length; j++ ) {
+            up += w[j] * u[j]; 
+            vp += w[j] * v[j]; 
+        }
+        if ( up > vp ) { 
+           t = 1; 
+        } else { 
+           if ( up < vp ) { 
+              t = -1; 
+           }
+        }
+        return t;
+    }
+
+
+    /**
+     * Inverse graded lexicographical compare part.
+     */
+
+    public static int EVIGLC( ExpVector U, ExpVector V, int begin, int end ) {
+        long[] u = U.getval();
+        long[] v = V.getval();
+        int t = 0;
+        int i;
+        for ( i = begin; i < end; i++ ) {
+            if ( u[i] > v[i] ) { 
+               t = 1; break; 
+            }
+            if ( u[i] < v[i] ) { 
+               t = -1; break; 
+            }
+        }
+        if ( t == 0 ) {
+           return t;
+        }
+        long up = 0; 
+        long vp = 0; 
+        for (int j = i; j < end; j++ ) {
+            up += u[j]; 
+            vp += v[j]; 
+        }
+        if ( up > vp ) { 
+           t = 1; 
+        } else { 
+           if ( up < vp ) { 
+              t = -1; 
+           }
+        }
+        return t;
+    }
+
+
+    /**
+     * Inverse weighted lexicographical compare part.
+     */
+
+    public static int EVIWLC( long[] w, ExpVector U, ExpVector V, int begin, int end ) {
+        long[] u = U.getval();
+        long[] v = V.getval();
+        int t = 0;
+        int i;
+        for ( i = begin; i < end; i++ ) {
+            if ( u[i] > v[i] ) { 
+               t = 1; break; 
+            }
+            if ( u[i] < v[i] ) { 
+               t = -1; break; 
+            }
+        }
+        if ( t == 0 ) {
+           return t;
+        }
+        long up = 0; 
+        long vp = 0; 
+        for (int j = i; j < end; j++ ) {
+            up += w[j] * u[j]; 
+            vp += w[j] * v[j]; 
         }
         if ( up > vp ) { 
            t = 1; 
@@ -424,6 +581,33 @@ public class ExpVector implements Cloneable, Serializable {
                         t =    EVIGLC( U, V )  ;  break; 
             }
             default:     { 
+                        throw new IllegalArgumentException("EVCOMP, undefined term order.");
+            }
+        }
+        return t;
+    }
+
+
+    /**
+     * Compare part.
+     */
+
+    public static int EVCOMP( int evord, ExpVector U, ExpVector V, int begin, int end ) {
+        int t = 0;
+        switch ( evord ) {
+            case TermOrder.LEX:    { 
+                        t = ( -EVILCP( U, V, begin, end ) );  break; 
+            }
+            case TermOrder.INVLEX: { 
+                        t =    EVILCP( U, V, begin, end )  ;  break; 
+            }
+            case TermOrder.GRLEX:  { 
+                        t = ( -EVIGLC( U, V, begin, end ) );  break; 
+            }
+            case TermOrder.IGRLEX: { 
+                        t =    EVIGLC( U, V, begin, end )  ;  break; 
+            }
+            default:    { 
                         throw new IllegalArgumentException("EVCOMP, undefined term order.");
             }
         }
