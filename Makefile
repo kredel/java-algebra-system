@@ -79,6 +79,9 @@ edu/jas/poly/%.class: %.java
 edu/jas/ring/%.class: %.java
 	$(JAVAC) $<
 
+edu/jas/versuch/%.class: %.java
+	$(JAVAC) $<
+
 
 edu.jas.%: edu/jas/%.class
 	$(JAVA) $@ $(cl)
@@ -91,6 +94,10 @@ edu.jas.poly.%: edu/jas/poly/%.class
 
 edu.jas.ring.%: edu/jas/ring/%.class
 	$(JAVA) $@ $(cl)
+
+edu.jas.versuch.%: edu/jas/versuch/%.class
+	$(JAVA) $@ $(cl)
+
 
 
 
