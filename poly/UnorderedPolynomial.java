@@ -14,7 +14,7 @@ import java.util.Map;
  * Unordered Polynomial Interface. 
  * For implementations based on Maps, 
  * e.g. java.util.LinkedHashMap.
- * @author Hienz Kredel
+ * @author Heinz Kredel
  */
 
 public interface UnorderedPolynomial {
