@@ -18,6 +18,8 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
 
+import org.apache.log4j.Logger;
+
 import edu.jas.arith.BigRational;
 
 /**
@@ -28,11 +30,13 @@ import edu.jas.arith.BigRational;
 
 public class OrderedPolynomialTokenizer  {
 
+    private static final Logger logger = Logger.getLogger(OrderedPolynomialTokenizer.class);
+
     private String[] vars;
     private TermOrder tord;
     private Reader in;
     private StreamTokenizer tok;
-    private boolean debug = false;
+    private boolean debug = false; // even more debugging
 
     /**
      * constructors
@@ -49,16 +53,18 @@ public class OrderedPolynomialTokenizer  {
 
 	tok = new StreamTokenizer( r );
 	tok.resetSyntax();
-	tok.eolIsSignificant(true);
+	// tok.eolIsSignificant(true); no more
+	tok.eolIsSignificant(false);
         tok.wordChars('0','9');
 	tok.wordChars('a', 'z');
 	tok.wordChars('A', 'Z');
 	tok.wordChars('/', '/');
 	tok.wordChars(128 + 32, 255);
 	tok.whitespaceChars(0, ' ');
-	//	tok.commentChar('/');
+	tok.commentChar('#');
 	tok.quoteChar('"');
 	tok.quoteChar('\'');
+	//tok.slashStarComments(true); does not work
 
     }
 
@@ -73,13 +79,13 @@ public class OrderedPolynomialTokenizer  {
      */
 
     public RatOrderedMapPolynomial nextRatPolynomial() throws IOException {
-        if (debug) System.out.println("torder = " + tord);
+        logger.debug("torder = " + tord);
 	RatOrderedMapPolynomial a = new RatOrderedMapPolynomial(tord);
 	ExpVector leer = new ExpVector(vars.length);
 	RatOrderedMapPolynomial a1 = (RatOrderedMapPolynomial) a.add(BigRational.ONE,leer);
 
-        if (debug) System.out.println("a = " + a);
-        if (debug) System.out.println("a1 = " + a1);
+        if (debug) logger.debug("a = " + a);
+        logger.debug("a1 = " + a1);
 	RatOrderedMapPolynomial b = a1;
 	RatOrderedMapPolynomial c;
 	int tt, oldtt;
@@ -92,22 +98,17 @@ public class OrderedPolynomialTokenizer  {
 	while ( true ) {
 	    // next input. determine next action
 	    tt = tok.nextToken();
-            if (debug) System.out.println("tt = " + tt);
+            logger.debug("while tt = " + tok);
 	    if ( tt == StreamTokenizer.TT_EOF ) break;
 	    switch ( tt ) {
 	    case ')': 
 	    case ',': 
-		 //System.out.println(",: ");
 		 return a;
 	    case '-': 
-		 //System.out.println("-: " + tok.sval);
-		b = (RatOrderedMapPolynomial) b.negate(); //RatOrderedMapPolynomial.DIPNEG( b );
+		 b = (RatOrderedMapPolynomial) b.negate(); 
 	    case '+': 
-		 //System.out.println("+: " + tok.sval);
 	    case '*': 
-		 //System.out.println("*: " + tok.sval);
                  tt = tok.nextToken();
-	         if (debug) System.out.println("tt = " + tt);
 		 break;
 	    default: // skip
 	    }
@@ -124,9 +125,9 @@ public class OrderedPolynomialTokenizer  {
 		     // ie = nextExponent();
 		     // r = r^ie;
 		     // c = new RatOrderedMapPolynomial(r,leer);
-		     b = (RatOrderedMapPolynomial) b.multiply(r,leer); //RatOrderedMapPolynomial.DIRPPR( b, c ); 
+		     b = (RatOrderedMapPolynomial) b.multiply(r,leer); 
                      tt = tok.nextToken();
-	             if (debug) System.out.println("tt = " + tt);
+	             if (debug) logger.debug("tt,digit = " + tok);
 		 } 
                  if ( tt == StreamTokenizer.TT_EOF ) break;
 		 // read polynomial (not jet implemented)
@@ -138,12 +139,13 @@ public class OrderedPolynomialTokenizer  {
 		     if ( ix < 0 ) break;
 		     //  System.out.println("ix: " + ix);
 		     ie = nextExponent();
+		     //  System.out.println("ie: " + ie);
 		     r = BigRational.RNONE;
 		     e = new ExpVector( vars.length, ix, ie);
 		     //c = new RatOrderedMapPolynomial(r,e);
-		     b = (RatOrderedMapPolynomial) b.multiply(r,e); //RatOrderedMapPolynomial.DIRPPR( b, c ); 
+		     b = (RatOrderedMapPolynomial) b.multiply(r,e); 
                      tt = tok.nextToken();
-	             if (debug) System.out.println("tt = " + tt);
+	             if (debug) logger.debug("tt,letter = " + tok);
 		 }
 		 break;
 	    default: //skip 
@@ -153,30 +155,24 @@ public class OrderedPolynomialTokenizer  {
             tok.pushBack();
 	    switch ( tt ) {
 	    case '-': 
-		 //System.out.println("-: " + tok.sval);
 	    case '+': 
-		 //System.out.println("+: " + tok.sval);
 	    case '*': 
-		 //System.out.println("*: " + tok.sval);
 	    case ')': 
-		 //System.out.println("): ");
 	    case ',': 
-		 //System.out.println(",: ");
-                 if (debug) System.out.println("b = " + b);
-		 a = (RatOrderedMapPolynomial) a.add(b); //RatOrderedMapPolynomial.DIPSUM( a, b );
+                 logger.debug("b, = " + b);
+		 a = (RatOrderedMapPolynomial) a.add(b); 
 		 b = a1;
 		 break;
 	    case '\n':
-		 //System.out.println("nl: " );
                  tt = tok.nextToken();
-	         if (debug) System.out.println("tt = " + tt);
+	         if (debug) logger.debug("tt,nl = " + tt);
  	    default: // skip ?
-		// System.out.println("default: " + tok);
+		 if (debug) logger.debug("default: " + tok);
 	    }
 	}
-	if (debug) System.out.println("b = " + b);
-	a = (RatOrderedMapPolynomial) a.add(b); //RatOrderedMapPolynomial.DIPSUM( a, b );
-	if (debug) System.out.println("a = " + a);
+	if (debug) logger.debug("b = " + b);
+	a = (RatOrderedMapPolynomial) a.add(b); 
+	logger.debug("a = " + a);
 	// b = a1;
 	return a;
     }
@@ -184,15 +180,16 @@ public class OrderedPolynomialTokenizer  {
 
     /**
      * parsing method for variable exponent
-     * syntax: ^long 
+     * syntax: ^long | **long
      */
     public long nextExponent() throws IOException {
-	// syntax: ^long
+	// syntax: ^long | **long
 	long e = 1;
 	char first;
 	int tt;
         tt = tok.nextToken();
 	if ( tt == '^' ) {
+           if (debug) logger.debug("exponent ^");
            tt = tok.nextToken();
     	   if ( tok.sval != null ) {
               first = tok.sval.charAt(0);
@@ -202,15 +199,68 @@ public class OrderedPolynomialTokenizer  {
 	      }
 	   }
 	}
+	if ( tt == '*' ) {
+           tt = tok.nextToken();
+           if ( tt == '*' ) {
+              if (debug) logger.debug("exponent **");
+              tt = tok.nextToken();
+              if ( tok.sval != null ) {
+                 first = tok.sval.charAt(0);
+	         if ( digit(first) ) {
+	            e = Long.parseLong( tok.sval );
+		    return e;
+	         }
+	      }
+	   }
+           tok.pushBack();
+	}
  	tok.pushBack();
 	return e;
+    }
+
+
+    /**
+     * parsing method for comments 
+     * syntax: (* comment *) | /_* comment *_/ without _
+     * @false does not work with this pushBack()
+     */
+    public String nextComment() throws IOException {
+	// syntax: (* comment *) | /* comment */ 
+	StringBuffer c = new StringBuffer();
+	int tt;
+        if (debug) logger.debug("comment: " + tok);
+        tt = tok.nextToken();
+        if (debug) logger.debug("comment: " + tok);
+	if ( tt == '(' ) {
+           tt = tok.nextToken();
+           if (debug) logger.debug("comment: " + tok);
+           if ( tt == '*' ) {
+              if (debug) logger.debug("comment: ");
+	      while (true) { 
+                 tt = tok.nextToken();
+                 if ( tt == '*' ) {
+                    tt = tok.nextToken();
+                    if ( tt == ')' ) {
+			return c.toString();
+		    } 
+		    tok.pushBack();
+	         }
+		 c.append(tok.sval);
+	      }
+	   } 
+           tok.pushBack();
+           if (debug) logger.debug("comment: " + tok);
+	}
+ 	tok.pushBack();
+        if (debug) logger.debug("comment: " + tok);
+	return c.toString();
     }
 
     // unused
     public void nextComma() throws IOException {
 	int tt;
     	if ( tok.ttype == ',' ) {
-           System.out.println("comma: ");
+           if (debug) logger.debug("comma: ");
            tt = tok.nextToken();
 	}
     }
@@ -225,7 +275,7 @@ public class OrderedPolynomialTokenizer  {
 	int tt;
         tt = tok.nextToken();
     	if ( tt == '(' ) {
-	   //System.out.println("(: ");
+	   logger.debug("variable list");
            tt = tok.nextToken();
 	   while ( true ) {
                  if ( tt == StreamTokenizer.TT_EOF ) break;
@@ -287,10 +337,20 @@ public class OrderedPolynomialTokenizer  {
         tt = tok.nextToken();
         if ( tt == StreamTokenizer.TT_EOF ) return L;
         if ( tt != '(' ) return L;
+	logger.debug("polynomial list");
         while ( true ) {
-	       a = nextRatPolynomial();
-               System.out.println("a = " + a); 
+               tt = tok.nextToken();
+               if ( tok.ttype == ',' ) continue;
+               if ( tt == '(' ) {
+	          a = nextRatPolynomial();
+                  tt = tok.nextToken();
+                  if ( tok.ttype != ')' ) tok.pushBack();
+	       } else { tok.pushBack();
+                  a = nextRatPolynomial();
+	       }
+               logger.info("next = " + a); 
 	       L.add( a );
+
                if ( tok.ttype == StreamTokenizer.TT_EOF ) break;
                if ( tok.ttype == ')' ) break;
          }
@@ -301,17 +361,23 @@ public class OrderedPolynomialTokenizer  {
      * parsing method for polynomial set
      * syntax: varList termOrderName polyList
      */
-    public PolynomialList  nextPolynomialSet() throws IOException {
+    public PolynomialList nextPolynomialSet() throws IOException {
 	ArrayList s = null;
+	//String comments = "";
+        //comments += nextComment();
+        //if (debug) logger.debug("comment = " + comments);
+
 	vars = nextVariableList();
-               System.out.print("vars ="); 
+               String dd = "vars ="; 
 	       for (int i = 0; i < vars.length ;i++) {
-                   System.out.print( " "+vars[i] ); 
+                   dd+= " "+vars[i]; 
 	       }
-               System.out.println(); 
+               logger.info(dd); 
 	tord = nextExpOrd();
-               System.out.println("tord = " + tord); 
+               logger.info("tord = " + tord); 
 	s = nextPolynomialList();
+               logger.info("s = " + s); 
+	// comments += nextComment();
 	return new PolynomialList(vars,tord,s);
     }
 
