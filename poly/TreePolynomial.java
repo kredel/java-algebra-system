@@ -230,6 +230,10 @@ public abstract class TreePolynomial implements Polynomial, Cloneable {
         return y;
     }
 
+    public Map.Entry leadingMonomial() {  
+	return LM();
+    }
+
     public static Map.Entry DIPLM(Polynomial a) {  
 	if ( a == null ) return null;
         return a.LM();
@@ -249,6 +253,10 @@ public abstract class TreePolynomial implements Polynomial, Cloneable {
 	if ( h == null ) return null;
         */
         return (ExpVector)m.getKey();
+    }
+
+    public ExpVector leadingExpVector() {  
+	return LEV();
     }
 
     public static ExpVector DIPLEV(Polynomial a) {  
@@ -271,6 +279,10 @@ public abstract class TreePolynomial implements Polynomial, Cloneable {
         return e.length();
     }
 
+    public int numberOfVariables() {  
+	return NOV();
+    }
+
     public static int DIPNOV(Polynomial a) {  
 	if ( a == null ) return 0;
         return a.NOV();
@@ -288,11 +300,14 @@ public abstract class TreePolynomial implements Polynomial, Cloneable {
         return a;
     }
 
+    public Object leadingBaseCoefficient() {  
+	return LBC();
+    }
+
     public static Object DIPLBC(Polynomial a) {  
 	if ( a == null ) return null;
         return a.LBC();
     }
-
 
     /**
      * Sum. Implemantation based on TreeMap / SortedMap.

@@ -14,7 +14,7 @@ import java.util.Map;
 /**
  * Polynomial Interface. 
  * For implementations based different Maps, e.g. 
- * SortedMap / TreeMap, LinkedHashMap.
+ * SortedMap / TreeMap, HashMap / LinkedHashMap.
  */
 
 interface Polynomial {
@@ -45,13 +45,17 @@ interface Polynomial {
 
     public Polynomial getONE();
 
-    public Map.Entry LM();
+    public Map.Entry LM();  // deprecated
+    public Map.Entry leadingMonomial();
 
-    public ExpVector LEV();
+    public ExpVector LEV(); // deprecated
+    public ExpVector leadingExpVector();
 
-    public int NOV(); 
+    public int NOV(); // deprecated
+    public int numberOfVariables(); 
 
-    public Object LBC(); 
+    public Object LBC(); // deprecated
+    public Object leadingBaseCoefficient(); 
 
     public Polynomial add(Polynomial B);
 
