@@ -9,13 +9,14 @@
 # todo 
 
 # set this to your jdk binaries path
-JDK=/usr/java/j2sdk1.4.1_01/bin
+#JDK=/usr/java/jdk1.5.0/bin
+#JDK=/usr/java/j2sdk1.4.1_01/bin
 #JDK=/usr/java/j2sdk1.4.0_01/bin
 #JDK=/opt/jdk1.4/bin
 #JDK=/opt/jdk1.4.0b3/bin
 #JDK=/usr/lib/jdk1.3/bin
 #JDK=/opt/jdk1.2.2/bin
-#JDK=/usr/lib/java/bin
+JDK=/usr/lib/java/bin
 
 LIBPATH=/home/kredel/java/lib
 JUNITPATH=$(LIBPATH)/junit.jar
@@ -31,7 +32,7 @@ cl=
 #.EXPORT_ALL_VARIABLES :
 
 JASPATH=/home/kredel/jas
-DEFS=$(JASPATH)/arith:$(JASPATH)/poly:$(JASPATH)/ring
+DEFS=$(JASPATH)/arith:$(JASPATH)/poly:$(JASPATH)/ring:$(JASPATH)/util
 DOCCLASSES=$(JUNITPATH):$(LOG4JPATH):$(JOMPPATH)
 DOCOPTS=-package
 #DOCOPTS=-package -version -author
@@ -39,7 +40,8 @@ DOCOPTS=-package
 
 MYCLASSPATH = .:$(DEFS):$(JUNITPATH):$(LOG4JPATH):$(JOMPPATH):$(TNJPATH)
 
-JAVAC=$(JDK)/javac -classpath $(MYCLASSPATH) -d .
+JAVAC=$(JDK)/javac -classpath $(MYCLASSPATH) -d . 
+#-Xlint:unchecked
 JAVA=$(JDK)/java -classpath $(MYCLASSPATH)  
 #-verbose:gc
 #JAVA=$(JDK)/java -classpath $(MYCLASSPATH)  -verbose:gc -Xrunhprof:cpu=times,format=a
@@ -58,7 +60,8 @@ GETC      = getc.pl
 
 .SUFFIXES :
 .SUFFIXES : .class .java 
-.PRECIOUS : %.java %.class edu/jas/arith/%.class edu/jas/poly/%.class edu/jas/ring/%.class edu/jas/versuch/%.class
+.PRECIOUS : %.java %.class edu/jas/arith/%.class edu/jas/poly/%.class edu/jas/ring/%.class edu/jas/versuch/%.class edu/jas/util/%.class edu/jas/%.class
+
 .PHONY    : clean doc
 
 all:
@@ -83,6 +86,9 @@ edu/jas/ring/%.class: %.java
 edu/jas/versuch/%.class: %.java
 	$(JAVAC) $<
 
+edu/jas/util/%.class: %.java
+	$(JAVAC) $<
+
 
 edu.jas.%: edu/jas/%.class
 	$(JAVA) $@ $(cl)
@@ -99,12 +105,13 @@ edu.jas.ring.%: edu/jas/ring/%.class
 edu.jas.versuch.%: edu/jas/versuch/%.class
 	$(JAVA) $@ $(cl)
 
+edu.jas.util.%: edu/jas/util/%.class
+	$(JAVA) $@ $(cl)
 
 
 
-.PRECIOUS : %.java %.class edu/jas/%.class
 
-FILES=$(wildcard *.java arith/*.java poly/*.java ring/*.java)
+FILES=$(wildcard *.java arith/*.java poly/*.java ring/*.java util/*.java)
 LIBS=$(JUNITPATH) $(LOG4JPATH) $(JOMPPATH)
 
 doc: $(FILES)
