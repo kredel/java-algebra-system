@@ -28,7 +28,7 @@
   <echoproperties />
 </target>
 
-<target name="compile" depends="vorher,depend" >
+<target name="compile" depends="vorher" >
   <javac srcdir="${src}" destdir="${build}" 
          classpath="${cp}" />
 </target>
@@ -41,11 +41,11 @@
   </javadoc>
 </target>
 
-<target name="depend" depends="vorher" >
+<!--target name="depend" depends="vorher" >
   <depend srcDir="${src}" destDir="${build}" 
           dump="true" closure="true" >
   </depend>
-</target>
+</target-->
 
 <target name="jdepend" depends="vorher" >
   <!-- does not work: jars missing  -->
