@@ -69,25 +69,25 @@ public class DistributedListServer implements Runnable {
        mythread = Thread.currentThread();
        goon = true;
        while (goon) {
-          logger.info("list server " + this + " go on");
+          logger.debug("list server " + this + " go on");
           try {
                channel = cf.getChannel();
 	       if ( mythread.isInterrupted() ) {
 		   goon = false;
-	           logger.info("list server " + this + " interrupted");
+	           //logger.info("list server " + this + " interrupted");
 		   return;
 	       } else {
 	          s = new Broadcaster(channel,servers);
 	          servers.add( s );
 	          s.start();
-	          logger.info("server " + s + " started");
+	          logger.debug("server " + s + " started");
 	       }
           } catch (InterruptedException e) {
                goon = false;
 	       // e.printStackTrace();
 	  }
        }
-       logger.info("listserver " + this + " terminated");
+       //logger.debug("listserver " + this + " terminated");
     }
 
 /**
@@ -96,7 +96,7 @@ public class DistributedListServer implements Runnable {
 
     public void terminate() {
 	goon = false;
-        logger.info("terminating ListServer");
+        //logger.debug("terminating ListServer");
 	cf.terminate();
 	if ( servers == null ) return;
 	Iterator it = servers.iterator();
@@ -108,7 +108,7 @@ public class DistributedListServer implements Runnable {
                         x.interrupt(); 
                         x.join(100);
                 }
-	        logger.info("server " + x + " terminated");
+	        //logger.debug("server " + x + " terminated");
             } catch (InterruptedException e) { 
             }
 	}
@@ -116,11 +116,10 @@ public class DistributedListServer implements Runnable {
 	if ( mythread == null ) return;
         try { 
             while ( mythread.isAlive() ) {
-		    System.out.print("%");
                     mythread.interrupt(); 
                     mythread.join(100);
             }
-            logger.info("server " + mythread + " terminated");
+            //logger.debug("server " + mythread + " terminated");
         } catch (InterruptedException e) { 
         }
     }
@@ -141,6 +140,7 @@ public class DistributedListServer implements Runnable {
 
 class Broadcaster extends Thread /*implements Runnable*/ {
 
+    private static Logger logger = Logger.getLogger(Broadcaster.class);
     protected final SocketChannel channel;
     private List list;
 
@@ -153,11 +153,10 @@ class Broadcaster extends Thread /*implements Runnable*/ {
 	Iterator it = list.iterator();
 	while ( it.hasNext() ) {
 	    Broadcaster x = (Broadcaster) it.next();
-	    //System.out.println("x = " + x);
 	    try {
                 if ( x.channel != channel ) {
                    x.channel.send(o);
-		   System.out.println("bcast: "+o+" to "+x.channel);
+		   //System.out.println("bcast: "+o+" to "+x.channel);
 		} 
 	    } catch (IOException e) {
               try { 
@@ -177,10 +176,9 @@ class Broadcaster extends Thread /*implements Runnable*/ {
 	Object o;
 	boolean goon = true;
 	while (goon) {
-              System.out.println("receiving in "+this);
               try {
                    o = channel.receive();
-                   System.out.println("receive: "+o+" from "+channel);
+                   //System.out.println("receive: "+o+" from "+channel);
 		   broadcast(o);
 		   if ( this.isInterrupted() ) {
 		       goon = false;
@@ -191,7 +189,7 @@ class Broadcaster extends Thread /*implements Runnable*/ {
                    goon = false;
 	      }
 	}
-        System.out.println("broadcaster terminated "+this);
+	logger.debug("broadcaster terminated "+this);
 	channel.close();
     }
 

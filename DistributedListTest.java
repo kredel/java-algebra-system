@@ -73,13 +73,13 @@ public class DistributedListTest extends TestCase {
        while ( dlst.isAlive() && k < 10 ) { 
 	     k++;
              try {
-                  System.out.print("-");
+		  // System.out.print("-");
                   dlst.interrupt();
                   dlst.join(100);
              } catch (InterruptedException e) {
              }
        }
-       System.out.println("tearedDown");
+       //System.out.println("tearedDown");
    }
 
 
@@ -120,20 +120,22 @@ public class DistributedListTest extends TestCase {
      l2 = new DistributedList(host);
      assertTrue("l2==empty",l2.isEmpty());
 
-     int i = 0;
-     while ( i < 10 ) {
+     int i = 0, loops = 10;
+     while ( i < loops ) {
 	   Integer x = new Integer( ++i );
            l1.add( x );
            assertTrue("#l1==i", l1.size() == i );
      }
+     assertTrue("#l1==10", l1.size() == loops );
 
-     while ( l2.size() < 5 ) {
+     while ( l2.size() < loops ) {
          try {
-	     System.out.print(".");
+	     //System.out.print(".");
              Thread.currentThread().sleep(100);
          } catch (InterruptedException e) {
          }
      }
+     assertTrue("#l2==10", l2.size() == loops );
 
      Iterator it = null;
      it = l2.iterator();
@@ -141,14 +143,9 @@ public class DistributedListTest extends TestCase {
      while ( it.hasNext() ) {
 	   Object o = it.next();
 	   Integer x = new Integer( ++i );
-	   System.out.println("o = " + o + " x = "+ x);
+	   //System.out.println("o = " + o + " x = "+ x);
            assertEquals("l2(i)==(i)", x, o );
      }
-     //     assertEquals("#l2==10", 10, l2.size() );
-
-     //l2.clear();
-     //l1.clear();
-     //assertTrue("#l1==0", l1.size() == 0 );
    }
 
 

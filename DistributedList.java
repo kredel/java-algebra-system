@@ -70,7 +70,7 @@ public class DistributedList /* implements List ?*/{
     public synchronized boolean add(Object o) {
 	try {
             channel.send(o);
-            System.out.println("send: "+o+" @ "+listener);
+            //System.out.println("send: "+o+" @ "+listener);
 	} catch (IOException e) {
 	    e.printStackTrace();
 	}
@@ -84,21 +84,17 @@ public class DistributedList /* implements List ?*/{
     public void terminate() {
 	cf.terminate();
 	//theList.clear();
-        System.out.println("terminate "+listener);
+        logger.debug("terminate "+listener);
         listener.setDone(); 
 	channel.close();
         try { 
- 	     int t = 0;
              while ( listener.isAlive() ) {
-                     System.out.println("interrupt "+listener);
                      listener.interrupt(); 
-		     t++;
                      listener.join(100);
              }
         } catch (InterruptedException unused) { 
         }
 	listener = null;
-        System.out.println("listener = null");
     }
 
 /**
@@ -143,10 +139,9 @@ class Listener extends Thread /*implements Runnable*/ {
 	Object o;
 	goon = true;
 	while (goon) {
-              System.out.println("listener receive @ "+Thread.currentThread());
               try {
                    o = channel.receive();
-                   System.out.println("receive: "+o+" @ "+Thread.currentThread());
+                   //System.out.println("receive: "+o+" @ "+Thread.currentThread());
 		   if ( this.isInterrupted() ) {
 		       goon = false;
 		       return;
