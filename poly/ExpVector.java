@@ -28,6 +28,7 @@ public class ExpVector implements Cloneable {
     public static final int REVTDEG = 7;
     public static final int REVITDG = 8;
 
+    //public static final int DEFAULT_EVORD = INVLEX;
     public static final int DEFAULT_EVORD = IGRLEX;
 
 
@@ -129,6 +130,7 @@ public class ExpVector implements Cloneable {
     public String toString(String[] vars) {
         String s = "";
         boolean pit;
+	if ( val.length != vars.length ) return toString();
         for (int i = 0; i < (val.length-1); i++ ) {
             if ( val[i] != 0 ) { 
                s += vars[val.length-1-i];
