@@ -65,6 +65,14 @@ Some UML class diagramms as produced by ArgoUML:
 </dd>
 -->
 
+<dt>2004, 1, 10</dt>
+<dd>
+Refactored Groebner base for new OrderedPolynomials and
+split sequential and parallel GB implementations.
+New unit tests for sequential and parallel GBs.
+GB now works for arbitrary Coefficients.
+</dd>
+
 <dt>2004, 1, 5</dt>
 <dd>
 New coefficient domains BigComplex and BigQuaternion. 
@@ -72,6 +80,8 @@ New test unit for all coefficients.
 Based on these coefficients are new polynomials, e.g. 
 ComplexOrderedMapPolynomial and QuatOrderedMapPolynomial
 together with unit tests.
+Problem: RatPolynomial requires DEFAULT_EVORD be set correctly in ExpVector.
+This is now solved for the new OrderedMapPolynomials.
 </dd>
 
 <dt>2003, 12, 29</dt>
@@ -653,7 +663,7 @@ CPU TIME (ms) END
 <p>
 <!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
 <!-- hhmts start -->
-Last modified: Wed Jan  7 21:30:59 CET 2004
+Last modified: Sun Jan 11 19:14:37 CET 2004
 <!-- hhmts end -->
 </p>
 <p align="right" >
