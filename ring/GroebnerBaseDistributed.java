@@ -215,8 +215,18 @@ public class GroebnerBaseDistributed  {
                while ( goon && ( pairlist.hasNext() || pool.hasJobs() ) ) {
                    while ( ! pairlist.hasNext() ) {
                        // wait
-                       pool.beIdle(); set = true;
-                       if ( ! pool.hasJobs() ) break;
+		       if ( ! set ) {
+                          pool.beIdle(); 
+                          set = true;
+		       }
+                       if ( ! pool.hasJobs() && ! pairlist.hasNext() ) {
+			   goon = false;
+                           if ( set ) { 
+	                      set = false;
+                              pool.notIdle();
+		           }
+                           break;
+		       }
                        try {
                            sleeps++;
                            if ( sleeps % 10 == 0 ) {
@@ -226,15 +236,34 @@ public class GroebnerBaseDistributed  {
                            }
                            Thread.currentThread().sleep(100);
                        } catch (InterruptedException e) {
+                           goon = false;
+                           if ( set ) { 
+	                      set = false;
+                              pool.notIdle();
+		           }
                            break;
                        }
-                       if ( ! pool.hasJobs() ) break;
+                       if ( ! pool.hasJobs() && ! pairlist.hasNext() ) {
+			  goon = false;
+                          if ( set ) { 
+	                     set = false;
+                             pool.notIdle();
+		          }
+                          break;
+		       }
                    }
                    if ( ! pairlist.hasNext() && ! pool.hasJobs() ) {
                       goon = false;
+                      if ( set ) { 
+			 set = false;
+                         pool.notIdle();
+		      }
                       continue; //break?
                    }
-                   if ( set ) pool.notIdle();
+                   if ( set ) {
+		      set = false;
+                      pool.notIdle();
+		   }
 
                    pair = (Pair) pairlist.removeNext();
                    // if ( pair == null ) continue; 
@@ -284,6 +313,7 @@ public class GroebnerBaseDistributed  {
                       goon = false;
 		      break;
                    }
+
                // receive request
                logger.debug("receive request");
                dummy = null;
@@ -312,7 +342,8 @@ public class GroebnerBaseDistributed  {
                goon = false;
                e.printStackTrace();
            }
-           pool.allIdle();
+	   // pool.allIdle();
+	   pool.beIdle();
            pairChannel.close();
         }
 
