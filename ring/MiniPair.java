@@ -8,8 +8,8 @@ import java.io.Serializable;
      */
 
     class MiniPair implements Serializable {
-	public Integer i;
-	public Integer j;
+	public final Integer i;
+	public final Integer j;
 
 	MiniPair(int i, int j) {
             this.i = new Integer(i); 
