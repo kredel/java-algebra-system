@@ -1,10 +1,14 @@
+/*
+ * $Id$
+ */
 
 package edu.jas.ring;
 
 import java.io.Serializable;
 
     /**
-     * subclass to hold pairs of polynomials
+     * Subclass to hold pairs of polynomial indices
+     * What is this class good for?
      */
 
     class MiniPair implements Serializable {
