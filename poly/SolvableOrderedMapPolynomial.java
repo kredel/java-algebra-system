@@ -125,6 +125,8 @@ public abstract class SolvableOrderedMapPolynomial
         erg.append( super.toString() );
         erg.append(" | #rel = ");
         erg.append( table.size() ); // not table itself!
+        //erg.append(", ");
+        //erg.append( table.getNumvar() ); 
         erg.append(" }");
         return erg.toString(); 
     }
@@ -138,6 +140,9 @@ public abstract class SolvableOrderedMapPolynomial
 	if ( Bp == null ) return getZERO();
         if ( ! this.order.equals( Bp.getTermOrder() ) ) { 
            logger.error("SPol term orderings not equal, this = "+this+", Bp = "+Bp); 
+        }
+        if ( table == null ) {
+           throw new RuntimeException("no solvable polynomial "+super.toString());
         }
         // this.val != empty
         int rl = numberOfVariables();
