@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 
+import org.apache.log4j.BasicConfigurator;
+
 import edu.jas.arith.BigRational;
 import edu.jas.poly.RatOrderedMapPolynomial;
 import edu.jas.poly.OrderedPolynomialTokenizer;
@@ -24,6 +26,7 @@ public class RunRose {
 
 
   public static void main( java.lang.String[] args ) {
+      BasicConfigurator.configure();
       final int THREADS = 3;
       int threads = THREADS;
       if ( args.length > 0 ) {
