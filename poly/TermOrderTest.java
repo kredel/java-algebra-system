@@ -205,7 +205,29 @@ public class TermOrderTest extends TestCase {
      b = ExpVector.EVRAND(5,10,q);
 
      int wrong = 99;
-     t = new TermOrder(wrong);
+     int x = 0;
+
+     try {
+         t = new TermOrder(wrong);
+     } catch (IllegalArgumentException e) {
+         return;
+     }
+     fail("IllegalArgumentException");
+   }
+
+
+/**
+ * Test compare exception
+ * 
+ */
+ public void testCompareException() {
+     float q = (float) 0.9;
+
+     a = ExpVector.EVRAND(5,10,q);
+     b = ExpVector.EVRAND(5,10,q);
+
+     int notimpl = TermOrder.REVITDG;
+     t = new TermOrder(notimpl);
      int x = 0;
 
      try {
