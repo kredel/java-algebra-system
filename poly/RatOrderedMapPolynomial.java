@@ -6,6 +6,7 @@ package edu.jas.poly;
 
 import java.util.Set;
 import java.util.Map;
+import java.util.SortedMap;
 import java.util.LinkedHashMap;
 import java.util.Iterator;
 
@@ -69,7 +70,6 @@ public class RatOrderedMapPolynomial extends OrderedMapPolynomial {
 	super(to,o);
     }
 
-
     public Object clone() { 
        RatOrderedMapPolynomial p = new RatOrderedMapPolynomial(order,val);
        p.setVars(vars);
@@ -98,6 +98,50 @@ public class RatOrderedMapPolynomial extends OrderedMapPolynomial {
     public static final RatOrderedMapPolynomial ONE = 
                         new RatOrderedMapPolynomial(BigRational.ONE,
                                                     new ExpVector());
+
+
+    /**
+     * polynomial from string.
+     * simple format:  p/q (1,2) r/s (3,4) ...
+     * @see PolynomialTokenizer
+     */
+
+    public static RatOrderedMapPolynomial fromString(String s) { 
+	RatOrderedMapPolynomial erg = null;
+	BigRational r;
+	ExpVector u;
+	String teil;
+	int b = 0;
+	int e = s.length();
+	int k = s.indexOf('(');
+	if ( k < 0 ) {
+	    r = new BigRational( s.trim() );
+	    u = new ExpVector( );
+	    erg = new RatOrderedMapPolynomial( r, u );
+	} else {
+	    teil = s.substring(0,k);
+	    r = new BigRational( teil.trim() );
+	    b = k;
+	    k = s.indexOf(')',b);
+	    teil = s.substring(b,k+1);
+	    u = new ExpVector( teil.trim() );
+	    erg = new RatOrderedMapPolynomial( r, u );
+	    b = k + 1;
+	    while ( b <= e ) {
+               k = s.indexOf('(',b);
+	       if ( k < 0 ) break;
+               teil = s.substring(b,k);
+	       r = new BigRational( teil.trim() );
+	       b = k;
+	       k = s.indexOf(')',b);
+	       teil = s.substring(b,k+1);
+	       u = new ExpVector( teil.trim() );
+	       b = k + 1;
+	       erg = (RatOrderedMapPolynomial) erg.add( r, u );
+	    }
+	}
+	return erg; //val = (SortedMap) erg.getMap();
+    }
 
     /**
      * Random polynomial.
