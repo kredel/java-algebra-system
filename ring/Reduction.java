@@ -106,6 +106,26 @@ public class Reduction  {
 
 
     /**
+     * Module criterium.
+     * @return true if the module S-polynomial(i,j) is required.
+     */
+
+    public static boolean ModuleCriterion(int modv, 
+                                          OrderedPolynomial A, 
+                                          OrderedPolynomial B) {  
+        if ( modv == 0 ) {
+            return true;
+        }
+        ExpVector ei = A.leadingExpVector();
+        ExpVector ej = B.leadingExpVector();
+        if ( ExpVector.EVILCP( ei, ej, 0, modv ) != 0 ) {
+           return false; // skip pair
+        }
+        return true;
+    }
+
+
+    /**
      * GB criterium 4.
      * @param e = lcm(ht(A),ht(B)) 
      * @return true if the S-polynomial(i,j) is required.
