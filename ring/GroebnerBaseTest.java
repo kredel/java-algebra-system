@@ -132,7 +132,7 @@ public class GroebnerBaseTest extends TestCase {
      L = new ArrayList();
      L.add(a);
 
-     L = GroebnerBase.DIRPGBparallel( L, threads );
+     L = GroebnerBaseParallel.DIRPGB( L, threads );
      assertTrue("isDIRPGB( { a } )", GroebnerBase.isDIRPGB(L) );
 
      //b = RatOrderedMapPolynomial.DIRRAS(rl, kl, ll, el, q );
@@ -140,21 +140,21 @@ public class GroebnerBaseTest extends TestCase {
      L.add(b);
      //  System.out.println("L = " + L.size() );
 
-     L = GroebnerBase.DIRPGBparallel( L, threads );
+     L = GroebnerBaseParallel.DIRPGB( L, threads );
      assertTrue("isDIRPGB( { a, b } )", GroebnerBase.isDIRPGB(L) );
 
      // c = RatOrderedMapPolynomial.DIRRAS(rl, kl, ll, el, q );
      assertTrue("not isZERO( c )", !c.isZERO() );
      L.add(c);
 
-     L = GroebnerBase.DIRPGBparallel( L, threads );
+     L = GroebnerBaseParallel.DIRPGB( L, threads );
      assertTrue("isDIRPGB( { a, ,b, c } )", GroebnerBase.isDIRPGB(L) );
 
      // d = RatOrderedMapPolynomial.DIRRAS(rl, kl, ll, el, q );
      assertTrue("not isZERO( d )", !d.isZERO() );
      L.add(d);
 
-     L = GroebnerBase.DIRPGBparallel( L, threads );
+     L = GroebnerBaseParallel.DIRPGB( L, threads );
      assertTrue("isDIRPGB( { a, ,b, c, d } )", GroebnerBase.isDIRPGB(L) );
  }
 
