@@ -191,29 +191,29 @@ public class SolvableSyzygyTest extends TestCase {
      L.add(b);
      L = SolvableGroebnerBase.leftGB(L);
      assertTrue("isGB( { a, b } )", SolvableGroebnerBase.isLeftGB(L) );
-     System.out.println("\nL = " + L );
+     //System.out.println("\nL = " + L );
      N = SolvableSyzygy.leftZeroRelations( L );
-     System.out.println("\nN = " + N );
+     //System.out.println("\nN = " + N );
      assertTrue("is ZR( { a, b } )", SolvableSyzygy.isLeftZeroRelation(N,L) );
 
      // useless since 1 in GB
      assertTrue("not isZERO( c )", !c.isZERO() );
      L.add(c);
      L = SolvableGroebnerBase.leftGB(L);
-     System.out.println("\nL = " + L );
+     //System.out.println("\nL = " + L );
      assertTrue("isGB( { a, b, c } )", SolvableGroebnerBase.isLeftGB(L) );
      N = SolvableSyzygy.leftZeroRelations( L );
-     System.out.println("\nN = " + N );
+     //System.out.println("\nN = " + N );
      assertTrue("is ZR( { a, b, c } )", SolvableSyzygy.isLeftZeroRelation(N,L) );
 
      // useless since 1 in GB
      assertTrue("not isZERO( d )", !d.isZERO() );
      L.add(d);
      L = SolvableGroebnerBase.leftGB(L);
-     System.out.println("\nL = " + L );
+     //System.out.println("\nL = " + L );
      assertTrue("isGB( { a, b, c, d } )", SolvableGroebnerBase.isLeftGB(L) );
      N = SolvableSyzygy.leftZeroRelations( L );
-     System.out.println("\nN = " + N );
+     //System.out.println("\nN = " + N );
      assertTrue("is ZR( { a, b, c, d } )", SolvableSyzygy.isLeftZeroRelation(N,L) );
 
      //System.out.println("N = " + N );
