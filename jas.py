@@ -83,6 +83,8 @@ class SolvRing:
         sr = StringReader( str );
         tok = OrderedPolynomialTokenizer(sr);
         self.pset = tok.nextSolvablePolynomialSet();
+        self.vars = self.pset.vars;
+        self.tord = self.pset.tord;
 
     def __str__(self):
         return str(self.pset);
