@@ -29,7 +29,7 @@ public class BigQuaternion implements Coefficient, Comparable {
     private static Logger logger = Logger.getLogger(BigQuaternion.class);
 
     /** The constructors create a BigQuaternion object 
-     * from two BigRational objects real and imaginary part. 
+     * from two BigRational objects real and imaginary parts. 
      */
 
     public BigQuaternion(BigRational r, BigRational i, BigRational j, BigRational k) {
@@ -59,37 +59,61 @@ public class BigQuaternion implements Coefficient, Comparable {
         this(BigRational.ZERO);
     }
 
+
+    /** The BigQuaternion string constructor accepts the
+     * following formats:
+     * empty string, "rational", or "rat i rat j rat k rat"
+     */
+
     public BigQuaternion(String s) throws NumberFormatException {
         if ( s == null || s.length() == 0) {
-            re = BigRational.ZERO;
-            im = BigRational.ZERO;
-            jm = null;
-            km = null;
-            return;
+           re = BigRational.ZERO;
+           im = BigRational.ZERO;
+           jm = BigRational.ZERO;
+           km = BigRational.ZERO;
+           return;
         } 
         s = s.trim();
-        int i = s.indexOf("i");
-        if ( i < 0 ) {
-           re = new BigRational( s );
+	int r = s.indexOf("i") + s.indexOf("j") + s.indexOf("k");
+	if ( r == -3 ) {
+           re = new BigRational(s);
            im = BigRational.ZERO;
-           jm = null;
-           km = null;
+           jm = BigRational.ZERO;
+           km = BigRational.ZERO;
            return;
-        }
-        logger.warn("String constructor not done");
+	}
+
+        int i = s.indexOf("i");
         String sr = "";
         if ( i > 0 ) {
            sr = s.substring(0,i);
         }
         String si = "";
         if ( i < s.length() ) {
-           si = s.substring(i+1,s.length());
+           s = s.substring(i+1,s.length());
         }
-        int j = sr.indexOf("+");
+        int j = s.indexOf("j");
+        if ( j > 0 ) {
+           si = s.substring(0,j);
+        }
+        String sj = "";
+        if ( j < s.length() ) {
+           s = s.substring(j+1,s.length());
+        }
+        int k = s.indexOf("k");
+        if ( k > 0 ) {
+           sj = s.substring(0,k);
+        }
+        String sk = "";
+        if ( k < s.length() ) {
+           s = s.substring(k+1,s.length());
+        }
+	sk = s;
+
         re = new BigRational( sr.trim() );
         im = new BigRational( si.trim() );
-        jm = null;
-        km = null;
+        jm = new BigRational( sj.trim() );
+        km = new BigRational( sk.trim() );
     }
 
     public /*static*/ Coefficient fromInteger(BigInteger a) {
@@ -137,23 +161,21 @@ public class BigQuaternion implements Coefficient, Comparable {
 
 
     /** string representation
+     * compatible with string constructor
      */
 
     public String toString() {
         String s = "" + re;
         int i = im.compareTo( BigRational.ZERO );
-        logger.info("compareTo "+im+" ? 0 = "+i);
-        if ( i == 0 ) return s;
+        int j = jm.compareTo( BigRational.ZERO );
+        int k = km.compareTo( BigRational.ZERO );
+        logger.debug("compareTo "+im+" ? 0 = "+i);
+        logger.debug("compareTo "+jm+" ? 0 = "+j);
+        logger.debug("compareTo "+km+" ? 0 = "+k);
+        if ( i == 0 && j == 0 && k == 0 ) return s;
         s += " i " + im;
-        /*
-        if ( i == 1 ) {
-           s += " - " + (im.negate()) + "i";
-        } else if ( i == -1 ) {
-           s += " + " + im + "i";
-        } else {
-            // do nothing
-        }
-        */
+        s += " j " + jm;
+        s += " k " + km;
         return s;
     }
 
@@ -398,7 +420,7 @@ public class BigQuaternion implements Coefficient, Comparable {
     rational numbers A and B are generated using RNRAND(n). Then 
     R is the quaternion number with real part A and imaginary part B. */
 
-    public static BigQuaternion CRAND(int n) {
+    public static BigQuaternion QRAND(int n) {
       return new BigQuaternion( new BigRational(n), 
                                 new BigRational(n), 
                                 new BigRational(n),
@@ -409,7 +431,7 @@ public class BigQuaternion implements Coefficient, Comparable {
      */
 
     public Coefficient random(int n) {
-        return CRAND(n);
+        return QRAND(n);
     }
 
 }
