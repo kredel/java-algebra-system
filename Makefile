@@ -58,7 +58,7 @@ GETC      = getc.pl
 
 .SUFFIXES :
 .SUFFIXES : .class .java 
-.PRECIOUS : %.java %.class edu/jas/arith/%.class edu/jas/poly/%.class edu/jas/ring/%.class
+.PRECIOUS : %.java %.class edu/jas/arith/%.class edu/jas/poly/%.class edu/jas/ring/%.class edu/jas/versuch/%.class
 .PHONY    : clean doc
 
 all:
@@ -110,10 +110,10 @@ LIBS=$(JUNITPATH) $(LOG4JPATH) $(JOMPPATH)
 doc: $(FILES)
 	$(DOC) $(DOCOPTS) -d doc $(FILES) 
 
-jar: $(FILES) jas-log.html Makefile
-	$(JDK)/jar -cvf jas.jar $(FILES) edu/ jas-log.html Makefile
+jar: $(FILES) jas-log.html Makefile build.xml log4j.properties
+	$(JDK)/jar -cvf jas.jar $(FILES) edu/ jas-log.html Makefile build.xml log4j.properties
 	cp jas.jar /tmp/jas-`date +%Y%j`.jar
-	cp jas.jar /mnt/i/e/kredel/jas-`date +%Y%j`.jar
+#	cp jas.jar /mnt/i/e/kredel/jas-`date +%Y%j`.jar
 
 dist: jas.jar
 	tar -cvzf jas-dist.tgz jas.jar $(LIBS)

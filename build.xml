@@ -121,7 +121,7 @@
   <jar jarfile="../jas-${DSTAMP}.jar"  >
      <fileset dir="." includes="**/*.java"  />
      <fileset dir="." includes="jas-log.html"  />
-     <fileset dir="." includes="build.xml Makefile"  />
+     <fileset dir="." includes="build.xml Makefile log4j.properties"  />
      <fileset dir="edu/jas" />
   </jar>
 </target>
