@@ -212,7 +212,8 @@ public class ExecutableChannels {
                 j = 1;
             }
             channels[i] = cf.getChannel( servers[j], ports[j] );
-        }
+            j++;
+       }
     }
 
 
