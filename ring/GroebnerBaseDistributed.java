@@ -134,7 +134,14 @@ public class GroebnerBaseDistributed  {
            logger.error("#distributed list = "+theList.size() 
                       + " #pairlist list = "+G.size() );
         }
-        G = DIGBMI(G,T); // not jet distributed but threaded
+        long time = System.currentTimeMillis();
+        List Gp = DIGBMI(G,T); // not jet distributed but threaded
+        time = System.currentTimeMillis() - time;
+        logger.info("parallel gbmi = " + time);
+        time = System.currentTimeMillis();
+        G = GroebnerBase.DIGBMI(G); // sequential
+        time = System.currentTimeMillis() - time;
+        logger.info("sequential gbmi = " + time);
         cf.terminate();
         T.terminate();
         theList.terminate();
