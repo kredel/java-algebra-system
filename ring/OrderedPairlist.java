@@ -37,6 +37,8 @@ public class OrderedPairlist {
     private final ArrayList red;
     private final TermOrder torder;
     private boolean oneInGB = false;
+    private int putCount;
+    private int remCount;
 
     private static Logger logger = Logger.getLogger(OrderedPairlist.class);
 
@@ -49,9 +51,17 @@ public class OrderedPairlist {
          P = new ArrayList();
          pairlist = new TreeMap( to.getAscendComparator() );
          red = new ArrayList();
+	 putCount = 0;
+	 remCount = 0;
     }
 
+
+    /**
+     * Put one Polynomial to the pairlist and reduction matrix
+     */
+
     public synchronized void put(OrderedPolynomial p) { 
+	   putCount++;
            if ( oneInGB ) return;
            Pair pair;
            ExpVector e; 
@@ -83,16 +93,21 @@ public class OrderedPairlist {
            // System.out.println("pairlist.keys@put = " + pairlist.keySet() );  
            P.add(  p );
            redi = new BitSet();
-           if ( l > 0 ) { // redi.set( 0, l ) jdk 1.4
-               for ( int i=0; i<l; i++ ) redi.set(i);
-           }
+           redi.set( 0, l ); // jdk 1.4
+	   // if ( l > 0 ) { // jdk 1.3
+           //    for ( int i=0; i<l; i++ ) redi.set(i);
+           // }
            red.add( redi );
     }
 
 
-    public synchronized Pair removeNext() { 
-        //System.out.println("pairlist.keys@remove = " + pairlist.keySet() );  
+    /**
+     * remove the next required pair from the pairlist and reduction matrix
+     * appy the criterions 3 and 4 to see if the S-polynomial is required
+     */
 
+    public synchronized Pair removeNext() { 
+       remCount++;
        if ( oneInGB ) return null;
        Set pk = pairlist.entrySet();
        Iterator ip = pk.iterator();
@@ -133,16 +148,48 @@ public class OrderedPairlist {
     }
 
 
+    /**
+     * Test if there is possibly a pair in the list
+     */
+
     public boolean hasNext() { 
           return pairlist.size() > 0;
     }
+
+
+    /**
+     * Get the list of polynomials
+     */
 
     public ArrayList getList() { 
           return P;
     }
 
 
+    /**
+     * Get the number of polynomials put to the pairlist
+     */
+
+    public int putCount() { 
+          return putCount;
+    }
+
+
+    /**
+     * Get the number of required pairs removed from the pairlist
+     */
+
+    public int remCount() { 
+          return remCount;
+    }
+
+
+    /**
+     * Put to ONE-Polynomial to the pairlist
+     */
+
     public synchronized void putOne(OrderedPolynomial one) { 
+        putCount++;
         if ( one == null ) return;
         if ( ! one.isONE() ) return;
         oneInGB = true;
