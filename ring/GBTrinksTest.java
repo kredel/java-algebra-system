@@ -17,6 +17,7 @@ import org.apache.log4j.Logger;
 
 import edu.jas.arith.BigRational;
 import edu.jas.poly.RatPolynomial;
+import edu.jas.poly.ExpVector;
 import edu.jas.poly.RatOrderedMapPolynomial;
 
   /**
@@ -55,11 +56,12 @@ public class GBTrinksTest extends TestCase {
     ArrayList Lb;
     ArrayList Gb;
 
+    RatPolynomial           p1, p2, p3, p4, p5, p6, p7;
+    RatOrderedMapPolynomial q1, q2, q3, q4, q5, q6, q7;
+
    protected void setUp() {
        La = new ArrayList();
        Ga = null;
-
-      RatPolynomial p1, p2, p3, p4, p5, p6, p7;
 
       p1 = new RatPolynomial( " 45 (0,1,0,0,0,0) 35 (0,0,0,0,1,0) -165 (0,0,0,0,0,1) -36 (0,0,0,0,0,0) " );
       if ( logger.isDebugEnabled() ) {
@@ -106,8 +108,6 @@ public class GBTrinksTest extends TestCase {
 
        Lb = new ArrayList();
        Gb = null;
-
-      RatOrderedMapPolynomial q1, q2, q3, q4, q5, q6, q7;
 
       q1 = RatOrderedMapPolynomial.fromString( p1.toString() );
       if ( logger.isDebugEnabled() ) {
@@ -179,8 +179,15 @@ public class GBTrinksTest extends TestCase {
       t = System.currentTimeMillis() - t;
       logger.info("time = " + t + " milliseconds" ); 
 
-      assertTrue("#(trinks)=14", La.size() == 6 );
-      assertTrue("#GB(trinks)=14", Ga.size() == 14 );
+      int evord = p1.getOrd();
+      if ( evord == ExpVector.IGRLEX ) {
+         assertTrue("#(trinks)=6", La.size() == 6 );
+         assertTrue("#GB(trinks)=14", Ga.size() == 14 );
+      }
+      if ( evord == ExpVector.INVLEX ) {
+         assertTrue("#(trinks)=6", La.size() == 6 );
+         assertTrue("#GB(trinks)=6", Ga.size() == 6 );
+      }
   }
 
 
@@ -204,8 +211,15 @@ public class GBTrinksTest extends TestCase {
       t = System.currentTimeMillis() - t;
       logger.info("time = " + t + " milliseconds" ); 
 
-      assertTrue("#(trinks)=14", Lb.size() == 6 );
-      assertTrue("#GB(trinks)=14", Gb.size() == 14 );
+      int evord = q1.getTermOrder().getEvord();
+      if ( evord == ExpVector.IGRLEX ) {
+         assertTrue("#(trinks)=6", Lb.size() == 6 );
+         assertTrue("#GB(trinks)=14", Gb.size() == 14 );
+      }
+      if ( evord == ExpVector.INVLEX ) {
+         assertTrue("#(trinks)=6", Lb.size() == 6 );
+         assertTrue("#GB(trinks)=6", Gb.size() == 6 );
+      }
   }
 
 
@@ -228,9 +242,6 @@ public class GBTrinksTest extends TestCase {
       t = System.currentTimeMillis() - t;
       logger.info("time = " + t + " milliseconds" ); 
 
-      assertTrue("#(trinks)=14", La.size() == 6 );
-      assertTrue("#GB(trinks)=14", Ga.size() == 14 );
-
       if ( logger.isDebugEnabled() ) {
          logger.debug("Lb = " + Lb ); 
          logger.debug("Lb.size() = " + Lb.size() ); 
@@ -245,9 +256,6 @@ public class GBTrinksTest extends TestCase {
       logger.info("Gb.size() = " + Gb.size() ); 
       t = System.currentTimeMillis() - t;
       logger.info("time = " + t + " milliseconds" ); 
-
-      assertTrue("#(trinks)=14", Lb.size() == 6 );
-      assertTrue("#GB(trinks)=14", Gb.size() == 14 );
 
       Iterator ia = Ga.iterator(); 
       Iterator ib = Gb.iterator(); 
