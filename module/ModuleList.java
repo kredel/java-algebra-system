@@ -67,7 +67,7 @@ public class ModuleList {
         }
 	vars = v;
 	tord = to;
-	list = sort( padCols(l) ); 
+	list = padCols(l); //sort( l ); 
         table = rt;
     }
 
@@ -106,31 +106,11 @@ public class ModuleList {
             //System.out.println("List, size");
             return false;
         }
-        Iterator jt = ml.list.iterator();
-        for ( Iterator it = list.iterator(); 
-              it.hasNext() && jt.hasNext(); ) {
-            Object mi = it.next();
-            Object mj = jt.next();
-            if ( ! ( mi instanceof List ) ) {
-                //System.out.println("List, mi");
-                return false;
-            }
-            if ( ! ( mj instanceof List ) ) {
-                //System.out.println("List, mj");
-                return false;
-            }
-            Object[] mia = ((List)mi).toArray();
-            Object[] mja = ((List)mj).toArray();
-            for ( int k = 0; k < mia.length; k++ ) {
-                OrderedPolynomial pi = (OrderedPolynomial)mia[k];
-                OrderedPolynomial pj = (OrderedPolynomial)mja[k];
-                if ( ! pi.equals( pj ) ) {
-                    //System.out.println("OrderedPolynomial");
-                    //System.out.println("pi = " + pi);
-                    //System.out.println("pj = " + pj);
-                   return false;
-                }
-            }
+        // compare sorted lists
+        List otl = OrderedModuleList.sort( list );
+        List oml = OrderedModuleList.sort( ml.list );
+        if ( ! otl.equals(oml) ) {
+            return false;
         }
 
         if ( table == null && ml.table != null ) {
@@ -222,7 +202,7 @@ public class ModuleList {
      * make all rows have the same number of columns.
      */
 
-    public List padCols(List l) {
+    public static List padCols(List l) {
         if ( l == null ) {
            return l;
         }
@@ -249,63 +229,6 @@ public class ModuleList {
             }
         }
         return norm;
-    }
-
-
-    /**
-     * Sort a list of vectors of polynomials with respect to the 
-     * ascending order of the leading Exponent vectors of the 
-     * first column. 
-     * The term order is taken from the first polynomials TermOrder.
-     */
-
-    public static List sort(List l) {
-        if ( l == null ) {
-            return l;
-        }
-        if ( l.size() <= 1 ) { // nothing to sort
-            return l;
-        }
-        List v = (List)l.get(0);
-        OrderedPolynomial p = (OrderedPolynomial)v.get(0);
-        final Comparator e = p.getTermOrder().getAscendComparator();
-        Comparator c = new Comparator() {
-                public int compare(Object o1, Object o2) {
-                       List l1 = (List)o1;
-                       List l2 = (List)o2;
-                       int c = 0;
-                       for ( int i = 0; i < l1.size(); i++ ) {
-                           OrderedPolynomial p1 = (OrderedPolynomial)l1.get(i);
-                           OrderedPolynomial p2 = (OrderedPolynomial)l2.get(i);
-                           ExpVector e1 = p1.leadingExpVector();
-                           ExpVector e2 = p2.leadingExpVector();
-                           if ( e1 == null && e2 != null ) {
-                               return -1; 
-                           }
-                           if ( e1 != null && e2 == null ) {
-                               return 1; 
-                           }
-                           if ( e1 == null && e2 == null ) {
-                               continue; 
-                           }
-                           if ( e1.length() != e2.length() ) {
-                              if ( e1.length() > e2.length() ) {
-                                 return 1; 
-                              } else {
-                                 return -1;
-                              }
-                           }
-                           c = e.compare(e1,e2);
-                           if ( c != 0 ) {
-                               return c;
-                           }
-                       }
-                       return c;
-                }
-            };
-        Object[] s = l.toArray();
-        Arrays.sort( s, c );
-        return new ArrayList( Arrays.asList(s) );
     }
 
 
@@ -415,10 +338,10 @@ public class ModuleList {
                     ExpVector e = (ExpVector)jt.next();
                     int[] dov = e.dependencyOnVariables();
                     int ix = 0;
-                    if ( dov.length != 1 ) {
+                    if ( dov.length > 1 ) {
                        throw new RuntimeException("wrong dependencyOnVariables " + e);
                        //System.out.println("wrong dependencyOnVariables " + e);
-                    } else {
+                    } else if ( dov.length == 1 )  {
                        ix = dov[0];
                     }
                     //ix = i-1 - ix; // revert
@@ -435,7 +358,7 @@ public class ModuleList {
                 m.add( row );
             }
         }
-        // assert zero != null, zero == (0)
+        //assert zero != null : zero ; // , zero == (0)
         //System.out.println("zero = " + zero ); 
         for (Iterator it = m.iterator(); it.hasNext(); ) {
             ArrayList vr = (ArrayList)it.next();
