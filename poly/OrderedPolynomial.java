@@ -78,6 +78,8 @@ public interface OrderedPolynomial /* extends UnorderedPolynomial */ {
 
     public OrderedPolynomial multiply(Coefficient b, ExpVector e);
 
+    public OrderedPolynomial multiply(ExpVector e);
+
     public OrderedPolynomial multiply(Map.Entry m);
 
 }

@@ -572,6 +572,33 @@ public abstract class OrderedMapPolynomial /* extends MapPolynomial */
 
 
     /**
+     * Product with exponent vector.
+     */
+
+    public OrderedPolynomial multiply(ExpVector e) {  
+        OrderedPolynomial Cp = getZERO(order); 
+        Cp.setVars(vars);
+        if ( e.isZERO() ) { 
+            return this;
+        }
+        Map C = Cp.getMap();
+        Map A = val; //this.getMap();
+        Iterator ai = A.entrySet().iterator();
+        while ( ai.hasNext() ) {
+            Map.Entry y = (Map.Entry) ai.next();
+            ExpVector f = (ExpVector) y.getKey(); 
+            //System.out.println("e = " + e);
+            Coefficient a = (Coefficient) y.getValue(); 
+            //System.out.println("a = " + a);
+            ExpVector g = f.sum(e);
+            //System.out.println("g = " + g);
+            C.put( g, a );
+        }
+        return Cp;
+    }
+
+
+    /**
      * Product with 'monomial'.
      */
 
