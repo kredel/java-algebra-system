@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
+import org.apache.log4j.BasicConfigurator;
 
 import edu.unima.ky.parallel.ChannelFactory;
 import edu.unima.ky.parallel.SocketChannel;
@@ -58,6 +59,7 @@ public class ExecutableServer extends Thread {
      */
 
     public static void main(String[] args) {
+        BasicConfigurator.configure();
 
         int port = DEFAULT_PORT;
 	if ( args.length < 1 ) {
