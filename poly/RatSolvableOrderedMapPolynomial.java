@@ -112,17 +112,18 @@ public class RatSolvableOrderedMapPolynomial
     public OrderedPolynomial getONE() {
        return new RatSolvableOrderedMapPolynomial(table,
                                                   BigRational.ONE,
-                                 new ExpVector(numberOfVariables())); 
+                                     new ExpVector(numberOfVariables())); 
     }
 
     public OrderedPolynomial getONE(TermOrder to) { 
-        return new RatSolvableOrderedMapPolynomial(table,
+       return new RatSolvableOrderedMapPolynomial(table,
                                                    to,
                                                    getONE());
     }
 
     public SolvablePolynomial getONE(RelationTable table) { 
-       return new RatSolvableOrderedMapPolynomial(table);
+       return new RatSolvableOrderedMapPolynomial(table,
+                                                  getONE()); 
     }
 
     public SolvablePolynomial getONE(RelationTable table, 

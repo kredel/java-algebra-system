@@ -122,7 +122,8 @@ public class IntSolvableOrderedMapPolynomial
     }
 
     public SolvablePolynomial getONE(RelationTable table) { 
-       return new IntSolvableOrderedMapPolynomial(table);
+       return new IntSolvableOrderedMapPolynomial(table,
+                                                  getONE());
     }
 
     public SolvablePolynomial getONE(RelationTable table, 

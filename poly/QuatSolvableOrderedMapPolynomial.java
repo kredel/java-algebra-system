@@ -122,7 +122,8 @@ public class QuatSolvableOrderedMapPolynomial
     }
 
     public SolvablePolynomial getONE(RelationTable table) { 
-       return new QuatSolvableOrderedMapPolynomial(table);
+       return new QuatSolvableOrderedMapPolynomial(table,
+                                                   getONE());
     }
 
     public SolvablePolynomial getONE(RelationTable table, 
