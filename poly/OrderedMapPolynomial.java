@@ -159,7 +159,10 @@ public abstract class OrderedMapPolynomial /* extends MapPolynomial */
     public String toString(String[] v) { 
         StringBuffer erg = new StringBuffer();
         Iterator it = val.entrySet().iterator();
-        if ( ! it.hasNext() ) return erg.toString();
+        if ( ! it.hasNext() ) {
+           erg.append("0");
+           return erg.toString();
+        }
         Map.Entry y = (Map.Entry) it.next();
         ExpVector f = (ExpVector) y.getKey(); 
         Coefficient a = (Coefficient) y.getValue();
@@ -168,7 +171,7 @@ public abstract class OrderedMapPolynomial /* extends MapPolynomial */
             if ( neg ) {
                erg.append( a.negate() );
             } else {
-              erg.append(a);
+               erg.append(a);
             }
             neg = false;
             erg.append(" " + f.toString(v));
@@ -187,6 +190,7 @@ public abstract class OrderedMapPolynomial /* extends MapPolynomial */
         } 
         return erg.toString(); 
     }
+
 
     public boolean equals( Object B ) { 
        if ( ! ( B instanceof OrderedPolynomial) ) return false;
