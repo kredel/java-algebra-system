@@ -122,6 +122,7 @@ public class GroebnerBase  {
               }
 	}
 	P = DIGBMI(P);
+        logger.info("pairlist #put = " + pairlist.putCount() + " #rem = " + pairlist.remCount());
 	return P;
     }
 
