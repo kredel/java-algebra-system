@@ -10,7 +10,7 @@ package edu.jas;
  * @author Heinz Kredel.
  */
 
-public class StrategyEnumeration {
+public final class StrategyEnumeration {
 
     public static final StrategyEnumeration FIFO = new StrategyEnumeration();
 
