@@ -135,7 +135,7 @@
 
 <target name="distclean" depends="clean" >
   <delete verbose="true" >
-    <fileset dir="${src}" includes="edu/**/*.class"  />
+    <fileset dir="${src}" includes="**/*.class"  />
   </delete>
 </target>
 
