@@ -63,6 +63,14 @@ public class BigInteger implements Coefficient {
 	return val.toString();
     }
 
+    public int compareTo(Object b) {
+        if ( ! (b instanceof BigInteger) ) {
+	   System.err.println("BigInteger.compareTo not a BigInteger");
+           return Integer.MAX_VALUE;
+        }
+	return val.compareTo( ((BigInteger)b).getval() );
+    }
+
     public boolean equals(Object b) {
 	if ( ! ( b instanceof BigInteger ) ) return false;
 	return val.equals( ((BigInteger)b).getval() );
