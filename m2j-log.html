@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>MAS to jas Project</title>
+<style type="text/css">
+body { background-color: #FFFFF5; } 
+pre  { background-color: silver; }
+</style>
+
+  </head>
+
+  <body>
+    <h1>MAS to jas Project</h1>
+
+<h2>Documentation</h2>
+
+<p>Rudimentary jas API documentation by javadoc:
+<a href="doc/index.html">index</a>
+</p>
+
+
+<h2>History</h2>
+
+<dl>
+<!--
+<dt>2000, 7,  </dt>
+<dd> 
+</dd>
+-->
+
+<dt>2003, 1, 7-11 </dt>
+<dd>Improved parallel version of GB.
+    <ul>
+    <li>the sequence of polynomials added to the pair list is kept 
+        stable. i.e. a pair scheduled for reduction at time t 
+        will (if non zero) enter the list before any pair 
+        scheduled at time t+x. 
+    </li>
+    <li>this limits the parallelism since polynomials which reduce to zero
+        keep a reducer thread occupied until older polynomials are 
+        finally reduced. one could eventualy hand over the blocking
+        object to the next thread. 
+    </li>
+    <li>the number of pairs scheduled for reduction is now also limited
+        to the number of parallel reduction threads. this avoids
+        that to many pairs with high lcm will be scheduled before 
+        eventually new created pairs with lower lcm.
+    </li>
+    <li>the limiting of scheduled pairs could also be implemented using
+        a BoundedBuffer/Queue for the ThreadPool workpile.
+        then addJob() would block until free Threads are avalilable.
+    </li>
+    <li>the sequencing and limiting could eventually also 
+        achieved when the reducing threads take the pairs by 
+        themselves instead of the master thread.
+        the main thread should then simply wait until all
+        threads are idle.
+    </li>
+    <li>the final reduction of the GB to a minimal GB is now 
+        also parallelized.
+    </li>
+    </ul>
+   <p>
+   Todo: CVS, comments, 
+   polynomial implementation using LinkedList
+   </p>
+<p>with the improved algorithm the running time of the parallel GB
+   becomes more stable and not slower than the sequential GB.
+   however there is still no significant speedup.
+</p>
+<div align="center" >
+<table border="1" cellpadding="10"
+       summary="number of reductions" >
+<caption>parallel GB on one cpu</caption>
+<tr>
+<th># Threads</th>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+<td>4</td>
+<td>5</td>
+<td>6</td>
+<td>7</td>
+<td>8</td>
+<td>16</td>
+</tr>
+<tr>
+<th># Reductions</th>
+<td>25</td>
+<td>25</td>
+<td>27</td>
+<td>25</td>
+<td>25</td>
+<td>25</td>
+<td>25</td>
+<td>25</td>
+<td>25</td>
+</tr>
+</table>
+</div>
+<p></p>
+<div align="center" >
+<table border="1" cellpadding="10"
+       summary="number of reductions" >
+<caption>parallel GB on 4 cpus</caption>
+<tr>
+<th># Threads</th>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+<td>4</td>
+<td>5</td>
+<td>6</td>
+<td>7</td>
+<td>8</td>
+<td>16</td>
+</tr>
+<tr>
+<th># Reductions</th>
+<td>22</td>
+<td>24</td>
+<td>30, 28, 24, 29</td>
+<td>28</td>
+<td>29</td>
+<td>42</td>
+<td>32</td>
+<td>32</td>
+<td>37</td>
+</tr>
+</table>
+</div>
+<p></p>
+</dd>
+
+<dt>2003, 1, 6 </dt>
+<dd>implemented parallel version of GB using ThreadPool from tnj
+    <p>
+    parallel results): <br />
+    Trinks 7: mas 0.598 sec, jas 0.918 sec, jas par 0.955 sec <br />
+    Trinks 6: mas 26.935 sec, jas 3.211 sec, jas par 3.656 sec <br />
+    mas: including startup and gc time,
+    jas: excluding startup of jvm and including gc time,
+    jas par on single processor
+    </p>
+    this make for a penality of 12 percent,
+    all tests with output to files,
+</dd>
+
+<dt>2003, 1, 5 </dt>
+<dd>timing benchmarks between BigRational and Coefficient versions
+    of the algorithms,
+    the difference seems to be less than 1 percent with 
+    no clear advantage of one side
+    <br />
+    the sum and product algorithms have not jet optimal complexity,
+    sum has 2 l log(l) instead of 2 l 
+        because of TreeMap.remove() and because of TreeMap.put(),
+    prod has l^2 log(l^2/2) instead of l^2 because of TreeMap.put()
+    <br />
+    TreeMap cannot used for this,
+    some kind of SortedLinkedList or SortedHashMap would be required,
+    the last would in turn require a hashValue() of an ExpVector
+    <p>
+    implemented edu.jas.arith.BigInteger which implements Coefficient,
+    tested with IntPolynomial which extends Polynomial
+    </p>
+    todo: alternative Implementations, cleanup RatPolynomial, parallel GB,
+    conversion RatPolynomial &lt;--&gt; IntPolynomial
+</dd>
+
+<dt>2003, 1, 4 </dt>
+<dd>added reading of PolynomialLists and Variable Lists to 
+    PolynomialTokenizer, 
+    implemented PolynomialList
+    <br />
+    refactoring RatPolynomial to extend Polynomial,
+    implementing IntPolynomial extends Polynomial
+    <br />
+    to make BigInteger implement Coefficient will require 
+    a delegation extension of BigInteger
+</dd>
+
+<dt>2003, 1, 3 </dt>
+<dd>implemented PolynomialTokenizer to read RatPolynomials 
+</dd>
+
+<dt>2003, 1,  2</dt>
+<dd>file RatPolynomial split into RatGBase,
+    criterion 3 implemented with BitSet
+    <p>
+    second results (with new criterion 3 in jas): <br />
+    Trinks 7: mas 0.598 sec, jas 1.159 sec <br />
+    Trinks 6: mas 26.935 sec, jas 6.468 sec <br />
+    mas: including startup and gc time,
+    jas: excluding startup of jvm and including gc time 
+    </p>
+    implemented DIGBMI, H-polynomal was not monic in DIRPGB
+    <p>
+    third results (with new criterion 3 in jas and GBminimal): <br />
+    Trinks 7: mas 0.598 sec, jas 0.918 sec <br />
+    Trinks 6: mas 26.935 sec, jas 3.211 sec <br />
+    mas: including startup and gc time,
+    jas: excluding startup of jvm and including gc time 
+    </p>
+    <p>
+    this makes for a factor of 8-9 better,
+    all tests with output to files,
+    startup of JVM is approx. 1.0-1.2 sec,
+    most time is spent in BigInteger:
+    </p>
+<pre>
+java -Xrunhprof:cpu=times,format=a
+
+CPU TIME (ms) BEGIN (total = 136) Thu Jan  2 18:33:53 2003
+rank   self  accum   count trace method
+   1 15,44% 15,44%  596610    21 java.math.MutableBigInteger.rightShift
+   2 13,24% 28,68%  582132    15 java.math.MutableBigInteger.difference
+   3 12,50% 41,18%  612760    19 java.math.MutableBigInteger.getLowestSetBit
+   4  9,56% 50,74%       2     9 java.lang.Object.wait
+   5  9,56% 60,29%    5271    22 java.math.MutableBigInteger.binaryGCD
+   6  6,62% 66,91%  612760    23 java.math.BigInteger.trailingZeroCnt
+   7  5,88% 72,79%  592152    18 java.math.BigInteger.bitLen
+   8  5,88% 78,68%    6018    20 java.math.MutableBigInteger.binaryGCD
+   9  5,15% 83,82%  578887    25 java.math.MutableBigInteger.normalize
+  10  4,41% 88,24%  550992    24 java.math.MutableBigInteger.primitiveRightShift
+  11  4,41% 92,65%       1    10 java.lang.Object.wait
+  12  3,68% 96,32%  582132    12 java.math.MutableBigInteger.compare
+  13  0,74% 97,06%   35965    13 edu.jas.poly.ExpVector.EVILCP
+  14  0,74% 97,79%   11612    14 java.math.BigInteger.divide
+  15  0,74% 98,53%    5866    11 java.math.MutableBigInteger.divide
+  16  0,74% 99,26%    9032    16 java.math.MutableBigInteger.divide
+  17  0,74% 100,00%   9032    17 java.math.BigInteger.divide
+CPU TIME (ms) END
+</pre>
+</dd>
+
+<dt>2003, 1,  1</dt>
+<dd>renaming packages to edu.jas,
+    renaming to arith, poly and ring,
+    new Makefile, project dokumentation in XHTML,
+    using JDK 1.4 with JIT 
+    <p>
+    first results (without criterion 3 in jas): <br />
+    Trinks 7: mas 0.598 sec, jas 1.373 sec <br />
+    Trinks 6: mas 26.935 sec, jas 30.935 sec <br />
+    mas: including startup and gc time, 
+    jas: excluding startup of jvm and including gc time 
+    </p>
+</dd>
+
+<dt>2002, 12,  31</dt>
+<dd>starting with extraction of relevant files in new directory <br /> 
+</dd>
+
+<dt>2000, 7,  21</dt>
+<dd>keySet/get replaced by entrySet/getval. <br />
+    Implemented S-Polynomial, normal form, irreducible set.
+    Implemented Groebner base with criterion 4. Criterion 3 left to to.
+</dd>
+
+<dt>2000, 7, 16</dt>
+<dd>Implemented and tested BigRational based on Javas BigInteger.<br />
+    With and without I/O BigRational addition, multiplication and 
+    comparison is approx. 10 times faster than respective 
+    SACRN functions.<br />    
+    <p>Implemented and testet ExpVector based on Javas int arrays. 
+    </p>
+    <p>Implemented and testet RatPolynomial based on Javas TreeMap. <br />
+       static methods: DIRPDF, DIRPWR via toString, DIRPON, DIRPMC, 
+       DIRPPR, DIRPSM, DIRRAS.<br />
+       Consider replacing keySet/get by entrySet/getval where appropriate.
+       Can there be an generic Polynomial class?
+    </p>
+</dd>
+
+<dt>2000, 7, 15</dt>
+<dd>Some testing with Javas builtin BigInteger class.<br />
+    Without I/O builtin multiplication is approx. 15 times faster 
+            than SAC product.<br />
+    With much I/O builtin multiplication is approx. 3 times faster 
+            than SAC product.<br />
+    Builtin uses also twos-complement representation, which is
+    bad for decimal printing.
+    <p>This will be the end of list processing for Jas.</p>
+    <p>
+   DIPRNGB needs DIRPDF, DIRPWR, DIRPON, DIRPMC, DIRPPR, DIRPSM.<br />
+   These need RNDIF, RNDWR, RNINT, RNSIGN, ISRNONE, RNONE, RNZERO,
+         RNINV (and DIRPRP), RNPROD, RNSUM.
+   </p>
+</dd>
+
+<dt>2000, 7, 14</dt>
+<dd>Class BigInteger based on SACI with toString().<br /> 
+    Class List based on MASSTOR with toString(). <br />
+    Problem with Modula-2 module initialization with main(args) 
+    method: initialization of static variables.
+</dd>
+
+<dt>2000, 7, 5</dt>
+<dd>Finished testing most of masarith. 
+</dd>
+
+<dt>2000, 7, 2</dt>
+<dd>Finished porting masarith. 
+    Testing needs sill to be done. MASAPF is ok.
+</dd>
+
+<dt>2000, 6, 24</dt>
+<dd>Perl script getc.pl to grab comments in Modula-2 source 
+    and add to Java source. 
+    Comments grabbed on most working files so far.
+    Generated new documentation.
+</dd>
+
+<dt>2000, 6, 22</dt>
+<dd>Future directions:
+    <ul>
+    <li>Parallel GB.
+    </li>
+    <li>Move to Java without Modula-2.
+    </li>
+    <li>Develop an applet version.
+    </li>
+    <li>Implement more of Mas.
+    </li>
+    <li>Replace SACI by Java BigInteger.
+    </li>
+    <li>Setup for real objects: <br />
+        implement constructor, <br />
+        implement methods: a.method(b) as STATIC_METHOD(a,b), <br />
+        use real objects instead of only Cell objects <br />
+        define interfaces e.g. for ring, polynomial ring, 
+                                   module, group, field
+    </li>
+    <li>Small additions: <br />
+        toString equivalents of xWRITEs
+    </li>
+    </ul>
+    Problems identified:
+    <ul>
+    <li>LISTs over Beta-Integers are diffrent to LISTs over LISTs,
+        when implementing LISTs as Java Types
+        LISTs over other types will require also special handling.
+    </li>
+    </ul>
+</dd>
+
+<dt>2000, 6, 22</dt>
+<dd>GB running on Trinks (small and big). 
+    Jas ist about 5-8 times slower than MAS in GB computation.
+    Using JDK 1.1.7 without JIT on Linux, PII-300.
+    Using JDK 1.2.2-RC3 without JIT on Linux, PII-300 is 
+    about 6-9 times slower.
+    Using JDK 1.2.2-RC4 with JIT (sunwjit) on Linux, PII-300 is 
+    about 2-4 times slower.
+    Implemented Java input via BufferedReader.
+</dd>
+
+<dt>2000, 6, 21</dt>
+<dd>Got GB running. Problem was in EQUAL.
+</dd>
+
+<dt>2000, 6, 17</dt>
+<dd>Placed under control of CVS.
+    Begining with a clean version from Uni Passau.
+    Incorporated Java specific changes up to now.
+</dd>
+
+<dt>2000, 6, 10</dt>
+<dd>Transformation of DIPRNGB finished.
+    Important parts of maspoly finished.
+</dd>
+
+<dt>2000, 6, 4</dt>
+<dd>Transformation of SACPRIM finished.
+    Most of maskern finished.
+    Important parts of masarith finished.
+</dd>
+
+<dt>2000, 5, 29</dt>
+<dd>MASSTOR: Mapping MAS list direkt to a Java list class and using 
+    of the garbage collector from Java. 
+    Data types LIST and GAMMAINT are now distinct.
+    Buying the MHC Compiler (UK Pound 59).
+</dd>
+
+<dt>2000, 5, 28</dt>
+<dd>MASSTOR: First attempt to use list class with own garbage collection.
+    Using the constructor to record list pointers.
+</dd>
+
+<dt>2000, 5, 27: </dt>
+<dd>Beginning of the first tests. 
+    Conversion of .md to .def, .mi to .mod.
+</dd>
+
+<dt>2000, 5, 26: </dt>
+<dd>Discovery of the MHC Modula-2 to Java compiler. 
+    Mill Hill &amp; Canterbury Corporation, Ltd, URL
+    <a href="http://www.mhccorp.com">http://www.mhccorp.com</a>
+</dd>
+
+</dl>
+
+
+<h2>To Do</h2>
+
+<ul>
+<li>JUnit checker fpr every class.
+</li>
+<li>Applet front-end.
+</li>
+<li>Reimplementing MASBIOS for streams.
+</li>
+<li>Copying the comments to java.
+</li>
+<li>Switching to Java and abandoning Modula-2.
+</li>
+</ul>
+
+
+<h2>Done</h2>
+
+<ul>
+<li>Removal of the mas prefix in directory names.
+</li>
+<li>Improved Makefiles.
+</li>
+</ul>
+
+
+    <hr />
+    <address><a href="mailto:kredel@kredel.rz.uni-mannheim.de">Heinz Kredel</a></address>
+<!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
+<!-- hhmts start -->
+Last modified: Sat Jan 11 18:21:55 CET 2003
+<!-- hhmts end -->
+  </body>
+</html>
