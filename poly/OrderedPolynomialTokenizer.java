@@ -22,6 +22,8 @@ import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigComplex;
 import edu.jas.arith.BigQuaternion;
 
+import edu.jas.module.ModuleList;
+
 /**
  * OrderedMapPolynomial Tokenizer. 
  * Used to read rational polynomials and lists from input streams.
@@ -482,11 +484,41 @@ public class OrderedPolynomialTokenizer  {
                } else { tok.pushBack();
                   a = nextRatPolynomial();
                }
-               logger.info("next = " + a); 
+               logger.info("next pol = " + a); 
                L.add( a );
-
                if ( tok.ttype == StreamTokenizer.TT_EOF ) break;
                if ( tok.ttype == ')' ) break;
+         }
+         return L;
+    }
+
+
+    /**
+     * parsing method for submodule list
+     * syntax: ( ( p11, p12, p13, ..., p1n ), 
+                 ..., 
+                 ( pm1, pm2, pm3, ..., pmn ) )
+     */
+    public List nextSubModuleList() throws IOException {
+        RatOrderedMapPolynomial a;
+        List L = new ArrayList();
+        int tt;
+        tt = tok.nextToken();
+        if ( tt == StreamTokenizer.TT_EOF ) return L;
+        if ( tt != '(' ) return L;
+        logger.debug("module list");
+        List v = null;
+        while ( true ) {
+               tt = tok.nextToken();
+               if ( tok.ttype == ',' ) continue;
+               if ( tok.ttype == ')' ) break;
+               if ( tok.ttype == StreamTokenizer.TT_EOF ) break;
+               if ( tt == '(' ) {
+                  tok.pushBack();
+                  v = nextPolynomialList();
+                  logger.info("next vect = " + v); 
+                  L.add( v );
+               }
          }
          return L;
     }
@@ -562,6 +594,37 @@ public class OrderedPolynomialTokenizer  {
 
 
     /**
+     * parsing method for module set
+     * syntax: varList termOrderName moduleList
+     */
+    public ModuleList nextSubModuleSet() throws IOException {
+        List s = null;
+        //String comments = "";
+        //comments += nextComment();
+        //if (debug) logger.debug("comment = " + comments);
+
+        Coefficient coeff = nextCoefficientRing();
+        logger.info("coeff = " + coeff); 
+
+        vars = nextVariableList();
+             String dd = "vars ="; 
+             for (int i = 0; i < vars.length ;i++) {
+                 dd+= " "+vars[i]; 
+             }
+             logger.info(dd); 
+
+        tord = nextTermOrder();
+             logger.info("tord = " + tord); 
+
+        s = nextSubModuleList();
+             logger.info("s = " + s); 
+        // comments += nextComment();
+
+        return new ModuleList(vars,tord,s);
+    }
+
+
+    /**
      * parsing method for solvable polynomial list
      * syntax: ( p1, p2, p3, ..., pn )
      */
@@ -633,7 +696,7 @@ public class OrderedPolynomialTokenizer  {
     }
 
     /**
-     * parsing method for command
+     * parsing method for command, @unused
      * syntax: ClassToLoad.compute(a1,a2,...)
      * @return String[] { "ClassToLoad", "compute", "a1", "a2", ... }
      */
