@@ -15,6 +15,8 @@ import java.util.Comparator;
 import edu.jas.arith.Coefficient;
 import edu.jas.arith.BigRational;
 
+import java.io.Serializable;
+
 
 /**
  * list of polynomials
@@ -22,7 +24,7 @@ import edu.jas.arith.BigRational;
  * @author Heinz Kredel
  */
 
-public class PolynomialList {
+public class PolynomialList implements Serializable {
 
     public final Coefficient coeff;
     public final String[] vars;
