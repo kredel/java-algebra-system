@@ -65,6 +65,25 @@ Some UML class diagramms as produced by ArgoUML:
 </dd>
 -->
 
+<dt>2004, 2, 26</dt>
+<dd>
+  Ideas to implement: 
+  a distributed task launcher like <code>mpirun</code>,
+  a daemon to run on a distributed system to work with the launcher,
+  solvable polynomials and non-commutative GBs.
+</dd>
+
+<dt>2004, 2, 1</dt>
+<dd>
+   Parallel computations with the Rose example are at ?? h with 3 threads
+   on 2 Pentium 4 @ 3.0 GHz hyperthreading CPUs. 
+   <p>With one thread the time is 30.6 h. 
+   Besides the better CPU speed, this makes a 5 % improvement on JDK 1.4 
+   compared to the older timings from a JDK 1.3 
+   and the new polynomial implementation.
+ </p>
+</dd>
+
 <dt>2004, 1, 25</dt>
 <dd>
 Spin model checker:
@@ -220,7 +239,7 @@ Added JUnit testing with Apache Ant version 1.6.0 to build.xml.
    native executable binaries. the timings are not better than with
    a jit, often worser.
    <p>Parallel computations with the Rose example are at 18 h with 4 threads
-   on 2 Pentium 4 @ 2.4 GHz hyperthreading CPUs. with one thread the time
+   on 2 Pentium 4 @ 2.4 GHz hyperthreading CPUs. With one thread the time
    is 40 h. 
  </p>
 </dd>
@@ -554,7 +573,7 @@ CPU TIME (ms) END
 
 <dt>2000, 7, 2</dt>
 <dd>Finished porting masarith. 
-    Testing needs sill to be done. MASAPF is ok.
+    Testing needs still to be done. MASAPF is ok.
 </dd>
 
 <dt>2000, 6, 24</dt>
@@ -658,15 +677,11 @@ CPU TIME (ms) END
 <h2>To Do</h2>
 
 <ul>
-<li>JUnit checker fpr every class.
-</li>
 <li>Applet front-end.
 </li>
-<li>Reimplementing MASBIOS for streams.
+<li><del>Reimplementing MASBIOS for streams.</del>
 </li>
 <li>Copying the comments to java.
-</li>
-<li>Switching to Java and abandoning Modula-2.
 </li>
 </ul>
 
@@ -674,6 +689,10 @@ CPU TIME (ms) END
 <h2>Done</h2>
 
 <ul>
+<li>JUnit checker for every class.
+</li>
+<li>Switching to Java and abandoning Modula-2.
+</li>
 <li>Removal of the mas prefix in directory names.
 </li>
 <li>Improved Makefiles.
@@ -686,7 +705,7 @@ CPU TIME (ms) END
 <p>
 <!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
 <!-- hhmts start -->
-Last modified: Sun Jan 25 15:52:30 CET 2004
+Last modified: Thu Feb 26 22:18:07 CET 2004
 <!-- hhmts end -->
 </p>
 <p align="right" >
