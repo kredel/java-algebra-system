@@ -10,6 +10,7 @@ pre  { background-color: silver; }
 dt   { font-weight: bolder; 
        margin-top: 1em;
      }
+.note { color: maroon; }
 </style>
 
   </head>
@@ -23,6 +24,12 @@ dt   { font-weight: bolder;
 <a href="doc/index.html" target="doc" >index</a>
 </p>
 
+<p>
+Some UML class diagramms as produced by ArgoUML:
+<a href="images/edu_jas_classes.gif" target="diagram">edu.jas</a>,
+<a href="images/edu_jas_arith_classes.gif" target="diagram">edu.jas.arith</a>,
+<a href="images/edu_jas_poly_classes.gif" target="diagram">edu.jas.poly</a>.
+</p>
 
 <h2>History</h2>
 
@@ -33,6 +40,11 @@ dt   { font-weight: bolder;
 </dd>
 -->
 
+<dt>2003, 12, 27</dt>
+<dd>Using ArgoUML to produce class diagramms fpr jas.
+    Refactoring GB from edu.jas.poly to edu.jas.ring.
+</dd>
+
 <dt>2003, 12, 21</dt>
 <dd>Setup for JUnit version 3.8.1. 
 Added JUnit testing with Apache Ant version 1.6.0 to build.xml. 
@@ -40,12 +52,13 @@ Added JUnit testing with Apache Ant version 1.6.0 to build.xml.
 
 <dt>2003, September</dt>
 <dd>
-  experimented with LinkedHashMap instead of TreeMap (SortedMap) 
+  Experimented with LinkedHashMap instead of TreeMap (SortedMap) 
   for the representation of polynomials. 
-  Algorithms which work also with LinkedHaspMap have 1 or 2 in their names.
+  Algorithms which work also with LinkedHashMap have 1 or 2 in their names
+  (now in new class HashPolynomial).
   LinkedHashMap has the property of using the insertion order for 
   the iterator order.
-  With LinkedhAspMap the add() and subtract() can be reformulated to 
+  With LinkedHashMap the add() and subtract() can be reformulated to 
   use a merging algorithm as in the original DIP implementation.
   Assuming the Map insertion order is the the same as the polynomial
   term order.
@@ -62,8 +75,8 @@ Added JUnit testing with Apache Ant version 1.6.0 to build.xml.
   Polynomial size was ~100 terms and the product contained ~8000 terms.
   Complexity for a*b is 
   lab = length(a)*length(b) coefficient multiplications for both implementations
-  plus length(a*b)*length(b) for merging summands respectively 
-  lab*log2(length(a*b)) for TreeMap insertion.
+  plus length(a*b)*length(b) for merging summands, respectively 
+  plus lab*log2(length(a*b)) for TreeMap insertion.
   Since for sparse polynomials length(a*b) = lab, the TreeMap complexity 
   is asymptotically better in this case.
   If for dense polynomials length(a*b) ~ length(a)[+length(b)], then 
@@ -73,7 +86,7 @@ Added JUnit testing with Apache Ant version 1.6.0 to build.xml.
 
 <dt>2003, 3, 15</dt>
 <dd>
-   some testing with new 
+   Some testing with new 
    AMD Athlon XP 2200+ @ 1.8 GHz, 133x2 MHz memory access.<br />
    Trinks 6: 1.013 sec with log4j level WARN, parallel 1.058 - 1.740 sec.<br />
    Trinks 7: 0.553 sec with log4j level WARN.<br />
@@ -81,18 +94,18 @@ Added JUnit testing with Apache Ant version 1.6.0 to build.xml.
 
 <dt>2003, 2, 2 </dt>
 <dd>
-   replacing all System.out.println by Log4j logging calls.
+   Replacing all System.out.println by Log4j logging calls.
    adding some Junit tests.
 </dd>
 
 <dt>2003, 1, 28 </dt>
 <dd>
- some testing with gcj (Gnu Java Compiler). this compiler gernerates 
-    native executable binaries. the timings are not better than with
+   Some testing with gcj (Gnu Java Compiler). this compiler gernerates 
+   native executable binaries. the timings are not better than with
    a jit, often worser.
- <p>parallel computations with the Rose example are at 18 h with 4 threads
-    on 2 Pentium 4 @ 2.4 GHz hyperthreading CPUs. with one thread the time
-    is 40 h. 
+   <p>Parallel computations with the Rose example are at 18 h with 4 threads
+   on 2 Pentium 4 @ 2.4 GHz hyperthreading CPUs. with one thread the time
+   is 40 h. 
  </p>
 </dd>
 
@@ -107,30 +120,36 @@ Added JUnit testing with Apache Ant version 1.6.0 to build.xml.
 
 <dt>2003, 1, 12 </dt>
 <dd>
-    general differences between sequential and parallel GB algorithms
+    General differences between sequential and parallel GB algorithms
     <ul>
-    <li>the parallelization is achieved by doing the normal form reductions
-        in parallel
+    <li>The parallelization is achieved by doing the normal form reductions
+        in parallel.
     </li>
-    <li>since the reductions may require different times to complete 
+    <li>Since the reductions may require different times to complete 
         the normal forms may be entered into the list of polynomials
-        in different order than in the sequential case. 
-        so the pairs may be generated in different order.
-        however since the list of pair is ordered wrt. the lcm of 
+        in different (time) order than in the sequential case. 
+        So the pairs may be generated in different order.
+        However since the list of pairs is ordered wrt. the lcm of 
         the head terms this seems not to be a big issue. 
     </li>
-    <li>since several reductions are scheduled in parallel 
+    <li>Since several reductions are scheduled in parallel 
         the pairs are taken from the list of pairs in different order
         than in the sequential case.
-        one should not take more pairs from the list than can be reduced
+        One should not take more pairs from the list than can be reduced
         in parallel. 
     </li>
     </ul>
-    <p>new implementation of parallel version of GB.
-       removal of pairs is now also in parallel.
-       but ordering of pair insertion is no more preserved
+    <p class="note">Does this influence the validity of criterion 3?
+       Access to pairlist is synchronized. 
+       Pairs are marked as reduced as soon they are taken from the list.
+       But the algorithm terminates only after all reductions of pairs have
+       terminated. So criterion 3 holds.
     </p>
-    <p>timings are more stable 
+    <p>New implementation of parallel version of GB.
+       Removal of pairs is now also in parallel.
+       But ordering of pair insertion is no more preserved
+    </p>
+    <p>Timings are more stable 
        and slightly better than that of sequential GB.
     </p>
     <p>Todo: unit tests, comments, ...
@@ -139,37 +158,37 @@ Added JUnit testing with Apache Ant version 1.6.0 to build.xml.
 
 <dt>2003, 1, 7-11 </dt>
 <dd>
-    renamed jas to mas2jas, 
-    new cvs repository for jas, import and checkout 
+    Renamed jas to mas2jas, 
+    new cvs repository for jas, import and checkout.
     <p>Improved parallel version of GB.
     </p>
     <ul>
-    <li>the sequence of polynomials added to the pair list is kept 
+    <li>The sequence of polynomials added to the pair list is kept 
         stable. i.e. a pair scheduled for reduction at time t 
         will (if non zero) enter the list before any pair 
         scheduled at time t+x. 
     </li>
-    <li>this limits the parallelism since polynomials which reduce to zero
+    <li>This limits the parallelism since polynomials which reduce to zero
         keep a reducer thread occupied until older polynomials are 
-        finally reduced. one could eventualy hand over the blocking
+        finally reduced. One could eventualy hand over the blocking
         object to the next thread. 
     </li>
-    <li>the number of pairs scheduled for reduction is now also limited
+    <li>The number of pairs scheduled for reduction is now also limited
         to the number of parallel reduction threads. this avoids
         that to many pairs with high lcm will be scheduled before 
         eventually new created pairs with lower lcm.
     </li>
-    <li>the limiting of scheduled pairs could also be implemented using
+    <li>The limiting of scheduled pairs could also be implemented using
         a BoundedBuffer/Queue for the ThreadPool workpile.
         then addJob() would block until free Threads are avalilable.
     </li>
-    <li>the sequencing and limiting could eventually also 
+    <li>The sequencing and limiting could eventually also 
         achieved when the reducing threads take the pairs by 
         themselves instead of the master thread.
-        the main thread should then simply wait until all
+        The main thread should then simply wait until all
         threads are idle.
     </li>
-    <li>the final reduction of the GB to a minimal GB is now 
+    <li>The final reduction of the GB to a minimal GB is now 
         also parallelized.
     </li>
     </ul>
@@ -178,9 +197,9 @@ Added JUnit testing with Apache Ant version 1.6.0 to build.xml.
    polynomial implementation using LinkedList,
    parallel GB simplify
    </p>
-<p>with the improved algorithm the running time of the parallel GB
+<p>With the improved algorithm the running time of the parallel GB
    becomes more stable and not slower than the sequential GB.
-   however there is still no significant speedup.
+   However there is still no significant speedup.
 </p>
 <div align="center" >
 <table border="1" cellpadding="10"
@@ -249,7 +268,7 @@ Added JUnit testing with Apache Ant version 1.6.0 to build.xml.
 <dt>2003, 1, 6 </dt>
 <dd>implemented parallel version of GB using ThreadPool from tnj
     <p>
-    parallel results): <br />
+    parallel results: <br />
     Trinks 7: mas 0.598 sec, jas 0.918 sec, jas par 0.955 sec <br />
     Trinks 6: mas 26.935 sec, jas 3.211 sec, jas par 3.656 sec <br />
     mas: including startup and gc time,
@@ -294,7 +313,7 @@ Added JUnit testing with Apache Ant version 1.6.0 to build.xml.
     to make BigInteger implement Coefficient will require 
     a delegation extension of BigInteger
 </dd>
-
+<!--  -->
 <dt>2003, 1, 3 </dt>
 <dd>implemented PolynomialTokenizer to read RatPolynomials 
 </dd>
@@ -551,7 +570,7 @@ CPU TIME (ms) END
 <p>
 <!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
 <!-- hhmts start -->
-Last modified: Sun Dec 21 12:53:54 CET 2003
+Last modified: Sat Dec 27 16:05:46 CET 2003
 <!-- hhmts end -->
 </p>
 <p align="right" >
