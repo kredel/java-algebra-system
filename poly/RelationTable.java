@@ -57,6 +57,35 @@ public class RelationTable implements Serializable {
     }
 
 
+    public String toString(String[] vars) {
+        if ( vars == null ) {
+            return toString();
+        }
+        Object k, v;
+        StringBuffer s = new StringBuffer("RelationTable\n(\n");
+        for (Iterator it = table.keySet().iterator(); it.hasNext(); ) { 
+            k = it.next();
+            v = table.get( k );
+            List l = (List)v;
+            for (Iterator jt = l.iterator(); jt.hasNext(); ) { 
+                ExpVectorPair ep = (ExpVectorPair)jt.next();
+                s.append("( " + ep.getFirst().toString(vars) + " ), " );
+                s.append("( " + ep.getSecond().toString(vars) + " ), " );
+                OrderedPolynomial p = (OrderedPolynomial)jt.next();
+                s.append("( " + p.toString(vars) + " )" );
+                if ( jt.hasNext() ) {
+                   s.append(",\n");
+                }
+            }
+            if ( it.hasNext() ) {
+               s.append(",\n");
+            }
+        }
+        s.append("\n)");
+        return s.toString();
+    }
+
+
     public void update(ExpVector e, ExpVector f, OrderedPolynomial p) {
         if ( logger.isDebugEnabled() ) {
             logger.info("new relation = " + e + " .*. " + f + " = " + p);
