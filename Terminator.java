@@ -28,6 +28,7 @@ public class Terminator {
 
 	public synchronized void beIdle() {
 	    idler++;
+            logger.debug("beIdle, idler = "+idler);
 	    if ( idler >= workers ) {
                fin.V();
 	    }
@@ -40,6 +41,7 @@ public class Terminator {
 
 	public synchronized void notIdle() {
 	    idler--;
+            logger.debug("notIdle, idler = "+idler);
 	}
 
 	public boolean hasJobs() {
@@ -49,7 +51,7 @@ public class Terminator {
 	public void done() {
             try { fin.P();
 	    } catch (InterruptedException e) { }
-            logger.info("done, idler = "+idler);
+            logger.debug("done, idler = "+idler);
 	}
 
 }
