@@ -47,10 +47,19 @@ public class OrderedPolynomialTokenizer  {
         this(null,new TermOrder(),r);
     }
 
+    public OrderedPolynomialTokenizer(String[] v, TermOrder to) {
+        this(v,to, new BufferedReader( new InputStreamReader( System.in ) ) );
+    }
+
     public OrderedPolynomialTokenizer(String[] v, TermOrder to, Reader r) {
+        this(v,to,r,null);
+    }
+
+    public OrderedPolynomialTokenizer(String[] v, TermOrder to, Reader r, RelationTable rt) {
         vars = v;
         tord = to;
         in = r;
+        table = rt;
 
         tok = new StreamTokenizer( r );
         tok.resetSyntax();
@@ -69,9 +78,6 @@ public class OrderedPolynomialTokenizer  {
 
     }
 
-    public OrderedPolynomialTokenizer(String[] v, TermOrder to) {
-        this(v,to, new BufferedReader( new InputStreamReader( System.in ) ) );
-    }
 
 
     /**
@@ -556,6 +562,26 @@ public class OrderedPolynomialTokenizer  {
 
 
     /**
+     * parsing method for solvable polynomial list
+     * syntax: ( p1, p2, p3, ..., pn )
+     */
+    public List nextSolvablePolynomialList() throws IOException {
+        List s = nextPolynomialList();
+             logger.info("s = " + s); 
+        // comments += nextComment();
+
+        OrderedPolynomial p;
+        List sp = new ArrayList( s.size() );
+        for ( Iterator it = s.iterator(); it.hasNext(); ) {
+            p = (OrderedPolynomial)it.next();
+            p = new RatSolvableOrderedMapPolynomial(table,tord,p);
+            sp.add( p );
+        }
+        s = sp;
+        return s;
+    }
+
+    /**
      * parsing method for solvable polynomial set
      * syntax: varList termOrderName relationTable polyList
      */
@@ -581,18 +607,10 @@ public class OrderedPolynomialTokenizer  {
         table = nextRelationTable();
              logger.info("table = " + table); 
 
-        s = nextPolynomialList();
+        s = nextSolvablePolynomialList();
              logger.info("s = " + s); 
         // comments += nextComment();
 
-        OrderedPolynomial p;
-        List sp = new ArrayList( s.size() );
-        for ( Iterator it = s.iterator(); it.hasNext(); ) {
-            p = (OrderedPolynomial)it.next();
-            p = new RatSolvableOrderedMapPolynomial(table,tord,p);
-            sp.add( p );
-        }
-        s = sp;
         return new PolynomialList(vars,tord,s,table);
     }
 
@@ -612,6 +630,81 @@ public class OrderedPolynomialTokenizer  {
             }
         }
         return -1; // not found
+    }
+
+    /**
+     * parsing method for command
+     * syntax: ClassToLoad.compute(a1,a2,...)
+     * @return String[] { "ClassToLoad", "compute", "a1", "a2", ... }
+     */
+    public String[] nextCommand() throws IOException {
+        List cmd = new ArrayList();
+        String[] cs = new String[0];
+        String c = null;
+        int tt;
+        boolean od = debug;
+        //debug = true;
+        tt = tok.nextToken();
+        if ( tt == StreamTokenizer.TT_EOF ) { /* nop */
+           debug = od;
+           return cs;
+        }
+        // ClassToLoad
+        if ( tt == StreamTokenizer.TT_WORD ) {
+           if ( debug ) logger.info("TT_WORD: " + tok.sval);
+           c = tok.sval;
+           cmd.add(c);
+        } else {
+           debug = od;
+           return cs;
+        }
+        tt = tok.nextToken();
+        if ( tt == '(' ) {
+           tt = tok.nextToken();
+           if ( tt == ')' ) {
+              tt = tok.nextToken();
+           }
+        }
+        // .compute
+        if ( tt != '.' ) {
+           debug = od;
+           return cs;
+        }
+        tt = tok.nextToken();
+        if ( tt == StreamTokenizer.TT_EOF ) { /* nop */
+           debug = od;
+           return cs;
+        }
+        if ( tt == StreamTokenizer.TT_WORD ) {
+           if ( debug ) logger.info("TT_WORD: " + tok.sval);
+           c = tok.sval;
+           if ( c.equals("compute") ) {
+              cmd.add(c);
+           }
+        } else {
+           debug = od;
+           return cs;
+        }
+        // (a1,a2, ... ) parameters
+        tt = tok.nextToken();
+        if ( tt == '(' ) {
+           tt = tok.nextToken();
+           while ( tt != ')' ) {
+               c = tok.sval;
+               cmd.add(c);
+               tt = tok.nextToken();
+               if ( tt == ',' ) {
+                  tt = tok.nextToken();
+               }
+           }
+        }
+        Object[] oc = cmd.toArray();
+        cs = new String[ oc.length ];
+        for ( int i = 0; i < oc.length; i++ ) {
+            cs[i] = (String)oc[i];
+        }
+        debug = od;
+        return cs;
     }
 
 }
