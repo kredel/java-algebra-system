@@ -111,8 +111,9 @@ public class OrderedPairlist {
      */
 
     public synchronized Pair removeNext() { 
-       remCount++;
-       if ( oneInGB ) return null;
+       if ( oneInGB ) {
+          return null;
+       }
        Set pk = pairlist.entrySet();
        Iterator ip = pk.iterator();
 
@@ -121,15 +122,12 @@ public class OrderedPairlist {
        int i, j;
 
        while ( !c & ip.hasNext() )  {
-
            Map.Entry me = (Map.Entry) ip.next();
-
            ExpVector g = (ExpVector) me.getKey();
            LinkedList xl =(LinkedList) me.getValue();
            if ( logger.isInfoEnabled() )
               logger.info("g  = " + g);
            pair = null;
-
            while ( !c & xl.size() > 0 ) {
                  pair = (Pair) xl.removeFirst();
                  // xl is also modified in pairlist 
@@ -151,7 +149,11 @@ public class OrderedPairlist {
            if ( xl.size() == 0 ) ip.remove(); 
               // = pairlist.remove( g );
        }
-       if ( ! c ) pair = null;
+       if ( ! c ) {
+          pair = null;
+       } else {
+          remCount++; // count only real pairs
+       }
        return pair; 
     }
 
