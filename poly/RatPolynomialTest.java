@@ -143,21 +143,11 @@ public class RatPolynomialTest extends TestCase {
      assertTrue("not isZERO( a )", !a.isZERO() );
      //a = RatPolynomial.DIRRAS(1, kl, 4, el, q );
 
-     // does not work
-     //c = RatPolynomial.DIPPR(a,RatPolynomial.ONE);
-     //assertEquals("a*1 = a",c,a);
-
-     // does not work
-     //d = RatPolynomial.DIPPR(a,RatPolynomial.ZERO);
-     //assertEquals("a*0 = 0",d,RatPolynomial.ZERO);
-     //assertTrue("isZERO( a*0 )", d.isZERO() );
-
-
      b = RatPolynomial.DIRRAS(rl, kl, ll, el, q );
      assertTrue("not isZERO( b )", !b.isZERO() );
      //b = RatPolynomial.DIRRAS(1, kl, 4, el, q );
 
-     //     System.out.println("\na = "+a);
+     //System.out.println("\na = "+a);
      //System.out.println("b = "+b);
 
      c = RatPolynomial.DIRPPR(b,a);
@@ -181,6 +171,40 @@ public class RatPolynomialTest extends TestCase {
 
      assertEquals("a+(b+c) = (a+b)+c",d,e);
      assertTrue("a+(b+c) = (a+b)+c", d.equals(e) );
+ }
+
+
+/**
+ * Test object multiplication
+ * 
+ */
+ public void testMultiplication1() {
+
+     a = RatPolynomial.DIRRAS(rl, kl, ll, el, q );
+     assertTrue("not isZERO( a )", !a.isZERO() );
+     //a = RatOrderedMapPolynomial.DIRRAS(1, kl, 4, el, q );
+
+     b = RatPolynomial.DIRRAS(rl, kl, ll, el, q );
+     assertTrue("not isZERO( b )", !b.isZERO() );
+
+     c = (RatPolynomial)b.multiply(a);
+     d = (RatPolynomial)a.multiply(b);
+     assertTrue("not isZERO( c )", !c.isZERO() );
+     assertTrue("not isZERO( d )", !d.isZERO() );
+
+     e = (RatPolynomial)d.subtract(c);
+     assertTrue("isZERO( a*b-b*a ) " + e, e.isZERO() );
+
+     assertEquals("a*b = b*a",c,d);
+     assertTrue("a*b = b*a", c.equals(d) );
+
+     c = RatPolynomial.DIRRAS(rl, kl, ll, el, q );
+     d = (RatPolynomial)a.multiply( b.multiply(c) );
+     e = (RatPolynomial)(a.multiply(b)).multiply(c);
+
+     assertEquals("a(bc) = (ab)c",d,e);
+     assertTrue("a(bc) = (ab)c", d.equals(e) );
+
  }
 
 }
