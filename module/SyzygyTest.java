@@ -89,13 +89,13 @@ public class SyzygyTest extends TestCase {
        TermOrder to = new TermOrder( TermOrder.INVLEX );
        a = b = c = d = e = null;
        a = RatOrderedMapPolynomial.DIRRAS(rl, kl, ll, el, q );
-       //a = new RatOrderedMapPolynomial(to,a);
+       a = new RatOrderedMapPolynomial(to,a);
        b = RatOrderedMapPolynomial.DIRRAS(rl, kl, ll, el, q );
-       //b = new RatOrderedMapPolynomial(to,b);
+       b = new RatOrderedMapPolynomial(to,b);
        c = RatOrderedMapPolynomial.DIRRAS(rl, kl, ll, el, q );
-       //c = new RatOrderedMapPolynomial(to,c);
+       c = new RatOrderedMapPolynomial(to,c);
        d = RatOrderedMapPolynomial.DIRRAS(rl, kl, ll, el, q );
-       //d = new RatOrderedMapPolynomial(to,d);
+       d = new RatOrderedMapPolynomial(to,d);
        e = d; //RatOrderedMapPolynomial.DIRRAS(rl, kl, ll, el, q );
        vars = ExpVector.STDVARS( rl );
        one = a.getONE();
@@ -177,7 +177,7 @@ public class SyzygyTest extends TestCase {
 
      Z = Syzygy.zeroRelations(N);
      //System.out.println("Z = " + Z);
-     //  assertTrue("is ZR( { (a,0,1) } )", Syzygy.isZeroRelation(Z,N) );
+     assertTrue("is ZR( { a) } )", Syzygy.isZeroRelation(Z,N) );
 
      assertTrue("not isZERO( b )", !b.isZERO() );
      V = new ArrayList();
@@ -187,11 +187,11 @@ public class SyzygyTest extends TestCase {
      //System.out.println("L = " + L.size() );
 
      N = ModGroebnerBase.GB( M );
-     assertTrue("isGB( { (b,1,0) } )", ModGroebnerBase.isGB(N) );
+     assertTrue("isGB( { a, b } )", ModGroebnerBase.isGB(N) );
 
      Z = Syzygy.zeroRelations(N);
      //System.out.println("Z = " + Z);
-     //  assertTrue("is ZR( { (a,0,1) } )", Syzygy.isZeroRelation(Z,N) );
+     assertTrue("is ZR( { a, b } )", Syzygy.isZeroRelation(Z,N) );
 
      assertTrue("not isZERO( c )", !c.isZERO() );
      V = new ArrayList();
@@ -201,11 +201,14 @@ public class SyzygyTest extends TestCase {
      //System.out.println("L = " + L.size() );
 
      N = ModGroebnerBase.GB( M );
-     assertTrue("isGB( { (c,1,0) } )", ModGroebnerBase.isGB(N) );
+     //System.out.println("GB(M) = " + N);
+     assertTrue("isGB( { a,b,c) } )", ModGroebnerBase.isGB(N) );
 
      Z = Syzygy.zeroRelations(N);
      //System.out.println("Z = " + Z);
-     //  assertTrue("is ZR( { (a,0,1) } )", Syzygy.isZeroRelation(Z,N) );
+     //boolean b = Syzygy.isZeroRelation(Z,N);
+     //System.out.println("boolean = " + b);
+     assertTrue("is ZR( { a,b,c } )", Syzygy.isZeroRelation(Z,N) );
 
  }
 
