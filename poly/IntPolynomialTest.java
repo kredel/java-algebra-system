@@ -117,6 +117,12 @@ public class IntPolynomialTest extends TestCase {
      assertEquals("a+a-a = a",c,a);
      assertTrue("a+a-a = a", c.equals(a) );
 
+     b = TreePolynomial.DIPSUM(a,IntPolynomial.ZERO);
+     c = TreePolynomial.DIPDIF(b,IntPolynomial.ZERO);
+
+     assertTrue("a+0 = a", b.equals(a) );
+     assertEquals("a+0-0 = a",c,a);
+
      b = IntPolynomial.DIIRAS(rl, kl, ll, el, q );
      c = IntPolynomial.DIPSUM(b,a);
      d = IntPolynomial.DIPSUM(a,b);
@@ -142,14 +148,14 @@ public class IntPolynomialTest extends TestCase {
      a = IntPolynomial.DIIRAS(rl, kl, ll, el, q );
      assertTrue("not isZERO( a )", !a.isZERO() );
 
-     // does not work
-     //c = IntPolynomial.DIPPR(a,IntPolynomial.ONE);
+     // does not work, expvector sizes not equal 
+     //c = TreePolynomial.DIPPR(a,IntPolynomial.ONE);
      //assertEquals("a*1 = a",c,a);
 
-     // does not work
-     //d = IntPolynomial.DIPPR(a,IntPolynomial.ZERO);
-     //assertEquals("a*0 = 0",d,IntPolynomial.ZERO);
-     //assertTrue("isZERO( a*0 )", d.isZERO() );
+     // does work, checked for zero
+     d = TreePolynomial.DIPPR(a,IntPolynomial.ZERO);
+     assertEquals("a*0 = 0",d,IntPolynomial.ZERO);
+     assertTrue("isZERO( a*0 )", d.isZERO() );
 
 
      b = IntPolynomial.DIIRAS(rl, kl, ll, el, q );
