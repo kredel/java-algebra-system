@@ -71,4 +71,14 @@ public final class TermOrder {
        return evord == ((TermOrder)B).getEvord();
     }
 
+    public String toString() {
+	StringBuffer erg = new StringBuffer();
+	switch ( evord ) {
+	case ExpVector.INVLEX: erg.append("INVLEX("+evord+")"); break ;
+	case ExpVector.IGRLEX: erg.append("IGRLEX("+evord+")"); break ;
+	case ExpVector.LEX:    erg.append("LEX("+evord+")");    break ;
+	case ExpVector.GRLEX:  erg.append("GRLEX("+evord+")");  break ;
+	}
+        return erg.toString();
+    }
 }
