@@ -233,6 +233,9 @@ public abstract class OrderedMapPolynomial /* extends MapPolynomial */
      */
 
     public ExpVector leadingExpVector() {
+	if ( val.size() == 0 ) {
+	    return null;
+	}
         return (ExpVector) val.firstKey(); 
     }
 
