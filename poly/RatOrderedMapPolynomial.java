@@ -17,7 +17,7 @@ import edu.jas.arith.BigRational;
 /**
  * BigRational Ordered Map Polynomial. 
  * Extension of OrderedMapPolynomial with BigRational Coefficients.
- * @author Hienz Kredel
+ * @author Heinz Kredel
  */
 
 public class RatOrderedMapPolynomial extends OrderedMapPolynomial {
@@ -98,41 +98,6 @@ public class RatOrderedMapPolynomial extends OrderedMapPolynomial {
     public static final RatOrderedMapPolynomial ONE = 
                         new RatOrderedMapPolynomial(BigRational.ONE,
                                                     new ExpVector());
-
-
-    public String toString(String[] v) { 
-        StringBuffer erg = new StringBuffer();
-        Set ent = val.entrySet();
-        Iterator it = ent.iterator();
-        if ( ! it.hasNext() ) return erg.toString();
-        Map.Entry y = (Map.Entry) it.next();
-        ExpVector f = (ExpVector) y.getKey(); 
-        BigRational a = (BigRational) y.getValue();
-        boolean neg = false;
-        while ( true ) {
-            if ( neg ) {
-               erg.append( a.negate() );
-            } else {
-              erg.append(a);
-            }
-            neg = false;
-            erg.append(" " + f.toString(v));
-            if ( it.hasNext() ) {
-                y = (Map.Entry) it.next();
-                f = (ExpVector) y.getKey(); 
-                a = (BigRational) y.getValue();
-                if ( a.signum() < 0 ) {
-                   erg.append(" - ");
-                   neg = true;
-                } else {
-                   erg.append(" + ");
-                   neg = false;
-                }
-            } else break; 
-        } 
-        return erg.toString(); 
-    }
-
 
     /**
      * Random polynomial.

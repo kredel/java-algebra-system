@@ -105,8 +105,39 @@ public abstract class MapPolynomial implements UnorderedPolynomial, Cloneable {
         return erg.toString(); 
     }
 
-    abstract public String toString(String[] vars); 
+    //    abstract public String toString(String[] vars); 
 
+    public String toString(String[] v) { 
+        StringBuffer erg = new StringBuffer();
+        Iterator it = val.entrySet().iterator();
+        if ( ! it.hasNext() ) return erg.toString();
+        Map.Entry y = (Map.Entry) it.next();
+        ExpVector f = (ExpVector) y.getKey(); 
+        Coefficient a = (Coefficient) y.getValue();
+        boolean neg = false;
+        while ( true ) {
+            if ( neg ) {
+               erg.append( a.negate() );
+            } else {
+              erg.append(a);
+            }
+            neg = false;
+            erg.append(" " + f.toString(v));
+            if ( it.hasNext() ) {
+                y = (Map.Entry) it.next();
+                f = (ExpVector) y.getKey(); 
+                a = (Coefficient) y.getValue();
+                if ( a.signum() < 0 ) {
+                   erg.append(" - ");
+                   neg = true;
+                } else {
+                   erg.append(" + ");
+                   neg = false;
+                }
+            } else break; 
+        } 
+        return erg.toString(); 
+    }
 
     public boolean equals( Object B ) { 
        if ( ! ( B instanceof UnorderedPolynomial) ) return false;

@@ -18,7 +18,7 @@ import edu.jas.arith.BigInteger;
 /**
  * BigInteger Ordered Map Polynomial. 
  * Extension of OrderedMapPolynomial with BigInteger Coefficients.
- * @author Hienz Kredel
+ * @author Heinz Kredel
  */
 
 public class IntOrderedMapPolynomial extends OrderedMapPolynomial {
@@ -99,40 +99,6 @@ public class IntOrderedMapPolynomial extends OrderedMapPolynomial {
     public static final IntOrderedMapPolynomial ONE = 
                         new IntOrderedMapPolynomial(BigInteger.ONE,
                                                     new ExpVector());
-
-
-    public String toString(String[] v) { 
-        StringBuffer erg = new StringBuffer();
-        Set ent = val.entrySet();
-        Iterator it = ent.iterator();
-        if ( ! it.hasNext() ) return erg.toString();
-        Map.Entry y = (Map.Entry) it.next();
-        ExpVector f = (ExpVector) y.getKey(); 
-        BigInteger a = (BigInteger) y.getValue();
-        boolean neg = false;
-        while ( true ) {
-            if ( neg ) {
-               erg.append( a.negate() );
-            } else {
-              erg.append(a);
-            }
-            neg = false;
-            erg.append(" " + f.toString(v));
-            if ( it.hasNext() ) {
-                y = (Map.Entry) it.next();
-                f = (ExpVector) y.getKey(); 
-                a = (BigInteger) y.getValue();
-                if ( a.signum() < 0 ) {
-                   erg.append(" - ");
-                   neg = true;
-                } else {
-                   erg.append(" + ");
-                   neg = false;
-                }
-            } else break; 
-        } 
-        return erg.toString(); 
-    }
 
 
     /**
