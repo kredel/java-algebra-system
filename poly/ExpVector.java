@@ -146,14 +146,25 @@ public class ExpVector implements Cloneable {
     }
 
     public boolean equals( Object B ) { 
-       if ( ! ( B instanceof ExpVector) ) return false;
-       return (0 == EVILCP( this, (ExpVector)B ) );
+       if ( ! (B instanceof ExpVector) ) return false;
+       int t = EVILCP( this, (ExpVector)B );
+       //System.out.println("equals: this = " + this + " B = " + B + " t = " + t);
+       return (0 == t);
+    }
+
+    public int hashCode() { 
+	int h = 0;
+        for (int i = 0; i < val.length; i++ ) {
+	    h = h<<4 + (int)val[i];
+	}
+	return h;
     }
 
     public boolean isZERO() { 
        return (0 == EVSIGN( this ) );
     }
 
+    /* remove */
     public String[] getVars() {
         return null; // vars;
     } 
@@ -165,6 +176,7 @@ public class ExpVector implements Cloneable {
     public void setStdVars() {
 	//	vars = stdVars();
     } 
+    /* remove */
 
     /**
      * Standard vars.
