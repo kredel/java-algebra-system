@@ -715,9 +715,9 @@ public abstract class OrderedMapPolynomial /* extends MapPolynomial */
      */
 
     public OrderedPolynomial extend(int i, int j, long k, String[] v) {  
-	if ( this.isZERO() ) return this;
         OrderedPolynomial Cp = getZERO(); 
         Cp.setVars( v );
+	if ( this.isZERO() ) return Cp;
         Map C = Cp.getMap();
         Map A = val; 
         Iterator ai = A.entrySet().iterator();
