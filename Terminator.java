@@ -4,6 +4,8 @@
 
 package edu.jas;
 
+import edu.unima.ky.parallel.Semaphore;
+
     /**
      * terminating helper class
      * like a barrier with coming and going
