@@ -15,8 +15,8 @@ import org.apache.log4j.Logger;
 
 import edu.unima.ky.parallel.Semaphore;
 
-import edu.jas.ThreadPool;
-import edu.jas.Terminator;
+import edu.jas.util.ThreadPool;
+import edu.jas.util.Terminator;
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.OrderedPolynomial;

@@ -18,8 +18,8 @@ import edu.unima.ky.parallel.Semaphore;
 import edu.unima.ky.parallel.ChannelFactory;
 import edu.unima.ky.parallel.SocketChannel;
 
-import edu.jas.ThreadPool;
-import edu.jas.Terminator;
+import edu.jas.util.ThreadPool;
+import edu.jas.util.Terminator;
 import edu.jas.util.DistributedListServer;
 import edu.jas.util.DistributedList;
 
