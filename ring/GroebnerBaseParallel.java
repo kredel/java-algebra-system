@@ -48,16 +48,18 @@ public class GroebnerBaseParallel  {
                p = p.monic();
                if ( p.isONE() ) {
 		  P.clear(); P.add( p );
-                  return P;
+                  return P; // since no threads activated jet
 	       }
                P.add( (Object) p );
-	       if ( pairlist == null ) 
+	       if ( pairlist == null ) {
                   pairlist = new OrderedPairlist( p.getTermOrder() );
-               pairlist.put( p );
+               }
+               // putOne not required
+               pairlist.putParallel( p, null );
 	    }
             else l--;
 	}
-        if ( l <= 1 ) return P;
+        if ( l <= 1 ) return P; // since no threads activated jet
 
 	if ( threads < 1 ) threads = 1;
 	ThreadPool T = new ThreadPool(threads);
@@ -70,7 +72,9 @@ public class GroebnerBaseParallel  {
 	fin.done();
 	P = DIGBMI(P,T);
 	T.terminate();
-        logger.info("pairlist #put = " + pairlist.putCount() + " #rem = " + pairlist.remCount());
+        logger.info("pairlist #put = " + pairlist.putCount() 
+                  + " #rem = " + pairlist.remCount()
+                  + " #total = " + pairlist.pairCount());
 	return P;
     }
 
@@ -120,7 +124,7 @@ public class GroebnerBaseParallel  {
               if ( ! pairlist.hasNext() && ! pool.hasJobs() ) break;
               if ( set ) pool.notIdle();
 
-              pair = (Pair) pairlist.removeNext();
+              pair = (Pair) pairlist.removeNextParallel();
               if ( pair == null ) continue; 
 
               pi = pair.pi; 
@@ -130,20 +134,26 @@ public class GroebnerBaseParallel  {
 
               S = Reduction.SPolynomial( pi, pj );
               //System.out.println("S   = " + S);
-              if ( S.isZERO() ) continue;
-
+              if ( S.isZERO() ) { 
+                 pair.setZero();
+                 continue;
+              }
               if ( logger.isDebugEnabled() ) {
                  logger.debug("ht(S) = " + S.leadingExpVector() );
 	      }
               H = Reduction.Normalform( P, S );
 	      red++;
-              if ( H.isZERO() ) continue;
+              if ( H.isZERO() ) {
+                 pair.setZero();
+                 continue;
+              }
 	      if ( logger.isDebugEnabled() ) {
                  logger.debug("ht(H) = " + H.leadingExpVector() );
 	      }
               H = H.monic();
               // System.out.println("H   = " + H);
-	      if ( H.isONE() ) {
+	      if ( H.isONE() ) { 
+                  pairlist.putOne( H, pair ); // not really required
 		  synchronized (P) {
                       P.clear(); P.add( H );
 		  }
@@ -153,7 +163,7 @@ public class GroebnerBaseParallel  {
               synchronized (P) {
                      P.add( H );
               }
-              pairlist.put( H );
+              pairlist.putParallel( H, pair );
 	   }
            logger.info( "terminated, done " + red + " reductions");
 	}

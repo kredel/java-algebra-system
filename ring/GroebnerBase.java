@@ -68,16 +68,20 @@ public class GroebnerBase  {
                p = p.monic();
                if ( p.isONE() ) {
 		  P.clear(); P.add( p );
-                  return P;
+                  return P; // since no threads are activated
 	       }
                P.add( (Object) p );
-	       if ( pairlist == null ) 
+	       if ( pairlist == null ) {
                   pairlist = new OrderedPairlist( p.getTermOrder() );
-               pairlist.put( p );
+               }
+               // putOne not required
+               pairlist.put( p, null );
 	    }
             else l--;
 	}
-        if ( l <= 1 ) return P;
+        if ( l <= 1 ) {
+           return P; // since no threads are activated
+        }
 
         Pair pair;
         OrderedPolynomial pi;
@@ -96,13 +100,19 @@ public class GroebnerBase  {
 	      }
 
               S = Reduction.SPolynomial( pi, pj );
-              if ( S.isZERO() ) continue;
+              if ( S.isZERO() ) {
+                 pair.setZero();
+                 continue;
+              }
               if ( logger.isDebugEnabled() ) {
                  logger.debug("ht(S) = " + S.leadingExpVector() );
 	      }
 
               H = Reduction.Normalform( P, S );
-              if ( H.isZERO() ) continue;
+              if ( H.isZERO() ) {
+                 pair.setZero();
+                 continue;
+              }
               if ( logger.isDebugEnabled() ) {
                  logger.debug("ht(H) = " + H.leadingExpVector() );
 	      }
@@ -110,7 +120,7 @@ public class GroebnerBase  {
 	      H = H.monic();
 	      if ( H.isONE() ) {
 		  P.clear(); P.add( H );
-                  return P;
+                  return P; // since no threads are activated
 	      }
               if ( logger.isDebugEnabled() ) {
                  logger.debug("H = " + H );
@@ -118,11 +128,13 @@ public class GroebnerBase  {
               if ( H.length() > 0 ) {
 		 l++;
                  P.add( (Object) H );
-                 pairlist.put( H );
+                 pairlist.put( H, null );
               }
 	}
 	P = DIGBMI(P);
-        logger.info("pairlist #put = " + pairlist.putCount() + " #rem = " + pairlist.remCount());
+        logger.info("pairlist #put = " + pairlist.putCount() 
+                  + " #rem = " + pairlist.remCount()
+                  + " #total = " + pairlist.pairCount());
 	return P;
     }
 

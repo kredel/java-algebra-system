@@ -85,12 +85,13 @@ public class GroebnerBaseDistributed  {
                if ( ! oneInGB ) {
                   P.add( p );
                }
-               if ( pairlist == null ) 
+               if ( pairlist == null ) {
                   pairlist = new OrderedPairlist( p.getTermOrder() );
+               }
                if ( p.isONE() ) {
-                  pairlist.putOne( p );
+                   pairlist.putOne( p, null );
                } else {
-                  pairlist.put( p );
+                   pairlist.putParallel( p, null );
                }
             }
             else l--;
@@ -148,7 +149,9 @@ public class GroebnerBaseDistributed  {
         T.terminate();
         theList.terminate();
         dls.terminate();
-        logger.info("pairlist #put = " + pairlist.putCount() + " #rem = " + pairlist.remCount());
+        logger.info("pairlist #put = " + pairlist.putCount() 
+                  + " #rem = " + pairlist.remCount()
+                  + " #total = " + pairlist.pairCount());
         return P;
     }
 
@@ -268,7 +271,7 @@ public class GroebnerBaseDistributed  {
                       pool.notIdle();
 		   }
 
-                   pair = (Pair) pairlist.removeNext();
+                   pair = (Pair) pairlist.removeNextParallel();
                    // if ( pair == null ) continue; 
 
                    /*
@@ -294,20 +297,26 @@ public class GroebnerBaseDistributed  {
                        e.printStackTrace();
                    }
                    logger.debug("received H polynomial");
-                   if ( rh != null ) {
+                   if ( rh == null ) {
+                       if ( pair != null ) {
+                           pair.setZero();
+                       }
+                   } else {
                        /*
                         * update pair list
                         */
                        red++;
                        H = (OrderedPolynomial)rh;
                        logger.debug("H = " + H);
-                       if ( ! H.isZERO() ) {
+                       if ( H.isZERO() ) {
+                           pair.setZero();
+                       } else {
                            if ( H.isONE() ) {
                                // pool.allIdle();
-                               pairlist.putOne( H );
+                               pairlist.putOne( H, pair );
                                goon = false;
                            } else {
-                               pairlist.put( H );
+                               pairlist.putParallel( H, pair );
 			   }
                        }
                    }
@@ -407,7 +416,7 @@ public class GroebnerBaseDistributed  {
                /*
                 * request pair and process, send result
                 */
-               // pair = (Pair) pairlist.removeNext();
+               // pair = (Pair) pairlist.removeNextParallel();
 
                Object dummy = new Integer(5);
                logger.debug("send request, dummy = "+dummy);
@@ -447,13 +456,17 @@ public class GroebnerBaseDistributed  {
 
                    S = Reduction.SPolynomial( pi, pj );
                    //System.out.println("S   = " + S);
-                   if ( !S.isZERO() ) {
+                   if ( S.isZERO() ) {
+                       // pair.setZero(); does not work in dist
+                   } else {
                        if ( logger.isDebugEnabled() ) {
                            logger.debug("ht(S) = " + S.leadingExpVector() );
                        }
                        H = Reduction.Normalform( theList.getList(), S );
                        red++;
-                       if ( ! H.isZERO() ) {
+                       if ( H.isZERO() ) {
+                           // pair.setZero(); does not work in dist
+                       } else {
                            if ( logger.isDebugEnabled() ) {
                                logger.debug("ht(H) = " + H.leadingExpVector() );
                            }
@@ -466,7 +479,7 @@ public class GroebnerBaseDistributed  {
                    }
                }
 
-               // send H or null
+               // send H or must send null
                logger.debug("#distributed list = "+theList.size());
                logger.debug("send H polynomial = " + H);
                try {
