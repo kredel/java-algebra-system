@@ -53,6 +53,27 @@ Some UML class diagramms as produced by ArgoUML:
 </dd>
 -->
 
+<dt>2003, 12, 29</dt>
+<dd>
+New organization of polynomials: 
+2 interfaces: UnorderedPolynomial and OrderedPolynomial. 
+Ordered polynomials have a term order and are implemented using 
+some SortedMap (e.g. TreeMap).
+Unodered polynomials are implemented using some HashMap (e.g. LinkedHashMap).
+2 abstract classes: UnorderedMapPolynomial and OrderedMapPolynomial.  
+Both implement all algorithms which do not need an explicit coeficient domain, 
+i.e. they are formulated in terms of the Coefficient interface from jas.arith.
+2 or more classes which extend the respective abstract classes: 
+RatUnorderedMapPolynomial and RatOrderedMapPolynomial both need explicitly 
+coefficients from BigRational or others. 
+<p>
+Multiplication with ordered polynomials is about 8-10 times faster than 
+the multiplication with unordered polynomials. Also the multiplication with 
+semi-ordered polynomials (LinkedHashMap) with orderpreserving addition is
+about 7-8 times slower than multiplication with ordered polynomials.
+</p>
+</dd>
+
 <dt>2003, 12, 28</dt>
 <dd>Things to do: 
 refactor and test HashPolynomial, check performance.
@@ -590,7 +611,7 @@ CPU TIME (ms) END
 <p>
 <!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
 <!-- hhmts start -->
-Last modified: Sun Dec 28 11:09:15 CET 2003
+Last modified: Tue Dec 30 11:02:08 CET 2003
 <!-- hhmts end -->
 </p>
 <p align="right" >
