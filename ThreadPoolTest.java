@@ -148,11 +148,17 @@ public class ThreadPoolTest extends TestCase {
 }
 
 
+/**
+ * Utility class for ThreadPool Test 
+ */
 class FastWorker implements Runnable {
     public void run() { 
     }
 }
 
+/**
+ * Utility class for ThreadPool Test 
+ */
 class SlowWorker implements Runnable {
     public void run() { 
         try {
