@@ -149,13 +149,13 @@ class SubModule:
         self.pset = self.mset.getPolynomialList();
 
     def __str__(self):
-        return str(self.mset) + "\n\n" + str(self.pset);
+        return str(self.mset); # + "\n\n" + str(self.pset);
 
     def GB(self):
         s = self.pset;
         F = s.list;
         t = System.currentTimeMillis();
-        G = GroebnerBase.DIRPGB(F);
+        G = ModGroebnerBase.GB(self.cols,F);
         t = System.currentTimeMillis() - t;
         print "executed in %s ms" % t; 
         self.pset = PolynomialList(s.vars,s.tord,G);
