@@ -224,25 +224,4 @@ public class Reduction  {
 	return P;
     }
 
-
-    /**
-     * Groebner base test
-     */
-
-    public static boolean isDIRPGB(List Pp) {  
-        OrderedPolynomial pi, pj, s, h;
-	for ( int i = 0; i < Pp.size(); i++ ) {
-	    pi = (OrderedPolynomial) Pp.get(i);
-            for ( int j = i+1; j < Pp.size(); j++ ) {
-                pj = (OrderedPolynomial) Pp.get(j);
-		if ( ! GBCriterion4( pi, pj ) ) continue;
-		s = SPolynomial( pi, pj );
-		if ( s.isZERO() ) continue;
-		h = Normalform( Pp, s );
-		if ( ! h.isZERO() ) return false;
-	    }
-	}
-	return true;
-    }
-
 }
