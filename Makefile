@@ -53,7 +53,7 @@ cl=
 #.EXPORT_ALL_VARIABLES :
 
 JASPATH=/home/kredel/jas
-DEFS=$(JASPATH)/arith:$(JASPATH)/poly:$(JASPATH)/ring:$(JASPATH)/util
+DEFS=$(JASPATH)/arith:$(JASPATH)/poly:$(JASPATH)/ring:$(JASPATH)/module:$(JASPATH)/util
 DOCCLASSES=$(JUNITPATH):$(LOG4JPATH):$(JOMPPATH):$(TNJPATH)
 DOCOPTS=-package
 #DOCOPTS=-package -version -author
@@ -80,7 +80,7 @@ GETC      = getc.pl
 
 .SUFFIXES :
 .SUFFIXES : .class .java 
-.PRECIOUS : %.java %.class edu/jas/arith/%.class edu/jas/poly/%.class edu/jas/ring/%.class edu/jas/versuch/%.class edu/jas/util/%.class edu/jas/%.class
+.PRECIOUS : %.java %.class edu/jas/arith/%.class edu/jas/poly/%.class edu/jas/ring/%.class edu/jas/module/%.class edu/jas/versuch/%.class edu/jas/util/%.class edu/jas/%.class
 
 .PHONY    : clean doc
 
@@ -103,6 +103,9 @@ edu/jas/poly/%.class: %.java
 edu/jas/ring/%.class: %.java
 	$(JAVAC) $<
 
+edu/jas/module/%.class: %.java
+	$(JAVAC) $<
+
 edu/jas/versuch/%.class: %.java
 	$(JAVAC) $<
 
@@ -122,6 +125,9 @@ edu.jas.poly.%: edu/jas/poly/%.class
 edu.jas.ring.%: edu/jas/ring/%.class
 	$(JAVA) $@ $(cl)
 
+edu.jas.module.%: edu/jas/module/%.class
+	$(JAVA) $@ $(cl)
+
 edu.jas.versuch.%: edu/jas/versuch/%.class
 	$(JAVA) $@ $(cl)
 
@@ -131,9 +137,9 @@ edu.jas.util.%: edu/jas/util/%.class
 
 
 
-FILES=$(wildcard *.java arith/*.java poly/*.java ring/*.java util/*.java)
+FILES=$(wildcard *.java arith/*.java poly/*.java ring/*.java module/*.java util/*.java)
 LIBS=$(JUNITPATH) $(LOG4JPATH) $(JOMPPATH)
-#CLASSES=$(wildcard *.class arith/*.class poly/*.class ring/*.class util/*.class)
+#CLASSES=$(wildcard *.class arith/*.class poly/*.class ring/*.class module/*.class util/*.class)
 CLASSES=edu/jas
 
 doc: $(FILES)
