@@ -33,6 +33,7 @@ public class ExecutableServer extends Thread {
      */
 
     public static final int DEFAULT_PORT = 7411;
+    public static final String DONE = "Done";
 
     private boolean goon = true;
     private Thread mythread = null;
@@ -67,6 +68,7 @@ public class ExecutableServer extends Thread {
             } catch (NumberFormatException e) {
             }
         }
+        logger.info("ExecutableServer at port " + port);
 	(new ExecutableServer(port)).run();
 	// until CRTL-C
     }
@@ -101,7 +103,7 @@ public class ExecutableServer extends Thread {
 	       logger.debug("execute channel = "+channel);
 	       if ( mythread.isInterrupted() ) {
 		   goon = false;
-	           //logger.info("execute server " + this + " interrupted");
+	           logger.debug("execute server " + this + " interrupted");
 	       } else {
 	          s = new Executor(channel,servers);
 	          servers.add( s );
@@ -110,7 +112,9 @@ public class ExecutableServer extends Thread {
 	       }
           } catch (InterruptedException e) {
                goon = false;
-	       // e.printStackTrace();
+               if ( logger.isDebugEnabled() ) {
+	          e.printStackTrace();
+               }
 	  }
        }
        //logger.debug("execute server " + this + " terminated");
@@ -185,7 +189,9 @@ class Executor extends Thread /*implements Runnable*/ {
                    if ( this.isInterrupted() ) {
 		        goon = false;
 		   } else {
-                     //System.out.println("receive: "+o+" from "+channel);
+                     if ( logger.isDebugEnabled() ) {
+                        logger.debug("receive: "+o+" from "+channel);
+                     }
                      // check permission
 		     if ( o instanceof RemoteExecutable ) {
 		         re = (RemoteExecutable)o;
@@ -193,7 +199,7 @@ class Executor extends Thread /*implements Runnable*/ {
 		         if ( this.isInterrupted() ) {
 		            goon = false;
 		         } else {
-                           channel.send("done");
+                           channel.send(ExecutableServer.DONE);
 			   goon = false; // stop this thread
 			 }
 		     }
