@@ -30,10 +30,31 @@ pre  { background-color: silver; }
 </dd>
 -->
 
+<dt>2003, 1, 28 </dt>
+<dd>
+ <p>some testing with gcj (Gnu Java Compiler). this compiler gernerates 
+    native executable binaries. the timings are not better than with
+   a jit, often worser.
+ </p>
+ <p>parallel computations with the Rose example are at 18 h with 4 threads
+    on 2 Pentium 4 @ 24. GHz hyperthreading CPUs. with one thread the time
+    is 40 h. 
+ </p>
+</dd>
+
+<dt>2003, 1, 26 </dt>
+<dd>
+ <p>timings with JDK 1.3 (from IBM) are 30% to 40% faster 
+    than with JDK 1.4.1 (from Sun).
+    timings on PowerPC 604 @ 200MHz JDK 1.3 (from IBM) 
+    JDK 1.2 (from Sun) are a factor 3.5-4.5 slower than on Intel PIII @ 450 MHz.
+    on PowerPC not using jit is faster than using a jit, ca. 20% - 30%.
+ </p>
+</dd>
+
 <dt>2003, 1, 12 </dt>
 <dd>
-    <p>general differences between sequential and parallel GB algorithms
-    </p>
+    general differences between sequential and parallel GB algorithms
     <ul>
     <li>the parallelization is achieved by doing the normal form reductions
         in parallel
@@ -59,13 +80,14 @@ pre  { background-color: silver; }
     <p>timings are more stable 
        and slightly better than that of sequential GB.
     </p>
+    <p>Todo: unit tests, comments, ...
+    </p> 
 </dd>
 
 <dt>2003, 1, 7-11 </dt>
 <dd>
-    <p>renamed jas to mas2jas, 
-       new cvs repository for jas, import and checkout 
-    </p>
+    renamed jas to mas2jas, 
+    new cvs repository for jas, import and checkout 
     <p>Improved parallel version of GB.
     </p>
     <ul>
@@ -180,6 +202,7 @@ pre  { background-color: silver; }
     mas: including startup and gc time,
     jas: excluding startup of jvm and including gc time,
     jas par on single processor
+    timing on P-3@450
     </p>
     this make for a penality of 12 percent,
     all tests with output to files,
@@ -240,6 +263,7 @@ pre  { background-color: silver; }
     Trinks 6: mas 26.935 sec, jas 3.211 sec <br />
     mas: including startup and gc time,
     jas: excluding startup of jvm and including gc time 
+    timing on P-3@450
     </p>
     <p>
     this makes for a factor of 8-9 better,
@@ -283,7 +307,8 @@ CPU TIME (ms) END
     Trinks 7: mas 0.598 sec, jas 1.373 sec <br />
     Trinks 6: mas 26.935 sec, jas 30.935 sec <br />
     mas: including startup and gc time, 
-    jas: excluding startup of jvm and including gc time 
+    jas: excluding startup of jvm and including gc time.
+    timing on P-3@450
     </p>
 </dd>
 
@@ -473,7 +498,7 @@ CPU TIME (ms) END
 <p>
 <!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
 <!-- hhmts start -->
-Last modified: Sun Jan 12 14:03:55 CET 2003
+Last modified: Sat Feb  1 11:00:09 CET 2003
 <!-- hhmts end -->
 </p>
 <p align="right" >
