@@ -5,6 +5,8 @@
 
 package edu.jas.poly;
 
+import java.util.Comparator;
+
 import edu.jas.arith.Coefficient;
 
 import java.util.Map;
@@ -18,6 +20,10 @@ import java.util.Map;
 interface Polynomial {
 
     public int getOrd();
+
+    public Comparator getDescendComparator();
+
+    public Comparator getAscendComparator();
 
     public Map getMap();
 

@@ -151,7 +151,9 @@ public abstract class HashPolynomial implements Polynomial, Cloneable {
        return t; 
     }
 
-    public Comparator getComparator() { return horder; }
+    public Comparator getDescendComparator() { return horder; }
+
+    public Comparator getAscendComparator() { return lorder; }
 
     public String[] getVars() { return vars; }
 
