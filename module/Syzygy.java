@@ -16,6 +16,7 @@ import edu.jas.arith.Coefficient;
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.OrderedPolynomial;
+import edu.jas.poly.OrderedMapPolynomial;
 import edu.jas.poly.PolynomialList;
 
 import edu.jas.ring.Reduction;
@@ -58,7 +59,7 @@ public class Syzygy  {
                 //logger.info("p"+i+", p"+j+" = " + pi + ", " +pj);
 
 		if ( ! Reduction.ModuleCriterion( modv, pi, pj ) ) continue;
-		if ( ! Reduction.GBCriterion4( pi, pj ) ) continue;
+		// if ( ! Reduction.GBCriterion4( pi, pj ) ) continue;
                 ArrayList row = (ArrayList)S.clone();
 
 		s = SPolynomial( row, i, pi, j, pj );
@@ -100,22 +101,55 @@ public class Syzygy  {
         if ( t == null || t.size() == 0 ) {
             return N;
         }
+        OrderedPolynomial zero = (OrderedPolynomial)((List)M.list.get(0)).get(0);
+        zero = zero.getZERO();
+        //System.out.println("zero = " + zero);
+
         ModuleList Np = null;
         PolynomialList F = M.getPolynomialList();
         int modv = ((List)t.get(0)).size();;
+        //System.out.println("modv = " + modv);
         List G = zeroRelations(modv,F.list);
         if ( G == null ) {
             return N;
         }
         List Z = new ArrayList();
         for ( int i = 0; i < G.size(); i++ ) {
-            F = new PolynomialList(F.coeff,F.vars,F.tord,(List)G.get(i),F.table);
-            Np = ModuleList.getModuleList(modv,F);
-            if ( Np != null ) {
-                Z.addAll( Np.list );
+            //F = new PolynomialList(F.coeff,F.vars,F.tord,(List)G.get(i),F.table);
+            List Gi = (List)G.get(i);
+            List Zi = new ArrayList();
+            // System.out.println("\nG("+i+") = " + G.get(i));
+            for ( int j = 0; j < Gi.size(); j++ ) {
+                //System.out.println("\nG("+i+","+j+") = " + Gi.get(j));
+                OrderedMapPolynomial p = (OrderedMapPolynomial)Gi.get(j);
+                if ( p != null ) {
+                   Map r = p.contract( modv );
+                   //System.out.println("map("+i+","+j+") = " + r + ", size = " + r.size() );
+                   if ( r.size() == 0 ) {
+                       Zi.add(zero); 
+                   } else if ( r.size() == 1 ) {
+                       OrderedPolynomial vi = (OrderedPolynomial)(r.values().toArray())[0];
+                       Zi.add(vi); 
+                   } else { // will not happen
+                       throw new RuntimeException("Map.size() > 1 = " + r.size());
+                   }
+                   /*
+                for ( Iterator jt = r.keySet().iterator(); jt.hasNext(); ) {
+                    ExpVector e = (ExpVector)jt.next();
+                    int[] dov = e.dependencyOnVariables();
+                    OrderedPolynomial vi = (OrderedPolynomial)r.get( e );
+                    System.out.print("dov = " + dov.length ); 
+                    System.out.println("  vi = " + vi ); 
+                }
+                   */
+
+                }
             }
+            //System.out.println("\nZ("+i+") = " + Zi);
+            Z.add( Zi );
         }
         N = new ModuleList(M.coeff,M.vars,M.tord,Z,M.table);
+        //System.out.println("\n\nN = " + N);
         return N;
     }
 
@@ -286,6 +320,123 @@ public class Syzygy  {
             logger.error("scalarProduct wrong sizes");
         }
         return sp;
+    }
+
+
+    /**
+     * Test if sysygy of modules
+     */
+
+    public static boolean isZeroRelation(ModuleList Z, ModuleList F) {  
+        if ( Z == null ) {
+            return true;
+        }
+        if ( Z.list == null ) {
+            return true;
+        }
+        for ( Iterator it = Z.list.iterator(); it.hasNext(); ) {
+            List row = (List)it.next();
+            List zr = scalarProduct(row,F);
+            if ( ! isZero(zr) ) {
+                logger.info("is not ZeroRelation (" + zr.size() + ") = " + zr);
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    /**
+     * product of vector and matrix of polynomials.
+     */
+
+    public static List scalarProduct(List r, ModuleList F) {  
+        List ZZ = null;
+        Iterator it = r.iterator();
+        Iterator jt = F.list.iterator();
+        while ( it.hasNext() && jt.hasNext() ) {
+            OrderedPolynomial pi = (OrderedPolynomial)it.next();
+            List vj = (List)jt.next();
+            List Z = scalarProduct( pi, vj );
+            //System.out.println("pi" + pi);
+            //System.out.println("vj" + vj);
+            // System.out.println("scalarProduct" + Z);
+            if ( ZZ == null ) {
+                ZZ = Z;
+            } else {
+                ZZ = vectorAdd(ZZ,Z);
+            }
+        }
+        if ( it.hasNext() || jt.hasNext() ) {
+            logger.error("scalarProduct wrong sizes");
+        }
+        if ( logger.isDebugEnabled() ) {
+            logger.debug("scalarProduct" + ZZ);
+        }
+        return ZZ;
+    }
+
+    /**
+     * Addition of vectors of polynomials.
+     */
+
+    public static List vectorAdd(List a, List b) {  
+        if ( a == null ) {
+            return b;
+        }
+        if ( b == null ) {
+            return a;
+        }
+        List V = new ArrayList( a.size() );
+        Iterator it = a.iterator();
+        Iterator jt = b.iterator();
+        while ( it.hasNext() && jt.hasNext() ) {
+            OrderedPolynomial pi = (OrderedPolynomial)it.next();
+            OrderedPolynomial pj = (OrderedPolynomial)jt.next();
+            OrderedPolynomial p = pi.add( pj );
+            V.add( p );
+        }
+        //System.out.println("vectorAdd" + V);
+        if ( it.hasNext() || jt.hasNext() ) {
+            logger.error("vectorAdd wrong sizes");
+        }
+        return V;
+    }
+
+    /**
+     * test vector of zero polynomials.
+     */
+
+    public static boolean isZero(List a) {  
+        if ( a == null ) {
+            return true;
+        }
+        Iterator it = a.iterator();
+        while ( it.hasNext() ) {
+            OrderedPolynomial pi = (OrderedPolynomial)it.next();
+            if ( pi == null ) {
+                continue;
+            }
+            if ( ! pi.isZERO() ) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    /**
+     * Scalar product of polynomial with vector of polynomials.
+     */
+
+    public static List scalarProduct(OrderedPolynomial p, List F) {  
+        List V = new ArrayList( F.size() );
+        for ( Iterator it = F.iterator(); it.hasNext(); ) {
+            OrderedPolynomial pi = (OrderedPolynomial)it.next();
+            pi = p.multiply( pi );
+            V.add( pi );
+        }
+        return V;
     }
 
 }
