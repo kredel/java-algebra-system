@@ -87,8 +87,8 @@ public class RelationTableTest extends TestCase {
 
      ExpVector ef = ExpVector.EVSUM(e,f);
      Coefficient one = BigRational.ONE;
-     OrderedPolynomial a = new RatOrderedMapPolynomial(one,z);
-     OrderedPolynomial b = new RatOrderedMapPolynomial(one,ef);
+     OrderedPolynomial a = new RatSolvableOrderedMapPolynomial(table,one,z);
+     OrderedPolynomial b = new RatSolvableOrderedMapPolynomial(table,one,ef);
      OrderedPolynomial rel = a.add(b);
 
      table.update(e,f,rel);
@@ -98,7 +98,7 @@ public class RelationTableTest extends TestCase {
      f = new ExpVector(rl,2,1); // insert in beginning
 
      ef = ExpVector.EVSUM(e,f);
-     b = new RatOrderedMapPolynomial(one,ef);
+     b = new RatSolvableOrderedMapPolynomial(table,one,ef);
      rel = a.add(b);
 
      table.update(e,f,rel);
@@ -108,7 +108,7 @@ public class RelationTableTest extends TestCase {
      f = new ExpVector(rl,2,2);
 
      ef = ExpVector.EVSUM(e,f);
-     b = new RatOrderedMapPolynomial(one,ef);
+     b = new RatSolvableOrderedMapPolynomial(table,one,ef);
      rel = a.add(b);
 
      table.update(e,f,rel);
@@ -118,7 +118,7 @@ public class RelationTableTest extends TestCase {
      f = new ExpVector(rl,2,4);
 
      ef = ExpVector.EVSUM(e,f);
-     b = new RatOrderedMapPolynomial(one,ef);
+     b = new RatSolvableOrderedMapPolynomial(table,one,ef);
      rel = a.add(b);
 
      table.update(e,f,rel);
@@ -128,7 +128,7 @@ public class RelationTableTest extends TestCase {
      f = new ExpVector(rl,2,3); // insert in middle
 
      ef = ExpVector.EVSUM(e,f);
-     b = new RatOrderedMapPolynomial(one,ef);
+     b = new RatSolvableOrderedMapPolynomial(table,one,ef);
      rel = a.add(b);
 
      table.update(e,f,rel);
@@ -153,8 +153,8 @@ public class RelationTableTest extends TestCase {
 
      ExpVector ef = ExpVector.EVSUM(e,f);
      Coefficient one = BigRational.ONE;
-     OrderedPolynomial a = new RatOrderedMapPolynomial(one,z);
-     OrderedPolynomial b = new RatOrderedMapPolynomial(one,ef);
+     OrderedPolynomial a = new RatSolvableOrderedMapPolynomial(table,one,z);
+     OrderedPolynomial b = new RatSolvableOrderedMapPolynomial(table,one,ef);
      OrderedPolynomial rel = a.add(b);
 
      table.update(e,f,rel);
@@ -164,7 +164,7 @@ public class RelationTableTest extends TestCase {
      f = new ExpVector(rl,0,1);
 
      ef = ExpVector.EVSUM(e,f);
-     b = new RatOrderedMapPolynomial(one,ef);
+     b = new RatSolvableOrderedMapPolynomial(table,one,ef);
      rel = a.add(b);
 
      table.update(e,f,rel);
@@ -174,7 +174,7 @@ public class RelationTableTest extends TestCase {
      f = new ExpVector(rl,2,1);
 
      ef = ExpVector.EVSUM(e,f);
-     b = new RatOrderedMapPolynomial(one,ef);
+     b = new RatSolvableOrderedMapPolynomial(table,one,ef);
      rel = a.add(b);
 
      table.update(e,f,rel);
@@ -199,8 +199,8 @@ public class RelationTableTest extends TestCase {
 
      ExpVector ef = ExpVector.EVSUM(e,f);
      Coefficient one = BigRational.ONE;
-     OrderedPolynomial a = new RatOrderedMapPolynomial(one,z);
-     OrderedPolynomial b = new RatOrderedMapPolynomial(one,ef);
+     OrderedPolynomial a = new RatSolvableOrderedMapPolynomial(table,one,z);
+     OrderedPolynomial b = new RatSolvableOrderedMapPolynomial(table,one,ef);
      OrderedPolynomial rel = a.add(b);
      OrderedPolynomial r1 = rel;
 
@@ -218,7 +218,7 @@ public class RelationTableTest extends TestCase {
      f = new ExpVector(rl,2,1); // insert in beginning
 
      ef = ExpVector.EVSUM(e,f);
-     b = new RatOrderedMapPolynomial(one,ef);
+     b = new RatSolvableOrderedMapPolynomial(table,one,ef);
      rel = a.add(b);
 
      table.update(e,f,rel);
@@ -234,7 +234,7 @@ public class RelationTableTest extends TestCase {
      f = new ExpVector(rl,2,2);
 
      ef = ExpVector.EVSUM(e,f);
-     b = new RatOrderedMapPolynomial(one,ef);
+     b = new RatSolvableOrderedMapPolynomial(table,one,ef);
      rel = a.add(b);
 
      table.update(e,f,rel);
@@ -250,7 +250,7 @@ public class RelationTableTest extends TestCase {
      f = new ExpVector(rl,2,4);
 
      ef = ExpVector.EVSUM(e,f);
-     b = new RatOrderedMapPolynomial(one,ef);
+     b = new RatSolvableOrderedMapPolynomial(table,one,ef);
      rel = a.add(b);
 
      table.update(e,f,rel);
@@ -266,7 +266,7 @@ public class RelationTableTest extends TestCase {
      f = new ExpVector(rl,2,3); // insert in middle
 
      ef = ExpVector.EVSUM(e,f);
-     b = new RatOrderedMapPolynomial(one,ef);
+     b = new RatSolvableOrderedMapPolynomial(table,one,ef);
      rel = a.add(b);
 
      table.update(e,f,rel);
@@ -305,8 +305,8 @@ public class RelationTableTest extends TestCase {
 
      ExpVector ef = ExpVector.EVSUM(e,f);
      Coefficient one = BigRational.ONE;
-     OrderedPolynomial a = new RatOrderedMapPolynomial(one,z);
-     OrderedPolynomial b = new RatOrderedMapPolynomial(one,ef);
+     OrderedPolynomial a = new RatSolvableOrderedMapPolynomial(table,one,z);
+     OrderedPolynomial b = new RatSolvableOrderedMapPolynomial(table,one,ef);
      OrderedPolynomial rel = a.add(b);
 
      table.update(e,f,rel);
@@ -321,7 +321,7 @@ public class RelationTableTest extends TestCase {
      e = new ExpVector(rl,2,1);
      f = new ExpVector(rl,0,1);
      ef = ExpVector.EVSUM(e,f);
-     b = new RatOrderedMapPolynomial(one,ef);
+     b = new RatSolvableOrderedMapPolynomial(table,one,ef);
      rel = a.add(b);
 
      table.update(e,f,rel);
@@ -336,7 +336,7 @@ public class RelationTableTest extends TestCase {
      e = new ExpVector(rl,4,1);
      f = new ExpVector(rl,2,1);
      ef = ExpVector.EVSUM(e,f);
-     b = new RatOrderedMapPolynomial(one,ef);
+     b = new RatSolvableOrderedMapPolynomial(table,one,ef);
      rel = a.add(b);
 
      table.update(e,f,rel);
@@ -367,8 +367,8 @@ public class RelationTableTest extends TestCase {
 
      ExpVector ef = ExpVector.EVSUM(e,f);
      Coefficient one = BigRational.ONE;
-     OrderedPolynomial a = new RatOrderedMapPolynomial(one,z);
-     OrderedPolynomial b = new RatOrderedMapPolynomial(one,ef);
+     OrderedPolynomial a = new RatSolvableOrderedMapPolynomial(table,one,z);
+     OrderedPolynomial b = new RatSolvableOrderedMapPolynomial(table,one,ef);
 
      TableRelation r = table.lookup(e,f,a);
      //System.out.println("relation = " + r);
@@ -380,7 +380,7 @@ public class RelationTableTest extends TestCase {
      e = new ExpVector(rl,2,1);
      f = new ExpVector(rl,0,1);
      ef = ExpVector.EVSUM(e,f);
-     b = new RatOrderedMapPolynomial(one,ef);
+     b = new RatSolvableOrderedMapPolynomial(table,one,ef);
 
      r = table.lookup(e,f,a);
      assertEquals("e = e",null,r.e);
@@ -391,7 +391,7 @@ public class RelationTableTest extends TestCase {
      e = new ExpVector(rl,4,1);
      f = new ExpVector(rl,2,1);
      ef = ExpVector.EVSUM(e,f);
-     b = new RatOrderedMapPolynomial(one,ef);
+     b = new RatSolvableOrderedMapPolynomial(table,one,ef);
 
      r = table.lookup(e,f,a);
      assertEquals("e = e",null,r.e);
