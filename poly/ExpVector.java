@@ -98,8 +98,14 @@ public class ExpVector implements Cloneable, Serializable {
         return val;
     } 
 
-    public void setVal(int i, long e) {
+    public long getVal(int i) {
+        return val[i];
+    } 
+
+    public long setVal(int i, long e) {
+        long x = val[i];
         val[i] = e;
+        return x;
     } 
 
     public int length() {
@@ -187,7 +193,9 @@ public class ExpVector implements Cloneable, Serializable {
         long[] u = U.getval();
         long[] v = V.getval();
         long[] w = new long[u.length];
-        for (int i = 0; i < u.length; i++ ) w[i] = u[i] + v[i];
+        for (int i = 0; i < u.length; i++ ) {
+            w[i] = u[i] + v[i];
+        }
         return new ExpVector( w );
     }
 
@@ -204,12 +212,29 @@ public class ExpVector implements Cloneable, Serializable {
         long[] u = U.getval();
         long[] v = V.getval();
         long[] w = new long[u.length];
-        for (int i = 0; i < u.length; i++ ) w[i] = u[i] - v[i];
+        for (int i = 0; i < u.length; i++ ) { 
+            w[i] = u[i] - v[i];
+        }
         return new ExpVector( w );
     }
 
     public ExpVector dif( ExpVector V ) {
         return EVDIF(this, V);
+    }
+
+
+    /**
+     * Substitute.
+     */
+
+    public static ExpVector EVSU( ExpVector U, int i, long d ) {
+        ExpVector V = (ExpVector)U.clone();
+        long e = V.setVal( i, d );
+        return V;
+    }
+
+    public ExpVector subst( int i, long d ) {
+        return EVSU(this, i, d);
     }
 
 
@@ -259,7 +284,9 @@ public class ExpVector implements Cloneable, Serializable {
     public static int EVTDEG( ExpVector U ) {
         int t = 0;
         long[] u = U.getval();
-        for (int i = 0; i < u.length; i++ ) t += u[i];
+        for (int i = 0; i < u.length; i++ ) {
+            t += u[i];
+        }
         return t;
     }
 
@@ -272,22 +299,60 @@ public class ExpVector implements Cloneable, Serializable {
         long[] u = U.getval();
         long[] v = V.getval();
         long[] w = new long[u.length];
-        for (int i = 0; i < u.length; i++ ) 
+        for (int i = 0; i < u.length; i++ ) {
             w[i] = ( u[i] >= v[i] ? u[i] : v[i] );
+        }
         return new ExpVector( w );
     }
 
 
     /**
-     * Multiple test.
+     * Dependency on variables.
+     */
+
+    public static int[] EVDOV( ExpVector U ) {
+        if ( U == null ) {
+            return null;
+        }
+        return U.dependencyOnVariables();
+    }
+
+    public int[] dependencyOnVariables() {
+        long[] u = val;
+        int l = 0;
+        for (int i = 0; i < u.length; i++ ) {
+            if ( u[i] > 0 ) {
+                l++;
+            }
+        }
+        int[] dep = new int[ l ];
+        if ( l == 0 ) {
+            return dep;
+        }
+        int j = 0;
+        for (int i = 0; i < u.length; i++ ) {
+            if ( u[i] > 0 ) {
+                dep[j] = i; j++;
+            }
+        }
+        return dep;
+    }
+
+
+    /**
+     * Multiple test. 
+     * @returns true if U is a multiple of V, else false.
      */
 
     public static boolean EVMT( ExpVector U, ExpVector V ) {
         long[] u = U.getval();
         long[] v = V.getval();
         boolean t = true;
-        for (int i = 0; i < u.length; i++ ) 
-            if ( u[i] < v[i] ) return false;
+        for (int i = 0; i < u.length; i++ ) {
+            if ( u[i] < v[i] ) { 
+               return false;
+            }
+        }
         return t;
     }
 
@@ -327,8 +392,12 @@ public class ExpVector implements Cloneable, Serializable {
         for (int j = i; j < u.length; j++ ) {
             up += u[j]; vp += v[j]; 
         }
-        if ( up > vp ) { t = 1; }
-        else { if ( up < vp ) { t = -1; }
+        if ( up > vp ) { 
+           t = 1; 
+        } else { 
+           if ( up < vp ) { 
+              t = -1; 
+           }
         }
         return t;
     }
@@ -341,11 +410,20 @@ public class ExpVector implements Cloneable, Serializable {
     public static int EVCOMP( int evord, ExpVector U, ExpVector V ) {
         int t = 0;
         switch ( evord ) {
-            case TermOrder.LEX:    { t = ( -EVILCP( U, V ) );  break; }
-            case TermOrder.INVLEX: { t =    EVILCP( U, V )  ;  break; }
-            case TermOrder.GRLEX:  { t = ( -EVIGLC( U, V ) );  break; }
-            case TermOrder.IGRLEX: { t =    EVIGLC( U, V )  ;  break; }
-            default:     { System.out.println("EVCOMP, undefined term order.");
+            case TermOrder.LEX:    { 
+                        t = ( -EVILCP( U, V ) );  break; 
+            }
+            case TermOrder.INVLEX: { 
+                        t =    EVILCP( U, V )  ;  break; 
+            }
+            case TermOrder.GRLEX:  { 
+                        t = ( -EVIGLC( U, V ) );  break; 
+            }
+            case TermOrder.IGRLEX: { 
+                        t =    EVIGLC( U, V )  ;  break; 
+            }
+            default:     { 
+                        throw new IllegalArgumentException("EVCOMP, undefined term order.");
             }
         }
         return t;
