@@ -31,7 +31,7 @@ class Ideal:
         sr = StringReader( str );
         tok = OrderedPolynomialTokenizer(ring.pset.vars,ring.pset.tord,sr);
         self.list = tok.nextPolynomialList();
-        self.pset = PolynomialList(ring.pset.vars,ring.pset.tord,self.list);
+        self.pset = OrderedPolynomialList(ring.pset.vars,ring.pset.tord,self.list);
 
     def __str__(self):
         return str(self.pset);
@@ -43,7 +43,7 @@ class Ideal:
         G = GroebnerBase.DIRPGB(F);
         t = System.currentTimeMillis() - t;
         print "executed in %s ms" % t; 
-        g = PolynomialList(s.vars,s.tord,G);
+        g = OrderedPolynomialList(s.vars,s.tord,G);
         return g;
 
     def parGB(self,thread=2):
@@ -53,7 +53,7 @@ class Ideal:
         G = GroebnerBaseParallel.DIRPGB(F,thread);
         t = System.currentTimeMillis() - t;
         print "executed in %s ms" % t; 
-        g = PolynomialList(s.vars,s.tord,G);
+        g = OrderedPolynomialList(s.vars,s.tord,G);
         return g;
 
     def distGB(self,thread=2,machine="util/machines.localhost",port=7114):
@@ -64,7 +64,7 @@ class Ideal:
         G = GBDist().execute(F,thread,machine,port);
         t = System.currentTimeMillis() - t;
         print "executed in %s ms" % t; 
-        g = PolynomialList(s.vars,s.tord,G);
+        g = OrderedPolynomialList(s.vars,s.tord,G);
         return g;
 
     def distClient(self,port=8114):
@@ -95,7 +95,7 @@ class SolvIdeal:
         sr = StringReader( str );
         tok = OrderedPolynomialTokenizer(ring.pset.vars,ring.pset.tord,sr,ring.pset.table);
         self.list = tok.nextSolvablePolynomialList();
-        self.pset = PolynomialList(ring.pset.vars,ring.pset.tord,self.list,ring.pset.table);
+        self.pset = OrderedPolynomialList(ring.pset.vars,ring.pset.tord,self.list,ring.pset.table);
 
     def __str__(self):
         return str(self.pset);
@@ -107,7 +107,7 @@ class SolvIdeal:
         G = SolvableGroebnerBase.leftGB(F);
         t = System.currentTimeMillis() - t;
         print "executed in %s ms" % t; 
-        g = PolynomialList(s.vars,s.tord,G,s.table);
+        g = OrderedPolynomialList(s.vars,s.tord,G,s.table);
         return g;
 
     def twosidedGB(self):
@@ -117,7 +117,7 @@ class SolvIdeal:
         G = SolvableGroebnerBase.twosidedGB(F);
         t = System.currentTimeMillis() - t;
         print "executed in %s ms" % t; 
-        g = PolynomialList(s.vars,s.tord,G,s.table);
+        g = OrderedPolynomialList(s.vars,s.tord,G,s.table);
         return g;
 
 

@@ -23,6 +23,7 @@ import edu.jas.arith.BigComplex;
 import edu.jas.arith.BigQuaternion;
 
 import edu.jas.module.ModuleList;
+import edu.jas.module.OrderedModuleList;
 
 /**
  * OrderedMapPolynomial Tokenizer. 
@@ -589,7 +590,7 @@ public class OrderedPolynomialTokenizer  {
              logger.info("s = " + s); 
         // comments += nextComment();
 
-        return new PolynomialList(vars,tord,s);
+        return new OrderedPolynomialList(vars,tord,s);
     }
 
 
@@ -620,7 +621,7 @@ public class OrderedPolynomialTokenizer  {
              logger.info("s = " + s); 
         // comments += nextComment();
 
-        return new ModuleList(vars,tord,s);
+        return new OrderedModuleList(vars,tord,s);
     }
 
 
@@ -674,7 +675,7 @@ public class OrderedPolynomialTokenizer  {
              logger.info("s = " + s); 
         // comments += nextComment();
 
-        return new PolynomialList(vars,tord,s,table);
+        return new OrderedPolynomialList(vars,tord,s,table);
     }
 
 
