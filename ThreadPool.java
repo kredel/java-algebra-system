@@ -99,7 +99,7 @@ public class ThreadPool {
     public void terminate() {
         while ( hasJobs() ) {
             try {
-                Thread.currentThread().sleep(100);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
             }
         }
