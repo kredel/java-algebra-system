@@ -110,6 +110,25 @@ public class ExpVector implements Cloneable, Serializable {
         return val.length; 
     } 
 
+    public ExpVector extend(int i, int j, long e) {
+        long[] w = new long[ val.length + i ];
+        System.arraycopy(val,0,w,i,val.length);
+        if ( j >= i ) {
+           throw new RuntimeException("i "+i+" <= j "+j+" invalid");
+        }
+        w[j] = e;
+        return new ExpVector( w );
+    }
+
+    public ExpVector contract(int i, int len) {
+        if ( i+len > val.length ) {
+           throw new RuntimeException("len "+len+" > val.len "+val.length);
+        }
+        long[] w = new long[ len ];
+        System.arraycopy(val,i,w,0,len);
+        return new ExpVector( w );
+    }
+
     public String toString() {
         // if ( vars != null ) return toString(vars);
         StringBuffer s = new StringBuffer("(");
@@ -181,7 +200,7 @@ public class ExpVector implements Cloneable, Serializable {
     public static String[] STDVARS(int n) {
         String[] vars = new String[ n ];
         for ( int i = 0; i < n; i++) {
-            vars[i] = "x" + (n-1-i);
+            vars[i] = "x" + i; //(n-1-i);
         }
         return vars;
     }

@@ -701,4 +701,70 @@ public abstract class OrderedMapPolynomial /* extends MapPolynomial */
         return a.isONE();
     }
 
+
+    /**
+     * Extend variables. Used e.g. in module embedding.
+     * Extend all ExpVectors by i elements and multiply by x_j^k.
+     */
+
+    public OrderedPolynomial extend(int i, int j, long k, String[] v) {  
+	if ( this.isZERO() ) return this;
+        OrderedPolynomial Cp = getZERO(); 
+        Cp.setVars( v );
+        Map C = Cp.getMap();
+        Map A = val; 
+        Iterator ai = A.entrySet().iterator();
+        while ( ai.hasNext() ) {
+            Map.Entry y = (Map.Entry) ai.next();
+            ExpVector e = (ExpVector) y.getKey(); 
+            //System.out.println("e = " + e);
+            Coefficient a = (Coefficient) y.getValue(); 
+            //System.out.println("a = " + a);
+            ExpVector f = e.extend(i,j,k); 
+            //System.out.println("e = " + e + ", f = " + f);
+            C.put( f, a );
+        }
+        return Cp;
+    }
+
+
+    /**
+     * Contract variables. Used e.g. in module embedding.
+     * remove i elements of each ExpVector.
+     */
+
+    public Map contract(int i) { 
+        OrderedPolynomial zero = getZERO(); 
+        if ( vars != null ) {
+           String[] v = null;
+           v = new String[ vars.length - i ];
+           for ( int j = 0; j < vars.length-i; j++ ) {
+               v[j] = vars[j];
+           }
+           zero.setVars( v );
+        }
+        TermOrder t = new TermOrder( TermOrder.INVLEX );
+        Map C = new TreeMap( t.getAscendComparator() );
+	if ( this.isZERO() ) return C;
+        Map A = val; 
+        Iterator ai = A.entrySet().iterator();
+        while ( ai.hasNext() ) {
+            Map.Entry y = (Map.Entry) ai.next();
+            ExpVector e = (ExpVector) y.getKey(); 
+            //System.out.println("e = " + e);
+            Coefficient a = (Coefficient) y.getValue(); 
+            //System.out.println("a = " + a);
+            ExpVector f = e.contract(0,i); 
+            ExpVector g = e.contract(i,e.length()-i); 
+            //System.out.println("e = " + e + ", f = " + f + ", g = " + g );
+            OrderedPolynomial p = (OrderedPolynomial)C.get(f);
+            if ( p == null ) {
+                p = zero;
+            } 
+            p = p.add( a, g );
+            C.put( f, p );
+        }
+        return C;
+    }
+
 }
