@@ -202,7 +202,7 @@ public abstract class OrderedMapPolynomial /* extends MapPolynomial */
         return (ExpVector) val.firstKey(); 
     }
 
-    public static ExpVector DIPLEV(Polynomial a) {  
+    public static ExpVector DIPLEV(OrderedPolynomial a) {  
 	if ( a == null ) return null;
         return a.leadingExpVector();
     }
@@ -218,7 +218,7 @@ public abstract class OrderedMapPolynomial /* extends MapPolynomial */
         return (Coefficient) m.getValue();
     }
 
-    public static Object DIPLBC(Polynomial a) {  
+    public static Object DIPLBC(OrderedPolynomial a) {  
 	if ( a == null ) return null;
         return a.leadingBaseCoefficient();
     }
