@@ -12,7 +12,7 @@ import edu.jas.poly.OrderedPolynomial;
      * Serializable subclass to hold pairs of polynomials
      */
 
-class Pair implements Serializable, Comparable {
+public class Pair implements Serializable, Comparable {
 
     public final OrderedPolynomial pi;
     public final OrderedPolynomial pj;
