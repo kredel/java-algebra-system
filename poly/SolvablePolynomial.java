@@ -17,10 +17,20 @@ import java.util.Map;
 
 public interface SolvablePolynomial extends OrderedPolynomial {
 
-    public OrderedPolynomial multiplyLeft(Coefficient b, ExpVector e);
+    public RelationTable getRelationTable();
 
-    public OrderedPolynomial multiplyLeft(ExpVector e);
+    public SolvablePolynomial getZERO(RelationTable r);
 
-    public OrderedPolynomial multiplyLeft(Map.Entry m);
+    public SolvablePolynomial getZERO(RelationTable r, TermOrder t);
+
+    public SolvablePolynomial getONE(RelationTable r);
+
+    public SolvablePolynomial getONE(RelationTable r, TermOrder t);
+
+    public SolvablePolynomial multiplyLeft(Coefficient b, ExpVector e);
+
+    public SolvablePolynomial multiplyLeft(ExpVector e);
+
+    public SolvablePolynomial multiplyLeft(Map.Entry m);
 
 }
