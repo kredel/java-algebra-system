@@ -301,6 +301,26 @@ public abstract class OrderedMapPolynomial /* extends MapPolynomial */
         return a.add(b);
     }
 
+    public OrderedPolynomial add(Coefficient b, ExpVector e) {  
+	if ( b == null || e == null ) return this;
+	OrderedPolynomial Cp = (OrderedPolynomial) this.clone();
+        Map C = Cp.getMap();
+        Coefficient c = (Coefficient) C.get( e ); //remove?
+        // System.out.println("c = " + c);
+        if ( c != null ) { 
+           c = c.add(b);
+           // System.out.println("c = " + c);
+           if ( ! c.isZERO() ) { 
+              C.put( e, c ); 
+           } else {
+              C.remove( e );
+	   }
+        } else { 
+	   // System.out.println("b = " + b);
+           C.put( e, b ); 
+        }
+        return Cp;
+    }
 
     /**
      * Difference. Implementation based on TreeMap / SortedMap.
@@ -347,6 +367,27 @@ public abstract class OrderedMapPolynomial /* extends MapPolynomial */
         return a.subtract(b);
     }
 
+
+    public OrderedPolynomial subtract(Coefficient b, ExpVector e) {  
+	if ( b == null || e == null ) return this;
+	OrderedPolynomial Cp = (OrderedPolynomial) this.clone();
+        Map C = Cp.getMap();
+        Coefficient c = (Coefficient) C.get( e ); //remove?
+        // System.out.println("c = " + c);
+        if ( c != null ) { 
+           c = c.subtract(b);
+           // System.out.println("c = " + c);
+           if ( ! c.isZERO() ) { 
+              C.put( e, c ); 
+           } else {
+              C.remove( e );
+	   }
+        } else { 
+	   // System.out.println("b = " + b);
+           C.put( e, b.negate() ); 
+        }
+        return Cp;
+    }
 
     /**
      * Multiply. Implementation using polynomial add.
@@ -463,6 +504,27 @@ public abstract class OrderedMapPolynomial /* extends MapPolynomial */
         return a.multiply(b);
     }
 
+    public OrderedPolynomial monic() {  
+	Coefficient b = this.leadingBaseCoefficient();
+	b = b.inverse();
+
+        OrderedPolynomial Cp = getZERO(order); 
+        Cp.setVars(vars);
+        Map C = Cp.getMap();
+        Map A = val; //this.getMap();
+        Iterator ai = A.entrySet().iterator();
+        while ( ai.hasNext() ) {
+            Map.Entry y = (Map.Entry) ai.next();
+            ExpVector e = (ExpVector) y.getKey(); 
+            //System.out.println("e = " + e);
+            Coefficient a = (Coefficient) y.getValue(); 
+            //System.out.println("a = " + a);
+            Coefficient c = a.multiply(b);
+            //System.out.println("c = " + c);
+            C.put( e, c );
+        }
+        return Cp;
+    }
 
     /**
      * Product with number and exponent vector.

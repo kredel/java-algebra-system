@@ -61,10 +61,16 @@ public interface OrderedPolynomial /* extends UnorderedPolynomial */ {
 
     public OrderedPolynomial add(OrderedPolynomial B);
 
+    public OrderedPolynomial add(Coefficient b, ExpVector e);
+
     public OrderedPolynomial subtract(OrderedPolynomial B);
+
+    public OrderedPolynomial subtract(Coefficient b, ExpVector e);
 
     public OrderedPolynomial negate();
 
+
+    public OrderedPolynomial monic();
 
     public OrderedPolynomial multiply(OrderedPolynomial B);
 
