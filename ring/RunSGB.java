@@ -20,7 +20,7 @@ import edu.jas.util.ExecutableServer;
 
   /**
    * Simple setup to run a solvable GB example. <br />
-   * Usage: RunSGB [seq] &lt;file&gt; 
+   * Usage: RunSGB [seq] &lt;file&gt; [irr|left|two] 
    * @author Heinz Kredel
    */
 
@@ -40,7 +40,8 @@ public class RunSGB {
       String usage = "Usage: RunSGB "
                     + "[ seq ] "
           //        + "[ seq | par | dist | cli [port] ] "
-                    + "<file> ";
+                    + "<file> "
+                    + "[irr|left|two] ";
           //          + "#procs "
           //          + "[machinefile]";
       if ( args.length < 1 ) {
@@ -51,6 +52,7 @@ public class RunSGB {
       String kind = args[0];
       String[] allkinds = new String[] { "seq" };
       // String[] allkinds = new String[] { "seq", "par", "dist", "cli"  };
+      String action = "left";
       boolean sup = false;
       for ( int i = 0; i < allkinds.length; i++ ) {
           if ( kind.equals( allkinds[i] ) ) {
@@ -90,23 +92,38 @@ public class RunSGB {
       }
       System.out.println("S =\n" + S); 
 
+      if ( args.length >= 3 ) {
+          action = args[2];
+      }
+
       if ( kind.equals("seq") ) {
-         runSequential( S );
+          runSequential( S, action );
       }
 
   }
 
 
-  static void runSequential(PolynomialList S) {
+    static void runSequential(PolynomialList S, String action) {
       List L = S.list; 
-      List G;
+      List G = null;
       long t;
 
       t = System.currentTimeMillis();
-      System.out.println("\nSolvable Groebner base sequential ..."); 
-      // G = SolvableGroebnerBase.leftGB(L);
-      G = SolvableGroebnerBase.twosidedGB(L);
-      S = new PolynomialList( S.vars, S.tord, G );
+      System.out.println("\nSolvable GB [" + action + "] sequential ..."); 
+      if ( action.equals("irr") ) {
+         G = Reduction.leftIrreducibleSet(L);
+      }
+      if ( action.equals("left") ) {
+         G = SolvableGroebnerBase.leftGB(L);
+      }
+      if ( action.equals("two") ) {
+         G = SolvableGroebnerBase.twosidedGB(L);
+      }
+      if ( G == null ) {
+          System.out.println("unknown action = " + action + "\n"); 
+          return;
+      }
+      S = new PolynomialList( S.vars, S.tord, G, S.table );
       System.out.println("G =\n" + S ); 
       System.out.println("G.size() = " + G.size() ); 
       t = System.currentTimeMillis() - t;
