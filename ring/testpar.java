@@ -67,7 +67,7 @@ public class testpar
       System.out.println("\nGroebner base " + threads 
                        + "-times parallel ..."); 
       G = RatGBase.DIRPGBparallel(L,threads);
-      S = new PolynomialList( S.vars, S.evord, G );
+      S = new PolynomialList( S.vars, S.tord, G );
       System.out.println("G =\n" + S ); 
       System.out.println("G.size() = " + G.size() ); 
       t = System.currentTimeMillis() - t;
@@ -77,7 +77,7 @@ public class testpar
       t = System.currentTimeMillis();
       System.out.println("\nGroebner base ..."); 
       G = RatGBase.DIRPGB(L);
-      S = new PolynomialList( S.vars, S.evord, G );
+      S = new PolynomialList( S.vars, S.tord, G );
       System.out.println("G =\n" + S ); 
       System.out.println("G.size() = " + G.size() ); 
       t = System.currentTimeMillis() - t;

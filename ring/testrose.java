@@ -19,6 +19,7 @@ import edu.jas.poly.PolynomialList;
 
   /**
    * simple test setup for the Rose example.
+   * @deprecated
    */
 
 public class testrose {
@@ -67,7 +68,7 @@ public class testrose {
       t = System.currentTimeMillis();
       System.out.println("\nGroebner base parallel ..."); 
       G = RatGBase.DIRPGBparallel(L,threads);
-      S = new PolynomialList( S.vars, S.evord, G );
+      S = new PolynomialList( S.vars, S.tord, G );
       System.out.println("G =\n" + S ); 
       System.out.println("G.size() = " + G.size() ); 
       t = System.currentTimeMillis() - t;
@@ -77,7 +78,7 @@ public class testrose {
       t = System.currentTimeMillis();
       System.out.println("\nGroebner base ..."); 
       G = RatGBase.DIRPGB(L);
-      S = new PolynomialList( S.vars, S.evord, G );
+      S = new PolynomialList( S.vars, S.tord, G );
       System.out.println("G =\n" + S ); 
       System.out.println("G.size() = " + G.size() ); 
       t = System.currentTimeMillis() - t;
