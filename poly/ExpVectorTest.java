@@ -153,7 +153,6 @@ public class ExpVectorTest extends TestCase {
      assertTrue("sign(lcm(a,b)-a) >= 0", ExpVector.EVSIGN(d) >= 0 );
      d = ExpVector.EVDIF(c,b);
      assertTrue("sign(lcm(a,b)-b) >= 0", ExpVector.EVSIGN(d) >= 0 );
-
  }
 
 /**
@@ -187,6 +186,75 @@ public class ExpVectorTest extends TestCase {
      assertTrue("tdeg(lcm(a,b)) >= tdeg(b)", 
                    ExpVector.EVTDEG(c) >=
                    ExpVector.EVTDEG(b) );
+ }
+
+/**
+ * Test weighted 
+ * 
+ */
+ public void testWeightdeg() {
+     a = new ExpVector( 100 );
+     assertTrue("tdeg(a) = 0", ExpVector.EVTDEG(a) == 0 );
+     assertTrue("wdeg(a) = 0", ExpVector.EVWDEG(null,a) == 0 );
+
+     float q = (float) 0.2;
+
+     a = ExpVector.EVRAND(5,10,q);
+     b = ExpVector.EVRAND(5,10,q);
+     long [] w = new long[] { 1l, 1l, 1l, 1l, 1l };
+
+     assertTrue("tdeg(a) >= 0", ExpVector.EVTDEG(a) >= 0 );
+     assertTrue("tdeg(b) >= 0", ExpVector.EVTDEG(b) >= 0 );
+
+     assertTrue("wdeg(a) >= 0", ExpVector.EVWDEG(w,a) >= 0 );
+     assertTrue("wdeg(b) >= 0", ExpVector.EVWDEG(w,b) >= 0 );
+
+     assertEquals("tdeg(a) == wdeg(a)", ExpVector.EVTDEG(a), ExpVector.EVWDEG(w,a) );
+     assertEquals("tdeg(b) == wdeg(b)", ExpVector.EVTDEG(b), ExpVector.EVWDEG(w,b) );
+
+     c = ExpVector.EVSUM(a,b);
+     assertTrue("wdeg(a+b) >= wdeg(a)", 
+                   ExpVector.EVWDEG(w,c) >=
+                   ExpVector.EVWDEG(w,a) );
+     assertTrue("wdeg(a+b) >= wdeg(b)", 
+                   ExpVector.EVWDEG(w,c) >=
+                   ExpVector.EVWDEG(w,b) );
+
+     c = ExpVector.EVLCM(a,b);
+     assertTrue("wdeg(lcm(a,b)) >= wdeg(a)", 
+                   ExpVector.EVWDEG(w,c) >=
+                   ExpVector.EVWDEG(w,a) );
+     assertTrue("wdeg(lcm(a,b)) >= wdeg(b)", 
+                   ExpVector.EVWDEG(w,c) >=
+                   ExpVector.EVWDEG(w,b) );
+
+
+     w = new long[] { 10l, 1l, 3l, 9l, 100l };
+
+     assertTrue("tdeg(a) >= 0", ExpVector.EVTDEG(a) >= 0 );
+     assertTrue("tdeg(b) >= 0", ExpVector.EVTDEG(b) >= 0 );
+
+     assertTrue("wdeg(a) >= 0", ExpVector.EVWDEG(w,a) >= 0 );
+     assertTrue("wdeg(b) >= 0", ExpVector.EVWDEG(w,b) >= 0 );
+
+     assertTrue("tdeg(a) <= wdeg(a)", ExpVector.EVTDEG(a) <= ExpVector.EVWDEG(w,a) );
+     assertTrue("tdeg(b) <= wdeg(b)", ExpVector.EVTDEG(b) <= ExpVector.EVWDEG(w,b) );
+
+     c = ExpVector.EVSUM(a,b);
+     assertTrue("wdeg(a+b) >= wdeg(a)", 
+                   ExpVector.EVWDEG(w,c) >=
+                   ExpVector.EVWDEG(w,a) );
+     assertTrue("wdeg(a+b) >= wdeg(b)", 
+                   ExpVector.EVWDEG(w,c) >=
+                   ExpVector.EVWDEG(w,b) );
+
+     c = ExpVector.EVLCM(a,b);
+     assertTrue("wdeg(lcm(a,b)) >= wdeg(a)", 
+                   ExpVector.EVWDEG(w,c) >=
+                   ExpVector.EVWDEG(w,a) );
+     assertTrue("wdeg(lcm(a,b)) >= wdeg(b)", 
+                   ExpVector.EVWDEG(w,c) >=
+                   ExpVector.EVWDEG(w,b) );
 
  }
 
@@ -228,9 +296,6 @@ public class ExpVectorTest extends TestCase {
      exp = new int[] { 0 };
      dep = ExpVector.EVDOV(b);
      assertTrue("[0] = [0]",Arrays.equals(exp,dep));
-
-
  }
-
 
 }
