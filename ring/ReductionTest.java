@@ -78,6 +78,84 @@ public class ReductionTest extends TestCase {
 
 
 /**
+ * Test constants and empty list reduction
+ * 
+ */
+ public void testRatReduction0() {
+     L = new ArrayList();
+
+     //a = RatOrderedMapPolynomial.DIRRAS(rl, kl, ll, el, q );
+     c = RatOrderedMapPolynomial.ONE;
+     d = RatOrderedMapPolynomial.ZERO;
+
+     e = Reduction.Normalform( L, c );
+     assertTrue("isONE( e )", e.isONE() ); 
+
+     e = Reduction.Normalform( L, d );
+     assertTrue("isZERO( e )", e.isZERO() ); 
+
+
+     L.add( c );
+     e = Reduction.Normalform( L, c );
+     assertTrue("isZERO( e )", e.isZERO() ); 
+
+     // e = Reduction.Normalform( L, a );
+     // assertTrue("isZERO( e )", e.isZERO() ); 
+
+     e = Reduction.Normalform( L, d );
+     assertTrue("isZERO( e )", e.isZERO() ); 
+
+
+     L = new ArrayList();
+     L.add( d );
+     e = Reduction.Normalform( L, c );
+     assertTrue("isONE( e )", e.isONE() ); 
+
+     e = Reduction.Normalform( L, d );
+     assertTrue("isZERO( e )", e.isZERO() ); 
+ }
+
+
+/**
+ * Test ReductionMod with constants and empty list reduction
+ * 
+ */
+ public void testRatReduction1() {
+     L = new ArrayList();
+
+     //a = RatOrderedMapPolynomial.DIRRAS(rl, kl, ll, el, q );
+     c = RatOrderedMapPolynomial.ONE;
+     d = RatOrderedMapPolynomial.ZERO;
+
+     e = Reduction.NormalformMod( L, c );
+     assertTrue("isONE( e )", e.isONE() ); 
+
+     e = Reduction.NormalformMod( L, d );
+     assertTrue("isZERO( e )", e.isZERO() ); 
+
+
+     L.add( c );
+     e = Reduction.NormalformMod( L, c );
+     assertTrue("isZERO( e )", e.isZERO() ); 
+
+     // e = Reduction.Normalform( L, a );
+     // assertTrue("isZERO( e )", e.isZERO() ); 
+
+     e = Reduction.NormalformMod( L, d );
+     assertTrue("isZERO( e )", e.isZERO() ); 
+
+
+     L = new ArrayList();
+     L.add( d );
+     e = Reduction.NormalformMod( L, c );
+     assertTrue("isONE( e )", e.isONE() ); 
+
+     e = Reduction.NormalformMod( L, d );
+     assertTrue("isZERO( e )", e.isZERO() ); 
+ }
+
+
+/**
  * Test Rat reduction
  * 
  */
@@ -86,7 +164,6 @@ public class ReductionTest extends TestCase {
      a = RatOrderedMapPolynomial.DIRRAS(rl, kl, ll, el, q );
      b = RatOrderedMapPolynomial.DIRRAS(rl, kl, ll, el, q );
 
-     //a = RatPolynomial.DIRRAS(rl, kl, ll, el, q );
      assertTrue("not isZERO( a )", !a.isZERO() );
 
      L = new ArrayList();
@@ -95,11 +172,35 @@ public class ReductionTest extends TestCase {
      e = Reduction.Normalform( L, a );
      assertTrue("isZERO( e )", e.isZERO() );
 
-     //b = RatPolynomial.DIRRAS(rl, kl, ll, el, q );
      assertTrue("not isZERO( b )", !b.isZERO() );
 
      L.add(b);
      e = Reduction.Normalform( L, a );
+     assertTrue("isZERO( e ) some times", e.isZERO() ); 
+ }
+
+
+/**
+ * Test Rat reduction Mod
+ * 
+ */
+ public void testRatReductionMod() {
+
+     a = RatOrderedMapPolynomial.DIRRAS(rl, kl, ll, el, q );
+     b = RatOrderedMapPolynomial.DIRRAS(rl, kl, ll, el, q );
+
+     assertTrue("not isZERO( a )", !a.isZERO() );
+
+     L = new ArrayList();
+     L.add(a);
+
+     e = Reduction.NormalformMod( L, a );
+     assertTrue("isZERO( e )", e.isZERO() );
+
+     assertTrue("not isZERO( b )", !b.isZERO() );
+
+     L.add(b);
+     e = Reduction.NormalformMod( L, a );
      assertTrue("isZERO( e ) some times", e.isZERO() ); 
  }
 
@@ -113,7 +214,6 @@ public class ReductionTest extends TestCase {
      a = ComplexOrderedMapPolynomial.DICRAS(rl, kl, ll, el, q );
      b = ComplexOrderedMapPolynomial.DICRAS(rl, kl, ll, el, q );
 
-     //a = ComplexPolynomial.DIRRAS(rl, kl, ll, el, q );
      assertTrue("not isZERO( a )", !a.isZERO() );
 
      L = new ArrayList();
@@ -122,7 +222,6 @@ public class ReductionTest extends TestCase {
      e = Reduction.Normalform( L, a );
      assertTrue("isZERO( e )", e.isZERO() );
 
-     //b = ComplexPolynomial.DIRRAS(rl, kl, ll, el, q );
      assertTrue("not isZERO( b )", !b.isZERO() );
 
      L.add(b);
