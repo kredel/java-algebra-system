@@ -17,8 +17,9 @@ import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 
+import edu.unima.ky.parallel.Semaphore;
+
 import edu.jas.ThreadPool;
-import edu.jas.Semaphore;
 import edu.jas.arith.BigRational;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.RatPolynomial;
@@ -29,6 +30,7 @@ import edu.jas.poly.TreePolynomial;
  * Implements S-Polynomial, Reduction, Irreducible List and Groebner bases.
  * Included is a parallel implementation of Groebner bbases.
  * @author Heinz Kredel
+ * @deprecated
  */
 
 public class RatGBase  {
