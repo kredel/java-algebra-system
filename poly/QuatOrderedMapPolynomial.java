@@ -9,6 +9,8 @@ import java.util.Map;
 import edu.jas.arith.Coefficient;
 import edu.jas.arith.BigQuaternion;
 
+import org.apache.log4j.Logger;
+
 /**
  * BigQuaternion Ordered Map Polynomial. 
  * Extension of OrderedMapPolynomial with BigQuaternion Coefficients.
@@ -16,6 +18,9 @@ import edu.jas.arith.BigQuaternion;
  */
 
 public class QuatOrderedMapPolynomial extends OrderedMapPolynomial {
+
+    private static Logger logger = 
+            Logger.getLogger(QuatOrderedMapPolynomial.class);
 
     /**
      * Constructors for QuatOrderedMapPolynomial
@@ -105,7 +110,6 @@ public class QuatOrderedMapPolynomial extends OrderedMapPolynomial {
             ExpVector U = ExpVector.EVRAND(r,e,q);
             BigQuaternion c = (BigQuaternion) C.get( U );
             BigQuaternion a = BigQuaternion.QRAND(k);
-            // System.out.println("rat random U = " + U + " c = " + c + " a = " +a);
             if ( ! a.isZERO() ) {
                 if ( c == null ) {
                    C.put( U, a );
@@ -114,7 +118,9 @@ public class QuatOrderedMapPolynomial extends OrderedMapPolynomial {
                 }
             }
         }
-        //System.out.println("rat random = " + x);
+        if ( logger.isDebugEnabled() ) {
+           logger.debug("rat random = " + x);
+        }
         return x; 
     }
 
