@@ -65,10 +65,29 @@ Some UML class diagramms as produced by ArgoUML:
 </dd>
 -->
 
-<dt>2005, 1, 24</dt>
+<dt>2005, 2, 4-</dt>
+<dd> 
+  New unit test case for TermOrder.
+  Fixed weak point in polynomial getONE() to correct number 
+  of variables, e.g. correct exponent vector size.
+  Polynomial constant ONE still has wrong exponent vector size.
+  Implemented noncommutative product for solvable polynomials,
+  together with relation tables. 
+  SolvableOrderedMapPolynomial extends OrderedMapPolynomial.
+  RatSolvableOrderedMapPolynomial extends SolvableOrderedMapPolynomial.
+</dd>
+
+<dt>2005, 1, 24-31</dt>
 <dd> 
   Removed old deprecated classes.
   Todo: let DistHashTable implement Map Interface.
+  Reimplemented Reduction.Normalform so that asynchronous 
+  update of the polynomial list is possible and respected.
+  In case a new polynomial arrives, the reduction is restarted 
+  from the beginning. Continuing with the done work and 
+  rereducing so far irreducible terms would be an alternative.
+  Todo: use JDK 1.5 java.util.concurrent with interference free Lists,
+  BlockingQueues.
 </dd>
 
 <dt>2005, 1, 15-16</dt>
@@ -1064,7 +1083,7 @@ CPU TIME (ms) END
 <p>
 <!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
 <!-- hhmts start -->
-Last modified: Mon Jan 24 23:10:12 CET 2005
+Last modified: Sun Feb  6 14:31:17 CET 2005
 <!-- hhmts end -->
 </p>
 <p align="right" >
