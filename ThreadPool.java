@@ -17,17 +17,17 @@ import org.apache.log4j.Logger;
  */
 
 public class ThreadPool {
-    static final int SIZE = 3;
-    int size;
-    PoolThread[] workers;
-    int nojobs = 0;
-    //    Stack jobstack;
-    LinkedList jobstack;
+    static final int DEFAULT_SIZE = 3;
+    protected PoolThread[] workers;
+    protected int nojobs = 0;
+    // List or Collection is not appropriate
+    //   Stack jobstack; // LIFO strategy for recursion
+    LinkedList jobstack; // FIFO strategy for GB
 
     private static Logger logger = Logger.getLogger(ThreadPool.class);
 
     public ThreadPool() {
-        this(SIZE);
+        this(DEFAULT_SIZE);
     }
 
 
@@ -36,14 +36,20 @@ public class ThreadPool {
  * @param size of the pool
  */ 
     public ThreadPool(int size) {
-	//        jobstack = new Stack();
+        // jobstack = new Stack();
         jobstack = new LinkedList();
-        this.size = size;
         workers = new PoolThread[size];
-        for (int i=0; i<size; i++) {
+        for (int i=0; i < workers.length; i++) {
             workers[i] = new PoolThread(this);
             workers[i].start();
         }
+    }
+
+/**
+ * number of worker threads
+ */
+    public int getNumber() {
+        return workers.length; // not null
     }
 
 /**
@@ -57,7 +63,7 @@ public class ThreadPool {
             catch (InterruptedException e) {
             }
         }
-        for (int i=0; i<size; i++) {
+        for (int i=0; i < workers.length; i++) {
             try { 
                 while ( workers[i].isAlive() ) {
                     workers[i].interrupt(); 
@@ -72,11 +78,11 @@ public class ThreadPool {
  * adds a job to the workpile
  */
     public synchronized void addJob(Runnable job) {
-	//        jobstack.push(job);
+        //        jobstack.push(job);
         jobstack.addLast(job);
-	logger.debug("adding job" );
+        logger.debug("adding job" );
         if (nojobs > 0) {
-	    logger.debug("notifying a jobless worker");
+            logger.debug("notifying a jobless worker");
             notify();
         }
     }
@@ -85,14 +91,14 @@ public class ThreadPool {
 /**
  * get a job for processing
  */
-    public synchronized Runnable getJob() throws InterruptedException {
+    protected synchronized Runnable getJob() throws InterruptedException {
         while (jobstack.isEmpty()) {
             nojobs++;
-	    logger.debug("waiting");
+            logger.debug("waiting");
             wait();
             nojobs--;
         }
-	//        return (Runnable)jobstack.pop();
+        //        return (Runnable)jobstack.pop();
         return (Runnable)jobstack.removeFirst();
     }
 
@@ -101,10 +107,10 @@ public class ThreadPool {
  * check if there are jobs processed
  */
     public boolean hasJobs() {
-	if ( jobstack.size() > 0 ) return true;
-        for (int i=0; i<size; i++) {
-	    if ( workers[i].working ) return true;
-	}
+        if ( jobstack.size() > 0 ) return true;
+        for (int i=0; i < workers.length; i++) {
+            if ( workers[i].working ) return true;
+        }
         return false;
     }
 
@@ -113,14 +119,15 @@ public class ThreadPool {
  * check if there are more than n jobs 
  */
     public boolean hasJobs(int n) {
-	int j = jobstack.size();
-	if ( j > 0 && ( j+size > n ) ) return true; 
-           // ( ( j > 0 && ( j+size > n ) ) || ( j > n )
-	int x = 0;
-        for (int i=0; i<size; i++) {
-	    if ( workers[i].working ) x++;;
-	}
-	if ( j+x > n ) return true;
+        int j = jobstack.size();
+        if ( j > 0 && ( j + workers.length > n ) ) return true;
+           // if j > 0 no worker should be idle
+           // ( ( j > 0 && ( j+workers.length > n ) ) || ( j > n )
+        int x = 0;
+        for (int i=0; i < workers.length; i++) {
+            if ( workers[i].working ) x++;;
+        }
+        if ( j+x > n ) return true;
         return false;
     }
 
@@ -145,10 +152,10 @@ class PoolThread extends Thread {
  */
     public void run() {
         logger.info( "ready" );
-	Runnable job;
-	int done = 0;
-	long time = 0;
-	long t;
+        Runnable job;
+        int done = 0;
+        long time = 0;
+        long t;
         boolean running = true;
         while (running) {
             try {
@@ -156,11 +163,11 @@ class PoolThread extends Thread {
                 job = pool.getJob();
                 working = true;
                 logger.info( "working" );
-		t = System.currentTimeMillis();
+                t = System.currentTimeMillis();
                 job.run(); 
                 working = false;
-		time += System.currentTimeMillis() - t;
-		done++;
+                time += System.currentTimeMillis() - t;
+                done++;
                 logger.info( "done" );
             }
             catch (InterruptedException e) { running = false; }
