@@ -35,6 +35,7 @@ public class OrderedPairlist {
     private boolean useCriterion4 = true;
     private int putCount;
     private int remCount;
+    private final int moduleVars;
 
     private static Logger logger = Logger.getLogger(OrderedPairlist.class);
 
@@ -43,6 +44,11 @@ public class OrderedPairlist {
      */
 
     public OrderedPairlist(TermOrder to) {
+        this(0,to);
+    }
+
+    public OrderedPairlist(int m, TermOrder to) {
+         moduleVars = m;
          torder = to;
          P = new ArrayList();
          pairlist = new TreeMap( to.getAscendComparator() );
@@ -79,6 +85,11 @@ public class OrderedPairlist {
            for ( int j = 0; j < l; j++ ) {
                pj = (OrderedPolynomial) P.get(j);
                f = pj.leadingExpVector(); 
+               if ( moduleVars > 0 ) {
+                   if ( ExpVector.EVILCP( e, f, 0, moduleVars ) != 0 ) {
+                       continue; // skip pair
+                   }
+               }
                g = ExpVector.EVLCM( e, f );
                pair = new Pair( pj, p, j, l);
                // redi = (BitSet)red.get(j);

@@ -28,11 +28,16 @@ public class GroebnerBase  {
      */
 
     public static boolean isDIRPGB(List F) {  
+        return isDIRPGB(0,F);
+    }
+
+    public static boolean isDIRPGB(int modv, List F) {  
         OrderedPolynomial pi, pj, s, h;
 	for ( int i = 0; i < F.size(); i++ ) {
 	    pi = (OrderedPolynomial) F.get(i);
             for ( int j = i+1; j < F.size(); j++ ) {
                 pj = (OrderedPolynomial) F.get(j);
+		if ( ! Reduction.ModuleCriterion( modv, pi, pj ) ) continue;
 		if ( ! Reduction.GBCriterion4( pi, pj ) ) continue;
 		s = Reduction.SPolynomial( pi, pj );
 		if ( s.isZERO() ) continue;
@@ -49,6 +54,10 @@ public class GroebnerBase  {
      */
 
     public static ArrayList DIRPGB(List F) {  
+        return DIRPGB(0,F);
+    }
+
+    public static ArrayList DIRPGB(int modv, List F) {  
         OrderedPolynomial p;
         ArrayList G = new ArrayList();
         OrderedPairlist pairlist = null; 
@@ -64,7 +73,7 @@ public class GroebnerBase  {
 	       }
                G.add( p );
 	       if ( pairlist == null ) {
-                  pairlist = new OrderedPairlist( p.getTermOrder() );
+                  pairlist = new OrderedPairlist( modv, p.getTermOrder() );
                }
                // putOne not required
                pairlist.put( p );
