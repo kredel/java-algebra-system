@@ -17,9 +17,10 @@ JDK=/usr/java/j2sdk1.4.1_01/bin
 #JDK=/opt/jdk1.2.2/bin
 #JDK=/usr/lib/java/bin
 
-JUNITPATH=/home/kredel/java/lib/junit.jar
-LOG4JPATH=/home/kredel/java/lib/log4j.jar
-JOMPPATH=/home/kredel/java/lib/jomp1.0b.jar
+LIBPATH=/home/kredel/java/lib
+JUNITPATH=$(LIBPATH)/junit.jar
+LOG4JPATH=$(LIBPATH)/log4j.jar
+JOMPPATH=$(LIBPATH)/jomp1.0b.jar
 
 # no need to change below this line
 
@@ -92,7 +93,7 @@ edu.jas.poly.%: edu/jas/poly/%.class
 .PRECIOUS : %.java %.class edu/jas/%.class
 
 FILES=$(wildcard *.java arith/*.java poly/*.java ring/*.java)
-
+LIBS=$(JUNITPATH) $(LOG4JPATH) $(JOMPPATH)
 
 doc: $(FILES)
 	$(DOC) $(DOCOPTS) -d doc $(FILES) 
@@ -101,6 +102,9 @@ jar: $(FILES) jas-log.html Makefile
 	$(JDK)/jar -cvf jas.jar $(FILES) edu/ jas-log.html Makefile
 	cp jas.jar /tmp/jas-`date +%Y%j`.jar
 	cp jas.jar /mnt/i/e/kredel/jas-`date +%Y%j`.jar
+
+dist: jas.jar
+	tar -cvzf jas-dist.tgz jas.jar $(LIBS)
 
 
 clean:
