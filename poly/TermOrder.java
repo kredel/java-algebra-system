@@ -574,6 +574,10 @@ public final class TermOrder implements Serializable {
         return evord2; 
     }
 
+    public long[] getWeight() { 
+        return weight; 
+    }
+
 
     public Comparator getDescendComparator() { 
         return horder; // highest first
@@ -593,17 +597,34 @@ public final class TermOrder implements Serializable {
        return evord == ((TermOrder)B).getEvord();
     }
 
-    public String toString() {
+
+    public String weightToString() {
 	StringBuffer erg = new StringBuffer();
         if ( weight != null ) {
-           erg.append("weight{");
+           erg.append("weight(");
            for ( int i = 0; i < weight.length; i++ ) {
-               erg.append(""+weight[i]);
+               erg.append(""+weight[ weight.length-i-1 ]);
                if ( i < weight.length-1 ) {
                   erg.append(",");
                }
            }
-           erg.append("}");
+           erg.append(")");
+        }
+        return erg.toString();
+    }
+
+
+    public String toString() {
+	StringBuffer erg = new StringBuffer();
+        if ( weight != null ) {
+           erg.append("W(");
+           for ( int i = 0; i < weight.length; i++ ) {
+               erg.append(""+weight[ i ]);
+               if ( i < weight.length-1 ) {
+                  erg.append(",");
+               }
+           }
+           erg.append(")");
            if ( evend1 == evend2 ) {
               return erg.toString();
            }

@@ -147,9 +147,9 @@ public class TermOrderTest extends TestCase {
      assertEquals("x = y",x,y);
      //System.out.println("s = " + s);
 
-     x = "weight{";
+     x = "W(";
      boolean z = t.toString().startsWith(x);
-     assertTrue("weight{.}",z);
+     assertTrue("W(.)",z);
    }
 
 
