@@ -30,6 +30,37 @@ pre  { background-color: silver; }
 </dd>
 -->
 
+<dt>2003, 1, 12 </dt>
+<dd>
+    <p>general differences between sequential and parallel GB algorithms
+    </p>
+    <ul>
+    <li>the parallelization is achieved by doing the normal form reductions
+        in parallel
+    </li>
+    <li>since the reductions may require different times to complete 
+        the normal forms may be entered into the list of polynomials
+        in different order than in the sequential case. 
+        so the pairs may be generated in different order.
+        however since the list of pair is ordered wrt. the lcm of 
+        the head terms this seems not to be a big issue. 
+    </li>
+    <li>since several reductions are scheduled in parallel 
+        the pairs are taken from the list of pairs in different order
+        than in the sequential case.
+        one should not take more pairs from the list than can be reduced
+        in parallel. 
+    </li>
+    </ul>
+    <p>new implementation of parallel version of GB.
+       removal of pairs is now also in parallel.
+       but ordering of pair insertion is no more preserved
+    </p>
+    <p>timings are more stable 
+       and slightly better than that of sequential GB.
+    </p>
+</dd>
+
 <dt>2003, 1, 7-11 </dt>
 <dd>
     <p>renamed jas to mas2jas, 
@@ -69,7 +100,8 @@ pre  { background-color: silver; }
     </ul>
    <p>
    Todo: CVS, comments, 
-   polynomial implementation using LinkedList
+   polynomial implementation using LinkedList,
+   parallel GB simplify
    </p>
 <p>with the improved algorithm the running time of the parallel GB
    becomes more stable and not slower than the sequential GB.
@@ -441,7 +473,7 @@ CPU TIME (ms) END
 <p>
 <!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
 <!-- hhmts start -->
-Last modified: Sat Jan 11 21:13:40 CET 2003
+Last modified: Sun Jan 12 14:03:55 CET 2003
 <!-- hhmts end -->
 </p>
 <p align="right" >
