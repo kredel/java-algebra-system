@@ -274,16 +274,19 @@ public class RatGBase  {
               //System.out.println("pj  = " + pj);
 
               S = DIRPSP( pi, pj );
-	      // System.out.println("S   = " + S);
+	      //System.out.println("S   = " + S);
               if ( S.length() == 0 ) continue;
 
               H = DIRPNF( P, S );
+              if ( H.isZERO() ) continue;
 	      H = RatPolynomial.DIRPMC( H );
 	      if ( H.isONE() ) {
 		  P.clear(); P.add( H );
                   return P;
 	      }
-              //System.out.println("H   = " + H);
+              if ( logger.isDebugEnabled() ) {
+                 logger.debug("H   = " + H);
+	      }
               if ( H.length() > 0 ) {
 		 l++;
                  P.add( (Object) H );
@@ -292,7 +295,6 @@ public class RatGBase  {
 	}
 	//        P = DIRLIS(P);
 	P = DIGBMI(P);
-        //System.out.println();
 	return P;
     }
 
@@ -402,6 +404,7 @@ public class RatGBase  {
 	      if ( P.size() > plen ) { // only new polynomials
 		 plen = P.size();
                  H = DIRPNF( P, H );
+                 if ( H.isZERO() ) continue;
                  logger.info("ht(H) = " + TreePolynomial.DIPLEV(H));
 	         H = RatPolynomial.DIRPMC( H );
 	      } else {
@@ -551,6 +554,7 @@ public class RatGBase  {
               logger.info("ht(S) = " + TreePolynomial.DIPLEV(S));
               H = DIRPNF( P, S );
 	      red++;
+              if ( H.isZERO() ) continue;
               logger.info("ht(H) = " + TreePolynomial.DIPLEV(H));
               H = RatPolynomial.DIRPMC( H );
               // System.out.println("H   = " + H);
