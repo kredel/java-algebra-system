@@ -60,8 +60,8 @@ MYCLASSPATH = .:$(DEFS):$(JUNITPATH):$(LOG4JPATH):$(JOMPPATH):$(TNJPATH)
 
 JAVAC=$(JDK)/javac -classpath $(MYCLASSPATH) -d .
 #-Xlint:unchecked
-JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -Xms100M -Xmx600M -verbose:gc
-#JAVA=$(JDK)/java -classpath $(MYCLASSPATH)  -verbose:gc -Xrunhprof:cpu=times,format=a
+JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -Xms300M -Xmx600M -XX:+AggressiveHeap -XX:+UseParallelGC -verbose:gc
+#JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -verbose:gc -Xrunhprof:cpu=times,format=a
 #JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -verbose:gc -verbose:class -verbose:jni
 DOC=$(JDK)/javadoc -classpath $(DOCCLASSES)
 
