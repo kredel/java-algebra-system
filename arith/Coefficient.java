@@ -29,20 +29,22 @@ public interface Coefficient {
 
     public int compareTo(Object b);
 
-    public Coefficient abs();
+    public int signum();
+
+    public Coefficient add(Coefficient S);
 
     public Coefficient subtract(Coefficient S);
 
     public Coefficient negate();
 
-    public int signum();
-
-    public Coefficient divide(Coefficient S);
+    public Coefficient abs();
 
     public Coefficient random(int n);
 
+    public Coefficient divide(Coefficient S);
+
     public Coefficient multiply(Coefficient S);
 
-    public Coefficient add(Coefficient S);
+    public Coefficient inverse();
 
 }
