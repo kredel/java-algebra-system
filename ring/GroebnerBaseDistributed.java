@@ -16,8 +16,8 @@ import org.apache.log4j.Logger;
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.OrderedPolynomial;
-import edu.jas.util.DistributedList;
-import edu.jas.util.DistributedListServer;
+import edu.jas.util.DistHashTable;
+import edu.jas.util.DistHashTableServer;
 import edu.jas.util.Terminator;
 import edu.jas.util.ThreadPool;
 import edu.unima.ky.parallel.ChannelFactory;
@@ -60,7 +60,7 @@ public class GroebnerBaseDistributed  {
 
         final int DL_PORT = port + 100;
         ChannelFactory cf = new ChannelFactory(port);
-        DistributedListServer dls = new DistributedListServer(DL_PORT);
+        DistHashTableServer dls = new DistHashTableServer(DL_PORT);
         dls.init();
         logger.debug("dist-list server running");
 
@@ -69,6 +69,7 @@ public class GroebnerBaseDistributed  {
         OrderedPairlist pairlist = null; 
         boolean oneInGB = false;
         int l = F.size();
+        int unused;
         ListIterator it = F.listIterator();
         while ( it.hasNext() ) { 
             p = (OrderedPolynomial) it.next();
@@ -86,10 +87,11 @@ public class GroebnerBaseDistributed  {
                if ( pairlist == null ) {
                   pairlist = new OrderedPairlist( p.getTermOrder() );
                }
+               // theList not updated here
                if ( p.isONE() ) {
-                   pairlist.putOne( p );
+                   unused = pairlist.putOne( p );
                } else {
-                   pairlist.put( p );
+                   unused = pairlist.put( p );
                }
             } else {
                l--;
@@ -104,26 +106,14 @@ public class GroebnerBaseDistributed  {
         if ( threads < 1 ) {
            threads = 1;
         }
-        /* now in DL, uses resend for late clients
-        while ( dls.size() < threads ) {
-            try { 
-                //System.out.print("*");
-                Thread.currentThread().sleep(200);
-            } catch (InterruptedException e) {
-              e.printStackTrace();
-              cf.terminate();
-              dls.terminate();
-              return null;
-            }
-        }
-        t = System.currentTimeMillis() - t;
-        logger.info("all " + threads + " clients seen, wait time = " + t + " milliseconds");
-        */
+        // now in DL, uses resend for late clients
+        //while ( dls.size() < threads ) { sleep(); }
 
-        DistributedList theList = new DistributedList( "localhost", DL_PORT );
-        Iterator il = G.iterator();
-        while ( il.hasNext() ) {
-            theList.add( il.next() );
+        DistHashTable theList = new DistHashTable( "localhost", DL_PORT );
+        ArrayList al = pairlist.getList();
+        for ( int i = 0; i < al.size(); i++ ) {
+            // no wait required
+            theList.put( new Integer(i), al.get(i) );
         }
 
         ThreadPool T = new ThreadPool(threads);
@@ -169,7 +159,7 @@ public class GroebnerBaseDistributed  {
         SocketChannel pairChannel = cf.getChannel(host,port);
 
         final int DL_PORT = port + 100;
-        DistributedList theList = new DistributedList(host, DL_PORT );
+        DistHashTable theList = new DistHashTable(host, DL_PORT );
 
         ReducerClient R = new ReducerClient(pairChannel,theList);
         R.run();
@@ -271,14 +261,14 @@ class ReducerServer implements Runnable {
         private Terminator pool;
         private ChannelFactory cf;
         private SocketChannel pairChannel;
-        private DistributedList theList;
+        private DistHashTable theList;
         private List G;
         private OrderedPairlist pairlist;
         private static Logger logger = Logger.getLogger(ReducerServer.class);
 
       ReducerServer(Terminator fin, 
                     ChannelFactory cf, 
-                    DistributedList dl, 
+                    DistHashTable dl, 
                     List G, 
                     OrderedPairlist L) {
             pool = fin;
@@ -306,6 +296,7 @@ class ReducerServer implements Runnable {
            OrderedPolynomial H = null;
            boolean set = false;
            boolean goon = true;
+           int polIndex = -1;
            int red = 0;
            int sleeps = 0;
 
@@ -371,7 +362,7 @@ class ReducerServer implements Runnable {
                logger.debug("send pair = " + pair );
                GBTransportMess msg = null;
                if ( pair != null ) {
-                  msg = new GBTransportMessPair( pair );
+                  msg = new GBTransportMessPairIndex( pair );
                } else {
                   msg = new GBTransportMess(); //End();
                   // goon ?= false;
@@ -417,11 +408,13 @@ class ReducerServer implements Runnable {
                      } else {
                         if ( H.isONE() ) {
                            // pool.allIdle();
-                           pairlist.putOne( H );
+                           polIndex = pairlist.putOne( H );
+                           theList.put( new Integer(polIndex), H );
                            goon = false;
                            break;
                         } else {
-                           pairlist.put( H );
+                           polIndex = pairlist.put( H );
+                           theList.put( new Integer(polIndex), H );
                         }
                      }
                   }
@@ -487,6 +480,29 @@ class GBTransportMessPair extends GBTransportMess {
     }
 }
 
+class GBTransportMessPairIndex extends GBTransportMess {
+    public final Integer i;
+    public final Integer j;
+    public GBTransportMessPairIndex(Pair p) {
+        if ( p == null ) {
+            throw new NullPointerException("pair may not be null");
+        }
+        this.i = new Integer( p.i );
+        this.j = new Integer( p.j );
+    }
+    public GBTransportMessPairIndex(int i, int j) {
+        this.i = new Integer(i);
+        this.j = new Integer(j);
+    }
+    public GBTransportMessPairIndex(Integer i, Integer j) {
+        this.i = i;
+        this.j = j;
+    }
+    public String toString() {
+        return super.toString() + "( " + i + "," +j + " )";
+    }
+}
+
 
     /**
      * distributed clients reducing worker threads
@@ -494,10 +510,10 @@ class GBTransportMessPair extends GBTransportMess {
 
 class ReducerClient implements Runnable {
         private SocketChannel pairChannel;
-        private DistributedList theList;
+        private DistHashTable theList;
         private static Logger logger = Logger.getLogger(ReducerClient.class);
 
-      ReducerClient(SocketChannel pc, DistributedList dl) {
+      ReducerClient(SocketChannel pc, DistHashTable dl) {
              pairChannel = pc;
              theList = dl;
       } 
@@ -514,6 +530,8 @@ class ReducerClient implements Runnable {
            boolean goon = true;
            int red = 0;
            int sleeps = 0;
+           Integer pix;
+           Integer pjx;
 
            while ( goon ) {
                /* protocol:
@@ -551,14 +569,27 @@ class ReducerClient implements Runnable {
                   goon = false;
                   continue;
                }
-               if ( pp instanceof GBTransportMessPair ) {
-                   pair = ((GBTransportMessPair)pp).pair;
-                   if ( pair != null ) {
-                      pi = pair.pi; 
-                      pj = pair.pj; 
-                      //System.out.println("pi  = " + pi);
-                      //System.out.println("pj  = " + pj);
+               if ( pp instanceof GBTransportMessPair 
+                  || pp instanceof GBTransportMessPairIndex ) {
+                  pi = pj = null;
+                  if ( pp instanceof GBTransportMessPair ) {
+                     pair = ((GBTransportMessPair)pp).pair;
+                     if ( pair != null ) {
+                        pi = pair.pi; 
+                        pj = pair.pj; 
+                        //logger.debug("pair: pix = " + pair.i 
+                        //               + ", pjx = " + pair.j);
+                     }
+                  }
+                  if ( pp instanceof GBTransportMessPairIndex ) {
+                      pix = ((GBTransportMessPairIndex)pp).i;
+                      pjx = ((GBTransportMessPairIndex)pp).j;
+                      pi = (OrderedPolynomial)theList.getWait( pix );
+                      pj = (OrderedPolynomial)theList.getWait( pjx );
+                      logger.info("pix = " + pix + ", pjx = " +pjx);
+                  }
 
+                  if ( pi != null && pj != null ) {
                       S = Reduction.SPolynomial( pi, pj );
                       //System.out.println("S   = " + S);
                       if ( S.isZERO() ) {
@@ -577,9 +608,10 @@ class ReducerClient implements Runnable {
                             }
                             H = H.monic();
                             // System.out.println("H = " + H);
-                            synchronized (theList) {
-                                theList.add( H );
-                            }
+                            //synchronized (theList) {
+                            // now done by master
+                            //    theList.add( H );
+                            //}
                          }
                       }
                    }
