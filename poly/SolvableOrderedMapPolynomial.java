@@ -148,6 +148,8 @@ public abstract class SolvableOrderedMapPolynomial
         Set Bk = B.entrySet();
         while ( ai.hasNext() ) {
             Map.Entry y = (Map.Entry) ai.next();
+            Coefficient a = (Coefficient) y.getValue(); 
+            //logger.debug("a = " + a);
 	    ExpVector e = (ExpVector) y.getKey(); 
             //logger.debug("e = " + e);
             int[] ep = e.dependencyOnVariables();
@@ -156,15 +158,14 @@ public abstract class SolvableOrderedMapPolynomial
                 el1 = ep[0];
             }
             int el1s = rl+1-el1; 
-            Coefficient a = (Coefficient) y.getValue(); 
-            //logger.debug("a = " + a);
             if ( one == null ) {
                 one = a.fromInteger( 1l );
             }
             Iterator bi = Bk.iterator();
             while ( bi.hasNext() ) {
-                OrderedPolynomial Cs = null;
                 Map.Entry x = (Map.Entry) bi.next();
+                Coefficient b = (Coefficient) x.getValue(); 
+                //logger.debug("b = " + b);
 	        ExpVector f = (ExpVector) x.getKey(); 
                 //logger.debug("f = " + f);
                 int[] fp = f.dependencyOnVariables();
@@ -173,9 +174,8 @@ public abstract class SolvableOrderedMapPolynomial
                    fl1 = fp[fp.length-1];
                 }
                 int fl1s = rl+1-fl1; 
-                Coefficient b = (Coefficient) x.getValue(); 
-                //logger.debug("b = " + b);
                 //logger.debug("el1s = " + el1s + " fl1s = " + fl1s);
+                OrderedPolynomial Cs = null;
                 if ( el1s <= fl1s ) { // symmetric
 	            ExpVector g = ExpVector.EVSUM(e,f); 
                     //logger.debug("g = " + g);
@@ -226,6 +226,148 @@ public abstract class SolvableOrderedMapPolynomial
             }
         }
         return Cp;
+    }
+
+
+    /*
+    protected static OrderedPolynomial multiply(RelationTable table,
+                                                ExpVector e, 
+                                                ExpVector f,
+                                                ExpVector Z,
+                                                Coefficient one,
+                                                OrderedPolynomial zero) {  
+        int rl = e.length();
+        OrderedPolynomial C1 = null;
+        OrderedPolynomial C2 = null;
+
+            int[] ep = e.dependencyOnVariables();
+            int el1 = rl + 1;
+            if ( ep.length > 0 ) {
+                el1 = ep[0];
+            }
+            int el1s = rl+1-el1; 
+
+                int[] fp = f.dependencyOnVariables();
+                int fl1 = 0; 
+                if ( fp.length > 0 ) {
+                   fl1 = fp[fp.length-1];
+                }
+                int fl1s = rl+1-fl1; 
+                //logger.debug("el1s = " + el1s + " fl1s = " + fl1s);
+                OrderedPolynomial Cs = null;
+                if ( el1s <= fl1s ) { // symmetric
+	            ExpVector g = ExpVector.EVSUM(e,f); 
+                    //logger.debug("g = " + g);
+                    Cs = zero.add( one, g ); // symmetric!
+                } else { // unsymmetric
+                    // split e = e1 * e2, f = f1 * f2
+                    ExpVector e1 = e.subst(el1,0);
+                    ExpVector e2 = Z.subst(el1,e.getVal(el1));
+                    ExpVector e4;
+                    ExpVector f1 = f.subst(fl1,0);
+                    ExpVector f2 = Z.subst(fl1,f.getVal(fl1));
+                    logger.debug("e1 = " + e1 + " e2 = " + e2);
+                    logger.debug("f1 = " + f1 + " f2 = " + f2);
+                    TableRelation rel = table.lookup(e2,f2,one); 
+                    //logger.debug("relation = " + rel);
+                    Cs = rel.p; 
+                    if ( rel.f != null ) {
+                       C2 = zero.add( one, rel.f );
+                       Cs = Cs.multiply( C2 );
+                       if ( rel.e == null ) {
+                          e4 = e2;
+                       } else {
+                          e4 = e2.dif( rel.e );
+                       }
+                       table.update(e4,f2,Cs);
+                    }
+                    if ( rel.e != null ) {
+                       C1 = zero.add( one, rel.e );
+                       Cs = C1.multiply( Cs );
+                       table.update(e2,f2,Cs);
+                    }
+                    if ( !f1.isZERO() ) {
+                       C2 = zero.add( one, f1 );
+                       Cs = Cs.multiply( C2 ); 
+                       //table.update(?,f1,Cs)
+                    }
+                    if ( !e1.isZERO() ) {
+                       C1 = zero.add( one, e1 );
+                       Cs = C1.multiply( Cs ); 
+                       //table.update(e1,?,Cs)
+                    }
+                }
+            return Cs;
+    }
+    */
+
+
+    /**
+     * Product with number and exponent vector.
+     */
+
+    public OrderedPolynomial multiply(Coefficient b, ExpVector e) {  
+        OrderedPolynomial Cp = getZERO(table,order); 
+        Cp.setVars(vars);
+        if ( b.isZERO() ) { 
+            return Cp;
+        }
+        Cp = Cp.add(b,e);
+        return multiply(Cp);
+    }
+
+    public static OrderedPolynomial DIPRP(OrderedPolynomial a, 
+                                          Coefficient b, 
+                                          ExpVector e) {
+        if ( a == null ) return null;
+        return a.multiply(b,e);
+    }
+
+
+    /**
+     * Left product with number and exponent vector.
+     */
+
+    public OrderedPolynomial multiplyLeft(Coefficient b, ExpVector e) {  
+        OrderedPolynomial Cp = getZERO(table,order); 
+        Cp.setVars(vars);
+        if ( b.isZERO() ) { 
+            return Cp;
+        }
+        Cp = Cp.add(b,e);
+        return Cp.multiply(this);
+    }
+
+
+    /**
+     * Left product with exponent vector.
+     */
+
+    public OrderedPolynomial multiplyLeft(ExpVector e) {  
+        OrderedPolynomial Cp = getZERO(table,order); 
+        Cp.setVars(vars);
+        if ( e.isZERO() ) { 
+            return this;
+        }
+        Coefficient b = leadingBaseCoefficient().ONE;
+        Cp = Cp.add(b,e);
+        return Cp.multiply(this);
+    }
+
+
+    /**
+     * Product with 'monomial'.
+     */
+
+    public OrderedPolynomial multiply(Map.Entry m) {  
+        if ( m == null ) return null;
+        return multiply( (Coefficient)m.getValue(), (ExpVector)m.getKey() );
+    }
+
+    public static OrderedPolynomial DIPRP(OrderedPolynomial a, 
+                                          Map.Entry m) {  
+        if ( a == null ) return null;
+        return a.multiply(m);
     }
 
 
