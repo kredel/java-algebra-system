@@ -93,6 +93,68 @@ public class TermOrderTest extends TestCase {
 
 
 /**
+ * Test constructor, split TO
+ * 
+ */
+ public void testConstructorSplit() {
+
+     int r = 10;
+     int sp = 5;
+     s = new TermOrder(r,sp);
+     t = new TermOrder(r,sp);
+     assertEquals("t = s",t,s);
+
+     String x = t.toString();
+     String y = s.toString();
+     assertEquals("x = y",x,y);
+     //System.out.println("s = " + s);
+
+     s = new TermOrder(TermOrder.IGRLEX,TermOrder.INVLEX,r,sp);
+     t = new TermOrder(TermOrder.IGRLEX,TermOrder.INVLEX,r,sp);
+     assertEquals("t = s",t,s);
+     //System.out.println("s = " + s);
+   }
+
+
+/**
+ * Test constructor weight and toString
+ * 
+ */
+ public void testConstructorWeight() {
+     long [] w = new long[]{ 1l, 1l, 1l, 1l, 1l };
+
+     s = new TermOrder(w);
+     t = new TermOrder(w);
+     assertEquals("t = s",t,s);
+
+     String x = t.toString();
+     String y = s.toString();
+
+     assertEquals("x = y",x,y);
+     //System.out.println("s = " + s);
+
+     int r = 5;
+     int sp = 3;
+     w = new long[]{ 5l, 4l, 3l, 2l, 1l };
+
+     s = new TermOrder(w,sp);
+     t = new TermOrder(w,sp);
+     assertEquals("t = s",t,s);
+
+     x = t.toString();
+     y = s.toString();
+
+     assertEquals("x = y",x,y);
+     //System.out.println("s = " + s);
+
+     x = "weight{";
+     boolean z = t.toString().startsWith(x);
+     assertTrue("weight{.}",z);
+   }
+
+
+
+/**
  * Test compare
  * 
  */
@@ -127,7 +189,161 @@ public class TermOrderTest extends TestCase {
 
 
 /**
- * Test comparators
+ * Test compare weight
+ * 
+ */
+ public void testCompareWeight() {
+     float q = (float) 0.9;
+
+     a = ExpVector.EVRAND(5,10,q);
+     b = ExpVector.EVRAND(5,10,q);
+
+     c = ExpVector.EVSUM(a,b);
+
+     long [] w = new long[]{ 1l, 1l, 1l, 1l, 1l };
+
+     t = new TermOrder(w);
+
+     int x = ExpVector.EVIWLC(w,c,a);
+     int y = ExpVector.EVIWLC(w,c,b);
+
+     assertEquals("x = 1",1,x);
+     assertEquals("y = 1",1,y);
+
+     x = ExpVector.EVIWLC(w,a,c);
+     y = ExpVector.EVIWLC(w,b,c);
+
+     assertEquals("x = -1",-1,x);
+     assertEquals("y = -1",-1,y);
+
+     x = ExpVector.EVIWLC(w,a,a);
+     y = ExpVector.EVIWLC(w,b,b);
+
+     assertEquals("x = 0",0,x);
+     assertEquals("y = 0",0,y);
+   }
+
+
+
+/**
+ * Test compare split TO
+ * 
+ */
+ public void testCompareSplit() {
+     float q = (float) 0.9;
+     int r = 10;
+     int sp = 5;
+
+     a = ExpVector.EVRAND(r,10,q);
+     b = ExpVector.EVRAND(r,10,q);
+     c = ExpVector.EVSUM(a,b);
+
+     t = new TermOrder(r,sp);
+
+     int x = ExpVector.EVCOMP(t.getEvord(),c,a,0,sp);
+     int y = ExpVector.EVCOMP(t.getEvord(),c,b,0,sp);
+     assertEquals("x = 1",1,x);
+     assertEquals("y = 1",1,y);
+
+     x = ExpVector.EVCOMP(t.getEvord2(),c,a,sp,r);
+     y = ExpVector.EVCOMP(t.getEvord2(),c,b,sp,r);
+     assertEquals("x = 1",1,x);
+     assertEquals("y = 1",1,y);
+
+     x = ExpVector.EVCOMP(t.getEvord(),a,c,0,sp);
+     y = ExpVector.EVCOMP(t.getEvord(),b,c,0,sp);
+     assertEquals("x = -1",-1,x);
+     assertEquals("y = -1",-1,y);
+
+     x = ExpVector.EVCOMP(t.getEvord2(),a,c,sp,r);
+     y = ExpVector.EVCOMP(t.getEvord2(),b,c,sp,r);
+     assertEquals("x = -1",-1,x);
+     assertEquals("y = -1",-1,y);
+
+
+     x = ExpVector.EVCOMP(t.getEvord(),a,a,0,sp);
+     y = ExpVector.EVCOMP(t.getEvord(),b,b,0,sp);
+     assertEquals("x = 0",0,x);
+     assertEquals("y = 0",0,y);
+
+     x = ExpVector.EVCOMP(t.getEvord2(),a,a,sp,r);
+     y = ExpVector.EVCOMP(t.getEvord2(),b,b,sp,r);
+     assertEquals("x = 0",0,x);
+     assertEquals("y = 0",0,y);
+   }
+
+
+/**
+ * Test compare weight split
+ * 
+ */
+ public void testCompareWeightSplit() {
+     float q = (float) 0.9;
+     int r = 8;
+     int sp = 4;
+
+     a = ExpVector.EVRAND(r,10,q);
+     b = ExpVector.EVRAND(r,10,q);
+     c = ExpVector.EVSUM(a,b);
+
+     long [] w = new long[]{ 1l, 1l, 1l, 1l, 1l, 1l, 1l, 1l };
+
+     t = new TermOrder(w,sp);
+
+     int x;
+     int y;
+     x = ExpVector.EVIWLC(w,c,a);
+     y = ExpVector.EVIWLC(w,c,b);
+     assertEquals("x = 1",1,x);
+     assertEquals("y = 1",1,y);
+
+     x = ExpVector.EVIWLC(w,c,a,0,sp);
+     y = ExpVector.EVIWLC(w,c,b,0,sp);
+     assertEquals("x = 1",1,x);
+     assertEquals("y = 1",1,y);
+
+     x = ExpVector.EVIWLC(w,c,a,sp,r);
+     y = ExpVector.EVIWLC(w,c,b,sp,r);
+     assertEquals("x = 1",1,x);
+     assertEquals("y = 1",1,y);
+
+
+     x = ExpVector.EVIWLC(w,a,c);
+     y = ExpVector.EVIWLC(w,b,c);
+     assertEquals("x = -1",-1,x);
+     assertEquals("y = -1",-1,y);
+
+     x = ExpVector.EVIWLC(w,a,c,0,sp);
+     y = ExpVector.EVIWLC(w,b,c,0,sp);
+     assertEquals("x = -1",-1,x);
+     assertEquals("y = -1",-1,y);
+
+     x = ExpVector.EVIWLC(w,a,c,sp,r);
+     y = ExpVector.EVIWLC(w,b,c,sp,r);
+     assertEquals("x = -1",-1,x);
+     assertEquals("y = -1",-1,y);
+
+
+     x = ExpVector.EVIWLC(w,a,a);
+     y = ExpVector.EVIWLC(w,b,b);
+     assertEquals("x = 0",0,x);
+     assertEquals("y = 0",0,y);
+
+     x = ExpVector.EVIWLC(w,a,a,0,sp);
+     y = ExpVector.EVIWLC(w,b,b,0,sp);
+     assertEquals("x = 0",0,x);
+     assertEquals("y = 0",0,y);
+
+     x = ExpVector.EVIWLC(w,a,a,sp,r);
+     y = ExpVector.EVIWLC(w,b,b,sp,r);
+     assertEquals("x = 0",0,x);
+     assertEquals("y = 0",0,y);
+ }
+
+
+
+/**
+ * Test ascend comparators
  * 
  */
  public void testAscendComparator() {
@@ -161,7 +377,74 @@ public class TermOrderTest extends TestCase {
 
 
 /**
- * Test comparators
+ * Test ascend comparators split
+ * 
+ */
+ public void testAscendComparatorSplit() {
+     float q = (float) 0.9;
+
+     int r = 10;
+     int sp = 5;
+
+     a = ExpVector.EVRAND(r,10,q);
+     b = ExpVector.EVRAND(r,10,q);
+     c = ExpVector.EVSUM(a,b);
+
+     t = new TermOrder(r,sp);
+
+     int x = t.getAscendComparator().compare(c,a);
+     int y = t.getAscendComparator().compare(c,b);
+     assertEquals("x = 1",1,x);
+     assertEquals("y = 1",1,y);
+
+     x = t.getAscendComparator().compare(a,c);
+     y = t.getAscendComparator().compare(b,c);
+     assertEquals("x = -1",-1,x);
+     assertEquals("y = -1",-1,y);
+
+     x = t.getAscendComparator().compare(a,a);
+     y = t.getAscendComparator().compare(b,b);
+     assertEquals("x = 0",0,x);
+     assertEquals("y = 0",0,y);
+   }
+
+
+/**
+ * Test ascend comparators weight and split
+ * 
+ */
+ public void testAscendComparatorWeightSplit() {
+     float q = (float) 0.9;
+
+     int r = 8;
+     int sp = 5;
+     long [] w = new long[]{ 1l, 2l, 3l, 4l, 5l, 1l, 2l, 3l };
+
+     a = ExpVector.EVRAND(r,10,q);
+     b = ExpVector.EVRAND(r,10,q);
+     c = ExpVector.EVSUM(a,b);
+
+     t = new TermOrder(w,sp);
+
+     int x = t.getAscendComparator().compare(c,a);
+     int y = t.getAscendComparator().compare(c,b);
+     assertEquals("x = 1",1,x);
+     assertEquals("y = 1",1,y);
+
+     x = t.getAscendComparator().compare(a,c);
+     y = t.getAscendComparator().compare(b,c);
+     assertEquals("x = -1",-1,x);
+     assertEquals("y = -1",-1,y);
+
+     x = t.getAscendComparator().compare(a,a);
+     y = t.getAscendComparator().compare(b,b);
+     assertEquals("x = 0",0,x);
+     assertEquals("y = 0",0,y);
+   }
+
+
+/**
+ * Test descend comparators
  * 
  */
  public void testDescendComparator() {
@@ -195,6 +478,73 @@ public class TermOrderTest extends TestCase {
 
 
 /**
+ * Test descend comparators split
+ * 
+ */
+ public void testDescendComparatorSplit() {
+     float q = (float) 0.9;
+
+     int r = 10;
+     int sp = 5;
+
+     a = ExpVector.EVRAND(r,10,q);
+     b = ExpVector.EVRAND(r,10,q);
+     c = ExpVector.EVSUM(a,b);
+
+     t = new TermOrder(r,sp);
+
+     int x = t.getDescendComparator().compare(c,a);
+     int y = t.getDescendComparator().compare(c,b);
+     assertEquals("x = -1",-1,x);
+     assertEquals("y = -1",-1,y);
+
+     x = t.getDescendComparator().compare(a,c);
+     y = t.getDescendComparator().compare(b,c);
+     assertEquals("x = 1",1,x);
+     assertEquals("y = 1",1,y);
+
+     x = t.getDescendComparator().compare(a,a);
+     y = t.getDescendComparator().compare(b,b);
+     assertEquals("x = 0",0,x);
+     assertEquals("y = 0",0,y);
+   }
+
+
+/**
+ * Test descend comparators weight and split
+ * 
+ */
+ public void testDescendComparatorWeightSplit() {
+     float q = (float) 0.9;
+
+     int r = 8;
+     int sp = 5;
+     long [] w = new long[]{ 1l, 2l, 3l, 4l, 5l, 1l, 2l, 3l };
+
+     a = ExpVector.EVRAND(r,10,q);
+     b = ExpVector.EVRAND(r,10,q);
+     c = ExpVector.EVSUM(a,b);
+
+     t = new TermOrder(w,sp);
+
+     int x = t.getDescendComparator().compare(c,a);
+     int y = t.getDescendComparator().compare(c,b);
+     assertEquals("x = -1",-1,x);
+     assertEquals("y = -1",-1,y);
+
+     x = t.getDescendComparator().compare(a,c);
+     y = t.getDescendComparator().compare(b,c);
+     assertEquals("x = 1",1,x);
+     assertEquals("y = 1",1,y);
+
+     x = t.getDescendComparator().compare(a,a);
+     y = t.getDescendComparator().compare(b,b);
+     assertEquals("x = 0",0,x);
+     assertEquals("y = 0",0,y);
+   }
+
+
+/**
  * Test exception
  * 
  */
@@ -217,7 +567,32 @@ public class TermOrderTest extends TestCase {
 
 
 /**
- * Test compare exception
+ * Test exception split
+ * 
+ */
+ public void testExceptionSplit() {
+     float q = (float) 0.9;
+
+     int r = 10;
+     int sp = 5;
+
+     a = ExpVector.EVRAND(r,10,q);
+     b = ExpVector.EVRAND(r,10,q);
+
+     int wrong = 99;
+     int x = 0;
+
+     try {
+         t = new TermOrder(wrong,wrong,r,sp);
+     } catch (IllegalArgumentException e) {
+         return;
+     }
+     fail("IllegalArgumentException");
+   }
+
+
+/**
+ * Test compare exception 
  * 
  */
  public void testCompareException() {
@@ -227,16 +602,74 @@ public class TermOrderTest extends TestCase {
      b = ExpVector.EVRAND(5,10,q);
 
      int notimpl = TermOrder.REVITDG;
-     t = new TermOrder(notimpl);
      int x = 0;
 
      try {
+         t = new TermOrder(notimpl);
          x = t.getDescendComparator().compare(a,b);
      } catch (IllegalArgumentException e) {
+         return;
+     } catch (NullPointerException e) {
          return;
      }
      fail("IllegalArgumentException");
    }
+
+
+/**
+ * Test compare exception split
+ * 
+ */
+ public void testCompareExceptionSplit() {
+     float q = (float) 0.9;
+
+     int r = 10;
+     int sp = 5;
+
+     a = ExpVector.EVRAND(r,10,q);
+     b = ExpVector.EVRAND(r,10,q);
+
+     int notimpl = TermOrder.REVITDG;
+     int x = 0;
+
+     try {
+         t = new TermOrder(notimpl,notimpl,r,sp);
+         x = t.getDescendComparator().compare(a,b);
+     } catch (IllegalArgumentException e) {
+         return;
+     } catch (NullPointerException e) {
+         return;
+     }
+     fail("IllegalArgumentException");
+   }
+
+
+/**
+ * Test compare exception weight
+ * 
+ */
+ public void testCompareExceptionWeigth() {
+     float q = (float) 0.9;
+
+     int r = 10;
+     int sp = 5;
+
+     a = ExpVector.EVRAND(r,10,q);
+     b = ExpVector.EVRAND(r,10,q);
+
+     int x = 0;
+
+     try {
+         t = new TermOrder(null,sp);
+         x = t.getDescendComparator().compare(a,b);
+     } catch (IllegalArgumentException e) {
+         return;
+     } catch (NullPointerException e) {
+         return;
+     }
+     fail("IllegalArgumentException");
+   }
+
 
 
 }
