@@ -41,6 +41,9 @@ heinz:
 krum:
 	$(RSYNC) ./                krum:java/$(PART)
 
+pub:
+	$(RSYNC) ./                krum:htdocs/$(PART)
+
 compute:
 	$(RSYNC) ./                compute:java/$(PART)
 
