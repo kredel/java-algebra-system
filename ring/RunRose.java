@@ -31,8 +31,15 @@ public class RunRose {
 	      threads = Integer.parseInt( args[0] );
 	  } catch (NumberFormatException e) { }
       }
+      final int SPORT = 4711;
+      int port = SPORT;
+      if ( args.length > 1 ) {
+	  try {
+	      port = Integer.parseInt( args[1] );
+	  } catch (NumberFormatException e) { }
+      }
 
-      String set = "(U3,U4,A46) L" 
+      String set = "(U3,U4,A46) G" 
                  + "( "  
                  + " U4^4 - 20/7 A46^2, "
                  + " A46^2 U3^4 + 7/10 A46 U3^4 + 7/48 U3^4 - 50/27 A46^2 - 35/27 A46 - 49/216, "
@@ -59,10 +66,30 @@ public class RunRose {
       }
       System.out.println("S =\n" + S); 
 
-      runParallel( S, threads );
-      runSequential( S );
+      runServer( S, threads, port );
+      //runParallel( S, threads );
+      //runSequential( S );
   }
 
+
+  static void runServer(PolynomialList S, int threads, int port) {
+      ArrayList L = S.list; 
+      ArrayList G = null;
+      long t;
+
+      t = System.currentTimeMillis();
+      System.out.println("\nGroebner base distributed ..."); 
+      try {
+          G = GroebnerBaseDistributed.DIRPGBServer( L, threads, port );
+      } catch (IOException e) {
+      }
+      S = new PolynomialList( S.vars, S.tord, G );
+      System.out.println("G =\n" + S ); 
+      System.out.println("G.size() = " + G.size() ); 
+      t = System.currentTimeMillis() - t;
+      System.out.println("time = " + t + " milliseconds" ); 
+      System.out.println(""); 
+  }
 
   static void runParallel(PolynomialList S, int threads) {
       ArrayList L = S.list; 
