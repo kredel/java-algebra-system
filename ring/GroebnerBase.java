@@ -87,32 +87,40 @@ public class GroebnerBase  {
               pair = (OrderedPairlist.Pair) pairlist.removeNext();
               if ( pair == null ) continue; 
 
-              pi = pair.pi; //(OrderedPolynomial) pair[0];
-              pj = pair.pj; //(OrderedPolynomial) pair[1];
-	      //System.out.println("pi  = " + pi);
-              //System.out.println("pj  = " + pj);
+              pi = pair.pi; 
+              pj = pair.pj; 
+              if ( false && logger.isDebugEnabled() ) {
+                 logger.debug("pi    = " + pi );
+                 logger.debug("pj    = " + pj );
+	      }
 
               S = Reduction.SPolynomial( pi, pj );
-	      // System.out.println("S   = " + S);
               if ( S.isZERO() ) continue;
+              if ( logger.isDebugEnabled() ) {
+                 logger.debug("ht(S) = " + S.leadingExpVector() );
+	      }
 
               H = Reduction.Normalform( P, S );
               if ( H.isZERO() ) continue;
+              if ( logger.isDebugEnabled() ) {
+                 logger.debug("ht(H) = " + H.leadingExpVector() );
+	      }
+
 	      H = H.monic();
 	      if ( H.isONE() ) {
 		  P.clear(); P.add( H );
                   return P;
 	      }
-              //System.out.println("H   = " + H);
+              if ( logger.isDebugEnabled() ) {
+                 logger.debug("H = " + H );
+	      }
               if ( H.length() > 0 ) {
 		 l++;
                  P.add( (Object) H );
                  pairlist.put( H );
               }
 	}
-	//        P = DIRLIS(P);
 	P = DIGBMI(P);
-        //System.out.println();
 	return P;
     }
 
