@@ -18,8 +18,17 @@ import edu.jas.arith.BigRational;
 public class testrose
 {
 
-  static void tuwas()
+  static void tuwas(String[] args)
   {
+
+      final int THREADS = 3;
+      int threads = THREADS;
+      if ( args.length > 0 ) {
+	  try {
+	      threads = Integer.parseInt( args[0] );
+	  } catch (NumberFormatException e) { }
+      }
+
       String set = "(U3,U4,A46) L" 
                  + "( "  
                  + " U4^4 - 20/7 A46^2, "
@@ -53,7 +62,7 @@ public class testrose
 
       t = System.currentTimeMillis();
       System.out.println("\nGroebner base parallel ..."); 
-      G = RatGBase.DIRPGBparallel(L);
+      G = RatGBase.DIRPGBparallel(L,threads);
       S = new PolynomialList( S.vars, S.evord, G );
       System.out.println("G =\n" + S ); 
       System.out.println("G.size() = " + G.size() ); 
@@ -79,7 +88,7 @@ public class testrose
   {
     try
     {
-      tuwas();
+      tuwas( _args );
       if (_args != null)
       {
         java.lang.System.runFinalization();
