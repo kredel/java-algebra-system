@@ -68,11 +68,11 @@ public class GroebnerBaseTest extends TestCase {
    PolynomialList F;
    PolynomialList G;
 
-   int rl = 3; 
+   int rl = 4; //3; 
    int kl = 10;
    int ll = 7;
    int el = 3;
-   float q = 0.3f; //0.4f
+   float q = 0.2f; //0.4f
 
    protected void setUp() {
        a = b = c = d = e = null;
@@ -299,7 +299,6 @@ public class GroebnerBaseTest extends TestCase {
      L = Gs;
      L.add(c);
      Gs = GroebnerBase.DIRPGB( L );
-     if ( Gs.size() > 1 ) {
      for (int t = 0; t < threads; t++) {
 	 clients[t] = new Thread( new Clients(host,port) );
 	 clients[t].start();
@@ -316,12 +315,10 @@ public class GroebnerBaseTest extends TestCase {
      }
      assertTrue("Gs.containsAll(Gp)", Gs.containsAll(Gp) );
      assertTrue("Gp.containsAll(Gs)", Gp.containsAll(Gs) );
-     }
 
      L = Gs;
      L.add(d);
      Gs = GroebnerBase.DIRPGB( L );
-     if ( Gs.size() > 1 ) {
      for (int t = 0; t < threads; t++) {
 	 clients[t] = new Thread( new Clients(host,port) );
 	 clients[t].start();
@@ -338,12 +335,11 @@ public class GroebnerBaseTest extends TestCase {
      }
      assertTrue("Gs.containsAll(Gp)", Gs.containsAll(Gp) );
      assertTrue("Gp.containsAll(Gs)", Gp.containsAll(Gs) );
-     }
 
      L = Gs;
      L.add(e);
      Gs = GroebnerBase.DIRPGB( L );
-     if ( Gs.size() > 1 ) {
+     //if ( Gs.size() > 1 ) {
      for (int t = 0; t < threads; t++) {
 	 clients[t] = new Thread( new Clients(host,port) );
 	 clients[t].start();
@@ -360,7 +356,7 @@ public class GroebnerBaseTest extends TestCase {
      }
      assertTrue("Gs.containsAll(Gp)", Gs.containsAll(Gp) );
      assertTrue("Gp.containsAll(Gs)", Gp.containsAll(Gs) );
-     }
+     //}
  }
 
 }
