@@ -21,6 +21,8 @@ public interface Coefficient {
 
     public /*static*/ Coefficient fromInteger(long a);
 
+    public int compareTo(Object b);
+
     public Coefficient abs();
 
     public Coefficient subtract(Coefficient S);
