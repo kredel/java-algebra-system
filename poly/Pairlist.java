@@ -80,7 +80,9 @@ public class Pairlist {
 	   // System.out.println("pairlist.keys@put = " + pairlist.keySet() );  
            P.add( (Object) p );
 	   redi = new BitSet();
-           if ( l > 0 ) redi.set( 0, l );
+           if ( l > 0 ) { // redi.set( 0, l ) jdk 1.4
+	       for ( int i=0; i<l; i++ ) redi.set(i);
+	   }
 	   red.add( redi );
     }
 
@@ -117,7 +119,7 @@ public class Pairlist {
                     c = DIGBC3( i, j, g );
                     //System.out.println("c3  = " + c); 
 		 }
-                 ((BitSet)red.get( j )).set(i,false);
+                 ((BitSet)red.get( j )).clear(i); // set(i,false) jdk1.4
 	   }
            if ( xl.size() == 0 ) ip.remove(); 
               // = pairlist.remove( g );
