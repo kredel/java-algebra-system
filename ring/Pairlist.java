@@ -33,6 +33,8 @@ public class Pairlist {
     private ArrayList P;
     private TreeMap pairlist;
     private ArrayList red;
+    private int putCount;
+    private int remCount;
 
     private static Logger logger = Logger.getLogger(Pairlist.class);
 
@@ -44,6 +46,8 @@ public class Pairlist {
          P = new ArrayList();
          pairlist = new TreeMap(lorder);
          red = new ArrayList();
+	 putCount = 0;
+	 remCount = 0;
     }
 
     /**
@@ -70,6 +74,7 @@ public class Pairlist {
 	   BitSet redi;
            Object x;
            LinkedList xl;
+	   putCount++;
            e = RatPolynomial.DIRPEV( p );
 	   int l = P.size();
            for ( int j = 0; j < l; j++ ) {
@@ -99,14 +104,13 @@ public class Pairlist {
 
 
     public synchronized Pair removeNext() { 
-	//System.out.println("pairlist.keys@remove = " + pairlist.keySet() );  
-
        Set pk = pairlist.entrySet();
        Iterator ip = pk.iterator();
 
        Pair pair = null;
        boolean c = false;
        int i, j;
+       remCount++;
 
        while ( !c & ip.hasNext() )  {
 
@@ -139,6 +143,15 @@ public class Pairlist {
 
     public boolean hasNext() { 
           return pairlist.size() > 0;
+    }
+
+
+    public int putCount() { 
+          return putCount;
+    }
+
+    public int remCount() { 
+          return remCount;
     }
 
 
