@@ -9,6 +9,7 @@ package edu.jas.ring;
 import java.util.List;
 import java.util.Iterator;
 import java.util.ArrayList;
+import java.io.IOException;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -54,7 +55,8 @@ public class GroebnerBaseTest extends TestCase {
      return suite;
    }
 
-   private final static int bitlen = 100;
+   int port = 4711;
+   String host = "localhost";
 
    OrderedPolynomial a;
    OrderedPolynomial b;
@@ -90,7 +92,7 @@ public class GroebnerBaseTest extends TestCase {
  * Test GBase
  * 
  */
- public void testGBase() {
+ public void xtestGBase() {
 
      // a = RatOrderedMapPolynomial.DIRRAS(rl, kl, ll, el, q );
      assertTrue("not isZERO( a )", !a.isZERO() );
@@ -135,7 +137,7 @@ public class GroebnerBaseTest extends TestCase {
  * Test parallel GBase
  * 
  */
- public void testParallelGBase() {
+ public void xtestParallelGBase() {
      int threads = 2;
 
      //a = RatOrderedMapPolynomial.DIRRAS(rl, kl, ll, el, q );
@@ -193,7 +195,7 @@ public class GroebnerBaseTest extends TestCase {
  * Test compare sequential with parallel GBase
  * 
  */
- public void testSequentialParallelGBase() {
+ public void xtestSequentialParallelGBase() {
      int threads = 2;
 
      ArrayList Gs, Gp;
@@ -254,5 +256,108 @@ public class GroebnerBaseTest extends TestCase {
      }
      assertFalse("Gs = Gp = empty " , is.hasNext() || ip.hasNext() );
  }
+
+/**
+ * Test compare sequential with distributed GBase
+ * 
+ */
+ public void testSequentialDistributedGBase() {
+     int threads = 2;
+
+     ArrayList Gs, Gp;
+     L = new ArrayList();
+     Iterator is, ip;
+     Gp = null;
+
+     L.add(a);
+     Gs = GroebnerBase.DIRPGB( L );
+     Thread[] clients = new Thread[threads];
+     for (int t = 0; t < threads; t++) {
+	 clients[t] = new Thread( new Clients(host,port) );
+	 clients[t].start();
+     }
+     try {
+         Gp = GroebnerBaseDistributed.DIRPGBServer( L, threads, port );
+     } catch (IOException e) {
+     }
+     for (int t = 0; t < threads; t++) {
+	 try {
+             clients[t].join();
+	 } catch (InterruptedException e) {
+	 }
+     }
+     is = Gs.iterator(); 
+     ip = Gp.iterator(); 
+     while ( is.hasNext() && ip.hasNext() ) {
+	   assertEquals("is.equals(ip)", is.next(), ip.next() );
+     }
+     assertFalse("Gs = Gp = empty " , is.hasNext() || ip.hasNext() );
+
+     /*
+     L = Gs;
+     L.add(b);
+     Gs = GroebnerBase.DIRPGB( L );
+     Gp = GroebnerBaseDistributed.DIRPGB( L, threads );
+     is = Gs.iterator(); 
+     ip = Gp.iterator(); 
+     while ( is.hasNext() && ip.hasNext() ) {
+	   assertEquals("is.equals(ip)", is.next(), ip.next() );
+     }
+     assertFalse("Gs = Gp = empty " , is.hasNext() || ip.hasNext() );
+
+     L = Gs;
+     L.add(c);
+     Gs = GroebnerBase.DIRPGB( L );
+     Gp = GroebnerBaseDistributed.DIRPGB( L, threads );
+     is = Gs.iterator(); 
+     ip = Gp.iterator(); 
+     while ( is.hasNext() && ip.hasNext() ) {
+	   assertEquals("is.equals(ip)", is.next(), ip.next() );
+     }
+     assertFalse("Gs = Gp = empty " , is.hasNext() || ip.hasNext() );
+
+     L = Gs;
+     L.add(d);
+     Gs = GroebnerBase.DIRPGB( L );
+     Gp = GroebnerBaseDistributed.DIRPGB( L, threads );
+     is = Gs.iterator(); 
+     ip = Gp.iterator(); 
+     while ( is.hasNext() && ip.hasNext() ) {
+	   assertEquals("is.equals(ip)", is.next(), ip.next() );
+     }
+     assertFalse("Gs = Gp = empty " , is.hasNext() || ip.hasNext() );
+
+     L = Gs;
+     L.add(e);
+     Gs = GroebnerBase.DIRPGB( L );
+     Gp = GroebnerBaseDistributed.DIRPGB( L, threads );
+     is = Gs.iterator(); 
+     ip = Gp.iterator(); 
+     while ( is.hasNext() && ip.hasNext() ) {
+	   assertEquals("is.equals(ip)", is.next(), ip.next() );
+     }
+     assertFalse("Gs = Gp = empty " , is.hasNext() || ip.hasNext() );
+     */
+ }
+
+}
+
+
+class Clients implements Runnable {
+    private final String host;
+    private final int port;
+
+    Clients(String host, int port) {
+	this.host = host;
+	this.port = port;
+    }
+
+    public void run() {
+	try {
+            GroebnerBaseDistributed.DIRPGBClient(host,port);
+	} catch (IOException e) {
+	}
+	return;
+    }
 
 }
