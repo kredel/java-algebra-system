@@ -52,11 +52,14 @@ public class OrderedPairlist {
 
     /**
      * Put one Polynomial to the pairlist and reduction matrix
+     * returns the index of the added polynomial.
      */
 
-    public synchronized void put(OrderedPolynomial p) { 
+    public synchronized int put(OrderedPolynomial p) { 
 	   putCount++;
-           if ( oneInGB ) return;
+           if ( oneInGB ) { 
+               return P.size()-1;
+           }
            Pair pair;
            ExpVector e; 
            ExpVector f; 
@@ -92,6 +95,7 @@ public class OrderedPairlist {
            //    for ( int i=0; i<l; i++ ) redi.set(i);
            // }
            red.add( redi );
+           return P.size()-1;
     }
 
 
@@ -180,17 +184,23 @@ public class OrderedPairlist {
 
     /**
      * Put to ONE-Polynomial to the pairlist
+     * returns the index of the last polynomial.
      */
 
-    public synchronized void putOne(OrderedPolynomial one) { 
+    public synchronized int putOne(OrderedPolynomial one) { 
         putCount++;
-        if ( one == null ) return;
-        if ( ! one.isONE() ) return;
+        if ( one == null ) {
+           return P.size()-1;
+        }
+        if ( ! one.isONE() ) {
+           return P.size()-1;
+        }
         oneInGB = true;
         pairlist.clear();
         P.clear();
         P.add(one);
         red.clear();
+        return P.size()-1;
     }
 
 
