@@ -74,7 +74,10 @@ public class SolvableGroebnerBase  {
 		s = Reduction.leftSPolynomial( pi, pj );
 		if ( s.isZERO() ) continue;
 		h = Reduction.leftNormalform( F, s );
-		if ( ! h.isZERO() ) return false;
+		if ( ! h.isZERO() ) {
+                   logger.info("is not TwosidedGB: " + h);
+                   return false;
+                }
 	    }
 	}
 	return true;
