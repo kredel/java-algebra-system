@@ -542,11 +542,14 @@ public abstract class MapPolynomial
     public static UnorderedPolynomial DIPPR(UnorderedPolynomial a, 
                                             UnorderedPolynomial b) {  
         if ( a == null ) return null;
+        return a.multiply(b);
+        /* only if commutative 
         if ( a.length() <= b.length() ) {
              return a.multiply(b);
         } else { 
              return b.multiply(a);
         }
+        */
     }
 
      public UnorderedPolynomial multiply(int evord, UnorderedPolynomial Bp) {  

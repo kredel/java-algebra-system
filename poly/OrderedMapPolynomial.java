@@ -470,11 +470,14 @@ public abstract class OrderedMapPolynomial /* extends MapPolynomial */
     public static OrderedPolynomial DIPPR(OrderedPolynomial a, 
                                           OrderedPolynomial b) {  
         if ( a == null ) return null;
+        return a.multiply(b);
+        /* only if commutative polynomials
         if ( a.length() <= b.length() ) {
              return a.multiply(b);
         } else { 
              return b.multiply(a);
         }
+        */
     }
 
 
