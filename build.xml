@@ -30,6 +30,7 @@
 
 <target name="compile" depends="vorher" >
   <javac srcdir="${src}" destdir="${build}" 
+         debug="on" debuglevel="lines,source"
          classpath="${cp}" />
 </target>
 
