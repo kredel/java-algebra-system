@@ -116,6 +116,7 @@ public class Reduction  {
 
     public static OrderedPolynomial Normalform(List Pp, 
                                                OrderedPolynomial Ap) {  
+        if ( Pp == null ) return Ap;
         if ( Pp.isEmpty() ) return Ap;
         int i;
         int l = Pp.size();
