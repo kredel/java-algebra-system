@@ -22,16 +22,16 @@ ps = """
 ) 
 """;
 
-#f = Ideal( r, ps );
-#print "Ideal: " + str(f);
-#print;
+f = Ideal( r, ps );
+print "Ideal: " + str(f);
+print;
 
 
 #Katsura equations for N = 3:
 
-r = Ring( "Rat(u0,u1,u2,u3) G" );
-print "Ring: " + str(r);
-print;
+#r = Ring( "Rat(u0,u1,u2,u3) L" );
+#print "Ring: " + str(r);
+#print;
 
 ps = """
 (
@@ -42,9 +42,9 @@ ps = """
 )
 """;
 
-f = Ideal( r, ps );
-print "Ideal: " + str(f);
-print;
+#f = Ideal( r, ps );
+#print "Ideal: " + str(f);
+#print;
 
 rg = f.GB();
 print "seq Output:", rg;
