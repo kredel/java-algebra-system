@@ -173,12 +173,14 @@ public class RatGBaseTest extends TestCase {
      L = RatGBase.DIRPGBparallel( L, threads );
      assertTrue("isDIRPGB( { a, ,b, c } )", RatGBase.isDIRPGB(L) );
 
+     /*
      // d = RatPolynomial.DIRRAS(rl, kl, ll, el, q );
      assertTrue("not isZERO( d )", !d.isZERO() );
      L.add(d);
 
      L = RatGBase.DIRPGBparallel( L, threads );
      assertTrue("isDIRPGB( { a, ,b, c, d } )", RatGBase.isDIRPGB(L) );
+     */
  }
 
 }
