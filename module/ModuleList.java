@@ -273,24 +273,34 @@ public class ModuleList {
                 public int compare(Object o1, Object o2) {
                        List l1 = (List)o1;
                        List l2 = (List)o2;
-                       OrderedPolynomial p1 = (OrderedPolynomial)l1.get(0);
-                       OrderedPolynomial p2 = (OrderedPolynomial)l2.get(0);
-                       ExpVector e1 = p1.leadingExpVector();
-                       ExpVector e2 = p2.leadingExpVector();
-                       if ( e1 == null ) {
-                          return -1; // dont care
+                       int c = 0;
+                       for ( int i = 0; i < l1.size(); i++ ) {
+                           OrderedPolynomial p1 = (OrderedPolynomial)l1.get(i);
+                           OrderedPolynomial p2 = (OrderedPolynomial)l2.get(i);
+                           ExpVector e1 = p1.leadingExpVector();
+                           ExpVector e2 = p2.leadingExpVector();
+                           if ( e1 == null && e2 != null ) {
+                               return -1; 
+                           }
+                           if ( e1 != null && e2 == null ) {
+                               return 1; 
+                           }
+                           if ( e1 == null && e2 == null ) {
+                               continue; 
+                           }
+                           if ( e1.length() != e2.length() ) {
+                              if ( e1.length() > e2.length() ) {
+                                 return 1; // dont care
+                              } else {
+                                 return -1; // dont care
+                              }
+                           }
+                           c = e.compare(e1,e2);
+                           if ( c != 0 ) {
+                               return c;
+                           }
                        }
-                       if ( e2 == null ) {
-                          return 1; // dont care
-                       }
-                       if ( e1.length() != e2.length() ) {
-                          if ( e1.length() > e2.length() ) {
-                             return 1; // dont care
-                          } else {
-                             return -1; // dont care
-                          }
-                       }
-                       return e.compare(e1,e2);
+                       return c;
                 }
             };
         Object[] s = l.toArray();
@@ -349,19 +359,20 @@ public class ModuleList {
             v[i] = vars[i];
         }
         for ( int i = 0; i < cols; i++ ) {
-            v[ vars.length + i ] = "e" + i;
+            v[ vars.length + i ] = "e" + (i+1);
         }
         OrderedMapPolynomial c = null;
         OrderedPolynomial d = null;
         for ( Iterator it = list.iterator(); it.hasNext(); ) {
             List r = (List)it.next();
             OrderedPolynomial ext = zero;
-            int m = cols-1;
+            //int m = cols-1;
+            int m = 0;
             for ( Iterator jt = r.iterator(); jt.hasNext(); ) {
                 c = (OrderedMapPolynomial)jt.next();
                 d = c.extend( cols, m, 1l, v );
                 ext = ext.add(d); 
-                m--;
+                m++;
             }
             pols.add( ext );
         }
@@ -405,12 +416,12 @@ public class ModuleList {
                     int[] dov = e.dependencyOnVariables();
                     int ix = 0;
                     if ( dov.length != 1 ) {
-                       //throw new RuntimeException("wrong dependencyOnVariables " + e);
-                       System.out.println("wrong dependencyOnVariables " + e);
+                       throw new RuntimeException("wrong dependencyOnVariables " + e);
+                       //System.out.println("wrong dependencyOnVariables " + e);
                     } else {
                        ix = dov[0];
                     }
-                    ix = i-1 - ix; // revert
+                    //ix = i-1 - ix; // revert
                     //System.out.println("ix = " + ix ); 
                     OrderedPolynomial vi = (OrderedPolynomial)r.get( e );
                     if ( vi != null && zero == null ) {
