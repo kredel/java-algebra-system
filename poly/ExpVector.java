@@ -126,24 +126,26 @@ public class ExpVector implements Cloneable, Serializable {
     public String toString(String[] vars) {
         String s = "";
         boolean pit;
-	if ( val.length != vars.length ) return toString();
-        for (int i = 0; i < (val.length-1); i++ ) {
+	if ( val.length != vars.length ) {
+           return toString();
+        }
+        for (int i = val.length-1; i > 0; i-- ) {
             if ( val[i] != 0 ) { 
                s += vars[val.length-1-i];
                if ( val[i] != 1 ) {
                   s += "^" + val[i];
                }
                pit = false;
-               for ( int j = i+1; j < val.length; j++ ) {
+               for ( int j = i-1; j >= 0; j-- ) {
                    if ( val[j] != 0 ) pit = true;
                }
                if ( pit ) s += " * ";
             }
         }
-        if ( val[val.length-1] != 0 ) { 
-            s += vars[val.length-1-(val.length-1)];
-               if ( val[val.length-1] != 1 ) {
-                  s += "^" + val[val.length-1] + "";
+        if ( val[0] != 0 ) { 
+            s += vars[val.length-1];
+               if ( val[0] != 1 ) {
+                  s += "^" + val[0] + "";
                }
         }
         return s; 
