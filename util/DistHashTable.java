@@ -6,8 +6,9 @@ package edu.jas.util;
 
 import java.io.IOException;
 import java.util.Iterator;
-//import java.util.Collection;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.ArrayList;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -25,7 +26,7 @@ import edu.unima.ky.parallel.SocketChannel;
  * @author Heinz Kredel.
  */
 
-public class DistHashTable /* implements List not jet */ {
+public class DistHashTable /* implements Map not jet */ {
 
     private static Logger logger = Logger.getLogger(DistHashTable.class);
 
@@ -74,10 +75,17 @@ public class DistHashTable /* implements List not jet */ {
 
 
 /**
+ * Get the internal list, do not convert from Collection
+ */ 
+    public Collection values() {
+        return theList.values();
+    }
+
+/**
  * Get the internal list, convert from Collection
  * @fix but is ok
  */ 
-    public List getList() {
+    public ArrayList getArrayList() {
         synchronized ( theList ) {
            return new ArrayList( theList.values() );
         }
