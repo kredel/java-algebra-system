@@ -99,16 +99,16 @@ public abstract class SolvableOrderedMapPolynomial
     }
 
 
-    abstract public OrderedPolynomial getZERO(RelationTable table);
+    abstract public SolvablePolynomial getZERO(RelationTable table);
     // { return new SolvableOrderedMapPolynomial(table,vars); }
 
-    abstract public OrderedPolynomial getZERO(RelationTable table, TermOrder t);
+    abstract public SolvablePolynomial getZERO(RelationTable table, TermOrder t);
     // { return new SolvableOrderedMapPolynomial(table,vars,t); }
 
-    abstract public OrderedPolynomial getONE(RelationTable table);
+    abstract public SolvablePolynomial getONE(RelationTable table);
     // { return new SolvableOrderedMapPolynomial(table,vars); }
 
-    abstract public OrderedPolynomial getONE(RelationTable table, TermOrder t);
+    abstract public SolvablePolynomial getONE(RelationTable table, TermOrder t);
     // { return new SolvableOrderedMapPolynomial(table,vars,t); }
 
 
@@ -322,14 +322,14 @@ public abstract class SolvableOrderedMapPolynomial
      * Left product with number and exponent vector.
      */
 
-    public OrderedPolynomial multiplyLeft(Coefficient b, ExpVector e) {  
-        OrderedPolynomial Cp = getZERO(table,order); 
+    public SolvablePolynomial multiplyLeft(Coefficient b, ExpVector e) {  
+        SolvablePolynomial Cp = getZERO(table,order); 
         Cp.setVars(vars);
         if ( b.isZERO() ) { 
             return Cp;
         }
-        Cp = Cp.add(b,e);
-        return Cp.multiply(this);
+        Cp = (SolvablePolynomial)Cp.add(b,e);
+        return (SolvablePolynomial)Cp.multiply(this);
     }
 
 
@@ -337,15 +337,15 @@ public abstract class SolvableOrderedMapPolynomial
      * Left product with exponent vector.
      */
 
-    public OrderedPolynomial multiplyLeft(ExpVector e) {  
-        OrderedPolynomial Cp = getZERO(table,order); 
+    public SolvablePolynomial multiplyLeft(ExpVector e) {  
+        SolvablePolynomial Cp = getZERO(table,order); 
         Cp.setVars(vars);
         if ( e.isZERO() ) { 
             return this;
         }
         Coefficient b = leadingBaseCoefficient().ONE;
-        Cp = Cp.add(b,e);
-        return Cp.multiply(this);
+        Cp = (SolvablePolynomial)Cp.add(b,e);
+        return (SolvablePolynomial)Cp.multiply(this);
     }
 
 
@@ -353,7 +353,7 @@ public abstract class SolvableOrderedMapPolynomial
      * Product with 'monomial'.
      */
 
-    public OrderedPolynomial multiplyLeft(Map.Entry m) {  
+    public SolvablePolynomial multiplyLeft(Map.Entry m) {  
         if ( m == null ) return null;
         return multiplyLeft( (Coefficient)m.getValue(), (ExpVector)m.getKey() );
     }

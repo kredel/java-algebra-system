@@ -45,7 +45,7 @@ public class WeylRelations {
         return table;
     }
 
-    public RelationTable generate(int r, SolvableOrderedMapPolynomial ref) {
+    public RelationTable generate(int r, SolvablePolynomial ref) {
         RelationTable table = new RelationTable();
         if ( r <= 1 || (r % 2) != 0 ) {
            throw new IllegalArgumentException("WeylRelations, wrong r = "+r);
