@@ -1,0 +1,328 @@
+/*
+ * $Id$
+ */
+
+package edu.jas.util;
+
+import java.io.IOException;
+import java.io.Serializable;
+
+import java.util.Iterator;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.SortedMap;
+import java.util.TreeMap;
+import java.util.Map.Entry;
+
+import org.apache.log4j.Logger;
+
+import edu.unima.ky.parallel.ChannelFactory;
+import edu.unima.ky.parallel.SocketChannel;
+
+
+/**
+ * Server for the distributed version of a list.
+ * @author Heinz Kredel.
+ * @todo redistribute list for late comming clients, removal of elements
+ */
+
+public class DistributedListServer extends Thread {
+
+    private static Logger logger = Logger.getLogger(DistributedListServer.class);
+
+    public final static int DEFAULT_PORT = ChannelFactory.DEFAULT_PORT + 99;
+    protected final ChannelFactory cf;
+
+    protected List servers;
+
+    private boolean goon = true;
+    private Thread mythread = null;
+
+    private Counter listElem = null;
+    protected final SortedMap theList;
+
+
+/**
+ * Constructs a new DistributedListServer
+ */ 
+
+    public DistributedListServer() {
+	this(DEFAULT_PORT);
+    }
+
+    public DistributedListServer(int port) {
+	this( new ChannelFactory(port) );
+    }
+
+    public DistributedListServer(ChannelFactory cf) {
+	listElem = new Counter(0);
+	this.cf = cf;
+	servers = new ArrayList();
+	theList = new TreeMap();
+    }
+
+    public static void main(String[] args) {
+	int port = DEFAULT_PORT;
+	if ( args.length < 1 ) {
+	    System.out.println("Usage: DistributedListServer <port>");
+	} else {
+	   try {
+	        port = Integer.parseInt( args[0] );
+	    } catch (NumberFormatException e) {
+	    }
+	}
+	(new DistributedListServer(port)).run();
+	// until CRTL-C
+    }
+
+
+/**
+ * thread initialization and start
+ */ 
+    public void init() {
+	this.start();
+    }
+
+
+/**
+ * main server method
+ */ 
+    public void run() {
+       SocketChannel channel = null;
+       Broadcaster s = null;
+       mythread = Thread.currentThread();
+       Entry e;
+       Object n;
+       Object o;
+       while (goon) {
+	   // logger.debug("list server " + this + " go on");
+          try {
+               channel = cf.getChannel();
+	       logger.debug("dls channel = "+channel);
+	       if ( mythread.isInterrupted() ) {
+		  goon = false;
+	          //logger.info("list server " + this + " interrupted");
+	       } else {
+		  s = new Broadcaster(channel,servers,listElem,theList);
+		  int ls = 0;
+		  synchronized (servers) {
+	             servers.add( s );
+		     ls = theList.size();
+	             s.start();
+		  }
+	          //logger.debug("server " + s + " started");
+		  if ( ls > 0 ) {
+	             logger.info("sending " + ls + " list elements");
+		     synchronized (theList) {
+			 Iterator it = theList.entrySet().iterator();
+			 for ( int i = 0; i < ls; i++ ) {
+			     e = (Entry)it.next();
+			     n = e.getKey();
+			     o = e.getValue();
+			     try {
+			         s.sendChannel( n,o );
+		             } catch (IOException ioe) {
+				 // stop s
+			     }
+			 }
+		     } 
+		  }
+	       }
+          } catch (InterruptedException end) {
+               goon = false;
+	  }
+       }
+       //logger.debug("listserver " + this + " terminated");
+    }
+
+
+/**
+ * terminate all servers
+ */ 
+
+    public void terminate() {
+	goon = false;
+        logger.debug("terminating ListServer");
+        if ( cf != null ) cf.terminate();
+	if ( servers != null ) {
+	   Iterator it = servers.iterator();
+	   while ( it.hasNext() ) {
+	      Broadcaster br = (Broadcaster) it.next();
+              br.closeChannel();
+              try { 
+                  while ( br.isAlive() ) {
+		          //System.out.print(".");
+                          br.interrupt(); 
+                          br.join(100);
+                  }
+	          //logger.debug("server " + br + " terminated");
+              } catch (InterruptedException e) { 
+              }
+	   }
+	   servers = null;
+	}
+        logger.debug("Broadcasters terminated");
+	if ( mythread == null ) return;
+        try { 
+            while ( mythread.isAlive() ) {
+		    // System.out.print("-");
+                    mythread.interrupt(); 
+                    mythread.join(100);
+            }
+            //logger.debug("server " + mythread + " terminated");
+        } catch (InterruptedException e) { 
+        }
+        logger.debug("ListServer terminated");
+    }
+
+
+/**
+ * number of servers
+ */ 
+    public int size() {
+	return servers.size();
+    }
+
+}
+
+
+/**
+ * Class for holding the list index used a key in TreeMap.
+ * Implemented since Integer has no add() method.
+ * Must implement Comparable so that TreeMap works with correct ordering.
+ */ 
+
+class Counter implements Serializable, Comparable {
+
+    private int value;
+
+    public Counter() {
+	this(0);
+    }
+
+    public Counter(int v) {
+	value = v;
+    }
+
+    public int intValue() {
+	return value;
+    }
+
+    public void add(int v) { // synchronized elsewhere
+	value += v;
+    }
+
+    public int compareTo(Object o) throws ClassCastException {
+	if ( ! (o instanceof Counter) ) {
+	    throw new ClassCastException("Counter "+value+" o "+o);
+	}
+	int x = ((Counter)o).intValue();
+	if ( value > x ) { 
+           return 1;
+	}
+	if ( value < x ) { 
+           return -1;
+	}
+	return 0;
+    }
+
+    public String toString() {
+	return "Counter("+value+")";
+    }
+
+}
+
+
+/**
+ * Thread for broadcasting all incoming objects to the list clients
+ */ 
+
+class Broadcaster extends Thread /*implements Runnable*/ {
+
+    private static Logger logger = Logger.getLogger(Broadcaster.class);
+    private final SocketChannel channel;
+    private final List bcaster;
+    private Counter listElem;
+    private final SortedMap theList;
+
+
+    public Broadcaster(SocketChannel s, List p, Counter le, SortedMap sm) {
+	channel = s;
+	bcaster = p;
+	listElem = le;
+        theList = sm;
+    } 
+
+
+    public void closeChannel() {
+	channel.close();
+    }
+
+
+    public void sendChannel(Object n, Object o) throws IOException {
+	synchronized (channel) {
+	   channel.send(n);
+	   channel.send(o);
+	}
+    }
+
+
+    public void broadcast(Object o) {
+	Counter li = null;
+	synchronized (listElem) {
+	    listElem.add(1);
+            li = new Counter( listElem.intValue() );
+	}
+	synchronized (theList) {
+	    theList.put( li, o );
+	}
+	synchronized (bcaster) {
+	    Iterator it = bcaster.iterator();
+	    while ( it.hasNext() ) {
+		Broadcaster br = (Broadcaster) it.next();
+		try {
+		    br.sendChannel(li,o);
+		    //System.out.println("bcast: "+o+" to "+x.channel);
+		} catch (IOException e) {
+		    try { 
+			br.closeChannel();
+			while ( br.isAlive() ) {
+			    br.interrupt(); 
+			    br.join(100);
+			}
+		    } catch (InterruptedException unused) { 
+		    }
+		    bcaster.remove( br );
+		}
+	    }
+	}
+    }
+
+
+    public void run() {
+	Object o;
+	boolean goon = true;
+	while (goon) {
+              try {
+                   o = channel.receive();
+                   //System.out.println("receive: "+o+" from "+channel);
+		   broadcast(o);
+		   if ( this.isInterrupted() ) {
+		       goon = false;
+		   }
+	      } catch (IOException e) {
+                   goon = false;
+	      } catch (ClassNotFoundException e) {
+                   goon = false;
+	      }
+	}
+	logger.debug("broadcaster terminated "+this);
+	channel.close();
+    }
+
+
+    public String toSting() {
+	return "Broadcaster("+channel+","+bcaster.size()+","+listElem+")";
+    }
+
+}
