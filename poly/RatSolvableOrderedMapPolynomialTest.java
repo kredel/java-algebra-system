@@ -4,7 +4,6 @@
 
 package edu.jas.poly;
 
-//import edu.jas.poly.RatPolynomial;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.Coefficient;
 
@@ -47,6 +46,7 @@ public class RatSolvableOrderedMapPolynomialTest extends TestCase {
 
    private final static int bitlen = 100;
 
+   SolvableOrderedMapPolynomial dummy;
    OrderedPolynomial a;
    OrderedPolynomial b;
    OrderedPolynomial c;
@@ -55,8 +55,8 @@ public class RatSolvableOrderedMapPolynomialTest extends TestCase {
 
    int rl = 5; 
    int kl = 10;
-   int ll = 7;
-   int el = 4;
+   int ll = 5;
+   int el = 3;
    float q = 0.5f;
 
    RelationTable table;
@@ -258,9 +258,12 @@ public class RatSolvableOrderedMapPolynomialTest extends TestCase {
  * 
  */
  public void testWeyl() {
+     dummy = RatSolvableOrderedMapPolynomial.DIRRAS(table/*null*/,rl,kl,ll,el,q);
+
      WeylRelations wl = new WeylRelations();
      int rloc = 4;
-     RelationTable table = wl.generate(rloc);
+     RelationTable table = wl.generate(rloc,dummy);
+     dummy = null;
 
      a = RatSolvableOrderedMapPolynomial.DIRRAS(table, rloc, kl, ll, el, q );
      assertTrue("not isZERO( a )", !a.isZERO() );
