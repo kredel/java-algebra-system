@@ -52,7 +52,7 @@ public class ComplexMapPolynomial extends MapPolynomial {
     }
 
     public UnorderedPolynomial getONE() { 
-       return new ComplexMapPolynomial(BigComplex.ONE, new ExpVector()); 
+       return new ComplexMapPolynomial(BigComplex.ONE, new ExpVector(numberOfVariables())); 
     }
 
     public static final ComplexMapPolynomial ZERO = new ComplexMapPolynomial();

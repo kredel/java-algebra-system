@@ -82,11 +82,11 @@ public class IntOrderedMapPolynomial extends OrderedMapPolynomial {
 
     public OrderedPolynomial getONE() {
        return new IntOrderedMapPolynomial(BigInteger.ONE,
-                                          new ExpVector()); 
+                                          new ExpVector(numberOfVariables())); 
     }
 
     public OrderedPolynomial getONE(TermOrder to) { 
-       return new IntOrderedMapPolynomial(to,ONE);
+        return new IntOrderedMapPolynomial(to,getONE());
     }
 
     public static final IntOrderedMapPolynomial ZERO = 

@@ -81,11 +81,11 @@ public class QuatOrderedMapPolynomial extends OrderedMapPolynomial {
 
     public OrderedPolynomial getONE() {
        return new QuatOrderedMapPolynomial(BigQuaternion.ONE,
-                                          new ExpVector()); 
+                                          new ExpVector(numberOfVariables())); 
     }
 
     public OrderedPolynomial getONE(TermOrder to) { 
-       return new QuatOrderedMapPolynomial(to,ONE);
+        return new QuatOrderedMapPolynomial(to,getONE());
     }
 
     public static final QuatOrderedMapPolynomial ZERO = 

@@ -81,11 +81,11 @@ public class ComplexOrderedMapPolynomial extends OrderedMapPolynomial {
 
     public OrderedPolynomial getONE() {
        return new ComplexOrderedMapPolynomial(BigComplex.ONE,
-                                          new ExpVector()); 
+                                          new ExpVector(numberOfVariables())); 
     }
 
     public OrderedPolynomial getONE(TermOrder to) { 
-       return new ComplexOrderedMapPolynomial(to,ONE);
+        return new ComplexOrderedMapPolynomial(to,getONE());
     }
 
     public static final ComplexOrderedMapPolynomial ZERO = 

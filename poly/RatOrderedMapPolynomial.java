@@ -80,11 +80,11 @@ public class RatOrderedMapPolynomial extends OrderedMapPolynomial {
 
     public OrderedPolynomial getONE() {
        return new RatOrderedMapPolynomial(BigRational.ONE,
-                                          new ExpVector()); 
+                                          new ExpVector(numberOfVariables())); 
     }
 
     public OrderedPolynomial getONE(TermOrder to) { 
-       return new RatOrderedMapPolynomial(to,ONE);
+        return new RatOrderedMapPolynomial(to,getONE());
     }
 
     public static final RatOrderedMapPolynomial ZERO = 

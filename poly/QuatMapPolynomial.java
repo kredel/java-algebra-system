@@ -52,7 +52,7 @@ public class QuatMapPolynomial extends MapPolynomial {
     }
 
     public UnorderedPolynomial getONE() { 
-       return new QuatMapPolynomial(BigQuaternion.ONE, new ExpVector()); 
+       return new QuatMapPolynomial(BigQuaternion.ONE, new ExpVector(numberOfVariables())); 
     }
 
     public static final QuatMapPolynomial ZERO = new QuatMapPolynomial();

@@ -52,7 +52,7 @@ public class RatMapPolynomial extends MapPolynomial {
     }
 
     public UnorderedPolynomial getONE() { 
-       return new RatMapPolynomial(BigRational.ONE, new ExpVector()); 
+       return new RatMapPolynomial(BigRational.ONE, new ExpVector(numberOfVariables())); 
     }
 
     public static final RatMapPolynomial ZERO = new RatMapPolynomial();
