@@ -180,7 +180,7 @@ public abstract class MapPolynomial implements UnorderedPolynomial, Cloneable {
             e = (ExpVector) x.getKey(); 
             a = (Coefficient) x.getValue();
 
-            b = (Coefficient) C.get( e ); // is allways null
+            b = null; //(Coefficient) C.get( e ); // is allways null
             if ( b == null ) {
                 C.put( e, a );
             } else {
@@ -485,7 +485,6 @@ public abstract class MapPolynomial implements UnorderedPolynomial, Cloneable {
      * multiply. Implementation based on any LinkedHashMap.
      */
      public UnorderedPolynomial multiply(UnorderedPolynomial Bp) {  
-
         UnorderedPolynomial Cp = getZERO(); 
         Cp.setVars(vars);
         Map A = val; // this.getMap();
@@ -499,7 +498,7 @@ public abstract class MapPolynomial implements UnorderedPolynomial, Cloneable {
             //System.out.println("a = " + a);
             UnorderedPolynomial Dp = Bp.multiply( a, e );
             //System.out.println("Dp = " + Dp.length());
-            Cp = Cp.add(Dp);
+            Cp = Dp.add(Cp);
             //System.out.println("Cp = " + Cp.length());
         }
         //System.out.println("Cp = " + Cp);
@@ -514,6 +513,27 @@ public abstract class MapPolynomial implements UnorderedPolynomial, Cloneable {
         } else { 
              return b.multiply(a);
         }
+    }
+
+     public UnorderedPolynomial multiply(int evord, UnorderedPolynomial Bp) {  
+        UnorderedPolynomial Cp = getZERO(); 
+        Cp.setVars(vars);
+        Map A = val; // this.getMap();
+        Set Ak = A.entrySet();
+        Iterator ai = Ak.iterator();
+        while ( ai.hasNext() ) {
+            Map.Entry y = (Map.Entry) ai.next();
+            ExpVector e = (ExpVector) y.getKey(); 
+            //System.out.println("e = " + e);
+            Coefficient a = (Coefficient) y.getValue(); 
+            //System.out.println("a = " + a);
+            UnorderedPolynomial Dp = Bp.multiply( a, e );
+            //System.out.println("Dp = " + Dp.length());
+            Cp = ((MapPolynomial)Dp).add(evord,Cp);
+            //System.out.println("Cp = " + Cp.length());
+        }
+        //System.out.println("Cp = " + Cp);
+        return Cp;
     }
 
     /**
@@ -546,6 +566,7 @@ public abstract class MapPolynomial implements UnorderedPolynomial, Cloneable {
         if ( a == null ) return null;
         return a.multiply(b);
     }
+
 
     /**
      * Product with number and exponent vector.
