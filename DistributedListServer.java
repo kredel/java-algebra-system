@@ -116,7 +116,7 @@ public class DistributedListServer extends Thread {
               x.channel.close();
               try { 
                   while ( x.isAlive() ) {
-                          System.out.print(".");
+		      //System.out.print(".");
                           x.interrupt(); 
                           x.join(100);
                   }
@@ -130,7 +130,7 @@ public class DistributedListServer extends Thread {
 	if ( mythread == null ) return;
         try { 
             while ( mythread.isAlive() ) {
-                    System.out.print("-");
+		//System.out.print("-");
                     mythread.interrupt(); 
                     mythread.join(100);
             }

@@ -103,7 +103,7 @@ public class GroebnerBaseDistributed  {
         if ( threads < 1 ) threads = 1;
         while ( dls.size()< threads ) {
             try { 
-                System.out.print("*");
+                //System.out.print("*");
                 Thread.currentThread().sleep(100);
             } catch (InterruptedException e) {
               e.printStackTrace();
