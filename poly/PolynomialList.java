@@ -42,16 +42,17 @@ public class PolynomialList {
         erg.append(" "+tord);
         erg.append("\n");
 
-        Polynomial a;
+        // Polynomial a;
         OrderedPolynomial oa;
         Iterator it = list.iterator();
         erg.append("(\n");
         while ( it.hasNext() ) {
               Object o = it.next();
-	      if ( o instanceof Polynomial ) {
-                a = (Polynomial) o;
-	        erg.append( a.toString(vars) );
-	      } else if ( o instanceof OrderedPolynomial ) {
+	      //if ( o instanceof Polynomial ) {
+              //  a = (Polynomial) o;
+	      //  erg.append( a.toString(vars) );
+	      //} else 
+              if ( o instanceof OrderedPolynomial ) {
                 oa = (OrderedPolynomial) o;
 	        erg.append( oa.toString(vars) );
 	      } else {
