@@ -594,7 +594,34 @@ public final class TermOrder implements Serializable {
 
     public boolean equals( Object B ) { 
        if ( ! (B instanceof TermOrder) ) return false;
-       return evord == ((TermOrder)B).getEvord();
+       TermOrder b = (TermOrder)B;
+       boolean t =    evord  == b.getEvord()
+                   && evord2 == b.evord2
+                   && evbeg1 == b.evbeg1
+                   && evend1 == b.evend1
+                   && evbeg2 == b.evbeg2
+                   && evend2 == b.evend2;
+       if ( ! t ) {
+          return t;
+       }
+       if ( weight == b.weight ) {
+          return true;
+       }
+       if ( weight != null && b.weight == null ) {
+          return false;
+       }
+       if ( weight == null && b.weight != null ) {
+          return false;
+       }
+       if ( weight.length != b.weight.length ) {
+          return false;
+       }
+       for ( int i = 0; i < weight.length; i++ ) {
+           if ( weight[i] != b.weight[i] ) {
+              return false;
+           }
+       }
+       return true;
     }
 
 
