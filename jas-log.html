@@ -71,10 +71,19 @@ Some UML class diagramms as produced by ArgoUML:
   Fixed weak point in polynomial getONE() to correct number 
   of variables, e.g. correct exponent vector size.
   Polynomial constant ONE still has wrong exponent vector size.
+  Deleted many old polynomial classes.
+<p>
   Implemented noncommutative product for solvable polynomials,
   together with relation tables. 
   SolvableOrderedMapPolynomial extends OrderedMapPolynomial.
   RatSolvableOrderedMapPolynomial extends SolvableOrderedMapPolynomial.
+  Interface SolvablePolynomial extends Ordered Polynomial.
+  Some more left multiplication methods, left reduction and 
+  left Groebner Bases, twosided Groebner Base test and computation.
+  Pairlist class changed to avoid usage of criterion 4 if running
+  for SolvablePolynomials, also criterion4() method itself checks 
+  for SolvablePolynomials.
+</p>
 </dd>
 
 <dt>2005, 1, 24-31</dt>
@@ -106,6 +115,7 @@ Some UML class diagramms as produced by ArgoUML:
   New classes implementing a distributed hash table to hold the 
   polynomials in distributed GB. Index of polynomials in Pairlist
   is used as hash key.
+  Communication is now using message types GBTransportMess.
   Now polynomials are only transported once to each reducer since 
   only polynomial hash indexes are transported.
   Distributed list is asynchronous and late updated, 
@@ -157,30 +167,30 @@ Some UML class diagramms as produced by ArgoUML:
 <tr align="right">
 <td>1</td>
 <td>181.5</td>
-<td>159.7</td>
+<td>4% / 159.7</td>
 <td></td>
 <td>28418.6</td>
 </tr>
 <tr align="right">
 <td>2</td>
 <td>118.6</td>
-<td>75.6</td>
+<td>s2.02 / p2.11 / 75.6</td>
 <td></td>
-<td>13760.0</td>
+<td>p2.06 / 13760.0</td>
 </tr>
 <tr align="right">
 <td>4</td>
 <td>76.8</td>
-<td>40.4</td>
+<td>s3.79 / p3.95 / 40.4</td>
 <td>6256.9</td>
-<td>6225.1</td>
+<td>p4.56 / 6225.1</td>
 </tr>
 <tr align="right">
 <td>8</td>
 <td>43.2</td>
-<td>21.3</td>
+<td>s7.19 / p7.49 / 21.3</td>
 <td>3240.7</td>
-<td>3318.8</td>
+<td>p8.56/ 3318.8</td>
 </tr>
 <tr align="right">
 <td>10</td>
@@ -194,7 +204,7 @@ Some UML class diagramms as produced by ArgoUML:
 <td>40.5</td>
 <td></td>
 <td>2288.1</td>
-<td>2868.4</td>
+<td>p9.90 / 2868.4</td>
 </tr>
 <tr align="right">
 <td>14</td>
@@ -206,9 +216,9 @@ Some UML class diagramms as produced by ArgoUML:
 <tr align="right">
 <td>16</td>
 <td>51.9</td>
-<td>18.7</td>
+<td>s8.19 / p8.54 / 18.7</td>
 <td>5376.4</td>
-<td>2256.1</td>
+<td>p12.59 / 2256.1</td>
 </tr>
 <!--
 <tr align="right">
@@ -225,6 +235,12 @@ Some UML class diagramms as produced by ArgoUML:
    <br />
   *) timing taken with other load on the CPUs.
   +) timing taken with no other load on the CPUs.
+   <br />
+   Speedup: s = relative to sequential, 
+            p = relative to parallel with one thread / CPU.
+   <br />
+   Scaling from 8 to 16 CPUs is bad, but also observed on 
+   non CA / GB Examples (Java and C/FORTRAN).
 </p>
 </dd>
 
@@ -1083,7 +1099,7 @@ CPU TIME (ms) END
 <p>
 <!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
 <!-- hhmts start -->
-Last modified: Sun Feb  6 14:31:17 CET 2005
+Last modified: Tue Feb  8 13:36:00 CET 2005
 <!-- hhmts end -->
 </p>
 <p align="right" >
