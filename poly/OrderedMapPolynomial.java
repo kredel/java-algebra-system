@@ -60,6 +60,11 @@ public abstract class OrderedMapPolynomial /* extends MapPolynomial */
         val.put( e, a );
     }
 
+    public OrderedMapPolynomial(TermOrder to, Coefficient a, ExpVector e) { 
+        this( to );
+        val.put( e, a );
+    }
+
     public OrderedMapPolynomial(TermOrder to) { 
         vars = null;
 	order = to;
