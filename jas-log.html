@@ -65,9 +65,34 @@ Some UML class diagramms as produced by ArgoUML:
 </dd>
 -->
 
+<dt>2005, 1, 15-16</dt>
+<dd> 
+  Further things to improve in GB algorithms (from tsp):
+  local work queues, i.e. local Pairlists, 
+  improve data locality in polynomials and lists,
+  communication using message types,
+  reduce object serialization in DL-broadcast 
+  by using MarshalledObjects,
+  reduce communication in Pair send by not sending polynomials
+  but indicies (requires distributed hashtable instead of DL),
+  interleave communication and computation by adding a 
+  communication thread in the distributed client.
+<p>
+  New classes implementing a distributed hash table to hold the 
+  polynomials in distributed GB. Index of polynomials in Pairlist
+  is used as hash key.
+  Now polynomials are only transported once to each reducer since 
+  only polynomial hash indexes are transported.
+  Distributed list is asynchronous and late updated, 
+  so some duplicate H-polynomials (head terms) could be (are) produced.
+  Solution by local put to hash table with dummy index?
+  Timings are not dramatically better.
+</p>
+</dd>
+
 <dt>2005, 1, 9-14</dt>
 <dd> 
-  Introduced all improvements in util classes found so far.
+  Introduced all direct improvements in util classes found so far.
   (ChannelFactory and others)
   On parallel computers the following JVM options (1.4.2) 
   must be used:
@@ -1031,7 +1056,7 @@ CPU TIME (ms) END
 <p>
 <!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
 <!-- hhmts start -->
-Last modified: Fri Jan 14 22:33:26 CET 2005
+Last modified: Sun Jan 16 16:13:01 CET 2005
 <!-- hhmts end -->
 </p>
 <p align="right" >
