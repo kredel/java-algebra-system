@@ -292,12 +292,16 @@ public abstract class OrderedMapPolynomial /* extends MapPolynomial */
             //System.out.println("f = " + f);
             Coefficient b = (Coefficient) y.getValue(); 
             //System.out.println("b = " + b);
-            Coefficient c = (Coefficient) C.remove( (Object) f );
+            Coefficient c = (Coefficient) C.get( f );
             //System.out.println("c = " + c);
             if ( c != null ) { 
                c = c.subtract(b);
                //System.out.println("c = " + c);
-               if (  ! c.isZERO() ) { C.put( f, c ); }
+               if (  ! c.isZERO() ) { 
+                  C.put( f, c ); 
+               } else {
+		  C.remove( f );
+	       }
             } else { 
                C.put( f, b.negate() ); 
             }
