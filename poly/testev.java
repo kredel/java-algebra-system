@@ -21,18 +21,12 @@ public class testev
       U = ExpVector.EVRAND(5,10,q);
       System.out.println("U = " + U );
       System.out.println("U = " + U.toString(vars) );
-      U.setVars( vars );
-      System.out.println("U = " + U );
-      U.setStdVars( );
-      System.out.println("U = " + U );
+      System.out.println("U = " + U.toString( U.stdVars() ) );
 
       V = ExpVector.EVRAND(5,10,q);
       System.out.println("V = " + V);
       System.out.println("V = " + V.toString(vars) );
-      V.setVars( vars );
-      System.out.println("V = " + V );
-      V.setStdVars( );
-      System.out.println("V = " + V );
+      System.out.println("V = " + V.toString( V.stdVars() ) );
 
       System.out.println("hashCode(U) = " + U.hashCode() );
       System.out.println("hashCode(V) = " + V.hashCode() );
