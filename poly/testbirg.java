@@ -11,7 +11,7 @@ package edu.jas.poly;
 
 import java.util.Date;
 import java.io.IOException;
-import edu.jas.Datei;
+import edu.jas.util.Datei;
 
 /**
  * @deprecated
