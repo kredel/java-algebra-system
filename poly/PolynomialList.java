@@ -64,6 +64,74 @@ public class PolynomialList {
     }
 
 
+    /**
+     * equals from Object.
+     */
+
+    public boolean equals(Object p) {
+        if ( ! (p instanceof PolynomialList) ) {
+            System.out.println("PolynomialList");
+            return false;
+        }
+        PolynomialList pl = (PolynomialList)p;
+        if ( ! coeff.equals( pl.coeff ) ) {
+            System.out.println("Coefficient");
+            return false;
+        }
+        if ( ! Arrays.equals( vars, pl.vars ) ) {
+            System.out.println("String[]");
+            return false;
+        }
+        if ( ! tord.equals( pl.tord ) ) {
+            System.out.println("TermOrder");
+            return false;
+        }
+        if ( list == null && pl.list != null ) {
+            System.out.println("List, null");
+            return false;
+        }
+        if ( list != null && pl.list == null ) {
+            System.out.println("List, null");
+            return false;
+        }
+        if ( list.size() != pl.list.size() ) {
+            System.out.println("List, size");
+            return false;
+        }
+        Iterator jt = pl.list.iterator();
+        for ( Iterator it = list.iterator(); 
+              it.hasNext() && jt.hasNext(); ) {
+            Object pi = it.next();
+            Object pj = jt.next();
+            if ( ! ( pi instanceof OrderedPolynomial ) ) {
+                System.out.println("OrderedPolynomial, pi");
+                return false;
+            }
+            if ( ! ( pj instanceof OrderedPolynomial ) ) {
+                System.out.println("OrderedPolynomial, pj");
+                return false;
+            }
+            OrderedPolynomial pip = (OrderedPolynomial)pi;
+            OrderedPolynomial pjp = (OrderedPolynomial)pj;
+            if ( ! pip.equals( pjp ) ) {
+               System.out.println("OrderedPolynomial");
+               System.out.println("pip = " + pip);
+               System.out.println("pjp = " + pjp);
+               return false;
+            }
+        }
+
+        if ( table == null && pl.table != null ) {
+            return false;
+        }
+        if ( table != null && pl.table == null ) {
+            return false;
+        }
+        // otherwise tables may be different
+        return true;
+    }
+
+
     public String toString() {
 	StringBuffer erg = new StringBuffer();
         if ( coeff != null ) {
