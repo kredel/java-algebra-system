@@ -41,6 +41,9 @@ heinz:
 krum:
 	$(RSYNC) ./                krum:java/$(PART)
 
+compute:
+	$(RSYNC) ./                compute:java/$(PART)
+
 
 # no need to change below this line
 
@@ -51,7 +54,7 @@ cl=
 
 JASPATH=/home/kredel/jas
 DEFS=$(JASPATH)/arith:$(JASPATH)/poly:$(JASPATH)/ring:$(JASPATH)/util
-DOCCLASSES=$(JUNITPATH):$(LOG4JPATH):$(JOMPPATH)
+DOCCLASSES=$(JUNITPATH):$(LOG4JPATH):$(JOMPPATH):$(TNJPATH)
 DOCOPTS=-package
 #DOCOPTS=-package -version -author
 #DOCOPTS=-public -protected -package -author -version
