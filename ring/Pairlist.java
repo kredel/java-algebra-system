@@ -1,5 +1,6 @@
 /*
  * $Id$
+ * log: Pairlist.java,v 1.4 2003/10/26 kredel Exp 
  */
 
 package edu.jas.ring;

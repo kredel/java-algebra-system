@@ -1,5 +1,6 @@
 /*
  * $Id$
+ * log: RatGBaseTest.java,v 1.3 2003/12/25 kredel Exp 
  */
 
 package edu.jas.ring;
