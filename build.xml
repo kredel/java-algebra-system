@@ -55,6 +55,12 @@
   </jdepend>
 </target>
 
+<target name="time" depends="vorher" >
+  <java  classname="edu.jas.poly.PolynomialTimings" 
+         classpath="${cp}" 
+         fork="yes" />
+</target>
+
 <target name="TestOld" depends="vorher" >
   <java  classname="edu.jas.SemaphoreTest" 
          classpath="${cp}" 
@@ -99,7 +105,7 @@
   <junit printsummary="yes" 
          fork="yes" 
          showoutput="yes"
-         haltonfailure="no" >
+         haltonfailure="yes" >
      <classpath path="${cp}" />
      <formatter type="plain" /> <!-- plain, xml, brief -->
      <batchtest todir="${test}" >
