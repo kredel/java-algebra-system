@@ -33,7 +33,9 @@
 </target>
 
 <target name="doc" >
-  <javadoc sourcepath="${src}" destdir="${doc}" private="true" >
+  <javadoc sourcepath="${src}" destdir="${doc}" 
+           classpath="${cp}" 
+           private="true" >
      <fileset dir="." includes="**/*.java"  />
   </javadoc>
 </target>
