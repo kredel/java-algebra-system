@@ -25,23 +25,23 @@ public class RatMapPolynomial extends MapPolynomial {
      * Constructors for RatMapPolynomial
      */
     public RatMapPolynomial() { 
-	super();
+        super();
     }
 
     public RatMapPolynomial(int r) { 
-	super(r);
+        super(r);
     }
 
     public RatMapPolynomial(Map t) { 
-	super(t);
+        super(t);
     }
 
     public RatMapPolynomial(String[] v) { 
-	super(v);
+        super(v);
     }
 
     public RatMapPolynomial(Coefficient a, ExpVector e) { 
-	super( a, e );
+        super( a, e );
     }
 
 
@@ -52,49 +52,49 @@ public class RatMapPolynomial extends MapPolynomial {
     }
 
     public UnorderedPolynomial getZERO() { 
-       return (UnorderedPolynomial) ZERO.clone();
+       return new RatMapPolynomial();
     }
 
     public UnorderedPolynomial getONE() { 
-       return (UnorderedPolynomial) ONE.clone(); 
+       return new RatMapPolynomial(BigRational.ONE, new ExpVector()); 
     }
 
     public static final RatMapPolynomial ZERO = new RatMapPolynomial();
     public static final RatMapPolynomial ONE = new RatMapPolynomial(
-			                              BigRational.ONE,
-					              new ExpVector()
+                                                      BigRational.ONE,
+                                                      new ExpVector()
                                                       );
 
     public String toString(String[] v) { 
-	StringBuffer erg = new StringBuffer();
+        StringBuffer erg = new StringBuffer();
         Set ent = val.entrySet();
         Iterator it = ent.iterator();
-	if ( ! it.hasNext() ) return erg.toString();
+        if ( ! it.hasNext() ) return erg.toString();
         Map.Entry y = (Map.Entry) it.next();
         ExpVector f = (ExpVector) y.getKey(); 
-	BigRational a = (BigRational) y.getValue();
-	boolean neg = false;
+        BigRational a = (BigRational) y.getValue();
+        boolean neg = false;
         while ( true ) {
-	    if ( neg ) {
-	       erg.append( a.negate() );
-	    } else {
+            if ( neg ) {
+               erg.append( a.negate() );
+            } else {
               erg.append(a);
-	    }
+            }
             neg = false;
-	    erg.append(" " + f.toString(v));
-	    if ( it.hasNext() ) {
+            erg.append(" " + f.toString(v));
+            if ( it.hasNext() ) {
                 y = (Map.Entry) it.next();
-	        f = (ExpVector) y.getKey(); 
-	        a = (BigRational) y.getValue();
-		if ( a.signum() < 0 ) {
-		   erg.append(" - ");
-		   neg = true;
-		} else {
+                f = (ExpVector) y.getKey(); 
+                a = (BigRational) y.getValue();
+                if ( a.signum() < 0 ) {
+                   erg.append(" - ");
+                   neg = true;
+                } else {
                    erg.append(" + ");
-		   neg = false;
-		}
-	    } else break; 
-	} 
+                   neg = false;
+                }
+            } else break; 
+        } 
         return erg.toString(); 
     }
 
@@ -108,18 +108,18 @@ public class RatMapPolynomial extends MapPolynomial {
         Map C = x.getMap(); 
         for (int i = 0; i < l; i++ ) { 
             ExpVector U = ExpVector.EVRAND(r,e,q);
-	    BigRational c = (BigRational) C.get( U );
+            BigRational c = (BigRational) C.get( U );
             BigRational a = BigRational.RNRAND(k);
-	    // System.out.println("rat random U = " + U + " c = " + c + " a = " +a);
+            // System.out.println("rat random U = " + U + " c = " + c + " a = " +a);
             if ( ! a.isZERO() ) {
-		if ( c == null ) {
+                if ( c == null ) {
                    C.put( U, a );
-		} else {
+                } else {
                    C.put( U, c.add(a) );
-		}
-	    }
+                }
+            }
         }
-	//System.out.println("rat random = " + x);
+        //System.out.println("rat random = " + x);
         return x; 
     }
 
