@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -414,7 +413,7 @@ class ReducerServer implements Runnable {
                            break;
                         } else {
                            polIndex = pairlist.put( H );
-                           // use putWait ?
+                           // use putWait ? but still not all distributed
                            theList.put( new Integer(polIndex), H );
                         }
                      }
