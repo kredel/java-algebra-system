@@ -94,9 +94,11 @@ public class ReductionSolvableTest extends TestCase {
      L = new ArrayList();
      table = new RelationTable();
 
-     //a = RatSolvableOrderedMapPolynomial.DIRRAS(table,rl, kl, ll, el, q );
-     c = RatSolvableOrderedMapPolynomial.ONE;
-     d = RatSolvableOrderedMapPolynomial.ZERO;
+     a = RatSolvableOrderedMapPolynomial.DIRRAS(table,rl, kl, ll, el, q );
+     //c = RatSolvableOrderedMapPolynomial.getONE(table);
+     //d = RatSolvableOrderedMapPolynomial.getZERO(table);
+     c = a.getONE(table);
+     d = a.getZERO(table);
 
      e = Reduction.leftNormalform( L, c );
      assertTrue("isONE( e )", e.isONE() ); 
@@ -136,9 +138,11 @@ public class ReductionSolvableTest extends TestCase {
      table = (new WeylRelations()).generate(rl,dummy);
      dummy = null;
 
-     //a = RatSolvableOrderedMapPolynomial.DIRRAS(table,rl, kl, ll, el, q );
-     c = RatSolvableOrderedMapPolynomial.ONE;
-     d = RatSolvableOrderedMapPolynomial.ZERO;
+     a = RatSolvableOrderedMapPolynomial.DIRRAS(table,rl, kl, ll, el, q );
+     //c = RatSolvableOrderedMapPolynomial.getONE(table);
+     //d = RatSolvableOrderedMapPolynomial.getZERO(table);
+     c = a.getONE(table);
+     d = a.getZERO(table);
 
      e = Reduction.leftNormalform( L, c );
      assertTrue("isONE( e )", e.isONE() ); 
