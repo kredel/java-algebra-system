@@ -1,8 +1,8 @@
 #
 # jython examples for jas.
 
-from jas import SolvRing
-from jas import SolvIdeal
+from jas import SolvableRing
+from jas import SolvableIdeal
 
 
 # WA_32 example
@@ -17,8 +17,8 @@ RelationTable
 )
 """;
 
-r = SolvRing( rs );
-print "SolvRing: " + str(r);
+r = SolvableRing( rs );
+print "SolvableRing: " + str(r);
 print;
 
 
@@ -30,8 +30,8 @@ ps = """
 )
 """;
 
-f = SolvIdeal( r, ps );
-print "SolvIdeal: " + str(f);
+f = SolvableIdeal( r, ps );
+print "SolvableIdeal: " + str(f);
 print;
 
 
