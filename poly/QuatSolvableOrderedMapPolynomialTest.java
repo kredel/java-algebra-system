@@ -255,10 +255,10 @@ public class QuatSolvableOrderedMapPolynomialTest extends TestCase {
  * 
  */
  public void testWeyl() {
-     dummy = RatSolvableOrderedMapPolynomial.DIRRAS(table/*null*/,rl,kl,ll,el,q);
 
      WeylRelations wl = new WeylRelations();
      int rloc = 4;
+     dummy = QuatSolvableOrderedMapPolynomial.DIQRAS(table/*null*/,rloc,kl,ll,el,q);
      RelationTable table = wl.generate(rloc,dummy);
      dummy = null;
 
