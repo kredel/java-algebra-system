@@ -133,6 +133,8 @@ edu.jas.util.%: edu/jas/util/%.class
 
 FILES=$(wildcard *.java arith/*.java poly/*.java ring/*.java util/*.java)
 LIBS=$(JUNITPATH) $(LOG4JPATH) $(JOMPPATH)
+#CLASSES=$(wildcard *.class arith/*.class poly/*.class ring/*.class util/*.class)
+CLASSES=edu/jas
 
 doc: $(FILES)
 	$(DOC) $(DOCOPTS) -d doc $(FILES) 
@@ -142,8 +144,13 @@ jar: $(FILES) jas-log.html Makefile build.xml log4j.properties
 	cp jas.jar /tmp/jas-`date +%Y%j`.jar
 #	cp jas.jar /mnt/i/e/kredel/jas-`date +%Y%j`.jar
 
-dist: jas.jar
-	tar -cvzf jas-dist.tgz jas.jar $(LIBS)
+
+TOJAR=$(FILES) $(CLASSES) Makefile build.xml log4j.properties
+jars: GBManifest.MF $(TOJAR)
+	$(JDK)/jar -cvfm JAS.jar GBManifest.MF $(TOJAR)
+
+dist: jas.jar JAS.jar $(LIBS)
+	tar -cvzf jas-dist.tgz jas.jar JAS.jar $(LIBS)
 
 
 clean:
