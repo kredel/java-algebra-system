@@ -78,32 +78,32 @@ public class ModuleList {
 
     public boolean equals(Object m) {
         if ( ! (m instanceof ModuleList) ) {
-            System.out.println("ModuleList");
+            //System.out.println("ModuleList");
             return false;
         }
         ModuleList ml = (ModuleList)m;
         if ( ! coeff.equals( ml.coeff ) ) {
-            System.out.println("Coefficient");
+            //System.out.println("Coefficient");
             return false;
         }
         if ( ! Arrays.equals( vars, ml.vars ) ) {
-            System.out.println("String[]");
+            //System.out.println("String[]");
             return false;
         }
         if ( ! tord.equals( ml.tord ) ) {
-            System.out.println("TermOrder");
+            //System.out.println("TermOrder");
             return false;
         }
         if ( list == null && ml.list != null ) {
-            System.out.println("List, null");
+            //System.out.println("List, null");
             return false;
         }
         if ( list != null && ml.list == null ) {
-            System.out.println("List, null");
+            //System.out.println("List, null");
             return false;
         }
         if ( list.size() != ml.list.size() ) {
-            System.out.println("List, size");
+            //System.out.println("List, size");
             return false;
         }
         Iterator jt = ml.list.iterator();
@@ -112,11 +112,11 @@ public class ModuleList {
             Object mi = it.next();
             Object mj = jt.next();
             if ( ! ( mi instanceof List ) ) {
-                System.out.println("List, mi");
+                //System.out.println("List, mi");
                 return false;
             }
             if ( ! ( mj instanceof List ) ) {
-                System.out.println("List, mj");
+                //System.out.println("List, mj");
                 return false;
             }
             Object[] mia = ((List)mi).toArray();
@@ -125,9 +125,9 @@ public class ModuleList {
                 OrderedPolynomial pi = (OrderedPolynomial)mia[k];
                 OrderedPolynomial pj = (OrderedPolynomial)mja[k];
                 if ( ! pi.equals( pj ) ) {
-                   System.out.println("OrderedPolynomial");
-                   System.out.println("pi = " + pi);
-                   System.out.println("pj = " + pj);
+                    //System.out.println("OrderedPolynomial");
+                    //System.out.println("pi = " + pi);
+                    //System.out.println("pj = " + pj);
                    return false;
                 }
             }
@@ -290,9 +290,9 @@ public class ModuleList {
                            }
                            if ( e1.length() != e2.length() ) {
                               if ( e1.length() > e2.length() ) {
-                                 return 1; // dont care
+                                 return 1; 
                               } else {
-                                 return -1; // dont care
+                                 return -1;
                               }
                            }
                            c = e.compare(e1,e2);
