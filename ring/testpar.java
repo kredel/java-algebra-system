@@ -4,19 +4,14 @@
 
 package edu.jas.ring;
 
-import java.util.TreeMap;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Iterator;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.ArrayList;
 
-import edu.jas.arith.BigRational;
-import edu.jas.poly.RatPolynomial;
-import edu.jas.poly.PolynomialTokenizer;
-import edu.jas.poly.PolynomialList;
 import edu.jas.poly.ExpVector;
+import edu.jas.poly.PolynomialList;
+import edu.jas.poly.PolynomialTokenizer;
 
   /**
    * @deprecated

@@ -6,7 +6,6 @@ package edu.jas.ring;
 
 import java.util.ArrayList;
 
-import edu.jas.arith.BigRational;
 import edu.jas.poly.RatPolynomial;
 
   /**

@@ -4,11 +4,8 @@
 
 package edu.jas.ring;
 
-import java.util.TreeMap;
 import java.util.ArrayList;
-import java.util.List;
 
-import edu.jas.arith.BigRational;
 import edu.jas.poly.RatPolynomial;
 
   /**
