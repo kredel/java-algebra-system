@@ -88,9 +88,10 @@ public class ExpVector implements Cloneable, Serializable {
 
     public Object clone() {
         long[] w = new long[ val.length ];
-        for (int i = 0; i < w.length; i++ ) {
-            w[i] = val[i];
-        }
+        System.arraycopy(val,0,w,0,val.length);
+        //for (int i = 0; i < w.length; i++ ) {
+        //    w[i] = val[i];
+        //}
         return new ExpVector( w );
     }
 
