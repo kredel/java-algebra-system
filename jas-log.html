@@ -65,6 +65,134 @@ Some UML class diagramms as produced by ArgoUML:
 </dd>
 -->
 
+<dt>2004, September </dt>
+<dd> 
+  Implemented Java server (<code>ExecutableServer</code>) for remote execution 
+  of objects implementing the <code>RemoteExecutable</code> interface.
+  <p>New setup for the distributed computation of GBs: 
+  the GB master now sends the client code to some ExecutableSevers
+  based on a maschine file with host and port infos about the 
+  distributed environment.
+  </p>
+  <p>Improved the PolynomialTokenizer so that it can read almost unedited
+  old MAS GB input files: <code>**</code> exponents and parenthesis 
+  around polynomials. 
+  Lines starting with <code>#</code> are treated as comments.
+  Comments <code>(* *)</code> and parenthesis within polynomials are 
+  still not supported.
+  </p>
+  <p>Implemented a common driver for GB computations <code>RunGB</code>.
+  Sequential, thread parallel and distributed computation can be selected
+  by command line parameters. The input is taken from a file. The number 
+  of threads respectively the number of distributed clients can be specified.
+  For distributed execution the host and port information is taken from 
+  a maschines file.
+  </p>
+<pre>
+Usage: RunGB [seq|par|dist|cli] &lt;file&gt; #procs [machinefile]
+</pre>
+  <p>Added methods <code>putCount()</code> and <code>remCount()</code>
+  in <code>OrderedPairlist</code> to count the number of polynomials
+  put and get from the pair data structure.
+  </p>  
+<div align="center" >
+<table border="1" cellpadding="10"
+       summary="pairlist put and remove" >
+<caption>pairlist put and remove, trinks6</caption>
+<tr>
+<th># Threads</th>
+<td>1 seq</td>
+
+<td>1 par</td>
+<td>2 par</td>
+<td>2 par</td>
+<td>3 par</td>
+<td>4 par</td>
+<td>5 par</td>
+
+<td>1 dist</td>
+<td>2 dist</td>
+<td>3 dist</td>
+<td>4 dist</td>
+<td>4 dist</td>
+<td>4 dist</td>
+<td>5 dist</td>
+</tr>
+<tr>
+<th># put</th>
+<td>22</td>
+
+<td>22</td>
+<td>43</td>
+<td>26</td>
+<td>28</td>
+<td>28</td>
+<td>28</td>
+
+<td>22</td>
+<td>25</td>
+<td>28</td>
+<td>37</td>
+<td>40</td>
+<td>33</td>
+<td>27</td>
+</tr>
+<tr>
+<th># remove</th>
+<td>25</td>
+
+<td>25</td>
+<td>61</td>
+<td>30</td>
+<td>32</td>
+<td>32</td>
+<td>41</td>
+
+<td>26</td>
+<td>33</td>
+<td>42</td>
+<td>47</td>
+<td>61</td>
+<td>54</td>
+<td>69</td>
+</tr>
+</table>
+</div>
+  <p>Timings @ 500 MHz on one CPU and one maschine and log4j level INFO are: <br />
+  ca. 2.5 - 3.5 seconds for sequential GB,<br />
+  ca. 2.5 - 6 seconds for parallel GB,<br />
+  ca. 5.5 - 9 seconds plus 5 seconds sync time for distributed GB. <br />
+  Network shuffling of polynomials seems to account for 3 seconds in 
+  this example.
+  </p>
+  <p>Problem uncovered: the distributed version of GB needs an 
+  avarage of 5 seconds to sync with all clients (on one maschine).
+  This is way to much for execution times in the range of 2 to 8 seconds.
+  </p>
+  <p>Redesign of DistributedList, now using TreeMap to keep the list 
+  entries in proper sequence. As key a natural number is used, which is 
+  assigned by the server to successive add() requests.
+  The server now also holds a copy of the list by itself. So the 
+  retransmission of list elements to late arriving clients is possible.
+  This doubles the space required to store polynomials, but removes 
+  initial delays to sync all clients to receive all list elements.
+  <br />
+  By retransmission the DistributedList synchronization delay during 
+  DistributedGB could be removed.
+  However the problem of about 5 seconds delay in startup 
+  of DistributedGB still remains. It is not visible where and why this
+  delay occurs.
+  <br />
+  Further improvements would be the removal of list elements or the 
+  clearing of the list.
+  Next steps could be distributed HashMap or TreeMap.
+  <br />
+  An important improvement would be to keep serialized copies of the 
+  list elements (polynomials) at the server and to 
+  avoid many time serialization during broadcast.
+  </p>
+</dd>
+
 <dt>2004, 2, 26</dt>
 <dd>
   Ideas to implement: 
@@ -705,7 +833,7 @@ CPU TIME (ms) END
 <p>
 <!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
 <!-- hhmts start -->
-Last modified: Thu Feb 26 22:18:07 CET 2004
+Last modified: Thu Sep 16 12:15:07 CEST 2004
 <!-- hhmts end -->
 </p>
 <p align="right" >
