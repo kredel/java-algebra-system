@@ -118,8 +118,8 @@ public class BigRational implements Coefficient, Comparable {
                && den.equals( B.denominator() );
     }
 
-/**Rational number reduction to lowest terms.  A and B are integers,
-B non-zero.  R is the rational number A/B in canonical form.*/
+/** Rational number reduction to lowest terms.  A and B are integers,
+B non-zero.  R is the rational number A/B in canonical form. */
 
   public static BigRational RNRED(BigInteger n, BigInteger d) {
       BigInteger num;
@@ -138,8 +138,8 @@ B non-zero.  R is the rational number A/B in canonical form.*/
   } 
 
 
-/**Rational number absolute value.  R is a rational number.  S is the
-absolute value of R.*/
+/** Rational number absolute value.  R is a rational number.  S is the
+absolute value of R. */
 
   public Coefficient abs() {
       if ( RNSIGN( this ) >= 0 ) {
@@ -155,7 +155,7 @@ absolute value of R.*/
   }
 
 
-/**Rational number comparison.  R and S are rational numbers.
+/** Rational number comparison.  R and S are rational numbers.
 t=SIGN(R-S).*/
 
   public int compareTo(Object b) {
@@ -203,15 +203,15 @@ t=SIGN(R-S).*/
   }
 
 
-/**Rational number denominator.  R is a rational number.  b is the
-denominator of R, a positive integer.*/
+/** Rational number denominator.  R is a rational number.  b is the
+denominator of R, a positive integer. */
 
   public static BigInteger RNDEN(BigRational R) {
       return R.denominator();
   }
 
 
-/**Rational number difference.  R and S are rational numbers.  T=R-S.*/
+/** Rational number difference.  R and S are rational numbers.  T=R-S. */
 
   public Coefficient subtract(Coefficient S) {
       return subtract( (BigRational) S);
@@ -231,22 +231,30 @@ denominator of R, a positive integer.*/
   }
 
 
-/**Rational number decimal write.  R is a rational number.  n is a
+/** Rational number decimal write.  R is a rational number.  n is a
 non-negative integer.  R is approximated by a decimal fraction D with
 n decimal digits following the decimal point and D is written in the
 output stream.  The inaccuracy of the approximation is at most
 (1/2)*10**-n.  If ABS(D) is greater than ABS(R) then the last digit is
 followed by a minus sign, if ABS(D) is less than ABS(R) then by a
-plus sign.*/
+plus sign. */
 
   public static void RNDWR(BigRational R, int NL) {             
-      System.out.print( R.toString() );
+      BigInteger num = R.numerator();
+      BigInteger den = R.denominator();
+      /* BigInteger p = new BigInteger("10");
+         p = p.pow(NL);
+      */
+      double n = num.doubleValue();
+      double d = den.doubleValue();
+      double r = n/d;
+      System.out.print( String.valueOf( d ) );
       return;
   }
 
 
-/**Rational number from integer.  A is an integer.  R is the rational
-number A/1.*/
+/** Rational number from integer.  A is an integer.  R is the rational
+number A/1. */
 
   public static BigRational RNINT(BigInteger A) {
       BigRational R = new BigRational( A );
@@ -254,7 +262,7 @@ number A/1.*/
   }
 
 
-/**Rational number inverse.  R is a non-zero rational number.  S=1/R.*/
+/** Rational number inverse.  R is a non-zero rational number.  S=1/R. */
 
   public BigRational inverse() {
       BigInteger R1 = num; //R.nominator();
@@ -277,7 +285,7 @@ number A/1.*/
   }
 
 
-/**Rational number negative.  R is a rational number.  S=-R.*/
+/** Rational number negative.  R is a rational number.  S=-R. */
 
   public Coefficient negate() {
       BigInteger n = num.negate();
@@ -290,15 +298,15 @@ number A/1.*/
   }
 
 
-/**Rational number numerator.  R is a rational number.  a is the
-numerator of R, an integer.*/
+/** Rational number numerator.  R is a rational number.  a is the
+numerator of R, an integer. */
 
   public static BigInteger RNNUM(BigRational R) {
       return R.numerator();
   }
 
 
-/**Rational number product.  R and S are rational numbers.  T=R*S.*/
+/** Rational number product.  R and S are rational numbers.  T=R*S. */
 
   public Coefficient multiply(Coefficient S) {
       return multiply( (BigRational) S);
@@ -365,8 +373,8 @@ numerator of R, an integer.*/
   }
 
 
-/**Rational number quotient.  R and S are rational numbers, S non-zero.
-T=R/S.*/
+/** Rational number quotient.  R and S are rational numbers, S non-zero.
+T=R/S. */
 
 
   public Coefficient divide(Coefficient S) {
@@ -385,9 +393,9 @@ T=R/S.*/
   }
 
 
-/**Rational number, random.  n is a positive beta-integer.  Random
+/** Rational number, random.  n is a positive beta-integer.  Random
 integers A and B are generated using IRAND(n).  Then R=A/(ABS(B)+1),
-reduced to lowest terms.*/
+reduced to lowest terms. */
 
   public Coefficient random(int n) {
       return RNRAND( n );
@@ -406,7 +414,7 @@ reduced to lowest terms.*/
   }
 
 
-/**Rational number sign.  R is a rational number.  s=SIGN(R).*/
+/** Rational number sign.  R is a rational number.  s=SIGN(R). */
 
   public int signum() {
       int SL;
@@ -424,7 +432,7 @@ reduced to lowest terms.*/
   }
 
 
-/**Rational number sum.  R and S are rational numbers.  T=R+S.*/
+/** Rational number sum.  R and S are rational numbers.  T=R+S. */
 
   public Coefficient add(Coefficient S) {
       return add( (BigRational) S);
