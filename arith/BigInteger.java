@@ -137,6 +137,16 @@ public class BigInteger implements Coefficient {
       return (BigInteger) A.divide(B);
     }
 
+    /** Integer inverse.  R is a non-zero integer.  
+        S=1/R if defined else 0. */
+
+    public Coefficient inverse() {
+	if ( this.isONE() || this.negate().isONE() ) {
+           return this;
+	}
+	return ZERO;
+    }
+
     public Coefficient remainder(Coefficient S) {
       return new BigInteger( val.remainder( ((BigInteger)S).getval() ) );
     }
