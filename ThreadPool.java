@@ -72,7 +72,7 @@ public class ThreadPool {
         this.strategy = strategy;
         jobstack = new LinkedList(); // ok for all strategies ?
         workers = new PoolThread[size];
-        for (int i=0; i < workers.length; i++) {
+        for (int i = 0; i < workers.length; i++) {
             workers[i] = new PoolThread(this);
             workers[i].start();
         }
@@ -103,7 +103,7 @@ public class ThreadPool {
             } catch (InterruptedException e) {
             }
         }
-        for (int i=0; i < workers.length; i++) {
+        for (int i = 0; i < workers.length; i++) {
             try { 
                 while ( workers[i].isAlive() ) {
                         workers[i].interrupt(); 
@@ -150,8 +150,10 @@ public class ThreadPool {
  * check if there are jobs for processing
  */
     public boolean hasJobs() {
-        if ( jobstack.size() > 0 ) return true;
-        for (int i=0; i < workers.length; i++) {
+        if ( jobstack.size() > 0 ) {
+            return true;
+        }
+        for (int i = 0; i < workers.length; i++) {
             if ( workers[i].working ) return true;
         }
         return false;
@@ -168,9 +170,9 @@ public class ThreadPool {
            // ( ( j > 0 && ( j+workers.length > n ) ) || ( j > n )
         int x = 0;
         for (int i=0; i < workers.length; i++) {
-            if ( workers[i].working ) x++;;
+            if ( workers[i].working ) x++;
         }
-        if ( j+x > n ) return true;
+        if ( (j + x) > n ) return true;
         return false;
     }
 
@@ -216,7 +218,7 @@ class PoolThread extends Thread {
               running = false; 
             }
         }
-        logger.info( "terminated, done "+done+" jobs in " 
+        logger.info( "terminated, done " + done + " jobs in " 
                         + time + " milliseconds");
     }
 
