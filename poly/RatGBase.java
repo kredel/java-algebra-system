@@ -245,7 +245,7 @@ public class RatGBase  {
      * Parallel Groebner base using pairlist class.
      */
 
-    public static ArrayList DIRPGBparallel(List Pp, int threads) {  
+    public static ArrayList DIRPGBparallel1(List Pp, int threads) {  
         RatPolynomial p;
         ArrayList P = new ArrayList();
         Pairlist pairlist = new Pairlist( RatPolynomial.ordm );
@@ -274,7 +274,7 @@ public class RatGBase  {
         RatPolynomial pj;
         RatPolynomial S;
         RatPolynomial H;
-	Reducer R = null;
+	Reducer1 R = null;
 	int sleeps = 0;
         while ( pairlist.hasNext() || T.hasJobs() ) {
 	      while ( ! pairlist.hasNext() || T.hasJobs(threads) ) {
@@ -304,7 +304,7 @@ public class RatGBase  {
               //System.out.println("S   = " + S);
               if ( S.isZERO() ) continue;
 
-	      R = new Reducer( R, P, S, pairlist );
+	      R = new Reducer1( R, P, S, pairlist );
 	      T.addJob( R );
 	}
 	P = DIGBMIparallel(P,T);
@@ -318,16 +318,16 @@ public class RatGBase  {
      * reducing worker threads
      */
 
-    static class Reducer implements Runnable {
+    static class Reducer1 implements Runnable {
 	private List P;
 	private RatPolynomial S;
 	private Pairlist pairlist;
-	private Reducer proceeding;
+	private Reducer1 proceeding;
 	private boolean working = true;
 	private boolean sema = false;
 	public final Semaphore done = new Semaphore(0);
 
-	Reducer(Reducer pr, List P, RatPolynomial p, Pairlist l) {
+	Reducer1(Reducer1 pr, List P, RatPolynomial p, Pairlist l) {
 	    proceeding = pr;
 	    this.P = P;
 	    S = p;
@@ -384,6 +384,174 @@ public class RatGBase  {
 	public boolean done() {
 	    return ! working;
 	}
+    }
+
+    /**
+     * Parallel Groebner base using pairlist class.
+     */
+
+    public static ArrayList DIRPGBparallel(List Pp, int threads) {  
+        RatPolynomial p;
+        ArrayList P = new ArrayList();
+        Pairlist pairlist = new Pairlist( RatPolynomial.ordm );
+        int l = Pp.size();
+        ListIterator it = Pp.listIterator();
+        while ( it.hasNext() ) { 
+            p = (RatPolynomial) it.next();
+            if ( p.length() > 0 ) {
+               p = RatPolynomial.DIRPMC( p );
+               if ( p.isONE() ) {
+		  P.clear(); P.add( p );
+                  return P;
+	       }
+               P.add( (Object) p );
+               pairlist.put( p );
+	    }
+            else l--;
+	}
+        if ( l <= 1 ) return P;
+
+	if ( threads < 1 ) threads = 1;
+	ThreadPool T = new ThreadPool(threads);
+	Terminator fin = new Terminator(threads);
+	Reducer R;
+	for ( int i = 0; i < threads; i++ ) {
+	      R = new Reducer( fin, P, pairlist );
+	      T.addJob( R );
+	}
+	fin.done();
+	// System.out.println("\n main loop ended \n");
+	P = DIGBMIparallel(P,T);
+	T.terminate();
+        System.out.println();
+	return P;
+    }
+
+
+
+    /**
+     * reducing worker threads
+     */
+
+    static class Reducer implements Runnable {
+	private List P;
+	private Pairlist pairlist;
+	private Terminator pool;
+
+	Reducer(Terminator fin, List P, Pairlist L) {
+	    pool = fin;
+	    this.P = P;
+	    pairlist = L;
+	} 
+
+	public void run() {
+           Pairlist.Pair pair;
+           RatPolynomial pi;
+           RatPolynomial pj;
+           RatPolynomial S;
+           RatPolynomial H;
+	   boolean set = false;
+	   int red = 0;
+	   int sleeps = 0;
+           while ( pairlist.hasNext() || pool.hasJobs() ) {
+	      while ( ! pairlist.hasNext() ) {
+                  // wait
+                  pool.beIdle(); set = true;
+		  try {
+		      sleeps++;
+                      if ( sleeps % 10 == 0 ) {
+                         System.out.println(" reducer is sleeping");
+		      } else {
+                         System.out.print("r");
+		      }
+		      Thread.currentThread().sleep(100);
+		  } catch (InterruptedException e) {
+                     break;
+		  }
+		  if ( ! pool.hasJobs() ) break;
+              }
+              if ( ! pairlist.hasNext() && ! pool.hasJobs() ) break;
+              if ( set ) pool.notIdle();
+
+              pair = (Pairlist.Pair) pairlist.removeNext();
+              if ( pair == null ) continue; 
+
+              pi = pair.pi; 
+              pj = pair.pj; 
+	      //System.out.println("pi  = " + pi);
+              //System.out.println("pj  = " + pj);
+
+              S = DIRPSP( pi, pj );
+              //System.out.println("S   = " + S);
+              if ( S.isZERO() ) continue;
+
+              System.out.print("ht(S) = " + Polynomial.DIPLEV(S));
+              H = DIRPNF( P, S );
+	      red++;
+              System.out.println(", ht(H) = " + Polynomial.DIPLEV(H));
+              H = RatPolynomial.DIRPMC( H );
+              // System.out.println("H   = " + H);
+	      if ( H.isONE() ) {
+		  synchronized (P) {
+                      P.clear(); P.add( H );
+		  }
+	          pool.allIdle();
+                  return;
+	      }
+	      if ( H != null && ! H.isZERO() ) {
+	         // System.out.println("add(H) = " + Polynomial.DIPLEV(H));
+                 synchronized (P) {
+                     P.add( H );
+	         }
+                 pairlist.put( H );
+	      }
+	   }
+           System.out.println( "Reducer["+
+                      Thread.currentThread().getName()+
+                      "] terminated, done " + red + " reductions");
+	}
+
+    }
+
+
+    /**
+     * terminating helper class
+     */
+
+    static class Terminator {
+
+	private int workers = 0;
+	private int idler = 0;
+	private Semaphore fin = new Semaphore(0);
+
+	Terminator(int workers) {
+	    this.workers = workers;
+	}
+
+	synchronized void beIdle() {
+	    idler++;
+	    if ( idler >= workers ) fin.V();
+	}
+
+	synchronized void allIdle() {
+	    idler = workers;
+	    fin.V();
+	}
+
+	synchronized void notIdle() {
+	    idler--;
+	}
+
+	boolean hasJobs() {
+	    return ( idler < workers );
+	}
+
+	void done() {
+            try { fin.P();
+	    } catch (InterruptedException e) { }
+	}
+
+
     }
 
     /**
