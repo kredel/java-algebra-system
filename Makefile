@@ -21,6 +21,7 @@ LIBPATH=/home/kredel/java/lib
 JUNITPATH=$(LIBPATH)/junit.jar
 LOG4JPATH=$(LIBPATH)/log4j.jar
 JOMPPATH=$(LIBPATH)/jomp1.0b.jar
+TNJPATH=$(LIBPATH)/tnj.jar
 
 # no need to change below this line
 
@@ -36,7 +37,7 @@ DOCOPTS=-package
 #DOCOPTS=-package -version -author
 #DOCOPTS=-public -protected -package -author -version
 
-MYCLASSPATH = .:$(DEFS):$(JUNITPATH):$(LOG4JPATH):$(JOMPPATH)
+MYCLASSPATH = .:$(DEFS):$(JUNITPATH):$(LOG4JPATH):$(JOMPPATH):$(TNJPATH)
 
 JAVAC=$(JDK)/javac -classpath $(MYCLASSPATH) -d .
 JAVA=$(JDK)/java -classpath $(MYCLASSPATH)  
