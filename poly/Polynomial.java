@@ -19,7 +19,7 @@ import java.util.Map;
  * @deprecated
  */
 
-interface Polynomial {
+public interface Polynomial {
 
     public int getOrd();
 
