@@ -23,7 +23,7 @@ import edu.jas.arith.Coefficient;
 
 /**
  * Polynomial. 
- * Implementation based on SortedMap / TreeMap in add/difference/multiply.
+ * Implementation based on HashMap / LinkedHashMap in add/difference/multiply.
  * Other methods work with any Map.
  */
 
@@ -230,6 +230,10 @@ public abstract class HashPolynomial implements Polynomial, Cloneable {
         return y;
     }
 
+    public Map.Entry leadingMonomial() {  
+	return this.LM();
+    }
+
     public static Map.Entry DIPLM(Polynomial a) {  
 	if ( a == null ) return null;
         return a.LM();
@@ -249,6 +253,10 @@ public abstract class HashPolynomial implements Polynomial, Cloneable {
 	if ( h == null ) return null;
         */
         return (ExpVector)m.getKey();
+    }
+
+    public ExpVector leadingExpVector() {  
+	return this.LEV();
     }
 
     public static ExpVector DIPLEV(Polynomial a) {  
@@ -271,6 +279,10 @@ public abstract class HashPolynomial implements Polynomial, Cloneable {
         return e.length();
     }
 
+    public int numberOfVariables() {  
+	return this.NOV();
+    }
+
     public static int DIPNOV(Polynomial a) {  
 	if ( a == null ) return 0;
         return a.NOV();
@@ -288,6 +300,10 @@ public abstract class HashPolynomial implements Polynomial, Cloneable {
         return a;
     }
 
+    public Object leadingBaseCoefficient() {  
+	return this.LBC();
+    }
+
     public static Object DIPLBC(Polynomial a) {  
 	if ( a == null ) return null;
         return a.LBC();
@@ -302,7 +318,7 @@ public abstract class HashPolynomial implements Polynomial, Cloneable {
            logger.error("orderings not equal"); 
         }
         if ( ! (val instanceof SortedMap) && ! (val instanceof LinkedHashMap) ) { 
-           logger.error("add1 requires LinkedHashMap or SortedMap"); 
+           logger.error("add requires LinkedHashMap or SortedMap"); 
         }
 	if ( this.length() == 0 ) return Bp;
 	if ( Bp.length() == 0 ) return this;
@@ -310,9 +326,9 @@ public abstract class HashPolynomial implements Polynomial, Cloneable {
 	Cp.setVars( vars ); 
 	Polynomial Ap = (Polynomial) this;
 
-	Map A = Ap.getMap(); //new LinkedHashMap( Ap.getMap() );
-        Map B = Bp.getMap(); //new LinkedHashMap( Bp.getMap() );
-        Map C = Cp.getMap(); //new LinkedHashMap( Cp.getMap() );
+	Map A = Ap.getMap(); 
+        Map B = Bp.getMap(); 
+        Map C = Cp.getMap(); 
 
         Set As = A.entrySet();
         Iterator ai = As.iterator();
@@ -400,14 +416,6 @@ public abstract class HashPolynomial implements Polynomial, Cloneable {
               b = (Coefficient) y.getValue();
 	      C.put( f, b );
 	}
-
-	//	System.out.println("Ap = " + Ap);
-	//System.out.println("Bp = " + Bp);
-	//Cp.setMap( C );
-	//System.out.println("Cp = " + Cp);
-	//	TreeMap tm = new TreeMap(horder);
-        //tm.putAll(C);
-	//Cp.setMap( tm );
         return Cp;
     }
 
@@ -425,7 +433,7 @@ public abstract class HashPolynomial implements Polynomial, Cloneable {
            logger.error("orderings not equal"); 
         }
         if ( ! (val instanceof SortedMap) && ! (val instanceof LinkedHashMap) ) { 
-           logger.error("subtract1 requires LinkedHashMap or SortedMap"); 
+           logger.error("subtract requires LinkedHashMap or SortedMap"); 
         }
 	if ( this.length() == 0 ) return Bp.negate();
 	if ( Bp.length() == 0 ) return this;
@@ -433,9 +441,9 @@ public abstract class HashPolynomial implements Polynomial, Cloneable {
 	Cp.setVars( vars ); 
 	Polynomial Ap = (Polynomial) this;
 
-	Map A = Ap.getMap(); //new LinkedHashMap( Ap.getMap() );
-        Map B = Bp.getMap(); //new LinkedHashMap( Bp.getMap() );
-        Map C = Cp.getMap(); //new LinkedHashMap( Cp.getMap() );
+	Map A = Ap.getMap(); 
+        Map B = Bp.getMap(); 
+        Map C = Cp.getMap(); 
 
         Set As = A.entrySet();
         Iterator ai = As.iterator();
@@ -523,14 +531,6 @@ public abstract class HashPolynomial implements Polynomial, Cloneable {
               b = (Coefficient) y.getValue();
 	      C.put( f, b.negate() );
 	}
-
-	//System.out.println("Ap = " + Ap);
-	//System.out.println("Bp = " + Bp);
-	//Cp.setMap( C );
-	//System.out.println("Cp = " + Cp);
-	//TreeMap tm = new TreeMap(horder);
-        //tm.putAll(C);
-	//Cp.setMap( tm );
         return Cp;
     }
 
@@ -548,8 +548,8 @@ public abstract class HashPolynomial implements Polynomial, Cloneable {
            logger.error("orderings not equal"); 
         }
         Polynomial Cp = new RatPolynomial(evord,horder,lorder); 
-	Cp.setVars( vars ); //Cp.setord( evord );
-        Map A = val; //this.getMap();
+	Cp.setVars( vars ); // Cp.setord( evord );
+        Map A = val; // this.getMap();
         Set Ak = A.entrySet();
         Iterator ai = Ak.iterator();
         while ( ai.hasNext() ) {
@@ -580,7 +580,6 @@ public abstract class HashPolynomial implements Polynomial, Cloneable {
      */
 
     public Polynomial multiply(Coefficient b) {  
-	//  Polynomial Cp = (Polynomial) this.clone();
         Polynomial Cp = new RatPolynomial(evord,horder,lorder);
         Map C = Cp.getMap();
         Map A = val; //this.getMap();
@@ -629,7 +628,7 @@ public abstract class HashPolynomial implements Polynomial, Cloneable {
         return Cp;
     }
 
-    public static Polynomial DIPRP(Polynomial a, Coefficient b, ExpVector e) {  
+    public static Polynomial DIPRP(Polynomial a, Coefficient b, ExpVector e) {
 	if ( a == null ) return null;
         return a.multiply(b,e);
     }
