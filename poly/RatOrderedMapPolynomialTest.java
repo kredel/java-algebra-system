@@ -170,4 +170,73 @@ public class RatOrderedMapPolynomialTest extends TestCase {
 
  }
 
+
+/**
+ * Test object multiplication
+ * 
+ */
+ public void testMultiplication1() {
+
+     a = RatOrderedMapPolynomial.DIRRAS(rl, kl, ll, el, q );
+     assertTrue("not isZERO( a )", !a.isZERO() );
+     //a = RatOrderedMapPolynomial.DIRRAS(1, kl, 4, el, q );
+
+     b = RatOrderedMapPolynomial.DIRRAS(rl, kl, ll, el, q );
+     assertTrue("not isZERO( b )", !b.isZERO() );
+
+     c = b.multiply(a);
+     d = a.multiply(b);
+     assertTrue("not isZERO( c )", !c.isZERO() );
+     assertTrue("not isZERO( d )", !d.isZERO() );
+
+     e = d.subtract(c);
+     assertTrue("isZERO( a*b-b*a ) " + e, e.isZERO() );
+
+     assertEquals("a*b = b*a",c,d);
+     assertTrue("a*b = b*a", c.equals(d) );
+
+     c = RatOrderedMapPolynomial.DIRRAS(rl, kl, ll, el, q );
+     d = a.multiply( b.multiply(c) );
+     e = (a.multiply(b)).multiply(c);
+
+     assertEquals("a(bc) = (ab)c",d,e);
+     assertTrue("a(bc) = (ab)c", d.equals(e) );
+
+ }
+
+/**
+ * Test object multiplication with add
+ * 
+ */
+ public void testMultiplication2() {
+
+     RatOrderedMapPolynomial a, b;
+
+     a = RatOrderedMapPolynomial.DIRRAS(rl, kl, ll, el, q );
+     assertTrue("not isZERO( a )", !a.isZERO() );
+     //a = RatOrderedMapPolynomial.DIRRAS(1, kl, 4, el, q );
+
+     b = RatOrderedMapPolynomial.DIRRAS(rl, kl, ll, el, q );
+     assertTrue("not isZERO( b )", !b.isZERO() );
+
+     c = b.multiplyA(a);
+     d = a.multiplyA(b);
+     assertTrue("not isZERO( c )", !c.isZERO() );
+     assertTrue("not isZERO( d )", !d.isZERO() );
+
+     e = d.subtract(c);
+     assertTrue("isZERO( a*b-b*a ) " + e, e.isZERO() );
+
+     assertEquals("a*b = b*a",c,d);
+     assertTrue("a*b = b*a", c.equals(d) );
+
+     c = RatOrderedMapPolynomial.DIRRAS(rl, kl, ll, el, q );
+     d = a.multiplyA( b.multiplyA(c) );
+     e = ((RatOrderedMapPolynomial)a.multiplyA(b)).multiplyA(c);
+
+     assertEquals("a(bc) = (ab)c",d,e);
+     assertTrue("a(bc) = (ab)c", d.equals(e) );
+
+ }
+
 }
