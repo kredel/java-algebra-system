@@ -70,6 +70,10 @@ public class RatGBaseTest extends TestCase {
 
    protected void setUp() {
        a = b = c = d = e = null;
+       a = RatPolynomial.DIRRAS(rl, kl, ll, el, q );
+       b = RatPolynomial.DIRRAS(rl, kl, ll, el, q );
+       c = RatPolynomial.DIRRAS(rl, kl, ll, el, q );
+       d = RatPolynomial.DIRRAS(rl, kl, ll, el, q );
    }
 
    protected void tearDown() {
@@ -83,22 +87,21 @@ public class RatGBaseTest extends TestCase {
  */
  public void testReduction() {
 
-     a = RatPolynomial.DIRRAS(rl, kl, ll, el, q );
+     //a = RatPolynomial.DIRRAS(rl, kl, ll, el, q );
      assertTrue("not isZERO( a )", !a.isZERO() );
 
      L = new ArrayList();
      L.add(a);
 
-     b = RatGBase.DIRPNF( L, a );
-     assertTrue("isZERO( b )", b.isZERO() );
+     e = RatGBase.DIRPNF( L, a );
+     assertTrue("isZERO( e )", e.isZERO() );
 
-     b = RatPolynomial.DIRRAS(rl, kl, ll, el, q );
+     //b = RatPolynomial.DIRRAS(rl, kl, ll, el, q );
      assertTrue("not isZERO( b )", !b.isZERO() );
 
      L.add(b);
-     c = RatGBase.DIRPNF( L, a );
-     assertTrue("isZERO( c ) some times", c.isZERO() ); 
-
+     e = RatGBase.DIRPNF( L, a );
+     assertTrue("isZERO( e ) some times", e.isZERO() ); 
  }
 
 /**
@@ -107,7 +110,7 @@ public class RatGBaseTest extends TestCase {
  */
  public void testGBase() {
 
-     a = RatPolynomial.DIRRAS(rl, kl, ll, el, q );
+     // a = RatPolynomial.DIRRAS(rl, kl, ll, el, q );
      assertTrue("not isZERO( a )", !a.isZERO() );
 
      L = new ArrayList();
@@ -116,28 +119,27 @@ public class RatGBaseTest extends TestCase {
      L = RatGBase.DIRPGB( L );
      assertTrue("isDIRPGB( { a } )", RatGBase.isDIRPGB(L) );
 
-     b = RatPolynomial.DIRRAS(rl, kl, ll, el, q );
+     // b = RatPolynomial.DIRRAS(rl, kl, ll, el, q );
      assertTrue("not isZERO( b )", !b.isZERO() );
      L.add(b);
-     //     System.out.println("L = " + L.size() );
+     // System.out.println("L = " + L.size() );
 
      L = RatGBase.DIRPGB( L );
      assertTrue("isDIRPGB( { a, b } )", RatGBase.isDIRPGB(L) );
 
-     c = RatPolynomial.DIRRAS(rl, kl, ll, el, q );
+     // c = RatPolynomial.DIRRAS(rl, kl, ll, el, q );
      assertTrue("not isZERO( c )", !c.isZERO() );
      L.add(c);
 
      L = RatGBase.DIRPGB( L );
      assertTrue("isDIRPGB( { a, ,b, c } )", RatGBase.isDIRPGB(L) );
 
-     d = RatPolynomial.DIRRAS(rl, kl, ll, el, q );
+     // d = RatPolynomial.DIRRAS(rl, kl, ll, el, q );
      assertTrue("not isZERO( d )", !d.isZERO() );
      L.add(d);
 
      L = RatGBase.DIRPGB( L );
-     assertTrue("isDIRPGB( { a, ,b, c } )", RatGBase.isDIRPGB(L) );
-
+     assertTrue("isDIRPGB( { a, ,b, c, d } )", RatGBase.isDIRPGB(L) );
  }
 
 /**
@@ -147,7 +149,7 @@ public class RatGBaseTest extends TestCase {
  public void testParallelGBase() {
      int threads = 2;
 
-     a = RatPolynomial.DIRRAS(rl, kl, ll, el, q );
+     //a = RatPolynomial.DIRRAS(rl, kl, ll, el, q );
      assertTrue("not isZERO( a )", !a.isZERO() );
 
      L = new ArrayList();
@@ -156,28 +158,27 @@ public class RatGBaseTest extends TestCase {
      L = RatGBase.DIRPGBparallel( L, threads );
      assertTrue("isDIRPGB( { a } )", RatGBase.isDIRPGB(L) );
 
-     b = RatPolynomial.DIRRAS(rl, kl, ll, el, q );
+     //b = RatPolynomial.DIRRAS(rl, kl, ll, el, q );
      assertTrue("not isZERO( b )", !b.isZERO() );
      L.add(b);
-     //     System.out.println("L = " + L.size() );
+     //  System.out.println("L = " + L.size() );
 
      L = RatGBase.DIRPGBparallel( L, threads );
      assertTrue("isDIRPGB( { a, b } )", RatGBase.isDIRPGB(L) );
 
-     c = RatPolynomial.DIRRAS(rl, kl, ll, el, q );
+     // c = RatPolynomial.DIRRAS(rl, kl, ll, el, q );
      assertTrue("not isZERO( c )", !c.isZERO() );
      L.add(c);
 
      L = RatGBase.DIRPGBparallel( L, threads );
      assertTrue("isDIRPGB( { a, ,b, c } )", RatGBase.isDIRPGB(L) );
 
-     d = RatPolynomial.DIRRAS(rl, kl, ll, el, q );
+     // d = RatPolynomial.DIRRAS(rl, kl, ll, el, q );
      assertTrue("not isZERO( d )", !d.isZERO() );
      L.add(d);
 
      L = RatGBase.DIRPGBparallel( L, threads );
      assertTrue("isDIRPGB( { a, ,b, c, d } )", RatGBase.isDIRPGB(L) );
-
  }
 
 }
