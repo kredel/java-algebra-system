@@ -65,6 +65,13 @@ Some UML class diagramms as produced by ArgoUML:
 </dd>
 -->
 
+<dt>2004, 1, 25</dt>
+<dd>
+Spin model checker:
+Setup Promella description of parallel and distributed GB algorithm.
+Used to verify the safety and liveness properties of the algorithms.
+</dd>
+
 <dt>2004, 1, 17</dt>
 <dd>
 New (minimal) class DistributedList in preparation of a 
@@ -74,6 +81,11 @@ Fixed ChannelFactory and other classes in edu.unima.ky.parallel
 to be interuptable.
 Moved Semaphore back to edu.unima.ky.parallel.
 First version of a distributed memory GB.
+One problem was inner class Pair results in serialization 
+of outer class OrderedPairlist, which is not intented. 
+So Pair is now a proper class.
+Distributed version mainly working. 
+Problem with signaling and termination if 1 in GB.
 </dd>
 
 <dt>2004, 1, 10</dt>
@@ -674,7 +686,7 @@ CPU TIME (ms) END
 <p>
 <!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
 <!-- hhmts start -->
-Last modified: Sat Jan 17 23:45:51 CET 2004
+Last modified: Sun Jan 25 15:52:30 CET 2004
 <!-- hhmts end -->
 </p>
 <p align="right" >
