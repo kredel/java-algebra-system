@@ -1,5 +1,5 @@
 #
-# $ Id: $
+# $Id$
 #
 # Makefile with default rules for the Java-Algebra-System
 # by Heinz kredel
