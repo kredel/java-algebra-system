@@ -24,7 +24,7 @@ public class GBDist {
    * Distribute clients and start master.
    */
 
-    public ArrayList execute(List P, int threads, String mfile, int port) {
+    public ArrayList execute(List F, int threads, String mfile, int port) {
 
 	final String fname;
 	if ( mfile == null || mfile.length() == 0 ) {
@@ -60,9 +60,9 @@ public class GBDist {
 	    return G;
 	}
 
-	G = (ArrayList)P;
+	G = (ArrayList)F;
         try {
-            G = GroebnerBaseDistributed.DIRPGBServer( P, threads, port );
+            G = GroebnerBaseDistributed.DIRPGBServer( F, threads, port );
         } catch (IOException e) {
         }
 

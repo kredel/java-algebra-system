@@ -27,16 +27,16 @@ public class GroebnerBase  {
      * Groebner base test
      */
 
-    public static boolean isDIRPGB(List Pp) {  
+    public static boolean isDIRPGB(List F) {  
         OrderedPolynomial pi, pj, s, h;
-	for ( int i = 0; i < Pp.size(); i++ ) {
-	    pi = (OrderedPolynomial) Pp.get(i);
-            for ( int j = i+1; j < Pp.size(); j++ ) {
-                pj = (OrderedPolynomial) Pp.get(j);
+	for ( int i = 0; i < F.size(); i++ ) {
+	    pi = (OrderedPolynomial) F.get(i);
+            for ( int j = i+1; j < F.size(); j++ ) {
+                pj = (OrderedPolynomial) F.get(j);
 		if ( ! Reduction.GBCriterion4( pi, pj ) ) continue;
 		s = Reduction.SPolynomial( pi, pj );
 		if ( s.isZERO() ) continue;
-		h = Reduction.Normalform( Pp, s );
+		h = Reduction.Normalform( F, s );
 		if ( ! h.isZERO() ) return false;
 	    }
 	}
@@ -48,31 +48,32 @@ public class GroebnerBase  {
      * Groebner base using pairlist class.
      */
 
-    public static ArrayList DIRPGB(List Pp) {  
+    public static ArrayList DIRPGB(List F) {  
         OrderedPolynomial p;
-        ArrayList P = new ArrayList();
+        ArrayList G = new ArrayList();
         OrderedPairlist pairlist = null; 
-        int l = Pp.size();
-        ListIterator it = Pp.listIterator();
+        int l = F.size();
+        ListIterator it = F.listIterator();
         while ( it.hasNext() ) { 
             p = (OrderedPolynomial) it.next();
             if ( p.length() > 0 ) {
                p = p.monic();
                if ( p.isONE() ) {
-		  P.clear(); P.add( p );
-                  return P; // since no threads are activated
+		  G.clear(); G.add( p );
+                  return G; // since no threads are activated
 	       }
-               P.add( (Object) p );
+               G.add( p );
 	       if ( pairlist == null ) {
                   pairlist = new OrderedPairlist( p.getTermOrder() );
                }
                // putOne not required
                pairlist.put( p );
-	    }
-            else l--;
+	    } else { 
+               l--;
+            }
 	}
         if ( l <= 1 ) {
-           return P; // since no threads are activated
+           return G; // since no threads are activated
         }
 
         Pair pair;
@@ -100,7 +101,7 @@ public class GroebnerBase  {
                  logger.debug("ht(S) = " + S.leadingExpVector() );
 	      }
 
-              H = Reduction.Normalform( P, S );
+              H = Reduction.Normalform( G, S );
               if ( H.isZERO() ) {
                  pair.setZero();
                  continue;
@@ -111,24 +112,24 @@ public class GroebnerBase  {
 
 	      H = H.monic();
 	      if ( H.isONE() ) {
-		  P.clear(); P.add( H );
-                  return P; // since no threads are activated
+		  G.clear(); G.add( H );
+                  return G; // since no threads are activated
 	      }
               if ( logger.isDebugEnabled() ) {
                  logger.debug("H = " + H );
 	      }
               if ( H.length() > 0 ) {
 		 l++;
-                 P.add( (Object) H );
+                 G.add( H );
                  pairlist.put( H );
               }
 	}
-	P = DIGBMI(P);
+	G = DIGBMI(G);
         logger.info("pairlist #put = " + pairlist.putCount() 
                   + " #rem = " + pairlist.remCount()
                     // + " #total = " + pairlist.pairCount()
                    );
-	return P;
+	return G;
     }
 
 
@@ -136,60 +137,64 @@ public class GroebnerBase  {
      * Minimal ordered groebner basis.
      */
 
-    public static ArrayList DIGBMI(List Pp) {  
+    public static ArrayList DIGBMI(List Gp) {  
         OrderedPolynomial a;
-        ArrayList P = new ArrayList();
-        ListIterator it = Pp.listIterator();
+        ArrayList G = new ArrayList();
+        ListIterator it = Gp.listIterator();
         while ( it.hasNext() ) { 
             a = (OrderedPolynomial) it.next();
             if ( a.length() != 0 ) { // always true
-	       // already monic  a = a.monic();
-               P.add( (Object) a );
+	       // already monic a = a.monic();
+               G.add( a );
 	    }
 	}
-        if ( P.size() <= 1 ) return P;
+        if ( G.size() <= 1 ) {
+           return G;
+        }
 
         ExpVector e;        
         ExpVector f;        
         OrderedPolynomial p;
-        ArrayList Q = new ArrayList();
+        ArrayList F = new ArrayList();
 	boolean mt;
 
-        while ( P.size() > 0 ) {
-            a = (OrderedPolynomial) P.remove(0);
+        while ( G.size() > 0 ) {
+            a = (OrderedPolynomial) G.remove(0);
 	    e = a.leadingExpVector();
 
-            it = P.listIterator();
+            it = G.listIterator();
 	    mt = false;
 	    while ( it.hasNext() && ! mt ) {
                p = (OrderedPolynomial) it.next();
                f = p.leadingExpVector();
 	       mt = ExpVector.EVMT( e, f );
 	    }
-            it = Q.listIterator();
+            it = F.listIterator();
 	    while ( it.hasNext() && ! mt ) {
                p = (OrderedPolynomial) it.next();
                f = p.leadingExpVector();
 	       mt = ExpVector.EVMT( e, f );
 	    }
 	    if ( ! mt ) {
-		Q.add( (Object)a );
+		F.add( a );
 	    } else {
 		// System.out.println("dropped " + a.length());
 	    }
 	}
-	P = Q;
-        if ( P.size() <= 1 ) return P;
+	G = F;
+        if ( G.size() <= 1 ) {
+           return G;
+        }
 
-        Q = new ArrayList();
-        while ( P.size() > 0 ) {
-            a = (OrderedPolynomial) P.remove(0);
+        F = new ArrayList();
+        while ( G.size() > 0 ) {
+            a = (OrderedPolynomial) G.remove(0);
 	    // System.out.println("doing " + a.length());
-            a = Reduction.Normalform( P, a );
-            a = Reduction.Normalform( Q, a );
-            Q.add( (Object)a );
+            a = Reduction.Normalform( G, a );
+            a = Reduction.Normalform( F, a );
+            F.add( a );
 	}
-	return Q;
+	return F;
     }
 
 }

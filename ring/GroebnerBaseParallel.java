@@ -31,47 +31,52 @@ public class GroebnerBaseParallel  {
      * slaves maintain pairlist
      */
 
-    public static ArrayList DIRPGB(List Pp, int threads) {  
+    public static ArrayList DIRPGB(List F, int threads) {  
         OrderedPolynomial p;
-        ArrayList P = new ArrayList();
+        ArrayList G = new ArrayList();
         OrderedPairlist pairlist = null; 
-        int l = Pp.size();
-        ListIterator it = Pp.listIterator();
+        int l = F.size();
+        ListIterator it = F.listIterator();
         while ( it.hasNext() ) { 
             p = (OrderedPolynomial) it.next();
             if ( p.length() > 0 ) {
                p = p.monic();
                if ( p.isONE() ) {
-		  P.clear(); P.add( p );
-                  return P; // since no threads activated jet
+		  G.clear(); G.add( p );
+                  return G; // since no threads activated jet
 	       }
-               P.add( (Object) p );
+               G.add( p );
 	       if ( pairlist == null ) {
                   pairlist = new OrderedPairlist( p.getTermOrder() );
                }
                // putOne not required
                pairlist.put( p );
-	    }
-            else l--;
+	    } else {
+               l--;
+            }
 	}
-        if ( l <= 1 ) return P; // since no threads activated jet
+        if ( l <= 1 ) {
+           return G; // since no threads activated jet
+        }
 
-	if ( threads < 1 ) threads = 1;
+	if ( threads < 1 ) {
+           threads = 1;
+        }
 	ThreadPool T = new ThreadPool(threads);
 	Terminator fin = new Terminator(threads);
 	Reducer R;
 	for ( int i = 0; i < threads; i++ ) {
-	      R = new Reducer( fin, P, pairlist );
+	      R = new Reducer( fin, G, pairlist );
 	      T.addJob( R );
 	}
 	fin.done();
-	P = DIGBMI(P,T);
+	G = DIGBMI(G,T);
 	T.terminate();
         logger.info("pairlist #put = " + pairlist.putCount() 
                   + " #rem = " + pairlist.remCount()
                     //+ " #total = " + pairlist.pairCount()
                    );
-	return P;
+	return G;
     }
 
 
@@ -80,14 +85,14 @@ public class GroebnerBaseParallel  {
      */
 
     static class Reducer implements Runnable {
-	private List P;
+	private List G;
 	private OrderedPairlist pairlist;
 	private Terminator pool;
         private static Logger logger = Logger.getLogger(Reducer.class);
 
-	Reducer(Terminator fin, List P, OrderedPairlist L) {
+	Reducer(Terminator fin, List G, OrderedPairlist L) {
 	    pool = fin;
-	    this.P = P;
+	    this.G = G;
 	    pairlist = L;
 	} 
 
@@ -115,13 +120,21 @@ public class GroebnerBaseParallel  {
 		  } catch (InterruptedException e) {
                      break;
 		  }
-		  if ( ! pool.hasJobs() ) break;
+		  if ( ! pool.hasJobs() ) {
+                     break;
+                  }
               }
-              if ( ! pairlist.hasNext() && ! pool.hasJobs() ) break;
-              if ( set ) pool.notIdle();
+              if ( ! pairlist.hasNext() && ! pool.hasJobs() ) {
+                 break;
+              }
+              if ( set ) {
+                 pool.notIdle();
+              }
 
               pair = (Pair) pairlist.removeNext();
-              if ( pair == null ) continue; 
+              if ( pair == null ) {
+                 continue; 
+              }
 
               pi = pair.pi; 
               pj = pair.pj; 
@@ -137,7 +150,7 @@ public class GroebnerBaseParallel  {
               if ( logger.isDebugEnabled() ) {
                  logger.debug("ht(S) = " + S.leadingExpVector() );
 	      }
-              H = Reduction.Normalform( P, S );
+              H = Reduction.Normalform( G, S );
 	      red++;
               if ( H.isZERO() ) {
                  pair.setZero();
@@ -150,14 +163,14 @@ public class GroebnerBaseParallel  {
               // System.out.println("H   = " + H);
 	      if ( H.isONE() ) { 
                   pairlist.putOne( H ); // not really required
-		  synchronized (P) {
-                      P.clear(); P.add( H );
+		  synchronized (G) {
+                      G.clear(); G.add( H );
 		  }
 	          pool.allIdle();
                   return;
 	      }
-              synchronized (P) {
-                     P.add( H );
+              synchronized (G) {
+                     G.add( H );
               }
               pairlist.put( H );
 	   }
@@ -171,69 +184,73 @@ public class GroebnerBaseParallel  {
      * Minimal ordered groebner basis, parallel.
      */
 
-    public static ArrayList DIGBMI(List Pp, ThreadPool T) {  
+    public static ArrayList DIGBMI(List Fp, ThreadPool T) {  
         OrderedPolynomial a;
-        ArrayList P = new ArrayList();
-        ListIterator it = Pp.listIterator();
+        ArrayList G = new ArrayList();
+        ListIterator it = Fp.listIterator();
         while ( it.hasNext() ) { 
             a = (OrderedPolynomial) it.next();
             if ( a.length() != 0 ) { // always true
 	       // already monic  a = a.monic();
-               P.add( (Object) a );
+               G.add( a );
 	    }
 	}
-        if ( P.size() <= 1 ) return P;
+        if ( G.size() <= 1 ) {
+           return G;
+        }
 
         ExpVector e;        
         ExpVector f;        
         OrderedPolynomial p;
-        ArrayList Q = new ArrayList();
+        ArrayList F = new ArrayList();
 	boolean mt;
 
-        while ( P.size() > 0 ) {
-            a = (OrderedPolynomial) P.remove(0);
+        while ( G.size() > 0 ) {
+            a = (OrderedPolynomial) G.remove(0);
 	    e = a.leadingExpVector();
 
-            it = P.listIterator();
+            it = G.listIterator();
 	    mt = false;
 	    while ( it.hasNext() && ! mt ) {
                p = (OrderedPolynomial) it.next();
                f = p.leadingExpVector();
 	       mt = ExpVector.EVMT( e, f );
 	    }
-            it = Q.listIterator();
+            it = F.listIterator();
 	    while ( it.hasNext() && ! mt ) {
                p = (OrderedPolynomial) it.next();
                f = p.leadingExpVector();
 	       mt = ExpVector.EVMT( e, f );
 	    }
 	    if ( ! mt ) {
-		Q.add( (Object)a );
+		F.add( a );
 	    } else {
 		// System.out.println("dropped " + a.length());
 	    }
 	}
-	P = Q;
-        if ( P.size() <= 1 ) return P;
+	G = F;
+        if ( G.size() <= 1 ) {
+           return G;
+        }
 
-	MiReducer[] mirs = new MiReducer[ P.size() ];
+	MiReducer[] mirs = new MiReducer[ G.size() ];
         int i = 0;
-        Q = new ArrayList( P.size() );
-        while ( P.size() > 0 ) {
-            a = (OrderedPolynomial) P.remove(0);
+        F = new ArrayList( G.size() );
+        while ( G.size() > 0 ) {
+            a = (OrderedPolynomial) G.remove(0);
 	    // System.out.println("doing " + a.length());
-	    mirs[i] = new MiReducer( (List)P.clone(), (List)Q.clone(), a );
+	    mirs[i] = new MiReducer( (List)G.clone(), (List)F.clone(), a );
 	    T.addJob( mirs[i] );
 	    i++;
-            Q.add( (Object)a );
+            F.add( a );
 	}
-	P = Q;
-	Q = new ArrayList( P.size() );
+	G = F;
+	F = new ArrayList( G.size() );
 	for ( i = 0; i < mirs.length; i++ ) {
 	    a = (OrderedPolynomial) mirs[i].getNF();
-            Q.add( (Object)a );
+            F.add( a );
 	}
-	return Q;
+	return F;
     }
 
 
@@ -242,16 +259,16 @@ public class GroebnerBaseParallel  {
      */
 
     static class MiReducer implements Runnable {
-	private List P;
-	private List Q;
+	private List G;
+	private List F;
 	private OrderedPolynomial S;
 	private OrderedPolynomial H;
 	private Semaphore done = new Semaphore(0);
         private static Logger logger = Logger.getLogger(MiReducer.class);
 
-	MiReducer(List P, List Q, OrderedPolynomial p) {
-	    this.P = P;
-	    this.Q = Q;
+	MiReducer(List G, List F, OrderedPolynomial p) {
+	    this.G = G;
+	    this.F = F;
 	    S = p;
 	    H = S;
 	} 
@@ -266,8 +283,8 @@ public class GroebnerBaseParallel  {
 	    if ( logger.isDebugEnabled() ) {
                  logger.debug("ht(S) = " + S.leadingExpVector() );
 	    }
-            H = Reduction.Normalform( P, H );
-            H = Reduction.Normalform( Q, H );
+            H = Reduction.Normalform( G, H );
+            H = Reduction.Normalform( F, H );
             done.V();
 	    if ( logger.isDebugEnabled() ) {
                  logger.debug("ht(H) = " + H.leadingExpVector() );
