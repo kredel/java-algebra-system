@@ -29,6 +29,7 @@ public class RelationTable implements Serializable {
 
     //private final List table;
     private final Map table;
+    private int numvar;
 
     /**
      * Constructors for RelationTable
@@ -36,8 +37,12 @@ public class RelationTable implements Serializable {
 
     public RelationTable() {
         table = new HashMap();
+        numvar = -1;
     }
 
+    public int getNumvar() {
+        return numvar;
+    }
 
     public String toString() {
         Object k, v;
@@ -90,6 +95,13 @@ public class RelationTable implements Serializable {
         if ( logger.isDebugEnabled() ) {
             logger.info("new relation = " + e + " .*. " + f + " = " + p);
         }
+        if ( numvar < 0 ) {
+            numvar = e.length();
+        }
+        if ( numvar != e.length() ) {
+            logger.info("relation = " + e + " .*. " + f + " = " + p);
+            throw new RuntimeException("update "+numvar+" != e.len "+e.length());
+        }
         List key = makeKey(e,f);
         ExpVectorPair evp = new ExpVectorPair( e, f );
         List part = (List)table.get( key );
@@ -120,6 +132,14 @@ public class RelationTable implements Serializable {
 
 
     public TableRelation lookup(ExpVector e, ExpVector f, OrderedPolynomial one) {
+        if ( numvar < 0 ) {
+            numvar = e.length();
+        }
+        if ( numvar != e.length() ) {
+            logger.info("lookup relation = " + e + " .*. " + f + ", " + one);
+            logger.info("relation = " + this);
+            throw new RuntimeException("update "+numvar+" != e.len "+e.length());
+        }
         List key = makeKey(e,f);
         List part = (List)table.get( key );
         if ( part == null ) { // symmetric product
@@ -202,7 +222,7 @@ public class RelationTable implements Serializable {
                 OrderedMapPolynomial p = (OrderedMapPolynomial)jt.next();
                 ExpVector ex = e.extend(i,j,k);
                 ExpVector fx = f.extend(i,j,k);
-                OrderedPolynomial px = p.extend(i,j,k,v);
+                OrderedPolynomial px = ((SolvableOrderedMapPolynomial)p).extend(i,j,k,v,tab);
                 tab.update( ex, fx, px );
             }
         }
@@ -232,13 +252,14 @@ public class RelationTable implements Serializable {
                 OrderedMapPolynomial p = (OrderedMapPolynomial)jt.next();
                 ExpVector ec = e.contract(i,e.length()-i);
                 ExpVector fc = f.contract(i,f.length()-i);
-                Map mc = p.contract(i);
+                Map mc = ((SolvableOrderedMapPolynomial)p).contract(i,tab);
                 OrderedPolynomial pc = null;
                 if ( mc.size() == 1 ) {
                    pc = (OrderedPolynomial)(mc.values().toArray())[0];
                 } else {
                    // should not happen
-                   throw new RuntimeException("Map.size() != 1 = " + mc.size());
+                   logger.info("p = " + p);
+                   throw new RuntimeException("Map.size() != 1: " + mc.size());
                 }
                 tab.update( ec, fc, pc );
             }
