@@ -79,13 +79,13 @@ public class GroebnerBase  {
 	}
         if ( l <= 1 ) return P;
 
-        OrderedPairlist.Pair pair;
+        Pair pair;
         OrderedPolynomial pi;
         OrderedPolynomial pj;
         OrderedPolynomial S;
         OrderedPolynomial H;
         while ( pairlist.hasNext() ) {
-              pair = (OrderedPairlist.Pair) pairlist.removeNext();
+              pair = (Pair) pairlist.removeNext();
               if ( pair == null ) continue; 
 
               pi = pair.pi; 

@@ -93,7 +93,7 @@ public class GroebnerBaseParallel  {
 	} 
 
 	public void run() {
-           OrderedPairlist.Pair pair;
+           Pair pair;
            OrderedPolynomial pi;
            OrderedPolynomial pj;
            OrderedPolynomial S;
@@ -121,7 +121,7 @@ public class GroebnerBaseParallel  {
               if ( ! pairlist.hasNext() && ! pool.hasJobs() ) break;
               if ( set ) pool.notIdle();
 
-              pair = (OrderedPairlist.Pair) pairlist.removeNext();
+              pair = (Pair) pairlist.removeNext();
               if ( pair == null ) continue; 
 
               pi = pair.pi; 

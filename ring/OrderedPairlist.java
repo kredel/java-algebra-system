@@ -50,28 +50,6 @@ public class OrderedPairlist {
          red = new ArrayList();
     }
 
-    /**
-     * subclass to hold pairs of polynomials
-     */
-
-    class Pair implements Serializable {
-	public final OrderedPolynomial pi;
-	public final OrderedPolynomial pj;
-	public final int i;
-	public final int j;
-
-	Pair(Object a, OrderedPolynomial b, int i, int j) {
-	    this( (OrderedPolynomial)a, b, i, j); 
-	}
-
-	Pair(OrderedPolynomial a, OrderedPolynomial b, int i, int j) {
-	    pi = a; 
-            pj = b; 
-            this.i = i; 
-            this.j = j;
-	}
-    }
-
     public synchronized void put(OrderedPolynomial p) { 
            Pair pair;
            ExpVector e; 
@@ -151,8 +129,20 @@ public class OrderedPairlist {
        return pair; 
     }
 
+
     public boolean hasNext() { 
           return pairlist.size() > 0;
+    }
+
+    public ArrayList getList() { 
+          return P;
+    }
+
+
+    public void clear() { 
+	pairlist.clear();
+	P.clear();
+	red.clear();
     }
 
 
@@ -199,6 +189,5 @@ public class OrderedPairlist {
 	}
         return true;
     }
-
-
 }
+
