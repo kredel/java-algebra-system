@@ -147,6 +147,7 @@ public abstract class OrderedMapPolynomial /* extends MapPolynomial */
                 erg.append(" ");
             } 
         }
+        erg.append(": " + order);
         return erg.toString(); 
     }
 
