@@ -18,40 +18,40 @@ public class Terminator {
 
         private static Logger logger = Logger.getLogger(Terminator.class);
 
-	private int workers = 0;
-	private int idler = 0;
-	private Semaphore fin = new Semaphore(0);
+        private int workers = 0;
+        private int idler = 0;
+        private Semaphore fin = new Semaphore(0);
 
-	public Terminator(int workers) {
-	    this.workers = workers;
-	}
+        public Terminator(int workers) {
+            this.workers = workers;
+        }
 
-	public synchronized void beIdle() {
-	    idler++;
-            logger.debug("beIdle, idler = "+idler);
-	    if ( idler >= workers ) {
+        public synchronized void beIdle() {
+            idler++;
+            logger.debug("beIdle, idler = " + idler);
+            if ( idler >= workers ) {
                fin.V();
-	    }
-	}
+            }
+        }
 
-	public synchronized void allIdle() {
-	    idler = workers;
-	    fin.V();
-	}
+        public synchronized void allIdle() {
+            idler = workers;
+            fin.V();
+        }
 
-	public synchronized void notIdle() {
-	    idler--;
-            logger.debug("notIdle, idler = "+idler);
-	}
+        public synchronized void notIdle() {
+            idler--;
+            logger.debug("notIdle, idler = " + idler);
+        }
 
-	public boolean hasJobs() {
-	    return ( idler < workers );
-	}
+        public boolean hasJobs() {
+            return ( idler < workers );
+        }
 
-	public void done() {
+        public void done() {
             try { fin.P();
-	    } catch (InterruptedException e) { }
-            logger.debug("done, idler = "+idler);
-	}
+            } catch (InterruptedException e) { }
+            logger.debug("done, idler = " + idler);
+        }
 
 }
