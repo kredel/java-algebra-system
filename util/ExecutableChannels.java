@@ -60,7 +60,7 @@ public class ExecutableChannels {
 
 
     /**
-     * Constructor from maschine file
+     * Constructor from machine file
      */
 
     public ExecutableChannels(String fname) throws FileNotFoundException {

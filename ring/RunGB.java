@@ -20,7 +20,7 @@ import edu.jas.util.ExecutableServer;
 
   /**
    * Simple setup to run a GB example. <br />
-   * Usage: RunGB [seq|par|dist|cli] &lt;file&gt; #procs [maschinefile]
+   * Usage: RunGB [seq|par|dist|cli] &lt;file&gt; #procs [machinefile]
    * @author Heinz Kredel
    */
 
@@ -28,7 +28,7 @@ public class RunGB {
 
     /**
      * main method to be called from commandline <br />
-     * Usage: RunGB [seq|par|dist|cli] &lt;file&gt; #procs [maschinefile]
+     * Usage: RunGB [seq|par|dist|cli] &lt;file&gt; #procs [machinefile]
      */
 
   public static void main( java.lang.String[] args ) {
@@ -96,7 +96,7 @@ public class RunGB {
           if ( args.length >= 4 ) {
               mfile = args[3];
           } else {
-	      mfile = "maschines";
+	      mfile = "machines";
 	  }
       }
 

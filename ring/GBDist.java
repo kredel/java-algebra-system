@@ -30,7 +30,7 @@ public class GBDist {
 
 	final String fname;
 	if ( mfile == null || mfile.length() == 0 ) {
-             fname = "../util/maschines";
+             fname = "../util/machines";
 	} else {
 	     fname = mfile;
 	}
