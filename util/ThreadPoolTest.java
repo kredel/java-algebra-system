@@ -72,7 +72,7 @@ public class ThreadPoolTest extends TestCase {
      p1.terminate();
 
      p1 = new ThreadPool();
-     assertTrue( "# empty pool ", p1.getNumber() == p1.DEFAULT_SIZE );
+     assertTrue( "# empty pool ", p1.getNumber() == ThreadPool.DEFAULT_SIZE );
      p1.terminate();
 
      p1 = new ThreadPool(10);
@@ -162,7 +162,7 @@ class FastWorker implements Runnable {
 class SlowWorker implements Runnable {
     public void run() { 
         try {
-            Thread.currentThread().sleep(100);
+            Thread.sleep(100);
         } catch (InterruptedException e ) {
         }
     }

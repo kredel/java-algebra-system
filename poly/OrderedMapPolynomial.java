@@ -14,8 +14,7 @@ import java.io.Serializable;
 import org.apache.log4j.Logger;
 
 import edu.jas.arith.Coefficient;
-import edu.jas.arith.BigInteger;
-import edu.jas.arith.BigRational;
+
 
 /**
  * Ordered Map Polynomial. 

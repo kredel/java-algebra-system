@@ -9,8 +9,6 @@ import java.util.List;
 import java.io.IOException;
 import java.io.FileNotFoundException;
 
-import org.apache.log4j.BasicConfigurator;
-
 import edu.jas.util.RemoteExecutable;
 import edu.jas.util.ExecutableChannels;
 

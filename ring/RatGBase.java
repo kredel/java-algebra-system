@@ -5,25 +5,19 @@
 
 package edu.jas.ring;
 
-import java.util.TreeMap;
-import java.util.Comparator;
-import java.util.Set;
-import java.util.Map;
-import java.util.List;
-import java.util.LinkedList;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ListIterator;
-import java.util.Iterator;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import edu.unima.ky.parallel.Semaphore;
-
-import edu.jas.util.ThreadPool;
 import edu.jas.arith.BigRational;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.RatPolynomial;
 import edu.jas.poly.TreePolynomial;
+import edu.jas.util.ThreadPool;
+import edu.unima.ky.parallel.Semaphore;
 
 /**
  * Groebner Bases class.
@@ -348,7 +342,7 @@ public class RatGBase  {
 		      } else {
                          logger.debug("s");
 		      }
-		      Thread.currentThread().sleep(100);
+		      Thread.sleep(100);
 		  } catch (InterruptedException e) {
                      break;
 		  }
@@ -532,7 +526,7 @@ public class RatGBase  {
 		      } else {
                          logger.debug("r");
 		      }
-		      Thread.currentThread().sleep(100);
+		      Thread.sleep(100);
 		  } catch (InterruptedException e) {
                      break;
 		  }

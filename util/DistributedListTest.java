@@ -131,7 +131,7 @@ public class DistributedListTest extends TestCase {
      while ( l2.size() < loops ) {
          try {
 	     System.out.print("2");
-             Thread.currentThread().sleep(100);
+             Thread.sleep(100);
          } catch (InterruptedException e) {
          }
      }
@@ -170,7 +170,7 @@ public class DistributedListTest extends TestCase {
      while ( l2.size() < loops || l1.size() < loops-1 ) {
          try {
 	     System.out.print("3");
-             Thread.currentThread().sleep(100);
+             Thread.sleep(100);
          } catch (InterruptedException e) {
          }
      }
@@ -221,7 +221,7 @@ public class DistributedListTest extends TestCase {
      while ( l2.size() < l1.size() ) {
          try {
 	     System.out.print("4");
-             Thread.currentThread().sleep(100);
+             Thread.sleep(100);
          } catch (InterruptedException e) {
          }
      }
@@ -269,7 +269,7 @@ public class DistributedListTest extends TestCase {
      while ( l2.size() < l1.size() ) {
          try {
 	     System.out.print("5");
-             Thread.currentThread().sleep(100);
+             Thread.sleep(100);
          } catch (InterruptedException e) {
          }
      }
@@ -309,8 +309,8 @@ public class DistributedListTest extends TestCase {
      // assertTrue("l2==empty",l2.isEmpty());
      while ( l2.size() < loops ) {
          try {
-	     System.out.print("2");
-             Thread.currentThread().sleep(100);
+	         //System.out.print("2");
+             Thread.sleep(100);
          } catch (InterruptedException e) {
          }
      }

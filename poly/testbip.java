@@ -4,7 +4,6 @@
 
 package edu.jas.poly;
 
-import java.util.TreeMap;
 import java.util.Map;
 
 import edu.jas.arith.BigInteger;

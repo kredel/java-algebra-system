@@ -16,7 +16,6 @@ import junit.framework.TestSuite;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
-import edu.jas.poly.ExpVector;
 import edu.jas.poly.RatPolynomial;
 import edu.jas.poly.PolynomialList;
 

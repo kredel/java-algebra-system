@@ -4,13 +4,7 @@
 
 package edu.jas.poly;
 
-import java.util.Set;
 import java.util.Map;
-import java.util.SortedMap;
-import java.util.LinkedHashMap;
-import java.util.Iterator;
-
-import org.apache.log4j.Logger;
 
 import edu.jas.arith.Coefficient;
 import edu.jas.arith.BigRational;

@@ -9,16 +9,11 @@ import java.util.Comparator;
 import java.util.Set;
 import java.util.Map;
 import java.util.SortedMap;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.LinkedList;
 import java.util.LinkedHashMap;
-import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 
-import edu.jas.arith.BigRational;
 import edu.jas.arith.Coefficient;
 
 /**

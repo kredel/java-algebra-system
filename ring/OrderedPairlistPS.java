@@ -4,25 +4,19 @@
 
 package edu.jas.ring;
 
-import java.util.TreeMap;
-import java.util.Comparator;
-import java.util.Set;
-import java.util.Map;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.LinkedList;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.BitSet;
-import java.io.Serializable;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.OrderedPolynomial;
 import edu.jas.poly.TermOrder;
-
-import edu.jas.ring.Reduction;
 
 /**
  * Pair list management.

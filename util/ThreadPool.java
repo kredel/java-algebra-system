@@ -5,12 +5,10 @@
 //package edu.unima.ky.parallel;
 package edu.jas.util;
 
-//import java.util.Stack;
 import java.util.LinkedList;
 
 import org.apache.log4j.Logger;
 
-import edu.unima.ky.parallel.Semaphore;
 
 /**
  * Thread Pool using stack / list workpile

@@ -4,26 +4,16 @@
 
 package edu.jas.ring;
 
-import java.util.TreeMap;
-//import java.util.Comparator;
-//import java.util.Set;
-import java.util.Map;
-import java.util.List;
-//import java.util.LinkedList;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ListIterator;
-import java.util.Iterator;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
 import edu.jas.arith.Coefficient;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.OrderedPolynomial;
-import edu.jas.poly.OrderedMapPolynomial;
-
-import edu.jas.arith.BigRational;
-import edu.jas.poly.RatPolynomial;
-import edu.jas.poly.TreePolynomial;
 
 
 /**

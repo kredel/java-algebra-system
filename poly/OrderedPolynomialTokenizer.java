@@ -4,14 +4,7 @@
 
 package edu.jas.poly;
 
-import java.util.Comparator;
-import java.util.Set;
-import java.util.Map;
-//import java.util.List;
-import java.util.ListIterator;
-import java.util.LinkedList;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.io.StreamTokenizer;
 import java.io.Reader;
 import java.io.BufferedReader;
