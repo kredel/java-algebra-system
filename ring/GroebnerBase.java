@@ -124,6 +124,7 @@ public class GroebnerBase  {
                  pairlist.put( H );
               }
 	}
+        logger.debug("#sequential list = "+G.size());
 	G = DIGBMI(G);
         logger.info("pairlist #put = " + pairlist.putCount() 
                   + " #rem = " + pairlist.remCount()
