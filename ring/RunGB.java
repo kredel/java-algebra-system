@@ -182,7 +182,7 @@ public class RunGB {
       long t;
 
       t = System.currentTimeMillis();
-      System.out.println("\nGroebner base ..."); 
+      System.out.println("\nGroebner base sequential ..."); 
       G = GroebnerBase.DIRPGB(L);
       S = new PolynomialList( S.vars, S.tord, G );
       System.out.println("G =\n" + S ); 
