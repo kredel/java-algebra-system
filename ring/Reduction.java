@@ -28,7 +28,7 @@ import edu.jas.poly.TreePolynomial;
 
 /**
  * Polynomial Reduction class.
- * Implements S-Polynomial, Reduction, Irreducible List and GB test.
+ * Implements S-Polynomial, Normalform, Criterion 4 and Irreducible Set.
  * @author Heinz Kredel
  */
 
@@ -54,7 +54,7 @@ public class Reduction  {
            }
 	}
         Map.Entry ma = Ap.leadingMonomial();
-        Map.Entry mb = Ap.leadingMonomial();
+        Map.Entry mb = Bp.leadingMonomial();
 
         ExpVector e = (ExpVector) ma.getKey();
         ExpVector f = (ExpVector) mb.getKey();
