@@ -8,6 +8,7 @@ package edu.jas.ring;
 //import edu.jas.poly.RatGBase;
 
 import java.util.List;
+import java.util.Iterator;
 import java.util.ArrayList;
 
 import junit.framework.Test;
@@ -15,6 +16,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Logger;
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.RatPolynomial;
@@ -26,6 +28,8 @@ import edu.jas.poly.PolynomialList;
  */
 
 public class RatGBaseTest extends TestCase {
+
+    private static final Logger logger = Logger.getLogger(RatGBaseTest.class);
 
 /**
  * main
@@ -170,17 +174,26 @@ public class RatGBaseTest extends TestCase {
      assertTrue("not isZERO( c )", !c.isZERO() );
      L.add(c);
 
+     if ( logger.isDebugEnabled() ) {
+	 for (Iterator it = L.iterator(); it.hasNext(); ) {
+             logger.debug("before Li = " + it.next() );
+	 }
+     }
+
      L = RatGBase.DIRPGBparallel( L, threads );
      assertTrue("isDIRPGB( { a, ,b, c } )", RatGBase.isDIRPGB(L) );
+     if ( logger.isDebugEnabled() ) {
+	 for (Iterator it = L.iterator(); it.hasNext(); ) {
+             logger.debug("after Li = " + it.next() );
+	 }
+     }
 
-     /*
      // d = RatPolynomial.DIRRAS(rl, kl, ll, el, q );
      assertTrue("not isZERO( d )", !d.isZERO() );
      L.add(d);
 
      L = RatGBase.DIRPGBparallel( L, threads );
      assertTrue("isDIRPGB( { a, ,b, c, d } )", RatGBase.isDIRPGB(L) );
-     */
  }
 
 }
