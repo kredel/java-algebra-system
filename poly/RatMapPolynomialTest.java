@@ -47,10 +47,10 @@ public class RatMapPolynomialTest extends TestCase {
    UnorderedPolynomial d;
    UnorderedPolynomial e;
 
-   int rl = 2; //7; 
-   int kl = 5; //10;
-   int ll = 3; //10;
-   int el = 4; //5;
+   int rl = 7; 
+   int kl = 10;
+   int ll = 10;
+   int el = 5;
    float q = 0.5f;
 
    protected void setUp() {
