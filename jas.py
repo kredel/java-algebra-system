@@ -76,7 +76,7 @@ class Ideal:
 
 
 
-class SolvRing:
+class SolvableRing:
     pset = None;
 
     def __init__(self,str):
@@ -90,7 +90,7 @@ class SolvRing:
         return str(self.pset);
 
 
-class SolvIdeal:
+class SolvableIdeal:
 
     def __init__(self,ring,str):
         self.ring = ring;
@@ -145,7 +145,7 @@ class SubModule:
         sr = StringReader( str );
         tok = OrderedPolynomialTokenizer(module.mset.vars,module.mset.tord,sr);
         self.list = tok.nextSubModuleList();
-        self.mset = ModuleList(module.mset.vars,module.mset.tord,self.list);
+        self.mset = OrderedModuleList(module.mset.vars,module.mset.tord,self.list);
         self.cols = self.mset.list[0].size();
         #print "cols = %s" % self.cols;
         self.pset = self.mset.getPolynomialList();
@@ -158,6 +158,46 @@ class SubModule:
         F = s.list;
         t = System.currentTimeMillis();
         G = ModGroebnerBase.GB(self.cols,F);
+        t = System.currentTimeMillis() - t;
+        print "executed in %s ms" % t; 
+        self.pset = PolynomialList(s.vars,s.tord,G);
+        self.mset = ModuleList.getModuleList(self.cols,self.pset);
+        return self;
+
+
+class SolvableModule:
+
+    def __init__(self,str):
+        sr = StringReader( str );
+        tok = OrderedPolynomialTokenizer(sr);
+        self.mset = tok.nextSolvableSubModuleSet();
+        self.vars = self.mset.vars;
+        self.tord = self.mset.tord;
+
+    def __str__(self):
+        return str(self.mset);
+
+
+class SolvableSubModule:
+
+    def __init__(self,module,str):
+        self.module = module;
+        sr = StringReader( str );
+        tok = OrderedPolynomialTokenizer(module.mset.vars,module.mset.tord,sr,module.mset.table);
+        self.list = tok.nextSolvableSubModuleList();
+        self.mset = OrderedModuleList(module.mset.vars,module.mset.tord,self.list,module.mset.table);
+        self.cols = self.mset.list[0].size();
+        #print "cols = %s" % self.cols;
+        self.pset = self.mset.getPolynomialList();
+
+    def __str__(self):
+        return str(self.mset); # + "\n\n" + str(self.pset);
+
+    def leftGB(self):
+        s = self.pset;
+        F = s.list;
+        t = System.currentTimeMillis();
+        G = ModSolvableGroebnerBase.leftGB(self.cols,F);
         t = System.currentTimeMillis() - t;
         print "executed in %s ms" % t; 
         self.pset = PolynomialList(s.vars,s.tord,G);

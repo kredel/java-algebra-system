@@ -679,6 +679,70 @@ public class OrderedPolynomialTokenizer  {
     }
 
 
+    /**
+     * parsing method for solvable submodule list
+     * syntax: ( ( p11, p12, p13, ..., p1n ), 
+                 ..., 
+                 ( pm1, pm2, pm3, ..., pmn ) )
+     */
+    public List nextSolvableSubModuleList() throws IOException {
+        RatOrderedMapPolynomial a;
+        List L = new ArrayList();
+        int tt;
+        tt = tok.nextToken();
+        if ( tt == StreamTokenizer.TT_EOF ) return L;
+        if ( tt != '(' ) return L;
+        logger.debug("module list");
+        List v = null;
+        while ( true ) {
+               tt = tok.nextToken();
+               if ( tok.ttype == ',' ) continue;
+               if ( tok.ttype == ')' ) break;
+               if ( tok.ttype == StreamTokenizer.TT_EOF ) break;
+               if ( tt == '(' ) {
+                  tok.pushBack();
+                  v = nextSolvablePolynomialList();
+                  logger.info("next vect = " + v); 
+                  L.add( v );
+               }
+         }
+         return L;
+    }
+
+    /**
+     * parsing method for solvable module set
+     * syntax: varList termOrderName relationTable moduleList
+     */
+    public ModuleList nextSolvableSubModuleSet() throws IOException {
+        List s = null;
+        //String comments = "";
+        //comments += nextComment();
+        //if (debug) logger.debug("comment = " + comments);
+
+        Coefficient coeff = nextCoefficientRing();
+        logger.info("coeff = " + coeff); 
+
+        vars = nextVariableList();
+             String dd = "vars ="; 
+             for (int i = 0; i < vars.length ;i++) {
+                 dd+= " "+vars[i]; 
+             }
+             logger.info(dd); 
+
+        tord = nextTermOrder();
+             logger.info("tord = " + tord); 
+
+        table = nextRelationTable();
+             logger.info("table = " + table); 
+
+        s = nextSolvableSubModuleList();
+             logger.info("s = " + s); 
+        // comments += nextComment();
+
+        return new OrderedModuleList(vars,tord,s,table);
+    }
+
+
     private boolean digit(char x) {
         return '0' <= x && x <= '9';
     }
