@@ -186,6 +186,7 @@ static void prodRatGeneric() throws IOException {
       logger.info("----------");
   }
 
+
 static void prodTreeHash() throws IOException {
       logger.info("Timing multipy/multiply2-Polynomial prodTreeHash "); 
 
@@ -360,6 +361,101 @@ static void prodMapOrdered() throws IOException {
       logger.info("----------");
   }
 
+
+static void prodIntMapOrdered() throws IOException {
+      logger.info("Timing multipy/multiply-IntPolynomial/IntOrderedMap-Polynomial prodIntMapOrdered"); 
+
+      TreePolynomial A, B, C, D, E, F, ApB, AmB;
+      OrderedMapPolynomial As, Bs, Cs, Ds, AmBs;
+      int rl = 10; 
+      int kl = 10;
+      int ll = 10*dauer;
+      int el = 5;
+      float q = 0.3f;
+      int loops = 50; //50;
+
+      A = IntPolynomial.DIIRAS(rl, kl, ll, el, q );
+      if ( logger.isDebugEnabled() ) logger.debug("A = " + A ); 
+      logger.info("A.size() = " + A.length() ); 
+
+      B = IntPolynomial.DIIRAS(rl, kl, ll, el, q );
+      if ( logger.isDebugEnabled() ) logger.debug("B = " + B ); 
+      logger.info("B.size() = " + B.length() ); 
+
+      As = new IntOrderedMapPolynomial(A.getMap());
+      logger.debug("As.size() = " + As.length() ); 
+      Bs = new IntOrderedMapPolynomial(B.getMap());
+      logger.debug("Bs.size() = " + Bs.length() ); 
+
+      AmB = (TreePolynomial) A.multiply(B);
+      if ( logger.isDebugEnabled() ) logger.debug("Prod = " + AmB ); 
+      logger.info("Prod.size() = " + AmB.length() ); 
+
+      AmBs = (IntOrderedMapPolynomial) As.multiply(Bs);
+      if ( logger.isDebugEnabled() ) logger.debug("Prod = " + AmBs ); 
+      logger.info("Prod.size() = " + AmBs.length() ); 
+     
+
+      Cs = null; C = null;
+      long tg, tr;
+
+      logger.info("Warming up ... " ); 
+      for (int i = 0; i < loops; i++) {
+          C = (TreePolynomial) A.multiply(B); 
+      }
+      for (int i = 0; i < loops; i++) {
+          Cs = (IntOrderedMapPolynomial) As.multiply(Bs); 
+      }
+
+      logger.info("Timing IntPolynomial multiply ..." ); 
+      tg = System.currentTimeMillis();
+      for (int i = 0; i < loops; i++) {
+          C = (TreePolynomial) A.multiply(B); 
+      }
+      tg = System.currentTimeMillis() - tg;
+      D = (TreePolynomial) TreePolynomial.DIPDIF(AmB,C);
+      if ( ! D.isZERO() ) {
+	  logger.error("C = " + C.length() ); 
+	  logger.error("D = " + D.length() ); 
+      }
+
+      logger.info("Timing IntOrderedMapPolynomial multiply ..." ); 
+      tr = System.currentTimeMillis();
+      for (int i = 0; i < loops; i++) {
+          Cs = (IntOrderedMapPolynomial) As.multiply(Bs); 
+      }
+      tr = System.currentTimeMillis() - tr;
+      Ds = (IntOrderedMapPolynomial) IntOrderedMapPolynomial.DIPDIF(AmBs,Cs);
+      if ( ! Ds.isZERO() ) {
+	  logger.error("Cs = " + Cs.length() ); 
+	  logger.error("Ds = " + Ds.length() ); 
+      }
+
+      // normalization
+      float fg = (float)tg;
+      float fr = (float)tr;
+
+      fg = (tg/(float)loops)/(float)AmB.length();
+      fr = (tr/(float)loops)/(float)AmB.length();
+
+      logger.info("Parameters:             " + new Date());
+      logger.info("Variables:              " + rl);
+      logger.info("Coefficient size:       " + kl);
+      logger.info("Number of coefficients: " + ll);
+      logger.info("Coefficients in result: " + C.length());
+      logger.info("maximal Degrees:        " + el);
+      logger.info("Exponent density:       " + q);
+      logger.info("Number of loops:        " + loops);
+
+      logger.info("time multiply =         " + tg + " milliseconds" ); 
+      logger.info("time multiply2 =        " + tr + " milliseconds" ); 
+      logger.info("time derivation tg-tr = " + (float)(tg-tr)/(float)(tg+tr) ); 
+      logger.info("time c / loop / size =  " + fg ); 
+      logger.info("time r / loop / size =  " + fr ); 
+      logger.info("----------");
+  }
+
+
 static void prodRatMapOrdered() throws IOException {
       logger.info("Timing multipy/multiply-RatPolynomial/RatOrderedMap-Polynomial prodRatMapOrdered"); 
 
@@ -450,6 +546,7 @@ static void prodRatMapOrdered() throws IOException {
       logger.info("time r / loop / size =  " + fr ); 
       logger.info("----------");
   }
+
 
 static void prodaddRatMapOrdered() throws IOException {
       logger.info("Timing multipy/multiplyAdd-RatOrderedMap-Polynomial prodaddRatMapOrdered"); 
@@ -542,6 +639,7 @@ static void prodaddRatMapOrdered() throws IOException {
       logger.info("----------");
   }
 
+
 static void prodObjectMapOrdered() throws IOException {
       logger.info("Timing multipy/multiply-RatMap/RatOrderedMap-Polynomial prodObjectMapOrdered"); 
 
@@ -632,6 +730,7 @@ static void prodObjectMapOrdered() throws IOException {
       logger.info("time r / loop / size =  " + fr ); 
       logger.info("----------");
   }
+
 
 static void prodMapEvordOrdered() throws IOException {
       logger.info("Timing multipy(evord)/multiply-RatMap/RatOrderedMap-Polynomial prodMapEvordOrdered"); 
@@ -725,6 +824,7 @@ static void prodMapEvordOrdered() throws IOException {
       logger.info("time r / loop / size =  " + fr ); 
       logger.info("----------");
   }
+
 
 static void prodMapEvord() throws IOException {
       logger.info("Timing multipy(evord)/multiply-RatMap-Polynomial prodMapEvord"); 
@@ -828,6 +928,7 @@ public static void main( String[] args ) throws IOException {
       prodRatGeneric();
       prodTreeHash();
       prodMapOrdered();
+      prodIntMapOrdered();
       prodRatMapOrdered();
       prodaddRatMapOrdered();
       prodObjectMapOrdered();
