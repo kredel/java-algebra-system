@@ -36,6 +36,7 @@ public class OrderedPairlist {
     private final TreeMap pairlist;
     private final ArrayList red;
     private final TermOrder torder;
+    private boolean oneInGB = false;
 
     private static Logger logger = Logger.getLogger(OrderedPairlist.class);
 
@@ -44,53 +45,55 @@ public class OrderedPairlist {
      */
 
     public OrderedPairlist(TermOrder to) {
-	 torder = to;
+         torder = to;
          P = new ArrayList();
          pairlist = new TreeMap( to.getAscendComparator() );
          red = new ArrayList();
     }
 
     public synchronized void put(OrderedPolynomial p) { 
+           if ( oneInGB ) return;
            Pair pair;
            ExpVector e; 
            ExpVector f; 
            ExpVector g; 
            OrderedPolynomial pj; 
-	   BitSet redi;
+           BitSet redi;
            Object x;
            LinkedList xl;
            e = p.leadingExpVector();
-	   int l = P.size();
+           int l = P.size();
            for ( int j = 0; j < l; j++ ) {
-	       pj = (OrderedPolynomial) P.get(j);
+               pj = (OrderedPolynomial) P.get(j);
                f = pj.leadingExpVector(); 
                g = ExpVector.EVLCM( e, f );
                pair = new Pair( pj, p, j, l);
-	       // redi = (BitSet)red.get(j);
-	       ///if ( j < l ) redi.set( l );
-	       // System.out.println("bitset."+j+" = " + redi );  
+               // redi = (BitSet)red.get(j);
+               ///if ( j < l ) redi.set( l );
+               // System.out.println("bitset."+j+" = " + redi );  
 
-	       //multiple pairs under same keys -> list of pairs
+               //multiple pairs under same keys -> list of pairs
                x = pairlist.get( g );
                if ( x == null ) xl = new LinkedList();
-	          else xl = (LinkedList) x; 
+                  else xl = (LinkedList) x; 
 
                xl.addLast( pair); // first or last ?
                pairlist.put( g, xl );
-	   }
-	   // System.out.println("pairlist.keys@put = " + pairlist.keySet() );  
+           }
+           // System.out.println("pairlist.keys@put = " + pairlist.keySet() );  
            P.add(  p );
-	   redi = new BitSet();
+           redi = new BitSet();
            if ( l > 0 ) { // redi.set( 0, l ) jdk 1.4
-	       for ( int i=0; i<l; i++ ) redi.set(i);
-	   }
-	   red.add( redi );
+               for ( int i=0; i<l; i++ ) redi.set(i);
+           }
+           red.add( redi );
     }
 
 
     public synchronized Pair removeNext() { 
-	//System.out.println("pairlist.keys@remove = " + pairlist.keySet() );  
+        //System.out.println("pairlist.keys@remove = " + pairlist.keySet() );  
 
+       if ( oneInGB ) return null;
        Set pk = pairlist.entrySet();
        Iterator ip = pk.iterator();
 
@@ -105,10 +108,10 @@ public class OrderedPairlist {
            ExpVector g = (ExpVector) me.getKey();
            LinkedList xl =(LinkedList) me.getValue();
            if ( logger.isInfoEnabled() )
-	      logger.info("g  = " + g);
-	   pair = null;
+              logger.info("g  = " + g);
+           pair = null;
 
-	   while ( !c & xl.size() > 0 ) {
+           while ( !c & xl.size() > 0 ) {
                  pair = (Pair) xl.removeFirst();
                  // xl is also modified in pairlist 
                  i = pair.i; 
@@ -116,12 +119,12 @@ public class OrderedPairlist {
                  //System.out.println("pair(" + j + "," +i+") ");
                  c = Reduction.GBCriterion4( pair.pi, pair.pj, g ); 
                  //System.out.println("c4  = " + c);  
-		 if ( c ) {
+                 if ( c ) {
                     c = GBCriterion3( i, j, g );
                     //System.out.println("c3  = " + c); 
-		 }
+                 }
                  ((BitSet)red.get( j )).clear(i); // set(i,false) jdk1.4
-	   }
+           }
            if ( xl.size() == 0 ) ip.remove(); 
               // = pairlist.remove( g );
        }
@@ -139,10 +142,14 @@ public class OrderedPairlist {
     }
 
 
-    public void clear() { 
-	pairlist.clear();
-	P.clear();
-	red.clear();
+    public synchronized void putOne(OrderedPolynomial one) { 
+        if ( one == null ) return;
+        if ( ! one.isONE() ) return;
+        oneInGB = true;
+        pairlist.clear();
+        P.clear();
+        P.add(one);
+        red.clear();
     }
 
 
@@ -152,41 +159,41 @@ public class OrderedPairlist {
      */
 
     public boolean GBCriterion3(int i, int j, ExpVector eij) {  
-	// assert i < j;
-	boolean s;
+        // assert i < j;
+        boolean s;
         s = ((BitSet)red.get( j )).get(i); 
-	if ( ! s ) { 
+        if ( ! s ) { 
            logger.warn("c3.s false for " + j + " " + i); 
            return s;
-	}
-	s = true;
-	boolean m;
-	OrderedPolynomial A;
+        }
+        s = true;
+        boolean m;
+        OrderedPolynomial A;
         ExpVector ek;
-	for ( int k = 0; k < P.size(); k++ ) {
-	    A = (OrderedPolynomial) P.get( k );
+        for ( int k = 0; k < P.size(); k++ ) {
+            A = (OrderedPolynomial) P.get( k );
             ek = A.leadingExpVector();
             m = ExpVector.EVMT(eij,ek);
-	    if ( m ) {
-		if ( k < i ) {
-		   // System.out.println("k < i "+k+" "+i); 
+            if ( m ) {
+                if ( k < i ) {
+                   // System.out.println("k < i "+k+" "+i); 
                    s =    ((BitSet)red.get( i )).get(k) 
                        || ((BitSet)red.get( j )).get(k); 
-		}
-		if ( i < k && k < j ) {
-		   // System.out.println("i < k < j "+i+" "+k+" "+j); 
+                }
+                if ( i < k && k < j ) {
+                   // System.out.println("i < k < j "+i+" "+k+" "+j); 
                    s =    ((BitSet)red.get( k )).get(i) 
                        || ((BitSet)red.get( j )).get(k); 
-		}
-		if ( j < k ) {
-		    //System.out.println("j < k "+j+" "+k); 
+                }
+                if ( j < k ) {
+                    //System.out.println("j < k "+j+" "+k); 
                    s =    ((BitSet)red.get( k )).get(i) 
                        || ((BitSet)red.get( k )).get(j); 
-		}
+                }
                 //System.out.println("s."+k+" = " + s); 
-		if ( ! s ) return s;
-	    }
-	}
+                if ( ! s ) return s;
+            }
+        }
         return true;
     }
 }
