@@ -52,10 +52,16 @@ public class ModGroebnerBase  {
 
     public static ModuleList GB(ModuleList M) {  
         PolynomialList F = M.getPolynomialList();
-        int modv = ((List)M.list.get(0)).size();
+        ModuleList N = M;
+        List t = (List)M.list;
+        int modv = 0;
+        if ( t == null || t.size() == 0 ) {
+           return N;
+        }
+        modv = ((List)t.get(0)).size();
         List G = GroebnerBase.DIRPGB(modv,F.list);
         F = new PolynomialList(F.coeff,F.vars,F.tord,G,F.table);
-        ModuleList N = ModuleList.getModuleList(modv,F);
+        N = ModuleList.getModuleList(modv,F);
         return N;
     }
 
