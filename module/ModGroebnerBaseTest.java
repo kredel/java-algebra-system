@@ -101,7 +101,7 @@ public class ModGroebnerBaseTest extends TestCase {
  * Test sequential GBase
  * 
  */
- public void testSequentialGBase() {
+ public void testSequentialModGB() {
 
      assertTrue("not isZERO( a )", !a.isZERO() );
 
