@@ -195,35 +195,92 @@ public class SolvableGroebnerBaseTest extends TestCase {
      L.add(a);
 
      L = SolvableGroebnerBase.twosidedGB( L );
-     System.out.println("L = " + L.size() );
+     //System.out.println("L = " + L.size() );
      assertTrue("isTwosidedGB( { a } )", SolvableGroebnerBase.isTwosidedGB(L) );
 
      assertTrue("not isZERO( b )", !b.isZERO() );
      L.add(b);
 
      L = SolvableGroebnerBase.twosidedGB( L );
-     System.out.println("L = " + L.size() );
+     //System.out.println("L = " + L.size() );
      assertTrue("isTwosidedGB( { a, b } )", SolvableGroebnerBase.isTwosidedGB(L) );
 
      assertTrue("not isZERO( c )", !c.isZERO() );
      L.add(c);
 
      L = SolvableGroebnerBase.twosidedGB( L );
-     System.out.println("L = " + L.size() );
+     //System.out.println("L = " + L.size() );
      assertTrue("isTwosidedGB( { a, ,b, c } )", SolvableGroebnerBase.isTwosidedGB(L) );
 
      assertTrue("not isZERO( d )", !d.isZERO() );
      L.add(d);
 
      L = SolvableGroebnerBase.twosidedGB( L );
-     System.out.println("L = " + L.size() );
+     //System.out.println("L = " + L.size() );
      assertTrue("isTwosidedGB( { a, ,b, c, d } )", SolvableGroebnerBase.isTwosidedGB(L) );
 
      assertTrue("not isZERO( e )", !e.isZERO() );
      L.add(e);
 
      L = SolvableGroebnerBase.twosidedGB( L );
-     System.out.println("L = " + L.size() );
+     //System.out.println("L = " + L.size() );
+     assertTrue("isTwosidedGB( { a, ,b, c, d, e } )", SolvableGroebnerBase.isTwosidedGB(L) );
+ }
+
+
+
+/**
+ * Test Weyl sequential twosided GBase
+ * 
+ */
+ public void testWeylSequentialTSGBase() {
+
+     dummy = RatSolvableOrderedMapPolynomial.DIRRAS(table/*null*/,rl, kl, ll, el, q );
+     table = (new WeylRelations()).generate(rl,dummy);
+     dummy = null;
+
+     a = RatSolvableOrderedMapPolynomial.DIRRAS(table,rl, kl, ll, el, q );
+     b = RatSolvableOrderedMapPolynomial.DIRRAS(table,rl, kl, ll, el, q );
+     c = RatSolvableOrderedMapPolynomial.DIRRAS(table,rl, kl, ll, el, q );
+     d = RatSolvableOrderedMapPolynomial.DIRRAS(table,rl, kl, ll, el, q );
+     e = d; //RatSolvableOrderedMapPolynomial.DIRRAS(table,rl, kl, ll, el, q );
+
+
+     assertTrue("not isZERO( a )", !a.isZERO() );
+
+     L = new ArrayList();
+     L.add(a);
+
+     L = SolvableGroebnerBase.twosidedGB( L );
+     //System.out.println("L = " + L.size() );
+     assertTrue("isTwosidedGB( { a } )", SolvableGroebnerBase.isTwosidedGB(L) );
+
+     assertTrue("not isZERO( b )", !b.isZERO() );
+     L.add(b);
+
+     L = SolvableGroebnerBase.twosidedGB( L );
+     //System.out.println("L = " + L.size() );
+     assertTrue("isTwosidedGB( { a, b } )", SolvableGroebnerBase.isTwosidedGB(L) );
+
+     assertTrue("not isZERO( c )", !c.isZERO() );
+     L.add(c);
+
+     L = SolvableGroebnerBase.twosidedGB( L );
+     //System.out.println("L = " + L.size() );
+     assertTrue("isTwosidedGB( { a, ,b, c } )", SolvableGroebnerBase.isTwosidedGB(L) );
+
+     assertTrue("not isZERO( d )", !d.isZERO() );
+     L.add(d);
+
+     L = SolvableGroebnerBase.twosidedGB( L );
+     //System.out.println("L = " + L.size() );
+     assertTrue("isTwosidedGB( { a, ,b, c, d } )", SolvableGroebnerBase.isTwosidedGB(L) );
+
+     assertTrue("not isZERO( e )", !e.isZERO() );
+     L.add(e);
+
+     L = SolvableGroebnerBase.twosidedGB( L );
+     //System.out.println("L = " + L.size() );
      assertTrue("isTwosidedGB( { a, ,b, c, d, e } )", SolvableGroebnerBase.isTwosidedGB(L) );
  }
 
