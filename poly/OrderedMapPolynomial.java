@@ -31,7 +31,7 @@ public abstract class OrderedMapPolynomial /* extends MapPolynomial */
     protected final SortedMap val;
     protected String[] vars;
 
-    protected TermOrder order; 
+    protected final TermOrder order; 
 
     /**
      * Constructors for OrderedMapPolynomial
