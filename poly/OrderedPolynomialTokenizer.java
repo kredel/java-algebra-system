@@ -593,7 +593,7 @@ public class OrderedPolynomialTokenizer  {
             sp.add( p );
         }
         s = sp;
-        return new PolynomialList(vars,tord,s);
+        return new PolynomialList(vars,tord,s,table);
     }
 
 
