@@ -13,8 +13,9 @@ import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 
+import edu.unima.ky.parallel.Semaphore;
+
 import edu.jas.ThreadPool;
-import edu.jas.Semaphore;
 import edu.jas.Terminator;
 
 import edu.jas.poly.ExpVector;
