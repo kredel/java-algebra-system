@@ -23,7 +23,7 @@ public abstract class MapPolynomial implements UnorderedPolynomial, Cloneable {
 
     private static Logger logger = Logger.getLogger(MapPolynomial.class);
 
-    protected Map val;
+    protected final Map val;
     protected String[] vars;
 
 
@@ -31,28 +31,28 @@ public abstract class MapPolynomial implements UnorderedPolynomial, Cloneable {
      * Constructors for MapPolynomial
      */
     public MapPolynomial() { 
-	vars = null;
+        vars = null;
         val = new LinkedHashMap(100);
     }
 
     public MapPolynomial(int r) { 
-	this();
-	vars = ExpVector.STDVARS(r);
+        this();
+        vars = ExpVector.STDVARS(r);
     }
 
     public MapPolynomial(Map t) { 
-	vars = null;
+        vars = null;
         val = new LinkedHashMap(t);
-	// if (t instanceof LinkedHashMap) val = t.clone();
+        // if (t instanceof LinkedHashMap) val = t.clone();
     }
 
     public MapPolynomial(String[] v) { 
-	this();
+        this();
         vars = v;
     }
 
     public MapPolynomial(Coefficient a, ExpVector e) { 
-	this( e.length() );
+        this( e.length() );
         val.put( e, a );
     }
 
@@ -61,7 +61,9 @@ public abstract class MapPolynomial implements UnorderedPolynomial, Cloneable {
      * Methods of MapPolynomial
      */
 
-    public int length() { return val.size(); }
+    public int length() { 
+        return val.size(); 
+    }
 
     public Map getMap() { 
         return val; 
@@ -87,18 +89,18 @@ public abstract class MapPolynomial implements UnorderedPolynomial, Cloneable {
     // { return new MapPolynomial(vars,evord); }
 
     public String toString() { 
-	StringBuffer erg = new StringBuffer();
+        StringBuffer erg = new StringBuffer();
         Set ent = val.entrySet();
         Iterator it = ent.iterator();
         while ( it.hasNext() ) {
             Map.Entry y = (Map.Entry) it.next();
-	    ExpVector f = (ExpVector) y.getKey(); 
-	    Object a = y.getValue();
-	    erg.append(a + " " + f);  
-	    if ( it.hasNext() ) {
-		erg.append(" ");
-	    } 
-	}
+            ExpVector f = (ExpVector) y.getKey(); 
+            Object a = y.getValue();
+            erg.append(a + " " + f);  
+            if ( it.hasNext() ) {
+                erg.append(" ");
+            } 
+        }
         return erg.toString(); 
     }
 
@@ -120,15 +122,15 @@ public abstract class MapPolynomial implements UnorderedPolynomial, Cloneable {
 
     public int numberOfVariables() {  
         if ( vars != null ) return vars.length;
-	if ( val.size() == 0 ) { 
+        if ( val.size() == 0 ) { 
            return 0;
-	}
+        }
         Object e = ((Map.Entry)val.entrySet().iterator().next()).getKey();
         return ((ExpVector)e).length();
     }
 
     public static int DIPNOV(UnorderedPolynomial a) {  
-	if ( a == null ) return 0;
+        if ( a == null ) return 0;
         return a.numberOfVariables();
     }
 
@@ -138,73 +140,73 @@ public abstract class MapPolynomial implements UnorderedPolynomial, Cloneable {
      */
 
     public UnorderedPolynomial add(UnorderedPolynomial Bp) {  
-	if ( this.length() == 0 ) return Bp;
-	if ( Bp.length() == 0 ) return this;
+        if ( this.length() == 0 ) return Bp;
+        if ( Bp.length() == 0 ) return this;
 
         UnorderedPolynomial Cp = getZERO(); 
-	Cp.setVars(vars);
-	UnorderedPolynomial Ap = (UnorderedPolynomial) this.clone();
+        Cp.setVars(vars);
+        UnorderedPolynomial Ap = (UnorderedPolynomial) this.clone();
 
-	Map A = Ap.getMap(); 
+        Map A = Ap.getMap(); 
         Map B = Bp.getMap(); 
         Map C = Cp.getMap(); 
 
-	Map.Entry x,y;
-	ExpVector e,f;
+        Map.Entry x,y;
+        ExpVector e,f;
         Coefficient a, b, c;
 
         Set Bs = B.entrySet();
         Iterator bi = Bs.iterator();
-	while ( bi.hasNext() ) {
+        while ( bi.hasNext() ) {
             y = (Map.Entry) bi.next();
-	    f = (ExpVector) y.getKey(); 
-	    b = (Coefficient) y.getValue();
+            f = (ExpVector) y.getKey(); 
+            b = (Coefficient) y.getValue();
 
-	    a = (Coefficient) A.remove( f ); // must be destructive
-	    if ( a == null ) {
-		C.put( f, b );
-	    } else {
-		c = a.add( b );
+            a = (Coefficient) A.remove( f ); // must be destructive
+            if ( a == null ) {
+                C.put( f, b );
+            } else {
+                c = a.add( b );
                 if ( ! c.isZERO() ) { 
                    C.put( f, c ); 
                 }
-	    }
-	}
+            }
+        }
 
         Set As = A.entrySet(); // rest of A
         Iterator ai = As.iterator();
-	while ( ai.hasNext() ) {
+        while ( ai.hasNext() ) {
             x = (Map.Entry) ai.next();
-	    e = (ExpVector) x.getKey(); 
+            e = (ExpVector) x.getKey(); 
             a = (Coefficient) x.getValue();
 
-	    b = (Coefficient) C.get( e ); // is allways null
-	    if ( b == null ) {
-		C.put( e, a );
-	    } else {
-	        System.out.println("b is not null " + b);
-		c = a.add( b );
+            b = (Coefficient) C.get( e ); // is allways null
+            if ( b == null ) {
+                C.put( e, a );
+            } else {
+                System.out.println("b is not null " + b);
+                c = a.add( b );
                 if ( ! c.isZERO() ) { 
                    C.put( e, c ); 
                 }
-	    }
-	}
+            }
+        }
 
-	return Cp;
+        return Cp;
     }
 
     /**
      * Sum. Implementation based on LinkedHashMap and given evord.
      */
     public UnorderedPolynomial add(int evord, UnorderedPolynomial Bp) {  
-	if ( this.length() == 0 ) return Bp;
-	if ( Bp.length() == 0 ) return this;
+        if ( this.length() == 0 ) return Bp;
+        if ( Bp.length() == 0 ) return this;
 
         UnorderedPolynomial Cp = getZERO(); 
-	Cp.setVars(vars);
-	UnorderedPolynomial Ap = (UnorderedPolynomial) this;
+        Cp.setVars(vars);
+        UnorderedPolynomial Ap = (UnorderedPolynomial) this;
 
-	Map A = Ap.getMap(); 
+        Map A = Ap.getMap(); 
         Map B = Bp.getMap(); 
         Map C = Cp.getMap(); 
 
@@ -213,93 +215,93 @@ public abstract class MapPolynomial implements UnorderedPolynomial, Cloneable {
         Set Bs = B.entrySet();
         Iterator bi = Bs.iterator();
 
-	Map.Entry x,y;
-	ExpVector e,f;
+        Map.Entry x,y;
+        ExpVector e,f;
         Coefficient a, b, c;
 
             // hasNext() == true here
             x = (Map.Entry) ai.next();
-	    e = (ExpVector) x.getKey(); 
+            e = (ExpVector) x.getKey(); 
             y = (Map.Entry) bi.next();
-	    f = (ExpVector) y.getKey(); 
+            f = (ExpVector) y.getKey(); 
             a = (Coefficient) x.getValue();
-	    b = (Coefficient) y.getValue();
+            b = (Coefficient) y.getValue();
 
         do {
-	    int s = ExpVector.EVCOMP( evord, e, f );
-	    // System.out.println("s = " + s);
-	    if ( s == 1 ) {
+            int s = ExpVector.EVCOMP( evord, e, f );
+            // System.out.println("s = " + s);
+            if ( s == 1 ) {
                 C.put( e, a ); 
-		if ( ai.hasNext() ) {
+                if ( ai.hasNext() ) {
                    x = (Map.Entry) ai.next();
-		   e = (ExpVector) x.getKey();
+                   e = (ExpVector) x.getKey();
                    a = (Coefficient) x.getValue();
-		} else {
-		    x = null;
-		    e = null;
-		    a = null;
-		}
-	    } else if ( s == -1 ) {
+                } else {
+                    x = null;
+                    e = null;
+                    a = null;
+                }
+            } else if ( s == -1 ) {
                 C.put( f, b ); 
-		if ( bi.hasNext() ) {
+                if ( bi.hasNext() ) {
                    y = (Map.Entry) bi.next();
-		   f = (ExpVector) y.getKey();
-		   b = (Coefficient) y.getValue();
-		} else {
-		    y = null;
-		    f = null;
-		    b = null;
-		}
-	    } else {
-		c = a.add(b);
+                   f = (ExpVector) y.getKey();
+                   b = (Coefficient) y.getValue();
+                } else {
+                    y = null;
+                    f = null;
+                    b = null;
+                }
+            } else {
+                c = a.add(b);
                 if ( ! c.isZERO() ) { 
                    C.put( f, c ); 
                 }
-		if ( ai.hasNext() ) {
+                if ( ai.hasNext() ) {
                    x = (Map.Entry) ai.next();
-		   e = (ExpVector) x.getKey();
-		   a = (Coefficient) x.getValue();
-		} else {
-		    x = null;
-		    e = null;
-		    a = null;
-		}
-		if ( bi.hasNext() ) {
+                   e = (ExpVector) x.getKey();
+                   a = (Coefficient) x.getValue();
+                } else {
+                    x = null;
+                    e = null;
+                    a = null;
+                }
+                if ( bi.hasNext() ) {
                    y = (Map.Entry) bi.next();
-		   f = (ExpVector) y.getKey();
-		   b = (Coefficient) y.getValue();
-		} else {
-		    y = null;
-		    f = null;
-		    b = null;
-		}
-	    }
+                   f = (ExpVector) y.getKey();
+                   b = (Coefficient) y.getValue();
+                } else {
+                    y = null;
+                    f = null;
+                    b = null;
+                }
+            }
         } while ( x != null && y != null ); 
 
-	if ( x != null ) {
-	    C.put( e, a );
-	}
-	if ( y != null ) {
-	    C.put( f, b );
-	}
-	while ( ai.hasNext() ) {
+        if ( x != null ) {
+            C.put( e, a );
+        }
+        if ( y != null ) {
+            C.put( f, b );
+        }
+        while ( ai.hasNext() ) {
               x = (Map.Entry) ai.next();
               e = (ExpVector) x.getKey();
               a = (Coefficient) x.getValue();
-	      C.put( e, a );
-	}
-	while ( bi.hasNext() ) {
+              C.put( e, a );
+        }
+        while ( bi.hasNext() ) {
               y = (Map.Entry) bi.next();
               f = (ExpVector) y.getKey();
               b = (Coefficient) y.getValue();
-	      C.put( f, b );
-	}
+              C.put( f, b );
+        }
         return Cp;
     }
 
     public static UnorderedPolynomial DIPSUM(UnorderedPolynomial a, 
                                              UnorderedPolynomial b) {  
-	if ( a == null ) return b;
+        if ( a == null ) return b;
         return a.add(b);
     }
 
@@ -308,62 +310,62 @@ public abstract class MapPolynomial implements UnorderedPolynomial, Cloneable {
      * Difference. Implementation based on LinkedHashMap without order.
      */
     public UnorderedPolynomial subtract(UnorderedPolynomial Bp) {  
-	if ( this.length() == 0 ) return Bp;
-	if ( Bp.length() == 0 ) return this;
+        if ( this.length() == 0 ) return Bp;
+        if ( Bp.length() == 0 ) return this;
 
         UnorderedPolynomial Cp = getZERO(); 
-	Cp.setVars(vars);
-	UnorderedPolynomial Ap = (UnorderedPolynomial) this.clone();
+        Cp.setVars(vars);
+        UnorderedPolynomial Ap = (UnorderedPolynomial) this.clone();
 
-	Map A = Ap.getMap(); 
+        Map A = Ap.getMap(); 
         Map B = Bp.getMap(); 
         Map C = Cp.getMap(); 
 
-	Map.Entry x,y;
-	ExpVector e,f;
+        Map.Entry x,y;
+        ExpVector e,f;
         Coefficient a, b, c;
 
         Set Bs = B.entrySet();
         Iterator bi = Bs.iterator();
-	while ( bi.hasNext() ) {
+        while ( bi.hasNext() ) {
             y = (Map.Entry) bi.next();
-	    f = (ExpVector) y.getKey(); 
-	    b = (Coefficient) y.getValue();
-	    b = b.negate();
+            f = (ExpVector) y.getKey(); 
+            b = (Coefficient) y.getValue();
+            b = b.negate();
 
-	    a = (Coefficient) A.get( f ); 
-	    A.remove( f ); // must be destructive
-	    // System.out.println("f = " + f + " b = " + b + " a = " + a);
-	    if ( a == null ) {
-		C.put( f, b );
-	    } else {
-		c = a.add( b );
+            a = (Coefficient) A.get( f ); 
+            A.remove( f ); // must be destructive
+            // System.out.println("f = " + f + " b = " + b + " a = " + a);
+            if ( a == null ) {
+                C.put( f, b );
+            } else {
+                c = a.add( b );
                 if ( ! c.isZERO() ) { 
                    C.put( f, c ); 
                 }
-	    }
-	}
+            }
+        }
 
         Set As = A.entrySet(); // rest of A
         Iterator ai = As.iterator();
-	while ( ai.hasNext() ) {
+        while ( ai.hasNext() ) {
             x = (Map.Entry) ai.next();
-	    e = (ExpVector) x.getKey(); 
+            e = (ExpVector) x.getKey(); 
             a = (Coefficient) x.getValue();
-	    //System.out.println("e = " + e + " a = " + a);
+            //System.out.println("e = " + e + " a = " + a);
 
-	    b = (Coefficient) C.get( e ); // is allways null
-	    if ( b == null ) {
-		C.put( e, a );
-	    } else {
-	        System.out.println("b is not null " + b);
-		c = a.add( b.negate() );
+            b = (Coefficient) C.get( e ); // is allways null
+            if ( b == null ) {
+                C.put( e, a );
+            } else {
+                System.out.println("b is not null " + b);
+                c = a.add( b.negate() );
                 if ( ! c.isZERO() ) { 
                    C.put( e, c ); 
                 }
-	    }
-	}
-	return Cp;
+            }
+        }
+        return Cp;
     }
 
 
@@ -372,14 +374,14 @@ public abstract class MapPolynomial implements UnorderedPolynomial, Cloneable {
      */
     public UnorderedPolynomial subtract(int evord, UnorderedPolynomial Bp) {  
 
-	if ( this.length() == 0 ) return Bp.negate();
-	if ( Bp.length() == 0 ) return this;
+        if ( this.length() == 0 ) return Bp.negate();
+        if ( Bp.length() == 0 ) return this;
 
         UnorderedPolynomial Cp = getZERO(); 
-	Cp.setVars(vars);
-	UnorderedPolynomial Ap = (UnorderedPolynomial) this;
+        Cp.setVars(vars);
+        UnorderedPolynomial Ap = (UnorderedPolynomial) this;
 
-	Map A = Ap.getMap(); 
+        Map A = Ap.getMap(); 
         Map B = Bp.getMap(); 
         Map C = Cp.getMap(); 
 
@@ -388,93 +390,93 @@ public abstract class MapPolynomial implements UnorderedPolynomial, Cloneable {
         Set Bs = B.entrySet();
         Iterator bi = Bs.iterator();
 
-	Map.Entry x,y;
-	ExpVector e,f;
+        Map.Entry x,y;
+        ExpVector e,f;
         Coefficient a, b, c;
 
             // hasNext() == true here
             x = (Map.Entry) ai.next();
-	    e = (ExpVector) x.getKey(); 
+            e = (ExpVector) x.getKey(); 
             y = (Map.Entry) bi.next();
-	    f = (ExpVector) y.getKey(); 
+            f = (ExpVector) y.getKey(); 
             a = (Coefficient) x.getValue();
-	    b = (Coefficient) y.getValue();
+            b = (Coefficient) y.getValue();
 
         do {
-	    int s = ExpVector.EVCOMP( evord, e, f );
-	    //	    System.out.println("s = " + s);
-	    if ( s == 1 ) {
+            int s = ExpVector.EVCOMP( evord, e, f );
+            //      System.out.println("s = " + s);
+            if ( s == 1 ) {
                 C.put( e, a ); 
-		if ( ai.hasNext() ) {
+                if ( ai.hasNext() ) {
                    x = (Map.Entry) ai.next();
-		   e = (ExpVector) x.getKey();
+                   e = (ExpVector) x.getKey();
                    a = (Coefficient) x.getValue();
-		} else {
-		    x = null;
-		    e = null;
-		    a = null;
-		}
-	    } else if ( s == -1 ) {
+                } else {
+                    x = null;
+                    e = null;
+                    a = null;
+                }
+            } else if ( s == -1 ) {
                 C.put( f, b.negate() ); 
-		if ( bi.hasNext() ) {
+                if ( bi.hasNext() ) {
                    y = (Map.Entry) bi.next();
-		   f = (ExpVector) y.getKey();
-		   b = (Coefficient) y.getValue();
-		} else {
-		    y = null;
-		    f = null;
-		    b = null;
-		}
-	    } else {
-		c = a.subtract(b);
+                   f = (ExpVector) y.getKey();
+                   b = (Coefficient) y.getValue();
+                } else {
+                    y = null;
+                    f = null;
+                    b = null;
+                }
+            } else {
+                c = a.subtract(b);
                 if ( ! c.isZERO() ) { 
                    C.put( f, c ); 
                 }
-		if ( ai.hasNext() ) {
+                if ( ai.hasNext() ) {
                    x = (Map.Entry) ai.next();
-		   e = (ExpVector) x.getKey();
-		   a = (Coefficient) x.getValue();
-		} else {
-		    x = null;
-		    e = null;
-		    a = null;
-		}
-		if ( bi.hasNext() ) {
+                   e = (ExpVector) x.getKey();
+                   a = (Coefficient) x.getValue();
+                } else {
+                    x = null;
+                    e = null;
+                    a = null;
+                }
+                if ( bi.hasNext() ) {
                    y = (Map.Entry) bi.next();
-		   f = (ExpVector) y.getKey();
-		   b = (Coefficient) y.getValue();
-		} else {
-		    y = null;
-		    f = null;
-		    b = null;
-		}
-	    }
+                   f = (ExpVector) y.getKey();
+                   b = (Coefficient) y.getValue();
+                } else {
+                    y = null;
+                    f = null;
+                    b = null;
+                }
+            }
         } while ( x != null && y != null ); 
 
-	if ( x != null ) {
-	    C.put( e, a );
-	}
-	if ( y != null ) {
-	    C.put( f, b.negate() );
-	}
-	while ( ai.hasNext() ) {
+        if ( x != null ) {
+            C.put( e, a );
+        }
+        if ( y != null ) {
+            C.put( f, b.negate() );
+        }
+        while ( ai.hasNext() ) {
               x = (Map.Entry) ai.next();
               e = (ExpVector) x.getKey();
               a = (Coefficient) x.getValue();
-	      C.put( e, a );
-	}
-	while ( bi.hasNext() ) {
+              C.put( e, a );
+        }
+        while ( bi.hasNext() ) {
               y = (Map.Entry) bi.next();
               f = (ExpVector) y.getKey();
               b = (Coefficient) y.getValue();
-	      C.put( f, b.negate() );
-	}
+              C.put( f, b.negate() );
+        }
         return Cp;
     }
 
     public static UnorderedPolynomial DIPDIF(UnorderedPolynomial a, 
                                              UnorderedPolynomial b) {  
-	if ( a == null ) return b;
+        if ( a == null ) return b;
         return a.subtract(b);
     }
 
@@ -485,19 +487,19 @@ public abstract class MapPolynomial implements UnorderedPolynomial, Cloneable {
      public UnorderedPolynomial multiply(UnorderedPolynomial Bp) {  
 
         UnorderedPolynomial Cp = getZERO(); 
-	Cp.setVars(vars);
+        Cp.setVars(vars);
         Map A = val; // this.getMap();
         Set Ak = A.entrySet();
         Iterator ai = Ak.iterator();
         while ( ai.hasNext() ) {
             Map.Entry y = (Map.Entry) ai.next();
-	    ExpVector e = (ExpVector) y.getKey(); 
+            ExpVector e = (ExpVector) y.getKey(); 
             //System.out.println("e = " + e);
             Coefficient a = (Coefficient) y.getValue(); 
             //System.out.println("a = " + a);
-	    UnorderedPolynomial Dp = Bp.multiply( a, e );
+            UnorderedPolynomial Dp = Bp.multiply( a, e );
             //System.out.println("Dp = " + Dp.length());
-	    Cp = Cp.add(Dp);
+            Cp = Cp.add(Dp);
             //System.out.println("Cp = " + Cp.length());
         }
         //System.out.println("Cp = " + Cp);
@@ -506,12 +508,12 @@ public abstract class MapPolynomial implements UnorderedPolynomial, Cloneable {
 
     public static UnorderedPolynomial DIPPR(UnorderedPolynomial a, 
                                             UnorderedPolynomial b) {  
-	if ( a == null ) return null;
-	if ( a.length() <= b.length() ) {
+        if ( a == null ) return null;
+        if ( a.length() <= b.length() ) {
              return a.multiply(b);
-	} else { 
+        } else { 
              return b.multiply(a);
-	}
+        }
     }
 
     /**
@@ -521,14 +523,14 @@ public abstract class MapPolynomial implements UnorderedPolynomial, Cloneable {
     public UnorderedPolynomial multiply(Coefficient b) {  
 
         UnorderedPolynomial Cp = getZERO(); 
-	Cp.setVars(vars);
+        Cp.setVars(vars);
         Map C = Cp.getMap();
         Map A = val; //this.getMap();
         Set Ak = A.entrySet();
         Iterator ai = Ak.iterator();
         while ( ai.hasNext() ) {
             Map.Entry y = (Map.Entry) ai.next();
-	    ExpVector e = (ExpVector) y.getKey(); 
+            ExpVector e = (ExpVector) y.getKey(); 
             //System.out.println("e = " + e);
             Coefficient a = (Coefficient) y.getValue(); 
             //System.out.println("a = " + a);
@@ -541,7 +543,7 @@ public abstract class MapPolynomial implements UnorderedPolynomial, Cloneable {
 
     public static UnorderedPolynomial DIPRP(UnorderedPolynomial a, 
                                             Coefficient b) {  
-	if ( a == null ) return null;
+        if ( a == null ) return null;
         return a.multiply(b);
     }
 
@@ -551,20 +553,20 @@ public abstract class MapPolynomial implements UnorderedPolynomial, Cloneable {
 
     public UnorderedPolynomial multiply(Coefficient b, ExpVector e) {  
         UnorderedPolynomial Cp = getZERO(); 
-	Cp.setVars(vars);
+        Cp.setVars(vars);
         Map C = Cp.getMap();
         Map A = val; //this.getMap();
         Set Ak = A.entrySet();
         Iterator ai = Ak.iterator();
         while ( ai.hasNext() ) {
             Map.Entry y = (Map.Entry) ai.next();
-	    ExpVector f = (ExpVector) y.getKey(); 
+            ExpVector f = (ExpVector) y.getKey(); 
             //System.out.println("e = " + e);
             Coefficient a = (Coefficient) y.getValue(); 
             //System.out.println("a = " + a);
             Coefficient c = a.multiply(b);
             //System.out.println("c = " + c);
-	    ExpVector g = f.sum(e);
+            ExpVector g = f.sum(e);
             //System.out.println("g = " + g);
             C.put( g, c );
         }
@@ -574,7 +576,7 @@ public abstract class MapPolynomial implements UnorderedPolynomial, Cloneable {
     public static UnorderedPolynomial DIPRP(UnorderedPolynomial a, 
                                             Coefficient b, 
                                             ExpVector e) {
-	if ( a == null ) return null;
+        if ( a == null ) return null;
         return a.multiply(b,e);
     }
 
@@ -583,13 +585,13 @@ public abstract class MapPolynomial implements UnorderedPolynomial, Cloneable {
      */
 
     public UnorderedPolynomial multiply(Map.Entry m) {  
-	if ( m == null ) return null;
-	return multiply( (Coefficient)m.getValue(), (ExpVector)m.getKey() );
+        if ( m == null ) return null;
+        return multiply( (Coefficient)m.getValue(), (ExpVector)m.getKey() );
     }
 
     public static UnorderedPolynomial DIPRP(UnorderedPolynomial a, 
                                             Map.Entry m) {  
-	if ( a == null ) return null;
+        if ( a == null ) return null;
         return a.multiply(m);
     }
 
@@ -599,14 +601,14 @@ public abstract class MapPolynomial implements UnorderedPolynomial, Cloneable {
 
     public UnorderedPolynomial negate() {  
         UnorderedPolynomial Cp = getZERO(); 
-	Cp.setVars(vars);
+        Cp.setVars(vars);
         Map C = Cp.getMap();
         Map A = val; //this.getMap();
         Set Ak = A.entrySet();
         Iterator ai = Ak.iterator();
         while ( ai.hasNext() ) {
             Map.Entry y = (Map.Entry) ai.next();
-	    ExpVector e = (ExpVector) y.getKey(); 
+            ExpVector e = (ExpVector) y.getKey(); 
             //System.out.println("e = " + e);
             Coefficient a = (Coefficient) y.getValue(); 
             //System.out.println("a = " + a);
@@ -618,7 +620,7 @@ public abstract class MapPolynomial implements UnorderedPolynomial, Cloneable {
     }
 
     public static UnorderedPolynomial DIPNEG(UnorderedPolynomial a) {  
-	if ( a == null ) return null;
+        if ( a == null ) return null;
         return a.negate();
     }
 
@@ -641,7 +643,7 @@ public abstract class MapPolynomial implements UnorderedPolynomial, Cloneable {
     }
 
     public static boolean DIPZERO(UnorderedPolynomial a) {  
-	if ( a == null ) return false;
+        if ( a == null ) return false;
         return a.isZERO();
     }
 
@@ -655,7 +657,7 @@ public abstract class MapPolynomial implements UnorderedPolynomial, Cloneable {
         if ( val.size() != 1 ) return t;
         Map.Entry y = (Map.Entry) val.entrySet().iterator().next();
         ExpVector e = (ExpVector) y.getKey(); 
-	//        System.out.println("e = " + e);
+        //        System.out.println("e = " + e);
         if ( ExpVector.EVTDEG(e) != 0 ) return t;
         Coefficient a = (Coefficient) y.getValue(); 
         //System.out.println("a = " + a);
@@ -664,7 +666,7 @@ public abstract class MapPolynomial implements UnorderedPolynomial, Cloneable {
     }
 
     public static boolean DIPONE(UnorderedPolynomial a) {  
-	if ( a == null ) return false;
+        if ( a == null ) return false;
         return a.isONE();
     }
 
