@@ -49,7 +49,7 @@ public class testgb
       L.add( (Object) p4 );
       L.add( (Object) p5 );
       L.add( (Object) p6 );
-      //                        L.add( (Object) p7 ); // trinks 6 oder 7
+      //                      L.add( (Object) p7 ); // trinks 6 oder 7
       System.out.println("L = " + L ); 
       System.out.println("L.size() = " + L.size() ); 
 
