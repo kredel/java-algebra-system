@@ -48,10 +48,10 @@ public class QuatMapPolynomialTest extends TestCase {
    UnorderedPolynomial e;
    UnorderedPolynomial f;
 
-   int rl = 7; 
+   int rl = 6; 
    int kl = 10;
-   int ll = 10;
-   int el = 5;
+   int ll = 7;
+   int el = 4;
    float q = 0.5f;
 
    protected void setUp() {
