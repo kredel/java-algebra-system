@@ -58,9 +58,9 @@ public class DistributedListTest extends TestCase {
 
    private DistributedList l1;
    private DistributedList l2;
+   private DistributedList l3;
 
    private DistributedListServer dls;
-   private Thread dlst;
 
    int rl = 7; 
    int kl = 10;
@@ -70,32 +70,16 @@ public class DistributedListTest extends TestCase {
 
    protected void setUp() {
        dls = new DistributedListServer();
-       dlst = new Thread( dls );
-       dlst.start();
+       dls.init();
    }
 
    protected void tearDown() {
-       try {
-           dlst.interrupt();
-           dlst.join(100);
-       } catch (InterruptedException e) {
-       }
        dls.terminate();
        dls = null;
        if ( l1 != null ) l1.terminate();
        if ( l2 != null ) l2.terminate();
-       l1 = l2 = null;
-       int k = 0;
-       while ( dlst.isAlive() && k < 10 ) { 
-	     k++;
-             try {
-		  // System.out.print("-");
-                  dlst.interrupt();
-                  dlst.join(100);
-             } catch (InterruptedException e) {
-             }
-       }
-       //System.out.println("tearedDown");
+       if ( l3 != null ) l3.terminate();
+       l1 = l2 = l3 = null;
    }
 
 
@@ -163,10 +147,54 @@ public class DistributedListTest extends TestCase {
      assertTrue("#l2==10", l2.size() == loops );
    }
 
+
+/**
+ * Tests if the three created DistributedLists have #n objects as content.
+ */
+ public void testDistributedList3() {
+     l1 = new DistributedList(host);
+     assertTrue("l1==empty",l1.isEmpty());
+     l2 = new DistributedList(host);
+     assertTrue("l2==empty",l2.isEmpty());
+     l3 = new DistributedList(host);
+     assertTrue("l3==empty",l3.isEmpty());
+
+     int i = 0, loops = 10;
+     while ( i < loops ) {
+	   Integer x = new Integer( ++i );
+           l1.add( x );
+           assertTrue("#l1==i", l1.size() == i );
+     }
+     assertTrue("#l1==10", l1.size() == loops );
+
+     while ( l2.size() < loops/2 || l3.size() < loops/2 ) {
+         try {
+	     //System.out.print(".");
+             Thread.currentThread().sleep(100);
+         } catch (InterruptedException e) {
+         }
+     }
+     Iterator it = null;
+     it = l2.iterator();
+     Iterator it3 = null;
+     it3 = l3.iterator();
+     i = 0;
+     while ( it.hasNext() && it3.hasNext() ) {
+	   Object o = it.next();
+	   Object p = it3.next();
+	   Integer x = new Integer( ++i );
+	   //System.out.println("o = " + o + " x = "+ x);
+           assertEquals("l2(i)==(i)", x, o );
+           assertEquals("l3(i)==(i)", x, p );
+     }
+     assertTrue("#l2==10", l2.size() == loops );
+     assertTrue("#l2==10", l3.size() == loops );
+   }
+
 /**
  * Tests DistributedLists with BigInteger, BigRational etc.
  */
- public void testDistributedList3() {
+ public void testDistributedList4() {
      l1 = new DistributedList(host);
      assertTrue("l1==empty",l1.isEmpty());
      l2 = new DistributedList(host);
@@ -212,7 +240,7 @@ public class DistributedListTest extends TestCase {
 /**
  * Tests DistributedLists with Polynomials.
  */
- public void testDistributedList4() {
+ public void testDistributedList5() {
      l1 = new DistributedList(host);
      assertTrue("l1==empty",l1.isEmpty());
      l2 = new DistributedList(host);
