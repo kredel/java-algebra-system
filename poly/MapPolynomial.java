@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.Map;
 import java.util.LinkedHashMap;
 import java.util.Iterator;
+import java.io.Serializable;
 
 import org.apache.log4j.Logger;
 
@@ -20,7 +21,8 @@ import edu.jas.arith.Coefficient;
  * @author Heinz Kredel
  */
 
-public abstract class MapPolynomial implements UnorderedPolynomial, Cloneable {
+public abstract class MapPolynomial 
+                implements UnorderedPolynomial, Cloneable, Serializable {
 
     private static Logger logger = Logger.getLogger(MapPolynomial.class);
 

@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 
 import java.math.BigInteger;
 import java.util.Random;
+import java.io.Serializable;
 
 /**
  * BigComplex class based on BigRational implementing the Coefficient 
@@ -15,7 +16,7 @@ import java.util.Random;
  * @author Heinz Kredel
  */
 
-public class BigComplex implements Coefficient, Comparable {
+public class BigComplex implements Coefficient, Comparable, Serializable {
 
     /* the data structure */
 

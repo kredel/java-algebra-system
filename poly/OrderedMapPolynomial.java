@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.Iterator;
+import java.io.Serializable;
 
 import org.apache.log4j.Logger;
 
@@ -24,7 +25,7 @@ import edu.jas.arith.BigRational;
  */
 
 public abstract class OrderedMapPolynomial /* extends MapPolynomial */ 
-                      implements OrderedPolynomial, Cloneable {
+                      implements OrderedPolynomial, Cloneable, Serializable {
 
     private static Logger logger = Logger.getLogger(OrderedMapPolynomial.class);
 

@@ -6,6 +6,7 @@ package edu.jas.arith;
 
 import java.math.BigInteger;
 import java.util.Random;
+import java.io.Serializable;
 
 /**
  * BigRational class based on BigInteger implementing the Coefficient interface
@@ -13,7 +14,7 @@ import java.util.Random;
  * @author Heinz Kredel
  */
 
-public class BigRational implements Coefficient, Comparable {
+public class BigRational implements Coefficient, Comparable, Serializable {
 
     private final BigInteger num;
     private final BigInteger den;

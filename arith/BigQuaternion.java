@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 
 import java.math.BigInteger;
 import java.util.Random;
+import java.io.Serializable;
 
 /**
  * BigQuaternion class based on BigRational implementing the Coefficient 
@@ -15,7 +16,7 @@ import java.util.Random;
  * @author Heinz Kredel
  */
 
-public class BigQuaternion implements Coefficient, Comparable {
+public class BigQuaternion implements Coefficient, Comparable, Serializable {
 
     /* the data structure */
 

@@ -5,6 +5,7 @@
 package edu.jas.arith;
 
 import java.util.Random;
+import java.io.Serializable;
 
 /**
  * BigInteger class to make java.math.BigInteger available with Coefficient interface
@@ -13,7 +14,7 @@ import java.util.Random;
  * @see java.math.BigInteger
  */
 
-public class BigInteger implements Coefficient {
+public class BigInteger implements Coefficient, Serializable {
 
     private final static Random random = new Random();
 
