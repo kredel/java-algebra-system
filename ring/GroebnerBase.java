@@ -36,7 +36,7 @@ public class GroebnerBase  {
 		if ( ! Reduction.GBCriterion4( pi, pj ) ) continue;
 		s = Reduction.SPolynomial( pi, pj );
 		if ( s.isZERO() ) continue;
-		h = Reduction.Normalform( F, s );
+		h = Reduction.normalform( F, s );
 		if ( ! h.isZERO() ) return false;
 	    }
 	}
@@ -101,7 +101,7 @@ public class GroebnerBase  {
                  logger.debug("ht(S) = " + S.leadingExpVector() );
 	      }
 
-              H = Reduction.Normalform( G, S );
+              H = Reduction.normalform( G, S );
               if ( H.isZERO() ) {
                  pair.setZero();
                  continue;
@@ -191,8 +191,8 @@ public class GroebnerBase  {
         while ( G.size() > 0 ) {
             a = (OrderedPolynomial) G.remove(0);
 	    // System.out.println("doing " + a.length());
-            a = Reduction.Normalform( G, a );
-            a = Reduction.Normalform( F, a );
+            a = Reduction.normalform( G, a );
+            a = Reduction.normalform( F, a );
             F.add( a );
 	}
 	return F;

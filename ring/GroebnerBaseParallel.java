@@ -151,7 +151,7 @@ public class GroebnerBaseParallel  {
               if ( logger.isDebugEnabled() ) {
                  logger.debug("ht(S) = " + S.leadingExpVector() );
 	      }
-              H = Reduction.NormalformMod( G, S );
+              H = Reduction.normalformMod( G, S );
 	      red++;
               if ( H.isZERO() ) {
                  pair.setZero();
@@ -284,8 +284,8 @@ public class GroebnerBaseParallel  {
 	    if ( logger.isDebugEnabled() ) {
                  logger.debug("ht(S) = " + S.leadingExpVector() );
 	    }
-            H = Reduction.NormalformMod( G, H );
-            H = Reduction.NormalformMod( F, H );
+            H = Reduction.normalformMod( G, H );
+            H = Reduction.normalformMod( F, H );
             done.V();
 	    if ( logger.isDebugEnabled() ) {
                  logger.debug("ht(H) = " + H.leadingExpVector() );

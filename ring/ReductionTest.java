@@ -88,30 +88,30 @@ public class ReductionTest extends TestCase {
      c = RatOrderedMapPolynomial.ONE;
      d = RatOrderedMapPolynomial.ZERO;
 
-     e = Reduction.Normalform( L, c );
+     e = Reduction.normalform( L, c );
      assertTrue("isONE( e )", e.isONE() ); 
 
-     e = Reduction.Normalform( L, d );
+     e = Reduction.normalform( L, d );
      assertTrue("isZERO( e )", e.isZERO() ); 
 
 
      L.add( c );
-     e = Reduction.Normalform( L, c );
+     e = Reduction.normalform( L, c );
      assertTrue("isZERO( e )", e.isZERO() ); 
 
-     // e = Reduction.Normalform( L, a );
+     // e = Reduction.normalform( L, a );
      // assertTrue("isZERO( e )", e.isZERO() ); 
 
-     e = Reduction.Normalform( L, d );
+     e = Reduction.normalform( L, d );
      assertTrue("isZERO( e )", e.isZERO() ); 
 
 
      L = new ArrayList();
      L.add( d );
-     e = Reduction.Normalform( L, c );
+     e = Reduction.normalform( L, c );
      assertTrue("isONE( e )", e.isONE() ); 
 
-     e = Reduction.Normalform( L, d );
+     e = Reduction.normalform( L, d );
      assertTrue("isZERO( e )", e.isZERO() ); 
  }
 
@@ -127,30 +127,30 @@ public class ReductionTest extends TestCase {
      c = RatOrderedMapPolynomial.ONE;
      d = RatOrderedMapPolynomial.ZERO;
 
-     e = Reduction.NormalformMod( L, c );
+     e = Reduction.normalformMod( L, c );
      assertTrue("isONE( e )", e.isONE() ); 
 
-     e = Reduction.NormalformMod( L, d );
+     e = Reduction.normalformMod( L, d );
      assertTrue("isZERO( e )", e.isZERO() ); 
 
 
      L.add( c );
-     e = Reduction.NormalformMod( L, c );
+     e = Reduction.normalformMod( L, c );
      assertTrue("isZERO( e )", e.isZERO() ); 
 
-     // e = Reduction.Normalform( L, a );
+     // e = Reduction.normalform( L, a );
      // assertTrue("isZERO( e )", e.isZERO() ); 
 
-     e = Reduction.NormalformMod( L, d );
+     e = Reduction.normalformMod( L, d );
      assertTrue("isZERO( e )", e.isZERO() ); 
 
 
      L = new ArrayList();
      L.add( d );
-     e = Reduction.NormalformMod( L, c );
+     e = Reduction.normalformMod( L, c );
      assertTrue("isONE( e )", e.isONE() ); 
 
-     e = Reduction.NormalformMod( L, d );
+     e = Reduction.normalformMod( L, d );
      assertTrue("isZERO( e )", e.isZERO() ); 
  }
 
@@ -169,13 +169,13 @@ public class ReductionTest extends TestCase {
      L = new ArrayList();
      L.add(a);
 
-     e = Reduction.Normalform( L, a );
+     e = Reduction.normalform( L, a );
      assertTrue("isZERO( e )", e.isZERO() );
 
      assertTrue("not isZERO( b )", !b.isZERO() );
 
      L.add(b);
-     e = Reduction.Normalform( L, a );
+     e = Reduction.normalform( L, a );
      assertTrue("isZERO( e ) some times", e.isZERO() ); 
  }
 
@@ -194,13 +194,13 @@ public class ReductionTest extends TestCase {
      L = new ArrayList();
      L.add(a);
 
-     e = Reduction.NormalformMod( L, a );
+     e = Reduction.normalformMod( L, a );
      assertTrue("isZERO( e )", e.isZERO() );
 
      assertTrue("not isZERO( b )", !b.isZERO() );
 
      L.add(b);
-     e = Reduction.NormalformMod( L, a );
+     e = Reduction.normalformMod( L, a );
      assertTrue("isZERO( e ) some times", e.isZERO() ); 
  }
 
@@ -219,13 +219,13 @@ public class ReductionTest extends TestCase {
      L = new ArrayList();
      L.add(a);
 
-     e = Reduction.Normalform( L, a );
+     e = Reduction.normalform( L, a );
      assertTrue("isZERO( e )", e.isZERO() );
 
      assertTrue("not isZERO( b )", !b.isZERO() );
 
      L.add(b);
-     e = Reduction.Normalform( L, a );
+     e = Reduction.normalform( L, a );
      assertTrue("isZERO( e ) some times", e.isZERO() ); 
  }
 

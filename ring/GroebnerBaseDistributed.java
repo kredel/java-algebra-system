@@ -598,7 +598,7 @@ class ReducerClient implements Runnable {
                          if ( logger.isDebugEnabled() ) {
                             logger.debug("ht(S) = " + S.leadingExpVector() );
                          }
-                         H = Reduction.NormalformMod( theList, S );
+                         H = Reduction.normalformMod( theList, S );
                          red++;
                          if ( H.isZERO() ) {
                             // pair.setZero(); does not work in dist
@@ -658,8 +658,8 @@ class MiReducerServer implements Runnable {
             if ( logger.isDebugEnabled() ) {
                  logger.debug("ht(S) = " + S.leadingExpVector() );
             }
-            H = Reduction.NormalformMod( G, H );
-            H = Reduction.NormalformMod( F, H );
+            H = Reduction.normalformMod( G, H );
+            H = Reduction.normalformMod( F, H );
             done.V();
             if ( logger.isDebugEnabled() ) {
                  logger.debug("ht(H) = " + H.leadingExpVector() );
@@ -699,8 +699,8 @@ class MiReducerClient implements Runnable {
             if ( logger.isDebugEnabled() ) {
                  logger.debug("ht(S) = " + S.leadingExpVector() );
             }
-            H = Reduction.NormalformMod( G, H );
-            H = Reduction.NormalformMod( F, H );
+            H = Reduction.normalformMod( G, H );
+            H = Reduction.normalformMod( F, H );
             done.V();
             if ( logger.isDebugEnabled() ) {
                  logger.debug("ht(H) = " + H.leadingExpVector() );

@@ -105,7 +105,7 @@ public class QuatSolvableOrderedMapPolynomialTest extends TestCase {
  */
  public void testRandom() {
      for (int i = 0; i < 2; i++) {
-         a = QuatSolvableOrderedMapPolynomial.DIRRAS(table,rl+i, kl*(i+1), ll+2*i, el+i, q );
+         a = QuatSolvableOrderedMapPolynomial.DIQRAS(table,rl+i, kl*(i+1), ll+2*i, el+i, q );
          assertTrue("length( a"+i+" ) <> 0", a.length() >= 0);
          assertTrue(" not isZERO( a"+i+" )", !a.isZERO() );
          assertTrue(" not isONE( a"+i+" )", !a.isONE() );
@@ -119,7 +119,7 @@ public class QuatSolvableOrderedMapPolynomialTest extends TestCase {
  */
  public void testAddition() {
 
-     a = QuatSolvableOrderedMapPolynomial.DIRRAS(table, rl, kl, ll, el, q );
+     a = QuatSolvableOrderedMapPolynomial.DIQRAS(table, rl, kl, ll, el, q );
 
      c = QuatSolvableOrderedMapPolynomial.DIPDIF(a,a);
      assertTrue("a-a = 0", c.isZERO() );
@@ -130,14 +130,14 @@ public class QuatSolvableOrderedMapPolynomialTest extends TestCase {
      assertEquals("a+a-a = a",c,a);
      assertTrue("a+a-a = a", c.equals(a) );
 
-     b = QuatSolvableOrderedMapPolynomial.DIRRAS(table, rl, kl, ll, el, q );
+     b = QuatSolvableOrderedMapPolynomial.DIQRAS(table, rl, kl, ll, el, q );
      c = QuatSolvableOrderedMapPolynomial.DIPSUM(b,a);
      d = QuatSolvableOrderedMapPolynomial.DIPSUM(a,b);
 
      assertEquals("a+b = b+a",c,d);
      assertTrue("a+b = b+a", c.equals(d) );
 
-     c = QuatSolvableOrderedMapPolynomial.DIRRAS(table, rl, kl, ll, el, q );
+     c = QuatSolvableOrderedMapPolynomial.DIQRAS(table, rl, kl, ll, el, q );
      d = QuatSolvableOrderedMapPolynomial.DIPSUM(a,QuatSolvableOrderedMapPolynomial.DIPSUM(b,c));
      e = QuatSolvableOrderedMapPolynomial.DIPSUM(QuatSolvableOrderedMapPolynomial.DIPSUM(a,b),c);
 
@@ -174,11 +174,11 @@ public class QuatSolvableOrderedMapPolynomialTest extends TestCase {
  */
  public void testMultiplication() {
 
-     a = QuatSolvableOrderedMapPolynomial.DIRRAS(table, rl, kl, ll, el, q );
+     a = QuatSolvableOrderedMapPolynomial.DIQRAS(table, rl, kl, ll, el, q );
      assertTrue("not isZERO( a )", !a.isZERO() );
-     //a = QuatSolvableOrderedMapPolynomial.DIRRAS(1, kl, 4, el, q );
+     //a = QuatSolvableOrderedMapPolynomial.DIQRAS(1, kl, 4, el, q );
 
-     b = QuatSolvableOrderedMapPolynomial.DIRRAS(table, rl, kl, ll, el, q );
+     b = QuatSolvableOrderedMapPolynomial.DIQRAS(table, rl, kl, ll, el, q );
      assertTrue("not isZERO( b )", !b.isZERO() );
 
      c = QuatSolvableOrderedMapPolynomial.DIPPR(b,a);
@@ -192,7 +192,7 @@ public class QuatSolvableOrderedMapPolynomialTest extends TestCase {
      //assertEquals("a*b = b*a",c,d);
      assertTrue("a*b != b*a", !c.equals(d) );
 
-     c = QuatSolvableOrderedMapPolynomial.DIRRAS(table, rl, kl, ll, el, q );
+     c = QuatSolvableOrderedMapPolynomial.DIQRAS(table, rl, kl, ll, el, q );
      d = QuatSolvableOrderedMapPolynomial.DIPPR(a,QuatSolvableOrderedMapPolynomial.DIPPR(b,c));
      e = QuatSolvableOrderedMapPolynomial.DIPPR(QuatSolvableOrderedMapPolynomial.DIPPR(a,b),c);
 
@@ -208,11 +208,11 @@ public class QuatSolvableOrderedMapPolynomialTest extends TestCase {
  */
  public void testMultiplication1() {
 
-     a = QuatSolvableOrderedMapPolynomial.DIRRAS(table, rl, kl, ll, el, q );
+     a = QuatSolvableOrderedMapPolynomial.DIQRAS(table, rl, kl, ll, el, q );
      assertTrue("not isZERO( a )", !a.isZERO() );
-     //a = QuatSolvableOrderedMapPolynomial.DIRRAS(1, kl, 4, el, q );
+     //a = QuatSolvableOrderedMapPolynomial.DIQRAS(1, kl, 4, el, q );
 
-     b = QuatSolvableOrderedMapPolynomial.DIRRAS(table, rl, kl, ll, el, q );
+     b = QuatSolvableOrderedMapPolynomial.DIQRAS(table, rl, kl, ll, el, q );
      assertTrue("not isZERO( b )", !b.isZERO() );
 
      c = b.multiply(a);
@@ -226,7 +226,7 @@ public class QuatSolvableOrderedMapPolynomialTest extends TestCase {
      //assertEquals("a*b = b*a",c,d);
      assertTrue("a*b != b*a", !c.equals(d) );
 
-     c = QuatSolvableOrderedMapPolynomial.DIRRAS(table, rl, kl, ll, el, q );
+     c = QuatSolvableOrderedMapPolynomial.DIQRAS(table, rl, kl, ll, el, q );
      d = a.multiply( b.multiply(c) );
      e = (a.multiply(b)).multiply(c);
 
@@ -262,10 +262,10 @@ public class QuatSolvableOrderedMapPolynomialTest extends TestCase {
      RelationTable table = wl.generate(rloc,dummy);
      dummy = null;
 
-     a = QuatSolvableOrderedMapPolynomial.DIRRAS(table, rloc, kl, ll, el, q );
+     a = QuatSolvableOrderedMapPolynomial.DIQRAS(table, rloc, kl, ll, el, q );
      assertTrue("not isZERO( a )", !a.isZERO() );
 
-     b = QuatSolvableOrderedMapPolynomial.DIRRAS(table, rloc, kl, ll, el, q );
+     b = QuatSolvableOrderedMapPolynomial.DIQRAS(table, rloc, kl, ll, el, q );
      assertTrue("not isZERO( b )", !b.isZERO() );
 
      // non commutative
@@ -280,7 +280,7 @@ public class QuatSolvableOrderedMapPolynomialTest extends TestCase {
      assertTrue("!isZERO( a*b-b*a ) " + e, !e.isZERO() );
      assertTrue("a*b != b*a", !c.equals(d) );
 
-     c = QuatSolvableOrderedMapPolynomial.DIRRAS(table, rloc, kl, ll, el, q );
+     c = QuatSolvableOrderedMapPolynomial.DIQRAS(table, rloc, kl, ll, el, q );
      // associative
      d = a.multiply( b.multiply(c) );
      e = (a.multiply(b)).multiply(c);

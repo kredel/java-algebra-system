@@ -105,7 +105,7 @@ public class IntSolvableOrderedMapPolynomialTest extends TestCase {
  */
  public void testRandom() {
      for (int i = 0; i < 2; i++) {
-         a = IntSolvableOrderedMapPolynomial.DIRRAS(table,rl+i, kl*(i+1), ll+2*i, el+i, q );
+         a = IntSolvableOrderedMapPolynomial.DIIRAS(table,rl+i, kl*(i+1), ll+2*i, el+i, q );
          assertTrue("length( a"+i+" ) <> 0", a.length() >= 0);
          assertTrue(" not isZERO( a"+i+" )", !a.isZERO() );
          assertTrue(" not isONE( a"+i+" )", !a.isONE() );
@@ -119,7 +119,7 @@ public class IntSolvableOrderedMapPolynomialTest extends TestCase {
  */
  public void testAddition() {
 
-     a = IntSolvableOrderedMapPolynomial.DIRRAS(table, rl, kl, ll, el, q );
+     a = IntSolvableOrderedMapPolynomial.DIIRAS(table, rl, kl, ll, el, q );
 
      c = IntSolvableOrderedMapPolynomial.DIPDIF(a,a);
      assertTrue("a-a = 0", c.isZERO() );
@@ -130,14 +130,14 @@ public class IntSolvableOrderedMapPolynomialTest extends TestCase {
      assertEquals("a+a-a = a",c,a);
      assertTrue("a+a-a = a", c.equals(a) );
 
-     b = IntSolvableOrderedMapPolynomial.DIRRAS(table, rl, kl, ll, el, q );
+     b = IntSolvableOrderedMapPolynomial.DIIRAS(table, rl, kl, ll, el, q );
      c = IntSolvableOrderedMapPolynomial.DIPSUM(b,a);
      d = IntSolvableOrderedMapPolynomial.DIPSUM(a,b);
 
      assertEquals("a+b = b+a",c,d);
      assertTrue("a+b = b+a", c.equals(d) );
 
-     c = IntSolvableOrderedMapPolynomial.DIRRAS(table, rl, kl, ll, el, q );
+     c = IntSolvableOrderedMapPolynomial.DIIRAS(table, rl, kl, ll, el, q );
      d = IntSolvableOrderedMapPolynomial.DIPSUM(a,IntSolvableOrderedMapPolynomial.DIPSUM(b,c));
      e = IntSolvableOrderedMapPolynomial.DIPSUM(IntSolvableOrderedMapPolynomial.DIPSUM(a,b),c);
 
@@ -174,11 +174,11 @@ public class IntSolvableOrderedMapPolynomialTest extends TestCase {
  */
  public void testMultiplication() {
 
-     a = IntSolvableOrderedMapPolynomial.DIRRAS(table, rl, kl, ll, el, q );
+     a = IntSolvableOrderedMapPolynomial.DIIRAS(table, rl, kl, ll, el, q );
      assertTrue("not isZERO( a )", !a.isZERO() );
-     //a = IntSolvableOrderedMapPolynomial.DIRRAS(1, kl, 4, el, q );
+     //a = IntSolvableOrderedMapPolynomial.DIIRAS(1, kl, 4, el, q );
 
-     b = IntSolvableOrderedMapPolynomial.DIRRAS(table, rl, kl, ll, el, q );
+     b = IntSolvableOrderedMapPolynomial.DIIRAS(table, rl, kl, ll, el, q );
      assertTrue("not isZERO( b )", !b.isZERO() );
 
      c = IntSolvableOrderedMapPolynomial.DIPPR(b,a);
@@ -192,7 +192,7 @@ public class IntSolvableOrderedMapPolynomialTest extends TestCase {
      assertEquals("a*b = b*a",c,d);
      assertTrue("a*b = b*a", c.equals(d) );
 
-     c = IntSolvableOrderedMapPolynomial.DIRRAS(table, rl, kl, ll, el, q );
+     c = IntSolvableOrderedMapPolynomial.DIIRAS(table, rl, kl, ll, el, q );
      d = IntSolvableOrderedMapPolynomial.DIPPR(a,IntSolvableOrderedMapPolynomial.DIPPR(b,c));
      e = IntSolvableOrderedMapPolynomial.DIPPR(IntSolvableOrderedMapPolynomial.DIPPR(a,b),c);
 
@@ -208,11 +208,11 @@ public class IntSolvableOrderedMapPolynomialTest extends TestCase {
  */
  public void testMultiplication1() {
 
-     a = IntSolvableOrderedMapPolynomial.DIRRAS(table, rl, kl, ll, el, q );
+     a = IntSolvableOrderedMapPolynomial.DIIRAS(table, rl, kl, ll, el, q );
      assertTrue("not isZERO( a )", !a.isZERO() );
-     //a = IntSolvableOrderedMapPolynomial.DIRRAS(1, kl, 4, el, q );
+     //a = IntSolvableOrderedMapPolynomial.DIIRAS(1, kl, 4, el, q );
 
-     b = IntSolvableOrderedMapPolynomial.DIRRAS(table, rl, kl, ll, el, q );
+     b = IntSolvableOrderedMapPolynomial.DIIRAS(table, rl, kl, ll, el, q );
      assertTrue("not isZERO( b )", !b.isZERO() );
 
      c = b.multiply(a);
@@ -226,7 +226,7 @@ public class IntSolvableOrderedMapPolynomialTest extends TestCase {
      assertEquals("a*b = b*a",c,d);
      assertTrue("a*b = b*a", c.equals(d) );
 
-     c = IntSolvableOrderedMapPolynomial.DIRRAS(table, rl, kl, ll, el, q );
+     c = IntSolvableOrderedMapPolynomial.DIIRAS(table, rl, kl, ll, el, q );
      d = a.multiply( b.multiply(c) );
      e = (a.multiply(b)).multiply(c);
 
@@ -248,10 +248,10 @@ public class IntSolvableOrderedMapPolynomialTest extends TestCase {
      RelationTable table = wl.generate(rloc,dummy);
      dummy = null;
 
-     a = IntSolvableOrderedMapPolynomial.DIRRAS(table, rloc, kl, ll, el, q );
+     a = IntSolvableOrderedMapPolynomial.DIIRAS(table, rloc, kl, ll, el, q );
      assertTrue("not isZERO( a )", !a.isZERO() );
 
-     b = IntSolvableOrderedMapPolynomial.DIRRAS(table, rloc, kl, ll, el, q );
+     b = IntSolvableOrderedMapPolynomial.DIIRAS(table, rloc, kl, ll, el, q );
      assertTrue("not isZERO( b )", !b.isZERO() );
 
      // non commutative
@@ -266,7 +266,7 @@ public class IntSolvableOrderedMapPolynomialTest extends TestCase {
      assertTrue("!isZERO( a*b-b*a ) " + e, !e.isZERO() );
      assertTrue("a*b != b*a", !c.equals(d) );
 
-     c = IntSolvableOrderedMapPolynomial.DIRRAS(table, rloc, kl, ll, el, q );
+     c = IntSolvableOrderedMapPolynomial.DIIRAS(table, rloc, kl, ll, el, q );
      // associative
      d = a.multiply( b.multiply(c) );
      e = (a.multiply(b)).multiply(c);

@@ -458,7 +458,7 @@ public class GroebnerBaseDistributedPS  {
                        if ( logger.isDebugEnabled() ) {
                            logger.debug("ht(S) = " + S.leadingExpVector() );
                        }
-                       H = Reduction.Normalform( theList.getList(), S );
+                       H = Reduction.normalform( theList.getList(), S );
                        red++;
                        if ( H.isZERO() ) {
                            // pair.setZero(); does not work in dist
@@ -595,8 +595,8 @@ public class GroebnerBaseDistributedPS  {
             if ( logger.isDebugEnabled() ) {
                  logger.debug("ht(S) = " + S.leadingExpVector() );
             }
-            H = Reduction.Normalform( P, H );
-            H = Reduction.Normalform( Q, H );
+            H = Reduction.normalform( P, H );
+            H = Reduction.normalform( Q, H );
             done.V();
             if ( logger.isDebugEnabled() ) {
                  logger.debug("ht(H) = " + H.leadingExpVector() );
@@ -635,8 +635,8 @@ public class GroebnerBaseDistributedPS  {
             if ( logger.isDebugEnabled() ) {
                  logger.debug("ht(S) = " + S.leadingExpVector() );
             }
-            H = Reduction.Normalform( P, H );
-            H = Reduction.Normalform( Q, H );
+            H = Reduction.normalform( P, H );
+            H = Reduction.normalform( Q, H );
             done.V();
             if ( logger.isDebugEnabled() ) {
                  logger.debug("ht(H) = " + H.leadingExpVector() );
