@@ -70,7 +70,7 @@ public class RatOrderedMapPolynomial extends OrderedMapPolynomial {
 
 
     public Object clone() { 
-       RatOrderedMapPolynomial p = new RatOrderedMapPolynomial(val);
+       RatOrderedMapPolynomial p = new RatOrderedMapPolynomial(order,val);
        p.setVars(vars);
        return p; 
     }
