@@ -48,6 +48,7 @@ public class DistributedList /* implements List not jet */{
 	} catch (IOException e) {
 	    e.printStackTrace();
 	}
+	logger.debug("dl channel = "+channel);
 	theList = new ArrayList();
 	listener = new Listener(channel,theList);
 	listener.start();
