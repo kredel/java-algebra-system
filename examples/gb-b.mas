@@ -1,0 +1,50 @@
+(* ----------------------------------------------------------------------------
+ * $Id$
+ * ----------------------------------------------------------------------------
+ * This file is part of MAS.
+ * ----------------------------------------------------------------------------
+ * Copyright (c) 1989 - 1996 Universitaet Passau
+ * ----------------------------------------------------------------------------
+ * $Log$
+ * Revision 1.1  2000/06/22 21:21:56  kredel
+ * Initial revision
+ *
+ * Revision 1.1.1.1  2000/06/17 20:40:56  kredel
+ * Clean import of MAS 1.0 from Uni Passau
+ *
+ * Revision 1.1  1996/06/08 18:15:55  pesch
+ * Renamed *.test to *.mas and added new tests.
+ *
+ * Revision 1.1  1992/01/30  12:21:10  kredel
+ * Initial revision
+ *
+ * ----------------------------------------------------------------------------
+ *)
+ 
+CLOUT("Computing Groebner base ... "). 
+   
+P:=PREAD(). 
+ 
+(B,S,T,Z,P,W) L 
+( 
+( 45 P + 35 S - 165 B - 36 ), 
+( 35 P + 40 Z + 25 T - 27 S ), 
+( 15 W + 25 S P + 30 Z - 18 T - 165 B**2 ), 
+( - 9 W + 15 T P + 20 S Z ), 
+( P W + 2 T Z - 11 B**3 ), 
+( 99 W - 11 B S + 3 B**2 ) 
+
+) 
+
+(*Syntax: <variable list> <term order> 
+          <polynomial list> *) 
+  
+PWRITE(P). 
+ 
+Q:=DIRPGB(P,1). 
+ 
+PWRITE(Q). 
+ 
+CLOUT(" ... finished."). 
+
+(* -EOF- *)
