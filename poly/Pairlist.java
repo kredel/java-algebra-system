@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.BitSet;
 
+import org.apache.log4j.Logger;
+
 //import edu.jas.poly.ExpVector;
 
 /**
@@ -26,6 +28,8 @@ public class Pairlist {
     private ArrayList P;
     private TreeMap pairlist;
     private ArrayList red;
+
+    private static Logger logger = Logger.getLogger(Pairlist.class);
 
     public Pairlist(Comparator ordm) {
          P = new ArrayList();
@@ -103,7 +107,8 @@ public class Pairlist {
 
            ExpVector g = (ExpVector) me.getKey();
            LinkedList xl =(LinkedList) me.getValue();
-	   System.out.println("g  = " + g);
+           if ( logger.isInfoEnabled() )
+	      logger.info("g  = " + g);
 
 	   while ( !c & xl.size() > 0 ) {
                  pair = (Pair) xl.removeFirst();
@@ -142,7 +147,7 @@ public class Pairlist {
 	boolean s;
         s = ((BitSet)red.get( j )).get(i); 
 	if ( ! s ) { 
-           System.out.println("c3.s false for " + j + " " + i); 
+           logger.warn("c3.s false for " + j + " " + i); 
            return s;
 	}
 	s = true;

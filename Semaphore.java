@@ -5,7 +5,8 @@
 package edu.jas;
 //package edu.unima.ky.parallel;
 
-import java.io.*;
+import java.io.Serializable;
+import org.apache.log4j.Logger;
 
 /**
  * Semaphore
@@ -18,6 +19,8 @@ public class Semaphore implements Serializable {
   private int init;
   private int s;
   private int del;
+
+  private static Logger logger = Logger.getLogger("edu.jas");
 
   /**
    * Constructs a default semaphore
@@ -41,7 +44,7 @@ public class Semaphore implements Serializable {
   protected void finalize() throws Throwable {
     if (init != s) { 
         int x = s - init;
-        System.out.println("Semaphore: " + x + " pending operations."); 
+        logger.warn("Semaphore: " + x + " pending operations."); 
     }
    super.finalize();
   }

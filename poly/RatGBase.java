@@ -14,14 +14,18 @@ import java.util.ArrayList;
 import java.util.ListIterator;
 import java.util.Iterator;
 
+import org.apache.log4j.Logger;
+
 import edu.jas.arith.BigRational;
 import edu.jas.ThreadPool;
 import edu.jas.Semaphore;
 
 public class RatGBase  {
 
+    private static Logger logger = Logger.getLogger(RatGBase.class);
+
     public static RatPolynomial DIRPSP(RatPolynomial Ap, RatPolynomial Bp) {  
-        if ( Ap.evord != Bp.evord ) { System.out.println("ERROR"); }
+        if ( Ap.evord != Bp.evord ) { logger.error("evord mismatch"); }
 
         Map.Entry ma = RatPolynomial.DIRPLM(Ap);
         Map.Entry mb = RatPolynomial.DIRPLM(Bp);
@@ -55,7 +59,7 @@ public class RatGBase  {
     public static boolean DIGBC4(RatPolynomial A, 
                                  RatPolynomial B, 
                                  ExpVector e) {  
-        if ( A.evord != B.evord ) { System.out.println("ERROR"); }
+        if ( A.evord != B.evord ) { logger.error("evord mismatch"); }
         ExpVector ei = RatPolynomial.DIRPEV(A);
         ExpVector ej = RatPolynomial.DIRPEV(B);
         ExpVector g = ExpVector.EVSUM(ei,ej);
@@ -110,14 +114,14 @@ public class RatGBase  {
                   if ( mt ) break; 
 	      }
               if ( ! mt ) { 
-		  //System.out.println(e + " irred ");
+		 logger.debug("irred");
                  T = new RatPolynomial( a, e );
                  R = RatPolynomial.DIRPSM( R, T );
                  S = RatPolynomial.DIRPDF( S, T ); // bad performance
 		 //		 System.out.println(" S = " + S);
 	      }
               else { 
-		  //                 System.out.println(e + " red ");
+		 logger.debug("red");
 		 e = ExpVector.EVDIF( e, htl[i] );
                  a = BigRational.RNQ( a, lbc[i] );
                  T = new RatPolynomial( a, e );
@@ -150,14 +154,14 @@ public class RatGBase  {
         int irr = 0;
         ExpVector e;        
         ExpVector f;        
-        System.out.print("irr = ");
+        logger.debug("irr = ");
         while ( irr != l ) {
             it = P.listIterator(); 
 	    a = (RatPolynomial) it.next();
             P.remove(0);
             e = RatPolynomial.DIRPEV( a );
             a = DIRPNF( P, a );
-            System.out.print(irr + " ");
+            logger.debug(String.valueOf(irr));
             if ( a.length() == 0 ) { l--;
 	       if ( l <= 1 ) { return P; }
 	    } else {
@@ -174,7 +178,7 @@ public class RatGBase  {
                P.add( (Object) a );
 	    }
 	}
-        System.out.println();
+        //System.out.println();
 	return P;
     }
 
@@ -282,9 +286,9 @@ public class RatGBase  {
 		  try {
 		      sleeps++;
                       if ( sleeps % 10 == 0 ) {
-                         System.out.println(" main is sleeping");
+                         logger.info("main is sleeping");
 		      } else {
-                         System.out.print("s");
+                         logger.debug("s");
 		      }
 		      Thread.currentThread().sleep(100);
 		  } catch (InterruptedException e) {
@@ -326,6 +330,7 @@ public class RatGBase  {
 	private boolean working = true;
 	private boolean sema = false;
 	public final Semaphore done = new Semaphore(0);
+        private static Logger logger = Logger.getLogger(Reducer1.class);
 
 	Reducer1(Reducer1 pr, List P, RatPolynomial p, Pairlist l) {
 	    proceeding = pr;
@@ -339,14 +344,14 @@ public class RatGBase  {
 	   int l = 0;
 	   int plen = 0;
 	   do {
-              System.out.print("ht(S|H) = " + Polynomial.DIPLEV(H));
+              logger.info("ht(S|H) = " + Polynomial.DIPLEV(H));
 	      if ( P.size() > plen ) { // only new polynomials
 		 plen = P.size();
                  H = DIRPNF( P, H );
-                 System.out.println(", ht(H) = " + Polynomial.DIPLEV(H));
+                 logger.info("ht(H) = " + Polynomial.DIPLEV(H));
 	         H = RatPolynomial.DIRPMC( H );
 	      } else {
-                 System.out.println();
+		  //System.out.println();
 	      }
               // System.out.println("H   = " + H);
 	      if ( H.isONE() ) {
@@ -362,7 +367,7 @@ public class RatGBase  {
 	      if ( proceeding == null ) break;
 	      if ( ! proceeding.done() ) { 
 		 try {
-		     System.out.println("wait on proceeding");
+		     logger.info("wait on proceeding");
 		     // proceeding.wait(100);
 		     sema = proceeding.done.P(100);
 		     // System.out.println("sema = " + sema);
@@ -437,6 +442,7 @@ public class RatGBase  {
 	private List P;
 	private Pairlist pairlist;
 	private Terminator pool;
+        private static Logger logger = Logger.getLogger(Reducer.class);
 
 	Reducer(Terminator fin, List P, Pairlist L) {
 	    pool = fin;
@@ -460,9 +466,9 @@ public class RatGBase  {
 		  try {
 		      sleeps++;
                       if ( sleeps % 10 == 0 ) {
-                         System.out.println(" reducer is sleeping");
+                         logger.info(" reducer is sleeping");
 		      } else {
-                         System.out.print("r");
+                         logger.debug("r");
 		      }
 		      Thread.currentThread().sleep(100);
 		  } catch (InterruptedException e) {
@@ -485,10 +491,10 @@ public class RatGBase  {
               //System.out.println("S   = " + S);
               if ( S.isZERO() ) continue;
 
-              System.out.print("ht(S) = " + Polynomial.DIPLEV(S));
+              logger.info("ht(S) = " + Polynomial.DIPLEV(S));
               H = DIRPNF( P, S );
 	      red++;
-              System.out.println(", ht(H) = " + Polynomial.DIPLEV(H));
+              logger.info("ht(H) = " + Polynomial.DIPLEV(H));
               H = RatPolynomial.DIRPMC( H );
               // System.out.println("H   = " + H);
 	      if ( H.isONE() ) {
@@ -506,9 +512,7 @@ public class RatGBase  {
                  pairlist.put( H );
 	      }
 	   }
-           System.out.println( "Reducer["+
-                      Thread.currentThread().getName()+
-                      "] terminated, done " + red + " reductions");
+           logger.info( "terminated, done " + red + " reductions");
 	}
 
     }
@@ -694,6 +698,7 @@ public class RatGBase  {
 	private RatPolynomial S;
 	private RatPolynomial H;
 	private Semaphore done = new Semaphore(0);
+        private static Logger logger = Logger.getLogger(MiReducer.class);
 
 	MiReducer(List P, List Q, RatPolynomial p) {
 	    this.P = P;
@@ -709,11 +714,13 @@ public class RatGBase  {
 	}
 
 	public void run() {
-              System.out.print("ht(S) = " + Polynomial.DIPLEV(S));
+	      if ( logger.isDebugEnabled() )
+                 logger.debug("ht(S) = " + Polynomial.DIPLEV(S));
               H = DIRPNF( P, H );
               H = DIRPNF( Q, H );
 	      done.V();
-              System.out.println(", ht(H) = " + Polynomial.DIPLEV(H));
+	      if ( logger.isDebugEnabled() )
+                 logger.debug("ht(H) = " + Polynomial.DIPLEV(H));
 	      // H = RatPolynomial.DIRPMC( H );
 	}
 

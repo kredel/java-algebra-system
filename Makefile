@@ -17,7 +17,8 @@ JDK=/usr/java/j2sdk1.4.1_01/bin
 #JDK=/opt/jdk1.2.2/bin
 #JDK=/usr/lib/java/bin
 
-JUNITPATH=/home/kredel/java/lib/junit.jar:.
+JUNITPATH=/home/kredel/java/lib/junit.jar
+LOG4JPATH=/home/kredel/java/lib/log4j.jar
 JOMPPATH=/home/kredel/java/lib/jomp1.0b.jar
 
 # no need to change below this line
@@ -29,12 +30,12 @@ cl=
 
 JASPATH=/home/kredel/jas
 DEFS=$(JASPATH)/arith:$(JASPATH)/poly:$(JASPATH)/ring
-DOCCLASSES=$(JUNITPATH):$(JOMPPATH)
+DOCCLASSES=$(JUNITPATH):$(LOG4JPATH):$(JOMPPATH)
 DOCOPTS=-package
 #DOCOPTS=-package -version -author
 #DOCOPTS=-public -protected -package -author -version
 
-MYCLASSPATH = $(DEFS):$(JUNITPATH):$(JOMPPATH)
+MYCLASSPATH = .:$(DEFS):$(JUNITPATH):$(LOG4JPATH):$(JOMPPATH)
 
 JAVAC=$(JDK)/javac -classpath $(MYCLASSPATH) -d .
 JAVA=$(JDK)/java -classpath $(MYCLASSPATH)  
@@ -64,11 +65,17 @@ all:
 %.class: %.java
 	$(JAVAC) $<
 
+edu/jas/%.class: %.java
+	$(JAVAC) $<
+
 edu/jas/arith/%.class: %.java
 	$(JAVAC) $<
 
 edu/jas/poly/%.class: %.java
 	$(JAVAC) $<
+
+edu.jas.%: edu/jas/%.class
+	$(JAVA) $@ $(cl)
 
 edu.jas.arith.%: edu/jas/arith/%.class
 	$(JAVA) $@ $(cl)
@@ -90,8 +97,8 @@ FILES=$(wildcard *.java arith/*.java poly/*.java ring/*.java)
 doc: $(FILES)
 	$(DOC) $(DOCOPTS) -d doc $(FILES) 
 
-jar: $(FILES) m2j-log.html Makefile
-	$(JDK)/jar -cvf jas.jar $(FILES) edu/ m2j-log.html Makefile
+jar: $(FILES) jas-log.html Makefile
+	$(JDK)/jar -cvf jas.jar $(FILES) edu/ jas-log.html Makefile
 	cp jas.jar /tmp/jas-`date +%Y%j`.jar
 	cp jas.jar /mnt/i/e/kredel/jas-`date +%Y%j`.jar
 

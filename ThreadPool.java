@@ -8,6 +8,8 @@ package edu.jas;
 //import java.util.Stack;
 import java.util.LinkedList;
 
+import org.apache.log4j.Logger;
+
 /**
  * Thread Pool using stack workpile
  * @author Akitoshi Yoshida 
@@ -21,6 +23,8 @@ public class ThreadPool {
     int nojobs = 0;
     //    Stack jobstack;
     LinkedList jobstack;
+
+    private static Logger logger = Logger.getLogger(ThreadPool.class);
 
     public ThreadPool() {
         this(SIZE);
@@ -70,12 +74,9 @@ public class ThreadPool {
     public synchronized void addJob(Runnable job) {
 	//        jobstack.push(job);
         jobstack.addLast(job);
-	// System.out.println("Thread["+Thread.currentThread().getName()+
-        //                "] adding job" );
+	logger.debug("adding job" );
         if (nojobs > 0) {
-	    // nojobs--;
-	    // System.out.println("Thread["+Thread.currentThread().getName()+
-            //                   "] notifying a jobless worker");
+	    logger.debug("notifying a jobless worker");
             notify();
         }
     }
@@ -87,8 +88,7 @@ public class ThreadPool {
     public synchronized Runnable getJob() throws InterruptedException {
         while (jobstack.isEmpty()) {
             nojobs++;
-	    // System.out.println("Thread["+Thread.currentThread().getName()+
-            //                   "] waiting");
+	    logger.debug("waiting");
             wait();
             nojobs--;
         }
@@ -131,6 +131,7 @@ public class ThreadPool {
  */
 class PoolThread extends Thread {
     ThreadPool pool;
+    private static Logger logger = Logger.getLogger(ThreadPool.class);
 
     boolean working = false;
 
@@ -143,9 +144,7 @@ class PoolThread extends Thread {
  * Runs the thread.
  */
     public void run() {
-        System.out.println( "Thread["+
-                        Thread.currentThread().getName()+
-                        "] ready" );
+        logger.info( "ready" );
 	Runnable job;
 	int done = 0;
 	long time = 0;
@@ -153,28 +152,20 @@ class PoolThread extends Thread {
         boolean running = true;
         while (running) {
             try {
-                //System.out.println( "Thread["+
-                //               Thread.currentThread().getName()+
-                //               "] looking for a job" );
+                logger.debug( "looking for a job" );
                 job = pool.getJob();
                 working = true;
-                System.out.println( "Thread["+
-                               Thread.currentThread().getName()+
-                               "] working" );
+                logger.info( "working" );
 		t = System.currentTimeMillis();
                 job.run(); 
                 working = false;
 		time += System.currentTimeMillis() - t;
 		done++;
-                System.out.println( "Thread["+
-                               Thread.currentThread().getName()+
-                               "] done" );
+                logger.info( "done" );
             }
             catch (InterruptedException e) { running = false; }
         }
-        System.out.println( "Thread["+
-                        Thread.currentThread().getName()+
-                        "] terminated, done "+done+" jobs in " 
+        logger.info( "terminated, done "+done+" jobs in " 
                         + time + " milliseconds");
     }
 
