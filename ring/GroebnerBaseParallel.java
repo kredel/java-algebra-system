@@ -68,10 +68,9 @@ public class GroebnerBaseParallel  {
 	      T.addJob( R );
 	}
 	fin.done();
-	// System.out.println("\n main loop ended \n");
 	P = DIGBMI(P,T);
 	T.terminate();
-        //System.out.println();
+        logger.info("pairlist #put = " + pairlist.putCount() + " #rem = " + pairlist.remCount());
 	return P;
     }
 
