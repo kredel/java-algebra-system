@@ -4,6 +4,8 @@
 
 package edu.jas;
 
+import org.apache.log4j.Logger;
+
 import edu.unima.ky.parallel.Semaphore;
 
     /**
@@ -13,6 +15,8 @@ import edu.unima.ky.parallel.Semaphore;
      */
 
 public class Terminator {
+
+        private static Logger logger = Logger.getLogger(Terminator.class);
 
 	private int workers = 0;
 	private int idler = 0;
@@ -24,7 +28,9 @@ public class Terminator {
 
 	public synchronized void beIdle() {
 	    idler++;
-	    if ( idler >= workers ) fin.V();
+	    if ( idler >= workers ) {
+               fin.V();
+	    }
 	}
 
 	public synchronized void allIdle() {
@@ -43,6 +49,7 @@ public class Terminator {
 	public void done() {
             try { fin.P();
 	    } catch (InterruptedException e) { }
+            logger.info("done, idler = "+idler);
 	}
 
 }
