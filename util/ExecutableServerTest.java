@@ -86,7 +86,7 @@ public class ExecutableServerTest extends TestCase {
 	 sc.send( e1 );
 	 Object o = sc.receive();
          assertTrue("o:String", o instanceof String);
-         assertEquals("o==done", (String)o, "done" );
+         assertEquals("o==done", (String)o, ExecutableServer.DONE );
          sc.close();
      } catch (IOException e) {
 	 e.printStackTrace();
@@ -111,7 +111,7 @@ public class ExecutableServerTest extends TestCase {
   	     sc.send( e1 );
 	     o = sc.receive();
              assertTrue("o:String", o instanceof String);
-             assertEquals("o==done", (String)o, "done" );
+             assertEquals("o==done", (String)o, ExecutableServer.DONE );
 	 }
          sc.close();
      } catch (IOException e) {
@@ -139,7 +139,7 @@ public class ExecutableServerTest extends TestCase {
 	     sc.send( e1 );
 	     o = sc.receive();
              assertTrue("o:String", o instanceof String);
-             assertEquals("o==done", (String)o, "done" );
+             assertEquals("o==done", (String)o, ExecutableServer.DONE );
 
              e1 = null;
              sc.close();
