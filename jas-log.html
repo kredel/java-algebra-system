@@ -60,10 +60,103 @@ Some UML class diagramms as produced by ArgoUML:
 
 <dl>
 <!--
-<dt>2003, 1,  </dt>
+<dt>2005, 1,  </dt>
 <dd> 
 </dd>
 -->
+
+<dt>2005, 1, 9</dt>
+<dd> 
+  Introduced all improvements in util classes found so far.
+  (ChannelFactory and others)
+</dd>
+
+<dt>2004, 10, 3 </dt>
+<dd> 
+  Generator for Katsura examples (from POSSO / FRISCO examples).
+  Timings on an AMD Athlon XP 2800 (2086MHz) with log level INFO.
+  Log level WARN would gain 10-20 %.
+<div align="center" >
+<table border="1" cellpadding="10"
+       summary="Timings Katsura examples" >
+<caption>Timings Katsura examples</caption>
+<tr>
+<th>N <br />vars = N+1</th>
+<th>TermOrder</th>
+<th>Seconds</th>
+<th>TermOrder</th>
+<th>Seconds</th>
+</tr>
+<tr align="right">
+<td> 7 </td>
+<td> G </td>
+<td>32044.204</td>
+<td> L </td>
+<td></td>
+</tr>
+<tr align="right">
+<td> 6 </td>
+<td> G </td>
+<td>112.641</td>
+<td> L </td>
+<td></td>
+</tr>
+<tr align="right">
+<td> 5 </td>
+<td> G </td>
+<td>4.195</td>
+<td> L </td>
+<td></td>
+</tr>
+<tr align="right">
+<td> 4 </td>
+<td> G </td>
+<td>0.431</td>
+<td> L </td>
+<td>11.650</td>
+</tr>
+<tr align="right">
+<td> 3 </td>
+<td> G </td>
+<td>0.153</td>
+<td> L </td>
+<td>0.310</td>
+</tr>
+<tr align="right">
+<td> 2 </td>
+<td> G </td>
+<td>0.031</td>
+<td> L </td>
+<td>0.032</td>
+</tr>
+</table>
+</div>
+</dd>
+
+<dt>2004, 9, 20-26 </dt>
+<dd> 
+  Changed OrderedPairlist to record the sequence of pairs taken from the list. 
+  New methods <code>putParallel()</code>, <code>removeParallel()</code> and 
+  helper methods. Sequence numbers are generated and reduced polynomials 
+  are only put to the pair list if corresponding pair number is in 
+  correct (sequential) sequence. 
+  The ordered list / queue <code>pairsequence</code> (TreeMap/SortedMap) 
+  keeps track of the polynomials not yet put to the pairlist.
+  <br />
+  Parallelism is possible as long there are pairs to be reduced.
+  But non zero reduced polynomials are only put into the pairlist if
+  the polynomial would be put into the pairlist in the sequential 
+  Buchberger algorithm.
+  GroebnerBase algorithms had to be modified to record that a polynomial
+  reduced to zero.
+</dd>
+
+<dt>2004, 9, 19 </dt>
+<dd> 
+  Changed order of Pair inserts for pairs with same LCM of HTs.
+  Added sequence number to each Pair and indicator if Pair did not
+  reduce to zero.
+</dd>
 
 <dt>2004, September </dt>
 <dd> 
@@ -833,7 +926,7 @@ CPU TIME (ms) END
 <p>
 <!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
 <!-- hhmts start -->
-Last modified: Thu Sep 16 12:15:07 CEST 2004
+Last modified: Sun Jan  9 17:15:18 CET 2005
 <!-- hhmts end -->
 </p>
 <p align="right" >
