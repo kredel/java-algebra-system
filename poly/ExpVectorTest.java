@@ -6,6 +6,8 @@ package edu.jas.poly;
 
 //import edu.jas.poly.ExpVector;
 
+import java.util.Arrays;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -187,5 +189,48 @@ public class ExpVectorTest extends TestCase {
                    ExpVector.EVTDEG(b) );
 
  }
+
+
+/**
+ * Test dependency on variables.
+ * 
+ */
+ public void testDependency() {
+     int[] exp;
+     int[] dep;
+
+     a = new ExpVector(10,5,2l);
+     exp = new int[] { 5 };
+     dep = ExpVector.EVDOV(a);
+     assertTrue("[5] = [5]",Arrays.equals(exp,dep));
+
+     b = new ExpVector(10,3,9l);
+     exp = new int[] { 3 };
+     dep = ExpVector.EVDOV(b);
+     assertTrue("[3] = [3]",Arrays.equals(exp,dep));
+
+     c = ExpVector.EVSUM(a,b);
+     exp = new int[] { 3, 5 };
+     dep = ExpVector.EVDOV(c);
+     assertTrue("[3,5] = [3,5]",Arrays.equals(exp,dep));
+
+     b = new ExpVector(10);
+     exp = new int[] { };
+     dep = ExpVector.EVDOV(b);
+     assertTrue("[] = []",Arrays.equals(exp,dep));
+
+     b = new ExpVector();
+     exp = new int[] { };
+     dep = ExpVector.EVDOV(b);
+     assertTrue("[] = []",Arrays.equals(exp,dep));
+
+     b = new ExpVector(1,0,1l);
+     exp = new int[] { 0 };
+     dep = ExpVector.EVDOV(b);
+     assertTrue("[0] = [0]",Arrays.equals(exp,dep));
+
+
+ }
+
 
 }
