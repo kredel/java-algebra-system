@@ -7,6 +7,7 @@ package edu.jas.ring;
 //import edu.jas.poly.GroebnerBase;
 
 import java.util.List;
+import java.util.Iterator;
 import java.util.ArrayList;
 
 import junit.framework.Test;
@@ -14,6 +15,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Logger;
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.RatOrderedMapPolynomial;
@@ -26,6 +28,8 @@ import edu.jas.poly.PolynomialList;
  */
 
 public class GroebnerBaseTest extends TestCase {
+
+    private static final Logger logger = Logger.getLogger(GroebnerBaseTest.class);
 
 /**
  * main
@@ -66,7 +70,7 @@ public class GroebnerBaseTest extends TestCase {
    int kl = 10;
    int ll = 7;
    int el = 3;
-   float q = 0.4f;
+    float q = 0.3f; //0.4f
 
    protected void setUp() {
        a = b = c = d = e = null;
@@ -74,6 +78,7 @@ public class GroebnerBaseTest extends TestCase {
        b = RatOrderedMapPolynomial.DIRRAS(rl, kl, ll, el, q );
        c = RatOrderedMapPolynomial.DIRRAS(rl, kl, ll, el, q );
        d = RatOrderedMapPolynomial.DIRRAS(rl, kl, ll, el, q );
+       e = RatOrderedMapPolynomial.DIRRAS(rl, kl, ll, el, q );
    }
 
    protected void tearDown() {
@@ -117,6 +122,13 @@ public class GroebnerBaseTest extends TestCase {
 
      L = GroebnerBase.DIRPGB( L );
      assertTrue("isDIRPGB( { a, ,b, c, d } )", GroebnerBase.isDIRPGB(L) );
+
+     // e = RatOrderedMapPolynomial.DIRRAS(rl, kl, ll, el, q );
+     assertTrue("not isZERO( e )", !e.isZERO() );
+     L.add(e);
+
+     L = GroebnerBase.DIRPGB( L );
+     assertTrue("isDIRPGB( { a, ,b, c, d, e } )", GroebnerBase.isDIRPGB(L) );
  }
 
 /**
@@ -156,6 +168,91 @@ public class GroebnerBaseTest extends TestCase {
 
      L = GroebnerBaseParallel.DIRPGB( L, threads );
      assertTrue("isDIRPGB( { a, ,b, c, d } )", GroebnerBase.isDIRPGB(L) );
+
+     // e = RatOrderedMapPolynomial.DIRRAS(rl, kl, ll, el, q );
+     assertTrue("not isZERO( e )", !e.isZERO() );
+     L.add(e);
+
+     if ( logger.isDebugEnabled() ) {
+	 for (Iterator it = L.iterator(); it.hasNext(); ) {
+             logger.debug("before Li = " + it.next() );
+	 }
+     }
+
+     L = GroebnerBaseParallel.DIRPGB( L, threads );
+     assertTrue("isDIRPGB( { a, ,b, c, d, e } )", GroebnerBase.isDIRPGB(L) );
+
+     if ( logger.isDebugEnabled() ) {
+	 for (Iterator it = L.iterator(); it.hasNext(); ) {
+             logger.debug("after Li = " + it.next() );
+	 }
+     }
+ }
+
+/**
+ * Test compare sequential with parallel GBase
+ * 
+ */
+ public void testSequentialParallelGBase() {
+     int threads = 2;
+
+     ArrayList Gs, Gp;
+     L = new ArrayList();
+     Iterator is, ip;
+
+     L.add(a);
+     Gs = GroebnerBase.DIRPGB( L );
+     Gp = GroebnerBaseParallel.DIRPGB( L, threads );
+     is = Gs.iterator(); 
+     ip = Gp.iterator(); 
+     while ( is.hasNext() && ip.hasNext() ) {
+	   assertEquals("is.equals(ip)", is.next(), ip.next() );
+     }
+     assertFalse("Gs = Gp = empty " , is.hasNext() || ip.hasNext() );
+
+     L = Gs;
+     L.add(b);
+     Gs = GroebnerBase.DIRPGB( L );
+     Gp = GroebnerBaseParallel.DIRPGB( L, threads );
+     is = Gs.iterator(); 
+     ip = Gp.iterator(); 
+     while ( is.hasNext() && ip.hasNext() ) {
+	   assertEquals("is.equals(ip)", is.next(), ip.next() );
+     }
+     assertFalse("Gs = Gp = empty " , is.hasNext() || ip.hasNext() );
+
+     L = Gs;
+     L.add(c);
+     Gs = GroebnerBase.DIRPGB( L );
+     Gp = GroebnerBaseParallel.DIRPGB( L, threads );
+     is = Gs.iterator(); 
+     ip = Gp.iterator(); 
+     while ( is.hasNext() && ip.hasNext() ) {
+	   assertEquals("is.equals(ip)", is.next(), ip.next() );
+     }
+     assertFalse("Gs = Gp = empty " , is.hasNext() || ip.hasNext() );
+
+     L = Gs;
+     L.add(d);
+     Gs = GroebnerBase.DIRPGB( L );
+     Gp = GroebnerBaseParallel.DIRPGB( L, threads );
+     is = Gs.iterator(); 
+     ip = Gp.iterator(); 
+     while ( is.hasNext() && ip.hasNext() ) {
+	   assertEquals("is.equals(ip)", is.next(), ip.next() );
+     }
+     assertFalse("Gs = Gp = empty " , is.hasNext() || ip.hasNext() );
+
+     L = Gs;
+     L.add(e);
+     Gs = GroebnerBase.DIRPGB( L );
+     Gp = GroebnerBaseParallel.DIRPGB( L, threads );
+     is = Gs.iterator(); 
+     ip = Gp.iterator(); 
+     while ( is.hasNext() && ip.hasNext() ) {
+	   assertEquals("is.equals(ip)", is.next(), ip.next() );
+     }
+     assertFalse("Gs = Gp = empty " , is.hasNext() || ip.hasNext() );
  }
 
 }
