@@ -272,7 +272,7 @@ number A/1. */
 
 /** Rational number inverse.  R is a non-zero rational number.  S=1/R. */
 
-  public BigRational inverse() {
+  public Coefficient inverse() {
       BigInteger R1 = num; //R.nominator();
       BigInteger R2 = den; //R.denominator();
       BigInteger S1;
@@ -289,7 +289,7 @@ number A/1. */
 
   public static BigRational RNINV(BigRational R) {
       if ( R == null ) return null;
-      return R.inverse();
+      return (BigRational)R.inverse();
   }
 
 
@@ -391,12 +391,12 @@ T=R/S. */
 
   public BigRational divide(BigRational S) {
       BigRational T;
-      T = RNPROD( this, S.inverse() );
+      T = RNPROD( this, (BigRational)S.inverse() );
       return T;
   }
 
   public static BigRational RNQ(BigRational R, BigRational S) {
-      if ( R == null ) return S.inverse();
+      if ( R == null ) return (BigRational)S.inverse();
       return R.divide( S );
   }
 
