@@ -30,6 +30,8 @@ public abstract class SolvableOrderedMapPolynomial
     private static Logger logger = Logger.getLogger(SolvableOrderedMapPolynomial.class);
 
     protected final RelationTable table;
+ 
+    private final boolean debug = logger.isDebugEnabled();
 
     /**
      * Constructors for SolvableOrderedMapPolynomial
@@ -56,6 +58,11 @@ public abstract class SolvableOrderedMapPolynomial
 
     public SolvableOrderedMapPolynomial(RelationTable table, Coefficient a, ExpVector e) { 
         super(a,e);
+        this.table = table;
+    }
+
+    public SolvableOrderedMapPolynomial(RelationTable table, TermOrder to, Coefficient a, ExpVector e) { 
+        super(to,a,e);
         this.table = table;
     }
 
@@ -130,7 +137,7 @@ public abstract class SolvableOrderedMapPolynomial
      public OrderedPolynomial multiply(OrderedPolynomial Bp) {  
 	if ( Bp == null ) return getZERO();
         if ( ! this.order.equals( Bp.getTermOrder() ) ) { 
-           logger.error("term orderings not equal"); 
+           logger.error("SPol term orderings not equal, this = "+this+", Bp = "+Bp); 
         }
         // this.val != empty
         int rl = numberOfVariables();
@@ -152,7 +159,7 @@ public abstract class SolvableOrderedMapPolynomial
             Coefficient a = (Coefficient) y.getValue(); 
             //logger.debug("a = " + a);
 	    ExpVector e = (ExpVector) y.getKey(); 
-            logger.debug("e = " + e);
+            if ( debug ) logger.debug("e = " + e);
             int[] ep = e.dependencyOnVariables();
             int el1 = rl + 1;
             if ( ep.length > 0 ) {
@@ -168,18 +175,18 @@ public abstract class SolvableOrderedMapPolynomial
                 Coefficient b = (Coefficient) x.getValue(); 
                 //logger.debug("b = " + b);
 	        ExpVector f = (ExpVector) x.getKey(); 
-                logger.debug("f = " + f);
+                if ( debug ) logger.debug("f = " + f);
                 int[] fp = f.dependencyOnVariables();
                 int fl1 = 0; 
                 if ( fp.length > 0 ) {
                    fl1 = fp[fp.length-1];
                 }
                 int fl1s = rl+1-fl1; 
-                logger.debug("el1s = " + el1s + " fl1s = " + fl1s);
+                if ( debug ) logger.debug("el1s = " + el1s + " fl1s = " + fl1s);
                 SolvablePolynomial Cs = null;
                 if ( el1s <= fl1s ) { // symmetric
 	            ExpVector g = ExpVector.EVSUM(e,f); 
-                    logger.debug("g = " + g);
+                    if ( debug ) logger.debug("g = " + g);
                     Cs = (SolvablePolynomial)zero.add( one, g ); // symmetric!
                 } else { // unsymmetric
                     // split e = e1 * e2, f = f1 * f2
@@ -188,8 +195,8 @@ public abstract class SolvableOrderedMapPolynomial
                     ExpVector e4;
                     ExpVector f1 = f.subst(fl1,0);
                     ExpVector f2 = Z.subst(fl1,f.getVal(fl1));
-                    logger.debug("e1 = " + e1 + " e2 = " + e2);
-                    logger.debug("f1 = " + f1 + " f2 = " + f2);
+                    if ( debug ) logger.debug("e1 = " + e1 + " e2 = " + e2);
+                    if ( debug ) logger.debug("f1 = " + f1 + " f2 = " + f2);
                     TableRelation rel = table.lookup(e2,f2,this); 
                     //logger.info("relation = " + rel);
                     Cs = (SolvablePolynomial)rel.p; 
@@ -222,7 +229,7 @@ public abstract class SolvableOrderedMapPolynomial
                 Coefficient c = a.multiply(b);
                 //logger.debug("c = " + c);
                 Cs = (SolvablePolynomial)Cs.multiply( c ); // symmetric!
-                logger.debug("Cs = " + Cs);
+                if ( debug ) logger.debug("Cs = " + Cs);
                 Cp = (SolvablePolynomial)Cp.add( Cs );
             }
         }
@@ -301,6 +308,34 @@ public abstract class SolvableOrderedMapPolynomial
             return Cs;
     }
     */
+
+
+
+    /**
+     * Product with number.
+     */
+
+    public OrderedPolynomial multiply(Coefficient b) {  
+        OrderedPolynomial Cp = getZERO(table,order); 
+        Cp.setVars(vars);
+        if ( b.isZERO() ) { 
+            return Cp;
+        }
+        Map C = Cp.getMap();
+        Map A = val; //this.getMap();
+        Iterator ai = A.entrySet().iterator();
+        while ( ai.hasNext() ) {
+            Map.Entry y = (Map.Entry) ai.next();
+            ExpVector e = (ExpVector) y.getKey(); 
+            //System.out.println("e = " + e);
+            Coefficient a = (Coefficient) y.getValue(); 
+            //System.out.println("a = " + a);
+            Coefficient c = a.multiply(b);
+            //System.out.println("c = " + c);
+            C.put( e, c );
+        }
+        return Cp;
+    }
 
 
     /**
