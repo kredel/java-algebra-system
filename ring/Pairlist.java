@@ -25,6 +25,7 @@ import edu.jas.poly.RatPolynomial;
  * Pair list management.
  * Implemented using TreeMap (SortedMap) and BitSet.
  * @author Heinz Kredel
+ * @deprecated
  */
 
 public class Pairlist {
