@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="iso-8859-1" ?>
+
+<project name="jas" default="usage" basedir="." >
+
+  <property name="src"      value="." />
+  <property name="build"    value="." />
+  <property name="doc"      value="doc" />
+
+  <property name="libs"     value="/home/kredel/java/lib" />
+  <property name="log4j"    value="${libs}/log4j.jar" />
+  <property name="junit"    value="${libs}/junit.jar" />
+  <property name="jomp"     value="${libs}/jomp1.0b.jar" />
+
+  <property name="cp"       value="${log4j}:${junit}:." />
+  <property name="version"  value="0.1" />
+
+<target name="vorher" >
+  <!-- set properties DSTAMP, TSTAMP -->
+  <tstamp />
+  <mkdir dir="edu/jas"  />
+</target>
+
+<target name="usage" >
+  <echo message="ant &lt;name&gt; cl='cmd'"  />
+  <!--echoproperties /-->
+</target>
+
+<target name="compile" depends="vorher,depend" >
+  <javac srcdir="${src}" destdir="${build}" 
+         classpath="${cp}" />
+</target>
+
+<target name="doc" >
+  <javadoc sourcepath="${src}" destdir="${doc}" private="true" >
+     <fileset dir="." includes="**/*.java"  />
+  </javadoc>
+</target>
+
+<target name="depend" depends="vorher" >
+  <depend srcDir="${src}" destDir="${build}" 
+          dump="true" closure="true" >
+  </depend>
+</target>
+
+<target name="jdepend" depends="vorher" >
+  <!-- does not work: jars missing  -->
+  <jdepend outputfile="jdepend.report" > 
+     <sourcespath>
+        <pathelement location="${src}"/>
+    </sourcespath>
+  </jdepend>
+</target>
+
+<target name="junit" depends="compile" >
+  <!-- does not work: optional for junit missing -->
+  <junit printsummary="yes" fork="yes" haltonfailure="yes" >
+     <formatter type="plain" />
+     <test name="edu.jas.SemaphoreTest" />
+  </junit>
+</target>
+
+<target name="jar" depends="vorher" >
+  <jar jarfile="../jas-${DSTAMP}.jar"  >
+     <fileset dir="." includes="**/*.java"  />
+     <fileset dir="." includes="jas-log.html"  />
+     <fileset dir="." includes="build.xml Makefile"  />
+     <fileset dir="edu/jas" />
+  </jar>
+</target>
+
+<target name="clean" >
+  <delete verbose="true" >
+    <fileset dir="${src}" defaultexcludes="no" includes="**/*~"  />
+  </delete>
+</target>
+
+</project>
