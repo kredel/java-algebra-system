@@ -32,8 +32,7 @@ f = SubModule( r, ps );
 print "SubModule: " + str(f);
 print;
 
-from edu.jas.module import *
-
+#from edu.jas.module import *
 #print "SubModule: " + str(ModuleList.getModuleList(4,f.pset));
 #print;
 
