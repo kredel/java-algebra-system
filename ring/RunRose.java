@@ -5,21 +5,22 @@
 package edu.jas.ring;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Iterator;
+//import java.util.List;
+//import java.util.Iterator;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 
 import org.apache.log4j.BasicConfigurator;
 
-import edu.jas.arith.BigRational;
-import edu.jas.poly.RatOrderedMapPolynomial;
+//import edu.jas.arith.BigRational;
+//import edu.jas.poly.RatOrderedMapPolynomial;
 import edu.jas.poly.OrderedPolynomialTokenizer;
 import edu.jas.poly.PolynomialList;
 
   /**
-   * simple setup to run the Rose example.
+   * Simple setup to run the Rose example.
+   * @author Heinz Kredel
    */
 
 public class RunRose {
@@ -30,16 +31,16 @@ public class RunRose {
       final int THREADS = 3;
       int threads = THREADS;
       if ( args.length > 0 ) {
-	  try {
-	      threads = Integer.parseInt( args[0] );
-	  } catch (NumberFormatException e) { }
+          try {
+              threads = Integer.parseInt( args[0] );
+          } catch (NumberFormatException e) { }
       }
       final int SPORT = 4711;
       int port = SPORT;
       if ( args.length > 1 ) {
-	  try {
-	      port = Integer.parseInt( args[1] );
-	  } catch (NumberFormatException e) { }
+          try {
+              port = Integer.parseInt( args[1] );
+          } catch (NumberFormatException e) { }
       }
 
       String set = "(U3,U4,A46) G" 

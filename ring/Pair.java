@@ -6,10 +6,11 @@ import java.io.Serializable;
 import edu.jas.poly.OrderedPolynomial;
 
     /**
-     * subclass to hold pairs of polynomials
+     * Serializable subclass to hold pairs of polynomials
      */
 
-    class Pair implements Serializable {
+class Pair implements Serializable {
+
 	public final OrderedPolynomial pi;
 	public final OrderedPolynomial pj;
 	public final int i;
@@ -34,4 +35,4 @@ import edu.jas.poly.OrderedPolynomial;
 	    return new MiniPair(i,j);
 	}
 
-    }
+}

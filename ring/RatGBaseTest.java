@@ -5,8 +5,6 @@
 
 package edu.jas.ring;
 
-//import edu.jas.poly.RatGBase;
-
 import java.util.List;
 import java.util.Iterator;
 import java.util.ArrayList;

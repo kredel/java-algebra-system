@@ -7,7 +7,8 @@ package edu.jas.ring;
 import java.io.IOException;
 
   /**
-   * simple setup to run the client in the distributed Rose example.
+   * Simple setup to run the client in the distributed Rose example.
+   * @author Heinz Kredel
    */
 
 public class RunRoseClient {
@@ -17,14 +18,14 @@ public class RunRoseClient {
       final String SERVER = "localhost";
       String host = SERVER;
       if ( args.length > 0 ) {
-	      host = args[0];
+              host = args[0];
       }
       final int SPORT = 4711;
       int port = SPORT;
       if ( args.length > 1 ) {
-	  try {
-	      port = Integer.parseInt( args[1] );
-	  } catch (NumberFormatException e) { }
+          try {
+              port = Integer.parseInt( args[1] );
+          } catch (NumberFormatException e) { }
       }
 
       runClient( host, port );
@@ -36,7 +37,7 @@ public class RunRoseClient {
 
       t = System.currentTimeMillis();
       System.out.println("\nGroebner base distributed server @ " 
-                                     + host + ":" +port); 
+                                     + host + ":" + port); 
       System.out.println("Groebner base distributed client ..."); 
       try {
           GroebnerBaseDistributed.DIRPGBClient(host,port);
