@@ -100,12 +100,12 @@ public class QuatSolvableOrderedMapPolynomial
        return new QuatSolvableOrderedMapPolynomial(table,to);
     }
 
-    public OrderedPolynomial getZERO(RelationTable table, 
+    public SolvablePolynomial getZERO(RelationTable table, 
                                      TermOrder to) { 
        return new QuatSolvableOrderedMapPolynomial(table,to);
     }
 
-    public OrderedPolynomial getZERO(RelationTable table) { 
+    public SolvablePolynomial getZERO(RelationTable table) { 
        return new QuatSolvableOrderedMapPolynomial(table);
     }
 
@@ -121,11 +121,11 @@ public class QuatSolvableOrderedMapPolynomial
                                                    getONE());
     }
 
-    public OrderedPolynomial getONE(RelationTable table) { 
+    public SolvablePolynomial getONE(RelationTable table) { 
        return new QuatSolvableOrderedMapPolynomial(table);
     }
 
-    public OrderedPolynomial getONE(RelationTable table, 
+    public SolvablePolynomial getONE(RelationTable table, 
                                     TermOrder to) { 
         return new QuatSolvableOrderedMapPolynomial(table,
                                                    to,
@@ -146,7 +146,7 @@ public class QuatSolvableOrderedMapPolynomial
      * Random polynomial.
      */
 
-    public static QuatSolvableOrderedMapPolynomial DIRRAS(RelationTable table, 
+    public static QuatSolvableOrderedMapPolynomial DIQRAS(RelationTable table, 
                                                          int r, 
                                                          int k, 
                                                          int l, 

@@ -100,12 +100,12 @@ public class IntSolvableOrderedMapPolynomial
        return new IntSolvableOrderedMapPolynomial(table,to);
     }
 
-    public OrderedPolynomial getZERO(RelationTable table, 
+    public SolvablePolynomial getZERO(RelationTable table, 
                                      TermOrder to) { 
        return new IntSolvableOrderedMapPolynomial(table,to);
     }
 
-    public OrderedPolynomial getZERO(RelationTable table) { 
+    public SolvablePolynomial getZERO(RelationTable table) { 
        return new IntSolvableOrderedMapPolynomial(table);
     }
 
@@ -121,11 +121,11 @@ public class IntSolvableOrderedMapPolynomial
                                                    getONE());
     }
 
-    public OrderedPolynomial getONE(RelationTable table) { 
+    public SolvablePolynomial getONE(RelationTable table) { 
        return new IntSolvableOrderedMapPolynomial(table);
     }
 
-    public OrderedPolynomial getONE(RelationTable table, 
+    public SolvablePolynomial getONE(RelationTable table, 
                                     TermOrder to) { 
         return new IntSolvableOrderedMapPolynomial(table,
                                                    to,
@@ -146,7 +146,7 @@ public class IntSolvableOrderedMapPolynomial
      * Random polynomial.
      */
 
-    public static IntSolvableOrderedMapPolynomial DIRRAS(RelationTable table, 
+    public static IntSolvableOrderedMapPolynomial DIIRAS(RelationTable table, 
                                                          int r, 
                                                          int k, 
                                                          int l, 

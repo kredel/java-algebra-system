@@ -100,12 +100,12 @@ public class RatSolvableOrderedMapPolynomial
        return new RatSolvableOrderedMapPolynomial(table,to);
     }
 
-    public OrderedPolynomial getZERO(RelationTable table, 
+    public SolvablePolynomial getZERO(RelationTable table, 
                                      TermOrder to) { 
        return new RatSolvableOrderedMapPolynomial(table,to);
     }
 
-    public OrderedPolynomial getZERO(RelationTable table) { 
+    public SolvablePolynomial getZERO(RelationTable table) { 
        return new RatSolvableOrderedMapPolynomial(table);
     }
 
@@ -121,11 +121,11 @@ public class RatSolvableOrderedMapPolynomial
                                                    getONE());
     }
 
-    public OrderedPolynomial getONE(RelationTable table) { 
+    public SolvablePolynomial getONE(RelationTable table) { 
        return new RatSolvableOrderedMapPolynomial(table);
     }
 
-    public OrderedPolynomial getONE(RelationTable table, 
+    public SolvablePolynomial getONE(RelationTable table, 
                                     TermOrder to) { 
         return new RatSolvableOrderedMapPolynomial(table,
                                                    to,
