@@ -55,7 +55,7 @@ public class GroebnerBaseParallel  {
                   pairlist = new OrderedPairlist( p.getTermOrder() );
                }
                // putOne not required
-               pairlist.putParallel( p, null );
+               pairlist.put( p );
 	    }
             else l--;
 	}
@@ -74,7 +74,8 @@ public class GroebnerBaseParallel  {
 	T.terminate();
         logger.info("pairlist #put = " + pairlist.putCount() 
                   + " #rem = " + pairlist.remCount()
-                  + " #total = " + pairlist.pairCount());
+                    //+ " #total = " + pairlist.pairCount()
+                   );
 	return P;
     }
 
@@ -124,7 +125,7 @@ public class GroebnerBaseParallel  {
               if ( ! pairlist.hasNext() && ! pool.hasJobs() ) break;
               if ( set ) pool.notIdle();
 
-              pair = (Pair) pairlist.removeNextParallel();
+              pair = (Pair) pairlist.removeNext();
               if ( pair == null ) continue; 
 
               pi = pair.pi; 
@@ -153,7 +154,7 @@ public class GroebnerBaseParallel  {
               H = H.monic();
               // System.out.println("H   = " + H);
 	      if ( H.isONE() ) { 
-                  pairlist.putOne( H, pair ); // not really required
+                  pairlist.putOne( H ); // not really required
 		  synchronized (P) {
                       P.clear(); P.add( H );
 		  }
@@ -163,7 +164,7 @@ public class GroebnerBaseParallel  {
               synchronized (P) {
                      P.add( H );
               }
-              pairlist.putParallel( H, pair );
+              pairlist.put( H );
 	   }
            logger.info( "terminated, done " + red + " reductions");
 	}

@@ -75,7 +75,7 @@ public class GroebnerBase  {
                   pairlist = new OrderedPairlist( p.getTermOrder() );
                }
                // putOne not required
-               pairlist.put( p, null );
+               pairlist.put( p );
 	    }
             else l--;
 	}
@@ -128,13 +128,14 @@ public class GroebnerBase  {
               if ( H.length() > 0 ) {
 		 l++;
                  P.add( (Object) H );
-                 pairlist.put( H, null );
+                 pairlist.put( H );
               }
 	}
 	P = DIGBMI(P);
         logger.info("pairlist #put = " + pairlist.putCount() 
                   + " #rem = " + pairlist.remCount()
-                  + " #total = " + pairlist.pairCount());
+                    // + " #total = " + pairlist.pairCount()
+                   );
 	return P;
     }
 

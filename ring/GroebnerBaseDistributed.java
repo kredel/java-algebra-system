@@ -89,9 +89,9 @@ public class GroebnerBaseDistributed  {
                   pairlist = new OrderedPairlist( p.getTermOrder() );
                }
                if ( p.isONE() ) {
-                   pairlist.putOne( p, null );
+                   pairlist.putOne( p );
                } else {
-                   pairlist.putParallel( p, null );
+                   pairlist.put( p );
                }
             }
             else l--;
@@ -151,7 +151,8 @@ public class GroebnerBaseDistributed  {
         dls.terminate();
         logger.info("pairlist #put = " + pairlist.putCount() 
                   + " #rem = " + pairlist.remCount()
-                  + " #total = " + pairlist.pairCount());
+                    //+ " #total = " + pairlist.pairCount()
+                   );
         return P;
     }
 
@@ -271,7 +272,7 @@ public class GroebnerBaseDistributed  {
                       pool.notIdle();
 		   }
 
-                   pair = (Pair) pairlist.removeNextParallel();
+                   pair = (Pair) pairlist.removeNext();
                    // if ( pair == null ) continue; 
 
                    /*
@@ -313,10 +314,10 @@ public class GroebnerBaseDistributed  {
                        } else {
                            if ( H.isONE() ) {
                                // pool.allIdle();
-                               pairlist.putOne( H, pair );
+                               pairlist.putOne( H );
                                goon = false;
                            } else {
-                               pairlist.putParallel( H, pair );
+                               pairlist.put( H );
 			   }
                        }
                    }
@@ -416,7 +417,7 @@ public class GroebnerBaseDistributed  {
                /*
                 * request pair and process, send result
                 */
-               // pair = (Pair) pairlist.removeNextParallel();
+               // pair = (Pair) pairlist.removeNext();
 
                Object dummy = new Integer(5);
                logger.debug("send request, dummy = "+dummy);
