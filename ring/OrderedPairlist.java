@@ -130,6 +130,7 @@ public class OrderedPairlist {
            LinkedList xl =(LinkedList) me.getValue();
            if ( logger.isInfoEnabled() )
 	      logger.info("g  = " + g);
+	   pair = null;
 
 	   while ( !c & xl.size() > 0 ) {
                  pair = (Pair) xl.removeFirst();
@@ -148,6 +149,7 @@ public class OrderedPairlist {
            if ( xl.size() == 0 ) ip.remove(); 
               // = pairlist.remove( g );
        }
+       if ( ! c ) pair = null;
        return pair; 
     }
 
