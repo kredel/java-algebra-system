@@ -18,11 +18,15 @@ import edu.jas.arith.BigRational;
 
 import edu.jas.poly.OrderedPolynomial;
 import edu.jas.poly.OrderedMapPolynomial;
+import edu.jas.poly.SolvableOrderedMapPolynomial;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.TermOrder;
 import edu.jas.poly.RelationTable;
 import edu.jas.poly.PolynomialList;
 
+import java.io.Serializable;
+
+import org.apache.log4j.Logger;
 
 /**
  * list of vectors of polynomials
@@ -30,7 +34,9 @@ import edu.jas.poly.PolynomialList;
  * @author Heinz Kredel
  */
 
-public class ModuleList {
+public class ModuleList implements Serializable {
+
+    private static Logger logger = Logger.getLogger(ModuleList.class);
 
     public final Coefficient coeff;
     public final String[] vars;
@@ -284,6 +290,13 @@ public class ModuleList {
         for ( int i = 0; i < cols; i++ ) {
             v[ vars.length + i ] = "e" + (i+1);
         }
+        logger.debug("gen poly list = " + cols + " more from " + vars.length);
+        RelationTable extab = null;
+        if ( table != null ) {
+           extab = table.extend(cols,v);
+           zero = ((SolvableOrderedMapPolynomial)zero).getZERO( extab );
+           //logger.info("zero = " + zero);
+        }
         OrderedMapPolynomial c = null;
         OrderedPolynomial d = null;
         for ( Iterator it = list.iterator(); it.hasNext(); ) {
@@ -293,13 +306,17 @@ public class ModuleList {
             int m = 0;
             for ( Iterator jt = r.iterator(); jt.hasNext(); ) {
                 c = (OrderedMapPolynomial)jt.next();
-                d = c.extend( cols, m, 1l, v );
+                if ( c instanceof SolvableOrderedMapPolynomial ) {
+                   d = ((SolvableOrderedMapPolynomial)c).extend( cols, m, 1l, v, extab );
+                } else {
+                   d = c.extend( cols, m, 1l, v );
+                }
                 ext = ext.add(d); 
                 m++;
             }
             pols.add( ext );
         }
-        return new PolynomialList(coeff,v,tord,pols,table);
+        return new PolynomialList(coeff, v, tord, pols, extab);
     }
 
     /**
@@ -322,6 +339,11 @@ public class ModuleList {
         for ( int j = 0; j < cols; j++ ) {
             v[j] = pl.vars[j];
         }
+        RelationTable contab = null;
+        if ( pl.table != null ) {
+           contab = pl.table.contract( i );
+        }
+
         List m = new ArrayList( l.size() );
         ArrayList zr = new ArrayList( i-1 );
         OrderedPolynomial zero = null;
@@ -331,7 +353,12 @@ public class ModuleList {
         for (Iterator it = l.iterator(); it.hasNext(); ) {
             OrderedMapPolynomial p = (OrderedMapPolynomial)it.next();
             if ( p != null ) {
-                Map r = p.contract( i );
+                Map r = null;
+                if ( p instanceof SolvableOrderedMapPolynomial ) {
+                    r = ((SolvableOrderedMapPolynomial)p).contract( i, contab );
+                } else {
+                   r = p.contract( i );
+                }
                 //System.out.println("r = " + r ); 
                 List row = (List)zr.clone();
                 for ( Iterator jt = r.keySet().iterator(); jt.hasNext(); ) {
@@ -369,7 +396,7 @@ public class ModuleList {
             }
             //System.out.println("vr = " + vr ); 
         }
-        return new ModuleList(pl.coeff,v,pl.tord,m,pl.table);
+        return new ModuleList(pl.coeff, v, pl.tord, m, contab);
     }
 
 }
