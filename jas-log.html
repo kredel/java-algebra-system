@@ -65,6 +65,15 @@ Some UML class diagramms as produced by ArgoUML:
 </dd>
 -->
 
+<dt>2005, 3, 5</dt>
+<dd> 
+ For the python languege and interpreter exists also a Java 
+ version named jython. This system can directly access Java classes 
+ and execute Java methods. 
+ Added some jython modules Ring, Ideal, SolvRing and SolvIdeal, 
+ to access jas GB algorithms from jython.
+</dd>
+
 <dt>2005, 2, 25-28</dt>
 <dd> 
  Penality of commutative GB computed as non-commutative left GB
@@ -106,6 +115,112 @@ Some UML class diagramms as produced by ArgoUML:
   for SolvablePolynomials, also criterion4() method itself checks 
   for SolvablePolynomials.
 </p>
+<div align="center" >
+<table border="1" cellpadding="10"
+       summary="relation table timings 1" >
+<caption>RelationTable timings I, U(sl_3)</caption>
+<tr>
+<th>run / n</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+<th>11</th>
+<th>12</th>
+<th>13</th>
+<th>14</th>
+<th>15</th>
+</tr>
+<tr align="right">
+<th>first</th>
+<td> 3</td>
+<td> 13</td>
+<td> 32</td>
+<td> 92</td>
+<td> 128</td>
+<td> 188</td>
+<td> 274</td>
+<td> 420</td>
+<td> 683</td>
+<td> 1126</td>
+<td> 1795</td>
+<td> 2793</td>
+<td> 4380</td>
+<td> 6741</td>
+</tr>
+<tr align="right">
+<th>second</th>
+<td> 0</td>
+<td> 1</td>
+<td> 2</td>
+<td> 3</td>
+<td> 4</td>
+<td> 5</td>
+<td> 6</td>
+<td> 8</td>
+<td> 10</td>
+<td> 13</td>
+<td> 16</td>
+<td> 21</td>
+<td> 27</td>
+<td> 35</td>
+</tr>
+</table>
+</div>
+<p>
+  Timings in ms on AMD XP 2800+.
+  Computation of (Y^n) * (X^n) with respect to the relation
+  Y * X = X Y - H.
+  In the first run the relation table is populated with the 
+  products Y^i * X^i, i = 2,...,n.
+  In the second run the relations are reused, showing almost
+  no computing time anymore for the products.
+</p>
+<div align="center" >
+<table border="1" cellpadding="10"
+       summary="relation table timings 2" >
+<caption>RelationTable timings II, U(sl_3)</caption>
+<tr>
+<th>run / n</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+</tr>
+<tr align="right">
+<th>first</th>
+<td> 28</td>
+<td> 94</td>
+<td> 303</td>
+<td> 1234</td>
+<td> 5185</td>
+<td> 24647</td>
+</tr>
+<tr align="right">
+<th>second</th>
+<td> 1</td>
+<td> 12</td>
+<td> 107</td>
+<td> 782</td>
+<td> 4569</td>
+<td> 23897</td>
+</tr>
+</table>
+</div>
+<p>
+  Second example shows th computation of 
+  ( Xa + Xb + Xc + Ya + Yb + Yc + Ha + Hb )^n
+  in U(sl_3).
+  Since in the relation table only products of two variables 
+  are stored, the improvement is minimal (for low n).
+</p>
 </dd>
 
 <dt>2005, 1, 24-31</dt>
@@ -119,6 +234,192 @@ Some UML class diagramms as produced by ArgoUML:
   rereducing so far irreducible terms would be an alternative.
   Todo: use JDK 1.5 java.util.concurrent with interference free Lists,
   BlockingQueues.
+
+<div align="center" >
+<table border="1" cellpadding="10"
+       summary="distributed timings k6g" >
+<caption>Distributed computation timings, Katsura 6 (G)</caption>
+<tr>
+<th># Threads <br /> CPUs</th>
+<th># JVMs</th>
+<th>time (sec)</th>
+<th>#put</th>
+<th>#remove</th>
+<th>% total</th>
+</tr>
+<tr align="right">
+<td>1, seq</td>
+<td>1</td>
+<td>160.2</td>
+<td>70</td>
+<td>327</td>
+<td>13.5</td>
+</tr>
+<tr align="right">
+<td>1, par</td>
+<td>1</td>
+<td>157.0</td>
+<td>70</td>
+<td>327</td>
+<td>13.5</td>
+</tr>
+<tr align="right">
+<td>2, par</td>
+<td>1</td>
+<td> 82.2</td>
+<td>72</td>
+<td>329</td>
+<td>12.7</td>
+</tr>
+<tr align="right">
+<td>1, dist</td>
+<td>1</td>
+<td>177.2</td>
+<td>77</td>
+<td>334</td>
+<td>11.4</td>
+</tr>
+<tr align="right">
+<td>2, dist</td>
+<td>2</td>
+<td> 92.2</td>
+<td>90</td>
+<td>347</td>
+<td> 8.6</td>
+</tr>
+<tr align="right">
+<td>4, dist</td>
+<td>2</td>
+<td> 56.2</td>
+<td>112</td>
+<td>369</td>
+<td> 5.9</td>
+</tr>
+<tr align="right">
+<td>8, dist</td>
+<td>2</td>
+<td> 58.9</td>
+<td>255</td>
+<td>516</td>
+<td> 1.5</td>
+</tr>
+<tr align="right">
+<td>4, dist</td>
+<td>4</td>
+<td> 51.2</td>
+<td>117</td>
+<td>374</td>
+<td> 5.5</td>
+</tr>
+<tr align="right">
+<td>6, dist</td>
+<td>4</td>
+<td> 43.7</td>
+<td>129</td>
+<td>386</td>
+<td> 4.6</td>
+</tr>
+<tr align="right">
+<td>8, dist</td>
+<td>4</td>
+<td> 62.9</td>
+<td>259</td>
+<td>519</td>
+<td> 1.5</td>
+</tr>
+<!--
+<tr align="right">
+<td></td>
+<td></td>
+<td></td>
+</tr>
+-->
+</table>
+</div>
+<p>Timings taken on a 16 CPU Intel Xeon SMP computer running 
+   at 2.7 GHz and with 32 GB RAM. 
+   JVM 1.4.2 started with AggressiveHeap and UseParallelGC. 
+   <br />
+   #JVMs = number of distinct Java virtual machines.
+   #put = number of polynomials put to pair list.
+   #remove = number of pairs removed from pair list, 
+             i.e. after application of criterions, 
+             but including nulls up to now.
+   % total = per cent of removed pairs from total pairs generated,
+             #remove / ( #put * (#put-1) / 2 ) * 100.
+</p>
+<div align="center" >
+<table border="1" cellpadding="10"
+       summary="distributed timings k7g" >
+<caption>Distributed computation timings, Katsura 7 (G)</caption>
+<tr>
+<th># Threads <br /> CPUs</th>
+<th># JVMs</th>
+<th>time (sec)</th>
+<th>#put</th>
+<th>#remove</th>
+<th>% total</th>
+</tr>
+<tr align="right">
+<td>1, dist</td>
+<td>1</td>
+<td>24726.2</td>
+<td>140</td>
+<td>781</td>
+<td> 8.0</td>
+</tr>
+<tr align="right">
+<td>2, dist</td>
+<td>2</td>
+<td>12356.1</td>
+<td>165</td>
+<td>806</td>
+<td> 5.9</td>
+</tr>
+<tr align="right">
+<td>4, dist</td>
+<td>4</td>
+<td>6859.3</td>
+<td>218</td>
+<td>859</td>
+<td> 3.6</td>
+</tr>
+<tr align="right">
+<td>8, dist</td>
+<td>4</td>
+<td>7465.1</td>
+<td>411</td>
+<td>1054</td>
+<td> 1.2</td>
+</tr>
+<tr align="right">
+<td>8, dist</td>
+<td>8</td>
+<td>6412.9</td>
+<td>344</td>
+<td>986</td>
+<td> 1.6</td>
+</tr>
+<tr align="right">
+<td>8, dist</td>
+<td>8</td>
+<td>7173.3</td>
+<td>399</td>
+<td>1041</td>
+<td> 1.3</td>
+</tr>
+</table>
+</div>
+<p>
+  Overhead for distributed variant is about 10% in Katsura 6 (G).
+  Distributed 1 means one distributed process is running for the
+  reduction of S-polynomials. There is always a master process
+  handling polynomial input / output, setup and management of 
+  distributed workers and handling of the pair list.
+  Communication between master and workers is always via TCP/IP
+  with object serialization, even if running on one computer.
+</p>
+
 </dd>
 
 <dt>2005, 1, 15-16</dt>
@@ -1121,7 +1422,7 @@ CPU TIME (ms) END
 <p>
 <!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
 <!-- hhmts start -->
-Last modified: Sun Feb 27 16:48:48 CET 2005
+Last modified: Sun Mar  6 16:19:57 CET 2005
 <!-- hhmts end -->
 </p>
 <p align="right" >
