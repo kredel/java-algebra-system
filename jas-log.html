@@ -65,10 +65,93 @@ Some UML class diagramms as produced by ArgoUML:
 </dd>
 -->
 
-<dt>2005, 1, 9</dt>
+<dt>2005, 1, 9-12</dt>
 <dd> 
   Introduced all improvements in util classes found so far.
   (ChannelFactory and others)
+  On parallel computers the following JVM options (1.4.2) 
+  must be used:
+<pre>
+  -Xms200M -Xmx400M -XX:+AggressiveHeap -XX:+UseParallelGC
+</pre>
+  Memory must be adjusted with respect to your situation.
+<p>
+  Seperated versions with Pair Sequence Respecting Order (PS) and
+  normal versions. PS versions try to keep the order of 
+  reduced polynomials added to the ideal base the same as in 
+  the sequential version.
+  Normal versions now running OK on parallel computer with the 
+  right JVM options.
+</p>
+<div align="center" >
+<table border="1" cellpadding="10"
+       summary="parallel timings" >
+<caption>Parallel computation timings, Katsura examples</caption>
+<tr>
+<th># Threads<br />CPUs</th>
+<th>Katsura 6 TO(G)</th>
+<th>Katsura 7 TO(G)</th>
+</tr>
+<tr align="right">
+<td>seq</td>
+<td>184.5</td>
+<td></td>
+</tr>
+<tr align="right">
+<td>1</td>
+<td>181.5</td>
+<td></td>
+</tr>
+<tr align="right">
+<td>2</td>
+<td>118.6</td>
+<td></td>
+</tr>
+<tr align="right">
+<td>4</td>
+<td>76.8</td>
+<td>6256.9</td>
+</tr>
+<tr align="right">
+<td>8</td>
+<td>43.2</td>
+<td>3240.7</td>
+</tr>
+<tr align="right">
+<td>10</td>
+<td>42,5</td>
+<td></td>
+</tr>
+<tr align="right">
+<td>12</td>
+<td>40.5</td>
+<td>2288.1</td>
+</tr>
+<tr align="right">
+<td>14</td>
+<td>31.2</td>
+<td></td>
+</tr>
+<tr align="right">
+<td>16</td>
+<td>51.9</td>
+<td>* 5376.4</td>
+</tr>
+<!--
+<tr align="right">
+<td></td>
+<td></td>
+<td></td>
+</tr>
+-->
+</table>
+</div>
+<p>Timings taken on a 16 CPU Intel Xeon SMP computer running 
+   at 2.7 GHz and with 32 GB RAM. 
+   JVM 1.4.2 started with AggressiveHeap and UseParallelGC. 
+   <br />
+  *) timing taken with other load on the CPUs.
+</p>
 </dd>
 
 <dt>2004, 10, 3 </dt>
@@ -926,7 +1009,7 @@ CPU TIME (ms) END
 <p>
 <!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
 <!-- hhmts start -->
-Last modified: Sun Jan  9 17:15:18 CET 2005
+Last modified: Wed Jan 12 21:35:30 CET 2005
 <!-- hhmts end -->
 </p>
 <p align="right" >
