@@ -142,7 +142,7 @@ public class Reduction  {
         ExpVector e;
         Coefficient a;
         boolean mt = false;
-        OrderedPolynomial R = Ap.getZERO();
+        OrderedPolynomial R = Ap.getZERO( Ap.getTermOrder() );
 
         OrderedPolynomial T = null;
         OrderedPolynomial Q = null;
