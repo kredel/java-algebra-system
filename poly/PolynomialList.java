@@ -59,7 +59,7 @@ public class PolynomialList {
         }
 	vars = v;
 	tord = to;
-	list = sort(l);
+	list = l; //sort(l);
         table = rt;
     }
 
@@ -98,27 +98,12 @@ public class PolynomialList {
             System.out.println("List, size");
             return false;
         }
-        Iterator jt = pl.list.iterator();
-        for ( Iterator it = list.iterator(); 
-              it.hasNext() && jt.hasNext(); ) {
-            Object pi = it.next();
-            Object pj = jt.next();
-            if ( ! ( pi instanceof OrderedPolynomial ) ) {
-                System.out.println("OrderedPolynomial, pi");
-                return false;
-            }
-            if ( ! ( pj instanceof OrderedPolynomial ) ) {
-                System.out.println("OrderedPolynomial, pj");
-                return false;
-            }
-            OrderedPolynomial pip = (OrderedPolynomial)pi;
-            OrderedPolynomial pjp = (OrderedPolynomial)pj;
-            if ( ! pip.equals( pjp ) ) {
-               System.out.println("OrderedPolynomial");
-               System.out.println("pip = " + pip);
-               System.out.println("pjp = " + pjp);
-               return false;
-            }
+        // compare sorted lists
+        // compare sorted lists
+        List otl = OrderedPolynomialList.sort( list );
+        List opl = OrderedPolynomialList.sort( pl.list );
+        if ( ! otl.equals(opl) ) {
+            return false;
         }
 
         if ( table == null && pl.table != null ) {
@@ -190,49 +175,5 @@ public class PolynomialList {
         }
 	return erg.toString();
     }
-
-
-    /**
-     * Sort a list of polynomials with respect to the ascending order 
-     * of the leading Exponent vectors. 
-     * The term order is taken from the first polynomials TermOrder.
-     */
-
-    public static List sort(List l) {
-        if ( l == null ) {
-            return l;
-        }
-        if ( l.size() <= 1 ) { // nothing to sort
-            return l;
-        }
-        OrderedPolynomial p = (OrderedPolynomial)l.get(0);
-        final Comparator e = p.getTermOrder().getAscendComparator();
-        Comparator c = new Comparator() {
-                public int compare(Object o1, Object o2) {
-                       OrderedPolynomial p1 = (OrderedPolynomial)o1;
-                       OrderedPolynomial p2 = (OrderedPolynomial)o2;
-                       ExpVector e1 = p1.leadingExpVector();
-                       ExpVector e2 = p2.leadingExpVector();
-                       if ( e1 == null ) {
-                          return -1; // dont care
-                       }
-                       if ( e2 == null ) {
-                          return 1; // dont care
-                       }
-                       if ( e1.length() != e2.length() ) {
-                          if ( e1.length() > e2.length() ) {
-                             return 1; // dont care
-                          } else {
-                             return -1; // dont care
-                          }
-                       }
-                       return e.compare(e1,e2);
-                }
-            };
-        Object[] s = l.toArray();
-        Arrays.sort( s, c );
-        return new ArrayList( Arrays.asList(s) );
-    }
-
 
 }
