@@ -32,6 +32,7 @@ public final class TermOrder implements Serializable {
 
     private final Comparator horder;  // highest first 
     private final Comparator lorder;  // lowest first
+    private final Comparator sugar;   // graded lowest first
 
     private final class EVhorder implements Comparator, Serializable {
            public int compare(Object o1, Object o2) {
@@ -49,6 +50,13 @@ public final class TermOrder implements Serializable {
            }
     }
 
+    private final class EVsugar implements Comparator, Serializable {
+           public int compare(Object o1, Object o2) {
+               return ExpVector.EVCOMP( /*INVLEX*/ IGRLEX , 
+                                        (ExpVector) o1, 
+                                        (ExpVector) o2 ); 
+           }
+    }
 
     public TermOrder() {
         this(DEFAULT_EVORD);
@@ -56,9 +64,13 @@ public final class TermOrder implements Serializable {
 
 
     public TermOrder(int evord) {
+        if ( evord < LEX || REVITDG < evord ) {
+           throw new IllegalArgumentException("invalid term order: "+evord);
+        }
         this.evord = evord;
         horder = new EVhorder();
         lorder = new EVlorder();
+        sugar  = new EVsugar();
     }
 
 
@@ -71,10 +83,14 @@ public final class TermOrder implements Serializable {
         return horder; 
     }
 
-
     public Comparator getAscendComparator() { 
         return lorder; 
     }
+
+    public Comparator getSugarComparator() { 
+        return sugar; 
+    }
+
 
     public boolean equals( Object B ) { 
        if ( ! (B instanceof TermOrder) ) return false;
@@ -84,10 +100,11 @@ public final class TermOrder implements Serializable {
     public String toString() {
 	StringBuffer erg = new StringBuffer();
 	switch ( evord ) {
-	case INVLEX: erg.append("INVLEX("+evord+")"); break ;
-	case IGRLEX: erg.append("IGRLEX("+evord+")"); break ;
-	case LEX:    erg.append("LEX("+evord+")");    break ;
-	case GRLEX:  erg.append("GRLEX("+evord+")");  break ;
+	case INVLEX: erg.append("INVLEX("+evord+")");  break ;
+	case IGRLEX: erg.append("IGRLEX("+evord+")");  break ;
+	case LEX:    erg.append("LEX("+evord+")");     break ;
+	case GRLEX:  erg.append("GRLEX("+evord+")");   break ;
+        default:     erg.append("invalid("+evord+")"); break ;
 	}
         return erg.toString();
     }
