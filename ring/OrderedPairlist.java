@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.OrderedPolynomial;
+import edu.jas.poly.SolvablePolynomial;
 import edu.jas.poly.TermOrder;
 
 /**
@@ -31,6 +32,7 @@ public class OrderedPairlist {
     private final ArrayList red;
     private final TermOrder torder;
     private boolean oneInGB = false;
+    private boolean useCriterion4 = true;
     private int putCount;
     private int remCount;
 
@@ -59,6 +61,9 @@ public class OrderedPairlist {
 	   putCount++;
            if ( oneInGB ) { 
                return P.size()-1;
+           }
+           if ( p instanceof SolvablePolynomial ) {
+               useCriterion4 = false;
            }
            Pair pair;
            ExpVector e; 
@@ -130,7 +135,11 @@ public class OrderedPairlist {
                  i = pair.i; 
                  j = pair.j; 
                  //System.out.println("pair(" + j + "," +i+") ");
-                 c = Reduction.GBCriterion4( pair.pi, pair.pj, g ); 
+                 if ( useCriterion4 ) {
+                    c = Reduction.GBCriterion4( pair.pi, pair.pj, g ); 
+                 } else {
+                    c = true;
+                 }
                  //System.out.println("c4  = " + c);  
                  if ( c ) {
                     c = GBCriterion3( i, j, g );
