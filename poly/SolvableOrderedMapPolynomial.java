@@ -24,7 +24,8 @@ import edu.jas.arith.Coefficient;
  */
 
 public abstract class SolvableOrderedMapPolynomial 
-                      extends OrderedMapPolynomial {
+                      extends OrderedMapPolynomial 
+                      implements SolvablePolynomial {
 
     private static Logger logger = Logger.getLogger(SolvableOrderedMapPolynomial.class);
 
@@ -316,13 +317,6 @@ public abstract class SolvableOrderedMapPolynomial
         return multiply(Cp);
     }
 
-    public static OrderedPolynomial DIPRP(OrderedPolynomial a, 
-                                          Coefficient b, 
-                                          ExpVector e) {
-        if ( a == null ) return null;
-        return a.multiply(b,e);
-    }
-
 
     /**
      * Left product with number and exponent vector.
@@ -359,15 +353,9 @@ public abstract class SolvableOrderedMapPolynomial
      * Product with 'monomial'.
      */
 
-    public OrderedPolynomial multiply(Map.Entry m) {  
+    public OrderedPolynomial multiplyLeft(Map.Entry m) {  
         if ( m == null ) return null;
-        return multiply( (Coefficient)m.getValue(), (ExpVector)m.getKey() );
-    }
-
-    public static OrderedPolynomial DIPRP(OrderedPolynomial a, 
-                                          Map.Entry m) {  
-        if ( a == null ) return null;
-        return a.multiply(m);
+        return multiplyLeft( (Coefficient)m.getValue(), (ExpVector)m.getKey() );
     }
 
 
