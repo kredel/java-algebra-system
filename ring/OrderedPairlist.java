@@ -14,6 +14,7 @@ import java.util.LinkedList;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.BitSet;
+import java.io.Serializable;
 
 import org.apache.log4j.Logger;
 
@@ -25,7 +26,7 @@ import edu.jas.ring.Reduction;
 
 /**
  * Pair list management.
- * Implemented using TreeMap (SortedMap) and BitSet.
+ * Implemented using OrderedPolynomial, TreeMap and BitSet.
  * @author Heinz Kredel
  */
 
@@ -50,20 +51,17 @@ public class OrderedPairlist {
     }
 
     /**
-     * subclass to hold pairs
+     * subclass to hold pairs of polynomials
      */
 
-    class Pair {
+    class Pair implements Serializable {
 	public final OrderedPolynomial pi;
 	public final OrderedPolynomial pj;
 	public final int i;
 	public final int j;
 
 	Pair(Object a, OrderedPolynomial b, int i, int j) {
-	    pi = (OrderedPolynomial)a; 
-            pj = b; 
-            this.i = i; 
-            this.j = j;
+	    this( (OrderedPolynomial)a, b, i, j); 
 	}
 
 	Pair(OrderedPolynomial a, OrderedPolynomial b, int i, int j) {
