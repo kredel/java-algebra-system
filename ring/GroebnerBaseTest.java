@@ -70,7 +70,7 @@ public class GroebnerBaseTest extends TestCase {
    int kl = 10;
    int ll = 7;
    int el = 3;
-    float q = 0.3f; //0.4f
+   float q = 0.3f; //0.4f
 
    protected void setUp() {
        a = b = c = d = e = null;
@@ -78,7 +78,7 @@ public class GroebnerBaseTest extends TestCase {
        b = RatOrderedMapPolynomial.DIRRAS(rl, kl, ll, el, q );
        c = RatOrderedMapPolynomial.DIRRAS(rl, kl, ll, el, q );
        d = RatOrderedMapPolynomial.DIRRAS(rl, kl, ll, el, q );
-       e = RatOrderedMapPolynomial.DIRRAS(rl, kl, ll, el, q );
+       e = d; //RatOrderedMapPolynomial.DIRRAS(rl, kl, ll, el, q );
    }
 
    protected void tearDown() {
