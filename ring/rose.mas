@@ -6,8 +6,11 @@
  * Copyright (c) 1989 - 1996 Universitaet Passau
  * ----------------------------------------------------------------------------
  * $Log$
- * Revision 1.1  2003/01/07 21:05:40  kredel
- * Initial revision
+ * Revision 1.1  2003/12/27 14:59:22  kredel
+ * refactored GB form poly to ring
+ *
+ * Revision 1.1.1.1  2003/01/07 21:05:40  kredel
+ * first import of new jas
  *
  * Revision 1.1  1996/06/08 18:15:55  pesch
  * Renamed *.test to *.mas and added new tests.
