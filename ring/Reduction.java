@@ -7,6 +7,8 @@ package edu.jas.ring;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Iterator;
+import java.util.Collection;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -14,6 +16,7 @@ import org.apache.log4j.Logger;
 import edu.jas.arith.Coefficient;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.OrderedPolynomial;
+import edu.jas.util.DistHashTable;
 
 
 /**
@@ -147,17 +150,148 @@ public class Reduction  {
                   if ( mt ) break; 
 	      }
               if ( ! mt ) { 
-		 logger.debug("irred");
+                 //logger.debug("irred");
                  //T = new OrderedMapPolynomial( a, e );
                  R = R.add( a, e );
                  S = S.subtract( a, e ); 
 		 // System.out.println(" S = " + S);
-	      }
-              else { 
-		 logger.debug("red");
+	      } else { 
+                 //logger.debug("red");
 		 e = ExpVector.EVDIF( e, htl[i] );
                  a = a.divide( lbc[i] );
                  Q = (OrderedPolynomial) p[i].multiply( a, e );
+                 S = S.subtract( Q );
+              }
+	}
+        return R;
+    }
+
+
+    /**
+     * Normalform. Allows concurrent modification of the list.
+     */
+
+    public static OrderedPolynomial NormalformMod(/*Array*/List Pp, 
+                                                  OrderedPolynomial Ap) {  
+        if ( Pp == null ) return Ap;
+        if ( Pp.isEmpty() ) return Ap;
+        int l = Pp.size();
+        Map.Entry m;
+        Map.Entry m1;
+        Object[] P = Pp.toArray();
+        Iterator it;
+        ExpVector e;
+        ExpVector f = null;
+        Coefficient a;
+        boolean mt = false;
+
+        OrderedPolynomial Rz = Ap.getZERO( Ap.getTermOrder() );
+        OrderedPolynomial R = Rz;
+        OrderedPolynomial p = null;
+        // OrderedPolynomial T = null;
+        OrderedPolynomial Q = null;
+        OrderedPolynomial S = Ap;
+        while ( S.length() > 0 ) { 
+              if ( Pp.size() != l ) { 
+                 //long t = System.currentTimeMillis();
+                 synchronized (Pp) { // required, bad in parallel
+                    P = Pp.toArray();
+                 }
+                 l = P.length;
+                 //t = System.currentTimeMillis()-t;
+                 //logger.info("Pp.toArray() = " + t + " ms, size() = " + l);
+                 S = Ap; // S.add(R)? // restart reduction ?
+                 R = Rz; 
+              }
+	      m = S.leadingMonomial();
+              e = (ExpVector) m.getKey();
+              a = (Coefficient) m.getValue();
+              for ( int i = 0; i < P.length ; i++ ) {
+                  p = (OrderedPolynomial)P[i];
+                  f = p.leadingExpVector();
+                  if ( f != null ) {
+                     mt = ExpVector.EVMT( e, f );
+                     if ( mt ) break; 
+                  }
+	      }
+              if ( ! mt ) { 
+                 //logger.debug("irred");
+                 //T = new OrderedMapPolynomial( a, e );
+                 R = R.add( a, e );
+                 S = S.subtract( a, e ); 
+		 // System.out.println(" S = " + S);
+	      } else { 
+                 //logger.debug("red");
+                 m1 = p.leadingMonomial();
+		 e = ExpVector.EVDIF( e, f );
+                 a = a.divide( (Coefficient)m1.getValue() );
+                 Q = (OrderedPolynomial)p.multiply( a, e );
+                 S = S.subtract( Q );
+              }
+	}
+        return R;
+    }
+
+
+    /**
+     * Normalform. Allows concurrent modification of the list.
+     */
+
+    public static OrderedPolynomial NormalformMod(DistHashTable Pp, 
+                                                  OrderedPolynomial Ap) {  
+        if ( Pp == null ) return Ap;
+        if ( Pp.isEmpty() ) return Ap;
+        int l = Pp.size();
+        Map.Entry m;
+        Map.Entry m1;
+        Object[] P = Pp.values().toArray();
+        Iterator it;
+        ExpVector e;
+        ExpVector f = null;
+        Coefficient a;
+        boolean mt = false;
+
+        OrderedPolynomial Rz = Ap.getZERO( Ap.getTermOrder() );
+        OrderedPolynomial R = Rz;
+        OrderedPolynomial p = null;
+        // OrderedPolynomial T = null;
+        OrderedPolynomial Q = null;
+        OrderedPolynomial S = Ap;
+        while ( S.length() > 0 ) { 
+              if ( Pp.size() != l ) { 
+                 //long t = System.currentTimeMillis();
+                 synchronized (Pp) { // required, ok in dist
+                     P = Pp.values().toArray();
+                 }
+                 l = P.length;
+                 //t = System.currentTimeMillis()-t;
+                 //logger.info("Pp.values().toArray() = " + t + " ms, size() = " + l);
+                 S = Ap; // S.add(R)? // restart reduction ?
+                 R = Rz; 
+              }
+	      m = S.leadingMonomial();
+              e = (ExpVector) m.getKey();
+              a = (Coefficient) m.getValue();
+              for ( int i = 0; i < P.length ; i++ ) {
+                  p = (OrderedPolynomial)P[i];
+                  f = p.leadingExpVector();
+                  if ( f != null ) {
+                     mt = ExpVector.EVMT( e, f );
+                     if ( mt ) break; 
+                  }
+	      }
+              if ( ! mt ) { 
+                 //logger.debug("irred");
+                 //T = new OrderedMapPolynomial( a, e );
+                 R = R.add( a, e );
+                 S = S.subtract( a, e ); 
+		 // System.out.println(" S = " + S);
+	      } else { 
+                 //logger.debug("red");
+                 m1 = p.leadingMonomial();
+		 e = ExpVector.EVDIF( e, f );
+                 a = a.divide( (Coefficient)m1.getValue() );
+                 Q = (OrderedPolynomial)p.multiply( a, e );
                  S = S.subtract( Q );
               }
 	}

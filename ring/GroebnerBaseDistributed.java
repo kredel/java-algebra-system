@@ -127,7 +127,7 @@ public class GroebnerBaseDistributed  {
         int ps = theList.size();
         logger.debug("#distributed list = "+ps);
         // make sure all polynomials arrived
-        // G = (ArrayList)theList.getList();
+        // G = (ArrayList)theList.values();
         G = pairlist.getList();
         logger.debug("#pairlist list = "+G.size());
         if ( ps != G.size() ) {
@@ -598,7 +598,7 @@ class ReducerClient implements Runnable {
                          if ( logger.isDebugEnabled() ) {
                             logger.debug("ht(S) = " + S.leadingExpVector() );
                          }
-                         H = Reduction.Normalform( theList.getList(), S );
+                         H = Reduction.NormalformMod( theList, S );
                          red++;
                          if ( H.isZERO() ) {
                             // pair.setZero(); does not work in dist
@@ -658,8 +658,8 @@ class MiReducerServer implements Runnable {
             if ( logger.isDebugEnabled() ) {
                  logger.debug("ht(S) = " + S.leadingExpVector() );
             }
-            H = Reduction.Normalform( G, H );
-            H = Reduction.Normalform( F, H );
+            H = Reduction.NormalformMod( G, H );
+            H = Reduction.NormalformMod( F, H );
             done.V();
             if ( logger.isDebugEnabled() ) {
                  logger.debug("ht(H) = " + H.leadingExpVector() );
@@ -699,8 +699,8 @@ class MiReducerClient implements Runnable {
             if ( logger.isDebugEnabled() ) {
                  logger.debug("ht(S) = " + S.leadingExpVector() );
             }
-            H = Reduction.Normalform( G, H );
-            H = Reduction.Normalform( F, H );
+            H = Reduction.NormalformMod( G, H );
+            H = Reduction.NormalformMod( F, H );
             done.V();
             if ( logger.isDebugEnabled() ) {
                  logger.debug("ht(H) = " + H.leadingExpVector() );

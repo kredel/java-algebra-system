@@ -70,6 +70,7 @@ public class GroebnerBaseParallel  {
 	      T.addJob( R );
 	}
 	fin.done();
+        logger.debug("#parallel list = "+G.size());
 	G = DIGBMI(G,T);
 	T.terminate();
         logger.info("pairlist #put = " + pairlist.putCount() 
@@ -150,7 +151,7 @@ public class GroebnerBaseParallel  {
               if ( logger.isDebugEnabled() ) {
                  logger.debug("ht(S) = " + S.leadingExpVector() );
 	      }
-              H = Reduction.Normalform( G, S );
+              H = Reduction.NormalformMod( G, S );
 	      red++;
               if ( H.isZERO() ) {
                  pair.setZero();
@@ -223,7 +224,7 @@ public class GroebnerBaseParallel  {
 	       mt = ExpVector.EVMT( e, f );
 	    }
 	    if ( ! mt ) {
-		F.add( a );
+		F.add( a ); // no thread at this point
 	    } else {
 		// System.out.println("dropped " + a.length());
 	    }
@@ -283,8 +284,8 @@ public class GroebnerBaseParallel  {
 	    if ( logger.isDebugEnabled() ) {
                  logger.debug("ht(S) = " + S.leadingExpVector() );
 	    }
-            H = Reduction.Normalform( G, H );
-            H = Reduction.Normalform( F, H );
+            H = Reduction.NormalformMod( G, H );
+            H = Reduction.NormalformMod( F, H );
             done.V();
 	    if ( logger.isDebugEnabled() ) {
                  logger.debug("ht(H) = " + H.leadingExpVector() );
