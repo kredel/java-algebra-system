@@ -56,13 +56,16 @@ Some UML class diagramms as produced by ArgoUML:
 <dt>2003, 12, 29</dt>
 <dd>
 New organization of polynomials: 
+<br />
 2 interfaces: UnorderedPolynomial and OrderedPolynomial. 
 Ordered polynomials have a term order and are implemented using 
 some SortedMap (e.g. TreeMap).
 Unodered polynomials are implemented using some HashMap (e.g. LinkedHashMap).
+<br />
 2 abstract classes: UnorderedMapPolynomial and OrderedMapPolynomial.  
 Both implement all algorithms which do not need an explicit coeficient domain, 
 i.e. they are formulated in terms of the Coefficient interface from jas.arith.
+<br />
 2 or more classes which extend the respective abstract classes: 
 RatUnorderedMapPolynomial and RatOrderedMapPolynomial both need explicitly 
 coefficients from BigRational or others. 
@@ -71,6 +74,14 @@ Multiplication with ordered polynomials is about 8-10 times faster than
 the multiplication with unordered polynomials. Also the multiplication with 
 semi-ordered polynomials (LinkedHashMap) with orderpreserving addition is
 about 7-8 times slower than multiplication with ordered polynomials.
+</p>
+<p>
+All implementations are based on Map interface and classes. 
+The Map maps exponent vectors (from some monoid) to coefficients (from some domain). 
+This is in sync with the mathematical definition of multivariate polynomials 
+as mappings from some monoid to some domain.
+Term orders are represented by a TermOrder class which provides the 
+desired Comparator classes for the SortedMap implementation. 
 </p>
 </dd>
 
@@ -106,22 +117,32 @@ Added JUnit testing with Apache Ant version 1.6.0 to build.xml.
   <p>
   However the merging add/subtact implementation is a factor of 
   2 slower than the TreeMap implementation. 
-  Complexity for a+b is 
-  length(a)+length(b) for merging pre sorted polynomials and 
-  length(a)+length(b)*log2(length(a+b)) for TreeMap clone and insertion.
+  Complexity for a+b is <br />
+  2*(length(a)+length(b)) 
+    for access and merging pre sorted polynomials and 
+  <br />
+  2*length(a)+length(b)+length(b)*log2(length(a+b)) 
+    for TreeMap clone, access and insertion.
   </p>
   <p>
   The merging multiplication implementation is by a factor of 
   10 slower than the TreeMap implementation. 
   Polynomial size was ~100 terms and the product contained ~8000 terms.
   Complexity for a*b is 
+  <br />
   lab = length(a)*length(b) coefficient multiplications for both implementations
-  plus length(a*b)*length(b) for merging summands, respectively 
-  plus lab*log2(length(a*b)) for TreeMap insertion.
+  <br />
+  plus 2*length(a*b)*length(b) for merging summands, respectively 
+  <br />
+  plus length(a)*length(b)*log2(length(a*b)) for TreeMap insertion.
   Since for sparse polynomials length(a*b) = lab, the TreeMap complexity 
-  is asymptotically better in this case.
-  If for dense polynomials length(a*b) ~ length(a)[+length(b)], then 
-  the LinkedHashMap complexity is asymptotically better.
+  is asymptotically better in this case:<br />
+     2*length(a)*length(b)*length(b) =>= length(a)*length(b)*log2(length(a*b))
+  <br />
+  For dense polynomials with length(a*b) ~ length(a)[+length(b)], then 
+  the LinkedHashMap complexity is asymptotically better:
+  <br />
+     2*length(a)*length(b) =<= length(a)*length(b)*log2(length(a*b))
   </p>
 </dd>
 
@@ -611,7 +632,7 @@ CPU TIME (ms) END
 <p>
 <!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
 <!-- hhmts start -->
-Last modified: Tue Dec 30 11:02:08 CET 2003
+Last modified: Tue Dec 30 11:54:08 CET 2003
 <!-- hhmts end -->
 </p>
 <p align="right" >
