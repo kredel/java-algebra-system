@@ -387,7 +387,7 @@ public class ExpVector implements Cloneable, Serializable {
 
     /**
      * Multiple test. 
-     * @returns true if U is a multiple of V, else false.
+     * @return true if U is a multiple of V, else false.
      */
 
     public static boolean EVMT( ExpVector U, ExpVector V ) {

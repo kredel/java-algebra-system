@@ -448,7 +448,7 @@ class ReducerServer implements Runnable {
 
 
 /**
- * Distributed GB transport message
+ * Distributed GB transport message.
  */
 
 class GBTransportMess implements Serializable {
@@ -457,15 +457,27 @@ class GBTransportMess implements Serializable {
     }
 }
 
+/**
+ * Distributed GB transport message for requests.
+ */
+
 class GBTransportMessReq extends GBTransportMess {
     public GBTransportMessReq() {
     }
 }
 
+/**
+ * Distributed GB transport message for termination.
+ */
+
 class GBTransportMessEnd extends GBTransportMess {
     public GBTransportMessEnd() {
     }
 }
+
+/**
+ * Distributed GB transport message for polynomial.
+ */
 
 class GBTransportMessPoly extends GBTransportMess {
     public final OrderedPolynomial pol;
@@ -477,6 +489,10 @@ class GBTransportMessPoly extends GBTransportMess {
     }
 }
 
+/**
+ * Distributed GB transport message for pairs.
+ */
+
 class GBTransportMessPair extends GBTransportMess {
     public final Pair pair;
     public GBTransportMessPair(Pair p) {
@@ -486,6 +502,10 @@ class GBTransportMessPair extends GBTransportMess {
         return super.toString() + "( " + pair + " )";
     }
 }
+
+/**
+ * Distributed GB transport message for index pairs.
+ */
 
 class GBTransportMessPairIndex extends GBTransportMess {
     public final Integer i;

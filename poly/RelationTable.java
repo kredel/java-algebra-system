@@ -180,6 +180,11 @@ public class RelationTable implements Serializable {
 }
 
 
+/**
+ * TableRelation container for storage and printing in RelationTable.
+ * @author Heinz Kredel
+ */
+
 class TableRelation implements Serializable {
 
     public final ExpVector e;

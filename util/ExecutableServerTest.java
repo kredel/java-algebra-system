@@ -156,6 +156,11 @@ public class ExecutableServerTest extends TestCase {
 }
 
 
+/**
+ * Unit Test Class which implements interface RemoteExecutable.
+ * @author Heinz Kredel
+ */
+
 class Executable implements RemoteExecutable {
 
     private static Logger logger = Logger.getLogger(Executable.class);

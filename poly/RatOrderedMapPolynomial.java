@@ -99,7 +99,7 @@ public class RatOrderedMapPolynomial extends OrderedMapPolynomial {
     /**
      * polynomial from string.
      * simple format:  p/q (1,2) r/s (3,4) ...
-     * @see PolynomialTokenizer
+     * @see OrderedPolynomialTokenizer
      */
 
     public static RatOrderedMapPolynomial fromString(String s) { 

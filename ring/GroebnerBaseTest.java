@@ -361,6 +361,10 @@ public class GroebnerBaseTest extends TestCase {
 }
 
 
+/**
+ * Unit Test client to be executed by test threads.
+ */
+
 class Clients implements Runnable {
     private final String host;
     private final int port;
