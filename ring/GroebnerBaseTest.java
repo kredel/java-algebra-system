@@ -67,7 +67,7 @@ public class GroebnerBaseTest extends TestCase {
    PolynomialList F;
    PolynomialList G;
 
-   int rl = 4; //3; 
+   int rl = 3; //4; //3; 
    int kl = 10;
    int ll = 7;
    int el = 3;
@@ -88,10 +88,10 @@ public class GroebnerBaseTest extends TestCase {
 
 
 /**
- * Test GBase
+ * Test sequential GBase
  * 
  */
- public void testGBase() {
+ public void testSequentialGBase() {
 
      // a = RatOrderedMapPolynomial.DIRRAS(rl, kl, ll, el, q );
      assertTrue("not isZERO( a )", !a.isZERO() );
