@@ -204,8 +204,8 @@ public class Reduction  {
                  S = S.subtract( a, e ); 
 		 // System.out.println(" S = " + S);
 	      } else { 
-                 //logger.debug("red");
 		 e = ExpVector.EVDIF( e, htl[i] );
+                 //logger.info("red div = " + e);
                  a = a.divide( lbc[i] );
                  Q = p[i].multiply( a, e );
                  S = S.subtract( Q );
@@ -256,6 +256,7 @@ public class Reduction  {
         while ( S.length() > 0 ) { 
 	      m = S.leadingMonomial();
               e = (ExpVector) m.getKey();
+              //logger.info("red = " + e);
               a = (Coefficient) m.getValue();
               for ( i = 0; i < l; i++ ) {
                   mt = ExpVector.EVMT( e, htl[i] );
