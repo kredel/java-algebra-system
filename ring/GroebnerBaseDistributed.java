@@ -283,7 +283,7 @@ class ReducerServer implements Runnable {
            try {
                 pairChannel = cf.getChannel();
            } catch (InterruptedException e) {
-                logger.info("get pair channel interrupted");
+                logger.debug("get pair channel interrupted");
                 e.printStackTrace();
                 return;
            } 
@@ -314,7 +314,7 @@ class ReducerServer implements Runnable {
                    goon = false;
                    e.printStackTrace();
                }
-               logger.info("received request, req = " + req);
+               logger.debug("received request, req = " + req);
                if ( req == null ) { 
                   goon = false;
                   break;
@@ -414,6 +414,7 @@ class ReducerServer implements Runnable {
                            break;
                         } else {
                            polIndex = pairlist.put( H );
+                           // use putWait ?
                            theList.put( new Integer(polIndex), H );
                         }
                      }
@@ -560,7 +561,7 @@ class ReducerClient implements Runnable {
                    goon = false;
                    e.printStackTrace();
                }
-               logger.info("received pair = " + pp);
+               logger.debug("received pair = " + pp);
                H = null;
                if ( pp == null ) { // should not happen
                    continue;
@@ -586,7 +587,7 @@ class ReducerClient implements Runnable {
                       pjx = ((GBTransportMessPairIndex)pp).j;
                       pi = (OrderedPolynomial)theList.getWait( pix );
                       pj = (OrderedPolynomial)theList.getWait( pjx );
-                      logger.info("pix = " + pix + ", pjx = " +pjx);
+                      //logger.info("pix = " + pix + ", pjx = " +pjx);
                   }
 
                   if ( pi != null && pj != null ) {
@@ -603,15 +604,10 @@ class ReducerClient implements Runnable {
                          if ( H.isZERO() ) {
                             // pair.setZero(); does not work in dist
                          } else {
-                            if ( logger.isDebugEnabled() ) {
-                               logger.debug("ht(H) = " + H.leadingExpVector() );
-                            }
                             H = H.monic();
-                            // System.out.println("H = " + H);
-                            //synchronized (theList) {
-                            // now done by master
-                            //    theList.add( H );
-                            //}
+                            if ( logger.isInfoEnabled() ) {
+                               logger.info("ht(H) = " + H.leadingExpVector() );
+                            }
                          }
                       }
                    }
