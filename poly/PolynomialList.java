@@ -44,6 +44,7 @@ public class PolynomialList {
 
         // Polynomial a;
         OrderedPolynomial oa;
+        String sa;
         Iterator it = list.iterator();
         erg.append("(\n");
         while ( it.hasNext() ) {
@@ -52,14 +53,22 @@ public class PolynomialList {
               //  a = (Polynomial) o;
 	      //  erg.append( a.toString(vars) );
 	      //} else 
+              sa = "";
               if ( o instanceof OrderedPolynomial ) {
                 oa = (OrderedPolynomial) o;
-	        erg.append( oa.toString(vars) );
+                sa = oa.toString(vars);
+	        erg.append( sa );
 	      } else {
 	        erg.append( o.toString() );
 	      }
-	      if ( it.hasNext() ) erg.append(",\n");
-	      else erg.append("\n");
+	      if ( it.hasNext() ) {
+                 erg.append(",\n");
+                 if ( sa.length() > 100 ) {
+                    erg.append("\n");
+                 }
+	      } else { 
+                 erg.append("\n");
+              }
         }
         erg.append(")");
 	return erg.toString();
