@@ -224,7 +224,6 @@ public class SolvableSyzygyTest extends TestCase {
  * Test sequential module SolvableSyzygy
  * 
  */
-/*
  public void testSequentialModSolvableSyzygy() {
 
      ModuleList M;
@@ -236,11 +235,11 @@ public class SolvableSyzygyTest extends TestCase {
      V = new ArrayList();
      V.add(a); V.add(zero); V.add(one);
      L.add(V);
-     M = new ModuleList(vars,a.getTermOrder(),L);
-     assertTrue("isGB( { (a,0,1) } )", ModGroebnerBase.isGB(M) );
+     M = new ModuleList(vars,a.getTermOrder(),L,table);
+     assertTrue("isGB( { (a,0,1) } )", ModSolvableGroebnerBase.isLeftGB(M) );
 
-     N = ModGroebnerBase.GB( M );
-     assertTrue("isGB( { (a,0,1) } )", ModGroebnerBase.isGB(N) );
+     N = ModSolvableGroebnerBase.leftGB( M );
+     assertTrue("isGB( { (a,0,1) } )", ModSolvableGroebnerBase.isLeftGB(N) );
 
      Z = SolvableSyzygy.leftZeroRelations(N);
      //System.out.println("Z = " + Z);
@@ -250,11 +249,11 @@ public class SolvableSyzygyTest extends TestCase {
      V = new ArrayList();
      V.add(b); V.add(one); V.add(zero);
      L.add(V);
-     M = new ModuleList(vars,a.getTermOrder(),L);
+     M = new ModuleList(vars,a.getTermOrder(),L,table);
      //System.out.println("L = " + L.size() );
 
-     N = ModGroebnerBase.GB( M );
-     assertTrue("isGB( { a, b } )", ModGroebnerBase.isGB(N) );
+     N = ModSolvableGroebnerBase.leftGB( M );
+     assertTrue("isGB( { a, b } )", ModSolvableGroebnerBase.isLeftGB(N) );
 
      Z = SolvableSyzygy.leftZeroRelations(N);
      //System.out.println("Z = " + Z);
@@ -264,12 +263,12 @@ public class SolvableSyzygyTest extends TestCase {
      V = new ArrayList();
      V.add(c); V.add(one); V.add(zero);
      L.add(V);
-     M = new ModuleList(vars,a.getTermOrder(),L);
+     M = new ModuleList(vars,a.getTermOrder(),L,table);
      //System.out.println("L = " + L.size() );
 
-     N = ModGroebnerBase.GB( M );
+     N = ModSolvableGroebnerBase.leftGB( M );
      //System.out.println("GB(M) = " + N);
-     assertTrue("isGB( { a,b,c) } )", ModGroebnerBase.isGB(N) );
+     assertTrue("isGB( { a,b,c) } )", ModSolvableGroebnerBase.isLeftGB(N) );
 
      Z = SolvableSyzygy.leftZeroRelations(N);
      //System.out.println("Z = " + Z);
@@ -277,6 +276,5 @@ public class SolvableSyzygyTest extends TestCase {
      //System.out.println("boolean = " + b);
      assertTrue("is ZR( { a,b,c } )", SolvableSyzygy.isLeftZeroRelation(Z,N) );
  }
-*/
 
 }
