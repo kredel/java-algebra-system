@@ -505,6 +505,8 @@ public abstract class OrderedMapPolynomial /* extends MapPolynomial */
     }
 
     public OrderedPolynomial monic() {  
+	if ( this.isZERO() ) return this;
+
 	Coefficient b = this.leadingBaseCoefficient();
 	b = b.inverse();
 
