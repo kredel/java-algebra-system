@@ -19,12 +19,12 @@ import org.apache.log4j.Logger;
  * @author Heinz Kredel.
  */
 
-public class DistributedList /* implements List ?*/{
+public class DistributedList /* implements List not jet */{
 
     private static Logger logger = Logger.getLogger(DistributedList.class);
 
-    protected /*final*/ List theList;
-    protected ChannelFactory cf;
+    protected final List theList;
+    protected final ChannelFactory cf;
     protected SocketChannel channel = null;
     protected Listener listener = null;
 
@@ -38,17 +38,28 @@ public class DistributedList /* implements List ?*/{
     }
 
     public DistributedList(String host,int port) {
-	theList = new ArrayList();
-	cf = new ChannelFactory(port+1);
+	this(new ChannelFactory(port+1),host,port);
+    }
+
+    public DistributedList(ChannelFactory cf,String host,int port) {
+	this.cf = cf;
 	try {
             channel = cf.getChannel(host,port);
 	} catch (IOException e) {
 	    e.printStackTrace();
 	}
+	theList = new ArrayList();
 	listener = new Listener(channel,theList);
 	listener.start();
     }
 
+    public DistributedList(SocketChannel sc) {
+	cf = null;
+	channel = sc;
+	theList = new ArrayList();
+	listener = new Listener(channel,theList);
+	listener.start();
+    }
 
 /**
  * get the internal List
@@ -82,11 +93,16 @@ public class DistributedList /* implements List ?*/{
  * terminate the List thread
  */ 
     public void terminate() {
-	cf.terminate();
+	if ( cf != null ) {
+           cf.terminate();
+	}
+        if ( channel != null ) {
+           channel.close();
+	}
 	//theList.clear();
+	if ( listener == null ) return;
         logger.debug("terminate "+listener);
         listener.setDone(); 
-	channel.close();
         try { 
              while ( listener.isAlive() ) {
                      listener.interrupt(); 
@@ -99,6 +115,7 @@ public class DistributedList /* implements List ?*/{
 
 /**
  * clear the List
+ * caveat: must be called on all clients
  */ 
     public synchronized void clear() {
 	theList.clear();
@@ -144,15 +161,12 @@ class Listener extends Thread /*implements Runnable*/ {
                    //System.out.println("receive: "+o+" @ "+Thread.currentThread());
 		   if ( this.isInterrupted() ) {
 		       goon = false;
-		       return;
 		   }
 		   list.add(o);
 	      } catch (IOException e) {
 		   goon = false;
-                   return;
 	      } catch (ClassNotFoundException e) {
                    goon = false;
-                   return;
 	      }
 	}
     }

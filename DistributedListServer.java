@@ -15,16 +15,16 @@ import edu.unima.ky.parallel.SocketChannel;
 import org.apache.log4j.Logger;
 
 /**
- * Distributed version of a List.
+ * Server for the distributed version of a list.
  * @author Heinz Kredel.
  */
 
-public class DistributedListServer implements Runnable {
+public class DistributedListServer extends Thread {
 
     private static Logger logger = Logger.getLogger(DistributedListServer.class);
 
     // protected /*final*/ List theList;
-    protected ChannelFactory cf;
+    protected final ChannelFactory cf;
     protected ArrayList servers = null;
 
     public final static int DEFAULT_PORT = 4711;
@@ -40,8 +40,12 @@ public class DistributedListServer implements Runnable {
     }
 
     public DistributedListServer(int port) {
+	this( new ChannelFactory(port) );
+    }
+
+    public DistributedListServer(ChannelFactory cf) {
 	//theList = new ArrayList();
-	cf = new ChannelFactory(port);
+	this.cf = cf;
 	servers = new ArrayList();
     }
 
@@ -57,6 +61,13 @@ public class DistributedListServer implements Runnable {
 	}
 	(new DistributedListServer(port)).run();
 	// until CRTL-C
+    }
+
+/**
+ * thread initialization and start
+ */ 
+    public void init() {
+	this.start();
     }
 
 
@@ -75,7 +86,6 @@ public class DistributedListServer implements Runnable {
 	       if ( mythread.isInterrupted() ) {
 		   goon = false;
 	           //logger.info("list server " + this + " interrupted");
-		   return;
 	       } else {
 	          s = new Broadcaster(channel,servers);
 	          servers.add( s );
@@ -98,21 +108,22 @@ public class DistributedListServer implements Runnable {
 	goon = false;
         //logger.debug("terminating ListServer");
 	cf.terminate();
-	if ( servers == null ) return;
-	Iterator it = servers.iterator();
-	while ( it.hasNext() ) {
-	    Broadcaster x = (Broadcaster) it.next();
-            x.channel.close();
-            try { 
-                while ( x.isAlive() ) {
-                        x.interrupt(); 
-                        x.join(100);
-                }
-	        //logger.debug("server " + x + " terminated");
-            } catch (InterruptedException e) { 
-            }
+	if ( servers != null ) {
+	   Iterator it = servers.iterator();
+	   while ( it.hasNext() ) {
+	      Broadcaster x = (Broadcaster) it.next();
+              x.channel.close();
+              try { 
+                  while ( x.isAlive() ) {
+                          x.interrupt(); 
+                          x.join(100);
+                  }
+	          //logger.debug("server " + x + " terminated");
+              } catch (InterruptedException e) { 
+              }
+	   }
+	   servers = null;
 	}
-	servers = null;
 	if ( mythread == null ) return;
         try { 
             while ( mythread.isAlive() ) {
