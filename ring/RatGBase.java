@@ -19,7 +19,7 @@ import org.apache.log4j.Logger;
 
 import edu.unima.ky.parallel.Semaphore;
 
-import edu.jas.ThreadPool;
+import edu.jas.util.ThreadPool;
 import edu.jas.arith.BigRational;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.RatPolynomial;
