@@ -288,7 +288,7 @@ public class BigQuaternion implements Coefficient, Comparable, Serializable {
         BigQuaternion B = (BigQuaternion) b;
         return new BigQuaternion( re.subtract(B.getRe()), 
                                   im.subtract(B.getIm()),
-                                  jm.subtract(B.getIm()),
+                                  jm.subtract(B.getJm()),
                                   km.subtract(B.getKm()) );
     }
 
@@ -422,10 +422,10 @@ public class BigQuaternion implements Coefficient, Comparable, Serializable {
     R is the quaternion number with real part A and imaginary part B. */
 
     public static BigQuaternion QRAND(int n) {
-      return new BigQuaternion( new BigRational(n), 
-                                new BigRational(n), 
-                                new BigRational(n),
-                                new BigRational(n) );
+      return new BigQuaternion( BigRational.RNRAND(n), 
+                                BigRational.RNRAND(n), 
+                                BigRational.RNRAND(n),
+                                BigRational.RNRAND(n) );
     }
 
     /** random quaternion number 
