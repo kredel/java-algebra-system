@@ -7,17 +7,20 @@
 <style type="text/css">
 body { background-color: #FFFFF5; } 
 pre  { background-color: silver; }
+dt   { font-weight: bolder; 
+       margin-top: 1em;
+     }
 </style>
 
   </head>
 
   <body>
-    <h1>MAS to jas Project</h1>
+    <h1>Jas Project (MAS to jas Project)</h1>
 
 <h2>Documentation</h2>
 
 <p>Rudimentary jas API documentation by javadoc:
-<a href="doc/index.html">index</a>
+<a href="doc/index.html" target="doc" >index</a>
 </p>
 
 
@@ -31,15 +34,13 @@ pre  { background-color: silver; }
 -->
 
 <dt>2003, 12, 21</dt>
-<dd><p>
-Setup for JUnit version 3.8.1. 
+<dd>Setup for JUnit version 3.8.1. 
 Added JUnit testing with Apache Ant version 1.6.0 to build.xml. 
-</p>
 </dd>
 
 <dt>2003, September</dt>
 <dd>
-  <p>experimented with LinkedHashMap instead of TreeMap (SortedMap) 
+  experimented with LinkedHashMap instead of TreeMap (SortedMap) 
   for the representation of polynomials. 
   Algorithms which work also with LinkedHaspMap have 1 or 2 in their names.
   LinkedHashMap has the property of using the insertion order for 
@@ -48,7 +49,6 @@ Added JUnit testing with Apache Ant version 1.6.0 to build.xml.
   use a merging algorithm as in the original DIP implementation.
   Assuming the Map insertion order is the the same as the polynomial
   term order.
-  </p>
   <p>
   However the merging add/subtact implementation is a factor of 
   2 slower than the TreeMap implementation. 
@@ -69,32 +69,27 @@ Added JUnit testing with Apache Ant version 1.6.0 to build.xml.
   If for dense polynomials length(a*b) ~ length(a)[+length(b)], then 
   the LinkedHashMap complexity is asymptotically better.
   </p>
-
 </dd>
 
 <dt>2003, 3, 15</dt>
 <dd>
-  <p>some testing with new 
+   some testing with new 
    AMD Athlon XP 2200+ @ 1.8 GHz, 133x2 MHz memory access.<br />
    Trinks 6: 1.013 sec with log4j level WARN, parallel 1.058 - 1.740 sec.<br />
    Trinks 7: 0.553 sec with log4j level WARN.<br />
-  </p>
-
 </dd>
 
 <dt>2003, 2, 2 </dt>
 <dd>
- <p>replacing all System.out.println by Log4j logging calls.
-    adding some Junit tests.
- </p>
+   replacing all System.out.println by Log4j logging calls.
+   adding some Junit tests.
 </dd>
 
 <dt>2003, 1, 28 </dt>
 <dd>
- <p>some testing with gcj (Gnu Java Compiler). this compiler gernerates 
+ some testing with gcj (Gnu Java Compiler). this compiler gernerates 
     native executable binaries. the timings are not better than with
    a jit, often worser.
- </p>
  <p>parallel computations with the Rose example are at 18 h with 4 threads
     on 2 Pentium 4 @ 2.4 GHz hyperthreading CPUs. with one thread the time
     is 40 h. 
@@ -103,12 +98,11 @@ Added JUnit testing with Apache Ant version 1.6.0 to build.xml.
 
 <dt>2003, 1, 26 </dt>
 <dd>
- <p>timings with JDK 1.3 (from IBM) are 30% to 40% faster 
+    timings with JDK 1.3 (from IBM) are 30% to 40% faster 
     than with JDK 1.4.1 (from Sun).
     timings on PowerPC 604 @ 200MHz JDK 1.3 (from IBM) 
     JDK 1.2 (from Sun) are a factor 3.5-4.5 slower than on Intel PIII @ 450 MHz.
     on PowerPC not using jit is faster than using a jit, ca. 20% - 30%.
- </p>
 </dd>
 
 <dt>2003, 1, 12 </dt>
@@ -557,7 +551,7 @@ CPU TIME (ms) END
 <p>
 <!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
 <!-- hhmts start -->
-Last modified: Sun Dec 21 12:18:15 CET 2003
+Last modified: Sun Dec 21 12:53:54 CET 2003
 <!-- hhmts end -->
 </p>
 <p align="right" >
