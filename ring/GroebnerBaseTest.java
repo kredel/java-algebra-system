@@ -92,7 +92,7 @@ public class GroebnerBaseTest extends TestCase {
  * Test GBase
  * 
  */
- public void xtestGBase() {
+ public void testGBase() {
 
      // a = RatOrderedMapPolynomial.DIRRAS(rl, kl, ll, el, q );
      assertTrue("not isZERO( a )", !a.isZERO() );
@@ -137,7 +137,7 @@ public class GroebnerBaseTest extends TestCase {
  * Test parallel GBase
  * 
  */
- public void xtestParallelGBase() {
+ public void testParallelGBase() {
      int threads = 2;
 
      //a = RatOrderedMapPolynomial.DIRRAS(rl, kl, ll, el, q );
@@ -205,56 +205,41 @@ public class GroebnerBaseTest extends TestCase {
      L.add(a);
      Gs = GroebnerBase.DIRPGB( L );
      Gp = GroebnerBaseParallel.DIRPGB( L, threads );
-     is = Gs.iterator(); 
-     ip = Gp.iterator(); 
-     while ( is.hasNext() && ip.hasNext() ) {
-	   assertEquals("is.equals(ip)", is.next(), ip.next() );
-     }
-     assertFalse("Gs = Gp = empty " , is.hasNext() || ip.hasNext() );
+
+     assertTrue("Gs.containsAll(Gp)", Gs.containsAll(Gp) );
+     assertTrue("Gp.containsAll(Gs)", Gp.containsAll(Gs) );
 
      L = Gs;
      L.add(b);
      Gs = GroebnerBase.DIRPGB( L );
      Gp = GroebnerBaseParallel.DIRPGB( L, threads );
-     is = Gs.iterator(); 
-     ip = Gp.iterator(); 
-     while ( is.hasNext() && ip.hasNext() ) {
-	   assertEquals("is.equals(ip)", is.next(), ip.next() );
-     }
-     assertFalse("Gs = Gp = empty " , is.hasNext() || ip.hasNext() );
+
+     assertTrue("Gs.containsAll(Gp)", Gs.containsAll(Gp) );
+     assertTrue("Gp.containsAll(Gs)", Gp.containsAll(Gs) );
 
      L = Gs;
      L.add(c);
      Gs = GroebnerBase.DIRPGB( L );
      Gp = GroebnerBaseParallel.DIRPGB( L, threads );
-     is = Gs.iterator(); 
-     ip = Gp.iterator(); 
-     while ( is.hasNext() && ip.hasNext() ) {
-	   assertEquals("is.equals(ip)", is.next(), ip.next() );
-     }
-     assertFalse("Gs = Gp = empty " , is.hasNext() || ip.hasNext() );
+
+     assertTrue("Gs.containsAll(Gp)", Gs.containsAll(Gp) );
+     assertTrue("Gp.containsAll(Gs)", Gp.containsAll(Gs) );
 
      L = Gs;
      L.add(d);
      Gs = GroebnerBase.DIRPGB( L );
      Gp = GroebnerBaseParallel.DIRPGB( L, threads );
-     is = Gs.iterator(); 
-     ip = Gp.iterator(); 
-     while ( is.hasNext() && ip.hasNext() ) {
-	   assertEquals("is.equals(ip)", is.next(), ip.next() );
-     }
-     assertFalse("Gs = Gp = empty " , is.hasNext() || ip.hasNext() );
+
+     assertTrue("Gs.containsAll(Gp)", Gs.containsAll(Gp) );
+     assertTrue("Gp.containsAll(Gs)", Gp.containsAll(Gs) );
 
      L = Gs;
      L.add(e);
      Gs = GroebnerBase.DIRPGB( L );
      Gp = GroebnerBaseParallel.DIRPGB( L, threads );
-     is = Gs.iterator(); 
-     ip = Gp.iterator(); 
-     while ( is.hasNext() && ip.hasNext() ) {
-	   assertEquals("is.equals(ip)", is.next(), ip.next() );
-     }
-     assertFalse("Gs = Gp = empty " , is.hasNext() || ip.hasNext() );
+
+     assertTrue("Gs.containsAll(Gp)", Gs.containsAll(Gp) );
+     assertTrue("Gp.containsAll(Gs)", Gp.containsAll(Gs) );
  }
 
 /**
@@ -267,7 +252,7 @@ public class GroebnerBaseTest extends TestCase {
      ArrayList Gs, Gp;
      L = new ArrayList();
      Iterator is, ip;
-     Gp = null;
+     Gs = Gp = null;
 
      L.add(a);
      Gs = GroebnerBase.DIRPGB( L );
@@ -286,58 +271,96 @@ public class GroebnerBaseTest extends TestCase {
 	 } catch (InterruptedException e) {
 	 }
      }
-     is = Gs.iterator(); 
-     ip = Gp.iterator(); 
-     while ( is.hasNext() && ip.hasNext() ) {
-	   assertEquals("is.equals(ip)", is.next(), ip.next() );
-     }
-     assertFalse("Gs = Gp = empty " , is.hasNext() || ip.hasNext() );
+     //System.out.println("Gs = "+Gs);
+     //System.out.println("Gp = "+Gp);
+     assertTrue("Gs.containsAll(Gp)", Gs.containsAll(Gp) );
+     assertTrue("Gp.containsAll(Gs)", Gp.containsAll(Gs) );
 
-     /*
      L = Gs;
      L.add(b);
      Gs = GroebnerBase.DIRPGB( L );
-     Gp = GroebnerBaseDistributed.DIRPGB( L, threads );
-     is = Gs.iterator(); 
-     ip = Gp.iterator(); 
-     while ( is.hasNext() && ip.hasNext() ) {
-	   assertEquals("is.equals(ip)", is.next(), ip.next() );
+     for (int t = 0; t < threads; t++) {
+	 clients[t] = new Thread( new Clients(host,port) );
+	 clients[t].start();
      }
-     assertFalse("Gs = Gp = empty " , is.hasNext() || ip.hasNext() );
+     try {
+         Gp = GroebnerBaseDistributed.DIRPGBServer( L, threads, port );
+     } catch (IOException e) {
+     }
+     for (int t = 0; t < threads; t++) {
+	 try {
+             clients[t].join();
+	 } catch (InterruptedException e) {
+	 }
+     }
+     assertTrue("Gs.containsAll(Gp)", Gs.containsAll(Gp) );
+     assertTrue("Gp.containsAll(Gs)", Gp.containsAll(Gs) );
 
      L = Gs;
      L.add(c);
      Gs = GroebnerBase.DIRPGB( L );
-     Gp = GroebnerBaseDistributed.DIRPGB( L, threads );
-     is = Gs.iterator(); 
-     ip = Gp.iterator(); 
-     while ( is.hasNext() && ip.hasNext() ) {
-	   assertEquals("is.equals(ip)", is.next(), ip.next() );
+     if ( Gs.size() > 1 ) {
+     for (int t = 0; t < threads; t++) {
+	 clients[t] = new Thread( new Clients(host,port) );
+	 clients[t].start();
      }
-     assertFalse("Gs = Gp = empty " , is.hasNext() || ip.hasNext() );
+     try {
+         Gp = GroebnerBaseDistributed.DIRPGBServer( L, threads, port );
+     } catch (IOException e) {
+     }
+     for (int t = 0; t < threads; t++) {
+	 try {
+             clients[t].join();
+	 } catch (InterruptedException e) {
+	 }
+     }
+     assertTrue("Gs.containsAll(Gp)", Gs.containsAll(Gp) );
+     assertTrue("Gp.containsAll(Gs)", Gp.containsAll(Gs) );
+     }
 
      L = Gs;
      L.add(d);
      Gs = GroebnerBase.DIRPGB( L );
-     Gp = GroebnerBaseDistributed.DIRPGB( L, threads );
-     is = Gs.iterator(); 
-     ip = Gp.iterator(); 
-     while ( is.hasNext() && ip.hasNext() ) {
-	   assertEquals("is.equals(ip)", is.next(), ip.next() );
+     if ( Gs.size() > 1 ) {
+     for (int t = 0; t < threads; t++) {
+	 clients[t] = new Thread( new Clients(host,port) );
+	 clients[t].start();
      }
-     assertFalse("Gs = Gp = empty " , is.hasNext() || ip.hasNext() );
+     try {
+         Gp = GroebnerBaseDistributed.DIRPGBServer( L, threads, port );
+     } catch (IOException e) {
+     }
+     for (int t = 0; t < threads; t++) {
+	 try {
+             clients[t].join();
+	 } catch (InterruptedException e) {
+	 }
+     }
+     assertTrue("Gs.containsAll(Gp)", Gs.containsAll(Gp) );
+     assertTrue("Gp.containsAll(Gs)", Gp.containsAll(Gs) );
+     }
 
      L = Gs;
      L.add(e);
      Gs = GroebnerBase.DIRPGB( L );
-     Gp = GroebnerBaseDistributed.DIRPGB( L, threads );
-     is = Gs.iterator(); 
-     ip = Gp.iterator(); 
-     while ( is.hasNext() && ip.hasNext() ) {
-	   assertEquals("is.equals(ip)", is.next(), ip.next() );
+     if ( Gs.size() > 1 ) {
+     for (int t = 0; t < threads; t++) {
+	 clients[t] = new Thread( new Clients(host,port) );
+	 clients[t].start();
      }
-     assertFalse("Gs = Gp = empty " , is.hasNext() || ip.hasNext() );
-     */
+     try {
+         Gp = GroebnerBaseDistributed.DIRPGBServer( L, threads, port );
+     } catch (IOException e) {
+     }
+     for (int t = 0; t < threads; t++) {
+	 try {
+             clients[t].join();
+	 } catch (InterruptedException e) {
+	 }
+     }
+     assertTrue("Gs.containsAll(Gp)", Gs.containsAll(Gp) );
+     assertTrue("Gp.containsAll(Gs)", Gp.containsAll(Gs) );
+     }
  }
 
 }
