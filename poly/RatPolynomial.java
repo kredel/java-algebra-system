@@ -20,6 +20,12 @@ import org.apache.log4j.Logger;
 
 import edu.jas.arith.BigRational;
 
+  /**
+   * old version of polynomial implementation
+   * @author Heinz Kredel
+   * @deprecated
+   */
+
 public class RatPolynomial extends TreePolynomial {
 
     private static Logger logger = Logger.getLogger(RatPolynomial.class);

@@ -6,6 +6,11 @@ package edu.jas.arith;
 
 //import edu.jas.arith.BigRational;
 
+  /**
+   * old test class
+   * @deprecated
+   */
+
 public class testbr
 {
 

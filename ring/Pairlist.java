@@ -22,7 +22,9 @@ import edu.jas.poly.ExpVector;
 import edu.jas.poly.RatPolynomial;
 
 /**
- * Pair list management
+ * Pair list management.
+ * Implemented using TreeMap (SortedMap) and BitSet.
+ * @author Heinz Kredel
  */
 
 public class Pairlist {
@@ -33,11 +35,19 @@ public class Pairlist {
 
     private static Logger logger = Logger.getLogger(Pairlist.class);
 
+    /**
+     * Constructor for Pairlist
+     */
+
     public Pairlist(Comparator lorder) {
          P = new ArrayList();
          pairlist = new TreeMap(lorder);
          red = new ArrayList();
     }
+
+    /**
+     * subclass to hold pairs
+     */
 
     class Pair {
 	public final RatPolynomial pi;

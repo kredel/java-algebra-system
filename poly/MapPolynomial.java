@@ -17,6 +17,7 @@ import edu.jas.arith.Coefficient;
  * Map Polynomial. 
  * Abstract implementation of UnorderedPolynomial.
  * Implementation based on Map / HashMap / LinkedHashMap 
+ * @author Heinz Kredel
  */
 
 public abstract class MapPolynomial implements UnorderedPolynomial, Cloneable {
@@ -173,6 +174,7 @@ public abstract class MapPolynomial implements UnorderedPolynomial, Cloneable {
             }
         }
 
+	// C.putAll(A) ?
         Set As = A.entrySet(); // rest of A
         Iterator ai = As.iterator();
         while ( ai.hasNext() ) {
@@ -191,7 +193,6 @@ public abstract class MapPolynomial implements UnorderedPolynomial, Cloneable {
                 }
             }
         }
-
         return Cp;
     }
 

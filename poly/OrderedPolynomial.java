@@ -13,6 +13,7 @@ import java.util.Map;
  * Ordered Polynomial Interface. 
  * For implementations based on Sorted Maps, 
  * e.g. java.util.TreeMap.
+ * @author Heinz Kredel
  */
 
 interface OrderedPolynomial /* extends UnorderedPolynomial */ {

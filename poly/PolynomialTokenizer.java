@@ -21,6 +21,12 @@ import java.io.IOException;
 
 import edu.jas.arith.BigRational;
 
+/**
+ * Polynomial Tokenizer. 
+ * Used to read polynomials and lists from input streams.
+ * @author Heinz Kredel
+ */
+
 public class PolynomialTokenizer  {
 
     private String[] vars;

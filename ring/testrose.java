@@ -17,11 +17,13 @@ import edu.jas.poly.RatPolynomial;
 import edu.jas.poly.PolynomialTokenizer;
 import edu.jas.poly.PolynomialList;
 
-public class testrose
-{
+  /**
+   * simple test setup for the Rose example.
+   */
 
-  static void tuwas(String[] args)
-  {
+public class testrose {
+
+  static void tuwas(String[] args) {
 
       final int THREADS = 3;
       int threads = THREADS;
@@ -86,17 +88,13 @@ public class testrose
 
 
 
-  public static void main( java.lang.String[] _args )
-  {
-    try
-    {
+  public static void main( java.lang.String[] _args ) {
+    try {
       tuwas( _args );
-      if (_args != null)
-      {
+      if (_args != null) {
         java.lang.System.runFinalization();
         java.lang.System.exit(0);
       }
-    }
-    finally { }
+    } finally { }
   }
 }

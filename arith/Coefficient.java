@@ -6,6 +6,12 @@ package edu.jas.arith;
 
 import java.math.BigInteger;
 
+/**
+ * Coefficient interface for use with the polynomial classes.
+ * BigRational and BigInteger implement this interface. 
+ * @author Heinz Kredel
+ */
+
 public interface Coefficient {
 
     public static Coefficient ONE = null;

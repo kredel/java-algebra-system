@@ -13,6 +13,9 @@ import edu.jas.arith.BigRational;
 //import edu.jas.poly.RatPolynomial;
 //import edu.jas.poly.IntPolynomial;
 
+/**
+ * @deprecated
+ */
 
 public class testbip
 {

@@ -7,6 +7,12 @@ package edu.jas.poly;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+/**
+ * list of polynomials
+ * mainly for storage and printing/toString
+ * @author Heinz Kredel
+ */
+
 public class PolynomialList {
 
     public final String[] vars;

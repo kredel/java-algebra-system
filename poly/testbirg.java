@@ -13,6 +13,10 @@ import java.util.Date;
 import java.io.IOException;
 import edu.jas.Datei;
 
+/**
+ * @deprecated
+ */
+
 public class testbirg
 {
 

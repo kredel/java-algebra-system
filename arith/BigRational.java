@@ -7,6 +7,11 @@ package edu.jas.arith;
 import java.math.BigInteger;
 import java.util.Random;
 
+/**
+ * BigRational class based on BigInteger implementing the Coefficient interface
+ * and with the familiar SAC method names.
+ * @author Heinz Kredel
+ */
 
 public class BigRational implements Coefficient, Comparable {
 
@@ -24,6 +29,9 @@ public class BigRational implements Coefficient, Comparable {
 
     private final static Random random = new Random();
 
+    /**
+     * Constructors for BigRational
+     */
 
     public BigRational(BigInteger n, BigInteger d) {
 	num = n; 

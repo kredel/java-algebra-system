@@ -19,6 +19,12 @@ import java.util.Random;
 
 import edu.jas.arith.BigInteger;
 
+  /**
+   * old version of polynomial implementation
+   * @author Heinz Kredel
+   * @deprecated
+   */
+
 public class IntPolynomial extends TreePolynomial {
 
     public IntPolynomial() { 

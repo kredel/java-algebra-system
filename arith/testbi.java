@@ -6,6 +6,11 @@ package edu.jas.arith;
 
 //import edu.jas.arith.BigInteger;
 
+  /**
+   * old test class
+   * @deprecated
+   */
+
 public class testbi {
 
   static void tuwas() {

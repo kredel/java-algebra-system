@@ -14,6 +14,11 @@ import org.apache.log4j.Logger;
 import java.util.Date;
 import java.io.IOException;
 
+/**
+ * Timings for various aspects of polynomial implementation details.
+ * @author Heinz Kredel
+ */
+
 public class PolynomialTimings {
 
     private static final int dauer = 5; // 1=kurs, 5=mittel, 20=lang
@@ -184,7 +189,7 @@ static void prodRatGeneric() throws IOException
 
   }
 
-static void tuwas_prodTreeHash() throws IOException
+static void prodTreeHash() throws IOException
   {
       logger.info("Timing multipy/multiply2-Polynomial prodTreeHash "); 
 
@@ -329,6 +334,100 @@ static void prodMapOrdered() throws IOException
       tr = System.currentTimeMillis();
       for (int i = 0; i < loops; i++) {
           Cs = (RatOrderedMapPolynomial) RatOrderedMapPolynomial.DIPPR(As,Bs);
+      }
+      tr = System.currentTimeMillis() - tr;
+      Ds = (RatOrderedMapPolynomial) RatOrderedMapPolynomial.DIPDIF(AmBs,Cs);
+      if ( ! Ds.isZERO() ) {
+	  logger.error("Cs = " + Cs.length() ); 
+	  logger.error("Ds = " + Ds.length() ); 
+      }
+
+      // normalization
+      float fg = (float)tg;
+      float fr = (float)tr;
+
+      fg = (tg/(float)loops)/(float)AmB.length();
+      fr = (tr/(float)loops)/(float)AmB.length();
+
+      logger.info("Parameters:             " + new Date());
+      logger.info("Variables:              " + rl);
+      logger.info("Coefficient size:       " + kl);
+      logger.info("Number of coefficients: " + ll);
+      logger.info("Coefficients in result: " + C.length());
+      logger.info("maximal Degrees:        " + el);
+      logger.info("Exponent density:       " + q);
+      logger.info("Number of loops:        " + loops);
+
+      logger.info("time multiply =         " + tg + " milliseconds" ); 
+      logger.info("time multiply2 =        " + tr + " milliseconds" ); 
+      logger.info("time derivation tg-tr = " + (float)(tg-tr)/(float)(tg+tr) ); 
+      logger.info("time c / loop / size =  " + fg ); 
+      logger.info("time r / loop / size =  " + fr ); 
+      logger.info("----------");
+
+  }
+
+static void prodRatMapOrdered() throws IOException
+  {
+      logger.info("Timing multipy/multiply-RatPolynomial/RatOrderedMap-Polynomial prodRatMapOrdered"); 
+
+      RatPolynomial A, B, C, D, E, F, ApB, AmB;
+      OrderedMapPolynomial As, Bs, Cs, Ds, AmBs;
+      int rl = 10; 
+      int kl = 10;
+      int ll = 5*dauer;
+      int el = 5;
+      float q = 0.3f;
+      int loops = 50; //50;
+
+      A = RatPolynomial.DIRRAS(rl, kl, ll, el, q );
+      if ( logger.isDebugEnabled() ) logger.debug("A = " + A ); 
+      logger.info("A.size() = " + A.length() ); 
+
+      B = RatPolynomial.DIRRAS(rl, kl, ll, el, q );
+      if ( logger.isDebugEnabled() ) logger.debug("B = " + B ); 
+      logger.info("B.size() = " + B.length() ); 
+
+      As = new RatOrderedMapPolynomial(A.getMap());
+      Bs = new RatOrderedMapPolynomial(B.getMap());
+
+      AmB = (RatPolynomial) A.multiply(B);
+      if ( logger.isDebugEnabled() ) logger.debug("Prod = " + AmB ); 
+      logger.info("Prod.size() = " + AmB.length() ); 
+      
+      AmBs = (RatOrderedMapPolynomial) As.multiply(Bs);
+      if ( logger.isDebugEnabled() ) logger.debug("Prod = " + AmBs ); 
+      logger.info("Prod.size() = " + AmBs.length() ); 
+      
+
+      Cs = null; C = null;
+      long tg, tr;
+
+      logger.info("Warming up ... " ); 
+      for (int i = 0; i < loops; i++) {
+          C = (RatPolynomial) A.multiply(B); 
+      }
+      for (int i = 0; i < loops; i++) {
+          Cs = (RatOrderedMapPolynomial) As.multiply(Bs); 
+      }
+
+      logger.info("Timing RatPolynomial multiply ..." ); 
+      tg = System.currentTimeMillis();
+      for (int i = 0; i < loops; i++) {
+          C = (RatPolynomial) A.multiply(B); 
+      }
+      tg = System.currentTimeMillis() - tg;
+      D = (RatPolynomial) RatPolynomial.DIPDIF(AmB,C);
+      if ( ! D.isZERO() ) {
+	  logger.error("C = " + C.length() ); 
+	  logger.error("D = " + D.length() ); 
+      }
+
+
+      logger.info("Timing RatOrderedMapPolynomial multiply ..." ); 
+      tr = System.currentTimeMillis();
+      for (int i = 0; i < loops; i++) {
+          Cs = (RatOrderedMapPolynomial) As.multiply(Bs); 
       }
       tr = System.currentTimeMillis() - tr;
       Ds = (RatOrderedMapPolynomial) RatOrderedMapPolynomial.DIPDIF(AmBs,Cs);
@@ -653,10 +752,12 @@ static void prodMapEvord() throws IOException
 
 
   public static void main( String[] args ) throws IOException {
+      logger.info("new PolynomialTimings ------------------------------"); 
       sumRatGeneric();
       prodRatGeneric();
-      tuwas_prodTreeHash();
+      prodTreeHash();
       prodMapOrdered();
+      prodRatMapOrdered();
       prodObjectMapOrdered();
       prodMapEvordOrdered();
       prodMapEvord();

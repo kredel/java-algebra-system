@@ -6,6 +6,13 @@ package edu.jas.arith;
 
 import java.util.Random;
 
+/**
+ * BigInteger class to make java.math.BigInteger available with Coefficient interface
+ * and with the familiar SAC method names.
+ * @author Heinz Kredel
+ * @see java.math.BigInteger
+ */
+
 public class BigInteger implements Coefficient {
 
     private final static Random random = new Random();
@@ -14,6 +21,10 @@ public class BigInteger implements Coefficient {
     public final static BigInteger ONE = new BigInteger( java.math.BigInteger.ONE );
 
     private final java.math.BigInteger val;
+
+    /**
+     * Constructors for BigInteger
+     */
 
     public BigInteger(java.math.BigInteger a) {
 	val = a;

@@ -24,9 +24,20 @@ import edu.jas.poly.ExpVector;
 import edu.jas.poly.RatPolynomial;
 import edu.jas.poly.TreePolynomial;
 
+/**
+ * Groebner Bases class.
+ * Implements S-Polynomial, Reduction, Irreducible List and Groebner bases.
+ * Included is a parallel implementation of Groebner bbases.
+ * @author Heinz Kredel
+ */
+
 public class RatGBase  {
 
     private static Logger logger = Logger.getLogger(RatGBase.class);
+
+    /**
+     * S-Polynomial
+     */
 
     public static RatPolynomial DIRPSP(RatPolynomial Ap, RatPolynomial Bp) {  
         //if ( Ap.evord != Bp.evord ) { logger.error("evord mismatch"); }

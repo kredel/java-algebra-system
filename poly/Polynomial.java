@@ -15,6 +15,8 @@ import java.util.Map;
  * Polynomial Interface. 
  * For implementations based different Maps, e.g. 
  * SortedMap / TreeMap, HashMap / LinkedHashMap.
+ * @author Heinz Kredel
+ * @deprecated
  */
 
 interface Polynomial {

@@ -10,6 +10,7 @@ import java.util.Comparator;
 
 /**
  * Term order class for ordered polynomials. 
+ * @author Hienz Kredel
  */
 
 public final class TermOrder {

@@ -6,7 +6,7 @@ package edu.jas;
 
 /**
  * StrategyEnumeration
- * This class names all possible strategies.
+ * This class names possible / implemented strategies.
  * @author Heinz Kredel.
  */
 

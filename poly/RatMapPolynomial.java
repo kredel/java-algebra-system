@@ -17,6 +17,7 @@ import edu.jas.arith.BigRational;
 /**
  * BigRational Map Polynomial. 
  * Extension of MapPolynomial with BigRational Coefficients.
+ * @author Hienz Kredel
  */
 
 public class RatMapPolynomial extends MapPolynomial {

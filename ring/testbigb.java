@@ -9,9 +9,11 @@ import java.util.ArrayList;
 import edu.jas.arith.BigRational;
 import edu.jas.poly.RatPolynomial;
 
+  /**
+   * @deprecated
+   */
 
-public class testbigb
-{
+public class testbigb {
 
   static void tuwas()
   {

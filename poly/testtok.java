@@ -14,6 +14,10 @@ import java.io.StringReader;
 import edu.jas.arith.BigRational;
 //import edu.jas.poly.RatPolynomial;
 
+/**
+ * @deprecated
+ */
+
 public class testtok
 {
 

@@ -25,6 +25,8 @@ import edu.jas.arith.Coefficient;
  * Polynomial. 
  * Implementation based on SortedMap / TreeMap in add/difference/multiply.
  * Other methods work with any Map.
+ * @author Hienz Kredel
+ * @deprecated
  */
 
 public abstract class TreePolynomial implements Polynomial, Cloneable {

@@ -9,7 +9,9 @@ import java.util.Vector;
 
 
 /**
- * Class: ExpVector
+ * ExpVector
+ * implements exponent vectors for polynomials.
+ * @author Heinz Kredel
  */
 
 
@@ -31,6 +33,10 @@ public class ExpVector implements Cloneable {
 
     private final static Random random = new Random();
 
+
+    /**
+     * Constructors for ExpVector
+     */
 
     public ExpVector(int n) {
         this( new long[n] );

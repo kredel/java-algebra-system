@@ -18,6 +18,7 @@ import edu.jas.arith.Coefficient;
  * Ordered Map Polynomial. 
  * Abstract implementation of OrderedPolynomial.
  * Implementation based on Sorted Map / TreeMap
+ * @author Heinz Kredel
  */
 
 public abstract class OrderedMapPolynomial /* extends MapPolynomial */ 
@@ -245,14 +246,16 @@ public abstract class OrderedMapPolynomial /* extends MapPolynomial */
 	    // System.out.println("f = " + f);
             Coefficient b = (Coefficient) y.getValue(); 
 	    // System.out.println("b = " + b);
-            Coefficient c = (Coefficient) C.remove( f );
+            Coefficient c = (Coefficient) C.get( f ); //remove?
             // System.out.println("c = " + c);
             if ( c != null ) { 
                c = c.add(b);
                // System.out.println("c = " + c);
                if ( ! c.isZERO() ) { 
                   C.put( f, c ); 
-               }
+               } else {
+                  C.remove( f );
+	       }
             } else { 
 	       // System.out.println("b = " + b);
                C.put( f, b ); 

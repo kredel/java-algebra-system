@@ -17,6 +17,7 @@ import edu.jas.arith.BigRational;
 /**
  * BigRational Ordered Map Polynomial. 
  * Extension of OrderedMapPolynomial with BigRational Coefficients.
+ * @author Hienz Kredel
  */
 
 public class RatOrderedMapPolynomial extends OrderedMapPolynomial {

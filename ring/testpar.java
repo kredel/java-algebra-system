@@ -18,6 +18,9 @@ import edu.jas.poly.PolynomialTokenizer;
 import edu.jas.poly.PolynomialList;
 import edu.jas.poly.ExpVector;
 
+  /**
+   * @deprecated
+   */
 
 public class testpar
 {

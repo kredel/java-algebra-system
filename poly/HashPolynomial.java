@@ -25,6 +25,8 @@ import edu.jas.arith.Coefficient;
  * Polynomial. 
  * Implementation based on HashMap / LinkedHashMap in add/difference/multiply.
  * Other methods work with any Map.
+ * @author Heinz Kredel
+ * @deprecated 
  */
 
 public abstract class HashPolynomial implements Polynomial, Cloneable {
