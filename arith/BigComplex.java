@@ -60,7 +60,7 @@ public class BigComplex implements Coefficient, Comparable {
            im = BigRational.ZERO;
 	   return;
 	}
-	logger.warn("String constructor not done");
+	//logger.warn("String constructor not done");
 	String sr = "";
 	if ( i > 0 ) {
            sr = s.substring(0,i);
@@ -69,7 +69,7 @@ public class BigComplex implements Coefficient, Comparable {
 	if ( i < s.length() ) {
            si = s.substring(i+1,s.length());
 	}
-	int j = sr.indexOf("+");
+	//int j = sr.indexOf("+");
         re = new BigRational( sr.trim() );
         im = new BigRational( si.trim() );
     }
@@ -109,18 +109,9 @@ public class BigComplex implements Coefficient, Comparable {
     public String toString() {
         String s = "" + re;
 	int i = im.compareTo( BigRational.ZERO );
-	logger.info("compareTo "+im+" ? 0 = "+i);
+	//logger.info("compareTo "+im+" ? 0 = "+i);
 	if ( i == 0 ) return s;
 	s += " i " + im;
-	/*
-        if ( i == 1 ) {
-           s += " - " + (im.negate()) + "i";
-        } else if ( i == -1 ) {
-           s += " + " + im + "i";
-	} else {
-	    // do nothing
-	}
-	*/
         return s;
     }
 
