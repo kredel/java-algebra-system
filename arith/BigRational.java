@@ -34,7 +34,8 @@ public class BigRational implements Coefficient, Comparable, Serializable {
      * Constructors for BigRational
      */
 
-    public BigRational(BigInteger n, BigInteger d) {
+    protected BigRational(BigInteger n, BigInteger d) {
+        // assume gcd(n,d) == 1
 	num = n; 
         den = d;
     } 
@@ -42,6 +43,14 @@ public class BigRational implements Coefficient, Comparable, Serializable {
     public BigRational(BigInteger n) {
 	num = n; 
         den = IONE;
+    } 
+
+    public BigRational(long n, long d) {
+        BigInteger nu = BigInteger.valueOf(n);
+        BigInteger de = BigInteger.valueOf(d);
+        BigRational r = RNRED(nu,de);
+	num = r.numerator(); 
+        den = r.denominator();
     } 
 
     public BigRational(long n) {
@@ -75,7 +84,6 @@ public class BigRational implements Coefficient, Comparable, Serializable {
             BigRational r = RNRED( n, d );
 	    num = r.numerator();
 	    den = r.denominator();
-	    // r = null;
 	    return;
 	}
     } 
@@ -92,7 +100,9 @@ public class BigRational implements Coefficient, Comparable, Serializable {
     public String toString() {
         StringBuffer s = new StringBuffer();
         s.append(num);
-	if ( ! den.equals(BigInteger.ONE) ) s.append("/").append(den);
+	if ( ! den.equals(BigInteger.ONE) ) {
+           s.append("/").append(den);
+        }
         return s.toString();
     } 
 
