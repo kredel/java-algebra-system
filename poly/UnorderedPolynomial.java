@@ -17,7 +17,7 @@ import java.util.Map;
  * @author Hienz Kredel
  */
 
-interface UnorderedPolynomial {
+public interface UnorderedPolynomial {
 
 
     public Map getMap();

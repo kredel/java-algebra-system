@@ -16,7 +16,7 @@ import java.util.Map;
  * @author Heinz Kredel
  */
 
-interface OrderedPolynomial /* extends UnorderedPolynomial */ {
+public interface OrderedPolynomial /* extends UnorderedPolynomial */ {
 
     public TermOrder getTermOrder();
 
