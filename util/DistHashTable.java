@@ -75,10 +75,12 @@ public class DistHashTable /* implements List not jet */ {
 
 /**
  * Get the internal list, convert from Collection
- * @fix and @check
+ * @fix but is ok
  */ 
     public List getList() {
-        return new ArrayList( theList.values() );
+        synchronized ( theList ) {
+           return new ArrayList( theList.values() );
+        }
     }
 
 
@@ -86,7 +88,37 @@ public class DistHashTable /* implements List not jet */ {
  * Size of the (local) list
  */ 
     public int size() {
-        return theList.size();
+        synchronized ( theList ) {
+           return theList.size();
+        }
+    }
+
+/**
+ * Is the List empty?
+ */ 
+    public boolean isEmpty() {
+        synchronized ( theList ) {
+           return theList.isEmpty();
+        }
+    }
+
+
+/**
+ * List key iterator
+ */ 
+    public Iterator iterator() {
+        synchronized ( theList ) {
+           return theList.keySet().iterator();
+        }
+    }
+
+/**
+ * List value iterator
+ */ 
+    public Iterator valueIterator() {
+        synchronized ( theList ) {
+           return theList.values().iterator();
+        }
     }
 
 
@@ -161,6 +193,17 @@ public class DistHashTable /* implements List not jet */ {
 
 
 /**
+ * Clear the List
+ * caveat: must be called on all clients
+ */ 
+    public void clear() {
+        // send clear message to others
+        synchronized ( theList) {
+           theList.clear();
+        }
+    }
+
+/**
  * Terminate the list thread
  */ 
     public void terminate() {
@@ -184,32 +227,6 @@ public class DistHashTable /* implements List not jet */ {
         } catch (InterruptedException unused) { 
         }
         listener = null;
-    }
-
-
-/**
- * Clear the List
- * caveat: must be called on all clients
- */ 
-    public synchronized void clear() {
-        theList.clear();
-    }
-
-
-/**
- * Is the List empty?
- */ 
-    public boolean isEmpty() {
-        return theList.isEmpty();
-    }
-
-
-/**
- * List iterator
- */ 
-    public Iterator iterator() {
-        return theList.keySet().iterator();
-        // return theList.values().iterator();
     }
 
 }
@@ -251,24 +268,28 @@ class DHTListener extends Thread {
                 logger.debug("receive("+o+")");
                 if ( this.isInterrupted() ) {
                    goon = false;
-                } else {
-                   if ( o != null ) {
-                      if ( o instanceof DHTTransport ) {
-                          tc = (DHTTransport)o;
-                          if ( tc.key != null ) {
-                             logger.debug("receive, put(" + tc + ")");
-                             synchronized ( theList ) {
-                                theList.put( tc.key, tc.value );
-                                theList.notify();
-                             }
-                          }
+                   break;
+                } 
+                if ( o == null ) {
+                   goon = false;
+                   break;
+                }
+                if ( o instanceof DHTTransport ) {
+                   tc = (DHTTransport)o;
+                   if ( tc.key != null ) {
+                      //logger.debug("receive, put(" + tc + ")");
+                      synchronized ( theList ) {
+                         theList.put( tc.key, tc.value );
+                         theList.notify();
                       }
                    }
                 }
             } catch (IOException e) {
                 goon = false;
+                //e.printStackTrace();
             } catch (ClassNotFoundException e) {
                 goon = false;
+                e.printStackTrace();
             }
         }
     }
