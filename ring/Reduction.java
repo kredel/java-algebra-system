@@ -39,10 +39,10 @@ public class Reduction  {
                                                 OrderedPolynomial Bp) {  
         if ( logger.isInfoEnabled() ) {
 	   if ( Bp == null || Bp.isZERO() ) {
-	      return Ap;
+              return Ap; // wrong zero
 	   }
 	   if ( Ap == null || Ap.isZERO() ) {
-	      return (OrderedPolynomial) Bp.negate();
+	      return (OrderedPolynomial) Bp.negate(); // wrong zero
 	   }
            if ( ! Ap.getTermOrder().equals( Bp.getTermOrder() ) ) { 
               logger.error("term orderings not equal"); 
@@ -76,10 +76,10 @@ public class Reduction  {
                                                      SolvablePolynomial Bp) {  
         if ( logger.isInfoEnabled() ) {
 	   if ( Bp == null || Bp.isZERO() ) {
-	      return Ap;
+	      return Ap; // wrong zero
 	   }
 	   if ( Ap == null || Ap.isZERO() ) {
-	      return (SolvablePolynomial)Bp.negate();
+	      return (SolvablePolynomial)Bp.negate(); // wrong zero
 	   }
            if ( ! Ap.getTermOrder().equals( Bp.getTermOrder() ) ) { 
               logger.error("term orderings not equal"); 
@@ -132,6 +132,12 @@ public class Reduction  {
         int s = ExpVector.EVSIGN(h);
         return ! ( s == 0 );
     }
+
+
+    /**
+     * GB criterium 4.
+     * @return true if the S-polynomial(i,j) is required.
+     */
 
     public static boolean GBCriterion4(OrderedPolynomial A, 
                                        OrderedPolynomial B) {  
@@ -357,7 +363,10 @@ public class Reduction  {
         int l = Pp.size();
         Map.Entry m;
         Map.Entry m1;
-        Object[] P = Pp.values().toArray();
+        Object[] P;
+        synchronized (Pp) { // required, ok in dist
+           P = Pp.values().toArray();
+        }
         Iterator it;
         ExpVector e;
         ExpVector f = null;
