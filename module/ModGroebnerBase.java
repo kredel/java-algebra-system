@@ -36,6 +36,15 @@ public class ModGroebnerBase  {
     }
 
     public static boolean isGB(ModuleList M) {  
+        if ( M == null ) {
+            return true;
+        }
+        if ( M.list == null ) {
+            return true;
+        }
+        if ( M.list.size() == 0 ) {
+            return true;
+        }
         PolynomialList F = M.getPolynomialList();
         int modv = ((List)M.list.get(0)).size();
         return GroebnerBase.isDIRPGB(modv,F.list);
