@@ -43,13 +43,14 @@ public class BigQuaternionTest extends TestCase {
    BigQuaternion b;
    BigQuaternion c;
    BigQuaternion d;
+   BigQuaternion e;
 
    protected void setUp() {
-       a = b = c = d = null;
+       a = b = c = d = e = null;
    }
 
    protected void tearDown() {
-       a = b = c = d = null;
+       a = b = c = d = e = null;
    }
 
 
@@ -113,7 +114,7 @@ public class BigQuaternionTest extends TestCase {
      b = new BigQuaternion( a.getRe(), a.getIm(), a.getJm(), a.getKm() );
      c = BigQuaternion.QDIF(b,a);
 
-     assertEquals("a-b = 0",c,BigQuaternion.ZERO);
+     assertEquals("a-b = 0",BigQuaternion.ZERO,c);
 
      d = new BigQuaternion( b.getRe(), b.getIm(), b.getJm(), b.getKm() );
      assertEquals("sign(a-a) = 0", 0, b.compareTo(d) );
@@ -169,6 +170,28 @@ public class BigQuaternionTest extends TestCase {
      c = BigQuaternion.QPROD( a, b );
 
      assertTrue("a*1/a = 1", c.isONE() );
+ }
+
+
+/**
+ * Test multiplication axioms
+ * 
+ */
+ public void testMultiplicationAxioms() {
+     a = BigQuaternion.QRAND( 100 );
+     b = BigQuaternion.QRAND( 100 );
+
+     c = BigQuaternion.QPROD( a, b );
+     d = BigQuaternion.QPROD( b, a );
+
+     assertTrue("a*b != b*a",!c.equals(d));
+
+     c = BigQuaternion.QRAND( 100 );
+
+     d = BigQuaternion.QPROD( a, BigQuaternion.QPROD( b, c ) );
+     e = BigQuaternion.QPROD( BigQuaternion.QPROD( a, b ), c );
+     assertTrue("a(bc) = (ab)c",e.equals(d));
+
  }
 
 }
