@@ -46,6 +46,7 @@ public class OrderedPairlist {
          torder = to;
          P = new ArrayList();
          pairlist = new TreeMap( to.getAscendComparator() );
+         //pairlist = new TreeMap( to.getSugarComparator() );
          red = new ArrayList();
 	 putCount = 0;
 	 remCount = 0;
