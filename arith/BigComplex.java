@@ -316,8 +316,8 @@ public class BigComplex implements Coefficient, Comparable, Serializable {
     R is the complex number with real part A and imaginary part B. */
 
     public static BigComplex CRAND(int n) {
-      return new BigComplex( new BigRational(n), 
-                             new BigRational(n) );
+      return new BigComplex( BigRational.RNRAND(n), 
+                             BigRational.RNRAND(n) );
     }
 
     /** random complex number 
