@@ -168,7 +168,7 @@ public class RatGBaseTest extends TestCase {
      L.add(d);
 
      L = RatGBase.DIRPGBparallel( L, threads );
-     assertTrue("isDIRPGB( { a, ,b, c } )", RatGBase.isDIRPGB(L) );
+     assertTrue("isDIRPGB( { a, ,b, c, d } )", RatGBase.isDIRPGB(L) );
 
  }
 
