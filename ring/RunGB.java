@@ -36,7 +36,7 @@ public class RunGB {
       BasicConfigurator.configure();
 
       String usage = "Usage: RunGB "
-                    + "[seq|par|dist|cli] "
+                    + "[ seq | par | dist | cli [port] ] "
                     + "<file> "
                     + "#procs "
                     + "[machinefile]";
@@ -63,7 +63,16 @@ public class RunGB {
       int port = GB_SERVER_PORT;
 
       if ( kind.equals("cli") ) {
-          runClient( EX_CLIENT_PORT );
+          if ( args.length >=2 ) {
+             try {
+                 port = Integer.parseInt( args[1] );
+             } catch (NumberFormatException e) { 
+                 e.printStackTrace();
+                 System.out.println(usage);
+                 return;
+             }
+          }
+          runClient( port );
           return;
       }
 
