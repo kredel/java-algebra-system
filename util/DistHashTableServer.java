@@ -270,6 +270,10 @@ class DHTBroadcaster extends Thread /*implements Runnable*/ {
 	channel.send(tc);
     }
 
+    public void sendChannel(DHTTransport tc) throws IOException {
+	channel.send(tc);
+    }
+
 
     public void broadcast(Object o) {
         logger.debug("broadcast = "+o);
@@ -292,7 +296,7 @@ class DHTBroadcaster extends Thread /*implements Runnable*/ {
                     if ( logger.isDebugEnabled() ) {
 		       logger.debug("bcasting("+tc.key+") = "+tc.value);
                     }
-		    br.sendChannel(tc.key, tc.value);
+		    br.sendChannel( tc );
 		} catch (IOException e) {
 		    try { 
 			br.closeChannel();
@@ -315,19 +319,19 @@ class DHTBroadcaster extends Thread /*implements Runnable*/ {
 	boolean goon = true;
 	while (goon) {
               try {
-                   logger.debug("trying to receive");
-                   o = channel.receive();
-                   if ( logger.isDebugEnabled() ) {
-                      logger.debug("received = "+o);
-                   }
-		   broadcast(o);
-		   if ( this.isInterrupted() ) {
-		       goon = false;
-		   }
+                  //logger.debug("trying to receive");
+                  o = channel.receive();
+                  if ( logger.isDebugEnabled() ) {
+                     logger.debug("received = "+o);
+                  }
+		  broadcast(o);
+		  if ( this.isInterrupted() ) {
+		      goon = false;
+		  }
 	      } catch (IOException e) {
-                   goon = false;
+                  goon = false;
 	      } catch (ClassNotFoundException e) {
-                   goon = false;
+                  goon = false;
 	      }
 	}
 	logger.debug("DHTBroadcaster terminated "+this);
