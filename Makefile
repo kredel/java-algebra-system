@@ -9,14 +9,15 @@
 # todo 
 
 # set this to your jdk binaries path
-#JDK=/usr/java/jdk1.5.0/bin
+JDK=/usr/lib/jvm/java-1.5.0/bin
+#JDK=/usr/java/jdk1.5.0_01/bin
 #JDK=/usr/java/j2sdk1.4.1_01/bin
 #JDK=/usr/java/j2sdk1.4.0_01/bin
 #JDK=/opt/jdk1.4/bin
 #JDK=/opt/jdk1.4.0b3/bin
 #JDK=/usr/lib/jdk1.3/bin
 #JDK=/opt/jdk1.2.2/bin
-JDK=/usr/lib/java/bin
+#JDK=/usr/lib/java/bin
 
 LIBPATH=/home/kredel/java/lib
 JUNITPATH=$(LIBPATH)/junit.jar
