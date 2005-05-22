@@ -20,8 +20,8 @@ public class BigComplex implements Coefficient, Comparable, Serializable {
 
     /* the data structure */
 
-    private final BigRational re;  // der Realteil
-    private final BigRational im;  // der Imaginärteil
+    private final BigRational re;  // real part
+    private final BigRational im;  // imaginary part 
 
     private final static Random random = new Random();
 
@@ -75,11 +75,11 @@ public class BigComplex implements Coefficient, Comparable, Serializable {
         im = new BigRational( si.trim() );
     }
 
-    public /*static*/ Coefficient fromInteger(BigInteger a) {
+    public /*static*/ /*Coefficient*/ BigComplex fromInteger(BigInteger a) {
 	return new BigComplex( new BigRational(a) );
     }
 
-    public /*static*/ Coefficient fromInteger(long a) {
+    public /*static*/ /*Coefficient*/ BigComplex fromInteger(long a) {
 	return new BigComplex( new BigRational( a ) );
     }
 
@@ -186,7 +186,7 @@ public class BigComplex implements Coefficient, Comparable, Serializable {
     /** arithmetic operations: +, -, -
      */
 
-    public Coefficient add(Coefficient b) {
+    public /*Coefficient*/ BigComplex add(Coefficient b) {
 	if ( ! ( b instanceof BigComplex ) ) return this;
 	BigComplex B = (BigComplex) b;
 	return new BigComplex( re.add(B.getRe()), 
@@ -209,7 +209,7 @@ public class BigComplex implements Coefficient, Comparable, Serializable {
       return (BigComplex) A.subtract(B);
     }
 
-    public Coefficient subtract(Coefficient b) {
+    public /*Coefficient*/ BigComplex subtract(Coefficient b) {
 	if ( ! ( b instanceof BigComplex ) ) return this;
 	BigComplex B = (BigComplex) b;
 	return new BigComplex(re.subtract(B.getRe()), 
@@ -224,7 +224,7 @@ public class BigComplex implements Coefficient, Comparable, Serializable {
       return (BigComplex) A.negate();
     }
 
-    public Coefficient negate() {
+    public /*Coefficient*/ BigComplex negate() {
 	return new BigComplex( (BigRational)re.negate(), 
                                (BigRational)im.negate());
     }
@@ -245,7 +245,7 @@ public class BigComplex implements Coefficient, Comparable, Serializable {
 	return new BigComplex(re, (BigRational)im.negate());
     }
 
-    public Coefficient abs() {
+    public /*Coefficient*/ BigRational abs() {
 	BigRational v = re.multiply(re).add(im.multiply(im));
 	logger.error("abs() square root missing");
 	// v = v.sqrt();
@@ -272,7 +272,7 @@ public class BigComplex implements Coefficient, Comparable, Serializable {
     /** arithmetic operations: *, inverse, / 
      */
 
-    public Coefficient multiply(Coefficient b) {
+    public /*Coefficient*/ BigComplex multiply(Coefficient b) {
 	if ( ! ( b instanceof BigComplex ) ) return this;
 	BigComplex B = (BigComplex) b;
 	return new BigComplex(
@@ -288,7 +288,7 @@ public class BigComplex implements Coefficient, Comparable, Serializable {
       return (BigComplex) A.inverse();
     }
 
-    public Coefficient inverse() {
+    public /*Coefficient*/ BigComplex inverse() {
         BigRational a = re.multiply(re).add(im.multiply(im));
 	return new BigComplex(             re.divide(a), 
                               (BigRational)im.divide(a).negate() ); 
@@ -304,7 +304,7 @@ public class BigComplex implements Coefficient, Comparable, Serializable {
       return (BigComplex) A.divide(B);
     }
 
-    public Coefficient divide (Coefficient b) {
+    public /*Coefficient*/ BigComplex divide (Coefficient b) {
 	if ( ! ( b instanceof BigComplex ) ) return this;
 	BigComplex B = (BigComplex) b;
 	return this.multiply( B.inverse() );
@@ -323,7 +323,7 @@ public class BigComplex implements Coefficient, Comparable, Serializable {
     /** random complex number 
      */
 
-    public Coefficient random(int n) {
+    public /*Coefficient*/ BigComplex random(int n) {
 	return CRAND(n);
     }
 

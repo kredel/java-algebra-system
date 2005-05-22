@@ -20,10 +20,10 @@ public class BigQuaternion implements Coefficient, Comparable, Serializable {
 
     /* the data structure */
 
-    private final BigRational re;  // der Realteil
-    private final BigRational im;  // der i Imaginärteil
-    private final BigRational jm;  // der j Imaginärteil
-    private final BigRational km;  // der k Imaginärteil
+    private final BigRational re;  // real part
+    private final BigRational im;  // i imaginary part
+    private final BigRational jm;  // j imaginary part
+    private final BigRational km;  // k imaginary part
 
     private final static Random random = new Random();
 
@@ -117,11 +117,11 @@ public class BigQuaternion implements Coefficient, Comparable, Serializable {
         km = new BigRational( sk.trim() );
     }
 
-    public /*static*/ Coefficient fromInteger(BigInteger a) {
+    public /*static*/ /*Coefficient*/ BigQuaternion fromInteger(BigInteger a) {
         return new BigQuaternion( new BigRational(a) );
     }
 
-    public /*static*/ Coefficient fromInteger(long a) {
+    public /*static*/ /*Coefficient*/ BigQuaternion fromInteger(long a) {
         return new BigQuaternion( new BigRational( a ) );
     }
 
@@ -258,7 +258,7 @@ public class BigQuaternion implements Coefficient, Comparable, Serializable {
     /** arithmetic operations: +, -, -
      */
 
-    public Coefficient add(Coefficient b) {
+    public /*Coefficient*/ BigQuaternion add(Coefficient b) {
         if ( ! ( b instanceof BigQuaternion ) ) return this;
         BigQuaternion B = (BigQuaternion) b;
         return new BigQuaternion( re.add(B.getRe()), 
@@ -283,7 +283,7 @@ public class BigQuaternion implements Coefficient, Comparable, Serializable {
       return (BigQuaternion) A.subtract(B);
     }
 
-    public Coefficient subtract(Coefficient b) {
+    public /*Coefficient*/ BigQuaternion subtract(Coefficient b) {
         if ( ! ( b instanceof BigQuaternion ) ) return this;
         BigQuaternion B = (BigQuaternion) b;
         return new BigQuaternion( re.subtract(B.getRe()), 
@@ -300,7 +300,7 @@ public class BigQuaternion implements Coefficient, Comparable, Serializable {
       return (BigQuaternion) A.negate();
     }
 
-    public Coefficient negate() {
+    public /*Coefficient*/ BigQuaternion negate() {
         return new BigQuaternion( (BigRational)re.negate(), 
                                   (BigRational)im.negate(),
                                   (BigRational)jm.negate(),
@@ -326,7 +326,7 @@ public class BigQuaternion implements Coefficient, Comparable, Serializable {
                                   (BigRational)km.negate() );
     }
 
-    public Coefficient abs() {
+    public /*Coefficient*/ BigRational abs() {
         BigRational v = re.multiply(re);
         v = v.add(im.multiply(im));
         v = v.add(jm.multiply(jm));
@@ -356,7 +356,7 @@ public class BigQuaternion implements Coefficient, Comparable, Serializable {
     /** arithmetic operations: *, inverse, / 
      */
 
-    public Coefficient multiply(Coefficient b) {
+    public /*Coefficient*/ BigQuaternion multiply(Coefficient b) {
         if ( ! ( b instanceof BigQuaternion ) ) return this;
         BigQuaternion B = (BigQuaternion) b;
 	BigRational r = re.multiply(B.getRe());
@@ -389,7 +389,7 @@ public class BigQuaternion implements Coefficient, Comparable, Serializable {
       return (BigQuaternion) A.inverse();
     }
 
-    public Coefficient inverse() {
+    public /*Coefficient*/ BigQuaternion inverse() {
         BigRational a = re.multiply(re);
         a = a.add(im.multiply(im));
         a = a.add(jm.multiply(jm));
@@ -410,7 +410,7 @@ public class BigQuaternion implements Coefficient, Comparable, Serializable {
       return (BigQuaternion) A.divide(B);
     }
 
-    public Coefficient divide (Coefficient b) {
+    public /*Coefficient*/ BigQuaternion divide (Coefficient b) {
         if ( ! ( b instanceof BigQuaternion ) ) return this;
         BigQuaternion B = (BigQuaternion) b;
         return this.multiply( B.inverse() );
@@ -431,7 +431,7 @@ public class BigQuaternion implements Coefficient, Comparable, Serializable {
     /** random quaternion number 
      */
 
-    public Coefficient random(int n) {
+    public /*Coefficient*/ BigQuaternion random(int n) {
         return QRAND(n);
     }
 

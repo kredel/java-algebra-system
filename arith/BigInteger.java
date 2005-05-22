@@ -47,7 +47,7 @@ public class BigInteger implements Coefficient, Serializable {
       return val;
     }
 
-    public /*static*/ Coefficient fromInteger(java.math.BigInteger a) {
+    public /*static*/ /*Coefficient*/ BigInteger fromInteger(java.math.BigInteger a) {
 	return new BigInteger(a);
     }
 
@@ -55,7 +55,7 @@ public class BigInteger implements Coefficient, Serializable {
 	return new BigInteger(a);
     }
 
-    public /*static*/ Coefficient fromInteger(long a) {
+    public /*static*/ /*Coefficient*/ BigInteger fromInteger(long a) {
 	return new BigInteger(a);
     }
 
@@ -93,7 +93,7 @@ public class BigInteger implements Coefficient, Serializable {
 	return val.equals( ((BigInteger)b).getval() );
     }
 
-    public Coefficient abs() {
+    public /*Coefficient*/ BigInteger abs() {
       return new BigInteger( val.abs() );
     }
 
@@ -102,7 +102,7 @@ public class BigInteger implements Coefficient, Serializable {
       return (BigInteger) A.abs();
     }
 
-    public Coefficient negate() {
+    public /*Coefficient*/ BigInteger negate() {
       return new BigInteger( val.negate() );
     }
 
@@ -120,7 +120,7 @@ public class BigInteger implements Coefficient, Serializable {
       return A.signum();
     }
 
-    public Coefficient subtract(Coefficient S) {
+    public /*Coefficient*/ BigInteger subtract(Coefficient S) {
       return new BigInteger( val.subtract( ((BigInteger)S).getval() ) );
     }
 
@@ -129,7 +129,7 @@ public class BigInteger implements Coefficient, Serializable {
       return (BigInteger) A.subtract(B);
     }
 
-    public Coefficient divide(Coefficient S) {
+    public /*Coefficient*/ BigInteger divide(Coefficient S) {
       return new BigInteger( val.divide( ((BigInteger)S).getval() ) );
     }
 
@@ -141,14 +141,14 @@ public class BigInteger implements Coefficient, Serializable {
     /** Integer inverse.  R is a non-zero integer.  
         S=1/R if defined else 0. */
 
-    public Coefficient inverse() {
+    public /*Coefficient*/ BigInteger inverse() {
 	if ( this.isONE() || this.negate().isONE() ) {
            return this;
 	}
 	return ZERO;
     }
 
-    public Coefficient remainder(Coefficient S) {
+    public /*Coefficient*/ BigInteger remainder(Coefficient S) {
       return new BigInteger( val.remainder( ((BigInteger)S).getval() ) );
     }
 
@@ -157,8 +157,8 @@ public class BigInteger implements Coefficient, Serializable {
       return (BigInteger) A.remainder(B);
     }
 
-    public Coefficient[] divideAndRemainder(Coefficient S) {
-      Coefficient[] qr = new BigInteger[2];
+    public /*Coefficient*/ BigInteger[] divideAndRemainder(Coefficient S) {
+      /*Coefficient*/ BigInteger[] qr = new BigInteger[2];
       java.math.BigInteger[] C = val.divideAndRemainder( 
                                      ((BigInteger)S).getval() );
       qr[0] = new BigInteger( C[0] );
@@ -176,7 +176,7 @@ public class BigInteger implements Coefficient, Serializable {
       return (BigInteger[]) A.divideAndRemainder(B);
     }
 
-    public Coefficient gcd(Coefficient S) {
+    public /*Coefficient*/ BigInteger gcd(Coefficient S) {
       return new BigInteger( val.gcd( ((BigInteger)S).getval() ) );
     }
 
@@ -185,7 +185,7 @@ public class BigInteger implements Coefficient, Serializable {
       return (BigInteger) A.gcd(B);
     }
 
-    public Coefficient random(int n) {
+    public /*Coefficient*/ BigInteger random(int n) {
       return IRAND( n );
     }
 
@@ -193,7 +193,7 @@ public class BigInteger implements Coefficient, Serializable {
       return new BigInteger( new java.math.BigInteger( NL, random ) );
     }
 
-    public Coefficient multiply(Coefficient S) {
+    public /*Coefficient*/ BigInteger multiply(Coefficient S) {
       return new BigInteger( val.multiply( ((BigInteger)S).getval() ) );
     }
 
@@ -202,7 +202,7 @@ public class BigInteger implements Coefficient, Serializable {
       return (BigInteger) A.multiply(B);
     }
 
-    public Coefficient add(Coefficient S) {
+    public /*Coefficient*/ BigInteger add(Coefficient S) {
       return new BigInteger( val.add( ((BigInteger)S).getval() ) );
     }
 
@@ -214,7 +214,7 @@ public class BigInteger implements Coefficient, Serializable {
 
     // the mod methods do not belong here -------------------
 
-    public Coefficient modInverse(Coefficient M) {
+    public /*Coefficient*/ BigInteger modInverse(Coefficient M) {
       return new BigInteger( val.modInverse( ((BigInteger)M).getval() ) );
     }
 
@@ -224,7 +224,7 @@ public class BigInteger implements Coefficient, Serializable {
       return (BigInteger) A.modInverse(M);
     }
 
-    public Coefficient mod(Coefficient M) {
+    public /*Coefficient*/ BigInteger mod(Coefficient M) {
       return new BigInteger( val.mod( ((BigInteger)M).getval() ) );
     }
 

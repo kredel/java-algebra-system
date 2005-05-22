@@ -106,7 +106,7 @@ public class BigRational implements Coefficient, Comparable, Serializable {
         return s.toString();
     } 
 
-    public /*static*/ Coefficient fromInteger(BigInteger a) {
+    public /*static*/ /*Coefficient*/ BigRational fromInteger(BigInteger a) {
 	return new BigRational(a);
     }
 
@@ -114,7 +114,7 @@ public class BigRational implements Coefficient, Comparable, Serializable {
 	return new BigRational(a);
     }
 
-    public /*static*/ Coefficient fromInteger(long a) {
+    public /*static*/ /*Coefficient*/ BigRational fromInteger(long a) {
 	return new BigRational(a);
     }
 
@@ -160,7 +160,7 @@ B non-zero.  R is the rational number A/B in canonical form. */
 /** Rational number absolute value.  R is a rational number.  S is the
 absolute value of R. */
 
-  public Coefficient abs() {
+  public /*Coefficient*/ BigRational abs() {
       if ( RNSIGN( this ) >= 0 ) {
 	  return this;
       } else {
@@ -232,7 +232,7 @@ denominator of R, a positive integer. */
 
 /** Rational number difference.  R and S are rational numbers.  T=R-S. */
 
-  public Coefficient subtract(Coefficient S) {
+  public /*Coefficient*/ BigRational subtract(Coefficient S) {
       return subtract( (BigRational) S);
   }
 
@@ -283,7 +283,7 @@ number A/1. */
 
 /** Rational number inverse.  R is a non-zero rational number.  S=1/R. */
 
-  public Coefficient inverse() {
+  public /*Coefficient*/ BigRational inverse() {
       BigInteger R1 = num; //R.nominator();
       BigInteger R2 = den; //R.denominator();
       BigInteger S1;
@@ -306,7 +306,7 @@ number A/1. */
 
 /** Rational number negative.  R is a rational number.  S=-R. */
 
-  public Coefficient negate() {
+  public /*Coefficient*/ BigRational negate() {
       BigInteger n = num.negate();
       return new BigRational( n, den );
   }
@@ -327,7 +327,7 @@ numerator of R, an integer. */
 
 /** Rational number product.  R and S are rational numbers.  T=R*S. */
 
-  public Coefficient multiply(Coefficient S) {
+  public /*Coefficient*/ BigRational multiply(Coefficient S) {
       return multiply( (BigRational) S);
   }
 
@@ -396,7 +396,7 @@ numerator of R, an integer. */
 T=R/S. */
 
 
-  public Coefficient divide(Coefficient S) {
+  public /*Coefficient*/ BigRational divide(Coefficient S) {
       return divide( (BigRational) S);
   }
 
@@ -416,7 +416,7 @@ T=R/S. */
 integers A and B are generated using IRAND(n).  Then R=A/(ABS(B)+1),
 reduced to lowest terms. */
 
-  public Coefficient random(int n) {
+  public /*Coefficient*/ BigRational random(int n) {
       return RNRAND( n );
   }
 
@@ -453,7 +453,7 @@ reduced to lowest terms. */
 
 /** Rational number sum.  R and S are rational numbers.  T=R+S. */
 
-  public Coefficient add(Coefficient S) {
+  public /*Coefficient*/ BigRational add(Coefficient S) {
       return add( (BigRational) S);
   }
 
