@@ -4,6 +4,9 @@
 from java.lang import System
 from java.io import StringReader
 
+from org.apache.log4j import BasicConfigurator;
+#BasicConfigurator.configure();
+
 from edu.jas.arith  import *
 from edu.jas.poly   import *
 from edu.jas.ring   import *
