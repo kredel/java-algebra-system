@@ -67,19 +67,29 @@ Some UML class diagramms as produced by ArgoUML (outdated):
 <ul>
 <li><p><a href="jas.jar">jas.jar</a> execute with 
     <code>java -jar jas.jar RunGB &lt;args&gt;</code>    </p>
-    <p>Execution of RunGB.
-    class and java files.
+    <p>Execution of RunGB or other classes with main() method.
+    Contains class and java files.
     </p>
 </li>
 <li><p><a href="JAS.jar">JAS.jar</a> execute with 
     <code>java -jar JAS.jar &lt;RungGB args&gt;</code>
     </p>
     <p>Execution of RunGB.
-    class and java files.
+    Contains class and java files.
     </p>
 </li>
-<li><p><a href="libjas.jar">libjas.jar</a>
-    only class files.
+<li><p>Required libraries: 
+    <a href="lib/log4j.jar">lib/log4j.jar</a> (from Apache Log4j),
+    <a href="lib/junit.jar">lib/junit.jar</a> (from Junit),
+    <a href="lib/tnj.jar">lib/tnj.jar</a> (for Thread and Network Programming).
+    <br />
+    In case you have the first two ones, just ensure they are in the correct location
+    (<code>./lib/</code>).
+    The last one you most likely do not have and you must download it.
+    </p>
+    <p>Installation: 
+    Download the libraries and put them in a directory <code>lib</code>.
+    Create an empty directory <code>test</code> for the output of log4j.
     </p>
 </li>
 </ul>
@@ -87,6 +97,9 @@ Some UML class diagramms as produced by ArgoUML (outdated):
 <h2>Jython Interpreter</h2>
 
 <p><a href="jas.py">jas.py</a> (imported by other Python files).
+</p>
+<p>To install jas with jython you have to add the above libraries 
+(log4j.jar, junit.jar, tnj.jar and JAS.jar) to the Java classpath.
 </p>
 
 <h3>Examples</h3>
@@ -153,7 +166,7 @@ For execution with RunGB.
 <p>
 <!-- Created: Sat Mar 19 21:44:14 CET 2005 -->
 <!-- hhmts start -->
-Last modified: Sat Mar 19 22:25:19 CET 2005
+Last modified: Wed Apr  6 10:51:50 CEST 2005
 <!-- hhmts end -->
 </p>
 <p align="right" >
