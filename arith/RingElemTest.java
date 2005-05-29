@@ -4,6 +4,9 @@
 
 package edu.jas.arith;
 
+import edu.jas.structure.RingElem;
+import edu.jas.structure.FieldElem;
+
 //import edu.jas.arith.BigInteger;
 //import edu.jas.arith.BigRational;
 //import edu.jas.arith.BigComplex;
@@ -14,11 +17,11 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 /**
- * Coefficient Test using JUnit 
+ * RingElem Test using JUnit 
  * @author Heinz Kredel.
  */
 
-public class CoefficientTest extends TestCase {
+public class RingElemTest extends TestCase {
 
 /**
  * main
@@ -28,32 +31,34 @@ public class CoefficientTest extends TestCase {
    }
 
 /**
- * Constructs a <CODE>CoefficientTest</CODE> object.
+ * Constructs a <CODE>RingElemTest</CODE> object.
  * @param name String
  */
-   public CoefficientTest(String name) {
+   public RingElemTest(String name) {
           super(name);
    }
 
 /**
  */ 
  public static Test suite() {
-     TestSuite suite= new TestSuite(CoefficientTest.class);
+     TestSuite suite= new TestSuite(RingElemTest.class);
      return suite;
    }
 
-   Coefficient a;
-   Coefficient b;
-   Coefficient c;
-   Coefficient d;
-   Coefficient e;
+    /*
+   RingElem a;
+   RingElem b;
+   RingElem c;
+   RingElem d;
+   RingElem e;
+    */
 
    protected void setUp() {
-       a = b = c = d = e = null;
+       //a = b = c = d = e = null;
    }
 
    protected void tearDown() {
-       a = b = c = d = e = null;
+       //a = b = c = d = e = null;
    }
 
 
@@ -62,77 +67,9 @@ public class CoefficientTest extends TestCase {
  * 
  */
  public void testIntegerConstants() {
+     BigInteger a, b, c, d, e;
      a = BigInteger.ZERO;
      b = BigInteger.ONE;
-     c = b.subtract(b);
-
-     assertTrue("0.isZERO()",a.isZERO());
-     assertTrue("1.isONE", b.isONE() );
-
-     assertEquals("1-1 = 0",c,a);
-     assertTrue("(1-1).isZERO()",c.isZERO());
-
-     d = b.multiply(b);
-     assertTrue("1*1 = 1",d.isONE());
-
-     d = b.multiply(a);
-     assertTrue("1*0 = 0",d.isZERO());
-   }
-
-
-/**
- * Test static initialization and constants for BigRational
- * 
- */
- public void testRationalConstants() {
-     a = BigRational.ZERO;
-     b = BigRational.ONE;
-     c = b.subtract(b);
-
-     assertTrue("0.isZERO()",a.isZERO());
-     assertTrue("1.isONE", b.isONE() );
-
-     assertEquals("1-1 = 0",c,a);
-     assertTrue("(1-1).isZERO()",c.isZERO());
-
-     d = b.multiply(b);
-     assertTrue("1*1 = 1",d.isONE());
-
-     d = b.multiply(a);
-     assertTrue("1*0 = 0",d.isZERO());
-   }
-
-
-/**
- * Test static initialization and constants for BigComplex
- * 
- */
- public void testComplexConstants() {
-     a = BigComplex.ZERO;
-     b = BigComplex.ONE;
-     c = b.subtract(b);
-
-     assertTrue("0.isZERO()",a.isZERO());
-     assertTrue("1.isONE", b.isONE() );
-
-     assertEquals("1-1 = 0",c,a);
-     assertTrue("(1-1).isZERO()",c.isZERO());
-
-     d = b.multiply(b);
-     assertTrue("1*1 = 1",d.isONE());
-
-     d = b.multiply(a);
-     assertTrue("1*0 = 0",d.isZERO());
-   }
-
-
-/**
- * Test static initialization and constants for BigQuaternion
- * 
- */
- public void testQuaternionConstants() {
-     a = BigQuaternion.ZERO;
-     b = BigQuaternion.ONE;
      c = b.subtract(b);
 
      assertTrue("0.isZERO()",a.isZERO());
@@ -156,6 +93,7 @@ public class CoefficientTest extends TestCase {
  * 
  */
  public void testIntegerConstructor() {
+     BigInteger a, b, c, d, e;
      a = new BigInteger( 1 );
      b = new BigInteger( -1 );
      c = new BigInteger( 0 );
@@ -187,11 +125,188 @@ public class CoefficientTest extends TestCase {
      assertEquals("stringConstr = toString",s,t);
    }
 
+    //--------------------------------------------------------
+
+/**
+ * Test random and compares Integer
+ * 
+ */
+ public void testIntegerRandom() {
+     BigInteger a, b, c, d, e;
+     a = BigInteger.ZERO.random( 500 );
+     b = new BigInteger( "" + a );
+     c = b.subtract(a);
+
+     assertTrue("a-'a' = 0",c.isZERO());
+     assertEquals("compareTo('a',a) = 0", 0, b.compareTo(a) );
+     assertEquals("signum('a'-a) = 0", 0, c.signum() );
+ }
+
+    //--------------------------------------------------------
+
+
+/**
+ * Test addition for Integer
+ * 
+ */
+ public void testIntegerAddition() {
+     BigInteger a, b, c, d, e;
+     // neutral element
+     a = BigInteger.ZERO.random( 500 );
+     d = a.add(BigInteger.ZERO);
+     assertEquals("a+0 = a",d,a);
+     d = a.subtract(BigInteger.ZERO);
+     assertEquals("a-0 = a",d,a);
+
+     // inverse operations
+     b = a.add(a);
+     c = b.subtract(a);
+     assertEquals("(a+a)-a = a",c,a);
+     b = a.subtract(a);
+     c = b.add(a);
+     assertEquals("(a-a)+a = a",c,a);
+
+     // comutativity
+     b = BigInteger.ZERO.random( 500 );
+     c = a.add(b);
+     d = b.add(a);
+     assertEquals("a+b = b+a", c, d );
+
+     // negation
+     c = a.subtract(b);
+     d = a.add(b.negate());
+     assertEquals("a-b = a+(-b)", c, d );
+
+     // associativity
+     c = BigInteger.ZERO.random( 500 );
+     d = a.add(b.add(c));
+     e = a.add(b).add(c);
+     assertEquals("a+(b+c) = (a+b)+c", d, e );
+ }
+
+    //--------------------------------------------------------
+
+
+/**
+ * Test multiplication for Integer
+ * 
+ */
+ public void testIntegerMultiplication() {
+     BigInteger a, b, c, d, e;
+     // neutral element
+     a = BigInteger.ZERO.random( 500 );
+     d = a.multiply(BigInteger.ONE);
+     assertEquals("a*1 = a",d,a);
+     d = a.divide(BigInteger.ONE);
+     assertEquals("a/1 = a",d,a);
+
+     // inverse operations
+     b = a.multiply(a);
+     c = b.divide(a);
+     assertEquals("(a*a)/a = a",c,a);
+     b = a.divide(a);
+     c = b.multiply(a);
+     assertEquals("(a/a)*a = a",c,a);
+
+     // comutativity
+     b = BigInteger.ZERO.random( 500 );
+     c = a.multiply(b);
+     d = b.multiply(a);
+     assertEquals("a*b = b*a", c, d );
+
+     // inverse
+     d = c.divide(b);
+     // e = c.multiply( b.inverse() );
+     e = a;
+     assertEquals("a/b = a*(1/b)", d, e );
+
+     // associativity
+     c = BigInteger.ZERO.random( 500 );
+     d = a.multiply(b.multiply(c));
+     e = a.multiply(b).multiply(c);
+     assertEquals("a*(b*c) = (a*b)*c", d, e );
+ }
+
+/**
+ * Test static initialization and constants for BigRational
+ * 
+ */
+ public void testRationalConstants() {
+     BigRational a, b, c, d, e;
+     a = BigRational.ZERO;
+     b = BigRational.ONE;
+     c = b.subtract(b);
+
+     assertTrue("0.isZERO()",a.isZERO());
+     assertTrue("1.isONE", b.isONE() );
+
+     assertEquals("1-1 = 0",c,a);
+     assertTrue("(1-1).isZERO()",c.isZERO());
+
+     d = b.multiply(b);
+     assertTrue("1*1 = 1",d.isONE());
+
+     d = b.multiply(a);
+     assertTrue("1*0 = 0",d.isZERO());
+   }
+
+
+/**
+ * Test static initialization and constants for BigComplex
+ * 
+ */
+ public void testComplexConstants() {
+     BigComplex a, b, c, d, e;
+     a = BigComplex.ZERO;
+     b = BigComplex.ONE;
+     c = b.subtract(b);
+
+     assertTrue("0.isZERO()",a.isZERO());
+     assertTrue("1.isONE", b.isONE() );
+
+     assertEquals("1-1 = 0",c,a);
+     assertTrue("(1-1).isZERO()",c.isZERO());
+
+     d = b.multiply(b);
+     assertTrue("1*1 = 1",d.isONE());
+
+     d = b.multiply(a);
+     assertTrue("1*0 = 0",d.isZERO());
+   }
+
+
+/**
+ * Test static initialization and constants for BigQuaternion
+ * 
+ */
+ public void testQuaternionConstants() {
+     BigQuaternion a, b, c, d, e;
+     a = BigQuaternion.ZERO;
+     b = BigQuaternion.ONE;
+     c = b.subtract(b);
+
+     assertTrue("0.isZERO()",a.isZERO());
+     assertTrue("1.isONE", b.isONE() );
+
+     assertEquals("1-1 = 0",c,a);
+     assertTrue("(1-1).isZERO()",c.isZERO());
+
+     d = b.multiply(b);
+     assertTrue("1*1 = 1",d.isONE());
+
+     d = b.multiply(a);
+     assertTrue("1*0 = 0",d.isZERO());
+   }
+
+    //--------------------------------------------------------
+
+
 /**
  * Test string constructor and toString for BigRational
  * 
  */
  public void testRationalConstructor() {
+     BigRational a, b, c, d, e;
      a = new BigRational( 1 );
      b = new BigRational( -1 );
      c = new BigRational( 0 );
@@ -228,6 +343,7 @@ public class CoefficientTest extends TestCase {
  * 
  */
  public void testComplexConstructor() {
+     BigComplex a, b, c, d, e;
      a = new BigComplex( 1 );
      b = new BigComplex( -1 );
      c = new BigComplex( 0 );
@@ -264,6 +380,7 @@ public class CoefficientTest extends TestCase {
  * 
  */
  public void testQuaternionConstructor() {
+     BigQuaternion a, b, c, d, e;
      a = new BigQuaternion( 1 );
      b = new BigQuaternion( -1 );
      c = new BigQuaternion( 0 );
@@ -298,25 +415,13 @@ public class CoefficientTest extends TestCase {
 
     //--------------------------------------------------------
 
-/**
- * Test random and compares Integer
- * 
- */
- public void testIntegerRandom() {
-     a = BigInteger.ZERO.random( 500 );
-     b = new BigInteger( "" + a );
-     c = b.subtract(a);
-
-     assertTrue("a-'a' = 0",c.isZERO());
-     assertEquals("compareTo('a',a) = 0", 0, b.compareTo(a) );
-     assertEquals("signum('a'-a) = 0", 0, c.signum() );
- }
 
 /**
  * Test random and compares Rational
  * 
  */
  public void testRationalRandom() {
+     BigRational a, b, c, d, e;
      a = BigRational.ZERO.random( 500 );
      b = new BigRational( "" + a );
      c = b.subtract(a);
@@ -331,6 +436,7 @@ public class CoefficientTest extends TestCase {
  * 
  */
  public void testComplexRandom() {
+     BigComplex a, b, c, d, e;
      a = BigComplex.ZERO.random( 500 );
      b = new BigComplex( "" + a );
      c = b.subtract(a);
@@ -345,6 +451,7 @@ public class CoefficientTest extends TestCase {
  * 
  */
  public void testQuaternionRandom() {
+     BigQuaternion a, b, c, d, e;
      a = BigQuaternion.ZERO.random( 500 );
      b = new BigQuaternion( "" + a );
      c = b.subtract(a);
@@ -359,48 +466,11 @@ public class CoefficientTest extends TestCase {
 
 
 /**
- * Test addition for Integer
- * 
- */
- public void testIntegerAddition() {
-     // neutral element
-     a = BigInteger.ZERO.random( 500 );
-     d = a.add(BigInteger.ZERO);
-     assertEquals("a+0 = a",d,a);
-     d = a.subtract(BigInteger.ZERO);
-     assertEquals("a-0 = a",d,a);
-
-     // inverse operations
-     b = a.add(a);
-     c = b.subtract(a);
-     assertEquals("(a+a)-a = a",c,a);
-     b = a.subtract(a);
-     c = b.add(a);
-     assertEquals("(a-a)+a = a",c,a);
-
-     // comutativity
-     b = BigInteger.ZERO.random( 500 );
-     c = a.add(b);
-     d = b.add(a);
-     assertEquals("a+b = b+a", c, d );
-
-     // negation
-     c = a.subtract(b);
-     d = a.add(b.negate());
-     assertEquals("a-b = a+(-b)", c, d );
-
-     // associativity
-     c = BigInteger.ZERO.random( 500 );
-     d = a.add(b.add(c));
-     e = a.add(b).add(c);
-     assertEquals("a+(b+c) = (a+b)+c", d, e );
- }
-
-/**
  * Test addition for Rational
  * 
  */
  public void testRationalAddition() {
+     BigRational a, b, c, d, e;
      // neutral element
      a = BigRational.ZERO.random( 500 );
      d = a.add(BigRational.ZERO);
@@ -439,6 +509,7 @@ public class CoefficientTest extends TestCase {
  * 
  */
  public void testComplexAddition() {
+     BigComplex a, b, c, d, e;
      // neutral element
      a = BigComplex.ZERO.random( 500 );
      d = a.add(BigComplex.ZERO);
@@ -477,6 +548,7 @@ public class CoefficientTest extends TestCase {
  * 
  */
  public void testQuaternionAddition() {
+     BigQuaternion a, b, c, d, e;
      // neutral element
      a = BigQuaternion.ZERO.random( 500 );
      d = a.add(BigQuaternion.ZERO);
@@ -514,49 +586,11 @@ public class CoefficientTest extends TestCase {
 
 
 /**
- * Test multiplication for Integer
- * 
- */
- public void testIntegerMultiplication() {
-     // neutral element
-     a = BigInteger.ZERO.random( 500 );
-     d = a.multiply(BigInteger.ONE);
-     assertEquals("a*1 = a",d,a);
-     d = a.divide(BigInteger.ONE);
-     assertEquals("a/1 = a",d,a);
-
-     // inverse operations
-     b = a.multiply(a);
-     c = b.divide(a);
-     assertEquals("(a*a)/a = a",c,a);
-     b = a.divide(a);
-     c = b.multiply(a);
-     assertEquals("(a/a)*a = a",c,a);
-
-     // comutativity
-     b = BigInteger.ZERO.random( 500 );
-     c = a.multiply(b);
-     d = b.multiply(a);
-     assertEquals("a*b = b*a", c, d );
-
-     // inverse
-     d = c.divide(b);
-     // e = c.multiply( b.inverse() );
-     e = a;
-     assertEquals("a/b = a*(1/b)", d, e );
-
-     // associativity
-     c = BigInteger.ZERO.random( 500 );
-     d = a.multiply(b.multiply(c));
-     e = a.multiply(b).multiply(c);
-     assertEquals("a*(b*c) = (a*b)*c", d, e );
- }
-
-/**
  * Test multiplication for Rational
  * 
  */
  public void testRationalMultiplication() {
+     BigRational a, b, c, d, e;
      // neutral element
      a = BigRational.ZERO.random( 500 );
      d = a.multiply(BigRational.ONE);
@@ -596,6 +630,7 @@ public class CoefficientTest extends TestCase {
  * 
  */
  public void testComplexMultiplication() {
+     BigComplex a, b, c, d, e;
      // neutral element
      a = BigComplex.ZERO.random( 500 );
      d = a.multiply(BigComplex.ONE);
@@ -635,6 +670,7 @@ public class CoefficientTest extends TestCase {
  * 
  */
  public void testQuaternionMultiplication() {
+     BigQuaternion a, b, c, d, e;
      // neutral element
      a = BigQuaternion.ZERO.random( 500 );
      d = a.multiply(BigQuaternion.ONE);

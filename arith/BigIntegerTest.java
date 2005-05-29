@@ -111,7 +111,7 @@ public class BigIntegerTest extends TestCase {
 
      assertEquals("a-b = 0",c,BigInteger.ZERO);
 
-     d = new BigInteger( b.getval() );
+     d = new BigInteger( b.getVal() );
      assertEquals("sign(a-a) = 0", 0, b.compareTo(d) );
  }
 
@@ -206,27 +206,6 @@ public class BigIntegerTest extends TestCase {
      assertEquals("b = gcd(a,b)*q1",b,d);
      assertEquals("b/gcd(a,b) = q*x + 0", qr[1], BigInteger.ZERO );
 
- }
-
-/**
- * Test mod
- * 
- */
-
- public void testMod() {
-     do {
-        a = BigInteger.IRAND( bitlen );
-        b = BigInteger.IRAND( bitlen*2 );
-        a = BigInteger.MIHOM(b,a);
-        c = BigInteger.IGCD( a, b ); // ~1
-     } while ( ! c.isONE() );
-
-     d = BigInteger.MIINV(b,a);
-
-     c = BigInteger.IPROD( a, d ); 
-     c = BigInteger.MIHOM( b, c ); 
-
-     assertEquals("a*a^-1 == 1 mod b", c, BigInteger.ONE );
  }
 
 }

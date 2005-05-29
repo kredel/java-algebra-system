@@ -4,11 +4,14 @@
 
 package edu.jas.arith;
 
+import edu.jas.structure.RingElem;
+import edu.jas.structure.RingFactory;
+
 import org.apache.log4j.Logger;
 
 import java.math.BigInteger;
 import java.util.Random;
-import java.io.Serializable;
+import java.io.Reader;
 
 /**
  * BigQuaternion class based on BigRational implementing the Coefficient 
@@ -16,7 +19,8 @@ import java.io.Serializable;
  * @author Heinz Kredel
  */
 
-public class BigQuaternion implements Coefficient, Comparable, Serializable {
+public class BigQuaternion implements RingElem<BigQuaternion>, 
+                                      RingFactory<BigQuaternion> {
 
     /* the data structure */
 
@@ -117,11 +121,27 @@ public class BigQuaternion implements Coefficient, Comparable, Serializable {
         km = new BigRational( sk.trim() );
     }
 
-    public /*static*/ /*Coefficient*/ BigQuaternion fromInteger(BigInteger a) {
+    public BigQuaternion clone() {
+        return new BigQuaternion( re, im, jm, km );
+    }
+
+    public BigQuaternion copy(BigQuaternion c) {
+        return new BigQuaternion( c.re, c.im, c.jm, c.km );
+    }
+
+    public BigQuaternion getZERO() {
+        return ZERO;
+    }
+
+    public BigQuaternion getONE() {
+        return ONE;
+    }
+
+    public BigQuaternion fromInteger(BigInteger a) {
         return new BigQuaternion( new BigRational(a) );
     }
 
-    public /*static*/ /*Coefficient*/ BigQuaternion fromInteger(long a) {
+    public BigQuaternion fromInteger(long a) {
         return new BigQuaternion( new BigRational( a ) );
     }
 
@@ -183,7 +203,7 @@ public class BigQuaternion implements Coefficient, Comparable, Serializable {
    /**Quaternion number zero.  A is a quaternion number.  If A is 0 then
     true is returned, else false. */
 
-    public static boolean isCZERO(BigQuaternion A) {
+    public static boolean isQZERO(BigQuaternion A) {
       if ( A == null ) return false;
       return A.isZERO();
     }
@@ -198,7 +218,7 @@ public class BigQuaternion implements Coefficient, Comparable, Serializable {
     /**Quaternion number one.  A is a quaternion number.  If A is 1 then
     true is returned, else false. */
 
-    public static boolean isCONE(BigQuaternion A) {
+    public static boolean isQONE(BigQuaternion A) {
       if ( A == null ) return false;
       return A.isONE();
     }
@@ -217,6 +237,9 @@ public class BigQuaternion implements Coefficient, Comparable, Serializable {
                && km.equals( BigRational.ZERO );
     }
 
+    public boolean isUnit() {
+	return ( ! isZERO() );
+    }
 
     /** comparison of two BigQuaternion numbers
      */
@@ -238,8 +261,8 @@ public class BigQuaternion implements Coefficient, Comparable, Serializable {
      * @return 1 else
      */
 
-    public int compareTo(Object b) {
-      if ( ! (b instanceof BigQuaternion) ) return -1;
+    public int compareTo(BigQuaternion b) {
+      //if ( ! (b instanceof BigQuaternion) ) return -1;
       if ( equals(b) ) { 
           return 0;
       } else {
@@ -258,9 +281,7 @@ public class BigQuaternion implements Coefficient, Comparable, Serializable {
     /** arithmetic operations: +, -, -
      */
 
-    public /*Coefficient*/ BigQuaternion add(Coefficient b) {
-        if ( ! ( b instanceof BigQuaternion ) ) return this;
-        BigQuaternion B = (BigQuaternion) b;
+    public BigQuaternion add(BigQuaternion B) {
         return new BigQuaternion( re.add(B.getRe()), 
                                   im.add(B.getIm()), 
                                   jm.add(B.getJm()), 
@@ -272,7 +293,7 @@ public class BigQuaternion implements Coefficient, Comparable, Serializable {
 
     public static BigQuaternion QSUM(BigQuaternion A, BigQuaternion B) {
       if ( A == null ) return null;
-      return (BigQuaternion) A.add(B);
+      return A.add(B);
     }
 
     /**Quaternion number difference.  A and B are quaternion numbers.  
@@ -280,12 +301,10 @@ public class BigQuaternion implements Coefficient, Comparable, Serializable {
 
     public static BigQuaternion QDIF(BigQuaternion A, BigQuaternion B) {
       if ( A == null ) return null;
-      return (BigQuaternion) A.subtract(B);
+      return A.subtract(B);
     }
 
-    public /*Coefficient*/ BigQuaternion subtract(Coefficient b) {
-        if ( ! ( b instanceof BigQuaternion ) ) return this;
-        BigQuaternion B = (BigQuaternion) b;
+    public BigQuaternion subtract(BigQuaternion B) {
         return new BigQuaternion( re.subtract(B.getRe()), 
                                   im.subtract(B.getIm()),
                                   jm.subtract(B.getJm()),
@@ -297,10 +316,10 @@ public class BigQuaternion implements Coefficient, Comparable, Serializable {
 
     public static BigQuaternion QNEG(BigQuaternion A) {
       if ( A == null ) return null;
-      return (BigQuaternion) A.negate();
+      return A.negate();
     }
 
-    public /*Coefficient*/ BigQuaternion negate() {
+    public BigQuaternion negate() {
         return new BigQuaternion( (BigRational)re.negate(), 
                                   (BigRational)im.negate(),
                                   (BigRational)jm.negate(),
@@ -313,7 +332,7 @@ public class BigQuaternion implements Coefficient, Comparable, Serializable {
 
     public static BigQuaternion QCON(BigQuaternion A) {
       if ( A == null ) return null;
-      return (BigQuaternion) A.conjugate();
+      return A.conjugate();
     }
 
     /** arithmetic operations: conjugate, absolut value 
@@ -326,14 +345,14 @@ public class BigQuaternion implements Coefficient, Comparable, Serializable {
                                   (BigRational)km.negate() );
     }
 
-    public /*Coefficient*/ BigRational abs() {
+    public BigQuaternion abs() {
         BigRational v = re.multiply(re);
         v = v.add(im.multiply(im));
         v = v.add(jm.multiply(jm));
         v = v.add(km.multiply(km));
         logger.error("abs() square root missing");
         // v = v.sqrt();
-        return ( v );
+        return new BigQuaternion( v );
     }
 
     /**Quaternion number absolute value.  R is a quaternion number.  S is the
@@ -342,7 +361,7 @@ public class BigQuaternion implements Coefficient, Comparable, Serializable {
 
     public static BigRational QABS(BigQuaternion A) {
       if ( A == null ) return null;
-      return (BigRational) A.abs();
+      return A.abs().getRe();
     }
 
     /**Quaternion number product.  A and B are quaternion numbers.  
@@ -350,15 +369,13 @@ public class BigQuaternion implements Coefficient, Comparable, Serializable {
 
     public static BigQuaternion QPROD(BigQuaternion A, BigQuaternion B) {
       if ( A == null ) return null;
-      return (BigQuaternion) A.multiply(B);
+      return A.multiply(B);
     }
 
     /** arithmetic operations: *, inverse, / 
      */
 
-    public /*Coefficient*/ BigQuaternion multiply(Coefficient b) {
-        if ( ! ( b instanceof BigQuaternion ) ) return this;
-        BigQuaternion B = (BigQuaternion) b;
+    public BigQuaternion multiply(BigQuaternion B) {
 	BigRational r = re.multiply(B.getRe());
 	r = r.subtract(im.multiply(B.getIm()));
 	r = r.subtract(jm.multiply(B.getJm()));
@@ -386,10 +403,10 @@ public class BigQuaternion implements Coefficient, Comparable, Serializable {
 
     public static BigQuaternion QINV(BigQuaternion A) {
       if ( A == null ) return null;
-      return (BigQuaternion) A.inverse();
+      return A.inverse();
     }
 
-    public /*Coefficient*/ BigQuaternion inverse() {
+    public BigQuaternion inverse() {
         BigRational a = re.multiply(re);
         a = a.add(im.multiply(im));
         a = a.add(jm.multiply(jm));
@@ -401,21 +418,25 @@ public class BigQuaternion implements Coefficient, Comparable, Serializable {
     }
 
 
+  public BigQuaternion remainder(BigQuaternion S) {
+      if ( S.isZERO() ) {
+          throw new RuntimeException("division by zero");
+      }
+      return ZERO;
+  }
+
     /**Quaternion number quotient.  A and B are quaternion numbers, 
       B non-zero.
       @return T=R/S. */
 
     public static BigQuaternion QQ(BigQuaternion A, BigQuaternion B) {
       if ( A == null ) return null;
-      return (BigQuaternion) A.divide(B);
+      return A.divide(B);
     }
 
-    public /*Coefficient*/ BigQuaternion divide (Coefficient b) {
-        if ( ! ( b instanceof BigQuaternion ) ) return this;
-        BigQuaternion B = (BigQuaternion) b;
-        return this.multiply( B.inverse() );
+    public BigQuaternion divide (BigQuaternion b) {
+	return this.multiply( b.inverse() );
     }
-
 
     /**Quaternion number, random.  n is a positive beta-integer.  Random 
     rational numbers A and B are generated using RNRAND(n). Then 
@@ -431,8 +452,16 @@ public class BigQuaternion implements Coefficient, Comparable, Serializable {
     /** random quaternion number 
      */
 
-    public /*Coefficient*/ BigQuaternion random(int n) {
+    public BigQuaternion random(int n) {
         return QRAND(n);
+    }
+
+    public BigQuaternion parse(String s) {
+        return new BigQuaternion(s);
+    }
+
+    public BigQuaternion parse(Reader r) {
+        return ZERO;
     }
 
 }

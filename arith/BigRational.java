@@ -4,9 +4,12 @@
 
 package edu.jas.arith;
 
+import edu.jas.structure.RingElem;
+import edu.jas.structure.RingFactory;
+
 import java.math.BigInteger;
 import java.util.Random;
-import java.io.Serializable;
+import java.io.Reader;
 
 /**
  * BigRational class based on BigInteger implementing the Coefficient interface
@@ -14,10 +17,11 @@ import java.io.Serializable;
  * @author Heinz Kredel
  */
 
-public class BigRational implements Coefficient, Comparable, Serializable {
+public class BigRational implements RingElem<BigRational>, 
+                                    RingFactory<BigRational> {
 
-    private final BigInteger num;
-    private final BigInteger den;
+    protected final BigInteger num;
+    protected final BigInteger den;
 
     public final static BigInteger IZERO = BigInteger.ZERO;
     public final static BigInteger IONE = BigInteger.ONE;
@@ -88,6 +92,13 @@ public class BigRational implements Coefficient, Comparable, Serializable {
 	}
     } 
 
+    public BigRational clone() {
+        return new BigRational( num, den );
+    }
+
+    public BigRational copy(BigRational c) {
+        return new BigRational( c.num, c.den );
+    }
 
     public BigInteger numerator() {
         return num;
@@ -106,7 +117,15 @@ public class BigRational implements Coefficient, Comparable, Serializable {
         return s.toString();
     } 
 
-    public /*static*/ /*Coefficient*/ BigRational fromInteger(BigInteger a) {
+    public BigRational getZERO() {
+        return ZERO;
+    }
+
+    public BigRational getONE() {
+        return ONE;
+    }
+
+    public BigRational fromInteger(BigInteger a) {
 	return new BigRational(a);
     }
 
@@ -114,7 +133,7 @@ public class BigRational implements Coefficient, Comparable, Serializable {
 	return new BigRational(a);
     }
 
-    public /*static*/ /*Coefficient*/ BigRational fromInteger(long a) {
+    public BigRational fromInteger(long a) {
 	return new BigRational(a);
     }
 
@@ -128,6 +147,10 @@ public class BigRational implements Coefficient, Comparable, Serializable {
 
     public boolean isONE() {
 	return num.equals( den );
+    }
+
+    public boolean isUnit() {
+	return ( ! isZERO() );
     }
 
     public boolean equals( Object b) {
@@ -160,7 +183,7 @@ B non-zero.  R is the rational number A/B in canonical form. */
 /** Rational number absolute value.  R is a rational number.  S is the
 absolute value of R. */
 
-  public /*Coefficient*/ BigRational abs() {
+  public BigRational abs() {
       if ( RNSIGN( this ) >= 0 ) {
 	  return this;
       } else {
@@ -170,19 +193,14 @@ absolute value of R. */
 
   public static BigRational RNABS(BigRational R) {
       if ( R == null ) return null;
-      return (BigRational) R.abs();
+      return R.abs();
   }
 
 
 /** Rational number comparison.  R and S are rational numbers.
 t=SIGN(R-S).*/
 
-  public int compareTo(Object b) {
-      if ( ! (b instanceof BigRational) ) {
-	  System.err.println("BigRational.compareTo not a BigRational.");
-          return Integer.MAX_VALUE;
-      }
-      BigRational S = (BigRational) b;
+  public int compareTo(BigRational S) {
       BigInteger J2Y;
       BigInteger J3Y;
       BigInteger R1;
@@ -232,10 +250,6 @@ denominator of R, a positive integer. */
 
 /** Rational number difference.  R and S are rational numbers.  T=R-S. */
 
-  public /*Coefficient*/ BigRational subtract(Coefficient S) {
-      return subtract( (BigRational) S);
-  }
-
   public BigRational subtract(BigRational S) {
       BigRational J1Y;
       BigRational T;
@@ -245,7 +259,7 @@ denominator of R, a positive integer. */
   }
 
   public static BigRational RNDIF(BigRational R, BigRational S) {
-      if ( R == null ) return (BigRational) S.negate();
+      if ( R == null ) return S.negate();
       return R.subtract(S);
   }
 
@@ -283,7 +297,7 @@ number A/1. */
 
 /** Rational number inverse.  R is a non-zero rational number.  S=1/R. */
 
-  public /*Coefficient*/ BigRational inverse() {
+  public BigRational inverse() {
       BigInteger R1 = num; //R.nominator();
       BigInteger R2 = den; //R.denominator();
       BigInteger S1;
@@ -300,20 +314,20 @@ number A/1. */
 
   public static BigRational RNINV(BigRational R) {
       if ( R == null ) return null;
-      return (BigRational)R.inverse();
+      return R.inverse();
   }
 
 
 /** Rational number negative.  R is a rational number.  S=-R. */
 
-  public /*Coefficient*/ BigRational negate() {
+  public BigRational negate() {
       BigInteger n = num.negate();
       return new BigRational( n, den );
   }
 
   public static BigRational RNNEG(BigRational R) {
       if ( R == null ) return null;
-      return (BigRational) R.negate();
+      return R.negate();
   }
 
 
@@ -326,10 +340,6 @@ numerator of R, an integer. */
 
 
 /** Rational number product.  R and S are rational numbers.  T=R*S. */
-
-  public /*Coefficient*/ BigRational multiply(Coefficient S) {
-      return multiply( (BigRational) S);
-  }
 
   public BigRational multiply(BigRational S) {
       BigInteger D1 = null;
@@ -396,10 +406,6 @@ numerator of R, an integer. */
 T=R/S. */
 
 
-  public /*Coefficient*/ BigRational divide(Coefficient S) {
-      return divide( (BigRational) S);
-  }
-
   public BigRational divide(BigRational S) {
       BigRational T;
       T = RNPROD( this, (BigRational)S.inverse() );
@@ -407,8 +413,19 @@ T=R/S. */
   }
 
   public static BigRational RNQ(BigRational R, BigRational S) {
-      if ( R == null ) return (BigRational)S.inverse();
+      if ( R == null ) return S.inverse();
       return R.divide( S );
+  }
+
+
+/* Rational number remainder.  R and S are rational numbers, S non-zero.
+T=0=R-(R/S)*S. */
+
+  public BigRational remainder(BigRational S) {
+      if ( S.isZERO() ) {
+          throw new RuntimeException("division by zero");
+      }
+      return ZERO;
   }
 
 
@@ -416,7 +433,7 @@ T=R/S. */
 integers A and B are generated using IRAND(n).  Then R=A/(ABS(B)+1),
 reduced to lowest terms. */
 
-  public /*Coefficient*/ BigRational random(int n) {
+  public BigRational random(int n) {
       return RNRAND( n );
   }
 
@@ -452,10 +469,6 @@ reduced to lowest terms. */
 
 
 /** Rational number sum.  R and S are rational numbers.  T=R+S. */
-
-  public /*Coefficient*/ BigRational add(Coefficient S) {
-      return add( (BigRational) S);
-  }
 
   public BigRational add(BigRational S) {
       BigInteger D = null;
@@ -527,6 +540,13 @@ reduced to lowest terms. */
       return R.add( S );
   }
 
+    public BigRational parse(String s) {
+        return new BigRational(s);
+    }
+
+    public BigRational parse(Reader r) {
+        return ZERO;
+    }
 
 }
 

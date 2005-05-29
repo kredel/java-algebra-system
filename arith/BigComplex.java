@@ -4,11 +4,15 @@
 
 package edu.jas.arith;
 
+import edu.jas.structure.RingElem;
+import edu.jas.structure.RingFactory;
+
 import org.apache.log4j.Logger;
 
 import java.math.BigInteger;
 import java.util.Random;
-import java.io.Serializable;
+import java.io.Reader;
+
 
 /**
  * BigComplex class based on BigRational implementing the Coefficient 
@@ -16,7 +20,8 @@ import java.io.Serializable;
  * @author Heinz Kredel
  */
 
-public class BigComplex implements Coefficient, Comparable, Serializable {
+public class BigComplex implements RingElem<BigComplex>, 
+                                   RingFactory<BigComplex> {
 
     /* the data structure */
 
@@ -75,11 +80,27 @@ public class BigComplex implements Coefficient, Comparable, Serializable {
         im = new BigRational( si.trim() );
     }
 
-    public /*static*/ /*Coefficient*/ BigComplex fromInteger(BigInteger a) {
+    public BigComplex clone() {
+        return new BigComplex( re, im );
+    }
+
+    public BigComplex copy(BigComplex c) {
+        return new BigComplex( c.re, c.im );
+    }
+
+    public BigComplex getZERO() {
+        return ZERO;
+    }
+
+    public BigComplex getONE() {
+        return ONE;
+    }
+
+    public BigComplex fromInteger(BigInteger a) {
 	return new BigComplex( new BigRational(a) );
     }
 
-    public /*static*/ /*Coefficient*/ BigComplex fromInteger(long a) {
+    public BigComplex fromInteger(long a) {
 	return new BigComplex( new BigRational( a ) );
     }
 
@@ -147,6 +168,9 @@ public class BigComplex implements Coefficient, Comparable, Serializable {
                && im.equals( BigRational.ONE );
     }
 
+    public boolean isUnit() {
+	return ( ! isZERO() );
+    }
 
     /** comparison of two BigComplex numbers
      */
@@ -166,8 +190,8 @@ public class BigComplex implements Coefficient, Comparable, Serializable {
      * @return 1 else
      */
 
-    public int compareTo(Object b) {
-      if ( ! (b instanceof BigComplex) ) return -1;
+    public int compareTo(BigComplex b) {
+      // if ( ! (b instanceof BigComplex) ) return -1;
       if ( equals(b) ) { 
 	  return 0;
       } else {
@@ -186,9 +210,7 @@ public class BigComplex implements Coefficient, Comparable, Serializable {
     /** arithmetic operations: +, -, -
      */
 
-    public /*Coefficient*/ BigComplex add(Coefficient b) {
-	if ( ! ( b instanceof BigComplex ) ) return this;
-	BigComplex B = (BigComplex) b;
+    public BigComplex add(BigComplex B) {
 	return new BigComplex( re.add(B.getRe()), 
                                im.add(B.getIm()) );
     }
@@ -198,7 +220,7 @@ public class BigComplex implements Coefficient, Comparable, Serializable {
 
     public static BigComplex CSUM(BigComplex A, BigComplex B) {
       if ( A == null ) return null;
-      return (BigComplex) A.add(B);
+      return A.add(B);
     }
 
     /**Complex number difference.  A and B are complex numbers.  
@@ -206,12 +228,10 @@ public class BigComplex implements Coefficient, Comparable, Serializable {
 
     public static BigComplex CDIF(BigComplex A, BigComplex B) {
       if ( A == null ) return null;
-      return (BigComplex) A.subtract(B);
+      return A.subtract(B);
     }
 
-    public /*Coefficient*/ BigComplex subtract(Coefficient b) {
-	if ( ! ( b instanceof BigComplex ) ) return this;
-	BigComplex B = (BigComplex) b;
+    public BigComplex subtract(BigComplex B) {
 	return new BigComplex(re.subtract(B.getRe()), 
                               im.subtract(B.getIm()));
     }
@@ -221,10 +241,10 @@ public class BigComplex implements Coefficient, Comparable, Serializable {
 
     public static BigComplex CNEG(BigComplex A) {
       if ( A == null ) return null;
-      return (BigComplex) A.negate();
+      return A.negate();
     }
 
-    public /*Coefficient*/ BigComplex negate() {
+    public BigComplex negate() {
 	return new BigComplex( (BigRational)re.negate(), 
                                (BigRational)im.negate());
     }
@@ -235,7 +255,7 @@ public class BigComplex implements Coefficient, Comparable, Serializable {
 
     public static BigComplex CCON(BigComplex A) {
       if ( A == null ) return null;
-      return (BigComplex) A.conjugate();
+      return A.conjugate();
     }
 
     /** arithmetic operations: conjugate, absolut value 
@@ -245,11 +265,11 @@ public class BigComplex implements Coefficient, Comparable, Serializable {
 	return new BigComplex(re, (BigRational)im.negate());
     }
 
-    public /*Coefficient*/ BigRational abs() {
+    public BigComplex abs() {
 	BigRational v = re.multiply(re).add(im.multiply(im));
 	logger.error("abs() square root missing");
 	// v = v.sqrt();
-	return ( v );
+	return new BigComplex( v );
     }
 
     /**Complex number absolute value.  R is a complex number.  S is the
@@ -258,7 +278,7 @@ public class BigComplex implements Coefficient, Comparable, Serializable {
 
     public static BigRational CABS(BigComplex A) {
       if ( A == null ) return null;
-      return (BigRational) A.abs();
+      return A.abs().getRe();
     }
 
     /**Complex number product.  A and B are complex numbers.  
@@ -266,15 +286,13 @@ public class BigComplex implements Coefficient, Comparable, Serializable {
 
     public static BigComplex CPROD(BigComplex A, BigComplex B) {
       if ( A == null ) return null;
-      return (BigComplex) A.multiply(B);
+      return A.multiply(B);
     }
 
     /** arithmetic operations: *, inverse, / 
      */
 
-    public /*Coefficient*/ BigComplex multiply(Coefficient b) {
-	if ( ! ( b instanceof BigComplex ) ) return this;
-	BigComplex B = (BigComplex) b;
+    public BigComplex multiply(BigComplex B) {
 	return new BigComplex(
                re.multiply(B.getRe()).subtract(im.multiply(B.getIm())),
                re.multiply(B.getIm()).add(im.multiply(B.getRe())) );
@@ -285,15 +303,21 @@ public class BigComplex implements Coefficient, Comparable, Serializable {
 
     public static BigComplex CINV(BigComplex A) {
       if ( A == null ) return null;
-      return (BigComplex) A.inverse();
+      return A.inverse();
     }
 
-    public /*Coefficient*/ BigComplex inverse() {
+    public BigComplex inverse() {
         BigRational a = re.multiply(re).add(im.multiply(im));
 	return new BigComplex(             re.divide(a), 
-                              (BigRational)im.divide(a).negate() ); 
+                                           im.divide(a).negate() ); 
     }
 
+  public BigComplex remainder(BigComplex S) {
+      if ( S.isZERO() ) {
+          throw new RuntimeException("division by zero");
+      }
+      return ZERO;
+  }
 
     /**Complex number quotient.  A and B are complex numbers, 
       B non-zero.
@@ -301,13 +325,11 @@ public class BigComplex implements Coefficient, Comparable, Serializable {
 
     public static BigComplex CQ(BigComplex A, BigComplex B) {
       if ( A == null ) return null;
-      return (BigComplex) A.divide(B);
+      return A.divide(B);
     }
 
-    public /*Coefficient*/ BigComplex divide (Coefficient b) {
-	if ( ! ( b instanceof BigComplex ) ) return this;
-	BigComplex B = (BigComplex) b;
-	return this.multiply( B.inverse() );
+    public BigComplex divide (BigComplex b) {
+	return this.multiply( b.inverse() );
     }
 
 
@@ -323,8 +345,16 @@ public class BigComplex implements Coefficient, Comparable, Serializable {
     /** random complex number 
      */
 
-    public /*Coefficient*/ BigComplex random(int n) {
+    public BigComplex random(int n) {
 	return CRAND(n);
+    }
+
+    public BigComplex parse(String s) {
+        return new BigComplex(s);
+    }
+
+    public BigComplex parse(Reader r) {
+        return ZERO;
     }
 
 }
