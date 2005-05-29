@@ -65,9 +65,9 @@ DOCOPTS=-package
 
 MYCLASSPATH = .:$(DEFS):$(JUNITPATH):$(LOG4JPATH):$(JOMPPATH):$(TNJPATH)
 
-JAVAC=$(JDK)/javac -classpath $(MYCLASSPATH) -d .
+JAVAC=$(JDK)/javac -classpath $(MYCLASSPATH) -d . -Xlint:unchecked
 #-Xlint:unchecked
-JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -Xms300M -Xmx600M -XX:+AggressiveHeap -XX:+UseParallelGC -verbose:gc
+JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -Xms300M -Xmx600M -XX:+AggressiveHeap -XX:+UseParallelGC -verbose:gc 
 #JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -verbose:gc -Xrunhprof:cpu=times,format=a
 #JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -verbose:gc -verbose:class -verbose:jni
 DOC=$(JDK)/javadoc -classpath $(DOCCLASSES)
@@ -84,7 +84,7 @@ GETC      = getc.pl
 
 .SUFFIXES :
 .SUFFIXES : .class .java 
-.PRECIOUS : %.java %.class edu/jas/arith/%.class edu/jas/poly/%.class edu/jas/ring/%.class edu/jas/module/%.class edu/jas/versuch/%.class edu/jas/util/%.class edu/jas/%.class
+.PRECIOUS : %.java %.class edu/jas/arith/%.class edu/jas/poly/%.class edu/jas/ring/%.class edu/jas/module/%.class edu/jas/structure/%.class edu/jas/util/%.class edu/jas/%.class
 
 .PHONY    : clean doc
 
@@ -110,7 +110,7 @@ edu/jas/ring/%.class: %.java
 edu/jas/module/%.class: %.java
 	$(JAVAC) $<
 
-edu/jas/versuch/%.class: %.java
+edu/jas/structure/%.class: %.java
 	$(JAVAC) $<
 
 edu/jas/util/%.class: %.java
@@ -132,7 +132,7 @@ edu.jas.ring.%: edu/jas/ring/%.class
 edu.jas.module.%: edu/jas/module/%.class
 	$(JAVA) $@ $(cl)
 
-edu.jas.versuch.%: edu/jas/versuch/%.class
+edu.jas.structure.%: edu/jas/structure/%.class
 	$(JAVA) $@ $(cl)
 
 edu.jas.util.%: edu/jas/util/%.class
@@ -141,9 +141,9 @@ edu.jas.util.%: edu/jas/util/%.class
 
 
 
-FILES=$(wildcard *.java arith/*.java poly/*.java ring/*.java module/*.java util/*.java)
+FILES=$(wildcard *.java structure/*.java arith/*.java poly/*.java ring/*.java module/*.java util/*.java)
 LIBS=$(JUNITPATH) $(LOG4JPATH) $(JOMPPATH)
-#CLASSES=$(wildcard *.class arith/*.class poly/*.class ring/*.class module/*.class util/*.class)
+#CLASSES=$(wildcard *.class structure/*.java arith/*.class poly/*.class ring/*.class module/*.class util/*.class)
 CLASSES=edu/jas
 
 doc: $(FILES)
