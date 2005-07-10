@@ -102,7 +102,9 @@ public class ModInteger implements RingElem<ModInteger>,
     }
 
     public boolean isUnit() {
-	return ( this.isONE() || this.negate().isONE() );
+        java.math.BigInteger g = modul.gcd( val );
+	return ( g.equals(java.math.BigInteger.ONE) 
+              || g.equals(java.math.BigInteger.ONE.negate()) );
     }
 
     public String toString() {
