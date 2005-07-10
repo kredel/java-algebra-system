@@ -5,28 +5,21 @@
 package edu.jas.module;
 
 import java.util.List;
-import java.util.Collection;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.Comparator;
-
-import edu.jas.arith.Coefficient;
-import edu.jas.arith.BigRational;
-
-import edu.jas.poly.OrderedPolynomial;
-import edu.jas.poly.OrderedMapPolynomial;
-import edu.jas.poly.SolvableOrderedMapPolynomial;
-import edu.jas.poly.ExpVector;
-import edu.jas.poly.TermOrder;
-import edu.jas.poly.RelationTable;
-import edu.jas.poly.PolynomialList;
 
 import java.io.Serializable;
 
 import org.apache.log4j.Logger;
+
+import edu.jas.structure.RingFactory;
+import edu.jas.structure.RingElem;
+
+import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.GenPolynomialRing;
+import edu.jas.poly.PolynomialList;
+import edu.jas.poly.GenSolvablePolynomial;
+import edu.jas.poly.GenSolvablePolynomialRing;
+
 
 /**
  * list of vectors of polynomials
@@ -34,47 +27,44 @@ import org.apache.log4j.Logger;
  * @author Heinz Kredel
  */
 
-public class ModuleList implements Serializable {
+public class ModuleList<C extends RingElem<C> > implements Serializable {
 
     private static Logger logger = Logger.getLogger(ModuleList.class);
 
-    public final Coefficient coeff;
-    public final String[] vars;
-    public final TermOrder tord;
-    public final List list;
-    public final RelationTable table;
+    public final GenPolynomialRing< C > ring;
 
-    public ModuleList( String[] v, int eo, List l ) {
-        this( null, v, new TermOrder(eo), l);
-    }
+    public final List< List< GenPolynomial<C> > > list;
 
-    public ModuleList( String[] v, TermOrder to, List l ) {
-        this( null, v, to, l, null);
-    }
+    public final int rows; // -1 is undefined
+    public final int cols; // -1 is undefined
 
-    public ModuleList( String[] v, TermOrder to, List l, RelationTable rt ) {
-        this( null, v, to, l, rt);
-    }
 
-    public ModuleList( Coefficient c, String[] v, int eo, List l ) {
-        this( c, v, new TermOrder(eo), l);
-    }
-
-    public ModuleList( Coefficient c, String[] v, TermOrder to, List l ) {
-        this( c, v, to, l, null);
-    }
-
-    public ModuleList( Coefficient c, String[] v, TermOrder to, 
-                       List l, RelationTable rt ) {
-        if ( c == null ) {
-           coeff = new BigRational();
+    /**
+     * Contstructor.
+     */
+    public ModuleList( GenPolynomialRing< C > r,
+                       List< List<GenPolynomial< C >>> l) {
+        ring = r;
+	list = padCols(r,l); 
+        if ( list == null ) {
+            rows = -1; 
+            cols = -1;
         } else {
-           coeff = c;
+            rows = list.size();
+            if ( rows > 0 ) {
+                cols = list.get(0).size();
+            } else {
+                cols = -1;
+            }
         }
-	vars = v;
-	tord = to;
-	list = padCols(l); //sort( l ); 
-        table = rt;
+    }
+
+    /**
+     * Contstructor.
+     */
+    public ModuleList( GenSolvablePolynomialRing< C > r,
+                       List< List<GenSolvablePolynomial< C >>> l) {
+        this(r,castToList(l));
     }
 
 
@@ -87,17 +77,16 @@ public class ModuleList implements Serializable {
             //System.out.println("ModuleList");
             return false;
         }
-        ModuleList ml = (ModuleList)m;
-        if ( ! coeff.equals( ml.coeff ) ) {
-            //System.out.println("Coefficient");
+        ModuleList<C> ml = null;
+        try {
+            ml = (ModuleList<C>)m;
+        } catch (ClassCastException ignored) {
+        }
+        if ( ml == null ) { 
             return false;
         }
-        if ( ! Arrays.equals( vars, ml.vars ) ) {
-            //System.out.println("String[]");
-            return false;
-        }
-        if ( ! tord.equals( ml.tord ) ) {
-            //System.out.println("TermOrder");
+        if ( ! ring.equals( ml.ring ) ) {
+            //System.out.println("Ring");
             return false;
         }
         if ( list == null && ml.list != null ) {
@@ -113,92 +102,54 @@ public class ModuleList implements Serializable {
             return false;
         }
         // compare sorted lists
-        List otl = OrderedModuleList.sort( list );
-        List oml = OrderedModuleList.sort( ml.list );
+        List otl = OrderedModuleList.sort( ring, list );
+        List oml = OrderedModuleList.sort( ring, ml.list );
         if ( ! otl.equals(oml) ) {
             return false;
         }
-
-        if ( table == null && ml.table != null ) {
-            return false;
-        }
-        if ( table != null && ml.table == null ) {
-            return false;
-        }
-        // otherwise tables may be different
         return true;
     }
 
 
+    @Override
+    @SuppressWarnings("unchecked") // not jet working
     public String toString() {
 	StringBuffer erg = new StringBuffer();
-        if ( coeff != null ) {
-            if ( coeff instanceof BigRational ) {
-               erg.append("Rat");
+        String[] vars = null;
+        if ( ring != null ) {
+           erg.append( ring.toString() );
+           vars = ring.getVars();
+        }
+        boolean first = true;
+        erg.append("(\n");
+        for ( List< GenPolynomial<C> > row: list ) {
+            if ( first ) {
+               first = false;
+            } else {
+               erg.append( ",\n" );
             }
+            boolean ifirst = true;
+            erg.append(" (\n");
+            String os;
+            for ( GenPolynomial<C> oa: row ) {
+                if ( vars != null ) {
+                   os = oa.toString(vars);
+                } else {
+                   os = oa.toString();
+                }
+                if ( ifirst ) {
+                   ifirst = false;
+                } else {
+                   erg.append( ", " );
+                   if ( os.length() > 100 ) {
+                      erg.append("\n");
+                   }
+                }
+                erg.append( os );
+            }
+            erg.append(" )");
         }
-        erg.append("(");
-        for ( int i = 0; i < vars.length; i++ ) {
-            erg.append(vars[i]); 
-	    if ( i < vars.length-1 ) {
-               erg.append(",");
-            } 
-        }
-        erg.append(")");
-        if ( tord.getWeight() == null ) {
-           erg.append(" "+tord);
-        } else {
-           erg.append(" "+tord.weightToString());
-        }
-        erg.append("\n");
-
-        if ( table != null ) {
-            erg.append(table.toString(vars) + "\n\n");
-        }
-
-        OrderedPolynomial oa;
-        String sa;
-        if ( list != null && list.size() > 0 ) {
-           Iterator it = list.iterator();
-           erg.append("(\n");
-           while ( it.hasNext() ) {
-                 Object o = it.next();
-                 if ( o instanceof List ) {
-                     erg.append(" (\n");
-                     for ( Iterator jt = ((List)o).iterator(); 
-                           jt.hasNext(); ) {
-                         Object oo = jt.next();
-                         sa = "";
-                         if ( oo == null ) {
-	                    erg.append( "  ( 0 )" );
-                         } else if ( oo instanceof OrderedPolynomial ) {
-                            oa = (OrderedPolynomial) oo;
-                            sa = oa.toString(vars);
-	                    erg.append( "  ( " + sa + " )" );
-	                 } else {
-                             erg.append( oo.toString() );
-                         }
-	                 if ( jt.hasNext() ) {
-                            erg.append(",\n");
-                            if ( sa.length() > 100 ) {
-                               erg.append("\n");
-                            }
-	                 } else { 
-                            erg.append("\n");
-                         }
-                     }
-                     erg.append(" )");
-	         } else {
-	            erg.append( o.toString() );
-	         }
-	         if ( it.hasNext() ) {
-                    erg.append(",\n");
-	         } else { 
-                    erg.append("\n");
-                 }
-           }
-           erg.append(")");
-        }
+        erg.append("\n)");
 	return erg.toString();
     }
 
@@ -207,29 +158,31 @@ public class ModuleList implements Serializable {
      * pad Columns and remove zero rows.
      * make all rows have the same number of columns.
      */
-
-    public static List padCols(List l) {
+    public static <C extends RingElem<C> >
+                      List< List<GenPolynomial< C >>> 
+                      padCols(GenPolynomialRing< C > ring,
+                              List< List<GenPolynomial< C >>> l) {
         if ( l == null ) {
            return l;
         }
         int mcols = 0;
         int rs = 0;
-        for ( Iterator it = l.iterator(); it.hasNext(); ) {
-            List r = (List)it.next();
-            if ( r != null ) {
-                rs++;
-                if ( r.size() > mcols ) {
-                    mcols = r.size();
-                }
+        for ( List< GenPolynomial<C> > row: l ) {
+            if ( row != null ) {
+               rs++;
+               if ( row.size() > mcols ) {
+                  mcols = row.size();
+               }
             }
         }
-        List norm = new ArrayList( rs );
-        for ( Iterator it = l.iterator(); it.hasNext(); ) {
-            List r = (List)it.next();
-            if ( r != null ) {
-                List rn = new ArrayList( r );
+        List< List<GenPolynomial<C>> > norm 
+            = new ArrayList< List<GenPolynomial<C>> >( rs );
+        for ( List< GenPolynomial<C> > row: l ) {
+            if ( row != null ) {
+                List<GenPolynomial<C>> rn 
+                    = new ArrayList<GenPolynomial<C>>( row );
                 while ( rn.size() < mcols ) {
-                    rn.add( (OrderedPolynomial)null );
+                    rn.add( ring.getZERO() );
                 }
                 norm.add( rn );
             }
@@ -243,160 +196,95 @@ public class ModuleList implements Serializable {
      * get PolynomialList.
      * Embed module in a polynomial ring. 
      */
+    public PolynomialList<C> getPolynomialList() {
+        GenPolynomialRing< C > pfac = ring.extend(cols);
+        logger.debug("extended ring = " + pfac);
+        //System.out.println("extended ring = " + pfac);
 
-    public PolynomialList getPolynomialList() {
-        if ( list == null ) {
-           return new PolynomialList(coeff,vars,tord,list,table);
-        }
-        if ( list.size() == 0 ) { // nothing to do
-           return new PolynomialList(coeff,vars,tord,list,table);
-        }
-        List row = null;
-        int cols = 0;
-        OrderedPolynomial p = null;
-        int k = 0;
-        // search non zero row and non zero polynomial
-        while ( p == null && k < list.size() ) {
-           row = (List)list.get(k);
-           k++;
-           //assert (row != null); 
-           cols = row.size();
-           int j = 0;
-           while ( p == null && j < row.size() ) {
-              p = (OrderedPolynomial)row.get(j);
-              j++;
-              if ( p != null ) {
-                  if ( p.isZERO() ) {
-                      p = null;
-                  } else {
-                      break;
-                  }
-              }
-           }
-        }
-        if ( p == null ) {
-           return new PolynomialList(coeff,vars,tord,(List)null,table);
-        }
-        //System.out.println("non zero p = "+p);
-        ExpVector e = p.leadingExpVector();
-        OrderedPolynomial zero = p.getZERO();
-
-        int vs = e.length();
-        List pols = new ArrayList( list.size() );
-        String[] v = new String[ vars.length+cols ];
-        for ( int i = 0; i < vars.length; i++ ) {
-            v[i] = vars[i];
-        }
-        for ( int i = 0; i < cols; i++ ) {
-            v[ vars.length + i ] = "e" + (i+1);
-        }
-        logger.debug("gen poly list = " + cols + " more from " + vars.length);
+        /*
         RelationTable extab = null;
         if ( table != null ) {
            extab = table.extend(cols,v);
            zero = ((SolvableOrderedMapPolynomial)zero).getZERO( extab );
            //logger.info("zero = " + zero);
         }
-        OrderedMapPolynomial c = null;
-        OrderedPolynomial d = null;
-        for ( Iterator it = list.iterator(); it.hasNext(); ) {
-            List r = (List)it.next();
-            OrderedPolynomial ext = zero;
+        */
+
+        List<GenPolynomial<C>> pols = null;
+        if ( list == null ) { // rows < 0
+           return new PolynomialList<C>(pfac,pols);
+        }
+        pols = new ArrayList<GenPolynomial<C>>( rows );
+        if ( rows == 0 ) { // nothing to do
+           return new PolynomialList<C>(pfac,pols);
+        }
+
+        GenPolynomial<C> zero = pfac.getZERO();
+        GenPolynomial<C> d = null;
+        for ( List<GenPolynomial<C>> r: list ) {
+            GenPolynomial<C> ext = zero;
             //int m = cols-1;
             int m = 0;
-            for ( Iterator jt = r.iterator(); jt.hasNext(); ) {
-                c = (OrderedMapPolynomial)jt.next();
-                if ( c instanceof SolvableOrderedMapPolynomial ) {
-                   d = ((SolvableOrderedMapPolynomial)c).extend( cols, m, 1l, v, extab );
-                } else {
-                   d = c.extend( cols, m, 1l, v );
-                }
+            for ( GenPolynomial<C> c: r ) {
+                d = c.extend( pfac, m, 1l );
                 ext = ext.add(d); 
                 m++;
             }
             pols.add( ext );
         }
-        return new PolynomialList(coeff, v, tord, pols, extab);
+        return new PolynomialList<C>(pfac, pols);
+    }
+
+
+    /**
+     * Get list as List of GenSolvablePolynomials.
+     * Required because no List casts allowed. Equivalent to 
+     * cast (List<List<GenSolvablePolynomial<C>>>) list.
+     */
+    public List< List< GenSolvablePolynomial<C> > > castToSolvableList() {
+        List< List<GenSolvablePolynomial<C>> > slist = null;
+        if ( list == null ) {
+            return slist;
+        }
+        slist = new ArrayList< List<GenSolvablePolynomial<C>> >( list.size() ); 
+        for ( List< GenPolynomial<C>> row: list ) {
+            List< GenSolvablePolynomial<C> > srow 
+                = new ArrayList< GenSolvablePolynomial<C> >( row.size() ); 
+            for ( GenPolynomial<C> p: row ) {
+                if ( ! (p instanceof GenSolvablePolynomial) ) {
+                    throw new RuntimeException("no solvable polynomial "+p);
+                }
+                GenSolvablePolynomial<C> s
+                    = (GenSolvablePolynomial<C>) p;
+                srow.add( s );
+            }
+            slist.add( srow );
+        }
+        return slist;
     }
 
     /**
-     * get ModuleList from PolynomialList.
-     * Extract module from polynomial ring. 
+     * Get of solvable polynomials list as List of GenPolynomials.
+     * Required because no List casts allowed. Equivalent to 
+     * cast (List<List<GenPolynomial<C>>>) list.
      */
-
-    public static ModuleList getModuleList(int i, PolynomialList pl) {
-        if ( pl == null ) {
-           return new ModuleList(pl.coeff,pl.vars,pl.tord,
-                                 (List)null,pl.table);
+    public static <C extends RingElem<C> >
+           List< List< GenPolynomial<C> > > 
+           castToList( List< List<GenSolvablePolynomial<C>> > slist ) {
+        List< List<GenPolynomial<C>> > list = null;
+        if ( slist == null ) {
+            return list;
         }
-        List l = pl.list;
-        if ( l == null ) {
-           return new ModuleList(pl.coeff,pl.vars,pl.tord,
-                                 (List)null,pl.table);
-        }
-        int cols = pl.vars.length - i;
-        String[] v = new String[ cols ];
-        for ( int j = 0; j < cols; j++ ) {
-            v[j] = pl.vars[j];
-        }
-        RelationTable contab = null;
-        if ( pl.table != null ) {
-           contab = pl.table.contract( i );
-        }
-
-        List m = new ArrayList( l.size() );
-        ArrayList zr = new ArrayList( i-1 );
-        OrderedPolynomial zero = null;
-        for ( int j = 0; j < i; j++ ) {
-            zr.add(j,zero);
-        }
-        for (Iterator it = l.iterator(); it.hasNext(); ) {
-            OrderedMapPolynomial p = (OrderedMapPolynomial)it.next();
-            if ( p != null ) {
-                Map r = null;
-                if ( p instanceof SolvableOrderedMapPolynomial ) {
-                    r = ((SolvableOrderedMapPolynomial)p).contract( i, contab );
-                } else {
-                   r = p.contract( i );
-                }
-                //System.out.println("r = " + r ); 
-                List row = (List)zr.clone();
-                for ( Iterator jt = r.keySet().iterator(); jt.hasNext(); ) {
-                    ExpVector e = (ExpVector)jt.next();
-                    int[] dov = e.dependencyOnVariables();
-                    int ix = 0;
-                    if ( dov.length > 1 ) {
-                       throw new RuntimeException("wrong dependencyOnVariables " + e);
-                       //System.out.println("wrong dependencyOnVariables " + e);
-                    } else if ( dov.length == 1 )  {
-                       ix = dov[0];
-                    }
-                    //ix = i-1 - ix; // revert
-                    //System.out.println("ix = " + ix ); 
-                    OrderedPolynomial vi = (OrderedPolynomial)r.get( e );
-                    if ( vi != null && zero == null ) {
-                        if ( ! vi.isZERO() ) {
-                            zero = vi.getZERO();
-                        }
-                    }
-                    row.set(ix,vi);
-                }
-                //System.out.println("row = " + row ); 
-                m.add( row );
+        list = new ArrayList< List<GenPolynomial<C>> >( slist.size() ); 
+        for ( List< GenSolvablePolynomial<C>> srow: slist ) {
+            List< GenPolynomial<C> > row 
+                = new ArrayList< GenPolynomial<C> >( srow.size() ); 
+            for ( GenSolvablePolynomial<C> s: srow ) {
+                row.add( s );
             }
+            list.add( row );
         }
-        //assert zero != null : zero ; // , zero == (0)
-        //System.out.println("zero = " + zero ); 
-        for (Iterator it = m.iterator(); it.hasNext(); ) {
-            ArrayList vr = (ArrayList)it.next();
-            for ( int j = 0; j < i; j++ ) {
-                if ( vr.get(j) == null ) {
-                    vr.set(j,zero);
-                }
-            }
-            //System.out.println("vr = " + vr ); 
-        }
-        return new ModuleList(pl.coeff, v, pl.tord, m, contab);
+        return list;
     }
 
 }

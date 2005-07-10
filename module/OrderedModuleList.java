@@ -5,22 +5,17 @@
 package edu.jas.module;
 
 import java.util.List;
-import java.util.Collection;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.TreeMap;
 import java.util.Comparator;
 
-import edu.jas.arith.Coefficient;
-import edu.jas.arith.BigRational;
+import edu.jas.structure.RingFactory;
+import edu.jas.structure.RingElem;
 
-import edu.jas.poly.OrderedPolynomial;
-import edu.jas.poly.OrderedMapPolynomial;
 import edu.jas.poly.ExpVector;
-import edu.jas.poly.TermOrder;
-import edu.jas.poly.RelationTable;
+import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.GenPolynomialRing;
+
 import edu.jas.poly.PolynomialList;
 import edu.jas.poly.OrderedPolynomialList;
 
@@ -31,31 +26,16 @@ import edu.jas.poly.OrderedPolynomialList;
  * @author Heinz Kredel
  */
 
-public class OrderedModuleList extends ModuleList {
+public class OrderedModuleList<C extends RingElem<C> > 
+             extends ModuleList<C> {
 
-    public OrderedModuleList( String[] v, int eo, List l ) {
-        this( null, v, new TermOrder(eo), l);
-    }
 
-    public OrderedModuleList( String[] v, TermOrder to, List l ) {
-        this( null, v, to, l, null);
-    }
-
-    public OrderedModuleList( String[] v, TermOrder to, List l, RelationTable rt ) {
-        this( null, v, to, l, rt);
-    }
-
-    public OrderedModuleList( Coefficient c, String[] v, int eo, List l ) {
-        this( c, v, new TermOrder(eo), l);
-    }
-
-    public OrderedModuleList( Coefficient c, String[] v, TermOrder to, List l ) {
-        this( c, v, to, l, null);
-    }
-
-    public OrderedModuleList( Coefficient c, String[] v, TermOrder to, 
-                       List l, RelationTable rt ) {
-        super( c, v, to, sort( l ), rt );
+    /**
+     * Constructor.
+     */
+    public OrderedModuleList( GenPolynomialRing< C > r,
+                              List<List<GenPolynomial<C>>> l ) {
+        super( r, sort( r, ModuleList.padCols(r,l) ) );
     }
 
 
@@ -63,70 +43,22 @@ public class OrderedModuleList extends ModuleList {
      * equals from Object.
      */
 
+    @Override
+    @SuppressWarnings("unchecked") // not jet working
     public boolean equals(Object m) {
-        if ( ! (m instanceof OrderedModuleList) ) {
-            //System.out.println("ModuleList");
+        if ( ! super.equals(m) ) {
             return false;
         }
-        OrderedModuleList ml = (OrderedModuleList)m;
-        if ( ! coeff.equals( ml.coeff ) ) {
-            //System.out.println("Coefficient");
-            return false;
+        OrderedModuleList<C> ml = null;
+        try {
+            ml = (OrderedModuleList<C>)m;
+        } catch (ClassCastException ignored) {
         }
-        if ( ! Arrays.equals( vars, ml.vars ) ) {
-            //System.out.println("String[]");
-            return false;
+        if ( ml == null ) {
+           return false;
         }
-        if ( ! tord.equals( ml.tord ) ) {
-            //System.out.println("TermOrder");
-            return false;
-        }
-        if ( list == null && ml.list != null ) {
-            //System.out.println("List, null");
-            return false;
-        }
-        if ( list != null && ml.list == null ) {
-            //System.out.println("List, null");
-            return false;
-        }
-        if ( list.size() != ml.list.size() ) {
-            //System.out.println("List, size");
-            return false;
-        }
-        Iterator jt = ml.list.iterator();
-        for ( Iterator it = list.iterator(); 
-              it.hasNext() && jt.hasNext(); ) {
-            Object mi = it.next();
-            Object mj = jt.next();
-            if ( ! ( mi instanceof List ) ) {
-                //System.out.println("List, mi");
-                return false;
-            }
-            if ( ! ( mj instanceof List ) ) {
-                //System.out.println("List, mj");
-                return false;
-            }
-            Object[] mia = ((List)mi).toArray();
-            Object[] mja = ((List)mj).toArray();
-            for ( int k = 0; k < mia.length; k++ ) {
-                OrderedPolynomial pi = (OrderedPolynomial)mia[k];
-                OrderedPolynomial pj = (OrderedPolynomial)mja[k];
-                if ( ! pi.equals( pj ) ) {
-                    //System.out.println("OrderedPolynomial");
-                    //System.out.println("pi = " + pi);
-                    //System.out.println("pj = " + pj);
-                   return false;
-                }
-            }
-        }
-
-        if ( table == null && ml.table != null ) {
-            return false;
-        }
-        if ( table != null && ml.table == null ) {
-            return false;
-        }
-        // otherwise tables may be different
+        // compare sorted lists
+        // done already in super.equals()
         return true;
     }
 
@@ -136,27 +68,28 @@ public class OrderedModuleList extends ModuleList {
      * Sort a list of vectors of polynomials with respect to the 
      * ascending order of the leading Exponent vectors of the 
      * first column. 
-     * The term order is taken from the first polynomials TermOrder.
+     * The term order is taken from the ring.
      */
 
-    public static List sort(List l) {
+    public static <C extends RingElem<C> >
+           List<List<GenPolynomial<C>>> sort( GenPolynomialRing<C> r,
+                                              List<List<GenPolynomial<C>>> l) {
+
         if ( l == null ) {
             return l;
         }
         if ( l.size() <= 1 ) { // nothing to sort
             return l;
         }
-        List v = (List)l.get(0);
-        OrderedPolynomial p = (OrderedPolynomial)v.get(0);
-        final Comparator e = p.getTermOrder().getAscendComparator();
-        Comparator c = new Comparator() {
-                public int compare(Object o1, Object o2) {
-                       List l1 = (List)o1;
-                       List l2 = (List)o2;
+        final Comparator<ExpVector> evc = r.tord.getAscendComparator();
+        Comparator<List<GenPolynomial<C>>> cmp 
+              = new Comparator<List<GenPolynomial<C>>>() {
+                public int compare(List<GenPolynomial<C>> l1, 
+                                   List<GenPolynomial<C>> l2) {
                        int c = 0;
                        for ( int i = 0; i < l1.size(); i++ ) {
-                           OrderedPolynomial p1 = (OrderedPolynomial)l1.get(i);
-                           OrderedPolynomial p2 = (OrderedPolynomial)l2.get(i);
+                           GenPolynomial<C> p1 = l1.get(i);
+                           GenPolynomial<C> p2 = l2.get(i);
                            ExpVector e1 = p1.leadingExpVector();
                            ExpVector e2 = p2.leadingExpVector();
                            if ( e1 == null && e2 != null ) {
@@ -175,7 +108,7 @@ public class OrderedModuleList extends ModuleList {
                                  return -1;
                               }
                            }
-                           c = e.compare(e1,e2);
+                           c = evc.compare(e1,e2);
                            if ( c != 0 ) {
                                return c;
                            }
@@ -183,9 +116,22 @@ public class OrderedModuleList extends ModuleList {
                        return c;
                 }
             };
-        Object[] s = l.toArray();
-        Arrays.sort( s, c );
-        return new ArrayList( Arrays.asList(s) );
+
+        List<GenPolynomial<C>>[] s = null;
+        try {
+            s = new List[ l.size() ]; //<GenPolynomial<C>>
+            //System.out.println("s.length = " + s.length );
+            //s = l.toArray(s);
+            for ( int i = 0; i < l.size(); i++ ) {
+                s[i] = l.get(i);
+            }
+            Arrays.<List<GenPolynomial<C>>>sort( s, cmp );
+            return new ArrayList<List<GenPolynomial<C>>>( 
+                            Arrays.<List<GenPolynomial<C>>>asList(s) );
+        } catch(ClassCastException ok) {
+            System.out.println("Warning: polynomials not sorted");
+        }
+        return l; // unsorted
     }
 
 
@@ -194,19 +140,19 @@ public class OrderedModuleList extends ModuleList {
      * get OrderedPolynomialList.
      * Embed module in a polynomial ring and sort polynomials. 
      */
-
+    /*
     public OrderedPolynomialList getOrderedPolynomialList() {
         PolynomialList pl = super.getPolynomialList();
         return new OrderedPolynomialList(pl.coeff, pl.vars, pl.tord, 
                                          pl.list, pl.table);
     }
-
+    */
 
     /**
      * get OrderedModuleList from PolynomialList.
      * Extract module from polynomial ring and sort generators. 
      */
-
+    /*
     public static OrderedModuleList getOrderedModuleList(
                                        int i, 
                                        PolynomialList pl) {
@@ -214,5 +160,6 @@ public class OrderedModuleList extends ModuleList {
         return new OrderedModuleList(ml.coeff, ml.vars, ml.tord,
                                      ml.list, ml.table);
     }
+    */
 
 }

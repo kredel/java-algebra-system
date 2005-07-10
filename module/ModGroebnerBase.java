@@ -10,12 +10,18 @@ import java.util.ListIterator;
 
 import org.apache.log4j.Logger;
 
-import edu.jas.poly.ExpVector;
-import edu.jas.poly.OrderedPolynomial;
+import edu.jas.structure.RingElem;
+
+import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.PolynomialList;
+
+import edu.jas.poly.GenSolvablePolynomial;
 
 import edu.jas.ring.Reduction;
 import edu.jas.ring.GroebnerBase;
+
+import edu.jas.module.ModuleList;
+
 
 /**
  * Module Groebner Bases class.
@@ -31,23 +37,22 @@ public class ModGroebnerBase  {
      * Module Groebner base test
      */
 
-    public static boolean isGB(int modv, List F) {  
-        return GroebnerBase.isDIRPGB(modv,F);
+    public static <C extends RingElem<C>> 
+           boolean isGB(int modv, List<GenPolynomial<C>> F) {  
+        return GroebnerBase.isGB(modv,F);
     }
 
-    public static boolean isGB(ModuleList M) {  
-        if ( M == null ) {
+    public static <C extends RingElem<C>>
+           boolean isGB(ModuleList<C> M) {  
+        if ( M == null || M.list == null ) {
             return true;
         }
-        if ( M.list == null ) {
+        if ( M.rows == 0 || M.cols == 0 ) {
             return true;
         }
-        if ( M.list.size() == 0 ) {
-            return true;
-        }
-        PolynomialList F = M.getPolynomialList();
-        int modv = ((List)M.list.get(0)).size();
-        return GroebnerBase.isDIRPGB(modv,F.list);
+        PolynomialList<C> F = M.getPolynomialList();
+        int modv = M.cols; // > 0  
+        return GroebnerBase.isGB(modv,F.list);
     }
 
 
@@ -55,22 +60,26 @@ public class ModGroebnerBase  {
      * Groebner base using pairlist class.
      */
 
-    public static ArrayList GB(int modv, List F) {  
-        return GroebnerBase.DIRPGB(modv,F);
+    public static <C extends RingElem<C>>
+           ArrayList<GenPolynomial<C>> GB(int modv, List<GenPolynomial<C>> F) {  
+        return GroebnerBase.GB(modv,F);
     }
 
-    public static ModuleList GB(ModuleList M) {  
-        PolynomialList F = M.getPolynomialList();
-        ModuleList N = M;
-        List t = (List)M.list;
-        int modv = 0;
-        if ( t == null || t.size() == 0 ) {
-           return N;
+    public static <C extends RingElem<C>>
+           ModuleList<C> GB(ModuleList<C> M) {  
+        ModuleList<C> N = M;
+        if ( M == null || M.list == null ) {
+            return N;
         }
-        modv = ((List)t.get(0)).size();
-        List G = GroebnerBase.DIRPGB(modv,F.list);
-        F = new PolynomialList(F.coeff,F.vars,F.tord,G,F.table);
-        N = ModuleList.getModuleList(modv,F);
+        if ( M.rows == 0 || M.cols == 0 ) {
+            return N;
+        }
+
+        PolynomialList<C> F = M.getPolynomialList();
+        int modv = M.cols;
+        List<GenPolynomial<C>> G = GroebnerBase.GB(modv,F.list);
+        F = new PolynomialList<C>(F.ring,G);
+        N = F.getModuleList(modv);
         return N;
     }
 

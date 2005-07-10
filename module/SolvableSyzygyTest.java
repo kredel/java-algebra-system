@@ -18,19 +18,28 @@ import junit.framework.TestSuite;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
-import edu.jas.poly.RatOrderedMapPolynomial;
-import edu.jas.poly.RatSolvableOrderedMapPolynomial;
-import edu.jas.poly.SolvableOrderedMapPolynomial;
-import edu.jas.poly.OrderedPolynomial;
-import edu.jas.poly.SolvablePolynomial;
+
+import edu.jas.structure.RingElem;
+
+import edu.jas.arith.BigRational;
+
+import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolynomialList;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.TermOrder;
-import edu.jas.poly.RelationTable;
+import edu.jas.poly.GenSolvablePolynomial;
+import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.WeylRelations;
+import edu.jas.poly.RelationTable;
 
-//import edu.jas.ring.GroebnerBase;
+import edu.jas.ring.Reduction;
+import edu.jas.ring.GroebnerBase;
 import edu.jas.ring.SolvableGroebnerBase;
+
+import edu.jas.module.ModuleList;
+import edu.jas.module.Syzygy;
+import edu.jas.module.SolvableSyzygy;
 
 
 /**
@@ -68,53 +77,68 @@ public class SolvableSyzygyTest extends TestCase {
    int port = 4711;
    String host = "localhost";
 
-   SolvableOrderedMapPolynomial dummy;
-   OrderedPolynomial a;
-   OrderedPolynomial b;
-   OrderedPolynomial c;
-   OrderedPolynomial d;
-   OrderedPolynomial e;
-   String[] vars;
-   OrderedPolynomial one;
-   OrderedPolynomial zero;
+   BigRational cfac;
+   GenSolvablePolynomialRing<BigRational> fac;
 
+   PolynomialList<BigRational> F;
+   List<GenSolvablePolynomial<BigRational>> G;
+
+   GenSolvablePolynomial<BigRational> a;
+   GenSolvablePolynomial<BigRational> b;
+   GenSolvablePolynomial<BigRational> c;
+   GenSolvablePolynomial<BigRational> d;
+   GenSolvablePolynomial<BigRational> e;
+   GenSolvablePolynomial<BigRational> zero;
+   GenSolvablePolynomial<BigRational> one;
+
+   String[] vars;
+   TermOrder tord;
    RelationTable table;
 
-   List L;
-   List V;
-   PolynomialList F;
-   PolynomialList G;
-   List M;
-   List N;
-   List Z;
+   List<GenSolvablePolynomial<BigRational>> L;
+   List<List<GenSolvablePolynomial<BigRational>>> K;
+   List<GenSolvablePolynomial<BigRational>> V;
+   List<List<GenSolvablePolynomial<BigRational>>> W;
+   ModuleList<BigRational> M;
+   ModuleList<BigRational> N;
+   ModuleList<BigRational> Z;
 
    int rl = 4; //4; //3; 
    int kl = 5;
    int ll = 9;
    int el = 2;
-   float q = 0.2f; //0.4f
+   float q = 0.3f; //0.4f
 
    protected void setUp() {
-       table = new RelationTable(); // symmetric test
-       TermOrder to = new TermOrder( /*TermOrder.INVLEX*/ );
-       a = b = c = d = e = null;
-       a = RatSolvableOrderedMapPolynomial.DIRRAS(table,rl, kl, ll, el, q );
-       a = new RatSolvableOrderedMapPolynomial(table,to,a);
-       b = RatSolvableOrderedMapPolynomial.DIRRAS(table,rl, kl, ll, el, q );
-       b = new RatSolvableOrderedMapPolynomial(table,to,b);
-       c = RatSolvableOrderedMapPolynomial.DIRRAS(table,rl, kl, ll, el, q );
-       c = new RatSolvableOrderedMapPolynomial(table,to,c);
-       d = RatSolvableOrderedMapPolynomial.DIRRAS(table,rl, kl, ll, el, q );
-       d = new RatSolvableOrderedMapPolynomial(table,to,d);
-       e = d; //RatOrderedMapPolynomial.DIRRAS(rl, kl, ll, el, q );
+       cfac = new BigRational(1);
        vars = ExpVector.STDVARS( rl );
-       one = a.getONE();
-       zero = a.getZERO();
+       tord = new TermOrder();
+       fac = new GenSolvablePolynomialRing<BigRational>(cfac,rl,tord,vars);
+       table = fac.table; 
+       a = b = c = d = e = null;
+       L = null;
+       K = null;
+       V = null;
+
+       a = fac.random(kl, ll, el, q );
+       b = fac.random(kl, ll, el, q );
+       c = fac.random(kl, ll, el, q );
+       d = fac.random(kl, ll, el, q );
+       e = d; //fac.random(kl, ll, el, q );
+
+       one = fac.getONE();
+       zero = fac.getZERO();
    }
 
    protected void tearDown() {
-       table = null;
        a = b = c = d = e = null;
+       L = null;
+       K = null;
+       V = null;
+       fac = null;
+       vars = null;
+       tord = null;
+       table = null;
    }
 
 
@@ -124,42 +148,42 @@ public class SolvableSyzygyTest extends TestCase {
  */
  public void testSequentialSolvableSyzygy() {
 
-     L = new ArrayList();
+     L = new ArrayList<GenSolvablePolynomial<BigRational>>();
 
      assertTrue("not isZERO( a )", !a.isZERO() );
      L.add(a);
-     assertTrue("isGB( { a } )", SolvableGroebnerBase.isLeftGB(L) );
-     N = SolvableSyzygy.leftZeroRelations( L );
-     assertTrue("is ZR( { a } )", SolvableSyzygy.isLeftZeroRelation(N,L) );
+     assertTrue("isGB( { a } )", SolvableGroebnerBase.<BigRational>isLeftGB(L) );
+     K = SolvableSyzygy.<BigRational>leftZeroRelations( L );
+     assertTrue("is ZR( { a } )", SolvableSyzygy.<BigRational>isLeftZeroRelation(K,L) );
 
      assertTrue("not isZERO( b )", !b.isZERO() );
      L.add(b);
-     L = SolvableGroebnerBase.leftGB(L);
-     assertTrue("isGB( { a, b } )", SolvableGroebnerBase.isLeftGB(L) );
+     L = SolvableGroebnerBase.<BigRational>leftGB(L);
+     assertTrue("isGB( { a, b } )", SolvableGroebnerBase.<BigRational>isLeftGB(L) );
      //System.out.println("\nL = " + L );
-     N = SolvableSyzygy.leftZeroRelations( L );
-     //System.out.println("\nN = " + N );
-     assertTrue("is ZR( { a, b } )", SolvableSyzygy.isLeftZeroRelation(N,L) );
+     K = SolvableSyzygy.<BigRational>leftZeroRelations( L );
+     //System.out.println("\nK = " + K );
+     assertTrue("is ZR( { a, b } )", SolvableSyzygy.<BigRational>isLeftZeroRelation(K,L) );
 
      assertTrue("not isZERO( c )", !c.isZERO() );
      L.add(c);
-     L = SolvableGroebnerBase.leftGB(L);
+     L = SolvableGroebnerBase.<BigRational>leftGB(L);
      //System.out.println("\nL = " + L );
-     assertTrue("isGB( { a, b, c } )", SolvableGroebnerBase.isLeftGB(L) );
-     N = SolvableSyzygy.leftZeroRelations( L );
-     //System.out.println("\nN = " + N );
-     assertTrue("is ZR( { a, b, c } )", SolvableSyzygy.isLeftZeroRelation(N,L) );
+     assertTrue("isGB( { a, b, c } )", SolvableGroebnerBase.<BigRational>isLeftGB(L) );
+     K = SolvableSyzygy.<BigRational>leftZeroRelations( L );
+     //System.out.println("\nK = " + K );
+     assertTrue("is ZR( { a, b, c } )", SolvableSyzygy.<BigRational>isLeftZeroRelation(K,L) );
 
      assertTrue("not isZERO( d )", !d.isZERO() );
      L.add(d);
-     L = SolvableGroebnerBase.leftGB(L);
+     L = SolvableGroebnerBase.<BigRational>leftGB(L);
      //System.out.println("\nL = " + L );
-     assertTrue("isGB( { a, b, c, d } )", SolvableGroebnerBase.isLeftGB(L) );
-     N = SolvableSyzygy.leftZeroRelations( L );
-     //System.out.println("\nN = " + N );
-     assertTrue("is ZR( { a, b, c, d } )", SolvableSyzygy.isLeftZeroRelation(N,L) );
+     assertTrue("isGB( { a, b, c, d } )", SolvableGroebnerBase.<BigRational>isLeftGB(L) );
+     K = SolvableSyzygy.<BigRational>leftZeroRelations( L );
+     //System.out.println("\nK = " + K );
+     assertTrue("is ZR( { a, b, c, d } )", SolvableSyzygy.<BigRational>isLeftZeroRelation(K,L) );
 
-     //System.out.println("N = " + N );
+     //System.out.println("K = " + K );
  }
 
 
@@ -168,55 +192,58 @@ public class SolvableSyzygyTest extends TestCase {
  * 
  */
  public void testSequentialWeylSolvableSyzygy() {
-     dummy = RatSolvableOrderedMapPolynomial.DIRRAS(table,rl, kl, ll, el, q );
-     TermOrder to = a.getTermOrder();
-     dummy = new RatSolvableOrderedMapPolynomial(table,to,dummy);
 
-     table = (new WeylRelations()).generate(rl,dummy);
-     a = new RatSolvableOrderedMapPolynomial(table,to,a);
-     b = new RatSolvableOrderedMapPolynomial(table,to,b);
-     c = new RatSolvableOrderedMapPolynomial(table,to,c);
-     d = new RatSolvableOrderedMapPolynomial(table,to,d);
-     e = d; 
+     int rloc = 4;
+     fac = new GenSolvablePolynomialRing<BigRational>(cfac,rloc);
 
-     L = new ArrayList();
+     WeylRelations<BigRational> wl = new WeylRelations<BigRational>(fac);
+     wl.generate();
+     table = fac.table;
+
+     a = fac.random(kl, ll, el, q );
+     b = fac.random(kl, ll, el, q );
+     c = fac.random(kl, ll, el, q );
+     d = fac.random(kl, ll, el, q );
+     e = d; //fac.random(kl, ll, el, q );
+
+     L = new ArrayList<GenSolvablePolynomial<BigRational>>();
 
      assertTrue("not isZERO( a )", !a.isZERO() );
      L.add(a);
-     assertTrue("isGB( { a } )", SolvableGroebnerBase.isLeftGB(L) );
-     N = SolvableSyzygy.leftZeroRelations( L );
-     assertTrue("is ZR( { a } )", SolvableSyzygy.isLeftZeroRelation(N,L) );
+     assertTrue("isGB( { a } )", SolvableGroebnerBase.<BigRational>isLeftGB(L) );
+     K = SolvableSyzygy.<BigRational>leftZeroRelations( L );
+     assertTrue("is ZR( { a } )", SolvableSyzygy.<BigRational>isLeftZeroRelation(K,L) );
 
      assertTrue("not isZERO( b )", !b.isZERO() );
      L.add(b);
-     L = SolvableGroebnerBase.leftGB(L);
-     assertTrue("isGB( { a, b } )", SolvableGroebnerBase.isLeftGB(L) );
+     L = SolvableGroebnerBase.<BigRational>leftGB(L);
+     assertTrue("isGB( { a, b } )", SolvableGroebnerBase.<BigRational>isLeftGB(L) );
      //System.out.println("\nL = " + L );
-     N = SolvableSyzygy.leftZeroRelations( L );
-     //System.out.println("\nN = " + N );
-     assertTrue("is ZR( { a, b } )", SolvableSyzygy.isLeftZeroRelation(N,L) );
+     K = SolvableSyzygy.<BigRational>leftZeroRelations( L );
+     //System.out.println("\nK = " + K );
+     assertTrue("is ZR( { a, b } )", SolvableSyzygy.<BigRational>isLeftZeroRelation(K,L) );
 
      // useless since 1 in GB
      assertTrue("not isZERO( c )", !c.isZERO() );
      L.add(c);
-     L = SolvableGroebnerBase.leftGB(L);
+     L = SolvableGroebnerBase.<BigRational>leftGB(L);
      //System.out.println("\nL = " + L );
-     assertTrue("isGB( { a, b, c } )", SolvableGroebnerBase.isLeftGB(L) );
-     N = SolvableSyzygy.leftZeroRelations( L );
-     //System.out.println("\nN = " + N );
-     assertTrue("is ZR( { a, b, c } )", SolvableSyzygy.isLeftZeroRelation(N,L) );
+     assertTrue("isGB( { a, b, c } )", SolvableGroebnerBase.<BigRational>isLeftGB(L) );
+     K = SolvableSyzygy.<BigRational>leftZeroRelations( L );
+     //System.out.println("\nK = " + K );
+     assertTrue("is ZR( { a, b, c } )", SolvableSyzygy.<BigRational>isLeftZeroRelation(K,L) );
 
      // useless since 1 in GB
      assertTrue("not isZERO( d )", !d.isZERO() );
      L.add(d);
-     L = SolvableGroebnerBase.leftGB(L);
+     L = SolvableGroebnerBase.<BigRational>leftGB(L);
      //System.out.println("\nL = " + L );
-     assertTrue("isGB( { a, b, c, d } )", SolvableGroebnerBase.isLeftGB(L) );
-     N = SolvableSyzygy.leftZeroRelations( L );
-     //System.out.println("\nN = " + N );
-     assertTrue("is ZR( { a, b, c, d } )", SolvableSyzygy.isLeftZeroRelation(N,L) );
+     assertTrue("isGB( { a, b, c, d } )", SolvableGroebnerBase.<BigRational>isLeftGB(L) );
+     K = SolvableSyzygy.<BigRational>leftZeroRelations( L );
+     //System.out.println("\nK = " + K );
+     assertTrue("is ZR( { a, b, c, d } )", SolvableSyzygy.<BigRational>isLeftZeroRelation(K,L) );
 
-     //System.out.println("N = " + N );
+     //System.out.println("K = " + K );
  }
 
 
@@ -226,55 +253,52 @@ public class SolvableSyzygyTest extends TestCase {
  */
  public void testSequentialModSolvableSyzygy() {
 
-     ModuleList M;
-     ModuleList N;
-     ModuleList Z;
-     L = new ArrayList();
+     W = new ArrayList<List<GenSolvablePolynomial<BigRational>>>();
 
      assertTrue("not isZERO( a )", !a.isZERO() );
-     V = new ArrayList();
+     V = new ArrayList<GenSolvablePolynomial<BigRational>>();
      V.add(a); V.add(zero); V.add(one);
-     L.add(V);
-     M = new ModuleList(vars,a.getTermOrder(),L,table);
-     assertTrue("isGB( { (a,0,1) } )", ModSolvableGroebnerBase.isLeftGB(M) );
+     W.add(V);
+     M = new ModuleList<BigRational>(fac,W);
+     assertTrue("isGB( { (a,0,1) } )", ModSolvableGroebnerBase.<BigRational>isLeftGB(M) );
 
-     N = ModSolvableGroebnerBase.leftGB( M );
-     assertTrue("isGB( { (a,0,1) } )", ModSolvableGroebnerBase.isLeftGB(N) );
+     N = ModSolvableGroebnerBase.<BigRational>leftGB( M );
+     assertTrue("isGB( { (a,0,1) } )", ModSolvableGroebnerBase.<BigRational>isLeftGB(N) );
 
-     Z = SolvableSyzygy.leftZeroRelations(N);
+     Z = SolvableSyzygy.<BigRational>leftZeroRelations(N);
      //System.out.println("Z = " + Z);
-     assertTrue("is ZR( { a) } )", SolvableSyzygy.isLeftZeroRelation(Z,N) );
+     assertTrue("is ZR( { a) } )", SolvableSyzygy.<BigRational>isLeftZeroRelation(Z,N) );
 
      assertTrue("not isZERO( b )", !b.isZERO() );
-     V = new ArrayList();
+     V = new ArrayList<GenSolvablePolynomial<BigRational>>();
      V.add(b); V.add(one); V.add(zero);
-     L.add(V);
-     M = new ModuleList(vars,a.getTermOrder(),L,table);
-     //System.out.println("L = " + L.size() );
+     W.add(V);
+     M = new ModuleList<BigRational>(fac,W);
+     //System.out.println("W = " + W.size() );
 
-     N = ModSolvableGroebnerBase.leftGB( M );
-     assertTrue("isGB( { a, b } )", ModSolvableGroebnerBase.isLeftGB(N) );
+     N = ModSolvableGroebnerBase.<BigRational>leftGB( M );
+     assertTrue("isGB( { a, b } )", ModSolvableGroebnerBase.<BigRational>isLeftGB(N) );
 
-     Z = SolvableSyzygy.leftZeroRelations(N);
+     Z = SolvableSyzygy.<BigRational>leftZeroRelations(N);
      //System.out.println("Z = " + Z);
-     assertTrue("is ZR( { a, b } )", SolvableSyzygy.isLeftZeroRelation(Z,N) );
+     assertTrue("is ZR( { a, b } )", SolvableSyzygy.<BigRational>isLeftZeroRelation(Z,N) );
 
      assertTrue("not isZERO( c )", !c.isZERO() );
-     V = new ArrayList();
+     V = new ArrayList<GenSolvablePolynomial<BigRational>>();
      V.add(c); V.add(one); V.add(zero);
-     L.add(V);
-     M = new ModuleList(vars,a.getTermOrder(),L,table);
-     //System.out.println("L = " + L.size() );
+     W.add(V);
+     M = new ModuleList<BigRational>(fac,W);
+     //System.out.println("W = " + W.size() );
 
-     N = ModSolvableGroebnerBase.leftGB( M );
+     N = ModSolvableGroebnerBase.<BigRational>leftGB( M );
      //System.out.println("GB(M) = " + N);
-     assertTrue("isGB( { a,b,c) } )", ModSolvableGroebnerBase.isLeftGB(N) );
+     assertTrue("isGB( { a,b,c) } )", ModSolvableGroebnerBase.<BigRational>isLeftGB(N) );
 
-     Z = SolvableSyzygy.leftZeroRelations(N);
+     Z = SolvableSyzygy.<BigRational>leftZeroRelations(N);
      //System.out.println("Z = " + Z);
-     //boolean b = SolvableSyzygy.isLeftZeroRelation(Z,N);
+     //boolean b = SolvableSyzygy.<BigRational>isLeftZeroRelation(Z,N);
      //System.out.println("boolean = " + b);
-     assertTrue("is ZR( { a,b,c } )", SolvableSyzygy.isLeftZeroRelation(Z,N) );
+     assertTrue("is ZR( { a,b,c } )", SolvableSyzygy.<BigRational>isLeftZeroRelation(Z,N) );
  }
 
 }
