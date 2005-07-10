@@ -1,5 +1,7 @@
 #
 # jython interface to jas.
+# $Id$
+#
 
 from java.lang import System
 from java.io import StringReader
@@ -7,34 +9,35 @@ from java.io import StringReader
 from org.apache.log4j import BasicConfigurator;
 #BasicConfigurator.configure();
 
-from edu.jas.arith  import *
-from edu.jas.poly   import *
-from edu.jas.ring   import *
-from edu.jas.module import *
-from edu.jas.util   import *
+from edu.jas.structure import *
+from edu.jas.arith     import *
+from edu.jas.poly      import *
+from edu.jas.ring      import *
+from edu.jas.module    import *
+from edu.jas.util      import *
 
 
 class Ring:
 
-    def __init__(self,str):
-        sr = StringReader( str );
-        tok = OrderedPolynomialTokenizer(sr);
+    def __init__(self,ringstr):
+        sr = StringReader( ringstr );
+        tok = GenPolynomialTokenizer(sr);
         self.pset = tok.nextPolynomialSet();
-        self.vars = self.pset.vars;
-        self.tord = self.pset.tord;
+        self.ring = self.pset.ring;
 
     def __str__(self):
-        return str(self.pset);
+        return str(self.ring);
+
 
 
 class Ideal:
 
-    def __init__(self,ring,str):
+    def __init__(self,ring,ringstr):
         self.ring = ring;
-        sr = StringReader( str );
-        tok = OrderedPolynomialTokenizer(ring.pset.vars,ring.pset.tord,sr);
+        sr = StringReader( ringstr );
+        tok = GenPolynomialTokenizer(ring.pset.ring,sr);
         self.list = tok.nextPolynomialList();
-        self.pset = OrderedPolynomialList(ring.pset.vars,ring.pset.tord,self.list);
+        self.pset = OrderedPolynomialList(ring.ring,self.list);
 
     def __str__(self):
         return str(self.pset);
@@ -43,64 +46,36 @@ class Ideal:
         s = self.pset;
         F = s.list;
         t = System.currentTimeMillis();
-        G = GroebnerBase.DIRPGB(F);
+        G = GroebnerBase.GB(F);
         t = System.currentTimeMillis() - t;
         print "executed in %s ms" % t; 
-        g = OrderedPolynomialList(s.vars,s.tord,G);
+        g = OrderedPolynomialList(s.ring,G);
         return g;
-
-    def parGB(self,thread=2):
-        s = self.pset;
-        F = s.list;
-        t = System.currentTimeMillis();
-        G = GroebnerBaseParallel.DIRPGB(F,thread);
-        t = System.currentTimeMillis() - t;
-        print "executed in %s ms" % t; 
-        g = OrderedPolynomialList(s.vars,s.tord,G);
-        return g;
-
-    def distGB(self,thread=2,machine="util/machines.localhost",port=7114):
-        s = self.pset;
-        F = s.list;
-        t = System.currentTimeMillis();
-        # G = GroebnerBaseDistributed.DIRPGB(F,thread);
-        G = GBDist().execute(F,thread,machine,port);
-        t = System.currentTimeMillis() - t;
-        print "executed in %s ms" % t; 
-        g = OrderedPolynomialList(s.vars,s.tord,G);
-        return g;
-
-    def distClient(self,port=8114):
-        s = self.pset;
-        es = ExecutableServer( port );
-        es.init();
-        return None;
+#        return Ideal(self.ring,str(g));
 
 
 
 
 class SolvableRing:
-    pset = None;
 
-    def __init__(self,str):
-        sr = StringReader( str );
-        tok = OrderedPolynomialTokenizer(sr);
+    def __init__(self,ringstr):
+        sr = StringReader( ringstr );
+        tok = GenPolynomialTokenizer(sr);
         self.pset = tok.nextSolvablePolynomialSet();
-        self.vars = self.pset.vars;
-        self.tord = self.pset.tord;
+        self.ring = self.pset.ring;
 
     def __str__(self):
-        return str(self.pset);
+        return str(self.ring);
 
 
 class SolvableIdeal:
 
-    def __init__(self,ring,str):
+    def __init__(self,ring,ringstr):
         self.ring = ring;
-        sr = StringReader( str );
-        tok = OrderedPolynomialTokenizer(ring.pset.vars,ring.pset.tord,sr,ring.pset.table);
+        sr = StringReader( ringstr );
+        tok = GenPolynomialTokenizer(ring.ring,sr);
         self.list = tok.nextSolvablePolynomialList();
-        self.pset = OrderedPolynomialList(ring.pset.vars,ring.pset.tord,self.list,ring.pset.table);
+        self.pset = OrderedPolynomialList(ring.ring,self.list);
 
     def __str__(self):
         return str(self.pset);
@@ -112,7 +87,7 @@ class SolvableIdeal:
         G = SolvableGroebnerBase.leftGB(F);
         t = System.currentTimeMillis() - t;
         print "executed in %s ms" % t; 
-        g = OrderedPolynomialList(s.vars,s.tord,G,s.table);
+        g = OrderedPolynomialList(s.ring,G);
         return g;
 
     def twosidedGB(self):
@@ -122,34 +97,36 @@ class SolvableIdeal:
         G = SolvableGroebnerBase.twosidedGB(F);
         t = System.currentTimeMillis() - t;
         print "executed in %s ms" % t; 
-        g = OrderedPolynomialList(s.vars,s.tord,G,s.table);
+        g = OrderedPolynomialList(s.ring,G);
         return g;
-
 
 
 
 class Module:
 
-    def __init__(self,str):
-        sr = StringReader( str );
-        tok = OrderedPolynomialTokenizer(sr);
+    def __init__(self,modstr):
+        sr = StringReader( modstr );
+        tok = GenPolynomialTokenizer(sr);
         self.mset = tok.nextSubModuleSet();
-        self.vars = self.mset.vars;
-        self.tord = self.mset.tord;
+        self.ring = self.mset.ring;
+        self.rows = self.mset.rows;
 
     def __str__(self):
+#        return "hi %s[%s]" % self.ring;
+#        return str(self.ring);
         return str(self.mset);
 
 
 class SubModule:
 
-    def __init__(self,module,str):
+    def __init__(self,module,modstr):
         self.module = module;
-        sr = StringReader( str );
-        tok = OrderedPolynomialTokenizer(module.mset.vars,module.mset.tord,sr);
+        sr = StringReader( modstr );
+        tok = GenPolynomialTokenizer(module.ring,sr);
         self.list = tok.nextSubModuleList();
-        self.mset = OrderedModuleList(module.mset.vars,module.mset.tord,self.list);
-        self.cols = self.mset.list[0].size();
+        self.mset = OrderedModuleList(module.ring,self.list);
+        self.cols = self.mset.cols;
+        self.cols = self.mset.cols;
         #print "cols = %s" % self.cols;
         self.pset = self.mset.getPolynomialList();
 
@@ -163,19 +140,20 @@ class SubModule:
         G = ModGroebnerBase.GB(self.cols,F);
         t = System.currentTimeMillis() - t;
         print "executed in %s ms" % t; 
-        self.pset = PolynomialList(s.vars,s.tord,G);
-        self.mset = ModuleList.getModuleList(self.cols,self.pset);
+        self.pset = PolynomialList(s.ring,G);
+        self.mset = self.pset.getModuleList(self.cols);
         return self;
+
 
 
 class SolvableModule:
 
-    def __init__(self,str):
-        sr = StringReader( str );
-        tok = OrderedPolynomialTokenizer(sr);
+    def __init__(self,modstr):
+        sr = StringReader( modstr );
+        tok = GenPolynomialTokenizer(sr);
         self.mset = tok.nextSolvableSubModuleSet();
-        self.vars = self.mset.vars;
-        self.tord = self.mset.tord;
+        self.ring = self.mset.ring;
+        self.rows = self.mset.rows;
 
     def __str__(self):
         return str(self.mset);
@@ -183,13 +161,13 @@ class SolvableModule:
 
 class SolvableSubModule:
 
-    def __init__(self,module,str):
+    def __init__(self,module,modstr):
         self.module = module;
-        sr = StringReader( str );
-        tok = OrderedPolynomialTokenizer(module.mset.vars,module.mset.tord,sr,module.mset.table);
+        sr = StringReader( modstr );
+        tok = GenPolynomialTokenizer(module.ring,sr);
         self.list = tok.nextSolvableSubModuleList();
-        self.mset = OrderedModuleList(module.mset.vars,module.mset.tord,self.list,module.mset.table);
-        self.cols = self.mset.list[0].size();
+        self.mset = OrderedModuleList(module.ring,self.list);
+        self.cols = self.mset.cols;
         #print "cols = %s" % self.cols;
         self.pset = self.mset.getPolynomialList();
 
@@ -203,6 +181,6 @@ class SolvableSubModule:
         G = ModSolvableGroebnerBase.leftGB(self.cols,F);
         t = System.currentTimeMillis() - t;
         print "executed in %s ms" % t; 
-        self.pset = PolynomialList(s.vars,s.tord,G);
-        self.mset = ModuleList.getModuleList(self.cols,self.pset);
+        self.pset = PolynomialList(s.ring,G);
+        self.mset = self.pset.getModuleList(self.cols);
         return self;
