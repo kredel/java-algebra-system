@@ -18,9 +18,6 @@ import org.apache.log4j.Logger;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
 
-import edu.jas.arith.BigInteger;
-import edu.jas.arith.BigRational;
-
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomialRing;
 
@@ -30,7 +27,8 @@ import edu.jas.poly.GenPolynomialRing;
  * @author Heinz Kredel
  */
 
-public class GenPolynomial<C extends RingElem<C> > implements RingElem< GenPolynomial<C> > {
+public class GenPolynomial<C extends RingElem<C> > 
+             implements RingElem< GenPolynomial<C> > {
 
     public final GenPolynomialRing< C > ring;
     protected final SortedMap<ExpVector,C> val;
@@ -51,16 +49,22 @@ public class GenPolynomial<C extends RingElem<C> > implements RingElem< GenPolyn
 
     public GenPolynomial(GenPolynomialRing< C > r, SortedMap<ExpVector,C> v) {
         this(r);
-        val.putAll( v );
+        val.putAll( v ); // assume no zero coefficients
     }
 
     public GenPolynomial(GenPolynomialRing< C > r, C c, ExpVector e) {
         this(r);
-        val.put(e,c);
+        if ( ! c.isZERO() ) {
+           val.put(e,c);
+        }
     }
 
+
+    /**
+     * Clone this GenPolynomial
+     */
     public GenPolynomial<C> clone() {
-        // return ring.copy(this);
+        //return ring.copy(this);
         return new GenPolynomial<C>(ring,this.val);
     }
 
@@ -69,16 +73,25 @@ public class GenPolynomial<C extends RingElem<C> > implements RingElem< GenPolyn
      * Methods of GenPolynomial
      */
 
+    /**
+     * Length = number of coefficients GenPolynomial
+     */
     public int length() { 
         return val.size(); 
     }
 
 
+    /**
+     * ExpVector to coefficient map of GenPolynomial
+     */
     public Map<ExpVector,C> getMap() { 
         return val; 
     }
 
 
+    /**
+     * String representation of GenPolynomial
+     */
     public String toString() {
         StringBuffer s = new StringBuffer( this.getClass().getSimpleName() + "[ " );
         boolean first = true;
@@ -97,6 +110,10 @@ public class GenPolynomial<C extends RingElem<C> > implements RingElem< GenPolyn
     }
 
 
+    /**
+     * String representation of GenPolynomial
+     * using names for variables from v
+     */
     public String toString(String[] v) {
         StringBuffer s = new StringBuffer( this.getClass().getSimpleName() + "[ " );
         if ( val.size() == 0 ) {
@@ -318,7 +335,7 @@ public class GenPolynomial<C extends RingElem<C> > implements RingElem< GenPolyn
                   nv.remove( e );
                }
             } else {
-               nv.put( e, y );
+               nv.put( e, y.negate() );
             }
         }
         return n;
@@ -408,8 +425,8 @@ public class GenPolynomial<C extends RingElem<C> > implements RingElem< GenPolyn
                 } else {
                     c0 = c0.add( c );
                     if ( ! c0.isZERO() ) {
-                       pv.put( e, c);
-                    } else { // should not happen in integral domains
+                       pv.put( e, c0 );
+                    } else { 
                         pv.remove( e );
                     }
                 }
@@ -442,6 +459,24 @@ public class GenPolynomial<C extends RingElem<C> > implements RingElem< GenPolyn
             pv.put( e1, c ); // or m1.setValue( c )
         }
         return p;
+    }
+
+
+    /**
+     * monic, i.e. ldcf = 1.
+     */
+
+    public GenPolynomial<C> monic() {
+        if ( this.isZERO() ) {
+            return this;
+        }
+        C lc = leadingBaseCoefficient();
+        if ( !lc.isUnit() ) {
+            //System.out.println("lc = "+lc);
+           return this;
+        }
+        C lm = lc.inverse();
+        return multiply(lm);
     }
 
 
@@ -503,17 +538,172 @@ public class GenPolynomial<C extends RingElem<C> > implements RingElem< GenPolyn
     }
 
 
+    /**
+     * Division with remainder.
+     */
+
+    public GenPolynomial<C>[] divideRemainder(GenPolynomial<C> S) {
+        if ( S == null || S.isZERO() ) {
+           throw new RuntimeException(this.getClass().getName()
+                                      + " division by zero");
+        }
+        C c = S.leadingBaseCoefficient();
+        if ( ! c.isUnit() ) {
+            logger.error("leadingBaseCoefficient not invertible " + c);
+            throw new RuntimeException(this.getClass().getName()
+                                        + " lbc not invertible " + c);
+        }
+        C ci = c.inverse();
+        ExpVector e = S.leadingExpVector();
+        //System.out.println("e = " + e);
+        GenPolynomial<C> h;
+        GenPolynomial<C> q = ring.getZERO().clone();
+        GenPolynomial<C> r = this.clone(); 
+        GenPolynomial<C> rx; 
+        while ( ! r.isZERO() ) {
+             ExpVector f = r.leadingExpVector();
+             //System.out.println("f = " + f);
+             if ( ExpVector.EVMT(f,e) ) {
+                 C a = r.leadingBaseCoefficient();
+		 f = ExpVector.EVDIF( f, e );
+                 //logger.info("red div = " + e);
+                 C ax = a;
+                 a = a.multiply( ci );
+                 q = q.add( a, f );
+                 h = S.multiply( a, f );
+                 rx = r;
+                 r = r.subtract( h );
+                 //if ( h.leadingExpVector().equals(r.leadingExpVector()) ) {
+                 //   logger.error("degree r not decreasing");
+                 //   throw new RuntimeException(this.getClass().getName()
+                 //                       + " degree r not decreasing");
+                 //}
+             } else {
+                 break;
+             }
+        }
+        //System.out.println("q = " + q + ", r = " +r);
+        GenPolynomial<C>[] ret = new GenPolynomial[2];
+        ret[0] = q;
+        ret[1] = r;
+        return ret;
+    }
+
+
     public GenPolynomial<C> divide(GenPolynomial<C> S) {
-        throw new RuntimeException(this.getClass().getName()
-                                   + " divide() not implemented");
-        //return S;
+        //throw new RuntimeException(this.getClass().getName()
+        //                           + " divide() not implemented");
+        return divideRemainder(S)[0];
     }
 
     public GenPolynomial<C> remainder(GenPolynomial<C> S) {
-        throw new RuntimeException(this.getClass().getName()
-                                   + " remainder() not implemented");
-        //return S;
+        if ( S == null || S.isZERO() ) {
+           throw new RuntimeException(this.getClass().getName()
+                                      + " division by zero");
+        }
+        C c = S.leadingBaseCoefficient();
+        if ( ! c.isUnit() ) {
+            logger.error("leadingBaseCoefficient not invertible " + c);
+            throw new RuntimeException(this.getClass().getName()
+                                        + " lbc not invertible " + c);
+        }
+        ExpVector e = S.leadingExpVector();
+        GenPolynomial<C> h;
+        GenPolynomial<C> r = this.clone(); 
+        while ( ! r.isZERO() ) {
+             ExpVector f = r.leadingExpVector();
+             if ( ExpVector.EVMT(f,e) ) {
+                 C a = r.leadingBaseCoefficient();
+		 f = ExpVector.EVDIF( f, e );
+                 //logger.info("red div = " + e);
+                 a = a.divide( c );
+                 h = S.multiply( a, f );
+                 r = r.subtract( h );
+             } else {
+                 break;
+             }
+        }
+        return r;
     }
+
+
+    public GenPolynomial<C> gcd(GenPolynomial<C> S) {
+        if ( S == null || S.isZERO() ) {
+            return this;
+        }
+        if ( this.isZERO() ) {
+            return S;
+        }
+        if ( ring.nvar != 1 ) {
+           logger.info("gcd only for univariate polynomials");
+           // keep going
+           return ring.getONE();
+        }
+        GenPolynomial<C> x;
+        GenPolynomial<C> q = this;
+        GenPolynomial<C> r = S;
+        while ( !r.isZERO() ) {
+            x = q.remainder(r);
+            q = r;
+            r = x;
+        }
+        return q.monic(); // normalize
+    }
+
+    public GenPolynomial<C>[] egcd(GenPolynomial<C> S) {
+        GenPolynomial<C>[] ret = new GenPolynomial[3];
+        ret[0] = null;
+        ret[1] = null;
+        ret[2] = null;
+        if ( S == null || S.isZERO() ) {
+           ret[0] = this;
+           return ret;
+        }
+        if ( this.isZERO() ) {
+           ret[0] = S;
+           return ret;
+        }
+        if ( ring.nvar != 1 ) {
+           logger.info("gcd only for univariate polynomials");
+           // keep going
+           ret[0] = ring.getONE();
+           return ret;
+        }
+        //System.out.println("this = " + this + ", S = " + S);
+        GenPolynomial<C>[] qr;
+        GenPolynomial<C> q = this; 
+        GenPolynomial<C> r = S;
+        GenPolynomial<C> c1 = ring.getONE().clone();
+        GenPolynomial<C> d1 = ring.getZERO().clone();
+        GenPolynomial<C> c2 = ring.getZERO().clone();
+        GenPolynomial<C> d2 = ring.getONE().clone();
+        GenPolynomial<C> x1;
+        GenPolynomial<C> x2;
+        while ( !r.isZERO() ) {
+            qr = q.divideRemainder(r);
+            q = qr[0];
+            x1 = c1.subtract( q.multiply(d1) );
+            x2 = c2.subtract( q.multiply(d2) );
+            c1 = d1; c2 = d2;
+            d1 = x1; d2 = x2;
+            q = r;
+            r = qr[1];
+        }
+        // normalize ldcf(q) to 1, i.e. make monic
+        C g = q.leadingBaseCoefficient();
+        if ( g.isUnit() ) {
+           C h = g.inverse();
+           q = q.multiply( h );
+           c1 = c1.multiply( h );
+           c2 = c2.multiply( h );
+        }        
+        //System.out.println("q = " + q + "\n c1 = " + c1 + "\n c2 = " + c2);
+        ret[0] = q; 
+        ret[1] = c1;
+        ret[2] = c2;
+        return ret;
+    }
+
 
     public GenPolynomial<C> inverse() {
         throw new RuntimeException(this.getClass().getName()
@@ -521,15 +711,128 @@ public class GenPolynomial<C extends RingElem<C> > implements RingElem< GenPolyn
         //return this;
     }
 
+    public GenPolynomial<C> modInverse(GenPolynomial<C> m) {
+        GenPolynomial<C>[] xegcd = this.egcd(m);
+        GenPolynomial<C> a = xegcd[0];
+        if ( !a.isUnit() ) {
+           throw new RuntimeException(this.getClass().getName()
+                                   + " not invertible");
+        }
+        a = xegcd[1];
+        if ( a.isZERO() ) { // why does this happen?
+           throw new RuntimeException(this.getClass().getName()
+                                   + " not invertible");
+        }
+        return a; 
+    }
+
+
+    public GenPolynomial<C> pseudoRemainder(GenPolynomial<C> S) {
+        if ( S == null || S.isZERO() ) {
+           throw new RuntimeException(this.getClass().getName()
+                                      + " division by zero");
+        }
+        C c = S.leadingBaseCoefficient();
+        ExpVector e = S.leadingExpVector();
+        GenPolynomial<C> h;
+        GenPolynomial<C> r = this.clone(); 
+        while ( ! r.isZERO() ) {
+             ExpVector f = r.leadingExpVector();
+             if ( ExpVector.EVMT(f,e) ) {
+                 C a = r.leadingBaseCoefficient();
+		 f = ExpVector.EVDIF( f, e );
+                 //logger.info("red div = " + e);
+                 r = r.multiply( c );
+                 h = S.multiply( a, f );
+                 r = r.subtract( h );
+             } else {
+                 break;
+             }
+        }
+        return r;
+    }
+
+    public GenPolynomial<C> pseudoGcd(GenPolynomial<C> S) {
+        if ( S == null || S.isZERO() ) {
+            return this;
+        }
+        if ( this.isZERO() ) {
+            return S;
+        }
+        if ( ring.nvar != 1 ) {
+           logger.info("gcd only for univariate polynomials");
+           // keep going
+           return ring.getONE();
+        }
+        GenPolynomial<C> x;
+        GenPolynomial<C> q = this;
+        GenPolynomial<C> r = S;
+        while ( !r.isZERO() ) {
+            x = q.pseudoRemainder(r);
+            q = r;
+            r = x;
+        }
+        return q; // p.primitivePart() //q.monic(); // normalize
+    }
+
+
     /**
      * Extend variables. Used e.g. in module embedding.
      * Extend all ExpVectors by i elements and multiply by x_j^k.
      */
+    public GenPolynomial<C> extend(GenPolynomialRing<C> pfac, int j, long k) {
+        //GenPolynomialRing<C> pfac = ring.extend(i);
+        GenPolynomial<C> Cp = pfac.getZERO().clone();
+        int i = pfac.nvar - ring.nvar;
+
+        if ( this.isZERO() ) return Cp;
+        Map<ExpVector,C> C = Cp.getMap();
+        Map<ExpVector,C> A = val;
+        for ( Map.Entry<ExpVector,C> y: A.entrySet() ) {
+            ExpVector e = y.getKey();
+            //System.out.println("e = " + e);
+            C a = y.getValue();
+            //System.out.println("a = " + a);
+            ExpVector f = e.extend(i,j,k);
+            //System.out.println("e = " + e + ", f = " + f);
+            C.put( f, a );
+        }
+        return Cp;
+    }
+
 
     /**
      * Contract variables. Used e.g. in module embedding.
      * remove i elements of each ExpVector.
      */
+    public Map<ExpVector,GenPolynomial<C>> contract(GenPolynomialRing<C> pfac) {
+        //GenPolynomialRing<C> pfac = ring.contract(i);
+        GenPolynomial<C> zero = pfac.getZERO();
+        int i = ring.nvar - pfac.nvar;
+
+        TermOrder t = new TermOrder( TermOrder.INVLEX );
+        Map<ExpVector,GenPolynomial<C>> B
+           = new TreeMap<ExpVector,GenPolynomial<C>>( t.getAscendComparator() );
+
+        if ( this.isZERO() ) return B;
+        Map<ExpVector,C> A = val;
+        for ( Map.Entry<ExpVector,C> y: A.entrySet() ) {
+            ExpVector e = y.getKey();
+            //System.out.println("e = " + e);
+            C a = y.getValue();
+            //System.out.println("a = " + a);
+            ExpVector f = e.contract(0,i);
+            ExpVector g = e.contract(i,e.length()-i);
+            //System.out.println("e = " + e + ", f = " + f + ", g = " + g );
+            GenPolynomial<C> p = B.get(f);
+            if ( p == null ) {
+                p = zero;
+            }
+            p = p.add( a, g );
+            B.put( f, p );
+        }
+        return B;
+    }
 
 
 }
