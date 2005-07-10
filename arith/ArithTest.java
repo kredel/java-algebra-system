@@ -5,23 +5,22 @@
 package edu.jas.arith;
 
 import edu.jas.structure.RingElem;
-import edu.jas.structure.FieldElem;
 
-//import edu.jas.arith.BigInteger;
-//import edu.jas.arith.BigRational;
-//import edu.jas.arith.BigComplex;
-//import edu.jas.arith.BigQuaternion;
+import edu.jas.arith.BigInteger;
+import edu.jas.arith.BigRational;
+import edu.jas.arith.BigComplex;
+import edu.jas.arith.BigQuaternion;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 /**
- * RingElem Test using JUnit 
+ * Arith Test using JUnit 
  * @author Heinz Kredel.
  */
 
-public class RingElemTest extends TestCase {
+public class ArithTest extends TestCase {
 
 /**
  * main
@@ -31,17 +30,17 @@ public class RingElemTest extends TestCase {
    }
 
 /**
- * Constructs a <CODE>RingElemTest</CODE> object.
+ * Constructs a <CODE>ArithTest</CODE> object.
  * @param name String
  */
-   public RingElemTest(String name) {
+   public ArithTest(String name) {
           super(name);
    }
 
 /**
  */ 
  public static Test suite() {
-     TestSuite suite= new TestSuite(RingElemTest.class);
+     TestSuite suite= new TestSuite(ArithTest.class);
      return suite;
    }
 
