@@ -1,11 +1,18 @@
 #
 # jython examples for jas.
+# $Id$
+#
 
 from jas import Ring
 from jas import Ideal
 
-# trinks 7 example
+# trinks 6/7 example
 
+#r = Ring( "Mod 19 (B,S,T,Z,P,W) L" );
+#r = Ring( "Mod 1152921504606846883 (B,S,T,Z,P,W) L" ); # 2^60-93
+#r = Ring( "Quat(B,S,T,Z,P,W) L" );
+#r = Ring( "Z(B,S,T,Z,P,W) L" );
+#r = Ring( "C(B,S,T,Z,P,W) L" );
 r = Ring( "Rat(B,S,T,Z,P,W) L" );
 print "Ring: " + str(r);
 print;
@@ -23,6 +30,9 @@ ps = """
 ) 
 """;
 
+# ( 10000 B**2 + 6600 B + 2673 )
+# ( B**2 + 33/50 B + 2673/10000 )
+
 f = Ideal( r, ps );
 print "Ideal: " + str(f);
 print;
@@ -32,9 +42,9 @@ print "seq Output:", rg;
 print;
 
 
-rg = f.parGB(2);
-print "par Output:", rg;
-print;
+#rg = f.parGB(2);
+#print "par Output:", rg;
+#print;
 
 
 # rg = f.distGB(2);
