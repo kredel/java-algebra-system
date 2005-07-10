@@ -133,7 +133,7 @@ public class BigComplex implements RingElem<BigComplex>,
 	int i = im.compareTo( BigRational.ZERO );
 	//logger.info("compareTo "+im+" ? 0 = "+i);
 	if ( i == 0 ) return s;
-	s += " i " + im;
+	s += "i" + im;
         return s;
     }
 
