@@ -16,6 +16,8 @@ import java.io.Serializable;
 
 import org.apache.log4j.Logger;
 
+import edu.jas.structure.RingElem;
+
 
 /**
  * RelationTable for solvable polynomials.
@@ -23,39 +25,91 @@ import org.apache.log4j.Logger;
  */
 
 
-public class RelationTable implements Serializable {
+public class RelationTable<C extends RingElem<C>> implements Serializable {
 
     private static Logger logger = Logger.getLogger(RelationTable.class);
 
-    //private final List table;
-    private final Map table;
-    private int numvar;
+    public final Map< List<Integer>, List > table;
+    public final GenSolvablePolynomialRing<C> ring;
+
 
     /**
-     * Constructors for RelationTable
+     * Constructors for RelationTable requires ring factory.
      */
 
-    public RelationTable() {
-        table = new HashMap();
-        numvar = -1;
+    public RelationTable(GenSolvablePolynomialRing<C> r) {
+        table = new HashMap< List<Integer>, List >();
+        ring = r;
+        if ( ring == null ) {
+           throw new IllegalArgumentException("RelationTable no ring");
+        }
     }
 
-    public int getNumvar() {
-        return numvar;
+
+    /**
+     * RelationTable equals.
+     * Tests same keySets only, not relations itself.
+     */
+
+    @Override
+    @SuppressWarnings("unchecked") // not jet working
+    public boolean equals(Object p) {
+        if ( ! (p instanceof RelationTable) ) {
+            System.out.println("no RelationTable");
+            return false;
+        }
+        RelationTable< C > tab = null;
+        try {
+            tab = (RelationTable< C >)p;
+        } catch (ClassCastException ignored) {
+        }
+        if ( tab == null ) {
+           return false;
+        }
+        if ( ! ring.equals( tab.ring ) ) {
+            System.out.println("not same Ring");
+            return false;
+        }
+        for ( List<Integer> k: table.keySet() ) { 
+            List a = table.get(k);
+            List b = tab.table.get(k);
+            if ( b == null ) {
+                return false;
+            }
+            // check contents, but only base relations
+            if ( ! a.equals(b) ) {
+                return false;
+            }
+        }
+        for ( List<Integer> k: tab.table.keySet() ) { 
+            List a = table.get(k);
+            List b = tab.table.get(k);
+            if ( a == null ) {
+               return false;
+            }
+            // check contents, but only base relations
+            if ( ! a.equals(b) ) {
+               return false;
+            }
+        }
+        return true;
     }
+
 
     public String toString() {
-        Object k, v;
+        List v;
         StringBuffer s = new StringBuffer("RelationTable[");
-        for (Iterator it = table.keySet().iterator(); it.hasNext(); ) { 
-            k = it.next();
+        boolean first = true;
+        for ( List<Integer> k: table.keySet() ) { 
+            if ( first ) {
+               first = false;
+            } else {
+               s.append( ", " );
+            }
             s.append( k.toString() );
             v = table.get( k );
             s.append("=");
             s.append( v.toString() );
-            if ( it.hasNext() ) {
-               s.append(",");
-            }
         }
         s.append("]");
         return s.toString();
@@ -66,24 +120,26 @@ public class RelationTable implements Serializable {
         if ( vars == null ) {
             return toString();
         }
-        Object k, v;
+        List v;
         StringBuffer s = new StringBuffer("RelationTable\n(\n");
-        for (Iterator it = table.keySet().iterator(); it.hasNext(); ) { 
-            k = it.next();
+        boolean first = true;
+        for ( List<Integer> k: table.keySet() ) { 
+            if ( first ) {
+               first = false;
+            } else {
+               s.append( ",\n" );
+            }
             v = table.get( k );
-            List l = (List)v;
-            for (Iterator jt = l.iterator(); jt.hasNext(); ) { 
+            for (Iterator jt = v.iterator(); jt.hasNext(); ) { 
                 ExpVectorPair ep = (ExpVectorPair)jt.next();
                 s.append("( " + ep.getFirst().toString(vars) + " ), " );
                 s.append("( " + ep.getSecond().toString(vars) + " ), " );
-                OrderedPolynomial p = (OrderedPolynomial)jt.next();
+                GenSolvablePolynomial<C> p 
+                  = (GenSolvablePolynomial<C>)jt.next();
                 s.append("( " + p.toString(vars) + " )" );
                 if ( jt.hasNext() ) {
                    s.append(",\n");
                 }
-            }
-            if ( it.hasNext() ) {
-               s.append(",\n");
             }
         }
         s.append("\n)");
@@ -91,20 +147,21 @@ public class RelationTable implements Serializable {
     }
 
 
-    public void update(ExpVector e, ExpVector f, OrderedPolynomial p) {
+    /**
+     * Update RelationTable with new relation.
+     * relation is e * f = p
+     */
+
+    public void update(ExpVector e, ExpVector f, GenSolvablePolynomial<C> p) {
         if ( logger.isDebugEnabled() ) {
             logger.info("new relation = " + e + " .*. " + f + " = " + p);
         }
-        if ( numvar < 0 ) {
-            numvar = e.length();
+        if ( p == null ) {
+           throw new IllegalArgumentException("RelationTable update p == null");
         }
-        if ( numvar != e.length() ) {
-            logger.info("relation = " + e + " .*. " + f + " = " + p);
-            throw new RuntimeException("update "+numvar+" != e.len "+e.length());
-        }
-        List key = makeKey(e,f);
+        List<Integer> key = makeKey(e,f);
         ExpVectorPair evp = new ExpVectorPair( e, f );
-        List part = (List)table.get( key );
+        List part = table.get( key );
         if ( part == null ) { // initialization only
            part = new LinkedList();
            part.add( evp );
@@ -131,29 +188,29 @@ public class RelationTable implements Serializable {
     }
 
 
-    public TableRelation lookup(ExpVector e, ExpVector f, OrderedPolynomial one) {
-        if ( numvar < 0 ) {
-            numvar = e.length();
-        }
-        if ( numvar != e.length() ) {
-            logger.info("lookup relation = " + e + " .*. " + f + ", " + one);
-            logger.info("relation = " + this);
-            throw new RuntimeException("update "+numvar+" != e.len "+e.length());
-        }
-        List key = makeKey(e,f);
-        List part = (List)table.get( key );
+    /**
+     * Lookup RelationTable for exiting relation.
+     * Find p with e * f = p.
+     * If no relation for e * f is contained in the table then
+     * return the symmetric product p = 1 e f. 
+     */
+
+    public TableRelation<C> lookup(ExpVector e, ExpVector f) {
+        List<Integer> key = makeKey(e,f);
+        List part = table.get( key );
         if ( part == null ) { // symmetric product
             ExpVector ef = ExpVector.EVSUM( e, f );
-            OrderedPolynomial p = (SolvablePolynomial)one.getONE().multiply( ef );
-            return new TableRelation(null,null,p);
+            GenSolvablePolynomial<C> p = ring.getONE().multiply( ef );
+            return new TableRelation<C>(null,null,p);
         }
         ExpVectorPair evp = new ExpVectorPair( e, f );
         ExpVector ep = null;
         ExpVector fp = null;
-        OrderedPolynomial p = null;
+        ExpVectorPair look = null;
+        GenSolvablePolynomial<C> p = null;
         for ( Iterator it = part.iterator(); it.hasNext(); ) {
-            ExpVectorPair look = (ExpVectorPair)it.next();
-            p = (OrderedPolynomial)it.next();
+            look = (ExpVectorPair)it.next();
+            p = (GenSolvablePolynomial<C>)it.next();
             if ( evp.isMultiple( look ) ) {
                 ep = e.dif( look.getFirst() );
                 fp = f.dif( look.getSecond() );
@@ -163,18 +220,21 @@ public class RelationTable implements Serializable {
                 if ( fp.isZERO() ) {
                     fp = null;
                 }
-                return new TableRelation(ep,fp,p);
+                return new TableRelation<C>(ep,fp,p);
             }
         }
         // unreacheable code!
-        return new TableRelation(ep,fp,p);
+        return new TableRelation<C>(ep,fp,p);
     }
 
 
-    private List makeKey(ExpVector e, ExpVector f) {
+    /**
+     * Construct a key for (e,f).
+     */
+    protected List<Integer> makeKey(ExpVector e, ExpVector f) {
         int[] de = e.dependencyOnVariables();
         int[] df = f.dependencyOnVariables();
-        List key = new ArrayList( de.length + df.length );
+        List<Integer> key = new ArrayList<Integer>( de.length + df.length );
         for (int i = 0; i < de.length; i++ ) {
             key.add( new Integer( de[i] ) );
         }
@@ -185,13 +245,16 @@ public class RelationTable implements Serializable {
     }
 
 
+    /**
+     * Size of the table, i.e. the number of non-commutative relations.
+     */
     public int size() {
         int s = 0;
         if ( table == null ) {
             return s;
         }
-        for ( Iterator it = table.values().iterator(); it.hasNext(); ) {
-            List list = (List)it.next();
+        for ( Iterator<List> it = table.values().iterator(); it.hasNext(); ) {
+            List list = it.next();
             s += list.size()/2;
         }
         return s;
@@ -203,30 +266,29 @@ public class RelationTable implements Serializable {
      * Extend all ExpVectors by i elements.
      */
 
-    public RelationTable extend(int i, String[] v) {  
-        RelationTable tab = new RelationTable();
-        if ( size() == 0 ) {
-            return tab;
+    public void extend(RelationTable<C> tab) {  
+        if ( tab.table.size() == 0 ) {
+            return;
         }
+        int i = ring.nvar - tab.ring.nvar;
         int j = 0;
         long k = 0l;
-        Object key, val;
-        for (Iterator it = table.keySet().iterator(); it.hasNext(); ) { 
-            key = it.next();
-            val = table.get( key );
-            List l = (List)val;
-            for (Iterator jt = l.iterator(); jt.hasNext(); ) { 
+        List val;
+        for ( List<Integer> key: tab.table.keySet() ) { 
+            val = tab.table.get( key );
+            for ( Iterator jt = val.iterator(); jt.hasNext(); ) { 
                 ExpVectorPair ep = (ExpVectorPair)jt.next();
                 ExpVector e = ep.getFirst();
                 ExpVector f = ep.getSecond();
-                OrderedMapPolynomial p = (OrderedMapPolynomial)jt.next();
-                ExpVector ex = e.extend(i,j,k);
-                ExpVector fx = f.extend(i,j,k);
-                OrderedPolynomial px = ((SolvableOrderedMapPolynomial)p).extend(i,j,k,v,tab);
-                tab.update( ex, fx, px );
+                GenSolvablePolynomial<C> p = (GenSolvablePolynomial<C>)jt.next();
+                ExpVector ex = e.extend(i,j,k); 
+                ExpVector fx = f.extend(i,j,k); 
+                GenSolvablePolynomial<C> px 
+                   = (GenSolvablePolynomial<C>)p.extend(ring,j,k);
+                this.update( ex, fx, px ); 
             }
         }
-        return tab;
+        return;
     }
 
 
@@ -234,37 +296,35 @@ public class RelationTable implements Serializable {
      * Contract variables. Used e.g. in module embedding.
      * remove i elements of each ExpVector.
      */
-
-    public RelationTable contract(int i) { 
-        RelationTable tab = new RelationTable();
-        if ( size() == 0 ) {
-            return tab;
+    public void contract(RelationTable<C> tab) { 
+        if ( tab.table.size() == 0 ) {
+            return;
         }
-        Object key, val;
-        for (Iterator it = table.keySet().iterator(); it.hasNext(); ) { 
-            key = it.next();
-            val = table.get( key );
-            List l = (List)val;
-            for (Iterator jt = l.iterator(); jt.hasNext(); ) { 
+        int i = tab.ring.nvar - ring.nvar;
+        List val;
+        for ( List<Integer> key: tab.table.keySet() ) { 
+            val = tab.table.get( key );
+            for (Iterator jt = val.iterator(); jt.hasNext(); ) { 
                 ExpVectorPair ep = (ExpVectorPair)jt.next();
                 ExpVector e = ep.getFirst();
                 ExpVector f = ep.getSecond();
-                OrderedMapPolynomial p = (OrderedMapPolynomial)jt.next();
-                ExpVector ec = e.contract(i,e.length()-i);
-                ExpVector fc = f.contract(i,f.length()-i);
-                Map mc = ((SolvableOrderedMapPolynomial)p).contract(i,tab);
-                OrderedPolynomial pc = null;
-                if ( mc.size() == 1 ) {
-                   pc = (OrderedPolynomial)(mc.values().toArray())[0];
-                } else {
-                   // should not happen
-                   logger.info("p = " + p);
-                   throw new RuntimeException("Map.size() != 1: " + mc.size());
+                GenSolvablePolynomial<C> p = (GenSolvablePolynomial<C>)jt.next();
+                ExpVector ec = e.contract(i,e.length()-i); 
+                ExpVector fc = f.contract(i,f.length()-i); 
+                Map<ExpVector,GenPolynomial<C>> mc = p.contract(ring);
+                GenSolvablePolynomial<C> pc = null;
+                for ( GenPolynomial<C> x : mc.values() ) {
+                    if ( pc != null ) {
+                       // should not happen 
+                       logger.info("p = " + p);
+                       throw new RuntimeException("Map.size() != 1: " + mc.size());
+                    }
+                    pc = (GenSolvablePolynomial<C>)x;
                 }
-                tab.update( ec, fc, pc );
+                this.update( ec, fc, pc );
             }
         }
-        return tab;
+        return;
     }
 
 }
@@ -277,13 +337,14 @@ public class RelationTable implements Serializable {
  * @author Heinz Kredel
  */
 
-class TableRelation implements Serializable {
+class TableRelation<C extends RingElem<C>> implements Serializable {
 
     public final ExpVector e;
     public final ExpVector f;
-    public final OrderedPolynomial p;
+    public final GenSolvablePolynomial<C> p;
 
-    public TableRelation(ExpVector e, ExpVector f, OrderedPolynomial p) {
+    public TableRelation(ExpVector e, ExpVector f, 
+                         GenSolvablePolynomial<C> p) {
         this.e = e;
         this.f = f;
         this.p = p;

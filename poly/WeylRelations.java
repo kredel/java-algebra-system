@@ -4,10 +4,8 @@
 
 package edu.jas.poly;
 
-//import edu.jas.poly.WeylRelations;
-
 import edu.jas.arith.BigRational;
-import edu.jas.arith.Coefficient;
+import edu.jas.structure.RingElem;
 
 import org.apache.log4j.Logger;
 
@@ -17,53 +15,40 @@ import org.apache.log4j.Logger;
  * @author Heinz Kredel.
  */
 
-public class WeylRelations {
+public class WeylRelations<C extends RingElem<C>> {
 
     private static Logger logger = Logger.getLogger(WeylRelations.class);
 
-    public RelationTable nogenerate(int r) {
-        RelationTable table = new RelationTable();
-        if ( r <= 1 || (r % 2) != 0 ) {
-           throw new IllegalArgumentException("WeylRelations, wrong r = "+r);
+    private final GenSolvablePolynomialRing<C> ring;
+
+    public WeylRelations(GenSolvablePolynomialRing<C> r) {
+        if ( r == null ) {
+           throw new IllegalArgumentException("WeylRelations, ring == null");
         }
-        int m = r / 2;
-        ExpVector z = new ExpVector(r);
-        Coefficient one = BigRational.ONE;
-        OrderedPolynomial a = new RatSolvableOrderedMapPolynomial(table,one,z);
-        for ( int i = m; i < r; i++ ) {
-            ExpVector f = new ExpVector(r,i,1); 
-            int j = i - m;
-            ExpVector e = new ExpVector(r,j,1);
-            ExpVector ef = ExpVector.EVSUM(e,f);
-            OrderedPolynomial b = new RatSolvableOrderedMapPolynomial(table,one,ef);
-            OrderedPolynomial rel = a.add(b);
-            table.update(e,f,rel);
+        ring = r;
+        if ( ring.nvar <= 1 || (ring.nvar % 2) != 0 ) {
+           throw new IllegalArgumentException("WeylRelations, wrong nvar = "
+                                              + ring.nvar);
         }
-        if ( logger.isDebugEnabled() ) {
-           logger.debug("\nWeyl relations = " + table);
-        }
-        return table;
     }
 
-    public RelationTable generate(int r, SolvablePolynomial ref) {
-        RelationTable table = new RelationTable();
-        if ( r <= 1 || (r % 2) != 0 ) {
-           throw new IllegalArgumentException("WeylRelations, wrong r = "+r);
-        }
-        int m = r / 2;
-        ExpVector z = new ExpVector(r);
-        SolvablePolynomial one = ref.getONE(table);
-        SolvablePolynomial zero = ref.getZERO(table);
-        // Coefficient one = a.leadingBaseCoefficient();
+    public void generate() {
+        RelationTable<C> table = ring.table;
+        int r = ring.nvar;
+        int m =  r / 2;
+        ExpVector z = ring.evzero;
+        GenSolvablePolynomial<C> one = ring.getONE().clone();
+        GenSolvablePolynomial<C> zero = ring.getZERO().clone();
         for ( int i = m; i < r; i++ ) {
             ExpVector f = new ExpVector(r,i,1); 
             int j = i - m;
             ExpVector e = new ExpVector(r,j,1);
             ExpVector ef = ExpVector.EVSUM(e,f);
-            SolvablePolynomial b = (SolvablePolynomial)one.multiply(ef);
-            SolvablePolynomial rel = (SolvablePolynomial)one.add(b);
+            GenSolvablePolynomial<C> b = one.multiply(ef);
+            GenSolvablePolynomial<C> rel 
+               = (GenSolvablePolynomial<C>)one.add(b);
             if ( rel.isZERO() ) {
-               logger.info("ref  = " + ref);
+               logger.info("ring = " + ring);
                logger.info("one  = " + one);
                logger.info("zero = " + zero);
                logger.info("b    = " + b);
@@ -75,7 +60,7 @@ public class WeylRelations {
         if ( logger.isDebugEnabled() ) {
            logger.debug("\nWeyl relations = " + table);
         }
-        return table;
+        return;
     }
 
 }

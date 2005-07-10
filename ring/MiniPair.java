@@ -11,17 +11,18 @@ import java.io.Serializable;
      * What is this class good for?
      */
 
-    class MiniPair implements Serializable {
-	public final Integer i;
-	public final Integer j;
+class MiniPair implements Serializable {
 
-	MiniPair(int i, int j) {
+      public final Integer i;
+      public final Integer j;
+
+      MiniPair(int i, int j) {
             this.i = new Integer(i); 
             this.j = new Integer(j);
-	}
+      }
 
-	public String toString() {
-	    return "miniPair(" + i + "," + j + ")";
-	}
+      public String toString() {
+	   return "miniPair(" + i + "," + j + ")";
+      }
 
-    }
+}

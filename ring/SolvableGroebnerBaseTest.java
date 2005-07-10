@@ -16,9 +16,20 @@ import junit.framework.TestSuite;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
-import edu.jas.poly.RatSolvableOrderedMapPolynomial;
-import edu.jas.poly.OrderedPolynomial;
-import edu.jas.poly.SolvablePolynomial;
+import edu.jas.structure.RingElem;
+
+import edu.jas.arith.BigRational;
+
+import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.PolynomialList;
+import edu.jas.poly.ExpVector;
+import edu.jas.poly.TermOrder;
+
+import edu.jas.ring.Reduction;
+//import edu.jas.ring.GroebnerBase;
+
+import edu.jas.poly.GenSolvablePolynomial;
+import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.PolynomialList;
 import edu.jas.poly.RelationTable;
 import edu.jas.poly.WeylRelations;
@@ -58,36 +69,51 @@ public class SolvableGroebnerBaseTest extends TestCase {
    int port = 4711;
    String host = "localhost";
 
-   RelationTable table;
+   GenSolvablePolynomial<BigRational> a;
+   GenSolvablePolynomial<BigRational> b;
+   GenSolvablePolynomial<BigRational> c;
+   GenSolvablePolynomial<BigRational> d;
+   GenSolvablePolynomial<BigRational> e;
 
-   SolvablePolynomial dummy;
-   SolvablePolynomial a;
-   SolvablePolynomial b;
-   SolvablePolynomial c;
-   SolvablePolynomial d;
-   SolvablePolynomial e;
+   List<GenSolvablePolynomial<BigRational>> L;
+   PolynomialList<BigRational> F;
+   PolynomialList<BigRational> G;
 
-   List L;
-   PolynomialList F;
-   PolynomialList G;
+   GenSolvablePolynomialRing<BigRational> ring;
+
+   BigRational cfac;
+   String[] vars;
+   TermOrder tord;
+   RelationTable<BigRational> table;
 
    int rl = 4; //4; //3; 
    int kl = 10;
-   int ll = 3;
+   int ll = 4;
    int el = 2;
-   float q = 0.2f; //0.4f
+   float q = 0.3f; //0.4f
 
    protected void setUp() {
-       table = new RelationTable();
-       a = RatSolvableOrderedMapPolynomial.DIRRAS(table,rl, kl, ll, el, q );
-       b = RatSolvableOrderedMapPolynomial.DIRRAS(table,rl, kl, ll, el, q );
-       c = RatSolvableOrderedMapPolynomial.DIRRAS(table,rl, kl, ll, el, q );
-       d = RatSolvableOrderedMapPolynomial.DIRRAS(table,rl, kl, ll, el, q );
-       e = d; //RatSolvableOrderedMapPolynomial.DIRRAS(table,rl, kl, ll, el, q );
+       cfac = new BigRational(9);
+       vars = ExpVector.STDVARS( rl );
+       tord = new TermOrder();
+       ring = new GenSolvablePolynomialRing<BigRational>(cfac,rl,tord,vars);
+       table = ring.table;
+       a = b = c = d = e = null;
+
+       a = ring.random(kl, ll, el, q );
+       b = ring.random(kl, ll, el, q );
+       c = ring.random(kl, ll, el, q );
+       d = ring.random(kl, ll, el, q );
+       e = d; //ring.random(kl, ll, el, q );
    }
 
    protected void tearDown() {
        a = b = c = d = e = null;
+       ring = null;
+       vars = null;
+       tord = null;
+       table = null;
+       cfac = null;
    }
 
 
@@ -99,7 +125,7 @@ public class SolvableGroebnerBaseTest extends TestCase {
 
      assertTrue("not isZERO( a )", !a.isZERO() );
 
-     L = new ArrayList();
+     L = new ArrayList<GenSolvablePolynomial<BigRational>>();
      L.add(a);
 
      L = SolvableGroebnerBase.leftGB( L );
@@ -138,19 +164,22 @@ public class SolvableGroebnerBaseTest extends TestCase {
  */
  public void testWeylSequentialGBase() {
 
-     dummy = RatSolvableOrderedMapPolynomial.DIRRAS(table/*null*/,rl, kl, ll, el, q );
-     table = (new WeylRelations()).generate(rl,dummy);
-     dummy = null;
+     int rloc = 4;
+     ring = new GenSolvablePolynomialRing<BigRational>(cfac,rloc);
 
-     a = RatSolvableOrderedMapPolynomial.DIRRAS(table,rl, kl, ll, el, q );
-     b = RatSolvableOrderedMapPolynomial.DIRRAS(table,rl, kl, ll, el, q );
-     c = RatSolvableOrderedMapPolynomial.DIRRAS(table,rl, kl, ll, el, q );
-     d = RatSolvableOrderedMapPolynomial.DIRRAS(table,rl, kl, ll, el, q );
-     e = d; //RatSolvableOrderedMapPolynomial.DIRRAS(table,rl, kl, ll, el, q );
+     WeylRelations<BigRational> wl = new WeylRelations<BigRational>(ring);
+     wl.generate();
+     table = ring.table;
+
+     a = ring.random(kl, ll, el, q );
+     b = ring.random(kl, ll, el, q );
+     c = ring.random(kl, ll, el, q );
+     d = ring.random(kl, ll, el, q );
+     e = d; //ring.random(kl, ll, el, q );
 
      assertTrue("not isZERO( a )", !a.isZERO() );
 
-     L = new ArrayList();
+     L = new ArrayList<GenSolvablePolynomial<BigRational>>();
      L.add(a);
 
      L = SolvableGroebnerBase.leftGB( L );
@@ -191,7 +220,7 @@ public class SolvableGroebnerBaseTest extends TestCase {
 
      assertTrue("not isZERO( a )", !a.isZERO() );
 
-     L = new ArrayList();
+     L = new ArrayList<GenSolvablePolynomial<BigRational>>();
      L.add(a);
 
      L = SolvableGroebnerBase.twosidedGB( L );
@@ -231,28 +260,31 @@ public class SolvableGroebnerBaseTest extends TestCase {
 
 /**
  * Test Weyl sequential twosided GBase
- * 
+ * is always 1
  */
  public void testWeylSequentialTSGBase() {
 
-     dummy = RatSolvableOrderedMapPolynomial.DIRRAS(table/*null*/,rl, kl, ll, el, q );
-     table = (new WeylRelations()).generate(rl,dummy);
-     dummy = null;
+     int rloc = 4;
+     ring = new GenSolvablePolynomialRing<BigRational>(cfac,rloc);
 
-     a = RatSolvableOrderedMapPolynomial.DIRRAS(table,rl, kl, ll, el, q );
-     b = RatSolvableOrderedMapPolynomial.DIRRAS(table,rl, kl, ll, el, q );
-     c = RatSolvableOrderedMapPolynomial.DIRRAS(table,rl, kl, ll, el, q );
-     d = RatSolvableOrderedMapPolynomial.DIRRAS(table,rl, kl, ll, el, q );
-     e = d; //RatSolvableOrderedMapPolynomial.DIRRAS(table,rl, kl, ll, el, q );
+     WeylRelations<BigRational> wl = new WeylRelations<BigRational>(ring);
+     wl.generate();
+     table = ring.table;
 
+     a = ring.random(kl, ll, el, q );
+     b = ring.random(kl, ll, el, q );
+     c = ring.random(kl, ll, el, q );
+     d = ring.random(kl, ll, el, q );
+     e = d; //ring.random(kl, ll, el, q );
 
      assertTrue("not isZERO( a )", !a.isZERO() );
 
-     L = new ArrayList();
+     L = new ArrayList<GenSolvablePolynomial<BigRational>>();
      L.add(a);
 
+     //System.out.println("La = " + L );
      L = SolvableGroebnerBase.twosidedGB( L );
-     //System.out.println("L = " + L.size() );
+     //System.out.println("L = " + L );
      assertTrue("isTwosidedGB( { a } )", SolvableGroebnerBase.isTwosidedGB(L) );
 
      assertTrue("not isZERO( b )", !b.isZERO() );
@@ -266,21 +298,21 @@ public class SolvableGroebnerBaseTest extends TestCase {
      L.add(c);
 
      L = SolvableGroebnerBase.twosidedGB( L );
-     //System.out.println("L = " + L.size() );
+     //System.out.println("L = " + L );
      assertTrue("isTwosidedGB( { a, b, c } )", SolvableGroebnerBase.isTwosidedGB(L) );
 
      assertTrue("not isZERO( d )", !d.isZERO() );
      L.add(d);
 
      L = SolvableGroebnerBase.twosidedGB( L );
-     //System.out.println("L = " + L.size() );
+     //System.out.println("L = " + L );
      assertTrue("isTwosidedGB( { a, b, c, d } )", SolvableGroebnerBase.isTwosidedGB(L) );
 
      assertTrue("not isZERO( e )", !e.isZERO() );
      L.add(e);
 
      L = SolvableGroebnerBase.twosidedGB( L );
-     //System.out.println("L = " + L.size() );
+     //System.out.println("L = " + L );
      assertTrue("isTwosidedGB( { a, b, c, d, e } )", SolvableGroebnerBase.isTwosidedGB(L) );
  }
 

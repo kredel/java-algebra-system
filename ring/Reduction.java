@@ -13,11 +13,14 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import edu.jas.arith.Coefficient;
+import edu.jas.structure.RingElem;
+
 import edu.jas.poly.ExpVector;
-import edu.jas.poly.OrderedPolynomial;
-import edu.jas.poly.SolvablePolynomial;
-import edu.jas.util.DistHashTable;
+import edu.jas.poly.GenPolynomial;
+
+import edu.jas.poly.GenSolvablePolynomial;
+
+//import edu.jas.util.DistHashTable;
 
 
 /**
@@ -35,35 +38,36 @@ public class Reduction  {
      * S-Polynomial
      */
 
-    public static OrderedPolynomial SPolynomial(OrderedPolynomial Ap, 
-                                                OrderedPolynomial Bp) {  
+    public static <C extends RingElem<C>> 
+        GenPolynomial<C> SPolynomial(GenPolynomial<C> Ap, 
+                                     GenPolynomial<C> Bp) {  
         if ( logger.isInfoEnabled() ) {
 	   if ( Bp == null || Bp.isZERO() ) {
-              return Ap; // wrong zero
+              return Ap.ring.getZERO(); 
 	   }
 	   if ( Ap == null || Ap.isZERO() ) {
-	      return (OrderedPolynomial) Bp.negate(); // wrong zero
+              return Bp.ring.getZERO(); 
 	   }
-           if ( ! Ap.getTermOrder().equals( Bp.getTermOrder() ) ) { 
-              logger.error("term orderings not equal"); 
+           if ( ! Ap.ring.equals( Bp.ring ) ) { 
+              logger.error("rings not equal"); 
            }
 	}
-        Map.Entry ma = Ap.leadingMonomial();
-        Map.Entry mb = Bp.leadingMonomial();
+        Map.Entry<ExpVector,C> ma = Ap.leadingMonomial();
+        Map.Entry<ExpVector,C> mb = Bp.leadingMonomial();
 
-        ExpVector e = (ExpVector) ma.getKey();
-        ExpVector f = (ExpVector) mb.getKey();
+        ExpVector e = ma.getKey();
+        ExpVector f = mb.getKey();
 
         ExpVector g  = ExpVector.EVLCM(e,f);
         ExpVector e1 = ExpVector.EVDIF(g,e);
         ExpVector f1 = ExpVector.EVDIF(g,f);
 
-        Coefficient a = (Coefficient) ma.getValue();
-        Coefficient b = (Coefficient) mb.getValue();
+        C a = ma.getValue();
+        C b = mb.getValue();
 
-        OrderedPolynomial App = Ap.multiply( b, e1 );
-        OrderedPolynomial Bpp = Bp.multiply( a, f1 );
-        OrderedPolynomial Cp = App.subtract(Bpp);
+        GenPolynomial<C> App = Ap.multiply( b, e1 );
+        GenPolynomial<C> Bpp = Bp.multiply( a, f1 );
+        GenPolynomial<C> Cp = App.subtract(Bpp);
         return Cp;
     }
 
@@ -72,37 +76,46 @@ public class Reduction  {
      * Left S-Polynomial
      */
 
-    public static SolvablePolynomial leftSPolynomial(SolvablePolynomial Ap, 
-                                                     SolvablePolynomial Bp) {  
+    public static <C extends RingElem<C>>
+           GenSolvablePolynomial<C> 
+           leftSPolynomial(GenSolvablePolynomial<C> Ap, 
+                           GenSolvablePolynomial<C> Bp) {  
         if ( logger.isInfoEnabled() ) {
 	   if ( Bp == null || Bp.isZERO() ) {
-	      return Ap; // wrong zero
+               if ( Ap != null ) {
+                  return Ap.ring.getZERO(); 
+               } else {
+                  return null;
+               }
 	   }
 	   if ( Ap == null || Ap.isZERO() ) {
-	      return (SolvablePolynomial)Bp.negate(); // wrong zero
+              return Bp.ring.getZERO(); 
 	   }
-           if ( ! Ap.getTermOrder().equals( Bp.getTermOrder() ) ) { 
-              logger.error("term orderings not equal"); 
+           if ( ! Ap.ring.equals( Bp.ring ) ) { 
+              logger.error("rings not equal"); 
            }
 	}
-        Map.Entry ma = Ap.leadingMonomial();
-        Map.Entry mb = Bp.leadingMonomial();
+        Map.Entry<ExpVector,C> ma 
+            = Ap.leadingMonomial();
+        Map.Entry<ExpVector,C> mb 
+            = Bp.leadingMonomial();
 
-        ExpVector e = (ExpVector) ma.getKey();
-        ExpVector f = (ExpVector) mb.getKey();
+        ExpVector e = ma.getKey();
+        ExpVector f = mb.getKey();
 
         ExpVector g = ExpVector.EVLCM(e,f);
         ExpVector e1 = ExpVector.EVDIF(g,e);
         ExpVector f1 = ExpVector.EVDIF(g,f);
 
-        Coefficient a = (Coefficient) ma.getValue();
-        Coefficient b = (Coefficient) mb.getValue();
+        C a = ma.getValue();
+        C b = mb.getValue();
 
-        SolvablePolynomial App = Ap.multiplyLeft( b, e1 );
-        SolvablePolynomial Bpp = Bp.multiplyLeft( a, f1 );
-        SolvablePolynomial Cp = (SolvablePolynomial) App.subtract(Bpp);
+        GenSolvablePolynomial<C> App = Ap.multiplyLeft( b, e1 );
+        GenSolvablePolynomial<C> Bpp = Bp.multiplyLeft( a, f1 );
+        GenSolvablePolynomial<C> Cp = (GenSolvablePolynomial<C>) App.subtract(Bpp);
         return Cp;
     }
+
 
 
     /**
@@ -110,9 +123,10 @@ public class Reduction  {
      * @return true if the module S-polynomial(i,j) is required.
      */
 
-    public static boolean ModuleCriterion(int modv, 
-                                          OrderedPolynomial A, 
-                                          OrderedPolynomial B) {  
+    public static <C extends RingElem<C>> 
+           boolean ModuleCriterion(int modv, 
+                                   GenPolynomial<C> A, 
+                                   GenPolynomial<C> B) {  
         if ( modv == 0 ) {
             return true;
         }
@@ -131,15 +145,16 @@ public class Reduction  {
      * @return true if the S-polynomial(i,j) is required.
      */
 
-    public static boolean GBCriterion4(OrderedPolynomial A, 
-                                       OrderedPolynomial B, 
-                                       ExpVector e) {  
+    public static <C extends RingElem<C>> 
+           boolean GBCriterion4(GenPolynomial<C> A, 
+                                GenPolynomial<C> B, 
+                                ExpVector e) {  
         if ( logger.isInfoEnabled() ) {
-           if ( ! A.getTermOrder().equals( B.getTermOrder() ) ) { 
-              logger.error("term orderings not equal"); 
+           if ( ! A.ring.equals( B.ring ) ) { 
+              logger.error("rings equal"); 
            }
-           if (   A instanceof SolvablePolynomial
-               || B instanceof SolvablePolynomial ) {
+           if (   A instanceof GenSolvablePolynomial
+               || B instanceof GenSolvablePolynomial ) {
               logger.error("GBCriterion4 not applicabable to SolvablePolynomials"); 
               return true;
            }
@@ -159,12 +174,15 @@ public class Reduction  {
      * @return true if the S-polynomial(i,j) is required.
      */
 
-    public static boolean GBCriterion4(OrderedPolynomial A, 
-                                       OrderedPolynomial B) {  
-        if (   A instanceof SolvablePolynomial
-            || B instanceof SolvablePolynomial ) {
-            logger.error("GBCriterion4 not applicabable to SolvablePolynomials"); 
-            return true;
+    public static <C extends RingElem<C>> 
+           boolean GBCriterion4(GenPolynomial<C> A, 
+                                GenPolynomial<C> B) {  
+        if ( logger.isInfoEnabled() ) {
+           if (   A instanceof GenSolvablePolynomial
+               || B instanceof GenSolvablePolynomial ) {
+               logger.error("GBCriterion4 not applicabable to SolvablePolynomials"); 
+               return true;
+           }
         }
         ExpVector ei = A.leadingExpVector();
         ExpVector ej = B.leadingExpVector();
@@ -181,44 +199,53 @@ public class Reduction  {
      * Normalform.
      */
 
-    public static OrderedPolynomial normalform(List Pp, 
-                                               OrderedPolynomial Ap) {  
-        if ( Pp == null ) return Ap;
-        if ( Pp.isEmpty() ) return Ap;
-        int i;
+    @SuppressWarnings("unchecked") // not jet working
+    public static <C extends RingElem<C>> 
+           GenPolynomial<C> normalform(List<GenPolynomial<C>> Pp, 
+                                       GenPolynomial<C> Ap) {  
+        if ( Pp == null || Pp.isEmpty() ) {
+           return Ap;
+        }
+        if ( Ap == null || Ap.isZERO() ) {
+           return Ap;
+        }
+        Map.Entry<ExpVector,C> m;
         int l = Pp.size();
-        Map.Entry m;
-        Object[] P;
+        GenPolynomial<C>[] P = new GenPolynomial[l];
         synchronized (Pp) {
-           P = Pp.toArray();
+            //P = Pp.toArray();
+            for ( int i = 0; i < Pp.size(); i++ ) {
+                P[i] = Pp.get(i);
+            }
 	}
         ExpVector[] htl = new ExpVector[ l ];
-        Coefficient[] lbc = new Coefficient[ l ];
-        OrderedPolynomial[] p = new OrderedPolynomial[ l ];
+        Object[] lbc = new Object[ l ]; // want <C>
+        GenPolynomial<C>[] p = new GenPolynomial[ l ];
+        int i;
 	int j = 0;
         for ( i = 0; i < l; i++ ) { 
-            p[i] = (OrderedPolynomial) P[i];
+            p[i] = P[i];
             m = p[i].leadingMonomial();
 	    if ( m != null ) { 
                p[j] = p[i];
-               htl[j] = (ExpVector) m.getKey();
-               lbc[j] = (Coefficient) m.getValue();
+               htl[j] = m.getKey();
+               lbc[j] = m.getValue();
 	       j++;
 	    }
 	}
 	l = j;
         ExpVector e;
-        Coefficient a;
+        C a;
         boolean mt = false;
-        OrderedPolynomial R = Ap.getZERO( Ap.getTermOrder() );
+        GenPolynomial<C> R = Ap.ring.getZERO();
 
-        OrderedPolynomial T = null;
-        OrderedPolynomial Q = null;
-        OrderedPolynomial S = Ap;
+        GenPolynomial<C> T = null;
+        GenPolynomial<C> Q = null;
+        GenPolynomial<C> S = Ap;
         while ( S.length() > 0 ) { 
 	      m = S.leadingMonomial();
-              e = (ExpVector) m.getKey();
-              a = (Coefficient) m.getValue();
+              e = m.getKey();
+              a = m.getValue();
               for ( i = 0; i < l; i++ ) {
                   mt = ExpVector.EVMT( e, htl[i] );
                   if ( mt ) break; 
@@ -232,7 +259,7 @@ public class Reduction  {
 	      } else { 
 		 e = ExpVector.EVDIF( e, htl[i] );
                  //logger.info("red div = " + e);
-                 a = a.divide( lbc[i] );
+                 a = a.divide( (C)lbc[i] );
                  Q = p[i].multiply( a, e );
                  S = S.subtract( Q );
               }
@@ -242,218 +269,40 @@ public class Reduction  {
 
 
     /**
-     * Left Normalform.
+     * Normalform Set.
      */
 
-    public static SolvablePolynomial leftNormalform(List Pp, 
-                                                    SolvablePolynomial Ap) {  
-        if ( Pp == null ) return Ap;
-        if ( Pp.isEmpty() ) return Ap;
-        int i;
-        int l = Pp.size();
-        Map.Entry m;
-        Object[] P;
-        synchronized (Pp) {
-           P = Pp.toArray();
-	}
-        ExpVector[] htl = new ExpVector[ l ];
-        Coefficient[] lbc = new Coefficient[ l ];
-        SolvablePolynomial[] p = new SolvablePolynomial[ l ];
-	int j = 0;
-        for ( i = 0; i < l; i++ ) { 
-            p[i] = (SolvablePolynomial) P[i];
-            m = p[i].leadingMonomial();
-	    if ( m != null ) { 
-               p[j] = p[i];
-               htl[j] = (ExpVector) m.getKey();
-               lbc[j] = (Coefficient) m.getValue();
-	       j++;
-	    }
-	}
-	l = j;
-        ExpVector e;
-        Coefficient a;
-        boolean mt = false;
-        SolvablePolynomial R = Ap.getZERO( Ap.getRelationTable(), Ap.getTermOrder() );
-
-        SolvablePolynomial T = null;
-        SolvablePolynomial Q = null;
-        SolvablePolynomial S = Ap;
-        while ( S.length() > 0 ) { 
-	      m = S.leadingMonomial();
-              e = (ExpVector) m.getKey();
-              //logger.info("red = " + e);
-              a = (Coefficient) m.getValue();
-              for ( i = 0; i < l; i++ ) {
-                  mt = ExpVector.EVMT( e, htl[i] );
-                  if ( mt ) break; 
-	      }
-              if ( ! mt ) { 
-                 //logger.debug("irred");
-                 //T = new OrderedMapPolynomial( a, e );
-                 R = (SolvablePolynomial)R.add( a, e );
-                 S = (SolvablePolynomial)S.subtract( a, e ); 
-		 // System.out.println(" S = " + S);
-	      } else { 
-                 //logger.debug("red");
-		 e = ExpVector.EVDIF( e, htl[i] );
-                 a = a.divide( lbc[i] );
-                 Q = p[i].multiplyLeft( a, e );
-                 S = (SolvablePolynomial)S.subtract( Q );
-              }
-	}
-        return R;
-    }
-
-
-    /**
-     * Normalform. Allows concurrent modification of the list.
-     */
-
-    public static OrderedPolynomial normalformMod(/*Array*/List Pp, 
-                                                  OrderedPolynomial Ap) {  
-        if ( Pp == null ) return Ap;
-        if ( Pp.isEmpty() ) return Ap;
-        int l = Pp.size();
-        Map.Entry m;
-        Map.Entry m1;
-        Object[] P = Pp.toArray();
-        Iterator it;
-        ExpVector e;
-        ExpVector f = null;
-        Coefficient a;
-        boolean mt = false;
-
-        OrderedPolynomial Rz = Ap.getZERO( Ap.getTermOrder() );
-        OrderedPolynomial R = Rz;
-        OrderedPolynomial p = null;
-        // OrderedPolynomial T = null;
-        OrderedPolynomial Q = null;
-        OrderedPolynomial S = Ap;
-        while ( S.length() > 0 ) { 
-              if ( Pp.size() != l ) { 
-                 //long t = System.currentTimeMillis();
-                 synchronized (Pp) { // required, bad in parallel
-                    P = Pp.toArray();
-                 }
-                 l = P.length;
-                 //t = System.currentTimeMillis()-t;
-                 //logger.info("Pp.toArray() = " + t + " ms, size() = " + l);
-                 S = Ap; // S.add(R)? // restart reduction ?
-                 R = Rz; 
-              }
-	      m = S.leadingMonomial();
-              e = (ExpVector) m.getKey();
-              a = (Coefficient) m.getValue();
-              for ( int i = 0; i < P.length ; i++ ) {
-                  p = (OrderedPolynomial)P[i];
-                  f = p.leadingExpVector();
-                  if ( f != null ) {
-                     mt = ExpVector.EVMT( e, f );
-                     if ( mt ) break; 
-                  }
-	      }
-              if ( ! mt ) { 
-                 //logger.debug("irred");
-                 //T = new OrderedMapPolynomial( a, e );
-                 R = R.add( a, e );
-                 S = S.subtract( a, e ); 
-		 // System.out.println(" S = " + S);
-	      } else { 
-                 //logger.debug("red");
-                 m1 = p.leadingMonomial();
-		 e = ExpVector.EVDIF( e, f );
-                 a = a.divide( (Coefficient)m1.getValue() );
-                 Q = (OrderedPolynomial)p.multiply( a, e );
-                 S = S.subtract( Q );
-              }
-	}
-        return R;
-    }
-
-
-    /**
-     * Normalform. Allows concurrent modification of the list.
-     */
-
-    public static OrderedPolynomial normalformMod(DistHashTable Pp, 
-                                                  OrderedPolynomial Ap) {  
-        if ( Pp == null ) return Ap;
-        if ( Pp.isEmpty() ) return Ap;
-        int l = Pp.size();
-        Map.Entry m;
-        Map.Entry m1;
-        Object[] P;
-        synchronized (Pp) { // required, ok in dist
-           P = Pp.values().toArray();
+    public static <C extends RingElem<C>> 
+           List<GenPolynomial<C>> normalform(List<GenPolynomial<C>> Pp, 
+                                             List<GenPolynomial<C>> Ap) {  
+        if ( Pp == null || Pp.isEmpty() ) {
+           return Ap;
         }
-        Iterator it;
-        ExpVector e;
-        ExpVector f = null;
-        Coefficient a;
-        boolean mt = false;
-
-        OrderedPolynomial Rz = Ap.getZERO( Ap.getTermOrder() );
-        OrderedPolynomial R = Rz;
-        OrderedPolynomial p = null;
-        // OrderedPolynomial T = null;
-        OrderedPolynomial Q = null;
-        OrderedPolynomial S = Ap;
-        while ( S.length() > 0 ) { 
-              if ( Pp.size() != l ) { 
-                 //long t = System.currentTimeMillis();
-                 synchronized (Pp) { // required, ok in dist
-                     P = Pp.values().toArray();
-                 }
-                 l = P.length;
-                 //t = System.currentTimeMillis()-t;
-                 //logger.info("Pp.values().toArray() = " + t + " ms, size() = " + l);
-                 S = Ap; // S.add(R)? // restart reduction ?
-                 R = Rz; 
-              }
-	      m = S.leadingMonomial();
-              e = (ExpVector) m.getKey();
-              a = (Coefficient) m.getValue();
-              for ( int i = 0; i < P.length ; i++ ) {
-                  p = (OrderedPolynomial)P[i];
-                  f = p.leadingExpVector();
-                  if ( f != null ) {
-                     mt = ExpVector.EVMT( e, f );
-                     if ( mt ) break; 
-                  }
-	      }
-              if ( ! mt ) { 
-                 //logger.debug("irred");
-                 //T = new OrderedMapPolynomial( a, e );
-                 R = R.add( a, e );
-                 S = S.subtract( a, e ); 
-		 // System.out.println(" S = " + S);
-	      } else { 
-                 //logger.debug("red");
-                 m1 = p.leadingMonomial();
-		 e = ExpVector.EVDIF( e, f );
-                 a = a.divide( (Coefficient)m1.getValue() );
-                 Q = (OrderedPolynomial)p.multiply( a, e );
-                 S = S.subtract( Q );
-              }
-	}
-        return R;
+        if ( Ap == null || Ap.isEmpty() ) {
+           return Ap;
+        }
+        ArrayList<GenPolynomial<C>> red 
+           = new ArrayList<GenPolynomial<C>>();
+        for ( GenPolynomial<C> A : Ap ) {
+            A = normalform( Pp, A );
+            red.add( A );
+        }
+        return red;
     }
+
 
 
     /**
      * Irreducible set.
      */
 
-    public static ArrayList irreducibleSet(List Pp) {  
-        OrderedPolynomial a;
-        ArrayList P = new ArrayList();
-        ListIterator it = Pp.listIterator();
-        while ( it.hasNext() ) { 
-            a = (OrderedPolynomial) it.next();
+    public static <C extends RingElem<C>> 
+           List<GenPolynomial<C>> irreducibleSet(List<GenPolynomial<C>> Pp) {  
+        ArrayList<GenPolynomial<C>> P = new ArrayList<GenPolynomial<C>>();
+        for ( GenPolynomial<C> a : Pp ) {
             if ( a.length() != 0 ) {
                a = a.monic();
-               P.add( (Object) a );
+               P.add( a );
 	    }
 	}
         int l = P.size();
@@ -462,10 +311,12 @@ public class Reduction  {
         int irr = 0;
         ExpVector e;        
         ExpVector f;        
+        GenPolynomial<C> a;
+        Iterator<GenPolynomial<C>> it;
         logger.debug("irr = ");
         while ( irr != l ) {
             it = P.listIterator(); 
-	    a = (OrderedPolynomial) it.next();
+	    a = it.next();
             P.remove(0);
             e = a.leadingExpVector();
             a = normalform( P, a );
@@ -475,7 +326,7 @@ public class Reduction  {
 	    } else {
 	       f = a.leadingExpVector();
                if ( ExpVector.EVSIGN( f ) == 0 ) { 
-		  P = new ArrayList(); 
+		  P = new ArrayList<GenPolynomial<C>>(); 
                   P.add( a.monic() ); 
 	          return P;
                }    
@@ -484,7 +335,7 @@ public class Reduction  {
 	       } else {
                   irr = 0; a = a.monic();
 	       }
-               P.add( (Object) a );
+               P.add( a );
 	    }
 	}
         //System.out.println();
@@ -493,17 +344,115 @@ public class Reduction  {
 
 
     /**
+     * Left Normalform.
+     */
+
+    public static <C extends RingElem<C>> 
+           GenSolvablePolynomial<C> 
+           leftNormalform(List<GenSolvablePolynomial<C>> Pp, 
+                          GenSolvablePolynomial<C> Ap) {  
+        if ( Pp == null || Pp.isEmpty() ) {
+           return Ap;
+        }
+        if ( Ap == null || Ap.isZERO() ) {
+           return Ap;
+        }
+        int l = Pp.size();
+        Map.Entry<ExpVector,C> m;
+        GenSolvablePolynomial<C>[] P = new GenSolvablePolynomial[ l ];
+        synchronized (Pp) {
+            //P = Pp.toArray();
+            for ( int j = 0; j < Pp.size(); j++ ) {
+                P[j] = Pp.get(j);
+            }
+	}
+        int i;
+        ExpVector[] htl = new ExpVector[ l ];
+        Object[] lbc = new Object[ l ]; // want <C>
+        GenSolvablePolynomial<C>[] p = new GenSolvablePolynomial[ l ];
+	int j = 0;
+        for ( i = 0; i < l; i++ ) { 
+            p[i] = P[i];
+            m = p[i].leadingMonomial();
+	    if ( m != null ) { 
+               p[j] = p[i];
+               htl[j] = m.getKey();
+               lbc[j] = m.getValue();
+	       j++;
+	    }
+	}
+	l = j;
+        ExpVector e;
+        C a;
+        boolean mt = false;
+        GenSolvablePolynomial<C> R = Ap.ring.getZERO();
+
+        GenSolvablePolynomial<C> T = null;
+        GenSolvablePolynomial<C> Q = null;
+        GenSolvablePolynomial<C> S = Ap;
+        while ( S.length() > 0 ) { 
+	      m = S.leadingMonomial();
+              e = m.getKey();
+              //logger.info("red = " + e);
+              a = m.getValue();
+              for ( i = 0; i < l; i++ ) {
+                  mt = ExpVector.EVMT( e, htl[i] );
+                  if ( mt ) break; 
+	      }
+              if ( ! mt ) { 
+                 //logger.debug("irred");
+                 //T = new OrderedMapPolynomial( a, e );
+                 R = (GenSolvablePolynomial<C>)R.add( a, e );
+                 S = (GenSolvablePolynomial<C>)S.subtract( a, e ); 
+		 // System.out.println(" S = " + S);
+	      } else { 
+                 //logger.debug("red");
+		 e = ExpVector.EVDIF( e, htl[i] );
+                 a = a.divide( (C)lbc[i] );
+                 Q = p[i].multiplyLeft( a, e );
+                 S = (GenSolvablePolynomial<C>)S.subtract( Q );
+              }
+	}
+        return R;
+    }
+
+
+    /**
+     * Left Normalform Set.
+     */
+
+    public static <C extends RingElem<C>> 
+           List<GenSolvablePolynomial<C>> 
+           leftNormalform(List<GenSolvablePolynomial<C>> Pp, 
+                          List<GenSolvablePolynomial<C>> Ap) {  
+        if ( Pp == null || Pp.isEmpty() ) {
+           return Ap;
+        }
+        if ( Ap == null || Ap.isEmpty() ) {
+           return Ap;
+        }
+        ArrayList<GenSolvablePolynomial<C>> red 
+           = new ArrayList<GenSolvablePolynomial<C>>();
+        for ( GenSolvablePolynomial<C> A : Ap ) {
+            A = leftNormalform( Pp, A );
+            red.add( A );
+        }
+        return red;
+    }
+
+
+    /**
      * Left irreducible set.
      */
 
-    public static ArrayList leftIrreducibleSet(List Pp) {  
-        SolvablePolynomial a;
-        ArrayList P = new ArrayList();
-        ListIterator it = Pp.listIterator();
-        while ( it.hasNext() ) { 
-            a = (SolvablePolynomial) it.next();
+    public static <C extends RingElem<C>> 
+           List<GenSolvablePolynomial<C>> 
+           leftIrreducibleSet(List<GenSolvablePolynomial<C>> Pp) {  
+        ArrayList<GenSolvablePolynomial<C>> P 
+           = new ArrayList<GenSolvablePolynomial<C>>();
+        for ( GenSolvablePolynomial<C> a : Pp ) {
             if ( a.length() != 0 ) {
-               a = (SolvablePolynomial)a.monic();
+               a = (GenSolvablePolynomial<C>)a.monic();
                P.add( a );
 	    }
 	}
@@ -513,10 +462,12 @@ public class Reduction  {
         int irr = 0;
         ExpVector e;        
         ExpVector f;        
+        GenSolvablePolynomial<C> a;
+        Iterator<GenSolvablePolynomial<C>> it;
         logger.debug("irr = ");
         while ( irr != l ) {
             it = P.listIterator(); 
-	    a = (SolvablePolynomial) it.next();
+	    a = it.next();
             P.remove(0);
             e = a.leadingExpVector();
             a = leftNormalform( P, a );
@@ -526,14 +477,14 @@ public class Reduction  {
 	    } else {
 	       f = a.leadingExpVector();
                if ( ExpVector.EVSIGN( f ) == 0 ) { 
-		  P = new ArrayList(); 
-                  P.add( (SolvablePolynomial)a.monic() ); 
+		  P = new ArrayList<GenSolvablePolynomial<C>>(); 
+                  P.add( (GenSolvablePolynomial<C>)a.monic() ); 
 	          return P;
                }    
                if ( e.equals( f ) ) {
 		  irr++;
 	       } else {
-                  irr = 0; a = (SolvablePolynomial)a.monic();
+                  irr = 0; a = (GenSolvablePolynomial<C>)a.monic();
 	       }
                P.add( a );
 	    }
@@ -541,5 +492,6 @@ public class Reduction  {
         //System.out.println();
 	return P;
     }
+
 
 }

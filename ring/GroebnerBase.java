@@ -10,8 +10,14 @@ import java.util.ListIterator;
 
 import org.apache.log4j.Logger;
 
+import edu.jas.structure.RingElem;
+
 import edu.jas.poly.ExpVector;
-import edu.jas.poly.OrderedPolynomial;
+import edu.jas.poly.GenPolynomial;
+
+//import edu.jas.poly.GenSolvablePolynomial;
+
+import edu.jas.ring.OrderedPairlist;
 
 /**
  * Groebner Bases class.
@@ -27,22 +33,32 @@ public class GroebnerBase  {
      * Groebner base test
      */
 
-    public static boolean isDIRPGB(List F) {  
-        return isDIRPGB(0,F);
+    public static <C extends RingElem<C>> 
+           boolean isGB(List<GenPolynomial<C>> F) {  
+        return isGB(0,F);
     }
 
-    public static boolean isDIRPGB(int modv, List F) {  
-        OrderedPolynomial pi, pj, s, h;
+    public static <C extends RingElem<C>> 
+           boolean isGB(int modv, List<GenPolynomial<C>> F) {  
+        GenPolynomial<C> pi, pj, s, h;
 	for ( int i = 0; i < F.size(); i++ ) {
-	    pi = (OrderedPolynomial) F.get(i);
+	    pi = F.get(i);
             for ( int j = i+1; j < F.size(); j++ ) {
-                pj = (OrderedPolynomial) F.get(j);
-		if ( ! Reduction.ModuleCriterion( modv, pi, pj ) ) continue;
-		if ( ! Reduction.GBCriterion4( pi, pj ) ) continue;
-		s = Reduction.SPolynomial( pi, pj );
-		if ( s.isZERO() ) continue;
-		h = Reduction.normalform( F, s );
-		if ( ! h.isZERO() ) return false;
+                pj = F.get(j);
+		if ( ! Reduction.<C>ModuleCriterion( modv, pi, pj ) ) {
+                   continue;
+                }
+		if ( ! Reduction.<C>GBCriterion4( pi, pj ) ) { 
+                   continue;
+                }
+		s = Reduction.<C>SPolynomial( pi, pj );
+		if ( s.isZERO() ) {
+                   continue;
+                }
+		h = Reduction.<C>normalform( F, s );
+		if ( ! h.isZERO() ) {
+                   return false;
+                }
 	    }
 	}
 	return true;
@@ -53,18 +69,21 @@ public class GroebnerBase  {
      * Groebner base using pairlist class.
      */
 
-    public static ArrayList DIRPGB(List F) {  
-        return DIRPGB(0,F);
+    public static <C extends RingElem<C>> 
+           ArrayList<GenPolynomial<C>> GB(List<GenPolynomial<C>> F) {  
+        return GB(0,F);
     }
 
-    public static ArrayList DIRPGB(int modv, List F) {  
-        OrderedPolynomial p;
-        ArrayList G = new ArrayList();
+    public static <C extends RingElem<C>> 
+           ArrayList<GenPolynomial<C>> GB(int modv, 
+                                          List<GenPolynomial<C>> F) {  
+        GenPolynomial<C> p;
+        ArrayList<GenPolynomial<C>> G = new ArrayList<GenPolynomial<C>>();
         OrderedPairlist pairlist = null; 
         int l = F.size();
-        ListIterator it = F.listIterator();
+        ListIterator<GenPolynomial<C>> it = F.listIterator();
         while ( it.hasNext() ) { 
-            p = (OrderedPolynomial) it.next();
+            p = it.next();
             if ( p.length() > 0 ) {
                p = p.monic();
                if ( p.isONE() ) {
@@ -73,7 +92,7 @@ public class GroebnerBase  {
 	       }
                G.add( p );
 	       if ( pairlist == null ) {
-                  pairlist = new OrderedPairlist( modv, p.getTermOrder() );
+                  pairlist = new OrderedPairlist( modv, p.ring );
                }
                // putOne not required
                pairlist.put( p );
@@ -85,13 +104,13 @@ public class GroebnerBase  {
            return G; // since no threads are activated
         }
 
-        Pair pair;
-        OrderedPolynomial pi;
-        OrderedPolynomial pj;
-        OrderedPolynomial S;
-        OrderedPolynomial H;
+        Pair<C> pair;
+        GenPolynomial<C> pi;
+        GenPolynomial<C> pj;
+        GenPolynomial<C> S;
+        GenPolynomial<C> H;
         while ( pairlist.hasNext() ) {
-              pair = (Pair) pairlist.removeNext();
+              pair = (Pair<C>) pairlist.removeNext();
               if ( pair == null ) continue; 
 
               pi = pair.pi; 
@@ -101,7 +120,7 @@ public class GroebnerBase  {
                  logger.debug("pj    = " + pj );
 	      }
 
-              S = Reduction.SPolynomial( pi, pj );
+              S = Reduction.<C>SPolynomial( pi, pj );
               if ( S.isZERO() ) {
                  pair.setZero();
                  continue;
@@ -110,7 +129,7 @@ public class GroebnerBase  {
                  logger.debug("ht(S) = " + S.leadingExpVector() );
 	      }
 
-              H = Reduction.normalform( G, S );
+              H = Reduction.<C>normalform( G, S );
               if ( H.isZERO() ) {
                  pair.setZero();
                  continue;
@@ -134,7 +153,7 @@ public class GroebnerBase  {
               }
 	}
         logger.debug("#sequential list = "+G.size());
-	G = DIGBMI(G);
+	G = GBmi(G);
         logger.info("pairlist #put = " + pairlist.putCount() 
                   + " #rem = " + pairlist.remCount()
                     // + " #total = " + pairlist.pairCount()
@@ -147,12 +166,13 @@ public class GroebnerBase  {
      * Minimal ordered groebner basis.
      */
 
-    public static ArrayList DIGBMI(List Gp) {  
-        OrderedPolynomial a;
-        ArrayList G = new ArrayList();
-        ListIterator it = Gp.listIterator();
+    public static <C extends RingElem<C>>
+           ArrayList<GenPolynomial<C>> GBmi(List<GenPolynomial<C>> Gp) {  
+        GenPolynomial<C> a;
+        ArrayList<GenPolynomial<C>> G = new ArrayList<GenPolynomial<C>>();
+        ListIterator<GenPolynomial<C>> it = Gp.listIterator();
         while ( it.hasNext() ) { 
-            a = (OrderedPolynomial) it.next();
+            a = it.next();
             if ( a.length() != 0 ) { // always true
 	       // already monic a = a.monic();
                G.add( a );
@@ -164,24 +184,24 @@ public class GroebnerBase  {
 
         ExpVector e;        
         ExpVector f;        
-        OrderedPolynomial p;
-        ArrayList F = new ArrayList();
+        GenPolynomial<C> p;
+        ArrayList<GenPolynomial<C>> F = new ArrayList<GenPolynomial<C>>();
 	boolean mt;
 
         while ( G.size() > 0 ) {
-            a = (OrderedPolynomial) G.remove(0);
+            a = G.remove(0);
 	    e = a.leadingExpVector();
 
             it = G.listIterator();
 	    mt = false;
 	    while ( it.hasNext() && ! mt ) {
-               p = (OrderedPolynomial) it.next();
+               p = it.next();
                f = p.leadingExpVector();
 	       mt = ExpVector.EVMT( e, f );
 	    }
             it = F.listIterator();
 	    while ( it.hasNext() && ! mt ) {
-               p = (OrderedPolynomial) it.next();
+               p = it.next();
                f = p.leadingExpVector();
 	       mt = ExpVector.EVMT( e, f );
 	    }
@@ -196,12 +216,12 @@ public class GroebnerBase  {
            return G;
         }
 
-        F = new ArrayList();
+        F = new ArrayList<GenPolynomial<C>>();
         while ( G.size() > 0 ) {
-            a = (OrderedPolynomial) G.remove(0);
+            a = G.remove(0);
 	    // System.out.println("doing " + a.length());
-            a = Reduction.normalform( G, a );
-            a = Reduction.normalform( F, a );
+            a = Reduction.<C>normalform( G, a );
+            a = Reduction.<C>normalform( F, a );
             F.add( a );
 	}
 	return F;

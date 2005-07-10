@@ -13,16 +13,15 @@ import junit.framework.TestSuite;
 
 import org.apache.log4j.BasicConfigurator;
 
-import edu.jas.arith.Coefficient;
+import edu.jas.structure.RingElem;
+import edu.jas.structure.RingFactory;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.BigComplex;
 import edu.jas.arith.BigQuaternion;
 import edu.jas.arith.BigInteger;
-import edu.jas.poly.OrderedPolynomial;
-import edu.jas.poly.IntOrderedMapPolynomial;
-import edu.jas.poly.RatOrderedMapPolynomial;
-import edu.jas.poly.ComplexOrderedMapPolynomial;
-import edu.jas.poly.QuatOrderedMapPolynomial;
+
+import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.GenPolynomialRing;
 
 /**
  * DistributedList Test using JUnit 
@@ -202,19 +201,19 @@ public class DistributedListTest extends TestCase {
      l2 = new DistributedList(host);
      assertTrue("l2==empty",l2.isEmpty());
 
-     Coefficient a = BigInteger.IRAND(kl);
+     RingElem<BigInteger> a = (new BigInteger()).random(kl);
      l1.add( a );
      assertTrue("#l1==i", l1.size() == 1 );
 
-     Coefficient b = BigRational.RNRAND(kl);
+     RingElem<BigRational> b = (new BigRational()).random(kl);
      l1.add( b );
      assertTrue("#l1==i", l1.size() == 2 );
 
-     Coefficient c = BigComplex.CRAND(kl);
+     RingElem<BigComplex> c = (new BigComplex()).random(kl);
      l1.add( c );
      assertTrue("#l1==i", l1.size() == 3 );
 
-     Coefficient d = BigQuaternion.QRAND(kl);
+     RingElem<BigQuaternion> d = (new BigQuaternion()).random(kl);
      l1.add( d );
      assertTrue("#l1==i", l1.size() == 4 );
 
@@ -229,8 +228,7 @@ public class DistributedListTest extends TestCase {
      ita = l1.iterator();
      Iterator itb = null;
      itb = l2.iterator();
-     /* sequence of elements is not correct at moment
-     */
+     // sequence of elements is not correct at moment
      while ( ita.hasNext() && itb.hasNext() ) {
 	   Object o = ita.next();
 	   Object p = itb.next();
@@ -250,21 +248,33 @@ public class DistributedListTest extends TestCase {
      l2 = new DistributedList(host);
      assertTrue("l2==empty",l2.isEmpty());
 
-     OrderedPolynomial a = IntOrderedMapPolynomial.DIIRAS(rl, kl, ll, el, q);
+     GenPolynomialRing<BigInteger> afac = new GenPolynomialRing<BigInteger>(
+                                                new BigInteger(), rl);
+     GenPolynomial<BigInteger> a = afac.random(ll); //, el, q);
      l1.add( a );
      assertTrue("#l1==i", l1.size() == 1 );
 
-     OrderedPolynomial b = RatOrderedMapPolynomial.DIRRAS(rl, kl, ll, el, q);
+
+     GenPolynomialRing<BigRational> bfac = new GenPolynomialRing<BigRational>(
+                                                new BigRational(), rl);
+     GenPolynomial<BigRational> b = bfac.random(ll); //, el, q);
      l1.add( b );
      assertTrue("#l1==i", l1.size() == 2 );
 
-     OrderedPolynomial c = ComplexOrderedMapPolynomial.DICRAS(rl, kl, ll, el, q);
+
+     GenPolynomialRing<BigComplex> cfac = new GenPolynomialRing<BigComplex>(
+                                                new BigComplex(), rl);
+     GenPolynomial<BigComplex> c = cfac.random(ll); //, el, q);
      l1.add( c );
      assertTrue("#l1==i", l1.size() == 3 );
 
-     OrderedPolynomial d = QuatOrderedMapPolynomial.DIQRAS(rl, kl, ll, el, q);
+
+     GenPolynomialRing<BigQuaternion> dfac = new GenPolynomialRing<BigQuaternion>(
+                                                new BigQuaternion(), rl);
+     GenPolynomial<BigQuaternion> d = dfac.random(ll); //, el, q);
      l1.add( d );
      assertTrue("#l1==i", l1.size() == 4 );
+
 
      while ( l2.size() < l1.size() ) {
          try {
@@ -277,8 +287,7 @@ public class DistributedListTest extends TestCase {
      ita = l1.iterator();
      Iterator itb = null;
      itb = l2.iterator();
-     /* sequence of elements is not correct at moment
-     */
+     // sequence of elements is not correct at moment
      while ( ita.hasNext() && itb.hasNext() ) {
 	   Object o = ita.next();
 	   Object p = itb.next();

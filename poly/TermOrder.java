@@ -38,12 +38,13 @@ public final class TermOrder implements Serializable {
 
     private final long[] weight;
 
-    private final Comparator horder;  // highest first 
-    private final Comparator lorder;  // lowest first
-    private final Comparator sugar;   // graded lowest first
+    private final Comparator<ExpVector> horder;  // highest first 
+    private final Comparator<ExpVector> lorder;  // lowest first
+    private final Comparator<ExpVector> sugar;   // graded lowest first
 
-    private abstract class EVorder implements Comparator, Serializable {
-           public abstract int compare(Object o1, Object o2); 
+    private abstract class EVorder implements Comparator<ExpVector>, 
+                                              Serializable {
+           public abstract int compare(ExpVector e1, ExpVector e2); 
     }
 
 
@@ -74,40 +75,32 @@ public final class TermOrder implements Serializable {
         switch ( evord ) { // horder = new EVhorder();
             case TermOrder.LEX:    { 
                 horder = new EVorder() {
-                   public int compare(Object o1, Object o2) {
-                       return   ExpVector.EVILCP( 
-                                         (ExpVector) o1, 
-                                         (ExpVector) o2 ); 
+                   public int compare(ExpVector e1, ExpVector e2) {
+                       return   ExpVector.EVILCP( e1, e2 ); 
                    }
                 };
                 break; 
             }
             case TermOrder.INVLEX: { 
                 horder = new EVorder() {
-                   public int compare(Object o1, Object o2) {
-                       return - ExpVector.EVILCP( 
-                                         (ExpVector) o1, 
-                                         (ExpVector) o2 ); 
+                   public int compare(ExpVector e1, ExpVector e2) {
+                       return - ExpVector.EVILCP( e1, e2 ); 
                    }
                 };
                 break; 
             }
             case TermOrder.GRLEX:  { 
                 horder = new EVorder() {
-                   public int compare(Object o1, Object o2) {
-                       return   ExpVector.EVIGLC( 
-                                         (ExpVector) o1, 
-                                         (ExpVector) o2 ); 
+                   public int compare(ExpVector e1, ExpVector e2) {
+                       return   ExpVector.EVIGLC( e1, e2 ); 
                    }
                 };
                 break; 
             }
             case TermOrder.IGRLEX: { 
                 horder = new EVorder() {
-                   public int compare(Object o1, Object o2) {
-                       return - ExpVector.EVIGLC( 
-                                         (ExpVector) o1, 
-                                         (ExpVector) o2 ); 
+                   public int compare(ExpVector e1, ExpVector e2) {
+                       return - ExpVector.EVIGLC( e1, e2 ); 
                    }
                 };
                 break; 
@@ -122,17 +115,15 @@ public final class TermOrder implements Serializable {
 
         // lorder = new EVlorder();
         lorder = new EVorder() {
-                     public int compare(Object o1, Object o2) {
-                         return - horder.compare( o1, o2 );
+                     public int compare(ExpVector e1, ExpVector e2) {
+                         return - horder.compare( e1, e2 );
                      }
         };
 
         // sugar = new EVsugar();
         sugar = new EVorder() {
-               public int compare(Object o1, Object o2) {
-                      return   ExpVector.EVIGLC( 
-                                        (ExpVector) o1, 
-                                        (ExpVector) o2 ); 
+               public int compare(ExpVector e1, ExpVector e2) {
+                      return   ExpVector.EVIGLC( e1, e2 ); 
                }
         };
     }
@@ -155,18 +146,15 @@ public final class TermOrder implements Serializable {
         evend2 = evend1;
 
         horder = new EVorder() {
-                     public int compare(Object o1, Object o2) {
-                         return - ExpVector.EVIWLC( 
-                                             weight,
-                                     (ExpVector) o1, 
-                                     (ExpVector) o2 ); 
+                     public int compare(ExpVector e1, ExpVector e2) {
+                         return - ExpVector.EVIWLC( weight, e1, e2 ); 
             }
         };
 
         // lorder = new EVlorder();
         lorder = new EVorder() {
-                     public int compare(Object o1, Object o2) {
-                         return - horder.compare( o1, o2 );
+                     public int compare(ExpVector e1, ExpVector e2) {
+                         return - horder.compare( e1, e2 );
                      }
         };
 
@@ -195,25 +183,23 @@ public final class TermOrder implements Serializable {
         }
 
         horder = new EVorder() {
-                     public int compare(Object o1, Object o2) {
+                     public int compare(ExpVector e1, ExpVector e2) {
                               int t = - ExpVector.EVIWLC( 
                                                    weight,
-                                           (ExpVector) o1, 
-                                           (ExpVector) o2, evbeg1, evend1 );
+                                            e1, e2, evbeg1, evend1 );
                               if ( t != 0 ) {
                                   return t;
                               }
                               return  - ExpVector.EVIWLC( 
                                                    weight,
-                                           (ExpVector) o1, 
-                                           (ExpVector) o2, evbeg2, evend2 ); 
+                                            e1, e2, evbeg2, evend2 ); 
                      }
         };
 
         // lorder = new EVlorder();
         lorder = new EVorder() {
-                     public int compare(Object o1, Object o2) {
-                         return - horder.compare( o1, o2 );
+                     public int compare(ExpVector e1, ExpVector e2) {
+                         return - horder.compare( e1, e2 );
                      }
         };
 
@@ -257,64 +243,56 @@ public final class TermOrder implements Serializable {
                 switch ( evord2 ) { 
                     case TermOrder.LEX:    { 
                        horder = new EVorder() {
-                          public int compare(Object o1, Object o2) {
+                          public int compare(ExpVector e1, ExpVector e2) {
                               int t =   ExpVector.EVILCP( 
-                                           (ExpVector) o1, 
-                                           (ExpVector) o2, evbeg1, evend1 );
+                                            e1, e2, evbeg1, evend1 );
                               if ( t != 0 ) {
                                   return t;
                               }
                               return    ExpVector.EVILCP( 
-                                           (ExpVector) o1, 
-                                           (ExpVector) o2, evbeg2, evend2 ); 
+                                            e1, e2, evbeg2, evend2 ); 
                           }
                        };
                     break;
                     }
                     case TermOrder.INVLEX:    { 
                        horder = new EVorder() {
-                          public int compare(Object o1, Object o2) {
+                          public int compare(ExpVector e1, ExpVector e2) {
                               int t =   ExpVector.EVILCP( 
-                                           (ExpVector) o1, 
-                                           (ExpVector) o2, evbeg1, evend1 );
+                                            e1, e2, evbeg1, evend1 );
                               if ( t != 0 ) {
                                   return t;
                               }
                               return  - ExpVector.EVILCP( 
-                                           (ExpVector) o1, 
-                                           (ExpVector) o2, evbeg2, evend2 ); 
+                                            e1, e2, evbeg2, evend2 ); 
                           }
                        };
                     break;
                     }
                     case TermOrder.GRLEX:    { 
                        horder = new EVorder() {
-                          public int compare(Object o1, Object o2) {
+                          public int compare(ExpVector e1, ExpVector e2) {
                               int t =   ExpVector.EVILCP( 
-                                           (ExpVector) o1, 
-                                           (ExpVector) o2, evbeg1, evend1 );
+                                            e1, e2, evbeg1, evend1 );
                               if ( t != 0 ) {
                                   return t;
                               }
                               return    ExpVector.EVIGLC( 
-                                           (ExpVector) o1, 
-                                           (ExpVector) o2, evbeg2, evend2 ); 
+                                            e1, e2, evbeg2, evend2 ); 
                           }
                        };
                     break;
                     }
                     case TermOrder.IGRLEX:    { 
                        horder = new EVorder() {
-                          public int compare(Object o1, Object o2) {
+                          public int compare(ExpVector e1, ExpVector e2) {
                               int t =   ExpVector.EVILCP( 
-                                           (ExpVector) o1, 
-                                           (ExpVector) o2, evbeg1, evend1 );
+                                            e1, e2, evbeg1, evend1 );
                               if ( t != 0 ) {
                                   return t;
                               }
                               return  - ExpVector.EVIGLC( 
-                                           (ExpVector) o1, 
-                                           (ExpVector) o2, evbeg2, evend2 ); 
+                                            e1, e2, evbeg2, evend2 ); 
                           }
                        };
                     break;
@@ -329,64 +307,56 @@ public final class TermOrder implements Serializable {
                 switch ( evord2 ) { 
                     case TermOrder.LEX:    { 
                        horder = new EVorder() {
-                          public int compare(Object o1, Object o2) {
+                          public int compare(ExpVector e1, ExpVector e2) {
                               int t = - ExpVector.EVILCP( 
-                                           (ExpVector) o1, 
-                                           (ExpVector) o2, evbeg1, evend1 );
+                                            e1, e2, evbeg1, evend1 );
                               if ( t != 0 ) {
                                   return t;
                               }
                               return    ExpVector.EVILCP( 
-                                           (ExpVector) o1, 
-                                           (ExpVector) o2, evbeg2, evend2 ); 
+                                            e1, e2, evbeg2, evend2 ); 
                           }
                        };
                     break;
                     }
                     case TermOrder.INVLEX:    { 
                        horder = new EVorder() {
-                          public int compare(Object o1, Object o2) {
+                          public int compare(ExpVector e1, ExpVector e2) {
                               int t = - ExpVector.EVILCP( 
-                                           (ExpVector) o1, 
-                                           (ExpVector) o2, evbeg1, evend1 );
+                                            e1, e2, evbeg1, evend1 );
                               if ( t != 0 ) {
                                   return t;
                               }
                               return  - ExpVector.EVILCP( 
-                                           (ExpVector) o1, 
-                                           (ExpVector) o2, evbeg2, evend2 ); 
+                                            e1, e2, evbeg2, evend2 ); 
                           }
                        };
                     break;
                     }
                     case TermOrder.GRLEX:    { 
                        horder = new EVorder() {
-                          public int compare(Object o1, Object o2) {
+                          public int compare(ExpVector e1, ExpVector e2) {
                               int t = - ExpVector.EVILCP( 
-                                           (ExpVector) o1, 
-                                           (ExpVector) o2, evbeg1, evend1 );
+                                            e1, e2, evbeg1, evend1 );
                               if ( t != 0 ) {
                                   return t;
                               }
                               return    ExpVector.EVIGLC( 
-                                           (ExpVector) o1, 
-                                           (ExpVector) o2, evbeg2, evend2 ); 
+                                            e1, e2, evbeg2, evend2 ); 
                           }
                        };
                     break;
                     }
                     case TermOrder.IGRLEX:    { 
                        horder = new EVorder() {
-                          public int compare(Object o1, Object o2) {
+                          public int compare(ExpVector e1, ExpVector e2) {
                               int t = - ExpVector.EVILCP( 
-                                           (ExpVector) o1, 
-                                           (ExpVector) o2, evbeg1, evend1 );
+                                            e1, e2, evbeg1, evend1 );
                               if ( t != 0 ) {
                                   return t;
                               }
                               return  - ExpVector.EVIGLC( 
-                                           (ExpVector) o1, 
-                                           (ExpVector) o2, evbeg2, evend2 ); 
+                                            e1, e2, evbeg2, evend2 ); 
                           }
                        };
                     break;
@@ -401,64 +371,56 @@ public final class TermOrder implements Serializable {
                 switch ( evord2 ) { 
                     case TermOrder.LEX:    { 
                        horder = new EVorder() {
-                          public int compare(Object o1, Object o2) {
+                          public int compare(ExpVector e1, ExpVector e2) {
                               int t =   ExpVector.EVIGLC( 
-                                           (ExpVector) o1, 
-                                           (ExpVector) o2, evbeg1, evend1 );
+                                            e1, e2, evbeg1, evend1 );
                               if ( t != 0 ) {
                                   return t;
                               }
                               return    ExpVector.EVILCP( 
-                                           (ExpVector) o1, 
-                                           (ExpVector) o2, evbeg2, evend2 ); 
+                                            e1, e2, evbeg2, evend2 ); 
                           }
                        };
                     break;
                     }
                     case TermOrder.INVLEX:    { 
                        horder = new EVorder() {
-                          public int compare(Object o1, Object o2) {
+                          public int compare(ExpVector e1, ExpVector e2) {
                               int t =   ExpVector.EVIGLC( 
-                                           (ExpVector) o1, 
-                                           (ExpVector) o2, evbeg1, evend1 );
+                                            e1, e2, evbeg1, evend1 );
                               if ( t != 0 ) {
                                   return t;
                               }
                               return  - ExpVector.EVILCP( 
-                                           (ExpVector) o1, 
-                                           (ExpVector) o2, evbeg2, evend2 ); 
+                                            e1, e2, evbeg2, evend2 ); 
                           }
                        };
                     break;
                     }
                     case TermOrder.GRLEX:    { 
                        horder = new EVorder() {
-                          public int compare(Object o1, Object o2) {
+                          public int compare(ExpVector e1, ExpVector e2) {
                               int t =   ExpVector.EVIGLC( 
-                                           (ExpVector) o1, 
-                                           (ExpVector) o2, evbeg1, evend1 );
+                                            e1, e2, evbeg1, evend1 );
                               if ( t != 0 ) {
                                   return t;
                               }
                               return    ExpVector.EVIGLC( 
-                                           (ExpVector) o1, 
-                                           (ExpVector) o2, evbeg2, evend2 ); 
+                                            e1, e2, evbeg2, evend2 ); 
                           }
                        };
                     break;
                     }
                     case TermOrder.IGRLEX:    { 
                        horder = new EVorder() {
-                          public int compare(Object o1, Object o2) {
+                          public int compare(ExpVector e1, ExpVector e2) {
                               int t =   ExpVector.EVIGLC( 
-                                           (ExpVector) o1, 
-                                           (ExpVector) o2, evbeg1, evend1 );
+                                            e1, e2, evbeg1, evend1 );
                               if ( t != 0 ) {
                                   return t;
                               }
                               return  - ExpVector.EVIGLC( 
-                                           (ExpVector) o1, 
-                                           (ExpVector) o2, evbeg2, evend2 ); 
+                                            e1, e2, evbeg2, evend2 ); 
                           }
                        };
                     break;
@@ -473,64 +435,56 @@ public final class TermOrder implements Serializable {
                 switch ( evord2 ) { 
                     case TermOrder.LEX:    { 
                        horder = new EVorder() {
-                          public int compare(Object o1, Object o2) {
+                          public int compare(ExpVector e1, ExpVector e2) {
                               int t = - ExpVector.EVIGLC( 
-                                           (ExpVector) o1, 
-                                           (ExpVector) o2, evbeg1, evend1 );
+                                            e1, e2, evbeg1, evend1 );
                               if ( t != 0 ) {
                                   return t;
                               }
                               return    ExpVector.EVILCP( 
-                                           (ExpVector) o1, 
-                                           (ExpVector) o2, evbeg2, evend2 ); 
+                                            e1, e2, evbeg2, evend2 ); 
                           }
                        };
                     break;
                     }
                     case TermOrder.INVLEX:    { 
                        horder = new EVorder() {
-                          public int compare(Object o1, Object o2) {
+                          public int compare(ExpVector e1, ExpVector e2) {
                               int t = - ExpVector.EVIGLC( 
-                                           (ExpVector) o1, 
-                                           (ExpVector) o2, evbeg1, evend1 );
+                                            e1, e2, evbeg1, evend1 );
                               if ( t != 0 ) {
                                   return t;
                               }
                               return  - ExpVector.EVILCP( 
-                                           (ExpVector) o1, 
-                                           (ExpVector) o2, evbeg2, evend2 ); 
+                                            e1, e2, evbeg2, evend2 ); 
                           }
                        };
                     break;
                     }
                     case TermOrder.GRLEX:    { 
                        horder = new EVorder() {
-                          public int compare(Object o1, Object o2) {
+                          public int compare(ExpVector e1, ExpVector e2) {
                               int t = - ExpVector.EVIGLC( 
-                                           (ExpVector) o1, 
-                                           (ExpVector) o2, evbeg1, evend1 );
+                                            e1, e2, evbeg1, evend1 );
                               if ( t != 0 ) {
                                   return t;
                               }
                               return    ExpVector.EVIGLC( 
-                                           (ExpVector) o1, 
-                                           (ExpVector) o2, evbeg2, evend2 ); 
+                                            e1, e2, evbeg2, evend2 ); 
                           }
                        };
                     break;
                     }
                     case TermOrder.IGRLEX:    { 
                        horder = new EVorder() {
-                          public int compare(Object o1, Object o2) {
+                          public int compare(ExpVector e1, ExpVector e2) {
                               int t = - ExpVector.EVIGLC( 
-                                           (ExpVector) o1, 
-                                           (ExpVector) o2, evbeg1, evend1 );
+                                            e1, e2, evbeg1, evend1 );
                               if ( t != 0 ) {
                                   return t;
                               }
                               return  - ExpVector.EVIGLC( 
-                                           (ExpVector) o1, 
-                                           (ExpVector) o2, evbeg2, evend2 ); 
+                                            e1, e2, evbeg2, evend2 ); 
                           }
                        };
                     break;
@@ -550,17 +504,15 @@ public final class TermOrder implements Serializable {
         }
 
         lorder = new EVorder() {
-                     public int compare(Object o1, Object o2) {
-                         return - horder.compare( o1, o2 );
+                     public int compare(ExpVector e1, ExpVector e2) {
+                         return - horder.compare( e1, e2 );
                      }
         };
 
         // sugar = new EVsugar();
         sugar = new EVorder() {
-                    public int compare(Object o1, Object o2) {
-                        return   ExpVector.EVIGLC( 
-                                        (ExpVector) o1, 
-                                        (ExpVector) o2 ); 
+                    public int compare(ExpVector e1, ExpVector e2) {
+                        return   ExpVector.EVIGLC( e1, e2 ); 
                     }
         };
     }
@@ -579,15 +531,15 @@ public final class TermOrder implements Serializable {
     }
 
 
-    public Comparator getDescendComparator() { 
+    public Comparator<ExpVector> getDescendComparator() { 
         return horder; // highest first
     }
 
-    public Comparator getAscendComparator() { 
+    public Comparator<ExpVector> getAscendComparator() { 
         return lorder; // lowest first
     }
 
-    public Comparator getSugarComparator() { 
+    public Comparator<ExpVector> getSugarComparator() { 
         return sugar; // graded lowest first
     }
 

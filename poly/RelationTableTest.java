@@ -7,7 +7,7 @@ package edu.jas.poly;
 //import edu.jas.poly.RelationTable;
 
 import edu.jas.arith.BigRational;
-import edu.jas.arith.Coefficient;
+import edu.jas.structure.RingElem;
 
 import java.util.Arrays;
 
@@ -47,14 +47,19 @@ public class RelationTableTest extends TestCase {
      return suite;
    }
 
-   RelationTable table;
+   RelationTable<BigRational> table;
+   GenSolvablePolynomialRing<BigRational> ring; 
+   int rl = 5;
 
    protected void setUp() {
-       table = null;
+       BigRational cfac = new BigRational(1);
+       ring = new GenSolvablePolynomialRing<BigRational>(cfac,rl);
+       table = ring.table; // non null
    }
 
    protected void tearDown() {
        table = null;
+       ring = null;
    }
 
 
@@ -63,8 +68,9 @@ public class RelationTableTest extends TestCase {
  * 
  */
  public void testConstructor() {
-     table = new RelationTable();
+     table = new RelationTable<BigRational>(ring);
      assertEquals("size() = 0",0,table.size());
+     assertEquals("ring == table.ring",ring,table.ring);
 
      String s = "RelationTable[]";
      String t = table.toString();
@@ -77,19 +83,19 @@ public class RelationTableTest extends TestCase {
  * 
  */
  public void testUpdateOneKey() {
-     table = new RelationTable();
+     table = ring.table; 
      assertEquals("size() = 0",0,table.size());
 
-     int rl = 5;
-     ExpVector z = new ExpVector(rl);
+     ExpVector z = ring.evzero;
      ExpVector e = new ExpVector(rl,3,1);
      ExpVector f = new ExpVector(rl,2,1); // insert in empty
 
      ExpVector ef = ExpVector.EVSUM(e,f);
-     Coefficient one = BigRational.ONE;
-     OrderedPolynomial a = new RatSolvableOrderedMapPolynomial(table,one,z);
-     OrderedPolynomial b = new RatSolvableOrderedMapPolynomial(table,one,ef);
-     OrderedPolynomial rel = a.add(b);
+
+     GenSolvablePolynomial<BigRational> a = ring.getONE();
+     GenSolvablePolynomial<BigRational> b = ring.getONE().multiply(ef);
+     GenSolvablePolynomial<BigRational> rel 
+        = (GenSolvablePolynomial<BigRational>)a.add(b);
 
      table.update(e,f,rel);
      assertEquals("size() = 1",1,table.size());
@@ -98,8 +104,8 @@ public class RelationTableTest extends TestCase {
      f = new ExpVector(rl,2,1); // insert in beginning
 
      ef = ExpVector.EVSUM(e,f);
-     b = new RatSolvableOrderedMapPolynomial(table,one,ef);
-     rel = a.add(b);
+     b = ring.getONE().multiply(ef);
+     rel = (GenSolvablePolynomial<BigRational>)a.add(b);
 
      table.update(e,f,rel);
      assertEquals("size() = 2",2,table.size());
@@ -108,8 +114,8 @@ public class RelationTableTest extends TestCase {
      f = new ExpVector(rl,2,2);
 
      ef = ExpVector.EVSUM(e,f);
-     b = new RatSolvableOrderedMapPolynomial(table,one,ef);
-     rel = a.add(b);
+     b = ring.getONE().multiply(ef);
+     rel = (GenSolvablePolynomial<BigRational>)a.add(b);
 
      table.update(e,f,rel);
      assertEquals("size() = 3",3,table.size());
@@ -118,8 +124,8 @@ public class RelationTableTest extends TestCase {
      f = new ExpVector(rl,2,4);
 
      ef = ExpVector.EVSUM(e,f);
-     b = new RatSolvableOrderedMapPolynomial(table,one,ef);
-     rel = a.add(b);
+     b = ring.getONE().multiply(ef);
+     rel = (GenSolvablePolynomial<BigRational>)a.add(b);
 
      table.update(e,f,rel);
      assertEquals("size() = 4",4,table.size());
@@ -128,8 +134,8 @@ public class RelationTableTest extends TestCase {
      f = new ExpVector(rl,2,3); // insert in middle
 
      ef = ExpVector.EVSUM(e,f);
-     b = new RatSolvableOrderedMapPolynomial(table,one,ef);
-     rel = a.add(b);
+     b = ring.getONE().multiply(ef);
+     rel = (GenSolvablePolynomial<BigRational>)a.add(b);
 
      table.update(e,f,rel);
      assertEquals("size() = 5",5,table.size());
@@ -143,19 +149,19 @@ public class RelationTableTest extends TestCase {
  * 
  */
  public void testUpdateKeys() {
-     table = new RelationTable();
+     table = ring.table; 
      assertEquals("size() = 0",0,table.size());
 
-     int rl = 5;
-     ExpVector z = new ExpVector(rl);
+     ExpVector z = ring.evzero;
      ExpVector e = new ExpVector(rl,3,1);
-     ExpVector f = new ExpVector(rl,2,1);
+     ExpVector f = new ExpVector(rl,2,1); // insert in empty
 
      ExpVector ef = ExpVector.EVSUM(e,f);
-     Coefficient one = BigRational.ONE;
-     OrderedPolynomial a = new RatSolvableOrderedMapPolynomial(table,one,z);
-     OrderedPolynomial b = new RatSolvableOrderedMapPolynomial(table,one,ef);
-     OrderedPolynomial rel = a.add(b);
+
+     GenSolvablePolynomial<BigRational> a = ring.getONE();
+     GenSolvablePolynomial<BigRational> b = ring.getONE().multiply(ef);
+     GenSolvablePolynomial<BigRational> rel 
+        = (GenSolvablePolynomial<BigRational>)a.add(b);
 
      table.update(e,f,rel);
      assertEquals("size() = 1",1,table.size());
@@ -164,8 +170,9 @@ public class RelationTableTest extends TestCase {
      f = new ExpVector(rl,0,1);
 
      ef = ExpVector.EVSUM(e,f);
-     b = new RatSolvableOrderedMapPolynomial(table,one,ef);
-     rel = a.add(b);
+
+     b = ring.getONE().multiply(ef);
+     rel = (GenSolvablePolynomial<BigRational>)a.add(b);
 
      table.update(e,f,rel);
      assertEquals("size() = 2",2,table.size());
@@ -174,8 +181,8 @@ public class RelationTableTest extends TestCase {
      f = new ExpVector(rl,2,1);
 
      ef = ExpVector.EVSUM(e,f);
-     b = new RatSolvableOrderedMapPolynomial(table,one,ef);
-     rel = a.add(b);
+     b = ring.getONE().multiply(ef);
+     rel = (GenSolvablePolynomial<BigRational>)a.add(b);
 
      table.update(e,f,rel);
      assertEquals("size() = 3",3,table.size());
@@ -189,25 +196,24 @@ public class RelationTableTest extends TestCase {
  * 
  */
  public void testLookupOneKey() {
-     table = new RelationTable();
+     table = ring.table; 
      assertEquals("size() = 0",0,table.size());
 
-     int rl = 5;
-     ExpVector z = new ExpVector(rl);
+     ExpVector z = ring.evzero;
      ExpVector e = new ExpVector(rl,3,1);
      ExpVector f = new ExpVector(rl,2,1); // insert in empty
 
      ExpVector ef = ExpVector.EVSUM(e,f);
-     Coefficient one = BigRational.ONE;
-     OrderedPolynomial a = new RatSolvableOrderedMapPolynomial(table,one,z);
-     OrderedPolynomial b = new RatSolvableOrderedMapPolynomial(table,one,ef);
-     OrderedPolynomial rel = a.add(b);
-     OrderedPolynomial r1 = rel;
+     GenSolvablePolynomial<BigRational> a = ring.getONE();
+     GenSolvablePolynomial<BigRational> b = ring.getONE().multiply(ef);
+     GenSolvablePolynomial<BigRational> rel 
+        = (GenSolvablePolynomial<BigRational>)a.add(b);
+     GenSolvablePolynomial<BigRational> r1 = rel; 
 
      table.update(e,f,rel);
      assertEquals("size() = 1",1,table.size());
 
-     TableRelation r = table.lookup(e,f,a);
+     TableRelation<BigRational> r = table.lookup(e,f);
      //System.out.println("relation = " + r);
      assertEquals("e = e",null,r.e);
      assertEquals("f = f",null,r.f);
@@ -218,13 +224,13 @@ public class RelationTableTest extends TestCase {
      f = new ExpVector(rl,2,1); // insert in beginning
 
      ef = ExpVector.EVSUM(e,f);
-     b = new RatSolvableOrderedMapPolynomial(table,one,ef);
-     rel = a.add(b);
+     b = ring.getONE().multiply(ef);
+     rel = (GenSolvablePolynomial<BigRational>)a.add(b);
 
      table.update(e,f,rel);
      assertEquals("size() = 2",2,table.size());
 
-     r = table.lookup(e,f,a);
+     r = table.lookup(e,f);
      assertEquals("e = e",null,r.e);
      assertEquals("f = f",null,r.f);
      assertEquals("p = p",rel,r.p);
@@ -234,13 +240,13 @@ public class RelationTableTest extends TestCase {
      f = new ExpVector(rl,2,2);
 
      ef = ExpVector.EVSUM(e,f);
-     b = new RatSolvableOrderedMapPolynomial(table,one,ef);
-     rel = a.add(b);
+     b = ring.getONE().multiply(ef);
+     rel = (GenSolvablePolynomial<BigRational>)a.add(b);
 
      table.update(e,f,rel);
      assertEquals("size() = 3",3,table.size());
 
-     r = table.lookup(e,f,a);
+     r = table.lookup(e,f);
      assertEquals("e = e",null,r.e);
      assertEquals("f = f",null,r.f);
      assertEquals("p = p",rel,r.p);
@@ -250,13 +256,13 @@ public class RelationTableTest extends TestCase {
      f = new ExpVector(rl,2,4);
 
      ef = ExpVector.EVSUM(e,f);
-     b = new RatSolvableOrderedMapPolynomial(table,one,ef);
-     rel = a.add(b);
+     b = ring.getONE().multiply(ef);
+     rel = (GenSolvablePolynomial<BigRational>)a.add(b);
 
      table.update(e,f,rel);
      assertEquals("size() = 4",4,table.size());
 
-     r = table.lookup(e,f,a);
+     r = table.lookup(e,f);
      assertEquals("e = e",null,r.e);
      assertEquals("f = f",null,r.f);
      assertEquals("p = p",rel,r.p);
@@ -266,13 +272,13 @@ public class RelationTableTest extends TestCase {
      f = new ExpVector(rl,2,3); // insert in middle
 
      ef = ExpVector.EVSUM(e,f);
-     b = new RatSolvableOrderedMapPolynomial(table,one,ef);
-     rel = a.add(b);
+     b = ring.getONE().multiply(ef);
+     rel = (GenSolvablePolynomial<BigRational>)a.add(b);
 
      table.update(e,f,rel);
      assertEquals("size() = 5",5,table.size());
 
-     r = table.lookup(e,f,a);
+     r = table.lookup(e,f);
      assertEquals("e = e",null,r.e);
      assertEquals("f = f",null,r.f);
      assertEquals("p = p",rel,r.p);
@@ -282,7 +288,7 @@ public class RelationTableTest extends TestCase {
      e = new ExpVector(rl,3,1);
      f = new ExpVector(rl,2,1); 
 
-     r = table.lookup(e,f,a);
+     r = table.lookup(e,f);
      assertEquals("e = e",null,r.e);
      assertEquals("f = f",null,r.f);
      assertEquals("p = p",r1,r.p);
@@ -290,29 +296,29 @@ public class RelationTableTest extends TestCase {
      //System.out.println("table = " + table);
    }
 
+
 /**
  * Test lookup keys
  * 
  */
  public void testLookupKeys() {
-     table = new RelationTable();
+     table = ring.table; 
      assertEquals("size() = 0",0,table.size());
 
-     int rl = 5;
-     ExpVector z = new ExpVector(rl);
+     ExpVector z = ring.evzero;
      ExpVector e = new ExpVector(rl,3,1);
      ExpVector f = new ExpVector(rl,2,1);
 
      ExpVector ef = ExpVector.EVSUM(e,f);
-     Coefficient one = BigRational.ONE;
-     OrderedPolynomial a = new RatSolvableOrderedMapPolynomial(table,one,z);
-     OrderedPolynomial b = new RatSolvableOrderedMapPolynomial(table,one,ef);
-     OrderedPolynomial rel = a.add(b);
+     GenSolvablePolynomial<BigRational> a = ring.getONE();
+     GenSolvablePolynomial<BigRational> b = ring.getONE().multiply(ef);
+     GenSolvablePolynomial<BigRational> rel 
+        = (GenSolvablePolynomial<BigRational>)a.add(b);
 
      table.update(e,f,rel);
      assertEquals("size() = 1",1,table.size());
 
-     TableRelation r = table.lookup(e,f,a);
+     TableRelation<BigRational> r = table.lookup(e,f);
      assertEquals("e = e",null,r.e);
      assertEquals("f = f",null,r.f);
      assertEquals("p = p",rel,r.p);
@@ -321,13 +327,13 @@ public class RelationTableTest extends TestCase {
      e = new ExpVector(rl,2,1);
      f = new ExpVector(rl,0,1);
      ef = ExpVector.EVSUM(e,f);
-     b = new RatSolvableOrderedMapPolynomial(table,one,ef);
-     rel = a.add(b);
+     b = ring.getONE().multiply(ef);
+     rel = (GenSolvablePolynomial<BigRational>)a.add(b);
 
      table.update(e,f,rel);
      assertEquals("size() = 2",2,table.size());
 
-     r = table.lookup(e,f,a);
+     r = table.lookup(e,f);
      assertEquals("e = e",null,r.e);
      assertEquals("f = f",null,r.f);
      assertEquals("p = p",rel,r.p);
@@ -336,13 +342,13 @@ public class RelationTableTest extends TestCase {
      e = new ExpVector(rl,4,1);
      f = new ExpVector(rl,2,1);
      ef = ExpVector.EVSUM(e,f);
-     b = new RatSolvableOrderedMapPolynomial(table,one,ef);
-     rel = a.add(b);
+     b = ring.getONE().multiply(ef);
+     rel = (GenSolvablePolynomial<BigRational>)a.add(b);
 
      table.update(e,f,rel);
      assertEquals("size() = 3",3,table.size());
 
-     r = table.lookup(e,f,a);
+     r = table.lookup(e,f);
      assertEquals("e = e",null,r.e);
      assertEquals("f = f",null,r.f);
      assertEquals("p = p",rel,r.p);
@@ -357,20 +363,21 @@ public class RelationTableTest extends TestCase {
  * 
  */
  public void testSymmetric() {
-     table = new RelationTable();
+     table = ring.table; 
      assertEquals("size() = 0",0,table.size());
 
-     int rl = 5;
-     ExpVector z = new ExpVector(rl);
+     ExpVector z = ring.evzero;
      ExpVector e = new ExpVector(rl,3,1);
      ExpVector f = new ExpVector(rl,2,1);
 
      ExpVector ef = ExpVector.EVSUM(e,f);
-     Coefficient one = BigRational.ONE;
-     OrderedPolynomial a = new RatSolvableOrderedMapPolynomial(table,one,z);
-     OrderedPolynomial b = new RatSolvableOrderedMapPolynomial(table,one,ef);
 
-     TableRelation r = table.lookup(e,f,a);
+     GenSolvablePolynomial<BigRational> a = ring.getONE();
+     GenSolvablePolynomial<BigRational> b = ring.getONE().multiply(ef);
+     GenSolvablePolynomial<BigRational> rel 
+        = (GenSolvablePolynomial<BigRational>)a.add(b);
+
+     TableRelation<BigRational> r = table.lookup(e,f);
      //System.out.println("relation = " + r);
      assertEquals("e = e",null,r.e);
      assertEquals("f = f",null,r.f);
@@ -380,9 +387,9 @@ public class RelationTableTest extends TestCase {
      e = new ExpVector(rl,2,1);
      f = new ExpVector(rl,0,1);
      ef = ExpVector.EVSUM(e,f);
-     b = new RatSolvableOrderedMapPolynomial(table,one,ef);
+     b = ring.getONE().multiply(ef);
 
-     r = table.lookup(e,f,a);
+     r = table.lookup(e,f);
      assertEquals("e = e",null,r.e);
      assertEquals("f = f",null,r.f);
      assertEquals("p = b",b,r.p);
@@ -391,9 +398,9 @@ public class RelationTableTest extends TestCase {
      e = new ExpVector(rl,4,1);
      f = new ExpVector(rl,2,1);
      ef = ExpVector.EVSUM(e,f);
-     b = new RatSolvableOrderedMapPolynomial(table,one,ef);
+     b = ring.getONE().multiply(ef);
 
-     r = table.lookup(e,f,a);
+     r = table.lookup(e,f);
      assertEquals("e = e",null,r.e);
      assertEquals("f = f",null,r.f);
      assertEquals("p = b",b,r.p);

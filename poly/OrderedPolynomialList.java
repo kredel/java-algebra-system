@@ -7,13 +7,20 @@ package edu.jas.poly;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.TreeMap;
+//import java.util.Iterator;
+//import java.util.Map;
+//import java.util.TreeMap;
 import java.util.Comparator;
 
-import edu.jas.arith.Coefficient;
+import java.io.Serializable;
+
+import edu.jas.structure.RingElem;
+import edu.jas.structure.RingFactory;
+
 import edu.jas.arith.BigRational;
+
+import edu.jas.poly.ExpVector;
+import edu.jas.poly.GenPolynomialRing;
 
 
 /**
@@ -22,34 +29,13 @@ import edu.jas.arith.BigRational;
  * @author Heinz Kredel
  */
 
-public class OrderedPolynomialList extends PolynomialList {
+public class OrderedPolynomialList<C extends RingElem<C> > 
+             extends PolynomialList<C> {
 
-    public OrderedPolynomialList( String[] v, int eo, List l ) {
-        this( null, v, new TermOrder(eo), l);
-    }
 
-    public OrderedPolynomialList( String[] v, TermOrder to, List l ) {
-        this( null, v, to, l, null);
-    }
-
-    public OrderedPolynomialList( String[] v, TermOrder to, 
-                                  List l, RelationTable rt ) {
-        this( null, v, to, l, rt);
-    }
-
-    public OrderedPolynomialList( Coefficient c, String[] v, 
-                                  int eo, List l ) {
-        this( c, v, new TermOrder(eo), l);
-    }
-
-    public OrderedPolynomialList( Coefficient c, String[] v, 
-                                  TermOrder to, List l ) {
-        this( c, v, to, l, null);
-    }
-
-    public OrderedPolynomialList( Coefficient c, String[] v, TermOrder to, 
-                                  List l, RelationTable rt ) {
-        super( c, v, to, sort(l), rt);
+    public OrderedPolynomialList( GenPolynomialRing< C > r,
+                                  List< GenPolynomial< C > > l ) {
+        super(r, sort(r,l) );
     }
 
 
@@ -57,66 +43,22 @@ public class OrderedPolynomialList extends PolynomialList {
      * equals from Object.
      */
 
+    @Override
+    @SuppressWarnings("unchecked") // not jet working
     public boolean equals(Object p) {
-        if ( ! (p instanceof PolynomialList) ) {
-            System.out.println("PolynomialList");
+        if ( ! super.equals(p) ) {
             return false;
         }
-        PolynomialList pl = (PolynomialList)p;
-        if ( ! coeff.equals( pl.coeff ) ) {
-            System.out.println("Coefficient");
-            return false;
+        OrderedPolynomialList< C > pl = null;
+        try {
+            pl = (OrderedPolynomialList< C >)p;
+        } catch (ClassCastException ignored) {
         }
-        if ( ! Arrays.equals( vars, pl.vars ) ) {
-            System.out.println("String[]");
-            return false;
+        if ( pl == null ) {
+           return false;
         }
-        if ( ! tord.equals( pl.tord ) ) {
-            System.out.println("TermOrder");
-            return false;
-        }
-        if ( list == null && pl.list != null ) {
-            System.out.println("List, null");
-            return false;
-        }
-        if ( list != null && pl.list == null ) {
-            System.out.println("List, null");
-            return false;
-        }
-        if ( list.size() != pl.list.size() ) {
-            System.out.println("List, size");
-            return false;
-        }
-        Iterator jt = pl.list.iterator();
-        for ( Iterator it = list.iterator(); 
-              it.hasNext() && jt.hasNext(); ) {
-            Object pi = it.next();
-            Object pj = jt.next();
-            if ( ! ( pi instanceof OrderedPolynomial ) ) {
-                System.out.println("OrderedPolynomial, pi");
-                return false;
-            }
-            if ( ! ( pj instanceof OrderedPolynomial ) ) {
-                System.out.println("OrderedPolynomial, pj");
-                return false;
-            }
-            OrderedPolynomial pip = (OrderedPolynomial)pi;
-            OrderedPolynomial pjp = (OrderedPolynomial)pj;
-            if ( ! pip.equals( pjp ) ) {
-               System.out.println("OrderedPolynomial");
-               System.out.println("pip = " + pip);
-               System.out.println("pjp = " + pjp);
-               return false;
-            }
-        }
-
-        if ( table == null && pl.table != null ) {
-            return false;
-        }
-        if ( table != null && pl.table == null ) {
-            return false;
-        }
-        // otherwise tables may be different
+        // compare sorted lists
+        // done already in super.equals()
         return true;
     }
 
@@ -124,22 +66,22 @@ public class OrderedPolynomialList extends PolynomialList {
     /**
      * Sort a list of polynomials with respect to the ascending order 
      * of the leading Exponent vectors. 
-     * The term order is taken from the first polynomials TermOrder.
+     * The term order is taken from the ring.
      */
 
-    public static List sort(List l) {
+    public static <C extends RingElem<C> >
+    List<GenPolynomial<C>> sort( GenPolynomialRing< C > r,
+                                 List<GenPolynomial<C>> l ) {
         if ( l == null ) {
             return l;
         }
         if ( l.size() <= 1 ) { // nothing to sort
             return l;
         }
-        OrderedPolynomial p = (OrderedPolynomial)l.get(0);
-        final Comparator e = p.getTermOrder().getAscendComparator();
-        Comparator c = new Comparator() {
-                public int compare(Object o1, Object o2) {
-                       OrderedPolynomial p1 = (OrderedPolynomial)o1;
-                       OrderedPolynomial p2 = (OrderedPolynomial)o2;
+        final Comparator<ExpVector> evc = r.tord.getAscendComparator();
+        Comparator<GenPolynomial<C>> cmp = new Comparator<GenPolynomial<C>>() {
+                public int compare(GenPolynomial<C> p1, 
+                                   GenPolynomial<C> p2) {
                        ExpVector e1 = p1.leadingExpVector();
                        ExpVector e2 = p2.leadingExpVector();
                        if ( e1 == null ) {
@@ -155,13 +97,24 @@ public class OrderedPolynomialList extends PolynomialList {
                              return -1; // dont care
                           }
                        }
-                       return e.compare(e1,e2);
+                       return evc.compare(e1,e2);
                 }
             };
-        Object[] s = l.toArray();
-        Arrays.sort( s, c );
-        return new ArrayList( Arrays.asList(s) );
+        GenPolynomial<C>[] s = null;
+        try {
+            s = new GenPolynomial[ l.size() ]; //<C>
+            //System.out.println("s.length = " + s.length );
+            //s = l.toArray(s);
+            for ( int i = 0; i < l.size(); i++ ) {
+                s[i] = l.get(i);
+            }
+            Arrays.<GenPolynomial<C>>sort( s, cmp );
+            return new ArrayList<GenPolynomial<C>>( 
+                            Arrays.<GenPolynomial<C>>asList(s) );
+        } catch(ClassCastException ok) {
+            System.out.println("Warning: polynomials not sorted");
+        }
+        return l; // unsorted
     }
-
 
 }
