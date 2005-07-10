@@ -1,0 +1,333 @@
+/*
+ * $Id$
+ */
+
+package edu.jas.module;
+
+import java.util.List;
+import java.util.ArrayList;
+
+import org.apache.log4j.Logger;
+
+import edu.jas.structure.RingElem;
+import edu.jas.structure.RingFactory;
+import edu.jas.structure.ModulElem;
+import edu.jas.structure.ModulFactory;
+
+import edu.jas.poly.GenPolynomial;
+
+
+/**
+ * GenVector generic vector implementing ModulElem.
+ * vectors of n columns over C.
+ * @author Heinz Kredel
+ */
+
+public class GenVector<C extends RingElem<C> > 
+    implements ModulElem<GenVector<C>,C> {
+
+    private static Logger logger = Logger.getLogger(GenVector.class);
+
+    public final GenVectorModul< C > modul;
+    protected final List<C> val;
+
+
+    /**
+     * Constructors for GenVector
+     */
+
+    public GenVector(GenVectorModul< C > m) {
+        this( m, m.getZERO().val );
+    }
+
+    protected GenVector(GenVectorModul< C > m, List<C> v) {
+        modul = m;
+        val = v;
+    }
+
+
+    /**
+     * toString method.
+     */
+    @Override
+    public String toString() {
+        StringBuffer s = new StringBuffer();
+        s.append("( ");
+        boolean first = true;
+        for ( C c : val ) {
+            if ( first ) {
+                first = false;
+            } else {
+                s.append(", ");
+            }
+            s.append( c.toString() );
+        }
+        s.append(" ) :: ");
+        s.append(modul.toString());
+        s.append("\n");
+        return s.toString();
+    }
+
+
+    /**
+     * clone method.
+     */
+    @Override
+    public GenVector<C> clone() {
+        //return modul.copy(this);
+        ArrayList<C> av = (ArrayList<C>) val;
+        return new GenVector<C>( modul, (List<C>)av.clone() );
+    }
+
+    /**
+     * test if this is equal to a zero vector.
+     */
+    public boolean isZERO() {
+        return ( 0 == this.compareTo( modul.getZERO() ) );
+    }
+
+    /**
+     * equals method.
+     */
+    @Override
+    public boolean equals( Object other ) { 
+        if ( ! (other instanceof GenVector) ) {
+            return false;
+        }
+        GenVector ovec = (GenVector)other;
+        if ( ! modul.equals(ovec.modul) ) {
+            return false;
+        }
+        if ( ! val.equals(ovec.val) ) {
+            return false;
+        }
+        return true;
+    }
+
+
+    public int compareTo(GenVector<C> b) {
+        if ( ! modul.equals(b.modul) ) {
+            return -1;
+        }
+        List<C> oval = b.val;
+        int i = 0;
+        for ( C c : val ) {
+            int s = c.compareTo( oval.get( i++ ) );
+            if ( s != 0 ) {
+                return s;
+            }
+        }
+        return 0;
+    }
+
+
+    /**
+     * sign of vector.
+     */
+    public int signum() {
+        return compareTo( modul.getZERO() );
+    }
+
+
+    /**
+     * Sum of vectors.
+     * @return this+b
+     */
+    public GenVector<C> add(GenVector<C> b) {
+        List<C> oval = b.val;
+        ArrayList<C> a = new ArrayList<C>( modul.cols );
+        int i = 0;
+        for ( C c : val ) {
+            C e = c.add( oval.get( i++ ) );
+            a.add( e );
+        }
+        return new GenVector<C>(modul,a);
+    }
+
+
+    /**
+     * Difference of vectors.
+     * @return this-b
+     */
+    public GenVector<C> subtract(GenVector<C> b) {
+        List<C> oval = b.val;
+        ArrayList<C> a = new ArrayList<C>( modul.cols );
+        int i = 0;
+        for ( C c : val ) {
+            C e = c.subtract( oval.get( i++ ) );
+            a.add( e );
+        }
+        return new GenVector<C>(modul,a);
+    }
+
+
+    /**
+     * Negative of this vector.
+     * @return -this
+     */
+    public GenVector<C> negate() {
+        ArrayList<C> a = new ArrayList<C>( modul.cols );
+        int i = 0;
+        for ( C c : val ) {
+            C e = c.negate();
+            a.add( e );
+        }
+        return new GenVector<C>(modul,a);
+    }
+
+
+    /**
+     * Product of this vector with scalar.
+     * @return this*s
+     */
+    public GenVector<C> scalarMultiply(C s) {
+        ArrayList<C> a = new ArrayList<C>( modul.cols );
+        int i = 0;
+        for ( C c : val ) {
+            C e = c.multiply( s );
+            a.add( e );
+        }
+        return new GenVector<C>(modul,a);
+    }
+
+
+    /**
+     * Left product of this vector with scalar.
+     * @return s*this
+     */
+    public GenVector<C> leftScalarMultiply(C s) {
+        ArrayList<C> a = new ArrayList<C>( modul.cols );
+        int i = 0;
+        for ( C c : val ) {
+            C e = s.multiply( c );
+            a.add( e );
+        }
+        return new GenVector<C>(modul,a);
+    }
+
+
+    /**
+     * Linear compination of this vector with 
+     * scalar multiple of other vector.
+     * @return this*s+b*t
+     */
+    public GenVector<C> linearCombination(C s, GenVector<C> b, C t) {
+        List<C> oval = b.val;
+        ArrayList<C> a = new ArrayList<C>( modul.cols );
+        int i = 0;
+        for ( C c : val ) {
+            C c1 = c.multiply(s);
+            C c2 = oval.get( i++ ).multiply( t );
+            C e = c1.add( c2 );
+            a.add( e );
+        }
+        return new GenVector<C>(modul,a);
+    }
+
+
+    /**
+     * Linear compination of this vector with 
+     * scalar multiple of other vector.
+     * @return this+b*t
+     */
+    public GenVector<C> linearCombination(GenVector<C> b, C t) {
+        List<C> oval = b.val;
+        ArrayList<C> a = new ArrayList<C>( modul.cols );
+        int i = 0;
+        for ( C c : val ) {
+            C c2 = oval.get( i++ ).multiply( t );
+            C e = c.add( c2 );
+            a.add( e );
+        }
+        return new GenVector<C>(modul,a);
+    }
+
+
+    /**
+     * Left linear compination of this vector with 
+     * scalar multiple of other vector.
+     * @return this+t*b
+     */
+    public GenVector<C> linearCombination(C t, GenVector<C> b) {
+        List<C> oval = b.val;
+        ArrayList<C> a = new ArrayList<C>( modul.cols );
+        int i = 0;
+        for ( C c : val ) {
+            C c2 = t.multiply( oval.get( i++ ) );
+            C e = c.add( c2 );
+            a.add( e );
+        }
+        return new GenVector<C>(modul,a);
+    }
+
+
+    /**
+     * left linear compination of this vector with 
+     * scalar multiple of other vector.
+     * @return s*this+t*b
+     */
+    public GenVector<C> leftLinearCombination(C s, C t, 
+                                              GenVector<C> b) {
+        List<C> oval = b.val;
+        ArrayList<C> a = new ArrayList<C>( modul.cols );
+        int i = 0;
+        for ( C c : val ) {
+            C c1 = s.multiply(c);
+            C c2 = t.multiply( oval.get( i++ ) );
+            C e = c1.add( c2 );
+            a.add( e );
+        }
+        return new GenVector<C>(modul,a);
+    }
+
+
+
+    /**
+     * scalar / dot product of this vector with other vector.
+     * @return this . b
+     */
+    public C scalarProduct(GenVector<C> b) {
+        C a = modul.coFac.getZERO();
+        List<C> oval = b.val;
+        int i = 0;
+        for ( C c : val ) {
+            C c2 = c.multiply( oval.get( i++ ) );
+            a = a.add( c2 );
+        }
+        return a;
+    }
+
+
+    /**
+     * scalar / dot product of this vector with list of other vectors.
+     * @return this * b
+     */
+    public GenVector<C> scalarProduct(List<GenVector<C>> B) {
+        GenVector<C> A = modul.getZERO();
+        int i = 0;
+        for ( C c : val ) {
+            GenVector<C> b = B.get( i++ );
+            GenVector<C> a = b.leftScalarMultiply( c );
+            A = A.add( a );
+        }
+        return A;
+    }
+
+
+    /**
+     * right scalar / dot product of this vector with list 
+     * of other vectors.
+     * @return b * this
+     */
+    public GenVector<C> rightScalarProduct(List<GenVector<C>> B) {
+        GenVector<C> A = modul.getZERO();
+        int i = 0;
+        for ( C c : val ) {
+            GenVector<C> b = B.get( i++ );
+            GenVector<C> a = b.scalarMultiply( c );
+            A = A.add( a );
+        }
+        return A;
+    }
+
+}
