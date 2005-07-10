@@ -120,9 +120,11 @@
 </target>
 
 <target name="jar" depends="vorher" >
-  <jar jarfile="../jas-${DSTAMP}.jar"  >
+  <jar jarfile="/tmp/jas-ant-${DSTAMP}.jar"  >
      <fileset dir="." includes="**/*.java"  />
-     <fileset dir="." includes="jas-log.html"  />
+     <fileset dir="." includes="*.html"  />
+     <fileset dir="." includes="*.py"  />
+     <fileset dir="." includes="*.jas"  />
      <fileset dir="." includes="build.xml Makefile log4j.properties"  />
      <fileset dir="edu/jas" />
   </jar>
