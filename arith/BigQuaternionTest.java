@@ -85,10 +85,9 @@ public class BigQuaternionTest extends TestCase {
 
      assertEquals("6/8 = 3/4",a,b);
 
-     a = new BigQuaternion( "3/4 i 4/5" );
-     b = new BigQuaternion( "-3/4 i -4/5" );
-
-     assertEquals("3/4 + i 4/5 ",a,b.negate());
+     a = new BigQuaternion( "3/4 i 4/5 j 1/5 k 2/5" );
+     b = new BigQuaternion( "-3/4 i -4/5 j -1/5 k -2/5" );
+     assertEquals("3/4 + i 4/5 + j 1/5 + k 2/5",a,b.negate());
 
      String s = "6/1111111111111111111111111111111111111111111";
      a = new BigQuaternion( s );

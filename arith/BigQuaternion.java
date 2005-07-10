@@ -68,6 +68,7 @@ public class BigQuaternion implements RingElem<BigQuaternion>,
     /** The BigQuaternion string constructor accepts the
      * following formats:
      * empty string, "rational", or "rat i rat j rat k rat"
+     * with no blanks around i, j or k if used as polynoial coefficient.
      */
 
     public BigQuaternion(String s) throws NumberFormatException {
@@ -92,6 +93,8 @@ public class BigQuaternion implements RingElem<BigQuaternion>,
         String sr = "";
         if ( i > 0 ) {
            sr = s.substring(0,i);
+        } else if ( i < 0 ) {
+           throw new NumberFormatException("BigQuaternion missing i");
         }
         String si = "";
         if ( i < s.length() ) {
@@ -100,6 +103,8 @@ public class BigQuaternion implements RingElem<BigQuaternion>,
         int j = s.indexOf("j");
         if ( j > 0 ) {
            si = s.substring(0,j);
+        } else if ( j < 0 ) {
+           throw new NumberFormatException("BigQuaternion missing j");
         }
         String sj = "";
         if ( j < s.length() ) {
@@ -108,6 +113,8 @@ public class BigQuaternion implements RingElem<BigQuaternion>,
         int k = s.indexOf("k");
         if ( k > 0 ) {
            sj = s.substring(0,k);
+        } else if ( k < 0 ) {
+           throw new NumberFormatException("BigQuaternion missing k");
         }
         String sk = "";
         if ( k < s.length() ) {
@@ -194,9 +201,9 @@ public class BigQuaternion implements RingElem<BigQuaternion>,
         logger.debug("compareTo "+jm+" ? 0 = "+j);
         logger.debug("compareTo "+km+" ? 0 = "+k);
         if ( i == 0 && j == 0 && k == 0 ) return s;
-        s += " i " + im;
-        s += " j " + jm;
-        s += " k " + km;
+        s += "i" + im;
+        s += "j" + jm;
+        s += "k" + km;
         return s;
     }
 
