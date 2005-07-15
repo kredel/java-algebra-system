@@ -114,7 +114,7 @@ public class PolynomialList<C extends RingElem<C> > implements Serializable {
         }
         String[] vars = ring.getVars();
         boolean first = true;
-        erg.append("(\n");
+        erg.append("\n(\n");
         String sa = null;
         for ( GenPolynomial<C> oa: list ) {
             if ( vars != null ) {
@@ -125,8 +125,8 @@ public class PolynomialList<C extends RingElem<C> > implements Serializable {
             if ( first ) {
                first = false;
             } else {
-               erg.append( "," );
-               if ( sa.length() > 100 ) {
+               erg.append( ", " );
+               if ( sa.length() > 10 ) {
                   erg.append("\n");
                }
             }
