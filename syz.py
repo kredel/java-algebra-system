@@ -55,7 +55,7 @@ from edu.jas.module import ModuleList;
 from edu.jas.module import ModGroebnerBase;
 
 s = Syzygy.zeroRelations( rg.list );
-sl = ModuleList(rg.vars,rg.tord,s);
+sl = ModuleList(rg.ring,s);
 
 print "syzygy:", sl;
 print;
@@ -71,7 +71,7 @@ print;
 
 zg = sl;
 
-for i in range(1,len(r.vars)+1): 
+for i in range(1,len(r.ring.vars)+1): 
    print "\n %s. resolution" % i;
 
    sl = zg;
