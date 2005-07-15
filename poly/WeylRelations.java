@@ -55,6 +55,7 @@ public class WeylRelations<C extends RingElem<C>> {
                logger.info("rel  = " + rel);
                System.exit(1);
             }
+            //System.out.println("rel = " + rel.toString(ring.vars));
             table.update(e,f,rel);
         }
         if ( logger.isDebugEnabled() ) {
