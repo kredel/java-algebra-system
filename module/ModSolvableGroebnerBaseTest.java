@@ -245,12 +245,16 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
 
      int rloc = 4;
      pfac = new GenSolvablePolynomialRing<BigRational>(cfac,rloc);
+     //System.out.println("pfac = " + pfac);
+     //System.out.println("pfac end");
 
      WeylRelations<BigRational> wl = new WeylRelations<BigRational>(pfac);
+     //System.out.println("wl = ");
      wl.generate();
+     //System.out.println("generate = ");
      table = pfac.table;
-     //System.out.println("table = " + table);
-     //System.out.println("pfac = " + pfac);
+     //System.out.println("table = ");
+     //System.out.println("table = " + table.size());
 
      a = pfac.random(kl, ll, el, q );
      b = pfac.random(kl, ll, el, q );
@@ -259,6 +263,11 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
      e = d; // = pfac.random(kl, ll, el, q );
      one =  pfac.getONE();
      zero = pfac.getZERO();
+     //System.out.println("a = " + a );
+     //System.out.println("b = " + b );
+     //System.out.println("c = " + c );
+     //System.out.println("d = " + d );
+     //System.out.println("e = " + e );
 
      assertTrue("not isZERO( a )", !a.isZERO() );
 
