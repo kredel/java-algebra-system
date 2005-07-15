@@ -4,11 +4,13 @@
 
 package edu.jas.arith;
 
-//import edu.jas.arith.ModInteger;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+
+import edu.jas.structure.PrettyPrint;
+
 
 /**
  * ModInteger Test using JUnit 
@@ -88,9 +90,14 @@ public class ModIntegerTest extends TestCase {
      String s = "61111111111111111111111111111111111111111111";
      a = new ModInteger( "10", s );
      String t = a.toString();
-     String st = "1 mod(10)";
 
-     assertEquals("stringConstr = toString",st,t);
+     if ( PrettyPrint.isTrue() ) {
+        String st = "1";
+        assertEquals("stringConstr = toString",st,t);
+     } else {
+        String st = "1 mod(10)";
+        assertEquals("stringConstr = toString",st,t);
+     }
 
      a = new ModInteger( 7, 1 );
      b = new ModInteger( 7, -1 );

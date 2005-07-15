@@ -21,6 +21,7 @@ import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
+import edu.jas.structure.PrettyPrint;
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.TermOrder;
@@ -95,7 +96,17 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
 
     @Override
     public String toString() {
-        return this.getClass().getSimpleName() 
+        String res = "";
+        if ( PrettyPrint.isTrue() ) {
+           res = coFac.getClass().getSimpleName()
+                 + "(" 
+                 + varsToString()
+                 + ") " 
+                 + tord.toString()
+                 + "\n"
+                 + table.toString(vars);
+        } else {
+           res = this.getClass().getSimpleName() 
                  + "[ " // + coFac.toString() + " : "
                  + coFac.getClass().getSimpleName()
                  + ", " + nvar
@@ -103,6 +114,8 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
                  + ", " + varsToString()
                  + ", #rel = " + table.size()
                  + " ]";
+        }
+        return res;
     }
 
 

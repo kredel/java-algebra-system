@@ -17,6 +17,7 @@ import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
+import edu.jas.structure.PrettyPrint;
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomialRing;
@@ -93,7 +94,8 @@ public class GenPolynomial<C extends RingElem<C> >
      * String representation of GenPolynomial
      */
     public String toString() {
-        StringBuffer s = new StringBuffer( this.getClass().getSimpleName() + "[ " );
+        StringBuffer s = new StringBuffer();
+        s.append( this.getClass().getSimpleName() + "[ ");
         boolean first = true;
         for ( Map.Entry<ExpVector,C> m : val.entrySet() ) {
             if ( first ) {
@@ -105,7 +107,7 @@ public class GenPolynomial<C extends RingElem<C> >
             s.append( " " );
             s.append( m.getKey().toString() );
         }
-        s.append(" ] :: " + ring.toString() );
+        s.append(" ] "); // no not use: ring.toString() );
         return s.toString();
     }
 
@@ -115,29 +117,66 @@ public class GenPolynomial<C extends RingElem<C> >
      * using names for variables from v
      */
     public String toString(String[] v) {
-        StringBuffer s = new StringBuffer( this.getClass().getSimpleName() + "[ " );
-        if ( val.size() == 0 ) {
-           s.append( "0" );
+        StringBuffer s = new StringBuffer();
+        if ( PrettyPrint.isTrue() ) {
+            if ( val.size() == 0 ) {
+                s.append( "0" );
+            } else {
+                // s.append( "( " );
+                boolean first = true;
+                for ( Map.Entry<ExpVector,C> m : val.entrySet() ) {
+                    C c = m.getValue();
+                    if ( first ) {
+                        first = false;
+                    } else {
+                        if ( c.signum() < 0 ) {
+                            s.append( " - " );
+                            c = c.negate();
+                        } else {
+                            s.append( " + " );
+                        }
+                    }
+                    ExpVector e = m.getKey();
+                    if ( !c.isONE() || e.isZERO() ) {
+                       s.append( c.toString() );
+                       s.append( " " );
+                    }
+                    if ( e != null && v != null ) {
+                       s.append( e.toString(v) );
+                    } else {
+                       s.append( e );
+                    }
+                }
+                //s.append(" )");
+            }
         } else {
-           boolean first = true;
-           for ( Map.Entry<ExpVector,C> m : val.entrySet() ) {
-               C c = m.getValue();
-               if ( first ) {
-                  first = false;
-               } else {
-                   if ( c.signum() < 0 ) {
-                      s.append( " - " );
-                      c = c.negate();
-                   } else {
-                      s.append( " + " );
-                   }
-               }
-               s.append( c.toString() );
-               s.append( " " );
-               s.append( m.getKey().toString(v) );
-           }
+            s.append( this.getClass().getSimpleName() + "[ ");
+            if ( val.size() == 0 ) {
+                s.append( "0" );
+            } else {
+                boolean first = true;
+                for ( Map.Entry<ExpVector,C> m : val.entrySet() ) {
+                    C c = m.getValue();
+                    if ( first ) {
+                        first = false;
+                    } else {
+                        if ( c.signum() < 0 ) {
+                            s.append( " - " );
+                            c = c.negate();
+                        } else {
+                            s.append( " + " );
+                        }
+                    }
+                    ExpVector e = m.getKey();
+                    if ( !c.isONE() || e.isZERO() ) {
+                       s.append( c.toString() );
+                       s.append( " " );
+                    }
+                    s.append( e.toString(v) );
+                }
+            }
+            s.append(" ] "); // no not use: ring.toString() );
         }
-        s.append(" ] :: " + ring.toString() );
         return s.toString();
     }
 

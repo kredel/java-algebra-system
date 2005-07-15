@@ -6,6 +6,7 @@ package edu.jas.arith;
 
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
+import edu.jas.structure.PrettyPrint;
 
 import java.util.Random;
 import java.io.Reader;
@@ -108,7 +109,11 @@ public class ModInteger implements RingElem<ModInteger>,
     }
 
     public String toString() {
-	return val.toString() + " mod(" + modul.toString() + ")";
+        if ( PrettyPrint.isTrue() ) {
+	   return val.toString();
+        } else {
+ 	   return val.toString() + " mod(" + modul.toString() + ")";
+        }
     }
 
 

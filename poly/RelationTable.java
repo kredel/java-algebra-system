@@ -17,6 +17,7 @@ import java.io.Serializable;
 import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
+import edu.jas.structure.PrettyPrint;
 
 
 /**
@@ -122,23 +123,46 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
         }
         List v;
         StringBuffer s = new StringBuffer("RelationTable\n(\n");
-        boolean first = true;
-        for ( List<Integer> k: table.keySet() ) { 
-            if ( first ) {
-               first = false;
-            } else {
-               s.append( ",\n" );
+        if ( PrettyPrint.isTrue() ) {
+            boolean first = true;
+            for ( List<Integer> k: table.keySet() ) { 
+                if ( first ) {
+                    first = false;
+                } else {
+                    s.append( ",\n" );
+                }
+                v = table.get( k );
+                for (Iterator jt = v.iterator(); jt.hasNext(); ) { 
+                    ExpVectorPair ep = (ExpVectorPair)jt.next();
+                    s.append("( " + ep.getFirst().toString(vars) + " ), " );
+                    s.append("( " + ep.getSecond().toString(vars) + " ), " );
+                    GenSolvablePolynomial<C> p 
+                        = (GenSolvablePolynomial<C>)jt.next();
+                    s.append("( " + p.toString(vars) + " )" );
+                    if ( jt.hasNext() ) {
+                        s.append(",\n");
+                    }
+                }
             }
-            v = table.get( k );
-            for (Iterator jt = v.iterator(); jt.hasNext(); ) { 
-                ExpVectorPair ep = (ExpVectorPair)jt.next();
-                s.append("( " + ep.getFirst().toString(vars) + " ), " );
-                s.append("( " + ep.getSecond().toString(vars) + " ), " );
-                GenSolvablePolynomial<C> p 
-                  = (GenSolvablePolynomial<C>)jt.next();
-                s.append("( " + p.toString(vars) + " )" );
-                if ( jt.hasNext() ) {
-                   s.append(",\n");
+        } else {
+            boolean first = true;
+            for ( List<Integer> k: table.keySet() ) { 
+                if ( first ) {
+                    first = false;
+                } else {
+                    s.append( ",\n" );
+                }
+                v = table.get( k );
+                for (Iterator jt = v.iterator(); jt.hasNext(); ) { 
+                    ExpVectorPair ep = (ExpVectorPair)jt.next();
+                    s.append("( " + ep.getFirst().toString(vars) + " ), " );
+                    s.append("( " + ep.getSecond().toString(vars) + " ), " );
+                    GenSolvablePolynomial<C> p 
+                        = (GenSolvablePolynomial<C>)jt.next();
+                    s.append("( " + p.toString(vars) + " )" );
+                    if ( jt.hasNext() ) {
+                        s.append(",\n");
+                    }
                 }
             }
         }

@@ -65,16 +65,10 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
         return new GenSolvablePolynomial<C>(ring,this.val);
     }
 
+
     /*
+    @inherit
     public String toString() { 
-        StringBuffer erg = new StringBuffer(); //"Solvable{ ");
-        erg.append( super.toString() );
-        //erg.append(" | #rel = ");
-        //erg.append( ring.table.size() ); // not table itself!
-        //erg.append(", ");
-        //erg.append( table.getNumvar() ); 
-        //erg.append(" }");
-        return erg.toString(); 
     }
     */
 

@@ -16,6 +16,8 @@ from edu.jas.ring      import *
 from edu.jas.module    import *
 from edu.jas.util      import *
 
+#PrettyPrint.setInternal();
+
 
 class Ring:
 
