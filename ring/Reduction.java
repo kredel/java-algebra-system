@@ -20,7 +20,7 @@ import edu.jas.poly.GenPolynomial;
 
 import edu.jas.poly.GenSolvablePolynomial;
 
-//import edu.jas.util.DistHashTable;
+import edu.jas.util.DistHashTable;
 
 
 /**
@@ -493,5 +493,163 @@ public class Reduction  {
 	return P;
     }
 
+
+    /**
+     * Normalform. Allows concurrent modification of the list.
+     */
+
+    public static <C extends RingElem<C>>
+           GenPolynomial<C> 
+           normalformMod(/*Array*/List<GenPolynomial<C>> Pp, 
+                         GenPolynomial<C> Ap) {  
+        if ( Pp == null ) return Ap;
+        if ( Pp.isEmpty() ) return Ap;
+        int l = Pp.size();
+        GenPolynomial<C>[] P = new GenPolynomial[l];
+        synchronized (Pp) { // required, ok in dist
+           //P = Pp.values().toArray();
+           for ( int i = 0; i < Pp.size(); i++ ) {
+               P[i] = Pp.get(i);
+           }
+        }
+
+        Map.Entry<ExpVector,C> m;
+        Map.Entry<ExpVector,C> m1;
+        ExpVector e;
+        ExpVector f = null;
+        C a;
+        boolean mt = false;
+        GenPolynomial<C> Rz = Ap.ring.getZERO();
+        GenPolynomial<C> R = Rz;
+        GenPolynomial<C> p = null;
+        GenPolynomial<C> Q = null;
+        GenPolynomial<C> S = Ap;
+        while ( S.length() > 0 ) { 
+              if ( Pp.size() != l ) { 
+                 //long t = System.currentTimeMillis();
+                 l = Pp.size();
+                 synchronized (Pp) { // required, bad in parallel
+                    P = new GenPolynomial[ l ];
+                    //P = Pp.toArray();
+                    for ( int i = 0; i < Pp.size(); i++ ) {
+                        P[i] = Pp.get(i);
+                    }
+                 }
+                 //t = System.currentTimeMillis()-t;
+                 //logger.info("Pp.toArray() = " + t + " ms, size() = " + l);
+                 S = Ap; // S.add(R)? // restart reduction ?
+                 R = Rz; 
+              }
+	      m = S.leadingMonomial();
+              e = m.getKey();
+              a = m.getValue();
+              for ( int i = 0; i < P.length ; i++ ) {
+                  p = P[i];
+                  f = p.leadingExpVector();
+                  if ( f != null ) {
+                     mt = ExpVector.EVMT( e, f );
+                     if ( mt ) break; 
+                  }
+	      }
+              if ( ! mt ) { 
+                 //logger.debug("irred");
+                 //T = new OrderedMapPolynomial( a, e );
+                 R = R.add( a, e );
+                 S = S.subtract( a, e ); 
+		 // System.out.println(" S = " + S);
+	      } else { 
+                 //logger.debug("red");
+                 m1 = p.leadingMonomial();
+		 e = ExpVector.EVDIF( e, f );
+                 a = a.divide( m1.getValue() );
+                 Q = p.multiply( a, e );
+                 S = S.subtract( Q );
+              }
+	}
+        return R;
+    }
+
+
+    /**
+     * Normalform. Allows concurrent modification of the list.
+     */
+
+    public static <C extends RingElem<C>>
+           GenPolynomial<C> 
+           normalformMod(DistHashTable Pp, 
+                         GenPolynomial<C> Ap) {  
+        if ( Pp == null ) return Ap;
+        if ( Pp.isEmpty() ) return Ap;
+        int l = Pp.size();
+        GenPolynomial<C>[] P = new GenPolynomial[l];
+        synchronized (Pp) { // required, ok in dist
+           //P = Pp.values().toArray();
+           Collection<GenPolynomial<C>> Pv 
+               = (Collection<GenPolynomial<C>>)Pp.values();
+           int i = 0;
+           for ( GenPolynomial<C> x : Pv ) {
+               P[i++] = x;
+           }
+        }
+
+        Map.Entry<ExpVector,C> m;
+        Map.Entry<ExpVector,C> m1;
+        ExpVector e;
+        ExpVector f = null;
+        C a;
+        boolean mt = false;
+        GenPolynomial<C> Rz = Ap.ring.getZERO();
+        GenPolynomial<C> R = Rz;
+        GenPolynomial<C> p = null;
+        GenPolynomial<C> Q = null;
+        GenPolynomial<C> S = Ap;
+        while ( S.length() > 0 ) { 
+              if ( Pp.size() != l ) { 
+                 //long t = System.currentTimeMillis();
+                 l = Pp.size();
+                 synchronized (Pp) { // required, ok in distributed
+                    P = new GenPolynomial[ l ];
+                    //P = Pp.values().toArray();
+                    Collection<GenPolynomial<C>> Pv 
+                        = (Collection<GenPolynomial<C>>)Pp.values();
+                    int i = 0;
+                    for ( GenPolynomial<C> x : Pv ) {
+                        P[i++] = x;
+                    }
+                 }
+                 //t = System.currentTimeMillis()-t;
+                 //logger.info("Pp.toArray() = " + t + " ms, size() = " + l);
+                 S = Ap; // S.add(R)? // restart reduction ?
+                 R = Rz; 
+              }
+
+	      m = S.leadingMonomial();
+              e = m.getKey();
+              a = m.getValue();
+              for ( int i = 0; i < P.length ; i++ ) {
+                  p = P[i];
+                  f = p.leadingExpVector();
+                  if ( f != null ) {
+                     mt = ExpVector.EVMT( e, f );
+                     if ( mt ) break; 
+                  }
+	      }
+              if ( ! mt ) { 
+                 //logger.debug("irred");
+                 //T = new OrderedMapPolynomial( a, e );
+                 R = R.add( a, e );
+                 S = S.subtract( a, e ); 
+		 // System.out.println(" S = " + S);
+	      } else { 
+                 //logger.debug("red");
+                 m1 = p.leadingMonomial();
+		 e = ExpVector.EVDIF( e, f );
+                 a = a.divide( m1.getValue() );
+                 Q = p.multiply( a, e );
+                 S = S.subtract( Q );
+              }
+	}
+        return R;
+    }
 
 }
