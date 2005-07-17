@@ -122,12 +122,13 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
             return toString();
         }
         List v;
-        StringBuffer s = new StringBuffer("RelationTable\n(\n");
+        StringBuffer s = new StringBuffer("RelationTable\n(");
         if ( PrettyPrint.isTrue() ) {
             boolean first = true;
             for ( List<Integer> k: table.keySet() ) { 
                 if ( first ) {
                     first = false;
+                    s.append( "\n" );
                 } else {
                     s.append( ",\n" );
                 }
@@ -166,7 +167,7 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
                 }
             }
         }
-        s.append("\n)");
+        s.append("\n)\n");
         return s.toString();
     }
 

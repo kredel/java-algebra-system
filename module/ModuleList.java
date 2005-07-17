@@ -129,7 +129,7 @@ public class ModuleList<C extends RingElem<C> > implements Serializable {
                erg.append( ",\n" );
             }
             boolean ifirst = true;
-            erg.append(" (\n");
+            erg.append(" ( ");
             String os;
             for ( GenPolynomial<C> oa: row ) {
                 if ( vars != null ) {

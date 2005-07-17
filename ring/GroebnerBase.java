@@ -70,16 +70,18 @@ public class GroebnerBase  {
      */
 
     public static <C extends RingElem<C>> 
-           ArrayList<GenPolynomial<C>> GB(List<GenPolynomial<C>> F) {  
+           ArrayList<GenPolynomial<C>> 
+                  GB(List<GenPolynomial<C>> F) {  
         return GB(0,F);
     }
 
     public static <C extends RingElem<C>> 
-           ArrayList<GenPolynomial<C>> GB(int modv, 
-                                          List<GenPolynomial<C>> F) {  
+           ArrayList<GenPolynomial<C>> 
+                  GB(int modv, 
+                     List<GenPolynomial<C>> F) {  
         GenPolynomial<C> p;
         ArrayList<GenPolynomial<C>> G = new ArrayList<GenPolynomial<C>>();
-        OrderedPairlist pairlist = null; 
+        OrderedPairlist<C> pairlist = null; 
         int l = F.size();
         ListIterator<GenPolynomial<C>> it = F.listIterator();
         while ( it.hasNext() ) { 
@@ -92,7 +94,7 @@ public class GroebnerBase  {
 	       }
                G.add( p );
 	       if ( pairlist == null ) {
-                  pairlist = new OrderedPairlist( modv, p.ring );
+                  pairlist = new OrderedPairlist<C>( modv, p.ring );
                }
                // putOne not required
                pairlist.put( p );
@@ -110,7 +112,7 @@ public class GroebnerBase  {
         GenPolynomial<C> S;
         GenPolynomial<C> H;
         while ( pairlist.hasNext() ) {
-              pair = (Pair<C>) pairlist.removeNext();
+              pair = pairlist.removeNext();
               if ( pair == null ) continue; 
 
               pi = pair.pi; 
@@ -167,7 +169,8 @@ public class GroebnerBase  {
      */
 
     public static <C extends RingElem<C>>
-           ArrayList<GenPolynomial<C>> GBmi(List<GenPolynomial<C>> Gp) {  
+           ArrayList<GenPolynomial<C>> 
+                  GBmi(List<GenPolynomial<C>> Gp) {  
         GenPolynomial<C> a;
         ArrayList<GenPolynomial<C>> G = new ArrayList<GenPolynomial<C>>();
         ListIterator<GenPolynomial<C>> it = Gp.listIterator();
