@@ -50,11 +50,20 @@ class Ideal:
         t = System.currentTimeMillis();
         G = GroebnerBase.GB(F);
         t = System.currentTimeMillis() - t;
-        print "executed in %s ms" % t; 
+        print "sequential executed in %s ms" % t; 
         g = OrderedPolynomialList(s.ring,G);
         return g;
 #        return Ideal(self.ring,str(g));
 
+    def parGB(self,th):
+        s = self.pset;
+        F = s.list;
+        t = System.currentTimeMillis();
+        G = GroebnerBaseParallel.GB(F,th);
+        t = System.currentTimeMillis() - t;
+        print "parallel %s executed in %s ms" % (th, t); 
+        g = OrderedPolynomialList(s.ring,G);
+        return g;
 
 
 
