@@ -4,8 +4,6 @@
 
 package edu.jas.ring;
 
-//import edu.jas.poly.RatGBase;
-
 import java.util.List;
 import java.util.ArrayList;
 
@@ -51,7 +49,7 @@ public class ReductionTest extends TestCase {
      return suite;
    }
 
-   private final static int bitlen = 100;
+   //private final static int bitlen = 100;
 
    GenPolynomialRing<BigRational> fac;
 
@@ -89,7 +87,7 @@ public class ReductionTest extends TestCase {
  public void testRatReduction0() {
      L = new ArrayList<GenPolynomial<BigRational>>();
 
-     //a = RatOrderedMapPolynomial.DIRRAS(rl, kl, ll, el, q );
+     a = fac.random(kl, ll, el, q );
      c = fac.getONE();
      d = fac.getZERO();
 
@@ -104,8 +102,8 @@ public class ReductionTest extends TestCase {
      e = Reduction.<BigRational>normalform( L, c );
      assertTrue("isZERO( e )", e.isZERO() ); 
 
-     // e = Reduction.normalform( L, a );
-     // assertTrue("isZERO( e )", e.isZERO() ); 
+     e = Reduction.<BigRational>normalform( L, a );
+     assertTrue("isZERO( e )", e.isZERO() ); 
 
      e = Reduction.<BigRational>normalform( L, d );
      assertTrue("isZERO( e )", e.isZERO() ); 
@@ -125,11 +123,10 @@ public class ReductionTest extends TestCase {
  * Test ReductionMod with constants and empty list reduction
  * 
  */
-/*
  public void testRatReduction1() {
      L = new ArrayList<GenPolynomial<BigRational>>();
 
-     //a = RatOrderedMapPolynomial.DIRRAS(rl, kl, ll, el, q );
+     a = fac.random(kl, ll, el, q );
      c = fac.getONE();
      d = fac.getZERO();
 
@@ -144,14 +141,14 @@ public class ReductionTest extends TestCase {
      e = Reduction.<BigRational>normalformMod( L, c );
      assertTrue("isZERO( e )", e.isZERO() ); 
 
-     // e = Reduction.normalform( L, a );
-     // assertTrue("isZERO( e )", e.isZERO() ); 
+     e = Reduction.<BigRational>normalformMod( L, a );
+     assertTrue("isZERO( e )", e.isZERO() ); 
 
      e = Reduction.<BigRational>normalformMod( L, d );
      assertTrue("isZERO( e )", e.isZERO() ); 
 
 
-     L = new ArrayList();
+     L = new ArrayList<GenPolynomial<BigRational>>();
      L.add( d );
      e = Reduction.<BigRational>normalformMod( L, c );
      assertTrue("isONE( e )", e.isONE() ); 
@@ -159,7 +156,6 @@ public class ReductionTest extends TestCase {
      e = Reduction.<BigRational>normalformMod( L, d );
      assertTrue("isZERO( e )", e.isZERO() ); 
  }
-*/
 
 
 /**
@@ -191,7 +187,6 @@ public class ReductionTest extends TestCase {
  * Test Rat reduction Mod
  * 
  */
-/*
  public void testRatReductionMod() {
 
      a = fac.random(kl, ll, el, q );
@@ -211,7 +206,7 @@ public class ReductionTest extends TestCase {
      e = Reduction.<BigRational>normalformMod( L, a );
      assertTrue("isZERO( e ) some times", e.isZERO() ); 
  }
-*/
+
 
 /**
  * Test Complex reduction
