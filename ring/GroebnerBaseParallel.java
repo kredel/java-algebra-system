@@ -173,7 +173,7 @@ public class GroebnerBaseParallel  {
                  logger.debug("ht(S) = " + S.leadingExpVector() );
 	      }
 
-              H = Reduction.<C>normalform( G, S );
+              H = Reduction.<C>normalformMod( G, S );
 	      red++;
               if ( H.isZERO() ) {
                  pair.setZero();
