@@ -210,9 +210,11 @@ public class Reduction  {
            return Ap;
         }
         Map.Entry<ExpVector,C> m;
-        int l = Pp.size();
-        GenPolynomial<C>[] P = new GenPolynomial[l];
+        int l;
+        GenPolynomial<C>[] P;
         synchronized (Pp) {
+            l = Pp.size();
+            P = new GenPolynomial[l];
             //P = Pp.toArray();
             for ( int i = 0; i < Pp.size(); i++ ) {
                 P[i] = Pp.get(i);
@@ -357,10 +359,12 @@ public class Reduction  {
         if ( Ap == null || Ap.isZERO() ) {
            return Ap;
         }
-        int l = Pp.size();
+        int l;
         Map.Entry<ExpVector,C> m;
-        GenSolvablePolynomial<C>[] P = new GenSolvablePolynomial[ l ];
+        GenSolvablePolynomial<C>[] P;
         synchronized (Pp) {
+            l = Pp.size();
+            P = new GenSolvablePolynomial[l];
             //P = Pp.toArray();
             for ( int j = 0; j < Pp.size(); j++ ) {
                 P[j] = Pp.get(j);
@@ -504,9 +508,11 @@ public class Reduction  {
                          GenPolynomial<C> Ap) {  
         if ( Pp == null ) return Ap;
         if ( Pp.isEmpty() ) return Ap;
-        int l = Pp.size();
-        GenPolynomial<C>[] P = new GenPolynomial[l];
+        int l;
+        GenPolynomial<C>[] P;
         synchronized (Pp) { // required, ok in dist
+           l = Pp.size();
+           P = new GenPolynomial[l];
            //P = Pp.values().toArray();
            for ( int i = 0; i < Pp.size(); i++ ) {
                P[i] = Pp.get(i);
@@ -527,8 +533,8 @@ public class Reduction  {
         while ( S.length() > 0 ) { 
               if ( Pp.size() != l ) { 
                  //long t = System.currentTimeMillis();
-                 l = Pp.size();
                  synchronized (Pp) { // required, bad in parallel
+                    l = Pp.size();
                     P = new GenPolynomial[ l ];
                     //P = Pp.toArray();
                     for ( int i = 0; i < Pp.size(); i++ ) {
@@ -580,9 +586,11 @@ public class Reduction  {
                          GenPolynomial<C> Ap) {  
         if ( Pp == null ) return Ap;
         if ( Pp.isEmpty() ) return Ap;
-        int l = Pp.size();
-        GenPolynomial<C>[] P = new GenPolynomial[l];
+        int l;
+        GenPolynomial<C>[] P;
         synchronized (Pp) { // required, ok in dist
+           l = Pp.size();
+           P = new GenPolynomial[l];
            //P = Pp.values().toArray();
            Collection<GenPolynomial<C>> Pv 
                = (Collection<GenPolynomial<C>>)Pp.values();
@@ -606,8 +614,8 @@ public class Reduction  {
         while ( S.length() > 0 ) { 
               if ( Pp.size() != l ) { 
                  //long t = System.currentTimeMillis();
-                 l = Pp.size();
                  synchronized (Pp) { // required, ok in distributed
+                    l = Pp.size();
                     P = new GenPolynomial[ l ];
                     //P = Pp.values().toArray();
                     Collection<GenPolynomial<C>> Pv 
