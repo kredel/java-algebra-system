@@ -4,8 +4,6 @@
 
 package edu.jas.ring;
 
-//import edu.jas.poly.RatGBase;
-
 import java.util.List;
 import java.util.ArrayList;
 
@@ -15,13 +13,16 @@ import junit.framework.TestSuite;
 
 import org.apache.log4j.BasicConfigurator;
 
-import edu.jas.poly.SolvablePolynomial;
-import edu.jas.poly.OrderedPolynomial;
-import edu.jas.poly.RatSolvableOrderedMapPolynomial;
-import edu.jas.poly.ComplexSolvableOrderedMapPolynomial;
+import edu.jas.arith.BigRational;
+import edu.jas.arith.BigComplex;
+import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.GenPolynomialRing;
+import edu.jas.poly.GenSolvablePolynomial;
+import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.PolynomialList;
 import edu.jas.poly.RelationTable;
 import edu.jas.poly.WeylRelations;
+
 
 /**
  * Reduction Test using JUnit 
@@ -53,21 +54,21 @@ public class ReductionSolvableTest extends TestCase {
      return suite;
    }
 
-   private final static int bitlen = 100;
+   //private final static int bitlen = 100;
+
+   GenSolvablePolynomialRing<BigRational> fac;
 
    RelationTable table;
 
-   SolvablePolynomial dummy;
+   GenSolvablePolynomial<BigRational> a;
+   GenSolvablePolynomial<BigRational> b;
+   GenSolvablePolynomial<BigRational> c;
+   GenSolvablePolynomial<BigRational> d;
+   GenSolvablePolynomial<BigRational> e;
 
-   SolvablePolynomial a;
-   SolvablePolynomial b;
-   SolvablePolynomial c;
-   SolvablePolynomial d;
-   SolvablePolynomial e;
-
-   List L;
-   PolynomialList F;
-   PolynomialList G;
+   List<GenSolvablePolynomial<BigRational>> L;
+   PolynomialList<BigRational> F;
+   PolynomialList<BigRational> G;
 
    int rl = 4; 
    int kl = 10;
@@ -77,12 +78,12 @@ public class ReductionSolvableTest extends TestCase {
 
    protected void setUp() {
        a = b = c = d = e = null;
-       table = null;
+       fac = new GenSolvablePolynomialRing<BigRational>( new BigRational(0), rl );
    }
 
    protected void tearDown() {
        a = b = c = d = e = null;
-       table = null;
+       fac = null;
    }
 
 
@@ -91,122 +92,119 @@ public class ReductionSolvableTest extends TestCase {
  * 
  */
  public void testRatReduction0() {
-     L = new ArrayList();
-     table = new RelationTable();
+     L = new ArrayList<GenSolvablePolynomial<BigRational>>();
 
-     a = RatSolvableOrderedMapPolynomial.DIRRAS(table,rl, kl, ll, el, q );
-     //c = RatSolvableOrderedMapPolynomial.getONE(table);
-     //d = RatSolvableOrderedMapPolynomial.getZERO(table);
-     c = a.getONE(table);
-     d = a.getZERO(table);
+     a = fac.random(kl, ll, el, q );
+     c = fac.getONE();
+     d = fac.getZERO();
 
-     e = Reduction.leftNormalform( L, c );
+     e = Reduction.<BigRational>leftNormalform( L, c );
      assertTrue("isONE( e )", e.isONE() ); 
 
-     e = Reduction.leftNormalform( L, d );
+     e = Reduction.<BigRational>leftNormalform( L, d );
      assertTrue("isZERO( e )", e.isZERO() ); 
 
 
      L.add( c );
-     e = Reduction.leftNormalform( L, c );
+     e = Reduction.<BigRational>leftNormalform( L, c );
      assertTrue("isZERO( e )", e.isZERO() ); 
 
      // e = Reduction.leftNormalform( L, a );
      // assertTrue("isZERO( e )", e.isZERO() ); 
 
-     e = Reduction.leftNormalform( L, d );
+     e = Reduction.<BigRational>leftNormalform( L, d );
      assertTrue("isZERO( e )", e.isZERO() ); 
 
 
-     L = new ArrayList();
+     L = new ArrayList<GenSolvablePolynomial<BigRational>>();
      L.add( d );
-     e = Reduction.leftNormalform( L, c );
+     e = Reduction.<BigRational>leftNormalform( L, c );
      assertTrue("isONE( e )", e.isONE() ); 
 
-     e = Reduction.leftNormalform( L, d );
+     e = Reduction.<BigRational>leftNormalform( L, d );
      assertTrue("isZERO( e )", e.isZERO() ); 
  }
+
 
 /**
  * Test constants and empty list reduction
  * 
  */
  public void testWeylRatReduction0() {
-     L = new ArrayList();
+     L = new ArrayList<GenSolvablePolynomial<BigRational>>();
 
-     dummy = RatSolvableOrderedMapPolynomial.DIRRAS(table/*null*/,rl, kl, ll, el, q );
-     table = (new WeylRelations()).generate(rl,dummy);
-     dummy = null;
+     WeylRelations<BigRational> wl = new WeylRelations<BigRational>(fac);
+     wl.generate();
 
-     a = RatSolvableOrderedMapPolynomial.DIRRAS(table,rl, kl, ll, el, q );
-     //c = RatSolvableOrderedMapPolynomial.getONE(table);
-     //d = RatSolvableOrderedMapPolynomial.getZERO(table);
-     c = a.getONE(table);
-     d = a.getZERO(table);
+     a = fac.random(kl, ll, el, q );
+     c = fac.getONE();
+     d = fac.getZERO();
 
-     e = Reduction.leftNormalform( L, c );
+     e = Reduction.<BigRational>leftNormalform( L, c );
      assertTrue("isONE( e )", e.isONE() ); 
 
-     e = Reduction.leftNormalform( L, d );
+     e = Reduction.<BigRational>leftNormalform( L, d );
      assertTrue("isZERO( e )", e.isZERO() ); 
 
 
      L.add( c );
-     e = Reduction.leftNormalform( L, c );
+     e = Reduction.<BigRational>leftNormalform( L, c );
      assertTrue("isZERO( e )", e.isZERO() ); 
 
-     // e = Reduction.leftNormalform( L, a );
-     // assertTrue("isZERO( e )", e.isZERO() ); 
+     e = Reduction.<BigRational>leftNormalform( L, a );
+     assertTrue("isZERO( e )", e.isZERO() ); 
 
-     e = Reduction.leftNormalform( L, d );
+     e = Reduction.<BigRational>leftNormalform( L, d );
      assertTrue("isZERO( e )", e.isZERO() ); 
 
 
-     L = new ArrayList();
+     L = new ArrayList<GenSolvablePolynomial<BigRational>>();
      L.add( d );
-     e = Reduction.leftNormalform( L, c );
+     e = Reduction.<BigRational>leftNormalform( L, c );
      assertTrue("isONE( e )", e.isONE() ); 
 
-     e = Reduction.leftNormalform( L, d );
+     e = Reduction.<BigRational>leftNormalform( L, d );
      assertTrue("isZERO( e )", e.isZERO() ); 
  }
+
 
 
 /**
  * Test ReductionMod with constants and empty list reduction
  * 
+ */
+/*
  public void testRatReduction1() {
-     L = new ArrayList();
-     table = new RelationTable();
+     L = new ArrayList<GenSolvablePolynomial<BigRational>>();
 
-     //a = RatSolvableOrderedMapPolynomial.DIRRAS(table,rl, kl, ll, el, q );
-     c = RatSolvableOrderedMapPolynomial.ONE;
-     d = RatSolvableOrderedMapPolynomial.ZERO;
+     a = fac.random(kl, ll, el, q );
+     c = fac.getONE();
+     d = fac.getZERO();
 
-     e = Reduction.leftNormalformMod( L, c );
+     e = Reduction.<BigRational>leftNormalformMod( L, c );
      assertTrue("isONE( e )", e.isONE() ); 
 
-     e = Reduction.leftNormalformMod( L, d );
+     e = Reduction.<BigRational>leftNormalformMod( L, d );
      assertTrue("isZERO( e )", e.isZERO() ); 
 
 
      L.add( c );
-     e = Reduction.leftNormalformMod( L, c );
+     e = Reduction.<BigRational>leftNormalformMod( L, c );
      assertTrue("isZERO( e )", e.isZERO() ); 
 
-     // e = Reduction.leftNormalform( L, a );
+     // e = Reduction.<BigRational>leftNormalform( L, a );
      // assertTrue("isZERO( e )", e.isZERO() ); 
 
-     e = Reduction.leftNormalformMod( L, d );
+     e = Reduction.<BigRational>leftNormalformMod( L, d );
      assertTrue("isZERO( e )", e.isZERO() ); 
 
 
-     L = new ArrayList();
+     L = new ArrayList<GenSolvablePolynomial<BigRational>>();
      L.add( d );
-     e = Reduction.leftNormalformMod( L, c );
+     e = Reduction.<BigRational>leftNormalformMod( L, c );
      assertTrue("isONE( e )", e.isONE() ); 
 
-     e = Reduction.leftNormalformMod( L, d );
+     e = Reduction.<BigRational>leftNormalformMod( L, d );
      assertTrue("isZERO( e )", e.isZERO() ); 
  }
  */
@@ -218,23 +216,21 @@ public class ReductionSolvableTest extends TestCase {
  */
  public void testRatReduction() {
 
-     table = new RelationTable();
-
-     a = RatSolvableOrderedMapPolynomial.DIRRAS(table,rl, kl, ll, el, q );
-     b = RatSolvableOrderedMapPolynomial.DIRRAS(table,rl, kl, ll, el, q );
+     a = fac.random(kl, ll, el, q );
+     b = fac.random(kl, ll, el, q );
 
      assertTrue("not isZERO( a )", !a.isZERO() );
 
-     L = new ArrayList();
+     L = new ArrayList<GenSolvablePolynomial<BigRational>>();
      L.add(a);
 
-     e = Reduction.leftNormalform( L, a );
+     e = Reduction.<BigRational>leftNormalform( L, a );
      assertTrue("isZERO( e )", e.isZERO() );
 
      assertTrue("not isZERO( b )", !b.isZERO() );
 
      L.add(b);
-     e = Reduction.leftNormalform( L, a );
+     e = Reduction.<BigRational>leftNormalform( L, a );
      assertTrue("isZERO( e ) some times", e.isZERO() ); 
  }
 
@@ -244,26 +240,25 @@ public class ReductionSolvableTest extends TestCase {
  * 
  */
  public void testWeylRatReduction() {
+     L = new ArrayList<GenSolvablePolynomial<BigRational>>();
 
-     dummy = RatSolvableOrderedMapPolynomial.DIRRAS(table/*null*/,rl, kl, ll, el, q );
-     table = (new WeylRelations()).generate(rl,dummy);
-     dummy = null;
+     WeylRelations<BigRational> wl = new WeylRelations<BigRational>(fac);
+     wl.generate();
 
-     a = RatSolvableOrderedMapPolynomial.DIRRAS(table,rl, kl, ll, el, q );
-     b = RatSolvableOrderedMapPolynomial.DIRRAS(table,rl, kl, ll, el, q );
+     a = fac.random(kl, ll, el, q );
+     b = fac.random(kl, ll, el, q );
 
      assertTrue("not isZERO( a )", !a.isZERO() );
 
-     L = new ArrayList();
      L.add(a);
 
-     e = Reduction.leftNormalform( L, a );
+     e = Reduction.<BigRational>leftNormalform( L, a );
      assertTrue("isZERO( e )", e.isZERO() );
 
      assertTrue("not isZERO( b )", !b.isZERO() );
 
      L.add(b);
-     e = Reduction.leftNormalform( L, a );
+     e = Reduction.<BigRational>leftNormalform( L, a );
      assertTrue("isZERO( e ) some times", e.isZERO() ); 
  }
 
@@ -271,84 +266,27 @@ public class ReductionSolvableTest extends TestCase {
 /**
  * Test Rat reduction Mod
  * 
+ */
+/*
  public void testRatReductionMod() {
 
-     table = new RelationTable();
-
-     a = RatSolvableOrderedMapPolynomial.DIRRAS(table,rl, kl, ll, el, q );
-     b = RatSolvableOrderedMapPolynomial.DIRRAS(table,rl, kl, ll, el, q );
+     a = fac.random(kl, ll, el, q );
+     b = fac.random(kl, ll, el, q );
 
      assertTrue("not isZERO( a )", !a.isZERO() );
 
-     L = new ArrayList();
+     L = new ArrayList<GenSolvablePolynomial<BigRational>>();
      L.add(a);
 
-     e = Reduction.leftNormalformMod( L, a );
+     e = Reduction.<BigRational>leftNormalformMod( L, a );
      assertTrue("isZERO( e )", e.isZERO() );
 
      assertTrue("not isZERO( b )", !b.isZERO() );
 
      L.add(b);
-     e = Reduction.leftNormalformMod( L, a );
+     e = Reduction.<BigRational>leftNormalformMod( L, a );
      assertTrue("isZERO( e ) some times", e.isZERO() ); 
  }
  */
-
-
-/**
- * Test Complex reduction
- * 
- */
- public void testComplexReduction() {
-
-     dummy = RatSolvableOrderedMapPolynomial.DIRRAS(table/*null*/,rl, kl, ll, el, q );
-     table = (new WeylRelations()).generate(rl,dummy);
-     dummy = null;
-
-     a = ComplexSolvableOrderedMapPolynomial.DICRAS(table,rl, kl, ll, el, q );
-     b = ComplexSolvableOrderedMapPolynomial.DICRAS(table,rl, kl, ll, el, q );
-
-     assertTrue("not isZERO( a )", !a.isZERO() );
-
-     L = new ArrayList();
-     L.add(a);
-
-     e = Reduction.leftNormalform( L, a );
-     assertTrue("isZERO( e )", e.isZERO() );
-
-     assertTrue("not isZERO( b )", !b.isZERO() );
-
-     L.add(b);
-     e = Reduction.leftNormalform( L, a );
-     assertTrue("isZERO( e ) some times", e.isZERO() ); 
- }
-
-
-/**
- * Test Weyl Complex reduction
- * 
- */
- public void testWeylComplexReduction() {
-
-     table = new RelationTable();
-
-     a = ComplexSolvableOrderedMapPolynomial.DICRAS(table,rl, kl, ll, el, q );
-     b = ComplexSolvableOrderedMapPolynomial.DICRAS(table,rl, kl, ll, el, q );
-
-     assertTrue("not isZERO( a )", !a.isZERO() );
-
-     L = new ArrayList();
-     L.add(a);
-
-     e = Reduction.leftNormalform( L, a );
-     assertTrue("isZERO( e )", e.isZERO() );
-
-     assertTrue("not isZERO( b )", !b.isZERO() );
-
-     L.add(b);
-     e = Reduction.leftNormalform( L, a );
-     assertTrue("isZERO( e ) some times", e.isZERO() ); 
- }
-
 
 }
