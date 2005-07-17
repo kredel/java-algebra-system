@@ -77,8 +77,14 @@ public class Katsura {
            return s.toString();
     }
 
-    String varList(String order) {
+
+    public String varList(String order) {
+        return varList("Rat",order);
+    }
+
+    public String varList(String coeff, String order) {
            StringBuffer s = new StringBuffer();
+           s.append(coeff);
            s.append("(");
            for (int i = 0; i <= N; i++) {
                s.append(variable(i));
@@ -95,6 +101,12 @@ public class Katsura {
            StringBuffer s = new StringBuffer();
            s.append(varList(order));
            s.append("\n");
+           s.append(polyList());
+           return s.toString();
+    }
+
+    public String polyList() {
+           StringBuffer s = new StringBuffer();
            s.append("(\n");
            //for (int m = -N + 1; m <= N - 1; m++) { doubles polynomials
            for (int m = 0; m <= N - 1; m++) {
