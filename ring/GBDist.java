@@ -9,6 +9,10 @@ import java.util.List;
 import java.io.IOException;
 import java.io.FileNotFoundException;
 
+import edu.jas.structure.RingElem;
+
+import edu.jas.poly.GenPolynomial;
+
 import edu.jas.util.RemoteExecutable;
 import edu.jas.util.ExecutableChannels;
 
@@ -17,14 +21,18 @@ import edu.jas.util.ExecutableChannels;
    * @author Heinz Kredel
    */
 
-public class GBDist {
+public class GBDist<C extends RingElem<C>> {
 
   /**
    * Execute a distributed GB example.
    * Distribute clients and start master.
    */
 
-    public ArrayList execute(List F, int threads, String mfile, int port) {
+    public ArrayList<GenPolynomial<C>> 
+           execute(List<GenPolynomial<C>> F, 
+                   int threads, 
+                   String mfile, 
+                   int port) {
 
 	final String fname;
 	if ( mfile == null || mfile.length() == 0 ) {
@@ -34,7 +42,7 @@ public class GBDist {
 	}
 	final int numc = threads;
 
-	ArrayList G = null;
+	ArrayList<GenPolynomial<C>> G = null;
 
 	ExecutableChannels ec = null;
 	try {
@@ -50,7 +58,8 @@ public class GBDist {
 	    return G;
 	}
 
-	GBClient gbc = new GBClient( ec.getMasterHost(), ec.getMasterPort() );
+	GBClient<C> gbc 
+          = new GBClient<C>( ec.getMasterHost(), ec.getMasterPort() );
 	try {
 	    for ( int i = 0; i < numc; i++ ) {
 	        ec.send( i, gbc );
@@ -60,9 +69,9 @@ public class GBDist {
 	    return G;
 	}
 
-	G = (ArrayList)F;
+	G = null;
         try {
-            G = GroebnerBaseDistributed.DIRPGBServer( F, threads, port );
+            G = GroebnerBaseDistributed.<C>Server( F, threads, port );
         } catch (IOException e) {
         }
 
@@ -88,7 +97,7 @@ public class GBDist {
  * Objects of this class are to be send to a ExecutableServer
  */
 
-class GBClient implements RemoteExecutable {
+class GBClient<C extends RingElem<C>> implements RemoteExecutable {
 
     String host;
     int port;
@@ -100,7 +109,7 @@ class GBClient implements RemoteExecutable {
 
     public void run() {
 	try {
-	    GroebnerBaseDistributed.DIRPGBClient(host, port);
+	    GroebnerBaseDistributed.<C>Client(host, port);
 	} catch (IOException ignored) {
 	}
     }
