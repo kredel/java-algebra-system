@@ -3,6 +3,8 @@
 # $Id$
 #
 
+import sys;
+
 from jas import Ring
 from jas import Ideal
 
@@ -25,11 +27,11 @@ ps = """
  ( 15 W + 25 S P + 30 Z - 18 T - 165 B**2 ), 
  ( - 9 W + 15 T P + 20 S Z ), 
  ( P W + 2 T Z - 11 B**3 ), 
- ( 99 W - 11 B S + 3 B**2 ),
- ( 10000 B**2 + 6600 B + 2673 )
+ ( 99 W - 11 B S + 3 B**2 )
 ) 
 """;
 
+# ( 10000 B**2 + 6600 B + 2673 )
 # ( B**2 + 33/50 B + 2673/10000 )
 
 f = Ideal( r, ps );
@@ -37,19 +39,18 @@ print "Ideal: " + str(f);
 print;
 
 rg = f.GB();
-print "seq Output:", rg;
-print;
+#print "seq Output:", rg;
+#print;
 
 
-#rg = f.parGB(2);
+rg = f.parGB(2);
 #print "par Output:", rg;
 #print;
 
-
-# rg = f.distGB(2);
+f.distClient(); # starts in background
+rg = f.distGB(2);
 #print "dist Output:", rg;
 #print;
 
-#f.distClient();
-
+sys.exit();
 

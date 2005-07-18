@@ -65,6 +65,23 @@ class Ideal:
         g = OrderedPolynomialList(s.ring,G);
         return g;
 
+    def distGB(self,th=2,machine="util/machines.localhost",port=7114):
+        s = self.pset;
+        F = s.list;
+        t = System.currentTimeMillis();
+        # G = GroebnerBaseDistributed.Server(F,th);
+        G = GBDist().execute(F,th,machine,port);
+        t = System.currentTimeMillis() - t;
+        print "distributed %s executed in %s ms" % (th,t); 
+        g = OrderedPolynomialList(s.ring,G);
+        return g;
+
+    def distClient(self,port=8114):
+        s = self.pset;
+        es = ExecutableServer( port );
+        es.init();
+        return None;
+
 
 
 class SolvableRing:
