@@ -82,7 +82,7 @@ public class GroebnerBaseParallel  {
         }
 	ThreadPool T = new ThreadPool(threads);
 	Terminator fin = new Terminator(threads);
-	Reducer R;
+	Reducer<C> R;
 	for ( int i = 0; i < threads; i++ ) {
 	      R = new Reducer<C>( fin, G, pairlist );
 	      T.addJob( R );
