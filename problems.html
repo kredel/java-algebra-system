@@ -20,7 +20,12 @@ dt   { font-weight: bolder;
   <body>
     <h1>JAS - Designs, Problems and Solutions</h1>
 
-<h2>Designs</h2>
+<p>In ths document we discus some design alternatives, 
+some problems and present our implemented solutions. 
+</p>
+
+
+<h2>1. Designs</h2>
 
 <p><strong>Note:</strong> 
 In this section 'base ring' 
@@ -30,7 +35,14 @@ of all considered ring classes and 'extension ring' is some
 subclass of the 'base ring' class.
 </p>
 
-<h3>Ring is Object with Methods</h3>
+<p>The first question is which classes or which objects 
+implement the arithmetic of polynomials. Are polynomials 
+only passive containers which are transformed by ring methods?
+Or are polynomials active objects with methods.
+</p>
+
+
+<h3>1.1. Ring is object with methods</h3>
 
 <p>
 One design was proposed e.g. by M. Conrad in 2002 
@@ -65,30 +77,23 @@ in the various <code>map()</code> methods.
 
 
 
-<h3>Polynomial is Object with Methods</h3>
+<h3>1.2. Polynomial is object with methods</h3>
 
 <p>
 An other design, e.g. used in our approach, takes polynomials as
 the primary players. A <code>Polynomial</code> is implemented as
 a class with the usual algebraic operations as methods. 
 Each polynomial has a reference to a corresponding <code>Ring</code>
-class, which is a container for the ring characteristics. E.g. 
+object, which is a container for the ring characteristics. E.g. 
 for polynomial rings these are the number of variables, the 
 type information of the coefficent ring, the term order,
 the names of the variables and eventualy the commutator relations.
 There is one proposal by V. Niculescu, from 2003, 
-[ref: A design proposal fo an object oriented algebraic library] 
+[ref:  
+<a href="http://www.cs.ubbcluj.ro/~vniculescu/Niculescu-03i1.zip"
+   >A design proposal for an object oriented algebraic library</a>]
 to view and implement the <code>Ring</code> as a factory class
 for polynomials and to make the polynomial constructors unavailable.
-</p>
-<p>
-Type resolution of the coefficient or polynomial method parameters are 
-to the respective interface during compile time with a dynamic upcast 
-to the actual polynomial or coefficient during runtime. 
-There is currently no mapping of elements from one ring to 
-another. However there are conversions / constructor / parser methods 
-from <code>long</code>, <code>java.math.BigInteger</code>, 
-<code>String</code> and <code>java.io.Reader</code>.
 </p>
 <p>
 Creation of ring elements was in our first design by employing the 
@@ -97,9 +102,18 @@ and directly using element constructors. In the new design it
 will use the factory pattern (via <code>getZERO()</code>, 
 <code>getONE()</code> etc.) of the <code>RingFactory</code>
 </p>
+<p>
+Type resolution of the coefficient or polynomial method parameters are 
+to the respective interface during compile time with a dynamic upcast 
+to the actual polynomial or coefficient during runtime. 
+There is currently no mapping of elements from one ring to 
+another. However there are conversions / constructor / parser methods 
+from <code>long</code>, <code>java.math.BigInteger</code>, 
+<code>String</code> and <code>java.io.Reader</code> in the new design.
+</p>
 
 
-<h3>Template, Generics and Type Parameter Approaches</h3>
+<h3>1.3. Template, generics and type parameter approaches</h3>
 
 <p>
 These approaches may not be completely covered by Java, C++ or C#.
@@ -115,10 +129,10 @@ generated only from a type parameter but only from an object or class.
 
 
 
-<h2>Problems</h2>
+<h2>2. Problems</h2>
 
 <p>During the development and refactorings 
-<!--no to use type parmeters (generics, templates) -->
+<!--no  to use type parmeters (generics, templates) -->
 some problems have been detected.
 Consider the following interface and class definitions.
 </p>
@@ -213,7 +227,7 @@ instead of interfaces.
 </p>
 
 
-<h2>Solutions</h2>
+<h2>3. Solutions</h2>
 
 <p>Reflecting on the mentioned designs and problems our
 design proposal is as follows.
@@ -244,7 +258,7 @@ design proposal is as follows.
 </li>
 <li><p>Basic data types, such as rational numbers, can directly 
     implement both interfaces but more complex data types, such 
-    as polynomials will implement this interfaces in two different 
+    as polynomials will implement the interfaces in two different 
     classes. e.g.
     </p>
     <pre>
@@ -328,6 +342,9 @@ GenPolynomialRing&lt;C extends RingElem&lt;C&gt; &gt; implements RingFactory&lt;
 -->
 </ol>
 
+
+<h3>3.1. Interfaces</h3>
+
 <p>The interface definition for ring elements with the usual
 arithmetic operations and some status, comparison methods
 and a clone method is as follows.
@@ -382,6 +399,9 @@ public interface RingFactory&lt;C extends RingElem&gt;
 }
 </pre>
 
+
+<h3>3.2. Some constructors</h3>
+
 <p>Constructors for BigRational:
 </p>
 <pre>
@@ -409,6 +429,9 @@ public interface RingFactory&lt;C extends RingElem&gt;
     public GenPolynomialRing(RingFactory&lt; C &gt; cf, int n, TermOrder t) {
     public GenPolynomialRing(RingFactory&lt; C &gt; cf, int n, TermOrder t, String[] v)
 </pre>
+
+
+<h3>3.3. Polynomial examples</h3>
 
 <p>Example of a 
 random polynomial in 7 variables over the rational numbers 
@@ -469,6 +492,8 @@ a = GenPolynomial[
     :: GenPolynomialRing[ GenPolynomialRing, 3, IGRLEX(4),  ]
 </pre>
 
+
+<h3>3.4. Algebraic number examples</h3>
 
 <p>Example of algebraic numbers 
 </p>
@@ -538,6 +563,9 @@ a = AlgebraicNumber[
        :: GenPolynomialRing[ ModInteger, 1, IGRLEX(4),  ] ]
 </pre>
 
+
+<h3>3.5. Solvable polynomial examples</h3>
+
 <p>Example for the creation of a solvable polynomial ring factory.
    The relation table is created internally.
 </p>
@@ -592,7 +620,7 @@ d = GenSolvablePolynomial[ 3 mod(19) (1,1,0), 1 mod(19) (0,0,1) ]
 <p>
 <!-- Created: Thu May 26 10:38:37 CEST 2005 -->
 <!-- hhmts start -->
-Last modified: Thu Jun 30 22:59:37 CEST 2005
+Last modified: Sun Jul 24 19:38:36 CEST 2005
 <!-- hhmts end -->
 </p>
 <p align="right" >
