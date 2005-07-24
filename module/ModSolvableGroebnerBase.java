@@ -73,7 +73,7 @@ public class ModSolvableGroebnerBase  {
      */
 
     public static <C extends RingElem<C>>
-           ArrayList<GenSolvablePolynomial<C>> 
+           List<GenSolvablePolynomial<C>> 
            leftGB(int modv, List<GenSolvablePolynomial<C>> F) {  
         return SolvableGroebnerBase.leftGB(modv,F);
     }
@@ -139,7 +139,7 @@ public class ModSolvableGroebnerBase  {
      */
 
     public static <C extends RingElem<C>>
-           ArrayList<GenSolvablePolynomial<C>> 
+           List<GenSolvablePolynomial<C>> 
            twosidedGB(int modv, List<GenSolvablePolynomial<C>> F) {  
         return SolvableGroebnerBase.twosidedGB(modv,F);
     }
