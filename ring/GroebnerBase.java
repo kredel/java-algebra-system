@@ -41,27 +41,27 @@ public class GroebnerBase  {
     public static <C extends RingElem<C>> 
            boolean isGB(int modv, List<GenPolynomial<C>> F) {  
         GenPolynomial<C> pi, pj, s, h;
-	for ( int i = 0; i < F.size(); i++ ) {
-	    pi = F.get(i);
+        for ( int i = 0; i < F.size(); i++ ) {
+            pi = F.get(i);
             for ( int j = i+1; j < F.size(); j++ ) {
                 pj = F.get(j);
-		if ( ! Reduction.<C>ModuleCriterion( modv, pi, pj ) ) {
+                if ( ! Reduction.<C>ModuleCriterion( modv, pi, pj ) ) {
                    continue;
                 }
-		if ( ! Reduction.<C>GBCriterion4( pi, pj ) ) { 
+                if ( ! Reduction.<C>GBCriterion4( pi, pj ) ) { 
                    continue;
                 }
-		s = Reduction.<C>SPolynomial( pi, pj );
-		if ( s.isZERO() ) {
+                s = Reduction.<C>SPolynomial( pi, pj );
+                if ( s.isZERO() ) {
                    continue;
                 }
-		h = Reduction.<C>normalform( F, s );
-		if ( ! h.isZERO() ) {
+                h = Reduction.<C>normalform( F, s );
+                if ( ! h.isZERO() ) {
                    return false;
                 }
-	    }
-	}
-	return true;
+            }
+        }
+        return true;
     }
 
 
@@ -89,19 +89,19 @@ public class GroebnerBase  {
             if ( p.length() > 0 ) {
                p = p.monic();
                if ( p.isONE() ) {
-		  G.clear(); G.add( p );
+                  G.clear(); G.add( p );
                   return G; // since no threads are activated
-	       }
+               }
                G.add( p );
-	       if ( pairlist == null ) {
+               if ( pairlist == null ) {
                   pairlist = new OrderedPairlist<C>( modv, p.ring );
                }
                // putOne not required
                pairlist.put( p );
-	    } else { 
+            } else { 
                l--;
             }
-	}
+        }
         if ( l <= 1 ) {
            return G; // since no threads are activated
         }
@@ -120,7 +120,7 @@ public class GroebnerBase  {
               if ( false && logger.isDebugEnabled() ) {
                  logger.debug("pi    = " + pi );
                  logger.debug("pj    = " + pj );
-	      }
+              }
 
               S = Reduction.<C>SPolynomial( pi, pj );
               if ( S.isZERO() ) {
@@ -129,7 +129,7 @@ public class GroebnerBase  {
               }
               if ( logger.isDebugEnabled() ) {
                  logger.debug("ht(S) = " + S.leadingExpVector() );
-	      }
+              }
 
               H = Reduction.<C>normalform( G, S );
               if ( H.isZERO() ) {
@@ -138,29 +138,29 @@ public class GroebnerBase  {
               }
               if ( logger.isDebugEnabled() ) {
                  logger.debug("ht(H) = " + H.leadingExpVector() );
-	      }
+              }
 
-	      H = H.monic();
-	      if ( H.isONE() ) {
-		  G.clear(); G.add( H );
+              H = H.monic();
+              if ( H.isONE() ) {
+                  G.clear(); G.add( H );
                   return G; // since no threads are activated
-	      }
+              }
               if ( logger.isDebugEnabled() ) {
                  logger.debug("H = " + H );
-	      }
+              }
               if ( H.length() > 0 ) {
-		 l++;
+                 l++;
                  G.add( H );
                  pairlist.put( H );
               }
-	}
+        }
         logger.debug("#sequential list = "+G.size());
-	G = GBmi(G);
+        G = GBmi(G);
         logger.info("pairlist #put = " + pairlist.putCount() 
                   + " #rem = " + pairlist.remCount()
                     // + " #total = " + pairlist.pairCount()
                    );
-	return G;
+        return G;
     }
 
 
@@ -177,10 +177,10 @@ public class GroebnerBase  {
         while ( it.hasNext() ) { 
             a = it.next();
             if ( a.length() != 0 ) { // always true
-	       // already monic a = a.monic();
+               // already monic a = a.monic();
                G.add( a );
-	    }
-	}
+            }
+        }
         if ( G.size() <= 1 ) {
            return G;
         }
@@ -189,32 +189,32 @@ public class GroebnerBase  {
         ExpVector f;        
         GenPolynomial<C> p;
         ArrayList<GenPolynomial<C>> F = new ArrayList<GenPolynomial<C>>();
-	boolean mt;
+        boolean mt;
 
         while ( G.size() > 0 ) {
             a = G.remove(0);
-	    e = a.leadingExpVector();
+            e = a.leadingExpVector();
 
             it = G.listIterator();
-	    mt = false;
-	    while ( it.hasNext() && ! mt ) {
+            mt = false;
+            while ( it.hasNext() && ! mt ) {
                p = it.next();
                f = p.leadingExpVector();
-	       mt = ExpVector.EVMT( e, f );
-	    }
+               mt = ExpVector.EVMT( e, f );
+            }
             it = F.listIterator();
-	    while ( it.hasNext() && ! mt ) {
+            while ( it.hasNext() && ! mt ) {
                p = it.next();
                f = p.leadingExpVector();
-	       mt = ExpVector.EVMT( e, f );
-	    }
-	    if ( ! mt ) {
-		F.add( a );
-	    } else {
-		// System.out.println("dropped " + a.length());
-	    }
-	}
-	G = F;
+               mt = ExpVector.EVMT( e, f );
+            }
+            if ( ! mt ) {
+                F.add( a );
+            } else {
+                // System.out.println("dropped " + a.length());
+            }
+        }
+        G = F;
         if ( G.size() <= 1 ) {
            return G;
         }
@@ -222,12 +222,12 @@ public class GroebnerBase  {
         F = new ArrayList<GenPolynomial<C>>();
         while ( G.size() > 0 ) {
             a = G.remove(0);
-	    // System.out.println("doing " + a.length());
+            // System.out.println("doing " + a.length());
             a = Reduction.<C>normalform( G, a );
             a = Reduction.<C>normalform( F, a );
             F.add( a );
-	}
-	return F;
+        }
+        return F;
     }
 
 }
