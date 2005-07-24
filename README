@@ -2,7 +2,7 @@
 JAS: Java Algebra System
 ------------------------
 
-Version 0.10, March 2005
+Version 0.90, July 2005
 
 by Heinz Kredel, University of Mannheim, kredel@rz.uni-mannheim.de
 
@@ -14,9 +14,9 @@ Programms released under GPL, see COPYING.
 Requirements
 ------------
 
-A Java JDK 1.4.1 or newer.
+A Java JDK 1.5.0 or newer.
 
-Release Notes see jas-log.html.
+Documentation see index.html.
 
 
 Usage
