@@ -14,7 +14,8 @@ import java.io.FileReader;
 
 import org.apache.log4j.BasicConfigurator;
 
-import edu.jas.poly.OrderedPolynomialTokenizer;
+import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.GenPolynomialTokenizer;
 import edu.jas.poly.PolynomialList;
 import edu.jas.util.ExecutableServer;
 
@@ -118,7 +119,7 @@ public class RunGB {
            return;
       }
 
-      OrderedPolynomialTokenizer tok = new OrderedPolynomialTokenizer(problem);
+      GenPolynomialTokenizer tok = new GenPolynomialTokenizer(problem);
       PolynomialList S = null; 
       try {
           S = tok.nextPolynomialSet();
@@ -151,7 +152,7 @@ public class RunGB {
 
       G = (new GBDist()).execute( L, threads, mfile, port );
 
-      S = new PolynomialList( S.vars, S.tord, G );
+      S = new PolynomialList( S.ring, G );
       System.out.println("G =\n" + S ); 
       System.out.println("G.size() = " + G.size() ); 
       t = System.currentTimeMillis() - t;
@@ -175,8 +176,8 @@ public class RunGB {
 
       t = System.currentTimeMillis();
       System.out.println("\nGroebner base parallel ..."); 
-      G = GroebnerBaseParallel.DIRPGB(L,threads);
-      S = new PolynomialList( S.vars, S.tord, G );
+      G = GroebnerBaseParallel.GB(L,threads);
+      S = new PolynomialList( S.ring, G );
       System.out.println("G =\n" + S ); 
       System.out.println("G.size() = " + G.size() ); 
       t = System.currentTimeMillis() - t;
@@ -192,8 +193,8 @@ public class RunGB {
 
       t = System.currentTimeMillis();
       System.out.println("\nGroebner base sequential ..."); 
-      G = GroebnerBase.DIRPGB(L);
-      S = new PolynomialList( S.vars, S.tord, G );
+      G = GroebnerBase.GB(L);
+      S = new PolynomialList( S.ring, G );
       System.out.println("G =\n" + S ); 
       System.out.println("G.size() = " + G.size() ); 
       t = System.currentTimeMillis() - t;

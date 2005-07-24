@@ -14,7 +14,9 @@ import java.io.FileReader;
 
 import org.apache.log4j.BasicConfigurator;
 
-import edu.jas.poly.OrderedPolynomialTokenizer;
+import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.GenSolvablePolynomial;
+import edu.jas.poly.GenPolynomialTokenizer;
 import edu.jas.poly.PolynomialList;
 import edu.jas.util.ExecutableServer;
 
@@ -82,7 +84,7 @@ public class RunSGB {
            return;
       }
 
-      OrderedPolynomialTokenizer tok = new OrderedPolynomialTokenizer(problem);
+      GenPolynomialTokenizer tok = new GenPolynomialTokenizer(problem);
       PolynomialList S = null; 
       try {
           S = tok.nextSolvablePolynomialSet();
@@ -123,7 +125,7 @@ public class RunSGB {
           System.out.println("unknown action = " + action + "\n"); 
           return;
       }
-      S = new PolynomialList( S.vars, S.tord, G, S.table );
+      S = new PolynomialList( S.ring, G );
       System.out.println("G =\n" + S ); 
       System.out.println("G.size() = " + G.size() ); 
       t = System.currentTimeMillis() - t;
