@@ -525,7 +525,7 @@ public class SolvableSyzygy  {
         List<GenSolvablePolynomial<C>> G;
         PolynomialList<C> Gl;
 
-        G = SolvableGroebnerBase.<C>leftGB( F.list );
+        G = SolvableGroebnerBase.<C>leftGB( F.castToSolvableList() );
         Z = SolvableSyzygy.<C>leftZeroRelations( G );
         Gl = new PolynomialList<C>((GenSolvablePolynomialRing<C>)F.ring, G);
         Zm = new ModuleList<C>((GenSolvablePolynomialRing<C>)F.ring, Z);
