@@ -7,7 +7,7 @@ package edu.jas.ring;
 import java.io.Serializable;
 
     /**
-     * Subclass to hold pairs of polynomial indices
+     * Subclass to hold pairs of polynomial indices.
      * What is this class good for?
      */
 

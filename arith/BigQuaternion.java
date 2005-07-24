@@ -14,8 +14,8 @@ import java.util.Random;
 import java.io.Reader;
 
 /**
- * BigQuaternion class based on BigRational implementing the Coefficient 
- * interface and with the familiar SAC method names.
+ * BigQuaternion class based on BigRational implementing the RingElem 
+ * interface and with the familiar MAS static method names.
  * @author Heinz Kredel
  */
 
@@ -152,23 +152,32 @@ public class BigQuaternion implements RingElem<BigQuaternion>,
         return new BigQuaternion( new BigRational( a ) );
     }
 
-    /** constants: 1, 0 und i 
+
+    /** constant 0. 
      */
 
     public static final BigQuaternion ZERO = 
            new BigQuaternion();
 
+    /** constant 1.
+     */
     public static final BigQuaternion ONE = 
            new BigQuaternion(BigRational.ONE);
 
+    /** constant i. 
+     */
     public static final BigQuaternion I = 
            new BigQuaternion(BigRational.ZERO, BigRational.ONE);
 
+    /** constant j. 
+     */
     public static final BigQuaternion J = 
            new BigQuaternion(BigRational.ZERO, 
                              BigRational.ZERO,
                              BigRational.ONE);
 
+    /** constant k. 
+     */
     public static final BigQuaternion K = 
            new BigQuaternion(BigRational.ZERO,
                              BigRational.ZERO,

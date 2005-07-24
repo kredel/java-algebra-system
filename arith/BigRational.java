@@ -12,8 +12,8 @@ import java.util.Random;
 import java.io.Reader;
 
 /**
- * BigRational class based on BigInteger implementing the Coefficient interface
- * and with the familiar SAC method names.
+ * BigRational class based on BigInteger implementing the RingElem interface
+ * and with the familiar SAC ststic method names.
  * @author Heinz Kredel
  */
 

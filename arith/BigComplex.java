@@ -15,8 +15,8 @@ import java.io.Reader;
 
 
 /**
- * BigComplex class based on BigRational implementing the Coefficient 
- * interface and with the familiar SAC method names.
+ * BigComplex class based on BigRational implementing the RingElem
+ * interface and with the familiar SAC static method names.
  * @author Heinz Kredel
  */
 
@@ -104,15 +104,18 @@ public class BigComplex implements RingElem<BigComplex>,
 	return new BigComplex( new BigRational( a ) );
     }
 
-    /** constants: 1, 0 und i 
+    /** constant 0
      */
-
     public static final BigComplex ZERO = 
            new BigComplex();
 
+    /** constant 1
+     */
     public static final BigComplex ONE = 
            new BigComplex(BigRational.ONE);
 
+    /** constant i 
+     */
     public static final BigComplex I = 
            new BigComplex(BigRational.ZERO,BigRational.ONE);
 
@@ -342,16 +345,25 @@ public class BigComplex implements RingElem<BigComplex>,
                              BigRational.RNRAND(n) );
     }
 
-    /** random complex number 
+
+    /** random complex number. 
      */
 
     public BigComplex random(int n) {
 	return CRAND(n);
     }
 
+
+    /** Parse complex number from string.
+     */
+
     public BigComplex parse(String s) {
         return new BigComplex(s);
     }
+
+
+    /** Parse complex number from Reader.
+     */
 
     public BigComplex parse(Reader r) {
         return ZERO;

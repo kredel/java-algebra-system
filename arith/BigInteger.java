@@ -11,8 +11,8 @@ import java.util.Random;
 import java.io.Reader;
 
 /**
- * BigInteger class to make java.math.BigInteger available with Coefficient interface
- * and with the familiar SAC method names.
+ * BigInteger class to make java.math.BigInteger available with RingElem 
+ * interface and with the familiar SAC static method names.
  * @author Heinz Kredel
  * @see java.math.BigInteger
  */
