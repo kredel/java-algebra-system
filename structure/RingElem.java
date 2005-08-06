@@ -17,17 +17,22 @@ public interface RingElem<C extends RingElem> extends Cloneable,
 
     public C clone();
 
+
     public boolean isZERO();
 
     public boolean isONE();
 
     public boolean isUnit();
 
+
     public boolean equals(Object b);
+
+    public int hashCode();
 
     public int compareTo(C b);
 
     public int signum();
+
 
     public C add(C S);
 
@@ -36,6 +41,7 @@ public interface RingElem<C extends RingElem> extends Cloneable,
     public C negate();
 
     public C abs();
+
 
     public C multiply(C S);
 

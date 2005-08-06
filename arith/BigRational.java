@@ -20,19 +20,30 @@ import java.io.Reader;
 public class BigRational implements RingElem<BigRational>, 
                                     RingFactory<BigRational> {
 
+    /**
+     * Numerator and denominator.
+     */
     protected final BigInteger num;
     protected final BigInteger den;
 
-    public final static BigInteger IZERO = BigInteger.ZERO;
-    public final static BigInteger IONE = BigInteger.ONE;
+    /* from history: */
+    private final static BigInteger IZERO = BigInteger.ZERO;
+    private final static BigInteger IONE = BigInteger.ONE;
 
-    public final static BigRational RNZERO = new BigRational(IZERO);
-    public final static BigRational RNONE = new BigRational(IONE);
+    /**
+     * Constants 0 and 1.
+     */
+    public final static BigRational ZERO 
+                        = new BigRational(BigInteger.ZERO);
+    public final static BigRational ONE 
+                        = new BigRational(BigInteger.ONE);
 
-    public final static BigRational ZERO = new BigRational(IZERO);
-    public final static BigRational ONE = new BigRational(IONE);
+    /* from history: */
+    private final static BigRational RNZERO = ZERO;
+    private final static BigRational RNONE = ONE;
 
     private final static Random random = new Random();
+
 
     /**
      * Constructors for BigRational
@@ -46,15 +57,16 @@ public class BigRational implements RingElem<BigRational>,
 
     public BigRational(BigInteger n) {
 	num = n; 
-        den = IONE;
+        den = IONE; // be aware of static initialization order
+        //den = BigInteger.ONE;
     } 
 
     public BigRational(long n, long d) {
         BigInteger nu = BigInteger.valueOf(n);
         BigInteger de = BigInteger.valueOf(d);
         BigRational r = RNRED(nu,de);
-	num = r.numerator(); 
-        den = r.denominator();
+	num = r.num; 
+        den = r.den;
     } 
 
     public BigRational(long n) {
@@ -86,8 +98,8 @@ public class BigRational implements RingElem<BigRational>,
 	    n = new BigInteger( s.substring(0,i) );
 	    d = new BigInteger( s.substring( i+1, s.length() ) );
             BigRational r = RNRED( n, d );
-	    num = r.numerator();
-	    den = r.denominator();
+	    num = r.num;
+	    den = r.den;
 	    return;
 	}
     } 
@@ -154,11 +166,18 @@ public class BigRational implements RingElem<BigRational>,
     }
 
     public boolean equals( Object b) {
-	if ( ! ( b instanceof BigRational ) ) return false;
-	BigRational B = (BigRational) b;
-	return    num.equals( B.numerator() ) 
-               && den.equals( B.denominator() );
+	if ( ! ( b instanceof BigRational ) ) {
+           return false;
+        }
+	BigRational br = (BigRational) b;
+	return    num.equals( br.num ) 
+               && den.equals( br.den );
     }
+
+    public int hashCode() {
+        return 37 * num.hashCode() + den.hashCode();
+    }
+
 
 /** Rational number reduction to lowest terms.  A and B are integers,
 B non-zero.  R is the rational number A/B in canonical form. */
@@ -211,16 +230,16 @@ t=SIGN(R-S).*/
       int SL;
       int TL;
       int RL;
-      if ( this.equals( RNZERO ) ) {
+      if ( this.equals( ZERO ) ) {
         return - RNSIGN( S );
       }
-      if ( S.equals( RNZERO ) ) {
+      if ( S.equals( ZERO ) ) {
         return RNSIGN( this );
       }
       R1 = num; //this.numerator(); 
       R2 = den; //this.denominator();
-      S1 = S.numerator();
-      S2 = S.denominator();
+      S1 = S.num;
+      S2 = S.den;
       RL = R1.signum();
       SL = S1.signum();
       J1Y = (RL - SL);
@@ -244,7 +263,8 @@ t=SIGN(R-S).*/
 denominator of R, a positive integer. */
 
   public static BigInteger RNDEN(BigRational R) {
-      return R.denominator();
+      if ( R == null ) return null;
+      return R.den;
   }
 
 
@@ -273,8 +293,8 @@ followed by a minus sign, if ABS(D) is less than ABS(R) then by a
 plus sign. */
 
   public static void RNDWR(BigRational R, int NL) {             
-      BigInteger num = R.numerator();
-      BigInteger den = R.denominator();
+      BigInteger num = R.num;
+      BigInteger den = R.den;
       /* BigInteger p = new BigInteger("10");
          p = p.pow(NL);
       */
@@ -335,7 +355,8 @@ number A/1. */
 numerator of R, an integer. */
 
   public static BigInteger RNNUM(BigRational R) {
-      return R.numerator();
+      if ( R == null ) return null;
+      return R.num;
   }
 
 
@@ -355,14 +376,14 @@ numerator of R, an integer. */
       BigRational T;
       BigInteger T1;
       BigInteger T2;
-      if ( this.equals( RNZERO ) || S.equals( RNZERO ) ) {
-        T = RNZERO;
+      if ( this.equals( ZERO ) || S.equals( ZERO ) ) {
+        T = ZERO;
         return T;
       }
       R1 = num; //this.numerator(); 
       R2 = den; //this.denominator();
-      S1 = S.numerator();
-      S2 = S.denominator();
+      S1 = S.num;
+      S2 = S.den;
       if ( R2.equals( IONE ) && S2.equals( IONE ) ) {
         T1 = R1.multiply( S1 );
         T = new BigRational( T1, IONE );
@@ -454,7 +475,7 @@ reduced to lowest terms. */
 
   public int signum() {
       int SL;
-      if ( this.equals(RNZERO) ) {
+      if ( this.equals(ZERO) ) {
         SL = 0;
       } else {
         SL = num.signum();
@@ -484,18 +505,18 @@ reduced to lowest terms. */
       BigRational T;
       BigInteger T1;
       BigInteger T2;
-      if ( this.equals( RNZERO ) ) {
+      if ( this.equals( ZERO ) ) {
         T = S;
         return T;
       }
-      if ( S.equals( RNZERO ) ) {
+      if ( S.equals( ZERO ) ) {
         T = this;
         return T;
       }
       R1 = num; //this.numerator(); 
       R2 = den; //this.denominator();
-      S1 = S.numerator();
-      S2 = S.denominator();
+      S1 = S.num;
+      S2 = S.den;
       if ( R2.equals( IONE ) && S2.equals( IONE ) ) {
         T1 = R1.add( S1 );
         T = new BigRational( T1, IONE );
@@ -520,7 +541,7 @@ reduced to lowest terms. */
       J2Y = RB2.multiply( S1 );
       T1 = J1Y.add( J2Y );
       if ( T1.equals( IZERO ) ) {
-        T = RNZERO;
+        T = ZERO;
         return T;
       }
       if ( ! D.equals( IONE ) ) {

@@ -25,8 +25,8 @@ public class BigComplex implements RingElem<BigComplex>,
 
     /* the data structure */
 
-    private final BigRational re;  // real part
-    private final BigRational im;  // imaginary part 
+    protected final BigRational re;  // real part
+    protected final BigRational im;  // imaginary part 
 
     private final static Random random = new Random();
 
@@ -45,7 +45,7 @@ public class BigComplex implements RingElem<BigComplex>,
         this(r,BigRational.ZERO);
     }
 
-    public BigComplex(int r) {
+    public BigComplex(long r) {
         this(new BigRational(r),BigRational.ZERO);
     }
 
@@ -175,27 +175,33 @@ public class BigComplex implements RingElem<BigComplex>,
 	return ( ! isZERO() );
     }
 
+
     /** comparison of two BigComplex numbers
      */
 
     public boolean equals(Object b) {
-	if ( ! ( b instanceof BigComplex ) ) return false;
-	BigComplex B = (BigComplex) b;
-	return    re.equals( B.getRe() ) 
-               && im.equals( B.getIm() );
+	if ( ! ( b instanceof BigComplex ) ) {
+           return false;
+        }
+	BigComplex bc = (BigComplex) b;
+	return    re.equals( bc.re ) 
+               && im.equals( bc.im );
     }
+
+    public int hashCode() {
+        return 37 * im.hashCode() + re.hashCode();
+    }
+
 
     /** since complex numbers are unordered, there is 
      * no compareTo method. 
      * We define the result to be 
-     * @return -1 if b is not a BigComplex object
      * @return 0 if b is equal to this
      * @return 1 else
      */
 
     public int compareTo(BigComplex b) {
-      // if ( ! (b instanceof BigComplex) ) return -1;
-      if ( equals(b) ) { 
+      if ( this.equals(b) ) { 
 	  return 0;
       } else {
 	  return 1;
@@ -210,12 +216,13 @@ public class BigComplex implements RingElem<BigComplex>,
       }
     }
 
+
     /** arithmetic operations: +, -, -
      */
 
     public BigComplex add(BigComplex B) {
-	return new BigComplex( re.add(B.getRe()), 
-                               im.add(B.getIm()) );
+	return new BigComplex( re.add( B.re ), 
+                               im.add( B.im ) );
     }
 
     /**Complex number sum.  A and B are complex numbers.  
@@ -235,8 +242,8 @@ public class BigComplex implements RingElem<BigComplex>,
     }
 
     public BigComplex subtract(BigComplex B) {
-	return new BigComplex(re.subtract(B.getRe()), 
-                              im.subtract(B.getIm()));
+	return new BigComplex( re.subtract( B.re ), 
+                               im.subtract( B.im ) );
     }
 
     /**Complex number negative.  A is a complex number.  
@@ -281,7 +288,7 @@ public class BigComplex implements RingElem<BigComplex>,
 
     public static BigRational CABS(BigComplex A) {
       if ( A == null ) return null;
-      return A.abs().getRe();
+      return A.abs().re;
     }
 
     /**Complex number product.  A and B are complex numbers.  
@@ -297,8 +304,8 @@ public class BigComplex implements RingElem<BigComplex>,
 
     public BigComplex multiply(BigComplex B) {
 	return new BigComplex(
-               re.multiply(B.getRe()).subtract(im.multiply(B.getIm())),
-               re.multiply(B.getIm()).add(im.multiply(B.getRe())) );
+               re.multiply(B.re).subtract(im.multiply(B.im)),
+               re.multiply(B.im).add(im.multiply(B.re)) );
     }
 
     /**Complex number inverse.  A is a non-zero complex number.  
@@ -311,8 +318,8 @@ public class BigComplex implements RingElem<BigComplex>,
 
     public BigComplex inverse() {
         BigRational a = re.multiply(re).add(im.multiply(im));
-	return new BigComplex(             re.divide(a), 
-                                           im.divide(a).negate() ); 
+	return new BigComplex( re.divide(a), 
+                               im.divide(a).negate() ); 
     }
 
   public BigComplex remainder(BigComplex S) {

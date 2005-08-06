@@ -21,13 +21,17 @@ public interface ModulElem<M extends ModulElem<M,C>,
                          Serializable {
     public M clone();
 
+
     public boolean isZERO();
 
     public boolean equals(Object b);
 
+    public int hashCode();
+
     public int compareTo(M b);
 
     public int signum();
+
 
     public M add(M b);
 

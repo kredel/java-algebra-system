@@ -22,8 +22,10 @@ public class BigInteger implements RingElem<BigInteger>,
 
     private final static Random random = new Random();
 
-    public final static BigInteger ZERO = new BigInteger( java.math.BigInteger.ZERO );
-    public final static BigInteger ONE = new BigInteger( java.math.BigInteger.ONE );
+    public final static BigInteger ZERO 
+                 = new BigInteger( java.math.BigInteger.ZERO );
+    public final static BigInteger ONE 
+                 = new BigInteger( java.math.BigInteger.ONE );
 
     protected final java.math.BigInteger val;
 
@@ -110,8 +112,16 @@ public class BigInteger implements RingElem<BigInteger>,
     }
 
     public boolean equals(Object b) {
-	if ( ! ( b instanceof BigInteger ) ) return false;
-	return val.equals( ((BigInteger)b).getVal() );
+	if ( ! ( b instanceof BigInteger ) ) {
+           return false;
+        }
+        BigInteger bi = (BigInteger)b;
+	return val.equals( bi.val );
+    }
+
+
+    public int hashCode() {
+        return val.hashCode();
     }
 
 
