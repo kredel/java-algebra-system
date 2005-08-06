@@ -58,8 +58,8 @@ public class BigRationalTest extends TestCase {
  * 
  */
  public void testConstants() {
-     a = BigRational.RNZERO;
-     b = BigRational.RNONE;
+     a = BigRational.ZERO;
+     b = BigRational.ONE;
      c = BigRational.RNDIF(b,b);
 
      assertEquals("1-1 = 0",c,a);
@@ -113,7 +113,7 @@ public class BigRationalTest extends TestCase {
      b = new BigRational( "" + a );
      c = BigRational.RNDIF(b,a);
 
-     assertEquals("a-b = 0",c,BigRational.RNZERO);
+     assertEquals("a-b = 0",c,BigRational.ZERO);
 
      d = new BigRational( b.numerator(), b.denominator() );
      assertEquals("sign(a-a) = 0", 0, b.compareTo(d) );
@@ -132,12 +132,12 @@ public class BigRationalTest extends TestCase {
      assertEquals("a+a-a = a",c,a);
      assertEquals("a+a-a = a",0,BigRational.RNCOMP(c,a));
 
-     d = BigRational.RNSUM( a, BigRational.RNZERO );
+     d = BigRational.RNSUM( a, BigRational.ZERO );
      assertEquals("a+0 = a",d,a);
-     d = BigRational.RNDIF( a, BigRational.RNZERO );
+     d = BigRational.RNDIF( a, BigRational.ZERO );
      assertEquals("a-0 = a",d,a);
      d = BigRational.RNDIF( a, a );
-     assertEquals("a-a = 0",d,BigRational.RNZERO);
+     assertEquals("a-a = 0",d,BigRational.ZERO);
 
      a = BigRational.RNRAND( 100 );
      b = BigRational.RNABS( a );
@@ -160,9 +160,9 @@ public class BigRationalTest extends TestCase {
      assertEquals("a*a/a = a",c,a);
      assertEquals("a*a/a = a",0,BigRational.RNCOMP(c,a));
 
-     d = BigRational.RNPROD( a, BigRational.RNONE );
+     d = BigRational.RNPROD( a, BigRational.ONE );
      assertEquals("a*1 = a",d,a);
-     d = BigRational.RNQ( a, BigRational.RNONE );
+     d = BigRational.RNQ( a, BigRational.ONE );
      assertEquals("a/1 = a",d,a);
 
      a = BigRational.RNRAND( 100 );
