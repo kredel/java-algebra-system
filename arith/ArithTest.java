@@ -234,6 +234,8 @@ public class ArithTest extends TestCase {
      BigRational a, b, c, d, e;
      a = BigRational.ZERO;
      b = BigRational.ONE;
+     //System.out.println("a = " + a);
+     //System.out.println("b = " + b);
      c = b.subtract(b);
 
      assertTrue("0.isZERO()",a.isZERO());
