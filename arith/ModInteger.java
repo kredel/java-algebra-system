@@ -14,6 +14,7 @@ import java.io.Reader;
 /**
  * ModInteger class with RingElem interface
  * and with the familiar SAC method names.
+ * Objects of this class are immutable.
  * @author Heinz Kredel
  * @see java.math.BigInteger
  */
@@ -21,20 +22,36 @@ import java.io.Reader;
 public class ModInteger implements RingElem<ModInteger>, 
                                    RingFactory<ModInteger> {
 
+
+    /** Module part of the factory data structure. 
+      */
     protected final java.math.BigInteger modul;
+
+
+    /** Value part of the element data structure. 
+      */
     protected final java.math.BigInteger val;
+
 
     private final static Random random = new Random();
 
-    /**
-     * Constructors for ModInteger
-     */
 
+    /** The constructor creates a ModInteger object 
+     * from two BigInteger objects module and value part. 
+     * @param m math.BigInteger.
+     * @param a math.BigInteger.
+     */
     public ModInteger(java.math.BigInteger m, java.math.BigInteger a) {
         modul = m;
 	val = a.mod(modul);
     }
 
+
+    /** The constructor creates a ModInteger object 
+     * from two longs objects module and value part. 
+     * @param m long.
+     * @param a long.
+     */
     public ModInteger(long m, long a) {
         this( 
 	     new java.math.BigInteger( String.valueOf(m) ),
@@ -42,6 +59,12 @@ public class ModInteger implements RingElem<ModInteger>,
              );
     }
 
+
+    /** The constructor creates a ModInteger object 
+     * from two String objects module and value part. 
+     * @param m String.
+     * @param s String.
+     */
     public ModInteger(String m, String s) {
         this( 
 	     new java.math.BigInteger( m ),
@@ -49,65 +72,136 @@ public class ModInteger implements RingElem<ModInteger>,
              );
     }
 
+
+    /** The constructor creates a ModInteger object 
+     * from a BigInteger object module and a String value part. 
+     * @param m BigInteger.
+     * @param s String.
+     */
     public ModInteger(java.math.BigInteger m, String s) {
         this( m, new java.math.BigInteger( s ) );
     }
 
+
+    /** The constructor creates a ModInteger object 
+     * from a BigInteger object module and a long value part. 
+     * @param m BigInteger.
+     * @param s long.
+     */
     public ModInteger(java.math.BigInteger m, long s) {
         this( m, new java.math.BigInteger( String.valueOf(s) ) );
     }
 
+
+    /** The constructor creates a 0 ModInteger object 
+     * from a BigInteger object module. 
+     * @param m BigInteger.
+     */
     public ModInteger(java.math.BigInteger m) {
         modul = m; // assert m != 0
 	val = java.math.BigInteger.ZERO;
     }
 
+
+    /** Get the value part. 
+     * @return val.
+     */
     public java.math.BigInteger getVal() {
       return val;
     }
 
+
+    /** Get the module part. 
+     * @return modul.
+     */
     public java.math.BigInteger getModul() {
       return modul;
     }
 
+
+    /**  Clone this.
+     * @see java.lang.Object#clone()
+     */
     public ModInteger clone() {
         return new ModInteger( modul, val );
     }
 
+
+    /** Copy ModInteger element c.
+     * @param c
+     * @return a copy of c.
+     */
     public ModInteger copy(ModInteger c) {
         return new ModInteger( c.modul, c.val );
     }
 
+
+    /** Get the zero element.
+     * @return 0 as ModInteger.
+     */
     public ModInteger getZERO() {
         return new ModInteger( modul, java.math.BigInteger.ZERO );
     }
 
+
+    /**  Get the one element.
+     * @return 1 as ModInteger.
+     */
     public ModInteger getONE() {
         return new ModInteger( modul, java.math.BigInteger.ONE );
     }
 
+
+    /** Get a ModInteger element from a BigInteger value.
+     * @param a ModInteger.
+     * @return a ModInteger.
+     */
     public ModInteger fromInteger(java.math.BigInteger a) {
 	return new ModInteger(modul,a);
     }
 
+
+    /** Get a ModInteger element from a long value.
+     * @param a long.
+     * @return a ModInteger.
+     */
     public ModInteger fromInteger(long a) {
 	return new ModInteger(modul, a );
     }
 
+
+    /** Is ModInteger number zero. 
+     * @return If this is 0 then true is returned, else false.
+     * @see edu.jas.structure.RingElem#isZERO()
+     */
     public boolean isZERO() {
 	return val.equals( java.math.BigInteger.ZERO );
     }
 
+
+    /** Is ModInteger number one. 
+     * @return If this is 1 then true is returned, else false.
+     * @see edu.jas.structure.RingElem#isONE()
+     */
     public boolean isONE() {
 	return val.equals( java.math.BigInteger.ONE );
     }
 
+
+    /** Is ModInteger number a unit. 
+     * @return If this is a unit then true is returned, else false.
+     * @see edu.jas.structure.RingElem#isUnit()
+     */
     public boolean isUnit() {
         java.math.BigInteger g = modul.gcd( val );
 	return ( g.equals(java.math.BigInteger.ONE) 
               || g.equals(java.math.BigInteger.ONE.negate()) );
     }
 
+
+    /**  Get the String representation.
+     * @see java.lang.Object#toString()
+     */
     public String toString() {
         if ( PrettyPrint.isTrue() ) {
 	   return val.toString();
@@ -117,6 +211,10 @@ public class ModInteger implements RingElem<ModInteger>,
     }
 
 
+    /** ModInteger comparison.  
+     * @param b ModInteger.
+     * @return sign(this-b).
+     */
     public int compareTo(ModInteger b) {
         java.math.BigInteger v = b.val;
         if ( modul != b.modul ) {
@@ -125,12 +223,21 @@ public class ModInteger implements RingElem<ModInteger>,
 	return val.compareTo( v );
     }
 
+
+    /** ModInteger comparison.
+     * @param A  ModInteger.
+     * @param B  ModInteger.
+     * @return sign(this-b).
+     */
     public static int MICOMP(ModInteger A, ModInteger B) {
       if ( A == null ) return -B.signum();
       return A.compareTo(B);
     }
 
 
+    /** Comparison with any other object.
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
     public boolean equals(Object b) {
 	if ( ! ( b instanceof ModInteger ) ) {
            return false;
@@ -139,108 +246,205 @@ public class ModInteger implements RingElem<ModInteger>,
     }
 
 
+    /** ModInteger absolute value.
+     * @return the absolute value of this.
+     * @see edu.jas.structure.RingElem#abs()
+     */
     public ModInteger abs() {
        return new ModInteger( modul, val.abs() );
     }
 
+
+    /** ModInteger absolute value.
+     * @param A ModInteger.
+     * @return the absolute value of A.
+     */
     public static ModInteger MIABS(ModInteger A) {
       if ( A == null ) return null;
       return A.abs();
     }
 
 
+    /** ModInteger negative. 
+     * @see edu.jas.structure.RingElem#negate()
+     * @return -this.
+     */
     public ModInteger negate() {
        return new ModInteger( modul, val.negate() );
     }
 
+
+    /** ModInteger negative.
+     * @param A ModInteger.
+     * @return -A.
+     */
     public static ModInteger MINEG(ModInteger A) {
       if ( A == null ) return null;
       return A.negate();
     }
 
 
+    /** ModInteger signum.
+     * @see edu.jas.structure.RingElem#signum()
+     * @return signum(this).
+     */
     public int signum() {
       return val.signum();
     }
 
+
+    /** ModInteger signum.
+     * @param A ModInteger
+     * @return signum(A).
+     */
     public static int MISIGN(ModInteger A) {
       if ( A == null ) return 0;
       return A.signum();
     }
 
 
+    /** ModInteger subtraction.
+     * @param S ModInteger. 
+     * @return this-S.
+     */
     public ModInteger subtract(ModInteger S) {
       return new ModInteger( modul, val.subtract( S.val ) );
     }
 
+
+    /** ModInteger subtraction.
+     * @param A ModInteger.
+     * @param B ModInteger.
+     * @return A-B.
+     */
     public static ModInteger MIDIF(ModInteger A, ModInteger B) {
       if ( A == null ) return (ModInteger) B.negate();
       return A.subtract(B);
     }
 
 
+    /** ModInteger divide.
+     * @param S ModInteger.
+     * @return this/S.
+     */
     public ModInteger divide(ModInteger S) {
      return multiply( S.inverse() );
     }
 
+
+    /** ModInteger quotient.
+     * @param A ModInteger. 
+     * @param B ModInteger.
+     * @return A/B.
+     */
     public static ModInteger MIQ(ModInteger A, ModInteger B) {
       if ( A == null ) return null;
       return A.divide(B);
     }
 
 
-    /** Integer inverse.  R is a non-zero integer.  
-        S=1/R if defined else 0. */
-
+    /** ModInteger inverse.  
+     * @see edu.jas.structure.RingElem#inverse()
+     * @return S with S=1/this if defined. 
+     */
     public ModInteger inverse() {
 	return new ModInteger( modul, val.modInverse( modul ));
     }
 
+
+    /** ModInteger inverse.  
+     * @param A is a non-zero integer.  
+     * @see edu.jas.structure.RingElem#inverse()
+     * @return S with S=1/A if defined.
+     */
     public static ModInteger MIINV(ModInteger A) {
       if ( A == null ) return null;
       return A.inverse();
     }
 
 
+    /** ModInteger remainder.
+     * @param S ModInteger.
+     * @return this - (this/S)*S.
+     */
     public ModInteger remainder(ModInteger S) {
       return new ModInteger( modul, val.remainder( S.val ) );
     }
 
+
+    /** ModInteger remainder.
+     * @param A ModInteger.
+     * @param B ModInteger.
+     * @return A - (A/B)*B.
+     */
     public static ModInteger MIREM(ModInteger A, ModInteger B) {
       if ( A == null ) return null;
       return A.remainder(B);
     }
 
 
+    /** ModInteger random.
+     * @param n int.
+     * @return a random ModInteger.
+     */
     public ModInteger random(int n) {
       return new ModInteger( modul, new java.math.BigInteger( n, random ) );
     }
 
 
+    /** ModInteger multiply.
+     * @param S ModInteger.
+     * @return this*S.
+     */
     public ModInteger multiply(ModInteger S) {
       return new ModInteger( modul, val.multiply( S.val ) );
     }
 
+
+    /** ModInteger product.
+     * @param A ModInteger.
+     * @param B ModInteger.
+     * @return A*B.
+     */
     public static ModInteger MIPROD(ModInteger A, ModInteger B) {
       if ( A == null ) return null;
       return A.multiply(B);
     }
 
 
+    /** ModInteger addition.
+     * @param S ModInteger.
+     * @return this+S.
+     */
     public ModInteger add(ModInteger S) {
       return new ModInteger( modul, val.add( S.val ) );
     }
 
+
+    /** ModInteger summation.
+     * @param A ModInteger.
+     * @param B ModInteger.
+     * @return A+B.
+     */
     public static ModInteger MISUM(ModInteger A, ModInteger B) {
       if ( A == null ) return null;
       return A.add(B);
     }
 
 
+    /** Parse ModInteger from String.
+     * @param s String.
+     * @return ModInteger from s.
+     */
     public ModInteger parse(String s) {
         return new ModInteger(modul,s);
     }
 
+
+    /** Parse ModInteger from Reader.
+     * @param r Reader.
+     * @return next ModInteger from r.
+     */
     public ModInteger parse(Reader r) {
         return getZERO();
     }

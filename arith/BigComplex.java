@@ -17,42 +17,69 @@ import java.io.Reader;
 /**
  * BigComplex class based on BigRational implementing the RingElem
  * interface and with the familiar SAC static method names.
+ * Objects of this class are immutable.
  * @author Heinz Kredel
  */
-
 public class BigComplex implements RingElem<BigComplex>, 
                                    RingFactory<BigComplex> {
 
-    /* the data structure */
+    /** Real part of the data structure. 
+      */
+    protected final BigRational re;
 
-    protected final BigRational re;  // real part
-    protected final BigRational im;  // imaginary part 
+    /** Imaginary part of the data structure. 
+      */
+    protected final BigRational im;
 
     private final static Random random = new Random();
 
     private static Logger logger = Logger.getLogger(BigComplex.class);
 
-    /** The constructors create a BigComplex object 
-     * from two BigRational objects real and imaginary part. 
-     */
 
+    /** The constructor creates a BigComplex object 
+     * from two BigRational objects real and imaginary part. 
+     * @param r real part
+     * @param i imaginary part
+     */
     public BigComplex(BigRational r, BigRational i) {
         re = r;
         im = i;
     }
 
+
+    /** The constructor creates a BigComplex object 
+     * from a BigRational object as real part, 
+     * the imaginary part is set to 0. 
+     * @param r real part
+     */
     public BigComplex(BigRational r) {
         this(r,BigRational.ZERO);
     }
 
+
+    /** The constructor creates a BigComplex object 
+     * from a long element as real part, 
+     * the imaginary part is set to 0. 
+     * @param r real part
+     */
     public BigComplex(long r) {
         this(new BigRational(r),BigRational.ZERO);
     }
 
+
+    /** The constructor creates a BigComplex object 
+     * with real part 0 and imaginary part 0. 
+     */
     public BigComplex() {
         this(BigRational.ZERO);
     }
 
+
+    /** The constructor creates a BigComplex object 
+     * from a String representation.
+     * @param s
+     * @throws NumberFormatException
+     */
     public BigComplex(String s) throws NumberFormatException {
         if ( s == null || s.length() == 0) {
 	    re = BigRational.ZERO;
@@ -80,57 +107,89 @@ public class BigComplex implements RingElem<BigComplex>,
         im = new BigRational( si.trim() );
     }
 
+
+    /** Clone this.
+     * @see java.lang.Object#clone()
+     */
     public BigComplex clone() {
         return new BigComplex( re, im );
     }
 
+
+    /** Copy BigComplex element c.
+     * @param c BigComplex.
+     * @return a copy of c.
+     */
     public BigComplex copy(BigComplex c) {
         return new BigComplex( c.re, c.im );
     }
 
+
+    /** Get the zero element.
+     * @return 0 as BigComplex.
+     */
     public BigComplex getZERO() {
         return ZERO;
     }
 
+
+    /** Get the one element.
+     * @return 1 as BigComplex.
+     */
     public BigComplex getONE() {
         return ONE;
     }
 
+
+    /** Get a BigComplex element from a BigInteger.
+     * @param a BigInteger.
+     * @return a BigComplex.
+     */
     public BigComplex fromInteger(BigInteger a) {
 	return new BigComplex( new BigRational(a) );
     }
 
+
+    /** Get a BigComplex element from a long.
+     * @param a long.
+     * @return a BigComplex.
+     */
     public BigComplex fromInteger(long a) {
 	return new BigComplex( new BigRational( a ) );
     }
 
-    /** constant 0
+
+    /** The constant 0.
      */
     public static final BigComplex ZERO = 
            new BigComplex();
 
-    /** constant 1
+
+    /** The constant 1.
      */
     public static final BigComplex ONE = 
            new BigComplex(BigRational.ONE);
 
-    /** constant i 
+
+    /** The constant i. 
      */
     public static final BigComplex I = 
            new BigComplex(BigRational.ZERO,BigRational.ONE);
 
 
-    /** get the real and imaginary part 
+    /** Get the real part. 
+     * @return re.
      */
-
     public BigRational getRe() { return re; }
 
+    /** Get the imaginary part. 
+     * @return im.
+     */
     public BigRational getIm() { return im; }
 
 
-    /** string representation
+    /** Get the String representation.
      */
-
     public String toString() {
         String s = "" + re;
 	int i = im.compareTo( BigRational.ZERO );
@@ -140,45 +199,66 @@ public class BigComplex implements RingElem<BigComplex>,
         return s;
     }
 
-   /**Complex number zero.  A is a complex number.  If A is 0 then
-    true is returned, else false. */
 
+   /** Complex number zero. 
+     * @param A is a complex number. 
+     * @return If A is 0 then true is returned, else false.
+     */
     public static boolean isCZERO(BigComplex A) {
       if ( A == null ) return false;
       return A.isZERO();
     }
 
+   /** Is Complex number zero. 
+     * @return If this is 0 then true is returned, else false.
+     * @see edu.jas.structure.RingElem#isZERO()
+     */
     public boolean isZERO() {
 	return    re.equals( BigRational.ZERO )
                && im.equals( BigRational.ZERO );
     }
 
-    /**Complex number one.  A is a complex number.  If A is 1 then
-    true is returned, else false. */
-
+    /** Complex number one.  
+     * @param A is a complex number.  
+     * @return If A is 1 then true is returned, else false. 
+     */
     public static boolean isCONE(BigComplex A) {
       if ( A == null ) return false;
       return A.isONE();
     }
 
+
+    /** Is Complex number one.  
+     * @return If this is 1 then true is returned, else false. 
+     * @see edu.jas.structure.RingElem#isONE()
+     */
     public boolean isONE() {
 	return    re.equals( BigRational.ONE )
                && im.equals( BigRational.ZERO );
     }
 
+
+    /** Is Complex imaginary one.  
+     * @return If this is i then true is returned, else false. 
+     */
     public boolean isIMAG() {
 	return    re.equals( BigRational.ZERO )
                && im.equals( BigRational.ONE );
     }
 
+
+    /** Is Complex unit element.
+     * @return If this is a unit then true is returned, else false. 
+     * @see edu.jas.structure.RingElem#isUnit()
+     */
     public boolean isUnit() {
 	return ( ! isZERO() );
     }
 
 
-    /** comparison of two BigComplex numbers
+    /** Comparison with any other object.
+     * @see java.lang.Object#equals(java.lang.Object)
      */
-
     public boolean equals(Object b) {
 	if ( ! ( b instanceof BigComplex ) ) {
            return false;
@@ -188,6 +268,10 @@ public class BigComplex implements RingElem<BigComplex>,
                && im.equals( bc.im );
     }
 
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#hashCode()
+     */
     public int hashCode() {
         return 37 * im.hashCode() + re.hashCode();
     }
@@ -199,7 +283,6 @@ public class BigComplex implements RingElem<BigComplex>,
      * @return 0 if b is equal to this
      * @return 1 else
      */
-
     public int compareTo(BigComplex b) {
       if ( this.equals(b) ) { 
 	  return 0;
@@ -208,6 +291,13 @@ public class BigComplex implements RingElem<BigComplex>,
       }
     }
 
+    /** since complex numbers are unordered, there is 
+     * no signum method. 
+     * We define the result to be 
+     * @return 0 if this is equal to 0
+     * @return 1 else
+     * @see edu.jas.structure.RingElem#signum()
+     */
     public int signum() {
       if ( this.equals(ZERO) ) {
          return 0;
@@ -217,64 +307,93 @@ public class BigComplex implements RingElem<BigComplex>,
     }
 
 
-    /** arithmetic operations: +, -, -
+    /* arithmetic operations: +, -, -
      */
 
+    /** Complex number add.  
+     * @param B a BigComplex number.
+     * @return this+B.
+     */
     public BigComplex add(BigComplex B) {
 	return new BigComplex( re.add( B.re ), 
                                im.add( B.im ) );
     }
 
-    /**Complex number sum.  A and B are complex numbers.  
-      @return T=A+B. */
-
+    /** Complex number sum.  
+     * @param A and B are complex numbers.  
+     * @return A+B. 
+     */
     public static BigComplex CSUM(BigComplex A, BigComplex B) {
       if ( A == null ) return null;
       return A.add(B);
     }
 
-    /**Complex number difference.  A and B are complex numbers.  
-       @return T=A-B. */
 
+    /** Complex number difference.  
+     * @param A and B are complex numbers.  
+     * @return A-B. 
+     */
     public static BigComplex CDIF(BigComplex A, BigComplex B) {
       if ( A == null ) return null;
       return A.subtract(B);
     }
 
+
+    /** Complex number subtract.  
+     * @param B a BigComplex number.
+     * @return this-B.
+     */
     public BigComplex subtract(BigComplex B) {
 	return new BigComplex( re.subtract( B.re ), 
                                im.subtract( B.im ) );
     }
 
-    /**Complex number negative.  A is a complex number.  
-      @return S=-A. */
 
+    /** Complex number negative.  
+     * @param A is a complex number.  
+     * @return -A. 
+     */
     public static BigComplex CNEG(BigComplex A) {
       if ( A == null ) return null;
       return A.negate();
     }
 
+
+    /** Complex number negative.  
+     * @return -this. 
+     * @see edu.jas.structure.RingElem#negate()
+     */
     public BigComplex negate() {
 	return new BigComplex( (BigRational)re.negate(), 
                                (BigRational)im.negate());
     }
 
 
-    /**Complex number conjugate.  A is a complex number. S is the
-    complex conjugate of A. */
-
+    /** Complex number conjugate.  
+     * @param A is a complex number. 
+     * @return the complex conjugate of A. 
+     */
     public static BigComplex CCON(BigComplex A) {
       if ( A == null ) return null;
       return A.conjugate();
     }
 
-    /** arithmetic operations: conjugate, absolut value 
+    /* arithmetic operations: conjugate, absolut value 
      */
 
+    /** Complex number conjugate.  
+     * @return the complex conjugate of this. 
+     */
     public BigComplex conjugate() {
 	return new BigComplex(re, (BigRational)im.negate());
     }
 
+
+    /** Complex number absolute value.  
+     * @see edu.jas.structure.RingElem#abs()
+     * @return |this|^2.
+     * @note The square root is not jet implemented.
+     */
     public BigComplex abs() {
 	BigRational v = re.multiply(re).add(im.multiply(im));
 	logger.error("abs() square root missing");
@@ -282,96 +401,130 @@ public class BigComplex implements RingElem<BigComplex>,
 	return new BigComplex( v );
     }
 
-    /**Complex number absolute value.  R is a complex number.  S is the
-      absolute value of R, a rational number. 
+    /** Complex number absolute value.  
+     * @param A is a complex number.  
+     * @return the absolute value of A, a rational number. 
+     * @note The square root is not jet implemented.
      */
-
     public static BigRational CABS(BigComplex A) {
       if ( A == null ) return null;
       return A.abs().re;
     }
 
-    /**Complex number product.  A and B are complex numbers.  
-      @return T=A*B. */
 
+    /** Complex number product.  
+     * @param A and B are complex numbers.  
+     * @return A*B. 
+     */
     public static BigComplex CPROD(BigComplex A, BigComplex B) {
       if ( A == null ) return null;
       return A.multiply(B);
     }
 
-    /** arithmetic operations: *, inverse, / 
+
+    /* arithmetic operations: *, inverse, / 
      */
 
+
+    /** Complex number product.  
+     * @param B is a complex number.  
+     * @return this*B.
+     */
     public BigComplex multiply(BigComplex B) {
 	return new BigComplex(
                re.multiply(B.re).subtract(im.multiply(B.im)),
                re.multiply(B.im).add(im.multiply(B.re)) );
     }
 
-    /**Complex number inverse.  A is a non-zero complex number.  
-       S A=1. */
 
+    /** Complex number inverse.  
+     * @param A is a non-zero complex number.  
+     * @return S with S*A = 1. 
+     */
     public static BigComplex CINV(BigComplex A) {
       if ( A == null ) return null;
       return A.inverse();
     }
 
+
+    /** Complex number inverse.  
+     * @return S with S*this = 1. 
+     * @see edu.jas.structure.RingElem#inverse()
+     */
     public BigComplex inverse() {
         BigRational a = re.multiply(re).add(im.multiply(im));
 	return new BigComplex( re.divide(a), 
                                im.divide(a).negate() ); 
     }
 
-  public BigComplex remainder(BigComplex S) {
+
+    /** Complex number inverse.  
+     * @param S is a complex number.  
+     * @return 0. 
+     */
+    public BigComplex remainder(BigComplex S) {
       if ( S.isZERO() ) {
           throw new RuntimeException("division by zero");
       }
       return ZERO;
-  }
+    }
 
-    /**Complex number quotient.  A and B are complex numbers, 
-      B non-zero.
-      @return T=R/S. */
 
+    /** Complex number quotient.  
+     * @param A and B are complex numbers, B non-zero.
+     * @return A/B. 
+     */
     public static BigComplex CQ(BigComplex A, BigComplex B) {
       if ( A == null ) return null;
       return A.divide(B);
     }
 
-    public BigComplex divide (BigComplex b) {
-	return this.multiply( b.inverse() );
+
+    /** Complex number divide.
+     * @param B is a complex number, non-zero.
+     * @return this/B. 
+     */
+    public BigComplex divide (BigComplex B) {
+	return this.multiply( B.inverse() );
     }
 
 
-    /**Complex number, random.  n is a positive beta-integer.  Random 
-    rational numbers A and B are generated using RNRAND(n). Then 
-    R is the complex number with real part A and imaginary part B. */
-
+    /** Complex number, random.  
+     * @param n is a positive beta-integer.  
+     * Random rational numbers A and B are generated using RNRAND(n). 
+     * Then R is the complex number with real part A and imaginary part B. 
+     * @return R.
+     */
     public static BigComplex CRAND(int n) {
       return new BigComplex( BigRational.RNRAND(n), 
                              BigRational.RNRAND(n) );
     }
 
 
-    /** random complex number. 
+    /** Complex number, random.  
+     * @param n is a positive beta-integer.  
+     * Random rational numbers A and B are generated using RNRAND(n). 
+     * Then R is the complex number with real part A and imaginary part B. 
+     * @return R.
      */
-
     public BigComplex random(int n) {
 	return CRAND(n);
     }
 
 
     /** Parse complex number from string.
+     * @param s String.
+     * @return BigComplex from s.
      */
-
     public BigComplex parse(String s) {
         return new BigComplex(s);
     }
 
 
     /** Parse complex number from Reader.
+     * @param r Reader.
+     * @return next BigComplex from r.
      */
-
     public BigComplex parse(Reader r) {
         return ZERO;
     }
