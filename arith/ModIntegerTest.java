@@ -147,12 +147,6 @@ public class ModIntegerTest extends TestCase {
      d = ModInteger.MIDIF( a, a );
      assertEquals("a-a = 0",d,d.getZERO());
 
-     a = d.random( 100 );
-     b = ModInteger.MIABS( a );
-     c = ModInteger.MINEG( b );
-     d = ModInteger.MISUM( a, c );
-
-     assertTrue("a-abs(a) = 0", d.isZERO() );
  }
 
 

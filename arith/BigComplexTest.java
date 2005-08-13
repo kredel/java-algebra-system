@@ -139,11 +139,6 @@ public class BigComplexTest extends TestCase {
      d = BigComplex.CDIF( a, a );
      assertEquals("a-a = 0",d,BigComplex.ZERO);
 
-     a = BigComplex.CRAND( 100 );
-     c = BigComplex.CNEG( a );
-     d = BigComplex.CSUM( a, c );
-
-     assertTrue("a-abs(a) = 0", d.isZERO() );
  }
 
 

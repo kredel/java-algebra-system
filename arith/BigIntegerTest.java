@@ -135,12 +135,6 @@ public class BigIntegerTest extends TestCase {
      d = BigInteger.IDIF( a, a );
      assertEquals("a-a = 0", d, BigInteger.ZERO );
 
-     a = BigInteger.IRAND( bitlen );
-     b = BigInteger.IABS(a);
-     c = BigInteger.INEG(b);
-     d = BigInteger.ISUM(a,c);
-
-     assertTrue("a-abs(a) = 0", d.isZERO() );
  }
 
 

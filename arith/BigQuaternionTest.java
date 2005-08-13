@@ -139,11 +139,6 @@ public class BigQuaternionTest extends TestCase {
      d = BigQuaternion.QDIF( a, a );
      assertEquals("a-a = 0",d,BigQuaternion.ZERO);
 
-     a = BigQuaternion.QRAND( 100 );
-     c = BigQuaternion.QNEG( a );
-     d = BigQuaternion.QSUM( a, c );
-
-     assertTrue("a-abs(a) = 0", d.isZERO() );
  }
 
 

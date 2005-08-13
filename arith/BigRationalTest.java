@@ -139,12 +139,6 @@ public class BigRationalTest extends TestCase {
      d = BigRational.RNDIF( a, a );
      assertEquals("a-a = 0",d,BigRational.ZERO);
 
-     a = BigRational.RNRAND( 100 );
-     b = BigRational.RNABS( a );
-     c = BigRational.RNNEG( b );
-     d = BigRational.RNSUM( a, c );
-
-     assertTrue("a-abs(a) = 0", d.isZERO() );
  }
 
 
