@@ -384,11 +384,22 @@ public class ModInteger implements RingElem<ModInteger>,
 
 
     /** ModInteger random.
-     * @param n int.
-     * @return a random ModInteger.
+     * @param n such that 0 &le; v &le; (2<sup>n</sup>-1).
+     * @return a random integer mod modul.
      */
     public ModInteger random(int n) {
-      return new ModInteger( modul, new java.math.BigInteger( n, random ) );
+        return random( n, random );
+    }
+
+
+    /** ModInteger random.
+     * @param n such that 0 &le; v &le; (2<sup>n</sup>-1).
+     * @param rnd is a source for random bits.
+     * @return a random integer mod modul.
+     */
+    public ModInteger random(int n, Random rnd) {
+      java.math.BigInteger v = new java.math.BigInteger( n, rnd );
+      return new ModInteger( modul, v );
     }
 
 

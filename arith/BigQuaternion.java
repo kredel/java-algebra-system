@@ -515,7 +515,7 @@ public class BigQuaternion implements RingElem<BigQuaternion>,
     /** Quaternion number absolute value.  
      * @see edu.jas.structure.RingElem#abs()
      * @return |this|^2.
-     * @note The square root is not jet implemented.
+     * Note: The square root is not jet implemented.
      */
     public BigQuaternion abs() {
         BigRational v = re.multiply(re);
@@ -531,7 +531,7 @@ public class BigQuaternion implements RingElem<BigQuaternion>,
     /** Quaternion number absolute value.    
      * @param A is a quaternion number.
      * @return the absolute value of A, a rational number.
-     * @note The square root is not jet implemented.
+     * Note: The square root is not jet implemented.
      */
     public static BigRational QABS(BigQuaternion A) {
       if ( A == null ) return null;
@@ -635,32 +635,48 @@ public class BigQuaternion implements RingElem<BigQuaternion>,
      * @return this/b.
      */
     public BigQuaternion divide (BigQuaternion b) {
-	return this.multiply( b.inverse() );
-    }
-
-
-    /** Quaternion number, random.
-     * Random rational numbers A and B are generated using RNRAND(n). 
-     * Then R is the quaternion number with real part A and imaginary part B. 
-     * @param n is a positive beta-integer.
-     * @return R.
-     */
-    public static BigQuaternion QRAND(int n) {
-      return new BigQuaternion( BigRational.RNRAND(n), 
-                                BigRational.RNRAND(n), 
-                                BigRational.RNRAND(n),
-                                BigRational.RNRAND(n) );
+      return this.multiply( b.inverse() );
     }
 
 
     /** BigQuaternion random.
-     * Random rational numbers A and B are generated using RNRAND(n). 
-     * Then R is the quaternion number with real part A and imaginary part B. 
-     * @param n is a positive beta-integer.
-     * @return R.
+     * Random rational numbers A, B, C and D are generated using random(n). 
+     * Then R is the quaternion number with real part A and 
+     * imaginary parts B, C and D. 
+     * @param n such that 0 &le; A, B, C, D &le; (2<sup>n</sup>-1).
+     * @return R, a random BigQuaternion.
      */
     public BigQuaternion random(int n) {
-        return QRAND(n);
+      return random( n, random );
+    }
+
+
+    /** BigQuaternion random.
+     * Random rational numbers A, B, C and D are generated using RNRAND(n). 
+     * Then R is the quaternion number with real part A and 
+     * imaginary parts B, C and D. 
+     * @param n such that 0 &le; A, B, C, D &le; (2<sup>n</sup>-1).
+     * @param rnd is a source for random bits.
+     * @return R, a random BigQuaternion.
+     */
+    public BigQuaternion random(int n, Random rnd) {
+      BigRational r = BigRational.ONE.random( n, rnd );
+      BigRational i = BigRational.ONE.random( n, rnd );
+      BigRational j = BigRational.ONE.random( n, rnd );
+      BigRational k = BigRational.ONE.random( n, rnd );
+      return new BigQuaternion( r, i, j, k );
+    }
+
+
+    /** Quaternion number, random.
+     * Random rational numbers A, B, C and D are generated using RNRAND(n). 
+     * Then R is the quaternion number with real part A and 
+     * imaginary parts B, C and D. 
+     * @param n such that 0 &le; A, B, C, D &le; (2<sup>n</sup>-1).
+     * @return R, a random BigQuaternion.
+     */
+    public static BigQuaternion QRAND(int n) {
+      return ONE.random( n, random);
     }
 
 

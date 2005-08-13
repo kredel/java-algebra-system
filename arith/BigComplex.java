@@ -182,6 +182,7 @@ public class BigComplex implements RingElem<BigComplex>,
      */
     public BigRational getRe() { return re; }
 
+
     /** Get the imaginary part. 
      * @return im.
      */
@@ -209,6 +210,7 @@ public class BigComplex implements RingElem<BigComplex>,
       return A.isZERO();
     }
 
+
    /** Is Complex number zero. 
      * @return If this is 0 then true is returned, else false.
      * @see edu.jas.structure.RingElem#isZERO()
@@ -217,6 +219,7 @@ public class BigComplex implements RingElem<BigComplex>,
 	return    re.equals( BigRational.ZERO )
                && im.equals( BigRational.ZERO );
     }
+
 
     /** Complex number one.  
      * @param A is a complex number.  
@@ -392,7 +395,7 @@ public class BigComplex implements RingElem<BigComplex>,
     /** Complex number absolute value.  
      * @see edu.jas.structure.RingElem#abs()
      * @return |this|^2.
-     * @note The square root is not jet implemented.
+     * Note: The square root is not jet implemented.
      */
     public BigComplex abs() {
 	BigRational v = re.multiply(re).add(im.multiply(im));
@@ -404,7 +407,7 @@ public class BigComplex implements RingElem<BigComplex>,
     /** Complex number absolute value.  
      * @param A is a complex number.  
      * @return the absolute value of A, a rational number. 
-     * @note The square root is not jet implemented.
+     * Note: The square root is not jet implemented.
      */
     public static BigRational CABS(BigComplex A) {
       if ( A == null ) return null;
@@ -490,25 +493,38 @@ public class BigComplex implements RingElem<BigComplex>,
 
 
     /** Complex number, random.  
-     * @param n is a positive beta-integer.  
-     * Random rational numbers A and B are generated using RNRAND(n). 
+     * Random rational numbers A and B are generated using random(n). 
      * Then R is the complex number with real part A and imaginary part B. 
+     * @param n such that 0 &le; A, B &le; (2<sup>n</sup>-1).
      * @return R.
      */
-    public static BigComplex CRAND(int n) {
-      return new BigComplex( BigRational.RNRAND(n), 
-                             BigRational.RNRAND(n) );
+    public BigComplex random(int n) {
+      return random(n,random);
     }
 
 
     /** Complex number, random.  
-     * @param n is a positive beta-integer.  
-     * Random rational numbers A and B are generated using RNRAND(n). 
+     * Random rational numbers A and B are generated using random(n). 
      * Then R is the complex number with real part A and imaginary part B. 
+     * @param n such that 0 &le; A, B &le; (2<sup>n</sup>-1).
+     * @param rnd is a source for random bits.
      * @return R.
      */
-    public BigComplex random(int n) {
-	return CRAND(n);
+    public BigComplex random(int n, Random rnd) {
+      BigRational r = BigRational.ONE.random( n, rnd );
+      BigRational i = BigRational.ONE.random( n, rnd );
+      return new BigComplex( r, i ); 
+    }
+
+
+    /** Complex number, random.  
+     * Random rational numbers A and B are generated using random(n). 
+     * Then R is the complex number with real part A and imaginary part B. 
+     * @param n such that 0 &le; A, B &le; (2<sup>n</sup>-1).
+     * @return R.
+     */
+    public static BigComplex CRAND(int n) {
+      return ONE.random(n,random);
     }
 
 

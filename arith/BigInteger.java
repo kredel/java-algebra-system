@@ -400,20 +400,34 @@ public class BigInteger implements RingElem<BigInteger>,
 
 
     /** BigInteger random.
-     * @param n int.
-     * @return a random BigInteger.
+     * @param n such that 0 &le; r &le; (2<sup>n</sup>-1).
+     * @return r, a random BigInteger.
      */
     public BigInteger random(int n) {
-      return IRAND( n );
+      return random(n,random);
     }
 
 
     /** BigInteger random.
-     * @param NL int.
-     * @return a random BigInteger.
+     * @param n such that 0 &le; r &le; (2<sup>n</sup>-1).
+     * @param rnd is a source for random bits.
+     * @return r, a random BigInteger.
+     */
+    public BigInteger random(int n, Random rnd) {
+      java.math.BigInteger r = new java.math.BigInteger( n, rnd );
+      if ( rnd.nextBoolean() ) {
+          r = r.negate();
+      }
+      return new BigInteger( r );
+    }
+
+
+    /** BigInteger random.
+     * @param NL such that 0 &le; r &le; (2<sup>n</sup>-1).
+     * @return r, a random BigInteger.
      */
     public static BigInteger IRAND(int NL) {
-      return new BigInteger( new java.math.BigInteger( NL, random ) );
+      return ONE.random(NL,random);
     }
 
 

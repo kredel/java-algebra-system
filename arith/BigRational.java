@@ -608,31 +608,47 @@ public class BigRational implements RingElem<BigRational>,
 
 
     /** Rational number, random. 
-     * Random integers A and B are generated using IRAND(n).  
-     * Then R=A/(ABS(B)+1), reduced to lowest terms. 
-     * @param n is a positive beta-integer.
+     * Random integers A, B and a random sign s are generated 
+     * using BigInteger(n,random) and random.nextBoolen().  
+     * Then R = s*A/(B+1), reduced to lowest terms. 
+     * @param n such that 0 &le; A, B &le; (2<sup>n</sup>-1).
      * @return a random BigRational.
      */
     public BigRational random(int n) {
-      return RNRAND( n );
+        return random( n, random );
     }
 
+
     /** Rational number, random. 
-     * Random integers A and B are generated using IRAND(n).  
-     * Then R=A/(ABS(B)+1), reduced to lowest terms. 
-     * @param NL is a positive beta-integer.
+     * Random integers A, B and a random sign s are generated 
+     * using BigInteger(n,random) and random.nextBoolen().  
+     * Then R = s*A/(B+1), reduced to lowest terms. 
+     * @param n such that 0 &le; A, B &le; (2<sup>n</sup>-1).
+     * @param rnd is a source for random bits.
+     * @return a random BigRational.
+     */
+    public BigRational random(int n, Random rnd) {
+      BigInteger A;
+      BigInteger B;
+      A = new BigInteger( n, rnd ); // always positive
+      if ( rnd.nextBoolean() ) {
+          A = A.negate();
+      }
+      B = new BigInteger( n, rnd ); // always positive
+      B = B.add( IONE );
+      return RNRED( A, B );
+    }
+
+
+    /** Rational number, random. 
+     * Random integers A, B and a random sign s are generated 
+     * using BigInteger(n,random) and random.nextBoolen().  
+     * Then R = s*A/(B+1), reduced to lowest terms. 
+     * @param NL such that 0 &le; A, B &le; (2<sup>n</sup>-1).
      * @return a random BigRational.
      */
     public static BigRational RNRAND(int NL) {             
-      BigInteger A;
-      BigInteger B;
-      BigRational R;
-      A = new BigInteger( NL, random );
-      B = new BigInteger( NL, random );
-      B = B.abs();
-      B = B.add( IONE );
-      R = RNRED( A, B );
-      return R;
+        return ONE.random(NL,random);
     }
 
 
