@@ -153,7 +153,7 @@ public class ModInteger implements RingElem<ModInteger>,
 
 
     /** Get a ModInteger element from a BigInteger value.
-     * @param a ModInteger.
+     * @param a BigInteger.
      * @return a ModInteger.
      */
     public ModInteger fromInteger(java.math.BigInteger a) {
@@ -238,6 +238,7 @@ public class ModInteger implements RingElem<ModInteger>,
     /** Comparison with any other object.
      * @see java.lang.Object#equals(java.lang.Object)
      */
+    @Override
     public boolean equals(Object b) {
 	if ( ! ( b instanceof ModInteger ) ) {
            return false;

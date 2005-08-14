@@ -264,6 +264,7 @@ public class BigRational implements RingElem<BigRational>,
     /** Comparison with any other object.
      * @see java.lang.Object#equals(java.lang.Object)
      */
+    @Override
     public boolean equals( Object b) {
 	if ( ! ( b instanceof BigRational ) ) {
            return false;
