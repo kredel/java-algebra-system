@@ -7,6 +7,7 @@ package edu.jas.structure;
 import java.math.BigInteger;
 import java.io.Reader;
 import java.io.Serializable;
+import java.util.Random;
 
 /**
  * RingFactory interface for use with the polynomial classes.
@@ -48,11 +49,20 @@ public interface RingFactory<C extends RingElem> extends Serializable {
 
 
     /**
-     * Generate a random RingElem with size less equal to 2^n.
+     * Generate a random RingElem with size less equal to n.
      * @param n
      * @return a random element.
      */
     public C random(int n);
+
+
+    /**
+     * Generate a random RingElem with size less equal to n.
+     * @param n
+     * @param random is a source for random bits.
+     * @return a random element.
+     */
+    public C random(int n, Random random);
 
 
     /**
