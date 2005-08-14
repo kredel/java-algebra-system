@@ -287,7 +287,7 @@ public class ExpVectorTest extends TestCase {
      dep = ExpVector.EVDOV(b);
      assertTrue("[] = []",Arrays.equals(exp,dep));
 
-     b = new ExpVector();
+     b = new ExpVector(0);
      exp = new int[] { };
      dep = ExpVector.EVDOV(b);
      assertTrue("[] = []",Arrays.equals(exp,dep));
