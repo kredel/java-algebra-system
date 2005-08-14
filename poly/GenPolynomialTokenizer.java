@@ -36,6 +36,7 @@ import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.module.ModuleList;
 import edu.jas.module.OrderedModuleList;
 
+
 /**
  * GenPolynomial Tokenizer. 
  * Used to read rational polynomials and lists from input streams.
@@ -73,9 +74,8 @@ public class GenPolynomialTokenizer  {
 
 
     /**
-     * noargs constructor
+     * noargs constructor reads from System.in
      */
-
     public GenPolynomialTokenizer() {
         this( new BufferedReader( new InputStreamReader( System.in ) ) );
     }
@@ -221,7 +221,7 @@ public class GenPolynomialTokenizer  {
 
 
     /**
-     * parsing method for GenPolynomial
+     * parsing method for GenPolynomial.
      * syntax ? (simple)
      */
     public GenPolynomial nextPolynomial() throws IOException {
@@ -325,7 +325,7 @@ public class GenPolynomialTokenizer  {
 
 
     /**
-     * parsing method for exponent (of variable)
+     * parsing method for exponent (of variable).
      * syntax: ^long | **long
      */
     public long nextExponent() throws IOException {
@@ -365,9 +365,9 @@ public class GenPolynomialTokenizer  {
 
 
     /**
-     * parsing method for comments 
+     * parsing method for comments.
      * syntax: (* comment *) | /_* comment *_/ without _
-     * @false does not work with this pushBack()
+     * Does not work with this pushBack(), unused.
      */
     public String nextComment() throws IOException {
         // syntax: (* comment *) | /* comment */ 
@@ -402,9 +402,8 @@ public class GenPolynomialTokenizer  {
     }
 
 
-
     /**
-     * parsing method for variable list
+     * parsing method for variable list.
      * syntax: (a, b c, de) gives [ "a", "b", "c", "de" ]
      */
     public String[] nextVariableList() throws IOException {
@@ -432,8 +431,9 @@ public class GenPolynomialTokenizer  {
         return v;
     }
 
+
     /**
-     * parsing method for coefficient ring
+     * parsing method for coefficient ring.
      * syntax: Rat | Q | Int | Z | Mod modul | Complex | C | Quat 
      */
     public RingFactory nextCoefficientRing() throws IOException {
@@ -501,7 +501,7 @@ public class GenPolynomialTokenizer  {
 
 
     /**
-     * parsing method for weight list
+     * parsing method for weight list.
      * syntax: (w1, w2, w3, ..., wn)
      */
     public long[] nextWeightList() throws IOException {
@@ -536,8 +536,9 @@ public class GenPolynomialTokenizer  {
         return w;
     }
 
+
     /**
-     * parsing method for split index
+     * parsing method for split index.
      * syntax: |i|
      */
     public int nextSplitIndex() throws IOException {
@@ -570,7 +571,7 @@ public class GenPolynomialTokenizer  {
 
 
     /**
-     * parsing method for term order name
+     * parsing method for term order name.
      * syntax: termOrderName = L, IL, LEX, G, IG, GRLEX
      *         W(weights)
      */
@@ -620,8 +621,9 @@ public class GenPolynomialTokenizer  {
         }
     }
 
+
     /**
-     * parsing method for polynomial list
+     * parsing method for polynomial list.
      * syntax: ( p1, p2, p3, ..., pn )
      */
     public List<GenPolynomial> nextPolynomialList() throws IOException {
@@ -652,12 +654,13 @@ public class GenPolynomialTokenizer  {
 
 
     /**
-     * parsing method for submodule list
+     * parsing method for submodule list.
      * syntax: ( ( p11, p12, p13, ..., p1n ), 
                  ..., 
                  ( pm1, pm2, pm3, ..., pmn ) )
      */
-    public List<List<GenPolynomial>> nextSubModuleList() throws IOException {
+    public List< List<GenPolynomial> > nextSubModuleList() 
+           throws IOException {
         List<List<GenPolynomial>> L = new ArrayList<List<GenPolynomial>>();
         int tt;
         tt = tok.nextToken();
@@ -682,7 +685,7 @@ public class GenPolynomialTokenizer  {
 
 
     /**
-     * parsing method for solvable polynomial relation table
+     * parsing method for solvable polynomial relation table.
      * syntax: ( p_1, p_2, p_3, ..., p_n+3 )
      * semantics: p_n+1 * p_n+2 = p_n+3 
      */
@@ -726,7 +729,7 @@ public class GenPolynomialTokenizer  {
 
 
     /**
-     * parsing method for polynomial set
+     * parsing method for polynomial set.
      * syntax: coeffRing varList termOrderName polyList
      */
     public PolynomialList nextPolynomialSet() throws IOException {
@@ -761,7 +764,7 @@ public class GenPolynomialTokenizer  {
 
 
     /**
-     * parsing method for module set
+     * parsing method for module set.
      * syntax: coeffRing varList termOrderName moduleList
      */
     public ModuleList nextSubModuleSet() throws IOException {
@@ -796,7 +799,7 @@ public class GenPolynomialTokenizer  {
 
 
     /**
-     * parsing method for solvable polynomial list
+     * parsing method for solvable polynomial list.
      * syntax: ( p1, p2, p3, ..., pn )
      */
     public List<GenSolvablePolynomial> nextSolvablePolynomialList() 
@@ -820,7 +823,7 @@ public class GenPolynomialTokenizer  {
 
 
     /**
-     * parsing method for solvable polynomial
+     * parsing method for solvable polynomial.
      * syntax: p
      */
     public GenSolvablePolynomial nextSolvablePolynomial() 
@@ -837,7 +840,7 @@ public class GenPolynomialTokenizer  {
 
 
     /**
-     * parsing method for solvable polynomial set
+     * parsing method for solvable polynomial set.
      * syntax: varList termOrderName relationTable polyList
      */
 
@@ -882,12 +885,12 @@ public class GenPolynomialTokenizer  {
 
 
     /**
-     * parsing method for solvable submodule list
+     * parsing method for solvable submodule list.
      * syntax: ( ( p11, p12, p13, ..., p1n ), 
                  ..., 
                  ( pm1, pm2, pm3, ..., pmn ) )
      */
-    public List<List<GenSolvablePolynomial>> nextSolvableSubModuleList() 
+    public List< List<GenSolvablePolynomial> > nextSolvableSubModuleList() 
            throws IOException {
         List<List<GenSolvablePolynomial>> L 
              = new ArrayList<List<GenSolvablePolynomial>>();
@@ -912,8 +915,9 @@ public class GenPolynomialTokenizer  {
          return L;
     }
 
+
     /**
-     * parsing method for solvable module set
+     * parsing method for solvable module set.
      * syntax: varList termOrderName relationTable moduleList
      */
     public ModuleList nextSolvableSubModuleSet() throws IOException {
@@ -955,13 +959,16 @@ public class GenPolynomialTokenizer  {
         return new OrderedModuleList(spfac,s); // Ordered
     }
 
+
     private boolean digit(char x) {
         return '0' <= x && x <= '9';
     }
 
+
     private boolean letter(char x) {
         return ( 'a' <= x && x <= 'z' ) || ( 'A' <= x && x <= 'Z' );
     }
+
 
     private int indexVar(String x) {
         for ( int i = 0; i < vars.length; i++ ) { 
@@ -971,6 +978,7 @@ public class GenPolynomialTokenizer  {
         }
         return -1; // not found
     }
+
 
     // unused
     public void nextComma() throws IOException {

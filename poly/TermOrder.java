@@ -5,12 +5,18 @@
 package edu.jas.poly;
 
 import java.util.Comparator;
+import java.util.Arrays;
 import java.io.Serializable;
 
 import edu.jas.poly.ExpVector;
 
+
 /**
  * Term order class for ordered polynomials. 
+ * Implements the most used term orders: 
+ * graded, lexicographical, weight vector and block orders.
+ * Does not (jet) implement orders by linear forms over Q[t].
+ * Objects of this class are immutable.
  * @author Heinz Kredel
  */
 
@@ -29,19 +35,44 @@ public final class TermOrder implements Serializable {
     //public final static int DEFAULT_EVORD = INVLEX;
 
     private final int evord;
-    // split termorders
+    // for split termorders
     private final int evord2;
     private final int evbeg1;
     private final int evend1;
     private final int evbeg2;
     private final int evend2;
 
+
+    /**
+     * Defined weight vector.
+     */
     private final long[] weight;
 
-    private final Comparator<ExpVector> horder;  // highest first 
-    private final Comparator<ExpVector> lorder;  // lowest first
-    private final Comparator<ExpVector> sugar;   // graded lowest first
 
+    /**
+     * Defined descending order comparator. 
+     * Sorts the highest terms first.
+     */
+    private final Comparator<ExpVector> horder;
+
+
+    /**
+     * Defined ascending order comparator. 
+     * Sorts the lowest terms first.
+     */
+    private final Comparator<ExpVector> lorder;
+
+
+    /**
+     * Defined sugar order comparator. 
+     * Sorts the graded lowest terms first.
+     */
+    private final Comparator<ExpVector> sugar;
+
+
+    /**
+     * Comparator for ExpVectors.
+     */
     private abstract class EVorder implements Comparator<ExpVector>, 
                                               Serializable {
            public abstract int compare(ExpVector e1, ExpVector e2); 
@@ -49,18 +80,17 @@ public final class TermOrder implements Serializable {
 
 
     /**
-     * Default constructor
+     * Cconstructor for default term order.
      */
-
     public TermOrder() {
         this(DEFAULT_EVORD);
     }
 
 
     /**
-     * Constructor for given order
+     * Cconstructor for given term order.
+     * @param evord requested term order indicator / enumerator.
      */
-
     public TermOrder(int evord) {
         if ( evord < LEX || REVITDG < evord ) {
            throw new IllegalArgumentException("invalid term order: "+evord);
@@ -130,9 +160,9 @@ public final class TermOrder implements Serializable {
 
 
     /**
-     * Constructor for given weight order
+     * Constructor for given exponent weights.
+     * @param w weight vector of longs.
      */
-
     public TermOrder(long[] w) {
         if ( w == null ) {
            throw new IllegalArgumentException("invalid term order weight");
@@ -164,9 +194,10 @@ public final class TermOrder implements Serializable {
 
 
     /**
-     * Constructor for weighted split orders
+     * Constructor for given weighted split orders.
+     * @param w weight vector of longs.
+     * @param split index.
      */
-
     public TermOrder(long[] w, int split) {
         if ( w == null ) {
            throw new IllegalArgumentException("invalid term order weight");
@@ -209,17 +240,22 @@ public final class TermOrder implements Serializable {
 
 
     /**
-     * Default constructor for split orders
+     * Constructor for default split order.
+     * @param r max number of exponents to compare.
+     * @param split index.
      */
-
     public TermOrder(int r, int split) {
         this(DEFAULT_EVORD,DEFAULT_EVORD,r,split);
     }
 
-    /**
-     * Constructor for given split orders
-     */
 
+    /**
+     * Constructor for given split order.
+     * @param ev1 requested term order indicator for first block.
+     * @param ev2 requested term order indicator for second block.
+     * @param r max number of exponents to compare.
+     * @param split index.
+     */
     public TermOrder(int ev1, int ev2, int r, int split) {
         if ( ev1 < LEX || REVITDG < ev1 ) {
            throw new IllegalArgumentException("invalid term order: "+ev1);
@@ -500,7 +536,8 @@ public final class TermOrder implements Serializable {
             }
         }
         if ( horder == null ) {
-           throw new IllegalArgumentException("invalid term order: "+evord + " 2 "+ evord2);
+           throw new IllegalArgumentException("invalid term order: "
+                                             +evord + " 2 "+ evord2);
         }
 
         lorder = new EVorder() {
@@ -518,34 +555,80 @@ public final class TermOrder implements Serializable {
     }
 
 
+    /**
+     * Get the first defined order indicator. 
+     * @return evord.
+     */
     public int getEvord() { 
         return evord; 
     }
 
+
+    /**
+     * Get the second defined order indicator. 
+     * @return evord2.
+     */
     public int getEvord2() { 
         return evord2; 
     }
 
+
+    /**
+     * Get the split index. 
+     * @return split.
+     */
+    public int getSplit() { 
+        return evbeg2; 
+    }
+
+
+    /**
+     * Get the weight vector. 
+     * @return weight.
+     */
     public long[] getWeight() { 
         return weight; 
     }
 
 
+    /**
+     * Get the descending order comparator. 
+     * Sorts the highest terms first.
+     * @return horder.
+     */
     public Comparator<ExpVector> getDescendComparator() { 
-        return horder; // highest first
+        return horder; 
     }
 
+
+    /**
+     * Get the ascending order comparator. 
+     * Sorts the lowest terms first.
+     * @return lorder.
+     */
     public Comparator<ExpVector> getAscendComparator() { 
-        return lorder; // lowest first
+        return lorder; 
     }
 
+
+    /**
+     * Get the sugar order comparator. 
+     * Sorts the graded lowest terms first.
+     * @return sugar.
+     */
     public Comparator<ExpVector> getSugarComparator() { 
-        return sugar; // graded lowest first
+        return sugar; 
     }
 
 
+    /** Comparison with any other object.
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
     public boolean equals( Object B ) { 
-       if ( ! (B instanceof TermOrder) ) return false;
+       if ( ! (B instanceof TermOrder) ) {
+          return false;
+       }
        TermOrder b = (TermOrder)B;
        boolean t =    evord  == b.getEvord()
                    && evord2 == b.evord2
@@ -556,27 +639,17 @@ public final class TermOrder implements Serializable {
        if ( ! t ) {
           return t;
        }
-       if ( weight == b.weight ) {
-          return true;
-       }
-       if ( weight != null && b.weight == null ) {
+       if ( ! Arrays.equals(weight,b.weight) ) {
           return false;
-       }
-       if ( weight == null && b.weight != null ) {
-          return false;
-       }
-       if ( weight.length != b.weight.length ) {
-          return false;
-       }
-       for ( int i = 0; i < weight.length; i++ ) {
-           if ( weight[i] != b.weight[i] ) {
-              return false;
-           }
        }
        return true;
     }
 
 
+    /**
+     * String representation of weight vector.
+     * @see java.lang.Object#toString()
+     */
     public String weightToString() {
 	StringBuffer erg = new StringBuffer();
         if ( weight != null ) {
@@ -593,6 +666,11 @@ public final class TermOrder implements Serializable {
     }
 
 
+    /**
+     * String representation of TermOrder.
+     * @see java.lang.Object#toString()
+     */
+    @Override
     public String toString() {
 	StringBuffer erg = new StringBuffer();
         if ( weight != null ) {
@@ -632,4 +710,5 @@ public final class TermOrder implements Serializable {
         erg.append("["+evbeg2+","+evend2+"]");
         return erg.toString();
     }
+
 }

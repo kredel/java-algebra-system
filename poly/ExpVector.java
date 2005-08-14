@@ -10,46 +10,67 @@ import java.io.Serializable;
 
 
 /**
- * ExpVector
- * implements exponent vectors for polynomials.
+ * ExpVector implements exponent vectors for polynomials.
+ * Exponent vectors are implemented as arrays of longs
+ * with the familiar MAS static method names.
+ * The implementation is only tested for nonnegative exponents
+ * but should work also for negative exponents.
+ * Objects of this class are intended to be immutable, but 
+ * exponents can be set (during construction).
+ * Will be made generic in the future, e.g. ExpVector&lt;long&gt;.
  * @author Heinz Kredel
  */
 
-
 public class ExpVector implements Cloneable, Serializable {
 
+
+    /**
+     * The data structure is an array of longs.
+     */
     private final long[] val;
 
-    //public static final int DEFAULT_EVORD = TermOrder.DEFAULT_EVORD;
 
     private final static Random random = new Random();
 
 
     /**
-     * Constructors for ExpVector
+     * Constructor for ExpVector.
+     * @param n length of exponent vector.
      */
-
     public ExpVector(int n) {
         this( new long[n] );
     }
 
+    
+    /**
+     * Constructor for ExpVector.
+     * Sets exponent i to e.
+     * @param n length of exponent vector.
+     * @param i index of exponent to be set.
+     * @param e exponent to be set.
+     */
     public ExpVector(int n, int i, long e) {
         this( new long[n] );
         val[i] = e;
     }
 
-    public ExpVector() {
-        this( new long[0] );
-    }
 
-    public ExpVector(long[] v) {
+    /**
+     * Constructor for ExpVector.
+     * Sets val.
+     * @param v other exponent vector.
+     */
+    protected ExpVector(long[] v) {
         val = v;
     }
 
-    public ExpVector(String[] v) {
-        this( new long[v.length] );
-    }
 
+    /**
+     * Constructor for ExpVector.
+     * Converts a String representation to an ExpVector.
+     * Accepted format = (1,2,3,4,5,6,7).
+     * @param s String representation.
+     */
     public ExpVector(String s) throws NumberFormatException {
         // first format = (1,2,3,4,5,6,7)
         Vector exps = new Vector();
@@ -86,30 +107,66 @@ public class ExpVector implements Cloneable, Serializable {
         }
     }
 
+
+    /** Clone this.
+     * @see java.lang.Object#clone()
+     */
     public Object clone() {
         long[] w = new long[ val.length ];
         System.arraycopy(val,0,w,0,val.length);
         return new ExpVector( w );
     }
 
+
+    /**
+     * Get the exponent vector. 
+     * @return val.
+     */
     public long[] getval() {
         return val;
     } 
 
+
+    /**
+     * Get the exponent at position i. 
+     * @param i position.
+     * @return val[i].
+     */
     public long getVal(int i) {
         return val[i];
     } 
 
-    public long setVal(int i, long e) {
+
+    /**
+     * Set the exponent at position i to e. 
+     * @param i
+     * @param e
+     * @return val with val[i] == e.
+     */
+    protected long setVal(int i, long e) {
         long x = val[i];
         val[i] = e;
         return x;
     } 
 
+
+    /**
+     * Get the length of this exponent vector. 
+     * @return val.length.
+     */
     public int length() {
         return val.length; 
     } 
 
+
+    /**
+     * Extend variables. Used e.g. in module embedding.
+     * Extend this by i elements and set val[j] to e.
+     * @param i number of elements to extend.
+     * @param j index of element to be set.
+     * @param e new exponent for val[j].
+     * @return extended exponent vector.
+     */
     public ExpVector extend(int i, int j, long e) {
         long[] w = new long[ val.length + i ];
         System.arraycopy(val,0,w,i,val.length);
@@ -120,6 +177,14 @@ public class ExpVector implements Cloneable, Serializable {
         return new ExpVector( w );
     }
 
+
+    /**
+     * Contract variables. Used e.g. in module embedding.
+     * Contract this to len elements.
+     * @param i position of first element to be copied.
+     * @param len new length.
+     * @return contracted exponent vector.
+     */
     public ExpVector contract(int i, int len) {
         if ( i+len > val.length ) {
            throw new RuntimeException("len "+len+" > val.len "+val.length);
@@ -129,6 +194,10 @@ public class ExpVector implements Cloneable, Serializable {
         return new ExpVector( w );
     }
 
+
+    /** Get the string representation.
+     * @see java.lang.Object#toString()
+     */
     public String toString() {
         // if ( vars != null ) return toString(vars);
         StringBuffer s = new StringBuffer("(");
@@ -142,6 +211,11 @@ public class ExpVector implements Cloneable, Serializable {
         return s.toString();
     }
 
+
+    /** Get the string representation with variable names.
+     * @param vars names of variables.
+     * @see java.lang.Object#toString()
+     */
     public String toString(String[] vars) {
         String s = "";
         boolean pit;
@@ -170,13 +244,27 @@ public class ExpVector implements Cloneable, Serializable {
         return s; 
     }
 
+
+    /** Comparison with any other object.
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
     public boolean equals( Object B ) { 
-       if ( ! (B instanceof ExpVector) ) return false;
-       int t = EVILCP( this, (ExpVector)B );
+       if ( ! (B instanceof ExpVector) ) {
+          return false;
+       }
+       ExpVector b = (ExpVector)B;
+       int t = EVILCP( this, b );
        //System.out.println("equals: this = " + this + " B = " + B + " t = " + t);
        return (0 == t);
     }
 
+
+    /** hashCode.
+     * Optimized for small exponents, i.e. &le; 2<sup>4</sup>
+     * and small number of variables, i.e. &le; 8.
+     * @see java.lang.Object#hashCode()
+     */
     public int hashCode() { 
         int h = 0;
         for (int i = 0; i < val.length; i++ ) {
@@ -185,18 +273,32 @@ public class ExpVector implements Cloneable, Serializable {
         return h;
     }
 
+
+    /** Is ExpVector zero. 
+     * @return If this has all elements 0 then true is returned, else false.
+     */
     public boolean isZERO() { 
        return (0 == EVSIGN( this ) );
     }
 
-    /**
-     * Standard vars.
-     */
 
+    /**
+     * Standard variable names.
+     * Generate standard names for variables, 
+     * i.e. x0 to x(n-1). 
+     * @return standard names.
+     */
     public String[] stdVars() {
         return STDVARS(val.length);
     }
 
+
+    /**
+     * Standard variable names.
+     * Generate standard names for variables, 
+     * i.e. x0 to x(n-1). 
+     * @return standard names.
+     */
     public static String[] STDVARS(int n) {
         String[] vars = new String[ n ];
         for ( int i = 0; i < n; i++) {
@@ -207,9 +309,11 @@ public class ExpVector implements Cloneable, Serializable {
 
 
     /**
-     * Sum.
+     * ExpVector summation.
+     * @param U
+     * @param V
+     * @return U+V
      */
-
     public static ExpVector EVSUM( ExpVector U, ExpVector V ) {
         long[] u = U.getval();
         long[] v = V.getval();
@@ -220,15 +324,23 @@ public class ExpVector implements Cloneable, Serializable {
         return new ExpVector( w );
     }
 
+    /**
+     * ExpVector summation.
+     * @param V
+     * @return this+V
+     */
     public ExpVector sum( ExpVector V ) {
         return EVSUM(this, V);
     }
 
 
     /**
-     * Difference.
+     * ExpVector difference.
+     * Result may have negative entries.
+     * @param U
+     * @param V
+     * @return U-V
      */
-
     public static ExpVector EVDIF( ExpVector U, ExpVector V ) {
         long[] u = U.getval();
         long[] v = V.getval();
@@ -239,40 +351,75 @@ public class ExpVector implements Cloneable, Serializable {
         return new ExpVector( w );
     }
 
+
+    /**
+     * ExpVector difference.
+     * Result may have negative entries.
+     * @param V
+     * @return this-V
+     */
     public ExpVector dif( ExpVector V ) {
         return EVDIF(this, V);
     }
 
 
     /**
-     * Substitute.
+     * ExpVector substitution.
+     * Clone and set exponent to d at position i.
+     * @param U 
+     * @param i position.
+     * @param d new exponent.
+     * @return substituted ExpVector.
      */
-
     public static ExpVector EVSU( ExpVector U, int i, long d ) {
         ExpVector V = (ExpVector)U.clone();
         long e = V.setVal( i, d );
         return V;
     }
 
+
+    /**
+     * ExpVector substitution.
+     * Clone and set exponent to d at position i.
+     * @param i position.
+     * @param d new exponent.
+     * @return substituted ExpVector.
+     */
     public ExpVector subst( int i, long d ) {
         return EVSU(this, i, d);
     }
 
 
     /**
-     * Random.
+     * Generate a random ExpVector.
+     * @param r length of new ExpVector. 
+     * @param k maximal degree in each exponent.
+     * @param q density of nozero exponents.
+     * @return random ExpVector.
      */
+    public static ExpVector EVRAND( int r, long k, float q ) {
+        return EVRAND(r,k,q,random);
+    }
 
-    public static ExpVector EVRAND( int r, int k, float q ) {
+
+    /**
+     * Generate a random ExpVector.
+     * @param r length of new ExpVector. 
+     * @param k maximal degree in each exponent.
+     * @param q density of nozero exponents.
+     * @param rnd is a source for random bits.
+     * @return random ExpVector.
+     */
+    public static ExpVector EVRAND( int r, long k, float q, Random rnd ) {
         long[] w = new long[r];
         long e;
         float f;
         for (int i = 0; i < w.length; i++ ) {
-            f = random.nextFloat(); 
+            f = rnd.nextFloat(); 
             if ( f > q ) { 
                e = 0; 
             } else { 
-               e = random.nextLong() % k; 
+               e = rnd.nextLong() % k; 
                if ( e < 0 ) {
                   e = -e;
                } 
@@ -282,15 +429,38 @@ public class ExpVector implements Cloneable, Serializable {
         return new ExpVector( w );
     }
 
-    public static ExpVector EVRAND( int r, int k) {
-        return EVRAND( r, k, (float)1.0 );
+
+    /**
+     * Generate a random ExpVector.
+     * @param r length of new ExpVector. 
+     * @param k maximal degree in each exponent.
+     * @param q density of nozero exponents.
+     * @return random ExpVector.
+     */
+    public static ExpVector random( int r, long k, float q ) {
+        return EVRAND(r,k,q,random);
     }
 
 
     /**
-     * Sign.
+     * Generate a random ExpVector.
+     * @param r length of new ExpVector. 
+     * @param k maximal degree in each exponent.
+     * @param q density of nozero exponents.
+     * @param rnd is a source for random bits.
+     * @return random ExpVector.
      */
+    public static ExpVector random( int r, long k, float q, Random rnd ) {
+        return EVRAND(r,k,q,rnd);
+    }
 
+
+    /**
+     * ExpVector sign.
+     * @param U
+     * @return 0 if U is zero, -1 if some entry is negative, 
+               1 if no entry is negativ and at least one entry is positive.
+     */
     public static int EVSIGN( ExpVector U ) {
         int t = 0;
         long[] u = U.getval();
@@ -307,9 +477,10 @@ public class ExpVector implements Cloneable, Serializable {
 
 
     /**
-     * Total degree.
+     * ExpVector total degree.
+     * @param U
+     * @return sum of all exponents.
      */
-
     public static long EVTDEG( ExpVector U ) {
         long t = 0;
         long[] u = U.getval();
@@ -321,9 +492,11 @@ public class ExpVector implements Cloneable, Serializable {
 
 
     /**
-     * Weighted degree.
+     * ExpVector weighted degree.
+     * @param w weights.
+     * @param U
+     * @return weighted sum of all exponents.
      */
-
     public static long EVWDEG( long[] w, ExpVector U ) {
         if ( w == null ) { 
             return EVTDEG( U ); // assume weight 1 
@@ -338,9 +511,11 @@ public class ExpVector implements Cloneable, Serializable {
 
 
     /**
-     * Least common multiple.
+     * ExpVector least common multiple.
+     * @param U
+     * @param V
+     * @return component wise maximum of U and V.
      */
-
     public static ExpVector EVLCM( ExpVector U, ExpVector V ) {
         long[] u = U.getval();
         long[] v = V.getval();
@@ -353,9 +528,10 @@ public class ExpVector implements Cloneable, Serializable {
 
 
     /**
-     * Dependency on variables.
+     * ExpVector dependency on variables.
+     * @param U
+     * @return array of indices where U has positive exponents.
      */
-
     public static int[] EVDOV( ExpVector U ) {
         if ( U == null ) {
             return null;
@@ -363,6 +539,11 @@ public class ExpVector implements Cloneable, Serializable {
         return U.dependencyOnVariables();
     }
 
+
+    /**
+     * ExpVector dependency on variables.
+     * @return array of indices where val has positive exponents.
+     */
     public int[] dependencyOnVariables() {
         long[] u = val;
         int l = 0;
@@ -386,10 +567,12 @@ public class ExpVector implements Cloneable, Serializable {
 
 
     /**
-     * Multiple test. 
+     * ExpVector multiple test.
+     * Test if U is component wise greater or equal to V.
+     * @param U
+     * @param V
      * @return true if U is a multiple of V, else false.
      */
-
     public static boolean EVMT( ExpVector U, ExpVector V ) {
         long[] u = U.getval();
         long[] v = V.getval();
@@ -405,8 +588,10 @@ public class ExpVector implements Cloneable, Serializable {
 
     /**
      * Inverse lexicographical compare.
+     * @param U
+     * @param V
+     * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
      */
-
     public static int EVILCP( ExpVector U, ExpVector V ) {
         long[] u = U.getval();
         long[] v = V.getval();
@@ -418,10 +603,16 @@ public class ExpVector implements Cloneable, Serializable {
         return t;
     }
 
+
     /**
      * Inverse lexicographical compare part.
+     * Compare entries between begin and end (-1).
+     * @param U
+     * @param V
+     * @param begin
+     * @param end
+     * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
      */
-
     public static int EVILCP( ExpVector U, ExpVector V, int begin, int end ) {
         long[] u = U.getval();
         long[] v = V.getval();
@@ -436,8 +627,10 @@ public class ExpVector implements Cloneable, Serializable {
 
     /**
      * Inverse graded lexicographical compare.
+     * @param U
+     * @param V
+     * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
      */
-
     public static int EVIGLC( ExpVector U, ExpVector V ) {
         long[] u = U.getval();
         long[] v = V.getval();
@@ -473,8 +666,11 @@ public class ExpVector implements Cloneable, Serializable {
 
     /**
      * Inverse weighted lexicographical compare.
+     * @param w weight vector.
+     * @param U
+     * @param V
+     * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
      */
-
     public static int EVIWLC( long[] w, ExpVector U, ExpVector V ) {
         long[] u = U.getval();
         long[] v = V.getval();
@@ -510,8 +706,13 @@ public class ExpVector implements Cloneable, Serializable {
 
     /**
      * Inverse graded lexicographical compare part.
+     * Compare entries between begin and end (-1).
+     * @param U
+     * @param V
+     * @param begin
+     * @param end
+     * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
      */
-
     public static int EVIGLC( ExpVector U, ExpVector V, int begin, int end ) {
         long[] u = U.getval();
         long[] v = V.getval();
@@ -547,8 +748,14 @@ public class ExpVector implements Cloneable, Serializable {
 
     /**
      * Inverse weighted lexicographical compare part.
+     * Compare entries between begin and end (-1).
+     * @param w weight vector.
+     * @param U
+     * @param V
+     * @param begin
+     * @param end
+     * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
      */
-
     public static int EVIWLC( long[] w, ExpVector U, ExpVector V, int begin, int end ) {
         long[] u = U.getval();
         long[] v = V.getval();
@@ -584,8 +791,13 @@ public class ExpVector implements Cloneable, Serializable {
 
     /**
      * Compare.
+     * @param evord
+     * @param U
+     * @param V
+     * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
+     * @deprecated Now obsoleted by TermOrder.get*Comparator, 
+     * used only in TermOrderTest.
      */
-
     public static int EVCOMP( int evord, ExpVector U, ExpVector V ) {
         int t = 0;
         switch ( evord ) {
@@ -611,9 +823,18 @@ public class ExpVector implements Cloneable, Serializable {
 
     /**
      * Compare part.
+     * Compare entries between begin and end (-1).
+     * @param evord
+     * @param U
+     * @param V
+     * @param begin
+     * @param end
+     * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
+     * @deprecated Now obsoleted by TermOrder.get*Comparator, 
+     * used only in TermOrderTest.
      */
-
-    public static int EVCOMP( int evord, ExpVector U, ExpVector V, int begin, int end ) {
+    public static int EVCOMP( int evord, ExpVector U, ExpVector V, 
+                              int begin, int end ) {
         int t = 0;
         switch ( evord ) {
             case TermOrder.LEX:    { 

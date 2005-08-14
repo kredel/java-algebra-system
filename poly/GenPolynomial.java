@@ -22,37 +22,54 @@ import edu.jas.structure.PrettyPrint;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomialRing;
 
+
 /**
  * GenPolynomial generic polynomials implementing RingElem.
  * n-variate ordered polynomials over C.
+ * Objects of this class are intended to be immutable.
+ * The implementation is based on TreeMap respectively SortedMap 
+ * from exponents to coefficients.
+ * Only the coefficients are modeled with generic types,
+ * the exponents are fixed to ExpVector with long entries 
+ * (this could be canged in the future). 
  * @author Heinz Kredel
  */
 
 public class GenPolynomial<C extends RingElem<C> > 
              implements RingElem< GenPolynomial<C> > {
 
+    /** The factory for the polynomial ring. 
+     */
     public final GenPolynomialRing< C > ring;
+
+
+    /** The data structure for polynomials. 
+     */
     protected final SortedMap<ExpVector,C> val;
+
 
     private static Logger logger = Logger.getLogger(GenPolynomial.class);
 
 
-    /**
-     * Constructors for GenPolynomial
-     */
-
     // protected GenPolynomial() { ring = null; val = null; } // don't use
 
+
+    /**
+     * Constructor for zero GenPolynomial.
+     * @param r polynomial ring factory.
+     */
     public GenPolynomial(GenPolynomialRing< C > r) {
         ring = r;
         val = new TreeMap<ExpVector,C>( ring.tord.getDescendComparator() );
     }
 
-    public GenPolynomial(GenPolynomialRing< C > r, SortedMap<ExpVector,C> v) {
-        this(r);
-        val.putAll( v ); // assume no zero coefficients
-    }
 
+    /**
+     * Constructor for GenPolynomial c * x<sup>e</sup>.
+     * @param r polynomial ring factory.
+     * @param c coefficient.
+     * @param e exponent.
+     */
     public GenPolynomial(GenPolynomialRing< C > r, C c, ExpVector e) {
         this(r);
         if ( ! c.isZERO() ) {
@@ -62,7 +79,20 @@ public class GenPolynomial<C extends RingElem<C> >
 
 
     /**
+     * Constructor for GenPolynomial.
+     * @param r polynomial ring factory.
+     * @param v the SortedMap of some other polynomial.
+     */
+    protected GenPolynomial(GenPolynomialRing< C > r, 
+                            SortedMap<ExpVector,C> v) {
+        this(r);
+        val.putAll( v ); // assume no zero coefficients
+    }
+
+
+    /**
      * Clone this GenPolynomial
+     * @see java.lang.Object#clone()
      */
     public GenPolynomial<C> clone() {
         //return ring.copy(this);
@@ -71,11 +101,8 @@ public class GenPolynomial<C extends RingElem<C> >
 
 
     /**
-     * Methods of GenPolynomial
-     */
-
-    /**
-     * Length = number of coefficients GenPolynomial
+     * Length of GenPolynomial. 
+     * @return number of coefficients of this GenPolynomial
      */
     public int length() { 
         return val.size(); 
@@ -83,15 +110,17 @@ public class GenPolynomial<C extends RingElem<C> >
 
 
     /**
-     * ExpVector to coefficient map of GenPolynomial
+     * ExpVector to coefficient map of GenPolynomial.
+     * @return val SortedMap.
      */
-    public Map<ExpVector,C> getMap() { 
+    public SortedMap<ExpVector,C> getMap() { 
         return val; 
     }
 
 
     /**
      * String representation of GenPolynomial
+     * @see java.lang.Object#toString()
      */
     public String toString() {
         StringBuffer s = new StringBuffer();
@@ -113,8 +142,9 @@ public class GenPolynomial<C extends RingElem<C> >
 
 
     /**
-     * String representation of GenPolynomial
-     * using names for variables from v
+     * String representation of GenPolynomial.
+     * @param v names for variables.
+     * @see java.lang.Object#toString()
      */
     public String toString(String[] v) {
         StringBuffer s = new StringBuffer();
@@ -181,10 +211,19 @@ public class GenPolynomial<C extends RingElem<C> >
     }
 
 
+    /** Is GenPolynomial<C> zero. 
+     * @return If this is 0 then true is returned, else false.
+     * @see edu.jas.structure.RingElem#isZERO()
+     */
     public boolean isZERO() {
         return ( val.size() == 0 );
     }
 
+
+    /** Is GenPolynomial<C> one. 
+     * @return If this is 1 then true is returned, else false.
+     * @see edu.jas.structure.RingElem#isONE()
+     */
     public boolean isONE() {
         if ( val.size() != 1 ) {
             return false;
@@ -199,6 +238,11 @@ public class GenPolynomial<C extends RingElem<C> >
         return true;
     }
 
+
+    /** Is GenPolynomial<C> a unit. 
+     * @return If this is a unit then true is returned, else false.
+     * @see edu.jas.structure.RingElem#isUnit()
+     */
     public boolean isUnit() {
         if ( val.size() != 1 ) {
             return false;
@@ -213,9 +257,16 @@ public class GenPolynomial<C extends RingElem<C> >
         return false;
     }
 
+
+    /** Comparison with any other object.
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
     @Override
     @SuppressWarnings("unchecked") // not jet working
     public boolean equals( Object B ) { 
+       if ( ! ( B instanceof GenPolynomial ) ) {
+          return false;
+       }
        GenPolynomial<C> a = null;
        try {
            a = (GenPolynomial<C>) B;
@@ -227,6 +278,11 @@ public class GenPolynomial<C extends RingElem<C> >
        return this.subtract( a ).isZERO();
     }
 
+
+    /** GenPolynomial comparison.  
+     * @param b GenPolynomial.
+     * @return sign(this-b).
+     */
     public int compareTo(GenPolynomial<C> b) { 
         if ( b == null ) {
             return this.signum();
@@ -235,6 +291,10 @@ public class GenPolynomial<C extends RingElem<C> >
         return s;
     }
 
+
+    /** GenPolynomial signum.  
+     * @return sign(ldcf(this)).
+     */
     public int signum() {
         if ( this.isZERO() ) {
             return 0;
@@ -247,8 +307,8 @@ public class GenPolynomial<C extends RingElem<C> >
 
     /**
      * Number of variables.
+     * @return ring.nvar.
      */
-
     public int numberOfVariables() {  
         return ring.nvar;
     }
@@ -256,18 +316,19 @@ public class GenPolynomial<C extends RingElem<C> >
 
     /**
      * Leading monomial.
+     * @return first map entry.
      */
-
     public Map.Entry<ExpVector,C> leadingMonomial() {
 	if ( val.size() == 0 ) return null;
         Iterator<Map.Entry<ExpVector,C>> ai = val.entrySet().iterator();
         return ai.next();
     }
 
+
     /**
      * Leading exponent vector.
+     * @return first exponent.
      */
-
     public ExpVector leadingExpVector() {
 	if ( val.size() == 0 ) {
 	    return null;
@@ -278,19 +339,24 @@ public class GenPolynomial<C extends RingElem<C> >
 
     /**
      * Leading base coefficient.
+     * @return first coefficient.
      */
-
     public C leadingBaseCoefficient() {
-        Map.Entry<ExpVector,C> m = this.leadingMonomial();
-	if ( m == null ) return null;
-        return m.getValue();
+        //Map.Entry<ExpVector,C> m = this.leadingMonomial();
+	//if ( m == null ) return null;
+        //return m.getValue();
+	if ( val.size() == 0 ) {
+	    return null;
+	}
+        return val.get( val.firstKey() ); 
     }
 
 
     /**
-     * Sum. Implemantation based on TreeMap / SortedMap.
+     * GenPolynomial addition. 
+     * @param S GenPolynomial.
+     * @return this+S.
      */
-
     public GenPolynomial<C> add(GenPolynomial<C> S) {
         if ( S == null ) {
             return this;
@@ -321,6 +387,14 @@ public class GenPolynomial<C extends RingElem<C> >
         return n;
     }
 
+
+    /**
+     * GenPolynomial addition. 
+     * This method is not very efficient, since this is copied.
+     * @param a coefficient.
+     * @param e exponent.
+     * @return this + a x<sup>e</sup>.
+     */
     public GenPolynomial<C> add(C a, ExpVector e) {
         if ( a == null ) {
             return this;
@@ -347,9 +421,10 @@ public class GenPolynomial<C extends RingElem<C> >
 
 
     /**
-     * Difference. Implementation based on TreeMap / SortedMap.
+     * GenPolynomial subtraction. 
+     * @param S GenPolynomial.
+     * @return this-S.
      */
-
     public GenPolynomial<C> subtract(GenPolynomial<C> S) {
         if ( S == null ) {
             return this;
@@ -380,6 +455,14 @@ public class GenPolynomial<C extends RingElem<C> >
         return n;
     }
 
+
+    /**
+     * GenPolynomial subtraction. 
+     * This method is not very efficient, since this is copied.
+     * @param a coefficient.
+     * @param e exponent.
+     * @return this - a x<sup>e</sup>.
+     */
     public GenPolynomial<C> subtract(C a, ExpVector e) {
         if ( a == null ) {
             return this;
@@ -405,9 +488,9 @@ public class GenPolynomial<C extends RingElem<C> >
 
 
     /**
-     * Negation.
+     * GenPolynomial negation. 
+     * @return -this.
      */
-
     public GenPolynomial<C> negate() {
         GenPolynomial<C> n = ring.getZERO().clone(); 
                     //new GenPolynomial<C>(ring, ring.getZERO().val);
@@ -422,9 +505,9 @@ public class GenPolynomial<C extends RingElem<C> >
 
 
     /**
-     * Absolute value, i.e. leadingCoefficient > 0.
+     * GenPolynomial absolute value, i.e. leadingCoefficient &gt; 0.
+     * @return abs(this).
      */
-
     public GenPolynomial<C> abs() {
         if ( leadingBaseCoefficient().signum() < 0 ) {
            return this.negate();
@@ -435,9 +518,10 @@ public class GenPolynomial<C extends RingElem<C> >
 
 
     /**
-     * Multiply. Implementation using map.put on result polynomial.
+     * GenPolynomial multiplication. 
+     * @param S GenPolynomial.
+     * @return this*S.
      */
-
     public GenPolynomial<C> multiply(GenPolynomial<C> S) {
         if ( S == null ) {
             return ring.getZERO();
@@ -476,9 +560,11 @@ public class GenPolynomial<C extends RingElem<C> >
 
 
     /**
-     * Product with ring element.
+     * GenPolynomial multiplication. 
+     * Product with coefficient ring element.
+     * @param s coefficient.
+     * @return this*s.
      */
-
     public GenPolynomial<C> multiply(C s) {
         if ( s == null ) {
             return ring.getZERO();
@@ -502,9 +588,10 @@ public class GenPolynomial<C extends RingElem<C> >
 
 
     /**
-     * monic, i.e. ldcf = 1.
+     * GenPolynomial monic, i.e. leadingCoefficient == 1.
+     * If leadingCoefficient is not invertible returns this unmodified.
+     * @return monic(this).
      */
-
     public GenPolynomial<C> monic() {
         if ( this.isZERO() ) {
             return this;
@@ -520,9 +607,12 @@ public class GenPolynomial<C extends RingElem<C> >
 
 
     /**
+     * GenPolynomial multiplication. 
      * Product with ring element and exponent vector.
+     * @param s coefficient.
+     * @param e exponent.
+     * @return this * s x<sup>e</sup>.
      */
-
     public GenPolynomial<C> multiply(C s, ExpVector e) {
         if ( s == null ) {
             return ring.getZERO();
@@ -547,10 +637,13 @@ public class GenPolynomial<C extends RingElem<C> >
 
 
     /**
+     * GenPolynomial multiplication. 
      * Product with exponent vector.
+     * @param e exponent (!= null).
+     * @return this * x<sup>e</sup>.
      */
-
     public GenPolynomial<C> multiply(ExpVector e) {
+        // assert e != null. This is never allowed.
         if ( this.isZERO() ) {
             return this;
         }
@@ -565,10 +658,13 @@ public class GenPolynomial<C extends RingElem<C> >
         return p;
     }
 
-    /**
-     * Product with 'monomial'.
-     */
 
+    /**
+     * GenPolynomial multiplication. 
+     * Product with 'monomial'.
+     * @param m 'monomial'.
+     * @return this * m.
+     */
     public GenPolynomial<C> multiply(Map.Entry<ExpVector,C> m) {
         if ( m == null ) {
             return ring.getZERO();
@@ -578,9 +674,13 @@ public class GenPolynomial<C extends RingElem<C> >
 
 
     /**
-     * Division with remainder.
+     * GenPolynomial division with remainder.
+     * Meaningful only for univariate polynomials but works 
+     * in any case.
+     * @param S nonzero GenPolynomial with invertible leading coefficient.
+     * @return [ quotient , remainder ] with this = quotient * S + remainder.
+     * @see #pseudoRemainder(edu.jas.poly.GenPolynomial).
      */
-
     public GenPolynomial<C>[] divideRemainder(GenPolynomial<C> S) {
         if ( S == null || S.isZERO() ) {
            throw new RuntimeException(this.getClass().getName()
@@ -612,11 +712,6 @@ public class GenPolynomial<C extends RingElem<C> >
                  h = S.multiply( a, f );
                  rx = r;
                  r = r.subtract( h );
-                 //if ( h.leadingExpVector().equals(r.leadingExpVector()) ) {
-                 //   logger.error("degree r not decreasing");
-                 //   throw new RuntimeException(this.getClass().getName()
-                 //                       + " degree r not decreasing");
-                 //}
              } else {
                  break;
              }
@@ -629,12 +724,27 @@ public class GenPolynomial<C extends RingElem<C> >
     }
 
 
+    /**
+     * GenPolynomial division.
+     * Meaningful only for univariate polynomials but works 
+     * in any case.
+     * @param S nonzero GenPolynomial with invertible leading coefficient.
+     * @return quotient with this = quotient * S + remainder.
+     * @see #pseudoRemainder(edu.jas.poly.GenPolynomial).
+     */
     public GenPolynomial<C> divide(GenPolynomial<C> S) {
-        //throw new RuntimeException(this.getClass().getName()
-        //                           + " divide() not implemented");
         return divideRemainder(S)[0];
     }
 
+
+    /**
+     * GenPolynomial remainder.
+     * Meaningful only for univariate polynomials but works 
+     * in any case.
+     * @param S nonzero GenPolynomial with invertible leading coefficient.
+     * @return remainder with this = quotient * S + remainder.
+     * @see #pseudoRemainder(edu.jas.poly.GenPolynomial).
+     */
     public GenPolynomial<C> remainder(GenPolynomial<C> S) {
         if ( S == null || S.isZERO() ) {
            throw new RuntimeException(this.getClass().getName()
@@ -666,6 +776,14 @@ public class GenPolynomial<C extends RingElem<C> >
     }
 
 
+    /**
+     * GenPolynomial greatest comon divisor.
+     * Correct only for univariate polynomials.
+     * Returns 1 for multivariate polynomials 
+     * (which is a good guess for random polynomials).
+     * @param S GenPolynomial.
+     * @return gcd(this,S).
+     */
     public GenPolynomial<C> gcd(GenPolynomial<C> S) {
         if ( S == null || S.isZERO() ) {
             return this;
@@ -689,6 +807,14 @@ public class GenPolynomial<C extends RingElem<C> >
         return q.monic(); // normalize
     }
 
+
+    /**
+     * GenPolynomial extended greatest comon divisor.
+     * Correct only for univariate polynomials.
+     * Returns [1,null,null] for multivariate polynomials.
+     * @param S GenPolynomial.
+     * @return [ gcd(this,S), a, b ] with a*this + b*S = gcd(this,S).
+     */
     public GenPolynomial<C>[] egcd(GenPolynomial<C> S) {
         GenPolynomial<C>[] ret = new GenPolynomial[3];
         ret[0] = null;
@@ -744,12 +870,24 @@ public class GenPolynomial<C extends RingElem<C> >
     }
 
 
+    /**
+     * GenPolynomial inverse.
+     * Required by RingElem.
+     * Throws not implemented exception.
+     */
     public GenPolynomial<C> inverse() {
         throw new RuntimeException(this.getClass().getName()
                                    + " inverse() not implemented");
         //return this;
     }
 
+
+    /**
+     * GenPolynomial modular inverse.
+     * Correct only for univariate polynomials.
+     * @param m GenPolynomial.
+     * @return a with with a*this = 1 mod m.
+     */
     public GenPolynomial<C> modInverse(GenPolynomial<C> m) {
         GenPolynomial<C>[] xegcd = this.egcd(m);
         GenPolynomial<C> a = xegcd[0];
@@ -766,6 +904,14 @@ public class GenPolynomial<C extends RingElem<C> >
     }
 
 
+    /**
+     * GenPolynomial pseudo remainder.
+     * Meaningful only for univariate polynomials but works 
+     * in any case.
+     * @param S nonzero GenPolynomial.
+     * @return remainder with ldcf(S)<sup>m</sup> this = quotient * S + remainder.
+     * @see #remainder(edu.jas.poly.GenPolynomial).
+     */
     public GenPolynomial<C> pseudoRemainder(GenPolynomial<C> S) {
         if ( S == null || S.isZERO() ) {
            throw new RuntimeException(this.getClass().getName()
@@ -791,6 +937,16 @@ public class GenPolynomial<C extends RingElem<C> >
         return r;
     }
 
+
+    /**
+     * GenPolynomial pseudo greatest comon divisor.
+     * Uses pseudoRemainder for remainder.
+     * Correct only for univariate polynomials.
+     * Returns 1 for multivariate polynomials 
+     * (which is a good guess for random polynomials).
+     * @param S GenPolynomial.
+     * @return pgcd(this,S).
+     */
     public GenPolynomial<C> pseudoGcd(GenPolynomial<C> S) {
         if ( S == null || S.isZERO() ) {
             return this;
@@ -818,6 +974,10 @@ public class GenPolynomial<C extends RingElem<C> >
     /**
      * Extend variables. Used e.g. in module embedding.
      * Extend all ExpVectors by i elements and multiply by x_j^k.
+     * @param pfac extended polynomial ring factory (by i variables).
+     * @param j index of variable to be used for multiplication.
+     * @param k exponent for x_j.
+     * @return extended polynomial.
      */
     public GenPolynomial<C> extend(GenPolynomialRing<C> pfac, int j, long k) {
         //GenPolynomialRing<C> pfac = ring.extend(i);
@@ -843,9 +1003,10 @@ public class GenPolynomial<C extends RingElem<C> >
     /**
      * Contract variables. Used e.g. in module embedding.
      * remove i elements of each ExpVector.
+     * @param pfac contracted polynomial ring factory (by i variables).
+     * @return Map of exponents and contracted polynomials.
      */
     public Map<ExpVector,GenPolynomial<C>> contract(GenPolynomialRing<C> pfac) {
-        //GenPolynomialRing<C> pfac = ring.contract(i);
         GenPolynomial<C> zero = pfac.getZERO();
         int i = ring.nvar - pfac.nvar;
 
