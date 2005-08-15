@@ -81,7 +81,7 @@ public class GenPolynomialRing<C extends RingElem<C> >
     /**
      * A default random sequence generator.
      */
-    private final static Random random = new Random(); 
+    protected final static Random random = new Random(); 
 
 
     private static Logger logger = Logger.getLogger(GenPolynomialRing.class);
@@ -165,7 +165,7 @@ public class GenPolynomialRing<C extends RingElem<C> >
         GenPolynomialRing<C> oring = null;
         try {
             oring = (GenPolynomialRing<C>)other;
-        } catch (ClassCastException e) {
+        } catch (ClassCastException ignored) {
         }
         if ( oring == null ) {
             return false;
@@ -337,7 +337,7 @@ public class GenPolynomialRing<C extends RingElem<C> >
         C a;
         // add l random coeffs and exponents
         for ( int i = 0; i < l; i++ ) {
-            e = ExpVector.EVRAND(nvar, d, q);
+            e = ExpVector.EVRAND(nvar, d, q, rnd);
             a = coFac.random(k,rnd);
             r = r.add(a,e); // somewhat inefficient but clean
             //System.out.println("e = " + e + " a = " + a);
