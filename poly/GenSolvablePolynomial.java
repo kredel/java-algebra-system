@@ -8,8 +8,6 @@ import java.util.Set;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
-//import java.util.Iterator;
-//import java.io.Serializable;
 
 import org.apache.log4j.Logger;
 
@@ -18,8 +16,14 @@ import edu.jas.structure.RingFactory;
 
 
 /**
- * Generic Solvable Polynomial. 
- * Implementation based on Sorted Map / TreeMap
+ * GenSolvablePolynomial generic solvable polynomials implementing RingElem.
+ * n-variate ordered solvable polynomials over C.
+ * Objects of this class are intended to be immutable.
+ * The implementation is based on TreeMap respectively SortedMap 
+ * from exponents to coefficients by extension of GenPolybomial.
+ * Only the coefficients are modeled with generic types,
+ * the exponents are fixed to ExpVector with long entries 
+ * (this will eventually be changed in the future). 
  * @author Heinz Kredel
  */
 
@@ -27,6 +31,9 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
              extends GenPolynomial<C> {
     //       implements RingElem< GenSolvablePolynomial<C> > {
 
+
+    /** The factory for the solvable polynomial ring. 
+     */
     public final GenSolvablePolynomialRing< C > ring;
 
 
@@ -35,20 +42,21 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
 
 
     /**
-     * Constructors for GenSolvablePolynomial
+     * Constructor for zero GenSolvablePolynomial.
+     * @param r solvable polynomial ring factory.
      */
-
     public GenSolvablePolynomial(GenSolvablePolynomialRing< C > r) {
         super(r);
         ring = r;
     }
 
-    public GenSolvablePolynomial(GenSolvablePolynomialRing< C > r, 
-                                 SortedMap<ExpVector,C> v) {
-        this(r);
-        val.putAll( v ); // assume no zero coefficients
-    }
 
+    /**
+     * Constructor for zero GenSolvablePolynomial.
+     * @param r solvable polynomial ring factory.
+     * @param c coefficient.
+     * @param e exponent.
+     */
     public GenSolvablePolynomial(GenSolvablePolynomialRing< C > r, 
                                  C c, ExpVector e) {
         this(r);
@@ -57,8 +65,22 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
         }
     }
 
+
     /**
-     * Clone this GenSolvablePolynomial
+     * Constructor for zero GenSolvablePolynomial.
+     * @param r solvable polynomial ring factory.
+     * @param v the SortedMap of some other (solvable) polynomial.
+     */
+    protected GenSolvablePolynomial(GenSolvablePolynomialRing< C > r, 
+                                    SortedMap<ExpVector,C> v) {
+        this(r);
+        val.putAll( v ); // assume no zero coefficients
+    }
+
+
+    /**
+     * Clone this GenSolvablePolynomial.
+     * @see java.lang.Object#clone()
      */
     public GenSolvablePolynomial<C> clone() {
         //return ring.copy(this);
@@ -66,17 +88,11 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
     }
 
 
-    /*
-    @inherit
-    public String toString() { 
-    }
-    */
-
-
     /**
-     * Multiply. Implementation using map.put on result polynomial.
+     * GenSolvablePolynomial multiplication. 
+     * @param Bp GenSolvablePolynomial.
+     * @return this*Bp, where * denotes solvable multiplication.
      */
-
      public GenSolvablePolynomial<C> multiply(GenSolvablePolynomial<C> Bp) {  
         if ( Bp == null || Bp.isZERO() ) {
            return ring.getZERO();
@@ -176,7 +192,10 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
 
 
     /**
-     * Product with number.
+     * GenSolvablePolynomial multiplication. 
+     * Product with coefficient ring element.
+     * @param b coefficient.
+     * @return this*b, where * is usual multiplication.
      */
     public GenSolvablePolynomial<C> multiply(C b) {  
         GenSolvablePolynomial<C> Cp = ring.getZERO().clone(); 
@@ -197,8 +216,13 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
         return Cp;
     }
 
+
     /**
+     * GenSolvablePolynomial multiplication. 
      * Product with exponent vector.
+     * @param e exponent.
+     * @return this * x<sup>e</sup>, 
+     * where * denotes solvable multiplication.
      */
     public GenSolvablePolynomial<C> multiply(ExpVector e) {  
         GenSolvablePolynomial<C> Cp = ring.getZERO().clone(); 
@@ -210,8 +234,14 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
         return multiply(Cp);
     }
 
+
     /**
-     * Product with number and exponent vector.
+     * GenSolvablePolynomial multiplication. 
+     * Product with ring element and exponent vector.
+     * @param b coefficient.
+     * @param e exponent.
+     * @return this * b x<sup>e</sup>, 
+     * where * denotes solvable multiplication.
      */
     public GenSolvablePolynomial<C> multiply(C b, ExpVector e) {  
         GenSolvablePolynomial<C> Cp = ring.getZERO().clone(); 
@@ -225,7 +255,12 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
 
 
     /**
-     * Left product with number and exponent vector.
+     * GenSolvablePolynomial multiplication. 
+     * Left product with ring element and exponent vector.
+     * @param b coefficient.
+     * @param e exponent.
+     * @return b x<sup>e</sup> * this, 
+     * where * denotes solvable multiplication.
      */
     public GenSolvablePolynomial<C> multiplyLeft(C b, ExpVector e) {  
         GenSolvablePolynomial<C> Cp = ring.getZERO().clone(); 
@@ -237,8 +272,13 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
         return Cp;
     }
 
+
     /**
+     * GenSolvablePolynomial multiplication. 
      * Left product with exponent vector.
+     * @param e exponent.
+     * @return x<sup>e</sup> * this, 
+     * where * denotes solvable multiplication.
      */
     public GenSolvablePolynomial<C> multiplyLeft(ExpVector e) {  
         GenSolvablePolynomial<C> Cp = ring.getZERO().clone(); 
@@ -252,7 +292,11 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
 
 
     /**
-     * Product with 'monomial'.
+     * GenSolvablePolynomial multiplication. 
+     * Left product with 'monimial'.
+     * @param m 'monoial'.
+     * @return m * this, 
+     * where * denotes solvable multiplication.
      */
     public GenSolvablePolynomial<C> multiplyLeft(Map.Entry<ExpVector,C> m) {  
         if ( m == null ) {
@@ -262,12 +306,13 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
     }
 
 
-    /**
+    /* @inherit 
      * Extend variables. Used e.g. in module embedding.
      * Extend all ExpVectors by i elements and multiply by x_j^k.
      */
 
-    /**
+
+    /* @inherit 
      * Contract variables. Used e.g. in module embedding.
      * remove i elements of each ExpVector.
      */
