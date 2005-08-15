@@ -31,7 +31,7 @@ import edu.jas.poly.GenPolynomialRing;
  * from exponents to coefficients.
  * Only the coefficients are modeled with generic types,
  * the exponents are fixed to ExpVector with long entries 
- * (this could be changed in the future). 
+ * (this will eventually be changed in the future).
  * @author Heinz Kredel
  */
 
