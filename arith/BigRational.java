@@ -14,7 +14,7 @@ import java.io.Reader;
 /**
  * Immutable arbitraty-precision rational numbers.
  * BigRational class based on BigInteger implementing the RingElem 
- * interface and with the familiar SAC ststic method names.
+ * interface and with the familiar SAC static method names.
  * BigInteger is from java.math in the implementation.
  * @author Heinz Kredel
  */

@@ -23,7 +23,6 @@ public interface RingElem<C extends RingElem> extends Cloneable,
     public C clone();
 
 
-
     /**
      * Test if this is zero.
      * @return true if this is 0, else false.
@@ -46,7 +45,6 @@ public interface RingElem<C extends RingElem> extends Cloneable,
     public boolean isUnit();
 
 
-
     /**
      * Test if this is equal to b.
      * @param b
@@ -63,7 +61,7 @@ public interface RingElem<C extends RingElem> extends Cloneable,
 
 
     /**
-     * Compare this is to b.
+     * Compare this to b.
      * @param b
      * @return 0 if this is equal to b, else +1 or -1.
      */
@@ -110,7 +108,7 @@ public interface RingElem<C extends RingElem> extends Cloneable,
 
 
     /**
-     * Multiply S with this.
+     * Multiply this with S.
      * @param S
      * @return this * S.
      */
@@ -126,7 +124,7 @@ public interface RingElem<C extends RingElem> extends Cloneable,
 
 
     /**
-     * Remainder after division by S.
+     * Remainder after division of this by S.
      * @param S
      * @return this - (this / S) * S.
      */
@@ -135,7 +133,7 @@ public interface RingElem<C extends RingElem> extends Cloneable,
 
     /**
      * Inverse of this.
-     * @return x with this.multiply(x).isONE().
+     * @return x with this * x = 1.
      */
     public C inverse();
 
