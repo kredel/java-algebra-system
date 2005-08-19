@@ -25,22 +25,32 @@ import edu.jas.module.ModuleList;
 
 
 /**
- * Set / list of polynomials.
- * For storage and printing/toString and sorting.
+ * List of polynomials.
+ * Mainly for storage and printing / toString and 
+ * conversions to other representations.
  * @author Heinz Kredel
  */
 
 public class PolynomialList<C extends RingElem<C> > implements Serializable {
 
-    private static Logger logger = Logger.getLogger(PolynomialList.class);
 
+    /** The factory for the solvable polynomial ring. 
+     */
     public final GenPolynomialRing< C > ring;
 
+
+    /** The data structure is a List of polynomials. 
+     */
     public final List< GenPolynomial<C> > list;
+
+
+    private static Logger logger = Logger.getLogger(PolynomialList.class);
 
 
     /**
      * Contstructor.
+     * @param r polynomial ring factory.
+     * @param l list of polynomials.
      */
     public PolynomialList( GenPolynomialRing< C > r,
                            List<GenPolynomial< C >> l) {
@@ -50,6 +60,8 @@ public class PolynomialList<C extends RingElem<C> > implements Serializable {
 
     /**
      * Contstructor.
+     * @param r solvable polynomial ring factory.
+     * @param l list of solvable polynomials.
      */
     public PolynomialList( GenSolvablePolynomialRing< C > r,
                            List<GenSolvablePolynomial< C >> l) {
@@ -57,10 +69,9 @@ public class PolynomialList<C extends RingElem<C> > implements Serializable {
     }
 
 
-    /**
-     * equals from Object.
+    /** Comparison with any other object.
+     * @see java.lang.Object#equals(java.lang.Object)
      */
-
     @Override
     @SuppressWarnings("unchecked") // not jet working
     public boolean equals(Object p) {
@@ -107,6 +118,10 @@ public class PolynomialList<C extends RingElem<C> > implements Serializable {
     }
 
 
+    /**
+     * String representation of the polynomial list.
+     * @see java.lang.Object#toString()
+     */
     public String toString() {
 	StringBuffer erg = new StringBuffer();
         if ( ring != null ) {
@@ -138,10 +153,11 @@ public class PolynomialList<C extends RingElem<C> > implements Serializable {
 
 
     /**
-     * get ModuleList from PolynomialList.
+     * Get ModuleList from PolynomialList.
      * Extract module from polynomial ring. 
+     * @param i number of variables to be contract form the polynomials.
+     * @return m module list corresponding to this.
      */
-
     public ModuleList<C> getModuleList(int i) {
         GenPolynomialRing< C > pfac = ring.contract(i);
         logger.debug("contracted ring = " + pfac);
@@ -196,6 +212,7 @@ public class PolynomialList<C extends RingElem<C> > implements Serializable {
      * Get list as List of GenSolvablePolynomials.
      * Required because no List casts allowed. Equivalent to 
      * cast (List<GenSolvablePolynomial<C>>) list.
+     * @return l solvable polynomial list from this.
      */
     public List< GenSolvablePolynomial<C> > castToSolvableList() {
         List< GenSolvablePolynomial<C> > slist = null;
@@ -214,10 +231,13 @@ public class PolynomialList<C extends RingElem<C> > implements Serializable {
         return slist;
     }
 
+
     /**
      * Get solvable polynomial list as List of GenPolynomials.
      * Required because no List casts allowed. Equivalent to 
      * cast (List<GenPolynomial<C>>) list.
+     * @param slist solvable polynomial list.
+     * @return l polynomial list from slist.
      */
     public static <C extends RingElem<C> > 
            List< GenPolynomial<C> > 

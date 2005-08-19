@@ -22,23 +22,43 @@ import edu.jas.structure.PrettyPrint;
 
 /**
  * RelationTable for solvable polynomials.
+ * This class maintains the non-commutative multiplication 
+ * relations of solvable polynomial rings.
+ * The table entries are initialized with relations of the 
+ * form x<sub>j</sub> * x<sub>i</sub> = p<sub>ij</sub>.
+ * During multiplication the ralations are updated by relations 
+ * of the form x<sub>j</sub><sup>k</sup> * x<sub>i</sub><sup>l</sup> 
+ * = p<sub>ijkl</sub>.
+ * If no relation for x<sub>j</sub> * x<sub>i</sub> is found in 
+ * the table, this multiplication is assumed to be commutative
+ * x<sub>i</sub> x<sub>j</sub>.
  * @author Heinz Kredel
  */
 
-
 public class RelationTable<C extends RingElem<C>> implements Serializable {
 
-    private static Logger logger = Logger.getLogger(RelationTable.class);
 
+    /** The data structure for the relations. 
+     */
     public final Map< List<Integer>, List > table;
+
+
+    /** The factory for the solvable polynomial ring. 
+     */
     public final GenSolvablePolynomialRing<C> ring;
 
 
-    /**
-     * Constructors for RelationTable requires ring factory.
-     */
+    private static Logger logger = Logger.getLogger(RelationTable.class);
 
-    public RelationTable(GenSolvablePolynomialRing<C> r) {
+
+    /**
+     * Constructor for RelationTable requires ring factory.
+     * Note: This constructor is called within the constructor 
+     * of the ring factory, so methods of this class can only be used
+     * after the other constructor has terminated.
+     * @param r solvable polynomial ring factory.
+     */
+    protected RelationTable(GenSolvablePolynomialRing<C> r) {
         table = new HashMap< List<Integer>, List >();
         ring = r;
         if ( ring == null ) {
@@ -50,8 +70,9 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
     /**
      * RelationTable equals.
      * Tests same keySets only, not relations itself.
+     * Will be improved in the future.
+     * @see java.lang.Object#equals(java.lang.Object)
      */
-
     @Override
     @SuppressWarnings("unchecked") // not jet working
     public boolean equals(Object p) {
@@ -97,6 +118,10 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
     }
 
 
+    /** Get the String representation.
+     * @see java.lang.Object#toString()
+     */
+    @Override
     public String toString() {
         List v;
         StringBuffer s = new StringBuffer("RelationTable[");
@@ -117,6 +142,10 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
     }
 
 
+    /** Get the String representation.
+     * @param vars names for the variables.
+     * @see java.lang.Object#toString()
+     */
     public String toString(String[] vars) {
         if ( vars == null ) {
             return toString();
@@ -173,10 +202,12 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
 
 
     /**
-     * Update RelationTable with new relation.
-     * relation is e * f = p
+     * Update or initialize RelationTable with new relation.
+     * relation is e * f = p.
+     * @param e first term.
+     * @param f second term.
+     * @param p product polynomial.
      */
-
     public void update(ExpVector e, ExpVector f, GenSolvablePolynomial<C> p) {
         if ( logger.isDebugEnabled() ) {
             logger.info("new relation = " + e + " .*. " + f + " = " + p);
@@ -214,12 +245,15 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
 
 
     /**
-     * Lookup RelationTable for exiting relation.
+     * Lookup RelationTable for existing relation.
      * Find p with e * f = p.
      * If no relation for e * f is contained in the table then
      * return the symmetric product p = 1 e f. 
+     * @param e first term.
+     * @param f second term.
+     * @return t table relation container, 
+     *         contains e' and f' with e f = e' lt(p) f'. 
      */
-
     public TableRelation<C> lookup(ExpVector e, ExpVector f) {
         List<Integer> key = makeKey(e,f);
         List part = table.get( key );
@@ -255,6 +289,9 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
 
     /**
      * Construct a key for (e,f).
+     * @param e first term.
+     * @param f second term.
+     * @return k key for (e,f).
      */
     protected List<Integer> makeKey(ExpVector e, ExpVector f) {
         int[] de = e.dependencyOnVariables();
@@ -271,7 +308,8 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
 
 
     /**
-     * Size of the table, i.e. the number of non-commutative relations.
+     * Size of the table.      
+     * @return n number of non-commutative relations.
      */
     public int size() {
         int s = 0;
@@ -288,13 +326,16 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
 
     /**
      * Extend variables. Used e.g. in module embedding.
-     * Extend all ExpVectors by i elements.
+     * Extend all ExpVectors and polynomials of the given 
+     * relation table by i elements and put the relations into 
+     * this table, i.e. this should be empty.
+     * @param tab a relation table to be extended.
      */
-
     public void extend(RelationTable<C> tab) {  
         if ( tab.table.size() == 0 ) {
             return;
         }
+        // assert this.size() == 0
         int i = ring.nvar - tab.ring.nvar;
         int j = 0;
         long k = 0l;
@@ -319,12 +360,16 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
 
     /**
      * Contract variables. Used e.g. in module embedding.
-     * remove i elements of each ExpVector.
+     * Contract all ExpVectors and polynomials of the given 
+     * relation table by i elements and put the relations into 
+     * this table, i.e. this should be empty.
+     * @param tab a relation table to be contracted.
      */
     public void contract(RelationTable<C> tab) { 
         if ( tab.table.size() == 0 ) {
             return;
         }
+        // assert this.size() == 0
         int i = tab.ring.nvar - ring.nvar;
         List val;
         for ( List<Integer> key: tab.table.keySet() ) { 
@@ -356,7 +401,6 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
 
 
 
-
 /**
  * TableRelation container for storage and printing in RelationTable.
  * @author Heinz Kredel
@@ -364,10 +408,27 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
 
 class TableRelation<C extends RingElem<C>> implements Serializable {
 
+    /** First ExpVector of the data structure.
+     */
     public final ExpVector e;
+
+
+    /** Second ExpVector of the data structure.
+     */
     public final ExpVector f;
+
+
+    /** GenSolvablePolynomial of the data structure.
+     */
     public final GenSolvablePolynomial<C> p;
 
+
+    /**
+     * Constructor to setup the data structure.
+     * @param e first term.
+     * @param f second term.
+     * @param p product polynomial.
+     */
     public TableRelation(ExpVector e, ExpVector f, 
                          GenSolvablePolynomial<C> p) {
         this.e = e;
@@ -375,6 +436,10 @@ class TableRelation<C extends RingElem<C>> implements Serializable {
         this.p = p;
     }
 
+
+    /** Get the String representation.
+     * @see java.lang.Object#toString()
+     */
     public String toString() {
         StringBuffer s = new StringBuffer("TableRelation[");
         s.append(""+e);

@@ -24,8 +24,10 @@ import edu.jas.poly.GenPolynomialRing;
 
 
 /**
- * list of polynomials
- * mainly for storage and printing/toString and sorting
+ * Ordered list of polynomials.
+ * Mainly for storage and printing / toString and 
+ * conversions to other representations.
+ * Polynomials in this list are sorted according to their head terms.
  * @author Heinz Kredel
  */
 
@@ -33,16 +35,20 @@ public class OrderedPolynomialList<C extends RingElem<C> >
              extends PolynomialList<C> {
 
 
+    /**
+     * Contstructor.
+     * @param r polynomial ring factory.
+     * @param l list of polynomials.
+     */
     public OrderedPolynomialList( GenPolynomialRing< C > r,
                                   List< GenPolynomial< C > > l ) {
         super(r, sort(r,l) );
     }
 
 
-    /**
-     * equals from Object.
+    /** Comparison with any other object.
+     * @see java.lang.Object#equals(java.lang.Object)
      */
-
     @Override
     @SuppressWarnings("unchecked") // not jet working
     public boolean equals(Object p) {
@@ -67,8 +73,10 @@ public class OrderedPolynomialList<C extends RingElem<C> >
      * Sort a list of polynomials with respect to the ascending order 
      * of the leading Exponent vectors. 
      * The term order is taken from the ring.
+     * @param r polynomial ring factory.
+     * @param l polynomial list.
+     * @return s sorted polynomial list from l.
      */
-
     public static <C extends RingElem<C> >
     List<GenPolynomial<C>> sort( GenPolynomialRing< C > r,
                                  List<GenPolynomial<C>> l ) {

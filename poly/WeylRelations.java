@@ -12,15 +12,28 @@ import org.apache.log4j.Logger;
 
 /**
  * Generate Relation Table for Weyl Algebras
+ * Adds the respective relations to the relation table
+ * of the given solvable ring factory. Relations are of the 
+ * form x<sub>j</sub> * x<sub>i</sub> = x<sub>i</sub> x<sub>j</sub> + 1.
  * @author Heinz Kredel.
  */
 
 public class WeylRelations<C extends RingElem<C>> {
 
-    private static Logger logger = Logger.getLogger(WeylRelations.class);
 
+    /** The factory for the solvable polynomial ring. 
+     */
     private final GenSolvablePolynomialRing<C> ring;
 
+
+    private static Logger logger = Logger.getLogger(WeylRelations.class);
+
+
+    /** The constructor requires a ring factory.
+     * The relation table of this ring is setup to a Weyl Algebra.
+     * @param r solvable polynomial ring factory,
+     * r must have even number of variables.
+     */
     public WeylRelations(GenSolvablePolynomialRing<C> r) {
         if ( r == null ) {
            throw new IllegalArgumentException("WeylRelations, ring == null");
@@ -32,12 +45,15 @@ public class WeylRelations<C extends RingElem<C>> {
         }
     }
 
+
+    /** Generates the relation table of this ring.
+     */
     public void generate() {
         RelationTable<C> table = ring.table;
         int r = ring.nvar;
         int m =  r / 2;
         ExpVector z = ring.evzero;
-        GenSolvablePolynomial<C> one = ring.getONE().clone();
+        GenSolvablePolynomial<C> one  = ring.getONE().clone();
         GenSolvablePolynomial<C> zero = ring.getZERO().clone();
         for ( int i = m; i < r; i++ ) {
             ExpVector f = new ExpVector(r,i,1); 
@@ -46,7 +62,8 @@ public class WeylRelations<C extends RingElem<C>> {
             ExpVector ef = ExpVector.EVSUM(e,f);
             GenSolvablePolynomial<C> b = one.multiply(ef);
             GenSolvablePolynomial<C> rel 
-               = (GenSolvablePolynomial<C>)one.add(b);
+                = (GenSolvablePolynomial<C>)b.add(one);
+            //                = (GenSolvablePolynomial<C>)b.subtract(one);
             if ( rel.isZERO() ) {
                logger.info("ring = " + ring);
                logger.info("one  = " + one);
