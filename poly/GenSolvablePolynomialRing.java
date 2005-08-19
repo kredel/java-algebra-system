@@ -30,6 +30,8 @@ import edu.jas.poly.ExpVector;
  * GenSolvablePolynomialRing generic solvable polynomial factory 
  * implementing RingFactory and extending GenPolynomialRing factory;
  * Factory for n-variate ordered solvable polynomials over C.
+ * The non-commutative multiplication relations are maintained in
+ * a relation table.
  * Almost immutable object, except variable names and  
  * relation table contents.
  * @author Heinz Kredel
