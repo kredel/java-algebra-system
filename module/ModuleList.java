@@ -22,25 +22,42 @@ import edu.jas.poly.GenSolvablePolynomialRing;
 
 
 /**
- * list of vectors of polynomials
- * mainly for storage and printing/toString and conversion
+ * List of vectors of polynomials.
+ * Mainly for storage and printing / toString and 
+ * conversions to other representations.
  * @author Heinz Kredel
  */
 
 public class ModuleList<C extends RingElem<C> > implements Serializable {
 
-    private static Logger logger = Logger.getLogger(ModuleList.class);
 
+    /** The factory for the solvable polynomial ring. 
+     */
     public final GenPolynomialRing< C > ring;
 
+
+    /** The data structure is a List of Lists of polynomials. 
+     */
     public final List< List< GenPolynomial<C> > > list;
 
+
+    /** Number of rows in the data structure. 
+     */
     public final int rows; // -1 is undefined
+
+
+    /** Number of columns in the data structure. 
+     */
     public final int cols; // -1 is undefined
 
 
+    private static Logger logger = Logger.getLogger(ModuleList.class);
+
+
     /**
-     * Contstructor.
+     * Constructor.
+     * @param r polynomial ring factory.
+     * @param l list of list of polynomials.
      */
     public ModuleList( GenPolynomialRing< C > r,
                        List< List<GenPolynomial< C >>> l) {
@@ -59,8 +76,11 @@ public class ModuleList<C extends RingElem<C> > implements Serializable {
         }
     }
 
+
     /**
-     * Contstructor.
+     * Constructor.
+     * @param r solvable polynomial ring factory.
+     * @param l list of list of solvable polynomials.
      */
     public ModuleList( GenSolvablePolynomialRing< C > r,
                        List< List<GenSolvablePolynomial< C >>> l) {
@@ -68,10 +88,11 @@ public class ModuleList<C extends RingElem<C> > implements Serializable {
     }
 
 
-    /**
-     * equals from Object.
+    /** Comparison with any other object.
+     * @see java.lang.Object#equals(java.lang.Object)
      */
-
+    @Override
+    @SuppressWarnings("unchecked") // not jet working
     public boolean equals(Object m) {
         if ( ! (m instanceof ModuleList) ) {
             //System.out.println("ModuleList");
@@ -111,6 +132,10 @@ public class ModuleList<C extends RingElem<C> > implements Serializable {
     }
 
 
+    /**
+     * String representation of the polynomial list.
+     * @see java.lang.Object#toString()
+     */
     @Override
     @SuppressWarnings("unchecked") // not jet working
     public String toString() {
@@ -155,8 +180,11 @@ public class ModuleList<C extends RingElem<C> > implements Serializable {
 
 
     /**
-     * pad Columns and remove zero rows.
-     * make all rows have the same number of columns.
+     * Pad columns and remove zero rows.
+     * Make all rows have the same number of columns.
+     * @param ring polynomial ring factory.
+     * @param l list of list of polynomials.
+     * @return list of list of polynomials with same number of colums.
      */
     public static <C extends RingElem<C> >
                       List< List<GenPolynomial< C >>> 
@@ -193,22 +221,14 @@ public class ModuleList<C extends RingElem<C> > implements Serializable {
 
 
     /**
-     * get PolynomialList.
+     * Get PolynomialList.
      * Embed module in a polynomial ring. 
+     * @return polynomial list corresponding to this.
      */
     public PolynomialList<C> getPolynomialList() {
         GenPolynomialRing< C > pfac = ring.extend(cols);
         logger.debug("extended ring = " + pfac);
         //System.out.println("extended ring = " + pfac);
-
-        /*
-        RelationTable extab = null;
-        if ( table != null ) {
-           extab = table.extend(cols,v);
-           zero = ((SolvableOrderedMapPolynomial)zero).getZERO( extab );
-           //logger.info("zero = " + zero);
-        }
-        */
 
         List<GenPolynomial<C>> pols = null;
         if ( list == null ) { // rows < 0
@@ -239,7 +259,8 @@ public class ModuleList<C extends RingElem<C> > implements Serializable {
     /**
      * Get list as List of GenSolvablePolynomials.
      * Required because no List casts allowed. Equivalent to 
-     * cast (List<List<GenSolvablePolynomial<C>>>) list.
+     * cast (List&lt;List&lt;GenSolvablePolynomial&lt;C&gt;&gt;&gt;) list.
+     * @return list of solvable polynomial lists from this.
      */
     public List< List< GenSolvablePolynomial<C> > > castToSolvableList() {
         List< List<GenSolvablePolynomial<C>> > slist = null;
@@ -263,10 +284,13 @@ public class ModuleList<C extends RingElem<C> > implements Serializable {
         return slist;
     }
 
+
     /**
      * Get of solvable polynomials list as List of GenPolynomials.
      * Required because no List casts allowed. Equivalent to 
-     * cast (List<List<GenPolynomial<C>>>) list.
+     * cast (List&lt;List&lt;GenPolynomial&lt;C&gt;&gt;&gt;) list.
+     * @param slist list of solvable polynomial lists.
+     * @return list of polynomial lists from slist.
      */
     public static <C extends RingElem<C> >
            List< List< GenPolynomial<C> > > 

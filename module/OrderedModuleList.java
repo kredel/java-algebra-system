@@ -21,8 +21,11 @@ import edu.jas.poly.OrderedPolynomialList;
 
 
 /**
- * list of vectors of polynomials
- * mainly for storage and printing/toString and conversion
+ * List of vectors of polynomials.
+ * Mainly for storage and printing / toString and 
+ * conversions to other representations.
+ * Lists of polynomials in this list are sorted according to 
+ * the head terms of the first column.
  * @author Heinz Kredel
  */
 
@@ -32,6 +35,8 @@ public class OrderedModuleList<C extends RingElem<C> >
 
     /**
      * Constructor.
+     * @param r polynomial ring factory.
+     * @param l list of list of polynomials.
      */
     public OrderedModuleList( GenPolynomialRing< C > r,
                               List<List<GenPolynomial<C>>> l ) {
@@ -39,10 +44,9 @@ public class OrderedModuleList<C extends RingElem<C> >
     }
 
 
-    /**
-     * equals from Object.
+    /** Comparison with any other object.
+     * @see java.lang.Object#equals(java.lang.Object)
      */
-
     @Override
     @SuppressWarnings("unchecked") // not jet working
     public boolean equals(Object m) {
@@ -69,12 +73,14 @@ public class OrderedModuleList<C extends RingElem<C> >
      * ascending order of the leading Exponent vectors of the 
      * first column. 
      * The term order is taken from the ring.
+     * @param r polynomial ring factory.
+     * @param l list of polynomial lists.
+     * @return sorted list of polynomial lists from l.
      */
-
     public static <C extends RingElem<C> >
-           List<List<GenPolynomial<C>>> sort( GenPolynomialRing<C> r,
-                                              List<List<GenPolynomial<C>>> l) {
-
+           List<List<GenPolynomial<C>>> 
+           sort( GenPolynomialRing<C> r,
+                 List<List<GenPolynomial<C>>> l) {
         if ( l == null ) {
             return l;
         }
@@ -121,9 +127,13 @@ public class OrderedModuleList<C extends RingElem<C> >
         try {
             s = new List[ l.size() ]; //<GenPolynomial<C>>
             //System.out.println("s.length = " + s.length );
-            //s = l.toArray(s);
-            for ( int i = 0; i < l.size(); i++ ) {
-                s[i] = l.get(i);
+            //s = l.toArray(s); does not work
+            //for ( int i = 0; i < l.size(); i++ ) {
+            //    s[i] = l.get(i);
+            //}
+            int i = 0;
+            for ( List<GenPolynomial<C>> p : l ) {
+                s[i++] = p;
             }
             Arrays.<List<GenPolynomial<C>>>sort( s, cmp );
             return new ArrayList<List<GenPolynomial<C>>>( 
@@ -133,33 +143,5 @@ public class OrderedModuleList<C extends RingElem<C> >
         }
         return l; // unsorted
     }
-
-
-
-    /**
-     * get OrderedPolynomialList.
-     * Embed module in a polynomial ring and sort polynomials. 
-     */
-    /*
-    public OrderedPolynomialList getOrderedPolynomialList() {
-        PolynomialList pl = super.getPolynomialList();
-        return new OrderedPolynomialList(pl.coeff, pl.vars, pl.tord, 
-                                         pl.list, pl.table);
-    }
-    */
-
-    /**
-     * get OrderedModuleList from PolynomialList.
-     * Extract module from polynomial ring and sort generators. 
-     */
-    /*
-    public static OrderedModuleList getOrderedModuleList(
-                                       int i, 
-                                       PolynomialList pl) {
-        ModuleList ml = ModuleList.getModuleList(i,pl);
-        return new OrderedModuleList(ml.coeff, ml.vars, ml.tord,
-                                     ml.list, ml.table);
-    }
-    */
 
 }
