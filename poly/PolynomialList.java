@@ -48,7 +48,7 @@ public class PolynomialList<C extends RingElem<C> > implements Serializable {
 
 
     /**
-     * Contstructor.
+     * Constructor.
      * @param r polynomial ring factory.
      * @param l list of polynomials.
      */
@@ -59,7 +59,7 @@ public class PolynomialList<C extends RingElem<C> > implements Serializable {
     }
 
     /**
-     * Contstructor.
+     * Constructor.
      * @param r solvable polynomial ring factory.
      * @param l list of solvable polynomials.
      */
@@ -156,7 +156,7 @@ public class PolynomialList<C extends RingElem<C> > implements Serializable {
      * Get ModuleList from PolynomialList.
      * Extract module from polynomial ring. 
      * @param i number of variables to be contract form the polynomials.
-     * @return m module list corresponding to this.
+     * @return module list corresponding to this.
      */
     public ModuleList<C> getModuleList(int i) {
         GenPolynomialRing< C > pfac = ring.contract(i);
@@ -211,8 +211,8 @@ public class PolynomialList<C extends RingElem<C> > implements Serializable {
     /**
      * Get list as List of GenSolvablePolynomials.
      * Required because no List casts allowed. Equivalent to 
-     * cast (List<GenSolvablePolynomial<C>>) list.
-     * @return l solvable polynomial list from this.
+     * cast (List&lt;GenSolvablePolynomial&lt;C&gt;&gt;) list.
+     * @return solvable polynomial list from this.
      */
     public List< GenSolvablePolynomial<C> > castToSolvableList() {
         List< GenSolvablePolynomial<C> > slist = null;
@@ -235,9 +235,9 @@ public class PolynomialList<C extends RingElem<C> > implements Serializable {
     /**
      * Get solvable polynomial list as List of GenPolynomials.
      * Required because no List casts allowed. Equivalent to 
-     * cast (List<GenPolynomial<C>>) list.
+     * cast (List&lt;GenPolynomial&lt;C&gt;&gt;) list.
      * @param slist solvable polynomial list.
-     * @return l polynomial list from slist.
+     * @return polynomial list from slist.
      */
     public static <C extends RingElem<C> > 
            List< GenPolynomial<C> > 

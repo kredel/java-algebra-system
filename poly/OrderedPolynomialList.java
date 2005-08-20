@@ -36,7 +36,7 @@ public class OrderedPolynomialList<C extends RingElem<C> >
 
 
     /**
-     * Contstructor.
+     * Constructor.
      * @param r polynomial ring factory.
      * @param l list of polynomials.
      */
@@ -75,7 +75,7 @@ public class OrderedPolynomialList<C extends RingElem<C> >
      * The term order is taken from the ring.
      * @param r polynomial ring factory.
      * @param l polynomial list.
-     * @return s sorted polynomial list from l.
+     * @return sorted polynomial list from l.
      */
     public static <C extends RingElem<C> >
     List<GenPolynomial<C>> sort( GenPolynomialRing< C > r,
@@ -112,9 +112,13 @@ public class OrderedPolynomialList<C extends RingElem<C> >
         try {
             s = new GenPolynomial[ l.size() ]; //<C>
             //System.out.println("s.length = " + s.length );
-            //s = l.toArray(s);
-            for ( int i = 0; i < l.size(); i++ ) {
-                s[i] = l.get(i);
+            //s = l.toArray(s); does not work
+            //for ( int i = 0; i < l.size(); i++ ) {
+            //    s[i] = l.get(i);
+            //}
+            int i = 0;
+            for ( GenPolynomial<C> p : l ) {
+                s[i++] = p;
             }
             Arrays.<GenPolynomial<C>>sort( s, cmp );
             return new ArrayList<GenPolynomial<C>>( 
