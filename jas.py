@@ -82,6 +82,16 @@ class Ideal:
         es.init();
         return None;
 
+    def NF(self,reducer):
+        s = self.pset;
+        F = s.list;
+        G = reducer.list;
+        t = System.currentTimeMillis();
+        N = Reduction.normalform(G,F);
+        t = System.currentTimeMillis() - t;
+        print "sequential executed in %s ms" % t; 
+        n = OrderedPolynomialList(s.ring,N);
+        return n;
 
 
 class SolvableRing:
