@@ -241,7 +241,8 @@ public class GenPolynomialTokenizer  {
         ExpVector e;
         int ix;
         long ie;
-        while ( true ) {
+	boolean done = false;
+        while ( !done ) {
             // next input. determine next action
             tt = tok.nextToken();
             logger.debug("while tt = " + tok);
@@ -249,7 +250,7 @@ public class GenPolynomialTokenizer  {
             switch ( tt ) {
             case ')': 
             case ',': 
-                 return a;
+		 return a; // do not change or remove
             case '-': 
                  b = b.negate(); 
             case '+': 
@@ -282,7 +283,11 @@ public class GenPolynomialTokenizer  {
                  first = tok.sval.charAt(0);
                  if ( letter(first) ) {
                      ix = indexVar( tok.sval );
-                     if ( ix < 0 ) break;
+                     if ( ix < 0 ) {
+                        logger.error("Unkonown varibable " + tok.sval); 
+			done = true;
+                        break;
+		     }
                      //  System.out.println("ix: " + ix);
                      ie = nextExponent();
                      //  System.out.println("ie: " + ie);
@@ -296,6 +301,7 @@ public class GenPolynomialTokenizer  {
                  break;
             default: //skip 
             }
+	    if ( done ) break; // unknown variable
             if ( tt == StreamTokenizer.TT_EOF ) break;
             // complete polynomial
             tok.pushBack();
@@ -312,7 +318,7 @@ public class GenPolynomialTokenizer  {
             case '\n':
                  tt = tok.nextToken();
                  if (debug) logger.debug("tt,nl = " + tt);
-            default: // skip ?
+            default: // skip or finish ?
                  if (debug) logger.debug("default: " + tok);
             }
         }
@@ -538,6 +544,51 @@ public class GenPolynomialTokenizer  {
 
 
     /**
+     * parsing method for weight array.
+     * syntax: ( (w11, ...,w1n), ..., (wm1, ..., wmn) )
+     */
+    public long[][] nextWeightArray() throws IOException {
+        List<long[]> l = new ArrayList<long[]>();
+        long[][] w = null;
+        long[] e;
+        char first;
+        int tt;
+        tt = tok.nextToken();
+        if ( tt == '(' ) {
+           logger.debug("weight array");
+           tt = tok.nextToken();
+           while ( true ) {
+                 if ( tt == StreamTokenizer.TT_EOF ) break;
+                 if ( tt == ')' ) break;
+                 if ( tt == '(' ) {
+                    tok.pushBack();
+		    e = nextWeightList();
+                    l.add( e );
+                    //System.out.println("wa: " + e);
+                 } else if ( tok.sval != null ) {
+                    first = tok.sval.charAt(0);
+                    if ( digit(first) ) {
+                       tok.pushBack();
+                       tok.pushBack();
+                       e = nextWeightList();
+                       l.add( e );
+		       break;
+                       //System.out.println("w: " + e);
+                    }
+                 }
+                 tt = tok.nextToken(); // also comma
+           }
+        }
+        Object[] ol = l.toArray();
+        w = new long[ ol.length ][];
+        for ( int i=0; i < w.length; i++ ) {
+            w[i] = (long[])ol[ i ];
+        }
+        return w;
+    }
+
+
+    /**
      * parsing method for split index.
      * syntax: |i|
      */
@@ -572,8 +623,8 @@ public class GenPolynomialTokenizer  {
 
     /**
      * parsing method for term order name.
-     * syntax: termOrderName = L, IL, LEX, G, IG, GRLEX
-     *         W(weights)
+     * syntax: termOrderName = L, IL, LEX, G, IG, GRLEX, W(weights)
+     *         |split index|
      */
     public TermOrder nextTermOrder() throws IOException {
         int evord = TermOrder.DEFAULT_EVORD;
@@ -603,7 +654,7 @@ public class GenPolynomialTokenizer  {
                  evord = TermOrder.GRLEX;
               }
               if ( tok.sval.equalsIgnoreCase("W") ) {
-                 long[] w = nextWeightList();
+                 long[][] w = nextWeightArray();
                  int s = nextSplitIndex();
                  if ( s <= 0 ) {
                     return new TermOrder( w );
@@ -959,6 +1010,10 @@ public class GenPolynomialTokenizer  {
         return new OrderedModuleList(spfac,s); // Ordered
     }
 
+    // must also allow +/- // does not work with tokenizer
+    private boolean number(char x) {
+        return digit(x) || x == '-' || x == '+';
+    }
 
     private boolean digit(char x) {
         return '0' <= x && x <= '9';

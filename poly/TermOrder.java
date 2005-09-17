@@ -14,8 +14,8 @@ import edu.jas.poly.ExpVector;
 /**
  * Term order class for ordered polynomials. 
  * Implements the most used term orders: 
- * graded, lexicographical, weight vector and block orders.
- * Does not (jet) implement orders by linear forms over Q[t].
+ * graded, lexicographical, weight aray and block orders.
+ * Does not implement orders by linear forms over Q[t].
  * Objects of this class are immutable.
  * @author Heinz Kredel
  */
@@ -44,9 +44,9 @@ public final class TermOrder implements Serializable {
 
 
     /**
-     * Defined weight vector.
+     * Defined array of weight vectors.
      */
-    private final long[] weight;
+    private final long[][] weight;
 
 
     /**
@@ -164,14 +164,23 @@ public final class TermOrder implements Serializable {
      * @param w weight vector of longs.
      */
     public TermOrder(long[] w) {
-        if ( w == null ) {
+	this( new long[][] { w } );
+    }
+
+
+    /**
+     * Constructor for given exponent weights.
+     * @param w weight array of longs.
+     */
+    public TermOrder(long[][] w) {
+        if ( w == null || w.length == 0 ) {
            throw new IllegalArgumentException("invalid term order weight");
         }
         weight = w;
         this.evord = 0;
         this.evord2 = 0;
         evbeg1 = 0;
-        evend1 = weight.length;
+        evend1 = weight[0].length;
         evbeg2 = evend1;
         evend2 = evend1;
 
@@ -184,7 +193,8 @@ public final class TermOrder implements Serializable {
         // lorder = new EVlorder();
         lorder = new EVorder() {
                      public int compare(ExpVector e1, ExpVector e2) {
-                         return - horder.compare( e1, e2 );
+                         return + ExpVector.EVIWLC( weight, e1, e2 ); 
+			 // return - horder.compare( e1, e2 );
                      }
         };
 
@@ -195,11 +205,23 @@ public final class TermOrder implements Serializable {
 
     /**
      * Constructor for given weighted split orders.
+     * Unnecessary, to be removed.
      * @param w weight vector of longs.
      * @param split index.
      */
     public TermOrder(long[] w, int split) {
-        if ( w == null ) {
+	this( new long[][] { w }, split );
+    }
+
+
+    /**
+     * Constructor for given weighted split orders.
+     * Unnecessary, to be removed.
+     * @param w weight array of longs.
+     * @param split index.
+     */
+    public TermOrder(long[][] w, int split) {
+        if ( w == null || w.length == 0 ) {
            throw new IllegalArgumentException("invalid term order weight");
         }
         weight = w;
@@ -208,7 +230,7 @@ public final class TermOrder implements Serializable {
         evbeg1 = 0;
         evend1 = split;
         evbeg2 = split;
-        evend2 = weight.length;
+        evend2 = weight[0].length;
         if ( evbeg2 > evend2 ) {
            throw new IllegalArgumentException("invalid term order split");
         }
@@ -583,10 +605,10 @@ public final class TermOrder implements Serializable {
 
 
     /**
-     * Get the weight vector. 
+     * Get the weight array. 
      * @return weight.
      */
-    public long[] getWeight() { 
+    public long[][] getWeight() { 
         return weight; 
     }
 
@@ -654,12 +676,20 @@ public final class TermOrder implements Serializable {
 	StringBuffer erg = new StringBuffer();
         if ( weight != null ) {
            erg.append("weight(");
-           for ( int i = 0; i < weight.length; i++ ) {
-               erg.append(""+weight[ weight.length-i-1 ]);
-               if ( i < weight.length-1 ) {
+           for ( int j = 0; j < weight.length; j++ ) {
+	       long[] wj = weight[j];
+               erg.append("(");
+               for ( int i = 0; i < wj.length; i++ ) {
+                   erg.append(""+wj[ wj.length-i-1 ]);
+                   if ( i < wj.length-1 ) {
+                      erg.append(",");
+                   }
+               }
+               erg.append(")");
+               if ( j < weight.length-1 ) {
                   erg.append(",");
                }
-           }
+	   }
            erg.append(")");
         }
         return erg.toString();
@@ -675,12 +705,20 @@ public final class TermOrder implements Serializable {
 	StringBuffer erg = new StringBuffer();
         if ( weight != null ) {
            erg.append("W(");
-           for ( int i = 0; i < weight.length; i++ ) {
-               erg.append(""+weight[ i ]);
-               if ( i < weight.length-1 ) {
+           for ( int j = 0; j < weight.length; j++ ) {
+	       long[] wj = weight[j];
+               erg.append("(");
+               for ( int i = 0; i < wj.length; i++ ) {
+                   erg.append(""+wj[ wj.length-i-1 ]);
+                   if ( i < wj.length-1 ) {
+                      erg.append(",");
+                   }
+               }
+               erg.append(")");
+               if ( j < weight.length-1 ) {
                   erg.append(",");
                }
-           }
+	   }
            erg.append(")");
            if ( evend1 == evend2 ) {
               return erg.toString();

@@ -141,7 +141,7 @@ public class ExpVector implements Cloneable, Serializable {
      * Set the exponent at position i to e. 
      * @param i
      * @param e
-     * @return val with val[i] == e.
+     * @return old val[i].
      */
     protected long setVal(int i, long e) {
         long x = val[i];
@@ -289,7 +289,19 @@ public class ExpVector implements Cloneable, Serializable {
      * @return standard names.
      */
     public String[] stdVars() {
-        return STDVARS(val.length);
+        return STDVARS("x",val.length);
+    }
+
+
+    /**
+     * Generate variable names.
+     * Generate names for variables, 
+     * i.e. prefix0 to prefix(n-1). 
+     * @param prefix name prefix
+     * @return standard names.
+     */
+    public String[] stdVars(String prefix) {
+        return STDVARS(prefix,val.length);
     }
 
 
@@ -297,12 +309,29 @@ public class ExpVector implements Cloneable, Serializable {
      * Standard variable names.
      * Generate standard names for variables, 
      * i.e. x0 to x(n-1). 
+     * @param n size of names array
      * @return standard names.
      */
     public static String[] STDVARS(int n) {
+        return STDVARS("x",n);
+    }
+
+
+    /**
+     * Generate variable names.
+     * Generate names for variables from given prefix.
+     * i.e. prefix0 to prefix(n-1). 
+     * @param n size of names array
+     * @param prefix name prefix
+     * @return vatiable names.
+     */
+    public static String[] STDVARS(String prefix, int n) {
         String[] vars = new String[ n ];
+	if ( prefix == null || prefix.length() == 0 ) {
+	    prefix = "x";
+	}
         for ( int i = 0; i < n; i++) {
-            vars[i] = "x" + i; //(n-1-i);
+            vars[i] = prefix + i; //(n-1-i);
         }
         return vars;
     }
@@ -497,15 +526,18 @@ public class ExpVector implements Cloneable, Serializable {
      * @param U
      * @return weighted sum of all exponents.
      */
-    public static long EVWDEG( long[] w, ExpVector U ) {
-        if ( w == null ) { 
+    public static long EVWDEG( long[][] w, ExpVector U ) {
+        if ( w == null || w.length == 0 ) { 
             return EVTDEG( U ); // assume weight 1 
         }
         long t = 0;
         long[] u = U.getval();
-        for (int i = 0; i < u.length; i++ ) {
-            t += w[i] * u[i];
-        }
+	for ( int j = 0; j < w.length; j++ ) {
+	    long[] wj = w[j];
+            for (int i = 0; i < u.length; i++ ) {
+                t += wj[i] * u[i];
+            }
+	}
         return t;
     }
 
@@ -666,12 +698,12 @@ public class ExpVector implements Cloneable, Serializable {
 
     /**
      * Inverse weighted lexicographical compare.
-     * @param w weight vector.
+     * @param w weight array.
      * @param U
      * @param V
      * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
      */
-    public static int EVIWLC( long[] w, ExpVector U, ExpVector V ) {
+    public static int EVIWLC( long[][] w, ExpVector U, ExpVector V ) {
         long[] u = U.getval();
         long[] v = V.getval();
         int t = 0;
@@ -687,19 +719,20 @@ public class ExpVector implements Cloneable, Serializable {
         if ( t == 0 ) {
            return t;
         }
-        long up = 0; 
-        long vp = 0; 
-        for (int j = i; j < u.length; j++ ) {
-            up += w[j] * u[j]; 
-            vp += w[j] * v[j]; 
-        }
-        if ( up > vp ) { 
-           t = 1; 
-        } else { 
-           if ( up < vp ) { 
-              t = -1; 
-           }
-        }
+	for ( int k = 0; k < w.length; k++ ) {
+	    long[] wk = w[k];
+            long up = 0; 
+            long vp = 0; 
+            for (int j = i; j < u.length; j++ ) {
+                up += wk[j] * u[j]; 
+                vp += wk[j] * v[j]; 
+            }
+            if ( up > vp ) { 
+               return 1;
+            } else if ( up < vp ) { 
+               return -1;
+            }
+	}
         return t;
     }
 
@@ -749,14 +782,14 @@ public class ExpVector implements Cloneable, Serializable {
     /**
      * Inverse weighted lexicographical compare part.
      * Compare entries between begin and end (-1).
-     * @param w weight vector.
+     * @param w weight array.
      * @param U
      * @param V
      * @param begin
      * @param end
      * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
      */
-    public static int EVIWLC( long[] w, ExpVector U, ExpVector V, int begin, int end ) {
+    public static int EVIWLC( long[][] w, ExpVector U, ExpVector V, int begin, int end ) {
         long[] u = U.getval();
         long[] v = V.getval();
         int t = 0;
@@ -772,19 +805,20 @@ public class ExpVector implements Cloneable, Serializable {
         if ( t == 0 ) {
            return t;
         }
-        long up = 0; 
-        long vp = 0; 
-        for (int j = i; j < end; j++ ) {
-            up += w[j] * u[j]; 
-            vp += w[j] * v[j]; 
-        }
-        if ( up > vp ) { 
-           t = 1; 
-        } else { 
-           if ( up < vp ) { 
-              t = -1; 
-           }
-        }
+	for ( int k = 0; k < w.length; k++ ) {
+	    long[] wk = w[k];
+            long up = 0; 
+            long vp = 0; 
+            for (int j = i; j < end; j++ ) {
+                up += wk[j] * u[j]; 
+                vp += wk[j] * v[j]; 
+            }
+            if ( up > vp ) { 
+               return 1;
+            } else if ( up < vp ) { 
+               return -1;
+            }
+	}
         return t;
     }
 
