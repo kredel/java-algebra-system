@@ -26,7 +26,7 @@ import edu.jas.module.ModuleList;
 
 /**
  * ModuleList Test using JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class ModuleListTest extends TestCase {
@@ -48,7 +48,7 @@ public class ModuleListTest extends TestCase {
 
 /**
  * suite.
- * @return
+ * @return a test suite.
  */
 public static Test suite() {
      TestSuite suite= new TestSuite(ModuleListTest.class);

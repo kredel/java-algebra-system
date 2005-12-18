@@ -58,7 +58,7 @@ public class ExpVectorPair implements Serializable {
 
     /**
      * equals.
-     * @param b other.
+     * @param B other.
      * @return true, if this == b, else false.
      */
     public boolean equals(Object B) { 

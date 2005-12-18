@@ -37,7 +37,7 @@ public interface ModulFactory<M extends ModulElem<M,C>,
      * random.
      * @param k length of vectors.
      * @param q fraction of non zero elements.
-     * @return
+     * @return a random module element.
      */
     public M random(int k, float q);
 

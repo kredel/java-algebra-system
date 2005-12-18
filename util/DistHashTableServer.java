@@ -236,7 +236,7 @@ class DHTCounter implements Serializable, Comparable {
 
 /**
  * intValue.
- * @return
+ * @return the value.
  */
     public int intValue() {
 	return value;

@@ -78,8 +78,8 @@ public class SolvableGroebnerBase  {
     /**
      * Twosided Groebner base test.
      * @param C coefficient type.
-     * @param F solvable polynomial list.
-     * @return true, if F is a two-sided Groebner base, else false.
+     * @param Fp solvable polynomial list.
+     * @return true, if Fp is a two-sided Groebner base, else false.
      */
     public static <C extends RingElem<C>>
            boolean isTwosidedGB(List<GenSolvablePolynomial<C>> Fp) {  
@@ -91,8 +91,8 @@ public class SolvableGroebnerBase  {
      * Twosided Groebner base test.
      * @param C coefficient type.
      * @param modv number of module variables.
-     * @param F solvable polynomial list.
-     * @return true, if F is a two-sided Groebner base, else false.
+     * @param Fp solvable polynomial list.
+     * @return true, if Fp is a two-sided Groebner base, else false.
      */
     public static <C extends RingElem<C>>
            boolean isTwosidedGB(int modv, List<GenSolvablePolynomial<C>> Fp) {

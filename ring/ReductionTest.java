@@ -44,7 +44,7 @@ public class ReductionTest extends TestCase {
 
 /**
  * suite.
- * @return
+ * @return a test suite.
  */
 public static Test suite() {
      TestSuite suite= new TestSuite(ReductionTest.class);

@@ -766,7 +766,7 @@ public class GenPolynomialTokenizer  {
      * parsing method for solvable polynomial relation table.
      * syntax: ( p_1, p_2, p_3, ..., p_n+3 )
      * semantics: p_n+1 * p_n+2 = p_n+3 
-     * @return the next relation table.
+     * The next relation table in internaly stored.
      * @throws IOException
      */
     public void nextRelationTable() throws IOException {

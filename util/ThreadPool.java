@@ -162,7 +162,7 @@ public class ThreadPool {
 /**
  * check if there are more than n jobs for processing.
  * @param n Integer
- * @return
+ * @return true, if there are possibly more than n jobs. 
  */
     public boolean hasJobs(int n) {
         int j = jobstack.size();

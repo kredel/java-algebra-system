@@ -52,7 +52,7 @@ public class Katsura {
 
     /**
      * Katsura constructor.
-     * @param v name of varaibles.
+     * @param v name of variables.
      * @param n problem size.
      */
     public Katsura(String v, int n) {
@@ -62,7 +62,7 @@ public class Katsura {
 
     /**
      * Katsura constructor.
-     * @param v name of varaibles.
+     * @param var name of variables.
      * @param n problem size.
      * @param order term order letter for output.
      */

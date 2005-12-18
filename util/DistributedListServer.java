@@ -228,7 +228,7 @@ class Counter implements Serializable, Comparable {
 
     /**
      * intValue.
-     * @return
+     * @return the value.
      */
     public int intValue() {
 	return value;
@@ -385,7 +385,7 @@ class Broadcaster extends Thread /*implements Runnable*/ {
 
     /**
      * toString.
-     * @return
+     * @return a string representation of this.
      */
     public String toSting() {
 	return "Broadcaster("+channel+","+bcaster.size()+","+listElem+")";

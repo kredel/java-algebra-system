@@ -165,7 +165,6 @@ public class ModSolvableGroebnerBase  {
     /**
      * Twosided Groebner base using pairlist class.
      * @param C coefficient type.
-     * @param modv number of modul variables.
      * @param M a module basis.
      * @return tsGB(M) a twosided Groebner base for M.
      */
