@@ -389,8 +389,7 @@ public class BigQuaternion implements RingElem<BigQuaternion>,
      * no compareTo method. 
      * @param b BigQuaternion.
      * We define the result to be 
-     * @return 0 if b is equal to this
-     * @return 1 else
+     * @return 0 if b is equal to this, 1 else.
      */
     public int compareTo(BigQuaternion b) {
       if ( equals(b) ) { 
@@ -404,8 +403,7 @@ public class BigQuaternion implements RingElem<BigQuaternion>,
     /** since quaternion numbers are unordered, there is 
      * no signum method. 
      * We define the result to be 
-     * @return 0 if this is equal to ZERO
-     * @return 1 else
+     * @return 0 if this is equal to ZERO, 1 else.
      * @see edu.jas.structure.RingElem#signum()
      */
     public int signum() {

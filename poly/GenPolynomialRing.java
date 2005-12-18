@@ -359,7 +359,7 @@ public class GenPolynomialRing<C extends RingElem<C> >
 
 
     /**
-     * Parse a polynomial with the use of GenPolynomialTokenizer
+     * Parse a polynomial with the use of GenPolynomialTokenizer.
      * @param s String.
      * @return GenPolynomial from s.
      */
@@ -369,7 +369,7 @@ public class GenPolynomialRing<C extends RingElem<C> >
 
 
     /**
-     * Parse a polynomial with the use of GenPolynomialTokenizer
+     * Parse a polynomial with the use of GenPolynomialTokenizer.
      * @param r Reader.
      * @return next GenPolynomial from r.
      */

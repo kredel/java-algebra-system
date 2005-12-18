@@ -8,11 +8,11 @@ import org.apache.log4j.Logger;
 
 import edu.unima.ky.parallel.Semaphore;
 
-    /**
-     * terminating helper class
-     * like a barrier with coming and going
-     * @author Heinz Kredel
-     */
+/**
+ * Terminating helper class.
+ * Like a barrier with coming and going.
+ * @author Heinz Kredel
+ */
 
 public class Terminator {
 
@@ -22,10 +22,17 @@ public class Terminator {
         private int idler = 0;
         private Semaphore fin = new Semaphore(0);
 
+/**
+ * Terminator.
+ * @param workers number of expected threads.
+ */
         public Terminator(int workers) {
             this.workers = workers;
         }
 
+ /**
+  * beIdle.
+  */
         public synchronized void beIdle() {
             idler++;
             logger.debug("beIdle, idler = " + idler);
@@ -34,20 +41,33 @@ public class Terminator {
             }
         }
 
+/**
+ * allIdle.
+ */
         public synchronized void allIdle() {
             idler = workers;
             fin.V();
         }
 
+/**
+ * notIdle.
+ */
         public synchronized void notIdle() {
             idler--;
             logger.debug("notIdle, idler = " + idler);
         }
 
+/**
+ * hasJobs.
+ * @return true, if there are possibly jobs, else false.
+ */
         public boolean hasJobs() {
             return ( idler < workers );
         }
 
+/**
+ * done.
+ */
         public void done() {
             try { fin.P();
             } catch (InterruptedException e) { }

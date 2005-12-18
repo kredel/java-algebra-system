@@ -33,7 +33,7 @@ import edu.jas.ring.GroebnerBase;
 import edu.jas.module.ModuleList;
 
 /**
- * ModGroebnerBase Test using JUnit 
+ * ModGroebnerBase Test using JUnit.
  * @author Heinz Kredel.
  */
 
@@ -42,7 +42,7 @@ public class ModGroebnerBaseTest extends TestCase {
     private static final Logger logger = Logger.getLogger(ModGroebnerBaseTest.class);
 
 /**
- * main
+ * main.
  */
    public static void main (String[] args) {
           BasicConfigurator.configure();
@@ -51,13 +51,14 @@ public class ModGroebnerBaseTest extends TestCase {
 
 /**
  * Constructs a <CODE>ModGroebnerBaseTest</CODE> object.
- * @param name String
+ * @param name String.
  */
    public ModGroebnerBaseTest(String name) {
           super(name);
    }
 
 /**
+ * suite.
  */ 
  public static Test suite() {
      TestSuite suite= new TestSuite(ModGroebnerBaseTest.class);
@@ -115,7 +116,7 @@ public class ModGroebnerBaseTest extends TestCase {
 
 
 /**
- * Test sequential GBase
+ * Test sequential GBase.
  * 
  */
  public void testSequentialModGB() {

@@ -25,6 +25,7 @@ import edu.unima.ky.parallel.Semaphore;
 /**
  * Groebner Base Parallel class.
  * Implements a shared memory parallel version of Groebner bases.
+ * Slaves maintain pairlist.
  * @author Heinz Kredel
  */
 
@@ -35,9 +36,12 @@ public class GroebnerBaseParallel  {
 
     /**
      * Parallel Groebner base using pairlist class.
-     * slaves maintain pairlist
+     * Slaves maintain pairlist.
+     * @param C coefficient type.
+     * @param F polynomial list.
+     * @param threads number of threads to use.
+     * @return GB(F) a Groebner base of F.
      */
-
     public static <C extends RingElem<C>> 
            ArrayList<GenPolynomial<C>> 
                   GB(List<GenPolynomial<C>> F, 
@@ -45,6 +49,16 @@ public class GroebnerBaseParallel  {
         return GB(0,F,threads);
     }
 
+
+    /**
+     * Parallel Groebner base using pairlist class.
+     * Slaves maintain pairlist.
+     * @param C coefficient type.
+     * @param modv number of module variables.
+     * @param F polynomial list.
+     * @param threads number of threads to use.
+     * @return GB(F) a Groebner base of F.
+     */
     public static <C extends RingElem<C>>
            ArrayList<GenPolynomial<C>> 
                   GB(int modv,
@@ -100,9 +114,8 @@ public class GroebnerBaseParallel  {
 
 
     /**
-     * reducing worker threads
+     * Reducing worker threads.
      */
-
     static class Reducer<C extends RingElem<C>> implements Runnable {
 	private List<GenPolynomial<C>> G;
 	private OrderedPairlist<C> pairlist;
@@ -116,6 +129,7 @@ public class GroebnerBaseParallel  {
 	    this.G = G;
 	    pairlist = L;
 	} 
+
 
 	public void run() {
            Pair<C> pair;
@@ -208,8 +222,11 @@ public class GroebnerBaseParallel  {
 
     /**
      * Minimal ordered groebner basis, parallel.
+     * @param C coefficient type.
+     * @param Fp a Groebner base.
+     * @param T pool of threads to use.
+     * @return GBmi(F) a minimal Groebner base of Fp.
      */
-
     public static <C extends RingElem<C>>
            ArrayList<GenPolynomial<C>> 
                   GBmi(List<GenPolynomial<C>> Fp, 
@@ -285,9 +302,8 @@ public class GroebnerBaseParallel  {
 
 
     /**
-     * reducing worker threads for minimal GB
+     * Reducing worker threads for minimal GB.
      */
-
     static class MiReducer<C extends RingElem<C>> implements Runnable {
 	private List<GenPolynomial<C>> G;
 	private List<GenPolynomial<C>> F;
@@ -305,9 +321,15 @@ public class GroebnerBaseParallel  {
 	    H = S;
 	} 
 
+
+	/**
+	 * getNF. Blocks until the normal form is computed.
+	 * @return the computed normal form.
+	 */
 	public GenPolynomial<C> getNF() {
 	    try { done.P();
-	    } catch (InterruptedException e) { }
+	    } catch (InterruptedException e) { 
+            }
 	    return H;
 	}
 

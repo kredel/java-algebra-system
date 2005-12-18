@@ -14,31 +14,35 @@ import junit.framework.TestSuite;
 import org.apache.log4j.BasicConfigurator;
 
 /**
- * DistHashTable Test using JUnit 
+ * DistHashTable Test using JUnit.
  * @author Heinz Kredel
  */
 
 public class DistHashTableTest extends TestCase {
 
 /**
- * main
+ * main.
  */
    public static void main (String[] args) {
           BasicConfigurator.configure();
           junit.textui.TestRunner.run( suite() );
    }
 
+
 /**
  * Constructs a <CODE>DistHashTableTest</CODE> object.
- * @param name String
+ * @param name String.
  */
    public DistHashTableTest(String name) {
           super(name);
    }
 
+
 /**
- */ 
- public static Test suite() {
+ * suite.
+ * @return a test suite.
+ */
+public static Test suite() {
      TestSuite suite= new TestSuite(DistHashTableTest.class);
      return suite;
    }

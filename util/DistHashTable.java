@@ -23,7 +23,7 @@ import edu.unima.ky.parallel.SocketChannel;
  * Distributed version of a HashTable.
  * Implemented with a SortedMap / TreeMap to keep the sequence 
  * order of elements.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class DistHashTable /* implements Map not jet */ {
@@ -37,20 +37,30 @@ public class DistHashTable /* implements Map not jet */ {
 
 
 /**
- * Constructs a new DistHashTable
- * @param host Name or IP of server host
+ * Constructs a new DistHashTable.
+ * @param host name or IP of server host.
  */ 
-
     public DistHashTable(String host) {
         this(host,DistHashTableServer.DEFAULT_PORT);
     }
 
 
+/**
+ * DistHashTable.
+ * @param host name or IP of server host.
+ * @param port on server.
+ */
     public DistHashTable(String host,int port) {
         this(new ChannelFactory(port+1),host,port);
     }
 
 
+/**
+ * DistHashTable.
+ * @param cf ChannelFactory to use.
+ * @param host name or IP of server host.
+ * @param port on server.
+ */
     public DistHashTable(ChannelFactory cf,String host,int port) {
         this.cf = cf;
         try {
@@ -65,6 +75,10 @@ public class DistHashTable /* implements Map not jet */ {
     }
 
 
+/**
+ * DistHashTable.
+ * @param sc SocketChannel to use.
+ */
     public DistHashTable(SocketChannel sc) {
         cf = null;
         channel = sc;
@@ -75,14 +89,14 @@ public class DistHashTable /* implements Map not jet */ {
 
 
 /**
- * Get the internal list, do not convert from Collection
+ * Get the internal list, do not convert from Collection.
  */ 
     public Collection values() {
         return theList.values();
     }
 
 /**
- * Get the internal list, convert from Collection
+ * Get the internal list, convert from Collection.
  * @fix but is ok
  */ 
     public ArrayList getArrayList() {
@@ -93,7 +107,7 @@ public class DistHashTable /* implements Map not jet */ {
 
 
 /**
- * Size of the (local) list
+ * Size of the (local) list.
  */ 
     public int size() {
         synchronized ( theList ) {
@@ -112,7 +126,7 @@ public class DistHashTable /* implements Map not jet */ {
 
 
 /**
- * List key iterator
+ * List key iterator.
  */ 
     public Iterator iterator() {
         synchronized ( theList ) {
@@ -121,7 +135,7 @@ public class DistHashTable /* implements Map not jet */ {
     }
 
 /**
- * List value iterator
+ * List value iterator.
  */ 
     public Iterator valueIterator() {
         synchronized ( theList ) {
@@ -134,7 +148,9 @@ public class DistHashTable /* implements Map not jet */ {
  * Put object to the distributed hash table.
  * Blocks until the key value pair is send and received 
  * from the server.
- */ 
+ * @param key
+ * @param value
+ */
     public void putWait(Object key, Object value) {
         put(key,value); // = send
         try {
@@ -149,10 +165,13 @@ public class DistHashTable /* implements Map not jet */ {
         }
     }
 
+
 /**
  * Put object to the distributed hash table.
  * Returns immediately after sending does not block.
- */ 
+ * @param key
+ * @param value
+ */
     public void put(Object key, Object value) {
         if ( key == null || value == null ) {
            throw new NullPointerException("null keys or values not allowed");
@@ -171,7 +190,9 @@ public class DistHashTable /* implements Map not jet */ {
  * Get value under key from DHT.
  * Blocks until the object is send and received from the server
  * (actually it blocks until some value under key is received).
- */ 
+ * @param key
+ * @return the value stored under the key.
+ */
     public Object getWait(Object key) {
         Object value = null;
         try {
@@ -192,7 +213,9 @@ public class DistHashTable /* implements Map not jet */ {
 /**
  * Get value under key from DHT.
  * If no value is jet available null is returned. 
- */ 
+ * @param key
+ * @return the value stored under the key.
+ */
     public Object get(Object key) {
         synchronized ( theList ) {
            return theList.get(key);
@@ -201,8 +224,8 @@ public class DistHashTable /* implements Map not jet */ {
 
 
 /**
- * Clear the List
- * caveat: must be called on all clients
+ * Clear the List.
+ * Caveat: must be called on all clients.
  */ 
     public void clear() {
         // send clear message to others
@@ -211,8 +234,9 @@ public class DistHashTable /* implements Map not jet */ {
         }
     }
 
+
 /**
- * Terminate the list thread
+ * Terminate the list thread.
  */ 
     public void terminate() {
         if ( cf != null ) {
@@ -263,7 +287,9 @@ class DHTListener extends Thread {
         goon = false;
     }
 
-
+/**
+ * run.
+ */
     public void run() {
         Object o;
         DHTTransport tc;

@@ -25,7 +25,7 @@ import edu.jas.poly.WeylRelations;
 
 
 /**
- * Reduction Test using JUnit 
+ * Reduction Test using JUnit.
  * @author Heinz Kredel.
  */
 
@@ -41,13 +41,14 @@ public class ReductionSolvableTest extends TestCase {
 
 /**
  * Constructs a <CODE>ReductionSolvableTest</CODE> object.
- * @param name String
+ * @param name String.
  */
    public ReductionSolvableTest(String name) {
           super(name);
    }
 
 /**
+ * suite.
  */ 
  public static Test suite() {
      TestSuite suite= new TestSuite(ReductionSolvableTest.class);
@@ -88,7 +89,7 @@ public class ReductionSolvableTest extends TestCase {
 
 
 /**
- * Test constants and empty list reduction
+ * Test constants and empty list reduction.
  * 
  */
  public void testRatReduction0() {
@@ -127,7 +128,7 @@ public class ReductionSolvableTest extends TestCase {
 
 
 /**
- * Test constants and empty list reduction
+ * Test constants and empty list reduction.
  * 
  */
  public void testWeylRatReduction0() {
@@ -170,7 +171,7 @@ public class ReductionSolvableTest extends TestCase {
 
 
 /**
- * Test ReductionMod with constants and empty list reduction
+ * Test ReductionMod with constants and empty list reduction.
  * 
  */
 /*
@@ -211,7 +212,7 @@ public class ReductionSolvableTest extends TestCase {
 
 
 /**
- * Test Rat reduction
+ * Test Rat reduction.
  * 
  */
  public void testRatReduction() {
@@ -236,7 +237,7 @@ public class ReductionSolvableTest extends TestCase {
 
 
 /**
- * Test Weyl Rat reduction
+ * Test Weyl Rat reduction.
  * 
  */
  public void testWeylRatReduction() {
@@ -264,7 +265,7 @@ public class ReductionSolvableTest extends TestCase {
 
 
 /**
- * Test Rat reduction Mod
+ * Test Rat reduction Mod.
  * 
  */
 /*

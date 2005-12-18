@@ -6,10 +6,11 @@ package edu.jas.ring;
 
 import java.io.Serializable;
 
-    /**
-     * Subclass to hold pairs of polynomial indices.
-     * What is this class good for?
-     */
+/**
+ * Subclass to hold pairs of polynomial indices.
+ * What is this class good for?
+ * @author Heinz Kredel
+ */
 
 class MiniPair implements Serializable {
 

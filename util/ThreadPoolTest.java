@@ -12,9 +12,9 @@ import junit.framework.TestSuite;
 import org.apache.log4j.BasicConfigurator;
 
 /**
- * ThreadPool Test using JUnit 
+ * ThreadPool Test using JUnit. 
  * @author Akitoshi Yoshida
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class ThreadPoolTest extends TestCase {
@@ -22,7 +22,7 @@ public class ThreadPoolTest extends TestCase {
     static final int JOBS = 10; // number of jobs to start
 
 /**
- * main
+ * main.
  */
    public static void main (String[] args) {
           BasicConfigurator.configure();
@@ -31,7 +31,7 @@ public class ThreadPoolTest extends TestCase {
 
 /**
  * Constructs a <CODE>ThreadPoolTest</CODE> object.
- * @param name String
+ * @param name String.
  */
    public ThreadPoolTest(String name) {
           super(name);
@@ -122,7 +122,7 @@ public class ThreadPoolTest extends TestCase {
 
 
 /**
- * Tests if the created ThreadPool has correct strategy
+ * Tests if the created ThreadPool has correct strategy.
  */
  public void testThreadPool6() {
      p1 = new ThreadPool(StrategyEnumeration.LIFO);
@@ -149,7 +149,7 @@ public class ThreadPoolTest extends TestCase {
 
 
 /**
- * Utility class for ThreadPool Test 
+ * Utility class for ThreadPool Test.
  */
 class FastWorker implements Runnable {
     public void run() { 
@@ -157,7 +157,7 @@ class FastWorker implements Runnable {
 }
 
 /**
- * Utility class for ThreadPool Test 
+ * Utility class for ThreadPool Test.
  */
 class SlowWorker implements Runnable {
     public void run() { 

@@ -17,7 +17,7 @@ import edu.jas.poly.AlgebraicNumber;
 
 
 /**
- * ANumGenPolynomial Test using JUnit 
+ * ANumGenPolynomial Test using JUnit.
  * @author Heinz Kredel.
  */
 
@@ -32,13 +32,14 @@ public class ANumGenPolynomialTest extends TestCase {
 
 /**
  * Constructs a <CODE>ANumGenPolynomialTest</CODE> object.
- * @param name String
+ * @param name String.
  */
    public ANumGenPolynomialTest(String name) {
           super(name);
    }
 
 /**
+ * suite.
  */ 
  public static Test suite() {
      TestSuite suite= new TestSuite(ANumGenPolynomialTest.class);
@@ -103,7 +104,7 @@ public class ANumGenPolynomialTest extends TestCase {
 
 
 /**
- * Test random polynomial
+ * Test random polynomial.
  * 
  */
  public void testRandom() {
@@ -120,7 +121,7 @@ public class ANumGenPolynomialTest extends TestCase {
 
 
 /**
- * Test addition
+ * Test addition.
  * 
  */
  public void testAddition() {
@@ -173,7 +174,7 @@ public class ANumGenPolynomialTest extends TestCase {
 
 
 /**
- * Test object multiplication
+ * Test object multiplication.
  * 
  */
 
@@ -243,7 +244,7 @@ public class ANumGenPolynomialTest extends TestCase {
 
 
 /**
- * Test object quotient and remainder
+ * Test object quotient and remainder.
  * 
  */
 

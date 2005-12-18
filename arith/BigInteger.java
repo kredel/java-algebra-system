@@ -43,7 +43,7 @@ public class BigInteger implements RingElem<BigInteger>,
 
     /**
      * Constructor for BigInteger from math.BigInteger.
-     * @param a java.math.BigInteger
+     * @param a java.math.BigInteger.
      */
     public BigInteger(java.math.BigInteger a) {
 	val = a;

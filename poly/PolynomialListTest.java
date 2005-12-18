@@ -21,14 +21,14 @@ import edu.jas.poly.OrderedPolynomialList;
 
 
 /**
- * PolynomialList Test using JUnit 
- * @author Heinz Kredel.
+ * PolynomialList Test using JUnit.
+ * @author Heinz Kredel
  */
 
 public class PolynomialListTest extends TestCase {
 
 /**
- * main
+ * main.
  */
    public static void main (String[] args) {
           junit.textui.TestRunner.run( suite() );
@@ -36,7 +36,7 @@ public class PolynomialListTest extends TestCase {
 
 /**
  * Constructs a <CODE>PolynomialListTest</CODE> object.
- * @param name String
+ * @param name String.
  */
    public PolynomialListTest(String name) {
           super(name);
@@ -84,7 +84,7 @@ public class PolynomialListTest extends TestCase {
 
 
 /**
- * Test constructor and toString
+ * Test constructor and toString.
  * 
  */
  public void testConstructor() {
@@ -99,7 +99,7 @@ public class PolynomialListTest extends TestCase {
 
 
 /**
- * Test polynomial list
+ * Test polynomial list.
  * 
  */
  public void testPolynomialList() {
@@ -120,7 +120,7 @@ public class PolynomialListTest extends TestCase {
 
 
 /**
- * Test ordered polynomial list
+ * Test ordered polynomial list.
  * 
  */
  public void testOrderedPolynomialList() {

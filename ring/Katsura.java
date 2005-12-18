@@ -6,13 +6,16 @@
 package edu.jas.ring;
 
 /**
- * Class to produce a system of equations as defined by Katsura
+ * Class to produce a system of equations as defined by Katsura.
  * 
- * @author kredel
+ * @author Heinz Kredel
  *
-  */
+ */
 public class Katsura {
 
+   /**
+    * main.
+    */
     public static void main(String[] args) {
         if ( args.length == 0 ) {
            System.out.println("usage: Katsura N <order> <var>");
@@ -37,19 +40,38 @@ public class Katsura {
     final String var;
     final String order;
 
+
+    /**
+     * Katsura constructor.
+     * @param n problem size.
+     */
     public Katsura(int n) {
            this("u", n);
     }
 
+
+    /**
+     * Katsura constructor.
+     * @param v name of varaibles.
+     * @param n problem size.
+     */
     public Katsura(String v, int n) {
            this(v, n, "G");
     }
 
+
+    /**
+     * Katsura constructor.
+     * @param v name of varaibles.
+     * @param n problem size.
+     * @param order term order letter for output.
+     */
     public Katsura(String var, int n, String order) {
            this.var = var;
            this.N = n;
            this.order = order;
     }
+
 
     String sum1() {
            StringBuffer s = new StringBuffer();
@@ -62,6 +84,7 @@ public class Katsura {
            s.append(" - 1");
            return s.toString();
     }
+
 
     String sumUm(int m) {
            StringBuffer s = new StringBuffer();
@@ -78,10 +101,22 @@ public class Katsura {
     }
 
 
+    /**
+     * Generate variable list.
+     * @param order term order letter.
+     * @return polynomial ring description.
+     */
     public String varList(String order) {
         return varList("Rat",order);
     }
 
+
+    /**
+     * Generate variable list.
+     * @param order term order letter.
+     * @param coeff coefficient ring name.
+     * @return polynomial ring description.
+     */
     public String varList(String coeff, String order) {
            StringBuffer s = new StringBuffer();
            s.append(coeff);
@@ -97,6 +132,11 @@ public class Katsura {
            return s.toString();
     }
 
+
+    /**
+     * toString.
+     * @return Katsura problem as string.
+     */
     public String toString() {
            StringBuffer s = new StringBuffer();
            s.append(varList(order));
@@ -105,20 +145,30 @@ public class Katsura {
            return s.toString();
     }
 
+
+    /**
+     * Generate polynomial list.
+     * @return Katsura polynomials as string.
+     */
     public String polyList() {
            StringBuffer s = new StringBuffer();
            s.append("(\n");
            //for (int m = -N + 1; m <= N - 1; m++) { doubles polynomials
            for (int m = 0; m <= N - 1; m++) {
-               s.append(sumUm(m));
+               s.append( sumUm(m) );
                s.append(",\n");
            }
-           s.append(sum1());
+           s.append( sum1() );
            s.append("\n");
            s.append(")\n");
            return s.toString();
     }
 
+
+    /**
+     * Generate variable string.
+     * @return varaible name as string.
+     */
     String variable(int i) {
            if (i < 0) {
                return variable(-i);

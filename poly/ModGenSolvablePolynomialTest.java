@@ -15,7 +15,7 @@ import edu.jas.structure.RingElem;
 
 
 /**
- * ModGenSolvablePolynomial Test using JUnit 
+ * ModGenSolvablePolynomial Test using JUnit.
  * @author Heinz Kredel.
  */
 
@@ -31,13 +31,14 @@ public class ModGenSolvablePolynomialTest extends TestCase {
 
 /**
  * Constructs a <CODE>ModGenSolvablePolynomialTest</CODE> object.
- * @param name String
+ * @param name String.
  */
    public ModGenSolvablePolynomialTest(String name) {
           super(name);
    }
 
 /**
+ * suite.
  */ 
  public static Test suite() {
      TestSuite suite= new TestSuite(ModGenSolvablePolynomialTest.class);
@@ -80,7 +81,7 @@ public class ModGenSolvablePolynomialTest extends TestCase {
 
 
 /**
- * Test constructor and toString
+ * Test constructor and toString.
  * 
  */
  public void testConstructor() {
@@ -102,7 +103,7 @@ public class ModGenSolvablePolynomialTest extends TestCase {
 
 
 /**
- * Test random polynomial
+ * Test random polynomial.
  * 
  */
  public void testRandom() {
@@ -117,7 +118,7 @@ public class ModGenSolvablePolynomialTest extends TestCase {
 
 
 /**
- * Test addition
+ * Test addition.
  * 
  */
  public void testAddition() {
@@ -172,7 +173,7 @@ public class ModGenSolvablePolynomialTest extends TestCase {
 
 
 /**
- * Test object multiplication
+ * Test object multiplication.
  * 
  */
 
@@ -224,7 +225,7 @@ public class ModGenSolvablePolynomialTest extends TestCase {
 
 
 /**
- * Test Weyl polynomials
+ * Test Weyl polynomials.
  * 
  */
 

@@ -29,7 +29,7 @@ import edu.jas.module.GenVectorModul;
 public class GenVectorTest extends TestCase {
 
 /**
- * main
+ * main.
  */
    public static void main (String[] args) {
           junit.textui.TestRunner.run( suite() );
@@ -37,7 +37,7 @@ public class GenVectorTest extends TestCase {
 
 /**
  * Constructs a <CODE>RatGenVectorTest</CODE> object.
- * @param name String
+ * @param name String.
  */
    public GenVectorTest(String name) {
           super(name);
@@ -63,7 +63,7 @@ public class GenVectorTest extends TestCase {
 
 
 /**
- * Test constructor and toString
+ * Test constructor and toString.
  * 
  */
  public void testConstruction() {
@@ -98,7 +98,7 @@ public class GenVectorTest extends TestCase {
 
 
 /**
- * Test random vector
+ * Test random vector.
  * 
  */
  public void testRandom() {
@@ -116,7 +116,7 @@ public class GenVectorTest extends TestCase {
 
 
 /**
- * Test addition
+ * Test addition.
  * 
  */
  public void testAddition() {
@@ -158,7 +158,7 @@ public class GenVectorTest extends TestCase {
 
 
 /**
- * Test scalar multiplication
+ * Test scalar multiplication.
  * 
  */
  public void testMultiplication() {
@@ -233,7 +233,7 @@ public class GenVectorTest extends TestCase {
 
 
 /**
- * Test constructor and toString
+ * Test constructor and toString.
  * 
  */
  public void testPolynomialConstruction() {
@@ -292,7 +292,7 @@ public class GenVectorTest extends TestCase {
 
 
 /**
- * Test addition
+ * Test addition.
  * 
  */
  public void testPolynomialAddition() {
@@ -338,7 +338,7 @@ public class GenVectorTest extends TestCase {
 
 
 /**
- * Test scalar multiplication
+ * Test scalar multiplication.
  * 
  */
  public void testPolynomialMultiplication() {

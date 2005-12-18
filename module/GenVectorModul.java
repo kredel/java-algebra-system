@@ -41,9 +41,9 @@ public class GenVectorModul<C extends RingElem<C> >
     private static Logger logger = Logger.getLogger(GenVectorModul.class);
 
 
-    /**
-     * Constructors for GenVectorModul
-     */
+/**
+ * Constructors for GenVectorModul.
+ */
 
     public GenVectorModul(RingFactory< C > b, int s) {
         coFac = b;
@@ -68,6 +68,10 @@ public class GenVectorModul<C extends RingElem<C> >
     }
 
 
+    /**
+     * getZERO.
+     * @return ZERO.
+     */
     public GenVector<C> getZERO() {
         return ZERO;
     }

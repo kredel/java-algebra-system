@@ -5,7 +5,7 @@
 package edu.jas.util;
 
 /**
- * StrategyEnumeration
+ * StrategyEnumeration.
  * This class names possible / implemented strategies.
  * @author Heinz Kredel.
  */
@@ -18,6 +18,9 @@ public final class StrategyEnumeration {
 
     private StrategyEnumeration() { }
 
+/**
+ * toString.
+ */    
     public String toString() {
         if (this == FIFO) {
            return "FIFO strategy";

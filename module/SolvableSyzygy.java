@@ -43,15 +43,12 @@ public class SolvableSyzygy  {
 
     private static final Logger logger = Logger.getLogger(SolvableSyzygy.class);
 
-    /**
-     * Solvable Syzygy module from Groebner base
-     * F must be a Groebner base.
-     */
-
-
 
     /**
      * Left syzygy for left Groebner base.
+     * @param C coefficient type.
+     * @param F a Groebner base.
+     * @return leftSyz(F), a basis for the left module of syzygies for F.
      */
     public static <C extends RingElem<C>>
            List<List<GenSolvablePolynomial<C>>> 
@@ -59,8 +56,13 @@ public class SolvableSyzygy  {
         return leftZeroRelations(0,F);
     }
 
+
     /**
      * Left syzygy for left Groebner base.
+     * @param C coefficient type.
+     * @param modv number of module variables.
+     * @param F a Groebner base.
+     * @return leftSyz(F), a basis for the left module of syzygies for F.
      */
     public static <C extends RingElem<C>>
            List<List<GenSolvablePolynomial<C>>>
@@ -122,6 +124,9 @@ public class SolvableSyzygy  {
 
     /**
      * Left syzygy for left module Groebner base.
+     * @param C coefficient type.
+     * @param M a Groebner base.
+     * @return leftSyz(M), a basis for the left module of syzygies for M.
      */
     public static <C extends RingElem<C>>
            ModuleList<C> 
@@ -181,8 +186,14 @@ public class SolvableSyzygy  {
 
     /**
      * S-Polynomial with recording.
+     * @param C coefficient type.
+     * @param S recording matrix, is modified.
+     * @param i index of Ap in basis list.
+     * @param Ap a polynomial.
+     * @param j index of Bp in basis list.
+     * @param Bp a polynomial.
+     * @return leftSpol(Ap, Bp), the left S-Polynomial for Ap and Bp.
      */
-
     public static <C extends RingElem<C>>
            GenSolvablePolynomial<C> 
            leftSPolynomial(ArrayList<GenSolvablePolynomial<C>> S,
@@ -230,8 +241,12 @@ public class SolvableSyzygy  {
 
     /**
      * LeftNormalform with recording.
+     * @param C coefficient type.
+     * @param row recording matrix, is modified.
+     * @param Pp a polynomial list for reduction.
+     * @param Ap a polynomial.
+     * @return nf(Pp,Ap), the left normal form of Ap wrt. Pp.
      */
-
     public static <C extends RingElem<C>>
            GenSolvablePolynomial<C> 
            leftNormalform(ArrayList<GenSolvablePolynomial<C>> row,
@@ -312,9 +327,12 @@ public class SolvableSyzygy  {
 
 
     /**
-     * Test if sysygy
+     * Test if sysygy.
+     * @param C coefficient type.
+     * @param Z list of sysygies.
+     * @param F a polynomial list.
+     * @return true, if Z is a list of left syzygies for F, else false.
      */
-
     public static <C extends RingElem<C>>
            boolean 
            isLeftZeroRelation(List<List<GenSolvablePolynomial<C>>> Z, 
@@ -335,8 +353,11 @@ public class SolvableSyzygy  {
 
     /**
      * Scalar product of vectors of polynomials.
+     * @param C coefficient type.
+     * @param r a polynomial list.
+     * @param F a polynomial list.
+     * @return the left scalar product of r and F.
      */
-
     public static <C extends RingElem<C>>
            GenSolvablePolynomial<C> 
            leftScalarProduct(List<GenSolvablePolynomial<C>> r, 
@@ -365,8 +386,11 @@ public class SolvableSyzygy  {
 
     /**
      * Test if sysygy of modules
+     * @param C coefficient type.
+     * @param Z list of sysygies.
+     * @param F a module list.
+     * @return true, if Z is a list of left syzygies for F, else false.
      */
-
     public static <C extends RingElem<C>>
            boolean 
            isLeftZeroRelation(ModuleList<C> Z, 
@@ -387,8 +411,11 @@ public class SolvableSyzygy  {
 
     /**
      * product of vector and matrix of polynomials.
+     * @param C coefficient type.
+     * @param r a polynomial list.
+     * @param F a polynomial list.
+     * @return the left scalar product of r and F.
      */
-
     public static <C extends RingElem<C>>
            List<GenSolvablePolynomial<C>> 
            leftScalarProduct(List<GenSolvablePolynomial<C>> r, 
@@ -420,8 +447,11 @@ public class SolvableSyzygy  {
 
     /**
      * Addition of vectors of polynomials.
+     * @param C coefficient type.
+     * @param a a polynomial list.
+     * @param b a polynomial list.
+     * @return a+b, the vector sum of a and b.
      */
-
     public static <C extends RingElem<C>>
            List<GenSolvablePolynomial<C>>
            vectorAdd(List<GenSolvablePolynomial<C>> a, 
@@ -449,10 +479,13 @@ public class SolvableSyzygy  {
         return V;
     }
 
+
     /**
      * test vector of zero polynomials.
+     * @param C coefficient type.
+     * @param a a polynomial list.
+     * @return true, if all polynomial in a are zero, else false.
      */
-
     public static <C extends RingElem<C>>
            boolean 
            isZero(List<GenSolvablePolynomial<C>> a) {  
@@ -473,8 +506,11 @@ public class SolvableSyzygy  {
 
     /**
      * Scalar product of polynomial with vector of polynomials.
+     * @param C coefficient type.
+     * @param p a polynomial.
+     * @param F a polynomial list.
+     * @return the left scalar product of p and F.
      */
-
     public static <C extends RingElem<C>>
            List<GenSolvablePolynomial<C>> 
            leftScalarProduct(GenSolvablePolynomial<C> p, 
@@ -492,6 +528,9 @@ public class SolvableSyzygy  {
     /**
      * Resolution of a module.
      * Only with direct GBs.
+     * @param C coefficient type.
+     * @param M a module list of a Groebner basis.
+     * @return a resolution of M.
      */
     public static <C extends RingElem<C>>
            List<SolvResPart<C>> 
@@ -516,6 +555,9 @@ public class SolvableSyzygy  {
     /**
      * Resolution of a polynomial list.
      * Only with direct GBs.
+     * @param C coefficient type.
+     * @param F a polynomial list of a Groebner basis.
+     * @return a resolution of F.
      */
     public static <C extends RingElem<C>>
            List // <SolvResPart<C>|SolvResPolPart<C>> 
@@ -541,19 +583,28 @@ public class SolvableSyzygy  {
 /**
  * Container for module resolution components.
  */
-
 class SolvResPart<C extends RingElem<C>> implements Serializable {
 
     public final ModuleList<C> module;
     public final ModuleList<C> GB;
     public final ModuleList<C> syzygy;
 
+    /**
+     * SolvResPart.
+     * @param m a module list.
+     * @param g a module list GB.
+     * @param z a syzygy module list.
+     */
     public SolvResPart(ModuleList<C> m, ModuleList<C> g, ModuleList<C> z) {
         module = m;
         GB = g;
         syzygy = z;
     }
 
+
+    /**
+     * toString.
+     */
     public String toString() {
         StringBuffer s = new StringBuffer("SolvResPart(\n");
         s.append("module = " + module);
@@ -568,13 +619,18 @@ class SolvResPart<C extends RingElem<C>> implements Serializable {
 /**
  * Container for polynomial resolution components.
  */
-
 class SolvResPolPart<C extends RingElem<C>> implements Serializable {
 
     public final PolynomialList<C> ideal;
     public final PolynomialList<C> GB;
     public final ModuleList<C> syzygy;
 
+/**
+ * SolvResPolPart.
+ * @param m a polynomial list.
+ * @param g a polynomial list GB.
+ * @param z a syzygy module list.
+ */
     public SolvResPolPart(PolynomialList<C> m, PolynomialList<C> g, 
                           ModuleList<C> z) {
         ideal = m;
@@ -582,6 +638,10 @@ class SolvResPolPart<C extends RingElem<C>> implements Serializable {
         syzygy = z;
     }
 
+
+/**
+ * toString.
+ */
     public String toString() {
         StringBuffer s = new StringBuffer("SolvResPolPart(\n");
         s.append("ideal = " + ideal);

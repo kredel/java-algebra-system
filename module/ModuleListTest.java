@@ -25,14 +25,14 @@ import edu.jas.module.ModuleList;
 
 
 /**
- * ModuleList Test using JUnit 
+ * ModuleList Test using JUnit.
  * @author Heinz Kredel.
  */
 
 public class ModuleListTest extends TestCase {
 
 /**
- * main
+ * main.
  */
    public static void main (String[] args) {
           junit.textui.TestRunner.run( suite() );
@@ -40,15 +40,17 @@ public class ModuleListTest extends TestCase {
 
 /**
  * Constructs a <CODE>ModuleListTest</CODE> object.
- * @param name String
+ * @param name String.
  */
    public ModuleListTest(String name) {
           super(name);
    }
 
 /**
- */ 
- public static Test suite() {
+ * suite.
+ * @return
+ */
+public static Test suite() {
      TestSuite suite= new TestSuite(ModuleListTest.class);
      return suite;
    }
@@ -91,7 +93,7 @@ public class ModuleListTest extends TestCase {
 
 
 /**
- * Test constructor and toString
+ * Test constructor and toString.
  * 
  */
  public void testConstructor() {
@@ -104,7 +106,7 @@ public class ModuleListTest extends TestCase {
 
 
 /**
- * Test polynomial list
+ * Test polynomial list.
  * 
  */
  public void testPolynomialList() {
@@ -126,7 +128,7 @@ public class ModuleListTest extends TestCase {
 
 
 /**
- * Test module list
+ * Test module list.
  * 
  */
  public void testModuleList() {
@@ -152,7 +154,7 @@ public class ModuleListTest extends TestCase {
 
 
 /**
- * Test module and polynomial list
+ * Test module and polynomial list.
  * 
  */
  public void testModulePolynomialList() {
@@ -183,7 +185,7 @@ public class ModuleListTest extends TestCase {
 
 
 /**
- * Test module and polynomial and module list
+ * Test module and polynomial and module list.
  * 
  */
  public void testModulePolynomialModuleList() {
@@ -222,7 +224,7 @@ public class ModuleListTest extends TestCase {
 
 
 /**
- * Test module and polynomial and module and polynomial list
+ * Test module and polynomial and module and polynomial list.
  * 
  */
  public void testModulePolynomialModuleListPolynomial() {

@@ -14,7 +14,7 @@ import edu.jas.structure.RingElem;
 
 
 /**
- * RatPolyGenPolynomial Test using JUnit 
+ * RatPolyGenPolynomial Test using JUnit.
  * @author Heinz Kredel.
  */
 
@@ -29,7 +29,7 @@ public class RatPolyGenPolynomialTest extends TestCase {
 
 /**
  * Constructs a <CODE>RatPolyGenPolynomialTest</CODE> object.
- * @param name String
+ * @param name String.
  */
    public RatPolyGenPolynomialTest(String name) {
           super(name);
@@ -72,7 +72,7 @@ public class RatPolyGenPolynomialTest extends TestCase {
 
 
 /**
- * Test constructor and toString
+ * Test constructor and toString.
  * 
  */
  public void testConstruction() {
@@ -89,7 +89,7 @@ public class RatPolyGenPolynomialTest extends TestCase {
 
 
 /**
- * Test random polynomial
+ * Test random polynomial.
  * 
  */
  public void testRandom() {
@@ -104,7 +104,7 @@ public class RatPolyGenPolynomialTest extends TestCase {
 
 
 /**
- * Test addition
+ * Test addition.
  * 
  */
  public void testAddition() {
@@ -143,7 +143,7 @@ public class RatPolyGenPolynomialTest extends TestCase {
 
 
 /**
- * Test object multiplication
+ * Test object multiplication.
  * 
  */
 

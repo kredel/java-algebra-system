@@ -35,9 +35,12 @@ public class Reduction  {
 
 
     /**
-     * S-Polynomial
+     * S-Polynomial.
+     * @param C coefficient type.
+     * @param Ap polynomial.
+     * @param Bp polynomial.
+     * @return spol(Ap,Bp) the S-polynomial of Ap and Bp.
      */
-
     public static <C extends RingElem<C>> 
         GenPolynomial<C> SPolynomial(GenPolynomial<C> Ap, 
                                      GenPolynomial<C> Bp) {  
@@ -73,9 +76,12 @@ public class Reduction  {
 
 
     /**
-     * Left S-Polynomial
+     * Left S-Polynomial.
+     * @param C coefficient type.
+     * @param Ap solvable polynomial.
+     * @param Bp solvable polynomial.
+     * @return left-spol(Ap,Bp) the left S-polynomial of Ap and Bp.
      */
-
     public static <C extends RingElem<C>>
            GenSolvablePolynomial<C> 
            leftSPolynomial(GenSolvablePolynomial<C> Ap, 
@@ -120,9 +126,12 @@ public class Reduction  {
 
     /**
      * Module criterium.
+     * @param C coefficient type.
+     * @param modv number of module variables.
+     * @param A polynomial.
+     * @param B polynomial.
      * @return true if the module S-polynomial(i,j) is required.
      */
-
     public static <C extends RingElem<C>> 
            boolean ModuleCriterion(int modv, 
                                    GenPolynomial<C> A, 
@@ -141,10 +150,13 @@ public class Reduction  {
 
     /**
      * GB criterium 4.
-     * @param e = lcm(ht(A),ht(B)) 
-     * @return true if the S-polynomial(i,j) is required.
+     * Use only for commutative polynomial rings.
+     * @param C coefficient type.
+     * @param A polynomial.
+     * @param B polynomial.
+     * @param e = lcm(ht(A),ht(B))
+     * @return true if the S-polynomial(i,j) is required, else false.
      */
-
     public static <C extends RingElem<C>> 
            boolean GBCriterion4(GenPolynomial<C> A, 
                                 GenPolynomial<C> B, 
@@ -171,9 +183,12 @@ public class Reduction  {
 
     /**
      * GB criterium 4.
-     * @return true if the S-polynomial(i,j) is required.
+     * Use only for commutative polynomial rings.
+     * @param C coefficient type.
+     * @param A polynomial.
+     * @param B polynomial.
+     * @return true if the S-polynomial(i,j) is required, else false.
      */
-
     public static <C extends RingElem<C>> 
            boolean GBCriterion4(GenPolynomial<C> A, 
                                 GenPolynomial<C> B) {  
@@ -197,8 +212,11 @@ public class Reduction  {
 
     /**
      * Normalform.
+     * @param C coefficient type.
+     * @param Ap polynomial.
+     * @param Pp polynomial list.
+     * @return nf(Ap) with respect to Pp.
      */
-
     @SuppressWarnings("unchecked") // not jet working
     public static <C extends RingElem<C>> 
            GenPolynomial<C> normalform(List<GenPolynomial<C>> Pp, 
@@ -272,8 +290,11 @@ public class Reduction  {
 
     /**
      * Normalform Set.
+     * @param C coefficient type.
+     * @param Ap polynomial list.
+     * @param Pp polynomial list.
+     * @return list of nf(a) with respect to Pp for all a in Ap.
      */
-
     public static <C extends RingElem<C>> 
            List<GenPolynomial<C>> normalform(List<GenPolynomial<C>> Pp, 
                                              List<GenPolynomial<C>> Ap) {  
@@ -296,8 +317,10 @@ public class Reduction  {
 
     /**
      * Irreducible set.
+     * @param C coefficient type.
+     * @param Pp polynomial list.
+     * @return a list P of polynomials which are in normalform wrt. P.
      */
-
     public static <C extends RingElem<C>> 
            List<GenPolynomial<C>> irreducibleSet(List<GenPolynomial<C>> Pp) {  
         ArrayList<GenPolynomial<C>> P = new ArrayList<GenPolynomial<C>>();
@@ -347,8 +370,11 @@ public class Reduction  {
 
     /**
      * Left Normalform.
+     * @param C coefficient type.
+     * @param Ap solvable polynomial.
+     * @param Pp solvable polynomial list.
+     * @return left-nf(Ap) with respect to Pp.
      */
-
     public static <C extends RingElem<C>> 
            GenSolvablePolynomial<C> 
            leftNormalform(List<GenSolvablePolynomial<C>> Pp, 
@@ -423,8 +449,11 @@ public class Reduction  {
 
     /**
      * Left Normalform Set.
+     * @param C coefficient type.
+     * @param Ap solvable polynomial list.
+     * @param Pp solvable polynomial list.
+     * @return list of left-nf(a) with respect to Pp for all a in Ap.
      */
-
     public static <C extends RingElem<C>> 
            List<GenSolvablePolynomial<C>> 
            leftNormalform(List<GenSolvablePolynomial<C>> Pp, 
@@ -447,8 +476,10 @@ public class Reduction  {
 
     /**
      * Left irreducible set.
+     * @param C coefficient type.
+     * @param Pp solvable polynomial list.
+     * @return a list P of solvable polynomials which are in normalform wrt. P.
      */
-
     public static <C extends RingElem<C>> 
            List<GenSolvablePolynomial<C>> 
            leftIrreducibleSet(List<GenSolvablePolynomial<C>> Pp) {  
@@ -500,8 +531,11 @@ public class Reduction  {
 
     /**
      * Normalform. Allows concurrent modification of the list.
+     * @param C coefficient type.
+     * @param Ap polynomial.
+     * @param Pp polynomial list, concurrent modification allowed.
+     * @return nf(Ap) with respect to Pp.
      */
-
     public static <C extends RingElem<C>>
            GenPolynomial<C> 
            normalformMod(/*Array*/List<GenPolynomial<C>> Pp, 
@@ -577,9 +611,12 @@ public class Reduction  {
 
 
     /**
-     * Normalform. Allows concurrent modification of the list.
+     * Normalform. Allows concurrent modification of the DHT.
+     * @param C coefficient type.
+     * @param Ap polynomial.
+     * @param Pp distributed hash table, concurrent modification allowed.
+     * @return nf(Ap) with respect to Pp.
      */
-
     public static <C extends RingElem<C>>
            GenPolynomial<C> 
            normalformMod(DistHashTable Pp, 

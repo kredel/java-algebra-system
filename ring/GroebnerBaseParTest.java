@@ -29,7 +29,7 @@ import edu.jas.poly.PolynomialList;
 import edu.jas.ring.GroebnerBase;
 
 /**
- * GroebnerBase Test using JUnit 
+ * GroebnerBase Test using JUnit.
  * @author Heinz Kredel.
  */
 
@@ -47,13 +47,14 @@ public class GroebnerBaseParTest extends TestCase {
 
 /**
  * Constructs a <CODE>GroebnerBaseParTest</CODE> object.
- * @param name String
+ * @param name String.
  */
    public GroebnerBaseParTest(String name) {
           super(name);
    }
 
 /**
+ * suite.
  */ 
  public static Test suite() {
      TestSuite suite= new TestSuite(GroebnerBaseParTest.class);
@@ -93,7 +94,7 @@ public class GroebnerBaseParTest extends TestCase {
 
 
 /**
- * Test parallel GBase
+ * Test parallel GBase.
  * 
  */
  public void testParallelGBase() {
@@ -140,7 +141,7 @@ public class GroebnerBaseParTest extends TestCase {
 
 
 /**
- * Test compare sequential with parallel GBase
+ * Test compare sequential with parallel GBase.
  * 
  */
  public void testSequentialParallelGBase() {
@@ -197,7 +198,7 @@ public class GroebnerBaseParTest extends TestCase {
 
 
 /**
- * Test Trinks7 GBase
+ * Test Trinks7 GBase.
  * 
  */
  public void testTrinks7GBase() {
@@ -229,5 +230,4 @@ public class GroebnerBaseParTest extends TestCase {
      //System.out.println("G = " + trinks);
 
  }
-
 }

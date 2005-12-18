@@ -18,7 +18,7 @@ import edu.jas.structure.RingElem;
 
 
 /**
- * GaloisField Test using JUnit 
+ * GaloisField Test using JUnit.
  * @author Heinz Kredel.
  */
 
@@ -33,7 +33,7 @@ public class GaloisFieldTest extends TestCase {
 
 /**
  * Constructs a <CODE>GaloisFieldTest</CODE> object.
- * @param name String
+ * @param name String.
  */
    public GaloisFieldTest(String name) {
           super(name);
@@ -93,7 +93,7 @@ public class GaloisFieldTest extends TestCase {
 
 
 /**
- * Test constructor and toString
+ * Test constructor and toString.
  * 
  */
  public void testConstruction() {
@@ -131,7 +131,7 @@ public class GaloisFieldTest extends TestCase {
 
 
 /**
- * Test addition
+ * Test addition.
  * 
  */
  public void testAddition() {
@@ -161,7 +161,7 @@ public class GaloisFieldTest extends TestCase {
 
 
 /**
- * Test object multiplication
+ * Test object multiplication.
  * 
  */
 

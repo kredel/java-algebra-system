@@ -17,14 +17,14 @@ import edu.unima.ky.parallel.ChannelFactory;
 
 
 /**
- * ExecutableChannels Test using JUnit 
+ * ExecutableChannels Test using JUnit.
  * @author Heinz Kredel
  */
 
 public class ExecutableChannelsTest extends TestCase {
 
 /**
- * main
+ * main.
  */
    public static void main (String[] args) {
           BasicConfigurator.configure();
@@ -33,13 +33,14 @@ public class ExecutableChannelsTest extends TestCase {
 
 /**
  * Constructs a <CODE>ExecutableChannelsTest</CODE> object.
- * @param name String
+ * @param name String.
  */
    public ExecutableChannelsTest(String name) {
           super(name);
    }
 
 /**
+ * suite.
  */ 
  public static Test suite() {
      TestSuite suite= new TestSuite(ExecutableChannelsTest.class);
@@ -69,7 +70,7 @@ public class ExecutableChannelsTest extends TestCase {
 
 
 /**
- * Tests if the ExecutableChannels could be initialized with null
+ * Tests if the ExecutableChannels could be initialized with null.
  */
  public void testExecutableChannels1() {
      String[] servers = null;
@@ -82,7 +83,7 @@ public class ExecutableChannelsTest extends TestCase {
 
 
 /**
- * Tests if the ExecutableChannels could be initialized with small server array
+ * Tests if the ExecutableChannels could be initialized with small server array.
  */
  public void testExecutableChannels2() {
      int nums = 1;
@@ -99,7 +100,7 @@ public class ExecutableChannelsTest extends TestCase {
 
 
 /**
- * Tests if the ExecutableChannels could be initialized with big server array
+ * Tests if the ExecutableChannels could be initialized with big server array.
  */
  public void testExecutableChannels3() {
      int nums = 100;
@@ -117,7 +118,7 @@ public class ExecutableChannelsTest extends TestCase {
 
 
 /**
- * Tests if the ExecutableChannels could be initialized and opened
+ * Tests if the ExecutableChannels could be initialized and opened.
  */
  public void testExecutableChannels4() {
      int nums = 2;
@@ -145,7 +146,7 @@ public class ExecutableChannelsTest extends TestCase {
 
 
 /**
- * Tests if 11 ExecutableChannels could be initialized and opened
+ * Tests if 11 ExecutableChannels could be initialized and opened.
  */
  public void testExecutableChannels5() {
      int nums = 11; // max 11 by some limit on number of threads
@@ -173,7 +174,7 @@ public class ExecutableChannelsTest extends TestCase {
 
 
 /**
- * Tests if 10 ExecutableChannels to 1 server could be initialized and opened
+ * Tests if 10 ExecutableChannels to 1 server could be initialized and opened.
  */
  public void testExecutableChannels6() {
      int nums = 2; // max 11 by some limit on number of threads
@@ -198,7 +199,7 @@ public class ExecutableChannelsTest extends TestCase {
 
 
 /**
- * Tests if 5 ExecutableChannels to 10 servers could be initialized and opened
+ * Tests if 5 ExecutableChannels to 10 servers could be initialized and opened.
  */
  public void testExecutableChannels7() {
      int nums = 10; // max 11 by some limit on number of threads
@@ -223,7 +224,7 @@ public class ExecutableChannelsTest extends TestCase {
 
 
 /**
- * Tests if the ExecutableChannels could be initialized with servers from file
+ * Tests if the ExecutableChannels could be initialized with servers from file.
  */
  public void testExecutableChannels8() {
      try {
@@ -246,7 +247,7 @@ public class ExecutableChannelsTest extends TestCase {
 
 
 /**
- * Tests if the ExecutableChannels could be initialized with servers from file
+ * Tests if the ExecutableChannels could be initialized with servers from file.
  */
  public void testExecutableChannels9() {
      try {

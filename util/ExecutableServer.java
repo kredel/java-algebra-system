@@ -17,7 +17,7 @@ import edu.unima.ky.parallel.SocketChannel;
 
 /**
  * Class ExecutableServer
- * used to receive and execute classes
+ * used to receive and execute classes.
  * @author Heinz Kredel
  */
 
@@ -30,7 +30,7 @@ public class ExecutableServer extends Thread {
     protected ArrayList servers = null;
 
     /**
-     * DEFAULT_PORT to listen to
+     * DEFAULT_PORT to listen to.
      */
 
     public static final int DEFAULT_PORT = 7411;
@@ -43,6 +43,10 @@ public class ExecutableServer extends Thread {
 	this(DEFAULT_PORT);
     }
 
+    /**
+     * ExecutableServer.
+     * @param port
+     */
     public ExecutableServer(int port) {
 	this( new ChannelFactory(port) );
     }
@@ -54,7 +58,7 @@ public class ExecutableServer extends Thread {
 
 
     /**
-     * main method to start serving thread
+     * main method to start serving thread.
      * @param args args[0] is port
      */
 
@@ -77,21 +81,21 @@ public class ExecutableServer extends Thread {
 
 
 /**
- * thread initialization and start
+ * thread initialization and start.
  */ 
     public void init() {
 	this.start();
     }
 
 /**
- * number of servers
+ * number of servers.
  */ 
     public int size() {
 	return servers.size();
     }
 
 /**
- * run is main server method
+ * run is main server method.
  */ 
 
     public void run() {
@@ -124,7 +128,7 @@ public class ExecutableServer extends Thread {
 
 
 /**
- * terminate all servers
+ * terminate all servers.
  */ 
 
     public void terminate() {
@@ -166,7 +170,7 @@ public class ExecutableServer extends Thread {
 
 
 /**
- * class for executing incoming objects
+ * class for executing incoming objects.
  */ 
 
 class Executor extends Thread /*implements Runnable*/ {
@@ -180,6 +184,9 @@ class Executor extends Thread /*implements Runnable*/ {
 	list = p;
     } 
 
+/**
+ * run.
+ */    
     public void run() {
 	Object o;
 	RemoteExecutable re = null;

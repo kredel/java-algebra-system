@@ -29,15 +29,26 @@ public class GroebnerBase  {
 
     private static final Logger logger = Logger.getLogger(GroebnerBase.class);
 
-    /**
-     * Groebner base test
-     */
 
+    /**
+     * Groebner base test.
+     * @param C coefficient type.
+     * @param F polynomial list.
+     * @return true, if F is a Groebner base, else false.
+     */
     public static <C extends RingElem<C>> 
            boolean isGB(List<GenPolynomial<C>> F) {  
         return isGB(0,F);
     }
 
+
+    /**
+     * Groebner base test.
+     * @param C coefficient type.
+     * @param modv module variable nunber.
+     * @param F polynomial list.
+     * @return true, if F is a Groebner base, else false.
+     */
     public static <C extends RingElem<C>> 
            boolean isGB(int modv, List<GenPolynomial<C>> F) {  
         GenPolynomial<C> pi, pj, s, h;
@@ -67,14 +78,24 @@ public class GroebnerBase  {
 
     /**
      * Groebner base using pairlist class.
+     * @param C coefficient type.
+     * @param F polynomial list.
+     * @return GB(F) a Groebner base of F.
      */
-
     public static <C extends RingElem<C>> 
            ArrayList<GenPolynomial<C>> 
                   GB(List<GenPolynomial<C>> F) {  
         return GB(0,F);
     }
 
+
+    /**
+     * Groebner base using pairlist class.
+     * @param C coefficient type.
+     * @param modv module variable nunber.
+     * @param F polynomial list.
+     * @return GB(F) a Groebner base of F.
+     */
     public static <C extends RingElem<C>> 
            ArrayList<GenPolynomial<C>> 
                   GB(int modv, 
@@ -166,8 +187,10 @@ public class GroebnerBase  {
 
     /**
      * Minimal ordered groebner basis.
+     * @param C coefficient type.
+     * @param Gp a Groebner base.
+     * @return a reduced Groebner base of Gp.
      */
-
     public static <C extends RingElem<C>>
            ArrayList<GenPolynomial<C>> 
                   GBmi(List<GenPolynomial<C>> Gp) {  

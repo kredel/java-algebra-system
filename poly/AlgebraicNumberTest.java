@@ -18,14 +18,14 @@ import edu.jas.poly.AlgebraicNumber;
 
 
 /**
- * AlgebraicNumber Test using JUnit 
+ * AlgebraicNumber Test using JUnit. 
  * @author Heinz Kredel.
  */
 
 public class AlgebraicNumberTest extends TestCase {
 
 /**
- * main
+ * main.
  */
    public static void main (String[] args) {
           junit.textui.TestRunner.run( suite() );
@@ -33,13 +33,14 @@ public class AlgebraicNumberTest extends TestCase {
 
 /**
  * Constructs a <CODE>AlgebraicNumberTest</CODE> object.
- * @param name String
+ * @param name String.
  */
    public AlgebraicNumberTest(String name) {
           super(name);
    }
 
 /**
+ * suite.
  */ 
  public static Test suite() {
      TestSuite suite= new TestSuite(AlgebraicNumberTest.class);
@@ -80,7 +81,7 @@ public class AlgebraicNumberTest extends TestCase {
 
 
 /**
- * Test constructor and toString
+ * Test constructor and toString.
  * 
  */
  public void testConstruction() {
@@ -101,7 +102,7 @@ public class AlgebraicNumberTest extends TestCase {
 
 
 /**
- * Test random polynomial
+ * Test random polynomial.
  * 
  */
  public void testRandom() {
@@ -118,7 +119,7 @@ public class AlgebraicNumberTest extends TestCase {
 
 
 /**
- * Test addition
+ * Test addition.
  * 
  */
  public void testAddition() {
@@ -152,7 +153,7 @@ public class AlgebraicNumberTest extends TestCase {
 
 
 /**
- * Test object multiplication
+ * Test object multiplication.
  * 
  */
 

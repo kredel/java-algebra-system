@@ -14,14 +14,14 @@ import edu.jas.structure.RingElem;
 
 
 /**
- * ModGenPolynomial Test using JUnit 
+ * ModGenPolynomial Test using JUnit.
  * @author Heinz Kredel.
  */
 
 public class ModGenPolynomialTest extends TestCase {
 
 /**
- * main
+ * main.
  */
    public static void main (String[] args) {
           junit.textui.TestRunner.run( suite() );
@@ -29,13 +29,14 @@ public class ModGenPolynomialTest extends TestCase {
 
 /**
  * Constructs a <CODE>ModGenPolynomialTest</CODE> object.
- * @param name String
+ * @param name String.
  */
    public ModGenPolynomialTest(String name) {
           super(name);
    }
 
 /**
+ * suite.
  */ 
  public static Test suite() {
      TestSuite suite= new TestSuite(ModGenPolynomialTest.class);
@@ -71,7 +72,7 @@ public class ModGenPolynomialTest extends TestCase {
 
 
 /**
- * Test constructor and toString
+ * Test constructor and toString.
  * 
  */
  public void testConstruction() {
@@ -88,7 +89,7 @@ public class ModGenPolynomialTest extends TestCase {
 
 
 /**
- * Test random polynomial
+ * Test random polynomial.
  * 
  */
  public void testRandom() {
@@ -103,7 +104,7 @@ public class ModGenPolynomialTest extends TestCase {
 
 
 /**
- * Test addition
+ * Test addition.
  * 
  */
  public void testAddition() {
@@ -142,7 +143,7 @@ public class ModGenPolynomialTest extends TestCase {
 
 
 /**
- * Test object multiplication
+ * Test object multiplication.
  * 
  */
 

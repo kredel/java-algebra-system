@@ -33,15 +33,20 @@ public class ModGroebnerBase  {
 
     private static final Logger logger = Logger.getLogger(ModGroebnerBase.class);
 
-    /**
-     * Module Groebner base test
-     */
+/**
+ * Module Groebner base test.
+ */
 
     public static <C extends RingElem<C>> 
            boolean isGB(int modv, List<GenPolynomial<C>> F) {  
         return GroebnerBase.isGB(modv,F);
     }
 
+ /**
+  * isGB.
+  * @param M a module basis.
+  * @return true, if M is a Groebner base, else false.
+  */
     public static <C extends RingElem<C>>
            boolean isGB(ModuleList<C> M) {  
         if ( M == null || M.list == null ) {
@@ -65,6 +70,11 @@ public class ModGroebnerBase  {
         return GroebnerBase.GB(modv,F);
     }
 
+    /**
+     * GB.
+     * @param M a module basis.
+     * @return GB(M), a Groebner base of M.
+     */
     public static <C extends RingElem<C>>
            ModuleList<C> GB(ModuleList<C> M) {  
         ModuleList<C> N = M;

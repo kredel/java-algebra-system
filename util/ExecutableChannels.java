@@ -18,7 +18,7 @@ import edu.unima.ky.parallel.SocketChannel;
 
 /**
  * Class ExecutableChannels
- * used to receive and execute classes
+ * used to receive and execute classes.
  * @author Heinz Kredel
  */
 
@@ -34,15 +34,18 @@ public class ExecutableChannels {
     protected final int DEFAULT_PORT = ChannelFactory.DEFAULT_PORT;
 
 
+    /**
+     * Internal constructor.
+     */
     protected ExecutableChannels() {
         cf = new ChannelFactory();
     }
 
 
     /**
-     * Constructor from array of server:port strings
+     * Constructor from array of server:port strings.
+     * @param srvs A String array.
      */
-
     public ExecutableChannels(String[] srvs) {
         this();
         if ( srvs == null ) {
@@ -57,15 +60,16 @@ public class ExecutableChannels {
 
 
     /**
-     * Constructor from machine file
+     * Constructor from machine file.
+     * @param fname
+     * @throws FileNotFoundException.
      */
-
     public ExecutableChannels(String fname) throws FileNotFoundException {
         this();
         BufferedReader in = new BufferedReader( new FileReader( fname ) );
         String line = null;
         List list = new ArrayList();
-	int x;
+        int x;
         try {
             while (true) {
                if ( !in.ready() ) {
@@ -116,7 +120,7 @@ public class ExecutableChannels {
 
 
 /**
- * String representation
+ * String representation.
  */ 
     public String toString() {
         StringBuffer s = new StringBuffer("ExecutableChannels(");
@@ -134,7 +138,7 @@ public class ExecutableChannels {
 
 
 /**
- * number of servers
+ * number of servers.
  */ 
     public int numServers() {
         if ( servers != null ) {
@@ -145,7 +149,7 @@ public class ExecutableChannels {
     }
 
 /**
- * get master host
+ * get master host.
  */ 
     public String getMasterHost() {
         if ( servers != null && servers.length > 0 ) {
@@ -156,7 +160,7 @@ public class ExecutableChannels {
     }
 
 /**
- * get master port
+ * get master port.
  */ 
     public int getMasterPort() {
         if ( ports != null && ports.length > 0 ) {
@@ -168,7 +172,7 @@ public class ExecutableChannels {
 
 
 /**
- * number of channels
+ * number of channels.
  */ 
     public int numChannels() {
         if ( channels != null ) {
@@ -180,13 +184,14 @@ public class ExecutableChannels {
 
 
 /**
- * open, setup of SocketChannels 
- */ 
+ * open, setup of SocketChannels. 
+ * @throws IOException.
+ */
     public void open() throws IOException {
         logger.debug("opening " + servers.length + " channels");
-	if ( servers.length <= 1 ) {
-	    throw new IOException("to few servers");
-	}
+        if ( servers.length <= 1 ) {
+            throw new IOException("to few servers");
+        }
         channels = new SocketChannel[ servers.length-1 ];
         for ( int i = 1; i < servers.length; i++ ) {
             channels[i-1] = cf.getChannel( servers[i], ports[i] );
@@ -195,13 +200,16 @@ public class ExecutableChannels {
 
 
 /**
- * open, setup of SocketChannels 
- */ 
+ * open, setup of SocketChannels. 
+ * If nc &gt; servers.length open in round robin fashion.
+ * @param nc number of channels to open.
+ * @throws IOException.
+ */
     public void open(int nc) throws IOException {
         logger.debug("opening " + nc + " channels");
-	if ( servers.length <= 1 ) {
-	    throw new IOException("to few servers");
-	}
+        if ( servers.length <= 1 ) {
+            throw new IOException("to few servers");
+        }
         channels = new SocketChannel[ nc ];
         int j = 1; // 0 is master
         for ( int i = 0; i < channels.length; i++ ) {
@@ -215,7 +223,7 @@ public class ExecutableChannels {
 
 
 /**
- * close all channels and ChannelFactory
+ * close all channels and ChannelFactory.
  */ 
 
     public void close() {
@@ -225,7 +233,7 @@ public class ExecutableChannels {
             for ( int i = 0; i < channels.length; i++ ) {
                if ( channels[i] != null ) {
                   channels[i].close();
-		  channels[i] = null;
+                  channels[i] = null;
                }
            }
            channels = null;
@@ -235,8 +243,8 @@ public class ExecutableChannels {
 
 
 /**
- * getChannel
- * @param i channel number
+ * getChannel.
+ * @param i channel number.
  */ 
     public SocketChannel getChannel(int i) {
         if ( channels != null && 0 <= i && i < channels.length ) {
@@ -248,7 +256,7 @@ public class ExecutableChannels {
 
 
 /**
- * getChannels
+ * getChannels.
  */ 
     public SocketChannel[] getChannels() {
         return channels;
@@ -256,9 +264,9 @@ public class ExecutableChannels {
 
 
 /**
- * send on channel i
- * @param i channel number
- * @param o object to send
+ * send on channel i.
+ * @param i channel number.
+ * @param o object to send.
  */ 
     public void send(int i, Object o) throws IOException {
         if ( channels != null && 0 <= i && i < channels.length ) {
@@ -268,16 +276,16 @@ public class ExecutableChannels {
 
 
 /**
- * recieve on channel i
- * @param i channel number
- * @return object recieved
+ * recieve on channel i.
+ * @param i channel number.
+ * @return object recieved.
  */ 
     public Object receive(int i) throws IOException, ClassNotFoundException {
         if ( channels != null && 0 <= i && i < channels.length ) {
            return channels[i].receive();
         } else {
-	    return null;
-	}
+            return null;
+        }
 
     }
 

@@ -12,8 +12,9 @@ import java.util.List;
 /**
  * ModulElement interface for use with the polynomial classes.
  * @author Heinz Kredel
+ * @param M module type.
+ * @param C coefficient type.
  */
-
 public interface ModulElem<M extends ModulElem<M,C>,
                            C extends RingElem> 
                  extends Cloneable, 

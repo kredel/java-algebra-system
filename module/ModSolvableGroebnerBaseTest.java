@@ -38,7 +38,7 @@ import edu.jas.module.ModuleList;
 
 
 /**
- * ModSolvableGroebnerBase Test using JUnit 
+ * ModSolvableGroebnerBase Test using JUnit.
  * @author Heinz Kredel.
  */
 
@@ -47,7 +47,7 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
     private static final Logger logger = Logger.getLogger(ModSolvableGroebnerBaseTest.class);
 
 /**
- * main
+ * main.
  */
    public static void main (String[] args) {
           BasicConfigurator.configure();
@@ -56,13 +56,14 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
 
 /**
  * Constructs a <CODE>ModSolvableGroebnerBaseTest</CODE> object.
- * @param name String
+ * @param name String.
  */
    public ModSolvableGroebnerBaseTest(String name) {
           super(name);
    }
 
 /**
+ * suite.
  */ 
  public static Test suite() {
      TestSuite suite= new TestSuite(ModSolvableGroebnerBaseTest.class);
@@ -124,7 +125,7 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
 
 
 /**
- * Test sequential left GBase
+ * Test sequential left GBase.
  * 
  */
  public void testSequentialModSolvableGB() {
@@ -183,7 +184,7 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
 
 
 /**
- * Test sequential twosided GBase
+ * Test sequential twosided GBase.
  * 
  */
  public void testSequentialModTSSolvableGB() {
@@ -238,7 +239,7 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
 
 
 /**
- * Test sequential Weyl GBase
+ * Test sequential Weyl GBase.
  * 
  */
  public void testSequentialModSolvableWeylGB() {

@@ -36,14 +36,14 @@ import edu.jas.module.ModuleList;
 
 
 /**
- * GenPolynomialTokenizer Test using JUnit 
- * @author Heinz Kredel.
+ * GenPolynomialTokenizer Test using JUnit.
+ * @author Heinz Kredel
  */
 
 public class GenPolynomialTokenizerTest extends TestCase {
 
 /**
- * main
+ * main.
  */
    public static void main (String[] args) {
           junit.textui.TestRunner.run( suite() );
@@ -51,13 +51,14 @@ public class GenPolynomialTokenizerTest extends TestCase {
 
 /**
  * Constructs a <CODE>GenPolynomialTokenizerTest</CODE> object.
- * @param name String
+ * @param name String.
  */
    public GenPolynomialTokenizerTest(String name) {
           super(name);
    }
 
 /**
+ * suite.
  */ 
  public static Test suite() {
      TestSuite suite= new TestSuite(GenPolynomialTokenizerTest.class);
@@ -87,7 +88,7 @@ public class GenPolynomialTokenizerTest extends TestCase {
 
 
 /**
- * Test rational polynomial
+ * Test rational polynomial.
  * 
  */
  public void testBigRational() {
@@ -137,7 +138,7 @@ public class GenPolynomialTokenizerTest extends TestCase {
 
 
 /**
- * Test integer polynomial
+ * Test integer polynomial.
  * 
  */
  public void testBigInteger() {
@@ -187,7 +188,7 @@ public class GenPolynomialTokenizerTest extends TestCase {
 
 
 /**
- * Test moduar integer polynomial
+ * Test modular integer polynomial.
  * 
  */
  public void testModInteger() {
@@ -217,7 +218,6 @@ public class GenPolynomialTokenizerTest extends TestCase {
      pfac = new GenPolynomialRing<ModInteger>(fac,nvar,tord,vars);
      assertEquals("pfac == f.ring", pfac, f.ring );
 
-
      GenPolynomial a = (GenPolynomial)f.list.get(0);
      //System.out.println("a = " + a);
      assertTrue("isONE( f.get(0) )", a.isONE() );
@@ -237,7 +237,7 @@ public class GenPolynomialTokenizerTest extends TestCase {
 
 
 /**
- * Test complex polynomial
+ * Test complex polynomial.
  * 
  */
  public void testBigComplex() {
@@ -287,7 +287,7 @@ public class GenPolynomialTokenizerTest extends TestCase {
 
 
 /**
- * Test quaternion polynomial
+ * Test quaternion polynomial.
  * 
  */
  public void testBigQuaternion() {
@@ -337,7 +337,7 @@ public class GenPolynomialTokenizerTest extends TestCase {
 
 
 /**
- * Test rational solvable polynomial
+ * Test rational solvable polynomial.
  * 
  */
  public void testSolvableBigRational() {
@@ -394,7 +394,7 @@ public class GenPolynomialTokenizerTest extends TestCase {
 
 
 /**
- * Test mod integer solvable polynomial
+ * Test mod integer solvable polynomial.
  * 
  */
  public void testSolvableModInteger() {
@@ -451,7 +451,7 @@ public class GenPolynomialTokenizerTest extends TestCase {
 
 
 /**
- * Test integer polynomial module
+ * Test integer polynomial module.
  * 
  */
  public void testBigIntegerModule() {
@@ -528,7 +528,7 @@ public class GenPolynomialTokenizerTest extends TestCase {
 
 
 /**
- * Test rational solvable polynomial module
+ * Test rational solvable polynomial module.
  * 
  */
  public void testBigRationalSolvableModule() {

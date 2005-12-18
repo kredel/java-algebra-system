@@ -11,14 +11,14 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 /**
- * BigRational Test using JUnit 
+ * BigRational Test using JUnit. 
  * @author Heinz Kredel.
  */
 
 public class BigRationalTest extends TestCase {
 
 /**
- * main
+ * main.
  */
    public static void main (String[] args) {
           junit.textui.TestRunner.run( suite() );
@@ -26,7 +26,7 @@ public class BigRationalTest extends TestCase {
 
 /**
  * Constructs a <CODE>BigRationalTest</CODE> object.
- * @param name String
+ * @param name String.
  */
    public BigRationalTest(String name) {
           super(name);
@@ -54,7 +54,7 @@ public class BigRationalTest extends TestCase {
 
 
 /**
- * Test static initialization and constants
+ * Test static initialization and constants.
  * 
  */
  public void testConstants() {
@@ -75,7 +75,7 @@ public class BigRationalTest extends TestCase {
 
 
 /**
- * Test constructor and toString
+ * Test constructor and toString.
  * 
  */
  public void testConstructor() {
@@ -105,7 +105,7 @@ public class BigRationalTest extends TestCase {
 
 
 /**
- * Test random rationals
+ * Test random rationals.
  * 
  */
  public void testRandom() {
@@ -121,7 +121,7 @@ public class BigRationalTest extends TestCase {
 
 
 /**
- * Test addition
+ * Test addition.
  * 
  */
  public void testAddition() {
@@ -143,7 +143,7 @@ public class BigRationalTest extends TestCase {
 
 
 /**
- * Test multiplication
+ * Test multiplication.
  * 
  */
  public void testMultiplication() {

@@ -24,7 +24,7 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 
 /**
- * DistributedList Test using JUnit 
+ * DistributedList Test using JUnit.
  * @author Heinz Kredel
  */
 
@@ -40,7 +40,7 @@ public class DistributedListTest extends TestCase {
 
 /**
  * Constructs a <CODE>DistributedListTest</CODE> object.
- * @param name String
+ * @param name String.
  */
    public DistributedListTest(String name) {
           super(name);

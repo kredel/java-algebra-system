@@ -38,8 +38,8 @@ public class BigComplex implements RingElem<BigComplex>,
 
     /** The constructor creates a BigComplex object 
      * from two BigRational objects real and imaginary part. 
-     * @param r real part
-     * @param i imaginary part
+     * @param r real part.
+     * @param i imaginary part.
      */
     public BigComplex(BigRational r, BigRational i) {
         re = r;
@@ -50,7 +50,7 @@ public class BigComplex implements RingElem<BigComplex>,
     /** The constructor creates a BigComplex object 
      * from a BigRational object as real part, 
      * the imaginary part is set to 0. 
-     * @param r real part
+     * @param r real part.
      */
     public BigComplex(BigRational r) {
         this(r,BigRational.ZERO);
@@ -60,7 +60,7 @@ public class BigComplex implements RingElem<BigComplex>,
     /** The constructor creates a BigComplex object 
      * from a long element as real part, 
      * the imaginary part is set to 0. 
-     * @param r real part
+     * @param r real part.
      */
     public BigComplex(long r) {
         this(new BigRational(r),BigRational.ZERO);
@@ -77,7 +77,7 @@ public class BigComplex implements RingElem<BigComplex>,
 
     /** The constructor creates a BigComplex object 
      * from a String representation.
-     * @param s
+     * @param s string of a BigComplex.
      * @throws NumberFormatException
      */
     public BigComplex(String s) throws NumberFormatException {
@@ -334,7 +334,7 @@ public class BigComplex implements RingElem<BigComplex>,
 
     /** Complex number difference.  
      * @param A and B are complex numbers.  
-     * @return A-B. 
+     * @return A-B.
      */
     public static BigComplex CDIF(BigComplex A, BigComplex B) {
       if ( A == null ) return null;
@@ -354,7 +354,7 @@ public class BigComplex implements RingElem<BigComplex>,
 
     /** Complex number negative.  
      * @param A is a complex number.  
-     * @return -A. 
+     * @return -A
      */
     public static BigComplex CNEG(BigComplex A) {
       if ( A == null ) return null;
@@ -417,7 +417,7 @@ public class BigComplex implements RingElem<BigComplex>,
 
     /** Complex number product.  
      * @param A and B are complex numbers.  
-     * @return A*B. 
+     * @return A*B.
      */
     public static BigComplex CPROD(BigComplex A, BigComplex B) {
       if ( A == null ) return null;

@@ -29,14 +29,14 @@ import edu.jas.module.ModuleList;
 
 
 /**
- * SolvableModuleList Test using JUnit 
+ * SolvableModuleList Test using JUnit.
  * @author Heinz Kredel.
  */
 
 public class SolvableModuleListTest extends TestCase {
 
 /**
- * main
+ * main.
  */
    public static void main (String[] args) {
           junit.textui.TestRunner.run( suite() );
@@ -44,13 +44,14 @@ public class SolvableModuleListTest extends TestCase {
 
 /**
  * Constructs a <CODE>SolvableModuleListTest</CODE> object.
- * @param name String
+ * @param name String.
  */
    public SolvableModuleListTest(String name) {
           super(name);
    }
 
 /**
+ * suite.
  */ 
  public static Test suite() {
      TestSuite suite= new TestSuite(SolvableModuleListTest.class);
@@ -95,7 +96,7 @@ public class SolvableModuleListTest extends TestCase {
 
 
 /**
- * Test constructor and toString
+ * Test constructor and toString.
  * 
  */
  public void testConstructor() {
@@ -108,7 +109,7 @@ public class SolvableModuleListTest extends TestCase {
 
 
 /**
- * Test polynomial list
+ * Test polynomial list.
  * 
  */
  public void testPolynomialList() {
@@ -130,7 +131,7 @@ public class SolvableModuleListTest extends TestCase {
 
 
 /**
- * Test module list
+ * Test module list.
  * 
  */
  public void testModuleList() {
@@ -156,7 +157,7 @@ public class SolvableModuleListTest extends TestCase {
 
 
 /**
- * Test module and polynomial list
+ * Test module and polynomial list.
  * 
  */
  public void testModulePolynomialList() {
@@ -187,7 +188,7 @@ public class SolvableModuleListTest extends TestCase {
 
 
 /**
- * Test module and polynomial and module list
+ * Test module and polynomial and module list.
  * 
  */
  public void testModulePolynomialModuleList() {
@@ -226,7 +227,7 @@ public class SolvableModuleListTest extends TestCase {
 
 
 /**
- * Test module and polynomial and module and polynomial list
+ * Test module and polynomial and module and polynomial list.
  * 
  */
  public void testModulePolynomialModuleListPolynomial() {
@@ -274,7 +275,7 @@ public class SolvableModuleListTest extends TestCase {
 
 /**
  * Test module and polynomial and module and polynomial list
- * with WeylRelations
+ * with WeylRelations.
  * 
  */
  public void testWeylModulePolynomialModuleListPolynomial() {

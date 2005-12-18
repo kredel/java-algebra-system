@@ -14,14 +14,14 @@ import edu.jas.structure.RingElem;
 
 
 /**
- * RatGenPolynomial Test using JUnit 
+ * RatGenPolynomial Test using JUnit.
  * @author Heinz Kredel.
  */
 
 public class RatGenPolynomialTest extends TestCase {
 
 /**
- * main
+ * main.
  */
    public static void main (String[] args) {
           junit.textui.TestRunner.run( suite() );
@@ -29,7 +29,7 @@ public class RatGenPolynomialTest extends TestCase {
 
 /**
  * Constructs a <CODE>RatGenPolynomialTest</CODE> object.
- * @param name String
+ * @param name String.
  */
    public RatGenPolynomialTest(String name) {
           super(name);
@@ -70,7 +70,7 @@ public class RatGenPolynomialTest extends TestCase {
 
 
 /**
- * Test constructor and toString
+ * Test constructor and toString.
  * 
  */
  public void testConstruction() {
@@ -87,8 +87,7 @@ public class RatGenPolynomialTest extends TestCase {
 
 
 /**
- * Test random polynomial
- * 
+ * Test random polynomial.
  */
  public void testRandom() {
      for (int i = 0; i < 7; i++) {
@@ -104,7 +103,7 @@ public class RatGenPolynomialTest extends TestCase {
 
 
 /**
- * Test addition
+ * Test addition.
  * 
  */
  public void testAddition() {
@@ -143,10 +142,9 @@ public class RatGenPolynomialTest extends TestCase {
 
 
 /**
- * Test object multiplication
+ * Test object multiplication.
  * 
  */
-
  public void testMultiplication() {
 
      a = fac.random(ll);
@@ -202,7 +200,7 @@ public class RatGenPolynomialTest extends TestCase {
 
 
 /**
- * Test object quotient and remainder
+ * Test object quotient and remainder.
  * 
  */
 

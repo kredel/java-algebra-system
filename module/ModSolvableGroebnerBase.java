@@ -40,9 +40,12 @@ public class ModSolvableGroebnerBase  {
     private static final Logger logger = Logger.getLogger(ModSolvableGroebnerBase.class);
 
     /**
-     * Module left Groebner base test
+     * Module left Groebner base test.
+     * @param C coefficient type.
+     * @param modv number of modul variables.
+     * @param F a module basis.
+     * @return true, if F is a left Groebner base, else false.
      */
-
     public static <C extends RingElem<C>>  
            boolean 
            isLeftGB(int modv, List<GenSolvablePolynomial<C>> F) {  
@@ -50,9 +53,11 @@ public class ModSolvableGroebnerBase  {
     }
 
     /**
-     * Module left Groebner base test
+     * Module left Groebner base test.
+     * @param C coefficient type.
+     * @param M a module basis.
+     * @return true, if M is a left Groebner base, else false.
      */
-
     public static <C extends RingElem<C>>
            boolean 
            isLeftGB(ModuleList<C> M) {  
@@ -70,8 +75,11 @@ public class ModSolvableGroebnerBase  {
 
     /**
      * Left Groebner base using pairlist class.
+     * @param C coefficient type.
+     * @param modv number of modul variables.
+     * @param F a module basis.
+     * @return leftGB(F) a left Groebner base for F.
      */
-
     public static <C extends RingElem<C>>
            List<GenSolvablePolynomial<C>> 
            leftGB(int modv, List<GenSolvablePolynomial<C>> F) {  
@@ -80,8 +88,10 @@ public class ModSolvableGroebnerBase  {
 
     /**
      * Left Groebner base using pairlist class.
+     * @param C coefficient type.
+     * @param M a module basis.
+     * @return leftGB(M) a left Groebner base for M.
      */
-
     public static <C extends RingElem<C>>
            ModuleList<C> 
            leftGB(ModuleList<C> M) {  
@@ -106,9 +116,12 @@ public class ModSolvableGroebnerBase  {
 
 
     /**
-     * Module twosided Groebner base test
+     * Module twosided Groebner base test.
+     * @param C coefficient type.
+     * @param modv number of modul variables.
+     * @param F a module basis.
+     * @return true, if F is a twosided Groebner base, else false.
      */
-
     public static <C extends RingElem<C>>
            boolean 
            isTwosidedGB(int modv, List<GenSolvablePolynomial<C>> F) {  
@@ -116,9 +129,11 @@ public class ModSolvableGroebnerBase  {
     }
 
     /**
-     * Module twosided Groebner base test
+     * Module twosided Groebner base test.
+     * @param C coefficient type.
+     * @param M a module basis.
+     * @return true, if M is a twosided Groebner base, else false.
      */
-
     public static <C extends RingElem<C>>
            boolean 
            isTwosidedGB(ModuleList<C> M) {  
@@ -136,8 +151,11 @@ public class ModSolvableGroebnerBase  {
 
     /**
      * Twosided Groebner base using pairlist class.
+     * @param C coefficient type.
+     * @param modv number of modul variables.
+     * @param F a module basis.
+     * @return tsGB(F) a twosided Groebner base for F.
      */
-
     public static <C extends RingElem<C>>
            List<GenSolvablePolynomial<C>> 
            twosidedGB(int modv, List<GenSolvablePolynomial<C>> F) {  
@@ -146,8 +164,11 @@ public class ModSolvableGroebnerBase  {
 
     /**
      * Twosided Groebner base using pairlist class.
+     * @param C coefficient type.
+     * @param modv number of modul variables.
+     * @param M a module basis.
+     * @return tsGB(M) a twosided Groebner base for M.
      */
-
     public static <C extends RingElem<C>>
            ModuleList<C> 
            twosidedGB(ModuleList<C> M) {  
@@ -248,7 +269,7 @@ public class ModSolvableGroebnerBase  {
 
     /**
      * test if vector has a component with a unit.
-     * return last index of one component
+     * return last index of one component.
      */
     /*
     public static int hasOne( List row ) {

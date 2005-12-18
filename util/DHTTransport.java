@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 /**
  * Transport Container for Distributed version of a HashTable.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class DHTTransport implements Serializable {
@@ -19,14 +19,19 @@ public class DHTTransport implements Serializable {
 
 
 /**
- * Constructs a new DHTTransport Container
- */ 
-
-  public DHTTransport(Object key, Object value) {
+ * Constructs a new DHTTransport Container.
+ * @param key 
+ * @param value
+ */
+public DHTTransport(Object key, Object value) {
       this.key = key;
       this.value = value;
   }
 
+
+  /**
+   * toString.
+   */
   public String toString() {
       return "" + this.getClass().getName()
              + "("+key+","+value+")";

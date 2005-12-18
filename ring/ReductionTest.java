@@ -20,7 +20,7 @@ import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolynomialList;
 
 /**
- * Reduction Test using JUnit 
+ * Reduction Test using JUnit.
  * @author Heinz Kredel.
  */
 
@@ -43,8 +43,10 @@ public class ReductionTest extends TestCase {
    }
 
 /**
- */ 
- public static Test suite() {
+ * suite.
+ * @return
+ */
+public static Test suite() {
      TestSuite suite= new TestSuite(ReductionTest.class);
      return suite;
    }
@@ -81,8 +83,7 @@ public class ReductionTest extends TestCase {
 
 
 /**
- * Test constants and empty list reduction
- * 
+ * Test constants and empty list reduction.
  */
  public void testRatReduction0() {
      L = new ArrayList<GenPolynomial<BigRational>>();
@@ -120,8 +121,7 @@ public class ReductionTest extends TestCase {
 
 
 /**
- * Test ReductionMod with constants and empty list reduction
- * 
+ * Test ReductionMod with constants and empty list reduction.
  */
  public void testRatReduction1() {
      L = new ArrayList<GenPolynomial<BigRational>>();
@@ -159,7 +159,7 @@ public class ReductionTest extends TestCase {
 
 
 /**
- * Test Rat reduction
+ * Test Rat reduction.
  * 
  */
  public void testRatReduction() {
@@ -184,7 +184,7 @@ public class ReductionTest extends TestCase {
 
 
 /**
- * Test Rat reduction Mod
+ * Test Rat reduction Mod.
  * 
  */
  public void testRatReductionMod() {
@@ -209,7 +209,7 @@ public class ReductionTest extends TestCase {
 
 
 /**
- * Test Complex reduction
+ * Test Complex reduction.
  * 
  */
 

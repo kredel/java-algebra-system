@@ -22,8 +22,8 @@ import edu.unima.ky.parallel.SocketChannel;
 
 /**
  * Server for the distributed version of a list.
- * @author Heinz Kredel.
- * @todo redistribute list for late comming clients, removal of elements
+ * @author Heinz Kredel
+ * @todo redistribute list for late comming clients, removal of elements.
  */
 
 public class DistributedListServer extends Thread {
@@ -43,17 +43,25 @@ public class DistributedListServer extends Thread {
 
 
 /**
- * Constructs a new DistributedListServer
+ * Constructs a new DistributedListServer.
  */ 
 
     public DistributedListServer() {
 	this(DEFAULT_PORT);
     }
 
+    /**
+     * DistributedListServer.
+     * @param port to run server on.
+     */
     public DistributedListServer(int port) {
 	this( new ChannelFactory(port) );
     }
 
+    /**
+     * DistributedListServer.
+     * @param cf ChannelFactory to use.
+     */
     public DistributedListServer(ChannelFactory cf) {
 	listElem = new Counter(0);
 	this.cf = cf;
@@ -61,6 +69,11 @@ public class DistributedListServer extends Thread {
 	theList = new TreeMap();
     }
 
+
+    /**
+     * main.
+     * Usage: DistributedListServer &lt;port&gt;
+     */
     public static void main(String[] args) {
 	int port = DEFAULT_PORT;
 	if ( args.length < 1 ) {
@@ -77,7 +90,7 @@ public class DistributedListServer extends Thread {
 
 
 /**
- * thread initialization and start
+ * thread initialization and start.
  */ 
     public void init() {
 	this.start();
@@ -85,7 +98,7 @@ public class DistributedListServer extends Thread {
 
 
 /**
- * main server method
+ * main server method.
  */ 
     public void run() {
        SocketChannel channel = null;
@@ -137,9 +150,8 @@ public class DistributedListServer extends Thread {
 
 
 /**
- * terminate all servers
+ * terminate all servers.
  */ 
-
     public void terminate() {
 	goon = false;
         logger.debug("terminating ListServer");
@@ -177,7 +189,7 @@ public class DistributedListServer extends Thread {
 
 
 /**
- * number of servers
+ * number of servers.
  */ 
     public int size() {
 	return servers.size();
@@ -196,22 +208,45 @@ class Counter implements Serializable, Comparable {
 
     private int value;
 
+
+    /**
+     * Counter.
+     */
     public Counter() {
 	this(0);
     }
 
+
+    /**
+     * Counter.
+     * @param v
+     */
     public Counter(int v) {
 	value = v;
     }
 
+
+    /**
+     * intValue.
+     * @return
+     */
     public int intValue() {
 	return value;
     }
 
+
+    /**
+     * add.
+     * @param v
+     */
     public void add(int v) { // synchronized elsewhere
 	value += v;
     }
 
+
+    /**
+     * compareTo.
+     */
     public int compareTo(Object o) throws ClassCastException {
 	if ( ! (o instanceof Counter) ) {
 	    throw new ClassCastException("Counter "+value+" o "+o);
@@ -226,6 +261,10 @@ class Counter implements Serializable, Comparable {
 	return 0;
     }
 
+
+    /**
+     * toString.
+     */  
     public String toString() {
 	return "Counter("+value+")";
     }
@@ -234,7 +273,7 @@ class Counter implements Serializable, Comparable {
 
 
 /**
- * Thread for broadcasting all incoming objects to the list clients
+ * Thread for broadcasting all incoming objects to the list clients.
  */ 
 
 class Broadcaster extends Thread /*implements Runnable*/ {
@@ -246,6 +285,13 @@ class Broadcaster extends Thread /*implements Runnable*/ {
     private final SortedMap theList;
 
 
+    /**
+     * Broadcaster.
+     * @param s SocketChannel to use.
+     * @param p list of broadcasters.
+     * @param le counter
+     * @param sm SortedMap with counter value pairs.
+     */
     public Broadcaster(SocketChannel s, List p, Counter le, SortedMap sm) {
 	channel = s;
 	bcaster = p;
@@ -254,11 +300,20 @@ class Broadcaster extends Thread /*implements Runnable*/ {
     } 
 
 
+    /**
+     * closeChannel.
+     */
     public void closeChannel() {
 	channel.close();
     }
 
 
+    /**
+     * sendChannel.
+     * @param n counter.
+     * @param o value.
+     * @throws IOException
+     */
     public void sendChannel(Object n, Object o) throws IOException {
 	synchronized (channel) {
 	   channel.send(n);
@@ -267,6 +322,10 @@ class Broadcaster extends Thread /*implements Runnable*/ {
     }
 
 
+    /**
+     * broadcast.
+     * @param o object to store and send.
+     */
     public void broadcast(Object o) {
 	Counter li = null;
 	synchronized (listElem) {
@@ -299,6 +358,9 @@ class Broadcaster extends Thread /*implements Runnable*/ {
     }
 
 
+    /**
+     * run.
+     */
     public void run() {
 	Object o;
 	boolean goon = true;
@@ -321,6 +383,10 @@ class Broadcaster extends Thread /*implements Runnable*/ {
     }
 
 
+    /**
+     * toString.
+     * @return
+     */
     public String toSting() {
 	return "Broadcaster("+channel+","+bcaster.size()+","+listElem+")";
     }

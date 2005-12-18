@@ -34,7 +34,7 @@ import edu.jas.module.Syzygy;
 
 
 /**
- * Syzygy Test using JUnit 
+ * Syzygy Test using JUnit. 
  * @author Heinz Kredel.
  */
 
@@ -43,7 +43,7 @@ public class SyzygyTest extends TestCase {
     private static final Logger logger = Logger.getLogger(SyzygyTest.class);
 
 /**
- * main
+ * main.
  */
    public static void main (String[] args) {
           BasicConfigurator.configure();
@@ -52,7 +52,7 @@ public class SyzygyTest extends TestCase {
 
 /**
  * Constructs a <CODE>SyzygyTest</CODE> object.
- * @param name String
+ * @param name String.
  */
    public SyzygyTest(String name) {
           super(name);
@@ -130,7 +130,7 @@ public class SyzygyTest extends TestCase {
 
 
 /**
- * Test sequential Syzygy
+ * Test sequential Syzygy.
  * 
  */
  public void testSequentialSyzygy() {
@@ -177,7 +177,7 @@ public class SyzygyTest extends TestCase {
 
 
 /**
- * Test sequential module Syzygy
+ * Test sequential module Syzygy.
  * 
  */
  public void testSequentialModSyzygy() {

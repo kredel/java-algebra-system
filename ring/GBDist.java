@@ -16,18 +16,22 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.util.RemoteExecutable;
 import edu.jas.util.ExecutableChannels;
 
-  /**
-   * Setup to run a distributed GB example.
-   * @author Heinz Kredel
-   */
+/**
+ * Setup to run a distributed GB example.
+ * @author Heinz Kredel
+ */
 
 public class GBDist<C extends RingElem<C>> {
 
   /**
    * Execute a distributed GB example.
    * Distribute clients and start master.
+   * @param F list of polynomials
+   * @param threads number of threads respectivly processes.
+   * @param mfile name of the machine file.
+   * @param port for GB server. 
+   * @return GB(F) a Groebner base for F.
    */
-
     public ArrayList<GenPolynomial<C>> 
            execute(List<GenPolynomial<C>> F, 
                    int threads, 
@@ -94,7 +98,7 @@ public class GBDist<C extends RingElem<C>> {
 
 
 /**
- * Objects of this class are to be send to a ExecutableServer
+ * Objects of this class are to be send to a ExecutableServer.
  */
 
 class GBClient<C extends RingElem<C>> implements RemoteExecutable {
@@ -102,12 +106,21 @@ class GBClient<C extends RingElem<C>> implements RemoteExecutable {
     String host;
     int port;
 
+    /**
+     * GBClient.
+     * @param host
+     * @param port
+     */
     public GBClient(String host, int port) {
 	this.host = host;
 	this.port = port;
     }
 
-    public void run() {
+     
+    /**
+     * run.
+     */
+    public void run() {		// run starts here.
 	try {
 	    GroebnerBaseDistributed.<C>Client(host, port);
 	} catch (IOException ignored) {

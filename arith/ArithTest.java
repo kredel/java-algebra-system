@@ -16,14 +16,14 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 /**
- * Arith Test using JUnit 
+ * Arith Test using JUnit.
  * @author Heinz Kredel.
  */
 
 public class ArithTest extends TestCase {
 
 /**
- * main
+ * main.
  */
    public static void main (String[] args) {
           junit.textui.TestRunner.run( suite() );
@@ -31,13 +31,14 @@ public class ArithTest extends TestCase {
 
 /**
  * Constructs a <CODE>ArithTest</CODE> object.
- * @param name String
+ * @param name String.
  */
    public ArithTest(String name) {
           super(name);
    }
 
 /**
+ * suite.
  */ 
  public static Test suite() {
      TestSuite suite= new TestSuite(ArithTest.class);
@@ -62,8 +63,7 @@ public class ArithTest extends TestCase {
 
 
 /**
- * Test static initialization and constants for BigInteger
- * 
+ * Test static initialization and constants for BigInteger.
  */
  public void testIntegerConstants() {
      BigInteger a, b, c, d, e;
@@ -88,8 +88,7 @@ public class ArithTest extends TestCase {
 
 
 /**
- * Test string constructor and toString for BigInteger
- * 
+ * Test string constructor and toString for BigInteger.
  */
  public void testIntegerConstructor() {
      BigInteger a, b, c, d, e;
@@ -127,7 +126,7 @@ public class ArithTest extends TestCase {
     //--------------------------------------------------------
 
 /**
- * Test random and compares Integer
+ * Test random and compares Integer.
  * 
  */
  public void testIntegerRandom() {
@@ -145,7 +144,7 @@ public class ArithTest extends TestCase {
 
 
 /**
- * Test addition for Integer
+ * Test addition for Integer.
  * 
  */
  public void testIntegerAddition() {
@@ -187,7 +186,7 @@ public class ArithTest extends TestCase {
 
 
 /**
- * Test multiplication for Integer
+ * Test multiplication for Integer.
  * 
  */
  public void testIntegerMultiplication() {
@@ -227,7 +226,7 @@ public class ArithTest extends TestCase {
  }
 
 /**
- * Test static initialization and constants for BigRational
+ * Test static initialization and constants for BigRational.
  * 
  */
  public void testRationalConstants() {
@@ -253,7 +252,7 @@ public class ArithTest extends TestCase {
 
 
 /**
- * Test static initialization and constants for BigComplex
+ * Test static initialization and constants for BigComplex.
  * 
  */
  public void testComplexConstants() {
@@ -277,7 +276,7 @@ public class ArithTest extends TestCase {
 
 
 /**
- * Test static initialization and constants for BigQuaternion
+ * Test static initialization and constants for BigQuaternion.
  * 
  */
  public void testQuaternionConstants() {
@@ -303,7 +302,7 @@ public class ArithTest extends TestCase {
 
 
 /**
- * Test string constructor and toString for BigRational
+ * Test string constructor and toString for BigRational.
  * 
  */
  public void testRationalConstructor() {
@@ -340,7 +339,7 @@ public class ArithTest extends TestCase {
    }
 
 /**
- * Test string constructor and toString for BigComplex
+ * Test string constructor and toString for BigComplex.
  * 
  */
  public void testComplexConstructor() {
@@ -377,7 +376,7 @@ public class ArithTest extends TestCase {
    }
 
 /**
- * Test string constructor and toString for BigQuaternion
+ * Test string constructor and toString for BigQuaternion.
  * 
  */
  public void testQuaternionConstructor() {
@@ -418,7 +417,7 @@ public class ArithTest extends TestCase {
 
 
 /**
- * Test random and compares Rational
+ * Test random and compares Rational.
  * 
  */
  public void testRationalRandom() {
@@ -433,7 +432,7 @@ public class ArithTest extends TestCase {
  }
 
 /**
- * Test random and compares Complex
+ * Test random and compares Complex.
  * 
  */
  public void testComplexRandom() {
@@ -448,7 +447,7 @@ public class ArithTest extends TestCase {
  }
 
 /**
- * Test random and compares Quaternion
+ * Test random and compares Quaternion.
  * 
  */
  public void testQuaternionRandom() {
@@ -467,7 +466,7 @@ public class ArithTest extends TestCase {
 
 
 /**
- * Test addition for Rational
+ * Test addition for Rational.
  * 
  */
  public void testRationalAddition() {
@@ -506,7 +505,7 @@ public class ArithTest extends TestCase {
  }
 
 /**
- * Test addition for Complex
+ * Test addition for Complex.
  * 
  */
  public void testComplexAddition() {
@@ -545,7 +544,7 @@ public class ArithTest extends TestCase {
  }
 
 /**
- * Test addition for Quaternion
+ * Test addition for Quaternion.
  * 
  */
  public void testQuaternionAddition() {
@@ -587,7 +586,7 @@ public class ArithTest extends TestCase {
 
 
 /**
- * Test multiplication for Rational
+ * Test multiplication for Rational.
  * 
  */
  public void testRationalMultiplication() {
@@ -627,7 +626,7 @@ public class ArithTest extends TestCase {
  }
 
 /**
- * Test multiplication for Complex
+ * Test multiplication for Complex.
  * 
  */
  public void testComplexMultiplication() {
@@ -667,7 +666,7 @@ public class ArithTest extends TestCase {
  }
 
 /**
- * Test multiplication for Quaternion
+ * Test multiplication for Quaternion.
  * 
  */
  public void testQuaternionMultiplication() {

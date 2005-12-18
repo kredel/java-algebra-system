@@ -14,14 +14,14 @@ import edu.jas.structure.RingElem;
 
 
 /**
- * IntGenPolynomial Test using JUnit 
+ * IntGenPolynomial Test using JUnit.
  * @author Heinz Kredel.
  */
 
 public class IntGenPolynomialTest extends TestCase {
 
 /**
- * main
+ * main.
  */
    public static void main (String[] args) {
           junit.textui.TestRunner.run( suite() );
@@ -29,7 +29,7 @@ public class IntGenPolynomialTest extends TestCase {
 
 /**
  * Constructs a <CODE>IntGenPolynomialTest</CODE> object.
- * @param name String
+ * @param name String.
  */
    public IntGenPolynomialTest(String name) {
           super(name);
@@ -70,7 +70,7 @@ public class IntGenPolynomialTest extends TestCase {
 
 
 /**
- * Test constructor and toString
+ * Test constructor and toString.
  * 
  */
  public void testConstruction() {
@@ -87,7 +87,7 @@ public class IntGenPolynomialTest extends TestCase {
 
 
 /**
- * Test random polynomial
+ * Test random polynomial.
  * 
  */
  public void testRandom() {
@@ -101,7 +101,7 @@ public class IntGenPolynomialTest extends TestCase {
 
 
 /**
- * Test addition
+ * Test addition.
  * 
  */
  public void testAddition() {
@@ -140,7 +140,7 @@ public class IntGenPolynomialTest extends TestCase {
 
 
 /**
- * Test object multiplication
+ * Test object multiplication.
  * 
  */
 
@@ -199,7 +199,7 @@ public class IntGenPolynomialTest extends TestCase {
 
 
 /**
- * Test object quotient and remainder
+ * Test object quotient and remainder.
  * 
  */
 

@@ -18,14 +18,14 @@ import junit.framework.TestSuite;
 import org.apache.log4j.BasicConfigurator;
 
 /**
- * RelationTable Test using JUnit 
+ * RelationTable Test using JUnit.
  * @author Heinz Kredel.
  */
 
 public class RelationTableTest extends TestCase {
 
 /**
- * main
+ * main.
  */
    public static void main (String[] args) {
           BasicConfigurator.configure();
@@ -34,13 +34,14 @@ public class RelationTableTest extends TestCase {
 
 /**
  * Constructs a <CODE>RelationTableTest</CODE> object.
- * @param name String
+ * @param name String.
  */
    public RelationTableTest(String name) {
           super(name);
    }
 
 /**
+ * suite.
  */ 
  public static Test suite() {
      TestSuite suite= new TestSuite(RelationTableTest.class);
@@ -64,7 +65,7 @@ public class RelationTableTest extends TestCase {
 
 
 /**
- * Test constructor and toString
+ * Test constructor and toString.
  * 
  */
  public void testConstructor() {
@@ -79,7 +80,7 @@ public class RelationTableTest extends TestCase {
 
 
 /**
- * Test update one key
+ * Test update one key.
  * 
  */
  public void testUpdateOneKey() {
@@ -145,7 +146,7 @@ public class RelationTableTest extends TestCase {
 
 
 /**
- * Test update more keys
+ * Test update more keys.
  * 
  */
  public void testUpdateKeys() {
@@ -192,7 +193,7 @@ public class RelationTableTest extends TestCase {
 
 
 /**
- * Test lookup one key
+ * Test lookup one key.
  * 
  */
  public void testLookupOneKey() {
@@ -298,7 +299,7 @@ public class RelationTableTest extends TestCase {
 
 
 /**
- * Test lookup keys
+ * Test lookup keys.
  * 
  */
  public void testLookupKeys() {
@@ -359,7 +360,7 @@ public class RelationTableTest extends TestCase {
 
 
 /**
- * Test lookup symmetric products
+ * Test lookup symmetric products.
  * 
  */
  public void testSymmetric() {

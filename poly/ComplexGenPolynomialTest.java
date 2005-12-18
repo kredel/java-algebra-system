@@ -14,14 +14,14 @@ import edu.jas.structure.RingElem;
 
 
 /**
- * ComplexGenPolynomial Test using JUnit 
+ * ComplexGenPolynomial Test using JUnit.
  * @author Heinz Kredel.
  */
 
 public class ComplexGenPolynomialTest extends TestCase {
 
 /**
- * main
+ * main.
  */
    public static void main (String[] args) {
           junit.textui.TestRunner.run( suite() );
@@ -29,13 +29,14 @@ public class ComplexGenPolynomialTest extends TestCase {
 
 /**
  * Constructs a <CODE>ComplexGenPolynomialTest</CODE> object.
- * @param name String
+ * @param name String.
  */
    public ComplexGenPolynomialTest(String name) {
           super(name);
    }
 
 /**
+ * suite.
  */ 
  public static Test suite() {
      TestSuite suite= new TestSuite(ComplexGenPolynomialTest.class);
@@ -70,7 +71,7 @@ public class ComplexGenPolynomialTest extends TestCase {
 
 
 /**
- * Test constructor and toString
+ * Test constructor and toString.
  * 
  */
  public void testConstruction() {
@@ -87,7 +88,7 @@ public class ComplexGenPolynomialTest extends TestCase {
 
 
 /**
- * Test random polynomial
+ * Test random polynomial.
  * 
  */
  public void testRandom() {
@@ -102,7 +103,7 @@ public class ComplexGenPolynomialTest extends TestCase {
 
 
 /**
- * Test addition
+ * Test addition.
  * 
  */
  public void testAddition() {
@@ -141,10 +142,9 @@ public class ComplexGenPolynomialTest extends TestCase {
 
 
 /**
- * Test object multiplication
+ * Test object multiplication.
  * 
  */
-
  public void testMultiplication() {
 
      a = fac.random(ll);

@@ -22,8 +22,8 @@ import edu.unima.ky.parallel.SocketChannel;
 
 /**
  * Server for the distributed version of a list.
- * @author Heinz Kredel.
- * @todo redistribute list for late comming clients, removal of elements
+ * @author Heinz Kredel
+ * @todo redistribute list for late comming clients, removal of elements.
  */
 
 public class DistHashTableServer extends Thread {
@@ -43,17 +43,26 @@ public class DistHashTableServer extends Thread {
 
 
 /**
- * Constructs a new DistHashTableServer
+ * Constructs a new DistHashTableServer.
  */ 
-
     public DistHashTableServer() {
 	this(DEFAULT_PORT);
     }
 
+
+/**
+ * DistHashTableServer.
+ * @param port to run server on.
+ */
     public DistHashTableServer(int port) {
 	this( new ChannelFactory(port) );
     }
 
+
+/**
+ * DistHashTableServer.
+ * @param cf ChannelFactory to use.
+ */
     public DistHashTableServer(ChannelFactory cf) {
 	listElem = new DHTCounter(0);
 	this.cf = cf;
@@ -61,6 +70,11 @@ public class DistHashTableServer extends Thread {
 	theList = new TreeMap();
     }
 
+
+/**
+ * main.
+ * Usage: DistHashTableServer &lt;port&gt;
+ */
     public static void main(String[] args) {
 	int port = DEFAULT_PORT;
 	if ( args.length < 1 ) {
@@ -77,7 +91,7 @@ public class DistHashTableServer extends Thread {
 
 
 /**
- * thread initialization and start
+ * thread initialization and start.
  */ 
     public void init() {
 	this.start();
@@ -85,7 +99,7 @@ public class DistHashTableServer extends Thread {
 
 
 /**
- * main server method
+ * main server method.
  */ 
     public void run() {
        SocketChannel channel = null;
@@ -137,9 +151,8 @@ public class DistHashTableServer extends Thread {
 
 
 /**
- * terminate all servers
+ * terminate all servers.
  */ 
-
     public void terminate() {
 	goon = false;
         logger.debug("terminating ListServer");
@@ -181,7 +194,7 @@ public class DistHashTableServer extends Thread {
 
 
 /**
- * number of servers
+ * number of servers.
  */ 
     public int size() {
         synchronized (servers) {
@@ -203,22 +216,45 @@ class DHTCounter implements Serializable, Comparable {
 
     private int value;
 
+
+/**
+ * DHTCounter.
+ */
     public DHTCounter() {
 	this(0);
     }
 
+
+/**
+ * DHTCounter.
+ * @param v
+ */
     public DHTCounter(int v) {
 	value = v;
     }
 
+
+/**
+ * intValue.
+ * @return
+ */
     public int intValue() {
 	return value;
     }
 
+
+/**
+ * add.
+ * @param v
+ */
     public void add(int v) { // synchronized elsewhere
 	value += v;
     }
 
+
+/**
+ * compareTo.
+ */
     public int compareTo(Object o) throws ClassCastException {
 	if ( ! (o instanceof DHTCounter) ) {
 	    throw new ClassCastException("DHTCounter "+value+" o "+o);
@@ -233,6 +269,10 @@ class DHTCounter implements Serializable, Comparable {
 	return 0;
     }
 
+
+/**
+ * toString.
+ */
     public String toString() {
 	return "DHTCounter("+value+")";
     }
@@ -241,7 +281,7 @@ class DHTCounter implements Serializable, Comparable {
 
 
 /**
- * Thread for broadcasting all incoming objects to the list clients
+ * Thread for broadcasting all incoming objects to the list clients.
  */ 
 
 class DHTBroadcaster extends Thread /*implements Runnable*/ {
@@ -253,6 +293,13 @@ class DHTBroadcaster extends Thread /*implements Runnable*/ {
     private final SortedMap theList;
 
 
+/**
+ * DHTBroadcaster.
+ * @param s SocketChannel to use.
+ * @param bc list of broadcasters.
+ * @param le DHTCounter.
+ * @param sm SortedMap with key value pairs.
+ */
     public DHTBroadcaster(SocketChannel s, 
                           List bc, 
                           DHTCounter le, 
@@ -264,21 +311,40 @@ class DHTBroadcaster extends Thread /*implements Runnable*/ {
     } 
 
 
+/**
+ * closeChannel.
+ */
     public void closeChannel() {
 	channel.close();
     }
 
 
+/**
+ * sendChannel.
+ * @param n key
+ * @param o value
+ * @throws IOException
+ */
     public void sendChannel(Object n, Object o) throws IOException {
         DHTTransport tc = new DHTTransport(n,o);
 	channel.send(tc);
     }
 
+
+/**
+ * sendChannel.
+ * @param tc DHTTransport.
+ * @throws IOException
+ */
     public void sendChannel(DHTTransport tc) throws IOException {
 	channel.send(tc);
     }
 
 
+/**
+ * broadcast.
+ * @param o DHTTransport element to broadcast.
+ */
     public void broadcast(Object o) {
         logger.debug("broadcast = "+o);
         DHTTransport tc = null;
@@ -318,6 +384,9 @@ class DHTBroadcaster extends Thread /*implements Runnable*/ {
     }
 
 
+/**
+ * run.
+ */
     public void run() {
 	Object o;
 	boolean goon = true;
@@ -343,6 +412,10 @@ class DHTBroadcaster extends Thread /*implements Runnable*/ {
     }
 
 
+/**
+ * toSting.
+ * @return a string representation of this.
+ */
     public String toSting() {
 	return "DHTBroadcaster("+channel+","+bcaster.size()+","+listElem+")";
     }

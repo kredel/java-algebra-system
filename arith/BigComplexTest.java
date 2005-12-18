@@ -11,7 +11,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 /**
- * BigComplex Test using JUnit 
+ * BigComplex Test using JUnit.
  * @author Heinz Kredel.
  */
 
@@ -26,13 +26,14 @@ public class BigComplexTest extends TestCase {
 
 /**
  * Constructs a <CODE>BigComplexTest</CODE> object.
- * @param name String
+ * @param name String.
  */
    public BigComplexTest(String name) {
           super(name);
    }
 
 /**
+ * suite.
  */ 
  public static Test suite() {
      TestSuite suite= new TestSuite(BigComplexTest.class);
@@ -54,7 +55,7 @@ public class BigComplexTest extends TestCase {
 
 
 /**
- * Test static initialization and constants
+ * Test static initialization and constants.
  * 
  */
  public void testConstants() {
@@ -75,7 +76,7 @@ public class BigComplexTest extends TestCase {
 
 
 /**
- * Test constructor and toString
+ * Test constructor and toString.
  * 
  */
  public void testConstructor() {
@@ -105,7 +106,7 @@ public class BigComplexTest extends TestCase {
 
 
 /**
- * Test random rationals
+ * Test random rationals.
  * 
  */
  public void testRandom() {
@@ -121,7 +122,7 @@ public class BigComplexTest extends TestCase {
 
 
 /**
- * Test addition
+ * Test addition.
  * 
  */
  public void testAddition() {
@@ -143,7 +144,7 @@ public class BigComplexTest extends TestCase {
 
 
 /**
- * Test multiplication
+ * Test multiplication.
  * 
  */
  public void testMultiplication() {

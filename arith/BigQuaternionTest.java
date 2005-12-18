@@ -11,14 +11,14 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 /**
- * BigQuaternion Test using JUnit 
+ * BigQuaternion Test using JUnit. 
  * @author Heinz Kredel.
  */
 
 public class BigQuaternionTest extends TestCase {
 
 /**
- * main
+ * main.
  */
    public static void main (String[] args) {
           junit.textui.TestRunner.run( suite() );
@@ -26,7 +26,7 @@ public class BigQuaternionTest extends TestCase {
 
 /**
  * Constructs a <CODE>BigQuaternionTest</CODE> object.
- * @param name String
+ * @param name String.
  */
    public BigQuaternionTest(String name) {
           super(name);
@@ -34,7 +34,10 @@ public class BigQuaternionTest extends TestCase {
 
 /**
  */ 
- public static Test suite() {
+ /**
+ * @return suite.
+ */
+public static Test suite() {
      TestSuite suite= new TestSuite(BigQuaternionTest.class);
      return suite;
    }
@@ -55,7 +58,7 @@ public class BigQuaternionTest extends TestCase {
 
 
 /**
- * Test static initialization and constants
+ * Test static initialization and constants.
  * 
  */
  public void testConstants() {
@@ -76,7 +79,7 @@ public class BigQuaternionTest extends TestCase {
 
 
 /**
- * Test constructor and toString
+ * Test constructor and toString.
  * 
  */
  public void testConstructor() {
@@ -105,7 +108,7 @@ public class BigQuaternionTest extends TestCase {
 
 
 /**
- * Test random rationals
+ * Test random rationals.
  * 
  */
  public void testRandom() {
@@ -121,7 +124,7 @@ public class BigQuaternionTest extends TestCase {
 
 
 /**
- * Test addition
+ * Test addition.
  * 
  */
  public void testAddition() {
@@ -143,7 +146,7 @@ public class BigQuaternionTest extends TestCase {
 
 
 /**
- * Test multiplication
+ * Test multiplication.
  * 
  */
  public void testMultiplication() {
@@ -168,7 +171,7 @@ public class BigQuaternionTest extends TestCase {
 
 
 /**
- * Test multiplication axioms
+ * Test multiplication axioms.
  * 
  */
  public void testMultiplicationAxioms() {

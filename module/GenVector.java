@@ -33,7 +33,7 @@ public class GenVector<C extends RingElem<C> >
 
 
     /**
-     * Constructors for GenVector
+     * Constructors for GenVector.
      */
 
     public GenVector(GenVectorModul< C > m) {
@@ -105,6 +105,11 @@ public class GenVector<C extends RingElem<C> >
     }
 
 
+/**
+ * compareTo.
+ * @param b other
+ * @return 1 if (this &lt; b), 0 if (this == b) or -1 if (this &gt; b).
+ */
     public int compareTo(GenVector<C> b) {
         if ( ! modul.equals(b.modul) ) {
             return -1;
@@ -123,6 +128,7 @@ public class GenVector<C extends RingElem<C> >
 
     /**
      * sign of vector.
+     * @return 1 if (this &lt; 0), 0 if (this == 0) or -1 if (this &gt; 0).
      */
     public int signum() {
         return compareTo( modul.getZERO() );

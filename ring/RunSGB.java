@@ -105,6 +105,11 @@ public class RunSGB {
   }
 
 
+    /**
+     * run Sequential.
+     * @param S polynomial list.
+     * @param action what to to.
+     */
     static void runSequential(PolynomialList S, String action) {
       List L = S.list; 
       List G = null;

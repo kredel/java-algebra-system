@@ -91,7 +91,7 @@ public class GenPolynomial<C extends RingElem<C> >
 
 
     /**
-     * Clone this GenPolynomial
+     * Clone this GenPolynomial.
      * @see java.lang.Object#clone()
      */
     public GenPolynomial<C> clone() {
@@ -102,7 +102,7 @@ public class GenPolynomial<C extends RingElem<C> >
 
     /**
      * Length of GenPolynomial. 
-     * @return number of coefficients of this GenPolynomial
+     * @return number of coefficients of this GenPolynomial.
      */
     public int length() { 
         return val.size(); 
@@ -119,7 +119,7 @@ public class GenPolynomial<C extends RingElem<C> >
 
 
     /**
-     * String representation of GenPolynomial
+     * String representation of GenPolynomial.
      * @see java.lang.Object#toString()
      */
     public String toString() {
@@ -779,7 +779,7 @@ public class GenPolynomial<C extends RingElem<C> >
     /**
      * GenPolynomial greatest comon divisor.
      * Correct only for univariate polynomials.
-     * Returns 1 for multivariate polynomials 
+     * Returns 1 for multivariate polynomials
      * (which is a good guess for random polynomials).
      * @param S GenPolynomial.
      * @return gcd(this,S).
@@ -942,7 +942,7 @@ public class GenPolynomial<C extends RingElem<C> >
      * GenPolynomial pseudo greatest comon divisor.
      * Uses pseudoRemainder for remainder.
      * Correct only for univariate polynomials.
-     * Returns 1 for multivariate polynomials 
+     * Returns 1 for multivariate polynomials.
      * (which is a good guess for random polynomials).
      * @param S GenPolynomial.
      * @return pgcd(this,S).

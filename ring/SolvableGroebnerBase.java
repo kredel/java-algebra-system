@@ -23,58 +23,79 @@ import edu.jas.ring.Reduction;
 /**
  * Solvable Groebner Bases class.
  * Implements left Groebner bases and left GB test.
- * @author Heinz Kredel
+ * @author Heinz Kredel.
  */
 
 public class SolvableGroebnerBase  {
 
     private static final Logger logger = Logger.getLogger(SolvableGroebnerBase.class);
 
-    /**
-     * Left Groebner base test
-     */
 
+    /**
+     * Left Groebner base test.
+     * @param C coefficient type.
+     * @param F solvable polynomial list.
+     * @return true, if F is a left Groebner base, else false.
+     */
     public static <C extends RingElem<C>>
            boolean isLeftGB(List<GenSolvablePolynomial<C>> F) {  
         return isLeftGB(0,F);
     }
 
+
+    /**
+     * Left Groebner base test.
+     * @param C coefficient type.
+     * @param modv number of module variables.
+     * @param F solvable polynomial list.
+     * @return true, if F is a left Groebner base, else false.
+     */
     public static <C extends RingElem<C>>
            boolean isLeftGB(int modv, List<GenSolvablePolynomial<C>> F) {  
         GenSolvablePolynomial<C> pi, pj, s, h;
-	for ( int i = 0; i < F.size(); i++ ) {
-	    pi = F.get(i);
+        for ( int i = 0; i < F.size(); i++ ) {
+            pi = F.get(i);
             for ( int j = i+1; j < F.size(); j++ ) {
                 pj = F.get(j);
-		if ( ! Reduction.<C>ModuleCriterion( modv, pi, pj ) ) {
+                if ( ! Reduction.<C>ModuleCriterion( modv, pi, pj ) ) {
                    continue;
                 }
-		// if ( ! Reduction.<C>GBCriterion4( pi, pj ) ) { continue; }
-		s = Reduction.<C>leftSPolynomial( pi, pj );
-		if ( s.isZERO() ) {
+                // if ( ! Reduction.<C>GBCriterion4( pi, pj ) ) { continue; }
+                s = Reduction.<C>leftSPolynomial( pi, pj );
+                if ( s.isZERO() ) {
                    continue;
                 }
-		h = Reduction.<C>leftNormalform( F, s );
-		if ( ! h.isZERO() ) {
+                h = Reduction.<C>leftNormalform( F, s );
+                if ( ! h.isZERO() ) {
                    return false;
                 }
-	    }
-	}
-	return true;
+            }
+        }
+        return true;
     }
 
 
     /**
-     * Twosided Groebner base test
+     * Twosided Groebner base test.
+     * @param C coefficient type.
+     * @param F solvable polynomial list.
+     * @return true, if F is a two-sided Groebner base, else false.
      */
-
     public static <C extends RingElem<C>>
            boolean isTwosidedGB(List<GenSolvablePolynomial<C>> Fp) {  
         return isTwosidedGB(0,Fp);
     }
 
+
+    /**
+     * Twosided Groebner base test.
+     * @param C coefficient type.
+     * @param modv number of module variables.
+     * @param F solvable polynomial list.
+     * @return true, if F is a two-sided Groebner base, else false.
+     */
     public static <C extends RingElem<C>>
-           boolean isTwosidedGB(int modv, List<GenSolvablePolynomial<C>> Fp) {  
+           boolean isTwosidedGB(int modv, List<GenSolvablePolynomial<C>> Fp) {
         if ( Fp == null || Fp.size() == 0 ) { // 0 not 1
             return true;
         }
@@ -83,8 +104,8 @@ public class SolvableGroebnerBase  {
             = new ArrayList<GenSolvablePolynomial<C>>( Fp.size() * (1+X.size()) );
         F.addAll( Fp );
         GenSolvablePolynomial<C> p, x, pi, pj, s, h;
-	for ( int i = 0; i < Fp.size(); i++ ) {
-	    p = Fp.get(i);
+        for ( int i = 0; i < Fp.size(); i++ ) {
+            p = Fp.get(i);
             for ( int j = 0; j < X.size(); j++ ) {
                 x = X.get(j);
                 p = p.multiply( x );
@@ -92,31 +113,34 @@ public class SolvableGroebnerBase  {
             }
         }
         //System.out.println("F to check = " + F);
-	for ( int i = 0; i < F.size(); i++ ) {
-	    pi = F.get(i);
+        for ( int i = 0; i < F.size(); i++ ) {
+            pi = F.get(i);
             for ( int j = i+1; j < F.size(); j++ ) {
                 pj = F.get(j);
-		if ( ! Reduction.<C>ModuleCriterion( modv, pi, pj ) ) {
+                if ( ! Reduction.<C>ModuleCriterion( modv, pi, pj ) ) {
                    continue;
                 }
-		// if ( ! Reduction.<C>GBCriterion4( pi, pj ) ) { continue; }
-		s = Reduction.<C>leftSPolynomial( pi, pj );
-		if ( s.isZERO() ) {
+                // if ( ! Reduction.<C>GBCriterion4( pi, pj ) ) { continue; }
+                s = Reduction.<C>leftSPolynomial( pi, pj );
+                if ( s.isZERO() ) {
                    continue;
                 }
-		h = Reduction.leftNormalform( F, s );
-		if ( ! h.isZERO() ) {
+                h = Reduction.leftNormalform( F, s );
+                if ( ! h.isZERO() ) {
                    logger.info("is not TwosidedGB: " + h);
                    return false;
                 }
-	    }
-	}
-	return true;
+            }
+        }
+        return true;
     }
 
 
     /**
      * Generate solvable polynomials in each variable.
+     * @param C coefficient type.
+     * @param F solvable polynomial list.
+     * @return a list of solvable univariate polynomials for each variable.
      */
     protected static <C extends RingElem<C>> 
               List<GenSolvablePolynomial<C>> 
@@ -124,6 +148,15 @@ public class SolvableGroebnerBase  {
         return generateUnivar(0,F);
     }
 
+
+    /**
+     * Generate solvable polynomials in each variable.
+     * Module variable polynomials are not generated.
+     * @param C coefficient type.
+     * @param modv number of module variables.
+     * @param F solvable polynomial list.
+     * @return a list of solvable univariate polynomials for each variable.
+     */
     protected static <C extends RingElem<C>>
               List<GenSolvablePolynomial<C>> 
               generateUnivar(int modv, List<GenSolvablePolynomial<C>> F) {
@@ -148,14 +181,24 @@ public class SolvableGroebnerBase  {
 
     /**
      * Left Groebner base using pairlist class.
+     * @param C coefficient type.
+     * @param F solvable polynomial list.
+     * @return leftGB(F) a left Groebner base of F.
      */
-
     public static <C extends RingElem<C>>
            List<GenSolvablePolynomial<C>> 
            leftGB(List<GenSolvablePolynomial<C>> F) {  
         return leftGB(0,F);
     }
 
+
+    /**
+     * Left Groebner base using pairlist class.
+     * @param C coefficient type.
+     * @param modv number of module variables.
+     * @param F solvable polynomial list.
+     * @return leftGB(F) a left Groebner base of F.
+     */
     public static <C extends RingElem<C>>
            List<GenSolvablePolynomial<C>> 
            leftGB(int modv, List<GenSolvablePolynomial<C>> F) {  
@@ -169,19 +212,19 @@ public class SolvableGroebnerBase  {
             if ( p.length() > 0 ) {
                p = (GenSolvablePolynomial<C>)p.monic();
                if ( p.isONE() ) {
-		  G.clear(); G.add( p );
+                  G.clear(); G.add( p );
                   return G; // since no threads are activated
-	       }
+               }
                G.add( p );
-	       if ( pairlist == null ) {
+               if ( pairlist == null ) {
                    pairlist = new OrderedPairlist( modv, p.ring );
                }
                // putOne not required
                pairlist.put( p );
-	    } else { 
+            } else { 
                l--;
             }
-	}
+        }
         if ( l <= 1 ) {
            return G; // since no threads are activated
         }
@@ -198,7 +241,7 @@ public class SolvableGroebnerBase  {
               if ( false && logger.isDebugEnabled() ) {
                  logger.info("pi    = " + pi );
                  logger.info("pj    = " + pj );
-	      }
+              }
 
               S = Reduction.<C>leftSPolynomial( pi, pj );
               if ( S.isZERO() ) {
@@ -207,7 +250,7 @@ public class SolvableGroebnerBase  {
               }
               if ( false &&  logger.isDebugEnabled() ) {
                  logger.info("ht(S) = " + S.leadingExpVector() );
-	      }
+              }
 
               H = Reduction.<C>leftNormalform( G, S );
               if ( H.isZERO() ) {
@@ -216,36 +259,38 @@ public class SolvableGroebnerBase  {
               }
               if ( false && logger.isDebugEnabled() ) {
                  logger.info("ht(H) = " + H.leadingExpVector() );
-	      }
+              }
 
-	      H = (GenSolvablePolynomial<C>)H.monic();
-	      if ( H.isONE() ) {
-		  G.clear(); G.add( H );
+              H = (GenSolvablePolynomial<C>)H.monic();
+              if ( H.isONE() ) {
+                  G.clear(); G.add( H );
                   return G; // since no threads are activated
-	      }
+              }
               if ( logger.isDebugEnabled() ) {
                  logger.debug("H = " + H );
-	      }
+              }
               if ( H.length() > 0 ) {
-		 l++;
+                 l++;
                  G.add( H );
                  pairlist.put( H );
               }
-	}
+        }
         logger.debug("#sequential list = "+G.size());
-	G = leftGBMI(G);
+        G = leftGBMI(G);
         logger.info("pairlist #put = " + pairlist.putCount() 
                   + " #rem = " + pairlist.remCount()
                     // + " #total = " + pairlist.pairCount()
                    );
-	return G;
+        return G;
     }
 
 
     /**
      * Left minimal ordered groebner basis.
+     * @param C coefficient type.
+     * @param Gp a left Groebner base.
+     * @return leftGBmi(F) a minimal left Groebner base of Gp.
      */
-
     public static <C extends RingElem<C>>
            ArrayList<GenSolvablePolynomial<C>> 
            leftGBMI(List<GenSolvablePolynomial<C>> Gp) {  
@@ -255,10 +300,10 @@ public class SolvableGroebnerBase  {
         for ( GenSolvablePolynomial<C> a: Gp ) { 
             // a = (SolvablePolynomial) it.next();
             if ( a.length() != 0 ) { // always true
-	       // already monic a = a.monic();
+               // already monic a = a.monic();
                G.add( a );
-	    }
-	}
+            }
+        }
         if ( G.size() <= 1 ) {
            return G;
         }
@@ -268,32 +313,32 @@ public class SolvableGroebnerBase  {
         GenSolvablePolynomial<C> a, p;
         ArrayList<GenSolvablePolynomial<C>> F 
            = new ArrayList<GenSolvablePolynomial<C>>();
-	boolean mt;
+        boolean mt;
 
         while ( G.size() > 0 ) {
             a = G.remove(0);
-	    e = a.leadingExpVector();
+            e = a.leadingExpVector();
 
             it = G.listIterator();
-	    mt = false;
-	    while ( it.hasNext() && ! mt ) {
+            mt = false;
+            while ( it.hasNext() && ! mt ) {
                p = it.next();
                f = p.leadingExpVector();
-	       mt = ExpVector.EVMT( e, f );
-	    }
+               mt = ExpVector.EVMT( e, f );
+            }
             it = F.listIterator();
-	    while ( it.hasNext() && ! mt ) {
+            while ( it.hasNext() && ! mt ) {
                p = it.next();
                f = p.leadingExpVector();
-	       mt = ExpVector.EVMT( e, f );
-	    }
-	    if ( ! mt ) {
-		F.add( a );
-	    } else {
-		// System.out.println("dropped " + a.length());
-	    }
-	}
-	G = F;
+               mt = ExpVector.EVMT( e, f );
+            }
+            if ( ! mt ) {
+                F.add( a );
+            } else {
+                // System.out.println("dropped " + a.length());
+            }
+        }
+        G = F;
         if ( G.size() <= 1 ) {
            return G;
         }
@@ -301,26 +346,36 @@ public class SolvableGroebnerBase  {
         F = new ArrayList<GenSolvablePolynomial<C>>();
         while ( G.size() > 0 ) {
             a = G.remove(0);
-	    // System.out.println("doing " + a.length());
+            // System.out.println("doing " + a.length());
             a = Reduction.<C>leftNormalform( G, a );
             a = Reduction.<C>leftNormalform( F, a );
             F.add( a );
-	}
-	return F;
+        }
+        return F;
     }
 
 
 
     /**
      * Twosided Groebner base using pairlist class.
+     * @param C coefficient type.
+     * @param Fp solvable polynomial list.
+     * @return tsGB(Fp) a twosided Groebner base of Fp.
      */
-
     public static <C extends RingElem<C>>
            List<GenSolvablePolynomial<C>> 
            twosidedGB(List<GenSolvablePolynomial<C>> Fp) {  
         return twosidedGB(0,Fp);
     }
 
+
+    /**
+     * Twosided Groebner base using pairlist class.
+     * @param C coefficient type.
+     * @param modv number of module variables.
+     * @param Fp solvable polynomial list.
+     * @return tsGB(Fp) a twosided Groebner base of Fp.
+     */
     public static <C extends RingElem<C>>
            List<GenSolvablePolynomial<C>> 
            twosidedGB(int modv, List<GenSolvablePolynomial<C>> Fp) {  
@@ -333,8 +388,8 @@ public class SolvableGroebnerBase  {
             = new ArrayList<GenSolvablePolynomial<C>>( Fp.size() * (1+X.size()) );
         F.addAll( Fp );
         GenSolvablePolynomial<C> p, x, q;
-	for ( int i = 0; i < Fp.size(); i++ ) {
-	    p = Fp.get(i);
+        for ( int i = 0; i < Fp.size(); i++ ) {
+            p = Fp.get(i);
             for ( int j = 0; j < X.size(); j++ ) {
                 x = X.get(j);
                 q = p.multiply( x );
@@ -355,19 +410,19 @@ public class SolvableGroebnerBase  {
             if ( p.length() > 0 ) {
                p = (GenSolvablePolynomial<C>)p.monic();
                if ( p.isONE() ) {
-		  G.clear(); G.add( p );
+                  G.clear(); G.add( p );
                   return G; // since no threads are activated
-	       }
+               }
                G.add( p );
-	       if ( pairlist == null ) {
+               if ( pairlist == null ) {
                   pairlist = new OrderedPairlist( modv, p.ring );
                }
                // putOne not required
                pairlist.put( p );
-	    } else { 
+            } else { 
                l--;
             }
-	}
+        }
         //System.out.println("G to check = " + G);
         if ( l <= 1 ) { // 1 ok
            return G; // since no threads are activated
@@ -386,7 +441,7 @@ public class SolvableGroebnerBase  {
               if ( false && logger.isDebugEnabled() ) {
                  logger.debug("pi    = " + pi );
                  logger.debug("pj    = " + pj );
-	      }
+              }
 
               S = Reduction.<C>leftSPolynomial( pi, pj );
               if ( S.isZERO() ) {
@@ -395,7 +450,7 @@ public class SolvableGroebnerBase  {
               }
               if ( logger.isDebugEnabled() ) {
                  logger.debug("ht(S) = " + S.leadingExpVector() );
-	      }
+              }
 
               H = Reduction.<C>leftNormalform( G, S );
               if ( H.isZERO() ) {
@@ -404,18 +459,18 @@ public class SolvableGroebnerBase  {
               }
               if ( logger.isDebugEnabled() ) {
                  logger.debug("ht(H) = " + H.leadingExpVector() );
-	      }
+              }
 
-	      H = (GenSolvablePolynomial<C>)H.monic();
-	      if ( H.isONE() ) {
-		  G.clear(); G.add( H );
+              H = (GenSolvablePolynomial<C>)H.monic();
+              if ( H.isONE() ) {
+                  G.clear(); G.add( H );
                   return G; // since no threads are activated
-	      }
+              }
               if ( logger.isDebugEnabled() ) {
                  logger.debug("H = " + H );
-	      }
+              }
               if ( H.length() > 0 ) {
-		 l++;
+                 l++;
                  G.add( H );
                  pairlist.put( H );
                  for ( int j = 0; j < X.size(); j++ ) {
@@ -425,23 +480,23 @@ public class SolvableGroebnerBase  {
                      p = Reduction.<C>leftNormalform( G, p );
                      if ( !p.isZERO() ) {
                         p = (GenSolvablePolynomial<C>)p.monic();
-	                if ( p.isONE() ) {
-		           G.clear(); G.add( p );
+                        if ( p.isONE() ) {
+                           G.clear(); G.add( p );
                            return G; // since no threads are activated
-	                }
+                        }
                         G.add( p );
                         pairlist.put( p );
                      }
                  }
               }
-	}
+        }
         logger.debug("#sequential list = "+G.size());
-	G = leftGBMI(G);
+        G = leftGBMI(G);
         logger.info("pairlist #put = " + pairlist.putCount() 
                   + " #rem = " + pairlist.remCount()
                     // + " #total = " + pairlist.pairCount()
                    );
-	return G;
+        return G;
     }
 
 }

@@ -34,6 +34,8 @@ import edu.unima.ky.parallel.SocketChannel;
 /**
  * Groebner Base Distributed class.
  * Implements a distributed memory parallel version of Groebner bases.
+ * Using pairlist class, slaves maintain pairlist.
+ * Distributed slaves do reduction.
  * @author Heinz Kredel
  */
 
@@ -41,13 +43,17 @@ public class GroebnerBaseDistributed  {
 
     private static final Logger logger = Logger.getLogger(GroebnerBaseDistributed.class);
 
+
     /**
-     * Distributed Groebner base using pairlist class.
-     * slaves maintain pairlist
-     * distributed slaves do reduction
+     * Distributed Groebner base server part.
+     * Slaves maintain pairlist.
+     * @param C coefficient type.
+     * @param F polynomial list.
+     * @param threads number of threads to use.
+     * @param port the server is to listen.
+     * @return GB(F) a Groebner base of F.
+     * @throws IOException
      */
-
-
     public static <C extends RingElem<C>>
            ArrayList<GenPolynomial<C>> 
                   Server(List<GenPolynomial<C>> F, 
@@ -59,9 +65,16 @@ public class GroebnerBaseDistributed  {
 
 
     /**
-     * GB distributed server
+     * Distributed Groebner base server part.
+     * Slaves maintain pairlist.
+     * @param C coefficient type.
+     * @param modv number of module variables.
+     * @param F polynomial list.
+     * @param threads number of threads to use.
+     * @param port the server is to listen.
+     * @return GB(F) a Groebner base of F.
+     * @throws IOException
      */
-
     public static <C extends RingElem<C>>
            ArrayList<GenPolynomial<C>> 
                   Server(int modv,
@@ -172,9 +185,12 @@ public class GroebnerBaseDistributed  {
 
   
     /**
-     * GB distributed client
+     * GB distributed client.
+     * @param C coefficient type.
+     * @param host the server runns on.
+     * @param port of the server.
+     * @throws IOException
      */
-
     public static <C extends RingElem<C>>
            void 
                   Client(String host, int port) 
@@ -198,9 +214,12 @@ public class GroebnerBaseDistributed  {
 
     /**
      * Minimal ordered groebner basis, distributed.
-     * not jet distributed but threaded
+     * Not jet distributed but threaded.
+     * @param C coefficient type.
+     * @param Fp a Groebner base.
+     * @param T pool of threads to use.
+     * @return GBmi(F) a minimal Groebner base of Fp.
      */
-
     public static <C extends RingElem<C>>
            ArrayList<GenPolynomial<C>> 
                   MiServer(List<GenPolynomial<C>> Fp, 
@@ -279,18 +298,20 @@ public class GroebnerBaseDistributed  {
 
 
 
-    /**
-     * distributed server reducing worker threads
-     */
+/**
+ * Distributed server reducing worker threads.
+ * @param C coefficient type.
+ */
 
 class ReducerServer <C extends RingElem<C>> implements Runnable {
-        private Terminator pool;
-        private ChannelFactory cf;
-        private SocketChannel pairChannel;
-        private DistHashTable theList;
-        private List<GenPolynomial<C>> G;
-        private OrderedPairlist<C> pairlist;
-        private static Logger logger = Logger.getLogger(ReducerServer.class);
+      private Terminator pool;
+      private ChannelFactory cf;
+      private SocketChannel pairChannel;
+      private DistHashTable theList;
+      private List<GenPolynomial<C>> G;
+      private OrderedPairlist<C> pairlist;
+      private static Logger logger = Logger.getLogger(ReducerServer.class);
+
 
       ReducerServer(Terminator fin, 
                     ChannelFactory cf, 
@@ -303,6 +324,7 @@ class ReducerServer <C extends RingElem<C>> implements Runnable {
             this.G = G;
             pairlist = L;
       } 
+
 
       public void run() {
            logger.debug("reducer server running");
@@ -472,10 +494,15 @@ class ReducerServer <C extends RingElem<C>> implements Runnable {
  */
 
 class GBTransportMess implements Serializable {
+
+    /**
+     * toString.
+     */
     public String toString() {
         return "" + this.getClass().getName();
     }
 }
+
 
 /**
  * Distributed GB transport message for requests.
@@ -485,6 +512,7 @@ class GBTransportMessReq extends GBTransportMess {
     public GBTransportMessReq() {
     }
 }
+
 
 /**
  * Distributed GB transport message for termination.
@@ -500,14 +528,28 @@ class GBTransportMessEnd extends GBTransportMess {
  */
 
 class GBTransportMessPoly<C extends RingElem<C>> extends GBTransportMess {
+
+    /**
+     * The polynomial for transport.
+     */
     public final GenPolynomial<C> pol;
+
+    /**
+     * GBTransportMessPoly.
+     * @param p polynomial to transfered.
+     */
     public GBTransportMessPoly(GenPolynomial<C> p) {
         this.pol = p;
     }
+
+    /**
+     * toString.
+     */
     public String toString() {
         return super.toString() + "( " + pol + " )";
     }
 }
+
 
 /**
  * Distributed GB transport message for pairs.
@@ -515,13 +557,23 @@ class GBTransportMessPoly<C extends RingElem<C>> extends GBTransportMess {
 
 class GBTransportMessPair extends GBTransportMess {
     public final Pair pair;
+
+    /**
+     * GBTransportMessPair.
+     * @param p pair for transfer.
+     */
     public GBTransportMessPair(Pair p) {
         this.pair = p;
     }
+
+    /**
+     * toString.
+     */
     public String toString() {
         return super.toString() + "( " + pair + " )";
     }
 }
+
 
 /**
  * Distributed GB transport message for index pairs.
@@ -530,6 +582,11 @@ class GBTransportMessPair extends GBTransportMess {
 class GBTransportMessPairIndex extends GBTransportMess {
     public final Integer i;
     public final Integer j;
+
+    /**
+     * GBTransportMessPairIndex.
+     * @param p pair for transport.
+     */
     public GBTransportMessPairIndex(Pair p) {
         if ( p == null ) {
             throw new NullPointerException("pair may not be null");
@@ -537,28 +594,44 @@ class GBTransportMessPairIndex extends GBTransportMess {
         this.i = new Integer( p.i );
         this.j = new Integer( p.j );
     }
+
+    /**
+     * GBTransportMessPairIndex.
+     * @param i first index.
+     * @param j second index.
+     */
     public GBTransportMessPairIndex(int i, int j) {
         this.i = new Integer(i);
         this.j = new Integer(j);
     }
+
+    /**
+     * GBTransportMessPairIndex.
+     * @param i first index.
+     * @param j second index.
+     */
     public GBTransportMessPairIndex(Integer i, Integer j) {
         this.i = i;
         this.j = j;
     }
+
+    /**
+     * toString.
+     */
     public String toString() {
         return super.toString() + "( " + i + "," +j + " )";
     }
 }
 
 
-    /**
-     * distributed clients reducing worker threads
-     */
+/**
+ * Distributed clients reducing worker threads.
+ */
 
 class ReducerClient <C extends RingElem<C>> implements Runnable {
-        private SocketChannel pairChannel;
-        private DistHashTable theList;
-        private static Logger logger = Logger.getLogger(ReducerClient.class);
+      private SocketChannel pairChannel;
+      private DistHashTable theList;
+      private static Logger logger = Logger.getLogger(ReducerClient.class);
 
       ReducerClient(SocketChannel pc, DistHashTable dl) {
              pairChannel = pc;
@@ -675,10 +748,10 @@ class ReducerClient <C extends RingElem<C>> implements Runnable {
 }
 
 
-    /**
-     * distributed server reducing worker threads for minimal GB
-     * not jet distributed but threaded
-     */
+/**
+ * Distributed server reducing worker threads for minimal GB
+ * Not jet distributed but threaded.
+ */
 
 class MiReducerServer <C extends RingElem<C>> implements Runnable {
         private List G;
@@ -695,6 +768,10 @@ class MiReducerServer <C extends RingElem<C>> implements Runnable {
             H = S;
       } 
 
+      /**
+       * getNF. Blocks until the normal form is computed.
+       * @return the computed normal form.
+       */
       public GenPolynomial<C> getNF() {
             try { done.P();
             } catch (InterruptedException e) { }
@@ -716,10 +793,10 @@ class MiReducerServer <C extends RingElem<C>> implements Runnable {
 }
 
 
-    /**
-     * distributed clients reducing worker threads for minimal GB
-     * not jet used
-     */
+/**
+ * Distributed clients reducing worker threads for minimal GB.
+ * Not jet used.
+ */
 
 class MiReducerClient <C extends RingElem<C>> implements Runnable {
         private List G;
@@ -736,6 +813,10 @@ class MiReducerClient <C extends RingElem<C>> implements Runnable {
             H = S;
       } 
 
+      /**
+       * getNF. Blocks until the normal form is computed.
+       * @return the computed normal form.
+       */
       public GenPolynomial<C> getNF() {
             try { done.P();
             } catch (InterruptedException unused) { }

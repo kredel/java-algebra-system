@@ -15,14 +15,14 @@ import junit.framework.TestSuite;
 import org.apache.log4j.BasicConfigurator;
 
 /**
- * TermOrder Test using JUnit 
- * @author Heinz Kredel.
+ * TermOrder Test using JUnit.
+ * @author Heinz Kredel
  */
 
 public class TermOrderTest extends TestCase {
 
 /**
- * main
+ * main.
  */
    public static void main (String[] args) {
           BasicConfigurator.configure();
@@ -31,13 +31,14 @@ public class TermOrderTest extends TestCase {
 
 /**
  * Constructs a <CODE>TermOrderTest</CODE> object.
- * @param name String
+ * @param name String.
  */
    public TermOrderTest(String name) {
           super(name);
    }
 
 /**
+ * suite.
  */ 
  public static Test suite() {
      TestSuite suite= new TestSuite(TermOrderTest.class);
@@ -67,7 +68,7 @@ public class TermOrderTest extends TestCase {
 
 
 /**
- * Test constructor and toString
+ * Test constructor and toString.
  * 
  */
  public void testConstructor() {
@@ -93,7 +94,7 @@ public class TermOrderTest extends TestCase {
 
 
 /**
- * Test constructor, split TO
+ * Test constructor, split TO.
  * 
  */
  public void testConstructorSplit() {
@@ -117,7 +118,7 @@ public class TermOrderTest extends TestCase {
 
 
 /**
- * Test constructor weight and toString
+ * Test constructor weight and toString.
  * 
  */
  public void testConstructorWeight() {
@@ -155,7 +156,7 @@ public class TermOrderTest extends TestCase {
 
 
 /**
- * Test compare
+ * Test compare.
  * 
  */
  public void testCompare() {
@@ -189,7 +190,7 @@ public class TermOrderTest extends TestCase {
 
 
 /**
- * Test compare weight
+ * Test compare weight.
  * 
  */
  public void testCompareWeight() {
@@ -225,7 +226,7 @@ public class TermOrderTest extends TestCase {
 
 
 /**
- * Test compare weight 2 rows
+ * Test compare weight 2 rows.
  * 
  */
  public void testCompareWeight2() {
@@ -262,7 +263,7 @@ public class TermOrderTest extends TestCase {
 
 
 /**
- * Test compare split TO
+ * Test compare split TO.
  * 
  */
  public void testCompareSplit() {
@@ -310,7 +311,7 @@ public class TermOrderTest extends TestCase {
 
 
 /**
- * Test compare weight split
+ * Test compare weight split.
  * 
  */
  public void testCompareWeightSplit() {
@@ -432,7 +433,7 @@ public class TermOrderTest extends TestCase {
 
 
 /**
- * Test ascend comparators
+ * Test ascend comparators.
  * 
  */
  public void testAscendComparator() {
@@ -466,7 +467,7 @@ public class TermOrderTest extends TestCase {
 
 
 /**
- * Test ascend comparators split
+ * Test ascend comparators split.
  * 
  */
  public void testAscendComparatorSplit() {
@@ -499,7 +500,7 @@ public class TermOrderTest extends TestCase {
 
 
 /**
- * Test ascend comparators weight and split
+ * Test ascend comparators weight and split.
  * 
  */
  public void testAscendComparatorWeightSplit() {
@@ -563,7 +564,7 @@ public class TermOrderTest extends TestCase {
 
 
 /**
- * Test descend comparators
+ * Test descend comparators.
  * 
  */
  public void testDescendComparator() {
@@ -597,7 +598,7 @@ public class TermOrderTest extends TestCase {
 
 
 /**
- * Test descend comparators split
+ * Test descend comparators split.
  * 
  */
  public void testDescendComparatorSplit() {
@@ -630,7 +631,7 @@ public class TermOrderTest extends TestCase {
 
 
 /**
- * Test descend comparators weight and split
+ * Test descend comparators weight and split.
  * 
  */
  public void testDescendComparatorWeightSplit() {
@@ -694,7 +695,7 @@ public class TermOrderTest extends TestCase {
 
 
 /**
- * Test exception
+ * Test exception.
  * 
  */
  public void testException() {
@@ -716,7 +717,7 @@ public class TermOrderTest extends TestCase {
 
 
 /**
- * Test exception split
+ * Test exception split.
  * 
  */
  public void testExceptionSplit() {
@@ -741,7 +742,7 @@ public class TermOrderTest extends TestCase {
 
 
 /**
- * Test compare exception 
+ * Test compare exception.
  * 
  */
  public void testCompareException() {
@@ -766,7 +767,7 @@ public class TermOrderTest extends TestCase {
 
 
 /**
- * Test compare exception split
+ * Test compare exception split.
  * 
  */
  public void testCompareExceptionSplit() {
@@ -794,7 +795,7 @@ public class TermOrderTest extends TestCase {
 
 
 /**
- * Test compare exception weight
+ * Test compare exception weight.
  * 
  */
  public void testCompareExceptionWeigth() {

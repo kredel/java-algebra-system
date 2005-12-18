@@ -43,7 +43,7 @@ import edu.jas.module.SolvableSyzygy;
 
 
 /**
- * SolvableSyzygy Test using JUnit 
+ * SolvableSyzygy Test using JUnit. 
  * @author Heinz Kredel.
  */
 
@@ -52,7 +52,7 @@ public class SolvableSyzygyTest extends TestCase {
     private static final Logger logger = Logger.getLogger(SolvableSyzygyTest.class);
 
 /**
- * main
+ * main.
  */
    public static void main (String[] args) {
           BasicConfigurator.configure();
@@ -61,7 +61,7 @@ public class SolvableSyzygyTest extends TestCase {
 
 /**
  * Constructs a <CODE>SolvableSyzygyTest</CODE> object.
- * @param name String
+ * @param name String.
  */
    public SolvableSyzygyTest(String name) {
           super(name);
@@ -143,7 +143,7 @@ public class SolvableSyzygyTest extends TestCase {
 
 
 /**
- * Test sequential SolvableSyzygy
+ * Test sequential SolvableSyzygy.
  * 
  */
  public void testSequentialSolvableSyzygy() {
@@ -188,7 +188,7 @@ public class SolvableSyzygyTest extends TestCase {
 
 
 /**
- * Test sequential Weyl SolvableSyzygy
+ * Test sequential Weyl SolvableSyzygy.
  * 
  */
  public void testSequentialWeylSolvableSyzygy() {
@@ -248,7 +248,7 @@ public class SolvableSyzygyTest extends TestCase {
 
 
 /**
- * Test sequential module SolvableSyzygy
+ * Test sequential module SolvableSyzygy.
  * 
  */
  public void testSequentialModSolvableSyzygy() {

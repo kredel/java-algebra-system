@@ -9,14 +9,14 @@ import edu.jas.arith.ModInteger;
 
 
 /**
- * Examples
+ * Examples.
  * @author Heinz Kredel.
  */
 
 public class Examples {
 
 /**
- * main
+ * main.
  */
    public static void main (String[] args) {
        example1();
@@ -25,7 +25,10 @@ public class Examples {
        example4();
    }
 
-   public static void example1() {
+/**
+ * example1.
+ */
+public static void example1() {
        System.out.println("\n\n example 1");
 
        BigRational cfac = new BigRational();
@@ -40,7 +43,10 @@ public class Examples {
        System.out.println("a = " + a);
    }
 
-   public static void example2() {
+/**
+ * example2.
+ */
+public static void example2() {
        System.out.println("\n\n example 2");
 
        BigRational cfac = new BigRational();
@@ -57,7 +63,10 @@ public class Examples {
        System.out.println("a = " + a);
    }
 
-   public static void example3() {
+/**
+ * example3.
+ */
+public static void example3() {
        System.out.println("\n\n example 3");
 
        BigRational cfac = new BigRational();
@@ -89,7 +98,10 @@ public class Examples {
        return prime;
    }
 
-   public static void example4() {
+/**
+ * example4.
+ */
+public static void example4() {
        System.out.println("\n\n example 4");
 
        long prime = getPrime();

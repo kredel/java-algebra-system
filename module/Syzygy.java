@@ -42,8 +42,11 @@ public class Syzygy  {
     private static final Logger logger = Logger.getLogger(Syzygy.class);
 
     /**
-     * Syzygy module from Groebner base
+     * Syzygy module from Groebner base.
      * F must be a Groebner base.
+     * @param C coefficient type.
+     * @param F a Groebner base.
+     * @return syz(F), a basis for the module of syzygies for F.
      */
 
     public static <C extends RingElem<C>>
@@ -54,8 +57,12 @@ public class Syzygy  {
 
 
     /**
-     * Syzygy module from Groebner base
+     * Syzygy module from Groebner base.
      * F must be a Groebner base.
+     * @param C coefficient type.
+     * @param modv number of module variables.
+     * @param F a Groebner base.
+     * @return syz(F), a basis for the module of syzygies for F.
      */
 
     public static <C extends RingElem<C>>
@@ -85,8 +92,12 @@ public class Syzygy  {
 
 
     /**
-     * Syzygy module from Groebner base
+     * Syzygy module from Groebner base.
      * v must be a Groebner base.
+     * @param C coefficient type.
+     * @param modv number of module variables.
+     * @param v a Groebner base.
+     * @return syz(v), a basis for the module of syzygies for v.
      */
 
     public static <C extends RingElem<C>>
@@ -134,8 +145,11 @@ public class Syzygy  {
 
 
     /**
-     * Syzygy module from module Groebner base
+     * Syzygy module from module Groebner base.
      * M must be a module Groebner base.
+     * @param C coefficient type.
+     * @param M a module Groebner base.
+     * @return syz(M), a basis for the module of syzygies for M.
      */
 
     public static <C extends RingElem<C>>
@@ -198,8 +212,14 @@ public class Syzygy  {
 
 
     /**
-     * S-Polynomial
-     * @param S is modified
+     * S-Polynomial with recording.
+     * @param C coefficient type.
+     * @param S recording matrix, is modified.
+     * @param i index of Ap in basis list.
+     * @param Ap a polynomial.
+     * @param j index of Bp in basis list.
+     * @param Bp a polynomial.
+     * @return Spol(Ap, Bp), the S-Polynomial for Ap and Bp.
      */
 
     public static <C extends RingElem<C>>
@@ -248,8 +268,12 @@ public class Syzygy  {
 
 
     /**
-     * Normalform.
-     * @param row is modified
+     * Normalform with recording.
+     * @param C coefficient type.
+     * @param row recording matrix, is modified.
+     * @param Pp a polynomial list for reduction.
+     * @param Ap a polynomial.
+     * @return nf(Pp,Ap), the normal form of Ap wrt. Pp.
      */
 
     public static <C extends RingElem<C>>
@@ -332,7 +356,11 @@ public class Syzygy  {
 
 
     /**
-     * Test if sysygy
+     * Test if sysygy.
+     * @param C coefficient type.
+     * @param Z list of sysygies.
+     * @param F a polynomial list.
+     * @return true, if Z is a list of syzygies for F, else false.
      */
 
     public static <C extends RingElem<C>>
@@ -355,6 +383,10 @@ public class Syzygy  {
 
     /**
      * Scalar product of vectors of polynomials.
+     * @param C coefficient type.
+     * @param r a polynomial list.
+     * @param F a polynomial list.
+     * @return the scalar product of r and F.
      */
 
     public static <C extends RingElem<C>>
@@ -384,7 +416,11 @@ public class Syzygy  {
 
 
     /**
-     * Test if sysygy of modules
+     * Test if sysygy of modules.
+     * @param C coefficient type.
+     * @param Z list of sysygies.
+     * @param F a module list.
+     * @return true, if Z is a list of syzygies for F, else false.
      */
 
     public static <C extends RingElem<C>>
@@ -406,6 +442,10 @@ public class Syzygy  {
 
     /**
      * product of vector and matrix of polynomials.
+     * @param C coefficient type.
+     * @param r a polynomial list.
+     * @param F a polynomial list.
+     * @return the scalar product of r and F.
      */
 
     public static <C extends RingElem<C>>
@@ -439,6 +479,10 @@ public class Syzygy  {
 
     /**
      * Addition of vectors of polynomials.
+     * @param C coefficient type.
+     * @param a a polynomial list.
+     * @param b a polynomial list.
+     * @return a+b, the vector sum of a and b.
      */
 
     public static <C extends RingElem<C>>
@@ -469,6 +513,9 @@ public class Syzygy  {
 
     /**
      * test vector of zero polynomials.
+     * @param C coefficient type.
+     * @param a a polynomial list.
+     * @return true, if all polynomial in a are zero, else false.
      */
     public static <C extends RingElem<C>>
            boolean 
@@ -490,6 +537,10 @@ public class Syzygy  {
 
     /**
      * Scalar product of polynomial with vector of polynomials.
+     * @param C coefficient type.
+     * @param p a polynomial.
+     * @param F a polynomial list.
+     * @return the scalar product of p and F.
      */
 
     public static <C extends RingElem<C>>
@@ -507,6 +558,9 @@ public class Syzygy  {
     /**
      * Resolution of a module.
      * Only with direct GBs.
+     * @param C coefficient type.
+     * @param M a module list of a Groebner basis.
+     * @return a resolution of M.
      */
     public static <C extends RingElem<C>>
            List<ResPart<C>>
@@ -531,6 +585,9 @@ public class Syzygy  {
     /**
      * Resolution of a polynomial list.
      * Only with direct GBs.
+     * @param C coefficient type.
+     * @param F a polynomial list of a Groebner basis.
+     * @return a resolution of F.
      */
     public static <C extends RingElem<C>>
            List // <ResPart<C>|ResPolPart<C>>
@@ -556,19 +613,28 @@ public class Syzygy  {
 /**
  * Container for module resolution components.
  */
-
 class ResPart<C extends RingElem<C>> implements Serializable {
 
     public final ModuleList<C> module;
     public final ModuleList<C> GB;
     public final ModuleList<C> syzygy;
 
+   /**
+     * ResPart.
+     * @param m a module list.
+     * @param g a module list GB.
+     * @param z a syzygy module list.
+     */
     public ResPart(ModuleList<C> m, ModuleList<C> g, ModuleList<C> z) {
         module = m;
         GB = g;
         syzygy = z;
     }
 
+
+/**
+ * toString.
+ */
     public String toString() {
         StringBuffer s = new StringBuffer("ResPart(\n");
         s.append("module = " + module);
@@ -583,19 +649,28 @@ class ResPart<C extends RingElem<C>> implements Serializable {
 /**
  * Container for polynomial resolution components.
  */
-
 class ResPolPart<C extends RingElem<C>> implements Serializable {
 
     public final PolynomialList<C> ideal;
     public final PolynomialList<C> GB;
     public final ModuleList<C> syzygy;
 
+    /**
+      * ResPolPart.
+      * @param m a polynomial list.
+      * @param g a polynomial list GB.
+      * @param z a syzygy module list.
+      */
     public ResPolPart(PolynomialList<C> m, PolynomialList<C> g, ModuleList<C> z) {
         ideal = m;
         GB = g;
         syzygy = z;
     }
 
+
+   /**
+     * toString.
+     */
     public String toString() {
         StringBuffer s = new StringBuffer("ResPolPart(\n");
         s.append("ideal = " + ideal);

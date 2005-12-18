@@ -14,7 +14,7 @@ import edu.jas.structure.RingElem;
 
 
 /**
- * QuatGenPolynomial Test using JUnit 
+ * QuatGenPolynomial Test using JUnit.
  * @author Heinz Kredel.
  */
 
@@ -29,7 +29,7 @@ public class QuatGenPolynomialTest extends TestCase {
 
 /**
  * Constructs a <CODE>QuatGenPolynomialTest</CODE> object.
- * @param name String
+ * @param name String.
  */
    public QuatGenPolynomialTest(String name) {
           super(name);
@@ -70,7 +70,7 @@ public class QuatGenPolynomialTest extends TestCase {
 
 
 /**
- * Test constructor and toString
+ * Test constructor and toString.
  * 
  */
  public void testConstruction() {
@@ -87,7 +87,7 @@ public class QuatGenPolynomialTest extends TestCase {
 
 
 /**
- * Test random polynomial
+ * Test random polynomial.
  * 
  */
  public void testRandom() {
@@ -102,7 +102,7 @@ public class QuatGenPolynomialTest extends TestCase {
 
 
 /**
- * Test addition
+ * Test addition.
  * 
  */
  public void testAddition() {
@@ -141,7 +141,7 @@ public class QuatGenPolynomialTest extends TestCase {
 
 
 /**
- * Test object multiplication
+ * Test object multiplication.
  * 
  */
 

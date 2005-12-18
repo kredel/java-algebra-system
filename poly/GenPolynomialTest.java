@@ -19,7 +19,7 @@ import edu.jas.structure.RingFactory;
 
 
 /**
- * GenPolynomial Test using JUnit 
+ * GenPolynomial Test using JUnit.
  * @author Heinz Kredel.
  */
 
@@ -34,13 +34,14 @@ public class GenPolynomialTest extends TestCase {
 
 /**
  * Constructs a <CODE>GenPolynomialTest</CODE> object.
- * @param name String
+ * @param name String.
  */
    public GenPolynomialTest(String name) {
           super(name);
    }
 
 /**
+ * suite.
  */ 
  public static Test suite() {
      TestSuite suite= new TestSuite(GenPolynomialTest.class);

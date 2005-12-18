@@ -18,14 +18,14 @@ import edu.unima.ky.parallel.SocketChannel;
 
 
 /**
- * ExecutableServer Test using JUnit 
+ * ExecutableServer Test using JUnit.
  * @author Heinz Kredel
  */
 
 public class ExecutableServerTest extends TestCase {
 
 /**
- * main
+ * main.
  */
    public static void main (String[] args) {
           BasicConfigurator.configure();
@@ -34,13 +34,14 @@ public class ExecutableServerTest extends TestCase {
 
 /**
  * Constructs a <CODE>ExecutableServerTest</CODE> object.
- * @param name String
+ * @param name String.
  */
    public ExecutableServerTest(String name) {
           super(name);
    }
 
 /**
+ * suite.
  */ 
  public static Test suite() {
      TestSuite suite= new TestSuite(ExecutableServerTest.class);
@@ -68,7 +69,7 @@ public class ExecutableServerTest extends TestCase {
 
 
 /**
- * Tests if the ExecutableServer could be started and terminated
+ * Tests if the ExecutableServer could be started and terminated.
  */
  public void testExecutableServer1() {
      assertTrue("should never fail", true );
@@ -76,29 +77,29 @@ public class ExecutableServerTest extends TestCase {
 
 
 /**
- * Tests if the ExecutableServer can execute a RemoteExecutable
+ * Tests if the ExecutableServer can execute a RemoteExecutable.
  */
  public void testExecutableServer2() {
      RemoteExecutable e1 = new Executable("2");
      try {
          SocketChannel sc = cf.getChannel(host,port);
-	 sc.send( e1 );
-	 Object o = sc.receive();
+         sc.send( e1 );
+         Object o = sc.receive();
          assertTrue("o:String", o instanceof String);
          assertEquals("o==done", (String)o, ExecutableServer.DONE );
          sc.close();
      } catch (IOException e) {
-	 e.printStackTrace();
-	 fail("IOException");
+         e.printStackTrace();
+         fail("IOException");
      } catch (ClassNotFoundException e) {
-	 e.printStackTrace();
-	 fail("ClassNotFoundException");
+         e.printStackTrace();
+         fail("ClassNotFoundException");
      }
    }
 
 
 /**
- * Tests if the ExecutableServer can execute more RemoteExecutable
+ * Tests if the ExecutableServer can execute more RemoteExecutable.
  */
  public void testExecutableServer3() {
      RemoteExecutable e1 = new Executable("3");
@@ -106,50 +107,50 @@ public class ExecutableServerTest extends TestCase {
      Object o;
      try {
          SocketChannel sc = cf.getChannel(host,port);
-	 for (int i = 0; i < numloops; i++ ) {
-  	     sc.send( e1 );
-	     o = sc.receive();
+         for (int i = 0; i < numloops; i++ ) {
+             sc.send( e1 );
+             o = sc.receive();
              assertTrue("o:String", o instanceof String);
              assertEquals("o==done", (String)o, ExecutableServer.DONE );
-	 }
+         }
          sc.close();
      } catch (IOException e) {
-	 e.printStackTrace();
-	 fail("IOException");
+         e.printStackTrace();
+         fail("IOException");
      } catch (ClassNotFoundException e) {
-	 e.printStackTrace();
-	 fail("ClassNotFoundException");
+         e.printStackTrace();
+         fail("ClassNotFoundException");
      }
    }
 
 
 /**
- * Tests if the ExecutableServer can execute a RemoteExecutable
+ * Tests if the ExecutableServer can execute a RemoteExecutable.
  */
  public void testExecutableServer4() {
      RemoteExecutable e1 = null; 
      SocketChannel sc = null;
      Object o;
      try {
-	 for (int i = 0; i < 4; i++ ) {
- 	     e1 = new Executable("4-"+i);
+         for (int i = 0; i < 4; i++ ) {
+             e1 = new Executable("4-"+i);
              sc = cf.getChannel(host,port);
 
-	     sc.send( e1 );
-	     o = sc.receive();
+             sc.send( e1 );
+             o = sc.receive();
              assertTrue("o:String", o instanceof String);
              assertEquals("o==done", (String)o, ExecutableServer.DONE );
 
              e1 = null;
              sc.close();
              sc = null;
-	 }
+         }
      } catch (IOException e) {
-	 e.printStackTrace();
-	 fail("IOException");
+         e.printStackTrace();
+         fail("IOException");
      } catch (ClassNotFoundException e) {
-	 e.printStackTrace();
-	 fail("ClassNotFoundException");
+         e.printStackTrace();
+         fail("ClassNotFoundException");
      }
    }
 
@@ -158,7 +159,6 @@ public class ExecutableServerTest extends TestCase {
 
 /**
  * Unit Test Class which implements interface RemoteExecutable.
- * @author Heinz Kredel
  */
 
 class Executable implements RemoteExecutable {
@@ -167,12 +167,18 @@ class Executable implements RemoteExecutable {
 
     private String param = null;
 
+/**
+ * Executable.
+ * @param param String.
+ */
     public Executable(String param) {
-	this.param = param;
+        this.param = param;
     }
-
+/**
+ * run.
+ */
     public void run() {
-	logger.debug(param + " has been run");
+        logger.debug(param + " has been run");
     }
 
 }

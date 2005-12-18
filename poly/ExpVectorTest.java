@@ -15,7 +15,7 @@ import junit.framework.TestSuite;
 import org.apache.log4j.BasicConfigurator;
 
 /**
- * ExpVector Test using JUnit 
+ * ExpVector Test using JUnit.
  * @author Heinz Kredel.
  */
 
@@ -31,7 +31,7 @@ public class ExpVectorTest extends TestCase {
 
 /**
  * Constructs a <CODE>ExpVectorTest</CODE> object.
- * @param name String
+ * @param name String.
  */
    public ExpVectorTest(String name) {
           super(name);
@@ -61,7 +61,7 @@ public class ExpVectorTest extends TestCase {
 
 
 /**
- * Test constructor and toString
+ * Test constructor and toString.
  * 
  */
  public void testConstructor() {
@@ -87,7 +87,7 @@ public class ExpVectorTest extends TestCase {
 
 
 /**
- * Test random integer
+ * Test random integer.
  * 
  */
  public void testRandom() {
@@ -105,7 +105,7 @@ public class ExpVectorTest extends TestCase {
 
 
 /**
- * Test addition
+ * Test addition.
  * 
  */
  public void testAddition() {
@@ -133,7 +133,7 @@ public class ExpVectorTest extends TestCase {
 
 
 /**
- * Test lcm
+ * Test lcm.
  * 
  */
  public void testLcm() {
@@ -156,7 +156,7 @@ public class ExpVectorTest extends TestCase {
  }
 
 /**
- * Test tdeg
+ * Test tdeg.
  * 
  */
  public void testTdeg() {
@@ -189,7 +189,7 @@ public class ExpVectorTest extends TestCase {
  }
 
 /**
- * Test weighted 
+ * Test weighted.
  * 
  */
  public void testWeightdeg() {

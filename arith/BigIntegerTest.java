@@ -11,7 +11,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 /**
- * BigInteger Test using JUnit 
+ * BigInteger Test using JUnit.
  * @author Heinz Kredel.
  */
 
@@ -26,13 +26,14 @@ public class BigIntegerTest extends TestCase {
 
 /**
  * Constructs a <CODE>BigIntegerTest</CODE> object.
- * @param name String
+ * @param name String.
  */
    public BigIntegerTest(String name) {
           super(name);
    }
 
 /**
+ * suite.
  */ 
  public static Test suite() {
      TestSuite suite= new TestSuite(BigIntegerTest.class);
@@ -56,7 +57,7 @@ public class BigIntegerTest extends TestCase {
 
 
 /**
- * Test static initialization and constants
+ * Test static initialization and constants.
  * 
  */
  public void testConstants() {
@@ -71,7 +72,7 @@ public class BigIntegerTest extends TestCase {
 
 
 /**
- * Test constructor and toString
+ * Test constructor and toString.
  * 
  */
  public void testConstructor() {
@@ -101,7 +102,7 @@ public class BigIntegerTest extends TestCase {
 
 
 /**
- * Test random integer
+ * Test random integer.
  * 
  */
  public void testRandom() {
@@ -117,7 +118,7 @@ public class BigIntegerTest extends TestCase {
 
 
 /**
- * Test addition
+ * Test addition.
  * 
  */
  public void testAddition() {
@@ -139,7 +140,7 @@ public class BigIntegerTest extends TestCase {
 
 
 /**
- * Test multiplication
+ * Test multiplication.
  * 
  */
 
@@ -165,7 +166,7 @@ public class BigIntegerTest extends TestCase {
  }
 
 /**
- * Test gcd
+ * Test gcd.
  * 
  */
 

@@ -297,7 +297,7 @@ public class ExpVector implements Cloneable, Serializable {
      * Generate variable names.
      * Generate names for variables, 
      * i.e. prefix0 to prefix(n-1). 
-     * @param prefix name prefix
+     * @param prefix name prefix.
      * @return standard names.
      */
     public String[] stdVars(String prefix) {
@@ -321,8 +321,8 @@ public class ExpVector implements Cloneable, Serializable {
      * Generate variable names.
      * Generate names for variables from given prefix.
      * i.e. prefix0 to prefix(n-1). 
-     * @param n size of names array
-     * @param prefix name prefix
+     * @param n size of names array.
+     * @param prefix name prefix.
      * @return vatiable names.
      */
     public static String[] STDVARS(String prefix, int n) {
@@ -341,7 +341,7 @@ public class ExpVector implements Cloneable, Serializable {
      * ExpVector summation.
      * @param U
      * @param V
-     * @return U+V
+     * @return U+V.
      */
     public static ExpVector EVSUM( ExpVector U, ExpVector V ) {
         long[] u = U.getval();
@@ -356,7 +356,7 @@ public class ExpVector implements Cloneable, Serializable {
     /**
      * ExpVector summation.
      * @param V
-     * @return this+V
+     * @return this+V.
      */
     public ExpVector sum( ExpVector V ) {
         return EVSUM(this, V);
@@ -368,7 +368,7 @@ public class ExpVector implements Cloneable, Serializable {
      * Result may have negative entries.
      * @param U
      * @param V
-     * @return U-V
+     * @return U-V.
      */
     public static ExpVector EVDIF( ExpVector U, ExpVector V ) {
         long[] u = U.getval();
@@ -385,7 +385,7 @@ public class ExpVector implements Cloneable, Serializable {
      * ExpVector difference.
      * Result may have negative entries.
      * @param V
-     * @return this-V
+     * @return this-V.
      */
     public ExpVector dif( ExpVector V ) {
         return EVDIF(this, V);
@@ -395,7 +395,7 @@ public class ExpVector implements Cloneable, Serializable {
     /**
      * ExpVector substitution.
      * Clone and set exponent to d at position i.
-     * @param U 
+     * @param U
      * @param i position.
      * @param d new exponent.
      * @return substituted ExpVector.

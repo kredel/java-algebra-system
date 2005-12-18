@@ -44,13 +44,19 @@ public class OrderedPairlist<C extends RingElem<C> > {
     private static Logger logger = Logger.getLogger(OrderedPairlist.class);
 
     /**
-     * Constructor for OrderedPairlist
+     * Constructor for OrderedPairlist.
+     * @param r polynomial factory.
      */
-
     public OrderedPairlist(GenPolynomialRing<C> r) {
         this(0,r);
     }
 
+
+    /**
+     * Constructor for OrderedPairlist.
+     * @param m number of module variables.
+     * @param r polynomial factory.
+     */
     public OrderedPairlist(int m, GenPolynomialRing<C> r) {
          moduleVars = m;
          ring = r;
@@ -68,10 +74,10 @@ public class OrderedPairlist<C extends RingElem<C> > {
 
 
     /**
-     * Put one Polynomial to the pairlist and reduction matrix
+     * Put one Polynomial to the pairlist and reduction matrix.
+     * @param p polynomial.
      * @return the index of the added polynomial.
      */
-
     public synchronized int put(GenPolynomial<C> p) { 
 	   putCount++;
            if ( oneInGB ) { 
@@ -124,10 +130,10 @@ public class OrderedPairlist<C extends RingElem<C> > {
 
 
     /**
-     * remove the next required pair from the pairlist and reduction matrix
-     * appy the criterions 3 and 4 to see if the S-polynomial is required
+     * Remove the next required pair from the pairlist and reduction matrix.
+     * Appy the criterions 3 and 4 to see if the S-polynomial is required.
+     * @return the next pair if one exists, otherwise null.
      */
-
     public synchronized Pair<C> removeNext() { 
        if ( oneInGB ) {
           return null;
@@ -177,46 +183,46 @@ public class OrderedPairlist<C extends RingElem<C> > {
 
 
     /**
-     * Test if there is possibly a pair in the list
+     * Test if there is possibly a pair in the list.
+     * @return true if a next pair could exist, otherwise false.
      */
-
     public boolean hasNext() { 
           return pairlist.size() > 0;
     }
 
 
     /**
-     * Get the list of polynomials
+     * Get the list of polynomials.
+     * @return the polynomial list.
      */
-
     public ArrayList<GenPolynomial<C>> getList() { 
           return P;
     }
 
 
     /**
-     * Get the number of polynomials put to the pairlist
+     * Get the number of polynomials put to the pairlist.
+     * @return the number of calls to put.
      */
-
     public int putCount() { 
           return putCount;
     }
 
 
     /**
-     * Get the number of required pairs removed from the pairlist
+     * Get the number of required pairs removed from the pairlist.
+     * @return the number of non null pairs delivered.
      */
-
     public int remCount() { 
           return remCount;
     }
 
 
     /**
-     * Put to ONE-Polynomial to the pairlist
+     * Put to ONE-Polynomial to the pairlist.
+     * @param one polynomial. (no more required)
      * @return the index of the last polynomial.
      */
-
     public synchronized int putOne(GenPolynomial<C> one) { 
         putCount++;
         if ( one == null ) {
@@ -238,7 +244,6 @@ public class OrderedPairlist<C extends RingElem<C> > {
      * GB criterium 3.
      * @return true if the S-polynomial(i,j) is required.
      */
-
     public boolean GBCriterion3(int i, int j, ExpVector eij) {  
         // assert i < j;
         boolean s;

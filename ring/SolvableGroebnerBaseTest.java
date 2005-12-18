@@ -35,7 +35,7 @@ import edu.jas.poly.RelationTable;
 import edu.jas.poly.WeylRelations;
 
 /**
- * SolvableGroebnerBase Test using JUnit 
+ * SolvableGroebnerBase Test using JUnit.
  * @author Heinz Kredel.
  */
 
@@ -44,7 +44,7 @@ public class SolvableGroebnerBaseTest extends TestCase {
     private static final Logger logger = Logger.getLogger(SolvableGroebnerBaseTest.class);
 
 /**
- * main
+ * main.
  */
    public static void main (String[] args) {
           BasicConfigurator.configure();
@@ -53,13 +53,14 @@ public class SolvableGroebnerBaseTest extends TestCase {
 
 /**
  * Constructs a <CODE>SolvableGroebnerBaseTest</CODE> object.
- * @param name String
+ * @param name String.
  */
    public SolvableGroebnerBaseTest(String name) {
           super(name);
    }
 
 /**
+ * suite.
  */ 
  public static Test suite() {
      TestSuite suite= new TestSuite(SolvableGroebnerBaseTest.class);
@@ -118,8 +119,7 @@ public class SolvableGroebnerBaseTest extends TestCase {
 
 
 /**
- * Test sequential GBase
- * 
+ * Test sequential GBase.
  */
  public void testSequentialGBase() {
 
@@ -159,7 +159,7 @@ public class SolvableGroebnerBaseTest extends TestCase {
 
 
 /**
- * Test Weyl sequential GBase
+ * Test Weyl sequential GBase.
  * 
  */
  public void testWeylSequentialGBase() {
@@ -213,7 +213,7 @@ public class SolvableGroebnerBaseTest extends TestCase {
 
 
 /**
- * Test sequential twosided GBase
+ * Test sequential twosided GBase.
  * 
  */
  public void testSequentialTSGBase() {
@@ -260,7 +260,7 @@ public class SolvableGroebnerBaseTest extends TestCase {
 
 /**
  * Test Weyl sequential twosided GBase
- * is always 1
+ * is always 1.
  */
  public void testWeylSequentialTSGBase() {
 

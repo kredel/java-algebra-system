@@ -11,9 +11,9 @@ import org.apache.log4j.Logger;
 
 
 /**
- * Thread Pool using stack / list workpile
- * @author Akitoshi Yoshida 
- * @author Heinz Kredel.
+ * Thread Pool using stack / list workpile.
+ * @author Akitoshi Yoshida
+ * @author Heinz Kredel
  */
 
 public class ThreadPool {
@@ -32,7 +32,7 @@ public class ThreadPool {
 /**
  * Constructs a new ThreadPool
  * with strategy StrategyEnumeration.FIFO
- * and size DEFAULT_SIZE
+ * and size DEFAULT_SIZE.
  */ 
 
     public ThreadPool() {
@@ -42,8 +42,8 @@ public class ThreadPool {
 
 /**
  * Constructs a new ThreadPool
- * with size DEFAULT_SIZE
- * @param strategy for job processing
+ * with size DEFAULT_SIZE.
+ * @param strategy for job processing.
  */ 
 
     public ThreadPool(StrategyEnumeration strategy) {
@@ -53,8 +53,8 @@ public class ThreadPool {
 
 /**
  * Constructs a new ThreadPool
- * with strategy StrategyEnumeration.FIFO
- * @param size of the pool
+ * with strategy StrategyEnumeration.FIFO.
+ * @param size of the pool.
  */ 
 
     public ThreadPool(int size) {
@@ -62,9 +62,9 @@ public class ThreadPool {
     }
 
 /**
- * Constructs a new ThreadPool
- * @param strategy for job processing
- * @param size of the pool
+ * Constructs a new ThreadPool.
+ * @param strategy for job processing.
+ * @param size of the pool.
  */ 
     public ThreadPool(StrategyEnumeration strategy, int size) {
         this.strategy = strategy;
@@ -78,21 +78,21 @@ public class ThreadPool {
     }
 
 /**
- * number of worker threads
+ * number of worker threads.
  */
     public int getNumber() {
         return workers.length; // not null
     }
 
 /**
- * get used strategy
+ * get used strategy.
  */
     public StrategyEnumeration getStrategy() {
         return strategy; 
     }
 
 /**
- * Terminates the threads
+ * Terminates the threads.
  */
     public void terminate() {
         while ( hasJobs() ) {
@@ -113,7 +113,8 @@ public class ThreadPool {
     }
 
 /**
- * adds a job to the workpile
+ * adds a job to the workpile.
+ * @param job
  */
     public synchronized void addJob(Runnable job) {
         jobstack.addLast(job);
@@ -126,7 +127,7 @@ public class ThreadPool {
 
 
 /**
- * get a job for processing
+ * get a job for processing.
  */
     protected synchronized Runnable getJob() throws InterruptedException {
         while (jobstack.isEmpty()) {
@@ -145,7 +146,7 @@ public class ThreadPool {
 
 
 /**
- * check if there are jobs for processing
+ * check if there are jobs for processing.
  */
     public boolean hasJobs() {
         if ( jobstack.size() > 0 ) {
@@ -159,7 +160,9 @@ public class ThreadPool {
 
 
 /**
- * check if there are more than n jobs for processing
+ * check if there are more than n jobs for processing.
+ * @param n Integer
+ * @return
  */
     public boolean hasJobs(int n) {
         int j = jobstack.size();
@@ -185,6 +188,9 @@ class PoolThread extends Thread {
 
     boolean working = false;
 
+/**
+ * @param pool ThreadPool.
+ */
     public PoolThread(ThreadPool pool) {
         this.pool = pool;
     }
