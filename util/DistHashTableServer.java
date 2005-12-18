@@ -413,10 +413,10 @@ class DHTBroadcaster extends Thread /*implements Runnable*/ {
 
 
 /**
- * toSting.
+ * toString.
  * @return a string representation of this.
  */
-    public String toSting() {
+    public String toString() {
 	return "DHTBroadcaster("+channel+","+bcaster.size()+","+listElem+")";
     }
 

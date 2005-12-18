@@ -387,7 +387,7 @@ class Broadcaster extends Thread /*implements Runnable*/ {
      * toString.
      * @return a string representation of this.
      */
-    public String toSting() {
+    public String toString() {
 	return "Broadcaster("+channel+","+bcaster.size()+","+listElem+")";
     }
 
