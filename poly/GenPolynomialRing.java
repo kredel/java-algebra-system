@@ -404,8 +404,9 @@ public class GenPolynomialRing<C extends RingElem<C> >
                v[ vars.length + k ] = "e" + (k+1);
            }
         }
+        TermOrder to = tord.extend(nvar,i);
         GenPolynomialRing<C> pfac 
-            = new GenPolynomialRing<C>(coFac,nvar+i,tord,v);
+            = new GenPolynomialRing<C>(coFac,nvar+i,to,v);
         return pfac;
     }
 
@@ -424,8 +425,9 @@ public class GenPolynomialRing<C extends RingElem<C> >
                v[j] = vars[j];
            }
         }
+        TermOrder to = tord.contract();
         GenPolynomialRing<C> pfac 
-            = new GenPolynomialRing<C>(coFac,nvar-i,tord,v);
+            = new GenPolynomialRing<C>(coFac,nvar-i,to,v);
         return pfac;
     }
 

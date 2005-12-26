@@ -80,7 +80,7 @@ public final class TermOrder implements Serializable {
 
 
     /**
-     * Cconstructor for default term order.
+     * Constructor for default term order.
      */
     public TermOrder() {
         this(DEFAULT_EVORD);
@@ -88,7 +88,7 @@ public final class TermOrder implements Serializable {
 
 
     /**
-     * Cconstructor for given term order.
+     * Constructor for given term order.
      * @param evord requested term order indicator / enumerator.
      */
     public TermOrder(int evord) {
@@ -748,5 +748,40 @@ public final class TermOrder implements Serializable {
         erg.append("["+evbeg2+","+evend2+"]");
         return erg.toString();
     }
+
+
+    /**
+     * Extend variables. Used e.g. in module embedding.
+     * Extend TermOrder by i elements.
+     * @param r current number of variables.
+     * @param i number of variables to extend.
+     * @return extended TermOrder.
+     */
+    public TermOrder extend(int r, int i) {
+        if ( weight != null ) {
+            throw new RuntimeException("extend not implemented for weights");
+        }
+        if ( evord2 != 0 ) {
+            throw new RuntimeException("already extended");
+        }
+        return new TermOrder(evord,evord,r+i,i);
+    }
+
+
+    /**
+     * Contract variables. Used e.g. in module embedding.
+     * Contract TermOrder to non split status.
+     * @return contracted TermOrder.
+     */
+    public TermOrder contract() {
+        if ( weight != null ) {
+            throw new RuntimeException("extend not implemented for weights");
+        }
+        if ( evord2 == 0 ) {
+            throw new RuntimeException("already contracted");
+        }
+        return new TermOrder(evord);
+    }
+
 
 }
