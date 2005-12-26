@@ -65,7 +65,7 @@ public class PolynomialList<C extends RingElem<C> > implements Serializable {
      */
     public PolynomialList( GenSolvablePolynomialRing< C > r,
                            List<GenSolvablePolynomial< C >> l) {
-        this(r,castToList(l)); 
+        this( r, PolynomialList.<C>castToList(l) ); 
     }
 
 
@@ -107,7 +107,7 @@ public class PolynomialList<C extends RingElem<C> > implements Serializable {
             GenPolynomial<C> a = l1.get(i);
             GenPolynomial<C> b = l2.get(i);
             if ( ! a.equals( b ) ) {
-               System.out.println("PolynomialList");
+               System.out.println("PolynomialList not equals");
                System.out.println("a = " + a);
                System.out.println("b = " + b);
                return false;
@@ -155,6 +155,7 @@ public class PolynomialList<C extends RingElem<C> > implements Serializable {
     /**
      * Get ModuleList from PolynomialList.
      * Extract module from polynomial ring. 
+     * @see edu.jas.module.ModuleList
      * @param i number of variables to be contract form the polynomials.
      * @return module list corresponding to this.
      */

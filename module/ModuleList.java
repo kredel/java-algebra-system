@@ -62,7 +62,7 @@ public class ModuleList<C extends RingElem<C> > implements Serializable {
     public ModuleList( GenPolynomialRing< C > r,
                        List< List<GenPolynomial< C >>> l) {
         ring = r;
-	list = padCols(r,l); 
+	list = ModuleList.<C>padCols(r,l); 
         if ( list == null ) {
             rows = -1; 
             cols = -1;
@@ -84,7 +84,7 @@ public class ModuleList<C extends RingElem<C> > implements Serializable {
      */
     public ModuleList( GenSolvablePolynomialRing< C > r,
                        List< List<GenSolvablePolynomial< C >>> l) {
-        this(r,castToList(l));
+        this( r, ModuleList.<C>castToList(l) );
     }
 
 
@@ -223,6 +223,7 @@ public class ModuleList<C extends RingElem<C> > implements Serializable {
     /**
      * Get PolynomialList.
      * Embed module in a polynomial ring. 
+     * @see edu.jas.poly.PolynomialList
      * @return polynomial list corresponding to this.
      */
     public PolynomialList<C> getPolynomialList() {
