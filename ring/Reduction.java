@@ -45,16 +45,16 @@ public class Reduction  {
         GenPolynomial<C> SPolynomial(GenPolynomial<C> Ap, 
                                      GenPolynomial<C> Bp) {  
         if ( logger.isInfoEnabled() ) {
-	   if ( Bp == null || Bp.isZERO() ) {
+           if ( Bp == null || Bp.isZERO() ) {
               return Ap.ring.getZERO(); 
-	   }
-	   if ( Ap == null || Ap.isZERO() ) {
+           }
+           if ( Ap == null || Ap.isZERO() ) {
               return Bp.ring.getZERO(); 
-	   }
+           }
            if ( ! Ap.ring.equals( Bp.ring ) ) { 
               logger.error("rings not equal"); 
            }
-	}
+        }
         Map.Entry<ExpVector,C> ma = Ap.leadingMonomial();
         Map.Entry<ExpVector,C> mb = Bp.leadingMonomial();
 
@@ -87,20 +87,20 @@ public class Reduction  {
            leftSPolynomial(GenSolvablePolynomial<C> Ap, 
                            GenSolvablePolynomial<C> Bp) {  
         if ( logger.isInfoEnabled() ) {
-	   if ( Bp == null || Bp.isZERO() ) {
+           if ( Bp == null || Bp.isZERO() ) {
                if ( Ap != null ) {
                   return Ap.ring.getZERO(); 
                } else {
                   return null;
                }
-	   }
-	   if ( Ap == null || Ap.isZERO() ) {
+           }
+           if ( Ap == null || Ap.isZERO() ) {
               return Bp.ring.getZERO(); 
-	   }
+           }
            if ( ! Ap.ring.equals( Bp.ring ) ) { 
               logger.error("rings not equal"); 
            }
-	}
+        }
         Map.Entry<ExpVector,C> ma 
             = Ap.leadingMonomial();
         Map.Entry<ExpVector,C> mb 
@@ -170,11 +170,11 @@ public class Reduction  {
               logger.error("GBCriterion4 not applicabable to SolvablePolynomials"); 
               return true;
            }
-	}
+        }
         ExpVector ei = A.leadingExpVector();
         ExpVector ej = B.leadingExpVector();
         ExpVector g = ExpVector.EVSUM(ei,ej);
-	// boolean t =  g == e ;
+        // boolean t =  g == e ;
         ExpVector h = ExpVector.EVDIF(g,e);
         int s = ExpVector.EVSIGN(h);
         return ! ( s == 0 );
@@ -203,7 +203,7 @@ public class Reduction  {
         ExpVector ej = B.leadingExpVector();
         ExpVector g = ExpVector.EVSUM(ei,ej);
         ExpVector e = ExpVector.EVLCM(ei,ej);
-	//        boolean t =  g == e ;
+        //        boolean t =  g == e ;
         ExpVector h = ExpVector.EVDIF(g,e);
         int s = ExpVector.EVSIGN(h);
         return ! ( s == 0 );
@@ -237,23 +237,23 @@ public class Reduction  {
             for ( int i = 0; i < Pp.size(); i++ ) {
                 P[i] = Pp.get(i);
             }
-	}
+        }
         ExpVector[] htl = new ExpVector[ l ];
         Object[] lbc = new Object[ l ]; // want <C>
         GenPolynomial<C>[] p = new GenPolynomial[ l ];
         int i;
-	int j = 0;
+        int j = 0;
         for ( i = 0; i < l; i++ ) { 
             p[i] = P[i];
             m = p[i].leadingMonomial();
-	    if ( m != null ) { 
+            if ( m != null ) { 
                p[j] = p[i];
                htl[j] = m.getKey();
                lbc[j] = m.getValue();
-	       j++;
-	    }
-	}
-	l = j;
+               j++;
+            }
+        }
+        l = j;
         ExpVector e;
         C a;
         boolean mt = false;
@@ -263,27 +263,27 @@ public class Reduction  {
         GenPolynomial<C> Q = null;
         GenPolynomial<C> S = Ap;
         while ( S.length() > 0 ) { 
-	      m = S.leadingMonomial();
+              m = S.leadingMonomial();
               e = m.getKey();
               a = m.getValue();
               for ( i = 0; i < l; i++ ) {
                   mt = ExpVector.EVMT( e, htl[i] );
                   if ( mt ) break; 
-	      }
+              }
               if ( ! mt ) { 
                  //logger.debug("irred");
                  //T = new OrderedMapPolynomial( a, e );
                  R = R.add( a, e );
                  S = S.subtract( a, e ); 
-		 // System.out.println(" S = " + S);
-	      } else { 
-		 e = ExpVector.EVDIF( e, htl[i] );
+                 // System.out.println(" S = " + S);
+              } else { 
+                 e = ExpVector.EVDIF( e, htl[i] );
                  //logger.info("red div = " + e);
                  a = a.divide( (C)lbc[i] );
                  Q = p[i].multiply( a, e );
                  S = S.subtract( Q );
               }
-	}
+        }
         return R;
     }
 
@@ -328,8 +328,8 @@ public class Reduction  {
             if ( a.length() != 0 ) {
                a = a.monic();
                P.add( a );
-	    }
-	}
+            }
+        }
         int l = P.size();
         if ( l <= 1 ) return P;
 
@@ -341,30 +341,30 @@ public class Reduction  {
         logger.debug("irr = ");
         while ( irr != l ) {
             it = P.listIterator(); 
-	    a = it.next();
+            a = it.next();
             P.remove(0);
             e = a.leadingExpVector();
             a = normalform( P, a );
             logger.debug(String.valueOf(irr));
             if ( a.length() == 0 ) { l--;
-	       if ( l <= 1 ) { return P; }
-	    } else {
-	       f = a.leadingExpVector();
+               if ( l <= 1 ) { return P; }
+            } else {
+               f = a.leadingExpVector();
                if ( ExpVector.EVSIGN( f ) == 0 ) { 
-		  P = new ArrayList<GenPolynomial<C>>(); 
+                  P = new ArrayList<GenPolynomial<C>>(); 
                   P.add( a.monic() ); 
-	          return P;
+                  return P;
                }    
                if ( e.equals( f ) ) {
-		  irr++;
-	       } else {
+                  irr++;
+               } else {
                   irr = 0; a = a.monic();
-	       }
+               }
                P.add( a );
-	    }
-	}
+            }
+        }
         //System.out.println();
-	return P;
+        return P;
     }
 
 
@@ -395,23 +395,23 @@ public class Reduction  {
             for ( int j = 0; j < Pp.size(); j++ ) {
                 P[j] = Pp.get(j);
             }
-	}
+        }
         int i;
         ExpVector[] htl = new ExpVector[ l ];
         Object[] lbc = new Object[ l ]; // want <C>
         GenSolvablePolynomial<C>[] p = new GenSolvablePolynomial[ l ];
-	int j = 0;
+        int j = 0;
         for ( i = 0; i < l; i++ ) { 
             p[i] = P[i];
             m = p[i].leadingMonomial();
-	    if ( m != null ) { 
+            if ( m != null ) { 
                p[j] = p[i];
                htl[j] = m.getKey();
                lbc[j] = m.getValue();
-	       j++;
-	    }
-	}
-	l = j;
+               j++;
+            }
+        }
+        l = j;
         ExpVector e;
         C a;
         boolean mt = false;
@@ -421,28 +421,28 @@ public class Reduction  {
         GenSolvablePolynomial<C> Q = null;
         GenSolvablePolynomial<C> S = Ap;
         while ( S.length() > 0 ) { 
-	      m = S.leadingMonomial();
+              m = S.leadingMonomial();
               e = m.getKey();
               //logger.info("red = " + e);
               a = m.getValue();
               for ( i = 0; i < l; i++ ) {
                   mt = ExpVector.EVMT( e, htl[i] );
                   if ( mt ) break; 
-	      }
+              }
               if ( ! mt ) { 
                  //logger.debug("irred");
                  //T = new OrderedMapPolynomial( a, e );
                  R = (GenSolvablePolynomial<C>)R.add( a, e );
                  S = (GenSolvablePolynomial<C>)S.subtract( a, e ); 
-		 // System.out.println(" S = " + S);
-	      } else { 
+                 // System.out.println(" S = " + S);
+              } else { 
                  //logger.debug("red");
-		 e = ExpVector.EVDIF( e, htl[i] );
+                 e = ExpVector.EVDIF( e, htl[i] );
                  a = a.divide( (C)lbc[i] );
                  Q = p[i].multiplyLeft( a, e );
                  S = (GenSolvablePolynomial<C>)S.subtract( Q );
               }
-	}
+        }
         return R;
     }
 
@@ -489,8 +489,8 @@ public class Reduction  {
             if ( a.length() != 0 ) {
                a = (GenSolvablePolynomial<C>)a.monic();
                P.add( a );
-	    }
-	}
+            }
+        }
         int l = P.size();
         if ( l <= 1 ) return P;
 
@@ -502,30 +502,30 @@ public class Reduction  {
         logger.debug("irr = ");
         while ( irr != l ) {
             it = P.listIterator(); 
-	    a = it.next();
+            a = it.next();
             P.remove(0);
             e = a.leadingExpVector();
             a = leftNormalform( P, a );
             logger.debug(String.valueOf(irr));
             if ( a.length() == 0 ) { l--;
-	       if ( l <= 1 ) { return P; }
-	    } else {
-	       f = a.leadingExpVector();
+               if ( l <= 1 ) { return P; }
+            } else {
+               f = a.leadingExpVector();
                if ( ExpVector.EVSIGN( f ) == 0 ) { 
-		  P = new ArrayList<GenSolvablePolynomial<C>>(); 
+                  P = new ArrayList<GenSolvablePolynomial<C>>(); 
                   P.add( (GenSolvablePolynomial<C>)a.monic() ); 
-	          return P;
+                  return P;
                }    
                if ( e.equals( f ) ) {
-		  irr++;
-	       } else {
+                  irr++;
+               } else {
                   irr = 0; a = (GenSolvablePolynomial<C>)a.monic();
-	       }
+               }
                P.add( a );
-	    }
-	}
+            }
+        }
         //System.out.println();
-	return P;
+        return P;
     }
 
 
@@ -580,7 +580,7 @@ public class Reduction  {
                  S = Ap; // S.add(R)? // restart reduction ?
                  R = Rz; 
               }
-	      m = S.leadingMonomial();
+              m = S.leadingMonomial();
               e = m.getKey();
               a = m.getValue();
               for ( int i = 0; i < P.length ; i++ ) {
@@ -590,22 +590,22 @@ public class Reduction  {
                      mt = ExpVector.EVMT( e, f );
                      if ( mt ) break; 
                   }
-	      }
+              }
               if ( ! mt ) { 
                  //logger.debug("irred");
                  //T = new OrderedMapPolynomial( a, e );
                  R = R.add( a, e );
                  S = S.subtract( a, e ); 
-		 // System.out.println(" S = " + S);
-	      } else { 
+                 // System.out.println(" S = " + S);
+              } else { 
                  //logger.debug("red");
                  m1 = p.leadingMonomial();
-		 e = ExpVector.EVDIF( e, f );
+                 e = ExpVector.EVDIF( e, f );
                  a = a.divide( m1.getValue() );
                  Q = p.multiply( a, e );
                  S = S.subtract( Q );
               }
-	}
+        }
         return R;
     }
 
@@ -668,7 +668,7 @@ public class Reduction  {
                  R = Rz; 
               }
 
-	      m = S.leadingMonomial();
+              m = S.leadingMonomial();
               e = m.getKey();
               a = m.getValue();
               for ( int i = 0; i < P.length ; i++ ) {
@@ -678,22 +678,22 @@ public class Reduction  {
                      mt = ExpVector.EVMT( e, f );
                      if ( mt ) break; 
                   }
-	      }
+              }
               if ( ! mt ) { 
                  //logger.debug("irred");
                  //T = new OrderedMapPolynomial( a, e );
                  R = R.add( a, e );
                  S = S.subtract( a, e ); 
-		 // System.out.println(" S = " + S);
-	      } else { 
+                 // System.out.println(" S = " + S);
+              } else { 
                  //logger.debug("red");
                  m1 = p.leadingMonomial();
-		 e = ExpVector.EVDIF( e, f );
+                 e = ExpVector.EVDIF( e, f );
                  a = a.divide( m1.getValue() );
                  Q = p.multiply( a, e );
                  S = S.subtract( Q );
               }
-	}
+        }
         return R;
     }
 
