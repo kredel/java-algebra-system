@@ -21,6 +21,7 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
 //import edu.jas.structure.PrettyPrint;
+import edu.jas.arith.ModInteger;
 import edu.jas.arith.BigRational;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
@@ -83,7 +84,7 @@ public class IdealTest extends TestCase {
    float q = 0.2f; //0.4f
 
    protected void setUp() {
-       BigRational coeff = new BigRational(9);
+       BigRational coeff = new BigRational(17,1);
        to = new TermOrder( /*TermOrder.INVLEX*/ );
        fac = new GenPolynomialRing<BigRational>(coeff,rl,to);
        a = b = c = d = e = null;
