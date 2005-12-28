@@ -823,7 +823,7 @@ public class ExpVector implements Cloneable, Serializable {
     }
 
 
-    /**
+    /*
      * Compare.
      * @param evord
      * @param U
@@ -831,7 +831,7 @@ public class ExpVector implements Cloneable, Serializable {
      * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
      * @deprecated Now obsoleted by TermOrder.get*Comparator, 
      * used only in TermOrderTest.
-     */
+     *
     public static int EVCOMP( int evord, ExpVector U, ExpVector V ) {
         int t = 0;
         switch ( evord ) {
@@ -853,9 +853,10 @@ public class ExpVector implements Cloneable, Serializable {
         }
         return t;
     }
+     */
 
 
-    /**
+    /*
      * Compare part.
      * Compare entries between begin and end (-1).
      * @param evord
@@ -866,7 +867,7 @@ public class ExpVector implements Cloneable, Serializable {
      * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
      * @deprecated Now obsoleted by TermOrder.get*Comparator, 
      * used only in TermOrderTest.
-     */
+     *
     public static int EVCOMP( int evord, ExpVector U, ExpVector V, 
                               int begin, int end ) {
         int t = 0;
@@ -889,5 +890,6 @@ public class ExpVector implements Cloneable, Serializable {
         }
         return t;
     }
+     */
 
 }

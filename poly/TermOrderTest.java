@@ -158,7 +158,6 @@ public class TermOrderTest extends TestCase {
 /**
  * Test compare.
  * 
- */
  public void testCompare() {
      float q = (float) 0.9;
 
@@ -187,6 +186,7 @@ public class TermOrderTest extends TestCase {
      assertEquals("x = 0",0,x);
      assertEquals("y = 0",0,y);
    }
+ */
 
 
 /**
@@ -265,7 +265,6 @@ public class TermOrderTest extends TestCase {
 /**
  * Test compare split TO.
  * 
- */
  public void testCompareSplit() {
      float q = (float) 0.9;
      int r = 10;
@@ -308,6 +307,7 @@ public class TermOrderTest extends TestCase {
      assertEquals("x = 0",0,x);
      assertEquals("y = 0",0,y);
    }
+ */
 
 
 /**
