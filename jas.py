@@ -48,7 +48,7 @@ class Ideal:
         s = self.pset;
         F = s.list;
         t = System.currentTimeMillis();
-        G = GroebnerBase.GB(F);
+        G = GroebnerBaseSeq().GB(F);
         t = System.currentTimeMillis() - t;
         print "sequential executed in %s ms" % t; 
         g = OrderedPolynomialList(s.ring,G);
@@ -59,7 +59,7 @@ class Ideal:
         s = self.pset;
         F = s.list;
         t = System.currentTimeMillis();
-        G = GroebnerBaseParallel.GB(F,th);
+        G = GroebnerBaseParallel(th).GB(F);
         t = System.currentTimeMillis() - t;
         print "parallel %s executed in %s ms" % (th, t); 
         g = OrderedPolynomialList(s.ring,G);
@@ -70,7 +70,7 @@ class Ideal:
         F = s.list;
         t = System.currentTimeMillis();
         # G = GroebnerBaseDistributed.Server(F,th);
-        G = GBDist().execute(F,th,machine,port);
+        G = GBDist(th,machine,port).execute(F);
         t = System.currentTimeMillis() - t;
         print "distributed %s executed in %s ms" % (th,t); 
         g = OrderedPolynomialList(s.ring,G);
@@ -87,7 +87,7 @@ class Ideal:
         F = s.list;
         G = reducer.list;
         t = System.currentTimeMillis();
-        N = Reduction.normalform(G,F);
+        N = ReductionSeq().normalform(G,F);
         t = System.currentTimeMillis() - t;
         print "sequential executed in %s ms" % t; 
         n = OrderedPolynomialList(s.ring,N);
@@ -122,7 +122,7 @@ class SolvableIdeal:
         s = self.pset;
         F = s.list;
         t = System.currentTimeMillis();
-        G = SolvableGroebnerBase.leftGB(F);
+        G = SolvableGroebnerBaseSeq().leftGB(F);
         t = System.currentTimeMillis() - t;
         print "executed in %s ms" % t; 
         g = OrderedPolynomialList(s.ring,G);
@@ -132,7 +132,7 @@ class SolvableIdeal:
         s = self.pset;
         F = s.list;
         t = System.currentTimeMillis();
-        G = SolvableGroebnerBase.twosidedGB(F);
+        G = SolvableGroebnerBaseSeq().twosidedGB(F);
         t = System.currentTimeMillis() - t;
         print "executed in %s ms" % t; 
         g = OrderedPolynomialList(s.ring,G);
@@ -175,7 +175,7 @@ class SubModule:
         s = self.pset;
         F = s.list;
         t = System.currentTimeMillis();
-        G = ModGroebnerBase.GB(self.cols,F);
+        G = ModGroebnerBase().GB(self.cols,F);
         t = System.currentTimeMillis() - t;
         print "executed in %s ms" % t; 
         self.pset = PolynomialList(s.ring,G);
@@ -216,7 +216,7 @@ class SolvableSubModule:
         s = self.pset;
         F = s.list;
         t = System.currentTimeMillis();
-        G = ModSolvableGroebnerBase.leftGB(self.cols,F);
+        G = ModSolvableGroebnerBase().leftGB(self.cols,F);
         t = System.currentTimeMillis() - t;
         print "executed in %s ms" % t; 
         self.pset = PolynomialList(s.ring,G);

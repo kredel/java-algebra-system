@@ -54,13 +54,13 @@ from edu.jas.module import Syzygy;
 from edu.jas.module import ModuleList;
 from edu.jas.module import ModGroebnerBase;
 
-s = Syzygy.zeroRelations( rg.list );
+s = Syzygy().zeroRelations( rg.list );
 sl = ModuleList(rg.ring,s);
 
 print "syzygy:", sl;
 print;
 
-z = Syzygy.isZeroRelation( s, rg.list );
+z = Syzygy().isZeroRelation( s, rg.list );
 
 print "is Syzygy ?",
 if z:
@@ -75,20 +75,20 @@ for i in range(1,len(r.ring.vars)+1):
    print "\n %s. resolution" % i;
 
    sl = zg;
-   mg = ModGroebnerBase.GB(sl);
+   mg = ModGroebnerBase().GB(sl);
    print "Mod GB: ", mg;
    print;
 
-   zg = Syzygy.zeroRelations(mg);
+   zg = Syzygy().zeroRelations(mg);
    print "syzygies of Mod GB: ", zg;
    print;
 
-   if ModGroebnerBase.isGB( mg ):
+   if ModGroebnerBase().isGB( mg ):
        print "is GB";
    else:
        print "is not GB";
 
-   if Syzygy.isZeroRelation(zg,mg):
+   if Syzygy().isZeroRelation(zg,mg):
        print "is Syzygy";
    else:
        print "is not Syzygy";
