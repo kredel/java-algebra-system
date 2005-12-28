@@ -25,6 +25,7 @@ import edu.jas.poly.PolynomialList;
 import edu.jas.ring.Reduction;
 import edu.jas.ring.GroebnerBase;
 import edu.jas.ring.SolvableGroebnerBase;
+import edu.jas.ring.SolvableGroebnerBaseSeq;
 
 import edu.jas.module.ModuleList;
 
@@ -35,9 +36,24 @@ import edu.jas.module.ModuleList;
  * @author Heinz Kredel
  */
 
-public class ModSolvableGroebnerBase  {
+public class ModSolvableGroebnerBase<C extends RingElem<C>> {
 
     private static final Logger logger = Logger.getLogger(ModSolvableGroebnerBase.class);
+
+
+    /**
+     * Used Solvable Groebner base algorithm.
+     */
+    protected final SolvableGroebnerBase<C> sbb;
+
+
+    /**
+     * Constructor.
+     */
+    public ModSolvableGroebnerBase() {
+        sbb = new SolvableGroebnerBaseSeq<C>();
+    }
+
 
     /**
      * Module left Groebner base test.
@@ -46,11 +62,11 @@ public class ModSolvableGroebnerBase  {
      * @param F a module basis.
      * @return true, if F is a left Groebner base, else false.
      */
-    public static <C extends RingElem<C>>  
-           boolean 
+    public boolean 
            isLeftGB(int modv, List<GenSolvablePolynomial<C>> F) {  
-        return SolvableGroebnerBase.isLeftGB(modv,F);
+        return sbb.isLeftGB(modv,F);
     }
+
 
     /**
      * Module left Groebner base test.
@@ -58,8 +74,7 @@ public class ModSolvableGroebnerBase  {
      * @param M a module basis.
      * @return true, if M is a left Groebner base, else false.
      */
-    public static <C extends RingElem<C>>
-           boolean 
+    public boolean 
            isLeftGB(ModuleList<C> M) {  
         if ( M == null || M.list == null ) {
             return true;
@@ -69,7 +84,7 @@ public class ModSolvableGroebnerBase  {
         }
         int modv = M.cols; // > 0  
         PolynomialList<C> F = M.getPolynomialList();
-        return SolvableGroebnerBase.<C>isLeftGB(modv,F.castToSolvableList());
+        return sbb.isLeftGB(modv,F.castToSolvableList());
     }
 
 
@@ -80,10 +95,9 @@ public class ModSolvableGroebnerBase  {
      * @param F a module basis.
      * @return leftGB(F) a left Groebner base for F.
      */
-    public static <C extends RingElem<C>>
-           List<GenSolvablePolynomial<C>> 
+    public List<GenSolvablePolynomial<C>> 
            leftGB(int modv, List<GenSolvablePolynomial<C>> F) {  
-        return SolvableGroebnerBase.leftGB(modv,F);
+        return sbb.leftGB(modv,F);
     }
 
     /**
@@ -92,8 +106,7 @@ public class ModSolvableGroebnerBase  {
      * @param M a module basis.
      * @return leftGB(M) a left Groebner base for M.
      */
-    public static <C extends RingElem<C>>
-           ModuleList<C> 
+    public ModuleList<C> 
            leftGB(ModuleList<C> M) {  
         ModuleList<C> N = M;
         if ( M == null || M.list == null ) {
@@ -107,7 +120,7 @@ public class ModSolvableGroebnerBase  {
             = (GenSolvablePolynomialRing<C>)F.ring;
         int modv = M.cols;
         List<GenSolvablePolynomial<C>> G 
-            = SolvableGroebnerBase.leftGB(modv,F.castToSolvableList());
+            = sbb.leftGB(modv,F.castToSolvableList());
         F = new PolynomialList<C>(sring,G);
         N = F.getModuleList(modv);
         return N;
@@ -122,10 +135,9 @@ public class ModSolvableGroebnerBase  {
      * @param F a module basis.
      * @return true, if F is a twosided Groebner base, else false.
      */
-    public static <C extends RingElem<C>>
-           boolean 
+    public boolean 
            isTwosidedGB(int modv, List<GenSolvablePolynomial<C>> F) {  
-        return SolvableGroebnerBase.isTwosidedGB(modv,F);
+        return sbb.isTwosidedGB(modv,F);
     }
 
     /**
@@ -134,8 +146,7 @@ public class ModSolvableGroebnerBase  {
      * @param M a module basis.
      * @return true, if M is a twosided Groebner base, else false.
      */
-    public static <C extends RingElem<C>>
-           boolean 
+    public boolean 
            isTwosidedGB(ModuleList<C> M) {  
         if ( M == null || M.list == null ) {
             return true;
@@ -145,7 +156,7 @@ public class ModSolvableGroebnerBase  {
         }
         PolynomialList<C> F = M.getPolynomialList();
         int modv = M.cols; // > 0  
-        return SolvableGroebnerBase.isTwosidedGB(modv,F.castToSolvableList());
+        return sbb.isTwosidedGB(modv,F.castToSolvableList());
     }
 
 
@@ -156,10 +167,9 @@ public class ModSolvableGroebnerBase  {
      * @param F a module basis.
      * @return tsGB(F) a twosided Groebner base for F.
      */
-    public static <C extends RingElem<C>>
-           List<GenSolvablePolynomial<C>> 
+    public List<GenSolvablePolynomial<C>> 
            twosidedGB(int modv, List<GenSolvablePolynomial<C>> F) {  
-        return SolvableGroebnerBase.twosidedGB(modv,F);
+        return sbb.twosidedGB(modv,F);
     }
 
     /**
@@ -168,8 +178,7 @@ public class ModSolvableGroebnerBase  {
      * @param M a module basis.
      * @return tsGB(M) a twosided Groebner base for M.
      */
-    public static <C extends RingElem<C>>
-           ModuleList<C> 
+    public ModuleList<C> 
            twosidedGB(ModuleList<C> M) {  
         ModuleList<C> N = M;
         if ( M == null || M.list == null ) {
@@ -183,7 +192,7 @@ public class ModSolvableGroebnerBase  {
             = (GenSolvablePolynomialRing<C>)F.ring;
         int modv = M.cols;
         List<GenSolvablePolynomial<C>> G 
-            = SolvableGroebnerBase.twosidedGB(modv,F.castToSolvableList());
+            = sbb.twosidedGB(modv,F.castToSolvableList());
         F = new PolynomialList<C>(sring,G);
         N = F.getModuleList(modv);
         return N;
@@ -195,8 +204,7 @@ public class ModSolvableGroebnerBase  {
      * Reduce matrix to diagonal form using rows with units.
      */
     /* ----------------------------------------------------------------------
-    public static <C extends RingElem<C>>
-           ModuleList<C> 
+    public ModuleList<C> 
            leftReductionBase(ModuleList<C> M) {  
         ModuleList<C> N = M;
         if ( M == null || M.list == null ) {
@@ -271,7 +279,7 @@ public class ModSolvableGroebnerBase  {
      * return last index of one component.
      */
     /*
-    public static int hasOne( List row ) {
+    public int hasOne( List row ) {
         int col = -1;
         int i = 0;
         for (Iterator it = row.iterator(); it.hasNext(); i++ ) {
@@ -291,7 +299,7 @@ public class ModSolvableGroebnerBase  {
      * number of trailing zero components.
      */
     /*
-    public static int trailingZeros( List row ) {
+    public int trailingZeros( List row ) {
         int col = row.size()-1;
         for (int i = col; i >= 0; i-- ) {
             OrderedPolynomial pol = (OrderedPolynomial)row.get(i);
@@ -310,7 +318,7 @@ public class ModSolvableGroebnerBase  {
      * compute a + l b.
      */
     /*
-    public static List linearCombination( List a, SolvablePolynomial l, List b ) {
+    public List linearCombination( List a, SolvablePolynomial l, List b ) {
         if ( a == null ) {
             throw new RuntimeException("a null " + a );
             //return null; // wrong @fixme
@@ -341,7 +349,7 @@ public class ModSolvableGroebnerBase  {
      * Reduce a with b.
      */
     /*
-    public static List gaussReduce( List a, List b ) {
+    public List gaussReduce( List a, List b ) {
         if ( a == null ) {
             return null; 
         }
@@ -386,7 +394,7 @@ public class ModSolvableGroebnerBase  {
      * intersect to n components.
      */
     /*
-    public static List intersect( int p, List row ) {
+    public List intersect( int p, List row ) {
         List irow = new ArrayList( p );
         for (int i = 0; i < p; i++ ) {
             OrderedPolynomial pol = (OrderedPolynomial)row.get(i);
@@ -400,7 +408,7 @@ public class ModSolvableGroebnerBase  {
      * Intersection to n components.
      */
     /*
-    public static ModuleList intersection(int p, ModuleList M) {  
+    public ModuleList intersection(int p, ModuleList M) {  
         ModuleList N = M;
         List mo = (List)M.list;
         if ( mo == null || mo.size() == 0 ) {
@@ -424,7 +432,7 @@ public class ModSolvableGroebnerBase  {
      * Left irreducible base.
      */
     /*
-    public static ArrayList leftIrreducibleBase(int modv, List F) {  
+    public ArrayList leftIrreducibleBase(int modv, List F) {  
         return leftIrreducibleSet(modv,F);
     }
     */
@@ -434,7 +442,7 @@ public class ModSolvableGroebnerBase  {
      * Left irreducible base.
      */
     /*
-    public static ModuleList leftIrreducibleBase(ModuleList M) {  
+    public ModuleList leftIrreducibleBase(ModuleList M) {  
         ModuleList N = M;
         List mo = (List)M.list;
         int modv = 0;
@@ -455,7 +463,7 @@ public class ModSolvableGroebnerBase  {
      * Left irreducible set.
      */
     /*
-    public static ArrayList leftIrreducibleSet(int modv, List Pp) {  
+    public ArrayList leftIrreducibleSet(int modv, List Pp) {  
         SolvablePolynomial a;
         ArrayList P = new ArrayList();
         ListIterator it = Pp.listIterator();

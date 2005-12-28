@@ -39,49 +39,108 @@ import edu.unima.ky.parallel.SocketChannel;
  * @author Heinz Kredel
  */
 
-public class GroebnerBaseDistributed  {
+public class GroebnerBaseDistributed<C extends RingElem<C>> 
+       extends GroebnerBaseAbstract<C>  {
 
     private static final Logger logger = Logger.getLogger(GroebnerBaseDistributed.class);
 
 
     /**
-     * Distributed Groebner base server part.
-     * Slaves maintain pairlist.
-     * @param C coefficient type.
-     * @param F polynomial list.
-     * @param threads number of threads to use.
-     * @param port the server is to listen.
-     * @return GB(F) a Groebner base of F.
-     * @throws IOException
+     * Number of threads to use.
      */
-    public static <C extends RingElem<C>>
-           ArrayList<GenPolynomial<C>> 
-                  Server(List<GenPolynomial<C>> F, 
-                         int threads, 
-                         int port) 
-                  throws IOException {  
-        return Server(0,F,threads,port);
+    protected final int threads;
+
+
+    /**
+     * Default number of threads.
+     */
+    protected static final int DEFAULT_THREADS = 2;
+
+
+    /**
+     * Pool of threads to use.
+     */
+    protected final ThreadPool pool;
+
+
+    /**
+     * Default server port.
+     */
+    protected static final int DEFAULT_PORT = 4711;
+
+
+    /**
+     * Server port to use.
+     */
+    protected final int port;
+
+
+    /**
+     * Constructor.
+     */
+    public GroebnerBaseDistributed() {
+        this( DEFAULT_THREADS, DEFAULT_PORT );
     }
 
 
     /**
-     * Distributed Groebner base server part.
+     * Constructor.
+     * @param threads number of threads to use.
+     */
+    public GroebnerBaseDistributed(int threads) {
+        this(threads, new ThreadPool(threads), DEFAULT_PORT );
+    }
+
+
+    /**
+     * Constructor.
+     * @param threads number of threads to use.
+     * @param port server port to use.
+     */
+    public GroebnerBaseDistributed(int threads, int port) {
+        this(threads, new ThreadPool(threads), port );
+    }
+
+
+    /**
+     * Constructor.
+     * @param threads number of threads to use.
+     * @param pool ThreadPool to use.
+     * @param port server port to use.
+     */
+    public GroebnerBaseDistributed(int threads, ThreadPool pool, int port) {
+	if ( threads < 1 ) {
+           threads = 1;
+        }
+        this.threads = threads;
+        this.pool = pool;
+        this.port = port;
+        red = new ReductionPar<C>();
+    }
+
+
+    /**
+     * Cleanup and terminate ThreadPool.
+     */
+    public void terminate() {
+	if ( pool == null ) {
+           return;
+        }
+        pool.terminate();
+    }
+
+
+    /**
+     * Distributed Groebner base.
      * Slaves maintain pairlist.
      * @param C coefficient type.
      * @param modv number of module variables.
      * @param F polynomial list.
-     * @param threads number of threads to use.
-     * @param port the server is to listen.
-     * @return GB(F) a Groebner base of F.
-     * @throws IOException
+     * @return GB(F) a Groebner base of F or null, if a IOException occurs.
      */
-    public static <C extends RingElem<C>>
-           ArrayList<GenPolynomial<C>> 
-                  Server(int modv,
-                         List<GenPolynomial<C>> F, 
-                         int threads, 
-                         int port) 
-                  throws IOException {  
+    public List<GenPolynomial<C>> 
+             GB( int modv,
+                 List<GenPolynomial<C>> F ) {  
 
         final int DL_PORT = port + 100;
         ChannelFactory cf = new ChannelFactory(port);
@@ -90,7 +149,7 @@ public class GroebnerBaseDistributed  {
         logger.debug("dist-list server running");
 
         GenPolynomial<C> p;
-        ArrayList<GenPolynomial<C>> G = new ArrayList<GenPolynomial<C>>();
+        List<GenPolynomial<C>> G = new ArrayList<GenPolynomial<C>>();
         OrderedPairlist<C> pairlist = null; 
         boolean oneInGB = false;
         int l = F.size();
@@ -128,9 +187,6 @@ public class GroebnerBaseDistributed  {
 
         logger.debug("looking for clients");
         long t = System.currentTimeMillis();
-        if ( threads < 1 ) {
-           threads = 1;
-        }
         // now in DL, uses resend for late clients
         //while ( dls.size() < threads ) { sleep(); }
 
@@ -141,12 +197,11 @@ public class GroebnerBaseDistributed  {
             theList.put( new Integer(i), al.get(i) );
         }
 
-        ThreadPool T = new ThreadPool(threads);
         Terminator fin = new Terminator(threads);
         ReducerServer<C> R;
         for ( int i = 0; i < threads; i++ ) {
               R = new ReducerServer<C>( fin, cf, theList, G, pairlist );
-              T.addJob( R );
+              pool.addJob( R );
         }
         logger.debug("main loop waiting");
         fin.done();
@@ -161,8 +216,8 @@ public class GroebnerBaseDistributed  {
                       + " #pairlist list = "+G.size() );
         }
         long time = System.currentTimeMillis();
-        ArrayList<GenPolynomial<C>> Gp 
-             = MiServer(G,T); // not jet distributed but threaded
+        List<GenPolynomial<C>> Gp; 
+        Gp = minimalGB(G); // not jet distributed but threaded
         time = System.currentTimeMillis() - time;
         logger.info("parallel gbmi = " + time);
         /*
@@ -173,7 +228,7 @@ public class GroebnerBaseDistributed  {
         */
         G = Gp;
         cf.terminate();
-        T.terminate();
+        // no mor required // pool.terminate();
         theList.terminate();
         dls.terminate();
         logger.info("pairlist #put = " + pairlist.putCount() 
@@ -188,13 +243,10 @@ public class GroebnerBaseDistributed  {
      * GB distributed client.
      * @param C coefficient type.
      * @param host the server runns on.
-     * @param port of the server.
      * @throws IOException
      */
-    public static <C extends RingElem<C>>
-           void 
-                  Client(String host, int port) 
-                  throws IOException {  
+    public void clientPart(String host) 
+                          throws IOException {  
 
         ChannelFactory cf = new ChannelFactory(port+10); // != port for localhost
         SocketChannel pairChannel = cf.getChannel(host,port);
@@ -213,19 +265,16 @@ public class GroebnerBaseDistributed  {
 
 
     /**
-     * Minimal ordered groebner basis, distributed.
-     * Not jet distributed but threaded.
+     * Minimal ordered groebner basis.
      * @param C coefficient type.
      * @param Fp a Groebner base.
-     * @param T pool of threads to use.
-     * @return GBmi(F) a minimal Groebner base of Fp.
+     * @return a reduced Groebner base of Fp.
      */
-    public static <C extends RingElem<C>>
-           ArrayList<GenPolynomial<C>> 
-                  MiServer(List<GenPolynomial<C>> Fp, 
-                           ThreadPool T) {  
+    public List<GenPolynomial<C>> 
+                minimalGB(List<GenPolynomial<C>> Fp) {  
         GenPolynomial<C> a;
-        ArrayList<GenPolynomial<C>> G = new ArrayList<GenPolynomial<C>>();
+        ArrayList<GenPolynomial<C>> G;
+        G = new ArrayList<GenPolynomial<C>>( Fp.size() );
         ListIterator<GenPolynomial<C>> it = Fp.listIterator();
         while ( it.hasNext() ) { 
             a = it.next();
@@ -241,7 +290,8 @@ public class GroebnerBaseDistributed  {
         ExpVector e;        
         ExpVector f;        
         GenPolynomial<C> p;
-        ArrayList<GenPolynomial<C>> F = new ArrayList<GenPolynomial<C>>();
+        ArrayList<GenPolynomial<C>> F;
+        F = new ArrayList<GenPolynomial<C>>( G.size() );
         boolean mt;
 
         while ( G.size() > 0 ) {
@@ -281,7 +331,7 @@ public class GroebnerBaseDistributed  {
             mirs[i] = new MiReducerServer<C>((List<GenPolynomial<C>>)G.clone(), 
                                              (List<GenPolynomial<C>>)F.clone(), 
                                              a );
-            T.addJob( mirs[i] );
+            pool.addJob( mirs[i] );
             i++;
             F.add( a );
         }
@@ -303,7 +353,7 @@ public class GroebnerBaseDistributed  {
  * @param C coefficient type.
  */
 
-class ReducerServer <C extends RingElem<C>> implements Runnable {
+class ReducerServer<C extends RingElem<C>> implements Runnable {
       private Terminator pool;
       private ChannelFactory cf;
       private SocketChannel pairChannel;
@@ -337,7 +387,7 @@ class ReducerServer <C extends RingElem<C>> implements Runnable {
            } 
            logger.debug("pairChannel = "+pairChannel);
 
-           Pair pair;
+           Pair<C> pair;
            GenPolynomial<C> pi;
            GenPolynomial<C> pj;
            GenPolynomial<C> S;
@@ -555,14 +605,14 @@ class GBTransportMessPoly<C extends RingElem<C>> extends GBTransportMess {
  * Distributed GB transport message for pairs.
  */
 
-class GBTransportMessPair extends GBTransportMess {
-    public final Pair pair;
+class GBTransportMessPair<C extends RingElem<C>> extends GBTransportMess {
+    public final Pair<C> pair;
 
     /**
      * GBTransportMessPair.
      * @param p pair for transfer.
      */
-    public GBTransportMessPair(Pair p) {
+    public GBTransportMessPair(Pair<C> p) {
         this.pair = p;
     }
 
@@ -628,27 +678,31 @@ class GBTransportMessPairIndex extends GBTransportMess {
  * Distributed clients reducing worker threads.
  */
 
-class ReducerClient <C extends RingElem<C>> implements Runnable {
+class ReducerClient<C extends RingElem<C>> implements Runnable {
+
       private SocketChannel pairChannel;
       private DistHashTable theList;
+      private ReductionPar<C> red;
+
       private static Logger logger = Logger.getLogger(ReducerClient.class);
 
       ReducerClient(SocketChannel pc, DistHashTable dl) {
              pairChannel = pc;
              theList = dl;
+             red = new ReductionPar<C>();
       } 
 
       public void run() {
            logger.debug("pairChannel = "+pairChannel);
            logger.debug("reducer client running");
-           Pair pair = null;
+           Pair<C> pair = null;
            GenPolynomial<C> pi;
            GenPolynomial<C> pj;
            GenPolynomial<C> S;
            GenPolynomial<C> H = null;
            boolean set = false;
            boolean goon = true;
-           int red = 0;
+           int reduction = 0;
            int sleeps = 0;
            Integer pix;
            Integer pjx;
@@ -693,7 +747,7 @@ class ReducerClient <C extends RingElem<C>> implements Runnable {
                   || pp instanceof GBTransportMessPairIndex ) {
                   pi = pj = null;
                   if ( pp instanceof GBTransportMessPair ) {
-                     pair = ((GBTransportMessPair)pp).pair;
+                     pair = ((GBTransportMessPair<C>)pp).pair;
                      if ( pair != null ) {
                         pi = pair.pi; 
                         pj = pair.pj; 
@@ -710,7 +764,7 @@ class ReducerClient <C extends RingElem<C>> implements Runnable {
                   }
 
                   if ( pi != null && pj != null ) {
-                      S = Reduction.<C>SPolynomial( pi, pj );
+                      S = red.SPolynomial( pi, pj );
                       //System.out.println("S   = " + S);
                       if ( S.isZERO() ) {
                          // pair.setZero(); does not work in dist
@@ -718,8 +772,8 @@ class ReducerClient <C extends RingElem<C>> implements Runnable {
                          if ( logger.isDebugEnabled() ) {
                             logger.debug("ht(S) = " + S.leadingExpVector() );
                          }
-                         H = Reduction.<C>normalformMod( theList, S );
-                         red++;
+                         H = red.normalform( theList, S );
+                         reduction++;
                          if ( H.isZERO() ) {
                             // pair.setZero(); does not work in dist
                          } else {
@@ -742,7 +796,7 @@ class ReducerClient <C extends RingElem<C>> implements Runnable {
                    e.printStackTrace();
                }
            }
-           logger.info( "terminated, done " + red + " reductions");
+           logger.info( "terminated, done " + reduction + " reductions");
            pairChannel.close();
       }
 }
@@ -753,19 +807,23 @@ class ReducerClient <C extends RingElem<C>> implements Runnable {
  * Not jet distributed but threaded.
  */
 
-class MiReducerServer <C extends RingElem<C>> implements Runnable {
-        private List G;
-        private List F;
+class MiReducerServer<C extends RingElem<C>> implements Runnable {
+        private List<GenPolynomial<C>> G;
+        private List<GenPolynomial<C>> F;
         private GenPolynomial<C> S;
         private GenPolynomial<C> H;
         private Semaphore done = new Semaphore(0);
+        private Reduction<C> red;
         private static Logger logger = Logger.getLogger(MiReducerServer.class);
 
-      MiReducerServer(List G, List F, GenPolynomial<C> p) {
+      MiReducerServer( List<GenPolynomial<C>> G, 
+                       List<GenPolynomial<C>> F, 
+                       GenPolynomial<C> p) {
             this.G = G;
             this.F = F;
             S = p;
             H = S;
+            red = new ReductionPar<C>();
       } 
 
       /**
@@ -782,8 +840,8 @@ class MiReducerServer <C extends RingElem<C>> implements Runnable {
             if ( logger.isDebugEnabled() ) {
                  logger.debug("ht(S) = " + S.leadingExpVector() );
             }
-            H = Reduction.<C>normalformMod( G, H );
-            H = Reduction.<C>normalformMod( F, H );
+            H = red.normalform( G, H ); //mod
+            H = red.normalform( F, H ); //mod
             done.V();
             if ( logger.isDebugEnabled() ) {
                  logger.debug("ht(H) = " + H.leadingExpVector() );
@@ -798,19 +856,23 @@ class MiReducerServer <C extends RingElem<C>> implements Runnable {
  * Not jet used.
  */
 
-class MiReducerClient <C extends RingElem<C>> implements Runnable {
-        private List G;
-        private List F;
+class MiReducerClient<C extends RingElem<C>> implements Runnable {
+        private List<GenPolynomial<C>> G;
+        private List<GenPolynomial<C>> F;
         private GenPolynomial<C> S;
         private GenPolynomial<C> H;
+        private Reduction<C> red;
         private Semaphore done = new Semaphore(0);
         private static Logger logger = Logger.getLogger(MiReducerClient.class);
 
-      MiReducerClient(List G, List F, GenPolynomial<C> p) {
+      MiReducerClient( List<GenPolynomial<C>> G, 
+                       List<GenPolynomial<C>> F, 
+                       GenPolynomial<C> p) {
             this.G = G;
             this.F = F;
             S = p;
             H = S;
+            red = new ReductionPar<C>();
       } 
 
       /**
@@ -827,8 +889,8 @@ class MiReducerClient <C extends RingElem<C>> implements Runnable {
             if ( logger.isDebugEnabled() ) {
                  logger.debug("ht(S) = " + S.leadingExpVector() );
             }
-            H = Reduction.<C>normalformMod( G, H );
-            H = Reduction.<C>normalformMod( F, H );
+            H = red.normalform( G, H ); //mod
+            H = red.normalform( F, H ); //mod
             done.V();
             if ( logger.isDebugEnabled() ) {
                  logger.debug("ht(H) = " + H.leadingExpVector() );

@@ -19,6 +19,7 @@ import edu.jas.poly.GenSolvablePolynomial;
 
 import edu.jas.ring.Reduction;
 import edu.jas.ring.GroebnerBase;
+import edu.jas.ring.GroebnerBaseSeq;
 
 import edu.jas.module.ModuleList;
 
@@ -29,26 +30,40 @@ import edu.jas.module.ModuleList;
  * @author Heinz Kredel
  */
 
-public class ModGroebnerBase  {
+public class ModGroebnerBase<C extends RingElem<C>>  {
 
     private static final Logger logger = Logger.getLogger(ModGroebnerBase.class);
+
+
+/**
+ * Used Groebner base algorithm.
+ */
+    protected final GroebnerBase<C> bb;
+
+
+/**
+ * Constructor.
+ */
+    public ModGroebnerBase() {
+        bb = new GroebnerBaseSeq<C>();
+    }
+
+
 
 /**
  * Module Groebner base test.
  */
-
-    public static <C extends RingElem<C>> 
-           boolean isGB(int modv, List<GenPolynomial<C>> F) {  
-        return GroebnerBase.isGB(modv,F);
+    public boolean isGB(int modv, List<GenPolynomial<C>> F) {  
+        return bb.isGB(modv,F);
     }
 
- /**
-  * isGB.
-  * @param M a module basis.
-  * @return true, if M is a Groebner base, else false.
-  */
-    public static <C extends RingElem<C>>
-           boolean isGB(ModuleList<C> M) {  
+
+/**
+ * isGB.
+ * @param M a module basis.
+ * @return true, if M is a Groebner base, else false.
+ */
+    public boolean isGB(ModuleList<C> M) {  
         if ( M == null || M.list == null ) {
             return true;
         }
@@ -57,26 +72,25 @@ public class ModGroebnerBase  {
         }
         PolynomialList<C> F = M.getPolynomialList();
         int modv = M.cols; // > 0  
-        return GroebnerBase.isGB(modv,F.list);
+        return bb.isGB(modv,F.list);
     }
 
 
-    /**
-     * Groebner base using pairlist class.
-     */
-
-    public static <C extends RingElem<C>>
-           ArrayList<GenPolynomial<C>> GB(int modv, List<GenPolynomial<C>> F) {  
-        return GroebnerBase.GB(modv,F);
+/**
+ * Groebner base using pairlist class.
+ */
+    public List<GenPolynomial<C>> 
+             GB(int modv, List<GenPolynomial<C>> F) {  
+        return bb.GB(modv,F);
     }
 
-    /**
-     * GB.
-     * @param M a module basis.
-     * @return GB(M), a Groebner base of M.
-     */
-    public static <C extends RingElem<C>>
-           ModuleList<C> GB(ModuleList<C> M) {  
+
+/**
+ * GB.
+ * @param M a module basis.
+ * @return GB(M), a Groebner base of M.
+ */
+    public ModuleList<C> GB(ModuleList<C> M) {  
         ModuleList<C> N = M;
         if ( M == null || M.list == null ) {
             return N;
@@ -87,11 +101,10 @@ public class ModGroebnerBase  {
 
         PolynomialList<C> F = M.getPolynomialList();
         int modv = M.cols;
-        List<GenPolynomial<C>> G = GroebnerBase.GB(modv,F.list);
+        List<GenPolynomial<C>> G = bb.GB(modv,F.list);
         F = new PolynomialList<C>(F.ring,G);
         N = F.getModuleList(modv);
         return N;
     }
-
 
 }

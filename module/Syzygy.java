@@ -24,7 +24,9 @@ import edu.jas.poly.ExpVector;
 import edu.jas.poly.TermOrder;
 
 import edu.jas.ring.Reduction;
+import edu.jas.ring.ReductionSeq;
 import edu.jas.ring.GroebnerBase;
+import edu.jas.ring.GroebnerBaseSeq;
 
 import edu.jas.module.ModuleList;
 import edu.jas.module.GenVector;
@@ -37,9 +39,24 @@ import edu.jas.module.GenVectorModul;
  * @author Heinz Kredel
  */
 
-public class Syzygy  {
+public class Syzygy<C extends RingElem<C>>  {
 
     private static final Logger logger = Logger.getLogger(Syzygy.class);
+
+
+    /**
+     * Reduction engine.
+     */
+    protected Reduction<C> red;
+
+
+    /**
+     * Constructor.
+     */
+    public Syzygy() {
+        red = new ReductionSeq<C>();
+    }
+
 
     /**
      * Syzygy module from Groebner base.
@@ -48,9 +65,7 @@ public class Syzygy  {
      * @param F a Groebner base.
      * @return syz(F), a basis for the module of syzygies for F.
      */
-
-    public static <C extends RingElem<C>>
-           List<List<GenPolynomial<C>>> 
+    public List<List<GenPolynomial<C>>> 
            zeroRelations(List<GenPolynomial<C>> F) {  
         return zeroRelations(0,F);
     }
@@ -64,9 +79,7 @@ public class Syzygy  {
      * @param F a Groebner base.
      * @return syz(F), a basis for the module of syzygies for F.
      */
-
-    public static <C extends RingElem<C>>
-           List<List<GenPolynomial<C>>> 
+    public List<List<GenPolynomial<C>>> 
            zeroRelations(int modv, List<GenPolynomial<C>> F) {  
         List<List<GenPolynomial<C>>> Z 
            = new ArrayList<List<GenPolynomial<C>>>();
@@ -99,9 +112,7 @@ public class Syzygy  {
      * @param v a Groebner base.
      * @return syz(v), a basis for the module of syzygies for v.
      */
-
-    public static <C extends RingElem<C>>
-           List<List<GenPolynomial<C>>> 
+    public List<List<GenPolynomial<C>>> 
            zeroRelations(int modv, GenVector<GenPolynomial<C>> v) {  
 
         List<List<GenPolynomial<C>>> Z 
@@ -118,19 +129,19 @@ public class Syzygy  {
                 pj = F.get(j);
                 //logger.info("p"+i+", p"+j+" = " + pi + ", " +pj);
 
-		if ( ! Reduction.<C>ModuleCriterion( modv, pi, pj ) ) {
+		if ( ! red.moduleCriterion( modv, pi, pj ) ) {
                    continue;
                 }
-		// if ( ! Reduction.GBCriterion4( pi, pj ) ) { continue; }
+		// if ( ! red.criterion4( pi, pj ) ) { continue; }
                 List<GenPolynomial<C>> row = S.clone().val;
 
-		s = SPolynomial( row, i, pi, j, pj );
+		s = red.SPolynomial( row, i, pi, j, pj );
 		if ( s.isZERO() ) {
                    Z.add( row );
                    continue;
                 }
 
-		h = normalform( row, F, s );
+		h = red.normalform( row, F, s );
 		if ( ! h.isZERO() ) {
                    throw new RuntimeException("Syzygy no GB");
                 }
@@ -151,9 +162,7 @@ public class Syzygy  {
      * @param M a module Groebner base.
      * @return syz(M), a basis for the module of syzygies for M.
      */
-
-    public static <C extends RingElem<C>>
-           ModuleList<C> 
+    public ModuleList<C> 
            zeroRelations(ModuleList<C> M) {  
         ModuleList<C> N = M;
         if ( M == null || M.list == null) {
@@ -209,152 +218,6 @@ public class Syzygy  {
     }
 
 
-
-
-    /**
-     * S-Polynomial with recording.
-     * @param C coefficient type.
-     * @param S recording matrix, is modified.
-     * @param i index of Ap in basis list.
-     * @param Ap a polynomial.
-     * @param j index of Bp in basis list.
-     * @param Bp a polynomial.
-     * @return Spol(Ap, Bp), the S-Polynomial for Ap and Bp.
-     */
-
-    public static <C extends RingElem<C>>
-           GenPolynomial<C> 
-           SPolynomial(List<GenPolynomial<C>> S,
-                       int i,
-                       GenPolynomial<C> Ap, 
-                       int j,
-                       GenPolynomial<C> Bp) {  
-        if ( logger.isInfoEnabled() ) {
-	   if ( Bp == null || Bp.isZERO() ) {
-               throw new RuntimeException("Spol B is zero");
-	   }
-	   if ( Ap == null || Ap.isZERO() ) {
-               throw new RuntimeException("Spol A is zero");
-	   }
-           if ( ! Ap.ring.equals( Bp.ring ) ) { 
-              logger.error("term orderings not equal"); 
-           }
-	}
-        Map.Entry<ExpVector,C> ma = Ap.leadingMonomial();
-        Map.Entry<ExpVector,C> mb = Bp.leadingMonomial();
-
-        ExpVector e = ma.getKey();
-        ExpVector f = mb.getKey();
-
-        ExpVector g  = ExpVector.EVLCM(e,f);
-        ExpVector e1 = ExpVector.EVDIF(g,e);
-        ExpVector f1 = ExpVector.EVDIF(g,f);
-
-        C a = ma.getValue();
-        C b = mb.getValue();
-
-        GenPolynomial<C> App = Ap.multiply( b, e1 );
-        GenPolynomial<C> Bpp = Bp.multiply( a, f1 );
-        GenPolynomial<C> Cp = App.subtract(Bpp);
-
-        GenPolynomial<C> zero = Ap.ring.getZERO();
-        GenPolynomial<C> As = (GenPolynomial<C>)zero.add( b.negate(), e1 );
-        GenPolynomial<C> Bs = (GenPolynomial<C>)zero.add( a, f1 );
-        S.set( i, As );
-        S.set( j, Bs );
-
-        return Cp;
-    }
-
-
-    /**
-     * Normalform with recording.
-     * @param C coefficient type.
-     * @param row recording matrix, is modified.
-     * @param Pp a polynomial list for reduction.
-     * @param Ap a polynomial.
-     * @return nf(Pp,Ap), the normal form of Ap wrt. Pp.
-     */
-
-    public static <C extends RingElem<C>>
-           GenPolynomial<C> 
-           normalform(List<GenPolynomial<C>> row,
-                      List<GenPolynomial<C>> Pp, 
-                      GenPolynomial<C> Ap) {  
-        if ( Pp == null || Pp.isEmpty() ) {
-           return Ap;
-        }
-        if ( Ap == null || Ap.isZERO() ) {
-           return Ap;
-        }
-        int l = Pp.size();
-        GenPolynomial<C>[] P = new GenPolynomial[l];
-        synchronized (Pp) {
-            //P = Pp.toArray();
-            for ( int i = 0; i < Pp.size(); i++ ) {
-                P[i] = Pp.get(i);
-            }
-	}
-        ExpVector[] htl = new ExpVector[ l ];
-        Object[] lbc = new Object[ l ]; // want <C>
-        GenPolynomial<C>[] p = new GenPolynomial[ l ];
-        Map.Entry<ExpVector,C> m;
-	int j = 0;
-        int i;
-        for ( i = 0; i < l; i++ ) { 
-            p[i] = P[i];
-            m = p[i].leadingMonomial();
-	    if ( m != null ) { 
-               p[j] = p[i];
-               htl[j] = m.getKey();
-               lbc[j] = m.getValue();
-	       j++;
-	    }
-	}
-	l = j;
-        ExpVector e;
-        C a;
-        boolean mt = false;
-        GenPolynomial<C> zero = Ap.ring.getZERO();
-        GenPolynomial<C> R = Ap.ring.getZERO();
-
-        GenPolynomial<C> fac = null;
-        // GenPolynomial<C> T = null;
-        GenPolynomial<C> Q = null;
-        GenPolynomial<C> S = Ap;
-        while ( S.length() > 0 ) { 
-	      m = S.leadingMonomial();
-              e = m.getKey();
-              a = m.getValue();
-              for ( i = 0; i < l; i++ ) {
-                  mt = ExpVector.EVMT( e, htl[i] );
-                  if ( mt ) break; 
-	      }
-              if ( ! mt ) { 
-                 //logger.debug("irred");
-                 R = R.add( a, e );
-                 S = S.subtract( a, e ); 
-		 // System.out.println(" S = " + S);
-                 throw new RuntimeException("Syzygy no GB");
-	      } else { 
-		 e = ExpVector.EVDIF( e, htl[i] );
-                 //logger.info("red div = " + e);
-                 a = a.divide( (C)lbc[i] );
-                 Q = p[i].multiply( a, e );
-                 S = S.subtract( Q );
-                 fac = row.get(i);
-                 if ( fac == null ) {
-                    fac = zero.add( a, e );
-                 } else {
-                    fac = fac.add( a, e );
-                 }
-                 row.set(i,fac);
-              }
-	}
-        return R;
-    }
-
-
     /**
      * Test if sysygy.
      * @param C coefficient type.
@@ -363,8 +226,7 @@ public class Syzygy  {
      * @return true, if Z is a list of syzygies for F, else false.
      */
 
-    public static <C extends RingElem<C>>
-           boolean 
+    public boolean 
            isZeroRelation(List<List<GenPolynomial<C>>> Z, 
                           List<GenPolynomial<C>> F) {  
         for ( List<GenPolynomial<C>> row: Z ) {
@@ -389,8 +251,7 @@ public class Syzygy  {
      * @return the scalar product of r and F.
      */
 
-    public static <C extends RingElem<C>>
-           GenPolynomial<C> 
+    public GenPolynomial<C> 
            scalarProduct(List<GenPolynomial<C>> r, 
                          List<GenPolynomial<C>> F) {  
         GenPolynomial<C> sp = null;
@@ -423,8 +284,7 @@ public class Syzygy  {
      * @return true, if Z is a list of syzygies for F, else false.
      */
 
-    public static <C extends RingElem<C>>
-           boolean 
+    public boolean 
            isZeroRelation(ModuleList<C> Z, ModuleList<C> F) {  
         if ( Z == null || Z.list == null ) {
             return true;
@@ -448,8 +308,7 @@ public class Syzygy  {
      * @return the scalar product of r and F.
      */
 
-    public static <C extends RingElem<C>>
-           List<GenPolynomial<C>> 
+    public List<GenPolynomial<C>> 
            scalarProduct(List<GenPolynomial<C>> r, ModuleList<C> F) {  
         List<GenPolynomial<C>> ZZ = null;
         Iterator<GenPolynomial<C>> it = r.iterator();
@@ -485,8 +344,7 @@ public class Syzygy  {
      * @return a+b, the vector sum of a and b.
      */
 
-    public static <C extends RingElem<C>>
-           List<GenPolynomial<C>> 
+    public List<GenPolynomial<C>> 
            vectorAdd(List<GenPolynomial<C>> a, List<GenPolynomial<C>> b) {  
         if ( a == null ) {
             return b;
@@ -517,8 +375,7 @@ public class Syzygy  {
      * @param a a polynomial list.
      * @return true, if all polynomial in a are zero, else false.
      */
-    public static <C extends RingElem<C>>
-           boolean 
+    public boolean 
            isZero(List<GenPolynomial<C>> a) {  
         if ( a == null ) {
             return true;
@@ -543,8 +400,7 @@ public class Syzygy  {
      * @return the scalar product of p and F.
      */
 
-    public static <C extends RingElem<C>>
-           List<GenPolynomial<C>> 
+    public List<GenPolynomial<C>> 
            scalarProduct(GenPolynomial<C> p, List<GenPolynomial<C>> F) {  
         List<GenPolynomial<C>> V = new ArrayList<GenPolynomial<C>>( F.size() );
         for ( GenPolynomial<C> pi : F ) {
@@ -562,15 +418,15 @@ public class Syzygy  {
      * @param M a module list of a Groebner basis.
      * @return a resolution of M.
      */
-    public static <C extends RingElem<C>>
-           List<ResPart<C>>
+    public List<ResPart<C>>
            resolution(ModuleList<C> M) {  
         List<ResPart<C>> R = new ArrayList<ResPart<C>>();
         ModuleList<C> MM = M;
         ModuleList<C> GM;
         ModuleList<C> Z;
+        ModGroebnerBase<C> mbb = new ModGroebnerBase<C>();
         while (true) {
-          GM = ModGroebnerBase.<C>GB(MM);
+          GM = mbb.GB(MM);
           Z = zeroRelations(GM);
           R.add( new ResPart<C>(MM,GM,Z) );
           if ( Z == null || Z.list == null || Z.list.size() == 0 ) {
@@ -589,15 +445,14 @@ public class Syzygy  {
      * @param F a polynomial list of a Groebner basis.
      * @return a resolution of F.
      */
-    public static <C extends RingElem<C>>
-           List // <ResPart<C>|ResPolPart<C>>
+    public List // <ResPart<C>|ResPolPart<C>>
            resolution(PolynomialList<C> F) {  
         List<List<GenPolynomial<C>>> Z;
         ModuleList<C> Zm;
         List<GenPolynomial<C>> G;
         PolynomialList<C> Gl;
 
-        G = GroebnerBase.<C>GB( F.list );
+        G = (new GroebnerBaseSeq<C>()).GB( F.list );
         Z = zeroRelations( G );
         Gl = new PolynomialList<C>(F.ring, G);
         Zm = new ModuleList<C>(F.ring, Z);

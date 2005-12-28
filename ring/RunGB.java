@@ -150,7 +150,7 @@ public class RunGB {
       t = System.currentTimeMillis();
       System.out.println("\nGroebner base distributed ..."); 
 
-      G = (new GBDist()).execute( L, threads, mfile, port );
+      G = (new GBDist(threads, mfile, port)).execute( L );
 
       S = new PolynomialList( S.ring, G );
       System.out.println("G =\n" + S ); 
@@ -173,16 +173,18 @@ public class RunGB {
       List L = S.list; 
       List G;
       long t;
+      GroebnerBaseParallel bb = new GroebnerBaseParallel(threads);
 
       t = System.currentTimeMillis();
       System.out.println("\nGroebner base parallel ..."); 
-      G = GroebnerBaseParallel.GB(L,threads);
+      G = bb.GB(L);
       S = new PolynomialList( S.ring, G );
       System.out.println("G =\n" + S ); 
       System.out.println("G.size() = " + G.size() ); 
       t = System.currentTimeMillis() - t;
       System.out.println("time = " + t + " milliseconds" ); 
       System.out.println(""); 
+      bb.terminate();
   }
 
 
@@ -190,10 +192,11 @@ public class RunGB {
       List L = S.list; 
       List G;
       long t;
+      GroebnerBase bb = new GroebnerBaseSeq();
 
       t = System.currentTimeMillis();
       System.out.println("\nGroebner base sequential ..."); 
-      G = GroebnerBase.GB(L);
+      G = bb.GB(L);
       S = new PolynomialList( S.ring, G );
       System.out.println("G =\n" + S ); 
       System.out.println("G.size() = " + G.size() ); 

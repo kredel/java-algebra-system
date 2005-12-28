@@ -4,7 +4,6 @@
 
 package edu.jas.ring;
 
-//import edu.jas.poly.GroebnerBase;
 
 import java.util.List;
 import java.util.Iterator;
@@ -67,6 +66,8 @@ public class GroebnerBaseSeqTest extends TestCase {
    PolynomialList<BigRational> F;
    List<GenPolynomial<BigRational>> G;
 
+   GroebnerBase<BigRational> bb;
+
    GenPolynomial<BigRational> a;
    GenPolynomial<BigRational> b;
    GenPolynomial<BigRational> c;
@@ -83,11 +84,13 @@ public class GroebnerBaseSeqTest extends TestCase {
        BigRational coeff = new BigRational(9);
        fac = new GenPolynomialRing<BigRational>(coeff,rl);
        a = b = c = d = e = null;
+       bb = new GroebnerBaseSeq<BigRational>();
    }
 
    protected void tearDown() {
        a = b = c = d = e = null;
        fac = null;
+       bb = null;
    }
 
 
@@ -108,39 +111,40 @@ public class GroebnerBaseSeqTest extends TestCase {
      assertTrue("not isZERO( a )", !a.isZERO() );
      L.add(a);
 
-     L = GroebnerBase.GB( L );
-     assertTrue("isGB( { a } )", GroebnerBase.isGB(L) );
+     L = bb.GB( L );
+     assertTrue("isGB( { a } )", bb.isGB(L) );
 
      assertTrue("not isZERO( b )", !b.isZERO() );
      L.add(b);
      //System.out.println("L = " + L.size() );
 
-     L = GroebnerBase.GB( L );
-     assertTrue("isGB( { a, b } )", GroebnerBase.isGB(L) );
+     L = bb.GB( L );
+     assertTrue("isGB( { a, b } )", bb.isGB(L) );
 
      assertTrue("not isZERO( c )", !c.isZERO() );
      L.add(c);
 
-     L = GroebnerBase.GB( L );
-     assertTrue("isGB( { a, ,b, c } )", GroebnerBase.isGB(L) );
+     L = bb.GB( L );
+     assertTrue("isGB( { a, ,b, c } )", bb.isGB(L) );
 
      assertTrue("not isZERO( d )", !d.isZERO() );
      L.add(d);
 
-     L = GroebnerBase.GB( L );
-     assertTrue("isGB( { a, ,b, c, d } )", GroebnerBase.isGB(L) );
+     L = bb.GB( L );
+     assertTrue("isGB( { a, ,b, c, d } )", bb.isGB(L) );
 
      assertTrue("not isZERO( e )", !e.isZERO() );
      L.add(e);
 
-     L = GroebnerBase.GB( L );
-     assertTrue("isGB( { a, ,b, c, d, e } )", GroebnerBase.isGB(L) );
+     L = bb.GB( L );
+     assertTrue("isGB( { a, ,b, c, d, e } )", bb.isGB(L) );
  }
 
 /**
  * Test Trinks7 GBase.
  * 
  */
+ @SuppressWarnings("unchecked") // not jet working
  public void testTrinks7GBase() {
      String exam = "(B,S,T,Z,P,W) L "
                  + "( "  
@@ -156,14 +160,16 @@ public class GroebnerBaseSeqTest extends TestCase {
      GenPolynomialTokenizer parser
                   = new GenPolynomialTokenizer( source );
      try {
-         F = parser.nextPolynomialSet();
+         F = (PolynomialList<BigRational>) parser.nextPolynomialSet();
+     } catch(ClassCastException e) {
+         fail(""+e);
      } catch(IOException e) {
          fail(""+e);
      }
      //System.out.println("F = " + F);
 
-     G = GroebnerBase.GB(F.list);
-     assertTrue("isGB( GB(Trinks7) )", GroebnerBase.isGB(G) );
+     G = bb.GB(F.list);
+     assertTrue("isGB( GB(Trinks7) )", bb.isGB(G) );
      assertEquals("#GB(Trinks7) == 6", 6, G.size() );
      PolynomialList<BigRational> trinks 
            = new PolynomialList<BigRational>(F.ring,G);

@@ -114,17 +114,19 @@ public class RunSGB {
       List L = S.list; 
       List G = null;
       long t;
+      SolvableReduction sred = new SolvableReductionSeq();
+      SolvableGroebnerBase sbb = new SolvableGroebnerBaseSeq();
 
       t = System.currentTimeMillis();
       System.out.println("\nSolvable GB [" + action + "] sequential ..."); 
       if ( action.equals("irr") ) {
-         G = Reduction.leftIrreducibleSet(L);
+         G = sred.leftIrreducibleSet(L);
       }
       if ( action.equals("left") ) {
-         G = SolvableGroebnerBase.leftGB(L);
+         G = sbb.leftGB(L);
       }
       if ( action.equals("two") ) {
-         G = SolvableGroebnerBase.twosidedGB(L);
+         G = sbb.twosidedGB(L);
       }
       if ( G == null ) {
           System.out.println("unknown action = " + action + "\n"); 

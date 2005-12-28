@@ -14,7 +14,6 @@ import edu.jas.structure.RingElem;
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
-//import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.ring.OrderedPairlist;
 
 import edu.jas.util.Terminator;
@@ -29,24 +28,64 @@ import edu.unima.ky.parallel.Semaphore;
  * @author Heinz Kredel
  */
 
-public class GroebnerBaseParallel  {
+public class GroebnerBaseParallel<C extends RingElem<C>>
+             extends GroebnerBaseAbstract<C>  {
 
     private static final Logger logger = Logger.getLogger(GroebnerBaseParallel.class);
 
 
     /**
-     * Parallel Groebner base using pairlist class.
-     * Slaves maintain pairlist.
-     * @param C coefficient type.
-     * @param F polynomial list.
-     * @param threads number of threads to use.
-     * @return GB(F) a Groebner base of F.
+     * Number of threads to use.
      */
-    public static <C extends RingElem<C>> 
-           ArrayList<GenPolynomial<C>> 
-                  GB(List<GenPolynomial<C>> F, 
-                     int threads) {  
-        return GB(0,F,threads);
+    protected final int threads;
+
+
+    /**
+     * Pool of threads to use.
+     */
+    protected final ThreadPool pool;
+
+
+    /**
+     * Constructor.
+     */
+    public GroebnerBaseParallel() {
+        this(2);
+    }
+
+
+    /**
+     * Constructor.
+     * @param threads number of threads to use.
+     */
+    public GroebnerBaseParallel(int threads) {
+        this(threads, new ThreadPool(threads) );
+    }
+
+
+    /**
+     * Constructor.
+     * @param threads number of threads to use.
+     * @param pool ThreadPool to use.
+     */
+    public GroebnerBaseParallel(int threads, ThreadPool pool) {
+	if ( threads < 1 ) {
+           threads = 1;
+        }
+        this.threads = threads;
+        this.pool = pool;
+        red = new ReductionPar<C>();
+    }
+
+
+    /**
+     * Cleanup and terminate ThreadPool.
+     */
+    public void terminate() {
+	if ( pool == null ) {
+           return;
+        }
+        pool.terminate();
     }
 
 
@@ -56,16 +95,13 @@ public class GroebnerBaseParallel  {
      * @param C coefficient type.
      * @param modv number of module variables.
      * @param F polynomial list.
-     * @param threads number of threads to use.
      * @return GB(F) a Groebner base of F.
      */
-    public static <C extends RingElem<C>>
-           ArrayList<GenPolynomial<C>> 
-                  GB(int modv,
-                     List<GenPolynomial<C>> F, 
-                     int threads) {  
+    public List<GenPolynomial<C>> 
+             GB( int modv,
+                 List<GenPolynomial<C>> F ) {  
         GenPolynomial<C> p;
-        ArrayList<GenPolynomial<C>> G = new ArrayList<GenPolynomial<C>>();
+        List<GenPolynomial<C>> G = new ArrayList<GenPolynomial<C>>();
         OrderedPairlist<C> pairlist = null; 
         int l = F.size();
         ListIterator<GenPolynomial<C>> it = F.listIterator();
@@ -91,20 +127,16 @@ public class GroebnerBaseParallel  {
            return G; // since no threads activated jet
         }
 
-	if ( threads < 1 ) {
-           threads = 1;
-        }
-	ThreadPool T = new ThreadPool(threads);
 	Terminator fin = new Terminator(threads);
 	Reducer<C> R;
 	for ( int i = 0; i < threads; i++ ) {
 	      R = new Reducer<C>( fin, G, pairlist );
-	      T.addJob( R );
+	      pool.addJob( R );
 	}
 	fin.done();
         logger.debug("#parallel list = "+G.size());
-	G = GBmi(G,T);
-	T.terminate();
+	G = minimalGB(G);
+	// not in this context // pool.terminate();
         logger.info("pairlist #put = " + pairlist.putCount() 
                   + " #rem = " + pairlist.remCount()
                     //+ " #total = " + pairlist.pairCount()
@@ -114,12 +146,95 @@ public class GroebnerBaseParallel  {
 
 
     /**
-     * Reducing worker threads.
+     * Minimal ordered groebner basis, parallel.
+     * @param C coefficient type.
+     * @param Fp a Groebner base.
+     * @return minimalGB(F) a minimal Groebner base of Fp.
      */
-    static class Reducer<C extends RingElem<C>> implements Runnable {
+    public List<GenPolynomial<C>> 
+           minimalGB(List<GenPolynomial<C>> Fp) {  
+        GenPolynomial<C> a;
+        ArrayList<GenPolynomial<C>> G;
+        G = new ArrayList<GenPolynomial<C>>( Fp.size() );
+        ListIterator<GenPolynomial<C>> it = Fp.listIterator();
+        while ( it.hasNext() ) { 
+            a = it.next();
+            if ( a.length() != 0 ) { // always true
+	       // already monic  a = a.monic();
+               G.add( a );
+	    }
+	}
+        if ( G.size() <= 1 ) {
+           return G;
+        }
+
+        ExpVector e;        
+        ExpVector f;        
+        GenPolynomial<C> p;
+        ArrayList<GenPolynomial<C>> F;
+        F = new ArrayList<GenPolynomial<C>>( G.size() );
+	boolean mt;
+        while ( G.size() > 0 ) {
+            a = G.remove(0);
+	    e = a.leadingExpVector();
+
+            it = G.listIterator();
+	    mt = false;
+	    while ( it.hasNext() && ! mt ) {
+               p = it.next();
+               f = p.leadingExpVector();
+	       mt = ExpVector.EVMT( e, f );
+	    }
+            it = F.listIterator();
+	    while ( it.hasNext() && ! mt ) {
+               p = it.next();
+               f = p.leadingExpVector();
+	       mt = ExpVector.EVMT( e, f );
+	    }
+	    if ( ! mt ) {
+		F.add( a ); // no thread at this point
+	    } else {
+		// System.out.println("dropped " + a.length());
+	    }
+	}
+	G = F;
+        if ( G.size() <= 1 ) {
+           return G;
+        }
+
+	MiReducer<C>[] mirs = new MiReducer[ G.size() ];
+        int i = 0;
+        F = new ArrayList<GenPolynomial<C>>( G.size() );
+        while ( G.size() > 0 ) {
+            a = G.remove(0);
+	    // System.out.println("doing " + a.length());
+	    mirs[i] = new MiReducer<C>( (List<GenPolynomial<C>>)G.clone(), 
+                                        (List<GenPolynomial<C>>)F.clone(), 
+                                        a );
+	    pool.addJob( mirs[i] );
+	    i++;
+            F.add( a );
+	}
+	G = F;
+	F = new ArrayList<GenPolynomial<C>>( G.size() );
+	for ( i = 0; i < mirs.length; i++ ) {
+	    a = mirs[i].getNF();
+            F.add( a );
+	}
+	return F;
+    }
+
+}
+
+
+/**
+ * Reducing worker threads.
+ */
+class Reducer<C extends RingElem<C>> implements Runnable {
 	private List<GenPolynomial<C>> G;
 	private OrderedPairlist<C> pairlist;
 	private Terminator pool;
+        private ReductionPar<C> red;
         private static Logger logger = Logger.getLogger(Reducer.class);
 
 	Reducer(Terminator fin, 
@@ -128,6 +243,7 @@ public class GroebnerBaseParallel  {
 	    pool = fin;
 	    this.G = G;
 	    pairlist = L;
+            red = new ReductionPar<C>();
 	} 
 
 
@@ -138,7 +254,7 @@ public class GroebnerBaseParallel  {
            GenPolynomial<C> S;
            GenPolynomial<C> H;
 	   boolean set = false;
-	   int red = 0;
+	   int reduction = 0;
 	   int sleeps = 0;
            while ( pairlist.hasNext() || pool.hasJobs() ) {
 	      while ( ! pairlist.hasNext() ) {
@@ -178,7 +294,7 @@ public class GroebnerBaseParallel  {
                  logger.debug("pj    = " + pj );
 	      }
 
-              S = Reduction.<C>SPolynomial( pi, pj );
+              S = red.SPolynomial( pi, pj );
               if ( S.isZERO() ) {
                  pair.setZero();
                  continue;
@@ -187,8 +303,8 @@ public class GroebnerBaseParallel  {
                  logger.debug("ht(S) = " + S.leadingExpVector() );
 	      }
 
-              H = Reduction.<C>normalformMod( G, S );
-	      red++;
+              H = red.normalform( G, S ); //mod
+	      reduction++;
               if ( H.isZERO() ) {
                  pair.setZero();
                  continue;
@@ -215,100 +331,20 @@ public class GroebnerBaseParallel  {
               }
               pairlist.put( H );
 	   }
-           logger.info( "terminated, done " + red + " reductions");
+           logger.info( "terminated, done " + reduction + " reductions");
 	}
-    }
+}
 
 
-    /**
-     * Minimal ordered groebner basis, parallel.
-     * @param C coefficient type.
-     * @param Fp a Groebner base.
-     * @param T pool of threads to use.
-     * @return GBmi(F) a minimal Groebner base of Fp.
-     */
-    public static <C extends RingElem<C>>
-           ArrayList<GenPolynomial<C>> 
-                  GBmi(List<GenPolynomial<C>> Fp, 
-                       ThreadPool T) {  
-        GenPolynomial<C> a;
-        ArrayList<GenPolynomial<C>> G = new ArrayList<GenPolynomial<C>>();
-        ListIterator<GenPolynomial<C>> it = Fp.listIterator();
-        while ( it.hasNext() ) { 
-            a = it.next();
-            if ( a.length() != 0 ) { // always true
-	       // already monic  a = a.monic();
-               G.add( a );
-	    }
-	}
-        if ( G.size() <= 1 ) {
-           return G;
-        }
-
-        ExpVector e;        
-        ExpVector f;        
-        GenPolynomial<C> p;
-        ArrayList<GenPolynomial<C>> F = new ArrayList<GenPolynomial<C>>();
-	boolean mt;
-        while ( G.size() > 0 ) {
-            a = G.remove(0);
-	    e = a.leadingExpVector();
-
-            it = G.listIterator();
-	    mt = false;
-	    while ( it.hasNext() && ! mt ) {
-               p = it.next();
-               f = p.leadingExpVector();
-	       mt = ExpVector.EVMT( e, f );
-	    }
-            it = F.listIterator();
-	    while ( it.hasNext() && ! mt ) {
-               p = it.next();
-               f = p.leadingExpVector();
-	       mt = ExpVector.EVMT( e, f );
-	    }
-	    if ( ! mt ) {
-		F.add( a ); // no thread at this point
-	    } else {
-		// System.out.println("dropped " + a.length());
-	    }
-	}
-	G = F;
-        if ( G.size() <= 1 ) {
-           return G;
-        }
-
-	MiReducer<C>[] mirs = new MiReducer[ G.size() ];
-        int i = 0;
-        F = new ArrayList<GenPolynomial<C>>( G.size() );
-        while ( G.size() > 0 ) {
-            a = G.remove(0);
-	    // System.out.println("doing " + a.length());
-	    mirs[i] = new MiReducer( (List<GenPolynomial<C>>)G.clone(), 
-                                     (List<GenPolynomial<C>>)F.clone(), 
-                                     a );
-	    T.addJob( mirs[i] );
-	    i++;
-            F.add( a );
-	}
-	G = F;
-	F = new ArrayList<GenPolynomial<C>>( G.size() );
-	for ( i = 0; i < mirs.length; i++ ) {
-	    a = mirs[i].getNF();
-            F.add( a );
-	}
-	return F;
-    }
-
-
-    /**
-     * Reducing worker threads for minimal GB.
-     */
-    static class MiReducer<C extends RingElem<C>> implements Runnable {
+/**
+ * Reducing worker threads for minimal GB.
+ */
+class MiReducer<C extends RingElem<C>> implements Runnable {
 	private List<GenPolynomial<C>> G;
 	private List<GenPolynomial<C>> F;
 	private GenPolynomial<C> S;
 	private GenPolynomial<C> H;
+        private ReductionPar<C> red;
 	private Semaphore done = new Semaphore(0);
         private static Logger logger = Logger.getLogger(MiReducer.class);
 
@@ -319,6 +355,7 @@ public class GroebnerBaseParallel  {
 	    this.F = F;
 	    S = p;
 	    H = S;
+            red = new ReductionPar<C>();
 	} 
 
 
@@ -337,8 +374,8 @@ public class GroebnerBaseParallel  {
 	    if ( logger.isDebugEnabled() ) {
                  logger.debug("ht(S) = " + S.leadingExpVector() );
 	    }
-            H = Reduction.<C>normalformMod( G, H );
-            H = Reduction.<C>normalformMod( F, H );
+            H = red.normalform( G, H ); //mod
+            H = red.normalform( F, H ); //mod
             done.V();
 	    if ( logger.isDebugEnabled() ) {
                  logger.debug("ht(H) = " + H.leadingExpVector() );
@@ -346,7 +383,5 @@ public class GroebnerBaseParallel  {
 	    // H = H.monic();
 	}
 
-    }
-
-
 }
+

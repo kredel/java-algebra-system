@@ -23,75 +23,109 @@ import edu.jas.util.ExecutableChannels;
 
 public class GBDist<C extends RingElem<C>> {
 
-  /**
-   * Execute a distributed GB example.
-   * Distribute clients and start master.
-   * @param F list of polynomials
-   * @param threads number of threads respectivly processes.
-   * @param mfile name of the machine file.
-   * @param port for GB server. 
-   * @return GB(F) a Groebner base for F.
-   */
-    public ArrayList<GenPolynomial<C>> 
-           execute(List<GenPolynomial<C>> F, 
-                   int threads, 
-                   String mfile, 
-                   int port) {
 
-	final String fname;
-	if ( mfile == null || mfile.length() == 0 ) {
+    /**
+     * machine file to use.
+     */
+    private final String mfile;
+
+
+    /**
+     * Number of threads to use.
+     */
+    protected final int threads;
+
+
+    /**
+     * Server port to use.
+     */
+    protected final int port;
+
+
+
+    /**
+     * GB algorithm to use.
+     */
+    private final GroebnerBaseDistributed bbd;
+
+
+    /**
+     * Constructor.
+     * @param threads number of threads respectivly processes.
+     * @param mfile name of the machine file.
+     * @param port for GB server. 
+     */
+    public GBDist(int threads, 
+                  String mfile, 
+                  int port) {
+        this.threads = threads;
+        this.mfile = mfile;
+        this.port = port;
+        bbd = new GroebnerBaseDistributed<C>(threads,port);
+    }
+
+
+    /**
+     * Execute a distributed GB example.
+     * Distribute clients and start master.
+     * @param F list of polynomials
+     * @return GB(F) a Groebner base for F.
+     */
+    public List<GenPolynomial<C>> 
+           execute(List<GenPolynomial<C>> F) {
+
+        final String fname;
+        if ( mfile == null || mfile.length() == 0 ) {
              fname = "../util/machines";
-	} else {
-	     fname = mfile;
-	}
-	final int numc = threads;
+        } else {
+             fname = mfile;
+        }
+        final int numc = threads;
 
-	ArrayList<GenPolynomial<C>> G = null;
+        List<GenPolynomial<C>> G = null;
 
-	ExecutableChannels ec = null;
-	try {
-            ec = new ExecutableChannels( fname );
-	} catch (FileNotFoundException e) {
-	    e.printStackTrace();
-	    return G;
-	}
-	try {
-	    ec.open(numc);
-	} catch (IOException e) {
-	    e.printStackTrace();
-	    return G;
-	}
-
-	GBClient<C> gbc 
-          = new GBClient<C>( ec.getMasterHost(), ec.getMasterPort() );
-	try {
-	    for ( int i = 0; i < numc; i++ ) {
-	        ec.send( i, gbc );
-	    }
-	} catch (IOException e) {
-	    e.printStackTrace();
-	    return G;
-	}
-
-	G = null;
+        ExecutableChannels ec = null;
         try {
-            G = GroebnerBaseDistributed.<C>Server( F, threads, port );
+            ec = new ExecutableChannels( fname );
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return G;
+        }
+        try {
+            ec.open(numc);
         } catch (IOException e) {
+            e.printStackTrace();
+            return G;
         }
 
-	try {
-	    for ( int i = 0; i < numc; i++ ) {
-	       Object o = ec.receive( i );
-	    }
-	} catch (IOException e) {
-	    e.printStackTrace();
-	    return G;
-	} catch (ClassNotFoundException e) {
-	    e.printStackTrace();
-	    return G;
-	}
-	ec.close();
-	return G;
+        GBClient<C> gbc 
+          = new GBClient<C>( ec.getMasterHost(), ec.getMasterPort() );
+        try {
+            for ( int i = 0; i < numc; i++ ) {
+                ec.send( i, gbc );
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return G;
+        }
+
+        G = bbd.GB( F );
+
+        try {
+            for ( int i = 0; i < numc; i++ ) {
+               Object o = ec.receive( i );
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return G;
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            return G;
+        }
+        ec.close();
+        bbd.terminate();
+
+        return G;
     }
 
 }
@@ -112,19 +146,22 @@ class GBClient<C extends RingElem<C>> implements RemoteExecutable {
      * @param port
      */
     public GBClient(String host, int port) {
-	this.host = host;
-	this.port = port;
+        this.host = host;
+        this.port = port;
     }
 
      
     /**
      * run.
      */
-    public void run() {		// run starts here.
-	try {
-	    GroebnerBaseDistributed.<C>Client(host, port);
-	} catch (IOException ignored) {
-	}
+    public void run() {
+        GroebnerBaseDistributed<C> bbd;
+        bbd = new GroebnerBaseDistributed<C>(1,null,port);
+        try {
+            bbd.clientPart(host);
+        } catch (IOException ignored) {
+        }
+        bbd.terminate();
     }
 
 }

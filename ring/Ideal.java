@@ -46,6 +46,18 @@ public class Ideal<C extends RingElem<C>> implements Serializable {
   protected boolean testGB;
 
 
+  /** 
+   * Groebner base algorithm. 
+   */
+  protected GroebnerBase<C> bb;
+
+
+  /**
+   * Reduction engine.
+   */
+  protected Reduction<C> red;
+
+
   private static Logger logger = Logger.getLogger(Ideal.class);
 
 
@@ -89,6 +101,8 @@ public class Ideal<C extends RingElem<C>> implements Serializable {
       this.list = list;
       this.isGB = gb;
       this.testGB = ( gb ? true : false ); // ??
+      bb = new GroebnerBaseSeq<C>();
+      red = new ReductionSeq<C>();
   }
 
 
@@ -199,7 +213,7 @@ public class Ideal<C extends RingElem<C>> implements Serializable {
           return isGB;
       }
       logger.warn("isGB computing");
-      isGB = GroebnerBase.isGB( getList() );
+      isGB = bb.isGB( getList() );
       testGB = true;
       return isGB;
   }
@@ -215,7 +229,7 @@ public class Ideal<C extends RingElem<C>> implements Serializable {
       }
       logger.warn("GB computing");
       List< GenPolynomial<C> > c = getList();
-      c = GroebnerBase.<C>GB( c );
+      c = bb.GB( c );
       return new Ideal<C>( getRing(), c, true );
   }
 
@@ -239,13 +253,13 @@ public class Ideal<C extends RingElem<C>> implements Serializable {
       if ( !isGB ) {
          logger.warn("contains computing GB");
          List< GenPolynomial<C> > c = getList();
-         c = GroebnerBase.<C>GB( c );
+         c = bb.GB( c );
          list = new PolynomialList<C>( getRing(), c );
          isGB = true;
          testGB = true;
       }
       List< GenPolynomial<C> > z;
-      z = Reduction.<C>normalform( getList(), B.getList() );
+      z = red.normalform( getList(), B.getList() );
       if ( z == null ) {
           return true;
       }
@@ -284,7 +298,7 @@ public class Ideal<C extends RingElem<C>> implements Serializable {
       c.addAll( B.getList() );
       if ( isGB && B.isGB ) {
          logger.warn("sum computing GB");
-         c = GroebnerBase.<C>GB( c );
+         c = bb.GB( c );
          return new Ideal<C>( getRing(), c, true );
       } else {
          return new Ideal<C>( getRing(), c, false );
@@ -319,7 +333,7 @@ public class Ideal<C extends RingElem<C>> implements Serializable {
       }
       if ( isGB && B.isGB ) {
          logger.warn("product computing GB");
-         c = GroebnerBase.<C>GB( c );
+         c = bb.GB( c );
          return new Ideal<C>( getRing(), c, true );
       } else {
          return new Ideal<C>( getRing(), c, false );
@@ -361,7 +375,7 @@ public class Ideal<C extends RingElem<C>> implements Serializable {
           c.add( p );
       }
       logger.warn("intersect computing GB");
-      List< GenPolynomial<C> > g = GroebnerBase.<C>GB( c );
+      List< GenPolynomial<C> > g = bb.GB( c );
       if ( logger.isDebugEnabled() ) {
          logger.debug("intersect GB = " + g);
       }

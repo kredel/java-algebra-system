@@ -30,6 +30,7 @@ import edu.jas.poly.PolynomialList;
 import edu.jas.poly.TermOrder;
 
 import edu.jas.ring.GroebnerBase;
+import edu.jas.ring.GroebnerBaseSeq;
 
 /**
  * Ideal Test using JUnit.
@@ -71,6 +72,8 @@ public class IdealTest extends TestCase {
    PolynomialList<BigRational> F;
    List<GenPolynomial<BigRational>> G;
 
+   GroebnerBase<BigRational> bb;
+
    GenPolynomial<BigRational> a;
    GenPolynomial<BigRational> b;
    GenPolynomial<BigRational> c;
@@ -87,12 +90,14 @@ public class IdealTest extends TestCase {
        BigRational coeff = new BigRational(17,1);
        to = new TermOrder( /*TermOrder.INVLEX*/ );
        fac = new GenPolynomialRing<BigRational>(coeff,rl,to);
+       bb = new GroebnerBaseSeq<BigRational>();
        a = b = c = d = e = null;
    }
 
    protected void tearDown() {
        a = b = c = d = e = null;
        fac = null;
+       bb = null;
    }
 
 
@@ -133,8 +138,8 @@ public class IdealTest extends TestCase {
      assertTrue("isGB( I )", I.isGB() );
 
 
-     L = GroebnerBase.GB( L );
-     assertTrue("isGB( { a } )", GroebnerBase.isGB(L) );
+     L = bb.GB( L );
+     assertTrue("isGB( { a } )", bb.isGB(L) );
 
      I = new Ideal<BigRational>(fac,L,true);
      assertTrue("not isZERO( I )", !I.isZERO() );
@@ -157,8 +162,8 @@ public class IdealTest extends TestCase {
      //assertTrue("not isGB( I )", !I.isGB() );
 
 
-     L = GroebnerBase.GB( L );
-     assertTrue("isGB( { a, b } )", GroebnerBase.isGB(L) );
+     L = bb.GB( L );
+     assertTrue("isGB( { a, b } )", bb.isGB(L) );
 
      I = new Ideal<BigRational>(fac,L,true);
      assertTrue("not isZERO( I )", !I.isZERO() );
@@ -176,7 +181,7 @@ public class IdealTest extends TestCase {
      L = new ArrayList<GenPolynomial<BigRational>>();
      assertTrue("not isZERO( c )", !c.isZERO() );
      L.add(c);
-     assertTrue("isGB( { c } )", GroebnerBase.isGB(L) );
+     assertTrue("isGB( { c } )", bb.isGB(L) );
 
      J = new Ideal<BigRational>(fac,L,true);
      K = J.sum( I );
@@ -189,7 +194,7 @@ public class IdealTest extends TestCase {
      assertTrue("not isZERO( d )", !d.isZERO() );
      L.add(d);
 
-     assertTrue("isGB( { d } )", GroebnerBase.isGB(L) );
+     assertTrue("isGB( { d } )", bb.isGB(L) );
      J = new Ideal<BigRational>(fac,L,true);
      I = K;
      K = J.sum( I );
@@ -203,7 +208,7 @@ public class IdealTest extends TestCase {
      assertTrue("not isZERO( e )", !e.isZERO() );
      L.add(e);
 
-     assertTrue("isGB( { e } )", GroebnerBase.isGB(L) );
+     assertTrue("isGB( { e } )", bb.isGB(L) );
      J = new Ideal<BigRational>(fac,L,true);
      I = K;
      K = J.sum( I );
@@ -280,7 +285,7 @@ public class IdealTest extends TestCase {
      L.add(a);
      assertTrue("not isZERO( c )", !c.isZERO() );
      L.add(c);
-     L = GroebnerBase.GB( L );
+     L = bb.GB( L );
 
      I = new Ideal<BigRational>(fac,L,true);
      assertTrue("not isZERO( I )", !I.isZERO() );
@@ -312,7 +317,7 @@ public class IdealTest extends TestCase {
      L.add(b);
      assertTrue("not isZERO( d )", !d.isZERO() );
      L.add(d);
-     L = GroebnerBase.GB( L );
+     L = bb.GB( L );
 
      J = new Ideal<BigRational>(fac,L,true);
      assertTrue("not isZERO( J )", !J.isZERO() );
@@ -365,7 +370,7 @@ public class IdealTest extends TestCase {
      L = new ArrayList<GenPolynomial<BigRational>>();
      assertTrue("not isZERO( a )", !a.isZERO() );
      L.add(a);
-     L = GroebnerBase.GB( L );
+     L = bb.GB( L );
 
      I = new Ideal<BigRational>(fac,L,true);
      assertTrue("not isZERO( I )", !I.isZERO() );
@@ -376,7 +381,7 @@ public class IdealTest extends TestCase {
      L = new ArrayList<GenPolynomial<BigRational>>();
      assertTrue("not isZERO( b )", !a.isZERO() );
      L.add(b);
-     L = GroebnerBase.GB( L );
+     L = bb.GB( L );
 
      J = new Ideal<BigRational>(fac,L,true);
      assertTrue("not isZERO( J )", !J.isZERO() );
@@ -405,7 +410,7 @@ public class IdealTest extends TestCase {
      L.add(b);
      assertTrue("not isZERO( c )", !c.isZERO() );
      L.add(c);
-     L = GroebnerBase.GB( L );
+     L = bb.GB( L );
 
      J = new Ideal<BigRational>(fac,L,true);
      assertTrue("not isZERO( J )", !J.isZERO() );
@@ -429,7 +434,7 @@ public class IdealTest extends TestCase {
      L.add(a);
      assertTrue("not isZERO( d )", !d.isZERO() );
      L.add(d);
-     L = GroebnerBase.GB( L );
+     L = bb.GB( L );
 
      I = new Ideal<BigRational>(fac,L,true);
      assertTrue("not isZERO( I )", !I.isZERO() );
@@ -479,7 +484,7 @@ public class IdealTest extends TestCase {
      L = new ArrayList<GenPolynomial<BigRational>>();
      assertTrue("not isZERO( b )", !b.isZERO() );
      L.add( b );
-     L = GroebnerBase.GB( L );
+     L = bb.GB( L );
      I = new Ideal<BigRational>(fac,L,true);
      assertTrue("not isZERO( I )", !I.isZERO() );
      //assertTrue("not isONE( I )", !I.isONE() );
@@ -489,7 +494,7 @@ public class IdealTest extends TestCase {
 
      assertTrue("not isZERO( c )", !c.isZERO() );
      L.add(c);
-     L = GroebnerBase.GB( L );
+     L = bb.GB( L );
      I = new Ideal<BigRational>(fac,L,true);
      assertTrue("not isZERO( I )", !I.isZERO() );
      //assertTrue("not isONE( I )", !I.isONE() );
@@ -500,7 +505,7 @@ public class IdealTest extends TestCase {
 
      assertTrue("not isZERO( d )", !d.isZERO() );
      L.add(d);
-     L = GroebnerBase.GB( L );
+     L = bb.GB( L );
      I = new Ideal<BigRational>(fac,L,true);
      assertTrue("not isZERO( I )", !I.isZERO() );
      //assertTrue("not isONE( I )", !I.isONE() );
@@ -512,7 +517,7 @@ public class IdealTest extends TestCase {
      /*
      assertTrue("not isZERO( e )", !e.isZERO() );
      L.add(e);
-     L = GroebnerBase.GB( L );
+     L = bb.GB( L );
      I = new Ideal<BigRational>(fac,L,true);
      assertTrue("not isZERO( I )", !I.isZERO() );
      //assertTrue("not isONE( I )", !I.isONE() );

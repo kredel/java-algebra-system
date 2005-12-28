@@ -82,6 +82,8 @@ public class SolvableGroebnerBaseTest extends TestCase {
 
    GenSolvablePolynomialRing<BigRational> ring;
 
+   SolvableGroebnerBase<BigRational> sbb;
+
    BigRational cfac;
    String[] vars;
    TermOrder tord;
@@ -100,6 +102,7 @@ public class SolvableGroebnerBaseTest extends TestCase {
        ring = new GenSolvablePolynomialRing<BigRational>(cfac,rl,tord,vars);
        table = ring.table;
        a = b = c = d = e = null;
+       sbb = new SolvableGroebnerBaseSeq<BigRational>();
 
        a = ring.random(kl, ll, el, q );
        b = ring.random(kl, ll, el, q );
@@ -115,6 +118,7 @@ public class SolvableGroebnerBaseTest extends TestCase {
        tord = null;
        table = null;
        cfac = null;
+       sbb = null;
    }
 
 
@@ -128,33 +132,33 @@ public class SolvableGroebnerBaseTest extends TestCase {
      L = new ArrayList<GenSolvablePolynomial<BigRational>>();
      L.add(a);
 
-     L = SolvableGroebnerBase.leftGB( L );
-     assertTrue("isLeftGB( { a } )", SolvableGroebnerBase.isLeftGB(L) );
+     L = sbb.leftGB( L );
+     assertTrue("isLeftGB( { a } )", sbb.isLeftGB(L) );
 
      assertTrue("not isZERO( b )", !b.isZERO() );
      L.add(b);
      //System.out.println("L = " + L.size() );
 
-     L = SolvableGroebnerBase.leftGB( L );
-     assertTrue("isLeftGB( { a, b } )", SolvableGroebnerBase.isLeftGB(L) );
+     L = sbb.leftGB( L );
+     assertTrue("isLeftGB( { a, b } )", sbb.isLeftGB(L) );
 
      assertTrue("not isZERO( c )", !c.isZERO() );
      L.add(c);
 
-     L = SolvableGroebnerBase.leftGB( L );
-     assertTrue("isLeftGB( { a, b, c } )", SolvableGroebnerBase.isLeftGB(L) );
+     L = sbb.leftGB( L );
+     assertTrue("isLeftGB( { a, b, c } )", sbb.isLeftGB(L) );
 
      assertTrue("not isZERO( d )", !d.isZERO() );
      L.add(d);
 
-     L = SolvableGroebnerBase.leftGB( L );
-     assertTrue("isLeftGB( { a, b, c, d } )", SolvableGroebnerBase.isLeftGB(L) );
+     L = sbb.leftGB( L );
+     assertTrue("isLeftGB( { a, b, c, d } )", sbb.isLeftGB(L) );
 
      assertTrue("not isZERO( e )", !e.isZERO() );
      L.add(e);
 
-     L = SolvableGroebnerBase.leftGB( L );
-     assertTrue("isLeftGB( { a, b, c, d, e } )", SolvableGroebnerBase.isLeftGB(L) );
+     L = sbb.leftGB( L );
+     assertTrue("isLeftGB( { a, b, c, d, e } )", sbb.isLeftGB(L) );
  }
 
 
@@ -182,33 +186,33 @@ public class SolvableGroebnerBaseTest extends TestCase {
      L = new ArrayList<GenSolvablePolynomial<BigRational>>();
      L.add(a);
 
-     L = SolvableGroebnerBase.leftGB( L );
-     assertTrue("isLeftGB( { a } )", SolvableGroebnerBase.isLeftGB(L) );
+     L = sbb.leftGB( L );
+     assertTrue("isLeftGB( { a } )", sbb.isLeftGB(L) );
 
      assertTrue("not isZERO( b )", !b.isZERO() );
      L.add(b);
      //System.out.println("L = " + L.size() );
 
-     L = SolvableGroebnerBase.leftGB( L );
-     assertTrue("isLeftGB( { a, b } )", SolvableGroebnerBase.isLeftGB(L) );
+     L = sbb.leftGB( L );
+     assertTrue("isLeftGB( { a, b } )", sbb.isLeftGB(L) );
 
      assertTrue("not isZERO( c )", !c.isZERO() );
      L.add(c);
 
-     L = SolvableGroebnerBase.leftGB( L );
-     assertTrue("isLeftGB( { a, b, c } )", SolvableGroebnerBase.isLeftGB(L) );
+     L = sbb.leftGB( L );
+     assertTrue("isLeftGB( { a, b, c } )", sbb.isLeftGB(L) );
 
      assertTrue("not isZERO( d )", !d.isZERO() );
      L.add(d);
 
-     L = SolvableGroebnerBase.leftGB( L );
-     assertTrue("isLeftGB( { a, b, c, d } )", SolvableGroebnerBase.isLeftGB(L) );
+     L = sbb.leftGB( L );
+     assertTrue("isLeftGB( { a, b, c, d } )", sbb.isLeftGB(L) );
 
      assertTrue("not isZERO( e )", !e.isZERO() );
      L.add(e);
 
-     L = SolvableGroebnerBase.leftGB( L );
-     assertTrue("isLeftGB( { a, b, c, d, e } )", SolvableGroebnerBase.isLeftGB(L) );
+     L = sbb.leftGB( L );
+     assertTrue("isLeftGB( { a, b, c, d, e } )", sbb.isLeftGB(L) );
  }
 
 
@@ -223,37 +227,37 @@ public class SolvableGroebnerBaseTest extends TestCase {
      L = new ArrayList<GenSolvablePolynomial<BigRational>>();
      L.add(a);
 
-     L = SolvableGroebnerBase.twosidedGB( L );
+     L = sbb.twosidedGB( L );
      //System.out.println("L = " + L.size() );
-     assertTrue("isTwosidedGB( { a } )", SolvableGroebnerBase.isTwosidedGB(L) );
+     assertTrue("isTwosidedGB( { a } )", sbb.isTwosidedGB(L) );
 
      assertTrue("not isZERO( b )", !b.isZERO() );
      L.add(b);
 
-     L = SolvableGroebnerBase.twosidedGB( L );
+     L = sbb.twosidedGB( L );
      //System.out.println("L = " + L.size() );
-     assertTrue("isTwosidedGB( { a, b } )", SolvableGroebnerBase.isTwosidedGB(L) );
+     assertTrue("isTwosidedGB( { a, b } )", sbb.isTwosidedGB(L) );
 
      assertTrue("not isZERO( c )", !c.isZERO() );
      L.add(c);
 
-     L = SolvableGroebnerBase.twosidedGB( L );
+     L = sbb.twosidedGB( L );
      //System.out.println("L = " + L.size() );
-     assertTrue("isTwosidedGB( { a, b, c } )", SolvableGroebnerBase.isTwosidedGB(L) );
+     assertTrue("isTwosidedGB( { a, b, c } )", sbb.isTwosidedGB(L) );
 
      assertTrue("not isZERO( d )", !d.isZERO() );
      L.add(d);
 
-     L = SolvableGroebnerBase.twosidedGB( L );
+     L = sbb.twosidedGB( L );
      //System.out.println("L = " + L.size() );
-     assertTrue("isTwosidedGB( { a, b, c, d } )", SolvableGroebnerBase.isTwosidedGB(L) );
+     assertTrue("isTwosidedGB( { a, b, c, d } )", sbb.isTwosidedGB(L) );
 
      assertTrue("not isZERO( e )", !e.isZERO() );
      L.add(e);
 
-     L = SolvableGroebnerBase.twosidedGB( L );
+     L = sbb.twosidedGB( L );
      //System.out.println("L = " + L.size() );
-     assertTrue("isTwosidedGB( { a, b, c, d, e } )", SolvableGroebnerBase.isTwosidedGB(L) );
+     assertTrue("isTwosidedGB( { a, b, c, d, e } )", sbb.isTwosidedGB(L) );
  }
 
 
@@ -283,37 +287,37 @@ public class SolvableGroebnerBaseTest extends TestCase {
      L.add(a);
 
      //System.out.println("La = " + L );
-     L = SolvableGroebnerBase.twosidedGB( L );
+     L = sbb.twosidedGB( L );
      //System.out.println("L = " + L );
-     assertTrue("isTwosidedGB( { a } )", SolvableGroebnerBase.isTwosidedGB(L) );
+     assertTrue("isTwosidedGB( { a } )", sbb.isTwosidedGB(L) );
 
      assertTrue("not isZERO( b )", !b.isZERO() );
      L.add(b);
 
-     L = SolvableGroebnerBase.twosidedGB( L );
+     L = sbb.twosidedGB( L );
      //System.out.println("L = " + L );
-     assertTrue("isTwosidedGB( { a, b } )", SolvableGroebnerBase.isTwosidedGB(L) );
+     assertTrue("isTwosidedGB( { a, b } )", sbb.isTwosidedGB(L) );
 
      assertTrue("not isZERO( c )", !c.isZERO() );
      L.add(c);
 
-     L = SolvableGroebnerBase.twosidedGB( L );
+     L = sbb.twosidedGB( L );
      //System.out.println("L = " + L );
-     assertTrue("isTwosidedGB( { a, b, c } )", SolvableGroebnerBase.isTwosidedGB(L) );
+     assertTrue("isTwosidedGB( { a, b, c } )", sbb.isTwosidedGB(L) );
 
      assertTrue("not isZERO( d )", !d.isZERO() );
      L.add(d);
 
-     L = SolvableGroebnerBase.twosidedGB( L );
+     L = sbb.twosidedGB( L );
      //System.out.println("L = " + L );
-     assertTrue("isTwosidedGB( { a, b, c, d } )", SolvableGroebnerBase.isTwosidedGB(L) );
+     assertTrue("isTwosidedGB( { a, b, c, d } )", sbb.isTwosidedGB(L) );
 
      assertTrue("not isZERO( e )", !e.isZERO() );
      L.add(e);
 
-     L = SolvableGroebnerBase.twosidedGB( L );
+     L = sbb.twosidedGB( L );
      //System.out.println("L = " + L );
-     assertTrue("isTwosidedGB( { a, b, c, d, e } )", SolvableGroebnerBase.isTwosidedGB(L) );
+     assertTrue("isTwosidedGB( { a, b, c, d, e } )", sbb.isTwosidedGB(L) );
  }
 
 }

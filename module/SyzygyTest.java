@@ -28,6 +28,7 @@ import edu.jas.poly.TermOrder;
 
 import edu.jas.ring.Reduction;
 import edu.jas.ring.GroebnerBase;
+import edu.jas.ring.GroebnerBaseSeq;
 
 import edu.jas.module.ModuleList;
 import edu.jas.module.Syzygy;
@@ -73,6 +74,11 @@ public class SyzygyTest extends TestCase {
    PolynomialList<BigRational> F;
    List<GenPolynomial<BigRational>> G;
 
+   GroebnerBase<BigRational> bb;
+   ModGroebnerBase<BigRational> mbb;
+
+   Syzygy<BigRational> sz;
+
    GenPolynomial<BigRational> a;
    GenPolynomial<BigRational> b;
    GenPolynomial<BigRational> c;
@@ -103,6 +109,11 @@ public class SyzygyTest extends TestCase {
        vars = ExpVector.STDVARS( rl );
        tord = new TermOrder();
        fac = new GenPolynomialRing<BigRational>(coeff,rl,tord,vars);
+
+       bb = new GroebnerBaseSeq<BigRational>();
+       mbb = new ModGroebnerBase<BigRational>();
+       sz = new Syzygy<BigRational>();
+
        a = b = c = d = e = null;
        L = null;
        K = null;
@@ -126,6 +137,9 @@ public class SyzygyTest extends TestCase {
        fac = null;
        vars = null;
        tord = null;
+       bb = null;
+       mbb = null;
+       sz = null;
    }
 
 
@@ -139,36 +153,36 @@ public class SyzygyTest extends TestCase {
 
      assertTrue("not isZERO( a )", !a.isZERO() );
      L.add(a);
-     assertTrue("isGB( { a } )", GroebnerBase.<BigRational>isGB(L) );
-     K = Syzygy.<BigRational>zeroRelations( L );
-     assertTrue("is ZR( { a } )", Syzygy.<BigRational>isZeroRelation(K,L) );
+     assertTrue("isGB( { a } )", bb.isGB(L) );
+     K = sz.zeroRelations( L );
+     assertTrue("is ZR( { a } )", sz.isZeroRelation(K,L) );
 
      assertTrue("not isZERO( b )", !b.isZERO() );
      L.add(b);
-     L = GroebnerBase.<BigRational>GB(L);
-     assertTrue("isGB( { a, b } )", GroebnerBase.<BigRational>isGB(L) );
+     L = bb.GB(L);
+     assertTrue("isGB( { a, b } )", bb.isGB(L) );
      //System.out.println("\nL = " + L );
-     K = Syzygy.<BigRational>zeroRelations( L );
+     K = sz.zeroRelations( L );
      //System.out.println("\nN = " + N );
-     assertTrue("is ZR( { a, b } )", Syzygy.<BigRational>isZeroRelation(K,L) );
+     assertTrue("is ZR( { a, b } )", sz.isZeroRelation(K,L) );
 
      assertTrue("not isZERO( c )", !c.isZERO() );
      L.add(c);
-     L = GroebnerBase.<BigRational>GB(L);
+     L = bb.GB(L);
      //System.out.println("\nL = " + L );
-     assertTrue("isGB( { a, b, c } )", GroebnerBase.<BigRational>isGB(L) );
-     K = Syzygy.<BigRational>zeroRelations( L );
+     assertTrue("isGB( { a, b, c } )", bb.isGB(L) );
+     K = sz.zeroRelations( L );
      //System.out.println("\nN = " + N );
-     assertTrue("is ZR( { a, b, c } )", Syzygy.<BigRational>isZeroRelation(K,L) );
+     assertTrue("is ZR( { a, b, c } )", sz.isZeroRelation(K,L) );
 
      assertTrue("not isZERO( d )", !d.isZERO() );
      L.add(d);
-     L = GroebnerBase.<BigRational>GB(L);
+     L = bb.GB(L);
      //System.out.println("\nL = " + L );
-     assertTrue("isGB( { a, b, c, d } )", GroebnerBase.<BigRational>isGB(L) );
-     K = Syzygy.<BigRational>zeroRelations( L );
+     assertTrue("isGB( { a, b, c, d } )", bb.isGB(L) );
+     K = sz.zeroRelations( L );
      //System.out.println("\nN = " + N );
-     assertTrue("is ZR( { a, b, c, d } )", Syzygy.<BigRational>isZeroRelation(K,L) );
+     assertTrue("is ZR( { a, b, c, d } )", sz.isZeroRelation(K,L) );
 
      //System.out.println("N = " + N );
      /*
@@ -189,14 +203,14 @@ public class SyzygyTest extends TestCase {
      V.add(a); V.add(zero); V.add(one);
      W.add(V);
      M = new ModuleList<BigRational>(fac,W);
-     assertTrue("isGB( { (a,0,1) } )", ModGroebnerBase.<BigRational>isGB(M) );
+     assertTrue("isGB( { (a,0,1) } )", mbb.isGB(M) );
 
-     N = ModGroebnerBase.<BigRational>GB( M );
-     assertTrue("isGB( { (a,0,1) } )", ModGroebnerBase.<BigRational>isGB(N) );
+     N = mbb.GB( M );
+     assertTrue("isGB( { (a,0,1) } )", mbb.isGB(N) );
 
-     Z = Syzygy.zeroRelations(N);
+     Z = sz.zeroRelations(N);
      //System.out.println("Z = " + Z);
-     assertTrue("is ZR( { a) } )", Syzygy.<BigRational>isZeroRelation(Z,N) );
+     assertTrue("is ZR( { a) } )", sz.isZeroRelation(Z,N) );
 
      assertTrue("not isZERO( b )", !b.isZERO() );
      V = new ArrayList<GenPolynomial<BigRational>>();
@@ -205,12 +219,12 @@ public class SyzygyTest extends TestCase {
      M = new ModuleList<BigRational>(fac,W);
      //System.out.println("W = " + W.size() );
 
-     N = ModGroebnerBase.<BigRational>GB( M );
-     assertTrue("isGB( { a, b } )", ModGroebnerBase.<BigRational>isGB(N) );
+     N = mbb.GB( M );
+     assertTrue("isGB( { a, b } )", mbb.isGB(N) );
 
-     Z = Syzygy.<BigRational>zeroRelations(N);
+     Z = sz.zeroRelations(N);
      //System.out.println("Z = " + Z);
-     assertTrue("is ZR( { a, b } )", Syzygy.<BigRational>isZeroRelation(Z,N) );
+     assertTrue("is ZR( { a, b } )", sz.isZeroRelation(Z,N) );
 
      assertTrue("not isZERO( c )", !c.isZERO() );
      V = new ArrayList<GenPolynomial<BigRational>>();
@@ -219,15 +233,15 @@ public class SyzygyTest extends TestCase {
      M = new ModuleList<BigRational>(fac,W);
      //System.out.println("W = " + W.size() );
 
-     N = ModGroebnerBase.<BigRational>GB( M );
+     N = mbb.GB( M );
      //System.out.println("GB(M) = " + N);
-     assertTrue("isGB( { a,b,c) } )", ModGroebnerBase.<BigRational>isGB(N) );
+     assertTrue("isGB( { a,b,c) } )", mbb.isGB(N) );
 
-     Z = Syzygy.<BigRational>zeroRelations(N);
+     Z = sz.zeroRelations(N);
      //System.out.println("Z = " + Z);
      //boolean b = Syzygy.isZeroRelation(Z,N);
      //System.out.println("boolean = " + b);
-     assertTrue("is ZR( { a,b,c } )", Syzygy.<BigRational>isZeroRelation(Z,N) );
+     assertTrue("is ZR( { a,b,c } )", sz.isZeroRelation(Z,N) );
 
  }
 

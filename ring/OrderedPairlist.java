@@ -35,6 +35,7 @@ public class OrderedPairlist<C extends RingElem<C> > {
     private final TreeMap<ExpVector,LinkedList<Pair<C>>> pairlist;
     private final ArrayList<BitSet> red;
     private final GenPolynomialRing<C> ring;
+    private final Reduction<C> reduction;
     private boolean oneInGB = false;
     private boolean useCriterion4 = true;
     private int putCount;
@@ -70,6 +71,7 @@ public class OrderedPairlist<C extends RingElem<C> > {
          if ( ring instanceof GenSolvablePolynomialRing ) {
             useCriterion4 = false;
          }
+         reduction = new ReductionSeq<C>();
     }
 
 
@@ -159,13 +161,13 @@ public class OrderedPairlist<C extends RingElem<C> > {
                  j = pair.j; 
                  //System.out.println("pair(" + j + "," +i+") ");
                  if ( useCriterion4 ) {
-                    c = Reduction.<C>GBCriterion4( pair.pi, pair.pj, g ); 
+                    c = reduction.criterion4( pair.pi, pair.pj, g ); 
                  } else {
                     c = true;
                  }
                  //System.out.println("c4  = " + c);  
                  if ( c ) {
-                    c = GBCriterion3( i, j, g );
+                    c = criterion3( i, j, g );
                     //System.out.println("c3  = " + c); 
                  }
                  red.get( j ).clear(i); // set(i,false) jdk1.4
@@ -244,7 +246,7 @@ public class OrderedPairlist<C extends RingElem<C> > {
      * GB criterium 3.
      * @return true if the S-polynomial(i,j) is required.
      */
-    public boolean GBCriterion3(int i, int j, ExpVector eij) {  
+    public boolean criterion3(int i, int j, ExpVector eij) {  
         // assert i < j;
         boolean s;
         s = red.get( j ).get(i); 

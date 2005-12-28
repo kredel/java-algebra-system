@@ -65,6 +65,9 @@ public static Test suite() {
    PolynomialList<BigRational> F;
    PolynomialList<BigRational> G;
 
+   Reduction<BigRational> red;
+   Reduction<BigRational> redpar;
+
    int rl = 3; 
    int kl = 10;
    int ll = 7;
@@ -74,11 +77,15 @@ public static Test suite() {
    protected void setUp() {
        a = b = c = d = e = null;
        fac = new GenPolynomialRing<BigRational>( new BigRational(0), rl );
+       red = new ReductionSeq<BigRational>();
+       redpar = new ReductionPar<BigRational>();
    }
 
    protected void tearDown() {
        a = b = c = d = e = null;
        fac = null;
+       red = null;
+       redpar = null;
    }
 
 
@@ -92,30 +99,30 @@ public static Test suite() {
      c = fac.getONE();
      d = fac.getZERO();
 
-     e = Reduction.<BigRational>normalform( L, c );
+     e = red.normalform( L, c );
      assertTrue("isONE( e )", e.isONE() ); 
 
-     e = Reduction.<BigRational>normalform( L, d );
+     e = red.normalform( L, d );
      assertTrue("isZERO( e )", e.isZERO() ); 
 
 
      L.add( c );
-     e = Reduction.<BigRational>normalform( L, c );
+     e = red.normalform( L, c );
      assertTrue("isZERO( e )", e.isZERO() ); 
 
-     e = Reduction.<BigRational>normalform( L, a );
+     e = red.normalform( L, a );
      assertTrue("isZERO( e )", e.isZERO() ); 
 
-     e = Reduction.<BigRational>normalform( L, d );
+     e = red.normalform( L, d );
      assertTrue("isZERO( e )", e.isZERO() ); 
 
 
      L = new ArrayList<GenPolynomial<BigRational>>();
      L.add( d );
-     e = Reduction.<BigRational>normalform( L, c );
+     e = red.normalform( L, c );
      assertTrue("isONE( e )", e.isONE() ); 
 
-     e = Reduction.<BigRational>normalform( L, d );
+     e = red.normalform( L, d );
      assertTrue("isZERO( e )", e.isZERO() ); 
  }
 
@@ -130,30 +137,30 @@ public static Test suite() {
      c = fac.getONE();
      d = fac.getZERO();
 
-     e = Reduction.<BigRational>normalformMod( L, c );
+     e = redpar.normalform( L, c );
      assertTrue("isONE( e )", e.isONE() ); 
 
-     e = Reduction.<BigRational>normalformMod( L, d );
+     e = redpar.normalform( L, d );
      assertTrue("isZERO( e )", e.isZERO() ); 
 
 
      L.add( c );
-     e = Reduction.<BigRational>normalformMod( L, c );
+     e = redpar.normalform( L, c );
      assertTrue("isZERO( e )", e.isZERO() ); 
 
-     e = Reduction.<BigRational>normalformMod( L, a );
+     e = redpar.normalform( L, a );
      assertTrue("isZERO( e )", e.isZERO() ); 
 
-     e = Reduction.<BigRational>normalformMod( L, d );
+     e = redpar.normalform( L, d );
      assertTrue("isZERO( e )", e.isZERO() ); 
 
 
      L = new ArrayList<GenPolynomial<BigRational>>();
      L.add( d );
-     e = Reduction.<BigRational>normalformMod( L, c );
+     e = redpar.normalform( L, c );
      assertTrue("isONE( e )", e.isONE() ); 
 
-     e = Reduction.<BigRational>normalformMod( L, d );
+     e = redpar.normalform( L, d );
      assertTrue("isZERO( e )", e.isZERO() ); 
  }
 
@@ -172,13 +179,13 @@ public static Test suite() {
      L = new ArrayList<GenPolynomial<BigRational>>();
      L.add(a);
 
-     e = Reduction.<BigRational>normalform( L, a );
+     e = red.normalform( L, a );
      assertTrue("isZERO( e )", e.isZERO() );
 
      assertTrue("not isZERO( b )", !b.isZERO() );
 
      L.add(b);
-     e = Reduction.<BigRational>normalform( L, a );
+     e = red.normalform( L, a );
      assertTrue("isZERO( e ) some times", e.isZERO() ); 
  }
 
@@ -197,13 +204,13 @@ public static Test suite() {
      L = new ArrayList<GenPolynomial<BigRational>>();
      L.add(a);
 
-     e = Reduction.<BigRational>normalformMod( L, a );
+     e = redpar.normalform( L, a );
      assertTrue("isZERO( e )", e.isZERO() );
 
      assertTrue("not isZERO( b )", !b.isZERO() );
 
      L.add(b);
-     e = Reduction.<BigRational>normalformMod( L, a );
+     e = redpar.normalform( L, a );
      assertTrue("isZERO( e ) some times", e.isZERO() ); 
  }
 
@@ -218,6 +225,8 @@ public static Test suite() {
      GenPolynomialRing<BigComplex> fac 
           = new GenPolynomialRing<BigComplex>( new BigComplex(0), rl );
 
+     Reduction<BigComplex> cred = new ReductionSeq<BigComplex>();
+
      GenPolynomial<BigComplex> a = fac.random(kl, ll, el, q );
      GenPolynomial<BigComplex> b = fac.random(kl, ll, el, q );
 
@@ -228,13 +237,13 @@ public static Test suite() {
      L.add(a);
 
      GenPolynomial<BigComplex> e 
-         = Reduction.<BigComplex>normalform( L, a );
+         = cred.normalform( L, a );
      assertTrue("isZERO( e )", e.isZERO() );
 
      assertTrue("not isZERO( b )", !b.isZERO() );
 
      L.add(b);
-     e = Reduction.<BigComplex>normalform( L, a );
+     e = cred.normalform( L, a );
      assertTrue("isZERO( e ) some times", e.isZERO() ); 
  }
 

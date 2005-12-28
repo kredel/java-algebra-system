@@ -87,6 +87,8 @@ public class ModGroebnerBaseTest extends TestCase {
    ModuleList<BigRational> M;
    ModuleList<BigRational> N;
 
+   ModGroebnerBase<BigRational> mbb;
+
    int rl = 3; //4; //3; 
    int kl = 8;
    int ll = 5;
@@ -98,6 +100,7 @@ public class ModGroebnerBaseTest extends TestCase {
        vars = ExpVector.STDVARS( rl );
        tord = new TermOrder();
        fac = new GenPolynomialRing<BigRational>(coeff,rl,tord,vars);
+       mbb = new ModGroebnerBase<BigRational>();
        a = b = c = d = e = null;
 
        a = fac.random(kl, ll, el, q );
@@ -108,6 +111,7 @@ public class ModGroebnerBaseTest extends TestCase {
    }
 
    protected void tearDown() {
+       mbb = null;
        a = b = c = d = e = null;
        fac = null;
        vars = null;
@@ -128,10 +132,10 @@ public class ModGroebnerBaseTest extends TestCase {
      V.add(a); V.add(fac.getZERO()); V.add(fac.getONE());
      L.add(V);
      M = new ModuleList<BigRational>(fac,L);
-     assertTrue("isGB( { (a,0,1) } )", ModGroebnerBase.isGB(M) );
+     assertTrue("isGB( { (a,0,1) } )", mbb.isGB(M) );
 
-     N = ModGroebnerBase.GB( M );
-     assertTrue("isGB( { (a,0,1) } )", ModGroebnerBase.isGB(N) );
+     N = mbb.GB( M );
+     assertTrue("isGB( { (a,0,1) } )", mbb.isGB(N) );
 
      assertTrue("not isZERO( b )", !b.isZERO() );
      V = new ArrayList<GenPolynomial<BigRational>>();
@@ -140,8 +144,8 @@ public class ModGroebnerBaseTest extends TestCase {
      M = new ModuleList(fac,L);
      //System.out.println("L = " + L.size() );
 
-     N = ModGroebnerBase.GB( M );
-     assertTrue("isDIRPGB( { (a,0,1),(b,1,0) } )", ModGroebnerBase.isGB(N) );
+     N = mbb.GB( M );
+     assertTrue("isDIRPGB( { (a,0,1),(b,1,0) } )", mbb.isGB(N) );
      //System.out.println("N = " + N );
 
      assertTrue("not isZERO( c )", !c.isZERO() );
@@ -151,8 +155,8 @@ public class ModGroebnerBaseTest extends TestCase {
      M = new ModuleList<BigRational>(fac,L);
      //System.out.println("L = " + L.size() );
 
-     N = ModGroebnerBase.GB( M );
-     assertTrue("isDIRPGB( { (a,),(b,),(c,) } )", ModGroebnerBase.isGB(N) );
+     N = mbb.GB( M );
+     assertTrue("isDIRPGB( { (a,),(b,),(c,) } )", mbb.isGB(N) );
      //System.out.println("N = " + N );
 
      assertTrue("not isZERO( d )", !d.isZERO() );
@@ -162,8 +166,8 @@ public class ModGroebnerBaseTest extends TestCase {
      M = new ModuleList<BigRational>(fac,L);
      //System.out.println("L = " + L.size() );
 
-     N = ModGroebnerBase.GB( M );
-     assertTrue("isDIRPGB( { (a,b,c,d) } )", ModGroebnerBase.isGB(N) );
+     N = mbb.GB( M );
+     assertTrue("isDIRPGB( { (a,b,c,d) } )", mbb.isGB(N) );
      //System.out.println("N = " + N );
 
  }

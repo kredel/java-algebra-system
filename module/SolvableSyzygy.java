@@ -27,8 +27,12 @@ import edu.jas.poly.TermOrder;
 import edu.jas.poly.RelationTable;
 
 import edu.jas.ring.Reduction;
+import edu.jas.ring.SolvableReduction;
+import edu.jas.ring.ReductionSeq;
+import edu.jas.ring.SolvableReductionSeq;
 import edu.jas.ring.GroebnerBase;
 import edu.jas.ring.SolvableGroebnerBase;
+import edu.jas.ring.SolvableGroebnerBaseSeq;
 
 import edu.jas.module.ModuleList;
 
@@ -39,9 +43,29 @@ import edu.jas.module.ModuleList;
  * @author Heinz Kredel
  */
 
-public class SolvableSyzygy  {
+public class SolvableSyzygy<C extends RingElem<C>> {
 
     private static final Logger logger = Logger.getLogger(SolvableSyzygy.class);
+
+    /**
+     * Solvable reduction engine.
+     */
+    protected SolvableReduction<C> sred;
+
+
+    /**
+     * Reduction engine.
+     */
+    protected Reduction<C> red;
+
+
+    /**
+     * Constructor.
+     */
+    public SolvableSyzygy() {
+        red = new ReductionSeq<C>();
+        sred = new SolvableReductionSeq<C>();
+    }
 
 
     /**
@@ -50,8 +74,7 @@ public class SolvableSyzygy  {
      * @param F a Groebner base.
      * @return leftSyz(F), a basis for the left module of syzygies for F.
      */
-    public static <C extends RingElem<C>>
-           List<List<GenSolvablePolynomial<C>>> 
+    public List<List<GenSolvablePolynomial<C>>> 
            leftZeroRelations(List<GenSolvablePolynomial<C>> F) {  
         return leftZeroRelations(0,F);
     }
@@ -64,8 +87,7 @@ public class SolvableSyzygy  {
      * @param F a Groebner base.
      * @return leftSyz(F), a basis for the left module of syzygies for F.
      */
-    public static <C extends RingElem<C>>
-           List<List<GenSolvablePolynomial<C>>>
+    public List<List<GenSolvablePolynomial<C>>>
            leftZeroRelations(int modv, 
                              List<GenSolvablePolynomial<C>> F) {  
         List<List<GenSolvablePolynomial<C>>> Z 
@@ -86,21 +108,21 @@ public class SolvableSyzygy  {
                 pj = F.get(j);
                 //logger.info("p"+i+", p"+j+" = " + pi + ", " +pj);
 
-		if ( ! Reduction.ModuleCriterion( modv, pi, pj ) ) {
+		if ( ! red.moduleCriterion( modv, pi, pj ) ) {
                    continue;
                 }
-		// if ( ! Reduction.GBCriterion4( pi, pj ) ) continue;
+		// if ( ! red.criterion4( pi, pj ) ) continue;
                 ArrayList<GenSolvablePolynomial<C>> row 
                    = (ArrayList<GenSolvablePolynomial<C>>)S.clone();
 
-		s = leftSPolynomial( row, i, pi, j, pj );
+		s = sred.leftSPolynomial( row, i, pi, j, pj );
                 //logger.info("row = " + row);
 		if ( s.isZERO() ) {
                    Z.add( row );
                    continue;
                 }
 
-		h = leftNormalform( row, F, s );
+		h = sred.leftNormalform( row, F, s );
 		if ( ! h.isZERO() ) {
                    throw new RuntimeException("Syzygy no leftGB");
                 }
@@ -128,8 +150,7 @@ public class SolvableSyzygy  {
      * @param M a Groebner base.
      * @return leftSyz(M), a basis for the left module of syzygies for M.
      */
-    public static <C extends RingElem<C>>
-           ModuleList<C> 
+    public ModuleList<C> 
            leftZeroRelations(ModuleList<C> M) {  
         ModuleList<C> N = null;
         if ( M == null || M.list == null) {
@@ -182,150 +203,6 @@ public class SolvableSyzygy  {
     }
 
 
-
-
-    /**
-     * S-Polynomial with recording.
-     * @param C coefficient type.
-     * @param S recording matrix, is modified.
-     * @param i index of Ap in basis list.
-     * @param Ap a polynomial.
-     * @param j index of Bp in basis list.
-     * @param Bp a polynomial.
-     * @return leftSpol(Ap, Bp), the left S-Polynomial for Ap and Bp.
-     */
-    public static <C extends RingElem<C>>
-           GenSolvablePolynomial<C> 
-           leftSPolynomial(ArrayList<GenSolvablePolynomial<C>> S,
-                           int i,
-                           GenSolvablePolynomial<C> Ap, 
-                           int j,
-                           GenSolvablePolynomial<C> Bp) {  
-        if ( logger.isInfoEnabled() ) {
-	   if ( Bp == null || Bp.isZERO() ) {
-               throw new RuntimeException("Spol B is zero");
-	   }
-	   if ( Ap == null || Ap.isZERO() ) {
-               throw new RuntimeException("Spol A is zero");
-	   }
-           if ( ! Ap.ring.equals( Bp.ring ) ) { 
-              logger.error("rings not equal"); 
-           }
-	}
-        Map.Entry<ExpVector,C> ma = Ap.leadingMonomial();
-        Map.Entry<ExpVector,C> mb = Bp.leadingMonomial();
-
-        ExpVector e = ma.getKey();
-        ExpVector f = mb.getKey();
-
-        ExpVector g  = ExpVector.EVLCM(e,f);
-        ExpVector e1 = ExpVector.EVDIF(g,e);
-        ExpVector f1 = ExpVector.EVDIF(g,f);
-
-        C a = ma.getValue();
-        C b = mb.getValue();
-
-        GenSolvablePolynomial<C> App = Ap.multiplyLeft( b, e1 );
-        GenSolvablePolynomial<C> Bpp = Bp.multiplyLeft( a, f1 );
-        GenSolvablePolynomial<C> Cp = (GenSolvablePolynomial<C>)App.subtract(Bpp);
-
-        GenSolvablePolynomial<C> zero 
-           = (GenSolvablePolynomial<C>)Ap.ring.getZERO();
-        GenSolvablePolynomial<C> As = (GenSolvablePolynomial<C>)zero.add( b.negate(), e1 );
-        GenSolvablePolynomial<C> Bs = (GenSolvablePolynomial<C>)zero.add( a, f1 );
-        S.set( i, As );
-        S.set( j, Bs );
-        return Cp;
-    }
-
-
-    /**
-     * LeftNormalform with recording.
-     * @param C coefficient type.
-     * @param row recording matrix, is modified.
-     * @param Pp a polynomial list for reduction.
-     * @param Ap a polynomial.
-     * @return nf(Pp,Ap), the left normal form of Ap wrt. Pp.
-     */
-    public static <C extends RingElem<C>>
-           GenSolvablePolynomial<C> 
-           leftNormalform(ArrayList<GenSolvablePolynomial<C>> row,
-                          List<GenSolvablePolynomial<C>> Pp, 
-                          GenSolvablePolynomial<C> Ap) {  
-        if ( Pp == null || Pp.isEmpty() ) {
-           return Ap;
-        }
-        if ( Ap == null || Ap.isZERO() ) {
-           return Ap;
-        }
-        int l = Pp.size();
-        GenSolvablePolynomial<C>[] P = new GenSolvablePolynomial[ l ];
-        synchronized (Pp) {
-            //P = Pp.toArray();
-            for ( int i = 0; i < Pp.size(); i++ ) {
-                P[i] = Pp.get(i);
-            }
-	}
-        ExpVector[] htl = new ExpVector[ l ];
-        Object[] lbc = new Object[ l ]; // want <C>
-        GenSolvablePolynomial<C>[] p = new GenSolvablePolynomial[ l ];
-        Map.Entry<ExpVector,C> m;
-	int j = 0;
-        int i;
-        for ( i = 0; i < l; i++ ) { 
-            p[i] = P[i];
-            m = p[i].leadingMonomial();
-	    if ( m != null ) { 
-               p[j] = p[i];
-               htl[j] = m.getKey();
-               lbc[j] = m.getValue();
-	       j++;
-	    }
-	}
-	l = j;
-        ExpVector e;
-        C a;
-        boolean mt = false;
-        GenSolvablePolynomial<C> zero = Ap.ring.getZERO();
-        GenSolvablePolynomial<C> R = Ap.ring.getZERO();
-
-        GenSolvablePolynomial<C> fac = null;
-        // GenSolvablePolynomial<C> T = null;
-        GenSolvablePolynomial<C> Q = null;
-        GenSolvablePolynomial<C> S = Ap;
-        while ( S.length() > 0 ) { 
-	      m = S.leadingMonomial();
-              e = m.getKey();
-              a = m.getValue();
-              for ( i = 0; i < l; i++ ) {
-                  mt = ExpVector.EVMT( e, htl[i] );
-                  if ( mt ) break; 
-	      }
-              if ( ! mt ) { 
-                 //logger.debug("irred");
-                 R = (GenSolvablePolynomial<C>)R.add( a, e );
-                 S = (GenSolvablePolynomial<C>)S.subtract( a, e ); 
-		 // System.out.println(" S = " + S);
-                 throw new RuntimeException("Syzygy no leftGB");
-	      } else { 
-		 e = ExpVector.EVDIF( e, htl[i] );
-                 //logger.info("red div = " + e);
-                 a = a.divide( (C)lbc[i] );
-                 Q = p[i].multiplyLeft( a, e );
-                 S = (GenSolvablePolynomial<C>)S.subtract( Q );
-                 fac = row.get(i);
-                 if ( fac == null ) {
-                    fac = (GenSolvablePolynomial<C>)zero.add( a, e );
-                 } else {
-                    fac = (GenSolvablePolynomial<C>)fac.add( a, e );
-                 }
-                 row.set(i,fac);
-              }
-	}
-        return R;
-    }
-
-
     /**
      * Test if sysygy.
      * @param C coefficient type.
@@ -333,8 +210,7 @@ public class SolvableSyzygy  {
      * @param F a polynomial list.
      * @return true, if Z is a list of left syzygies for F, else false.
      */
-    public static <C extends RingElem<C>>
-           boolean 
+    public boolean 
            isLeftZeroRelation(List<List<GenSolvablePolynomial<C>>> Z, 
                               List<GenSolvablePolynomial<C>> F) {  
         for ( List<GenSolvablePolynomial<C>> row : Z ) {
@@ -358,8 +234,7 @@ public class SolvableSyzygy  {
      * @param F a polynomial list.
      * @return the left scalar product of r and F.
      */
-    public static <C extends RingElem<C>>
-           GenSolvablePolynomial<C> 
+    public GenSolvablePolynomial<C> 
            leftScalarProduct(List<GenSolvablePolynomial<C>> r, 
                              List<GenSolvablePolynomial<C>> F) {  
         GenSolvablePolynomial<C> sp = null;
@@ -391,8 +266,7 @@ public class SolvableSyzygy  {
      * @param F a module list.
      * @return true, if Z is a list of left syzygies for F, else false.
      */
-    public static <C extends RingElem<C>>
-           boolean 
+    public boolean 
            isLeftZeroRelation(ModuleList<C> Z, 
                               ModuleList<C> F) {  
         if ( Z == null || Z.list == null ) {
@@ -416,8 +290,7 @@ public class SolvableSyzygy  {
      * @param F a polynomial list.
      * @return the left scalar product of r and F.
      */
-    public static <C extends RingElem<C>>
-           List<GenSolvablePolynomial<C>> 
+    public List<GenSolvablePolynomial<C>> 
            leftScalarProduct(List<GenSolvablePolynomial<C>> r, 
                              ModuleList<C> F) {  
         List<GenSolvablePolynomial<C>> ZZ = null;
@@ -452,8 +325,7 @@ public class SolvableSyzygy  {
      * @param b a polynomial list.
      * @return a+b, the vector sum of a and b.
      */
-    public static <C extends RingElem<C>>
-           List<GenSolvablePolynomial<C>>
+    public List<GenSolvablePolynomial<C>>
            vectorAdd(List<GenSolvablePolynomial<C>> a, 
                      List<GenSolvablePolynomial<C>> b) {  
         if ( a == null ) {
@@ -486,8 +358,7 @@ public class SolvableSyzygy  {
      * @param a a polynomial list.
      * @return true, if all polynomial in a are zero, else false.
      */
-    public static <C extends RingElem<C>>
-           boolean 
+    public boolean 
            isZero(List<GenSolvablePolynomial<C>> a) {  
         if ( a == null ) {
             return true;
@@ -511,8 +382,7 @@ public class SolvableSyzygy  {
      * @param F a polynomial list.
      * @return the left scalar product of p and F.
      */
-    public static <C extends RingElem<C>>
-           List<GenSolvablePolynomial<C>> 
+    public List<GenSolvablePolynomial<C>> 
            leftScalarProduct(GenSolvablePolynomial<C> p, 
                              List<GenSolvablePolynomial<C>> F) {  
         List<GenSolvablePolynomial<C>> V 
@@ -532,15 +402,15 @@ public class SolvableSyzygy  {
      * @param M a module list of a Groebner basis.
      * @return a resolution of M.
      */
-    public static <C extends RingElem<C>>
-           List<SolvResPart<C>> 
+    public List<SolvResPart<C>> 
            resolution(ModuleList<C> M) {  
         List<SolvResPart<C>> R = new ArrayList<SolvResPart<C>>();
         ModuleList<C> MM = M;
         ModuleList<C> GM;
         ModuleList<C> Z;
+        ModSolvableGroebnerBase<C> msbb = new ModSolvableGroebnerBase<C>();
         while (true) {
-          GM = ModSolvableGroebnerBase.<C>leftGB(MM);
+          GM = msbb.leftGB(MM);
           Z = leftZeroRelations(GM);
           R.add( new SolvResPart(MM,GM,Z) );
           if ( Z == null || Z.list == null || Z.list.size() == 0 ) {
@@ -559,16 +429,16 @@ public class SolvableSyzygy  {
      * @param F a polynomial list of a Groebner basis.
      * @return a resolution of F.
      */
-    public static <C extends RingElem<C>>
-           List // <SolvResPart<C>|SolvResPolPart<C>> 
+    public List // <SolvResPart<C>|SolvResPolPart<C>> 
            resolution(PolynomialList<C> F) {  
         List<List<GenSolvablePolynomial<C>>> Z;
         ModuleList<C> Zm;
         List<GenSolvablePolynomial<C>> G;
         PolynomialList<C> Gl;
+        SolvableGroebnerBase<C> sbb = new SolvableGroebnerBaseSeq<C>();
 
-        G = SolvableGroebnerBase.<C>leftGB( F.castToSolvableList() );
-        Z = SolvableSyzygy.<C>leftZeroRelations( G );
+        G = sbb.leftGB( F.castToSolvableList() );
+        Z = leftZeroRelations( G );
         Gl = new PolynomialList<C>((GenSolvablePolynomialRing<C>)F.ring, G);
         Zm = new ModuleList<C>((GenSolvablePolynomialRing<C>)F.ring, Z);
 

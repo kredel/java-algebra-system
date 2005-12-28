@@ -94,6 +94,8 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
    ModuleList<BigRational> M;
    ModuleList<BigRational> N;
 
+   ModSolvableGroebnerBase<BigRational> msbb;
+
    int rl = 4; //4; //3; 
    int kl = 8;
    int ll = 4;
@@ -107,6 +109,7 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
        TermOrder tord = new TermOrder();
        String[] vars = ExpVector.STDVARS(rl);
        pfac = new GenSolvablePolynomialRing<BigRational>(cfac,rl,tord,vars);
+       msbb = new ModSolvableGroebnerBase<BigRational>();
 
        a = pfac.random(kl, ll, el, q );
        b = pfac.random(kl, ll, el, q );
@@ -121,6 +124,7 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
        a = b = c = d = e = null;
        one = null;
        zero = null;
+       msbb = null;
    }
 
 
@@ -138,12 +142,12 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
      V.add(a); V.add(zero); V.add(one);
      L.add(V);
      M = new ModuleList<BigRational>(pfac,L);
-     assertTrue("isLeftGB( { (a,0,1) } )", ModSolvableGroebnerBase.isLeftGB(M) );
+     assertTrue("isLeftGB( { (a,0,1) } )", msbb.isLeftGB(M) );
      //System.out.println("M = " + M );
 
-     N = ModSolvableGroebnerBase.leftGB( M );
+     N = msbb.leftGB( M );
      //System.out.println("N = " + N );
-     assertTrue("isLeftGB( { (a,0,1) } )", ModSolvableGroebnerBase.isLeftGB(N) );
+     assertTrue("isLeftGB( { (a,0,1) } )", msbb.isLeftGB(N) );
 
      assertTrue("not isZERO( b )", !b.isZERO() );
      V = new ArrayList<GenSolvablePolynomial<BigRational>>();
@@ -152,8 +156,8 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
      M = new ModuleList<BigRational>(pfac,L);
      //System.out.println("L = " + L.size() );
 
-     N = ModSolvableGroebnerBase.leftGB( M );
-     assertTrue("isLeftGB( { (a,0,1),(b,1,0) } )", ModSolvableGroebnerBase.isLeftGB(N) );
+     N = msbb.leftGB( M );
+     assertTrue("isLeftGB( { (a,0,1),(b,1,0) } )", msbb.isLeftGB(N) );
      //System.out.println("N = " + N );
 
      assertTrue("not isZERO( c )", !c.isZERO() );
@@ -164,8 +168,8 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
      //System.out.println("M = " + M );
      //System.out.println("L = " + L.size() );
 
-     N = ModSolvableGroebnerBase.leftGB( M );
-     assertTrue("isLeftGB( { (a,),(b,),(c,) } )", ModSolvableGroebnerBase.isLeftGB(N) );
+     N = msbb.leftGB( M );
+     assertTrue("isLeftGB( { (a,),(b,),(c,) } )", msbb.isLeftGB(N) );
      //System.out.println("N = " + N );
 
      assertTrue("not isZERO( d )", !d.isZERO() );
@@ -176,8 +180,8 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
      //System.out.println("M = " + M );
      //System.out.println("L = " + L.size() );
 
-     N = ModSolvableGroebnerBase.leftGB( M );
-     assertTrue("isLeftGB( { (a,b,c,d) } )", ModSolvableGroebnerBase.isLeftGB(N) );
+     N = msbb.leftGB( M );
+     assertTrue("isLeftGB( { (a,b,c,d) } )", msbb.isLeftGB(N) );
      //System.out.println("N = " + N );
 
  }
@@ -197,10 +201,10 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
      V.add(a); V.add(zero); V.add(one);
      L.add(V);
      M = new ModuleList<BigRational>(pfac,L);
-     assertTrue("isTwosidedGB( { (a,0,1) } )", ModSolvableGroebnerBase.isTwosidedGB(M) );
+     assertTrue("isTwosidedGB( { (a,0,1) } )", msbb.isTwosidedGB(M) );
 
-     N = ModSolvableGroebnerBase.twosidedGB( M );
-     assertTrue("isTwosidedGB( { (a,0,1) } )", ModSolvableGroebnerBase.isTwosidedGB(N) );
+     N = msbb.twosidedGB( M );
+     assertTrue("isTwosidedGB( { (a,0,1) } )", msbb.isTwosidedGB(N) );
 
      assertTrue("not isZERO( b )", !b.isZERO() );
      V = new ArrayList<GenSolvablePolynomial<BigRational>>();
@@ -209,8 +213,8 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
      M = new ModuleList<BigRational>(pfac,L);
      //System.out.println("L = " + L.size() );
 
-     N = ModSolvableGroebnerBase.twosidedGB( M );
-     assertTrue("isTwosidedGB( { (a,0,1),(b,1,0) } )", ModSolvableGroebnerBase.isTwosidedGB(N) );
+     N = msbb.twosidedGB( M );
+     assertTrue("isTwosidedGB( { (a,0,1),(b,1,0) } )", msbb.isTwosidedGB(N) );
      //System.out.println("N = " + N );
 
      assertTrue("not isZERO( c )", !c.isZERO() );
@@ -220,8 +224,8 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
      M = new ModuleList<BigRational>(pfac,L);
      //System.out.println("L = " + L.size() );
 
-     N = ModSolvableGroebnerBase.twosidedGB( M );
-     assertTrue("isTwosidedGB( { (a,),(b,),(c,) } )", ModSolvableGroebnerBase.isTwosidedGB(N) );
+     N = msbb.twosidedGB( M );
+     assertTrue("isTwosidedGB( { (a,),(b,),(c,) } )", msbb.isTwosidedGB(N) );
      //System.out.println("N = " + N );
 
      assertTrue("not isZERO( d )", !d.isZERO() );
@@ -231,8 +235,8 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
      M = new ModuleList<BigRational>(pfac,L);
      //System.out.println("L = " + L.size() );
 
-     N = ModSolvableGroebnerBase.twosidedGB( M );
-     assertTrue("isTwosidedGB( { (a,b,c,d) } )", ModSolvableGroebnerBase.isTwosidedGB(N) );
+     N = msbb.twosidedGB( M );
+     assertTrue("isTwosidedGB( { (a,b,c,d) } )", msbb.isTwosidedGB(N) );
      //System.out.println("N = " + N );
 
  }
@@ -278,10 +282,10 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
      V.add(a); V.add(zero); V.add(one);
      L.add(V);
      M = new ModuleList<BigRational>(pfac,L);
-     assertTrue("isLeftGB( { (a,0,1) } )", ModSolvableGroebnerBase.isLeftGB(M) );
+     assertTrue("isLeftGB( { (a,0,1) } )", msbb.isLeftGB(M) );
 
-     N = ModSolvableGroebnerBase.leftGB( M );
-     assertTrue("isLeftGB( { (a,0,1) } )", ModSolvableGroebnerBase.isLeftGB(N) );
+     N = msbb.leftGB( M );
+     assertTrue("isLeftGB( { (a,0,1) } )", msbb.isLeftGB(N) );
 
      assertTrue("not isZERO( b )", !b.isZERO() );
      V = new ArrayList<GenSolvablePolynomial<BigRational>>();
@@ -290,8 +294,8 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
      M = new ModuleList<BigRational>(pfac,L);
      //System.out.println("L = " + L.size() );
 
-     N = ModSolvableGroebnerBase.leftGB( M );
-     assertTrue("isLeftGB( { (a,0,1),(b,1,0) } )", ModSolvableGroebnerBase.isLeftGB(N) );
+     N = msbb.leftGB( M );
+     assertTrue("isLeftGB( { (a,0,1),(b,1,0) } )", msbb.isLeftGB(N) );
      //System.out.println("N = " + N );
 
      assertTrue("not isZERO( c )", !c.isZERO() );
@@ -302,8 +306,8 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
      //System.out.println("M = " + M );
      //System.out.println("L = " + L.size() );
 
-     N = ModSolvableGroebnerBase.leftGB( M );
-     assertTrue("isLeftGB( { (a,),(b,),(c,) } )", ModSolvableGroebnerBase.isLeftGB(N) );
+     N = msbb.leftGB( M );
+     assertTrue("isLeftGB( { (a,),(b,),(c,) } )", msbb.isLeftGB(N) );
      //System.out.println("N = " + N );
 
      assertTrue("not isZERO( d )", !d.isZERO() );
@@ -314,8 +318,8 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
      //System.out.println("M = " + M );
      //System.out.println("L = " + L.size() );
 
-     N = ModSolvableGroebnerBase.leftGB( M );
-     assertTrue("isLeftGB( { (a,b,c,d) } )", ModSolvableGroebnerBase.isLeftGB(N) );
+     N = msbb.leftGB( M );
+     assertTrue("isLeftGB( { (a,b,c,d) } )", msbb.isLeftGB(N) );
      //System.out.println("N = " + N );
 
  }

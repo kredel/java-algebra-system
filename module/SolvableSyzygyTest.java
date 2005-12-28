@@ -36,6 +36,7 @@ import edu.jas.poly.RelationTable;
 import edu.jas.ring.Reduction;
 import edu.jas.ring.GroebnerBase;
 import edu.jas.ring.SolvableGroebnerBase;
+import edu.jas.ring.SolvableGroebnerBaseSeq;
 
 import edu.jas.module.ModuleList;
 import edu.jas.module.Syzygy;
@@ -103,6 +104,11 @@ public class SolvableSyzygyTest extends TestCase {
    ModuleList<BigRational> N;
    ModuleList<BigRational> Z;
 
+   SolvableGroebnerBase<BigRational> sbb;
+   ModSolvableGroebnerBase<BigRational> msbb;
+
+   SolvableSyzygy<BigRational> ssz;
+
    int rl = 4; //4; //3; 
    int kl = 5;
    int ll = 9;
@@ -128,6 +134,10 @@ public class SolvableSyzygyTest extends TestCase {
 
        one = fac.getONE();
        zero = fac.getZERO();
+       sbb = new SolvableGroebnerBaseSeq<BigRational>();
+       msbb = new ModSolvableGroebnerBase<BigRational>();
+       ssz = new SolvableSyzygy<BigRational>();
+
    }
 
    protected void tearDown() {
@@ -139,6 +149,9 @@ public class SolvableSyzygyTest extends TestCase {
        vars = null;
        tord = null;
        table = null;
+       sbb = null;
+       msbb = null;
+       ssz = null;
    }
 
 
@@ -152,36 +165,36 @@ public class SolvableSyzygyTest extends TestCase {
 
      assertTrue("not isZERO( a )", !a.isZERO() );
      L.add(a);
-     assertTrue("isGB( { a } )", SolvableGroebnerBase.<BigRational>isLeftGB(L) );
-     K = SolvableSyzygy.<BigRational>leftZeroRelations( L );
-     assertTrue("is ZR( { a } )", SolvableSyzygy.<BigRational>isLeftZeroRelation(K,L) );
+     assertTrue("isGB( { a } )", sbb.isLeftGB(L) );
+     K = ssz.leftZeroRelations( L );
+     assertTrue("is ZR( { a } )", ssz.isLeftZeroRelation(K,L) );
 
      assertTrue("not isZERO( b )", !b.isZERO() );
      L.add(b);
-     L = SolvableGroebnerBase.<BigRational>leftGB(L);
-     assertTrue("isGB( { a, b } )", SolvableGroebnerBase.<BigRational>isLeftGB(L) );
+     L = sbb.leftGB(L);
+     assertTrue("isGB( { a, b } )", sbb.isLeftGB(L) );
      //System.out.println("\nL = " + L );
-     K = SolvableSyzygy.<BigRational>leftZeroRelations( L );
+     K = ssz.leftZeroRelations( L );
      //System.out.println("\nK = " + K );
-     assertTrue("is ZR( { a, b } )", SolvableSyzygy.<BigRational>isLeftZeroRelation(K,L) );
+     assertTrue("is ZR( { a, b } )", ssz.isLeftZeroRelation(K,L) );
 
      assertTrue("not isZERO( c )", !c.isZERO() );
      L.add(c);
-     L = SolvableGroebnerBase.<BigRational>leftGB(L);
+     L = sbb.leftGB(L);
      //System.out.println("\nL = " + L );
-     assertTrue("isGB( { a, b, c } )", SolvableGroebnerBase.<BigRational>isLeftGB(L) );
-     K = SolvableSyzygy.<BigRational>leftZeroRelations( L );
+     assertTrue("isGB( { a, b, c } )", sbb.isLeftGB(L) );
+     K = ssz.leftZeroRelations( L );
      //System.out.println("\nK = " + K );
-     assertTrue("is ZR( { a, b, c } )", SolvableSyzygy.<BigRational>isLeftZeroRelation(K,L) );
+     assertTrue("is ZR( { a, b, c } )", ssz.isLeftZeroRelation(K,L) );
 
      assertTrue("not isZERO( d )", !d.isZERO() );
      L.add(d);
-     L = SolvableGroebnerBase.<BigRational>leftGB(L);
+     L = sbb.leftGB(L);
      //System.out.println("\nL = " + L );
-     assertTrue("isGB( { a, b, c, d } )", SolvableGroebnerBase.<BigRational>isLeftGB(L) );
-     K = SolvableSyzygy.<BigRational>leftZeroRelations( L );
+     assertTrue("isGB( { a, b, c, d } )", sbb.isLeftGB(L) );
+     K = ssz.leftZeroRelations( L );
      //System.out.println("\nK = " + K );
-     assertTrue("is ZR( { a, b, c, d } )", SolvableSyzygy.<BigRational>isLeftZeroRelation(K,L) );
+     assertTrue("is ZR( { a, b, c, d } )", ssz.isLeftZeroRelation(K,L) );
 
      //System.out.println("K = " + K );
  }
@@ -210,38 +223,38 @@ public class SolvableSyzygyTest extends TestCase {
 
      assertTrue("not isZERO( a )", !a.isZERO() );
      L.add(a);
-     assertTrue("isGB( { a } )", SolvableGroebnerBase.<BigRational>isLeftGB(L) );
-     K = SolvableSyzygy.<BigRational>leftZeroRelations( L );
-     assertTrue("is ZR( { a } )", SolvableSyzygy.<BigRational>isLeftZeroRelation(K,L) );
+     assertTrue("isGB( { a } )", sbb.isLeftGB(L) );
+     K = ssz.leftZeroRelations( L );
+     assertTrue("is ZR( { a } )", ssz.isLeftZeroRelation(K,L) );
 
      assertTrue("not isZERO( b )", !b.isZERO() );
      L.add(b);
-     L = SolvableGroebnerBase.<BigRational>leftGB(L);
-     assertTrue("isGB( { a, b } )", SolvableGroebnerBase.<BigRational>isLeftGB(L) );
+     L = sbb.leftGB(L);
+     assertTrue("isGB( { a, b } )", sbb.isLeftGB(L) );
      //System.out.println("\nL = " + L );
-     K = SolvableSyzygy.<BigRational>leftZeroRelations( L );
+     K = ssz.leftZeroRelations( L );
      //System.out.println("\nK = " + K );
-     assertTrue("is ZR( { a, b } )", SolvableSyzygy.<BigRational>isLeftZeroRelation(K,L) );
+     assertTrue("is ZR( { a, b } )", ssz.isLeftZeroRelation(K,L) );
 
      // useless since 1 in GB
      assertTrue("not isZERO( c )", !c.isZERO() );
      L.add(c);
-     L = SolvableGroebnerBase.<BigRational>leftGB(L);
+     L = sbb.leftGB(L);
      //System.out.println("\nL = " + L );
-     assertTrue("isGB( { a, b, c } )", SolvableGroebnerBase.<BigRational>isLeftGB(L) );
-     K = SolvableSyzygy.<BigRational>leftZeroRelations( L );
+     assertTrue("isGB( { a, b, c } )", sbb.isLeftGB(L) );
+     K = ssz.leftZeroRelations( L );
      //System.out.println("\nK = " + K );
-     assertTrue("is ZR( { a, b, c } )", SolvableSyzygy.<BigRational>isLeftZeroRelation(K,L) );
+     assertTrue("is ZR( { a, b, c } )", ssz.isLeftZeroRelation(K,L) );
 
      // useless since 1 in GB
      assertTrue("not isZERO( d )", !d.isZERO() );
      L.add(d);
-     L = SolvableGroebnerBase.<BigRational>leftGB(L);
+     L = sbb.leftGB(L);
      //System.out.println("\nL = " + L );
-     assertTrue("isGB( { a, b, c, d } )", SolvableGroebnerBase.<BigRational>isLeftGB(L) );
-     K = SolvableSyzygy.<BigRational>leftZeroRelations( L );
+     assertTrue("isGB( { a, b, c, d } )", sbb.isLeftGB(L) );
+     K = ssz.leftZeroRelations( L );
      //System.out.println("\nK = " + K );
-     assertTrue("is ZR( { a, b, c, d } )", SolvableSyzygy.<BigRational>isLeftZeroRelation(K,L) );
+     assertTrue("is ZR( { a, b, c, d } )", ssz.isLeftZeroRelation(K,L) );
 
      //System.out.println("K = " + K );
  }
@@ -260,14 +273,14 @@ public class SolvableSyzygyTest extends TestCase {
      V.add(a); V.add(zero); V.add(one);
      W.add(V);
      M = new ModuleList<BigRational>(fac,W);
-     assertTrue("isGB( { (a,0,1) } )", ModSolvableGroebnerBase.<BigRational>isLeftGB(M) );
+     assertTrue("isGB( { (a,0,1) } )", msbb.isLeftGB(M) );
 
-     N = ModSolvableGroebnerBase.<BigRational>leftGB( M );
-     assertTrue("isGB( { (a,0,1) } )", ModSolvableGroebnerBase.<BigRational>isLeftGB(N) );
+     N = msbb.leftGB( M );
+     assertTrue("isGB( { (a,0,1) } )", msbb.isLeftGB(N) );
 
-     Z = SolvableSyzygy.<BigRational>leftZeroRelations(N);
+     Z = ssz.leftZeroRelations(N);
      //System.out.println("Z = " + Z);
-     assertTrue("is ZR( { a) } )", SolvableSyzygy.<BigRational>isLeftZeroRelation(Z,N) );
+     assertTrue("is ZR( { a) } )", ssz.isLeftZeroRelation(Z,N) );
 
      assertTrue("not isZERO( b )", !b.isZERO() );
      V = new ArrayList<GenSolvablePolynomial<BigRational>>();
@@ -276,12 +289,12 @@ public class SolvableSyzygyTest extends TestCase {
      M = new ModuleList<BigRational>(fac,W);
      //System.out.println("W = " + W.size() );
 
-     N = ModSolvableGroebnerBase.<BigRational>leftGB( M );
-     assertTrue("isGB( { a, b } )", ModSolvableGroebnerBase.<BigRational>isLeftGB(N) );
+     N = msbb.leftGB( M );
+     assertTrue("isGB( { a, b } )", msbb.isLeftGB(N) );
 
-     Z = SolvableSyzygy.<BigRational>leftZeroRelations(N);
+     Z = ssz.leftZeroRelations(N);
      //System.out.println("Z = " + Z);
-     assertTrue("is ZR( { a, b } )", SolvableSyzygy.<BigRational>isLeftZeroRelation(Z,N) );
+     assertTrue("is ZR( { a, b } )", ssz.isLeftZeroRelation(Z,N) );
 
      assertTrue("not isZERO( c )", !c.isZERO() );
      V = new ArrayList<GenSolvablePolynomial<BigRational>>();
@@ -290,15 +303,15 @@ public class SolvableSyzygyTest extends TestCase {
      M = new ModuleList<BigRational>(fac,W);
      //System.out.println("W = " + W.size() );
 
-     N = ModSolvableGroebnerBase.<BigRational>leftGB( M );
+     N = msbb.leftGB( M );
      //System.out.println("GB(M) = " + N);
-     assertTrue("isGB( { a,b,c) } )", ModSolvableGroebnerBase.<BigRational>isLeftGB(N) );
+     assertTrue("isGB( { a,b,c) } )", msbb.isLeftGB(N) );
 
-     Z = SolvableSyzygy.<BigRational>leftZeroRelations(N);
+     Z = ssz.leftZeroRelations(N);
      //System.out.println("Z = " + Z);
-     //boolean b = SolvableSyzygy.<BigRational>isLeftZeroRelation(Z,N);
+     //boolean b = ssz.isLeftZeroRelation(Z,N);
      //System.out.println("boolean = " + b);
-     assertTrue("is ZR( { a,b,c } )", SolvableSyzygy.<BigRational>isLeftZeroRelation(Z,N) );
+     assertTrue("is ZR( { a,b,c } )", ssz.isLeftZeroRelation(Z,N) );
  }
 
 }

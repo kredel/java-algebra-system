@@ -67,6 +67,9 @@ public class GroebnerBaseParTest extends TestCase {
    PolynomialList<BigRational> F;
    List<GenPolynomial<BigRational>> G;
 
+   GroebnerBase<BigRational> bbseq;
+   GroebnerBase<BigRational> bbpar;
+
    GenPolynomial<BigRational> a;
    GenPolynomial<BigRational> b;
    GenPolynomial<BigRational> c;
@@ -85,11 +88,16 @@ public class GroebnerBaseParTest extends TestCase {
        BigRational coeff = new BigRational(9);
        fac = new GenPolynomialRing<BigRational>(coeff,rl);
        a = b = c = d = e = null;
+       bbseq = new GroebnerBaseSeq<BigRational>();
+       bbpar = new GroebnerBaseParallel<BigRational>(threads);
    }
 
    protected void tearDown() {
        a = b = c = d = e = null;
        fac = null;
+       bbseq = null;
+       ((GroebnerBaseParallel<BigRational>)bbpar).terminate(); 
+       bbpar = null;
    }
 
 
@@ -110,33 +118,33 @@ public class GroebnerBaseParTest extends TestCase {
      assertTrue("not isZERO( a )", !a.isZERO() );
      L.add(a);
 
-     L = GroebnerBaseParallel.GB( L, threads );
-     assertTrue("isGB( { a } )", GroebnerBase.isGB(L) );
+     L = bbpar.GB( L );
+     assertTrue("isGB( { a } )", bbpar.isGB(L) );
 
      assertTrue("not isZERO( b )", !b.isZERO() );
      L.add(b);
      //System.out.println("L = " + L.size() );
 
-     L = GroebnerBaseParallel.GB( L, threads );
-     assertTrue("isGB( { a, b } )", GroebnerBase.isGB(L) );
+     L = bbpar.GB( L );
+     assertTrue("isGB( { a, b } )", bbpar.isGB(L) );
 
      assertTrue("not isZERO( c )", !c.isZERO() );
      L.add(c);
 
-     L = GroebnerBaseParallel.GB( L, threads );
-     assertTrue("isGB( { a, ,b, c } )", GroebnerBase.isGB(L) );
+     L = bbpar.GB( L );
+     assertTrue("isGB( { a, ,b, c } )", bbpar.isGB(L) );
 
      assertTrue("not isZERO( d )", !d.isZERO() );
      L.add(d);
 
-     L = GroebnerBaseParallel.GB( L, threads );
-     assertTrue("isGB( { a, ,b, c, d } )", GroebnerBase.isGB(L) );
+     L = bbpar.GB( L );
+     assertTrue("isGB( { a, ,b, c, d } )", bbpar.isGB(L) );
 
      assertTrue("not isZERO( e )", !e.isZERO() );
      L.add(e);
 
-     L = GroebnerBaseParallel.GB( L, threads );
-     assertTrue("isGB( { a, ,b, c, d, e } )", GroebnerBase.isGB(L) );
+     L = bbpar.GB( L );
+     assertTrue("isGB( { a, ,b, c, d, e } )", bbpar.isGB(L) );
  }
 
 
@@ -146,7 +154,7 @@ public class GroebnerBaseParTest extends TestCase {
  */
  public void testSequentialParallelGBase() {
 
-     ArrayList<GenPolynomial<BigRational>> Gs, Gp;
+     List<GenPolynomial<BigRational>> Gs, Gp;
 
      L = new ArrayList<GenPolynomial<BigRational>>();
 
@@ -157,40 +165,40 @@ public class GroebnerBaseParTest extends TestCase {
      e = d; //fac.random(kl, ll, el, q );
 
      L.add(a);
-     Gs = GroebnerBase.GB( L );
-     Gp = GroebnerBaseParallel.GB( L, threads );
+     Gs = bbseq.GB( L );
+     Gp = bbpar.GB( L );
 
      assertTrue("Gs.containsAll(Gp)", Gs.containsAll(Gp) );
      assertTrue("Gp.containsAll(Gs)", Gp.containsAll(Gs) );
 
      L = Gs;
      L.add(b);
-     Gs = GroebnerBase.GB( L );
-     Gp = GroebnerBaseParallel.GB( L, threads );
+     Gs = bbseq.GB( L );
+     Gp = bbpar.GB( L );
 
      assertTrue("Gs.containsAll(Gp)", Gs.containsAll(Gp) );
      assertTrue("Gp.containsAll(Gs)", Gp.containsAll(Gs) );
 
      L = Gs;
      L.add(c);
-     Gs = GroebnerBase.GB( L );
-     Gp = GroebnerBaseParallel.GB( L, threads );
+     Gs = bbseq.GB( L );
+     Gp = bbpar.GB( L );
 
      assertTrue("Gs.containsAll(Gp)", Gs.containsAll(Gp) );
      assertTrue("Gp.containsAll(Gs)", Gp.containsAll(Gs) );
 
      L = Gs;
      L.add(d);
-     Gs = GroebnerBase.GB( L );
-     Gp = GroebnerBaseParallel.GB( L, threads );
+     Gs = bbseq.GB( L );
+     Gp = bbpar.GB( L );
 
      assertTrue("Gs.containsAll(Gp)", Gs.containsAll(Gp) );
      assertTrue("Gp.containsAll(Gs)", Gp.containsAll(Gs) );
 
      L = Gs;
      L.add(e);
-     Gs = GroebnerBase.GB( L );
-     Gp = GroebnerBaseParallel.GB( L, threads );
+     Gs = bbseq.GB( L );
+     Gp = bbpar.GB( L );
 
      assertTrue("Gs.containsAll(Gp)", Gs.containsAll(Gp) );
      assertTrue("Gp.containsAll(Gs)", Gp.containsAll(Gs) );
@@ -217,13 +225,15 @@ public class GroebnerBaseParTest extends TestCase {
                   = new GenPolynomialTokenizer( source );
      try {
          F = parser.nextPolynomialSet();
+     } catch(ClassCastException e) {
+         fail(""+e);
      } catch(IOException e) {
          fail(""+e);
      }
      //System.out.println("F = " + F);
 
-     G = GroebnerBaseParallel.GB(F.list, threads);
-     assertTrue("isGB( GB(Trinks7) )", GroebnerBase.isGB(G) );
+     G = bbpar.GB( F.list );
+     assertTrue("isGB( GB(Trinks7) )", bbpar.isGB(G) );
      assertEquals("#GB(Trinks7) == 6", 6, G.size() );
      PolynomialList<BigRational> trinks 
            = new PolynomialList<BigRational>(F.ring,G);
