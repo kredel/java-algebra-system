@@ -152,7 +152,7 @@ public class ReductionPar<C extends RingElem<C>>
         if ( Pp.isEmpty() ) return Ap;
         int l;
         GenPolynomial<C>[] P;
-        synchronized (Pp) { // required, ok in dist
+        synchronized ( Pp.getList() ) { // required, ok in dist
            l = Pp.size();
            P = new GenPolynomial[l];
            //P = Pp.values().toArray();
@@ -178,7 +178,7 @@ public class ReductionPar<C extends RingElem<C>>
         while ( S.length() > 0 ) { 
               if ( Pp.size() != l ) { 
                  //long t = System.currentTimeMillis();
-                 synchronized (Pp) { // required, ok in distributed
+                 synchronized ( Pp.getList() ) { // required, ok in distributed
                     l = Pp.size();
                     P = new GenPolynomial[ l ];
                     //P = Pp.values().toArray();
@@ -191,6 +191,7 @@ public class ReductionPar<C extends RingElem<C>>
                  }
                  //t = System.currentTimeMillis()-t;
                  //logger.info("Pp.toArray() = " + t + " ms, size() = " + l);
+                 //logger.info("Pp.toArray() size() = " + l);
                  S = Ap; // S.add(R)? // restart reduction ?
                  R = Rz; 
               }
