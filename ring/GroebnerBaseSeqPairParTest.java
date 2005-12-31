@@ -295,6 +295,7 @@ public class GroebnerBaseSeqPairParTest extends TestCase {
      //System.out.println("F = " + F);
 
      long t;
+     /*     
      t = System.currentTimeMillis();
      G = bbseq.GB( F.list );
      t = System.currentTimeMillis() - t;
@@ -303,10 +304,11 @@ public class GroebnerBaseSeqPairParTest extends TestCase {
      G = bbpar.GB( F.list );
      t = System.currentTimeMillis() - t;
      System.out.println("bbpar ms = " + t);     
+     */
      t = System.currentTimeMillis();
      G = bbspar.GB( F.list );
      t = System.currentTimeMillis() - t;
-     System.out.println("bbspar ms = " + t);     
+     //System.out.println("bbspar ms = " + t);     
 
      assertTrue("isGB( GB(Trinks7) )", bbspar.isGB(G) );
      assertEquals("#GB(Trinks7) == 6", 6, G.size() );
