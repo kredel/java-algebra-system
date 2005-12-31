@@ -22,7 +22,10 @@ import edu.unima.ky.parallel.Semaphore;
 
 /**
  * Groebner Base Parallel class.
- * Uses sequential pair sequence order.
+ * Makes some effort to produce the same sequence of critical pairs 
+ * as in the sequential version.
+ * However already reduced pairs are not rereduced if new
+ * polynomials appear.
  * Implements a shared memory parallel version of Groebner bases.
  * Slaves maintain pairlist.
  * @author Heinz Kredel
@@ -310,12 +313,13 @@ class ReducerSeqPair<C extends RingElem<C>> implements Runnable {
               H = H.monic();
               // System.out.println("H   = " + H);
 	      if ( H.isONE() ) { 
-                  pairlist.putOne(); // not really required
-		  synchronized (G) {
-                      G.clear(); G.add( H );
-		  }
-	          pool.allIdle();
-                  return;
+                 // pairlist.update( pair, H );
+                 pairlist.putOne(); // not really required
+		 synchronized (G) {
+                     G.clear(); G.add( H );
+		 }
+	         pool.allIdle();
+                 return;
 	      }
               if ( logger.isDebugEnabled() ) {
                  logger.debug("H = " + H );
@@ -323,8 +327,9 @@ class ReducerSeqPair<C extends RingElem<C>> implements Runnable {
               synchronized (G) {
                      G.add( H );
               }
-              pairlist.record( pair, H );
-              pairlist.update();
+              pairlist.update( pair, H );
+              //pairlist.record( pair, H );
+              //pairlist.update();
 	   }
            logger.info( "terminated, done " + reduction + " reductions");
 	}
