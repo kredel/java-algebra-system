@@ -84,8 +84,8 @@ public GroebnerBaseDistTest(String name) {
    GenPolynomial<BigRational> e;
 
    int rl = 3; //4; //3; 
-   int kl = 5;
-   int ll = 9;
+   int kl = 4;
+   int ll = 7;
    int el = 3;
    float q = 0.2f; //0.4f
 
