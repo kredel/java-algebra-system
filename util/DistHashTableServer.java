@@ -46,7 +46,7 @@ public class DistHashTableServer extends Thread {
  * Constructs a new DistHashTableServer.
  */ 
     public DistHashTableServer() {
-	this(DEFAULT_PORT);
+        this(DEFAULT_PORT);
     }
 
 
@@ -55,7 +55,7 @@ public class DistHashTableServer extends Thread {
  * @param port to run server on.
  */
     public DistHashTableServer(int port) {
-	this( new ChannelFactory(port) );
+        this( new ChannelFactory(port) );
     }
 
 
@@ -64,10 +64,10 @@ public class DistHashTableServer extends Thread {
  * @param cf ChannelFactory to use.
  */
     public DistHashTableServer(ChannelFactory cf) {
-	listElem = new DHTCounter(0);
-	this.cf = cf;
-	servers = new ArrayList();
-	theList = new TreeMap();
+        listElem = new DHTCounter(0);
+        this.cf = cf;
+        servers = new ArrayList();
+        theList = new TreeMap();
     }
 
 
@@ -76,17 +76,17 @@ public class DistHashTableServer extends Thread {
  * Usage: DistHashTableServer &lt;port&gt;
  */
     public static void main(String[] args) {
-	int port = DEFAULT_PORT;
-	if ( args.length < 1 ) {
-	    System.out.println("Usage: DistHashTableServer <port>");
-	} else {
-	   try {
-	        port = Integer.parseInt( args[0] );
-	    } catch (NumberFormatException e) {
-	    }
-	}
-	(new DistHashTableServer(port)).run();
-	// until CRTL-C
+        int port = DEFAULT_PORT;
+        if ( args.length < 1 ) {
+            System.out.println("Usage: DistHashTableServer <port>");
+        } else {
+           try {
+                port = Integer.parseInt( args[0] );
+            } catch (NumberFormatException e) {
+            }
+        }
+        (new DistHashTableServer(port)).run();
+        // until CRTL-C
     }
 
 
@@ -94,7 +94,7 @@ public class DistHashTableServer extends Thread {
  * thread initialization and start.
  */ 
     public void init() {
-	this.start();
+        this.start();
     }
 
 
@@ -112,41 +112,49 @@ public class DistHashTableServer extends Thread {
           //logger.debug("list server " + this + " go on");
           try {
                channel = cf.getChannel();
-	       logger.debug("dls channel = "+channel);
-	       if ( mythread.isInterrupted() ) {
-		  goon = false;
-	          //logger.info("list server " + this + " interrupted");
-	       } else {
-		  s = new DHTBroadcaster(channel,servers,listElem,theList);
-		  int ls = 0;
-		  synchronized (servers) {
-	             servers.add( s );
-		     ls = theList.size();
-	             s.start();
-		  }
-	          logger.info("server " + s + " started");
-		  if ( ls > 0 ) {
-	             logger.debug("sending " + ls + " list elements");
-		     synchronized (theList) {
-			 Iterator it = theList.entrySet().iterator();
-			 for ( int i = 0; i < ls; i++ ) {
-			     e = (Entry)it.next();
-			     n = e.getKey();
-			     o = e.getValue();
-			     try {
-			         s.sendChannel( n, o );
-		             } catch (IOException ioe) {
-				 // stop s
-			     }
-			 }
-		     } 
-		  }
-	       }
+               if ( logger.isDebugEnabled() ) {
+                  logger.debug("dls channel = "+channel);
+               }
+               if ( mythread.isInterrupted() ) {
+                  goon = false;
+                  //logger.info("list server " + this + " interrupted");
+               } else {
+                  s = new DHTBroadcaster(channel,servers,listElem,theList);
+                  int ls = 0;
+                  synchronized (servers) {
+                     if ( goon ) {
+                        servers.add( s );
+                        ls = theList.size();
+                        s.start();
+                     }
+                  }
+                  if ( logger.isInfoEnabled() ) {
+                     logger.info("server " + s + " started " + s.isAlive());
+                  }
+                  if ( ls > 0 ) {
+                     //logger.debug("sending " + ls + " list elements");
+                     synchronized (theList) {
+                         Iterator it = theList.entrySet().iterator();
+                         for ( int i = 0; i < ls; i++ ) {
+                             e = (Entry)it.next();
+                             n = e.getKey();
+                             o = e.getValue();
+                             try {
+                                 s.sendChannel( n, o );
+                             } catch (IOException ioe) {
+                                 // stop s
+                             }
+                         }
+                     } 
+                  }
+               }
           } catch (InterruptedException end) {
                goon = false;
-	  }
+          }
        }
-       logger.debug("listserver " + this + " terminated");
+       if ( logger.isDebugEnabled() ) {
+          logger.debug("listserver " + this + " terminated");
+       }
     }
 
 
@@ -154,39 +162,52 @@ public class DistHashTableServer extends Thread {
  * terminate all servers.
  */ 
     public void terminate() {
-	goon = false;
+        goon = false;
         logger.debug("terminating ListServer");
-        if ( cf != null ) cf.terminate();
-	if ( servers != null ) {
+        if ( cf != null ) {
+           cf.terminate();
+        }
+        if ( servers != null ) {
            synchronized (servers) {
-	      Iterator it = servers.iterator();
-	      while ( it.hasNext() ) {
-	         DHTBroadcaster br = (DHTBroadcaster) it.next();
+              Iterator it = servers.iterator();
+              while ( it.hasNext() ) {
+                 DHTBroadcaster br = (DHTBroadcaster) it.next();
                  br.closeChannel();
                  try { 
+                     int c = 0; 
                      while ( br.isAlive() ) {
-		           //System.out.print(".");
+                           c++;
+                           if ( c > 10 ) {
+                              logger.warn("giving up on " + br);
+                              break;
+                           }
+                           //System.out.print(".");
                            br.interrupt(); 
                            br.join(100);
                      }
-	             logger.debug("server " + br + " terminated");
+                     if ( logger.isDebugEnabled() ) {
+                        logger.debug("server " + br + " terminated");
+                     }
                  } catch (InterruptedException e) { 
                  }
-	      }
+              }
+              servers.clear();
            }
-	   //? servers = null;
-	}
+           //? servers = null;
+        }
         logger.debug("DHTBroadcasters terminated");
-	if ( mythread == null ) {
+        if ( mythread == null ) {
            return;
         }
         try { 
             while ( mythread.isAlive() ) {
-		    // System.out.print("-");
-                    mythread.interrupt(); 
-                    mythread.join(100);
+                  //System.out.print("-");
+                  mythread.interrupt(); 
+                  mythread.join(100);
             }
-            logger.debug("server terminated " + mythread);
+            if ( logger.isDebugEnabled() ) {
+               logger.debug("server terminated " + mythread);
+            }
         } catch (InterruptedException e) { 
         }
         logger.debug("ListServer terminated");
@@ -198,7 +219,7 @@ public class DistHashTableServer extends Thread {
  */ 
     public int size() {
         synchronized (servers) {
-	   return servers.size();
+           return servers.size();
         }
     }
 
@@ -221,7 +242,7 @@ class DHTCounter implements Serializable, Comparable {
  * DHTCounter.
  */
     public DHTCounter() {
-	this(0);
+        this(0);
     }
 
 
@@ -230,7 +251,7 @@ class DHTCounter implements Serializable, Comparable {
  * @param v
  */
     public DHTCounter(int v) {
-	value = v;
+        value = v;
     }
 
 
@@ -239,7 +260,7 @@ class DHTCounter implements Serializable, Comparable {
  * @return the value.
  */
     public int intValue() {
-	return value;
+        return value;
     }
 
 
@@ -248,7 +269,7 @@ class DHTCounter implements Serializable, Comparable {
  * @param v
  */
     public void add(int v) { // synchronized elsewhere
-	value += v;
+        value += v;
     }
 
 
@@ -256,17 +277,17 @@ class DHTCounter implements Serializable, Comparable {
  * compareTo.
  */
     public int compareTo(Object o) throws ClassCastException {
-	if ( ! (o instanceof DHTCounter) ) {
-	    throw new ClassCastException("DHTCounter "+value+" o "+o);
-	}
-	int x = ((DHTCounter)o).intValue();
-	if ( value > x ) { 
+        if ( ! (o instanceof DHTCounter) ) {
+            throw new ClassCastException("DHTCounter "+value+" o "+o);
+        }
+        int x = ((DHTCounter)o).intValue();
+        if ( value > x ) { 
            return 1;
-	}
-	if ( value < x ) { 
+        }
+        if ( value < x ) { 
            return -1;
-	}
-	return 0;
+        }
+        return 0;
     }
 
 
@@ -274,7 +295,7 @@ class DHTCounter implements Serializable, Comparable {
  * toString.
  */
     public String toString() {
-	return "DHTCounter("+value+")";
+        return "DHTCounter("+value+")";
     }
 
 }
@@ -286,7 +307,7 @@ class DHTCounter implements Serializable, Comparable {
 
 class DHTBroadcaster extends Thread /*implements Runnable*/ {
 
-    private static Logger logger = Logger.getLogger(Broadcaster.class);
+    private static Logger logger = Logger.getLogger(DHTBroadcaster.class);
     private final SocketChannel channel;
     private final List bcaster;
     private DHTCounter listElem;
@@ -304,9 +325,9 @@ class DHTBroadcaster extends Thread /*implements Runnable*/ {
                           List bc, 
                           DHTCounter le, 
                           SortedMap sm) {
-	channel = s;
-	bcaster = bc;
-	listElem = le;
+        channel = s;
+        bcaster = bc;
+        listElem = le;
         theList = sm;
     } 
 
@@ -315,7 +336,7 @@ class DHTBroadcaster extends Thread /*implements Runnable*/ {
  * closeChannel.
  */
     public void closeChannel() {
-	channel.close();
+        channel.close();
     }
 
 
@@ -327,7 +348,7 @@ class DHTBroadcaster extends Thread /*implements Runnable*/ {
  */
     public void sendChannel(Object n, Object o) throws IOException {
         DHTTransport tc = new DHTTransport(n,o);
-	channel.send(tc);
+        channel.send(tc);
     }
 
 
@@ -337,7 +358,7 @@ class DHTBroadcaster extends Thread /*implements Runnable*/ {
  * @throws IOException
  */
     public void sendChannel(DHTTransport tc) throws IOException {
-	channel.send(tc);
+        channel.send(tc);
     }
 
 
@@ -346,7 +367,9 @@ class DHTBroadcaster extends Thread /*implements Runnable*/ {
  * @param o DHTTransport element to broadcast.
  */
     public void broadcast(Object o) {
-        logger.debug("broadcast = "+o);
+        if ( logger.isDebugEnabled() ) {
+           logger.debug("broadcast = "+o);
+        }
         DHTTransport tc = null;
         if ( o == null ) {
             return;
@@ -355,32 +378,37 @@ class DHTBroadcaster extends Thread /*implements Runnable*/ {
             return;
         }
         tc = (DHTTransport)o;
-	synchronized (theList) {
-	    theList.put( tc.key, tc.value );
-	}
-	synchronized (bcaster) {
-	    Iterator it = bcaster.iterator();
-	    while ( it.hasNext() ) {
-		DHTBroadcaster br = (DHTBroadcaster) it.next();
-		try {
+        synchronized (theList) {
+            //test
+            //Object x = theList.get( tc.key );
+            //if ( x != null ) {
+            //   logger.info("theList duplicate key " + tc.key );
+            //}
+            theList.put( tc.key, tc.value );
+        }
+        synchronized (bcaster) {
+            Iterator it = bcaster.iterator();
+            while ( it.hasNext() ) {
+                DHTBroadcaster br = (DHTBroadcaster) it.next();
+                try {
                     if ( logger.isDebugEnabled() ) {
-		       logger.debug("bcasting("+tc.key+") = "+tc.value);
+                       logger.debug("bcasting to " + br);
                     }
-		    br.sendChannel( tc );
-		} catch (IOException e) {
-		    try { 
-			br.closeChannel();
-			while ( br.isAlive() ) {
-			    br.interrupt(); 
-			    br.join(100);
-			}
-		    } catch (InterruptedException unused) { 
-		    }
-		    it.remove( /*br*/ ); //ConcurrentModificationException
+                    br.sendChannel( tc );
+                } catch (IOException e) {
+                    try { 
+                        br.closeChannel();
+                        while ( br.isAlive() ) {
+                            br.interrupt(); 
+                            br.join(100);
+                        }
+                    } catch (InterruptedException unused) { 
+                    }
+                    it.remove( /*br*/ ); //ConcurrentModificationException
                     logger.debug("bcaster.remove() " + br);
-		}
-	    }
-	}
+                }
+            }
+        }
     }
 
 
@@ -388,27 +416,32 @@ class DHTBroadcaster extends Thread /*implements Runnable*/ {
  * run.
  */
     public void run() {
-	Object o;
-	boolean goon = true;
-	while (goon) {
+        Object o;
+        boolean goon = true;
+        while (goon) {
               try {
-                  //logger.debug("trying to receive");
+                  logger.debug("trying to receive");
                   o = channel.receive();
+                  if ( this.isInterrupted() ) {
+                      break;
+                  }
                   if ( logger.isDebugEnabled() ) {
                      logger.debug("received = "+o);
                   }
-		  broadcast(o);
-		  if ( this.isInterrupted() ) {
-		      goon = false;
-		  }
-	      } catch (IOException e) {
+                  broadcast(o);
+                  if ( this.isInterrupted() ) {
+                      goon = false;
+                  }
+              } catch (IOException e) {
                   goon = false;
-	      } catch (ClassNotFoundException e) {
+              } catch (ClassNotFoundException e) {
                   goon = false;
-	      }
-	}
-	logger.debug("DHTBroadcaster terminated "+this);
-	channel.close();
+              }
+        }
+        if ( logger.isDebugEnabled() ) {
+           logger.debug("DHTBroadcaster terminated "+this);
+        }
+        channel.close();
     }
 
 
@@ -417,7 +450,7 @@ class DHTBroadcaster extends Thread /*implements Runnable*/ {
  * @return a string representation of this.
  */
     public String toString() {
-	return "DHTBroadcaster("+channel+","+bcaster.size()+","+listElem+")";
+        return "DHTBroadcaster("+channel+","+bcaster.size()+","+listElem+")";
     }
 
 }
