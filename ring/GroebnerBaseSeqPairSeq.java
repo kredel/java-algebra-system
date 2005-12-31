@@ -79,8 +79,8 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>>
         GenPolynomial<C> H;
         while ( pairlist.hasNext() ) {
               pair = pairlist.getNext();
-              if ( pair == null ) {
-                 pairlist.update();
+              if ( pair == null ) { 
+                 pairlist.update(); // ?
                  continue; 
               }
               pi = pair.pi; 
@@ -92,7 +92,7 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>>
 
               S = red.SPolynomial( pi, pj );
               if ( S.isZERO() ) {
-                 pairlist.record( pair, S );
+                 pairlist.update( pair, S );
                  continue;
               }
               if ( logger.isDebugEnabled() ) {
@@ -101,7 +101,7 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>>
 
               H = red.normalform( G, S );
               if ( H.isZERO() ) {
-                 pairlist.record( pair, H );
+                 pairlist.update( pair, H );
                  continue;
               }
               if ( logger.isDebugEnabled() ) {
@@ -118,8 +118,8 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>>
                  logger.debug("H = " + H );
               }
               G.add( H );
-              pairlist.record( pair, H );
-              pairlist.update();
+              pairlist.update( pair, H );
+              //pairlist.update();
         }
         logger.debug("#sequential list = "+G.size());
         G = minimalGB(G);
