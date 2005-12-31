@@ -7,6 +7,7 @@ package edu.jas.util;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.Collection;
+import java.util.Set;
 import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
@@ -68,7 +69,9 @@ public class DistHashTable /* implements Map not jet */ {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        logger.debug("dl channel = " + channel);
+        if ( logger.isDebugEnabled() ) {
+           logger.debug("dl channel = " + channel);
+        }
         theList = new TreeMap();
         listener = new DHTListener(channel,theList);
         listener.start();
@@ -89,11 +92,20 @@ public class DistHashTable /* implements Map not jet */ {
 
 
 /**
- * Get the internal list, do not convert from Collection.
+ * Get the values as Collection.
  */ 
     public Collection values() {
         return theList.values();
     }
+
+
+/**
+ * Get the keys as set.
+ */ 
+    public Set keySet() {
+        return theList.keySet();
+    }
+
 
 /**
  * Get the internal list, convert from Collection.
@@ -107,6 +119,15 @@ public class DistHashTable /* implements Map not jet */ {
 
 
 /**
+ * Get the internal sorted map.
+ * For synchronization purpose in normalform.
+ */ 
+    public SortedMap getList() {
+        return theList;
+    }
+
+
+/**
  * Size of the (local) list.
  */ 
     public int size() {
@@ -114,6 +135,7 @@ public class DistHashTable /* implements Map not jet */ {
            return theList.size();
         }
     }
+
 
 /**
  * Is the List empty?
@@ -133,6 +155,7 @@ public class DistHashTable /* implements Map not jet */ {
            return theList.keySet().iterator();
         }
     }
+
 
 /**
  * List value iterator.
@@ -199,6 +222,7 @@ public class DistHashTable /* implements Map not jet */ {
             synchronized ( theList ) {
                value = theList.get(key);
                while ( value == null ) {
+                   //System.out.print("^");
                    theList.wait(100);
                    value = theList.get(key);
                }
@@ -249,13 +273,16 @@ public class DistHashTable /* implements Map not jet */ {
         if ( listener == null ) { 
            return;
         }
-        logger.debug("terminate " + listener);
+        if ( logger.isDebugEnabled() ) {
+           logger.debug("terminate " + listener);
+        }
         listener.setDone(); 
         try { 
-             while ( listener.isAlive() ) {
-                     listener.interrupt(); 
-                     listener.join(100);
-             }
+            while ( listener.isAlive() ) {
+                  //System.out.print("+");
+                  listener.interrupt(); 
+                  listener.join(100);
+            }
         } catch (InterruptedException unused) { 
         }
         listener = null;
@@ -299,7 +326,9 @@ class DHTListener extends Thread {
             o = null;
             try {
                 o = channel.receive();
-                logger.debug("receive("+o+")");
+                if ( logger.isDebugEnabled() ) {
+                   logger.debug("receive("+o+")");
+                }
                 if ( this.isInterrupted() ) {
                    goon = false;
                    break;
