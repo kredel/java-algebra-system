@@ -25,6 +25,10 @@ import edu.jas.poly.TermOrder;
 
 /**
  * Critical pair list management.
+ * Makes some effort to produce the same sequence of critical pairs 
+ * also when used in parallel.
+ * However already reduced pairs are not rereduced if new
+ * polynomials appear.
  * Implemented using GenPolynomial, TreeSet and BitSet.
  * @author Heinz Kredel
  */
@@ -42,6 +46,7 @@ public class CriticalPairList<C extends RingElem<C> > {
 
     private boolean oneInGB = false;
     private boolean useCriterion4 = true;
+    private int recordCount;
     private int putCount;
     private int remCount;
     private final int moduleVars;
@@ -74,23 +79,13 @@ public class CriticalPairList<C extends RingElem<C> > {
         cpc = new CriticalPairComparator<C>( ring.tord ); 
         pairlist = new TreeSet< CriticalPair<C> >( cpc );
         red = new ArrayList<BitSet>();
+	recordCount = 0;
 	putCount = 0;
 	remCount = 0;
         if ( ring instanceof GenSolvablePolynomialRing ) {
            useCriterion4 = false;
         }
         reduction = new ReductionSeq<C>();
-    }
-
-
-    /**
-     * Record reduced polynomial.
-     * @param pair the corresponding critical pair.
-     * @param p polynomial.
-     */
-    public void record(CriticalPair<C> pair, GenPolynomial<C> p) { 
-        pair.setReductum(p);
-        // trigger thread
     }
 
 
@@ -128,6 +123,9 @@ public class CriticalPairList<C extends RingElem<C> > {
         redi = new BitSet();
         redi.set( 0, len ); // >= jdk 1.4
         red.add( redi );
+        if ( recordCount < len ) {
+            recordCount = len;
+        }
         return len;
     }
 
@@ -143,6 +141,7 @@ public class CriticalPairList<C extends RingElem<C> > {
         P.clear();
         P.add( ring.getONE() );
         red.clear();
+        recordCount = 0;
         return 0;
     }
 
@@ -197,11 +196,106 @@ public class CriticalPairList<C extends RingElem<C> > {
 
 
     /**
+     * Record reduced polynomial.
+     * @param pair the corresponding critical pair.
+     * @param p polynomial.
+     * @return index of recorded polynomial, or -1 if not added.
+     */
+    public int record(CriticalPair<C> pair, GenPolynomial<C> p) { 
+        if ( p == null ) {
+            p = ring.getZERO();
+        }
+        pair.setReductum(p);
+        // trigger thread
+        if ( ! p.isZERO() && ! p.isONE() ) {
+           recordCount++;
+           return recordCount;
+        }
+        return -1;
+    }
+
+
+    /**
+     * Record reduced polynomial and update critical pair list. 
+     * Note: it is better to use record and uptate separately.
+     * @param pair the corresponding critical pair.
+     * @param p polynomial.
+     * @return index of recorded polynomial
+     */
+    public int update(CriticalPair<C> pair, GenPolynomial<C> p) { 
+        if ( p == null ) {
+            p = ring.getZERO();
+        }
+        pair.setReductum(p);
+        if ( ! p.isZERO() && ! p.isONE() ) {
+           recordCount++;
+        }
+        int c = update();
+        if ( ! p.isZERO() && ! p.isONE() ) {
+           return recordCount;
+        } 
+        return -1;
+    }
+
+
+    /**
      * Update pairlist.
+     * Preserve the sequential pair sequence.
      * Remove pairs with completed reductions.
      * @return the number of added polynomials.
      */
     public synchronized int update() { 
+        int num = 0;
+        if ( oneInGB ) {
+           return num;
+        }
+        while ( pairlist.size() > 0 ) {
+            CriticalPair<C> pair = pairlist.first();
+            GenPolynomial<C> p = pair.getReductum();
+            if ( p != null ) {
+               pairlist.remove( pair );
+               num++;
+               if ( ! p.isZERO() ) {
+                  if ( p.isONE() ) {
+                     putOne(); // sets size = 1
+                  } else {
+                     put( p ); // changes pair list
+                  }
+               }
+            } else {
+               break;
+            }
+        }
+        return num;
+    }
+
+
+    /**
+     * In wok. List pairs which are currently reduced.
+     * @return list of critical pairs.
+     */
+    public synchronized List<CriticalPair<C>> inWork() { 
+        List<CriticalPair<C>> iw;
+        iw = new ArrayList<CriticalPair<C>>();
+        if ( oneInGB ) {
+            return iw;
+        }
+        for ( CriticalPair<C> pair : pairlist ) {
+            if ( pair.getInReduction() ) {
+               iw.add( pair );
+            }
+        }
+        return iw;
+    }
+
+
+    /**
+     * Update pairlist, several pairs at once. 
+     * This version does not preserve the sequential pair sequence.
+     * Remove pairs with completed reductions.
+     * @return the number of added polynomials.
+     */
+    public synchronized int updateMany() { 
         int num = 0;
         if ( oneInGB ) {
            return num;
