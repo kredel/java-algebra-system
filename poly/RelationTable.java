@@ -50,6 +50,8 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
 
     private static Logger logger = Logger.getLogger(RelationTable.class);
 
+    private final boolean debug = logger.isDebugEnabled() || true;
+
 
     /**
      * Constructor for RelationTable requires ring factory.
@@ -209,7 +211,7 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
      * @param p product polynomial.
      */
     public void update(ExpVector e, ExpVector f, GenSolvablePolynomial<C> p) {
-        if ( logger.isDebugEnabled() ) {
+        if ( debug ) {
             logger.info("new relation = " + e + " .*. " + f + " = " + p);
         }
         if ( p == null ) {

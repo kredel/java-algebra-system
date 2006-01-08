@@ -100,7 +100,9 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
         if ( this.isZERO() ) {
            return this;
         }
-        logger.debug("ring = " + ring);
+        if ( debug ) {
+           logger.debug("ring = " + ring);
+        }
         ExpVector Z = ring.evzero;
         GenSolvablePolynomial<C> Cp = ring.getZERO().clone(); 
         GenSolvablePolynomial<C> zero = ring.getZERO().clone();

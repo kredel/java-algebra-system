@@ -32,6 +32,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>>
 
     private static final Logger logger = Logger.getLogger(SolvableGroebnerBaseSeq.class);
 
+    private final boolean debug = logger.isDebugEnabled();
 
     /**
      * Constructor.
@@ -86,7 +87,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>>
               }
               pi = (GenSolvablePolynomial<C>)pair.pi; 
               pj = (GenSolvablePolynomial<C>)pair.pj; 
-              if ( false && logger.isDebugEnabled() ) {
+              if ( false && debug ) {
                  logger.info("pi    = " + pi );
                  logger.info("pj    = " + pj );
               }
@@ -96,7 +97,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>>
                  pair.setZero();
                  continue;
               }
-              if ( false &&  logger.isDebugEnabled() ) {
+              if ( false && debug ) {
                  logger.info("ht(S) = " + S.leadingExpVector() );
               }
 
@@ -105,7 +106,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>>
                  pair.setZero();
                  continue;
               }
-              if ( false && logger.isDebugEnabled() ) {
+              if ( false && debug ) {
                  logger.info("ht(H) = " + H.leadingExpVector() );
               }
 
@@ -114,7 +115,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>>
                   G.clear(); G.add( H );
                   return G; // since no threads are activated
               }
-              if ( logger.isDebugEnabled() ) {
+              if ( debug ) {
                  logger.debug("H = " + H );
               }
               if ( H.length() > 0 ) {
@@ -202,7 +203,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>>
 
               pi = (GenSolvablePolynomial<C>)pair.pi; 
               pj = (GenSolvablePolynomial<C>)pair.pj; 
-              if ( false && logger.isDebugEnabled() ) {
+              if ( false && debug ) {
                  logger.debug("pi    = " + pi );
                  logger.debug("pj    = " + pj );
               }
@@ -212,7 +213,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>>
                  pair.setZero();
                  continue;
               }
-              if ( logger.isDebugEnabled() ) {
+              if ( debug ) {
                  logger.debug("ht(S) = " + S.leadingExpVector() );
               }
 
@@ -221,7 +222,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>>
                  pair.setZero();
                  continue;
               }
-              if ( logger.isDebugEnabled() ) {
+              if ( debug ) {
                  logger.debug("ht(H) = " + H.leadingExpVector() );
               }
 
@@ -230,7 +231,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>>
                   G.clear(); G.add( H );
                   return G; // since no threads are activated
               }
-              if ( logger.isDebugEnabled() ) {
+              if ( debug ) {
                  logger.debug("H = " + H );
               }
               if ( H.length() > 0 ) {
