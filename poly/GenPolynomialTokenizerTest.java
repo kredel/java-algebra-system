@@ -23,6 +23,7 @@ import edu.jas.arith.ModInteger;
 import edu.jas.arith.BigComplex;
 import edu.jas.arith.BigQuaternion;
 
+import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenPolynomialRing;
@@ -606,6 +607,64 @@ public class GenPolynomialTokenizerTest extends TestCase {
      //System.out.println("d = " + d);
      assertTrue("isZERO( f.get(3) )", d.isZERO() );
 
+ }
+
+
+/**
+ * Test algebraic number polynomial.
+ * 
+ */
+ public void testAlgebraicNumber() {
+     String exam = "AN[ (i) ( i^2 + 1 ) ] (x,y,z) L "  
+                 + "( "
+                 + "( 1 ), "
+                 + "( _i_ ), "
+                 + "( 0 ), "
+                 + "( _i^2_ + 1 ), "
+                 + "( 1 x + x^3 + _3 i_ y z - x^3 ) "
+                 + " )";
+     source = new StringReader( exam );
+     parser = new GenPolynomialTokenizer( source );
+     PolynomialList f = null;
+     try {
+         f = parser.nextPolynomialSet();
+     } catch(IOException e) {
+         fail(""+e);
+     }
+     //System.out.println("f = " + f);
+     assertTrue("f != null", f.list != null);
+     assertTrue("length( f ) = 5", f.list.size() == 5);
+
+     AlgebraicNumber<BigRational> fac = (AlgebraicNumber<BigRational>)f.ring.coFac;
+     TermOrder tord = new TermOrder(TermOrder.INVLEX);
+     String[] vars = new String[]{ "x", "y", "z" };
+     int nvar = vars.length;
+     pfac = new GenPolynomialRing<AlgebraicNumber<BigRational>>(fac,nvar,tord,vars);
+     assertEquals("pfac == f.ring", pfac, f.ring );
+
+     GenPolynomial a = (GenPolynomial)f.list.get(0);
+     //System.out.println("a = " + a);
+     assertTrue("isONE( f.get(0) )", a.isONE() );
+
+     GenPolynomial b = (GenPolynomial)f.list.get(1);
+     //System.out.println("b = " + b);
+     assertTrue("isUnit( f.get(1) )", b.isUnit() );
+
+     b = b.monic();
+     //System.out.println("b = " + b);
+     assertTrue("isUnit( f.get(1) )", b.isONE() );
+
+     GenPolynomial c = (GenPolynomial)f.list.get(2);
+     //System.out.println("c = " + c);
+     assertTrue("isZERO( f.get(1) )", c.isZERO() );
+
+     GenPolynomial d = (GenPolynomial)f.list.get(3);
+     //System.out.println("d = " + d);
+     assertTrue("isZERO( f.get(2) )", d.isZERO() );
+
+     GenPolynomial e = (GenPolynomial)f.list.get(4);
+     //System.out.println("e = " + e);
+     assertEquals("f.get(3).length() == 2", 2, e.length() );
  }
 
 }
