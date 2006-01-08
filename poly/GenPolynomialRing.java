@@ -134,20 +134,37 @@ public class GenPolynomialRing<C extends RingElem<C> >
     public String toString() {
         String res = "";
         if ( PrettyPrint.isTrue() ) {
-           res = coFac.getClass().getSimpleName()
-                 + "(" 
-                 + varsToString()
-                 + ") " 
-                 + tord.toString()
-                 + " ";
+           res = coFac.getClass().getSimpleName();
+           if ( coFac instanceof AlgebraicNumber ) {
+              AlgebraicNumber an = (AlgebraicNumber)coFac;  
+              String[] v = an.modul.ring.vars;
+              res +=  "[ ("
+                     + an.modul.ring.varsToString()
+                     + ") ("
+                     + an.modul.toString( v )
+                     + ") ]";
+           }
+           res +=   "(" 
+                  + varsToString()
+                  + ") " 
+                  + tord.toString()
+                  + " ";
         } else {
            res = this.getClass().getSimpleName() 
                  + "[ " // + coFac.toString() + " : "
-                 + coFac.getClass().getSimpleName()
-                 + ", " + nvar
-                 + ", " + tord.toString()
-                 + ", " + varsToString()
-                 + " ]";
+                 + coFac.getClass().getSimpleName();
+           if ( coFac instanceof AlgebraicNumber ) {
+              AlgebraicNumber an = (AlgebraicNumber)coFac;  
+              res +=  "[ ("
+                     + an.modul.ring.varsToString()
+                     + ") ("
+                     + an.modul
+                     + ") ]";
+           }
+           res +=  ", " + nvar
+                  + ", " + tord.toString()
+                  + ", " + varsToString()
+                  + " ]";
         }
         return res;
     }
