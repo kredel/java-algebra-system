@@ -728,10 +728,10 @@ public final class TermOrder implements Serializable {
            return erg.toString();
         }
 	switch ( evord ) {
-	case INVLEX: erg.append("INVLEX("+evord+")");  break ;
-	case IGRLEX: erg.append("IGRLEX("+evord+")");  break ;
-	case LEX:    erg.append("LEX("+evord+")");     break ;
-	case GRLEX:  erg.append("GRLEX("+evord+")");   break ;
+	case INVLEX: erg.append("INVLEX");  break ;
+	case IGRLEX: erg.append("IGRLEX");  break ;
+	case LEX:    erg.append("LEX");     break ;
+	case GRLEX:  erg.append("GRLEX");   break ;
         default:     erg.append("invalid("+evord+")"); break ;
 	}
         if ( evord2 <= 0 ) {
@@ -739,10 +739,10 @@ public final class TermOrder implements Serializable {
         }
         erg.append("["+evbeg1+","+evend1+"]");
 	switch ( evord2 ) {
-	case INVLEX: erg.append("INVLEX("+evord2+")");  break ;
-	case IGRLEX: erg.append("IGRLEX("+evord2+")");  break ;
-	case LEX:    erg.append("LEX("+evord2+")");     break ;
-	case GRLEX:  erg.append("GRLEX("+evord2+")");   break ;
+	case INVLEX: erg.append("INVLEX");  break ;
+	case IGRLEX: erg.append("IGRLEX");  break ;
+	case LEX:    erg.append("LEX");     break ;
+	case GRLEX:  erg.append("GRLEX");   break ;
         default:     erg.append("invalid("+evord2+")"); break ;
 	}
         erg.append("["+evbeg2+","+evend2+"]");
