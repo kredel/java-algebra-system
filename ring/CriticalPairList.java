@@ -26,7 +26,7 @@ import edu.jas.poly.TermOrder;
 /**
  * Critical pair list management.
  * Makes some effort to produce the same sequence of critical pairs 
- * also when used in parallel.
+ * as in the sequential case, when used in parallel.
  * However already reduced pairs are not rereduced if new
  * polynomials appear.
  * Implemented using GenPolynomial, TreeSet and BitSet.
@@ -271,8 +271,8 @@ public class CriticalPairList<C extends RingElem<C> > {
 
 
     /**
-     * In wok. List pairs which are currently reduced.
-     * @return list of critical pairs.
+     * In work pairs. List pairs which are currently reduced.
+     * @return list of critical pairs which are in reduction.
      */
     public synchronized List<CriticalPair<C>> inWork() { 
         List<CriticalPair<C>> iw;
