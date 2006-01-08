@@ -169,16 +169,25 @@ public class AlgebraicNumber<C extends RingElem<C> >
     }
 
 
-    /** Get the String representation.
+    /** Get the String representation as RingElem.
      * @see java.lang.Object#toString()
      */
     public String toString() {
         if ( PrettyPrint.isTrue() ) {
-	   return val.toString();
+	   return val.toString( val.ring.vars );
         } else {
            return "AlgebraicNumber[ " + val.toString() 
                    + " mod " + modul.toString() + " ]";
         }
+    }
+
+
+    /** Get the String representation as RingFactory.
+     * @see java.lang.Object#toString()
+     */
+    public String toStringFac() {
+        return "AlgebraicNumber[ " 
+                + modul.toString() + " ]";
     }
 
 
