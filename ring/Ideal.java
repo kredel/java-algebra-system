@@ -379,6 +379,9 @@ public class Ideal<C extends RingElem<C>> implements Serializable {
       if ( logger.isDebugEnabled() ) {
          logger.debug("intersect GB = " + g);
       }
+      Ideal<C> E = new Ideal<C>( tfac, g, true );
+      return E.intersect( getRing() );
+      /*
       List< GenPolynomial<C> > h;
       h = new ArrayList<GenPolynomial<C>>( g.size() );
       for ( GenPolynomial<C> p : g ) {
@@ -396,6 +399,47 @@ public class Ideal<C extends RingElem<C>> implements Serializable {
           }
       }
       return new Ideal<C>( getRing(), h, true );
+      */
+  }
+
+
+  /**
+   * Intersection. Generators for the intersection of a ideal 
+   * with a polynomial ring. The polynomial ring of this ideal
+   * must be a contraction of R and the TermOrder must be 
+   * an elimination order.
+   * @param R polynomial ring
+   * @return ideal(this \cap R)
+   */
+  public Ideal<C> intersect( GenPolynomialRing<C> R ) {
+      if ( R == null ) { 
+         throw new RuntimeException("R may not be null");
+      }
+      int d = getRing().nvar - R.nvar;
+      if ( d <= 0 ) {
+          return this;
+      }
+      //GenPolynomialRing<C> tfac = getRing().contract(d);
+      //if ( ! tfac.equals( R ) ) { // check ?
+      //   throw new RuntimeException("contract(this) != R");
+      //}
+      List< GenPolynomial<C> > h;
+      h = new ArrayList<GenPolynomial<C>>( getList().size() );
+      for ( GenPolynomial<C> p : getList() ) {
+          Map<ExpVector,GenPolynomial<C>> m = null;
+          m = p.contract( R );
+          if ( logger.isDebugEnabled() ) {
+             logger.debug("intersect contract m = " + m);
+          }
+          if ( m.size() == 1 ) { // contains one power of variables
+             for ( ExpVector e : m.keySet() ) {
+                 if ( e.isZERO() ) {
+                    h.add( m.get( e ) );
+                 }
+             }
+          }
+      }
+      return new Ideal<C>( R, h, isGB );
   }
 
 
