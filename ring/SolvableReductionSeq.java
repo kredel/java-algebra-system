@@ -111,8 +111,10 @@ public class SolvableReductionSeq<C extends RingElem<C>>
               } else { 
                  //logger.debug("red");
                  e = ExpVector.EVDIF( e, htl[i] );
-                 a = a.divide( (C)lbc[i] );
-                 Q = p[i].multiplyLeft( a, e );
+                 //a = a.divide( (C)lbc[i] );
+                 Q = p[i].multiplyLeft( e );
+                 a = a.divide( (C)Q.leadingBaseCoefficient() );
+                 Q = Q.multiply( a );
                  S = (GenSolvablePolynomial<C>)S.subtract( Q );
               }
         }
@@ -190,8 +192,11 @@ public class SolvableReductionSeq<C extends RingElem<C>>
 	      } else { 
 		 e = ExpVector.EVDIF( e, htl[i] );
                  //logger.info("red div = " + e);
-                 a = a.divide( (C)lbc[i] );
-                 Q = p[i].multiplyLeft( a, e );
+                 //a = a.divide( (C)lbc[i] );
+                 //Q = p[i].multiplyLeft( a, e );
+                 Q = p[i].multiplyLeft( e );
+                 a = a.divide( (C)Q.leadingBaseCoefficient() );
+                 Q = Q.multiply( a );
                  S = (GenSolvablePolynomial<C>)S.subtract( Q );
                  fac = row.get(i);
                  if ( fac == null ) {
