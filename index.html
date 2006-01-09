@@ -87,6 +87,21 @@ for the new generic version.
 <p>To install jas with jython you have to add the above libraries 
 (log4j.jar, junit.jar, tnj.jar and JAS.jar) to the Java classpath.
 </p>
+<p>This can be done best when included in a <code>.jythonrc</code> file, e.g.
+</p>
+<pre>
+#!/bin/bash
+#
+export CLASSPATH="/home/kredel/java/lib/log4j.jar:/home/kredel/java/lib/junit.jar:/home/kredel/java/lib/tnj.jar:."
+
+export BASE_OPTIONS="-Xms500M -Xmx1300M -XX:+AggressiveHeap -XX:+UseParallelGC -verbose:gc"
+</pre>
+<p>
+If this does not help finding the jas classes, try to put the JAS.jar also 
+into the CLASSPATH or to unpack the jar into the directory you are starting jython 
+(also to get the correct version of .py files).
+</p>
+
 
 <h3>Examples</h3>
 
@@ -189,7 +204,7 @@ Some UML class diagramms as produced by ArgoUML (outdated):
 <p>
 <!-- Created: Sat Mar 19 21:44:14 CET 2005 -->
 <!-- hhmts start -->
-Last modified: Sun Jul 24 15:08:57 CEST 2005
+Last modified: Mon Jan  9 16:03:29 CET 2006
 <!-- hhmts end -->
 </p>
 <p align="right" >
