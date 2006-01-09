@@ -8,6 +8,8 @@ import java.util.Comparator;
 import java.util.Arrays;
 import java.io.Serializable;
 
+import org.apache.log4j.Logger;
+
 import edu.jas.poly.ExpVector;
 
 
@@ -41,6 +43,9 @@ public final class TermOrder implements Serializable {
     private final int evend1;
     private final int evbeg2;
     private final int evend2;
+
+    private static final Logger logger = Logger.getLogger(TermOrder.class);
+    private boolean debug = logger.isDebugEnabled();
 
 
     /**
@@ -759,10 +764,11 @@ public final class TermOrder implements Serializable {
      */
     public TermOrder extend(int r, int i) {
         if ( weight != null ) {
-            throw new RuntimeException("extend not implemented for weights");
+           throw new RuntimeException("extend not implemented for weights");
         }
         if ( evord2 != 0 ) {
-            throw new RuntimeException("already extended");
+           logger.warn("TermOrder is already extended");
+           return new TermOrder(evord,evord2,r+i,evend1+i);
         }
         return new TermOrder(evord,evord,r+i,i);
     }
@@ -775,10 +781,10 @@ public final class TermOrder implements Serializable {
      */
     public TermOrder contract() {
         if ( weight != null ) {
-            throw new RuntimeException("extend not implemented for weights");
+           throw new RuntimeException("extend not implemented for weights");
         }
         if ( evord2 == 0 ) {
-            throw new RuntimeException("already contracted");
+           logger.warn("TermOrder is already contracted");
         }
         return new TermOrder(evord);
     }
