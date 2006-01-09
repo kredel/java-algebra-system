@@ -107,9 +107,9 @@ public class PolynomialList<C extends RingElem<C> > implements Serializable {
             GenPolynomial<C> a = l1.get(i);
             GenPolynomial<C> b = l2.get(i);
             if ( ! a.equals( b ) ) {
-               System.out.println("PolynomialList not equals");
-               System.out.println("a = " + a);
-               System.out.println("b = " + b);
+               logger.info("PolynomialList not equals");
+               logger.info("a = " + a);
+               logger.info("b = " + b);
                return false;
             }
         }

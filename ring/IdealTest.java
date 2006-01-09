@@ -272,7 +272,7 @@ public class IdealTest extends TestCase {
      assertTrue("I contains(H)", I.contains(H) );
      assertTrue("J contains(H)", J.contains(H) );
      assertTrue("H contains(K)", H.contains(K) );
-     if ( ! H.equals(K) ) {
+     if ( false /*! H.equals(K)*/ ) {
         System.out.println("I = " + I );
         System.out.println("J = " + J );
         System.out.println("K = " + K );
@@ -304,7 +304,7 @@ public class IdealTest extends TestCase {
      assertTrue("I contains(H)", I.contains(H) );
      assertTrue("J contains(H)", J.contains(H) );
      assertTrue("H contains(K)", H.contains(K) );
-     if ( ! H.equals(K) ) {
+     if ( false /*! H.equals(K)*/ ) {
         System.out.println("I = " + I );
         System.out.println("J = " + J );
         System.out.println("K = " + K );
@@ -336,7 +336,7 @@ public class IdealTest extends TestCase {
      assertTrue("I contains(H)", I.contains(H) );
      assertTrue("J contains(H)", J.contains(H) );
      assertTrue("H contains(K)", H.contains(K) );
-     if ( ! H.equals(K) ) {
+     if ( false /*! H.equals(K)*/ ) {
         System.out.println("I = " + I );
         System.out.println("J = " + J );
         System.out.println("K = " + K );
