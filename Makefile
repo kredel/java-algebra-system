@@ -37,7 +37,7 @@ home:
 	$(RSYNC) krum:java/$(PART)/     .
 
 heinz:
-	$(RSYNC) ./                heinz@heinz2:$(PART)
+	$(RSYNC) ./                heinz@heinz3:$(PART)
 
 krum:
 	$(RSYNC) ./                krum:java/$(PART)
@@ -145,11 +145,12 @@ FILES=$(wildcard *.java structure/*.java arith/*.java poly/*.java ring/*.java mo
 LIBS=$(JUNITPATH) $(LOG4JPATH) $(JOMPPATH)
 #CLASSES=$(wildcard *.class structure/*.java arith/*.class poly/*.class ring/*.class module/*.class util/*.class)
 CLASSES=edu/jas
+PYS=$(wildcard *.py)
 
 doc: $(FILES)
 	$(DOC) $(DOCOPTS) -d doc $(FILES) 
 
-jar: $(FILES) jas-log.html index.html problems.html Makefile build.xml log4j.properties
+jar: $(FILES) jas-log.html index.html problems.html Makefile build.xml log4j.properties $(PYS)
 	$(JDK)/jar -cvf jas.jar $(FILES) edu/ jas-log.html index.html problems.html Makefile build.xml log4j.properties
 	cp jas.jar /tmp/jas-`date +%Y%j`.jar
 #	cp jas.jar /mnt/i/e/kredel/jas-`date +%Y%j`.jar
