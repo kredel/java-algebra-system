@@ -15,6 +15,8 @@ from edu.jas.poly      import *
 from edu.jas.ring      import *
 from edu.jas.module    import *
 from edu.jas.util      import *
+from edu.jas           import *
+from edu               import *
 
 #PrettyPrint.setInternal();
 
@@ -58,10 +60,24 @@ class Ideal:
     def parGB(self,th):
         s = self.pset;
         F = s.list;
+        bbpar = GroebnerBaseSeqPairParallel(th);
         t = System.currentTimeMillis();
-        G = GroebnerBaseParallel(th).GB(F);
+        G = bbpar.GB(F);
         t = System.currentTimeMillis() - t;
+        bbpar.terminate();
         print "parallel %s executed in %s ms" % (th, t); 
+        g = OrderedPolynomialList(s.ring,G);
+        return g;
+
+    def parOldGB(self,th):
+        s = self.pset;
+        F = s.list;
+        bbpar = GroebnerBaseParallel(th);
+        t = System.currentTimeMillis();
+        G = bbpar.GB(F);
+        t = System.currentTimeMillis() - t;
+        bbpar.terminate();
+        print "parallel-old %s executed in %s ms" % (th, t); 
         g = OrderedPolynomialList(s.ring,G);
         return g;
 
@@ -91,6 +107,12 @@ class Ideal:
         t = System.currentTimeMillis() - t;
         print "sequential executed in %s ms" % t; 
         n = OrderedPolynomialList(s.ring,N);
+        return n;
+
+    def intersect(self,ring):
+        s = self.pset;
+        N = jas.ring.Ideal(s).intersect(ring.ring);
+        n = OrderedPolynomialList(ring.ring,N.getList());
         return n;
 
 
@@ -138,6 +160,11 @@ class SolvableIdeal:
         g = OrderedPolynomialList(s.ring,G);
         return g;
 
+    def intersect(self,ring):
+        s = self.pset;
+        N = jas.ring.Ideal(s).intersect(ring.ring);
+        n = OrderedPolynomialList(ring.ring,N.getList());
+        return n;
 
 
 class Module:
@@ -217,6 +244,17 @@ class SolvableSubModule:
         F = s.list;
         t = System.currentTimeMillis();
         G = ModSolvableGroebnerBase().leftGB(self.cols,F);
+        t = System.currentTimeMillis() - t;
+        print "executed in %s ms" % t; 
+        self.pset = PolynomialList(s.ring,G);
+        self.mset = self.pset.getModuleList(self.cols);
+        return self;
+
+    def twosidedGB(self):
+        s = self.pset;
+        F = s.list;
+        t = System.currentTimeMillis();
+        G = ModSolvableGroebnerBase().twosidedGB(self.cols,F);
         t = System.currentTimeMillis() - t;
         print "executed in %s ms" % t; 
         self.pset = PolynomialList(s.ring,G);
