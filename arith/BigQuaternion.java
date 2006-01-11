@@ -403,15 +403,25 @@ public class BigQuaternion implements RingElem<BigQuaternion>,
     /** since quaternion numbers are unordered, there is 
      * no signum method. 
      * We define the result to be 
-     * @return 0 if this is equal to ZERO, 1 else.
+     * @return 0 if this is equal to 0
+     * @return 1 if re > 0, or re == 0 and im > 0, or ...
+     * @return -1 if re < 0, or re == 0 and im < 0, or ...
      * @see edu.jas.structure.RingElem#signum()
      */
     public int signum() {
-      if ( this.equals(ZERO) ) {
-         return 0;
-      } else {
-         return 1;
+      int s = re.signum();
+      if ( s != 0 ) {
+          return s;
       }
+      s = im.signum();
+      if ( s != 0 ) {
+          return s;
+      }
+      s = jm.signum();
+      if ( s != 0 ) {
+          return s;
+      }
+      return km.signum();
     }
 
 
