@@ -673,7 +673,7 @@ public class GenPolynomialTokenizerTest extends TestCase {
  * 
  */
  public void testGaloisField() {
-     String exam = "GF[ 19 (i) ( i^2 + 1 ) ] (x,y,z) L "  
+     String exam = "AN[ 19 (i) ( i^2 + 1 ) ] (x,y,z) L "  
                  + "( "
                  + "( 20 ), "
                  + "( _i_ ), "

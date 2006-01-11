@@ -48,6 +48,7 @@ public class GenPolynomialTokenizer  {
 
     private static final Logger logger 
             = Logger.getLogger(GenPolynomialTokenizer.class);
+    private boolean debug = logger.isDebugEnabled();
 
     private String[] vars;
     private int nvars = 1;
@@ -55,20 +56,18 @@ public class GenPolynomialTokenizer  {
     private RelationTable table;
     private Reader in;
     private StreamTokenizer tok;
-    private boolean debug = false; // even more debugging
-
 
     private RingFactory                                fac;
     private RingFactory<AlgebraicNumber<BigRational>> anfac;
     private RingFactory<AlgebraicNumber<ModInteger>>  gffac;
     private enum coeffType { BigRat, BigInt, ModInt, BigC, BigQ, 
-                             ANrat, GFmod };
+                             ANrat, ANmod };
     private coeffType parsedCoeff = coeffType.BigRat;
 
 
     private GenPolynomialRing                pfac;
     private enum polyType { PolBigRat, PolBigInt, PolModInt, PolBigC, 
-                            PolBigQ, PolANrat, PolGFmod };
+                            PolBigQ, PolANrat, PolANmod };
     private polyType parsedPoly = polyType.PolBigRat;
 
     private GenSolvablePolynomialRing        spfac;
@@ -237,13 +236,17 @@ public class GenPolynomialTokenizer  {
      * @throws IOException
      */
     public GenPolynomial nextPolynomial() throws IOException {
-        logger.debug("torder = " + tord);
+        if (debug) {
+           logger.debug("torder = " + tord);
+        }
         GenPolynomial a  = pfac.getZERO();
         GenPolynomial a1 = pfac.getONE();
         ExpVector leer = pfac.evzero;
 
-        if (debug) logger.debug("a = " + a);
-        logger.debug("a1 = " + a1);
+        if (debug) { 
+           logger.debug("a = " + a);
+           logger.debug("a1 = " + a1);
+        }
         GenPolynomial b = a1;
         GenPolynomial c;
         int tt, oldtt;
@@ -477,7 +480,7 @@ public class GenPolynomialTokenizer  {
     /**
      * parsing method for coefficient ring.
      * syntax: Rat | Q | Int | Z | Mod modul | Complex 
-                   | C | Quat | AN[ (var) ( poly ) | GF[ modul (var) ( poly ) ]
+                   | C | Quat | AN[ (var) ( poly ) | AN[ modul (var) ( poly ) ]
      * @return the next coefficient factory.
      * @throws IOException
      */
@@ -529,61 +532,6 @@ public class GenPolynomialTokenizer  {
               }
            } else if ( tok.sval.equalsIgnoreCase("AN") ) {
               tt = tok.nextToken();
-              //System.out.println("AlgebraicNumber = " + tok);
-              if ( tt == '[' ) {
-                 RingFactory tcfac = new BigRational();
-                 // tt = tok.nextToken();
-                 String[] anv = nextVariableList();
-                 //System.out.println("anv = " + anv.length + " " + anv[0]);
-                 int vs = anv.length;
-                 if ( vs != 1 ) {
-                    logger.error("AlgebraicNumber only for univariate polynomials");
-                 }
-                 GenPolynomialRing<BigRational> ancf;
-                 ancf = new GenPolynomialRing<BigRational>( tcfac, vs, new TermOrder(), anv );
-                 //System.out.println("ancf = " + ancf);
-                 GenPolynomialRing tpfac = pfac;
-                 pfac = ancf;
-                 RingFactory tfac = fac;
-                 fac = tcfac;
-                 String[] ovars = vars;
-                 vars = anv;
-                 tt = tok.nextToken();
-                 GenPolynomial<BigRational> anmod;
-                 if ( tt == '(' ) {
-                    anmod = nextPolynomial();
-                    tt = tok.nextToken();
-                    if ( tok.ttype != ')' ) tok.pushBack();
-                 } else { 
-                    tok.pushBack();
-                    anmod = nextPolynomial();
-                 }
-                 //System.out.println("anmod = " + anmod);
-                 pfac = tpfac;
-                 fac = tfac;
-                 vars = ovars;
-                 AlgebraicNumber<BigRational> an;
-                 an = new AlgebraicNumber<BigRational>( anmod );
-                 //System.out.println("an = " + an);
-                 tt = tok.nextToken();
-                 //System.out.println("an tok = " + tok);
-                 if ( tt == ']' ) {
-                    //ok, no nextToken();
-                 } else {
-                    tok.pushBack();
-                 }
-                 if ( an.isZERO() ) {
-                    coeff = an;
-                    ct = coeffType.ANrat;
-                 } else {
-                    tok.pushBack();
-                 }
-              } else {
-                 tok.pushBack();
-              }
-           } else if ( tok.sval.equalsIgnoreCase("GF") ) {
-              tt = tok.nextToken();
-              //System.out.println("GaloisField = " + tok);
               if ( tt == '[' ) {
                  tt = tok.nextToken();
                  RingFactory tcfac = new ModInteger("19","0");
@@ -591,53 +539,66 @@ public class GenPolynomialTokenizer  {
                     if ( digit( tok.sval.charAt(0) ) ) {
                        tcfac = new ModInteger(tok.sval,"0");
                     } else {
+                       tcfac = new BigRational();
                        tok.pushBack();
                     }
                  } else {
-                    logger.error("GaloisField modul missing");
+                    tcfac = new BigRational();
+                    tok.pushBack();
                  }
                  String[] anv = nextVariableList();
                  //System.out.println("anv = " + anv.length + " " + anv[0]);
                  int vs = anv.length;
                  if ( vs != 1 ) {
-                    logger.error("GaloisField only for univariate polynomials");
+                    logger.error("AlgebraicNumber only for univariate polynomials");
                  }
-                 GenPolynomialRing<ModInteger> gfcf;
-                 gfcf = new GenPolynomialRing<ModInteger>( tcfac, vs, new TermOrder(), anv );
-                 //System.out.println("gfcf = " + gfcf);
-                 GenPolynomialRing tpfac = pfac;
-                 pfac = gfcf;
-                 RingFactory tfac = fac;
-                 fac = tcfac;
                  String[] ovars = vars;
                  vars = anv;
+                 GenPolynomialRing tpfac = pfac;
+                 RingFactory tfac = fac;
+                 fac = tcfac;
+                 // pfac and fac used in nextPolynomial()
+                 if ( tcfac instanceof ModInteger ) {
+                    pfac = new GenPolynomialRing<ModInteger>( tcfac, vs, new TermOrder(), anv );
+                 } else {
+                    pfac = new GenPolynomialRing<BigRational>( tcfac, vs, new TermOrder(), anv );
+                 }
+                 if ( debug ) {
+                    logger.debug("pfac = " + pfac);
+                 }
                  tt = tok.nextToken();
-                 GenPolynomial<ModInteger> gfmod;
+                 GenPolynomial mod;
                  if ( tt == '(' ) {
-                    gfmod = nextPolynomial();
+                    mod = nextPolynomial();
                     tt = tok.nextToken();
                     if ( tok.ttype != ')' ) tok.pushBack();
                  } else { 
                     tok.pushBack();
-                    gfmod = nextPolynomial();
+                    mod = nextPolynomial();
                  }
-                 //System.out.println("gfmod = " + gfmod);
+                 if ( debug ) {
+                    logger.debug("mod = " + mod);
+                 }
                  pfac = tpfac;
                  fac = tfac;
                  vars = ovars;
-                 AlgebraicNumber<ModInteger> gf;
-                 gf = new AlgebraicNumber<ModInteger>( gfmod );
-                 //System.out.println("gf = " + gf);
+                 if ( tcfac instanceof ModInteger ) {
+                    GenPolynomial<ModInteger> gfmod;
+                    gfmod = (GenPolynomial<ModInteger>)mod;
+                    coeff = new AlgebraicNumber<ModInteger>( gfmod );
+                    ct = coeffType.ANmod;
+                 } else {
+                    GenPolynomial<BigRational> anmod;
+                    anmod = (GenPolynomial<BigRational>)mod;
+                    coeff = new AlgebraicNumber<BigRational>( anmod );
+                    ct = coeffType.ANrat;
+                 }
+                 if ( debug ) {
+                    logger.debug("coeff = " + coeff);
+                 }
                  tt = tok.nextToken();
-                 //System.out.println("an tok = " + tok);
                  if ( tt == ']' ) {
                     //ok, no nextToken();
-                 } else {
-                    tok.pushBack();
-                 }
-                 if ( gf.isZERO() ) {
-                    coeff = gf;
-                    ct = coeffType.GFmod;
                  } else {
                     tok.pushBack();
                  }
