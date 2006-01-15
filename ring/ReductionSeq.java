@@ -185,7 +185,7 @@ public class ReductionSeq<C extends RingElem<C>>
                  R = R.add( a, e );
                  S = S.subtract( a, e ); 
 		 // System.out.println(" S = " + S);
-                 throw new RuntimeException("Syzygy no GB");
+                 //throw new RuntimeException("Syzygy no GB");
 	      } else { 
 		 e = ExpVector.EVDIF( e, htl[i] );
                  //logger.info("red div = " + e);
