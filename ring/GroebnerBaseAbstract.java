@@ -14,8 +14,11 @@ import edu.jas.structure.RingElem;
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.GenPolynomialRing;
+import edu.jas.poly.PolynomialList;
 
-import edu.jas.ring.OrderedPairlist;
+import edu.jas.module.ModuleList;
+
 
 /**
  * Groebner Bases abstract class.
@@ -111,6 +114,22 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>>
                           List<GenPolynomial<C>> F );
 
 
+
+    /**
+     * Groebner base using pairlist class.
+     * @param C coefficient type.
+     * @param modv module variable nunber.
+     * @param F polynomial list.
+     * @return GB(F) a Groebner base of F.
+     */
+    /*
+    public ExtendedGB<C> 
+                  extGB( List<GenPolynomial<C>> F )
+        return extGB(0,F);
+    }
+    */
+
+
     /**
      * Minimal ordered groebner basis.
      * @param C coefficient type.
@@ -123,7 +142,7 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>>
             return Gp;
         }
         GenPolynomial<C> a;
-        ArrayList<GenPolynomial<C>> G;
+        List<GenPolynomial<C>> G;
         G = new ArrayList<GenPolynomial<C>>( Gp.size() );
         ListIterator<GenPolynomial<C>> it = Gp.listIterator();
         while ( it.hasNext() ) { 
@@ -139,7 +158,7 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>>
         ExpVector e;        
         ExpVector f;        
         GenPolynomial<C> p;
-        ArrayList<GenPolynomial<C>> F;
+        List<GenPolynomial<C>> F;
         F = new ArrayList<GenPolynomial<C>>( G.size() );
         boolean mt;
         while ( G.size() > 0 ) {
@@ -181,4 +200,67 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>>
         return F;
     }
 
+
+    /**
+     * Container for a GB and transformation matrices.
+     * @param C coefficient type.
+     * @param F an ideal base.
+     * @param G a Groebner base of F.
+     * @param F2G a transformation matrix from F to G.
+     * @param G2F a transformation matrix from G to F.
+     * @return a container for F, G, calG and calF.
+     */
+    public static class ExtendedGB<C extends RingElem<C>> {
+
+        public final List<GenPolynomial<C>> F;
+        public final List<GenPolynomial<C>> G;
+        public final List<List<GenPolynomial<C>>> F2G;
+        public final List<List<GenPolynomial<C>>> G2F;
+        public final GenPolynomialRing<C> ring;
+
+
+        public ExtendedGB( List<GenPolynomial<C>> F,
+                           List<GenPolynomial<C>> G,
+                           List<List<GenPolynomial<C>>> F2G,
+                           List<List<GenPolynomial<C>>> G2F) {
+            this.F = F;
+            this.G = G;
+            this.F2G = F2G;
+            this.G2F = G2F;
+            GenPolynomialRing<C> r = null;
+            for ( GenPolynomial<C> p : G ) {
+                if ( p != null ) {
+                   r = p.ring;
+                   break;
+                }
+            }
+            if ( r.getVars() == null ) {
+                r.setVars( r.evzero.stdVars("y") );
+            }
+            this.ring = r;
+        }
+
+
+        /** Get the String representation.
+         * @see java.lang.Object#toString()
+         */
+        public String toString() {
+            PolynomialList<C> P;
+            ModuleList<C> M;
+            StringBuffer s = new StringBuffer("ExtendedGB: \n\n");
+            P = new PolynomialList<C>( ring, F );
+            s.append("F = " + P + "\n\n");
+            P = new PolynomialList<C>( ring, G );
+            s.append("G = " + P + "\n\n");
+            M = new ModuleList<C>( ring, F2G );
+            s.append("F2G = " + M + "\n\n");
+            M = new ModuleList<C>( ring, G2F );
+            s.append("G2F = " + M + "\n");
+            return s.toString();
+        }
+
+    }
+
 }
+
+
