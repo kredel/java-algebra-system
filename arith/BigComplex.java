@@ -297,9 +297,9 @@ public class BigComplex implements RingElem<BigComplex>,
     /** since complex numbers are unordered, there is 
      * no signum method. 
      * We define the result to be 
-     * @return 0 if this is equal to 0
-     * @return 1 if re > 0, or re == 0 and im > 0
-     * @return -1 if re < 0, or re == 0 and im < 0
+     * @return 0 if this is equal to 0;
+     *         1 if re > 0, or re == 0 and im > 0;
+     *        -1 if re < 0, or re == 0 and im < 0
      * @see edu.jas.structure.RingElem#signum()
      */
     public int signum() {
