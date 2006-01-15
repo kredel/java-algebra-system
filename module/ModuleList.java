@@ -157,7 +157,9 @@ public class ModuleList<C extends RingElem<C> > implements Serializable {
             erg.append(" ( ");
             String os;
             for ( GenPolynomial<C> oa: row ) {
-                if ( vars != null ) {
+                if ( oa == null ) {
+                   os = "0";
+                } else if ( vars != null ) {
                    os = oa.toString(vars);
                 } else {
                    os = oa.toString();
