@@ -139,4 +139,20 @@ public interface Reduction<C extends RingElem<C>>  {
     public List<GenPolynomial<C>> irreducibleSet(List<GenPolynomial<C>> Pp);
 
 
+
+    /**
+     * Is reduction of normal form.
+     * @param row recording matrix, is modified.
+     * @param Pp a polynomial list for reduction.
+     * @param Ap a polynomial.
+     * @param Np nf(Pp,Ap), a normal form of Ap wrt. Pp.
+     * @return true, if Np + sum( row[i]*Pp[i] ) == Ap, else false.
+     */
+
+    public boolean 
+           isReductionNF(List<GenPolynomial<C>> row,
+                         List<GenPolynomial<C>> Pp, 
+                         GenPolynomial<C> Ap,
+                         GenPolynomial<C> Np);
+
 }

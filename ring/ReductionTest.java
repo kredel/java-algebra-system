@@ -65,14 +65,14 @@ public static Test suite() {
    PolynomialList<BigRational> F;
    PolynomialList<BigRational> G;
 
-   Reduction<BigRational> red;
+   ReductionSeq<BigRational> red;
    Reduction<BigRational> redpar;
 
-   int rl = 3; 
+   int rl = 4; 
    int kl = 10;
    int ll = 7;
    int el = 3;
-   float q = 0.4f;
+   float q = 0.6f;
 
    protected void setUp() {
        a = b = c = d = e = null;
@@ -245,6 +245,60 @@ public static Test suite() {
      L.add(b);
      e = cred.normalform( L, a );
      assertTrue("isZERO( e ) some times", e.isZERO() ); 
+ }
+
+
+/**
+ * Test Rat reduction recording.
+ * 
+ */
+ public void testRatReductionRecording() {
+
+     List<GenPolynomial<BigRational>> row = null;
+
+
+     a = fac.random(kl, ll, el, q );
+     b = fac.random(kl, ll, el, q );
+     c = fac.random(kl, ll, el, q );
+     d = fac.random(kl, ll, el, q );
+
+     assertTrue("not isZERO( a )", !a.isZERO() );
+
+     L = new ArrayList<GenPolynomial<BigRational>>();
+
+     L.add(a);
+     row = new ArrayList<GenPolynomial<BigRational>>( L.size() );
+     for ( int m = 0; m < L.size(); m++ ) {
+         row.add(null);
+     }
+     e = red.normalform( row, L, a );
+     assertTrue("isZERO( e )", e.isZERO() );
+     assertTrue("not isZERO( b )", !b.isZERO() );
+     assertTrue("is Reduction ", red.isReductionNF(row,L,a,e) );
+
+     L.add(b);
+     row = new ArrayList<GenPolynomial<BigRational>>( L.size() );
+     for ( int m = 0; m < L.size(); m++ ) {
+         row.add(null);
+     }
+     e = red.normalform( row, L, b );
+     assertTrue("is Reduction ", red.isReductionNF(row,L,b,e) );
+
+     L.add(c);
+     row = new ArrayList<GenPolynomial<BigRational>>( L.size() );
+     for ( int m = 0; m < L.size(); m++ ) {
+         row.add(null);
+     }
+     e = red.normalform( row, L, c );
+     assertTrue("is Reduction ", red.isReductionNF(row,L,c,e) );
+
+     L.add(d);
+     row = new ArrayList<GenPolynomial<BigRational>>( L.size() );
+     for ( int m = 0; m < L.size(); m++ ) {
+         row.add(null);
+     }
+     e = red.normalform( row, L, d );
+     assertTrue("is Reduction ", red.isReductionNF(row,L,d,e) );
  }
 
 

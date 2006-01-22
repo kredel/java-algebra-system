@@ -34,6 +34,7 @@ public abstract class ReductionAbstract<C extends RingElem<C>>
                       implements Reduction<C> {
 
     private static Logger logger = Logger.getLogger(ReductionAbstract.class);
+    private boolean debug = logger.isDebugEnabled();
 
 
     /**
@@ -87,7 +88,9 @@ public abstract class ReductionAbstract<C extends RingElem<C>>
     /**
      * S-Polynomial with recording.
      * @param C coefficient type.
-     * @param S recording matrix, is modified.
+     * @param S recording matrix, is modified. 
+     *        <b>Note</b> the negative Spolynomial is recorded as 
+     *        required by all applications.
      * @param i index of Ap in basis list.
      * @param Ap a polynomial.
      * @param j index of Bp in basis list.
@@ -126,11 +129,11 @@ public abstract class ReductionAbstract<C extends RingElem<C>>
 
         GenPolynomial<C> App = Ap.multiply( b, e1 );
         GenPolynomial<C> Bpp = Bp.multiply( a, f1 );
-        GenPolynomial<C> Cp = App.subtract(Bpp);
+        GenPolynomial<C> Cp  = App.subtract(Bpp);
 
         GenPolynomial<C> zero = Ap.ring.getZERO();
-        GenPolynomial<C> As = (GenPolynomial<C>)zero.add( b.negate(), e1 );
-        GenPolynomial<C> Bs = (GenPolynomial<C>)zero.add( a, f1 );
+        GenPolynomial<C> As = zero.add( b.negate(), e1 );
+        GenPolynomial<C> Bs = zero.add( a /*correct .negate()*/, f1 );
         S.set( i, As );
         S.set( j, Bs );
 
@@ -324,4 +327,59 @@ public abstract class ReductionAbstract<C extends RingElem<C>>
         return P;
     }
 
+
+    /**
+     * Is reduction of normal form.
+     * @param row recording matrix, is modified.
+     * @param Pp a polynomial list for reduction.
+     * @param Ap a polynomial.
+     * @param Np nf(Pp,Ap), a normal form of Ap wrt. Pp.
+     * @return true, if Np + sum( row[i]*Pp[i] ) == Ap, else false.
+     */
+
+    public boolean 
+           isReductionNF(List<GenPolynomial<C>> row,
+                         List<GenPolynomial<C>> Pp, 
+                         GenPolynomial<C> Ap,
+                         GenPolynomial<C> Np) {
+        if ( row == null && Pp != null ) {
+            return false;
+        }
+        if ( row != null && Pp == null ) {
+            return false;
+        }
+        if ( row.size() != Pp.size() ) {
+            return false;
+        }
+        GenPolynomial<C> t = Np;
+        GenPolynomial<C> r;
+        GenPolynomial<C> p;
+        for ( int m = 0; m < Pp.size(); m++ ) {
+            r = row.get(m);
+            p = Pp.get(m);
+            if ( r != null && p != null ) {
+               if ( t == null ) {
+                  t = r.multiply(p);
+               } else {
+                  t = t.add( r.multiply(p) );
+               }
+            }
+            //System.out.println("r = " + r );
+            //System.out.println("p = " + p );
+        }
+        if ( debug ) {
+           logger.info("t = " + t );
+           logger.info("a = " + Ap );
+        }
+        if ( t == null ) {
+           if ( Ap == null ) {
+              return true;
+           } else {
+              return Ap.isZERO();
+           }
+        } else {
+           t = t.subtract( Ap );
+           return t.isZERO();
+        }
+    }
 }
