@@ -19,6 +19,7 @@ import edu.jas.structure.RingElem;
 import edu.jas.arith.BigRational;
 
 import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolynomialList;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.TermOrder;
@@ -27,6 +28,8 @@ import edu.jas.ring.Reduction;
 import edu.jas.ring.ReductionSeq;
 import edu.jas.ring.GroebnerBase;
 import edu.jas.ring.GroebnerBaseSeq;
+import edu.jas.ring.GroebnerBaseSeqPairSeq;
+import edu.jas.ring.ExtendedGB;
 
 import edu.jas.module.ModuleList;
 import edu.jas.module.GenVector;
@@ -42,6 +45,7 @@ import edu.jas.module.GenVectorModul;
 public class Syzygy<C extends RingElem<C>>  {
 
     private static final Logger logger = Logger.getLogger(Syzygy.class);
+    private final boolean debug = logger.isDebugEnabled();
 
 
     /**
@@ -51,10 +55,17 @@ public class Syzygy<C extends RingElem<C>>  {
 
 
     /**
+     * Groebner base engine.
+     */
+    // no    protected GroebnerBase<C> gb;
+
+
+    /**
      * Constructor.
      */
     public Syzygy() {
         red = new ReductionSeq<C>();
+        //gb = new GroebnerBaseSeqPairSeq<C>();
     }
 
 
@@ -235,7 +246,9 @@ public class Syzygy<C extends RingElem<C>>  {
                continue;
             }
             if ( ! p.isZERO() ) {
-                logger.info("is not ZeroRelation = " + p);
+                logger.info("is not ZeroRelation = " + p.toString(p.ring.getVars()));
+                logger.info("row = " + row);
+                //logger.info("F = " + F);
                 return false;
             }
         }
@@ -304,7 +317,7 @@ public class Syzygy<C extends RingElem<C>>  {
      * product of vector and matrix of polynomials.
      * @param C coefficient type.
      * @param r a polynomial list.
-     * @param F a polynomial list.
+     * @param F a polynomial matrix.
      * @return the scalar product of r and F.
      */
 
@@ -404,7 +417,32 @@ public class Syzygy<C extends RingElem<C>>  {
            scalarProduct(GenPolynomial<C> p, List<GenPolynomial<C>> F) {  
         List<GenPolynomial<C>> V = new ArrayList<GenPolynomial<C>>( F.size() );
         for ( GenPolynomial<C> pi : F ) {
-            pi = p.multiply( pi );
+            if ( p != null ) {
+               pi = p.multiply( pi );
+            } else {
+               pi = null;
+            }
+            V.add( pi );
+        }
+        return V;
+    }
+
+
+    /**
+     * Scalar product of vector of polynomials with polynomial.
+     * @param C coefficient type.
+     * @param F a polynomial list.
+     * @param p a polynomial.
+     * @return the scalar product of F and p.
+     */
+
+    public List<GenPolynomial<C>> 
+        scalarProduct(List<GenPolynomial<C>> F, GenPolynomial<C> p) {  
+        List<GenPolynomial<C>> V = new ArrayList<GenPolynomial<C>>( F.size() );
+        for ( GenPolynomial<C> pi : F ) {
+            if ( pi != null ) {
+               pi = pi.multiply( p );
+            }
             V.add( pi );
         }
         return V;
@@ -460,6 +498,177 @@ public class Syzygy<C extends RingElem<C>>  {
         List R = resolution(Zm); //// <ResPart<C>|ResPolPart<C>>
         R.add( 0, new ResPolPart<C>( F, Gl, Zm ) ); 
         return R;
+    }
+
+
+    /**
+     * Syzygy module from arbitrary base.
+     * @param C coefficient type.
+     * @param F a polynomial list.
+     * @return syz(F), a basis for the module of syzygies for F.
+     */
+    public List<List<GenPolynomial<C>>> 
+           zeroRelationsArbitrary(List<GenPolynomial<C>> F) {  
+        return zeroRelationsArbitrary(0,F);
+    }
+
+
+    /**
+     * Syzygy module from arbitrary base.
+     * @param C coefficient type.
+     * @param modv number of module variables.
+     * @param F a polynomial list.
+     * @return syz(F), a basis for the module of syzygies for F.
+     */
+    public List<List<GenPolynomial<C>>> 
+        zeroRelationsArbitrary(int modv, List<GenPolynomial<C>> F) {  
+
+        if ( F == null ) {
+            return zeroRelations( modv, F );
+        }
+        if ( F.size() <= 1 ) {
+            return zeroRelations( modv, F );
+        }
+        final int lenf = F.size(); 
+        GroebnerBaseSeqPairSeq<C> gb = new GroebnerBaseSeqPairSeq<C>();
+        ExtendedGB<C> exgb = gb.extGB( F );
+        if ( debug ) {
+           logger.debug("exgb = " + exgb);
+        }
+        if ( ! gb.isReductionMatrix(exgb) ) {
+           logger.error("is reduction matrix ? false");
+        }
+
+        List<GenPolynomial<C>> G = exgb.G;
+        List<List<GenPolynomial<C>>> G2F = exgb.G2F;
+        List<List<GenPolynomial<C>>> F2G = exgb.F2G;
+
+        List<List<GenPolynomial<C>>> sg = zeroRelations( modv, G );
+        GenPolynomialRing<C> ring = G.get(0).ring;
+        ModuleList<C> S = new ModuleList<C>( ring, sg );
+        if ( debug ) {
+           logger.debug("syz = " + S);
+        }
+        if ( ! isZeroRelation(sg,G) ) {
+           logger.error("is syzygy ? false");
+        }
+
+        List<List<GenPolynomial<C>>> sf;
+        sf = new ArrayList<List<GenPolynomial<C>>>( sg.size() );
+        List<GenPolynomial<C>> row;
+
+        for ( List<GenPolynomial<C>> r : sg ) {
+            Iterator<GenPolynomial<C>> it = r.iterator();
+            Iterator<List<GenPolynomial<C>>> jt = G2F.iterator();
+
+            List<GenPolynomial<C>> rf;
+            rf = new ArrayList<GenPolynomial<C>>( lenf );
+            for ( int m = 0; m < lenf; m++ ) {
+                rf.add( ring.getZERO() );
+            }
+            while ( it.hasNext() && jt.hasNext() ) {
+               GenPolynomial<C> si = it.next();
+               List<GenPolynomial<C>> ai = jt.next();
+               //System.out.println("si = " + si);
+               //System.out.println("ai = " + ai);
+               if ( si == null || ai == null ) {
+                  continue;
+               }
+               List<GenPolynomial<C>> pi = scalarProduct(si,ai);
+               //System.out.println("pi = " + pi);
+               rf = vectorAdd( rf, pi );
+            }
+            if ( it.hasNext() || jt.hasNext() ) {
+               logger.error("zeroRelationsArbitrary wrong sizes");
+            }
+            //System.out.println("\nrf = " + rf + "\n");
+            sf.add( rf );
+        }
+
+
+        List<List<GenPolynomial<C>>> M;
+        M = new ArrayList<List<GenPolynomial<C>>>( lenf );
+        for ( List<GenPolynomial<C>> r : F2G ) {
+            Iterator<GenPolynomial<C>> it = r.iterator();
+            Iterator<List<GenPolynomial<C>>> jt = G2F.iterator();
+
+            List<GenPolynomial<C>> rf;
+            rf = new ArrayList<GenPolynomial<C>>( lenf );
+            for ( int m = 0; m < lenf; m++ ) {
+                rf.add( ring.getZERO() );
+            }
+            while ( it.hasNext() && jt.hasNext() ) {
+               GenPolynomial<C> si = it.next();
+               List<GenPolynomial<C>> ai = jt.next();
+               //System.out.println("si = " + si);
+               //System.out.println("ai = " + ai);
+               if ( si == null || ai == null ) {
+                  continue;
+               }
+               List<GenPolynomial<C>> pi = scalarProduct(ai,si);
+               //System.out.println("pi = " + pi);
+               rf = vectorAdd( rf, pi );
+            }
+            if ( it.hasNext() || jt.hasNext() ) {
+               logger.error("zeroRelationsArbitrary wrong sizes");
+            }
+            //System.out.println("\nMg Mf = " + rf + "\n");
+            M.add( rf );
+        }
+        ModuleList<C> ML = new ModuleList<C>( ring, M );
+        //System.out.println("syz ML = " + ML);
+        // debug only:
+        List<GenPolynomial<C>> F2 = new ArrayList<GenPolynomial<C>>( F.size() );
+        for ( List<GenPolynomial<C>> rr: M ) {
+            GenPolynomial<C> rrg = scalarProduct( F, rr );
+            F2.add( rrg );
+        }
+        PolynomialList<C> pF = new PolynomialList<C>( ring, F );
+        PolynomialList<C> pF2 = new PolynomialList<C>( ring, F2 );
+        if ( ! pF.equals( pF2 ) ) {
+           logger.error("is FAB = F ? false");
+        }
+
+        int sflen = sf.size();
+        List<List<GenPolynomial<C>>> M2;
+        M2 = new ArrayList<List<GenPolynomial<C>>>( lenf );
+        int i = 0;
+        for ( List<GenPolynomial<C>> ri: M ) {
+            List<GenPolynomial<C>> r2i;
+            r2i = new ArrayList<GenPolynomial<C>>( ri.size() );
+            int j = 0;
+            for ( GenPolynomial<C> rij: ri ) {
+                GenPolynomial<C> p = null;
+                if ( i == j ) {
+                    p = ring.getONE().subtract( rij );
+                } else {
+                    if ( rij != null ) {
+                       p = rij.negate();
+                    }
+                }
+                r2i.add( p );
+                j++;
+            }
+            M2.add( r2i );
+            if ( ! isZero( r2i ) ) {
+                sf.add( r2i );
+            }
+            i++;
+        }
+        ModuleList<C> M2L = new ModuleList<C>( ring, M2 );
+        if ( debug ) {
+           logger.debug("syz M2L = " + M2L);
+        }
+
+        if ( debug ) {
+           ModuleList<C> SF = new ModuleList<C>( ring, sf );
+           logger.debug("syz sf = " + SF);
+           logger.debug("#syz " + sflen + ", " + sf.size());
+        }
+        if ( ! isZeroRelation(sf,F) ) {
+           logger.error("is syz sf ? false");
+        }
+        return sf;
     }
 
 }

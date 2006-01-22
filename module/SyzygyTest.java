@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Iterator;
 import java.util.ArrayList;
 import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -25,6 +27,7 @@ import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolynomialList;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.TermOrder;
+import edu.jas.poly.GenPolynomialTokenizer;
 
 import edu.jas.ring.Reduction;
 import edu.jas.ring.GroebnerBase;
@@ -98,11 +101,11 @@ public class SyzygyTest extends TestCase {
    ModuleList<BigRational> N;
    ModuleList<BigRational> Z;
 
-   int rl = 4; //4; //3; 
-   int kl = 7;
-   int ll = 9;
+   int rl = 3; //4; //3; 
+   int kl = 3; //7;
+   int ll = 7; //9;
    int el = 2;
-   float q = 0.2f; //0.4f
+   float q = 0.3f; //0.4f
 
    protected void setUp() {
        BigRational coeff = new BigRational(9);
@@ -242,6 +245,85 @@ public class SyzygyTest extends TestCase {
      //boolean b = Syzygy.isZeroRelation(Z,N);
      //System.out.println("boolean = " + b);
      assertTrue("is ZR( { a,b,c } )", sz.isZeroRelation(Z,N) );
+
+ }
+
+
+/**
+ * Test sequential arbitrary base Syzygy.
+ * 
+ */
+ public void testSequentialArbitrarySyzygy() {
+
+     L = new ArrayList<GenPolynomial<BigRational>>();
+
+     assertTrue("not isZERO( a )", !a.isZERO() );
+     L.add(a);
+     assertTrue("isGB( { a } )", bb.isGB(L) );
+     K = sz.zeroRelationsArbitrary( L );
+     assertTrue("is ZR( { a } )", sz.isZeroRelation(K,L) );
+
+     assertTrue("not isZERO( b )", !b.isZERO() );
+     L.add(b);
+     // L = bb.GB(L);
+     // assertTrue("isGB( { a, b } )", bb.isGB(L) );
+     //System.out.println("\nL = " + L );
+     K = sz.zeroRelationsArbitrary( L );
+     //System.out.println("\nN = " + N );
+     assertTrue("is ZR( { a, b } )", sz.isZeroRelation(K,L) );
+
+     assertTrue("not isZERO( c )", !c.isZERO() );
+     L.add(c);
+     //L = bb.GB(L);
+     //System.out.println("\nL = " + L );
+     //assertTrue("isGB( { a, b, c } )", bb.isGB(L) );
+     K = sz.zeroRelationsArbitrary( L );
+     //System.out.println("\nN = " + N );
+     assertTrue("is ZR( { a, b, c } )", sz.isZeroRelation(K,L) );
+
+     assertTrue("not isZERO( d )", !d.isZERO() );
+     L.add(d);
+     //L = bb.GB(L);
+     //System.out.println("\nL = " + L );
+     //assertTrue("isGB( { a, b, c, d } )", bb.isGB(L) );
+     K = sz.zeroRelationsArbitrary( L );
+     //System.out.println("\nN = " + N );
+     assertTrue("is ZR( { a, b, c, d } )", sz.isZeroRelation(K,L) );
+
+     //System.out.println("N = " + N );
+
+ }
+
+
+/**
+ * Test sequential arbitrary base Syzygy, ex CLO 2, p 214 ff.
+ * 
+ */
+ @SuppressWarnings("unchecked") // not jet working
+ public void testSequentialArbitrarySyzygyCLO() {
+
+     PolynomialList<BigRational> F = null;
+
+     String exam = "(x,y) G "
+                 + "( "  
+                 + "( x y + x ), " 
+                 + "( y^2 + 1 ) "
+                 + ") ";
+     Reader source = new StringReader( exam );
+     GenPolynomialTokenizer parser
+                  = new GenPolynomialTokenizer( source );
+     try {
+         F = (PolynomialList<BigRational>) parser.nextPolynomialSet();
+     } catch(ClassCastException e) {
+         fail(""+e);
+     } catch(IOException e) {
+         fail(""+e);
+     }
+     //System.out.println("F = " + F);
+
+     L = F.list;
+     K = sz.zeroRelationsArbitrary( L );
+     assertTrue("is ZR( { a, b } )", sz.isZeroRelation(K,L) );
 
  }
 
