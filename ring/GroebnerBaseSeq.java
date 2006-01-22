@@ -39,7 +39,7 @@ public class GroebnerBaseSeq<C extends RingElem<C>>
     /**
      * Groebner base using pairlist class.
      * @param C coefficient type.
-     * @param modv module variable nunber.
+     * @param modv module variable number.
      * @param F polynomial list.
      * @return GB(F) a Groebner base of F.
      */
