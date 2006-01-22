@@ -47,7 +47,7 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>>
     /**
      * Groebner base using pairlist class.
      * @param C coefficient type.
-     * @param modv module variable nunber.
+     * @param modv module variable number.
      * @param F polynomial list.
      * @return GB(F) a Groebner base of F.
      */
@@ -140,23 +140,10 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>>
     }
 
 
-    /** 
-     * Extended Groebner base using critical pair class.
-     * Make abstract!
-     * @param C coefficient type.
-     * @param F polynomial list.
-     * @return a container for an extended Groebner base of F.
-     */
-    public ExtendedGB<C>  
-                  extGB( List<GenPolynomial<C>> F ) {
-        return extGB(0,F); 
-    }
-
-
     /**
      * Extended Groebner base using critical pair class.
      * @param C coefficient type.
-     * @param modv module variable nunber.
+     * @param modv module variable number.
      * @param F polynomial list.
      * @return a container for an extended Groebner base of F.
      */
@@ -171,6 +158,8 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>>
         int len = F.size();
 
         List<GenPolynomial<C>> row = null;
+        List<GenPolynomial<C>> rows = null;
+        List<GenPolynomial<C>> rowh = null;
         GenPolynomialRing<C> ring = null;
         GenPolynomial<C> H;
         GenPolynomial<C> p;
@@ -240,6 +229,9 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>>
         GenPolynomial<C> pi;
         GenPolynomial<C> pj;
         GenPolynomial<C> S;
+        GenPolynomial<C> x;
+        GenPolynomial<C> y;
+        GenPolynomial<C> z;
         while ( pairlist.hasNext() && ! oneInGB ) {
               pair = pairlist.getNext();
               if ( pair == null ) { 
@@ -255,11 +247,15 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>>
                  logger.info("j, pj    = " + j + ", " + pj );
               }
 
-              row = new ArrayList<GenPolynomial<C>>( G.size()+1 );
-              for ( int m = 0; m < G.size()+1; m++ ) {
-                  row.add(null);
+              rows = new ArrayList<GenPolynomial<C>>( G.size() );
+              for ( int m = 0; m < G.size(); m++ ) {
+                  rows.add(null);
               }
-              S = red.SPolynomial( row, i, pi, j, pj );
+              S = red.SPolynomial( rows, i, pi, j, pj );
+              if ( debug ) {
+                 logger.debug("is reduction S = " 
+                             + red.isReductionNF( rows, G, ring.getZERO(), S ) );
+              }
               if ( S.isZERO() ) {
                  pairlist.update( pair, S );
                  // do not add to G2F
@@ -269,7 +265,15 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>>
                  logger.debug("ht(S) = " + S.leadingExpVector() );
               }
 
-              H = red.normalform( row, G, S );
+              rowh = new ArrayList<GenPolynomial<C>>( G.size() );
+              for ( int m = 0; m < G.size(); m++ ) {
+                  rowh.add(null);
+              }
+              H = red.normalform( rowh, G, S );
+              if ( debug ) {
+                 logger.debug("is reduction H = " 
+                              + red.isReductionNF( rowh, G, S, H ) );
+              }
               if ( H.isZERO() ) {
                  pairlist.update( pair, H );
                  // do not add to G2F
@@ -278,6 +282,33 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>>
               if ( debug ) {
                  logger.debug("ht(H) = " + H.leadingExpVector() );
               }
+
+              row = new ArrayList<GenPolynomial<C>>( G.size()+1 );
+              for ( int m = 0; m < G.size(); m++ ) {
+                  x = rows.get(m);
+                  if ( x != null ) {
+                     //System.out.println("ms = " + m + " " + x);
+                     x = x.negate();
+                  }
+                  y = rowh.get(m);
+                  if ( y != null ) {
+                     y = y.negate();
+                     //System.out.println("mh = " + m + " " + y);
+                  }
+                  if ( x == null ) {
+                     x = y;
+                  } else {
+                     x = x.add( y );
+                  }
+                  //System.out.println("mx = " + m + " " + x);
+                  row.add( x );
+              }
+              if ( debug ) {
+                 logger.debug("is reduction 0+sum(row,G) == H : " 
+                             + red.isReductionNF( row, G, H, ring.getZERO() ) );
+              }
+              row.add( null );
+
 
               //  H = H.monic();
               C c = H.leadingBaseCoefficient();
@@ -300,11 +331,17 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>>
               pairlist.update( pair, H );
               G2F.add( row );
         }
-        //exgb = new ExtendedGB(F,G,F2G,G2F);
-        //System.out.println("exgb unnorm = " + exgb);
+        if ( debug ) {
+           exgb = new ExtendedGB(F,G,F2G,G2F);
+           logger.info("exgb unnorm = " + exgb);
+        }
         G2F = normalizeMatrix( F.size(), G2F );
-        //exgb = new ExtendedGB(F,G,F2G,G2F);
-        //System.out.println("exgb nonmin = " + exgb);
+        if ( debug ) {
+           exgb = new ExtendedGB(F,G,F2G,G2F);
+           logger.info("exgb nonmin = " + exgb);
+           boolean t2 = isReductionMatrix( exgb );
+           logger.debug("exgb t2 = " + t2);
+        }
         exgb = minimalExtendedGB(F.size(),G,G2F);
         G = exgb.G;
         G2F = exgb.G2F;
@@ -313,7 +350,7 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>>
                   + " #rem = " + pairlist.remCount()
                     // + " #total = " + pairlist.pairCount()
                    );
-        // setup matrices
+        // setup matrices F and F2G
         for ( GenPolynomial<C> f : F ) {
             row = new ArrayList<GenPolynomial<C>>( G.size() );
             for ( int m = 0; m < G.size(); m++ ) {
@@ -362,66 +399,19 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>>
         // check F and Mg: F * Mg[i] == G[i]
         int k = 0;
         for ( List<GenPolynomial<C>> row : Mg ) {
-            GenPolynomial<C> sp = null;
-            Iterator<GenPolynomial<C>> it = F.iterator();
-            Iterator<GenPolynomial<C>> jt = row.iterator();
-            while ( it.hasNext() && jt.hasNext() ) {
-               GenPolynomial<C> pi = it.next();
-               GenPolynomial<C> pj = jt.next();
-               if ( pi == null || pj == null ) {
-                  continue;
-               }
-               if ( sp == null ) {
-                  sp = pi.multiply(pj);
-               } else {
-                  sp = sp.add( pi.multiply(pj) );
-               }
-            }
-            if ( it.hasNext() /*no || jt.hasNext()*/ ) {
-               logger.error("isReductionMatrix wrong sizes");
-            }
-            GenPolynomial<C> x = G.get( k );
-            GenPolynomial<C> y = x.add( sp );
-            if ( ! y.isZERO() ) {
-               y = x.subtract( sp ); // if from identity part
-               if ( ! y.isZERO() ) {
-                  logger.error("F isReductionMatrix s, k = " + F.size() + ", " + k);
-                  logger.error("F isReductionMatrix x = " + x);
-                  logger.error("F isReductionMatrix sp = " + sp);
-                  logger.error("F isReductionMatrix y = " + y);
-                  return false;
-               }
+            boolean t = red.isReductionNF( row, F, G.get( k ), null );  
+            if ( ! t ) {
+               logger.error("F isReductionMatrix s, k = " + F.size() + ", " + k);
+               return false;
             }
             k++;
         }
         // check G and Mf: G * Mf[i] == F[i]
         k = 0;
         for ( List<GenPolynomial<C>> row : Mf ) {
-            GenPolynomial<C> sp = null;
-            Iterator<GenPolynomial<C>> it = G.iterator();
-            Iterator<GenPolynomial<C>> jt = row.iterator();
-            while ( it.hasNext() && jt.hasNext() ) {
-               GenPolynomial<C> pi = it.next();
-               GenPolynomial<C> pj = jt.next();
-               if ( pi == null || pj == null ) {
-                  continue;
-               }
-               if ( sp == null ) {
-                  sp = pi.multiply(pj);
-               } else {
-                  sp = sp.add( pi.multiply(pj) );
-               }
-            }
-            if ( it.hasNext() || jt.hasNext() ) {
-               logger.error("Fr isReductionMatrix gs, rs = " + G.size() + ", " + row.size());
-            }
-            GenPolynomial<C> x = F.get( k );
-            GenPolynomial<C> y = x.subtract( sp );
-            if ( ! y.isZERO() ) {
-               logger.error("Fr isReductionMatrix s, k = " + G.size() + ", " + k);
-               logger.error("Fr isReductionMatrix x = " + x);
-               logger.error("Fr isReductionMatrix sp = " + sp);
-               logger.error("Fr isReductionMatrix y = " + y);
+            boolean t = red.isReductionNF( row, G, F.get( k ), null );  
+            if ( ! t ) {
+               logger.error("G isReductionMatrix s, k = " + G.size() + ", " + k);
                return false;
             }
             k++;
@@ -447,17 +437,17 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>>
         }
         List<List<GenPolynomial<C>>> N = new ArrayList<List<GenPolynomial<C>>>();
         List<List<GenPolynomial<C>>> K = new ArrayList<List<GenPolynomial<C>>>();
-        int len = M.get( M.size()-1 ).size(); // longest row
-        //System.out.println("norm len = " + len);
+        int len = M.get(  M.size()-1 ).size(); // longest row
+        // pad / extend rows
         for ( List<GenPolynomial<C>> row : M ) {
-            // System.out.println("row = " + row);
             List<GenPolynomial<C>> nrow = new ArrayList<GenPolynomial<C>>( row );
             for ( int i = row.size(); i < len; i++ ) {
                 nrow.add( null );
             }
-            //System.out.println("nrow = " + nrow);
             N.add( nrow );
         }
+        // System.out.println("norm N fill = " + N);
+        // make zero columns
         int k = flen;
         for ( int i = 0; i < N.size(); i++ ) { // 0
             List<GenPolynomial<C>> row = N.get( i );
@@ -473,12 +463,12 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>>
             //System.out.println("norm i = " + i);
             for ( int j = i+1; j < N.size(); j++ ) {
                 List<GenPolynomial<C>> nrow = N.get( j );
-                //System.out.println("nrow = " + nrow);
+                //System.out.println("nrow j = " +j + ", " + nrow);
                 if ( k < nrow.size() ) { // always true
                    a = nrow.get( k );
-                   //System.out.println("a = " + a);
+                   //System.out.println("k, a = " + k + ", " + a);
                    if ( a != null && !a.isZERO() ) {
-                      xrow = syz.scalarProduct( a.negate(), row);
+                      xrow = syz.scalarProduct( a, row);
                       xrow = syz.vectorAdd(xrow,nrow);
                       //System.out.println("xrow = " + xrow);
                       N.set( j, xrow );
@@ -487,6 +477,18 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>>
             }
             k++;
         }
+        //System.out.println("norm K reduc = " + K);
+        // truncate 
+        N.clear();
+        for ( List<GenPolynomial<C>> row: K ) {
+            List<GenPolynomial<C>> tr = new ArrayList<GenPolynomial<C>>();
+            for ( int i = 0; i < flen; i++ ) {
+                tr.add( row.get(i) );
+            }
+            N.add( tr );
+        }
+        K = N;
+        //System.out.println("norm K trunc = " + K);
         return K;
     }
 
@@ -576,22 +578,6 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>>
             if ( u >= 0 ) {
                row = Mg.get( u );
                Mf.add( row );
-            }
-        }
-        // remove colums of Mf as indicated by jx
-        for ( int i = jx.size()-1; i >= 0; i-- ) {
-            int u = jx.get(i);
-            if ( u >= flen ) {
-               logger.info("remove column " + u);
-               for ( List<GenPolynomial<C>> r : Mf ) {
-                   if ( true || debug ) {
-                      p = r.get( u );
-                      if ( p != null && ! p.isZERO() ) {
-                         logger.error("remove p non zero = " + p);
-                      }
-                   }
-                   r.remove( u );
-               }
             }
         }
         if ( F.size() <= 1 || fix == -1 ) {
