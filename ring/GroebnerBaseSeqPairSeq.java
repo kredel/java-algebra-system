@@ -420,11 +420,11 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>>
 
 
     /**
-     * Nomalize M.
+     * Normalize M.
      * Make all rows the same size and make certain column elements zero.
      * @param C coefficient type.
      * @param M a reduction matrix.
-     * @return nomalized M.
+     * @return normalized M.
      */
     public List<List<GenPolynomial<C>>> 
            normalizeMatrix(int flen, List<List<GenPolynomial<C>>> M) {  

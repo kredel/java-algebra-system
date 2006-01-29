@@ -20,12 +20,12 @@ import edu.jas.module.ModuleList;
 
 /**
   * Container for a GB and transformation matrices.
+  * A container for F, G, calG and calF.
   * @param C coefficient type.
   * @param F an ideal base.
   * @param G a Groebner base of F.
   * @param F2G a transformation matrix from F to G.
   * @param G2F a transformation matrix from G to F.
-  * @return a container for F, G, calG and calF.
   */
 public class ExtendedGB<C extends RingElem<C>> {
 
