@@ -7,7 +7,6 @@ package edu.jas.module;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Iterator;
-//import java.util.ListIterator;
 import java.util.Map;
 
 import java.io.Serializable;
@@ -15,8 +14,6 @@ import java.io.Serializable;
 import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
-
-//import edu.jas.arith.BigRational;
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
@@ -33,6 +30,7 @@ import edu.jas.ring.SolvableReductionSeq;
 //import edu.jas.ring.GroebnerBase;
 import edu.jas.ring.SolvableGroebnerBase;
 import edu.jas.ring.SolvableGroebnerBaseSeq;
+import edu.jas.ring.SolvableExtendedGB;
 
 import edu.jas.module.ModuleList;
 
@@ -46,6 +44,7 @@ import edu.jas.module.ModuleList;
 public class SolvableSyzygy<C extends RingElem<C>> {
 
     private static final Logger logger = Logger.getLogger(SolvableSyzygy.class);
+    private final boolean debug = logger.isDebugEnabled();
 
     /**
      * Solvable reduction engine.
@@ -396,6 +395,28 @@ public class SolvableSyzygy<C extends RingElem<C>> {
 
 
     /**
+     * Scalar product of vector of polynomials with polynomial.
+     * @param C coefficient type.
+     * @param F a polynomial list.
+     * @param p a polynomial.
+     * @return the left scalar product of F and p.
+     */
+    public List<GenSolvablePolynomial<C>> 
+        leftScalarProduct(List<GenSolvablePolynomial<C>> F,
+                               GenSolvablePolynomial<C> p) {  
+        List<GenSolvablePolynomial<C>> V 
+            = new ArrayList<GenSolvablePolynomial<C>>( F.size() );
+        for ( GenSolvablePolynomial<C> pi : F ) {
+            if ( pi != null ) {
+               pi = pi.multiply( p );
+            }
+            V.add( pi );
+        }
+        return V;
+    }
+
+
+    /**
      * Resolution of a module.
      * Only with direct GBs.
      * @param C coefficient type.
@@ -445,6 +466,285 @@ public class SolvableSyzygy<C extends RingElem<C>> {
         List R = resolution(Zm);
         R.add( 0, new SolvResPolPart( F, Gl, Zm ) );
         return R;
+    }
+
+
+    /**
+     * Resolution of a module.
+     * @param C coefficient type.
+     * @param M a module list of an arbitrary basis.
+     * @return a resolution of M.
+     */
+    public List<SolvResPart<C>> 
+           resolutionArbitrary(ModuleList<C> M) {  
+        List<SolvResPart<C>> R = new ArrayList<SolvResPart<C>>();
+        ModuleList<C> MM = M;
+        ModuleList<C> GM = null;
+        ModuleList<C> Z;
+        ModSolvableGroebnerBase<C> msbb = new ModSolvableGroebnerBase<C>();
+        while (true) {
+            //GM = msbb.leftGB(MM);
+          Z = leftZeroRelationsArbitrary(MM);
+          R.add( new SolvResPart(MM,GM,Z) );
+          if ( Z == null || Z.list == null || Z.list.size() == 0 ) {
+              break;
+          }
+          MM = Z;
+        }
+        return R;
+    }
+
+
+    /**
+     * Resolution of a polynomial list.
+     * @param C coefficient type.
+     * @param F a polynomial list of an arbitrary basis.
+     * @return a resolution of F.
+     */
+    public List // <SolvResPart<C>|SolvResPolPart<C>> 
+           resolutionArbitrary(PolynomialList<C> F) {  
+        List<List<GenSolvablePolynomial<C>>> Z;
+        ModuleList<C> Zm;
+        List<GenSolvablePolynomial<C>> G;
+        PolynomialList<C> Gl = null;
+        SolvableGroebnerBase<C> sbb = new SolvableGroebnerBaseSeq<C>();
+
+        //G = sbb.leftGB( F.castToSolvableList() );
+        Z = leftZeroRelationsArbitrary( F.castToSolvableList() );
+        //Gl = new PolynomialList<C>((GenSolvablePolynomialRing<C>)F.ring, G);
+        Zm = new ModuleList<C>((GenSolvablePolynomialRing<C>)F.ring, Z);
+
+        List R = resolutionArbitrary(Zm);
+        R.add( 0, new SolvResPolPart( F, Gl, Zm ) );
+        return R;
+    }
+
+
+    /**
+     * Left syzygy module from arbitrary base.
+     * @param C coefficient type.
+     * @param F a solvable polynomial list.
+     * @return syz(F), a basis for the module of left syzygies for F.
+     */
+    public List<List<GenSolvablePolynomial<C>>> 
+           leftZeroRelationsArbitrary(List<GenSolvablePolynomial<C>> F) {  
+        return leftZeroRelationsArbitrary(0,F);
+    }
+
+
+    /**
+     * Left syzygy module from arbitrary base.
+     * @param C coefficient type.
+     * @param modv number of module variables.
+     * @param F a solvable polynomial list.
+     * @return syz(F), a basis for the module of left syzygies for F.
+     */
+    public List<List<GenSolvablePolynomial<C>>> 
+        leftZeroRelationsArbitrary(int modv, List<GenSolvablePolynomial<C>> F) {  
+
+        if ( F == null ) {
+            return leftZeroRelations( modv, F );
+        }
+        if ( F.size() <= 1 ) {
+            return leftZeroRelations( modv, F );
+        }
+        final int lenf = F.size(); 
+        SolvableGroebnerBaseSeq<C> sgb = new SolvableGroebnerBaseSeq<C>();
+        SolvableExtendedGB<C> exgb = sgb.extLeftGB( F );
+        if ( debug ) {
+           logger.debug("exgb = " + exgb);
+        }
+        if ( ! sgb.isLeftReductionMatrix(exgb) ) {
+           logger.error("is reduction matrix ? false");
+        }
+
+        List<GenSolvablePolynomial<C>> G = exgb.G;
+        List<List<GenSolvablePolynomial<C>>> G2F = exgb.G2F;
+        List<List<GenSolvablePolynomial<C>>> F2G = exgb.F2G;
+
+        List<List<GenSolvablePolynomial<C>>> sg = leftZeroRelations( modv, G );
+        GenSolvablePolynomialRing<C> ring = G.get(0).ring;
+        ModuleList<C> S = new ModuleList<C>( ring, sg );
+        if ( debug ) {
+           logger.debug("syz = " + S);
+        }
+        if ( ! isLeftZeroRelation(sg,G) ) {
+           logger.error("is syzygy ? false");
+        }
+
+        List<List<GenSolvablePolynomial<C>>> sf;
+        sf = new ArrayList<List<GenSolvablePolynomial<C>>>( sg.size() );
+        //List<GenPolynomial<C>> row;
+
+        for ( List<GenSolvablePolynomial<C>> r : sg ) {
+            Iterator<GenSolvablePolynomial<C>> it = r.iterator();
+            Iterator<List<GenSolvablePolynomial<C>>> jt = G2F.iterator();
+
+            List<GenSolvablePolynomial<C>> rf;
+            rf = new ArrayList<GenSolvablePolynomial<C>>( lenf );
+            for ( int m = 0; m < lenf; m++ ) {
+                rf.add( ring.getZERO() );
+            }
+            while ( it.hasNext() && jt.hasNext() ) {
+               GenSolvablePolynomial<C> si = it.next();
+               List<GenSolvablePolynomial<C>> ai = jt.next();
+               //System.out.println("si = " + si);
+               //System.out.println("ai = " + ai);
+               if ( si == null || ai == null ) {
+                  continue;
+               }
+               List<GenSolvablePolynomial<C>> pi = leftScalarProduct(si,ai);
+               //System.out.println("pi = " + pi);
+               rf = vectorAdd( rf, pi );
+            }
+            if ( it.hasNext() || jt.hasNext() ) {
+               logger.error("leftZeroRelationsArbitrary wrong sizes");
+            }
+            //System.out.println("\nrf = " + rf + "\n");
+            sf.add( rf );
+        }
+        List<List<GenSolvablePolynomial<C>>> M;
+        M = new ArrayList<List<GenSolvablePolynomial<C>>>( lenf );
+        for ( List<GenSolvablePolynomial<C>> r : F2G ) {
+            Iterator<GenSolvablePolynomial<C>> it = r.iterator();
+            Iterator<List<GenSolvablePolynomial<C>>> jt = G2F.iterator();
+
+            List<GenSolvablePolynomial<C>> rf;
+            rf = new ArrayList<GenSolvablePolynomial<C>>( lenf );
+            for ( int m = 0; m < lenf; m++ ) {
+                rf.add( ring.getZERO() );
+            }
+            while ( it.hasNext() && jt.hasNext() ) {
+               GenSolvablePolynomial<C> si = it.next();
+               List<GenSolvablePolynomial<C>> ai = jt.next();
+               //System.out.println("si = " + si);
+               //System.out.println("ai = " + ai);
+               if ( si == null || ai == null ) {
+                  continue;
+               }
+               List<GenSolvablePolynomial<C>> pi = leftScalarProduct(ai,si);
+               //System.out.println("pi = " + pi);
+               rf = vectorAdd( rf, pi );
+            }
+            if ( it.hasNext() || jt.hasNext() ) {
+               logger.error("zeroRelationsArbitrary wrong sizes");
+            }
+            //System.out.println("\nMg Mf = " + rf + "\n");
+            M.add( rf );
+        }
+        //ModuleList<C> ML = new ModuleList<C>( ring, M );
+        //System.out.println("syz ML = " + ML);
+        // debug only:
+        List<GenSolvablePolynomial<C>> F2 = new ArrayList<GenSolvablePolynomial<C>>( F.size() );
+        for ( List<GenSolvablePolynomial<C>> rr: M ) {
+            GenSolvablePolynomial<C> rrg = leftScalarProduct( F, rr );
+            F2.add( rrg );
+        }
+        PolynomialList<C> pF = new PolynomialList<C>( ring, F );
+        PolynomialList<C> pF2 = new PolynomialList<C>( ring, F2 );
+        if ( ! pF.equals( pF2 ) ) {
+           logger.error("is FAB = F ? false");
+        }
+
+        int sflen = sf.size();
+        List<List<GenSolvablePolynomial<C>>> M2;
+        M2 = new ArrayList<List<GenSolvablePolynomial<C>>>( lenf );
+        int i = 0;
+        for ( List<GenSolvablePolynomial<C>> ri: M ) {
+            List<GenSolvablePolynomial<C>> r2i;
+            r2i = new ArrayList<GenSolvablePolynomial<C>>( ri.size() );
+            int j = 0;
+            for ( GenSolvablePolynomial<C> rij: ri ) {
+                GenSolvablePolynomial<C> p = null;
+                if ( i == j ) {
+                    p = (GenSolvablePolynomial<C>)ring.getONE().subtract( rij );
+                } else {
+                    if ( rij != null ) {
+                       p = (GenSolvablePolynomial<C>)rij.negate();
+                    }
+                }
+                r2i.add( p );
+                j++;
+            }
+            M2.add( r2i );
+            if ( ! isZero( r2i ) ) {
+                sf.add( r2i );
+            }
+            i++;
+        }
+        ModuleList<C> M2L = new ModuleList<C>( ring, M2 );
+        if ( debug ) {
+           logger.debug("syz M2L = " + M2L);
+        }
+
+        if ( debug ) {
+           ModuleList<C> SF = new ModuleList<C>( ring, sf );
+           logger.debug("syz sf = " + SF);
+           logger.debug("#syz " + sflen + ", " + sf.size());
+        }
+        if ( ! isLeftZeroRelation(sf,F) ) {
+           logger.error("is syz sf ? false");
+        }
+        return sf;
+    }
+
+
+    /**
+     * Left syzygy for arbitrary left module base.
+     * @param C coefficient type.
+     * @param M an arbitrary base.
+     * @return leftSyz(M), a basis for the left module of syzygies for M.
+     */
+    public ModuleList<C> 
+           leftZeroRelationsArbitrary(ModuleList<C> M) {  
+        ModuleList<C> N = null;
+        if ( M == null || M.list == null) {
+            return N;
+        }
+        if ( M.rows == 0 || M.cols == 0 ) {
+            return N;
+        }
+        GenSolvablePolynomial<C> zero 
+           = (GenSolvablePolynomial<C>)M.ring.getZERO();
+        //logger.info("zero = " + zero);
+
+        //ModuleList<C> Np = null;
+        PolynomialList<C> F = M.getPolynomialList();
+        int modv = M.cols; // > 0  
+        logger.info("modv = " + modv);
+        List<List<GenSolvablePolynomial<C>>> G 
+            = leftZeroRelationsArbitrary(modv,F.castToSolvableList());
+        if ( G == null ) {
+            return N;
+        }
+        List<List<GenSolvablePolynomial<C>>> Z 
+            = new ArrayList<List<GenSolvablePolynomial<C>>>();
+        for ( int i = 0; i < G.size(); i++ ) {
+            List<GenSolvablePolynomial<C>> Gi = G.get(i);
+            List Zi = new ArrayList();
+            // System.out.println("\nG("+i+") = " + G.get(i));
+            for ( int j = 0; j < Gi.size(); j++ ) {
+                //System.out.println("\nG("+i+","+j+") = " + Gi.get(j));
+                GenSolvablePolynomial<C> p = Gi.get(j);
+                if ( p != null ) {
+                    Map<ExpVector,GenPolynomial<C>> r = p.contract( M.ring );
+                   //System.out.println("map("+i+","+j+") = " + r + ", size = " + r.size() );
+                   if ( r.size() == 0 ) {
+                       Zi.add(zero); 
+                   } else if ( r.size() == 1 ) {
+                       GenSolvablePolynomial<C> vi = (GenSolvablePolynomial<C>)(r.values().toArray())[0];
+                       Zi.add(vi); 
+                   } else { // will not happen
+                       throw new RuntimeException("Map.size() > 1 = " + r.size());
+                   }
+                }
+            }
+            //System.out.println("\nZ("+i+") = " + Zi);
+            Z.add( Zi );
+        }
+        N = new ModuleList<C>((GenSolvablePolynomialRing<C>)M.ring,Z);
+        //System.out.println("\n\nN = " + N);
+        return N;
     }
 
 }

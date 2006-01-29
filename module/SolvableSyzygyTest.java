@@ -4,12 +4,11 @@
 
 package edu.jas.module;
 
-//import edu.jas.poly.GroebnerBase;
-
 import java.util.List;
-//import java.util.Iterator;
 import java.util.ArrayList;
-//import java.io.IOException;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -18,28 +17,21 @@ import junit.framework.TestSuite;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
-
-//import edu.jas.structure.RingElem;
-
 import edu.jas.arith.BigRational;
 
-//import edu.jas.poly.GenPolynomial;
-//import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolynomialList;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.TermOrder;
+import edu.jas.poly.GenPolynomialTokenizer;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.WeylRelations;
 import edu.jas.poly.RelationTable;
 
-//import edu.jas.ring.Reduction;
-//import edu.jas.ring.GroebnerBase;
 import edu.jas.ring.SolvableGroebnerBase;
 import edu.jas.ring.SolvableGroebnerBaseSeq;
 
 import edu.jas.module.ModuleList;
-//import edu.jas.module.Syzygy;
 import edu.jas.module.SolvableSyzygy;
 
 
@@ -312,6 +304,120 @@ public class SolvableSyzygyTest extends TestCase {
      //boolean b = ssz.isLeftZeroRelation(Z,N);
      //System.out.println("boolean = " + b);
      assertTrue("is ZR( { a,b,c } )", ssz.isLeftZeroRelation(Z,N) );
+ }
+
+
+/**
+ * Test sequential arbitrary base Syzygy.
+ * 
+ */
+ public void testSequentialArbitrarySyzygy() {
+
+     L = new ArrayList<GenSolvablePolynomial<BigRational>>();
+
+     assertTrue("not isZERO( a )", !a.isZERO() );
+     L.add(a);
+     assertTrue("isGB( { a } )", sbb.isLeftGB(L) );
+     K = ssz.leftZeroRelationsArbitrary( L );
+     assertTrue("is ZR( { a } )", ssz.isLeftZeroRelation(K,L) );
+
+     assertTrue("not isZERO( b )", !b.isZERO() );
+     L.add(b);
+     K = ssz.leftZeroRelationsArbitrary( L );
+     //System.out.println("\nN = " + N );
+     assertTrue("is ZR( { a, b } )", ssz.isLeftZeroRelation(K,L) );
+
+     assertTrue("not isZERO( c )", !c.isZERO() );
+     L.add(c);
+     K = ssz.leftZeroRelationsArbitrary( L );
+     //System.out.println("\nN = " + N );
+     assertTrue("is ZR( { a, b, c } )", ssz.isLeftZeroRelation(K,L) );
+
+     assertTrue("not isZERO( d )", !d.isZERO() );
+     L.add(d);
+     K = ssz.leftZeroRelationsArbitrary( L );
+     //System.out.println("\nN = " + N );
+     assertTrue("is ZR( { a, b, c, d } )", ssz.isLeftZeroRelation(K,L) );
+
+     //System.out.println("N = " + N );
+ }
+
+
+/**
+ * Test sequential arbitrary base Syzygy, ex CLO 2, p 214 ff.
+ * 
+ */
+ @SuppressWarnings("unchecked") // not jet working
+ public void testSequentialArbitrarySyzygyCLO() {
+
+     PolynomialList<BigRational> F = null;
+
+     String exam = "Rat(x,y) G "
+                 + "( "  
+                 + "( x y + x ), " 
+                 + "( y^2 + 1 ) "
+                 + ") ";
+     Reader source = new StringReader( exam );
+     GenPolynomialTokenizer parser
+                  = new GenPolynomialTokenizer( source );
+     try {
+         F = (PolynomialList<BigRational>) parser.nextSolvablePolynomialSet();
+     } catch(ClassCastException e) {
+         fail(""+e);
+     } catch(IOException e) {
+         fail(""+e);
+     }
+     //System.out.println("F = " + F);
+
+     L = F.castToSolvableList();
+     K = ssz.leftZeroRelationsArbitrary( L );
+     assertTrue("is ZR( { a, b } )", ssz.isLeftZeroRelation(K,L) );
+
+ }
+
+
+/**
+ * Test sequential arbitrary module SolvableSyzygy.
+ * 
+ */
+ public void testSequentialArbitraryModSolvableSyzygy() {
+
+     W = new ArrayList<List<GenSolvablePolynomial<BigRational>>>();
+
+     assertTrue("not isZERO( a )", !a.isZERO() );
+     V = new ArrayList<GenSolvablePolynomial<BigRational>>();
+     V.add(a); V.add(zero); V.add(one);
+     W.add(V);
+     M = new ModuleList<BigRational>(fac,W);
+     assertTrue("isGB( { (a,0,1) } )", msbb.isLeftGB(M) );
+
+     Z = ssz.leftZeroRelationsArbitrary(M);
+     //System.out.println("Z = " + Z);
+     assertTrue("is ZR( { a) } )", ssz.isLeftZeroRelation(Z,M) );
+
+     assertTrue("not isZERO( b )", !b.isZERO() );
+     V = new ArrayList<GenSolvablePolynomial<BigRational>>();
+     V.add(b); V.add(one); V.add(zero);
+     W.add(V);
+     M = new ModuleList<BigRational>(fac,W);
+     //System.out.println("W = " + W.size() );
+
+     Z = ssz.leftZeroRelationsArbitrary(M);
+     //System.out.println("Z = " + Z);
+     assertTrue("is ZR( { a, b } )", ssz.isLeftZeroRelation(Z,M) );
+
+     assertTrue("not isZERO( c )", !c.isZERO() );
+     V = new ArrayList<GenSolvablePolynomial<BigRational>>();
+     V.add(c); V.add(one); V.add(zero);
+     W.add(V);
+     M = new ModuleList<BigRational>(fac,W);
+     //System.out.println("W = " + W.size() );
+
+     Z = ssz.leftZeroRelationsArbitrary(M);
+     //System.out.println("Z = " + Z);
+     //boolean b = ssz.isLeftZeroRelation(Z,N);
+     //System.out.println("boolean = " + b);
+     assertTrue("is ZR( { a,b,c } )", ssz.isLeftZeroRelation(Z,M) );
  }
 
 }
