@@ -15,7 +15,7 @@ import java.io.InputStreamReader;
 import java.io.IOException;
 
 import org.apache.log4j.Logger;
-import org.apache.log4j.BasicConfigurator;
+//import org.apache.log4j.BasicConfigurator;
 
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
@@ -54,12 +54,12 @@ public class GenPolynomialTokenizer  {
     private int nvars = 1;
     private TermOrder tord;
     private RelationTable table;
-    private Reader in;
+    //private Reader in;
     private StreamTokenizer tok;
 
     private RingFactory                                fac;
-    private RingFactory<AlgebraicNumber<BigRational>> anfac;
-    private RingFactory<AlgebraicNumber<ModInteger>>  gffac;
+    //private RingFactory<AlgebraicNumber<BigRational>> anfac;
+    //private RingFactory<AlgebraicNumber<ModInteger>>  gffac;
     private enum coeffType { BigRat, BigInt, ModInt, BigC, BigQ, 
                              ANrat, ANmod };
     private coeffType parsedCoeff = coeffType.BigRat;
@@ -122,7 +122,7 @@ public class GenPolynomialTokenizer  {
         //BasicConfigurator.configure();
         vars = null;
         tord = new TermOrder();
-        in = r;
+        //in = r;
         // table = rt;
         nvars = 1;
         if ( vars != null ) {

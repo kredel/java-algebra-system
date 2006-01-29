@@ -9,8 +9,8 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 
-import edu.jas.structure.RingElem;
-import edu.jas.structure.ModulElem;
+//import edu.jas.structure.RingElem;
+//import edu.jas.structure.ModulElem;
 
 import edu.jas.arith.BigRational;
 import edu.jas.poly.GenPolynomial;

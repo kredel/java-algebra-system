@@ -6,7 +6,6 @@ package edu.jas.ring;
 
 
 import java.util.List;
-import java.util.Iterator;
 import java.util.ArrayList;
 import java.io.IOException;
 import java.io.Reader;

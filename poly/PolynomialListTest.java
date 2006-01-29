@@ -4,20 +4,13 @@
 
 package edu.jas.poly;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-
 import edu.jas.arith.BigRational;
-
-import edu.jas.poly.PolynomialList;
-import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.TermOrder;
-import edu.jas.poly.ExpVector;
-import edu.jas.poly.OrderedPolynomialList;
 
 
 /**
@@ -49,7 +42,7 @@ public class PolynomialListTest extends TestCase {
      return suite;
    }
 
-   private final static int bitlen = 100;
+   //private final static int bitlen = 100;
 
    GenPolynomialRing<BigRational> fac;
 
@@ -88,7 +81,7 @@ public class PolynomialListTest extends TestCase {
  * 
  */
  public void testConstructor() {
-     p = new PolynomialList<BigRational>(fac,(List)null);
+     p = new PolynomialList<BigRational>(fac,(List<GenPolynomial<BigRational>>)null);
      assertTrue("p = 0", p.list == null);
 
      m = new PolynomialList<BigRational>(fac,

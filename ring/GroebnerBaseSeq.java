@@ -12,7 +12,7 @@ import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
 
-import edu.jas.poly.ExpVector;
+//import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 
 import edu.jas.ring.OrderedPairlist;

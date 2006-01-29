@@ -73,7 +73,7 @@ public class ExpVector implements Cloneable, Serializable {
      */
     public ExpVector(String s) throws NumberFormatException {
         // first format = (1,2,3,4,5,6,7)
-        Vector exps = new Vector();
+        Vector<Long> exps = new Vector<Long>();
         s.trim();
         int b = s.indexOf('(');
         int e = s.indexOf(')',b+1);

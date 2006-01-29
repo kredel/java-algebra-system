@@ -7,7 +7,6 @@ package edu.jas.ring;
 //import edu.jas.poly.GroebnerBase;
 
 import java.util.List;
-import java.util.Iterator;
 import java.util.ArrayList;
 import java.io.IOException;
 import java.io.Reader;

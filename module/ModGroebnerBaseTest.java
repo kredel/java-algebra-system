@@ -7,7 +7,7 @@ package edu.jas.module;
 import java.util.List;
 //import java.util.Iterator;
 import java.util.ArrayList;
-import java.io.IOException;
+//import java.io.IOException;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -17,7 +17,7 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
 
-import edu.jas.structure.RingElem;
+//import edu.jas.structure.RingElem;
 
 import edu.jas.arith.BigRational;
 
@@ -27,8 +27,8 @@ import edu.jas.poly.PolynomialList;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.TermOrder;
 
-import edu.jas.ring.Reduction;
-import edu.jas.ring.GroebnerBase;
+//import edu.jas.ring.Reduction;
+//import edu.jas.ring.GroebnerBase;
 
 import edu.jas.module.ModuleList;
 

@@ -32,7 +32,7 @@ public interface GroebnerBase<C extends RingElem<C>>  {
     /**
      * Groebner base test.
      * @param C coefficient type.
-     * @param modv module variable nunber.
+     * @param modv module variable number.
      * @param F polynomial list.
      * @return true, if F is a Groebner base, else false.
      */
@@ -46,19 +46,41 @@ public interface GroebnerBase<C extends RingElem<C>>  {
      * @return GB(F) a Groebner base of F.
      */
     public List<GenPolynomial<C>> 
-               GB( List<GenPolynomial<C>> F );
+           GB( List<GenPolynomial<C>> F );
 
 
     /**
      * Groebner base using pairlist class.
      * @param C coefficient type.
-     * @param modv module variable nunber.
+     * @param modv module variable number.
      * @param F polynomial list.
      * @return GB(F) a Groebner base of F.
      */
     public List<GenPolynomial<C>> 
-               GB( int modv, 
-                   List<GenPolynomial<C>> F );
+           GB( int modv, 
+               List<GenPolynomial<C>> F );
+
+
+    /** 
+     * Extended Groebner base using critical pair class.
+     * @param C coefficient type.
+     * @param F polynomial list.
+     * @return a container for an extended Groebner base of F.
+     */
+    public ExtendedGB<C>  
+           extGB( List<GenPolynomial<C>> F );
+
+
+    /**
+     * Extended Groebner base using critical pair class.
+     * @param C coefficient type.
+     * @param modv module variable number.
+     * @param F polynomial list.
+     * @return a container for an extended Groebner base of F.
+     */
+    public ExtendedGB<C> 
+           extGB( int modv, 
+                  List<GenPolynomial<C>> F );
 
 
     /**

@@ -14,7 +14,7 @@ import edu.jas.arith.ModInteger;
 
 import edu.jas.poly.GenPolynomial;
 
-import edu.jas.structure.RingElem;
+//import edu.jas.structure.RingElem;
 
 
 /**
@@ -46,7 +46,7 @@ public class GaloisFieldTest extends TestCase {
      return suite;
    }
 
-   private final static int bitlen = 100;
+   //private final static int bitlen = 100;
 
    AlgebraicNumber<ModInteger> fac;
    GenPolynomialRing<ModInteger> mfac;

@@ -68,7 +68,7 @@ public class ExecutableChannels {
         this();
         BufferedReader in = new BufferedReader( new FileReader( fname ) );
         String line = null;
-        List list = new ArrayList();
+        List<String> list = new ArrayList<String>();
         int x;
         try {
             while (true) {

@@ -12,12 +12,12 @@ import java.util.Arrays;
 //import java.util.TreeMap;
 import java.util.Comparator;
 
-import java.io.Serializable;
+//import java.io.Serializable;
 
 import edu.jas.structure.RingElem;
-import edu.jas.structure.RingFactory;
+//import edu.jas.structure.RingFactory;
 
-import edu.jas.arith.BigRational;
+//import edu.jas.arith.BigRational;
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomialRing;

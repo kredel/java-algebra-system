@@ -7,9 +7,9 @@ package edu.jas.module;
 //import edu.jas.poly.GroebnerBase;
 
 import java.util.List;
-import java.util.Iterator;
+//import java.util.Iterator;
 import java.util.ArrayList;
-import java.io.IOException;
+//import java.io.IOException;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -19,12 +19,12 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
 
-import edu.jas.structure.RingElem;
+//import edu.jas.structure.RingElem;
 
 import edu.jas.arith.BigRational;
 
-import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.GenPolynomialRing;
+//import edu.jas.poly.GenPolynomial;
+//import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolynomialList;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.TermOrder;
@@ -33,13 +33,13 @@ import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.WeylRelations;
 import edu.jas.poly.RelationTable;
 
-import edu.jas.ring.Reduction;
-import edu.jas.ring.GroebnerBase;
+//import edu.jas.ring.Reduction;
+//import edu.jas.ring.GroebnerBase;
 import edu.jas.ring.SolvableGroebnerBase;
 import edu.jas.ring.SolvableGroebnerBaseSeq;
 
 import edu.jas.module.ModuleList;
-import edu.jas.module.Syzygy;
+//import edu.jas.module.Syzygy;
 import edu.jas.module.SolvableSyzygy;
 
 

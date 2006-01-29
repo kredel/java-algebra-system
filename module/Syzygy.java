@@ -7,7 +7,7 @@ package edu.jas.module;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Iterator;
-import java.util.ListIterator;
+//import java.util.ListIterator;
 import java.util.Map;
 
 import java.io.Serializable;
@@ -16,17 +16,17 @@ import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
 
-import edu.jas.arith.BigRational;
+//import edu.jas.arith.BigRational;
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolynomialList;
 import edu.jas.poly.ExpVector;
-import edu.jas.poly.TermOrder;
+//import edu.jas.poly.TermOrder;
 
 import edu.jas.ring.Reduction;
 import edu.jas.ring.ReductionSeq;
-import edu.jas.ring.GroebnerBase;
+//import edu.jas.ring.GroebnerBase;
 import edu.jas.ring.GroebnerBaseSeq;
 import edu.jas.ring.GroebnerBaseSeqPairSeq;
 import edu.jas.ring.ExtendedGB;
@@ -185,7 +185,7 @@ public class Syzygy<C extends RingElem<C>>  {
         GenPolynomial<C> zero = M.ring.getZERO();
         //System.out.println("zero = " + zero);
 
-        ModuleList<C> Np = null;
+        //ModuleList<C> Np = null;
         PolynomialList<C> F = M.getPolynomialList();
         int modv = M.cols; // > 0  
         //System.out.println("modv = " + modv);
@@ -555,7 +555,7 @@ public class Syzygy<C extends RingElem<C>>  {
 
         List<List<GenPolynomial<C>>> sf;
         sf = new ArrayList<List<GenPolynomial<C>>>( sg.size() );
-        List<GenPolynomial<C>> row;
+        //List<GenPolynomial<C>> row;
 
         for ( List<GenPolynomial<C>> r : sg ) {
             Iterator<GenPolynomial<C>> it = r.iterator();
@@ -615,7 +615,7 @@ public class Syzygy<C extends RingElem<C>>  {
             //System.out.println("\nMg Mf = " + rf + "\n");
             M.add( rf );
         }
-        ModuleList<C> ML = new ModuleList<C>( ring, M );
+        //ModuleList<C> ML = new ModuleList<C>( ring, M );
         //System.out.println("syz ML = " + ML);
         // debug only:
         List<GenPolynomial<C>> F2 = new ArrayList<GenPolynomial<C>>( F.size() );

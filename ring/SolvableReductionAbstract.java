@@ -5,22 +5,16 @@
 package edu.jas.ring;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.ListIterator;
 import java.util.Iterator;
-import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import edu.jas.structure.RingElem;
-
 import edu.jas.poly.ExpVector;
-import edu.jas.poly.GenPolynomial;
-
 import edu.jas.poly.GenSolvablePolynomial;
 
-import edu.jas.util.DistHashTable;
+import edu.jas.structure.RingElem;
 
 
 /**

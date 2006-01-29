@@ -33,7 +33,7 @@ public class DistHashTableServer extends Thread {
     public final static int DEFAULT_PORT = ChannelFactory.DEFAULT_PORT + 99;
     protected final ChannelFactory cf;
 
-    protected List servers;
+    protected List<DHTBroadcaster> servers;
 
     private boolean goon = true;
     private Thread mythread = null;
@@ -66,7 +66,7 @@ public class DistHashTableServer extends Thread {
     public DistHashTableServer(ChannelFactory cf) {
         listElem = new DHTCounter(0);
         this.cf = cf;
-        servers = new ArrayList();
+        servers = new ArrayList<DHTBroadcaster>();
         theList = new TreeMap();
     }
 

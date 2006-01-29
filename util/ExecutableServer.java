@@ -27,7 +27,7 @@ public class ExecutableServer extends Thread {
     private static Logger logger = Logger.getLogger(ExecutableServer.class);
 
     protected final ChannelFactory cf;
-    protected ArrayList servers = null;
+    protected List<Executor> servers = null;
 
     /**
      * DEFAULT_PORT to listen to.
@@ -53,7 +53,7 @@ public class ExecutableServer extends Thread {
 
     public ExecutableServer(ChannelFactory cf) {
 	this.cf = cf;
-	servers = new ArrayList();
+	servers = new ArrayList<Executor>();
     }
 
 
@@ -177,11 +177,11 @@ class Executor extends Thread /*implements Runnable*/ {
 
     private static Logger logger = Logger.getLogger(Executor.class);
     protected final SocketChannel channel;
-    private List list;
+    //private List<Executor> list;
 
-    Executor(SocketChannel s, List p) {
+    Executor(SocketChannel s, List<Executor> p) {
 	channel = s;
-	list = p;
+	//list = p;
     } 
 
 /**

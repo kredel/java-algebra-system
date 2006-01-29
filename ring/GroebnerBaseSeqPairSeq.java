@@ -6,7 +6,6 @@ package edu.jas.ring;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Iterator;
 import java.util.ListIterator;
 
 import org.apache.log4j.Logger;
@@ -219,7 +218,7 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>>
                }
                F2G.add( row );
            }
-           exgb = new ExtendedGB(F,G,F2G,G2F);
+           exgb = new ExtendedGB<C>(F,G,F2G,G2F);
            //System.out.println("exgb 1 = " + exgb);
            return exgb;
         }
@@ -231,7 +230,7 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>>
         GenPolynomial<C> S;
         GenPolynomial<C> x;
         GenPolynomial<C> y;
-        GenPolynomial<C> z;
+        //GenPolynomial<C> z;
         while ( pairlist.hasNext() && ! oneInGB ) {
               pair = pairlist.getNext();
               if ( pair == null ) { 
@@ -332,12 +331,12 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>>
               G2F.add( row );
         }
         if ( debug ) {
-           exgb = new ExtendedGB(F,G,F2G,G2F);
+           exgb = new ExtendedGB<C>(F,G,F2G,G2F);
            logger.info("exgb unnorm = " + exgb);
         }
         G2F = normalizeMatrix( F.size(), G2F );
         if ( debug ) {
-           exgb = new ExtendedGB(F,G,F2G,G2F);
+           exgb = new ExtendedGB<C>(F,G,F2G,G2F);
            logger.info("exgb nonmin = " + exgb);
            boolean t2 = isReductionMatrix( exgb );
            logger.debug("exgb t2 = " + t2);
@@ -362,7 +361,7 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>>
             }
             F2G.add( row );
         }
-        return new ExtendedGB(F,G,F2G,G2F);
+        return new ExtendedGB<C>(F,G,F2G,G2F);
     }
 
 
@@ -505,10 +504,10 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>>
                           List<GenPolynomial<C>> Gp,
                           List<List<GenPolynomial<C>>> M) {  
         if ( Gp == null ) {
-           return new ExtendedGB(null,Gp,null,M);
+           return new ExtendedGB<C>(null,Gp,null,M);
         }
         if ( Gp.size() <= 1 ) {
-           return new ExtendedGB(null,Gp,null,M);
+           return new ExtendedGB<C>(null,Gp,null,M);
         }
         List<GenPolynomial<C>> G;
         List<GenPolynomial<C>> F;
@@ -581,7 +580,7 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>>
             }
         }
         if ( F.size() <= 1 || fix == -1 ) {
-           return new ExtendedGB(null,F,null,Mf);
+           return new ExtendedGB<C>(null,F,null,Mf);
         }
         // must return, since extended normalform has not correct order of polys
         /*
@@ -609,7 +608,7 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>>
         }
         // does Mf need renormalization?
         */
-        return new ExtendedGB(null,F,null,Mf);
+        return new ExtendedGB<C>(null,F,null,Mf);
     }
 
 }

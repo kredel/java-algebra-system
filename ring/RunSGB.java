@@ -4,21 +4,16 @@
 
 package edu.jas.ring;
 
-import java.util.ArrayList;
-import java.util.List;
-//import java.util.Iterator;
-import java.io.IOException;
 import java.io.FileNotFoundException;
-import java.io.Reader;
 import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
+import java.util.List;
 
 import org.apache.log4j.BasicConfigurator;
 
-import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenPolynomialTokenizer;
 import edu.jas.poly.PolynomialList;
-import edu.jas.util.ExecutableServer;
 
   /**
    * Simple setup to run a solvable GB example. <br />

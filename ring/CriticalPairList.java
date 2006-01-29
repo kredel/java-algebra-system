@@ -4,24 +4,21 @@
 
 package edu.jas.ring;
 
-import java.util.List;
 import java.util.ArrayList;
 import java.util.BitSet;
-import java.util.Iterator;
 import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 
-import edu.jas.structure.RingElem;
-
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
-import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
-import edu.jas.poly.TermOrder;
+import edu.jas.structure.RingElem;
 
 /**
  * Critical pair list management.

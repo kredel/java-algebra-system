@@ -11,7 +11,7 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import edu.jas.structure.RingElem;
+//import edu.jas.structure.RingElem;
 
 import edu.jas.arith.BigRational;
 
@@ -55,7 +55,7 @@ public static Test suite() {
      return suite;
    }
 
-   private final static int bitlen = 100;
+   //private final static int bitlen = 100;
 
    ModuleList<BigRational> m;
    PolynomialList<BigRational> p;

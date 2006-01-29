@@ -6,12 +6,8 @@ package edu.jas.ring;
 
 //import edu.jas.poly.GroebnerBase;
 
-import java.util.List;
-import java.util.Iterator;
 import java.util.ArrayList;
-import java.io.IOException;
-import java.io.Reader;
-import java.io.StringReader;
+import java.util.List;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -20,17 +16,12 @@ import junit.framework.TestSuite;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
-//import edu.jas.structure.PrettyPrint;
-import edu.jas.arith.ModInteger;
 import edu.jas.arith.BigRational;
+
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
-import edu.jas.poly.GenPolynomialTokenizer;
 import edu.jas.poly.PolynomialList;
 import edu.jas.poly.TermOrder;
-
-import edu.jas.ring.GroebnerBase;
-import edu.jas.ring.GroebnerBaseSeq;
 
 /**
  * Ideal Test using JUnit.

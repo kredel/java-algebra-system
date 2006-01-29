@@ -6,7 +6,6 @@ package edu.jas.ring;
 
 
 import java.util.List;
-import java.util.Iterator;
 import java.util.ArrayList;
 import java.io.IOException;
 import java.io.Reader;
@@ -29,7 +28,7 @@ import edu.jas.ring.GroebnerBase;
 import edu.jas.ring.GroebnerBaseSeqPairSeq;
 import edu.jas.ring.ExtendedGB;
 
-import edu.jas.module.Syzygy;
+//import edu.jas.module.Syzygy;
 
 
 /**
@@ -193,7 +192,6 @@ public class GroebnerBaseSeqPairSeqTest extends TestCase {
      L = new ArrayList<GenPolynomial<BigRational>>();
 
      ExtendedGB<BigRational> exgb;
-     Syzygy<BigRational> syz = new Syzygy<BigRational>();
 
      a = fac.random(kl, ll, el, q );
      b = fac.random(kl, ll, el, q );
@@ -276,8 +274,7 @@ public class GroebnerBaseSeqPairSeqTest extends TestCase {
 
 
      ExtendedGB<BigRational> exgb;
-     Syzygy<BigRational> syz = new Syzygy<BigRational>();
-
+     
      exgb = bb.extGB(F.list);
      //System.out.println("exgb = " + exgb );
      assertTrue("isGB( GB(Trinks7) )", bb.isGB(exgb.G) );

@@ -10,14 +10,10 @@ import java.util.ListIterator;
 
 import org.apache.log4j.Logger;
 
-import edu.jas.structure.RingElem;
-
 import edu.jas.poly.ExpVector;
-import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
 
-import edu.jas.ring.OrderedPairlist;
-import edu.jas.ring.Reduction;
+import edu.jas.structure.RingElem;
 
 
 /**

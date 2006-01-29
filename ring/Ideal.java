@@ -461,7 +461,7 @@ public class Ideal<C extends RingElem<C>> implements Serializable {
       List< GenPolynomial<C> > H;
       H = new ArrayList<GenPolynomial<C>>( 1 );
       H.add( h );
-      Ideal<C> Hi = new Ideal( getRing(), H, true );
+      Ideal<C> Hi = new Ideal<C>( getRing(), H, true );
 
       Ideal<C> I = this.intersect( Hi );
 

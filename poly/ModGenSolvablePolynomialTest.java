@@ -11,7 +11,7 @@ import junit.framework.TestSuite;
 import org.apache.log4j.BasicConfigurator;
 
 import edu.jas.arith.ModInteger;
-import edu.jas.structure.RingElem;
+//import edu.jas.structure.RingElem;
 
 
 /**

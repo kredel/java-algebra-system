@@ -9,15 +9,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 
-import edu.jas.structure.RingFactory;
+//import edu.jas.structure.RingFactory;
 import edu.jas.structure.RingElem;
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 
-import edu.jas.poly.PolynomialList;
-import edu.jas.poly.OrderedPolynomialList;
+//import edu.jas.poly.PolynomialList;
+//import edu.jas.poly.OrderedPolynomialList;
 
 
 /**

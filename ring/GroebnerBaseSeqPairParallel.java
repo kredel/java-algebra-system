@@ -239,7 +239,7 @@ class ReducerSeqPair<C extends RingElem<C>> implements Runnable {
 	private CriticalPairList<C> pairlist;
 	private Terminator pool;
         private ReductionPar<C> red;
-        private static Logger logger = Logger.getLogger(Reducer.class);
+        private static Logger logger = Logger.getLogger(ReducerSeqPair.class);
 
 	ReducerSeqPair(Terminator fin, 
                 List<GenPolynomial<C>> G, 
@@ -346,7 +346,7 @@ class MiReducerSeqPair<C extends RingElem<C>> implements Runnable {
 	private GenPolynomial<C> H;
         private ReductionPar<C> red;
 	private Semaphore done = new Semaphore(0);
-        private static Logger logger = Logger.getLogger(MiReducer.class);
+        private static Logger logger = Logger.getLogger(MiReducerSeqPair.class);
 
 	MiReducerSeqPair(List<GenPolynomial<C>> G, 
                          List<GenPolynomial<C>> F, 

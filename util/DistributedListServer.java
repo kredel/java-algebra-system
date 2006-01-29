@@ -33,7 +33,7 @@ public class DistributedListServer extends Thread {
     public final static int DEFAULT_PORT = ChannelFactory.DEFAULT_PORT + 99;
     protected final ChannelFactory cf;
 
-    protected List servers;
+    protected List<Broadcaster> servers;
 
     private boolean goon = true;
     private Thread mythread = null;
@@ -65,7 +65,7 @@ public class DistributedListServer extends Thread {
     public DistributedListServer(ChannelFactory cf) {
 	listElem = new Counter(0);
 	this.cf = cf;
-	servers = new ArrayList();
+	servers = new ArrayList<Broadcaster>();
 	theList = new TreeMap();
     }
 

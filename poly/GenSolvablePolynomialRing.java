@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 
-import java.util.List;
+//import java.util.List;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -21,7 +21,7 @@ import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.structure.PrettyPrint;
 
-import edu.jas.poly.GenPolynomial;
+//import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.TermOrder;
 import edu.jas.poly.ExpVector;
 

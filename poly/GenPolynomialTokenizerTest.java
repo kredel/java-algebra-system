@@ -14,7 +14,7 @@ import java.io.StringReader;
 
 import java.util.List;
 
-import edu.jas.structure.RingElem;
+//import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
 
 import edu.jas.arith.BigRational;

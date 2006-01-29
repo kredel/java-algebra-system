@@ -6,26 +6,20 @@ package edu.jas.ring;
 
 import java.io.IOException;
 import java.io.Serializable;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
 import org.apache.log4j.Logger;
 
-import edu.jas.structure.RingElem;
-
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
-//import edu.jas.poly.GenSolvablePolynomial;
-import edu.jas.ring.OrderedPairlist;
-
+import edu.jas.structure.RingElem;
 import edu.jas.util.DistHashTable;
 import edu.jas.util.DistHashTableServer;
 import edu.jas.util.Terminator;
 import edu.jas.util.ThreadPool;
 
-import edu.unima.ky.parallel.Semaphore;
 import edu.unima.ky.parallel.ChannelFactory;
 import edu.unima.ky.parallel.Semaphore;
 import edu.unima.ky.parallel.SocketChannel;
@@ -360,7 +354,7 @@ class ReducerServer<C extends RingElem<C>> implements Runnable {
       private ChannelFactory cf;
       private SocketChannel pairChannel;
       private DistHashTable theList;
-      private List<GenPolynomial<C>> G;
+      //private List<GenPolynomial<C>> G;
       private OrderedPairlist<C> pairlist;
       private static Logger logger = Logger.getLogger(ReducerServer.class);
 
@@ -373,7 +367,7 @@ class ReducerServer<C extends RingElem<C>> implements Runnable {
             pool = fin;
             this.cf = cf;
             theList = dl;
-            this.G = G;
+            //this.G = G;
             pairlist = L;
       } 
 
@@ -391,9 +385,9 @@ class ReducerServer<C extends RingElem<C>> implements Runnable {
               logger.debug("pairChannel = "+pairChannel);
            }
            Pair<C> pair;
-           GenPolynomial<C> pi;
-           GenPolynomial<C> pj;
-           GenPolynomial<C> S;
+           //GenPolynomial<C> pi;
+           //GenPolynomial<C> pj;
+           //GenPolynomial<C> S;
            GenPolynomial<C> H = null;
            boolean set = false;
            boolean goon = true;
@@ -704,10 +698,10 @@ class ReducerClient<C extends RingElem<C>> implements Runnable {
            GenPolynomial<C> pj;
            GenPolynomial<C> S;
            GenPolynomial<C> H = null;
-           boolean set = false;
+           //boolean set = false;
            boolean goon = true;
            int reduction = 0;
-           int sleeps = 0;
+           //int sleeps = 0;
            Integer pix;
            Integer pjx;
 

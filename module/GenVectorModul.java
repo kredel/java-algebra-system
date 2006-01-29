@@ -16,10 +16,10 @@ import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
-import edu.jas.structure.ModulElem;
+//import edu.jas.structure.ModulElem;
 import edu.jas.structure.ModulFactory;
 
-import edu.jas.poly.GenPolynomial;
+//import edu.jas.poly.GenPolynomial;
 
 
 /**
@@ -48,7 +48,7 @@ public class GenVectorModul<C extends RingElem<C> >
     public GenVectorModul(RingFactory< C > b, int s) {
         coFac = b;
         cols = s;
-        List<C> z = new ArrayList( cols ); 
+        List<C> z = new ArrayList<C>( cols ); 
         for ( int i = 0; i < cols; i++ ) {
             z.add( coFac.getZERO() );
         }

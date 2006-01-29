@@ -10,7 +10,7 @@ import junit.framework.TestSuite;
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.arith.ModInteger;
-import edu.jas.structure.RingElem;
+//import edu.jas.structure.RingElem;
 
 
 /**
@@ -43,7 +43,7 @@ public class ModGenPolynomialTest extends TestCase {
      return suite;
    }
 
-   private final static int bitlen = 100;
+   //private final static int bitlen = 100;
 
    GenPolynomialRing<ModInteger> fac;
 

@@ -13,15 +13,13 @@ import junit.framework.TestSuite;
 
 import org.apache.log4j.BasicConfigurator;
 
-import edu.jas.structure.RingElem;
-import edu.jas.structure.RingFactory;
-import edu.jas.arith.BigRational;
 import edu.jas.arith.BigComplex;
-import edu.jas.arith.BigQuaternion;
 import edu.jas.arith.BigInteger;
-
+import edu.jas.arith.BigQuaternion;
+import edu.jas.arith.BigRational;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
+import edu.jas.structure.RingElem;
 
 /**
  * DistributedList Test using JUnit.

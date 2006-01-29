@@ -10,7 +10,7 @@ import junit.framework.TestSuite;
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.arith.BigComplex;
-import edu.jas.structure.RingElem;
+//import edu.jas.structure.RingElem;
 
 
 /**
@@ -43,7 +43,7 @@ public class ComplexGenPolynomialTest extends TestCase {
      return suite;
    }
 
-   private final static int bitlen = 100;
+   //private final static int bitlen = 100;
 
    GenPolynomialRing<BigComplex> fac;
 

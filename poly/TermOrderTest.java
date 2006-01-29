@@ -6,8 +6,6 @@ package edu.jas.poly;
 
 //import edu.jas.poly.TermOrder;
 
-import java.util.Arrays;
-
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -45,7 +43,7 @@ public class TermOrderTest extends TestCase {
      return suite;
    }
 
-   private final static int bitlen = 100;
+   //private final static int bitlen = 100;
 
    ExpVector a;
    ExpVector b;
@@ -134,7 +132,7 @@ public class TermOrderTest extends TestCase {
      assertEquals("x = y",x,y);
      //System.out.println("s = " + s);
 
-     int r = 5;
+     //int r = 5;
      int sp = 3;
      w = new long [][] { new long[] { 5l, 4l, 3l, 2l, 1l } };
 

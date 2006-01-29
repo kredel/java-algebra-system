@@ -4,7 +4,6 @@
 
 package edu.jas.arith;
 
-import edu.jas.structure.RingElem;
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;

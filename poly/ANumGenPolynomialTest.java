@@ -8,7 +8,7 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import edu.jas.structure.RingElem;
+//import edu.jas.structure.RingElem;
 
 import edu.jas.arith.BigRational;
 
@@ -46,7 +46,7 @@ public class ANumGenPolynomialTest extends TestCase {
      return suite;
    }
 
-   private final static int bitlen = 100;
+   //private final static int bitlen = 100;
 
    GenPolynomialRing<AlgebraicNumber<BigRational>> fac;
    AlgebraicNumber<BigRational> cfac;

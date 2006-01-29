@@ -5,10 +5,10 @@
 
 package edu.jas.poly;
 
-import java.util.List;
-import java.util.ArrayList;
+//import java.util.List;
+//import java.util.ArrayList;
 import java.util.Map;
-import java.util.Map.Entry;
+//import java.util.Map.Entry;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.Iterator;
@@ -16,7 +16,7 @@ import java.util.Iterator;
 import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
-import edu.jas.structure.RingFactory;
+//import edu.jas.structure.RingFactory;
 import edu.jas.structure.PrettyPrint;
 
 import edu.jas.poly.ExpVector;
@@ -698,7 +698,7 @@ public class GenPolynomial<C extends RingElem<C> >
         GenPolynomial<C> h;
         GenPolynomial<C> q = ring.getZERO().clone();
         GenPolynomial<C> r = this.clone(); 
-        GenPolynomial<C> rx; 
+        //GenPolynomial<C> rx; 
         while ( ! r.isZERO() ) {
              ExpVector f = r.leadingExpVector();
              //System.out.println("f = " + f);
@@ -706,11 +706,11 @@ public class GenPolynomial<C extends RingElem<C> >
                  C a = r.leadingBaseCoefficient();
 		 f = ExpVector.EVDIF( f, e );
                  //logger.info("red div = " + e);
-                 C ax = a;
+                 //C ax = a;
                  a = a.multiply( ci );
                  q = q.add( a, f );
                  h = S.multiply( a, f );
-                 rx = r;
+                 //rx = r;
                  r = r.subtract( h );
              } else {
                  break;

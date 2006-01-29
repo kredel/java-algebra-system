@@ -4,10 +4,9 @@
 
 package edu.jas.poly;
 
-import edu.jas.arith.BigRational;
-import edu.jas.structure.RingElem;
-
 import org.apache.log4j.Logger;
+
+import edu.jas.structure.RingElem;
 
 
 /**
@@ -52,7 +51,7 @@ public class WeylRelations<C extends RingElem<C>> {
         RelationTable<C> table = ring.table;
         int r = ring.nvar;
         int m =  r / 2;
-        ExpVector z = ring.evzero;
+        //ExpVector z = ring.evzero;
         GenSolvablePolynomial<C> one  = ring.getONE().clone();
         GenSolvablePolynomial<C> zero = ring.getZERO().clone();
         for ( int i = m; i < r; i++ ) {

@@ -23,7 +23,7 @@ public class ThreadPool {
     // should be expressed using strategy pattern
     // List or Collection is not appropriate
                                    // LIFO strategy for recursion
-    protected LinkedList jobstack; // FIFO strategy for GB
+    protected LinkedList<Runnable> jobstack; // FIFO strategy for GB
 
     protected StrategyEnumeration strategy = StrategyEnumeration.LIFO;
 
@@ -68,7 +68,7 @@ public class ThreadPool {
  */ 
     public ThreadPool(StrategyEnumeration strategy, int size) {
         this.strategy = strategy;
-        jobstack = new LinkedList(); // ok for all strategies ?
+        jobstack = new LinkedList<Runnable>(); // ok for all strategies ?
         workers = new PoolThread[size];
         for (int i = 0; i < workers.length; i++) {
             workers[i] = new PoolThread(this);

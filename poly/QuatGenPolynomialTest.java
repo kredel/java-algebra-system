@@ -7,10 +7,7 @@ package edu.jas.poly;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-
-import edu.jas.poly.GenPolynomial;
 import edu.jas.arith.BigQuaternion;
-import edu.jas.structure.RingElem;
 
 
 /**
@@ -42,7 +39,7 @@ public class QuatGenPolynomialTest extends TestCase {
      return suite;
    }
 
-   private final static int bitlen = 100;
+   //private final static int bitlen = 100;
 
    GenPolynomialRing<BigQuaternion> fac;
 

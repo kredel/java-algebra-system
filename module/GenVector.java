@@ -10,11 +10,11 @@ import java.util.ArrayList;
 import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
-import edu.jas.structure.RingFactory;
+//import edu.jas.structure.RingFactory;
 import edu.jas.structure.ModulElem;
-import edu.jas.structure.ModulFactory;
+//import edu.jas.structure.ModulFactory;
 
-import edu.jas.poly.GenPolynomial;
+//import edu.jas.poly.GenPolynomial;
 
 
 /**
@@ -173,7 +173,6 @@ public class GenVector<C extends RingElem<C> >
      */
     public GenVector<C> negate() {
         ArrayList<C> a = new ArrayList<C>( modul.cols );
-        int i = 0;
         for ( C c : val ) {
             C e = c.negate();
             a.add( e );
@@ -188,7 +187,6 @@ public class GenVector<C extends RingElem<C> >
      */
     public GenVector<C> scalarMultiply(C s) {
         ArrayList<C> a = new ArrayList<C>( modul.cols );
-        int i = 0;
         for ( C c : val ) {
             C e = c.multiply( s );
             a.add( e );
@@ -203,7 +201,6 @@ public class GenVector<C extends RingElem<C> >
      */
     public GenVector<C> leftScalarMultiply(C s) {
         ArrayList<C> a = new ArrayList<C>( modul.cols );
-        int i = 0;
         for ( C c : val ) {
             C e = s.multiply( c );
             a.add( e );

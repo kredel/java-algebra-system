@@ -8,7 +8,7 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import edu.jas.structure.RingElem;
+//import edu.jas.structure.RingElem;
 
 //import edu.jas.arith.BigRational;
 import edu.jas.arith.ModInteger;
@@ -47,7 +47,7 @@ public class GFGenPolynomialTest extends TestCase {
      return suite;
    }
 
-   private final static int bitlen = 100;
+   //private final static int bitlen = 100;
 
    GenPolynomialRing<AlgebraicNumber<ModInteger>> fac;
    AlgebraicNumber<ModInteger> cfac;

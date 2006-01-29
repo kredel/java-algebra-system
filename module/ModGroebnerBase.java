@@ -4,9 +4,9 @@
 
 package edu.jas.module;
 
-import java.util.ArrayList;
+//import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
+//import java.util.ListIterator;
 
 import org.apache.log4j.Logger;
 
@@ -15,9 +15,9 @@ import edu.jas.structure.RingElem;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.PolynomialList;
 
-import edu.jas.poly.GenSolvablePolynomial;
+//import edu.jas.poly.GenSolvablePolynomial;
 
-import edu.jas.ring.Reduction;
+//import edu.jas.ring.Reduction;
 import edu.jas.ring.GroebnerBase;
 import edu.jas.ring.GroebnerBaseSeq;
 

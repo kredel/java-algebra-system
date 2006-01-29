@@ -6,16 +6,13 @@ package edu.jas.poly;
 
 //import edu.jas.poly.RelationTable;
 
-import edu.jas.arith.BigRational;
-import edu.jas.structure.RingElem;
-
-import java.util.Arrays;
-
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.apache.log4j.BasicConfigurator;
+
+import edu.jas.arith.BigRational;
 
 /**
  * RelationTable Test using JUnit.
@@ -87,7 +84,7 @@ public class RelationTableTest extends TestCase {
      table = ring.table; 
      assertEquals("size() = 0",0,table.size());
 
-     ExpVector z = ring.evzero;
+     //ExpVector z = ring.evzero;
      ExpVector e = new ExpVector(rl,3,1);
      ExpVector f = new ExpVector(rl,2,1); // insert in empty
 
@@ -153,7 +150,7 @@ public class RelationTableTest extends TestCase {
      table = ring.table; 
      assertEquals("size() = 0",0,table.size());
 
-     ExpVector z = ring.evzero;
+     //ExpVector z = ring.evzero;
      ExpVector e = new ExpVector(rl,3,1);
      ExpVector f = new ExpVector(rl,2,1); // insert in empty
 
@@ -200,7 +197,7 @@ public class RelationTableTest extends TestCase {
      table = ring.table; 
      assertEquals("size() = 0",0,table.size());
 
-     ExpVector z = ring.evzero;
+     //ExpVector z = ring.evzero;
      ExpVector e = new ExpVector(rl,3,1);
      ExpVector f = new ExpVector(rl,2,1); // insert in empty
 
@@ -306,7 +303,7 @@ public class RelationTableTest extends TestCase {
      table = ring.table; 
      assertEquals("size() = 0",0,table.size());
 
-     ExpVector z = ring.evzero;
+     //ExpVector z = ring.evzero;
      ExpVector e = new ExpVector(rl,3,1);
      ExpVector f = new ExpVector(rl,2,1);
 
@@ -367,16 +364,16 @@ public class RelationTableTest extends TestCase {
      table = ring.table; 
      assertEquals("size() = 0",0,table.size());
 
-     ExpVector z = ring.evzero;
+     //ExpVector z = ring.evzero;
      ExpVector e = new ExpVector(rl,3,1);
      ExpVector f = new ExpVector(rl,2,1);
 
      ExpVector ef = ExpVector.EVSUM(e,f);
 
-     GenSolvablePolynomial<BigRational> a = ring.getONE();
+     //GenSolvablePolynomial<BigRational> a = ring.getONE();
      GenSolvablePolynomial<BigRational> b = ring.getONE().multiply(ef);
-     GenSolvablePolynomial<BigRational> rel 
-        = (GenSolvablePolynomial<BigRational>)a.add(b);
+     //GenSolvablePolynomial<BigRational> rel 
+     //   = (GenSolvablePolynomial<BigRational>)a.add(b);
 
      TableRelation<BigRational> r = table.lookup(e,f);
      //System.out.println("relation = " + r);

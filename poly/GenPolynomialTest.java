@@ -15,7 +15,7 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 
 import edu.jas.structure.RingElem;
-import edu.jas.structure.RingFactory;
+//import edu.jas.structure.RingFactory;
 
 
 /**
@@ -48,7 +48,7 @@ public class GenPolynomialTest extends TestCase {
      return suite;
    }
 
-   private final static int bitlen = 100;
+   //private final static int bitlen = 100;
 
    int rl = 6; 
    int kl = 10;

@@ -11,7 +11,7 @@ import junit.framework.TestSuite;
 
 import edu.jas.arith.BigRational;
 
-import edu.jas.structure.RingElem;
+//import edu.jas.structure.RingElem;
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.AlgebraicNumber;
@@ -47,7 +47,7 @@ public class AlgebraicNumberTest extends TestCase {
      return suite;
    }
 
-   private final static int bitlen = 100;
+   //private final static int bitlen = 100;
 
    AlgebraicNumber<BigRational> fac;
    GenPolynomialRing<BigRational> mfac;

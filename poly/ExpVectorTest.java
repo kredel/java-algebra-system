@@ -44,7 +44,7 @@ public class ExpVectorTest extends TestCase {
      return suite;
    }
 
-   private final static int bitlen = 100;
+   //private final static int bitlen = 100;
 
    ExpVector a;
    ExpVector b;

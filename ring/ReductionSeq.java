@@ -4,23 +4,15 @@
 
 package edu.jas.ring;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
-import java.util.Iterator;
-import java.util.Collection;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import edu.jas.structure.RingElem;
-
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 
-import edu.jas.poly.GenSolvablePolynomial;
-
-import edu.jas.util.DistHashTable;
+import edu.jas.structure.RingElem;
 
 
 /**
@@ -90,7 +82,7 @@ public class ReductionSeq<C extends RingElem<C>>
         boolean mt = false;
         GenPolynomial<C> R = Ap.ring.getZERO();
 
-        GenPolynomial<C> T = null;
+        //GenPolynomial<C> T = null;
         GenPolynomial<C> Q = null;
         GenPolynomial<C> S = Ap;
         while ( S.length() > 0 ) { 
@@ -189,7 +181,8 @@ public class ReductionSeq<C extends RingElem<C>>
 	      } else { 
 		 e = ExpVector.EVDIF( e, htl[i] );
                  //logger.info("red div = " + e);
-                 a = a.divide( (C)lbc[i] );
+                 C c = (C)lbc[i];
+				 a = a.divide( c );
                  Q = p[i].multiply( a, e );
                  S = S.subtract( Q );
                  fac = row.get(i);

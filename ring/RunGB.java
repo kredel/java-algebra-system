@@ -4,17 +4,14 @@
 
 package edu.jas.ring;
 
-import java.util.ArrayList;
-import java.util.List;
-//import java.util.Iterator;
-import java.io.IOException;
 import java.io.FileNotFoundException;
-import java.io.Reader;
 import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
+import java.util.List;
 
 import org.apache.log4j.BasicConfigurator;
 
-import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialTokenizer;
 import edu.jas.poly.PolynomialList;
 import edu.jas.util.ExecutableServer;
@@ -60,7 +57,7 @@ public class RunGB {
       }
 
       final int GB_SERVER_PORT = 7114; 
-      final int EX_CLIENT_PORT = GB_SERVER_PORT + 1000; 
+      //inal int EX_CLIENT_PORT = GB_SERVER_PORT + 1000; 
       int port = GB_SERVER_PORT;
 
       if ( kind.equals("cli") ) {
