@@ -7,7 +7,6 @@ package edu.jas.module;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Iterator;
-//import java.util.ListIterator;
 import java.util.Map;
 
 import java.io.Serializable;
@@ -15,8 +14,6 @@ import java.io.Serializable;
 import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
-
-//import edu.jas.arith.BigRational;
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
@@ -502,6 +499,56 @@ public class Syzygy<C extends RingElem<C>>  {
 
 
     /**
+     * Resolution of a polynomial list.
+     * @param C coefficient type.
+     * @param F a polynomial list of an arbitrary basis.
+     * @return a resolution of F.
+     */
+    public List // <ResPart<C>|ResPolPart<C>>
+           resolutionArbitrary(PolynomialList<C> F) {  
+        List<List<GenPolynomial<C>>> Z;
+        ModuleList<C> Zm;
+        List<GenPolynomial<C>> G;
+        PolynomialList<C> Gl = null;
+
+        //G = (new GroebnerBaseSeq<C>()).GB( F.list );
+        Z = zeroRelationsArbitrary( F.list );
+        //Gl = new PolynomialList<C>(F.ring, F.list);
+        Zm = new ModuleList<C>(F.ring, Z);
+
+        List R = resolutionArbitrary(Zm); //// <ResPart<C>|ResPolPart<C>>
+        R.add( 0, new ResPolPart<C>( F, Gl, Zm ) ); 
+        return R;
+    }
+
+
+    /**
+     * Resolution of a module.
+     * @param C coefficient type.
+     * @param M a module list of an arbitrary basis.
+     * @return a resolution of M.
+     */
+    public List<ResPart<C>>
+           resolutionArbitrary(ModuleList<C> M) {  
+        List<ResPart<C>> R = new ArrayList<ResPart<C>>();
+        ModuleList<C> MM = M;
+        ModuleList<C> GM = null;
+        ModuleList<C> Z;
+        ModGroebnerBase<C> mbb = new ModGroebnerBase<C>();
+        while (true) {
+          //GM = mbb.GB(MM);
+          Z = zeroRelationsArbitrary(MM);
+          R.add( new ResPart<C>(MM,GM,Z) );
+          if ( Z == null || Z.list == null || Z.list.size() == 0 ) {
+              break;
+          }
+          MM = Z;
+        }
+        return R;
+    }
+
+
+    /**
      * Syzygy module from arbitrary base.
      * @param C coefficient type.
      * @param F a polynomial list.
@@ -538,7 +585,6 @@ public class Syzygy<C extends RingElem<C>>  {
         if ( ! gb.isReductionMatrix(exgb) ) {
            logger.error("is reduction matrix ? false");
         }
-
         List<GenPolynomial<C>> G = exgb.G;
         List<List<GenPolynomial<C>>> G2F = exgb.G2F;
         List<List<GenPolynomial<C>>> F2G = exgb.F2G;
@@ -552,11 +598,9 @@ public class Syzygy<C extends RingElem<C>>  {
         if ( ! isZeroRelation(sg,G) ) {
            logger.error("is syzygy ? false");
         }
-
         List<List<GenPolynomial<C>>> sf;
         sf = new ArrayList<List<GenPolynomial<C>>>( sg.size() );
         //List<GenPolynomial<C>> row;
-
         for ( List<GenPolynomial<C>> r : sg ) {
             Iterator<GenPolynomial<C>> it = r.iterator();
             Iterator<List<GenPolynomial<C>>> jt = G2F.iterator();
@@ -584,8 +628,6 @@ public class Syzygy<C extends RingElem<C>>  {
             //System.out.println("\nrf = " + rf + "\n");
             sf.add( rf );
         }
-
-
         List<List<GenPolynomial<C>>> M;
         M = new ArrayList<List<GenPolynomial<C>>>( lenf );
         for ( List<GenPolynomial<C>> r : F2G ) {
@@ -628,7 +670,6 @@ public class Syzygy<C extends RingElem<C>>  {
         if ( ! pF.equals( pF2 ) ) {
            logger.error("is FAB = F ? false");
         }
-
         int sflen = sf.size();
         List<List<GenPolynomial<C>>> M2;
         M2 = new ArrayList<List<GenPolynomial<C>>>( lenf );
@@ -669,6 +710,68 @@ public class Syzygy<C extends RingElem<C>>  {
            logger.error("is syz sf ? false");
         }
         return sf;
+    }
+
+
+    /**
+     * Syzygy module from arbitrary module base.
+     * @param C coefficient type.
+     * @param M an arbitrary module base.
+     * @return syz(M), a basis for the module of syzygies for M.
+     */
+    public ModuleList<C> 
+           zeroRelationsArbitrary(ModuleList<C> M) {  
+        ModuleList<C> N = M;
+        if ( M == null || M.list == null) {
+            return N;
+        }
+        if ( M.rows == 0 || M.cols == 0 ) {
+            return N;
+        }
+        GenPolynomial<C> zero = M.ring.getZERO();
+        //System.out.println("zero = " + zero);
+
+        //ModuleList<C> Np = null;
+        PolynomialList<C> F = M.getPolynomialList();
+        int modv = M.cols; // > 0  
+        //System.out.println("modv = " + modv);
+        List<List<GenPolynomial<C>>> G = zeroRelationsArbitrary(modv,F.list);
+        if ( G == null ) {
+            return N;
+        }
+        List<List<GenPolynomial<C>>> Z 
+           = new ArrayList<List<GenPolynomial<C>>>();
+        for ( int i = 0; i < G.size(); i++ ) {
+            //F = new PolynomialList(F.ring,(List)G.get(i));
+            List<GenPolynomial<C>> Gi = G.get(i);
+            List<GenPolynomial<C>> Zi = new ArrayList<GenPolynomial<C>>();
+            // System.out.println("\nG("+i+") = " + G.get(i));
+            for ( int j = 0; j < Gi.size(); j++ ) {
+                //System.out.println("\nG("+i+","+j+") = " + Gi.get(j));
+                GenPolynomial<C> p = Gi.get(j);
+                if ( p != null ) {
+                   Map<ExpVector,GenPolynomial<C>> r = p.contract( M.ring );
+                   int s = 0;
+                   for ( GenPolynomial<C> vi : r.values() ) {
+                       Zi.add(vi); 
+                       s++;
+                   }
+                   if ( s == 0 ) {
+                       Zi.add(zero); 
+                   } else if ( s > 1 ) { // will not happen
+                       System.out.println("p = " + p );
+                       System.out.println("map("+i+","+j+") = " 
+                                          + r + ", size = " + r.size() );
+                       throw new RuntimeException("Map.size() > 1 = " + r.size());
+                   }
+                }
+            }
+            //System.out.println("\nZ("+i+") = " + Zi);
+            Z.add( Zi );
+        }
+        N = new ModuleList<C>(M.ring,Z);
+        //System.out.println("\n\nN = " + N);
+        return N;
     }
 
 }

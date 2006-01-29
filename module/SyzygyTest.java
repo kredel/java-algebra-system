@@ -324,6 +324,51 @@ public class SyzygyTest extends TestCase {
      L = F.list;
      K = sz.zeroRelationsArbitrary( L );
      assertTrue("is ZR( { a, b } )", sz.isZeroRelation(K,L) );
+ }
+
+
+/**
+ * Test sequential arbitrary module Syzygy.
+ * 
+ */
+ public void testSequentialArbitraryModSyzygy() {
+
+     W = new ArrayList<List<GenPolynomial<BigRational>>>();
+
+     assertTrue("not isZERO( a )", !a.isZERO() );
+     V = new ArrayList<GenPolynomial<BigRational>>();
+     V.add(a); V.add(zero); V.add(one);
+     W.add(V);
+     M = new ModuleList<BigRational>(fac,W);
+     assertTrue("isGB( { (a,0,1) } )", mbb.isGB(M) );
+
+     Z = sz.zeroRelationsArbitrary(M);
+     //System.out.println("Z = " + Z);
+     assertTrue("is ZR( { a) } )", sz.isZeroRelation(Z,M) );
+
+     assertTrue("not isZERO( b )", !b.isZERO() );
+     V = new ArrayList<GenPolynomial<BigRational>>();
+     V.add(b); V.add(one); V.add(zero);
+     W.add(V);
+     M = new ModuleList<BigRational>(fac,W);
+     //System.out.println("W = " + W.size() );
+
+     Z = sz.zeroRelationsArbitrary(M);
+     //System.out.println("Z = " + Z);
+     assertTrue("is ZR( { a, b } )", sz.isZeroRelation(Z,M) );
+
+     assertTrue("not isZERO( c )", !c.isZERO() );
+     V = new ArrayList<GenPolynomial<BigRational>>();
+     V.add(c); V.add(one); V.add(zero);
+     W.add(V);
+     M = new ModuleList<BigRational>(fac,W);
+     //System.out.println("W = " + W.size() );
+
+     Z = sz.zeroRelationsArbitrary(M);
+     //System.out.println("Z = " + Z);
+     //boolean b = Syzygy.isZeroRelation(Z,N);
+     //System.out.println("boolean = " + b);
+     assertTrue("is ZR( { a,b,c } )", sz.isZeroRelation(Z,M) );
 
  }
 
