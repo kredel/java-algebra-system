@@ -219,6 +219,30 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
                   List<GenSolvablePolynomial<C>> F);
 
 
+    /** 
+     * Solvable Extended Groebner base using critical pair class.
+     * @param C coefficient type.
+     * @param F solvable polynomial list.
+     * @return a container for an extended left Groebner base of F.
+     */
+    public SolvableExtendedGB<C>  
+           extLeftGB( List<GenSolvablePolynomial<C>> F ) {
+        return extLeftGB(0,F); 
+    }
+
+
+    /**
+     * Solvable Extended Groebner base using critical pair class.
+     * @param C coefficient type.
+     * @param modv module variable number.
+     * @param F solvable polynomial list.
+     * @return a container for an extended left Groebner base of F.
+     */
+    public abstract SolvableExtendedGB<C> 
+                    extLeftGB( int modv, 
+                               List<GenSolvablePolynomial<C>> F );
+
+
     /**
      * Left minimal ordered groebner basis.
      * @param C coefficient type.
