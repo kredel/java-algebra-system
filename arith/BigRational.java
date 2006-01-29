@@ -430,7 +430,7 @@ public class BigRational implements RingElem<BigRational>,
       double n = num.doubleValue();
       double d = den.doubleValue();
       double r = n/d;
-      System.out.print( String.valueOf( d ) );
+      System.out.print( String.valueOf( r ) );
       return;
     }
 
