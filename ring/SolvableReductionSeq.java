@@ -179,7 +179,7 @@ public class SolvableReductionSeq<C extends RingElem<C>>
                  R = (GenSolvablePolynomial<C>)R.add( a, e );
                  S = (GenSolvablePolynomial<C>)S.subtract( a, e ); 
 		 // System.out.println(" S = " + S);
-                 throw new RuntimeException("Syzygy no leftGB");
+                 // throw new RuntimeException("Syzygy no leftGB");
 	      } else { 
 		 e = ExpVector.EVDIF( e, htl[i] );
                  //logger.info("red div = " + e);

@@ -28,6 +28,7 @@ public abstract class SolvableReductionAbstract<C extends RingElem<C>>
                       implements SolvableReduction<C> {
 
     private static Logger logger = Logger.getLogger(SolvableReductionAbstract.class);
+    private boolean debug = logger.isDebugEnabled();
 
 
     /**
@@ -241,6 +242,62 @@ public abstract class SolvableReductionAbstract<C extends RingElem<C>>
         }
         //System.out.println();
         return P;
+    }
+
+
+    /**
+     * Is reduction of normal form.
+     * @param row recording matrix, is modified.
+     * @param Pp a solvable polynomial list for reduction.
+     * @param Ap a solvable polynomial.
+     * @param Np nf(Pp,Ap), a left normal form of Ap wrt. Pp.
+     * @return true, if Np + sum( row[i]*Pp[i] ) == Ap, else false.
+     */
+
+    public boolean 
+           isLeftReductionNF(List<GenSolvablePolynomial<C>> row,
+                             List<GenSolvablePolynomial<C>> Pp, 
+                             GenSolvablePolynomial<C> Ap,
+                             GenSolvablePolynomial<C> Np) {
+        if ( row == null && Pp != null ) {
+            return false;
+        }
+        if ( row != null && Pp == null ) {
+            return false;
+        }
+        if ( row.size() != Pp.size() ) {
+            return false;
+        }
+        GenSolvablePolynomial<C> t = Np;
+        GenSolvablePolynomial<C> r;
+        GenSolvablePolynomial<C> p;
+        for ( int m = 0; m < Pp.size(); m++ ) {
+            r = row.get(m);
+            p = Pp.get(m);
+            if ( r != null && p != null ) {
+               if ( t == null ) {
+                  t = r.multiply(p);
+               } else {
+                  t = (GenSolvablePolynomial<C>)t.add( r.multiply(p) );
+               }
+            }
+            //System.out.println("r = " + r );
+            //System.out.println("p = " + p );
+        }
+        if ( debug ) {
+           logger.info("t = " + t );
+           logger.info("a = " + Ap );
+        }
+        if ( t == null ) {
+           if ( Ap == null ) {
+              return true;
+           } else {
+              return Ap.isZERO();
+           }
+        } else {
+           t = (GenSolvablePolynomial<C>)t.subtract( Ap );
+           return t.isZERO();
+        }
     }
 
 }

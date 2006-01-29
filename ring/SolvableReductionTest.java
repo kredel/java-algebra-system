@@ -223,4 +223,58 @@ public class SolvableReductionTest extends TestCase {
  }
 
 
+/**
+ * Test Rat reduction recording.
+ * 
+ */
+ public void testRatReductionRecording() {
+
+     List<GenSolvablePolynomial<BigRational>> row = null;
+
+
+     a = fac.random(kl, ll, el, q );
+     b = fac.random(kl, ll, el, q );
+     c = fac.random(kl, ll, el, q );
+     d = fac.random(kl, ll, el, q );
+
+     assertTrue("not isZERO( a )", !a.isZERO() );
+
+     L = new ArrayList<GenSolvablePolynomial<BigRational>>();
+
+     L.add(a);
+     row = new ArrayList<GenSolvablePolynomial<BigRational>>( L.size() );
+     for ( int m = 0; m < L.size(); m++ ) {
+         row.add(null);
+     }
+     e = sred.leftNormalform( row, L, a );
+     assertTrue("isZERO( e )", e.isZERO() );
+     assertTrue("not isZERO( b )", !b.isZERO() );
+     assertTrue("is leftReduction ", sred.isLeftReductionNF(row,L,a,e) );
+
+     L.add(b);
+     row = new ArrayList<GenSolvablePolynomial<BigRational>>( L.size() );
+     for ( int m = 0; m < L.size(); m++ ) {
+         row.add(null);
+     }
+     e = sred.leftNormalform( row, L, b );
+     assertTrue("is leftReduction ", sred.isLeftReductionNF(row,L,b,e) );
+
+     L.add(c);
+     row = new ArrayList<GenSolvablePolynomial<BigRational>>( L.size() );
+     for ( int m = 0; m < L.size(); m++ ) {
+         row.add(null);
+     }
+     e = sred.leftNormalform( row, L, c );
+     assertTrue("is leftReduction ", sred.isLeftReductionNF(row,L,c,e) );
+
+     L.add(d);
+     row = new ArrayList<GenSolvablePolynomial<BigRational>>( L.size() );
+     for ( int m = 0; m < L.size(); m++ ) {
+         row.add(null);
+     }
+     e = sred.leftNormalform( row, L, d );
+     assertTrue("is leftReduction ", sred.isLeftReductionNF(row,L,d,e) );
+ }
+
+
 }

@@ -99,4 +99,19 @@ public interface SolvableReduction<C extends RingElem<C>>  {
            leftIrreducibleSet(List<GenSolvablePolynomial<C>> Pp); 
 
 
+    /**
+     * Is reduction of normal form.
+     * @param row recording matrix, is modified.
+     * @param Pp a solvable polynomial list for reduction.
+     * @param Ap a solvable polynomial.
+     * @param Np nf(Pp,Ap), a left normal form of Ap wrt. Pp.
+     * @return true, if Np + sum( row[i]*Pp[i] ) == Ap, else false.
+     */
+
+    public boolean 
+           isLeftReductionNF(List<GenSolvablePolynomial<C>> row,
+                             List<GenSolvablePolynomial<C>> Pp, 
+                             GenSolvablePolynomial<C> Ap,
+                             GenSolvablePolynomial<C> Np);
+
 }
