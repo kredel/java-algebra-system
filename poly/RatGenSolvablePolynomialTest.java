@@ -237,6 +237,8 @@ public class RatGenSolvablePolynomialTest extends TestCase {
      //System.out.println("table = " + table);
      //System.out.println("ring = " + ring);
 
+     boolean t = ring.isAssociative();
+     assertTrue("ring not isAssociative",t);
 
      a = ring.random(kl, ll, el, q );
      assertTrue("not isZERO( a )", !a.isZERO() );

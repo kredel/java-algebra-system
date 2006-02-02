@@ -61,6 +61,7 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
 
 
     private static Logger logger = Logger.getLogger(GenSolvablePolynomialRing.class);
+    private final boolean debug = logger.isDebugEnabled();
 
 
     /** The constructor creates a solvable polynomial factory object
@@ -367,6 +368,23 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
 
 
     /**
+     * Generate univariate solvable polynomial in a given variable.
+     * @param C coefficient type.
+     * @param i the index of the variable.
+     * @return X_i as solvable univariate polynomial.
+     */
+    public GenSolvablePolynomial<C> univariate(int i) {
+        GenSolvablePolynomial<C> p = ZERO;
+        if ( 0 <= i && i < nvar ) {
+           C one = coFac.getONE();
+           ExpVector e = new ExpVector(nvar,i,1);
+           p = (GenSolvablePolynomial<C>) p.add(one,e);
+        }
+        return p;
+    }
+
+
+    /**
      * Extend variables. Used e.g. in module embedding.
      * Extend number of variables by i.
      * @param i number of variables to extend.
@@ -395,6 +413,40 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
                                                pfac.tord, pfac.vars);
         spfac.table.contract(this.table);
         return spfac;
+    }
+
+
+    /**
+     * Test if the relations define an associative solvable ring.
+     * @param C coefficient type.
+     * @return true, if this ring is associative, else false.
+     */
+    public boolean isAssociative() {
+        GenSolvablePolynomial<C> Xi;
+        GenSolvablePolynomial<C> Xj;
+        GenSolvablePolynomial<C> Xk;
+        GenSolvablePolynomial<C> p;
+        GenSolvablePolynomial<C> q;
+        for ( int i = 0; i < nvar; i++ ) {
+            Xi = univariate(i);
+            for ( int j = i+1; j < nvar; j++ ) {
+                Xj = univariate(j);
+                for ( int k = j+1; k < nvar; k++ ) {
+                    Xk = univariate(k);
+                    p = Xk.multiply(Xj).multiply(Xi);
+                    q = Xk.multiply(Xj.multiply(Xi));
+                    if ( !p.equals(q) ) {
+                       if ( true || debug ) {
+                          logger.info("Xi = " + Xi + ", Xj = " + Xj + ", Xk = " + Xk);
+                          logger.info("p = ( Xk * Xj ) * Xi = " + p);
+                          logger.info("q = Xk * ( Xj * Xi ) = " + q);
+                       }
+                       return false;
+                    }
+                }
+            }
+        }
+        return true;
     }
 
 
