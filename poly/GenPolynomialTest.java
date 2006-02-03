@@ -4,6 +4,11 @@
 
 package edu.jas.poly;
 
+import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
+
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -69,7 +74,6 @@ public class GenPolynomialTest extends TestCase {
  * Test constructors and factory.
  * 
  */
-
  public void testConstructors() {
         // rational numbers
         BigRational rf = new BigRational();
@@ -169,6 +173,69 @@ public class GenPolynomialTest extends TestCase {
         //System.out.println("pfx = " + pfx);
 
     }
+
+
+/**
+ * Test extension and contraction.
+ * 
+ */
+ public void testExtendContract() {
+     // rational numbers
+     BigRational cf = new BigRational( 99 );
+     // System.out.println("cf = " + cf);
+
+     // polynomials over rational numbers
+     GenPolynomialRing<BigRational> pf = new GenPolynomialRing<BigRational>(cf,rl);
+     // System.out.println("pf = " + pf);
+
+     GenPolynomial<BigRational> a = pf.random(kl,ll,el,q);
+     //System.out.println("a = " + a);
+
+     int k = rl;
+     GenPolynomialRing<BigRational> pfe = pf.extend(k);
+     GenPolynomialRing<BigRational> pfec = pfe.contract(k);
+     assertEquals("pf == pfec",pf,pfec);
+
+     GenPolynomial<BigRational> ae = a.extend(pfe,0,0);
+
+     Map<ExpVector,GenPolynomial<BigRational>> m = ae.contract(pfec);
+     List<GenPolynomial<BigRational>> ml = new ArrayList<GenPolynomial<BigRational>>( m.values() );
+     GenPolynomial<BigRational> aec = ml.get(0);
+     assertEquals("a == aec",a,aec);
+     //System.out.println("ae = " + ae);
+     //System.out.println("aec = " + aec);
+ }
+
+
+/**
+ * Test reversion.
+ * 
+ */
+ public void testReverse() {
+     // rational numbers
+     BigRational cf = new BigRational( 99 );
+     // System.out.println("cf = " + cf);
+
+     // polynomials over rational numbers
+     GenPolynomialRing<BigRational> pf = new GenPolynomialRing<BigRational>(cf,rl);
+     //System.out.println("pf = " + pf);
+
+     GenPolynomial<BigRational> a = pf.random(kl,ll,el,q);
+     //System.out.println("a = " + a);
+
+     int k = rl;
+     GenPolynomialRing<BigRational> pfr = pf.reverse();
+     GenPolynomialRing<BigRational> pfrr = pfr.reverse();
+     assertEquals("pf == pfrr",pf,pfrr);
+     //System.out.println("pfr = " + pfr);
+
+     GenPolynomial<BigRational> ar = a.reverse(pfr);
+     GenPolynomial<BigRational> arr = ar.reverse(pfrr);
+     assertEquals("a == arr",a,arr);
+     //System.out.println("ar = " + ar);
+     //System.out.println("arr = " + arr);
+ }
+
 
 
 }

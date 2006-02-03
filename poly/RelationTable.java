@@ -214,8 +214,15 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
         if ( debug ) {
             logger.info("new relation = " + e + " .*. " + f + " = " + p);
         }
-        if ( p == null ) {
-           throw new IllegalArgumentException("RelationTable update p == null");
+        if ( p == null || e == null || f == null ) {
+           throw new IllegalArgumentException("RelationTable update p|e|f == null");
+        }
+        if ( debug ) {
+           ExpVector ef = e.sum(f);
+           ExpVector lp = p.leadingExpVector();
+           if ( ! ef.equals(lp) ) { // check for suitable term order
+              throw new IllegalArgumentException("RelationTable update e*f != lt(p)");
+           }
         }
         List<Integer> key = makeKey(e,f);
         ExpVectorPair evp = new ExpVectorPair( e, f );
@@ -331,7 +338,7 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
      * Extend all ExpVectors and polynomials of the given 
      * relation table by i elements and put the relations into 
      * this table, i.e. this should be empty.
-     * @param tab a relation table to be extended.
+     * @param tab a relation table to be extended and inserted into this.
      */
     public void extend(RelationTable<C> tab) {  
         if ( tab.table.size() == 0 ) {
@@ -365,7 +372,7 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
      * Contract all ExpVectors and polynomials of the given 
      * relation table by i elements and put the relations into 
      * this table, i.e. this should be empty.
-     * @param tab a relation table to be contracted.
+     * @param tab a relation table to be contracted and inserted into this.
      */
     public void contract(RelationTable<C> tab) { 
         if ( tab.table.size() == 0 ) {
@@ -394,6 +401,37 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
                     pc = (GenSolvablePolynomial<C>)x;
                 }
                 this.update( ec, fc, pc );
+            }
+        }
+        return;
+    }
+
+
+    /**
+     * Reverse variables and relations. Used e.g. in opposite rings.
+     * Reverse all ExpVectors and polynomials of the given 
+     * relation table and put the modified relations into this table, 
+     * i.e. this should be empty.
+     * @param tab a relation table to be extended and inserted into this.
+     */
+    public void reverse(RelationTable<C> tab) {  
+        if ( tab.table.size() == 0 ) {
+            return;
+        }
+        // assert this.size() == 0
+        List val;
+        for ( List<Integer> key: tab.table.keySet() ) { 
+            val = tab.table.get( key );
+            for ( Iterator jt = val.iterator(); jt.hasNext(); ) { 
+                ExpVectorPair ep = (ExpVectorPair)jt.next();
+                ExpVector e = ep.getFirst();
+                ExpVector f = ep.getSecond();
+                GenSolvablePolynomial<C> p = (GenSolvablePolynomial<C>)jt.next();
+                ExpVector ex = e.reverse(); 
+                ExpVector fx = f.reverse(); 
+                GenSolvablePolynomial<C> px 
+                   = (GenSolvablePolynomial<C>)p.reverse(ring);
+                this.update( ex, fx, px ); 
             }
         }
         return;

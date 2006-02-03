@@ -417,6 +417,20 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
 
 
     /**
+     * Reverse variables. Used e.g. in opposite rings.
+     * @return solvable polynomial ring factory with reversed variables.
+     */
+    public GenSolvablePolynomialRing<C> reverse() {
+        GenPolynomialRing<C> pfac = super.reverse();
+        GenSolvablePolynomialRing<C> spfac 
+            = new GenSolvablePolynomialRing<C>(pfac.coFac, pfac.nvar,
+                                               pfac.tord, pfac.vars);
+        spfac.table.reverse(this.table);
+        return spfac;
+    }
+
+
+    /**
      * Test if the relations define an associative solvable ring.
      * @param C coefficient type.
      * @return true, if this ring is associative, else false.

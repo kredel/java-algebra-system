@@ -195,6 +195,19 @@ public class ExpVector implements Cloneable, Serializable {
     }
 
 
+    /**
+     * Reverse variables. Used e.g. in opposite rings.
+     * @return reversed exponent vector.
+     */
+    public ExpVector reverse() {
+        long[] w = new long[ val.length ];
+        for ( int i = 0; i < val.length; i++ ) {
+            w[i] = val[ val.length - 1 - i ];
+        }
+        return new ExpVector( w );
+    }
+
+
     /** Get the string representation.
      * @see java.lang.Object#toString()
      */

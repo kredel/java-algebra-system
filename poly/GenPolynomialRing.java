@@ -442,9 +442,28 @@ public class GenPolynomialRing<C extends RingElem<C> >
                v[j] = vars[j];
            }
         }
-        TermOrder to = tord.contract();
+        TermOrder to = tord.contract(i,nvar-i);
         GenPolynomialRing<C> pfac 
             = new GenPolynomialRing<C>(coFac,nvar-i,to,v);
+        return pfac;
+    }
+
+
+    /**
+     * Reverse variables. Used e.g. in opposite rings.
+     * @return polynomial ring factory with reversed variables.
+     */
+    public GenPolynomialRing<C> reverse() {
+        String[] v = null;
+        if ( vars != null ) {
+           v = new String[ vars.length ];
+           for ( int j = 0; j < vars.length; j++ ) {
+               v[j] = vars[ vars.length - 1 - j ];
+           }
+        }
+        TermOrder to = tord.reverse();
+        GenPolynomialRing<C> pfac 
+            = new GenPolynomialRing<C>(coFac,nvar,to,v);
         return pfac;
     }
 

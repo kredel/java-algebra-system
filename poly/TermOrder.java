@@ -208,23 +208,22 @@ public final class TermOrder implements Serializable {
     }
 
 
-    /**
+    /*
      * Constructor for given weighted split orders.
      * Unnecessary, to be removed.
      * @param w weight vector of longs.
      * @param split index.
-     */
     public TermOrder(long[] w, int split) {
 	this( new long[][] { w }, split );
     }
+     */
 
 
-    /**
+    /*
      * Constructor for given weighted split orders.
      * Unnecessary, to be removed.
      * @param w weight array of longs.
      * @param split index.
-     */
     public TermOrder(long[][] w, int split) {
         if ( w == null || w.length == 0 ) {
            throw new IllegalArgumentException("invalid term order weight");
@@ -264,6 +263,7 @@ public final class TermOrder implements Serializable {
         // sugar = new EVsugar();
         sugar = horder;
     }
+     */
 
 
     /**
@@ -757,31 +757,60 @@ public final class TermOrder implements Serializable {
 
     /**
      * Extend variables. Used e.g. in module embedding.
-     * Extend TermOrder by i elements.
+     * Extend TermOrder by k elements.
+     * <b>Note:</b> todo distinguish TOP and POT orders.
      * @param r current number of variables.
-     * @param i number of variables to extend.
+     * @param k number of variables to extend.
      * @return extended TermOrder.
      */
-    public TermOrder extend(int r, int i) {
+    public TermOrder extend(int r, int k) {
         if ( weight != null ) {
-           throw new RuntimeException("extend not implemented for weights");
+           long[][] w = new long[ weight.length ][];
+           for ( int i = 0; i < weight.length; i++ ) {
+               long[] wi = weight[i];
+               long max = 0;
+               // long min = Long.MAX_VALUE;
+               for ( int j = 0; j < wi.length; j++ ) {
+                   if ( wi[j] > max ) max = wi[j];
+                   //if ( wi[j] < min ) min = wi[j];
+               }
+               max++;
+               long[] wj = new long[ wi.length + k ];
+               for ( int j = 0; j < i; j++ ) {
+                   wj[j] = max;
+               }
+               System.arraycopy(wi,0,wj,i,wi.length);
+               w[i] = wj;
+           }
+           return new TermOrder( w );
+           // throw new RuntimeException("extend not implemented for weights");
         }
         if ( evord2 != 0 ) {
            logger.warn("TermOrder is already extended");
-           return new TermOrder(evord,evord2,r+i,evend1+i);
+           return new TermOrder(evord,evord2,r+k,evend1+k);
         }
-        return new TermOrder(evord,evord,r+i,i);
+        return new TermOrder(evord,evord,r+k,k);
     }
 
 
     /**
      * Contract variables. Used e.g. in module embedding.
      * Contract TermOrder to non split status.
+     * @param k position of first element to be copied.
+     * @param len new length.
      * @return contracted TermOrder.
      */
-    public TermOrder contract() {
+    public TermOrder contract(int k, int len) {
         if ( weight != null ) {
-           throw new RuntimeException("extend not implemented for weights");
+           long[][] w = new long[ weight.length ][];
+           for ( int i = 0; i < weight.length; i++ ) {
+               long[] wi = weight[i];
+               long[] wj = new long[ len ];
+               System.arraycopy(wi,k,wj,0,len);
+               w[i] = wj;
+           }
+           return new TermOrder( w );
+           // throw new RuntimeException("contract not implemented for weights");
         }
         if ( evord2 == 0 ) {
            logger.warn("TermOrder is already contracted");
@@ -789,5 +818,29 @@ public final class TermOrder implements Serializable {
         return new TermOrder(evord);
     }
 
+
+    /**
+     * Reverse variables. Used e.g. in opposite rings.
+     * @return TermOrder for reversed variables.
+     */
+    public TermOrder reverse() {
+        if ( weight != null ) {
+           long[][] w = new long[ weight.length ][];
+           for ( int i = 0; i < weight.length; i++ ) {
+               long[] wi = weight[i];
+               long[] wj = new long[ wi.length ];
+               for ( int j = 0; j < wj.length; j ++ ) {
+                   wj[j] = wi[ wj.length - 1 - j ];
+               }
+               w[i] = wj;
+           }
+           return new TermOrder( w );
+        }
+        if ( evord2 == 0 ) {
+           return new TermOrder( evord );
+        } else {
+           return new TermOrder( evord2, evord, evend2, evend2 - evend1 );
+        }
+    }
 
 }

@@ -980,7 +980,6 @@ public class GenPolynomial<C extends RingElem<C> >
      * @return extended polynomial.
      */
     public GenPolynomial<C> extend(GenPolynomialRing<C> pfac, int j, long k) {
-        //GenPolynomialRing<C> pfac = ring.extend(i);
         GenPolynomial<C> Cp = pfac.getZERO().clone();
         int i = pfac.nvar - ring.nvar;
 
@@ -1032,6 +1031,29 @@ public class GenPolynomial<C extends RingElem<C> >
             B.put( f, p );
         }
         return B;
+    }
+
+
+    /**
+     * Reverse variables. Used e.g. in opposite rings.
+     * @return polynomial with reversed variables.
+     */
+    public GenPolynomial<C> reverse(GenPolynomialRing<C> oring) {
+        GenPolynomial<C> Cp = oring.getZERO().clone();
+        if ( this.isZERO() ) return Cp;
+
+        Map<ExpVector,C> C = Cp.getMap();
+        Map<ExpVector,C> A = val;
+        for ( Map.Entry<ExpVector,C> y: A.entrySet() ) {
+            ExpVector e = y.getKey();
+            //System.out.println("e = " + e);
+            ExpVector f = e.reverse();
+            //System.out.println("e = " + e + ", f = " + f);
+            C a = y.getValue();
+            //System.out.println("a = " + a);
+            C.put( f, a );
+        }
+        return Cp;
     }
 
 

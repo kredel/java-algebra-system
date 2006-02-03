@@ -136,14 +136,14 @@ public class TermOrderTest extends TestCase {
      int sp = 3;
      w = new long [][] { new long[] { 5l, 4l, 3l, 2l, 1l } };
 
-     s = new TermOrder(w,sp);
-     t = new TermOrder(w,sp);
-     assertEquals("t = s",t,s);
+     //s = new TermOrder(w,sp);
+     //t = new TermOrder(w,sp);
+     //assertEquals("t = s",t,s);
 
-     x = t.toString();
-     y = s.toString();
+     //x = t.toString();
+     //y = s.toString();
 
-     assertEquals("x = y",x,y);
+     //assertEquals("x = y",x,y);
      //System.out.println("s = " + s);
 
      x = "W(";
@@ -514,7 +514,8 @@ public class TermOrderTest extends TestCase {
      b = ExpVector.EVRAND(r,10,q);
      c = ExpVector.EVSUM(a,b);
 
-     t = new TermOrder(w,sp);
+     // t = new TermOrder(w,sp);
+     t = new TermOrder(w2);
      TermOrder t2 = new TermOrder(w2);
      // now t equals t2
 
@@ -645,7 +646,8 @@ public class TermOrderTest extends TestCase {
      b = ExpVector.EVRAND(r,10,q);
      c = ExpVector.EVSUM(a,b);
 
-     t = new TermOrder(w,sp);
+     //t = new TermOrder(w,sp);
+     t = new TermOrder(w2);
      TermOrder t2 = new TermOrder(w2);
      // now t equals t2
 
@@ -808,7 +810,7 @@ public class TermOrderTest extends TestCase {
      int x = 0;
 
      try {
-         t = new TermOrder((long[][])null,sp);
+         t = new TermOrder((long[][])null);
          x = t.getDescendComparator().compare(a,b);
      } catch (IllegalArgumentException e) {
          return;
