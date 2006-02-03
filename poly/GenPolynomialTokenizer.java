@@ -811,12 +811,12 @@ public class GenPolynomialTokenizer  {
               }
               if ( tok.sval.equalsIgnoreCase("W") ) {
                  long[][] w = nextWeightArray();
-                 int s = nextSplitIndex();
-                 if ( s <= 0 ) {
+                 //int s = nextSplitIndex(); // no more
+                 //if ( s <= 0 ) {
                     return new TermOrder( w );
-                 } else {
-                    return new TermOrder( w, s );
-                 }
+                 //} else {
+                 //return new TermOrder( w, s );
+                 //}
               }
            }
         }
