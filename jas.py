@@ -123,6 +123,9 @@ class SolvableRing:
         tok = GenPolynomialTokenizer(sr);
         self.pset = tok.nextSolvablePolynomialSet();
         self.ring = self.pset.ring;
+        if not self.ring.isAssociative():
+            print "warning: ring is not associative";
+
 
     def __str__(self):
         return str(self.ring);
