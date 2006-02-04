@@ -40,8 +40,8 @@ print "Ideal: " + str(f);
 print;
 
 rg = f.GB();
-#print "seq Output:", rg;
-#print;
+print "seq Output:", rg;
+print;
 
 
 rg = f.parGB(2);
