@@ -31,7 +31,10 @@
 <target name="compile" depends="vorher" >
   <javac srcdir="${src}" destdir="${build}" 
          debug="on" debuglevel="lines,source"
-         classpath="${cp}" />
+         classpath="${cp}"
+  />
+<!--     listfiles="true"
+-->
 </target>
 
 <target name="doc" >
@@ -42,21 +45,6 @@
            linksource="true" >
      <fileset dir="." includes="**/*.java"  />
   </javadoc>
-</target>
-
-<!--target name="depend" depends="vorher" >
-  <depend srcDir="${src}" destDir="${build}" 
-          dump="true" closure="true" >
-  </depend>
-</target-->
-
-<target name="jdepend" depends="vorher" >
-  <!-- does not work: jars missing  -->
-  <jdepend outputfile="jdepend.report" > 
-     <sourcespath>
-        <pathelement location="${src}"/>
-    </sourcespath>
-  </jdepend>
 </target>
 
 <target name="time" depends="vorher" >
@@ -92,18 +80,21 @@
          fork="yes" />
 </target>
 
-<target name="testsingle" depends="vorher" >
+<target name="testsingle"
+        if="name" 
+        depends="vorher" >
   <junit printsummary="yes" 
-         fork="yes" 
+         fork="no" 
          showoutput="yes"
          haltonfailure="no" >
      <classpath path="${cp}" />
-     <test name="edu.jas.arith.BigRationalTest" 
-           outfile="brt.lst" />
+     <test name="edu.jas.${name}" 
+           outfile="${name}.lst" />
   </junit>
 </target>
 
-<target name="test" depends="vorher" >
+<target name="test" 
+        depends="vorher" >
   <!-- works with apache ant download -->
   <!-- does not work with suse ant, optional for junit missing -->
   <!-- ok in 2004 09 -->
