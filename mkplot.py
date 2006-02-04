@@ -5,10 +5,11 @@
 import re;
 import os;
 
-exam = "kat_7";
+exam = "kat_6";
 runs = "t16";
 
-bname = exam + "_" + runs;
+#bname = exam + "_" + runs;
+bname = "k6seqpair-2"
 fname = bname + ".out";
 oname = bname + ".po";
 
@@ -18,6 +19,7 @@ o=open(oname,"w");
 print o;
 
 res = {};
+resold = {};
 
 for line in f:
     if line.find("executed in") > 0:
@@ -28,15 +30,25 @@ for line in f:
              t = ('0', s.group(1));
              res[ int( t[0] ) ] = float( t[1] );
        else:
-          s = re.search("(\d+).*in (\d+)",line);
-          if s != None:
-             t = s.groups();
-             t0 = int( t[0] );
-             if res.has_key( t0 ):
-                 res[ t0 ] = ( res[ t0 ] + float(t[1]) )/2.0;
-             else:
-                 res[ t0 ] = float( t[1] );
-#       print "t = ", t, "\n";
+          if line.find("-old") >= 0:
+             s = re.search("(\d+).*in (\d+)",line);
+             if s != None:
+                t = s.groups();
+                t0 = int( t[0] );
+                if resold.has_key( t0 ):
+                   resold[ t0 ] = ( resold[ t0 ] + float(t[1]) )/2.0;
+                else:
+                   resold[ t0 ] = float( t[1] );
+          else:
+             s = re.search("(\d+).*in (\d+)",line);
+             if s != None:
+                t = s.groups();
+                t0 = int( t[0] );
+                if res.has_key( t0 ):
+                   res[ t0 ] = ( res[ t0 ] + float(t[1]) )/2.0;
+                else:
+                   res[ t0 ] = float( t[1] );
+#            print "t = ", t, "\n";
 
 print "\nres = ", res;
 
@@ -53,6 +65,7 @@ st = res[ s1 ];
 #print "st = ", st;
 
 speed = {};
+speedold = {};
 
 for k in ks:
     speed[ k ] = st / res[ k ]; 
