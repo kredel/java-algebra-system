@@ -22,9 +22,63 @@ dt   { font-weight: bolder;
   <body>
     <h1>Java Algebra System (JAS) Project </h1>
 
+<p><strong>Introduction.</strong> 
+The Java Algebra System (JAS) provides 
+a well designed software library using generic types 
+for algebraic computations implemented in the Java programming language.
+The library can be used as any other Java software package or it can be
+used interactively or interpreted through an jython (Java Python) front end.
+The focus of JAS is at the moment on commutative and solvable polynomials, 
+Groebner bases and applications.
+</p>
+
 <p>
-This is the documentation and implementation for the new version which 
-is designed using type parameters and requires Java 5 (JDK 1.5).
+The library contains at the moment of the following main packages:
+</p>
+<dl>
+<dt>edu.jas.structure:</dt>
+<dd>
+contains interfaces for the most general algebraic structures
+like <code>RingElem</code> and <code>RingFactory</code>.
+</dd>
+<dt>edu.jas.arith:</dt>
+<dd>
+contains classes for the basic coefficient rings
+like <code>BigRational</code>, <code>BigInteger</code> or <code>BigComplex</code>.
+</dd>
+<dt>edu.jas.poly:</dt>
+<dd>
+contains classes for polynomial and solvable polynomial arithmetic 
+like <code>GenPolynomial</code>, <code>GenSolvablePolynomial</code> 
+and others such as <code>AlgebraicNumber</code> and 
+a polynomial parser <code>GenPolynomialTokenizer</code>.
+</dd>
+<dt>edu.jas.ring:</dt>
+<dd>
+contains classes for polynomial reduction, Groebner bases and ideal arithmetic
+as well as thread parallel and distributed versions of Buchbergers algorithm 
+like <code>ReductionSeq</code>, <code>GroebnerBaseAbstract</code>,
+<code>GroebnerBaseSeq</code>, <code>GroebnerBaseParallel</code>
+and <code>GroebnerBaseDistributed</code>.
+</dd>
+<dt>edu.jas.module:</dt>
+<dd>
+contains classes for vectors, module Groebner bases and syzygies
+over polynomials and solvable polynomials
+like <code>GenVector</code>, <code>ModGroebnerBase</code> or 
+<code>SolvableSyzygy</code>.
+</dd>
+<dt>edu.jas.util:</dt>
+<dd>
+finally contains further utilities for parallel and distributed computations
+like <code>ThreadPool</code> or <code>DistHashTable</code>
+(part of this package has become obsolete with JDK 1.5).
+</dd>
+</dl>
+
+<p>
+This page contains documentation and the implementation for the new version 
+which is designed using type parameters and requires Java 5 (JDK 1.5).
 The old version for JDK 1.4 can be found <a href="../jas.j14">here</a>.
 </p>
 
@@ -46,9 +100,15 @@ and
 for the new generic version.
 </p>
 
+<h3>History</h3>
+
+<p>
+<a href="jas-log.html" target="weblog">Web-Log</a>
+</p>
 
 
-<h2>Download</h2>
+
+<h2>Download and Implementation</h2>
 
 <ul>
 <li><p><a href="jas.jar">jas.jar</a> execute with 
@@ -80,7 +140,7 @@ for the new generic version.
 </li>
 </ul>
 
-<h2>Jython Interpreter</h2>
+<h2>Usage with the Jython Interpreter</h2>
 
 <p><a href="jas.py">jas.py</a> (imported by other Python files).
 </p>
@@ -119,6 +179,7 @@ into the CLASSPATH or to unpack the jar into the directory you are starting jyth
 <a href="syzy2.py">syzy2.py</a>
 </p>
 
+
 <h2>RunGB Examples</h2>
 
 <p>
@@ -156,14 +217,8 @@ For execution with RunGB.
 <a href="ring/wa_61.jas" target="jas">wa_61.jas</a>
 </p>
 
-<h2>History</h2>
 
-<p>
-<a href="jas-log.html" target="weblog">Web-Log</a>
-</p>
-
-
-
+<!--
 <h3>Old stuff</h3>
 
 <p>
@@ -197,14 +252,14 @@ Some UML class diagramms as produced by ArgoUML (outdated):
 <a href="images/RatOrderedMapPolynomial.png" target="diagram">edu.jas.poly.RatOrderedMapPolynomial</a>.
 </dd>
 </dl>
-
+-->
 
     <hr />
     <address><a href="mailto:kredel@kredel.rz.uni-mannheim.de">Heinz Kredel</a></address>
 <p>
 <!-- Created: Sat Mar 19 21:44:14 CET 2005 -->
 <!-- hhmts start -->
-Last modified: Mon Jan  9 16:03:29 CET 2006
+Last modified: Wed Feb  1 21:49:41 CET 2006
 <!-- hhmts end -->
 </p>
 <p align="right" >
