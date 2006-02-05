@@ -843,7 +843,7 @@ class ReducerClientSeqPair<C extends RingElem<C>> implements Runnable {
                       logger.debug("invalid message = " + pp);
                    }
                    try {
-                       Thread.currentThread().sleep(100);
+                       Thread.sleep(100);
                    } catch (InterruptedException e) {
                        e.printStackTrace();
                    }

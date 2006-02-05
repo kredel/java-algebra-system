@@ -43,7 +43,7 @@ public class GBDist<C extends RingElem<C>> {
     /**
      * GB algorithm to use.
      */
-    private final GroebnerBaseDistributed bbd;
+    private final GroebnerBaseDistributed<C> bbd;
 
 
     /**

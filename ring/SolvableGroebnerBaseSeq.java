@@ -85,7 +85,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>>
         GenSolvablePolynomial<C> pi, pj, S, H;
         Pair<C> pair;
         while ( pairlist.hasNext() ) {
-              pair = (Pair<C>) pairlist.removeNext();
+              pair = pairlist.removeNext();
               if ( pair == null ) {
                  continue; 
               }
@@ -427,7 +427,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>>
         Pair<C> pair;
         GenSolvablePolynomial<C> pi, pj, S, H;
         while ( pairlist.hasNext() ) {
-              pair = (Pair<C>) pairlist.removeNext();
+              pair = pairlist.removeNext();
               if ( pair == null ) {
                  continue; 
               }

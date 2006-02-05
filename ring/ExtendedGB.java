@@ -6,8 +6,6 @@ package edu.jas.ring;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
 import edu.jas.structure.RingElem;
 
 //import edu.jas.poly.ExpVector;

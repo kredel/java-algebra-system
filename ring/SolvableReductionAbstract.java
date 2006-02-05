@@ -129,8 +129,7 @@ public abstract class SolvableReductionAbstract<C extends RingElem<C>>
         GenSolvablePolynomial<C> Bpp = Bp.multiplyLeft( a, f1 );
         GenSolvablePolynomial<C> Cp = (GenSolvablePolynomial<C>)App.subtract(Bpp);
 
-        GenSolvablePolynomial<C> zero 
-           = (GenSolvablePolynomial<C>)Ap.ring.getZERO();
+        GenSolvablePolynomial<C> zero = Ap.ring.getZERO();
         GenSolvablePolynomial<C> As = (GenSolvablePolynomial<C>)zero.add( b.negate(), e1 );
         GenSolvablePolynomial<C> Bs = (GenSolvablePolynomial<C>)zero.add( a, f1 );
         S.set( i, As );

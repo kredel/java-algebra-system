@@ -139,7 +139,8 @@ public class RunGB {
   }
 
 
-  static void runMaster(PolynomialList S, int threads, String mfile, int port) {
+  @SuppressWarnings("unchecked")
+static void runMaster(PolynomialList S, int threads, String mfile, int port) {
       List L = S.list; 
       List G = null;
       long t;
@@ -166,7 +167,8 @@ public class RunGB {
   }
 
 
-  static void runParallel(PolynomialList S, int threads) {
+  @SuppressWarnings("unchecked")
+static void runParallel(PolynomialList S, int threads) {
       List L = S.list; 
       List G;
       long t;
@@ -185,7 +187,8 @@ public class RunGB {
   }
 
 
-  static void runSequential(PolynomialList S) {
+  @SuppressWarnings("unchecked")
+static void runSequential(PolynomialList S) {
       List L = S.list; 
       List G;
       long t;
