@@ -95,7 +95,7 @@ public class ExecutableChannels {
         servers = new String[ list.size() ];
         ports = new int[ list.size() ];
         for ( int i = 0; i < servers.length; i++ ) {
-            setServerPort( i, (String)list.get( i ) );
+            setServerPort( i, list.get( i ) );
         }
     }
 

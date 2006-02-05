@@ -138,9 +138,9 @@ public class ThreadPool {
         }
         // is expressed using strategy enumeration
         if (strategy == StrategyEnumeration.LIFO) { 
-             return (Runnable)jobstack.removeLast(); // LIFO
+             return jobstack.removeLast(); // LIFO
         } else {
-             return (Runnable)jobstack.removeFirst(); // FIFO
+             return jobstack.removeFirst(); // FIFO
         }
     }
 
