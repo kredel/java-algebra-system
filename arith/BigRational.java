@@ -50,9 +50,10 @@ public class BigRational implements RingElem<BigRational>,
                         = new BigRational(BigInteger.ONE);
 
 
-    /* from history: */
+    /* from history: 
     private final static BigRational RNZERO = ZERO;
     private final static BigRational RNONE = ONE;
+    */
 
     private final static Random random = new Random();
 
@@ -580,7 +581,7 @@ public class BigRational implements RingElem<BigRational>,
      */
     public BigRational divide(BigRational S) {
       BigRational T;
-      T = RNPROD( this, (BigRational)S.inverse() );
+      T = RNPROD( this, S.inverse() );
       return T;
     }
 

@@ -319,7 +319,7 @@ public class ModInteger implements RingElem<ModInteger>,
      * @return A-B.
      */
     public static ModInteger MIDIF(ModInteger A, ModInteger B) {
-      if ( A == null ) return (ModInteger) B.negate();
+      if ( A == null ) return B.negate();
       return A.subtract(B);
     }
 

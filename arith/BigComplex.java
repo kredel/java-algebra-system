@@ -368,8 +368,8 @@ public class BigComplex implements RingElem<BigComplex>,
      * @see edu.jas.structure.RingElem#negate()
      */
     public BigComplex negate() {
-	return new BigComplex( (BigRational)re.negate(), 
-                               (BigRational)im.negate());
+	return new BigComplex( re.negate(), 
+                           im.negate());
     }
 
 
@@ -389,7 +389,7 @@ public class BigComplex implements RingElem<BigComplex>,
      * @return the complex conjugate of this. 
      */
     public BigComplex conjugate() {
-	return new BigComplex(re, (BigRational)im.negate());
+	return new BigComplex(re, im.negate());
     }
 
 
