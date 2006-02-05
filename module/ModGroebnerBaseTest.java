@@ -141,7 +141,7 @@ public class ModGroebnerBaseTest extends TestCase {
      V = new ArrayList<GenPolynomial<BigRational>>();
      V.add(b); V.add(fac.getONE()); V.add(fac.getZERO());
      L.add(V);
-     M = new ModuleList(fac,L);
+     M = new ModuleList<BigRational>(fac,L);
      //System.out.println("L = " + L.size() );
 
      N = mbb.GB( M );

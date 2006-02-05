@@ -175,7 +175,7 @@ public class SolvableSyzygy<C extends RingElem<C>> {
             = new ArrayList<List<GenSolvablePolynomial<C>>>();
         for ( int i = 0; i < G.size(); i++ ) {
             List<GenSolvablePolynomial<C>> Gi = G.get(i);
-            List Zi = new ArrayList();
+            List<GenSolvablePolynomial<C>> Zi = new ArrayList<GenSolvablePolynomial<C>>();
             // System.out.println("\nG("+i+") = " + G.get(i));
             for ( int j = 0; j < Gi.size(); j++ ) {
                 //System.out.println("\nG("+i+","+j+") = " + Gi.get(j));
@@ -297,7 +297,7 @@ public class SolvableSyzygy<C extends RingElem<C>> {
         Iterator<List<GenPolynomial<C>>> jt = F.list.iterator();
         while ( it.hasNext() && jt.hasNext() ) {
             GenSolvablePolynomial<C> pi = it.next();
-            List<GenSolvablePolynomial<C>> vj = (List)jt.next();
+            List<GenSolvablePolynomial<C>> vj = (List/*<GenSolvablePolynomial<C>>*/)jt.next();
             List<GenSolvablePolynomial<C>> Z = leftScalarProduct( pi, vj );
             //System.out.println("pi" + pi);
             //System.out.println("vj" + vj);
@@ -464,7 +464,7 @@ public class SolvableSyzygy<C extends RingElem<C>> {
         Zm = new ModuleList<C>((GenSolvablePolynomialRing<C>)F.ring, Z);
 
         List R = resolution(Zm);
-        R.add( 0, new SolvResPolPart( F, Gl, Zm ) );
+        R.add( 0, new SolvResPolPart<C>( F, Gl, Zm ) );
         return R;
     }
 
