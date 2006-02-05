@@ -28,7 +28,7 @@ TNJPATH=$(LIBPATH)/tnj.jar
 # --- syncing ----------
 DRY=--dry-run
 DELETE=
-RSYNC=rsync -e ssh -avuz $(DRY) $(DELETE) --exclude=*~ --exclude=*/.jxta/ --exclude=*.log* --exclude=*.out* --exclude=*.txt*
+RSYNC=rsync -e ssh -avuz $(DRY) $(DELETE) --exclude=*~ --exclude=*/.jxta/ --exclude=*.log* --exclude=*.out* --exclude=*.txt* --exclude=.svn
 PART=jas.j15
 
 all:
@@ -162,6 +162,9 @@ jars: GBManifest.MF $(TOJAR)
 
 dist: jas.jar JAS.jar $(LIBS)
 	tar -cvzf jas-dist.tgz jas.jar JAS.jar $(LIBS)
+
+#links: arith/build.xml module/build.xml ring/build.xml poly/build.xml structure/build.xml util/build.xml
+#
 
 
 clean:
