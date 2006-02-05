@@ -394,7 +394,7 @@ public class GenPolynomialRing<C extends RingElem<C> >
         GenPolynomialTokenizer pt = new GenPolynomialTokenizer(this,r);
         GenPolynomial<C> p = null;
         try {
-            p = pt.nextPolynomial();
+            p = (GenPolynomial<C>)pt.nextPolynomial();
         } catch (IOException e) {
             logger.error(e.toString()+" parse " + this);
             p = ZERO;

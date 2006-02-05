@@ -96,7 +96,7 @@ public class ExpVector implements Cloneable, Serializable {
             int length = exps.size();
             val = new long[ length ];
             for ( int j = 0; j < length; j++ ) {
-                val[j] = ((Long)exps.elementAt(j)).longValue();
+                val[j] = exps.elementAt(j).longValue();
             }
         } else {
         // not implemented

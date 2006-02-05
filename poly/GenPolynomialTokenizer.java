@@ -93,7 +93,7 @@ public class GenPolynomialTokenizer  {
             return;
         }
         if ( rf instanceof GenSolvablePolynomialRing ) {
-           pfac = (GenPolynomialRing)rf;
+           pfac = rf;
            spfac = (GenSolvablePolynomialRing)rf;
         } else {
           pfac = rf;

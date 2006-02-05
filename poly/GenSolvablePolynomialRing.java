@@ -358,7 +358,7 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
         GenPolynomialTokenizer pt = new GenPolynomialTokenizer(this,r);
         GenSolvablePolynomial<C> p = null;
         try {
-            p = pt.nextSolvablePolynomial();
+            p = (GenSolvablePolynomial<C>)pt.nextSolvablePolynomial();
         } catch (IOException e) {
             logger.error(e.toString()+" parse " + this);
             p = ZERO;
