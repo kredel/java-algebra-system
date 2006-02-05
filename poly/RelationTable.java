@@ -431,7 +431,7 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
                 ExpVector fx = f.reverse(); 
                 GenSolvablePolynomial<C> px 
                    = (GenSolvablePolynomial<C>)p.reverse(ring);
-                this.update( ex, fx, px ); 
+                this.update( fx, ex, px ); // opposite order
             }
         }
         return;
