@@ -48,7 +48,6 @@ f = SolvableSubModule( r, ps );
 print "SolvableSubModule: " + str(f);
 print;
 
-
 #flg = f.leftGB();
 #print "seq left GB Output:", flg;
 #print;
