@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenSolvablePolynomial;
+import edu.jas.poly.GenSolvablePolynomialRing;
 
 import edu.jas.structure.RingElem;
 
@@ -196,6 +197,49 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
 
 
     /**
+     * Right Groebner base test.
+     * @param C coefficient type.
+     * @param F solvable polynomial list.
+     * @return true, if F is a right Groebner base, else false.
+     */
+    public boolean isRightGB(List<GenSolvablePolynomial<C>> F) {
+        return isRightGB(0,F);
+    }
+
+
+    /**
+     * Right Groebner base test.
+     * @param C coefficient type.
+     * @param modv number of module variables.
+     * @param F solvable polynomial list.
+     * @return true, if F is a right Groebner base, else false.
+     */
+    public boolean isRightGB(int modv, List<GenSolvablePolynomial<C>> F) {
+        GenSolvablePolynomial<C> pi, pj, s, h;
+        for ( int i = 0; i < F.size(); i++ ) {
+            pi = F.get(i);
+            for ( int j = i+1; j < F.size(); j++ ) {
+                pj = F.get(j);
+                if ( ! red.moduleCriterion( modv, pi, pj ) ) {
+                   continue;
+                }
+                // if ( ! red.criterion4( pi, pj ) ) { continue; }
+                s = sred.rightSPolynomial( pi, pj );
+                if ( s.isZERO() ) {
+                   continue;
+                }
+                //System.out.println("s right = " + s);
+                h = sred.rightNormalform( F, s );
+                if ( ! h.isZERO() ) {
+                   return false;
+                }
+            }
+        }
+        return true;
+    }
+
+
+    /**
      * Left Groebner base using pairlist class.
      * @param C coefficient type.
      * @param F solvable polynomial list.
@@ -334,5 +378,60 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
     public abstract List<GenSolvablePolynomial<C>> 
            twosidedGB(int modv, 
                       List<GenSolvablePolynomial<C>> Fp);
+
+
+    /**
+     * Right Groebner base using opposite ring left GB.
+     * @param C coefficient type.
+     * @param F solvable polynomial list.
+     * @return rightGB(F) a right Groebner base of F.
+     */
+    public List<GenSolvablePolynomial<C>> 
+           rightGB(List<GenSolvablePolynomial<C>> F) {  
+        return rightGB(0,F);
+    }
+
+
+    /**
+     * Right Groebner base using opposite ring left GB.
+     * @param C coefficient type.
+     * @param modv number of module variables.
+     * @param F solvable polynomial list.
+     * @return rightGB(F) a right Groebner base of F.
+     */
+    public List<GenSolvablePolynomial<C>> 
+           rightGB(int modv, 
+                   List<GenSolvablePolynomial<C>> F) {
+        GenSolvablePolynomialRing<C> ring = null;
+        for ( GenSolvablePolynomial<C> p : F ) {
+            if ( p != null ) {
+                ring = p.ring;
+                break;
+            }
+        }
+        if ( ring == null ) {
+            return F;
+        }
+        GenSolvablePolynomialRing<C> rring = ring.reverse();
+        GenSolvablePolynomial<C> q;
+        List<GenSolvablePolynomial<C>> rF;
+           rF = new ArrayList<GenSolvablePolynomial<C>>( F.size() );
+        for ( GenSolvablePolynomial<C> p : F ) {
+            if ( p != null ) {
+               q = (GenSolvablePolynomial<C>)p.reverse(rring);
+               rF.add( q );
+            }
+        }
+        List<GenSolvablePolynomial<C>> rG = leftGB( modv, rF );
+        List<GenSolvablePolynomial<C>> G;
+           G = new ArrayList<GenSolvablePolynomial<C>>( rG.size() );
+        for ( GenSolvablePolynomial<C> p : rG ) {
+            if ( p != null ) {
+               q = (GenSolvablePolynomial<C>)p.reverse(ring);
+               G.add( q );
+            }
+        }
+        return G;
+    }
 
 }
