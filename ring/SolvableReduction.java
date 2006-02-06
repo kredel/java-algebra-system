@@ -114,4 +114,28 @@ public interface SolvableReduction<C extends RingElem<C>>  {
                              GenSolvablePolynomial<C> Ap,
                              GenSolvablePolynomial<C> Np);
 
+
+    /**
+     * Right S-Polynomial.
+     * @param C coefficient type.
+     * @param Ap solvable polynomial.
+     * @param Bp solvable polynomial.
+     * @return right-spol(Ap,Bp) the right S-polynomial of Ap and Bp.
+     */
+    public GenSolvablePolynomial<C> 
+           rightSPolynomial(GenSolvablePolynomial<C> Ap, 
+                            GenSolvablePolynomial<C> Bp);
+
+
+    /**
+     * Right Normalform.
+     * @param C coefficient type.
+     * @param Ap solvable polynomial.
+     * @param Pp solvable polynomial list.
+     * @return right-nf(Ap) with respect to Pp.
+     */
+    public GenSolvablePolynomial<C> 
+           rightNormalform(List<GenSolvablePolynomial<C>> Pp, 
+                           GenSolvablePolynomial<C> Ap);
+
 }

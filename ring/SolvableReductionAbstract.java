@@ -63,10 +63,8 @@ public abstract class SolvableReductionAbstract<C extends RingElem<C>>
               logger.error("rings not equal"); 
            }
         }
-        Map.Entry<ExpVector,C> ma 
-            = Ap.leadingMonomial();
-        Map.Entry<ExpVector,C> mb 
-            = Bp.leadingMonomial();
+        Map.Entry<ExpVector,C> ma = Ap.leadingMonomial();
+        Map.Entry<ExpVector,C> mb = Bp.leadingMonomial();
 
         ExpVector e = ma.getKey();
         ExpVector f = mb.getKey();
@@ -298,5 +296,63 @@ public abstract class SolvableReductionAbstract<C extends RingElem<C>>
            return t.isZERO();
         }
     }
+
+
+    /**
+     * Right S-Polynomial.
+     * @param C coefficient type.
+     * @param Ap solvable polynomial.
+     * @param Bp solvable polynomial.
+     * @return right-spol(Ap,Bp) the right S-polynomial of Ap and Bp.
+     */
+    public GenSolvablePolynomial<C> 
+           rightSPolynomial(GenSolvablePolynomial<C> Ap, 
+                            GenSolvablePolynomial<C> Bp) {  
+        if ( logger.isInfoEnabled() ) {
+           if ( Bp == null || Bp.isZERO() ) {
+               if ( Ap != null ) {
+                  return Ap.ring.getZERO(); 
+               } else {
+                  return null;
+               }
+           }
+           if ( Ap == null || Ap.isZERO() ) {
+              return Bp.ring.getZERO(); 
+           }
+           if ( ! Ap.ring.equals( Bp.ring ) ) { 
+              logger.error("rings not equal"); 
+           }
+        }
+        ExpVector e = Ap.leadingExpVector();
+        ExpVector f = Bp.leadingExpVector();
+
+        ExpVector g = ExpVector.EVLCM(e,f);
+        ExpVector e1 = ExpVector.EVDIF(g,e);
+        ExpVector f1 = ExpVector.EVDIF(g,f);
+
+        GenSolvablePolynomial<C> App = Ap.multiply( e1 );
+        GenSolvablePolynomial<C> Bpp = Bp.multiply( f1 );
+
+        C a = App.leadingBaseCoefficient();
+        C b = Bpp.leadingBaseCoefficient();
+        App = App.multiply( b );
+        Bpp = Bpp.multiply( a );
+
+        GenSolvablePolynomial<C> Cp = (GenSolvablePolynomial<C>) App.subtract(Bpp);
+        return Cp;
+    }
+
+
+    /**
+     * Right Normalform.
+     * @param C coefficient type.
+     * @param Ap solvable polynomial.
+     * @param Pp solvable polynomial list.
+     * @return right-nf(Ap) with respect to Pp.
+     */
+    public abstract GenSolvablePolynomial<C> 
+           rightNormalform(List<GenSolvablePolynomial<C>> Pp, 
+                           GenSolvablePolynomial<C> Ap);
+
 
 }
