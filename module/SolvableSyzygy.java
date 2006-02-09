@@ -203,7 +203,7 @@ public class SolvableSyzygy<C extends RingElem<C>> {
 
 
     /**
-     * Test if sysygy.
+     * Test if left syzygy.
      * @param C coefficient type.
      * @param Z list of sysygies.
      * @param F a polynomial list.
@@ -259,7 +259,31 @@ public class SolvableSyzygy<C extends RingElem<C>> {
 
 
     /**
-     * Test if sysygy of modules
+     * Test if right syzygy.
+     * @param C coefficient type.
+     * @param Z list of sysygies.
+     * @param F a polynomial list.
+     * @return true, if Z is a list of right syzygies for F, else false.
+     */
+    public boolean 
+           isRightZeroRelation(List<List<GenSolvablePolynomial<C>>> Z, 
+                               List<GenSolvablePolynomial<C>> F) {  
+        for ( List<GenSolvablePolynomial<C>> row : Z ) {
+            GenSolvablePolynomial<C> p = leftScalarProduct(F,row); // param order
+            if ( p == null ) { 
+               continue;
+            }
+            if ( ! p.isZERO() ) {
+                logger.info("is not ZeroRelation = " + p);
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    /**
+     * Test if left sysygy of modules
      * @param C coefficient type.
      * @param Z list of sysygies.
      * @param F a module list.
@@ -283,7 +307,31 @@ public class SolvableSyzygy<C extends RingElem<C>> {
 
 
     /**
-     * product of vector and matrix of polynomials.
+     * Test if right sysygy of modules
+     * @param C coefficient type.
+     * @param Z list of sysygies.
+     * @param F a module list.
+     * @return true, if Z is a list of right syzygies for F, else false.
+     */
+    public boolean 
+           isRightZeroRelation(ModuleList<C> Z, 
+                               ModuleList<C> F) {  
+        if ( Z == null || Z.list == null ) {
+            return true;
+        }
+        for ( List<GenSolvablePolynomial<C>> row : Z.castToSolvableList() ) {
+            List<GenSolvablePolynomial<C>> zr = rightScalarProduct(row,F);
+            if ( ! isZero(zr) ) {
+                logger.info("is not ZeroRelation (" + zr.size() + ") = " + zr);
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    /**
+     * Product of vector and matrix of polynomials.
      * @param C coefficient type.
      * @param r a polynomial list.
      * @param F a polynomial list.
@@ -316,6 +364,43 @@ public class SolvableSyzygy<C extends RingElem<C>> {
         }
         return ZZ;
     }
+
+
+    /**
+     * Product of vector and matrix of polynomials.
+     * @param C coefficient type.
+     * @param r a polynomial list.
+     * @param F a polynomial list.
+     * @return the right scalar product of r and F.
+     */
+    public List<GenSolvablePolynomial<C>> 
+           rightScalarProduct(List<GenSolvablePolynomial<C>> r, 
+                              ModuleList<C> F) {  
+        List<GenSolvablePolynomial<C>> ZZ = null;
+        Iterator<GenSolvablePolynomial<C>> it = r.iterator();
+        Iterator<List<GenPolynomial<C>>> jt = F.list.iterator();
+        while ( it.hasNext() && jt.hasNext() ) {
+            GenSolvablePolynomial<C> pi = it.next();
+            List<GenSolvablePolynomial<C>> vj = (List/*<GenSolvablePolynomial<C>>*/)jt.next();
+            List<GenSolvablePolynomial<C>> Z = leftScalarProduct( vj, pi ); // order
+            //System.out.println("pi" + pi);
+            //System.out.println("vj" + vj);
+            // System.out.println("scalarProduct" + Z);
+            if ( ZZ == null ) {
+                ZZ = Z;
+            } else {
+                ZZ = vectorAdd(ZZ,Z);
+            }
+        }
+        if ( it.hasNext() || jt.hasNext() ) {
+            logger.error("scalarProduct wrong sizes");
+        }
+        if ( logger.isDebugEnabled() ) {
+            logger.debug("scalarProduct" + ZZ);
+        }
+        return ZZ;
+    }
+
 
     /**
      * Addition of vectors of polynomials.
@@ -403,7 +488,7 @@ public class SolvableSyzygy<C extends RingElem<C>> {
      */
     public List<GenSolvablePolynomial<C>> 
         leftScalarProduct(List<GenSolvablePolynomial<C>> F,
-                               GenSolvablePolynomial<C> p) {  
+                          GenSolvablePolynomial<C> p) {  
         List<GenSolvablePolynomial<C>> V 
             = new ArrayList<GenSolvablePolynomial<C>>( F.size() );
         for ( GenSolvablePolynomial<C> pi : F ) {
@@ -552,7 +637,7 @@ public class SolvableSyzygy<C extends RingElem<C>> {
         SolvableGroebnerBaseSeq<C> sgb = new SolvableGroebnerBaseSeq<C>();
         SolvableExtendedGB<C> exgb = sgb.extLeftGB( F );
         if ( debug ) {
-           logger.debug("exgb = " + exgb);
+           logger.info("exgb = " + exgb);
         }
         if ( ! sgb.isLeftReductionMatrix(exgb) ) {
            logger.error("is reduction matrix ? false");
@@ -566,7 +651,7 @@ public class SolvableSyzygy<C extends RingElem<C>> {
         GenSolvablePolynomialRing<C> ring = G.get(0).ring;
         ModuleList<C> S = new ModuleList<C>( ring, sg );
         if ( debug ) {
-           logger.debug("syz = " + S);
+           logger.info("syz = " + S);
         }
         if ( ! isLeftZeroRelation(sg,G) ) {
            logger.error("is syzygy ? false");
@@ -603,6 +688,10 @@ public class SolvableSyzygy<C extends RingElem<C>> {
             //System.out.println("\nrf = " + rf + "\n");
             sf.add( rf );
         }
+        if ( ! isLeftZeroRelation(sf,F) ) {
+           logger.error("is partial syz sf ? false");
+        }
+
         List<List<GenSolvablePolynomial<C>>> M;
         M = new ArrayList<List<GenSolvablePolynomial<C>>>( lenf );
         for ( List<GenSolvablePolynomial<C>> r : F2G ) {
@@ -622,7 +711,8 @@ public class SolvableSyzygy<C extends RingElem<C>> {
                if ( si == null || ai == null ) {
                   continue;
                }
-               List<GenSolvablePolynomial<C>> pi = leftScalarProduct(ai,si);
+               // List<GenSolvablePolynomial<C>> pi = leftScalarProduct(ai,si);
+               List<GenSolvablePolynomial<C>> pi = leftScalarProduct(si,ai);
                //System.out.println("pi = " + pi);
                rf = vectorAdd( rf, pi );
             }
@@ -636,6 +726,7 @@ public class SolvableSyzygy<C extends RingElem<C>> {
         //System.out.println("syz ML = " + ML);
         // debug only:
         List<GenSolvablePolynomial<C>> F2 = new ArrayList<GenSolvablePolynomial<C>>( F.size() );
+        /* not true in solvable case
         for ( List<GenSolvablePolynomial<C>> rr: M ) {
             GenSolvablePolynomial<C> rrg = leftScalarProduct( F, rr );
             F2.add( rrg );
@@ -644,8 +735,10 @@ public class SolvableSyzygy<C extends RingElem<C>> {
         PolynomialList<C> pF2 = new PolynomialList<C>( ring, F2 );
         if ( ! pF.equals( pF2 ) ) {
            logger.error("is FAB = F ? false");
+           //System.out.println("pF  = " + pF.list.size());
+           //System.out.println("pF2 = " + pF2.list.size());
         }
-
+        */
         int sflen = sf.size();
         List<List<GenSolvablePolynomial<C>>> M2;
         M2 = new ArrayList<List<GenSolvablePolynomial<C>>>( lenf );
@@ -654,7 +747,7 @@ public class SolvableSyzygy<C extends RingElem<C>> {
             List<GenSolvablePolynomial<C>> r2i;
             r2i = new ArrayList<GenSolvablePolynomial<C>>( ri.size() );
             int j = 0;
-            for ( GenSolvablePolynomial<C> rij: ri ) {
+            for ( GenSolvablePolynomial<C> rij : ri ) {
                 GenSolvablePolynomial<C> p = null;
                 if ( i == j ) {
                     p = (GenSolvablePolynomial<C>)ring.getONE().subtract( rij );
@@ -745,6 +838,70 @@ public class SolvableSyzygy<C extends RingElem<C>> {
         N = new ModuleList<C>((GenSolvablePolynomialRing<C>)M.ring,Z);
         //System.out.println("\n\nN = " + N);
         return N;
+    }
+
+
+    /**
+     * Right syzygy module from arbitrary base.
+     * @param C coefficient type.
+     * @param F a solvable polynomial list.
+     * @return syz(F), a basis for the module of right syzygies for F.
+     */
+    public List<List<GenSolvablePolynomial<C>>> 
+           rightZeroRelationsArbitrary(List<GenSolvablePolynomial<C>> F) {  
+        return rightZeroRelationsArbitrary(0,F);
+    }
+
+
+    /**
+     * Right syzygy module from arbitrary base.
+     * @param C coefficient type.
+     * @param modv number of module variables.
+     * @param F a solvable polynomial list.
+     * @return syz(F), a basis for the module of right syzygies for F.
+     */
+    public List<List<GenSolvablePolynomial<C>>> 
+        rightZeroRelationsArbitrary(int modv, List<GenSolvablePolynomial<C>> F) {  
+        GenSolvablePolynomialRing<C> ring = null;
+        for ( GenSolvablePolynomial<C> p : F ) {
+            if ( p != null ) {
+                ring = p.ring;
+                break;
+            }
+        }
+        List<List<GenSolvablePolynomial<C>>> Z;
+        if ( ring == null ) { // all null
+           Z = new ArrayList<List<GenSolvablePolynomial<C>>>(1);
+           Z.add(F);
+           return Z;
+        }
+        GenSolvablePolynomialRing<C> rring = ring.reverse();
+        GenSolvablePolynomial<C> q;
+        List<GenSolvablePolynomial<C>> rF;
+           rF = new ArrayList<GenSolvablePolynomial<C>>( F.size() );
+        for ( GenSolvablePolynomial<C> p : F ) {
+            if ( p != null ) {
+               q = (GenSolvablePolynomial<C>)p.reverse(rring);
+               rF.add( q );
+            }
+        }
+        List<List<GenSolvablePolynomial<C>>> rZ = leftZeroRelationsArbitrary(modv,rF);
+        Z = new ArrayList<List<GenSolvablePolynomial<C>>>( rZ.size() );
+        for ( List<GenSolvablePolynomial<C>> z : rZ ) {
+            if ( z == null ) {
+               continue;
+            }
+            List<GenSolvablePolynomial<C>> s;
+                s = new ArrayList<GenSolvablePolynomial<C>>( z.size() );
+            for ( GenSolvablePolynomial<C> p : z ) {
+               if ( p != null ) {
+                  q = (GenSolvablePolynomial<C>)p.reverse(ring);
+                  s.add( q );
+               }
+            }
+            Z.add( s );
+        }
+        return Z;
     }
 
 }
