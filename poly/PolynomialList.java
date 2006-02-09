@@ -101,8 +101,8 @@ public class PolynomialList<C extends RingElem<C> > implements Serializable {
             return false;
         }
         // compare sorted lists
-        List<GenPolynomial<C>> l1 = OrderedPolynomialList.sort( ring, list );
-        List<GenPolynomial<C>> l2 = OrderedPolynomialList.sort( ring, pl.list );
+        List<GenPolynomial<C>> l1 = OrderedPolynomialList.<C>sort( ring, list );
+        List<GenPolynomial<C>> l2 = OrderedPolynomialList.<C>sort( ring, pl.list );
         for ( int i = 0; i < list.size(); i++ ) {
             GenPolynomial<C> a = l1.get(i);
             GenPolynomial<C> b = l2.get(i);
