@@ -103,7 +103,7 @@ public class SolvableSyzygyTest extends TestCase {
 
    int rl = 4; //4; //3; 
    int kl = 5;
-   int ll = 9;
+   int ll = 7;
    int el = 2;
    float q = 0.3f; //0.4f
 
@@ -356,6 +356,44 @@ public class SolvableSyzygyTest extends TestCase {
                  + "( "  
                  + "( x y + x ), " 
                  + "( y^2 + 1 ) "
+                 + ") ";
+     Reader source = new StringReader( exam );
+     GenPolynomialTokenizer parser
+                  = new GenPolynomialTokenizer( source );
+     try {
+         F = (PolynomialList<BigRational>) parser.nextSolvablePolynomialSet();
+     } catch(ClassCastException e) {
+         fail(""+e);
+     } catch(IOException e) {
+         fail(""+e);
+     }
+     //System.out.println("F = " + F);
+
+     L = F.castToSolvableList();
+     K = ssz.leftZeroRelationsArbitrary( L );
+     assertTrue("is ZR( { a, b } )", ssz.isLeftZeroRelation(K,L) );
+ }
+
+
+/**
+ * Test sequential arbitrary base Syzygy, ex WA_32.
+ * 
+ */
+ @SuppressWarnings("unchecked") // not jet working
+ public void testSequentialArbitrarySyzygyWA32() {
+
+     PolynomialList<BigRational> F = null;
+
+     String exam = "Rat(e1,e2,e3) L "
+                 + "RelationTable "
+                 + "( "
+                 + " ( e3 ), ( e1 ), ( e1 e3 - e1 ), "
+                 + " ( e3 ), ( e2 ), ( e2 e3 - e2 ) "
+                 + ")"
+                 + "( "  
+                 + " ( e1 e3^3 + e2^2 ), " 
+                 + " ( e1^3 e2^2 + e3 ), "
+                 + " ( e3^3 + e3^2 ) "
                  + ") ";
      Reader source = new StringReader( exam );
      GenPolynomialTokenizer parser
