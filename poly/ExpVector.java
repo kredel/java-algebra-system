@@ -208,6 +208,28 @@ public class ExpVector implements Cloneable, Serializable {
     }
 
 
+    /**
+     * Reverse j variables. Used e.g. in opposite rings.
+     * Reverses the first j-1 variables, the rest is unchanged.
+     * @param j index of first variable not reversed.
+     * @return reversed exponent vector.
+     */
+    public ExpVector reverse(int j) {
+        if ( j <= 0 || j > val.length ) {
+           return this;
+        }
+        long[] w = new long[ val.length ];
+        for ( int i = 0; i < j; i++ ) {
+            w[i] = val[ j - 1 - i ];
+        }
+        // copy rest
+        for ( int i = j; i < val.length; i++ ) {
+            w[i] = val[ i ];
+        }
+        return new ExpVector( w );
+    }
+
+
     /** Get the string representation.
      * @see java.lang.Object#toString()
      */
