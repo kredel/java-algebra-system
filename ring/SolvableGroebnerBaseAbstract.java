@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
+import edu.jas.poly.PolynomialList;
 
 import edu.jas.structure.RingElem;
 
@@ -28,6 +29,7 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
        implements SolvableGroebnerBase<C> {
 
     private static final Logger logger = Logger.getLogger(SolvableGroebnerBaseAbstract.class);
+    private final boolean debug = logger.isDebugEnabled();
 
 
     /**
@@ -412,7 +414,8 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
         if ( ring == null ) {
             return F;
         }
-        GenSolvablePolynomialRing<C> rring = ring.reverse();
+        GenSolvablePolynomialRing<C> rring = ring.reverse(true);
+        ring = rring.reverse(true);
         GenSolvablePolynomial<C> q;
         List<GenSolvablePolynomial<C>> rF;
            rF = new ArrayList<GenSolvablePolynomial<C>>( F.size() );
@@ -421,6 +424,11 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
                q = (GenSolvablePolynomial<C>)p.reverse(rring);
                rF.add( q );
             }
+        }
+        if ( true || debug ) {
+           PolynomialList<C> pl = new PolynomialList<C>(rring,rF);
+           //logger.info("reversed problem = " + pl);
+           System.out.println("reversed problem = " + pl);
         }
         List<GenSolvablePolynomial<C>> rG = leftGB( modv, rF );
         List<GenSolvablePolynomial<C>> G;
