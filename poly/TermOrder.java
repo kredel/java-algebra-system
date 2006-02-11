@@ -783,7 +783,6 @@ public final class TermOrder implements Serializable {
                w[i] = wj;
            }
            return new TermOrder( w );
-           // throw new RuntimeException("extend not implemented for weights");
         }
         if ( evord2 != 0 ) {
            logger.warn("TermOrder is already extended");
@@ -810,12 +809,16 @@ public final class TermOrder implements Serializable {
                w[i] = wj;
            }
            return new TermOrder( w );
-           // throw new RuntimeException("contract not implemented for weights");
         }
         if ( evord2 == 0 ) {
            logger.warn("TermOrder is already contracted");
+           return new TermOrder(evord);
         }
-        return new TermOrder(evord);
+        if ( evend1 > k ) { // < IntMax since evord2 != 0
+           return new TermOrder(evord,evord,len,evend1-k);
+        } else {
+           return new TermOrder(evord);
+        }
     }
 
 
