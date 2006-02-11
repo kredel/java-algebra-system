@@ -221,6 +221,7 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
            ExpVector ef = e.sum(f);
            ExpVector lp = p.leadingExpVector();
            if ( ! ef.equals(lp) ) { // check for suitable term order
+              logger.debug("relation term order = " + ring.tord);
               throw new IllegalArgumentException("RelationTable update e*f != lt(p)");
            }
         }
@@ -419,19 +420,42 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
             return;
         }
         // assert this.size() == 0
-        List val;
+        int k = ring.tord.getSplit();
+        if ( ! ring.partial ) {
+           k = -1;
+        }
         for ( List<Integer> key: tab.table.keySet() ) { 
-            val = tab.table.get( key );
+            List val = tab.table.get( key );
             for ( Iterator jt = val.iterator(); jt.hasNext(); ) { 
                 ExpVectorPair ep = (ExpVectorPair)jt.next();
                 ExpVector e = ep.getFirst();
                 ExpVector f = ep.getSecond();
                 GenSolvablePolynomial<C> p = (GenSolvablePolynomial<C>)jt.next();
-                ExpVector ex = e.reverse(); 
-                ExpVector fx = f.reverse(); 
-                GenSolvablePolynomial<C> px 
-                   = (GenSolvablePolynomial<C>)p.reverse(ring);
-                this.update( fx, ex, px ); // opposite order
+                ExpVector ex; 
+                ExpVector fx; 
+                GenSolvablePolynomial<C> px; 
+                boolean change = true; // if relevant vars reversed
+                if ( k >= 0 ) {
+                   ex = e.reverse(k); 
+                   fx = f.reverse(k); 
+                   int[] ed = ex.dependencyOnVariables(); // = e
+                   if ( ed.length == 0 || ed[0] >= k ) { // k >= 0
+                      change = false;
+                   }
+                   int[] fd = fx.dependencyOnVariables(); // = f
+                   if ( fd.length == 0 || fd[0] >= k ) { // k >= 0
+                      change = false;
+                   }
+                } else {
+                   ex = e.reverse(); 
+                   fx = f.reverse(); 
+                }
+                px = (GenSolvablePolynomial<C>)p.reverse(ring);
+                if ( ! change ) {
+                   this.update( e, f, px ); // same order
+                } else {
+                   this.update( fx, ex, px ); // opposite order
+                }
             }
         }
         return;

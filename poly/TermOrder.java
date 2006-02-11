@@ -294,7 +294,7 @@ public final class TermOrder implements Serializable {
         this.evord2 = ev2;
         weight = null;
         evbeg1 = 0;
-        evend1 = split;
+        evend1 = split; // excluded
         evbeg2 = split;
         evend2 = r;
         if ( evbeg2 > evend2 ) {
@@ -605,7 +605,7 @@ public final class TermOrder implements Serializable {
      * @return split.
      */
     public int getSplit() { 
-        return evbeg2; 
+        return evend1; // = evbeg2
     }
 
 
@@ -824,7 +824,21 @@ public final class TermOrder implements Serializable {
      * @return TermOrder for reversed variables.
      */
     public TermOrder reverse() {
+        return reverse(false);
+    }
+
+
+    /**
+     * Reverse variables. Used e.g. in opposite rings.
+     * @param partial true for partialy reversed term orders.
+     * @return TermOrder for reversed variables.
+     */
+    public TermOrder reverse(boolean partial) {
+        TermOrder t;
         if ( weight != null ) {
+           if ( partial ) {
+              logger.error("partial reversed weight order not implemented");
+           }
            long[][] w = new long[ weight.length ][];
            for ( int i = 0; i < weight.length; i++ ) {
                long[] wi = weight[i];
@@ -834,13 +848,21 @@ public final class TermOrder implements Serializable {
                }
                w[i] = wj;
            }
-           return new TermOrder( w );
+           t = new TermOrder( w );
+           logger.info("new TO = " + t);
+           return t;
         }
         if ( evord2 == 0 ) {
-           return new TermOrder( evord );
+           t = new TermOrder( evord );
+           return t;
+        } 
+        if ( partial ) {
+           t = new TermOrder( evord, evord2, evend2, evend1 );
         } else {
-           return new TermOrder( evord2, evord, evend2, evend2 - evend1 );
+           t = new TermOrder( evord2, evord, evend2, evend2-evbeg2 );
         }
+        logger.info("new TO = " + t);
+        return t;
     }
 
 }

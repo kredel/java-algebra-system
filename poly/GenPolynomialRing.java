@@ -54,6 +54,11 @@ public class GenPolynomialRing<C extends RingElem<C> >
     public final TermOrder tord;
 
 
+    /** True for partially reversed variables.
+     */
+    protected boolean partial;
+
+
     /** The names of the variables.
      * This value can be modified. 
      */
@@ -118,6 +123,7 @@ public class GenPolynomialRing<C extends RingElem<C> >
         coFac = cf;
         nvar = n;
         tord = t;
+        partial = false;
         vars = v;
         ZERO = new GenPolynomial<C>( this );
         C coeff = coFac.getONE();
@@ -164,6 +170,7 @@ public class GenPolynomialRing<C extends RingElem<C> >
            res +=  ", " + nvar
                   + ", " + tord.toString()
                   + ", " + varsToString()
+                  + ", " + partial
                   + " ]";
         }
         return res;
@@ -454,16 +461,37 @@ public class GenPolynomialRing<C extends RingElem<C> >
      * @return polynomial ring factory with reversed variables.
      */
     public GenPolynomialRing<C> reverse() {
+        return reverse(false);
+    }
+
+
+    /**
+     * Reverse variables. Used e.g. in opposite rings.
+     * @param partial true for partialy reversed term orders.
+     * @return polynomial ring factory with reversed variables.
+     */
+    public GenPolynomialRing<C> reverse(boolean partial) {
         String[] v = null;
-        if ( vars != null ) {
+        if ( vars != null ) { // vars are not inversed
            v = new String[ vars.length ];
-           for ( int j = 0; j < vars.length; j++ ) {
-               v[j] = vars[ vars.length - 1 - j ];
+           int k = tord.getSplit();
+           if ( partial && k < vars.length ) {
+              for ( int j = 0; j < k; j++ ) {
+                  v[ vars.length - k + j ] = vars[ vars.length - 1 - j ];
+              }
+              for ( int j = 0; j < vars.length - k; j++ ) {
+                  v[ j ] = vars[ j ];
+              }
+           } else {
+              for ( int j = 0; j < vars.length; j++ ) {
+                  v[j] = vars[ vars.length - 1 - j ];
+              }
            }
         }
-        TermOrder to = tord.reverse();
+        TermOrder to = tord.reverse(partial);
         GenPolynomialRing<C> pfac 
             = new GenPolynomialRing<C>(coFac,nvar,to,v);
+        pfac.partial = partial;
         return pfac;
     }
 

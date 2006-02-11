@@ -1041,13 +1041,22 @@ public class GenPolynomial<C extends RingElem<C> >
     public GenPolynomial<C> reverse(GenPolynomialRing<C> oring) {
         GenPolynomial<C> Cp = oring.getZERO().clone();
         if ( this.isZERO() ) return Cp;
+        int k = oring.tord.getSplit();
+        if ( ! oring.partial ) {
+           k = -1;
+        }
 
         Map<ExpVector,C> C = Cp.getMap();
         Map<ExpVector,C> A = val;
+        ExpVector f;
         for ( Map.Entry<ExpVector,C> y: A.entrySet() ) {
             ExpVector e = y.getKey();
             //System.out.println("e = " + e);
-            ExpVector f = e.reverse();
+            if ( k >= 0 ) {
+               f = e.reverse(k);
+            } else {
+               f = e.reverse();
+            }
             //System.out.println("e = " + e + ", f = " + f);
             C a = y.getValue();
             //System.out.println("a = " + a);

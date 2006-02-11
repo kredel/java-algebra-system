@@ -345,4 +345,8 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
      * remove i elements of each ExpVector.
      */
 
+     /* @inherit
+     * Reverse variables. Used e.g. in opposite rings.
+     */
+  
 }

@@ -421,10 +421,21 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
      * @return solvable polynomial ring factory with reversed variables.
      */
     public GenSolvablePolynomialRing<C> reverse() {
-        GenPolynomialRing<C> pfac = super.reverse();
+        return reverse(false);
+    }
+
+
+    /**
+     * Reverse variables. Used e.g. in opposite rings.
+     * @param partial true for partialy reversed term orders.
+     * @return solvable polynomial ring factory with reversed variables.
+     */
+    public GenSolvablePolynomialRing<C> reverse(boolean partial) {
+        GenPolynomialRing<C> pfac = super.reverse(partial);
         GenSolvablePolynomialRing<C> spfac 
             = new GenSolvablePolynomialRing<C>(pfac.coFac, pfac.nvar,
                                                pfac.tord, pfac.vars);
+        spfac.partial = partial;
         spfac.table.reverse(this.table);
         return spfac;
     }
