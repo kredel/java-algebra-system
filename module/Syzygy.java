@@ -660,6 +660,7 @@ public class Syzygy<C extends RingElem<C>>  {
         //ModuleList<C> ML = new ModuleList<C>( ring, M );
         //System.out.println("syz ML = " + ML);
         // debug only:
+        /* not true in general
         List<GenPolynomial<C>> F2 = new ArrayList<GenPolynomial<C>>( F.size() );
         for ( List<GenPolynomial<C>> rr: M ) {
             GenPolynomial<C> rrg = scalarProduct( F, rr );
@@ -670,6 +671,7 @@ public class Syzygy<C extends RingElem<C>>  {
         if ( ! pF.equals( pF2 ) ) {
            logger.error("is FAB = F ? false");
         }
+        */
         int sflen = sf.size();
         List<List<GenPolynomial<C>>> M2;
         M2 = new ArrayList<List<GenPolynomial<C>>>( lenf );
