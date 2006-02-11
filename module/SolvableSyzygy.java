@@ -711,7 +711,7 @@ public class SolvableSyzygy<C extends RingElem<C>> {
                if ( si == null || ai == null ) {
                   continue;
                }
-               // List<GenSolvablePolynomial<C>> pi = leftScalarProduct(ai,si);
+               //wrong: List<GenSolvablePolynomial<C>> pi = leftScalarProduct(ai,si);
                List<GenSolvablePolynomial<C>> pi = leftScalarProduct(si,ai);
                //System.out.println("pi = " + pi);
                rf = vectorAdd( rf, pi );
@@ -726,7 +726,7 @@ public class SolvableSyzygy<C extends RingElem<C>> {
         //System.out.println("syz ML = " + ML);
         // debug only:
         List<GenSolvablePolynomial<C>> F2 = new ArrayList<GenSolvablePolynomial<C>>( F.size() );
-        /* not true in solvable case
+        /* not true in general
         for ( List<GenSolvablePolynomial<C>> rr: M ) {
             GenSolvablePolynomial<C> rrg = leftScalarProduct( F, rr );
             F2.add( rrg );
@@ -875,7 +875,8 @@ public class SolvableSyzygy<C extends RingElem<C>> {
            Z.add(F);
            return Z;
         }
-        GenSolvablePolynomialRing<C> rring = ring.reverse();
+        GenSolvablePolynomialRing<C> rring = ring.reverse(true);
+        ring = rring.reverse(true);
         GenSolvablePolynomial<C> q;
         List<GenSolvablePolynomial<C>> rF;
            rF = new ArrayList<GenSolvablePolynomial<C>>( F.size() );
@@ -884,6 +885,11 @@ public class SolvableSyzygy<C extends RingElem<C>> {
                q = (GenSolvablePolynomial<C>)p.reverse(rring);
                rF.add( q );
             }
+        }
+        if ( true || debug ) {
+           PolynomialList<C> pl = new PolynomialList<C>(rring,rF);
+           //logger.info("reversed problem = " + pl);
+           System.out.println("reversed problem = " + pl);
         }
         List<List<GenSolvablePolynomial<C>>> rZ = leftZeroRelationsArbitrary(modv,rF);
         Z = new ArrayList<List<GenSolvablePolynomial<C>>>( rZ.size() );
