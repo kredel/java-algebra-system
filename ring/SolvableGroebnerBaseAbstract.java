@@ -220,8 +220,10 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
         GenSolvablePolynomial<C> pi, pj, s, h;
         for ( int i = 0; i < F.size(); i++ ) {
             pi = F.get(i);
+            //System.out.println("pi right = " + pi);
             for ( int j = i+1; j < F.size(); j++ ) {
                 pj = F.get(j);
+                //System.out.println("pj right = " + pj);
                 if ( ! red.moduleCriterion( modv, pi, pj ) ) {
                    continue;
                 }
@@ -233,7 +235,10 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
                 //System.out.println("s right = " + s);
                 h = sred.rightNormalform( F, s );
                 if ( ! h.isZERO() ) {
+                   logger.info("isRightGB non zero h = " + h);
                    return false;
+                } else {
+                   //logger.info("isRightGB zero h = " + h);
                 }
             }
         }
@@ -425,10 +430,9 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
                rF.add( q );
             }
         }
-        if ( true || debug ) {
+        if ( debug ) {
            PolynomialList<C> pl = new PolynomialList<C>(rring,rF);
-           //logger.info("reversed problem = " + pl);
-           System.out.println("reversed problem = " + pl);
+           logger.info("reversed problem = " + pl);
         }
         List<GenSolvablePolynomial<C>> rG = leftGB( modv, rF );
         List<GenSolvablePolynomial<C>> G;
