@@ -228,6 +228,7 @@ public class ModSolvableGroebnerBase<C extends RingElem<C>> {
         }
         int modv = M.cols; // > 0  
         PolynomialList<C> F = M.getPolynomialList();
+        System.out.println("F test -------------------- \n" + F);
         return sbb.isRightGB(modv,F.castToSolvableList());
     }
 
@@ -260,13 +261,14 @@ public class ModSolvableGroebnerBase<C extends RingElem<C>> {
             return N;
         }
         PolynomialList<C> F = M.getPolynomialList();
+        System.out.println("F -------------------- \n" + F);
         GenSolvablePolynomialRing<C> sring 
             = (GenSolvablePolynomialRing<C>)F.ring;
         int modv = M.cols;
         List<GenSolvablePolynomial<C>> G 
-            = sbb.rightGB(modv,F.castToSolvableList());
+            = sbb.rightGB( modv, F.castToSolvableList() );
         F = new PolynomialList<C>(sring,G);
-        //System.out.println("rightGB -------------------- \n" + F);
+        System.out.println("rightGB -------------------- \n" + F);
         N = F.getModuleList(modv);
         return N;
     }

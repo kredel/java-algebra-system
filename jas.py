@@ -7,7 +7,7 @@ from java.lang import System
 from java.io import StringReader
 
 from org.apache.log4j import BasicConfigurator;
-#BasicConfigurator.configure();
+BasicConfigurator.configure();
 
 from edu.jas.structure import *
 from edu.jas.arith     import *

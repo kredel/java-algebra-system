@@ -82,6 +82,7 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
    GenSolvablePolynomial<BigRational> d;
    GenSolvablePolynomial<BigRational> e;
    String[] vars;
+   TermOrder tord;
    GenSolvablePolynomial<BigRational> one;
    GenSolvablePolynomial<BigRational> zero;
 
@@ -97,7 +98,7 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
    ModSolvableGroebnerBase<BigRational> msbb;
 
    int rl = 4; //4; //3; 
-   int kl = 8;
+   int kl = 5;
    int ll = 4;
    int el = 2;
    float q = 0.2f; //0.4f
@@ -106,8 +107,8 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
        a = b = c = d = e = null;
 
        cfac = new BigRational(1);
-       TermOrder tord = new TermOrder();
-       String[] vars = ExpVector.STDVARS(rl);
+       tord = new TermOrder();
+       vars = ExpVector.STDVARS(rl);
        pfac = new GenSolvablePolynomialRing<BigRational>(cfac,rl,tord,vars);
        msbb = new ModSolvableGroebnerBase<BigRational>();
 
@@ -132,7 +133,7 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
  * Test sequential left GBase.
  * 
  */
- public void testSequentialModSolvableGB() {
+ public void xtestSequentialLeftModSolvableGB() {
 
      assertTrue("not isZERO( a )", !a.isZERO() );
 
@@ -191,7 +192,7 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
  * Test sequential twosided GBase.
  * 
  */
- public void testSequentialModTSSolvableGB() {
+ public void xtestSequentialTSModSolvableGB() {
 
      assertTrue("not isZERO( a )", !a.isZERO() );
 
@@ -246,10 +247,11 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
  * Test sequential Weyl GBase.
  * 
  */
- public void testSequentialModSolvableWeylGB() {
+ public void xtestSequentialLeftModSolvableWeylGB() {
 
      int rloc = 4;
-     pfac = new GenSolvablePolynomialRing<BigRational>(cfac,rloc);
+     String[] vars = ExpVector.STDVARS(rloc);
+     pfac = new GenSolvablePolynomialRing<BigRational>(cfac,rloc,tord,vars);
      //System.out.println("pfac = " + pfac);
      //System.out.println("pfac end");
 
@@ -321,7 +323,149 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
      N = msbb.leftGB( M );
      assertTrue("isLeftGB( { (a,b,c,d) } )", msbb.isLeftGB(N) );
      //System.out.println("N = " + N );
+ }
 
+
+/**
+ * Test sequential right GBase.
+ * 
+ */
+ public void testSequentialRightModSolvableGB() {
+
+     assertTrue("not isZERO( a )", !a.isZERO() );
+
+     L = new ArrayList<List<GenSolvablePolynomial<BigRational>>>();
+
+     V = new ArrayList<GenSolvablePolynomial<BigRational>>();
+     V.add(a); V.add(zero); V.add(one);
+     L.add(V);
+     M = new ModuleList<BigRational>(pfac,L);
+     assertTrue("isRightGB( { (a,0,1) } )", msbb.isRightGB(M) );
+     //System.out.println("M = " + M );
+
+     N = msbb.rightGB( M );
+     //System.out.println("N = " + N );
+     assertTrue("isRightGB( { (a,0,1) } )", msbb.isRightGB(N) );
+
+     assertTrue("not isZERO( b )", !b.isZERO() );
+     V = new ArrayList<GenSolvablePolynomial<BigRational>>();
+     V.add(b); V.add(one); V.add(zero);
+     L.add(V);
+     M = new ModuleList<BigRational>(pfac,L);
+     //System.out.println("L = " + L.size() );
+
+     System.out.println("M = " + M );
+     N = msbb.rightGB( M );
+     System.out.println("N = " + N );
+     assertTrue("isRightGB( { (a,0,1),(b,1,0) } )", msbb.isRightGB(N) );
+
+     assertTrue("not isZERO( c )", !c.isZERO() );
+     V = new ArrayList<GenSolvablePolynomial<BigRational>>();
+     V.add(c); V.add(zero); V.add(zero);
+     L.add(V);
+     M = new ModuleList<BigRational>(pfac,L);
+     //System.out.println("M = " + M );
+     //System.out.println("L = " + L.size() );
+
+     N = msbb.rightGB( M );
+     assertTrue("isRightGB( { (a,),(b,),(c,) } )", msbb.isRightGB(N) );
+     //System.out.println("N = " + N );
+
+     assertTrue("not isZERO( d )", !d.isZERO() );
+     V = new ArrayList<GenSolvablePolynomial<BigRational>>();
+     V.add(d); V.add(zero); V.add(zero);
+     L.add(V);
+     M = new ModuleList<BigRational>(pfac,L);
+     //System.out.println("M = " + M );
+     //System.out.println("L = " + L.size() );
+
+     N = msbb.rightGB( M );
+     assertTrue("isRightGB( { (a,b,c,d) } )", msbb.isRightGB(N) );
+     //System.out.println("N = " + N );
+ }
+
+
+/**
+ * Test sequential Weyl GBase.
+ * 
+ */
+ public void xtestSequentialRightModSolvableWeylGB() {
+
+     int rloc = 4;
+     String[] vars = ExpVector.STDVARS(rloc);
+     pfac = new GenSolvablePolynomialRing<BigRational>(cfac,rloc,tord,vars);
+     //System.out.println("pfac = " + pfac);
+     //System.out.println("pfac end");
+
+     WeylRelations<BigRational> wl = new WeylRelations<BigRational>(pfac);
+     //System.out.println("wl = ");
+     wl.generate();
+     //System.out.println("generate = ");
+     table = pfac.table;
+     //System.out.println("table = ");
+     //System.out.println("table = " + table.size());
+
+     a = pfac.random(kl, ll, el, q );
+     b = pfac.random(kl, ll, el, q );
+     c = pfac.random(kl, ll, el, q );
+     d = pfac.random(kl, ll, el, q );
+     e = d; // = pfac.random(kl, ll, el, q );
+     one =  pfac.getONE();
+     zero = pfac.getZERO();
+     //System.out.println("a = " + a );
+     //System.out.println("b = " + b );
+     //System.out.println("c = " + c );
+     //System.out.println("d = " + d );
+     //System.out.println("e = " + e );
+
+     assertTrue("not isZERO( a )", !a.isZERO() );
+
+     L = new ArrayList<List<GenSolvablePolynomial<BigRational>>>();
+
+     V = new ArrayList<GenSolvablePolynomial<BigRational>>();
+     V.add(a); V.add(zero); V.add(one);
+     L.add(V);
+     M = new ModuleList<BigRational>(pfac,L);
+     assertTrue("isRightGB( { (a,0,1) } )", msbb.isRightGB(M) );
+
+     N = msbb.rightGB( M );
+     assertTrue("isRightGB( { (a,0,1) } )", msbb.isRightGB(N) );
+
+     assertTrue("not isZERO( b )", !b.isZERO() );
+     V = new ArrayList<GenSolvablePolynomial<BigRational>>();
+     V.add(b); V.add(one); V.add(zero);
+     L.add(V);
+     M = new ModuleList<BigRational>(pfac,L);
+     //System.out.println("L = " + L.size() );
+
+     System.out.println("M = " + M );
+     N = msbb.rightGB( M );
+     System.out.println("N = " + N );
+     assertTrue("isRightGB( { (a,0,1),(b,1,0) } )", msbb.isRightGB(N) );
+
+     assertTrue("not isZERO( c )", !c.isZERO() );
+     V = new ArrayList<GenSolvablePolynomial<BigRational>>();
+     V.add(c); V.add(zero); V.add(zero);
+     L.add(V);
+     M = new ModuleList<BigRational>(pfac,L);
+     //System.out.println("M = " + M );
+     //System.out.println("L = " + L.size() );
+
+     N = msbb.rightGB( M );
+     assertTrue("isRightGB( { (a,),(b,),(c,) } )", msbb.isRightGB(N) );
+     //System.out.println("N = " + N );
+
+     assertTrue("not isZERO( d )", !d.isZERO() );
+     V = new ArrayList<GenSolvablePolynomial<BigRational>>();
+     V.add(d); V.add(zero); V.add(zero);
+     L.add(V);
+     M = new ModuleList<BigRational>(pfac,L);
+     //System.out.println("M = " + M );
+     //System.out.println("L = " + L.size() );
+
+     N = msbb.rightGB( M );
+     assertTrue("isRightGB( { (a,b,c,d) } )", msbb.isRightGB(N) );
+     //System.out.println("N = " + N );
  }
 
 }
