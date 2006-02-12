@@ -238,7 +238,7 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
                    logger.info("isRightGB non zero h = " + h);
                    return false;
                 } else {
-                   //logger.info("isRightGB zero h = " + h);
+                    //logger.info("isRightGB zero h = " + h);
                 }
             }
         }
@@ -430,12 +430,12 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
                rF.add( q );
             }
         }
-        if ( true || debug ) {
+        if ( debug ) {
            PolynomialList<C> pl = new PolynomialList<C>(rring,rF);
            logger.info("reversed problem = " + pl);
         }
         List<GenSolvablePolynomial<C>> rG = leftGB( modv, rF );
-        if ( true || debug ) {
+        if ( debug ) {
            PolynomialList<C> pl = new PolynomialList<C>(rring,rG);
            logger.info("reversed GB = " + pl);
         }
