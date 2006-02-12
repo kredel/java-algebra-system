@@ -49,6 +49,7 @@ public class GenPolynomial<C extends RingElem<C> >
 
 
     private static Logger logger = Logger.getLogger(GenPolynomial.class);
+    private final boolean debug = logger.isDebugEnabled();
 
 
     // protected GenPolynomial() { ring = null; val = null; } // don't use
@@ -1041,10 +1042,11 @@ public class GenPolynomial<C extends RingElem<C> >
     public GenPolynomial<C> reverse(GenPolynomialRing<C> oring) {
         GenPolynomial<C> Cp = oring.getZERO().clone();
         if ( this.isZERO() ) return Cp;
-        int k = oring.tord.getSplit();
-        if ( ! oring.partial ) {
-           k = -1;
+        int k = -1;
+        if ( oring.tord.getEvord2() != 0 && oring.partial ) {
+           k = oring.tord.getSplit();
         }
+        // logger.debug("poly k split = " + k );
 
         Map<ExpVector,C> C = Cp.getMap();
         Map<ExpVector,C> A = val;
