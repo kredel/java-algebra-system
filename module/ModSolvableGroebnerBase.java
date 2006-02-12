@@ -4,7 +4,7 @@
 
 package edu.jas.module;
 
-//import java.util.ArrayList;
+import java.util.ArrayList;
 //import java.util.Arrays;
 import java.util.List;
 //import java.util.ListIterator;
@@ -39,6 +39,7 @@ import edu.jas.module.ModuleList;
 public class ModSolvableGroebnerBase<C extends RingElem<C>> {
 
     private static final Logger logger = Logger.getLogger(ModSolvableGroebnerBase.class);
+    private final boolean debug = logger.isDebugEnabled();
 
 
     /**
@@ -116,12 +117,18 @@ public class ModSolvableGroebnerBase<C extends RingElem<C>> {
             return N;
         }
         PolynomialList<C> F = M.getPolynomialList();
+        if ( debug ) {
+           logger.info("F left +++++++++++++++++++ \n" + F);
+        }
         GenSolvablePolynomialRing<C> sring 
             = (GenSolvablePolynomialRing<C>)F.ring;
         int modv = M.cols;
         List<GenSolvablePolynomial<C>> G 
             = sbb.leftGB(modv,F.castToSolvableList());
         F = new PolynomialList<C>(sring,G);
+        if ( debug ) {
+           logger.info("G left +++++++++++++++++++ \n" + F);
+        }
         N = F.getModuleList(modv);
         return N;
     }
@@ -228,8 +235,8 @@ public class ModSolvableGroebnerBase<C extends RingElem<C>> {
         }
         int modv = M.cols; // > 0  
         PolynomialList<C> F = M.getPolynomialList();
-        System.out.println("F test -------------------- \n" + F);
-        return sbb.isRightGB(modv,F.castToSolvableList());
+        //System.out.println("F test = " + F);
+        return sbb.isRightGB( modv, F.castToSolvableList() );
     }
 
 
@@ -242,8 +249,13 @@ public class ModSolvableGroebnerBase<C extends RingElem<C>> {
      */
     public List<GenSolvablePolynomial<C>> 
            rightGB(int modv, List<GenSolvablePolynomial<C>> F) {  
-        return sbb.rightGB(modv,F);
+        if ( modv == 0 ) {
+           return sbb.rightGB(modv,F);
+        }
+        throw new RuntimeException("modv != 0 not jet implemented");
+        // return sbb.rightGB(modv,F);
     }
+
 
     /**
      * Right Groebner base using pairlist class.
@@ -260,17 +272,53 @@ public class ModSolvableGroebnerBase<C extends RingElem<C>> {
         if ( M.rows == 0 || M.cols == 0 ) {
             return N;
         }
-        PolynomialList<C> F = M.getPolynomialList();
-        System.out.println("F -------------------- \n" + F);
+        if ( debug ) {
+           logger.info("M ====================== \n" + M);
+        }
+        List<List<GenSolvablePolynomial<C>>> mlist = M.castToSolvableList();
         GenSolvablePolynomialRing<C> sring 
-            = (GenSolvablePolynomialRing<C>)F.ring;
-        int modv = M.cols;
-        List<GenSolvablePolynomial<C>> G 
-            = sbb.rightGB( modv, F.castToSolvableList() );
-        F = new PolynomialList<C>(sring,G);
-        System.out.println("rightGB -------------------- \n" + F);
-        N = F.getModuleList(modv);
-        return N;
+            = (GenSolvablePolynomialRing<C>)M.ring;
+        GenSolvablePolynomialRing<C> rring = sring.reverse(true); //true
+        sring = rring.reverse(true); // true
+
+        List<List<GenSolvablePolynomial<C>>> nlist = 
+            new ArrayList<List<GenSolvablePolynomial<C>>>( M.rows );
+        for ( List<GenSolvablePolynomial<C>> row : mlist ) {
+            List<GenSolvablePolynomial<C>> nrow = 
+                new ArrayList<GenSolvablePolynomial<C>>( row.size() );
+            for ( GenSolvablePolynomial<C> elem : row ) {
+                GenSolvablePolynomial<C> nelem 
+                   = (GenSolvablePolynomial<C>)elem.reverse(rring);
+                nrow.add( nelem );
+            }
+            nlist.add( nrow );
+        }
+        ModuleList<C> rM = new ModuleList<C>( rring, nlist );
+        if ( debug ) {
+           logger.info("rM -------------------- \n" + rM);
+        }
+        ModuleList<C> rMg = leftGB( rM );
+        if ( debug ) {
+           logger.info("rMg -------------------- \n" + rMg);
+        }
+
+        mlist = rMg.castToSolvableList();
+        nlist = new ArrayList<List<GenSolvablePolynomial<C>>>( rMg.rows );
+        for ( List<GenSolvablePolynomial<C>> row : mlist ) {
+            List<GenSolvablePolynomial<C>> nrow = 
+                new ArrayList<GenSolvablePolynomial<C>>( row.size() );
+            for ( GenSolvablePolynomial<C> elem : row ) {
+                GenSolvablePolynomial<C> nelem 
+                   = (GenSolvablePolynomial<C>)elem.reverse(sring);
+                nrow.add( nelem );
+            }
+            nlist.add( nrow );
+        }
+        ModuleList<C> Mg = new ModuleList<C>( sring, nlist );
+        if ( debug ) {
+           logger.info("Mg -------------------- \n" + Mg);
+        }
+        return Mg;
     }
 
 }
