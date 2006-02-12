@@ -1390,9 +1390,9 @@ public final class TermOrder implements Serializable {
            return new TermOrder(evord);
         }
         if ( evend1 > k ) { // < IntMax since evord2 != 0
-           return new TermOrder(evord,evord,len,evend1-k);
+           return new TermOrder(evord,evord2,len,evend1-k);
         } else {
-           return new TermOrder(evord);
+           return new TermOrder(evord2);
         }
     }
 
