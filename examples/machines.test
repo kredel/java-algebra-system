@@ -1,0 +1,9 @@
+# maschines file for jas for junit tests
+
+localhost:4712   # first host is master
+localhost:4711   # first host is master
+localhost:4711   # first client host
+localhost:4711   # second host with port
+#localhost:4711   # last host 
+
+# eof
