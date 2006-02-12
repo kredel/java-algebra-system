@@ -133,7 +133,7 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
  * Test sequential left GBase.
  * 
  */
- public void xtestSequentialLeftModSolvableGB() {
+ public void testSequentialLeftModSolvableGB() {
 
      assertTrue("not isZERO( a )", !a.isZERO() );
 
@@ -192,7 +192,7 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
  * Test sequential twosided GBase.
  * 
  */
- public void xtestSequentialTSModSolvableGB() {
+ public void testSequentialTSModSolvableGB() {
 
      assertTrue("not isZERO( a )", !a.isZERO() );
 
@@ -247,7 +247,7 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
  * Test sequential Weyl GBase.
  * 
  */
- public void xtestSequentialLeftModSolvableWeylGB() {
+ public void testSequentialLeftModSolvableWeylGB() {
 
      int rloc = 4;
      String[] vars = ExpVector.STDVARS(rloc);
@@ -354,9 +354,9 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
      M = new ModuleList<BigRational>(pfac,L);
      //System.out.println("L = " + L.size() );
 
-     System.out.println("M = " + M );
+     //System.out.println("M = " + M );
      N = msbb.rightGB( M );
-     System.out.println("N = " + N );
+     //System.out.println("N = " + N );
      assertTrue("isRightGB( { (a,0,1),(b,1,0) } )", msbb.isRightGB(N) );
 
      assertTrue("not isZERO( c )", !c.isZERO() );
@@ -389,7 +389,7 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
  * Test sequential Weyl GBase.
  * 
  */
- public void xtestSequentialRightModSolvableWeylGB() {
+ public void testSequentialRightModSolvableWeylGB() {
 
      int rloc = 4;
      String[] vars = ExpVector.STDVARS(rloc);
@@ -438,9 +438,9 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
      M = new ModuleList<BigRational>(pfac,L);
      //System.out.println("L = " + L.size() );
 
-     System.out.println("M = " + M );
+     //System.out.println("M = " + M );
      N = msbb.rightGB( M );
-     System.out.println("N = " + N );
+     //System.out.println("N = " + N );
      assertTrue("isRightGB( { (a,0,1),(b,1,0) } )", msbb.isRightGB(N) );
 
      assertTrue("not isZERO( c )", !c.isZERO() );
