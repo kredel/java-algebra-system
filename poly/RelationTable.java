@@ -420,10 +420,11 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
             return;
         }
         // assert this.size() == 0
-        int k = ring.tord.getSplit();
-        if ( ! ring.partial ) {
-           k = -1;
+        int k = -1;
+        if ( ring.tord.getEvord2() != 0 && ring.partial ) {
+           k = ring.tord.getSplit();
         }
+        //logger.info("k split = " + k );
         for ( List<Integer> key: tab.table.keySet() ) { 
             List val = tab.table.get( key );
             for ( Iterator jt = val.iterator(); jt.hasNext(); ) { 
@@ -431,6 +432,9 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
                 ExpVector e = ep.getFirst();
                 ExpVector f = ep.getSecond();
                 GenSolvablePolynomial<C> p = (GenSolvablePolynomial<C>)jt.next();
+                //logger.info("e pre reverse = " + e );
+                //logger.info("f pre reverse = " + f );
+                //logger.info("p pre reverse = " + p );
                 ExpVector ex; 
                 ExpVector fx; 
                 GenSolvablePolynomial<C> px; 
