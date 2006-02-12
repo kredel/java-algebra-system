@@ -732,47 +732,6 @@ public class ExpVector implements Cloneable, Serializable {
 
 
     /**
-     * Inverse weighted lexicographical compare.
-     * @param w weight array.
-     * @param U
-     * @param V
-     * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
-     */
-    public static int EVIWLC( long[][] w, ExpVector U, ExpVector V ) {
-        long[] u = U.getval();
-        long[] v = V.getval();
-        int t = 0;
-        int i;
-        for ( i = 0; i < u.length; i++ ) {
-            if ( u[i] > v[i] ) { 
-               t = 1; break; 
-            }
-            if ( u[i] < v[i] ) { 
-               t = -1; break; 
-            }
-        }
-        if ( t == 0 ) {
-           return t;
-        }
-	for ( int k = 0; k < w.length; k++ ) {
-	    long[] wk = w[k];
-            long up = 0; 
-            long vp = 0; 
-            for (int j = i; j < u.length; j++ ) {
-                up += wk[j] * u[j]; 
-                vp += wk[j] * v[j]; 
-            }
-            if ( up > vp ) { 
-               return 1;
-            } else if ( up < vp ) { 
-               return -1;
-            }
-	}
-        return t;
-    }
-
-
-    /**
      * Inverse graded lexicographical compare part.
      * Compare entries between begin and end (-1).
      * @param U
@@ -810,6 +769,167 @@ public class ExpVector implements Cloneable, Serializable {
               t = -1; 
            }
         }
+        return t;
+    }
+
+
+    /**
+     * Reverse inverse lexicographical compare.
+     * @param U
+     * @param V
+     * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
+     */
+    public static int EVRILCP( ExpVector U, ExpVector V ) {
+        long[] u = U.getval();
+        long[] v = V.getval();
+        int t = 0;
+        for (int i = u.length-1; i >= 0; i-- ) {
+            if ( u[i] > v[i] ) return 1;
+            if ( u[i] < v[i] ) return -1;
+        }
+        return t;
+    }
+
+
+    /**
+     * Reverse inverse lexicographical compare part.
+     * Compare entries between begin and end (-1).
+     * @param U
+     * @param V
+     * @param begin
+     * @param end
+     * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
+     */
+    public static int EVRILCP( ExpVector U, ExpVector V, int begin, int end ) {
+        long[] u = U.getval();
+        long[] v = V.getval();
+        int t = 0;
+        for (int i = end-1; i >= begin; i-- ) {
+            if ( u[i] > v[i] ) return 1;
+            if ( u[i] < v[i] ) return -1;
+        }
+        return t;
+    }
+
+
+    /**
+     * Reverse inverse graded lexicographical compare.
+     * @param U
+     * @param V
+     * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
+     */
+    public static int EVRIGLC( ExpVector U, ExpVector V ) {
+        long[] u = U.getval();
+        long[] v = V.getval();
+        int t = 0;
+        int i;
+        for ( i = u.length-1; i >= 0; i-- ) {
+            if ( u[i] > v[i] ) { 
+               t = 1; break; 
+            }
+            if ( u[i] < v[i] ) { 
+               t = -1; break; 
+            }
+        }
+        if ( t == 0 ) { 
+           return t;
+        }
+        long up = 0; 
+        long vp = 0; 
+        for (int j = i; j >= 0; j-- ) {
+            up += u[j]; 
+            vp += v[j]; 
+        }
+        if ( up > vp ) { 
+           t = 1; 
+        } else { 
+           if ( up < vp ) { 
+              t = -1; 
+           }
+        }
+        return t;
+    }
+
+
+    /**
+     * Reverse inverse graded lexicographical compare part.
+     * Compare entries between begin and end (-1).
+     * @param U
+     * @param V
+     * @param begin
+     * @param end
+     * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
+     */
+    public static int EVRIGLC( ExpVector U, ExpVector V, int begin, int end ) {
+        long[] u = U.getval();
+        long[] v = V.getval();
+        int t = 0;
+        int i;
+        for ( i = end-1; i >= begin; i-- ) {
+            if ( u[i] > v[i] ) { 
+               t = 1; break; 
+            }
+            if ( u[i] < v[i] ) { 
+               t = -1; break; 
+            }
+        }
+        if ( t == 0 ) {
+           return t;
+        }
+        long up = 0; 
+        long vp = 0; 
+        for (int j = i; j >= begin; j-- ) {
+            up += u[j]; 
+            vp += v[j]; 
+        }
+        if ( up > vp ) { 
+           t = 1; 
+        } else { 
+           if ( up < vp ) { 
+              t = -1; 
+           }
+        }
+        return t;
+    }
+
+
+    /**
+     * Inverse weighted lexicographical compare.
+     * @param w weight array.
+     * @param U
+     * @param V
+     * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
+     */
+    public static int EVIWLC( long[][] w, ExpVector U, ExpVector V ) {
+        long[] u = U.getval();
+        long[] v = V.getval();
+        int t = 0;
+        int i;
+        for ( i = 0; i < u.length; i++ ) {
+            if ( u[i] > v[i] ) { 
+               t = 1; break; 
+            }
+            if ( u[i] < v[i] ) { 
+               t = -1; break; 
+            }
+        }
+        if ( t == 0 ) {
+           return t;
+        }
+	for ( int k = 0; k < w.length; k++ ) {
+	    long[] wk = w[k];
+            long up = 0; 
+            long vp = 0; 
+            for (int j = i; j < u.length; j++ ) {
+                up += wk[j] * u[j]; 
+                vp += wk[j] * v[j]; 
+            }
+            if ( up > vp ) { 
+               return 1;
+            } else if ( up < vp ) { 
+               return -1;
+            }
+	}
         return t;
     }
 
@@ -856,75 +976,5 @@ public class ExpVector implements Cloneable, Serializable {
 	}
         return t;
     }
-
-
-    /*
-     * Compare.
-     * @param evord
-     * @param U
-     * @param V
-     * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
-     * @deprecated Now obsoleted by TermOrder.get*Comparator, 
-     * used only in TermOrderTest.
-     *
-    public static int EVCOMP( int evord, ExpVector U, ExpVector V ) {
-        int t = 0;
-        switch ( evord ) {
-            case TermOrder.LEX:    { 
-                        t = ( -EVILCP( U, V ) );  break; 
-            }
-            case TermOrder.INVLEX: { 
-                        t =    EVILCP( U, V )  ;  break; 
-            }
-            case TermOrder.GRLEX:  { 
-                        t = ( -EVIGLC( U, V ) );  break; 
-            }
-            case TermOrder.IGRLEX: { 
-                        t =    EVIGLC( U, V )  ;  break; 
-            }
-            default:     { 
-                        throw new IllegalArgumentException("EVCOMP, undefined term order.");
-            }
-        }
-        return t;
-    }
-     */
-
-
-    /*
-     * Compare part.
-     * Compare entries between begin and end (-1).
-     * @param evord
-     * @param U
-     * @param V
-     * @param begin
-     * @param end
-     * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
-     * @deprecated Now obsoleted by TermOrder.get*Comparator, 
-     * used only in TermOrderTest.
-     *
-    public static int EVCOMP( int evord, ExpVector U, ExpVector V, 
-                              int begin, int end ) {
-        int t = 0;
-        switch ( evord ) {
-            case TermOrder.LEX:    { 
-                        t = ( -EVILCP( U, V, begin, end ) );  break; 
-            }
-            case TermOrder.INVLEX: { 
-                        t =    EVILCP( U, V, begin, end )  ;  break; 
-            }
-            case TermOrder.GRLEX:  { 
-                        t = ( -EVIGLC( U, V, begin, end ) );  break; 
-            }
-            case TermOrder.IGRLEX: { 
-                        t =    EVIGLC( U, V, begin, end )  ;  break; 
-            }
-            default:    { 
-                        throw new IllegalArgumentException("EVCOMP, undefined term order.");
-            }
-        }
-        return t;
-    }
-     */
 
 }
