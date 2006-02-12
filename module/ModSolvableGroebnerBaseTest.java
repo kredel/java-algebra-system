@@ -98,8 +98,8 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
    ModSolvableGroebnerBase<BigRational> msbb;
 
    int rl = 4; //4; //3; 
-   int kl = 5;
-   int ll = 4;
+   int kl = 4;
+   int ll = 3;
    int el = 2;
    float q = 0.2f; //0.4f
 
