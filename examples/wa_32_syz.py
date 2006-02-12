@@ -13,7 +13,7 @@ from edu.jas.module import SolvableSyzygy;
 
 rs = """
 # solvable polynomials, Weyl algebra A_3,2:
-Rat(a,b,e1,e2,e3) L
+Rat(a,b,e1,e2,e3) G3|
 RelationTable
 (
  ( e3 ), ( e1 ), ( e1 e3 - e1 ),
