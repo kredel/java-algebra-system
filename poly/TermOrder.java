@@ -78,9 +78,9 @@ public final class TermOrder implements Serializable {
     /**
      * Comparator for ExpVectors.
      */
-    private abstract class EVorder implements Comparator<ExpVector>, 
-                                              Serializable {
-           public abstract int compare(ExpVector e1, ExpVector e2); 
+    private static abstract class EVorder implements Comparator<ExpVector>, 
+                                                     Serializable {
+            public abstract int compare(ExpVector e1, ExpVector e2); 
     }
 
 

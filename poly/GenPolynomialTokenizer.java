@@ -60,14 +60,14 @@ public class GenPolynomialTokenizer  {
     private RingFactory                                fac;
     //private RingFactory<AlgebraicNumber<BigRational>> anfac;
     //private RingFactory<AlgebraicNumber<ModInteger>>  gffac;
-    private enum coeffType { BigRat, BigInt, ModInt, BigC, BigQ, 
-                             ANrat, ANmod };
+    private static enum coeffType { BigRat, BigInt, ModInt, BigC, BigQ, 
+                                    ANrat, ANmod };
     private coeffType parsedCoeff = coeffType.BigRat;
 
 
     private GenPolynomialRing                pfac;
-    private enum polyType { PolBigRat, PolBigInt, PolModInt, PolBigC, 
-                            PolBigQ, PolANrat, PolANmod };
+    private static enum polyType { PolBigRat, PolBigInt, PolModInt, PolBigC, 
+                                   PolBigQ, PolANrat, PolANmod };
     private polyType parsedPoly = polyType.PolBigRat;
 
     private GenSolvablePolynomialRing        spfac;

@@ -413,7 +413,7 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
      * Reverse all ExpVectors and polynomials of the given 
      * relation table and put the modified relations into this table, 
      * i.e. this should be empty.
-     * @param tab a relation table to be extended and inserted into this.
+     * @param tab a relation table to be reverted and inserted into this.
      */
     public void reverse(RelationTable<C> tab) {  
         if ( tab.table.size() == 0 ) {
