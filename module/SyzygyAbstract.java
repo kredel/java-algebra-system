@@ -40,7 +40,7 @@ import edu.jas.module.GenVectorModul;
  */
 
 public class SyzygyAbstract<C extends RingElem<C>> 
-                              implements Syzygy<C> {
+             implements Syzygy<C> {
 
     private static final Logger logger = Logger.getLogger(SyzygyAbstract.class);
     private final boolean debug = logger.isDebugEnabled();
