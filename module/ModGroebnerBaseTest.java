@@ -100,7 +100,7 @@ public class ModGroebnerBaseTest extends TestCase {
        vars = ExpVector.STDVARS( rl );
        tord = new TermOrder();
        fac = new GenPolynomialRing<BigRational>(coeff,rl,tord,vars);
-       mbb = new ModGroebnerBase<BigRational>();
+       mbb = new ModGroebnerBaseAbstract<BigRational>();
        a = b = c = d = e = null;
 
        a = fac.random(kl, ll, el, q );
