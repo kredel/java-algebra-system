@@ -110,7 +110,7 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
        tord = new TermOrder();
        vars = ExpVector.STDVARS(rl);
        pfac = new GenSolvablePolynomialRing<BigRational>(cfac,rl,tord,vars);
-       msbb = new ModSolvableGroebnerBase<BigRational>();
+       msbb = new ModSolvableGroebnerBaseAbstract<BigRational>();
 
        a = pfac.random(kl, ll, el, q );
        b = pfac.random(kl, ll, el, q );
