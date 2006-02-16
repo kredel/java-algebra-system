@@ -114,7 +114,7 @@ public class SyzygyTest extends TestCase {
        fac = new GenPolynomialRing<BigRational>(coeff,rl,tord,vars);
 
        bb = new GroebnerBaseSeq<BigRational>();
-       mbb = new ModGroebnerBase<BigRational>();
+       mbb = new ModGroebnerBaseAbstract<BigRational>();
        sz = new SyzygyAbstract<BigRational>();
 
        a = b = c = d = e = null;
