@@ -115,7 +115,7 @@ public class SyzygyTest extends TestCase {
 
        bb = new GroebnerBaseSeq<BigRational>();
        mbb = new ModGroebnerBase<BigRational>();
-       sz = new Syzygy<BigRational>();
+       sz = new SyzygyAbstract<BigRational>();
 
        a = b = c = d = e = null;
        L = null;
