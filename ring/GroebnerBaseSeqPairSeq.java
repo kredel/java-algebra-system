@@ -16,7 +16,7 @@ import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 
-import edu.jas.module.Syzygy;
+import edu.jas.module.SyzygyAbstract;
 
 
 /**
@@ -32,14 +32,14 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>>
     private final boolean debug = logger.isDebugEnabled();
 
 
-    Syzygy<C> syz;
+    SyzygyAbstract<C> syz;
 
 
     /**
      * Constructor.
      */
     public GroebnerBaseSeqPairSeq() {
-        syz = new Syzygy<C>();
+        syz = new SyzygyAbstract<C>();
     }
 
 
