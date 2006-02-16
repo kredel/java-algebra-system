@@ -16,7 +16,7 @@ import edu.jas.poly.GenSolvablePolynomialRing;
 
 import edu.jas.structure.RingElem;
 
-import edu.jas.module.SolvableSyzygy;
+import edu.jas.module.SolvableSyzygyAbstract;
 
 
 /**
@@ -34,14 +34,14 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>>
     private final boolean debug = logger.isDebugEnabled();
 
 
-    SolvableSyzygy<C> ssyz;
+    SolvableSyzygyAbstract<C> ssyz;
 
 
     /**
      * Constructor.
      */
     public SolvableGroebnerBaseSeq() {
-        ssyz = new SolvableSyzygy<C>();
+        ssyz = new SolvableSyzygyAbstract<C>();
     }
 
 
