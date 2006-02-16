@@ -27,11 +27,12 @@ public class ExecutableChannels {
 
     private static Logger logger = Logger.getLogger(ExecutableChannels.class);
 
+    protected final static int DEFAULT_PORT = ChannelFactory.DEFAULT_PORT;
+
     protected final ChannelFactory cf;
     protected SocketChannel[] channels = null;
     protected String[] servers = null;
     protected int[] ports = null;
-    protected final int DEFAULT_PORT = ChannelFactory.DEFAULT_PORT;
 
 
     /**

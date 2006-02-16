@@ -163,6 +163,7 @@ public class ExecutableServer extends Thread {
             //logger.debug("server " + mythread + " terminated");
         } catch (InterruptedException e) { 
         }
+        mythread = null;
         logger.debug("ExecuteServer terminated");
     }
 

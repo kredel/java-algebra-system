@@ -210,6 +210,7 @@ public class DistHashTableServer extends Thread {
             }
         } catch (InterruptedException e) { 
         }
+        mythread = null;
         logger.debug("ListServer terminated");
     }
 
