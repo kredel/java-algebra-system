@@ -95,19 +95,6 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>>
     }
 
 
-    /**
-     * Groebner base using pairlist class.
-     * @param C coefficient type.
-     * @param modv module variable number.
-     * @param F polynomial list.
-     * @return GB(F) a Groebner base of F.
-     */
-    public abstract List<GenPolynomial<C>> 
-                    GB( int modv, 
-                        List<GenPolynomial<C>> F );
-
-
-
     /** 
      * Extended Groebner base using critical pair class.
      * @param C coefficient type.
