@@ -137,32 +137,6 @@ public abstract class SolvableReductionAbstract<C extends RingElem<C>>
 
 
     /**
-     * Left Normalform.
-     * @param C coefficient type.
-     * @param Ap solvable polynomial.
-     * @param Pp solvable polynomial list.
-     * @return left-nf(Ap) with respect to Pp.
-     */
-    public abstract GenSolvablePolynomial<C> 
-           leftNormalform(List<GenSolvablePolynomial<C>> Pp, 
-                          GenSolvablePolynomial<C> Ap);
-
-
-    /**
-     * LeftNormalform with recording.
-     * @param C coefficient type.
-     * @param row recording matrix, is modified.
-     * @param Pp a polynomial list for reduction.
-     * @param Ap a polynomial.
-     * @return nf(Pp,Ap), the left normal form of Ap wrt. Pp.
-     */
-    public abstract GenSolvablePolynomial<C> 
-           leftNormalform(List<GenSolvablePolynomial<C>> row,
-                          List<GenSolvablePolynomial<C>> Pp, 
-                          GenSolvablePolynomial<C> Ap);
-
-
-    /**
      * Left Normalform Set.
      * @param C coefficient type.
      * @param Ap solvable polynomial list.
@@ -341,18 +315,6 @@ public abstract class SolvableReductionAbstract<C extends RingElem<C>>
         GenSolvablePolynomial<C> Cp = (GenSolvablePolynomial<C>) App.subtract(Bpp);
         return Cp;
     }
-
-
-    /**
-     * Right Normalform.
-     * @param C coefficient type.
-     * @param Ap solvable polynomial.
-     * @param Pp solvable polynomial list.
-     * @return right-nf(Ap) with respect to Pp.
-     */
-    public abstract GenSolvablePolynomial<C> 
-           rightNormalform(List<GenSolvablePolynomial<C>> Pp, 
-                           GenSolvablePolynomial<C> Ap);
 
 
 }

@@ -258,18 +258,6 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
     }
 
 
-    /**
-     * Left Groebner base using pairlist class.
-     * @param C coefficient type.
-     * @param modv number of module variables.
-     * @param F solvable polynomial list.
-     * @return leftGB(F) a left Groebner base of F.
-     */
-    public abstract List<GenSolvablePolynomial<C>> 
-           leftGB(int modv, 
-                  List<GenSolvablePolynomial<C>> F);
-
-
     /** 
      * Solvable Extended Groebner base using critical pair class.
      * @param C coefficient type.
@@ -280,18 +268,6 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
            extLeftGB( List<GenSolvablePolynomial<C>> F ) {
         return extLeftGB(0,F); 
     }
-
-
-    /**
-     * Solvable Extended Groebner base using critical pair class.
-     * @param C coefficient type.
-     * @param modv module variable number.
-     * @param F solvable polynomial list.
-     * @return a container for an extended left Groebner base of F.
-     */
-    public abstract SolvableExtendedGB<C> 
-                    extLeftGB( int modv, 
-                               List<GenSolvablePolynomial<C>> F );
 
 
     /**
@@ -373,18 +349,6 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
                twosidedGB(List<GenSolvablePolynomial<C>> Fp) {  
         return twosidedGB(0,Fp);
     }
-
-
-    /**
-     * Twosided Groebner base using pairlist class.
-     * @param C coefficient type.
-     * @param modv number of module variables.
-     * @param Fp solvable polynomial list.
-     * @return tsGB(Fp) a twosided Groebner base of Fp.
-     */
-    public abstract List<GenSolvablePolynomial<C>> 
-           twosidedGB(int modv, 
-                      List<GenSolvablePolynomial<C>> Fp);
 
 
     /**

@@ -220,32 +220,6 @@ public abstract class ReductionAbstract<C extends RingElem<C>>
 
 
     /**
-     * Normalform.
-     * @param C coefficient type.
-     * @param Ap polynomial.
-     * @param Pp polynomial list.
-     * @return nf(Ap) with respect to Pp.
-     */
-    public abstract GenPolynomial<C> 
-           normalform(List<GenPolynomial<C>> Pp, 
-                      GenPolynomial<C> Ap);
-
-
-    /**
-     * Normalform with recording.
-     * @param C coefficient type.
-     * @param row recording matrix, is modified.
-     * @param Pp a polynomial list for reduction.
-     * @param Ap a polynomial.
-     * @return nf(Pp,Ap), the normal form of Ap wrt. Pp.
-     */
-    public abstract GenPolynomial<C> 
-           normalform(List<GenPolynomial<C>> row,
-                      List<GenPolynomial<C>> Pp, 
-                      GenPolynomial<C> Ap);
-
-
-    /**
      * Normalform Set.
      * @param C coefficient type.
      * @param Ap polynomial list.
