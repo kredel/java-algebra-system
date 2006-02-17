@@ -41,6 +41,19 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>>
      * Constructor.
      */
     public SolvableGroebnerBaseSeq() {
+        super();
+        ssyz = new SolvableSyzygyAbstract<C>();
+    }
+
+
+    /**
+     * Constructor.
+     * @param red Reduction engine
+     * @param sred Solvable reduction engine
+     */
+    public SolvableGroebnerBaseSeq(Reduction<C> red,
+                                   SolvableReduction<C> sred) {
+        super(red,sred);
         ssyz = new SolvableSyzygyAbstract<C>();
     }
 

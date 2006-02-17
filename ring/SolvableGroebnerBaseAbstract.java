@@ -48,8 +48,19 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
      * Constructor.
      */
     public SolvableGroebnerBaseAbstract() {
-        red = new ReductionSeq<C>();
-        sred = new SolvableReductionSeq<C>();
+        this( new ReductionSeq<C>(), new SolvableReductionSeq<C>() );
+    }
+
+
+    /**
+     * Constructor.
+     * @param red Reduction engine
+     * @param sred Solvable reduction engine
+     */
+    public SolvableGroebnerBaseAbstract(Reduction<C> red,
+                                        SolvableReduction<C> sred) {
+        this.red = red;
+        this.sred = sred;
     }
 
 
