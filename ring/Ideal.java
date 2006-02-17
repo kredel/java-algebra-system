@@ -28,6 +28,11 @@ import edu.jas.poly.PolynomialList;
 public class Ideal<C extends RingElem<C>> implements Serializable {
 
 
+  private static Logger logger = Logger.getLogger(Ideal.class);
+  private boolean debug = logger.isDebugEnabled();
+
+
+
   /** 
    * The data structure is a PolynomialList. 
    */
@@ -47,7 +52,7 @@ public class Ideal<C extends RingElem<C>> implements Serializable {
 
 
   /** 
-   * Groebner base algorithm. 
+   * Groebner base engine. 
    */
   protected GroebnerBase<C> bb;
 
@@ -56,9 +61,6 @@ public class Ideal<C extends RingElem<C>> implements Serializable {
    * Reduction engine.
    */
   protected Reduction<C> red;
-
-
-  private static Logger logger = Logger.getLogger(Ideal.class);
 
 
   /**
@@ -95,14 +97,42 @@ public class Ideal<C extends RingElem<C>> implements Serializable {
   /**
    * Constructor.
    * @param list polynomial list
+   * @param bb Groebner Base engine
+   * @param red Reduction engine
+   */
+  public Ideal( PolynomialList<C> list,
+                GroebnerBase<C> bb, Reduction<C> red) {
+      this( list, 
+            ( list == null ? true : ( list.list == null ? true : false ) ), 
+            new GroebnerBaseSeq<C>(), 
+            new ReductionSeq<C>() );
+  }
+
+
+  /**
+   * Constructor.
+   * @param list polynomial list
    * @param gb true if list is known to be a Groebner Base, else false
    */
   public Ideal( PolynomialList<C> list, boolean gb) {
+      this(list,gb, new GroebnerBaseSeq<C>(), new ReductionSeq<C>() );
+  }
+
+
+  /**
+   * Constructor.
+   * @param list polynomial list
+   * @param gb true if list is known to be a Groebner Base, else false
+   * @param bb Groebner Base engine
+   * @param red Reduction engine
+   */
+    public Ideal( PolynomialList<C> list, boolean gb,
+                  GroebnerBase<C> bb, Reduction<C> red) {
       this.list = list;
       this.isGB = gb;
       this.testGB = ( gb ? true : false ); // ??
-      bb = new GroebnerBaseSeq<C>();
-      red = new ReductionSeq<C>();
+      this.bb = bb;
+      this.red = red;
   }
 
 
@@ -376,30 +406,12 @@ public class Ideal<C extends RingElem<C>> implements Serializable {
       }
       logger.warn("intersect computing GB");
       List< GenPolynomial<C> > g = bb.GB( c );
-      if ( logger.isDebugEnabled() ) {
+      if ( debug ) {
          logger.debug("intersect GB = " + g);
       }
       Ideal<C> E = new Ideal<C>( tfac, g, true );
-      return E.intersect( getRing() );
-      /*
-      List< GenPolynomial<C> > h;
-      h = new ArrayList<GenPolynomial<C>>( g.size() );
-      for ( GenPolynomial<C> p : g ) {
-          Map<ExpVector,GenPolynomial<C>> m = null;
-          m = p.contract( getRing() );
-          if ( logger.isDebugEnabled() ) {
-             logger.debug("intersect contract m = " + m);
-          }
-          if ( m.size() == 1 ) { // contains one power of t
-             for ( ExpVector e : m.keySet() ) {
-                 if ( e.isZERO() ) {
-                    h.add( m.get( e ) );
-                 }
-             }
-          }
-      }
-      return new Ideal<C>( getRing(), h, true );
-      */
+      Ideal<C> I = E.intersect( getRing() );
+      return I;
   }
 
 
@@ -428,7 +440,7 @@ public class Ideal<C extends RingElem<C>> implements Serializable {
       for ( GenPolynomial<C> p : getList() ) {
           Map<ExpVector,GenPolynomial<C>> m = null;
           m = p.contract( R );
-          if ( logger.isDebugEnabled() ) {
+          if ( debug ) {
              logger.debug("intersect contract m = " + m);
           }
           if ( m.size() == 1 ) { // contains one power of variables
