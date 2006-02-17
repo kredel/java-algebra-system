@@ -460,7 +460,7 @@ public class SyzygyAbstract<C extends RingElem<C>>
         ModuleList<C> MM = M;
         ModuleList<C> GM;
         ModuleList<C> Z;
-        ModGroebnerBase<C> mbb = new ModGroebnerBase<C>();
+        ModGroebnerBase<C> mbb = new ModGroebnerBaseAbstract<C>();
         while (true) {
           GM = mbb.GB(MM);
           Z = zeroRelations(GM);
@@ -535,7 +535,7 @@ public class SyzygyAbstract<C extends RingElem<C>>
         ModuleList<C> MM = M;
         ModuleList<C> GM = null;
         ModuleList<C> Z;
-        ModGroebnerBase<C> mbb = new ModGroebnerBase<C>();
+        ModGroebnerBase<C> mbb = new ModGroebnerBaseAbstract<C>();
         while (true) {
           //GM = mbb.GB(MM);
           Z = zeroRelationsArbitrary(MM);

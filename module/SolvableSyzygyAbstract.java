@@ -516,7 +516,7 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
         ModuleList<C> MM = M;
         ModuleList<C> GM;
         ModuleList<C> Z;
-        ModSolvableGroebnerBase<C> msbb = new ModSolvableGroebnerBase<C>();
+        ModSolvableGroebnerBase<C> msbb = new ModSolvableGroebnerBaseAbstract<C>();
         while (true) {
           GM = msbb.leftGB(MM);
           Z = leftZeroRelations(GM);
@@ -568,7 +568,7 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
         ModuleList<C> MM = M;
         ModuleList<C> GM = null;
         ModuleList<C> Z;
-        ModSolvableGroebnerBase<C> msbb = new ModSolvableGroebnerBase<C>();
+        ModSolvableGroebnerBase<C> msbb = new ModSolvableGroebnerBaseAbstract<C>();
         while (true) {
             //GM = msbb.leftGB(MM);
           Z = leftZeroRelationsArbitrary(MM);
