@@ -7,7 +7,7 @@ from java.lang import System
 from java.io import StringReader
 
 from org.apache.log4j import BasicConfigurator;
-BasicConfigurator.configure();
+#BasicConfigurator.configure();
 
 from edu.jas.structure import *
 from edu.jas.arith     import *
@@ -15,8 +15,8 @@ from edu.jas.poly      import *
 from edu.jas.ring      import *
 from edu.jas.module    import *
 from edu.jas.util      import *
-from edu.jas           import *
-from edu               import *
+#from edu.jas           import *
+#from edu               import *
 
 #PrettyPrint.setInternal();
 
@@ -163,6 +163,16 @@ class SolvableIdeal:
         g = OrderedPolynomialList(s.ring,G);
         return g;
 
+    def rightGB(self):
+        s = self.pset;
+        F = s.list;
+        t = System.currentTimeMillis();
+        G = SolvableGroebnerBaseSeq().rightGB(F);
+        t = System.currentTimeMillis() - t;
+        print "executed in %s ms" % t; 
+        g = OrderedPolynomialList(s.ring,G);
+        return g;
+
     def intersect(self,ring):
         s = self.pset;
         N = jas.ring.Ideal(s).intersect(ring.ring);
@@ -202,14 +212,11 @@ class SubModule:
         return str(self.mset); # + "\n\n" + str(self.pset);
 
     def GB(self):
-        s = self.pset;
-        F = s.list;
         t = System.currentTimeMillis();
-        G = ModGroebnerBase().GB(self.cols,F);
+        G = ModGroebnerBaseAbstract().GB(self.mset);
         t = System.currentTimeMillis() - t;
         print "executed in %s ms" % t; 
-        self.pset = PolynomialList(s.ring,G);
-        self.mset = self.pset.getModuleList(self.cols);
+        self.mset = G;
         return self;
 
 
@@ -243,23 +250,27 @@ class SolvableSubModule:
         return str(self.mset); # + "\n\n" + str(self.pset);
 
     def leftGB(self):
-        s = self.pset;
-        F = s.list;
         t = System.currentTimeMillis();
-        G = ModSolvableGroebnerBase().leftGB(self.cols,F);
+        G = ModSolvableGroebnerBaseAbstract().leftGB(self.mset);
         t = System.currentTimeMillis() - t;
         print "executed in %s ms" % t; 
-        self.pset = PolynomialList(s.ring,G);
-        self.mset = self.pset.getModuleList(self.cols);
+        self.mset = G;
         return self;
 
     def twosidedGB(self):
         s = self.pset;
         F = s.list;
         t = System.currentTimeMillis();
-        G = ModSolvableGroebnerBase().twosidedGB(self.cols,F);
+        G = ModSolvableGroebnerBaseAbstract().twosidedGB(self.mset);
         t = System.currentTimeMillis() - t;
         print "executed in %s ms" % t; 
-        self.pset = PolynomialList(s.ring,G);
-        self.mset = self.pset.getModuleList(self.cols);
+        self.mset = G;
+        return self;
+
+    def rightGB(self):
+        t = System.currentTimeMillis();
+        G = ModSolvableGroebnerBaseAbstract().rightGB(self.mset);
+        t = System.currentTimeMillis() - t;
+        print "executed in %s ms" % t; 
+        self.mset = G;
         return self;
