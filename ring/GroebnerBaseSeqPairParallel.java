@@ -72,12 +72,36 @@ public class GroebnerBaseSeqPairParallel<C extends RingElem<C>>
      * @param pool ThreadPool to use.
      */
     public GroebnerBaseSeqPairParallel(int threads, ThreadPool pool) {
+        this(threads, pool, new ReductionPar<C>() );
+    }
+
+
+    /**
+     * Constructor.
+     * @param threads number of threads to use.
+     * @param red parallelism aware reduction engine
+     */
+    public GroebnerBaseSeqPairParallel(int threads, Reduction<C> red) {
+        this(threads, new ThreadPool(threads), red );
+    }
+
+
+    /**
+     * Constructor.
+     * @param threads number of threads to use.
+     * @param pool ThreadPool to use.
+     * @param red parallelism aware reduction engine
+     */
+    public GroebnerBaseSeqPairParallel(int threads, ThreadPool pool, Reduction<C> red) {
+        super(red);
+        if ( ! (red instanceof ReductionPar) ) {
+           logger.warn("parallel GB should use parallel aware reduction");
+        }
 	if ( threads < 1 ) {
            threads = 1;
         }
         this.threads = threads;
         this.pool = pool;
-        red = new ReductionPar<C>();
     }
 
 

@@ -33,6 +33,16 @@ public class GroebnerBaseSeq<C extends RingElem<C>>
      * Constructor.
      */
     public GroebnerBaseSeq() {
+        super();
+    }
+
+
+    /**
+     * Constructor.
+     * @param red Reduction engine
+     */
+    public GroebnerBaseSeq(Reduction<C> red) {
+        super(red);
     }
 
 

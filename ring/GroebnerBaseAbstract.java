@@ -22,7 +22,7 @@ import edu.jas.structure.RingElem;
 public abstract class GroebnerBaseAbstract<C extends RingElem<C>> 
                       implements GroebnerBase<C> {
 
-    //unused private static final Logger logger = Logger.getLogger(GroebnerBaseAbstract.class);
+    //private static final Logger logger = Logger.getLogger(GroebnerBaseAbstract.class);
 
 
     /**
@@ -35,7 +35,16 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>>
      * Constructor.
      */
     public GroebnerBaseAbstract() {
-        red = new ReductionSeq<C>();
+        this( new ReductionSeq<C>() );
+    }
+
+
+    /**
+     * Constructor.
+     * @param red Reduction engine
+     */
+    public GroebnerBaseAbstract(Reduction<C> red) {
+        this.red = red;
     }
 
 

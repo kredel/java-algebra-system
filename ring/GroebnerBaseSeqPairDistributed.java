@@ -95,6 +95,27 @@ public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>>
     /**
      * Constructor.
      * @param threads number of threads to use.
+     * @param red parallelism aware reduction engine
+     */
+    public GroebnerBaseSeqPairDistributed(int threads, Reduction<C> red) {
+        this(threads, new ThreadPool(threads), DEFAULT_PORT, red );
+    }
+
+
+    /**
+     * Constructor.
+     * @param threads number of threads to use.
+     * @param port server port to use.
+     * @param red parallelism aware reduction engine
+     */
+    public GroebnerBaseSeqPairDistributed(int threads, int port, Reduction<C> red) {
+        this(threads, new ThreadPool(threads), port, red );
+    }
+
+
+    /**
+     * Constructor.
+     * @param threads number of threads to use.
      * @param port server port to use.
      */
     public GroebnerBaseSeqPairDistributed(int threads, int port) {
@@ -109,13 +130,29 @@ public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>>
      * @param port server port to use.
      */
     public GroebnerBaseSeqPairDistributed(int threads, ThreadPool pool, int port) {
+        this( threads, pool, port, new ReductionPar<C>() );
+    }
+
+
+    /**
+     * Constructor.
+     * @param threads number of threads to use.
+     * @param pool ThreadPool to use.
+     * @param port server port to use.
+     * @param red parallelism aware reduction engine
+     */
+    public GroebnerBaseSeqPairDistributed(int threads, ThreadPool pool, 
+                                          int port, Reduction<C> red) {
+        super(red);
+        if ( ! (red instanceof ReductionPar) ) {
+           logger.warn("parallel GB should use parallel aware reduction");
+        }
 	if ( threads < 1 ) {
            threads = 1;
         }
         this.threads = threads;
         this.pool = pool;
         this.port = port;
-        red = new ReductionPar<C>();
     }
 
 

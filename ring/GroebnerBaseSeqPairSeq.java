@@ -39,6 +39,17 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>>
      * Constructor.
      */
     public GroebnerBaseSeqPairSeq() {
+        super();
+        syz = new SyzygyAbstract<C>();
+    }
+
+
+    /**
+     * Constructor.
+     * @param red Reduction engine
+     */
+    public GroebnerBaseSeqPairSeq(Reduction<C> red) {
+        super(red);
         syz = new SyzygyAbstract<C>();
     }
 
