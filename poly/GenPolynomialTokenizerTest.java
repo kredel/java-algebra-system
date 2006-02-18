@@ -102,10 +102,12 @@ public class GenPolynomialTokenizerTest extends TestCase {
                  + " )";
      source = new StringReader( exam );
      parser = new GenPolynomialTokenizer( source );
-     PolynomialList f = null;
+     PolynomialList<BigRational> f = null;
      try {
-         f = parser.nextPolynomialSet();
+         f = (PolynomialList<BigRational>)parser.nextPolynomialSet();
      } catch(IOException e) {
+         fail(""+e);
+     } catch (ClassCastException e) {
          fail(""+e);
      }
      //System.out.println("f = " + f);
@@ -120,19 +122,19 @@ public class GenPolynomialTokenizerTest extends TestCase {
      assertEquals("pfac == f.ring", pfac, f.ring );
 
 
-     GenPolynomial a = (GenPolynomial)f.list.get(0);
+     GenPolynomial<BigRational> a = f.list.get(0);
      //System.out.println("a = " + a);
      assertTrue("isONE( f.get(0) )", a.isONE() );
 
-     GenPolynomial b = (GenPolynomial)f.list.get(1);
+     GenPolynomial<BigRational> b = f.list.get(1);
      //System.out.println("b = " + b);
      assertTrue("isZERO( f.get(1) )", b.isZERO() );
 
-     GenPolynomial c = (GenPolynomial)f.list.get(2);
+     GenPolynomial<BigRational> c = f.list.get(2);
      //System.out.println("c = " + c);
      assertTrue("isZERO( f.get(2) )", c.isZERO() );
 
-     GenPolynomial d = (GenPolynomial)f.list.get(3);
+     GenPolynomial<BigRational> d = f.list.get(3);
      //System.out.println("d = " + d);
      assertEquals("f.get(3).length() == 2", 2, d.length() );
  }
@@ -152,10 +154,12 @@ public class GenPolynomialTokenizerTest extends TestCase {
                  + " )";
      source = new StringReader( exam );
      parser = new GenPolynomialTokenizer( source );
-     PolynomialList f = null;
+     PolynomialList<BigInteger> f = null;
      try {
-         f = parser.nextPolynomialSet();
+         f = (PolynomialList<BigInteger>)parser.nextPolynomialSet();
      } catch(IOException e) {
+         fail(""+e);
+     } catch (ClassCastException e) {
          fail(""+e);
      }
      //System.out.println("f = " + f);
@@ -170,19 +174,19 @@ public class GenPolynomialTokenizerTest extends TestCase {
      assertEquals("pfac == f.ring", pfac, f.ring );
 
 
-     GenPolynomial a = (GenPolynomial)f.list.get(0);
+     GenPolynomial<BigInteger> a = f.list.get(0);
      //System.out.println("a = " + a);
      assertTrue("isONE( f.get(0) )", a.isONE() );
 
-     GenPolynomial b = (GenPolynomial)f.list.get(1);
+     GenPolynomial<BigInteger> b = f.list.get(1);
      //System.out.println("b = " + b);
      assertTrue("isZERO( f.get(1) )", b.isZERO() );
 
-     GenPolynomial c = (GenPolynomial)f.list.get(2);
+     GenPolynomial<BigInteger> c = f.list.get(2);
      //System.out.println("c = " + c);
      assertTrue("isZERO( f.get(2) )", c.isZERO() );
 
-     GenPolynomial d = (GenPolynomial)f.list.get(3);
+     GenPolynomial<BigInteger> d = f.list.get(3);
      //System.out.println("d = " + d);
      assertEquals("f.get(3).length() == 2", 2, d.length() );
  }
@@ -202,10 +206,12 @@ public class GenPolynomialTokenizerTest extends TestCase {
                  + " )";
      source = new StringReader( exam );
      parser = new GenPolynomialTokenizer( source );
-     PolynomialList f = null;
+     PolynomialList<ModInteger> f = null;
      try {
-         f = parser.nextPolynomialSet();
+         f = (PolynomialList<ModInteger>)parser.nextPolynomialSet();
      } catch(IOException e) {
+         fail(""+e);
+     } catch (ClassCastException e) {
          fail(""+e);
      }
      //System.out.println("f = " + f);
@@ -219,19 +225,19 @@ public class GenPolynomialTokenizerTest extends TestCase {
      pfac = new GenPolynomialRing<ModInteger>(fac,nvar,tord,vars);
      assertEquals("pfac == f.ring", pfac, f.ring );
 
-     GenPolynomial a = (GenPolynomial)f.list.get(0);
+     GenPolynomial<ModInteger> a = f.list.get(0);
      //System.out.println("a = " + a);
      assertTrue("isONE( f.get(0) )", a.isONE() );
 
-     GenPolynomial b = (GenPolynomial)f.list.get(1);
+     GenPolynomial<ModInteger> b = f.list.get(1);
      //System.out.println("b = " + b);
      assertTrue("isZERO( f.get(1) )", b.isZERO() );
 
-     GenPolynomial c = (GenPolynomial)f.list.get(2);
+     GenPolynomial<ModInteger> c = f.list.get(2);
      //System.out.println("c = " + c);
      assertTrue("isZERO( f.get(2) )", c.isZERO() );
 
-     GenPolynomial d = (GenPolynomial)f.list.get(3);
+     GenPolynomial<ModInteger> d = f.list.get(3);
      //System.out.println("d = " + d);
      assertEquals("f.get(3).length() == 2", 2, d.length() );
  }
@@ -251,10 +257,12 @@ public class GenPolynomialTokenizerTest extends TestCase {
                  + " )";
      source = new StringReader( exam );
      parser = new GenPolynomialTokenizer( source );
-     PolynomialList f = null;
+     PolynomialList<BigComplex> f = null;
      try {
-         f = parser.nextPolynomialSet();
+         f = (PolynomialList<BigComplex>)parser.nextPolynomialSet();
      } catch(IOException e) {
+         fail(""+e);
+     } catch (ClassCastException e) {
          fail(""+e);
      }
      //System.out.println("f = " + f);
@@ -269,19 +277,19 @@ public class GenPolynomialTokenizerTest extends TestCase {
      assertEquals("pfac == f.ring", pfac, f.ring );
 
 
-     GenPolynomial a = (GenPolynomial)f.list.get(0);
+     GenPolynomial<BigComplex> a = f.list.get(0);
      //System.out.println("a = " + a);
      assertTrue("isONE( f.get(0) )", a.isONE() );
 
-     GenPolynomial b = (GenPolynomial)f.list.get(1);
+     GenPolynomial<BigComplex> b = f.list.get(1);
      //System.out.println("b = " + b);
      assertTrue("isZERO( f.get(1) )", b.isZERO() );
 
-     GenPolynomial c = (GenPolynomial)f.list.get(2);
+     GenPolynomial<BigComplex> c = f.list.get(2);
      //System.out.println("c = " + c);
      assertTrue("isZERO( f.get(2) )", c.isZERO() );
 
-     GenPolynomial d = (GenPolynomial)f.list.get(3);
+     GenPolynomial<BigComplex> d = f.list.get(3);
      //System.out.println("d = " + d);
      assertEquals("f.get(3).length() == 2", 2, d.length() );
  }
@@ -301,10 +309,12 @@ public class GenPolynomialTokenizerTest extends TestCase {
                  + " )";
      source = new StringReader( exam );
      parser = new GenPolynomialTokenizer( source );
-     PolynomialList f = null;
+     PolynomialList<BigQuaternion> f = null;
      try {
-         f = parser.nextPolynomialSet();
+         f = (PolynomialList<BigQuaternion>)parser.nextPolynomialSet();
      } catch(IOException e) {
+         fail(""+e);
+     } catch (ClassCastException e) {
          fail(""+e);
      }
      //System.out.println("f = " + f);
@@ -319,19 +329,19 @@ public class GenPolynomialTokenizerTest extends TestCase {
      assertEquals("pfac == f.ring", pfac, f.ring );
 
 
-     GenPolynomial a = (GenPolynomial)f.list.get(0);
+     GenPolynomial<BigQuaternion> a = f.list.get(0);
      //System.out.println("a = " + a);
      assertTrue("isONE( f.get(0) )", a.isONE() );
 
-     GenPolynomial b = (GenPolynomial)f.list.get(1);
+     GenPolynomial<BigQuaternion> b = f.list.get(1);
      //System.out.println("b = " + b);
      assertTrue("isZERO( f.get(1) )", b.isZERO() );
 
-     GenPolynomial c = (GenPolynomial)f.list.get(2);
+     GenPolynomial<BigQuaternion> c = f.list.get(2);
      //System.out.println("c = " + c);
      assertTrue("isZERO( f.get(2) )", c.isZERO() );
 
-     GenPolynomial d = (GenPolynomial)f.list.get(3);
+     GenPolynomial<BigQuaternion> d = f.list.get(3);
      //System.out.println("d = " + d);
      assertEquals("f.get(3).length() == 2", 2, d.length() );
  }
@@ -355,10 +365,12 @@ public class GenPolynomialTokenizerTest extends TestCase {
                  + " )";
      source = new StringReader( exam );
      parser = new GenPolynomialTokenizer( source );
-     PolynomialList f = null;
+     PolynomialList<BigRational> f = null;
      try {
-         f = parser.nextSolvablePolynomialSet();
+         f = (PolynomialList<BigRational>)parser.nextSolvablePolynomialSet();
      } catch(IOException e) {
+         fail(""+e);
+     } catch (ClassCastException e) {
          fail(""+e);
      }
      //System.out.println("f = " + f);
@@ -376,19 +388,19 @@ public class GenPolynomialTokenizerTest extends TestCase {
      //System.out.println("spfac.table = " + spfac.table);
 
 
-     GenSolvablePolynomial a = (GenSolvablePolynomial)f.list.get(0);
+     GenSolvablePolynomial<BigRational> a = f.castToSolvableList().get(0);
      //System.out.println("a = " + a);
      assertTrue("isZERO( f.get(0) )", a.isZERO() );
 
-     GenSolvablePolynomial b = (GenSolvablePolynomial)f.list.get(1);
+     GenSolvablePolynomial<BigRational> b = f.castToSolvableList().get(1);
      //System.out.println("b = " + b);
      assertTrue("isZERO( f.get(1) )", b.isZERO() );
 
-     GenSolvablePolynomial c = (GenSolvablePolynomial)f.list.get(2);
+     GenSolvablePolynomial<BigRational> c = f.castToSolvableList().get(2);
      //System.out.println("c = " + c);
      assertTrue("isONE( f.get(2) )", c.isONE() );
 
-     GenSolvablePolynomial d = (GenSolvablePolynomial)f.list.get(3);
+     GenSolvablePolynomial<BigRational> d = f.castToSolvableList().get(3);
      //System.out.println("d = " + d);
      assertEquals("f.get(3).length() == 2", 2, d.length() );
  }
@@ -412,10 +424,12 @@ public class GenPolynomialTokenizerTest extends TestCase {
                  + " )";
      source = new StringReader( exam );
      parser = new GenPolynomialTokenizer( source );
-     PolynomialList f = null;
+     PolynomialList<ModInteger> f = null;
      try {
-         f = parser.nextSolvablePolynomialSet();
+         f = (PolynomialList<ModInteger>)parser.nextSolvablePolynomialSet();
      } catch(IOException e) {
+         fail(""+e);
+     } catch (ClassCastException e) {
          fail(""+e);
      }
      //System.out.println("f = " + f);
@@ -433,19 +447,19 @@ public class GenPolynomialTokenizerTest extends TestCase {
      //System.out.println("spfac.table = " + spfac.table);
 
 
-     GenSolvablePolynomial a = (GenSolvablePolynomial)f.list.get(0);
+     GenSolvablePolynomial<ModInteger> a = f.castToSolvableList().get(0);
      //System.out.println("a = " + a);
      assertTrue("isZERO( f.get(0) )", a.isZERO() );
 
-     GenSolvablePolynomial b = (GenSolvablePolynomial)f.list.get(1);
+     GenSolvablePolynomial<ModInteger> b = f.castToSolvableList().get(1);
      //System.out.println("b = " + b);
      assertTrue("isZERO( f.get(1) )", b.isZERO() );
 
-     GenSolvablePolynomial c = (GenSolvablePolynomial)f.list.get(2);
+     GenSolvablePolynomial<ModInteger> c = f.castToSolvableList().get(2);
      //System.out.println("c = " + c);
      assertTrue("isONE( f.get(2) )", c.isONE() );
 
-     GenSolvablePolynomial d = (GenSolvablePolynomial)f.list.get(3);
+     GenSolvablePolynomial<ModInteger> d = f.castToSolvableList().get(3);
      //System.out.println("d = " + d);
      assertEquals("f.get(3).length() == 2", 2, d.length() );
  }
@@ -468,10 +482,12 @@ public class GenPolynomialTokenizerTest extends TestCase {
                  + ")";
      source = new StringReader( exam );
      parser = new GenPolynomialTokenizer( source );
-     ModuleList m = null;
+     ModuleList<BigInteger> m = null;
      try {
-         m = parser.nextSubModuleSet();
+         m = (ModuleList<BigInteger>)parser.nextSubModuleSet();
      } catch(IOException e) {
+         fail(""+e);
+     } catch (ClassCastException e) {
          fail(""+e);
      }
      //System.out.println("m = " + m);
@@ -487,42 +503,42 @@ public class GenPolynomialTokenizerTest extends TestCase {
      pfac = new GenPolynomialRing<BigInteger>(fac,nvar,tord,vars);
      assertEquals("pfac == m.ring", pfac, m.ring );
 
-     List<List<GenPolynomial>> rows = m.list;
-     List<GenPolynomial> f;
+     List<List<GenPolynomial<BigInteger>>> rows = m.list;
+     List<GenPolynomial<BigInteger>> f;
 
      f = rows.get(0);
-     GenPolynomial a = (GenPolynomial)f.get(0);
+     GenPolynomial<BigInteger> a = f.get(0);
      //System.out.println("a = " + a);
      assertTrue("isONE( f.get(0) )", a.isONE() );
 
-     GenPolynomial b = (GenPolynomial)f.get(1);
+     GenPolynomial<BigInteger> b = f.get(1);
      //System.out.println("b = " + b);
      assertTrue("isZERO( f.get(1) )", b.isZERO() );
 
-     GenPolynomial c = (GenPolynomial)f.get(2);
+     GenPolynomial<BigInteger> c = f.get(2);
      //System.out.println("c = " + c);
      assertTrue("isZERO( f.get(2) )", c.isZERO() );
 
-     GenPolynomial d = (GenPolynomial)f.get(3);
+     GenPolynomial<BigInteger> d = f.get(3);
      //System.out.println("d = " + d);
      assertEquals("f.get(3).length() == 2", 2, d.length() );
 
      f = rows.get(1);
      assertTrue("length( f ) = 4", f.size() == 4);
 
-     a = (GenPolynomial)f.get(0);
+     a = f.get(0);
      //System.out.println("a = " + a);
      assertTrue("isONE( f.get(0) )", a.isONE() );
 
-     b = (GenPolynomial)f.get(1);
+     b = f.get(1);
      //System.out.println("b = " + b);
      assertTrue("isZERO( f.get(1) )", b.isZERO() );
 
-     c = (GenPolynomial)f.get(2);
+     c = f.get(2);
      //System.out.println("c = " + c);
      assertTrue("isZERO( f.get(2) )", c.isZERO() );
 
-     d = (GenPolynomial)f.get(3);
+     d = f.get(3);
      //System.out.println("c = " + d);
      assertTrue("isZERO( f.get(3) )", d.isZERO() );
  }
@@ -549,10 +565,12 @@ public class GenPolynomialTokenizerTest extends TestCase {
                  + " )";
      source = new StringReader( exam );
      parser = new GenPolynomialTokenizer( source );
-     ModuleList m = null;
+     ModuleList<BigRational> m = null;
      try {
-         m = parser.nextSolvableSubModuleSet();
+         m = (ModuleList<BigRational>)parser.nextSolvableSubModuleSet();
      } catch(IOException e) {
+         fail(""+e);
+     } catch (ClassCastException e) {
          fail(""+e);
      }
      //System.out.println("m = " + m);
@@ -568,42 +586,42 @@ public class GenPolynomialTokenizerTest extends TestCase {
      spfac = new GenSolvablePolynomialRing<BigRational>(fac,nvar,tord,vars);
      assertEquals("spfac == m.ring", spfac, m.ring );
 
-     List<List<GenSolvablePolynomial>> rows = m.list;
-     List<GenSolvablePolynomial> f;
+     List<List<GenSolvablePolynomial<BigRational>>> rows = m.castToSolvableList();
+     List<GenSolvablePolynomial<BigRational>> f;
 
      f = rows.get(0);
-     GenSolvablePolynomial a = (GenSolvablePolynomial)f.get(0);
+     GenSolvablePolynomial<BigRational> a = f.get(0);
      //System.out.println("a = " + a);
      assertTrue("isONE( f.get(0) )", a.isONE() );
 
-     GenSolvablePolynomial b = (GenSolvablePolynomial)f.get(1);
+     GenSolvablePolynomial<BigRational> b = f.get(1);
      //System.out.println("b = " + b);
      assertTrue("isZERO( f.get(1) )", b.isZERO() );
 
-     GenSolvablePolynomial c = (GenSolvablePolynomial)f.get(2);
+     GenSolvablePolynomial<BigRational> c = f.get(2);
      //System.out.println("c = " + c);
      assertTrue("isZERO( f.get(2) )", c.isZERO() );
 
-     GenSolvablePolynomial d = (GenSolvablePolynomial)f.get(3);
+     GenSolvablePolynomial<BigRational> d = f.get(3);
      //System.out.println("d = " + d);
      assertEquals("f.get(3).length() == 2", 2, d.length() );
 
      f = rows.get(1);
      assertTrue("length( f ) = 4", f.size() == 4);
 
-     a = (GenSolvablePolynomial)f.get(0);
+     a = f.get(0);
      //System.out.println("a = " + a);
      assertTrue("!isONE( f.get(0) )", !a.isONE() );
 
-     b = (GenSolvablePolynomial)f.get(1);
+     b = f.get(1);
      //System.out.println("b = " + b);
      assertTrue("isONE( f.get(1) )", b.isONE() );
 
-     c = (GenSolvablePolynomial)f.get(2);
+     c = f.get(2);
      //System.out.println("c = " + c);
      assertTrue("isZERO( f.get(2) )", c.isZERO() );
 
-     d = (GenSolvablePolynomial)f.get(3);
+     d = f.get(3);
      //System.out.println("d = " + d);
      assertTrue("isZERO( f.get(3) )", d.isZERO() );
 
@@ -625,28 +643,31 @@ public class GenPolynomialTokenizerTest extends TestCase {
                  + " )";
      source = new StringReader( exam );
      parser = new GenPolynomialTokenizer( source );
-     PolynomialList f = null;
+     PolynomialList<AlgebraicNumber<BigRational>> f = null;
+     AlgebraicNumber<BigRational> fac = null;
      try {
-         f = parser.nextPolynomialSet();
+         f = (PolynomialList<AlgebraicNumber<BigRational>>)parser.nextPolynomialSet();
+         fac = (AlgebraicNumber<BigRational>)f.ring.coFac;
      } catch(IOException e) {
+         fail(""+e);
+     } catch (ClassCastException e) {
          fail(""+e);
      }
      //System.out.println("f = " + f);
      assertTrue("f != null", f.list != null);
      assertTrue("length( f ) = 5", f.list.size() == 5);
 
-     AlgebraicNumber<BigRational> fac = (AlgebraicNumber<BigRational>)f.ring.coFac;
      TermOrder tord = new TermOrder(TermOrder.INVLEX);
      String[] vars = new String[]{ "x", "y", "z" };
      int nvar = vars.length;
      pfac = new GenPolynomialRing<AlgebraicNumber<BigRational>>(fac,nvar,tord,vars);
      assertEquals("pfac == f.ring", pfac, f.ring );
 
-     GenPolynomial a = (GenPolynomial)f.list.get(0);
+     GenPolynomial<AlgebraicNumber<BigRational>> a = f.list.get(0);
      //System.out.println("a = " + a);
      assertTrue("isONE( f.get(0) )", a.isONE() );
 
-     GenPolynomial b = (GenPolynomial)f.list.get(1);
+     GenPolynomial<AlgebraicNumber<BigRational>> b = f.list.get(1);
      //System.out.println("b = " + b);
      assertTrue("isUnit( f.get(1) )", b.isUnit() );
 
@@ -654,15 +675,15 @@ public class GenPolynomialTokenizerTest extends TestCase {
      //System.out.println("b = " + b);
      assertTrue("isUnit( f.get(1) )", b.isONE() );
 
-     GenPolynomial c = (GenPolynomial)f.list.get(2);
+     GenPolynomial<AlgebraicNumber<BigRational>> c = f.list.get(2);
      //System.out.println("c = " + c);
      assertTrue("isZERO( f.get(1) )", c.isZERO() );
 
-     GenPolynomial d = (GenPolynomial)f.list.get(3);
+     GenPolynomial<AlgebraicNumber<BigRational>> d = f.list.get(3);
      //System.out.println("d = " + d);
      assertTrue("isZERO( f.get(2) )", d.isZERO() );
 
-     GenPolynomial e = (GenPolynomial)f.list.get(4);
+     GenPolynomial<AlgebraicNumber<BigRational>> e = f.list.get(4);
      //System.out.println("e = " + e);
      assertEquals("f.get(3).length() == 2", 2, e.length() );
  }
@@ -683,28 +704,31 @@ public class GenPolynomialTokenizerTest extends TestCase {
                  + " )";
      source = new StringReader( exam );
      parser = new GenPolynomialTokenizer( source );
-     PolynomialList f = null;
+     PolynomialList<AlgebraicNumber<ModInteger>> f = null;
+     AlgebraicNumber<ModInteger> fac = null;
      try {
-         f = parser.nextPolynomialSet();
+         f = (PolynomialList<AlgebraicNumber<ModInteger>>)parser.nextPolynomialSet();
+         fac = (AlgebraicNumber<ModInteger>)f.ring.coFac;
      } catch(IOException e) {
+         fail(""+e);
+     } catch (ClassCastException e) {
          fail(""+e);
      }
      //System.out.println("f = " + f);
      assertTrue("f != null", f.list != null);
      assertTrue("length( f ) = 5", f.list.size() == 5);
 
-     AlgebraicNumber<ModInteger> fac = (AlgebraicNumber<ModInteger>)f.ring.coFac;
      TermOrder tord = new TermOrder(TermOrder.INVLEX);
      String[] vars = new String[]{ "x", "y", "z" };
      int nvar = vars.length;
      pfac = new GenPolynomialRing<AlgebraicNumber<ModInteger>>(fac,nvar,tord,vars);
      assertEquals("pfac == f.ring", pfac, f.ring );
 
-     GenPolynomial a = (GenPolynomial)f.list.get(0);
+     GenPolynomial<AlgebraicNumber<ModInteger>> a = f.list.get(0);
      //System.out.println("a = " + a);
      assertTrue("isONE( f.get(0) )", a.isONE() );
 
-     GenPolynomial b = (GenPolynomial)f.list.get(1);
+     GenPolynomial<AlgebraicNumber<ModInteger>> b = f.list.get(1);
      //System.out.println("b = " + b);
      assertTrue("isUnit( f.get(1) )", b.isUnit() );
 
@@ -712,15 +736,15 @@ public class GenPolynomialTokenizerTest extends TestCase {
      //System.out.println("b = " + b);
      assertTrue("isUnit( f.get(1) )", b.isONE() );
 
-     GenPolynomial c = (GenPolynomial)f.list.get(2);
+     GenPolynomial<AlgebraicNumber<ModInteger>> c = f.list.get(2);
      //System.out.println("c = " + c);
      assertTrue("isZERO( f.get(1) )", c.isZERO() );
 
-     GenPolynomial d = (GenPolynomial)f.list.get(3);
+     GenPolynomial<AlgebraicNumber<ModInteger>> d = f.list.get(3);
      //System.out.println("d = " + d);
      assertTrue("isZERO( f.get(2) )", d.isZERO() );
 
-     GenPolynomial e = (GenPolynomial)f.list.get(4);
+     GenPolynomial<AlgebraicNumber<ModInteger>> e = f.list.get(4);
      //System.out.println("e = " + e);
      assertEquals("f.get(3).length() == 2", 2, e.length() );
  }
