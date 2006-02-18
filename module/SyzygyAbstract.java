@@ -23,7 +23,7 @@ import edu.jas.poly.ExpVector;
 
 import edu.jas.ring.Reduction;
 import edu.jas.ring.ReductionSeq;
-//import edu.jas.ring.GroebnerBase;
+import edu.jas.ring.GroebnerBase;
 import edu.jas.ring.GroebnerBaseSeq;
 import edu.jas.ring.GroebnerBaseSeqPairSeq;
 import edu.jas.ring.ExtendedGB;
@@ -53,9 +53,15 @@ public class SyzygyAbstract<C extends RingElem<C>>
 
 
     /**
+     * Linear algebra engine.
+     */
+    protected BasicLinAlg<C> blas;
+
+
+    /**
      * Groebner base engine.
      */
-    // no    protected GroebnerBase<C> gb;
+    protected GroebnerBase<C> gb;
 
 
     /**
@@ -63,7 +69,8 @@ public class SyzygyAbstract<C extends RingElem<C>>
      */
     public SyzygyAbstract() {
         red = new ReductionSeq<C>();
-        //gb = new GroebnerBaseSeqPairSeq<C>();
+        blas = new BasicLinAlg<C>();
+        gb = new GroebnerBaseSeqPairSeq<C>();
     }
 
 
@@ -239,7 +246,7 @@ public class SyzygyAbstract<C extends RingElem<C>>
            isZeroRelation(List<List<GenPolynomial<C>>> Z, 
                           List<GenPolynomial<C>> F) {  
         for ( List<GenPolynomial<C>> row: Z ) {
-            GenPolynomial<C> p = scalarProduct(row,F);
+            GenPolynomial<C> p = blas.scalarProduct(row,F);
             if ( p == null ) { 
                continue;
             }
@@ -251,39 +258,6 @@ public class SyzygyAbstract<C extends RingElem<C>>
             }
         }
         return true;
-    }
-
-
-    /**
-     * Scalar product of vectors of polynomials.
-     * @param C coefficient type.
-     * @param r a polynomial list.
-     * @param F a polynomial list.
-     * @return the scalar product of r and F.
-     */
-
-    public GenPolynomial<C> 
-           scalarProduct(List<GenPolynomial<C>> r, 
-                         List<GenPolynomial<C>> F) {  
-        GenPolynomial<C> sp = null;
-        Iterator<GenPolynomial<C>> it = r.iterator();
-        Iterator<GenPolynomial<C>> jt = F.iterator();
-        while ( it.hasNext() && jt.hasNext() ) {
-            GenPolynomial<C> pi = it.next();
-            GenPolynomial<C> pj = jt.next();
-            if ( pi == null || pj == null ) {
-               continue;
-            }
-            if ( sp == null ) {
-                sp = pi.multiply(pj);
-            } else {
-                sp = sp.add( pi.multiply(pj) );
-            }
-        }
-        if ( it.hasNext() || jt.hasNext() ) {
-            logger.error("scalarProduct wrong sizes");
-        }
-        return sp;
     }
 
 
@@ -301,149 +275,13 @@ public class SyzygyAbstract<C extends RingElem<C>>
             return true;
         }
         for ( List<GenPolynomial<C>> row : Z.list ) {
-            List<GenPolynomial<C>> zr = scalarProduct(row,F);
-            if ( ! isZero(zr) ) {
+            List<GenPolynomial<C>> zr = blas.scalarProduct(row,F);
+            if ( ! blas.isZero(zr) ) {
                 logger.info("is not ZeroRelation (" + zr.size() + ") = " + zr);
                 return false;
             }
         }
         return true;
-    }
-
-
-    /**
-     * product of vector and matrix of polynomials.
-     * @param C coefficient type.
-     * @param r a polynomial list.
-     * @param F a polynomial matrix.
-     * @return the scalar product of r and F.
-     */
-
-    public List<GenPolynomial<C>> 
-           scalarProduct(List<GenPolynomial<C>> r, ModuleList<C> F) {  
-        List<GenPolynomial<C>> ZZ = null;
-        Iterator<GenPolynomial<C>> it = r.iterator();
-        Iterator<List<GenPolynomial<C>>> jt = F.list.iterator();
-        while ( it.hasNext() && jt.hasNext() ) {
-            GenPolynomial<C> pi = it.next();
-            List<GenPolynomial<C>> vj = jt.next();
-            List<GenPolynomial<C>> Z = scalarProduct( pi, vj );
-            //System.out.println("pi" + pi);
-            //System.out.println("vj" + vj);
-            // System.out.println("scalarProduct" + Z);
-            if ( ZZ == null ) {
-                ZZ = Z;
-            } else {
-                ZZ = vectorAdd(ZZ,Z);
-            }
-        }
-        if ( it.hasNext() || jt.hasNext() ) {
-            logger.error("scalarProduct wrong sizes");
-        }
-        if ( logger.isDebugEnabled() ) {
-            logger.debug("scalarProduct" + ZZ);
-        }
-        return ZZ;
-    }
-
-
-    /**
-     * Addition of vectors of polynomials.
-     * @param C coefficient type.
-     * @param a a polynomial list.
-     * @param b a polynomial list.
-     * @return a+b, the vector sum of a and b.
-     */
-
-    public List<GenPolynomial<C>> 
-           vectorAdd(List<GenPolynomial<C>> a, List<GenPolynomial<C>> b) {  
-        if ( a == null ) {
-            return b;
-        }
-        if ( b == null ) {
-            return a;
-        }
-        List<GenPolynomial<C>> V = new ArrayList<GenPolynomial<C>>( a.size() );
-        Iterator<GenPolynomial<C>> it = a.iterator();
-        Iterator<GenPolynomial<C>> jt = b.iterator();
-        while ( it.hasNext() && jt.hasNext() ) {
-            GenPolynomial<C> pi = it.next();
-            GenPolynomial<C> pj = jt.next();
-            GenPolynomial<C> p = pi.add( pj );
-            V.add( p );
-        }
-        //System.out.println("vectorAdd" + V);
-        if ( it.hasNext() || jt.hasNext() ) {
-            logger.error("vectorAdd wrong sizes");
-        }
-        return V;
-    }
-
-
-    /**
-     * test vector of zero polynomials.
-     * @param C coefficient type.
-     * @param a a polynomial list.
-     * @return true, if all polynomial in a are zero, else false.
-     */
-    public boolean 
-           isZero(List<GenPolynomial<C>> a) {  
-        if ( a == null ) {
-            return true;
-        }
-        for ( GenPolynomial<C> pi : a ) {
-            if ( pi == null ) {
-                continue;
-            }
-            if ( ! pi.isZERO() ) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-
-    /**
-     * Scalar product of polynomial with vector of polynomials.
-     * @param C coefficient type.
-     * @param p a polynomial.
-     * @param F a polynomial list.
-     * @return the scalar product of p and F.
-     */
-
-    public List<GenPolynomial<C>> 
-           scalarProduct(GenPolynomial<C> p, List<GenPolynomial<C>> F) {  
-        List<GenPolynomial<C>> V = new ArrayList<GenPolynomial<C>>( F.size() );
-        for ( GenPolynomial<C> pi : F ) {
-            if ( p != null ) {
-               pi = p.multiply( pi );
-            } else {
-               pi = null;
-            }
-            V.add( pi );
-        }
-        return V;
-    }
-
-
-    /**
-     * Scalar product of vector of polynomials with polynomial.
-     * @param C coefficient type.
-     * @param F a polynomial list.
-     * @param p a polynomial.
-     * @return the scalar product of F and p.
-     */
-
-    public List<GenPolynomial<C>> 
-        scalarProduct(List<GenPolynomial<C>> F, GenPolynomial<C> p) {  
-        List<GenPolynomial<C>> V = new ArrayList<GenPolynomial<C>>( F.size() );
-        for ( GenPolynomial<C> pi : F ) {
-            if ( pi != null ) {
-               pi = pi.multiply( p );
-            }
-            V.add( pi );
-        }
-        return V;
     }
 
 
@@ -578,7 +416,7 @@ public class SyzygyAbstract<C extends RingElem<C>>
             return zeroRelations( modv, F );
         }
         final int lenf = F.size(); 
-        GroebnerBaseSeqPairSeq<C> gb = new GroebnerBaseSeqPairSeq<C>();
+        //GroebnerBaseSeqPairSeq<C> gb = new GroebnerBaseSeqPairSeq<C>();
         ExtendedGB<C> exgb = gb.extGB( F );
         if ( debug ) {
            logger.debug("exgb = " + exgb);
@@ -619,9 +457,9 @@ public class SyzygyAbstract<C extends RingElem<C>>
                if ( si == null || ai == null ) {
                   continue;
                }
-               List<GenPolynomial<C>> pi = scalarProduct(si,ai);
+               List<GenPolynomial<C>> pi = blas.scalarProduct(si,ai);
                //System.out.println("pi = " + pi);
-               rf = vectorAdd( rf, pi );
+               rf = blas.vectorAdd( rf, pi );
             }
             if ( it.hasNext() || jt.hasNext() ) {
                logger.error("zeroRelationsArbitrary wrong sizes");
@@ -648,9 +486,9 @@ public class SyzygyAbstract<C extends RingElem<C>>
                if ( si == null || ai == null ) {
                   continue;
                }
-               List<GenPolynomial<C>> pi = scalarProduct(ai,si);
+               List<GenPolynomial<C>> pi = blas.scalarProduct(ai,si);
                //System.out.println("pi = " + pi);
-               rf = vectorAdd( rf, pi );
+               rf = blas.vectorAdd( rf, pi );
             }
             if ( it.hasNext() || jt.hasNext() ) {
                logger.error("zeroRelationsArbitrary wrong sizes");
@@ -664,7 +502,7 @@ public class SyzygyAbstract<C extends RingElem<C>>
         /* not true in general
         List<GenPolynomial<C>> F2 = new ArrayList<GenPolynomial<C>>( F.size() );
         for ( List<GenPolynomial<C>> rr: M ) {
-            GenPolynomial<C> rrg = scalarProduct( F, rr );
+            GenPolynomial<C> rrg = blas.scalarProduct( F, rr );
             F2.add( rrg );
         }
         PolynomialList<C> pF = new PolynomialList<C>( ring, F );
@@ -694,7 +532,7 @@ public class SyzygyAbstract<C extends RingElem<C>>
                 j++;
             }
             M2.add( r2i );
-            if ( ! isZero( r2i ) ) {
+            if ( ! blas.isZero( r2i ) ) {
                 sf.add( r2i );
             }
             i++;

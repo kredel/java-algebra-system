@@ -16,7 +16,7 @@ import edu.jas.poly.GenSolvablePolynomialRing;
 
 import edu.jas.structure.RingElem;
 
-import edu.jas.module.SolvableSyzygyAbstract;
+import edu.jas.module.SolvableBasicLinAlg;
 
 
 /**
@@ -34,7 +34,10 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>>
     private final boolean debug = logger.isDebugEnabled();
 
 
-    SolvableSyzygyAbstract<C> ssyz;
+    /**
+     * Linear algebra engine.
+     */
+    protected SolvableBasicLinAlg<C> sblas;
 
 
     /**
@@ -42,7 +45,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>>
      */
     public SolvableGroebnerBaseSeq() {
         super();
-        ssyz = new SolvableSyzygyAbstract<C>();
+        sblas = new SolvableBasicLinAlg<C>();
     }
 
 
@@ -54,7 +57,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>>
     public SolvableGroebnerBaseSeq(Reduction<C> red,
                                    SolvableReduction<C> sred) {
         super(red,sred);
-        ssyz = new SolvableSyzygyAbstract<C>();
+        sblas = new SolvableBasicLinAlg<C>();
     }
 
 
@@ -326,7 +329,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>>
               C c = H.leadingBaseCoefficient();
               c = c.inverse();
               H = H.multiply( c );
-              row = ssyz.leftScalarProduct( mone.multiply(c), row );
+              row = sblas.leftScalarProduct( mone.multiply(c), row );
               row.set( G.size(), mone );
               if ( H.isONE() ) {
                  // pairlist.record( pair, H );
@@ -557,8 +560,8 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>>
                    a = nrow.get( k );
                    //System.out.println("k, a = " + k + ", " + a);
                    if ( a != null && !a.isZERO() ) {
-                      xrow = ssyz.leftScalarProduct( a, row);
-                      xrow = ssyz.vectorAdd(xrow,nrow);
+                      xrow = sblas.leftScalarProduct( a, row);
+                      xrow = sblas.vectorAdd(xrow,nrow);
                       //System.out.println("xrow = " + xrow);
                       N.set( j, xrow );
                    }
@@ -594,45 +597,6 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>>
             return true;
         }
         return isLeftReductionMatrix(exgb.F,exgb.G,exgb.F2G,exgb.G2F);
-    }
-
-
-    /**
-     * Test if M is a left reduction matrix.
-     * @param C coefficient type.
-     * @param F a solvable polynomial list.
-     * @param G a left Groebner base.
-     * @param Mf a possible left reduction matrix.
-     * @param Mg a possible left reduction matrix.
-     * @return true, if Mg and Mf are left reduction matrices, else false.
-     */
-    public boolean
-           isLeftReductionMatrix(List<GenSolvablePolynomial<C>> F, 
-                                 List<GenSolvablePolynomial<C>> G,
-                                 List<List<GenSolvablePolynomial<C>>> Mf,  
-                                 List<List<GenSolvablePolynomial<C>>> Mg) {  
-        // no more check G and Mg: G * Mg[i] == 0
-        // check F and Mg: F * Mg[i] == G[i]
-        int k = 0;
-        for ( List<GenSolvablePolynomial<C>> row : Mg ) {
-            boolean t = sred.isLeftReductionNF( row, F, G.get( k ), null );  
-            if ( ! t ) {
-               logger.error("F isLeftReductionMatrix s, k = " + F.size() + ", " + k);
-               return false;
-            }
-            k++;
-        }
-        // check G and Mf: G * Mf[i] == F[i]
-        k = 0;
-        for ( List<GenSolvablePolynomial<C>> row : Mf ) {
-            boolean t = sred.isLeftReductionNF( row, G, F.get( k ), null );  
-            if ( ! t ) {
-               logger.error("G isLeftReductionMatrix s, k = " + G.size() + ", " + k);
-               return false;
-            }
-            k++;
-        }
-        return true;
     }
 
 

@@ -61,11 +61,18 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
 
 
     /**
+     * Linear algebra engine.
+     */
+    protected SolvableBasicLinAlg<C> sblas;
+
+
+    /**
      * Constructor.
      */
     public SolvableSyzygyAbstract() {
         red = new ReductionSeq<C>();
         sred = new SolvableReductionSeq<C>();
+        sblas = new SolvableBasicLinAlg<C>();
     }
 
 
@@ -215,7 +222,7 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
            isLeftZeroRelation(List<List<GenSolvablePolynomial<C>>> Z, 
                               List<GenSolvablePolynomial<C>> F) {  
         for ( List<GenSolvablePolynomial<C>> row : Z ) {
-            GenSolvablePolynomial<C> p = leftScalarProduct(row,F);
+            GenSolvablePolynomial<C> p = sblas.leftScalarProduct(row,F);
             if ( p == null ) { 
                continue;
             }
@@ -225,38 +232,6 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
             }
         }
         return true;
-    }
-
-
-    /**
-     * Scalar product of vectors of polynomials.
-     * @param C coefficient type.
-     * @param r a polynomial list.
-     * @param F a polynomial list.
-     * @return the left scalar product of r and F.
-     */
-    public GenSolvablePolynomial<C> 
-           leftScalarProduct(List<GenSolvablePolynomial<C>> r, 
-                             List<GenSolvablePolynomial<C>> F) {  
-        GenSolvablePolynomial<C> sp = null;
-        Iterator<GenSolvablePolynomial<C>> it = r.iterator();
-        Iterator<GenSolvablePolynomial<C>> jt = F.iterator();
-        while ( it.hasNext() && jt.hasNext() ) {
-            GenSolvablePolynomial<C> pi = it.next();
-            GenSolvablePolynomial<C> pj = jt.next();
-            if ( pi == null || pj == null ) {
-               continue;
-            }
-            if ( sp == null ) {
-                sp = pi.multiply(pj);
-            } else {
-                sp = (GenSolvablePolynomial<C>)sp.add( pi.multiply(pj) );
-            }
-        }
-        if ( it.hasNext() || jt.hasNext() ) {
-            logger.error("scalarProduct wrong sizes");
-        }
-        return sp;
     }
 
 
@@ -271,7 +246,7 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
            isRightZeroRelation(List<List<GenSolvablePolynomial<C>>> Z, 
                                List<GenSolvablePolynomial<C>> F) {  
         for ( List<GenSolvablePolynomial<C>> row : Z ) {
-            GenSolvablePolynomial<C> p = leftScalarProduct(F,row); // param order
+            GenSolvablePolynomial<C> p = sblas.leftScalarProduct(F,row); // param order
             if ( p == null ) { 
                continue;
             }
@@ -298,8 +273,8 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
             return true;
         }
         for ( List<GenSolvablePolynomial<C>> row : Z.castToSolvableList() ) {
-            List<GenSolvablePolynomial<C>> zr = leftScalarProduct(row,F);
-            if ( ! isZero(zr) ) {
+            List<GenSolvablePolynomial<C>> zr = sblas.leftScalarProduct(row,F);
+            if ( ! sblas.isZero(zr) ) {
                 logger.info("is not ZeroRelation (" + zr.size() + ") = " + zr);
                 return false;
             }
@@ -322,184 +297,13 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
             return true;
         }
         for ( List<GenSolvablePolynomial<C>> row : Z.castToSolvableList() ) {
-            List<GenSolvablePolynomial<C>> zr = rightScalarProduct(row,F);
-            if ( ! isZero(zr) ) {
+            List<GenSolvablePolynomial<C>> zr = sblas.rightScalarProduct(row,F);
+            if ( ! sblas.isZero(zr) ) {
                 logger.info("is not ZeroRelation (" + zr.size() + ") = " + zr);
                 return false;
             }
         }
         return true;
-    }
-
-
-    /**
-     * Product of vector and matrix of polynomials.
-     * @param C coefficient type.
-     * @param r a polynomial list.
-     * @param F a polynomial list.
-     * @return the left scalar product of r and F.
-     */
-    public List<GenSolvablePolynomial<C>> 
-           leftScalarProduct(List<GenSolvablePolynomial<C>> r, 
-                             ModuleList<C> F) {  
-        List<GenSolvablePolynomial<C>> ZZ = null;
-        Iterator<GenSolvablePolynomial<C>> it = r.iterator();
-        Iterator<List<GenPolynomial<C>>> jt = F.list.iterator();
-        while ( it.hasNext() && jt.hasNext() ) {
-            GenSolvablePolynomial<C> pi = it.next();
-            List<GenSolvablePolynomial<C>> vj = (List/*<GenSolvablePolynomial<C>>*/)jt.next();
-            List<GenSolvablePolynomial<C>> Z = leftScalarProduct( pi, vj );
-            //System.out.println("pi" + pi);
-            //System.out.println("vj" + vj);
-            // System.out.println("scalarProduct" + Z);
-            if ( ZZ == null ) {
-                ZZ = Z;
-            } else {
-                ZZ = vectorAdd(ZZ,Z);
-            }
-        }
-        if ( it.hasNext() || jt.hasNext() ) {
-            logger.error("scalarProduct wrong sizes");
-        }
-        if ( logger.isDebugEnabled() ) {
-            logger.debug("scalarProduct" + ZZ);
-        }
-        return ZZ;
-    }
-
-
-    /**
-     * Product of vector and matrix of polynomials.
-     * @param C coefficient type.
-     * @param r a polynomial list.
-     * @param F a polynomial list.
-     * @return the right scalar product of r and F.
-     */
-    public List<GenSolvablePolynomial<C>> 
-           rightScalarProduct(List<GenSolvablePolynomial<C>> r, 
-                              ModuleList<C> F) {  
-        List<GenSolvablePolynomial<C>> ZZ = null;
-        Iterator<GenSolvablePolynomial<C>> it = r.iterator();
-        Iterator<List<GenPolynomial<C>>> jt = F.list.iterator();
-        while ( it.hasNext() && jt.hasNext() ) {
-            GenSolvablePolynomial<C> pi = it.next();
-            List<GenSolvablePolynomial<C>> vj = (List/*<GenSolvablePolynomial<C>>*/)jt.next();
-            List<GenSolvablePolynomial<C>> Z = leftScalarProduct( vj, pi ); // order
-            //System.out.println("pi" + pi);
-            //System.out.println("vj" + vj);
-            // System.out.println("scalarProduct" + Z);
-            if ( ZZ == null ) {
-                ZZ = Z;
-            } else {
-                ZZ = vectorAdd(ZZ,Z);
-            }
-        }
-        if ( it.hasNext() || jt.hasNext() ) {
-            logger.error("scalarProduct wrong sizes");
-        }
-        if ( logger.isDebugEnabled() ) {
-            logger.debug("scalarProduct" + ZZ);
-        }
-        return ZZ;
-    }
-
-
-    /**
-     * Addition of vectors of polynomials.
-     * @param C coefficient type.
-     * @param a a polynomial list.
-     * @param b a polynomial list.
-     * @return a+b, the vector sum of a and b.
-     */
-    public List<GenSolvablePolynomial<C>>
-           vectorAdd(List<GenSolvablePolynomial<C>> a, 
-                     List<GenSolvablePolynomial<C>> b) {  
-        if ( a == null ) {
-            return b;
-        }
-        if ( b == null ) {
-            return a;
-        }
-        List<GenSolvablePolynomial<C>> V 
-            = new ArrayList<GenSolvablePolynomial<C>>( a.size() );
-        Iterator<GenSolvablePolynomial<C>> it = a.iterator();
-        Iterator<GenSolvablePolynomial<C>> jt = b.iterator();
-        while ( it.hasNext() && jt.hasNext() ) {
-            GenSolvablePolynomial<C> pi = it.next();
-            GenSolvablePolynomial<C> pj = jt.next();
-            GenSolvablePolynomial<C> p = (GenSolvablePolynomial<C>)pi.add( pj );
-            V.add( p );
-        }
-        //System.out.println("vectorAdd" + V);
-        if ( it.hasNext() || jt.hasNext() ) {
-            logger.error("vectorAdd wrong sizes");
-        }
-        return V;
-    }
-
-
-    /**
-     * test vector of zero polynomials.
-     * @param C coefficient type.
-     * @param a a polynomial list.
-     * @return true, if all polynomial in a are zero, else false.
-     */
-    public boolean 
-           isZero(List<GenSolvablePolynomial<C>> a) {  
-        if ( a == null ) {
-            return true;
-        }
-        for ( GenSolvablePolynomial<C> pi : a ) {
-            if ( pi == null ) {
-                continue;
-            }
-            if ( ! pi.isZERO() ) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-
-    /**
-     * Scalar product of polynomial with vector of polynomials.
-     * @param C coefficient type.
-     * @param p a polynomial.
-     * @param F a polynomial list.
-     * @return the left scalar product of p and F.
-     */
-    public List<GenSolvablePolynomial<C>> 
-           leftScalarProduct(GenSolvablePolynomial<C> p, 
-                             List<GenSolvablePolynomial<C>> F) {  
-        List<GenSolvablePolynomial<C>> V 
-            = new ArrayList<GenSolvablePolynomial<C>>( F.size() );
-        for ( GenSolvablePolynomial<C> pi : F ) {
-            pi = p.multiply( pi );
-            V.add( pi );
-        }
-        return V;
-    }
-
-
-    /**
-     * Scalar product of vector of polynomials with polynomial.
-     * @param C coefficient type.
-     * @param F a polynomial list.
-     * @param p a polynomial.
-     * @return the left scalar product of F and p.
-     */
-    public List<GenSolvablePolynomial<C>> 
-        leftScalarProduct(List<GenSolvablePolynomial<C>> F,
-                          GenSolvablePolynomial<C> p) {  
-        List<GenSolvablePolynomial<C>> V 
-            = new ArrayList<GenSolvablePolynomial<C>>( F.size() );
-        for ( GenSolvablePolynomial<C> pi : F ) {
-            if ( pi != null ) {
-               pi = pi.multiply( p );
-            }
-            V.add( pi );
-        }
-        return V;
     }
 
 
@@ -680,9 +484,9 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
                if ( si == null || ai == null ) {
                   continue;
                }
-               List<GenSolvablePolynomial<C>> pi = leftScalarProduct(si,ai);
+               List<GenSolvablePolynomial<C>> pi = sblas.leftScalarProduct(si,ai);
                //System.out.println("pi = " + pi);
-               rf = vectorAdd( rf, pi );
+               rf = sblas.vectorAdd( rf, pi );
             }
             if ( it.hasNext() || jt.hasNext() ) {
                logger.error("leftZeroRelationsArbitrary wrong sizes");
@@ -713,10 +517,10 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
                if ( si == null || ai == null ) {
                   continue;
                }
-               //wrong: List<GenSolvablePolynomial<C>> pi = leftScalarProduct(ai,si);
-               List<GenSolvablePolynomial<C>> pi = leftScalarProduct(si,ai);
+               //wrong: List<GenSolvablePolynomial<C>> pi = sblas.leftScalarProduct(ai,si);
+               List<GenSolvablePolynomial<C>> pi = sblas.leftScalarProduct(si,ai);
                //System.out.println("pi = " + pi);
-               rf = vectorAdd( rf, pi );
+               rf = sblas.vectorAdd( rf, pi );
             }
             if ( it.hasNext() || jt.hasNext() ) {
                logger.error("zeroRelationsArbitrary wrong sizes");
@@ -730,7 +534,7 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
         List<GenSolvablePolynomial<C>> F2 = new ArrayList<GenSolvablePolynomial<C>>( F.size() );
         /* not true in general
         for ( List<GenSolvablePolynomial<C>> rr: M ) {
-            GenSolvablePolynomial<C> rrg = leftScalarProduct( F, rr );
+            GenSolvablePolynomial<C> rrg = sblas.leftScalarProduct( F, rr );
             F2.add( rrg );
         }
         PolynomialList<C> pF = new PolynomialList<C>( ring, F );
@@ -762,7 +566,7 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
                 j++;
             }
             M2.add( r2i );
-            if ( ! isZero( r2i ) ) {
+            if ( ! sblas.isZero( r2i ) ) {
                 sf.add( r2i );
             }
             i++;

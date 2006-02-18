@@ -16,7 +16,7 @@ import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 
-import edu.jas.module.SyzygyAbstract;
+import edu.jas.module.BasicLinAlg;
 
 
 /**
@@ -32,7 +32,7 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>>
     private final boolean debug = logger.isDebugEnabled();
 
 
-    SyzygyAbstract<C> syz;
+    BasicLinAlg<C> blas;
 
 
     /**
@@ -40,7 +40,7 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>>
      */
     public GroebnerBaseSeqPairSeq() {
         super();
-        syz = new SyzygyAbstract<C>();
+        blas = new BasicLinAlg<C>();
     }
 
 
@@ -50,7 +50,7 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>>
      */
     public GroebnerBaseSeqPairSeq(Reduction<C> red) {
         super(red);
-        syz = new SyzygyAbstract<C>();
+        blas = new BasicLinAlg<C>();
     }
 
 
@@ -324,7 +324,7 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>>
               C c = H.leadingBaseCoefficient();
               c = c.inverse();
               H = H.multiply( c );
-              row = syz.scalarProduct( mone.multiply(c), row );
+              row = blas.scalarProduct( mone.multiply(c), row );
               row.set( G.size(), mone );
               if ( H.isONE() ) {
                  // pairlist.record( pair, H );
@@ -377,60 +377,6 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>>
 
 
     /**
-     * Test if M is a reduction matrix.
-     * @param C coefficient type.
-     * @param exgb an ExtendedGB container.
-     * @return true, if exgb contains a reduction matrix, else false.
-     */
-    public boolean
-           isReductionMatrix(ExtendedGB<C> exgb) {  
-        if ( exgb == null ) {
-            return true;
-        }
-        return isReductionMatrix(exgb.F,exgb.G,exgb.F2G,exgb.G2F);
-    }
-
-
-    /**
-     * Test if M is a reduction matrix.
-     * @param C coefficient type.
-     * @param F a polynomial list.
-     * @param G a Groebner base.
-     * @param Mf a possible reduction matrix.
-     * @param Mg a possible reduction matrix.
-     * @return true, if Mg and Mf are reduction matrices, else false.
-     */
-    public boolean
-           isReductionMatrix(List<GenPolynomial<C>> F, 
-                             List<GenPolynomial<C>> G,
-                             List<List<GenPolynomial<C>>> Mf,  
-                             List<List<GenPolynomial<C>>> Mg) {  
-        // no more check G and Mg: G * Mg[i] == 0
-        // check F and Mg: F * Mg[i] == G[i]
-        int k = 0;
-        for ( List<GenPolynomial<C>> row : Mg ) {
-            boolean t = red.isReductionNF( row, F, G.get( k ), null );  
-            if ( ! t ) {
-               logger.error("F isReductionMatrix s, k = " + F.size() + ", " + k);
-               return false;
-            }
-            k++;
-        }
-        // check G and Mf: G * Mf[i] == F[i]
-        k = 0;
-        for ( List<GenPolynomial<C>> row : Mf ) {
-            boolean t = red.isReductionNF( row, G, F.get( k ), null );  
-            if ( ! t ) {
-               logger.error("G isReductionMatrix s, k = " + G.size() + ", " + k);
-               return false;
-            }
-            k++;
-        }
-        return true;
-    }
-
-
-    /**
      * Normalize M.
      * Make all rows the same size and make certain column elements zero.
      * @param C coefficient type.
@@ -478,8 +424,8 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>>
                    a = nrow.get( k );
                    //System.out.println("k, a = " + k + ", " + a);
                    if ( a != null && !a.isZERO() ) {
-                      xrow = syz.scalarProduct( a, row);
-                      xrow = syz.vectorAdd(xrow,nrow);
+                      xrow = blas.scalarProduct( a, row);
+                      xrow = blas.vectorAdd(xrow,nrow);
                       //System.out.println("xrow = " + xrow);
                       N.set( j, xrow );
                    }
