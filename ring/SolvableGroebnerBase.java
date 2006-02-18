@@ -176,4 +176,30 @@ public interface SolvableGroebnerBase<C extends RingElem<C>> {
            rightGB(int modv, 
                    List<GenSolvablePolynomial<C>> F);
 
+
+    /**
+     * Test if left reduction matrix.
+     * @param C coefficient type.
+     * @param exgb an SolvableExtendedGB container.
+     * @return true, if exgb contains a left reduction matrix, else false.
+     */
+    public boolean
+           isLeftReductionMatrix(SolvableExtendedGB<C> exgb);  
+
+
+    /**
+     * Test if left reduction matrix.
+     * @param C coefficient type.
+     * @param F a solvable polynomial list.
+     * @param G a left Groebner base.
+     * @param Mf a possible left reduction matrix.
+     * @param Mg a possible left reduction matrix.
+     * @return true, if Mg and Mf are left reduction matrices, else false.
+     */
+    public boolean
+           isLeftReductionMatrix(List<GenSolvablePolynomial<C>> F, 
+                                 List<GenSolvablePolynomial<C>> G,
+                                 List<List<GenSolvablePolynomial<C>>> Mf,  
+                                 List<List<GenSolvablePolynomial<C>>> Mg);  
+
 }

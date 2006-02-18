@@ -425,4 +425,58 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
         return G;
     }
 
+
+    /**
+     * Test if left reduction matrix.
+     * @param C coefficient type.
+     * @param exgb an SolvableExtendedGB container.
+     * @return true, if exgb contains a left reduction matrix, else false.
+     */
+    public boolean
+           isLeftReductionMatrix(SolvableExtendedGB<C> exgb) {  
+        if ( exgb == null ) {
+            return true;
+        }
+        return isLeftReductionMatrix(exgb.F,exgb.G,exgb.F2G,exgb.G2F);
+    }
+
+
+    /**
+     * Test if left reduction matrix.
+     * @param C coefficient type.
+     * @param F a solvable polynomial list.
+     * @param G a left Groebner base.
+     * @param Mf a possible left reduction matrix.
+     * @param Mg a possible left reduction matrix.
+     * @return true, if Mg and Mf are left reduction matrices, else false.
+     */
+    public boolean
+           isLeftReductionMatrix(List<GenSolvablePolynomial<C>> F, 
+                                 List<GenSolvablePolynomial<C>> G,
+                                 List<List<GenSolvablePolynomial<C>>> Mf,  
+                                 List<List<GenSolvablePolynomial<C>>> Mg) {  
+        // no more check G and Mg: G * Mg[i] == 0
+        // check F and Mg: F * Mg[i] == G[i]
+        int k = 0;
+        for ( List<GenSolvablePolynomial<C>> row : Mg ) {
+            boolean t = sred.isLeftReductionNF( row, F, G.get( k ), null );  
+            if ( ! t ) {
+               logger.error("F isLeftReductionMatrix s, k = " + F.size() + ", " + k);
+               return false;
+            }
+            k++;
+        }
+        // check G and Mf: G * Mf[i] == F[i]
+        k = 0;
+        for ( List<GenSolvablePolynomial<C>> row : Mf ) {
+            boolean t = sred.isLeftReductionNF( row, G, F.get( k ), null );  
+            if ( ! t ) {
+               logger.error("G isLeftReductionMatrix s, k = " + G.size() + ", " + k);
+               return false;
+            }
+            k++;
+        }
+        return true;
+    }
+
 }

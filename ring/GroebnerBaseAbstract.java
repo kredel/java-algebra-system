@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
+import org.apache.log4j.Logger;
+
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.structure.RingElem;
@@ -22,7 +24,7 @@ import edu.jas.structure.RingElem;
 public abstract class GroebnerBaseAbstract<C extends RingElem<C>> 
                       implements GroebnerBase<C> {
 
-    //private static final Logger logger = Logger.getLogger(GroebnerBaseAbstract.class);
+    private static final Logger logger = Logger.getLogger(GroebnerBaseAbstract.class);
 
 
     /**
@@ -199,6 +201,60 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>>
             F.add( a );
         }
         return F;
+    }
+
+
+    /**
+     * Test if reduction matrix.
+     * @param C coefficient type.
+     * @param exgb an ExtendedGB container.
+     * @return true, if exgb contains a reduction matrix, else false.
+     */
+    public boolean
+           isReductionMatrix(ExtendedGB<C> exgb) {  
+        if ( exgb == null ) {
+            return true;
+        }
+        return isReductionMatrix(exgb.F,exgb.G,exgb.F2G,exgb.G2F);
+    }
+
+
+    /**
+     * Test if reduction matrix.
+     * @param C coefficient type.
+     * @param F a polynomial list.
+     * @param G a Groebner base.
+     * @param Mf a possible reduction matrix.
+     * @param Mg a possible reduction matrix.
+     * @return true, if Mg and Mf are reduction matrices, else false.
+     */
+    public boolean
+           isReductionMatrix(List<GenPolynomial<C>> F, 
+                             List<GenPolynomial<C>> G,
+                             List<List<GenPolynomial<C>>> Mf,  
+                             List<List<GenPolynomial<C>>> Mg) {  
+        // no more check G and Mg: G * Mg[i] == 0
+        // check F and Mg: F * Mg[i] == G[i]
+        int k = 0;
+        for ( List<GenPolynomial<C>> row : Mg ) {
+            boolean t = red.isReductionNF( row, F, G.get( k ), null );  
+            if ( ! t ) {
+               logger.error("F isReductionMatrix s, k = " + F.size() + ", " + k);
+               return false;
+            }
+            k++;
+        }
+        // check G and Mf: G * Mf[i] == F[i]
+        k = 0;
+        for ( List<GenPolynomial<C>> row : Mf ) {
+            boolean t = red.isReductionNF( row, G, F.get( k ), null );  
+            if ( ! t ) {
+               logger.error("G isReductionMatrix s, k = " + G.size() + ", " + k);
+               return false;
+            }
+            k++;
+        }
+        return true;
     }
 
 }

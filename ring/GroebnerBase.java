@@ -93,4 +93,29 @@ public interface GroebnerBase<C extends RingElem<C>>  {
                minimalGB(List<GenPolynomial<C>> Gp);
 
 
+    /**
+     * Test if reduction matrix.
+     * @param C coefficient type.
+     * @param exgb an ExtendedGB container.
+     * @return true, if exgb contains a reduction matrix, else false.
+     */
+    public boolean
+           isReductionMatrix(ExtendedGB<C> exgb); 
+
+
+    /**
+     * Test if reduction matrix.
+     * @param C coefficient type.
+     * @param F a polynomial list.
+     * @param G a Groebner base.
+     * @param Mf a possible reduction matrix.
+     * @param Mg a possible reduction matrix.
+     * @return true, if Mg and Mf are reduction matrices, else false.
+     */
+    public boolean
+           isReductionMatrix(List<GenPolynomial<C>> F, 
+                             List<GenPolynomial<C>> G,
+                             List<List<GenPolynomial<C>>> Mf,  
+                             List<List<GenPolynomial<C>>> Mg);
+
 }
