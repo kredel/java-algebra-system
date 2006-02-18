@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="iso-8859-1" ?>
 
+<!-- $Id$ -->
+
+
 <project name="jas" default="usage" basedir="." >
 
-  <property name="src"      value="." />
+  <property name="src"      value="src" />
   <property name="build"    value="." />
   <property name="doc"      value="doc" />
   <property name="test"     value="test" />
@@ -28,10 +31,19 @@
   <echoproperties />
 </target>
 
+<target name="recompile" depends="vorher" >
+  <javac srcdir="." destdir="${build}"
+         includes="*/*.java" 
+         debug="on" debuglevel="lines,source"
+         classpath="${cp}" 
+  />
+</target>
+
 <target name="compile" depends="vorher" >
   <javac srcdir="${src}" destdir="${build}" 
          debug="on" debuglevel="lines,source"
          classpath="${cp}"
+         listfiles="true"
   />
 <!--     listfiles="true"
 -->
@@ -105,7 +117,7 @@
      <classpath path="${cp}" />
      <formatter type="plain" /> <!-- plain, xml, brief -->
      <batchtest todir="${test}" >
-        <fileset dir="${src}">
+        <fileset dir="${build}">
           <include name="edu/**/*Test.class"/>
         </fileset>
      </batchtest>
