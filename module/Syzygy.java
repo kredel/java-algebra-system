@@ -4,33 +4,11 @@
 
 package edu.jas.module;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Iterator;
-import java.util.Map;
-
-import java.io.Serializable;
-
-import org.apache.log4j.Logger;
-
-import edu.jas.structure.RingElem;
 
 import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolynomialList;
-import edu.jas.poly.ExpVector;
-//import edu.jas.poly.TermOrder;
-
-import edu.jas.ring.Reduction;
-import edu.jas.ring.ReductionSeq;
-//import edu.jas.ring.GroebnerBase;
-import edu.jas.ring.GroebnerBaseSeq;
-import edu.jas.ring.GroebnerBaseSeqPairSeq;
-import edu.jas.ring.ExtendedGB;
-
-import edu.jas.module.ModuleList;
-import edu.jas.module.GenVector;
-import edu.jas.module.GenVectorModul;
+import edu.jas.structure.RingElem;
 
 
 /**
@@ -171,7 +149,7 @@ public interface Syzygy<C extends RingElem<C>>  {
      * @return syz(F), a basis for the module of syzygies for F.
      */
     public List<List<GenPolynomial<C>>> 
-        zeroRelationsArbitrary(int modv, List<GenPolynomial<C>> F);
+           zeroRelationsArbitrary(int modv, List<GenPolynomial<C>> F);
 
 
     /**

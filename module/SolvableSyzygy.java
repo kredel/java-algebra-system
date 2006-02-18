@@ -4,35 +4,11 @@
 
 package edu.jas.module;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Iterator;
-import java.util.Map;
 
-import java.io.Serializable;
-
-import org.apache.log4j.Logger;
-
-import edu.jas.structure.RingElem;
-
-import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
-import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.PolynomialList;
-import edu.jas.poly.ExpVector;
-//import edu.jas.poly.TermOrder;
-//import edu.jas.poly.RelationTable;
-
-import edu.jas.ring.Reduction;
-import edu.jas.ring.SolvableReduction;
-import edu.jas.ring.ReductionSeq;
-import edu.jas.ring.SolvableReductionSeq;
-//import edu.jas.ring.GroebnerBase;
-import edu.jas.ring.SolvableGroebnerBase;
-import edu.jas.ring.SolvableGroebnerBaseSeq;
-import edu.jas.ring.SolvableExtendedGB;
-
-import edu.jas.module.ModuleList;
+import edu.jas.structure.RingElem;
 
 
 /**
@@ -215,6 +191,6 @@ public interface SolvableSyzygy<C extends RingElem<C>> {
      * @return syz(F), a basis for the module of right syzygies for F.
      */
     public List<List<GenSolvablePolynomial<C>>> 
-        rightZeroRelationsArbitrary(int modv, List<GenSolvablePolynomial<C>> F);
+           rightZeroRelationsArbitrary(int modv, List<GenSolvablePolynomial<C>> F);
 
 }
