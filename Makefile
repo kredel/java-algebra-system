@@ -146,27 +146,33 @@ FILES=$(wildcard *.java structure/*.java arith/*.java poly/*.java ring/*.java mo
 LIBS=$(JUNITPATH) $(LOG4JPATH) $(JOMPPATH)
 #CLASSES=$(wildcard *.class structure/*.java arith/*.class poly/*.class ring/*.class module/*.class util/*.class)
 CLASSES=edu/jas
-PYS=$(wildcard *.py)
+PYS=$(wildcard *.py examples/*.py)
+DOCU=jas-log.html index.html problems.html README COPYING COPYING.lgpl sample.jythonrc
 
 doc: $(FILES)
 	$(DOC) $(DOCOPTS) -d doc $(FILES) 
 
-jar: $(FILES) jas-log.html index.html problems.html Makefile build.xml log4j.properties $(PYS)
-	$(JDK)/jar -cvf jas.jar $(FILES) edu/ jas-log.html index.html problems.html Makefile build.xml log4j.properties
+jas.jar: $(FILES) $(DOCU) Makefile build.xml log4j.properties $(PYS)
+	$(JDK)/jar -cvf jas.jar $(FILES) edu/ $(DOCU) Makefile build.xml log4j.properties $(PYS)
 	cp jas.jar /tmp/jas-`date +%Y%j`.jar
 #	cp jas.jar /mnt/i/e/kredel/jas-`date +%Y%j`.jar
 
 
 TOJAR=$(FILES) $(CLASSES) Makefile build.xml log4j.properties
-jars: GBManifest.MF $(TOJAR)
-	$(JDK)/jar -cvfm JAS.jar GBManifest.MF $(TOJAR)
+jas-run.jar: GBManifest.MF $(TOJAR)
+	$(JDK)/jar -cvfm jas-run.jar GBManifest.MF $(TOJAR)
 
-dist: jas.jar JAS.jar $(LIBS)
-	tar -cvzf jas-dist.tgz jas.jar JAS.jar $(LIBS)
+jas-doc.jar: doc/
+	$(JDK)/jar -cvf jas-doc.jar doc/ $(DOCU)
+
+
+dist: jas.jar jas-run.jar jas-doc.jar $(LIBS)
+	tar -cvzf jas-dist.tgz jas.jar jas-run.jar jas-doc.jar $(LIBS)
 
 #links: arith/build.xml module/build.xml ring/build.xml poly/build.xml structure/build.xml util/build.xml
 #
 
+jars: jas.jar jas-run.jar jas-doc.jar
 
 clean:
 	find . -name "*~" -follow -print -exec rm {} \;

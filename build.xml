@@ -129,7 +129,8 @@
      <fileset dir="." includes="**/*.java"  />
      <fileset dir="." includes="*.html"  />
      <fileset dir="." includes="*.py"  />
-     <fileset dir="." includes="*.jas"  />
+     <fileset dir="." includes="examples/*.py"  />
+     <fileset dir="." includes="**/*.jas"  />
      <fileset dir="." includes="build.xml Makefile log4j.properties"  />
      <fileset dir="edu/jas" />
   </jar>
