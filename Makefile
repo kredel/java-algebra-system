@@ -28,7 +28,8 @@ TNJPATH=$(LIBPATH)/tnj.jar
 # --- syncing ----------
 DRY=--dry-run
 DELETE=
-RSYNC=rsync -e ssh -avuz $(DRY) $(DELETE) --exclude=*~ --exclude=*/.jxta/ --exclude=*.log* --exclude=*.out* --exclude=*.txt* --exclude=.svn
+RSYNC=rsync -e ssh -avuz $(DRY) $(DELETE) --exclude=*~ --exclude=*/.jxta/ --exclude=*.log* --exclude=*.out* --exclude=*.txt* --exclude=.svn 
+####--exclude=*.ps --exclude=*.pdf --exclude=spin*
 PART=jas.j15
 
 all:
