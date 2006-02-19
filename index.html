@@ -88,12 +88,15 @@ The old version for JDK 1.4 can be found <a href="../jas.j14">here</a>.
 
 <p>JAS
 <a href="doc/index.html" target="doc" >API documentation</a>
-by javadoc (uptodate).
+by javadoc (uptodate), as 
+<a href="jas-doc.jar" target="doc" >jas-doc.jar</a>.
 </p>
 
 <p><a href="README" target="readme" >README</a>
 and 
 <a href="COPYING" target="readme" >COPYING</a> (GPL)
+or 
+<a href="COPYING.lgpl" target="readme" >COPYING.lgpl</a> (LGPL)
 </p>
 
 <p>Some  
@@ -107,7 +110,7 @@ for the new generic version.
 
 
 
-<h2>Download, Instalation and Test</h2>
+<h2>Download, instalation and unit tests</h2>
 
 <ul>
 <li><p><a href="jas.jar">jas.jar</a> execute with 
@@ -116,8 +119,8 @@ for the new generic version.
     Contains class and java files.
     </p>
 </li>
-<li><p><a href="JAS.jar">JAS.jar</a> execute with 
-    <code>java -jar JAS.jar &lt;RungGB args&gt;</code>
+<li><p><a href="jas-run.jar">jas-run.jar</a> execute with 
+    <code>java -jar jas-run.jar &lt;RungGB args&gt;</code>
     </p>
     <p>Execution of RunGB.
     Contains class and java files.
@@ -154,30 +157,24 @@ for the new generic version.
 </li>
 </ul>
 
-<h2>Usage with the Jython Interpreter</h2>
+<h2>Usage with the Jython interpreter</h2>
 
 <p><a href="examples/jas.py">jas.py</a> (imported by other Python files).
 </p>
 <p>To install jas with jython you have to add the above libraries 
-(log4j.jar, junit.jar, tnj.jar and JAS.jar) to the Java classpath.
+(log4j.jar, junit.jar, tnj.jar and jas.jar) to the Java classpath.
 </p>
 <p>This can be done best when included in a <code>.jythonrc</code> file, e.g.
+<a href="sample.jythonrc">sample.jythonrc</a>.
 </p>
-<pre>
-#!/bin/bash
-#
-export CLASSPATH="/home/kredel/java/lib/log4j.jar:/home/kredel/java/lib/junit.jar:/home/kredel/java/lib/tnj.jar:."
-
-export BASE_OPTIONS="-Xms500M -Xmx1300M -XX:+AggressiveHeap -XX:+UseParallelGC -verbose:gc"
-</pre>
 <p>
-If this does not help finding the jas classes, try to put the JAS.jar also 
+If this does not help finding the jas classes, try to put the jas.jar also 
 into the CLASSPATH or to unpack the jar into the directory you are starting jython 
 (also to get the correct version of .py files).
 </p>
 
 
-<h3>Examples</h3>
+<h4>Examples</h4>
 
 <p>Commutative:
 <a href="examples/trinks.py">trinks.py</a>,
@@ -270,11 +267,11 @@ Some UML class diagramms as produced by ArgoUML (outdated):
 -->
 
     <hr />
-    <address><a href="mailto:kredel@kredel.rz.uni-mannheim.de">Heinz Kredel</a></address>
+    <address><a href="mailto:kredel@at@rz.uni-mannheim.de">Heinz Kredel</a></address>
 <p>
 <!-- Created: Sat Mar 19 21:44:14 CET 2005 -->
 <!-- hhmts start -->
-Last modified: Sun Feb 12 19:59:28 CET 2006
+Last modified: Sun Feb 19 15:02:24 CET 2006
 <!-- hhmts end -->
 </p>
 <p align="right" >
