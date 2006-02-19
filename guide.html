@@ -206,14 +206,49 @@ This concludes the getting started section.
 <h3>Overview of jas.py classes and methods</h3>
 
 <p>
-The jython inteface to the JAS library consits of the following jathon classes.
+The jython interface to the JAS library consists of the 
+following jython classes.
 </p>
-
+<ul>
+<li><p><code>Ring</code> and <code>Ideal</code> <br />
+    define polynomial rings and ideals. <br />
+    <code>Ideal</code> has methods for sequential, parallel and distributed 
+    Groebner bases computation, e.g.
+    <code>GB()</code>,  <code>parGB()</code>,  <code>distGB()</code>,  
+    <code>NF()</code>,  <code>intersect()</code>.
+    </p>
+</li>
+<li><p><code>SolvableRing</code> and <code>SolvableIdeal</code> <br />
+    define solvable polynomial rings and left, right and two-sided ideals.<br />
+    <code>SolvableIdeal</code> has methods for left, right and two-sided
+    Groebner bases computation, e.g.
+    <code>leftGB()</code>,  <code>rightGB()</code>,  <code>twosidedGB()</code>,  
+    <code>intersect()</code>.
+    </p>
+</li>
+<li><p><code>Module</code> and <code>SubModule</code> <br />
+    define modules over polynomial rings and sub modules. <br />
+    <code>Module</code> has a method for sequential Groebner bases computation, 
+    e.g. <code>GB()</code>.  
+    </p>
+</li>
+<li><p><code>SolvableModule</code> and <code>SolvableSubModule</code> <br />
+    define modules over solvable polynomial rings and sub modules. <br />
+    <code>SolvableModule</code> has methods for left, right and two-sided
+    Groebner bases computation, e.g.
+    <code>leftGB()</code>,  <code>rightGB()</code>,  <code>twosidedGB()</code>.
+    </p>
+</li>
+</ul>
 
 
 <h3>Some internals of jas.py</h3>
 
 <!--
+<li><p><code></code><code></code>
+    </p>
+</li>
+
 <pre>
 </pre>
 
@@ -233,11 +268,11 @@ The jython inteface to the JAS library consits of the following jathon classes.
 <p>
 <!-- Created: Sun Feb 19 15:49:14 CET 2006 -->
 <!-- hhmts start -->
-Last modified: Sun Feb 19 18:27:36 CET 2006
+Last modified: Sun Feb 19 18:47:09 CET 2006
 <!-- hhmts end -->
 </p>
 <p align="right" >
-$Id: $
+$Id: guide.html 650 2006-02-19 11:29:48Z kredel $
 </p>
   </body>
 </html>
