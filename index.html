@@ -55,7 +55,8 @@ a polynomial parser <code>GenPolynomialTokenizer</code>.
 </dd>
 <dt>edu.jas.ring:</dt>
 <dd>
-contains classes for polynomial reduction, Groebner bases and ideal arithmetic
+contains classes for polynomial and solvable polynomial reduction, 
+Groebner bases and ideal arithmetic
 as well as thread parallel and distributed versions of Buchbergers algorithm 
 like <code>ReductionSeq</code>, <code>GroebnerBaseAbstract</code>,
 <code>GroebnerBaseSeq</code>, <code>GroebnerBaseParallel</code>
@@ -100,15 +101,13 @@ and
 for the new generic version.
 </p>
 
-<h3>History</h3>
-
-<p>
-<a href="jas-log.html" target="weblog">Web-Log</a>
+<p>The history of the project can be found in the 
+   <a href="jas-log.html" target="weblog">Web-Log</a>.
 </p>
 
 
 
-<h2>Download and Implementation</h2>
+<h2>Download, Instalation and Test</h2>
 
 <ul>
 <li><p><a href="jas.jar">jas.jar</a> execute with 
@@ -136,6 +135,21 @@ for the new generic version.
     <p>Installation: 
     Download the libraries and put them in a directory <code>lib</code>.
     Create an empty directory <code>test</code> for the output of log4j.
+    </p>
+</li>
+<li><p>Unit tests can be run with the "test" target for ant, e.g. 
+    <code> ant test</code>
+    </p>
+    <p>The test units work mainly with generated random polynomials.
+    The parameters are choosen such that the resulting Groebner bases 
+    are not to hard to compute.
+    However some random polynomials may be to big and the running time
+    may occasionally be several minutes (but not hours).
+    <br />
+    On the other hand random polynomials may sometimes be zero or one.
+    If such input does not make sense the test will fail. I.e. some
+    tests will fail from time to time, but not for repeated execution 
+    of the test. So if a test fails rerun the test a few times.
     </p>
 </li>
 </ul>
@@ -167,9 +181,10 @@ into the CLASSPATH or to unpack the jar into the directory you are starting jyth
 
 <p>Commutative:
 <a href="examples/trinks.py">trinks.py</a>,
-<a href="examples/wa_32.py">wa_32.py</a>
+<a href="examples/katsura.py">katsura.py</a>
 </p>
 <p>Solvable:
+<a href="examples/wa_32.py">wa_32.py</a>,
 <a href="examples/u_sl_3_prod.py">u_sl_3_prod.py</a>,
 <a href="examples/u_sl_3.py">u_sl_3.py</a>
 </p>
@@ -259,7 +274,7 @@ Some UML class diagramms as produced by ArgoUML (outdated):
 <p>
 <!-- Created: Sat Mar 19 21:44:14 CET 2005 -->
 <!-- hhmts start -->
-Last modified: Sun Feb 12 12:23:26 CET 2006
+Last modified: Sun Feb 12 19:59:28 CET 2006
 <!-- hhmts end -->
 </p>
 <p align="right" >
