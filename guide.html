@@ -241,8 +241,39 @@ following jython classes.
 </li>
 </ul>
 
+<p>
+Solvable polynomial rings are non commutative polynomial rings 
+where the non commutativity is expressed by commutator relations.
+Commutator relations are stored in a data structure called relation table.
+In the definition of a solvable polynomial ring this relation table must be 
+defined. E.g the definition for the ring of a Weyl algebra is
+</p>
+<pre>
+Rat(a,b,e1,e2,e3) L
+RelationTable
+(
+ ( e3 ), ( e1 ), ( e1 e3 - e1 ),
+ ( e3 ), ( e2 ), ( e2 e3 - e2 )
+)
+</pre>
+<p>
+The relation table must be buildt from triples of (commutative) polynomials.
+A triple <code>p1, p2, p3</code> is interpreted as non commutative 
+multiplication relation <code>p1 .*. p2 = p3</code>. 
+Currently <code>p1</code> and <code>p2</code> must be single term, single variable
+polynomials. The term order must be choosen such that 
+leadingTerm(<code>p1 p2</code>) equals leadingTerm(<code>p3</code>)
+and <code>p1 &gt; p2</code> for each triple.
+Variables for which there are no commutator relations are assumed to 
+commute with each other and with all other variables, 
+e.g. the variables <code>a, b</code> in the example.
+</p>
+<p>Module ...
+</p>
 
 <h3>Some internals of jas.py</h3>
+
+
 
 <!--
 <li><p><code></code><code></code>
@@ -268,11 +299,12 @@ following jython classes.
 <p>
 <!-- Created: Sun Feb 19 15:49:14 CET 2006 -->
 <!-- hhmts start -->
-Last modified: Sun Feb 19 18:47:09 CET 2006
+Last modified: Sun Feb 19 21:53:47 CET 2006
 <!-- hhmts end -->
 </p>
 <p align="right" >
-$Id: guide.html 650 2006-02-19 11:29:48Z kredel $
+$Id: guide.html ? 2006-02-19 11:29:48Z kredel $
+$Id: $
 </p>
   </body>
 </html>
