@@ -1,5 +1,7 @@
 #
 # jython examples for jas.
+# $Id$
+#
 
 from jas import SolvableRing
 from jas import SolvableIdeal
@@ -69,7 +71,7 @@ for t in (2,3,5,7,11,13,17,19,23,27,31,37,43):
   # compute I_{\phi_t} \cap WA_1^opp
   x = it.leftGB();
   print "seq left x:", x;
-  y = Ideal(x).intersect(r1c.ring);
+  y = Ideal(x.pset).intersect(r1c.ring);
   len = y.list.size();
   print "seq left y: ", y;
   print "seq left y len: ", len;
@@ -86,7 +88,7 @@ for t in (2,3,5,7,11,13,17,19,23,27,31,37,43):
   # compute ker(\phi_t)
   x = ikt.leftGB();
   print "seq left x:", x;
-  y = Ideal(x).intersect(r2c.ring);
+  y = Ideal(x.pset).intersect(r2c.ring);
   len = y.list.size();
   print "seq left y: ", y;
   print "seq left y len: ", len;

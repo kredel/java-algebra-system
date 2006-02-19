@@ -1,5 +1,7 @@
 #
 # jython examples for jas.
+# $Id$
+#
 
 from jas import SolvableRing
 from jas import SolvableIdeal
@@ -11,7 +13,7 @@ from edu.jas.ring import Ideal
 
 rs1 = """
 # solvable polynomials, U_sl_2 and Weyl algebra A_1:
-Rat(D,X,e,f,h) G|2|
+Rat(D,X,e,f,h) G|3|
 RelationTable
 (
  ( f ), ( e ), ( e f - h ),
@@ -33,7 +35,7 @@ RelationTable
 
 rs2 = """
 # solvable polynomials, U_sl_2 and Weyl algebra A_1:
-Rat(e,f,h,D,X) G|3|
+Rat(e,f,h,D,X) G|2|
 RelationTable
 (
  ( f ), ( e ), ( e f - h ),
@@ -75,7 +77,7 @@ print;
 # compute I_{\phi_t} \cap WA_1^opp
 x = it.leftGB();
 print "seq left x:", x;
-y = Ideal(x).intersect(r1c.ring);
+y = Ideal(x.pset).intersect(r1c.ring);
 len = y.list.size();
 print "seq left y: ", y;
 print "seq left y len: ", len;
@@ -92,7 +94,7 @@ print;
 # compute ker(\phi_t)
 x = ikt.leftGB();
 print "seq left x:", x;
-y = Ideal(x).intersect(r2c.ring);
+y = Ideal(x.pset).intersect(r2c.ring);
 len = y.list.size();
 print "seq left y: ", y;
 print "seq left y len: ", len;

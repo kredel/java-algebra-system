@@ -1,5 +1,7 @@
 #
 # jython examples for jas.
+# $Id$
+#
 
 from jas import SolvableModule
 from jas import SolvableSubModule
@@ -57,17 +59,17 @@ print "seq twosided GB Output:", ftg;
 print;
 
 
-from edu.jas.module import SolvableSyzygy;
+from edu.jas.module import SolvableSyzygyAbstract;
 from edu.jas.module import ModuleList;
 from edu.jas.module import ModSolvableGroebnerBase;
 
-s = SolvableSyzygy().leftZeroRelations( ftg.mset );
+s = SolvableSyzygyAbstract().leftZeroRelations( ftg.mset );
 #sl = ModuleList(f.pset.vars,f.pset.tord,s,f.pset.table);
 
 print "leftSyzygy:", s;
 print;
 
-if SolvableSyzygy().isLeftZeroRelation(s,ftg.mset):
+if SolvableSyzygyAbstract().isLeftZeroRelation(s,ftg.mset):
    print "is Syzygy";
 else:
    print "is not Syzygy";

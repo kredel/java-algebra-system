@@ -1,5 +1,7 @@
 #
 # jython examples for jas.
+# $Id$
+#
 
 from jas import Ring
 from jas import Ideal
@@ -27,17 +29,17 @@ rg = f.GB();
 print "seq Output:", rg;
 print;
 
-from edu.jas.module import Syzygy;
+from edu.jas.module import SyzygyAbstract;
 from edu.jas.module import ModuleList;
-from edu.jas.module import ModGroebnerBase;
+from edu.jas.module import ModGroebnerBaseAbstract;
 
-s = Syzygy.zeroRelations( rg.list );
-sl = ModuleList(rg.ring,s);
+s = SyzygyAbstract().zeroRelations( rg.list );
+sl = ModuleList(rg.pset.ring,s);
 
 print "syzygy:", sl;
 print;
 
-z = Syzygy.isZeroRelation( s, rg.list );
+z = SyzygyAbstract().isZeroRelation( s, rg.list );
 
 print "is zero s ?",
 if z:
@@ -52,20 +54,20 @@ for i in range(1,len(r.ring.vars)+1):
    print "\n %s. resolution" % i;
 
    sl = zg;
-   mg = ModGroebnerBase.GB(sl);
+   mg = ModGroebnerBaseAbstract().GB(sl);
    print "Mod GB: ", mg;
    print;
 
-   zg = Syzygy.zeroRelations(mg);
+   zg = SyzygyAbstract().zeroRelations(mg);
    print "syzygies of Mod GB: ", zg;
    print;
 
-   if ModGroebnerBase.isGB( mg ):
+   if ModGroebnerBaseAbstract().isGB( mg ):
        print "is GB";
    else:
        print "is not GB";
 
-   if Syzygy.isZeroRelation(zg,mg):
+   if SyzygyAbstract().isZeroRelation(zg,mg):
        print "is Syzygy";
    else:
        print "is not Syzygy";

@@ -1,5 +1,7 @@
 #
 # jython examples for jas.
+# $Id$
+#
 
 from jas import Ring
 from jas import Ideal
@@ -23,11 +25,11 @@ f = Ideal( r, ps );
 print "Ideal: " + str(f);
 print;
 
-from edu.jas.module import Syzygy;
+from edu.jas.module import SyzygyAbstract;
 from edu.jas.module import ModuleList;
-from edu.jas.module import ModGroebnerBase;
+from edu.jas.module import ModGroebnerBaseAbstract;
 
-R = Syzygy().resolution( f.pset );
+R = SyzygyAbstract().resolution( f.pset );
 
 for i in range(0,R.size()): 
    print "\n %s. resolution" % (i+1);

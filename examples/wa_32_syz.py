@@ -1,5 +1,7 @@
 #
 # jython examples for jas.
+# $Id: $
+#
 
 from jas import SolvableRing
 from jas import SolvableIdeal
@@ -7,7 +9,7 @@ from jas import SolvableIdeal
 from edu.jas.ring   import SolvableGroebnerBaseSeq;
 from edu.jas.poly   import OrderedPolynomialList;
 from edu.jas.module import ModuleList;
-from edu.jas.module import SolvableSyzygy;
+from edu.jas.module import SolvableSyzygyAbstract;
 
 # WA_32 example
 
@@ -39,23 +41,23 @@ print "SolvableIdeal: " + str(f);
 print;
 
 
-Z = SolvableSyzygy().leftZeroRelationsArbitrary( f.list );
-#Z = SolvableSyzygy().leftZeroRelations( g );
+Z = SolvableSyzygyAbstract().leftZeroRelationsArbitrary( f.list );
+#Z = SolvableSyzygyAbstract().leftZeroRelations( g );
 Zp = ModuleList( r.ring, Z );
 print "seq left syz Output:", Zp;
 print;
-if SolvableSyzygy().isLeftZeroRelation( Zp.list, f.list ):
+if SolvableSyzygyAbstract().isLeftZeroRelation( Zp.list, f.list ):
    print "is left syzygy";
 else:
    print "is not left syzygy";
 
 
-Zr = SolvableSyzygy().rightZeroRelationsArbitrary( f.list );
-#Z = SolvableSyzygy().rightZeroRelations( g );
+Zr = SolvableSyzygyAbstract().rightZeroRelationsArbitrary( f.list );
+#Z = SolvableSyzygyAbstract().rightZeroRelations( g );
 Zpr = ModuleList( r.ring, Zr );
 print "seq right syz Output:", Zpr;
 print;
-if SolvableSyzygy().isRightZeroRelation( Zpr.list, f.list ):
+if SolvableSyzygyAbstract().isRightZeroRelation( Zpr.list, f.list ):
    print "is right syzygy";
 else:
    print "is not right syzygy";

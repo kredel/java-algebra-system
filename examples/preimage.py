@@ -1,5 +1,7 @@
 #
 # jython examples for jas.
+# $Id$
+#
 
 from jas import Ring
 from jas import Ideal
@@ -40,7 +42,7 @@ ri = Ring( rsi );
 print "Ring: " + str(ri);
 
 
-y = ring.Ideal(g).intersect(ri.ring);
+y = ring.Ideal(g.pset).intersect(ri.ring);
 len = y.list.size();
 print "seq intersect y: ", y;
 
@@ -79,6 +81,6 @@ rb = Ring( rsb );
 print "Ring: " + str(rb);
 
 
-y = ring.Ideal(g).intersect(rb.ring);
+y = ring.Ideal(g.pset).intersect(rb.ring);
 len = y.list.size();
 print "seq intersect y: ", y;

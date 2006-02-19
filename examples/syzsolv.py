@@ -1,5 +1,7 @@
 #
 # jython examples for jas.
+# $Id$
+#
 
 from jas import SolvableRing
 from jas import SolvableIdeal
@@ -31,9 +33,9 @@ f = SolvableIdeal( r, ps );
 print "SolvIdeal: " + str(f);
 print;
 
-from edu.jas.module import SolvableSyzygy;
+from edu.jas.module import SolvableSyzygyAbstract;
 
-R = SolvableSyzygy().resolution( f.pset );
+R = SolvableSyzygyAbstract().resolution( f.pset );
 
 for i in range(0,R.size()): 
    print "\n %s. resolution" % (i+1);

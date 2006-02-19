@@ -1,5 +1,7 @@
 #
 # jython examples for jas.
+# $Id$
+#
 
 from jas import SolvableRing
 from jas import SolvableIdeal
@@ -33,8 +35,8 @@ RelationTable
  ( Ha ), ( Ya ), ( Ya Ha - 2 Ya ),
  ( Hb ), ( Ya ), ( Ya Hb + Ya ),
 
- ( Ha ), ( Yb ), ( Ya Ha + Yb ),
- ( Hb ), ( Yb ), ( Ya Hb - 2 Yb ),
+ ( Ha ), ( Yb ), ( Yb Ha + Yb ),
+ ( Hb ), ( Yb ), ( Yb Hb - 2 Yb ),
 
  ( Ha ), ( Yc ), ( Yc Ha - Yc ),
  ( Hb ), ( Yc ), ( Yc Hb - Yc )

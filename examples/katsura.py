@@ -10,8 +10,8 @@ from edu.jas.ring import Katsura;
 
 # katsura examples
 
-knum = 5;
-tnum = 4;
+knum = 4
+tnum = 2;
 
 #r = Ring( "Mod 19 (B,S,T,Z,P,W) L" );
 #r = Ring( "Mod 1152921504606846883 (B,S,T,Z,P,W) L" ); # 2^60-93
