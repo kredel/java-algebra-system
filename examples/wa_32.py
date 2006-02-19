@@ -1,5 +1,7 @@
 #
 # jython examples for jas.
+# $Id: $
+#
 
 from jas import SolvableRing
 from jas import SolvableIdeal
@@ -34,14 +36,8 @@ f = SolvableIdeal( r, ps );
 print "SolvableIdeal: " + str(f);
 print;
 
-
 rg = f.leftGB();
-print "seq left Output:", rg;
-print;
-
-
-rg = f.twosidedGB();
-print "seq twosided Output:", rg;
+print "seq left GB:", rg;
 print;
 
 from edu.jas.ring   import SolvableGroebnerBaseSeq;
@@ -52,64 +48,33 @@ else:
    print "is not left GB";
 
 
-from java.util import ArrayList
-from edu.jas.poly import OrderedPolynomialList
 
-al = ArrayList();
-fac = rg.ring;
-rfac = fac.reverse();
-print "reversed fac ", rfac;
-for i in rg.list:
-    ri = i.reverse(rfac);
-    al.add(ri);
+rg = f.twosidedGB();
+print "seq twosided GB:", rg;
+print;
 
-ap = OrderedPolynomialList( rfac, al );
-print "reversed ", ap;
+if SolvableGroebnerBaseSeq().isLeftGB( rg.list ):
+   print "twosided GB is left GB";
+else:
+   print "twosided GB is not left GB";
 
-if SolvableGroebnerBaseSeq().isLeftGB( al ):
+if SolvableGroebnerBaseSeq().isRightGB( rg.list ):
    print "twosided GB is right GB";
 else:
    print "twosided GB is not right GB";
 
-
-# compute right GB
-
-bl = ArrayList();
-for i in f.list:
-    ri = i.reverse(rfac);
-    bl.add(ri);
-
-rpi = OrderedPolynomialList( rfac, bl );
-print "reversed ideal ", rpi;
-
-rgb = SolvableGroebnerBaseSeq().leftGB( bl );
-rp = OrderedPolynomialList( rfac, rgb );
-
-print "left reversed GB ", rp;
-
-cl = ArrayList();
-for i in rgb:
-    ri = i.reverse(fac);
-    cl.add(ri);
-
-rc = OrderedPolynomialList( fac, cl );
+if SolvableGroebnerBaseSeq().isTwosidedGB( rg.list ):
+   print "is twosided GB";
+else:
+   print "is not twosided GB";
 
 
-print "seq right GB output", rc;
+
+rg = f.rightGB();
+print "seq right GB:", rg;
 print;
 
-if SolvableGroebnerBaseSeq().isRightGB( cl ):
-   print "is right GB";
-else:
-   print "is not right GB";
-
-
-drgb = SolvableGroebnerBaseSeq().rightGB( f.list );
-drp = OrderedPolynomialList( fac, drgb );
-
-print "right GB ", drp;
-
-if SolvableGroebnerBaseSeq().isRightGB( drgb ):
+if SolvableGroebnerBaseSeq().isRightGB( rg.list ):
    print "is right GB";
 else:
    print "is not right GB";

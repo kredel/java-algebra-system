@@ -1,5 +1,7 @@
 #
 # jython examples for jas.
+# $Id: $
+#
 
 from jas import SolvableRing
 from jas import SolvableIdeal
@@ -35,14 +37,8 @@ print;
 
 
 rg = f.leftGB();
-print "seq left Output:", rg;
+print "seq left GB:", rg;
 print;
-
-
-rg = f.twosidedGB();
-print "seq twosided Output:", rg;
-print;
-
 
 from edu.jas.ring   import SolvableGroebnerBaseSeq;
 
@@ -52,19 +48,34 @@ else:
    print "is not left GB";
 
 
-from java.util import ArrayList
 
-al = ArrayList();
-fac = rg.ring;
-rfac = fac.reverse();
-print "reversed fac ", rfac;
-for i in rg.list:
-    ri = i.reverse(rfac);
-    al.add(ri);
+rg = f.twosidedGB();
+print "seq twosided GB:", rg;
+print;
 
-#print "reversed ", al;
+if SolvableGroebnerBaseSeq().isLeftGB( rg.list ):
+   print "twosided GB is left GB";
+else:
+   print "twosided GB is not left GB";
 
-if SolvableGroebnerBaseSeq().isLeftGB( al ):
+if SolvableGroebnerBaseSeq().isRightGB( rg.list ):
+   print "twosided GB is right GB";
+else:
+   print "twosided GB is not right GB";
+
+if SolvableGroebnerBaseSeq().isTwosidedGB( rg.list ):
+   print "is twosided GB";
+else:
+   print "is not twosided GB";
+
+
+
+rg = f.rightGB();
+print "seq right GB:", rg;
+print;
+
+if SolvableGroebnerBaseSeq().isRightGB( rg.list ):
    print "is right GB";
 else:
    print "is not right GB";
+

@@ -35,11 +35,16 @@ print;
 
 
 rg = f.leftGB();
-print "seq left Output:", rg;
+print "seq left GB:", rg;
 print;
 
 
 rg = f.twosidedGB();
-print "seq twosided Output:", rg;
+print "seq twosided GB:", rg;
 print;
+
+
+#rg = f.rightGB();
+#print "seq right GB:", rg;
+#print;
 
