@@ -118,7 +118,8 @@ public class GenPolynomialTokenizer  {
      * constructor with Reader.
      * @param r reader stream.
      */
-    public GenPolynomialTokenizer(Reader r) {
+    @SuppressWarnings("unchecked")
+	public GenPolynomialTokenizer(Reader r) {
         //BasicConfigurator.configure();
         vars = null;
         tord = new TermOrder();
@@ -160,7 +161,8 @@ public class GenPolynomialTokenizer  {
      * @param rf ring factory.
      * @param ct coefficient type.
      */
-    public void initFactory( RingFactory rf, coeffType ct) {
+    @SuppressWarnings("unchecked")
+	public void initFactory( RingFactory rf, coeffType ct) {
         fac = rf;
         parsedCoeff = ct;
 
@@ -197,7 +199,8 @@ public class GenPolynomialTokenizer  {
      * @param rf ring factory.
      * @param ct coefficient type.
      */
-    public void initSolvableFactory( RingFactory rf, coeffType ct) {
+    @SuppressWarnings("unchecked")
+	public void initSolvableFactory( RingFactory rf, coeffType ct) {
         fac = rf;
         parsedCoeff = ct;
 
@@ -235,7 +238,8 @@ public class GenPolynomialTokenizer  {
      * @return the next polynomial.
      * @throws IOException
      */
-    public GenPolynomial nextPolynomial() throws IOException {
+    @SuppressWarnings("unchecked")
+	public GenPolynomial nextPolynomial() throws IOException {
         if (debug) {
            logger.debug("torder = " + tord);
         }
@@ -484,7 +488,8 @@ public class GenPolynomialTokenizer  {
      * @return the next coefficient factory.
      * @throws IOException
      */
-    public RingFactory nextCoefficientRing() throws IOException {
+    @SuppressWarnings("unchecked")
+	public RingFactory nextCoefficientRing() throws IOException {
         RingFactory coeff = null;
         coeffType ct = null;
         int tt;
@@ -902,7 +907,8 @@ public class GenPolynomialTokenizer  {
      * The next relation table in internaly stored.
      * @throws IOException
      */
-    public void nextRelationTable() throws IOException {
+    @SuppressWarnings("unchecked")
+	public void nextRelationTable() throws IOException {
         if ( spfac == null ) {
             return;
         }
@@ -947,7 +953,8 @@ public class GenPolynomialTokenizer  {
      * @return the next polynomial set.
      * @throws IOException
      */
-    public PolynomialList nextPolynomialSet() throws IOException {
+    @SuppressWarnings("unchecked")
+	public PolynomialList nextPolynomialSet() throws IOException {
         //String comments = "";
         //comments += nextComment();
         //if (debug) logger.debug("comment = " + comments);
@@ -984,7 +991,8 @@ public class GenPolynomialTokenizer  {
      * @return the next module set.
      * @throws IOException
      */
-    public ModuleList nextSubModuleSet() throws IOException {
+    @SuppressWarnings("unchecked")
+	public ModuleList nextSubModuleSet() throws IOException {
         //String comments = "";
         //comments += nextComment();
         //if (debug) logger.debug("comment = " + comments);
@@ -1022,7 +1030,8 @@ public class GenPolynomialTokenizer  {
      * @return the next solvable polynomial list.
      * @throws IOException
      */
-    public List<GenSolvablePolynomial> nextSolvablePolynomialList() 
+    @SuppressWarnings("unchecked")
+	public List<GenSolvablePolynomial> nextSolvablePolynomialList() 
            throws IOException {
         List<GenPolynomial> s = nextPolynomialList();
              logger.info("s = " + s); 
@@ -1048,7 +1057,8 @@ public class GenPolynomialTokenizer  {
      * @return the next polynomial.
      * @throws IOException
      */
-    public GenSolvablePolynomial nextSolvablePolynomial() 
+    @SuppressWarnings("unchecked")
+	public GenSolvablePolynomial nextSolvablePolynomial() 
            throws IOException {
         GenPolynomial p = nextPolynomial();
              logger.info("p = " + p); 
@@ -1068,7 +1078,8 @@ public class GenPolynomialTokenizer  {
      * @throws IOException
      */
 
-    public PolynomialList nextSolvablePolynomialSet() throws IOException {
+    @SuppressWarnings("unchecked")
+	public PolynomialList nextSolvablePolynomialSet() throws IOException {
         //String comments = "";
         //comments += nextComment();
         //if (debug) logger.debug("comment = " + comments);
@@ -1149,7 +1160,8 @@ public class GenPolynomialTokenizer  {
      * @return the next solvable module set.
      * @throws IOException
      */
-    public ModuleList nextSolvableSubModuleSet() throws IOException {
+    @SuppressWarnings("unchecked")
+	public ModuleList nextSolvableSubModuleSet() throws IOException {
         //String comments = "";
         //comments += nextComment();
         //if (debug) logger.debug("comment = " + comments);

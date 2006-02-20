@@ -92,7 +92,8 @@ public class GenPolynomialTokenizerTest extends TestCase {
  * Test rational polynomial.
  * 
  */
- public void testBigRational() {
+ @SuppressWarnings("unchecked")
+public void testBigRational() {
      String exam = "Rat(x,y,z) L "  
                  + "( "
                  + "( 1 ), "
@@ -144,7 +145,8 @@ public class GenPolynomialTokenizerTest extends TestCase {
  * Test integer polynomial.
  * 
  */
- public void testBigInteger() {
+ @SuppressWarnings("unchecked")
+public void testBigInteger() {
      String exam = "Int(x,y,z) L "  
                  + "( "
                  + "( 1 ), "
@@ -196,7 +198,8 @@ public class GenPolynomialTokenizerTest extends TestCase {
  * Test modular integer polynomial.
  * 
  */
- public void testModInteger() {
+ @SuppressWarnings("unchecked")
+public void testModInteger() {
      String exam = "Mod 19 (x,y,z) L "  
                  + "( "
                  + "( 1 ), "
@@ -247,7 +250,8 @@ public class GenPolynomialTokenizerTest extends TestCase {
  * Test complex polynomial.
  * 
  */
- public void testBigComplex() {
+ @SuppressWarnings("unchecked")
+public void testBigComplex() {
      String exam = "Complex(x,y,z) L "  
                  + "( "
                  + "( 1i0 ), "
@@ -299,7 +303,8 @@ public class GenPolynomialTokenizerTest extends TestCase {
  * Test quaternion polynomial.
  * 
  */
- public void testBigQuaternion() {
+ @SuppressWarnings("unchecked")
+public void testBigQuaternion() {
      String exam = "Quat(x,y,z) L "  
                  + "( "
                  + "( 1i0j0k0 ), "
@@ -351,7 +356,8 @@ public class GenPolynomialTokenizerTest extends TestCase {
  * Test rational solvable polynomial.
  * 
  */
- public void testSolvableBigRational() {
+ @SuppressWarnings("unchecked")
+public void testSolvableBigRational() {
      String exam = "Rat(x,y,z) L "  
                  + "RelationTable "
                  + "( "
@@ -410,7 +416,8 @@ public class GenPolynomialTokenizerTest extends TestCase {
  * Test mod integer solvable polynomial.
  * 
  */
- public void testSolvableModInteger() {
+ @SuppressWarnings("unchecked")
+public void testSolvableModInteger() {
      String exam = "Mod 19 (x,y,z) L "  
                  + "RelationTable "
                  + "( "
@@ -469,7 +476,8 @@ public class GenPolynomialTokenizerTest extends TestCase {
  * Test integer polynomial module.
  * 
  */
- public void testBigIntegerModule() {
+ @SuppressWarnings("unchecked")
+public void testBigIntegerModule() {
      String exam = "Int(x,y,z) L "  
                  + "( "
                  + " ( "
@@ -548,7 +556,8 @@ public class GenPolynomialTokenizerTest extends TestCase {
  * Test rational solvable polynomial module.
  * 
  */
- public void testBigRationalSolvableModule() {
+ @SuppressWarnings("unchecked")
+public void testBigRationalSolvableModule() {
      String exam = "Rat(x,y,z) L "  
                  + "RelationTable "
                  + "( "
@@ -632,7 +641,8 @@ public class GenPolynomialTokenizerTest extends TestCase {
  * Test algebraic number polynomial.
  * 
  */
- public void testAlgebraicNumber() {
+ @SuppressWarnings("unchecked")
+public void testAlgebraicNumber() {
      String exam = "AN[ (i) ( i^2 + 1 ) ] (x,y,z) L "  
                  + "( "
                  + "( 1 ), "
@@ -693,7 +703,8 @@ public class GenPolynomialTokenizerTest extends TestCase {
  * Test Galois field coefficient polynomial.
  * 
  */
- public void testGaloisField() {
+ @SuppressWarnings("unchecked")
+public void testGaloisField() {
      String exam = "AN[ 19 (i) ( i^2 + 1 ) ] (x,y,z) L "  
                  + "( "
                  + "( 20 ), "
