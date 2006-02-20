@@ -31,6 +31,7 @@ JAS can be used as any other Java library by adding <code>jas.jar</code>
 to the classpath and creating and using objects from it.
 JAS can also be used interactively via the Python Java interpreter 
 <code>jython</code>. 
+$Id: $
 </p>
 
 
@@ -257,16 +258,21 @@ RelationTable
 )
 </pre>
 <p>
-The relation table must be buildt from triples of (commutative) polynomials.
+The relation table must be build from triples of (commutative) polynomials.
 A triple <code>p1, p2, p3</code> is interpreted as non commutative 
 multiplication relation <code>p1 .*. p2 = p3</code>. 
 Currently <code>p1</code> and <code>p2</code> must be single term, single variable
 polynomials. The term order must be choosen such that 
 leadingTerm(<code>p1 p2</code>) equals leadingTerm(<code>p3</code>)
 and <code>p1 &gt; p2</code> for each triple.
+Polynomial <code>p3</code> must be in commutative form, 
+i.e. multiplication operators occuring in it are commutative.
 Variables for which there are no commutator relations are assumed to 
 commute with each other and with all other variables, 
 e.g. the variables <code>a, b</code> in the example.
+Polynomials in the generating set of an ideal are also assumed to be 
+in commutative form. This will be changed in the future to allow the 
+multiplication operator to mean non-commutative multiplication.
 </p>
 <p>Module ...
 </p>
@@ -299,12 +305,11 @@ e.g. the variables <code>a, b</code> in the example.
 <p>
 <!-- Created: Sun Feb 19 15:49:14 CET 2006 -->
 <!-- hhmts start -->
-Last modified: Sun Feb 19 21:53:47 CET 2006
+Last modified: Mon Feb 20 21:13:54 CET 2006
 <!-- hhmts end -->
 </p>
 <p align="right" >
 $Id: guide.html ? 2006-02-19 11:29:48Z kredel $
-$Id: $
 </p>
   </body>
 </html>
