@@ -148,7 +148,8 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
      * @param vars names for the variables.
      * @see java.lang.Object#toString()
      */
-    public String toString(String[] vars) {
+    @SuppressWarnings("unchecked")
+	public String toString(String[] vars) {
         if ( vars == null ) {
             return toString();
         }
@@ -210,7 +211,8 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
      * @param f second term.
      * @param p product polynomial.
      */
-    public void update(ExpVector e, ExpVector f, GenSolvablePolynomial<C> p) {
+    @SuppressWarnings("unchecked")
+	public void update(ExpVector e, ExpVector f, GenSolvablePolynomial<C> p) {
         if ( debug ) {
             logger.info("new relation = " + e + " .*. " + f + " = " + p);
         }
@@ -264,7 +266,8 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
      * @return t table relation container, 
      *         contains e' and f' with e f = e' lt(p) f'. 
      */
-    public TableRelation<C> lookup(ExpVector e, ExpVector f) {
+    @SuppressWarnings("unchecked")
+	public TableRelation<C> lookup(ExpVector e, ExpVector f) {
         List<Integer> key = makeKey(e,f);
         List part = table.get( key );
         if ( part == null ) { // symmetric product
@@ -341,7 +344,8 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
      * this table, i.e. this should be empty.
      * @param tab a relation table to be extended and inserted into this.
      */
-    public void extend(RelationTable<C> tab) {  
+    @SuppressWarnings("unchecked")
+	public void extend(RelationTable<C> tab) {  
         if ( tab.table.size() == 0 ) {
             return;
         }
@@ -375,7 +379,8 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
      * this table, i.e. this should be empty.
      * @param tab a relation table to be contracted and inserted into this.
      */
-    public void contract(RelationTable<C> tab) { 
+    @SuppressWarnings("unchecked")
+	public void contract(RelationTable<C> tab) { 
         if ( tab.table.size() == 0 ) {
             return;
         }
@@ -415,7 +420,8 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
      * i.e. this should be empty.
      * @param tab a relation table to be reverted and inserted into this.
      */
-    public void reverse(RelationTable<C> tab) {  
+    @SuppressWarnings("unchecked")
+	public void reverse(RelationTable<C> tab) {  
         if ( tab.table.size() == 0 ) {
             return;
         }
