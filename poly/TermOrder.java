@@ -1240,7 +1240,26 @@ public final class TermOrder implements Serializable {
     }
 
 
-    /**
+    /**Hash code.
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+        int h = evord;
+        h = (h << 3) + evord2;
+        h = (h << 4) + evbeg1;
+        h = (h << 4) + evend1;
+        h = (h << 4) + evbeg2;
+        h = (h << 4) + evend2;
+        if ( weight == null ) {
+	       return h;
+        }
+        h = h * 7 + Arrays.deepHashCode( weight );
+        return h;
+	}
+
+
+	/**
      * String representation of weight vector.
      * @see java.lang.Object#toString()
      */
@@ -1446,7 +1465,7 @@ public final class TermOrder implements Serializable {
 
     /**
      * Revert exponent order. Used e.g. in opposite rings.
-     * @param evo exponent order to be reverted.
+     * @param evord exponent order to be reverted.
      * @return reverted exponent order.
      */
     public static int revert(int evord) {

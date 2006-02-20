@@ -79,7 +79,16 @@ public class ExpVectorPair implements Serializable {
     }
 
 
-    /**
+    /** hash code.
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		return (e1.hashCode() << 16) + e2.hashCode() ;
+	}
+
+	
+	/**
      * isMultiple.
      * @param p other.
      * @return true, if this is a multiple of b, else false.
