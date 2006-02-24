@@ -11,6 +11,7 @@ import java.util.List;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.structure.RingElem;
 import edu.jas.util.ExecutableChannels;
+import edu.jas.util.DistThreadPool;
 import edu.jas.util.RemoteExecutable;
 
 /**
@@ -56,7 +57,11 @@ public class GBDist<C extends RingElem<C>> {
                   String mfile, 
                   int port) {
         this.threads = threads;
-        this.mfile = mfile;
+        if ( mfile == null || mfile.length() == 0 ) {
+             this.mfile = "../util/machines";
+        } else {
+             this.mfile = mfile;
+        }
         this.port = port;
         bbd = new GroebnerBaseDistributed<C>(threads,port);
     }
@@ -65,25 +70,20 @@ public class GBDist<C extends RingElem<C>> {
     /**
      * Execute a distributed GB example.
      * Distribute clients and start master.
+     * Obsolete version.
      * @param F list of polynomials
      * @return GB(F) a Groebner base for F.
      */
     public List<GenPolynomial<C>> 
-           execute(List<GenPolynomial<C>> F) {
+           executeOld(List<GenPolynomial<C>> F) {
 
-        final String fname;
-        if ( mfile == null || mfile.length() == 0 ) {
-             fname = "../util/machines";
-        } else {
-             fname = mfile;
-        }
         final int numc = threads;
 
         List<GenPolynomial<C>> G = null;
 
         ExecutableChannels ec = null;
         try {
-            ec = new ExecutableChannels( fname );
+            ec = new ExecutableChannels( mfile );
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             return G;
@@ -122,6 +122,31 @@ public class GBDist<C extends RingElem<C>> {
         ec.close();
         bbd.terminate();
 
+        return G;
+    }
+
+
+    /**
+     * Execute a distributed GB example.
+     * Distribute clients and start master.
+     * @param F list of polynomials
+     * @return GB(F) a Groebner base for F.
+     */
+    public List<GenPolynomial<C>> execute( List<GenPolynomial<C>> F ) {
+        DistThreadPool dtp = new DistThreadPool(threads,mfile);
+        String master = dtp.getEC().getMasterHost();
+        int port =  dtp.getEC().getMasterPort();
+
+        GBClient<C> gbc = new GBClient<C>( master, port );
+        for ( int i = 0; i < threads; i++ ) {
+            // schedule remote clients
+            dtp.addJob( gbc );
+        }
+
+        // run master
+        List<GenPolynomial<C>> G = bbd.GB( F );
+        bbd.terminate();
+        dtp.terminate();
         return G;
     }
 
