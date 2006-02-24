@@ -57,6 +57,7 @@ public class ExecutableChannelsTest extends TestCase {
    protected void setUp() {
        ec = null;
        es = new ExecutableServer(port);
+       es.init();
    }
 
    protected void tearDown() {
