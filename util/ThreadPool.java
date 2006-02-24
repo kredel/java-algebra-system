@@ -17,55 +17,77 @@ import org.apache.log4j.Logger;
  */
 
 public class ThreadPool {
+
+
+    /**
+     * Default number of threads to use.
+     */
     static final int DEFAULT_SIZE = 3;
+
+
+    /**
+     * Array of workers.
+     */
     protected PoolThread[] workers;
+
+
+    /**
+     * Number of idle workers.
+     */
     protected int idleworkers = 0; 
+
+
+    /**
+     * Work queue / stack.
+     */
     // should be expressed using strategy pattern
     // List or Collection is not appropriate
-                                   // LIFO strategy for recursion
+                                             // LIFO strategy for recursion
     protected LinkedList<Runnable> jobstack; // FIFO strategy for GB
+
 
     protected StrategyEnumeration strategy = StrategyEnumeration.LIFO;
 
+
     private static Logger logger = Logger.getLogger(ThreadPool.class);
+    //private static boolean debug = logger.isDebugEnabled();
 
-/**
- * Constructs a new ThreadPool
- * with strategy StrategyEnumeration.FIFO
- * and size DEFAULT_SIZE.
- */ 
 
+   /**
+    * Constructs a new ThreadPool
+    * with strategy StrategyEnumeration.FIFO
+    * and size DEFAULT_SIZE.
+    */ 
     public ThreadPool() {
         this(StrategyEnumeration.FIFO,DEFAULT_SIZE);
     }
 
 
-/**
- * Constructs a new ThreadPool
- * with size DEFAULT_SIZE.
- * @param strategy for job processing.
- */ 
-
+   /**
+    * Constructs a new ThreadPool
+    * with size DEFAULT_SIZE.
+    * @param strategy for job processing.
+    */ 
     public ThreadPool(StrategyEnumeration strategy) {
         this(strategy,DEFAULT_SIZE);
     }
 
 
-/**
- * Constructs a new ThreadPool
- * with strategy StrategyEnumeration.FIFO.
- * @param size of the pool.
- */ 
-
+   /**
+    * Constructs a new ThreadPool
+    * with strategy StrategyEnumeration.FIFO.
+    * @param size of the pool.
+    */ 
     public ThreadPool(int size) {
         this(StrategyEnumeration.FIFO,size);
     }
 
-/**
- * Constructs a new ThreadPool.
- * @param strategy for job processing.
- * @param size of the pool.
- */ 
+
+   /**
+    * Constructs a new ThreadPool.
+    * @param strategy for job processing.
+    * @param size of the pool.
+    */ 
     public ThreadPool(StrategyEnumeration strategy, int size) {
         this.strategy = strategy;
         jobstack = new LinkedList<Runnable>(); // ok for all strategies ?
@@ -77,23 +99,26 @@ public class ThreadPool {
         logger.info("strategy = " + strategy);
     }
 
-/**
- * number of worker threads.
- */
+
+   /**
+    * number of worker threads.
+    */
     public int getNumber() {
         return workers.length; // not null
     }
 
-/**
- * get used strategy.
- */
+
+   /**
+    * get used strategy.
+    */
     public StrategyEnumeration getStrategy() {
         return strategy; 
     }
 
-/**
- * Terminates the threads.
- */
+
+   /**
+    * Terminates the threads.
+    */
     public void terminate() {
         while ( hasJobs() ) {
             try {
@@ -112,10 +137,11 @@ public class ThreadPool {
         }
     }
 
-/**
- * adds a job to the workpile.
- * @param job
- */
+
+   /**
+    * adds a job to the workpile.
+    * @param job
+    */
     public synchronized void addJob(Runnable job) {
         jobstack.addLast(job);
         logger.debug("adding job" );
@@ -126,9 +152,9 @@ public class ThreadPool {
     }
 
 
-/**
- * get a job for processing.
- */
+   /**
+    * get a job for processing.
+    */
     protected synchronized Runnable getJob() throws InterruptedException {
         while (jobstack.isEmpty()) {
             idleworkers++;
@@ -145,9 +171,9 @@ public class ThreadPool {
     }
 
 
-/**
- * check if there are jobs for processing.
- */
+   /**
+    * check if there are jobs for processing.
+    */
     public boolean hasJobs() {
         if ( jobstack.size() > 0 ) {
             return true;
@@ -159,11 +185,11 @@ public class ThreadPool {
     }
 
 
-/**
- * check if there are more than n jobs for processing.
- * @param n Integer
- * @return true, if there are possibly more than n jobs. 
- */
+   /**
+    * check if there are more than n jobs for processing.
+    * @param n Integer
+    * @return true, if there are possibly more than n jobs. 
+    */
     public boolean hasJobs(int n) {
         int j = jobstack.size();
         if ( j > 0 && ( j + workers.length > n ) ) return true;
@@ -179,26 +205,31 @@ public class ThreadPool {
 
 }
 
+
 /**
  * Implements one Thread of the pool.
  */
 class PoolThread extends Thread {
+
     ThreadPool pool;
+
     private static Logger logger = Logger.getLogger(ThreadPool.class);
+    private static boolean debug = logger.isDebugEnabled();
 
     boolean working = false;
 
-/**
- * @param pool ThreadPool.
- */
+
+   /**
+    * @param pool ThreadPool.
+    */
     public PoolThread(ThreadPool pool) {
         this.pool = pool;
     }
 
 
-/**
- * Run the thread.
- */
+   /**
+    * Run the thread.
+    */
     public void run() {
         logger.info( "ready" );
         Runnable job;
@@ -211,13 +242,17 @@ class PoolThread extends Thread {
                 logger.debug( "looking for a job" );
                 job = pool.getJob();
                 working = true;
-                logger.info( "working" );
+                if ( debug ) {
+                   logger.info( "working" );
+                }
                 t = System.currentTimeMillis();
                 job.run(); 
                 working = false;
                 time += System.currentTimeMillis() - t;
                 done++;
-                logger.info( "done" );
+                if ( debug ) {
+                   logger.info( "done" );
+                }
             } catch (InterruptedException e) { 
               running = false; 
             }
