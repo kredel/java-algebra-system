@@ -69,6 +69,7 @@ public class SolvableReductionTest extends TestCase {
    PolynomialList<BigRational> G;
 
    SolvableReduction<BigRational> sred;
+   SolvableReduction<BigRational> sredpar;
 
    int rl = 4; 
    int kl = 10;
@@ -80,12 +81,14 @@ public class SolvableReductionTest extends TestCase {
        a = b = c = d = e = null;
        fac = new GenSolvablePolynomialRing<BigRational>( new BigRational(0), rl );
        sred = new SolvableReductionSeq<BigRational>();
+       sredpar = new SolvableReductionPar<BigRational>();
    }
 
    protected void tearDown() {
        a = b = c = d = e = null;
        fac = null;
        sred = null;
+       sredpar = null;
    }
 
 
@@ -196,6 +199,31 @@ public class SolvableReductionTest extends TestCase {
 
 
 /**
+ * Test Rat reduction parallel.
+ * 
+ */
+ public void testRatReductionPar() {
+
+     a = fac.random(kl, ll, el, q );
+     b = fac.random(kl, ll, el, q );
+
+     assertTrue("not isZERO( a )", !a.isZERO() );
+
+     L = new ArrayList<GenSolvablePolynomial<BigRational>>();
+     L.add(a);
+
+     e = sredpar.leftNormalform( L, a );
+     assertTrue("isZERO( e )", e.isZERO() );
+
+     assertTrue("not isZERO( b )", !b.isZERO() );
+
+     L.add(b);
+     e = sredpar.leftNormalform( L, a );
+     assertTrue("isZERO( e ) some times", e.isZERO() ); 
+ }
+
+
+/**
  * Test Weyl Rational reduction.
  * 
  */
@@ -219,6 +247,34 @@ public class SolvableReductionTest extends TestCase {
 
      L.add(b);
      e = sred.leftNormalform( L, a );
+     assertTrue("isZERO( e ) some times", e.isZERO() ); 
+ }
+
+
+/**
+ * Test Weyl Rational reduction parallel.
+ * 
+ */
+ public void testWeylRatReductionPar() {
+     L = new ArrayList<GenSolvablePolynomial<BigRational>>();
+
+     WeylRelations<BigRational> wl = new WeylRelations<BigRational>(fac);
+     wl.generate();
+
+     a = fac.random(kl, ll, el, q );
+     b = fac.random(kl, ll, el, q );
+
+     assertTrue("not isZERO( a )", !a.isZERO() );
+
+     L.add(a);
+
+     e = sredpar.leftNormalform( L, a );
+     assertTrue("isZERO( e )", e.isZERO() );
+
+     assertTrue("not isZERO( b )", !b.isZERO() );
+
+     L.add(b);
+     e = sredpar.leftNormalform( L, a );
      assertTrue("isZERO( e ) some times", e.isZERO() ); 
  }
 
