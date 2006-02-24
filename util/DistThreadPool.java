@@ -1,5 +1,5 @@
 /*
- * $Id: $
+ * $Id$
  */
 
 package edu.jas.util;
@@ -18,7 +18,7 @@ import org.apache.log4j.Logger;
  * @author Heinz Kredel
  */
 
-public class DistThreadPool {
+public class DistThreadPool /*extends ThreadPool*/ {
 
     /**
      * machine file to use.

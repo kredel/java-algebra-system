@@ -1,5 +1,5 @@
 /*
- * $Id: DistThreadPoolTest.java 496 2005-12-18 12:39:41Z kredel $
+ * $Id$
  */
 
 package edu.jas.util;
