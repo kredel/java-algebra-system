@@ -45,12 +45,6 @@ public class DistThreadPool /*extends ThreadPool*/ {
 
 
     /**
-     * Server port to use.
-     */
-    //    protected final int port;
-
-
-    /**
      * Channels to remote executable servers.
      */
     ExecutableChannels ec;
