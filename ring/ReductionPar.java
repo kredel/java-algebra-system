@@ -45,8 +45,12 @@ public class ReductionPar<C extends RingElem<C>>
     public GenPolynomial<C> 
            normalform(List<GenPolynomial<C>> Pp, 
                       GenPolynomial<C> Ap) {  
-        if ( Pp == null ) return Ap;
-        if ( Pp.isEmpty() ) return Ap;
+        if ( Pp == null || Pp.isEmpty() ) {
+           return Ap;
+        }
+        if ( Ap == null || Ap.isZERO() ) {
+           return Ap;
+        }
         int l;
         GenPolynomial<C>[] P;
         synchronized (Pp) { // required, ok in dist
@@ -141,8 +145,12 @@ public class ReductionPar<C extends RingElem<C>>
     public GenPolynomial<C> 
            normalform(DistHashTable Pp, 
                       GenPolynomial<C> Ap) {  
-        if ( Pp == null ) return Ap;
-        if ( Pp.isEmpty() ) return Ap;
+        if ( Pp == null || Pp.isEmpty() ) {
+           return Ap;
+        }
+        if ( Ap == null || Ap.isZERO() ) {
+           return Ap;
+        }
         int l;
         GenPolynomial<C>[] P;
         synchronized ( Pp.getList() ) { // required, ok in dist
