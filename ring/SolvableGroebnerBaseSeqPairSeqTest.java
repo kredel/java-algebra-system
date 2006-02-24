@@ -71,7 +71,7 @@ public class SolvableGroebnerBaseSeqPairSeqTest extends TestCase {
 
    GenSolvablePolynomialRing<BigRational> ring;
 
-   SolvableGroebnerBaseSeq<BigRational> sbb;
+   SolvableGroebnerBase<BigRational> sbb;
 
    BigRational cfac;
    String[] vars;

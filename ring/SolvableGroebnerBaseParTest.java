@@ -28,9 +28,9 @@ import edu.jas.poly.WeylRelations;
  * @author Heinz Kredel.
  */
 
-public class SolvableGroebnerBaseSeqPairSeqTest extends TestCase {
+public class SolvableGroebnerBaseParTest extends TestCase {
 
-    private static final Logger logger = Logger.getLogger(SolvableGroebnerBaseSeqPairSeqTest.class);
+    private static final Logger logger = Logger.getLogger(SolvableGroebnerBaseParTest.class);
 
 /**
  * main.
@@ -41,10 +41,10 @@ public class SolvableGroebnerBaseSeqPairSeqTest extends TestCase {
    }
 
 /**
- * Constructs a <CODE>SolvableGroebnerBaseSeqPairSeqTest</CODE> object.
+ * Constructs a <CODE>SolvableGroebnerBaseParTest</CODE> object.
  * @param name String.
  */
-   public SolvableGroebnerBaseSeqPairSeqTest(String name) {
+   public SolvableGroebnerBaseParTest(String name) {
           super(name);
    }
 
@@ -52,7 +52,7 @@ public class SolvableGroebnerBaseSeqPairSeqTest extends TestCase {
  * suite.
  */ 
  public static Test suite() {
-     TestSuite suite= new TestSuite(SolvableGroebnerBaseSeqPairSeqTest.class);
+     TestSuite suite= new TestSuite(SolvableGroebnerBaseParTest.class);
      return suite;
    }
 
@@ -71,7 +71,7 @@ public class SolvableGroebnerBaseSeqPairSeqTest extends TestCase {
 
    GenSolvablePolynomialRing<BigRational> ring;
 
-   SolvableGroebnerBaseSeq<BigRational> sbb;
+   SolvableGroebnerBase<BigRational> psbb;
 
    BigRational cfac;
    String[] vars;
@@ -91,7 +91,7 @@ public class SolvableGroebnerBaseSeqPairSeqTest extends TestCase {
        ring = new GenSolvablePolynomialRing<BigRational>(cfac,rl,tord,vars);
        table = ring.table;
        a = b = c = d = e = null;
-       sbb = new SolvableGroebnerBaseSeq<BigRational>();
+       psbb = new SolvableGroebnerBaseParallel<BigRational>();
 
        a = ring.random(kl, ll, el, q );
        b = ring.random(kl, ll, el, q );
@@ -107,55 +107,56 @@ public class SolvableGroebnerBaseSeqPairSeqTest extends TestCase {
        tord = null;
        table = null;
        cfac = null;
-       sbb = null;
+       ((SolvableGroebnerBaseParallel<BigRational>)psbb).terminate(); 
+       psbb = null;
    }
 
 
 /**
- * Test sequential GBase.
+ * Test parallel GBase.
  */
- public void testSequentialGBase() {
+ public void testParallelGBase() {
 
      assertTrue("not isZERO( a )", !a.isZERO() );
 
      L = new ArrayList<GenSolvablePolynomial<BigRational>>();
      L.add(a);
 
-     L = sbb.leftGB( L );
-     assertTrue("isLeftGB( { a } )", sbb.isLeftGB(L) );
+     L = psbb.leftGB( L );
+     assertTrue("isLeftGB( { a } )", psbb.isLeftGB(L) );
 
      assertTrue("not isZERO( b )", !b.isZERO() );
      L.add(b);
      //System.out.println("L = " + L.size() );
 
-     L = sbb.leftGB( L );
-     assertTrue("isLeftGB( { a, b } )", sbb.isLeftGB(L) );
+     L = psbb.leftGB( L );
+     assertTrue("isLeftGB( { a, b } )", psbb.isLeftGB(L) );
 
      assertTrue("not isZERO( c )", !c.isZERO() );
      L.add(c);
 
-     L = sbb.leftGB( L );
-     assertTrue("isLeftGB( { a, b, c } )", sbb.isLeftGB(L) );
+     L = psbb.leftGB( L );
+     assertTrue("isLeftGB( { a, b, c } )", psbb.isLeftGB(L) );
 
      assertTrue("not isZERO( d )", !d.isZERO() );
      L.add(d);
 
-     L = sbb.leftGB( L );
-     assertTrue("isLeftGB( { a, b, c, d } )", sbb.isLeftGB(L) );
+     L = psbb.leftGB( L );
+     assertTrue("isLeftGB( { a, b, c, d } )", psbb.isLeftGB(L) );
 
      assertTrue("not isZERO( e )", !e.isZERO() );
      L.add(e);
 
-     L = sbb.leftGB( L );
-     assertTrue("isLeftGB( { a, b, c, d, e } )", sbb.isLeftGB(L) );
+     L = psbb.leftGB( L );
+     assertTrue("isLeftGB( { a, b, c, d, e } )", psbb.isLeftGB(L) );
  }
 
 
 /**
- * Test Weyl sequential GBase.
+ * Test Weyl parallel GBase.
  * 
  */
- public void testWeylSequentialGBase() {
+ public void testWeylParallelGBase() {
 
      int rloc = 4;
      ring = new GenSolvablePolynomialRing<BigRational>(cfac,rloc);
@@ -175,87 +176,87 @@ public class SolvableGroebnerBaseSeqPairSeqTest extends TestCase {
      L = new ArrayList<GenSolvablePolynomial<BigRational>>();
      L.add(a);
 
-     L = sbb.leftGB( L );
-     assertTrue("isLeftGB( { a } )", sbb.isLeftGB(L) );
+     L = psbb.leftGB( L );
+     assertTrue("isLeftGB( { a } )", psbb.isLeftGB(L) );
 
      assertTrue("not isZERO( b )", !b.isZERO() );
      L.add(b);
      //System.out.println("L = " + L.size() );
 
-     L = sbb.leftGB( L );
-     assertTrue("isLeftGB( { a, b } )", sbb.isLeftGB(L) );
+     L = psbb.leftGB( L );
+     assertTrue("isLeftGB( { a, b } )", psbb.isLeftGB(L) );
 
      assertTrue("not isZERO( c )", !c.isZERO() );
      L.add(c);
 
-     L = sbb.leftGB( L );
-     assertTrue("isLeftGB( { a, b, c } )", sbb.isLeftGB(L) );
+     L = psbb.leftGB( L );
+     assertTrue("isLeftGB( { a, b, c } )", psbb.isLeftGB(L) );
 
      assertTrue("not isZERO( d )", !d.isZERO() );
      L.add(d);
 
-     L = sbb.leftGB( L );
-     assertTrue("isLeftGB( { a, b, c, d } )", sbb.isLeftGB(L) );
+     L = psbb.leftGB( L );
+     assertTrue("isLeftGB( { a, b, c, d } )", psbb.isLeftGB(L) );
 
      assertTrue("not isZERO( e )", !e.isZERO() );
      L.add(e);
 
-     L = sbb.leftGB( L );
-     assertTrue("isLeftGB( { a, b, c, d, e } )", sbb.isLeftGB(L) );
+     L = psbb.leftGB( L );
+     assertTrue("isLeftGB( { a, b, c, d, e } )", psbb.isLeftGB(L) );
  }
 
 
 /**
- * Test sequential twosided GBase.
+ * Test parallel twosided GBase.
  * 
  */
- public void testSequentialTSGBase() {
+ public void xtestParallelTSGBase() {
 
      assertTrue("not isZERO( a )", !a.isZERO() );
 
      L = new ArrayList<GenSolvablePolynomial<BigRational>>();
      L.add(a);
 
-     L = sbb.twosidedGB( L );
+     L = psbb.twosidedGB( L );
      //System.out.println("L = " + L.size() );
-     assertTrue("isTwosidedGB( { a } )", sbb.isTwosidedGB(L) );
+     assertTrue("isTwosidedGB( { a } )", psbb.isTwosidedGB(L) );
 
      assertTrue("not isZERO( b )", !b.isZERO() );
      L.add(b);
 
-     L = sbb.twosidedGB( L );
+     L = psbb.twosidedGB( L );
      //System.out.println("L = " + L.size() );
-     assertTrue("isTwosidedGB( { a, b } )", sbb.isTwosidedGB(L) );
+     assertTrue("isTwosidedGB( { a, b } )", psbb.isTwosidedGB(L) );
 
      assertTrue("not isZERO( c )", !c.isZERO() );
      L.add(c);
 
-     L = sbb.twosidedGB( L );
+     L = psbb.twosidedGB( L );
      //System.out.println("L = " + L.size() );
-     assertTrue("isTwosidedGB( { a, b, c } )", sbb.isTwosidedGB(L) );
+     assertTrue("isTwosidedGB( { a, b, c } )", psbb.isTwosidedGB(L) );
 
      assertTrue("not isZERO( d )", !d.isZERO() );
      L.add(d);
 
-     L = sbb.twosidedGB( L );
+     L = psbb.twosidedGB( L );
      //System.out.println("L = " + L.size() );
-     assertTrue("isTwosidedGB( { a, b, c, d } )", sbb.isTwosidedGB(L) );
+     assertTrue("isTwosidedGB( { a, b, c, d } )", psbb.isTwosidedGB(L) );
 
      assertTrue("not isZERO( e )", !e.isZERO() );
      L.add(e);
 
-     L = sbb.twosidedGB( L );
+     L = psbb.twosidedGB( L );
      //System.out.println("L = " + L.size() );
-     assertTrue("isTwosidedGB( { a, b, c, d, e } )", sbb.isTwosidedGB(L) );
+     assertTrue("isTwosidedGB( { a, b, c, d, e } )", psbb.isTwosidedGB(L) );
  }
 
 
 
 /**
- * Test Weyl sequential twosided GBase
+ * Test Weyl parallel twosided GBase
  * is always 1.
  */
- public void testWeylSequentialTSGBase() {
+ public void xtestWeylParallelTSGBase() {
 
      int rloc = 4;
      ring = new GenSolvablePolynomialRing<BigRational>(cfac,rloc);
@@ -276,164 +277,37 @@ public class SolvableGroebnerBaseSeqPairSeqTest extends TestCase {
      L.add(a);
 
      //System.out.println("La = " + L );
-     L = sbb.twosidedGB( L );
+     L = psbb.twosidedGB( L );
      //System.out.println("L = " + L );
-     assertTrue("isTwosidedGB( { a } )", sbb.isTwosidedGB(L) );
+     assertTrue("isTwosidedGB( { a } )", psbb.isTwosidedGB(L) );
 
      assertTrue("not isZERO( b )", !b.isZERO() );
      L.add(b);
 
-     L = sbb.twosidedGB( L );
+     L = psbb.twosidedGB( L );
      //System.out.println("L = " + L );
-     assertTrue("isTwosidedGB( { a, b } )", sbb.isTwosidedGB(L) );
+     assertTrue("isTwosidedGB( { a, b } )", psbb.isTwosidedGB(L) );
 
      assertTrue("not isZERO( c )", !c.isZERO() );
      L.add(c);
 
-     L = sbb.twosidedGB( L );
+     L = psbb.twosidedGB( L );
      //System.out.println("L = " + L );
-     assertTrue("isTwosidedGB( { a, b, c } )", sbb.isTwosidedGB(L) );
+     assertTrue("isTwosidedGB( { a, b, c } )", psbb.isTwosidedGB(L) );
 
      assertTrue("not isZERO( d )", !d.isZERO() );
      L.add(d);
 
-     L = sbb.twosidedGB( L );
+     L = psbb.twosidedGB( L );
      //System.out.println("L = " + L );
-     assertTrue("isTwosidedGB( { a, b, c, d } )", sbb.isTwosidedGB(L) );
+     assertTrue("isTwosidedGB( { a, b, c, d } )", psbb.isTwosidedGB(L) );
 
      assertTrue("not isZERO( e )", !e.isZERO() );
      L.add(e);
 
-     L = sbb.twosidedGB( L );
+     L = psbb.twosidedGB( L );
      //System.out.println("L = " + L );
-     assertTrue("isTwosidedGB( { a, b, c, d, e } )", sbb.isTwosidedGB(L) );
- }
-
-
-/**
- * Test sequential extended left GBase.
- * 
- */
- public void testSeqPairSequentialExtendedGBase() {
-
-     L = new ArrayList<GenSolvablePolynomial<BigRational>>();
-
-     SolvableExtendedGB<BigRational> exgb;
-     /*
-     a = ring.random(kl, ll, el, q );
-     b = ring.random(kl, ll, el, q );
-     c = ring.random(kl, ll, el, q );
-     d = ring.random(kl, ll, el, q );
-     e = d; //ring.random(kl, ll, el, q );
-     */
-     assertTrue("not isZERO( a )", !a.isZERO() );
-     L.add(a);
-     //System.out.println("L = " + L );
-
-     exgb = sbb.extLeftGB( L );
-     // System.out.println("exgb = " + exgb );
-     assertTrue("isLeftGB( { a } )", sbb.isLeftGB(exgb.G) );
-     assertTrue("isRmat( { a } )", sbb.isLeftReductionMatrix(exgb) );
-
-     assertTrue("not isZERO( b )", !b.isZERO() );
-     L.add(b);
-     //System.out.println("L = " + L );
-
-     exgb = sbb.extLeftGB( L );
-     //System.out.println("exgb = " + exgb );
-     assertTrue("isLeftGB( { a, b } )", sbb.isLeftGB(exgb.G) );
-     assertTrue("isRmat( { a, b } )", sbb.isLeftReductionMatrix(exgb) );
-
-     assertTrue("not isZERO( c )", !c.isZERO() );
-     L.add(c);
-
-     exgb = sbb.extLeftGB( L );
-     //System.out.println("exgb = " + exgb );
-     assertTrue("isLeftGB( { a, ,b, c } )", sbb.isLeftGB(exgb.G) );
-     assertTrue("isRmat( { a, b, c } )", sbb.isLeftReductionMatrix(exgb) );
-
-     assertTrue("not isZERO( d )", !d.isZERO() );
-     L.add(d);
-
-     exgb = sbb.extLeftGB( L );
-     //System.out.println("exgb = " + exgb );
-     assertTrue("isLeftGB( { a, ,b, c, d } )", sbb.isLeftGB(exgb.G) );
-     assertTrue("isRmat( { a, b, c, d } )", sbb.isLeftReductionMatrix(exgb) );
-
-
-     assertTrue("not isZERO( e )", !e.isZERO() );
-     L.add(e);
-
-     exgb = sbb.extLeftGB( L );
-     //System.out.println("exgb = " + exgb );
-     assertTrue("isLeftGB( { a, ,b, c, d, e } )", sbb.isLeftGB(exgb.G) );
-     assertTrue("isRmat( { a, b, c, d, e } )", sbb.isLeftReductionMatrix(exgb) );
- }
-
-
-/**
- * Test Weyl sequential extended GBase.
- * 
- */
- public void testWeylSequentialExtendedGBase() {
-
-     int rloc = 4;
-     ring = new GenSolvablePolynomialRing<BigRational>(cfac,rloc);
-
-     WeylRelations<BigRational> wl = new WeylRelations<BigRational>(ring);
-     wl.generate();
-     table = ring.table;
-
-     a = ring.random(kl, ll, el, q );
-     b = ring.random(kl, ll, el, q );
-     c = ring.random(kl, ll, el, q );
-     d = ring.random(kl, ll, el, q );
-     e = d; //ring.random(kl, ll, el, q );
-
-     SolvableExtendedGB<BigRational> exgb;
-
-     assertTrue("not isZERO( a )", !a.isZERO() );
-
-     L = new ArrayList<GenSolvablePolynomial<BigRational>>();
-     L.add(a);
-
-     exgb = sbb.extLeftGB( L );
-     // System.out.println("exgb = " + exgb );
-     assertTrue("isLeftGB( { a } )", sbb.isLeftGB(exgb.G) );
-     assertTrue("isRmat( { a } )", sbb.isLeftReductionMatrix(exgb) );
-
-     assertTrue("not isZERO( b )", !b.isZERO() );
-     L.add(b);
-     //System.out.println("L = " + L.size() );
-
-     exgb = sbb.extLeftGB( L );
-     //System.out.println("exgb = " + exgb );
-     assertTrue("isLeftGB( { a, b } )", sbb.isLeftGB(exgb.G) );
-     assertTrue("isRmat( { a, b } )", sbb.isLeftReductionMatrix(exgb) );
-
-     assertTrue("not isZERO( c )", !c.isZERO() );
-     L.add(c);
-
-     exgb = sbb.extLeftGB( L );
-     //System.out.println("exgb = " + exgb );
-     assertTrue("isLeftGB( { a, ,b, c } )", sbb.isLeftGB(exgb.G) );
-     assertTrue("isRmat( { a, b, c } )", sbb.isLeftReductionMatrix(exgb) );
-
-     assertTrue("not isZERO( d )", !d.isZERO() );
-     L.add(d);
-
-     exgb = sbb.extLeftGB( L );
-     //System.out.println("exgb = " + exgb );
-     assertTrue("isLeftGB( { a, ,b, c, d } )", sbb.isLeftGB(exgb.G) );
-     assertTrue("isRmat( { a, b, c, d } )", sbb.isLeftReductionMatrix(exgb) );
-
-     assertTrue("not isZERO( e )", !e.isZERO() );
-     L.add(e);
-
-     exgb = sbb.extLeftGB( L );
-     //System.out.println("exgb = " + exgb );
-     assertTrue("isLeftGB( { a, ,b, c, d, e } )", sbb.isLeftGB(exgb.G) );
-     assertTrue("isRmat( { a, b, c, d, e } )", sbb.isLeftReductionMatrix(exgb) );
+     assertTrue("isTwosidedGB( { a, b, c, d, e } )", psbb.isTwosidedGB(L) );
  }
 
 }
