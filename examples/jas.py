@@ -36,6 +36,8 @@ class Ring:
     def __str__(self):
         return str(self.ring);
 
+    def ideal(self,ringstr="",list=None):
+        return Ideal(self,ringstr,list);
 
 
 class Ideal:
@@ -132,6 +134,9 @@ class SolvableRing:
     def __str__(self):
         return str(self.ring);
 
+    def ideal(self,ringstr="",list=None):
+        return SolvableIdeal(self,ringstr,list);
+
 
 class SolvableIdeal:
 
@@ -180,6 +185,28 @@ class SolvableIdeal:
         N = jas.ring.Ideal(s).intersect(ring.ring);
         return SolvableIdeal(self.ring,"",N.getList());
 
+    def parLeftGB(self,th):
+        s = self.pset;
+        F = s.list;
+        bbpar = SolvableGroebnerBaseParallel(th);
+        t = System.currentTimeMillis();
+        G = bbpar.leftGB(F);
+        t = System.currentTimeMillis() - t;
+        bbpar.terminate();
+        print "parallel %s executed in %s ms" % (th, t); 
+        return Ideal(self.ring,"",G);
+
+    def parTwosidedGB(self,th):
+        s = self.pset;
+        F = s.list;
+        bbpar = SolvableGroebnerBaseParallel(th);
+        t = System.currentTimeMillis();
+        G = bbpar.twosidedGB(F);
+        t = System.currentTimeMillis() - t;
+        bbpar.terminate();
+        print "parallel %s executed in %s ms" % (th, t); 
+        return Ideal(self.ring,"",G);
+
 
 class Module:
 
@@ -194,6 +221,9 @@ class Module:
 
     def __str__(self):
         return str(self.mset);
+
+    def submodul(self,modstr="",list=None):
+        return Submodule(self,modstr,list);
 
 
 class SubModule:
@@ -237,6 +267,9 @@ class SolvableModule:
 
     def __str__(self):
         return str(self.mset);
+
+    def solvsubmodul(self,modstr="",list=None):
+        return Submodule(self,modstr,list);
 
 
 class SolvableSubModule:
