@@ -35,6 +35,7 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>>
              extends SolvableGroebnerBaseAbstract<C>  {
 
     private static final Logger logger = Logger.getLogger(SolvableGroebnerBaseParallel.class);
+    private static final boolean debug = logger.isDebugEnabled();
 
 
     /**
@@ -98,7 +99,7 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>>
         if ( ! (sred instanceof SolvableReductionPar) ) {
            logger.warn("parallel GB should use parallel aware reduction");
         }
-	if ( threads < 1 ) {
+        if ( threads < 1 ) {
            threads = 1;
         }
         this.threads = threads;
@@ -110,7 +111,7 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>>
      * Cleanup and terminate ThreadPool.
      */
     public void terminate() {
-	if ( pool == null ) {
+        if ( pool == null ) {
            return;
         }
         pool.terminate();
@@ -138,38 +139,38 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>>
             if ( p.length() > 0 ) {
                p = (GenSolvablePolynomial<C>)p.monic();
                if ( p.isONE() ) {
-		  G.clear(); G.add( p );
+                  G.clear(); G.add( p );
                   return G; // since no threads activated jet
-	       }
+               }
                G.add( p );
-	       if ( pairlist == null ) {
+               if ( pairlist == null ) {
                   pairlist = new CriticalPairList<C>( modv, p.ring );
                }
                // putOne not required
                pairlist.put( p );
-	    } else {
+            } else {
                l--;
             }
-	}
+        }
         if ( l <= 1 ) {
            return G; // since no threads activated jet
         }
 
-	Terminator fin = new Terminator(threads);
-	SolvableReducer<C> R;
-	for ( int i = 0; i < threads; i++ ) {
-	      R = new SolvableReducer<C>( fin, G, pairlist );
-	      pool.addJob( R );
-	}
-	fin.done();
+        Terminator fin = new Terminator(threads);
+        LeftSolvableReducer<C> R;
+        for ( int i = 0; i < threads; i++ ) {
+            R = new LeftSolvableReducer<C>( fin, G, pairlist );
+            pool.addJob( R );
+        }
+        fin.done();
         logger.debug("#parallel list = "+G.size());
-	G = leftMinimalGB(G);
-	// not in this context // pool.terminate();
+        G = leftMinimalGB(G);
+        // not in this context // pool.terminate();
         logger.info("pairlist #put = " + pairlist.putCount() 
                   + " #rem = " + pairlist.remCount()
                     //+ " #total = " + pairlist.pairCount()
                    );
-	return G;
+        return G;
     }
 
 
@@ -188,10 +189,10 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>>
         while ( it.hasNext() ) { 
             a = it.next();
             if ( a.length() != 0 ) { // always true
-	       // already monic  a = a.monic();
+               // already monic  a = a.monic();
                G.add( a );
-	    }
-	}
+            }
+        }
         if ( G.size() <= 1 ) {
            return G;
         }
@@ -201,56 +202,56 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>>
         GenSolvablePolynomial<C> p;
         ArrayList<GenSolvablePolynomial<C>> F;
         F = new ArrayList<GenSolvablePolynomial<C>>( G.size() );
-	boolean mt;
+        boolean mt;
         while ( G.size() > 0 ) {
             a = G.remove(0);
-	    e = a.leadingExpVector();
+            e = a.leadingExpVector();
 
             it = G.listIterator();
-	    mt = false;
-	    while ( it.hasNext() && ! mt ) {
+            mt = false;
+            while ( it.hasNext() && ! mt ) {
                p = it.next();
                f = p.leadingExpVector();
-	       mt = ExpVector.EVMT( e, f );
-	    }
+               mt = ExpVector.EVMT( e, f );
+            }
             it = F.listIterator();
-	    while ( it.hasNext() && ! mt ) {
+            while ( it.hasNext() && ! mt ) {
                p = it.next();
                f = p.leadingExpVector();
-	       mt = ExpVector.EVMT( e, f );
-	    }
-	    if ( ! mt ) {
-		F.add( a ); // no thread at this point
-	    } else {
-		// System.out.println("dropped " + a.length());
-	    }
-	}
-	G = F;
+               mt = ExpVector.EVMT( e, f );
+            }
+            if ( ! mt ) {
+                F.add( a ); // no thread at this point
+            } else {
+                // System.out.println("dropped " + a.length());
+            }
+        }
+        G = F;
         if ( G.size() <= 1 ) {
            return G;
         }
 
-	SolvableMiReducer<C>[] mirs = new SolvableMiReducer[ G.size() ];
+        SolvableMiReducer<C>[] mirs = new SolvableMiReducer[ G.size() ];
         int i = 0;
         F = new ArrayList<GenSolvablePolynomial<C>>( G.size() );
         while ( G.size() > 0 ) {
             a = G.remove(0);
-	    // System.out.println("doing " + a.length());
-	    mirs[i] = new SolvableMiReducer<C>( 
+            // System.out.println("doing " + a.length());
+            mirs[i] = new SolvableMiReducer<C>( 
                                         (List<GenSolvablePolynomial<C>>)G.clone(), 
                                         (List<GenSolvablePolynomial<C>>)F.clone(), 
                                         a );
-	    pool.addJob( mirs[i] );
-	    i++;
+            pool.addJob( mirs[i] );
+            i++;
             F.add( a );
-	}
-	G = F;
-	F = new ArrayList<GenSolvablePolynomial<C>>( G.size() );
-	for ( i = 0; i < mirs.length; i++ ) {
-	    a = mirs[i].getNF();
+        }
+        G = F;
+        F = new ArrayList<GenSolvablePolynomial<C>>( G.size() );
+        for ( i = 0; i < mirs.length; i++ ) {
+            a = mirs[i].getNF();
             F.add( a );
-	}
-	return F;
+        }
+        return F;
     }
 
 
@@ -272,62 +273,125 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>>
      * Twosided Groebner base using pairlist class.
      * @param C coefficient type.
      * @param modv number of module variables.
-     * @param Fp solvable polynomial list.
-     * @return tsGB(Fp) a twosided Groebner base of Fp.
+     * @param F solvable polynomial list.
+     * @return tsGB(Fp) a twosided Groebner base of F.
      */
     public List<GenSolvablePolynomial<C>> 
            twosidedGB(int modv, 
                       List<GenSolvablePolynomial<C>> Fp) {
-        throw new RuntimeException("parallel twosidedGB not implemented");
+        if ( Fp == null || Fp.size() == 0 ) { // 0 not 1
+            return new ArrayList<GenSolvablePolynomial<C>>( Fp );
+        }
+        List<GenSolvablePolynomial<C>> X = generateUnivar( modv, Fp );
+        //System.out.println("X univ = " + X);
+        List<GenSolvablePolynomial<C>> F 
+            = new ArrayList<GenSolvablePolynomial<C>>( Fp.size() * (1+X.size()) );
+        F.addAll( Fp );
+        GenSolvablePolynomial<C> p, x, q;
+        for ( int i = 0; i < Fp.size(); i++ ) {
+            p = Fp.get(i);
+            for ( int j = 0; j < X.size(); j++ ) {
+                x = X.get(j);
+                q = p.multiply( x );
+                q = sred.leftNormalform( F, q );
+                if ( !q.isZERO() ) {
+                   F.add( q );
+                }
+            }
+        }
+        //System.out.println("F generated = " + F);
+        List<GenSolvablePolynomial<C>> G 
+            = new ArrayList<GenSolvablePolynomial<C>>();
+        CriticalPairList<C> pairlist = null; 
+        int l = F.size();
+        ListIterator<GenSolvablePolynomial<C>> it = F.listIterator();
+        while ( it.hasNext() ) { 
+            p = it.next();
+            if ( p.length() > 0 ) {
+               p = (GenSolvablePolynomial<C>)p.monic();
+               if ( p.isONE() ) {
+                  G.clear(); G.add( p );
+                  return G; // since no threads are activated
+               }
+               G.add( p );
+               if ( pairlist == null ) {
+                  pairlist = new CriticalPairList<C>( modv, p.ring );
+               }
+               // putOne not required
+               pairlist.put( p );
+            } else { 
+               l--;
+            }
+        }
+        //System.out.println("G to check = " + G);
+        if ( l <= 1 ) { // 1 ok
+           return G; // since no threads are activated
+        }
+        Terminator fin = new Terminator(threads);
+        TwosidedSolvableReducer<C> R;
+        for ( int i = 0; i < threads; i++ ) {
+            R = new TwosidedSolvableReducer<C>( fin, X, G, pairlist );
+            pool.addJob( R );
+        }
+        fin.done();
+        logger.debug("#parallel list = "+G.size());
+        G = leftMinimalGB(G);
+        // not in this context // pool.terminate();
+        logger.info("pairlist #put = " + pairlist.putCount() 
+                  + " #rem = " + pairlist.remCount()
+                    //+ " #total = " + pairlist.pairCount()
+                   );
+        return G;
     }
 
 }
 
 
 /**
- * Reducing worker threads.
+ * Reducing left worker threads.
  */
-class SolvableReducer<C extends RingElem<C>> implements Runnable {
-	private List<GenSolvablePolynomial<C>> G;
-	private CriticalPairList<C> pairlist;
-	private Terminator pool;
+class LeftSolvableReducer<C extends RingElem<C>> implements Runnable {
+        private List<GenSolvablePolynomial<C>> G;
+        private CriticalPairList<C> pairlist;
+        private Terminator pool;
         private SolvableReductionPar<C> sred;
-        private static Logger logger = Logger.getLogger(SolvableReducer.class);
+        private static Logger logger = Logger.getLogger(LeftSolvableReducer.class);
+        private static final boolean debug = logger.isDebugEnabled();
 
-	SolvableReducer(Terminator fin, 
-                        List<GenSolvablePolynomial<C>> G, 
-                        CriticalPairList<C> L) {
-	    pool = fin;
-	    this.G = G;
-	    pairlist = L;
+        LeftSolvableReducer(Terminator fin, 
+                            List<GenSolvablePolynomial<C>> G, 
+                            CriticalPairList<C> L) {
+            pool = fin;
+            this.G = G;
+            pairlist = L;
             sred = new SolvableReductionPar<C>();
-	} 
+        } 
 
 
-	public void run() {
+        public void run() {
            CriticalPair<C> pair;
            GenSolvablePolynomial<C> S;
            GenSolvablePolynomial<C> H;
-	   boolean set = false;
-	   int reduction = 0;
-	   int sleeps = 0;
+           boolean set = false;
+           int reduction = 0;
+           int sleeps = 0;
            while ( pairlist.hasNext() || pool.hasJobs() ) {
-	      while ( ! pairlist.hasNext() ) {
+              while ( ! pairlist.hasNext() ) {
                   pairlist.update();
                   // wait
                   pool.beIdle(); set = true;
-		  try {
-		      sleeps++;
+                  try {
+                      sleeps++;
                       if ( sleeps % 10 == 0 ) {
                          logger.info(" reducer is sleeping");
-		      } else {
+                      } else {
                          logger.debug("r");
-		      }
-		      Thread.sleep(100);
-		  } catch (InterruptedException e) {
+                      }
+                      Thread.sleep(100);
+                  } catch (InterruptedException e) {
                      break;
-		  }
-		  if ( ! pool.hasJobs() ) {
+                  }
+                  if ( ! pool.hasJobs() ) {
                      break;
                   }
               }
@@ -342,51 +406,179 @@ class SolvableReducer<C extends RingElem<C>> implements Runnable {
                  pairlist.update();
                  continue; 
               }
-              if ( false && logger.isDebugEnabled() ) {
+              if ( debug ) {
                  logger.debug("pi = " + pair.pi );
                  logger.debug("pj = " + pair.pj );
-	      }
+              }
               S = sred.leftSPolynomial( (GenSolvablePolynomial<C>)pair.pi, 
                                         (GenSolvablePolynomial<C>)pair.pj );
               if ( S.isZERO() ) {
                  pairlist.record( pair, S );
                  continue;
               }
-              if ( logger.isDebugEnabled() ) {
+              if ( debug ) {
                  logger.debug("ht(S) = " + S.leadingExpVector() );
-	      }
+              }
               H = sred.leftNormalform( G, S ); //mod
-	      reduction++;
+              reduction++;
               if ( H.isZERO() ) {
                  pairlist.record( pair, H );
                  continue;
               }
-              if ( logger.isDebugEnabled() ) {
+              if ( debug ) {
                  logger.debug("ht(H) = " + H.leadingExpVector() );
-	      }
+              }
               H = (GenSolvablePolynomial<C>)H.monic();
               // System.out.println("H   = " + H);
-	      if ( H.isONE() ) { 
+              if ( H.isONE() ) { 
                  // pairlist.update( pair, H );
                  pairlist.putOne(); // not really required
-		 synchronized (G) {
+                 synchronized (G) {
                      G.clear(); G.add( H );
-		 }
-	         pool.allIdle();
+                 }
+                 pool.allIdle();
                  return;
-	      }
-              if ( logger.isDebugEnabled() ) {
+              }
+              if ( debug ) {
                  logger.debug("H = " + H );
-	      }
+              }
               synchronized (G) {
                      G.add( H );
               }
               pairlist.update( pair, H );
               //pairlist.record( pair, H );
               //pairlist.update();
-	   }
+           }
            logger.info( "terminated, done " + reduction + " reductions");
-	}
+        }
+}
+
+
+/**
+ * Reducing twosided worker threads.
+ */
+class TwosidedSolvableReducer<C extends RingElem<C>> implements Runnable {
+        private List<GenSolvablePolynomial<C>> X;
+        private List<GenSolvablePolynomial<C>> G;
+        private CriticalPairList<C> pairlist;
+        private Terminator pool;
+        private SolvableReductionPar<C> sred;
+        private static Logger logger = Logger.getLogger(TwosidedSolvableReducer.class);
+        private static final boolean debug = logger.isDebugEnabled();
+
+        TwosidedSolvableReducer(Terminator fin, 
+                                List<GenSolvablePolynomial<C>> X,
+                                List<GenSolvablePolynomial<C>> G, 
+                                CriticalPairList<C> L) {
+            pool = fin;
+            this.X = X;
+            this.G = G;
+            pairlist = L;
+            sred = new SolvableReductionPar<C>();
+        } 
+
+
+        public void run() {
+           GenSolvablePolynomial<C> p, x, q;
+           CriticalPair<C> pair;
+           GenSolvablePolynomial<C> S;
+           GenSolvablePolynomial<C> H;
+           boolean set = false;
+           int reduction = 0;
+           int sleeps = 0;
+           while ( pairlist.hasNext() || pool.hasJobs() ) {
+              while ( ! pairlist.hasNext() ) {
+                  pairlist.update();
+                  // wait
+                  pool.beIdle(); set = true;
+                  try {
+                      sleeps++;
+                      if ( sleeps % 10 == 0 ) {
+                         logger.info(" reducer is sleeping");
+                      } else {
+                         logger.debug("r");
+                      }
+                      Thread.sleep(50);
+                  } catch (InterruptedException e) {
+                     break;
+                  }
+                  if ( ! pool.hasJobs() ) {
+                     break;
+                  }
+              }
+              if ( ! pairlist.hasNext() && ! pool.hasJobs() ) {
+                 break;
+              }
+              if ( set ) {
+                 pool.notIdle();
+              }
+              pair = pairlist.getNext();
+              if ( pair == null ) {
+                 pairlist.update();
+                 continue; 
+              }
+              if ( debug ) {
+                 logger.debug("pi = " + pair.pi );
+                 logger.debug("pj = " + pair.pj );
+              }
+              S = sred.leftSPolynomial( (GenSolvablePolynomial<C>)pair.pi, 
+                                        (GenSolvablePolynomial<C>)pair.pj );
+              if ( S.isZERO() ) {
+                 pairlist.record( pair, S );
+                 continue;
+              }
+              if ( debug ) {
+                 logger.debug("ht(S) = " + S.leadingExpVector() );
+              }
+              H = sred.leftNormalform( G, S ); //mod
+              reduction++;
+              if ( H.isZERO() ) {
+                 pairlist.record( pair, H );
+                 continue;
+              }
+              if ( debug ) {
+                 logger.debug("ht(H) = " + H.leadingExpVector() );
+              }
+              H = (GenSolvablePolynomial<C>)H.monic();
+              // System.out.println("H   = " + H);
+              if ( H.isONE() ) { 
+                 // pairlist.update( pair, H );
+                 pairlist.putOne(); // not really required
+                 synchronized (G) {
+                     G.clear(); G.add( H );
+                 }
+                 pool.allIdle();
+                 return;
+              }
+              if ( debug ) {
+                 logger.debug("H = " + H );
+              }
+              synchronized (G) {
+                     G.add( H );
+              }
+              pairlist.update( pair, H );
+              for ( int j = 0; j < X.size(); j++ ) {
+                  x = X.get(j);
+                  p = H.multiply( x );
+                  p = sred.leftNormalform( G, p );
+                  if ( !p.isZERO() ) {
+                     p = (GenSolvablePolynomial<C>)p.monic();
+                     if ( p.isONE() ) {
+                        synchronized (G) {
+                           G.clear(); G.add( p );
+                        }
+                        pool.allIdle();
+                        return; 
+                     }
+                     synchronized (G) {
+                        G.add( p );
+                     }
+                     pairlist.put( p );
+                  }
+              }
+           }
+           logger.info( "terminated, done " + reduction + " reductions");
+        }
 }
 
 
@@ -394,48 +586,49 @@ class SolvableReducer<C extends RingElem<C>> implements Runnable {
  * Reducing worker threads for minimal GB.
  */
 class SolvableMiReducer<C extends RingElem<C>> implements Runnable {
-	private List<GenSolvablePolynomial<C>> G;
-	private List<GenSolvablePolynomial<C>> F;
-	private GenSolvablePolynomial<C> S;
-	private GenSolvablePolynomial<C> H;
+        private List<GenSolvablePolynomial<C>> G;
+        private List<GenSolvablePolynomial<C>> F;
+        private GenSolvablePolynomial<C> S;
+        private GenSolvablePolynomial<C> H;
         private SolvableReductionPar<C> sred;
-	private Semaphore done = new Semaphore(0);
+        private Semaphore done = new Semaphore(0);
         private static Logger logger = Logger.getLogger(SolvableMiReducer.class);
+        private static final boolean debug = logger.isDebugEnabled();
 
-	SolvableMiReducer(List<GenSolvablePolynomial<C>> G, 
+        SolvableMiReducer(List<GenSolvablePolynomial<C>> G, 
                           List<GenSolvablePolynomial<C>> F, 
                           GenSolvablePolynomial<C> p) {
-	    this.G = G;
-	    this.F = F;
-	    S = p;
-	    H = S;
+            this.G = G;
+            this.F = F;
+            S = p;
+            H = S;
             sred = new SolvableReductionPar<C>();
-	} 
+        } 
 
 
-	/**
-	 * getNF. Blocks until the normal form is computed.
-	 * @return the computed normal form.
-	 */
-	public GenSolvablePolynomial<C> getNF() {
-	    try { done.P();
-	    } catch (InterruptedException e) { 
+        /**
+         * getNF. Blocks until the normal form is computed.
+         * @return the computed normal form.
+         */
+        public GenSolvablePolynomial<C> getNF() {
+            try { done.P();
+            } catch (InterruptedException e) { 
             }
-	    return H;
-	}
+            return H;
+        }
 
-	public void run() {
-	    if ( logger.isDebugEnabled() ) {
-                 logger.debug("ht(S) = " + S.leadingExpVector() );
-	    }
+        public void run() {
+            if ( debug ) {
+               logger.debug("ht(S) = " + S.leadingExpVector() );
+            }
             H = sred.leftNormalform( G, H ); //mod
             H = sred.leftNormalform( F, H ); //mod
             done.V();
-	    if ( logger.isDebugEnabled() ) {
-                 logger.debug("ht(H) = " + H.leadingExpVector() );
-	    }
-	    // H = H.monic();
-	}
+            if ( debug ) {
+               logger.debug("ht(H) = " + H.leadingExpVector() );
+            }
+            // H = H.monic();
+        }
 
 }
 
