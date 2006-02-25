@@ -210,7 +210,7 @@ public class SolvableGroebnerBaseParTest extends TestCase {
  * Test parallel twosided GBase.
  * 
  */
- public void xtestParallelTSGBase() {
+ public void testParallelTSGBase() {
 
      assertTrue("not isZERO( a )", !a.isZERO() );
 
@@ -256,7 +256,7 @@ public class SolvableGroebnerBaseParTest extends TestCase {
  * Test Weyl parallel twosided GBase
  * is always 1.
  */
- public void xtestWeylParallelTSGBase() {
+ public void testWeylParallelTSGBase() {
 
      int rloc = 4;
      ring = new GenSolvablePolynomialRing<BigRational>(cfac,rloc);
