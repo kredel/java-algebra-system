@@ -35,7 +35,11 @@ ps = """
 # ( 10000 B**2 + 6600 B + 2673 )
 # ( B**2 + 33/50 B + 2673/10000 )
 
-f = Ideal( r, ps );
+#f = Ideal( r, ps );
+#print "Ideal: " + str(f);
+#print;
+
+f = r.ideal( ps );
 print "Ideal: " + str(f);
 print;
 
