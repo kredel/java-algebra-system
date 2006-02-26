@@ -47,9 +47,9 @@ public class DistThreadPoolTest extends TestCase {
    }
 
 
-   private static final String host = "localhost";
+   //private static final String host = "localhost";
    private static final int port = ChannelFactory.DEFAULT_PORT;
-   private static final String mfile = "machines.test";
+   //private static final String mfile = "machines.test";
 
    private ExecutableServer es;
 
