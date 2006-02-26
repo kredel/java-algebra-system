@@ -70,7 +70,7 @@ public class GroebnerBaseSeqPairSeqTest extends TestCase {
    PolynomialList<BigRational> F;
    List<GenPolynomial<BigRational>> G;
 
-   GroebnerBaseSeqPairSeq<BigRational> bb; // do interface
+   GroebnerBase<BigRational> bb; // do interface
 
    GenPolynomial<BigRational> a;
    GenPolynomial<BigRational> b;
