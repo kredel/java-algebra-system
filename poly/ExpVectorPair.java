@@ -30,6 +30,7 @@ public class ExpVectorPair implements Serializable {
         e2 = f;
     }
 
+
     /**
      * @return first part.
      */
@@ -37,12 +38,14 @@ public class ExpVectorPair implements Serializable {
         return e1;
     } 
 
+
     /**
      * @return second part.
      */
     public ExpVector getSecond() {
         return e2;
     } 
+
 
     /**
      * toString.
@@ -55,6 +58,7 @@ public class ExpVectorPair implements Serializable {
         s.append("]");
         return s.toString();
     }
+
 
     /**
      * equals.
@@ -80,15 +84,15 @@ public class ExpVectorPair implements Serializable {
 
 
     /** hash code.
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		return (e1.hashCode() << 16) + e2.hashCode() ;
-	}
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+       return (e1.hashCode() << 16) + e2.hashCode();
+    }
 
-	
-	/**
+        
+    /**
      * isMultiple.
      * @param p other.
      * @return true, if this is a multiple of b, else false.
