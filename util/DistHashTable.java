@@ -298,8 +298,8 @@ class DHTListener extends Thread {
 
     private static Logger logger = Logger.getLogger(DHTListener.class);
 
-    private SocketChannel channel;
-    private SortedMap theList;
+    private final SocketChannel channel;
+    private final SortedMap theList;
     private boolean goon;
 
 
