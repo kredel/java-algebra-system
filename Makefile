@@ -24,6 +24,7 @@ JUNITPATH=$(LIBPATH)/junit.jar
 LOG4JPATH=$(LIBPATH)/log4j.jar
 JOMPPATH=$(LIBPATH)/jomp1.0b.jar
 TNJPATH=$(LIBPATH)/tnj.jar
+LINTPATH=$(LIBPATH)/lint4j.jar
 
 # --- syncing ----------
 DRY=--dry-run
@@ -143,7 +144,7 @@ edu.jas.util.%: edu/jas/util/%.class
 
 
 FILES=$(wildcard *.java structure/*.java arith/*.java poly/*.java ring/*.java module/*.java util/*.java)
-LIBS=$(JUNITPATH) $(LOG4JPATH) $(JOMPPATH)
+LIBS=$(JUNITPATH) $(LOG4JPATH) $(JOMPPATH) $(TNJPATH)
 #CLASSES=$(wildcard *.class structure/*.java arith/*.class poly/*.class ring/*.class module/*.class util/*.class)
 CLASSES=edu/jas
 PYS=$(wildcard *.py examples/*.py)
@@ -173,6 +174,12 @@ dist: jas.jar jas-run.jar jas-doc.jar $(LIBS)
 #
 
 jars: jas.jar jas-run.jar jas-doc.jar
+
+
+lint:
+	$(JDK)/java -jar $(LINTPATH) -v 3 -classpath $(DOCCLASSES):jas.jar -sourcepath src edu.jas.*
+#	$(JDK)/java -jar $(LINTPATH) -v 5 -exact -classpath $(DOCCLASSES) -sourcepath src edu.jas.*
+
 
 clean:
 	find . -name "*~" -follow -print -exec rm {} \;

@@ -5,19 +5,29 @@
 
 <project name="jas" default="usage" basedir="." >
 
-  <property name="src"      value="src" />
-  <property name="build"    value="." />
-  <property name="doc"      value="doc" />
-  <property name="test"     value="test" />
+  <property name="src"       value="src" />
+  <property name="build"     value="." />
+  <property name="doc"       value="doc" />
+  <property name="test"      value="test" />
+  <property name="jar"       value="jas.jar" />
 
-  <property name="libs"     value="/home/kredel/java/lib" />
-  <property name="log4j"    value="${libs}/log4j.jar" />
-  <property name="junit"    value="${libs}/junit.jar" />
-  <property name="jomp"     value="${libs}/jomp1.0b.jar" />
-  <property name="tnj"      value="${libs}/tnj.jar" />
+  <property name="libs"      value="/home/kredel/java/lib" />
+  <property name="log4j"     value="${libs}/log4j.jar" />
+  <property name="junit"     value="${libs}/junit.jar" />
+  <property name="jomp"      value="${libs}/jomp1.0b.jar" />
+  <property name="tnj"       value="${libs}/tnj.jar" />
+  <property name="lint"      value="${libs}/lint4j.jar" />
+  <property name="l4j.level" value="3" />
+  <property name="l4j.exact" value="true" />
 
   <property name="cp"       value="${log4j}:${junit}:${tnj}:." />
   <property name="version"  value="0.1" />
+
+  <taskdef name="lint4j" classname="com.jutils.lint4j.ant.Lint4jAntTask">
+    <classpath>
+      <pathelement location="${lint}"/>
+    </classpath>
+  </taskdef>
 
 <target name="vorher" >
   <!-- set properties DSTAMP, TSTAMP -->
@@ -122,6 +132,15 @@
         </fileset>
      </batchtest>
   </junit>
+</target>
+
+<target name="lint" depends="vorher" >
+  <lint4j sourcepath="${src}" 
+          classpath="${cp}:${jar}"
+          packages="edu.jas.*" 
+          level="${l4j.level}" 
+          exact="${l4j.exact}" >
+  </lint4j>
 </target>
 
 <target name="jar" depends="vorher" >
