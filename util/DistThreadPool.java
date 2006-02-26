@@ -47,13 +47,13 @@ public class DistThreadPool /*extends ThreadPool*/ {
     /**
      * Channels to remote executable servers.
      */
-    ExecutableChannels ec;
+    final ExecutableChannels ec;
 
 
     /**
      * Array of workers.
      */
-    protected DistPoolThread[] workers;
+    protected final DistPoolThread[] workers;
 
 
     /**
@@ -127,23 +127,21 @@ public class DistThreadPool /*extends ThreadPool*/ {
     */ 
     public DistThreadPool(StrategyEnumeration strategy, int size, String mfile) {
         this.strategy = strategy;
-        this.mfile = mfile;
         if ( size < 0 ) {
            this.threads = 0;
-        } else {
+         } else {
            this.threads = size;
-        }
-        jobstack = new LinkedList<Runnable>(); // ok for all strategies ?
-        final String fname;
+         }
         if ( mfile == null || mfile.length() == 0 ) {
-           fname = DEFAULT_MFILE;
-        } else {
-           fname = mfile;
-        }
-        ec = null;
+           this.mfile = DEFAULT_MFILE;
+         } else {
+           this.mfile = mfile;
+         }
+        jobstack = new LinkedList<Runnable>(); // ok for all strategies ?
         try {
-            ec = new ExecutableChannels( fname );
+            ec = new ExecutableChannels( this.mfile );
         } catch (FileNotFoundException e) {
+            // ec = null;
             e.printStackTrace();
             throw new RuntimeException("DistThreadPool " +e);
         }
@@ -181,6 +179,14 @@ public class DistThreadPool /*extends ThreadPool*/ {
     */
     public StrategyEnumeration getStrategy() {
        return strategy; 
+    }
+
+
+   /**
+    * the used executable channel.
+    */
+    public ExecutableChannels getEC() {
+       return ec; // not null
     }
 
 
