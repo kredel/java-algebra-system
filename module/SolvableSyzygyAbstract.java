@@ -324,7 +324,7 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
         while (true) {
           GM = msbb.leftGB(MM);
           Z = leftZeroRelations(GM);
-          R.add( new SolvResPart(MM,GM,Z) );
+          R.add( new SolvResPart<C>(MM,GM,Z) );
           if ( Z == null || Z.list == null || Z.list.size() == 0 ) {
               break;
           }
@@ -376,7 +376,7 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
         while (true) {
             //GM = msbb.leftGB(MM);
           Z = leftZeroRelationsArbitrary(MM);
-          R.add( new SolvResPart(MM,GM,Z) );
+          R.add( new SolvResPart<C>(MM,GM,Z) );
           if ( Z == null || Z.list == null || Z.list.size() == 0 ) {
               break;
           }
@@ -406,7 +406,7 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
         Zm = new ModuleList<C>((GenSolvablePolynomialRing<C>)F.ring, Z);
 
         List R = resolutionArbitrary(Zm);
-        R.add( 0, new SolvResPolPart( F, Gl, Zm ) );
+        R.add( 0, new SolvResPolPart<C>( F, Gl, Zm ) );
         return R;
     }
 
