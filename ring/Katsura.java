@@ -140,7 +140,7 @@ public class Katsura {
     public String toString() {
            StringBuffer s = new StringBuffer();
            s.append(varList(order));
-           s.append("\n");
+           s.append(System.getProperty("line.separator"));
            s.append(polyList());
            return s.toString();
     }
@@ -152,15 +152,15 @@ public class Katsura {
      */
     public String polyList() {
            StringBuffer s = new StringBuffer();
-           s.append("(\n");
+           s.append("("+System.getProperty("line.separator"));
            //for (int m = -N + 1; m <= N - 1; m++) { doubles polynomials
            for (int m = 0; m <= N - 1; m++) {
                s.append( sumUm(m) );
-               s.append(",\n");
+               s.append(","+System.getProperty("line.separator"));
            }
            s.append( sum1() );
-           s.append("\n");
-           s.append(")\n");
+           s.append(System.getProperty("line.separator"));
+           s.append(")"+System.getProperty("line.separator"));
            return s.toString();
     }
 
