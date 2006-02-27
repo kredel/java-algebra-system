@@ -2,7 +2,7 @@
  * $Id$
  */
 
-package edu.jas.module;
+package edu.jas.vector;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -13,8 +13,6 @@ import edu.jas.structure.RingElem;
 //import edu.jas.structure.RingFactory;
 import edu.jas.structure.ModulElem;
 //import edu.jas.structure.ModulFactory;
-
-//import edu.jas.poly.GenPolynomial;
 
 
 /**
@@ -29,7 +27,7 @@ public class GenVector<C extends RingElem<C> >
     private static Logger logger = Logger.getLogger(GenVector.class);
 
     public final GenVectorModul< C > modul;
-    protected final List<C> val;
+    public final List<C> val;
 
 
     /**

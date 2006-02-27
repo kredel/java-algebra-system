@@ -2,7 +2,7 @@
  * $Id$
  */
 
-package edu.jas.module;
+package edu.jas.vector;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -16,8 +16,6 @@ import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 
-//import edu.jas.poly.PolynomialList;
-//import edu.jas.poly.OrderedPolynomialList;
 
 
 /**

@@ -2,7 +2,7 @@
  * $Id$
  */
 
-package edu.jas.module;
+package edu.jas.vector;
 
 //import java.io.IOException;
 import java.io.Reader;
@@ -18,8 +18,6 @@ import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
 //import edu.jas.structure.ModulElem;
 import edu.jas.structure.ModulFactory;
-
-//import edu.jas.poly.GenPolynomial;
 
 
 /**

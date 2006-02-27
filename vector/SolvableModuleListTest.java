@@ -2,7 +2,7 @@
  * $Id$
  */
 
-package edu.jas.module;
+package edu.jas.vector;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -24,8 +24,6 @@ import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.WeylRelations;
 import edu.jas.poly.RelationTable;
-
-import edu.jas.module.ModuleList;
 
 
 /**

@@ -2,7 +2,7 @@
  * $Id$
  */
 
-package edu.jas.module;
+package edu.jas.vector;
 
 import java.util.ArrayList;
 import java.util.Iterator;
