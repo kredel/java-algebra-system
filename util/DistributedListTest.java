@@ -13,6 +13,7 @@ import junit.framework.TestSuite;
 
 import org.apache.log4j.BasicConfigurator;
 
+/*
 import edu.jas.arith.BigComplex;
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigQuaternion;
@@ -20,6 +21,7 @@ import edu.jas.arith.BigRational;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.structure.RingElem;
+*/
 
 /**
  * DistributedList Test using JUnit.
@@ -192,7 +194,6 @@ public class DistributedListTest extends TestCase {
 
 /**
  * Tests DistributedLists with BigInteger, BigRational etc.
- */
  public void testDistributedList4() {
      l1 = new DistributedList(host);
      assertTrue("l1==empty",l1.isEmpty());
@@ -235,11 +236,11 @@ public class DistributedListTest extends TestCase {
      }
      assertTrue("#l1==#l210", l1.size() == l2.size() );
  }
+ */
 
 
 /**
  * Tests DistributedLists with Polynomials.
- */
  public void testDistributedList5() {
      l1 = new DistributedList(host);
      assertTrue("l1==empty",l1.isEmpty());
@@ -294,6 +295,7 @@ public class DistributedListTest extends TestCase {
      }
      assertTrue("#l1==#l210", l1.size() == l2.size() );
  }
+ */
 
 
 /**
