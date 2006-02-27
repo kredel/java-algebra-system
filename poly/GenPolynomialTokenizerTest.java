@@ -32,7 +32,7 @@ import edu.jas.poly.GenPolynomialTokenizer;
 
 import edu.jas.poly.PolynomialList;
 
-import edu.jas.module.ModuleList;
+import edu.jas.vector.ModuleList;
 
 
 

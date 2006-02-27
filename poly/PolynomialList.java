@@ -21,7 +21,7 @@ import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenSolvablePolynomialRing;
 
-import edu.jas.module.ModuleList;
+import edu.jas.vector.ModuleList;
 
 
 /**

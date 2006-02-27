@@ -34,8 +34,8 @@ import edu.jas.poly.OrderedPolynomialList;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
 
-import edu.jas.module.ModuleList;
-import edu.jas.module.OrderedModuleList;
+import edu.jas.vector.ModuleList;
+import edu.jas.vector.OrderedModuleList;
 
 
 /**
