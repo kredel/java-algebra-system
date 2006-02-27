@@ -16,7 +16,7 @@ import edu.jas.poly.GenSolvablePolynomialRing;
 
 import edu.jas.structure.RingElem;
 
-import edu.jas.module.SolvableBasicLinAlg;
+import edu.jas.vector.SolvableBasicLinAlg;
 
 
 /**

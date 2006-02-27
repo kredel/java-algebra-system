@@ -28,7 +28,6 @@ import edu.jas.ring.GroebnerBase;
 import edu.jas.ring.GroebnerBaseSeqPairSeq;
 import edu.jas.ring.ExtendedGB;
 
-//import edu.jas.module.Syzygy;
 
 
 /**

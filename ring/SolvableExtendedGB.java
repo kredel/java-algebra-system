@@ -6,7 +6,7 @@ package edu.jas.ring;
 
 import java.util.List;
 
-import edu.jas.module.ModuleList;
+import edu.jas.vector.ModuleList;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.PolynomialList;

@@ -16,7 +16,7 @@ import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 
-import edu.jas.module.BasicLinAlg;
+import edu.jas.vector.BasicLinAlg;
 
 
 /**
