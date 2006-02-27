@@ -10,6 +10,8 @@ import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.PolynomialList;
 import edu.jas.structure.RingElem;
 
+import edu.jas.vector.ModuleList;
+
 
 /**
  * Syzygy interface for solvable polynomials.

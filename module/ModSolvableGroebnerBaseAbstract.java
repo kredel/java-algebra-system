@@ -27,7 +27,7 @@ import edu.jas.poly.PolynomialList;
 import edu.jas.ring.SolvableGroebnerBase;
 import edu.jas.ring.SolvableGroebnerBaseSeq;
 
-import edu.jas.module.ModuleList;
+import edu.jas.vector.ModuleList;
 
 
 /**

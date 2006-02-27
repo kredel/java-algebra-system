@@ -9,6 +9,8 @@ import java.util.List;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.structure.RingElem;
 
+import edu.jas.vector.ModuleList;
+
 
 /**
  * Module solvable Groebner Bases interface.

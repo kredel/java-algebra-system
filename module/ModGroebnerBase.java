@@ -10,7 +10,7 @@ import edu.jas.structure.RingElem;
 
 import edu.jas.poly.GenPolynomial;
 
-import edu.jas.module.ModuleList;
+import edu.jas.vector.ModuleList;
 
 
 /**

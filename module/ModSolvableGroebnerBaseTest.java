@@ -34,7 +34,7 @@ import edu.jas.poly.WeylRelations;
 //import edu.jas.ring.Reduction;
 //import edu.jas.ring.GroebnerBase;
 
-import edu.jas.module.ModuleList;
+import edu.jas.vector.ModuleList;
 
 
 /**

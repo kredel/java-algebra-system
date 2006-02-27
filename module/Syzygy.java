@@ -10,6 +10,8 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.PolynomialList;
 import edu.jas.structure.RingElem;
 
+import edu.jas.vector.ModuleList;
+import edu.jas.vector.GenVector;
 
 /**
  * Syzygy interface.

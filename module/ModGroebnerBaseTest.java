@@ -30,7 +30,8 @@ import edu.jas.poly.TermOrder;
 //import edu.jas.ring.Reduction;
 //import edu.jas.ring.GroebnerBase;
 
-import edu.jas.module.ModuleList;
+import edu.jas.vector.ModuleList;
+
 
 /**
  * ModGroebnerBase Test using JUnit.

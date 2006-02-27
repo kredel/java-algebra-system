@@ -31,8 +31,8 @@ import edu.jas.poly.RelationTable;
 import edu.jas.ring.SolvableGroebnerBase;
 import edu.jas.ring.SolvableGroebnerBaseSeq;
 
-import edu.jas.module.ModuleList;
-import edu.jas.module.SolvableSyzygy;
+import edu.jas.vector.ModuleList;
+//import edu.jas.module.SolvableSyzygy;
 
 
 /**

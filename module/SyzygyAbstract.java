@@ -28,9 +28,10 @@ import edu.jas.ring.GroebnerBaseSeq;
 import edu.jas.ring.GroebnerBaseSeqPairSeq;
 import edu.jas.ring.ExtendedGB;
 
-import edu.jas.module.ModuleList;
-import edu.jas.module.GenVector;
-import edu.jas.module.GenVectorModul;
+import edu.jas.vector.ModuleList;
+import edu.jas.vector.GenVector;
+import edu.jas.vector.GenVectorModul;
+import edu.jas.vector.BasicLinAlg;
 
 
 /**

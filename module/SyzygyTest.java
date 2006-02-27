@@ -33,8 +33,8 @@ import edu.jas.poly.GenPolynomialTokenizer;
 import edu.jas.ring.GroebnerBase;
 import edu.jas.ring.GroebnerBaseSeq;
 
-import edu.jas.module.ModuleList;
-import edu.jas.module.Syzygy;
+import edu.jas.vector.ModuleList;
+//import edu.jas.module.Syzygy;
 
 
 /**

@@ -32,7 +32,8 @@ import edu.jas.ring.SolvableGroebnerBase;
 import edu.jas.ring.SolvableGroebnerBaseSeq;
 import edu.jas.ring.SolvableExtendedGB;
 
-import edu.jas.module.ModuleList;
+import edu.jas.vector.ModuleList;
+import edu.jas.vector.SolvableBasicLinAlg;
 
 
 /**
