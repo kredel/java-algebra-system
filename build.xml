@@ -6,6 +6,7 @@
 <project name="jas" default="usage" basedir="." >
 
   <property name="src"       value="src" />
+  <property name="bin"       value="edu" />
   <property name="build"     value="." />
   <property name="doc"       value="doc" />
   <property name="test"      value="test" />
@@ -143,6 +144,16 @@
   </lint4j>
 </target>
 
+<target name="jdepend" depends="vorher" >
+  <jdepend outputfile="doc/jdepend-report-${DSTAMP}.out" >
+      <exclude name="java.*" />
+      <exclude name="javax.*" />
+      <classespath>
+        <pathelement location="${bin}"/>
+      </classespath>
+  </jdepend>
+</target>
+
 <target name="jar" depends="vorher" >
   <jar jarfile="/tmp/jas-ant-${DSTAMP}.jar"  >
      <fileset dir="." includes="**/*.java"  />
@@ -164,6 +175,7 @@
 <target name="distclean" depends="clean" >
   <delete verbose="true" >
     <fileset dir="${src}" includes="**/*.class"  />
+    <fileset dir="${build}" includes="**/*.class"  />
   </delete>
 </target>
 
