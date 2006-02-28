@@ -4,6 +4,9 @@
 
 package edu.jas.application;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import edu.jas.poly.GenPolynomial;
 import edu.jas.structure.PrettyPrint;
 import edu.jas.structure.RingElem;
@@ -66,13 +69,66 @@ public class Quotient<C extends RingElem<C> >
         if ( d == null || d.isZERO() ) {
            throw new RuntimeException("denominator may not be zero");
         }
-        if ( d.signum() >= 0 ) {
+        if ( d.signum() < 0 ) {
+           n = n.negate();
+           d = d.negate();
+        }
+        GenPolynomial<C> gcd = gcd( n, d );
+        if ( gcd.isONE() ) {
            num = n;
            den = d;
         } else {
-           num = n.negate();
-           den = d.negate();
+           num = n.divide( gcd );
+           den = d.divide( gcd );
         }
+
+    }
+
+
+    /** Least common multiple.
+     * @param n first polynomial.
+     * @param d second polynomial.
+     * @return lcm(n,d)
+     */
+    protected GenPolynomial<C> lcm(GenPolynomial<C> n, GenPolynomial<C> d) {
+        List<GenPolynomial<C>> list;
+        list = new ArrayList<GenPolynomial<C>>( 1 );
+        list.add( n );
+        Ideal<C> N = new Ideal<C>( ring.ring, list, true );
+        list = new ArrayList<GenPolynomial<C>>( 1 );
+        list.add( d );
+        Ideal<C> D = new Ideal<C>( ring.ring, list, true );
+        Ideal<C> L = N.intersect( D );
+        if ( L.list.list.size() != 1 ) {
+           throw new RuntimeException("lcm not uniqe");
+        }
+        GenPolynomial<C> lcm = L.list.list.get(0);
+        return lcm;
+    }
+
+
+    /** Greatest common divisor.
+     * @param n first polynomial.
+     * @param d second polynomial.
+     * @return gcd(n,d)
+     */
+    protected GenPolynomial<C> gcd(GenPolynomial<C> n, GenPolynomial<C> d) {
+        if ( n.isZERO() ) {
+           return d;
+        }
+        if ( d.isZERO() ) {
+           return n;
+        }
+        if ( n.isONE() ) {
+           return n;
+        }
+        if ( d.isONE() ) {
+           return d;
+        }
+        GenPolynomial<C> p = n.multiply(d);
+        GenPolynomial<C> lcm = lcm(n,d);
+        GenPolynomial<C> gcd = p.divide(lcm);
+        return gcd;
     }
 
 
