@@ -2,7 +2,7 @@
  * $Id$
  */
 
-package edu.jas.ring;
+package edu.jas.application;
 
 //import edu.jas.poly.GroebnerBase;
 
@@ -23,11 +23,16 @@ import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolynomialList;
 import edu.jas.poly.TermOrder;
 
+import edu.jas.ring.GroebnerBase;
+//import edu.jas.ring.Reduction;
+import edu.jas.ring.GroebnerBaseSeq;
+//import edu.jas.ring.ReductionSeq;
+
+
 /**
  * Ideal Test using JUnit.
  * @author Heinz Kredel.
  */
-
 public class IdealTest extends TestCase {
 
     private static final Logger logger = Logger.getLogger(IdealTest.class);

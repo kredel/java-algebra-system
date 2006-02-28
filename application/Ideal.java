@@ -2,7 +2,7 @@
  * $Id$
  */
 
-package edu.jas.ring;
+package edu.jas.application;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,12 +19,17 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolynomialList;
 
+import edu.jas.ring.ExtendedGB;
+import edu.jas.ring.GroebnerBase;
+import edu.jas.ring.Reduction;
+import edu.jas.ring.GroebnerBaseSeq;
+import edu.jas.ring.ReductionSeq;
+
 
 /**
  * Ideal. Some methods for ideal arithmetic.
  * @author Heinz Kredel
  */
-
 public class Ideal<C extends RingElem<C>> implements Serializable {
 
 
@@ -71,6 +76,7 @@ public class Ideal<C extends RingElem<C>> implements Serializable {
   public Ideal( GenPolynomialRing<C> ring, List<GenPolynomial<C>> F ) {
       this( new PolynomialList<C>( ring, F ) );
   }
+
 
   /**
    * Constructor.
@@ -199,18 +205,7 @@ public class Ideal<C extends RingElem<C>> implements Serializable {
    * @return true, if this is the 0 ideal, else false
    */
   public boolean isZERO() {
-      if ( getList() == null ) {
-          return true;
-      }
-      for ( GenPolynomial<C> p : getList() ) {
-          if ( p == null ) {
-              continue;
-          }
-          if ( ! p.isZERO() ) {
-             return false;
-          }
-      }
-      return true;
+      return list.isZERO();
   }
 
 
@@ -219,18 +214,7 @@ public class Ideal<C extends RingElem<C>> implements Serializable {
    * @return true, if this is the 1 ideal, else false
    */
   public boolean isONE() {
-      if ( getList() == null ) {
-          return false;
-      }
-      for ( GenPolynomial<C> p : getList() ) {
-          if ( p == null ) {
-              continue;
-          }
-          if ( p.isONE() ) {
-             return true;
-          }
-      }
-      return false;
+      return list.isONE();
   }
 
 
@@ -548,5 +532,96 @@ public class Ideal<C extends RingElem<C>> implements Serializable {
       }
       return I;
   }
+
+
+  /**
+   * Normalform for element.
+   * @param h polynomial
+   * @return normalform of h with respect to this
+   */
+  public GenPolynomial<C> normalform( GenPolynomial<C> h ) {
+      if ( h == null ) { 
+          return h;
+      }
+      if ( h.isZERO() ) { 
+          return h;
+      }
+      if ( this.isZERO() ) { 
+          return h;
+      }
+      GenPolynomial<C> r;
+      r = red.normalform( list.list, h );
+      return r;
+  }
+
+
+  /**
+   * Inverse for element modulo this ideal.
+   * @param h polynomial
+   * @return inverse of h with respect to this, if defined
+   */
+  public GenPolynomial<C> inverse( GenPolynomial<C> h ) {
+      if ( h == null || h.isZERO() ) { 
+         throw new RuntimeException(this.getClass().getName()
+                                    + " not invertible");
+      }
+      if ( this.isZERO() ) { 
+         throw new RuntimeException(this.getClass().getName()
+                                    + " not invertible");
+      }
+      List<GenPolynomial<C>> F = new ArrayList<GenPolynomial<C>>( 1 + list.list.size() );
+      F.add( h );
+      F.addAll( list.list );
+      ExtendedGB<C> x = bb.extGB( F );
+      List<GenPolynomial<C>> G = x.G;
+      GenPolynomial<C> one = null;
+      int i = -1;
+      for ( GenPolynomial<C> p : G ) {
+          i++;
+          if ( p == null ) {
+             continue;
+          }
+          if ( p.isUnit() ) {
+             one = p;
+             break;
+          }
+      }
+      if ( one == null ) { 
+         throw new RuntimeException(this.getClass().getName()
+                                    + " not invertible");
+      }
+      List<GenPolynomial<C>> row = x.G2F.get( i ); // != -1
+      GenPolynomial<C> g = row.get(0);
+      return g;
+  }
+
+
+  /**
+   * Test if element is a unit modulo this ideal.
+   * @param h polynomial
+   * @return true if h is a unit with respect to this, else false
+   */
+  public boolean isUnit( GenPolynomial<C> h ) {
+      if ( h == null || h.isZERO() ) { 
+         return false;
+      }
+      if ( this.isZERO() ) { 
+         return false;
+      }
+      List<GenPolynomial<C>> F = new ArrayList<GenPolynomial<C>>( 1 + list.list.size() );
+      F.add( h );
+      F.addAll( list.list );
+      List<GenPolynomial<C>> G = bb.GB( F );
+      for ( GenPolynomial<C> p : G ) {
+          if ( p == null ) {
+             continue;
+          }
+          if ( p.isUnit() ) {
+             return true;
+          }
+      }
+      return false;
+  }
+
 
 }
