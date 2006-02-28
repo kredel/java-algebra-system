@@ -4,15 +4,17 @@
 
 package edu.jas.application;
 
+import java.util.Random;
+import java.io.Reader;
+
+import org.apache.log4j.Logger;
+
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.structure.PrettyPrint;
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
-
-import java.util.Random;
-import java.io.Reader;
 
 
 /**
@@ -21,7 +23,10 @@ import java.io.Reader;
  * @author Heinz Kredel
  */
 public class ResidueRing<C extends RingElem<C> > 
-                        implements RingFactory< Residue<C> >  {
+             implements RingFactory< Residue<C> >  {
+
+     private static Logger logger = Logger.getLogger(ResidueRing.class);
+     private boolean debug = logger.isDebugEnabled();
 
 
     /** Polynomial ideal of the factory. 
@@ -40,7 +45,7 @@ public class ResidueRing<C extends RingElem<C> >
      * @param r polynomial ideal.
      */
     public ResidueRing(Ideal<C> i) {
-        ideal = i;
+        ideal = i.GB(); // cheap if isGB
         ring = ideal.list.ring;
     }
 
@@ -66,7 +71,11 @@ public class ResidueRing<C extends RingElem<C> >
      * @return 1 as Residue.
      */
     public Residue<C> getONE() {
-        return new Residue<C>( this, ring.getONE() );
+        Residue<C> one = new Residue<C>( this, ring.getONE() );
+        if ( one.isZERO() ) {
+           logger.warn("ideal is one, so all residues are 0");
+        }
+        return one;
     }
 
     
@@ -127,6 +136,20 @@ public class ResidueRing<C extends RingElem<C> >
      */
     public Residue<C> random(int n) {
       GenPolynomial<C> x = ring.random( n ).monic();
+      return new Residue<C>( this, x );
+    }
+
+
+    /**
+     * Generate a random residum polynomial.
+     * @param k bitsize of random coefficients.
+     * @param l number of terms.
+     * @param d maximal degree in each variable.
+     * @param q density of nozero exponents.
+     * @return a random residue polynomial.
+     */
+    public Residue<C> random(int k, int l, int d, float q) {
+      GenPolynomial<C> x = ring.random(k,l,d,q).monic();
       return new Residue<C>( this, x );
     }
 

@@ -22,7 +22,7 @@ import edu.jas.poly.PolynomialList;
 import edu.jas.ring.ExtendedGB;
 import edu.jas.ring.GroebnerBase;
 import edu.jas.ring.Reduction;
-import edu.jas.ring.GroebnerBaseSeq;
+import edu.jas.ring.GroebnerBaseSeqPairSeq;
 import edu.jas.ring.ReductionSeq;
 
 
@@ -110,7 +110,7 @@ public class Ideal<C extends RingElem<C>> implements Serializable {
                 GroebnerBase<C> bb, Reduction<C> red) {
       this( list, 
             ( list == null ? true : ( list.list == null ? true : false ) ), 
-            new GroebnerBaseSeq<C>(), 
+            new GroebnerBaseSeqPairSeq<C>(), 
             new ReductionSeq<C>() );
   }
 
@@ -121,7 +121,7 @@ public class Ideal<C extends RingElem<C>> implements Serializable {
    * @param gb true if list is known to be a Groebner Base, else false
    */
   public Ideal( PolynomialList<C> list, boolean gb) {
-      this(list,gb, new GroebnerBaseSeq<C>(), new ReductionSeq<C>() );
+      this(list,gb, new GroebnerBaseSeqPairSeq<C>(), new ReductionSeq<C>() );
   }
 
 
@@ -592,6 +592,33 @@ public class Ideal<C extends RingElem<C>> implements Serializable {
       }
       List<GenPolynomial<C>> row = x.G2F.get( i ); // != -1
       GenPolynomial<C> g = row.get(0);
+      if ( g == null || g.isZERO() ) { 
+         throw new RuntimeException(this.getClass().getName()
+                                    + " not invertible " + h);
+      }
+      // adjust g to get g*h == 1
+      GenPolynomial<C> f = g.multiply(h);
+      GenPolynomial<C> k = red.normalform(list.list,f);
+      if ( ! k.isONE() ) {
+         C lbc = k.leadingBaseCoefficient();
+         lbc = lbc.inverse();
+         g = g.multiply( lbc );
+      }
+      if ( debug ) {
+         //logger.info("inv G = " + G);
+         //logger.info("inv G2F = " + x.G2F);
+         //logger.info("inv row "+i+" = " + row);
+         //logger.info("inv h = " + h);
+         //logger.info("inv g = " + g);
+         //logger.info("inv f = " + f);
+         f = g.multiply(h);
+         k = red.normalform(list.list,f);
+         logger.info("inv k = " + k);
+         if ( ! k.isUnit() ) {
+            throw new RuntimeException(this.getClass().getName()
+                                       + " not invertible");
+         }
+      }
       return g;
   }
 
