@@ -1,6 +1,6 @@
 
 /*
- * $Id: ResidueTest.java  $
+ * $Id$
  */
 
 package edu.jas.application;

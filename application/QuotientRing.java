@@ -1,5 +1,5 @@
 /*
- * $Id: QuotientRing.java $
+ * $Id$
  */
 
 package edu.jas.application;
