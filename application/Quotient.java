@@ -7,6 +7,8 @@ package edu.jas.application;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import edu.jas.poly.GenPolynomial;
 import edu.jas.structure.PrettyPrint;
 import edu.jas.structure.RingElem;
@@ -15,10 +17,14 @@ import edu.jas.structure.RingElem;
 /**
  * Quotient class element based on GenPolynomial with RingElem interface.
  * Objects of this class are immutable.
+ * <b>Note:</b> Just for fun, reduction to lowest terms is not efficient.
  * @author Heinz Kredel
  */
 public class Quotient<C extends RingElem<C> > 
              implements RingElem< Quotient<C> > {
+
+    private static Logger logger = Logger.getLogger(Quotient.class);
+    private boolean debug = logger.isDebugEnabled();
 
 
     /** Quotient class factory data structure. 
@@ -93,6 +99,10 @@ public class Quotient<C extends RingElem<C> >
         }
         // must reduce to lowest terms
         GenPolynomial<C> gcd = gcd( n, d );
+        if ( true || debug ) {
+           logger.info("gcd = " + gcd);
+        }
+        //GenPolynomial<C> gcd = ring.ring.getONE();
         if ( gcd.isONE() ) {
            num = n;
            den = d;
@@ -104,6 +114,7 @@ public class Quotient<C extends RingElem<C> >
 
 
     /** Least common multiple.
+     * Just for fun, is not efficient.
      * @param n first polynomial.
      * @param d second polynomial.
      * @return lcm(n,d)
@@ -126,6 +137,7 @@ public class Quotient<C extends RingElem<C> >
 
 
     /** Greatest common divisor.
+     * Just for fun, is not efficient.
      * @param n first polynomial.
      * @param d second polynomial.
      * @return gcd(n,d)
@@ -195,7 +207,7 @@ public class Quotient<C extends RingElem<C> >
     public String toString() {
         if ( PrettyPrint.isTrue() ) {
            return num.toString( ring.ring.getVars() ) 
-                  + "/" + den.toString( ring.ring.getVars() );
+                  + "///" + den.toString( ring.ring.getVars() );
         } else {
            return "Quotient[ " + num.toString() 
                    + " / " + den.toString() + " ]";
@@ -208,8 +220,13 @@ public class Quotient<C extends RingElem<C> >
      * @return sign(this-b).
      */
     public int compareTo(Quotient<C> b) {
-        Quotient<C> s = this.subtract( b );
-        return s.signum();
+        if ( b == null || b.isZERO() ) {
+            return this.signum();
+        }
+        GenPolynomial<C> r = num.multiply( b.den );
+        GenPolynomial<C> s = den.multiply( b.num );
+        GenPolynomial<C> x = r.subtract( s );
+        return x.signum();
     }
 
 
@@ -251,9 +268,9 @@ public class Quotient<C extends RingElem<C> >
         if ( S == null || S.isZERO() ) {
            return this;
         }
-        GenPolynomial<C> d = den.multiply( S.den );
         GenPolynomial<C> n = num.multiply( S.den );
-        n.add( den.multiply( S.num ) ); 
+        n = n.add( den.multiply( S.num ) ); 
+        GenPolynomial<C> d = den.multiply( S.den );
         return new Quotient<C>( ring, n, d, false );
     }
 
@@ -284,9 +301,9 @@ public class Quotient<C extends RingElem<C> >
         if ( S == null || S.isZERO() ) {
            return this;
         }
-        GenPolynomial<C> d = den.multiply( S.den );
         GenPolynomial<C> n = num.multiply( S.den );
-        n.subtract( den.multiply( S.num ) ); 
+        n = n.subtract( den.multiply( S.num ) ); 
+        GenPolynomial<C> d = den.multiply( S.den );
         return new Quotient<C>( ring, n, d, false );
     }
 
@@ -338,8 +355,8 @@ public class Quotient<C extends RingElem<C> >
         if ( this.isONE() ) {
            return S;
         }
-        GenPolynomial<C> d = den.multiply( S.den );
         GenPolynomial<C> n = num.multiply( S.num );
+        GenPolynomial<C> d = den.multiply( S.den );
         return new Quotient<C>( ring, n, d, false );
 
     }
