@@ -14,7 +14,7 @@ import edu.jas.structure.RingElem;
 
 /**
  * Quotient class element based on GenPolynomial with RingElem interface.
- * Objects of this class are (nearly) immutable.
+ * Objects of this class are immutable.
  * @author Heinz Kredel
  */
 public class Quotient<C extends RingElem<C> > 
@@ -23,17 +23,17 @@ public class Quotient<C extends RingElem<C> >
 
     /** Quotient class factory data structure. 
      */
-    protected final QuotientRing<C> ring;
+    public final QuotientRing<C> ring;
 
 
     /** Numerator part of the element data structure. 
      */
-    protected final GenPolynomial<C> num;
+    public final GenPolynomial<C> num;
 
 
     /** Denominator part of the element data structure. 
      */
-    protected final GenPolynomial<C> den;
+    public final GenPolynomial<C> den;
 
 
     /** The constructor creates a Quotient object 
@@ -52,7 +52,7 @@ public class Quotient<C extends RingElem<C> >
      * @param n numerator polynomial.
      */
     public Quotient(QuotientRing<C> r, GenPolynomial<C> n) {
-        this( r, n, r.ring.getONE() );
+        this( r, n, r.ring.getONE(), true );
     }
 
 
@@ -64,15 +64,34 @@ public class Quotient<C extends RingElem<C> >
      */
     public Quotient(QuotientRing<C> r, 
                     GenPolynomial<C> n, GenPolynomial<C> d) {
-        ring = r;
-        // must reduce to lowest terms
+        this(r,n,d,false);
+    }
+
+
+    /** The constructor creates a Quotient object 
+     * from a ring factory and a numerator and denominator polynomial. 
+     * @param r ring factory.
+     * @param n numerator polynomial.
+     * @param d denominator polynomial.
+     * @param isred true if gcd(n,d) == 1, else false.
+     */
+    protected Quotient(QuotientRing<C> r, 
+                       GenPolynomial<C> n, GenPolynomial<C> d,
+                       boolean isred) {
         if ( d == null || d.isZERO() ) {
            throw new RuntimeException("denominator may not be zero");
         }
+        ring = r;
         if ( d.signum() < 0 ) {
            n = n.negate();
            d = d.negate();
         }
+        if ( isred ) {
+           num = n;
+           den = d;
+           return;
+        }
+        // must reduce to lowest terms
         GenPolynomial<C> gcd = gcd( n, d );
         if ( gcd.isONE() ) {
            num = n;
@@ -81,7 +100,6 @@ public class Quotient<C extends RingElem<C> >
            num = n.divide( gcd );
            den = d.divide( gcd );
         }
-
     }
 
 
@@ -136,7 +154,7 @@ public class Quotient<C extends RingElem<C> >
      * @see java.lang.Object#clone()
      */
     public Quotient<C> clone() {
-        return new Quotient<C>( ring, num, den );
+        return new Quotient<C>( ring, num, den, true );
     }
    
 
@@ -221,7 +239,7 @@ public class Quotient<C extends RingElem<C> >
      * @see edu.jas.structure.RingElem#abs()
      */
     public Quotient<C> abs() {
-        return new Quotient<C>( ring, num.abs(), den );
+        return new Quotient<C>( ring, num.abs(), den, true );
     }
 
 
@@ -236,7 +254,7 @@ public class Quotient<C extends RingElem<C> >
         GenPolynomial<C> d = den.multiply( S.den );
         GenPolynomial<C> n = num.multiply( S.den );
         n.add( den.multiply( S.num ) ); 
-        return new Quotient<C>( ring, n, d );
+        return new Quotient<C>( ring, n, d, false );
     }
 
 
@@ -245,7 +263,7 @@ public class Quotient<C extends RingElem<C> >
      * @see edu.jas.structure.RingElem#negate()
      */
     public Quotient<C> negate() {
-        return new Quotient<C>( ring, num.negate(), den );
+        return new Quotient<C>( ring, num.negate(), den, true );
     }
 
 
@@ -269,7 +287,7 @@ public class Quotient<C extends RingElem<C> >
         GenPolynomial<C> d = den.multiply( S.den );
         GenPolynomial<C> n = num.multiply( S.den );
         n.subtract( den.multiply( S.num ) ); 
-        return new Quotient<C>( ring, n, d );
+        return new Quotient<C>( ring, n, d, false );
     }
 
 
@@ -287,7 +305,7 @@ public class Quotient<C extends RingElem<C> >
      * @return S with S = 1/this. 
      */
     public Quotient<C> inverse() {
-        return new Quotient<C>( ring, den, num );
+        return new Quotient<C>( ring, den, num, true );
     }
 
 
@@ -322,7 +340,7 @@ public class Quotient<C extends RingElem<C> >
         }
         GenPolynomial<C> d = den.multiply( S.den );
         GenPolynomial<C> n = num.multiply( S.num );
-        return new Quotient<C>( ring, n, d );
+        return new Quotient<C>( ring, n, d, false );
 
     }
 
@@ -338,7 +356,7 @@ public class Quotient<C extends RingElem<C> >
         lbc = lbc.inverse();
         GenPolynomial<C> n = num.multiply( lbc );
         GenPolynomial<C> d = den.multiply( lbc );
-        return new Quotient<C>( ring, n, d );
+        return new Quotient<C>( ring, n, d, true );
     }
 
 }
