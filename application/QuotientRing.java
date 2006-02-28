@@ -31,7 +31,7 @@ public class QuotientRing<C extends RingElem<C> >
 
     /** Polynomial ring of the factory. 
      */
-    protected final GenPolynomialRing<C> ring;
+    public final GenPolynomialRing<C> ring;
 
 
     /** The constructor creates a QuotientRing object 
@@ -48,7 +48,7 @@ public class QuotientRing<C extends RingElem<C> >
      * @return a copy of c.
      */
     public Quotient<C> copy(Quotient<C> c) {
-        return new Quotient<C>( c.ring, c.num, c.den );
+        return new Quotient<C>( c.ring, c.num, c.den, true );
     }
 
 
@@ -121,8 +121,9 @@ public class QuotientRing<C extends RingElem<C> >
      * @return a random residue element.
      */
     public Quotient<C> random(int n) {
-        GenPolynomial<C> x = ring.random( n ).monic();
-        return new Quotient<C>( this, x );
+        GenPolynomial<C> r = ring.random( n ).monic();
+        GenPolynomial<C> s = ring.random( n ).monic();
+        return new Quotient<C>( this, r, s, false );
     }
 
 
@@ -135,8 +136,9 @@ public class QuotientRing<C extends RingElem<C> >
      * @return a random residue polynomial.
      */
     public Quotient<C> random(int k, int l, int d, float q) {
-        GenPolynomial<C> x = ring.random(k,l,d,q).monic();
-        return new Quotient<C>( this, x );
+        GenPolynomial<C> r = ring.random(k,l,d,q).monic();
+        GenPolynomial<C> s = ring.random(k,l,d,q).monic();
+        return new Quotient<C>( this, r, s, false );
     }
 
 
@@ -146,8 +148,9 @@ public class QuotientRing<C extends RingElem<C> >
      * @return a random residue element.
      */
     public Quotient<C> random(int n, Random rnd) {
-        GenPolynomial<C> x = ring.random( n, rnd ).monic();
-        return new Quotient<C>( this, x);
+        GenPolynomial<C> r = ring.random( n, rnd ).monic();
+        GenPolynomial<C> s = ring.random( n, rnd ).monic();
+        return new Quotient<C>( this, r, s, false);
     }
 
 
