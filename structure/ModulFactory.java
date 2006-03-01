@@ -12,7 +12,7 @@ import java.io.Serializable;
  * ModulFactory interface for use with the polynomial classes.
  * @author Heinz Kredel
  * @param M module type.
- * @param C coefficient type.
+ * @typeparam C coefficient type.
  */
 public interface ModulFactory<M extends ModulElem<M,C>,
                               C extends RingElem> 
