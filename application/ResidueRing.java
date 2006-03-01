@@ -42,7 +42,7 @@ public class ResidueRing<C extends RingElem<C> >
 
     /** The constructor creates a ResidueRing object 
      * from an Ideal. 
-     * @param r polynomial ideal.
+     * @param i polynomial ideal.
      */
     public ResidueRing(Ideal<C> i) {
         ideal = i.GB(); // cheap if isGB
