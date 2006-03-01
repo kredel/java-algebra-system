@@ -369,7 +369,7 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
 
     /**
      * Generate univariate solvable polynomial in a given variable.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param i the index of the variable.
      * @return X_i as solvable univariate polynomial.
      */
@@ -443,7 +443,7 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
 
     /**
      * Test if the relations define an associative solvable ring.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @return true, if this ring is associative, else false.
      */
     public boolean isAssociative() {
