@@ -111,7 +111,7 @@ public class QuotientTest extends TestCase {
  public void testRandom() {
      for (int i = 0; i < 7; i++) {
          //a = fac.random(ll+i);
-         a = fac.random(kl*(i+1), ll+5+2*i, el+i, q );
+         a = fac.random(kl*(i+1), ll+2+2*i, el, q );
          //System.out.println("a = " + a);
          assertTrue("length( a"+i+" ) <> 0", a.num.length() >= 0);
          assertTrue(" not isZERO( a"+i+" )", !a.isZERO() );
