@@ -29,7 +29,7 @@ public class ResidueRing<C extends RingElem<C> >
     private boolean debug = logger.isDebugEnabled();
 
 
-    /** Polynomial ideal of the factory. 
+    /** Polynomial ideal for the reduction. 
      */
     protected final Ideal<C> ideal;
 
