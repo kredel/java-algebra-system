@@ -155,7 +155,7 @@ public class PolynomialList<C extends RingElem<C> > implements Serializable {
     /**
      * Get ModuleList from PolynomialList.
      * Extract module from polynomial ring. 
-     * @see edu.jas.module.ModuleList
+     * @see edu.jas.vector.ModuleList
      * @param i number of variables to be contract form the polynomials.
      * @return module list corresponding to this.
      */
