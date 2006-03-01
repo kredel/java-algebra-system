@@ -29,11 +29,6 @@ public class LocalRing<C extends RingElem<C> >
      private boolean debug = logger.isDebugEnabled();
 
 
-    /** Polynomial for localization. 
-     */
-    protected final GenPolynomial<C> loc;
-
-
     /** Polynomial ideal for localization. 
      */
     protected final Ideal<C> ideal;
@@ -46,13 +41,11 @@ public class LocalRing<C extends RingElem<C> >
 
     /** The constructor creates a LocalRing object 
      * from a GenPolynomialRing and a GenPolynomial. 
-     * @param r polynomial ring.
-     * @param l localization polynomial.
+     * @param l localization polynomial ideal.
      */
-    public LocalRing(GenPolynomialRing<C> r, GenPolynomial<C> l) {
-        ring = r;
-        loc = l;
-        ideal = null;
+    public LocalRing(Ideal<C> i) {
+        ideal = i.GB(); // cheap if isGB
+        ring = ideal.list.ring;
     }
 
 
@@ -108,7 +101,7 @@ public class LocalRing<C extends RingElem<C> >
      */
     public String toString() {
         return "Local[ " 
-                + loc.toString() + " ]";
+                + ideal.toString() + " ]";
     }
 
 
@@ -132,7 +125,7 @@ public class LocalRing<C extends RingElem<C> >
         if ( ! ring.equals( a.ring ) ) {
             return false;
         }
-        return loc.equals( a.loc );
+        return ideal.equals( a.ideal );
     }
 
 

@@ -4,6 +4,9 @@
 
 package edu.jas.application;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import edu.jas.poly.GenPolynomial;
 import edu.jas.structure.PrettyPrint;
 import edu.jas.structure.RingElem;
@@ -13,6 +16,7 @@ import edu.jas.structure.RingElem;
  * Local class element based on GenPolynomial with RingElem interface.
  * Objects of this class are (nearly) immutable.
  * @author Heinz Kredel
+ * @fix Not jet working because of monic GBs.
  */
 public class Local<C extends RingElem<C> > 
              implements RingElem< Local<C> > {
@@ -23,12 +27,17 @@ public class Local<C extends RingElem<C> >
     protected final LocalRing<C> ring;
 
 
-    /** Value part of the element data structure. 
+    /** Value polynomial of the element data structure. 
      */
     protected final GenPolynomial<C> val;
 
 
-    /** Flag to remember if this residue element is a unit.
+    /** Value ideal of the element data structure. 
+     */
+    protected final Ideal<C> ival;
+
+
+    /** Flag to remember if this local element is a unit.
      * -1 is unknown, 1 is unit, 0 not a unit.
      */
     protected int isunit = -1; // initially unknown
@@ -61,7 +70,16 @@ public class Local<C extends RingElem<C> >
      */
     public Local(LocalRing<C> r, GenPolynomial<C> a, int u) {
         ring = r;
-        val = ring.ideal.normalform( a ); //.monic() no go
+        List<GenPolynomial<C>> li = new ArrayList<GenPolynomial<C>>(1);
+        li.add( a );
+        Ideal<C> id = new Ideal<C>( ring.ring, li );
+        Ideal<C> iv = id.infiniteQuotient( ring.ideal );
+        val = iv.list.list.get(0); //.monic() no go
+        if ( ! a.equals(val) ) {
+            System.out.println("Local: a   = " + a);
+            System.out.println("Local: val = " + val);
+        }
+        ival = iv;
         switch ( u ) {
         case 0:  isunit = u;
                  break;
@@ -113,7 +131,8 @@ public class Local<C extends RingElem<C> >
             return false;
         } 
         // not jet known
-        boolean u = ring.ideal.isUnit( val );
+        GenPolynomial<C> p = ring.ideal.normalform( val );
+        boolean u = ( p == null || p.isZERO() );
         if ( u ) {
            isunit = 1;
         } else {
@@ -141,10 +160,10 @@ public class Local<C extends RingElem<C> >
      * @return sign(this-b).
      */
     public int compareTo(Local<C> b) {
-        GenPolynomial<C> v = b.val;
         if ( ! ring.equals( b.ring ) ) {
-           v = ring.ideal.normalform( v );
+           b = new Local<C>( ring, b.val );
         }
+        GenPolynomial<C> v = b.val;
         return val.compareTo( v );
     }
 
