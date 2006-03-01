@@ -522,6 +522,41 @@ public class Ideal<C extends RingElem<C>> implements Serializable {
       while ( !eq ) {
         Ideal<C> Is = I.quotient( hs );
         Is = Is.GB(); // should be already
+        logger.info("infiniteQuotient s = " + s);
+        eq = Is.contains(I);  // I.contains(Is) always
+        if ( !eq ) {
+           I = Is;
+           s++;
+           // hs = hs.multiply( h );
+        }
+      }
+      return I;
+  }
+
+
+  /**
+   * Infinite quotient. Generators for the infinite ideal quotient.
+   * @param h polynomial
+   * @return ideal(this : h<sup>s</sup>), a Groebner base
+   */
+  public Ideal<C> infiniteQuotientOld( GenPolynomial<C> h ) {
+      if ( h == null ) { // == (0)
+          return this;
+      }
+      if ( h.isZERO() ) { 
+          return this;
+      }
+      if ( this.isZERO() ) {
+          return this;
+      }
+      int s = 0;
+      Ideal<C> I = this.GB(); // should be already
+      GenPolynomial<C> hs = h;
+
+      boolean eq = false;
+      while ( !eq ) {
+        Ideal<C> Is = I.quotient( hs );
+        Is = Is.GB(); // should be already
         logger.debug("infiniteQuotient s = " + s);
         eq = Is.contains(I);  // I.contains(Is) always
         if ( !eq ) {
@@ -531,6 +566,34 @@ public class Ideal<C extends RingElem<C>> implements Serializable {
         }
       }
       return I;
+  }
+
+
+  /**
+   * Infinite Quotient. Generators for the ideal infinite  quotient.
+   * @param H ideal
+   * @return ideal(this : H<sup>s</sup>), a Groebner base
+   */
+  public Ideal<C> infiniteQuotient( Ideal<C> H ) {
+      if ( H == null ) { // == (0)
+          return this;
+      }
+      if ( H.isZERO() ) { 
+          return this;
+      }
+      if ( this.isZERO() ) { 
+          return this;
+      }
+      Ideal<C> Q = null;
+      for ( GenPolynomial<C> h : H.getList() ) {
+          Ideal<C> Hi = this.infiniteQuotient(h);
+          if ( Q == null ) {
+             Q = Hi;
+          } else {
+             Q = Q.intersect( Hi );
+          }
+      }
+      return Q;
   }
 
 

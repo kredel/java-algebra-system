@@ -465,6 +465,7 @@ public class IdealTest extends TestCase {
 
      Ideal<BigRational> I;
      Ideal<BigRational> J;
+     Ideal<BigRational> K;
 
      I = new Ideal<BigRational>(fac,L);
      assertTrue("isZERO( I )", I.isZERO() );
@@ -510,21 +511,30 @@ public class IdealTest extends TestCase {
      J = I.infiniteQuotient( a );
      assertTrue("equals(J,I)", J.equals(I) ); // GBs only
 
-     /*
-     assertTrue("not isZERO( e )", !e.isZERO() );
-     L.add(e);
-     L = bb.GB( L );
-     I = new Ideal<BigRational>(fac,L,true);
-     assertTrue("not isZERO( I )", !I.isZERO() );
+
+     G = new ArrayList<GenPolynomial<BigRational>>();
+     assertTrue("not isZERO( a )", !a.isZERO() );
+     G.add( a );
+     G = bb.GB( G );
+     K = new Ideal<BigRational>(fac,G,true);
+     assertTrue("not isZERO( K )", !K.isZERO() );
      //assertTrue("not isONE( I )", !I.isONE() );
-     assertTrue("isGB( I )", I.isGB() );
+     assertTrue("isGB( K )", K.isGB() );
 
-     J = I.infiniteQuotient( a );
+     J = I.infiniteQuotient( K );
      assertTrue("equals(J,I)", J.equals(I) ); // GBs only
 
-     J = I.infiniteQuotient( b );
+
+     assertTrue("not isZERO( e )", !e.isZERO() );
+     G.add( e );
+     G = bb.GB( G );
+     K = new Ideal<BigRational>(fac,G,true);
+     assertTrue("not isZERO( K )", !K.isZERO() );
+     //assertTrue("not isONE( I )", !I.isONE() );
+     assertTrue("isGB( K )", K.isGB() );
+
+     J = I.infiniteQuotient( K );
      assertTrue("equals(J,I)", J.equals(I) ); // GBs only
-     */
  }
 
 }
