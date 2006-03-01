@@ -62,7 +62,7 @@ public class ModuleList<C extends RingElem<C> > implements Serializable {
     public ModuleList( GenPolynomialRing< C > r,
                        List< List<GenPolynomial< C >>> l) {
         ring = r;
-	list = ModuleList.<C>padCols(r,l); 
+        list = ModuleList.<C>padCols(r,l); 
         if ( list == null ) {
             rows = -1; 
             cols = -1;
@@ -139,7 +139,7 @@ public class ModuleList<C extends RingElem<C> > implements Serializable {
     @Override
     @SuppressWarnings("unchecked") // not jet working
     public String toString() {
-	StringBuffer erg = new StringBuffer();
+        StringBuffer erg = new StringBuffer();
         String[] vars = null;
         if ( ring != null ) {
            erg.append( ring.toString() );
@@ -177,7 +177,7 @@ public class ModuleList<C extends RingElem<C> > implements Serializable {
             erg.append(" )");
         }
         erg.append("\n)");
-	return erg.toString();
+        return erg.toString();
     }
 
 
