@@ -25,7 +25,6 @@ import edu.unima.ky.parallel.SocketChannel;
  * @author Heinz Kredel
  * @todo redistribute list for late comming clients, removal of elements.
  */
-
 public class DistributedListServer extends Thread {
 
     private static Logger logger = Logger.getLogger(DistributedListServer.class);
@@ -42,12 +41,12 @@ public class DistributedListServer extends Thread {
     protected final SortedMap theList;
 
 
-/**
- * Constructs a new DistributedListServer.
- */ 
+    /**
+     * Constructs a new DistributedListServer.
+     */ 
 
     public DistributedListServer() {
-	this(DEFAULT_PORT);
+        this(DEFAULT_PORT);
     }
 
     /**
@@ -55,7 +54,7 @@ public class DistributedListServer extends Thread {
      * @param port to run server on.
      */
     public DistributedListServer(int port) {
-	this( new ChannelFactory(port) );
+        this( new ChannelFactory(port) );
     }
 
     /**
@@ -63,10 +62,10 @@ public class DistributedListServer extends Thread {
      * @param cf ChannelFactory to use.
      */
     public DistributedListServer(ChannelFactory cf) {
-	listElem = new Counter(0);
-	this.cf = cf;
-	servers = new ArrayList<Broadcaster>();
-	theList = new TreeMap();
+        listElem = new Counter(0);
+        this.cf = cf;
+        servers = new ArrayList<Broadcaster>();
+        theList = new TreeMap();
     }
 
 
@@ -75,111 +74,111 @@ public class DistributedListServer extends Thread {
      * Usage: DistributedListServer &lt;port&gt;
      */
     public static void main(String[] args) {
-	int port = DEFAULT_PORT;
-	if ( args.length < 1 ) {
-	    System.out.println("Usage: DistributedListServer <port>");
-	} else {
-	   try {
-	        port = Integer.parseInt( args[0] );
-	    } catch (NumberFormatException e) {
-	    }
-	}
-	(new DistributedListServer(port)).run();
-	// until CRTL-C
+        int port = DEFAULT_PORT;
+        if ( args.length < 1 ) {
+            System.out.println("Usage: DistributedListServer <port>");
+        } else {
+            try {
+                port = Integer.parseInt( args[0] );
+            } catch (NumberFormatException e) {
+            }
+        }
+        (new DistributedListServer(port)).run();
+        // until CRTL-C
     }
 
 
-/**
- * thread initialization and start.
- */ 
+    /**
+     * thread initialization and start.
+     */ 
     public void init() {
-	this.start();
+        this.start();
     }
 
 
-/**
- * main server method.
- */ 
+    /**
+     * main server method.
+     */ 
     public void run() {
-       SocketChannel channel = null;
-       Broadcaster s = null;
-       mythread = Thread.currentThread();
-       Entry e;
-       Object n;
-       Object o;
-       while (goon) {
-	   // logger.debug("list server " + this + " go on");
-          try {
-               channel = cf.getChannel();
-	       logger.debug("dls channel = "+channel);
-	       if ( mythread.isInterrupted() ) {
-		  goon = false;
-	          //logger.info("list server " + this + " interrupted");
-	       } else {
-		  s = new Broadcaster(channel,servers,listElem,theList);
-		  int ls = 0;
-		  synchronized (servers) {
-	             servers.add( s );
-		     ls = theList.size();
-	             s.start();
-		  }
-	          //logger.debug("server " + s + " started");
-		  if ( ls > 0 ) {
-	             logger.info("sending " + ls + " list elements");
-		     synchronized (theList) {
-			 Iterator it = theList.entrySet().iterator();
-			 for ( int i = 0; i < ls; i++ ) {
-			     e = (Entry)it.next();
-			     n = e.getKey();
-			     o = e.getValue();
-			     try {
-			         s.sendChannel( n,o );
-		             } catch (IOException ioe) {
-				 // stop s
-			     }
-			 }
-		     } 
-		  }
-	       }
-          } catch (InterruptedException end) {
-               goon = false;
-	  }
-       }
-       //logger.debug("listserver " + this + " terminated");
+        SocketChannel channel = null;
+        Broadcaster s = null;
+        mythread = Thread.currentThread();
+        Entry e;
+        Object n;
+        Object o;
+        while (goon) {
+            // logger.debug("list server " + this + " go on");
+            try {
+                channel = cf.getChannel();
+                logger.debug("dls channel = "+channel);
+                if ( mythread.isInterrupted() ) {
+                    goon = false;
+                    //logger.info("list server " + this + " interrupted");
+                } else {
+                    s = new Broadcaster(channel,servers,listElem,theList);
+                    int ls = 0;
+                    synchronized (servers) {
+                        servers.add( s );
+                        ls = theList.size();
+                        s.start();
+                    }
+                    //logger.debug("server " + s + " started");
+                    if ( ls > 0 ) {
+                        logger.info("sending " + ls + " list elements");
+                        synchronized (theList) {
+                            Iterator it = theList.entrySet().iterator();
+                            for ( int i = 0; i < ls; i++ ) {
+                                e = (Entry)it.next();
+                                n = e.getKey();
+                                o = e.getValue();
+                                try {
+                                    s.sendChannel( n,o );
+                                } catch (IOException ioe) {
+                                    // stop s
+                                }
+                            }
+                        } 
+                    }
+                }
+            } catch (InterruptedException end) {
+                goon = false;
+            }
+        }
+        //logger.debug("listserver " + this + " terminated");
     }
 
 
-/**
- * terminate all servers.
- */ 
+    /**
+     * terminate all servers.
+     */ 
     public void terminate() {
-	goon = false;
+        goon = false;
         logger.debug("terminating ListServer");
         if ( cf != null ) cf.terminate();
-	if ( servers != null ) {
-	   Iterator it = servers.iterator();
-	   while ( it.hasNext() ) {
-	      Broadcaster br = (Broadcaster) it.next();
-              br.closeChannel();
-              try { 
-                  while ( br.isAlive() ) {
-		          //System.out.print(".");
-                          br.interrupt(); 
-                          br.join(100);
-                  }
-	          //logger.debug("server " + br + " terminated");
-              } catch (InterruptedException e) { 
-              }
-	   }
-	   servers = null;
-	}
+        if ( servers != null ) {
+            Iterator it = servers.iterator();
+            while ( it.hasNext() ) {
+                Broadcaster br = (Broadcaster) it.next();
+                br.closeChannel();
+                try { 
+                    while ( br.isAlive() ) {
+                        //System.out.print(".");
+                        br.interrupt(); 
+                        br.join(100);
+                    }
+                    //logger.debug("server " + br + " terminated");
+                } catch (InterruptedException e) { 
+                }
+            }
+            servers = null;
+        }
         logger.debug("Broadcasters terminated");
-	if ( mythread == null ) return;
+        if ( mythread == null ) return;
         try { 
             while ( mythread.isAlive() ) {
-		    // System.out.print("-");
-                    mythread.interrupt(); 
-                    mythread.join(100);
+                // System.out.print("-");
+                mythread.interrupt(); 
+                mythread.join(100);
             }
             //logger.debug("server " + mythread + " terminated");
         } catch (InterruptedException e) { 
@@ -189,11 +188,11 @@ public class DistributedListServer extends Thread {
     }
 
 
-/**
- * number of servers.
- */ 
+    /**
+     * number of servers.
+     */ 
     public int size() {
-	return servers.size();
+        return servers.size();
     }
 
 }
@@ -214,7 +213,7 @@ class Counter implements Serializable, Comparable {
      * Counter.
      */
     public Counter() {
-	this(0);
+        this(0);
     }
 
 
@@ -223,7 +222,7 @@ class Counter implements Serializable, Comparable {
      * @param v
      */
     public Counter(int v) {
-	value = v;
+        value = v;
     }
 
 
@@ -232,7 +231,7 @@ class Counter implements Serializable, Comparable {
      * @return the value.
      */
     public int intValue() {
-	return value;
+        return value;
     }
 
 
@@ -241,7 +240,7 @@ class Counter implements Serializable, Comparable {
      * @param v
      */
     public void add(int v) { // synchronized elsewhere
-	value += v;
+        value += v;
     }
 
 
@@ -249,17 +248,17 @@ class Counter implements Serializable, Comparable {
      * compareTo.
      */
     public int compareTo(Object o) throws ClassCastException {
-	if ( ! (o instanceof Counter) ) {
-	    throw new ClassCastException("Counter "+value+" o "+o);
-	}
-	int x = ((Counter)o).intValue();
-	if ( value > x ) { 
-           return 1;
-	}
-	if ( value < x ) { 
-           return -1;
-	}
-	return 0;
+        if ( ! (o instanceof Counter) ) {
+            throw new ClassCastException("Counter "+value+" o "+o);
+        }
+        int x = ((Counter)o).intValue();
+        if ( value > x ) { 
+            return 1;
+        }
+        if ( value < x ) { 
+            return -1;
+        }
+        return 0;
     }
 
 
@@ -267,7 +266,7 @@ class Counter implements Serializable, Comparable {
      * toString.
      */  
     public String toString() {
-	return "Counter("+value+")";
+        return "Counter("+value+")";
     }
 
 }
@@ -294,9 +293,9 @@ class Broadcaster extends Thread /*implements Runnable*/ {
      * @param sm SortedMap with counter value pairs.
      */
     public Broadcaster(SocketChannel s, List p, Counter le, SortedMap sm) {
-	channel = s;
-	bcaster = p;
-	listElem = le;
+        channel = s;
+        bcaster = p;
+        listElem = le;
         theList = sm;
     } 
 
@@ -305,7 +304,7 @@ class Broadcaster extends Thread /*implements Runnable*/ {
      * closeChannel.
      */
     public void closeChannel() {
-	channel.close();
+        channel.close();
     }
 
 
@@ -316,10 +315,10 @@ class Broadcaster extends Thread /*implements Runnable*/ {
      * @throws IOException
      */
     public void sendChannel(Object n, Object o) throws IOException {
-	synchronized (channel) {
-	   channel.send(n);
-	   channel.send(o);
-	}
+        synchronized (channel) {
+            channel.send(n);
+            channel.send(o);
+        }
     }
 
 
@@ -328,34 +327,34 @@ class Broadcaster extends Thread /*implements Runnable*/ {
      * @param o object to store and send.
      */
     public void broadcast(Object o) {
-	Counter li = null;
-	synchronized (listElem) {
-	    listElem.add(1);
+        Counter li = null;
+        synchronized (listElem) {
+            listElem.add(1);
             li = new Counter( listElem.intValue() );
-	}
-	synchronized (theList) {
-	    theList.put( li, o );
-	}
-	synchronized (bcaster) {
-	    Iterator it = bcaster.iterator();
-	    while ( it.hasNext() ) {
-		Broadcaster br = (Broadcaster) it.next();
-		try {
-		    br.sendChannel(li,o);
-		    //System.out.println("bcast: "+o+" to "+x.channel);
-		} catch (IOException e) {
-		    try { 
-			br.closeChannel();
-			while ( br.isAlive() ) {
-			    br.interrupt(); 
-			    br.join(100);
-			}
-		    } catch (InterruptedException unused) { 
-		    }
-		    bcaster.remove( br );
-		}
-	    }
-	}
+        }
+        synchronized (theList) {
+            theList.put( li, o );
+        }
+        synchronized (bcaster) {
+            Iterator it = bcaster.iterator();
+            while ( it.hasNext() ) {
+                Broadcaster br = (Broadcaster) it.next();
+                try {
+                    br.sendChannel(li,o);
+                    //System.out.println("bcast: "+o+" to "+x.channel);
+                } catch (IOException e) {
+                    try { 
+                        br.closeChannel();
+                        while ( br.isAlive() ) {
+                            br.interrupt(); 
+                            br.join(100);
+                        }
+                    } catch (InterruptedException unused) { 
+                    }
+                    bcaster.remove( br );
+                }
+            }
+        }
     }
 
 
@@ -363,24 +362,24 @@ class Broadcaster extends Thread /*implements Runnable*/ {
      * run.
      */
     public void run() {
-	Object o;
-	boolean goon = true;
-	while (goon) {
-              try {
-                   o = channel.receive();
-                   //System.out.println("receive: "+o+" from "+channel);
-		   broadcast(o);
-		   if ( this.isInterrupted() ) {
-		       goon = false;
-		   }
-	      } catch (IOException e) {
-                   goon = false;
-	      } catch (ClassNotFoundException e) {
-                   goon = false;
-	      }
-	}
-	logger.debug("broadcaster terminated "+this);
-	channel.close();
+        Object o;
+        boolean goon = true;
+        while (goon) {
+            try {
+                o = channel.receive();
+                //System.out.println("receive: "+o+" from "+channel);
+                broadcast(o);
+                if ( this.isInterrupted() ) {
+                    goon = false;
+                }
+            } catch (IOException e) {
+                goon = false;
+            } catch (ClassNotFoundException e) {
+                goon = false;
+            }
+        }
+        logger.debug("broadcaster terminated "+this);
+        channel.close();
     }
 
 
@@ -389,7 +388,7 @@ class Broadcaster extends Thread /*implements Runnable*/ {
      * @return a string representation of this.
      */
     public String toString() {
-	return "Broadcaster("+channel+","+bcaster.size()+","+listElem+")";
+        return "Broadcaster("+channel+","+bcaster.size()+","+listElem+")";
     }
 
 }
