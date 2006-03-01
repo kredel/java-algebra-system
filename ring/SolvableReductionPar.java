@@ -35,7 +35,7 @@ public class SolvableReductionPar<C extends RingElem<C>>
 
     /**
      * Left Normalform.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param Ap solvable polynomial.
      * @param Pp solvable polynomial list.
      * @return left-nf(Ap) with respect to Pp.
@@ -117,7 +117,7 @@ public class SolvableReductionPar<C extends RingElem<C>>
 
     /**
      * LeftNormalform with recording.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param row recording matrix, is modified.
      * @param Pp a polynomial list for reduction.
      * @param Ap a polynomial.
@@ -133,7 +133,7 @@ public class SolvableReductionPar<C extends RingElem<C>>
 
     /**
      * Right Normalform.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param Ap solvable polynomial.
      * @param Pp solvable polynomial list.
      * @return right-nf(Ap) with respect to Pp.

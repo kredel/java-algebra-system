@@ -127,7 +127,7 @@ public class GroebnerBaseDistributed<C extends RingElem<C>>
     /**
      * Distributed Groebner base.
      * Slaves maintain pairlist.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param modv number of module variables.
      * @param F polynomial list.
      * @return GB(F) a Groebner base of F or null, if a IOException occurs.
@@ -237,7 +237,7 @@ public class GroebnerBaseDistributed<C extends RingElem<C>>
   
     /**
      * GB distributed client.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param host the server runns on.
      * @throws IOException
      */
@@ -262,7 +262,7 @@ public class GroebnerBaseDistributed<C extends RingElem<C>>
 
     /**
      * Minimal ordered groebner basis.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param Fp a Groebner base.
      * @return a reduced Groebner base of Fp.
      */
@@ -346,7 +346,7 @@ public class GroebnerBaseDistributed<C extends RingElem<C>>
 
 /**
  * Distributed server reducing worker threads.
- * @param C coefficient type.
+ * @typeparam C coefficient type.
  */
 
 class ReducerServer<C extends RingElem<C>> implements Runnable {

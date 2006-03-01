@@ -16,7 +16,7 @@ import edu.jas.structure.RingElem;
 /**
   * Container for a GB and transformation matrices.
   * A container for F, G, calG and calF.
-  * @param C coefficient type.
+  * @typeparam C coefficient type.
   * @param F an ideal base.
   * @param G a Groebner base of F.
   * @param F2G a transformation matrix from F to G.

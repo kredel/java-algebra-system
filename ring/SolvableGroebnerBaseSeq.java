@@ -63,7 +63,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>>
 
     /**
      * Left Groebner base using pairlist class.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param modv number of module variables.
      * @param F solvable polynomial list.
      * @return leftGB(F) a left Groebner base of F.
@@ -156,7 +156,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>>
 
     /**
      * Solvable Extended Groebner base using critical pair class.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param modv module variable number.
      * @param F solvable polynomial list.
      * @return a container for an extended left Groebner base of F.
@@ -383,7 +383,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>>
 
     /**
      * Twosided Groebner base using pairlist class.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param modv number of module variables.
      * @param Fp solvable polynomial list.
      * @return tsGB(Fp) a twosided Groebner base of Fp.
@@ -515,7 +515,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>>
     /**
      * Normalize M.
      * Make all rows the same size and make certain column elements zero.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param M a reduction matrix.
      * @return normalized M.
      */
@@ -587,7 +587,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>>
 
     /**
      * Test if M is a left reduction matrix.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param exgb an SolvableExtendedGB container.
      * @return true, if exgb contains a left reduction matrix, else false.
      */
@@ -602,7 +602,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>>
 
     /**
      * Minimal solvable extended groebner basis.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param Gp a left Groebner base.
      * @param M a left reduction matrix, is modified.
      * @return a (partially) reduced left Groebner base of Gp in a container.

@@ -37,7 +37,7 @@ public class ReductionPar<C extends RingElem<C>>
 
     /**
      * Normalform. Allows concurrent modification of the list.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param Ap polynomial.
      * @param Pp polynomial list, concurrent modification allowed.
      * @return nf(Ap) with respect to Pp.
@@ -121,7 +121,7 @@ public class ReductionPar<C extends RingElem<C>>
 
     /**
      * Normalform with recording.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param row recording matrix, is modified.
      * @param Pp a polynomial list for reduction.
      * @param Ap a polynomial.
@@ -137,7 +137,7 @@ public class ReductionPar<C extends RingElem<C>>
 
     /**
      * Normalform. Allows concurrent modification of the DHT.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param Ap polynomial.
      * @param Pp distributed hash table, concurrent modification allowed.
      * @return nf(Ap) with respect to Pp.

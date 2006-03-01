@@ -14,7 +14,7 @@ import edu.jas.poly.GenPolynomial;
 /**
  * Serializable subclass to hold pairs of polynomials.
  * @author Heinz Kredel.
- * @param C coefficient factory.
+ * @typeparam C coefficient factory.
  */
 public class Pair<C extends RingElem<C> > 
              implements Serializable, Comparable {

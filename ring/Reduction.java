@@ -23,7 +23,7 @@ public interface Reduction<C extends RingElem<C>>  {
 
     /**
      * S-Polynomial.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param Ap polynomial.
      * @param Bp polynomial.
      * @return spol(Ap,Bp) the S-polynomial of Ap and Bp.
@@ -34,7 +34,7 @@ public interface Reduction<C extends RingElem<C>>  {
 
     /**
      * S-Polynomial with recording.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param S recording matrix, is modified.
      * @param i index of Ap in basis list.
      * @param Ap a polynomial.
@@ -52,7 +52,7 @@ public interface Reduction<C extends RingElem<C>>  {
 
     /**
      * Module criterium.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param modv number of module variables.
      * @param A polynomial.
      * @param B polynomial.
@@ -66,7 +66,7 @@ public interface Reduction<C extends RingElem<C>>  {
     /**
      * GB criterium 4.
      * Use only for commutative polynomial rings.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param A polynomial.
      * @param B polynomial.
      * @param e = lcm(ht(A),ht(B))
@@ -80,7 +80,7 @@ public interface Reduction<C extends RingElem<C>>  {
     /**
      * GB criterium 4.
      * Use only for commutative polynomial rings.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param A polynomial.
      * @param B polynomial.
      * @return true if the S-polynomial(i,j) is required, else false.
@@ -91,7 +91,7 @@ public interface Reduction<C extends RingElem<C>>  {
 
     /**
      * Normalform.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param Ap polynomial.
      * @param Pp polynomial list.
      * @return nf(Ap) with respect to Pp.
@@ -102,7 +102,7 @@ public interface Reduction<C extends RingElem<C>>  {
 
     /**
      * Normalform Set.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param Ap polynomial list.
      * @param Pp polynomial list.
      * @return list of nf(a) with respect to Pp for all a in Ap.
@@ -113,7 +113,7 @@ public interface Reduction<C extends RingElem<C>>  {
 
     /**
      * Normalform with recording.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param row recording matrix, is modified.
      * @param Pp a polynomial list for reduction.
      * @param Ap a polynomial.
@@ -127,7 +127,7 @@ public interface Reduction<C extends RingElem<C>>  {
 
     /**
      * Irreducible set.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param Pp polynomial list.
      * @return a list P of polynomials which are in normalform wrt. P.
      */

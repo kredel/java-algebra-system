@@ -24,7 +24,7 @@ public interface SolvableGroebnerBase<C extends RingElem<C>> {
 
     /**
      * Left Groebner base test.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param F solvable polynomial list.
      * @return true, if F is a left Groebner base, else false.
      */
@@ -33,7 +33,7 @@ public interface SolvableGroebnerBase<C extends RingElem<C>> {
 
     /**
      * Left Groebner base test.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param modv number of module variables.
      * @param F solvable polynomial list.
      * @return true, if F is a left Groebner base, else false.
@@ -43,7 +43,7 @@ public interface SolvableGroebnerBase<C extends RingElem<C>> {
 
     /**
      * Twosided Groebner base test.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param Fp solvable polynomial list.
      * @return true, if Fp is a two-sided Groebner base, else false.
      */
@@ -52,7 +52,7 @@ public interface SolvableGroebnerBase<C extends RingElem<C>> {
 
     /**
      * Twosided Groebner base test.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param modv number of module variables.
      * @param Fp solvable polynomial list.
      * @return true, if Fp is a two-sided Groebner base, else false.
@@ -63,7 +63,7 @@ public interface SolvableGroebnerBase<C extends RingElem<C>> {
 
     /**
      * Right Groebner base test.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param F solvable polynomial list.
      * @return true, if F is a right Groebner base, else false.
      */
@@ -72,7 +72,7 @@ public interface SolvableGroebnerBase<C extends RingElem<C>> {
 
     /**
      * Right Groebner base test.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param modv number of module variables.
      * @param F solvable polynomial list.
      * @return true, if F is a right Groebner base, else false.
@@ -82,7 +82,7 @@ public interface SolvableGroebnerBase<C extends RingElem<C>> {
 
     /**
      * Left Groebner base using pairlist class.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param F solvable polynomial list.
      * @return leftGB(F) a left Groebner base of F.
      */
@@ -92,7 +92,7 @@ public interface SolvableGroebnerBase<C extends RingElem<C>> {
 
     /**
      * Left Groebner base using pairlist class.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param modv number of module variables.
      * @param F solvable polynomial list.
      * @return leftGB(F) a left Groebner base of F.
@@ -104,7 +104,7 @@ public interface SolvableGroebnerBase<C extends RingElem<C>> {
 
     /** 
      * Solvable Extended Groebner base using critical pair class.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param F solvable polynomial list.
      * @return a container for an extended left Groebner base of F.
      */
@@ -114,7 +114,7 @@ public interface SolvableGroebnerBase<C extends RingElem<C>> {
 
     /**
      * Solvable Extended Groebner base using critical pair class.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param modv module variable number.
      * @param F solvable polynomial list.
      * @return a container for an extended left Groebner base of F.
@@ -126,7 +126,7 @@ public interface SolvableGroebnerBase<C extends RingElem<C>> {
 
     /**
      * Left minimal ordered groebner basis.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param Gp a left Groebner base.
      * @return leftGBmi(F) a minimal left Groebner base of Gp.
      */
@@ -136,7 +136,7 @@ public interface SolvableGroebnerBase<C extends RingElem<C>> {
 
     /**
      * Twosided Groebner base using pairlist class.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param Fp solvable polynomial list.
      * @return tsGB(Fp) a twosided Groebner base of Fp.
      */
@@ -145,7 +145,7 @@ public interface SolvableGroebnerBase<C extends RingElem<C>> {
 
     /**
      * Twosided Groebner base using pairlist class.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param modv number of module variables.
      * @param Fp solvable polynomial list.
      * @return tsGB(Fp) a twosided Groebner base of Fp.
@@ -157,7 +157,7 @@ public interface SolvableGroebnerBase<C extends RingElem<C>> {
 
     /**
      * Right Groebner base using opposite ring left GB.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param F solvable polynomial list.
      * @return rightGB(F) a right Groebner base of F.
      */
@@ -167,7 +167,7 @@ public interface SolvableGroebnerBase<C extends RingElem<C>> {
 
     /**
      * Right Groebner base using opposite ring left GB.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param modv number of module variables.
      * @param F solvable polynomial list.
      * @return rightGB(F) a right Groebner base of F.
@@ -179,7 +179,7 @@ public interface SolvableGroebnerBase<C extends RingElem<C>> {
 
     /**
      * Test if left reduction matrix.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param exgb an SolvableExtendedGB container.
      * @return true, if exgb contains a left reduction matrix, else false.
      */
@@ -189,7 +189,7 @@ public interface SolvableGroebnerBase<C extends RingElem<C>> {
 
     /**
      * Test if left reduction matrix.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param F a solvable polynomial list.
      * @param G a left Groebner base.
      * @param Mf a possible left reduction matrix.

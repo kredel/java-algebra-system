@@ -16,7 +16,7 @@ import edu.jas.poly.GenPolynomial;
  * Serializable subclass to hold critical pairs of polynomials.
  * Used also to manage reduction status of the pair.
  * @author Heinz Kredel.
- * @param C coefficient factory.
+ * @typeparam C coefficient factory.
  */
 public class CriticalPair<C extends RingElem<C> > 
              implements Serializable {

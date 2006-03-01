@@ -119,7 +119,7 @@ public class GroebnerBaseSeqPairParallel<C extends RingElem<C>>
     /**
      * Parallel Groebner base using sequential pair order class.
      * Slaves maintain pairlist.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param modv number of module variables.
      * @param F polynomial list.
      * @return GB(F) a Groebner base of F.
@@ -174,7 +174,7 @@ public class GroebnerBaseSeqPairParallel<C extends RingElem<C>>
 
     /**
      * Minimal ordered groebner basis, parallel.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param Fp a Groebner base.
      * @return minimalGB(F) a minimal Groebner base of Fp.
      */

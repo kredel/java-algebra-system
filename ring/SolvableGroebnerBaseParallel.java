@@ -91,7 +91,7 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>>
      * Constructor.
      * @param threads number of threads to use.
      * @param pool ThreadPool to use.
-     * @param red parallelism aware reduction engine
+     * @param sred parallelism aware reduction engine
      */
     public SolvableGroebnerBaseParallel(int threads, ThreadPool pool, 
                                         SolvableReduction<C> sred) {
@@ -121,7 +121,7 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>>
     /**
      * Parallel Groebner base using sequential pair order class.
      * Slaves maintain pairlist.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param modv number of module variables.
      * @param F polynomial list.
      * @return GB(F) a Groebner base of F.
@@ -176,7 +176,7 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>>
 
     /**
      * Minimal ordered groebner basis, parallel.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param Fp a Groebner base.
      * @return minimalGB(F) a minimal Groebner base of Fp.
      */
@@ -257,7 +257,7 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>>
 
     /**
      * Solvable Extended Groebner base using critical pair class.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param modv module variable number.
      * @param F solvable polynomial list.
      * @return a container for an extended left Groebner base of F.
@@ -271,9 +271,9 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>>
 
     /**
      * Twosided Groebner base using pairlist class.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param modv number of module variables.
-     * @param F solvable polynomial list.
+     * @param Fp solvable polynomial list.
      * @return tsGB(Fp) a twosided Groebner base of F.
      */
     public List<GenSolvablePolynomial<C>> 

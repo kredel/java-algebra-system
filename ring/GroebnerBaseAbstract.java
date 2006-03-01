@@ -52,7 +52,7 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>>
 
     /**
      * Groebner base test.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param F polynomial list.
      * @return true, if F is a Groebner base, else false.
      */
@@ -63,7 +63,7 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>>
 
     /**
      * Groebner base test.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param modv module variable number.
      * @param F polynomial list.
      * @return true, if F is a Groebner base, else false.
@@ -96,7 +96,7 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>>
 
     /**
      * Groebner base using pairlist class.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param F polynomial list.
      * @return GB(F) a Groebner base of F.
      */
@@ -108,7 +108,7 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>>
 
     /** 
      * Extended Groebner base using critical pair class.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param F polynomial list.
      * @return a container for an extended Groebner base of F.
      */
@@ -120,7 +120,7 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>>
 
     /**
      * Extended Groebner base using critical pair class.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param modv module variable number.
      * @param F polynomial list.
      * @return a container for an extended Groebner base of F.
@@ -135,7 +135,7 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>>
 
     /**
      * Minimal ordered groebner basis.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param Gp a Groebner base.
      * @return a reduced Groebner base of Gp.
      */
@@ -206,7 +206,7 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>>
 
     /**
      * Test if reduction matrix.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param exgb an ExtendedGB container.
      * @return true, if exgb contains a reduction matrix, else false.
      */
@@ -221,7 +221,7 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>>
 
     /**
      * Test if reduction matrix.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param F a polynomial list.
      * @param G a Groebner base.
      * @param Mf a possible reduction matrix.

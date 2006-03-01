@@ -17,7 +17,7 @@ import edu.jas.poly.TermOrder;
 /**
  * Comparator for critical pairs of polynomials.
  * @author Heinz Kredel.
- * @param C coefficient factory.
+ * @typeparam C coefficient factory.
  */
 public class CriticalPairComparator<C extends RingElem<C> > 
              implements Serializable, Comparator<CriticalPair<C>> {
