@@ -123,7 +123,7 @@ public class PolynomialList<C extends RingElem<C> > implements Serializable {
      * @see java.lang.Object#toString()
      */
     public String toString() {
-	StringBuffer erg = new StringBuffer();
+        StringBuffer erg = new StringBuffer();
         if ( ring != null ) {
            erg.append( ring.toString() );
         }
@@ -148,7 +148,7 @@ public class PolynomialList<C extends RingElem<C> > implements Serializable {
             erg.append( "( " + sa + " )" );
         }
         erg.append("\n)");
-	return erg.toString();
+        return erg.toString();
     }
 
 
@@ -253,5 +253,46 @@ public class PolynomialList<C extends RingElem<C> > implements Serializable {
         }
         return list;
     }
+
+
+  /**
+   * Test if list contains only ZEROs.
+   * @return true, if this is the 0 list, else false
+   */
+  public boolean isZERO() {
+      if ( list == null ) {
+          return true;
+      }
+      for ( GenPolynomial<C> p : list ) {
+          if ( p == null ) {
+              continue;
+          }
+          if ( ! p.isZERO() ) {
+             return false;
+          }
+      }
+      return true;
+  }
+
+
+  /**
+   * Test if list contains a ONE.
+   * @return true, if this contains 1, else false
+   */
+  public boolean isONE() {
+      if ( list == null ) {
+          return false;
+      }
+      for ( GenPolynomial<C> p : list ) {
+          if ( p == null ) {
+              continue;
+          }
+          if ( p.isONE() ) {
+             return true;
+          }
+      }
+      return false;
+  }
+
 
 }

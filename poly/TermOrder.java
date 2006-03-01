@@ -201,7 +201,7 @@ public final class TermOrder implements Serializable {
      * @param w weight vector of longs.
      */
     public TermOrder(long[] w) {
-	this( new long[][] { w } );
+        this( new long[][] { w } );
     }
 
 
@@ -231,7 +231,7 @@ public final class TermOrder implements Serializable {
         lorder = new EVorder() {
                      public int compare(ExpVector e1, ExpVector e2) {
                          return + ExpVector.EVIWLC( weight, e1, e2 ); 
-			 // return - horder.compare( e1, e2 );
+                      // return - horder.compare( e1, e2 );
                      }
         };
 
@@ -1240,11 +1240,11 @@ public final class TermOrder implements Serializable {
     }
 
 
-    /**Hash code.
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
+    /** Hash code.
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
         int h = evord;
         h = (h << 3) + evord2;
         h = (h << 4) + evbeg1;
@@ -1252,23 +1252,23 @@ public final class TermOrder implements Serializable {
         h = (h << 4) + evbeg2;
         h = (h << 4) + evend2;
         if ( weight == null ) {
-	       return h;
+          return h;
         }
         h = h * 7 + Arrays.deepHashCode( weight );
         return h;
-	}
+    }
 
 
-	/**
+    /**
      * String representation of weight vector.
      * @see java.lang.Object#toString()
      */
     public String weightToString() {
-	StringBuffer erg = new StringBuffer();
+        StringBuffer erg = new StringBuffer();
         if ( weight != null ) {
            erg.append("weight(");
            for ( int j = 0; j < weight.length; j++ ) {
-	       long[] wj = weight[j];
+               long[] wj = weight[j];
                erg.append("(");
                for ( int i = 0; i < wj.length; i++ ) {
                    erg.append(""+wj[ wj.length-i-1 ]);
@@ -1280,7 +1280,7 @@ public final class TermOrder implements Serializable {
                if ( j < weight.length-1 ) {
                   erg.append(",");
                }
-	   }
+           }
            erg.append(")");
         }
         return erg.toString();
@@ -1293,57 +1293,57 @@ public final class TermOrder implements Serializable {
      */
     @Override
     public String toString() {
-	StringBuffer erg = new StringBuffer();
+        StringBuffer erg = new StringBuffer();
         if ( weight != null ) {
-           erg.append("W(");
-           for ( int j = 0; j < weight.length; j++ ) {
-	       long[] wj = weight[j];
-               erg.append("(");
-               for ( int i = 0; i < wj.length; i++ ) {
-                   erg.append(""+wj[ wj.length-i-1 ]);
-                   if ( i < wj.length-1 ) {
-                      erg.append(",");
-                   }
-               }
-               erg.append(")");
-               if ( j < weight.length-1 ) {
-                  erg.append(",");
-               }
-	   }
-           erg.append(")");
-           if ( evend1 == evend2 ) {
-              return erg.toString();
-           }
-           erg.append("["+evbeg1+","+evend1+"]");
-           erg.append("["+evbeg2+","+evend2+"]");
-           return erg.toString();
+            erg.append("W(");
+            for ( int j = 0; j < weight.length; j++ ) {
+                long[] wj = weight[j];
+                erg.append("(");
+                for ( int i = 0; i < wj.length; i++ ) {
+                    erg.append(""+wj[ wj.length-i-1 ]);
+                    if ( i < wj.length-1 ) {
+                        erg.append(",");
+                    }
+                }
+                erg.append(")");
+                if ( j < weight.length-1 ) {
+                    erg.append(",");
+                }
+            }
+            erg.append(")");
+            if ( evend1 == evend2 ) {
+                return erg.toString();
+            }
+            erg.append("["+evbeg1+","+evend1+"]");
+            erg.append("["+evbeg2+","+evend2+"]");
+            return erg.toString();
         }
-	switch ( evord ) {
-	case LEX:     erg.append("LEX");     break;
-	case INVLEX:  erg.append("INVLEX");  break;
-	case GRLEX:   erg.append("GRLEX");   break;
-	case IGRLEX:  erg.append("IGRLEX");  break;
-	case REVLEX:  erg.append("REVLEX");  break;
-	case REVILEX: erg.append("REVILEX"); break;
-	case REVTDEG: erg.append("REVTDEG"); break;
-	case REVITDG: erg.append("REVITDG"); break;
+        switch ( evord ) {
+        case LEX:     erg.append("LEX");     break;
+        case INVLEX:  erg.append("INVLEX");  break;
+        case GRLEX:   erg.append("GRLEX");   break;
+        case IGRLEX:  erg.append("IGRLEX");  break;
+        case REVLEX:  erg.append("REVLEX");  break;
+        case REVILEX: erg.append("REVILEX"); break;
+        case REVTDEG: erg.append("REVTDEG"); break;
+        case REVITDG: erg.append("REVITDG"); break;
         default:     erg.append("invalid("+evord+")"); break;
-	}
+        }
         if ( evord2 <= 0 ) {
-           return erg.toString();
+            return erg.toString();
         }
         erg.append("["+evbeg1+","+evend1+"]");
-	switch ( evord2 ) {
-	case LEX:     erg.append("LEX");     break;
-	case INVLEX:  erg.append("INVLEX");  break;
-	case GRLEX:   erg.append("GRLEX");   break;
-	case IGRLEX:  erg.append("IGRLEX");  break;
-	case REVLEX:  erg.append("REVLEX");  break;
-	case REVILEX: erg.append("REVILEX"); break;
-	case REVTDEG: erg.append("REVTDEG"); break;
-	case REVITDG: erg.append("REVITDG"); break;
+        switch ( evord2 ) {
+        case LEX:     erg.append("LEX");     break;
+        case INVLEX:  erg.append("INVLEX");  break;
+        case GRLEX:   erg.append("GRLEX");   break;
+        case IGRLEX:  erg.append("IGRLEX");  break;
+        case REVLEX:  erg.append("REVLEX");  break;
+        case REVILEX: erg.append("REVILEX"); break;
+        case REVTDEG: erg.append("REVTDEG"); break;
+        case REVITDG: erg.append("REVITDG"); break;
         default:     erg.append("invalid("+evord2+")"); break;
-	}
+        }
         erg.append("["+evbeg2+","+evend2+"]");
         return erg.toString();
     }
@@ -1470,17 +1470,17 @@ public final class TermOrder implements Serializable {
      */
     public static int revert(int evord) {
         int i = evord;
-	switch ( evord ) {
-	case LEX:     i = REVLEX;  break;
-	case INVLEX:  i = REVILEX; break;
-	case GRLEX:   i = REVTDEG; break;
-	case IGRLEX:  i = REVITDG; break;
-	case REVLEX:  i = LEX;     break;
-	case REVILEX: i = INVLEX;  break;
-	case REVTDEG: i = GRLEX;   break;
-	case REVITDG: i = IGRLEX;  break;
+        switch ( evord ) {
+        case LEX:     i = REVLEX;  break;
+        case INVLEX:  i = REVILEX; break;
+        case GRLEX:   i = REVTDEG; break;
+        case IGRLEX:  i = REVITDG; break;
+        case REVLEX:  i = LEX;     break;
+        case REVILEX: i = INVLEX;  break;
+        case REVTDEG: i = GRLEX;   break;
+        case REVITDG: i = IGRLEX;  break;
         default:      logger.error("can not revert " + evord); break;
-	}
+        }
         return i;
     }
 

@@ -254,27 +254,27 @@ public class ExpVector implements Cloneable, Serializable {
     public String toString(String[] vars) {
         String s = "";
         boolean pit;
-	if ( val.length != vars.length ) {
-           return toString();
+        if ( val.length != vars.length ) {
+            return toString();
         }
         for (int i = val.length-1; i > 0; i-- ) {
             if ( val[i] != 0 ) { 
-               s += vars[val.length-1-i];
-               if ( val[i] != 1 ) {
-                  s += "^" + val[i];
-               }
-               pit = false;
-               for ( int j = i-1; j >= 0; j-- ) {
-                   if ( val[j] != 0 ) pit = true;
-               }
-               if ( pit ) s += " * ";
+                s += vars[val.length-1-i];
+                if ( val[i] != 1 ) {
+                    s += "^" + val[i];
+                }
+                pit = false;
+                for ( int j = i-1; j >= 0; j-- ) {
+                    if ( val[j] != 0 ) pit = true;
+                }
+                if ( pit ) s += " * ";
             }
         }
         if ( val[0] != 0 ) { 
             s += vars[val.length-1];
-               if ( val[0] != 1 ) {
-                  s += "^" + val[0] + "";
-               }
+            if ( val[0] != 1 ) {
+                s += "^" + val[0] + "";
+            }
         }
         return s; 
     }
@@ -284,14 +284,14 @@ public class ExpVector implements Cloneable, Serializable {
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
-    public boolean equals( Object B ) { 
-       if ( ! (B instanceof ExpVector) ) {
-          return false;
-       }
-       ExpVector b = (ExpVector)B;
-       int t = EVILCP( this, b );
-       //System.out.println("equals: this = " + this + " B = " + B + " t = " + t);
-       return (0 == t);
+        public boolean equals( Object B ) { 
+        if ( ! (B instanceof ExpVector) ) {
+            return false;
+        }
+        ExpVector b = (ExpVector)B;
+        int t = EVILCP( this, b );
+        //System.out.println("equals: this = " + this + " B = " + B + " t = " + t);
+        return (0 == t);
     }
 
 
@@ -313,7 +313,7 @@ public class ExpVector implements Cloneable, Serializable {
      * @return If this has all elements 0 then true is returned, else false.
      */
     public boolean isZERO() { 
-       return (0 == EVSIGN( this ) );
+        return (0 == EVSIGN( this ) );
     }
 
 
@@ -362,9 +362,9 @@ public class ExpVector implements Cloneable, Serializable {
      */
     public static String[] STDVARS(String prefix, int n) {
         String[] vars = new String[ n ];
-	if ( prefix == null || prefix.length() == 0 ) {
-	    prefix = "x";
-	}
+        if ( prefix == null || prefix.length() == 0 ) {
+            prefix = "x";
+        }
         for ( int i = 0; i < n; i++) {
             vars[i] = prefix + i; //(n-1-i);
         }
@@ -481,12 +481,12 @@ public class ExpVector implements Cloneable, Serializable {
         for (int i = 0; i < w.length; i++ ) {
             f = rnd.nextFloat(); 
             if ( f > q ) { 
-               e = 0; 
+                e = 0; 
             } else { 
-               e = rnd.nextLong() % k; 
-               if ( e < 0 ) {
-                  e = -e;
-               } 
+                e = rnd.nextLong() % k; 
+                if ( e < 0 ) {
+                    e = -e;
+                } 
             }
             w[i] = e;
         }
@@ -523,17 +523,17 @@ public class ExpVector implements Cloneable, Serializable {
      * ExpVector sign.
      * @param U
      * @return 0 if U is zero, -1 if some entry is negative, 
-               1 if no entry is negativ and at least one entry is positive.
-     */
+     1 if no entry is negativ and at least one entry is positive.
+    */
     public static int EVSIGN( ExpVector U ) {
         int t = 0;
         long[] u = U.getval();
         for (int i = 0; i < u.length; i++ ) {
             if ( u[i] < 0 ) {
-               return -1;
+                return -1;
             }
             if ( u[i] > 0 ) {
-               t = 1;
+                t = 1;
             }
         }
         return t;
@@ -567,12 +567,12 @@ public class ExpVector implements Cloneable, Serializable {
         }
         long t = 0;
         long[] u = U.getval();
-	for ( int j = 0; j < w.length; j++ ) {
-	    long[] wj = w[j];
+        for ( int j = 0; j < w.length; j++ ) {
+            long[] wj = w[j];
             for (int i = 0; i < u.length; i++ ) {
                 t += wj[i] * u[i];
             }
-	}
+        }
         return t;
     }
 
@@ -646,7 +646,7 @@ public class ExpVector implements Cloneable, Serializable {
         boolean t = true;
         for (int i = 0; i < u.length; i++ ) {
             if ( u[i] < v[i] ) { 
-               return false;
+                return false;
             }
         }
         return t;
@@ -705,14 +705,14 @@ public class ExpVector implements Cloneable, Serializable {
         int i;
         for ( i = 0; i < u.length; i++ ) {
             if ( u[i] > v[i] ) { 
-               t = 1; break; 
+                t = 1; break; 
             }
             if ( u[i] < v[i] ) { 
-               t = -1; break; 
+                t = -1; break; 
             }
         }
         if ( t == 0 ) { 
-           return t;
+            return t;
         }
         long up = 0; 
         long vp = 0; 
@@ -721,11 +721,11 @@ public class ExpVector implements Cloneable, Serializable {
             vp += v[j]; 
         }
         if ( up > vp ) { 
-           t = 1; 
+            t = 1; 
         } else { 
-           if ( up < vp ) { 
-              t = -1; 
-           }
+            if ( up < vp ) { 
+                t = -1; 
+            }
         }
         return t;
     }
@@ -747,14 +747,14 @@ public class ExpVector implements Cloneable, Serializable {
         int i;
         for ( i = begin; i < end; i++ ) {
             if ( u[i] > v[i] ) { 
-               t = 1; break; 
+                t = 1; break; 
             }
             if ( u[i] < v[i] ) { 
-               t = -1; break; 
+                t = -1; break; 
             }
         }
         if ( t == 0 ) {
-           return t;
+            return t;
         }
         long up = 0; 
         long vp = 0; 
@@ -763,11 +763,11 @@ public class ExpVector implements Cloneable, Serializable {
             vp += v[j]; 
         }
         if ( up > vp ) { 
-           t = 1; 
+            t = 1; 
         } else { 
-           if ( up < vp ) { 
-              t = -1; 
-           }
+            if ( up < vp ) { 
+                t = -1; 
+            }
         }
         return t;
     }
@@ -825,14 +825,14 @@ public class ExpVector implements Cloneable, Serializable {
         int i;
         for ( i = u.length-1; i >= 0; i-- ) {
             if ( u[i] > v[i] ) { 
-               t = 1; break; 
+                t = 1; break; 
             }
             if ( u[i] < v[i] ) { 
-               t = -1; break; 
+                t = -1; break; 
             }
         }
         if ( t == 0 ) { 
-           return t;
+            return t;
         }
         long up = 0; 
         long vp = 0; 
@@ -841,11 +841,11 @@ public class ExpVector implements Cloneable, Serializable {
             vp += v[j]; 
         }
         if ( up > vp ) { 
-           t = 1; 
+            t = 1; 
         } else { 
-           if ( up < vp ) { 
-              t = -1; 
-           }
+            if ( up < vp ) { 
+                t = -1; 
+            }
         }
         return t;
     }
@@ -867,14 +867,14 @@ public class ExpVector implements Cloneable, Serializable {
         int i;
         for ( i = end-1; i >= begin; i-- ) {
             if ( u[i] > v[i] ) { 
-               t = 1; break; 
+                t = 1; break; 
             }
             if ( u[i] < v[i] ) { 
-               t = -1; break; 
+                t = -1; break; 
             }
         }
         if ( t == 0 ) {
-           return t;
+            return t;
         }
         long up = 0; 
         long vp = 0; 
@@ -883,11 +883,11 @@ public class ExpVector implements Cloneable, Serializable {
             vp += v[j]; 
         }
         if ( up > vp ) { 
-           t = 1; 
+            t = 1; 
         } else { 
-           if ( up < vp ) { 
-              t = -1; 
-           }
+            if ( up < vp ) { 
+                t = -1; 
+            }
         }
         return t;
     }
@@ -907,17 +907,17 @@ public class ExpVector implements Cloneable, Serializable {
         int i;
         for ( i = 0; i < u.length; i++ ) {
             if ( u[i] > v[i] ) { 
-               t = 1; break; 
+                t = 1; break; 
             }
             if ( u[i] < v[i] ) { 
-               t = -1; break; 
+                t = -1; break; 
             }
         }
         if ( t == 0 ) {
-           return t;
+            return t;
         }
-	for ( int k = 0; k < w.length; k++ ) {
-	    long[] wk = w[k];
+        for ( int k = 0; k < w.length; k++ ) {
+            long[] wk = w[k];
             long up = 0; 
             long vp = 0; 
             for (int j = i; j < u.length; j++ ) {
@@ -925,11 +925,11 @@ public class ExpVector implements Cloneable, Serializable {
                 vp += wk[j] * v[j]; 
             }
             if ( up > vp ) { 
-               return 1;
+                return 1;
             } else if ( up < vp ) { 
-               return -1;
+                return -1;
             }
-	}
+        }
         return t;
     }
 
@@ -951,17 +951,17 @@ public class ExpVector implements Cloneable, Serializable {
         int i;
         for ( i = begin; i < end; i++ ) {
             if ( u[i] > v[i] ) { 
-               t = 1; break; 
+                t = 1; break; 
             }
             if ( u[i] < v[i] ) { 
-               t = -1; break; 
+                t = -1; break; 
             }
         }
         if ( t == 0 ) {
-           return t;
+            return t;
         }
-	for ( int k = 0; k < w.length; k++ ) {
-	    long[] wk = w[k];
+        for ( int k = 0; k < w.length; k++ ) {
+            long[] wk = w[k];
             long up = 0; 
             long vp = 0; 
             for (int j = i; j < end; j++ ) {
@@ -969,11 +969,11 @@ public class ExpVector implements Cloneable, Serializable {
                 vp += wk[j] * v[j]; 
             }
             if ( up > vp ) { 
-               return 1;
+                return 1;
             } else if ( up < vp ) { 
-               return -1;
+                return -1;
             }
-	}
+        }
         return t;
     }
 

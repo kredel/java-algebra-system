@@ -117,7 +117,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
         for ( Map.Entry<ExpVector,C> y:  A.entrySet() ) {
             C a = y.getValue(); 
             //logger.debug("a = " + a);
-	    ExpVector e = y.getKey(); 
+            ExpVector e = y.getKey(); 
             if ( debug ) logger.debug("e = " + e);
             int[] ep = e.dependencyOnVariables();
             int el1 = ring.nvar + 1;
@@ -128,7 +128,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
             for ( Map.Entry<ExpVector,C> x: Bk ) {
                 C b = x.getValue(); 
                 //logger.debug("b = " + b);
-	        ExpVector f = x.getKey(); 
+                ExpVector f = x.getKey(); 
                 if ( debug ) logger.debug("f = " + f);
                 int[] fp = f.dependencyOnVariables();
                 int fl1 = 0; 
@@ -139,7 +139,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
                 if ( debug ) logger.debug("el1s = " + el1s + " fl1s = " + fl1s);
                 GenSolvablePolynomial<C> Cs = null;
                 if ( el1s <= fl1s ) { // symmetric
-	            ExpVector g = ExpVector.EVSUM(e,f); 
+                    ExpVector g = ExpVector.EVSUM(e,f); 
                     if ( debug ) logger.debug("g = " + g);
                     Cs = (GenSolvablePolynomial<C>)zero.add( one, g ); // symmetric!
                     //Cs = new GenSolvablePolynomial<C>(ring,one,g); // symmetric!

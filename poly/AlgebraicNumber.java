@@ -47,7 +47,7 @@ public class AlgebraicNumber<C extends RingElem<C> >
      */
     public AlgebraicNumber(GenPolynomial<C> m, GenPolynomial<C> a) {
         modul = m;
-	val = a.remainder(modul); //.monic() no go
+        val = a.remainder(modul); //.monic() no go
     }
 
 
@@ -58,7 +58,7 @@ public class AlgebraicNumber<C extends RingElem<C> >
     public AlgebraicNumber(GenPolynomial<C> m) {
 
         modul = m; // assert m != 0
-	val = m.ring.getZERO();
+        val = m.ring.getZERO();
     }
 
 
@@ -66,7 +66,7 @@ public class AlgebraicNumber<C extends RingElem<C> >
      * @return val.
      */
     public GenPolynomial<C> getVal() {
-      return val;
+        return val;
     }
 
 
@@ -74,7 +74,7 @@ public class AlgebraicNumber<C extends RingElem<C> >
      * @return modul.
      */
     public GenPolynomial<C> getModul() {
-      return modul;
+        return modul;
     }
 
 
@@ -116,7 +116,7 @@ public class AlgebraicNumber<C extends RingElem<C> >
      * @return a AlgebraicNumber.
      */
     public AlgebraicNumber<C> fromInteger(java.math.BigInteger a) {
-	return new AlgebraicNumber<C>(modul, modul.ring.fromInteger(a) );
+        return new AlgebraicNumber<C>(modul, modul.ring.fromInteger(a) );
     }
 
 
@@ -125,7 +125,7 @@ public class AlgebraicNumber<C extends RingElem<C> >
      * @return a AlgebraicNumber.
      */
     public AlgebraicNumber<C> fromInteger(long a) {
-	return new AlgebraicNumber<C>(modul, modul.ring.fromInteger(a) );
+        return new AlgebraicNumber<C>(modul, modul.ring.fromInteger(a) );
     }
     
 
@@ -134,7 +134,7 @@ public class AlgebraicNumber<C extends RingElem<C> >
      * @see edu.jas.structure.RingElem#isZERO()
      */
     public boolean isZERO() {
-	return val.equals( val.ring.getZERO() );
+        return val.equals( val.ring.getZERO() );
     }
 
 
@@ -143,7 +143,7 @@ public class AlgebraicNumber<C extends RingElem<C> >
      * @see edu.jas.structure.RingElem#isONE()
      */
     public boolean isONE() {
-	return val.equals( val.ring.getONE() );
+        return val.equals( val.ring.getONE() );
     }
 
 
@@ -165,7 +165,7 @@ public class AlgebraicNumber<C extends RingElem<C> >
         } else {
             isunit = 0;
         }
-	return ( u );
+        return ( u );
     }
 
 
@@ -174,10 +174,10 @@ public class AlgebraicNumber<C extends RingElem<C> >
      */
     public String toString() {
         if ( PrettyPrint.isTrue() ) {
-	   return val.toString( val.ring.vars );
+            return val.toString( val.ring.vars );
         } else {
-           return "AlgebraicNumber[ " + val.toString() 
-                   + " mod " + modul.toString() + " ]";
+            return "AlgebraicNumber[ " + val.toString() 
+                + " mod " + modul.toString() + " ]";
         }
     }
 
@@ -187,7 +187,7 @@ public class AlgebraicNumber<C extends RingElem<C> >
      */
     public String toStringFac() {
         return "AlgebraicNumber[ " 
-                + modul.toString() + " ]";
+            + modul.toString() + " ]";
     }
 
 
@@ -200,7 +200,7 @@ public class AlgebraicNumber<C extends RingElem<C> >
         if ( modul != b.modul ) {
             v = v.remainder( modul );
         }
-	return val.compareTo( v );
+        return val.compareTo( v );
     }
 
 
@@ -208,10 +208,10 @@ public class AlgebraicNumber<C extends RingElem<C> >
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
-    @SuppressWarnings("unchecked") // not jet working
-    public boolean equals(Object b) {
-	if ( ! ( b instanceof AlgebraicNumber ) ) {
-           return false;
+        @SuppressWarnings("unchecked") // not jet working
+        public boolean equals(Object b) {
+        if ( ! ( b instanceof AlgebraicNumber ) ) {
+            return false;
         }
         AlgebraicNumber<C> a = null;
         try {
@@ -221,7 +221,7 @@ public class AlgebraicNumber<C extends RingElem<C> >
         if ( a == null ) {
             return false;
         }
-	return (0 == compareTo( a ) );
+        return (0 == compareTo( a ) );
     }
 
 
@@ -230,7 +230,7 @@ public class AlgebraicNumber<C extends RingElem<C> >
      * @see edu.jas.structure.RingElem#abs()
      */
     public AlgebraicNumber<C> abs() {
-       return new AlgebraicNumber<C>( modul, val.abs() );
+        return new AlgebraicNumber<C>( modul, val.abs() );
     }
 
 
@@ -239,7 +239,7 @@ public class AlgebraicNumber<C extends RingElem<C> >
      * @return this+S.
      */
     public AlgebraicNumber<C> add(AlgebraicNumber<C> S) {
-      return new AlgebraicNumber<C>( modul, val.add( S.val ) );
+        return new AlgebraicNumber<C>( modul, val.add( S.val ) );
     }
 
 
@@ -248,7 +248,7 @@ public class AlgebraicNumber<C extends RingElem<C> >
      * @see edu.jas.structure.RingElem#negate()
      */
     public AlgebraicNumber<C> negate() {
-       return new AlgebraicNumber<C>( modul, val.negate() );
+        return new AlgebraicNumber<C>( modul, val.negate() );
     }
 
 
@@ -257,7 +257,7 @@ public class AlgebraicNumber<C extends RingElem<C> >
      * @return signum(this).
      */
     public int signum() {
-      return val.signum();
+        return val.signum();
     }
 
 
@@ -266,7 +266,7 @@ public class AlgebraicNumber<C extends RingElem<C> >
      * @return this-S.
      */
     public AlgebraicNumber<C> subtract(AlgebraicNumber<C> S) {
-      return new AlgebraicNumber<C>( modul, val.subtract( S.val ) );
+        return new AlgebraicNumber<C>( modul, val.subtract( S.val ) );
     }
 
 
@@ -275,7 +275,7 @@ public class AlgebraicNumber<C extends RingElem<C> >
      * @return this/S.
      */
     public AlgebraicNumber<C> divide(AlgebraicNumber<C> S) {
-     return multiply( S.inverse() );
+        return multiply( S.inverse() );
     }
 
 
@@ -285,7 +285,7 @@ public class AlgebraicNumber<C extends RingElem<C> >
      */
     public AlgebraicNumber<C> inverse() {
         GenPolynomial<C> x = val.modInverse( modul );
-	return new AlgebraicNumber<C>( modul, x );
+        return new AlgebraicNumber<C>( modul, x );
     }
 
 
@@ -294,8 +294,8 @@ public class AlgebraicNumber<C extends RingElem<C> >
      * @return this - (this/S)*S.
      */
     public AlgebraicNumber<C> remainder(AlgebraicNumber<C> S) {
-      GenPolynomial<C> x = val.remainder( S.val );
-      return new AlgebraicNumber<C>( modul, x );
+        GenPolynomial<C> x = val.remainder( S.val );
+        return new AlgebraicNumber<C>( modul, x );
     }
 
 
@@ -304,8 +304,8 @@ public class AlgebraicNumber<C extends RingElem<C> >
      * @return a random integer mod modul.
      */
     public AlgebraicNumber<C> random(int n) {
-      GenPolynomial<C> x = modul.ring.random( n ).monic();
-      return new AlgebraicNumber<C>( modul, x);
+        GenPolynomial<C> x = modul.ring.random( n ).monic();
+        return new AlgebraicNumber<C>( modul, x);
     }
 
 
@@ -315,8 +315,8 @@ public class AlgebraicNumber<C extends RingElem<C> >
      * @return a random integer mod modul.
      */
     public AlgebraicNumber<C> random(int n, Random rnd) {
-      GenPolynomial<C> x = modul.ring.random( n, rnd ).monic();
-      return new AlgebraicNumber<C>( modul, x);
+        GenPolynomial<C> x = modul.ring.random( n, rnd ).monic();
+        return new AlgebraicNumber<C>( modul, x);
     }
 
 
@@ -325,8 +325,8 @@ public class AlgebraicNumber<C extends RingElem<C> >
      * @return this*S.
      */
     public AlgebraicNumber<C> multiply(AlgebraicNumber<C> S) {
-      GenPolynomial<C> x = val.multiply( S.val );
-      return new AlgebraicNumber<C>( modul, x );
+        GenPolynomial<C> x = val.multiply( S.val );
+        return new AlgebraicNumber<C>( modul, x );
     }
 
 
@@ -334,7 +334,7 @@ public class AlgebraicNumber<C extends RingElem<C> >
      * @return this with monic value part.
      */
     public AlgebraicNumber<C> monic() {
-	return new AlgebraicNumber<C>( modul, val.monic() );
+        return new AlgebraicNumber<C>( modul, val.monic() );
     }
 
 
@@ -344,7 +344,7 @@ public class AlgebraicNumber<C extends RingElem<C> >
      */
     public AlgebraicNumber<C> parse(String s) {
         GenPolynomial<C> x = modul.ring.parse( s );
-	return new AlgebraicNumber<C>( modul, x );
+        return new AlgebraicNumber<C>( modul, x );
     }
 
 
@@ -354,7 +354,7 @@ public class AlgebraicNumber<C extends RingElem<C> >
      */
     public AlgebraicNumber<C> parse(Reader r) {
         GenPolynomial<C> x = modul.ring.parse( r );
-	return new AlgebraicNumber<C>( modul, x );
+        return new AlgebraicNumber<C>( modul, x );
     }
 
 }
