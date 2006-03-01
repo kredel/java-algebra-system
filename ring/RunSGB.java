@@ -106,7 +106,7 @@ public class RunSGB {
      * @param action what to to.
      */
     @SuppressWarnings("unchecked")
-	static void runSequential(PolynomialList S, String action) {
+    static void runSequential(PolynomialList S, String action) {
       List L = S.list; 
       List G = null;
       long t;

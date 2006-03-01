@@ -103,8 +103,8 @@ public class RunGB {
           if ( args.length >= 4 ) {
               mfile = args[3];
           } else {
-	      mfile = "machines";
-	  }
+              mfile = "machines";
+          }
       }
 
       Reader problem = null;

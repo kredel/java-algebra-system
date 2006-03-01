@@ -93,22 +93,22 @@ public abstract class ReductionAbstract<C extends RingElem<C>>
      * @return Spol(Ap, Bp), the S-Polynomial for Ap and Bp.
      */
     public GenPolynomial<C> 
-           SPolynomial(List<GenPolynomial<C>> S,
-                       int i,
-                       GenPolynomial<C> Ap, 
-                       int j,
-                       GenPolynomial<C> Bp) {  
+        SPolynomial(List<GenPolynomial<C>> S,
+                    int i,
+                    GenPolynomial<C> Ap, 
+                    int j,
+                    GenPolynomial<C> Bp) {  
         if ( logger.isInfoEnabled() ) {
-	   if ( Bp == null || Bp.isZERO() ) {
-               throw new RuntimeException("Spol B is zero");
-	   }
-	   if ( Ap == null || Ap.isZERO() ) {
-               throw new RuntimeException("Spol A is zero");
-	   }
-           if ( ! Ap.ring.equals( Bp.ring ) ) { 
-              logger.error("term orderings not equal"); 
-           }
-	}
+            if ( Bp == null || Bp.isZERO() ) {
+                throw new RuntimeException("Spol B is zero");
+            }
+            if ( Ap == null || Ap.isZERO() ) {
+                throw new RuntimeException("Spol A is zero");
+            }
+            if ( ! Ap.ring.equals( Bp.ring ) ) { 
+                logger.error("term orderings not equal"); 
+            }
+        }
         Map.Entry<ExpVector,C> ma = Ap.leadingMonomial();
         Map.Entry<ExpVector,C> mb = Bp.leadingMonomial();
 

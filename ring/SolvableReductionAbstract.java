@@ -94,22 +94,22 @@ public abstract class SolvableReductionAbstract<C extends RingElem<C>>
      * @return leftSpol(Ap, Bp), the left S-Polynomial for Ap and Bp.
      */
     public GenSolvablePolynomial<C> 
-           leftSPolynomial(List<GenSolvablePolynomial<C>> S,
-                           int i,
-                           GenSolvablePolynomial<C> Ap, 
-                           int j,
-                           GenSolvablePolynomial<C> Bp) {  
+        leftSPolynomial(List<GenSolvablePolynomial<C>> S,
+                        int i,
+                        GenSolvablePolynomial<C> Ap, 
+                        int j,
+                        GenSolvablePolynomial<C> Bp) {  
         if ( logger.isInfoEnabled() ) {
-	   if ( Bp == null || Bp.isZERO() ) {
-               throw new RuntimeException("Spol B is zero");
-	   }
-	   if ( Ap == null || Ap.isZERO() ) {
-               throw new RuntimeException("Spol A is zero");
-	   }
-           if ( ! Ap.ring.equals( Bp.ring ) ) { 
-              logger.error("rings not equal"); 
-           }
-	}
+            if ( Bp == null || Bp.isZERO() ) {
+                throw new RuntimeException("Spol B is zero");
+            }
+            if ( Ap == null || Ap.isZERO() ) {
+                throw new RuntimeException("Spol A is zero");
+            }
+            if ( ! Ap.ring.equals( Bp.ring ) ) { 
+                logger.error("rings not equal"); 
+            }
+        }
         Map.Entry<ExpVector,C> ma = Ap.leadingMonomial();
         Map.Entry<ExpVector,C> mb = Bp.leadingMonomial();
 

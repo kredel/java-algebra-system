@@ -120,14 +120,14 @@ public class ReductionSeq<C extends RingElem<C>>
      * @return nf(Pp,Ap), the normal form of Ap wrt. Pp.
      */
     public GenPolynomial<C> 
-           normalform(List<GenPolynomial<C>> row,
-                      List<GenPolynomial<C>> Pp, 
-                      GenPolynomial<C> Ap) {  
+        normalform(List<GenPolynomial<C>> row,
+                   List<GenPolynomial<C>> Pp, 
+                   GenPolynomial<C> Ap) {  
         if ( Pp == null || Pp.isEmpty() ) {
-           return Ap;
+            return Ap;
         }
         if ( Ap == null || Ap.isZERO() ) {
-           return Ap;
+            return Ap;
         }
         int l = Pp.size();
         GenPolynomial<C>[] P = new GenPolynomial[l];
@@ -136,24 +136,24 @@ public class ReductionSeq<C extends RingElem<C>>
             for ( int i = 0; i < Pp.size(); i++ ) {
                 P[i] = Pp.get(i);
             }
-	}
+        }
         ExpVector[] htl = new ExpVector[ l ];
         Object[] lbc = new Object[ l ]; // want <C>
         GenPolynomial<C>[] p = new GenPolynomial[ l ];
         Map.Entry<ExpVector,C> m;
-	int j = 0;
+        int j = 0;
         int i;
         for ( i = 0; i < l; i++ ) { 
             p[i] = P[i];
             m = p[i].leadingMonomial();
-	    if ( m != null ) { 
-               p[j] = p[i];
-               htl[j] = m.getKey();
-               lbc[j] = m.getValue();
-	       j++;
-	    }
-	}
-	l = j;
+            if ( m != null ) { 
+                p[j] = p[i];
+                htl[j] = m.getKey();
+                lbc[j] = m.getValue();
+                j++;
+            }
+        }
+        l = j;
         ExpVector e;
         C a;
         boolean mt = false;
@@ -165,35 +165,35 @@ public class ReductionSeq<C extends RingElem<C>>
         GenPolynomial<C> Q = null;
         GenPolynomial<C> S = Ap;
         while ( S.length() > 0 ) { 
-	      m = S.leadingMonomial();
-              e = m.getKey();
-              a = m.getValue();
-              for ( i = 0; i < l; i++ ) {
-                  mt = ExpVector.EVMT( e, htl[i] );
-                  if ( mt ) break; 
-	      }
-              if ( ! mt ) { 
-                 //logger.debug("irred");
-                 R = R.add( a, e );
-                 S = S.subtract( a, e ); 
-		 // System.out.println(" S = " + S);
-                 //throw new RuntimeException("Syzygy no GB");
-	      } else { 
-		 e = ExpVector.EVDIF( e, htl[i] );
-                 //logger.info("red div = " + e);
-                 C c = (C)lbc[i];
-				 a = a.divide( c );
-                 Q = p[i].multiply( a, e );
-                 S = S.subtract( Q );
-                 fac = row.get(i);
-                 if ( fac == null ) {
+            m = S.leadingMonomial();
+            e = m.getKey();
+            a = m.getValue();
+            for ( i = 0; i < l; i++ ) {
+                mt = ExpVector.EVMT( e, htl[i] );
+                if ( mt ) break; 
+            }
+            if ( ! mt ) { 
+                //logger.debug("irred");
+                R = R.add( a, e );
+                S = S.subtract( a, e ); 
+                // System.out.println(" S = " + S);
+                //throw new RuntimeException("Syzygy no GB");
+            } else { 
+                e = ExpVector.EVDIF( e, htl[i] );
+                //logger.info("red div = " + e);
+                C c = (C)lbc[i];
+                a = a.divide( c );
+                Q = p[i].multiply( a, e );
+                S = S.subtract( Q );
+                fac = row.get(i);
+                if ( fac == null ) {
                     fac = zero.add( a, e );
-                 } else {
+                } else {
                     fac = fac.add( a, e );
-                 }
-                 row.set(i,fac);
-              }
-	}
+                }
+                row.set(i,fac);
+            }
+        }
         return R;
     }
 

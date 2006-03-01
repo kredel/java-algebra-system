@@ -63,8 +63,8 @@ public class OrderedPairlist<C extends RingElem<C> > {
                                ring.tord.getAscendComparator() );
          //pairlist = new TreeMap( to.getSugarComparator() );
          red = new ArrayList<BitSet>();
-	 putCount = 0;
-	 remCount = 0;
+         putCount = 0;
+         remCount = 0;
          if ( ring instanceof GenSolvablePolynomialRing ) {
             useCriterion4 = false;
          }
@@ -78,7 +78,7 @@ public class OrderedPairlist<C extends RingElem<C> > {
      * @return the index of the added polynomial.
      */
     public synchronized int put(GenPolynomial<C> p) { 
-	   putCount++;
+           putCount++;
            if ( oneInGB ) { 
                return P.size()-1;
            }
@@ -120,7 +120,7 @@ public class OrderedPairlist<C extends RingElem<C> > {
            P.add(  p );
            redi = new BitSet();
            redi.set( 0, l ); // jdk 1.4
-	   // if ( l > 0 ) { // jdk 1.3
+           // if ( l > 0 ) { // jdk 1.3
            //    for ( int i=0; i<l; i++ ) redi.set(i);
            // }
            red.add( redi );

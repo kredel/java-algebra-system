@@ -112,8 +112,8 @@ public GroebnerBaseDistTest(String name) {
   Thread[] startThreads() {
      Thread[] clients = new Thread[threads];
      for (int t = 0; t < threads; t++) {
-	 clients[t] = new Thread( new JunitClient(host,port) );
-	 clients[t].start();
+         clients[t] = new Thread( new JunitClient(host,port) );
+         clients[t].start();
      }
      return clients;
  }
@@ -124,12 +124,12 @@ public GroebnerBaseDistTest(String name) {
  */
 
   void stopThreads(Thread[] clients) {
-     for (int t = 0; t < threads; t++) {
-	 try {
-             clients[t].join();
-	 } catch (InterruptedException e) {
-	 }
-     }
+      for (int t = 0; t < threads; t++) {
+          try {
+              clients[t].join();
+          } catch (InterruptedException e) {
+          }
+      }
  }
 
 
@@ -310,8 +310,8 @@ class JunitClient<C extends RingElem<C>> implements Runnable {
     private final int port;
 
     JunitClient(String host, int port) {
-	this.host = host;
-	this.port = port;
+        this.host = host;
+        this.port = port;
     }
 
     public void run() {

@@ -147,7 +147,7 @@ public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>>
         if ( ! (red instanceof ReductionPar) ) {
            logger.warn("parallel GB should use parallel aware reduction");
         }
-	if ( threads < 1 ) {
+        if ( threads < 1 ) {
            threads = 1;
         }
         this.threads = threads;
@@ -160,7 +160,7 @@ public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>>
      * Cleanup and terminate ThreadPool.
      */
     public void terminate() {
-	if ( pool == null ) {
+        if ( pool == null ) {
            return;
         }
         pool.terminate();

@@ -103,7 +103,7 @@ public class GroebnerBaseDistributed<C extends RingElem<C>>
      * @param port server port to use.
      */
     public GroebnerBaseDistributed(int threads, ThreadPool pool, int port) {
-	if ( threads < 1 ) {
+        if ( threads < 1 ) {
            threads = 1;
         }
         this.threads = threads;
@@ -117,7 +117,7 @@ public class GroebnerBaseDistributed<C extends RingElem<C>>
      * Cleanup and terminate ThreadPool.
      */
     public void terminate() {
-	if ( pool == null ) {
+        if ( pool == null ) {
            return;
         }
         pool.terminate();

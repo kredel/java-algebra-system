@@ -76,9 +76,9 @@ public class CriticalPairList<C extends RingElem<C> > {
         cpc = new CriticalPairComparator<C>( ring.tord ); 
         pairlist = new TreeSet< CriticalPair<C> >( cpc );
         red = new ArrayList<BitSet>();
-	recordCount = 0;
-	putCount = 0;
-	remCount = 0;
+        recordCount = 0;
+        putCount = 0;
+        remCount = 0;
         if ( ring instanceof GenSolvablePolynomialRing ) {
            useCriterion4 = false;
         }
@@ -92,7 +92,7 @@ public class CriticalPairList<C extends RingElem<C> > {
      * @return the index of the added polynomial.
      */
     public synchronized int put(GenPolynomial<C> p) { 
-	putCount++;
+        putCount++;
         if ( oneInGB ) { 
            return P.size()-1;
         }

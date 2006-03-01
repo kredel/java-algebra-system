@@ -350,7 +350,7 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>>
            exgb = new ExtendedGB<C>(F,G,F2G,G2F);
            logger.info("exgb nonmin = " + exgb);
            boolean t2 = isReductionMatrix( exgb );
-           logger.debug("exgb t2 = " + t2);
+           logger.info("exgb t2 = " + t2);
         }
         exgb = minimalExtendedGB(F.size(),G,G2F);
         G = exgb.G;
@@ -372,7 +372,13 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>>
             }
             F2G.add( row );
         }
-        return new ExtendedGB<C>(F,G,F2G,G2F);
+        exgb = new ExtendedGB<C>(F,G,F2G,G2F);
+        if ( debug ) {
+           logger.info("exgb nonmin = " + exgb);
+           boolean t2 = isReductionMatrix( exgb );
+           logger.info("exgb t2 = " + t2);
+        }
+        return exgb;
     }
 
 

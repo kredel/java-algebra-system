@@ -23,7 +23,7 @@ class MiniPair implements Serializable {
       }
 
       public String toString() {
-	   return "miniPair(" + i + "," + j + ")";
+          return "miniPair(" + i + "," + j + ")";
       }
 
 }

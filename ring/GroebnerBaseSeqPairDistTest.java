@@ -115,8 +115,8 @@ public GroebnerBaseSeqPairDistTest(String name) {
   Thread[] startThreads() {
      Thread[] clients = new Thread[threads];
      for (int t = 0; t < threads; t++) {
-	 clients[t] = new Thread( new JunitSeqPairClient(host,port) );
-	 clients[t].start();
+         clients[t] = new Thread( new JunitSeqPairClient(host,port) );
+         clients[t].start();
      }
      return clients;
  }
@@ -126,14 +126,14 @@ public GroebnerBaseSeqPairDistTest(String name) {
  * 
  */
 
-  void stopThreads(Thread[] clients) {
-     for (int t = 0; t < threads; t++) {
-	 try {
-             clients[t].join();
-	 } catch (InterruptedException e) {
-	 }
-     }
- }
+    void stopThreads(Thread[] clients) {
+        for (int t = 0; t < threads; t++) {
+            try {
+                clients[t].join();
+            } catch (InterruptedException e) {
+            }
+        }
+    }
 
 
 /**
@@ -313,8 +313,8 @@ class JunitSeqPairClient<C extends RingElem<C>> implements Runnable {
     private final int port;
 
     JunitSeqPairClient(String host, int port) {
-	this.host = host;
-	this.port = port;
+        this.host = host;
+        this.port = port;
     }
 
     public void run() {
