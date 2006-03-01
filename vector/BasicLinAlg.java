@@ -35,7 +35,7 @@ public class BasicLinAlg<C extends RingElem<C>> {
 
     /**
      * Scalar product of vectors of polynomials.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param r a polynomial list.
      * @param F a polynomial list.
      * @return the scalar product of r and F.
@@ -68,7 +68,7 @@ public class BasicLinAlg<C extends RingElem<C>> {
 
     /**
      * product of vector and matrix of polynomials.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param r a polynomial list.
      * @param F a polynomial matrix.
      * @return the scalar product of r and F.
@@ -104,7 +104,7 @@ public class BasicLinAlg<C extends RingElem<C>> {
 
     /**
      * Addition of vectors of polynomials.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param a a polynomial list.
      * @param b a polynomial list.
      * @return a+b, the vector sum of a and b.
@@ -137,7 +137,7 @@ public class BasicLinAlg<C extends RingElem<C>> {
 
     /**
      * test vector of zero polynomials.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param a a polynomial list.
      * @return true, if all polynomial in a are zero, else false.
      */
@@ -160,7 +160,7 @@ public class BasicLinAlg<C extends RingElem<C>> {
 
     /**
      * Scalar product of polynomial with vector of polynomials.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param p a polynomial.
      * @param F a polynomial list.
      * @return the scalar product of p and F.
@@ -183,7 +183,7 @@ public class BasicLinAlg<C extends RingElem<C>> {
 
     /**
      * Scalar product of vector of polynomials with polynomial.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param F a polynomial list.
      * @param p a polynomial.
      * @return the scalar product of F and p.
