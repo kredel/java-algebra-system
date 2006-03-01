@@ -179,4 +179,13 @@
   </delete>
 </target>
 
+<target name="untabify-isdone" depends="vorher" >
+  <fixcrlf srcdir="${src}"
+       tab="remove"
+       tablength="5"
+       javafiles="yes"
+       includes="**/*.java" 
+  />
+</target>
+
 </project>
