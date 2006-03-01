@@ -59,7 +59,7 @@ cl=
 #.EXPORT_ALL_VARIABLES :
 
 JASPATH=/home/kredel/jas
-DEFS=$(JASPATH)/arith:$(JASPATH)/poly:$(JASPATH)/vector:$(JASPATH)/ring:$(JASPATH)/module:$(JASPATH)/util
+DEFS=$(JASPATH)/arith:$(JASPATH)/poly:$(JASPATH)/vector:$(JASPATH)/ring:$(JASPATH)/module:$(JASPATH)/util:$(JASPATH)/application
 DOCCLASSES=$(JUNITPATH):$(LOG4JPATH):$(JOMPPATH):$(TNJPATH)
 DOCOPTS=-package
 #DOCOPTS=-package -version -author
@@ -86,7 +86,7 @@ GETC      = getc.pl
 
 .SUFFIXES :
 .SUFFIXES : .class .java 
-.PRECIOUS : %.java %.class edu/jas/arith/%.class edu/jas/poly/%.class edu/jas/ring/%.class edu/jas/vector/%.class edu/jas/module/%.class edu/jas/structure/%.class edu/jas/util/%.class edu/jas/%.class
+.PRECIOUS : %.java %.class edu/jas/arith/%.class edu/jas/poly/%.class edu/jas/ring/%.class edu/jas/vector/%.class edu/jas/module/%.class edu/jas/structure/%.class edu/jas/util/%.class edu/jas/application/%.class edu/jas/%.class
 
 .PHONY    : clean doc
 
@@ -121,6 +121,9 @@ edu/jas/structure/%.class: %.java
 edu/jas/util/%.class: %.java
 	$(JAVAC) $<
 
+edu/jas/application/%.class: %.java
+	$(JAVAC) $<
+
 
 edu.jas.%: edu/jas/%.class
 	$(JAVA) $@ $(cl)
@@ -146,12 +149,15 @@ edu.jas.structure.%: edu/jas/structure/%.class
 edu.jas.util.%: edu/jas/util/%.class
 	$(JAVA) $@ $(cl)
 
+edu.jas.application.%: edu/jas/application/%.class
+	$(JAVA) $@ $(cl)
 
 
 
-FILES=$(wildcard *.java structure/*.java arith/*.java poly/*.java ring/*.java vector/*.java module/*.java util/*.java)
+
+FILES=$(wildcard *.java structure/*.java arith/*.java poly/*.java ring/*.java application/*.java vector/*.java module/*.java util/*.java)
 LIBS=$(JUNITPATH) $(LOG4JPATH) $(JOMPPATH) $(TNJPATH)
-#CLASSES=$(wildcard *.class structure/*.java arith/*.class poly/*.class ring/*.class vector/*.class module/*.class util/*.class)
+#CLASSES=$(wildcard *.class structure/*.java arith/*.class poly/*.class ring/*.class application/*.class vector/*.class module/*.class util/*.class)
 CLASSES=edu/jas
 PYS=$(wildcard *.py examples/*.py)
 DOCU=jas-log.html index.html problems.html README COPYING COPYING.lgpl sample.jythonrc
@@ -176,7 +182,7 @@ jas-doc.jar: doc/
 dist: jas.jar jas-run.jar jas-doc.jar $(LIBS)
 	tar -cvzf jas-dist.tgz jas.jar jas-run.jar jas-doc.jar $(LIBS)
 
-#links: arith/build.xml module/build.xml vector/build.xml ring/build.xml poly/build.xml structure/build.xml util/build.xml
+#links: arith/build.xml module/build.xml vector/build.xml ring/build.xml application/build.xml poly/build.xml structure/build.xml util/build.xml
 #
 
 jars: jas.jar jas-run.jar jas-doc.jar
