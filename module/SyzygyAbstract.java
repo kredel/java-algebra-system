@@ -130,44 +130,44 @@ public class SyzygyAbstract<C extends RingElem<C>>
      * @return syz(v), a basis for the module of syzygies for v.
      */
     public List<List<GenPolynomial<C>>> 
-           zeroRelations(int modv, GenVector<GenPolynomial<C>> v) {  
+        zeroRelations(int modv, GenVector<GenPolynomial<C>> v) {  
 
         List<List<GenPolynomial<C>>> Z 
-           = new ArrayList<List<GenPolynomial<C>>>();
+            = new ArrayList<List<GenPolynomial<C>>>();
 
         GenVectorModul<GenPolynomial<C>> mfac = v.modul;
         List<GenPolynomial<C>> F = v.val; 
         GenVector<GenPolynomial<C>> S = mfac.getZERO();
         GenPolynomial<C> pi, pj, s, h, zero;
         zero = mfac.coFac.getZERO();
-	for ( int i = 0; i < F.size(); i++ ) {
-	    pi = F.get(i);
+        for ( int i = 0; i < F.size(); i++ ) {
+            pi = F.get(i);
             for ( int j = i+1; j < F.size(); j++ ) {
                 pj = F.get(j);
                 //logger.info("p"+i+", p"+j+" = " + pi + ", " +pj);
 
-		if ( ! red.moduleCriterion( modv, pi, pj ) ) {
-                   continue;
+                if ( ! red.moduleCriterion( modv, pi, pj ) ) {
+                    continue;
                 }
-		// if ( ! red.criterion4( pi, pj ) ) { continue; }
+                // if ( ! red.criterion4( pi, pj ) ) { continue; }
                 List<GenPolynomial<C>> row = S.clone().val;
 
-		s = red.SPolynomial( row, i, pi, j, pj );
-		if ( s.isZERO() ) {
-                   Z.add( row );
-                   continue;
+                s = red.SPolynomial( row, i, pi, j, pj );
+                if ( s.isZERO() ) {
+                    Z.add( row );
+                    continue;
                 }
 
-		h = red.normalform( row, F, s );
-		if ( ! h.isZERO() ) {
-                   throw new RuntimeException("Syzygy no GB");
+                h = red.normalform( row, F, s );
+                if ( ! h.isZERO() ) {
+                    throw new RuntimeException("Syzygy no GB");
                 }
                 if ( logger.isDebugEnabled() ) {
-                   logger.info("row = " + row.size());
+                    logger.info("row = " + row.size());
                 }
                 Z.add( row );
-	    }
-	}
+            }
+        }
         return Z;
     }
 

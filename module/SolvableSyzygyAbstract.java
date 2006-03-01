@@ -97,19 +97,19 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
      * @return leftSyz(F), a basis for the left module of syzygies for F.
      */
     public List<List<GenSolvablePolynomial<C>>>
-           leftZeroRelations(int modv, 
-                             List<GenSolvablePolynomial<C>> F) {  
+        leftZeroRelations(int modv, 
+                          List<GenSolvablePolynomial<C>> F) {  
         List<List<GenSolvablePolynomial<C>>> Z 
-           = new ArrayList<List<GenSolvablePolynomial<C>>>();
+            = new ArrayList<List<GenSolvablePolynomial<C>>>();
         ArrayList<GenSolvablePolynomial<C>> S 
-           = new ArrayList<GenSolvablePolynomial<C>>( F.size() );
+            = new ArrayList<GenSolvablePolynomial<C>>( F.size() );
         for ( int i = 0; i < F.size(); i++ ) {
             S.add( null );
         }
         GenSolvablePolynomial<C> pi, pj, s, h, zero;
         zero = null;
-	for ( int i = 0; i < F.size(); i++ ) {
-	    pi = F.get(i);
+        for ( int i = 0; i < F.size(); i++ ) {
+            pi = F.get(i);
             if ( pi != null && zero == null ) {
                 zero = pi.ring.getZERO();
             }
@@ -117,30 +117,30 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
                 pj = F.get(j);
                 //logger.info("p"+i+", p"+j+" = " + pi + ", " +pj);
 
-		if ( ! red.moduleCriterion( modv, pi, pj ) ) {
-                   continue;
+                if ( ! red.moduleCriterion( modv, pi, pj ) ) {
+                    continue;
                 }
-		// if ( ! red.criterion4( pi, pj ) ) continue;
+                // if ( ! red.criterion4( pi, pj ) ) continue;
                 ArrayList<GenSolvablePolynomial<C>> row 
-                   = (ArrayList<GenSolvablePolynomial<C>>)S.clone();
+                    = (ArrayList<GenSolvablePolynomial<C>>)S.clone();
 
-		s = sred.leftSPolynomial( row, i, pi, j, pj );
+                s = sred.leftSPolynomial( row, i, pi, j, pj );
                 //logger.info("row = " + row);
-		if ( s.isZERO() ) {
-                   Z.add( row );
-                   continue;
+                if ( s.isZERO() ) {
+                    Z.add( row );
+                    continue;
                 }
 
-		h = sred.leftNormalform( row, F, s );
-		if ( ! h.isZERO() ) {
-                   throw new RuntimeException("Syzygy no leftGB");
+                h = sred.leftNormalform( row, F, s );
+                if ( ! h.isZERO() ) {
+                    throw new RuntimeException("Syzygy no leftGB");
                 }
                 if ( logger.isDebugEnabled() ) {
-                   logger.info("row = " + row);
+                    logger.info("row = " + row);
                 }
                 Z.add( row );
-	    }
-	}
+            }
+        }
         // set null to zero
         for ( List<GenSolvablePolynomial<C>> vr : Z ) {
             for ( int j = 0; j < vr.size(); j++ ) {
@@ -433,7 +433,6 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
      */
     public List<List<GenSolvablePolynomial<C>>> 
         leftZeroRelationsArbitrary(int modv, List<GenSolvablePolynomial<C>> F) {  
-
         if ( F == null ) {
             return leftZeroRelations( modv, F );
         }
@@ -449,7 +448,6 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
         if ( ! sgb.isLeftReductionMatrix(exgb) ) {
            logger.error("is reduction matrix ? false");
         }
-
         List<GenSolvablePolynomial<C>> G = exgb.G;
         List<List<GenSolvablePolynomial<C>>> G2F = exgb.G2F;
         List<List<GenSolvablePolynomial<C>>> F2G = exgb.F2G;
