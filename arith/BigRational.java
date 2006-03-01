@@ -42,17 +42,17 @@ public class BigRational implements RingElem<BigRational>,
      * The Constant 0.
      */
     public final static BigRational ZERO 
-                        = new BigRational(BigInteger.ZERO);
+        = new BigRational(BigInteger.ZERO);
     /**
      * The Constant 1.
      */
     public final static BigRational ONE 
-                        = new BigRational(BigInteger.ONE);
+        = new BigRational(BigInteger.ONE);
 
 
     /* from history: 
-    private final static BigRational RNZERO = ZERO;
-    private final static BigRational RNONE = ONE;
+       private final static BigRational RNZERO = ZERO;
+       private final static BigRational RNONE = ONE;
     */
 
     private final static Random random = new Random();
@@ -64,7 +64,7 @@ public class BigRational implements RingElem<BigRational>,
      */
     protected BigRational(BigInteger n, BigInteger d) {
         // assume gcd(n,d) == 1
-	num = n; 
+        num = n; 
         den = d;
     } 
 
@@ -73,7 +73,7 @@ public class BigRational implements RingElem<BigRational>,
      * @param n math.BigInteger.
      */
     public BigRational(BigInteger n) {
-	num = n; 
+        num = n; 
         den = IONE; // be aware of static initialization order
         //den = BigInteger.ONE;
     } 
@@ -87,7 +87,7 @@ public class BigRational implements RingElem<BigRational>,
         BigInteger nu = BigInteger.valueOf(n);
         BigInteger de = BigInteger.valueOf(d);
         BigRational r = RNRED(nu,de);
-	num = r.num; 
+        num = r.num; 
         den = r.den;
     } 
 
@@ -96,14 +96,14 @@ public class BigRational implements RingElem<BigRational>,
      * @param n long.
      */
     public BigRational(long n) {
-	num = BigInteger.valueOf(n); 
+        num = BigInteger.valueOf(n); 
         den = IONE;
     } 
 
     /** Constructor for a BigRational with no arguments.
      */
     public BigRational() {
-	num = IZERO; den = IONE;
+        num = IZERO; den = IONE;
     } 
 
 
@@ -113,28 +113,28 @@ public class BigRational implements RingElem<BigRational>,
      */
     public BigRational(String s) throws NumberFormatException {
         if ( s == null ) {
-           num = IZERO; den = IONE;
-           return;
-	}
+            num = IZERO; den = IONE;
+            return;
+        }
         if ( s.length() == 0) {
-           num = IZERO; den = IONE;
-           return;
-	}
-	BigInteger n;
-	BigInteger d;
-	int i = s.indexOf('/');
-	if ( i < 0 ) {
-	    num = new BigInteger( s );
+            num = IZERO; den = IONE;
+            return;
+        }
+        BigInteger n;
+        BigInteger d;
+        int i = s.indexOf('/');
+        if ( i < 0 ) {
+            num = new BigInteger( s );
             den = BigInteger.ONE;
             return;
-	} else {
-	    n = new BigInteger( s.substring(0,i) );
-	    d = new BigInteger( s.substring( i+1, s.length() ) );
+        } else {
+            n = new BigInteger( s.substring(0,i) );
+            d = new BigInteger( s.substring( i+1, s.length() ) );
             BigRational r = RNRED( n, d );
-	    num = r.num;
-	    den = r.den;
-	    return;
-	}
+            num = r.num;
+            den = r.den;
+            return;
+        }
     } 
 
 
@@ -177,8 +177,8 @@ public class BigRational implements RingElem<BigRational>,
     public String toString() {
         StringBuffer s = new StringBuffer();
         s.append(num);
-	if ( ! den.equals(BigInteger.ONE) ) {
-           s.append("/").append(den);
+        if ( ! den.equals(BigInteger.ONE) ) {
+            s.append("/").append(den);
         }
         return s.toString();
     } 
@@ -204,16 +204,16 @@ public class BigRational implements RingElem<BigRational>,
      * @return BigRational from a. 
      */
     public BigRational fromInteger(BigInteger a) {
-	return new BigRational(a);
+        return new BigRational(a);
     }
 
  
-   /** Get a BigRational element from a math.BigInteger.
+    /** Get a BigRational element from a math.BigInteger.
      * @param a math.BigInteger.
      * @return BigRational from a. 
      */
     public static BigRational valueOf(BigInteger a) {
-	return new BigRational(a);
+        return new BigRational(a);
     }
 
 
@@ -222,7 +222,7 @@ public class BigRational implements RingElem<BigRational>,
      * @return BigRational from a. 
      */
     public BigRational fromInteger(long a) {
-	return new BigRational(a);
+        return new BigRational(a);
     }
 
 
@@ -231,7 +231,7 @@ public class BigRational implements RingElem<BigRational>,
      * @return BigRational from a.
      */
     public static BigRational valueOf(long a) {
-	return new BigRational(a);
+        return new BigRational(a);
     }
 
 
@@ -240,7 +240,7 @@ public class BigRational implements RingElem<BigRational>,
      * @see edu.jas.structure.RingElem#isZERO()
      */
     public boolean isZERO() {
-	return num.equals( BigInteger.ZERO );
+        return num.equals( BigInteger.ZERO );
     }
 
 
@@ -249,7 +249,7 @@ public class BigRational implements RingElem<BigRational>,
      * @see edu.jas.structure.RingElem#isONE()
      */
     public boolean isONE() {
-	return num.equals( den );
+        return num.equals( den );
     }
 
 
@@ -258,7 +258,7 @@ public class BigRational implements RingElem<BigRational>,
      * @see edu.jas.structure.RingElem#isUnit()
      */
     public boolean isUnit() {
-	return ( ! isZERO() );
+        return ( ! isZERO() );
     }
 
 
@@ -266,13 +266,13 @@ public class BigRational implements RingElem<BigRational>,
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
-    public boolean equals( Object b) {
-	if ( ! ( b instanceof BigRational ) ) {
-           return false;
+        public boolean equals( Object b) {
+        if ( ! ( b instanceof BigRational ) ) {
+            return false;
         }
-	BigRational br = (BigRational) b;
-	return    num.equals( br.num ) 
-               && den.equals( br.den );
+        BigRational br = (BigRational) b;
+        return    num.equals( br.num ) 
+            && den.equals( br.den );
     }
 
 
@@ -290,19 +290,19 @@ public class BigRational implements RingElem<BigRational>,
      * @return a/b ~ n/d, gcd(a,b) = 1, b > 0.
      */
     public static BigRational RNRED(BigInteger n, BigInteger d) {
-      BigInteger num;
-      BigInteger den;
-      if ( n.equals(IZERO) ) {
-	  num = n; den = IONE;
-          return new BigRational(num,den);
-      }
-      BigInteger C = n.gcd(d);
-      num = n.divide(C);
-      den = d.divide(C);
-      if ( den.signum() < 0 ) {
-        num = num.negate(); den = den.negate();
-      }
-      return new BigRational(num,den);
+        BigInteger num;
+        BigInteger den;
+        if ( n.equals(IZERO) ) {
+            num = n; den = IONE;
+            return new BigRational(num,den);
+        }
+        BigInteger C = n.gcd(d);
+        num = n.divide(C);
+        den = d.divide(C);
+        if ( den.signum() < 0 ) {
+            num = num.negate(); den = den.negate();
+        }
+        return new BigRational(num,den);
     } 
 
 
@@ -311,11 +311,11 @@ public class BigRational implements RingElem<BigRational>,
      * @see edu.jas.structure.RingElem#abs()
      */
     public BigRational abs() {
-      if ( RNSIGN( this ) >= 0 ) {
-	  return this;
-      } else {
-	  return RNNEG(this);
-      }
+        if ( RNSIGN( this ) >= 0 ) {
+            return this;
+        } else {
+            return RNNEG(this);
+        }
     }
 
 
@@ -324,8 +324,8 @@ public class BigRational implements RingElem<BigRational>,
      * @return the absolute value of R.
      */
     public static BigRational RNABS(BigRational R) {
-      if ( R == null ) return null;
-      return R.abs();
+        if ( R == null ) return null;
+        return R.abs();
     }
 
 
@@ -334,37 +334,37 @@ public class BigRational implements RingElem<BigRational>,
      * @return SIGN(this-S).
      */
     public int compareTo(BigRational S) {
-      BigInteger J2Y;
-      BigInteger J3Y;
-      BigInteger R1;
-      BigInteger R2;
-      BigInteger S1;
-      BigInteger S2;
-      int J1Y;
-      int SL;
-      int TL;
-      int RL;
-      if ( this.equals( ZERO ) ) {
-        return - RNSIGN( S );
-      }
-      if ( S.equals( ZERO ) ) {
-        return RNSIGN( this );
-      }
-      R1 = num; //this.numerator(); 
-      R2 = den; //this.denominator();
-      S1 = S.num;
-      S2 = S.den;
-      RL = R1.signum();
-      SL = S1.signum();
-      J1Y = (RL - SL);
-      TL = (J1Y / 2);
-      if ( TL != 0 ) {
+        BigInteger J2Y;
+        BigInteger J3Y;
+        BigInteger R1;
+        BigInteger R2;
+        BigInteger S1;
+        BigInteger S2;
+        int J1Y;
+        int SL;
+        int TL;
+        int RL;
+        if ( this.equals( ZERO ) ) {
+            return - RNSIGN( S );
+        }
+        if ( S.equals( ZERO ) ) {
+            return RNSIGN( this );
+        }
+        R1 = num; //this.numerator(); 
+        R2 = den; //this.denominator();
+        S1 = S.num;
+        S2 = S.den;
+        RL = R1.signum();
+        SL = S1.signum();
+        J1Y = (RL - SL);
+        TL = (J1Y / 2);
+        if ( TL != 0 ) {
+            return TL;
+        }
+        J3Y = R1.multiply( S2 );
+        J2Y = R2.multiply( S1 );
+        TL = J3Y.compareTo( J2Y );
         return TL;
-      }
-      J3Y = R1.multiply( S2 );
-      J2Y = R2.multiply( S1 );
-      TL = J3Y.compareTo( J2Y );
-      return TL;
     }
 
 
@@ -374,8 +374,8 @@ public class BigRational implements RingElem<BigRational>,
      * @return SIGN(R-S).
      */
     public static int RNCOMP(BigRational R, BigRational S) {
-      if ( R == null ) return Integer.MAX_VALUE;
-      return R.compareTo(S);
+        if ( R == null ) return Integer.MAX_VALUE;
+        return R.compareTo(S);
     }
 
 
@@ -384,8 +384,8 @@ public class BigRational implements RingElem<BigRational>,
      * @return R.denominator().
      */
     public static BigInteger RNDEN(BigRational R) {
-      if ( R == null ) return null;
-      return R.den;
+        if ( R == null ) return null;
+        return R.den;
     }
 
 
@@ -394,11 +394,11 @@ public class BigRational implements RingElem<BigRational>,
      * @return this-S.
      */
     public BigRational subtract(BigRational S) {
-      BigRational J1Y;
-      BigRational T;
-      J1Y = RNNEG( S );
-      T = RNSUM( this, J1Y );
-      return T;
+        BigRational J1Y;
+        BigRational T;
+        J1Y = RNNEG( S );
+        T = RNSUM( this, J1Y );
+        return T;
     }
 
     /** Rational number difference.  
@@ -407,32 +407,32 @@ public class BigRational implements RingElem<BigRational>,
      * @return R-S.
      */
     public static BigRational RNDIF(BigRational R, BigRational S) {
-      if ( R == null ) return S.negate();
-      return R.subtract(S);
+        if ( R == null ) return S.negate();
+        return R.subtract(S);
     }
 
 
     /** Rational number decimal write.  R is a rational number.  n is a
-      non-negative integer.  R is approximated by a decimal fraction D with
-      n decimal digits following the decimal point and D is written in the
-      output stream.  The inaccuracy of the approximation is at most
-      (1/2)*10**-n.  If ABS(D) is greater than ABS(R) then the last digit is
-      followed by a minus sign, if ABS(D) is less than ABS(R) then by a
-      plus sign. 
-     * @param R
-     * @param NL
-     */
+        non-negative integer.  R is approximated by a decimal fraction D with
+        n decimal digits following the decimal point and D is written in the
+        output stream.  The inaccuracy of the approximation is at most
+        (1/2)*10**-n.  If ABS(D) is greater than ABS(R) then the last digit is
+        followed by a minus sign, if ABS(D) is less than ABS(R) then by a
+        plus sign. 
+        * @param R
+        * @param NL
+        */
     public static void RNDWR(BigRational R, int NL) {             
-      BigInteger num = R.num;
-      BigInteger den = R.den;
-      /* BigInteger p = new BigInteger("10");
-         p = p.pow(NL);
-      */
-      double n = num.doubleValue();
-      double d = den.doubleValue();
-      double r = n/d;
-      System.out.print( String.valueOf( r ) );
-      return;
+        BigInteger num = R.num;
+        BigInteger den = R.den;
+        /* BigInteger p = new BigInteger("10");
+           p = p.pow(NL);
+        */
+        double n = num.doubleValue();
+        double d = den.doubleValue();
+        double r = n/d;
+        System.out.print( String.valueOf( r ) );
+        return;
     }
 
  
@@ -441,8 +441,8 @@ public class BigRational implements RingElem<BigRational>,
      * @return A/1.
      */
     public static BigRational RNINT(BigInteger A) {
-      BigRational R = new BigRational( A );
-      return R;
+        BigRational R = new BigRational( A );
+        return R;
     }
 
 
@@ -451,18 +451,18 @@ public class BigRational implements RingElem<BigRational>,
      * @see edu.jas.structure.RingElem#inverse()
      */
     public BigRational inverse() {
-      BigInteger R1 = num; //R.nominator();
-      BigInteger R2 = den; //R.denominator();
-      BigInteger S1;
-      BigInteger S2;
-      if ( R1.signum() >= 0 ) {
-        S1 = R2;
-        S2 = R1;
-      } else {
-        S1 = R2.negate();
-        S2 = R1.negate();
-      }
-      return new BigRational(S1,S2);
+        BigInteger R1 = num; //R.nominator();
+        BigInteger R2 = den; //R.denominator();
+        BigInteger S1;
+        BigInteger S2;
+        if ( R1.signum() >= 0 ) {
+            S1 = R2;
+            S2 = R1;
+        } else {
+            S1 = R2.negate();
+            S2 = R1.negate();
+        }
+        return new BigRational(S1,S2);
     }
 
     /** Rational number inverse.
@@ -470,8 +470,8 @@ public class BigRational implements RingElem<BigRational>,
      * @return 1/R.
      */
     public static BigRational RNINV(BigRational R) {
-      if ( R == null ) return null;
-      return R.inverse();
+        if ( R == null ) return null;
+        return R.inverse();
     }
 
 
@@ -480,8 +480,8 @@ public class BigRational implements RingElem<BigRational>,
      * @see edu.jas.structure.RingElem#negate()
      */
     public BigRational negate() {
-      BigInteger n = num.negate();
-      return new BigRational( n, den );
+        BigInteger n = num.negate();
+        return new BigRational( n, den );
     }
 
 
@@ -490,8 +490,8 @@ public class BigRational implements RingElem<BigRational>,
      * @return -R. 
      */
     public static BigRational RNNEG(BigRational R) {
-      if ( R == null ) return null;
-      return R.negate();
+        if ( R == null ) return null;
+        return R.negate();
     }
 
 
@@ -500,8 +500,8 @@ public class BigRational implements RingElem<BigRational>,
      * @return R.numerator().
      */
     public static BigInteger RNNUM(BigRational R) {
-      if ( R == null ) return null;
-      return R.num;
+        if ( R == null ) return null;
+        return R.num;
     }
 
 
@@ -510,58 +510,58 @@ public class BigRational implements RingElem<BigRational>,
      * @return this*S.
      */
     public BigRational multiply(BigRational S) {
-      BigInteger D1 = null;
-      BigInteger D2 = null;
-      BigInteger R1 = null;
-      BigInteger R2 = null;
-      BigInteger RB1 = null;
-      BigInteger RB2 = null;
-      BigInteger S1 = null;
-      BigInteger S2 = null;
-      BigInteger SB1 = null;
-      BigInteger SB2 = null;
-      BigRational T;
-      BigInteger T1;
-      BigInteger T2;
-      if ( this.equals( ZERO ) || S.equals( ZERO ) ) {
-        T = ZERO;
-        return T;
-      }
-      R1 = num; //this.numerator(); 
-      R2 = den; //this.denominator();
-      S1 = S.num;
-      S2 = S.den;
-      if ( R2.equals( IONE ) && S2.equals( IONE ) ) {
-        T1 = R1.multiply( S1 );
-        T = new BigRational( T1, IONE );
-        return T;
-      }
-      if ( R2.equals( IONE ) ) {
+        BigInteger D1 = null;
+        BigInteger D2 = null;
+        BigInteger R1 = null;
+        BigInteger R2 = null;
+        BigInteger RB1 = null;
+        BigInteger RB2 = null;
+        BigInteger S1 = null;
+        BigInteger S2 = null;
+        BigInteger SB1 = null;
+        BigInteger SB2 = null;
+        BigRational T;
+        BigInteger T1;
+        BigInteger T2;
+        if ( this.equals( ZERO ) || S.equals( ZERO ) ) {
+            T = ZERO;
+            return T;
+        }
+        R1 = num; //this.numerator(); 
+        R2 = den; //this.denominator();
+        S1 = S.num;
+        S2 = S.den;
+        if ( R2.equals( IONE ) && S2.equals( IONE ) ) {
+            T1 = R1.multiply( S1 );
+            T = new BigRational( T1, IONE );
+            return T;
+        }
+        if ( R2.equals( IONE ) ) {
+            D1 = R1.gcd( S2 ); 
+            RB1 = R1.divide( D1 );
+            SB2 = S2.divide( D1 );
+            T1 = RB1.multiply( S1 );
+            T = new BigRational( T1, SB2 );
+            return T;
+        }
+        if ( S2.equals( IONE ) ) {
+            D2 = S1.gcd( R2 );
+            SB1 = S1.divide( D2 );
+            RB2 = R2.divide( D2 );
+            T1 = SB1.multiply( R1 );
+            T = new BigRational( T1, RB2 );
+            return T;
+        }
         D1 = R1.gcd( S2 ); 
         RB1 = R1.divide( D1 );
         SB2 = S2.divide( D1 );
-        T1 = RB1.multiply( S1 );
-        T = new BigRational( T1, SB2 );
-        return T;
-      }
-      if ( S2.equals( IONE ) ) {
         D2 = S1.gcd( R2 );
         SB1 = S1.divide( D2 );
         RB2 = R2.divide( D2 );
-        T1 = SB1.multiply( R1 );
-        T = new BigRational( T1, RB2 );
+        T1 = RB1.multiply( SB1 );
+        T2 = RB2.multiply( SB2 );
+        T = new BigRational( T1, T2 );
         return T;
-      }
-      D1 = R1.gcd( S2 ); 
-      RB1 = R1.divide( D1 );
-      SB2 = S2.divide( D1 );
-      D2 = S1.gcd( R2 );
-      SB1 = S1.divide( D2 );
-      RB2 = R2.divide( D2 );
-      T1 = RB1.multiply( SB1 );
-      T2 = RB2.multiply( SB2 );
-      T = new BigRational( T1, T2 );
-      return T;
     }
 
     /** Rational number product.
@@ -570,8 +570,8 @@ public class BigRational implements RingElem<BigRational>,
      * @return R*S.
      */
     public static BigRational RNPROD(BigRational R, BigRational S) {
-      if ( R == null ) return S;
-      return R.multiply(S);
+        if ( R == null ) return S;
+        return R.multiply(S);
     }
 
 
@@ -580,9 +580,9 @@ public class BigRational implements RingElem<BigRational>,
      * @return this/S.
      */
     public BigRational divide(BigRational S) {
-      BigRational T;
-      T = RNPROD( this, S.inverse() );
-      return T;
+        BigRational T;
+        T = RNPROD( this, S.inverse() );
+        return T;
     }
 
 
@@ -592,8 +592,8 @@ public class BigRational implements RingElem<BigRational>,
      * @return R/S.
      */
     public static BigRational RNQ(BigRational R, BigRational S) {
-      if ( R == null ) return S.inverse();
-      return R.divide( S );
+        if ( R == null ) return S.inverse();
+        return R.divide( S );
     }
 
 
@@ -602,10 +602,10 @@ public class BigRational implements RingElem<BigRational>,
      * @return this-(this/S)*S
      */
     public BigRational remainder(BigRational S) {
-      if ( S.isZERO() ) {
-          throw new RuntimeException("division by zero");
-      }
-      return ZERO;
+        if ( S.isZERO() ) {
+            throw new RuntimeException("division by zero");
+        }
+        return ZERO;
     }
 
 
@@ -630,15 +630,15 @@ public class BigRational implements RingElem<BigRational>,
      * @return a random BigRational.
      */
     public BigRational random(int n, Random rnd) {
-      BigInteger A;
-      BigInteger B;
-      A = new BigInteger( n, rnd ); // always positive
-      if ( rnd.nextBoolean() ) {
-          A = A.negate();
-      }
-      B = new BigInteger( n, rnd ); // always positive
-      B = B.add( IONE );
-      return RNRED( A, B );
+        BigInteger A;
+        BigInteger B;
+        A = new BigInteger( n, rnd ); // always positive
+        if ( rnd.nextBoolean() ) {
+            A = A.negate();
+        }
+        B = new BigInteger( n, rnd ); // always positive
+        B = B.add( IONE );
+        return RNRED( A, B );
     }
 
 
@@ -658,13 +658,13 @@ public class BigRational implements RingElem<BigRational>,
      * @see edu.jas.structure.RingElem#signum()
      */
     public int signum() {
-      int SL;
-      if ( this.equals(ZERO) ) {
-        SL = 0;
-      } else {
-        SL = num.signum();
-      }
-      return SL;
+        int SL;
+        if ( this.equals(ZERO) ) {
+            SL = 0;
+        } else {
+            SL = num.signum();
+        }
+        return SL;
     }
 
     /** Rational number sign.  
@@ -672,8 +672,8 @@ public class BigRational implements RingElem<BigRational>,
      * @return R.signum().
      */
     public static int RNSIGN(BigRational R) {
-      if ( R == null ) return Integer.MAX_VALUE;
-      return R.signum();
+        if ( R == null ) return Integer.MAX_VALUE;
+        return R.signum();
     }
 
 
@@ -682,68 +682,68 @@ public class BigRational implements RingElem<BigRational>,
      * @return this+S.
      */
     public BigRational add(BigRational S) {
-      BigInteger D = null;
-      BigInteger E;
-      BigInteger J1Y;
-      BigInteger J2Y;
-      BigInteger R1 = null;
-      BigInteger R2 = null;
-      BigInteger RB2 = null;
-      BigInteger S1 = null;
-      BigInteger S2 = null;
-      BigInteger SB2 = null;
-      BigRational T;
-      BigInteger T1;
-      BigInteger T2;
-      if ( this.equals( ZERO ) ) {
-        T = S;
-        return T;
-      }
-      if ( S.equals( ZERO ) ) {
-        T = this;
-        return T;
-      }
-      R1 = num; //this.numerator(); 
-      R2 = den; //this.denominator();
-      S1 = S.num;
-      S2 = S.den;
-      if ( R2.equals( IONE ) && S2.equals( IONE ) ) {
-        T1 = R1.add( S1 );
-        T = new BigRational( T1, IONE );
-        return T;
-      }
-      if ( R2.equals( IONE ) ) {
-        T1 = R1.multiply( S2 );
-        T1 = T1.add( S1 );
-        T = new BigRational( T1, S2 );
-        return T;
-      }
-      if ( S2.equals( IONE ) ) {
-        T1 = R2.multiply( S1 );
-        T1 = T1.add( R1 );
-        T = new BigRational( T1, R2 );
-        return T;
-      }
-      D = R2.gcd( S2 );
-      RB2 = R2.divide( D );
-      SB2 = S2.divide( D );
-      J1Y = R1.multiply( SB2 );
-      J2Y = RB2.multiply( S1 );
-      T1 = J1Y.add( J2Y );
-      if ( T1.equals( IZERO ) ) {
-        T = ZERO;
-        return T;
-      }
-      if ( ! D.equals( IONE ) ) {
-        E = T1.gcd( D );
-        if ( ! E.equals( IONE ) ) {
-          T1 = T1.divide( E );
-          R2 = R2.divide( E );
+        BigInteger D = null;
+        BigInteger E;
+        BigInteger J1Y;
+        BigInteger J2Y;
+        BigInteger R1 = null;
+        BigInteger R2 = null;
+        BigInteger RB2 = null;
+        BigInteger S1 = null;
+        BigInteger S2 = null;
+        BigInteger SB2 = null;
+        BigRational T;
+        BigInteger T1;
+        BigInteger T2;
+        if ( this.equals( ZERO ) ) {
+            T = S;
+            return T;
         }
-      }
-      T2 = R2.multiply( SB2 );
-      T = new BigRational( T1, T2 );
-      return T;
+        if ( S.equals( ZERO ) ) {
+            T = this;
+            return T;
+        }
+        R1 = num; //this.numerator(); 
+        R2 = den; //this.denominator();
+        S1 = S.num;
+        S2 = S.den;
+        if ( R2.equals( IONE ) && S2.equals( IONE ) ) {
+            T1 = R1.add( S1 );
+            T = new BigRational( T1, IONE );
+            return T;
+        }
+        if ( R2.equals( IONE ) ) {
+            T1 = R1.multiply( S2 );
+            T1 = T1.add( S1 );
+            T = new BigRational( T1, S2 );
+            return T;
+        }
+        if ( S2.equals( IONE ) ) {
+            T1 = R2.multiply( S1 );
+            T1 = T1.add( R1 );
+            T = new BigRational( T1, R2 );
+            return T;
+        }
+        D = R2.gcd( S2 );
+        RB2 = R2.divide( D );
+        SB2 = S2.divide( D );
+        J1Y = R1.multiply( SB2 );
+        J2Y = RB2.multiply( S1 );
+        T1 = J1Y.add( J2Y );
+        if ( T1.equals( IZERO ) ) {
+            T = ZERO;
+            return T;
+        }
+        if ( ! D.equals( IONE ) ) {
+            E = T1.gcd( D );
+            if ( ! E.equals( IONE ) ) {
+                T1 = T1.divide( E );
+                R2 = R2.divide( E );
+            }
+        }
+        T2 = R2.multiply( SB2 );
+        T = new BigRational( T1, T2 );
+        return T;
     }
 
 
@@ -753,8 +753,8 @@ public class BigRational implements RingElem<BigRational>,
      * @return R+S.
      */
     public static BigRational RNSUM(BigRational R, BigRational S) {
-      if ( R == null ) return S;
-      return R.add( S );
+        if ( R == null ) return S;
+        return R.add( S );
     }
 
 

@@ -24,11 +24,11 @@ public class BigQuaternion implements RingElem<BigQuaternion>,
                                       RingFactory<BigQuaternion> {
 
     /** Real part of the data structure. 
-      */
+     */
     protected final BigRational re;  // real part
 
     /** Imaginary part i of the data structure. 
-      */
+     */
     protected final BigRational im;  // i imaginary part
 
     /** Imaginary part j of the data structure. 
@@ -111,54 +111,54 @@ public class BigQuaternion implements RingElem<BigQuaternion>,
      */
     public BigQuaternion(String s) throws NumberFormatException {
         if ( s == null || s.length() == 0) {
-           re = BigRational.ZERO;
-           im = BigRational.ZERO;
-           jm = BigRational.ZERO;
-           km = BigRational.ZERO;
-           return;
+            re = BigRational.ZERO;
+            im = BigRational.ZERO;
+            jm = BigRational.ZERO;
+            km = BigRational.ZERO;
+            return;
         } 
         s = s.trim();
-	int r = s.indexOf("i") + s.indexOf("j") + s.indexOf("k");
-	if ( r == -3 ) {
-           re = new BigRational(s);
-           im = BigRational.ZERO;
-           jm = BigRational.ZERO;
-           km = BigRational.ZERO;
-           return;
-	}
+        int r = s.indexOf("i") + s.indexOf("j") + s.indexOf("k");
+        if ( r == -3 ) {
+            re = new BigRational(s);
+            im = BigRational.ZERO;
+            jm = BigRational.ZERO;
+            km = BigRational.ZERO;
+            return;
+        }
 
         int i = s.indexOf("i");
         String sr = "";
         if ( i > 0 ) {
-           sr = s.substring(0,i);
+            sr = s.substring(0,i);
         } else if ( i < 0 ) {
-           throw new NumberFormatException("BigQuaternion missing i");
+            throw new NumberFormatException("BigQuaternion missing i");
         }
         String si = "";
         if ( i < s.length() ) {
-           s = s.substring(i+1,s.length());
+            s = s.substring(i+1,s.length());
         }
         int j = s.indexOf("j");
         if ( j > 0 ) {
-           si = s.substring(0,j);
+            si = s.substring(0,j);
         } else if ( j < 0 ) {
-           throw new NumberFormatException("BigQuaternion missing j");
+            throw new NumberFormatException("BigQuaternion missing j");
         }
         String sj = "";
         if ( j < s.length() ) {
-           s = s.substring(j+1,s.length());
+            s = s.substring(j+1,s.length());
         }
         int k = s.indexOf("k");
         if ( k > 0 ) {
-           sj = s.substring(0,k);
+            sj = s.substring(0,k);
         } else if ( k < 0 ) {
-           throw new NumberFormatException("BigQuaternion missing k");
+            throw new NumberFormatException("BigQuaternion missing k");
         }
         String sk = "";
         if ( k < s.length() ) {
-           s = s.substring(k+1,s.length());
+            s = s.substring(k+1,s.length());
         }
-	sk = s;
+        sk = s;
 
         re = new BigRational( sr.trim() );
         im = new BigRational( si.trim() );
@@ -221,36 +221,36 @@ public class BigQuaternion implements RingElem<BigQuaternion>,
     /** The constant 0. 
      */
     public static final BigQuaternion ZERO = 
-           new BigQuaternion();
+        new BigQuaternion();
 
 
     /** The constant 1.
      */
     public static final BigQuaternion ONE = 
-           new BigQuaternion(BigRational.ONE);
+        new BigQuaternion(BigRational.ONE);
 
 
     /** The constant i. 
      */
     public static final BigQuaternion I = 
-           new BigQuaternion(BigRational.ZERO, BigRational.ONE);
+        new BigQuaternion(BigRational.ZERO, BigRational.ONE);
 
 
     /** The constant j. 
      */
     public static final BigQuaternion J = 
-           new BigQuaternion(BigRational.ZERO, 
-                             BigRational.ZERO,
-                             BigRational.ONE);
+        new BigQuaternion(BigRational.ZERO, 
+                          BigRational.ZERO,
+                          BigRational.ONE);
 
 
     /** The constant k. 
      */
     public static final BigQuaternion K = 
-           new BigQuaternion(BigRational.ZERO,
-                             BigRational.ZERO,
-                             BigRational.ZERO,
-                             BigRational.ONE);
+        new BigQuaternion(BigRational.ZERO,
+                          BigRational.ZERO,
+                          BigRational.ZERO,
+                          BigRational.ONE);
 
 
     /** Get the real part. 
@@ -297,13 +297,13 @@ public class BigQuaternion implements RingElem<BigQuaternion>,
     }
 
 
-   /** Is Quaternion number zero.
+    /** Is Quaternion number zero.
      * @param A BigQuaternion.
      * @return true if A is 0, else false. 
      */
     public static boolean isQZERO(BigQuaternion A) {
-      if ( A == null ) return false;
-      return A.isZERO();
+        if ( A == null ) return false;
+        return A.isZERO();
     }
 
 
@@ -313,9 +313,9 @@ public class BigQuaternion implements RingElem<BigQuaternion>,
      */
     public boolean isZERO() {
         return    re.equals( BigRational.ZERO )
-               && im.equals( BigRational.ZERO )
-               && jm.equals( BigRational.ZERO )
-               && km.equals( BigRational.ZERO );
+            && im.equals( BigRational.ZERO )
+            && jm.equals( BigRational.ZERO )
+            && km.equals( BigRational.ZERO );
     }
 
 
@@ -324,8 +324,8 @@ public class BigQuaternion implements RingElem<BigQuaternion>,
      * @return true if A is 1, else false.
      */
     public static boolean isQONE(BigQuaternion A) {
-      if ( A == null ) return false;
-      return A.isONE();
+        if ( A == null ) return false;
+        return A.isONE();
     }
 
 
@@ -357,7 +357,7 @@ public class BigQuaternion implements RingElem<BigQuaternion>,
      * @see edu.jas.structure.RingElem#isUnit()
      */
     public boolean isUnit() {
-	return ( ! isZERO() );
+        return ( ! isZERO() );
     }
 
 
@@ -379,9 +379,9 @@ public class BigQuaternion implements RingElem<BigQuaternion>,
      */
     public int hashCode() {
         return 37 * ( 37 * ( 37 * km.hashCode() 
-                                + jm.hashCode() ) 
-                         + im.hashCode() ) 
-                  + re.hashCode();
+                             + jm.hashCode() ) 
+                      + im.hashCode() ) 
+            + re.hashCode();
     }
 
 
@@ -392,11 +392,11 @@ public class BigQuaternion implements RingElem<BigQuaternion>,
      * @return 0 if b is equal to this, 1 else.
      */
     public int compareTo(BigQuaternion b) {
-      if ( equals(b) ) { 
-          return 0;
-      } else {
-          return 1;
-      }
+        if ( equals(b) ) { 
+            return 0;
+        } else {
+            return 1;
+        }
     }
 
 
@@ -409,19 +409,19 @@ public class BigQuaternion implements RingElem<BigQuaternion>,
      * @see edu.jas.structure.RingElem#signum()
      */
     public int signum() {
-      int s = re.signum();
-      if ( s != 0 ) {
-          return s;
-      }
-      s = im.signum();
-      if ( s != 0 ) {
-          return s;
-      }
-      s = jm.signum();
-      if ( s != 0 ) {
-          return s;
-      }
-      return km.signum();
+        int s = re.signum();
+        if ( s != 0 ) {
+            return s;
+        }
+        s = im.signum();
+        if ( s != 0 ) {
+            return s;
+        }
+        s = jm.signum();
+        if ( s != 0 ) {
+            return s;
+        }
+        return km.signum();
     }
 
 
@@ -446,8 +446,8 @@ public class BigQuaternion implements RingElem<BigQuaternion>,
      * @return A+B.
      */
     public static BigQuaternion QSUM(BigQuaternion A, BigQuaternion B) {
-      if ( A == null ) return null;
-      return A.add(B);
+        if ( A == null ) return null;
+        return A.add(B);
     }
 
 
@@ -457,8 +457,8 @@ public class BigQuaternion implements RingElem<BigQuaternion>,
      * @return A-B.
      */
     public static BigQuaternion QDIF(BigQuaternion A, BigQuaternion B) {
-      if ( A == null ) return null;
-      return A.subtract(B);
+        if ( A == null ) return null;
+        return A.subtract(B);
     }
 
 
@@ -479,8 +479,8 @@ public class BigQuaternion implements RingElem<BigQuaternion>,
      * @return -A.
      */
     public static BigQuaternion QNEG(BigQuaternion A) {
-      if ( A == null ) return null;
-      return A.negate();
+        if ( A == null ) return null;
+        return A.negate();
     }
 
 
@@ -501,8 +501,8 @@ public class BigQuaternion implements RingElem<BigQuaternion>,
      * @return the quaternion conjugate of A.
      */
     public static BigQuaternion QCON(BigQuaternion A) {
-      if ( A == null ) return null;
-      return A.conjugate();
+        if ( A == null ) return null;
+        return A.conjugate();
     }
 
 
@@ -542,8 +542,8 @@ public class BigQuaternion implements RingElem<BigQuaternion>,
      * Note: The square root is not jet implemented.
      */
     public static BigRational QABS(BigQuaternion A) {
-      if ( A == null ) return null;
-      return A.abs().re;
+        if ( A == null ) return null;
+        return A.abs().re;
     }
 
 
@@ -553,8 +553,8 @@ public class BigQuaternion implements RingElem<BigQuaternion>,
      * @return A*B.
      */
     public static BigQuaternion QPROD(BigQuaternion A, BigQuaternion B) {
-      if ( A == null ) return null;
-      return A.multiply(B);
+        if ( A == null ) return null;
+        return A.multiply(B);
     }
 
 
@@ -566,24 +566,24 @@ public class BigQuaternion implements RingElem<BigQuaternion>,
      * @return this*B.
      */
     public BigQuaternion multiply(BigQuaternion B) {
-	BigRational r = re.multiply(B.re);
-	r = r.subtract(im.multiply(B.im));
-	r = r.subtract(jm.multiply(B.jm));
-	r = r.subtract(km.multiply(B.km));
-	BigRational i = re.multiply(B.im);
-	i = i.add( im.multiply(B.re) );
-	i = i.add( jm.multiply(B.km) );
-	i = i.subtract( km.multiply(B.jm) );
+        BigRational r = re.multiply(B.re);
+        r = r.subtract(im.multiply(B.im));
+        r = r.subtract(jm.multiply(B.jm));
+        r = r.subtract(km.multiply(B.km));
+        BigRational i = re.multiply(B.im);
+        i = i.add( im.multiply(B.re) );
+        i = i.add( jm.multiply(B.km) );
+        i = i.subtract( km.multiply(B.jm) );
 
-	BigRational j = re.multiply(B.jm);
-	j = j.subtract( im.multiply(B.km) );
-	j = j.add( jm.multiply(B.re) );
-	j = j.add( km.multiply(B.im) );
+        BigRational j = re.multiply(B.jm);
+        j = j.subtract( im.multiply(B.km) );
+        j = j.add( jm.multiply(B.re) );
+        j = j.add( km.multiply(B.im) );
 
-	BigRational k = re.multiply(B.km);
-	k = k.add( im.multiply(B.jm) );
-	k = k.subtract( jm.multiply(B.im) );
-	k = k.add( km.multiply(B.re) );
+        BigRational k = re.multiply(B.km);
+        k = k.add( im.multiply(B.jm) );
+        k = k.subtract( jm.multiply(B.im) );
+        k = k.add( km.multiply(B.re) );
 
         return new BigQuaternion( r, i, j, k );
     }
@@ -594,8 +594,8 @@ public class BigQuaternion implements RingElem<BigQuaternion>,
      * @return S with S * A = 1.
      */
     public static BigQuaternion QINV(BigQuaternion A) {
-      if ( A == null ) return null;
-      return A.inverse();
+        if ( A == null ) return null;
+        return A.inverse();
     }
 
 
@@ -610,7 +610,7 @@ public class BigQuaternion implements RingElem<BigQuaternion>,
         a = a.add(km.multiply(km));
         return new BigQuaternion( re.divide(a), 
                                   im.divide(a).negate(), 
-				  jm.divide(a).negate(), 
+                                  jm.divide(a).negate(), 
                                   km.divide(a).negate() ); 
     }
 
@@ -620,10 +620,10 @@ public class BigQuaternion implements RingElem<BigQuaternion>,
      * @return 0.
      */
     public BigQuaternion remainder(BigQuaternion S) {
-      if ( S.isZERO() ) {
-          throw new RuntimeException("division by zero");
-      }
-      return ZERO;
+        if ( S.isZERO() ) {
+            throw new RuntimeException("division by zero");
+        }
+        return ZERO;
     }
 
 
@@ -633,8 +633,8 @@ public class BigQuaternion implements RingElem<BigQuaternion>,
      * @return R/S.
      */
     public static BigQuaternion QQ(BigQuaternion A, BigQuaternion B) {
-      if ( A == null ) return null;
-      return A.divide(B);
+        if ( A == null ) return null;
+        return A.divide(B);
     }
 
 
@@ -643,7 +643,7 @@ public class BigQuaternion implements RingElem<BigQuaternion>,
      * @return this/b.
      */
     public BigQuaternion divide (BigQuaternion b) {
-      return this.multiply( b.inverse() );
+        return this.multiply( b.inverse() );
     }
 
 
@@ -655,7 +655,7 @@ public class BigQuaternion implements RingElem<BigQuaternion>,
      * @return R, a random BigQuaternion.
      */
     public BigQuaternion random(int n) {
-      return random( n, random );
+        return random( n, random );
     }
 
 
@@ -668,11 +668,11 @@ public class BigQuaternion implements RingElem<BigQuaternion>,
      * @return R, a random BigQuaternion.
      */
     public BigQuaternion random(int n, Random rnd) {
-      BigRational r = BigRational.ONE.random( n, rnd );
-      BigRational i = BigRational.ONE.random( n, rnd );
-      BigRational j = BigRational.ONE.random( n, rnd );
-      BigRational k = BigRational.ONE.random( n, rnd );
-      return new BigQuaternion( r, i, j, k );
+        BigRational r = BigRational.ONE.random( n, rnd );
+        BigRational i = BigRational.ONE.random( n, rnd );
+        BigRational j = BigRational.ONE.random( n, rnd );
+        BigRational k = BigRational.ONE.random( n, rnd );
+        return new BigQuaternion( r, i, j, k );
     }
 
 
@@ -684,7 +684,7 @@ public class BigQuaternion implements RingElem<BigQuaternion>,
      * @return R, a random BigQuaternion.
      */
     public static BigQuaternion QRAND(int n) {
-      return ONE.random( n, random);
+        return ONE.random( n, random);
     }
 
 

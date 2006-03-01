@@ -46,7 +46,7 @@ public class BigInteger implements RingElem<BigInteger>,
      * @param a java.math.BigInteger.
      */
     public BigInteger(java.math.BigInteger a) {
-	val = a;
+        val = a;
     }
 
 
@@ -55,7 +55,7 @@ public class BigInteger implements RingElem<BigInteger>,
      * @param a long.
      */
     public BigInteger(long a) {
-	val = new java.math.BigInteger( String.valueOf(a) );
+        val = new java.math.BigInteger( String.valueOf(a) );
     }
 
 
@@ -64,7 +64,7 @@ public class BigInteger implements RingElem<BigInteger>,
      * @param s String.
      */
     public BigInteger(String s) {
-	val = new java.math.BigInteger( s );
+        val = new java.math.BigInteger( s );
     }
 
 
@@ -72,7 +72,7 @@ public class BigInteger implements RingElem<BigInteger>,
      * Constructor for BigInteger without parameters.
      */
     public BigInteger() {
-	val = java.math.BigInteger.ZERO;
+        val = java.math.BigInteger.ZERO;
     }
 
 
@@ -80,7 +80,7 @@ public class BigInteger implements RingElem<BigInteger>,
      * @return val java.math.BigInteger.
      */
     public java.math.BigInteger getVal() {
-      return val;
+        return val;
     }
 
 
@@ -122,7 +122,7 @@ public class BigInteger implements RingElem<BigInteger>,
      * @return a as BigInteger.
      */
     public BigInteger fromInteger(java.math.BigInteger a) {
-	return new BigInteger(a);
+        return new BigInteger(a);
     }
 
 
@@ -131,7 +131,7 @@ public class BigInteger implements RingElem<BigInteger>,
      * @return a as BigInteger.
      */
     public static BigInteger valueOf(java.math.BigInteger a) {
-	return new BigInteger(a);
+        return new BigInteger(a);
     }
 
 
@@ -140,7 +140,7 @@ public class BigInteger implements RingElem<BigInteger>,
      * @return a as BigInteger.
      */
     public BigInteger fromInteger(long a) {
-	return new BigInteger(a);
+        return new BigInteger(a);
     }
 
 
@@ -149,7 +149,7 @@ public class BigInteger implements RingElem<BigInteger>,
      * @return a as BigInteger.
      */
     public static BigInteger valueOf(long a) {
-	return new BigInteger(a);
+        return new BigInteger(a);
     }
 
 
@@ -158,7 +158,7 @@ public class BigInteger implements RingElem<BigInteger>,
      * @see edu.jas.structure.RingElem#isZERO()
      */
     public boolean isZERO() {
-	return val.equals( java.math.BigInteger.ZERO );
+        return val.equals( java.math.BigInteger.ZERO );
     }
 
 
@@ -166,7 +166,7 @@ public class BigInteger implements RingElem<BigInteger>,
      * @see edu.jas.structure.RingElem#isONE()
      */
     public boolean isONE() {
-	return val.equals( java.math.BigInteger.ONE );
+        return val.equals( java.math.BigInteger.ONE );
     }
 
 
@@ -174,38 +174,36 @@ public class BigInteger implements RingElem<BigInteger>,
      * @see edu.jas.structure.RingElem#isUnit()
      */
     public boolean isUnit() {
-	return ( this.isONE() || this.negate().isONE() );
+        return ( this.isONE() || this.negate().isONE() );
     }
 
     /** Get the String representation.
      * @see java.lang.Object#toString()
      */
     public String toString() {
-	return val.toString();
+        return val.toString();
     }
 
 
     /** Compare to BigInteger b.
      * @param b BigInteger.
      * @return 0 if this == b, 
-               1 if this > b,
-              -1 if this < b.
-     */
+     1 if this > b,
+     -1 if this < b.
+    */
     public int compareTo(BigInteger b) {
-	return val.compareTo( b.val );
+        return val.compareTo( b.val );
     }
 
 
     /** Integer comparison.
      * @param A BigInteger.
      * @param B BigInteger.
-     * @return 0 if A == B, 
-               1 if A > B,
-              -1 if A < B.
+     * @return 0 if A == B, 1 if A > B, -1 if A < B.
      */
     public static int ICOMP(BigInteger A, BigInteger B) {
-      if ( A == null ) return -B.signum();
-      return A.compareTo(B);
+        if ( A == null ) return -B.signum();
+        return A.compareTo(B);
     }
 
 
@@ -213,11 +211,11 @@ public class BigInteger implements RingElem<BigInteger>,
      * @see java.lang.Object#equals(java.lang.Object)
      */
     public boolean equals(Object b) {
-	if ( ! ( b instanceof BigInteger ) ) {
-           return false;
+        if ( ! ( b instanceof BigInteger ) ) {
+            return false;
         }
         BigInteger bi = (BigInteger)b;
-	return val.equals( bi.val );
+        return val.equals( bi.val );
     }
 
 
@@ -233,7 +231,7 @@ public class BigInteger implements RingElem<BigInteger>,
      * @see edu.jas.structure.RingElem#abs()
      */
     public BigInteger abs() {
-      return new BigInteger( val.abs() );
+        return new BigInteger( val.abs() );
     }
 
 
@@ -242,8 +240,8 @@ public class BigInteger implements RingElem<BigInteger>,
      * @return abs(A).
      */
     public static BigInteger IABS(BigInteger A) {
-      if ( A == null ) return null;
-      return A.abs();
+        if ( A == null ) return null;
+        return A.abs();
     }
 
 
@@ -251,7 +249,7 @@ public class BigInteger implements RingElem<BigInteger>,
      * @see edu.jas.structure.RingElem#negate()
      */
     public BigInteger negate() {
-      return new BigInteger( val.negate() );
+        return new BigInteger( val.negate() );
     }
 
 
@@ -260,8 +258,8 @@ public class BigInteger implements RingElem<BigInteger>,
      * @return -A.
      */
     public static BigInteger INEG(BigInteger A) {
-      if ( A == null ) return null;
-      return A.negate();
+        if ( A == null ) return null;
+        return A.negate();
     }
 
 
@@ -269,7 +267,7 @@ public class BigInteger implements RingElem<BigInteger>,
      * @see edu.jas.structure.RingElem#signum()
      */
     public int signum() {
-      return val.signum();
+        return val.signum();
     }
 
 
@@ -278,8 +276,8 @@ public class BigInteger implements RingElem<BigInteger>,
      * @return signum(A).
      */
     public static int ISIGN(BigInteger A) {
-      if ( A == null ) return 0;
-      return A.signum();
+        if ( A == null ) return 0;
+        return A.signum();
     }
 
 
@@ -288,7 +286,7 @@ public class BigInteger implements RingElem<BigInteger>,
      * @return this-S.
      */
     public BigInteger subtract(BigInteger S) {
-      return new BigInteger( val.subtract( S.val ) );
+        return new BigInteger( val.subtract( S.val ) );
     }
 
     /** BigInteger subtract.
@@ -297,8 +295,8 @@ public class BigInteger implements RingElem<BigInteger>,
      * @return A-B.
      */
     public static BigInteger IDIF(BigInteger A, BigInteger B) {
-      if ( A == null ) return B.negate();
-      return A.subtract(B);
+        if ( A == null ) return B.negate();
+        return A.subtract(B);
     }
 
 
@@ -307,7 +305,7 @@ public class BigInteger implements RingElem<BigInteger>,
      * @return this/S.
      */
     public BigInteger divide(BigInteger S) {
-      return new BigInteger( val.divide( S.val ) );
+        return new BigInteger( val.divide( S.val ) );
     }
 
     /** BigInteger divide.
@@ -316,20 +314,20 @@ public class BigInteger implements RingElem<BigInteger>,
      * @return A/B.
      */
     public static BigInteger IQ(BigInteger A, BigInteger B) {
-      if ( A == null ) return null;
-      return A.divide(B);
+        if ( A == null ) return null;
+        return A.divide(B);
     }
 
 
     /** Integer inverse.  R is a non-zero integer.  
         S=1/R if defined else 0. 
-     * @see edu.jas.structure.RingElem#inverse()
-     */
+        * @see edu.jas.structure.RingElem#inverse()
+        */
     public BigInteger inverse() {
-	if ( this.isONE() || this.negate().isONE() ) {
-           return this;
-	}
-	return ZERO;
+        if ( this.isONE() || this.negate().isONE() ) {
+            return this;
+        }
+        return ZERO;
     }
 
 
@@ -338,7 +336,7 @@ public class BigInteger implements RingElem<BigInteger>,
      * @return this - (this/S)*S.
      */
     public BigInteger remainder(BigInteger S) {
-      return new BigInteger( val.remainder( S.val ) );
+        return new BigInteger( val.remainder( S.val ) );
     }
 
 
@@ -348,8 +346,8 @@ public class BigInteger implements RingElem<BigInteger>,
      * @return A - (A/B)*B.
      */
     public static BigInteger IREM(BigInteger A, BigInteger B) {
-      if ( A == null ) return null;
-      return A.remainder(B);
+        if ( A == null ) return null;
+        return A.remainder(B);
     }
 
 
@@ -358,24 +356,24 @@ public class BigInteger implements RingElem<BigInteger>,
      * @return BigInteger[] { q, r } with q = this/S and r = rem(this,S).
      */
     public BigInteger[] divideAndRemainder(BigInteger S) {
-      BigInteger[] qr = new BigInteger[2];
-      java.math.BigInteger[] C = val.divideAndRemainder( S.val );
-      qr[0] = new BigInteger( C[0] );
-      qr[1] = new BigInteger( C[1] );
-      return qr;
+        BigInteger[] qr = new BigInteger[2];
+        java.math.BigInteger[] C = val.divideAndRemainder( S.val );
+        qr[0] = new BigInteger( C[0] );
+        qr[1] = new BigInteger( C[1] );
+        return qr;
     }
 
 
     /**
        Integer quotient and remainder.  A and B are integers, B ne 0.  Q is
        the quotient, integral part of A/B, and R is the remainder A-B*Q.
-     * @param A BigInteger.
-     * @param B BigInteger.
-     * @return BigInteger[] { q, r } with q = A/B and r = rem(A,B).
-     */
+       * @param A BigInteger.
+       * @param B BigInteger.
+       * @return BigInteger[] { q, r } with q = A/B and r = rem(A,B).
+       */
     public static BigInteger[] IQR(BigInteger A, BigInteger B) {
-      if ( A == null ) return null;
-      return A.divideAndRemainder(B);
+        if ( A == null ) return null;
+        return A.divideAndRemainder(B);
     }
 
 
@@ -384,7 +382,7 @@ public class BigInteger implements RingElem<BigInteger>,
      * @return gcd(this,S).
      */
     public BigInteger gcd(BigInteger S) {
-      return new BigInteger( val.gcd( S.val ) );
+        return new BigInteger( val.gcd( S.val ) );
     }
 
 
@@ -394,8 +392,8 @@ public class BigInteger implements RingElem<BigInteger>,
      * @return gcd(A,B).
      */
     public static BigInteger IGCD(BigInteger A, BigInteger B) {
-      if ( A == null ) return null;
-      return A.gcd(B);
+        if ( A == null ) return null;
+        return A.gcd(B);
     }
 
 
@@ -404,7 +402,7 @@ public class BigInteger implements RingElem<BigInteger>,
      * @return r, a random BigInteger.
      */
     public BigInteger random(int n) {
-      return random(n,random);
+        return random(n,random);
     }
 
 
@@ -414,11 +412,11 @@ public class BigInteger implements RingElem<BigInteger>,
      * @return r, a random BigInteger.
      */
     public BigInteger random(int n, Random rnd) {
-      java.math.BigInteger r = new java.math.BigInteger( n, rnd );
-      if ( rnd.nextBoolean() ) {
-          r = r.negate();
-      }
-      return new BigInteger( r );
+        java.math.BigInteger r = new java.math.BigInteger( n, rnd );
+        if ( rnd.nextBoolean() ) {
+            r = r.negate();
+        }
+        return new BigInteger( r );
     }
 
 
@@ -427,7 +425,7 @@ public class BigInteger implements RingElem<BigInteger>,
      * @return r, a random BigInteger.
      */
     public static BigInteger IRAND(int NL) {
-      return ONE.random(NL,random);
+        return ONE.random(NL,random);
     }
 
 
@@ -436,7 +434,7 @@ public class BigInteger implements RingElem<BigInteger>,
      * @return this*S.
      */
     public BigInteger multiply(BigInteger S) {
-      return new BigInteger( val.multiply( S.val ) );
+        return new BigInteger( val.multiply( S.val ) );
     }
 
 
@@ -446,8 +444,8 @@ public class BigInteger implements RingElem<BigInteger>,
      * @return A*B.
      */
     public static BigInteger IPROD(BigInteger A, BigInteger B) {
-      if ( A == null ) return null;
-      return A.multiply(B);
+        if ( A == null ) return null;
+        return A.multiply(B);
     }
 
 
@@ -456,7 +454,7 @@ public class BigInteger implements RingElem<BigInteger>,
      * @return this+S.
      */
     public BigInteger add(BigInteger S) {
-      return new BigInteger( val.add( S.val ) );
+        return new BigInteger( val.add( S.val ) );
     }
 
 
@@ -466,8 +464,8 @@ public class BigInteger implements RingElem<BigInteger>,
      * @return A+B.
      */
     public static BigInteger ISUM(BigInteger A, BigInteger B) {
-      if ( A == null ) return null;
-      return A.add(B);
+        if ( A == null ) return null;
+        return A.add(B);
     }
 
 

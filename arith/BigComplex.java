@@ -82,27 +82,27 @@ public class BigComplex implements RingElem<BigComplex>,
      */
     public BigComplex(String s) throws NumberFormatException {
         if ( s == null || s.length() == 0) {
-	    re = BigRational.ZERO;
+            re = BigRational.ZERO;
             im = BigRational.ZERO;
             return;
-	} 
-	s = s.trim();
-	int i = s.indexOf("i");
-	if ( i < 0 ) {
+        } 
+        s = s.trim();
+        int i = s.indexOf("i");
+        if ( i < 0 ) {
            re = new BigRational( s );
            im = BigRational.ZERO;
-	   return;
-	}
-	//logger.warn("String constructor not done");
-	String sr = "";
-	if ( i > 0 ) {
-           sr = s.substring(0,i);
-	}
-	String si = "";
-	if ( i < s.length() ) {
-           si = s.substring(i+1,s.length());
-	}
-	//int j = sr.indexOf("+");
+           return;
+        }
+        //logger.warn("String constructor not done");
+        String sr = "";
+        if ( i > 0 ) {
+            sr = s.substring(0,i);
+        }
+        String si = "";
+        if ( i < s.length() ) {
+            si = s.substring(i+1,s.length());
+        }
+        //int j = sr.indexOf("+");
         re = new BigRational( sr.trim() );
         im = new BigRational( si.trim() );
     }
@@ -146,7 +146,7 @@ public class BigComplex implements RingElem<BigComplex>,
      * @return a BigComplex.
      */
     public BigComplex fromInteger(BigInteger a) {
-	return new BigComplex( new BigRational(a) );
+        return new BigComplex( new BigRational(a) );
     }
 
 
@@ -155,7 +155,7 @@ public class BigComplex implements RingElem<BigComplex>,
      * @return a BigComplex.
      */
     public BigComplex fromInteger(long a) {
-	return new BigComplex( new BigRational( a ) );
+        return new BigComplex( new BigRational( a ) );
     }
 
 
@@ -193,10 +193,10 @@ public class BigComplex implements RingElem<BigComplex>,
      */
     public String toString() {
         String s = "" + re;
-	int i = im.compareTo( BigRational.ZERO );
-	//logger.info("compareTo "+im+" ? 0 = "+i);
-	if ( i == 0 ) return s;
-	s += "i" + im;
+        int i = im.compareTo( BigRational.ZERO );
+        //logger.info("compareTo "+im+" ? 0 = "+i);
+        if ( i == 0 ) return s;
+        s += "i" + im;
         return s;
     }
 
@@ -216,7 +216,7 @@ public class BigComplex implements RingElem<BigComplex>,
      * @see edu.jas.structure.RingElem#isZERO()
      */
     public boolean isZERO() {
-	return    re.equals( BigRational.ZERO )
+        return    re.equals( BigRational.ZERO )
                && im.equals( BigRational.ZERO );
     }
 
@@ -236,7 +236,7 @@ public class BigComplex implements RingElem<BigComplex>,
      * @see edu.jas.structure.RingElem#isONE()
      */
     public boolean isONE() {
-	return    re.equals( BigRational.ONE )
+        return    re.equals( BigRational.ONE )
                && im.equals( BigRational.ZERO );
     }
 
@@ -245,7 +245,7 @@ public class BigComplex implements RingElem<BigComplex>,
      * @return If this is i then true is returned, else false. 
      */
     public boolean isIMAG() {
-	return    re.equals( BigRational.ZERO )
+        return    re.equals( BigRational.ZERO )
                && im.equals( BigRational.ONE );
     }
 
@@ -255,7 +255,7 @@ public class BigComplex implements RingElem<BigComplex>,
      * @see edu.jas.structure.RingElem#isUnit()
      */
     public boolean isUnit() {
-	return ( ! isZERO() );
+        return ( ! isZERO() );
     }
 
 
@@ -263,11 +263,11 @@ public class BigComplex implements RingElem<BigComplex>,
      * @see java.lang.Object#equals(java.lang.Object)
      */
     public boolean equals(Object b) {
-	if ( ! ( b instanceof BigComplex ) ) {
+        if ( ! ( b instanceof BigComplex ) ) {
            return false;
         }
-	BigComplex bc = (BigComplex) b;
-	return    re.equals( bc.re ) 
+   BigComplex bc = (BigComplex) b;
+        return    re.equals( bc.re ) 
                && im.equals( bc.im );
     }
 
@@ -287,11 +287,11 @@ public class BigComplex implements RingElem<BigComplex>,
      * @return 1 else
      */
     public int compareTo(BigComplex b) {
-      if ( this.equals(b) ) { 
-	  return 0;
-      } else {
-	  return 1;
-      }
+        if ( this.equals(b) ) { 
+            return 0;
+        } else {
+            return 1;
+        }
     }
 
     /** since complex numbers are unordered, there is 
@@ -319,7 +319,7 @@ public class BigComplex implements RingElem<BigComplex>,
      * @return this+B.
      */
     public BigComplex add(BigComplex B) {
-	return new BigComplex( re.add( B.re ), 
+        return new BigComplex( re.add( B.re ), 
                                im.add( B.im ) );
     }
 
@@ -328,8 +328,8 @@ public class BigComplex implements RingElem<BigComplex>,
      * @return A+B. 
      */
     public static BigComplex CSUM(BigComplex A, BigComplex B) {
-      if ( A == null ) return null;
-      return A.add(B);
+        if ( A == null ) return null;
+        return A.add(B);
     }
 
 
@@ -338,8 +338,8 @@ public class BigComplex implements RingElem<BigComplex>,
      * @return A-B.
      */
     public static BigComplex CDIF(BigComplex A, BigComplex B) {
-      if ( A == null ) return null;
-      return A.subtract(B);
+        if ( A == null ) return null;
+        return A.subtract(B);
     }
 
 
@@ -348,7 +348,7 @@ public class BigComplex implements RingElem<BigComplex>,
      * @return this-B.
      */
     public BigComplex subtract(BigComplex B) {
-	return new BigComplex( re.subtract( B.re ), 
+        return new BigComplex( re.subtract( B.re ), 
                                im.subtract( B.im ) );
     }
 
@@ -358,8 +358,8 @@ public class BigComplex implements RingElem<BigComplex>,
      * @return -A
      */
     public static BigComplex CNEG(BigComplex A) {
-      if ( A == null ) return null;
-      return A.negate();
+        if ( A == null ) return null;
+        return A.negate();
     }
 
 
@@ -368,8 +368,8 @@ public class BigComplex implements RingElem<BigComplex>,
      * @see edu.jas.structure.RingElem#negate()
      */
     public BigComplex negate() {
-	return new BigComplex( re.negate(), 
-                           im.negate());
+        return new BigComplex( re.negate(), 
+                               im.negate());
     }
 
 
@@ -378,8 +378,8 @@ public class BigComplex implements RingElem<BigComplex>,
      * @return the complex conjugate of A. 
      */
     public static BigComplex CCON(BigComplex A) {
-      if ( A == null ) return null;
-      return A.conjugate();
+        if ( A == null ) return null;
+        return A.conjugate();
     }
 
     /* arithmetic operations: conjugate, absolut value 
@@ -389,7 +389,7 @@ public class BigComplex implements RingElem<BigComplex>,
      * @return the complex conjugate of this. 
      */
     public BigComplex conjugate() {
-	return new BigComplex(re, im.negate());
+        return new BigComplex(re, im.negate());
     }
 
 
@@ -399,10 +399,10 @@ public class BigComplex implements RingElem<BigComplex>,
      * Note: The square root is not jet implemented.
      */
     public BigComplex abs() {
-	BigRational v = re.multiply(re).add(im.multiply(im));
-	logger.error("abs() square root missing");
-	// v = v.sqrt();
-	return new BigComplex( v );
+        BigRational v = re.multiply(re).add(im.multiply(im));
+        logger.error("abs() square root missing");
+        // v = v.sqrt();
+        return new BigComplex( v );
     }
 
     /** Complex number absolute value.  
@@ -435,7 +435,7 @@ public class BigComplex implements RingElem<BigComplex>,
      * @return this*B.
      */
     public BigComplex multiply(BigComplex B) {
-	return new BigComplex(
+        return new BigComplex(
                re.multiply(B.re).subtract(im.multiply(B.im)),
                re.multiply(B.im).add(im.multiply(B.re)) );
     }
@@ -446,8 +446,8 @@ public class BigComplex implements RingElem<BigComplex>,
      * @return S with S*A = 1. 
      */
     public static BigComplex CINV(BigComplex A) {
-      if ( A == null ) return null;
-      return A.inverse();
+        if ( A == null ) return null;
+        return A.inverse();
     }
 
 
@@ -457,7 +457,7 @@ public class BigComplex implements RingElem<BigComplex>,
      */
     public BigComplex inverse() {
         BigRational a = re.multiply(re).add(im.multiply(im));
-	return new BigComplex( re.divide(a), 
+        return new BigComplex( re.divide(a), 
                                im.divide(a).negate() ); 
     }
 
@@ -467,10 +467,10 @@ public class BigComplex implements RingElem<BigComplex>,
      * @return 0. 
      */
     public BigComplex remainder(BigComplex S) {
-      if ( S.isZERO() ) {
-          throw new RuntimeException("division by zero");
-      }
-      return ZERO;
+        if ( S.isZERO() ) {
+           throw new RuntimeException("division by zero");
+        }
+        return ZERO;
     }
 
 
@@ -479,8 +479,8 @@ public class BigComplex implements RingElem<BigComplex>,
      * @return A/B. 
      */
     public static BigComplex CQ(BigComplex A, BigComplex B) {
-      if ( A == null ) return null;
-      return A.divide(B);
+        if ( A == null ) return null;
+        return A.divide(B);
     }
 
 
@@ -489,7 +489,7 @@ public class BigComplex implements RingElem<BigComplex>,
      * @return this/B. 
      */
     public BigComplex divide (BigComplex B) {
-	return this.multiply( B.inverse() );
+        return this.multiply( B.inverse() );
     }
 
 
@@ -500,7 +500,7 @@ public class BigComplex implements RingElem<BigComplex>,
      * @return R.
      */
     public BigComplex random(int n) {
-      return random(n,random);
+        return random(n,random);
     }
 
 
@@ -512,9 +512,9 @@ public class BigComplex implements RingElem<BigComplex>,
      * @return R.
      */
     public BigComplex random(int n, Random rnd) {
-      BigRational r = BigRational.ONE.random( n, rnd );
-      BigRational i = BigRational.ONE.random( n, rnd );
-      return new BigComplex( r, i ); 
+        BigRational r = BigRational.ONE.random( n, rnd );
+        BigRational i = BigRational.ONE.random( n, rnd );
+        return new BigComplex( r, i ); 
     }
 
 
@@ -525,7 +525,7 @@ public class BigComplex implements RingElem<BigComplex>,
      * @return R.
      */
     public static BigComplex CRAND(int n) {
-      return ONE.random(n,random);
+        return ONE.random(n,random);
     }
 
 

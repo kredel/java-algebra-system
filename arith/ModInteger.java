@@ -24,12 +24,12 @@ public class ModInteger implements RingElem<ModInteger>,
 
 
     /** Module part of the factory data structure. 
-      */
+     */
     protected final java.math.BigInteger modul;
 
 
     /** Value part of the element data structure. 
-      */
+     */
     protected final java.math.BigInteger val;
 
 
@@ -43,7 +43,7 @@ public class ModInteger implements RingElem<ModInteger>,
      */
     public ModInteger(java.math.BigInteger m, java.math.BigInteger a) {
         modul = m;
-	val = a.mod(modul);
+        val = a.mod(modul);
     }
 
 
@@ -54,8 +54,8 @@ public class ModInteger implements RingElem<ModInteger>,
      */
     public ModInteger(long m, long a) {
         this( 
-	     new java.math.BigInteger( String.valueOf(m) ),
-	     new java.math.BigInteger( String.valueOf(a) )
+             new java.math.BigInteger( String.valueOf(m) ),
+             new java.math.BigInteger( String.valueOf(a) )
              );
     }
 
@@ -67,8 +67,8 @@ public class ModInteger implements RingElem<ModInteger>,
      */
     public ModInteger(String m, String s) {
         this( 
-	     new java.math.BigInteger( m ),
-	     new java.math.BigInteger( s )
+             new java.math.BigInteger( m ),
+             new java.math.BigInteger( s )
              );
     }
 
@@ -99,7 +99,7 @@ public class ModInteger implements RingElem<ModInteger>,
      */
     public ModInteger(java.math.BigInteger m) {
         modul = m; // assert m != 0
-	val = java.math.BigInteger.ZERO;
+        val = java.math.BigInteger.ZERO;
     }
 
 
@@ -107,7 +107,7 @@ public class ModInteger implements RingElem<ModInteger>,
      * @return val.
      */
     public java.math.BigInteger getVal() {
-      return val;
+        return val;
     }
 
 
@@ -115,7 +115,7 @@ public class ModInteger implements RingElem<ModInteger>,
      * @return modul.
      */
     public java.math.BigInteger getModul() {
-      return modul;
+        return modul;
     }
 
 
@@ -157,7 +157,7 @@ public class ModInteger implements RingElem<ModInteger>,
      * @return a ModInteger.
      */
     public ModInteger fromInteger(java.math.BigInteger a) {
-	return new ModInteger(modul,a);
+        return new ModInteger(modul,a);
     }
 
 
@@ -166,7 +166,7 @@ public class ModInteger implements RingElem<ModInteger>,
      * @return a ModInteger.
      */
     public ModInteger fromInteger(long a) {
-	return new ModInteger(modul, a );
+        return new ModInteger(modul, a );
     }
 
 
@@ -175,7 +175,7 @@ public class ModInteger implements RingElem<ModInteger>,
      * @see edu.jas.structure.RingElem#isZERO()
      */
     public boolean isZERO() {
-	return val.equals( java.math.BigInteger.ZERO );
+        return val.equals( java.math.BigInteger.ZERO );
     }
 
 
@@ -184,7 +184,7 @@ public class ModInteger implements RingElem<ModInteger>,
      * @see edu.jas.structure.RingElem#isONE()
      */
     public boolean isONE() {
-	return val.equals( java.math.BigInteger.ONE );
+        return val.equals( java.math.BigInteger.ONE );
     }
 
 
@@ -194,8 +194,8 @@ public class ModInteger implements RingElem<ModInteger>,
      */
     public boolean isUnit() {
         java.math.BigInteger g = modul.gcd( val );
-	return ( g.equals(java.math.BigInteger.ONE) 
-              || g.equals(java.math.BigInteger.ONE.negate()) );
+        return ( g.equals(java.math.BigInteger.ONE) 
+                 || g.equals(java.math.BigInteger.ONE.negate()) );
     }
 
 
@@ -204,9 +204,9 @@ public class ModInteger implements RingElem<ModInteger>,
      */
     public String toString() {
         if ( PrettyPrint.isTrue() ) {
-	   return val.toString();
+            return val.toString();
         } else {
- 	   return val.toString() + " mod(" + modul.toString() + ")";
+            return val.toString() + " mod(" + modul.toString() + ")";
         }
     }
 
@@ -220,7 +220,7 @@ public class ModInteger implements RingElem<ModInteger>,
         if ( modul != b.modul ) {
             v = v.mod( modul );
         }
-	return val.compareTo( v );
+        return val.compareTo( v );
     }
 
 
@@ -230,8 +230,8 @@ public class ModInteger implements RingElem<ModInteger>,
      * @return sign(this-b).
      */
     public static int MICOMP(ModInteger A, ModInteger B) {
-      if ( A == null ) return -B.signum();
-      return A.compareTo(B);
+        if ( A == null ) return -B.signum();
+        return A.compareTo(B);
     }
 
 
@@ -239,11 +239,11 @@ public class ModInteger implements RingElem<ModInteger>,
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
-    public boolean equals(Object b) {
-	if ( ! ( b instanceof ModInteger ) ) {
-           return false;
+        public boolean equals(Object b) {
+        if ( ! ( b instanceof ModInteger ) ) {
+            return false;
         }
-	return (0 == compareTo( (ModInteger)b) );
+        return (0 == compareTo( (ModInteger)b) );
     }
 
 
@@ -252,7 +252,7 @@ public class ModInteger implements RingElem<ModInteger>,
      * @see edu.jas.structure.RingElem#abs()
      */
     public ModInteger abs() {
-       return new ModInteger( modul, val.abs() );
+        return new ModInteger( modul, val.abs() );
     }
 
 
@@ -261,8 +261,8 @@ public class ModInteger implements RingElem<ModInteger>,
      * @return the absolute value of A.
      */
     public static ModInteger MIABS(ModInteger A) {
-      if ( A == null ) return null;
-      return A.abs();
+        if ( A == null ) return null;
+        return A.abs();
     }
 
 
@@ -271,7 +271,7 @@ public class ModInteger implements RingElem<ModInteger>,
      * @return -this.
      */
     public ModInteger negate() {
-       return new ModInteger( modul, val.negate() );
+        return new ModInteger( modul, val.negate() );
     }
 
 
@@ -280,8 +280,8 @@ public class ModInteger implements RingElem<ModInteger>,
      * @return -A.
      */
     public static ModInteger MINEG(ModInteger A) {
-      if ( A == null ) return null;
-      return A.negate();
+        if ( A == null ) return null;
+        return A.negate();
     }
 
 
@@ -290,7 +290,7 @@ public class ModInteger implements RingElem<ModInteger>,
      * @return signum(this).
      */
     public int signum() {
-      return val.signum();
+        return val.signum();
     }
 
 
@@ -299,8 +299,8 @@ public class ModInteger implements RingElem<ModInteger>,
      * @return signum(A).
      */
     public static int MISIGN(ModInteger A) {
-      if ( A == null ) return 0;
-      return A.signum();
+        if ( A == null ) return 0;
+        return A.signum();
     }
 
 
@@ -309,7 +309,7 @@ public class ModInteger implements RingElem<ModInteger>,
      * @return this-S.
      */
     public ModInteger subtract(ModInteger S) {
-      return new ModInteger( modul, val.subtract( S.val ) );
+        return new ModInteger( modul, val.subtract( S.val ) );
     }
 
 
@@ -319,8 +319,8 @@ public class ModInteger implements RingElem<ModInteger>,
      * @return A-B.
      */
     public static ModInteger MIDIF(ModInteger A, ModInteger B) {
-      if ( A == null ) return B.negate();
-      return A.subtract(B);
+        if ( A == null ) return B.negate();
+        return A.subtract(B);
     }
 
 
@@ -329,7 +329,7 @@ public class ModInteger implements RingElem<ModInteger>,
      * @return this/S.
      */
     public ModInteger divide(ModInteger S) {
-     return multiply( S.inverse() );
+        return multiply( S.inverse() );
     }
 
 
@@ -339,8 +339,8 @@ public class ModInteger implements RingElem<ModInteger>,
      * @return A/B.
      */
     public static ModInteger MIQ(ModInteger A, ModInteger B) {
-      if ( A == null ) return null;
-      return A.divide(B);
+        if ( A == null ) return null;
+        return A.divide(B);
     }
 
 
@@ -349,7 +349,7 @@ public class ModInteger implements RingElem<ModInteger>,
      * @return S with S=1/this if defined. 
      */
     public ModInteger inverse() {
-	return new ModInteger( modul, val.modInverse( modul ));
+        return new ModInteger( modul, val.modInverse( modul ));
     }
 
 
@@ -359,8 +359,8 @@ public class ModInteger implements RingElem<ModInteger>,
      * @return S with S=1/A if defined.
      */
     public static ModInteger MIINV(ModInteger A) {
-      if ( A == null ) return null;
-      return A.inverse();
+        if ( A == null ) return null;
+        return A.inverse();
     }
 
 
@@ -369,7 +369,7 @@ public class ModInteger implements RingElem<ModInteger>,
      * @return this - (this/S)*S.
      */
     public ModInteger remainder(ModInteger S) {
-      return new ModInteger( modul, val.remainder( S.val ) );
+        return new ModInteger( modul, val.remainder( S.val ) );
     }
 
 
@@ -379,8 +379,8 @@ public class ModInteger implements RingElem<ModInteger>,
      * @return A - (A/B)*B.
      */
     public static ModInteger MIREM(ModInteger A, ModInteger B) {
-      if ( A == null ) return null;
-      return A.remainder(B);
+        if ( A == null ) return null;
+        return A.remainder(B);
     }
 
 
@@ -399,8 +399,8 @@ public class ModInteger implements RingElem<ModInteger>,
      * @return a random integer mod modul.
      */
     public ModInteger random(int n, Random rnd) {
-      java.math.BigInteger v = new java.math.BigInteger( n, rnd );
-      return new ModInteger( modul, v );
+        java.math.BigInteger v = new java.math.BigInteger( n, rnd );
+        return new ModInteger( modul, v );
     }
 
 
@@ -409,7 +409,7 @@ public class ModInteger implements RingElem<ModInteger>,
      * @return this*S.
      */
     public ModInteger multiply(ModInteger S) {
-      return new ModInteger( modul, val.multiply( S.val ) );
+        return new ModInteger( modul, val.multiply( S.val ) );
     }
 
 
@@ -419,8 +419,8 @@ public class ModInteger implements RingElem<ModInteger>,
      * @return A*B.
      */
     public static ModInteger MIPROD(ModInteger A, ModInteger B) {
-      if ( A == null ) return null;
-      return A.multiply(B);
+        if ( A == null ) return null;
+        return A.multiply(B);
     }
 
 
@@ -429,7 +429,7 @@ public class ModInteger implements RingElem<ModInteger>,
      * @return this+S.
      */
     public ModInteger add(ModInteger S) {
-      return new ModInteger( modul, val.add( S.val ) );
+        return new ModInteger( modul, val.add( S.val ) );
     }
 
 
@@ -439,8 +439,8 @@ public class ModInteger implements RingElem<ModInteger>,
      * @return A+B.
      */
     public static ModInteger MISUM(ModInteger A, ModInteger B) {
-      if ( A == null ) return null;
-      return A.add(B);
+        if ( A == null ) return null;
+        return A.add(B);
     }
 
 
