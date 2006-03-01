@@ -79,7 +79,7 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
 
     /**
      * Left syzygy for left Groebner base.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param F a Groebner base.
      * @return leftSyz(F), a basis for the left module of syzygies for F.
      */
@@ -91,7 +91,7 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
 
     /**
      * Left syzygy for left Groebner base.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param modv number of module variables.
      * @param F a Groebner base.
      * @return leftSyz(F), a basis for the left module of syzygies for F.
@@ -155,7 +155,7 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
 
     /**
      * Left syzygy for left module Groebner base.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param M a Groebner base.
      * @return leftSyz(M), a basis for the left module of syzygies for M.
      */
@@ -214,7 +214,7 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
 
     /**
      * Test if left syzygy.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param Z list of sysygies.
      * @param F a polynomial list.
      * @return true, if Z is a list of left syzygies for F, else false.
@@ -238,7 +238,7 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
 
     /**
      * Test if right syzygy.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param Z list of sysygies.
      * @param F a polynomial list.
      * @return true, if Z is a list of right syzygies for F, else false.
@@ -262,7 +262,7 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
 
     /**
      * Test if left sysygy of modules
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param Z list of sysygies.
      * @param F a module list.
      * @return true, if Z is a list of left syzygies for F, else false.
@@ -286,7 +286,7 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
 
     /**
      * Test if right sysygy of modules
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param Z list of sysygies.
      * @param F a module list.
      * @return true, if Z is a list of right syzygies for F, else false.
@@ -311,7 +311,7 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
     /**
      * Resolution of a module.
      * Only with direct GBs.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param M a module list of a Groebner basis.
      * @return a resolution of M.
      */
@@ -338,7 +338,7 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
     /**
      * Resolution of a polynomial list.
      * Only with direct GBs.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param F a polynomial list of a Groebner basis.
      * @return a resolution of F.
      */
@@ -363,7 +363,7 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
 
     /**
      * Resolution of a module.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param M a module list of an arbitrary basis.
      * @return a resolution of M.
      */
@@ -389,7 +389,7 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
 
     /**
      * Resolution of a polynomial list.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param F a polynomial list of an arbitrary basis.
      * @return a resolution of F.
      */
@@ -414,7 +414,7 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
 
     /**
      * Left syzygy module from arbitrary base.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param F a solvable polynomial list.
      * @return syz(F), a basis for the module of left syzygies for F.
      */
@@ -426,7 +426,7 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
 
     /**
      * Left syzygy module from arbitrary base.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param modv number of module variables.
      * @param F a solvable polynomial list.
      * @return syz(F), a basis for the module of left syzygies for F.
@@ -589,7 +589,7 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
 
     /**
      * Left syzygy for arbitrary left module base.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param M an arbitrary base.
      * @return leftSyz(M), a basis for the left module of syzygies for M.
      */
@@ -648,7 +648,7 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
 
     /**
      * Right syzygy module from arbitrary base.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param F a solvable polynomial list.
      * @return syz(F), a basis for the module of right syzygies for F.
      */
@@ -660,7 +660,7 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
 
     /**
      * Right syzygy module from arbitrary base.
-     * @param C coefficient type.
+     * @typeparam C coefficient type.
      * @param modv number of module variables.
      * @param F a solvable polynomial list.
      * @return syz(F), a basis for the module of right syzygies for F.
