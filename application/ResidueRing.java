@@ -18,15 +18,15 @@ import edu.jas.poly.GenPolynomialRing;
 
 
 /**
- * Algebraic number class based on GenPolynomial with RingElem interface.
+ * Residue ring class based on GenPolynomial with RingElem interface.
  * Objects of this class are immutable.
  * @author Heinz Kredel
  */
 public class ResidueRing<C extends RingElem<C> > 
              implements RingFactory< Residue<C> >  {
 
-     private static Logger logger = Logger.getLogger(ResidueRing.class);
-     private boolean debug = logger.isDebugEnabled();
+    private static Logger logger = Logger.getLogger(ResidueRing.class);
+    private boolean debug = logger.isDebugEnabled();
 
 
     /** Polynomial ideal of the factory. 
@@ -41,7 +41,7 @@ public class ResidueRing<C extends RingElem<C> >
 
 
     /** The constructor creates a ResidueRing object 
-     * from a GenPolynomialRing and a GenPolynomial list. 
+     * from an Ideal. 
      * @param r polynomial ideal.
      */
     public ResidueRing(Ideal<C> i) {
@@ -84,7 +84,7 @@ public class ResidueRing<C extends RingElem<C> >
      * @return a Residue.
      */
     public Residue<C> fromInteger(java.math.BigInteger a) {
-   return new Residue<C>( this, ring.fromInteger(a) );
+        return new Residue<C>( this, ring.fromInteger(a) );
     }
 
 
@@ -93,7 +93,7 @@ public class ResidueRing<C extends RingElem<C> >
      * @return a Residue.
      */
     public Residue<C> fromInteger(long a) {
-   return new Residue<C>( this, ring.fromInteger(a) );
+        return new Residue<C>( this, ring.fromInteger(a) );
     }
     
 
@@ -112,7 +112,7 @@ public class ResidueRing<C extends RingElem<C> >
     @Override
     @SuppressWarnings("unchecked") // not jet working
     public boolean equals(Object b) {
-   if ( ! ( b instanceof ResidueRing ) ) {
+        if ( ! ( b instanceof ResidueRing ) ) {
            return false;
         }
         ResidueRing<C> a = null;
@@ -126,7 +126,7 @@ public class ResidueRing<C extends RingElem<C> >
         if ( ! ring.equals( a.ring ) ) {
             return false;
         }
-   return ideal.equals( a.ideal );
+        return ideal.equals( a.ideal );
     }
 
 
@@ -171,7 +171,7 @@ public class ResidueRing<C extends RingElem<C> >
      */
     public Residue<C> parse(String s) {
         GenPolynomial<C> x = ring.parse( s );
-   return new Residue<C>( this, x );
+        return new Residue<C>( this, x );
     }
 
 
@@ -181,7 +181,7 @@ public class ResidueRing<C extends RingElem<C> >
      */
     public Residue<C> parse(Reader r) {
         GenPolynomial<C> x = ring.parse( r );
-   return new Residue<C>( this, x );
+        return new Residue<C>( this, x );
     }
 
 }
