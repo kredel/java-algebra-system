@@ -18,82 +18,88 @@ import edu.jas.poly.GenPolynomialRing;
 
 
 /**
- * Algebraic number class based on GenPolynomial with RingElem interface.
+ * Local ring class based on GenPolynomial with RingElem interface.
  * Objects of this class are immutable.
  * @author Heinz Kredel
  */
-public class ResidueRing<C extends RingElem<C> > 
-             implements RingFactory< Residue<C> >  {
+public class LocalRing<C extends RingElem<C> > 
+             implements RingFactory< Local<C> >  {
 
-     private static Logger logger = Logger.getLogger(ResidueRing.class);
+     private static Logger logger = Logger.getLogger(LocalRing.class);
      private boolean debug = logger.isDebugEnabled();
 
 
-    /** Polynomial ideal of the factory. 
+    /** Polynomial for localization. 
+     */
+    protected final GenPolynomial<C> loc;
+
+
+    /** Polynomial ideal for localization. 
      */
     protected final Ideal<C> ideal;
 
 
     /** Polynomial ring of the factory. 
-     * Shortcut to ideal.list.ring. 
      */
     protected final GenPolynomialRing<C> ring;
 
 
-    /** The constructor creates a ResidueRing object 
-     * from a GenPolynomialRing and a GenPolynomial list. 
-     * @param r polynomial ideal.
+    /** The constructor creates a LocalRing object 
+     * from a GenPolynomialRing and a GenPolynomial. 
+     * @param r polynomial ring.
+     * @param l localization polynomial.
      */
-    public ResidueRing(Ideal<C> i) {
-        ideal = i.GB(); // cheap if isGB
-        ring = ideal.list.ring;
+    public LocalRing(GenPolynomialRing<C> r, GenPolynomial<C> l) {
+        ring = r;
+        loc = l;
+        ideal = null;
     }
 
 
-    /** Copy Residue element c.
+    /** Copy Local element c.
      * @param c
      * @return a copy of c.
      */
-    public Residue<C> copy(Residue<C> c) {
-        return new Residue<C>( c.ring, c.val );
+    public Local<C> copy(Local<C> c) {
+        return new Local<C>( c.ring, c.val );
     }
 
 
     /** Get the zero element.
-     * @return 0 as Residue.
+     * @return 0 as Local.
      */
-    public Residue<C> getZERO() {
-        return new Residue<C>( this, ring.getZERO() );
+    public Local<C> getZERO() {
+        return new Local<C>( this, ring.getZERO() );
     }
 
 
     /**  Get the one element.
-     * @return 1 as Residue.
+     * @return 1 as Local.
      */
-    public Residue<C> getONE() {
-        Residue<C> one = new Residue<C>( this, ring.getONE() );
-        if ( one.isZERO() ) {
-           logger.warn("ideal is one, so all residues are 0");
+    public Local<C> getONE() {
+        Local<C> one = new Local<C>( this, ring.getONE() );
+        if ( one.isZERO() ) { // can this happen ?
+           logger.warn("loc is one, so all localizations are 0");
         }
         return one;
     }
 
     
-    /** Get a Residue element from a BigInteger value.
+    /** Get a Local element from a BigInteger value.
      * @param a BigInteger.
-     * @return a Residue.
+     * @return a Local.
      */
-    public Residue<C> fromInteger(java.math.BigInteger a) {
-   return new Residue<C>( this, ring.fromInteger(a) );
+    public Local<C> fromInteger(java.math.BigInteger a) {
+        return new Local<C>( this, ring.fromInteger(a) );
     }
 
 
-    /** Get a Residue element from a long value.
+    /** Get a Local element from a long value.
      * @param a long.
-     * @return a Residue.
+     * @return a Local.
      */
-    public Residue<C> fromInteger(long a) {
-   return new Residue<C>( this, ring.fromInteger(a) );
+    public Local<C> fromInteger(long a) {
+        return new Local<C>( this, ring.fromInteger(a) );
     }
     
 
@@ -101,8 +107,8 @@ public class ResidueRing<C extends RingElem<C> >
      * @see java.lang.Object#toString()
      */
     public String toString() {
-        return "Residue[ " 
-                + ideal.toString() + " ]";
+        return "Local[ " 
+                + loc.toString() + " ]";
     }
 
 
@@ -112,12 +118,12 @@ public class ResidueRing<C extends RingElem<C> >
     @Override
     @SuppressWarnings("unchecked") // not jet working
     public boolean equals(Object b) {
-   if ( ! ( b instanceof ResidueRing ) ) {
+        if ( ! ( b instanceof LocalRing ) ) {
            return false;
         }
-        ResidueRing<C> a = null;
+        LocalRing<C> a = null;
         try {
-            a = (ResidueRing<C>) b;
+            a = (LocalRing<C>) b;
         } catch (ClassCastException e) {
         }
         if ( a == null ) {
@@ -126,17 +132,17 @@ public class ResidueRing<C extends RingElem<C> >
         if ( ! ring.equals( a.ring ) ) {
             return false;
         }
-   return ideal.equals( a.ideal );
+        return loc.equals( a.loc );
     }
 
 
-    /** Residue random.
+    /** Local random.
      * @param n such that 0 &le; v &le; (2<sup>n</sup>-1).
      * @return a random residue element.
      */
-    public Residue<C> random(int n) {
+    public Local<C> random(int n) {
       GenPolynomial<C> x = ring.random( n ).monic();
-      return new Residue<C>( this, x );
+      return new Local<C>( this, x );
     }
 
 
@@ -148,40 +154,40 @@ public class ResidueRing<C extends RingElem<C> >
      * @param q density of nozero exponents.
      * @return a random residue polynomial.
      */
-    public Residue<C> random(int k, int l, int d, float q) {
+    public Local<C> random(int k, int l, int d, float q) {
       GenPolynomial<C> x = ring.random(k,l,d,q).monic();
-      return new Residue<C>( this, x );
+      return new Local<C>( this, x );
     }
 
 
-    /** Residue random.
+    /** Local random.
      * @param n such that 0 &le; v &le; (2<sup>n</sup>-1).
      * @param rnd is a source for random bits.
      * @return a random residue element.
      */
-    public Residue<C> random(int n, Random rnd) {
+    public Local<C> random(int n, Random rnd) {
       GenPolynomial<C> x = ring.random( n, rnd ).monic();
-      return new Residue<C>( this, x);
+      return new Local<C>( this, x);
     }
 
 
-    /** Parse Residue from String.
+    /** Parse Local from String.
      * @param s String.
-     * @return Residue from s.
+     * @return Local from s.
      */
-    public Residue<C> parse(String s) {
+    public Local<C> parse(String s) {
         GenPolynomial<C> x = ring.parse( s );
-   return new Residue<C>( this, x );
+        return new Local<C>( this, x );
     }
 
 
-    /** Parse Residue from Reader.
+    /** Parse Local from Reader.
      * @param r Reader.
-     * @return next Residue from r.
+     * @return next Local from r.
      */
-    public Residue<C> parse(Reader r) {
+    public Local<C> parse(Reader r) {
         GenPolynomial<C> x = ring.parse( r );
-   return new Residue<C>( this, x );
+        return new Local<C>( this, x );
     }
 
 }

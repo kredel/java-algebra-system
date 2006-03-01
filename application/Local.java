@@ -10,17 +10,17 @@ import edu.jas.structure.RingElem;
 
 
 /**
- * Residue class element based on GenPolynomial with RingElem interface.
+ * Local class element based on GenPolynomial with RingElem interface.
  * Objects of this class are (nearly) immutable.
  * @author Heinz Kredel
  */
-public class Residue<C extends RingElem<C> > 
-             implements RingElem< Residue<C> > {
+public class Local<C extends RingElem<C> > 
+             implements RingElem< Local<C> > {
 
 
-    /** Residue class factory data structure. 
+    /** Local class factory data structure. 
      */
-    protected final ResidueRing<C> ring;
+    protected final LocalRing<C> ring;
 
 
     /** Value part of the element data structure. 
@@ -34,32 +34,32 @@ public class Residue<C extends RingElem<C> >
     protected int isunit = -1; // initially unknown
 
 
-    /** The constructor creates a Residue object 
+    /** The constructor creates a Local object 
      * from a ring factory. 
      * @param r ring factory.
      */
-    public Residue(ResidueRing<C> r) {
+    public Local(LocalRing<C> r) {
         this( r, r.ring.getZERO(), 0 );
     }
 
 
-    /** The constructor creates a Residue object 
+    /** The constructor creates a Local object 
      * from a ring factory and a polynomial list. 
      * @param r ring factory.
      * @param a polynomial list.
      */
-    public Residue(ResidueRing<C> r, GenPolynomial<C> a) {
+    public Local(LocalRing<C> r, GenPolynomial<C> a) {
         this( r, a, -1 );
     }
 
 
-    /** The constructor creates a Residue object 
+    /** The constructor creates a Local object 
      * from a ring factory, a polynomial list and an indicator if a is a unit. 
      * @param r ring factory.
      * @param a polynomial list.
      * @param u isunit indicator, -1, 0, 1.
      */
-    public Residue(ResidueRing<C> r, GenPolynomial<C> a, int u) {
+    public Local(LocalRing<C> r, GenPolynomial<C> a, int u) {
         ring = r;
         val = ring.ideal.normalform( a ); //.monic() no go
         switch ( u ) {
@@ -78,12 +78,12 @@ public class Residue<C extends RingElem<C> >
     /**  Clone this.
      * @see java.lang.Object#clone()
      */
-    public Residue<C> clone() {
-        return new Residue<C>( ring, val );
+    public Local<C> clone() {
+        return new Local<C>( ring, val );
     }
    
 
-    /** Is Residue zero. 
+    /** Is Local zero. 
      * @return If this is 0 then true is returned, else false.
      * @see edu.jas.structure.RingElem#isZERO()
      */
@@ -92,7 +92,7 @@ public class Residue<C extends RingElem<C> >
     }
 
 
-    /** Is Residue one. 
+    /** Is Local one. 
      * @return If this is 1 then true is returned, else false.
      * @see edu.jas.structure.RingElem#isONE()
      */
@@ -101,7 +101,7 @@ public class Residue<C extends RingElem<C> >
     }
 
 
-    /** Is Residue unit. 
+    /** Is Local unit. 
      * @return If this is a unit then true is returned, else false.
      * @see edu.jas.structure.RingElem#isUnit()
      */
@@ -130,17 +130,17 @@ public class Residue<C extends RingElem<C> >
         if ( PrettyPrint.isTrue() ) {
            return val.toString( ring.ring.getVars() );
         } else {
-           return "Residue[ " + val.toString() 
+           return "Local[ " + val.toString() 
                    + " mod " + ring.toString() + " ]";
         }
     }
 
 
-    /** Residue comparison.  
-     * @param b Residue.
+    /** Local comparison.  
+     * @param b Local.
      * @return sign(this-b).
      */
-    public int compareTo(Residue<C> b) {
+    public int compareTo(Local<C> b) {
         GenPolynomial<C> v = b.val;
         if ( ! ring.equals( b.ring ) ) {
            v = ring.ideal.normalform( v );
@@ -155,12 +155,12 @@ public class Residue<C extends RingElem<C> >
     @SuppressWarnings("unchecked") // not jet working
     @Override
     public boolean equals(Object b) {
-        if ( ! ( b instanceof Residue ) ) {
+        if ( ! ( b instanceof Local ) ) {
            return false;
         }
-        Residue<C> a = null;
+        Local<C> a = null;
         try {
-            a = (Residue<C>) b;
+            a = (Local<C>) b;
         } catch (ClassCastException e) {
         }
         if ( a == null ) {
@@ -170,34 +170,34 @@ public class Residue<C extends RingElem<C> >
     }
 
 
-    /** Residue absolute value.
+    /** Local absolute value.
      * @return the absolute value of this.
      * @see edu.jas.structure.RingElem#abs()
      */
-    public Residue<C> abs() {
-        return new Residue<C>( ring, val.abs() );
+    public Local<C> abs() {
+        return new Local<C>( ring, val.abs() );
     }
 
 
-    /** Residue addition.
-     * @param S Residue.
+    /** Local addition.
+     * @param S Local.
      * @return this+S.
      */
-    public Residue<C> add(Residue<C> S) {
-        return new Residue<C>( ring, val.add( S.val ) );
+    public Local<C> add(Local<C> S) {
+        return new Local<C>( ring, val.add( S.val ) );
     }
 
 
-    /** Residue negate.
+    /** Local negate.
      * @return -this.
      * @see edu.jas.structure.RingElem#negate()
      */
-    public Residue<C> negate() {
-        return new Residue<C>( ring, val.negate() );
+    public Local<C> negate() {
+        return new Local<C>( ring, val.negate() );
     }
 
 
-    /** Residue signum.
+    /** Local signum.
      * @see edu.jas.structure.RingElem#signum()
      * @return signum(this).
      */
@@ -206,59 +206,60 @@ public class Residue<C extends RingElem<C> >
     }
 
 
-    /** Residue subtraction.
-     * @param S Residue.
+    /** Local subtraction.
+     * @param S Local.
      * @return this-S.
      */
-    public Residue<C> subtract(Residue<C> S) {
-        return new Residue<C>( ring, val.subtract( S.val ) );
+    public Local<C> subtract(Local<C> S) {
+        return new Local<C>( ring, val.subtract( S.val ) );
     }
 
 
-    /** Residue division.
-     * @param S Residue.
+    /** Local division.
+     * @param S Local.
      * @return this/S.
      */
-    public Residue<C> divide(Residue<C> S) {
+    public Local<C> divide(Local<C> S) {
         return multiply( S.inverse() );
     }
 
 
-    /** Residue inverse.  
+    /** Local inverse.  
      * @see edu.jas.structure.RingElem#inverse()
      * @return S with S = 1/this if defined. 
      */
-    public Residue<C> inverse() {
-        GenPolynomial<C> x = ring.ideal.inverse( val );
-        return new Residue<C>( ring, x );
+    public Local<C> inverse() {
+        throw new RuntimeException("inverse not implemented");
+        //GenPolynomial<C> x = ring.ideal.inverse( val );
+        //return new Local<C>( ring, x );
     }
 
 
-    /** Residue remainder.
-     * @param S Residue.
+    /** Local remainder.
+     * @param S Local.
      * @return this - (this/S)*S.
      */
-    public Residue<C> remainder(Residue<C> S) {
+    public Local<C> remainder(Local<C> S) {
         GenPolynomial<C> x = val.remainder( S.val );
-        return new Residue<C>( ring, x );
+        return new Local<C>( ring, x );
     }
 
 
-    /** Residue multiplication.
-     * @param S Residue.
+    /** Local multiplication.
+     * @param S Local.
      * @return this*S.
      */
-    public Residue<C> multiply(Residue<C> S) {
+    public Local<C> multiply(Local<C> S) {
         GenPolynomial<C> x = val.multiply( S.val );
-        return new Residue<C>( ring, x );
+        return new Local<C>( ring, x );
     }
 
  
-    /** Residue monic.
+    /** Local monic.
      * @return this with monic value part.
      */
-    public Residue<C> monic() {
-        return new Residue<C>( ring, val.monic() );
+    public Local<C> monic() {
+        return new Local<C>( ring, val.monic() );
     }
 
 }
