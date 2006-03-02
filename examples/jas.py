@@ -6,14 +6,16 @@
 from java.lang import System
 from java.io import StringReader
 
-from edu.jas.structure import *
-from edu.jas.arith     import *
-from edu.jas.poly      import *
-from edu.jas.ring      import *
-from edu.jas.module    import *
-from edu.jas.util      import *
-from edu.jas           import *
-from edu               import *
+from edu.jas.structure   import *
+from edu.jas.arith       import *
+from edu.jas.poly        import *
+from edu.jas.ring        import *
+from edu.jas.module      import *
+from edu.jas.vector      import *
+from edu.jas.application import *
+from edu.jas.util        import *
+from edu.jas             import *
+from edu                 import *
 #PrettyPrint.setInternal();
 
 from org.apache.log4j import BasicConfigurator;
