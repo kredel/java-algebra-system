@@ -69,23 +69,27 @@ public class LocalTest extends TestCase {
 
    int rl = 3; 
    int kl = 3;
-   int ll = 7;
-   int el = 3;
-   float q = 0.4f;
+   int ll = 5;
+   int el = 2;
+   float q = 0.3f;
    int il = 2; 
 
    protected void setUp() {
        a = b = c = d = e = null;
        mfac = new GenPolynomialRing<BigRational>( new BigRational(1), rl );
-       F = new ArrayList<GenPolynomial<BigRational>>( il );
-       for ( int i = 0; i < il; i++ ) {
-           GenPolynomial<BigRational> mo = mfac.random(kl,ll,el,q);
-           while ( mo.isUnit() ) {
-                 mo = mfac.random(kl,ll,el,q);
+       id = null;
+       while ( id == null || id.isONE() ) {
+           F = new ArrayList<GenPolynomial<BigRational>>( il );
+           for ( int i = 0; i < il; i++ ) {
+               GenPolynomial<BigRational> mo = mfac.random(kl,ll,el,q);
+               while ( mo.isUnit() ) {
+                    mo = mfac.random(kl,ll,el,q);
+               }
+               F.add( mo );
            }
-           F.add( mo );
+           id = new Ideal<BigRational>(mfac,F);
+           id = id.GB();
        }
-       id = new Ideal<BigRational>(mfac,F);
        fac = new LocalRing<BigRational>( id );
        F = null;
    }
@@ -105,15 +109,15 @@ public class LocalTest extends TestCase {
  public void testConstruction() {
      c = fac.getONE();
      //System.out.println("c = " + c);
-     //System.out.println("c.val = " + c.val);
-     assertTrue("length( c ) = 1", c.val.length() == 1);
+     //System.out.println("c.num = " + c.num);
+     assertTrue("length( c ) = 1", c.num.length() == 1);
      assertTrue("isZERO( c )", !c.isZERO() );
      assertTrue("isONE( c )", c.isONE() );
 
      d = fac.getZERO();
      //System.out.println("d = " + d);
-     //System.out.println("d.val = " + d.val);
-     assertTrue("length( d ) = 0", d.val.length() == 0);
+     //System.out.println("d.num = " + d.num);
+     assertTrue("length( d ) = 0", d.num.length() == 0);
      assertTrue("isZERO( d )", d.isZERO() );
      assertTrue("isONE( d )", !d.isONE() );
  }
@@ -128,7 +132,7 @@ public class LocalTest extends TestCase {
          //a = fac.random(ll+i);
          a = fac.random(kl*(i+1), ll+i, el, q );
          //System.out.println("a = " + a);
-         assertTrue("length( a"+i+" ) <> 0", a.val.length() >= 0);
+         assertTrue("length( a"+i+" ) <> 0", a.num.length() >= 0);
          assertTrue(" not isZERO( a"+i+" )", !a.isZERO() );
          assertTrue(" not isONE( a"+i+" )", !a.isONE() );
      }
@@ -139,33 +143,25 @@ public class LocalTest extends TestCase {
  * Test addition.
  * Not jet working because of monic GBs.
  */
- public void xtestAddition() {
+ public void testAddition() {
 
      a = fac.random(kl,ll,el,q);
      b = fac.random(kl,ll,el,q);
-
-     System.out.println("a = " + a);
-     System.out.println("b = " + b);
+     //System.out.println("a = " + a);
+     //System.out.println("b = " + b);
 
      c = a.add(b);
      d = c.subtract(b);
-     System.out.println("c = " + c);
-     System.out.println("d = " + d);
      assertEquals("a+b-b = a",a,d);
 
      c = a.add(b);
      d = b.add(a);
-     System.out.println("c = " + c);
-     System.out.println("d = " + d);
      assertEquals("a+b = b+a",c,d);
 
 
      c = fac.random(kl,ll,el,q);
      d = c.add( a.add(b) );
      e = c.add( a ).add(b);
-     System.out.println("c = " + c);
-     System.out.println("d = " + d);
-     System.out.println("e = " + e);
      assertEquals("c+(a+b) = (c+a)+b",d,e);
 
 
@@ -176,7 +172,6 @@ public class LocalTest extends TestCase {
      c = fac.getZERO().add( a );
      d = fac.getZERO().subtract( a.negate() );
      assertEquals("0+a = 0+(-a)",c,d);
-
  }
 
 
@@ -185,7 +180,7 @@ public class LocalTest extends TestCase {
  * Not jet working because of monic GBs
  */
 
- public void xtestMultiplication() {
+ public void testMultiplication() {
 
      a = fac.random(kl,ll,el,q);
      assertTrue("not isZERO( a )", !a.isZERO() );
@@ -207,14 +202,8 @@ public class LocalTest extends TestCase {
      assertEquals("a*b = b*a",c,d);
 
      c = fac.random(kl,ll,el,q);
-     //System.out.println("c = " + c);
      d = a.multiply( b.multiply(c) );
      e = (a.multiply(b)).multiply(c);
-
-     //System.out.println("d = " + d);
-     //System.out.println("e = " + e);
-
-     //System.out.println("d-e = " + d.subtract(c) );
 
      assertEquals("a(bc) = (ab)c",d,e);
      assertTrue("a(bc) = (ab)c", d.equals(e) );

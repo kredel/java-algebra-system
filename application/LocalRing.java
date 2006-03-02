@@ -44,7 +44,13 @@ public class LocalRing<C extends RingElem<C> >
      * @param l localization polynomial ideal.
      */
     public LocalRing(Ideal<C> i) {
+        if ( i == null ) {
+           throw new RuntimeException("ideal may not be null");
+        }
         ideal = i.GB(); // cheap if isGB
+        if ( ideal.isONE() ) {
+           throw new RuntimeException("ideal may not be 1");
+        }
         ring = ideal.list.ring;
     }
 
@@ -54,7 +60,7 @@ public class LocalRing<C extends RingElem<C> >
      * @return a copy of c.
      */
     public Local<C> copy(Local<C> c) {
-        return new Local<C>( c.ring, c.val );
+        return new Local<C>( c.ring, c.num, c.den, true );
     }
 
 
@@ -70,11 +76,7 @@ public class LocalRing<C extends RingElem<C> >
      * @return 1 as Local.
      */
     public Local<C> getONE() {
-        Local<C> one = new Local<C>( this, ring.getONE() );
-        if ( one.isZERO() ) { // can this happen ?
-           logger.warn("loc is one, so all localizations are 0");
-        }
-        return one;
+        return new Local<C>( this, ring.getONE() );
     }
 
     
@@ -134,8 +136,15 @@ public class LocalRing<C extends RingElem<C> >
      * @return a random residue element.
      */
     public Local<C> random(int n) {
-      GenPolynomial<C> x = ring.random( n ).monic();
-      return new Local<C>( this, x );
+      GenPolynomial<C> r = ring.random( n ).monic();
+      GenPolynomial<C> s = ring.random( n ).monic();
+      s = ideal.normalform( s );
+      while ( s.isZERO() ) {
+          logger.info("s was in ideal");
+          s = ring.random( n ).monic();
+          s = ideal.normalform( s );
+      }
+      return new Local<C>( this, r, s, false );
     }
 
 
@@ -148,8 +157,15 @@ public class LocalRing<C extends RingElem<C> >
      * @return a random residue polynomial.
      */
     public Local<C> random(int k, int l, int d, float q) {
-      GenPolynomial<C> x = ring.random(k,l,d,q).monic();
-      return new Local<C>( this, x );
+      GenPolynomial<C> r = ring.random(k,l,d,q).monic();
+      GenPolynomial<C> s = ring.random(k,l,d,q).monic();
+      s = ideal.normalform( s );
+      while ( s.isZERO() ) {
+          logger.info("s was in ideal "+ideal);
+          s = ring.random( k,l,d,q ).monic();
+          s = ideal.normalform( s );
+      }
+      return new Local<C>( this, r, s, false );
     }
 
 
@@ -159,8 +175,15 @@ public class LocalRing<C extends RingElem<C> >
      * @return a random residue element.
      */
     public Local<C> random(int n, Random rnd) {
-      GenPolynomial<C> x = ring.random( n, rnd ).monic();
-      return new Local<C>( this, x);
+      GenPolynomial<C> r = ring.random( n, rnd ).monic();
+      GenPolynomial<C> s = ring.random( n, rnd ).monic();
+      s = ideal.normalform( s );
+      while ( s.isZERO() ) {
+          logger.info("s was in ideal");
+          s = ring.random( n, rnd ).monic();
+          s = ideal.normalform( s );
+      }
+      return new Local<C>( this, r, s, false);
     }
 
 

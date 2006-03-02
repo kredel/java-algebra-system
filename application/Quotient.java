@@ -331,8 +331,8 @@ public class Quotient<C extends RingElem<C> >
      * @return this - (this/S)*S.
      */
     public Quotient<C> remainder(Quotient<C> S) {
-        if ( this.isZERO() ) {
-
+        if ( num.isZERO() ) {
+           throw new RuntimeException("element not invertible " + this);
         }
         return ring.getZERO();
     }
@@ -358,7 +358,6 @@ public class Quotient<C extends RingElem<C> >
         GenPolynomial<C> n = num.multiply( S.num );
         GenPolynomial<C> d = den.multiply( S.den );
         return new Quotient<C>( ring, n, d, false );
-
     }
 
  

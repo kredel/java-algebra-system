@@ -123,6 +123,9 @@ public class QuotientRing<C extends RingElem<C> >
     public Quotient<C> random(int n) {
         GenPolynomial<C> r = ring.random( n ).monic();
         GenPolynomial<C> s = ring.random( n ).monic();
+        while ( s.isZERO() ) {
+            s = ring.random( n ).monic();
+        }
         return new Quotient<C>( this, r, s, false );
     }
 
@@ -138,6 +141,9 @@ public class QuotientRing<C extends RingElem<C> >
     public Quotient<C> random(int k, int l, int d, float q) {
         GenPolynomial<C> r = ring.random(k,l,d,q).monic();
         GenPolynomial<C> s = ring.random(k,l,d,q).monic();
+        while ( s.isZERO() ) {
+            s = ring.random( k,l,d,q ).monic();
+        }
         return new Quotient<C>( this, r, s, false );
     }
 
@@ -150,6 +156,9 @@ public class QuotientRing<C extends RingElem<C> >
     public Quotient<C> random(int n, Random rnd) {
         GenPolynomial<C> r = ring.random( n, rnd ).monic();
         GenPolynomial<C> s = ring.random( n, rnd ).monic();
+        while ( s.isZERO() ) {
+            s = ring.random( n, rnd ).monic();
+        }
         return new Quotient<C>( this, r, s, false);
     }
 

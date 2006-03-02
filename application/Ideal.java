@@ -192,11 +192,11 @@ public class Ideal<C extends RingElem<C>> implements Serializable {
           B = (Ideal<C>)b;
       } catch (ClassCastException ignored) {
       }
-      if ( isGB && B.isGB ) {
-         return list.equals( B.list );
-      } else { // compute GBs ?
-         return list.equals( B.list );
-      }
+      //if ( isGB && B.isGB ) {
+      //   return list.equals( B.list ); requires also monic polys
+      //} else { // compute GBs ?
+      return this.contains( B ) && B.contains( this );
+      //}
   }
 
 
@@ -517,10 +517,11 @@ public class Ideal<C extends RingElem<C>> implements Serializable {
       int s = 0;
       Ideal<C> I = this.GB(); // should be already
       GenPolynomial<C> hs = h;
+      Ideal<C> Is = I;
 
       boolean eq = false;
       while ( !eq ) {
-        Ideal<C> Is = I.quotient( hs );
+        Is = I.quotient( hs );
         Is = Is.GB(); // should be already
         logger.info("infiniteQuotient s = " + s);
         eq = Is.contains(I);  // I.contains(Is) always
@@ -530,7 +531,7 @@ public class Ideal<C extends RingElem<C>> implements Serializable {
            // hs = hs.multiply( h );
         }
       }
-      return I;
+      return Is;
   }
 
 

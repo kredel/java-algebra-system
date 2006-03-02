@@ -7,6 +7,8 @@ package edu.jas.application;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import edu.jas.poly.GenPolynomial;
 import edu.jas.structure.PrettyPrint;
 import edu.jas.structure.RingElem;
@@ -22,19 +24,23 @@ public class Local<C extends RingElem<C> >
              implements RingElem< Local<C> > {
 
 
+  private static Logger logger = Logger.getLogger(Local.class);
+  private boolean debug = logger.isDebugEnabled();
+
+
     /** Local class factory data structure. 
      */
     protected final LocalRing<C> ring;
 
 
-    /** Value polynomial of the element data structure. 
+    /** Numerator part of the element data structure. 
      */
-    protected final GenPolynomial<C> val;
+    protected final GenPolynomial<C> num;
 
 
-    /** Value ideal of the element data structure. 
+    /** Denominator part of the element data structure. 
      */
-    protected final Ideal<C> ival;
+    protected final GenPolynomial<C> den;
 
 
     /** Flag to remember if this local element is a unit.
@@ -43,31 +49,143 @@ public class Local<C extends RingElem<C> >
     protected int isunit = -1; // initially unknown
 
 
+
     /** The constructor creates a Local object 
      * from a ring factory. 
      * @param r ring factory.
      */
     public Local(LocalRing<C> r) {
-        this( r, r.ring.getZERO(), 0 );
+        this( r, r.ring.getZERO() );
     }
 
 
     /** The constructor creates a Local object 
-     * from a ring factory and a polynomial list. 
+     * from a ring factory and a numerator polynomial. 
+     * The denominator is assumed to be 1.
      * @param r ring factory.
-     * @param a polynomial list.
+     * @param n numerator polynomial.
      */
-    public Local(LocalRing<C> r, GenPolynomial<C> a) {
-        this( r, a, -1 );
+    public Local(LocalRing<C> r, GenPolynomial<C> n) {
+        this( r, n, r.ring.getONE(), true );
     }
 
 
     /** The constructor creates a Local object 
+     * from a ring factory and a numerator and denominator polynomial. 
+     * @param r ring factory.
+     * @param n numerator polynomial.
+     * @param d denominator polynomial.
+     */
+    public Local(LocalRing<C> r, 
+                 GenPolynomial<C> n, GenPolynomial<C> d) {
+        this(r,n,d,false);
+    }
+
+
+    /** The constructor creates a Local object 
+     * from a ring factory and a numerator and denominator polynomial. 
+     * @param r ring factory.
+     * @param n numerator polynomial.
+     * @param d denominator polynomial.
+     * @param isred true if gcd(n,d) == 1, else false.
+     */
+    protected Local(LocalRing<C> r, 
+                    GenPolynomial<C> n, GenPolynomial<C> d,
+                    boolean isred) {
+        if ( d == null || d.isZERO() ) {
+           throw new RuntimeException("denominator may not be zero");
+        }
+        ring = r;
+        if ( d.signum() < 0 ) {
+           n = n.negate();
+           d = d.negate();
+        }
+        if ( isred ) {
+           num = n;
+           den = d;
+           return;
+        }
+        GenPolynomial<C> p = ring.ideal.normalform( d );
+        if ( p == null || p.isZERO() ) {
+           throw new RuntimeException("denominator may not be in ideal");
+        }
+        // must reduce to lowest terms
+        //GenPolynomial<C> gcd = ring.ring.getONE();
+        GenPolynomial<C> gcd = gcd( n, d );
+        if ( true || debug ) {
+           logger.info("gcd = " + gcd);
+        }
+        if ( gcd.isONE() ) {
+           num = n;
+           den = d;
+        } else {
+           // d not in ideal --> gcd not in ideal 
+           //p = ring.ideal.normalform( gcd );
+           //if ( p == null || p.isZERO() ) { // todo: find nonzero factor
+           //   num = n;
+           //   den = d;
+           //} else {
+              num = n.divide( gcd );
+              den = d.divide( gcd );
+           //}
+        }
+    }
+
+
+    /** Least common multiple.
+     * Just for fun, is not efficient.
+     * @param n first polynomial.
+     * @param d second polynomial.
+     * @return lcm(n,d)
+     */
+    protected GenPolynomial<C> lcm(GenPolynomial<C> n, GenPolynomial<C> d) {
+        List<GenPolynomial<C>> list;
+        list = new ArrayList<GenPolynomial<C>>( 1 );
+        list.add( n );
+        Ideal<C> N = new Ideal<C>( ring.ring, list, true );
+        list = new ArrayList<GenPolynomial<C>>( 1 );
+        list.add( d );
+        Ideal<C> D = new Ideal<C>( ring.ring, list, true );
+        Ideal<C> L = N.intersect( D );
+        if ( L.list.list.size() != 1 ) {
+           throw new RuntimeException("lcm not uniqe");
+        }
+        GenPolynomial<C> lcm = L.list.list.get(0);
+        return lcm;
+    }
+
+
+    /** Greatest common divisor.
+     * Just for fun, is not efficient.
+     * @param n first polynomial.
+     * @param d second polynomial.
+     * @return gcd(n,d)
+     */
+    protected GenPolynomial<C> gcd(GenPolynomial<C> n, GenPolynomial<C> d) {
+        if ( n.isZERO() ) {
+           return d;
+        }
+        if ( d.isZERO() ) {
+           return n;
+        }
+        if ( n.isONE() ) {
+           return n;
+        }
+        if ( d.isONE() ) {
+           return d;
+        }
+        GenPolynomial<C> p = n.multiply(d);
+        GenPolynomial<C> lcm = lcm(n,d);
+        GenPolynomial<C> gcd = p.divide(lcm);
+        return gcd;
+    }
+
+
+    /* The constructor creates a Local object 
      * from a ring factory, a polynomial list and an indicator if a is a unit. 
      * @param r ring factory.
      * @param a polynomial list.
      * @param u isunit indicator, -1, 0, 1.
-     */
     public Local(LocalRing<C> r, GenPolynomial<C> a, int u) {
         ring = r;
         List<GenPolynomial<C>> li = new ArrayList<GenPolynomial<C>>(1);
@@ -91,13 +209,14 @@ public class Local<C extends RingElem<C> >
            isunit = 1;
         }
     }
+     */
 
 
     /**  Clone this.
      * @see java.lang.Object#clone()
      */
     public Local<C> clone() {
-        return new Local<C>( ring, val );
+        return new Local<C>( ring, num, den, true );
     }
    
 
@@ -106,7 +225,7 @@ public class Local<C extends RingElem<C> >
      * @see edu.jas.structure.RingElem#isZERO()
      */
     public boolean isZERO() {
-        return val.equals( ring.ring.getZERO() );
+        return num.isZERO();
     }
 
 
@@ -115,7 +234,7 @@ public class Local<C extends RingElem<C> >
      * @see edu.jas.structure.RingElem#isONE()
      */
     public boolean isONE() {
-        return val.equals( ring.ring.getONE() );
+        return num.equals( den );
     }
 
 
@@ -131,8 +250,12 @@ public class Local<C extends RingElem<C> >
             return false;
         } 
         // not jet known
-        GenPolynomial<C> p = ring.ideal.normalform( val );
-        boolean u = ( p == null || p.isZERO() );
+        if ( num.isZERO() ) {
+           isunit = 0;
+           return false;
+        }
+        GenPolynomial<C> p = ring.ideal.normalform( num );
+        boolean u = ( p != null && ! p.isZERO() );
         if ( u ) {
            isunit = 1;
         } else {
@@ -147,10 +270,11 @@ public class Local<C extends RingElem<C> >
      */
     public String toString() {
         if ( PrettyPrint.isTrue() ) {
-           return val.toString( ring.ring.getVars() );
+           return num.toString( ring.ring.getVars() ) 
+                  + "///" + den.toString( ring.ring.getVars() );
         } else {
-           return "Local[ " + val.toString() 
-                   + " mod " + ring.toString() + " ]";
+           return "Local[ " + num.toString() 
+                    + " / " + den.toString() + " ]";
         }
     }
 
@@ -160,11 +284,13 @@ public class Local<C extends RingElem<C> >
      * @return sign(this-b).
      */
     public int compareTo(Local<C> b) {
-        if ( ! ring.equals( b.ring ) ) {
-           b = new Local<C>( ring, b.val );
+        if ( b == null || b.isZERO() ) {
+            return this.signum();
         }
-        GenPolynomial<C> v = b.val;
-        return val.compareTo( v );
+        GenPolynomial<C> r = num.multiply( b.den );
+        GenPolynomial<C> s = den.multiply( b.num );
+        GenPolynomial<C> x = r.subtract( s );
+        return x.signum();
     }
 
 
@@ -194,7 +320,7 @@ public class Local<C extends RingElem<C> >
      * @see edu.jas.structure.RingElem#abs()
      */
     public Local<C> abs() {
-        return new Local<C>( ring, val.abs() );
+        return new Local<C>( ring, num.abs(), den, true );
     }
 
 
@@ -203,7 +329,13 @@ public class Local<C extends RingElem<C> >
      * @return this+S.
      */
     public Local<C> add(Local<C> S) {
-        return new Local<C>( ring, val.add( S.val ) );
+        if ( S == null || S.isZERO() ) {
+           return this;
+        }
+        GenPolynomial<C> n = num.multiply( S.den );
+        n = n.add( den.multiply( S.num ) ); 
+        GenPolynomial<C> d = den.multiply( S.den );
+        return new Local<C>( ring, n, d, false );
     }
 
 
@@ -212,7 +344,7 @@ public class Local<C extends RingElem<C> >
      * @see edu.jas.structure.RingElem#negate()
      */
     public Local<C> negate() {
-        return new Local<C>( ring, val.negate() );
+        return new Local<C>( ring, num.negate(), den, true );
     }
 
 
@@ -221,7 +353,7 @@ public class Local<C extends RingElem<C> >
      * @return signum(this).
      */
     public int signum() {
-        return val.signum();
+        return num.signum();
     }
 
 
@@ -230,7 +362,13 @@ public class Local<C extends RingElem<C> >
      * @return this-S.
      */
     public Local<C> subtract(Local<C> S) {
-        return new Local<C>( ring, val.subtract( S.val ) );
+        if ( S == null || S.isZERO() ) {
+           return this;
+        }
+        GenPolynomial<C> n = num.multiply( S.den );
+        n = n.subtract( den.multiply( S.num ) ); 
+        GenPolynomial<C> d = den.multiply( S.den );
+        return new Local<C>( ring, n, d, false );
     }
 
 
@@ -248,9 +386,13 @@ public class Local<C extends RingElem<C> >
      * @return S with S = 1/this if defined. 
      */
     public Local<C> inverse() {
-        throw new RuntimeException("inverse not implemented");
-        //GenPolynomial<C> x = ring.ideal.inverse( val );
-        //return new Local<C>( ring, x );
+        if ( isONE() ) {
+           return this;
+        }
+        if ( isUnit() ) {
+           return new Local<C>( ring, den, num, true );
+        }
+        throw new RuntimeException("element not invertible " + this);
     }
 
 
@@ -259,8 +401,14 @@ public class Local<C extends RingElem<C> >
      * @return this - (this/S)*S.
      */
     public Local<C> remainder(Local<C> S) {
-        GenPolynomial<C> x = val.remainder( S.val );
-        return new Local<C>( ring, x );
+        if ( num.isZERO() ) {
+           throw new RuntimeException("element not invertible " + this);
+        }
+        if ( S.isUnit() ) {
+           return ring.getZERO(); 
+        } else {
+           throw new RuntimeException("remainder not implemented" + S);
+        }
     }
 
 
@@ -269,8 +417,21 @@ public class Local<C extends RingElem<C> >
      * @return this*S.
      */
     public Local<C> multiply(Local<C> S) {
-        GenPolynomial<C> x = val.multiply( S.val );
-        return new Local<C>( ring, x );
+        if ( S == null || S.isZERO() ) {
+           return S;
+        }
+        if ( num.isZERO() ) {
+           return this;
+        }
+        if ( S.isONE() ) {
+           return this;
+        }
+        if ( this.isONE() ) {
+           return S;
+        }
+        GenPolynomial<C> n = num.multiply( S.num );
+        GenPolynomial<C> d = den.multiply( S.den );
+        return new Local<C>( ring, n, d, false );
     }
 
  
@@ -278,7 +439,14 @@ public class Local<C extends RingElem<C> >
      * @return this with monic value part.
      */
     public Local<C> monic() {
-        return new Local<C>( ring, val.monic() );
+        if ( num.isZERO() ) {
+           return this;
+        }
+        C lbc = num.leadingBaseCoefficient();
+        lbc = lbc.inverse();
+        GenPolynomial<C> n = num.multiply( lbc );
+        GenPolynomial<C> d = den.multiply( lbc );
+        return new Local<C>( ring, n, d, true );
     }
 
 }

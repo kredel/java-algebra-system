@@ -509,6 +509,7 @@ public class IdealTest extends TestCase {
      assertTrue("isGB( I )", I.isGB() );
 
      J = I.infiniteQuotient( a );
+     assertTrue("isGB( J )", J.isGB() );
      assertTrue("equals(J,I)", J.equals(I) ); // GBs only
 
 
