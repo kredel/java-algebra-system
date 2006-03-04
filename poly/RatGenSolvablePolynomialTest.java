@@ -125,22 +125,22 @@ public class RatGenSolvablePolynomialTest extends TestCase {
      c = (GenSolvablePolynomial<BigRational>)a.subtract(a);
      assertTrue("a-a = 0", c.isZERO() );
 
-     b = (GenSolvablePolynomial<BigRational>)a.add(a);
+     b = (GenSolvablePolynomial<BigRational>)a.sum(a);
      c = (GenSolvablePolynomial<BigRational>)b.subtract(a);
 
      assertEquals("a+a-a = a",c,a);
      assertTrue("a+a-a = a", c.equals(a) );
 
      b = ring.random(kl, ll, el, q );
-     c = (GenSolvablePolynomial<BigRational>)b.add(a);
-     d = (GenSolvablePolynomial<BigRational>)a.add(b);
+     c = (GenSolvablePolynomial<BigRational>)b.sum(a);
+     d = (GenSolvablePolynomial<BigRational>)a.sum(b);
 
      assertEquals("a+b = b+a",c,d);
      assertTrue("a+b = b+a", c.equals(d) );
 
      c = ring.random(kl, ll, el, q );
-     d = (GenSolvablePolynomial<BigRational>)a.add(b.add(c));
-     e = (GenSolvablePolynomial<BigRational>)a.add(b).add(c);
+     d = (GenSolvablePolynomial<BigRational>)a.sum(b.sum(c));
+     e = (GenSolvablePolynomial<BigRational>)a.sum(b).sum(c);
 
      assertEquals("a+(b+c) = (a+b)+c",d,e);
      assertTrue("a+(b+c) = (a+b)+c", d.equals(e) );
@@ -149,8 +149,8 @@ public class RatGenSolvablePolynomialTest extends TestCase {
      BigRational x = cfac.random(kl);
 
      b = ring.getONE().multiply( x, u);
-     c = (GenSolvablePolynomial<BigRational>)a.add(b);
-     d = (GenSolvablePolynomial<BigRational>)a.add(x,u);
+     c = (GenSolvablePolynomial<BigRational>)a.sum(b);
+     d = (GenSolvablePolynomial<BigRational>)a.sum(x,u);
      assertEquals("a+p(x,u) = a+(x,u)",c,d);
 
      c = (GenSolvablePolynomial<BigRational>)a.subtract(b);
@@ -159,8 +159,8 @@ public class RatGenSolvablePolynomialTest extends TestCase {
 
      a = ring.getZERO();
      b = ring.getONE().multiply( x, u);
-     c = (GenSolvablePolynomial<BigRational>)b.add(a);
-     d = (GenSolvablePolynomial<BigRational>)a.add(x,u);
+     c = (GenSolvablePolynomial<BigRational>)b.sum(a);
+     d = (GenSolvablePolynomial<BigRational>)a.sum(x,u);
      assertEquals("a+p(x,u) = a+(x,u)",c,d);
 
      c = (GenSolvablePolynomial<BigRational>)a.subtract(b);

@@ -318,7 +318,7 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
         for ( int i = 0; i < l; i++ ) {
             e = ExpVector.EVRAND(nvar, d, q, rnd);
             a = coFac.random(k,rnd);
-            r = (GenSolvablePolynomial<C>)r.add(a,e); 
+            r = (GenSolvablePolynomial<C>)r.sum(a,e); 
                 // somewhat inefficient but clean
         }
         // System.out.println("r = " + r);
@@ -378,7 +378,7 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
         if ( 0 <= i && i < nvar ) {
            C one = coFac.getONE();
            ExpVector e = new ExpVector(nvar,i,1);
-           p = (GenSolvablePolynomial<C>) p.add(one,e);
+           p = (GenSolvablePolynomial<C>) p.sum(one,e);
         }
         return p;
     }

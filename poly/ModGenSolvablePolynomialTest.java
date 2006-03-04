@@ -128,22 +128,22 @@ public class ModGenSolvablePolynomialTest extends TestCase {
      c = (GenSolvablePolynomial<ModInteger>)a.subtract(a);
      assertTrue("a-a = 0", c.isZERO() );
 
-     b = (GenSolvablePolynomial<ModInteger>)a.add(a);
+     b = (GenSolvablePolynomial<ModInteger>)a.sum(a);
      c = (GenSolvablePolynomial<ModInteger>)b.subtract(a);
 
      assertEquals("a+a-a = a",c,a);
      assertTrue("a+a-a = a", c.equals(a) );
 
      b = ring.random(kl, ll, el, q );
-     c = (GenSolvablePolynomial<ModInteger>)b.add(a);
-     d = (GenSolvablePolynomial<ModInteger>)a.add(b);
+     c = (GenSolvablePolynomial<ModInteger>)b.sum(a);
+     d = (GenSolvablePolynomial<ModInteger>)a.sum(b);
 
      assertEquals("a+b = b+a",c,d);
      assertTrue("a+b = b+a", c.equals(d) );
 
      c = ring.random(kl, ll, el, q );
-     d = (GenSolvablePolynomial<ModInteger>)a.add(b.add(c));
-     e = (GenSolvablePolynomial<ModInteger>)a.add(b).add(c);
+     d = (GenSolvablePolynomial<ModInteger>)a.sum(b.sum(c));
+     e = (GenSolvablePolynomial<ModInteger>)a.sum(b).sum(c);
 
      assertEquals("a+(b+c) = (a+b)+c",d,e);
      assertTrue("a+(b+c) = (a+b)+c", d.equals(e) );
@@ -152,8 +152,8 @@ public class ModGenSolvablePolynomialTest extends TestCase {
      ModInteger x = cfac.random(kl);
 
      b = ring.getONE().multiply( x, u);
-     c = (GenSolvablePolynomial<ModInteger>)a.add(b);
-     d = (GenSolvablePolynomial<ModInteger>)a.add(x,u);
+     c = (GenSolvablePolynomial<ModInteger>)a.sum(b);
+     d = (GenSolvablePolynomial<ModInteger>)a.sum(x,u);
      assertEquals("a+p(x,u) = a+(x,u)",c,d);
 
      c = (GenSolvablePolynomial<ModInteger>)a.subtract(b);
@@ -162,8 +162,8 @@ public class ModGenSolvablePolynomialTest extends TestCase {
 
      a = ring.getZERO();
      b = ring.getONE().multiply( x, u);
-     c = (GenSolvablePolynomial<ModInteger>)b.add(a);
-     d = (GenSolvablePolynomial<ModInteger>)a.add(x,u);
+     c = (GenSolvablePolynomial<ModInteger>)b.sum(a);
+     d = (GenSolvablePolynomial<ModInteger>)a.sum(x,u);
      assertEquals("a+p(x,u) = a+(x,u)",c,d);
 
      c = (GenSolvablePolynomial<ModInteger>)a.subtract(b);

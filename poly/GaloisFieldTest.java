@@ -139,21 +139,21 @@ public class GaloisFieldTest extends TestCase {
      a = fac.random(ll);
      b = fac.random(ll);
 
-     c = a.add(b);
+     c = a.sum(b);
      d = c.subtract(b);
      assertEquals("a+b-b = a",a,d);
 
      c = fac.random(ll);
-     d = c.add( a.add(b) );
-     e = c.add( a ).add(b);
+     d = c.sum( a.sum(b) );
+     e = c.sum( a ).sum(b);
      assertEquals("c+(a+b) = (c+a)+b",d,e);
 
 
-     c = a.add( fac.getZERO() );
+     c = a.sum( fac.getZERO() );
      d = a.subtract( fac.getZERO() );
      assertEquals("a+0 = a-0",c,d);
 
-     c = fac.getZERO().add( a );
+     c = fac.getZERO().sum( a );
      d = fac.getZERO().subtract( a.negate() );
      assertEquals("0+a = 0+(-a)",c,d);
 

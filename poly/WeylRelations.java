@@ -61,7 +61,7 @@ public class WeylRelations<C extends RingElem<C>> {
             ExpVector ef = ExpVector.EVSUM(e,f);
             GenSolvablePolynomial<C> b = one.multiply(ef);
             GenSolvablePolynomial<C> rel 
-                = (GenSolvablePolynomial<C>)b.add(one);
+                = (GenSolvablePolynomial<C>)b.sum(one);
             //                = (GenSolvablePolynomial<C>)b.subtract(one);
             if ( rel.isZERO() ) {
                logger.info("ring = " + ring);

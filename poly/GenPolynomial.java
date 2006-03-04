@@ -343,11 +343,8 @@ public class GenPolynomial<C extends RingElem<C> >
      * @return first coefficient.
      */
     public C leadingBaseCoefficient() {
-        //Map.Entry<ExpVector,C> m = this.leadingMonomial();
-        //if ( m == null ) return null;
-        //return m.getValue();
         if ( val.size() == 0 ) {
-            return null;
+           return ring.coFac.getZERO();
         }
         return val.get( val.firstKey() ); 
     }
@@ -358,7 +355,7 @@ public class GenPolynomial<C extends RingElem<C> >
      * @param S GenPolynomial.
      * @return this+S.
      */
-    public GenPolynomial<C> add(GenPolynomial<C> S) {
+    public GenPolynomial<C> sum(GenPolynomial<C> S) {
         if ( S == null ) {
             return this;
         }
@@ -375,7 +372,7 @@ public class GenPolynomial<C extends RingElem<C> >
             C x = nv.get( e );
             C y = sv.get( e ); // assert y != null
             if ( x != null ) {
-                x = x.add(y);
+                x = x.sum(y);
                 if ( ! x.isZERO() ) {
                     nv.put( e, x );
                 } else {
@@ -396,7 +393,7 @@ public class GenPolynomial<C extends RingElem<C> >
      * @param e exponent.
      * @return this + a x<sup>e</sup>.
      */
-    public GenPolynomial<C> add(C a, ExpVector e) {
+    public GenPolynomial<C> sum(C a, ExpVector e) {
         if ( a == null ) {
             return this;
         }
@@ -408,7 +405,7 @@ public class GenPolynomial<C extends RingElem<C> >
         //if ( nv.size() == 0 ) { nv.put(e,a); return n; }
         C x = nv.get( e );
         if ( x != null ) {
-            x = x.add(a);
+            x = x.sum(a);
             if ( ! x.isZERO() ) {
                 nv.put( e, x );
             } else {
@@ -547,7 +544,7 @@ public class GenPolynomial<C extends RingElem<C> >
                 if ( c0 == null ) {
                     pv.put( e, c);
                 } else {
-                    c0 = c0.add( c );
+                    c0 = c0.sum( c );
                     if ( ! c0.isZERO() ) {
                         pv.put( e, c0 );
                     } else { 
@@ -709,7 +706,7 @@ public class GenPolynomial<C extends RingElem<C> >
                 //logger.info("red div = " + e);
                 //C ax = a;
                 a = a.multiply( ci );
-                q = q.add( a, f );
+                q = q.sum( a, f );
                 h = S.multiply( a, f );
                 //rx = r;
                 r = r.subtract( h );
@@ -1028,7 +1025,7 @@ public class GenPolynomial<C extends RingElem<C> >
             if ( p == null ) {
                 p = zero;
             }
-            p = p.add( a, g );
+            p = p.sum( a, g );
             B.put( f, p );
         }
         return B;

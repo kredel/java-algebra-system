@@ -350,7 +350,7 @@ public class GenPolynomialTokenizer  {
             case ')': 
             case ',': 
                 logger.debug("b, = " + b);
-                a = a.add(b); 
+                a = a.sum(b); 
                 b = a1;
                 break;
             case '\n':
@@ -361,7 +361,7 @@ public class GenPolynomialTokenizer  {
             }
         }
         if (debug) logger.debug("b = " + b);
-        a = a.add(b); 
+        a = a.sum(b); 
         logger.debug("a = " + a);
         // b = a1;
         return a;

@@ -238,8 +238,8 @@ public class AlgebraicNumber<C extends RingElem<C> >
      * @param S AlgebraicNumber.
      * @return this+S.
      */
-    public AlgebraicNumber<C> add(AlgebraicNumber<C> S) {
-        return new AlgebraicNumber<C>( modul, val.add( S.val ) );
+    public AlgebraicNumber<C> sum(AlgebraicNumber<C> S) {
+        return new AlgebraicNumber<C>( modul, val.sum( S.val ) );
     }
 
 

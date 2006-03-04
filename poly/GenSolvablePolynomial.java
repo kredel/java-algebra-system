@@ -141,7 +141,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
                 if ( el1s <= fl1s ) { // symmetric
                     ExpVector g = ExpVector.EVSUM(e,f); 
                     if ( debug ) logger.debug("g = " + g);
-                    Cs = (GenSolvablePolynomial<C>)zero.add( one, g ); // symmetric!
+                    Cs = (GenSolvablePolynomial<C>)zero.sum( one, g ); // symmetric!
                     //Cs = new GenSolvablePolynomial<C>(ring,one,g); // symmetric!
                 } else { // unsymmetric
                     // split e = e1 * e2, f = f1 * f2
@@ -156,7 +156,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
                     //logger.info("relation = " + rel);
                     Cs = rel.p; //ring.copy( rel.p ); // do not clone() 
                     if ( rel.f != null ) {
-                       C2 = (GenSolvablePolynomial<C>)zero.add( one, rel.f );
+                       C2 = (GenSolvablePolynomial<C>)zero.sum( one, rel.f );
                        Cs = Cs.multiply( C2 );
                        if ( rel.e == null ) {
                           e4 = e2;
@@ -166,17 +166,17 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
                        ring.table.update(e4,f2,Cs);
                     }
                     if ( rel.e != null ) {
-                       C1 = (GenSolvablePolynomial<C>)zero.add( one, rel.e );
+                       C1 = (GenSolvablePolynomial<C>)zero.sum( one, rel.e );
                        Cs = C1.multiply( Cs );
                        ring.table.update(e2,f2,Cs);
                     }
                     if ( !f1.isZERO() ) {
-                       C2 = (GenSolvablePolynomial<C>)zero.add( one, f1 );
+                       C2 = (GenSolvablePolynomial<C>)zero.sum( one, f1 );
                        Cs = Cs.multiply( C2 ); 
                        //ring.table.update(?,f1,Cs)
                     }
                     if ( !e1.isZERO() ) {
-                       C1 = (GenSolvablePolynomial<C>)zero.add( one, e1 );
+                       C1 = (GenSolvablePolynomial<C>)zero.sum( one, e1 );
                        Cs = C1.multiply( Cs ); 
                        //ring.table.update(e1,?,Cs)
                     }
@@ -185,7 +185,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
                 //logger.debug("c = " + c);
                 Cs = Cs.multiply( c ); // symmetric!
                 if ( debug ) logger.debug("Cs = " + Cs);
-                Cp = (GenSolvablePolynomial<C>)Cp.add( Cs );
+                Cp = (GenSolvablePolynomial<C>)Cp.sum( Cs );
             }
         }
         return Cp;

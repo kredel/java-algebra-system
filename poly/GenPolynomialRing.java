@@ -363,7 +363,7 @@ public class GenPolynomialRing<C extends RingElem<C> >
         for ( int i = 0; i < l; i++ ) {
             e = ExpVector.EVRAND(nvar, d, q, rnd);
             a = coFac.random(k,rnd);
-            r = r.add(a,e); // somewhat inefficient but clean
+            r = r.sum(a,e); // somewhat inefficient but clean
             //System.out.println("e = " + e + " a = " + a);
         }
         // System.out.println("r = " + r);

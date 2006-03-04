@@ -129,7 +129,7 @@ public class ANumGenPolynomialTest extends TestCase {
      a = fac.random(ll);
      b = fac.random(ll);
 
-     c = a.add(b);
+     c = a.sum(b);
      d = c.subtract(b);
      assertEquals("a+b-b = a",a,d);
 
@@ -139,8 +139,8 @@ public class ANumGenPolynomialTest extends TestCase {
      AlgebraicNumber<BigRational> x = cfac.random(kl);
 
      b = new GenPolynomial<AlgebraicNumber<BigRational>>(fac, x, u);
-     c = a.add(b);
-     d = a.add(x,u);
+     c = a.sum(b);
+     d = a.sum(x,u);
      assertEquals("a+p(x,u) = a+(x,u)",c,d);
 
      c = a.subtract(b);
@@ -149,8 +149,8 @@ public class ANumGenPolynomialTest extends TestCase {
 
      a = new GenPolynomial<AlgebraicNumber<BigRational>>(fac);
      b = new GenPolynomial<AlgebraicNumber<BigRational>>(fac,x, u);
-     c = b.add(a);
-     d = a.add(x,u);
+     c = b.sum(a);
+     d = a.sum(x,u);
      assertEquals("a+p(x,u) = a+(x,u)",c,d);
 
      c = a.subtract(b);
@@ -159,15 +159,15 @@ public class ANumGenPolynomialTest extends TestCase {
 
 
      c = fac.random(ll);
-     d = c.add( a.add(b) );
-     e = c.add( a ).add(b);
+     d = c.sum( a.sum(b) );
+     e = c.sum( a ).sum(b);
      assertEquals("c+(a+b) = (c+a)+b",d,e);
 
-     c = a.add( fac.getZERO() );
+     c = a.sum( fac.getZERO() );
      d = a.subtract( fac.getZERO() );
      assertEquals("a+0 = a-0",c,d);
 
-     c = fac.getZERO().add( a );
+     c = fac.getZERO().sum( a );
      d = fac.getZERO().subtract( a.negate() );
      assertEquals("0+a = 0+(-a)",c,d);
  }
@@ -274,7 +274,7 @@ public class ANumGenPolynomialTest extends TestCase {
      d = qr[1];
      //System.out.println("q = " + c);
      //System.out.println("r = " + d);
-     e = c.multiply(a).add(d);
+     e = c.multiply(a).sum(d);
      assertEquals("b = q a + r", b, e );
 
      qr = a.divideRemainder(b); 
@@ -282,7 +282,7 @@ public class ANumGenPolynomialTest extends TestCase {
      d = qr[1]; 
      //System.out.println("q = " + c);
      //System.out.println("r = " + d);
-     e = c.multiply(b).add(d); 
+     e = c.multiply(b).sum(d); 
      assertEquals("a = q b + r", a, e ); 
 
 
@@ -306,7 +306,7 @@ public class ANumGenPolynomialTest extends TestCase {
      //assertEquals("g = gcd(a,b)", c, g );
 
      GenPolynomial<AlgebraicNumber<BigRational>> x;
-     x = a.multiply(d).add( b.multiply(e) ).monic(); 
+     x = a.multiply(d).sum( b.multiply(e) ).monic(); 
      //System.out.println("x = " + x);
      assertEquals("gcd(a,b) = a s + b t", c, x );
 

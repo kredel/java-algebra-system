@@ -108,7 +108,7 @@ public class RatGenPolynomialTest extends TestCase {
      a = fac.random(ll);
      b = fac.random(ll);
 
-     c = a.add(b);
+     c = a.sum(b);
      d = c.subtract(b);
      assertEquals("a+b-b = a",a,d);
 
@@ -118,8 +118,8 @@ public class RatGenPolynomialTest extends TestCase {
      BigRational x = BigRational.RNRAND(kl);
 
      b = new GenPolynomial<BigRational>(fac,x, u);
-     c = a.add(b);
-     d = a.add(x,u);
+     c = a.sum(b);
+     d = a.sum(x,u);
      assertEquals("a+p(x,u) = a+(x,u)",c,d);
 
      c = a.subtract(b);
@@ -128,8 +128,8 @@ public class RatGenPolynomialTest extends TestCase {
 
      a = new GenPolynomial<BigRational>(fac);
      b = new GenPolynomial<BigRational>(fac,x, u);
-     c = b.add(a);
-     d = a.add(x,u);
+     c = b.sum(a);
+     d = a.sum(x,u);
      assertEquals("a+p(x,u) = a+(x,u)",c,d);
 
      c = a.subtract(b);
@@ -226,7 +226,7 @@ public class RatGenPolynomialTest extends TestCase {
      d = qr[1];
      //System.out.println("q = " + c);
      //System.out.println("r = " + d);
-     e = c.multiply(a).add(d);
+     e = c.multiply(a).sum(d);
      assertEquals("b = q a + r", b, e );
 
      qr = a.divideRemainder(b);
@@ -234,7 +234,7 @@ public class RatGenPolynomialTest extends TestCase {
      d = qr[1];
      //System.out.println("q = " + c);
      //System.out.println("r = " + d);
-     e = c.multiply(b).add(d);
+     e = c.multiply(b).sum(d);
      assertEquals("a = q b + r", a, e );
 
 
@@ -256,7 +256,7 @@ public class RatGenPolynomialTest extends TestCase {
      assertEquals("g = gcd(a,b)", c, g );
 
      GenPolynomial<BigRational> x;
-     x = a.multiply(d).add( b.multiply(e) ).monic(); 
+     x = a.multiply(d).sum( b.multiply(e) ).monic(); 
      //System.out.println("x = " + x);
      assertEquals("gcd(a,b) = a s + b t", c, x );
 

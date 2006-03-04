@@ -109,7 +109,7 @@ public class RatPolyGenPolynomialTest extends TestCase {
      a = fac.random(ll);
      b = fac.random(ll);
 
-     c = a.add(b);
+     c = a.sum(b);
      d = c.subtract(b);
      assertEquals("a+b-b = a",a,d);
 
@@ -119,8 +119,8 @@ public class RatPolyGenPolynomialTest extends TestCase {
      GenPolynomial<BigRational> x = cf.random(kl);
 
      b = new GenPolynomial<GenPolynomial<BigRational>>(fac,x, u);
-     c = a.add(b);
-     d = a.add(x,u);
+     c = a.sum(b);
+     d = a.sum(x,u);
      assertEquals("a+p(x,u) = a+(x,u)",c,d);
 
      c = a.subtract(b);
@@ -129,8 +129,8 @@ public class RatPolyGenPolynomialTest extends TestCase {
 
      a = new GenPolynomial<GenPolynomial<BigRational>>(fac);
      b = new GenPolynomial<GenPolynomial<BigRational>>(fac,x, u);
-     c = b.add(a);
-     d = a.add(x,u);
+     c = b.sum(a);
+     d = a.sum(x,u);
      assertEquals("a+p(x,u) = a+(x,u)",c,d);
 
      c = a.subtract(b);

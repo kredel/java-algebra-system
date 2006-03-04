@@ -108,7 +108,7 @@ public class GenSolvablePolynomialTest extends TestCase {
         assertTrue("p.equals(pe) = ", p.equals(pe) );
         assertTrue("p.equals(p) = ", p.equals(p) );
 
-        pe = pe.add( p ); // why not p = p.add(pe) ?
+        pe = pe.sum( p ); // why not p = p.add(pe) ?
         //System.out.println("pe = " + pe);
         p = pf.random( 9 );
         p = (GenSolvablePolynomial<BigRational>)p.subtract( p ); 
@@ -135,7 +135,7 @@ public class GenSolvablePolynomialTest extends TestCase {
         assertTrue("pp.equals(ppe) = ", pp.equals(ppe) );
         assertTrue("pp.equals(pp) = ", pp.equals(pp) );
 
-        ppe = ppe.add( pp ); // why not pp = pp.add(ppe) ?
+        ppe = ppe.sum( pp ); // why not pp = pp.add(ppe) ?
         //System.out.println("ppe = " + ppe);
         pp = ppf.random( 2 );
         pp = (GenSolvablePolynomial< GenPolynomial<BigRational>>)pp.subtract( pp ); 
@@ -162,7 +162,7 @@ public class GenSolvablePolynomialTest extends TestCase {
         assertTrue("ppp.equals(pppe) = ", ppp.equals(pppe) );
         assertTrue("ppp.equals(ppp) = ", ppp.equals(ppp) );
 
-        pppe = pppe.add( ppp ); // why not ppp = ppp.add(pppe) ?
+        pppe = pppe.sum( ppp ); // why not ppp = ppp.add(pppe) ?
         // System.out.println("pppe = " + pppe);
         ppp = pppf.random( 2 );
         ppp = (GenSolvablePolynomial<GenPolynomial<GenPolynomial<BigRational>>>)ppp.subtract( ppp ); 

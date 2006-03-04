@@ -109,7 +109,7 @@ public class IntGenPolynomialTest extends TestCase {
      a = fac.random(kl,ll,el,q);
      b = fac.random(kl,ll,el,q);
 
-     c = a.add(b);
+     c = a.sum(b);
      d = c.subtract(b);
      assertEquals("a+b-b = a",a,d);
 
@@ -119,8 +119,8 @@ public class IntGenPolynomialTest extends TestCase {
      BigInteger x = BigInteger.IRAND(kl);
 
      b = new GenPolynomial<BigInteger>(fac,x, u);
-     c = a.add(b);
-     d = a.add(x,u);
+     c = a.sum(b);
+     d = a.sum(x,u);
      assertEquals("a+p(x,u) = a+(x,u)",c,d);
 
      c = a.subtract(b);
@@ -129,8 +129,8 @@ public class IntGenPolynomialTest extends TestCase {
 
      a = new GenPolynomial<BigInteger>(fac);
      b = new GenPolynomial<BigInteger>(fac,x, u);
-     c = b.add(a);
-     d = a.add(x,u);
+     c = b.sum(a);
+     d = a.sum(x,u);
      assertEquals("a+p(x,u) = a+(x,u)",c,d);
 
      c = a.subtract(b);
