@@ -351,7 +351,7 @@ public class GenPolynomial<C extends RingElem<C> >
 
 
     /**
-     * GenPolynomial addition. 
+     * GenPolynomial summation. 
      * @param S GenPolynomial.
      * @return this+S.
      */

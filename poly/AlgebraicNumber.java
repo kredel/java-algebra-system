@@ -234,7 +234,7 @@ public class AlgebraicNumber<C extends RingElem<C> >
     }
 
 
-    /** AlgebraicNumber addition.
+    /** AlgebraicNumber summation.
      * @param S AlgebraicNumber.
      * @return this+S.
      */
