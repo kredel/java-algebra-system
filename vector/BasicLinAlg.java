@@ -56,7 +56,7 @@ public class BasicLinAlg<C extends RingElem<C>> {
             if ( sp == null ) {
                 sp = pi.multiply(pj);
             } else {
-                sp = sp.add( pi.multiply(pj) );
+                sp = sp.sum( pi.multiply(pj) );
             }
         }
         if ( it.hasNext() || jt.hasNext() ) {
@@ -124,7 +124,7 @@ public class BasicLinAlg<C extends RingElem<C>> {
         while ( it.hasNext() && jt.hasNext() ) {
             GenPolynomial<C> pi = it.next();
             GenPolynomial<C> pj = jt.next();
-            GenPolynomial<C> p = pi.add( pj );
+            GenPolynomial<C> p = pi.sum( pj );
             V.add( p );
         }
         //System.out.println("vectorAdd" + V);

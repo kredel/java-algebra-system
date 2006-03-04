@@ -137,12 +137,12 @@ public class GenVector<C extends RingElem<C> >
      * Sum of vectors.
      * @return this+b
      */
-    public GenVector<C> add(GenVector<C> b) {
+    public GenVector<C> sum(GenVector<C> b) {
         List<C> oval = b.val;
         ArrayList<C> a = new ArrayList<C>( modul.cols );
         int i = 0;
         for ( C c : val ) {
-            C e = c.add( oval.get( i++ ) );
+            C e = c.sum( oval.get( i++ ) );
             a.add( e );
         }
         return new GenVector<C>(modul,a);
@@ -219,7 +219,7 @@ public class GenVector<C extends RingElem<C> >
         for ( C c : val ) {
             C c1 = c.multiply(s);
             C c2 = oval.get( i++ ).multiply( t );
-            C e = c1.add( c2 );
+            C e = c1.sum( c2 );
             a.add( e );
         }
         return new GenVector<C>(modul,a);
@@ -237,7 +237,7 @@ public class GenVector<C extends RingElem<C> >
         int i = 0;
         for ( C c : val ) {
             C c2 = oval.get( i++ ).multiply( t );
-            C e = c.add( c2 );
+            C e = c.sum( c2 );
             a.add( e );
         }
         return new GenVector<C>(modul,a);
@@ -255,7 +255,7 @@ public class GenVector<C extends RingElem<C> >
         int i = 0;
         for ( C c : val ) {
             C c2 = t.multiply( oval.get( i++ ) );
-            C e = c.add( c2 );
+            C e = c.sum( c2 );
             a.add( e );
         }
         return new GenVector<C>(modul,a);
@@ -275,7 +275,7 @@ public class GenVector<C extends RingElem<C> >
         for ( C c : val ) {
             C c1 = s.multiply(c);
             C c2 = t.multiply( oval.get( i++ ) );
-            C e = c1.add( c2 );
+            C e = c1.sum( c2 );
             a.add( e );
         }
         return new GenVector<C>(modul,a);
@@ -293,7 +293,7 @@ public class GenVector<C extends RingElem<C> >
         int i = 0;
         for ( C c : val ) {
             C c2 = c.multiply( oval.get( i++ ) );
-            a = a.add( c2 );
+            a = a.sum( c2 );
         }
         return a;
     }
@@ -309,7 +309,7 @@ public class GenVector<C extends RingElem<C> >
         for ( C c : val ) {
             GenVector<C> b = B.get( i++ );
             GenVector<C> a = b.leftScalarMultiply( c );
-            A = A.add( a );
+            A = A.sum( a );
         }
         return A;
     }
@@ -326,7 +326,7 @@ public class GenVector<C extends RingElem<C> >
         for ( C c : val ) {
             GenVector<C> b = B.get( i++ );
             GenVector<C> a = b.scalarMultiply( c );
-            A = A.add( a );
+            A = A.sum( a );
         }
         return A;
     }

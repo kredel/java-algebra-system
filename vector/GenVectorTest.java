@@ -126,27 +126,27 @@ public class GenVectorTest extends TestCase {
      //System.out.println("a = " + a);
      //System.out.println("b = " + b);
 
-     c = a.add(b);
+     c = a.sum(b);
      d = c.subtract(b);
      //System.out.println("c = " + c);
      //System.out.println("d = " + d);
      assertEquals("a+b-b = a",a,d);
 
-     c = a.add( b );
-     d = c.add( b.negate() );
+     c = a.sum( b );
+     d = c.sum( b.negate() );
      //System.out.println("c = " + c);
      //System.out.println("d = " + d);
      assertEquals("a+b+(-b) = a",a,d);
 
-     c = a.add(b);
-     d = b.add(a);
+     c = a.sum(b);
+     d = b.sum(a);
      //System.out.println("c = " + c);
      //System.out.println("d = " + d);
      assertEquals("a+b = b+a",c,d);
 
      c = mfac.random(kl,q);
-     d = a.add( b ).add( c );
-     e = a.add( b.add( c ) );
+     d = a.sum( b ).sum( c );
+     e = a.sum( b.sum( c ) );
      //System.out.println("d = " + d);
      //System.out.println("e = " + e);
      assertEquals("a+(b+c) = (a+b)+c",d,e);
@@ -191,7 +191,7 @@ public class GenVectorTest extends TestCase {
      assertEquals("a+1*b = b+1*a",c,d);
 
      c = a.linearCombination(b,t);
-     d = a.add(b);
+     d = a.sum(b);
      //System.out.println("c = " + c);
      //System.out.println("d = " + d);
      assertEquals("a+1*b = b+1*a",c,d);
@@ -306,27 +306,27 @@ public class GenVectorTest extends TestCase {
      //System.out.println("a = " + a);
      //System.out.println("b = " + b);
 
-     c = a.add(b);
+     c = a.sum(b);
      d = c.subtract(b);
      //System.out.println("c = " + c);
      //System.out.println("d = " + d);
      assertEquals("a+b-b = a",a,d);
 
-     c = a.add( b );
-     d = c.add( b.negate() );
+     c = a.sum( b );
+     d = c.sum( b.negate() );
      //System.out.println("c = " + c);
      //System.out.println("d = " + d);
      assertEquals("a+b+(-b) = a",a,d);
 
-     c = a.add(b);
-     d = b.add(a);
+     c = a.sum(b);
+     d = b.sum(a);
      //System.out.println("c = " + c);
      //System.out.println("d = " + d);
      assertEquals("a+b = b+a",c,d);
 
      c = mfac.random(kl,q);
-     d = a.add( b ).add( c );
-     e = a.add( b.add( c ) );
+     d = a.sum( b ).sum( c );
+     e = a.sum( b.sum( c ) );
      //System.out.println("d = " + d);
      //System.out.println("e = " + e);
      assertEquals("a+(b+c) = (a+b)+c",d,e);
@@ -358,7 +358,7 @@ public class GenVectorTest extends TestCase {
 
      c = a.scalarMultiply(r);
      d = a.scalarMultiply(s);
-     e = c.add(d);
+     e = c.sum(d);
      //System.out.println("c = " + c);
      //System.out.println("d = " + d);
      //System.out.println("e = " + e);
@@ -377,7 +377,7 @@ public class GenVectorTest extends TestCase {
      assertEquals("a+1*b = b+1*a",c,d);
 
      c = a.linearCombination(b,t);
-     d = a.add(b);
+     d = a.sum(b);
      //System.out.println("c = " + c);
      //System.out.println("d = " + d);
      assertEquals("a+1*b = b+1*a",c,d);

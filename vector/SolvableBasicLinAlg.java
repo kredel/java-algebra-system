@@ -56,7 +56,7 @@ public class SolvableBasicLinAlg<C extends RingElem<C>> {
             if ( sp == null ) {
                 sp = pi.multiply(pj);
             } else {
-                sp = (GenSolvablePolynomial<C>)sp.add( pi.multiply(pj) );
+                sp = (GenSolvablePolynomial<C>)sp.sum( pi.multiply(pj) );
             }
         }
         if ( it.hasNext() || jt.hasNext() ) {
@@ -161,7 +161,7 @@ public class SolvableBasicLinAlg<C extends RingElem<C>> {
         while ( it.hasNext() && jt.hasNext() ) {
             GenSolvablePolynomial<C> pi = it.next();
             GenSolvablePolynomial<C> pj = jt.next();
-            GenSolvablePolynomial<C> p = (GenSolvablePolynomial<C>)pi.add( pj );
+            GenSolvablePolynomial<C> p = (GenSolvablePolynomial<C>)pi.sum( pj );
             V.add( p );
         }
         //System.out.println("vectorAdd" + V);

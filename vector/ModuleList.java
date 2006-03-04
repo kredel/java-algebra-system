@@ -250,7 +250,7 @@ public class ModuleList<C extends RingElem<C> > implements Serializable {
             int m = 0;
             for ( GenPolynomial<C> c: r ) {
                 d = c.extend( pfac, m, 1l );
-                ext = ext.add(d); 
+                ext = ext.sum(d); 
                 m++;
             }
             pols.add( ext );
