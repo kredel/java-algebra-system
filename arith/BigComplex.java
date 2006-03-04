@@ -314,7 +314,7 @@ public class BigComplex implements RingElem<BigComplex>,
     /* arithmetic operations: +, -, -
      */
 
-    /** Complex number add.  
+    /** Complex number summation.  
      * @param B a BigComplex number.
      * @return this+B.
      */

@@ -449,7 +449,7 @@ public class BigInteger implements RingElem<BigInteger>,
     }
 
 
-    /** BigInteger addition.
+    /** BigInteger summation.
      * @param S BigInteger.
      * @return this+S.
      */

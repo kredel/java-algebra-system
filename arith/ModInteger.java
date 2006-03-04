@@ -424,7 +424,7 @@ public class ModInteger implements RingElem<ModInteger>,
     }
 
 
-    /** ModInteger addition.
+    /** ModInteger summation.
      * @param S ModInteger.
      * @return this+S.
      */

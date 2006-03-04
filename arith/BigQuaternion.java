@@ -428,7 +428,7 @@ public class BigQuaternion implements RingElem<BigQuaternion>,
     /* arithmetic operations: +, -, -
      */
 
-    /** BigQuaternion addition.
+    /** BigQuaternion summation.
      * @param B BigQuaternion.
      * @return this+B.
      */
