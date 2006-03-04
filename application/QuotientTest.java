@@ -129,28 +129,28 @@ public class QuotientTest extends TestCase {
      //System.out.println("a = " + a);
      //System.out.println("b = " + b);
 
-     c = a.add(b);
+     c = a.sum(b);
      d = c.subtract(b);
      assertEquals("a+b-b = a",a,d);
 
-     c = a.add(b);
-     d = b.add(a);
+     c = a.sum(b);
+     d = b.sum(a);
      //System.out.println("c = " + c);
      //System.out.println("d = " + d);
 
      assertEquals("a+b = b+a",c,d);
 
      c = fac.random(kl,ll,el,q);
-     d = c.add( a.add(b) );
-     e = c.add( a ).add(b);
+     d = c.sum( a.sum(b) );
+     e = c.sum( a ).sum(b);
      assertEquals("c+(a+b) = (c+a)+b",d,e);
 
 
-     c = a.add( fac.getZERO() );
+     c = a.sum( fac.getZERO() );
      d = a.subtract( fac.getZERO() );
      assertEquals("a+0 = a-0",c,d);
 
-     c = fac.getZERO().add( a );
+     c = fac.getZERO().sum( a );
      d = fac.getZERO().subtract( a.negate() );
      assertEquals("0+a = 0+(-a)",c,d);
 

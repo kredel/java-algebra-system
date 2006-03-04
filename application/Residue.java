@@ -183,8 +183,8 @@ public class Residue<C extends RingElem<C> >
      * @param S Residue.
      * @return this+S.
      */
-    public Residue<C> add(Residue<C> S) {
-        return new Residue<C>( ring, val.add( S.val ) );
+    public Residue<C> sum(Residue<C> S) {
+        return new Residue<C>( ring, val.sum( S.val ) );
     }
 
 

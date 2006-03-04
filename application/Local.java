@@ -328,12 +328,12 @@ public class Local<C extends RingElem<C> >
      * @param S Local.
      * @return this+S.
      */
-    public Local<C> add(Local<C> S) {
+    public Local<C> sum(Local<C> S) {
         if ( S == null || S.isZERO() ) {
            return this;
         }
         GenPolynomial<C> n = num.multiply( S.den );
-        n = n.add( den.multiply( S.num ) ); 
+        n = n.sum( den.multiply( S.num ) ); 
         GenPolynomial<C> d = den.multiply( S.den );
         return new Local<C>( ring, n, d, false );
     }

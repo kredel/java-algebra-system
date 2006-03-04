@@ -264,12 +264,12 @@ public class Quotient<C extends RingElem<C> >
      * @param S Quotient.
      * @return this+S.
      */
-    public Quotient<C> add(Quotient<C> S) {
+    public Quotient<C> sum(Quotient<C> S) {
         if ( S == null || S.isZERO() ) {
            return this;
         }
         GenPolynomial<C> n = num.multiply( S.den );
-        n = n.add( den.multiply( S.num ) ); 
+        n = n.sum( den.multiply( S.num ) ); 
         GenPolynomial<C> d = den.multiply( S.den );
         return new Quotient<C>( ring, n, d, false );
     }
