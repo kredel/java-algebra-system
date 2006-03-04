@@ -318,9 +318,9 @@ public class BigComplex implements RingElem<BigComplex>,
      * @param B a BigComplex number.
      * @return this+B.
      */
-    public BigComplex add(BigComplex B) {
-        return new BigComplex( re.add( B.re ), 
-                               im.add( B.im ) );
+    public BigComplex sum(BigComplex B) {
+        return new BigComplex( re.sum( B.re ), 
+                               im.sum( B.im ) );
     }
 
     /** Complex number sum.  
@@ -329,7 +329,7 @@ public class BigComplex implements RingElem<BigComplex>,
      */
     public static BigComplex CSUM(BigComplex A, BigComplex B) {
         if ( A == null ) return null;
-        return A.add(B);
+        return A.sum(B);
     }
 
 
@@ -399,7 +399,7 @@ public class BigComplex implements RingElem<BigComplex>,
      * Note: The square root is not jet implemented.
      */
     public BigComplex abs() {
-        BigRational v = re.multiply(re).add(im.multiply(im));
+        BigRational v = re.multiply(re).sum(im.multiply(im));
         logger.error("abs() square root missing");
         // v = v.sqrt();
         return new BigComplex( v );
@@ -437,7 +437,7 @@ public class BigComplex implements RingElem<BigComplex>,
     public BigComplex multiply(BigComplex B) {
         return new BigComplex(
                re.multiply(B.re).subtract(im.multiply(B.im)),
-               re.multiply(B.im).add(im.multiply(B.re)) );
+               re.multiply(B.im).sum(im.multiply(B.re)) );
     }
 
 
@@ -456,7 +456,7 @@ public class BigComplex implements RingElem<BigComplex>,
      * @see edu.jas.structure.RingElem#inverse()
      */
     public BigComplex inverse() {
-        BigRational a = re.multiply(re).add(im.multiply(im));
+        BigRational a = re.multiply(re).sum(im.multiply(im));
         return new BigComplex( re.divide(a), 
                                im.divide(a).negate() ); 
     }

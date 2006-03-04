@@ -95,7 +95,7 @@ public class ArithTest extends TestCase {
      b = new BigInteger( -1 );
      c = new BigInteger( 0 );
 
-     d = a.add(b);
+     d = a.sum(b);
      assertTrue("'1'.isONE()",a.isONE() );
      assertTrue("1+(-1) = 0",d.isZERO());
      d = a.negate();
@@ -150,34 +150,34 @@ public class ArithTest extends TestCase {
      BigInteger a, b, c, d, e;
      // neutral element
      a = BigInteger.ZERO.random( 500 );
-     d = a.add(BigInteger.ZERO);
+     d = a.sum(BigInteger.ZERO);
      assertEquals("a+0 = a",d,a);
      d = a.subtract(BigInteger.ZERO);
      assertEquals("a-0 = a",d,a);
 
      // inverse operations
-     b = a.add(a);
+     b = a.sum(a);
      c = b.subtract(a);
      assertEquals("(a+a)-a = a",c,a);
      b = a.subtract(a);
-     c = b.add(a);
+     c = b.sum(a);
      assertEquals("(a-a)+a = a",c,a);
 
      // comutativity
      b = BigInteger.ZERO.random( 500 );
-     c = a.add(b);
-     d = b.add(a);
+     c = a.sum(b);
+     d = b.sum(a);
      assertEquals("a+b = b+a", c, d );
 
      // negation
      c = a.subtract(b);
-     d = a.add(b.negate());
+     d = a.sum(b.negate());
      assertEquals("a-b = a+(-b)", c, d );
 
      // associativity
      c = BigInteger.ZERO.random( 500 );
-     d = a.add(b.add(c));
-     e = a.add(b).add(c);
+     d = a.sum(b.sum(c));
+     e = a.sum(b).sum(c);
      assertEquals("a+(b+c) = (a+b)+c", d, e );
  }
 
@@ -310,7 +310,7 @@ public class ArithTest extends TestCase {
      b = new BigRational( -1 );
      c = new BigRational( 0 );
 
-     d = a.add(b);
+     d = a.sum(b);
      assertTrue("'1'.isONE()",a.isONE() );
      assertTrue("1+(-1) = 0",d.isZERO());
      d = a.negate();
@@ -347,7 +347,7 @@ public class ArithTest extends TestCase {
      b = new BigComplex( -1 );
      c = new BigComplex( 0 );
 
-     d = a.add(b);
+     d = a.sum(b);
      assertTrue("'1'.isONE()",a.isONE() );
      assertTrue("1+(-1) = 0",d.isZERO());
      d = a.negate();
@@ -384,7 +384,7 @@ public class ArithTest extends TestCase {
      b = new BigQuaternion( -1 );
      c = new BigQuaternion( 0 );
 
-     d = a.add(b);
+     d = a.sum(b);
      assertTrue("'1'.isONE()",a.isONE() );
      assertTrue("1+(-1) = 0",d.isZERO());
      d = a.negate();
@@ -472,34 +472,34 @@ public class ArithTest extends TestCase {
      BigRational a, b, c, d, e;
      // neutral element
      a = BigRational.ZERO.random( 500 );
-     d = a.add(BigRational.ZERO);
+     d = a.sum(BigRational.ZERO);
      assertEquals("a+0 = a",d,a);
      d = a.subtract(BigRational.ZERO);
      assertEquals("a-0 = a",d,a);
 
      // inverse operations
-     b = a.add(a);
+     b = a.sum(a);
      c = b.subtract(a);
      assertEquals("(a+a)-a = a",c,a);
      b = a.subtract(a);
-     c = b.add(a);
+     c = b.sum(a);
      assertEquals("(a-a)+a = a",c,a);
 
      // comutativity
      b = BigRational.ZERO.random( 500 );
-     c = a.add(b);
-     d = b.add(a);
+     c = a.sum(b);
+     d = b.sum(a);
      assertEquals("a+b = b+a", c, d );
 
      // negation
      c = a.subtract(b);
-     d = a.add(b.negate());
+     d = a.sum(b.negate());
      assertEquals("a-b = a+(-b)", c, d );
 
      // associativity
      c = BigRational.ZERO.random( 500 );
-     d = a.add(b.add(c));
-     e = a.add(b).add(c);
+     d = a.sum(b.sum(c));
+     e = a.sum(b).sum(c);
      assertEquals("a+(b+c) = (a+b)+c", d, e );
  }
 
@@ -511,34 +511,34 @@ public class ArithTest extends TestCase {
      BigComplex a, b, c, d, e;
      // neutral element
      a = BigComplex.ZERO.random( 500 );
-     d = a.add(BigComplex.ZERO);
+     d = a.sum(BigComplex.ZERO);
      assertEquals("a+0 = a",d,a);
      d = a.subtract(BigComplex.ZERO);
      assertEquals("a-0 = a",d,a);
 
      // inverse operations
-     b = a.add(a);
+     b = a.sum(a);
      c = b.subtract(a);
      assertEquals("(a+a)-a = a",c,a);
      b = a.subtract(a);
-     c = b.add(a);
+     c = b.sum(a);
      assertEquals("(a-a)+a = a",c,a);
 
      // comutativity
      b = BigComplex.ZERO.random( 500 );
-     c = a.add(b);
-     d = b.add(a);
+     c = a.sum(b);
+     d = b.sum(a);
      assertEquals("a+b = b+a", c, d );
 
      // negation
      c = a.subtract(b);
-     d = a.add(b.negate());
+     d = a.sum(b.negate());
      assertEquals("a-b = a+(-b)", c, d );
 
      // associativity
      c = BigComplex.ZERO.random( 500 );
-     d = a.add(b.add(c));
-     e = a.add(b).add(c);
+     d = a.sum(b.sum(c));
+     e = a.sum(b).sum(c);
      assertEquals("a+(b+c) = (a+b)+c", d, e );
  }
 
@@ -550,34 +550,34 @@ public class ArithTest extends TestCase {
      BigQuaternion a, b, c, d, e;
      // neutral element
      a = BigQuaternion.ZERO.random( 500 );
-     d = a.add(BigQuaternion.ZERO);
+     d = a.sum(BigQuaternion.ZERO);
      assertEquals("a+0 = a",d,a);
      d = a.subtract(BigQuaternion.ZERO);
      assertEquals("a-0 = a",d,a);
 
      // inverse operations
-     b = a.add(a);
+     b = a.sum(a);
      c = b.subtract(a);
      assertEquals("(a+a)-a = a",c,a);
      b = a.subtract(a);
-     c = b.add(a);
+     c = b.sum(a);
      assertEquals("(a-a)+a = a",c,a);
 
      // comutativity
      b = BigQuaternion.ZERO.random( 500 );
-     c = a.add(b);
-     d = b.add(a);
+     c = a.sum(b);
+     d = b.sum(a);
      assertEquals("a+b = b+a", c, d );
 
      // negation
      c = a.subtract(b);
-     d = a.add(b.negate());
+     d = a.sum(b.negate());
      assertEquals("a-b = a+(-b)", c, d );
 
      // associativity
      c = BigQuaternion.ZERO.random( 500 );
-     d = a.add(b.add(c));
-     e = a.add(b).add(c);
+     d = a.sum(b.sum(c));
+     e = a.sum(b).sum(c);
      assertEquals("a+(b+c) = (a+b)+c", d, e );
  }
 

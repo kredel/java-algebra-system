@@ -428,7 +428,7 @@ public class ModInteger implements RingElem<ModInteger>,
      * @param S ModInteger.
      * @return this+S.
      */
-    public ModInteger add(ModInteger S) {
+    public ModInteger sum(ModInteger S) {
         return new ModInteger( modul, val.add( S.val ) );
     }
 
@@ -440,7 +440,7 @@ public class ModInteger implements RingElem<ModInteger>,
      */
     public static ModInteger MISUM(ModInteger A, ModInteger B) {
         if ( A == null ) return null;
-        return A.add(B);
+        return A.sum(B);
     }
 
 

@@ -681,7 +681,7 @@ public class BigRational implements RingElem<BigRational>,
      * @param S BigRational.
      * @return this+S.
      */
-    public BigRational add(BigRational S) {
+    public BigRational sum(BigRational S) {
         BigInteger D = null;
         BigInteger E;
         BigInteger J1Y;
@@ -754,7 +754,7 @@ public class BigRational implements RingElem<BigRational>,
      */
     public static BigRational RNSUM(BigRational R, BigRational S) {
         if ( R == null ) return S;
-        return R.add( S );
+        return R.sum( S );
     }
 
 

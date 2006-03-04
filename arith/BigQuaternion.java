@@ -432,11 +432,11 @@ public class BigQuaternion implements RingElem<BigQuaternion>,
      * @param B BigQuaternion.
      * @return this+B.
      */
-    public BigQuaternion add(BigQuaternion B) {
-        return new BigQuaternion( re.add(B.re), 
-                                  im.add(B.im), 
-                                  jm.add(B.jm), 
-                                  km.add(B.km) );
+    public BigQuaternion sum(BigQuaternion B) {
+        return new BigQuaternion( re.sum(B.re), 
+                                  im.sum(B.im), 
+                                  jm.sum(B.jm), 
+                                  km.sum(B.km) );
     }
 
 
@@ -447,7 +447,7 @@ public class BigQuaternion implements RingElem<BigQuaternion>,
      */
     public static BigQuaternion QSUM(BigQuaternion A, BigQuaternion B) {
         if ( A == null ) return null;
-        return A.add(B);
+        return A.sum(B);
     }
 
 
@@ -527,9 +527,9 @@ public class BigQuaternion implements RingElem<BigQuaternion>,
      */
     public BigQuaternion abs() {
         BigRational v = re.multiply(re);
-        v = v.add(im.multiply(im));
-        v = v.add(jm.multiply(jm));
-        v = v.add(km.multiply(km));
+        v = v.sum(im.multiply(im));
+        v = v.sum(jm.multiply(jm));
+        v = v.sum(km.multiply(km));
         logger.error("abs() square root missing");
         // v = v.sqrt();
         return new BigQuaternion( v );
@@ -571,19 +571,19 @@ public class BigQuaternion implements RingElem<BigQuaternion>,
         r = r.subtract(jm.multiply(B.jm));
         r = r.subtract(km.multiply(B.km));
         BigRational i = re.multiply(B.im);
-        i = i.add( im.multiply(B.re) );
-        i = i.add( jm.multiply(B.km) );
+        i = i.sum( im.multiply(B.re) );
+        i = i.sum( jm.multiply(B.km) );
         i = i.subtract( km.multiply(B.jm) );
 
         BigRational j = re.multiply(B.jm);
         j = j.subtract( im.multiply(B.km) );
-        j = j.add( jm.multiply(B.re) );
-        j = j.add( km.multiply(B.im) );
+        j = j.sum( jm.multiply(B.re) );
+        j = j.sum( km.multiply(B.im) );
 
         BigRational k = re.multiply(B.km);
-        k = k.add( im.multiply(B.jm) );
+        k = k.sum( im.multiply(B.jm) );
         k = k.subtract( jm.multiply(B.im) );
-        k = k.add( km.multiply(B.re) );
+        k = k.sum( km.multiply(B.re) );
 
         return new BigQuaternion( r, i, j, k );
     }
@@ -605,9 +605,9 @@ public class BigQuaternion implements RingElem<BigQuaternion>,
      */
     public BigQuaternion inverse() {
         BigRational a = re.multiply(re);
-        a = a.add(im.multiply(im));
-        a = a.add(jm.multiply(jm));
-        a = a.add(km.multiply(km));
+        a = a.sum(im.multiply(im));
+        a = a.sum(jm.multiply(jm));
+        a = a.sum(km.multiply(km));
         return new BigQuaternion( re.divide(a), 
                                   im.divide(a).negate(), 
                                   jm.divide(a).negate(), 

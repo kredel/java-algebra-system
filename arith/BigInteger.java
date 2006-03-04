@@ -453,7 +453,7 @@ public class BigInteger implements RingElem<BigInteger>,
      * @param S BigInteger.
      * @return this+S.
      */
-    public BigInteger add(BigInteger S) {
+    public BigInteger sum(BigInteger S) {
         return new BigInteger( val.add( S.val ) );
     }
 
@@ -465,7 +465,7 @@ public class BigInteger implements RingElem<BigInteger>,
      */
     public static BigInteger ISUM(BigInteger A, BigInteger B) {
         if ( A == null ) return null;
-        return A.add(B);
+        return A.sum(B);
     }
 
 
