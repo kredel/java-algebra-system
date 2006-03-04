@@ -96,7 +96,7 @@ public class SolvableReductionSeq<C extends RingElem<C>>
               if ( ! mt ) { 
                  //logger.debug("irred");
                  //T = new OrderedMapPolynomial( a, e );
-                 R = (GenSolvablePolynomial<C>)R.add( a, e );
+                 R = (GenSolvablePolynomial<C>)R.sum( a, e );
                  S = (GenSolvablePolynomial<C>)S.subtract( a, e ); 
                  // System.out.println(" S = " + S);
               } else { 
@@ -176,7 +176,7 @@ public class SolvableReductionSeq<C extends RingElem<C>>
             }
             if ( ! mt ) { 
                 //logger.debug("irred");
-                R = (GenSolvablePolynomial<C>)R.add( a, e );
+                R = (GenSolvablePolynomial<C>)R.sum( a, e );
                 S = (GenSolvablePolynomial<C>)S.subtract( a, e ); 
                 // System.out.println(" S = " + S);
                 // throw new RuntimeException("Syzygy no leftGB");
@@ -191,9 +191,9 @@ public class SolvableReductionSeq<C extends RingElem<C>>
                 S = (GenSolvablePolynomial<C>)S.subtract( Q );
                 fac = row.get(i);
                 if ( fac == null ) {
-                    fac = (GenSolvablePolynomial<C>)zero.add( a, e );
+                    fac = (GenSolvablePolynomial<C>)zero.sum( a, e );
                 } else {
-                    fac = (GenSolvablePolynomial<C>)fac.add( a, e );
+                    fac = (GenSolvablePolynomial<C>)fac.sum( a, e );
                 }
                 row.set(i,fac);
             }
@@ -265,7 +265,7 @@ public class SolvableReductionSeq<C extends RingElem<C>>
             if ( ! mt ) { 
                 //logger.debug("irred");
                 //T = new OrderedMapPolynomial( a, e );
-                R = (GenSolvablePolynomial<C>)R.add( a, e );
+                R = (GenSolvablePolynomial<C>)R.sum( a, e );
                 S = (GenSolvablePolynomial<C>)S.subtract( a, e ); 
                 // System.out.println(" S = " + S);
             } else { 

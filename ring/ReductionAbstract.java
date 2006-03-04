@@ -127,8 +127,8 @@ public abstract class ReductionAbstract<C extends RingElem<C>>
         GenPolynomial<C> Cp  = App.subtract(Bpp);
 
         GenPolynomial<C> zero = Ap.ring.getZERO();
-        GenPolynomial<C> As = zero.add( b.negate(), e1 );
-        GenPolynomial<C> Bs = zero.add( a /*correct .negate()*/, f1 );
+        GenPolynomial<C> As = zero.sum( b.negate(), e1 );
+        GenPolynomial<C> Bs = zero.sum( a /*correct .negate()*/, f1 );
         S.set( i, As );
         S.set( j, Bs );
 
@@ -330,7 +330,7 @@ public abstract class ReductionAbstract<C extends RingElem<C>>
                if ( t == null ) {
                   t = r.multiply(p);
                } else {
-                  t = t.add( r.multiply(p) );
+                  t = t.sum( r.multiply(p) );
                }
             }
             //System.out.println("r = " + r );

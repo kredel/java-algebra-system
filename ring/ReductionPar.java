@@ -103,7 +103,7 @@ public class ReductionPar<C extends RingElem<C>>
               if ( ! mt ) { 
                  //logger.debug("irred");
                  //T = new OrderedMapPolynomial( a, e );
-                 R = R.add( a, e );
+                 R = R.sum( a, e );
                  S = S.subtract( a, e ); 
                  // System.out.println(" S = " + S);
               } else { 
@@ -211,7 +211,7 @@ public class ReductionPar<C extends RingElem<C>>
               if ( ! mt ) { 
                  //logger.debug("irred");
                  //T = new OrderedMapPolynomial( a, e );
-                 R = R.add( a, e );
+                 R = R.sum( a, e );
                  S = S.subtract( a, e ); 
                  // System.out.println(" S = " + S);
               } else { 

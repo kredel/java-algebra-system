@@ -99,7 +99,7 @@ public class SolvableReductionPar<C extends RingElem<C>>
               }
               if ( ! mt ) { 
                  //logger.debug("irred");
-                 R = (GenSolvablePolynomial<C>)R.add( a, e );
+                 R = (GenSolvablePolynomial<C>)R.sum( a, e );
                  S = (GenSolvablePolynomial<C>)S.subtract( a, e ); 
                  // System.out.println(" S = " + S);
               } else { 
@@ -197,7 +197,7 @@ public class SolvableReductionPar<C extends RingElem<C>>
               }
               if ( ! mt ) { 
                  //logger.debug("irred");
-                 R = (GenSolvablePolynomial<C>)R.add( a, e );
+                 R = (GenSolvablePolynomial<C>)R.sum( a, e );
                  S = (GenSolvablePolynomial<C>)S.subtract( a, e ); 
                  // System.out.println(" S = " + S);
               } else { 

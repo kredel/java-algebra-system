@@ -202,7 +202,7 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
             if ( modv > 0 ) {
                 e = e.extend(modv,0,0l);
             }
-            p = (GenSolvablePolynomial<C>)zero.add(one,e);
+            p = (GenSolvablePolynomial<C>)zero.sum(one,e);
             pols.add( p );
         }
         return pols;

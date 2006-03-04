@@ -308,7 +308,7 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>>
                   if ( x == null ) {
                      x = y;
                   } else {
-                     x = x.add( y );
+                     x = x.sum( y );
                   }
                   //System.out.println("mx = " + m + " " + x);
                   row.add( x );

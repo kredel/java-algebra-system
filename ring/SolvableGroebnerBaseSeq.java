@@ -313,7 +313,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>>
                   if ( x == null ) {
                      x = y;
                   } else {
-                     x = (GenSolvablePolynomial<C>)x.add( y );
+                     x = (GenSolvablePolynomial<C>)x.sum( y );
                   }
                   //System.out.println("mx = " + m + " " + x);
                   row.add( x );

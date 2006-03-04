@@ -128,8 +128,8 @@ public abstract class SolvableReductionAbstract<C extends RingElem<C>>
         GenSolvablePolynomial<C> Cp = (GenSolvablePolynomial<C>)App.subtract(Bpp);
 
         GenSolvablePolynomial<C> zero = Ap.ring.getZERO();
-        GenSolvablePolynomial<C> As = (GenSolvablePolynomial<C>)zero.add( b.negate(), e1 );
-        GenSolvablePolynomial<C> Bs = (GenSolvablePolynomial<C>)zero.add( a, f1 );
+        GenSolvablePolynomial<C> As = (GenSolvablePolynomial<C>)zero.sum( b.negate(), e1 );
+        GenSolvablePolynomial<C> Bs = (GenSolvablePolynomial<C>)zero.sum( a, f1 );
         S.set( i, As );
         S.set( j, Bs );
         return Cp;
@@ -249,7 +249,7 @@ public abstract class SolvableReductionAbstract<C extends RingElem<C>>
                if ( t == null ) {
                   t = r.multiply(p);
                } else {
-                  t = (GenSolvablePolynomial<C>)t.add( r.multiply(p) );
+                  t = (GenSolvablePolynomial<C>)t.sum( r.multiply(p) );
                }
             }
             //System.out.println("r = " + r );

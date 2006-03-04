@@ -96,7 +96,7 @@ public class ReductionSeq<C extends RingElem<C>>
               if ( ! mt ) { 
                  //logger.debug("irred");
                  //T = new OrderedMapPolynomial( a, e );
-                 R = R.add( a, e );
+                 R = R.sum( a, e );
                  S = S.subtract( a, e ); 
                  // System.out.println(" S = " + S);
               } else { 
@@ -174,7 +174,7 @@ public class ReductionSeq<C extends RingElem<C>>
             }
             if ( ! mt ) { 
                 //logger.debug("irred");
-                R = R.add( a, e );
+                R = R.sum( a, e );
                 S = S.subtract( a, e ); 
                 // System.out.println(" S = " + S);
                 //throw new RuntimeException("Syzygy no GB");
@@ -187,9 +187,9 @@ public class ReductionSeq<C extends RingElem<C>>
                 S = S.subtract( Q );
                 fac = row.get(i);
                 if ( fac == null ) {
-                    fac = zero.add( a, e );
+                    fac = zero.sum( a, e );
                 } else {
-                    fac = fac.add( a, e );
+                    fac = fac.sum( a, e );
                 }
                 row.set(i,fac);
             }
