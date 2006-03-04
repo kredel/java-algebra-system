@@ -260,7 +260,7 @@ public class Quotient<C extends RingElem<C> >
     }
 
 
-    /** Quotient addition.
+    /** Quotient summation.
      * @param S Quotient.
      * @return this+S.
      */

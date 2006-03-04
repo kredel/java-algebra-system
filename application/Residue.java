@@ -179,7 +179,7 @@ public class Residue<C extends RingElem<C> >
     }
 
 
-    /** Residue addition.
+    /** Residue summation.
      * @param S Residue.
      * @return this+S.
      */

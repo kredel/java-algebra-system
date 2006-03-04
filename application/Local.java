@@ -324,7 +324,7 @@ public class Local<C extends RingElem<C> >
     }
 
 
-    /** Local addition.
+    /** Local summation.
      * @param S Local.
      * @return this+S.
      */
