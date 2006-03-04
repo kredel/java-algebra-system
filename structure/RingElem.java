@@ -77,7 +77,7 @@ public interface RingElem<C extends RingElem> extends Cloneable,
 
 
     /**
-     * Add S to this.
+     * Sum of this and S.
      * @param S
      * @return this + S.
      */
