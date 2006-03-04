@@ -538,4 +538,97 @@ public class IdealTest extends TestCase {
      assertTrue("equals(J,I)", J.equals(I) ); // GBs only
  }
 
+
+/**
+ * Test Ideal infinite quotient with Rabinowich trick.
+ * 
+ */
+ public void testIdealInfiniteQuotientRabi() {
+
+     Ideal<BigRational> I;
+     Ideal<BigRational> J;
+     Ideal<BigRational> K;
+     Ideal<BigRational> JJ;
+
+     I = new Ideal<BigRational>(fac,L);
+     assertTrue("isZERO( I )", I.isZERO() );
+     assertTrue("not isONE( I )", !I.isONE() );
+     assertTrue("isGB( I )", I.isGB() );
+
+     a = fac.random(kl-1, ll-1, el-1, q/2 );
+     b = fac.random(kl-1, ll-1, el, q/2 );
+     c = fac.random(kl-1, ll-1, el, q/2 );
+     d = fac.random(kl-1, ll-1, el, q/2 );
+     e = a; //fac.random(kl, ll-1, el, q );
+
+     L = new ArrayList<GenPolynomial<BigRational>>();
+     assertTrue("not isZERO( b )", !b.isZERO() );
+     L.add( b );
+     L = bb.GB( L );
+     I = new Ideal<BigRational>(fac,L,true);
+     assertTrue("not isZERO( I )", !I.isZERO() );
+     //assertTrue("not isONE( I )", !I.isONE() );
+     assertTrue("isGB( I )", I.isGB() );
+
+     J = I.infiniteQuotientRab( a );
+     JJ = I.infiniteQuotient( a );
+     assertTrue("equals(J,JJ)", J.equals(JJ) ); // GBs only
+
+     assertTrue("not isZERO( c )", !c.isZERO() );
+     L.add(c);
+     L = bb.GB( L );
+     I = new Ideal<BigRational>(fac,L,true);
+     assertTrue("not isZERO( I )", !I.isZERO() );
+     //assertTrue("not isONE( I )", !I.isONE() );
+     assertTrue("isGB( I )", I.isGB() );
+
+     J = I.infiniteQuotientRab( a );
+     assertTrue("equals(J,I)", J.equals(I) ); // GBs only
+     JJ = I.infiniteQuotient( a );
+     assertTrue("equals(J,JJ)", J.equals(JJ) ); // GBs only
+
+     assertTrue("not isZERO( d )", !d.isZERO() );
+     L.add(d);
+     L = bb.GB( L );
+     I = new Ideal<BigRational>(fac,L,true);
+     assertTrue("not isZERO( I )", !I.isZERO() );
+     //assertTrue("not isONE( I )", !I.isONE() );
+     assertTrue("isGB( I )", I.isGB() );
+
+     J = I.infiniteQuotientRab( a );
+     assertTrue("isGB( J )", J.isGB() );
+     assertTrue("equals(J,I)", J.equals(I) ); // GBs only
+     JJ = I.infiniteQuotient( a );
+     assertTrue("equals(J,JJ)", J.equals(JJ) ); // GBs only
+
+
+     G = new ArrayList<GenPolynomial<BigRational>>();
+     assertTrue("not isZERO( a )", !a.isZERO() );
+     G.add( a );
+     G = bb.GB( G );
+     K = new Ideal<BigRational>(fac,G,true);
+     assertTrue("not isZERO( K )", !K.isZERO() );
+     //assertTrue("not isONE( I )", !I.isONE() );
+     assertTrue("isGB( K )", K.isGB() );
+
+     J = I.infiniteQuotientRab( K );
+     assertTrue("equals(J,I)", J.equals(I) ); // GBs only
+     JJ = I.infiniteQuotient( a );
+     assertTrue("equals(J,JJ)", J.equals(JJ) ); // GBs only
+
+
+     assertTrue("not isZERO( e )", !e.isZERO() );
+     G.add( e );
+     G = bb.GB( G );
+     K = new Ideal<BigRational>(fac,G,true);
+     assertTrue("not isZERO( K )", !K.isZERO() );
+     //assertTrue("not isONE( I )", !I.isONE() );
+     assertTrue("isGB( K )", K.isGB() );
+
+     J = I.infiniteQuotientRab( K );
+     assertTrue("equals(J,I)", J.equals(I) ); // GBs only
+     JJ = I.infiniteQuotient( a );
+     assertTrue("equals(J,JJ)", J.equals(JJ) ); // GBs only
+ }
+
 }

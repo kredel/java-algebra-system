@@ -34,7 +34,7 @@ public class Ideal<C extends RingElem<C>> implements Serializable {
 
 
   private static Logger logger = Logger.getLogger(Ideal.class);
-  private boolean debug = logger.isDebugEnabled();
+  private boolean debug = true || logger.isDebugEnabled();
 
 
 
@@ -504,6 +504,47 @@ public class Ideal<C extends RingElem<C>> implements Serializable {
    * @param h polynomial
    * @return ideal(this : h<sup>s</sup>), a Groebner base
    */
+  public Ideal<C> infiniteQuotientRab( GenPolynomial<C> h ) {
+      if ( h == null ) { // == (0)
+          return this;
+      }
+      if ( h.isZERO() ) { 
+          return this;
+      }
+      if ( this.isZERO() ) {
+          return this;
+      }
+      Ideal<C> I = this.GB(); // should be already
+      List< GenPolynomial<C> > a = I.getList();
+      List< GenPolynomial<C> > c;
+      c = new ArrayList<GenPolynomial<C>>( a.size()+1 );
+
+      GenPolynomialRing<C> tfac = getRing().extend(1);
+      // term order is also adjusted
+      for ( GenPolynomial<C> p : a ) {
+          p = p.extend( tfac, 0, 0L ); // p
+          c.add( p );
+      }
+      GenPolynomial<C> q  = h.extend( tfac, 0, 1L );
+      GenPolynomial<C> r  = h.extend( tfac, 0, 0L );
+      GenPolynomial<C> hs = r.subtract( q ); // (1-t)*h
+      c.add( hs );
+      logger.warn("intersect computing GB");
+      List< GenPolynomial<C> > g = bb.GB( c );
+      if ( debug ) {
+         logger.debug("intersect GB = " + g);
+      }
+      Ideal<C> E = new Ideal<C>( tfac, g, true );
+      Ideal<C> Is = E.intersect( getRing() );
+      return Is;
+  }
+
+
+  /**
+   * Infinite quotient. Generators for the infinite ideal quotient.
+   * @param h polynomial
+   * @return ideal(this : h<sup>s</sup>), a Groebner base
+   */
   public Ideal<C> infiniteQuotient( GenPolynomial<C> h ) {
       if ( h == null ) { // == (0)
           return this;
@@ -588,6 +629,34 @@ public class Ideal<C extends RingElem<C>> implements Serializable {
       Ideal<C> Q = null;
       for ( GenPolynomial<C> h : H.getList() ) {
           Ideal<C> Hi = this.infiniteQuotient(h);
+          if ( Q == null ) {
+             Q = Hi;
+          } else {
+             Q = Q.intersect( Hi );
+          }
+      }
+      return Q;
+  }
+
+
+  /**
+   * Infinite Quotient. Generators for the ideal infinite  quotient.
+   * @param H ideal
+   * @return ideal(this : H<sup>s</sup>), a Groebner base
+   */
+  public Ideal<C> infiniteQuotientRab( Ideal<C> H ) {
+      if ( H == null ) { // == (0)
+          return this;
+      }
+      if ( H.isZERO() ) { 
+          return this;
+      }
+      if ( this.isZERO() ) { 
+          return this;
+      }
+      Ideal<C> Q = null;
+      for ( GenPolynomial<C> h : H.getList() ) {
+          Ideal<C> Hi = this.infiniteQuotientRab(h);
           if ( Q == null ) {
              Q = Hi;
           } else {
