@@ -18,7 +18,7 @@ import edu.jas.poly.GenPolynomialRing;
 
 
 /**
- * Algebraic number class based on GenPolynomial with RingElem interface.
+ * Tensor ring class based on GenPolynomial with RingElem interface.
  * Objects of this class are immutable.
  * @author Heinz Kredel
  */
@@ -29,17 +29,29 @@ public class TensorRing<C extends RingElem<C> >
      private boolean debug = logger.isDebugEnabled();
 
 
-    /** Polynomial ring of the factory. 
+    /** Polynomial ring 1 of the factory. 
      */
-    public final GenPolynomialRing<C> ring;
+    public final GenPolynomialRing<C> ring1;
+
+
+    /** Polynomial ring 2 of the factory. 
+     */
+    public final GenPolynomialRing<C> ring2;
 
 
     /** The constructor creates a TensorRing object 
-     * from a GenPolynomialRing and a GenPolynomial list. 
-     * @param r polynomial ring.
+     * from two GenPolynomialRings. 
+     * @param r1 first polynomial ring.
+     * @param r2 second polynomial ring.
      */
-    public TensorRing(GenPolynomialRing<C> r) {
-        ring = r;
+    public TensorRing(GenPolynomialRing<C> r1,GenPolynomialRing<C> r2) {
+        if ( true || debug ) {
+           if ( ! r1.coFac.equals( r2.coFac ) ) { // can not happen 
+              throw new RuntimeException("coefficient rings not equal");
+           }
+        }
+        ring1 = r1;
+        ring2 = r2;
     }
 
 
@@ -48,7 +60,7 @@ public class TensorRing<C extends RingElem<C> >
      * @return a copy of c.
      */
     public Tensor<C> copy(Tensor<C> c) {
-        return new Tensor<C>( c.ring, c.num, c.den, true );
+        return new Tensor<C>( c.ring, c.coeff, c.pol1, c.pol2 );
     }
 
 
@@ -56,7 +68,10 @@ public class TensorRing<C extends RingElem<C> >
      * @return 0 as Tensor.
      */
     public Tensor<C> getZERO() {
-        return new Tensor<C>( this, ring.getZERO() );
+        return new Tensor<C>( this, 
+                              ring1.coFac.getZERO(),
+                              ring1.getZERO(),
+                              ring2.getZERO() );
     }
 
 
@@ -64,7 +79,10 @@ public class TensorRing<C extends RingElem<C> >
      * @return 1 as Tensor.
      */
     public Tensor<C> getONE() {
-        return new Tensor<C>( this, ring.getONE() );
+        return new Tensor<C>( this, 
+                              ring1.coFac.getONE(),
+                              ring1.getONE(),
+                              ring2.getONE() );
     }
 
     
@@ -73,7 +91,10 @@ public class TensorRing<C extends RingElem<C> >
      * @return a Tensor.
      */
     public Tensor<C> fromInteger(java.math.BigInteger a) {
-        return new Tensor<C>( this, ring.fromInteger(a) );
+        return new Tensor<C>( this, 
+                              ring1.coFac.fromInteger(a),
+                              ring1.getONE(),
+                              ring2.getONE() );
     }
 
 
@@ -82,7 +103,10 @@ public class TensorRing<C extends RingElem<C> >
      * @return a Tensor.
      */
     public Tensor<C> fromInteger(long a) {
-        return new Tensor<C>( this, ring.fromInteger(a) );
+        return new Tensor<C>( this, 
+                              ring1.coFac.fromInteger(a),
+                              ring1.getONE(),
+                              ring2.getONE() );
     }
     
 
@@ -90,8 +114,9 @@ public class TensorRing<C extends RingElem<C> >
      * @see java.lang.Object#toString()
      */
     public String toString() {
-        return "Tensor[ " 
-                + ring.toString() + " ]";
+        return "TensorRing[ " 
+                + ring1.toString() + ", "
+                + ring2.toString() + " ]";
     }
 
 
@@ -112,7 +137,7 @@ public class TensorRing<C extends RingElem<C> >
         if ( a == null ) {
             return false;
         }
-        return ring.equals( a.ring );
+        return ring1.equals( a.ring1 ) && ring2.equals( a.ring2 );
     }
 
 
@@ -121,12 +146,9 @@ public class TensorRing<C extends RingElem<C> >
      * @return a random residue element.
      */
     public Tensor<C> random(int n) {
-        GenPolynomial<C> r = ring.random( n ).monic();
-        GenPolynomial<C> s = ring.random( n ).monic();
-        while ( s.isZERO() ) {
-            s = ring.random( n ).monic();
-        }
-        return new Tensor<C>( this, r, s, false );
+        GenPolynomial<C> p1 = ring1.random( n ).monic();
+        GenPolynomial<C> p2 = ring2.random( n ).monic();
+        return new Tensor<C>( this, null, p1, p2 );
     }
 
 
@@ -139,12 +161,9 @@ public class TensorRing<C extends RingElem<C> >
      * @return a random residue polynomial.
      */
     public Tensor<C> random(int k, int l, int d, float q) {
-        GenPolynomial<C> r = ring.random(k,l,d,q).monic();
-        GenPolynomial<C> s = ring.random(k,l,d,q).monic();
-        while ( s.isZERO() ) {
-            s = ring.random( k,l,d,q ).monic();
-        }
-        return new Tensor<C>( this, r, s, false );
+        GenPolynomial<C> p1 = ring1.random(k,l,d,q).monic();
+        GenPolynomial<C> p2 = ring2.random(k,l,d,q).monic();
+        return new Tensor<C>( this, null, p1, p2 );
     }
 
 
@@ -154,32 +173,33 @@ public class TensorRing<C extends RingElem<C> >
      * @return a random residue element.
      */
     public Tensor<C> random(int n, Random rnd) {
-        GenPolynomial<C> r = ring.random( n, rnd ).monic();
-        GenPolynomial<C> s = ring.random( n, rnd ).monic();
-        while ( s.isZERO() ) {
-            s = ring.random( n, rnd ).monic();
-        }
-        return new Tensor<C>( this, r, s, false);
+        GenPolynomial<C> p1 = ring1.random( n, rnd ).monic();
+        GenPolynomial<C> p2 = ring2.random( n, rnd ).monic();
+        return new Tensor<C>( this, null, p1, p2 );
     }
 
 
     /** Parse Tensor from String.
      * @param s String.
      * @return Tensor from s.
+     * does not work
      */
     public Tensor<C> parse(String s) {
-        GenPolynomial<C> x = ring.parse( s );
-        return new Tensor<C>( this, x );
+        GenPolynomial<C> p1 = ring1.parse( s );
+        GenPolynomial<C> p2 = ring2.parse( s );
+        return new Tensor<C>( this, null , p1, p2 );
     }
 
 
     /** Parse Tensor from Reader.
      * @param r Reader.
      * @return next Tensor from r.
+     * does not work
      */
     public Tensor<C> parse(Reader r) {
-        GenPolynomial<C> x = ring.parse( r );
-        return new Tensor<C>( this, x );
+        GenPolynomial<C> p1 = ring1.parse( r );
+        GenPolynomial<C> p2 = ring1.parse( r );
+        return new Tensor<C>( this, null, p1, p2 );
     }
 
 }

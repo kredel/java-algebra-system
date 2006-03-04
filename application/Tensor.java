@@ -17,7 +17,6 @@ import edu.jas.structure.RingElem;
 /**
  * Tensor class element based on GenPolynomial with RingElem interface.
  * Objects of this class are immutable.
- * <b>Note:</b> Just for fun, reduction to lowest terms is not efficient.
  * @author Heinz Kredel
  */
 public class Tensor<C extends RingElem<C> > 
@@ -32,14 +31,19 @@ public class Tensor<C extends RingElem<C> >
     public final TensorRing<C> ring;
 
 
-    /** Numerator part of the element data structure. 
+    /** Coefficient part of the element data structure. 
      */
-    public final GenPolynomial<C> num;
+    public final C coeff;
 
 
-    /** Denominator part of the element data structure. 
+    /** First part of the element data structure. 
      */
-    public final GenPolynomial<C> den;
+    public final GenPolynomial<C> pol1;
+
+
+    /** Second part of the element data structure. 
+     */
+    public final GenPolynomial<C> pol2;
 
 
     /** The constructor creates a Tensor object 
@@ -47,118 +51,65 @@ public class Tensor<C extends RingElem<C> >
      * @param r ring factory.
      */
     public Tensor(TensorRing<C> r) {
-        this( r, r.ring.getZERO() );
+        this( r, r.ring1.getZERO(), r.ring2.getZERO() );
     }
 
 
     /** The constructor creates a Tensor object 
-     * from a ring factory and a numerator polynomial. 
-     * The denominator is assumed to be 1.
+     * from a ring factory and two polynomials. 
      * @param r ring factory.
-     * @param n numerator polynomial.
-     */
-    public Tensor(TensorRing<C> r, GenPolynomial<C> n) {
-        this( r, n, r.ring.getONE(), true );
-    }
-
-
-    /** The constructor creates a Tensor object 
-     * from a ring factory and a numerator and denominator polynomial. 
-     * @param r ring factory.
-     * @param n numerator polynomial.
-     * @param d denominator polynomial.
+     * @param p1 first polynomial.
+     * @param p2 second polynomial.
      */
     public Tensor(TensorRing<C> r, 
-                    GenPolynomial<C> n, GenPolynomial<C> d) {
-        this(r,n,d,false);
+                  GenPolynomial<C> p1, GenPolynomial<C> p2) {
+        this(r,null,p1,p2);
     }
 
 
     /** The constructor creates a Tensor object 
-     * from a ring factory and a numerator and denominator polynomial. 
+     * from a ring factory and two polynomials. 
      * @param r ring factory.
-     * @param n numerator polynomial.
-     * @param d denominator polynomial.
-     * @param isred true if gcd(n,d) == 1, else false.
+     * @param c a coefficent, c == null, if not known
+     * @param p1 first polynomial.
+     * @param p2 second polynomial.
      */
     protected Tensor(TensorRing<C> r, 
-                       GenPolynomial<C> n, GenPolynomial<C> d,
-                       boolean isred) {
-        if ( d == null || d.isZERO() ) {
-           throw new RuntimeException("denominator may not be zero");
-        }
+                     C c,
+                     GenPolynomial<C> p1, 
+                     GenPolynomial<C> p2) {
         ring = r;
-        if ( d.signum() < 0 ) {
-           n = n.negate();
-           d = d.negate();
-        }
-        if ( isred ) {
-           num = n;
-           den = d;
+        if ( c != null ) {
+           coeff = c;
+           pol1 = p1;
+           pol2 = p2;
            return;
         }
-        // must reduce to lowest terms
-        GenPolynomial<C> gcd = gcd( n, d );
+        // must construct coefficient
+        c = ring.ring1.coFac.getZERO();
+        //= ring.ring2.coFac.getZERO();
+        C c1 = p1.leadingBaseCoefficient();
+        if ( c1 != null && c1.isUnit() ) {
+           p1 = p1.multiply( c1.inverse() );
+           c = c1;
+        }
+        C c2 = p2.leadingBaseCoefficient();
+        if ( c2 != null && c2.isUnit() ) {
+           p2 = p2.multiply( c2.inverse() );
+           c = c.multiply( c2 );
+        }
         if ( true || debug ) {
-           logger.info("gcd = " + gcd);
+           logger.info("c  = " + c);
+           logger.info("p1 = " + p1);
+           logger.info("p2 = " + p2);
         }
-        //GenPolynomial<C> gcd = ring.ring.getONE();
-        if ( gcd.isONE() ) {
-           num = n;
-           den = d;
-        } else {
-           num = n.divide( gcd );
-           den = d.divide( gcd );
+        if ( c.isZERO() ) { 
+           p1 = ring.ring1.getZERO(); 
+           p2 = ring.ring2.getZERO(); 
         }
-    }
-
-
-    /** Least common multiple.
-     * Just for fun, is not efficient.
-     * @param n first polynomial.
-     * @param d second polynomial.
-     * @return lcm(n,d)
-     */
-    protected GenPolynomial<C> lcm(GenPolynomial<C> n, GenPolynomial<C> d) {
-        List<GenPolynomial<C>> list;
-        list = new ArrayList<GenPolynomial<C>>( 1 );
-        list.add( n );
-        Ideal<C> N = new Ideal<C>( ring.ring, list, true );
-        list = new ArrayList<GenPolynomial<C>>( 1 );
-        list.add( d );
-        Ideal<C> D = new Ideal<C>( ring.ring, list, true );
-        Ideal<C> L = N.intersect( D );
-        if ( L.list.list.size() != 1 ) {
-           throw new RuntimeException("lcm not uniqe");
-        }
-        GenPolynomial<C> lcm = L.list.list.get(0);
-        return lcm;
-    }
-
-
-    /** Greatest common divisor.
-     * Just for fun, is not efficient.
-     * @param n first polynomial.
-     * @param d second polynomial.
-     * @return gcd(n,d)
-     */
-    protected GenPolynomial<C> gcd(GenPolynomial<C> n, GenPolynomial<C> d) {
-        if ( n.isZERO() ) {
-           return d;
-        }
-        if ( d.isZERO() ) {
-           return n;
-        }
-        if ( n.isONE() ) {
-           return n;
-        }
-        if ( d.isONE() ) {
-           return d;
-        }
-        GenPolynomial<C> p = n.multiply(d);
-        GenPolynomial<C> lcm = lcm(n,d);
-        GenPolynomial<C> gcd = p.divide(lcm);
-        return gcd;
+        coeff = c;
+        pol1 = p1;
+        pol2 = p2;
     }
 
 
@@ -166,7 +117,7 @@ public class Tensor<C extends RingElem<C> >
      * @see java.lang.Object#clone()
      */
     public Tensor<C> clone() {
-        return new Tensor<C>( ring, num, den, true );
+        return new Tensor<C>( ring, coeff, pol1, pol2 );
     }
    
 
@@ -175,7 +126,7 @@ public class Tensor<C extends RingElem<C> >
      * @see edu.jas.structure.RingElem#isZERO()
      */
     public boolean isZERO() {
-        return num.isZERO();
+        return coeff.isZERO();
     }
 
 
@@ -184,7 +135,7 @@ public class Tensor<C extends RingElem<C> >
      * @see edu.jas.structure.RingElem#isONE()
      */
     public boolean isONE() {
-        return num.equals( den );
+        return coeff.isONE() && pol1.isONE() && pol2.isONE();
     }
 
 
@@ -193,11 +144,10 @@ public class Tensor<C extends RingElem<C> >
      * @see edu.jas.structure.RingElem#isUnit()
      */
     public boolean isUnit() {
-        if ( num.isZERO() ) {
+        if ( coeff.isZERO() ) {
            return false;
-        } else {
-           return true;
         }
+        return coeff.isUnit() && pol1.isUnit() && pol2.isUnit();
     }
 
 
@@ -206,11 +156,17 @@ public class Tensor<C extends RingElem<C> >
      */
     public String toString() {
         if ( PrettyPrint.isTrue() ) {
-           return num.toString( ring.ring.getVars() ) 
-                  + "///" + den.toString( ring.ring.getVars() );
+           return coeff.toString() + " * " 
+                  + pol1.toString( ring.ring1.getVars() ) 
+                  + " {*} "
+                  + pol2.toString( ring.ring2.getVars() );
         } else {
-           return "Tensor[ " + num.toString() 
-                   + " / " + den.toString() + " ]";
+           return "Tensor[ " 
+                  + coeff.toString() + ", " 
+                  + pol1.toString() 
+                  + ", "
+                  + pol2.toString()
+                  + " ]";
         }
     }
 
@@ -221,12 +177,10 @@ public class Tensor<C extends RingElem<C> >
      */
     public int compareTo(Tensor<C> b) {
         if ( b == null || b.isZERO() ) {
-            return this.signum();
+           return coeff.signum();
         }
-        GenPolynomial<C> r = num.multiply( b.den );
-        GenPolynomial<C> s = den.multiply( b.num );
-        GenPolynomial<C> x = r.subtract( s );
-        return x.signum();
+        C c = coeff.subtract( b.coeff );
+        return c.signum();
     }
 
 
@@ -247,7 +201,7 @@ public class Tensor<C extends RingElem<C> >
         if ( a == null ) {
             return false;
         }
-        return ( 0 == compareTo( a ) );
+        return ( 0 == this.compareTo( a ) );
     }
 
 
@@ -256,7 +210,7 @@ public class Tensor<C extends RingElem<C> >
      * @see edu.jas.structure.RingElem#abs()
      */
     public Tensor<C> abs() {
-        return new Tensor<C>( ring, num.abs(), den, true );
+        return new Tensor<C>( ring, coeff.abs(), pol1, pol2 );
     }
 
 
@@ -268,10 +222,14 @@ public class Tensor<C extends RingElem<C> >
         if ( S == null || S.isZERO() ) {
            return this;
         }
-        GenPolynomial<C> n = num.multiply( S.den );
-        n = n.add( den.multiply( S.num ) ); 
-        GenPolynomial<C> d = den.multiply( S.den );
-        return new Tensor<C>( ring, n, d, false );
+        if ( this.isZERO() ) {
+           return S;
+        }
+        GenPolynomial<C> p1 =   pol1.multiply( coeff );
+        GenPolynomial<C> s  = S.pol1.multiply( S.coeff );
+                         p1 = p1.add( s );
+        GenPolynomial<C> p2 = pol2.add( S.pol2 );
+        return new Tensor<C>( ring, p1, p2 );
     }
 
 
@@ -280,7 +238,7 @@ public class Tensor<C extends RingElem<C> >
      * @see edu.jas.structure.RingElem#negate()
      */
     public Tensor<C> negate() {
-        return new Tensor<C>( ring, num.negate(), den, true );
+        return new Tensor<C>( ring, coeff.negate(), pol1, pol2 );
     }
 
 
@@ -289,7 +247,7 @@ public class Tensor<C extends RingElem<C> >
      * @return signum(this).
      */
     public int signum() {
-        return num.signum();
+        return coeff.signum();
     }
 
 
@@ -301,10 +259,14 @@ public class Tensor<C extends RingElem<C> >
         if ( S == null || S.isZERO() ) {
            return this;
         }
-        GenPolynomial<C> n = num.multiply( S.den );
-        n = n.subtract( den.multiply( S.num ) ); 
-        GenPolynomial<C> d = den.multiply( S.den );
-        return new Tensor<C>( ring, n, d, false );
+        if ( this.isZERO() ) {
+           return S.negate();
+        }
+        GenPolynomial<C> p1 =   pol1.multiply( coeff );
+        GenPolynomial<C> s  = S.pol1.multiply( S.coeff );
+                         p1 = p1.subtract( s );
+        GenPolynomial<C> p2 = pol2.subtract( S.pol2 );
+        return new Tensor<C>( ring, p1, p2 );
     }
 
 
@@ -322,7 +284,10 @@ public class Tensor<C extends RingElem<C> >
      * @return S with S = 1/this. 
      */
     public Tensor<C> inverse() {
-        return new Tensor<C>( ring, den, num, true );
+        return new Tensor<C>( ring, 
+                              coeff.inverse(), 
+                              pol1.inverse(), 
+                              pol2.inverse() );
     }
 
 
@@ -331,10 +296,17 @@ public class Tensor<C extends RingElem<C> >
      * @return this - (this/S)*S.
      */
     public Tensor<C> remainder(Tensor<C> S) {
-        if ( num.isZERO() ) {
-           throw new RuntimeException("element not invertible " + this);
+        if ( S == null || S.isZERO() ) {
+           throw new RuntimeException("division by zero " + S);
         }
-        return ring.getZERO();
+        if ( this.isZERO() ) {
+           return this;
+        }
+        GenPolynomial<C> p1 =   pol1.multiply( coeff );
+        GenPolynomial<C> s  = S.pol1.multiply( S.coeff );
+                         p1 = p1.remainder( s );
+        GenPolynomial<C> p2 =   pol2.remainder( S.pol2 );
+        return new Tensor<C>( ring, p1, p2 );
     }
 
 
@@ -346,7 +318,7 @@ public class Tensor<C extends RingElem<C> >
         if ( S == null || S.isZERO() ) {
            return S;
         }
-        if ( num.isZERO() ) {
+        if ( coeff.isZERO() ) {
            return this;
         }
         if ( S.isONE() ) {
@@ -355,9 +327,10 @@ public class Tensor<C extends RingElem<C> >
         if ( this.isONE() ) {
            return S;
         }
-        GenPolynomial<C> n = num.multiply( S.num );
-        GenPolynomial<C> d = den.multiply( S.den );
-        return new Tensor<C>( ring, n, d, false );
+        C c = coeff.multiply( S.coeff );
+        GenPolynomial<C> p1 = pol1.multiply( S.pol1 );
+        GenPolynomial<C> p2 = pol2.multiply( S.pol2 );
+        return new Tensor<C>( ring, c, p1, p2 );
     }
 
  
@@ -365,14 +338,11 @@ public class Tensor<C extends RingElem<C> >
      * @return this with monic value part.
      */
     public Tensor<C> monic() {
-        if ( num.isZERO() ) {
+        if ( coeff.isZERO() ) {
            return this;
         }
-        C lbc = num.leadingBaseCoefficient();
-        lbc = lbc.inverse();
-        GenPolynomial<C> n = num.multiply( lbc );
-        GenPolynomial<C> d = den.multiply( lbc );
-        return new Tensor<C>( ring, n, d, true );
+        C c = ring.ring1.coFac.getONE();
+        return new Tensor<C>( ring, c, pol1, pol2 );
     }
 
 }
