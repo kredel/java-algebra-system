@@ -81,7 +81,7 @@ public interface RingElem<C extends RingElem> extends Cloneable,
      * @param S
      * @return this + S.
      */
-    public C add(C S);
+    public C sum(C S);
 
 
     /**

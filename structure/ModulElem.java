@@ -34,7 +34,7 @@ public interface ModulElem<M extends ModulElem<M,C>,
     public int signum();
 
 
-    public M add(M b);
+    public M sum(M b);
 
     public M subtract(M b);
 
