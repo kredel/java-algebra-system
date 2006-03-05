@@ -41,7 +41,7 @@ public class LocalRing<C extends RingElem<C> >
 
     /** The constructor creates a LocalRing object 
      * from a GenPolynomialRing and a GenPolynomial. 
-     * @param l localization polynomial ideal.
+     * @param i localization polynomial ideal.
      */
     public LocalRing(Ideal<C> i) {
         if ( i == null ) {
