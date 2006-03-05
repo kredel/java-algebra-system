@@ -374,14 +374,16 @@ public class BigQuaternion implements RingElem<BigQuaternion>,
     }
 
 
-    /* (non-Javadoc)
+    /** Hash code for this BigQuaternion.
      * @see java.lang.Object#hashCode()
      */
     public int hashCode() {
-        return 37 * ( 37 * ( 37 * km.hashCode() 
-                             + jm.hashCode() ) 
-                      + im.hashCode() ) 
-            + re.hashCode();
+        int h;
+        h  = 37 * re.hashCode();
+        h += 37 * im.hashCode();
+        h += 37 * jm.hashCode();
+        h += 37 * km.hashCode();
+        return h;
     }
 
 

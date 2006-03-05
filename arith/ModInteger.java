@@ -247,6 +247,14 @@ public class ModInteger implements RingElem<ModInteger>,
     }
 
 
+    /** Hash code for this ModInteger.
+     * @see java.lang.Object#hashCode()
+     */
+    public int hashCode() {
+        return 37 * val.hashCode() + modul.hashCode();
+    }
+
+
     /** ModInteger absolute value.
      * @return the absolute value of this.
      * @see edu.jas.structure.RingElem#abs()

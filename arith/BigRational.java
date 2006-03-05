@@ -272,11 +272,11 @@ public class BigRational implements RingElem<BigRational>,
         }
         BigRational br = (BigRational) b;
         return    num.equals( br.num ) 
-            && den.equals( br.den );
+               && den.equals( br.den );
     }
 
 
-    /* (non-Javadoc)
+    /** Hash code for this BigRational.
      * @see java.lang.Object#hashCode()
      */
     public int hashCode() {

@@ -266,17 +266,17 @@ public class BigComplex implements RingElem<BigComplex>,
         if ( ! ( b instanceof BigComplex ) ) {
            return false;
         }
-   BigComplex bc = (BigComplex) b;
+        BigComplex bc = (BigComplex) b;
         return    re.equals( bc.re ) 
                && im.equals( bc.im );
     }
 
 
-    /* (non-Javadoc)
+    /** Hash code for this BigComplex.
      * @see java.lang.Object#hashCode()
      */
     public int hashCode() {
-        return 37 * im.hashCode() + re.hashCode();
+        return 37 * re.hashCode() + im.hashCode();
     }
 
 

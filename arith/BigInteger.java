@@ -219,7 +219,7 @@ public class BigInteger implements RingElem<BigInteger>,
     }
 
 
-    /* (non-Javadoc)
+    /** Hash code for this BigInteger.
      * @see java.lang.Object#hashCode()
      */
     public int hashCode() {
