@@ -280,6 +280,18 @@ public class GenPolynomial<C extends RingElem<C> >
     }
 
 
+    /** Hash code for this polynomial.
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() { 
+       int h;
+       h = ( ring.hashCode() << 27 );
+       h += val.hashCode();
+       return h;
+    }
+
+
     /** GenPolynomial comparison.  
      * @param b GenPolynomial.
      * @return sign(this-b).

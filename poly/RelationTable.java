@@ -120,6 +120,18 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
     }
 
 
+    /** Hash code for this relation table.
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() { 
+       int h;
+       h = ring.hashCode();
+       h = 31 * h + table.hashCode();
+       return h;
+    }
+
+
     /** Get the String representation.
      * @see java.lang.Object#toString()
      */

@@ -211,6 +211,19 @@ public class GenPolynomialRing<C extends RingElem<C> >
     }
 
 
+    /** Hash code for this polynomial ring.
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() { 
+       int h;
+       h = ( nvar << 27 );
+       h += ( coFac.hashCode() << 11 );
+       h += tord.hashCode();
+       return h;
+    }
+
+
     /** Get the variable names. 
      * @return vars.
      */

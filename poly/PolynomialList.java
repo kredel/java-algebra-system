@@ -58,6 +58,7 @@ public class PolynomialList<C extends RingElem<C> > implements Serializable {
         list = l; 
     }
 
+
     /**
      * Constructor.
      * @param r solvable polynomial ring factory.
@@ -115,6 +116,18 @@ public class PolynomialList<C extends RingElem<C> > implements Serializable {
         }
         // otherwise tables may be different
         return true;
+    }
+
+
+    /** Hash code for this polynomial list.
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() { 
+       int h;
+       h = ring.hashCode();
+       h = 37 * h + ( list == null ? 0 : list.hashCode() );
+       return h;
     }
 
 

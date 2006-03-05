@@ -181,35 +181,34 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
     @SuppressWarnings("unchecked") // not jet working
     public boolean equals( Object other ) { 
         if ( ! (other instanceof GenSolvablePolynomialRing) ) {
-            return false;
+           return false;
         }
         // do a super.equals( )
+        if ( ! super.equals( other ) ) {
+           return false;
+        }
         GenSolvablePolynomialRing<C> oring = null;
         try {
            oring = (GenSolvablePolynomialRing<C>)other;
         } catch (ClassCastException ignored) {
-        }
-        if ( oring == null ) {
-            return false;
-        }
-        if ( nvar != oring.nvar ) {
-            return false;
-        }
-        if ( ! coFac.equals(oring.coFac) ) {
-            return false;
-        }
-        if ( ! tord.equals(oring.tord) ) {
-            return false;
-        }
-        // same variables required ?
-        if ( ! Arrays.equals(vars,oring.vars) ) {
-            return false;
         }
         // @todo check same base relations
         //if ( ! table.equals(oring.table) ) {
         //    return false;
         //}
         return true;
+    }
+
+
+    /** Hash code for this polynomial ring.
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() { 
+       int h;
+       h = super.hashCode();
+       h = 37 * h + table.hashCode();
+       return h;
     }
 
 
