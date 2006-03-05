@@ -131,6 +131,17 @@ public class LocalRing<C extends RingElem<C> >
     }
 
 
+    /** Hash code for this local ring.
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() { 
+       int h;
+       h = ideal.hashCode();
+       return h;
+    }
+
+
     /** Local random.
      * @param n such that 0 &le; v &le; (2<sup>n</sup>-1).
      * @return a random residue element.

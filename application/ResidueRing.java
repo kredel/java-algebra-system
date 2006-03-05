@@ -130,6 +130,17 @@ public class ResidueRing<C extends RingElem<C> >
     }
 
 
+    /** Hash code for this residue ring.
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() { 
+       int h;
+       h = ideal.hashCode();
+       return h;
+    }
+
+
     /** Residue random.
      * @param n such that 0 &le; v &le; (2<sup>n</sup>-1).
      * @return a random residue element.

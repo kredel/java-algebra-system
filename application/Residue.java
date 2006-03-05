@@ -170,6 +170,18 @@ public class Residue<C extends RingElem<C> >
     }
 
 
+    /** Hash code for this local.
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() { 
+       int h;
+       h = ring.hashCode();
+       h = 37 * h + val.hashCode();
+       return h;
+    }
+
+
     /** Residue absolute value.
      * @return the absolute value of this.
      * @see edu.jas.structure.RingElem#abs()

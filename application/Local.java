@@ -181,37 +181,6 @@ public class Local<C extends RingElem<C> >
     }
 
 
-    /* The constructor creates a Local object 
-     * from a ring factory, a polynomial list and an indicator if a is a unit. 
-     * @param r ring factory.
-     * @param a polynomial list.
-     * @param u isunit indicator, -1, 0, 1.
-    public Local(LocalRing<C> r, GenPolynomial<C> a, int u) {
-        ring = r;
-        List<GenPolynomial<C>> li = new ArrayList<GenPolynomial<C>>(1);
-        li.add( a );
-        Ideal<C> id = new Ideal<C>( ring.ring, li );
-        Ideal<C> iv = id.infiniteQuotient( ring.ideal );
-        val = iv.list.list.get(0); //.monic() no go
-        if ( ! a.equals(val) ) {
-            System.out.println("Local: a   = " + a);
-            System.out.println("Local: val = " + val);
-        }
-        ival = iv;
-        switch ( u ) {
-        case 0:  isunit = u;
-                 break;
-        case 1:  isunit = u;
-                 break;
-        default: isunit = -1;
-        }
-        if ( val.isONE() ) {
-           isunit = 1;
-        }
-    }
-     */
-
-
     /**  Clone this.
      * @see java.lang.Object#clone()
      */
@@ -312,6 +281,19 @@ public class Local<C extends RingElem<C> >
             return false;
         }
         return ( 0 == compareTo( a ) );
+    }
+
+
+    /** Hash code for this local.
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() { 
+       int h;
+       h = ring.hashCode();
+       h = 37 * h + num.hashCode();
+       h = 37 * h + den.hashCode();
+       return h;
     }
 
 

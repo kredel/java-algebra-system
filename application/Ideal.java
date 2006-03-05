@@ -200,6 +200,23 @@ public class Ideal<C extends RingElem<C>> implements Serializable {
   }
 
 
+   /** Hash code for this ideal.
+    * @see java.lang.Object#hashCode()
+    */
+   @Override
+   public int hashCode() { 
+      int h;
+      h = list.hashCode();
+      if ( isGB ) {
+          h = h << 1;
+      }
+      if ( testGB ) {
+          h += 1;
+      }
+      return h;
+   }
+
+
   /**
    * Test if ZERO ideal.
    * @return true, if this is the 0 ideal, else false
