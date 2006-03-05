@@ -132,6 +132,18 @@ public class ModuleList<C extends RingElem<C> > implements Serializable {
     }
 
 
+    /** Hash code for this module list.
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() { 
+       int h;
+       h = ring.hashCode();
+       h = 37 * h + ( list == null ? 0 : list.hashCode() );
+       return h;
+    }
+
+
     /**
      * String representation of the polynomial list.
      * @see java.lang.Object#toString()

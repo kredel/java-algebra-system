@@ -91,6 +91,18 @@ public class GenVectorModul<C extends RingElem<C> >
     }
 
 
+    /** Hash code for this vector module.
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() { 
+       int h;
+       h = cols;
+       h = 37 * h + coFac.hashCode();
+       return h;
+    }
+
+
     /**
      * From List of coefficients.
      * @param v list of coefficients.
