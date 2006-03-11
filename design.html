@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>JAS - Class Design</title>
+<style type="text/css">
+body { background-color: #FFFFF5; } 
+pre  { background-color: silver; 
+       margin-left: 1em; 
+       margin-right: 1em; 
+       padding: 1em; 
+     }
+dt   { font-weight: bolder; 
+       margin-top: 1em;
+     }
+.note { color: maroon; }
+</style>
+  </head>
+  <body>
+    <h1>JAS class and package design overview</h1>
+
+<p>In ths document we give an overview on the structure 
+of the interfaces, classes and packages of JAS.
+For a discussion of other design alternatives see
+the <a href="problems.html">problems</a> document.
+</p>
+
+
+<h2>1. Recursive ring element design</h2>
+
+<p>The next figure gives an overview of the 
+central interfaces and classes.
+The interface <code>RingElem</code> defines a recursive type 
+which defines the functionality (see next section) of the 
+polynomial coefficients and is also implemented by the 
+polynomials itself. So polynomials can be taken as coefficients 
+for other polynomials, thus defining a recursive polynomial ring structure.
+</p>
+
+<p>
+Since the construction of constant ring elements has been difficult
+in previuos designs, we separated the creational aspects of ring elements
+into factory classes. The minimal factory functionality is defined 
+by the interface <code>RingFactory</code>.
+Constructors for polynomial rings will then require factories for
+the coefficients so that the construction of polynomials over these
+coefficient rings poses no problem. 
+The ring factories are additionaly required because of the 
+Java generic type design. I.e. if <code>C</code> is a generic type name
+it is not possible to construct an new object with <code>new C()</code>.
+Even if this would be possible, one can not specify constructor signatures 
+in Java interfaces, e.g. to construct a one or zero constant ring element.
+Recursion is again achieved by using polynomial factories as 
+coefficient factories in recursive polynomial rings.
+Constructors for polynomials will always require 
+a polynomial factory parameter which knows 
+all details about the polynomial ring under consideration.
+</p>
+
+<p>
+<a href="images/overview-recursive.png" 
+   target="diagram"
+   ><img src="images/overview-recursive.png"  /></a>
+</p>
+
+<p>
+Elementary coefficient classes, such as <code>BigRational</code>
+or <code>BigInteger</code>, implement both the <code>RingElem</code>
+and <code>RingFactory</code> interfaces. This is convenient, since 
+these factories do not need further context information.
+In the implementation of the interfaces the type parameter 
+<code>C extends RingElem&lt;C&gt;</code> is simultaneously bound 
+to the respective class, e.g. <code>BigRational</code>.
+Coefficient objects can in most cases created directly via the 
+respective class constructors, but also via the factory methods. 
+E.g. the object representing the rational number 2 can be created by 
+<code>new BigRational(2)</code> or by 
+<code>fac = new BigRational()</code>, <code>fac.fromInteger(2)</code> and 
+the object representing the rational number 1/2 can be created by 
+<code>new BigRational(1,2)</code> or by 
+<code>fac.parse("1/2")</code>.
+</p>
+
+<p>Generic polynomials are implemented in the <code>GenPolynomial</code>
+class, which has a type parameter <code>C extends RingElem&lt;C&gt;</code> 
+for the coefficient type. So all operations on coefficients required
+in polynomial arithmetic and manipulation are guaranteed to exist by the 
+<code>RingElem</code> interface. The constructors of the polynomials 
+always require a matching polynomial factory. 
+The generic polynomial factory is implemented in the class 
+<code>GenPolynomialRing</code>, again with type parameter 
+<code>C extends RingElem&lt;C&gt;</code> (not <code>RingFactory</code>).
+The polynomial factory however implements the interface 
+<code>RingFactory&lt;C extends RingElem&lt;C&gt;&gt;</code> so that 
+it can also be used recursively.
+The constructors for <code>GenPolynomialRing</code> require at least 
+parameters for a coefficient factory and the number of variables 
+of the polynomial ring.
+</p>
+
+<p>
+Having generic polynomial and elementary coefficient implementations 
+one can attempt to construct 'real' polynomial objects. 
+The type is first created by binding the type parameter 
+<code>C extends RingElem&lt;C&gt;</code> to the desired coefficient type, 
+e.g. <code>BigRational</code>. So we arrive at the type
+<code>GenPolynomial&lt;BigRational&gt;</code>.
+Polynomial objects are then created via the respective polynomial factory
+of type <code>GenPolynomialRing&lt;BigRational&gt;</code>, 
+which is created by binding the generic coefficient type of the 
+generic polynomial factory to the desired coefficient type, 
+e.g. <code>BigRational</code>.
+A polynomial factory object is created from a coefficient factory object 
+and the number of variables in the polynomial ring as usual with the 
+<code>new</code> operator via one of its constructors.
+Given an object <code>coFac</code> of type <code>BigRational</code>,
+e.g. created with <code>new BigRational()</code>, a polynomial factory
+object <code>pfac</code> of the above described type could be created by 
+<code>new GenPolynomialRing&lt;BigRational&gt;(coFac,5)</code>.
+I.e. we specified a polynomial ring with 5 variables over 
+the rational numbers.
+A polynomial object <code>p</code> of the above described type can then
+be created by any method defined in <code>RingFactory</code>, 
+e.g. by <code>pfac.getONE()</code>, 
+<code>pfac.fromInteger(1)</code>, <code>pfac.random(3)</code>
+or <code>pfac.parse("(1)")</code>.
+</p>
+
+<p>
+</p>
+
+
+
+<h2>2. Ring element interaction</h2>
+
+<p>The next figure gives an overview of the interplay between the 
+main interfaces and polynomial classes.
+</p>
+<p>
+<a href="images/overview-methods.png" 
+   target="diagram"
+   ><img src="images/overview-methods.png"  /></a>
+</p>
+
+<p>
+Optionaly a <code>TermOrder</code> and names for the variables can 
+be specified.
+</p>
+
+
+<!--
+<p>
+</p>
+<pre>
+</pre>
+-->
+
+<p><!--a href="README" target="readme" >README</a-->
+</p>
+
+    <hr />
+<address><a href="mailto:kredel at rz.uni-mannheim.de">Heinz Kredel</a></address>
+<p>
+<!-- Created: Sat Mar 11 10:51:36 CET 2006 -->
+<!-- hhmts start -->
+Last modified: Sat Mar 11 13:53:33 CET 2006
+<!-- hhmts end -->
+</p>
+<p align="right" >
+$Id$
+</p>
+  </body>
+</html>
