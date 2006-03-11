@@ -20,7 +20,8 @@ dt   { font-weight: bolder;
   <body>
     <h1>JAS class and package design overview</h1>
 
-<p>In ths document we give an overview on the structure 
+<p>
+In ths document we give an overview on the structure 
 of the interfaces, classes and packages of JAS.
 For a discussion of other design alternatives see
 the <a href="problems.html">problems</a> document.
@@ -29,9 +30,9 @@ the <a href="problems.html">problems</a> document.
 
 <h2>1. Recursive ring element design</h2>
 
-<p>The next figure gives an overview of the 
-central interfaces and classes.
-The interface <code>RingElem</code> defines a recursive type 
+<p>
+The next figure gives an overview of the central interfaces and classes.
+The interface <code>RingElem</code> defines a <strong>recursive type</strong> 
 which defines the functionality (see next section) of the 
 polynomial coefficients and is also implemented by the 
 polynomials itself. So polynomials can be taken as coefficients 
@@ -41,8 +42,9 @@ for other polynomials, thus defining a recursive polynomial ring structure.
 <p>
 Since the construction of constant ring elements has been difficult
 in previuos designs, we separated the creational aspects of ring elements
-into factory classes. The minimal factory functionality is defined 
-by the interface <code>RingFactory</code>.
+into <strong>ring factories</strong> with sufficient context information. 
+The minimal factory functionality is defined by the interface 
+<code>RingFactory</code>.
 Constructors for polynomial rings will then require factories for
 the coefficients so that the construction of polynomials over these
 coefficient rings poses no problem. 
@@ -65,15 +67,16 @@ all details about the polynomial ring under consideration.
 </p>
 
 <p>
-Elementary coefficient classes, such as <code>BigRational</code>
-or <code>BigInteger</code>, implement both the <code>RingElem</code>
-and <code>RingFactory</code> interfaces. This is convenient, since 
-these factories do not need further context information.
+Elementary <strong>coefficient classes</strong>, such as 
+<code>BigRational</code> or <code>BigInteger</code>, implement both 
+the <code>RingElem</code> and <code>RingFactory</code> interfaces. 
+This is convenient, since these factories do not need further context 
+information.
 In the implementation of the interfaces the type parameter 
 <code>C extends RingElem&lt;C&gt;</code> is simultaneously bound 
 to the respective class, e.g. <code>BigRational</code>.
-Coefficient objects can in most cases created directly via the 
-respective class constructors, but also via the factory methods. 
+<strong>Coefficient objects</strong> can in most cases created directly 
+via the respective class constructors, but also via the factory methods. 
 E.g. the object representing the rational number 2 can be created by 
 <code>new BigRational(2)</code> or by 
 <code>fac = new BigRational()</code>, <code>fac.fromInteger(2)</code> and 
@@ -82,13 +85,15 @@ the object representing the rational number 1/2 can be created by
 <code>fac.parse("1/2")</code>.
 </p>
 
-<p>Generic polynomials are implemented in the <code>GenPolynomial</code>
-class, which has a type parameter <code>C extends RingElem&lt;C&gt;</code> 
+<p>
+<strong>Generic polynomials</strong> are implemented in the 
+<code>GenPolynomial</code> class, which has a type parameter 
+<code>C extends RingElem&lt;C&gt;</code> 
 for the coefficient type. So all operations on coefficients required
 in polynomial arithmetic and manipulation are guaranteed to exist by the 
 <code>RingElem</code> interface. The constructors of the polynomials 
 always require a matching polynomial factory. 
-The generic polynomial factory is implemented in the class 
+The <strong>generic polynomial factory</strong> is implemented in the class 
 <code>GenPolynomialRing</code>, again with type parameter 
 <code>C extends RingElem&lt;C&gt;</code> (not <code>RingFactory</code>).
 The polynomial factory however implements the interface 
@@ -101,7 +106,7 @@ of the polynomial ring.
 
 <p>
 Having generic polynomial and elementary coefficient implementations 
-one can attempt to construct 'real' polynomial objects. 
+one can attempt to construct <strong>polynomial objects</strong>. 
 The type is first created by binding the type parameter 
 <code>C extends RingElem&lt;C&gt;</code> to the desired coefficient type, 
 e.g. <code>BigRational</code>. So we arrive at the type
@@ -111,9 +116,10 @@ of type <code>GenPolynomialRing&lt;BigRational&gt;</code>,
 which is created by binding the generic coefficient type of the 
 generic polynomial factory to the desired coefficient type, 
 e.g. <code>BigRational</code>.
-A polynomial factory object is created from a coefficient factory object 
-and the number of variables in the polynomial ring as usual with the 
-<code>new</code> operator via one of its constructors.
+A <strong>polynomial factory object</strong> is created from a 
+coefficient factory object and the number of variables in the 
+polynomial ring as usual with the <code>new</code> operator via one 
+of its constructors.
 Given an object <code>coFac</code> of type <code>BigRational</code>,
 e.g. created with <code>new BigRational()</code>, a polynomial factory
 object <code>pfac</code> of the above described type could be created by 
@@ -125,6 +131,77 @@ be created by any method defined in <code>RingFactory</code>,
 e.g. by <code>pfac.getONE()</code>, 
 <code>pfac.fromInteger(1)</code>, <code>pfac.random(3)</code>
 or <code>pfac.parse("(1)")</code>.
+</p>
+
+<p>
+The generic polynomials are intended as super class for further 
+types of polynomial rings. As one example we take so called 
+<strong>solvable polynomials</strong>, which are like normal polynomials 
+but are equipped with a new non-commutative multiplication. 
+They are implemented in the class <code>GenSolvablePolynomial</code> 
+which extends <code>GenPolynomial</code> and inherits all methods 
+except <code>clone()</code> and <code>multiply()</code>.
+The class also has a type parameter <code>C extends RingElem&lt;C&gt;</code> 
+for the coefficient type.
+Note, that the inherited methods are in fact creating solvable polynomials 
+since they employ the solvable polynomial factory for the creation of any
+new polynomial internally. Only the formal method return type is that 
+of <code>GenPolynomial</code>, the run-time type is 
+<code>GenSolvablePolynomial</code> to which they can be casted at any time.
+The <strong>factory for solvable polynomials</strong> is implemented 
+by the class <code>GenSolvablePolynomialRing</code> which also 
+extends the generic polynomial factory. So this factory can also be used 
+in the constructors of <code>GenPolynomial</code> via <code>super()</code> 
+to produce in fact solvable polynomials internally. The data structure 
+is enhanced by a table of non-commutative relations defining the 
+new multiplication. The constructors delegate most things to the 
+corresponding super class constructors and additionally have a 
+parameter for the <code>RelationTable</code> to be used.
+Also the methods delegate the work to the respective super class methods 
+where possible and then handle the non-commutative multiplication relations 
+separately.
+</p>
+
+<p>
+The construction of <strong>solvable polynomial objects</strong>
+follows directly that of polynomial objects.
+The type is created by binding the type parameter 
+<code>C extends RingElem&lt;C&gt;</code> to the desired coefficient type, 
+e.g. <code>BigRational</code>. So we have the type
+<code>GenSolvablePolynomial&lt;BigRational&gt;</code>.
+Solvable polynomial objects are then created via the respective 
+solvable polynomial factory of type 
+<code>GenSolvablePolynomialRing&lt;BigRational&gt;</code>, 
+which is created by binding the generic coefficient type of the 
+generic polynomial factory to the desired coefficient type, 
+e.g. <code>BigRational</code>.
+A <strong>solvable polynomial factory object</strong> is created from a 
+coefficient factory object, the number of variables in the 
+polynomial ring and a table containing the defining non-commutative relations
+as usual with the <code>new</code> operator via one of its constructors.
+Given an object <code>coFac</code> of type <code>BigRational</code>
+as before, a polynomial factory object <code>spfac</code> 
+of the above described type could be created by 
+<code>new GenSolvablePolynomialRing&lt;BigRational&gt;(coFac,5)</code>.
+I.e. we specified a polynomial ring with 5 variables over 
+the rational numbers with no commutator relations.
+A solvable polynomial object <code>p</code> of the above described type 
+can then be created by any method defined in <code>RingFactory</code>, 
+e.g. by <code>spfac.getONE()</code>, 
+<code>spfac.fromInteger(1)</code>, <code>spfac.random(3)</code>
+or <code>spfac.parse("(1)")</code>.
+Some care is needed to create <code>RelationTable</code> objects 
+since its constructor requires the solvable polynomial ring which 
+is under construction as parameter. It is most convenient to first
+create a <code>GenSolvablePolynomialRing</code> with an 
+empty relation table and then to add the defining relations.
+</p>
+
+
+<p>
+</p>
+
+<p>
 </p>
 
 <p>
@@ -164,7 +241,7 @@ be specified.
 <p>
 <!-- Created: Sat Mar 11 10:51:36 CET 2006 -->
 <!-- hhmts start -->
-Last modified: Sat Mar 11 13:53:33 CET 2006
+Last modified: Sat Mar 11 18:25:49 CET 2006
 <!-- hhmts end -->
 </p>
 <p align="right" >
