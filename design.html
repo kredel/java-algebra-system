@@ -14,6 +14,7 @@ pre  { background-color: silver;
 dt   { font-weight: bolder; 
        margin-top: 1em;
      }
+.center { text-align: center; }
 .note { color: maroon; }
 </style>
   </head>
@@ -62,10 +63,12 @@ a polynomial factory parameter which knows
 all details about the polynomial ring under consideration.
 </p>
 
-<p>
+<p class="center" >
 <a href="images/overview-recursive.png" 
    target="diagram"
-   ><img src="images/overview-recursive.png"  /></a>
+   ><img src="images/overview-recursive.png" alt="JAS type overview" /></a>
+<br />
+UML diagram of JAS types
 </p>
 
 
@@ -318,15 +321,17 @@ coefficients may never contain white space and must always start
 with a digit.
 In the future the ring factory will be enhanced by methods that
 test if the ring is commutative, associative or has some 
-other important property or the value of the property, 
+other important property or the value of a property, 
 e.g. is an euclidean ring, is a field, an integal domain, 
 a uniqe factorization domain, its characteristic or if it is noetherian. 
 </p>
 
-<p>
+<p class="center" >
 <a href="images/overview-methods.png" 
    target="diagram"
-   ><img src="images/overview-methods.png"  /></a>
+   ><img src="images/overview-methods.png" alt="JAS type functionality" /></a>
+<br />
+UML diagram of JAS type functionality
 </p>
 
 
@@ -338,19 +343,52 @@ with the generic polynomial and factory classes.
 </p>
 
 <p>
-Optionaly a <code>TermOrder</code> and names for the variables can 
+The <code>GenPolynomial</code> class has a generic type parameter 
+<code>C</code> which is constrained to a type with the functionality
+of ring elements <code>C extends RingElem&lt;C&gt;</code>.
+Further the class implements a <code>RingElem</code> over itself
+<code>RingElem&lt;GenPolynomial&lt;C&gt;&gt;</code> 
+so that it can be used for the coefficients of an other polynomial ring.
+The functionality of the ring element methods has already been explained 
+in the previous section. 
+There are two public and one protected constructors, each requires
+at least a ring factory parameter <code>GenPolynomialRing&lt;C&gt; r</code>.
+The first creates a zero polynomial
+<code>GenPolynomial(. r)</code>,
+the second creates a polynomial of one monomial with given coefficient 
+and exponent tuple
+<code>GenPolynomial(. r, C c, ExpVector e)</code>, 
+the third creates a polynomial from the internal sorted map of an 
+other polynomial
+<code>GenPolynomial(. r, SortedMap&lt;ExpVector,C&gt; v)</code>.
+Further there are methods to access parts of the polynomial 
+like leading term, leading coefficient 
+(still called leading base coefficient from the Aldes/SAC-2 tradition)
+and leading monomial.
+A last group of methods computes (extended) greatest common divisors.
+They work correct for univariate polynomials over a field but not 
+for arbitrary multivatiate polynomials. These methods will be moved
+to a new separate class in the future.
+</p>
+
+<p>
+Optionally a <code>TermOrder</code> and names for the variables can 
 be specified.
 </p>
+
 
 
 <p>
 </p>
 
+<p>
+</p>
 <p>
 </p>
 
 
 <!--
+<code></code> 
 <p>
 </p>
 <pre>
@@ -365,7 +403,7 @@ be specified.
 <p>
 <!-- Created: Sat Mar 11 10:51:36 CET 2006 -->
 <!-- hhmts start -->
-Last modified: Sun Mar 12 14:24:20 CET 2006
+Last modified: Sun Mar 12 20:21:08 CET 2006
 <!-- hhmts end -->
 </p>
 <p align="right" >
