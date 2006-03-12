@@ -139,19 +139,19 @@ Consider the following interface and class definitions.
 
 <pre>
 interface ModulElem {
-  ModulElem add(ModulElem other);
+  ModulElem sum(ModulElem other);
   ...
 }
 
 interface RingElem extends ModulElem {
-  // RingElem add(RingElem other); no override
+  // RingElem sum(RingElem other); no override
   RingElem multiply(RingElem other);
   ...
 }
 
 class Rational implements RingElem { // jdk 1.5
 
-  /*ModulElem*/ Rational add(ModulElem other) {
+  /*ModulElem*/ Rational sum(ModulElem other) {
   ...
   }
 
@@ -177,7 +177,7 @@ class Complex implements RingElem {
     Rational a = new Rational();
     Rational b = new Rational();
     Rational c;
-    c = a.add(b);       // jdk 1.5
+    c = a.sum(b);       // jdk 1.5
     c = a.multiply(b);  // jdk 1.5
   }
 
@@ -185,7 +185,7 @@ class Complex implements RingElem {
     RingElem a = new Rational();
     RingElem b = new Rational();
     RingElem c;
-    c = (RingElem) a.add(b); // must cast
+    c = (RingElem) a.sum(b); // must cast
     c = a.multiply(b);       // no cast
   }
 
@@ -199,10 +199,10 @@ class Complex implements RingElem {
 
 <p>
 One problem is the cast in 
-    <code>c = (RingElem)a.add(b)</code>
+    <code>c = (RingElem)a.sum(b)</code>
 which is not expected since a and b are <code>RingElem</code>s.
-One sulution would be to redefine <code>add()</code> for 
-<code>RingElem</code>, but then  <code>add()</code> in 
+One sulution would be to redefine <code>sum()</code> for 
+<code>RingElem</code>, but then  <code>sum()</code> in 
 <code>ModulElem</code> is not overriden. 
 Then <code>RingElem</code> is no longer an extension of 
 <code>ModulElem</code> and the relation between the 
@@ -325,7 +325,7 @@ GenPolynomialRing&lt;C extends RingElem&lt;C&gt; &gt; implements RingFactory&lt;
     non commutative multiplication and uses the commutative 
     methods from its super class <code>GenPolynomial</code>.
     As mentioned before, some casts are eventualy required, e.g.
-    <code>GenSolvablePolynomial&lt;C&gt; p.add(q)</code>. 
+    <code>GenSolvablePolynomial&lt;C&gt; p.sum(q)</code>. 
     The respective objects are however correctly buildt 
     using the methods from the solvable ring factory.
     <br />
@@ -360,10 +360,11 @@ public interface RingElem&lt;C extends RingElem&gt;
     public boolean isONE();
     public boolean isUnit();
     public boolean equals(Object b);
+    public int     hashCode();
     public int     compareTo(C b);
     public int     signum();
 
-    public C add(C S);
+    public C sum(C S);
     public C subtract(C S);
     public C negate();
     public C abs();
@@ -620,7 +621,7 @@ d = GenSolvablePolynomial[ 3 mod(19) (1,1,0), 1 mod(19) (0,0,1) ]
 <p>
 <!-- Created: Thu May 26 10:38:37 CEST 2005 -->
 <!-- hhmts start -->
-Last modified: Sun Jul 24 19:38:36 CEST 2005
+Last modified: Sun Mar 12 14:29:09 CET 2006
 <!-- hhmts end -->
 </p>
 <p align="right" >
