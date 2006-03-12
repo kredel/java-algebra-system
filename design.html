@@ -234,31 +234,119 @@ empty relation table and then to add the defining relations.
 </p>
 
 
-<p>
-</p>
+<h2>4. Ring element and factory functionality</h2>
 
 <p>
+The following sections and the next figure gives an overview 
+of the functionality of the main interfaces and polynomial classes.
 </p>
 
 <p>
+The <code>RingElem</code> interface has a generic type parameter 
+<code>C</code> which is constrained to a type with the same functionality
+<code>C extends RingElem&lt;C&gt;</code>.
+It defines the usual methods required for ring arithmetic such as
+<code>C sum(C S); C subtract(C S); C negate(); C abs();
+      C multiply(C S); C divide(C S); C remainder(C S); C inverse();
+</code>
+Although the actual ring may not have inverses for every element
+or some division algorithm we have included these methods in the definition.
+In a case where there is no such function, the implementation may 
+deliberately throw a <code>RuntimeException</code> or choose some 
+other meaningful element to return.
+The method <code>isUnit()</code> can be used to check if an element 
+is invertible.
+</p>
+<p>
+Besides the arithmetic method there are following testing methods
+<code>boolean isZERO(); boolean isONE(); boolean isUnit();
+    int signum();
+    boolean equals(Object b); int hashCode(); int compareTo(C b); 
+</code>
+The first three test if the element is 0, 1 or a unit in the respective ring.
+The <code>signum()</code> method defines the sign of the element (in case 
+of an ordered ring).
+<code>equals()</code>, <code>hashCode()</code> and <code>compareTo()</code> 
+are required to keep Javas object machinery working in our sense. 
+They are used when an element is put into a Java collection class, 
+e.g. <code>Set</code>, <code>Map</code> or <code>SortedMap</code>.
+The last method <code>C clone()</code> can be used to obtain a copy of the
+actual element. As creational method one should better use the 
+method <code>C copy(C a)</code> from the ring factory, but in Java 
+it is more convenient to use the <code>clone()</code> method.
 </p>
 
-
-
-<h2>4. Ring element interaction</h2>
-
-<p>The next figure gives an overview of the interplay between the 
-main interfaces and polynomial classes.
+<p>
+As mentioned before, the creational aspects of rings are separated 
+into a ring factory. A ring factory is intended to store all context
+information known or required for a specific ring. 
+Every ring element should also know its ring factory, so all
+constructors of ring element implementations require a parameter 
+for the corresponding ring factory. Unfortunately constructors 
+and their signature can not be specified in a Java interface.
+The <code>RingFactory</code> interface also has a generic type parameter 
+<code>C</code> which is constrained to a type with the ring element 
+functionality <code>C extends RingElem&lt;C&gt;</code>.
+The defined methods are 
+<code>C getZERO(); C getONE();
+      C fromInteger(long a); C fromInteger(java.math.BigInteger a);
+      C random(int n); C copy(C c);
+      C parse(String s); C parse(Reader r);
+</code>
+The first two create 0 and 1 of the ring.
+The second two are used to embed a natural number into the ring 
+and create the corresponding ring element.
+The <code>copy()</code> method was intended as the main means to 
+obtain a copy of a ring element, but it is now no more used in our 
+implmentation. Instead the <code>clone()</code> method is used from 
+the ring element interface.
+The <code>random(int n)</code> method creates a random element of the 
+respective ring. The parameter <code>n</code> specifies an appropriate 
+maximal size for the created element. In case of coefficients it
+usually means the maximal bit-length of the element, in case of 
+polynomials it influences the coefficient size and the degrees. 
+For polynomials there are <code>random()</code> methods with more 
+parameters.
+The two methods 
+<code>C parse(String s)</code> and <code>C parse(Reader r)</code> 
+create a ring element from some external string representation.
+For coefficients this is mostly implemented directly and for 
+polynomials the class <code>GenPolynomialTokenizer</code> is 
+employed internally.
+In the current implementation the external representation of 
+coefficients may never contain white space and must always start 
+with a digit.
+In the future the ring factory will be enhanced by methods that
+test if the ring is commutative, associative or has some 
+other important property or the value of the property, 
+e.g. is an euclidean ring, is a field, an integal domain, 
+a uniqe factorization domain, its characteristic or if it is noetherian. 
 </p>
+
 <p>
 <a href="images/overview-methods.png" 
    target="diagram"
    ><img src="images/overview-methods.png"  /></a>
 </p>
 
+
+<h2>5. Polynomial and factory functionality</h2>
+
+<p>
+We continue the discussion of the above figure 
+with the generic polynomial and factory classes.
+</p>
+
 <p>
 Optionaly a <code>TermOrder</code> and names for the variables can 
 be specified.
+</p>
+
+
+<p>
+</p>
+
+<p>
 </p>
 
 
@@ -277,7 +365,7 @@ be specified.
 <p>
 <!-- Created: Sat Mar 11 10:51:36 CET 2006 -->
 <!-- hhmts start -->
-Last modified: Sun Mar 12 12:23:59 CET 2006
+Last modified: Sun Mar 12 14:24:20 CET 2006
 <!-- hhmts end -->
 </p>
 <p align="right" >
