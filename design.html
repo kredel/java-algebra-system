@@ -23,6 +23,8 @@ dt   { font-weight: bolder;
 <p>
 In ths document we give an overview on the structure 
 of the interfaces, classes and packages of JAS.
+We focus on the structure of the required types and 
+the creation of the corresponding objects.
 For a discussion of other design alternatives see
 the <a href="problems.html">problems</a> document.
 </p>
@@ -64,6 +66,14 @@ all details about the polynomial ring under consideration.
 <a href="images/overview-recursive.png" 
    target="diagram"
    ><img src="images/overview-recursive.png"  /></a>
+</p>
+
+
+<h2>2. Coefficients and polynomials</h2>
+
+<p>
+We continue the discussion of the next layer of classes in the
+the above figure.
 </p>
 
 <p>
@@ -131,6 +141,32 @@ be created by any method defined in <code>RingFactory</code>,
 e.g. by <code>pfac.getONE()</code>, 
 <code>pfac.fromInteger(1)</code>, <code>pfac.random(3)</code>
 or <code>pfac.parse("(1)")</code>.
+</p>
+
+<p>
+Since <code>GenPolynomial</code> itself implements the 
+<code>RingElem</code> interface, they can also be used recursively
+as coefficients. 
+We continue the polynomial example and are going to use polynomials over
+the rational numbers as coefficients of a new polynomial. 
+The type is then 
+<code>GenPolynomial&lt;GenPolynomial&lt;BigRational&gt;&gt;</code>
+and the polynomial factory has type
+<code>GenPolynomial<b>Ring</b>&lt;GenPolynomial&lt;BigRational&gt;&gt;</code>.
+Using the polynomial coefficient factory <code>pfac</code> from above
+a recursive polynomial factory <code>rfac</code> could be created by 
+<code>new GenPolynomialRing&lt;GenPolynomial&lt;BigRational&gt;&gt;(pfac,3)</code>.
+The creation of a recursive polynomial object <code>r</code> of the 
+above described type is then as a easy as before
+e.g. by <code>rfac.getONE()</code>, 
+<code>rfac.fromInteger(1)</code> or <code>rfac.random(3)</code>.
+</p>
+
+
+<h2>3. Solvable polynomials</h2>
+
+<p>
+We turn now to the last layer of classes in the the above figure.
 </p>
 
 <p>
@@ -209,7 +245,7 @@ empty relation table and then to add the defining relations.
 
 
 
-<h2>2. Ring element interaction</h2>
+<h2>4. Ring element interaction</h2>
 
 <p>The next figure gives an overview of the interplay between the 
 main interfaces and polynomial classes.
@@ -241,7 +277,7 @@ be specified.
 <p>
 <!-- Created: Sat Mar 11 10:51:36 CET 2006 -->
 <!-- hhmts start -->
-Last modified: Sat Mar 11 18:25:49 CET 2006
+Last modified: Sun Mar 12 12:23:59 CET 2006
 <!-- hhmts end -->
 </p>
 <p align="right" >
