@@ -160,7 +160,7 @@ LIBS=$(JUNITPATH) $(LOG4JPATH) $(JOMPPATH) $(TNJPATH)
 #CLASSES=$(wildcard *.class structure/*.java arith/*.class poly/*.class ring/*.class application/*.class vector/*.class module/*.class util/*.class)
 CLASSES=edu/jas
 PYS=$(wildcard *.py examples/*.py)
-DOCU=jas-log.html index.html problems.html README COPYING COPYING.lgpl sample.jythonrc
+DOCU=$(wildcard jas-log.html index.html problems.html design.html README COPYING COPYING.lgpl sample.jythonrc overview.html */package.html)
 
 doc: $(FILES)
 	$(DOC) $(DOCOPTS) -d doc $(FILES) 
