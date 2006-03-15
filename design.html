@@ -365,6 +365,19 @@ Further there are methods to access parts of the polynomial
 like leading term, leading coefficient 
 (still called leading base coefficient from the Aldes/SAC-2 tradition)
 and leading monomial.
+The <code>toString()</code> method creates as usual a string representation 
+of the polynomials consisting of exponent tuples and coefficients. 
+One variant of it takes an array of variable names and creates a string
+consisting of coefficients and products of powers of variables.
+The method <code>extend()</code> is used to embed the polynomial into the 
+'bigger' polynomial ring specified in the first parameter. 
+The embeded polynomial can also be multiplied by a power of a variable.
+The <code>contract()</code> method returns a map of exponents and 
+coefficients. The coefficients are polynomials belonging to the 
+'smaller' polynomial ring specified in the first parameter. 
+If the polynomial actually belongs to the smaller polynomial ring 
+the map will contain only one pair, mapping the zero exponent vector
+to the polynomial with variables removed.
 A last group of methods computes (extended) greatest common divisors.
 They work correct for univariate polynomials over a field but not 
 for arbitrary multivatiate polynomials. These methods will be moved
@@ -372,8 +385,38 @@ to a new separate class in the future.
 </p>
 
 <p>
-Optionally a <code>TermOrder</code> and names for the variables can 
-be specified.
+The <code>GenPolynomialRing</code> class has a generic type parameter 
+<code>C</code> which is constrained to a type with the functionality
+of ring elements <code>C extends RingElem&lt;C&gt;</code>.
+Further the class implements a <code>RingFactory</code> over 
+<code>GenPolynomial&lt;C&gt;</code> so that it can be used as
+coefficient factory of a different polynomial ring.
+The constructors require at least a factory for the coefficents as
+first parameter of type <code>RingFactory&lt;C&gt;</code>
+and the number of variables in the second parameter.
+A third parameter can optionally specify a <code>TermOrder</code> 
+and a fourth parameter can specify the names for the variables
+of the polynomial ring.
+Besides the methods required by the <code>RingFactory</code>
+interface there are additional <code>random()</code> methods
+which provide more control over the creation of random polynomials. 
+They have the following parameters: 
+the bitsize of random coefficients to be used in the 
+<code>random()</code> method of the coefficient factory,
+the number of terms (i.e. the length of the polynomial), 
+the maximal degree in each variable
+and the density of nozero exponents, i.e. the ratio of nonzero to 
+zero exponents.
+The <code>toString()</code> method creates a string representation 
+of the polynomial ring consisting of the coefficient factory string 
+representation, the tuple of variable names and the string representation 
+of the term order. 
+The <code>extend()</code> and <code>contract()</code> methods
+create 'bigger' respectively 'smaller' polynomial rings. 
+Both methods take a parameter of how many variables are to be added 
+or removed form the actual polynomial ring.
+<code>extend()</code> will setup an elimination term order consisting 
+of two times the actual term order when ever possible.
 </p>
 
 
@@ -403,7 +446,7 @@ be specified.
 <p>
 <!-- Created: Sat Mar 11 10:51:36 CET 2006 -->
 <!-- hhmts start -->
-Last modified: Sun Mar 12 20:21:08 CET 2006
+Last modified: Wed Mar 15 23:36:49 CET 2006
 <!-- hhmts end -->
 </p>
 <p align="right" >
