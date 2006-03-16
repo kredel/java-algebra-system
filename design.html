@@ -24,8 +24,10 @@ dt   { font-weight: bolder;
 <p>
 In ths document we give an overview on the structure 
 of the interfaces, classes and packages of JAS.
-We focus on the structure of the required types and 
-the creation of the corresponding objects.
+In the first three sections we focus on the structure 
+of the required types and the creation of the corresponding objects.
+In the next three sections we focus on the functional aspects of 
+the types, i.e. their constructors and methods.
 For a discussion of other design alternatives see
 the <a href="problems.html">problems</a> document.
 </p>
@@ -335,7 +337,7 @@ UML diagram of JAS type functionality
 </p>
 
 
-<h2>5. Polynomial and factory functionality</h2>
+<h2>5. Polynomial and polynomial factory functionality</h2>
 
 <p>
 We continue the discussion of the above figure 
@@ -420,18 +422,85 @@ of two times the actual term order when ever possible.
 </p>
 
 
+<h2>6. Solvable polynomial and solvable polynomial factory functionality</h2>
 
 <p>
+We continue the discussion of the above figure 
+with the generic solvable polynomial and factory classes.
 </p>
 
 <p>
+The <code>GenSolvablePolynomial</code> class has a generic type parameter 
+<code>C</code> which is constrained to a type with the functionality
+of ring elements <code>C extends RingElem&lt;C&gt;</code>.
+The class extends the <code>GenPolynomial</code> class. It inherits 
+all additive functionality and overwrites the multiplicative 
+functionality with a new non-commutative multiplication method.
+Unfortunately it <em>cannot</em> implement a <code>RingElem</code> 
+over itself <code>RingElem&lt;GenSolvablePolynomial&lt;C&gt;&gt;</code> 
+but can only inherit the implementation of 
+<code>RingElem&lt;GenPolynomial&lt;C&gt;&gt;</code> from its super class.
+By this limitation a solvable polynomial can still be used as 
+coefficent in another polynomial, but only with the type of its super 
+class. The limitation comes form the erasure of template parameters in 
+<code>RingElem&lt;...&gt;</code> to <code>RingElem</code> for the 
+code generated. I.e. the generic interfaces become the same after
+type erasure and it is not allowed to implement the same interface twice.
+There are two public and one protected constructors as in the super class.
+Each requires at least a ring factory parameter 
+<code>GenSolvablePolynomialRing&lt;C&gt; r</code> 
+which is stored in a variable of this type shadowing the variable 
+with the same name of the super factory type. The rest of the 
+initialization work is delegated to the super class constructor.
 </p>
+
 <p>
+The <code>GenSolvablePolynomialRing</code> class has a generic type parameter 
+<code>C</code> which is constrained to a type with the functionality
+of ring elements <code>C extends RingElem&lt;C&gt;</code>.
+The class extends the <code>GenPolynomialRing</code> class. 
+It overwrites most methods to implement the new non-commutative 
+methods.
+Also this class cannot implement a <code>RingFactory</code> over 
+<code>GenSolvablePolynomial&lt;C&gt;</code>. It only implements 
+<code>RingFactory</code> over <code>GenPolynomial&lt;C&gt;</code>
+by inheritance by the same reason of type erasure as above.
+But it can be used as coefficient factory with the type of its super class
+for a different polynomial ring.
+One part of the constructors just restate the super class constructors
+with the actual solvable type. A solvable polynomial ring however 
+must know how to perform the non-commutative multiplication. 
+To this end a data structure with the respective commutator relations 
+is required. It is implemented in the <code>RelationTable</code> class.
+The other part of the constructors additionaly takes a parameter of type
+<code>RelationTable</code> to set the initial commutator relation table.
+Some care is needed to create relation tables and solvable polynomial
+factories since the relation table requires a solvable polynomial
+factory as parameter in the constructor. So it is most advisable to 
+create a solvable polynomial factory object with empty relation table
+and to fill it with commutator relations after the constructor is 
+completed but before the factory will be used.
+There is also a new method <code>isAssociative()</code> which tries
+to check if the commutator relations indeed define an associative 
+algebra. This method should be extracted to the <code>RingFactory</code>
+interface together with a method <code>isCommutative()</code>, 
+since both are of general importance and not always fulfilled 
+in our rings. E.g. <code>BigQuaternion</code> is not commutative 
+and so is a polynomial ring over these coefficents is not commutative.
+The same applies to associativity and the (not jet existing) class
+<code>BigOctonion</code>.
+</p>
+
+<p>
+This concludes the discussion of the main interfaces and classes 
+of the Java algebra system.
 </p>
 
 
 <!--
 <code></code> 
+<p>
+</p>
 <p>
 </p>
 <pre>
@@ -446,7 +515,7 @@ of two times the actual term order when ever possible.
 <p>
 <!-- Created: Sat Mar 11 10:51:36 CET 2006 -->
 <!-- hhmts start -->
-Last modified: Wed Mar 15 23:36:49 CET 2006
+Last modified: Thu Mar 16 23:07:31 CET 2006
 <!-- hhmts end -->
 </p>
 <p align="right" >
