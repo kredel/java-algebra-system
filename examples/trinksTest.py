@@ -1,6 +1,6 @@
 #
 # jython examples for jas.
-# $Id: trinks.py 597 2006-02-12 11:16:09Z kredel $
+# $Id$
 #
 
 import sys;

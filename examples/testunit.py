@@ -1,6 +1,6 @@
 #
 # test functionality of the jython interface to jas.
-# $Id: $
+# $Id$
 #
 
 # test ideal Groebner bases 

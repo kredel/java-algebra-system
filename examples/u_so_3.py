@@ -1,6 +1,6 @@
 #
 # jython examples for jas.
-# $Id: $
+# $Id$
 #
 
 from jas import SolvableRing
