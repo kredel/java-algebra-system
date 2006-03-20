@@ -44,47 +44,13 @@ f = SolvableSubModule( r, ps );
 print "SolvableSubModule: " + str(f);
 print;
 
+
 flg = f.leftGB();
 print "seq left GB:", flg;
 print;
-
-from edu.jas.module   import ModSolvableGroebnerBaseAbstract;
-
-if ModSolvableGroebnerBaseAbstract().isLeftGB( flg.mset ):
-   print "is left GB";
-else:
-   print "is not left GB";
-
 
 
 ftg = f.twosidedGB();
 print "seq twosided GB:", ftg;
 print;
 
-if ModSolvableGroebnerBaseAbstract().isLeftGB( ftg.mset ):
-   print "twosided GB is left GB";
-else:
-   print "twosided GB is not left GB";
-
-if ModSolvableGroebnerBaseAbstract().isRightGB( ftg.mset ):
-   print "twosided GB is right GB";
-else:
-   print "twosided GB is not right GB";
-
-if ModSolvableGroebnerBaseAbstract().isTwosidedGB( ftg.mset ):
-   print "is twosided GB";
-else:
-   print "is not twosided GB";
-
-
-## from jas import startLog
-## startLog();
-
-## frg = f.rightGB();
-## print "seq right GB:", frg;
-## print;
-
-## if ModSolvableGroebnerBaseAbstract().isRightGB( frg.mset ):
-##    print "is right GB";
-## else:
-##    print "is not right GB";
