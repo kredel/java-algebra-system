@@ -350,8 +350,10 @@ class DistPoolThread extends Thread {
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
+                    running = false; 
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
+                    running = false; 
                 }
                 working = false;
                 time += System.currentTimeMillis() - t;
