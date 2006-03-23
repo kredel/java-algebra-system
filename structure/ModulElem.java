@@ -16,7 +16,7 @@ import java.util.List;
  * @typeparam C coefficient type.
  */
 public interface ModulElem<M extends ModulElem<M,C>,
-                           C extends RingElem> 
+                           C extends RingElem<C>> 
                  extends Cloneable, 
                          Comparable< M >, 
                          Serializable {

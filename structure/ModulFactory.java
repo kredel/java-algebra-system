@@ -15,7 +15,7 @@ import java.io.Serializable;
  * @typeparam C coefficient type.
  */
 public interface ModulFactory<M extends ModulElem<M,C>,
-                              C extends RingElem> 
+                              C extends RingElem<C>> 
                  extends Serializable {
 
     /**
