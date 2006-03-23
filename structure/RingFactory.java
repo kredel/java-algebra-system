@@ -15,7 +15,7 @@ import java.util.Random;
  * @author Heinz Kredel
  */
 
-public interface RingFactory<C extends RingElem> extends Serializable {
+public interface RingFactory<C extends RingElem<C>> extends Serializable {
 
 
     /**
