@@ -33,6 +33,20 @@ public interface RingFactory<C extends RingElem<C>> extends Serializable {
 
 
     /**
+     * Query if this ring is commutative.
+     * @return true if this ring is commutative, else false.
+     */
+    public boolean isCommutative();
+
+
+    /**
+     * Query if this ring is associative.
+     * @return true if this ring is associative, else false.
+     */
+    public boolean isAssociative();
+
+
+    /**
      * Get the RingElem for a.
      * @param a
      * @return a: RingElem.
