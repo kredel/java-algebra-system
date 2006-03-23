@@ -200,6 +200,24 @@ public class BigQuaternion implements RingElem<BigQuaternion>,
     }
 
 
+    /**
+     * Query if this ring is commutative.
+     * @return false.
+     */
+    public boolean isCommutative() {
+        return false;
+    }
+
+
+    /**
+     * Query if this ring is associative.
+     * @return true.
+     */
+    public boolean isAssociative() {
+        return true;
+    }
+
+
     /** Get a BigQuaternion element from a BigInteger.
      * @param a BigInteger.
      * @return a BigQuaternion.

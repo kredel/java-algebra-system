@@ -141,6 +141,24 @@ public class BigComplex implements RingElem<BigComplex>,
     }
 
 
+    /**
+     * Query if this ring is commutative.
+     * @return true.
+     */
+    public boolean isCommutative() {
+        return true;
+    }
+
+
+    /**
+     * Query if this ring is associative.
+     * @return true.
+     */
+    public boolean isAssociative() {
+        return true;
+    }
+
+
     /** Get a BigComplex element from a BigInteger.
      * @param a BigInteger.
      * @return a BigComplex.

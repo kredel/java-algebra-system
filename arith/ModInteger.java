@@ -152,6 +152,24 @@ public class ModInteger implements RingElem<ModInteger>,
     }
 
 
+    /**
+     * Query if this ring is commutative.
+     * @return true.
+     */
+    public boolean isCommutative() {
+        return true;
+    }
+
+
+    /**
+     * Query if this ring is associative.
+     * @return true.
+     */
+    public boolean isAssociative() {
+        return true;
+    }
+
+
     /** Get a ModInteger element from a BigInteger value.
      * @param a BigInteger.
      * @return a ModInteger.

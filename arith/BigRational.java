@@ -199,6 +199,25 @@ public class BigRational implements RingElem<BigRational>,
         return ONE;
     }
 
+
+    /**
+     * Query if this ring is commutative.
+     * @return true.
+     */
+    public boolean isCommutative() {
+        return true;
+    }
+
+
+    /**
+     * Query if this ring is associative.
+     * @return true.
+     */
+    public boolean isAssociative() {
+        return true;
+    }
+
+
     /** Get a BigRational element from a math.BigInteger.
      * @param a math.BigInteger.
      * @return BigRational from a. 

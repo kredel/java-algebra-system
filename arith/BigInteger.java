@@ -117,6 +117,24 @@ public class BigInteger implements RingElem<BigInteger>,
     }
 
 
+    /**
+     * Query if this ring is commutative.
+     * @return true.
+     */
+    public boolean isCommutative() {
+        return true;
+    }
+
+
+    /**
+     * Query if this ring is associative.
+     * @return true.
+     */
+    public boolean isAssociative() {
+        return true;
+    }
+
+
     /** Get a BigInteger element from a math.BigInteger.
      * @param a math.BigInteger.
      * @return a as BigInteger.
