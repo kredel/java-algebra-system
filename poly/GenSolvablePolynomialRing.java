@@ -39,6 +39,7 @@ import edu.jas.poly.ExpVector;
 
 public class GenSolvablePolynomialRing<C extends RingElem<C> > 
              extends GenPolynomialRing<C> {
+         //  implements RingFactory< GenSolvablePolynomial<C> > {
 
 
     /** The solvable multiplication relations. 

@@ -1014,6 +1014,7 @@ public class GenPolynomial<C extends RingElem<C> >
      * remove i elements of each ExpVector.
      * @param pfac contracted polynomial ring factory (by i variables).
      * @return Map of exponents and contracted polynomials.
+     * <b>Note:</b> could return SortedMap
      */
     public Map<ExpVector,GenPolynomial<C>> contract(GenPolynomialRing<C> pfac) {
         GenPolynomial<C> zero = pfac.getZERO();
