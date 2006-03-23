@@ -229,6 +229,54 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
     }
 
 
+    /**
+     * Query if this ring is commutative.
+     * @return true if this ring is commutative, else false.
+     */
+    public boolean isCommutative() {
+        if ( table.size() == 0 ) {
+           return super.isCommutative();
+        }
+        // todo: check structure of relations
+        return false;
+    }
+
+
+    /**
+     * Query if this ring is associative.
+     * Test if the relations define an associative solvable ring.
+     * @typeparam C coefficient type.
+     * @return true, if this ring is associative, else false.
+     */
+    public boolean isAssociative() {
+        GenSolvablePolynomial<C> Xi;
+        GenSolvablePolynomial<C> Xj;
+        GenSolvablePolynomial<C> Xk;
+        GenSolvablePolynomial<C> p;
+        GenSolvablePolynomial<C> q;
+        for ( int i = 0; i < nvar; i++ ) {
+            Xi = univariate(i);
+            for ( int j = i+1; j < nvar; j++ ) {
+                Xj = univariate(j);
+                for ( int k = j+1; k < nvar; k++ ) {
+                    Xk = univariate(k);
+                    p = Xk.multiply(Xj).multiply(Xi);
+                    q = Xk.multiply(Xj.multiply(Xi));
+                    if ( !p.equals(q) ) {
+                       if ( true || debug ) {
+                          logger.info("Xi = " + Xi + ", Xj = " + Xj + ", Xk = " + Xk);
+                          logger.info("p = ( Xk * Xj ) * Xi = " + p);
+                          logger.info("q = Xk * ( Xj * Xi ) = " + q);
+                       }
+                       return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+
     /** Get a (constant) GenSolvablePolynomial<C> element from a long value.
      * @param a long.
      * @return a GenSolvablePolynomial<C>.
@@ -439,40 +487,5 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
         spfac.table.reverse(this.table);
         return spfac;
     }
-
-
-    /**
-     * Test if the relations define an associative solvable ring.
-     * @typeparam C coefficient type.
-     * @return true, if this ring is associative, else false.
-     */
-    public boolean isAssociative() {
-        GenSolvablePolynomial<C> Xi;
-        GenSolvablePolynomial<C> Xj;
-        GenSolvablePolynomial<C> Xk;
-        GenSolvablePolynomial<C> p;
-        GenSolvablePolynomial<C> q;
-        for ( int i = 0; i < nvar; i++ ) {
-            Xi = univariate(i);
-            for ( int j = i+1; j < nvar; j++ ) {
-                Xj = univariate(j);
-                for ( int k = j+1; k < nvar; k++ ) {
-                    Xk = univariate(k);
-                    p = Xk.multiply(Xj).multiply(Xi);
-                    q = Xk.multiply(Xj.multiply(Xi));
-                    if ( !p.equals(q) ) {
-                       if ( true || debug ) {
-                          logger.info("Xi = " + Xi + ", Xj = " + Xj + ", Xk = " + Xk);
-                          logger.info("p = ( Xk * Xj ) * Xi = " + p);
-                          logger.info("q = Xk * ( Xj * Xi ) = " + q);
-                       }
-                       return false;
-                    }
-                }
-            }
-        }
-        return true;
-    }
-
 
 }

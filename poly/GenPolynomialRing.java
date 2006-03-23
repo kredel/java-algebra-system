@@ -292,6 +292,24 @@ public class GenPolynomialRing<C extends RingElem<C> >
     }
 
 
+    /**
+     * Query if this ring is commutative.
+     * @return true if this ring is commutative, else false.
+     */
+    public boolean isCommutative() {
+        return coFac.isCommutative();
+    }
+
+
+    /**
+     * Query if this ring is associative.
+     * @return true if this ring is associative, else false.
+     */
+    public boolean isAssociative() {
+        return coFac.isAssociative();
+    }
+
+
     /** Get a (constant) GenPolynomial<C> element from a long value.
      * @param a long.
      * @return a GenPolynomial<C>.

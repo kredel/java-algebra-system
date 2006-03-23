@@ -111,6 +111,24 @@ public class AlgebraicNumber<C extends RingElem<C> >
     }
 
     
+    /**
+     * Query if this ring is commutative.
+     * @return true if this ring is commutative, else false.
+     */
+    public boolean isCommutative() {
+        return modul.ring.isCommutative();
+    }
+
+
+    /**
+     * Query if this ring is associative.
+     * @return true if this ring is associative, else false.
+     */
+    public boolean isAssociative() {
+        return modul.ring.isAssociative();
+    }
+
+
     /** Get a AlgebraicNumber element from a BigInteger value.
      * @param a BigInteger.
      * @return a AlgebraicNumber.
