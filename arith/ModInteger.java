@@ -19,8 +19,8 @@ import java.io.Reader;
  * @see java.math.BigInteger
  */
 
-public class ModInteger implements RingElem<ModInteger>, 
-                                   RingFactory<ModInteger> {
+public final class ModInteger implements RingElem<ModInteger>, 
+                                         RingFactory<ModInteger> {
 
 
     /** Module part of the factory data structure. 

@@ -19,8 +19,8 @@ import java.io.Reader;
  * @author Heinz Kredel
  */
 
-public class BigRational implements RingElem<BigRational>, 
-                                    RingFactory<BigRational> {
+public final class BigRational implements RingElem<BigRational>, 
+                                          RingFactory<BigRational> {
 
     /**
      * Numerator part of the data structure.

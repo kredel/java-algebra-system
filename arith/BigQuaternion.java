@@ -20,8 +20,8 @@ import java.io.Reader;
  * @author Heinz Kredel
  */
 
-public class BigQuaternion implements RingElem<BigQuaternion>, 
-                                      RingFactory<BigQuaternion> {
+public final class BigQuaternion implements RingElem<BigQuaternion>, 
+                                            RingFactory<BigQuaternion> {
 
     /** Real part of the data structure. 
      */

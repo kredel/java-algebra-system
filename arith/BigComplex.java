@@ -20,8 +20,8 @@ import java.io.Reader;
  * Objects of this class are immutable.
  * @author Heinz Kredel
  */
-public class BigComplex implements RingElem<BigComplex>, 
-                                   RingFactory<BigComplex> {
+public final class BigComplex implements RingElem<BigComplex>, 
+                                         RingFactory<BigComplex> {
 
     /** Real part of the data structure. 
       */

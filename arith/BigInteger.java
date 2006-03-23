@@ -18,8 +18,8 @@ import java.io.Reader;
  * @see java.math.BigInteger
  */
 
-public class BigInteger implements RingElem<BigInteger>, 
-                                   RingFactory<BigInteger> {
+public final class BigInteger implements RingElem<BigInteger>, 
+                                         RingFactory<BigInteger> {
 
     /** The data structure. 
       */
