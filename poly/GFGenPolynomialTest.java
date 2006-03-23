@@ -15,6 +15,7 @@ import edu.jas.arith.ModInteger;
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.AlgebraicNumber;
+import edu.jas.poly.AlgebraicNumberRing;
 
 
 /**
@@ -50,7 +51,7 @@ public class GFGenPolynomialTest extends TestCase {
    //private final static int bitlen = 100;
 
    GenPolynomialRing<AlgebraicNumber<ModInteger>> fac;
-   AlgebraicNumber<ModInteger> cfac;
+   AlgebraicNumberRing<ModInteger> cfac;
 
    GenPolynomial<AlgebraicNumber<ModInteger>> a;
    GenPolynomial<AlgebraicNumber<ModInteger>> b;
@@ -85,7 +86,7 @@ public class GFGenPolynomialTest extends TestCase {
        while ( modul.isZERO() || modul.isUnit() ) {
              modul = mfac.random(5); 
        }
-       cfac = new AlgebraicNumber<ModInteger>(modul.monic());
+       cfac = new AlgebraicNumberRing<ModInteger>(modul.monic());
        fac = new GenPolynomialRing<AlgebraicNumber<ModInteger>>(cfac,rl);
    }
 

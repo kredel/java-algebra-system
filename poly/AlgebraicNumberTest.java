@@ -15,6 +15,7 @@ import edu.jas.arith.BigRational;
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.AlgebraicNumber;
+import edu.jas.poly.AlgebraicNumberRing;
 
 
 /**
@@ -49,7 +50,7 @@ public class AlgebraicNumberTest extends TestCase {
 
    //private final static int bitlen = 100;
 
-   AlgebraicNumber<BigRational> fac;
+   AlgebraicNumberRing<BigRational> fac;
    GenPolynomialRing<BigRational> mfac;
 
    AlgebraicNumber< BigRational > a;
@@ -71,7 +72,7 @@ public class AlgebraicNumberTest extends TestCase {
        while ( mo.isUnit() ) {
           mo = mfac.random(kl,ll,el,q);
        }
-       fac = new AlgebraicNumber<BigRational>( mo );
+       fac = new AlgebraicNumberRing<BigRational>( mo );
    }
 
    protected void tearDown() {
@@ -150,7 +151,7 @@ public class AlgebraicNumberTest extends TestCase {
      assertEquals("0+a = 0+(-a)",c,d);
 
  }
-
+ 
 
 /**
  * Test object multiplication.

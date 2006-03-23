@@ -48,7 +48,7 @@ public class GaloisFieldTest extends TestCase {
 
    //private final static int bitlen = 100;
 
-   AlgebraicNumber<ModInteger> fac;
+   AlgebraicNumberRing<ModInteger> fac;
    GenPolynomialRing<ModInteger> mfac;
 
    AlgebraicNumber< ModInteger > a;
@@ -82,7 +82,7 @@ public class GaloisFieldTest extends TestCase {
        while ( mo.isUnit() || mo.isZERO() ) {
           mo = mfac.random(ll);
        }
-       fac = new AlgebraicNumber<ModInteger>( mo );
+       fac = new AlgebraicNumberRing<ModInteger>( mo );
        //System.out.println("fac = " + fac);
    }
 

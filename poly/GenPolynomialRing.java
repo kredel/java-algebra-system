@@ -141,13 +141,13 @@ public class GenPolynomialRing<C extends RingElem<C> >
         String res = "";
         if ( PrettyPrint.isTrue() ) {
            res = coFac.getClass().getSimpleName();
-           if ( coFac instanceof AlgebraicNumber ) {
-              AlgebraicNumber an = (AlgebraicNumber)coFac;  
-              String[] v = an.modul.ring.vars;
+           if ( coFac instanceof AlgebraicNumberRing ) {
+              AlgebraicNumberRing an = (AlgebraicNumberRing)coFac;  
+              String[] v = an.ring.vars;
               res +=  "[ ("
-                     + an.modul.ring.varsToString()
+                     + an.ring.varsToString()
                      + ") ("
-                     + an.modul.toString( v )
+                     + an.toString()
                      + ") ]";
            }
            res +=   "(" 
@@ -159,10 +159,10 @@ public class GenPolynomialRing<C extends RingElem<C> >
            res = this.getClass().getSimpleName() 
                  + "[ " // + coFac.toString() + " : "
                  + coFac.getClass().getSimpleName();
-           if ( coFac instanceof AlgebraicNumber ) {
-              AlgebraicNumber an = (AlgebraicNumber)coFac;  
+           if ( coFac instanceof AlgebraicNumberRing ) {
+              AlgebraicNumberRing an = (AlgebraicNumberRing)coFac;  
               res +=  "[ ("
-                     + an.modul.ring.varsToString()
+                     + an.ring.varsToString()
                      + ") ("
                      + an.modul
                      + ") ]";

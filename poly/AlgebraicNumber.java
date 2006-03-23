@@ -20,13 +20,14 @@ import java.io.Reader;
  */
 
 public class AlgebraicNumber<C extends RingElem<C> > 
-                               implements RingElem< AlgebraicNumber<C> >, 
-                                          RingFactory< AlgebraicNumber<C> >  {
+                               implements RingElem< AlgebraicNumber<C> > {
+
+                               //, RingFactory< AlgebraicNumber<C> >  {
 
 
-    /** Module part of the factory data structure. 
+    /** Ring part of the data structure. 
      */
-    protected final GenPolynomial<C> modul;
+    protected final AlgebraicNumberRing<C> ring;
 
 
     /** Value part of the element data structure. 
@@ -41,24 +42,23 @@ public class AlgebraicNumber<C extends RingElem<C> >
 
 
     /** The constructor creates a AlgebraicNumber object 
-     * from two GenPolynomial objects module and value part. 
-     * @param m module GenPolynomial<C>.
+     * from AlgebraicNumberRing modul and a GenPolynomial value. 
+     * @param r ring AlgebraicNumberRing<C>.
      * @param a value GenPolynomial<C>.
      */
-    public AlgebraicNumber(GenPolynomial<C> m, GenPolynomial<C> a) {
-        modul = m;
-        val = a.remainder(modul); //.monic() no go
+    public AlgebraicNumber(AlgebraicNumberRing<C> r, GenPolynomial<C> a) {
+        ring = r; // assert r != 0
+        val = a.remainder( ring.modul ); //.monic() no go
     }
 
 
     /** The constructor creates a AlgebraicNumber object 
      * from a GenPolynomial object module. 
-     * @param m module GenPolynomial<C>.
+     * @param r ring AlgebraicNumberRing<C>.
      */
-    public AlgebraicNumber(GenPolynomial<C> m) {
-
-        modul = m; // assert m != 0
-        val = m.ring.getZERO();
+    public AlgebraicNumber(AlgebraicNumberRing<C> r) {
+        ring = r; // assert r != 0
+        val = ring.ring.getZERO();
     }
 
 
@@ -70,89 +70,20 @@ public class AlgebraicNumber<C extends RingElem<C> >
     }
 
 
-    /** Get the module part. 
-     * @return modul.
-     */
-    public GenPolynomial<C> getModul() {
-        return modul;
-    }
-
-
     /**  Clone this.
      * @see java.lang.Object#clone()
      */
     public AlgebraicNumber<C> clone() {
-        return new AlgebraicNumber<C>( modul, val );
+        return new AlgebraicNumber<C>( ring, val );
     }
 
-
-    /** Copy AlgebraicNumber element c.
-     * @param c
-     * @return a copy of c.
-     */
-    public AlgebraicNumber<C> copy(AlgebraicNumber<C> c) {
-        return new AlgebraicNumber<C>( c.modul, c.val );
-    }
-
-
-    /** Get the zero element.
-     * @return 0 as AlgebraicNumber.
-     */
-    public AlgebraicNumber<C> getZERO() {
-        return new AlgebraicNumber<C>( modul, modul.ring.getZERO() );
-    }
-
-
-    /**  Get the one element.
-     * @return 1 as AlgebraicNumber.
-     */
-    public AlgebraicNumber<C> getONE() {
-        return new AlgebraicNumber<C>( modul, modul.ring.getONE() );
-    }
-
-    
-    /**
-     * Query if this ring is commutative.
-     * @return true if this ring is commutative, else false.
-     */
-    public boolean isCommutative() {
-        return modul.ring.isCommutative();
-    }
-
-
-    /**
-     * Query if this ring is associative.
-     * @return true if this ring is associative, else false.
-     */
-    public boolean isAssociative() {
-        return modul.ring.isAssociative();
-    }
-
-
-    /** Get a AlgebraicNumber element from a BigInteger value.
-     * @param a BigInteger.
-     * @return a AlgebraicNumber.
-     */
-    public AlgebraicNumber<C> fromInteger(java.math.BigInteger a) {
-        return new AlgebraicNumber<C>(modul, modul.ring.fromInteger(a) );
-    }
-
-
-    /** Get a AlgebraicNumber element from a long value.
-     * @param a long.
-     * @return a AlgebraicNumber.
-     */
-    public AlgebraicNumber<C> fromInteger(long a) {
-        return new AlgebraicNumber<C>(modul, modul.ring.fromInteger(a) );
-    }
-    
 
     /** Is AlgebraicNumber zero. 
      * @return If this is 0 then true is returned, else false.
      * @see edu.jas.structure.RingElem#isZERO()
      */
     public boolean isZERO() {
-        return val.equals( val.ring.getZERO() );
+        return val.equals( ring.ring.getZERO() );
     }
 
 
@@ -161,7 +92,7 @@ public class AlgebraicNumber<C extends RingElem<C> >
      * @see edu.jas.structure.RingElem#isONE()
      */
     public boolean isONE() {
-        return val.equals( val.ring.getONE() );
+        return val.equals( ring.ring.getONE() );
     }
 
 
@@ -177,7 +108,7 @@ public class AlgebraicNumber<C extends RingElem<C> >
             return false;
         } 
         // not jet known
-        boolean u = val.gcd(modul).isUnit();
+        boolean u = val.gcd( ring.modul ).isUnit();
         if ( u ) {
             isunit = 1;
         } else {
@@ -192,20 +123,11 @@ public class AlgebraicNumber<C extends RingElem<C> >
      */
     public String toString() {
         if ( PrettyPrint.isTrue() ) {
-            return val.toString( val.ring.vars );
+            return val.toString( ring.ring.vars );
         } else {
             return "AlgebraicNumber[ " + val.toString() 
-                + " mod " + modul.toString() + " ]";
+                               + " ]";
         }
-    }
-
-
-    /** Get the String representation as RingFactory.
-     * @see java.lang.Object#toString()
-     */
-    public String toStringFac() {
-        return "AlgebraicNumber[ " 
-            + modul.toString() + " ]";
     }
 
 
@@ -215,8 +137,8 @@ public class AlgebraicNumber<C extends RingElem<C> >
      */
     public int compareTo(AlgebraicNumber<C> b) {
         GenPolynomial<C> v = b.val;
-        if ( modul != b.modul ) {
-            v = v.remainder( modul );
+        if ( ring != b.ring ) {
+            v = v.remainder( ring.modul );
         }
         return val.compareTo( v );
     }
@@ -248,7 +170,7 @@ public class AlgebraicNumber<C extends RingElem<C> >
      * @see edu.jas.structure.RingElem#abs()
      */
     public AlgebraicNumber<C> abs() {
-        return new AlgebraicNumber<C>( modul, val.abs() );
+        return new AlgebraicNumber<C>( ring, val.abs() );
     }
 
 
@@ -257,7 +179,7 @@ public class AlgebraicNumber<C extends RingElem<C> >
      * @return this+S.
      */
     public AlgebraicNumber<C> sum(AlgebraicNumber<C> S) {
-        return new AlgebraicNumber<C>( modul, val.sum( S.val ) );
+        return new AlgebraicNumber<C>( ring, val.sum( S.val ) );
     }
 
 
@@ -266,7 +188,7 @@ public class AlgebraicNumber<C extends RingElem<C> >
      * @see edu.jas.structure.RingElem#negate()
      */
     public AlgebraicNumber<C> negate() {
-        return new AlgebraicNumber<C>( modul, val.negate() );
+        return new AlgebraicNumber<C>( ring, val.negate() );
     }
 
 
@@ -284,7 +206,7 @@ public class AlgebraicNumber<C extends RingElem<C> >
      * @return this-S.
      */
     public AlgebraicNumber<C> subtract(AlgebraicNumber<C> S) {
-        return new AlgebraicNumber<C>( modul, val.subtract( S.val ) );
+        return new AlgebraicNumber<C>( ring, val.subtract( S.val ) );
     }
 
 
@@ -302,8 +224,8 @@ public class AlgebraicNumber<C extends RingElem<C> >
      * @return S with S = 1/this if defined. 
      */
     public AlgebraicNumber<C> inverse() {
-        GenPolynomial<C> x = val.modInverse( modul );
-        return new AlgebraicNumber<C>( modul, x );
+        GenPolynomial<C> x = val.modInverse( ring.modul );
+        return new AlgebraicNumber<C>( ring, x );
     }
 
 
@@ -313,28 +235,7 @@ public class AlgebraicNumber<C extends RingElem<C> >
      */
     public AlgebraicNumber<C> remainder(AlgebraicNumber<C> S) {
         GenPolynomial<C> x = val.remainder( S.val );
-        return new AlgebraicNumber<C>( modul, x );
-    }
-
-
-    /** AlgebraicNumber random.
-     * @param n such that 0 &le; v &le; (2<sup>n</sup>-1).
-     * @return a random integer mod modul.
-     */
-    public AlgebraicNumber<C> random(int n) {
-        GenPolynomial<C> x = modul.ring.random( n ).monic();
-        return new AlgebraicNumber<C>( modul, x);
-    }
-
-
-    /** AlgebraicNumber random.
-     * @param n such that 0 &le; v &le; (2<sup>n</sup>-1).
-     * @param rnd is a source for random bits.
-     * @return a random integer mod modul.
-     */
-    public AlgebraicNumber<C> random(int n, Random rnd) {
-        GenPolynomial<C> x = modul.ring.random( n, rnd ).monic();
-        return new AlgebraicNumber<C>( modul, x);
+        return new AlgebraicNumber<C>( ring, x );
     }
 
 
@@ -344,7 +245,7 @@ public class AlgebraicNumber<C extends RingElem<C> >
      */
     public AlgebraicNumber<C> multiply(AlgebraicNumber<C> S) {
         GenPolynomial<C> x = val.multiply( S.val );
-        return new AlgebraicNumber<C>( modul, x );
+        return new AlgebraicNumber<C>( ring, x );
     }
 
 
@@ -352,27 +253,7 @@ public class AlgebraicNumber<C extends RingElem<C> >
      * @return this with monic value part.
      */
     public AlgebraicNumber<C> monic() {
-        return new AlgebraicNumber<C>( modul, val.monic() );
-    }
-
-
-    /** Parse AlgebraicNumber from String.
-     * @param s String.
-     * @return AlgebraicNumber from s.
-     */
-    public AlgebraicNumber<C> parse(String s) {
-        GenPolynomial<C> x = modul.ring.parse( s );
-        return new AlgebraicNumber<C>( modul, x );
-    }
-
-
-    /** Parse AlgebraicNumber from Reader.
-     * @param r Reader.
-     * @return next AlgebraicNumber from r.
-     */
-    public AlgebraicNumber<C> parse(Reader r) {
-        GenPolynomial<C> x = modul.ring.parse( r );
-        return new AlgebraicNumber<C>( modul, x );
+        return new AlgebraicNumber<C>( ring, val.monic() );
     }
 
 }

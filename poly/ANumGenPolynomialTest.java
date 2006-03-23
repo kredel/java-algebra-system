@@ -14,6 +14,7 @@ import edu.jas.arith.BigRational;
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.AlgebraicNumber;
+import edu.jas.poly.AlgebraicNumberRing;
 
 
 /**
@@ -49,7 +50,7 @@ public class ANumGenPolynomialTest extends TestCase {
    //private final static int bitlen = 100;
 
    GenPolynomialRing<AlgebraicNumber<BigRational>> fac;
-   AlgebraicNumber<BigRational> cfac;
+   AlgebraicNumberRing<BigRational> cfac;
 
    GenPolynomial<AlgebraicNumber<BigRational>> a;
    GenPolynomial<AlgebraicNumber<BigRational>> b;
@@ -74,7 +75,7 @@ public class ANumGenPolynomialTest extends TestCase {
              modul = mfac.random(3); 
        }
 
-       cfac = new AlgebraicNumber<BigRational>(modul.monic());
+       cfac = new AlgebraicNumberRing<BigRational>( modul.monic() );
        fac = new GenPolynomialRing<AlgebraicNumber<BigRational>>(cfac,rl);
    }
 

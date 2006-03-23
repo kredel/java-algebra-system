@@ -80,8 +80,8 @@ public static void example3() {
           // assume !mo.isUnit()
        System.out.println("modul = " + modul);
 
-       AlgebraicNumber<BigRational> fac;
-          fac = new AlgebraicNumber<BigRational>( modul );
+       AlgebraicNumberRing<BigRational> fac;
+          fac = new AlgebraicNumberRing<BigRational>( modul );
        System.out.println("fac = " + fac);
 
        AlgebraicNumber< BigRational > a = fac.random(15);
@@ -116,8 +116,8 @@ public static void example4() {
           // assume !modul.isUnit()
        System.out.println("modul = " + modul);
 
-       AlgebraicNumber<ModInteger> fac;
-          fac = new AlgebraicNumber<ModInteger>( modul );
+       AlgebraicNumberRing<ModInteger> fac;
+          fac = new AlgebraicNumberRing<ModInteger>( modul );
        System.out.println("fac = " + fac);
 
        AlgebraicNumber< ModInteger > a = fac.random(12);

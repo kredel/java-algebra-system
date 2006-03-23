@@ -24,6 +24,7 @@ import edu.jas.arith.BigComplex;
 import edu.jas.arith.BigQuaternion;
 
 import edu.jas.poly.AlgebraicNumber;
+import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenPolynomialRing;
@@ -654,10 +655,10 @@ public void testAlgebraicNumber() {
      source = new StringReader( exam );
      parser = new GenPolynomialTokenizer( source );
      PolynomialList<AlgebraicNumber<BigRational>> f = null;
-     AlgebraicNumber<BigRational> fac = null;
+     AlgebraicNumberRing<BigRational> fac = null;
      try {
          f = (PolynomialList<AlgebraicNumber<BigRational>>)parser.nextPolynomialSet();
-         fac = (AlgebraicNumber<BigRational>)f.ring.coFac;
+         fac = (AlgebraicNumberRing<BigRational>)f.ring.coFac;
      } catch(IOException e) {
          fail(""+e);
      } catch (ClassCastException e) {
@@ -716,10 +717,10 @@ public void testGaloisField() {
      source = new StringReader( exam );
      parser = new GenPolynomialTokenizer( source );
      PolynomialList<AlgebraicNumber<ModInteger>> f = null;
-     AlgebraicNumber<ModInteger> fac = null;
+     AlgebraicNumberRing<ModInteger> fac = null;
      try {
          f = (PolynomialList<AlgebraicNumber<ModInteger>>)parser.nextPolynomialSet();
-         fac = (AlgebraicNumber<ModInteger>)f.ring.coFac;
+         fac = (AlgebraicNumberRing<ModInteger>)f.ring.coFac;
      } catch(IOException e) {
          fail(""+e);
      } catch (ClassCastException e) {

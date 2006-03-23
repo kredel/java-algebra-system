@@ -590,12 +590,12 @@ public class GenPolynomialTokenizer  {
                     if ( tcfac instanceof ModInteger ) {
                         GenPolynomial<ModInteger> gfmod;
                         gfmod = (GenPolynomial<ModInteger>)mod;
-                        coeff = new AlgebraicNumber<ModInteger>( gfmod );
+                        coeff = new AlgebraicNumberRing<ModInteger>( gfmod );
                         ct = coeffType.ANmod;
                     } else {
                         GenPolynomial<BigRational> anmod;
                         anmod = (GenPolynomial<BigRational>)mod;
-                        coeff = new AlgebraicNumber<BigRational>( anmod );
+                        coeff = new AlgebraicNumberRing<BigRational>( anmod );
                         ct = coeffType.ANrat;
                     }
                     if ( debug ) {
