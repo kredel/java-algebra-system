@@ -80,6 +80,24 @@ public class LocalRing<C extends RingElem<C> >
     }
 
     
+    /**
+     * Query if this ring is commutative.
+     * @return true if this ring is commutative, else false.
+     */
+    public boolean isCommutative() {
+        return ring.isCommutative();
+    }
+
+
+    /**
+     * Query if this ring is associative.
+     * @return true if this ring is associative, else false.
+     */
+    public boolean isAssociative() {
+        return ring.isAssociative();
+    }
+
+
     /** Get a Local element from a BigInteger value.
      * @param a BigInteger.
      * @return a Local.
