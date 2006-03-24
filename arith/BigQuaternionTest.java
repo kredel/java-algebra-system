@@ -165,6 +165,16 @@ public static Test suite() {
      b = a.inverse();
      c = a.multiply( b );
      assertTrue("a*1/a = 1", c.isONE() );
+
+     b = a.abs();
+     c = b.inverse();
+     d = b.multiply( c );
+     assertTrue("abs(a)*1/abs(a) = 1", d.isONE() );
+
+     b = a.abs();
+     c = a.conjugate();
+     d = a.multiply( c );
+     assertEquals("abs(a)^2 = a a^", b, d );
  }
 
 
