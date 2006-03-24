@@ -148,7 +148,7 @@ public final class BigOctonion implements RingElem<BigOctonion>,
 
     /**
      * Query if this ring is associative.
-     * @return true.
+     * @return false.
      */
     public boolean isAssociative() {
         return false;
@@ -457,13 +457,12 @@ public final class BigOctonion implements RingElem<BigOctonion>,
      * @return this*B.
      */
     public BigOctonion multiply(BigOctonion B) {
-        // (a,b)(c,d) = ( a c − d b^, a^ d + c b )
+        // (r1,i1)(r2,i2) = ( r1 r2 - i2 i1^, r1^ i2 + r2 i1 ) Baez, jas
+        // (r1,i1)(r2,i2) = ( r1 r2 - i2^ i1, i1 r2^ + i2 r1 ) Dieudonne, mas
         BigQuaternion r = or.multiply( B.or );
         r = r.subtract( B.oi.multiply( oi.conjugate() ) );
-
         BigQuaternion i = or.conjugate().multiply( B.oi );
         i = i.sum( B.or.multiply( oi ) );
-
         return new BigOctonion( r, i );
     }
 
