@@ -76,7 +76,6 @@ public static Test suite() {
      a = BigOctonion.ZERO;
      b = BigOctonion.ONE;
      c = b.subtract(b);
-
      assertEquals("1-1 = 0",c,a);
    }
 
@@ -121,10 +120,10 @@ public static Test suite() {
  * 
  */
  public void testRandom() {
-     a = fac.random( 200 );
+     a = fac.random( 100 );
+
      b = new BigOctonion( a.getR(), a.getI() );
      c = b.subtract(a);
-
      assertEquals("a-b = 0",BigOctonion.ZERO,c);
 
      d = new BigOctonion( b.getR(), b.getI() );
@@ -150,7 +149,6 @@ public static Test suite() {
      assertEquals("a-0 = a",d,a);
      d = a.subtract( a );
      assertEquals("a-a = 0",d,BigOctonion.ZERO);
-
  }
 
 
@@ -159,7 +157,9 @@ public static Test suite() {
  * 
  */
  public void testMultiplication() {
-     a = fac.random( 50 );
+     a = fac.random( 30 );
+     //System.out.println("a = " + a);
+
      b = a.multiply( a );
      c = b.divide( a );
      assertEquals("a*a/a = a",c,a);
@@ -170,10 +170,21 @@ public static Test suite() {
      d = a.divide( BigOctonion.ONE );
      assertEquals("a/1 = a",d,a);
 
-     a = fac.random( 50 );
+     a = fac.random( 30 );
      b = a.inverse();
      c = a.multiply( b );
      assertTrue("a*1/a = 1", c.isONE() );
+
+     b = a.abs();
+     c = b.inverse();
+     d = b.multiply( c );
+     assertTrue("abs(a)*1/abs(a) = 1", d.isONE() );
+
+     a = fac.random( 3 );
+     b = a.abs();
+     c = a.conjugate();
+     d = a.multiply( c );
+     assertEquals("abs(a)^2 = a a^", b, d );
  }
 
 
@@ -182,20 +193,19 @@ public static Test suite() {
  * 
  */
  public void testMultiplicationAxioms() {
-     a = fac.random( 50 );
-     b = fac.random( 50 );
+     a = fac.random( 20 );
+     b = fac.random( 20 );
 
      c = a.multiply( b );
      d = b.multiply( a );
 
      assertTrue("a*b != b*a",!c.equals(d));
 
-     c = fac.random( 50 );
+     c = fac.random( 20 );
 
      d = a.multiply( b.multiply( c ) );
      e = a.multiply( b ).multiply( c );
      assertTrue("a(bc) != (ab)c",!e.equals(d));
-
  }
 
 }
