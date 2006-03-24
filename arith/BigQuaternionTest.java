@@ -47,13 +47,16 @@ public static Test suite() {
    BigQuaternion c;
    BigQuaternion d;
    BigQuaternion e;
+   BigQuaternion fac;
 
    protected void setUp() {
        a = b = c = d = e = null;
+       fac = new BigQuaternion();
    }
 
    protected void tearDown() {
        a = b = c = d = e = null;
+       fac = null;
    }
 
 
@@ -64,16 +67,14 @@ public static Test suite() {
  public void testConstants() {
      a = BigQuaternion.ZERO;
      b = BigQuaternion.ONE;
-     c = BigQuaternion.QDIF(b,b);
-
+     c = b.subtract(b);
      assertEquals("1-1 = 0",c,a);
      assertTrue("1-1 = 0",c.isZERO());
      assertTrue("1 = 1", b.isONE() );
 
      a = BigQuaternion.ZERO;
      b = BigQuaternion.ONE;
-     c = BigQuaternion.QDIF(b,b);
-
+     c = b.subtract(b);
      assertEquals("1-1 = 0",c,a);
    }
 
@@ -100,7 +101,7 @@ public static Test suite() {
 
      a = new BigQuaternion( 1 );
      b = new BigQuaternion( -1 );
-     c = BigQuaternion.QSUM(b,a);
+     c = b.sum(a);
 
      assertTrue("1 = 1", a.isONE() );
      assertEquals("1+(-1) = 0",c,BigQuaternion.ZERO);
@@ -112,9 +113,9 @@ public static Test suite() {
  * 
  */
  public void testRandom() {
-     a = BigQuaternion.QRAND( 500 );
+     a = fac.random( 500 );
      b = new BigQuaternion( a.getRe(), a.getIm(), a.getJm(), a.getKm() );
-     c = BigQuaternion.QDIF(b,a);
+     c = b.subtract(a);
 
      assertEquals("a-b = 0",BigQuaternion.ZERO,c);
 
@@ -128,18 +129,17 @@ public static Test suite() {
  * 
  */
  public void testAddition() {
-     a = BigQuaternion.QRAND( 100 );
-     b = BigQuaternion.QSUM( a, a );
-     c = BigQuaternion.QDIF( b, a );
-
+     a = fac.random( 100 );
+     b = a.sum( a );
+     c = b.subtract( a );
      assertEquals("a+a-a = a",c,a);
      assertEquals("a+a-a = a",0,c.compareTo(a));
 
-     d = BigQuaternion.QSUM( a, BigQuaternion.ZERO );
+     d = a.sum( BigQuaternion.ZERO );
      assertEquals("a+0 = a",d,a);
-     d = BigQuaternion.QDIF( a, BigQuaternion.ZERO );
+     d = a.subtract( BigQuaternion.ZERO );
      assertEquals("a-0 = a",d,a);
-     d = BigQuaternion.QDIF( a, a );
+     d = a.subtract( a );
      assertEquals("a-a = 0",d,BigQuaternion.ZERO);
 
  }
@@ -150,22 +150,20 @@ public static Test suite() {
  * 
  */
  public void testMultiplication() {
-     a = BigQuaternion.QRAND( 100 );
-     b = BigQuaternion.QPROD( a, a );
-     c = BigQuaternion.QQ( b, a );
-
+     a = fac.random( 100 );
+     b = a.multiply( a );
+     c = b.divide( a );
      assertEquals("a*a/a = a",c,a);
      assertEquals("a*a/a = a",0,c.compareTo(a));
 
-     d = BigQuaternion.QPROD( a, BigQuaternion.ONE );
+     d = a.multiply( BigQuaternion.ONE );
      assertEquals("a*1 = a",d,a);
-     d = BigQuaternion.QQ( a, BigQuaternion.ONE );
+     d = a.divide( BigQuaternion.ONE );
      assertEquals("a/1 = a",d,a);
 
-     a = BigQuaternion.QRAND( 100 );
-     b = BigQuaternion.QINV( a );
-     c = BigQuaternion.QPROD( a, b );
-
+     a = fac.random( 100 );
+     b = a.inverse();
+     c = a.multiply( b );
      assertTrue("a*1/a = 1", c.isONE() );
  }
 
@@ -175,20 +173,18 @@ public static Test suite() {
  * 
  */
  public void testMultiplicationAxioms() {
-     a = BigQuaternion.QRAND( 100 );
-     b = BigQuaternion.QRAND( 100 );
+     a = fac.random( 100 );
+     b = fac.random( 100 );
 
-     c = BigQuaternion.QPROD( a, b );
-     d = BigQuaternion.QPROD( b, a );
-
+     c = a.multiply( b );
+     d = b.multiply( a );
      assertTrue("a*b != b*a",!c.equals(d));
 
-     c = BigQuaternion.QRAND( 100 );
+     c = fac.random( 100 );
 
-     d = BigQuaternion.QPROD( a, BigQuaternion.QPROD( b, c ) );
-     e = BigQuaternion.QPROD( BigQuaternion.QPROD( a, b ), c );
+     d = a.multiply( b.multiply( c ) );
+     e = a.multiply( b ).multiply( c );
      assertTrue("a(bc) = (ab)c",e.equals(d));
-
  }
 
 }
