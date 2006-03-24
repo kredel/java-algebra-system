@@ -13,6 +13,7 @@ import java.io.StringWriter;
 import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
+import edu.jas.structure.StarRingElem;
 import edu.jas.structure.RingFactory;
 
 
@@ -23,7 +24,7 @@ import edu.jas.structure.RingFactory;
  * @author Heinz Kredel
  */
 
-public final class BigOctonion implements RingElem<BigOctonion>, 
+public final class BigOctonion implements StarRingElem<BigOctonion>, 
                                           RingFactory<BigOctonion> {
 
     /** First part of the data structure. 
@@ -412,18 +413,28 @@ public final class BigOctonion implements RingElem<BigOctonion>,
     }
 
 
+    /** Octonion number norm.  
+     * @see edu.jas.structure.StarRingElem#norm()
+     * @return ||this||.
+     */
+    public BigOctonion norm() {
+        // this.conjugate().multiply(this);
+        BigQuaternion v = or.norm();
+        v = v.sum( oi.norm() );
+        return new BigOctonion( v );
+    }
+
+
     /** Octonion number absolute value.  
      * @see edu.jas.structure.RingElem#abs()
      * @return |this|^2.
      * <b>Note:</b> The square root is not jet implemented.
      */
     public BigOctonion abs() {
-        // this.conjugate().multiply(this);
-        BigQuaternion v = or.abs();
-        v = v.sum( oi.abs() );
+        BigOctonion n = norm();
         logger.error("abs() square root missing");
-        // v = v.sqrt();
-        return new BigOctonion( v );
+        // n = n.sqrt();
+        return n;
     }
 
 

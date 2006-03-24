@@ -13,6 +13,7 @@ import java.io.StringWriter;
 import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
+import edu.jas.structure.StarRingElem;
 import edu.jas.structure.RingFactory;
 
 
@@ -23,7 +24,7 @@ import edu.jas.structure.RingFactory;
  * @author Heinz Kredel
  */
 
-public final class BigQuaternion implements RingElem<BigQuaternion>, 
+public final class BigQuaternion implements StarRingElem<BigQuaternion>, 
                                             RingFactory<BigQuaternion> {
 
     /** Real part of the data structure. 
@@ -543,19 +544,30 @@ public final class BigQuaternion implements RingElem<BigQuaternion>,
     }
 
 
+    /** Quaternion number norm.  
+     * @see edu.jas.structure.StarRingElem#norm()
+     * @return ||this||.
+     */
+    public BigQuaternion norm() {
+        // this.conjugate().multiply(this);
+        BigRational v = re.multiply(re);
+        v = v.sum( im.multiply(im) );
+        v = v.sum( jm.multiply(jm) );
+        v = v.sum( km.multiply(km) );
+        return new BigQuaternion( v );
+    }
+
+
     /** Quaternion number absolute value.  
      * @see edu.jas.structure.RingElem#abs()
      * @return |this|^2.
      * Note: The square root is not jet implemented.
      */
     public BigQuaternion abs() {
-        BigRational v = re.multiply(re);
-        v = v.sum(im.multiply(im));
-        v = v.sum(jm.multiply(jm));
-        v = v.sum(km.multiply(km));
+        BigQuaternion n = norm();
         logger.error("abs() square root missing");
-        // v = v.sqrt();
-        return new BigQuaternion( v );
+        // n = n.sqrt();
+        return n;
     }
 
 

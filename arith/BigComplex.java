@@ -5,6 +5,7 @@
 package edu.jas.arith;
 
 import edu.jas.structure.RingElem;
+import edu.jas.structure.StarRingElem;
 import edu.jas.structure.RingFactory;
 
 import org.apache.log4j.Logger;
@@ -20,7 +21,7 @@ import java.io.Reader;
  * Objects of this class are immutable.
  * @author Heinz Kredel
  */
-public final class BigComplex implements RingElem<BigComplex>, 
+public final class BigComplex implements StarRingElem<BigComplex>, 
                                          RingFactory<BigComplex> {
 
     /** Real part of the data structure. 
@@ -400,6 +401,7 @@ public final class BigComplex implements RingElem<BigComplex>,
         return A.conjugate();
     }
 
+
     /* arithmetic operations: conjugate, absolut value 
      */
 
@@ -411,17 +413,30 @@ public final class BigComplex implements RingElem<BigComplex>,
     }
 
 
+    /** Complex number norm.  
+     * @see edu.jas.structure.StarRingElem#norm()
+     * @return ||this||.
+     */
+    public BigComplex norm() {
+        // this.conjugate().multiply(this);
+        BigRational v = re.multiply(re);
+        v = v.sum( im.multiply(im) );
+        return new BigComplex( v );
+    }
+
+
     /** Complex number absolute value.  
      * @see edu.jas.structure.RingElem#abs()
      * @return |this|^2.
      * Note: The square root is not jet implemented.
      */
     public BigComplex abs() {
-        BigRational v = re.multiply(re).sum(im.multiply(im));
+        BigComplex n = norm();
         logger.error("abs() square root missing");
-        // v = v.sqrt();
-        return new BigComplex( v );
+        // n = n.sqrt();
+        return n;
     }
+
 
     /** Complex number absolute value.  
      * @param A is a complex number.  
