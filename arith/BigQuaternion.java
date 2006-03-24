@@ -4,14 +4,17 @@
 
 package edu.jas.arith;
 
-import edu.jas.structure.RingElem;
-import edu.jas.structure.RingFactory;
+import java.math.BigInteger;
+import java.util.Random;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.StringWriter;
 
 import org.apache.log4j.Logger;
 
-import java.math.BigInteger;
-import java.util.Random;
-import java.io.Reader;
+import edu.jas.structure.RingElem;
+import edu.jas.structure.RingFactory;
+
 
 /**
  * BigQuaternion class based on BigRational implementing the RingElem 
@@ -25,19 +28,19 @@ public final class BigQuaternion implements RingElem<BigQuaternion>,
 
     /** Real part of the data structure. 
      */
-    protected final BigRational re;  // real part
+    public final BigRational re;  // real part
 
     /** Imaginary part i of the data structure. 
      */
-    protected final BigRational im;  // i imaginary part
+    public final BigRational im;  // i imaginary part
 
     /** Imaginary part j of the data structure. 
      */
-    protected final BigRational jm;  // j imaginary part
+    public final BigRational jm;  // j imaginary part
 
     /** Imaginary part k of the data structure. 
      */
-    protected final BigRational km;  // k imaginary part
+    public final BigRational km;  // k imaginary part
 
 
     private final static Random random = new Random();
@@ -662,8 +665,21 @@ public final class BigQuaternion implements RingElem<BigQuaternion>,
      * @param b BigQuaternion.
      * @return this/b.
      */
-    public BigQuaternion divide (BigQuaternion b) {
+    public BigQuaternion divide(BigQuaternion b) {
         return this.multiply( b.inverse() );
+    }
+
+
+    /** BigQuaternion divide.
+     * @param b BigRational.
+     * @return this/b.
+     */
+    public BigQuaternion divide(BigRational b) {
+        BigRational bi = b.inverse();
+        return new BigQuaternion( re.multiply(bi),
+                                  im.multiply(bi),
+                                  jm.multiply(bi),
+                                  km.multiply(bi) );
     }
 
 
@@ -722,7 +738,17 @@ public final class BigQuaternion implements RingElem<BigQuaternion>,
      * @return next BigQuaternion from r.
      */ 
     public BigQuaternion parse(Reader r) {
-        return ZERO;
+        StringWriter sw = new StringWriter();
+        try {
+            char[] buffer = new char[ 4*1024 ];
+            int i;
+            while ( ( i=r.read(buffer) ) > -1 ) {
+                  sw.write(buffer,0,i);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return parse( sw.toString() );
     }
 
 }
