@@ -4,11 +4,14 @@
 
 package edu.jas.arith;
 
+import java.util.Random;
+import java.io.Reader;
+
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
 
-import java.util.Random;
-import java.io.Reader;
+import edu.jas.util.StringUtil;
+
 
 /**
  * BigInteger class to make java.math.BigInteger available with RingElem 
@@ -64,7 +67,7 @@ public final class BigInteger implements RingElem<BigInteger>,
      * @param s String.
      */
     public BigInteger(String s) {
-        val = new java.math.BigInteger( s );
+        val = new java.math.BigInteger( s.trim() );
     }
 
 
@@ -501,7 +504,7 @@ public final class BigInteger implements RingElem<BigInteger>,
      * @return next Biginteger from r.
      */
     public BigInteger parse(Reader r) {
-        return ZERO;
+        return parse( StringUtil.nextString(r) );
     }
 
 }

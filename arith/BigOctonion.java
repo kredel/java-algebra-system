@@ -6,15 +6,15 @@ package edu.jas.arith;
 
 import java.math.BigInteger;
 import java.util.Random;
-import java.io.IOException;
 import java.io.Reader;
-import java.io.StringWriter;
 
 import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
 import edu.jas.structure.StarRingElem;
 import edu.jas.structure.RingFactory;
+
+import edu.jas.util.StringUtil;
 
 
 /**
@@ -493,8 +493,8 @@ public final class BigOctonion implements StarRingElem<BigOctonion>,
      * @see edu.jas.structure.RingElem#inverse()
      */
     public BigOctonion inverse() {
-        BigRational a = this.abs().or.re;
-        return this.conjugate().divide(a); 
+        BigRational a = norm().or.re;
+        return conjugate().divide(a); 
     }
 
 
@@ -594,17 +594,7 @@ public final class BigOctonion implements StarRingElem<BigOctonion>,
      * @return next BigOctonion from r.
      */ 
     public BigOctonion parse(Reader r) {
-        StringWriter sw = new StringWriter();
-        try {
-            char[] buffer = new char[ 4*1024 ];
-            int i;
-            while ( ( i=r.read(buffer) ) > -1 ) {
-                  sw.write(buffer,0,i);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return parse( sw.toString() );
+        return parse( StringUtil.nextString(r) );
     }
 
 }

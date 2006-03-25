@@ -4,12 +4,15 @@
 
 package edu.jas.arith;
 
-import edu.jas.structure.RingElem;
-import edu.jas.structure.RingFactory;
-
 import java.math.BigInteger;
 import java.util.Random;
 import java.io.Reader;
+
+import edu.jas.structure.RingElem;
+import edu.jas.structure.RingFactory;
+
+import edu.jas.util.StringUtil;
+
 
 /**
  * Immutable arbitraty-precision rational numbers.
@@ -43,6 +46,8 @@ public final class BigRational implements RingElem<BigRational>,
      */
     public final static BigRational ZERO 
         = new BigRational(BigInteger.ZERO);
+
+
     /**
      * The Constant 1.
      */
@@ -99,6 +104,7 @@ public final class BigRational implements RingElem<BigRational>,
         num = BigInteger.valueOf(n); 
         den = IONE;
     } 
+
 
     /** Constructor for a BigRational with no arguments.
      */
@@ -420,6 +426,7 @@ public final class BigRational implements RingElem<BigRational>,
         return T;
     }
 
+
     /** Rational number difference.  
      * @param R BigRational.
      * @param S BigRational.
@@ -460,8 +467,7 @@ public final class BigRational implements RingElem<BigRational>,
      * @return A/1.
      */
     public static BigRational RNINT(BigInteger A) {
-        BigRational R = new BigRational( A );
-        return R;
+        return new BigRational( A );
     }
 
 
@@ -483,6 +489,7 @@ public final class BigRational implements RingElem<BigRational>,
         }
         return new BigRational(S1,S2);
     }
+
 
     /** Rational number inverse.
      * @param R BigRational.
@@ -583,6 +590,7 @@ public final class BigRational implements RingElem<BigRational>,
         return T;
     }
 
+
     /** Rational number product.
      * @param R BigRational.
      * @param S BigRational.
@@ -599,9 +607,7 @@ public final class BigRational implements RingElem<BigRational>,
      * @return this/S.
      */
     public BigRational divide(BigRational S) {
-        BigRational T;
-        T = RNPROD( this, S.inverse() );
-        return T;
+        return multiply( S.inverse() );
     }
 
 
@@ -677,14 +683,9 @@ public final class BigRational implements RingElem<BigRational>,
      * @see edu.jas.structure.RingElem#signum()
      */
     public int signum() {
-        int SL;
-        if ( this.equals(ZERO) ) {
-            SL = 0;
-        } else {
-            SL = num.signum();
-        }
-        return SL;
+        return num.signum();
     }
+
 
     /** Rational number sign.  
      * @param R BigRational.
@@ -791,7 +792,7 @@ public final class BigRational implements RingElem<BigRational>,
      * @return next BigRational from r.
      */
     public BigRational parse(Reader r) {
-        return ZERO;
+        return parse( StringUtil.nextString(r) );
     }
 
 }

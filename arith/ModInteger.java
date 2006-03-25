@@ -4,12 +4,15 @@
 
 package edu.jas.arith;
 
+import java.util.Random;
+import java.io.Reader;
+
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.structure.PrettyPrint;
 
-import java.util.Random;
-import java.io.Reader;
+import edu.jas.util.StringUtil;
+
 
 /**
  * ModInteger class with RingElem interface
@@ -67,8 +70,8 @@ public final class ModInteger implements RingElem<ModInteger>,
      */
     public ModInteger(String m, String s) {
         this( 
-             new java.math.BigInteger( m ),
-             new java.math.BigInteger( s )
+             new java.math.BigInteger( m.trim() ),
+             new java.math.BigInteger( s.trim() )
              );
     }
 
@@ -79,7 +82,7 @@ public final class ModInteger implements RingElem<ModInteger>,
      * @param s String.
      */
     public ModInteger(java.math.BigInteger m, String s) {
-        this( m, new java.math.BigInteger( s ) );
+        this( m, new java.math.BigInteger( s.trim() ) );
     }
 
 
@@ -484,7 +487,7 @@ public final class ModInteger implements RingElem<ModInteger>,
      * @return next ModInteger from r.
      */
     public ModInteger parse(Reader r) {
-        return getZERO();
+        return parse( StringUtil.nextString(r) );
     }
 
 }

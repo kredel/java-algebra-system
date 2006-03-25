@@ -4,15 +4,17 @@
 
 package edu.jas.arith;
 
+import java.math.BigInteger;
+import java.util.Random;
+import java.io.Reader;
+
+import org.apache.log4j.Logger;
+
 import edu.jas.structure.RingElem;
 import edu.jas.structure.StarRingElem;
 import edu.jas.structure.RingFactory;
 
-import org.apache.log4j.Logger;
-
-import java.math.BigInteger;
-import java.util.Random;
-import java.io.Reader;
+import edu.jas.util.StringUtil;
 
 
 /**
@@ -489,9 +491,9 @@ public final class BigComplex implements StarRingElem<BigComplex>,
      * @see edu.jas.structure.RingElem#inverse()
      */
     public BigComplex inverse() {
-        BigRational a = re.multiply(re).sum(im.multiply(im));
-        return new BigComplex( re.divide(a), 
-                               im.divide(a).negate() ); 
+        BigRational a = norm().re.inverse();
+        return new BigComplex( re.multiply(a), 
+                               im.multiply(a.negate()) ); 
     }
 
 
@@ -576,7 +578,7 @@ public final class BigComplex implements StarRingElem<BigComplex>,
      * @return next BigComplex from r.
      */
     public BigComplex parse(Reader r) {
-        return ZERO;
+        return parse( StringUtil.nextString(r) );
     }
 
 }

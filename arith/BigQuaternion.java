@@ -6,15 +6,15 @@ package edu.jas.arith;
 
 import java.math.BigInteger;
 import java.util.Random;
-import java.io.IOException;
 import java.io.Reader;
-import java.io.StringWriter;
 
 import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
 import edu.jas.structure.StarRingElem;
 import edu.jas.structure.RingFactory;
+
+import edu.jas.util.StringUtil;
 
 
 /**
@@ -639,14 +639,11 @@ public final class BigQuaternion implements StarRingElem<BigQuaternion>,
      * @see edu.jas.structure.RingElem#inverse()
      */
     public BigQuaternion inverse() {
-        BigRational a = re.multiply(re);
-        a = a.sum(im.multiply(im));
-        a = a.sum(jm.multiply(jm));
-        a = a.sum(km.multiply(km));
-        return new BigQuaternion( re.divide(a), 
-                                  im.divide(a).negate(), 
-                                  jm.divide(a).negate(), 
-                                  km.divide(a).negate() ); 
+        BigRational a = norm().re.inverse();
+        return new BigQuaternion( re.multiply(a), 
+                                  im.multiply(a.negate()), 
+                                  jm.multiply(a.negate()), 
+                                  km.multiply(a.negate()) ); 
     }
 
 
@@ -750,17 +747,7 @@ public final class BigQuaternion implements StarRingElem<BigQuaternion>,
      * @return next BigQuaternion from r.
      */ 
     public BigQuaternion parse(Reader r) {
-        StringWriter sw = new StringWriter();
-        try {
-            char[] buffer = new char[ 4*1024 ];
-            int i;
-            while ( ( i=r.read(buffer) ) > -1 ) {
-                  sw.write(buffer,0,i);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return parse( sw.toString() );
+        return parse( StringUtil.nextString(r) );
     }
 
 }
