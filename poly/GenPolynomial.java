@@ -5,8 +5,6 @@
 
 package edu.jas.poly;
 
-//import java.util.List;
-//import java.util.ArrayList;
 import java.util.Map;
 //import java.util.Map.Entry;
 import java.util.SortedMap;
@@ -16,7 +14,7 @@ import java.util.Iterator;
 import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
-//import edu.jas.structure.RingFactory;
+import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.PrettyPrint;
 
 import edu.jas.poly.ExpVector;
@@ -36,7 +34,7 @@ import edu.jas.poly.GenPolynomialRing;
  */
 
 public class GenPolynomial<C extends RingElem<C> > 
-             implements RingElem< GenPolynomial<C> > {
+             implements /*Gcd*/RingElem< GenPolynomial<C> > {
 
     /** The factory for the polynomial ring. 
      */
@@ -691,7 +689,7 @@ public class GenPolynomial<C extends RingElem<C> >
      * @return [ quotient , remainder ] with this = quotient * S + remainder.
      * @see #pseudoRemainder(edu.jas.poly.GenPolynomial).
      */
-    public GenPolynomial<C>[] divideRemainder(GenPolynomial<C> S) {
+    public GenPolynomial<C>[] divideAndRemainder(GenPolynomial<C> S) {
         if ( S == null || S.isZERO() ) {
             throw new RuntimeException(this.getClass().getName()
                                        + " division by zero");
@@ -743,7 +741,7 @@ public class GenPolynomial<C extends RingElem<C> >
      * @see #pseudoRemainder(edu.jas.poly.GenPolynomial).
      */
     public GenPolynomial<C> divide(GenPolynomial<C> S) {
-        return divideRemainder(S)[0];
+        return divideAndRemainder(S)[0];
     }
 
 
@@ -855,7 +853,7 @@ public class GenPolynomial<C extends RingElem<C> >
         GenPolynomial<C> x1;
         GenPolynomial<C> x2;
         while ( !r.isZERO() ) {
-            qr = q.divideRemainder(r);
+            qr = q.divideAndRemainder(r);
             q = qr[0];
             x1 = c1.subtract( q.multiply(d1) );
             x2 = c2.subtract( q.multiply(d2) );

@@ -270,7 +270,7 @@ public class ANumGenPolynomialTest extends TestCase {
      //System.out.println("tg = " + g);
 
      GenPolynomial<AlgebraicNumber<BigRational>>[] qr;
-     qr = b.divideRemainder(a);
+     qr = b.divideAndRemainder(a);
      c = qr[0];
      d = qr[1];
      //System.out.println("q = " + c);
@@ -278,7 +278,7 @@ public class ANumGenPolynomialTest extends TestCase {
      e = c.multiply(a).sum(d);
      assertEquals("b = q a + r", b, e );
 
-     qr = a.divideRemainder(b); 
+     qr = a.divideAndRemainder(b); 
      c = qr[0]; 
      d = qr[1]; 
      //System.out.println("q = " + c);

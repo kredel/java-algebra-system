@@ -281,7 +281,7 @@ public class GFGenPolynomialTest extends TestCase {
      //System.out.println("g = " + g);
 
      GenPolynomial<AlgebraicNumber<ModInteger>>[] qr;
-     qr = b.divideRemainder(a);
+     qr = b.divideAndRemainder(a);
      c = qr[0];
      d = qr[1];
      //System.out.println("q = " + c);
@@ -289,7 +289,7 @@ public class GFGenPolynomialTest extends TestCase {
      e = c.multiply(a).sum(d);
      assertEquals("b = q a + r", b, e );
 
-     qr = a.divideRemainder(b);
+     qr = a.divideAndRemainder(b);
      c = qr[0];
      d = qr[1];
      //System.out.println("q = " + c);
