@@ -234,12 +234,12 @@ public class PolynomialList<C extends RingElem<C> > implements Serializable {
             return slist;
         }
         slist = new ArrayList< GenSolvablePolynomial<C> >( list.size() ); 
+        GenSolvablePolynomial<C> s;
         for ( GenPolynomial<C> p: list ) {
             if ( ! (p instanceof GenSolvablePolynomial) ) {
                throw new RuntimeException("no solvable polynomial "+p);
             }
-            GenSolvablePolynomial<C> s
-               = (GenSolvablePolynomial<C>) p;
+            s = (GenSolvablePolynomial<C>) p;
             slist.add( s );
         }
         return slist;
@@ -247,21 +247,22 @@ public class PolynomialList<C extends RingElem<C> > implements Serializable {
 
 
     /**
-     * Get solvable polynomial list as List of GenPolynomials.
+     * Get list of extensions of polynomials as List of GenPolynomials.
      * Required because no List casts allowed. Equivalent to 
      * cast (List&lt;GenPolynomial&lt;C&gt;&gt;) list.
-     * @param slist solvable polynomial list.
+     * Mainly used for lists of GenSolvablePolynomials.
+     * @param slist list of extensions of polynomials.
      * @return polynomial list from slist.
      */
     public static <C extends RingElem<C> > 
            List< GenPolynomial<C> > 
-           castToList( List<GenSolvablePolynomial<C>> slist) {
+           castToList( List<? extends GenPolynomial<C>> slist) {
         List< GenPolynomial<C> > list = null;
         if ( slist == null ) {
             return list;
         }
         list = new ArrayList< GenPolynomial<C> >( slist.size() ); 
-        for ( GenSolvablePolynomial<C> p: slist ) {
+        for ( GenPolynomial<C> p: slist ) {
             list.add( p );
         }
         return list;
