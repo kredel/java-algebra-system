@@ -4,6 +4,7 @@
 
 package edu.jas.arith;
 
+import java.io.StringReader;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -106,7 +107,17 @@ public class ModIntegerTest extends TestCase {
      assertTrue("1 = 1", a.isONE() );
      assertTrue("1 = 1", b.isUnit() );
      assertEquals("1+(-1) = 0",c,a.getZERO());
-   }
+
+     a = new ModInteger( 5, 3 );
+     b = new ModInteger( 5, 0 );
+     c = b.parse( " 13 " );
+     assertEquals("3(5) = 3(5)",a,c);
+
+     StringReader sr = new StringReader("  13\n w ");
+     c = b.parse( sr );
+     assertEquals("3(5) = 3(5)",a,c);
+     //System.out.println("c = " + c);
+  }
 
 
 /**
