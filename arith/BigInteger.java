@@ -8,6 +8,7 @@ import java.util.Random;
 import java.io.Reader;
 
 import edu.jas.structure.RingElem;
+import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
 
 import edu.jas.util.StringUtil;
@@ -21,7 +22,7 @@ import edu.jas.util.StringUtil;
  * @see java.math.BigInteger
  */
 
-public final class BigInteger implements RingElem<BigInteger>, 
+public final class BigInteger implements GcdRingElem<BigInteger>, 
                                          RingFactory<BigInteger> {
 
     /** The data structure. 
@@ -404,6 +405,52 @@ public final class BigInteger implements RingElem<BigInteger>,
      */
     public BigInteger gcd(BigInteger S) {
         return new BigInteger( val.gcd( S.val ) );
+    }
+
+
+    /**
+     * BigInteger extended greatest comon divisor.
+     * @param S BigInteger.
+     * @return [ gcd(this,S), a, b ] with a*this + b*S = gcd(this,S).
+     */
+    public BigInteger[] egcd(BigInteger S) {
+        BigInteger[] ret = new BigInteger[3];
+        ret[0] = null;
+        ret[1] = null;
+        ret[2] = null;
+        if ( S == null || S.isZERO() ) {
+            ret[0] = this;
+            return ret;
+        }
+        if ( this.isZERO() ) {
+            ret[0] = S;
+            return ret;
+        }
+        //System.out.println("this = " + this + ", S = " + S);
+        BigInteger[] qr;
+        BigInteger q = this; 
+        BigInteger r = S;
+        BigInteger c1 = ONE;
+        BigInteger d1 = ZERO;
+        BigInteger c2 = ZERO;
+        BigInteger d2 = ONE;
+        BigInteger x1;
+        BigInteger x2;
+        while ( !r.isZERO() ) {
+            qr = q.divideAndRemainder(r);
+            q = qr[0];
+            x1 = c1.subtract( q.multiply(d1) );
+            x2 = c2.subtract( q.multiply(d2) );
+            c1 = d1; c2 = d2;
+            d1 = x1; d2 = x2;
+            q = r;
+            r = qr[1];
+        }
+        //System.out.println("q = " + q + "\n c1 = " + c1 + "\n c2 = " + c2);
+        ret[0] = q; 
+        ret[1] = c1;
+        ret[2] = c2;
+        return ret;
     }
 
 
