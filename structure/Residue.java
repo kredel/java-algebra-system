@@ -65,7 +65,11 @@ public class Residue<C extends RingElem<C> >
      */
     public Residue(ResidueRing<C> r, C a, int u) {
         ring = r;
-        val = ring.modul.remainder( a ); 
+        C v = a.remainder( ring.modul ); 
+        if ( v.signum() < 0 ) {
+            v = v.sum( ring.modul );
+        }
+        val = v;
         switch ( u ) {
         case 0:  isunit = u;
                  break;
@@ -73,7 +77,7 @@ public class Residue<C extends RingElem<C> >
                  break;
         default: isunit = -1;
         }
-        if ( val.isONE() ) {
+        if ( val.isUnit() ) {
            isunit = 1;
         }
     }
@@ -116,14 +120,11 @@ public class Residue<C extends RingElem<C> >
         if ( isunit == 0 ) {
             return false;
         } 
-        if ( this.isUnit() ) {
-            isunit = 1;
-            return true;
-        }
+        // val.isUnit() already tested
         // not jet known
         if (    this instanceof GcdRingElem 
              && ring.modul instanceof GcdRingElem ) {
-           GcdRingElem g = (GcdRingElem)this;
+           GcdRingElem g = (GcdRingElem)val;
            GcdRingElem m = (GcdRingElem)ring.modul;
            C gcd =  (C) g.gcd( m );
            if ( debug ) {
@@ -158,7 +159,7 @@ public class Residue<C extends RingElem<C> >
     public int compareTo(Residue<C> b) {
         C v = b.val;
         if ( ! ring.equals( b.ring ) ) {
-           v = ring.modul.remainder( v );
+           v = v.remainder( ring.modul );
         }
         return val.compareTo( v );
     }
@@ -259,11 +260,11 @@ public class Residue<C extends RingElem<C> >
         if ( isunit == 0 ) {
            return null;
         }
-        if (    this instanceof GcdRingElem 
+        if (    val instanceof GcdRingElem 
              && ring.modul instanceof GcdRingElem ) {
-           GcdRingElem g = (GcdRingElem)this;
+           GcdRingElem v = (GcdRingElem)val;
            GcdRingElem m = (GcdRingElem)ring.modul;
-           C[] egcd =  (C[]) g.egcd( m );
+           C[] egcd =  (C[]) v.egcd( m );
            if ( debug ) {
               logger.info("egcd = " + egcd[0] + ", f = " + egcd[1]);
            }

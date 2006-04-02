@@ -39,11 +39,20 @@ public class ResidueRing<C extends RingElem<C> >
     /** The constructor creates a ResidueRing object 
      * from an ring factory and a modul. 
      * @param r ring factory.
-     * @param i modul.
+     * @param m modul.
      */
-    public ResidueRing(RingFactory<C> r, C i) {
+    public ResidueRing(RingFactory<C> r, C m) {
         ring = r;
-        modul = i; 
+        if ( m.isZERO() ) {
+           logger.error("modul is zero");
+        }
+        if ( m.isONE() ) {
+           logger.warn("modul is one");
+        }
+        if ( m.signum() < 0 ) {
+           m = m.negate();
+        }
+        modul = m; 
     }
 
 
@@ -163,6 +172,7 @@ public class ResidueRing<C extends RingElem<C> >
      */
     public Residue<C> random(int n) {
       C x = ring.random( n );
+      // x = x.sum( ring.getONE() );
       return new Residue<C>( this, x );
     }
 
@@ -174,6 +184,7 @@ public class ResidueRing<C extends RingElem<C> >
      */
     public Residue<C> random(int n, Random rnd) {
       C x = ring.random( n, rnd );
+      // x = x.sum( ring.getONE() );
       return new Residue<C>( this, x);
     }
 
