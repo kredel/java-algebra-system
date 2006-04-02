@@ -86,9 +86,7 @@ public class Local<C extends RingElem<C> >
      * @param d denominator.
      * @param isred true if gcd(n,d) == 1, else false.
      */
-    protected Local(LocalRing<C> r, 
-                    C n, C d,
-                    boolean isred) {
+    protected Local(LocalRing<C> r, C n, C d, boolean isred) {
         if ( d == null || d.isZERO() ) {
            throw new RuntimeException("denominator may not be zero");
         }

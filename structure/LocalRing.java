@@ -166,7 +166,7 @@ public class LocalRing<C extends RingElem<C> >
       C s = ring.random( n );
       s = s.remainder( ideal );
       while ( s.isZERO() ) {
-          logger.info("zero was in ideal");
+          logger.debug("zero was in ideal");
           s = ring.random( n );
           s = s.remainder( ideal );
       }
@@ -184,7 +184,7 @@ public class LocalRing<C extends RingElem<C> >
       C s = ring.random( n, rnd );
       s = s.remainder( ideal );
       while ( s.isZERO() ) {
-          logger.info("zero was in ideal");
+          logger.debug("zero was in ideal");
           s = ring.random( n, rnd );
           s = s.remainder( ideal );
       }
