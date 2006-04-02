@@ -122,11 +122,11 @@ public class Residue<C extends RingElem<C> >
         } 
         // val.isUnit() already tested
         // not jet known
-        if (    this instanceof GcdRingElem 
+        if (           val instanceof GcdRingElem 
              && ring.modul instanceof GcdRingElem ) {
-           GcdRingElem g = (GcdRingElem)val;
+           GcdRingElem v = (GcdRingElem)val;
            GcdRingElem m = (GcdRingElem)ring.modul;
-           C gcd =  (C) g.gcd( m );
+           C gcd =  (C) v.gcd( m );
            if ( debug ) {
               logger.info("gcd = " + gcd);
            }
@@ -258,7 +258,7 @@ public class Residue<C extends RingElem<C> >
      */
     public Residue<C> inverse() {
         if ( isunit == 0 ) {
-           return null;
+           throw new RuntimeException("element not invertible " + this);
         }
         if (    val instanceof GcdRingElem 
              && ring.modul instanceof GcdRingElem ) {
@@ -270,13 +270,13 @@ public class Residue<C extends RingElem<C> >
            }
            if ( ! egcd[0].isONE() ) {
               isunit = 0;
-              return null;
+              throw new RuntimeException("element not invertible " + this);
            }
            isunit = 1;
            C x = egcd[1];
            return new Residue<C>( ring, x );
         }
-        return null;
+        throw new RuntimeException("element not invertible " + this);
     }
 
 

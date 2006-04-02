@@ -44,7 +44,7 @@ public class ResidueRing<C extends RingElem<C> >
     public ResidueRing(RingFactory<C> r, C m) {
         ring = r;
         if ( m.isZERO() ) {
-           logger.error("modul is zero");
+           throw new RuntimeException("modul may not be null");
         }
         if ( m.isONE() ) {
            logger.warn("modul is one");
