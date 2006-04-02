@@ -44,7 +44,7 @@ public class Residue<C extends RingElem<C> >
 
 
     /** The constructor creates a Residue object 
-     * from a ring factory and a polynomial list. 
+     * from a ring factory and a polynomial. 
      * @param r ring factory.
      * @param a polynomial list.
      */
@@ -54,7 +54,7 @@ public class Residue<C extends RingElem<C> >
 
 
     /** The constructor creates a Residue object 
-     * from a ring factory, a polynomial list and an indicator if a is a unit. 
+     * from a ring factory, a polynomial and an indicator if a is a unit. 
      * @param r ring factory.
      * @param a polynomial list.
      * @param u isunit indicator, -1, 0, 1.

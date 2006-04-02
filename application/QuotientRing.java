@@ -18,7 +18,7 @@ import edu.jas.poly.GenPolynomialRing;
 
 
 /**
- * Algebraic number class based on GenPolynomial with RingElem interface.
+ * Quotient ring class based on GenPolynomial with RingElem interface.
  * Objects of this class are immutable.
  * @author Heinz Kredel
  */
