@@ -78,6 +78,7 @@ public class QuotientTest extends TestCase {
 
    protected void setUp() {
        a = b = c = d = e = null;
+       ap = bp = cp = dp = ep = null;
        fac = new QuotientRing<BigInteger>( new BigInteger(1) );
        pfac = new GenPolynomialRing<BigInteger>( new BigInteger(1), 1 );
        mfac = new QuotientRing<GenPolynomial<BigInteger>>( pfac );
@@ -85,7 +86,10 @@ public class QuotientTest extends TestCase {
 
    protected void tearDown() {
        a = b = c = d = e = null;
+       ap = bp = cp = dp = ep = null;
        fac = null;
+       pfac = null;
+       mfac = null;
    }
 
 
@@ -96,13 +100,11 @@ public class QuotientTest extends TestCase {
  public void testIntConstruction() {
      c = fac.getONE();
      //System.out.println("c = " + c);
-     //System.out.println("c.val = " + c.val);
      assertTrue("isZERO( c )", !c.isZERO() );
      assertTrue("isONE( c )", c.isONE() );
 
      d = fac.getZERO();
      //System.out.println("d = " + d);
-     //System.out.println("d.val = " + d.val);
      assertTrue("isZERO( d )", d.isZERO() );
      assertTrue("isONE( d )", !d.isONE() );
  }
@@ -228,7 +230,7 @@ public class QuotientTest extends TestCase {
 
 
 /**
- * Test object integer multiplication.
+ * Test integer multiplication.
  * 
  */
  public void testIntMultiplication() {
@@ -281,10 +283,10 @@ public class QuotientTest extends TestCase {
 
 
 /**
- * Test object polynomial multiplication.
+ * Test polynomial multiplication.
  * 
  */
- public void testMultiplication() {
+ public void testPolyMultiplication() {
 
      ap = mfac.random(kl);
      assertTrue("not isZERO( a )", !ap.isZERO() );
