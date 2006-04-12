@@ -1,5 +1,5 @@
 /*
- * $Id: $
+ * $Id$
  */
 
 package edu.jas.structure;
