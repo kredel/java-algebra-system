@@ -23,6 +23,7 @@ public class Examples {
        example2();
        example3();
        example4();
+       example5();
    }
 
 /**
@@ -124,6 +125,35 @@ public static void example4() {
        System.out.println("a = " + a);
    }
 
+
+/**
+ * example5.
+ */
+public static void example5() {
+       System.out.println("\n\n example 5");
+
+       BigRational cfac = new BigRational();
+       System.out.println("cfac = " + cfac);
+       GenSolvablePolynomialRing<BigRational> sfac;
+                sfac = new GenSolvablePolynomialRing<BigRational>(cfac,6);
+       //System.out.println("sfac = " + sfac);
+       sfac.setVars( ExpVector.STDVARS(6) );
+       //System.out.println("sfac = " + sfac);
+
+       WeylRelations<BigRational> wl = new WeylRelations<BigRational>(sfac);
+       wl.generate();
+       System.out.println("sfac = " + sfac);
+
+       GenSolvablePolynomial<BigRational> a = sfac.random(5);
+       System.out.println("a = " + a);
+       System.out.println("a = " + a.toString( sfac.vars ) );
+
+       GenSolvablePolynomial<BigRational> b = a.multiply(a);
+       System.out.println("b = " + b);
+       System.out.println("b = " + b.toString( sfac.vars ) );
+
+       System.out.println("sfac = " + sfac);
+   }
 
 
 }
