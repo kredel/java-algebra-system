@@ -4,12 +4,10 @@
 
 package edu.jas.structure;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import edu.jas.structure.PrettyPrint;
+//import edu.jas.structure.PrettyPrint;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.GcdRingElem;
 
