@@ -264,6 +264,7 @@ public class GenPolynomialTokenizer  {
         while ( !done ) {
             // next input. determine next action
             tt = tok.nextToken();
+            //System.out.println("while tt = " + tok);
             logger.debug("while tt = " + tok);
             if ( tt == StreamTokenizer.TT_EOF ) break;
             switch ( tt ) {
@@ -294,7 +295,7 @@ public class GenPolynomialTokenizer  {
                     tt = tok.nextToken();
                 }
                 //System.out.println("coeff = " + cf.toString() );
-                r = fac.parse( cf.toString() );
+                r = (RingElem)fac.parse( cf.toString() );
                 if (debug) logger.debug("coeff " + r);
                 b = b.multiply(r,leer); 
                 tt = tok.nextToken();
@@ -306,7 +307,7 @@ public class GenPolynomialTokenizer  {
                 // read coefficient
                 first = tok.sval.charAt(0);
                 if ( digit(first) ) {
-                    r = fac.parse( tok.sval );
+                    r = (RingElem)fac.parse( tok.sval );
                     // ie = nextExponent();
                     // r = r^ie;
                     // c = new GenPolynomial<BigRational>(r,leer);
