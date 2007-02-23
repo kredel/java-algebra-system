@@ -110,8 +110,7 @@ public class Ideal<C extends RingElem<C>> implements Serializable {
                 GroebnerBase<C> bb, Reduction<C> red) {
       this( list, 
             ( list == null ? true : ( list.list == null ? true : false ) ), 
-            new GroebnerBaseSeqPairSeq<C>(), 
-            new ReductionSeq<C>() );
+            bb, red );
   }
 
 
