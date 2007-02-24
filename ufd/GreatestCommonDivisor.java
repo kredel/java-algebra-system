@@ -75,11 +75,12 @@ public class GreatestCommonDivisor<C extends GcdRingElem<C> > {
 
     /**
      * GenPolynomial content.
+     * @param pfac GenPolynomialRing of coefficients.
      * @param P GenPolynomial.
      * @return cont(P).
      */
     public GenPolynomial<C> content( GenPolynomialRing<C> pfac, 
-                                     GenPolynomial<C> P) {
+                                     GenPolynomial<C> P ) {
         if ( P == null ) {
            throw new RuntimeException(this.getClass().getName()
                                        + " P != null");
@@ -96,6 +97,35 @@ public class GreatestCommonDivisor<C extends GcdRingElem<C> > {
             }
         }
         return d; 
+    }
+
+
+    /**
+     * GenPolynomial primitive part.
+     * @param pfac GenPolynomialRing of coefficients.
+     * @param P GenPolynomial.
+     * @return pp(P).
+     */
+    public GenPolynomial<C> primitivePart( GenPolynomialRing<C> pfac,
+                                           GenPolynomial<C> P ) {
+        if ( P == null ) {
+           throw new RuntimeException(this.getClass().getName()
+                                       + " P != null");
+        }
+        if ( P.isZERO() ) {
+            return P;
+        }
+        GenPolynomial<C> d = content( pfac, P );
+        if ( P.isONE() ) {
+            return P;
+        }
+        GenPolynomial<C> D = d.extend( P.ring, 0, 0L );
+
+        GenPolynomial<C>[] qr = P.divideAndRemainder( D );
+        
+
+        GenPolynomial<C> pp = null;
+        return pp;
     }
 
 
@@ -162,7 +192,7 @@ public class GreatestCommonDivisor<C extends GcdRingElem<C> > {
         GenPolynomial<C> q = P;
         GenPolynomial<C> r = S;
         while ( !r.isZERO() ) {
-            x = q.pseudoRemainder(r);
+            x = pseudoRemainder(q,r);
             q = r;
             r = x;
         }

@@ -713,7 +713,7 @@ public class GenPolynomial<C extends RingElem<C> >
      * in any case.
      * @param S nonzero GenPolynomial with invertible leading coefficient.
      * @return [ quotient , remainder ] with this = quotient * S + remainder.
-     * @see #pseudoRemainder(edu.jas.poly.GenPolynomial).
+     * @see #pseudoRemainder(edu.jas..ufd.GreatestCommonDivisor).
      */
     public GenPolynomial<C>[] divideAndRemainder(GenPolynomial<C> S) {
         if ( S == null || S.isZERO() ) {
@@ -764,7 +764,7 @@ public class GenPolynomial<C extends RingElem<C> >
      * in any case.
      * @param S nonzero GenPolynomial with invertible leading coefficient.
      * @return quotient with this = quotient * S + remainder.
-     * @see #pseudoRemainder(edu.jas.poly.GenPolynomial).
+     * @see #pseudoRemainder(edu.jas..ufd.GreatestCommonDivisor).
      */
     public GenPolynomial<C> divide(GenPolynomial<C> S) {
         return divideAndRemainder(S)[0];
@@ -777,7 +777,7 @@ public class GenPolynomial<C extends RingElem<C> >
      * in any case.
      * @param S nonzero GenPolynomial with invertible leading coefficient.
      * @return remainder with this = quotient * S + remainder.
-     * @see #pseudoRemainder(edu.jas.poly.GenPolynomial).
+     * @see #pseudoRemainder(edu.jas.ufd.GreatestCommonDivisor).
      */
     public GenPolynomial<C> remainder(GenPolynomial<C> S) {
         if ( S == null || S.isZERO() ) {
@@ -936,73 +936,6 @@ public class GenPolynomial<C extends RingElem<C> >
                                        + " not invertible");
         }
         return a; 
-    }
-
-
-    /**
-     * GenPolynomial pseudo remainder.
-     * Meaningful only for univariate polynomials but works 
-     * in any case.
-     * @param S nonzero GenPolynomial.
-     * @return remainder with ldcf(S)<sup>m</sup> this = quotient * S + remainder.
-     * @see #remainder(edu.jas.poly.GenPolynomial).
-     */
-    public GenPolynomial<C> pseudoRemainder(GenPolynomial<C> S) {
-        if ( S == null || S.isZERO() ) {
-            throw new RuntimeException(this.getClass().getName()
-                                       + " division by zero");
-        }
-        C c = S.leadingBaseCoefficient();
-        ExpVector e = S.leadingExpVector();
-        GenPolynomial<C> h;
-        GenPolynomial<C> r = this.clone(); 
-        while ( ! r.isZERO() ) {
-            ExpVector f = r.leadingExpVector();
-            if ( ExpVector.EVMT(f,e) ) {
-                C a = r.leadingBaseCoefficient();
-                f = ExpVector.EVDIF( f, e );
-                //logger.info("red div = " + e);
-                r = r.multiply( c );
-                h = S.multiply( a, f );
-                r = r.subtract( h );
-            } else {
-                break;
-            }
-        }
-        return r;
-    }
-
-
-    /**
-     * GenPolynomial pseudo greatest comon divisor.
-     * Uses pseudoRemainder for remainder.
-     * Correct only for univariate polynomials.
-     * Returns 1 for multivariate polynomials.
-     * (which is a good guess for random polynomials).
-     * @param S GenPolynomial.
-     * @return pgcd(this,S).
-     */
-    public GenPolynomial<C> pseudoGcd(GenPolynomial<C> S) {
-        if ( S == null || S.isZERO() ) {
-            return this;
-        }
-        if ( this.isZERO() ) {
-            return S;
-        }
-        if ( ring.nvar != 1 ) {
-            logger.info("gcd only for univariate polynomials");
-            // keep going
-            return ring.getONE();
-        }
-        GenPolynomial<C> x;
-        GenPolynomial<C> q = this;
-        GenPolynomial<C> r = S;
-        while ( !r.isZERO() ) {
-            x = q.pseudoRemainder(r);
-            q = r;
-            r = x;
-        }
-        return q; // p.primitivePart() //q.monic(); // normalize
     }
 
 
