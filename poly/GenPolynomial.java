@@ -682,6 +682,32 @@ public class GenPolynomial<C extends RingElem<C> >
 
 
     /**
+     * GenPolynomial division. 
+     * Division by coefficient ring element.
+     * @param s coefficient.
+     * @return this/s.
+     */
+    public GenPolynomial<C> divide(C s) {
+        if ( s == null || s.isZERO() ) {
+            throw new RuntimeException(this.getClass().getName()
+                                       + " division by zero");
+        }
+        if ( this.isZERO() ) {
+            return this;
+        }
+        GenPolynomial<C> p = ring.getZERO().clone(); 
+        SortedMap<ExpVector,C> pv = p.val;
+        for ( Map.Entry<ExpVector,C> m1 : val.entrySet() ) {
+            C c1 = m1.getValue();
+            ExpVector e1 = m1.getKey();
+            C c = c1.divide(s);
+            pv.put( e1, c ); // or m1.setValue( c )
+        }
+        return p;
+    }
+
+
+    /**
      * GenPolynomial division with remainder.
      * Meaningful only for univariate polynomials but works 
      * in any case.
@@ -764,6 +790,7 @@ public class GenPolynomial<C extends RingElem<C> >
             throw new RuntimeException(this.getClass().getName()
                                        + " lbc not invertible " + c);
         }
+        C ci = c.inverse();
         ExpVector e = S.leadingExpVector();
         GenPolynomial<C> h;
         GenPolynomial<C> r = this.clone(); 
@@ -773,7 +800,7 @@ public class GenPolynomial<C extends RingElem<C> >
                 C a = r.leadingBaseCoefficient();
                 f = ExpVector.EVDIF( f, e );
                 //logger.info("red div = " + e);
-                a = a.divide( c );
+                a = a.multiply( ci );
                 h = S.multiply( a, f );
                 r = r.subtract( h );
             } else {
@@ -785,7 +812,7 @@ public class GenPolynomial<C extends RingElem<C> >
 
 
     /**
-     * GenPolynomial greatest comon divisor.
+     * GenPolynomial greatest common divisor.
      * Correct only for univariate polynomials.
      * Returns 1 for multivariate polynomials
      * (which is a good guess for random polynomials).
