@@ -230,6 +230,26 @@ public class ExpVector implements Cloneable, Serializable {
     }
 
 
+    /**
+     * Combine with ExpVector. 
+     * Combine this with the other ExpVector V.
+     * @param V the other exponent vector.
+     * @return combined exponent vector.
+     */
+    public ExpVector combine( ExpVector V ) {
+        if ( V == null || V.val.length == 0 ) {
+            return this;
+        }
+        if ( val.length == 0 ) {
+            return V;
+        }
+        long[] w = new long[ val.length + V.val.length ];
+        System.arraycopy(val,0,w,0,val.length);
+        System.arraycopy(V.val,0,w,val.length,V.val.length);
+        return new ExpVector( w );
+    }
+
+
     /** Get the string representation.
      * @see java.lang.Object#toString()
      */
