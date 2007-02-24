@@ -709,7 +709,7 @@ public class GenPolynomial<C extends RingElem<C> >
 
     /**
      * GenPolynomial division with remainder.
-     * Meaningful only for univariate polynomials but works 
+     * Meaningful only for univariate polynomials over fields, but works 
      * in any case.
      * @param S nonzero GenPolynomial with invertible leading coefficient.
      * @return [ quotient , remainder ] with this = quotient * S + remainder.
@@ -760,7 +760,7 @@ public class GenPolynomial<C extends RingElem<C> >
 
     /**
      * GenPolynomial division.
-     * Meaningful only for univariate polynomials but works 
+     * Meaningful only for univariate polynomials over fields, but works 
      * in any case.
      * @param S nonzero GenPolynomial with invertible leading coefficient.
      * @return quotient with this = quotient * S + remainder.
@@ -773,7 +773,7 @@ public class GenPolynomial<C extends RingElem<C> >
 
     /**
      * GenPolynomial remainder.
-     * Meaningful only for univariate polynomials but works 
+     * Meaningful only for univariate polynomials over fields, but works 
      * in any case.
      * @param S nonzero GenPolynomial with invertible leading coefficient.
      * @return remainder with this = quotient * S + remainder.
@@ -964,6 +964,42 @@ public class GenPolynomial<C extends RingElem<C> >
             C.put( f, a );
         }
         return Cp;
+    }
+
+
+    /**
+     * Recursive representation. 
+     * Represent as polynomial in i variables with coefficients in n-i variables.
+     * @param rfac recursive polynomial ring factory.
+     * @return Recursive represenations of this.
+     */
+    public GenPolynomial<GenPolynomial<C>> 
+           recursive( GenPolynomialRing<GenPolynomial<C>> rfac ) {
+
+        GenPolynomial<GenPolynomial<C>> B = rfac.getZERO().clone();
+        if ( this.isZERO() ) {
+           return B;
+        }
+        int i = rfac.nvar;
+        GenPolynomial<C> zero = rfac.getZEROCoefficient();
+        Map<ExpVector,C> A = val;
+        Map<ExpVector,GenPolynomial<C>> Bv = B.val;
+        for ( Map.Entry<ExpVector,C> y: A.entrySet() ) {
+            ExpVector e = y.getKey();
+            //System.out.println("e = " + e);
+            C a = y.getValue();
+            System.out.println("a = " + a);
+            ExpVector f = e.contract(0,i);
+            ExpVector g = e.contract(i,e.length()-i);
+            System.out.println("e = " + e + ", f = " + f + ", g = " + g );
+            GenPolynomial<C> p = Bv.get(f);
+            if ( p == null ) {
+                p = zero;
+            }
+            p = p.sum( a, g );
+            Bv.put( f, p );
+        }
+        return B;
     }
 
 
