@@ -15,6 +15,7 @@ import org.apache.log4j.Logger;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.ExpVector;
 
 
@@ -30,7 +31,7 @@ public class GreatestCommonDivisor<C extends GcdRingElem<C> > {
 
 
     /**
-     * GenPolynomial content.
+     * GenPolynomial base coefficient content.
      * @param P GenPolynomial.
      * @return cont(P).
      */
@@ -55,7 +56,7 @@ public class GreatestCommonDivisor<C extends GcdRingElem<C> > {
 
 
     /**
-     * GenPolynomial primitive part.
+     * GenPolynomial base coefficient primitive part.
      * @param P GenPolynomial.
      * @return pp(P).
      */
@@ -71,6 +72,31 @@ public class GreatestCommonDivisor<C extends GcdRingElem<C> > {
         return P.divide(d);
     }
 
+
+    /**
+     * GenPolynomial content.
+     * @param P GenPolynomial.
+     * @return cont(P).
+     */
+    public GenPolynomial<C> content( GenPolynomialRing<C> pfac, 
+                                     GenPolynomial<C> P) {
+        if ( P == null ) {
+           throw new RuntimeException(this.getClass().getName()
+                                       + " P != null");
+        }
+        if ( P.isZERO() ) {
+            return pfac.getZERO();
+        }
+        GenPolynomial<C> d = null;
+        for ( GenPolynomial<C> c : P.contract(pfac).values() ) {
+            if ( d == null ) {
+                d = c;
+            } else {
+                d = pseudoGcd(d,c);
+            }
+        }
+        return d; 
+    }
 
 
     /**
