@@ -12,6 +12,8 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.arith.BigInteger;
 //import edu.jas.structure.RingElem;
 
+import edu.jas.ufd.GreatestCommonDivisor;
+
 
 /**
  * IntGenPolynomial Test using JUnit.
@@ -43,6 +45,8 @@ public class IntGenPolynomialTest extends TestCase {
    }
 
    //private final static int bitlen = 100;
+
+   GreatestCommonDivisor gcd = new GreatestCommonDivisor();
 
    GenPolynomialRing<BigInteger> fac;
 
@@ -223,29 +227,29 @@ public class IntGenPolynomialTest extends TestCase {
      //System.out.println("g = " + g);
 
      GenPolynomial<BigInteger> r;
-     r = b.pseudoRemainder(a);
+     r = gcd.pseudoRemainder(b,a);
      //System.out.println("r = " + r);
 
      // not nice
      c = b;
      BigInteger lbc = a.leadingBaseCoefficient();
-     while ( ! c.subtract(r).pseudoRemainder(a).isZERO() ) {
+     while ( ! gcd.pseudoRemainder(c.subtract(r),a).isZERO() ) {
          c = c.multiply( lbc );
      }
      d = c.subtract(r);
      //System.out.println("d = " + d);
-     e = d.pseudoRemainder(a);
+     e = gcd.pseudoRemainder(d,a);
      //System.out.println("e = " + e);
      assertTrue("b-r = q a", e.isZERO() );
 
 
      // pseudo gcd tests -------------------------------
-     c = a.pseudoGcd(b);
+     c = gcd.pseudoGcd(a,b);
      //System.out.println("pseudoGcd = " + c);
-     //System.out.println("pseudoGcd = " + c.pseudoRemainder(g));
-     assertTrue("a mod pseudoGcd(a,b) = 0", a.pseudoRemainder(c).isZERO() );
-     assertTrue("b mod pseudoGcd(a,b) = 0", b.pseudoRemainder(c).isZERO() );
-     assertTrue("g = pseudoGcd(a,b)", c.pseudoRemainder(g).isZERO() );
+     //System.out.println("pseudoGcd = " + gcd.pseudoRemainder(c,g));
+     assertTrue("a mod pseudoGcd(a,b) = 0", gcd.pseudoRemainder(a,c).isZERO() );
+     assertTrue("b mod pseudoGcd(a,b) = 0", gcd.pseudoRemainder(b,c).isZERO() );
+     assertTrue("g = pseudoGcd(a,b)", gcd.pseudoRemainder(c,g).isZERO() );
  }
 
 }
