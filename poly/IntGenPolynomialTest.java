@@ -46,7 +46,7 @@ public class IntGenPolynomialTest extends TestCase {
 
    //private final static int bitlen = 100;
 
-   GreatestCommonDivisor gcd = new GreatestCommonDivisor();
+   GreatestCommonDivisor ufd = new GreatestCommonDivisor();
 
    GenPolynomialRing<BigInteger> fac;
 
@@ -227,29 +227,29 @@ public class IntGenPolynomialTest extends TestCase {
      //System.out.println("g = " + g);
 
      GenPolynomial<BigInteger> r;
-     r = gcd.pseudoRemainder(b,a);
+     r = ufd.basePseudoRemainder(b,a);
      //System.out.println("r = " + r);
 
      // not nice
      c = b;
      BigInteger lbc = a.leadingBaseCoefficient();
-     while ( ! gcd.pseudoRemainder(c.subtract(r),a).isZERO() ) {
+     while ( ! ufd.basePseudoRemainder(c.subtract(r),a).isZERO() ) {
          c = c.multiply( lbc );
      }
      d = c.subtract(r);
      //System.out.println("d = " + d);
-     e = gcd.pseudoRemainder(d,a);
+     e = ufd.basePseudoRemainder(d,a);
      //System.out.println("e = " + e);
      assertTrue("b-r = q a", e.isZERO() );
 
 
      // pseudo gcd tests -------------------------------
-     c = gcd.pseudoGcd(a,b);
+     c = ufd.basePseudoGcd(a,b);
      //System.out.println("pseudoGcd = " + c);
-     //System.out.println("pseudoGcd = " + gcd.pseudoRemainder(c,g));
-     assertTrue("a mod pseudoGcd(a,b) = 0", gcd.pseudoRemainder(a,c).isZERO() );
-     assertTrue("b mod pseudoGcd(a,b) = 0", gcd.pseudoRemainder(b,c).isZERO() );
-     assertTrue("g = pseudoGcd(a,b)", gcd.pseudoRemainder(c,g).isZERO() );
+     //System.out.println("pseudoGcd = " + ufd.basePseudoRemainder(c,g));
+     assertTrue("a mod pseudoGcd(a,b) = 0", ufd.basePseudoRemainder(a,c).isZERO() );
+     assertTrue("b mod pseudoGcd(a,b) = 0", ufd.basePseudoRemainder(b,c).isZERO() );
+     assertTrue("g = pseudoGcd(a,b)", ufd.basePseudoRemainder(c,g).isZERO() );
  }
 
 }
