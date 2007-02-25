@@ -940,48 +940,6 @@ public class GenPolynomial<C extends RingElem<C> >
 
 
     /**
-     * Distribute a recursive polynomial to a generic polynomial. 
-     * @param dfac combined polynomial ring factory of coefficients and this.
-     * @return distributed polynomial.
-     */
-    public GenPolynomial<C> distribute(GenPolynomialRing<C> dfac) {
-        GenPolynomial<C> C = dfac.getZERO().clone();
-        if ( this.isZERO() ) { 
-            return C;
-        }
-        Map<ExpVector,C> Cm = C.getMap();
-        for ( Map.Entry<ExpVector,C> y: val.entrySet() ) {
-            ExpVector e = y.getKey();
-            System.out.println("e = " + e);
-            C a = y.getValue();
-            System.out.println("a = " + a);
-            GenPolynomial<C> A = null;
-            if ( a instanceof GenPolynomial ) {
-                A = (GenPolynomial)a;
-            }
-            if ( A == null ) {
-               throw new RuntimeException(this.getClass().getName()
-                                       + " not a recursive polynomial");
-            }
-            for ( Map.Entry<ExpVector,C> x: A.val.entrySet() ) {
-                ExpVector f = x.getKey();
-                System.out.println("f = " + f);
-                C b = x.getValue();
-                System.out.println("b = " + b);
-                ExpVector g = e.combine(f);
-                System.out.println("e = " + e + ", f = " + f + ", g = " + g);
-                if ( Cm.get(g) != null ) {
-                   throw new RuntimeException(this.getClass().getName()
-                                       + " debug error");
-                }
-                Cm.put( g, b );
-            }
-        }
-        return C;
-    }
-
-
-    /**
      * Extend variables. Used e.g. in module embedding.
      * Extend all ExpVectors by i elements and multiply by x_j^k.
      * @param pfac extended polynomial ring factory (by i variables).
@@ -1006,42 +964,6 @@ public class GenPolynomial<C extends RingElem<C> >
             C.put( f, a );
         }
         return Cp;
-    }
-
-
-    /**
-     * Recursive representation. 
-     * Represent as polynomial in i variables with coefficients in n-i variables.
-     * @param rfac recursive polynomial ring factory.
-     * @return Recursive represenations of this in the ring rfac.
-     */
-    public GenPolynomial<GenPolynomial<C>> 
-           recursive( GenPolynomialRing<GenPolynomial<C>> rfac ) {
-
-        GenPolynomial<GenPolynomial<C>> B = rfac.getZERO().clone();
-        if ( this.isZERO() ) {
-           return B;
-        }
-        int i = rfac.nvar;
-        GenPolynomial<C> zero = rfac.getZEROCoefficient();
-        Map<ExpVector,C> A = val;
-        Map<ExpVector,GenPolynomial<C>> Bv = B.val;
-        for ( Map.Entry<ExpVector,C> y: A.entrySet() ) {
-            ExpVector e = y.getKey();
-            //System.out.println("e = " + e);
-            C a = y.getValue();
-            System.out.println("a = " + a);
-            ExpVector f = e.contract(0,i);
-            ExpVector g = e.contract(i,e.length()-i);
-            System.out.println("e = " + e + ", f = " + f + ", g = " + g );
-            GenPolynomial<C> p = Bv.get(f);
-            if ( p == null ) {
-                p = zero;
-            }
-            p = p.sum( a, g );
-            Bv.put( f, p );
-        }
-        return B;
     }
 
 
