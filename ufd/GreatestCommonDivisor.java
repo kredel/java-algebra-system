@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 
 
 import edu.jas.structure.RingElem;
+import edu.jas.structure.RingFactory;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
@@ -28,6 +29,77 @@ public class GreatestCommonDivisor<C extends GcdRingElem<C> > {
 
 
     private static final Logger logger = Logger.getLogger(GreatestCommonDivisor.class);
+
+
+    /**
+     * Recursive representation. 
+     * Represent as polynomial in i variables with coefficients in n-i variables.
+     * @param rfac recursive polynomial ring factory.
+     * @return Recursive represenations of this in the ring rfac.
+     */
+    public GenPolynomial<GenPolynomial<C>> 
+        recursive( GenPolynomialRing<GenPolynomial<C>> rfac, 
+                   GenPolynomial<C> A) {
+
+        GenPolynomial<GenPolynomial<C>> B = rfac.getZERO().clone();
+        if ( A.isZERO() ) {
+           return B;
+        }
+        int i = rfac.nvar;
+        GenPolynomial<C> zero = rfac.getZEROCoefficient();
+        Map<ExpVector,GenPolynomial<C>> Bv = B.getMap();
+        for ( Map.Entry<ExpVector,C> y: A.getMap().entrySet() ) {
+            ExpVector e = y.getKey();
+            //System.out.println("e = " + e);
+            C a = y.getValue();
+            System.out.println("a = " + a);
+            ExpVector f = e.contract(0,i);
+            ExpVector g = e.contract(i,e.length()-i);
+            System.out.println("e = " + e + ", f = " + f + ", g = " + g );
+            GenPolynomial<C> p = Bv.get(f);
+            if ( p == null ) {
+                p = zero;
+            }
+            p = p.sum( a, g );
+            Bv.put( f, p );
+        }
+        return B;
+    }
+
+
+    /**
+     * Distribute a recursive polynomial to a generic polynomial. 
+     * @param dfac combined polynomial ring factory of coefficients and this.
+     * @return distributed polynomial.
+     */
+    public GenPolynomial<C> distribute( GenPolynomialRing<C> dfac,
+                              GenPolynomial<GenPolynomial<C>> B) {
+        GenPolynomial<C> C = dfac.getZERO().clone();
+        if ( B.isZERO() ) { 
+            return C;
+        }
+        Map<ExpVector,C> Cm = C.getMap();
+        for ( Map.Entry<ExpVector,GenPolynomial<C>> y: B.getMap().entrySet() ) {
+            ExpVector e = y.getKey();
+            System.out.println("e = " + e);
+            GenPolynomial<C> A = y.getValue();
+            System.out.println("A = " + A);
+            for ( Map.Entry<ExpVector,C> x: A.getMap().entrySet() ) {
+                ExpVector f = x.getKey();
+                System.out.println("f = " + f);
+                C b = x.getValue();
+                System.out.println("b = " + b);
+                ExpVector g = e.combine(f);
+                System.out.println("e = " + e + ", f = " + f + ", g = " + g);
+                if ( Cm.get(g) != null ) {
+                   throw new RuntimeException(this.getClass().getName()
+                                       + " debug error");
+                }
+                Cm.put( g, b );
+            }
+        }
+        return C;
+    }
 
 
     /**
@@ -119,12 +191,17 @@ public class GreatestCommonDivisor<C extends GcdRingElem<C> > {
         if ( P.isONE() ) {
             return P;
         }
-        GenPolynomial<C> D = d.extend( P.ring, 0, 0L );
+        GenPolynomialRing<C> efac = P.ring;
+        GenPolynomialRing<C> dfac = pfac.extend(efac.nvar);
 
-        GenPolynomial<C>[] qr = P.divideAndRemainder( D );
-        
+        GenPolynomialRing<GenPolynomial<C>> rfac 
+           = new GenPolynomialRing<GenPolynomial<C>>(pfac,efac.nvar,efac.tord);
 
-        GenPolynomial<C> pp = null;
+        GenPolynomial<GenPolynomial<C>> Pr = recursive(rfac,P);
+
+        GenPolynomial<GenPolynomial<C>> Pd = Pr.divide( d ); 
+
+        GenPolynomial<C> pp = distribute( dfac, Pd );
         return pp;
     }
 
