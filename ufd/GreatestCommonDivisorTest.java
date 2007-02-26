@@ -264,13 +264,13 @@ public class GreatestCommonDivisorTest extends TestCase {
  * Test recursive quotioent and remainder.
  * 
  */
- public void testRecursiveQR() {
+ public void ytestRecursiveQR() {
      di = new BigInteger( 1 );
      dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),2,to);
      cfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),2-1,to);
      rfac = new GenPolynomialRing<GenPolynomial<BigInteger>>(cfac,1,to);
 
-     for (int i = 0; i < 1; i++) {
+     for (int i = 0; i < 5; i++) {
          a = dfac.random(kl*(i+1),ll+i,el+i,q);
          a = ufd.basePrimitivePart(a).abs();
 
@@ -282,46 +282,111 @@ public class GreatestCommonDivisorTest extends TestCase {
          c = ufd.basePrimitivePart(c).abs();
 
          ar = ufd.recursive(rfac,a);
-         System.out.println("ar = " + ar);
-         System.out.println("a  = " + a);
-         System.out.println("c  = " + c);
+         //System.out.println("ar = " + ar);
+         //System.out.println("a  = " + a);
+         //System.out.println("c  = " + c);
 
          assertTrue("length( c"+i+" ) <> 0", c.length() >= 0);
          //assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
          //assertTrue(" not isONE( c"+i+" )", !c.isONE() );
 
          br = ar.multiply(c);
-         System.out.println("br = " + br);
+         //System.out.println("br = " + br);
          dr = ufd.recursivePseudoDivide(br,c);
-         System.out.println("dr = " + dr);
+         //System.out.println("dr = " + dr);
          d = ufd.distribute(dfac,dr);
          d = ufd.basePrimitivePart(d).abs();
-         System.out.println("d  = " + d);
+         //System.out.println("d  = " + d);
 
          assertEquals("a == ac/c", a, d );
 
-         System.out.println("cr = " + cr);
+         //System.out.println("cr = " + cr);
          br = ar.multiply(cr);
-         System.out.println("br = " + br);
+         //System.out.println("br = " + br);
          dr = ufd.pseudoRemainder(br,cr);
-         //d = ufd.basePrimitivePart(d).abs();
-         System.out.println("dr = " + dr);
+         //System.out.println("dr = " + dr);
          d = ufd.distribute(dfac,dr);
          d = ufd.basePrimitivePart(d).abs();
-         System.out.println("d  = " + d);
+         //System.out.println("d  = " + d);
 
          assertTrue("rem(ac,c) == 0", d.isZERO() );
 
-         /*
-         b = a.multiply(c);
-         //System.out.println("b  = " + b);
-         d = ufd.basePseudoDivide(b,c);
-         //System.out.println("d  = " + d);
+         br = ar.multiply(c);
+         //System.out.println("br  = " + br);
+         dr = ufd.recursivePseudoDivide(br,c);
+         //System.out.println("dr  = " + dr);
+         d = ufd.distribute(dfac,dr);
          d = ufd.basePrimitivePart(d).abs();
          //System.out.println("d  = " + d);
 
          assertEquals("a == ac/c", a, d );
-         */
+     }
+ }
+
+
+/**
+ * Test recursive content and primitive part.
+ * 
+ */
+ public void ytestRecursiveContentPP() {
+     di = new BigInteger( 1 );
+     dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),2,to);
+     cfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),2-1,to);
+     rfac = new GenPolynomialRing<GenPolynomial<BigInteger>>(cfac,1,to);
+
+     for (int i = 0; i < 3; i++) {
+         cr = rfac.random(kl*(i+2),ll+2*i,el+i,q);
+         System.out.println("cr = " + cr);
+
+         assertTrue("length( c"+i+" ) <> 0", cr.length() >= 0);
+         //assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
+         //assertTrue(" not isONE( c"+i+" )", !c.isONE() );
+         
+         c = ufd.recursiveContent(cr);
+         dr = ufd.recursivePrimitivePart(cr);
+         System.out.println("c  = " + c);
+         System.out.println("dr = " + dr);
+
+         ar = dr.multiply(c);
+         assertEquals("c == cont(c)pp(c)", cr, ar );
+     }
+ }
+
+
+/**
+ * Test recursive gcd.
+ * 
+ */
+ public void testRecursiveGCD() {
+     di = new BigInteger( 1 );
+     dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),2,to);
+     cfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),2-1,to);
+     rfac = new GenPolynomialRing<GenPolynomial<BigInteger>>(cfac,1,to);
+
+     for (int i = 0; i < 2; i++) {
+         ar = rfac.random(kl,ll,el+i,q);
+         br = rfac.random(kl,ll,el,q);
+         cr = rfac.random(kl,ll,el,q);
+         System.out.println("ar = " + ar);
+         System.out.println("br = " + br);
+         System.out.println("cr = " + cr);
+
+         assertTrue("length( c"+i+" ) <> 0", cr.length() >= 0);
+         //assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
+         //assertTrue(" not isONE( c"+i+" )", !c.isONE() );
+         
+         ar = ar.multiply(cr);
+         br = br.multiply(cr);
+         System.out.println("ar = " + ar);
+         System.out.println("br = " + br);
+
+         dr = ufd.recursivePseudoGcd(ar,br);
+         System.out.println("dr = " + dr);
+
+         er = ufd.pseudoRemainder(cr,dr);
+         System.out.println("er = " + er);
+
+         assertTrue("gcd(ac,bc) | c", er.isZERO() );
      }
  }
 
