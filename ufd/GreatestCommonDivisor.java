@@ -293,10 +293,19 @@ public class GreatestCommonDivisor<C extends GcdRingElem<C> > {
                 f = ExpVector.EVDIF( f, e );
                 //logger.info("red div = " + e);
                 //System.out.println("a = " + a + ", f = " + f);
-                q = q.sum( a, f );
-                q = q.multiply( c );
-                h = S.multiply( a, f );
-                r = r.multiply( c );
+                C x = a.remainder(c);
+                if ( x.isZERO() ) {
+                   C y = a.divide(c);
+                   //System.out.println("y = " + y);
+                   q = q.sum( y, f );
+                   h = S.multiply( y, f ); // coeff a
+                } else {
+                   q = q.sum( a, f );
+                   q = q.multiply( c );
+                   r = r.multiply( c );    // coeff ac
+                   h = S.multiply( a, f ); // coeff ac
+                }
+
                 r = r.subtract( h );
             } else {
                 break;
