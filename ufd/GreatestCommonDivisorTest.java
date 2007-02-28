@@ -102,7 +102,7 @@ public class GreatestCommonDivisorTest extends TestCase {
  * Test recursive <--> distributive conversion.
  * 
  */
- public void ytestConversion() {
+ public void testConversion() {
      c = dfac.getONE();
      assertTrue("length( c ) = 1", c.length() == 1);
      assertTrue("isZERO( c )", !c.isZERO() );
@@ -127,7 +127,7 @@ public class GreatestCommonDivisorTest extends TestCase {
  * Test random recursive <--> distributive conversion.
  * 
  */
- public void ytestRandomConversion() {
+ public void testRandomConversion() {
      for (int i = 0; i < 7; i++) {
          c = dfac.random(kl*(i+2),ll+2*i,el+i,q);
 
@@ -147,37 +147,10 @@ public class GreatestCommonDivisorTest extends TestCase {
 
 
 /**
- * Test base content and primitive part.
- * 
- */
- public void ytestBaseContentPP() {
-     di = new BigInteger( 1 );
-
-     for (int i = 0; i < 13; i++) {
-         c = dfac.random(kl*(i+2),ll+2*i,el+i,q);
-         c = c.multiply( di.random(kl*(i+2)) );
-
-         assertTrue("length( c"+i+" ) <> 0", c.length() >= 0);
-         //assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
-         //assertTrue(" not isONE( c"+i+" )", !c.isONE() );
-         
-         ci = ufd.baseContent(c);
-         d = ufd.basePrimitivePart(c);
-         //System.out.println("c  = " + c);
-         //System.out.println("ci = " + ci);
-         //System.out.println("d  = " + d);
-
-         a = d.multiply(ci);
-         assertEquals("c == cont(c)pp(c)", c, a );
-     }
- }
-
-
-/**
  * Test base quotioent and remainder.
  * 
  */
- public void ytestBaseQR() {
+ public void testBaseQR() {
      di = new BigInteger( 1 );
      dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),1,to);
 
@@ -225,10 +198,37 @@ public class GreatestCommonDivisorTest extends TestCase {
 
 
 /**
+ * Test base content and primitive part.
+ * 
+ */
+ public void testBaseContentPP() {
+     di = new BigInteger( 1 );
+
+     for (int i = 0; i < 13; i++) {
+         c = dfac.random(kl*(i+2),ll+2*i,el+i,q);
+         c = c.multiply( di.random(kl*(i+2)) );
+
+         assertTrue("length( c"+i+" ) <> 0", c.length() >= 0);
+         //assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
+         //assertTrue(" not isONE( c"+i+" )", !c.isONE() );
+         
+         ci = ufd.baseContent(c);
+         d = ufd.basePrimitivePart(c);
+         //System.out.println("c  = " + c);
+         //System.out.println("ci = " + ci);
+         //System.out.println("d  = " + d);
+
+         a = d.multiply(ci);
+         assertEquals("c == cont(c)pp(c)", c, a );
+     }
+ }
+
+
+/**
  * Test base gcd.
  * 
  */
- public void ytestBaseGcd() {
+ public void testBaseGcd() {
 
      dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),1,to);
 
@@ -236,9 +236,9 @@ public class GreatestCommonDivisorTest extends TestCase {
          a = dfac.random(kl*(i+2),ll+2*i,el+2*i,q);
          b = dfac.random(kl*(i+2),ll+2*i,el+2*i,q);
          c = dfac.random(kl*(i+2),ll+2*i,el+2*i,q);
-         a = ufd.basePrimitivePart(a);
-         b = ufd.basePrimitivePart(b);
-         c = ufd.basePrimitivePart(c).abs();
+         //a = ufd.basePrimitivePart(a);
+         //b = ufd.basePrimitivePart(b);
+         //c = ufd.basePrimitivePart(c).abs();
 
          //System.out.println("a  = " + a);
          //System.out.println("b  = " + b);
@@ -252,10 +252,11 @@ public class GreatestCommonDivisorTest extends TestCase {
          b = b.multiply(c);
 
          d = ufd.basePseudoGcd(a,b);
-         d = ufd.basePrimitivePart(d).abs();
+         e = ufd.basePseudoRemainder(d,c);
+         //d = ufd.basePrimitivePart(d).abs();
          //System.out.println("d  = " + d);
 
-         assertEquals("c == gcd(ac,bc)", c, d );
+         assertTrue("c | gcd(ac,bc)", e.isZERO() );
      }
  }
 
@@ -264,7 +265,7 @@ public class GreatestCommonDivisorTest extends TestCase {
  * Test recursive quotioent and remainder.
  * 
  */
- public void ytestRecursiveQR() {
+ public void testRecursiveQR() {
      di = new BigInteger( 1 );
      dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),2,to);
      cfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),2-1,to);
@@ -303,7 +304,7 @@ public class GreatestCommonDivisorTest extends TestCase {
          //System.out.println("cr = " + cr);
          br = ar.multiply(cr);
          //System.out.println("br = " + br);
-         dr = ufd.pseudoRemainder(br,cr);
+         dr = ufd.recursivePseudoRemainder(br,cr);
          //System.out.println("dr = " + dr);
          d = ufd.distribute(dfac,dr);
          d = ufd.basePrimitivePart(d).abs();
@@ -328,7 +329,7 @@ public class GreatestCommonDivisorTest extends TestCase {
  * Test recursive content and primitive part.
  * 
  */
- public void ytestRecursiveContentPP() {
+ public void testRecursiveContentPP() {
      di = new BigInteger( 1 );
      dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),2,to);
      cfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),2-1,to);
@@ -336,7 +337,7 @@ public class GreatestCommonDivisorTest extends TestCase {
 
      for (int i = 0; i < 3; i++) {
          cr = rfac.random(kl*(i+2),ll+2*i,el+i,q);
-         System.out.println("cr = " + cr);
+         //System.out.println("cr = " + cr);
 
          assertTrue("length( c"+i+" ) <> 0", cr.length() >= 0);
          //assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
@@ -344,8 +345,8 @@ public class GreatestCommonDivisorTest extends TestCase {
          
          c = ufd.recursiveContent(cr);
          dr = ufd.recursivePrimitivePart(cr);
-         System.out.println("c  = " + c);
-         System.out.println("dr = " + dr);
+         //System.out.println("c  = " + c);
+         //System.out.println("dr = " + dr);
 
          ar = dr.multiply(c);
          assertEquals("c == cont(c)pp(c)", cr, ar );
@@ -367,9 +368,9 @@ public class GreatestCommonDivisorTest extends TestCase {
          ar = rfac.random(kl,ll,el+i,q);
          br = rfac.random(kl,ll,el,q);
          cr = rfac.random(kl,ll,el,q);
-         System.out.println("ar = " + ar);
-         System.out.println("br = " + br);
-         System.out.println("cr = " + cr);
+         //System.out.println("ar = " + ar);
+         //System.out.println("br = " + br);
+         //System.out.println("cr = " + cr);
 
          assertTrue("length( c"+i+" ) <> 0", cr.length() >= 0);
          //assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
@@ -377,126 +378,46 @@ public class GreatestCommonDivisorTest extends TestCase {
          
          ar = ar.multiply(cr);
          br = br.multiply(cr);
-         System.out.println("ar = " + ar);
-         System.out.println("br = " + br);
+         //System.out.println("ar = " + ar);
+         //System.out.println("br = " + br);
 
          dr = ufd.recursivePseudoGcd(ar,br);
-         System.out.println("dr = " + dr);
+         //System.out.println("dr = " + dr);
 
-         er = ufd.pseudoRemainder(cr,dr);
-         System.out.println("er = " + er);
+         er = ufd.recursivePseudoRemainder(dr,cr);
+         //System.out.println("er = " + er);
 
-         assertTrue("gcd(ac,bc) | c", er.isZERO() );
+         assertTrue("c | gcd(ac,bc)", er.isZERO() );
      }
  }
 
 
 /**
- * Test univariate quotient and remainder.
+ * Test content and primitive part.
  * 
  */
-
- public void xtestUnivQuotRem() {
-
-     dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),1,to);
-
-     a = dfac.random(kl,ll,ll,q).monic();
-     assertTrue("not isZERO( a )", !a.isZERO() );
-
-     b = dfac.random(kl,ll,ll,q).monic();
-     assertTrue("not isZERO( b )", !b.isZERO() );
-
-     GenPolynomial<BigInteger> h = a;
-     GenPolynomial<BigInteger> g = dfac.random(ll); //.monic();
-     assertTrue("not isZERO( g )", !g.isZERO() );
-     a = a.multiply(g);
-     b = b.multiply(g);
-     //System.out.println("a = " + a);
-     //System.out.println("b = " + b);
-     //System.out.println("g = " + g);
-
-     GenPolynomial<BigInteger> r;
-     r = ufd.basePseudoRemainder(b,a);
-     //System.out.println("r = " + r);
-
-     // not nice
-     c = b;
-     BigInteger lbc = a.leadingBaseCoefficient();
-     while ( ! ufd.basePseudoRemainder(c.subtract(r),a).isZERO() ) {
-         c = c.multiply( lbc );
-     }
-     d = c.subtract(r);
-     //System.out.println("d = " + d);
-     e = ufd.basePseudoRemainder(d,a);
-     //System.out.println("e = " + e);
-     assertTrue("b-r = q a", e.isZERO() );
-
-
-     // pseudo gcd tests -------------------------------
-     c = ufd.basePseudoGcd(a,b);
-     //System.out.println("pseudoGcd = " + c);
-     //System.out.println("pseudoGcd = " + ufd.basePseudoRemainder(c,g));
-     assertTrue("a mod pseudoGcd(a,b) = 0", ufd.basePseudoRemainder(a,c).isZERO() );
-     assertTrue("b mod pseudoGcd(a,b) = 0", ufd.basePseudoRemainder(b,c).isZERO() );
-     assertTrue("g = pseudoGcd(a,b)", ufd.basePseudoRemainder(c,g).isZERO() );
- }
-
-
-
-/**
- * Test bivariate quotient and remainder.
- * 
- */
-
- public void xtestQuotRem() {
-
+ public void xtestContentPP() {
      dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),2,to);
 
-     a = dfac.random(kl,ll,ll,q).monic();
-     assertTrue("not isZERO( a )", !a.isZERO() );
+     for (int i = 0; i < 3; i++) {
+         c = dfac.random(kl*(i+2),ll+2*i,el+i,q);
+         //System.out.println("cr = " + cr);
 
-     b = dfac.random(kl,ll,ll,q).monic();
-     assertTrue("not isZERO( b )", !b.isZERO() );
+         assertTrue("length( c"+i+" ) <> 0", c.length() >= 0);
+         //assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
+         //assertTrue(" not isONE( c"+i+" )", !c.isONE() );
+         
+         a = ufd.content(c);
+         e = a.extend(dfac,0,0L);
+         b = ufd.primitivePart(c);
+         System.out.println("c  = " + c);
+         System.out.println("a  = " + a);
+         System.out.println("e  = " + e);
+         System.out.println("b  = " + b);
 
-     GenPolynomial<BigInteger> h = a;
-     GenPolynomial<BigInteger> g = dfac.random(ll); //.monic();
-     assertTrue("not isZERO( g )", !g.isZERO() );
-
-     System.out.println("a = " + a);
-     System.out.println("b = " + b);
-     System.out.println("g = " + g);
-     a = a.multiply(g);
-     b = b.multiply(g);
-     System.out.println("ag = " + a);
-     System.out.println("bg = " + b);
-
-     BigInteger i = ufd.baseContent(a);
-     System.out.println("bc a = " + i);
-     i = ufd.baseContent(b);
-     System.out.println("bc b = " + i);
-     i = ufd.baseContent(g);
-     System.out.println("bc g = " + i);
-
-     a = ufd.basePrimitivePart(a);
-     b = ufd.basePrimitivePart(b);
-     g = ufd.basePrimitivePart(g);
-     System.out.println("bp a = " + a);
-     System.out.println("bp b = " + b);
-     System.out.println("bp g = " + g);
-
-
-     // pseudo gcd tests -------------------------------
-     c = ufd.pseudoGcd(a,b);
-     System.out.println("pseudoGcd = " + c);
-
-     c = ufd.basePrimitivePart(c);
-     System.out.println("bp c = " + c);
-
-     // c = ufd.primitivePart(c);
-     //System.out.println("pp pseudoGcd = " + c);
-     //System.out.println("pseudoGcd = " + ufd.basePseudoRemainder(c,g));
-
-     assertEquals("g == pseudoGcd(a,b)", g.abs(), c.abs() );
+         d = e.multiply(b);
+         assertEquals("c == cont(c)pp(c)", d, c );
+     }
  }
 
 
