@@ -9,6 +9,7 @@ import java.util.Random;
 import java.io.Reader;
 
 import edu.jas.structure.RingElem;
+import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
 
 import edu.jas.util.StringUtil;
@@ -22,7 +23,7 @@ import edu.jas.util.StringUtil;
  * @author Heinz Kredel
  */
 
-public final class BigRational implements RingElem<BigRational>, 
+public final class BigRational implements GcdRingElem<BigRational>, 
                                           RingFactory<BigRational> {
 
     /**
@@ -793,6 +794,47 @@ public final class BigRational implements RingElem<BigRational>,
      */
     public BigRational parse(Reader r) {
         return parse( StringUtil.nextString(r) );
+    }
+
+
+    /** Rational number greatest common divisor.  
+     * @param S BigRational.
+     * @return gcd(this,S).
+     */
+    public BigRational gcd(BigRational S) {
+        if ( S == null || S.isZERO() ) {
+            return this;
+        }
+        if ( this.isZERO() ) {
+            return S;
+        }
+        return ONE;
+    }
+
+
+    /**
+     * BigRational extended greatest common divisor.
+     * @param S BigRational.
+     * @return [ gcd(this,S), a, b ] with a*this + b*S = gcd(this,S).
+     */
+    public BigRational[] egcd(BigRational S) {
+        BigRational[] ret = new BigRational[3];
+        ret[0] = null;
+        ret[1] = null;
+        ret[2] = null;
+        if ( S == null || S.isZERO() ) {
+            ret[0] = this;
+            return ret;
+        }
+        if ( this.isZERO() ) {
+            ret[0] = S;
+            return ret;
+        }
+        BigRational half = new BigRational(1,2);
+        ret[0] = ONE;
+        ret[1] = this.inverse().multiply(half);
+        ret[2] = S.inverse().multiply(half);
+        return ret;
     }
 
 }
