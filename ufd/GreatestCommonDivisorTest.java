@@ -8,11 +8,13 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import edu.jas.arith.BigInteger;
+
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.TermOrder;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
-import edu.jas.arith.BigInteger;
+import static edu.jas.poly.PolyUtil.*;
 
 
 /**
@@ -96,54 +98,6 @@ public class GreatestCommonDivisorTest extends TestCase {
        cfac = null;
        rfac = null;
    }
-
-
-/**
- * Test recursive <--> distributive conversion.
- * 
- */
- public void testConversion() {
-     c = dfac.getONE();
-     assertTrue("length( c ) = 1", c.length() == 1);
-     assertTrue("isZERO( c )", !c.isZERO() );
-     assertTrue("isONE( c )", c.isONE() );
-
-     cr = ufd.recursive(rfac,c);
-     a = ufd.distribute(dfac,cr);
-     assertEquals("c == dist(rec(c))", c, a );
-
-     d = dfac.getZERO();
-     assertTrue("length( d ) = 0", d.length() == 0);
-     assertTrue("isZERO( d )", d.isZERO() );
-     assertTrue("isONE( d )", !d.isONE() );
-
-     dr = ufd.recursive(rfac,d);
-     b = ufd.distribute(dfac,dr);
-     assertEquals("d == dist(rec(d))", d, b );
- }
-
-
-/**
- * Test random recursive <--> distributive conversion.
- * 
- */
- public void testRandomConversion() {
-     for (int i = 0; i < 7; i++) {
-         c = dfac.random(kl*(i+2),ll+2*i,el+i,q);
-
-         assertTrue("length( c"+i+" ) <> 0", c.length() >= 0);
-         assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
-         assertTrue(" not isONE( c"+i+" )", !c.isONE() );
-
-         cr = ufd.recursive(rfac,c);
-         a = ufd.distribute(dfac,cr);
-         //System.out.println("c   = " + c);
-         //System.out.println("cr  = " + cr);
-         //System.out.println("crd = " + a);
-
-         assertEquals("c == dist(rec(c))", c, a );
-     }
- }
 
 
 /**
@@ -277,12 +231,12 @@ public class GreatestCommonDivisorTest extends TestCase {
 
          c = dfac.random(kl*(i+1),ll+i,el+i,q);
          c = ufd.basePrimitivePart(a).abs();
-         cr = ufd.recursive(rfac,c);
+         cr = recursive(rfac,c);
 
          c = cfac.random(kl*(i+1),ll+2*i,el+2*i,q);
          c = ufd.basePrimitivePart(c).abs();
 
-         ar = ufd.recursive(rfac,a);
+         ar = recursive(rfac,a);
          //System.out.println("ar = " + ar);
          //System.out.println("a  = " + a);
          //System.out.println("c  = " + c);
@@ -295,7 +249,7 @@ public class GreatestCommonDivisorTest extends TestCase {
          //System.out.println("br = " + br);
          dr = ufd.recursivePseudoDivide(br,c);
          //System.out.println("dr = " + dr);
-         d = ufd.distribute(dfac,dr);
+         d = distribute(dfac,dr);
          d = ufd.basePrimitivePart(d).abs();
          //System.out.println("d  = " + d);
 
@@ -306,7 +260,7 @@ public class GreatestCommonDivisorTest extends TestCase {
          //System.out.println("br = " + br);
          dr = ufd.recursivePseudoRemainder(br,cr);
          //System.out.println("dr = " + dr);
-         d = ufd.distribute(dfac,dr);
+         d = distribute(dfac,dr);
          d = ufd.basePrimitivePart(d).abs();
          //System.out.println("d  = " + d);
 
@@ -316,7 +270,7 @@ public class GreatestCommonDivisorTest extends TestCase {
          //System.out.println("br  = " + br);
          dr = ufd.recursivePseudoDivide(br,c);
          //System.out.println("dr  = " + dr);
-         d = ufd.distribute(dfac,dr);
+         d = distribute(dfac,dr);
          d = ufd.basePrimitivePart(d).abs();
          //System.out.println("d  = " + d);
 
