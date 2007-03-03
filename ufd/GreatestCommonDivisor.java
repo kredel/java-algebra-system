@@ -580,4 +580,26 @@ public class GreatestCommonDivisor<C extends GcdRingElem<C> > {
         return D;
     }
 
+
+    /**
+     * GenPolynomial least comon multiple.
+     * Main entry driver method.
+     * @param P GenPolynomial.
+     * @param S GenPolynomial.
+     * @return lcm(P,S).
+     */
+    public GenPolynomial<C> 
+        lcm( GenPolynomial<C> P,
+             GenPolynomial<C> S ) {
+        if ( S == null || S.isZERO() ) {
+            return S;
+        }
+        if ( P == null || P.isZERO() ) {
+            return P;
+        }
+        GenPolynomial<C> A = P.multiply(S);
+        GenPolynomial<C> C = gcd(P,S);
+        return basePseudoDivide(A,C);
+    }
+
 }

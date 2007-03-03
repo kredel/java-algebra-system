@@ -9,6 +9,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import edu.jas.arith.BigInteger;
+import edu.jas.arith.BigRational;
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.TermOrder;
@@ -425,6 +426,86 @@ public class GreatestCommonDivisorTest extends TestCase {
          //System.out.println("e = " + e);
 
          assertTrue("c | gcd(ac,bc)", e.isZERO() );
+     }
+ }
+
+
+/**
+ * Test gcd field coeffitients.
+ * 
+ */
+ public void testGCDfield() {
+     GenPolynomialRing<BigRational> dfac;
+     dfac = new GenPolynomialRing<BigRational>(new BigRational(1),3,to);
+
+     GreatestCommonDivisor<BigRational> ufd 
+          = new GreatestCommonDivisor<BigRational>();
+
+     GenPolynomial<BigRational> a, b, c, d, e;
+
+     for (int i = 0; i < 2; i++) {
+         a = dfac.random(kl,ll,el,q);
+         b = dfac.random(kl,ll,el,q);
+         c = dfac.random(kl,ll,el,q);
+         //System.out.println("a = " + a);
+         //System.out.println("b = " + b);
+         //System.out.println("c = " + c);
+
+         assertTrue("length( c"+i+" ) <> 0", c.length() >= 0);
+         //assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
+         //assertTrue(" not isONE( c"+i+" )", !c.isONE() );
+         
+         a = a.multiply(c);
+         b = b.multiply(c);
+         //System.out.println("a = " + a);
+         //System.out.println("b = " + b);
+
+         d = ufd.gcd(a,b);
+         //System.out.println("d = " + d);
+
+         e = ufd.basePseudoRemainder(d,c);
+         //System.out.println("e = " + e);
+
+         assertTrue("c | gcd(ac,bc)", e.isZERO() );
+     }
+ }
+
+
+/**
+ * Test lcm.
+ * 
+ */
+ public void testLCM() {
+     dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),3,to);
+
+     for (int i = 0; i < 1; i++) {
+         a = dfac.random(kl,ll,el,q);
+         b = dfac.random(kl,ll,el,q);
+         c = dfac.random(kl,3,2,q);
+         //System.out.println("a = " + a);
+         //System.out.println("b = " + b);
+         //System.out.println("c = " + c);
+
+         assertTrue("length( a"+i+" ) <> 0", a.length() >= 0);
+         //assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
+         //assertTrue(" not isONE( c"+i+" )", !c.isONE() );
+
+         a = a.multiply(c);
+         b = b.multiply(c);
+         
+         c = ufd.gcd(a,b);
+         //System.out.println("c = " + c);
+
+         d = ufd.lcm(a,b);
+         //System.out.println("d = " + d);
+
+         e = c.multiply(d);
+         //System.out.println("e = " + e);
+
+         c = a.multiply(b);
+         //System.out.println("c = " + c);
+
+         assertEquals("ab == gcd(a,b)lcm(ab)", c, e );
      }
  }
 
