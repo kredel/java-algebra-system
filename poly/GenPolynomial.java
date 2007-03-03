@@ -684,13 +684,14 @@ public class GenPolynomial<C extends RingElem<C> >
     /**
      * GenPolynomial division. 
      * Division by coefficient ring element.
+     * Fails, if exact division is not possible.
      * @param s coefficient.
      * @return this/s.
      */
     public GenPolynomial<C> divide(C s) {
         if ( s == null || s.isZERO() ) {
-            throw new RuntimeException(this.getClass().getName()
-                                       + " division by zero");
+           throw new RuntimeException(this.getClass().getName()
+                                      + " division by zero");
         }
         if ( this.isZERO() ) {
             return this;
@@ -709,6 +710,7 @@ public class GenPolynomial<C extends RingElem<C> >
 
     /**
      * GenPolynomial division with remainder.
+     * Fails, if exact division by leading base coefficient is not possible.
      * Meaningful only for univariate polynomials over fields, but works 
      * in any case.
      * @param S nonzero GenPolynomial with invertible leading coefficient.
@@ -722,8 +724,7 @@ public class GenPolynomial<C extends RingElem<C> >
         }
         C c = S.leadingBaseCoefficient();
         if ( ! c.isUnit() ) {
-            logger.error("leadingBaseCoefficient not invertible " + c);
-            throw new RuntimeException(this.getClass().getName()
+           throw new RuntimeException(this.getClass().getName()
                                        + " lbc not invertible " + c);
         }
         C ci = c.inverse();
@@ -760,6 +761,7 @@ public class GenPolynomial<C extends RingElem<C> >
 
     /**
      * GenPolynomial division.
+     * Fails, if exact division by leading base coefficient is not possible.
      * Meaningful only for univariate polynomials over fields, but works 
      * in any case.
      * @param S nonzero GenPolynomial with invertible leading coefficient.
@@ -773,6 +775,7 @@ public class GenPolynomial<C extends RingElem<C> >
 
     /**
      * GenPolynomial remainder.
+     * Fails, if exact division by leading base coefficient is not possible.
      * Meaningful only for univariate polynomials over fields, but works 
      * in any case.
      * @param S nonzero GenPolynomial with invertible leading coefficient.
@@ -781,14 +784,13 @@ public class GenPolynomial<C extends RingElem<C> >
      */
     public GenPolynomial<C> remainder(GenPolynomial<C> S) {
         if ( S == null || S.isZERO() ) {
-            throw new RuntimeException(this.getClass().getName()
-                                       + " division by zero");
+           throw new RuntimeException(this.getClass().getName()
+                                      + " division by zero");
         }
         C c = S.leadingBaseCoefficient();
         if ( ! c.isUnit() ) {
-            logger.error("leadingBaseCoefficient not invertible " + c);
-            throw new RuntimeException(this.getClass().getName()
-                                       + " lbc not invertible " + c);
+           throw new RuntimeException(this.getClass().getName()
+                                      + " lbc not invertible " + c);
         }
         C ci = c.inverse();
         ExpVector e = S.leadingExpVector();
@@ -813,9 +815,7 @@ public class GenPolynomial<C extends RingElem<C> >
 
     /**
      * GenPolynomial greatest common divisor.
-     * Correct only for univariate polynomials.
-     * Returns 1 for multivariate polynomials
-     * (which is a good guess for random polynomials).
+     * Only for univariate polynomials over fields.
      * @param S GenPolynomial.
      * @return gcd(this,S).
      */
@@ -827,9 +827,8 @@ public class GenPolynomial<C extends RingElem<C> >
             return S;
         }
         if ( ring.nvar != 1 ) {
-            logger.info("gcd only for univariate polynomials");
-            // keep going
-            return ring.getONE();
+           throw new RuntimeException(this.getClass().getName()
+                                      + " not univariate polynomials" + ring);
         }
         GenPolynomial<C> x;
         GenPolynomial<C> q = this;
@@ -845,8 +844,7 @@ public class GenPolynomial<C extends RingElem<C> >
 
     /**
      * GenPolynomial extended greatest comon divisor.
-     * Correct only for univariate polynomials.
-     * Returns [1,null,null] for multivariate polynomials.
+     * Only for univariate polynomials over fields.
      * @param S GenPolynomial.
      * @return [ gcd(this,S), a, b ] with a*this + b*S = gcd(this,S).
      */
@@ -864,10 +862,8 @@ public class GenPolynomial<C extends RingElem<C> >
             return ret;
         }
         if ( ring.nvar != 1 ) {
-            logger.info("gcd only for univariate polynomials");
-            // keep going
-            ret[0] = ring.getONE();
-            return ret;
+           throw new RuntimeException(this.getClass().getName()
+                                      + " not univariate polynomials" + ring);
         }
         //System.out.println("this = " + this + ", S = " + S);
         GenPolynomial<C>[] qr;
@@ -919,7 +915,7 @@ public class GenPolynomial<C extends RingElem<C> >
 
     /**
      * GenPolynomial modular inverse.
-     * Correct only for univariate polynomials.
+     * Only for univariate polynomials over fields.
      * @param m GenPolynomial.
      * @return a with with a*this = 1 mod m.
      */
