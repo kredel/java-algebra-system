@@ -12,8 +12,6 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.arith.BigInteger;
 //import edu.jas.structure.RingElem;
 
-import edu.jas.ufd.GreatestCommonDivisor;
-
 
 /**
  * IntGenPolynomial Test using JUnit.
@@ -45,8 +43,6 @@ public class IntGenPolynomialTest extends TestCase {
    }
 
    //private final static int bitlen = 100;
-
-   GreatestCommonDivisor ufd = new GreatestCommonDivisor();
 
    GenPolynomialRing<BigInteger> fac;
 
@@ -199,57 +195,6 @@ public class IntGenPolynomialTest extends TestCase {
 
      d = e.multiply(b);
      assertEquals("b*p(y,u) = p(y,u)*b",c,d);
- }
-
-
-/**
- * Test object quotient and remainder.
- * 
- */
-
- public void testQuotRem() {
-
-     fac = new GenPolynomialRing<BigInteger>(new BigInteger(1),1);
-
-     a = fac.random(kl,ll,ll,q).monic();
-     assertTrue("not isZERO( a )", !a.isZERO() );
-
-     b = fac.random(kl,ll,ll,q).monic();
-     assertTrue("not isZERO( b )", !b.isZERO() );
-
-     GenPolynomial<BigInteger> h = a;
-     GenPolynomial<BigInteger> g = fac.random(ll); //.monic();
-     assertTrue("not isZERO( g )", !g.isZERO() );
-     a = a.multiply(g);
-     b = b.multiply(g);
-     //System.out.println("a = " + a);
-     //System.out.println("b = " + b);
-     //System.out.println("g = " + g);
-
-     GenPolynomial<BigInteger> r;
-     r = ufd.basePseudoRemainder(b,a);
-     //System.out.println("r = " + r);
-
-     // not nice
-     c = b;
-     BigInteger lbc = a.leadingBaseCoefficient();
-     while ( ! ufd.basePseudoRemainder(c.subtract(r),a).isZERO() ) {
-         c = c.multiply( lbc );
-     }
-     d = c.subtract(r);
-     //System.out.println("d = " + d);
-     e = ufd.basePseudoRemainder(d,a);
-     //System.out.println("e = " + e);
-     assertTrue("b-r = q a", e.isZERO() );
-
-
-     // pseudo gcd tests -------------------------------
-     c = ufd.basePseudoGcd(a,b);
-     //System.out.println("pseudoGcd = " + c);
-     //System.out.println("pseudoGcd = " + ufd.basePseudoRemainder(c,g));
-     assertTrue("a mod pseudoGcd(a,b) = 0", ufd.basePseudoRemainder(a,c).isZERO() );
-     assertTrue("b mod pseudoGcd(a,b) = 0", ufd.basePseudoRemainder(b,c).isZERO() );
-     assertTrue("g = pseudoGcd(a,b)", ufd.basePseudoRemainder(c,g).isZERO() );
  }
 
 }
