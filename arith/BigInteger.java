@@ -409,7 +409,7 @@ public final class BigInteger implements GcdRingElem<BigInteger>,
 
 
     /**
-     * BigInteger extended greatest comon divisor.
+     * BigInteger extended greatest common divisor.
      * @param S BigInteger.
      * @return [ gcd(this,S), a, b ] with a*this + b*S = gcd(this,S).
      */
