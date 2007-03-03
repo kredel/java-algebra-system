@@ -32,6 +32,7 @@ public class GreatestCommonDivisor<C extends GcdRingElem<C> > {
 
 
     private static final Logger logger = Logger.getLogger(GreatestCommonDivisor.class);
+    private boolean debug = logger.isDebugEnabled();
 
 
     /**
@@ -59,8 +60,8 @@ public class GreatestCommonDivisor<C extends GcdRingElem<C> > {
         C c = S.leadingBaseCoefficient();
         ExpVector e = S.leadingExpVector();
         GenPolynomial<C> h;
-        GenPolynomial<C> q = S.ring.getZERO().clone();
         GenPolynomial<C> r = P;
+        GenPolynomial<C> q = S.ring.getZERO().clone();
 
         while ( ! r.isZERO() ) {
             ExpVector f = r.leadingExpVector();
@@ -278,6 +279,72 @@ public class GreatestCommonDivisor<C extends GcdRingElem<C> > {
 
 
     /**
+     * GenPolynomial polynomial derivative main variable.
+     * @param P recursive GenPolynomial.
+     * @return deriviative(P).
+     */
+    public GenPolynomial<C> 
+           baseDeriviative( GenPolynomial<C> P ) {
+        if ( P == null || P.isZERO() ) {
+            return P;
+        }
+        GenPolynomialRing<C> pfac = P.ring;
+        if ( pfac.nvar > 1 ) { 
+           // baseContent not possible by return type
+           throw new RuntimeException(this.getClass().getName()
+                     + " only for univariate polynomials");
+        }
+        RingFactory<C> rf = pfac.coFac;
+        GenPolynomial<C> d = pfac.getZERO().clone();
+        Map<ExpVector,C> dm = d.getMap();
+        for ( Map.Entry<ExpVector,C> m : P.getMap().entrySet() ) {
+            ExpVector f = m.getKey();  
+            long fl = f.getVal(0);
+            if ( fl > 0 ) {
+               C cf = rf.fromInteger( fl );
+               C a = m.getValue(); 
+               C x = a.multiply(cf);
+               ExpVector e = new ExpVector( 1, 0, fl-1L );  
+               dm.put(e,x);
+            }
+        }
+        return d; 
+    }
+
+
+    /**
+     * GenPolynomial polynomial greated squarefee divisor.
+     * @param P GenPolynomial.
+     * @return squarefree(P).
+     */
+    public GenPolynomial<C> 
+           baseSquarefreePart( GenPolynomial<C> P ) {
+        if ( P == null || P.isZERO() ) {
+            return P;
+        }
+        GenPolynomialRing<C> pfac = P.ring;
+        if ( pfac.nvar > 1 ) { 
+           // baseContent not possible by return type
+           throw new RuntimeException(this.getClass().getName()
+                     + " only for univariate polynomials");
+        }
+        //System.out.println("P  = " + P);
+        GenPolynomial<C> pp = basePrimitivePart(P);
+        //System.out.println("pp = " + pp);
+        if ( pp.leadingExpVector().getVal(0) < 1 ) {
+            return pp;
+        }
+        GenPolynomial<C> d = baseDeriviative(pp);
+        //System.out.println("d  = " + d);
+        GenPolynomial<C> g = baseGcd(pp,d);
+        //System.out.println("g  = " + g);
+        GenPolynomial<C> q = basePseudoDivide(pp,g);
+        //System.out.println("q  = " + q);
+        return q;
+    }
+
+
+    /**
      * GenPolynomial pseudo divide.
      * For recursive polynomials.
      * Division by coefficient ring element.
@@ -306,7 +373,7 @@ public class GreatestCommonDivisor<C extends GcdRingElem<C> > {
             GenPolynomial<C> c1 = m1.getValue();
             ExpVector e1 = m1.getKey();
             GenPolynomial<C> c = basePseudoDivide(c1,s);
-            if ( ! basePseudoRemainder(c1,s).isZERO() ) {
+            if ( debug || ! basePseudoRemainder(c1,s).isZERO() ) { // &&
                 System.out.println("c1 = " + c1);
                 System.out.println("s  = " + s);
                 System.out.println("c  = " + c);
@@ -360,6 +427,65 @@ public class GreatestCommonDivisor<C extends GcdRingElem<C> > {
             }
         }
         return r;
+    }
+
+
+    /**
+     * GenPolynomial pseudo divide.
+     * For recursive polynomials.
+     * @param P recursive GenPolynomial.
+     * @param S nonzero recursive GenPolynomial.
+     * @return quotient with ldcf(S)<sup>m</sup> P = quotient * S + remainder.
+     * @see #remainder(edu.jas.poly.GenPolynomial).
+     */
+    public GenPolynomial<GenPolynomial<C>> 
+           recursivePseudoDivide( GenPolynomial<GenPolynomial<C>> P, 
+                                  GenPolynomial<GenPolynomial<C>> S) {
+        if ( S == null || S.isZERO() ) {
+            throw new RuntimeException(this.getClass().getName()
+                                       + " division by zero");
+        }
+        if ( S.ring.nvar != 1 ) {
+           // ok if exact division
+           // throw new RuntimeException(this.getClass().getName()
+           //                            + " univariate polynomials only");
+        }
+        if ( P == null || P.isZERO() ) {
+            return P;
+        }
+        if ( S.isONE() ) {
+            return P.ring.getZERO();
+        }
+        GenPolynomial<C> c = S.leadingBaseCoefficient();
+        ExpVector e = S.leadingExpVector();
+        GenPolynomial<GenPolynomial<C>> h;
+        GenPolynomial<GenPolynomial<C>> r = P; 
+        GenPolynomial<GenPolynomial<C>> q = S.ring.getZERO().clone();
+        while ( ! r.isZERO() ) {
+            ExpVector f = r.leadingExpVector();
+            if ( ExpVector.EVMT(f,e) ) {
+                GenPolynomial<C> a = r.leadingBaseCoefficient();
+                f = ExpVector.EVDIF( f, e );
+                //logger.info("red div = " + e);
+                GenPolynomial<C> x = basePseudoRemainder(a,c);
+                //System.out.println("x = " + x);
+                if ( x.isZERO() ) {
+                   GenPolynomial<C> y = basePseudoDivide(a,c);
+                   //System.out.println("y = " + y);
+                   q = q.sum( y, f );
+                   h = S.multiply( y, f ); // coeff a
+                } else {
+                   q = q.sum( a, f );
+                   q = q.multiply( c );
+                   r = r.multiply( c );    // coeff ac
+                   h = S.multiply( a, f ); // coeff ac
+                }
+                r = r.subtract( h );
+            } else {
+                break;
+            }
+        }
+        return q;
     }
 
 
@@ -484,6 +610,73 @@ public class GreatestCommonDivisor<C extends GcdRingElem<C> > {
 
 
     /**
+     * GenPolynomial recursive polynomial derivative main variable.
+     * @param P recursive GenPolynomial.
+     * @return deriviative(P).
+     */
+    public GenPolynomial<GenPolynomial<C>> 
+           recursiveDeriviative( GenPolynomial<GenPolynomial<C>> P ) {
+        if ( P == null || P.isZERO() ) {
+            return P;
+        }
+        GenPolynomialRing<GenPolynomial<C>> pfac = P.ring;
+        if ( pfac.nvar > 1 ) { 
+           // baseContent not possible by return type
+           throw new RuntimeException(this.getClass().getName()
+                     + " only for univariate polynomials");
+        }
+        GenPolynomialRing<C> pr = (GenPolynomialRing<C>)pfac.coFac;
+        RingFactory<C> rf = pr.coFac;
+        GenPolynomial<GenPolynomial<C>> d = pfac.getZERO().clone();
+        Map<ExpVector,GenPolynomial<C>> dm = d.getMap();
+        for ( Map.Entry<ExpVector,GenPolynomial<C>> m : P.getMap().entrySet() ) {
+            ExpVector f = m.getKey();  
+            long fl = f.getVal(0);
+            if ( fl > 0 ) {
+               C cf = rf.fromInteger( fl );
+               GenPolynomial<C> a = m.getValue(); 
+               GenPolynomial<C> x = a.multiply(cf);
+               ExpVector e = new ExpVector( 1, 0, fl-1L );  
+               dm.put(e,x);
+            }
+        }
+        return d; 
+    }
+
+
+    /**
+     * GenPolynomial recursive polynomial greated squarefee divisor.
+     * @param P recursive GenPolynomial.
+     * @return squarefree(P).
+     */
+    public GenPolynomial<GenPolynomial<C>> 
+           recursiveSquarefreePart( GenPolynomial<GenPolynomial<C>> P ) {
+        if ( P == null || P.isZERO() ) {
+            return P;
+        }
+        GenPolynomialRing<GenPolynomial<C>> pfac = P.ring;
+        if ( pfac.nvar > 1 ) { 
+           // baseContent not possible by return type
+           throw new RuntimeException(this.getClass().getName()
+                     + " only for univariate polynomials");
+        }
+        GenPolynomial<GenPolynomial<C>> pp = recursivePrimitivePart(P);
+        //System.out.println("pp  = " + pp);
+        if ( pp.leadingExpVector().getVal(0) < 1 ) {
+            return pp;
+        }
+        GenPolynomial<GenPolynomial<C>> d = recursiveDeriviative(pp);
+        //System.out.println("d  = " + d);
+        GenPolynomial<GenPolynomial<C>> g = recursiveGcd(pp,d);
+        //System.out.println("g  = " + g);
+
+        GenPolynomial<GenPolynomial<C>> q = recursivePseudoDivide(pp,g);
+        //System.out.println("q  = " + q);
+        return q;
+    }
+
+
+    /**
      * GenPolynomial content.
      * Entry driver method.
      * @param P GenPolynomial.
@@ -600,6 +793,37 @@ public class GreatestCommonDivisor<C extends GcdRingElem<C> > {
         GenPolynomial<C> A = P.multiply(S);
         GenPolynomial<C> C = gcd(P,S);
         return basePseudoDivide(A,C);
+    }
+
+
+    /**
+     * GenPolynomial greatest squarefree divisor.
+     * Entry driver method.
+     * @param P GenPolynomial.
+     * @return squarefree(P).
+     */
+    public GenPolynomial<C> 
+        squarefreePart( GenPolynomial<C> P ) {
+        if ( P == null ) {
+           throw new RuntimeException(this.getClass().getName()
+                                       + " P != null");
+        }
+        if ( P.isZERO() ) {
+            return P;
+        }
+        GenPolynomialRing<C> pfac = P.ring;
+        if ( pfac.nvar <= 1 ) {
+           return baseSquarefreePart(P);
+        }
+        GenPolynomialRing<C> cfac = pfac.contract(1);
+        GenPolynomialRing<GenPolynomial<C>> rfac 
+           = new GenPolynomialRing<GenPolynomial<C>>(cfac,1);
+
+        GenPolynomial<GenPolynomial<C>> Pr = recursive(rfac,P);
+        GenPolynomial<GenPolynomial<C>> PP = recursiveSquarefreePart( Pr );
+
+        GenPolynomial<C> D = distribute( pfac, PP );
+        return D;
     }
 
 }

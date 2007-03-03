@@ -212,6 +212,42 @@ public class GreatestCommonDivisorTest extends TestCase {
 
 
 /**
+ * Test base squarefree.
+ * 
+ */
+ public void testBaseSquarefree() {
+
+     dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),1,to);
+
+     a = dfac.random(kl,ll,el+2,q);
+     b = dfac.random(kl,ll,el+2,q);
+     c = dfac.random(kl,ll,el,q);
+     //System.out.println("a  = " + a);
+     //System.out.println("b  = " + b);
+     //System.out.println("c  = " + c);
+
+     assertTrue("length( a ) <> 0", a.length() >= 0);
+     //assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
+     //assertTrue(" not isONE( c"+i+" )", !c.isONE() );
+         
+     d = a.multiply(a).multiply(b).multiply(b).multiply(c);
+     c = a.multiply(b).multiply(c);
+     //System.out.println("d  = " + d);
+     //c = ufd.basePrimitivePart(c);
+
+     d = ufd.baseSquarefreePart(d);
+     //System.out.println("c  = " + c);
+     //System.out.println("d  = " + d);
+
+     e = ufd.basePseudoRemainder(d,c);
+     //e = ufd.basePseudoRemainder(c,d);
+     //System.out.println("e  = " + e);
+
+     assertTrue("abc | squarefree(aabbc)", e.isZERO() );
+ }
+
+
+/**
  * Test recursive quotioent and remainder.
  * 
  */
@@ -332,6 +368,42 @@ public class GreatestCommonDivisorTest extends TestCase {
 
 
 /**
+ * Test recursive squarefree.
+ * 
+ */
+ public void testRecursiveSquarefree() {
+     cfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),2-1,to);
+     rfac = new GenPolynomialRing<GenPolynomial<BigInteger>>(cfac,1,to);
+
+     ar = rfac.random(kl,ll,2,q);
+     br = rfac.random(kl,ll,2,q);
+     cr = rfac.random(kl,ll,2,q);
+     //System.out.println("ar = " + ar);
+     //System.out.println("br = " + br);
+     //System.out.println("cr = " + cr);
+
+     assertTrue("length( cr ) <> 0", cr.length() >= 0);
+     //assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
+     //assertTrue(" not isONE( c"+i+" )", !c.isONE() );
+         
+
+     dr = ar.multiply(ar).multiply(br).multiply(br).multiply(cr);
+     cr = ar.multiply(br).multiply(cr);
+     //System.out.println("dr  = " + dr);
+     //cr = ufd.recursivePrimitivePart(cr);
+
+     dr = ufd.recursiveSquarefreePart(dr);
+     //System.out.println("cr  = " + cr);
+     //System.out.println("dr  = " + dr);
+
+     er = ufd.recursivePseudoRemainder(dr,cr);
+     //System.out.println("er  = " + er);
+
+     assertTrue("abc | squarefree(aabbc)", er.isZERO() );
+ }
+
+
+/**
  * Test content and primitive part.
  * 
  */
@@ -431,7 +503,7 @@ public class GreatestCommonDivisorTest extends TestCase {
 
 
 /**
- * Test gcd field coeffitients.
+ * Test gcd field coefficients.
  * 
  */
  public void testGCDfield() {
@@ -501,12 +573,47 @@ public class GreatestCommonDivisorTest extends TestCase {
 
          e = c.multiply(d);
          //System.out.println("e = " + e);
-
          c = a.multiply(b);
          //System.out.println("c = " + c);
 
          assertEquals("ab == gcd(a,b)lcm(ab)", c, e );
      }
+ }
+
+
+/**
+ * Test squarefree.
+ * 
+ */
+ public void testSquarefree() {
+
+     dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),3,to);
+
+     a = dfac.random(kl,ll,2,q);
+     b = dfac.random(kl,ll,2,q);
+     c = dfac.random(kl,ll,2,q);
+     //System.out.println("a  = " + a);
+     //System.out.println("b  = " + b);
+     //System.out.println("c  = " + c);
+
+     assertTrue("length( a ) <> 0", a.length() >= 0);
+     //assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
+     //assertTrue(" not isONE( c"+i+" )", !c.isONE() );
+         
+     d = a.multiply(a).multiply(b).multiply(b).multiply(c);
+     c = a.multiply(b).multiply(c);
+     //System.out.println("d  = " + d);
+     c = ufd.primitivePart(c); // required here
+
+     d = ufd.squarefreePart(d);
+     //System.out.println("c  = " + c);
+     //System.out.println("d  = " + d);
+
+     e = ufd.basePseudoRemainder(d,c);
+     //e = ufd.basePseudoRemainder(c,d);
+     //System.out.println("e  = " + e);
+
+     assertTrue("abc | squarefree(aabbc)", e.isZERO() );
  }
 
 }
