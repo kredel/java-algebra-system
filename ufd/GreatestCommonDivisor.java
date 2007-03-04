@@ -389,7 +389,7 @@ public class GreatestCommonDivisor<C extends GcdRingElem<C> > {
         while ( g.leadingExpVector().getVal(0) >= 1 /*!g.isONE()*/ ) {
               GenPolynomial<C> c = baseGcd(g,q);
               GenPolynomial<C> z = basePseudoDivide(q,c);
-              if ( !z.isONE() ) {
+              if ( z.leadingExpVector().getVal(0) > 0 /*!z.isONE()*/ ) {
                  sfactors.put(j,z);
               }
               j++;
@@ -785,7 +785,7 @@ public class GreatestCommonDivisor<C extends GcdRingElem<C> > {
         while ( g.leadingExpVector().getVal(0) >= 1 /*!g.abs().isONE()*/ ) {
               GenPolynomial<GenPolynomial<C>> c = recursiveGcd(g,q);
               GenPolynomial<GenPolynomial<C>> z = recursivePseudoDivide(q,c);
-              if ( !z.isONE() ) {
+              if ( z.leadingExpVector().getVal(0) > 0 /*!z.isONE()*/ ) {
                  sfactors.put(j,z);
               }
               //if ( g.leadingExpVector().getVal(0) >= 1 ) {
