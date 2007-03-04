@@ -12,6 +12,7 @@ import junit.framework.TestSuite;
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
+import edu.jas.arith.ModInteger;
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.TermOrder;
@@ -51,8 +52,8 @@ public class GreatestCommonDivisorTest extends TestCase {
 
    //private final static int bitlen = 100;
 
-   GreatestCommonDivisor<BigInteger> ufd 
-          = new GreatestCommonDivisor<BigInteger>();
+   GreatestCommonDivisorAbstract<BigInteger> ufd 
+          = new GreatestCommonDivisorSimple<BigInteger>();
 
    TermOrder to = new TermOrder( TermOrder.INVLEX );
 
@@ -620,8 +621,8 @@ public class GreatestCommonDivisorTest extends TestCase {
      GenPolynomialRing<BigRational> dfac;
      dfac = new GenPolynomialRing<BigRational>(new BigRational(1),3,to);
 
-     GreatestCommonDivisor<BigRational> ufd 
-          = new GreatestCommonDivisor<BigRational>();
+     GreatestCommonDivisorAbstract<BigRational> ufd 
+          = new GreatestCommonDivisorSimple<BigRational>();
 
      GenPolynomial<BigRational> a, b, c, d, e;
 
@@ -647,6 +648,49 @@ public class GreatestCommonDivisorTest extends TestCase {
 
          e = ufd.basePseudoRemainder(d,c);
          //System.out.println("e = " + e);
+
+         assertTrue("c | gcd(ac,bc) " + e, e.isZERO() );
+     }
+ }
+
+
+/**
+ * Test gcd modular coefficients. in error
+ * 
+ */
+ public void xtestGCDmodular() {
+     ModInteger mi = new ModInteger(19,1);
+
+     GenPolynomialRing<ModInteger> dfac;
+     dfac = new GenPolynomialRing<ModInteger>(mi,3,to);
+
+     GreatestCommonDivisorAbstract<ModInteger> ufd 
+          = new GreatestCommonDivisorSimple<ModInteger>();
+
+     GenPolynomial<ModInteger> a, b, c, d, e;
+
+     for (int i = 0; i < 2; i++) {
+         a = dfac.random(kl,ll,el,q);
+         b = dfac.random(kl,ll,el,q);
+         c = dfac.random(kl,ll,el,q);
+         System.out.println("a = " + a);
+         System.out.println("b = " + b);
+         System.out.println("c = " + c);
+
+         assertTrue("length( c"+i+" ) <> 0", c.length() >= 0);
+         //assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
+         //assertTrue(" not isONE( c"+i+" )", !c.isONE() );
+         
+         a = a.multiply(c);
+         b = b.multiply(c);
+         System.out.println("a = " + a);
+         System.out.println("b = " + b);
+
+         d = ufd.gcd(a,b);
+         System.out.println("d = " + d);
+
+         e = ufd.basePseudoRemainder(d,c);
+         System.out.println("e = " + e);
 
          assertTrue("c | gcd(ac,bc) " + e, e.isZERO() );
      }
