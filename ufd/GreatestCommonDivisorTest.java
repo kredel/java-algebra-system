@@ -236,7 +236,7 @@ public class GreatestCommonDivisorTest extends TestCase {
      d = a.multiply(a).multiply(b).multiply(b).multiply(b).multiply(c);
      c = a.multiply(b).multiply(c);
      //System.out.println("d  = " + d);
-     //c = ufd.basePrimitivePart(c);
+     c = ufd.basePrimitivePart(c);
 
      d = ufd.baseSquarefreePart(d);
      //System.out.println("c  = " + c);
@@ -447,7 +447,7 @@ public class GreatestCommonDivisorTest extends TestCase {
      dr = ar.multiply(ar).multiply(br).multiply(br).multiply(cr);
      cr = ar.multiply(br).multiply(cr);
      //System.out.println("dr  = " + dr);
-     //cr = ufd.recursivePrimitivePart(cr);
+     cr = ufd.recursivePrimitivePart(cr);
 
      dr = ufd.recursiveSquarefreePart(dr);
      //System.out.println("cr  = " + cr);
@@ -781,9 +781,9 @@ public class GreatestCommonDivisorTest extends TestCase {
 
      dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),3,to);
 
-     a = dfac.random(kl,ll,2,q);
-     b = dfac.random(kl,ll,2,q);
-     c = dfac.random(kl,ll,2,q);
+     a = dfac.random(kl,3,2,q);
+     b = dfac.random(kl,3,2,q);
+     c = dfac.random(kl,3,2,q);
      //System.out.println("a  = " + a);
      //System.out.println("b  = " + b);
      //System.out.println("c  = " + c);
