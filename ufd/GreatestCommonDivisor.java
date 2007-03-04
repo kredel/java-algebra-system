@@ -42,7 +42,7 @@ public class GreatestCommonDivisor<C extends GcdRingElem<C> > {
      * @param P GenPolynomial.
      * @param S nonzero GenPolynomial.
      * @return quotient with ldcf(S)<sup>m</sup> P = quotient * S + remainder.
-     * @see #divide(edu.jas.poly.GenPolynomial).
+     * @see edu.jas.poly.GenPolynomial#divide(edu.jas.poly.GenPolynomial).
      */
     public GenPolynomial<C> basePseudoDivide( GenPolynomial<C> P, 
                                               GenPolynomial<C> S ) {
@@ -99,7 +99,7 @@ public class GreatestCommonDivisor<C extends GcdRingElem<C> > {
      * @param P GenPolynomial.
      * @param S nonzero GenPolynomial.
      * @return remainder with ldcf(S)<sup>m</sup> P = quotient * S + remainder.
-     * @see #remainder(edu.jas.poly.GenPolynomial).
+     * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
      */
     public GenPolynomial<C> basePseudoRemainder( GenPolynomial<C> P, 
                                                  GenPolynomial<C> S ) {
@@ -147,7 +147,7 @@ public class GreatestCommonDivisor<C extends GcdRingElem<C> > {
      * @param P GenPolynomial.
      * @param s nonzero coefficient.
      * @return coefficient wise remainder.
-     * @see #remainder(edu.jas.poly.GenPolynomial).
+     * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
      */
     public GenPolynomial<C> baseRemainderPoly( GenPolynomial<C> P, 
                                                C s ) {
@@ -459,7 +459,7 @@ public class GreatestCommonDivisor<C extends GcdRingElem<C> > {
      * @param P recursive GenPolynomial.
      * @param S nonzero recursive GenPolynomial.
      * @return remainder with ldcf(S)<sup>m</sup> P = quotient * S + remainder.
-     * @see #remainder(edu.jas.poly.GenPolynomial).
+     * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
      */
     public GenPolynomial<GenPolynomial<C>> 
            recursivePseudoRemainder( GenPolynomial<GenPolynomial<C>> P, 
@@ -501,7 +501,7 @@ public class GreatestCommonDivisor<C extends GcdRingElem<C> > {
      * @param P recursive GenPolynomial.
      * @param S nonzero recursive GenPolynomial.
      * @return quotient with ldcf(S)<sup>m</sup> P = quotient * S + remainder.
-     * @see #remainder(edu.jas.poly.GenPolynomial).
+     * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
      */
     public GenPolynomial<GenPolynomial<C>> 
            recursivePseudoDivide( GenPolynomial<GenPolynomial<C>> P, 
