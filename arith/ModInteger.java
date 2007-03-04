@@ -7,7 +7,7 @@ package edu.jas.arith;
 import java.util.Random;
 import java.io.Reader;
 
-import edu.jas.structure.RingElem;
+import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.structure.PrettyPrint;
 
@@ -22,7 +22,7 @@ import edu.jas.util.StringUtil;
  * @see java.math.BigInteger
  */
 
-public final class ModInteger implements RingElem<ModInteger>, 
+public final class ModInteger implements GcdRingElem<ModInteger>, 
                                          RingFactory<ModInteger> {
 
 
@@ -488,6 +488,61 @@ public final class ModInteger implements RingElem<ModInteger>,
      */
     public ModInteger parse(Reader r) {
         return parse( StringUtil.nextString(r) );
+    }
+
+
+    /** ModInteger greatest common divisor.  
+     * @param S ModInteger.
+     * @return gcd(this,S).
+     */
+    public ModInteger gcd(ModInteger S) {
+        return new ModInteger( modul, val.gcd( S.val ) );
+    }
+
+
+    /**
+     * ModInteger extended greatest common divisor.
+     * @param S ModInteger.
+     * @return [ gcd(this,S), a, b ] with a*this + b*S = gcd(this,S).
+     */
+    public ModInteger[] egcd(ModInteger S) {
+        ModInteger[] ret = new ModInteger[3];
+        ret[0] = null;
+        ret[1] = null;
+        ret[2] = null;
+        if ( S == null || S.isZERO() ) {
+            ret[0] = this;
+            return ret;
+        }
+        if ( this.isZERO() ) {
+            ret[0] = S;
+            return ret;
+        }
+        //System.out.println("this = " + this + ", S = " + S);
+        java.math.BigInteger[] qr;
+        java.math.BigInteger q = this.val; 
+        java.math.BigInteger r = S.val;
+        java.math.BigInteger c1 = BigInteger.ONE.val;
+        java.math.BigInteger d1 = BigInteger.ZERO.val;
+        java.math.BigInteger c2 = BigInteger.ZERO.val;
+        java.math.BigInteger d2 = BigInteger.ONE.val;
+        java.math.BigInteger x1;
+        java.math.BigInteger x2;
+        while ( r.equals(java.math.BigInteger.ZERO) ) {
+            qr = q.divideAndRemainder(r);
+            q = qr[0];
+            x1 = c1.subtract( q.multiply(d1) );
+            x2 = c2.subtract( q.multiply(d2) );
+            c1 = d1; c2 = d2;
+            d1 = x1; d2 = x2;
+            q = r;
+            r = qr[1];
+        }
+        //System.out.println("q = " + q + "\n c1 = " + c1 + "\n c2 = " + c2);
+        ret[0] = new ModInteger(modul,q); 
+        ret[1] = new ModInteger(modul,c1);
+        ret[2] = new ModInteger(modul,c2);
+        return ret;
     }
 
 }
