@@ -271,7 +271,8 @@ public class GreatestCommonDivisorTest extends TestCase {
      c = a.multiply(b).multiply(c);
      //System.out.println("d  = " + d);
      //System.out.println("c  = " + c);
-     //c = ufd.basePrimitivePart(c);
+     c = ufd.basePrimitivePart(c);
+     d = ufd.basePrimitivePart(d);
 
      Map<Integer,GenPolynomial<BigInteger>> sfactors;
      sfactors = ufd.baseSquarefreeFactors(d);
@@ -481,7 +482,8 @@ public class GreatestCommonDivisorTest extends TestCase {
      cr = ar.multiply(br).multiply(cr);
      //System.out.println("d  = " + d);
      //System.out.println("cr  = " + cr);
-     //c = ufd.basePrimitivePart(c);
+     cr = ufd.recursivePrimitivePart(cr);
+     dr = ufd.recursivePrimitivePart(dr);
 
      Map<Integer,GenPolynomial<GenPolynomial<BigInteger>>> sfactors;
      sfactors = ufd.recursiveSquarefreeFactors(dr);
@@ -772,19 +774,19 @@ public class GreatestCommonDivisorTest extends TestCase {
 
 
 /**
- * Test squarefree factors. with errors
+ * Test squarefree factors.
  * 
  */
- public void xtestSquarefreeFactors() {
+ public void testSquarefreeFactors() {
 
      dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),3,to);
 
      a = dfac.random(kl,ll,2,q);
      b = dfac.random(kl,ll,2,q);
      c = dfac.random(kl,ll,2,q);
-     System.out.println("a  = " + a);
-     System.out.println("b  = " + b);
-     System.out.println("c  = " + c);
+     //System.out.println("a  = " + a);
+     //System.out.println("b  = " + b);
+     //System.out.println("c  = " + c);
 
      assertTrue("length( a ) <> 0", a.length() >= 0);
          
@@ -792,11 +794,12 @@ public class GreatestCommonDivisorTest extends TestCase {
      c = a.multiply(b).multiply(c);
      //System.out.println("d  = " + d);
      //System.out.println("c  = " + c);
-     //c = ufd.basePrimitivePart(c);
+     c = ufd.primitivePart(c);
+     d = ufd.primitivePart(d);
 
      Map<Integer,GenPolynomial<BigInteger>> sfactors;
      sfactors = ufd.squarefreeFactors(d);
-     System.out.println("sfactors = " + sfactors);
+     //System.out.println("sfactors = " + sfactors);
 
      e = dfac.getONE();
      for ( Map.Entry<Integer,GenPolynomial<BigInteger>> m : sfactors.entrySet() ) {
@@ -814,12 +817,12 @@ public class GreatestCommonDivisorTest extends TestCase {
      for ( GenPolynomial<BigInteger> p : sfactors.values() ) {
          e = e.multiply(p);
      }
-     System.out.println("c  = " + c);
-     System.out.println("e  = " + e);
+     //System.out.println("c  = " + c);
+     //System.out.println("e  = " + e);
 
      e = ufd.basePseudoRemainder(e,c);
      //e = ufd.basePseudoRemainder(c,e);
-     System.out.println("e  = " + e);
+     //System.out.println("e  = " + e);
 
      assertTrue("abc | squarefreefactors(aabbbc) " + e, e.isZERO() );
  }

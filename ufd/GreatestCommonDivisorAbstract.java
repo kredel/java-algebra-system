@@ -293,7 +293,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C> >
 
     /**
      * GenPolynomial polynomial squarefee factorization.
-     * @param P GenPolynomial.
+     * @param P primitive GenPolynomial.
      * @return squarefreeFactors(P).
      */
     public Map<Integer,GenPolynomial<C>> 
@@ -311,7 +311,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C> >
         }
         //System.out.println("P  = " + P);
         GenPolynomial<C> pp = P;
-        pp = basePrimitivePart(pp); // as precondition ?
+        //pp = basePrimitivePart(pp); // as precondition ?
         //System.out.println("pp = " + pp);
         //if ( pp.leadingExpVector().getVal(0) < 1 ) {
         //    return pp;
@@ -634,7 +634,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C> >
 
     /**
      * GenPolynomial recursive polynomial squarefee factorization.
-     * @param P recursive GenPolynomial.
+     * @param P primitive recursive GenPolynomial.
      * @return squarefreeFactors(P).
      */
     public Map<Integer,GenPolynomial<GenPolynomial<C>>> 
@@ -853,7 +853,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C> >
     /**
      * GenPolynomial squarefree factorization.
      * Entry driver method.
-     * @param P GenPolynomial.
+     * @param P primitive GenPolynomial.
      * @return squarefreeFactors(P).
      */
     public Map<Integer,GenPolynomial<C>> 
