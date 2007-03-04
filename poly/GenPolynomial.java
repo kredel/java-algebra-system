@@ -257,6 +257,21 @@ public class GenPolynomial<C extends RingElem<C> >
     }
 
 
+    /** Is GenPolynomial<C> a constant. 
+     * @return If this is a constant polynomial then true is returned, else false.
+     */
+    public boolean isConstant() {
+        if ( val.size() != 1 ) {
+            return false;
+        }
+        C c = val.get( ring.evzero );
+        if ( c == null ) {
+            return false;
+        }
+        return true;
+    }
+
+
     /** Comparison with any other object.
      * @see java.lang.Object#equals(java.lang.Object)
      */
