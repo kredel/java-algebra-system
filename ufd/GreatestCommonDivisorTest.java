@@ -4,6 +4,8 @@
 
 package edu.jas.ufd;
 
+import java.util.Map;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -77,7 +79,7 @@ public class GreatestCommonDivisorTest extends TestCase {
    GenPolynomial<GenPolynomial<BigInteger>> er;
 
    int rl = 5; 
-   int kl = 5;
+   int kl = 4;
    int ll = 5;
    int el = 3;
    float q = 0.3f;
@@ -206,7 +208,7 @@ public class GreatestCommonDivisorTest extends TestCase {
          e = ufd.basePseudoRemainder(d,c);
          //System.out.println("d  = " + d);
 
-         assertTrue("c | gcd(ac,bc)", e.isZERO() );
+         assertTrue("c | gcd(ac,bc) " + e, e.isZERO() );
      }
  }
 
@@ -230,7 +232,7 @@ public class GreatestCommonDivisorTest extends TestCase {
      //assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
      //assertTrue(" not isONE( c"+i+" )", !c.isONE() );
          
-     d = a.multiply(a).multiply(b).multiply(b).multiply(c);
+     d = a.multiply(a).multiply(b).multiply(b).multiply(b).multiply(c);
      c = a.multiply(b).multiply(c);
      //System.out.println("d  = " + d);
      //c = ufd.basePrimitivePart(c);
@@ -243,7 +245,60 @@ public class GreatestCommonDivisorTest extends TestCase {
      //e = ufd.basePseudoRemainder(c,d);
      //System.out.println("e  = " + e);
 
-     assertTrue("abc | squarefree(aabbc)", e.isZERO() );
+     assertTrue("abc | squarefree(aabbbc) " + e, e.isZERO() );
+ }
+
+
+/**
+ * Test base squarefree factors.
+ * 
+ */
+ public void testBaseSquarefreeFactors() {
+
+     dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),1,to);
+
+     a = dfac.random(kl,ll,el+3,q);
+     b = dfac.random(kl,ll,el+3,q);
+     c = dfac.random(kl,ll,el+2,q);
+     //System.out.println("a  = " + a);
+     //System.out.println("b  = " + b);
+     //System.out.println("c  = " + c);
+
+     assertTrue("length( a ) <> 0", a.length() >= 0);
+         
+     d = a.multiply(a).multiply(b).multiply(b).multiply(b).multiply(c);
+     c = a.multiply(b).multiply(c);
+     //System.out.println("d  = " + d);
+     //System.out.println("c  = " + c);
+     //c = ufd.basePrimitivePart(c);
+
+     Map<Integer,GenPolynomial<BigInteger>> sfactors;
+     sfactors = ufd.baseSquarefreeFactors(d);
+     //System.out.println("sfactors = " + sfactors);
+
+     e = dfac.getONE();
+     for ( Map.Entry<Integer,GenPolynomial<BigInteger>> m : sfactors.entrySet() ) {
+         GenPolynomial<BigInteger> p = m.getValue();
+         int j = m.getKey();
+         for ( int i = 0; i < j; i++ ) {
+             e = e.multiply(p);
+         }
+     }
+     //System.out.println("e  = " + e);
+     e = ufd.basePseudoRemainder(d,e);
+     assertTrue("PROD squarefreefactors(aabbbc) | aabbbc " + e, e.isZERO() );
+
+     e = dfac.getONE();
+     for ( GenPolynomial<BigInteger> p : sfactors.values() ) {
+         e = e.multiply(p);
+     }
+     //System.out.println("e  = " + e);
+
+     e = ufd.basePseudoRemainder(e,c);
+     //e = ufd.basePseudoRemainder(c,e);
+     //System.out.println("e  = " + e);
+
+     assertTrue("abc | squarefreefactors(aabbbc) " + e, e.isZERO() );
  }
 
 
@@ -362,7 +417,7 @@ public class GreatestCommonDivisorTest extends TestCase {
          er = ufd.recursivePseudoRemainder(dr,cr);
          //System.out.println("er = " + er);
 
-         assertTrue("c | gcd(ac,bc)", er.isZERO() );
+         assertTrue("c | gcd(ac,bc) " + er, er.isZERO() );
      }
  }
 
@@ -399,7 +454,62 @@ public class GreatestCommonDivisorTest extends TestCase {
      er = ufd.recursivePseudoRemainder(dr,cr);
      //System.out.println("er  = " + er);
 
-     assertTrue("abc | squarefree(aabbc)", er.isZERO() );
+     assertTrue("abc | squarefree(aabbc) " + er, er.isZERO() );
+ }
+
+
+/**
+ * Test recursive squarefree factors.
+ * 
+ */
+ public void testRecursiveSquarefreeFactors() {
+
+     cfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),2-1,to);
+     rfac = new GenPolynomialRing<GenPolynomial<BigInteger>>(cfac,1,to);
+
+     ar = rfac.random(3,3,2,q);
+     br = rfac.random(3,3,2,q);
+     cr = rfac.random(3,3,2,q);
+     //System.out.println("ar = " + ar);
+     //System.out.println("br = " + br);
+     //System.out.println("cr = " + cr);
+
+     assertTrue("length( cr ) <> 0", cr.length() >= 0);
+         
+     dr = ar.multiply(ar).multiply(br).multiply(br).multiply(cr);
+     cr = ar.multiply(br).multiply(cr);
+     //System.out.println("d  = " + d);
+     //System.out.println("cr  = " + cr);
+     //c = ufd.basePrimitivePart(c);
+
+     Map<Integer,GenPolynomial<GenPolynomial<BigInteger>>> sfactors;
+     sfactors = ufd.recursiveSquarefreeFactors(dr);
+     //System.out.println("sfactors = " + sfactors);
+
+     er = rfac.getONE();
+     for ( Map.Entry<Integer,GenPolynomial<GenPolynomial<BigInteger>>> m : sfactors.entrySet() ) {
+         GenPolynomial<GenPolynomial<BigInteger>> p = m.getValue();
+         int j = m.getKey();
+         for ( int i = 0; i < j; i++ ) {
+             er = er.multiply(p);
+         }
+     }
+     //System.out.println("er  = " + er);
+     er = ufd.recursivePseudoRemainder(dr,er);
+     assertTrue("PROD squarefreefactors(aabbbc) | aabbbc " + er, er.isZERO() );
+
+
+     er = rfac.getONE();
+     for ( GenPolynomial<GenPolynomial<BigInteger>> p : sfactors.values() ) {
+         er = er.multiply(p);
+     }
+     //System.out.println("er  = " + er);
+
+     er = ufd.recursivePseudoRemainder(er,cr);
+     //e = ufd.basePseudoRemainder(cr,er);
+     //System.out.println("er  = " + er);
+
+     assertTrue("abc | squarefreefactors(aabbc) " + er, er.isZERO() );
  }
 
 
@@ -462,7 +572,7 @@ public class GreatestCommonDivisorTest extends TestCase {
          e = ufd.basePseudoRemainder(d,c);
          //System.out.println("e = " + e);
 
-         assertTrue("c | gcd(ac,bc)", e.isZERO() );
+         assertTrue("c | gcd(ac,bc) " + e, e.isZERO() );
      }
  }
 
@@ -497,7 +607,7 @@ public class GreatestCommonDivisorTest extends TestCase {
          e = ufd.basePseudoRemainder(d,c);
          //System.out.println("e = " + e);
 
-         assertTrue("c | gcd(ac,bc)", e.isZERO() );
+         assertTrue("c | gcd(ac,bc) " + e, e.isZERO() );
      }
  }
 
@@ -538,7 +648,7 @@ public class GreatestCommonDivisorTest extends TestCase {
          e = ufd.basePseudoRemainder(d,c);
          //System.out.println("e = " + e);
 
-         assertTrue("c | gcd(ac,bc)", e.isZERO() );
+         assertTrue("c | gcd(ac,bc) " + e, e.isZERO() );
      }
  }
 
@@ -613,7 +723,61 @@ public class GreatestCommonDivisorTest extends TestCase {
      //e = ufd.basePseudoRemainder(c,d);
      //System.out.println("e  = " + e);
 
-     assertTrue("abc | squarefree(aabbc)", e.isZERO() );
+     assertTrue("abc | squarefree(aabbc) " + e, e.isZERO() );
+ }
+
+
+/**
+ * Test squarefree factors. with errors
+ * 
+ */
+ public void xtestSquarefreeFactors() {
+
+     dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),3,to);
+
+     a = dfac.random(kl,ll,2,q);
+     b = dfac.random(kl,ll,2,q);
+     c = dfac.random(kl,ll,2,q);
+     System.out.println("a  = " + a);
+     System.out.println("b  = " + b);
+     System.out.println("c  = " + c);
+
+     assertTrue("length( a ) <> 0", a.length() >= 0);
+         
+     d = a.multiply(a).multiply(b).multiply(b).multiply(b).multiply(c);
+     c = a.multiply(b).multiply(c);
+     //System.out.println("d  = " + d);
+     //System.out.println("c  = " + c);
+     //c = ufd.basePrimitivePart(c);
+
+     Map<Integer,GenPolynomial<BigInteger>> sfactors;
+     sfactors = ufd.squarefreeFactors(d);
+     System.out.println("sfactors = " + sfactors);
+
+     e = dfac.getONE();
+     for ( Map.Entry<Integer,GenPolynomial<BigInteger>> m : sfactors.entrySet() ) {
+         GenPolynomial<BigInteger> p = m.getValue();
+         int j = m.getKey();
+         for ( int i = 0; i < j; i++ ) {
+             e = e.multiply(p);
+         }
+     }
+     //System.out.println("e  = " + e);
+     e = ufd.basePseudoRemainder(d,e);
+     assertTrue("PROD squarefreefactors(aabbbc) | aabbbc " + e, e.isZERO() );
+
+     e = dfac.getONE();
+     for ( GenPolynomial<BigInteger> p : sfactors.values() ) {
+         e = e.multiply(p);
+     }
+     System.out.println("c  = " + c);
+     System.out.println("e  = " + e);
+
+     e = ufd.basePseudoRemainder(e,c);
+     //e = ufd.basePseudoRemainder(c,e);
+     System.out.println("e  = " + e);
+
+     assertTrue("abc | squarefreefactors(aabbbc) " + e, e.isZERO() );
  }
 
 }
