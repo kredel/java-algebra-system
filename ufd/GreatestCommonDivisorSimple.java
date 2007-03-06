@@ -67,9 +67,9 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C> >
         q = q.abs();
         C a = baseContent( r );
         C b = baseContent( q );
-        C c = a.gcd(b);
-        r = r.divide(a);
-        q = q.divide(b);
+        C c = gcd(a,b);  // indirection
+        r = divide(r,a); // indirection
+        q = divide(q,b); // indirection
         if ( r.isONE() ) {
            return r.multiply(c);
         }

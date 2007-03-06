@@ -763,6 +763,64 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C> >
 
 
     /**
+     * Coefficient division.
+     * Indirection to coefficient method.
+     * @param a coefficient.
+     * @param b coefficient.
+     * @return a/b.
+     */
+    public C divide( C a, C b ) {
+        if ( b == null || b.isZERO() ) {
+           throw new RuntimeException(this.getClass().getName()
+                                       + " division by zero");
+
+        }
+        if ( a == null || a.isZERO() ) {
+            return a;
+        }
+        return a.divide(b);
+    }
+
+
+    /**
+     * GenPolynomial division.
+     * Indirection to GenPolynomial method.
+     * @param a GenPolynomial.
+     * @param b coefficient.
+     * @return a/b.
+     */
+    public GenPolynomial<C> divide( GenPolynomial<C> a, C b ) {
+        if ( b == null || b.isZERO() ) {
+           throw new RuntimeException(this.getClass().getName()
+                                       + " division by zero");
+
+        }
+        if ( a == null || a.isZERO() ) {
+            return a;
+        }
+        return a.divide(b);
+    }
+
+
+    /**
+     * Coefficient greatest comon divisor.
+     * Indirection to coefficient method.
+     * @param a coefficient.
+     * @param b coefficient.
+     * @return gcd(a,b).
+     */
+    public C gcd( C a, C b ) {
+        if ( b == null || b.isZERO() ) {
+            return a;
+        }
+        if ( a == null || a.isZERO() ) {
+            return b;
+        }
+        return a.gcd(b);
+    }
+
+
+    /**
      * GenPolynomial greatest comon divisor.
      * Main entry driver method.
      * @param P GenPolynomial.
@@ -791,6 +849,10 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C> >
         GenPolynomial<GenPolynomial<C>> Sr = recursive(rfac,S);
 
         GenPolynomial<GenPolynomial<C>> Dr = recursiveGcd( Pr, Sr );
+        // GenPolynomial not a GcdRingElem:
+        //GreatestCommonDivisorSimple<GenPolynomial<GenPolynomial<C>>> sgcd 
+        //  = new GreatestCommonDivisorSimple<GenPolynomial<GenPolynomial<C>>>();
+        //GenPolynomial<GenPolynomial<C>> Dr = sgcd.gcd( Pr, Sr );
 
         GenPolynomial<C> D = distribute( pfac, Dr );
         return D;
