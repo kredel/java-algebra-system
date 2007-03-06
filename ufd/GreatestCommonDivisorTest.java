@@ -296,11 +296,11 @@ public class GreatestCommonDivisorTest extends TestCase {
      }
      //System.out.println("e  = " + e);
 
-     e = ufd.basePseudoRemainder(e,c);
-     //e = ufd.basePseudoRemainder(c,e);
+     //e = ufd.basePseudoRemainder(e,c);
+     e = ufd.basePseudoRemainder(c,e);
      //System.out.println("e  = " + e);
 
-     assertTrue("abc | squarefreefactors(aabbbc) " + e, e.isZERO() );
+     assertTrue("squarefreefactors(aabbbc) | abc" + e, e.isZERO() );
  }
 
 
@@ -508,11 +508,11 @@ public class GreatestCommonDivisorTest extends TestCase {
      }
      //System.out.println("er  = " + er);
 
-     er = ufd.recursivePseudoRemainder(er,cr);
-     //e = ufd.basePseudoRemainder(cr,er);
+     //er = ufd.recursivePseudoRemainder(er,cr);
+     er = ufd.recursivePseudoRemainder(cr,er);
      //System.out.println("er  = " + er);
 
-     assertTrue("abc | squarefreefactors(aabbc) " + er, er.isZERO() );
+     assertTrue("squarefreefactors(aabbc) | abc " + er, er.isZERO() );
  }
 
 
@@ -820,11 +820,11 @@ public class GreatestCommonDivisorTest extends TestCase {
      //System.out.println("c  = " + c);
      //System.out.println("e  = " + e);
 
-     e = ufd.basePseudoRemainder(e,c);
-     //e = ufd.basePseudoRemainder(c,e);
+     //e = ufd.basePseudoRemainder(e,c);
+     e = ufd.basePseudoRemainder(c,e);
      //System.out.println("e  = " + e);
 
-     assertTrue("abc | squarefreefactors(aabbbc) " + e, e.isZERO() );
+     assertTrue("squarefreefactors(aabbbc) | abc " + e, e.isZERO() );
  }
 
 }
