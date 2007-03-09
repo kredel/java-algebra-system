@@ -39,7 +39,7 @@ home:
 	$(RSYNC) krum:java/$(PART)/     .
 
 heinz:
-	$(RSYNC) ./                heinz@heinz3:$(PART)
+	$(RSYNC) ./                heinz@heinz2:$(PART)
 
 krum:
 	$(RSYNC) ./                krum:java/$(PART)
@@ -59,7 +59,7 @@ cl=
 #.EXPORT_ALL_VARIABLES :
 
 JASPATH=/home/kredel/jas
-DEFS=$(JASPATH)/arith:$(JASPATH)/poly:$(JASPATH)/vector:$(JASPATH)/ring:$(JASPATH)/module:$(JASPATH)/util:$(JASPATH)/application
+DEFS=$(JASPATH)/arith:$(JASPATH)/poly:$(JASPATH)/vector:$(JASPATH)/ring:$(JASPATH)/ufd:$(JASPATH)/module:$(JASPATH)/util:$(JASPATH)/application
 DOCCLASSES=$(JUNITPATH):$(LOG4JPATH):$(JOMPPATH):$(TNJPATH)
 DOCOPTS=-package
 #DOCOPTS=-package -version -author
@@ -69,10 +69,10 @@ MYCLASSPATH = .:$(DEFS):$(JUNITPATH):$(LOG4JPATH):$(JOMPPATH):$(TNJPATH)
 
 JAVAC=$(JDK)/javac -classpath $(MYCLASSPATH) -d . -Xlint:unchecked
 #-Xlint:unchecked
-#JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -Xms300M -Xmx600M -XX:+UseParallelGC -XX:ParallelGCThreads=2 -verbose:gc 
+JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -Xms300M -Xmx600M -XX:+UseParallelGC -XX:ParallelGCThreads=2 -verbose:gc 
 #-Xbatch
 #old#JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -Xms300M -Xmx600M -XX:+AggressiveHeap -XX:+UseParallelGC -verbose:gc 
-JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -verbose:gc -Xrunhprof:cpu=times,format=a
+#JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -verbose:gc -Xrunhprof:cpu=times,format=a
 #JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -verbose:gc -verbose:class -verbose:jni
 DOC=$(JDK)/javadoc -classpath $(DOCCLASSES)
 
@@ -88,7 +88,7 @@ GETC      = getc.pl
 
 .SUFFIXES :
 .SUFFIXES : .class .java 
-.PRECIOUS : %.java %.class edu/jas/arith/%.class edu/jas/poly/%.class edu/jas/ring/%.class edu/jas/vector/%.class edu/jas/module/%.class edu/jas/structure/%.class edu/jas/util/%.class edu/jas/application/%.class edu/jas/%.class
+.PRECIOUS : %.java %.class edu/jas/arith/%.class edu/jas/poly/%.class edu/jas/ring/%.class edu/jas/vector/%.class edu/jas/ufd/%.class edu/jas/module/%.class edu/jas/structure/%.class edu/jas/util/%.class edu/jas/application/%.class edu/jas/%.class
 
 .PHONY    : clean doc
 
@@ -109,6 +109,9 @@ edu/jas/poly/%.class: %.java
 	$(JAVAC) $<
 
 edu/jas/ring/%.class: %.java
+	$(JAVAC) $<
+
+edu/jas/ufd/%.class: %.java
 	$(JAVAC) $<
 
 edu/jas/vector/%.class: %.java
@@ -139,6 +142,9 @@ edu.jas.poly.%: edu/jas/poly/%.class
 edu.jas.ring.%: edu/jas/ring/%.class
 	$(JAVA) $@ $(cl)
 
+edu.jas.ufd.%: edu/jas/ufd/%.class
+	$(JAVA) $@ $(cl)
+
 edu.jas.vector.%: edu/jas/vector/%.class
 	$(JAVA) $@ $(cl)
 
@@ -157,9 +163,9 @@ edu.jas.application.%: edu/jas/application/%.class
 
 
 
-FILES=$(wildcard *.java structure/*.java arith/*.java poly/*.java ring/*.java application/*.java vector/*.java module/*.java util/*.java)
+FILES=$(wildcard *.java structure/*.java arith/*.java poly/*.java ring/*.java ufd/*.java application/*.java vector/*.java module/*.java util/*.java)
 LIBS=$(JUNITPATH) $(LOG4JPATH) $(JOMPPATH) $(TNJPATH)
-#CLASSES=$(wildcard *.class structure/*.java arith/*.class poly/*.class ring/*.class application/*.class vector/*.class module/*.class util/*.class)
+#CLASSES=$(wildcard *.class structure/*.java arith/*.class poly/*.class ring/*.class ufd/*.java application/*.class vector/*.class module/*.class util/*.class)
 CLASSES=edu/jas
 PYS=$(wildcard *.py examples/*.py)
 DOCU=$(wildcard jas-log.html index.html problems.html design.html README COPYING COPYING.lgpl sample.jythonrc overview.html */package.html)
@@ -184,7 +190,7 @@ jas-doc.jar: doc/
 dist: jas.jar jas-run.jar jas-doc.jar $(LIBS)
 	tar -cvzf jas-dist.tgz jas.jar jas-run.jar jas-doc.jar $(LIBS)
 
-#links: arith/build.xml module/build.xml vector/build.xml ring/build.xml application/build.xml poly/build.xml structure/build.xml util/build.xml
+#links: arith/build.xml module/build.xml vector/build.xml ring/build.xml application/build.xml poly/build.xml ufd/build.xml structure/build.xml util/build.xml
 #
 
 jars: jas.jar jas-run.jar jas-doc.jar
