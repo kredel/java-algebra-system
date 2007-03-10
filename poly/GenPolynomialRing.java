@@ -89,6 +89,11 @@ public class GenPolynomialRing<C extends RingElem<C> >
     protected final static Random random = new Random(); 
 
 
+    /** Indicator if this ring is a field.
+     */
+    protected int isField = -1; // initially unknown
+
+
     private static Logger logger = Logger.getLogger(GenPolynomialRing.class);
 
 
@@ -307,6 +312,26 @@ public class GenPolynomialRing<C extends RingElem<C> >
      */
     public boolean isAssociative() {
         return coFac.isAssociative();
+    }
+
+
+    /**
+     * Query if this ring is a field.
+     * @return false.
+     */
+    public boolean isField() {
+        if ( isField > 0 ) { 
+           return true;
+        }
+        if ( isField == 0 ) { 
+           return false;
+        }
+        if ( coFac.isField() && nvar == 0 ) {
+           isField = 1;
+           return true;
+        }
+        isField = 0;
+        return false;
     }
 
 

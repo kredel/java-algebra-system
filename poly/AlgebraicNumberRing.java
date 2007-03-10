@@ -34,6 +34,11 @@ public class AlgebraicNumberRing<C extends RingElem<C> >
     public final GenPolynomial<C> modul;
 
 
+    /** Indicator if this ring is a field.
+     */
+    protected int isField = -1; // initially unknown
+
+
     /** The constructor creates a AlgebraicNumber factory object 
      * from a GenPolynomial objects module. 
      * @param m module GenPolynomial<C>.
@@ -92,6 +97,27 @@ public class AlgebraicNumberRing<C extends RingElem<C> >
      */
     public boolean isAssociative() {
         return ring.isAssociative();
+    }
+
+
+    /**
+     * Query if this ring is a field.
+     * @return true if modul is prime, else false.
+     * @return false.
+     */
+    public boolean isField() {
+        if ( isField > 0 ) { 
+           return true;
+        }
+        if ( isField == 0 ) { 
+           return false;
+        }
+        //if ( modul.isProbablePrime(certainty) ) {
+        //   isField = 1;
+        //   return true;
+        //}
+        //isField = 0;
+        return false;
     }
 
 
