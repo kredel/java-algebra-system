@@ -35,6 +35,11 @@ public class LocalRing<C extends RingElem<C> >
     protected final RingFactory<C> ring;
 
 
+    /** Indicator if this ring is a field.
+     */
+    protected int isField = -1; // initially unknown
+
+
     /** The constructor creates a LocalRing object 
      * from a RingFactory and a RingElem. 
      * @param i localization ideal generator.
@@ -91,6 +96,22 @@ public class LocalRing<C extends RingElem<C> >
      */
     public boolean isAssociative() {
         return ring.isAssociative();
+    }
+
+
+    /**
+     * Query if this ring is a field.
+     * @return false.
+     */
+    public boolean isField() {
+        if ( isField > 0 ) { 
+           return true;
+        }
+        if ( isField == 0 ) { 
+           return false;
+        }
+        // ??
+        return false;
     }
 
 
