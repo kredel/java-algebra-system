@@ -24,6 +24,7 @@ public interface GcdRingElem<C extends GcdRingElem<C>>
 
     /**
      * Extended greatest common divisor.
+     * @param b other element.
      * @return [ gcd(this,b), c1, c2 ] with c1*this + c2*b = gcd(this,b).
      */
     public C[] egcd(C b);
