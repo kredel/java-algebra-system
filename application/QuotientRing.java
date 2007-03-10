@@ -86,6 +86,15 @@ public class QuotientRing<C extends RingElem<C> >
     }
 
 
+    /**
+     * Query if this ring is a field.
+     * @return true.
+     */
+    public boolean isField() {
+        return true;
+    }
+
+
     /** Get a Quotient element from a BigInteger value.
      * @param a BigInteger.
      * @return a Quotient.
