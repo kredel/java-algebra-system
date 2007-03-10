@@ -29,7 +29,7 @@ public class DistThreadPool /*extends ThreadPool*/ {
     /**
      * default machine file for test.
      */
-    private final static String DEFAULT_MFILE = "machines.test";
+    private final static String DEFAULT_MFILE = ExecutableChannels.DEFAULT_MFILE;
 
 
     /**

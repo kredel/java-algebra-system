@@ -28,7 +28,16 @@ public class ExecutableChannels {
     private static Logger logger = Logger.getLogger(ExecutableChannels.class);
 
 
+    /**
+     * default port.
+     */
     protected final static int DEFAULT_PORT = ChannelFactory.DEFAULT_PORT;
+
+
+    /**
+     * default machine file.
+     */
+    protected final static String DEFAULT_MFILE = "examples/machines.test";
 
 
     protected final ChannelFactory cf;
@@ -70,12 +79,15 @@ public class ExecutableChannels {
 
     /**
      * Constructor from machine file.
-     * @param fname
+     * @param mfile
      * @throws FileNotFoundException.
      */
-    public ExecutableChannels(String fname) throws FileNotFoundException {
+    public ExecutableChannels(String mfile) throws FileNotFoundException {
         this();
-        BufferedReader in = new BufferedReader( new FileReader( fname ) );
+        if ( mfile == null || mfile.length() == 0 ) {
+           mfile = DEFAULT_MFILE;
+        }
+        BufferedReader in = new BufferedReader( new FileReader( mfile ) );
         String line = null;
         List<String> list = new ArrayList<String>();
         int x;
@@ -97,7 +109,7 @@ public class ExecutableChannels {
             }
         } catch (IOException e) {
         }
-        logger.debug("list.size() in " + fname + " = " + list.size());
+        logger.debug("list.size() in " + mfile + " = " + list.size());
         if ( list.size() == 0 ) {
             return;
         }
