@@ -730,7 +730,7 @@ public class GenPolynomial<C extends RingElem<C> >
      * in any case.
      * @param S nonzero GenPolynomial with invertible leading coefficient.
      * @return [ quotient , remainder ] with this = quotient * S + remainder.
-     * @see edu.jas.ufd.GreatestCommonDivisor#basePseudoRemainder(edu.jas.poly.GenPolynomial,edu.jas.poly.GenPolynomial).
+     * @see edu.jas.ufd.GreatestCommonDivisorAbstract#basePseudoRemainder(edu.jas.poly.GenPolynomial,edu.jas.poly.GenPolynomial).
      */
     public GenPolynomial<C>[] divideAndRemainder(GenPolynomial<C> S) {
         if ( S == null || S.isZERO() ) {
@@ -781,7 +781,7 @@ public class GenPolynomial<C extends RingElem<C> >
      * in any case.
      * @param S nonzero GenPolynomial with invertible leading coefficient.
      * @return quotient with this = quotient * S + remainder.
-     * @see edu.jas.ufd.GreatestCommonDivisor#basePseudoRemainder(edu.jas.poly.GenPolynomial,edu.jas.poly.GenPolynomial).
+     * @see edu.jas.ufd.GreatestCommonDivisorAbstract#basePseudoRemainder(edu.jas.poly.GenPolynomial,edu.jas.poly.GenPolynomial).
      */
     public GenPolynomial<C> divide(GenPolynomial<C> S) {
         return divideAndRemainder(S)[0];
@@ -795,7 +795,7 @@ public class GenPolynomial<C extends RingElem<C> >
      * in any case.
      * @param S nonzero GenPolynomial with invertible leading coefficient.
      * @return remainder with this = quotient * S + remainder.
-     * @see edu.jas.ufd.GreatestCommonDivisor#basePseudoRemainder(edu.jas.poly.GenPolynomial,edu.jas.poly.GenPolynomial).
+     * @see edu.jas.ufd.GreatestCommonDivisorAbstract#basePseudoRemainder(edu.jas.poly.GenPolynomial,edu.jas.poly.GenPolynomial).
      */
     public GenPolynomial<C> remainder(GenPolynomial<C> S) {
         if ( S == null || S.isZERO() ) {
