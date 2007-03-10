@@ -222,6 +222,15 @@ public final class BigQuaternion implements StarRingElem<BigQuaternion>,
     }
 
 
+    /**
+     * Query if this ring is a field.
+     * @return true.
+     */
+    public boolean isField() {
+        return true;
+    }
+
+
     /** Get a BigQuaternion element from a BigInteger.
      * @param a BigInteger.
      * @return a BigQuaternion.

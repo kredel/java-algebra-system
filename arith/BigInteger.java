@@ -139,6 +139,15 @@ public final class BigInteger implements GcdRingElem<BigInteger>,
     }
 
 
+    /**
+     * Query if this ring is a field.
+     * @return true.
+     */
+    public boolean isField() {
+        return false;
+    }
+
+
     /** Get a BigInteger element from a math.BigInteger.
      * @param a math.BigInteger.
      * @return a as BigInteger.

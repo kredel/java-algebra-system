@@ -225,6 +225,15 @@ public final class BigRational implements GcdRingElem<BigRational>,
     }
 
 
+    /**
+     * Query if this ring is a field.
+     * @return true.
+     */
+    public boolean isField() {
+        return true;
+    }
+
+
     /** Get a BigRational element from a math.BigInteger.
      * @param a math.BigInteger.
      * @return BigRational from a. 

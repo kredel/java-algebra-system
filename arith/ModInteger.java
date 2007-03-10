@@ -39,6 +39,15 @@ public final class ModInteger implements GcdRingElem<ModInteger>,
     private final static Random random = new Random();
 
 
+    /** Indicator if this ring is a field.
+     */
+    protected int isField = -1; // initially unknown
+
+    /** Certainty if module is probable prime.
+     */
+    protected int certainty = 10;
+
+
     /** The constructor creates a ModInteger object 
      * from two BigInteger objects module and value part. 
      * @param m math.BigInteger.
@@ -170,6 +179,26 @@ public final class ModInteger implements GcdRingElem<ModInteger>,
      */
     public boolean isAssociative() {
         return true;
+    }
+
+
+    /**
+     * Query if this ring is a field.
+     * @return true if module is prime, else false.
+     */
+    public boolean isField() {
+        if ( isField > 0 ) { 
+           return true;
+        }
+        if ( isField == 0 ) { 
+           return false;
+        }
+        if ( modul.isProbablePrime(certainty) ) {
+           isField = 1;
+           return true;
+        }
+        isField = 0;
+        return false;
     }
 
 

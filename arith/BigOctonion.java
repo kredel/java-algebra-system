@@ -156,6 +156,15 @@ public final class BigOctonion implements StarRingElem<BigOctonion>,
     }
 
 
+    /**
+     * Query if this ring is a field.
+     * @return true.
+     */
+    public boolean isField() {
+        return true;
+    }
+
+
     /** Get a BigOctonion element from a BigInteger.
      * @param a BigInteger.
      * @return a BigOctonion.

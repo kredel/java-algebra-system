@@ -162,6 +162,15 @@ public final class BigComplex implements StarRingElem<BigComplex>,
     }
 
 
+    /**
+     * Query if this ring is a field.
+     * @return true.
+     */
+    public boolean isField() {
+        return true;
+    }
+
+
     /** Get a BigComplex element from a BigInteger.
      * @param a BigInteger.
      * @return a BigComplex.
