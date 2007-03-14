@@ -16,6 +16,7 @@ import edu.jas.structure.RingFactory;
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.ModInteger;
+import edu.jas.arith.BigComplex;
 
 
 /**
@@ -156,35 +157,9 @@ public class PolyUtil {
 
 
     /**
-     * BigRational from BigInteger coefficients. 
-     * Represent as polynomial with BigRational coefficients.
-     * @param fac result polynomial factory.
-     * @param A polynomial with BigInteger coefficients to be converted.
-     * @return polynomial with BigRational coefficients.
-    public static GenPolynomial<BigRational> 
-        rationalFromIntegerCoefficients( GenPolynomialRing<BigRational> fac,
-                                         GenPolynomial<BigInteger> A ) {
-        GenPolynomial<BigRational> B = fac.getZERO();
-        if ( A == null || A.isZERO() ) {
-           return B;
-        }
-        Map<ExpVector,BigRational> Bv = B.getMap();
-        for ( Map.Entry<ExpVector,BigInteger> y: A.getMap().entrySet() ) {
-            ExpVector e = y.getKey();
-            BigInteger a = y.getValue();
-            //System.out.println("e = " + e);
-            //System.out.println("a = " + a);
-            BigRational p = new BigRational( a.getVal() );
-            Bv.put( e, p );
-        }
-        return B;
-    }
-     */
-
-
-    /**
      * from BigInteger coefficients. 
-     * Represent as polynomial with type C coefficients.
+     * Represent as polynomial with type C coefficients,
+     * e.g. ModInteger or BigRational.
      * @param fac result polynomial factory.
      * @param A polynomial with BigInteger coefficients to be converted.
      * @return polynomial with type C coefficients.
@@ -204,8 +179,66 @@ public class PolyUtil {
             BigInteger a = y.getValue();
             //System.out.println("e = " + e);
             //System.out.println("a = " + a);
-            C p = cfac.fromInteger( a.getVal() );
-            Bv.put( e, p );
+            C p = cfac.fromInteger( a.getVal() ); // can be zero
+            if ( p != null && !p.isZERO() ) {
+               Bv.put( e, p );
+            }
+        }
+        return B;
+    }
+
+
+    /**
+     * Real part. 
+     * @param fac result polynomial factory.
+     * @param A polynomial with BigComplex coefficients to be converted.
+     * @return polynomial with real part of the coefficients.
+     */
+    public static GenPolynomial<BigRational> 
+        realPart( GenPolynomialRing<BigRational> fac,
+                  GenPolynomial<BigComplex> A ) {
+        GenPolynomial<BigRational> B = fac.getZERO();
+        if ( A == null || A.isZERO() ) {
+           return B;
+        }
+        Map<ExpVector,BigRational> Bv = B.getMap();
+        for ( Map.Entry<ExpVector,BigComplex> y: A.getMap().entrySet() ) {
+            ExpVector e = y.getKey();
+            BigComplex a = y.getValue();
+            //System.out.println("e = " + e);
+            //System.out.println("a = " + a);
+            BigRational p = a.getRe();
+            if ( p != null && !p.isZERO() ) {
+               Bv.put( e, p );
+            }
+        }
+        return B;
+    }
+
+
+    /**
+     * Imaginary part. 
+     * @param fac result polynomial factory.
+     * @param A polynomial with BigComplex coefficients to be converted.
+     * @return polynomial with imaginary part of coefficients.
+     */
+    public static GenPolynomial<BigRational> 
+        imaginaryPart( GenPolynomialRing<BigRational> fac,
+                       GenPolynomial<BigComplex> A ) {
+        GenPolynomial<BigRational> B = fac.getZERO();
+        if ( A == null || A.isZERO() ) {
+           return B;
+        }
+        Map<ExpVector,BigRational> Bv = B.getMap();
+        for ( Map.Entry<ExpVector,BigComplex> y: A.getMap().entrySet() ) {
+            ExpVector e = y.getKey();
+            BigComplex a = y.getValue();
+            //System.out.println("e = " + e);
+            //System.out.println("a = " + a);
+            BigRational p = a.getIm();
+            if ( p != null && !p.isZERO() ) {
+               Bv.put( e, p );
+            }
         }
         return B;
     }
