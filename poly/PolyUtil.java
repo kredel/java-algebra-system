@@ -11,9 +11,11 @@ import java.util.SortedMap;
 import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
+import edu.jas.structure.RingFactory;
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
+import edu.jas.arith.ModInteger;
 
 
 /**
@@ -159,7 +161,6 @@ public class PolyUtil {
      * @param fac result polynomial factory.
      * @param A polynomial with BigInteger coefficients to be converted.
      * @return polynomial with BigRational coefficients.
-     */
     public static GenPolynomial<BigRational> 
         rationalFromIntegerCoefficients( GenPolynomialRing<BigRational> fac,
                                          GenPolynomial<BigInteger> A ) {
@@ -178,6 +179,35 @@ public class PolyUtil {
         }
         return B;
     }
+     */
 
+
+    /**
+     * from BigInteger coefficients. 
+     * Represent as polynomial with type C coefficients.
+     * @param fac result polynomial factory.
+     * @param A polynomial with BigInteger coefficients to be converted.
+     * @return polynomial with type C coefficients.
+     */
+    public static <C extends RingElem<C>>
+        GenPolynomial<C> 
+        fromIntegerCoefficients( GenPolynomialRing<C> fac,
+                                 GenPolynomial<BigInteger> A ) {
+        GenPolynomial<C> B = fac.getZERO();
+        if ( A == null || A.isZERO() ) {
+           return B;
+        }
+        RingFactory<C> cfac = fac.coFac;
+        Map<ExpVector,C> Bv = B.getMap();
+        for ( Map.Entry<ExpVector,BigInteger> y: A.getMap().entrySet() ) {
+            ExpVector e = y.getKey();
+            BigInteger a = y.getValue();
+            //System.out.println("e = " + e);
+            //System.out.println("a = " + a);
+            C p = cfac.fromInteger( a.getVal() );
+            Bv.put( e, p );
+        }
+        return B;
+    }
 
 }
