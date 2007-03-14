@@ -12,6 +12,9 @@ import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
 
+import edu.jas.arith.BigInteger;
+import edu.jas.arith.BigRational;
+
 
 /**
  * Polynomial utilities.
@@ -97,6 +100,83 @@ public class PolyUtil {
             }
         }
         return C;
+    }
+
+
+    /**
+     * BigInteger from BigRational coefficients. 
+     * Represent as polynomial with BigInteger coefficients by 
+     * multiplication with the lcm of the numerators of the 
+     * BigRational coefficients.
+     * @param fac result polynomial factory.
+     * @param A polynomial with BigRational coefficients to be converted.
+     * @return polynomial with BigInteger coefficients.
+     */
+    public static GenPolynomial<BigInteger> 
+        integerFromRationalCoefficients( GenPolynomialRing<BigInteger> fac,
+                                         GenPolynomial<BigRational> A ) {
+        GenPolynomial<BigInteger> B = fac.getZERO();
+        if ( A == null || A.isZERO() ) {
+           return B;
+        }
+        java.math.BigInteger c = null;
+        java.math.BigInteger d;
+        java.math.BigInteger x;
+        int s = 0;
+        // lcm of denominators
+        for ( BigRational y: A.getMap().values() ) {
+            x = y.denominator();
+            // c = lcm(c,x)
+            if ( c == null ) {
+               c = x; 
+               s = x.signum();
+            } else {
+               d = c.gcd( x );
+               c = c.multiply( x.divide( d ) );
+            }
+        }
+        if ( s < 0 ) {
+           c = c.negate();
+        }
+        Map<ExpVector,BigInteger> Bv = B.getMap();
+        for ( Map.Entry<ExpVector,BigRational> y: A.getMap().entrySet() ) {
+            ExpVector e = y.getKey();
+            BigRational a = y.getValue();
+            //System.out.println("e = " + e);
+            //System.out.println("a = " + a);
+            // p = n*(c/d)
+            java.math.BigInteger b = c.divide( a.denominator() );
+            BigInteger p = new BigInteger( a.numerator().multiply( b ) );
+            Bv.put( e, p );
+        }
+        return B;
+    }
+
+
+    /**
+     * BigRational from BigInteger coefficients. 
+     * Represent as polynomial with BigRational coefficients.
+     * @param fac result polynomial factory.
+     * @param A polynomial with BigInteger coefficients to be converted.
+     * @return polynomial with BigRational coefficients.
+     */
+    public static GenPolynomial<BigRational> 
+        rationalFromIntegerCoefficients( GenPolynomialRing<BigRational> fac,
+                                         GenPolynomial<BigInteger> A ) {
+        GenPolynomial<BigRational> B = fac.getZERO();
+        if ( A == null || A.isZERO() ) {
+           return B;
+        }
+        Map<ExpVector,BigRational> Bv = B.getMap();
+        for ( Map.Entry<ExpVector,BigInteger> y: A.getMap().entrySet() ) {
+            ExpVector e = y.getKey();
+            BigInteger a = y.getValue();
+            //System.out.println("e = " + e);
+            //System.out.println("a = " + a);
+            BigRational p = new BigRational( a.getVal() );
+            Bv.put( e, p );
+        }
+        return B;
     }
 
 
