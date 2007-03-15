@@ -574,4 +574,32 @@ public final class ModInteger implements GcdRingElem<ModInteger>,
         return ret;
     }
 
+
+    /** ModInteger chinese remainder algorithm.  
+     * @param C ModInteger result factory with this.modul*a.modul = C.modul.
+     * @param a other ModInteger.
+     * @param mi inverse of this.modul in ring ModInteger of a.
+     * @return cra(this,a).
+     */
+    public ModInteger 
+           chineseRemainderAlgorithm(ModInteger C, 
+                                     ModInteger mi, 
+                                     ModInteger a) {
+        ModInteger b = new ModInteger( a.modul, this.val ); // this mod a.modul
+        ModInteger d = a.subtract( b ); // a-this mod a.modul
+        if ( d.isZERO() ) {
+           return C.getZERO();
+        }
+        b = d.multiply( mi ); // b = (a-this)*ci mod a.modul
+        if ( b.val.add( b.val ).compareTo( a.modul ) > 0 ) {
+           // b > m/2  
+           b = new ModInteger( a.modul, b.val.subtract( a.modul ) );
+        }
+        // (modul*b)+this mod C.modul = this mod modul = 
+        // (modul*ci*(a-this)+this) mod a.modul = a mod a.modul
+        java.math.BigInteger s = this.modul.multiply( b.val );
+        s = s.add( this.val );
+        return new ModInteger( C.modul, s );
+    }
+
 }
