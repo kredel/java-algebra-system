@@ -107,6 +107,34 @@ public class PolyUtil {
 
 
     /**
+     * BigInteger from ModInteger coefficients. 
+     * Represent as polynomial with BigInteger coefficients by 
+     * removing the modules.
+     * @param fac result polynomial factory.
+     * @param A polynomial with ModInteger coefficients to be converted.
+     * @return polynomial with BigInteger coefficients.
+     */
+    public static GenPolynomial<BigInteger> 
+        integerFromModularCoefficients( GenPolynomialRing<BigInteger> fac,
+                                        GenPolynomial<ModInteger> A ) {
+        GenPolynomial<BigInteger> B = fac.getZERO().clone();
+        if ( A == null || A.isZERO() ) {
+           return B;
+        }
+        Map<ExpVector,BigInteger> Bv = B.getMap();
+        for ( Map.Entry<ExpVector,ModInteger> y: A.getMap().entrySet() ) {
+            ExpVector e = y.getKey();
+            ModInteger a = y.getValue();
+            //System.out.println("e = " + e);
+            //System.out.println("a = " + a);
+            BigInteger p = new BigInteger( a.getVal() );
+            Bv.put( e, p );
+        }
+        return B;
+    }
+
+
+    /**
      * BigInteger from BigRational coefficients. 
      * Represent as polynomial with BigInteger coefficients by 
      * multiplication with the lcm of the numerators of the 
@@ -118,7 +146,7 @@ public class PolyUtil {
     public static GenPolynomial<BigInteger> 
         integerFromRationalCoefficients( GenPolynomialRing<BigInteger> fac,
                                          GenPolynomial<BigRational> A ) {
-        GenPolynomial<BigInteger> B = fac.getZERO();
+        GenPolynomial<BigInteger> B = fac.getZERO().clone();
         if ( A == null || A.isZERO() ) {
            return B;
         }
@@ -168,7 +196,7 @@ public class PolyUtil {
         GenPolynomial<C> 
         fromIntegerCoefficients( GenPolynomialRing<C> fac,
                                  GenPolynomial<BigInteger> A ) {
-        GenPolynomial<C> B = fac.getZERO();
+        GenPolynomial<C> B = fac.getZERO().clone();
         if ( A == null || A.isZERO() ) {
            return B;
         }
@@ -197,7 +225,7 @@ public class PolyUtil {
     public static GenPolynomial<BigRational> 
         realPart( GenPolynomialRing<BigRational> fac,
                   GenPolynomial<BigComplex> A ) {
-        GenPolynomial<BigRational> B = fac.getZERO();
+        GenPolynomial<BigRational> B = fac.getZERO().clone();
         if ( A == null || A.isZERO() ) {
            return B;
         }
@@ -225,7 +253,7 @@ public class PolyUtil {
     public static GenPolynomial<BigRational> 
         imaginaryPart( GenPolynomialRing<BigRational> fac,
                        GenPolynomial<BigComplex> A ) {
-        GenPolynomial<BigRational> B = fac.getZERO();
+        GenPolynomial<BigRational> B = fac.getZERO().clone();
         if ( A == null || A.isZERO() ) {
            return B;
         }
@@ -241,6 +269,51 @@ public class PolyUtil {
             }
         }
         return B;
+    }
+
+
+    /** ModInteger chinese remainder algorithm on coefficients.
+     * @param C GenPolynomial<ModInteger> result factory 
+     * with A.coFac.modul*B.coFac.modul = C.coFac.modul.
+     * @param A GenPolynomial<ModInteger>.
+     * @param B other GenPolynomial<ModInteger>.
+     * @param mi inverse of A.coFac.modul in ring ModInteger of B.coFac.
+     * @return cra(A,B).
+     */
+    public static GenPolynomial<ModInteger> 
+        chineseRemainderAlgorithm( GenPolynomialRing<ModInteger> fac,
+                                   GenPolynomial<ModInteger> A,
+                                   ModInteger mi,
+                                   GenPolynomial<ModInteger> B ) {
+        ModInteger cfac = fac.coFac.getZERO(); // RingFactory
+        GenPolynomial<ModInteger> C = fac.getZERO().clone(); 
+        GenPolynomial<ModInteger> Ap = A.clone(); 
+        SortedMap<ExpVector,ModInteger> av = Ap.getMap();
+        SortedMap<ExpVector,ModInteger> bv = B.getMap();
+        SortedMap<ExpVector,ModInteger> cv = C.getMap();
+        ModInteger c = null;
+        for ( ExpVector e : bv.keySet() ) {
+            ModInteger x = av.get( e );
+            av.remove( e );
+            ModInteger y = bv.get( e ); // assert y != null
+            if ( x != null ) {
+                c = x.chineseRemainderAlgorithm(cfac,mi,y);
+                if ( ! c.isZERO() ) {
+                    cv.put( e, c );
+                }
+            } else {
+                c = new ModInteger( cfac.getModul(), y.getVal() );
+                cv.put( e, c );
+            }
+        }
+        // assert bv is empty = done
+        for ( ExpVector e : av.keySet() ) {
+            ModInteger x = av.get( e ); // assert x != null
+            //ModInteger y = cv.get( e ); // assert y == null
+            c = new ModInteger( cfac.getModul(), x.getVal() );
+            cv.put( e, c );
+        }
+        return C;
     }
 
 }
