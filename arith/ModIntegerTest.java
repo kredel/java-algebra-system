@@ -46,13 +46,37 @@ public class ModIntegerTest extends TestCase {
    ModInteger b;
    ModInteger c;
    ModInteger d;
+   ModInteger e;
 
    protected void setUp() {
-       a = b = c = d = null;
+       a = b = c = d = e = null;
    }
 
    protected void tearDown() {
-       a = b = c = d = null;
+       a = b = c = d = e = null;
+   }
+
+
+   protected static java.math.BigInteger getPrime1() {
+       long prime = 2; //2^60-93; // 2^30-35; //19; knuth (2,390)
+       for ( int i = 1; i < 60; i++ ) {
+           prime *= 2;
+       }
+       prime -= 93;
+       //prime = 37;
+       //System.out.println("p1 = " + prime);
+       return new java.math.BigInteger(""+prime);
+   }
+
+   protected static java.math.BigInteger getPrime2() {
+       long prime = 2; //2^60-93; // 2^30-35; //19; knuth (2,390)
+       for ( int i = 1; i < 30; i++ ) {
+           prime *= 2;
+       }
+       prime -= 35;
+       //prime = 19;
+       //System.out.println("p2 = " + prime);
+       return new java.math.BigInteger(""+prime);
    }
 
 
@@ -121,7 +145,7 @@ public class ModIntegerTest extends TestCase {
 
 
 /**
- * Test random rationals.
+ * Test random modular integers.
  * 
  */
  public void testRandom() {
@@ -199,7 +223,56 @@ public class ModIntegerTest extends TestCase {
          return;
      }
      fail("0 invertible");
+ }
 
+
+/**
+ * Test multiplication.
+ * 
+ */
+ public void testChineseRemainder() {
+     a = new ModInteger(19*13,1);
+     a = a.random( 9 );
+     //System.out.println("a = " + a);
+     b = new ModInteger(19,a.getVal().longValue());
+     //System.out.println("b = " + b);
+     c = new ModInteger(13,a.getVal().longValue());
+     //System.out.println("c = " + c);
+     d = new ModInteger(13,19);
+     d = d.inverse();
+     //System.out.println("d = " + d);
+
+     e = a.chineseRemainder(b,d,c);
+     //System.out.println("e = " + e);
+
+     assertEquals("cra(a mod 19,a mod 13) = a",a,e);
+
+
+     java.math.BigInteger p1 = getPrime1();
+     java.math.BigInteger p2 = getPrime2();
+     java.math.BigInteger p1p2 = p1.multiply(p2);
+     //System.out.println("p1p2 = " + p1p2);
+     //System.out.println("prime p1 ? = " + p1.isProbablePrime(66));
+     //System.out.println("prime p2 ? = " + p2.isProbablePrime(33));
+     //System.out.println("prime p1p1 ? = " + p1p2.isProbablePrime(3));
+     a = new ModInteger(p1p2,1);
+
+     for ( int i = 0; i < 5; i++ ) {
+         a = a.random( 59+29 ); //60+30 );
+         //System.out.println("a = " + a);
+         b = new ModInteger(p1,a.getVal());
+         //System.out.println("b = " + b);
+         c = new ModInteger(p2,a.getVal());
+         //System.out.println("c = " + c);
+         ModInteger di = new ModInteger(p2,p1);
+         d = di.inverse();
+         //System.out.println("d = " + d);
+
+         e = a.chineseRemainder(b,d,c);
+         //System.out.println("e = " + e);
+
+         assertEquals("cra(a mod p1,a mod p2) = a",a,e);
+     }
  }
 
 }

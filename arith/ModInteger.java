@@ -576,30 +576,38 @@ public final class ModInteger implements GcdRingElem<ModInteger>,
 
 
     /** ModInteger chinese remainder algorithm.  
-     * @param C ModInteger result factory with this.modul*a.modul = C.modul.
+     * This is a factory method.
+     * Assert c.modul >= a.modul and c.modul * a.modul = this.modul.
+     * @param c ModInteger.
+     * @param ci inverse of c.modul in ring of a.
      * @param a other ModInteger.
-     * @param mi inverse of this.modul in ring ModInteger of a.
-     * @return cra(this,a).
+     * @return cra(c,a).
      */
     public ModInteger 
-           chineseRemainderAlgorithm(ModInteger C, 
-                                     ModInteger mi, 
-                                     ModInteger a) {
-        ModInteger b = new ModInteger( a.modul, this.val ); // this mod a.modul
-        ModInteger d = a.subtract( b ); // a-this mod a.modul
+           chineseRemainder(ModInteger c, 
+                            ModInteger ci, 
+                            ModInteger a) {
+        if ( false ) { // debug
+           if ( c.modul.compareTo( a.modul ) < 1 ) {
+               System.out.println("ModInteger error " + c + ", " + a);
+           }
+        }
+        ModInteger b = a.fromInteger( c.val ); // c mod a.modul
+        ModInteger d = a.subtract( b ); // a-c mod a.modul
         if ( d.isZERO() ) {
-           return C.getZERO();
+           return fromInteger( c.val );
         }
-        b = d.multiply( mi ); // b = (a-this)*ci mod a.modul
-        if ( b.val.add( b.val ).compareTo( a.modul ) > 0 ) {
-           // b > m/2  
-           b = new ModInteger( a.modul, b.val.subtract( a.modul ) );
-        }
-        // (modul*b)+this mod C.modul = this mod modul = 
-        // (modul*ci*(a-this)+this) mod a.modul = a mod a.modul
-        java.math.BigInteger s = this.modul.multiply( b.val );
-        s = s.add( this.val );
-        return new ModInteger( C.modul, s );
+        b = d.multiply( ci ); // b = (a-c)*ci mod a.modul
+        //java.math.BigInteger bv = b.val;
+        //if ( bv.add( bv ).compareTo( a.modul ) > 0 ) {
+           // b > m/2, make symmetric to 0, undone by fromInteger
+        //  bv = bv.subtract( a.modul );
+        //}
+        // (c.modul*b)+c mod this.modul = c mod c.modul = 
+        // (c.modul*ci*(a-c)+c) mod a.modul = a mod a.modul
+        java.math.BigInteger s = c.modul.multiply( b.val );
+        s = s.add( c.val );
+        return fromInteger( s );
     }
 
 }
