@@ -258,7 +258,7 @@ public class ModIntegerTest extends TestCase {
      a = new ModInteger(p1p2,1);
 
      for ( int i = 0; i < 5; i++ ) {
-         a = a.random( 59+29 ); //60+30 );
+         a = a.random( (59+29)/2 ); //60+30 );
          //System.out.println("a = " + a);
          b = new ModInteger(p1,a.getVal());
          //System.out.println("b = " + b);
