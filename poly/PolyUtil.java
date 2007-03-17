@@ -277,7 +277,7 @@ public class PolyUtil {
      * with A.coFac.modul*B.coFac.modul = C.coFac.modul.
      * @param A GenPolynomial<ModInteger>.
      * @param B other GenPolynomial<ModInteger>.
-     * @param mi inverse of A.coFac.modul in ring ModInteger of B.coFac.
+     * @param mi inverse of A.coFac.modul in ring B.coFac.
      * @return cra(A,B).
      */
     public static GenPolynomial<ModInteger> 
@@ -285,7 +285,7 @@ public class PolyUtil {
                                    GenPolynomial<ModInteger> A,
                                    ModInteger mi,
                                    GenPolynomial<ModInteger> B ) {
-        ModInteger cfac = fac.coFac.getZERO(); // RingFactory
+        ModInteger cfac = fac.coFac.getZERO(); // get RingFactory
         GenPolynomial<ModInteger> C = fac.getZERO().clone(); 
         GenPolynomial<ModInteger> Ap = A.clone(); 
         SortedMap<ExpVector,ModInteger> av = Ap.getMap();
@@ -294,23 +294,23 @@ public class PolyUtil {
         ModInteger c = null;
         for ( ExpVector e : bv.keySet() ) {
             ModInteger x = av.get( e );
-            av.remove( e );
             ModInteger y = bv.get( e ); // assert y != null
             if ( x != null ) {
-                c = x.chineseRemainderAlgorithm(cfac,mi,y);
-                if ( ! c.isZERO() ) {
-                    cv.put( e, c );
-                }
+               av.remove( e );
+               c = cfac.chineseRemainder(x,mi,y);
+               if ( ! c.isZERO() ) {
+                   cv.put( e, c );
+               }
             } else {
-                c = new ModInteger( cfac.getModul(), y.getVal() );
-                cv.put( e, c );
+               c = cfac.fromInteger( y.getVal() );
+               cv.put( e, c );
             }
         }
         // assert bv is empty = done
-        for ( ExpVector e : av.keySet() ) {
+        for ( ExpVector e : av.keySet() ) { // rest of av
             ModInteger x = av.get( e ); // assert x != null
             //ModInteger y = cv.get( e ); // assert y == null
-            c = new ModInteger( cfac.getModul(), x.getVal() );
+            c = cfac.fromInteger( x.getVal() );
             cv.put( e, c );
         }
         return C;
