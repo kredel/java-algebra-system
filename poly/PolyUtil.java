@@ -109,7 +109,7 @@ public class PolyUtil {
     /**
      * BigInteger from ModInteger coefficients. 
      * Represent as polynomial with BigInteger coefficients by 
-     * removing the modules.
+     * removing the modules and making coefficients symmetric to 0.
      * @param fac result polynomial factory.
      * @param A polynomial with ModInteger coefficients to be converted.
      * @return polynomial with BigInteger coefficients.
@@ -127,7 +127,13 @@ public class PolyUtil {
             ModInteger a = y.getValue();
             //System.out.println("e = " + e);
             //System.out.println("a = " + a);
-            BigInteger p = new BigInteger( a.getVal() );
+            java.math.BigInteger av = a.getVal();
+            java.math.BigInteger am = a.getModul();
+            if ( av.add( av ).compareTo( am ) > 0 ) {
+               // a > m/2, make symmetric to 0
+               av = av.subtract( am );
+            }
+            BigInteger p = new BigInteger( av );
             Bv.put( e, p );
         }
         return B;
@@ -272,6 +278,32 @@ public class PolyUtil {
     }
 
 
+    /**
+     * Complex from rational real part. 
+     * @param fac result polynomial factory.
+     * @param A polynomial with BigRational coefficients to be converted.
+     * @return polynomial with BigComplex coefficients.
+     */
+    public static GenPolynomial<BigComplex> 
+        complexFromRational( GenPolynomialRing<BigComplex> fac,
+                             GenPolynomial<BigRational> A ) {
+        GenPolynomial<BigComplex> B = fac.getZERO().clone();
+        if ( A == null || A.isZERO() ) {
+           return B;
+        }
+        Map<ExpVector,BigComplex> Bv = B.getMap();
+        for ( Map.Entry<ExpVector,BigRational> y: A.getMap().entrySet() ) {
+            ExpVector e = y.getKey();
+            BigRational a = y.getValue();
+            //System.out.println("e = " + e);
+            //System.out.println("a = " + a);
+            BigComplex p = new BigComplex( a );
+            Bv.put( e, p );
+        }
+        return B;
+    }
+
+
     /** ModInteger chinese remainder algorithm on coefficients.
      * @param C GenPolynomial<ModInteger> result factory 
      * with A.coFac.modul*B.coFac.modul = C.coFac.modul.
@@ -281,10 +313,10 @@ public class PolyUtil {
      * @return cra(A,B).
      */
     public static GenPolynomial<ModInteger> 
-        chineseRemainderAlgorithm( GenPolynomialRing<ModInteger> fac,
-                                   GenPolynomial<ModInteger> A,
-                                   ModInteger mi,
-                                   GenPolynomial<ModInteger> B ) {
+        chineseRemainder( GenPolynomialRing<ModInteger> fac,
+                          GenPolynomial<ModInteger> A,
+                          ModInteger mi,
+                          GenPolynomial<ModInteger> B ) {
         ModInteger cfac = fac.coFac.getZERO(); // get RingFactory
         GenPolynomial<ModInteger> C = fac.getZERO().clone(); 
         GenPolynomial<ModInteger> Ap = A.clone(); 
@@ -309,7 +341,6 @@ public class PolyUtil {
         // assert bv is empty = done
         for ( ExpVector e : av.keySet() ) { // rest of av
             ModInteger x = av.get( e ); // assert x != null
-            //ModInteger y = cv.get( e ); // assert y == null
             c = cfac.fromInteger( x.getVal() );
             cv.put( e, c );
         }
