@@ -8,10 +8,14 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import edu.jas.arith.BigInteger;
+import edu.jas.arith.ModInteger;
+import edu.jas.arith.BigRational;
+import edu.jas.arith.BigComplex;
+
 import edu.jas.poly.TermOrder;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
-import edu.jas.arith.BigInteger;
 
 
 /**
@@ -94,6 +98,29 @@ public class PolyUtilTest extends TestCase {
    }
 
 
+   protected static java.math.BigInteger getPrime1() {
+       long prime = 2; //2^60-93; // 2^30-35; //19; knuth (2,390)
+       for ( int i = 1; i < 60; i++ ) {
+           prime *= 2;
+       }
+       prime -= 93;
+       //prime = 37;
+       //System.out.println("p1 = " + prime);
+       return new java.math.BigInteger(""+prime);
+   }
+
+   protected static java.math.BigInteger getPrime2() {
+       long prime = 2; //2^60-93; // 2^30-35; //19; knuth (2,390)
+       for ( int i = 1; i < 30; i++ ) {
+           prime *= 2;
+       }
+       prime -= 35;
+       //prime = 19;
+       //System.out.println("p1 = " + prime);
+       return new java.math.BigInteger(""+prime);
+   }
+
+
 /**
  * Test recursive <--> distributive conversion.
  * 
@@ -138,6 +165,175 @@ public class PolyUtilTest extends TestCase {
          //System.out.println("crd = " + a);
 
          assertEquals("c == dist(rec(c))", c, a );
+     }
+ }
+
+
+/**
+ * Test random rational <--> integer conversion.
+ * 
+ */
+ public void testRationalConversion() {
+     GenPolynomialRing<BigRational> rfac
+         = new GenPolynomialRing<BigRational>(new BigRational(1),rl,to);
+
+     GenPolynomial<BigRational> ar;
+     GenPolynomial<BigRational> br;
+
+     for (int i = 0; i < 3; i++) {
+         c = dfac.random(kl*(i+2),ll*(i+1),el+i,q).abs();
+         //c = c.multiply( new BigInteger(99) ); // fails, since not primitive
+         //c = GreatestCommonDivisor.primitivePart(c);
+
+         assertTrue("length( c"+i+" ) <> 0", c.length() >= 0);
+         assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
+         assertTrue(" not isONE( c"+i+" )", !c.isONE() );
+
+         ar = PolyUtil.<BigRational>fromIntegerCoefficients(rfac,c);
+         br = ar.monic();
+         a = PolyUtil.integerFromRationalCoefficients(dfac,br);
+         //System.out.println("c   = " + c);
+         //System.out.println("ar  = " + ar);
+         //System.out.println("br  = " + br);
+         //System.out.println("crd = " + a);
+
+         assertEquals("c == integer(rational(c))", c, a );
+     }
+ }
+
+
+/**
+ * Test random modular <--> integer conversion.
+ * 
+ */
+ public void testModularConversion() {
+     ModInteger pm = new ModInteger(getPrime1(),1);
+     GenPolynomialRing<ModInteger> mfac
+         = new GenPolynomialRing<ModInteger>(pm,rl,to);
+
+     GenPolynomial<ModInteger> ar;
+     GenPolynomial<ModInteger> br;
+
+     for (int i = 0; i < 3; i++) {
+         c = dfac.random(kl*(i+2),ll*(i+1),el+i,q).abs();
+         //c = c.multiply( new BigInteger(99) ); // fails, since not primitive
+         //c = GreatestCommonDivisor.primitivePart(c);
+
+         assertTrue("length( c"+i+" ) <> 0", c.length() >= 0);
+         assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
+         assertTrue(" not isONE( c"+i+" )", !c.isONE() );
+
+         ar = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,c);
+         a = PolyUtil.integerFromModularCoefficients(dfac,ar);
+         //System.out.println("c   = " + c);
+         //System.out.println("ar  = " + ar);
+         //System.out.println("crd = " + a);
+
+         assertEquals("c == integer(modular(c))", c, a );
+     }
+ }
+
+
+/**
+ * Test chinese remainder.
+ * 
+ */
+ public void testChineseRemainder() {
+     java.math.BigInteger p1 = getPrime1();
+     java.math.BigInteger p2 = getPrime2();
+     java.math.BigInteger p12 = p1.multiply(p2);
+
+     ModInteger pm1 = new ModInteger(p1,1);
+     GenPolynomialRing<ModInteger> mfac1
+         = new GenPolynomialRing<ModInteger>(pm1,rl,to);
+
+     ModInteger pm2 = new ModInteger(p2,1);
+     GenPolynomialRing<ModInteger> mfac2
+         = new GenPolynomialRing<ModInteger>(pm2,rl,to);
+
+     ModInteger pm12 = new ModInteger(p12,1);
+     GenPolynomialRing<ModInteger> mfac
+         = new GenPolynomialRing<ModInteger>(pm12,rl,to);
+
+     ModInteger di = new ModInteger(p2,p1);
+     di = di.inverse();
+     //System.out.println("di = " + di);
+
+     GenPolynomial<ModInteger> am;
+     GenPolynomial<ModInteger> bm;
+     GenPolynomial<ModInteger> cm;
+
+     for (int i = 0; i < 3; i++) {
+         c = cfac.random( (59+29)/2, ll*(i+1), el+i, q);
+         //c = c.multiply( new BigInteger(99) ); // fails, since not primitive
+         //c = GreatestCommonDivisor.primitivePart(c);
+
+         assertTrue("length( c"+i+" ) <> 0", c.length() >= 0);
+         assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
+         assertTrue(" not isONE( c"+i+" )", !c.isONE() );
+
+         am = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac1,c);
+         bm = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac2,c);
+
+         cm = PolyUtil.chineseRemainder(mfac,am,di,bm);
+         a = PolyUtil.integerFromModularCoefficients(dfac,cm);
+
+         //System.out.println("c  = " + c);
+         //System.out.println("am = " + am);
+         //System.out.println("bm = " + bm);
+         //System.out.println("cm = " + cm);
+         //System.out.println("a  = " + a);
+
+         assertEquals("cra(c mod p1,c mod p2) = c",c,a);
+     }
+ }
+
+
+/**
+ * Test complex conversion.
+ * 
+ */
+ public void testComplexConversion() {
+     BigRational rf = new BigRational(1);
+     GenPolynomialRing<BigRational> rfac
+         = new GenPolynomialRing<BigRational>(rf,rl,to);
+
+     BigComplex cf = new BigComplex(1);
+     GenPolynomialRing<BigComplex> cfac
+         = new GenPolynomialRing<BigComplex>(cf,rl,to);
+
+     BigComplex imag = BigComplex.I;
+
+     GenPolynomial<BigRational> rp;
+     GenPolynomial<BigRational> ip;
+     GenPolynomial<BigComplex> crp;
+     GenPolynomial<BigComplex> cip;
+     GenPolynomial<BigComplex> cp;
+     GenPolynomial<BigComplex> ap;
+
+     for (int i = 0; i < 3; i++) {
+         cp = cfac.random( kl+2*i, ll*(i+1), el+i, q);
+ 
+         assertTrue("length( c"+i+" ) <> 0", cp.length() >= 0);
+         assertTrue(" not isZERO( c"+i+" )", !cp.isZERO() );
+         assertTrue(" not isONE( c"+i+" )", !cp.isONE() );
+
+         rp = PolyUtil.realPart(rfac,cp);
+         ip = PolyUtil.imaginaryPart(rfac,cp);
+
+         crp = PolyUtil.complexFromRational(cfac,rp);
+         cip = PolyUtil.complexFromRational(cfac,ip);
+
+         ap = crp.sum( cip.multiply( imag ) );
+
+         //System.out.println("cp = " + cp);
+         //System.out.println("rp = " + rp);
+         //System.out.println("ip = " + ip);
+         //System.out.println("crp = " + crp);
+         //System.out.println("cip = " + cip);
+         //System.out.println("ap  = " + ap);
+
+         assertEquals("re(c)+i*im(c) = c",cp,ap);
      }
  }
 
