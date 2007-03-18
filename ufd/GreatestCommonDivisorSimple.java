@@ -124,6 +124,8 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C> >
         }
         r = r.abs();
         q = q.abs();
+        //System.out.println("rgcd r = " + r);
+        //System.out.println("rgcd q = " + q);
         GenPolynomial<C> a = recursiveContent(r);
         GenPolynomial<C> b = recursiveContent(q);
         //System.out.println("rgcd a = " + a);
@@ -141,14 +143,23 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C> >
         }
         //System.out.println("rgcd q = " + q);
         //System.out.println("rgcd r = " + r);
+        if ( q.isConstant() || r.isConstant() ) {
+           System.out.println("rgcd q = " + q);
+           System.out.println("rgcd r = " + r);
+           throw new RuntimeException(this.getClass().getName()
+                                       + " error in recursive Content");
+        }
 
         GenPolynomial<GenPolynomial<C>> x;
         while ( !r.isZERO() ) {
             x = recursivePseudoRemainder(q,r);
-            //System.out.println("rpg x = " + x);
+            //System.out.println("rgcd x = " + x);
+            //if ( !x.isZERO() && x.isConstant() ) {
+            //   System.out.println("rpg x = is constant " + x);
+            //}
             q = r;
             r = recursivePrimitivePart( x );
-            //System.out.println("rpg r = " + r);
+            //System.out.println("rgcd r = " + r);
         }
         //System.out.println("sign q = " + q.signum());
         return q.abs().multiply(c); //.abs();
