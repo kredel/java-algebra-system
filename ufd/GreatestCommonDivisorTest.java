@@ -118,12 +118,13 @@ public class GreatestCommonDivisorTest extends TestCase {
          //a = ufd.basePrimitivePart(a).abs();
          //c = ufd.basePrimitivePart(c);
          ci = di.random(kl*(i+2));
+         ci = ci.sum(di.getONE());
 
          //System.out.println("a  = " + a);
          //System.out.println("c  = " + c);
          //System.out.println("ci = " + ci);
 
-         assertTrue("length( c"+i+" ) <> 0", c.length() >= 0);
+         assertTrue("length( c"+i+" ) <> 0", c.length() > 0);
          //assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
          //assertTrue(" not isONE( c"+i+" )", !c.isONE() );
          
@@ -162,7 +163,7 @@ public class GreatestCommonDivisorTest extends TestCase {
          c = dfac.random(kl*(i+2),ll+2*i,el+i,q);
          c = c.multiply( di.random(kl*(i+2)) );
 
-         assertTrue("length( c"+i+" ) <> 0", c.length() >= 0);
+         assertTrue("length( c"+i+" ) <> 0", c.length() > 0);
          //assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
          //assertTrue(" not isONE( c"+i+" )", !c.isONE() );
          
@@ -198,7 +199,7 @@ public class GreatestCommonDivisorTest extends TestCase {
          //System.out.println("b  = " + b);
          //System.out.println("c  = " + c);
 
-         assertTrue("length( c"+i+" ) <> 0", c.length() >= 0);
+         assertTrue("length( c"+i+" ) <> 0", c.length() > 0);
          //assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
          //assertTrue(" not isONE( c"+i+" )", !c.isONE() );
          
@@ -229,14 +230,17 @@ public class GreatestCommonDivisorTest extends TestCase {
      //System.out.println("b  = " + b);
      //System.out.println("c  = " + c);
 
-     assertTrue("length( a ) <> 0", a.length() >= 0);
+     assertTrue("length( a ) <> 0", a.length() > 0);
+     assertTrue("length( b ) <> 0", b.length() > 0);
+     assertTrue("length( c ) <> 0", c.length() > 0);
      //assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
      //assertTrue(" not isONE( c"+i+" )", !c.isONE() );
          
      d = a.multiply(a).multiply(b).multiply(b).multiply(b).multiply(c);
      c = a.multiply(b).multiply(c);
      //System.out.println("d  = " + d);
-     c = ufd.basePrimitivePart(c);
+     //c = ufd.basePrimitivePart(c); // if  a != b != c
+     c = ufd.baseSquarefreePart(c);
 
      d = ufd.baseSquarefreePart(d);
      //System.out.println("c  = " + c);
@@ -265,7 +269,7 @@ public class GreatestCommonDivisorTest extends TestCase {
      //System.out.println("b  = " + b);
      //System.out.println("c  = " + c);
 
-     assertTrue("length( a ) <> 0", a.length() >= 0);
+     assertTrue("length( a ) <> 0", a.length() > 0);
          
      d = a.multiply(a).multiply(b).multiply(b).multiply(b).multiply(c);
      c = a.multiply(b).multiply(c);
@@ -331,7 +335,7 @@ public class GreatestCommonDivisorTest extends TestCase {
          //System.out.println("c  = " + c);
          //System.out.println("cr = " + cr);
 
-         assertTrue("length( c"+i+" ) <> 0", c.length() >= 0);
+         assertTrue("length( cr"+i+" ) <> 0", cr.length() > 0);
          //assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
          //assertTrue(" not isONE( c"+i+" )", !c.isONE() );
 
@@ -371,7 +375,7 @@ public class GreatestCommonDivisorTest extends TestCase {
          cr = rfac.random(kl*(i+2),ll+2*i,el+i,q);
          //System.out.println("cr = " + cr);
 
-         assertTrue("length( c"+i+" ) <> 0", cr.length() >= 0);
+         assertTrue("length( cr"+i+" ) <> 0", cr.length() > 0);
          //assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
          //assertTrue(" not isONE( c"+i+" )", !c.isONE() );
          
@@ -381,6 +385,62 @@ public class GreatestCommonDivisorTest extends TestCase {
          //System.out.println("dr = " + dr);
 
          ar = dr.multiply(c);
+         assertEquals("c == cont(c)pp(c)", cr, ar );
+     }
+ }
+
+
+/**
+ * Test recursive content and primitive part, modular.
+ * 
+ */
+ public void testRecursiveContentPPmodular() {
+     ModInteger mi = new ModInteger(19,1);
+
+     GenPolynomialRing<ModInteger> dfac;
+     GenPolynomialRing<ModInteger> cfac;
+     GenPolynomialRing<GenPolynomial<ModInteger>> rfac;
+     dfac = new GenPolynomialRing<ModInteger>(mi,2,to);
+     cfac = new GenPolynomialRing<ModInteger>(mi,2-1,to);
+     rfac = new GenPolynomialRing<GenPolynomial<ModInteger>>(cfac,1,to);
+
+     GreatestCommonDivisorAbstract<ModInteger> ufd 
+          = new GreatestCommonDivisorSimple<ModInteger>();
+
+     GenPolynomial<GenPolynomial<ModInteger>> ar, br, cr, dr, er, ac, bc;
+     GenPolynomial<ModInteger> a,b,c;
+
+     for (int i = 0; i < 1; i++) {
+         a = cfac.random(kl,ll+2*i,el+i,q).monic();
+         cr = rfac.random(kl*(i+2),ll+2*i,el+i,q);
+         cr = monic( cr );
+         //System.out.println("a  = " + a);
+         //System.out.println("cr = " + cr);
+           //a = ufd.basePrimitivePart(a);
+           //b = distribute(dfac,cr);
+           //b = ufd.basePrimitivePart(b);
+           //cr = recursive(rfac,b);
+           //System.out.println("a  = " + a);
+           //System.out.println("cr = " + cr);
+
+         cr = cr.multiply(a);
+         //System.out.println("cr = " + cr);
+
+         assertTrue("length( cr"+i+" ) <> 0", cr.length() > 0);
+         //assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
+         //assertTrue(" not isONE( c"+i+" )", !c.isONE() );
+         
+         c = ufd.recursiveContent(cr).monic();
+         dr = ufd.recursivePrimitivePart(cr);
+         dr = monic( dr );
+         //System.out.println("c  = " + c);
+         //System.out.println("dr = " + dr);
+
+         //System.out.println("monic(a) = " + a.monic());
+         //System.out.println("monic(c) = " + c.monic());
+
+         ar = dr.multiply(c);
+         //System.out.println("ar = " + ar);
          assertEquals("c == cont(c)pp(c)", cr, ar );
      }
  }
@@ -404,7 +464,7 @@ public class GreatestCommonDivisorTest extends TestCase {
          //System.out.println("br = " + br);
          //System.out.println("cr = " + cr);
 
-         assertTrue("length( cr"+i+" ) <> 0", cr.length() >= 0);
+         assertTrue("length( cr"+i+" ) <> 0", cr.length() > 0);
          //assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
          //assertTrue(" not isONE( c"+i+" )", !c.isONE() );
          
@@ -439,7 +499,7 @@ public class GreatestCommonDivisorTest extends TestCase {
      //System.out.println("br = " + br);
      //System.out.println("cr = " + cr);
 
-     assertTrue("length( cr ) <> 0", cr.length() >= 0);
+     assertTrue("length( cr ) <> 0", cr.length() > 0);
      //assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
      //assertTrue(" not isONE( c"+i+" )", !c.isONE() );
          
@@ -476,7 +536,7 @@ public class GreatestCommonDivisorTest extends TestCase {
      //System.out.println("br = " + br);
      //System.out.println("cr = " + cr);
 
-     assertTrue("length( cr ) <> 0", cr.length() >= 0);
+     assertTrue("length( cr ) <> 0", cr.length() > 0);
          
      dr = ar.multiply(ar).multiply(br).multiply(br).multiply(cr);
      cr = ar.multiply(br).multiply(cr);
@@ -527,7 +587,7 @@ public class GreatestCommonDivisorTest extends TestCase {
          c = dfac.random(kl*(i+2),ll+2*i,el+i,q);
          //System.out.println("cr = " + cr);
 
-         assertTrue("length( c"+i+" ) <> 0", c.length() >= 0);
+         assertTrue("length( c"+i+" ) <> 0", c.length() > 0);
          //assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
          //assertTrue(" not isONE( c"+i+" )", !c.isONE() );
          
@@ -560,7 +620,7 @@ public class GreatestCommonDivisorTest extends TestCase {
          //System.out.println("b = " + b);
          //System.out.println("c = " + c);
 
-         assertTrue("length( c"+i+" ) <> 0", c.length() >= 0);
+         assertTrue("length( c"+i+" ) <> 0", c.length() > 0);
          //assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
          //assertTrue(" not isONE( c"+i+" )", !c.isONE() );
          
@@ -595,7 +655,7 @@ public class GreatestCommonDivisorTest extends TestCase {
          //System.out.println("b = " + b);
          //System.out.println("c = " + c);
 
-         assertTrue("length( c"+i+" ) <> 0", c.length() >= 0);
+         assertTrue("length( c"+i+" ) <> 0", c.length() > 0);
          //assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
          //assertTrue(" not isONE( c"+i+" )", !c.isONE() );
          
@@ -628,7 +688,7 @@ public class GreatestCommonDivisorTest extends TestCase {
 
      GenPolynomial<BigRational> a, b, c, d, e;
 
-     for (int i = 0; i < 2; i++) {
+     for (int i = 0; i < 1; i++) {
          a = dfac.random(kl,ll,el,q);
          b = dfac.random(kl,ll,el,q);
          c = dfac.random(kl,ll,el,q);
@@ -636,7 +696,7 @@ public class GreatestCommonDivisorTest extends TestCase {
          //System.out.println("b = " + b);
          //System.out.println("c = " + c);
 
-         assertTrue("length( c"+i+" ) <> 0", c.length() >= 0);
+         assertTrue("length( c"+i+" ) <> 0", c.length() > 0);
          //assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
          //assertTrue(" not isONE( c"+i+" )", !c.isONE() );
          
@@ -657,10 +717,120 @@ public class GreatestCommonDivisorTest extends TestCase {
 
 
 /**
- * Test gcd modular coefficients. in error
+ * Test base gcd modular coefficients. 
  * 
  */
- public void xtestGCDmodular() {
+ public void testGCDbaseMmodular() {
+     ModInteger mi = new ModInteger(19,1);
+
+     GenPolynomialRing<ModInteger> dfac;
+     dfac = new GenPolynomialRing<ModInteger>(mi,1,to);
+
+     GreatestCommonDivisorAbstract<ModInteger> ufd 
+          = new GreatestCommonDivisorSimple<ModInteger>();
+
+     GenPolynomial<ModInteger> a, b, c, d, e, ac, bc;
+
+     for (int i = 0; i < 1; i++) {
+         a = dfac.random(kl,ll,el+3+i,q).monic();
+         b = dfac.random(kl,ll,el+3+i,q).monic();
+         c = dfac.random(kl,ll,el+3+i,q).monic();
+         //System.out.println("a = " + a);
+         //System.out.println("b = " + b);
+         //System.out.println("c = " + c);
+
+         assertTrue("length( c"+i+" ) <> 0", c.length() > 0);
+         //assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
+         //assertTrue(" not isONE( c"+i+" )", !c.isONE() );
+         
+         ac = a.multiply(c);
+         bc = b.multiply(c);
+         //System.out.println("ac = " + ac);
+         //System.out.println("bc = " + bc);
+
+         //e = ufd.basePseudoRemainder(ac,c);
+         //System.out.println("ac/c a = 0 " + e);
+         //assertTrue("ac/c-a != 0 " + e, e.isZERO() );
+         //e = ufd.basePseudoRemainder(bc,c);
+         //System.out.println("bc/c-b = 0 " + e);
+         //assertTrue("bc/c-b != 0 " + e, e.isZERO() );
+
+         d = ufd.baseGcd(ac,bc);
+         d = d.monic(); // not required
+         //System.out.println("d = " + d);
+
+         e = ufd.basePseudoRemainder(d,c);
+         //System.out.println("e = " + e);
+
+         assertTrue("c | gcd(ac,bc) " + e, e.isZERO() );
+     }
+ }
+
+
+/**
+ * Test recursive modular gcd. 
+ * 
+ */
+ public void testRecursiveModularGCD() {
+     ModInteger mi = new ModInteger(19,1);
+
+     GenPolynomialRing<ModInteger> dfac;
+     GenPolynomialRing<ModInteger> cfac;
+     GenPolynomialRing<GenPolynomial<ModInteger>> rfac;
+     dfac = new GenPolynomialRing<ModInteger>(mi,2,to);
+     cfac = new GenPolynomialRing<ModInteger>(mi,2-1,to);
+     rfac = new GenPolynomialRing<GenPolynomial<ModInteger>>(cfac,1,to);
+
+     GreatestCommonDivisorAbstract<ModInteger> ufd 
+          = new GreatestCommonDivisorSimple<ModInteger>();
+
+     GenPolynomial<GenPolynomial<ModInteger>> ar, br, cr, dr, er, ac, bc;
+
+     for (int i = 0; i < 1; i++) {
+         ar = rfac.random(kl,2,el+2,q);
+         br = rfac.random(kl,2,el+2,q);
+         cr = rfac.random(kl,2,el+2,q);
+         ar = monic( ar );
+         br = monic( br );
+         cr = monic( cr );
+         //System.out.println("ar = " + ar);
+         //System.out.println("br = " + br);
+         //System.out.println("cr = " + cr);
+
+         assertTrue("length( cr"+i+" ) <> 0", cr.length() > 0);
+         //assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
+         //assertTrue(" not isONE( c"+i+" )", !c.isONE() );
+         
+         ac = ar.multiply(cr);
+         bc = br.multiply(cr);
+         //System.out.println("ac = " + ac);
+         //System.out.println("bc = " + bc);
+
+          //er = ufd.recursivePseudoRemainder(ac,cr);
+          //System.out.println("ac/c-a = 0 " + er);
+          //assertTrue("ac/c-a != 0 " + er, er.isZERO() );
+          //er = ufd.recursivePseudoRemainder(bc,cr);
+          //System.out.println("bc/c-b = 0 " + er);
+          //assertTrue("bc/c-b != 0 " + er, er.isZERO() );
+
+         dr = ufd.recursiveGcd(ac,bc);
+         dr = monic( dr );
+         //System.out.println("cr = " + cr);
+         //System.out.println("dr = " + dr);
+
+         er = ufd.recursivePseudoRemainder(dr,cr);
+         //System.out.println("er = " + er);
+
+         assertTrue("c | gcd(ac,bc) " + er, er.isZERO() );
+     }
+ }
+
+
+/**
+ * Test gcd modular coefficients.
+ * 
+ */
+ public void testGCDmodular() {
      ModInteger mi = new ModInteger(19,1);
 
      GenPolynomialRing<ModInteger> dfac;
@@ -669,30 +839,38 @@ public class GreatestCommonDivisorTest extends TestCase {
      GreatestCommonDivisorAbstract<ModInteger> ufd 
           = new GreatestCommonDivisorSimple<ModInteger>();
 
-     GenPolynomial<ModInteger> a, b, c, d, e;
+     GenPolynomial<ModInteger> a, b, c, d, e, ac, bc;
 
-     for (int i = 0; i < 2; i++) {
-         a = dfac.random(kl,ll,el,q);
-         b = dfac.random(kl,ll,el,q);
-         c = dfac.random(kl,ll,el,q);
-         System.out.println("a = " + a);
-         System.out.println("b = " + b);
-         System.out.println("c = " + c);
+     for (int i = 0; i < 1; i++) {
+         a = dfac.random(kl,ll,el+i,q).monic();
+         b = dfac.random(kl,ll,el+i,q).monic();
+         c = dfac.random(kl,ll,el+i,q).monic();
+         //System.out.println("a = " + a);
+         //System.out.println("b = " + b);
+         //System.out.println("c = " + c);
 
-         assertTrue("length( c"+i+" ) <> 0", c.length() >= 0);
+         assertTrue("length( c"+i+" ) <> 0", c.length() > 0);
          //assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
          //assertTrue(" not isONE( c"+i+" )", !c.isONE() );
          
-         a = a.multiply(c);
-         b = b.multiply(c);
-         System.out.println("a = " + a);
-         System.out.println("b = " + b);
+         ac = a.multiply(c);
+         bc = b.multiply(c);
+         //System.out.println("ac = " + ac);
+         //System.out.println("bc = " + bc);
 
-         d = ufd.gcd(a,b);
-         System.out.println("d = " + d);
+         //e = ufd.basePseudoRemainder(ac,c);
+         //System.out.println("ac/c-a = 0 " + e);
+         //assertTrue("ac/c-a != 0 " + e, e.isZERO() );
+         //e = ufd.basePseudoRemainder(bc,c);
+         //System.out.println("bc/c-b = 0 " + e);
+         //assertTrue("bc/c-b != 0 " + e, e.isZERO() );
+
+         d = ufd.gcd(ac,bc);
+         //System.out.println("d = " + d);
 
          e = ufd.basePseudoRemainder(d,c);
-         System.out.println("e = " + e);
+         //System.out.println("e = " + e);
+         //System.out.println("c = " + c);
 
          assertTrue("c | gcd(ac,bc) " + e, e.isZERO() );
      }
@@ -714,7 +892,7 @@ public class GreatestCommonDivisorTest extends TestCase {
          //System.out.println("b = " + b);
          //System.out.println("c = " + c);
 
-         assertTrue("length( a"+i+" ) <> 0", a.length() >= 0);
+         assertTrue("length( a"+i+" ) <> 0", a.length() > 0);
          //assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
          //assertTrue(" not isONE( c"+i+" )", !c.isONE() );
 
@@ -752,7 +930,7 @@ public class GreatestCommonDivisorTest extends TestCase {
      //System.out.println("b  = " + b);
      //System.out.println("c  = " + c);
 
-     assertTrue("length( a ) <> 0", a.length() >= 0);
+     assertTrue("length( c ) <> 0", c.length() > 0);
      //assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
      //assertTrue(" not isONE( c"+i+" )", !c.isONE() );
          
@@ -788,7 +966,7 @@ public class GreatestCommonDivisorTest extends TestCase {
      //System.out.println("b  = " + b);
      //System.out.println("c  = " + c);
 
-     assertTrue("length( a ) <> 0", a.length() >= 0);
+     assertTrue("length( a ) <> 0", a.length() > 0);
          
      d = a.multiply(a).multiply(b).multiply(b).multiply(b).multiply(c);
      c = a.multiply(b).multiply(c);
