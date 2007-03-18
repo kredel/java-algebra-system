@@ -567,9 +567,13 @@ public final class ModInteger implements GcdRingElem<ModInteger>,
             ret[0] = this;
             return ret;
         }
-        if ( this.isZERO() ) {
+        if ( isZERO() ) {
             ret[0] = S;
             return ret;
+        }
+        if ( isField() ) {
+           throw new RuntimeException(this.getClass().getName()
+                                      + " not implemented");
         }
         //System.out.println("this = " + this + ", S = " + S);
         java.math.BigInteger[] qr;
