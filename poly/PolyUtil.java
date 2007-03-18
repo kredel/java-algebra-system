@@ -305,7 +305,7 @@ public class PolyUtil {
 
 
     /** ModInteger chinese remainder algorithm on coefficients.
-     * @param C GenPolynomial<ModInteger> result factory 
+     * @param fac GenPolynomial<ModInteger> result factory 
      * with A.coFac.modul*B.coFac.modul = C.coFac.modul.
      * @param A GenPolynomial<ModInteger>.
      * @param B other GenPolynomial<ModInteger>.
@@ -330,21 +330,45 @@ public class PolyUtil {
             if ( x != null ) {
                av.remove( e );
                c = cfac.chineseRemainder(x,mi,y);
-               if ( ! c.isZERO() ) {
+               if ( ! c.isZERO() ) { // cannot happen
                    cv.put( e, c );
                }
             } else {
                c = cfac.fromInteger( y.getVal() );
-               cv.put( e, c );
+               cv.put( e, c ); // c != null
             }
         }
         // assert bv is empty = done
         for ( ExpVector e : av.keySet() ) { // rest of av
             ModInteger x = av.get( e ); // assert x != null
             c = cfac.fromInteger( x.getVal() );
-            cv.put( e, c );
+            cv.put( e, c ); // c != null
         }
         return C;
+    }
+
+
+    /**
+     * GenPolynomial monic, i.e. leadingBaseCoefficient == 1.
+     * If leadingBaseCoefficient is not invertible returns this unmodified.
+     * @param p recursive GenPolynomial<GenPolynomial<C>>.
+     * @return monic(p).
+     */
+    public static <C extends RingElem<C>>
+           GenPolynomial<GenPolynomial<C>> 
+           monic(GenPolynomial<GenPolynomial<C>> p) {
+        if ( p == null || p.isZERO() ) {
+            return p;
+        }
+        C lc = p.leadingBaseCoefficient().leadingBaseCoefficient();
+        if ( !lc.isUnit() ) {
+            //System.out.println("lc = "+lc);
+            return p;
+        }
+        C lm = lc.inverse();
+        GenPolynomial<C> L = p.ring.coFac.getONE();
+        L = L.multiply(lm);
+        return p.multiply(L);
     }
 
 }
