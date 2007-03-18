@@ -70,6 +70,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C> >
                 //logger.info("red div = " + e);
                 //System.out.println("a = " + a + ", f = " + f);
                 C x = a.remainder(c);
+                //System.out.println("rem x = " + x);
                 if ( x.isZERO() ) {
                    C y = a.divide(c);
                    //System.out.println("y = " + y);
@@ -262,7 +263,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C> >
     /**
      * GenPolynomial polynomial greatest squarefee divisor.
      * @param P GenPolynomial.
-     * @return squarefree(P).
+     * @return squarefree(pp(P)).
      */
     public GenPolynomial<C> 
            baseSquarefreePart( GenPolynomial<C> P ) {
@@ -341,7 +342,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C> >
               j++;
               q = c;
               g = basePseudoDivide(g,c);
-              if ( z.isConstant() && j > 10 ) { // debug
+              if ( z.isConstant() && j > 20 ) { // debug
                   System.out.println("j = " + j);
                   System.out.println("c = " + c);
                   System.out.println("z = " + z);
@@ -430,8 +431,15 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C> >
                 GenPolynomial<C> a = r.leadingBaseCoefficient();
                 f = ExpVector.EVDIF( f, e );
                 //logger.info("red div = " + e);
-                r = r.multiply( c );
-                h = S.multiply( a, f );
+                GenPolynomial<C> x = c; //test basePseudoRemainder(a,c);
+                if ( x.isZERO() ) {
+                   GenPolynomial<C> y = basePseudoDivide(a,c);
+                   //System.out.println("y = " + y);
+                   h = S.multiply( y, f ); // coeff a
+                } else {
+                   r = r.multiply( c );    // coeff ac
+                   h = S.multiply( a, f ); // coeff ac
+                }
                 r = r.subtract( h );
             } else {
                 break;
@@ -603,7 +611,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C> >
     /**
      * GenPolynomial recursive polynomial greated squarefee divisor.
      * @param P recursive GenPolynomial.
-     * @return squarefree(P).
+     * @return squarefree(pp(P)).
      */
     public GenPolynomial<GenPolynomial<C>> 
            recursiveSquarefreePart( GenPolynomial<GenPolynomial<C>> P ) {
@@ -686,7 +694,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C> >
               j++;
               q = c;
               g = recursivePseudoDivide(g,c);
-              if ( z.isConstant() && j > 10 ) { // debug
+              if ( z.isConstant() && j > 20 ) { // debug
                   System.out.println("j = " + j);
                   System.out.println("c = " + c);
                   System.out.println("z = " + z);
@@ -849,6 +857,9 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C> >
         GenPolynomial<GenPolynomial<C>> Sr = recursive(rfac,S);
 
         GenPolynomial<GenPolynomial<C>> Dr = recursiveGcd( Pr, Sr );
+        //System.out.println("Pr  =" + Pr);
+        //System.out.println("Sr  =" + Sr);
+        //System.out.println("Dr  =" + Dr);
         // GenPolynomial not a GcdRingElem:
         //GreatestCommonDivisorSimple<GenPolynomial<GenPolynomial<C>>> sgcd 
         //  = new GreatestCommonDivisorSimple<GenPolynomial<GenPolynomial<C>>>();
@@ -885,7 +896,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C> >
      * GenPolynomial greatest squarefree divisor.
      * Entry driver method.
      * @param P GenPolynomial.
-     * @return squarefree(P).
+     * @return squarefree(pp(P)).
      */
     public GenPolynomial<C> 
         squarefreePart( GenPolynomial<C> P ) {
