@@ -243,7 +243,10 @@ public final class ModInteger implements GcdRingElem<ModInteger>,
      * @see edu.jas.structure.RingElem#isUnit()
      */
     public boolean isUnit() {
-        if ( isField() && !isZERO() ) {
+        if ( isZERO() ) {
+           return false;
+        }
+        if ( isField() ) {
            return true;
         }
         java.math.BigInteger g = modul.gcd( val ).abs();
@@ -426,9 +429,16 @@ public final class ModInteger implements GcdRingElem<ModInteger>,
 
     /** ModInteger remainder.
      * @param S ModInteger.
-     * @return this - (this/S)*S.
+     * @return remainder(this,S).
      */
     public ModInteger remainder(ModInteger S) {
+        if ( S == null || S.isZERO()) {
+           throw new RuntimeException(this.getClass().getName()
+                                      + " division by zero");
+        }
+        if ( S.isONE()) {
+           return getZERO();
+        }
         if ( isField() ) {
            return getZERO();
         }
@@ -530,6 +540,12 @@ public final class ModInteger implements GcdRingElem<ModInteger>,
      * @return gcd(this,S).
      */
     public ModInteger gcd(ModInteger S) {
+        if ( S.isZERO() ) {
+           return this;
+        }
+        if ( isZERO() ) {
+           return S;
+        }
         if ( isField() ) {
            return getONE();
         }
