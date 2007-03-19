@@ -60,6 +60,20 @@ public final class ModInteger implements GcdRingElem<ModInteger>,
 
 
     /** The constructor creates a ModInteger object 
+     * from two BigInteger objects module and value part. 
+     * @param m math.BigInteger.
+     * @param a math.BigInteger.
+     * @param isField indicator if m is prime.
+     */
+    public ModInteger(java.math.BigInteger m, java.math.BigInteger a, 
+                      boolean isField) {
+        modul = m;
+        val = a.mod(modul);
+        this.isField = ( isField ? 1 :  0 );
+    }
+
+
+    /** The constructor creates a ModInteger object 
      * from two longs objects module and value part. 
      * @param m long.
      * @param a long.
@@ -68,6 +82,21 @@ public final class ModInteger implements GcdRingElem<ModInteger>,
         this( 
              new java.math.BigInteger( String.valueOf(m) ),
              new java.math.BigInteger( String.valueOf(a) )
+             );
+    }
+
+
+    /** The constructor creates a ModInteger object 
+     * from two longs objects module and value part. 
+     * @param m long.
+     * @param a long.
+     * @param isField indicator if m is prime.
+     */
+    public ModInteger(long m, long a, boolean isField) {
+        this( 
+             new java.math.BigInteger( String.valueOf(m) ),
+             new java.math.BigInteger( String.valueOf(a) ),
+             isField
              );
     }
 
@@ -112,6 +141,18 @@ public final class ModInteger implements GcdRingElem<ModInteger>,
     public ModInteger(java.math.BigInteger m) {
         modul = m; // assert m != 0
         val = java.math.BigInteger.ZERO;
+    }
+
+
+    /** The constructor creates a 0 ModInteger object 
+     * from a BigInteger object module. 
+     * @param m BigInteger.
+     * @param isField indicator if m is prime.
+     */
+    public ModInteger(java.math.BigInteger m, boolean isField) {
+        modul = m; // assert m != 0
+        val = java.math.BigInteger.ZERO;
+        this.isField = ( isField ? 1 :  0 );
     }
 
 
@@ -439,7 +480,7 @@ public final class ModInteger implements GcdRingElem<ModInteger>,
         if ( S.isONE()) {
            return getZERO();
         }
-        if ( isField() ) {
+        if ( S.isUnit() ) {
            return getZERO();
         }
         return new ModInteger( modul, val.remainder( S.val ) );
@@ -546,7 +587,7 @@ public final class ModInteger implements GcdRingElem<ModInteger>,
         if ( isZERO() ) {
            return S;
         }
-        if ( isField() ) {
+        if ( isUnit() || S.isUnit() ) {
            return getONE();
         }
         return new ModInteger( modul, val.gcd( S.val ) );
@@ -564,16 +605,33 @@ public final class ModInteger implements GcdRingElem<ModInteger>,
         ret[1] = null;
         ret[2] = null;
         if ( S == null || S.isZERO() ) {
-            ret[0] = this;
-            return ret;
+           ret[0] = this;
+           return ret;
         }
         if ( isZERO() ) {
-            ret[0] = S;
-            return ret;
+           ret[0] = S;
+           return ret;
         }
-        if ( isField() ) {
-           throw new RuntimeException(this.getClass().getName()
-                                      + " not implemented");
+        if ( this.isUnit() || S.isUnit() ) {
+           ret[0] = getONE();
+           if ( this.isUnit() && S.isUnit() ) {
+              ModInteger half = fromInteger(2).inverse();
+              ret[1] = this.inverse().multiply(half);
+              ret[2] = S.inverse().multiply(half);
+              return ret;
+           }
+           if ( this.isUnit() ) {
+              // oder inverse(S-1)?
+              ret[1] = this.inverse();
+              ret[2] = getZERO();
+              return ret;
+           }
+           // if ( S.isUnit() ) {
+              // oder inverse(this-1)?
+              ret[1] = getZERO();
+              ret[2] = S.inverse();
+              return ret;
+           //}
         }
         //System.out.println("this = " + this + ", S = " + S);
         java.math.BigInteger[] qr;
