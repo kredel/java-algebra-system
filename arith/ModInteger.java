@@ -667,7 +667,7 @@ public final class ModInteger implements GcdRingElem<ModInteger>,
      * @param c ModInteger.
      * @param ci inverse of c.modul in ring of a.
      * @param a other ModInteger.
-     * @return cra(c,a).
+     * @return S, with S mod c.modul == c and S mod a.modul == a. 
      */
     public ModInteger 
            chineseRemainder(ModInteger c, 
@@ -684,11 +684,6 @@ public final class ModInteger implements GcdRingElem<ModInteger>,
            return fromInteger( c.val );
         }
         b = d.multiply( ci ); // b = (a-c)*ci mod a.modul
-        //java.math.BigInteger bv = b.val;
-        //if ( bv.add( bv ).compareTo( a.modul ) > 0 ) {
-           // b > m/2, make symmetric to 0, undone by fromInteger
-        //  bv = bv.subtract( a.modul );
-        //}
         // (c.modul*b)+c mod this.modul = c mod c.modul = 
         // (c.modul*ci*(a-c)+c) mod a.modul = a mod a.modul
         java.math.BigInteger s = c.modul.multiply( b.val );
