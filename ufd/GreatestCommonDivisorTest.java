@@ -395,7 +395,7 @@ public class GreatestCommonDivisorTest extends TestCase {
  * 
  */
  public void testRecursiveContentPPmodular() {
-     ModInteger mi = new ModInteger(19,1);
+     ModInteger mi = new ModInteger(19,1,true);
 
      GenPolynomialRing<ModInteger> dfac;
      GenPolynomialRing<ModInteger> cfac;
@@ -721,7 +721,7 @@ public class GreatestCommonDivisorTest extends TestCase {
  * 
  */
  public void testGCDbaseMmodular() {
-     ModInteger mi = new ModInteger(19,1);
+     ModInteger mi = new ModInteger(19,1,true);
 
      GenPolynomialRing<ModInteger> dfac;
      dfac = new GenPolynomialRing<ModInteger>(mi,1,to);
@@ -772,7 +772,7 @@ public class GreatestCommonDivisorTest extends TestCase {
  * 
  */
  public void testRecursiveModularGCD() {
-     ModInteger mi = new ModInteger(19,1);
+     ModInteger mi = new ModInteger(19,1,true);
 
      GenPolynomialRing<ModInteger> dfac;
      GenPolynomialRing<ModInteger> cfac;
@@ -831,7 +831,7 @@ public class GreatestCommonDivisorTest extends TestCase {
  * 
  */
  public void testGCDmodular() {
-     ModInteger mi = new ModInteger(19,1);
+     ModInteger mi = new ModInteger(19,1,true);
 
      GenPolynomialRing<ModInteger> dfac;
      dfac = new GenPolynomialRing<ModInteger>(mi,3,to);
