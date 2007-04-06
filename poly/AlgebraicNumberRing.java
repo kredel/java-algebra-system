@@ -4,14 +4,16 @@
 
 package edu.jas.poly;
 
+import java.util.Random;
+import java.io.Reader;
+
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.structure.PrettyPrint;
 
 import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.PolyUtil;
 
-import java.util.Random;
-import java.io.Reader;
 
 /**
  * Algebraic number factory class based on GenPolynomial with RingElem 
@@ -221,5 +223,70 @@ public class AlgebraicNumberRing<C extends RingElem<C> >
         GenPolynomial<C> x = ring.parse( r );
         return new AlgebraicNumber<C>( this, x );
     }
+
+
+    /** AlgebraicNumber chinese remainder algorithm.  
+     * Assert deg(c.modul) >= deg(a.modul) 
+     * and c.modul * a.modul = this.modul.
+     * @param c AlgebraicNumber.
+     * @param ci inverse of c.modul in ring of a.
+     * @param a other AlgebraicNumber.
+     * @return cra(c,a).
+     */
+    public AlgebraicNumber<C>
+           chineseRemainder(AlgebraicNumber<C> c, 
+                            AlgebraicNumber<C> ci, 
+                            AlgebraicNumber<C> a) {
+        if ( true ) { // debug
+            if ( c.ring.modul.compareTo( a.ring.modul ) < 1 ) {
+               System.out.println("AlgebraicNumber error " + c + ", " + a);
+           }
+        }
+        AlgebraicNumber<C> b = new AlgebraicNumber<C>( a.ring, c.val ); 
+                              // c mod a.modul
+                              // c( tbcf(a.modul) ) if deg(a.modul)==1
+        AlgebraicNumber<C> d = a.subtract( b ); // a-c mod a.modul
+        if ( d.isZERO() ) {
+           return new AlgebraicNumber<C>( this, c.val );
+        }
+        b = d.multiply( ci ); // b = (a-c)*ci mod a.modul
+        // (c.modul*b)+c mod this.modul = c mod c.modul = 
+        // (c.modul*ci*(a-c)+c) mod a.modul = a mod a.modul
+        GenPolynomial<C> s = c.ring.modul.multiply( b.val );
+        s = s.sum( c.val );
+        return new AlgebraicNumber<C>( this, s );
+    }
+
+
+    /** AlgebraicNumber chinese remainder algorithm.  
+     * Assert deg(c.modul) >= deg(a.modul) 
+     * and c.modul * a.modul = this.modul.
+     * Special case with deg(a.modul) == 1.
+     * @param c AlgebraicNumber.
+     * @param ci inverse of c.modul(b) in ring of a.
+     * @param am trailing base coefficient of modul of other AlgebraicNumber A.
+     * @param a value of other AlgebraicNumber A.
+     * @return cra(c,A).
+     */
+    public AlgebraicNumber<C>
+           chineseRemainder(AlgebraicNumber<C> c, 
+                            C ci, 
+                            C am,
+                            C a) {
+        C b = PolyUtil.<C>evaluateMain( ring.coFac /*a*/, c.val, am ); 
+                              // c mod a.modul
+                              // c( tbcf(a.modul) ) if deg(a.modul)==1
+        C d = a.subtract( b ); // a-c mod a.modul
+        if ( d.isZERO() ) {
+           return new AlgebraicNumber<C>( this, c.val );
+        }
+        b = d.multiply( ci ); // b = (a-c)*ci mod a.modul
+        // (c.modul*b)+c mod this.modul = c mod c.modul = 
+        // (c.modul*ci*(a-c)+c) mod a.modul = a mod a.modul
+        GenPolynomial<C> s = c.ring.modul.multiply( b );
+        s = s.sum( c.val );
+        return new AlgebraicNumber<C>( this, s );
+    }
+
 
 }
