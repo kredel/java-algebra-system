@@ -376,6 +376,19 @@ public class GenPolynomial<C extends RingElem<C> >
 
 
     /**
+     * Trailing base coefficient.
+     * @return coefficient of constant term.
+     */
+    public C trailingBaseCoefficient() {
+        C c = val.get( ring.evzero );
+        if ( c == null ) {
+           return ring.coFac.getZERO();
+        }
+        return c;
+    }
+
+
+    /**
      * GenPolynomial summation. 
      * @param S GenPolynomial.
      * @return this+S.
