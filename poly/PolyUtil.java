@@ -310,7 +310,8 @@ public class PolyUtil {
      * @param A GenPolynomial<ModInteger>.
      * @param B other GenPolynomial<ModInteger>.
      * @param mi inverse of A.coFac.modul in ring B.coFac.
-     * @return cra(A,B).
+     * @return S = cra(A,B), with S mod A.coFac.modul == A 
+     *                       and S mod B.coFac.modul == B. 
      */
     public static GenPolynomial<ModInteger> 
         chineseRemainder( GenPolynomialRing<ModInteger> fac,
@@ -546,6 +547,86 @@ public class PolyUtil {
             }
         }
         return B;
+    }
+
+
+    /** ModInteger interpolate on first variable.
+     * @param fac GenPolynomial<ModInteger> result factory 
+     * with A.coFac.modul*B.coFac.modul = C.coFac.modul.
+     * @param A GenPolynomial<ModInteger>.
+     * @param B other GenPolynomial<ModInteger>.
+     * @param mi inverse of A.coFac.modul in ring B.coFac.
+     * @return S, with S(c) == c and S(A) == a.
+     */
+    public static GenPolynomial<GenPolynomial<ModInteger>> 
+        interpolate( GenPolynomialRing<GenPolynomial<ModInteger>> fac,
+                     GenPolynomial<GenPolynomial<ModInteger>> A,
+                     GenPolynomial<ModInteger> M,
+                     ModInteger mi,
+                     ModInteger ai,
+                     GenPolynomial<ModInteger> B ) {
+        GenPolynomial<GenPolynomial<ModInteger>> C = fac.getZERO().clone(); 
+        GenPolynomial<GenPolynomial<ModInteger>> Ap = A.clone(); 
+        SortedMap<ExpVector,GenPolynomial<ModInteger>> av = Ap.getMap();
+        SortedMap<ExpVector,ModInteger> bv = B.getMap();
+        SortedMap<ExpVector,GenPolynomial<ModInteger>> cv = C.getMap();
+        // RingFactory<GenPolynomial<ModInteger>> cfac = fac.coFac; 
+        // get RingFactory
+        GenPolynomialRing<ModInteger> cfac = (GenPolynomialRing<ModInteger>)fac.coFac; // get RingFactory
+        GenPolynomial<ModInteger> c = null;
+        for ( ExpVector e : bv.keySet() ) {
+            GenPolynomial<ModInteger> x = av.get( e );
+            ModInteger y = bv.get( e ); // assert y != null
+            if ( x != null ) {
+               av.remove( e );
+               c = PolyUtil.interpolate(cfac,x,M,mi,ai,y);
+               if ( ! c.isZERO() ) { // cannot happen
+                   cv.put( e, c );
+               }
+            } else {
+               c = cfac.fromInteger( y.getVal() );
+               cv.put( e, c ); // c != null
+            }
+        }
+        // assert bv is empty = done
+        for ( ExpVector e : av.keySet() ) { // rest of av
+            GenPolynomial<ModInteger> x = av.get( e ); // assert x != null
+            c = x; //new GenPolynomial<ModInteger>( cfac, x.getMap() );
+            cv.put( e, c ); // c != null
+        }
+        return C;
+    }
+
+
+    /** ModInteger univariate interpolation.
+     * @param fac GenPolynomial<ModInteger> result factory 
+     * with A.coFac.modul*B.coFac.modul = C.coFac.modul.
+     * @param A GenPolynomial<ModInteger>.
+     * @param B other GenPolynomial<ModInteger>.
+     * @param mi inverse of A.coFac.modul in ring B.coFac.
+     * @return S, with S(c) == c and S(A) == a.
+     */
+    public static GenPolynomial<ModInteger> 
+        interpolate( GenPolynomialRing<ModInteger> fac,
+                     GenPolynomial<ModInteger> A,
+                     GenPolynomial<ModInteger> M,
+                     ModInteger mi,
+                     ModInteger am,
+                     ModInteger a ) {
+        GenPolynomial<ModInteger> s; // = fac.getZERO();
+        ModInteger b = PolyUtil.<ModInteger>evaluateMain( fac.coFac, A, am ); 
+                              // c mod a.modul
+                              // c( tbcf(a.modul) ) if deg(a.modul)==1
+        ModInteger d = a.subtract( b ); // a-c mod a.modul
+        if ( d.isZERO() ) {
+           return A;
+        }
+        b = d.multiply( mi ); // b = (a-c)*ci mod a.modul
+        // (c.modul*b)+c mod this.modul = c mod c.modul = 
+        // (c.modul*ci*(a-c)+c) mod a.modul = a mod a.modul
+        s = M.multiply( b );
+        s = s.sum( A );
+        return s;
     }
 
 }
