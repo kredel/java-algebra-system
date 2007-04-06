@@ -473,6 +473,23 @@ public class GenPolynomialRing<C extends RingElem<C> >
 
 
     /**
+     * Generate univariate polynomial in a given variable.
+     * @typeparam C coefficient type.
+     * @param i the index of the variable.
+     * @return X_i as univariate polynomial.
+     */
+    public GenPolynomial<C> univariate(int i) {
+        GenPolynomial<C> p = getZERO();
+        if ( 0 <= i && i < nvar ) {
+           C one = coFac.getONE();
+           ExpVector e = new ExpVector(nvar,i,1);
+           p = p.sum(one,e);
+        }
+        return p;
+    }
+
+
+    /**
      * Extend variables. Used e.g. in module embedding.
      * Extend number of variables by i.
      * @param i number of variables to extend.
