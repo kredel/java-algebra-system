@@ -5,23 +5,23 @@
 
 package edu.jas.poly;
 
-import java.math.BigInteger;
 
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 
-//import java.util.List;
-//import java.util.ArrayList;
+import java.math.BigInteger;
+
 import java.util.Arrays;
 import java.util.Random;
-//import java.util.SortedMap;
 
 import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.structure.PrettyPrint;
+
+import edu.jas.arith.ModInteger;
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.TermOrder;
@@ -155,6 +155,12 @@ public class GenPolynomialRing<C extends RingElem<C> >
                      + an.toString()
                      + ") ]";
            }
+           //if ( coFac instanceof ModInteger ) {
+           //   ModInteger mn = (ModInteger)coFac;  
+           //   res +=  "[ "
+           //          + mn.getModul()
+           //          + " ]";
+           //}
            res +=   "(" 
                   + varsToString()
                   + ") " 
