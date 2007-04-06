@@ -371,4 +371,181 @@ public class PolyUtil {
         return p.multiply(L);
     }
 
+
+    /**
+     * Evaluate at main variable. 
+     * @param cfac coefficent polynomial ring factory.
+     * @param A polynomial to be evaluated.
+     * @param a value to evaluate at.
+     * @return A( x_1, ..., x_{n-1}, a ).
+     */
+    public static <C extends RingElem<C>> 
+        GenPolynomial<C> 
+        evaluateMain( GenPolynomialRing<C> cfac, 
+                      GenPolynomial<GenPolynomial<C>> A,
+                      C a ) {
+        if ( A == null || A.isZERO() ) {
+           return cfac.getZERO();
+        }
+        if ( A.ring.nvar != 1 ) { // todo assert
+           throw new RuntimeException("evaluateMain no univariate polynomial");
+        }
+        if ( a == null || a.isZERO() ) {
+           return A.trailingBaseCoefficient();
+        }
+        // assert decreasing exponents, i.e. compatible term order
+        Map<ExpVector,GenPolynomial<C>> val = A.getMap();
+        GenPolynomial<C> B = null;
+        long el1 = -1; // undefined
+        long el2 = -1;
+        for ( ExpVector e : val.keySet() ) {
+            el2 = e.getVal(0);
+            if ( B == null /*el1 < 0*/ ) { // first turn
+               B = val.get( e );
+            } else {
+               for ( long i = el2; i < el1; i++ ) {
+                   B = B.multiply( a );
+               }
+               B = B.sum( val.get( e ) );
+            }
+            el1 = el2;
+        }
+        for ( long i = 0; i < el2; i++ ) {
+            B = B.multiply( a );
+        }
+        return B;
+    }
+
+
+    /**
+     * Evaluate at main variable. 
+     * @param cfac coefficent ring factory.
+     * @param A polynomial to be evaluated.
+     * @param a value to evaluate at.
+     * @return A( a ).
+     */
+    public static <C extends RingElem<C>> 
+        C 
+        evaluateMain( RingFactory<C> cfac, 
+                      GenPolynomial<C> A,
+                      C a ) {
+        if ( A == null || A.isZERO() ) {
+           return cfac.getZERO();
+        }
+        if ( A.ring.nvar != 1 ) { // todo assert
+           throw new RuntimeException("evaluateMain no univariate polynomial");
+        }
+        if ( a == null || a.isZERO() ) {
+           return A.trailingBaseCoefficient();
+        }
+        // assert decreasing exponents, i.e. compatible term order
+        Map<ExpVector,C> val = A.getMap();
+        C B = null;
+        long el1 = -1; // undefined
+        long el2 = -1;
+        for ( ExpVector e : val.keySet() ) {
+            el2 = e.getVal(0);
+            if ( B == null /*el1 < 0*/ ) { // first turn
+               B = val.get( e );
+            } else {
+               for ( long i = el2; i < el1; i++ ) {
+                   B = B.multiply( a );
+               }
+               B = B.sum( val.get( e ) );
+            }
+            el1 = el2;
+        }
+        for ( long i = 0; i < el2; i++ ) {
+            B = B.multiply( a );
+        }
+        return B;
+    }
+
+
+    /**
+     * Evaluate at k-th variable. 
+     * @param cfac coefficient polynomial ring in k variables 
+     *        C[x_1, ..., x_k] factory.
+     * @param rfac coefficient polynomial ring 
+     *        C[x_1, ..., x_{k-1}] [x_k] factory,
+     *        a recursive polynomial ring in 1 variable with 
+     *        coefficients in k-1 variables.
+     * @param nfac polynomial ring in n-1 varaibles
+     *        C[x_1, ..., x_{k-1}] [x_{k+1}, ..., x_n] factory,
+     *        a recursive polynomial ring in n-k+1 variables with 
+     *        coefficients in k-1 variables.
+     * @param dfac polynomial ring in n-1 variables.
+     *        C[x_1, ..., x_{k-1}, x_{k+1}, ..., x_n] factory.
+     * @param A polynomial to be evaluated.
+     * @param a value to evaluate at.
+     * @return A( x_1, ..., x_{k-1}, a, x_{k+1}, ..., x_n).
+     */
+    public static <C extends RingElem<C>> 
+        GenPolynomial<C>
+        evaluate( GenPolynomialRing<C> cfac,
+                  GenPolynomialRing<GenPolynomial<C>> rfac, 
+                  GenPolynomialRing<GenPolynomial<C>> nfac, 
+                  GenPolynomialRing<C> dfac,
+                  GenPolynomial<C> A,
+                  C a ) {
+        if ( rfac.nvar != 1 ) { // todo assert
+           throw new RuntimeException("evaluate coefficient ring not univariate");
+        }
+        if ( A == null || A.isZERO() ) {
+           return cfac.getZERO();
+        }
+        Map<ExpVector,GenPolynomial<C>> Ap = A.contract(cfac);
+        GenPolynomialRing<C> rcf = (GenPolynomialRing<C>)rfac.coFac;
+        GenPolynomial<GenPolynomial<C>> Ev = nfac.getZERO().clone();
+        Map<ExpVector,GenPolynomial<C>> Evm = Ev.getMap();
+        for ( Map.Entry<ExpVector,GenPolynomial<C>> m : Ap.entrySet() ) {
+            ExpVector e = m.getKey();
+            GenPolynomial<C> b = m.getValue();
+            GenPolynomial<GenPolynomial<C>> c = recursive( rfac, b );
+            GenPolynomial<C> d = evaluateMain(rcf,c,a);
+            if ( d != null && !d.isZERO() ) {
+               Evm.put(e,d);
+            }
+        }
+        GenPolynomial<C> B = distribute(dfac,Ev);
+        return B;
+    }
+
+
+    /**
+     * Evaluate at first (lowest) variable. 
+     * @param cfac coefficient polynomial ring in first variable 
+     *        C[x_1] factory.
+     * @param dfac polynomial ring in n-1 variables.
+     *        C[x_2, ..., x_n] factory.
+     * @param A polynomial to be evaluated.
+     * @param a value to evaluate at.
+     * @return A( a, x_2, ..., x_n).
+     */
+    public static <C extends RingElem<C>> 
+        GenPolynomial<C>
+        evaluateFirst( GenPolynomialRing<C> cfac,
+                       GenPolynomialRing<C> dfac,
+                       GenPolynomial<C> A,
+                       C a ) {
+        if ( A == null || A.isZERO() ) {
+           return dfac.getZERO();
+        }
+        Map<ExpVector,GenPolynomial<C>> Ap = A.contract(cfac);
+        //RingFactory<C> rcf = cfac.coFac; // == dfac.coFac
+
+        GenPolynomial<C> B = dfac.getZERO().clone();
+        Map<ExpVector,C> Bm = B.getMap();
+
+        for ( Map.Entry<ExpVector,GenPolynomial<C>> m : Ap.entrySet() ) {
+            ExpVector e = m.getKey();
+            GenPolynomial<C> b = m.getValue();
+            C d = evaluateMain(cfac.coFac,b,a);
+            if ( d != null && !d.isZERO() ) {
+               Bm.put(e,d);
+            }
+        }
+        return B;
+    }
+
 }

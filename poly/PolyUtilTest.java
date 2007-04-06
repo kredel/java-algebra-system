@@ -181,7 +181,7 @@ public class PolyUtilTest extends TestCase {
      GenPolynomial<BigRational> br;
 
      for (int i = 0; i < 3; i++) {
-         c = dfac.random(kl*(i+2),ll*(i+1),el+i,q).abs();
+         c = dfac.random(kl*(i+9),ll*(i+3),el+i,q).abs();
          //c = c.multiply( new BigInteger(99) ); // fails, since not primitive
          //c = GreatestCommonDivisor.primitivePart(c);
 
@@ -336,5 +336,214 @@ public class PolyUtilTest extends TestCase {
          assertEquals("re(c)+i*im(c) = c",cp,ap);
      }
  }
+
+
+/**
+ * Test evaluate main recursive.
+ * 
+ */
+ public void testEvalMainRecursive() {
+     ai  = (new BigInteger()).random(kl);
+     //System.out.println("ai  = " + ai);
+
+     ar = rfac.getZERO();
+     //System.out.println("ar  = " + ar);
+
+     a = PolyUtil.<BigInteger>evaluateMain(cfac,ar,ai);
+     //System.out.println("a   = " + a);
+
+     assertTrue("isZERO( a )", a.isZERO() );
+
+     ar = rfac.getONE();
+     //System.out.println("ar  = " + ar);
+
+     a = PolyUtil.<BigInteger>evaluateMain(cfac,ar,ai);
+     //System.out.println("a   = " + a);
+
+     assertTrue("isONE( a )", a.isONE() );
+
+
+     //ar = rfac.getONE();
+     ar = rfac.random(kl,ll,el,q);
+     //System.out.println("ar  = " + ar);
+     //br = rfac.getONE();
+     br = rfac.random(kl,ll,el,q);
+     //System.out.println("br  = " + br);
+
+     cr = br.sum(ar);
+     //System.out.println("cr  = " + cr);
+
+     a = PolyUtil.<BigInteger>evaluateMain(cfac,ar,ai);
+     b = PolyUtil.<BigInteger>evaluateMain(cfac,br,ai);
+     c = PolyUtil.<BigInteger>evaluateMain(cfac,cr,ai);
+     //System.out.println("a   = " + a);
+     //System.out.println("b   = " + b);
+     //System.out.println("c   = " + c);
+
+     d = a.sum( b );
+     //System.out.println("d   = " + d);
+
+     assertEquals("eval(a+b) == eval(a) + eval(b)", c, d );
+
+
+     cr = br.multiply(ar);
+     //System.out.println("cr  = " + cr);
+
+     a = PolyUtil.<BigInteger>evaluateMain(cfac,ar,ai);
+     b = PolyUtil.<BigInteger>evaluateMain(cfac,br,ai);
+     c = PolyUtil.<BigInteger>evaluateMain(cfac,cr,ai);
+     //System.out.println("a   = " + a);
+     //System.out.println("b   = " + b);
+     //System.out.println("c   = " + c);
+
+     d = a.multiply( b );
+     //System.out.println("d   = " + d);
+
+     assertEquals("eval(a*b) == eval(a) * eval(b)", c, d );
+ }
+
+
+/**
+ * Test evaluate main.
+ * 
+ */
+ public void testEvalMain() {
+     ei  = (new BigInteger()).random(kl);
+     //System.out.println("ei  = " + ei);
+
+     cfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),1,to);
+     //System.out.println("cfac  = " + cfac);
+
+     a = cfac.getZERO();
+     //System.out.println("a  = " + a);
+
+     ai = PolyUtil.<BigInteger>evaluateMain(ei,a,ei);
+     //System.out.println("ai   = " + ai);
+
+     assertTrue("isZERO( ai )", ai.isZERO() );
+
+     a = cfac.getONE();
+     //System.out.println("a  = " + a);
+
+     ai = PolyUtil.<BigInteger>evaluateMain(ei,a,ei);
+     //System.out.println("ai   = " + ai);
+
+     assertTrue("isONE( ai )", ai.isONE() );
+
+     //a = cfac.getONE();
+     a = cfac.random(kl,ll,el,q);
+     //System.out.println("a  = " + a);
+     //b = cfac.getONE();
+     b = cfac.random(kl,ll,el,q);
+     //System.out.println("b  = " + b);
+
+     c = b.sum(a);
+     //System.out.println("c  = " + c);
+
+     ai = PolyUtil.<BigInteger>evaluateMain(ei,a,ei);
+     bi = PolyUtil.<BigInteger>evaluateMain(ei,b,ei);
+     ci = PolyUtil.<BigInteger>evaluateMain(ei,c,ei);
+     //System.out.println("ai   = " + ai);
+     //System.out.println("bi   = " + bi);
+     //System.out.println("ci   = " + ci);
+
+     di = bi.sum( ai );
+     //System.out.println("di   = " + di);
+
+     assertEquals("eval(a+b) == eval(a) + eval(b)", ci, di );
+
+
+     c = b.multiply(a);
+     //System.out.println("c  = " + c);
+
+     ai = PolyUtil.<BigInteger>evaluateMain(ei,a,ei);
+     bi = PolyUtil.<BigInteger>evaluateMain(ei,b,ei);
+     ci = PolyUtil.<BigInteger>evaluateMain(ei,c,ei);
+     //System.out.println("ai   = " + ai);
+     //System.out.println("bi   = " + bi);
+     //System.out.println("ci   = " + ci);
+
+     di = bi.multiply( ai );
+     //System.out.println("di   = " + di);
+
+     assertEquals("eval(a*b) == eval(a) * eval(b)", ci, di );
+ }
+
+
+/**
+ * Test evaluate first.
+ * 
+ */
+ public void testEvalFirst() {
+     ei  = (new BigInteger()).random(kl);
+     //System.out.println("ei  = " + ei);
+
+     GenPolynomial<BigInteger> ae, be, ce, de, ee;
+
+     GenPolynomialRing<BigInteger> fac;
+     fac = new GenPolynomialRing<BigInteger>(new BigInteger(1),rl,to);
+     //System.out.println("fac  = " + fac);
+
+     cfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),1,to);
+     //System.out.println("cfac  = " + cfac);
+
+     dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),rl-1,to);
+     //System.out.println("dfac  = " + dfac);
+
+     a = fac.getZERO();
+     //System.out.println("a  = " + a);
+
+     ae = PolyUtil.<BigInteger>evaluateFirst(cfac,dfac,a,ei);
+     //System.out.println("ae   = " + ae);
+
+     assertTrue("isZERO( ae )", ae.isZERO() );
+
+     a = fac.getONE();
+     //System.out.println("a  = " + a);
+
+     ae = PolyUtil.<BigInteger>evaluateFirst(cfac,dfac,a,ei);
+     //System.out.println("ae   = " + ae);
+
+     assertTrue("isONE( ae )", ae.isONE() );
+
+     //a = fac.getONE();
+     a = fac.random(kl,ll,el,q);
+     //System.out.println("a  = " + a);
+     //b = fac.getONE();
+     b = fac.random(kl,ll,el,q);
+     //System.out.println("b  = " + b);
+
+     c = b.sum(a);
+     //System.out.println("c  = " + c);
+
+     ae = PolyUtil.<BigInteger>evaluateFirst(cfac,dfac,a,ei);
+     be = PolyUtil.<BigInteger>evaluateFirst(cfac,dfac,b,ei);
+     ce = PolyUtil.<BigInteger>evaluateFirst(cfac,dfac,c,ei);
+     //System.out.println("ae   = " + ae);
+     //System.out.println("be   = " + be);
+     //System.out.println("ce   = " + ce);
+
+     de = be.sum( ae );
+     //System.out.println("de   = " + de);
+
+     assertEquals("eval(a+b) == eval(a) + eval(b)", ce, de );
+
+
+     c = b.multiply(a);
+     //System.out.println("c  = " + c);
+
+     ae = PolyUtil.<BigInteger>evaluateFirst(cfac,dfac,a,ei);
+     be = PolyUtil.<BigInteger>evaluateFirst(cfac,dfac,b,ei);
+     ce = PolyUtil.<BigInteger>evaluateFirst(cfac,dfac,c,ei);
+     //System.out.println("ae   = " + ae);
+     //System.out.println("be   = " + be);
+     //System.out.println("ce   = " + ce);
+
+     de = be.multiply( ae );
+     //System.out.println("de   = " + de);
+
+     assertEquals("eval(a*b) == eval(a) * eval(b)", ce, de );
+ }
+
 
 }
