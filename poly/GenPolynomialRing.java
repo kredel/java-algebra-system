@@ -253,7 +253,7 @@ public class GenPolynomialRing<C extends RingElem<C> >
     public String varsToString() {
         String s = "";
         if ( vars == null ) {
-            return s;
+            return s+"#"+nvar;
         }
         for ( int i = 0; i < vars.length; i++ ) {
             if ( i != 0 ) {
