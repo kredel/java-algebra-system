@@ -643,7 +643,7 @@ public final class ModInteger implements GcdRingElem<ModInteger>,
         java.math.BigInteger d2 = BigInteger.ONE.val;
         java.math.BigInteger x1;
         java.math.BigInteger x2;
-        while ( r.equals(java.math.BigInteger.ZERO) ) {
+        while ( !r.equals(java.math.BigInteger.ZERO) ) {
             qr = q.divideAndRemainder(r);
             q = qr[0];
             x1 = c1.subtract( q.multiply(d1) );
