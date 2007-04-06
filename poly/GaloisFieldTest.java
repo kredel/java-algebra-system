@@ -330,10 +330,10 @@ public class GaloisFieldTest extends TestCase {
  }
 
 /**
- * Test chinese remainder special case.
+ * Test interpolate, is chinese remainder special case.
  * 
  */
- public void testChineseRemainderSpecial() {
+ public void testInterpolate() {
      ModInteger cfac;
      GenPolynomialRing<ModInteger> m0fac;
      GenPolynomial<ModInteger> x0;
@@ -400,7 +400,7 @@ public class GaloisFieldTest extends TestCase {
      di = d.val.leadingBaseCoefficient();
      //System.out.println("di = " + di);
 
-     e = fac01.chineseRemainder(b,di,cm,ci);
+     e = fac01.interpolate(b,di,cm,ci);
      //System.out.println("e = " + e);
 
      assertEquals("cra(a mod (x-m0),a mod (x-m1)) = a (mod 19)",a,e);
@@ -456,7 +456,7 @@ public class GaloisFieldTest extends TestCase {
          di = d.val.leadingBaseCoefficient();
          //System.out.println("di = " + di);
 
-         e = fac01.chineseRemainder(b,di,cm,ci);
+         e = fac01.interpolate(b,di,cm,ci);
          //System.out.println("e = " + e);
 
          assertEquals("cra(a mod (x-m0),a mod (x-m1)) = a (mod 2^60-93)",a,e);
