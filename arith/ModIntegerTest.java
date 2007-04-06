@@ -227,7 +227,7 @@ public class ModIntegerTest extends TestCase {
 
 
 /**
- * Test multiplication.
+ * Test chinese remainder.
  * 
  */
  public void testChineseRemainder() {
