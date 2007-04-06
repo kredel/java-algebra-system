@@ -231,7 +231,7 @@ public class AlgebraicNumberRing<C extends RingElem<C> >
      * @param c AlgebraicNumber.
      * @param ci inverse of c.modul in ring of a.
      * @param a other AlgebraicNumber.
-     * @return cra(c,a).
+     * @return S, with S mod c.modul == c and S mod a.modul == a. 
      */
     public AlgebraicNumber<C>
            chineseRemainder(AlgebraicNumber<C> c, 
@@ -258,21 +258,22 @@ public class AlgebraicNumberRing<C extends RingElem<C> >
     }
 
 
-    /** AlgebraicNumber chinese remainder algorithm.  
-     * Assert deg(c.modul) >= deg(a.modul) 
-     * and c.modul * a.modul = this.modul.
-     * Special case with deg(a.modul) == 1.
+    /** AlgebraicNumber interpolation algorithm.  
+     * Assert deg(c.modul) >= deg(A.modul) 
+     * and c.modul * A.modul = this.modul.
+     * Special case with deg(A.modul) == 1.
+     * Similar algorithm as chinese remainder algortihm.
      * @param c AlgebraicNumber.
-     * @param ci inverse of c.modul(b) in ring of a.
+     * @param ci inverse of (c.modul)(a) in ring of A.
      * @param am trailing base coefficient of modul of other AlgebraicNumber A.
      * @param a value of other AlgebraicNumber A.
-     * @return cra(c,A).
+     * @return S, with S(c) == c and S(A) == a.
      */
     public AlgebraicNumber<C>
-           chineseRemainder(AlgebraicNumber<C> c, 
-                            C ci, 
-                            C am,
-                            C a) {
+           interpolate(AlgebraicNumber<C> c, 
+                       C ci, 
+                       C am,
+                       C a) {
         C b = PolyUtil.<C>evaluateMain( ring.coFac /*a*/, c.val, am ); 
                               // c mod a.modul
                               // c( tbcf(a.modul) ) if deg(a.modul)==1
