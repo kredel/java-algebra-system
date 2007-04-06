@@ -1,4 +1,3 @@
-
 /*
  * $Id$
  */
@@ -21,8 +20,8 @@ import edu.jas.poly.GenPolynomial;
  * GaloisField Test using JUnit.
  * @author Heinz Kredel.
  */
-
 public class GaloisFieldTest extends TestCase {
+
 
 /**
  * main
@@ -31,6 +30,7 @@ public class GaloisFieldTest extends TestCase {
           junit.textui.TestRunner.run( suite() );
    }
 
+
 /**
  * Constructs a <CODE>GaloisFieldTest</CODE> object.
  * @param name String.
@@ -38,6 +38,7 @@ public class GaloisFieldTest extends TestCase {
    public GaloisFieldTest(String name) {
           super(name);
    }
+
 
 /**
  */ 
@@ -135,7 +136,6 @@ public class GaloisFieldTest extends TestCase {
  * 
  */
  public void testAddition() {
-
      a = fac.random(ll);
      b = fac.random(ll);
 
@@ -164,9 +164,7 @@ public class GaloisFieldTest extends TestCase {
  * Test object multiplication.
  * 
  */
-
  public void testMultiplication() {
-
      a = fac.random(ll);
      assertTrue("not isZERO( a )", !a.isZERO() );
 
@@ -210,6 +208,260 @@ public class GaloisFieldTest extends TestCase {
      //System.out.println("c = " + c);
      //System.out.println("d = " + d);
      assertEquals("a*1/a = 1",fac.getONE(),d);
+ }
+
+
+/**
+ * Test chinese remainder.
+ * 
+ */
+ public void testChineseRemainder() {
+     ModInteger cfac;
+     GenPolynomialRing<ModInteger> m0fac;
+     GenPolynomial<ModInteger> x0;
+     GenPolynomial<ModInteger> x;
+     GenPolynomial<ModInteger> m0;
+     GenPolynomial<ModInteger> m1;
+     GenPolynomial<ModInteger> m01;
+     AlgebraicNumberRing<ModInteger> fac0;
+     AlgebraicNumberRing<ModInteger> fac1;
+     AlgebraicNumberRing<ModInteger> fac01;
+
+     cfac = new ModInteger(19,1);
+     //System.out.println("cfac = " + cfac.getModul());
+     m0fac = new GenPolynomialRing<ModInteger>( cfac, 0 );
+     //System.out.println("m0fac = " + m0fac);
+     mfac = new GenPolynomialRing<ModInteger>( cfac, 1 );
+     //System.out.println("mfac = " + mfac);
+
+     x0 = m0fac.getONE();
+     //System.out.println("x0 = " + x0);
+     x = x0.extend(mfac,0,1);
+     //System.out.println("x  = " + x);
+
+     m0 = mfac.fromInteger(2);
+     m1 = mfac.fromInteger(5);
+     //System.out.println("m0 = " + m0);
+     //System.out.println("m1 = " + m1);
+
+     m0 = x.subtract(m0);
+     m1 = x.subtract(m1);
+     //System.out.println("m0 = " + m0);
+     //System.out.println("m1 = " + m1);
+
+     m01 = m0.multiply(m1);
+     //System.out.println("m01 = " + m01);
+
+     fac0 = new AlgebraicNumberRing<ModInteger>( m0, true );
+     fac1 = new AlgebraicNumberRing<ModInteger>( m1, true );
+     fac01 = new AlgebraicNumberRing<ModInteger>( m01, false );
+     //System.out.println("fac0 = " + fac0);
+     //System.out.println("fac1 = " + fac1);
+     //System.out.println("fac01 = " + fac01);
+
+     a = fac01.random( 9 );
+     //System.out.println("a = " + a);
+     b = new AlgebraicNumber<ModInteger>(fac0,a.getVal());
+     //System.out.println("b = " + b);
+     c = new AlgebraicNumber<ModInteger>(fac1,a.getVal());
+     //System.out.println("c = " + c);
+
+     d = new AlgebraicNumber<ModInteger>(fac1,m0);
+     //System.out.println("d = " + d);
+     d = d.inverse();
+     //System.out.println("d = " + d);
+
+     e = fac01.chineseRemainder(b,d,c);
+     //System.out.println("e = " + e);
+
+     assertEquals("cra(a mod (x-m0),a mod (x-m1)) = a (mod 19)",a,e);
+
+
+     cfac = new ModInteger(getPrime(),1);
+     //System.out.println("cfac = " + cfac.getModul());
+     m0fac = new GenPolynomialRing<ModInteger>( cfac, 0 );
+     //System.out.println("m0fac = " + m0fac);
+     mfac = new GenPolynomialRing<ModInteger>( cfac, 1 );
+     //System.out.println("mfac = " + mfac);
+
+     x0 = m0fac.getONE();
+     //System.out.println("x0 = " + x0);
+     x = x0.extend(mfac,0,1);
+     //System.out.println("x  = " + x);
+
+     m0 = mfac.fromInteger(21);
+     m1 = mfac.fromInteger(57);
+     //System.out.println("m0 = " + m0);
+     //System.out.println("m1 = " + m1);
+
+     m0 = x.subtract(m0);
+     m1 = x.subtract(m1);
+     //System.out.println("m0 = " + m0);
+     //System.out.println("m1 = " + m1);
+
+     m01 = m0.multiply(m1);
+     //System.out.println("m01 = " + m01);
+
+     fac0 = new AlgebraicNumberRing<ModInteger>( m0, true );
+     fac1 = new AlgebraicNumberRing<ModInteger>( m1, true );
+     fac01 = new AlgebraicNumberRing<ModInteger>( m01, false );
+     //System.out.println("fac0 = " + fac0);
+     //System.out.println("fac1 = " + fac1);
+     //System.out.println("fac01 = " + fac01);
+
+     for ( int i = 0; i < 5; i++ ) {
+         a = fac01.random( 9 );
+         //System.out.println("a = " + a);
+         b = new AlgebraicNumber<ModInteger>(fac0,a.getVal());
+         //System.out.println("b = " + b);
+         c = new AlgebraicNumber<ModInteger>(fac1,a.getVal());
+         //System.out.println("c = " + c);
+
+         d = new AlgebraicNumber<ModInteger>(fac1,m0);
+         //System.out.println("d = " + d);
+         d = d.inverse();
+         //System.out.println("d = " + d);
+
+         e = fac01.chineseRemainder(b,d,c);
+         //System.out.println("e = " + e);
+
+         assertEquals("cra(a mod (x-m0),a mod (x-m1)) = a (mod 2^60-93)",a,e);
+     }
+ }
+
+/**
+ * Test chinese remainder special case.
+ * 
+ */
+ public void testChineseRemainderSpecial() {
+     ModInteger cfac;
+     GenPolynomialRing<ModInteger> m0fac;
+     GenPolynomial<ModInteger> x0;
+     GenPolynomial<ModInteger> x;
+     GenPolynomial<ModInteger> m0;
+     GenPolynomial<ModInteger> m1;
+     GenPolynomial<ModInteger> m01;
+     AlgebraicNumberRing<ModInteger> fac0;
+     AlgebraicNumberRing<ModInteger> fac1;
+     AlgebraicNumberRing<ModInteger> fac01;
+
+     ModInteger cm;
+     ModInteger ci;
+     ModInteger di;
+
+     cfac = new ModInteger(19,1);
+     //System.out.println("cfac = " + cfac.getModul());
+     m0fac = new GenPolynomialRing<ModInteger>( cfac, 0 );
+     //System.out.println("m0fac = " + m0fac);
+     mfac = new GenPolynomialRing<ModInteger>( cfac, 1 );
+     //System.out.println("mfac = " + mfac);
+
+     x0 = m0fac.getONE();
+     //System.out.println("x0 = " + x0);
+     x = x0.extend(mfac,0,1);
+     //System.out.println("x  = " + x);
+
+     m0 = mfac.fromInteger(2);
+     m1 = mfac.fromInteger(5);
+     //System.out.println("m0 = " + m0);
+     //System.out.println("m1 = " + m1);
+
+     m0 = x.subtract(m0);
+     m1 = x.subtract(m1);
+     //System.out.println("m0 = " + m0);
+     //System.out.println("m1 = " + m1);
+
+     m01 = m0.multiply(m1);
+     //System.out.println("m01 = " + m01);
+
+     fac0 = new AlgebraicNumberRing<ModInteger>( m0, true );
+     fac1 = new AlgebraicNumberRing<ModInteger>( m1, true );
+     fac01 = new AlgebraicNumberRing<ModInteger>( m01, false );
+     //System.out.println("fac0 = " + fac0);
+     //System.out.println("fac1 = " + fac1);
+     //System.out.println("fac01 = " + fac01);
+
+     a = fac01.random( 9 );
+     //System.out.println("a = " + a);
+     b = new AlgebraicNumber<ModInteger>(fac0,a.getVal());
+     //System.out.println("b = " + b);
+     c = new AlgebraicNumber<ModInteger>(fac1,a.getVal());
+     //System.out.println("c = " + c);
+     cm = fac1.modul.trailingBaseCoefficient();
+     //System.out.println("cm = " + cm);
+     ci = c.val.trailingBaseCoefficient();
+     //System.out.println("ci = " + ci);
+
+
+     d = new AlgebraicNumber<ModInteger>(fac1,m0);
+     //System.out.println("d = " + d);
+     d = d.inverse();
+     //System.out.println("d = " + d);
+     di = d.val.leadingBaseCoefficient();
+     //System.out.println("di = " + di);
+
+     e = fac01.chineseRemainder(b,di,cm,ci);
+     //System.out.println("e = " + e);
+
+     assertEquals("cra(a mod (x-m0),a mod (x-m1)) = a (mod 19)",a,e);
+
+     cfac = new ModInteger(getPrime(),1);
+     //System.out.println("cfac = " + cfac.getModul());
+     m0fac = new GenPolynomialRing<ModInteger>( cfac, 0 );
+     //System.out.println("m0fac = " + m0fac);
+     mfac = new GenPolynomialRing<ModInteger>( cfac, 1 );
+     //System.out.println("mfac = " + mfac);
+
+     x0 = m0fac.getONE();
+     //System.out.println("x0 = " + x0);
+     x = x0.extend(mfac,0,1);
+     //System.out.println("x  = " + x);
+
+     m0 = mfac.fromInteger(21);
+     m1 = mfac.fromInteger(57);
+     //System.out.println("m0 = " + m0);
+     //System.out.println("m1 = " + m1);
+
+     m0 = x.subtract(m0);
+     m1 = x.subtract(m1);
+     //System.out.println("m0 = " + m0);
+     //System.out.println("m1 = " + m1);
+
+     m01 = m0.multiply(m1);
+     //System.out.println("m01 = " + m01);
+
+     fac0 = new AlgebraicNumberRing<ModInteger>( m0, true );
+     fac1 = new AlgebraicNumberRing<ModInteger>( m1, true );
+     fac01 = new AlgebraicNumberRing<ModInteger>( m01, false );
+     //System.out.println("fac0 = " + fac0);
+     //System.out.println("fac1 = " + fac1);
+     //System.out.println("fac01 = " + fac01);
+
+     for ( int i = 0; i < 5; i++ ) {
+         a = fac01.random( 9 );
+         //System.out.println("a = " + a);
+         b = new AlgebraicNumber<ModInteger>(fac0,a.getVal());
+         //System.out.println("b = " + b);
+         c = new AlgebraicNumber<ModInteger>(fac1,a.getVal());
+         //System.out.println("c = " + c);
+         cm = fac1.modul.trailingBaseCoefficient();
+         //System.out.println("cm = " + cm);
+         ci = c.val.trailingBaseCoefficient();
+         //System.out.println("ci = " + ci);
+
+         d = new AlgebraicNumber<ModInteger>(fac1,m0);
+         //System.out.println("d = " + d);
+         d = d.inverse();
+         //System.out.println("d = " + d);
+         di = d.val.leadingBaseCoefficient();
+         //System.out.println("di = " + di);
+
+         e = fac01.chineseRemainder(b,di,cm,ci);
+         //System.out.println("e = " + e);
+
+         assertEquals("cra(a mod (x-m0),a mod (x-m1)) = a (mod 2^60-93)",a,e);
+     }
+
  }
 
 }
