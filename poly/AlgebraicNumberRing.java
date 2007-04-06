@@ -49,6 +49,18 @@ public class AlgebraicNumberRing<C extends RingElem<C> >
     }
 
 
+    /** The constructor creates a AlgebraicNumber factory object 
+     * from a GenPolynomial objects module. 
+     * @param m module GenPolynomial<C>.
+     * @param isField indicator if m is prime.
+     */
+    public AlgebraicNumberRing(GenPolynomial<C> m, boolean isField) {
+        ring = m.ring;
+        modul = m; // assert m != 0
+        this.isField = ( isField ? 1 :  0 );
+    }
+
+
     /** Get the module part. 
      * @return modul.
     public GenPolynomial<C> getModul() {
@@ -103,7 +115,6 @@ public class AlgebraicNumberRing<C extends RingElem<C> >
     /**
      * Query if this ring is a field.
      * @return true if modul is prime, else false.
-     * @return false.
      */
     public boolean isField() {
         if ( isField > 0 ) { 
@@ -143,8 +154,9 @@ public class AlgebraicNumberRing<C extends RingElem<C> >
      * @see java.lang.Object#toString()
      */
     public String toString() {
-        return "AlgebraicNumber[ " 
-              + modul.toString() + " :: "
+        return "AlgebraicNumberRing[ " 
+              + modul.toString() + " | isField="
+              + isField + " :: "
               + ring.toString() + " ]";
     }
 
