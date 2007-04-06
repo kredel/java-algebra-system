@@ -124,7 +124,6 @@ public class AlgebraicNumberTest extends TestCase {
  * 
  */
  public void testAddition() {
-
      a = fac.random(ll);
      b = fac.random(ll);
 
@@ -149,7 +148,6 @@ public class AlgebraicNumberTest extends TestCase {
      c = fac.getZERO().sum( a );
      d = fac.getZERO().subtract( a.negate() );
      assertEquals("0+a = 0+(-a)",c,d);
-
  }
  
 
@@ -157,9 +155,7 @@ public class AlgebraicNumberTest extends TestCase {
  * Test object multiplication.
  * 
  */
-
  public void testMultiplication() {
-
      a = fac.random(ll);
      assertTrue("not isZERO( a )", !a.isZERO() );
 
@@ -203,7 +199,6 @@ public class AlgebraicNumberTest extends TestCase {
      //System.out.println("c = " + c);
      //System.out.println("d = " + d);
      assertEquals("a*1/a = 1",fac.getONE(),d);
-
  }
 
 }
