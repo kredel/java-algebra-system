@@ -256,4 +256,89 @@ public class AlgebraicNumber<C extends RingElem<C> >
         return new AlgebraicNumber<C>( ring, val.monic() );
     }
 
+
+    /** AlgebraicNumber greatest common divisor.  
+     * @param S AlgebraicNumber.
+     * @return gcd(this,S).
+     */
+    public AlgebraicNumber<C> gcd(AlgebraicNumber<C> S) {
+        if ( S.isZERO() ) {
+           return this;
+        }
+        if ( isZERO() ) {
+           return S;
+        }
+        if ( isUnit() || S.isUnit() ) {
+           return ring.getONE();
+        }
+        return new AlgebraicNumber<C>( ring, val.gcd( S.val ) );
+    }
+
+
+    /**
+     * AlgebraicNumber extended greatest common divisor.
+     * @param S AlgebraicNumber.
+     * @return [ gcd(this,S), a, b ] with a*this + b*S = gcd(this,S).
+     */
+    public AlgebraicNumber<C>[] egcd(AlgebraicNumber<C> S) {
+        AlgebraicNumber<C>[] ret = new AlgebraicNumber[3];
+        ret[0] = null;
+        ret[1] = null;
+        ret[2] = null;
+        if ( S == null || S.isZERO() ) {
+           ret[0] = this;
+           return ret;
+        }
+        if ( isZERO() ) {
+           ret[0] = S;
+           return ret;
+        }
+        if ( this.isUnit() || S.isUnit() ) {
+           ret[0] = ring.getONE();
+           if ( this.isUnit() && S.isUnit() ) {
+              AlgebraicNumber<C> half = ring.fromInteger(2).inverse();
+              ret[1] = this.inverse().multiply(half);
+              ret[2] = S.inverse().multiply(half);
+              return ret;
+           }
+           if ( this.isUnit() ) {
+              // oder inverse(S-1)?
+              ret[1] = this.inverse();
+              ret[2] = ring.getZERO();
+              return ret;
+           }
+           // if ( S.isUnit() ) {
+              // oder inverse(this-1)?
+              ret[1] = ring.getZERO();
+              ret[2] = S.inverse();
+              return ret;
+           //}
+        }
+        //System.out.println("this = " + this + ", S = " + S);
+        GenPolynomial<C>[] qr;
+        GenPolynomial<C> q = this.val; 
+        GenPolynomial<C> r = S.val;
+        GenPolynomial<C> c1 = ring.ring.getONE();
+        GenPolynomial<C> d1 = ring.ring.getZERO();
+        GenPolynomial<C> c2 = ring.ring.getZERO();
+        GenPolynomial<C> d2 = ring.ring.getONE();
+        GenPolynomial<C> x1;
+        GenPolynomial<C> x2;
+        while ( !r.isZERO() ) {
+            qr = q.divideAndRemainder(r);
+            q = qr[0];
+            x1 = c1.subtract( q.multiply(d1) );
+            x2 = c2.subtract( q.multiply(d2) );
+            c1 = d1; c2 = d2;
+            d1 = x1; d2 = x2;
+            q = r;
+            r = qr[1];
+        }
+        //System.out.println("q = " + q + "\n c1 = " + c1 + "\n c2 = " + c2);
+        ret[0] = new AlgebraicNumber<C>(ring,q); 
+        ret[1] = new AlgebraicNumber<C>(ring,c1);
+        ret[2] = new AlgebraicNumber<C>(ring,c2);
+        return ret;
+    }
+
 }
