@@ -422,13 +422,7 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
      * @return X_i as solvable univariate polynomial.
      */
     public GenSolvablePolynomial<C> univariate(int i) {
-        GenSolvablePolynomial<C> p = ZERO;
-        if ( 0 <= i && i < nvar ) {
-           C one = coFac.getONE();
-           ExpVector e = new ExpVector(nvar,i,1);
-           p = (GenSolvablePolynomial<C>) p.sum(one,e);
-        }
-        return p;
+        return (GenSolvablePolynomial<C>)super.univariate(i);
     }
 
 
