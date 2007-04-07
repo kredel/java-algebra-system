@@ -357,7 +357,7 @@ public class GenPolynomial<C extends RingElem<C> >
      */
     public ExpVector leadingExpVector() {
         if ( val.size() == 0 ) {
-            return ring.evzero; // null ?;
+           return null; // ring.evzero or null ?;
         }
         return val.firstKey(); 
     }
@@ -385,6 +385,45 @@ public class GenPolynomial<C extends RingElem<C> >
            return ring.coFac.getZERO();
         }
         return c;
+    }
+
+
+    /**
+     * Degree in variable i.
+     * @return maximal degree in the variable i.
+     */
+    public long degree(int i) {
+        if ( val.size() == 0 ) {
+           return 0; // 0 or -1 ?;
+        }
+        int j = ring.nvar - 1 - i;
+        long deg = 0;
+        for ( ExpVector e : val.keySet() ) {
+            long d = e.getVal(j);
+            if ( d > deg ) {
+               deg = d;
+            }
+        }
+        return deg;
+    }
+
+
+    /**
+     * Maximal degree.
+     * @return maximal degree in any variables.
+     */
+    public long degree() {
+        if ( val.size() == 0 ) {
+           return 0; // 0 or -1 ?;
+        }
+        long deg = 0;
+        for ( ExpVector e : val.keySet() ) {
+            long d = ExpVector.EVMDEG( e );
+            if ( d > deg ) {
+               deg = d;
+            }
+        }
+        return deg;
     }
 
 
