@@ -357,7 +357,7 @@ public class GenPolynomial<C extends RingElem<C> >
      */
     public ExpVector leadingExpVector() {
         if ( val.size() == 0 ) {
-            return null;
+            return ring.evzero; // null ?;
         }
         return val.firstKey(); 
     }
