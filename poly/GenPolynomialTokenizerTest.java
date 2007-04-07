@@ -397,7 +397,7 @@ public void testSolvableBigRational() {
 
      GenSolvablePolynomial<BigRational> a = f.castToSolvableList().get(0);
      //System.out.println("a = " + a);
-     assertTrue("isZERO( f.get(0) )", a.isZERO() );
+     assertTrue("isZERO( f.get(0) )", a.isONE() );
 
      GenSolvablePolynomial<BigRational> b = f.castToSolvableList().get(1);
      //System.out.println("b = " + b);
@@ -405,7 +405,7 @@ public void testSolvableBigRational() {
 
      GenSolvablePolynomial<BigRational> c = f.castToSolvableList().get(2);
      //System.out.println("c = " + c);
-     assertTrue("isONE( f.get(2) )", c.isONE() );
+     assertTrue("isONE( f.get(2) )", c.isZERO() );
 
      GenSolvablePolynomial<BigRational> d = f.castToSolvableList().get(3);
      //System.out.println("d = " + d);
@@ -457,7 +457,7 @@ public void testSolvableModInteger() {
 
      GenSolvablePolynomial<ModInteger> a = f.castToSolvableList().get(0);
      //System.out.println("a = " + a);
-     assertTrue("isZERO( f.get(0) )", a.isZERO() );
+     assertTrue("isZERO( f.get(0) )", a.isONE() );
 
      GenSolvablePolynomial<ModInteger> b = f.castToSolvableList().get(1);
      //System.out.println("b = " + b);
@@ -465,7 +465,7 @@ public void testSolvableModInteger() {
 
      GenSolvablePolynomial<ModInteger> c = f.castToSolvableList().get(2);
      //System.out.println("c = " + c);
-     assertTrue("isONE( f.get(2) )", c.isONE() );
+     assertTrue("isONE( f.get(2) )", c.isZERO() );
 
      GenSolvablePolynomial<ModInteger> d = f.castToSolvableList().get(3);
      //System.out.println("d = " + d);
