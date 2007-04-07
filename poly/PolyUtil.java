@@ -421,7 +421,7 @@ public class PolyUtil {
     /**
      * Evaluate at main variable. 
      * @param cfac coefficent ring factory.
-     * @param A polynomial to be evaluated.
+     * @param A univariate polynomial to be evaluated.
      * @param a value to evaluate at.
      * @return A( a ).
      */
@@ -598,26 +598,28 @@ public class PolyUtil {
     }
 
 
-    /** ModInteger univariate interpolation.
-     * @param fac GenPolynomial<ModInteger> result factory 
+    /** Univariate polynomial interpolation.
+     * @param fac GenPolynomial<C> result factory 
      * with A.coFac.modul*B.coFac.modul = C.coFac.modul.
-     * @param A GenPolynomial<ModInteger>.
-     * @param B other GenPolynomial<ModInteger>.
+     * @param A GenPolynomial<C>.
+     * @param a evaluation of other GenPolynomial<C>.
+
      * @param mi inverse of A.coFac.modul in ring B.coFac.
      * @return S, with S(c) == c and S(A) == a.
      */
-    public static GenPolynomial<ModInteger> 
-        interpolate( GenPolynomialRing<ModInteger> fac,
-                     GenPolynomial<ModInteger> A,
-                     GenPolynomial<ModInteger> M,
-                     ModInteger mi,
-                     ModInteger am,
-                     ModInteger a ) {
-        GenPolynomial<ModInteger> s; // = fac.getZERO();
-        ModInteger b = PolyUtil.<ModInteger>evaluateMain( fac.coFac, A, am ); 
+    public static <C extends RingElem<C>>
+        GenPolynomial<C> 
+        interpolate( GenPolynomialRing<C> fac,
+                     GenPolynomial<C> A,
+                     GenPolynomial<C> M,
+                     C am,
+                     C mi,
+                     C a ) {
+        GenPolynomial<C> s; // = fac.getZERO();
+        C b = PolyUtil.<C>evaluateMain( fac.coFac, A, am ); 
                               // c mod a.modul
                               // c( tbcf(a.modul) ) if deg(a.modul)==1
-        ModInteger d = a.subtract( b ); // a-c mod a.modul
+        C d = a.subtract( b ); // a-c mod a.modul
         if ( d.isZERO() ) {
            return A;
         }
