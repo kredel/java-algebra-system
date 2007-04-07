@@ -576,6 +576,23 @@ public class ExpVector implements Cloneable, Serializable {
 
 
     /**
+     * ExpVector maximal degree.
+     * @param U
+     * @return maximal exponent.
+     */
+    public static long EVMDEG( ExpVector U ) {
+        long t = 0;
+        long[] u = U.getval();
+        for (int i = 0; i < u.length; i++ ) {
+            if ( u[i] > t ) {
+               t = u[i];
+            }
+        }
+        return t;
+    }
+
+
+    /**
      * ExpVector weighted degree.
      * @param w weights.
      * @param U
