@@ -598,7 +598,7 @@ public class PolyUtilTest extends TestCase {
      // Q(ei)^-1
      fi = ci.inverse();
      //System.out.println("fi   = " + fi);
-     r = PolyUtil.<ModInteger>interpolate(cfac,r,Q,ei,fi,ai);
+     r = PolyUtil.<ModInteger>interpolate(cfac,r,Q,fi,ai,ei);
      //System.out.println("r   = " + r);
 
 
@@ -614,7 +614,7 @@ public class PolyUtilTest extends TestCase {
      // Q(di)^-1
      fi = ci.inverse();
      //System.out.println("fi   = " + fi);
-     r = PolyUtil.<ModInteger>interpolate(cfac,r,Q,di,fi,bi);
+     r = PolyUtil.<ModInteger>interpolate(cfac,r,Q,fi,bi,di);
      //System.out.println("r   = " + r);
 
      // check evaluation
@@ -687,7 +687,7 @@ public class PolyUtilTest extends TestCase {
          // Q(ei)^-1
          fi = ci.inverse();
          //System.out.println("fi   = " + fi);
-         r = PolyUtil.<ModInteger>interpolate(cfac,r,Q,ei,fi,ai);
+         r = PolyUtil.<ModInteger>interpolate(cfac,r,Q,fi,ai,ei);
          //System.out.println("r   = " + r);
 
          // next evaluation polynomial
@@ -700,6 +700,97 @@ public class PolyUtilTest extends TestCase {
 
      //System.out.println("a   = " + a);
      //System.out.println("r   = " + r);
+
+     //            interpolate( a(e1), ..., a(ei) )           = a (mod 19)
+     assertEquals("interpolate(a mod (x-e1),...,a mod (x-ei)) = a (mod 19)",a,r);
+ }
+
+
+/**
+ * Test interpolate multivariate deg > 0 polynomial.
+ * 
+ */
+ public void testInterpolateMultivariate() {
+     ModInteger ai, bi, ci, di, ei, fi, gi, hi;
+     GenPolynomial<ModInteger> ap, bp, cp, dp, ep, fp, gp, hp;
+     GenPolynomial<GenPolynomial<ModInteger>> a, b, c, d, e;
+     GenPolynomialRing<GenPolynomial<ModInteger>> cfac;
+     GenPolynomialRing<ModInteger> ufac;
+     GenPolynomialRing<ModInteger> dfac;
+     ModInteger fac;
+     GenPolynomial<GenPolynomial<ModInteger>> r;
+     GenPolynomial<ModInteger> Q;
+     GenPolynomial<ModInteger> Qp;
+
+     long prime = 19;
+     //long prime = getPrime1().longValue();
+     fac = new ModInteger(prime,1);
+     System.out.println("fac.modul  = " + fac.getModul());
+     ufac = new GenPolynomialRing<ModInteger>(fac,1,to);
+     System.out.println("ufac  = " + ufac);
+     cfac = new GenPolynomialRing<GenPolynomial<ModInteger>>(ufac,1,to);
+     System.out.println("cfac  = " + cfac);
+     dfac = new GenPolynomialRing<ModInteger>(fac,1,to);
+     System.out.println("dfac  = " + dfac);
+     int maxdeg = 3;
+
+     // polynomial to interpolate
+     long deg = 0;
+     do {
+        a = cfac.random(kl,ll,maxdeg,q);
+        if ( !a.isZERO() ) {
+           deg = PolyUtil.coeffMaxDegree( a );
+        }
+     } while ( deg <= 0  );
+     System.out.println("a  = " + a);
+     System.out.println("deg  = " + deg);
+
+     // interpolation result
+     r = cfac.getZERO();
+     System.out.println("r   = " + r);
+
+     // interpolation polynomials product
+     Q = ufac.getONE();
+     System.out.println("Q   = " + Q);
+
+     long i = -1;
+     long qdeg;
+     do {
+         i++;
+         if ( i >= prime ) {
+            assertTrue("elements of Z_prime exhausted", i < prime);
+         }
+         qdeg = Q.leadingExpVector().getVal(0);
+         ei  = fac.fromInteger(i);
+         System.out.println("ei  = " + ei);
+         // a(ei)
+         ap = PolyUtil.<ModInteger>evaluateFirstRec(ufac,dfac,a,ei);
+         System.out.println("ap   = " + ap);
+
+         ci = PolyUtil.<ModInteger>evaluateMain(fac,Q,ei);
+         System.out.println("ci   = " + ci);
+         // Q(ei)^-1
+         fi = ci.inverse();
+         System.out.println("fi   = " + fi);
+         r = PolyUtil.interpolate(cfac,r,Q,fi,ap,ei);
+         System.out.println("r   = " + r);
+
+         // check
+         bp = PolyUtil.<ModInteger>evaluateFirstRec(ufac,dfac,r,ei);
+         System.out.println("bp   = " + bp);
+         assertEquals("interpolate(a)(ei) == a ",bp,ap);
+
+
+         // next evaluation polynomial
+         Qp = ufac.univariate(0);
+         Qp = Qp.subtract( ufac.getONE().multiply(ei) );
+         System.out.println("Qp   = " + Qp);
+         Q = Q.multiply( Qp );
+         System.out.println("Q   = " + Q);
+     } while ( qdeg < deg );
+
+     System.out.println("a   = " + a);
+     System.out.println("r   = " + r);
 
      //            interpolate( a(e1), ..., a(ei) )           = a (mod 19)
      assertEquals("interpolate(a mod (x-e1),...,a mod (x-ei)) = a (mod 19)",a,r);
