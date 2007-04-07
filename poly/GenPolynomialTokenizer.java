@@ -1117,7 +1117,7 @@ public class GenPolynomialTokenizer  {
         s = nextSolvablePolynomialList();
         logger.info("s = " + s); 
         // comments += nextComment();
-        return new OrderedPolynomialList(spfac,s); // Ordered
+        return new PolynomialList(spfac,s); // Ordered ?
     }
 
 
