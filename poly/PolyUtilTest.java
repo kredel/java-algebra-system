@@ -546,4 +546,163 @@ public class PolyUtilTest extends TestCase {
  }
 
 
+/**
+ * Test interpolate univariate 1 polynomial.
+ * 
+ */
+ public void testInterpolateUnivariateOne() {
+     ModInteger ai, bi, ci, di, ei, fi, gi, hi;
+     GenPolynomial<ModInteger> a, b, c, d, e;
+     GenPolynomialRing<ModInteger> cfac;
+     ModInteger fac;
+     GenPolynomial<ModInteger> r;
+     GenPolynomial<ModInteger> Q;
+     GenPolynomial<ModInteger> Qp;
+
+     fac = new ModInteger(19,1);
+     //System.out.println("fac.modul  = " + fac.getModul());
+     cfac = new GenPolynomialRing<ModInteger>(fac,1,to);
+     //System.out.println("cfac  = " + cfac);
+
+
+     a = cfac.getONE();
+     //System.out.println("a  = " + a);
+
+
+     ei  = fac.fromInteger(11);
+     //System.out.println("ei  = " + ei);
+     // a(ei)
+     ai = PolyUtil.<ModInteger>evaluateMain(fac,a,ei);
+     //System.out.println("ai   = " + ai);
+     assertTrue("isONE( ai )", ai.isONE() );
+
+     di  = fac.fromInteger(13);
+     //System.out.println("di  = " + di);
+     // a(di)
+     bi = PolyUtil.<ModInteger>evaluateMain(fac,a,di);
+     //System.out.println("bi   = " + bi);
+     assertTrue("isONE( bi )", bi.isONE() );
+
+
+     // interpolation result
+     r = cfac.getZERO();
+     //System.out.println("r   = " + r);
+
+     // interpolation polynomials product
+     Q = cfac.getONE();
+     //System.out.println("Q   = " + Q);
+
+
+     ci = PolyUtil.<ModInteger>evaluateMain(fac,Q,ei);
+     //System.out.println("ci   = " + ci);
+     // Q(ei)^-1
+     fi = ci.inverse();
+     //System.out.println("fi   = " + fi);
+     r = PolyUtil.<ModInteger>interpolate(cfac,r,Q,ei,fi,ai);
+     //System.out.println("r   = " + r);
+
+
+     // next evaluation polynomial
+     Qp = cfac.univariate(0);
+     Qp = Qp.subtract( cfac.getONE().multiply(ei) );
+     //System.out.println("Qp   = " + Qp);
+     Q = Q.multiply( Qp );
+     //System.out.println("Q   = " + Q);
+
+     ci = PolyUtil.<ModInteger>evaluateMain(fac,Q,di);
+     //System.out.println("ci   = " + ci);
+     // Q(di)^-1
+     fi = ci.inverse();
+     //System.out.println("fi   = " + fi);
+     r = PolyUtil.<ModInteger>interpolate(cfac,r,Q,di,fi,bi);
+     //System.out.println("r   = " + r);
+
+     // check evaluation
+     gi = PolyUtil.<ModInteger>evaluateMain(fac,r,ei);
+     //System.out.println("gi   = " + gi);
+     hi = PolyUtil.<ModInteger>evaluateMain(fac,r,di);
+     //System.out.println("hi   = " + hi);
+
+     //            interpolate( a(ei), a(di) )            = a (mod 19)
+     assertEquals("interpolate(a mod (x-ei),a mod (x-di)) = a (mod 19)",a,r);
+ }
+
+
+/**
+ * Test interpolate univariate deg > 0 polynomial.
+ * 
+ */
+ public void testInterpolateUnivariate() {
+     ModInteger ai, bi, ci, di, ei, fi, gi, hi;
+     GenPolynomial<ModInteger> a, b, c, d, e;
+     GenPolynomialRing<ModInteger> cfac;
+     ModInteger fac;
+     GenPolynomial<ModInteger> r;
+     GenPolynomial<ModInteger> Q;
+     GenPolynomial<ModInteger> Qp;
+
+     //long prime = 19;
+     long prime = getPrime1().longValue();
+     fac = new ModInteger(prime,1);
+     //System.out.println("fac.modul  = " + fac.getModul());
+     cfac = new GenPolynomialRing<ModInteger>(fac,1,to);
+     //System.out.println("cfac  = " + cfac);
+     int maxdeg = 19;
+
+     // polynomial to interpolate
+     long deg = 0;
+     do {
+        a = cfac.random(kl,ll,maxdeg,q);
+        if ( !a.isZERO() ) {
+           deg = a.leadingExpVector().getVal(0);
+        }
+     } while ( deg <= 0  );
+     //System.out.println("a  = " + a);
+     //System.out.println("deg  = " + deg);
+
+     // interpolation result
+     r = cfac.getZERO();
+     //System.out.println("r   = " + r);
+
+     // interpolation polynomials product
+     Q = cfac.getONE();
+     //System.out.println("Q   = " + Q);
+
+     long i = -1;
+     long qdeg;
+     do {
+         i++;
+         if ( i >= prime ) {
+            assertTrue("elements of Z_prime exhausted", i < prime);
+         }
+         qdeg = Q.leadingExpVector().getVal(0);
+         ei  = fac.fromInteger(i);
+         //System.out.println("ei  = " + ei);
+         // a(ei)
+         ai = PolyUtil.<ModInteger>evaluateMain(fac,a,ei);
+         //System.out.println("ai   = " + ai);
+
+         ci = PolyUtil.<ModInteger>evaluateMain(fac,Q,ei);
+         //System.out.println("ci   = " + ci);
+         // Q(ei)^-1
+         fi = ci.inverse();
+         //System.out.println("fi   = " + fi);
+         r = PolyUtil.<ModInteger>interpolate(cfac,r,Q,ei,fi,ai);
+         //System.out.println("r   = " + r);
+
+         // next evaluation polynomial
+         Qp = cfac.univariate(0);
+         Qp = Qp.subtract( cfac.getONE().multiply(ei) );
+         //System.out.println("Qp   = " + Qp);
+         Q = Q.multiply( Qp );
+         //System.out.println("Q   = " + Q);
+     } while ( qdeg < deg );
+
+     //System.out.println("a   = " + a);
+     //System.out.println("r   = " + r);
+
+     //            interpolate( a(e1), ..., a(ei) )           = a (mod 19)
+     assertEquals("interpolate(a mod (x-e1),...,a mod (x-ei)) = a (mod 19)",a,r);
+ }
+
 }
