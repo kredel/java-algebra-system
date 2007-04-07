@@ -550,26 +550,65 @@ public class PolyUtil {
     }
 
 
-    /** ModInteger interpolate on first variable.
-     * @param fac GenPolynomial<ModInteger> result factory 
-     * with A.coFac.modul*B.coFac.modul = C.coFac.modul.
-     * @param A GenPolynomial<ModInteger>.
-     * @param B other GenPolynomial<ModInteger>.
-     * @param mi inverse of A.coFac.modul in ring B.coFac.
-     * @return S, with S(c) == c and S(A) == a.
+    /**
+     * Evaluate at first (lowest) variable. 
+     * @param cfac coefficient polynomial ring in first variable 
+     *        C[x_1] factory.
+     * @param dfac polynomial ring in n-1 variables.
+     *        C[x_2, ..., x_n] factory.
+     * @param A recursive polynomial to be evaluated.
+     * @param a value to evaluate at.
+     * @return A( a, x_2, ..., x_n).
      */
-    public static GenPolynomial<GenPolynomial<ModInteger>> 
+    public static <C extends RingElem<C>> 
+        GenPolynomial<C>
+        evaluateFirstRec( GenPolynomialRing<C> cfac,
+                          GenPolynomialRing<C> dfac,
+                          GenPolynomial<GenPolynomial<C>> A,
+                          C a ) {
+        if ( A == null || A.isZERO() ) {
+           return dfac.getZERO();
+        }
+        Map<ExpVector,GenPolynomial<C>> Ap = A.getMap();
+        //RingFactory<C> rcf = cfac.coFac; // == dfac.coFac
+
+        GenPolynomial<C> B = dfac.getZERO().clone();
+        Map<ExpVector,C> Bm = B.getMap();
+
+        for ( Map.Entry<ExpVector,GenPolynomial<C>> m : Ap.entrySet() ) {
+            ExpVector e = m.getKey();
+            GenPolynomial<C> b = m.getValue();
+            C d = evaluateMain(cfac.coFac,b,a);
+            if ( d != null && !d.isZERO() ) {
+               Bm.put(e,d);
+            }
+        }
+        return B;
+    }
+
+
+    /** ModInteger interpolate on first variable.
+     * @param fac GenPolynomial<C> result factory.
+     * @param A GenPolynomial<C>.
+     * @param M GenPolynomial<C> interpolation modul of A.
+     * @param mi inverse of M(am) in ring fac.coFac.
+     * @param B evaluation of other GenPolynomial<C>.
+     * @param am evaluation point (interpolation modul) of B, i.e. P(am) = B.
+     * @return S, with S mod M == A and S(am) == B.
+     */
+    public static //<C extends RingElem<ModInteger>>
+        GenPolynomial<GenPolynomial<ModInteger>> 
         interpolate( GenPolynomialRing<GenPolynomial<ModInteger>> fac,
                      GenPolynomial<GenPolynomial<ModInteger>> A,
                      GenPolynomial<ModInteger> M,
                      ModInteger mi,
-                     ModInteger ai,
-                     GenPolynomial<ModInteger> B ) {
-        GenPolynomial<GenPolynomial<ModInteger>> C = fac.getZERO().clone(); 
+                     GenPolynomial<ModInteger> B, 
+                     ModInteger am ) {
+        GenPolynomial<GenPolynomial<ModInteger>> S = fac.getZERO().clone(); 
         GenPolynomial<GenPolynomial<ModInteger>> Ap = A.clone(); 
         SortedMap<ExpVector,GenPolynomial<ModInteger>> av = Ap.getMap();
         SortedMap<ExpVector,ModInteger> bv = B.getMap();
-        SortedMap<ExpVector,GenPolynomial<ModInteger>> cv = C.getMap();
+        SortedMap<ExpVector,GenPolynomial<ModInteger>> sv = S.getMap();
         // RingFactory<GenPolynomial<ModInteger>> cfac = fac.coFac; 
         // get RingFactory
         GenPolynomialRing<ModInteger> cfac = (GenPolynomialRing<ModInteger>)fac.coFac; // get RingFactory
@@ -579,56 +618,75 @@ public class PolyUtil {
             ModInteger y = bv.get( e ); // assert y != null
             if ( x != null ) {
                av.remove( e );
-               c = PolyUtil.interpolate(cfac,x,M,mi,ai,y);
+               c = PolyUtil.<ModInteger>interpolate(cfac,x,M,mi,y,am);
                if ( ! c.isZERO() ) { // cannot happen
-                   cv.put( e, c );
+                   sv.put( e, c );
                }
             } else {
                c = cfac.fromInteger( y.getVal() );
-               cv.put( e, c ); // c != null
+               sv.put( e, c ); // c != null
             }
         }
         // assert bv is empty = done
         for ( ExpVector e : av.keySet() ) { // rest of av
             GenPolynomial<ModInteger> x = av.get( e ); // assert x != null
             c = x; //new GenPolynomial<ModInteger>( cfac, x.getMap() );
-            cv.put( e, c ); // c != null
+            sv.put( e, c ); // c != null
         }
-        return C;
+        return S;
     }
 
 
     /** Univariate polynomial interpolation.
-     * @param fac GenPolynomial<C> result factory 
-     * with A.coFac.modul*B.coFac.modul = C.coFac.modul.
+     * @param fac GenPolynomial<C> result factory.
      * @param A GenPolynomial<C>.
+     * @param M GenPolynomial<C> interpolation modul of A.
+     * @param mi inverse of M(am) in ring fac.coFac.
      * @param a evaluation of other GenPolynomial<C>.
-
-     * @param mi inverse of A.coFac.modul in ring B.coFac.
-     * @return S, with S(c) == c and S(A) == a.
+     * @param am evaluation point (interpolation modul) of a, i.e. P(am) = a.
+     * @return S, with S mod M == A and S(am) == a.
      */
     public static <C extends RingElem<C>>
         GenPolynomial<C> 
         interpolate( GenPolynomialRing<C> fac,
                      GenPolynomial<C> A,
                      GenPolynomial<C> M,
-                     C am,
                      C mi,
-                     C a ) {
-        GenPolynomial<C> s; // = fac.getZERO();
+                     C a, 
+                     C am ) {
+        GenPolynomial<C> s; 
         C b = PolyUtil.<C>evaluateMain( fac.coFac, A, am ); 
-                              // c mod a.modul
-                              // c( tbcf(a.modul) ) if deg(a.modul)==1
-        C d = a.subtract( b ); // a-c mod a.modul
+                              // A mod a.modul
+        C d = a.subtract( b ); // a-A mod a.modul
         if ( d.isZERO() ) {
            return A;
         }
-        b = d.multiply( mi ); // b = (a-c)*ci mod a.modul
-        // (c.modul*b)+c mod this.modul = c mod c.modul = 
-        // (c.modul*ci*(a-c)+c) mod a.modul = a mod a.modul
+        b = d.multiply( mi ); // b = (a-A)*mi mod a.modul
+        // (M*b)+A mod M = A mod M = 
+        // (M*mi*(a-A)+A) mod a.modul = a mod a.modul
         s = M.multiply( b );
         s = s.sum( A );
         return s;
+    }
+
+
+    /**
+     * Maximal degree in the coefficient polynomials.
+     * @return maximal degree in the coefficients.
+     */
+    public static long 
+           coeffMaxDegree(GenPolynomial<GenPolynomial<ModInteger>> A) {
+        if ( A.isZERO() ) {
+           return 0; // 0 or -1 ?;
+        }
+        long deg = 0;
+        for ( GenPolynomial<ModInteger> a : A.getMap().values() ) {
+            long d = a.degree();
+            if ( d > deg ) {
+               deg = d;
+            }
+        }
+        return deg;
     }
 
 }
