@@ -428,6 +428,22 @@ public class GenPolynomial<C extends RingElem<C> >
 
 
     /**
+     * Maximal degree vector.
+     * @return maximal degree vector of all variables.
+     */
+    public ExpVector degreeVector() {
+        ExpVector deg = ring.evzero;
+        if ( val.size() == 0 ) {
+           return deg; 
+        }
+        for ( ExpVector e : val.keySet() ) {
+            deg = ExpVector.EVLCM( deg, e );
+        }
+        return deg;
+    }
+
+
+    /**
      * GenPolynomial summation. 
      * @param S GenPolynomial.
      * @return this+S.
