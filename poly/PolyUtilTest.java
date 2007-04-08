@@ -263,17 +263,31 @@ public class PolyUtilTest extends TestCase {
      GenPolynomial<ModInteger> bm;
      GenPolynomial<ModInteger> cm;
 
+     ExpVector degv, qdegv;
+
      for (int i = 0; i < 3; i++) {
-         c = cfac.random( (59+29)/2, ll*(i+1), el+i, q);
+         c = dfac.random( (59+29)/2, ll*(i+1), el+i, q);
          //c = c.multiply( new BigInteger(99) ); // fails, since not primitive
          //c = GreatestCommonDivisor.primitivePart(c);
+         degv = c.degreeVector();
+         //System.out.println("degv  = " + degv);
 
          assertTrue("length( c"+i+" ) <> 0", c.length() >= 0);
          assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
          assertTrue(" not isONE( c"+i+" )", !c.isONE() );
 
          am = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac1,c);
+         qdegv = am.degreeVector();
+         //System.out.println("qdegv  = " + qdegv);
+         if ( !degv.equals( qdegv) ) {
+            continue;
+         }
          bm = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac2,c);
+         qdegv = bm.degreeVector();
+         //System.out.println("qdegv  = " + qdegv);
+         if ( !degv.equals( qdegv) ) {
+            continue;
+         }
 
          cm = PolyUtil.chineseRemainder(mfac,am,di,bm);
          a = PolyUtil.integerFromModularCoefficients(dfac,cm);
@@ -722,39 +736,42 @@ public class PolyUtilTest extends TestCase {
      GenPolynomial<ModInteger> Q;
      GenPolynomial<ModInteger> Qp;
 
-     long prime = 19;
-     //long prime = getPrime1().longValue();
+     //long prime = 19;
+     long prime = getPrime1().longValue();
      fac = new ModInteger(prime,1);
-     System.out.println("fac.modul  = " + fac.getModul());
+     //System.out.println("fac.modul  = " + fac.getModul());
      ufac = new GenPolynomialRing<ModInteger>(fac,1,to);
-     System.out.println("ufac  = " + ufac);
-     cfac = new GenPolynomialRing<GenPolynomial<ModInteger>>(ufac,1,to);
-     System.out.println("cfac  = " + cfac);
-     dfac = new GenPolynomialRing<ModInteger>(fac,1,to);
-     System.out.println("dfac  = " + dfac);
-     int maxdeg = 3;
+     //System.out.println("ufac  = " + ufac);
+     cfac = new GenPolynomialRing<GenPolynomial<ModInteger>>(ufac,rl,to);
+     //System.out.println("cfac  = " + cfac);
+     dfac = new GenPolynomialRing<ModInteger>(fac,rl,to);
+     //System.out.println("dfac  = " + dfac);
+     int maxdeg = 19;
 
      // polynomial to interpolate
      long deg = 0;
      do {
-        a = cfac.random(kl,ll,maxdeg,q);
+        a = cfac.random(kl,ll+9,maxdeg,q);
         if ( !a.isZERO() ) {
            deg = PolyUtil.coeffMaxDegree( a );
         }
      } while ( deg <= 0  );
-     System.out.println("a  = " + a);
-     System.out.println("deg  = " + deg);
+     //System.out.println("a  = " + a);
+     //System.out.println("deg  = " + deg);
+     ExpVector degv = a.degreeVector();
+     //System.out.println("degv  = " + degv);
 
      // interpolation result
      r = cfac.getZERO();
-     System.out.println("r   = " + r);
+     //System.out.println("r   = " + r);
 
      // interpolation polynomials product
      Q = ufac.getONE();
-     System.out.println("Q   = " + Q);
+     //System.out.println("Q   = " + Q);
 
      long i = -1;
      long qdeg;
+     ExpVector qdegv;
      do {
          i++;
          if ( i >= prime ) {
@@ -762,35 +779,39 @@ public class PolyUtilTest extends TestCase {
          }
          qdeg = Q.leadingExpVector().getVal(0);
          ei  = fac.fromInteger(i);
-         System.out.println("ei  = " + ei);
+         //System.out.println("ei  = " + ei);
          // a(ei)
          ap = PolyUtil.<ModInteger>evaluateFirstRec(ufac,dfac,a,ei);
-         System.out.println("ap   = " + ap);
-
+         //System.out.println("ap   = " + ap);
+         qdegv = ap.degreeVector();
+         //System.out.println("qdegv = " + qdegv);
+         if ( !degv.equals( qdegv) ) {
+            continue;
+         }
          ci = PolyUtil.<ModInteger>evaluateMain(fac,Q,ei);
-         System.out.println("ci   = " + ci);
+         //System.out.println("ci   = " + ci);
          // Q(ei)^-1
          fi = ci.inverse();
-         System.out.println("fi   = " + fi);
+         //System.out.println("fi   = " + fi);
          r = PolyUtil.interpolate(cfac,r,Q,fi,ap,ei);
-         System.out.println("r   = " + r);
+         //System.out.println("r   = " + r);
 
          // check
          bp = PolyUtil.<ModInteger>evaluateFirstRec(ufac,dfac,r,ei);
-         System.out.println("bp   = " + bp);
+         //System.out.println("bp   = " + bp);
          assertEquals("interpolate(a)(ei) == a ",bp,ap);
 
 
          // next evaluation polynomial
          Qp = ufac.univariate(0);
          Qp = Qp.subtract( ufac.getONE().multiply(ei) );
-         System.out.println("Qp   = " + Qp);
+         //System.out.println("Qp   = " + Qp);
          Q = Q.multiply( Qp );
-         System.out.println("Q   = " + Q);
-     } while ( qdeg < deg );
+         //System.out.println("Q   = " + Q);
+     } while ( qdeg <= deg );
 
-     System.out.println("a   = " + a);
-     System.out.println("r   = " + r);
+     //System.out.println("a   = " + a);
+     //System.out.println("r   = " + r);
 
      //            interpolate( a(e1), ..., a(ei) )           = a (mod 19)
      assertEquals("interpolate(a mod (x-e1),...,a mod (x-ei)) = a (mod 19)",a,r);
