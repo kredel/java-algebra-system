@@ -335,14 +335,16 @@ public class PolyUtil {
                    cv.put( e, c );
                }
             } else {
-               c = cfac.fromInteger( y.getVal() );
+               //c = cfac.fromInteger( y.getVal() );
+               c = cfac.chineseRemainder(cfac.getZERO(),mi,y);
                cv.put( e, c ); // c != null
             }
         }
         // assert bv is empty = done
         for ( ExpVector e : av.keySet() ) { // rest of av
             ModInteger x = av.get( e ); // assert x != null
-            c = cfac.fromInteger( x.getVal() );
+            //c = cfac.fromInteger( x.getVal() );
+            c = cfac.chineseRemainder(x,mi,cfac.getZERO());
             cv.put( e, c ); // c != null
         }
         return C;
@@ -623,14 +625,16 @@ public class PolyUtil {
                    sv.put( e, c );
                }
             } else {
-               c = cfac.fromInteger( y.getVal() );
+               //c = cfac.fromInteger( y.getVal() );
+               c = PolyUtil.<ModInteger>interpolate(cfac,cfac.getZERO(),M,mi,y,am);
                sv.put( e, c ); // c != null
             }
         }
         // assert bv is empty = done
         for ( ExpVector e : av.keySet() ) { // rest of av
             GenPolynomial<ModInteger> x = av.get( e ); // assert x != null
-            c = x; //new GenPolynomial<ModInteger>( cfac, x.getMap() );
+            //c = x; //new GenPolynomial<ModInteger>( cfac, x.getMap() );
+            c = PolyUtil.<ModInteger>interpolate(cfac,x,M,mi,mi.getZERO(),am);
             sv.put( e, c ); // c != null
         }
         return S;
