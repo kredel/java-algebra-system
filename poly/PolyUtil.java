@@ -313,17 +313,18 @@ public class PolyUtil {
      * @return S = cra(A,B), with S mod A.coFac.modul == A 
      *                       and S mod B.coFac.modul == B. 
      */
-    public static GenPolynomial<ModInteger> 
+    public static //<C extends RingElem<C>>
+        GenPolynomial<ModInteger> 
         chineseRemainder( GenPolynomialRing<ModInteger> fac,
                           GenPolynomial<ModInteger> A,
                           ModInteger mi,
                           GenPolynomial<ModInteger> B ) {
         ModInteger cfac = fac.coFac.getZERO(); // get RingFactory
-        GenPolynomial<ModInteger> C = fac.getZERO().clone(); 
+        GenPolynomial<ModInteger> S = fac.getZERO().clone(); 
         GenPolynomial<ModInteger> Ap = A.clone(); 
         SortedMap<ExpVector,ModInteger> av = Ap.getMap();
         SortedMap<ExpVector,ModInteger> bv = B.getMap();
-        SortedMap<ExpVector,ModInteger> cv = C.getMap();
+        SortedMap<ExpVector,ModInteger> sv = S.getMap();
         ModInteger c = null;
         for ( ExpVector e : bv.keySet() ) {
             ModInteger x = av.get( e );
@@ -331,23 +332,27 @@ public class PolyUtil {
             if ( x != null ) {
                av.remove( e );
                c = cfac.chineseRemainder(x,mi,y);
-               if ( ! c.isZERO() ) { // cannot happen
-                   cv.put( e, c );
+               if ( ! c.isZERO() ) { // 0 cannot happen
+                   sv.put( e, c );
                }
             } else {
                //c = cfac.fromInteger( y.getVal() );
-               c = cfac.chineseRemainder(cfac.getZERO(),mi,y);
-               cv.put( e, c ); // c != null
+               c = cfac.chineseRemainder(A.ring.coFac.getZERO(),mi,y);
+               if ( ! c.isZERO() ) { // 0 cannot happen
+                  sv.put( e, c ); // c != null
+               }
             }
         }
         // assert bv is empty = done
         for ( ExpVector e : av.keySet() ) { // rest of av
             ModInteger x = av.get( e ); // assert x != null
             //c = cfac.fromInteger( x.getVal() );
-            c = cfac.chineseRemainder(x,mi,cfac.getZERO());
-            cv.put( e, c ); // c != null
+            c = cfac.chineseRemainder(x,mi,B.ring.coFac.getZERO());
+            if ( ! c.isZERO() ) { // 0 cannot happen
+               sv.put( e, c ); // c != null
+            }
         }
-        return C;
+        return S;
     }
 
 
@@ -598,44 +603,47 @@ public class PolyUtil {
      * @param am evaluation point (interpolation modul) of B, i.e. P(am) = B.
      * @return S, with S mod M == A and S(am) == B.
      */
-    public static //<C extends RingElem<ModInteger>>
-        GenPolynomial<GenPolynomial<ModInteger>> 
-        interpolate( GenPolynomialRing<GenPolynomial<ModInteger>> fac,
-                     GenPolynomial<GenPolynomial<ModInteger>> A,
-                     GenPolynomial<ModInteger> M,
-                     ModInteger mi,
-                     GenPolynomial<ModInteger> B, 
-                     ModInteger am ) {
-        GenPolynomial<GenPolynomial<ModInteger>> S = fac.getZERO().clone(); 
-        GenPolynomial<GenPolynomial<ModInteger>> Ap = A.clone(); 
-        SortedMap<ExpVector,GenPolynomial<ModInteger>> av = Ap.getMap();
-        SortedMap<ExpVector,ModInteger> bv = B.getMap();
-        SortedMap<ExpVector,GenPolynomial<ModInteger>> sv = S.getMap();
-        // RingFactory<GenPolynomial<ModInteger>> cfac = fac.coFac; 
-        // get RingFactory
-        GenPolynomialRing<ModInteger> cfac = (GenPolynomialRing<ModInteger>)fac.coFac; // get RingFactory
-        GenPolynomial<ModInteger> c = null;
+    public static <C extends RingElem<C>>
+        GenPolynomial<GenPolynomial<C>> 
+        interpolate( GenPolynomialRing<GenPolynomial<C>> fac,
+                     GenPolynomial<GenPolynomial<C>> A,
+                     GenPolynomial<C> M,
+                     C mi,
+                     GenPolynomial<C> B, 
+                     C am ) {
+        GenPolynomial<GenPolynomial<C>> S = fac.getZERO().clone(); 
+        GenPolynomial<GenPolynomial<C>> Ap = A.clone(); 
+        SortedMap<ExpVector,GenPolynomial<C>> av = Ap.getMap();
+        SortedMap<ExpVector,C> bv = B.getMap();
+        SortedMap<ExpVector,GenPolynomial<C>> sv = S.getMap();
+        GenPolynomialRing<C> cfac = (GenPolynomialRing<C>)fac.coFac; 
+        RingFactory<C> bfac = cfac.coFac; 
+        GenPolynomial<C> c = null;
         for ( ExpVector e : bv.keySet() ) {
-            GenPolynomial<ModInteger> x = av.get( e );
-            ModInteger y = bv.get( e ); // assert y != null
+            GenPolynomial<C> x = av.get( e );
+            C y = bv.get( e ); // assert y != null
             if ( x != null ) {
                av.remove( e );
-               c = PolyUtil.<ModInteger>interpolate(cfac,x,M,mi,y,am);
-               if ( ! c.isZERO() ) { // cannot happen
+               c = PolyUtil.<C>interpolate(cfac,x,M,mi,y,am);
+               if ( ! c.isZERO() ) { // 0 cannot happen
                    sv.put( e, c );
                }
             } else {
                //c = cfac.fromInteger( y.getVal() );
-               c = PolyUtil.<ModInteger>interpolate(cfac,cfac.getZERO(),M,mi,y,am);
-               sv.put( e, c ); // c != null
+               c = PolyUtil.<C>interpolate(cfac,cfac.getZERO(),M,mi,y,am);
+               if ( ! c.isZERO() ) { // 0 cannot happen
+                  sv.put( e, c ); // c != null
+               }
             }
         }
         // assert bv is empty = done
         for ( ExpVector e : av.keySet() ) { // rest of av
-            GenPolynomial<ModInteger> x = av.get( e ); // assert x != null
-            //c = x; //new GenPolynomial<ModInteger>( cfac, x.getMap() );
-            c = PolyUtil.<ModInteger>interpolate(cfac,x,M,mi,mi.getZERO(),am);
-            sv.put( e, c ); // c != null
+            GenPolynomial<C> x = av.get( e ); // assert x != null
+            //c = x; //new GenPolynomial<C>( cfac, x.getMap() );
+            c = PolyUtil.<C>interpolate(cfac,x,M,mi,bfac.getZERO(),am);
+            if ( ! c.isZERO() ) { // 0 cannot happen
+               sv.put( e, c ); // c != null
+            }
         }
         return S;
     }
@@ -678,13 +686,14 @@ public class PolyUtil {
      * Maximal degree in the coefficient polynomials.
      * @return maximal degree in the coefficients.
      */
-    public static long 
-           coeffMaxDegree(GenPolynomial<GenPolynomial<ModInteger>> A) {
+    public static <C extends RingElem<C>>
+           long 
+           coeffMaxDegree(GenPolynomial<GenPolynomial<C>> A) {
         if ( A.isZERO() ) {
            return 0; // 0 or -1 ?;
         }
         long deg = 0;
-        for ( GenPolynomial<ModInteger> a : A.getMap().values() ) {
+        for ( GenPolynomial<C> a : A.getMap().values() ) {
             long d = a.degree();
             if ( d > deg ) {
                deg = d;
