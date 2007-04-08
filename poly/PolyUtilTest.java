@@ -793,7 +793,7 @@ public class PolyUtilTest extends TestCase {
          // Q(ei)^-1
          fi = ci.inverse();
          //System.out.println("fi   = " + fi);
-         r = PolyUtil.interpolate(cfac,r,Q,fi,ap,ei);
+         r = PolyUtil.<ModInteger>interpolate(cfac,r,Q,fi,ap,ei);
          //System.out.println("r   = " + r);
 
          // check
