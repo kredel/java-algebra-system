@@ -668,7 +668,7 @@ public class PolyUtilTest extends TestCase {
      do {
         a = cfac.random(kl,ll,maxdeg,q);
         if ( !a.isZERO() ) {
-           deg = a.leadingExpVector().getVal(0);
+           deg = a.degree(0);
         }
      } while ( deg <= 0  );
      //System.out.println("a  = " + a);
@@ -689,7 +689,7 @@ public class PolyUtilTest extends TestCase {
          if ( i >= prime ) {
             assertTrue("elements of Z_prime exhausted", i < prime);
          }
-         qdeg = Q.leadingExpVector().getVal(0);
+         qdeg = Q.degree(0);
          ei  = fac.fromInteger(i);
          //System.out.println("ei  = " + ei);
          // a(ei)
@@ -753,7 +753,7 @@ public class PolyUtilTest extends TestCase {
      do {
         a = cfac.random(kl,ll+9,maxdeg,q);
         if ( !a.isZERO() ) {
-           deg = PolyUtil.coeffMaxDegree( a );
+           deg = PolyUtil.<ModInteger>coeffMaxDegree( a );
         }
      } while ( deg <= 0  );
      //System.out.println("a  = " + a);
@@ -777,7 +777,7 @@ public class PolyUtilTest extends TestCase {
          if ( i >= prime ) {
             assertTrue("elements of Z_prime exhausted", i < prime);
          }
-         qdeg = Q.leadingExpVector().getVal(0);
+         qdeg = Q.degree(0);
          ei  = fac.fromInteger(i);
          //System.out.println("ei  = " + ei);
          // a(ei)
@@ -798,6 +798,99 @@ public class PolyUtilTest extends TestCase {
 
          // check
          bp = PolyUtil.<ModInteger>evaluateFirstRec(ufac,dfac,r,ei);
+         //System.out.println("bp   = " + bp);
+         assertEquals("interpolate(a)(ei) == a ",bp,ap);
+
+
+         // next evaluation polynomial
+         Qp = ufac.univariate(0);
+         Qp = Qp.subtract( ufac.getONE().multiply(ei) );
+         //System.out.println("Qp   = " + Qp);
+         Q = Q.multiply( Qp );
+         //System.out.println("Q   = " + Q);
+     } while ( qdeg <= deg );
+
+     //System.out.println("a   = " + a);
+     //System.out.println("r   = " + r);
+
+     //            interpolate( a(e1), ..., a(ei) )           = a (mod 19)
+     assertEquals("interpolate(a mod (x-e1),...,a mod (x-ei)) = a (mod 19)",a,r);
+ }
+
+
+/**
+ * Test interpolate rational multivariate deg > 0 polynomial.
+ * 
+ */
+ public void testInterpolateRationalMultivariate() {
+     BigRational ai, bi, ci, di, ei, fi, gi, hi;
+     GenPolynomial<BigRational> ap, bp, cp, dp, ep, fp, gp, hp;
+     GenPolynomial<GenPolynomial<BigRational>> a, b, c, d, e;
+     GenPolynomialRing<GenPolynomial<BigRational>> cfac;
+     GenPolynomialRing<BigRational> ufac;
+     GenPolynomialRing<BigRational> dfac;
+     BigRational fac;
+     GenPolynomial<GenPolynomial<BigRational>> r;
+     GenPolynomial<BigRational> Q;
+     GenPolynomial<BigRational> Qp;
+
+     fac = new BigRational();
+     //System.out.println("fac.modul  = " + fac.getModul());
+     ufac = new GenPolynomialRing<BigRational>(fac,1,to);
+     //System.out.println("ufac  = " + ufac);
+     cfac = new GenPolynomialRing<GenPolynomial<BigRational>>(ufac,rl,to);
+     //System.out.println("cfac  = " + cfac);
+     dfac = new GenPolynomialRing<BigRational>(fac,rl,to);
+     //System.out.println("dfac  = " + dfac);
+     int maxdeg = 19;
+
+     // polynomial to interpolate
+     long deg = 0;
+     do {
+        a = cfac.random(kl,ll+9,maxdeg,q);
+        if ( !a.isZERO() ) {
+           deg = PolyUtil.<BigRational>coeffMaxDegree( a );
+        }
+     } while ( deg <= 0  );
+     //System.out.println("a  = " + a);
+     //System.out.println("deg  = " + deg);
+     ExpVector degv = a.degreeVector();
+     //System.out.println("degv  = " + degv);
+
+     // interpolation result
+     r = cfac.getZERO();
+     //System.out.println("r   = " + r);
+
+     // interpolation polynomials product
+     Q = ufac.getONE();
+     //System.out.println("Q   = " + Q);
+
+     long i = -1;
+     long qdeg;
+     ExpVector qdegv;
+     do {
+         i++;
+         qdeg = Q.degree(0);
+         ei  = fac.fromInteger(i);
+         //System.out.println("ei  = " + ei);
+         // a(ei)
+         ap = PolyUtil.<BigRational>evaluateFirstRec(ufac,dfac,a,ei);
+         //System.out.println("ap   = " + ap);
+         qdegv = ap.degreeVector();
+         //System.out.println("qdegv = " + qdegv);
+         if ( !degv.equals( qdegv) ) {
+            continue;
+         }
+         ci = PolyUtil.<BigRational>evaluateMain(fac,Q,ei);
+         //System.out.println("ci   = " + ci);
+         // Q(ei)^-1
+         fi = ci.inverse();
+         //System.out.println("fi   = " + fi);
+         r = PolyUtil.<BigRational>interpolate(cfac,r,Q,fi,ap,ei);
+         //System.out.println("r   = " + r);
+
+         // check
+         bp = PolyUtil.<BigRational>evaluateFirstRec(ufac,dfac,r,ei);
          //System.out.println("bp   = " + bp);
          assertEquals("interpolate(a)(ei) == a ",bp,ap);
 
