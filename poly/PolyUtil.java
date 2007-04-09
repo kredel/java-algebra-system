@@ -559,6 +559,8 @@ public class PolyUtil {
 
     /**
      * Evaluate at first (lowest) variable. 
+     * Could also be called evaluateFirst(), but type erasure of A parameter
+     * does not allow same name.
      * @param cfac coefficient polynomial ring in first variable 
      *        C[x_1] factory.
      * @param dfac polynomial ring in n-1 variables.
