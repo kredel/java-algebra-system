@@ -14,17 +14,16 @@ import edu.jas.poly.ExpVector;
 
 
 /**
- * Greatest common divisor algorithms.
+ * Greatest common divisor algorithms with primitive polynomial remainder sequence.
  * @author Heinz Kredel
  */
 
-public class GreatestCommonDivisorSimple<C extends GcdRingElem<C> > 
+public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C> > 
        extends GreatestCommonDivisorAbstract<C> {
 
 
-    private static final Logger logger = Logger.getLogger(GreatestCommonDivisorSimple.class);
+    private static final Logger logger = Logger.getLogger(GreatestCommonDivisorPrimitive.class);
     private boolean debug = logger.isDebugEnabled();
-
 
 
     /**
