@@ -781,11 +781,23 @@ public class GenPolynomial<C extends RingElem<C> >
         }
         GenPolynomial<C> p = ring.getZERO().clone(); 
         SortedMap<ExpVector,C> pv = p.val;
-        for ( Map.Entry<ExpVector,C> m1 : val.entrySet() ) {
-            C c1 = m1.getValue();
-            ExpVector e1 = m1.getKey();
+        for ( Map.Entry<ExpVector,C> m : val.entrySet() ) {
+            ExpVector e = m.getKey();
+            C c1 = m.getValue();
             C c = c1.divide(s);
-            pv.put( e1, c ); // or m1.setValue( c )
+            if ( true ) {
+                C x = c1.remainder(s);
+                if ( !x.isZERO() ) {
+                   System.out.println("divide x = " + x);
+                   throw new RuntimeException(this.getClass().getName()
+                                + " no exact division: " + c1 + "/" + s);
+                }
+            }
+            if ( c.isZERO() ) {
+               throw new RuntimeException(this.getClass().getName()
+                                + " no exact division: " + c1 + "/" + s);
+            }
+            pv.put( e, c ); // or m1.setValue( c )
         }
         return p;
     }
