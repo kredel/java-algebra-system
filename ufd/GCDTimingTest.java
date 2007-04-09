@@ -112,7 +112,7 @@ public class GCDTimingTest extends TestCase {
  * Test dummy for junit.
  * 
  */
- public void xtestDummy() {
+ public void testDummy() {
      assertTrue("ufd_pp != null", ufd_pp != null);
  }
 
@@ -240,5 +240,65 @@ public class GCDTimingTest extends TestCase {
          System.out.println("subresultant prs  time = " + t);
      }
  }
+
+
+/**
+ * Test gcd.
+ * 
+ */
+ public void xtestGCD() {
+
+     long t;
+
+     dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),5,to);
+
+     for (int i = 0; i < 5; i++) {
+         a = dfac.random(kl,ll,el,q);
+         b = dfac.random(kl,ll,el,q);
+         c = dfac.random(kl,ll,el,q);
+         c = c.multiply( dfac.univariate(0) );
+         //c = ufd.primitivePart(c).abs();
+         //System.out.println("a = " + a);
+         //System.out.println("b = " + b);
+         //System.out.println("c = " + c);
+
+         if ( a.isZERO() || b.isZERO() || c.isZERO() ) {
+            // skip for this turn
+            continue;
+         }
+         assertTrue("length( c"+i+" ) <> 0", c.length() > 0);
+         //assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
+         //assertTrue(" not isONE( c"+i+" )", !c.isONE() );
+         
+         a = a.multiply(c);
+         b = b.multiply(c);
+         //System.out.println("a = " + a);
+         //System.out.println("b = " + b);
+         //System.out.println("c = " + c);
+
+         System.out.println("\ndegrees: a = " + a.degree() 
+                                   + ", b = " + b.degree()  
+                                   + ", c = " + c.degree());  
+
+         t = System.currentTimeMillis();
+         d = ufd_pp.gcd(a,b);
+         t = System.currentTimeMillis() - t;
+         e = ufd_pp.basePseudoRemainder(d,c);
+         //System.out.println("d  = " + d);
+
+         assertTrue("c | gcd(ac,bc) " + e, e.isZERO() );
+         System.out.println("primitive prs     time = " + t);
+
+
+         t = System.currentTimeMillis();
+         d = ufd_sr.gcd(a,b);
+         t = System.currentTimeMillis() - t;
+         e = ufd_pp.basePseudoRemainder(d,c);
+         //System.out.println("d  = " + d);
+
+         assertTrue("c | gcd(ac,bc) " + e, e.isZERO() );
+         System.out.println("subsresultant prs time = " + t);
+     }
+     }
 
 }
