@@ -109,7 +109,7 @@ public class GreatestCommonDivisorTest extends TestCase {
  * Test base quotioent and remainder.
  * 
  */
- public void xtestBaseQR() {
+ public void testBaseQR() {
      di = new BigInteger( 1 );
      dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),1,to);
 
@@ -161,7 +161,7 @@ public class GreatestCommonDivisorTest extends TestCase {
  * Test base content and primitive part.
  * 
  */
- public void xtestBaseContentPP() {
+ public void testBaseContentPP() {
      di = new BigInteger( 1 );
 
      for (int i = 0; i < 13; i++) {
@@ -192,7 +192,7 @@ public class GreatestCommonDivisorTest extends TestCase {
  * Test base gcd simple.
  * 
  */
- public void xtestBaseGcd() {
+ public void testBaseGcd() {
 
      dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),1,to);
 
@@ -232,7 +232,7 @@ public class GreatestCommonDivisorTest extends TestCase {
  * Test base gcd subresultant.
  * 
  */
- public void xtestBaseGcdSubres() {
+ public void testBaseGcdSubres() {
 
      ufd = new GreatestCommonDivisorSubres<BigInteger>();
 
@@ -266,8 +266,15 @@ public class GreatestCommonDivisorTest extends TestCase {
          e = ufd.basePseudoRemainder(d,c);
          //System.out.println("d  = " + d);
          //System.out.println("c  = " + c);
-
          assertTrue("c | gcd(ac,bc) " + e, e.isZERO() );
+
+         e = ufd.basePseudoRemainder(a,d);
+         //System.out.println("e = " + e);
+         assertTrue("gcd(a,b) | a" + e, e.isZERO() );
+
+         e = ufd.basePseudoRemainder(b,d);
+         //System.out.println("e = " + e);
+         assertTrue("gcd(a,b) | b" + e, e.isZERO() );
      }
  }
 
@@ -276,7 +283,7 @@ public class GreatestCommonDivisorTest extends TestCase {
  * Test base squarefree.
  * 
  */
- public void xtestBaseSquarefree() {
+ public void testBaseSquarefree() {
 
      dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),1,to);
 
@@ -319,7 +326,7 @@ public class GreatestCommonDivisorTest extends TestCase {
  * Test base squarefree factors.
  * 
  */
- public void xtestBaseSquarefreeFactors() {
+ public void testBaseSquarefreeFactors() {
 
      dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),1,to);
 
@@ -377,7 +384,7 @@ public class GreatestCommonDivisorTest extends TestCase {
  * Test recursive quotioent and remainder.
  * 
  */
- public void xtestRecursiveQR() {
+ public void testRecursiveQR() {
      di = new BigInteger( 1 );
      dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),2,to);
      cfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),2-1,to);
@@ -400,7 +407,7 @@ public class GreatestCommonDivisorTest extends TestCase {
          //System.out.println("c  = " + c);
          //System.out.println("cr = " + cr);
 
-         if ( cr.length() == 0 ) {
+         if ( cr.isZERO() || c.isZERO() ) {
              // skip for this turn
             continue;
          }
@@ -434,7 +441,7 @@ public class GreatestCommonDivisorTest extends TestCase {
  * Test recursive content and primitive part.
  * 
  */
- public void xtestRecursiveContentPP() {
+ public void testRecursiveContentPP() {
      di = new BigInteger( 1 );
      dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),2,to);
      cfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),2-1,to);
@@ -463,7 +470,7 @@ public class GreatestCommonDivisorTest extends TestCase {
  * Test recursive content and primitive part, modular.
  * 
  */
- public void xtestRecursiveContentPPmodular() {
+ public void testRecursiveContentPPmodular() {
      ModInteger mi = new ModInteger(19,1,true);
 
      GenPolynomialRing<ModInteger> dfac;
@@ -523,7 +530,7 @@ public class GreatestCommonDivisorTest extends TestCase {
  * Test recursive gcd.
  * 
  */
- public void xtestRecursiveGCD() {
+ public void testRecursiveGCD() {
      di = new BigInteger( 1 );
      dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),2,to);
      cfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),2-1,to);
@@ -565,7 +572,7 @@ public class GreatestCommonDivisorTest extends TestCase {
  * Test recursive gcd subresultant.
  * 
  */
- public void xtestRecursiveGCDsubres() {
+ public void testRecursiveGCDsubres() {
 
      ufd = new GreatestCommonDivisorSubres<BigInteger>();
 
@@ -602,8 +609,15 @@ public class GreatestCommonDivisorTest extends TestCase {
 
          er = ufd.recursivePseudoRemainder(dr,cr);
          //System.out.println("er = " + er);
-
          assertTrue("c | gcd(ac,bc) " + er, er.isZERO() );
+
+         er = ufd.recursivePseudoRemainder(ar,dr);
+         //System.out.println("er = " + er);
+         assertTrue("gcd(a,b) | a" + er, er.isZERO() );
+
+         er = ufd.recursivePseudoRemainder(br,dr);
+         //System.out.println("er = " + er);
+         assertTrue("gcd(a,b) | b" + er, er.isZERO() );
      }
  }
 
@@ -612,7 +626,7 @@ public class GreatestCommonDivisorTest extends TestCase {
  * Test recursive squarefree.
  * 
  */
- public void xtestRecursiveSquarefree() {
+ public void testRecursiveSquarefree() {
      cfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),2-1,to);
      rfac = new GenPolynomialRing<GenPolynomial<BigInteger>>(cfac,1,to);
 
@@ -652,7 +666,7 @@ public class GreatestCommonDivisorTest extends TestCase {
  * Test recursive squarefree factors.
  * 
  */
- public void xtestRecursiveSquarefreeFactors() {
+ public void testRecursiveSquarefreeFactors() {
 
      cfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),2-1,to);
      rfac = new GenPolynomialRing<GenPolynomial<BigInteger>>(cfac,1,to);
@@ -712,7 +726,7 @@ public class GreatestCommonDivisorTest extends TestCase {
  * Test content and primitive part.
  * 
  */
- public void xtestContentPP() {
+ public void testContentPP() {
      dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),3,to);
 
      for (int i = 0; i < 3; i++) {
@@ -741,7 +755,7 @@ public class GreatestCommonDivisorTest extends TestCase {
  * Test gcd 3 variables.
  * 
  */
- public void xtestGCD3() {
+ public void testGCD3() {
      dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),3,to);
 
      for (int i = 0; i < 4; i++) {
@@ -780,10 +794,10 @@ public class GreatestCommonDivisorTest extends TestCase {
  * Test gcd.
  * 
  */
- public void xtestGCD() {
+ public void testGCD() {
      // dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),3,to);
 
-     for (int i = 0; i < 2; i++) {
+     for (int i = 0; i < 1; i++) {
          a = dfac.random(kl,ll,el,q);
          b = dfac.random(kl,ll,el,q);
          c = dfac.random(kl,ll,el,q);
@@ -809,8 +823,15 @@ public class GreatestCommonDivisorTest extends TestCase {
 
          e = ufd.basePseudoRemainder(d,c);
          //System.out.println("e = " + e);
-
          assertTrue("c | gcd(ac,bc) " + e, e.isZERO() );
+
+         e = ufd.basePseudoRemainder(a,d);
+         //System.out.println("e = " + e);
+         assertTrue("gcd(a,b) | a " + e, e.isZERO() );
+
+         e = ufd.basePseudoRemainder(b,d);
+         //System.out.println("e = " + e);
+         assertTrue("gcd(a,b) | b " + e, e.isZERO() );
      }
  }
 
@@ -821,14 +842,18 @@ public class GreatestCommonDivisorTest extends TestCase {
  */
  public void testGCDsubres() {
 
+     GreatestCommonDivisorAbstract<BigInteger> ufd_pp; 
+     ufd_pp = ufd;
+
      ufd = new GreatestCommonDivisorSubres<BigInteger>();
 
-     dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),3,to);
+     dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),5,to);
 
      for (int i = 0; i < 2; i++) {
          a = dfac.random(kl,ll,el,q);
          b = dfac.random(kl,ll,el,q);
          c = dfac.random(kl,ll,el,q);
+         c = c.multiply( dfac.univariate(0) );
          c = ufd.primitivePart(c).abs();
          //System.out.println("a = " + a);
          //System.out.println("b = " + b);
@@ -844,17 +869,25 @@ public class GreatestCommonDivisorTest extends TestCase {
          
          a = a.multiply(c);
          b = b.multiply(c);
-         System.out.println("a = " + a);
-         System.out.println("b = " + b);
-         System.out.println("c = " + c);
+         //System.out.println("a = " + a);
+         //System.out.println("b = " + b);
+         //System.out.println("c = " + c);
 
          d = ufd.gcd(a,b);
-         System.out.println("d = " + d);
+         //System.out.println("c = " + c);
+         //System.out.println("d = " + d);
 
-         e = ufd.basePseudoRemainder(d,c);
-         System.out.println("e = " + e);
-
+         e = ufd_pp.basePseudoRemainder(d,c);
+         //System.out.println("e = " + e);
          assertTrue("c | gcd(ac,bc) " + e, e.isZERO() );
+
+         e = ufd_pp.basePseudoRemainder(a,d);
+         //System.out.println("e = " + e);
+         assertTrue("gcd(a,b) | a " + e, e.isZERO() );
+
+         e = ufd_pp.basePseudoRemainder(b,d);
+         //System.out.println("e = " + e);
+         assertTrue("gcd(a,b) | b " + e, e.isZERO() );
      }
  }
 
@@ -863,7 +896,7 @@ public class GreatestCommonDivisorTest extends TestCase {
  * Test gcd field coefficients.
  * 
  */
- public void xtestGCDfield() {
+ public void testGCDfield() {
      GenPolynomialRing<BigRational> dfac;
      dfac = new GenPolynomialRing<BigRational>(new BigRational(1),3,to);
 
@@ -908,7 +941,7 @@ public class GreatestCommonDivisorTest extends TestCase {
  * Test base gcd modular coefficients. 
  * 
  */
- public void xtestGCDbaseModular() {
+ public void testGCDbaseModular() {
      ModInteger mi = new ModInteger(19,1,true);
 
      GenPolynomialRing<ModInteger> dfac;
@@ -963,7 +996,7 @@ public class GreatestCommonDivisorTest extends TestCase {
  * Test recursive modular gcd. 
  * 
  */
- public void xtestRecursiveModularGCD() {
+ public void testRecursiveModularGCD() {
      ModInteger mi = new ModInteger(19,1,true);
 
      GenPolynomialRing<ModInteger> dfac;
@@ -1026,7 +1059,7 @@ public class GreatestCommonDivisorTest extends TestCase {
  * Test gcd modular coefficients.
  * 
  */
- public void xtestGCDmodular() {
+ public void testGCDmodular() {
      ModInteger mi = new ModInteger(19,1,true);
 
      GenPolynomialRing<ModInteger> dfac;
@@ -1081,7 +1114,7 @@ public class GreatestCommonDivisorTest extends TestCase {
  * Test lcm.
  * 
  */
- public void xtestLCM() {
+ public void testLCM() {
      dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),3,to);
 
      for (int i = 0; i < 1; i++) {
@@ -1123,7 +1156,7 @@ public class GreatestCommonDivisorTest extends TestCase {
  * Test squarefree.
  * 
  */
- public void xtestSquarefree() {
+ public void testSquarefree() {
 
      dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),3,to);
 
@@ -1163,7 +1196,7 @@ public class GreatestCommonDivisorTest extends TestCase {
  * Test squarefree factors.
  * 
  */
- public void xtestSquarefreeFactors() {
+ public void testSquarefreeFactors() {
 
      dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),3,to);
 
