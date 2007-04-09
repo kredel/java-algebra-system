@@ -36,7 +36,7 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C> >
      * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
      */
     public GenPolynomial<C> basePseudoRemainder( GenPolynomial<C> P, 
-                                                    GenPolynomial<C> S ) {
+                                                 GenPolynomial<C> S ) {
         if ( S == null || S.isZERO() ) {
             throw new RuntimeException(this.getClass().getName()
                                        + " division by zero");
@@ -287,8 +287,6 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C> >
         if ( q.isONE() ) {
            return q.multiply(c);
         }
-        //System.out.println("rgcd q = " + q);
-        //System.out.println("rgcd r = " + r);
         if ( q.isConstant() || r.isConstant() ) {
            System.out.println("rgcd q = " + q);
            System.out.println("rgcd r = " + r);
@@ -316,14 +314,16 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C> >
                 //System.out.println("rgcd r = " + r);
                 g = q.leadingBaseCoefficient();
                     z = power( P.ring.coFac, g, delta );
-                    h = basePseudoDivide(z, power( P.ring.coFac, h, delta-1 )  );
+                h = basePseudoDivide(z, power( P.ring.coFac, h, delta-1 )  );
                 //System.out.println("rgcd g  = " + g);
                 //System.out.println("rgcd h  = " + h);
             } else {
                 r = x;
             }
         }
-        //System.out.println("sign q = " + q.signum());
+        //System.out.println("q = " + q);
+        q = recursivePrimitivePart( q );
+        //System.out.println("q = " + q);
         return q.abs().multiply(c); //.abs();
     }
 
