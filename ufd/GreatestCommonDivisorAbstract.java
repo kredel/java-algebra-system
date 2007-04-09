@@ -385,14 +385,6 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C> >
             GenPolynomial<C> c1 = m1.getValue();
             ExpVector e1 = m1.getKey();
             GenPolynomial<C> c = basePseudoDivide(c1,s);
-            if ( debug || ! basePseudoRemainder(c1,s).isZERO() ) { // &&
-                System.out.println("c1 = " + c1);
-                System.out.println("s  = " + s);
-                System.out.println("c  = " + c);
-                System.out.println("r  = " + basePseudoRemainder(c1,s));
-                throw new RuntimeException(this.getClass().getName()
-                                           + " remainder non zero");
-            }
             pv.put( e1, c ); // or m1.setValue( c )
         }
         //System.out.println("p  = " + p);
@@ -882,6 +874,20 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C> >
         //GreatestCommonDivisorSimple<GenPolynomial<GenPolynomial<C>>> sgcd 
         //  = new GreatestCommonDivisorSimple<GenPolynomial<GenPolynomial<C>>>();
         //GenPolynomial<GenPolynomial<C>> Dr = sgcd.gcd( Pr, Sr );
+        if ( false && debug ) {
+           GenPolynomial<GenPolynomial<C>> Er = recursivePseudoRemainder( Pr, Dr );
+           System.out.println("Dr | Pr = " + Er);
+           if ( !Er.isZERO() ) {
+              throw new RuntimeException(this.getClass().getName()
+                                         + " Er != null");
+           }
+           Er = recursivePseudoRemainder( Sr, Dr );
+           System.out.println("Dr | Sr = " + Er);
+           if ( !Er.isZERO() ) {
+              throw new RuntimeException(this.getClass().getName()
+                                         + " Er != null");
+           }
+        }
 
         GenPolynomial<C> D = distribute( pfac, Dr );
         return D;
