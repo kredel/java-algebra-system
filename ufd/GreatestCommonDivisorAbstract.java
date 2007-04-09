@@ -122,7 +122,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C> >
                 f = ExpVector.EVDIF( f, e );
                 //logger.info("red div = " + e);
                 C x = a.remainder(c);
-                if ( x.isZERO() ) {
+                if ( false && x.isZERO() ) {
                    C y = a.divide(c);
                    //System.out.println("y = " + y);
                    h = S.multiply( y, f ); // coeff a
@@ -846,8 +846,26 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C> >
         }
         GenPolynomialRing<C> pfac = P.ring;
         if ( pfac.nvar <= 1 ) {
-            //System.out.println("nvar = 1 ");
-            return baseGcd(P,S);
+            //System.out.println("P = " + P);
+            //System.out.println("S = " + S);
+            GenPolynomial<C> T = baseGcd(P,S);
+            //System.out.println("T = " + T);
+            if ( false || debug ) {
+               GenPolynomial<C> X;
+               X = basePseudoRemainder(P,T);
+               System.out.println("X1 =" + X);
+               if ( !X.isZERO() ) {
+                    throw new RuntimeException(this.getClass().getName()
+                                       + " X != null");
+               }
+               X = basePseudoRemainder(S,T);
+               System.out.println("X2 =" + X);
+               if ( !X.isZERO() ) {
+                    throw new RuntimeException(this.getClass().getName()
+                                       + " X != null");
+               }
+            }
+            return T;
         }
         GenPolynomialRing<C> cfac = pfac.contract(1);
         GenPolynomialRing<GenPolynomial<C>> rfac 
