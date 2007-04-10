@@ -11,6 +11,8 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import edu.jas.structure.PrettyPrint;
+import edu.jas.arith.ModInteger;
+import edu.jas.arith.PrimeList;
 
 
 /**
@@ -274,5 +276,32 @@ public class ModIntegerTest extends TestCase {
          assertEquals("cra(a mod p1,a mod p2) = a",a,e);
      }
  }
+
+
+/**
+ * Test prime list.
+ * 
+ */
+ public void testPrime() {
+     PrimeList primes = new PrimeList();
+     //System.out.println("primes = " + primes);
+
+     //assertTrue("all primes ", primes.checkPrimes() );
+
+     int i = 0;
+     //System.out.println("primes = ");
+     for ( java.math.BigInteger p : primes ) {
+         //System.out.print("" + p);
+         if ( i++ > 50 ) {
+            break;
+         }
+         //System.out.print(", ");
+     }
+     //System.out.println();
+
+     //System.out.println("primes = " + primes);
+
+     assertTrue("all primes ", primes.checkPrimes() );
+   }
 
 }
