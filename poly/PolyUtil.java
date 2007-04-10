@@ -381,6 +381,37 @@ public class PolyUtil {
 
 
     /**
+     * Factor coefficient bound.
+     * See SACIPOL.IPFCB: the product of all maxNorms of potential factors
+     * is less than or equal to 2**b times the maxNorm of A.
+     * @param e degree vector of a GenPolynomial A.
+     * @return 2**b.
+     */
+    public static BigInteger factorBound(ExpVector e) {
+        int n = 0;
+        java.math.BigInteger p = java.math.BigInteger.ONE;
+        java.math.BigInteger v;
+        if ( e == null || e.isZERO() ) {
+           return BigInteger.ONE;
+        }
+        long[] val = e.getval();
+        for ( int i = 0; i < val.length; i++ ) {
+            if ( val[i] > 0 ) {
+               n += ( 2*val[i] - 1 );
+               v = new java.math.BigInteger( "" + (val[i] - 1) );
+               p = p.multiply( v );
+            }
+        }
+        n += ( p.bitCount() + 1 ); // log2(p)
+        n /= 2;
+        v = new java.math.BigInteger( "" + 2 );
+        v = v.shiftLeft( n );
+        BigInteger N = new BigInteger( v );
+        return N;
+    }
+
+
+    /**
      * Evaluate at main variable. 
      * @param cfac coefficent polynomial ring factory.
      * @param A polynomial to be evaluated.
