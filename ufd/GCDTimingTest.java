@@ -52,6 +52,7 @@ public class GCDTimingTest extends TestCase {
 
    //private final static int bitlen = 100;
 
+   GreatestCommonDivisorAbstract<BigInteger> ufd_si; 
    GreatestCommonDivisorAbstract<BigInteger> ufd_pp; 
    GreatestCommonDivisorAbstract<BigInteger> ufd_sr; 
 
@@ -89,6 +90,7 @@ public class GCDTimingTest extends TestCase {
        a = b = c = d = e = null;
        ai = bi = ci = di = ei = null;
        ar = br = cr = dr = er = null;
+       ufd_si = new GreatestCommonDivisorSimple<BigInteger>();
        ufd_pp = new GreatestCommonDivisorPrimitive<BigInteger>();
        ufd_sr = new GreatestCommonDivisorSubres<BigInteger>();
        dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),rl,to);
@@ -100,6 +102,7 @@ public class GCDTimingTest extends TestCase {
        a = b = c = d = e = null;
        ai = bi = ci = di = ei = null;
        ar = br = cr = dr = er = null;
+       ufd_si = null;
        ufd_pp = null;
        ufd_sr = null;
        dfac = null;
@@ -154,6 +157,16 @@ public class GCDTimingTest extends TestCase {
          System.out.println("\ndegrees: a = " + a.degree() 
                                    + ", b = " + b.degree()  
                                    + ", c = " + c.degree());  
+         /*
+         t = System.currentTimeMillis();
+         d = ufd_si.baseGcd(a,b);
+         t = System.currentTimeMillis() - t;
+         e = ufd_pp.basePseudoRemainder(d,c);
+         //System.out.println("d  = " + d);
+
+         assertTrue("c | gcd(ac,bc) " + e, e.isZERO() );
+         System.out.println("simple prs        time = " + t);
+         */
 
          t = System.currentTimeMillis();
          d = ufd_pp.baseGcd(a,b);
@@ -215,6 +228,19 @@ public class GCDTimingTest extends TestCase {
          System.out.println("\ndegrees: a = " + ar.degree() 
                                    + ", b = " + br.degree()  
                                    + ", c = " + cr.degree());  
+
+         /*
+         t = System.currentTimeMillis();
+         dr = ufd_si.recursiveGcd(ar,br);
+         t = System.currentTimeMillis() - t;
+         //System.out.println("dr = " + dr);
+
+         //er = ufd_pp.recursivePseudoRemainder(dr,cr);
+         //System.out.println("er = " + er);
+
+         //assertTrue("c | gcd(ac,bc) " + er, er.isZERO() );
+         System.out.println("simple prs        time = " + t);
+         */
 
          t = System.currentTimeMillis();
          dr = ufd_pp.recursiveGcd(ar,br);
