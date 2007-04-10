@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.ExpVector;
+import edu.jas.poly.PolyUtil;
 
 
 /**
@@ -63,13 +64,20 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C> >
            q = P;
            r = S;
         }
-        r = r.abs();
-        q = q.abs();
-        C a = baseContent( r );
-        C b = baseContent( q );
-        C c = gcd(a,b);  // indirection
-        r = divide(r,a); // indirection
-        q = divide(q,b); // indirection
+        C c;
+        if ( field ) {
+           r = r.monic();
+           q = q.monic();
+           c = P.ring.getONECoefficient();
+        } else {
+           r = r.abs();
+           q = q.abs();
+           C a = baseContent( r );
+           C b = baseContent( q );
+           c = gcd(a,b);  // indirection
+           r = divide(r,a); // indirection
+           q = divide(q,b); // indirection
+        }
         if ( r.isONE() ) {
            return r.multiply(c);
         }
@@ -113,7 +121,7 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C> >
            throw new RuntimeException(this.getClass().getName()
                                        + " no univariate polynomial");
         }
-        boolean field = P.ring.coFac.isField();
+        boolean field = P.leadingBaseCoefficient().ring.coFac.isField();
         long e = P.degree(0);
         long f = S.degree(0);
         GenPolynomial<GenPolynomial<C>> q;
@@ -128,8 +136,13 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C> >
            q = P;
            r = S;
         }
-        r = r.abs();
-        q = q.abs();
+        if ( field ) {
+           r = PolyUtil.<C>monic(r);
+           q = PolyUtil.<C>monic(q);
+        } else {
+           r = r.abs();
+           q = q.abs();
+        }
         //System.out.println("rgcd r = " + r);
         //System.out.println("rgcd q = " + q);
         GenPolynomial<C> a = recursiveContent(r);
@@ -166,7 +179,7 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C> >
             q = r;
             //r = recursivePrimitivePart( x );
             if ( field ) {
-               r = x.monic();
+               r = PolyUtil.<C>monic(x);
             } else {
                r = x;
             }
