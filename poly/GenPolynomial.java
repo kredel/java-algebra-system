@@ -444,6 +444,36 @@ public class GenPolynomial<C extends RingElem<C> >
 
 
     /**
+     * GenPolynomial maximum norm. 
+     * @return ||this||.
+     */
+    public C maxNorm() {
+        C n = ring.getZEROCoefficient(); 
+        for ( C c : val.values() ) {
+            C x = c.abs();
+            if ( n.compareTo(x) < 0 ) {
+               n = x;
+            }
+        }
+        return n;
+    }
+
+
+    /**
+     * GenPolynomial sum norm. 
+     * @return sum of all absolute values of coefficients.
+     */
+    public C sumNorm() {
+        C n = ring.getZEROCoefficient(); 
+        for ( C c : val.values() ) {
+            C x = c.abs();
+            n = n.sum(x);
+        }
+        return n;
+    }
+
+
+    /**
      * GenPolynomial summation. 
      * @param S GenPolynomial.
      * @return this+S.
