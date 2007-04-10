@@ -632,6 +632,23 @@ public class ExpVector implements Cloneable, Serializable {
 
 
     /**
+     * ExpVector greatest common divisor.
+     * @param U
+     * @param V
+     * @return component wise minimum of U and V.
+     */
+    public static ExpVector EVGCD( ExpVector U, ExpVector V ) {
+        long[] u = U.getval();
+        long[] v = V.getval();
+        long[] w = new long[u.length];
+        for (int i = 0; i < u.length; i++ ) {
+            w[i] = ( u[i] <= v[i] ? u[i] : v[i] );
+        }
+        return new ExpVector( w );
+    }
+
+
+    /**
      * ExpVector dependency on variables.
      * @param U
      * @return array of indices where U has positive exponents.
