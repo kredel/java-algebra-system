@@ -125,14 +125,14 @@ public class GreatestCommonDivisorModular //<C extends GcdRingElem<C> >
         r = r.abs();
         q = q.abs();
         // compute contents and primitive parts
-        GenPolynomial<BigInteger> a = content( r );
-        GenPolynomial<BigInteger> b = content( q );
+        BigInteger a = baseContent( r );
+        BigInteger b = baseContent( q );
         // gcd of coefficient contents
-        GenPolynomial<BigInteger> c = gcd(a,b);  // indirection
+        BigInteger c = gcd(a,b);  // indirection
         System.out.println("a = " + a);
         System.out.println("b = " + b);
-        //fix r = divide(r,a); // indirection
-        //fix q = divide(q,b); // indirection
+        r = divide(r,a); // indirection
+        q = divide(q,b); // indirection
         System.out.println("r = " + r);
         System.out.println("q = " + q);
         System.out.println("c = " + c);
@@ -174,7 +174,7 @@ public class GreatestCommonDivisorModular //<C extends GcdRingElem<C> >
         System.out.println("cf = " + cf);
         //initialize prime list and degree vector
         PrimeList primes = new PrimeList();
-        int pn = 3; //primes.size();
+        int pn = 10; //primes.size();
         ModInteger cofac;
         ModInteger cofacM = null;
         GenPolynomial<ModInteger> qm;
@@ -187,8 +187,10 @@ public class GreatestCommonDivisorModular //<C extends GcdRingElem<C> >
         GenPolynomial<ModInteger> cm = null;
         for ( java.math.BigInteger p : primes ) {
             if ( ++i >= pn ) {
+                System.out.println("prime list exhausted");
+                return iufd.gcd(P,S);
                 //throw new RuntimeException("prime list exhausted");
-                break;
+                //break;
             }
             cofac = new ModInteger( p, true );
             System.out.println("cofac = " + cofac.getModul());
@@ -228,19 +230,21 @@ public class GreatestCommonDivisorModular //<C extends GcdRingElem<C> >
                System.out.println("TL = 0");
                // TL = 0
             } else { // TL = 3
+               boolean ok = false;
                if ( ExpVector.EVMT(rdegv1,mdegv) ) { // TL = 2
                   System.out.println("TL = 2");
                   M = null;
+                  ok = true;
                }
                if ( ExpVector.EVMT(mdegv,rdegv1) ) { // TL = 1
-                  // cannot happen
                   System.out.println("TL = 1");
+                  continue;
+               }
+               System.out.println("TL = 3");
+               if ( !ok ) {
                   M = null;
                   continue;
                }
-               //System.out.println("TL = 3");
-               //M = null;
-               //continue;
             }
             rdegv1 = mdegv;
             if ( M == null ) {
@@ -280,7 +284,7 @@ public class GreatestCommonDivisorModular //<C extends GcdRingElem<C> >
         System.out.println("q  = " + q);
         q = basePrimitivePart( q ); // should be monic
         System.out.println("q  = " + q);
-        return q.abs(); //fix .multiply( c ); 
+        return q.abs().multiply( c ); 
     }
 
 }
