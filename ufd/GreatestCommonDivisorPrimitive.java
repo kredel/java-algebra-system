@@ -48,8 +48,8 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C> >
            // guess
            //return P.ring.getONE();
         }
-        long e = P.leadingExpVector().getVal(0);
-        long f = S.leadingExpVector().getVal(0);
+        long e = P.degree(0);
+        long f = S.degree(0);
         GenPolynomial<C> q;
         GenPolynomial<C> r;
         if ( f > e ) {
@@ -107,8 +107,8 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C> >
            throw new RuntimeException(this.getClass().getName()
                                        + " no univariate polynomial");
         }
-        long e = P.leadingExpVector().getVal(0);
-        long f = S.leadingExpVector().getVal(0);
+        long e = P.degree(0);
+        long f = S.degree(0);
         GenPolynomial<GenPolynomial<C>> q;
         GenPolynomial<GenPolynomial<C>> r;
         if ( f > e ) {
@@ -142,7 +142,7 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C> >
         }
         //System.out.println("rgcd q = " + q);
         //System.out.println("rgcd r = " + r);
-        if ( q.isConstant() || r.isConstant() ) {
+        if ( debug && ( q.isConstant() || r.isConstant() ) ) {
            System.out.println("rgcd q = " + q);
            System.out.println("rgcd r = " + r);
            throw new RuntimeException(this.getClass().getName()
