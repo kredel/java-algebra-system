@@ -29,6 +29,7 @@ public final class PrimeList implements Iterable<java.math.BigInteger> {
 
     //private final static Random random = new Random();
 
+    private final static java.math.BigInteger p19 = new java.math.BigInteger(""+19);
 
     /**
      * Constructor for PrimeList.
@@ -46,6 +47,7 @@ public final class PrimeList implements Iterable<java.math.BigInteger> {
         if ( val == null ) {
             val = new ArrayList<java.math.BigInteger>((n > 50 ? n: 50));
            // start with some known primes, see knuth (2,390)
+           val.add( p19 );
            val.add( getLongPrime(63,25) );
            val.add( getLongPrime(63,165) );
            val.add( getLongPrime(63,259) );
@@ -137,6 +139,14 @@ public final class PrimeList implements Iterable<java.math.BigInteger> {
 
 
     /**
+     * size of current list.
+     */
+    public int size() {
+        return val.size();
+    }
+
+
+    /**
      * Iterator.
      */
     public Iterator<java.math.BigInteger> iterator() {
@@ -158,7 +168,11 @@ public final class PrimeList implements Iterable<java.math.BigInteger> {
                     // ignored;
                 }
                 if ( p == null ) {
-                    p = val.get(0).nextProbablePrime();
+                    if ( val.get(0).equals(p19) ) {
+                       p = val.get(1).nextProbablePrime();
+                    } else {
+                       p = val.get(0).nextProbablePrime();
+                    }
                     val.add( 0, p );
                 }
                 return p;
