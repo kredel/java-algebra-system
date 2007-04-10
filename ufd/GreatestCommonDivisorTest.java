@@ -280,14 +280,15 @@ public class GreatestCommonDivisorTest extends TestCase {
 
 
 /**
- * Test base gcd modular.
+ * Test gcd modular.
  * 
  */
- public void testBaseGcdModular() {
+ public void testGcdModular() {
 
-     ufd = new GreatestCommonDivisorModular();
+     GreatestCommonDivisorAbstract<BigInteger> ufd_m;
+     ufd_m = new GreatestCommonDivisorModular();
 
-     dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),1,to);
+     dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),2,to);
 
      for (int i = 0; i < 1; i++) {
          a = dfac.random(kl*(i+2),ll+2*i,el+2*i,q);
@@ -296,7 +297,6 @@ public class GreatestCommonDivisorTest extends TestCase {
          c = c.multiply( dfac.univariate(0) );
          //a = ufd.basePrimitivePart(a);
          //b = ufd.basePrimitivePart(b);
-         //c = ufd.basePrimitivePart(c).abs();
 
          if ( a.isZERO() || b.isZERO() || c.isZERO() ) {
             // skip for this turn
@@ -311,13 +311,23 @@ public class GreatestCommonDivisorTest extends TestCase {
 
          System.out.println("a  = " + a);
          System.out.println("b  = " + b);
-         System.out.println("c  = " + c);
 
-         d = ufd.baseGcd(a,b);
+         d = ufd_m.gcd(a,b);
+
+         c = ufd.basePrimitivePart(c).abs();
          e = ufd.basePseudoRemainder(d,c);
+         System.out.println("c  = " + c);
          System.out.println("d  = " + d);
 
          assertTrue("c | gcd(ac,bc) " + e, e.isZERO() );
+
+         e = ufd.basePseudoRemainder(a,d);
+         //System.out.println("e = " + e);
+         assertTrue("gcd(a,b) | a" + e, e.isZERO() );
+
+         e = ufd.basePseudoRemainder(b,d);
+         //System.out.println("e = " + e);
+         assertTrue("gcd(a,b) | b" + e, e.isZERO() );
      }
  }
 
