@@ -280,10 +280,10 @@ public class GreatestCommonDivisorTest extends TestCase {
 
 
 /**
- * Test gcd modular.
+ * Test modular gcd.
  * 
  */
- public void testGcdModular() {
+ public void testModularGcd() {
 
      GreatestCommonDivisorAbstract<BigInteger> ufd_m;
      ufd_m = new GreatestCommonDivisorModular();
@@ -1112,14 +1112,16 @@ public class GreatestCommonDivisorTest extends TestCase {
  * Test gcd modular coefficients.
  * 
  */
- public void xtestGCDmodular() {
+ public void testGcdModular() {
      ModInteger mi = new ModInteger(19,1,true);
 
      GenPolynomialRing<ModInteger> dfac;
-     dfac = new GenPolynomialRing<ModInteger>(mi,3,to);
+     dfac = new GenPolynomialRing<ModInteger>(mi,4,to);
 
      GreatestCommonDivisorAbstract<ModInteger> ufd 
+          //= new GreatestCommonDivisorSimple<ModInteger>();
           = new GreatestCommonDivisorPrimitive<ModInteger>();
+          //= new GreatestCommonDivisorSubres<ModInteger>();
 
      GenPolynomial<ModInteger> a, b, c, d, e, ac, bc;
 
@@ -1153,12 +1155,18 @@ public class GreatestCommonDivisorTest extends TestCase {
 
          d = ufd.gcd(ac,bc);
          //System.out.println("d = " + d);
-
          e = ufd.basePseudoRemainder(d,c);
          //System.out.println("e = " + e);
          //System.out.println("c = " + c);
-
          assertTrue("c | gcd(ac,bc) " + e, e.isZERO() );
+
+         e = ufd.basePseudoRemainder(ac,d);
+         //System.out.println("gcd(ac,bc) | ac " + e);
+         assertTrue("gcd(ac,bc) | ac " + e, e.isZERO() );
+         e = ufd.basePseudoRemainder(bc,d);
+         //System.out.println("gcd(ac,bc) | bc " + e);
+         assertTrue("gcd(ac,bc) | bc " + e, e.isZERO() );
+
      }
  }
 
