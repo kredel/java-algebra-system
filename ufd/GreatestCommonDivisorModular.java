@@ -73,8 +73,8 @@ public class GreatestCommonDivisorModular //<C extends GcdRingElem<C> >
 
     /**
      * GenPolynomial greatest comon divisor, modular algorithm.
-     * @param P univariate GenPolynomial.
-     * @param S univariate GenPolynomial.
+     * @param P GenPolynomial.
+     * @param S GenPolynomial.
      * @return gcd(P,S).
      */
     public GenPolynomial<BigInteger> gcd( GenPolynomial<BigInteger> P,
@@ -86,29 +86,11 @@ public class GreatestCommonDivisorModular //<C extends GcdRingElem<C> >
             return S;
         }
         GenPolynomialRing<BigInteger> fac = P.ring;
+        // special case for univariate polynomials
         if ( fac.nvar <= 1 ) {
-            //System.out.println("P = " + P);
-            //System.out.println("S = " + S);
-            GenPolynomial<BigInteger> T = baseGcd(P,S);
-            //System.out.println("T = " + T);
-            if ( false || debug ) {
-               GenPolynomial<BigInteger> X;
-               X = basePseudoRemainder(P,T);
-               System.out.println("X1 =" + X);
-               if ( !X.isZERO() ) {
-                    throw new RuntimeException(this.getClass().getName()
-                                       + " X != null");
-               }
-               X = basePseudoRemainder(S,T);
-               System.out.println("X2 =" + X);
-               if ( !X.isZERO() ) {
-                    throw new RuntimeException(this.getClass().getName()
-                                       + " X != null");
-               }
-            }
-            return T;
+           GenPolynomial<BigInteger> T = baseGcd(P,S);
+           return T;
         }
-
         long e = P.degree(0);
         long f = S.degree(0);
         System.out.println("e = " + e);
@@ -239,7 +221,7 @@ public class GreatestCommonDivisorModular //<C extends GcdRingElem<C> >
                if ( M != null ) {
                   if ( M.compareTo(cfe) > 0 ) {
                      System.out.println("M > cfe: " + M + " > " + cfe);
-                     // continue;
+                     // continue; // why should this be required?
                   }
                }
             } else { // TL = 3
