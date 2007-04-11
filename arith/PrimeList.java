@@ -147,6 +147,14 @@ public final class PrimeList implements Iterable<java.math.BigInteger> {
 
 
     /**
+     * get prime at index i.
+     */
+    public java.math.BigInteger get(int i) {
+        return val.get(i);
+    }
+
+
+    /**
      * Iterator.
      */
     public Iterator<java.math.BigInteger> iterator() {
