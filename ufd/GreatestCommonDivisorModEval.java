@@ -117,49 +117,7 @@ public class GreatestCommonDivisorModEval //<C extends GcdRingElem<C> >
         }
         r = r.abs();
         q = q.abs();
-        // compute univariate contents and primitive parts ?MUPGCD??
-        ModInteger a = baseContent( r );
-        ModInteger b = baseContent( q );
-        // gcd of coefficient contents
-        ModInteger c = gcd(a,b);  // indirection
-        System.out.println("a = " + a);
-        System.out.println("b = " + b);
-        r = divide(r,a); // indirection
-        q = divide(q,b); // indirection
-        System.out.println("r = " + r);
-        System.out.println("q = " + q);
-        System.out.println("c = " + c);
-        if ( r.isONE() ) {
-           return r.multiply(c);
-        }
-        if ( q.isONE() ) {
-           return q.multiply(c);
-        }
-        // compute normalization factor ???
-        ModInteger ac = r.leadingBaseCoefficient();
-        ModInteger bc = q.leadingBaseCoefficient();
-        //ModInteger cc = gcd(ac,bc);  // indirection
-        GenPolynomial<ModInteger> cc = null;
-        System.out.println("ac = " + ac);
-        System.out.println("bc = " + bc);
-        System.out.println("cc = " + cc);
-        // compute degrees and degree vectors
-        ExpVector rdegv = r.degreeVector(); // remove one
-        ExpVector qdegv = q.degreeVector(); // remove one
-        System.out.println("rdegv = " + rdegv);
-        System.out.println("qdegv = " + qdegv);
-        long rd0 = r.degree(0);
-        long qd0 = q.degree(0);
-        System.out.println("rd0 = " + rd0);
-        System.out.println("qd0 = " + qd0);
-        long cd0 = 0; //c.degree(0);
-        long G = ( rd0 >= qd0 ? rd0 : qd0 ) + cd0;
-        System.out.println("G = " + G);
-
-        // initialize element and degree vector
-        ExpVector wdegv = rdegv.subst( 0, rdegv.getVal(0) + 1 );
-        // +1 seems to be a hack for the unlucky prime test
-        System.out.println("wdegv = " + wdegv);
+        // setup factories
         RingFactory<ModInteger> cofac = P.ring.coFac;
         System.out.println("cofac = " + cofac);
         GenPolynomialRing<ModInteger> mfac
@@ -168,22 +126,82 @@ public class GreatestCommonDivisorModEval //<C extends GcdRingElem<C> >
            = new GenPolynomialRing<ModInteger>(cofac,1,fac.tord);
         GenPolynomialRing<GenPolynomial<ModInteger>> rfac
            = new GenPolynomialRing<GenPolynomial<ModInteger>>(ufac,fac.nvar-1,fac.tord);
+        // convert polynomials
+        GenPolynomial<GenPolynomial<ModInteger>> qr;
+        GenPolynomial<GenPolynomial<ModInteger>> rr;
+        qr = PolyUtil.<ModInteger>recursive(rfac,q);
+        rr = PolyUtil.<ModInteger>recursive(rfac,r);
+        System.out.println("rr = " + rr);
+        System.out.println("qr = " + qr);
+
+        // compute univariate contents and primitive parts
+        GenPolynomial<ModInteger> a = recursiveContent( rr );
+        GenPolynomial<ModInteger> b = recursiveContent( qr );
+        // gcd of univariate coefficient contents
+        GenPolynomial<ModInteger> c = gcd(a,b);  
+        System.out.println("a = " + a);
+        System.out.println("b = " + b);
+        rr = recursiveDivide(rr,a); 
+        qr = recursiveDivide(qr,b); 
+        System.out.println("rr = " + rr);
+        System.out.println("qr = " + qr);
+        System.out.println("c  = " + c);
+        if ( rr.isONE() ) {
+           rr = rr.multiply(c);
+           r = PolyUtil.<ModInteger>distribute(fac,rr);
+           return r;
+        }
+        if ( qr.isONE() ) {
+           qr = qr.multiply(c);
+           q = PolyUtil.<ModInteger>distribute(fac,qr);
+           return q;
+        }
+        // compute normalization factor
+        GenPolynomial<ModInteger> ac = rr.leadingBaseCoefficient();
+        GenPolynomial<ModInteger> bc = qr.leadingBaseCoefficient();
+        GenPolynomial<ModInteger> cc = gcd(ac,bc);  
+        System.out.println("ac = " + ac);
+        System.out.println("bc = " + bc);
+        System.out.println("cc = " + cc);
+        // compute degrees and degree vectors
+        ExpVector rdegv = rr.degreeVector(); 
+        ExpVector qdegv = qr.degreeVector(); 
+        System.out.println("rdegv = " + rdegv);
+        System.out.println("qdegv = " + qdegv);
+        long rd0 = PolyUtil.<ModInteger>coeffMaxDegree(rr);
+        long qd0 = PolyUtil.<ModInteger>coeffMaxDegree(qr);
+        System.out.println("rd0 = " + rd0);
+        System.out.println("qd0 = " + qd0);
+        long cd0 = cc.degree(0);
+        System.out.println("cd0 = " + cd0);
+        long G = ( rd0 >= qd0 ? rd0 : qd0 ) + cd0;
+        System.out.println("G = " + G);
+
+        // initialize element and degree vector
+        ExpVector wdegv = rdegv.subst( 0, rdegv.getVal(0) + 1 );
+        // +1 seems to be a hack for the unlucky prime test
+        System.out.println("wdegv = " + wdegv);
         ModInteger inc = cofac.getONE();
         long i = 0;
         long en = inc.getModul().longValue()-1;
-        System.out.println("en = " + en);
-        GenPolynomial<ModInteger> M;
+        ModInteger end = cofac.fromInteger(en);
+        System.out.println("en  = " + en);
+        System.out.println("end = " + end);
+        ModInteger mi;
+        GenPolynomial<ModInteger> M = null;
+        GenPolynomial<ModInteger> mn;
         GenPolynomial<ModInteger> qm;
         GenPolynomial<ModInteger> rm;
         GenPolynomial<ModInteger> cm;
-        GenPolynomial<ModInteger> cp = null;
-        for ( ModInteger d = cofac.getZERO(); /* d <= en */ ; d = d.sum(inc) ) {
+        GenPolynomial<GenPolynomial<ModInteger>> cp = null;
+        for ( ModInteger d = cofac.getZERO(); d.compareTo(end) <= 0; d = d.sum(inc) ) {
             if ( ++i >= en ) {
-                System.out.println("elements of Z_p exhausted");
-                return mufd.gcd(P,S);
-                //throw new RuntimeException("prime list exhausted");
-                //break;
+               System.out.println("elements of Z_p exhausted");
+               return mufd.gcd(P,S);
+               //throw new RuntimeException("prime list exhausted");
+               //break;
             }
+            System.out.println("d = " + d);
             // map normalization factor
             ModInteger nf = PolyUtil.<ModInteger>evaluateMain( cofac, cc, d );
             System.out.println("nf = " + nf);
@@ -191,18 +209,20 @@ public class GreatestCommonDivisorModEval //<C extends GcdRingElem<C> >
                 continue;
             }
             // map polynomials
-            qm = PolyUtil.<ModInteger>evaluateFirst( ufac, mfac, q, d );
+            qm = PolyUtil.<ModInteger>evaluateFirstRec( ufac, mfac, qr, d );
             System.out.println("qm = " + qm);
             if ( !qm.degreeVector().equals( qdegv ) ) {
                 continue;
             }
-            rm = PolyUtil.<ModInteger>evaluateFirst( ufac, mfac, r, d );
+            rm = PolyUtil.<ModInteger>evaluateFirstRec( ufac, mfac, rr, d );
             System.out.println("rm = " + rm);
             if ( !rm.degreeVector().equals( rdegv ) ) {
                 continue;
             }
             // compute modular gcd in recursion
+            System.out.println("recursion +++++++++++++++++++++++++++++++++++++");
             cm = gcd(rm,qm);
+            System.out.println("recursion -------------------------------------");
             System.out.println("cm = " + cm);
             if ( true || debug ) {
                System.out.println("cm | rm = " + mufd.basePseudoRemainder(rm,cm));
@@ -248,44 +268,43 @@ public class GreatestCommonDivisorModEval //<C extends GcdRingElem<C> >
             if ( M == null ) {
                // initialize interpolation
                M = ufac.getONE();
-               cp = cm; 
+               cp = rfac.getZERO();
                wdegv = ExpVector.EVGCD(wdegv,mdegv);
-            } else {
-               // interpolate
-               ModInteger mi = PolyUtil.<ModInteger>evaluateMain( cofac, M, d );
-               mi = mi.inverse(); // mod p
-               System.out.println("mi = " + mi);
-
-
-               GenPolynomial<ModInteger> mn = ufac.getONE().multiply(d);
-               mn = ufac.univariate(0).subtract(mn);
-               System.out.println("mn = " + mn); // (x_1 - d)
-               M = M.multiply( mn );
-               System.out.println("M = " + M);
-
-               cp = PolyUtil.interpolate(rfac,cp,M,mi,cm,d);
             }
+            // interpolate
+            mi = PolyUtil.<ModInteger>evaluateMain( cofac, M, d );
+            mi = mi.inverse(); // mod p
+            System.out.println("mi = " + mi);
+
+            cp = PolyUtil.interpolate(rfac,cp,M,mi,cm,d);
+
+            mn = ufac.getONE().multiply(d);
+            mn = ufac.univariate(0).subtract(mn);
+            System.out.println("mn = " + mn); // (x_1 - d)
+            M = M.multiply( mn );
+            System.out.println("M = " + M);
+
             // test for completion
             if ( M.degree(0) > G ) {
                System.out.println("done on M = " + M);
                break;
             }
-            long cmn = cp.degree(0);
+            long cmn = PolyUtil.<ModInteger>coeffMaxDegree(cp);
             System.out.println("cmn = " + cmn);
             if ( M.degree(0) > cmn ) {
                System.out.println("done on cmn = " + cmn);
                // does not work: only if cofactors are also considered?
                // break;
             }
-
-
         }
         // remove normalization
-        q = cp; //PolyUtil.integerFromModularCoefficients(fac,cp);
+        cp = recursivePrimitivePart( cp ).abs(); 
+        System.out.println("cp  = " + cp);
+        cp = cp.multiply( c ); 
+        System.out.println("cp  = " + cp);
+        q = PolyUtil.<ModInteger>distribute(fac,cp);
         System.out.println("q  = " + q);
-        q = basePrimitivePart( q ); 
-        System.out.println("q  = " + q);
-        return q.abs().multiply( c ); 
+        return q; 
     }
 
 }
