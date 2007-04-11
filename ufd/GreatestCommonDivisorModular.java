@@ -35,7 +35,10 @@ public class GreatestCommonDivisorModular //<C extends GcdRingElem<C> >
 
     protected final 
         GreatestCommonDivisorAbstract<ModInteger> mufd =  
-              new GreatestCommonDivisorSimple<ModInteger>();
+              //new GreatestCommonDivisorSimple<ModInteger>();
+              new GreatestCommonDivisorPrimitive<ModInteger>();
+              //new GreatestCommonDivisorSubres<ModInteger>();
+
     protected final 
         GreatestCommonDivisorAbstract<BigInteger> iufd =  
               new GreatestCommonDivisorSubres<BigInteger>();
@@ -159,10 +162,8 @@ public class GreatestCommonDivisorModular //<C extends GcdRingElem<C> >
         System.out.println("n  = " + n);
         // compute degree vectors
         ExpVector rdegv = r.degreeVector();
-        ExpVector rdegv1 = rdegv.subst( 0, rdegv.getVal(0) + 1 );
         ExpVector qdegv = q.degreeVector();
         System.out.println("rdegv  = " + rdegv);
-        System.out.println("rdegv1 = " + rdegv1);
         System.out.println("qdegv  = " + qdegv);
         //compute factor coefficient bounds
         BigInteger af = an.multiply( PolyUtil.factorBound( rdegv ) );
@@ -175,6 +176,9 @@ public class GreatestCommonDivisorModular //<C extends GcdRingElem<C> >
         //initialize prime list and degree vector
         PrimeList primes = new PrimeList();
         int pn = 10; //primes.size();
+        ExpVector wdegv = rdegv.subst( 0, rdegv.getVal(0) + 1 );
+        // +1 seems to be a hack for the unlucky prime test
+        System.out.println("wdegv = " + wdegv);
         ModInteger cofac;
         ModInteger cofacM = null;
         GenPolynomial<ModInteger> qm;
@@ -183,8 +187,10 @@ public class GreatestCommonDivisorModular //<C extends GcdRingElem<C> >
         GenPolynomialRing<ModInteger> rfac = null;
         int i = 0;
         BigInteger M = null;
+        BigInteger cfe = null;
         GenPolynomial<ModInteger> cp = null;
         GenPolynomial<ModInteger> cm = null;
+        GenPolynomial<BigInteger> cpi = null;
         for ( java.math.BigInteger p : primes ) {
             if ( ++i >= pn ) {
                 System.out.println("prime list exhausted");
@@ -192,6 +198,7 @@ public class GreatestCommonDivisorModular //<C extends GcdRingElem<C> >
                 //throw new RuntimeException("prime list exhausted");
                 //break;
             }
+            // initialize coefficient factory and map normalization factor
             cofac = new ModInteger( p, true );
             System.out.println("cofac = " + cofac.getModul());
             ModInteger nf = cofac.fromInteger( cc.getVal() );
@@ -199,6 +206,7 @@ public class GreatestCommonDivisorModular //<C extends GcdRingElem<C> >
             if ( nf.isZERO() ) {
                 continue;
             }
+            // initialize polynomial factory and map polynomials
             mfac = new GenPolynomialRing<ModInteger>(cofac,fac.nvar,fac.tord,fac.getVars());
             System.out.println("mfac = " + mfac);
             qm = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,q);
@@ -214,55 +222,69 @@ public class GreatestCommonDivisorModular //<C extends GcdRingElem<C> >
             // compute modular gcd
             cm = mufd.gcd(rm,qm);
             System.out.println("cm = " + cm);
-            if ( debug ) {
-               System.out.println("rm/cm = " + mufd.basePseudoRemainder(rm,cm));
-               System.out.println("qm/cm = " + mufd.basePseudoRemainder(qm,cm));
+            if ( true || debug ) {
+               System.out.println("cm | rm = " + mufd.basePseudoRemainder(rm,cm));
+               System.out.println("cm | qm = " + mufd.basePseudoRemainder(qm,cm));
             }
             // test for constant g.c.d
             if ( cm.isConstant() ) {
                return fac.getONE();
             }
-            cm = cm.multiply(nf);
-            System.out.println("cm = " + cm);
+            // test for unlucky prime
             ExpVector mdegv = cm.degreeVector();
             System.out.println("mdegv = " + mdegv);
-            if ( rdegv1.equals(mdegv) ) { 
+            if ( wdegv.equals(mdegv) ) { // TL = 0
                System.out.println("TL = 0");
-               // TL = 0
+               // prime ok, next round
+               if ( M != null ) {
+                  if ( M.compareTo(cfe) > 0 ) {
+                     System.out.println("M > cfe: " + M + " > " + cfe);
+                     // continue;
+                  }
+               }
             } else { // TL = 3
                boolean ok = false;
-               if ( ExpVector.EVMT(rdegv1,mdegv) ) { // TL = 2
+               if ( ExpVector.EVMT(wdegv,mdegv) ) { // TL = 2
                   System.out.println("TL = 2");
-                  M = null;
-                  ok = true;
+                  M = null;  // init chinese remainder
+                  ok = true; // prime ok
                }
-               if ( ExpVector.EVMT(mdegv,rdegv1) ) { // TL = 1
+               if ( ExpVector.EVMT(mdegv,wdegv) ) { // TL = 1
                   System.out.println("TL = 1");
-                  continue;
+                  continue; // skip this prime
                }
-               System.out.println("TL = 3");
                if ( !ok ) {
-                  M = null;
-                  continue;
+                  System.out.println("TL = 3");
+                  M = null; // discard chinese remainder and previous work
+                  continue; // prime not ok
                }
             }
-            rdegv1 = mdegv;
+            wdegv = mdegv;
+            // prepare chinese remainder algorithm
+            cm = cm.multiply(nf);
+            System.out.println("cm = " + cm);
             if ( M == null ) {
+               // initialize chinese remainder algorithm
                M = new BigInteger(p);
                cofacM = cofac;
                rfac = mfac;
                cp = cm; 
-               rdegv1 = ExpVector.EVGCD(rdegv1,mdegv);
+               wdegv = ExpVector.EVGCD(wdegv,mdegv);
+               cfe = cf;
+               for ( int k = 0; k < wdegv.length(); k++ ) {
+                   cfe = cfe.multiply( new BigInteger( wdegv.getVal(k)+1 ) );
+               }
+               System.out.println("cfe = " + cfe);
             } else {
-                // apply chinese remainder algorithm
-                ModInteger mi = cofac.fromInteger( M.getVal() ); 
-                mi = mi.inverse(); // mod p
-                System.out.println("mi = " + mi);
-                M = M.multiply( new BigInteger(p) );
-                System.out.println("M = " + M);
-                cofacM = new ModInteger( M.getVal() );
-                rfac = new GenPolynomialRing<ModInteger>(cofacM,fac.nvar,fac.tord,fac.getVars());
-                cp = PolyUtil.chineseRemainder(rfac,cp,mi,cm);
+               // apply chinese remainder algorithm
+               ModInteger mi = cofac.fromInteger( M.getVal() ); 
+               mi = mi.inverse(); // mod p
+               System.out.println("mi = " + mi);
+               M = M.multiply( new BigInteger(p) );
+               System.out.println("M = " + M);
+               cofacM = new ModInteger( M.getVal() );
+               rfac = new GenPolynomialRing<ModInteger>(cofacM,fac.nvar,fac.tord,fac.getVars());
+               cp = PolyUtil.chineseRemainder(rfac,cp,mi,cm);
             }
             System.out.println("cp = " + cp);
             // test for completion
@@ -271,18 +293,20 @@ public class GreatestCommonDivisorModular //<C extends GcdRingElem<C> >
                break;
             }
             // must use integer.sumNorm
-            java.math.BigInteger cmn = cp.sumNorm().getVal();
-            cmn = cmn.shiftLeft(2);
+            cpi = PolyUtil.integerFromModularCoefficients(fac,cp);
+            BigInteger cmn = cpi.sumNorm();
+            cmn = cmn.multiply( cmn.fromInteger(4) );
             System.out.println("cmn = " + cmn);
-            if ( cmn.compareTo( M.getVal() ) <= 0 ) {
+            if ( cmn.compareTo( M ) <= 0 ) {
                System.out.println("done on cmn = " + cmn);
-               //break;
+               // does not work: only if cofactors are also considered?
+               // break;
             }
         }
         // remove normalization
         q = PolyUtil.integerFromModularCoefficients(fac,cp);
         System.out.println("q  = " + q);
-        q = basePrimitivePart( q ); // should be monic
+        q = basePrimitivePart( q ); 
         System.out.println("q  = " + q);
         return q.abs().multiply( c ); 
     }
