@@ -160,8 +160,8 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C> >
         if ( q.isONE() ) {
            return q.multiply(c);
         }
-        //System.out.println("rgcd q = " + q);
-        //System.out.println("rgcd r = " + r);
+        System.out.println("rgcd q = " + q);
+        System.out.println("rgcd r = " + r);
         if ( debug && ( q.isConstant() || r.isConstant() ) ) {
            System.out.println("rgcd q = " + q);
            System.out.println("rgcd r = " + r);
@@ -186,7 +186,16 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C> >
             //System.out.println("rgcd r = " + r);
         }
         //System.out.println("sign q = " + q.signum());
-        return q.abs().multiply(c); //.abs();
+        q = q.abs().multiply(c);
+
+        System.out.println("c   = " + c);
+        System.out.println("q   = " + q);
+        x = recursivePseudoRemainder(P,q);
+        System.out.println("q | P = " + x);
+        x = recursivePseudoRemainder(S,q);
+        System.out.println("q | S = " + x);
+
+        return q; 
     }
 
 }
