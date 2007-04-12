@@ -138,16 +138,15 @@ public class GCDModEvalTest extends TestCase {
          
          a = a.multiply(c);
          b = b.multiply(c);
-
-         System.out.println("a  = " + a);
-         System.out.println("b  = " + b);
+         //System.out.println("a  = " + a);
+         //System.out.println("b  = " + b);
 
          d = ufd_me.gcd(a,b);
 
          c = ufd.basePrimitivePart(c).abs();
          e = ufd.basePseudoRemainder(d,c);
-         System.out.println("c  = " + c);
-         System.out.println("d  = " + d);
+         //System.out.println("c  = " + c);
+         //System.out.println("d  = " + d);
          assertTrue("c | gcd(ac,bc) " + e, e.isZERO() );
 
          e = ufd.basePseudoRemainder(a,d);
