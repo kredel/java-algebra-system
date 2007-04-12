@@ -29,6 +29,9 @@ public final class PrimeList implements Iterable<java.math.BigInteger> {
 
     //private final static Random random = new Random();
 
+    private final static java.math.BigInteger p11 = new java.math.BigInteger(""+11);
+    private final static java.math.BigInteger p13 = new java.math.BigInteger(""+13);
+    private final static java.math.BigInteger p17 = new java.math.BigInteger(""+17);
     private final static java.math.BigInteger p19 = new java.math.BigInteger(""+19);
 
     /**
@@ -47,17 +50,33 @@ public final class PrimeList implements Iterable<java.math.BigInteger> {
         if ( val == null ) {
             val = new ArrayList<java.math.BigInteger>((n > 50 ? n: 50));
            // start with some known primes, see knuth (2,390)
-           val.add( p19 );
-           val.add( getLongPrime(63,25) );
-           val.add( getLongPrime(63,165) );
-           val.add( getLongPrime(63,259) );
-           val.add( getLongPrime(63,301) );
-           val.add( getLongPrime(63,375) );
-           val.add( getLongPrime(63,387) );
-           val.add( getLongPrime(63,391) );
-           val.add( getLongPrime(63,409) );
-           val.add( getLongPrime(63,457) );
-           val.add( getLongPrime(63,471) );
+           // val.add( p11 );
+           // val.add( p13 );
+           // val.add( p17 );
+           // val.add( p19 );
+           // 2^29-x
+           val.add( getLongPrime(29,3) );
+           val.add( getLongPrime(29,33) );
+           val.add( getLongPrime(29,43) );
+           val.add( getLongPrime(29,63) );
+           val.add( getLongPrime(29,73) );
+           val.add( getLongPrime(29,75) );
+           val.add( getLongPrime(29,93) );
+           val.add( getLongPrime(29,99) );
+           val.add( getLongPrime(29,121) );
+           val.add( getLongPrime(29,133) );
+           // 2^28-x
+           val.add( getLongPrime(28,57) );
+           val.add( getLongPrime(28,89) );
+           val.add( getLongPrime(28,95) );
+           val.add( getLongPrime(28,119) );
+           val.add( getLongPrime(28,125) );
+           val.add( getLongPrime(28,143) );
+           val.add( getLongPrime(28,165) );
+           val.add( getLongPrime(28,183) );
+           val.add( getLongPrime(28,213) );
+           val.add( getLongPrime(28,273) );
+           // 2^60-x
            val.add( getLongPrime(60,93) );
            val.add( getLongPrime(60,107) );
            val.add( getLongPrime(60,173) );
@@ -68,6 +87,7 @@ public final class PrimeList implements Iterable<java.math.BigInteger> {
            val.add( getLongPrime(60,395) );
            val.add( getLongPrime(60,399) );
            val.add( getLongPrime(60,453) );
+           // 2^59-x
            val.add( getLongPrime(59,55) );
            val.add( getLongPrime(59,99) );
            val.add( getLongPrime(59,225) );
@@ -78,7 +98,18 @@ public final class PrimeList implements Iterable<java.math.BigInteger> {
            val.add( getLongPrime(59,687) );
            val.add( getLongPrime(59,861) );
            val.add( getLongPrime(59,871) );
-           //  val.add( getLongPrime(2,0) );
+           // 2^63-x
+           val.add( getLongPrime(63,25) );
+           val.add( getLongPrime(63,165) );
+           val.add( getLongPrime(63,259) );
+           val.add( getLongPrime(63,301) );
+           val.add( getLongPrime(63,375) );
+           val.add( getLongPrime(63,387) );
+           val.add( getLongPrime(63,391) );
+           val.add( getLongPrime(63,409) );
+           val.add( getLongPrime(63,457) );
+           val.add( getLongPrime(63,471) );
+           //val.add( getLongPrime(1,0) );
            int m = val.size();
            java.math.BigInteger start = getLongPrime(63,10000);
            java.math.BigInteger end   = getLongPrime(63,471);
@@ -150,7 +181,27 @@ public final class PrimeList implements Iterable<java.math.BigInteger> {
      * get prime at index i.
      */
     public java.math.BigInteger get(int i) {
-        return val.get(i);
+        java.math.BigInteger p;
+        p = null;
+        while ( p == null ) {
+            try {
+                p = val.get(i);
+            } catch(IndexOutOfBoundsException e) {
+                // ignored;
+            }
+            if ( p == null ) {
+                if ( val.get(0).equals(p19) ) {
+                    p = val.get(1).nextProbablePrime();
+                } else {
+                    p = val.get(0).nextProbablePrime();
+                }
+                val.add( 0, p );
+                p = null;
+            } else {
+                break;
+            }
+        }
+        return p;
     }
 
 
