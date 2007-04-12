@@ -34,18 +34,15 @@ public class GreatestCommonDivisorModEval //<C extends GcdRingElem<C> >
     private boolean debug = logger.isDebugEnabled();
 
     protected final 
-        GreatestCommonDivisorAbstract<ModInteger> mufd =  
-              //new GreatestCommonDivisorModular();
-              //new GreatestCommonDivisorSimple<ModInteger>();
-              new GreatestCommonDivisorPrimitive<ModInteger>();
-              //new GreatestCommonDivisorSubres<ModInteger>();
-
-    //        GreatestCommonDivisorModular mufd =  
-    //          new GreatestCommonDivisorModular();
+        GreatestCommonDivisorAbstract<ModInteger> mufd   
+          // = new GreatestCommonDivisorModular();
+             = new GreatestCommonDivisorSimple<ModInteger>();
+          // = new GreatestCommonDivisorPrimitive<ModInteger>();
+          // = new GreatestCommonDivisorSubres<ModInteger>();
 
     protected final 
-        GreatestCommonDivisorAbstract<BigInteger> iufd =  
-              new GreatestCommonDivisorSubres<BigInteger>();
+        GreatestCommonDivisorAbstract<BigInteger> iufd   
+             = new GreatestCommonDivisorSubres<BigInteger>();
               //new GreatestCommonDivisorSimple<ModInteger>();
               //new GreatestCommonDivisorPrimitive<ModInteger>();
 
