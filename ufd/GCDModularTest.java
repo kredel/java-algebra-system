@@ -115,13 +115,13 @@ public class GCDModularTest extends TestCase {
 
 
 /**
- * Test modular algorithm gcd.
+ * Test modular algorithm gcd with modular evaluation recursive algorithm.
  * 
  */
- public void testModularGcd() {
+ public void testModularEvaluationGcd() {
 
      GreatestCommonDivisorAbstract<BigInteger> ufd_m
-        = new GreatestCommonDivisorModular();
+        = new GreatestCommonDivisorModular(/*false*/);
 
      GreatestCommonDivisorAbstract<BigInteger> ufd
         = new GreatestCommonDivisorPrimitive<BigInteger>();
@@ -135,7 +135,7 @@ public class GCDModularTest extends TestCase {
      GenPolynomialRing<BigInteger> dfac 
          = new GenPolynomialRing<BigInteger>(new BigInteger(),3,to);
 
-     for (int i = 0; i < 3; i++) {
+     for (int i = 0; i < 2; i++) {
          a = dfac.random(kl,ll+i,el+i,q);
          b = dfac.random(kl,ll+i,el+i,q);
          c = dfac.random(kl,ll+i,el+i,q);
@@ -154,15 +154,78 @@ public class GCDModularTest extends TestCase {
          a = a.multiply(c);
          b = b.multiply(c);
 
-         System.out.println("a  = " + a);
-         System.out.println("b  = " + b);
+         //System.out.println("a  = " + a);
+         //System.out.println("b  = " + b);
 
          d = ufd_m.gcd(a,b);
 
          c = ufd.basePrimitivePart(c).abs();
          e = ufd.basePseudoRemainder(d,c);
-         System.out.println("c  = " + c);
-         System.out.println("d  = " + d);
+         //System.out.println("c  = " + c);
+         //System.out.println("d  = " + d);
+
+         assertTrue("c | gcd(ac,bc) " + e, e.isZERO() );
+
+         e = ufd.basePseudoRemainder(a,d);
+         //System.out.println("e = " + e);
+         assertTrue("gcd(a,b) | a" + e, e.isZERO() );
+
+         e = ufd.basePseudoRemainder(b,d);
+         //System.out.println("e = " + e);
+         assertTrue("gcd(a,b) | b" + e, e.isZERO() );
+     }
+ }
+
+
+/**
+ * Test modular algorithm gcd with simple PRS recursive algorithm.
+ * 
+ */
+ public void testModularSimpleGcd() {
+
+     GreatestCommonDivisorAbstract<BigInteger> ufd_m
+        = new GreatestCommonDivisorModular(true);
+
+     GreatestCommonDivisorAbstract<BigInteger> ufd
+        = new GreatestCommonDivisorPrimitive<BigInteger>();
+
+     GenPolynomial<BigInteger> a;
+     GenPolynomial<BigInteger> b;
+     GenPolynomial<BigInteger> c;
+     GenPolynomial<BigInteger> d;
+     GenPolynomial<BigInteger> e;
+
+     GenPolynomialRing<BigInteger> dfac 
+         = new GenPolynomialRing<BigInteger>(new BigInteger(),3,to);
+
+     for (int i = 0; i < 1; i++) {
+         a = dfac.random(kl,ll+i,el+i,q);
+         b = dfac.random(kl,ll+i,el+i,q);
+         c = dfac.random(kl,ll+i,el+i,q);
+         c = c.multiply( dfac.univariate(0) );
+         //a = ufd.basePrimitivePart(a);
+         //b = ufd.basePrimitivePart(b);
+
+         if ( a.isZERO() || b.isZERO() || c.isZERO() ) {
+            // skip for this turn
+            continue;
+         }
+         assertTrue("length( c"+i+" ) <> 0", c.length() > 0);
+         //assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
+         //assertTrue(" not isONE( c"+i+" )", !c.isONE() );
+         
+         a = a.multiply(c);
+         b = b.multiply(c);
+
+         //System.out.println("a  = " + a);
+         //System.out.println("b  = " + b);
+
+         d = ufd_m.gcd(a,b);
+
+         c = ufd.basePrimitivePart(c).abs();
+         e = ufd.basePseudoRemainder(d,c);
+         //System.out.println("c  = " + c);
+         //System.out.println("d  = " + d);
 
          assertTrue("c | gcd(ac,bc) " + e, e.isZERO() );
 
