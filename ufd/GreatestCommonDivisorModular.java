@@ -34,14 +34,13 @@ public class GreatestCommonDivisorModular //<C extends GcdRingElem<C> >
 
 
     protected final 
-        GreatestCommonDivisorAbstract<ModInteger> mufd =  
-              //new GreatestCommonDivisorSimple<ModInteger>();
-              new GreatestCommonDivisorPrimitive<ModInteger>();
-              //new GreatestCommonDivisorSubres<ModInteger>();
+        GreatestCommonDivisorAbstract<ModInteger> mufd   
+        // = new GreatestCommonDivisorModEval();
+           = new GreatestCommonDivisorSimple<ModInteger>();
 
     protected final 
-        GreatestCommonDivisorAbstract<BigInteger> iufd =  
-              new GreatestCommonDivisorSubres<BigInteger>();
+        GreatestCommonDivisorAbstract<BigInteger> iufd   
+           = new GreatestCommonDivisorSubres<BigInteger>();
 
     /**
      * Univariate GenPolynomial greatest comon divisor.
@@ -174,6 +173,7 @@ public class GreatestCommonDivisorModular //<C extends GcdRingElem<C> >
         GenPolynomial<ModInteger> cm = null;
         GenPolynomial<BigInteger> cpi = null;
         for ( java.math.BigInteger p : primes ) {
+            System.out.println("next run +++++++++++++++++++++++++++++++++++++");
             if ( ++i >= pn ) {
                 System.out.println("prime list exhausted");
                 return iufd.gcd(P,S);
@@ -241,7 +241,7 @@ public class GreatestCommonDivisorModular //<C extends GcdRingElem<C> >
                   continue; // prime not ok
                }
             }
-            wdegv = mdegv;
+            //--wdegv = mdegv;
             // prepare chinese remainder algorithm
             cm = cm.multiply(nf);
             System.out.println("cm = " + cm);
