@@ -1032,9 +1032,11 @@ public class GenPolynomial<C extends RingElem<C> >
      * Throws not implemented exception.
      */
     public GenPolynomial<C> inverse() {
-        throw new RuntimeException(this.getClass().getName()
-                                   + " inverse() not implemented");
-        //return this;
+        if ( isUnit() ) { // only possible if ldcf is unit
+           C c = leadingBaseCoefficient().inverse();
+           return ring.getONE().multiply( c );
+        }
+        throw new RuntimeException("element not invertible " + this);
     }
 
 
@@ -1048,13 +1050,11 @@ public class GenPolynomial<C extends RingElem<C> >
         GenPolynomial<C>[] xegcd = this.egcd(m);
         GenPolynomial<C> a = xegcd[0];
         if ( !a.isUnit() ) {
-            throw new RuntimeException(this.getClass().getName()
-                                       + " not invertible");
+           throw new RuntimeException("element not invertible " + a);
         }
         a = xegcd[1];
         if ( a.isZERO() ) { // why does this happen?
-            throw new RuntimeException(this.getClass().getName()
-                                       + " not invertible");
+           throw new RuntimeException("element not invertible " + a);
         }
         return a; 
     }
