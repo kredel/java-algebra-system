@@ -114,7 +114,7 @@ public class GCDSimpleTest extends TestCase {
 
      dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),1,to);
 
-     for (int i = 0; i < 1; i++) {
+     for (int i = 0; i < 5; i++) {
          a = dfac.random(kl*(i+2),ll+2*i,el+2,q);
          b = dfac.random(kl*(i+2),ll+2*i,el+2,q);
          c = dfac.random(kl*(i+2),ll+2,el+2,q);
@@ -166,7 +166,9 @@ public class GCDSimpleTest extends TestCase {
      cfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),2-1,to);
      rfac = new GenPolynomialRing<GenPolynomial<BigInteger>>(cfac,1,to);
 
-     for (int i = 0; i < 5; i++) {
+     //kl = 3; ll = 2;
+
+     for (int i = 0; i < 3; i++) {
          ar = rfac.random(kl,ll,el+i,q);
          br = rfac.random(kl,ll,el,q);
          cr = rfac.random(kl,ll,el,q);
@@ -187,9 +189,9 @@ public class GCDSimpleTest extends TestCase {
          br = br.multiply(cr);
          //System.out.println("ar = " + ar);
          //System.out.println("br = " + br);
-         //System.out.println("cr = " + cr);
 
          dr = ufd.recursiveGcd(ar,br);
+         //System.out.println("cr = " + cr);
          //System.out.println("dr = " + dr);
 
          er = ufd.recursivePseudoRemainder(dr,cr);
@@ -213,10 +215,7 @@ public class GCDSimpleTest extends TestCase {
  */
  public void testGCDSimple() {
 
-     GreatestCommonDivisorAbstract<BigInteger> ufd_pp; 
-     ufd_pp = ufd;
-
-     dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),2,to);
+     dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),4,to);
 
      for (int i = 0; i < 2; i++) {
          a = dfac.random(kl,ll,el,q);
@@ -246,15 +245,15 @@ public class GCDSimpleTest extends TestCase {
          //System.out.println("c = " + c);
          //System.out.println("d = " + d);
 
-         e = ufd_pp.basePseudoRemainder(d,c);
+         e = ufd.basePseudoRemainder(d,c);
          //System.out.println("e = " + e);
          assertTrue("c | gcd(ac,bc) " + e, e.isZERO() );
 
-         e = ufd_pp.basePseudoRemainder(a,d);
+         e = ufd.basePseudoRemainder(a,d);
          //System.out.println("e = " + e);
          assertTrue("gcd(a,b) | a " + e, e.isZERO() );
 
-         e = ufd_pp.basePseudoRemainder(b,d);
+         e = ufd.basePseudoRemainder(b,d);
          //System.out.println("e = " + e);
          assertTrue("gcd(a,b) | b " + e, e.isZERO() );
      }

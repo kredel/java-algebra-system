@@ -115,7 +115,7 @@ public class GCDModularTest extends TestCase {
 
 
 /**
- * Test modular gcd.
+ * Test modular algorithm gcd.
  * 
  */
  public void testModularGcd() {
@@ -133,12 +133,12 @@ public class GCDModularTest extends TestCase {
      GenPolynomial<BigInteger> e;
 
      GenPolynomialRing<BigInteger> dfac 
-         = new GenPolynomialRing<BigInteger>(new BigInteger(),rl,to);
+         = new GenPolynomialRing<BigInteger>(new BigInteger(),3,to);
 
-     for (int i = 0; i < 1; i++) {
-         a = dfac.random(kl*(i+2),ll+2*i,el+2*i,q);
-         b = dfac.random(kl*(i+2),ll+2*i,el+2*i,q);
-         c = dfac.random(kl*(i+2),ll+2*i,el+2*i,q);
+     for (int i = 0; i < 3; i++) {
+         a = dfac.random(kl,ll+i,el+i,q);
+         b = dfac.random(kl,ll+i,el+i,q);
+         c = dfac.random(kl,ll+i,el+i,q);
          c = c.multiply( dfac.univariate(0) );
          //a = ufd.basePrimitivePart(a);
          //b = ufd.basePrimitivePart(b);
@@ -178,7 +178,7 @@ public class GCDModularTest extends TestCase {
 
 
 /**
- * Test recursive content and primitive part, modular.
+ * Test recursive content and primitive part, modular coefficients.
  * 
  */
  public void testRecursiveContentPPmodular() {
@@ -282,10 +282,10 @@ public class GCDModularTest extends TestCase {
 
 
 /**
- * Test recursive modular gcd. 
+ * Test recursive gcd modular coefficients. 
  * 
  */
- public void testRecursiveModularGCD() {
+ public void testRecursiveGCDModular() {
 
      dfac = new GenPolynomialRing<ModInteger>(mi,2,to);
      cfac = new GenPolynomialRing<ModInteger>(mi,2-1,to);
@@ -346,11 +346,6 @@ public class GCDModularTest extends TestCase {
 
      dfac = new GenPolynomialRing<ModInteger>(mi,4,to);
 
-     GreatestCommonDivisorAbstract<ModInteger> ufd 
-          //= new GreatestCommonDivisorSimple<ModInteger>();
-          = new GreatestCommonDivisorPrimitive<ModInteger>();
-          //= new GreatestCommonDivisorSubres<ModInteger>();
-
      for (int i = 0; i < 1; i++) {
          a = dfac.random(kl,ll,el+i,q).monic();
          b = dfac.random(kl,ll,el+i,q).monic();
@@ -392,7 +387,6 @@ public class GCDModularTest extends TestCase {
          e = ufd.basePseudoRemainder(bc,d);
          //System.out.println("gcd(ac,bc) | bc " + e);
          assertTrue("gcd(ac,bc) | bc " + e, e.isZERO() );
-
      }
  }
 
