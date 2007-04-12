@@ -55,6 +55,8 @@ public class GCDTimingTest extends TestCase {
    GreatestCommonDivisorAbstract<BigInteger> ufd_si; 
    GreatestCommonDivisorAbstract<BigInteger> ufd_pp; 
    GreatestCommonDivisorAbstract<BigInteger> ufd_sr; 
+   GreatestCommonDivisorAbstract<BigInteger> ufd_mosi; 
+   GreatestCommonDivisorAbstract<BigInteger> ufd_moevsi; 
 
    TermOrder to = new TermOrder( TermOrder.INVLEX );
 
@@ -90,9 +92,11 @@ public class GCDTimingTest extends TestCase {
        a = b = c = d = e = null;
        ai = bi = ci = di = ei = null;
        ar = br = cr = dr = er = null;
-       ufd_si = new GreatestCommonDivisorSimple<BigInteger>();
-       ufd_pp = new GreatestCommonDivisorPrimitive<BigInteger>();
-       ufd_sr = new GreatestCommonDivisorSubres<BigInteger>();
+       ufd_si     = new GreatestCommonDivisorSimple<BigInteger>();
+       ufd_pp     = new GreatestCommonDivisorPrimitive<BigInteger>();
+       ufd_sr     = new GreatestCommonDivisorSubres<BigInteger>();
+       ufd_mosi   = new GreatestCommonDivisorModular(true);
+       ufd_moevsi = new GreatestCommonDivisorModular();
        dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),rl,to);
        cfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),rl-1,to);
        rfac = new GenPolynomialRing<GenPolynomial<BigInteger>>(cfac,1,to);
@@ -229,7 +233,6 @@ public class GCDTimingTest extends TestCase {
                                    + ", b = " + br.degree()  
                                    + ", c = " + cr.degree());  
 
-         /*
          t = System.currentTimeMillis();
          dr = ufd_si.recursiveGcd(ar,br);
          t = System.currentTimeMillis() - t;
@@ -240,6 +243,7 @@ public class GCDTimingTest extends TestCase {
 
          //assertTrue("c | gcd(ac,bc) " + er, er.isZERO() );
          System.out.println("simple prs        time = " + t);
+         /*
          */
 
          t = System.currentTimeMillis();
@@ -272,18 +276,20 @@ public class GCDTimingTest extends TestCase {
  * Test gcd.
  * 
  */
- public void xtestGCD() {
+ public void testGCD() {
 
      long t;
 
      dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),5,to);
 
-     for (int i = 0; i < 5; i++) {
-         a = dfac.random(kl,ll,el,q);
-         b = dfac.random(kl,ll,el,q);
-         c = dfac.random(kl,ll,el,q);
-         c = c.multiply( dfac.univariate(0) );
-         //c = ufd.primitivePart(c).abs();
+     for (int i = 0; i < 10; i++) {
+         a = dfac.random(kl+i*3,ll,el,q);
+         b = dfac.random(kl+i*3,ll,el,q);
+         c = dfac.random(kl,ll+i,el+i/2,q);
+         //c = dfac.getONE();
+         //c = c.multiply( dfac.univariate(0) ).multiply( dfac.univariate(4) );
+         //c = c.multiply( dfac.univariate(0) );
+         c = ufd_pp.primitivePart(c).abs();
          //System.out.println("a = " + a);
          //System.out.println("b = " + b);
          //System.out.println("c = " + c);
@@ -305,6 +311,16 @@ public class GCDTimingTest extends TestCase {
          System.out.println("\ndegrees: a = " + a.degree() 
                                    + ", b = " + b.degree()  
                                    + ", c = " + c.degree());  
+         /*
+         t = System.currentTimeMillis();
+         d = ufd_si.gcd(a,b);
+         t = System.currentTimeMillis() - t;
+         e = ufd_pp.basePseudoRemainder(d,c);
+         //System.out.println("d  = " + d);
+
+         assertTrue("c | gcd(ac,bc) " + e, e.isZERO() );
+         System.out.println("simple prs        time = " + t);
+         */
 
          t = System.currentTimeMillis();
          d = ufd_pp.gcd(a,b);
@@ -324,7 +340,27 @@ public class GCDTimingTest extends TestCase {
 
          assertTrue("c | gcd(ac,bc) " + e, e.isZERO() );
          System.out.println("subsresultant prs time = " + t);
-     }
+
+         /*
+         t = System.currentTimeMillis();
+         d = ufd_mosi.gcd(a,b);
+         t = System.currentTimeMillis() - t;
+         e = ufd_pp.basePseudoRemainder(d,c);
+         //System.out.println("d  = " + d);
+
+         assertTrue("c | gcd(ac,bc) " + e, e.isZERO() );
+         System.out.println("modular simple    time = " + t);
+         */
+
+         t = System.currentTimeMillis();
+         d = ufd_moevsi.gcd(a,b);
+         t = System.currentTimeMillis() - t;
+         e = ufd_pp.basePseudoRemainder(d,c);
+         //System.out.println("d  = " + d);
+
+         assertTrue("c | gcd(ac,bc) " + e, e.isZERO() );
+         System.out.println("modular eval      time = " + t);
+         }
      }
 
 }
