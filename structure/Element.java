@@ -40,9 +40,11 @@ public interface Element<C extends Element<C>> extends Cloneable,
 
     /**
      * Compare this to b.
+     * I.e. this &lt; b iff this.compareTo(b) &lt; 0.
      * <b>Note:</b> may not be meaningful if structure has no order.
      * @param b
-     * @return 0 if this is equal to b, else +1 or -1.
+     * @return 0 if this is equal to b, 
+               -1 if this is less then b, else +1.
      */
     public int compareTo(C b);
 
