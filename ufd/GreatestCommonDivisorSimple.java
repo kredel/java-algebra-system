@@ -89,13 +89,13 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C> >
             x = basePseudoRemainder(q,r);
             //System.out.println("x  = " + x);
             q = r;
-            //r = basePrimitivePart( x );
             if ( field ) {
                r = x.monic();
             } else {
                r = x;
             }
         }
+        q = basePrimitivePart( q );
         //System.out.println("q  = " + q);
         return (q.multiply(c)).abs(); 
     }
@@ -143,8 +143,6 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C> >
            r = r.abs();
            q = q.abs();
         }
-        //System.out.println("rgcd r = " + r);
-        //System.out.println("rgcd q = " + q);
         GenPolynomial<C> a = recursiveContent(r);
         GenPolynomial<C> b = recursiveContent(q);
         //System.out.println("rgcd a = " + a);
@@ -160,24 +158,17 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C> >
         if ( q.isONE() ) {
            return q.multiply(c);
         }
-        System.out.println("rgcd q = " + q);
-        System.out.println("rgcd r = " + r);
-        if ( debug && ( q.isConstant() || r.isConstant() ) ) {
-           System.out.println("rgcd q = " + q);
-           System.out.println("rgcd r = " + r);
-           throw new RuntimeException(this.getClass().getName()
-                                       + " error in recursive Content");
+        //System.out.println("rgcd q = " + q);
+        //System.out.println("rgcd r = " + r);
+        if ( false && debug ) {
+            System.out.println("rgcd r.a = " + r.multiply(a));
+            System.out.println("rgcd q.b = " + q.multiply(b));
         }
-
         GenPolynomial<GenPolynomial<C>> x;
         while ( !r.isZERO() ) {
             x = recursivePseudoRemainder(q,r);
             //System.out.println("rgcd x = " + x);
-            //if ( !x.isZERO() && x.isConstant() ) {
-            //   System.out.println("rpg x = is constant " + x);
-            //}
             q = r;
-            //r = recursivePrimitivePart( x );
             if ( field ) {
                r = PolyUtil.<C>monic(x);
             } else {
@@ -185,16 +176,9 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C> >
             }
             //System.out.println("rgcd r = " + r);
         }
-        //System.out.println("sign q = " + q.signum());
+        q = recursivePrimitivePart( q );
+        //System.out.println(" q = " + q);
         q = q.abs().multiply(c);
-
-        System.out.println("c   = " + c);
-        System.out.println("q   = " + q);
-        x = recursivePseudoRemainder(P,q);
-        System.out.println("q | P = " + x);
-        x = recursivePseudoRemainder(S,q);
-        System.out.println("q | S = " + x);
-
         return q; 
     }
 
