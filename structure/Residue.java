@@ -258,25 +258,31 @@ public class Residue<C extends RingElem<C> >
      */
     public Residue<C> inverse() {
         if ( isunit == 0 ) {
-           throw new RuntimeException("element not invertible " + this);
+           throw new RuntimeException("element not invertible (0) " + this);
         }
-        if (    val instanceof GcdRingElem 
+        if (           val instanceof GcdRingElem 
              && ring.modul instanceof GcdRingElem ) {
            GcdRingElem v = (GcdRingElem)val;
            GcdRingElem m = (GcdRingElem)ring.modul;
-           C[] egcd =  (C[]) v.egcd( m );
+           C[] egcd =  (C[])v.egcd( m );
            if ( debug ) {
               logger.info("egcd = " + egcd[0] + ", f = " + egcd[1]);
            }
            if ( ! egcd[0].isONE() ) {
               isunit = 0;
-              throw new RuntimeException("element not invertible " + this);
+              throw new RuntimeException("element not invertible (gcd)" + this);
            }
            isunit = 1;
            C x = egcd[1];
            return new Residue<C>( ring, x );
         }
-        throw new RuntimeException("element not invertible " + this);
+        if ( val.isUnit() ) {
+           C x = val.inverse();
+           return new Residue<C>( ring, x );
+        }
+        System.out.println("isunit = " + isunit 
+                       + ", isUnit() = " + this.isUnit() );
+        throw new RuntimeException("element not invertible (!gcd)" + this);
     }
 
 
@@ -298,5 +304,24 @@ public class Residue<C extends RingElem<C> >
         return new Residue<C>( ring, val.multiply( S.val ) );
     }
 
+
+    /**
+     * Greatest common divisor.
+     * @param b other element.
+     * @return gcd(this,b).
+     */
+    public Residue<C> gcd(Residue<C> b) {
+        throw new RuntimeException("gcd not implemented " + this.getClass().getName());
+    }
+
+
+    /**
+     * Extended greatest common divisor.
+     * @param b other element.
+     * @return [ gcd(this,b), c1, c2 ] with c1*this + c2*b = gcd(this,b).
+     */
+    public Residue<C>[] egcd(Residue<C> b) {
+        throw new RuntimeException("egcd not implemented " + this.getClass().getName());
+    }
  
 }
