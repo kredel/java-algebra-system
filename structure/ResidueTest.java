@@ -141,6 +141,9 @@ public class ResidueTest extends TestCase {
  public void testIntRandom() {
      for (int i = 0; i < 7; i++) {
          a = fac.random(kl*(i+1));
+        if ( a.isZERO() ) {
+            continue;
+         }
          //a = fac.random(kl*(i+1), ll+2*i, el+i, q );
          //System.out.println("a = " + a);
          assertTrue(" not isZERO( a"+i+" )", !a.isZERO() );
@@ -156,6 +159,9 @@ public class ResidueTest extends TestCase {
  public void testPolyRandom() {
      for (int i = 0; i < 7; i++) {
          ap = mfac.random(kl+i);
+         if ( ap.isZERO() ) {
+            continue;
+         }
          assertTrue(" not isZERO( ap"+i+" )", !ap.isZERO() );
          assertTrue(" not isONE( ap"+i+" )", !ap.isONE() );
      }
@@ -241,9 +247,15 @@ public class ResidueTest extends TestCase {
  public void testIntMultiplication() {
 
      a = fac.random(kl);
+     if ( a.isZERO() ) {
+        return;
+     }
      assertTrue("not isZERO( a )", !a.isZERO() );
 
      b = fac.random(kl);
+     if ( b.isZERO() ) {
+        return;
+     }
      assertTrue("not isZERO( b )", !b.isZERO() );
 
      c = b.multiply(a);
@@ -294,9 +306,15 @@ public class ResidueTest extends TestCase {
  public void testPolyMultiplication() {
 
      ap = mfac.random(kl);
+     if ( ap.isZERO() ) {
+        return;
+     }
      assertTrue("not isZERO( a )", !ap.isZERO() );
 
      bp = mfac.random(kl);
+     if ( bp.isZERO() ) {
+        return;
+     }
      assertTrue("not isZERO( b )", !bp.isZERO() );
 
      cp = bp.multiply(ap);
