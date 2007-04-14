@@ -80,7 +80,7 @@ public class GaloisFieldTest extends TestCase {
        mfac = new GenPolynomialRing<ModInteger>( new ModInteger(prime,1), 1 );
        //System.out.println("mfac = " + mfac);
        GenPolynomial<ModInteger> mo = mfac.random(kl,ll,el,q);
-       while ( mo.isUnit() || mo.isZERO() ) {
+       while ( mo.isConstant() ) {
           mo = mfac.random(kl,ll,el,q);
        }
        fac = new AlgebraicNumberRing<ModInteger>( mo );
