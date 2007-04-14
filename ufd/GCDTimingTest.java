@@ -276,16 +276,16 @@ public class GCDTimingTest extends TestCase {
  * Test gcd.
  * 
  */
- public void xtestGCD() {
+ public void testGCD() {
 
      long t;
 
-     dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),5,to);
+     dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),4,to);
 
      for (int i = 0; i < 10; i++) {
-         a = dfac.random(kl+i*3,ll,el,q);
-         b = dfac.random(kl+i*3,ll,el,q);
-         c = dfac.random(kl,ll+i,el+i/2,q);
+         a = dfac.random(kl+i*3,ll+i,2*el,q);
+         b = dfac.random(kl+i*3,ll+i,2*el,q);
+         c = dfac.random(kl,ll,el,q);
          //c = dfac.getONE();
          //c = c.multiply( dfac.univariate(0) ).multiply( dfac.univariate(4) );
          //c = c.multiply( dfac.univariate(0) );
@@ -321,7 +321,7 @@ public class GCDTimingTest extends TestCase {
          assertTrue("c | gcd(ac,bc) " + e, e.isZERO() );
          System.out.println("simple prs        time = " + t);
          */
-
+         /*
          t = System.currentTimeMillis();
          d = ufd_pp.gcd(a,b);
          t = System.currentTimeMillis() - t;
@@ -330,8 +330,8 @@ public class GCDTimingTest extends TestCase {
 
          assertTrue("c | gcd(ac,bc) " + e, e.isZERO() );
          System.out.println("primitive prs     time = " + t);
-
-
+         */
+         
          t = System.currentTimeMillis();
          d = ufd_sr.gcd(a,b);
          t = System.currentTimeMillis() - t;
@@ -340,7 +340,7 @@ public class GCDTimingTest extends TestCase {
 
          assertTrue("c | gcd(ac,bc) " + e, e.isZERO() );
          System.out.println("subsresultant prs time = " + t);
-
+         
          /*
          t = System.currentTimeMillis();
          d = ufd_mosi.gcd(a,b);
