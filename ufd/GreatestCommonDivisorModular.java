@@ -307,9 +307,24 @@ public class GreatestCommonDivisorModular //<C extends GcdRingElem<C> >
                // does not work: only if cofactors are also considered?
                // break;
             }
+            if ( i % 2 != 0 && !cp.isZERO() ) { 
+               // check if done on every second prime
+               GenPolynomial<BigInteger> x;
+               x = PolyUtil.integerFromModularCoefficients(fac,cp);
+               x = basePrimitivePart( x ); 
+               //x = x.abs().multiply( c ); 
+               if ( ! basePseudoRemainder(q,x).isZERO() ){
+                  continue;
+               }
+               if ( ! basePseudoRemainder(r,x).isZERO() ){
+                  continue;
+               }
+               System.out.println("done on exact division, #primes = " + i);
+               break;
+            }
         }
-        if ( debug ) {
-           System.out.println("done on M = " + M);
+        if ( true || debug ) {
+           System.out.println("done on M = " + M + ", #primes = " + i);
         }
         // remove normalization
         q = PolyUtil.integerFromModularCoefficients(fac,cp);
