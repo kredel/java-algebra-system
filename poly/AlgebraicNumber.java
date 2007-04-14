@@ -5,6 +5,7 @@
 package edu.jas.poly;
 
 import edu.jas.structure.RingElem;
+import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.structure.PrettyPrint;
 
@@ -19,8 +20,8 @@ import java.io.Reader;
  * @author Heinz Kredel
  */
 
-public class AlgebraicNumber<C extends RingElem<C> > 
-                               implements RingElem< AlgebraicNumber<C> > {
+public class AlgebraicNumber<C extends GcdRingElem<C> > 
+                               implements GcdRingElem< AlgebraicNumber<C> > {
 
                                //, RingFactory< AlgebraicNumber<C> >  {
 
