@@ -388,4 +388,24 @@ public class Quotient<C extends RingElem<C> >
         return new Quotient<C>( ring, n, d, true );
     }
 
+    /**
+     * Greatest common divisor.
+     * <b>Note: </b>Not implemented, throws RuntimeException.
+     * @param b other element.
+     * @return gcd(this,b).
+     */
+    public Quotient<C> gcd(Quotient<C> b) {
+        throw new RuntimeException("gcd not implemented " + this.getClass().getName());
+    }
+
+
+    /**
+     * Extended greatest common divisor.
+     * <b>Note: </b>Not implemented, throws RuntimeException.
+     * @param b other element.
+     * @return [ gcd(this,b), c1, c2 ] with c1*this + c2*b = gcd(this,b).
+     */
+    public Quotient<C>[] egcd(Quotient<C> b) {
+        throw new RuntimeException("egcd not implemented " + this.getClass().getName());
+    }
 }
