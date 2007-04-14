@@ -500,6 +500,7 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C> >
         GenPolynomial<C> t;
         if ( f == 0 && e == 0 && g.ring.nvar > 0 ) { 
            // if coeffs are multivariate (and non constant)
+           // otherwise it would be 1
            t = resultant( a, b );
            x = P.ring.getONE().multiply( t );
            return x;
