@@ -985,4 +985,52 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C> >
         return sfactors;
     }
 
+
+    /**
+     * GenPolynomial resultant.
+     * Main entry driver method.
+     * @param P GenPolynomial.
+     * @param S GenPolynomial.
+     * @return res(P,S).
+     */
+    public GenPolynomial<C> 
+        resultant( GenPolynomial<C> P,
+                   GenPolynomial<C> S ) {
+        if ( S == null || S.isZERO() ) {
+            return S;
+        }
+        if ( P == null || P.isZERO() ) {
+            return P;
+        }
+        GenPolynomialRing<C> pfac = P.ring;
+        // hack
+        GreatestCommonDivisorSubres<C> ufd_sr
+            = new GreatestCommonDivisorSubres<C>();
+        if ( pfac.nvar <= 1 ) {
+            //System.out.println("P = " + P);
+            //System.out.println("S = " + S);
+            GenPolynomial<C> T = ufd_sr.baseResultant(P,S);
+            //System.out.println("T = " + T);
+            return T;
+        }
+        GenPolynomialRing<C> cfac = pfac.contract(1);
+        GenPolynomialRing<GenPolynomial<C>> rfac 
+           = new GenPolynomialRing<GenPolynomial<C>>(cfac,1);
+
+        GenPolynomial<GenPolynomial<C>> Pr = recursive(rfac,P);
+        GenPolynomial<GenPolynomial<C>> Sr = recursive(rfac,S);
+
+        GenPolynomial<GenPolynomial<C>> Dr = ufd_sr.recursiveResultant( Pr, Sr );
+        //System.out.println("Pr  =" + Pr);
+        //System.out.println("Sr  =" + Sr);
+        //System.out.println("Dr  =" + Dr);
+        // GenPolynomial not a GcdRingElem:
+        //GreatestCommonDivisorSimple<GenPolynomial<GenPolynomial<C>>> sgcd 
+        //  = new GreatestCommonDivisorSimple<GenPolynomial<GenPolynomial<C>>>();
+        //GenPolynomial<GenPolynomial<C>> Dr = sgcd.gcd( Pr, Sr );
+
+        GenPolynomial<C> D = distribute( pfac, Dr );
+        return D;
+    }
+
 }

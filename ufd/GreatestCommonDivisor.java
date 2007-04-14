@@ -58,6 +58,18 @@ public interface GreatestCommonDivisor<C extends GcdRingElem<C> > {
 
 
     /**
+     * GenPolynomial resultant.
+     * Main entry driver method.
+     * @param P GenPolynomial.
+     * @param S GenPolynomial.
+     * @return res(P,S).
+     */
+    public GenPolynomial<C> 
+        resultant( GenPolynomial<C> P,
+                   GenPolynomial<C> S );
+
+
+    /**
      * GenPolynomial greatest squarefree divisor.
      * Entry driver method.
      * @param P GenPolynomial.
