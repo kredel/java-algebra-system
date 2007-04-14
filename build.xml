@@ -132,7 +132,7 @@
   <junit printsummary="yes" 
          fork="yes" 
          showoutput="yes"
-         haltonfailure="yes" >
+         haltonfailure="no" >
      <classpath path="${cp}" />
      <formatter type="plain" /> <!-- plain, xml, brief -->
      <batchtest todir="${test}" >
