@@ -25,12 +25,13 @@ import edu.jas.ufd.GreatestCommonDivisorModEval;
 
 /**
  * Greatest common divisor algorithms factory.
+ * Select appropriate GCD engine based on the coefficient types.
+ * @todo Base decision also an degree vectors and number of variables 
+ * of polynomials. Incorporate also number of CPUs / threads available.
  * @author Heinz Kredel
  */
 
-public abstract class GreatestCommonDivisorFactory<C extends GcdRingElem<C>> 
-                      {
-
+public class GreatestCommonDivisorFactory<C extends GcdRingElem<C>> {
 
     private static final Logger logger = Logger.getLogger(GreatestCommonDivisorFactory.class);
 
