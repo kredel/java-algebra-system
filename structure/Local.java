@@ -361,4 +361,26 @@ public class Local<C extends RingElem<C> >
         return new Local<C>( ring, n, d, false );
     }
 
+
+    /**
+     * Greatest common divisor.
+     * <b>Note: </b>Not implemented, throws RuntimeException.
+     * @param b other element.
+     * @return gcd(this,b).
+     */
+    public Local<C> gcd(Local<C> b) {
+        throw new RuntimeException("gcd not implemented " + this.getClass().getName());
+    }
+
+
+    /**
+     * Extended greatest common divisor.
+     * <b>Note: </b>Not implemented, throws RuntimeException.
+     * @param b other element.
+     * @return [ gcd(this,b), c1, c2 ] with c1*this + c2*b = gcd(this,b).
+     */
+    public Local<C>[] egcd(Local<C> b) {
+        throw new RuntimeException("egcd not implemented " + this.getClass().getName());
+    }
+
 }

@@ -307,6 +307,7 @@ public class Residue<C extends RingElem<C> >
 
     /**
      * Greatest common divisor.
+     * <b>Note: </b>Not implemented, throws RuntimeException.
      * @param b other element.
      * @return gcd(this,b).
      */
@@ -317,6 +318,7 @@ public class Residue<C extends RingElem<C> >
 
     /**
      * Extended greatest common divisor.
+     * <b>Note: </b>Not implemented, throws RuntimeException.
      * @param b other element.
      * @return [ gcd(this,b), c1, c2 ] with c1*this + c2*b = gcd(this,b).
      */
