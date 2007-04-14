@@ -357,11 +357,19 @@ public class GCDSubresTest extends TestCase {
          er = ufd.recursiveGcd(ar,br);
          //System.out.println("er = " + er);
 
-         if ( !er.isConstant() ) {
-            assertTrue("res(a,b) == 0 " + dr, dr.isZERO() || !d.isConstant() );
-         } else {
-            assertTrue("res(a,b) != 0 " + dr, !dr.isZERO() );
+         if ( er.isZERO() ) { // cannot happen since a, b, c != 0
+            assertTrue("res(a,b) = 0 " + dr + " e = " + er, dr.isZERO() );
          }
+         if ( er.isConstant() && er.leadingBaseCoefficient().isConstant() ) {
+            assertTrue("res(a,b) != 0 " + dr 
+                       + ", e = " + er + ", a = " + ar + ", b = " + br
+                       , !dr.isZERO() );
+         } else {
+            assertTrue("res(a,b) = 0 or not const " + dr 
+                       + ", e = " + er + ", a = " + ar + ", b = " + br
+                       , dr.isZERO() || !dr.isConstant() || !dr.leadingBaseCoefficient().isConstant() );
+         }
+
      }
  }
 
@@ -407,10 +415,17 @@ public class GCDSubresTest extends TestCase {
          //System.out.println("d = " + d);
          //System.out.println("e = " + e);
 
-         if ( !e.isConstant() ) {
-            assertTrue("res(a,b) = 0  " + d, d.isZERO() || !d.isConstant() );
+         if ( e.isZERO() ) { // cannot happen since a, b, c != 0
+            assertTrue("res(a,b) = 0 " + d + " e = " + e, d.isZERO() );
+         }
+         if ( e.isConstant() ) {
+            assertTrue("res(a,b) != 0 " + d 
+                       + ", e = " + e + ", a = " + a + ", b = " + b
+                       , !d.isZERO() );
          } else {
-            assertTrue("res(a,b) != 0 " + d, !d.isZERO() );
+            assertTrue("res(a,b) = 0 or not const " + d 
+                       + ", e = " + e + ", a = " + a + ", b = " + b
+                       , d.isZERO() || !d.isConstant() );
          }
 
      }
