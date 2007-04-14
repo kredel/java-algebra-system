@@ -69,7 +69,7 @@ public class AlgebraicNumberTest extends TestCase {
        a = b = c = d = e = null;
        mfac = new GenPolynomialRing<BigRational>( new BigRational(1), rl );
        GenPolynomial<BigRational> mo = mfac.random(kl,ll,el,q);
-       while ( mo.isUnit() ) {
+       while ( mo.isConstant() ) {
           mo = mfac.random(kl,ll,el,q);
        }
        fac = new AlgebraicNumberRing<BigRational>( mo );
