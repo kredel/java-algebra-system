@@ -295,7 +295,7 @@ public class GreatestCommonDivisorModEval //<C extends GcdRingElem<C> >
             }
         }
         if ( debug ) {
-           System.out.println("done on M = " + M);
+            System.out.println("done on deg(M) = " + M.degree(0));
         }
         // remove normalization
         cp = recursivePrimitivePart( cp ).abs(); 
