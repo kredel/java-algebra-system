@@ -82,7 +82,7 @@ public class LocalTest extends TestCase {
            F = new ArrayList<GenPolynomial<BigRational>>( il );
            for ( int i = 0; i < il; i++ ) {
                GenPolynomial<BigRational> mo = mfac.random(kl,ll,el,q);
-               while ( mo.isUnit() ) {
+               while ( mo.isConstant() ) {
                     mo = mfac.random(kl,ll,el,q);
                }
                F.add( mo );
