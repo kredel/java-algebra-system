@@ -11,6 +11,7 @@ import java.io.Reader;
 import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
+import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.StarRingElem;
 import edu.jas.structure.RingFactory;
 
@@ -25,6 +26,7 @@ import edu.jas.util.StringUtil;
  */
 
 public final class BigQuaternion implements StarRingElem<BigQuaternion>, 
+                                            GcdRingElem<BigQuaternion>,
                                             RingFactory<BigQuaternion> {
 
     /** Real part of the data structure. 
@@ -88,6 +90,14 @@ public final class BigQuaternion implements StarRingElem<BigQuaternion>,
      */
     public BigQuaternion(BigRational r) {
         this(r,BigRational.ZERO);
+    }
+
+
+    /** Constructor for a BigQuaternion from BigComplex.
+     * @param r BigComplex.
+     */
+    public BigQuaternion(BigComplex r) {
+        this(r.re,r.im);
     }
 
 
@@ -757,6 +767,47 @@ public final class BigQuaternion implements StarRingElem<BigQuaternion>,
      */ 
     public BigQuaternion parse(Reader r) {
         return parse( StringUtil.nextString(r) );
+    }
+
+
+    /** Quaternion number greatest common divisor.  
+     * @param S BigQuaternion.
+     * @return gcd(this,S).
+     */
+    public BigQuaternion gcd(BigQuaternion S) {
+        if ( S == null || S.isZERO() ) {
+            return this;
+        }
+        if ( this.isZERO() ) {
+            return S;
+        }
+        return ONE;
+    }
+
+
+    /**
+     * BigQuaternion extended greatest common divisor.
+     * @param S BigQuaternion.
+     * @return [ gcd(this,S), a, b ] with a*this + b*S = gcd(this,S).
+     */
+    public BigQuaternion[] egcd(BigQuaternion S) {
+        BigQuaternion[] ret = new BigQuaternion[3];
+        ret[0] = null;
+        ret[1] = null;
+        ret[2] = null;
+        if ( S == null || S.isZERO() ) {
+            ret[0] = this;
+            return ret;
+        }
+        if ( this.isZERO() ) {
+            ret[0] = S;
+            return ret;
+        }
+        BigQuaternion half = new BigQuaternion(new BigRational(1,2));
+        ret[0] = ONE;
+        ret[1] = this.inverse().multiply(half);
+        ret[2] = S.inverse().multiply(half);
+        return ret;
     }
 
 }

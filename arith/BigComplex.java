@@ -11,6 +11,7 @@ import java.io.Reader;
 import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
+import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.StarRingElem;
 import edu.jas.structure.RingFactory;
 
@@ -23,7 +24,8 @@ import edu.jas.util.StringUtil;
  * Objects of this class are immutable.
  * @author Heinz Kredel
  */
-public final class BigComplex implements StarRingElem<BigComplex>, 
+public final class BigComplex implements StarRingElem<BigComplex>,
+                                         GcdRingElem<BigComplex>, 
                                          RingFactory<BigComplex> {
 
     /** Real part of the data structure. 
@@ -588,6 +590,47 @@ public final class BigComplex implements StarRingElem<BigComplex>,
      */
     public BigComplex parse(Reader r) {
         return parse( StringUtil.nextString(r) );
+    }
+
+
+    /** Complex number greatest common divisor.  
+     * @param S BigComplex.
+     * @return gcd(this,S).
+     */
+    public BigComplex gcd(BigComplex S) {
+        if ( S == null || S.isZERO() ) {
+            return this;
+        }
+        if ( this.isZERO() ) {
+            return S;
+        }
+        return ONE;
+    }
+
+
+    /**
+     * BigComplex extended greatest common divisor.
+     * @param S BigComplex.
+     * @return [ gcd(this,S), a, b ] with a*this + b*S = gcd(this,S).
+     */
+    public BigComplex[] egcd(BigComplex S) {
+        BigComplex[] ret = new BigComplex[3];
+        ret[0] = null;
+        ret[1] = null;
+        ret[2] = null;
+        if ( S == null || S.isZERO() ) {
+            ret[0] = this;
+            return ret;
+        }
+        if ( this.isZERO() ) {
+            ret[0] = S;
+            return ret;
+        }
+        BigComplex half = new BigComplex(new BigRational(1,2));
+        ret[0] = ONE;
+        ret[1] = this.inverse().multiply(half);
+        ret[2] = S.inverse().multiply(half);
+        return ret;
     }
 
 }

@@ -11,6 +11,7 @@ import java.io.Reader;
 import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
+import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.StarRingElem;
 import edu.jas.structure.RingFactory;
 
@@ -25,6 +26,7 @@ import edu.jas.util.StringUtil;
  */
 
 public final class BigOctonion implements StarRingElem<BigOctonion>, 
+                                          GcdRingElem<BigOctonion>, 
                                           RingFactory<BigOctonion> {
 
     /** First part of the data structure. 
@@ -42,7 +44,7 @@ public final class BigOctonion implements StarRingElem<BigOctonion>,
     private static Logger logger = Logger.getLogger(BigOctonion.class);
 
 
-    /** Constructor for a BigOctonion from BigRationals.
+    /** Constructor for a BigOctonion from Quaternions.
      * @param r BigQuaternion.
      * @param i BigQuaternion.
      */
@@ -52,11 +54,27 @@ public final class BigOctonion implements StarRingElem<BigOctonion>,
     }
 
 
-    /** Constructor for a BigOctonion from BigRationals.
+    /** Constructor for a BigOctonion from BigQuaternion.
      * @param r BigQuaternion.
      */
     public BigOctonion(BigQuaternion r) {
         this(r,BigQuaternion.ZERO);
+    }
+
+
+    /** Constructor for a BigOctonion from BigComplex.
+     * @param r BigComplex.
+     */
+    public BigOctonion(BigComplex r) {
+        this(new BigQuaternion(r));
+    }
+
+
+    /** Constructor for a BigOctonion from BigRational.
+     * @param r BigRational.
+     */
+    public BigOctonion(BigRational r) {
+        this(new BigQuaternion(r));
     }
 
 
@@ -604,6 +622,47 @@ public final class BigOctonion implements StarRingElem<BigOctonion>,
      */ 
     public BigOctonion parse(Reader r) {
         return parse( StringUtil.nextString(r) );
+    }
+
+
+    /** Octonion number greatest common divisor.  
+     * @param S BigOctonion.
+     * @return gcd(this,S).
+     */
+    public BigOctonion gcd(BigOctonion S) {
+        if ( S == null || S.isZERO() ) {
+            return this;
+        }
+        if ( this.isZERO() ) {
+            return S;
+        }
+        return ONE;
+    }
+
+
+    /**
+     * BigOctonion extended greatest common divisor.
+     * @param S BigOctonion.
+     * @return [ gcd(this,S), a, b ] with a*this + b*S = gcd(this,S).
+     */
+    public BigOctonion[] egcd(BigOctonion S) {
+        BigOctonion[] ret = new BigOctonion[3];
+        ret[0] = null;
+        ret[1] = null;
+        ret[2] = null;
+        if ( S == null || S.isZERO() ) {
+            ret[0] = this;
+            return ret;
+        }
+        if ( this.isZERO() ) {
+            ret[0] = S;
+            return ret;
+        }
+        BigOctonion half = new BigOctonion(new BigRational(1,2));
+        ret[0] = ONE;
+        ret[1] = this.inverse().multiply(half);
+        ret[2] = S.inverse().multiply(half);
+        return ret;
     }
 
 }
