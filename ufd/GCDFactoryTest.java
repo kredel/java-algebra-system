@@ -174,7 +174,7 @@ public class GCDFactoryTest extends TestCase {
      GenPolynomialRing<BigRational> fac;
      fac = new GenPolynomialRing<BigRational>( b, 1 );
      GenPolynomial<BigRational> mo = fac.random(kl,ll,el,q);
-     while ( mo.isUnit() ) {
+     while ( mo.isConstant() ) {
           mo = fac.random(kl,ll,el,q);
      }
 
@@ -207,7 +207,7 @@ public class GCDFactoryTest extends TestCase {
      GenPolynomialRing<ModInteger> fac;
      fac = new GenPolynomialRing<ModInteger>( b, 1 );
      GenPolynomial<ModInteger> mo = fac.random(kl,ll,el,q);
-     while ( mo.isUnit() ) {
+     while ( mo.isConstant() ) {
           mo = fac.random(kl,ll,el,q);
      }
 
