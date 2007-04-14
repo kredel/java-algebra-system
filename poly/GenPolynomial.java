@@ -30,6 +30,8 @@ import edu.jas.poly.GenPolynomialRing;
  * Only the coefficients are modeled with generic types,
  * the exponents are fixed to ExpVector with long entries 
  * (this will eventually be changed in the future).
+ * C should be a domain, i.e. should not contain zero divisors, 
+ * since multiply() does not check for zeros.
  * @author Heinz Kredel
  */
 
@@ -661,11 +663,11 @@ public class GenPolynomial<C extends RingElem<C> >
             for ( Map.Entry<ExpVector,C> m2 : S.val.entrySet() ) {
                 C c2 = m2.getValue();
                 ExpVector e2 = m2.getKey();
-                C c = c1.multiply(c2);
+                C c = c1.multiply(c2); // check non zero if not domain
                 ExpVector e = e1.sum(e2);
                 C c0 = pv.get( e );
                 if ( c0 == null ) {
-                    pv.put( e, c);
+                    pv.put( e, c );
                 } else {
                     c0 = c0.sum( c );
                     if ( ! c0.isZERO() ) {
@@ -701,7 +703,7 @@ public class GenPolynomial<C extends RingElem<C> >
         for ( Map.Entry<ExpVector,C> m1 : val.entrySet() ) {
             C c1 = m1.getValue();
             ExpVector e1 = m1.getKey();
-            C c = c1.multiply(s);
+            C c = c1.multiply(s); // check non zero if not domain
             pv.put( e1, c ); // or m1.setValue( c )
         }
         return p;
@@ -749,7 +751,7 @@ public class GenPolynomial<C extends RingElem<C> >
         for ( Map.Entry<ExpVector,C> m1 : val.entrySet() ) {
             C c1 = m1.getValue();
             ExpVector e1 = m1.getKey();
-            C c = c1.multiply(s);
+            C c = c1.multiply(s); // check non zero if not domain
             ExpVector e2 = e1.sum(e);
             pv.put( e2, c ); 
         }
