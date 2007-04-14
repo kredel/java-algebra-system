@@ -356,51 +356,6 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C> >
 
 
     /**
-     * GenPolynomial resultant.
-     * Main entry driver method.
-     * @param P GenPolynomial.
-     * @param S GenPolynomial.
-     * @return res(P,S).
-     */
-    public GenPolynomial<C> 
-        resultant( GenPolynomial<C> P,
-                   GenPolynomial<C> S ) {
-        if ( S == null || S.isZERO() ) {
-            return S;
-        }
-        if ( P == null || P.isZERO() ) {
-            return P;
-        }
-        GenPolynomialRing<C> pfac = P.ring;
-        if ( pfac.nvar <= 1 ) {
-            //System.out.println("P = " + P);
-            //System.out.println("S = " + S);
-            GenPolynomial<C> T = baseResultant(P,S);
-            //System.out.println("T = " + T);
-            return T;
-        }
-        GenPolynomialRing<C> cfac = pfac.contract(1);
-        GenPolynomialRing<GenPolynomial<C>> rfac 
-           = new GenPolynomialRing<GenPolynomial<C>>(cfac,1);
-
-        GenPolynomial<GenPolynomial<C>> Pr = recursive(rfac,P);
-        GenPolynomial<GenPolynomial<C>> Sr = recursive(rfac,S);
-
-        GenPolynomial<GenPolynomial<C>> Dr = recursiveResultant( Pr, Sr );
-        //System.out.println("Pr  =" + Pr);
-        //System.out.println("Sr  =" + Sr);
-        //System.out.println("Dr  =" + Dr);
-        // GenPolynomial not a GcdRingElem:
-        //GreatestCommonDivisorSimple<GenPolynomial<GenPolynomial<C>>> sgcd 
-        //  = new GreatestCommonDivisorSimple<GenPolynomial<GenPolynomial<C>>>();
-        //GenPolynomial<GenPolynomial<C>> Dr = sgcd.gcd( Pr, Sr );
-
-        GenPolynomial<C> D = distribute( pfac, Dr );
-        return D;
-    }
-
-
-    /**
      * Univariate GenPolynomial resultant.
      * Uses pseudoRemainder for remainder.
      * @param P univariate GenPolynomial.
@@ -505,10 +460,10 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C> >
         recursiveResultant( GenPolynomial<GenPolynomial<C>> P,
                             GenPolynomial<GenPolynomial<C>> S ) {
         if ( S == null || S.isZERO() ) {
-            return P;
+            return S;
         }
         if ( P == null || P.isZERO() ) {
-            return S;
+            return P;
         }
         if ( P.ring.nvar > 1 ) {
            throw new RuntimeException(this.getClass().getName()
@@ -538,15 +493,21 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C> >
         //System.out.println("rgcd b = " + b);
         r = recursiveDivide(r,a);
         q = recursiveDivide(q,b);
-
         RingFactory<GenPolynomial<C>> cofac = P.ring.coFac;
         GenPolynomial<C> g = cofac.getONE();
         GenPolynomial<C> h = cofac.getONE();
-        GenPolynomial<C> t = power(cofac,a,e);
+        GenPolynomial<GenPolynomial<C>> x;
+        GenPolynomial<C> t;
+        if ( f == 0 && e == 0 && g.ring.nvar > 0 ) { 
+           // if coeffs are multivariate (and non constant)
+           t = resultant( a, b );
+           x = P.ring.getONE().multiply( t );
+           return x;
+        }
+        t = power(cofac,a,e);
         t = t.multiply( power(cofac,b,f) );
         // System.out.println("t = " + t);
         long s = 1;
-        GenPolynomial<GenPolynomial<C>> x;
         GenPolynomial<C> z;
         while ( r.degree(0) > 0 ) {
             long delta = q.degree(0) - r.degree(0);
