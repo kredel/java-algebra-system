@@ -87,7 +87,7 @@ public class ResidueTest extends TestCase {
        fac = new ResidueRing<BigInteger>( cfac, new BigInteger( p ) );
        pfac = new GenPolynomialRing<BigRational>( new BigRational(1), 1 );
        GenPolynomial<BigRational> mo = pfac.random(kl,ll,el,q);
-       while ( mo.isUnit() ) {
+       while ( mo.isConstant() ) {
              mo = pfac.random(kl,ll,el,q);
        }
        mfac = new ResidueRing<GenPolynomial<BigRational>>( pfac, mo );

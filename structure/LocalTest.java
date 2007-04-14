@@ -85,7 +85,7 @@ public class LocalTest extends TestCase {
 
        pfac = new GenPolynomialRing<BigRational>( new BigRational(1), 1 );
        GenPolynomial<BigRational> mo = pfac.random(kl,ll,el,q);
-       while ( mo.isUnit() ) {
+       while ( mo.isConstant() ) {
              mo = pfac.random(kl,ll,el,q);
        }
        mfac = new LocalRing<GenPolynomial<BigRational>>( pfac, mo );
