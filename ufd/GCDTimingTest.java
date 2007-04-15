@@ -276,7 +276,7 @@ public class GCDTimingTest extends TestCase {
  * Test gcd.
  * 
  */
- public void testGCD() {
+ public void xtestGCD() {
 
      long t;
 
