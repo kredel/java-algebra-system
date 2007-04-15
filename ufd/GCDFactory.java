@@ -34,29 +34,29 @@ import edu.jas.ufd.GreatestCommonDivisorModEval;
  * implementation based on the types of polynomial coefficients CT.
  * <pre>
  * GreatestCommonDivisor&lt;CT&gt; engine 
- *   = GreatestCommonDivisorFactory.&lt;CT&gt;getImplementation( cofac );
+ *   = GCDFactory.&lt;CT&gt;getImplementation( cofac );
  * c = engine.gcd(a,b);
  * </pre>
  * For example, if the coefficient type is BigInteger, the usage looks like
  * <pre>
  * BigInteger cofac = new BigInteger();
  * GreatestCommonDivisor&lt;BigInteger&gt; engine 
- *   = GreatestCommonDivisorFactory.&lt;BigInteger&gt;getImplementation( cofac );
+ *   = GCDFactory.&lt;BigInteger&gt;getImplementation( cofac );
  * c = engine.gcd(a,b);
  * </pre>
  * @see edu.jas.ufd.GreatestCommonDivisor#gcd( edu.jas.poly.GenPolynomial P, edu.jas.poly.GenPolynomial S)
  */
 
-public class GreatestCommonDivisorFactory /*<C extends GcdRingElem<C>>*/ {
+public class GCDFactory /*<C extends GcdRingElem<C>>*/ {
 
-    private static final Logger logger = Logger.getLogger(GreatestCommonDivisorFactory.class);
+    private static final Logger logger = Logger.getLogger(GCDFactory.class);
 
 
 
     /**
      * Protected factory constructor.
      */
-     protected GreatestCommonDivisorFactory() {
+     protected GCDFactory() {
      }                                              
 
 
@@ -79,6 +79,25 @@ public class GreatestCommonDivisorFactory /*<C extends GcdRingElem<C>>*/ {
 
 
     /**
+     * Determine suitable proxy for gcd algorithms, case ModInteger.
+     * @param fac ModInteger.
+     * @return gcd algorithm implementation.
+     */
+    public static <C extends ModInteger>
+           GreatestCommonDivisor<ModInteger> 
+           getProxy( ModInteger fac ) {
+        GreatestCommonDivisor<ModInteger> ufd1, ufd2; 
+        if ( fac.isField() ) {
+           ufd1 = new GreatestCommonDivisorModEval();
+        } else {
+           ufd1 = new GreatestCommonDivisorSimple<ModInteger>();
+        }
+        ufd2 = new GreatestCommonDivisorSubres<ModInteger>();
+        return new GCDProxy<ModInteger>(ufd1,ufd2);
+    }
+
+
+    /**
      * Determine suitable implementation of gcd algorithms, case BigInteger.
      * @param fac BigInteger.
      * @return gcd algorithm implementation.
@@ -97,6 +116,21 @@ public class GreatestCommonDivisorFactory /*<C extends GcdRingElem<C>>*/ {
 
 
     /**
+     * Determine suitable procy for gcd algorithms, case BigInteger.
+     * @param fac BigInteger.
+     * @return gcd algorithm implementation.
+     */
+    public static <C extends BigInteger>
+           GreatestCommonDivisor<BigInteger> 
+           getProxy( BigInteger fac ) {
+        GreatestCommonDivisor<BigInteger> ufd1, ufd2; 
+        ufd1 = new GreatestCommonDivisorModular();
+        ufd2 = new GreatestCommonDivisorSubres<BigInteger>();
+        return new GCDProxy<BigInteger>(ufd1,ufd2);
+    }
+
+
+    /**
      * Determine suitable implementation of gcd algorithms, case BigRational.
      * @param fac BigRational.
      * @return gcd algorithm implementation.
@@ -107,6 +141,21 @@ public class GreatestCommonDivisorFactory /*<C extends GcdRingElem<C>>*/ {
         GreatestCommonDivisor<BigRational> ufd; 
         ufd = new GreatestCommonDivisorPrimitive<BigRational>();
         return ufd;
+    }
+
+
+    /**
+     * Determine suitable proxy for gcd algorithms, case BigRational.
+     * @param fac BigRational.
+     * @return gcd algorithm implementation.
+     */
+    public static <C extends BigRational>
+           GreatestCommonDivisor<BigRational> 
+           getProxy( BigRational fac ) {
+        GreatestCommonDivisor<BigRational> ufd1, ufd2; 
+        ufd1 = new GreatestCommonDivisorSimple<BigRational>();
+        ufd2 = new GreatestCommonDivisorPrimitive<BigRational>();
+        return new GCDProxy<BigRational>(ufd1,ufd2);
     }
 
 
@@ -125,6 +174,21 @@ public class GreatestCommonDivisorFactory /*<C extends GcdRingElem<C>>*/ {
         }
         ufd = new GreatestCommonDivisorSubres<C>();
         return ufd;
+    }
+
+
+    /**
+     * Determine suitable proxy for gcd algorithms, other cases.
+     * @param fac RingFactory<C>.
+     * @return gcd algorithm implementation.
+     */
+    public static <C extends GcdRingElem<C>>
+           GreatestCommonDivisor<C> 
+           getProxy( RingFactory<C> fac ) {
+        GreatestCommonDivisor<C> ufd1, ufd2; 
+        ufd1 = new GreatestCommonDivisorSimple<C>();
+        ufd2 = new GreatestCommonDivisorSubres<C>();
+        return new GCDProxy<C>(ufd1,ufd2);
     }
 
 
