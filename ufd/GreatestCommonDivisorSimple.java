@@ -15,7 +15,9 @@ import edu.jas.poly.PolyUtil;
 
 
 /**
- * Greatest common divisor algorithms with primitive polynomial remainder sequence.
+ * Greatest common divisor algorithms with monic polynomial remainder sequence.
+ * If C is a field, then the monic PRS (on coefficients) is computed 
+ * otherwise no simplifications in the reduction are made.
  * @author Heinz Kredel
  */
 
