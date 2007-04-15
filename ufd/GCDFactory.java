@@ -27,21 +27,36 @@ import edu.jas.ufd.GreatestCommonDivisorModEval;
  * Greatest common divisor algorithms factory.
  * Select appropriate GCD engine based on the coefficient types.
  * @todo Base decision also an degree vectors and number of variables 
- * of polynomials. Incorporate also number of CPUs / threads available.
+ * of polynomials. 
+ * Incorporate also number of CPUs / threads available (done with GCDProxy).
  * @author Heinz Kredel
  * @usage To create classes that implement this interface use the
  * GreatestCommonDivisorFactory. It will select an appropriate 
  * implementation based on the types of polynomial coefficients CT.
+ * There are two methods to obtain an implementation: 
+ * getProxy() and getImplementation(). 
+ * getImplementation() returns an object of a class which implements the
+ * GreatestCommonDivisor interface.
+ * getProxy() returns a proxy object of a class which implements the
+ * GreatestCommonDivisor interface. The proxy will run two implementations 
+ * in parallel, return the first computed result 
+ * and cancel the second running task. 
+ * On systems with one CPU the computing time will be two times 
+ * the time of the fastest algorithm implmentation. On systems 
+ * with more than two CPUs the computing time will be the time of the 
+ * fastest algorithm implmentation.
  * <pre>
- * GreatestCommonDivisor&lt;CT&gt; engine 
- *   = GCDFactory.&lt;CT&gt;getImplementation( cofac );
+ * GreatestCommonDivisor&lt;CT&gt; engine;
+ *     engine = GCDFactory.&lt;CT&gt;getImplementation( cofac );
+ * or  engine = GCDFactory.&lt;CT&gt;getProxy( cofac );
  * c = engine.gcd(a,b);
  * </pre>
  * For example, if the coefficient type is BigInteger, the usage looks like
  * <pre>
  * BigInteger cofac = new BigInteger();
- * GreatestCommonDivisor&lt;BigInteger&gt; engine 
- *   = GCDFactory.&lt;BigInteger&gt;getImplementation( cofac );
+ * GreatestCommonDivisor&lt;BigInteger&gt; engine; 
+ *     engine = GCDFactory.&lt;BigInteger&gt;getImplementation( cofac );
+ * or  engine = GCDFactory.&lt;BigInteger&gt;getProxy( cofac );
  * c = engine.gcd(a,b);
  * </pre>
  * @see edu.jas.ufd.GreatestCommonDivisor#gcd( edu.jas.poly.GenPolynomial P, edu.jas.poly.GenPolynomial S)
