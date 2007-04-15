@@ -14,6 +14,22 @@ import edu.jas.poly.GenPolynomial;
 /**
  * Greatest common divisor algorithm interface.
  * @author Heinz Kredel
+ * @usage To create classes that implement this interface use the
+ * GreatestCommonDivisorFactory. It will select an appropriate 
+ * implementation based on the types of polynomial coefficients CT.
+ * <pre>
+ * GreatestCommonDivisor&lt;CT&gt; engine 
+ *   = GreatestCommonDivisorFactory.&lt;CT&gt;getImplementation( cofac );
+ * c = engine.gcd(a,b);
+ * </pre>
+ * For example, if the coefficient type is BigInteger, the usage looks like
+ * <pre>
+ * BigInteger cofac = new BigInteger();
+ * GreatestCommonDivisor&lt;BigInteger&gt; engine 
+ *   = GreatestCommonDivisorFactory.&lt;BigInteger&gt;getImplementation( cofac );
+ * c = engine.gcd(a,b);
+ * </pre>
+ * @see edu.jas.ufd.GreatestCommonDivisorFactory#getImplementation( edu.jas.structure.RingFactory f)
  */
 
 public interface GreatestCommonDivisor<C extends GcdRingElem<C> > {
@@ -64,9 +80,7 @@ public interface GreatestCommonDivisor<C extends GcdRingElem<C> > {
      * @param S GenPolynomial.
      * @return res(P,S).
      */
-    public GenPolynomial<C> 
-        resultant( GenPolynomial<C> P,
-                   GenPolynomial<C> S );
+    public GenPolynomial<C> resultant( GenPolynomial<C> P, GenPolynomial<C> S );
 
 
     /**

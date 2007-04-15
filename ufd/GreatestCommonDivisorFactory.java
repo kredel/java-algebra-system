@@ -29,9 +29,25 @@ import edu.jas.ufd.GreatestCommonDivisorModEval;
  * @todo Base decision also an degree vectors and number of variables 
  * of polynomials. Incorporate also number of CPUs / threads available.
  * @author Heinz Kredel
+ * @usage To create classes that implement this interface use the
+ * GreatestCommonDivisorFactory. It will select an appropriate 
+ * implementation based on the types of polynomial coefficients CT.
+ * <pre>
+ * GreatestCommonDivisor&lt;CT&gt; engine 
+ *   = GreatestCommonDivisorFactory.&lt;CT&gt;getImplementation( cofac );
+ * c = engine.gcd(a,b);
+ * </pre>
+ * For example, if the coefficient type is BigInteger, the usage looks like
+ * <pre>
+ * BigInteger cofac = new BigInteger();
+ * GreatestCommonDivisor&lt;BigInteger&gt; engine 
+ *   = GreatestCommonDivisorFactory.&lt;BigInteger&gt;getImplementation( cofac );
+ * c = engine.gcd(a,b);
+ * </pre>
+ * @see edu.jas.ufd.GreatestCommonDivisor#gcd( edu.jas.poly.GenPolynomial P, edu.jas.poly.GenPolynomial S)
  */
 
-public class GreatestCommonDivisorFactory<C extends GcdRingElem<C>> {
+public class GreatestCommonDivisorFactory /*<C extends GcdRingElem<C>>*/ {
 
     private static final Logger logger = Logger.getLogger(GreatestCommonDivisorFactory.class);
 
