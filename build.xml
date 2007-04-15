@@ -74,6 +74,7 @@
      <tag name="todo"      description="To do"            scope="all" />
      <tag name="fix"       description="Fix me"           scope="all" />
      <tag name="unused"    description="Not used"         scope="all" />
+     <tag name="usage"     description="Usage"            scope="all" />
      <fileset dir="${src}" includes="**/*.java"  />
   </javadoc>
 </target>
