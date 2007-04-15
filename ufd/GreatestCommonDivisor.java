@@ -19,17 +19,17 @@ import edu.jas.poly.GenPolynomial;
  * implementation based on the types of polynomial coefficients CT.
  * <pre>
  * GreatestCommonDivisor&lt;CT&gt; engine 
- *   = GreatestCommonDivisorFactory.&lt;CT&gt;getImplementation( cofac );
+ *   = GCDFactory.&lt;CT&gt;getImplementation( cofac );
  * c = engine.gcd(a,b);
  * </pre>
  * For example, if the coefficient type is BigInteger, the usage looks like
  * <pre>
  * BigInteger cofac = new BigInteger();
  * GreatestCommonDivisor&lt;BigInteger&gt; engine 
- *   = GreatestCommonDivisorFactory.&lt;BigInteger&gt;getImplementation( cofac );
+ *   = GCDFactory.&lt;BigInteger&gt;getImplementation( cofac );
  * c = engine.gcd(a,b);
  * </pre>
- * @see edu.jas.ufd.GreatestCommonDivisorFactory#getImplementation( edu.jas.structure.RingFactory f)
+ * @see edu.jas.ufd.GCDFactory#getImplementation( edu.jas.structure.RingFactory f)
  */
 
 public interface GreatestCommonDivisor<C extends GcdRingElem<C> > {
