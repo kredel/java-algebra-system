@@ -941,57 +941,50 @@ public class PolyUtilTest extends TestCase {
      GenPolynomial<ModInteger> sp;
      GenPolynomial<ModInteger> tp;
      GenPolynomial<ModInteger>[] egcd;
+     GenPolynomial<ModInteger> ap1;
+     GenPolynomial<ModInteger> bp1;
 
      GenPolynomial<BigInteger>[] lift;
      GenPolynomial<BigInteger> a1;
      GenPolynomial<BigInteger> b1;
+     GenPolynomial<BigInteger> c1;
 
      ExpVector degv, qdegv;
 
-     for (int i = 0; i < 1; i++) {
-         a = dfac.random( kl, ll, el+3, q);
-         b = dfac.random( kl, ll, el+3, q);
+     for (int i = 0; i < 5; i++) {
+         a = dfac.random( kl, ll, el+5, q);
+         b = dfac.random( kl, ll, el+5, q);
          c = a.multiply(b);
-         System.out.println("a = " + a);
-         System.out.println("b = " + b);
-         System.out.println("c = " + c);
 
          if ( a.degree(0) < 2 || b.degree(0) < 2 || c.degree(0) < 4 ) {
             continue;
          }
-         /*
-         a = PolyUtil.integerFromModularCoefficients(dfac,am);
-         b = PolyUtil.integerFromModularCoefficients(dfac,bm);
-         c = PolyUtil.integerFromModularCoefficients(dfac,cm);
-         System.out.println("a = " + a);
-         System.out.println("b = " + b);
-         System.out.println("c = " + c);
-         */
+
          ap = PolyUtil.fromIntegerCoefficients(pfac,a);
-         bp = PolyUtil.fromIntegerCoefficients(pfac,b);
          if ( !a.degreeVector().equals( ap.degreeVector() ) ) {
             continue;
          }
+         bp = PolyUtil.fromIntegerCoefficients(pfac,b);
          if ( !b.degreeVector().equals( bp.degreeVector() ) ) {
             continue;
          }
+         cp = PolyUtil.fromIntegerCoefficients(pfac,c);
+         if ( !c.degreeVector().equals( cp.degreeVector() ) ) {
+            continue;
+         }
 
-         egcd = ap.egcd(bp);
+         ap1 = ap.monic();
+         bp1 = bp.monic();
+         egcd = ap1.egcd(bp1);
          if ( !egcd[0].isONE() ) {
             continue;
          }
          sp = egcd[1];
          tp = egcd[2];
 
-         degv = c.degreeVector();
-         System.out.println("degv  = " + degv);
-
-         assertTrue("length( c"+i+" ) <> 0", c.length() >= 0);
-         assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
-         assertTrue(" not isONE( c"+i+" )", !c.isONE() );
-
-         cp = PolyUtil.fromIntegerCoefficients(pfac,c);
-
+         System.out.println("a     = " + a);
+         System.out.println("b     = " + b);
+         System.out.println("c     = " + c);
          System.out.println("ap = " + ap);
          System.out.println("bp = " + bp);
          System.out.println("cp = " + cp);
@@ -999,26 +992,22 @@ public class PolyUtilTest extends TestCase {
          System.out.println("sp = " + sp);
          System.out.println("tp = " + tp);
 
-         qdegv = cp.degreeVector();
-         System.out.println("qdegv  = " + qdegv);
-         if ( !degv.equals( qdegv) ) {
-            continue;
-         }
-
          lift = PolyUtil.liftHensel(c,mi,ap,bp,sp,tp);
          a1 = lift[0];
          b1 = lift[1];
+         c1 = a1.multiply(b1);
 
-         System.out.println("a1  = " + a1);
-         System.out.println("b1  = " + b1);
+         System.out.println("a     = " + a);
+         System.out.println("b     = " + b);
+         System.out.println("c     = " + c);
+         System.out.println("a1    = " + a1);
+         System.out.println("b1    = " + b1);
+         System.out.println("a1*b1 = " + c1);
 
-
-         //System.out.println("am = " + am);
-         //System.out.println("bm = " + bm);
-         //System.out.println("cm = " + cm);
-         //System.out.println("a  = " + a);
-
-         //assertEquals("cra(c mod p1,c mod p2) = c",c,a);
+         //assertEquals("lift(a mod p) = a",a,a1);
+         //assertEquals("lift(b mod p) = b",b,b1);
+         assertEquals("lift(a,b) = ab",c,c1);
+         break;
      }
  }
 

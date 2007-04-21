@@ -18,6 +18,9 @@ import edu.jas.arith.BigRational;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.BigComplex;
 
+import edu.jas.ufd.GreatestCommonDivisorAbstract;
+import edu.jas.ufd.GreatestCommonDivisorPrimitive;
+
 
 /**
  * Polynomial utilities.
@@ -777,55 +780,58 @@ public class PolyUtil {
         ModInteger Q = (ModInteger)q;
         BigInteger Qi = new BigInteger( Q.getModul() );
         ModInteger Qm = Mm.fromInteger( Q.getModul() );
-        GenPolynomialRing<ModInteger> qfac 
-           = new GenPolynomialRing<ModInteger>(q,pfac.nvar,pfac.tord,pfac.vars);
         GenPolynomialRing<ModInteger> mfac 
            = new GenPolynomialRing<ModInteger>(Mm,pfac.nvar,pfac.tord,pfac.vars);
         System.out.println("M  = " + M);
         System.out.println("Qi = " + Qi);
         System.out.println("P  = " + P.getModul());
+        BigInteger c = C.leadingBaseCoefficient();
+        System.out.println("c  = " + c);
+        C = C.multiply(c); // sic
+        System.out.println("C  = " + C);
+        A = A.monic();
+        B = B.monic();
 
         GenPolynomial<BigInteger> Ai 
-           = PolyUtil.integerFromModularCoefficients(fac,A);
+           = PolyUtil.integerFromModularCoefficients( fac, A );
         GenPolynomial<BigInteger> Bi
-           = PolyUtil.integerFromModularCoefficients(fac,B);
+           = PolyUtil.integerFromModularCoefficients( fac, B );
+        Ai = Ai.multiply( c );
+        Bi = Bi.multiply( c );
+
+        S = S.divide( p.fromInteger(c.getVal()) );
+        T = T.divide( p.fromInteger(c.getVal()) );
 
         GenPolynomial<ModInteger> Am 
            = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,Ai); 
         GenPolynomial<ModInteger> Bm 
            = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,Bi); 
+        System.out.println("Am = " + Am);
+        System.out.println("Bm = " + Bm);
 
         GenPolynomial<ModInteger> A1; 
         GenPolynomial<ModInteger> B1;
-        GenPolynomial<ModInteger> S1; 
-        GenPolynomial<ModInteger> T1;
-        A1 = A;
-        B1 = B;
-        S1 = S;
-        T1 = T;
         GenPolynomial<ModInteger> Cm 
             = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,C); 
 
-        while ( Qi.compareTo( M ) < 0 ) {
+        BigInteger M2 = M.multiply( M.fromInteger(2) );
+        while ( Qi.compareTo( M2 ) < 0 ) {
             // compute (C-AB)/q mod M
             //GenPolynomial<ModInteger> Em = Cm.subtract( Am.multiply(Bm) );
             GenPolynomial<BigInteger> E = C.subtract( Ai.multiply(Bi) );
             System.out.println("Ai = " + Ai);
             System.out.println("Bi = " + Bi);
-            System.out.println("C  = " + C);
             System.out.println("E  = " + E);
             System.out.println("Qi = " + Qi);
             if ( E.isZERO() ) {
                break;
             }
-            GenPolynomial<BigInteger> Ei = E;
-            // = PolyUtil.integerFromModularCoefficients(fac,Em);
-            Ei = Ei.divide( Qi );
-            System.out.println("Ei = " + Ei);
+            E = E.divide( Qi );
+            System.out.println("E = " + E);
 
             // E mod p
             GenPolynomial<ModInteger> Ep 
-               = PolyUtil.<ModInteger>fromIntegerCoefficients(pfac,Ei); 
+               = PolyUtil.<ModInteger>fromIntegerCoefficients(pfac,E); 
             System.out.println("Ep = " + Ep);
 
             // construct remainder mod p
@@ -865,10 +871,20 @@ public class PolyUtil {
             Qi = new BigInteger( Q.getModul().multiply( P.getModul() ) );
             Q = new ModInteger( Qi.getVal() );
             Qm = Mm.fromInteger( Qi.getVal() );
+            Ai = PolyUtil.integerFromModularCoefficients(fac,Am);
+            Bi = PolyUtil.integerFromModularCoefficients(fac,Bm);
         }
 
-        AB[0] = PolyUtil.integerFromModularCoefficients(fac,Am);
-        AB[1] = PolyUtil.integerFromModularCoefficients(fac,Bm);
+        GreatestCommonDivisorAbstract<BigInteger> ufd
+            = new GreatestCommonDivisorPrimitive<BigInteger>();
+
+        BigInteger a = ufd.baseContent(Ai);
+        Ai = Ai.divide( a );
+        BigInteger b = c.divide(a);
+        Bi = Bi.divide( b );
+
+        AB[0] = Ai;
+        AB[1] = Bi;
         return AB;
     }
 
