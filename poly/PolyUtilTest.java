@@ -910,4 +910,116 @@ public class PolyUtilTest extends TestCase {
      assertEquals("interpolate(a mod (x-e1),...,a mod (x-ei)) = a (mod 19)",a,r);
  }
 
+
+/**
+ * Test Hensel listing.
+ * 
+ */
+ public void testHenselLifting() {
+     // java.math.BigInteger p = getPrime1();
+     java.math.BigInteger p = new java.math.BigInteger("19");
+     java.math.BigInteger m = p.multiply(p).multiply(p);
+
+     BigInteger mi = new BigInteger(m);
+
+     ModInteger pm = new ModInteger(p,1);
+     GenPolynomialRing<ModInteger> pfac
+         = new GenPolynomialRing<ModInteger>(pm,1,to);
+
+     ModInteger mm = new ModInteger(m,1);
+     GenPolynomialRing<ModInteger> mfac
+         = new GenPolynomialRing<ModInteger>(mm,1,to);
+
+     dfac = new GenPolynomialRing<BigInteger>(mi,1,to);
+
+     GenPolynomial<ModInteger> am;
+     GenPolynomial<ModInteger> bm;
+     GenPolynomial<ModInteger> cm;
+     GenPolynomial<ModInteger> ap;
+     GenPolynomial<ModInteger> bp;
+     GenPolynomial<ModInteger> cp;
+     GenPolynomial<ModInteger> sp;
+     GenPolynomial<ModInteger> tp;
+     GenPolynomial<ModInteger>[] egcd;
+
+     GenPolynomial<BigInteger>[] lift;
+     GenPolynomial<BigInteger> a1;
+     GenPolynomial<BigInteger> b1;
+
+     ExpVector degv, qdegv;
+
+     for (int i = 0; i < 1; i++) {
+         a = dfac.random( kl, ll, el+3, q);
+         b = dfac.random( kl, ll, el+3, q);
+         c = a.multiply(b);
+         System.out.println("a = " + a);
+         System.out.println("b = " + b);
+         System.out.println("c = " + c);
+
+         if ( a.degree(0) < 2 || b.degree(0) < 2 || c.degree(0) < 4 ) {
+            continue;
+         }
+         /*
+         a = PolyUtil.integerFromModularCoefficients(dfac,am);
+         b = PolyUtil.integerFromModularCoefficients(dfac,bm);
+         c = PolyUtil.integerFromModularCoefficients(dfac,cm);
+         System.out.println("a = " + a);
+         System.out.println("b = " + b);
+         System.out.println("c = " + c);
+         */
+         ap = PolyUtil.fromIntegerCoefficients(pfac,a);
+         bp = PolyUtil.fromIntegerCoefficients(pfac,b);
+         if ( !a.degreeVector().equals( ap.degreeVector() ) ) {
+            continue;
+         }
+         if ( !b.degreeVector().equals( bp.degreeVector() ) ) {
+            continue;
+         }
+
+         egcd = ap.egcd(bp);
+         if ( !egcd[0].isONE() ) {
+            continue;
+         }
+         sp = egcd[1];
+         tp = egcd[2];
+
+         degv = c.degreeVector();
+         System.out.println("degv  = " + degv);
+
+         assertTrue("length( c"+i+" ) <> 0", c.length() >= 0);
+         assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
+         assertTrue(" not isONE( c"+i+" )", !c.isONE() );
+
+         cp = PolyUtil.fromIntegerCoefficients(pfac,c);
+
+         System.out.println("ap = " + ap);
+         System.out.println("bp = " + bp);
+         System.out.println("cp = " + cp);
+         System.out.println("gcd = " + egcd[0]);
+         System.out.println("sp = " + sp);
+         System.out.println("tp = " + tp);
+
+         qdegv = cp.degreeVector();
+         System.out.println("qdegv  = " + qdegv);
+         if ( !degv.equals( qdegv) ) {
+            continue;
+         }
+
+         lift = PolyUtil.liftHensel(c,mi,ap,bp,sp,tp);
+         a1 = lift[0];
+         b1 = lift[1];
+
+         System.out.println("a1  = " + a1);
+         System.out.println("b1  = " + b1);
+
+
+         //System.out.println("am = " + am);
+         //System.out.println("bm = " + bm);
+         //System.out.println("cm = " + cm);
+         //System.out.println("a  = " + a);
+
+         //assertEquals("cra(c mod p1,c mod p2) = c",c,a);
+     }
+ }
+
 }
