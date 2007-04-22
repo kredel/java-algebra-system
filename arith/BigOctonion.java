@@ -183,6 +183,15 @@ public final class BigOctonion implements StarRingElem<BigOctonion>,
     }
 
 
+    /**
+     * Characteristic of this ring.
+     * @return characteristic of this ring.
+     */
+    public java.math.BigInteger characteristic() {
+        return java.math.BigInteger.ZERO;
+    }
+
+
     /** Get a BigOctonion element from a BigInteger.
      * @param a BigInteger.
      * @return a BigOctonion.

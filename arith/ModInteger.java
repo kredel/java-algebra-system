@@ -243,6 +243,14 @@ public final class ModInteger implements GcdRingElem<ModInteger>,
     }
 
 
+    /**
+     * Characteristic of this ring.
+     * @return characteristic of this ring.
+     */
+    public java.math.BigInteger characteristic() {
+        return modul;
+    }
+
     /** Get a ModInteger element from a BigInteger value.
      * @param a BigInteger.
      * @return a ModInteger.

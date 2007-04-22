@@ -234,6 +234,15 @@ public final class BigRational implements GcdRingElem<BigRational>,
     }
 
 
+    /**
+     * Characteristic of this ring.
+     * @return characteristic of this ring.
+     */
+    public java.math.BigInteger characteristic() {
+        return java.math.BigInteger.ZERO;
+    }
+
+
     /** Get a BigRational element from a math.BigInteger.
      * @param a math.BigInteger.
      * @return BigRational from a. 

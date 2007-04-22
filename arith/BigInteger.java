@@ -148,6 +148,15 @@ public final class BigInteger implements GcdRingElem<BigInteger>,
     }
 
 
+    /**
+     * Characteristic of this ring.
+     * @return characteristic of this ring.
+     */
+    public java.math.BigInteger characteristic() {
+        return java.math.BigInteger.ZERO;
+    }
+
+
     /** Get a BigInteger element from a math.BigInteger.
      * @param a math.BigInteger.
      * @return a as BigInteger.

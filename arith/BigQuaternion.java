@@ -241,6 +241,15 @@ public final class BigQuaternion implements StarRingElem<BigQuaternion>,
     }
 
 
+    /**
+     * Characteristic of this ring.
+     * @return characteristic of this ring.
+     */
+    public java.math.BigInteger characteristic() {
+        return java.math.BigInteger.ZERO;
+    }
+
+
     /** Get a BigQuaternion element from a BigInteger.
      * @param a BigInteger.
      * @return a BigQuaternion.

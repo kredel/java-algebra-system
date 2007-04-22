@@ -173,6 +173,15 @@ public final class BigComplex implements StarRingElem<BigComplex>,
     }
 
 
+    /**
+     * Characteristic of this ring.
+     * @return characteristic of this ring.
+     */
+    public java.math.BigInteger characteristic() {
+        return java.math.BigInteger.ZERO;
+    }
+
+
     /** Get a BigComplex element from a BigInteger.
      * @param a BigInteger.
      * @return a BigComplex.
