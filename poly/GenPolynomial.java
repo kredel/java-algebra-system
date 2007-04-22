@@ -125,7 +125,12 @@ public class GenPolynomial<C extends RingElem<C> >
      */
     public String toString() {
         StringBuffer s = new StringBuffer();
-        s.append( this.getClass().getSimpleName() + "[ ");
+        s.append( this.getClass().getSimpleName() + ":" );
+        s.append( ring.coFac.getClass().getSimpleName() );
+        if ( ring.coFac.characteristic().longValue() > 0L ) { // fix if lowbits=0
+           s.append( "(" + ring.coFac.characteristic() + ")" );
+        }
+        s.append( "[ ");
         boolean first = true;
         for ( Map.Entry<ExpVector,C> m : val.entrySet() ) {
             if ( first ) {
