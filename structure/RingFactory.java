@@ -22,4 +22,11 @@ public interface RingFactory<C extends RingElem<C>>
      */
     public boolean isField();
 
+
+    /**
+     * Characteristic of this ring.
+     * @return characteristic of this ring.
+     */
+    public java.math.BigInteger characteristic();
+
 }
