@@ -341,6 +341,15 @@ public class GenPolynomialRing<C extends RingElem<C> >
     }
 
 
+    /**
+     * Characteristic of this ring.
+     * @return characteristic of this ring.
+     */
+    public java.math.BigInteger characteristic() {
+        return coFac.characteristic();
+    }
+
+
     /** Get a (constant) GenPolynomial<C> element from a long value.
      * @param a long.
      * @return a GenPolynomial<C>.
