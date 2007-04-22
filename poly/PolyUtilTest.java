@@ -918,6 +918,7 @@ public class PolyUtilTest extends TestCase {
  public void testHenselLifting() {
      //java.math.BigInteger p = getPrime1();
      java.math.BigInteger p = new java.math.BigInteger("19");
+     //java.math.BigInteger p = new java.math.BigInteger("5");
      java.math.BigInteger m = p.multiply(p).multiply(p);
 
      BigInteger mi = new BigInteger(m);
@@ -952,8 +953,8 @@ public class PolyUtilTest extends TestCase {
      ExpVector degv, qdegv;
 
      for (int i = 0; i < 5; i++) {
-         a = dfac.random( kl+10, ll, el+5, q).abs();
-         b = dfac.random( kl+10, ll, el+5, q).abs();
+         a = dfac.random( kl, ll, el+5, q).abs();
+         b = dfac.random( kl, ll, el+5, q).abs();
          c = a.multiply(b);
          if ( a.degree(0) < 2 || b.degree(0) < 2 ) {
             continue;
