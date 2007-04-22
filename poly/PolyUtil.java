@@ -110,7 +110,7 @@ public class PolyUtil {
 
 
     /**
-     * BigInteger from ModInteger coefficients. 
+     * BigInteger from ModInteger coefficients, symmetric. 
      * Represent as polynomial with BigInteger coefficients by 
      * removing the modules and making coefficients symmetric to 0.
      * @param fac result polynomial factory.
@@ -136,6 +136,35 @@ public class PolyUtil {
                // a > m/2, make symmetric to 0
                av = av.subtract( am );
             }
+            BigInteger p = new BigInteger( av );
+            Bv.put( e, p );
+        }
+        return B;
+    }
+
+
+    /**
+     * BigInteger from ModInteger coefficients, positive. 
+     * Represent as polynomial with BigInteger coefficients by 
+     * removing the modules.
+     * @param fac result polynomial factory.
+     * @param A polynomial with ModInteger coefficients to be converted.
+     * @return polynomial with BigInteger coefficients.
+     */
+    public static GenPolynomial<BigInteger> 
+        integerFromModularCoefficientsPositive( GenPolynomialRing<BigInteger> fac,
+                                                GenPolynomial<ModInteger> A ) {
+        GenPolynomial<BigInteger> B = fac.getZERO().clone();
+        if ( A == null || A.isZERO() ) {
+           return B;
+        }
+        Map<ExpVector,BigInteger> Bv = B.getMap();
+        for ( Map.Entry<ExpVector,ModInteger> y: A.getMap().entrySet() ) {
+            ExpVector e = y.getKey();
+            ModInteger a = y.getValue();
+            //System.out.println("e = " + e);
+            //System.out.println("a = " + a);
+            java.math.BigInteger av = a.getVal();
             BigInteger p = new BigInteger( av );
             Bv.put( e, p );
         }
@@ -784,86 +813,116 @@ public class PolyUtil {
            = new GenPolynomialRing<ModInteger>(Mm,pfac.nvar,pfac.tord,pfac.vars);
         System.out.println("M  = " + M);
         System.out.println("Qi = " + Qi);
+        System.out.println("Qm = " + Qm);
         System.out.println("P  = " + P.getModul());
-        BigInteger c = C.leadingBaseCoefficient();
-        System.out.println("c  = " + c);
-        C = C.multiply(c); // sic
-        System.out.println("C  = " + C);
-        A = A.monic();
-        B = B.monic();
 
-        GenPolynomial<BigInteger> Ai 
-           = PolyUtil.integerFromModularCoefficients( fac, A );
-        GenPolynomial<BigInteger> Bi
-           = PolyUtil.integerFromModularCoefficients( fac, B );
+        // normalize c and a, b factors, assert p is prime
+        GenPolynomial<BigInteger> Ai;
+        GenPolynomial<BigInteger> Bi;
+        /*
+        BigInteger c = C.leadingBaseCoefficient();
+        C = C.multiply(c); // sic
+        System.out.println("c  = " + c);
+        //System.out.println("C  = " + C);
+        ModInteger a = A.leadingBaseCoefficient();
+        if ( !a.isONE() ) {
+           //A = A.divide( a );
+           //S = S.multiply( a );
+        }
+        A = A.monic();
+        ModInteger b = B.leadingBaseCoefficient();
+        if ( !b.isONE() ) {
+           //B = B.divide( b );
+           //T = T.multiply( b );
+        }
+        B = B.monic();
+        ModInteger cp = p.fromInteger( c.getVal() );
+        S = S.divide( cp );
+        T = T.divide( cp );
+        Ai = PolyUtil.integerFromModularCoefficients( fac, A );
+        Bi = PolyUtil.integerFromModularCoefficients( fac, B );
         Ai = Ai.multiply( c );
         Bi = Bi.multiply( c );
+        */
+        Ai = PolyUtil.integerFromModularCoefficients( fac, A );
+        Bi = PolyUtil.integerFromModularCoefficients( fac, B );
 
-        S = S.divide( p.fromInteger(c.getVal()) );
-        T = T.divide( p.fromInteger(c.getVal()) );
-
-        GenPolynomial<ModInteger> Am 
-           = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,Ai); 
-        GenPolynomial<ModInteger> Bm 
-           = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,Bi); 
+        // polynomials mod M
+        GenPolynomial<ModInteger> Am; 
+        GenPolynomial<ModInteger> Bm; 
+        GenPolynomial<ModInteger> Eam; 
+        GenPolynomial<ModInteger> Ebm; 
+        Am = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,Ai); 
+        Bm = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,Bi); 
         System.out.println("Am = " + Am);
         System.out.println("Bm = " + Bm);
 
-        GenPolynomial<ModInteger> A1; 
-        GenPolynomial<ModInteger> B1;
-        GenPolynomial<ModInteger> Cm 
-            = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,C); 
+        // polynomials mod p
+        GenPolynomial<ModInteger> Ap; 
+        GenPolynomial<ModInteger> Bp;
+        GenPolynomial<ModInteger> A1p; 
+        GenPolynomial<ModInteger> B1p;
+        GenPolynomial<ModInteger> Ep;
+
+        GenPolynomial<BigInteger> E;
+        GenPolynomial<BigInteger> Ea;
+        GenPolynomial<BigInteger> Eb;
 
         BigInteger M2 = M.multiply( M.fromInteger(2) );
         while ( Qi.compareTo( M2 ) < 0 ) {
-            // compute (C-AB)/q mod M
-            //GenPolynomial<ModInteger> Em = Cm.subtract( Am.multiply(Bm) );
-            GenPolynomial<BigInteger> E = C.subtract( Ai.multiply(Bi) );
+            // compute E=(C-AB)/q over the integers
+            E = C.subtract( Ai.multiply(Bi) );
             System.out.println("Ai = " + Ai);
             System.out.println("Bi = " + Bi);
             System.out.println("E  = " + E);
             System.out.println("Qi = " + Qi);
             if ( E.isZERO() ) {
+               System.out.println("leaving on zero error");
                break;
             }
             E = E.divide( Qi );
             System.out.println("E = " + E);
-
             // E mod p
-            GenPolynomial<ModInteger> Ep 
-               = PolyUtil.<ModInteger>fromIntegerCoefficients(pfac,E); 
+            Ep = PolyUtil.<ModInteger>fromIntegerCoefficients(pfac,E); 
             System.out.println("Ep = " + Ep);
 
             // construct remainder mod p
-            GenPolynomial<ModInteger> A1p; 
-            GenPolynomial<ModInteger> B1p;
-            A1 = T.multiply( Ep ); // S,T
-            B1 = S.multiply( Ep );
-            System.out.println("A1 = " + A1);
-            System.out.println("B1 = " + B1);
+            Ap = T.multiply( Ep ); // S,T
+            Bp = S.multiply( Ep );
+            System.out.println("Ap = " + Ap);
+            System.out.println("Bp = " + Bp);
             GenPolynomial<ModInteger>[] QR;
-            QR = A1.divideAndRemainder( A );
+            QR = Ap.divideAndRemainder( A );
             GenPolynomial<ModInteger> Qp;
             GenPolynomial<ModInteger> Rp;
             Qp = QR[0];
             Rp = QR[1];
             A1p = Rp;
-            B1p = B1.sum( Qp.multiply( B ) );
-            System.out.println("A1p = " + A1p);
-            System.out.println("B1p = " + B1p);
+            B1p = Bp.sum( Qp.multiply( B ) );
+            System.out.println("A1p  = " + A1p);
+            System.out.println("Qp   = " + Qp);
+            System.out.println("Qp*B = " + Qp.multiply( B ));
+            System.out.println("B1p  = " + B1p);
+            //System.out.println("Qp*A+Rp-Ap = " + Qp.multiply(A).sum(Rp).subtract(Ap) );
 
-            // construct q-adic approximation
-            Ai = PolyUtil.integerFromModularCoefficients(fac,A1p);
-            Bi = PolyUtil.integerFromModularCoefficients(fac,B1p);
-            GenPolynomial<ModInteger> A1m 
-               = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,Ai); 
-            GenPolynomial<ModInteger> B1m 
-               = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,Bi); 
-            Am = Am.sum( A1m.multiply( Qm ) );
-            Bm = Bm.sum( B1m.multiply( Qm ) );
+            // construct q-adic approximation, convert mod p to mod M
+            Ea = PolyUtil.integerFromModularCoefficientsPositive(fac,A1p);
+            Eb = PolyUtil.integerFromModularCoefficientsPositive(fac,B1p);
+            Eam = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,Ea); 
+            Ebm = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,Eb); 
+            Eam = Eam.multiply( Qm );
+            Ebm = Ebm.multiply( Qm );
+            System.out.println("Eam = " + Eam);
+            System.out.println("Ebm = " + Ebm);
+            //if ( Eam.isZERO() && Ebm.isZERO() ) {
+            //   System.out.println("leaving on zero correction");
+            //   //break;
+            //}
+            Am = Am.sum( Eam );
+            Bm = Bm.sum( Ebm );
             System.out.println("Am = " + Am);
             System.out.println("Bm = " + Bm);
-            if ( Am.degree(0)+Bm.degree(0) > C.degree(0) ) {
+            if ( Am.degree(0)+Bm.degree(0) > C.degree(0) ) { // debug
                throw new RuntimeException("deg(A)+deg(B) > deg(C)");
             }
 
@@ -877,12 +936,16 @@ public class PolyUtil {
 
         GreatestCommonDivisorAbstract<BigInteger> ufd
             = new GreatestCommonDivisorPrimitive<BigInteger>();
-
-        BigInteger a = ufd.baseContent(Ai);
-        Ai = Ai.divide( a );
-        BigInteger b = c.divide(a);
-        Bi = Bi.divide( b );
-
+        /*
+        // remove normalization
+        BigInteger ai = ufd.baseContent(Ai);
+        System.out.println("ai = " + ai);
+        System.out.println("c  = " + c);
+        Ai = Ai.divide( ai );
+        BigInteger bi = c.divide(ai);
+        System.out.println("bi = " + bi);
+        Bi = Bi.divide( bi ); // divide( c/a )
+        */
         AB[0] = Ai;
         AB[1] = Bi;
         return AB;
