@@ -919,7 +919,7 @@ public class PolyUtilTest extends TestCase {
      //java.math.BigInteger p = getPrime1();
      java.math.BigInteger p = new java.math.BigInteger("19");
      //java.math.BigInteger p = new java.math.BigInteger("5");
-     java.math.BigInteger m = p.multiply(p).multiply(p).multiply(p); 
+     java.math.BigInteger m = p.multiply(p).multiply(p); 
      //.multiply(p).multiply(p).multiply(p);
 
      BigInteger mi = new BigInteger(m);
@@ -986,15 +986,24 @@ public class PolyUtilTest extends TestCase {
          sp = egcd[1];
          tp = egcd[2];
 
+         BigInteger an = a.maxNorm();
+         BigInteger bn = b.maxNorm();
+         if ( an.compareTo(bn) > 0 ) {
+             mi = an;
+         } else {
+             mi = bn;
+         }
+
          System.out.println("a     = " + a);
          System.out.println("b     = " + b);
          System.out.println("c     = " + c);
+         System.out.println("mi    = " + mi);
          System.out.println("ap    = " + ap);
          System.out.println("bp    = " + bp);
          System.out.println("cp    = " + cp);
-         System.out.println("ap*bp = " + ap.multiply(bp));
-         System.out.println("gcd   = " + egcd[0]);
-         System.out.println("gcd   = " + ap1.multiply(sp).sum(bp1.multiply(tp)));
+         // System.out.println("ap*bp = " + ap.multiply(bp));
+         //System.out.println("gcd   = " + egcd[0]);
+         //System.out.println("gcd   = " + ap1.multiply(sp).sum(bp1.multiply(tp)));
          System.out.println("sp    = " + sp);
          System.out.println("tp    = " + tp);
 
@@ -1003,7 +1012,7 @@ public class PolyUtilTest extends TestCase {
          b1 = lift[1];
          c1 = a1.multiply(b1);
 
-         System.out.println("a     = " + a);
+         System.out.println("\na     = " + a);
          System.out.println("b     = " + b);
          System.out.println("c     = " + c);
          System.out.println("a1    = " + a1);

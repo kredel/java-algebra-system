@@ -811,8 +811,10 @@ public class PolyUtil {
         ModInteger Qm = Mm.fromInteger( Q.getModul() );
         GenPolynomialRing<ModInteger> mfac 
            = new GenPolynomialRing<ModInteger>(Mm,pfac.nvar,pfac.tord,pfac.vars);
+        BigInteger M2 = M.multiply( M.fromInteger(2) ).multiply( Qi );
         System.out.println("M  = " + M);
-        System.out.println("Qi = " + Qi);
+        System.out.println("M2  = " + M2);
+        //System.out.println("Qi = " + Qi);
         //System.out.println("Qm = " + Qm);
         //System.out.println("P  = " + P.getModul());
 
@@ -871,7 +873,6 @@ public class PolyUtil {
         GenPolynomial<BigInteger> Ea1;
         GenPolynomial<BigInteger> Eb1;
 
-        BigInteger M2 = M.multiply( M.fromInteger(2) );
         while ( Qi.compareTo( M2 ) < 0 ) {
             // compute E=(C-AB)/q over the integers
             E = C.subtract( Ai.multiply(Bi) );
@@ -892,9 +893,9 @@ public class PolyUtil {
             // construct approximation mod p
             Ap = S.multiply( Ep ); // S,T ++ T,S
             Bp = T.multiply( Ep );
-            System.out.println("Ap = " + Ap);
-            System.out.println("Bp = " + Bp);
-System.out.println("A*Ap+B*Bp-Ep= " + A.multiply(Ap).sum(B.multiply(Bp)).subtract(Ep) );
+            //System.out.println("Ap = " + Ap);
+            //System.out.println("Bp = " + Bp);
+            //System.out.println("A*Ap+B*Bp-Ep= " + A.multiply(Ap).sum(B.multiply(Bp)).subtract(Ep) );
             GenPolynomial<ModInteger>[] QR;
             QR = Ap.divideAndRemainder( B );
             GenPolynomial<ModInteger> Qp;
@@ -904,10 +905,10 @@ System.out.println("A*Ap+B*Bp-Ep= " + A.multiply(Ap).sum(B.multiply(Bp)).subtrac
             A1p = Rp;
             B1p = Bp.sum( A.multiply( Qp ) );
             System.out.println("A1p  = " + A1p);
-            System.out.println("Qp   = " + Qp);
+            //System.out.println("Qp   = " + Qp);
             System.out.println("B1p  = " + B1p);
-System.out.println("Qp*B+Rp-Ap    = " + Qp.multiply(B).sum(Rp).subtract(Ap));
-System.out.println("A*A1p+B*B1p-Ep= " + A.multiply(A1p).sum(B.multiply(B1p)).subtract(Ep) );
+            //System.out.println("Qp*B+Rp-Ap    = " + Qp.multiply(B).sum(Rp).subtract(Ap));
+            //System.out.println("A*A1p+B*B1p-Ep= " + A.multiply(A1p).sum(B.multiply(B1p)).subtract(Ep) );
 
             // construct q-adic approximation, convert mod p to mod M
             Ea = PolyUtil.integerFromModularCoefficients(fac,A1p);
@@ -920,15 +921,15 @@ System.out.println("A*A1p+B*B1p-Ep= " + A.multiply(A1p).sum(B.multiply(B1p)).sub
             //System.out.println("Ebm = " + Ebm);
             Ea1 = Ea.multiply( Qi );
             Eb1 = Eb.multiply( Qi );
-            System.out.println("Ea1 = " + Ea1);
-            System.out.println("Eb1 = " + Eb1);
+            //System.out.println("Ea1 = " + Ea1);
+            //System.out.println("Eb1 = " + Eb1);
 
-            //if ( Eam.isZERO() && Ebm.isZERO() ) {
-            //   System.out.println("leaving on zero correction");
-            //   //break;
-            //}
-            Am = Am.sum( Eam );
-            Bm = Bm.sum( Ebm );
+            if ( Ea1.isZERO() && Eb1.isZERO() ) {
+               System.out.println("leaving on zero correction");
+               //break;
+            }
+            Am = Am.sum( Ebm );
+            Bm = Bm.sum( Eam ); //--------------------------
             //System.out.println("Am = " + Am);
             //System.out.println("Bm = " + Bm);
             Ea = Ai.sum( Eb1 );
