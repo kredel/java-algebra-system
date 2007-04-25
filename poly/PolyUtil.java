@@ -844,8 +844,8 @@ public class PolyUtil {
         Ai = Ai.multiply( c );
         Bi = Bi.multiply( c );
         */
-        Ai = PolyUtil.integerFromModularCoefficientsPositive( fac, A );
-        Bi = PolyUtil.integerFromModularCoefficientsPositive( fac, B );
+        Ai = PolyUtil.integerFromModularCoefficients( fac, A );
+        Bi = PolyUtil.integerFromModularCoefficients( fac, B );
 
         // polynomials mod M
         GenPolynomial<ModInteger> Am; 
@@ -890,34 +890,28 @@ public class PolyUtil {
             System.out.println("Ep = " + Ep);
 
             // construct approximation mod p
-            Ap = T.multiply( Ep ); // S,T
-            Bp = S.multiply( Ep );
+            Ap = S.multiply( Ep ); // S,T ++ T,S
+            Bp = T.multiply( Ep );
             System.out.println("Ap = " + Ap);
             System.out.println("Bp = " + Bp);
+System.out.println("A*Ap+B*Bp-Ep= " + A.multiply(Ap).sum(B.multiply(Bp)).subtract(Ep) );
             GenPolynomial<ModInteger>[] QR;
-            QR = Ap.divideAndRemainder( A ); 
-            //--QR = Bp.divideAndRemainder( B );
+            QR = Ap.divideAndRemainder( B );
             GenPolynomial<ModInteger> Qp;
             GenPolynomial<ModInteger> Rp;
             Qp = QR[0];
             Rp = QR[1];
-            A1p = Rp;                         // T Ep - A Qp
-            B1p = Bp.sum( Qp.multiply( B ) ); // S Ep + B Qp
-            //--B1p = Bp.remainder( B );
-            //--B1p = Rp;
-            //--A1p = Ap.sum( Qp.multiply( A ) );
+            A1p = Rp;
+            B1p = Bp.sum( A.multiply( Qp ) );
             System.out.println("A1p  = " + A1p);
             System.out.println("Qp   = " + Qp);
-            System.out.println("Qp*B = " + Qp.multiply( B ));
             System.out.println("B1p  = " + B1p);
-            //System.out.println("Qp*A+Rp-Ap = " + Qp.multiply(A).sum(Rp).subtract(Ap) );
-            if ( B1p.degree(0) > B.degree(0) ) { // debug
-               throw new RuntimeException("deg(B1p) > deg(B)");
-            }
+System.out.println("Qp*B+Rp-Ap    = " + Qp.multiply(B).sum(Rp).subtract(Ap));
+System.out.println("A*A1p+B*B1p-Ep= " + A.multiply(A1p).sum(B.multiply(B1p)).subtract(Ep) );
 
             // construct q-adic approximation, convert mod p to mod M
-            Ea = PolyUtil.integerFromModularCoefficientsPositive(fac,A1p);
-            Eb = PolyUtil.integerFromModularCoefficientsPositive(fac,B1p);
+            Ea = PolyUtil.integerFromModularCoefficients(fac,A1p);
+            Eb = PolyUtil.integerFromModularCoefficients(fac,B1p);
             Eam = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,Ea); 
             Ebm = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,Eb); 
             Eam = Eam.multiply( Qm );
@@ -937,11 +931,10 @@ public class PolyUtil {
             Bm = Bm.sum( Ebm );
             //System.out.println("Am = " + Am);
             //System.out.println("Bm = " + Bm);
-            Ea = Ai.sum( Ea1 );
-            Eb = Bi.sum( Eb1 );
+            Ea = Ai.sum( Eb1 );
+            Eb = Bi.sum( Ea1 ); //--------------------------
             System.out.println("Ea = " + Ea);
             System.out.println("Eb = " + Eb);
-            // if ( Am.degree(0)+Bm.degree(0) > C.degree(0) ) { // debug
             if ( Ea.degree(0)+Eb.degree(0) > C.degree(0) ) { // debug
                throw new RuntimeException("deg(A)+deg(B) > deg(C)");
             }

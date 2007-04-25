@@ -919,7 +919,8 @@ public class PolyUtilTest extends TestCase {
      //java.math.BigInteger p = getPrime1();
      java.math.BigInteger p = new java.math.BigInteger("19");
      //java.math.BigInteger p = new java.math.BigInteger("5");
-     java.math.BigInteger m = p.multiply(p).multiply(p);
+     java.math.BigInteger m = p.multiply(p).multiply(p).multiply(p); 
+     //.multiply(p).multiply(p).multiply(p);
 
      BigInteger mi = new BigInteger(m);
 
@@ -955,8 +956,11 @@ public class PolyUtilTest extends TestCase {
      for (int i = 0; i < 5; i++) {
          a = dfac.random( kl, ll, el+5, q).abs();
          b = dfac.random( kl, ll, el+5, q).abs();
+         //a = dfac.univariate(0).sum( dfac.fromInteger(30) );
+         //b = dfac.univariate(0).subtract( dfac.fromInteger(20) );
+         //b = b.multiply( dfac.univariate(0) ).sum( dfac.fromInteger(168));
          c = a.multiply(b);
-         if ( a.degree(0) < 2 || b.degree(0) < 2 ) {
+         if ( a.degree(0) < 1 || b.degree(0) < 2 ) {
             continue;
          }
 
@@ -973,8 +977,8 @@ public class PolyUtilTest extends TestCase {
             continue;
          }
 
-         ap1 = ap.monic();
-         bp1 = bp.monic();
+         ap1 = ap; //.monic();
+         bp1 = bp; //.monic();
          egcd = ap1.egcd(bp1);
          if ( !egcd[0].isONE() ) {
             continue;
@@ -985,12 +989,14 @@ public class PolyUtilTest extends TestCase {
          System.out.println("a     = " + a);
          System.out.println("b     = " + b);
          System.out.println("c     = " + c);
-         System.out.println("ap = " + ap);
-         System.out.println("bp = " + bp);
-         System.out.println("cp = " + cp);
-         System.out.println("gcd= " + egcd[0]);
-         System.out.println("sp = " + sp);
-         System.out.println("tp = " + tp);
+         System.out.println("ap    = " + ap);
+         System.out.println("bp    = " + bp);
+         System.out.println("cp    = " + cp);
+         System.out.println("ap*bp = " + ap.multiply(bp));
+         System.out.println("gcd   = " + egcd[0]);
+         System.out.println("gcd   = " + ap1.multiply(sp).sum(bp1.multiply(tp)));
+         System.out.println("sp    = " + sp);
+         System.out.println("tp    = " + tp);
 
          lift = PolyUtil.liftHensel(c,mi,ap,bp,sp,tp);
          a1 = lift[0];
