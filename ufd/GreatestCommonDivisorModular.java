@@ -323,8 +323,8 @@ public class GreatestCommonDivisorModular //<C extends GcdRingElem<C> >
                break;
             }
         }
-        if ( true || debug ) {
-           System.out.println("done on M = " + M + ", #primes = " + i);
+        if ( debug ) {
+           logger.info("done on M = " + M + ", #primes = " + i);
         }
         // remove normalization
         q = PolyUtil.integerFromModularCoefficients(fac,cp);
