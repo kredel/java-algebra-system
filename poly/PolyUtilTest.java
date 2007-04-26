@@ -916,21 +916,18 @@ public class PolyUtilTest extends TestCase {
  * 
  */
  public void testHenselLifting() {
-     //java.math.BigInteger p = getPrime1();
-     java.math.BigInteger p = new java.math.BigInteger("19");
-     //java.math.BigInteger p = new java.math.BigInteger("5");
-     java.math.BigInteger m = p.multiply(p).multiply(p); 
+     java.math.BigInteger p;
+     //p = getPrime1();
+     p = new java.math.BigInteger("19");
+     p = new java.math.BigInteger("5");
+     BigInteger m = new BigInteger( p ); 
      //.multiply(p).multiply(p).multiply(p);
 
-     BigInteger mi = new BigInteger(m);
+     BigInteger mi = m;
 
      ModInteger pm = new ModInteger(p,1);
      GenPolynomialRing<ModInteger> pfac
          = new GenPolynomialRing<ModInteger>(pm,1,to);
-
-     ModInteger mm = new ModInteger(m,1);
-     GenPolynomialRing<ModInteger> mfac
-         = new GenPolynomialRing<ModInteger>(mm,1,to);
 
      dfac = new GenPolynomialRing<BigInteger>(mi,1,to);
 
@@ -993,11 +990,15 @@ public class PolyUtilTest extends TestCase {
          } else {
              mi = bn;
          }
+         BigInteger cn = c.maxNorm();
+         if ( cn.compareTo(mi) > 0 ) {
+             mi = cn;
+         }
 
          System.out.println("a     = " + a);
          System.out.println("b     = " + b);
          System.out.println("c     = " + c);
-         System.out.println("mi    = " + mi);
+         //System.out.println("mi    = " + mi);
          System.out.println("ap    = " + ap);
          System.out.println("bp    = " + bp);
          System.out.println("cp    = " + cp);
