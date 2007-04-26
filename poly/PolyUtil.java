@@ -810,11 +810,11 @@ public class PolyUtil {
         ModInteger Q = (ModInteger)q;
         BigInteger Qi = new BigInteger( Q.getModul() );
         BigInteger M2 = M.multiply( M.fromInteger(2) ).multiply( Qi );
-        ModInteger Mm = new ModInteger( Qi.multiply(Qi).getVal() );
-        ModInteger Qm = Mm.fromInteger( Q.getModul() );
-        GenPolynomialRing<ModInteger> mfac 
-           = new GenPolynomialRing<ModInteger>(Mm,pfac.nvar,pfac.tord,pfac.vars);
-        System.out.println("M  = " + M);
+        //--ModInteger Mm = new ModInteger( Qi.multiply(Qi).getVal() );
+        //--ModInteger Qm = Mm.fromInteger( Q.getModul() );
+        //--GenPolynomialRing<ModInteger> mfac 
+        //-- = new GenPolynomialRing<ModInteger>(Mm,pfac.nvar,pfac.tord,pfac.vars);
+        //--System.out.println("M  = " + M);
         System.out.println("M2  = " + M2);
         //System.out.println("Qi = " + Qi);
         //System.out.println("Qm = " + Qm);
@@ -851,12 +851,12 @@ public class PolyUtil {
         Bi.getMap().put(eb,c);
 
         // polynomials mod M
-        GenPolynomial<ModInteger> Am; 
-        GenPolynomial<ModInteger> Bm; 
-        GenPolynomial<ModInteger> Eam; 
-        GenPolynomial<ModInteger> Ebm; 
-        Am = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,Ai); 
-        Bm = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,Bi); 
+        //--GenPolynomial<ModInteger> Am; 
+        //--GenPolynomial<ModInteger> Bm; 
+        //--GenPolynomial<ModInteger> Eam; 
+        //--GenPolynomial<ModInteger> Ebm; 
+        //--Am = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,Ai); 
+        //--Bm = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,Bi); 
         //System.out.println("Am = " + Am);
         //System.out.println("Bm = " + Bm);
 
@@ -914,44 +914,44 @@ public class PolyUtil {
             // construct q-adic approximation, convert mod p to mod M
             Ea = PolyUtil.integerFromModularCoefficients(fac,A1p);
             Eb = PolyUtil.integerFromModularCoefficients(fac,B1p);
-            Eam = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,Ea); 
-            Ebm = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,Eb); 
-            Eam = Eam.multiply( Qm );
-            Ebm = Ebm.multiply( Qm );
-            System.out.println("Eam = " + Eam);
-            System.out.println("Ebm = " + Ebm);
+            //--Eam = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,Ea); 
+            //--Ebm = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,Eb); 
+            //--Eam = Eam.multiply( Qm );
+            //--Ebm = Ebm.multiply( Qm );
+            //--System.out.println("Eam = " + Eam);
+            //--System.out.println("Ebm = " + Ebm);
             Ea1 = Ea.multiply( Qi );
             Eb1 = Eb.multiply( Qi );
             //System.out.println("Ea1 = " + Ea1);
             //System.out.println("Eb1 = " + Eb1);
 
-            if ( Eam.isZERO() && Ebm.isZERO() ) {
+            if ( Ea1.isZERO() && Eb1.isZERO() ) {
                System.out.println("leaving on zero correction");
                //break;
             }
-            Am = Am.sum( Ebm );
-            Bm = Bm.sum( Eam ); //--------------------------
-            System.out.println("Am = " + Am);
-            System.out.println("Bm = " + Bm);
+            //--Am = Am.sum( Ebm );
+            //--Bm = Bm.sum( Eam ); //--------------------------
+            //--System.out.println("Am = " + Am);
+            //--System.out.println("Bm = " + Bm);
             Ea = Ai.sum( Eb1 );
             Eb = Bi.sum( Ea1 ); //--------------------------
             System.out.println("Ea = " + Ea);
             System.out.println("Eb = " + Eb);
-            if ( Am.degree(0)+Bm.degree(0) > C.degree(0) ) { // debug
+            if ( Ea.degree(0)+Eb.degree(0) > C.degree(0) ) { // debug
                throw new RuntimeException("deg(A)+deg(B) > deg(C)");
             }
 
             // prepare for next iteration
-            Ai = PolyUtil.integerFromModularCoefficients(fac,Am);
-            Bi = PolyUtil.integerFromModularCoefficients(fac,Bm);
-            Qi = new BigInteger( Mm.getModul() ); //Q.getModul().multiply( P.getModul() ) );
+            //--Ai = PolyUtil.integerFromModularCoefficients(fac,Am);
+            //--Bi = PolyUtil.integerFromModularCoefficients(fac,Bm);
+            Qi = new BigInteger( Q.getModul().multiply( P.getModul() ) );
             Q = new ModInteger( Qi.getVal() );
-            Mm = new ModInteger( Mm.getModul().multiply( P.getModul() ) );
-            System.out.println("Mm = " + Mm.getModul());
-            mfac = new GenPolynomialRing<ModInteger>(Mm,pfac.nvar,pfac.tord,pfac.vars);
-            Qm = Mm.fromInteger( Qi.getVal() );
-            Am = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,Ai); 
-            Bm = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,Bi); 
+            //--Mm = new ModInteger( Mm.getModul().multiply( P.getModul() ) );
+            //--System.out.println("Mm = " + Mm.getModul());
+            //--mfac = new GenPolynomialRing<ModInteger>(Mm,pfac.nvar,pfac.tord,pfac.vars);
+            //--Qm = Mm.fromInteger( Qi.getVal() );
+            //--Am = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,Ai); 
+            //--Bm = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,Bi); 
             Ai = Ea;
             Bi = Eb;
         }
