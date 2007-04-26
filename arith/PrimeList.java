@@ -16,7 +16,7 @@ import edu.jas.util.StringUtil;
  * List of big primes.
  * Similar to ALDES/SAC2 SACPOL.PRIME list.
  * @author Heinz Kredel
- * @see ALDES and SAC2 SACPOL.PRIME
+ * See ALDES/SAC2 SACPOL.PRIME
  */
 
 public final class PrimeList implements Iterable<java.math.BigInteger> {
