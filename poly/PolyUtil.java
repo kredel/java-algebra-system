@@ -771,6 +771,8 @@ public class PolyUtil {
      * Let p = A.ring.coFac.modul() = B.ring.coFac.modul() 
      * and assume C == A*B mod p with ggt(A,B) == 1 mod p and
      * S A + T B == 1 mod p. 
+     * See Algorithm 6.1. in Geddes et.al.. 
+     * It can not use computation mod p^{e+1}.
      * @param C GenPolynomial<BigInteger>.
      * @param A GenPolynomial<ModInteger>.
      * @param B other GenPolynomial<ModInteger>.
@@ -821,33 +823,32 @@ public class PolyUtil {
         // normalize c and a, b factors, assert p is prime
         GenPolynomial<BigInteger> Ai;
         GenPolynomial<BigInteger> Bi;
-        /*
         BigInteger c = C.leadingBaseCoefficient();
         C = C.multiply(c); // sic
         System.out.println("c  = " + c);
-        //System.out.println("C  = " + C);
+        System.out.println("C  = " + C);
         ModInteger a = A.leadingBaseCoefficient();
-        if ( !a.isONE() ) {
-           //A = A.divide( a );
-           //S = S.multiply( a );
+        if ( !a.isONE() ) { // A = A.monic();
+           A = A.divide( a );
+           S = S.multiply( a );
         }
-        A = A.monic();
         ModInteger b = B.leadingBaseCoefficient();
-        if ( !b.isONE() ) {
-           //B = B.divide( b );
-           //T = T.multiply( b );
+        if ( !b.isONE() ) { // B = B.monic();
+           B = B.divide( b );
+           T = T.multiply( b );
         }
-        B = B.monic();
-        ModInteger cp = p.fromInteger( c.getVal() );
-        S = S.divide( cp );
-        T = T.divide( cp );
+        ModInteger ci = P.fromInteger( c.getVal() );
+        A = A.multiply( ci );
+        B = B.multiply( ci );
+        T = T.divide( ci );
+        S = S.divide( ci );
         Ai = PolyUtil.integerFromModularCoefficients( fac, A );
         Bi = PolyUtil.integerFromModularCoefficients( fac, B );
-        Ai = Ai.multiply( c );
-        Bi = Bi.multiply( c );
-        */
-        Ai = PolyUtil.integerFromModularCoefficients( fac, A );
-        Bi = PolyUtil.integerFromModularCoefficients( fac, B );
+        // replace leading base coefficients
+        ExpVector ea = Ai.leadingExpVector();
+        ExpVector eb = Bi.leadingExpVector();
+        Ai.getMap().put(ea,c);
+        Bi.getMap().put(eb,c);
 
         // polynomials mod M
         GenPolynomial<ModInteger> Am; 
@@ -943,7 +944,7 @@ public class PolyUtil {
             // prepare for next iteration
             Ai = PolyUtil.integerFromModularCoefficients(fac,Am);
             Bi = PolyUtil.integerFromModularCoefficients(fac,Bm);
-            Qi = new BigInteger( Q.getModul().multiply( P.getModul() ) );
+            Qi = new BigInteger( Mm.getModul() ); //Q.getModul().multiply( P.getModul() ) );
             Q = new ModInteger( Qi.getVal() );
             Mm = new ModInteger( Mm.getModul().multiply( P.getModul() ) );
             System.out.println("Mm = " + Mm.getModul());
@@ -951,13 +952,13 @@ public class PolyUtil {
             Qm = Mm.fromInteger( Qi.getVal() );
             Am = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,Ai); 
             Bm = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,Bi); 
-            //++Ai = Ea;
-            //++Bi = Eb;
+            Ai = Ea;
+            Bi = Eb;
         }
 
         GreatestCommonDivisorAbstract<BigInteger> ufd
             = new GreatestCommonDivisorPrimitive<BigInteger>();
-        /*
+
         // remove normalization
         BigInteger ai = ufd.baseContent(Ai);
         System.out.println("ai = " + ai);
@@ -966,7 +967,7 @@ public class PolyUtil {
         BigInteger bi = c.divide(ai);
         System.out.println("bi = " + bi);
         Bi = Bi.divide( bi ); // divide( c/a )
-        */
+
         AB[0] = Ai;
         AB[1] = Bi;
         return AB;
