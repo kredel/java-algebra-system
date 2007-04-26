@@ -810,23 +810,23 @@ public class PolyUtil {
         ModInteger Q = (ModInteger)q;
         BigInteger Qi = new BigInteger( Q.getModul() );
         BigInteger M2 = M.multiply( M.fromInteger(2) ).multiply( Qi );
+        //System.out.println("M2  = " + M2);
+        //System.out.println("Qi = " + Qi);
+        //System.out.println("P  = " + P.getModul());
         //--ModInteger Mm = new ModInteger( Qi.multiply(Qi).getVal() );
         //--ModInteger Qm = Mm.fromInteger( Q.getModul() );
         //--GenPolynomialRing<ModInteger> mfac 
         //-- = new GenPolynomialRing<ModInteger>(Mm,pfac.nvar,pfac.tord,pfac.vars);
         //--System.out.println("M  = " + M);
-        System.out.println("M2  = " + M2);
-        //System.out.println("Qi = " + Qi);
-        //System.out.println("Qm = " + Qm);
-        //System.out.println("P  = " + P.getModul());
+        //--System.out.println("Qm = " + Qm);
 
         // normalize c and a, b factors, assert p is prime
         GenPolynomial<BigInteger> Ai;
         GenPolynomial<BigInteger> Bi;
         BigInteger c = C.leadingBaseCoefficient();
         C = C.multiply(c); // sic
-        System.out.println("c  = " + c);
-        System.out.println("C  = " + C);
+        //System.out.println("c  = " + c);
+        //System.out.println("C  = " + C);
         ModInteger a = A.leadingBaseCoefficient();
         if ( !a.isONE() ) { // A = A.monic();
            A = A.divide( a );
@@ -877,19 +877,19 @@ public class PolyUtil {
         while ( Qi.compareTo( M2 ) < 0 ) {
             // compute E=(C-AB)/q over the integers
             E = C.subtract( Ai.multiply(Bi) );
-            System.out.println("\nQi = " + Qi);
-            System.out.println("Ai = " + Ai);
-            System.out.println("Bi = " + Bi);
-            System.out.println("E  = " + E);
+            //System.out.println("\nQi = " + Qi);
+            //System.out.println("Ai = " + Ai);
+            //System.out.println("Bi = " + Bi);
+            //System.out.println("E  = " + E);
             if ( E.isZERO() ) {
-               System.out.println("leaving on zero error");
+               logger.info("leaving on zero error");
                break;
             }
             E = E.divide( Qi );
-            System.out.println("E  = " + E);
+            //System.out.println("E  = " + E);
             // E mod p
             Ep = PolyUtil.<ModInteger>fromIntegerCoefficients(pfac,E); 
-            System.out.println("Ep = " + Ep);
+            logger.info("Ep = " + Ep);
 
             // construct approximation mod p
             Ap = S.multiply( Ep ); // S,T ++ T,S
@@ -905,9 +905,9 @@ public class PolyUtil {
             Rp = QR[1];
             A1p = Rp;
             B1p = Bp.sum( A.multiply( Qp ) );
-            System.out.println("A1p  = " + A1p);
+            //++System.out.println("A1p  = " + A1p);
             //System.out.println("Qp   = " + Qp);
-            System.out.println("B1p  = " + B1p);
+            //++System.out.println("B1p  = " + B1p);
             //System.out.println("Qp*B+Rp-Ap    = " + Qp.multiply(B).sum(Rp).subtract(Ap));
             //System.out.println("A*A1p+B*B1p-Ep= " + A.multiply(A1p).sum(B.multiply(B1p)).subtract(Ep) );
 
@@ -925,18 +925,18 @@ public class PolyUtil {
             //System.out.println("Ea1 = " + Ea1);
             //System.out.println("Eb1 = " + Eb1);
 
-            if ( Ea1.isZERO() && Eb1.isZERO() ) {
-               System.out.println("leaving on zero correction");
-               //break;
-            }
+            //--if ( Ea1.isZERO() && Eb1.isZERO() ) {
+               //--System.out.println("leaving on zero correction");
+               //-- not do that break;
+            //--}
             //--Am = Am.sum( Ebm );
             //--Bm = Bm.sum( Eam ); //--------------------------
             //--System.out.println("Am = " + Am);
             //--System.out.println("Bm = " + Bm);
-            Ea = Ai.sum( Eb1 );
+            Ea = Ai.sum( Eb1 ); // Eb1 and Ea1 are required
             Eb = Bi.sum( Ea1 ); //--------------------------
-            System.out.println("Ea = " + Ea);
-            System.out.println("Eb = " + Eb);
+            //System.out.println("Ea = " + Ea);
+            //System.out.println("Eb = " + Eb);
             if ( Ea.degree(0)+Eb.degree(0) > C.degree(0) ) { // debug
                throw new RuntimeException("deg(A)+deg(B) > deg(C)");
             }
@@ -961,11 +961,11 @@ public class PolyUtil {
 
         // remove normalization
         BigInteger ai = ufd.baseContent(Ai);
-        System.out.println("ai = " + ai);
-        System.out.println("c  = " + c);
+        //System.out.println("ai = " + ai);
+        //System.out.println("c  = " + c);
         Ai = Ai.divide( ai );
         BigInteger bi = c.divide(ai);
-        System.out.println("bi = " + bi);
+        //System.out.println("bi = " + bi);
         Bi = Bi.divide( bi ); // divide( c/a )
 
         AB[0] = Ai;
