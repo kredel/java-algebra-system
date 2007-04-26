@@ -917,9 +917,9 @@ public class PolyUtilTest extends TestCase {
  */
  public void testHenselLifting() {
      java.math.BigInteger p;
-     //p = getPrime1();
-     p = new java.math.BigInteger("19");
-     p = new java.math.BigInteger("5");
+     p = getPrime1();
+     //p = new java.math.BigInteger("19");
+     //p = new java.math.BigInteger("5");
      BigInteger m = new BigInteger( p ); 
      //.multiply(p).multiply(p).multiply(p);
 
@@ -950,9 +950,9 @@ public class PolyUtilTest extends TestCase {
 
      ExpVector degv, qdegv;
 
-     for (int i = 0; i < 5; i++) {
-         a = dfac.random( kl, ll, el+5, q).abs();
-         b = dfac.random( kl, ll, el+5, q).abs();
+     for (int i = 1; i < 5; i++) {
+         a = dfac.random( kl+70*i, ll, el+5, q).abs();
+         b = dfac.random( kl+70*i, ll, el+5, q).abs();
          //a = dfac.univariate(0).sum( dfac.fromInteger(30) );
          //b = dfac.univariate(0).subtract( dfac.fromInteger(20) );
          //b = b.multiply( dfac.univariate(0) ).sum( dfac.fromInteger(168));
@@ -995,34 +995,34 @@ public class PolyUtilTest extends TestCase {
              mi = cn;
          }
 
-         System.out.println("a     = " + a);
-         System.out.println("b     = " + b);
-         System.out.println("c     = " + c);
-         //System.out.println("mi    = " + mi);
-         System.out.println("ap    = " + ap);
-         System.out.println("bp    = " + bp);
-         System.out.println("cp    = " + cp);
+         //System.out.println("a     = " + a);
+         //System.out.println("b     = " + b);
+         //System.out.println("c     = " + c);
+         //--System.out.println("mi    = " + mi);
+         //System.out.println("ap    = " + ap);
+         //System.out.println("bp    = " + bp);
+         //System.out.println("cp    = " + cp);
          // System.out.println("ap*bp = " + ap.multiply(bp));
          //System.out.println("gcd   = " + egcd[0]);
          //System.out.println("gcd   = " + ap1.multiply(sp).sum(bp1.multiply(tp)));
-         System.out.println("sp    = " + sp);
-         System.out.println("tp    = " + tp);
+         //System.out.println("sp    = " + sp);
+         //System.out.println("tp    = " + tp);
 
          lift = PolyUtil.liftHensel(c,mi,ap,bp,sp,tp);
          a1 = lift[0];
          b1 = lift[1];
          c1 = a1.multiply(b1);
 
-         System.out.println("\na     = " + a);
-         System.out.println("b     = " + b);
-         System.out.println("c     = " + c);
-         System.out.println("a1    = " + a1);
-         System.out.println("b1    = " + b1);
-         System.out.println("a1*b1 = " + c1);
+         //System.out.println("\na     = " + a);
+         //System.out.println("b     = " + b);
+         //System.out.println("c     = " + c);
+         //System.out.println("a1    = " + a1);
+         //System.out.println("b1    = " + b1);
+         //System.out.println("a1*b1 = " + c1);
 
          //assertEquals("lift(a mod p) = a",a,a1);
          //assertEquals("lift(b mod p) = b",b,b1);
-         assertEquals("lift(a,b) = ab",c,c1);
+         assertEquals("lift(a b mod p) = a b",c,c1);
          break;
      }
  }
