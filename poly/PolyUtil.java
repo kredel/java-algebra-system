@@ -801,17 +801,17 @@ public class PolyUtil {
            throw new RuntimeException("polynomial ring not univariate");
         }
         // setup factories
-        ModInteger Mm = new ModInteger( M.getVal() );
         GenPolynomialRing<ModInteger> pfac = A.ring;
         RingFactory<ModInteger> p = pfac.coFac;
         RingFactory<ModInteger> q = p;
         ModInteger P = (ModInteger)p;
         ModInteger Q = (ModInteger)q;
         BigInteger Qi = new BigInteger( Q.getModul() );
+        BigInteger M2 = M.multiply( M.fromInteger(2) ).multiply( Qi );
+        ModInteger Mm = new ModInteger( Qi.multiply(Qi).getVal() );
         ModInteger Qm = Mm.fromInteger( Q.getModul() );
         GenPolynomialRing<ModInteger> mfac 
            = new GenPolynomialRing<ModInteger>(Mm,pfac.nvar,pfac.tord,pfac.vars);
-        BigInteger M2 = M.multiply( M.fromInteger(2) ).multiply( Qi );
         System.out.println("M  = " + M);
         System.out.println("M2  = " + M2);
         //System.out.println("Qi = " + Qi);
@@ -917,37 +917,42 @@ public class PolyUtil {
             Ebm = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,Eb); 
             Eam = Eam.multiply( Qm );
             Ebm = Ebm.multiply( Qm );
-            //System.out.println("Eam = " + Eam);
-            //System.out.println("Ebm = " + Ebm);
+            System.out.println("Eam = " + Eam);
+            System.out.println("Ebm = " + Ebm);
             Ea1 = Ea.multiply( Qi );
             Eb1 = Eb.multiply( Qi );
             //System.out.println("Ea1 = " + Ea1);
             //System.out.println("Eb1 = " + Eb1);
 
-            if ( Ea1.isZERO() && Eb1.isZERO() ) {
+            if ( Eam.isZERO() && Ebm.isZERO() ) {
                System.out.println("leaving on zero correction");
                //break;
             }
             Am = Am.sum( Ebm );
             Bm = Bm.sum( Eam ); //--------------------------
-            //System.out.println("Am = " + Am);
-            //System.out.println("Bm = " + Bm);
+            System.out.println("Am = " + Am);
+            System.out.println("Bm = " + Bm);
             Ea = Ai.sum( Eb1 );
             Eb = Bi.sum( Ea1 ); //--------------------------
             System.out.println("Ea = " + Ea);
             System.out.println("Eb = " + Eb);
-            if ( Ea.degree(0)+Eb.degree(0) > C.degree(0) ) { // debug
+            if ( Am.degree(0)+Bm.degree(0) > C.degree(0) ) { // debug
                throw new RuntimeException("deg(A)+deg(B) > deg(C)");
             }
 
             // prepare for next iteration
-            Qi = new BigInteger( Q.getModul().multiply( P.getModul() ) );
-            Q = new ModInteger( Qi.getVal() );
-            Qm = Mm.fromInteger( Qi.getVal() );
             Ai = PolyUtil.integerFromModularCoefficients(fac,Am);
             Bi = PolyUtil.integerFromModularCoefficients(fac,Bm);
-            Ai = Ea;
-            Bi = Eb;
+            Qi = new BigInteger( Q.getModul().multiply( P.getModul() ) );
+            Q = new ModInteger( Qi.getVal() );
+            Mm = new ModInteger( Mm.getModul().multiply( P.getModul() ) );
+            System.out.println("Mm = " + Mm.getModul());
+            mfac = new GenPolynomialRing<ModInteger>(Mm,pfac.nvar,pfac.tord,pfac.vars);
+            Qm = Mm.fromInteger( Qi.getVal() );
+            Am = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,Ai); 
+            Bm = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,Bi); 
+            //++Ai = Ea;
+            //++Bi = Eb;
         }
 
         GreatestCommonDivisorAbstract<BigInteger> ufd
