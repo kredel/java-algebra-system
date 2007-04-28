@@ -1067,9 +1067,9 @@ public class PolyUtilTest extends TestCase {
 
      ExpVector degv, qdegv;
 
-     for (int i = 1; i < 5; i++) {
-         a = dfac.random( kl+7*i, ll, el+5, q).abs();
-         b = dfac.random( kl+7*i, ll, el+5, q).abs();
+     for (int i = 1; i < 5; i++) { // 70 better for quadratic
+         a = dfac.random( kl+70*i, ll, el+5, q).abs();
+         b = dfac.random( kl+70*i, ll, el+5, q).abs();
          //a = dfac.univariate(0).sum( dfac.fromInteger(30) );
          //b = dfac.univariate(0).subtract( dfac.fromInteger(20) );
          //b = b.multiply( dfac.univariate(0) ).sum( dfac.fromInteger(168));
@@ -1125,7 +1125,9 @@ public class PolyUtilTest extends TestCase {
          //System.out.println("sp    = " + sp);
          //System.out.println("tp    = " + tp);
 
+         long tq = System.currentTimeMillis();
          lift = PolyUtil.liftHenselQuadratic(c,mi,ap,bp,sp,tp);
+         tq = System.currentTimeMillis() - tq;
          a1 = lift[0];
          b1 = lift[1];
          c1 = a1.multiply(b1);
@@ -1140,6 +1142,28 @@ public class PolyUtilTest extends TestCase {
          //assertEquals("lift(a mod p) = a",a,a1);
          //assertEquals("lift(b mod p) = b",b,b1);
          assertEquals("lift(a b mod p) = a b",c,c1);
+
+         long t = System.currentTimeMillis();
+         lift = PolyUtil.liftHensel(c,mi,ap,bp,sp,tp);
+         t = System.currentTimeMillis() - t;
+         a1 = lift[0];
+         b1 = lift[1];
+         c1 = a1.multiply(b1);
+
+         //System.out.println("\na     = " + a);
+         //System.out.println("b     = " + b);
+         //System.out.println("c     = " + c);
+         //System.out.println("a1    = " + a1);
+         //System.out.println("b1    = " + b1);
+         //System.out.println("a1*b1 = " + c1);
+
+         //assertEquals("lift(a mod p) = a",a,a1);
+         //assertEquals("lift(b mod p) = b",b,b1);
+         assertEquals("lift(a b mod p) = a b",c,c1);
+
+         System.out.println("\nquadratic Hensel time = " + tq);
+         System.out.println("linear    Hensel time = " + t);
+
          break;
      }
  }
