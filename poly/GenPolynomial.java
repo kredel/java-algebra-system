@@ -127,7 +127,7 @@ public class GenPolynomial<C extends RingElem<C> >
         StringBuffer s = new StringBuffer();
         s.append( this.getClass().getSimpleName() + ":" );
         s.append( ring.coFac.getClass().getSimpleName() );
-        if ( ring.coFac.characteristic().longValue() > 0L ) { // fix if lowbits=0
+        if ( ! ring.coFac.characteristic().equals(java.math.BigInteger.ZERO) ) {
            s.append( "(" + ring.coFac.characteristic() + ")" );
         }
         s.append( "[ ");
@@ -669,17 +669,19 @@ public class GenPolynomial<C extends RingElem<C> >
                 C c2 = m2.getValue();
                 ExpVector e2 = m2.getKey();
                 C c = c1.multiply(c2); // check non zero if not domain
-                ExpVector e = e1.sum(e2);
-                C c0 = pv.get( e );
-                if ( c0 == null ) {
-                    pv.put( e, c );
-                } else {
-                    c0 = c0.sum( c );
-                    if ( ! c0.isZERO() ) {
-                        pv.put( e, c0 );
-                    } else { 
-                        pv.remove( e );
-                    }
+                if ( !c.isZERO() ) {
+                   ExpVector e = e1.sum(e2);
+                   C c0 = pv.get( e );
+                   if ( c0 == null ) {
+                      pv.put( e, c );
+                   } else {
+                      c0 = c0.sum( c );
+                      if ( ! c0.isZERO() ) {
+                         pv.put( e, c0 );
+                      } else { 
+                         pv.remove( e );
+                      }
+                   }
                 }
             }
         }
@@ -709,7 +711,9 @@ public class GenPolynomial<C extends RingElem<C> >
             C c1 = m1.getValue();
             ExpVector e1 = m1.getKey();
             C c = c1.multiply(s); // check non zero if not domain
-            pv.put( e1, c ); // or m1.setValue( c )
+            if ( !c.isZERO() ) {
+               pv.put( e1, c ); // or m1.setValue( c )
+            }
         }
         return p;
     }
@@ -757,8 +761,10 @@ public class GenPolynomial<C extends RingElem<C> >
             C c1 = m1.getValue();
             ExpVector e1 = m1.getKey();
             C c = c1.multiply(s); // check non zero if not domain
-            ExpVector e2 = e1.sum(e);
-            pv.put( e2, c ); 
+            if ( !c.isZERO() ) {
+               ExpVector e2 = e1.sum(e);
+               pv.put( e2, c ); 
+            }
         }
         return p;
     }
