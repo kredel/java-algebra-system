@@ -912,7 +912,7 @@ public class PolyUtil {
             //System.out.println("Qp*B+Rp-Ap    = " + Qp.multiply(B).sum(Rp).subtract(Ap));
             //System.out.println("A*A1p+B*B1p-Ep= " + A.multiply(A1p).sum(B.multiply(B1p)).subtract(Ep) );
 
-            // construct q-adic approximation, convert mod p to mod M
+            // construct q-adic approximation, convert to integer
             Ea = PolyUtil.integerFromModularCoefficients(fac,A1p);
             Eb = PolyUtil.integerFromModularCoefficients(fac,B1p);
             //--Eam = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,Ea); 
@@ -1065,6 +1065,11 @@ public class PolyUtil {
         GenPolynomial<BigInteger> Eb;
         GenPolynomial<BigInteger> Ea1;
         GenPolynomial<BigInteger> Eb1;
+        GenPolynomial<BigInteger> Si;
+        GenPolynomial<BigInteger> Ti;
+
+        Si = PolyUtil.integerFromModularCoefficients( fac, S );
+        Ti = PolyUtil.integerFromModularCoefficients( fac, T );
 
         while ( Qi.compareTo( M2 ) < 0 ) {
             // compute E=(C-AB)/q over the integers
@@ -1105,7 +1110,7 @@ public class PolyUtil {
             //System.out.println("Qp*B+Rp-Ap    = " + Qp.multiply(B).sum(Rp).subtract(Ap));
             //System.out.println("A*A1p+B*B1p-Ep= " + A.multiply(A1p).sum(B.multiply(B1p)).subtract(Ep) );
 
-            // construct q-adic approximation, convert mod p to mod M
+            // construct q-adic approximation, convert to integer
             Ea = PolyUtil.integerFromModularCoefficients(fac,A1p);
             Eb = PolyUtil.integerFromModularCoefficients(fac,B1p);
             Ea1 = Ea.multiply( Qi );
@@ -1119,12 +1124,63 @@ public class PolyUtil {
             if ( Ea.degree(0)+Eb.degree(0) > C.degree(0) ) { // debug
                throw new RuntimeException("deg(A)+deg(B) > deg(C)");
             }
+            Ai = Ea;
+            Bi = Eb;
+
+            // gcd representation factors error
+            // compute E=(1-SA-TB)/q over the integers
+            E = fac.getONE();
+            E = E.subtract( Si.multiply(Ai) ).subtract( Ti.multiply(Bi) );
+            System.out.println("Si = " + Si);
+            System.out.println("Ti = " + Ti);
+            System.out.println("E2  = " + E);
+            E = E.divide( Qi );
+            System.out.println("E2  = " + E);
+            // E mod p
+            Ep = PolyUtil.<ModInteger>fromIntegerCoefficients(pfac,E); 
+            System.out.println("Ep2  = " + Ep);
+            logger.info("Ep2 = " + Ep);
+
+            // construct approximation mod p
+            Ap = S.multiply( Ep ); // S,T ++ T,S
+            Bp = T.multiply( Ep );
+            System.out.println("Ap = " + Ap);
+            System.out.println("Bp = " + Bp);
+            //System.out.println("A*Ap+B*Bp-Ep= " + A.multiply(Ap).sum(B.multiply(Bp)).subtract(Ep) );
+            //GenPolynomial<ModInteger>[] QR;
+            QR = Bp.divideAndRemainder( A ); // Ai == A mod p ?
+            //GenPolynomial<ModInteger> Qp;
+            //GenPolynomial<ModInteger> Rp;
+            Qp = QR[0];
+            Rp = QR[1];
+            B1p = Rp;
+            A1p = Ap.sum( B.multiply( Qp ) );
+            System.out.println("A1p  = " + A1p);
+            //System.out.println("Qp   = " + Qp);
+            System.out.println("B1p  = " + B1p);
+  System.out.println("A*A1p+B*B1p= " + A1p.multiply(A).sum(B1p.multiply(B)) );
+
+            // construct q-adic approximation, convert to integer
+            Ea = PolyUtil.integerFromModularCoefficients(fac,A1p);
+            Eb = PolyUtil.integerFromModularCoefficients(fac,B1p);
+            Ea1 = Ea.multiply( Qi );
+            Eb1 = Eb.multiply( Qi );
+            System.out.println("Ea1 = " + Ea1);
+            System.out.println("Eb1 = " + Eb1);
+            Ea = Si.sum( Ea1 ); // Eb1 and Ea1 are required
+            Eb = Ti.sum( Eb1 ); //--------------------------
+            System.out.println("Ea = " + Ea);
+            System.out.println("Eb = " + Eb);
+            if ( Ea.degree(0)+Eb.degree(0) > C.degree(0) ) { // debug
+               throw new RuntimeException("deg(A)+deg(B) > deg(C)");
+            }
+            Si = Ea;
+            Ti = Eb;
+  System.out.println("Ai*Si+Bi*Ti=1 " + Ai.multiply(Si).sum(Bi.multiply(Ti)) );
 
             // prepare for next iteration
             Qi = new BigInteger( Q.getModul().multiply( P.getModul() ) );
             Q = new ModInteger( Qi.getVal() );
-            Ai = Ea;
-            Bi = Eb;
         }
 
         GreatestCommonDivisorAbstract<BigInteger> ufd
