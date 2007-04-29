@@ -811,7 +811,8 @@ public class PolyUtil {
         ModInteger P = (ModInteger)p;
         ModInteger Q = (ModInteger)q;
         BigInteger Qi = new BigInteger( Q.getModul() );
-        BigInteger M2 = M.multiply( M.fromInteger(2) ).multiply( Qi );
+        BigInteger M2 = M.multiply( M.fromInteger(2) );
+        BigInteger Mq = Qi;
         //System.out.println("M2  = " + M2);
         //System.out.println("Qi = " + Qi);
         //System.out.println("P  = " + P.getModul());
@@ -876,7 +877,7 @@ public class PolyUtil {
         GenPolynomial<BigInteger> Ea1;
         GenPolynomial<BigInteger> Eb1;
 
-        while ( Qi.compareTo( M2 ) < 0 ) {
+        while ( Mq.compareTo( M2 ) < 0 ) {
             // compute E=(C-AB)/q over the integers
             E = C.subtract( Ai.multiply(Bi) );
             //System.out.println("\nQi = " + Qi);
@@ -946,6 +947,7 @@ public class PolyUtil {
             // prepare for next iteration
             //--Ai = PolyUtil.integerFromModularCoefficients(fac,Am);
             //--Bi = PolyUtil.integerFromModularCoefficients(fac,Bm);
+            Mq = Qi;
             Qi = new BigInteger( Q.getModul().multiply( P.getModul() ) );
             Q = new ModInteger( Qi.getVal() );
             //--Mm = new ModInteger( Mm.getModul().multiply( P.getModul() ) );
@@ -1019,7 +1021,8 @@ public class PolyUtil {
         ModInteger P = (ModInteger)p;
         ModInteger Q = (ModInteger)q;
         BigInteger Qi = new BigInteger( Q.getModul() );
-        BigInteger M2 = M.multiply( M.fromInteger(2) ).multiply( Qi ).multiply( Qi );
+        BigInteger M2 = M.multiply( M.fromInteger(2) );
+        BigInteger Mq = Qi;
         GenPolynomialRing<ModInteger> qfac;
         qfac = new GenPolynomialRing(Q,pfac.nvar,pfac.tord,pfac.vars);
         //System.out.println("M2  = " + M2);
@@ -1085,7 +1088,7 @@ public class PolyUtil {
         Aq = PolyUtil.<ModInteger>fromIntegerCoefficients(qfac,Ai); 
         Bq = PolyUtil.<ModInteger>fromIntegerCoefficients(qfac,Bi); 
 
-        while ( Qi.compareTo( M2 ) < 0 ) {
+        while ( Mq.compareTo( M2 ) < 0 ) {
             // compute E=(C-AB)/q over the integers
             E = C.subtract( Ai.multiply(Bi) );
             //System.out.println("\nQi = " + Qi);
@@ -1197,6 +1200,7 @@ public class PolyUtil {
 
             // prepare for next iteration
             //Qi = new BigInteger( Q.getModul().multiply( P.getModul() ) );
+            Mq = Qi;
             Qi = new BigInteger( Q.getModul().multiply( Q.getModul() ) );
             Q = new ModInteger( Qi.getVal() );
             //System.out.println("Q = " + Q.getModul());
