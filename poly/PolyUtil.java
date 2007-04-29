@@ -885,6 +885,7 @@ public class PolyUtil {
             //System.out.println("Bi = " + Bi);
             //System.out.println("E  = " + E);
             if ( E.isZERO() ) {
+               //System.out.println("leaving on zero error");
                logger.info("leaving on zero error");
                break;
             }
@@ -1096,7 +1097,7 @@ public class PolyUtil {
             //System.out.println("Bi = " + Bi);
             //System.out.println("E  = " + E);
             if ( E.isZERO() ) {
-               System.out.println("leaving on zero error");
+               //System.out.println("leaving on zero error");
                logger.info("leaving on zero error");
                break;
             }
