@@ -118,6 +118,15 @@ public class ResidueRing<C extends RingElem<C> >
     }
 
 
+    /**
+     * Characteristic of this ring.
+     * @return characteristic of this ring.
+     */
+    public java.math.BigInteger characteristic() {
+        return ring.characteristic();
+    }
+
+
     /** Get a Residue element from a BigInteger value.
      * @param a BigInteger.
      * @return a Residue.
