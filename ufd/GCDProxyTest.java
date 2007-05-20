@@ -110,6 +110,7 @@ public class GCDProxyTest extends TestCase {
  * 
  */
  public void xtestBigInteger() {
+     long t;
      BigInteger bi = new BigInteger();
 
      GreatestCommonDivisor<BigInteger> ufd_par; 
@@ -127,9 +128,9 @@ public class GCDProxyTest extends TestCase {
      dfac = new GenPolynomialRing<BigInteger>(bi,4,to);
 
      for (int i = 0; i < 5; i++) {
-         a = dfac.random(kl+i*2,ll+i,2*el,q);
-         b = dfac.random(kl+i*2,ll+i,2*el,q);
-         c = dfac.random(kl,ll,el,q);
+         a = dfac.random(kl+i*20,ll+i,10+el,q);
+         b = dfac.random(kl+i*20,ll+i,10+el,q);
+         c = dfac.random(kl+5,ll,el,q);
          //c = dfac.getONE();
          //c = c.multiply( dfac.univariate(0) );
          c = ufd.primitivePart(c).abs();
@@ -150,7 +151,14 @@ public class GCDProxyTest extends TestCase {
          //System.out.println("a = " + a);
          //System.out.println("b = " + b);
 
+         System.out.println("\ndegrees: a = " + a.degree() 
+                                   + ", b = " + b.degree()  
+                                   + ", c = " + c.degree());  
+
+         t = System.currentTimeMillis();
          d = ufd_par.gcd(a,b);
+         t = System.currentTimeMillis() - t;
+         System.out.println("proxy time = " + t);
          //System.out.println("c = " + c);
          //System.out.println("d = " + d);
          //System.out.println("e = " + e);
@@ -169,6 +177,7 @@ public class GCDProxyTest extends TestCase {
  * 
  */ 
  public void testModInteger() {
+     long t;
      // ModInteger mi = new ModInteger(19,0,true);
      ModInteger mi = new ModInteger(536870909,0,true);
 
@@ -190,8 +199,8 @@ public class GCDProxyTest extends TestCase {
      dfac = new GenPolynomialRing<ModInteger>(mi,4,to);
 
      for (int i = 0; i < 4; i++) {
-         a = dfac.random(kl+i*2,ll+i,2*el,q);
-         b = dfac.random(kl+i*2,ll+i,2*el,q);
+         a = dfac.random(kl+i*2,ll+i,10+el,q);
+         b = dfac.random(kl+i*2,ll+i,10+el,q);
          c = dfac.random(kl,ll,el,q);
          //a = dfac.random(kl,ll+i,el,q);
          //b = dfac.random(kl,ll+i,el,q);
@@ -216,7 +225,14 @@ public class GCDProxyTest extends TestCase {
          //System.out.println("a = " + a);
          //System.out.println("b = " + b);
 
+         System.out.println("\ndegrees: a = " + a.degree() 
+                                   + ", b = " + b.degree()  
+                                   + ", c = " + c.degree());  
+
+         t = System.currentTimeMillis();
          d = ufd_par.gcd(a,b);
+         t = System.currentTimeMillis() - t;
+         System.out.println("proxy time = " + t);
          //System.out.println("c = " + c);
          //System.out.println("d = " + d);
          //System.out.println("e = " + e);
