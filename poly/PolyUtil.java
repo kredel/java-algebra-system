@@ -774,7 +774,7 @@ public class PolyUtil {
      * and assume C == A*B mod p with ggt(A,B) == 1 mod p and
      * S A + T B == 1 mod p. 
      * See Algorithm 6.1. in Geddes et.al.. 
-     * It can not use computation mod p^{e+1}.
+     * Linear version, as it does not lift S A + T B == 1 mod p^{e+1}.
      * @param C GenPolynomial<BigInteger>.
      * @param A GenPolynomial<ModInteger>.
      * @param B other GenPolynomial<ModInteger>.
@@ -984,8 +984,8 @@ public class PolyUtil {
      * Let p = A.ring.coFac.modul() = B.ring.coFac.modul() 
      * and assume C == A*B mod p with ggt(A,B) == 1 mod p and
      * S A + T B == 1 mod p. 
-     * See Algorithm 6.1. in Geddes et.al.. 
-     * It can not use computation mod p^{e+1}.
+     * See algorithm 6.1. in Geddes et.al. and algorithms 3.5.{5,6} in Cohen. 
+     * Quadratic version, as it also lifts S A + T B == 1 mod p^{e+1}.
      * @param C GenPolynomial<BigInteger>.
      * @param A GenPolynomial<ModInteger>.
      * @param B other GenPolynomial<ModInteger>.
