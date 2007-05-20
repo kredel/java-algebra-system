@@ -120,6 +120,16 @@ public class GenPolynomialRing<C extends RingElem<C> >
     /** The constructor creates a polynomial factory object.
      * @param cf factory for coefficients of type C.
      * @param n number of variables.
+     * @param v names for the variables.
+     */
+    public GenPolynomialRing(RingFactory< C > cf, int n, String[] v) {
+        this(cf,n,new TermOrder(),v);
+    }
+
+
+    /** The constructor creates a polynomial factory object.
+     * @param cf factory for coefficients of type C.
+     * @param n number of variables.
      * @param t a term order.
      * @param v names for the variables.
      */
@@ -488,11 +498,23 @@ public class GenPolynomialRing<C extends RingElem<C> >
      * @return X_i as univariate polynomial.
      */
     public GenPolynomial<C> univariate(int i) {
+        return univariate(i,1L);
+    }
+
+
+    /**
+     * Generate univariate polynomial in a given variable with given exponent.
+     * @typeparam C coefficient type.
+     * @param i the index of the variable.
+     * @param e the exponent of the variable.
+     * @return X_i^e as univariate polynomial.
+     */
+    public GenPolynomial<C> univariate(int i, long e) {
         GenPolynomial<C> p = getZERO();
         if ( 0 <= i && i < nvar ) {
            C one = coFac.getONE();
-           ExpVector e = new ExpVector(nvar,i,1);
-           p = p.sum(one,e);
+           ExpVector f = new ExpVector(nvar,i,e);
+           p = p.sum(one,f);
         }
         return p;
     }
