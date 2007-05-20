@@ -1,0 +1,44 @@
+
+- make logger variables also final
+
+- split ModInteger to ModularFactory
+
+- rework junit tests to stop failing in case of zero polynomials
+
+- make polynomial chinese remainder generic (?)
+
+- define power(n) in RingElem and implement in classes
+
+- rename getval() to getVal() in ExpVector
+
+- check correct term order in recursive algorithms
+
+- implement proxys for GB computation
+
+- check solvable polynomials with non integral coefficients
+
+- add assertions to check for number of polynomial variables and term order
+
+- implement power series
+
+- implement factorization
+
+- replace with util.concurrent algorithms where possible
+
+- incorporete gcd() in the Quotient class in edu.jas.application
+
+- make exmaples with rational function field coefficients, 
+  e.g. lisa-tdi example
+
+- implement BigDecimal with RingElem interface
+
+- refactor Hensel listing to ufd
+
+
+- implement multivariate gcd, done
+
+- add methods to GenPolynomialRing to construct x_i polynomials, done
+
+- split RingFactory to ElemFactory, done
+
+- split AlgebraicNumber to AlgebraicFactory, done
