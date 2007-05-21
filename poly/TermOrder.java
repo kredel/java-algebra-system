@@ -1379,7 +1379,9 @@ public final class TermOrder implements Serializable {
            return new TermOrder( w );
         }
         if ( evord2 != 0 ) {
-           logger.warn("TermOrder is already extended");
+           if ( debug ) {
+              logger.warn("TermOrder is already extended");
+           }
            return new TermOrder(evord,evord2,r+k,evend1+k);
         }
         return new TermOrder(DEFAULT_EVORD/*evord*/,evord,r+k,k);
@@ -1405,7 +1407,9 @@ public final class TermOrder implements Serializable {
            return new TermOrder( w );
         }
         if ( evord2 == 0 ) {
-           logger.warn("TermOrder is already contracted");
+           if ( debug ) {
+              logger.warn("TermOrder is already contracted");
+           }
            return new TermOrder(evord);
         }
         if ( evend1 > k ) { // < IntMax since evord2 != 0
