@@ -23,6 +23,7 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 
 import edu.jas.ufd.GreatestCommonDivisor;
+import edu.jas.ufd.GreatestCommonDivisorAbstract;
 import edu.jas.ufd.GreatestCommonDivisorSubres;
 import edu.jas.ufd.GreatestCommonDivisorModular;
 import edu.jas.ufd.GreatestCommonDivisorModEval;
@@ -48,7 +49,7 @@ public class QuotientRing<C extends GcdRingElem<C> >
 
     /** GCD engine of the factory. 
      */
-    public final GreatestCommonDivisor/*<C>*/ engine;
+    public final GreatestCommonDivisorAbstract/*<C>*/ engine;
 
 
     /** Use GCD of package edu.jas.ufd. 
@@ -99,6 +100,7 @@ public class QuotientRing<C extends GcdRingElem<C> >
         } else {
            engine = new GreatestCommonDivisorSubres<C>();
         }
+        System.out.println("engine = " + engine);
     }
         //RingFactory<BigInteger> b0  = (RingFactory<BigInteger>)ring.coFac;
         //BigInteger b1 = (RingFactory)ring.coFac;
@@ -106,8 +108,20 @@ public class QuotientRing<C extends GcdRingElem<C> >
         //BigInteger b3 = (BigInteger)ring.coFac.fromInteger(1);
 
 
+    /** Divide.
+     * @param n first polynomial.
+     * @param d second polynomial.
+     * @return divide(n,d)
+     */
+    protected GenPolynomial<C> divide(GenPolynomial<C> n, GenPolynomial<C> d) {
+        if ( ufdGCD ) {
+           return engine.basePseudoDivide(n,d);
+        }
+        return n.divide(d);
+    }
+
+
     /** Greatest common divisor.
-     * Just for fun, is not efficient.
      * @param n first polynomial.
      * @param d second polynomial.
      * @return gcd(n,d)
