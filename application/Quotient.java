@@ -105,8 +105,8 @@ public class Quotient<C extends GcdRingElem<C> >
            num = n;
            den = d;
         } else {
-           num = n.divide( gcd );
-           den = d.divide( gcd );
+           num = ring.divide( n, gcd );
+           den = ring.divide( d, gcd );
         }
     }
 
@@ -155,8 +155,8 @@ public class Quotient<C extends GcdRingElem<C> >
      */
     public String toString() {
         if ( PrettyPrint.isTrue() ) {
-           return num.toString( ring.ring.getVars() ) 
-                  + "///" + den.toString( ring.ring.getVars() );
+           return "{" + num.toString( ring.ring.getVars() ) 
+                  + "} / {" + den.toString( ring.ring.getVars() ) + "}";
         } else {
            return "Quotient[ " + num.toString() 
                    + " / " + den.toString() + " ]";
