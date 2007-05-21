@@ -198,9 +198,9 @@ public class GCDProxyTest extends TestCase {
      GenPolynomialRing<ModInteger> dfac;
      dfac = new GenPolynomialRing<ModInteger>(mi,4,to);
 
-     for (int i = 0; i < 4; i++) {
-         a = dfac.random(kl+i*2,ll+i,10+el,q);
-         b = dfac.random(kl+i*2,ll+i,10+el,q);
+     for (int i = 0; i < 1; i++) {
+         a = dfac.random(kl+i*2,ll+i,2*el,q);
+         b = dfac.random(kl+i*2,ll+i,2*el,q);
          c = dfac.random(kl,ll,el,q);
          //a = dfac.random(kl,ll+i,el,q);
          //b = dfac.random(kl,ll+i,el,q);
