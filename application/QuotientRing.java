@@ -6,15 +6,27 @@ package edu.jas.application;
 
 import java.util.Random;
 import java.io.Reader;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
+import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
 //import edu.jas.structure.PrettyPrint;
 
+import edu.jas.arith.BigInteger;
+import edu.jas.arith.ModInteger;
+
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
+
+import edu.jas.ufd.GreatestCommonDivisor;
+import edu.jas.ufd.GreatestCommonDivisorSubres;
+import edu.jas.ufd.GreatestCommonDivisorModular;
+import edu.jas.ufd.GreatestCommonDivisorModEval;
+import edu.jas.ufd.GCDProxy;
 
 
 /**
@@ -22,7 +34,7 @@ import edu.jas.poly.GenPolynomialRing;
  * Objects of this class are immutable.
  * @author Heinz Kredel
  */
-public class QuotientRing<C extends RingElem<C> > 
+public class QuotientRing<C extends GcdRingElem<C> > 
              implements RingFactory< Quotient<C> >  {
 
      private static Logger logger = Logger.getLogger(QuotientRing.class);
@@ -34,12 +46,126 @@ public class QuotientRing<C extends RingElem<C> >
     public final GenPolynomialRing<C> ring;
 
 
+    /** GCD engine of the factory. 
+     */
+    public final GreatestCommonDivisor/*<C>*/ engine;
+
+
+    /** Use GCD of package edu.jas.ufd. 
+     */
+    public final boolean ufdGCD;
+
+
     /** The constructor creates a QuotientRing object 
      * from a GenPolynomialRing and a GenPolynomial list. 
      * @param r polynomial ring.
      */
     public QuotientRing(GenPolynomialRing<C> r) {
+        this(r,true);
+    }
+
+
+    /** The constructor creates a QuotientRing object 
+     * from a GenPolynomialRing and a GenPolynomial list. 
+     * @param r polynomial ring.
+     */
+    public QuotientRing(GenPolynomialRing<C> r, boolean ufdGCD) {
         ring = r;
+        this.ufdGCD = ufdGCD;
+        if ( ! ufdGCD ) {
+           engine = null;
+           return;
+        }
+        System.out.println("coFac = " + ring.coFac.getClass().getName());
+        int t = 0;
+        BigInteger b = new BigInteger(1);
+        C bc = ring.coFac.fromInteger(1);
+        if ( b.equals( bc ) ) {
+           t = 1;
+        } else {
+           if ( ring.coFac.characteristic().signum() > 0 ) {
+              ModInteger m = new ModInteger(ring.coFac.characteristic(),1);
+              C mc = ring.coFac.fromInteger(1);
+              if ( m.equals( mc ) ) {
+                 t = 2;
+              }
+           }
+        }
+        System.out.println("t     = " + t);
+        if ( t == 1 ) {
+           engine = new GreatestCommonDivisorModular/*<BigInteger>*/();
+        } else if ( t == 2 ) {
+           engine = new GreatestCommonDivisorModEval/*<ModInteger>*/();
+        } else {
+           engine = new GreatestCommonDivisorSubres<C>();
+        }
+    }
+        //RingFactory<BigInteger> b0  = (RingFactory<BigInteger>)ring.coFac;
+        //BigInteger b1 = (RingFactory)ring.coFac;
+        //BigInteger b2 = (BigInteger)ring.coFac;
+        //BigInteger b3 = (BigInteger)ring.coFac.fromInteger(1);
+
+
+    /** Greatest common divisor.
+     * Just for fun, is not efficient.
+     * @param n first polynomial.
+     * @param d second polynomial.
+     * @return gcd(n,d)
+     */
+    protected GenPolynomial<C> gcd(GenPolynomial<C> n, GenPolynomial<C> d) {
+        if ( ufdGCD ) {
+           return engine.gcd(n,d);
+        }
+        return syzGcd(n,d);
+    }
+
+
+    /** Least common multiple.
+     * Just for fun, is not efficient.
+     * @param n first polynomial.
+     * @param d second polynomial.
+     * @return lcm(n,d)
+     */
+    protected GenPolynomial<C> syzLcm(GenPolynomial<C> n, GenPolynomial<C> d) {
+        List<GenPolynomial<C>> list;
+        list = new ArrayList<GenPolynomial<C>>( 1 );
+        list.add( n );
+        Ideal<C> N = new Ideal<C>( ring, list, true );
+        list = new ArrayList<GenPolynomial<C>>( 1 );
+        list.add( d );
+        Ideal<C> D = new Ideal<C>( ring, list, true );
+        Ideal<C> L = N.intersect( D );
+        if ( L.list.list.size() != 1 ) {
+           throw new RuntimeException("lcm not uniqe");
+        }
+        GenPolynomial<C> lcm = L.list.list.get(0);
+        return lcm;
+    }
+
+
+    /** Greatest common divisor.
+     * Just for fun, is not efficient.
+     * @param n first polynomial.
+     * @param d second polynomial.
+     * @return gcd(n,d)
+     */
+    protected GenPolynomial<C> syzGcd(GenPolynomial<C> n, GenPolynomial<C> d) {
+        if ( n.isZERO() ) {
+           return d;
+        }
+        if ( d.isZERO() ) {
+           return n;
+        }
+        if ( n.isONE() ) {
+           return n;
+        }
+        if ( d.isONE() ) {
+           return d;
+        }
+        GenPolynomial<C> p = n.multiply(d);
+        GenPolynomial<C> lcm = syzLcm(n,d);
+        GenPolynomial<C> gcd = p.divide(lcm);
+        return gcd;
     }
 
 

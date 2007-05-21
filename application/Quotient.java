@@ -4,14 +4,12 @@
 
 package edu.jas.application;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.log4j.Logger;
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.structure.PrettyPrint;
 import edu.jas.structure.RingElem;
+import edu.jas.structure.GcdRingElem;
 
 
 /**
@@ -20,7 +18,7 @@ import edu.jas.structure.RingElem;
  * <b>Note:</b> Just for fun, reduction to lowest terms is not efficient.
  * @author Heinz Kredel
  */
-public class Quotient<C extends RingElem<C> > 
+public class Quotient<C extends GcdRingElem<C> > 
              implements RingElem< Quotient<C> > {
 
     private static Logger logger = Logger.getLogger(Quotient.class);
@@ -98,8 +96,8 @@ public class Quotient<C extends RingElem<C> >
            return;
         }
         // must reduce to lowest terms
-        GenPolynomial<C> gcd = gcd( n, d );
-        if ( true || debug ) {
+        GenPolynomial<C> gcd = ring.gcd( n, d );
+        if ( false || debug ) {
            logger.info("gcd = " + gcd);
         }
         //GenPolynomial<C> gcd = ring.ring.getONE();
@@ -110,55 +108,6 @@ public class Quotient<C extends RingElem<C> >
            num = n.divide( gcd );
            den = d.divide( gcd );
         }
-    }
-
-
-    /** Least common multiple.
-     * Just for fun, is not efficient.
-     * @param n first polynomial.
-     * @param d second polynomial.
-     * @return lcm(n,d)
-     */
-    protected GenPolynomial<C> lcm(GenPolynomial<C> n, GenPolynomial<C> d) {
-        List<GenPolynomial<C>> list;
-        list = new ArrayList<GenPolynomial<C>>( 1 );
-        list.add( n );
-        Ideal<C> N = new Ideal<C>( ring.ring, list, true );
-        list = new ArrayList<GenPolynomial<C>>( 1 );
-        list.add( d );
-        Ideal<C> D = new Ideal<C>( ring.ring, list, true );
-        Ideal<C> L = N.intersect( D );
-        if ( L.list.list.size() != 1 ) {
-           throw new RuntimeException("lcm not uniqe");
-        }
-        GenPolynomial<C> lcm = L.list.list.get(0);
-        return lcm;
-    }
-
-
-    /** Greatest common divisor.
-     * Just for fun, is not efficient.
-     * @param n first polynomial.
-     * @param d second polynomial.
-     * @return gcd(n,d)
-     */
-    protected GenPolynomial<C> gcd(GenPolynomial<C> n, GenPolynomial<C> d) {
-        if ( n.isZERO() ) {
-           return d;
-        }
-        if ( d.isZERO() ) {
-           return n;
-        }
-        if ( n.isONE() ) {
-           return n;
-        }
-        if ( d.isONE() ) {
-           return d;
-        }
-        GenPolynomial<C> p = n.multiply(d);
-        GenPolynomial<C> lcm = lcm(n,d);
-        GenPolynomial<C> gcd = p.divide(lcm);
-        return gcd;
     }
 
 
