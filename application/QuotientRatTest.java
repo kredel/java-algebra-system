@@ -23,11 +23,11 @@ import edu.jas.poly.TermOrder;
 
 
 /**
- * Quotient Test using JUnit. 
+ * QuotientRat Test using JUnit. 
  * @author Heinz Kredel.
  */
 
-public class QuotientTest extends TestCase {
+public class QuotientRatTest extends TestCase {
 
 /**
  * main.
@@ -38,10 +38,10 @@ public class QuotientTest extends TestCase {
    }
 
 /**
- * Constructs a <CODE>QuotientTest</CODE> object.
+ * Constructs a <CODE>QuotientRatTest</CODE> object.
  * @param name String.
  */
-   public QuotientTest(String name) {
+   public QuotientRatTest(String name) {
           super(name);
    }
 
@@ -49,7 +49,7 @@ public class QuotientTest extends TestCase {
  * suite.
  */ 
  public static Test suite() {
-     TestSuite suite= new TestSuite(QuotientTest.class);
+     TestSuite suite= new TestSuite(QuotientRatTest.class);
      return suite;
    }
 

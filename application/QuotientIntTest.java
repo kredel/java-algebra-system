@@ -14,6 +14,7 @@ import org.apache.log4j.BasicConfigurator;
 //import org.apache.log4j.Logger;
 
 import edu.jas.arith.BigRational;
+import edu.jas.arith.BigInteger;
 
 //import edu.jas.structure.RingElem;
 
@@ -23,11 +24,11 @@ import edu.jas.poly.TermOrder;
 
 
 /**
- * Quotient Test using JUnit. 
+ * QuotientInt Test using JUnit. 
  * @author Heinz Kredel.
  */
 
-public class QuotientTest extends TestCase {
+public class QuotientIntTest extends TestCase {
 
 /**
  * main.
@@ -38,10 +39,10 @@ public class QuotientTest extends TestCase {
    }
 
 /**
- * Constructs a <CODE>QuotientTest</CODE> object.
+ * Constructs a <CODE>QuotientIntTest</CODE> object.
  * @param name String.
  */
-   public QuotientTest(String name) {
+   public QuotientIntTest(String name) {
           super(name);
    }
 
@@ -49,45 +50,37 @@ public class QuotientTest extends TestCase {
  * suite.
  */ 
  public static Test suite() {
-     TestSuite suite= new TestSuite(QuotientTest.class);
+     TestSuite suite= new TestSuite(QuotientIntTest.class);
      return suite;
    }
 
    //private final static int bitlen = 100;
 
-   QuotientRing<BigRational> zFac;
-   QuotientRing<BigRational> eFac;
-   GenPolynomialRing<BigRational> mfac;
+   QuotientRing<BigInteger> eFac;
+   GenPolynomialRing<BigInteger> mfac;
 
-   Quotient< BigRational > a;
-   Quotient< BigRational > b;
-   Quotient< BigRational > c;
-   Quotient< BigRational > d;
-   Quotient< BigRational > e;
-   Quotient< BigRational > az;
-   Quotient< BigRational > bz;
-   Quotient< BigRational > cz;
-   Quotient< BigRational > dz;
-   Quotient< BigRational > ez;
+   Quotient< BigInteger > a;
+   Quotient< BigInteger > b;
+   Quotient< BigInteger > c;
+   Quotient< BigInteger > d;
+   Quotient< BigInteger > e;
 
-   int rl = 2; 
-   int kl = 3;
-   int ll = 3; //6;
+   int rl = 3; 
+   int kl = 5;
+   int ll = 4; //6;
    int el = 2;
    float q = 0.4f;
 
    protected void setUp() {
        a = b = c = d = e = null;
        TermOrder to = new TermOrder( TermOrder.INVLEX );
-       mfac = new GenPolynomialRing<BigRational>( new BigRational(1), rl, to );
-       eFac = new QuotientRing<BigRational>( mfac );
-       zFac = new QuotientRing<BigRational>( mfac, false );
+       mfac = new GenPolynomialRing<BigInteger>( new BigInteger(1), rl, to );
+       eFac = new QuotientRing<BigInteger>( mfac );
    }
 
    protected void tearDown() {
        a = b = c = d = e = null;
        eFac = null;
-       zFac = null;
    }
 
 
@@ -217,74 +210,6 @@ public class QuotientTest extends TestCase {
         //System.out.println("d = " + d);
         assertTrue("a*1/a = 1",d.isONE()); 
      }
- }
-
-
-/**
- * Test addition with syzygy gcd and euclids gcd.
- * 
- */
- public void testAdditionGcd() {
-
-     long te, tz;
-
-     a = eFac.random(kl,ll,el,q);
-     b = eFac.random(kl,ll,el,q);
-     //System.out.println("a = " + a);
-     //System.out.println("b = " + b);
-
-     az = new Quotient<BigRational>(zFac,a.num,a.den,true);
-     bz = new Quotient<BigRational>(zFac,b.num,b.den,true);
-
-     te = System.currentTimeMillis();
-     c = a.sum(b);
-     d = c.subtract(b);
-     te = System.currentTimeMillis() - te;
-     assertEquals("a+b-b = a",a,d);
-
-     tz = System.currentTimeMillis();
-     cz = az.sum(bz);
-     dz = cz.subtract(bz);
-     tz = System.currentTimeMillis() - tz;
-     assertEquals("a+b-b = a",az,dz);
-
-     System.out.println("te = " + te);
-     System.out.println("tz = " + tz);
-
-
-     c = a.sum(b);
-     d = b.sum(a);
-     //System.out.println("c = " + c);
-     //System.out.println("d = " + d);
-     assertEquals("a+b = b+a",c,d);
-
-     c = eFac.random(kl,ll,el,q);
-     cz = new Quotient<BigRational>(zFac,c.num,c.den,true);
-
-
-     te = System.currentTimeMillis();
-     d = c.sum( a.sum(b) );
-     e = c.sum( a ).sum(b);
-     te = System.currentTimeMillis() - te;
-     assertEquals("c+(a+b) = (c+a)+b",d,e);
-
-     tz = System.currentTimeMillis();
-     dz = cz.sum( az.sum(bz) );
-     ez = cz.sum( az ).sum(bz);
-     tz = System.currentTimeMillis() - tz;
-     assertEquals("c+(a+b) = (c+a)+b",dz,ez);
-
-     System.out.println("te = " + te);
-     System.out.println("tz = " + tz);
-
-     c = a.sum( eFac.getZERO() );
-     d = a.subtract( eFac.getZERO() );
-     assertEquals("a+0 = a-0",c,d);
-
-     c = eFac.getZERO().sum( a );
-     d = eFac.getZERO().subtract( a.negate() );
-     assertEquals("0+a = 0+(-a)",c,d);
-
  }
 
 }
