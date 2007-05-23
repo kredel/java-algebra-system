@@ -17,8 +17,10 @@ import edu.jas.arith.BigRational;
 import edu.jas.arith.BigInteger;
 
 //import edu.jas.structure.RingElem;
+import edu.jas.structure.PrettyPrint;
 
 //import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.TermOrder;
 
@@ -56,7 +58,7 @@ public class QuotientIntTest extends TestCase {
 
    //private final static int bitlen = 100;
 
-   QuotientRing<BigInteger> eFac;
+   QuotientRing<BigInteger> efac;
    GenPolynomialRing<BigInteger> mfac;
 
    Quotient< BigInteger > a;
@@ -73,14 +75,16 @@ public class QuotientIntTest extends TestCase {
 
    protected void setUp() {
        a = b = c = d = e = null;
+       BigInteger cfac = new BigInteger(1);
        TermOrder to = new TermOrder( TermOrder.INVLEX );
-       mfac = new GenPolynomialRing<BigInteger>( new BigInteger(1), rl, to );
-       eFac = new QuotientRing<BigInteger>( mfac );
+       String[] v = ExpVector.STDVARS("x",rl);
+       mfac = new GenPolynomialRing<BigInteger>( cfac, rl, to, v );
+       efac = new QuotientRing<BigInteger>( mfac );
    }
 
    protected void tearDown() {
        a = b = c = d = e = null;
-       eFac = null;
+       efac = null;
    }
 
 
@@ -89,14 +93,14 @@ public class QuotientIntTest extends TestCase {
  * 
  */
  public void testConstruction() {
-     c = eFac.getONE();
+     c = efac.getONE();
      //System.out.println("c = " + c);
      //System.out.println("c.val = " + c.val);
      assertTrue("length( c ) = 1", c.num.length() == 1);
      assertTrue("isZERO( c )", !c.isZERO() );
      assertTrue("isONE( c )", c.isONE() );
 
-     d = eFac.getZERO();
+     d = efac.getZERO();
      //System.out.println("d = " + d);
      //System.out.println("d.val = " + d.val);
      assertTrue("length( d ) = 0", d.num.length() == 0);
@@ -111,8 +115,8 @@ public class QuotientIntTest extends TestCase {
  */
  public void testRandom() {
      for (int i = 0; i < 7; i++) {
-         //a = eFac.random(ll+i);
-         a = eFac.random(kl*(i+1), ll+2+2*i, el, q );
+         //a = efac.random(ll+i);
+         a = efac.random(kl*(i+1), ll+2+2*i, el, q );
          //System.out.println("a = " + a);
          assertTrue("length( a"+i+" ) <> 0", a.num.length() >= 0);
          assertTrue(" not isZERO( a"+i+" )", !a.isZERO() );
@@ -127,8 +131,8 @@ public class QuotientIntTest extends TestCase {
  */
  public void testAddition() {
 
-     a = eFac.random(kl,ll,el,q);
-     b = eFac.random(kl,ll,el,q);
+     a = efac.random(kl,ll,el,q);
+     b = efac.random(kl,ll,el,q);
      //System.out.println("a = " + a);
      //System.out.println("b = " + b);
 
@@ -143,18 +147,18 @@ public class QuotientIntTest extends TestCase {
 
      assertEquals("a+b = b+a",c,d);
 
-     c = eFac.random(kl,ll,el,q);
+     c = efac.random(kl,ll,el,q);
      d = c.sum( a.sum(b) );
      e = c.sum( a ).sum(b);
      assertEquals("c+(a+b) = (c+a)+b",d,e);
 
 
-     c = a.sum( eFac.getZERO() );
-     d = a.subtract( eFac.getZERO() );
+     c = a.sum( efac.getZERO() );
+     d = a.subtract( efac.getZERO() );
      assertEquals("a+0 = a-0",c,d);
 
-     c = eFac.getZERO().sum( a );
-     d = eFac.getZERO().subtract( a.negate() );
+     c = efac.getZERO().sum( a );
+     d = efac.getZERO().subtract( a.negate() );
      assertEquals("0+a = 0+(-a)",c,d);
 
  }
@@ -166,10 +170,10 @@ public class QuotientIntTest extends TestCase {
  */
  public void testMultiplication() {
 
-     a = eFac.random(kl,ll,el,q);
+     a = efac.random(kl,ll,el,q);
      assertTrue("not isZERO( a )", !a.isZERO() );
 
-     b = eFac.random(kl,ll,el,q);
+     b = efac.random(kl,ll,el,q);
      assertTrue("not isZERO( b )", !b.isZERO() );
 
      c = b.multiply(a);
@@ -185,7 +189,7 @@ public class QuotientIntTest extends TestCase {
      assertTrue("a*b = b*a", c.equals(d) );
      assertEquals("a*b = b*a",c,d);
 
-     c = eFac.random(kl,ll,el,q);
+     c = efac.random(kl,ll,el,q);
      //System.out.println("c = " + c);
      d = a.multiply( b.multiply(c) );
      e = (a.multiply(b)).multiply(c);
@@ -198,8 +202,8 @@ public class QuotientIntTest extends TestCase {
      assertEquals("a(bc) = (ab)c",d,e);
      assertTrue("a(bc) = (ab)c", d.equals(e) );
 
-     c = a.multiply( eFac.getONE() );
-     d = eFac.getONE().multiply( a );
+     c = a.multiply( efac.getONE() );
+     d = efac.getONE().multiply( a );
      assertEquals("a*1 = 1*a",c,d);
 
      if ( a.isUnit() ) {
@@ -210,6 +214,29 @@ public class QuotientIntTest extends TestCase {
         //System.out.println("d = " + d);
         assertTrue("a*1/a = 1",d.isONE()); 
      }
+ }
+
+
+/**
+ * Test parse().
+ * 
+ */
+ public void testParse() {
+     a = efac.random(kl*2,ll*2,el*2,q*2);
+     assertTrue("not isZERO( a )", !a.isZERO() );
+
+     //PrettyPrint.setInternal();
+     //System.out.println("a = " + a);
+     PrettyPrint.setPretty();
+     //System.out.println("a = " + a);
+     String p = a.toString();
+     //System.out.println("p = " + p);
+     b = efac.parse(p);
+     System.out.println("b = " + b);
+
+     //c = a.subtract(b);
+     //System.out.println("c = " + c);
+     assertEquals("parse(toSting(a)) = a",a,b);
  }
 
 }

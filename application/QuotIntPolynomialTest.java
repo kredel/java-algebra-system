@@ -75,9 +75,12 @@ public class QuotIntPolynomialTest extends TestCase {
    protected void setUp() {
        a = b = c = d = e = null;
        TermOrder to = new TermOrder( TermOrder.INVLEX );
-       mfac = new GenPolynomialRing<BigInteger>( new BigInteger(1), rl, to );
+       String[] cv = new String[] { "a", "b", "c" };
+       BigInteger cfac = new BigInteger(1);
+       mfac = new GenPolynomialRing<BigInteger>( cfac, rl, to, cv );
        eFac = new QuotientRing<BigInteger>( mfac );
-       qfac = new GenPolynomialRing<Quotient<BigInteger>>( eFac, rl+1, to );
+       String[] v = new String[] { "w", "x", "y", "z" };
+       qfac = new GenPolynomialRing<Quotient<BigInteger>>( eFac, rl+1, v );
    }
 
    protected void tearDown() {
@@ -140,6 +143,8 @@ public class QuotIntPolynomialTest extends TestCase {
      b = qfac.random(kl,ll,el,q);
      //System.out.println("a = " + a);
      //System.out.println("b = " + b);
+     System.out.println("a = " + a.toString( qfac.getVars() ));
+     System.out.println("b = " + b.toString( qfac.getVars() ));
 
      c = a.sum(b);
      d = c.subtract(b);
@@ -147,7 +152,8 @@ public class QuotIntPolynomialTest extends TestCase {
 
      c = a.sum(b);
      d = b.sum(a);
-     System.out.println("c = " + c);
+     System.out.println("c = " + c.toString( qfac.getVars() ));
+     //System.out.println("c = " + c);
      //System.out.println("d = " + d);
 
      assertEquals("a+b = b+a",c,d);
