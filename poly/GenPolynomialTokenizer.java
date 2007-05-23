@@ -37,6 +37,9 @@ import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.vector.ModuleList;
 import edu.jas.vector.OrderedModuleList;
 
+import edu.jas.application.Quotient;
+import edu.jas.application.QuotientRing;
+
 
 /**
  * GenPolynomial Tokenizer. 
@@ -61,13 +64,13 @@ public class GenPolynomialTokenizer  {
     //private RingFactory<AlgebraicNumber<BigRational>> anfac;
     //private RingFactory<AlgebraicNumber<ModInteger>>  gffac;
     private static enum coeffType { BigRat, BigInt, ModInt, BigC, BigQ, 
-                                    ANrat, ANmod };
+                                    ANrat, ANmod, RatFunc };
     private coeffType parsedCoeff = coeffType.BigRat;
 
 
     private GenPolynomialRing                pfac;
     private static enum polyType { PolBigRat, PolBigInt, PolModInt, PolBigC, 
-                                   PolBigQ, PolANrat, PolANmod };
+                                   PolBigQ, PolANrat, PolANmod, PolRatFunc };
     private polyType parsedPoly = polyType.PolBigRat;
 
     private GenSolvablePolynomialRing        spfac;
@@ -187,6 +190,10 @@ public class GenPolynomialTokenizer  {
             pfac  = new GenPolynomialRing<BigQuaternion>(fac,nvars,tord,vars);
             parsedPoly = polyType.PolBigQ;
             break;
+        case RatFunc: 
+            pfac  = new GenPolynomialRing<Quotient<BigInteger>>(fac,nvars,tord,vars);
+            parsedPoly = polyType.PolRatFunc;
+            break;
         default: 
             pfac  = new GenPolynomialRing<BigRational>(fac,nvars,tord,vars);
             parsedPoly = polyType.PolBigRat;
@@ -224,6 +231,10 @@ public class GenPolynomialTokenizer  {
         case BigQ: 
             spfac  = new GenSolvablePolynomialRing<BigQuaternion>(fac,nvars,tord,vars);
             parsedPoly = polyType.PolBigQ;
+            break;
+        case RatFunc: 
+            spfac  = new GenSolvablePolynomialRing<Quotient<BigInteger>>(fac,nvars,tord,vars);
+            parsedPoly = polyType.PolRatFunc;
             break;
         default: 
             spfac  = new GenSolvablePolynomialRing<BigRational>(fac,nvars,tord,vars);
@@ -301,6 +312,27 @@ public class GenPolynomialTokenizer  {
                 tt = tok.nextToken();
                 if (debug) logger.debug("tt,digit = " + tok);
                 //no break;
+
+            case '{': 
+                StringBuffer rf = new StringBuffer();
+                tt = tok.nextToken();
+                while ( tt != '}' ) {
+                    //cf.append( " " );
+                    if ( tok.sval != null ) {
+                        rf.append( " " + tok.sval );
+                    } else {
+                        rf.append( (char)tt );
+                    }
+                    tt = tok.nextToken();
+                }
+                //System.out.println("coeff = " + rf.toString() );
+                r = (RingElem)fac.parse( rf.toString() );
+                if (debug) logger.debug("coeff " + r);
+                b = b.multiply(r,leer); 
+                tt = tok.nextToken();
+                if (debug) logger.debug("tt,digit = " + tok);
+                //no break;
+
             case StreamTokenizer.TT_WORD: 
                 //System.out.println("TT_WORD: " + tok.sval);
                 if ( tok.sval == null || tok.sval.length() == 0 ) break;
@@ -347,12 +379,16 @@ public class GenPolynomialTokenizer  {
             switch ( tt ) {
             case '-': 
             case '+': 
-            case '*': 
             case ')': 
             case ',': 
                 logger.debug("b, = " + b);
                 a = a.sum(b); 
                 b = a1;
+                break;
+            case '*': 
+                logger.debug("b, = " + b);
+                //a = a.sum(b); 
+                //b = a1;
                 break;
             case '\n':
                 tt = tok.nextToken();
@@ -536,6 +572,17 @@ public class GenPolynomialTokenizer  {
                 } else {
                     tok.pushBack();
                 }
+            } else if ( tok.sval.equalsIgnoreCase("RatFunc") ) {
+                tt = tok.nextToken();
+                String[] rfv = nextVariableList();
+                //System.out.println("rfv = " + rfv.length + " " + rfv[0]);
+                int vr = rfv.length;
+                BigInteger bi = new BigInteger();
+                TermOrder to = new TermOrder( TermOrder.INVLEX );
+                GenPolynomialRing<BigInteger> pcf 
+                    = new GenPolynomialRing<BigInteger>( bi, vr, to, rfv );
+                coeff = new QuotientRing( pcf );
+                ct = coeffType.RatFunc;
             } else if ( tok.sval.equalsIgnoreCase("AN") ) {
                 tt = tok.nextToken();
                 if ( tt == '[' ) {
