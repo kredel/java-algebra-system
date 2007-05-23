@@ -5,7 +5,10 @@
 package edu.jas.application;
 
 import java.util.Random;
+import java.io.IOException;
 import java.io.Reader;
+//import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -351,12 +354,30 @@ public class QuotientRing<C extends GcdRingElem<C> >
 
 
     /** Parse Quotient from String.
+     * Syntax: "{ polynomial | polynomial }" or "{ polynomial }" 
+     * or " polynomial | polynomial " or " polynomial " 
      * @param s String.
      * @return Quotient from s.
      */
     public Quotient<C> parse(String s) {
-        GenPolynomial<C> x = ring.parse( s );
-        return new Quotient<C>( this, x );
+        int i = s.indexOf("{");
+        if ( i >= 0 ) {
+           s = s.substring(i+1);
+        }
+        i = s.indexOf("}");
+        if ( i >= 0 ) {
+           s = s.substring(0,i);
+        }
+        i = s.indexOf("|");
+        if ( i < 0 ) {
+           GenPolynomial<C> n = ring.parse( s );
+           return new Quotient<C>( this, n );
+        }
+        String s1 = s.substring(0,i);
+        String s2 = s.substring(i+1);
+        GenPolynomial<C> n = ring.parse( s1 );
+        GenPolynomial<C> d = ring.parse( s2 );
+        return new Quotient<C>( this, n, d );
     }
 
 
@@ -365,8 +386,21 @@ public class QuotientRing<C extends GcdRingElem<C> >
      * @return next Quotient from r.
      */
     public Quotient<C> parse(Reader r) {
-        GenPolynomial<C> x = ring.parse( r );
-        return new Quotient<C>( this, x );
+        StringWriter sw = new StringWriter();
+        int c;
+        try {
+            while ( (c = r.read()) >= 0 ) {
+                if ( c == '}' ) {
+                    break;
+                }
+                sw.write(c);
+            }
+        } catch (IOException e) {
+            logger.error(e.toString()+ " parse " + this);
+            return getZERO();
+        }
+        String s = sw.toString();
+        return parse( s );
     }
 
 }
