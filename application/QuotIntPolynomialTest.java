@@ -17,6 +17,7 @@ import edu.jas.arith.BigRational;
 import edu.jas.arith.BigInteger;
 
 //import edu.jas.structure.RingElem;
+import edu.jas.structure.PrettyPrint;
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
@@ -225,6 +226,29 @@ public class QuotIntPolynomialTest extends TestCase {
         //System.out.println("d = " + d);
         assertTrue("a*1/a = 1",d.isONE()); 
      }
+ }
+
+
+/**
+ * Test parse().
+ * 
+ */
+ public void testParse() {
+     a = qfac.random(kl,ll*2,el*2,q*2);
+     assertTrue("not isZERO( a )", !a.isZERO() );
+
+     //PrettyPrint.setInternal();
+     //System.out.println("a = " + a);
+     PrettyPrint.setPretty();
+     //System.out.println("a = " + a);
+     String p = a.toString( qfac.getVars() );
+     //System.out.println("p = " + p);
+     b = qfac.parse(p);
+     //System.out.println("b = " + b.toString( qfac.getVars() ) );
+
+     //c = a.subtract(b);
+     //System.out.println("c = " + c);
+     assertEquals("parse(a.toSting()) = a",a,b);
  }
 
 }
