@@ -236,7 +236,7 @@ public class QuotientIntTest extends TestCase {
 
      //c = a.subtract(b);
      //System.out.println("c = " + c);
-     assertEquals("parse(toSting(a)) = a",a,b);
+     assertEquals("parse(a.toSting()) = a",a,b);
  }
 
 }
