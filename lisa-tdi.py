@@ -62,15 +62,15 @@ f = SolvableIdeal( r, ps );
 print "Ideal: " + str(f);
 print;
 
-from edu.jas.module import SolvableSyzygy;
-from edu.jas.module import ModuleList;
+from edu.jas.vector import ModuleList;
+from edu.jas.module import SolvableSyzygyAbstract;
 from edu.jas.module import ModSolvableGroebnerBase;
 from edu.jas.poly   import PolynomialList;
 from java.lang      import System;
 
 
 t = System.currentTimeMillis();
-s = SolvableSyzygy().rightZeroRelationsArbitrary( f.list );
+s = SolvableSyzygyAbstract().rightZeroRelationsArbitrary( f.list );
 t = System.currentTimeMillis() - t;
 print "executed in %s ms" % t; 
 sr = ModuleList(f.ring.ring,s);
@@ -81,7 +81,7 @@ print "#rightSyzygy[0] for f = ", s[0].size();
 print;
 
 t = System.currentTimeMillis();
-mz = SolvableSyzygy().isRightZeroRelation(sr.list,f.list);
+mz = SolvableSyzygyAbstract().isRightZeroRelation(sr.list,f.list);
 t = System.currentTimeMillis() - t;
 print "executed in %s ms" % t; 
 
@@ -92,7 +92,7 @@ else:
 
 
 ## t = System.currentTimeMillis();
-## s = SolvableSyzygy().leftZeroRelationsArbitrary( f.list );
+## s = SolvableSyzygyAbstract().leftZeroRelationsArbitrary( f.list );
 ## t = System.currentTimeMillis() - t;
 ## print "executed in %s ms" % t; 
 ## sl = ModuleList(f.ring.ring,s);
@@ -103,7 +103,7 @@ else:
 ## print;
 
 ## t = System.currentTimeMillis();
-## mz = SolvableSyzygy().isLeftZeroRelation(sl.list,f.list);
+## mz = SolvableSyzygyAbstract().isLeftZeroRelation(sl.list,f.list);
 ## t = System.currentTimeMillis() - t;
 ## print "executed in %s ms" % t; 
 
