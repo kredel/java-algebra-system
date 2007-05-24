@@ -573,7 +573,6 @@ public class GenPolynomialTokenizer  {
                     tok.pushBack();
                 }
             } else if ( tok.sval.equalsIgnoreCase("RatFunc") ) {
-                tt = tok.nextToken();
                 String[] rfv = nextVariableList();
                 //System.out.println("rfv = " + rfv.length + " " + rfv[0]);
                 int vr = rfv.length;
