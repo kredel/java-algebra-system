@@ -27,6 +27,8 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.TermOrder;
 import edu.jas.poly.ExpVector;
 
+import edu.jas.application.QuotientRing;
+
 
 /**
  * GenPolynomialRing generic polynomial factory implementing RingFactory;
@@ -164,6 +166,13 @@ public class GenPolynomialRing<C extends RingElem<C> >
                      + ") ("
                      + an.toString()
                      + ") ]";
+           }
+           if ( coFac instanceof QuotientRing ) {
+              QuotientRing rf = (QuotientRing)coFac;  
+              String[] v = rf.ring.vars;
+              res +=  "("
+                     + rf.ring.varsToString()
+                     + ") ";
            }
            //if ( coFac instanceof ModInteger ) {
            //   ModInteger mn = (ModInteger)coFac;  
