@@ -155,8 +155,11 @@ public class Quotient<C extends GcdRingElem<C> >
      */
     public String toString() {
         if ( PrettyPrint.isTrue() ) {
-           return "{ " + num.toString( ring.ring.getVars() ) 
-                  + " | " + den.toString( ring.ring.getVars() ) + "}";
+           String s = "{ " + num.toString( ring.ring.getVars() );
+           if ( !den.isONE() ) {
+              s += " | " + den.toString( ring.ring.getVars() );
+           }
+           return s + " }";
         } else {
            return "Quotient[ " + num.toString() 
                    + " | " + den.toString() + " ]";
