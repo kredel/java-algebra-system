@@ -364,7 +364,7 @@ public class QuotientRing<C extends GcdRingElem<C> >
         if ( i >= 0 ) {
            s = s.substring(i+1);
         }
-        i = s.indexOf("}");
+        i = s.lastIndexOf("}");
         if ( i >= 0 ) {
            s = s.substring(0,i);
         }
