@@ -173,12 +173,22 @@ public class Quotient<C extends GcdRingElem<C> >
      */
     public int compareTo(Quotient<C> b) {
         if ( b == null || b.isZERO() ) {
-            return this.signum();
+           return this.signum();
+        }
+        if ( this.isZERO() ) {
+           return - b.signum();
+        }
+        int s1 = num.signum();
+        int s2 = b.num.signum();
+        int t = (s1-s2)/2;
+        if ( t != 0 ) {
+           return t;
         }
         GenPolynomial<C> r = num.multiply( b.den );
         GenPolynomial<C> s = den.multiply( b.num );
-        GenPolynomial<C> x = r.subtract( s );
-        return x.signum();
+        //GenPolynomial<C> x = r.subtract( s );
+        //return x.signum();
+        return r.compareTo(s);
     }
 
 
@@ -199,7 +209,9 @@ public class Quotient<C extends GcdRingElem<C> >
         if ( a == null ) {
             return false;
         }
-        return ( 0 == compareTo( a ) );
+        //return ( 0 == compareTo( a ) );
+        return    num.equals( a.num ) 
+               && den.equals( a.den );
     }
 
 
@@ -233,10 +245,52 @@ public class Quotient<C extends GcdRingElem<C> >
         if ( S == null || S.isZERO() ) {
            return this;
         }
-        GenPolynomial<C> n = num.multiply( S.den );
-        n = n.sum( den.multiply( S.num ) ); 
-        GenPolynomial<C> d = den.multiply( S.den );
-        return new Quotient<C>( ring, n, d, false );
+        if ( this.isZERO() ) {
+           return S;
+        }
+        GenPolynomial<C> n;
+        if ( den.isONE() && S.den.isONE() ) {
+           n = num.multiply( S.num );
+           return new Quotient<C>( ring, n );
+        }
+        if ( den.isONE() ) {
+           n = num.multiply( S.den );
+           n = n.sum( S.num );
+           return new Quotient<C>( ring, n, S.den, true );
+        }
+        if ( S.den.isONE() ) {
+           n = S.num.multiply( den );
+           n = n.sum( num );
+           return new Quotient<C>( ring, n, den, true );
+        }
+        GenPolynomial<C> d;
+        GenPolynomial<C> sd;
+        GenPolynomial<C> g;
+        g = ring.gcd(den,S.den);
+        if ( g.isONE() ) {
+           d = den;
+           sd = S.den;
+        } else {
+           d = ring.divide(den,g);
+           sd = ring.divide(S.den,g);
+        }
+        n = num.multiply( sd );
+        n = n.sum( d.multiply( S.num ) ); 
+        if ( n.isZERO() ) {
+           return ring.getZERO();
+        }
+        GenPolynomial<C> f;
+        GenPolynomial<C> dd;
+        dd = den;
+        if ( !g.isONE() ) {
+           f = ring.gcd( n, g );
+           if ( !f.isONE() ) {
+              n = ring.divide(n,f);
+              dd = ring.divide( den, f);
+           }
+        }
+        d = dd.multiply( sd );
+        return new Quotient<C>( ring, n, d, true );
     }
 
 
@@ -320,9 +374,67 @@ public class Quotient<C extends GcdRingElem<C> >
         if ( this.isONE() ) {
            return S;
         }
-        GenPolynomial<C> n = num.multiply( S.num );
-        GenPolynomial<C> d = den.multiply( S.den );
-        return new Quotient<C>( ring, n, d, false );
+        GenPolynomial<C> n;
+        if ( den.isONE() && S.den.isONE() ) {
+           n = num.multiply( S.num );
+           return new Quotient<C>( ring, n );
+        }
+        GenPolynomial<C> g;
+        GenPolynomial<C> d;
+        if ( den.isONE() ) {
+           g = ring.gcd( num, S.den );
+           n = ring.divide(num,g);
+           d = ring.divide(S.den,g);
+           n = n.multiply( S.num );
+           return new Quotient<C>( ring, n, d, true );
+        }
+        if ( S.den.isONE() ) {
+           g = ring.gcd( S.num, den );
+           n = ring.divide(S.num,g);
+           d = ring.divide(den,g);
+           n = n.multiply( num );
+           return new Quotient<C>( ring, n, d, true );
+        }
+        GenPolynomial<C> f;
+        GenPolynomial<C> sd;
+        GenPolynomial<C> sn;
+        g = ring.gcd(num,S.den);
+        n = ring.divide(num,g);
+        sd = ring.divide(S.den,g);
+        f = ring.gcd(den,S.num);
+        d = ring.divide(den,f);
+        sn = ring.divide(S.num,f);
+        n = n.multiply( sn );
+        d = d.multiply( sd );
+        return new Quotient<C>( ring, n, d, true );
+    }
+
+
+    /** Quotient multiplication by GenPolynomial.
+     * @param b GenPolynomial<C>.
+     * @return this*b.
+     */
+    public Quotient<C> multiply(GenPolynomial<C> b) {
+        if ( b == null || b.isZERO() ) {
+           return ring.getZERO();
+        }
+        if ( num.isZERO() ) {
+           return this;
+        }
+        if ( b.isONE() ) {
+           return this;
+        }
+        GenPolynomial<C> gcd = ring.gcd(b,den);
+        GenPolynomial<C> d = den;
+        if ( !gcd.isONE() ) {
+           b = ring.divide(b,gcd);
+           d = ring.divide(d,gcd);
+        }
+        if ( this.isONE() ) {
+           return new Quotient<C>( ring, b, d, true );
+        }
+        GenPolynomial<C> n = num.multiply( b );
+        return new Quotient<C>( ring, n, d, true );
     }
 
  
@@ -340,6 +452,7 @@ public class Quotient<C extends GcdRingElem<C> >
         return new Quotient<C>( ring, n, d, true );
     }
 
+
     /**
      * Greatest common divisor.
      * <b>Note: </b>Not implemented, throws RuntimeException.
@@ -347,7 +460,14 @@ public class Quotient<C extends GcdRingElem<C> >
      * @return gcd(this,b).
      */
     public Quotient<C> gcd(Quotient<C> b) {
-        throw new RuntimeException("gcd not implemented " + this.getClass().getName());
+        if ( b == null || b.isZERO() ) {
+            return this;
+        }
+        if ( this.isZERO() ) {
+            return b;
+        }
+        return ring.getONE();
+        // throw new RuntimeException("gcd not implemented " + this.getClass().getName());
     }
 
 
@@ -358,6 +478,23 @@ public class Quotient<C extends GcdRingElem<C> >
      * @return [ gcd(this,b), c1, c2 ] with c1*this + c2*b = gcd(this,b).
      */
     public Quotient<C>[] egcd(Quotient<C> b) {
-        throw new RuntimeException("egcd not implemented " + this.getClass().getName());
+        Quotient[] ret = new Quotient[3];
+        ret[0] = null;
+        ret[1] = null;
+        ret[2] = null;
+        if ( b == null || b.isZERO() ) {
+            ret[0] = this;
+            return ret;
+        }
+        if ( this.isZERO() ) {
+            ret[0] = b;
+            return ret;
+        }
+        GenPolynomial<C> two = ring.ring.fromInteger(2);
+        ret[0] = ring.getONE();
+        ret[1] = (this.multiply(two)).inverse();
+        ret[2] = (b.multiply(two)).inverse();
+        return ret;
+        // throw new RuntimeException("egcd not implemented " + this.getClass().getName());
     }
 }
