@@ -28,6 +28,7 @@ import edu.jas.poly.GenPolynomialRing;
 import edu.jas.ufd.GreatestCommonDivisor;
 import edu.jas.ufd.GreatestCommonDivisorAbstract;
 import edu.jas.ufd.GreatestCommonDivisorSubres;
+import edu.jas.ufd.GreatestCommonDivisorSimple;
 import edu.jas.ufd.GreatestCommonDivisorModular;
 import edu.jas.ufd.GreatestCommonDivisorModEval;
 import edu.jas.ufd.GCDProxy;
@@ -97,11 +98,21 @@ public class QuotientRing<C extends GcdRingElem<C> >
         }
         System.out.println("t     = " + t);
         if ( t == 1 ) {
-           engine = new GreatestCommonDivisorModular/*<BigInteger>*/();
+           //engine = new GreatestCommonDivisorModular/*<BigInteger>*/();
+           //engine = new GreatestCommonDivisorSubres<BigInteger>();
+           engine = new GCDProxy( 
+                        new GreatestCommonDivisorModular/*<BigInteger>*/(),
+                        new GreatestCommonDivisorSubres<BigInteger>() );
         } else if ( t == 2 ) {
-           engine = new GreatestCommonDivisorModEval/*<ModInteger>*/();
+           //engine = new GreatestCommonDivisorModEval/*<ModInteger>*/();
+           engine = new GCDProxy( 
+                        new GreatestCommonDivisorModEval/*<ModInteger>*/(),
+                        new GreatestCommonDivisorSubres<BigInteger>() );
         } else {
-           engine = new GreatestCommonDivisorSubres<C>();
+           // engine = new GreatestCommonDivisorSubres<C>();
+           engine = new GCDProxy( 
+                        new GreatestCommonDivisorSimple<C>(),
+                        new GreatestCommonDivisorSubres<C>() );
         }
         System.out.println("engine = " + engine);
     }
@@ -109,6 +120,14 @@ public class QuotientRing<C extends GcdRingElem<C> >
         //BigInteger b1 = (RingFactory)ring.coFac;
         //BigInteger b2 = (BigInteger)ring.coFac;
         //BigInteger b3 = (BigInteger)ring.coFac.fromInteger(1);
+
+
+    /**
+     * Terminate proxy engine.
+     */
+    public void terminate() {
+        ((GCDProxy)engine).terminate();
+    }
 
 
     /** Divide.
