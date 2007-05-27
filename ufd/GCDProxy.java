@@ -41,7 +41,8 @@ import edu.jas.ufd.GreatestCommonDivisorModEval;
  */
 
 public class GCDProxy<C extends GcdRingElem<C>>
-             implements GreatestCommonDivisor<C> {
+             extends GreatestCommonDivisorAbstract<C> {
+    //       implements GreatestCommonDivisor<C> {
 
     private static final Logger logger = Logger.getLogger(GCDProxy.class);
 
@@ -66,7 +67,7 @@ public class GCDProxy<C extends GcdRingElem<C>>
       * Thread pool size.
       */
 
-    protected static final int anzahl = 2;
+    protected static final int anzahl = 3;
 
 
     /**
@@ -103,24 +104,29 @@ public class GCDProxy<C extends GcdRingElem<C>>
 
 
     /**
-     * GenPolynomial content.
-     * Entry driver method.
-     * @param P GenPolynomial.
-     * @return cont(P).
+     * Univariate GenPolynomial greatest comon divisor.
+     * Uses pseudoRemainder for remainder.
+     * @param P univariate GenPolynomial.
+     * @param S univariate GenPolynomial.
+     * @return gcd(P,S).
      */
-    public GenPolynomial<C> content( GenPolynomial<C> P ) {
-           throw new RuntimeException("content not implemented");
+    public GenPolynomial<C> baseGcd( GenPolynomial<C> P,
+                                     GenPolynomial<C> S ) {
+           throw new RuntimeException("baseGcd not implemented");
     }
 
 
     /**
-     * GenPolynomial primitive part.
-     * Entry driver method.
-     * @param P GenPolynomial.
-     * @return pp(P).
+     * Univariate GenPolynomial recursive greatest comon divisor.
+     * Uses pseudoRemainder for remainder.
+     * @param P univariate recursive GenPolynomial.
+     * @param S univariate recursive GenPolynomial.
+     * @return gcd(P,S).
      */
-    public GenPolynomial<C> primitivePart( GenPolynomial<C> P ) {
-           throw new RuntimeException("content not implemented");
+    public GenPolynomial<GenPolynomial<C>> 
+           recursiveGcd( GenPolynomial<GenPolynomial<C>> P,
+                         GenPolynomial<GenPolynomial<C>> S ) {
+           throw new RuntimeException("recursiveGcd not implemented");
     }
 
 
@@ -213,52 +219,5 @@ public class GCDProxy<C extends GcdRingElem<C>>
          }
          return g;
      }
-
-
-    /**
-     * GenPolynomial least comon multiple.
-     * Main entry driver method.
-     * @param P GenPolynomial.
-     * @param S GenPolynomial.
-     * @return lcm(P,S).
-     */
-    public GenPolynomial<C> lcm( GenPolynomial<C> P,GenPolynomial<C> S ) {
-           throw new RuntimeException("content not implemented");
-    }
-
-
-    /**
-     * GenPolynomial resultant.
-     * Main entry driver method.
-     * @param P GenPolynomial.
-     * @param S GenPolynomial.
-     * @return res(P,S).
-     */
-    public GenPolynomial<C> resultant( GenPolynomial<C> P, GenPolynomial<C> S ) {
-           throw new RuntimeException("content not implemented");
-    }
-
-
-    /**
-     * GenPolynomial greatest squarefree divisor.
-     * Entry driver method.
-     * @param P GenPolynomial.
-     * @return squarefree(P).
-     */
-    public GenPolynomial<C> squarefreePart( GenPolynomial<C> P ) {
-           throw new RuntimeException("content not implemented");
-    }
-
-
-    /**
-     * GenPolynomial squarefree factorization.
-     * Entry driver method.
-     * @param P GenPolynomial.
-     * @return squarefreeFactors(P).
-     */
-    public Map<Integer,GenPolynomial<C>> squarefreeFactors( GenPolynomial<C> P ) {
-           throw new RuntimeException("content not implemented");
-    }
-
 
 }
