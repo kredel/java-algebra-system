@@ -101,18 +101,18 @@ public class QuotientRing<C extends GcdRingElem<C> >
            //engine = new GreatestCommonDivisorModular/*<BigInteger>*/();
            //engine = new GreatestCommonDivisorSubres<BigInteger>();
            engine = new GCDProxy( 
-                        new GreatestCommonDivisorModular/*<BigInteger>*/(),
-                        new GreatestCommonDivisorSubres<BigInteger>() );
+                        new GreatestCommonDivisorSubres<BigInteger>(), 
+                        new GreatestCommonDivisorModular/*<BigInteger>*/() );
         } else if ( t == 2 ) {
            //engine = new GreatestCommonDivisorModEval/*<ModInteger>*/();
            engine = new GCDProxy( 
-                        new GreatestCommonDivisorModEval/*<ModInteger>*/(),
-                        new GreatestCommonDivisorSubres<BigInteger>() );
+                        new GreatestCommonDivisorSubres<BigInteger>(), 
+                        new GreatestCommonDivisorModEval/*<ModInteger>*/() );
         } else {
            // engine = new GreatestCommonDivisorSubres<C>();
            engine = new GCDProxy( 
-                        new GreatestCommonDivisorSimple<C>(),
-                        new GreatestCommonDivisorSubres<C>() );
+                        new GreatestCommonDivisorSubres<C>(), 
+                        new GreatestCommonDivisorSimple<C>() );
         }
         System.out.println("engine = " + engine);
     }
