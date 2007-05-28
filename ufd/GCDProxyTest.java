@@ -81,8 +81,8 @@ public class GCDProxyTest extends TestCase {
    GenPolynomial<GenPolynomial<BigInteger>> er;
 
    int rl = 5; 
-   int kl = 4;
-   int ll = 5;
+   int kl = 5;
+   int ll = 7;
    int el = 3;
    float q = 0.3f;
 
@@ -109,7 +109,7 @@ public class GCDProxyTest extends TestCase {
  * Test get BigInteger implementation.
  * 
  */
- public void xtestBigInteger() {
+ public void testBigInteger() {
      long t;
      BigInteger bi = new BigInteger();
 
@@ -117,19 +117,19 @@ public class GCDProxyTest extends TestCase {
      GreatestCommonDivisorAbstract<BigInteger> ufd; 
 
      ufd_par = GCDFactory.<BigInteger>getProxy(bi);
-     System.out.println("ufd_par = " + ufd_par);
+     //System.out.println("ufd_par = " + ufd_par);
      assertTrue("ufd_par != null " + ufd_par, ufd_par != null);
 
      ufd = new GreatestCommonDivisorSubres<BigInteger>(); 
 
-     System.out.println("ufd = " + ufd);
+     //System.out.println("ufd = " + ufd);
      assertTrue("ufd != null " + ufd, ufd != null);
 
      dfac = new GenPolynomialRing<BigInteger>(bi,4,to);
 
-     for (int i = 0; i < 5; i++) {
-         a = dfac.random(kl+i*20,ll+i,10+el,q);
-         b = dfac.random(kl+i*20,ll+i,10+el,q);
+     for (int i = 0; i < 1; i++) { // 10-50
+         a = dfac.random(kl+i*20,ll+i,2+el,q);
+         b = dfac.random(kl+i*20,ll+i,2+el,q);
          c = dfac.random(kl+5,ll,el,q);
          //c = dfac.getONE();
          //c = c.multiply( dfac.univariate(0) );
@@ -150,15 +150,15 @@ public class GCDProxyTest extends TestCase {
          b = b.multiply(c);
          //System.out.println("a = " + a);
          //System.out.println("b = " + b);
-
-         System.out.println("\ndegrees: a = " + a.degree() 
-                                   + ", b = " + b.degree()  
-                                   + ", c = " + c.degree());  
-
+         /*
+         System.out.println("\ni degrees: a = " + a.degree() 
+                                     + ", b = " + b.degree()  
+                                     + ", c = " + c.degree());  
+         */
          t = System.currentTimeMillis();
          d = ufd_par.gcd(a,b);
          t = System.currentTimeMillis() - t;
-         System.out.println("proxy time = " + t);
+         //System.out.println("i proxy time = " + t);
          //System.out.println("c = " + c);
          //System.out.println("d = " + d);
          //System.out.println("e = " + e);
@@ -167,7 +167,6 @@ public class GCDProxyTest extends TestCase {
          //System.out.println("e = " + e);
          assertTrue("c | gcd(ac,bc) " + e, e.isZERO() );
      }
-
      ((GCDProxy<BigInteger>)ufd_par).terminate();
  }
 
@@ -187,20 +186,20 @@ public class GCDProxyTest extends TestCase {
      GreatestCommonDivisorAbstract<ModInteger> ufd; 
 
      ufd_par = GCDFactory.<ModInteger>getProxy(mi);
-     System.out.println("ufd_par = " + ufd_par);
+     //System.out.println("ufd_par = " + ufd_par);
      assertTrue("ufd_par != null " + ufd_par, ufd_par != null);
 
      ufd = new GreatestCommonDivisorSubres<ModInteger>(); 
 
-     System.out.println("ufd = " + ufd);
+     //System.out.println("ufd = " + ufd);
      assertTrue("ufd != null " + ufd, ufd != null);
 
      GenPolynomialRing<ModInteger> dfac;
      dfac = new GenPolynomialRing<ModInteger>(mi,4,to);
 
      for (int i = 0; i < 1; i++) {
-         a = dfac.random(kl+i*2,ll+i,2*el,q);
-         b = dfac.random(kl+i*2,ll+i,2*el,q);
+         a = dfac.random(kl+i*2,ll+i,2+el,q);
+         b = dfac.random(kl+i*2,ll+i,2+el,q);
          c = dfac.random(kl,ll,el,q);
          //a = dfac.random(kl,ll+i,el,q);
          //b = dfac.random(kl,ll+i,el,q);
@@ -224,15 +223,15 @@ public class GCDProxyTest extends TestCase {
          b = b.multiply(c);
          //System.out.println("a = " + a);
          //System.out.println("b = " + b);
-
-         System.out.println("\ndegrees: a = " + a.degree() 
-                                   + ", b = " + b.degree()  
-                                   + ", c = " + c.degree());  
-
+         /*
+         System.out.println("\nm degrees: a = " + a.degree() 
+                                     + ", b = " + b.degree()  
+                                     + ", c = " + c.degree());  
+         */
          t = System.currentTimeMillis();
          d = ufd_par.gcd(a,b);
          t = System.currentTimeMillis() - t;
-         System.out.println("proxy time = " + t);
+         //System.out.println("m proxy time = " + t);
          //System.out.println("c = " + c);
          //System.out.println("d = " + d);
          //System.out.println("e = " + e);
@@ -241,7 +240,6 @@ public class GCDProxyTest extends TestCase {
          //System.out.println("e = " + e);
          assertTrue("c | gcd(ac,bc) " + e, e.isZERO() );
      }
-
      ((GCDProxy<ModInteger>)ufd_par).terminate();
  }
 
@@ -250,7 +248,7 @@ public class GCDProxyTest extends TestCase {
  * Test get BigRational implementation.
  * 
  */
- public void xtestBigRational() {
+ public void testBigRational() {
      BigRational b = new BigRational();
      GreatestCommonDivisor<BigRational> ufd; 
 
@@ -263,6 +261,7 @@ public class GCDProxyTest extends TestCase {
 /**
  * Test get BigComplex implementation.
  * 
+ */
  public void testBigComplex() {
      BigComplex b = new BigComplex();
      GreatestCommonDivisor<BigComplex> ufd; 
@@ -271,7 +270,6 @@ public class GCDProxyTest extends TestCase {
      //System.out.println("ufd = " + ufd);
      assertTrue("ufd != Simple " + ufd, ufd instanceof GreatestCommonDivisorSimple);
  }
- */
 
 
 /**
@@ -283,7 +281,7 @@ public class GCDProxyTest extends TestCase {
      GenPolynomialRing<BigRational> fac;
      fac = new GenPolynomialRing<BigRational>( b, 1 );
      GenPolynomial<BigRational> mo = fac.random(kl,ll,el,q);
-     while ( mo.isConstant() ) {
+     while ( mo.isConstant() || mo.isZERO() ) {
           mo = fac.random(kl,ll,el,q);
      }
 
@@ -296,14 +294,12 @@ public class GCDProxyTest extends TestCase {
      //System.out.println("ufd = " + ufd);
      assertTrue("ufd = Subres " + ufd, ufd instanceof GreatestCommonDivisorSubres);
 
-
      mo = fac.univariate(0).subtract( fac.getONE() );
      afac = new AlgebraicNumberRing<BigRational>( mo, true );
 
      ufd = GCDFactory.<AlgebraicNumber<BigRational>>getImplementation(afac);
      //System.out.println("ufd = " + ufd);
      assertTrue("ufd = Simple " + ufd, ufd instanceof GreatestCommonDivisorSimple);
-
  }
 
 
@@ -311,18 +307,17 @@ public class GCDProxyTest extends TestCase {
  * Test get AlgebraicNumber<ModInteger> implementation.
  * 
  */
- public void xtestAlgebraicNumberModInteger() {
+ public void testAlgebraicNumberModInteger() {
      ModInteger b = new ModInteger(19,0,true);
      GenPolynomialRing<ModInteger> fac;
      fac = new GenPolynomialRing<ModInteger>( b, 1 );
      GenPolynomial<ModInteger> mo = fac.random(kl,ll,el,q);
-     while ( mo.isConstant() ) {
+     while ( mo.isConstant() || mo.isZERO() ) {
           mo = fac.random(kl,ll,el,q);
      }
 
      AlgebraicNumberRing<ModInteger> afac;
      afac = new AlgebraicNumberRing<ModInteger>( mo );
-
 
      AlgebraicNumber<ModInteger> a = afac.getONE();
      GreatestCommonDivisor<AlgebraicNumber<ModInteger>> ufd; 
@@ -331,6 +326,5 @@ public class GCDProxyTest extends TestCase {
      //System.out.println("ufd = " + ufd);
      assertTrue("ufd = Subres " + ufd, ufd instanceof GreatestCommonDivisorSubres);
  }
-
 
 }

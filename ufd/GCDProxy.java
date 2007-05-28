@@ -45,6 +45,7 @@ public class GCDProxy<C extends GcdRingElem<C>>
     //       implements GreatestCommonDivisor<C> {
 
     private static final Logger logger = Logger.getLogger(GCDProxy.class);
+    private boolean debug = logger.isDebugEnabled();
 
 
     /**
@@ -67,7 +68,7 @@ public class GCDProxy<C extends GcdRingElem<C>>
       * Thread pool size.
       */
 
-    protected static final int anzahl = 3;
+    protected static final int anzahl = 2;
 
 
     /**
@@ -101,6 +102,16 @@ public class GCDProxy<C extends GcdRingElem<C>>
             logger.info("there are " + r.size() + " unfinished tasks ");
          }
      }
+
+
+    /** Get the String representation as RingFactory.
+     * @see java.lang.Object#toString()
+     */
+    public String toString() {
+        return "GCDProxy[ " 
+            + e1.getClass().getName() + ", "
+            + e2.getClass().getName() + " ]";
+    }
 
 
     /**
@@ -143,23 +154,29 @@ public class GCDProxy<C extends GcdRingElem<C>>
          Callable<GenPolynomial<C>> c0;
          Callable<GenPolynomial<C>> c1;
          List<Callable<GenPolynomial<C>>> cs = new ArrayList<Callable<GenPolynomial<C>>>(2);
-
+         
          cs.add( new Callable<GenPolynomial<C>>() {
                      public GenPolynomial<C> call() {
                          GenPolynomial<C> g = e1.gcd(P,S);
-                         System.out.println("GCDProxy done e1 " + e1);
+                         if ( debug ) {
+                            logger.info("GCDProxy done e1 " + e1);
+                         }
                          return g;
                      }
                  }
                  );
+
          cs.add( new Callable<GenPolynomial<C>>() {
                      public GenPolynomial<C> call() {
                          GenPolynomial<C> g = e2.gcd(P,S);
-                         System.out.println("GCDProxy done e2 " + e2);
+                         if ( debug ) {
+                            logger.info("GCDProxy done e2 " + e2);
+                         }
                          return g;
                      }
                  }
                  );
+        
          try {
              g = pool.invokeAny( cs );
          } catch (InterruptedException ignored) { 
@@ -199,12 +216,16 @@ public class GCDProxy<C extends GcdRingElem<C>>
                  if ( g == null && f0.isDone() /*&& ! f0.isCancelled()*/ ) {
                     g = f0.get(); 
                     f1.cancel(true);
-                    System.out.println("GCDProxy done e1 " + e1);
+                    if ( debug ) {
+                       logger.info("GCDProxy done e1 " + e1);
+                    }
                  }
                  if ( g == null && f1.isDone() /*&& ! f1.isCancelled()*/ ) {
                     g = f1.get(); 
                     f0.cancel(true);
-                    System.out.println("GCDProxy done e2 " + e2);
+                    if ( debug ) {
+                       logger.info("GCDProxy done e2 " + e2);
+                    }
                  }
                  if ( g == null ) {
                     Thread.currentThread().sleep(dauer);
@@ -215,7 +236,7 @@ public class GCDProxy<C extends GcdRingElem<C>>
              }
          }
          if ( !f0.isDone() || !f1.isDone() ) {
-            System.out.println("GCDProxy not done, f0 = " + f0 + ", f1 = " + f1);
+            logger.info("GCDProxy not done, f0 = " + f0 + ", f1 = " + f1);
          }
          return g;
      }
