@@ -77,12 +77,14 @@ public class GenVector<C extends RingElem<C> >
         return new GenVector<C>( modul, (List<C>)av.clone() );
     }
 
+
     /**
      * test if this is equal to a zero vector.
      */
     public boolean isZERO() {
         return ( 0 == this.compareTo( modul.getZERO() ) );
     }
+
 
     /**
      * equals method.
@@ -103,11 +105,19 @@ public class GenVector<C extends RingElem<C> >
     }
 
 
-/**
- * compareTo.
- * @param b other
- * @return 1 if (this &lt; b), 0 if (this == b) or -1 if (this &gt; b).
- */
+    /** Hash code for this GenVector.
+     * @see java.lang.Object#hashCode()
+     */
+    public int hashCode() {
+        return 37 * val.hashCode() + modul.hashCode();
+    }
+
+
+    /**
+     * compareTo.
+     * @param b other
+     * @return 1 if (this &lt; b), 0 if (this == b) or -1 if (this &gt; b).
+     */
     public int compareTo(GenVector<C> b) {
         if ( ! modul.equals(b.modul) ) {
             return -1;
