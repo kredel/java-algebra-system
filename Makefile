@@ -9,7 +9,8 @@
 # todo 
 
 # set this to your jdk binaries path
-JDK=/usr/lib/jvm/java-1.5.0/bin
+JDK=/usr/java/jdk1.6.0/bin
+#JDK=/usr/lib/jvm/java-1.5.0/bin
 #JDK=/usr/java/jdk1.5.0_01/bin
 #JDK=/usr/java/j2sdk1.4.1_01/bin
 #JDK=/usr/java/j2sdk1.4.0_01/bin
@@ -29,9 +30,11 @@ LINTPATH=$(LIBPATH)/lint4j.jar
 # --- syncing ----------
 DRY=--dry-run
 DELETE=
-RSYNC=rsync -e ssh -avuz $(DRY) $(DELETE) --exclude=*~ --exclude=*/.jxta/ --exclude=*.log* --exclude=*.out* --exclude=*.txt* --exclude=.svn 
+RSYNC=rsync -e ssh -avuz $(DRY) $(DELETE) --exclude=*~ --exclude=*.log* --exclude=*.out* --exclude=*.txt* --exclude=.svn 
+####--exclude=./test
 ####--exclude=*.ps --exclude=*.pdf --exclude=spin*
-PART=jas.j15
+####--exclude=*/.jxta/
+PART=jas.j16
 
 all:
 
@@ -45,7 +48,7 @@ krum:
 	$(RSYNC) ./                krum:java/$(PART)
 
 pub:
-	$(RSYNC) ./                krum:htdocs/$(PART)
+	$(RSYNC) --exclude=*ufd* ./ krum:htdocs/$(PART)
 
 compute:
 	$(RSYNC) ./                compute:java/$(PART)
@@ -69,7 +72,7 @@ MYCLASSPATH = .:$(DEFS):$(JUNITPATH):$(LOG4JPATH):$(JOMPPATH):$(TNJPATH)
 
 JAVAC=$(JDK)/javac -classpath $(MYCLASSPATH) -d . -Xlint:unchecked
 #-Xlint:unchecked
-JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -Xms300M -Xmx600M -XX:+UseParallelGC -XX:ParallelGCThreads=2 -verbose:gc 
+JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -server -Xms300M -Xmx600M -XX:+AggressiveHeap -XX:+UseParallelGC -XX:ParallelGCThreads=2 -verbose:gc 
 #-Xbatch
 #old#JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -Xms300M -Xmx600M -XX:+AggressiveHeap -XX:+UseParallelGC -verbose:gc 
 #JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -verbose:gc -Xrunhprof:cpu=times,format=a
@@ -93,7 +96,7 @@ GETC      = getc.pl
 .PHONY    : clean doc
 
 all:
-	$(JAVAC) *.java
+	$(JAVAC) */*.java
 
 %.class: %.java
 	$(JAVAC) $<
