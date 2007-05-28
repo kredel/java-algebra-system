@@ -224,7 +224,8 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
      * @param p product polynomial.
      */
     @SuppressWarnings("unchecked")
-    public void update(ExpVector e, ExpVector f, GenSolvablePolynomial<C> p) {
+    public synchronized void 
+           update(ExpVector e, ExpVector f, GenSolvablePolynomial<C> p) {
         if ( debug ) {
             logger.info("new relation = " + e + " .*. " + f + " = " + p);
         }
