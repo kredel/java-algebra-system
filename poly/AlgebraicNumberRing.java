@@ -194,6 +194,14 @@ public class AlgebraicNumberRing<C extends GcdRingElem<C> >
     }
 
 
+    /** Hash code for this AlgebraicNumber.
+     * @see java.lang.Object#hashCode()
+     */
+    public int hashCode() {
+        return 37 * modul.hashCode() + ring.hashCode();
+    }
+
+
     /** AlgebraicNumber random.
      * @param n such that 0 &le; v &le; (2<sup>n</sup>-1).
      * @return a random integer mod modul.

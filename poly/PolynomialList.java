@@ -137,10 +137,11 @@ public class PolynomialList<C extends RingElem<C> > implements Serializable {
      */
     public String toString() {
         StringBuffer erg = new StringBuffer();
+        String[] vars = null;
         if ( ring != null ) {
            erg.append( ring.toString() );
+           vars = ring.getVars();
         }
-        String[] vars = ring.getVars();
         boolean first = true;
         erg.append("\n(\n");
         String sa = null;

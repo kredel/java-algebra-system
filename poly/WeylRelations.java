@@ -69,7 +69,8 @@ public class WeylRelations<C extends RingElem<C>> {
                logger.info("zero = " + zero);
                logger.info("b    = " + b);
                logger.info("rel  = " + rel);
-               System.exit(1);
+               //System.exit(1);
+               throw new RuntimeException("rel.isZERO()");
             }
             //System.out.println("rel = " + rel.toString(ring.vars));
             table.update(e,f,rel);

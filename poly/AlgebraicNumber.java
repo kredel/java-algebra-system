@@ -166,6 +166,14 @@ public class AlgebraicNumber<C extends GcdRingElem<C> >
     }
 
 
+    /** Hash code for this AlgebraicNumber.
+     * @see java.lang.Object#hashCode()
+     */
+    public int hashCode() {
+        return 37 * val.hashCode() + ring.hashCode();
+    }
+
+
     /** AlgebraicNumber absolute value.
      * @return the absolute value of this.
      * @see edu.jas.structure.RingElem#abs()
