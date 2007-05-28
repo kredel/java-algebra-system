@@ -15,7 +15,7 @@ import java.io.InputStreamReader;
 import java.io.IOException;
 
 import org.apache.log4j.Logger;
-//import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.BasicConfigurator;
 
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
@@ -296,6 +296,7 @@ public class GenPolynomialTokenizer  {
             case '_': 
                 StringBuffer cf = new StringBuffer();
                 tt = tok.nextToken();
+                //System.out.println("tt = " + tt );
                 while ( tt != '_' ) {
                     //cf.append( " " );
                     if ( tok.sval != null ) {
@@ -307,11 +308,13 @@ public class GenPolynomialTokenizer  {
                 }
                 //System.out.println("coeff = " + cf.toString() );
                 r = (RingElem)fac.parse( cf.toString() );
+                //System.out.println("r = " + r );
                 if (debug) logger.debug("coeff " + r);
                 b = b.multiply(r,leer); 
                 tt = tok.nextToken();
                 if (debug) logger.debug("tt,digit = " + tok);
                 //no break;
+                break;
 
             case '{': 
                 StringBuffer rf = new StringBuffer();
@@ -332,6 +335,7 @@ public class GenPolynomialTokenizer  {
                 tt = tok.nextToken();
                 if (debug) logger.debug("tt,digit = " + tok);
                 //no break;
+                break;
 
             case StreamTokenizer.TT_WORD: 
                 //System.out.println("TT_WORD: " + tok.sval);
@@ -602,7 +606,7 @@ public class GenPolynomialTokenizer  {
                     //System.out.println("anv = " + anv.length + " " + anv[0]);
                     int vs = anv.length;
                     if ( vs != 1 ) {
-                        logger.error("AlgebraicNumber only for univariate polynomials");
+                       logger.error("AlgebraicNumber only for univariate polynomials");
                     }
                     String[] ovars = vars;
                     vars = anv;
@@ -1014,7 +1018,7 @@ public class GenPolynomialTokenizer  {
         for (int i = 0; i < vars.length ;i++) {
             dd+= " "+vars[i]; 
         }
-        logger.debug(dd); 
+        logger.info(dd); 
         if ( vars != null ) {
             nvars = vars.length;
         }
