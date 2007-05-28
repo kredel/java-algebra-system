@@ -1,6 +1,10 @@
 
 - make logger variables also final
 
+- make final variables public
+
+- make hashCode to reuse computed value --> not immutable
+
 - split ModInteger to ModularFactory
 
 - rework junit tests to stop failing in case of zero polynomials
