@@ -120,6 +120,10 @@ public class IdealTest extends TestCase {
      d = fac.random(kl, ll, el, q );
      e = d; //fac.random(kl, ll, el, q );
 
+     if ( a.isZERO() || b.isZERO() || c.isZERO() || d.isZERO() ) {
+        return;
+     }
+
      assertTrue("not isZERO( a )", !a.isZERO() );
      L.add(a);
 
