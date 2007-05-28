@@ -36,7 +36,7 @@ public class QuotientIntTest extends TestCase {
  * main.
  */
    public static void main (String[] args) {
-       BasicConfigurator.configure();
+       //BasicConfigurator.configure();
        junit.textui.TestRunner.run( suite() );
    }
 
@@ -84,6 +84,7 @@ public class QuotientIntTest extends TestCase {
 
    protected void tearDown() {
        a = b = c = d = e = null;
+       efac.terminate();
        efac = null;
    }
 
@@ -232,7 +233,7 @@ public class QuotientIntTest extends TestCase {
      String p = a.toString();
      //System.out.println("p = " + p);
      b = efac.parse(p);
-     System.out.println("b = " + b);
+     //System.out.println("b = " + b);
 
      //c = a.subtract(b);
      //System.out.println("c = " + c);

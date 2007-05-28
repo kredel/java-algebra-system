@@ -35,7 +35,7 @@ public class QuotIntPolynomialTest extends TestCase {
  * main.
  */
    public static void main (String[] args) {
-       BasicConfigurator.configure();
+       //BasicConfigurator.configure();
        junit.textui.TestRunner.run( suite() );
    }
 
@@ -86,6 +86,7 @@ public class QuotIntPolynomialTest extends TestCase {
 
    protected void tearDown() {
        a = b = c = d = e = null;
+       eFac.terminate();
        eFac = null;
        mfac = null;
        qfac = null;
@@ -122,14 +123,17 @@ public class QuotIntPolynomialTest extends TestCase {
          //a = qfac.random(ll+i);
          a = qfac.random(kl, ll+i, el, q );
          //System.out.println("a["+i+"] = " + a);
-         assertTrue("length( a"+i+" ) <> 0", a.length() >= 0);
-         //assertTrue(" not isZERO( a"+i+" )", !a.isZERO() );
-         assertTrue(" not isONE( a"+i+" )", !a.isONE() );
-         if ( !a.isZERO() ) {
-            b = a.monic();
-            //System.out.println("b["+i+"] = " + b);
-            assertTrue("ldbcf( b"+i+" ) == 1", b.leadingBaseCoefficient().isONE());
+         if ( a.isZERO() || a.isONE() ) {
+            continue;
          }
+         assertTrue("length( a"+i+" ) <> 0", a.length() >= 0);
+         assertTrue(" not isZERO( a"+i+" )", !a.isZERO() );
+         assertTrue(" not isONE( a"+i+" )", !a.isONE() );
+
+         b = a.monic();
+         Quotient<BigInteger> ldbcf = b.leadingBaseCoefficient();
+         //System.out.println("b["+i+"] = " + b);
+         assertTrue("ldbcf( b"+i+" ) == 1", ldbcf.isONE());
      }
  }
 
@@ -144,8 +148,8 @@ public class QuotIntPolynomialTest extends TestCase {
      b = qfac.random(kl,ll,el,q);
      //System.out.println("a = " + a);
      //System.out.println("b = " + b);
-     System.out.println("a = " + a.toString( qfac.getVars() ));
-     System.out.println("b = " + b.toString( qfac.getVars() ));
+     //System.out.println("a = " + a.toString( qfac.getVars() ));
+     //System.out.println("b = " + b.toString( qfac.getVars() ));
 
      c = a.sum(b);
      d = c.subtract(b);
@@ -153,7 +157,7 @@ public class QuotIntPolynomialTest extends TestCase {
 
      c = a.sum(b);
      d = b.sum(a);
-     System.out.println("c = " + c.toString( qfac.getVars() ));
+     //System.out.println("c = " + c.toString( qfac.getVars() ));
      //System.out.println("c = " + c);
      //System.out.println("d = " + d);
 
@@ -172,7 +176,6 @@ public class QuotIntPolynomialTest extends TestCase {
      c = qfac.getZERO().sum( a );
      d = qfac.getZERO().subtract( a.negate() );
      assertEquals("0+a = 0+(-a)",c,d);
-
  }
 
 

@@ -81,7 +81,7 @@ public class QuotientRing<C extends GcdRingElem<C> >
            engine = null;
            return;
         }
-        System.out.println("coFac = " + ring.coFac.getClass().getName());
+        logger.info("coFac = " + ring.coFac.getClass().getName());
         int t = 0;
         BigInteger b = new BigInteger(1);
         C bc = ring.coFac.fromInteger(1);
@@ -96,7 +96,7 @@ public class QuotientRing<C extends GcdRingElem<C> >
               }
            }
         }
-        System.out.println("t     = " + t);
+        //System.out.println("t     = " + t);
         if ( t == 1 ) {
            //engine = new GreatestCommonDivisorModular/*<BigInteger>*/();
            //engine = new GreatestCommonDivisorSubres<BigInteger>();
@@ -109,12 +109,13 @@ public class QuotientRing<C extends GcdRingElem<C> >
                         new GreatestCommonDivisorSubres<BigInteger>(), 
                         new GreatestCommonDivisorModEval/*<ModInteger>*/() );
         } else {
-           // engine = new GreatestCommonDivisorSubres<C>();
+           //engine = new GreatestCommonDivisorSimple<C>();
+           //engine = new GreatestCommonDivisorSubres<C>();
            engine = new GCDProxy( 
                         new GreatestCommonDivisorSubres<C>(), 
                         new GreatestCommonDivisorSimple<C>() );
         }
-        System.out.println("engine = " + engine);
+        logger.info("engine = " + engine);
     }
         //RingFactory<BigInteger> b0  = (RingFactory<BigInteger>)ring.coFac;
         //BigInteger b1 = (RingFactory)ring.coFac;
@@ -126,7 +127,12 @@ public class QuotientRing<C extends GcdRingElem<C> >
      * Terminate proxy engine.
      */
     public void terminate() {
-        ((GCDProxy)engine).terminate();
+        if ( engine == null ) {
+           return;
+        }
+        if ( engine instanceof GCDProxy ) {
+           ((GCDProxy)engine).terminate();
+        }
     }
 
 

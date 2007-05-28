@@ -250,7 +250,7 @@ public class Quotient<C extends GcdRingElem<C> >
         }
         GenPolynomial<C> n;
         if ( den.isONE() && S.den.isONE() ) {
-           n = num.multiply( S.num );
+           n = num.sum( S.num );
            return new Quotient<C>( ring, n );
         }
         if ( den.isONE() ) {
@@ -446,7 +446,11 @@ public class Quotient<C extends GcdRingElem<C> >
            return this;
         }
         C lbc = num.leadingBaseCoefficient();
+        if ( ! lbc.isUnit() ) {
+           return this;
+        }
         lbc = lbc.inverse();
+        lbc = lbc.abs();
         GenPolynomial<C> n = num.multiply( lbc );
         GenPolynomial<C> d = den.multiply( lbc );
         return new Quotient<C>( ring, n, d, true );
