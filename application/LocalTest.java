@@ -133,6 +133,9 @@ public class LocalTest extends TestCase {
          a = fac.random(kl*(i+1), ll+i, el, q );
          //System.out.println("a = " + a);
          assertTrue("length( a"+i+" ) <> 0", a.num.length() >= 0);
+         if ( a.isZERO() || a.isONE() ) {
+             continue;
+         }
          assertTrue(" not isZERO( a"+i+" )", !a.isZERO() );
          assertTrue(" not isONE( a"+i+" )", !a.isONE() );
      }
