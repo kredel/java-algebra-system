@@ -48,7 +48,7 @@ krum:
 	$(RSYNC) ./                krum:java/$(PART)
 
 pub:
-	$(RSYNC) --exclude=*ufd* ./ krum:htdocs/$(PART)
+	$(RSYNC) --exclude=*ufd* --exclude=*xml ./ krum:htdocs/$(PART)
 
 compute:
 	$(RSYNC) ./                compute:java/$(PART)
@@ -165,29 +165,45 @@ edu.jas.application.%: edu/jas/application/%.class
 
 
 
+#FILES=$(wildcard src/edu/jas/structure/*.java src/edu/jas/arith/*.java src/edu/jas/poly/*.java src/edu/jas/ring/*.java src/edu/jas/ufd/*.java src/edu/jas/application/*.java src/edu/jas/vector/*.java src/edu/jas/module/*.java src/edu/jas/util/*.java)
+FILES=$(wildcard src/edu/jas/structure/*.java src/edu/jas/arith/*.java src/edu/jas/poly/*.java src/edu/jas/ring/*.java src/edu/jas/application/*.java src/edu/jas/vector/*.java src/edu/jas/module/*.java src/edu/jas/util/*.java)
 
-FILES=$(wildcard *.java structure/*.java arith/*.java poly/*.java ring/*.java ufd/*.java application/*.java vector/*.java module/*.java util/*.java)
 LIBS=$(JUNITPATH) $(LOG4JPATH) $(JOMPPATH) $(TNJPATH)
-#CLASSES=$(wildcard *.class structure/*.java arith/*.class poly/*.class ring/*.class ufd/*.java application/*.class vector/*.class module/*.class util/*.class)
-CLASSES=edu/jas
-PYS=$(wildcard *.py examples/*.py)
-DOCU=$(wildcard jas-log.html index.html problems.html design.html README COPYING COPYING.lgpl sample.jythonrc overview.html */package.html)
+
+#CLASSES=$(wildcard edu/jas/structure/*.java edu/jas/arith/*.class edu/jas/poly/*.class edu/jas/ring/*.class edu/jas/ufd/*.class edu/jas/application/*.class edu/jas/vector/*.class edu/jas/module/*.class edu/jas/util/*.class)
+#CLASSES=edu/jas
+
+#CLASSES=edu/jas/structure/ edu/jas/arith/ edu/jas/poly/ edu/jas/ring/ edu/jas/ufd/ edu/jas/application/ edu/jas/vector/ edu/jas/module/ edu/jas/util/
+
+CLASSES=edu/jas/structure/ edu/jas/arith/ edu/jas/poly/ edu/jas/ring/ edu/jas/application/ edu/jas/vector/ edu/jas/module/ edu/jas/util/
+
+PYS=$(wildcard *.py)
+EXAMPY=$(wildcard examples/*.py)
+
+DOCU=$(wildcard jas-log.html index.html problems.html design.html COPYING* sample.jythonrc overview.html)
+# */package.html 
 
 doc: $(FILES)
 	$(DOC) $(DOCOPTS) -d doc $(FILES) 
 
-jas.jar: $(FILES) $(DOCU) Makefile build.xml log4j.properties $(PYS)
-	$(JDK)/jar -cvf jas.jar $(FILES) edu/ $(DOCU) Makefile build.xml log4j.properties $(PYS)
-	cp jas.jar /tmp/jas-`date +%Y%j`.jar
+ALLJAR=$(FILES) $(DOCU) Makefile build.xml log4j.properties $(PYS)
+
+jas-all.jar: $(ALLJAR)
+	$(JDK)/jar -cvf jas.jar $(ALLJAR) edu/ 
+	mv jas.jar /tmp/jas-`date +%Y%j`.jar
+
 #	cp jas.jar /mnt/i/e/kredel/jas-`date +%Y%j`.jar
+#jas-run.jar: GBManifest.MF $(TOJAR)
+#	$(JDK)/jar -cvfm jas-run.jar GBManifest.MF $(TOJAR)
 
 
-TOJAR=$(FILES) $(CLASSES) Makefile build.xml log4j.properties
-jas-run.jar: GBManifest.MF $(TOJAR)
-	$(JDK)/jar -cvfm jas-run.jar GBManifest.MF $(TOJAR)
+TOJAR=$(FILES) $(CLASSES) Makefile build.xml log4j.properties $(EXAMPY) examples/machines.test $(wildcard COPYING*)
 
-jas-doc.jar: doc/
-	$(JDK)/jar -cvf jas-doc.jar doc/ $(DOCU)
+jas.jar: $(FILES) Makefile build.xml log4j.properties $(EXAMPY)
+	$(JDK)/jar -cvf jas.jar $(TOJAR)
+
+jas-doc.jar: $(DOCU) doc/
+	$(JDK)/jar -cvf jas-doc.jar $(DOCU) doc/
 
 
 dist: jas.jar jas-run.jar jas-doc.jar $(LIBS)
@@ -196,7 +212,8 @@ dist: jas.jar jas-run.jar jas-doc.jar $(LIBS)
 #links: arith/build.xml module/build.xml vector/build.xml ring/build.xml application/build.xml poly/build.xml ufd/build.xml structure/build.xml util/build.xml
 #
 
-jars: jas.jar jas-run.jar jas-doc.jar
+jars: jas-run.jar jas-doc.jar
+#jars: jas.jar jas-run.jar jas-doc.jar
 
 
 lint:

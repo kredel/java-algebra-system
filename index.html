@@ -83,17 +83,28 @@ implemented in <code>Ideal</code> or <code>SolvableIdeal</code>.
 </dd>
 <dt>edu.jas.util:</dt>
 <dd>
-finally contains further utilities for parallel and distributed computations
+contains further utilities for parallel and distributed computations
 like <code>ThreadPool</code>, <code>DistThreadPool</code> 
 or <code>DistHashTable</code>
 (part of this package has become obsolete with JDK 1.5).
+</dd>
+<dt>edu.jas.ufd:</dt>
+<dd>
+will contain classes for unique factorization domains.
+like the interface <code>GreatestCommonDivisor</code>, 
+the abstract class <code>GreatestCommonDivisorAbstract</code> 
+and various implementations, 
+e.g. polynomial remainder sequences and modular algorihms.
+(This package will be available in September 2007).
 </dd>
 </dl>
 
 <p>
 This page contains documentation and the implementation for the new version 
-which is designed using type parameters and requires Java 5 (JDK 1.5).
-The old version for JDK 1.4 can be found <a href="../jas.j14">here</a>.
+which is designed using type parameters and requires Java 6 (JDK 1.6).
+It will still compile on JDK 1.5.
+Older versions can be found here <a href="../jas.j15">JDK 1.5</a> and
+<a href="../jas.j14">JDK 1.4</a>.
 </p>
 
 
@@ -151,18 +162,15 @@ I gave some background information on the development of jas
 <h2>Download, instalation and unit tests</h2>
 
 <ul>
-<li><p><a href="jas.jar">jas.jar</a> execute with 
-    <code>java -jar jas.jar RunGB &lt;args&gt;</code>    </p>
-    <p>Execution of RunGB or other classes with main() method.
-    Contains class and java files.
+<li><p>The JAS jar-file <a href="jas.jar">jas.jar</a> 
+     can be used the same way as any other Java archive during 
+     compilation and execution 
+     of Java programms using the JAS library.
+     I.e. add it to the classpath of your projects. 
     </p>
-</li>
-<li><p><a href="jas-run.jar">jas-run.jar</a> execute with 
-    <code>java -jar jas-run.jar &lt;RungGB args&gt;</code>
-    </p>
-    <p>Execution of RunGB.
-    Contains class and java files.
-    </p>
+<!--p>Additionaly some classes have main() methods to be called directly,
+    e.g. 
+    <code>java -jar jas.jar edu.jas.ring.RunGB &lt;args&gt;</code></p-->
 </li>
 <li><p>Required libraries: 
     <a href="lib/log4j.jar">lib/log4j.jar</a> (from Apache Log4j),
@@ -175,11 +183,11 @@ I gave some background information on the development of jas
     </p>
     <p>Installation: 
     Download the libraries and put them in a directory <code>lib</code>.
-    Create an empty directory <code>test</code> for the output of log4j.
+<!-- Create an empty directory <code>test</code> for the output of log4j.-->
     </p>
 </li>
 <li><p>Unit tests can be run with the "test" target for ant, e.g. 
-    <code> ant test</code>
+    <code>ant test</code>
     </p>
     <p>The test units work mainly with generated random polynomials.
     The parameters are choosen such that the resulting Groebner bases 
@@ -233,7 +241,9 @@ into the CLASSPATH or to unpack the jar into the directory you are starting jyth
 <h2>RunGB Examples</h2>
 
 <p>
-For execution with RunGB.
+The following are examples which can be executed with 
+the class edu.jas.ring.RunGB. E.g. <br />
+<code>java -cp .:jas.jar:... edu.jas.ring.RunGB &lt;args&gt;</code>
 </p>
 
 <p>Commutative:
@@ -267,49 +277,12 @@ For execution with RunGB.
 <a href="ring/wa_61.jas" target="jas">wa_61.jas</a>
 </p>
 
-
-<!--
-<h3>Old stuff</h3>
-
-<p>
-Some UML class diagramms as produced by ArgoUML (outdated):
-</p>
-<dl>
-<dt>Overview diagramms:</dt>
-<dd>
-<a href="images/edu_jas_classes.gif" target="diagram">edu.jas</a>,
-<a href="images/edu_jas_arith_classes.gif" target="diagram">edu.jas.arith</a>,
-<a href="images/edu_jas_poly_classes.gif" target="diagram">edu.jas.poly</a>,
-<a href="images/edu_jas_ring_classes.gif" target="diagram">edu.jas.ring</a>.
-</dd>
-<dt>Diagramms with operations:</dt>
-<dd>
-<a href="images/edu_jas_classes-full.gif" target="diagram">edu.jas</a>,
-<a href="images/edu_jas_arith_classes-full.gif" target="diagram">edu.jas.arith</a>,
-<a href="images/edu_jas_poly_classes-full.gif" target="diagram">edu.jas.poly</a>,
-<a href="images/edu_jas_ring_classes-full.gif" target="diagram">edu.jas.ring</a>.
-</dd>
-<dt>Diagramms of the new classes:</dt>
-<dd>
-<a href="images/edu_jas_poly_classes-new.gif" target="diagram">edu.jas.poly</a>,
-<a href="images/edu_jas_poly_classes-new-full.gif" target="diagram">edu.jas.poly-full</a>.
-<br />
-<a href="images/Coefficient.png" target="diagram">edu.jas.arith.Coefficient</a>,
-<a href="images/TermOrder.png" target="diagram">edu.jas.poly.TermOrder</a>,
-<a href="images/ExpVector.png" target="diagram">edu.jas.poly.ExpVector</a>,
-<a href="images/OrderedPolynomial.png" target="diagram">edu.jas.poly.OrderedPolynomial</a>,
-<a href="images/OrderedMapPolynomial.png" target="diagram">edu.jas.poly.OrderedMapPolynomial</a>,
-<a href="images/RatOrderedMapPolynomial.png" target="diagram">edu.jas.poly.RatOrderedMapPolynomial</a>.
-</dd>
-</dl>
--->
-
     <hr />
     <address><a href="mailto:kredel@at@rz.uni-mannheim.de">Heinz Kredel</a></address>
 <p>
 <!-- Created: Sat Mar 19 21:44:14 CET 2005 -->
 <!-- hhmts start -->
-Last modified: Sun May 20 17:55:29 CEST 2007
+Last modified: Wed May 30 22:29:35 CEST 2007
 <!-- hhmts end -->
 </p>
 <p align="right" >
