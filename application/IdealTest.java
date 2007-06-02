@@ -242,6 +242,10 @@ public class IdealTest extends TestCase {
      d = fac.random(kl, ll, el, q );
      e = d; //fac.random(kl, ll, el, q );
 
+     if ( a.isZERO() || b.isZERO() || c.isZERO() || d.isZERO() ) {
+        return;
+     }
+
      L = new ArrayList<GenPolynomial<BigRational>>();
      assertTrue("not isZERO( a )", !a.isZERO() );
      L.add(a);
@@ -367,6 +371,10 @@ public class IdealTest extends TestCase {
      d = fac.random(kl, ll, el, q );
      e = d; //fac.random(kl, ll, el, q );
 
+     if ( a.isZERO() || b.isZERO() || c.isZERO() || d.isZERO() ) {
+        return;
+     }
+
      L = new ArrayList<GenPolynomial<BigRational>>();
      assertTrue("not isZERO( a )", !a.isZERO() );
      L.add(a);
@@ -482,6 +490,10 @@ public class IdealTest extends TestCase {
      d = fac.random(kl, ll, el, q );
      e = d; //fac.random(kl, ll, el, q );
 
+     if ( a.isZERO() || b.isZERO() || c.isZERO() || d.isZERO() ) {
+        return;
+     }
+
      L = new ArrayList<GenPolynomial<BigRational>>();
      assertTrue("not isZERO( b )", !b.isZERO() );
      L.add( b );
@@ -564,6 +576,10 @@ public class IdealTest extends TestCase {
      c = fac.random(kl-1, ll-1, el, q/2 );
      d = fac.random(kl-1, ll-1, el, q/2 );
      e = a; //fac.random(kl, ll-1, el, q );
+
+     if ( a.isZERO() || b.isZERO() || c.isZERO() || d.isZERO() ) {
+        return;
+     }
 
      L = new ArrayList<GenPolynomial<BigRational>>();
      assertTrue("not isZERO( b )", !b.isZERO() );
