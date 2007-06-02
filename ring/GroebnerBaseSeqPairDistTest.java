@@ -152,6 +152,10 @@ public GroebnerBaseSeqPairDistTest(String name) {
      d = fac.random(kl, ll, el, q );
      e = d; //fac.random(kl, ll, el, q );
 
+     if ( a.isZERO() || b.isZERO() || c.isZERO() || d.isZERO() ) {
+        return;
+     }
+
      assertTrue("not isZERO( a )", !a.isZERO() );
      L.add(a);
 
@@ -212,6 +216,10 @@ public GroebnerBaseSeqPairDistTest(String name) {
      c = fac.random(kl, ll, el, q );
      d = fac.random(kl, ll, el, q );
      e = d; //fac.random(kl, ll, el, q );
+
+     if ( a.isZERO() || b.isZERO() || c.isZERO() || d.isZERO() ) {
+        return;
+     }
 
      L.add(a);
      Gs = bbseq.GB( L );
