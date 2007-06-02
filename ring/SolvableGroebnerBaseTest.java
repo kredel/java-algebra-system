@@ -116,6 +116,10 @@ public class SolvableGroebnerBaseTest extends TestCase {
  */
  public void testSequentialGBase() {
 
+     if ( a.isZERO() || b.isZERO() || c.isZERO() || d.isZERO() ) {
+        return;
+     }
+
      assertTrue("not isZERO( a )", !a.isZERO() );
 
      L = new ArrayList<GenSolvablePolynomial<BigRational>>();
@@ -170,6 +174,10 @@ public class SolvableGroebnerBaseTest extends TestCase {
      d = ring.random(kl, ll, el, q );
      e = d; //ring.random(kl, ll, el, q );
 
+     if ( a.isZERO() || b.isZERO() || c.isZERO() || d.isZERO() ) {
+        return;
+     }
+
      assertTrue("not isZERO( a )", !a.isZERO() );
 
      L = new ArrayList<GenSolvablePolynomial<BigRational>>();
@@ -210,6 +218,10 @@ public class SolvableGroebnerBaseTest extends TestCase {
  * 
  */
  public void testSequentialTSGBase() {
+
+     if ( a.isZERO() || b.isZERO() || c.isZERO() || d.isZERO() ) {
+        return;
+     }
 
      assertTrue("not isZERO( a )", !a.isZERO() );
 
@@ -269,6 +281,10 @@ public class SolvableGroebnerBaseTest extends TestCase {
      c = ring.random(kl, ll, el, q );
      d = ring.random(kl, ll, el, q );
      e = d; //ring.random(kl, ll, el, q );
+
+     if ( a.isZERO() || b.isZERO() || c.isZERO() || d.isZERO() ) {
+        return;
+     }
 
      assertTrue("not isZERO( a )", !a.isZERO() );
 
