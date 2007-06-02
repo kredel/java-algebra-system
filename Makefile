@@ -48,7 +48,7 @@ krum:
 	$(RSYNC) ./                krum:java/$(PART)
 
 pub:
-	$(RSYNC) --exclude=*ufd* --exclude=*xml ./ krum:htdocs/$(PART)
+	$(RSYNC) --exclude=*ufd* --exclude=lisa* --exclude=*xml ./ krum:htdocs/$(PART)
 
 compute:
 	$(RSYNC) ./                compute:java/$(PART)
