@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.concurrent.Semaphore;
 
 import org.apache.log4j.Logger;
 
@@ -21,7 +22,7 @@ import edu.jas.util.Terminator;
 import edu.jas.util.ThreadPool;
 
 import edu.unima.ky.parallel.ChannelFactory;
-import edu.unima.ky.parallel.Semaphore;
+//import edu.unima.ky.parallel.Semaphore;
 import edu.unima.ky.parallel.SocketChannel;
 
 
@@ -835,7 +836,7 @@ class MiReducerServer<C extends RingElem<C>> implements Runnable {
        * @return the computed normal form.
        */
       public GenPolynomial<C> getNF() {
-            try { done.P();
+          try { done.acquire(); //done.P();
             } catch (InterruptedException e) { }
             return H;
       }
@@ -846,7 +847,7 @@ class MiReducerServer<C extends RingElem<C>> implements Runnable {
             }
             H = red.normalform( G, H ); //mod
             H = red.normalform( F, H ); //mod
-            done.V();
+            done.release(); //done.V();
             if ( logger.isDebugEnabled() ) {
                  logger.debug("ht(H) = " + H.leadingExpVector() );
             }
@@ -884,7 +885,7 @@ class MiReducerClient<C extends RingElem<C>> implements Runnable {
        * @return the computed normal form.
        */
       public GenPolynomial<C> getNF() {
-            try { done.P();
+          try { done.acquire(); //done.P();
             } catch (InterruptedException unused) { }
             return H;
       }
@@ -895,7 +896,7 @@ class MiReducerClient<C extends RingElem<C>> implements Runnable {
             }
             H = red.normalform( G, H ); //mod
             H = red.normalform( F, H ); //mod
-            done.V();
+            done.release(); //done.V();
             if ( logger.isDebugEnabled() ) {
                  logger.debug("ht(H) = " + H.leadingExpVector() );
             }
