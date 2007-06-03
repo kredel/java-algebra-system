@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <link rel="stylesheet" type="text/css" href="html.css" />
+    <title>JAS Download</title>
+  </head>
+  <body class="main">
+    <h1>Download, installation and unit tests</h1>
+
+
+<h2>Download jar-files</h2>
+
+<ul>
+<li><p>The JAS jar-file <code>jas.jar</code>
+    can be used the same way as any other Java archive during 
+    compilation and execution of Java programms.
+    <br />
+    <a href="jas.jar">jas.jar</a> current version for JDK 1.6. 
+    (right click on the link and chose "save link as")
+    <br />
+    <a href="jas-doc.jar">jas-doc.jar</a> Javadoc for current version.
+    </p>
+</li>
+<li><p>Required libraries: 
+    <br />
+    <a href="lib/log4j.jar">lib/log4j.jar</a> (from Apache Log4j),
+    <br />
+    <a href="lib/junit.jar">lib/junit.jar</a> (from Junit),
+    <br />
+    <a href="lib/tnj.jar">lib/tnj.jar</a> (for Thread and Network Programming).
+    <br />
+    In case you have the first two ones, just ensure they are in the 
+    correct location (e.g. <code>./lib/</code>).
+    The last one you most likely do not have and you must download it.
+    </p>
+</li>
+<li><p>Old versions of the JAS jar-file: 
+    <br />
+    <a href="../jas.j15/jas.jar">jas.jar</a> version for JDK 1.5. 
+    <br />
+    <a href="../jas.j14/jas.jar">jas.jar</a> version for JDK 1.4. 
+</li>
+</ul>
+
+<h2>Installation</h2>
+
+<ul>
+<li><p>Add the JAS jar-file and the other required jar-files 
+     to the classpath. Start using it in your applications.
+    </p>
+</li>
+<li><p>If you want to develop with JAS, then extract the 
+     jar-file in a new directory
+     <code>jat -xvf jas.jar</code>
+    </p>
+</li>
+<li><p>Among the extracted files, there is an Ant build script
+    <code>build.xml</code>
+    and also a Gnu make file
+    <code>Makefile</code>.
+    <br />
+    To use Ant, you must edit the <code>build.xml</code> file and
+    adjust the <code>lib</code> property to point to the directory 
+    where you downloaded the jar files.
+    Also be sure to use the correct JDK version, e.g. via setting the     
+    <code>JAVA_HOME</code> environment variable.
+    <br />
+    To use the make file, you must edit the <code>Makefile</code>
+    and adjust the <code>JDK</code> and the <code>LIBPATH</code> variables.
+    </p>
+</li>
+<li><p>Most useful Ant targets:
+    <br />
+    <code>ant compile</code> changed Java files are compiled,
+    <br />
+    <code>ant recompile</code> all Java files are compiled,
+    <br />
+    <code>ant test</code> run all JUnit tests,
+    <br />
+    <code>ant clean</code> remove backup files,
+    <br />
+    <code>ant distcleanclean</code> remove all class files,
+    <br />
+    <code>ant doc</code> create ne Javadocs.
+    </p>
+</li>
+<li><p>Most useful make file targets:
+    <br />
+    <code>make "class"</code> run the <code>main()</code> method of the class,
+    <br />
+    e.g. <code>make edu.jas.poly.Examples</code> run 
+    the class <code>Examples</code>.
+    </p>
+</li>
+</ul>
+
+<h2>Unit tests with JUnit</h2>
+<ul>
+<li><p>Unit tests can be run with the "test" target for ant, e.g. 
+    <code>ant test</code>
+    </p>
+</li>
+<li><p>The test units work mainly with generated random polynomials.
+    The parameters are choosen such that the resulting Groebner bases 
+    are not to hard to compute.
+    However some random polynomials may be to big and the running time
+    may occasionally be several minutes (but not hours).
+    <br />
+    On the other hand random polynomials may sometimes be zero or one.
+    If such input does not make sense the test will fail. I.e. some
+    tests will fail from time to time, but not for repeated execution 
+    of the test. So if a test fails rerun the test a few times.
+    </p>
+</li>
+</ul>
+
+<h2><a name="docu">Documentation</a></h2>
+
+<ul>
+<li><p>The JAS documentation is contained in the jar files 
+    <code>jas.jar</code> and <code>jas-doc.jar</code>. 
+    Extract the jar files and start exploring with any browser
+    from the <code>index.html</code> file in the main directory.
+    </p>
+</li>
+<li><p><a href="README" target="main" >README</a> and licencing: 
+    <a href="COPYING.jas" target="main" >COPYING.jas</a> (GPL)
+    or 
+    <a href="COPYING.lgpl.jas" target="main" >COPYING.lgpl.jas</a> (LGPL)
+</p>
+</li>
+</ul>
+
+<h2>Using the <a name="jython">Jython</a> interpreter</h2>
+
+
+<ul>
+<li><p>Set up your <code>.jythonrc</code> file, e.g. see the sample code in
+    <a href="sample.jythonrc" target="py">sample.jythonrc</a>.
+    </p>
+</li>
+<li><p>Be sure you have downloaded the above libraries 
+    log4j.jar, junit.jar, tnj.jar and jas.jar.
+    </p>
+</li>
+<li><p>The main file to interface to the JAS library is  
+    <a href="examples/jas.py" target="py">jas.py</a>.
+    It must be imported by other Python files.
+    </p>
+</li>
+<li><p>If jthon cannot find the JAS classes, try to put the jas.jar also 
+    into the CLASSPATH or unpack the jar into the directory you are 
+    starting jython (also to get the correct version of .py files).
+    </p>
+</li>
+<li><p>Start using JAS, e.g.
+    <code>jython examples/trinks.py</code>
+    <br />
+    The 
+    <a href="examples/trinks.py" target="py">examples/trinks.py</a>
+    contains an Groebner base example named after its proposer Mr. Trinks.
+    The file runs a sequential, a parallel and a distributed version
+    of the Groebner base algorithms.
+    </p>
+</li>
+<li><p>For further discussion of the JAS jython interface 
+    see 
+    <a href="guide.html" target="main">User guide</a>.
+    </p>
+</li>
+</ul>
+
+    <hr />
+<address><a name="contact" 
+            href="mailto:kredel@at@rz.uni-mannheim.de">Heinz Kredel</a>
+</address>
+<p>
+<!-- Created: Sat Mar 19 21:44:14 CET 2005 -->
+<!-- hhmts start -->
+Last modified: Sun Jun  3 14:35:16 CEST 2007
+<!-- hhmts end -->
+</p>
+<!--p align="right" >
+$Id: intro.html 1116 2007-06-02 12:44:04Z kredel $
+</p-->
+  </body>
+</html>

@@ -104,12 +104,13 @@ Getting started with JAS, a
 </p>
 
 <p>JAS 
-<a href="design.html" target="main" >interface and class design</a> 
-and 
+<a href="design.html" target="main" >API guide</a> 
+with interface and class design considerations.
 <a href="doc/index.html" target="doc" >API documentation</a>
-by javadoc (uptodate), as 
+by Javadoc (uptodate), as 
 <a href="jas-doc.jar" target="doc" >jas-doc.jar</a>.
-Some  
+This file also contains Javadoc source code for browsing.
+Some 
 <a href="problems.html" target="main" >design considerations</a>
 for the new generic version.
 </p>
@@ -124,7 +125,7 @@ or
 
 <p>At the 
 <a href="http://www.wifo.uni-mannheim.de/pppj2006/" target="a3l">PPPJ 2006 conference in Mannheim</a> 
-I presented the design of the jas types, classes and implementation 
+I presented the design of the JAS types, classes and implementation 
 "<a href="http://krum.rz.uni-mannheim.de/kredel/jas-pppj2006.pdf" target="pppj" 
    >On the Design of a Java Computer Algebra System</a>"
 (<a href="http://krum.rz.uni-mannheim.de/kredel/jas-pppj2006-slides.pdf" target="pppj" 
@@ -134,81 +135,33 @@ I presented the design of the jas types, classes and implementation
 
 <p>At the 
 <a href="http://www.a3l.org/" target="a3l">A3L conference in Passau, 2005</a> 
-I gave some background information on the development of jas 
+I gave some background information on the development of JAS 
 "<a href="http://krum.rz.uni-mannheim.de/kredel/jas-a3l.pdf" target="a3l" 
    >A Systems Perspective on A3L</a>"
 (<a href="http://krum.rz.uni-mannheim.de/kredel/jas-a3l-slides.pdf" target="a3l" 
    >slides</a>).
 </p>
 
-<p>The history of the jas project can be found in the 
+<p>The history of the JAS project can be found in the 
    <a href="jas-log.html" target="main">Web-Log</a>.
 </p>
 
 
-
 <h2><a name="downlo">Download</a>, installation and unit tests</h2>
 
-<ul>
-<li><p>The JAS jar-file <a href="jas.jar">jas.jar</a> 
-     can be used the same way as any other Java archive during 
-     compilation and execution 
-     of Java programms using the JAS library.
-     I.e. add it to the classpath of your projects. 
-    </p>
-<!--p>Additionaly some classes have main() methods to be called directly,
-    e.g. 
-    <code>java -jar jas.jar edu.jas.ring.RunGB &lt;args&gt;</code></p-->
-</li>
-<li><p>Required libraries: 
-    <a href="lib/log4j.jar">lib/log4j.jar</a> (from Apache Log4j),
-    <a href="lib/junit.jar">lib/junit.jar</a> (from Junit),
-    <a href="lib/tnj.jar">lib/tnj.jar</a> (for Thread and Network Programming).
-    <br />
-    In case you have the first two ones, just ensure they are in the correct location
-    (<code>./lib/</code>).
-    The last one you most likely do not have and you must download it.
-    </p>
-    <p>Installation: 
-    Download the libraries and put them in a directory <code>lib</code>.
-<!-- Create an empty directory <code>test</code> for the output of log4j.-->
-    </p>
-</li>
-<li><p>Unit tests can be run with the "test" target for ant, e.g. 
-    <code>ant test</code>
-    </p>
-    <p>The test units work mainly with generated random polynomials.
-    The parameters are choosen such that the resulting Groebner bases 
-    are not to hard to compute.
-    However some random polynomials may be to big and the running time
-    may occasionally be several minutes (but not hours).
-    <br />
-    On the other hand random polynomials may sometimes be zero or one.
-    If such input does not make sense the test will fail. I.e. some
-    tests will fail from time to time, but not for repeated execution 
-    of the test. So if a test fails rerun the test a few times.
-    </p>
-</li>
-</ul>
+<p>
+See <a href="download.html" target="main">Download</a> page.
+</p>
+
 
 <h2><a name="usage">Usage</a> with the Jython interpreter</h2>
 
-<p><a href="examples/jas.py" target="py">jas.py</a> (imported by other Python files).
-</p>
-<p>To install jas with jython you have to add the above libraries 
-(log4j.jar, junit.jar, tnj.jar and jas.jar) to the Java classpath.
-</p>
-<p>This can be done best when included in a <code>.jythonrc</code> file, e.g.
-<a href="sample.jythonrc" target="py">sample.jythonrc</a>.
-</p>
 <p>
-If this does not help finding the jas classes, try to put the jas.jar also 
-into the CLASSPATH or to unpack the jar into the directory you are starting jython 
-(also to get the correct version of .py files).
+See <a href="download.html#jython" target="main">Download</a> 
+and <a href="guide.html" target="main">Users guide</a> pages.
 </p>
 
-
-<h4>Examples</h4>
+<h4>jython examples</h4>
 
 <p>Commutative:
 <a href="examples/trinks.py" target="py">trinks.py</a>,
@@ -272,7 +225,7 @@ the class edu.jas.ring.RunGB. E.g. <br />
 <p>
 <!-- Created: Sat Mar 19 21:44:14 CET 2005 -->
 <!-- hhmts start -->
-Last modified: Thu May 31 23:53:31 CEST 2007
+Last modified: Sun Jun  3 14:46:10 CEST 2007
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
