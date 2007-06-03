@@ -1,0 +1,172 @@
+/*
+ * $Id$
+ */
+
+//package edu.unima.ky.parallel;
+package edu.jas.util;
+
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+
+import org.apache.log4j.Logger;
+
+
+/**
+ * ChannelFactory.
+ * A symmetric and non blocking way of setting up sockets on the 
+ * client and server side.
+ * The constructor sets up a ServerSocket and accepts and stores any Socket 
+ * creation requests from clients. The created Sockets can the be retrieved 
+ * from the store without blocking.
+ * @author Akitoshi Yoshida
+ * @author Heinz Kredel.
+ * @see SocketChannel
+ */
+public class ChannelFactory extends Thread {
+
+    private static final Logger logger = Logger.getLogger(ChannelFactory.class);
+  
+  /**
+   * default port of socket. 
+   */
+  public final static int DEFAULT_PORT = 4711;
+
+  /**
+   * port of socket. 
+   */
+  private int port;
+
+  /**
+   * BoundedBuffer for sockets.
+   */
+  //private BoundedBuffer buf = new BoundedBuffer(100);
+  private final BlockingQueue<SocketChannel> buf 
+        = new LinkedBlockingQueue<SocketChannel>(/*infinite*/);
+
+  /**
+   * local server socket.
+   */
+  private ServerSocket srv = null;
+
+  /**
+   * Constructs a ChannelFactory. 
+   * @param p port.
+   */
+  public ChannelFactory(int p) {
+    if (p<=0) { port = DEFAULT_PORT; } 
+       else { port = p; }
+    try {
+        srv = new ServerSocket(port);
+        this.start();
+        logger.info("server started on port "+port);
+    } catch (IOException e) { 
+        logger.debug("IOException "+e);
+        if ( logger.isDebugEnabled() ) {
+           e.printStackTrace(); 
+        }
+    }
+  }
+
+  /**
+   * Constructs a ChannelFactory 
+   * on the DEFAULT_PORT.
+   */
+  public ChannelFactory() {
+    this(DEFAULT_PORT); 
+  }
+
+  /**
+   * Get a new socket channel from a server socket.
+   */
+  public SocketChannel getChannel() 
+         throws InterruptedException {
+    // return (SocketChannel)buf.get();
+    return buf.take();
+  }
+
+  /**
+   * Get a new socket channel to a given host.
+   * @param h hostname
+   * @param p port
+   */
+  public SocketChannel getChannel(String h, int p) 
+         throws IOException {
+    if (p<=0) { p = port; } 
+    SocketChannel c = null;
+    int i = 0;
+    int delay = 50;
+    logger.debug("connecting to "+h);
+    while (c == null) {
+        try { 
+            c = new SocketChannel( new Socket(h, p) );
+        } catch (IOException e) {
+            //System.out.println(e);
+            // wait server ready
+            i++;
+            if ( i % 50 == 0 ) {
+               delay += delay;
+               logger.info("Server on "+h+" not ready in " + delay +"ms" );
+            }
+            try {
+                Thread.sleep(delay);
+            } catch (InterruptedException ignored) { 
+            } 
+        }
+    }
+    logger.debug("connected, iter = " + i);
+    return c;
+  }
+
+  public void run() {
+    while (true) {
+      try {
+          logger.info("waiting for connection");
+          Socket s = srv.accept();
+          if ( this.isInterrupted() ) {
+              //System.out.println("ChannelFactory interrupted");
+             return;
+          }
+          //logger.debug("Socket = " +s);
+          logger.debug("connection accepted");
+          SocketChannel c = new SocketChannel(s);
+          buf.put( c );
+      } catch (IOException e) {
+          //logger.debug("ChannelFactory IO terminating");
+        return;
+      } catch (InterruptedException e) {
+          //logger.debug("ChannelFactory IE terminating");
+        return;
+      }
+    }
+  }
+
+  /**
+   * Terminate the Channel Factory
+   */
+  public void terminate() {
+    this.interrupt();
+    try {
+        if ( srv != null ) {
+           srv.close();
+        }
+        this.interrupt();
+        while ( !buf.isEmpty() ) { 
+            logger.debug("closing unused SocketChannel");
+            //((SocketChannel)buf.get()).close();
+            buf.take().close();
+        }
+    } catch (IOException e) { 
+    } catch (InterruptedException e) { 
+    }
+    try {
+        this.join();
+    } catch (InterruptedException e) { 
+    }
+    logger.debug("ChannelFactory terminated");
+  }
+
+}
