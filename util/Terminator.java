@@ -4,9 +4,11 @@
 
 package edu.jas.util;
 
+import java.util.concurrent.Semaphore;
+
 import org.apache.log4j.Logger;
 
-import edu.unima.ky.parallel.Semaphore;
+//import edu.unima.ky.parallel.Semaphore;
 
 /**
  * Terminating helper class.
@@ -37,7 +39,7 @@ public class Terminator {
             idler++;
             logger.debug("beIdle, idler = " + idler);
             if ( idler >= workers ) {
-               fin.V();
+                fin.release(); //fin.V();
             }
         }
 
@@ -46,7 +48,7 @@ public class Terminator {
  */
         public synchronized void allIdle() {
             idler = workers;
-            fin.V();
+            fin.release(); //fin.V();
         }
 
 /**
@@ -69,7 +71,7 @@ public class Terminator {
  * done.
  */
         public void done() {
-            try { fin.P();
+            try { fin.acquire(); //fin.P();
             } catch (InterruptedException e) { }
             logger.debug("done, idler = " + idler);
         }
