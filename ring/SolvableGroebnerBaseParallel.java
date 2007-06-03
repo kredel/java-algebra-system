@@ -7,6 +7,7 @@ package edu.jas.ring;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.concurrent.Semaphore;
 
 import org.apache.log4j.Logger;
 
@@ -17,7 +18,7 @@ import edu.jas.poly.GenSolvablePolynomial;
 
 import edu.jas.util.Terminator;
 import edu.jas.util.ThreadPool;
-import edu.unima.ky.parallel.Semaphore;
+//import edu.unima.ky.parallel.Semaphore;
 
 
 /**
@@ -611,7 +612,7 @@ class SolvableMiReducer<C extends RingElem<C>> implements Runnable {
          * @return the computed normal form.
          */
         public GenSolvablePolynomial<C> getNF() {
-            try { done.P();
+            try { done.acquire(); //done.P();
             } catch (InterruptedException e) { 
             }
             return H;
@@ -623,7 +624,7 @@ class SolvableMiReducer<C extends RingElem<C>> implements Runnable {
             }
             H = sred.leftNormalform( G, H ); //mod
             H = sred.leftNormalform( F, H ); //mod
-            done.V();
+            done.release(); //done.V();
             if ( debug ) {
                logger.debug("ht(H) = " + H.leadingExpVector() );
             }
