@@ -11,6 +11,7 @@ import java.net.Socket;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ArrayBlockingQueue;
 
 import org.apache.log4j.Logger;
 
@@ -22,13 +23,14 @@ import org.apache.log4j.Logger;
  * The constructor sets up a ServerSocket and accepts and stores any Socket 
  * creation requests from clients. The created Sockets can the be retrieved 
  * from the store without blocking.
+ * Refactored for java.util.concurrent.
  * @author Akitoshi Yoshida
  * @author Heinz Kredel.
  * @see SocketChannel
  */
 public class ChannelFactory extends Thread {
 
-    private static final Logger logger = Logger.getLogger(ChannelFactory.class);
+  private static final Logger logger = Logger.getLogger(ChannelFactory.class);
   
   /**
    * default port of socket. 
@@ -38,14 +40,15 @@ public class ChannelFactory extends Thread {
   /**
    * port of socket. 
    */
-  private int port;
+  private final int port;
 
   /**
    * BoundedBuffer for sockets.
    */
   //private BoundedBuffer buf = new BoundedBuffer(100);
   private final BlockingQueue<SocketChannel> buf 
-        = new LinkedBlockingQueue<SocketChannel>(/*infinite*/);
+    //    = new ArrayBlockingQueue<SocketChannel>(100);
+          = new LinkedBlockingQueue<SocketChannel>(/*infinite*/);
 
   /**
    * local server socket.
@@ -57,8 +60,11 @@ public class ChannelFactory extends Thread {
    * @param p port.
    */
   public ChannelFactory(int p) {
-    if (p<=0) { port = DEFAULT_PORT; } 
-       else { port = p; }
+    if ( p <= 0 ) { 
+       port = DEFAULT_PORT; 
+    } else { 
+       port = p; 
+    }
     try {
         srv = new ServerSocket(port);
         this.start();
@@ -95,10 +101,12 @@ public class ChannelFactory extends Thread {
    */
   public SocketChannel getChannel(String h, int p) 
          throws IOException {
-    if (p<=0) { p = port; } 
+    if ( p <= 0 ) { 
+       p = port; 
+    } 
     SocketChannel c = null;
     int i = 0;
-    int delay = 50;
+    int delay = 5; // 50
     logger.debug("connecting to "+h);
     while (c == null) {
         try { 
@@ -111,6 +119,7 @@ public class ChannelFactory extends Thread {
                delay += delay;
                logger.info("Server on "+h+" not ready in " + delay +"ms" );
             }
+            System.out.println("Server on "+h+" not ready in " + delay +"ms" );
             try {
                 Thread.sleep(delay);
             } catch (InterruptedException ignored) { 

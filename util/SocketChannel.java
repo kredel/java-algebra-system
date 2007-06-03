@@ -5,32 +5,36 @@
 //package edu.unima.ky.parallel;
 package edu.jas.util;
 
-import java.io.*;
-import java.net.*;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.ObjectInputStream;
+import java.net.Socket;
 
 
 /**
  * SocketChannel
  * This class provides a communication channel using TCP/IP sockets. 
+ * Refactored for java.util.concurrent.
  * @author Akitoshi Yoshida
  * @author Heinz Kredel.
  */
 
 public class SocketChannel {
-  /*
-   * input stream from the socket
-   */
-  private ObjectInputStream in;
 
   /*
-   * output stream to the socket
+   * Input stream from the socket.
    */
-  private ObjectOutputStream out;
+  private final ObjectInputStream in;
 
   /*
-   * socket
+   * Output stream to the socket.
    */
-  private Socket soc;
+  private final ObjectOutputStream out;
+
+  /*
+   * Underlying socket.
+   */
+  private final Socket soc;
 
   /**
    * Constructs a socket channel on the given socket s.

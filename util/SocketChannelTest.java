@@ -5,14 +5,18 @@
 // from package edu.unima.ky.parallel;
 package edu.jas.util;
 
-import junit.framework.*;
-import java.io.*;
+import java.io.IOException;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
+
 
 import org.apache.log4j.BasicConfigurator;
 
 /**
  * SocketChannel Test using JUnit
- *
+ * Refactored for java.util.concurrent.
  * @author Akitoshi Yoshida
  * @author Heinz Kredel.
  */
@@ -20,8 +24,8 @@ import org.apache.log4j.BasicConfigurator;
 public class SocketChannelTest extends TestCase {
 
    public static void main (String[] args) {
-          BasicConfigurator.configure();
-          junit.textui.TestRunner.run( suite() );
+       //BasicConfigurator.configure();
+       junit.textui.TestRunner.run( suite() );
    }
 
    public SocketChannelTest(String name) {
