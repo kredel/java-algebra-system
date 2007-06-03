@@ -4,20 +4,148 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <link rel="stylesheet" type="text/css" href="html.css" />
-    <title>JAS - Class Design</title>
+    <title>JAS - API Design</title>
   </head>
   <body class="main">
-    <h1>JAS class and package design overview</h1>
+    <h1>API usage and design overview</h1>
 
 <p>
 In ths document we give an overview on the structure 
 of the interfaces, classes and packages of JAS.
-In the first three sections we focus on the structure 
+In the first section we show how to compute Legendre polynomials 
+with the JAS API.
+In the next three sections we focus on the structure 
 of the required types and the creation of the corresponding objects.
-In the next three sections we focus on the functional aspects of 
+In the following three sections we focus on the functional aspects of 
 the types, i.e. their constructors and methods.
 For a discussion of other design alternatives see
 the <a href="problems.html">problems</a> document.
+</p>
+
+
+<h2>0. Computation of the Legendre polynomials</h2>
+
+The Legendre polynomials can be defined by the following recursion
+<ul>
+<li>P[0](x) = 1
+</li>
+<li>P[1](x) = x
+</li>
+<li>P[n](x) = 1/n ( (2n-1) x P[n-1] - (n-1) P[n-2] ).
+</li>
+</ul>
+The first 10 Legendre polynomials are:
+<pre>
+P[0] = 1 
+P[1] = x
+P[2] = 3/2 x^2 - 1/2 
+P[3] = 5/2 x^3 - 3/2 x
+P[4] = 35/8 x^4 - 15/4 x^2 + 3/8 
+P[5] = 63/8 x^5 - 35/4 x^3 + 15/8 x
+P[6] = 231/16 x^6 - 315/16 x^4 + 105/16 x^2 - 5/16 
+P[7] = 429/16 x^7 - 693/16 x^5 + 315/16 x^3 - 35/16 x
+P[8] = 6435/128 x^8 - 3003/32 x^6 + 3465/64 x^4 - 315/32 x^2 + 35/128 
+P[9] = 12155/128 x^9 - 6435/32 x^7 + 9009/64 x^5 - 1155/32 x^3 + 315/128 x
+</pre>
+
+<p>
+The polynomials have been computed with the following Java program.
+First we need a polynomial ring <code>ring</code> over the rational numbers, 
+in one variable <code>"x"</code> and a list <code>P</code> to store the
+computed polynomials.
+The polynomial factory object itself needs at least a factory for
+the creation of coefficients and the number of variables.
+Additionally the term order and names for the variables can be
+specified. With this information the polynomial ring factory
+can be created by 
+<code>new GenPolynomialRing &lt;BigRational&gt;(fac,1,var)</code>,
+where <code>fac</code> is the coefficient factory,
+<code>1</code> is the number of variables, and
+<!--<code>to</code> is the term order object and-->
+<code>var</code> is an <code>String</code> array of names.
+</p>
+<pre>
+    BigRational fac = new BigRational();
+    String[] var = new String[]{ "x" };
+    GenPolynomialRing&lt;BigRational&gt; ring
+        = new GenPolynomialRing&lt;BigRational&gt;(fac,1,var);
+
+    int n = 10;
+    List&lt;GenPolynomial&lt;BigRational&gt;&gt; P 
+       = new ArrayList&lt;GenPolynomial&lt;BigRational&gt;&gt;(n);
+    GenPolynomial&lt;BigRational&gt; t, one, x, xc;
+    BigRational n21, nn;
+
+    one = ring.getONE();
+    x   = ring.univariate(0);
+
+    P.add( one );
+    P.add( x );
+    for ( int i = 2; i &lt; n; i++ ) {
+        n21 = new BigRational( 2*i-1 );
+        xc = x.multiply( n21 );
+        t = xc.multiply( P.get(i-1) );  // (2n-1) x P[n-1]
+        nn = new BigRational( i-1 );
+        xc = P.get(i-2).multiply( nn ); // (n-1) P[n-2]
+        t = t.subtract( xc );
+        nn = new BigRational(1,i);      
+        t = t.multiply( nn );           // 1/n t
+        P.add( t );
+    }
+    for ( int i = 0; i &lt; n; i++ ) {
+        System.out.println("P["+i+"] = " + P.get(i).toString(var) );
+        System.out.println();
+    }
+</pre>
+<p>
+The polynomials for the recursion base are <code>one</code> and <code>x</code>.
+Both are generated from the polynomial ring factory
+with method <code>ring.getONE()</code> and <code>ring.univariate(0)</code>,
+respectively. 
+The polynomial <code>(2n-1)x</code> is produced in the for-loop by 
+<code>n21 = new BigRational( 2*i-1 );</code> and
+<code>xc = x.multiply( n21 );</code>.
+The polynomial <code>(n-1) P[n-2]</code> is computed by
+<code>nn = new BigRational( i-1 );</code> and
+<code>xc = P.get(i-2).multiply( nn )</code>.
+Finally we have to multiply the difference of the 
+intermediate polynomials by <code>1/i</code> as 
+<code>nn = new BigRational( 1, i );</code> and
+<code>t = t.multiply( nn )</code>.
+Then, in the for-loop, the polynomials <code>P[i]</code> are computed
+using the definition, and stored in the list <code>P</code> for further use.
+In the last for-loop, the polynomials are printed, producing the
+output shown above.
+The string representation of the polynomial object can be created,
+as expected, by <code>toString()</code>,
+or by using names for the variables with <code>toString(var)</code>.
+The imports required are
+</p>
+<pre>
+import java.util.ArrayList;
+import java.util.List;
+import edu.jas.arith.BigRational;
+import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.GenPolynomialRing;
+</pre>
+<p>
+To use other coefficient rings, one simply changes the
+generic type parameter, say, from <code>BigRational</code> to
+<code>BigComplex</code> and adjusts the coefficient factory.
+The factory would then be created as
+<code>c = new BigComplex()</code>, followed by
+<code>new GenPolynomialRing<BigComplex> (c,1,var)</code>.
+This small example shows that this library can easily be used,
+just as any other Java package or library.
+</p>
+<!--
+The string argument of method <code>parse()</code> can be the
+TeX-representation of the polynomial,
+except that no subscripts may appear.
+-->
+<p>
+In the following sections we describe the 
+central classes and interfaces for the polynomial API.
 </p>
 
 
@@ -503,7 +631,7 @@ of the Java algebra system.
 <p>
 <!-- Created: Sat Mar 11 10:51:36 CET 2006 -->
 <!-- hhmts start -->
-Last modified: Thu May 31 23:54:33 CEST 2007
+Last modified: Sat Jun  2 17:40:03 CEST 2007
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
