@@ -13,12 +13,12 @@ import java.net.Socket;
 
 /**
  * SocketChannel
- * This class provides a communication channel using TCP/IP sockets. 
+ * This class provides a communication channel for Java objects 
+ * using TCP/IP sockets. 
  * Refactored for java.util.concurrent.
  * @author Akitoshi Yoshida
  * @author Heinz Kredel.
  */
-
 public class SocketChannel {
 
   /*
@@ -26,15 +26,18 @@ public class SocketChannel {
    */
   private final ObjectInputStream in;
 
+
   /*
    * Output stream to the socket.
    */
   private final ObjectOutputStream out;
 
+
   /*
    * Underlying socket.
    */
   private final Socket soc;
+
 
   /**
    * Constructs a socket channel on the given socket s.
@@ -42,15 +45,16 @@ public class SocketChannel {
    */
   public SocketChannel(Socket s) throws IOException {
     soc = s;
-    if (checkOrder(s)) {
-      in = new ObjectInputStream(s.getInputStream());
-      out = new ObjectOutputStream(s.getOutputStream());
-    }
-    else {
-      out = new ObjectOutputStream(s.getOutputStream());
-      in = new ObjectInputStream(s.getInputStream());
-    }
+    //if ( checkOrder(s) ) {
+    //  in = new ObjectInputStream(s.getInputStream());
+    //  out = new ObjectOutputStream(s.getOutputStream());
+    //} else {
+      out = new ObjectOutputStream( s.getOutputStream() );
+      out.flush();
+      in  = new ObjectInputStream( s.getInputStream() );
+    //}
   }
+
 
   /**
    * Get the Socket
@@ -58,6 +62,7 @@ public class SocketChannel {
   public Socket getSocket() {
       return soc;
   }
+
 
   /**
    * Sends an object
@@ -67,6 +72,7 @@ public class SocketChannel {
       out.writeObject(v);
     }
   }
+
 
   /**
    * Receives an object
@@ -79,20 +85,25 @@ public class SocketChannel {
     return v;
   }
 
+
   /**
    * Closes the channel.
    */
   public void close() {
-    if (in != null) {
-      try { in.close(); } catch (IOException e) { }
+    if ( in != null ) {
+      try { in.close(); 
+      } catch (IOException e) { }
     }
-    if (out != null) {
-      try { out.close(); } catch (IOException e) { }
+    if ( out != null ) {
+      try { out.close(); 
+      } catch (IOException e) { }
     }
-    if (soc != null) {
-      try { soc.close(); } catch (IOException e) { }
+    if ( soc != null ) {
+      try { soc.close(); 
+      } catch (IOException e) { }
     }
   }
+
 
   /**
    * to string
@@ -101,10 +112,10 @@ public class SocketChannel {
     return "socketChannel("+soc+")";
   }
 
+
   /*
    * Determines the order of stream initialization.
    * @param s A socket's object.  
-   */
   private boolean checkOrder(Socket s) throws IOException {
     // first use the port numbers as the key
     int p1 = s.getLocalPort();
@@ -121,4 +132,6 @@ public class SocketChannel {
     // this shouldn't happen
     throw new IOException();
   }
+   */
+
 }

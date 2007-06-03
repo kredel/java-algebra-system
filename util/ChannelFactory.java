@@ -32,34 +32,39 @@ public class ChannelFactory extends Thread {
 
   private static final Logger logger = Logger.getLogger(ChannelFactory.class);
   
+
   /**
    * default port of socket. 
    */
   public final static int DEFAULT_PORT = 4711;
+
 
   /**
    * port of socket. 
    */
   private final int port;
 
+
   /**
    * BoundedBuffer for sockets.
    */
   //private BoundedBuffer buf = new BoundedBuffer(100);
-  private final BlockingQueue<SocketChannel> buf 
-    //    = new ArrayBlockingQueue<SocketChannel>(100);
-          = new LinkedBlockingQueue<SocketChannel>(/*infinite*/);
+    private final BlockingQueue<SocketChannel> buf; 
+
 
   /**
    * local server socket.
    */
-  private ServerSocket srv = null;
+  private volatile ServerSocket srv;
+
 
   /**
    * Constructs a ChannelFactory. 
    * @param p port.
    */
   public ChannelFactory(int p) {
+    // buf = new ArrayBlockingQueue<SocketChannel>(100);
+    buf = new LinkedBlockingQueue<SocketChannel>(/*infinite*/);
     if ( p <= 0 ) { 
        port = DEFAULT_PORT; 
     } else { 
@@ -77,6 +82,7 @@ public class ChannelFactory extends Thread {
     }
   }
 
+
   /**
    * Constructs a ChannelFactory 
    * on the DEFAULT_PORT.
@@ -84,6 +90,7 @@ public class ChannelFactory extends Thread {
   public ChannelFactory() {
     this(DEFAULT_PORT); 
   }
+
 
   /**
    * Get a new socket channel from a server socket.
@@ -93,6 +100,7 @@ public class ChannelFactory extends Thread {
     // return (SocketChannel)buf.get();
     return buf.take();
   }
+
 
   /**
    * Get a new socket channel to a given host.
@@ -130,6 +138,10 @@ public class ChannelFactory extends Thread {
     return c;
   }
 
+
+  /**
+   * Eun the servers accept() in an infinite loop.
+   */
   public void run() {
     while (true) {
       try {
@@ -152,6 +164,7 @@ public class ChannelFactory extends Thread {
       }
     }
   }
+
 
   /**
    * Terminate the Channel Factory
