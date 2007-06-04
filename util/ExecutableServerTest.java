@@ -13,8 +13,8 @@ import junit.framework.TestSuite;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
-import edu.unima.ky.parallel.ChannelFactory;
-import edu.unima.ky.parallel.SocketChannel;
+//import edu.unima.ky.parallel.ChannelFactory;
+//import edu.unima.ky.parallel.SocketChannel;
 
 
 /**

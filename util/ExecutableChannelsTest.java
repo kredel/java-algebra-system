@@ -13,7 +13,7 @@ import junit.framework.TestSuite;
 
 import org.apache.log4j.BasicConfigurator;
 
-import edu.unima.ky.parallel.ChannelFactory;
+//import edu.unima.ky.parallel.ChannelFactory;
 
 
 /**
