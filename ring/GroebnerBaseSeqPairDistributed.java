@@ -22,10 +22,12 @@ import edu.jas.util.DistHashTable;
 import edu.jas.util.DistHashTableServer;
 import edu.jas.util.Terminator;
 import edu.jas.util.ThreadPool;
+import edu.jas.util.ChannelFactory;
+import edu.jas.util.SocketChannel;
 
-import edu.unima.ky.parallel.ChannelFactory;
+//import edu.unima.ky.parallel.ChannelFactory;
 //import edu.unima.ky.parallel.Semaphore;
-import edu.unima.ky.parallel.SocketChannel;
+//import edu.unima.ky.parallel.SocketChannel;
 
 
 /**
