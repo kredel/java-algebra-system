@@ -28,12 +28,12 @@ public class AlgebraicNumber<C extends GcdRingElem<C> >
 
     /** Ring part of the data structure. 
      */
-    protected final AlgebraicNumberRing<C> ring;
+    public final AlgebraicNumberRing<C> ring;
 
 
     /** Value part of the element data structure. 
      */
-    protected final GenPolynomial<C> val;
+    public final GenPolynomial<C> val;
 
 
     /** Flag to remember if this algebraic number is a unit.
@@ -50,6 +50,13 @@ public class AlgebraicNumber<C extends GcdRingElem<C> >
     public AlgebraicNumber(AlgebraicNumberRing<C> r, GenPolynomial<C> a) {
         ring = r; // assert r != 0
         val = a.remainder( ring.modul ); //.monic() no go
+        if ( ring.isField() ) {
+           if ( val.isZERO() ) {
+              isunit = 0;
+           } else {
+              isunit = 1;
+           }
+        }
     }
 
 
@@ -58,8 +65,7 @@ public class AlgebraicNumber<C extends GcdRingElem<C> >
      * @param r ring AlgebraicNumberRing<C>.
      */
     public AlgebraicNumber(AlgebraicNumberRing<C> r) {
-        ring = r; // assert r != 0
-        val = ring.ring.getZERO();
+        this( r, r.ring.getZERO() );
     }
 
 
@@ -109,6 +115,15 @@ public class AlgebraicNumber<C extends GcdRingElem<C> >
             return false;
         } 
         // not jet known
+        if ( ring.isField() ) {
+           if ( val.isZERO() ) {
+              isunit = 0;
+              return false;
+           } else {
+              isunit = 1;
+              return true;
+           }
+        }
         boolean u = val.gcd( ring.modul ).isUnit();
         if ( u ) {
             isunit = 1;
