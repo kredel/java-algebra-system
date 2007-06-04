@@ -21,8 +21,10 @@
   <property name="l4j.level" value="3" />
   <property name="l4j.exact" value="true" />
 
-  <property name="cp"       value="${log4j}:${junit}:${tnj}:." />
-  <property name="doccp"    value="${log4j}:${junit}:${tnj}" />
+  <!--property name="cp"       value="${log4j}:${junit}:${tnj}:." /-->
+  <property name="cp"       value="${log4j}:${junit}:." />
+  <!--property name="doccp"    value="${log4j}:${junit}:${tnj}" /-->
+  <property name="doccp"    value="${log4j}:${junit}" />
   <property name="version"  value="0.1" />
 
   <taskdef name="lint4j" classname="com.jutils.lint4j.ant.Lint4jAntTask">
