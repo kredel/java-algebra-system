@@ -70,6 +70,7 @@ public class SocketChannel {
   public void send(Object v) throws IOException {
     synchronized (out) {
       out.writeObject(v);
+      out.flush();
     }
   }
 
