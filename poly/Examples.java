@@ -32,7 +32,9 @@ public class Examples {
        */
        //example6();
        //example7();
-       example8();
+       //example8();
+       example9();
+       //example10();
    }
 
 /**
@@ -313,7 +315,96 @@ public static void example8() {
     for ( int i = n-2; i < n; i++ ) {
         System.out.println("T["+i+"] = " + T.get(i).toString(var) );
     }
+}
 
+/**
+ * example9.
+ * Legendre polynomials
+ *
+ *  P(0) = 1
+ *  P(1) = x
+ *  P(n) = 1/n [ (2n-1) * x * P(n-1) - (n-1) * P(n-2) ]
+ */
+ // P(n+1) = 1/(n+1) [ (2n+1) * x * P(n) - n * P(n-1) ]
+public static void example9() {
+    int n = 10;
+
+    BigRational fac = new BigRational();
+    String[] var = new String[]{ "x" };
+
+    GenPolynomialRing<BigRational> ring
+        = new GenPolynomialRing<BigRational>(fac,1,var);
+
+    List<GenPolynomial<BigRational>> P 
+       = new ArrayList<GenPolynomial<BigRational>>(n);
+
+    GenPolynomial<BigRational> t, one, x, xc, xn;
+    BigRational n21, nn;
+
+    one = ring.getONE();
+    x   = ring.univariate(0);
+
+    P.add( one );
+    P.add( x );
+    for ( int i = 2; i < n; i++ ) {
+        n21 = new BigRational( 2*i-1 );
+        xc = x.multiply( n21 );
+        t = xc.multiply( P.get(i-1) );
+        nn = new BigRational( i-1 );
+        xc = P.get(i-2).multiply( nn );
+        t = t.subtract( xc );
+        nn = new BigRational(1,i);
+        t = t.multiply( nn );
+        P.add( t );
+    }
+    for ( int i = 0; i < n; i++ ) {
+        System.out.println("P["+i+"] = " + P.get(i).toString(var) );
+        System.out.println();
+    }
+}
+
+
+/**
+ * example10.
+ * Hermite polynomials
+ *
+ *  H(0) = 1
+ *  H(1) = 2 x
+ *  H(n) = 2 * x * H(n-1) - 2 * (n-1) * H(n-2)
+ */
+ // H(n+1) = 2 * x * H(n) - 2 * n * H(n-1)
+public static void example10() {
+    int n = 100;
+
+    BigInteger fac = new BigInteger();
+    String[] var = new String[]{ "x" };
+
+    GenPolynomialRing<BigInteger> ring
+        = new GenPolynomialRing<BigInteger>(fac,1,var);
+
+    List<GenPolynomial<BigInteger>> H 
+       = new ArrayList<GenPolynomial<BigInteger>>(n);
+
+    GenPolynomial<BigInteger> t, one, x2, xc, x;
+    BigInteger n2, nn;
+
+    one = ring.getONE();
+    x   = ring.univariate(0);
+    n2 = new BigInteger(2);
+    x2 = x.multiply( n2 );
+    H.add( one );
+    H.add( x2 );
+    for ( int i = 2; i < n; i++ ) {
+        t = x2.multiply( H.get(i-1) );
+        nn = new BigInteger( 2*(i-1) );
+        xc = H.get(i-2).multiply( nn );
+        t = t.subtract( xc );
+        H.add( t );
+    }
+    for ( int i = n-1; i < n; i++ ) {
+        System.out.println("H["+i+"] = " + H.get(i).toString(var) );
+        System.out.println();
+    }
 }
 
 }
