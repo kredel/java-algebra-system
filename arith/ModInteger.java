@@ -125,6 +125,28 @@ public final class ModInteger implements GcdRingElem<ModInteger>,
 
 
     /** The constructor creates a ModInteger object 
+     * from a BigInteger object module and a String value part. 
+     * @param m BigInteger.
+     * @param s String.
+     * @param isField indicator if m is prime.
+     */
+    public ModInteger(java.math.BigInteger m, String s, boolean isField) {
+        this( m, new java.math.BigInteger( s.trim() ), isField );
+    }
+
+
+    /** The constructor creates a ModInteger object 
+     * from a BigInteger object module and a long value part. 
+     * @param m BigInteger.
+     * @param s long.
+     * @param isField indicator if m is prime.
+     */
+    public ModInteger(java.math.BigInteger m, long s, boolean isField) {
+        this( m, new java.math.BigInteger( String.valueOf(s) ), isField );
+    }
+
+
+    /** The constructor creates a ModInteger object 
      * from a BigInteger object module and a long value part. 
      * @param m BigInteger.
      * @param s long.
@@ -139,8 +161,7 @@ public final class ModInteger implements GcdRingElem<ModInteger>,
      * @param m BigInteger.
      */
     public ModInteger(java.math.BigInteger m) {
-        modul = m; // assert m != 0
-        val = java.math.BigInteger.ZERO;
+        this(m,java.math.BigInteger.ZERO);
     }
 
 
@@ -176,6 +197,12 @@ public final class ModInteger implements GcdRingElem<ModInteger>,
      * @see java.lang.Object#clone()
      */
     public ModInteger clone() {
+        if ( isField > 0 ) {
+           return new ModInteger( modul, val, true );
+        }
+        if ( isField == 0 ) {
+           return new ModInteger( modul, val, false );
+        }
         return new ModInteger( modul, val );
     }
 
@@ -185,7 +212,13 @@ public final class ModInteger implements GcdRingElem<ModInteger>,
      * @return a copy of c.
      */
     public ModInteger copy(ModInteger c) {
-        return new ModInteger( c.modul, c.val );
+        if ( c.isField > 0 ) {
+           return new ModInteger( modul, val, true );
+        }
+        if ( c.isField == 0 ) {
+           return new ModInteger( modul, val, false );
+        }
+        return new ModInteger( modul, val );
     }
 
 
@@ -193,6 +226,12 @@ public final class ModInteger implements GcdRingElem<ModInteger>,
      * @return 0 as ModInteger.
      */
     public ModInteger getZERO() {
+        if ( isField > 0 ) {
+           return new ModInteger( modul, java.math.BigInteger.ZERO, true );
+        }
+        if ( isField == 0 ) {
+           return new ModInteger( modul, java.math.BigInteger.ZERO, false );
+        }
         return new ModInteger( modul, java.math.BigInteger.ZERO );
     }
 
@@ -201,6 +240,12 @@ public final class ModInteger implements GcdRingElem<ModInteger>,
      * @return 1 as ModInteger.
      */
     public ModInteger getONE() {
+        if ( isField > 0 ) {
+           return new ModInteger( modul, java.math.BigInteger.ONE, true );
+        }
+        if ( isField == 0 ) {
+           return new ModInteger( modul, java.math.BigInteger.ONE, false );
+        }
         return new ModInteger( modul, java.math.BigInteger.ONE );
     }
 
@@ -256,6 +301,12 @@ public final class ModInteger implements GcdRingElem<ModInteger>,
      * @return a ModInteger.
      */
     public ModInteger fromInteger(java.math.BigInteger a) {
+        if ( isField > 0 ) {
+           return new ModInteger( modul, a, true );
+        }
+        if ( isField == 0 ) {
+           return new ModInteger( modul, a, false );
+        }
         return new ModInteger(modul,a);
     }
 
@@ -265,6 +316,12 @@ public final class ModInteger implements GcdRingElem<ModInteger>,
      * @return a ModInteger.
      */
     public ModInteger fromInteger(long a) {
+        if ( isField > 0 ) {
+           return new ModInteger( modul, a, true );
+        }
+        if ( isField == 0 ) {
+           return new ModInteger( modul, a, false );
+        }
         return new ModInteger(modul, a );
     }
 
@@ -364,6 +421,12 @@ public final class ModInteger implements GcdRingElem<ModInteger>,
      * @see edu.jas.structure.RingElem#abs()
      */
     public ModInteger abs() {
+        if ( isField > 0 ) {
+           return new ModInteger( modul, val.abs(), true );
+        }
+        if ( isField == 0 ) {
+           return new ModInteger( modul, val.abs(), false );
+        }
         return new ModInteger( modul, val.abs() );
     }
 
@@ -383,6 +446,12 @@ public final class ModInteger implements GcdRingElem<ModInteger>,
      * @return -this.
      */
     public ModInteger negate() {
+        if ( isField > 0 ) {
+           return new ModInteger( modul, val.negate(), true );
+        }
+        if ( isField == 0 ) {
+           return new ModInteger( modul, val.negate(), false );
+        }
         return new ModInteger( modul, val.negate() );
     }
 
@@ -421,6 +490,12 @@ public final class ModInteger implements GcdRingElem<ModInteger>,
      * @return this-S.
      */
     public ModInteger subtract(ModInteger S) {
+        if ( isField > 0 ) {
+           return new ModInteger( modul, val.subtract( S.val ), true );
+        }
+        if ( isField == 0 ) {
+           return new ModInteger( modul, val.subtract( S.val ), false );
+        }
         return new ModInteger( modul, val.subtract( S.val ) );
     }
 
@@ -461,6 +536,12 @@ public final class ModInteger implements GcdRingElem<ModInteger>,
      * @return S with S=1/this if defined. 
      */
     public ModInteger inverse() {
+        if ( isField > 0 ) {
+           return new ModInteger( modul, val.modInverse( modul ), true );
+        }
+        if ( isField == 0 ) {
+           return new ModInteger( modul, val.modInverse( modul ), false );
+        }
         return new ModInteger( modul, val.modInverse( modul ));
     }
 
@@ -490,6 +571,12 @@ public final class ModInteger implements GcdRingElem<ModInteger>,
         }
         if ( S.isUnit() ) {
            return getZERO();
+        }
+        if ( isField > 0 ) {
+           return new ModInteger( modul, val.remainder( S.val ), true );
+        }
+        if ( isField == 0 ) {
+           return new ModInteger( modul, val.remainder( S.val ), false );
         }
         return new ModInteger( modul, val.remainder( S.val ) );
     }
@@ -522,6 +609,12 @@ public final class ModInteger implements GcdRingElem<ModInteger>,
      */
     public ModInteger random(int n, Random rnd) {
         java.math.BigInteger v = new java.math.BigInteger( n, rnd );
+        if ( isField > 0 ) {
+           return new ModInteger( modul, v, true );
+        }
+        if ( isField == 0 ) {
+           return new ModInteger( modul, v, false );
+        }
         return new ModInteger( modul, v );
     }
 
@@ -531,6 +624,12 @@ public final class ModInteger implements GcdRingElem<ModInteger>,
      * @return this*S.
      */
     public ModInteger multiply(ModInteger S) {
+        if ( isField > 0 ) {
+           return new ModInteger( modul, val.multiply( S.val ), true );
+        }
+        if ( isField == 0 ) {
+           return new ModInteger( modul, val.multiply( S.val ), false );
+        }
         return new ModInteger( modul, val.multiply( S.val ) );
     }
 
@@ -551,6 +650,12 @@ public final class ModInteger implements GcdRingElem<ModInteger>,
      * @return this+S.
      */
     public ModInteger sum(ModInteger S) {
+        if ( isField > 0 ) {
+           return new ModInteger( modul, val.add( S.val ), true );
+        }
+        if ( isField == 0 ) {
+           return new ModInteger( modul, val.add( S.val ), false );
+        }
         return new ModInteger( modul, val.add( S.val ) );
     }
 
@@ -571,6 +676,12 @@ public final class ModInteger implements GcdRingElem<ModInteger>,
      * @return ModInteger from s.
      */
     public ModInteger parse(String s) {
+        if ( isField > 0 ) {
+           return new ModInteger( modul, s, true );
+        }
+        if ( isField == 0 ) {
+           return new ModInteger( modul, s, false );
+        }
         return new ModInteger(modul,s);
     }
 
@@ -597,6 +708,12 @@ public final class ModInteger implements GcdRingElem<ModInteger>,
         }
         if ( isUnit() || S.isUnit() ) {
            return getONE();
+        }
+        if ( isField > 0 ) {
+           return new ModInteger( modul, val.gcd( S.val ), true );
+        }
+        if ( isField == 0 ) {
+           return new ModInteger( modul, val.gcd( S.val ), false );
         }
         return new ModInteger( modul, val.gcd( S.val ) );
     }
@@ -662,6 +779,16 @@ public final class ModInteger implements GcdRingElem<ModInteger>,
             r = qr[1];
         }
         //System.out.println("q = " + q + "\n c1 = " + c1 + "\n c2 = " + c2);
+        if ( isField > 0 ) {
+           ret[0] = new ModInteger(modul,q, true); 
+           ret[1] = new ModInteger(modul,c1, true);
+           ret[2] = new ModInteger(modul,c2, true);
+        }
+        if ( isField == 0 ) {
+           ret[0] = new ModInteger(modul,q, false); 
+           ret[1] = new ModInteger(modul,c1, false);
+           ret[2] = new ModInteger(modul,c2, false);
+        }
         ret[0] = new ModInteger(modul,q); 
         ret[1] = new ModInteger(modul,c1);
         ret[2] = new ModInteger(modul,c2);
