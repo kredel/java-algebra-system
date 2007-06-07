@@ -24,7 +24,8 @@ public final class PrimeList implements Iterable<java.math.BigInteger> {
 
     /** The list of probable primes. 
       */
-    protected static List<java.math.BigInteger> val;
+    protected static final List<java.math.BigInteger> val
+              = new ArrayList<java.math.BigInteger>(50);
 
 
     //private final static Random random = new Random();
@@ -47,24 +48,14 @@ public final class PrimeList implements Iterable<java.math.BigInteger> {
      * @param n initial number of primes.
      */
     public PrimeList(int n) {
-        if ( val == null ) {
-            val = new ArrayList<java.math.BigInteger>((n > 50 ? n: 50));
+        synchronized( val ) {
+        if ( val.size() == 0 ) {
+           // val = new ArrayList<java.math.BigInteger>((n > 50 ? n: 50));
            // start with some known primes, see knuth (2,390)
            // val.add( p11 );
            // val.add( p13 );
            // val.add( p17 );
            // val.add( p19 );
-           // 2^29-x
-           val.add( getLongPrime(29,3) );
-           val.add( getLongPrime(29,33) );
-           val.add( getLongPrime(29,43) );
-           val.add( getLongPrime(29,63) );
-           val.add( getLongPrime(29,73) );
-           val.add( getLongPrime(29,75) );
-           val.add( getLongPrime(29,93) );
-           val.add( getLongPrime(29,99) );
-           val.add( getLongPrime(29,121) );
-           val.add( getLongPrime(29,133) );
            // 2^28-x
            val.add( getLongPrime(28,57) );
            val.add( getLongPrime(28,89) );
@@ -76,6 +67,17 @@ public final class PrimeList implements Iterable<java.math.BigInteger> {
            val.add( getLongPrime(28,183) );
            val.add( getLongPrime(28,213) );
            val.add( getLongPrime(28,273) );
+           // 2^29-x
+           val.add( getLongPrime(29,3) );
+           val.add( getLongPrime(29,33) );
+           val.add( getLongPrime(29,43) );
+           val.add( getLongPrime(29,63) );
+           val.add( getLongPrime(29,73) );
+           val.add( getLongPrime(29,75) );
+           val.add( getLongPrime(29,93) );
+           val.add( getLongPrime(29,99) );
+           val.add( getLongPrime(29,121) );
+           val.add( getLongPrime(29,133) );
            // 2^60-x
            val.add( getLongPrime(60,93) );
            val.add( getLongPrime(60,107) );
@@ -125,6 +127,7 @@ public final class PrimeList implements Iterable<java.math.BigInteger> {
                }
                val.add( p );
            }
+        }
         }
     }
 
