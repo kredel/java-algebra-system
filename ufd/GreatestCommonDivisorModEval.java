@@ -218,7 +218,7 @@ public class GreatestCommonDivisorModEval //<C extends GcdRingElem<C> >
                 continue;
             }
             if ( debug ) {
-               logger.info("eval d = " + d);
+               logger.debug("eval d = " + d);
             }
             // compute modular gcd in recursion
             //System.out.println("recursion +++++++++++++++++++++++++++++++++++");
@@ -231,7 +231,15 @@ public class GreatestCommonDivisorModEval //<C extends GcdRingElem<C> >
             }
             // test for constant g.c.d
             if ( cm.isConstant() ) {
-               return fac.getONE();
+               logger.debug("cm.isConstant = " + cm + ", c = " + c);
+               if ( c.ring.nvar < cm.ring.nvar ) {
+                  c = c.extend(mfac,0,0);
+               }
+               cm = cm.abs().multiply(c);
+               q = cm.extend(fac,0,0);
+               logger.debug("q             = " + q + ", c = " + c);
+               return q;
+               //return fac.getONE(); //.multiply( c );
             }
             // test for unlucky prime
             ExpVector mdegv = cm.degreeVector();
@@ -294,7 +302,7 @@ public class GreatestCommonDivisorModEval //<C extends GcdRingElem<C> >
                // break;
             }
         }
-        if ( debug ) {
+        if ( false && debug ) {
             logger.info("done on deg(M) = " + M.degree(0));
         }
         // remove normalization
