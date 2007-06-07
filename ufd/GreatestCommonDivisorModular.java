@@ -321,7 +321,7 @@ public class GreatestCommonDivisorModular //<C extends GcdRingElem<C> >
                if ( ! basePseudoRemainder(r,x).isZERO() ){
                   continue;
                }
-               System.out.println("done on exact division, #primes = " + i);
+               logger.info("done on exact division, #primes = " + i);
                break;
             }
         }

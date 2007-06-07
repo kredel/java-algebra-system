@@ -188,14 +188,14 @@ public class GreatestCommonDivisorModEval //<C extends GcdRingElem<C> >
         GenPolynomial<ModInteger> cm;
         GenPolynomial<GenPolynomial<ModInteger>> cp = null;
         if ( debug ) {
-           System.out.println("c = " + c);
-           System.out.println("cc = " + cc);
-           System.out.println("G = " + G);
-           System.out.println("wdegv = " + wdegv);
+           logger.debug("c = " + c);
+           logger.debug("cc = " + cc);
+           logger.debug("G = " + G);
+           logger.info("wdegv = " + wdegv);
         }
         for ( ModInteger d = cofac.getZERO(); d.compareTo(end) <= 0; d = d.sum(inc) ) {
             if ( ++i >= en ) {
-               System.out.println("elements of Z_p exhausted, en = " + en);
+               logger.info("elements of Z_p exhausted, en = " + en);
                return mufd.gcd(P,S);
                //throw new RuntimeException("prime list exhausted");
                //break;
@@ -218,7 +218,7 @@ public class GreatestCommonDivisorModEval //<C extends GcdRingElem<C> >
                 continue;
             }
             if ( debug ) {
-               System.out.println("eval d = " + d);
+               logger.info("eval d = " + d);
             }
             // compute modular gcd in recursion
             //System.out.println("recursion +++++++++++++++++++++++++++++++++++");
@@ -226,8 +226,8 @@ public class GreatestCommonDivisorModEval //<C extends GcdRingElem<C> >
             //System.out.println("recursion -----------------------------------");
             //System.out.println("cm = " + cm);
             if ( false && debug ) {
-               System.out.println("cm | rm = " + mufd.basePseudoRemainder(rm,cm));
-               System.out.println("cm | qm = " + mufd.basePseudoRemainder(qm,cm));
+               logger.debug("cm | rm = " + mufd.basePseudoRemainder(rm,cm));
+               logger.debug("cm | qm = " + mufd.basePseudoRemainder(qm,cm));
             }
             // test for constant g.c.d
             if ( cm.isConstant() ) {
@@ -241,7 +241,7 @@ public class GreatestCommonDivisorModEval //<C extends GcdRingElem<C> >
                // prime ok, next round
                if ( M != null ) {
                   if ( M.degree(0) > G ) {
-                     System.out.println("deg(M) > G: " + M.degree(0) + " > " + G);
+                     logger.info("deg(M) > G: " + M.degree(0) + " > " + G);
                      // continue; // why should this be required?
                   }
                }
@@ -295,7 +295,7 @@ public class GreatestCommonDivisorModEval //<C extends GcdRingElem<C> >
             }
         }
         if ( debug ) {
-            System.out.println("done on deg(M) = " + M.degree(0));
+            logger.info("done on deg(M) = " + M.degree(0));
         }
         // remove normalization
         cp = recursivePrimitivePart( cp ).abs(); 
