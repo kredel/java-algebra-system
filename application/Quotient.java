@@ -98,13 +98,15 @@ public class Quotient<C extends GcdRingElem<C> >
         // must reduce to lowest terms
         GenPolynomial<C> gcd = ring.gcd( n, d );
         if ( false || debug ) {
-           logger.info("gcd = " + gcd);
+           logger.info("gcd = " + gcd.isONE());
         }
         //GenPolynomial<C> gcd = ring.ring.getONE();
         if ( gcd.isONE() ) {
+           logger.info("gcd = 1");
            num = n;
            den = d;
         } else {
+           logger.info("gcd = " + gcd );
            num = ring.divide( n, gcd );
            den = ring.divide( d, gcd );
         }
@@ -317,13 +319,7 @@ public class Quotient<C extends GcdRingElem<C> >
      * @return this-S.
      */
     public Quotient<C> subtract(Quotient<C> S) {
-        if ( S == null || S.isZERO() ) {
-           return this;
-        }
-        GenPolynomial<C> n = num.multiply( S.den );
-        n = n.subtract( den.multiply( S.num ) ); 
-        GenPolynomial<C> d = den.multiply( S.den );
-        return new Quotient<C>( ring, n, d, false );
+        return sum( S.negate() );
     }
 
 
