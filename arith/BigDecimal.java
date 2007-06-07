@@ -280,7 +280,7 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>,
         java.math.BigDecimal u1 = val.ulp();
         java.math.BigDecimal u2 = b.val.ulp();
         int u = Math.min( u1.scale(), u2.scale() );
-        System.out.println("u = " + u + ", s = " + s);
+        //System.out.println("u = " + u + ", s = " + s);
         java.math.BigDecimal eps;
         if ( u <= 0 ) { 
            eps = u1.max( u2 ); 
@@ -289,7 +289,7 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>,
         }
         //eps = eps.movePointRight(1);
         //System.out.println("ctx = " + context);
-        System.out.println("eps = " + eps);
+        //System.out.println("eps = " + eps);
         int t = s.abs().compareTo( eps );
         if ( t < 1 ) {
            return 0;
