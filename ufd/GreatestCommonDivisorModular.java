@@ -30,7 +30,7 @@ public class GreatestCommonDivisorModular //<C extends GcdRingElem<C> >
 
 
     private static final Logger logger = Logger.getLogger(GreatestCommonDivisorModular.class);
-    private boolean debug = logger.isDebugEnabled();
+    private boolean debug = logger.isInfoEnabled();
 
 
     protected final 
@@ -188,16 +188,16 @@ public class GreatestCommonDivisorModular //<C extends GcdRingElem<C> >
         GenPolynomial<ModInteger> cm = null;
         GenPolynomial<BigInteger> cpi = null;
         if ( debug ) {
-           System.out.println("c = " + c);
-           System.out.println("cc = " + cc);
-           System.out.println("n  = " + n);
-           System.out.println("cf = " + cf);
-           System.out.println("wdegv = " + wdegv);
+           logger.debug("c = " + c);
+           logger.debug("cc = " + cc);
+           logger.debug("n  = " + n);
+           logger.debug("cf = " + cf);
+           logger.info("wdegv = " + wdegv);
         }
         for ( java.math.BigInteger p : primes ) {
             //System.out.println("next run ++++++++++++++++++++++++++++++++++");
             if ( ++i >= pn ) {
-                System.out.println("prime list exhausted, pn = " + pn);
+                logger.info("prime list exhausted, pn = " + pn);
                 return iufd.gcd(P,S);
                 //throw new RuntimeException("prime list exhausted");
                 //break;
@@ -223,18 +223,20 @@ public class GreatestCommonDivisorModular //<C extends GcdRingElem<C> >
                 continue;
             }
             if ( debug ) {
-               System.out.println("cofac = " + cofac.getModul());
+               logger.info("cofac = " + cofac.getModul() 
+                               + ", " + cofac.isField() );
             }
             // compute modular gcd
             cm = mufd.gcd(rm,qm);
             //System.out.println("cm = " + cm);
-            if ( false || debug ) {
+            if ( false && debug ) {
                System.out.println("cm | rm = " + mufd.basePseudoRemainder(rm,cm));
                System.out.println("cm | qm = " + mufd.basePseudoRemainder(qm,cm));
             }
             // test for constant g.c.d
             if ( cm.isConstant() ) {
-               return fac.getONE();
+               logger.info("cm = " + cm ); 
+               return fac.getONE().multiply( c );
             }
             // test for unlucky prime
             ExpVector mdegv = cm.degreeVector();
