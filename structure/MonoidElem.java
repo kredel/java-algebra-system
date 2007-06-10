@@ -6,9 +6,10 @@ package edu.jas.structure;
 
 
 /**
- * MonoidElement interface for use with the polynomial classes.
+ * MonoidElement interface.
  * Defines the multiplicative methods.
  * @author Heinz Kredel
+ * @typeparam C element type.
  */
 
 public interface MonoidElem<C extends MonoidElem<C>> 

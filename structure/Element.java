@@ -8,8 +8,10 @@ import java.io.Serializable;
 
 
 /**
- * Element interface for use with the polynomial classes.
+ * Element interface.
+ * Basic functionality of elements.
  * @author Heinz Kredel
+ * @typeparam C element type.
  */
 
 public interface Element<C extends Element<C>> extends Cloneable, 

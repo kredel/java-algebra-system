@@ -6,9 +6,10 @@ package edu.jas.structure;
 
 
 /**
- * AbelianGroupElement interface for use with the polynomial classes.
+ * AbelianGroupElement interface.
  * Defines the additive methods.
  * @author Heinz Kredel
+ * @typeparam C element type.
  */
 
 public interface AbelianGroupElem<C extends AbelianGroupElem<C>> 

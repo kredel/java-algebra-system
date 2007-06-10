@@ -9,6 +9,7 @@ package edu.jas.structure;
  * RingElement interface for use with the polynomial classes.
  * Combines aditive and multiplicative methods.
  * @author Heinz Kredel
+ * @typeparam C element type.
  */
 
 public interface RingElem<C extends RingElem<C>> 
