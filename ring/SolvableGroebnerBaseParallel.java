@@ -163,7 +163,7 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>>
             R = new LeftSolvableReducer<C>( fin, G, pairlist );
             pool.addJob( R );
         }
-        fin.done();
+        fin.waitDone();
         logger.debug("#parallel list = "+G.size());
         G = leftMinimalGB(G);
         // not in this context // pool.terminate();
@@ -334,7 +334,7 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>>
             R = new TwosidedSolvableReducer<C>( fin, X, G, pairlist );
             pool.addJob( R );
         }
-        fin.done();
+        fin.waitDone();
         logger.debug("#parallel list = "+G.size());
         G = leftMinimalGB(G);
         // not in this context // pool.terminate();

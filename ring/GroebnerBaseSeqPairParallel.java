@@ -161,7 +161,7 @@ public class GroebnerBaseSeqPairParallel<C extends RingElem<C>>
             R = new ReducerSeqPair<C>( fin, G, pairlist );
             pool.addJob( R );
         }
-        fin.done();
+        fin.waitDone();
         logger.debug("#parallel list = "+G.size());
         G = minimalGB(G);
         // not in this context // pool.terminate();

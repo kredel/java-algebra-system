@@ -203,7 +203,7 @@ public class GroebnerBaseDistributed<C extends RingElem<C>>
               pool.addJob( R );
         }
         logger.debug("main loop waiting");
-        fin.done();
+        fin.waitDone();
         int ps = theList.size();
         logger.debug("#distributed list = "+ps);
         // make sure all polynomials arrived
@@ -889,9 +889,12 @@ class MiReducerClient<C extends RingElem<C>> implements Runnable {
        * @return the computed normal form.
        */
       public GenPolynomial<C> getNF() {
-          try { done.acquire(); //done.P();
-            } catch (InterruptedException unused) { }
-            return H;
+          try { 
+              done.acquire(); //done.P();
+          } catch (InterruptedException u) {
+              Thread.currentThread().interrupt();
+          }
+          return H;
       }
 
       public void run() {
