@@ -45,7 +45,7 @@ public class GCDProxy<C extends GcdRingElem<C>>
     //       implements GreatestCommonDivisor<C> {
 
     private static final Logger logger = Logger.getLogger(GCDProxy.class);
-    private boolean debug = logger.isDebugEnabled();
+    private boolean debug = logger.isDebugEnabled(); //logger.isInfoEnabled();
 
 
     /**
@@ -180,7 +180,9 @@ public class GCDProxy<C extends GcdRingElem<C>>
          try {
              g = pool.invokeAny( cs );
          } catch (InterruptedException ignored) { 
+             Thread.currentThread().interrupt();
          } catch (ExecutionException ignored) { 
+             Thread.currentThread().interrupt();
          }
          return g;
      }
@@ -231,8 +233,11 @@ public class GCDProxy<C extends GcdRingElem<C>>
                     Thread.currentThread().sleep(dauer);
                  }
              } catch (InterruptedException ignored) { 
+                 Thread.currentThread().interrupt();
              } catch (CancellationException ignored) { 
+                 Thread.currentThread().interrupt();
              } catch (ExecutionException ignored) { 
+                 Thread.currentThread().interrupt();
              }
          }
          if ( !f0.isDone() || !f1.isDone() ) {
