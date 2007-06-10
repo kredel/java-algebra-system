@@ -39,7 +39,7 @@ public class Terminator {
             idler++;
             logger.debug("beIdle, idler = " + idler);
             if ( idler >= workers ) {
-                fin.release(); //fin.V();
+               fin.release(); //fin.V();
             }
         }
 
@@ -68,11 +68,14 @@ public class Terminator {
         }
 
 /**
- * done.
+ * wait done.
  */
-        public void done() {
-            try { fin.acquire(); //fin.P();
-            } catch (InterruptedException e) { }
+        public void waitDone() {
+            try { 
+                fin.acquire(); //fin.P();
+            } catch (InterruptedException e) { 
+                Thread.currentThread().interrupt();
+            }
             logger.debug("done, idler = " + idler);
         }
 

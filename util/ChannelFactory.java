@@ -130,7 +130,9 @@ public class ChannelFactory extends Thread {
             System.out.println("Server on "+h+" not ready in " + delay +"ms" );
             try {
                 Thread.sleep(delay);
-            } catch (InterruptedException ignored) { 
+            } catch (InterruptedException w) { 
+                Thread.currentThread().interrupt();
+                throw new IOException("Interrupted during IO wait " + w);
             } 
         }
     }
@@ -148,7 +150,7 @@ public class ChannelFactory extends Thread {
           logger.info("waiting for connection");
           Socket s = srv.accept();
           if ( this.isInterrupted() ) {
-              //System.out.println("ChannelFactory interrupted");
+             //System.out.println("ChannelFactory interrupted");
              return;
           }
           //logger.debug("Socket = " +s);
@@ -157,10 +159,11 @@ public class ChannelFactory extends Thread {
           buf.put( c );
       } catch (IOException e) {
           //logger.debug("ChannelFactory IO terminating");
-        return;
+          return;
       } catch (InterruptedException e) {
+          // unfug Thread.currentThread().interrupt();
           //logger.debug("ChannelFactory IE terminating");
-        return;
+          return;
       }
     }
   }
@@ -183,10 +186,12 @@ public class ChannelFactory extends Thread {
         }
     } catch (IOException e) { 
     } catch (InterruptedException e) { 
+        // Thread.currentThread().interrupt();
     }
     try {
         this.join();
     } catch (InterruptedException e) { 
+        // unfug Thread.currentThread().interrupt();
     }
     logger.debug("ChannelFactory terminated");
   }

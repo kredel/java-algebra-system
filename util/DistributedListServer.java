@@ -142,6 +142,7 @@ public class DistributedListServer extends Thread {
                 }
             } catch (InterruptedException end) {
                 goon = false;
+                Thread.currentThread().interrupt();
             }
         }
         //logger.debug("listserver " + this + " terminated");
@@ -168,6 +169,7 @@ public class DistributedListServer extends Thread {
                     }
                     //logger.debug("server " + br + " terminated");
                 } catch (InterruptedException e) { 
+                    Thread.currentThread().interrupt();
                 }
             }
             servers = null;
@@ -182,6 +184,7 @@ public class DistributedListServer extends Thread {
             }
             //logger.debug("server " + mythread + " terminated");
         } catch (InterruptedException e) { 
+            Thread.currentThread().interrupt();
         }
         mythread = null;
         logger.debug("ListServer terminated");
@@ -349,7 +352,8 @@ class Broadcaster extends Thread /*implements Runnable*/ {
                             br.interrupt(); 
                             br.join(100);
                         }
-                    } catch (InterruptedException unused) { 
+                    } catch (InterruptedException u) { 
+                        Thread.currentThread().interrupt();
                     }
                     bcaster.remove( br );
                 }
@@ -376,6 +380,8 @@ class Broadcaster extends Thread /*implements Runnable*/ {
                 goon = false;
             } catch (ClassNotFoundException e) {
                 goon = false;
+                e.printStackTrace();
+
             }
         }
         logger.debug("broadcaster terminated "+this);

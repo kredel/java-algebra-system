@@ -198,6 +198,7 @@ public class DistThreadPool /*extends ThreadPool*/ {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
             }
         }
         for (int i = 0; i < workers.length; i++) {
@@ -207,6 +208,7 @@ public class DistThreadPool /*extends ThreadPool*/ {
                         workers[i].join(100);
                 }
             } catch (InterruptedException e) { 
+                Thread.currentThread().interrupt();
             }
         }
         ec.close();
@@ -363,6 +365,7 @@ class DistPoolThread extends Thread {
                 }
             } catch (InterruptedException e) { 
                 running = false; 
+                Thread.currentThread().interrupt();
             }
         }
         logger.info( "terminated, done " + done + " jobs in " 

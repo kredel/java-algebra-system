@@ -121,6 +121,7 @@ public class DistributedList /* implements List not jet */ {
                 this.wait(100);
             }
         } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
             e.printStackTrace();
         }
     }
@@ -147,7 +148,8 @@ public class DistributedList /* implements List not jet */ {
                      listener.interrupt(); 
                      listener.join(100);
              }
-        } catch (InterruptedException unused) { 
+        } catch (InterruptedException u) { 
+             Thread.currentThread().interrupt();
         }
         listener = null;
     }
@@ -223,6 +225,7 @@ class Listener extends Thread {
             } catch (IOException e) {
                    goon = false;
             } catch (ClassNotFoundException e) {
+                   e.printStackTrace();
                    goon = false;
             }
         }

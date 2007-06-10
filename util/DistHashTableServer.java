@@ -150,6 +150,7 @@ public class DistHashTableServer extends Thread {
                }
           } catch (InterruptedException end) {
                goon = false;
+               Thread.currentThread().interrupt();
           }
        }
        if ( logger.isDebugEnabled() ) {
@@ -189,6 +190,7 @@ public class DistHashTableServer extends Thread {
                         logger.debug("server " + br + " terminated");
                      }
                  } catch (InterruptedException e) { 
+                     Thread.currentThread().interrupt();
                  }
               }
               servers.clear();
@@ -209,6 +211,7 @@ public class DistHashTableServer extends Thread {
                logger.debug("server terminated " + mythread);
             }
         } catch (InterruptedException e) { 
+            Thread.currentThread().interrupt();
         }
         mythread = null;
         logger.debug("ListServer terminated");
@@ -403,7 +406,8 @@ class DHTBroadcaster extends Thread /*implements Runnable*/ {
                             br.interrupt(); 
                             br.join(100);
                         }
-                    } catch (InterruptedException unused) { 
+                    } catch (InterruptedException w) { 
+                        Thread.currentThread().interrupt();
                     }
                     it.remove( /*br*/ ); //ConcurrentModificationException
                     logger.debug("bcaster.remove() " + br);
@@ -435,8 +439,10 @@ class DHTBroadcaster extends Thread /*implements Runnable*/ {
                   }
               } catch (IOException e) {
                   goon = false;
+                  //e.printStackTrace();
               } catch (ClassNotFoundException e) {
                   goon = false;
+                  e.printStackTrace();
               }
         }
         if ( logger.isDebugEnabled() ) {

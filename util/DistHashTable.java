@@ -183,6 +183,7 @@ public class DistHashTable /* implements Map not jet */ {
                }
             }
         } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
             e.printStackTrace();
         }
     }
@@ -227,6 +228,7 @@ public class DistHashTable /* implements Map not jet */ {
                }
             }
         } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
             e.printStackTrace();
         }
         return value;
@@ -282,7 +284,8 @@ public class DistHashTable /* implements Map not jet */ {
                   listener.interrupt(); 
                   listener.join(100);
             }
-        } catch (InterruptedException unused) { 
+        } catch (InterruptedException e) { 
+            Thread.currentThread().interrupt();
         }
         listener = null;
     }

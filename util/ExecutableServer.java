@@ -158,6 +158,7 @@ public class ExecutableServer extends Thread {
                }
           } catch (InterruptedException e) {
                goon = false;
+               Thread.currentThread().interrupt();
                if ( logger.isDebugEnabled() ) {
                   e.printStackTrace();
                }
@@ -183,12 +184,13 @@ public class ExecutableServer extends Thread {
               x.channel.close();
               try { 
                   while ( x.isAlive() ) {
-                          //System.out.print(".");
-                          x.interrupt(); 
-                          x.join(100);
+                        //System.out.print(".");
+                        x.interrupt(); 
+                        x.join(100);
                   }
                   logger.debug("server " + x + " terminated");
               } catch (InterruptedException e) { 
+                  Thread.currentThread().interrupt();
               }
            }
            servers = null;
@@ -197,12 +199,13 @@ public class ExecutableServer extends Thread {
         if ( mythread == null ) return;
         try { 
             while ( mythread.isAlive() ) {
-                    //System.out.print("-");
-                    mythread.interrupt(); 
-                    mythread.join(100);
+                  //System.out.print("-");
+                  mythread.interrupt(); 
+                  mythread.join(100);
             }
             //logger.debug("server " + mythread + " terminated");
         } catch (InterruptedException e) { 
+            Thread.currentThread().interrupt();
         }
         mythread = null;
         logger.debug("ExecuteServer terminated");
@@ -270,8 +273,12 @@ class Executor extends Thread /*implements Runnable*/ {
                    }
               } catch (IOException e) {
                    goon = false;
+                   //e.printStackTrace();
+                   logger.debug("IOException "+ e);
               } catch (ClassNotFoundException e) {
                    goon = false;
+                   e.printStackTrace();
+                   logger.debug("ClassNotFoundException "+ e);
               }
         }
         logger.debug("executor terminated "+this);

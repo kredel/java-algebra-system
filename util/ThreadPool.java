@@ -124,6 +124,7 @@ public class ThreadPool {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
             }
         }
         for (int i = 0; i < workers.length; i++) {
@@ -133,6 +134,7 @@ public class ThreadPool {
                         workers[i].join(100);
                 }
             } catch (InterruptedException e) { 
+                Thread.currentThread().interrupt();
             }
         }
     }
@@ -254,7 +256,8 @@ class PoolThread extends Thread {
                    logger.info( "done" );
                 }
             } catch (InterruptedException e) { 
-              running = false; 
+                Thread.currentThread().interrupt();
+                running = false; 
             }
         }
         logger.info( "terminated, done " + done + " jobs in " 
