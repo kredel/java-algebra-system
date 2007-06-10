@@ -10,36 +10,14 @@ import java.util.List;
 
 
 /**
- * ModulElement interface for use with the polynomial classes.
+ * ModulElement interface.
  * @author Heinz Kredel
- * @param M module type.
- * @typeparam C coefficient type.
+ * @typeparam M module type.
+ * @typeparam C scalar type.
  */
 public interface ModulElem<M extends ModulElem<M,C>,
                            C extends RingElem<C>> 
-                 extends Cloneable, 
-                         Comparable< M >, 
-                         Serializable {
-    public M clone();
-
-
-    public boolean isZERO();
-
-    public boolean equals(Object b);
-
-    public int hashCode();
-
-    public int compareTo(M b);
-
-    public int signum();
-
-
-    public M sum(M b);
-
-    public M subtract(M b);
-
-    public M negate();
-
+                 extends AbelianGroupElem< M > {
 
     public M scalarMultiply(C s);
 
