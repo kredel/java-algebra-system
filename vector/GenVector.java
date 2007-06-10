@@ -114,7 +114,7 @@ public class GenVector<C extends RingElem<C> >
 
 
     /**
-     * compareTo.
+     * compareTo, lexicogaphical comparison.
      * @param b other
      * @return 1 if (this &lt; b), 0 if (this == b) or -1 if (this &gt; b).
      */
@@ -186,6 +186,19 @@ public class GenVector<C extends RingElem<C> >
             a.add( e );
         }
         return new GenVector<C>(modul,a);
+    }
+
+
+    /**
+     * Absolute value of this vector.
+     * @return abs(this)
+     */
+    public GenVector<C> abs() {
+        if ( signum() < 0 ) { 
+           return negate();
+        } else {
+           return this;
+        }
     }
 
 
