@@ -235,8 +235,9 @@ public class GreatestCommonDivisorModular //<C extends GcdRingElem<C> >
             }
             // test for constant g.c.d
             if ( cm.isConstant() ) {
-               logger.info("cm = " + cm ); 
+               logger.info("cm, constant = " + cm ); 
                return fac.getONE().multiply( c );
+               //return cm.abs().multiply( c );
             }
             // test for unlucky prime
             ExpVector mdegv = cm.degreeVector();
