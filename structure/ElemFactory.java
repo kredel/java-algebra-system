@@ -20,16 +20,16 @@ public interface ElemFactory<C extends Element<C>> extends Serializable {
 
     /**
      * Get the Element for a.
-     * @param a
-     * @return a: Element.
+     * @param a long
+     * @return element corresponding to a.
      */
     public C fromInteger(long a);
 
 
     /**
      * Get the Element for a.
-     * @param a
-     * @return a: Element.
+     * @param a java.math.BigInteger.
+     * @return element corresponding to a.
      */
     public C fromInteger(BigInteger a);
 
