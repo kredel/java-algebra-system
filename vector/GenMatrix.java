@@ -14,8 +14,8 @@ import edu.jas.structure.AlgebraElem;
 
 
 /**
- * GenMatrix generic vector implementing RingElem.
- * vectors of n columns over C.
+ * GenMatrix generic matrix implementing RingElem.
+ * matrixs of n columns over C.
  * @author Heinz Kredel
  */
 
@@ -25,20 +25,24 @@ public class GenMatrix<C extends RingElem<C> >
     private static Logger logger = Logger.getLogger(GenMatrix.class);
 
     public final GenMatrixRing< C > ring;
-    public final List<C> val;
+    public final List<C> val; //remove 
+    public final ArrayList<ArrayList<C>> matrix;
+    private int hashValue = 0;
 
 
     /**
      * Constructors for GenMatrix.
      */
 
-    public GenMatrix(GenMatrixRing< C > m) {
-        this( m, m.getZERO().val );
+    public GenMatrix(GenMatrixRing< C > r) {
+        this( r, r.getZERO().matrix );
     }
 
-    protected GenMatrix(GenMatrixRing< C > m, List<C> v) {
-        ring = m;
-        val = v;
+
+    protected GenMatrix(GenMatrixRing< C > r, ArrayList<ArrayList<C>> m) {
+        ring = r;
+        matrix = m;
+        val = null;
     }
 
 
@@ -48,15 +52,24 @@ public class GenMatrix<C extends RingElem<C> >
     @Override
     public String toString() {
         StringBuffer s = new StringBuffer();
-        s.append("( ");
-        boolean first = true;
-        for ( C c : val ) {
-            if ( first ) {
-                first = false;
+        boolean firstRow = true;
+        for ( List<C> val : matrix ) {
+            s.append("( ");
+            if ( firstRow ) {
+                 firstRow = false;
             } else {
-                s.append(", ");
+                 s.append(", ");
             }
-            s.append( c.toString() );
+            boolean first = true;
+            for ( C c : val ) {
+                if ( first ) {
+                   first = false;
+                } else {
+                   s.append(", ");
+                }
+                s.append( c.toString() );
+            }
+            s.append(" ) ");
         }
         s.append(" ) :: ");
         s.append(ring.toString());
@@ -71,13 +84,12 @@ public class GenMatrix<C extends RingElem<C> >
     @Override
     public GenMatrix<C> clone() {
         //return ring.copy(this);
-        ArrayList<C> av = (ArrayList<C>) val;
-        return new GenMatrix<C>( ring, (List<C>)av.clone() );
+        return new GenMatrix<C>( ring, (ArrayList<ArrayList<C>>)matrix.clone() );
     }
 
 
     /**
-     * test if this is equal to a zero vector.
+     * test if this is equal to a zero matrix.
      */
     public boolean isZERO() {
         return ( 0 == this.compareTo( ring.getZERO() ) );
@@ -101,11 +113,11 @@ public class GenMatrix<C extends RingElem<C> >
         if ( ! (other instanceof GenMatrix) ) {
             return false;
         }
-        GenMatrix ovec = (GenMatrix)other;
-        if ( ! ring.equals(ovec.ring) ) {
+        GenMatrix om = (GenMatrix)other;
+        if ( ! ring.equals(om.ring) ) {
             return false;
         }
-        if ( ! val.equals(ovec.val) ) {
+        if ( ! matrix.equals(om.matrix) ) {
             return false;
         }
         return true;
@@ -116,7 +128,13 @@ public class GenMatrix<C extends RingElem<C> >
      * @see java.lang.Object#hashCode()
      */
     public int hashCode() {
-        return 37 * val.hashCode() + ring.hashCode();
+        if ( hashValue == 0 ) {
+           hashValue = 37 * matrix.hashCode() + ring.hashCode();
+           if ( hashValue == 0 ) {
+              hashValue = 1;
+           }
+        }
+        return hashValue;
     }
 
 
@@ -126,15 +144,19 @@ public class GenMatrix<C extends RingElem<C> >
      * @return 1 if (this &lt; b), 0 if (this == b) or -1 if (this &gt; b).
      */
     public int compareTo(GenMatrix<C> b) {
-        if ( ! ring.equals(b.ring) ) {
+        if ( ! ring.equals( b.ring ) ) {
             return -1;
         }
-        List<C> oval = b.val;
+        ArrayList<ArrayList<C>> om = b.matrix;
         int i = 0;
-        for ( C c : val ) {
-            int s = c.compareTo( oval.get( i++ ) );
-            if ( s != 0 ) {
-                return s;
+        for ( ArrayList<C> val : matrix ) {
+            ArrayList<C> ov = om.get( i++ );
+            int j = 0;
+            for ( C c : val ) {
+                int s = c.compareTo( ov.get( j++ ) );
+                if ( s != 0 ) {
+                    return s;
+                }
             }
         }
         return 0;
@@ -152,7 +174,7 @@ public class GenMatrix<C extends RingElem<C> >
 
 
     /**
-     * sign of vector.
+     * sign of matrix.
      * @return 1 if (this &lt; 0), 0 if (this == 0) or -1 if (this &gt; 0).
      */
     public int signum() {
@@ -161,53 +183,70 @@ public class GenMatrix<C extends RingElem<C> >
 
 
     /**
-     * Sum of vectors.
+     * Sum of matrices.
      * @return this+b
      */
     public GenMatrix<C> sum(GenMatrix<C> b) {
-        List<C> oval = b.val;
-        ArrayList<C> a = new ArrayList<C>( ring.cols );
+        ArrayList<ArrayList<C>> om = b.matrix;
+        ArrayList<ArrayList<C>> m = new ArrayList<ArrayList<C>>( ring.rows );
         int i = 0;
-        for ( C c : val ) {
-            C e = c.sum( oval.get( i++ ) );
-            a.add( e );
+        for ( ArrayList<C> val : matrix ) {
+            ArrayList<C> ov = om.get( i++ );
+            ArrayList<C> v = new ArrayList<C>( ring.cols );
+            int j = 0;
+            for ( C c : val ) {
+                C e = c.sum( ov.get( j++ ) );
+                v.add( e );
+           }
+           m.add( v );
         }
-        return new GenMatrix<C>(ring,a);
+        return new GenMatrix<C>(ring,m);
     }
 
 
     /**
-     * Difference of vectors.
+     * Difference of matrices.
      * @return this-b
      */
     public GenMatrix<C> subtract(GenMatrix<C> b) {
-        List<C> oval = b.val;
-        ArrayList<C> a = new ArrayList<C>( ring.cols );
+        ArrayList<ArrayList<C>> om = b.matrix;
+        ArrayList<ArrayList<C>> m = new ArrayList<ArrayList<C>>( ring.rows );
         int i = 0;
-        for ( C c : val ) {
-            C e = c.subtract( oval.get( i++ ) );
-            a.add( e );
+        for ( ArrayList<C> val : matrix ) {
+            ArrayList<C> ov = om.get( i++ );
+            ArrayList<C> v = new ArrayList<C>( ring.cols );
+            int j = 0;
+            for ( C c : val ) {
+                C e = c.subtract( ov.get( j++ ) );
+                v.add( e );
+           }
+           m.add( v );
         }
-        return new GenMatrix<C>(ring,a);
+        return new GenMatrix<C>(ring,m);
     }
 
 
     /**
-     * Negative of this vector.
+     * Negative of this matrix.
      * @return -this
      */
     public GenMatrix<C> negate() {
-        ArrayList<C> a = new ArrayList<C>( ring.cols );
-        for ( C c : val ) {
-            C e = c.negate();
-            a.add( e );
+        ArrayList<ArrayList<C>> m = new ArrayList<ArrayList<C>>( ring.rows );
+        int i = 0;
+        for ( ArrayList<C> val : matrix ) {
+            ArrayList<C> v = new ArrayList<C>( ring.cols );
+            for ( C c : val ) {
+                C e = c.negate();
+                v.add( e );
+           }
+           m.add( v );
         }
-        return new GenMatrix<C>(ring,a);
+        return new GenMatrix<C>(ring,m);
     }
 
 
     /**
-     * Absolute value of this vector.
+     * Absolute value of this matrix.
      * @return abs(this)
      */
     public GenMatrix<C> abs() {
@@ -220,155 +259,139 @@ public class GenMatrix<C extends RingElem<C> >
 
 
     /**
-     * Product of this vector with scalar.
+     * Product of this matrix with scalar.
      * @return this*s
      */
     public GenMatrix<C> scalarMultiply(C s) {
-        ArrayList<C> a = new ArrayList<C>( ring.cols );
-        for ( C c : val ) {
-            C e = c.multiply( s );
-            a.add( e );
+        ArrayList<ArrayList<C>> m = new ArrayList<ArrayList<C>>( ring.rows );
+        int i = 0;
+        for ( ArrayList<C> val : matrix ) {
+            ArrayList<C> v = new ArrayList<C>( ring.cols );
+            for ( C c : val ) {
+                C e = c.multiply( s );
+                v.add( e );
+           }
+           m.add( v );
         }
-        return new GenMatrix<C>(ring,a);
+        return new GenMatrix<C>(ring,m);
     }
 
 
     /**
-     * Left product of this vector with scalar.
+     * Left product of this matrix with scalar.
      * @return s*this
      */
     public GenMatrix<C> leftScalarMultiply(C s) {
-        ArrayList<C> a = new ArrayList<C>( ring.cols );
-        for ( C c : val ) {
-            C e = s.multiply( c );
-            a.add( e );
+        ArrayList<ArrayList<C>> m = new ArrayList<ArrayList<C>>( ring.rows );
+        int i = 0;
+        for ( ArrayList<C> val : matrix ) {
+            ArrayList<C> v = new ArrayList<C>( ring.cols );
+            for ( C c : val ) {
+                C e = s.multiply( c );
+                v.add( e );
+           }
+           m.add( v );
         }
-        return new GenMatrix<C>(ring,a);
+        return new GenMatrix<C>(ring,m);
     }
 
 
     /**
-     * Linear compination of this vector with 
-     * scalar multiple of other vector.
+     * Linear compination of this matrix with 
+     * scalar multiple of other matrix.
      * @return this*s+b*t
      */
     public GenMatrix<C> linearCombination(C s, GenMatrix<C> b, C t) {
-        List<C> oval = b.val;
-        ArrayList<C> a = new ArrayList<C>( ring.cols );
+        ArrayList<ArrayList<C>> om = b.matrix;
+        ArrayList<ArrayList<C>> m = new ArrayList<ArrayList<C>>( ring.rows );
         int i = 0;
-        for ( C c : val ) {
-            C c1 = c.multiply(s);
-            C c2 = oval.get( i++ ).multiply( t );
-            C e = c1.sum( c2 );
-            a.add( e );
+        for ( ArrayList<C> val : matrix ) {
+            ArrayList<C> ov = om.get( i++ );
+            ArrayList<C> v = new ArrayList<C>( ring.cols );
+            int j = 0;
+            for ( C c : val ) {
+                C c1 = c.multiply(s);
+                C c2 = ov.get( j++ ).multiply( t );
+                C e = c1.sum( c2 );
+                v.add( e );
+           }
+           m.add( v );
         }
-        return new GenMatrix<C>(ring,a);
+        return new GenMatrix<C>(ring,m);
     }
 
 
     /**
-     * Linear compination of this vector with 
-     * scalar multiple of other vector.
+     * Linear compination of this matrix with 
+     * scalar multiple of other matrix.
      * @return this+b*t
      */
     public GenMatrix<C> linearCombination(GenMatrix<C> b, C t) {
-        List<C> oval = b.val;
-        ArrayList<C> a = new ArrayList<C>( ring.cols );
+        ArrayList<ArrayList<C>> om = b.matrix;
+        ArrayList<ArrayList<C>> m = new ArrayList<ArrayList<C>>( ring.rows );
         int i = 0;
-        for ( C c : val ) {
-            C c2 = oval.get( i++ ).multiply( t );
-            C e = c.sum( c2 );
-            a.add( e );
+        for ( ArrayList<C> val : matrix ) {
+            ArrayList<C> ov = om.get( i++ );
+            ArrayList<C> v = new ArrayList<C>( ring.cols );
+            int j = 0;
+            for ( C c : val ) {
+                C c2 = ov.get( j++ ).multiply( t );
+                C e = c.sum( c2 );
+                v.add( e );
+           }
+           m.add( v );
         }
-        return new GenMatrix<C>(ring,a);
+        return new GenMatrix<C>(ring,m);
     }
 
 
     /**
-     * Left linear compination of this vector with 
-     * scalar multiple of other vector.
+     * Left linear compination of this matrix with 
+     * scalar multiple of other matrix.
      * @return this+t*b
      */
     public GenMatrix<C> linearCombination(C t, GenMatrix<C> b) {
-        List<C> oval = b.val;
-        ArrayList<C> a = new ArrayList<C>( ring.cols );
+        ArrayList<ArrayList<C>> om = b.matrix;
+        ArrayList<ArrayList<C>> m = new ArrayList<ArrayList<C>>( ring.rows );
         int i = 0;
-        for ( C c : val ) {
-            C c2 = t.multiply( oval.get( i++ ) );
-            C e = c.sum( c2 );
-            a.add( e );
+        for ( ArrayList<C> val : matrix ) {
+            ArrayList<C> ov = om.get( i++ );
+            ArrayList<C> v = new ArrayList<C>( ring.cols );
+            int j = 0;
+            for ( C c : val ) {
+                C c2 = t.multiply( ov.get( j++ ) );
+                C e = c.sum( c2 );
+                v.add( e );
+           }
+           m.add( v );
         }
-        return new GenMatrix<C>(ring,a);
+        return new GenMatrix<C>(ring,m);
     }
 
 
     /**
-     * left linear compination of this vector with 
-     * scalar multiple of other vector.
+     * left linear compination of this matrix with 
+     * scalar multiple of other matrix.
      * @return s*this+t*b
      */
     public GenMatrix<C> leftLinearCombination(C s, C t, 
                                               GenMatrix<C> b) {
-        List<C> oval = b.val;
-        ArrayList<C> a = new ArrayList<C>( ring.cols );
+        ArrayList<ArrayList<C>> om = b.matrix;
+        ArrayList<ArrayList<C>> m = new ArrayList<ArrayList<C>>( ring.rows );
         int i = 0;
-        for ( C c : val ) {
-            C c1 = s.multiply(c);
-            C c2 = t.multiply( oval.get( i++ ) );
-            C e = c1.sum( c2 );
-            a.add( e );
+        for ( ArrayList<C> val : matrix ) {
+            ArrayList<C> ov = om.get( i++ );
+            ArrayList<C> v = new ArrayList<C>( ring.cols );
+            int j = 0;
+            for ( C c : val ) {
+                C c1 = s.multiply(c);
+                C c2 = t.multiply( ov.get( j++ ) );
+                C e = c1.sum( c2 );
+                v.add( e );
+           }
+           m.add( v );
         }
-        return new GenMatrix<C>(ring,a);
-    }
-
-
-
-    /**
-     * scalar / dot product of this vector with other vector.
-     * @return this . b
-     */
-    public C scalarProduct(GenMatrix<C> b) {
-        C a = ring.coFac.getZERO();
-        List<C> oval = b.val;
-        int i = 0;
-        for ( C c : val ) {
-            C c2 = c.multiply( oval.get( i++ ) );
-            a = a.sum( c2 );
-        }
-        return a;
-    }
-
-
-    /**
-     * scalar / dot product of this vector with list of other vectors.
-     * @return this * b
-     */
-    public GenMatrix<C> scalarProduct(List<GenMatrix<C>> B) {
-        GenMatrix<C> A = ring.getZERO();
-        int i = 0;
-        for ( C c : val ) {
-            GenMatrix<C> b = B.get( i++ );
-            GenMatrix<C> a = b.leftScalarMultiply( c );
-            A = A.sum( a );
-        }
-        return A;
-    }
-
-
-    /**
-     * right scalar / dot product of this vector with list 
-     * of other vectors.
-     * @return b * this
-     */
-    public GenMatrix<C> rightScalarProduct(List<GenMatrix<C>> B) {
-        GenMatrix<C> A = ring.getZERO();
-        int i = 0;
-        for ( C c : val ) {
-            GenMatrix<C> b = B.get( i++ );
-            GenMatrix<C> a = b.scalarMultiply( c );
-            A = A.sum( a );
-        }
-        return A;
+        return new GenMatrix<C>(ring,m);
     }
 
 

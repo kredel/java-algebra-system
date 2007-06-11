@@ -34,11 +34,13 @@ public class GenMatrixRing<C extends RingElem<C> >
 
     public final RingFactory< C > coFac;
 
+    public final int rows;
+
     public final int cols;
 
     public final GenMatrix<C> ZERO;
 
-    public final List<GenMatrix<C>> BASIS;
+    public final GenMatrix<C> ONE;
 
     private final static Random random = new Random(); 
 
@@ -50,24 +52,33 @@ public class GenMatrixRing<C extends RingElem<C> >
 
 /**
  * Constructors for GenMatrixRing.
+ * @param b coefficient factory. 
+ * @param r number of rows. 
+ * @param c number of colums. 
  */
 
-    public GenMatrixRing(RingFactory< C > b, int s) {
+    public GenMatrixRing(RingFactory< C > b, int r, int c) {
         coFac = b;
-        cols = s;
+        rows = r;
+        cols = c;
         ArrayList<C> z = new ArrayList<C>( cols ); 
         for ( int i = 0; i < cols; i++ ) {
             z.add( coFac.getZERO() );
         }
-        ZERO = new GenMatrix<C>( this, z );
-        BASIS = new ArrayList<GenMatrix<C>>( cols ); 
+        ArrayList<ArrayList<C>> m = new ArrayList<ArrayList<C>>( rows ); 
+        for ( int i = 0; i < rows; i++ ) {
+            m.add( z );
+        }
+        ZERO = new GenMatrix<C>( this, m );
+        m = new ArrayList<ArrayList<C>>( rows ); 
         C one = coFac.getONE();
         ArrayList<C> v; 
-        for ( int i = 0; i < cols; i++ ) {
+        for ( int i = 0; i < rows; i++ ) {
             v = (ArrayList<C>)z.clone();
             v.set(i, one );
-            BASIS.add( new GenMatrix<C>( this, v ) );
+            m.add( v );
         }
+        ONE = new GenMatrix<C>( this, m );
     }
 
 
@@ -78,7 +89,7 @@ public class GenMatrixRing<C extends RingElem<C> >
     public String toString() {
         StringBuffer s = new StringBuffer();
         s.append( coFac.getClass().getSimpleName() );
-        s.append("[" + cols + "]");
+        s.append("[" + rows + "," + cols + "]");
         return s.toString();
     }
 
@@ -97,7 +108,7 @@ public class GenMatrixRing<C extends RingElem<C> >
      * @return 1.
      */
     public GenMatrix<C> getONE() {
-        return null;
+        return ONE;
     }
 
 
@@ -123,7 +134,7 @@ public class GenMatrixRing<C extends RingElem<C> >
     @Override
     public int hashCode() { 
        int h;
-       h = cols;
+       h = rows * 17 + cols;
        h = 37 * h + coFac.hashCode();
        return h;
     }
@@ -173,7 +184,7 @@ public class GenMatrixRing<C extends RingElem<C> >
      */
     public GenMatrix<C> fromInteger(long a) {
         C c = coFac.fromInteger(a);
-        return BASIS.get(0).scalarMultiply(c);
+        return ONE.scalarMultiply(c);
     }
 
 
@@ -184,28 +195,41 @@ public class GenMatrixRing<C extends RingElem<C> >
      */
     public GenMatrix<C> fromInteger(BigInteger a) {
         C c = coFac.fromInteger(a);
-        return BASIS.get(0).scalarMultiply(c);
+        return ONE.scalarMultiply(c);
     }
 
 
     /**
      * From List of coefficients.
-     * @param v list of coefficients.
+     * @param om list of list of coefficients.
      */
-    public GenMatrix<C> fromList(List<C> v) {
-        if ( v == null ) {
+    public GenMatrix<C> fromList(List<List<C>> om) {
+        if ( om == null ) {
             return ZERO;
         }
-        if ( v.size() > cols ) {
-           throw new RuntimeException("size v > cols " + cols + " < " + v);
+        if ( om.size() > rows ) {
+           throw new RuntimeException("size v > rows " + rows + " < " + om);
         }
-        List<C> r = new ArrayList<C>( cols ); 
-        r.addAll( v );
-        // pad with zeros if required:
-        for ( int i = r.size(); i < cols; i++ ) {
-            r.add( coFac.getZERO() );
+        ArrayList<ArrayList<C>> m = new ArrayList<ArrayList<C>>( rows );
+        for ( int i = 0; i < rows; i++ ) {
+            List<C> ov = om.get( i++ );
+            ArrayList<C> v;
+            if ( ov == null ) {
+               v = ZERO.matrix.get(0);
+            } else {
+               if ( ov.size() > cols ) {
+                  throw new RuntimeException("size v > cols " + cols + " < " + ov);
+               }
+               v = new ArrayList<C>( cols );
+               v.addAll( ov );
+               // pad with zeros if required:
+               for ( int j = v.size(); j < cols; j++ ) {
+                   v.add( coFac.getZERO() );
+               }
+            }
+            m.add( v );
         }
-        return new GenMatrix<C>( this, r );
+        return new GenMatrix<C>(this,m);
     }
 
 
@@ -247,15 +271,21 @@ public class GenMatrixRing<C extends RingElem<C> >
      * @return a random element.
      */
     public GenMatrix<C> random(int k, float q, Random random) {
-        List<C> r = new ArrayList<C>( cols ); 
-        for ( int i = 0; i < cols; i++ ) {
-            if ( random.nextFloat() < q ) {
-                r.add( coFac.random(k) );
-            } else {
-                r.add( coFac.getZERO() );
-            }
+        ArrayList<ArrayList<C>> m = new ArrayList<ArrayList<C>>( rows );
+        for ( int i = 0; i < rows; i++ ) {
+            ArrayList<C> v = new ArrayList<C>( cols );
+            for ( int j = 0; j < cols; j++ ) {
+                C e; 
+                if ( random.nextFloat() < q ) {
+                   e = coFac.random(k);
+                } else {
+                   e = coFac.getZERO();
+                }
+                v.add( e );
+           }
+           m.add( v );
         }
-        return new GenMatrix<C>( this, r );
+        return new GenMatrix<C>(this,m);
     }
 
 
