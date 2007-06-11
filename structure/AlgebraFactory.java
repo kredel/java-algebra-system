@@ -20,10 +20,10 @@ public interface AlgebraFactory<A extends AlgebraElem<A,C>,
 
 
     /**
-     * Convert list to module.
-     * @param v list of ring elements.
-     * @return a module element with the elements from v.
+     * Convert list of list to matrix.
+     * @param m list of list of ring elements.
+     * @return a matrix with the elements from m.
      */
-    public A fromList(List<C> v);
+    public A fromList(List<List<C>> m);
 
 }
