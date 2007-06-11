@@ -16,13 +16,7 @@ import java.io.Serializable;
  */
 public interface ModulFactory<M extends ModulElem<M,C>,
                               C extends RingElem<C>> 
-                 extends Serializable {
-
-    /**
-     * getZERO.
-     * @return ZERO from the respective module.
-     */
-    public M getZERO();
+                 extends AbelianGroupFactory<M> {
 
 
     /**
@@ -41,28 +35,5 @@ public interface ModulFactory<M extends ModulElem<M,C>,
      */
     public M random(int k, float q);
 
-
-    /**
-     * copy.
-     * @param c module element.
-     * @return a copy of c.
-     */
-    public M copy(M c);
-
-
-    /**
-     * parse.
-     * @param s string which contains a module element.
-     * @return a module element.
-     */
-    public M parse(String s);
-
-
-    /**
-     * parse.
-     * @param r a stream reader.
-     * @return a module element.
-     */
-    public M parse(Reader r);
 
 }
