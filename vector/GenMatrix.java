@@ -53,14 +53,15 @@ public class GenMatrix<C extends RingElem<C> >
     public String toString() {
         StringBuffer s = new StringBuffer();
         boolean firstRow = true;
+        s.append("(\n");
         for ( List<C> val : matrix ) {
-            s.append("( ");
             if ( firstRow ) {
                  firstRow = false;
             } else {
-                 s.append(", ");
+                 s.append(",\n");
             }
             boolean first = true;
+            s.append("( ");
             for ( C c : val ) {
                 if ( first ) {
                    first = false;
@@ -69,7 +70,7 @@ public class GenMatrix<C extends RingElem<C> >
                 }
                 s.append( c.toString() );
             }
-            s.append(" ) ");
+            s.append(" )");
         }
         s.append(" ) :: ");
         s.append(ring.toString());
