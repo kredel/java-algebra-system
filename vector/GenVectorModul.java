@@ -12,11 +12,12 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Random;
 
+import java.math.BigInteger;
+
 import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
-//import edu.jas.structure.ModulElem;
 import edu.jas.structure.ModulFactory;
 
 
@@ -29,14 +30,22 @@ import edu.jas.structure.ModulFactory;
 public class GenVectorModul<C extends RingElem<C> > 
             implements ModulFactory< GenVector<C>, C > {
 
+    private static Logger logger = Logger.getLogger(GenVectorModul.class);
+
     public final RingFactory< C > coFac;
+
     public final int cols;
 
     public final GenVector<C> ZERO;
 
+    public final List<GenVector<C>> BASIS;
+
     private final static Random random = new Random(); 
 
-    private static Logger logger = Logger.getLogger(GenVectorModul.class);
+    public final static float DEFAULT_DENSITY = 0.5f; 
+
+    private float density = DEFAULT_DENSITY; 
+
 
 
 /**
@@ -46,11 +55,19 @@ public class GenVectorModul<C extends RingElem<C> >
     public GenVectorModul(RingFactory< C > b, int s) {
         coFac = b;
         cols = s;
-        List<C> z = new ArrayList<C>( cols ); 
+        ArrayList<C> z = new ArrayList<C>( cols ); 
         for ( int i = 0; i < cols; i++ ) {
             z.add( coFac.getZERO() );
         }
         ZERO = new GenVector<C>( this, z );
+        BASIS = new ArrayList<GenVector<C>>( cols ); 
+        C one = coFac.getONE();
+        ArrayList<C> v; 
+        for ( int i = 0; i < cols; i++ ) {
+            v = (ArrayList<C>)z.clone();
+            v.set(i, one );
+            BASIS.add( new GenVector<C>( this, v ) );
+        }
     }
 
 
@@ -104,6 +121,28 @@ public class GenVectorModul<C extends RingElem<C> >
 
 
     /**
+     * Get the vector for a.
+     * @param a long
+     * @return vector corresponding to a.
+     */
+    public GenVector<C> fromInteger(long a) {
+        C c = coFac.fromInteger(a);
+        return BASIS.get(0).scalarMultiply(c);
+    }
+
+
+    /**
+     * Get the vector for a.
+     * @param a long
+     * @return vector corresponding to a.
+     */
+    public GenVector<C> fromInteger(BigInteger a) {
+        C c = coFac.fromInteger(a);
+        return BASIS.get(0).scalarMultiply(c);
+    }
+
+
+    /**
      * From List of coefficients.
      * @param v list of coefficients.
      */
@@ -127,9 +166,41 @@ public class GenVectorModul<C extends RingElem<C> >
     /**
      * Random vector.
      * @param k size of random coefficients.
+     */
+    public GenVector<C> random(int k) {
+        return random( k, density, random );
+    }
+
+
+    /**
+     * Random vector.
+     * @param k size of random coefficients.
      * @param q density of nozero coefficients.
      */
     public GenVector<C> random(int k, float q) {
+        return random( k, q, random );
+    }
+
+
+    /**
+     * Random vector.
+     * @param k size of random coefficients.
+     * @param random is a source for random bits.
+     * @return a random element.
+     */
+    public GenVector<C> random(int k, Random random) {
+        return random( k, density, random );
+    }
+
+
+    /**
+     * Random vector.
+     * @param k size of random coefficients.
+     * @param q density of nozero coefficients.
+     * @param random is a source for random bits.
+     * @return a random element.
+     */
+    public GenVector<C> random(int k, float q, Random random) {
         List<C> r = new ArrayList<C>( cols ); 
         for ( int i = 0; i < cols; i++ ) {
             if ( random.nextFloat() < q ) {
