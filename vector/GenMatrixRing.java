@@ -58,6 +58,15 @@ public class GenMatrixRing<C extends RingElem<C> >
  */
 
     public GenMatrixRing(RingFactory< C > b, int r, int c) {
+        if ( b == null ) {
+            throw new RuntimeException("RingFactory is null");
+        }
+        if ( r < 1 ) {
+            throw new RuntimeException("rows < 1 " + r);
+        }
+        if ( c < 1 ) {
+            throw new RuntimeException("cols < 1 " + c);
+        }
         coFac = b;
         rows = r;
         cols = c;
@@ -74,9 +83,11 @@ public class GenMatrixRing<C extends RingElem<C> >
         C one = coFac.getONE();
         ArrayList<C> v; 
         for ( int i = 0; i < rows; i++ ) {
-            v = (ArrayList<C>)z.clone();
-            v.set(i, one );
-            m.add( v );
+            if ( i < cols ) {
+               v = (ArrayList<C>)z.clone();
+               v.set(i, one );
+               m.add( v );
+            }
         }
         ONE = new GenMatrix<C>( this, m );
     }
