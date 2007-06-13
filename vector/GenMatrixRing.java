@@ -38,6 +38,10 @@ public class GenMatrixRing<C extends RingElem<C> >
 
     public final int cols;
 
+    public final int blocksize;
+
+    public final static int DEFAULT_BSIZE = 5; 
+
     public final GenMatrix<C> ZERO;
 
     public final GenMatrix<C> ONE;
@@ -58,6 +62,19 @@ public class GenMatrixRing<C extends RingElem<C> >
  */
 
     public GenMatrixRing(RingFactory< C > b, int r, int c) {
+        this(b,r,c,DEFAULT_BSIZE);
+    }
+
+
+/**
+ * Constructors for GenMatrixRing.
+ * @param b coefficient factory. 
+ * @param r number of rows. 
+ * @param c number of colums. 
+ * @param s block size for blocked operations. 
+ */
+
+    public GenMatrixRing(RingFactory< C > b, int r, int c, int s) {
         if ( b == null ) {
             throw new RuntimeException("RingFactory is null");
         }
@@ -70,13 +87,14 @@ public class GenMatrixRing<C extends RingElem<C> >
         coFac = b;
         rows = r;
         cols = c;
+        blocksize = s;
         ArrayList<C> z = new ArrayList<C>( cols ); 
         for ( int i = 0; i < cols; i++ ) {
             z.add( coFac.getZERO() );
         }
         ArrayList<ArrayList<C>> m = new ArrayList<ArrayList<C>>( rows ); 
         for ( int i = 0; i < rows; i++ ) {
-            m.add( z );
+            m.add( (ArrayList<C>)z.clone() );
         }
         ZERO = new GenMatrix<C>( this, m );
         m = new ArrayList<ArrayList<C>>( rows ); 
@@ -129,6 +147,9 @@ public class GenMatrixRing<C extends RingElem<C> >
             return false;
         }
         GenMatrixRing omod = (GenMatrixRing)other;
+        if ( rows != omod.rows ) {
+            return false;
+        }
         if ( cols != omod.cols ) {
             return false;
         }
@@ -175,7 +196,7 @@ public class GenMatrixRing<C extends RingElem<C> >
      * @return true if this monoid is associative, else false.
      */
     public boolean isAssociative() {
-        return true;
+        return (rows == cols);
     }
 
 
@@ -185,6 +206,37 @@ public class GenMatrixRing<C extends RingElem<C> >
      */
     public java.math.BigInteger characteristic() {
        return coFac.characteristic();
+    }
+
+
+    /**
+     * Transposed matrix ring.
+     * @return transposed ring factory.
+     */
+    public GenMatrixRing<C> transpose() {
+        if ( rows == cols ) {
+           return this;
+        }
+        return new GenMatrixRing<C>(coFac, cols, rows, blocksize);
+    }
+
+
+    /**
+     * Product matrix ring for multiplication.
+     * @param o other matrix ring factory.
+     * @return product ring factory.
+     */
+    public GenMatrixRing<C> product(GenMatrixRing<C> other) {
+        if ( cols != other.rows ) {
+           throw new RuntimeException("invalid dimensions in product");
+        }
+        if ( ! coFac.equals( other.coFac ) ) {
+           throw new RuntimeException("invalid coefficients in product");
+        }
+        if ( rows == other.rows && cols == other.cols ) {
+           return this;
+        }
+        return new GenMatrixRing<C>(coFac, rows, other.cols, blocksize);
     }
 
 

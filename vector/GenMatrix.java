@@ -85,7 +85,13 @@ public class GenMatrix<C extends RingElem<C> >
     @Override
     public GenMatrix<C> clone() {
         //return ring.copy(this);
-        return new GenMatrix<C>( ring, (ArrayList<ArrayList<C>>)matrix.clone() );
+        ArrayList<ArrayList<C>> m = new ArrayList<ArrayList<C>>( ring.rows ); 
+        ArrayList<C> v; 
+        for ( ArrayList<C> val : matrix ) {
+            v = (ArrayList<C>)val.clone();
+            m.add( v );
+        }
+        return new GenMatrix<C>( ring, m );
     }
 
 
@@ -397,13 +403,68 @@ public class GenMatrix<C extends RingElem<C> >
 
 
     /**
+     * Transposed matrix.
+     * @return transpose(this)
+     */
+    public GenMatrix<C> transpose(GenMatrixRing<C> tr) {
+        GenMatrix<C> t = tr.getZERO().clone();
+        ArrayList<ArrayList<C>> m = t.matrix;
+        int i = 0;
+        for ( ArrayList<C> val : matrix ) {
+            int j = 0;
+            for ( C c : val ) {
+                (m.get(j)).set( i, c );
+                j++;
+            }
+            i++;
+        }
+        // return new GenMatrix<C>(tr,m);
+        return t;
+    }
+
+
+    /**
      * Multiply this with S.
      * @param S
      * @return this * S.
      */
     public GenMatrix<C> multiply(GenMatrix<C> S) {
-        throw new RuntimeException("multiply not implemented");
-        //return ZERO;
+      int na = ring.blocksize;
+      int nb = ring.blocksize;
+      //System.out.println("#blocks = " + (matrix.size()/na) + ", na = " + na 
+      //    + " SeqMultBlockTrans");
+      ArrayList<ArrayList<C>> m = matrix;
+      ArrayList<ArrayList<C>> s = S.matrix;
+
+      GenMatrixRing<C> tr = S.ring.transpose();
+      GenMatrix<C> T = S.transpose(tr);
+      ArrayList<ArrayList<C>> t = T.matrix;
+      //System.out.println("T = " + T); 
+
+      GenMatrixRing<C> pr = ring.product( S.ring );
+      GenMatrix<C> P = pr.getZERO().clone();
+      ArrayList<ArrayList<C>> p = P.matrix;
+      //System.out.println("P = " + P); 
+
+      for (int ii=0; ii < m.size(); ii+=na) {
+          for (int jj=0; jj < t.size(); jj+=nb) {
+
+              for (int i=ii; i < Math.min((ii+na),m.size()); i++) {
+                  ArrayList<C> Ai = m.get(i); //A[i];
+                  for (int j=jj; j < Math.min((jj+nb),t.size()); j++) {
+                      ArrayList<C> Bj = s.get(j); //B[j];
+                      C c = ring.coFac.getZERO();
+                      for (int k=0; k < Bj.size(); k++) {
+                          c = c.sum( Ai.get(k).multiply( Bj.get( k ) ) ); 
+                          //  c += Ai[k] * Bj[k];
+                      }
+                      (p.get(i)).set(j,c);  // C[i][j] = c;
+                  }
+              }
+
+          }
+      }
+      return new GenMatrix<C>(pr,p);
     }
 
 
