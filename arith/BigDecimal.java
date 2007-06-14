@@ -65,7 +65,7 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>,
     /**
      * Constructor for BigDecimal from math.BigDecimal.
      * @param a java.math.BigDecimal.
-     * @param c MathContext.
+     * @param mc MathContext.
      */
     public BigDecimal(java.math.BigDecimal a, MathContext mc) {
         context = mc;
@@ -85,7 +85,7 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>,
     /**
      * Constructor for BigDecimal from long and a context.
      * @param a long.
-     * @param c MathContext.
+     * @param mc MathContext.
      */
     public BigDecimal(long a, MathContext mc) {
         this( new java.math.BigDecimal( String.valueOf(a) ), mc );
@@ -104,7 +104,7 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>,
     /**
      * Constructor for BigDecimal from String.
      * @param s String.
-     * @param c MathContext.
+     * @param mc MathContext.
      */
     public BigDecimal(String s, MathContext mc) {
         this( new java.math.BigDecimal( s.trim() ), mc );
