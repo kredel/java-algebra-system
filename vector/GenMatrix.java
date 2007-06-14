@@ -413,7 +413,7 @@ public class GenMatrix<C extends RingElem<C> >
         for ( ArrayList<C> val : matrix ) {
             int j = 0;
             for ( C c : val ) {
-                (m.get(j)).set( i, c );
+                (m.get(j)).set( i, c ); //A[j,i] = A[i,j]
                 j++;
             }
             i++;
@@ -452,7 +452,7 @@ public class GenMatrix<C extends RingElem<C> >
               for (int i=ii; i < Math.min((ii+na),m.size()); i++) {
                   ArrayList<C> Ai = m.get(i); //A[i];
                   for (int j=jj; j < Math.min((jj+nb),t.size()); j++) {
-                      ArrayList<C> Bj = s.get(j); //B[j];
+                      ArrayList<C> Bj = t.get(j); //B[j];
                       C c = ring.coFac.getZERO();
                       for (int k=0; k < Bj.size(); k++) {
                           c = c.sum( Ai.get(k).multiply( Bj.get( k ) ) ); 
@@ -462,6 +462,35 @@ public class GenMatrix<C extends RingElem<C> >
                   }
               }
 
+          }
+      }
+      return new GenMatrix<C>(pr,p);
+    }
+
+
+    /**
+     * Multiply this with S.
+     * Simple unblocked algorithm.
+     * @param S
+     * @return this * S.
+     */
+    public GenMatrix<C> multiplySimple(GenMatrix<C> S) {
+      ArrayList<ArrayList<C>> m = matrix;
+      ArrayList<ArrayList<C>> B = S.matrix;
+
+      GenMatrixRing<C> pr = ring.product( S.ring );
+      GenMatrix<C> P = pr.getZERO().clone();
+      ArrayList<ArrayList<C>> p = P.matrix;
+
+      for (int i=0; i < pr.rows; i++) {
+          ArrayList<C> Ai = m.get(i); //A[i];
+          for (int j=0; j < pr.cols; j++) {
+              C c = ring.coFac.getZERO();
+              for (int k=0; k < S.ring.rows; k++) {
+                  c = c.sum( Ai.get(k).multiply( B.get( k ).get(j) ) ); 
+                  //  c += A[i][k] * B[k][j];
+              }
+              (p.get(i)).set(j,c);  // C[i][j] = c;
           }
       }
       return new GenMatrix<C>(pr,p);
@@ -520,6 +549,5 @@ public class GenMatrix<C extends RingElem<C> >
         throw new RuntimeException("egcd not implemented");
         //return ZERO;
     }
-
 
 }
