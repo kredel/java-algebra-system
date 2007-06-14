@@ -28,12 +28,11 @@ public interface ModulFactory<M extends ModulElem<M,C>,
 
 
     /**
-     * random.
-     * @param k length of vectors.
+     * Random vector.
+     * @param k size of coefficients.
      * @param q fraction of non zero elements.
-     * @return a random module element.
+     * @return a random vector.
      */
     public M random(int k, float q);
-
 
 }

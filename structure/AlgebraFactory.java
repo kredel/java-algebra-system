@@ -26,4 +26,13 @@ public interface AlgebraFactory<A extends AlgebraElem<A,C>,
      */
     public A fromList(List<List<C>> m);
 
+
+    /**
+     * Random Matrix.
+     * @param k size of coefficients.
+     * @param q fraction of non zero elements.
+     * @return a random matrix.
+     */
+    public A random(int k, float q);
+
 }
