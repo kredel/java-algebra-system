@@ -118,6 +118,9 @@ public class GenMatrixTest extends TestCase {
      for (int i = 0; i < 5; i++) {
          a = mfac.random(kl,q);
          //System.out.println("a = " + a);
+         if ( a.isZERO() ) {
+            continue;
+         }
          assertTrue(" not isZERO( a"+i+" )", !a.isZERO() );
          b = a.transpose(tfac);
          //System.out.println("b = " + b);
@@ -240,19 +243,18 @@ public class GenMatrixTest extends TestCase {
 
 
 /**
- * Test multiplication.
+ * Test (simple) multiplication.
  * 
  */
- public void testMultiplication() {
+ public void testSimpleMultiplication() {
      BigRational cfac = new BigRational(1);
      GenMatrixRing<BigRational> mfac 
         = new GenMatrixRing<BigRational>(cfac,rows,cols);
-     BigRational r, s, t; 
-     GenMatrix<BigRational> a, b, c, d, e; 
+     GenMatrix<BigRational> a, b, c, d, e, f; 
 
      a = mfac.getZERO();
      b = mfac.getZERO();
-     c = a.multiply(b);
+     c = a.multiplySimple(b);
      //System.out.println("a = " + a);
      //System.out.println("b = " + b);
      //System.out.println("c = " + c);
@@ -260,42 +262,66 @@ public class GenMatrixTest extends TestCase {
 
      a = mfac.getONE();
      b = mfac.getONE();
-     c = a.multiply(b);
+     c = a.multiplySimple(b);
      //System.out.println("a = " + a);
      //System.out.println("b = " + b);
      //System.out.println("c = " + c);
      assertTrue("1*1 = 1 ", c.isONE() );
 
-     GenMatrixRing<BigRational> tfac = mfac.transpose();
-
      a = mfac.random(kl,q);
      b = mfac.getONE();
-     c = a.multiply(b);
+     c = a.multiplySimple(b);
+     d = a.multiply(b);
      //System.out.println("a = " + a);
      //System.out.println("b = " + b);
      //System.out.println("c = " + c);
-     assertEquals("a*1 = a ", a, c );
-
-     //a = mfac.random(kl,q);
-     //b = mfac.getONE();
-     c = b.multiply(a);
-     //System.out.println("a = " + a);
-     //System.out.println("b = " + b);
-     //System.out.println("c = " + c);
-     d = c.transpose(tfac);
      //System.out.println("d = " + d);
-     assertEquals("1*a = a ", a, d );
+     assertEquals("a*1 = a ", a, c );
+     assertEquals("a*1 = a*1 ", c, d );
+
+     c = b.multiplySimple(a);
+     d = a.multiply(b);
+     //System.out.println("a = " + a);
+     //System.out.println("b = " + b);
+     //System.out.println("c = " + c);
+     //System.out.println("d = " + d);
+     assertEquals("1*a = a ", a, c );
+     assertEquals("a*1 = a*1 ", c, d );
 
      b = mfac.random(kl,q);
-     c = a.multiply(b);
-     d = b.multiply(a);
+     long s, t;
+       s = System.currentTimeMillis(); 
+     c = a.multiplySimple(b);
+       s = System.currentTimeMillis() - s; 
+     d = b.multiplySimple(a);
+       t = System.currentTimeMillis(); 
+     e = a.multiply(b);
+       t = System.currentTimeMillis() - t; 
+     f = b.multiply(a);
      //System.out.println("a = " + a);
      //System.out.println("b = " + b);
      //System.out.println("c = " + c);
      //System.out.println("d = " + d);
-     e = d.transpose(tfac);
      //System.out.println("e = " + e);
-     assertTrue("a*b != B*a ", c.equals(e) );
+     //System.out.println("f = " + e);
+     //System.out.println("e = " + e);
+     assertTrue("a*b != b*a ", !c.equals(d) );
+     assertEquals("a*1 = a*1 ", c, e );
+     assertEquals("a*1 = a*1 ", d, f );
+     //System.out.println("time: s = " + s + ", t = " + t);
+
+     if ( !mfac.isAssociative() ) {
+        return;
+     }
+     c = mfac.random(kl,q);
+
+     d = a.multiply( b.sum(c) );
+     e = (a.multiply(b)).sum( a.multiply(c) );
+     assertEquals("a*(b+c) = a*b+a*c", d, e );
+
+     d = a.multiply( b.multiply(c) );
+     e = (a.multiply(b)).multiply(c);
+     assertEquals("a*(b*c) = (a*b)*c", d, e );
  }
 
 
@@ -354,6 +380,9 @@ public class GenMatrixTest extends TestCase {
      for (int i = 0; i < 5; i++) {
          a = mfac.random(kl,q);
          //System.out.println("a = " + a);
+         if ( a.isZERO() ) {
+            continue;
+         }
          assertTrue(" not isZERO( a"+i+" )", !a.isZERO() );
      }
  }

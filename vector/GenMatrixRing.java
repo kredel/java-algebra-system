@@ -22,8 +22,8 @@ import edu.jas.structure.AlgebraFactory;
 
 
 /**
- * GenMatrixRing generic vector implementing RingElem.
- * vectors of n columns over C.
+ * GenMatrixRing generic matrix factory implementing RingFactory.
+ * Matrices of n rows and m columns over C.
  * @author Heinz Kredel
  */
 
@@ -40,7 +40,7 @@ public class GenMatrixRing<C extends RingElem<C> >
 
     public final int blocksize;
 
-    public final static int DEFAULT_BSIZE = 5; 
+    public final static int DEFAULT_BSIZE = 10; 
 
     public final GenMatrix<C> ZERO;
 
@@ -241,9 +241,9 @@ public class GenMatrixRing<C extends RingElem<C> >
 
 
     /**
-     * Get the vector for a.
+     * Get the matrix for a.
      * @param a long
-     * @return vector corresponding to a.
+     * @return matrix corresponding to a.
      */
     public GenMatrix<C> fromInteger(long a) {
         C c = coFac.fromInteger(a);
@@ -252,9 +252,9 @@ public class GenMatrixRing<C extends RingElem<C> >
 
 
     /**
-     * Get the vector for a.
+     * Get the matrix for a.
      * @param a long
-     * @return vector corresponding to a.
+     * @return matrix corresponding to a.
      */
     public GenMatrix<C> fromInteger(BigInteger a) {
         C c = coFac.fromInteger(a);
@@ -297,7 +297,7 @@ public class GenMatrixRing<C extends RingElem<C> >
 
 
     /**
-     * Random vector.
+     * Random matrix.
      * @param k size of random coefficients.
      */
     public GenMatrix<C> random(int k) {
@@ -306,7 +306,7 @@ public class GenMatrixRing<C extends RingElem<C> >
 
 
     /**
-     * Random vector.
+     * Random matrix.
      * @param k size of random coefficients.
      * @param q density of nozero coefficients.
      */
@@ -316,7 +316,7 @@ public class GenMatrixRing<C extends RingElem<C> >
 
 
     /**
-     * Random vector.
+     * Random matrix.
      * @param k size of random coefficients.
      * @param random is a source for random bits.
      * @return a random element.
@@ -327,7 +327,7 @@ public class GenMatrixRing<C extends RingElem<C> >
 
 
     /**
-     * Random vector.
+     * Random matrix.
      * @param k size of random coefficients.
      * @param q density of nozero coefficients.
      * @param random is a source for random bits.
@@ -353,7 +353,79 @@ public class GenMatrixRing<C extends RingElem<C> >
 
 
     /**
-     * copy vector.
+     * Random upper triangular matrix.
+     * @param k size of random coefficients.
+     * @param q density of nozero coefficients.
+     */
+    public GenMatrix<C> randomUpper(int k, float q) {
+        return randomUpper( k, q, random );
+    }
+
+
+    /**
+     * Random upper triangular matrix.
+     * @param k size of random coefficients.
+     * @param q density of nozero coefficients.
+     * @param random is a source for random bits.
+     * @return a random element.
+     */
+    public GenMatrix<C> randomUpper(int k, float q, Random random) {
+        ArrayList<ArrayList<C>> m = new ArrayList<ArrayList<C>>( rows );
+        for ( int i = 0; i < rows; i++ ) {
+            ArrayList<C> v = new ArrayList<C>( cols );
+            for ( int j = 0; j < cols; j++ ) {
+                C e = coFac.getZERO(); 
+                if ( j >= i ) {
+                   if ( random.nextFloat() < q ) {
+                      e = coFac.random(k);
+                   } 
+                } 
+                v.add( e );
+           }
+           m.add( v );
+        }
+        return new GenMatrix<C>(this,m);
+    }
+
+
+    /**
+     * Random lower triangular matrix.
+     * @param k size of random coefficients.
+     * @param q density of nozero coefficients.
+     */
+    public GenMatrix<C> randomLower(int k, float q) {
+        return randomLower( k, q, random );
+    }
+
+
+    /**
+     * Random lower triangular matrix.
+     * @param k size of random coefficients.
+     * @param q density of nozero coefficients.
+     * @param random is a source for random bits.
+     * @return a random element.
+     */
+    public GenMatrix<C> randomLower(int k, float q, Random random) {
+        ArrayList<ArrayList<C>> m = new ArrayList<ArrayList<C>>( rows );
+        for ( int i = 0; i < rows; i++ ) {
+            ArrayList<C> v = new ArrayList<C>( cols );
+            for ( int j = 0; j < cols; j++ ) {
+                C e = coFac.getZERO(); 
+                if ( j <= i ) {
+                   if ( random.nextFloat() < q ) {
+                      e = coFac.random(k);
+                   } 
+                } 
+                v.add( e );
+           }
+           m.add( v );
+        }
+        return new GenMatrix<C>(this,m);
+    }
+
+
+    /**
+     * copy matrix.
      */
     public GenMatrix<C> copy(GenMatrix<C> c) {
         if ( c == null ) {
@@ -366,7 +438,7 @@ public class GenMatrixRing<C extends RingElem<C> >
 
 
     /**
-     * parse a vector from a String.
+     * parse a matrix from a String.
      */
     public GenMatrix<C> parse(String s) {
         throw new RuntimeException("parse not jet implemented");
@@ -375,7 +447,7 @@ public class GenMatrixRing<C extends RingElem<C> >
 
 
     /**
-     * parse a vector from a Reader.
+     * parse a matrix from a Reader.
      */
     public GenMatrix<C> parse(Reader r) {
         throw new RuntimeException("parse not jet implemented");
