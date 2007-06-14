@@ -223,7 +223,7 @@ public class GenMatrixRing<C extends RingElem<C> >
 
     /**
      * Product matrix ring for multiplication.
-     * @param o other matrix ring factory.
+     * @param other matrix ring factory.
      * @return product ring factory.
      */
     public GenMatrixRing<C> product(GenMatrixRing<C> other) {
