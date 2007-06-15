@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
 import edu.jas.structure.AlgebraElem;
+import edu.jas.structure.PrettyPrint;
 
 
 /**
@@ -53,7 +54,7 @@ public class GenMatrix<C extends RingElem<C> >
     public String toString() {
         StringBuffer s = new StringBuffer();
         boolean firstRow = true;
-        s.append("(\n");
+        s.append("[\n");
         for ( List<C> val : matrix ) {
             if ( firstRow ) {
                  firstRow = false;
@@ -61,7 +62,7 @@ public class GenMatrix<C extends RingElem<C> >
                  s.append(",\n");
             }
             boolean first = true;
-            s.append("( ");
+            s.append("[ ");
             for ( C c : val ) {
                 if ( first ) {
                    first = false;
@@ -70,11 +71,13 @@ public class GenMatrix<C extends RingElem<C> >
                 }
                 s.append( c.toString() );
             }
-            s.append(" )");
+            s.append(" ]");
         }
-        s.append(" ) :: ");
-        s.append(ring.toString());
-        s.append("\n");
+        s.append(" ] ");
+        if ( ! PrettyPrint.isTrue() ) {
+           s.append(":: " + ring.toString());
+           s.append("\n");
+        }
         return s.toString();
     }
 
