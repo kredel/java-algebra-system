@@ -33,6 +33,8 @@ import edu.jas.ufd.GreatestCommonDivisorModular;
 import edu.jas.ufd.GreatestCommonDivisorModEval;
 import edu.jas.ufd.GCDProxy;
 
+import edu.jas.util.StringUtil;
+
 
 /**
  * Quotient ring class based on GenPolynomial with RingElem interface.
@@ -100,9 +102,11 @@ public class QuotientRing<C extends GcdRingElem<C> >
         if ( t == 1 ) {
            //engine = new GreatestCommonDivisorModular/*<BigInteger>*/();
            //engine = new GreatestCommonDivisorSubres<BigInteger>();
-           engine = new GCDProxy( 
-                        new GreatestCommonDivisorSubres<BigInteger>(), 
-                        new GreatestCommonDivisorModular/*<BigInteger>*/() );
+           engine = new GreatestCommonDivisorModular/*<BigInteger>*/(true);
+           //engine = new GCDProxy( 
+           //         new GreatestCommonDivisorSubres<BigInteger>(), 
+           //         new GreatestCommonDivisorModular/*<BigInteger>*/(true) );
+           //         new GreatestCommonDivisorModular/*<BigInteger>*/() );
         } else if ( t == 2 ) {
            //engine = new GreatestCommonDivisorModEval/*<ModInteger>*/();
            engine = new GCDProxy( 
@@ -411,6 +415,15 @@ public class QuotientRing<C extends GcdRingElem<C> >
      * @return next Quotient from r.
      */
     public Quotient<C> parse(Reader r) {
+        String s = StringUtil.nextString(r,'}');
+        return parse( s );
+    }
+
+
+    /* Parse Quotient from Reader.
+     * @param r Reader.
+     * @return next Quotient from r.
+    public Quotient<C> parse(Reader r) {
         StringWriter sw = new StringWriter();
         int c;
         try {
@@ -427,5 +440,6 @@ public class QuotientRing<C extends GcdRingElem<C> >
         String s = sw.toString();
         return parse( s );
     }
+     */
 
 }
