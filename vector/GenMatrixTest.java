@@ -100,7 +100,7 @@ public class GenMatrixTest extends TestCase {
 
 
 /**
- * Test random vector.
+ * Test random matrix.
  * 
  */
  public void testRandom() {
@@ -365,7 +365,7 @@ public class GenMatrixTest extends TestCase {
 
 
 /**
- * Test random vector
+ * Test random matrix
  * 
  */
  public void testPolynomialRandom() {
