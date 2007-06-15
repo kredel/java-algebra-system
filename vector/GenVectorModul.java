@@ -20,6 +20,8 @@ import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.structure.ModulFactory;
 
+import edu.jas.util.StringUtil;
+
 
 /**
  * GenVectorModul generic vector implementing ModulElem.
@@ -228,9 +230,35 @@ public class GenVectorModul<C extends RingElem<C> >
 
     /**
      * parse a vector from a String.
+     * Syntax: [ c, ..., c ]
      */
     public GenVector<C> parse(String s) {
-        throw new RuntimeException("parse not jet implemented");
+        int i = s.indexOf("[");
+        if ( i >= 0 ) {
+           s = s.substring(i+1);
+        }
+        i = s.indexOf("]");
+        if ( i >= 0 ) {
+           s = s.substring(0,i);
+        }
+        List<C> vec = new ArrayList<C>( cols );
+        String e;
+        C c;
+        do {
+           i = s.indexOf(",");
+           if ( i >= 0 ) {
+              e = s.substring(0,i);
+              s = s.substring(i+1);
+              c = coFac.parse( e );
+              vec.add( c );
+           }
+        } while ( i >= 0 );
+        if ( s.trim().length() > 0 ) {
+           c = coFac.parse( s );
+           vec.add( c );
+        }
+        return new GenVector<C>( this, vec );
+        //throw new RuntimeException("parse not jet implemented");
         //return ZERO;
     }
 
@@ -239,7 +267,9 @@ public class GenVectorModul<C extends RingElem<C> >
      * parse a vector from a Reader.
      */
     public GenVector<C> parse(Reader r) {
-        throw new RuntimeException("parse not jet implemented");
+        String s = StringUtil.nextString(r,']');
+        return parse( s );
+        //throw new RuntimeException("parse not jet implemented");
         //return ZERO;
     }
 

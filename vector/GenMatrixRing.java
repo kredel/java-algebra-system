@@ -20,6 +20,7 @@ import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.structure.AlgebraFactory;
 
+import edu.jas.util.StringUtil;
 
 /**
  * GenMatrixRing generic matrix factory implementing RingFactory.
@@ -439,9 +440,47 @@ public class GenMatrixRing<C extends RingElem<C> >
 
     /**
      * parse a matrix from a String.
+     * Syntax: [ [ c, ..., c ], ..., [ c, ..., c ] ]
      */
     public GenMatrix<C> parse(String s) {
-        throw new RuntimeException("parse not jet implemented");
+        int i = s.indexOf("[");
+        if ( i >= 0 ) {
+           s = s.substring(i+1);
+        }
+        ArrayList<ArrayList<C>> mat = new ArrayList<ArrayList<C>>( rows );
+        ArrayList<C> v;
+        GenVector<C> vec;
+        GenVectorModul<C> vmod = new GenVectorModul<C>( coFac, cols );
+        String e;
+        int j;
+        do {
+           i = s.indexOf("]");     // delimit vector
+           j = s.lastIndexOf("]"); // delimit matrix
+           if ( i != j ) {
+              if ( i >= 0 ) {
+                 e = s.substring(0,i);
+                 s = s.substring(i);
+                 vec = vmod.parse( e );
+                 v = (ArrayList<C>)vec.val;
+                 mat.add( v );
+                 i = s.indexOf(",");
+                 if ( i >= 0 ) {
+                    s = s.substring(i+1);
+                 }
+              }
+           } else { // matrix delimiter
+              if ( i >= 0 ) {
+                 e = s.substring(0,i);
+                 if ( e.trim().length() > 0 ) {
+                    throw new RuntimeException("Error e not empty " + e);
+                 }
+                 s = s.substring(i+1);
+              }
+              break;
+           }
+        } while ( i >= 0 );
+        return new GenMatrix<C>( this, mat );
+        //throw new RuntimeException("parse not jet implemented");
         //return ZERO;
     }
 
@@ -450,6 +489,8 @@ public class GenMatrixRing<C extends RingElem<C> >
      * parse a matrix from a Reader.
      */
     public GenMatrix<C> parse(Reader r) {
+        //String s = StringUtil.nextString(r,']');
+        //return parse( s );
         throw new RuntimeException("parse not jet implemented");
         //return ZERO;
     }
