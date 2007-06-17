@@ -159,6 +159,11 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C> >
             q = r;
             r = recursivePrimitivePart( x );
             //System.out.println("rgcd r = " + r);
+            if ( Thread.currentThread().isInterrupted() ) { 
+               // return what we have computed up to now
+               logger.info("isInterrupted() = " + this);
+               break;
+            }
         }
         //System.out.println("sign q = " + q.signum());
         return q.abs().multiply(c); //.abs();

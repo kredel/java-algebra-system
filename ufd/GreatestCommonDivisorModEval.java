@@ -301,6 +301,11 @@ public class GreatestCommonDivisorModEval //<C extends GcdRingElem<C> >
                // does not work: only if cofactors are also considered?
                // break;
             }
+            if ( Thread.currentThread().isInterrupted() ) { 
+               // return what we have computed up to now
+               logger.info("isInterrupted() = " + this);
+               break;
+            }
         }
         if ( false && debug ) {
             logger.info("done on deg(M) = " + M.degree(0));

@@ -155,6 +155,11 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C> >
                 h = z.divide( power( P.ring.coFac, h, delta-1 )  );
                 //System.out.println("g  = " + g);
                 //System.out.println("h  = " + h);
+                if ( Thread.currentThread().isInterrupted() ) { 
+                   // return what we have computed up to now
+                   logger.info("isInterrupted() = " + this);
+                   break;
+                }
             } else {
                 r = x;
             }

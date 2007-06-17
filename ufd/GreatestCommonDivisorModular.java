@@ -325,6 +325,11 @@ public class GreatestCommonDivisorModular //<C extends GcdRingElem<C> >
                logger.info("done on exact division, #primes = " + i);
                break;
             }
+            if ( Thread.currentThread().isInterrupted() ) { 
+               // return what we have computed up to now
+               logger.info("isInterrupted() = " + this);
+               break;
+            }
         }
         if ( debug ) {
            logger.info("done on M = " + M + ", #primes = " + i);
