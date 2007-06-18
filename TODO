@@ -5,15 +5,15 @@
 
 - make hashCode to reuse computed value --> not immutable
 
-- split ModInteger to ModularFactory
-
-- rework junit tests to stop failing in case of zero polynomials
+- split ModInteger to ModularFactory! do so!
 
 - make polynomial chinese remainder generic (?)
 
 - define power(n) in RingElem and implement in classes
 
 - rename getval() to getVal() in ExpVector
+
+- let inverse() throw a checked exception
 
 - check correct term order in recursive algorithms
 
@@ -27,17 +27,31 @@
 
 - implement factorization
 
-- replace with util.concurrent algorithms where possible
+- implement matrices to vector
 
-- incorporete gcd() in the Quotient class in edu.jas.application
+- refactor Hensel lifting to ufd
+
+- use further util.concurrent algorithms where possible, e.g. in DHT
+
+- add product category to applications
+
+- refactor from BasicLinAlg to GenMatrix and GenVector 
+
+
 
 - make exmaples with rational function field coefficients, 
   e.g. lisa-tdi example
 
-- implement BigDecimal with RingElem interface
+- incorporate gcd() in the Quotient class in edu.jas.application
 
-- refactor Hensel listing to ufd
+- rework junit tests to stop failing in case of zero polynomials
 
+
+
+- implement BigDecimal with RingElem interface, done
+
+- replace thread-and-network-programming algorithms with 
+  util.concurrent, done
 
 - implement multivariate gcd, done
 
