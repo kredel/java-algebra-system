@@ -15,7 +15,6 @@ import edu.jas.structure.GcdRingElem;
 /**
  * Quotient class element based on GenPolynomial with RingElem interface.
  * Objects of this class are immutable.
- * <b>Note:</b> Just for fun, reduction to lowest terms is not efficient.
  * @author Heinz Kredel
  */
 public class Quotient<C extends GcdRingElem<C> > 

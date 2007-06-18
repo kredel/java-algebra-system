@@ -102,11 +102,11 @@ public class QuotientRing<C extends GcdRingElem<C> >
         if ( t == 1 ) {
            //engine = new GreatestCommonDivisorModular/*<BigInteger>*/();
            //engine = new GreatestCommonDivisorSubres<BigInteger>();
-           engine = new GreatestCommonDivisorModular/*<BigInteger>*/(true);
-           //engine = new GCDProxy( 
-           //         new GreatestCommonDivisorSubres<BigInteger>(), 
+           //engine = new GreatestCommonDivisorModular/*<BigInteger>*/(true);
+           engine = new GCDProxy( 
+                    new GreatestCommonDivisorSubres<BigInteger>(), 
            //         new GreatestCommonDivisorModular/*<BigInteger>*/(true) );
-           //         new GreatestCommonDivisorModular/*<BigInteger>*/() );
+                    new GreatestCommonDivisorModular/*<BigInteger>*/() );
         } else if ( t == 2 ) {
            //engine = new GreatestCommonDivisorModEval/*<ModInteger>*/();
            engine = new GCDProxy( 
