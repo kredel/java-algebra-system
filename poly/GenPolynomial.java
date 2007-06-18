@@ -124,6 +124,9 @@ public class GenPolynomial<C extends RingElem<C> >
      * @see java.lang.Object#toString()
      */
     public String toString() {
+        if ( ring.vars != null ) {
+            return toString(ring.vars);
+        }
         StringBuffer s = new StringBuffer();
         s.append( this.getClass().getSimpleName() + ":" );
         s.append( ring.coFac.getClass().getSimpleName() );

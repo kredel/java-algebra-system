@@ -146,6 +146,9 @@ public class GenPolynomialRing<C extends RingElem<C> >
         C coeff = coFac.getONE();
         evzero = new ExpVector(nvar);
         ONE  = new GenPolynomial<C>( this, coeff, evzero );
+        if ( vars == null && PrettyPrint.isTrue() ) {
+           vars = evzero.stdVars();
+        }
     }
 
 
