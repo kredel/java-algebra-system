@@ -229,6 +229,10 @@ public class GreatestCommonDivisorModular //<C extends GcdRingElem<C> >
             // compute modular gcd
             cm = mufd.gcd(rm,qm);
             //System.out.println("cm = " + cm);
+            if ( Thread.currentThread().isInterrupted() ) { 
+               logger.info("isInterrupted()");
+               return P.ring.getZERO();
+            }
             if ( false && debug ) {
                System.out.println("cm | rm = " + mufd.basePseudoRemainder(rm,cm));
                System.out.println("cm | qm = " + mufd.basePseudoRemainder(qm,cm));
@@ -326,9 +330,10 @@ public class GreatestCommonDivisorModular //<C extends GcdRingElem<C> >
                break;
             }
             if ( Thread.currentThread().isInterrupted() ) { 
-               // return what we have computed up to now
-               logger.info("isInterrupted() = " + this);
-               break;
+               // return what we have computed up to now or zero?
+               logger.info("isInterrupted()");
+               return P.ring.getZERO();
+               //break;
             }
         }
         if ( debug ) {

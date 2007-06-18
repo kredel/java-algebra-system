@@ -223,6 +223,10 @@ public class GreatestCommonDivisorModEval //<C extends GcdRingElem<C> >
             // compute modular gcd in recursion
             //System.out.println("recursion +++++++++++++++++++++++++++++++++++");
             cm = gcd(rm,qm);
+            if ( Thread.currentThread().isInterrupted() ) { 
+               logger.info("isInterrupted()");
+               return P.ring.getZERO();
+            }
             //System.out.println("recursion -----------------------------------");
             //System.out.println("cm = " + cm);
             if ( false && debug ) {
@@ -302,9 +306,10 @@ public class GreatestCommonDivisorModEval //<C extends GcdRingElem<C> >
                // break;
             }
             if ( Thread.currentThread().isInterrupted() ) { 
-               // return what we have computed up to now
-               logger.info("isInterrupted() = " + this);
-               break;
+               // return what we have computed up to now or zero?
+               logger.info("isInterrupted()");
+               return P.ring.getZERO();
+               //break;
             }
         }
         if ( false && debug ) {

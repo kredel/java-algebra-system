@@ -137,6 +137,10 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C> >
             //System.out.println("r.degree = " + r.degree());
             //x = basePseudoRemainder(q,r);
             x = basePseudoRemainder(q,r);
+            if ( Thread.currentThread().isInterrupted() ) { 
+               logger.info("isInterrupted()");
+               return P.ring.getZERO();
+            }
             q = r;
             if ( !x.isZERO() ) {
                 //System.out.println("x  = " + x);
@@ -155,11 +159,6 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C> >
                 h = z.divide( power( P.ring.coFac, h, delta-1 )  );
                 //System.out.println("g  = " + g);
                 //System.out.println("h  = " + h);
-                if ( Thread.currentThread().isInterrupted() ) { 
-                   // return what we have computed up to now
-                   logger.info("isInterrupted() = " + this);
-                   break;
-                }
             } else {
                 r = x;
             }

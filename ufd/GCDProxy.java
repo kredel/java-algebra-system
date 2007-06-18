@@ -45,7 +45,7 @@ public class GCDProxy<C extends GcdRingElem<C>>
     //       implements GreatestCommonDivisor<C> {
 
     private static final Logger logger = Logger.getLogger(GCDProxy.class);
-    private boolean debug = logger.isDebugEnabled(); //logger.isInfoEnabled();
+    private boolean debug = logger.isInfoEnabled(); //logger.isInfoEnabled();
 
 
     /**
