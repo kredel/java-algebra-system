@@ -525,7 +525,9 @@ public class GenPolynomialTokenizer  {
     /**
      * parsing method for coefficient ring.
      * syntax: Rat | Q | Int | Z | Mod modul | Complex 
-     | C | Quat | AN[ (var) ( poly ) | AN[ modul (var) ( poly ) ]
+     *         | C | Quat 
+     *         | AN[ (var) ( poly ) | AN[ modul (var) ( poly ) ]
+     *         | RatFunc (var_list)
      * @return the next coefficient factory.
      * @throws IOException
      */
@@ -921,8 +923,8 @@ public class GenPolynomialTokenizer  {
     /**
      * parsing method for submodule list.
      * syntax: ( ( p11, p12, p13, ..., p1n ), 
-     ..., 
-     ( pm1, pm2, pm3, ..., pmn ) )
+     *           ..., 
+     *           ( pm1, pm2, pm3, ..., pmn ) )
      * @return the next list of polynomial lists.
      * @throws IOException
      */
@@ -953,9 +955,10 @@ public class GenPolynomialTokenizer  {
 
     /**
      * parsing method for solvable polynomial relation table.
-     * syntax: ( p_1, p_2, p_3, ..., p_n+3 )
-     * semantics: p_n+1 * p_n+2 = p_n+3 
-     * The next relation table in internaly stored.
+     * syntax: ( p_1, p_2, p_3, ..., p_{n+3} )
+     * semantics: p_{n+1} * p_{n+2} = p_{n+3} 
+     * The next relation table is stored into 
+     * the solvable polynomial factory.
      * @throws IOException
      */
     @SuppressWarnings("unchecked")
@@ -1174,8 +1177,8 @@ public class GenPolynomialTokenizer  {
     /**
      * parsing method for solvable submodule list.
      * syntax: ( ( p11, p12, p13, ..., p1n ), 
-     ..., 
-     ( pm1, pm2, pm3, ..., pmn ) )
+     *           ..., 
+     *           ( pm1, pm2, pm3, ..., pmn ) )
      * @return the next list of solvable polynomial lists.
      * @throws IOException
      */
