@@ -11,7 +11,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 /**
- * BigRational Test using JUnit. 
+ * BigRational tests with JUnit. 
  * @author Heinz Kredel.
  */
 
@@ -43,13 +43,14 @@ public class BigRationalTest extends TestCase {
    BigRational b;
    BigRational c;
    BigRational d;
+   BigRational e;
 
    protected void setUp() {
-       a = b = c = d = null;
+       a = b = c = d = e = null;
    }
 
    protected void tearDown() {
-       a = b = c = d = null;
+       a = b = c = d = e = null;
    }
 
 
@@ -164,6 +165,24 @@ public class BigRationalTest extends TestCase {
      c = BigRational.RNPROD( a, b );
 
      assertTrue("a*1/a = 1", c.isONE() );
+ }
+
+
+/**
+ * Test distributive law.
+ * 
+ */
+ public void testDistributive() {
+     BigRational fac = new BigRational();
+
+     a = fac.random( 500 );
+     b = fac.random( 500 );
+     c = fac.random( 500 );
+
+     d = a.multiply( b.sum(c) );
+     e = a.multiply( b ).sum( a.multiply(c) );
+
+     assertEquals("a(b+c) = ab+ac",d,e);
  }
 
 }

@@ -11,7 +11,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 /**
- * BigQuaternion Test using JUnit. 
+ * BigQuaternion tests with JUnit. 
  * @author Heinz Kredel.
  */
 
@@ -196,5 +196,22 @@ public static Test suite() {
      e = a.multiply( b ).multiply( c );
      assertTrue("a(bc) = (ab)c",e.equals(d));
  }
+
+
+/**
+ * Test distributive law.
+ * 
+ */
+ public void testDistributive() {
+     a = fac.random( 20 );
+     b = fac.random( 20 );
+     c = fac.random( 20 );
+
+     d = a.multiply( b.sum(c) );
+     e = a.multiply( b ).sum( a.multiply(c) );
+
+     assertEquals("a(b+c) = ab+ac",d,e);
+ }
+
 
 }

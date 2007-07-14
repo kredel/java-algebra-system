@@ -38,7 +38,7 @@ public final class BigComplex implements StarRingElem<BigComplex>,
 
     private final static Random random = new Random();
 
-    private static Logger logger = Logger.getLogger(BigComplex.class);
+    private static final Logger logger = Logger.getLogger(BigComplex.class);
 
 
     /** The constructor creates a BigComplex object 

@@ -10,13 +10,16 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import edu.jas.structure.PrettyPrint;
+import edu.jas.kern.PrettyPrint;
+import edu.jas.structure.NotInvertibleException;
+
 import edu.jas.arith.ModInteger;
+import edu.jas.arith.ModIntegerRing;
 import edu.jas.arith.PrimeList;
 
 
 /**
- * ModInteger Test using JUnit. 
+ * ModInteger and PrimeList tests with JUnit. 
  * @author Heinz Kredel.
  */
 
@@ -44,6 +47,9 @@ public class ModIntegerTest extends TestCase {
      return suite;
    }
 
+   ModIntegerRing zm;
+   ModIntegerRing z1;
+   ModIntegerRing z2;
    ModInteger a;
    ModInteger b;
    ModInteger c;
@@ -51,10 +57,12 @@ public class ModIntegerTest extends TestCase {
    ModInteger e;
 
    protected void setUp() {
+       zm = z1 = z2 = null;
        a = b = c = d = e = null;
    }
 
    protected void tearDown() {
+       zm = z1 = z2 = null;
        a = b = c = d = e = null;
    }
 
@@ -87,9 +95,10 @@ public class ModIntegerTest extends TestCase {
  * 
  */
  public void testConstants() {
-     d = new ModInteger(5,11);
-     a = d.getZERO();
-     b = d.getONE();
+     zm = new ModIntegerRing(5);
+     d = new ModInteger(zm,11);
+     a = zm.getZERO();
+     b = zm.getONE();
      c = ModInteger.MIDIF(b,b);
 
      assertEquals("1-1 = 0",c,a);
@@ -104,18 +113,21 @@ public class ModIntegerTest extends TestCase {
  * 
  */
  public void testConstructor() {
-     a = new ModInteger( "5", "64" );
-     b = new ModInteger( "5", "34" );
+     zm = new ModIntegerRing("5");
+     a = new ModInteger( zm, "64" );
+     b = new ModInteger( zm, "34" );
 
      assertEquals("64(5) = 34(5)",a,b);
 
-     a = new ModInteger( "7", "-4" );
-     b = new ModInteger( "7", "3" );
+     zm = new ModIntegerRing("7");
+     a = new ModInteger( zm, "-4" );
+     b = new ModInteger( zm, "3" );
 
      assertEquals("-4(7) = 3(7)",a,b);
 
      String s = "61111111111111111111111111111111111111111111";
-     a = new ModInteger( "10", s );
+     zm = new ModIntegerRing("10");
+     a = new ModInteger( zm, s );
      String t = a.toString();
 
      if ( PrettyPrint.isTrue() ) {
@@ -126,21 +138,23 @@ public class ModIntegerTest extends TestCase {
         assertEquals("stringConstr = toString",st,t);
      }
 
-     a = new ModInteger( 7, 1 );
-     b = new ModInteger( 7, -1 );
+     zm = new ModIntegerRing(7);
+     a = new ModInteger( zm, 1 );
+     b = new ModInteger( zm, -1 );
      c = ModInteger.MISUM(b,a);
 
      assertTrue("1 = 1", a.isONE() );
      assertTrue("1 = 1", b.isUnit() );
-     assertEquals("1+(-1) = 0",c,a.getZERO());
+     assertEquals("1+(-1) = 0",c,zm.getZERO());
 
-     a = new ModInteger( 5, 3 );
-     b = new ModInteger( 5, 0 );
-     c = b.parse( " 13 " );
+     zm = new ModIntegerRing(5);
+     a = new ModInteger( zm, 3 );
+     b = new ModInteger( zm, 0 );
+     c = zm.parse( " 13 " );
      assertEquals("3(5) = 3(5)",a,c);
 
      StringReader sr = new StringReader("  13\n w ");
-     c = b.parse( sr );
+     c = zm.parse( sr );
      assertEquals("3(5) = 3(5)",a,c);
      //System.out.println("c = " + c);
   }
@@ -151,14 +165,14 @@ public class ModIntegerTest extends TestCase {
  * 
  */
  public void testRandom() {
-     d = new ModInteger(19,11);
-     a = d.random( 500 );
+     zm = new ModIntegerRing(19);
+     a = zm.random( 500 );
      b = a.clone();
      c = ModInteger.MIDIF(b,a);
 
-     assertEquals("a-b = 0",c,d.getZERO());
+     assertEquals("a-b = 0",c,zm.getZERO());
 
-     d = new ModInteger( b.getModul(), b.getVal() );
+     d = new ModInteger( new ModIntegerRing(b.getModul()), b.getVal() );
      assertEquals("sign(a-a) = 0", 0, b.compareTo(d) );
  }
 
@@ -168,21 +182,21 @@ public class ModIntegerTest extends TestCase {
  * 
  */
  public void testAddition() {
-     d = new ModInteger(19,11);
+     zm = new ModIntegerRing(19);
 
-     a = d.random( 100 );
+     a = zm.random( 100 );
      b = ModInteger.MISUM( a, a );
      c = ModInteger.MIDIF( b, a );
 
      assertEquals("a+a-a = a",c,a);
      assertEquals("a+a-a = a",0,ModInteger.MICOMP(c,a));
 
-     d = ModInteger.MISUM( a, d.getZERO() );
+     d = ModInteger.MISUM( a, zm.getZERO() );
      assertEquals("a+0 = a",d,a);
-     d = ModInteger.MIDIF( a, d.getZERO() );
+     d = ModInteger.MIDIF( a, zm.getZERO() );
      assertEquals("a-0 = a",d,a);
      d = ModInteger.MIDIF( a, a );
-     assertEquals("a-a = 0",d,d.getZERO());
+     assertEquals("a-a = 0",d,zm.getZERO());
 
  }
 
@@ -192,10 +206,10 @@ public class ModIntegerTest extends TestCase {
  * 
  */
  public void testMultiplication() {
-     d = new ModInteger(5,11);
-     //System.out.println("a = " + a);
+     zm = new ModIntegerRing(5);
+     d = new ModInteger(zm,11);
 
-     a = d.random( 100 );
+     a = zm.random( 100 );
      if ( a.isZERO() ) {
          a = d;
      }
@@ -205,12 +219,12 @@ public class ModIntegerTest extends TestCase {
      assertEquals("a*a/a = a",c,a);
      assertEquals("a*a/a = a",0,c.compareTo(a));
 
-     d = ModInteger.MIPROD( a, d.getONE() );
+     d = ModInteger.MIPROD( a, zm.getONE() );
      assertEquals("a*1 = a",d,a);
-     d = ModInteger.MIQ( a, d.getONE() );
+     d = ModInteger.MIQ( a, zm.getONE() );
      assertEquals("a/1 = a",d,a);
 
-     a = d.random( 100 );
+     a = zm.random( 100 );
      if ( a.isZERO() ) {
          a = d;
      }
@@ -220,8 +234,8 @@ public class ModIntegerTest extends TestCase {
      assertTrue("a*1/a = 1", c.isONE() );
 
      try {
-         a = d.getZERO().inverse();
-     } catch(ArithmeticException expected) {
+         a = zm.getZERO().inverse();
+     } catch(NotInvertibleException expected) {
          return;
      }
      fail("0 invertible");
@@ -233,18 +247,20 @@ public class ModIntegerTest extends TestCase {
  * 
  */
  public void testChineseRemainder() {
-     a = new ModInteger(19*13,1);
-     a = a.random( 9 );
+     zm = new ModIntegerRing(19*13);
+     a = zm.random( 9 );
      //System.out.println("a = " + a);
-     b = new ModInteger(19,a.getVal().longValue());
+     z1 = new ModIntegerRing(19);
+     b = new ModInteger(z1,a.getVal().longValue());
      //System.out.println("b = " + b);
-     c = new ModInteger(13,a.getVal().longValue());
+     z2 = new ModIntegerRing(13);
+     c = new ModInteger(z2,a.getVal().longValue());
      //System.out.println("c = " + c);
-     d = new ModInteger(13,19);
+     d = new ModInteger(z2,19);
      d = d.inverse();
      //System.out.println("d = " + d);
 
-     e = a.chineseRemainder(b,d,c);
+     e = zm.chineseRemainder(b,d,c);
      //System.out.println("e = " + e);
 
      assertEquals("cra(a mod 19,a mod 13) = a",a,e);
@@ -257,20 +273,22 @@ public class ModIntegerTest extends TestCase {
      //System.out.println("prime p1 ? = " + p1.isProbablePrime(66));
      //System.out.println("prime p2 ? = " + p2.isProbablePrime(33));
      //System.out.println("prime p1p1 ? = " + p1p2.isProbablePrime(3));
-     a = new ModInteger(p1p2,1);
+     zm = new ModIntegerRing(p1p2);
+     z1 = new ModIntegerRing(p1);
+     z2 = new ModIntegerRing(p2);
 
      for ( int i = 0; i < 5; i++ ) {
-         a = a.random( (59+29)/2 ); //60+30 );
+         a = zm.random( (59+29)/2 ); //60+30 );
          //System.out.println("a = " + a);
-         b = new ModInteger(p1,a.getVal());
+         b = new ModInteger(z1,a.getVal());
          //System.out.println("b = " + b);
-         c = new ModInteger(p2,a.getVal());
+         c = new ModInteger(z2,a.getVal());
          //System.out.println("c = " + c);
-         ModInteger di = new ModInteger(p2,p1);
+         ModInteger di = new ModInteger(z2,p1);
          d = di.inverse();
          //System.out.println("d = " + d);
 
-         e = a.chineseRemainder(b,d,c);
+         e = zm.chineseRemainder(b,d,c);
          //System.out.println("e = " + e);
 
          assertEquals("cra(a mod p1,a mod p2) = a",a,e);

@@ -19,7 +19,7 @@ import edu.jas.util.StringUtil;
  * BigDecimal class to make java.math.BigDecimal available with RingElem 
  * interface.
  * Objects of this class are immutable.
- * Experimental, use with care. compareTo is hacked.
+ * Experimental, use with care, compareTo is hacked.
  * @author Heinz Kredel
  * @see java.math.BigDecimal
  */

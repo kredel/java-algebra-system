@@ -14,7 +14,7 @@ import junit.framework.TestSuite;
 
 
 /**
- * BigDecimal Test using JUnit. 
+ * BigDecimal tests with JUnit. 
  * @author Heinz Kredel.
  */
 

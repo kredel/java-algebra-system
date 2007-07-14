@@ -14,8 +14,10 @@ import edu.jas.util.StringUtil;
 
 /**
  * List of big primes.
+ * Provides an Iterator for generating prime numbers.
  * Similar to ALDES/SAC2 SACPOL.PRIME list.
  * @author Heinz Kredel
+ * See Knuth vol 2,page 390, for list of known primes.
  * See ALDES/SAC2 SACPOL.PRIME
  */
 

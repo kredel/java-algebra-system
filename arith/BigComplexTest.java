@@ -11,7 +11,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 /**
- * BigComplex Test using JUnit.
+ * BigComplex tests with JUnit.
  * @author Heinz Kredel.
  */
 
@@ -44,13 +44,14 @@ public class BigComplexTest extends TestCase {
    BigComplex b;
    BigComplex c;
    BigComplex d;
+   BigComplex e;
 
    protected void setUp() {
-       a = b = c = d = null;
+       a = b = c = d = e = null;
    }
 
    protected void tearDown() {
-       a = b = c = d = null;
+       a = b = c = d = e = null;
    }
 
 
@@ -165,6 +166,24 @@ public class BigComplexTest extends TestCase {
      c = BigComplex.CPROD( a, b );
 
      assertTrue("a*1/a = 1", c.isONE() );
+ }
+
+
+/**
+ * Test distributive law.
+ * 
+ */
+ public void testDistributive() {
+     BigComplex fac = new BigComplex();
+
+     a = fac.random( 500 );
+     b = fac.random( 500 );
+     c = fac.random( 500 );
+
+     d = a.multiply( b.sum(c) );
+     e = a.multiply( b ).sum( a.multiply(c) );
+
+     assertEquals("a(b+c) = ab+ac",d,e);
  }
 
 }

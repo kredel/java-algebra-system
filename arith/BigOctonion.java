@@ -41,7 +41,7 @@ public final class BigOctonion implements StarRingElem<BigOctonion>,
 
     private final static Random random = new Random();
 
-    private static Logger logger = Logger.getLogger(BigOctonion.class);
+    private static final Logger logger = Logger.getLogger(BigOctonion.class);
 
 
     /** Constructor for a BigOctonion from Quaternions.

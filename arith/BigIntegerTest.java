@@ -11,7 +11,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 /**
- * BigInteger Test using JUnit.
+ * BigInteger tests with JUnit.
  * @author Heinz Kredel.
  */
 
@@ -46,13 +46,14 @@ public class BigIntegerTest extends TestCase {
    BigInteger b;
    BigInteger c;
    BigInteger d;
+   BigInteger e;
 
    protected void setUp() {
-       a = b = c = d = null;
+       a = b = c = d = e = null;
    }
 
    protected void tearDown() {
-       a = b = c = d = null;
+       a = b = c = d = e = null;
    }
 
 
@@ -143,7 +144,6 @@ public class BigIntegerTest extends TestCase {
  * Test multiplication.
  * 
  */
-
  public void testMultiplication() {
      a = BigInteger.IRAND( bitlen );
      b = BigInteger.IPROD( a, a );
@@ -165,11 +165,29 @@ public class BigIntegerTest extends TestCase {
      assertEquals("a = q*b+r)",a,c);
  }
 
+
+/**
+ * Test distributive law.
+ * 
+ */
+ public void testDistributive() {
+     BigInteger fac = new BigInteger();
+
+     a = fac.random( bitlen );
+     b = fac.random( bitlen );
+     c = fac.random( bitlen );
+
+     d = a.multiply( b.sum(c) );
+     e = a.multiply( b ).sum( a.multiply(c) );
+
+     assertEquals("a(b+c) = ab+ac",d,e);
+ }
+
+
 /**
  * Test gcd.
  * 
  */
-
  public void testGcd() {
      a = BigInteger.IRAND( bitlen );
      b = BigInteger.IRAND( bitlen );

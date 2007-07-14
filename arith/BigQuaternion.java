@@ -48,7 +48,7 @@ public final class BigQuaternion implements StarRingElem<BigQuaternion>,
 
     private final static Random random = new Random();
 
-    private static Logger logger = Logger.getLogger(BigQuaternion.class);
+    private static final Logger logger = Logger.getLogger(BigQuaternion.class);
 
 
 

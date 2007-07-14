@@ -16,7 +16,7 @@ import edu.jas.util.StringUtil;
 
 
 /**
- * Immutable arbitraty-precision rational numbers.
+ * Immutable arbitrary-precision rational numbers.
  * BigRational class based on BigInteger implementing the RingElem 
  * interface and with the familiar SAC static method names.
  * BigInteger is from java.math in the implementation.

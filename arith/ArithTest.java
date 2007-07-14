@@ -15,7 +15,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 /**
- * Arith Test using JUnit.
+ * Basic arithmetic tests with JUnit.
  * @author Heinz Kredel.
  */
 
