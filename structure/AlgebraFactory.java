@@ -9,7 +9,8 @@ import java.io.Reader;
 import java.io.Serializable;
 
 /**
- * AlgebraFactory interface for use with the polynomial classes.
+ * Algebra factory interface.
+ * Defines conversion from list of lists and sparse random.
  * @author Heinz Kredel
  * @param A algebra type.
  * @typeparam C coefficient type.

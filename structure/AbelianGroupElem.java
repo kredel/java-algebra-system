@@ -6,7 +6,7 @@ package edu.jas.structure;
 
 
 /**
- * AbelianGroupElement interface.
+ * Abelian group element interface.
  * Defines the additive methods.
  * @author Heinz Kredel
  * @typeparam C element type.

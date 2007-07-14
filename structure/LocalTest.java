@@ -23,7 +23,7 @@ import edu.jas.poly.GenPolynomialRing;
 
 
 /**
- * Local Test using JUnit. 
+ * Local tests with JUnit. 
  * @author Heinz Kredel.
  */
 

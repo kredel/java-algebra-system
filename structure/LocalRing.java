@@ -14,14 +14,14 @@ import edu.jas.structure.RingFactory;
 
 
 /**
- * Local ring class based on RingElem interface.
+ * Local ring factrory based on RingElem principal ideal.
  * Objects of this class are immutable.
  * @author Heinz Kredel
  */
 public class LocalRing<C extends RingElem<C> > 
              implements RingFactory< Local<C> >  {
 
-     private static Logger logger = Logger.getLogger(LocalRing.class);
+     private static final Logger logger = Logger.getLogger(LocalRing.class);
      private boolean debug = logger.isDebugEnabled();
 
 

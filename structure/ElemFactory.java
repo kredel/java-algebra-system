@@ -10,8 +10,8 @@ import java.io.Serializable;
 import java.util.Random;
 
 /**
- * ElemFactory interface for use with the polynomial classes.
- * 
+ * Element factory interface.
+ * Defines embedding of integers, parsing and random element construction.
  * @author Heinz Kredel
  */
 

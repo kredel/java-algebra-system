@@ -9,7 +9,8 @@ import java.io.Reader;
 import java.io.Serializable;
 
 /**
- * ModulFactory interface for use with the polynomial classes.
+ * Module factory interface.
+ * Defines conversion from list and sparse random.
  * @author Heinz Kredel
  * @param M module type.
  * @typeparam C coefficient type.

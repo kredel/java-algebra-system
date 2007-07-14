@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 /**
  * Element interface.
- * Basic functionality of elements.
+ * Basic functionality of elements, e.g. compareTo, equals, clone.
  * @author Heinz Kredel
  * @typeparam C element type.
  */

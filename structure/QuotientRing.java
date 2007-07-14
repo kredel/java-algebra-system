@@ -12,18 +12,17 @@ import org.apache.log4j.Logger;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.structure.GcdRingElem;
-//import edu.jas.structure.PrettyPrint;
 
 
 /**
- * Quotient ring class based on RingElem interface.
+ * Quotient ring factory using RingElem and RingFactory.
  * Objects of this class are immutable.
  * @author Heinz Kredel
  */
 public class QuotientRing<C extends RingElem<C> > 
              implements RingFactory< Quotient<C> >  {
 
-     private static Logger logger = Logger.getLogger(QuotientRing.class);
+     private static final Logger logger = Logger.getLogger(QuotientRing.class);
      private boolean debug = logger.isDebugEnabled();
 
 

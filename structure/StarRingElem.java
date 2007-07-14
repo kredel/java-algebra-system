@@ -6,8 +6,8 @@ package edu.jas.structure;
 
 
 /**
- * StarRingElement interface for use with the basic arithmetic classes.
- * Adds norm and conjugation.
+ * Star ring element interface.
+ * Defines norm and conjugation.
  * @author Heinz Kredel
  */
 

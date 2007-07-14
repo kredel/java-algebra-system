@@ -6,8 +6,8 @@ package edu.jas.structure;
 
 
 /**
- * RingFactory interface for use with the polynomial classes.
- * 
+ * Ring factory interface.
+ * Defines test for field and access of characteristic.
  * @author Heinz Kredel
  */
 

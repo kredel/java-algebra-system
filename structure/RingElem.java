@@ -6,8 +6,9 @@ package edu.jas.structure;
 
 
 /**
- * RingElement interface for use with the polynomial classes.
+ * Ring element interface.
  * Combines aditive and multiplicative methods.
+ * Adds also gcd because of polynomials.
  * @author Heinz Kredel
  * @typeparam C element type.
  */

@@ -23,7 +23,7 @@ import edu.jas.poly.GenPolynomialRing;
 
 
 /**
- * Quotient Test using JUnit. 
+ * Quotient tests with JUnit. 
  * @author Heinz Kredel.
  */
 

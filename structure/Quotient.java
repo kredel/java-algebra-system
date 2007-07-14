@@ -7,20 +7,19 @@ package edu.jas.structure;
 
 import org.apache.log4j.Logger;
 
-//import edu.jas.structure.PrettyPrint;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.GcdRingElem;
 
 
 /**
- * Quotient class element based on RingElem interface.
+ * Quotient element based on RingElem pairs.
  * Objects of this class are immutable.
  * @author Heinz Kredel
  */
 public class Quotient<C extends RingElem<C> > 
              implements RingElem< Quotient<C> > {
 
-    private static Logger logger = Logger.getLogger(Quotient.class);
+    private static final Logger logger = Logger.getLogger(Quotient.class);
     private boolean debug = logger.isDebugEnabled();
 
 

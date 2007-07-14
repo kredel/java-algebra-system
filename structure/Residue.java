@@ -11,14 +11,14 @@ import edu.jas.structure.GcdRingElem;
 
 
 /**
- * Residue class element based on RingElem interface.
+ * Residue element based on RingElem residue.
  * Objects of this class are (nearly) immutable.
  * @author Heinz Kredel
  */
 public class Residue<C extends RingElem<C> > 
              implements RingElem< Residue<C> > {
 
-    private static Logger logger = Logger.getLogger(Residue.class);
+    private static final Logger logger = Logger.getLogger(Residue.class);
     private boolean debug = logger.isDebugEnabled();
 
 

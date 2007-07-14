@@ -6,7 +6,7 @@ package edu.jas.structure;
 
 
 /**
- * MonoidElement interface.
+ * Monoid element interface.
  * Defines the multiplicative methods.
  * @author Heinz Kredel
  * @typeparam C element type.
@@ -57,8 +57,9 @@ public interface MonoidElem<C extends MonoidElem<C>>
 
     /**
      * Inverse of this.
+     * Some implementing classes will throw NotInvertibleException if the element is not invertible.
      * @return x with this * x = 1, if it exists.
      */
-    public C inverse();
+    public C inverse() /*throws NotInvertibleException*/;
 
 }

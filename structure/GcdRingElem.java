@@ -6,7 +6,7 @@ package edu.jas.structure;
 
 
 /**
- * GcdRingElement interface for use with the polynomial classes.
+ * Gcd ring element interface.
  * Adds greatest common divisor and extended greatest common divisor.
  * Empty interface since gcd and egcd is now in RingElem.
  * @author Heinz Kredel

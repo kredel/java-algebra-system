@@ -6,8 +6,8 @@ package edu.jas.structure;
 
 
 /**
- * MonoidFactory interface for use with the polynomial classes.
- * 
+ * Monoid factory interface.
+ * Defines get one and tests for associativity and commutativity.
  * @author Heinz Kredel
  */
 

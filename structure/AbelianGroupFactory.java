@@ -6,8 +6,8 @@ package edu.jas.structure;
 
 
 /**
- * RingFactory interface for use with the polynomial classes.
- * 
+ * Abelian group factory interface.
+ * Defines get zero.
  * @author Heinz Kredel
  */
 
