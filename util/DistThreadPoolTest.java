@@ -14,7 +14,7 @@ import org.apache.log4j.BasicConfigurator;
 
 
 /**
- * DistThreadPool Test using JUnit. 
+ * DistThreadPool tests with JUnit. 
  * @author Akitoshi Yoshida
  * @author Heinz Kredel
  */

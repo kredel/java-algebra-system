@@ -15,7 +15,7 @@ import junit.framework.TestSuite;
 import org.apache.log4j.BasicConfigurator;
 
 /**
- * SocketChannel Test using JUnit
+ * SocketChannel tests with JUnit.
  * Refactored for java.util.concurrent.
  * @author Akitoshi Yoshida
  * @author Heinz Kredel.

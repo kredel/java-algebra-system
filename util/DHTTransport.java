@@ -8,7 +8,8 @@ import java.io.Serializable;
 
 
 /**
- * Transport Container for Distributed version of a HashTable.
+ * Transport container for a distributed version of a HashTable.
+ * Immutable objects.
  * @author Heinz Kredel
  */
 

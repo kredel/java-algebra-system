@@ -10,7 +10,7 @@ import java.io.IOException;
 
 
 /**
- * Class with static String and Reader methods.
+ * Static String and Reader methods.
  * @author Heinz Kredel
  */
 

@@ -28,7 +28,7 @@ import org.apache.log4j.Logger;
 
 public class DistHashTableServer extends Thread {
 
-    private static Logger logger = Logger.getLogger(DistHashTableServer.class);
+    private static final Logger logger = Logger.getLogger(DistHashTableServer.class);
 
     public final static int DEFAULT_PORT = ChannelFactory.DEFAULT_PORT + 99;
     protected final ChannelFactory cf;
@@ -311,7 +311,7 @@ class DHTCounter implements Serializable, Comparable {
 
 class DHTBroadcaster extends Thread /*implements Runnable*/ {
 
-    private static Logger logger = Logger.getLogger(DHTBroadcaster.class);
+    private static final Logger logger = Logger.getLogger(DHTBroadcaster.class);
     private final SocketChannel channel;
     private final List bcaster;
     private DHTCounter listElem;

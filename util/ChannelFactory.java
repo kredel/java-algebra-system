@@ -17,8 +17,8 @@ import org.apache.log4j.Logger;
 
 
 /**
- * ChannelFactory.
- * A symmetric and non blocking way of setting up sockets on the 
+ * ChannelFactory implements 
+ * a symmetric and non blocking way of setting up sockets on the 
  * client and server side.
  * The constructor sets up a ServerSocket and accepts and stores any Socket 
  * creation requests from clients. The created Sockets can the be retrieved 

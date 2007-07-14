@@ -28,7 +28,7 @@ import org.apache.log4j.Logger;
 
 public class DistHashTable /* implements Map not jet */ {
 
-    private static Logger logger = Logger.getLogger(DistHashTable.class);
+    private static final Logger logger = Logger.getLogger(DistHashTable.class);
 
     protected final SortedMap theList;
     protected final ChannelFactory cf;
@@ -299,7 +299,7 @@ public class DistHashTable /* implements Map not jet */ {
 
 class DHTListener extends Thread {
 
-    private static Logger logger = Logger.getLogger(DHTListener.class);
+    private static final Logger logger = Logger.getLogger(DHTListener.class);
 
     private final SocketChannel channel;
     private final SortedMap theList;

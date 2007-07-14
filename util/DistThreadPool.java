@@ -13,7 +13,7 @@ import org.apache.log4j.Logger;
 
 
 /**
- * Distributed Thread Pool.
+ * Distributed thread pool.
  * Using stack / list workpile and Executable Channels and Servers.
  * @author Heinz Kredel
  */
@@ -74,7 +74,7 @@ public class DistThreadPool /*extends ThreadPool*/ {
     protected StrategyEnumeration strategy = StrategyEnumeration.LIFO;
 
 
-    private static Logger logger = Logger.getLogger(DistThreadPool.class);
+    private static final Logger logger = Logger.getLogger(DistThreadPool.class);
     private static boolean debug = logger.isDebugEnabled();
 
 
@@ -302,7 +302,7 @@ class DistPoolThread extends Thread {
 
     final int myId;
 
-    private static Logger logger = Logger.getLogger(DistPoolThread.class);
+    private static final Logger logger = Logger.getLogger(DistPoolThread.class);
     private static boolean debug = logger.isDebugEnabled();
 
     boolean working = false;

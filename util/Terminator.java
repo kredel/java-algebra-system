@@ -12,13 +12,13 @@ import org.apache.log4j.Logger;
 
 /**
  * Terminating helper class.
- * Like a barrier with coming and going.
+ * Like a barrier, but with coming and going.
  * @author Heinz Kredel
  */
 
 public class Terminator {
 
-        private static Logger logger = Logger.getLogger(Terminator.class);
+        private static final Logger logger = Logger.getLogger(Terminator.class);
 
         private int workers = 0;
         private int idler = 0;

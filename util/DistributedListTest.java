@@ -25,7 +25,7 @@ import edu.jas.structure.RingElem;
 
 
 /**
- * DistributedList Test using JUnit.
+ * DistributedList tests with JUnit.
  * @author Heinz Kredel
  */
 public class DistributedListTest extends TestCase {

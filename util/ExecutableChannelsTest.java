@@ -17,7 +17,7 @@ import org.apache.log4j.BasicConfigurator;
 
 
 /**
- * ExecutableChannels Test using JUnit.
+ * ExecutableChannels tests with JUnit.
  * @author Heinz Kredel
  */
 

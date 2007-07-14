@@ -15,7 +15,7 @@ import org.apache.log4j.BasicConfigurator;
 
 
 /**
- * DistHashTable Test using JUnit.
+ * DistHashTable test with JUnit.
  * @author Heinz Kredel
  */
 public class DistHashTableTest extends TestCase {

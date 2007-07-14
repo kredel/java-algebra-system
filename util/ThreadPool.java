@@ -11,7 +11,7 @@ import org.apache.log4j.Logger;
 
 
 /**
- * Thread Pool using stack / list workpile.
+ * Thread pool using stack / list workpile.
  * @author Akitoshi Yoshida
  * @author Heinz Kredel
  */
@@ -49,7 +49,7 @@ public class ThreadPool {
     protected StrategyEnumeration strategy = StrategyEnumeration.LIFO;
 
 
-    private static Logger logger = Logger.getLogger(ThreadPool.class);
+    private static final Logger logger = Logger.getLogger(ThreadPool.class);
     //private static boolean debug = logger.isDebugEnabled();
 
 
@@ -215,7 +215,7 @@ class PoolThread extends Thread {
 
     ThreadPool pool;
 
-    private static Logger logger = Logger.getLogger(ThreadPool.class);
+    private static final Logger logger = Logger.getLogger(ThreadPool.class);
     private static boolean debug = logger.isDebugEnabled();
 
     boolean working = false;

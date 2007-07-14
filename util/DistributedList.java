@@ -26,7 +26,7 @@ import org.apache.log4j.Logger;
 
 public class DistributedList /* implements List not jet */ {
 
-    private static Logger logger = Logger.getLogger(DistributedList.class);
+    private static final Logger logger = Logger.getLogger(DistributedList.class);
 
     protected final SortedMap theList;
     protected final ChannelFactory cf;

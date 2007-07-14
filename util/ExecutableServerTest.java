@@ -18,7 +18,7 @@ import org.apache.log4j.Logger;
 
 
 /**
- * ExecutableServer Test using JUnit.
+ * ExecutableServer tests with JUnit.
  * @author Heinz Kredel
  */
 
@@ -163,7 +163,7 @@ public class ExecutableServerTest extends TestCase {
 
 class Executable implements RemoteExecutable {
 
-    private static Logger logger = Logger.getLogger(Executable.class);
+    private static final Logger logger = Logger.getLogger(Executable.class);
 
     private String param = null;
 

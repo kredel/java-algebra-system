@@ -16,7 +16,7 @@ import org.apache.log4j.BasicConfigurator;
 //import edu.unima.ky.parallel.SocketChannel;
 
 /**
- * Class ExecutableServer
+ * ExecutableServer is
  * used to receive and execute classes.
  * @author Heinz Kredel
  */
@@ -24,7 +24,7 @@ import org.apache.log4j.BasicConfigurator;
 
 public class ExecutableServer extends Thread {
 
-    private static Logger logger = Logger.getLogger(ExecutableServer.class);
+    private static final Logger logger = Logger.getLogger(ExecutableServer.class);
     private static boolean debug = logger.isDebugEnabled();
 
 
@@ -58,7 +58,7 @@ public class ExecutableServer extends Thread {
     public static final String STOP = "Stop";
 
 
-    private boolean goon = true;
+    private volatile boolean goon = true;
 
     private Thread mythread = null;
 
@@ -146,6 +146,7 @@ public class ExecutableServer extends Thread {
                if ( mythread.isInterrupted() ) {
                   goon = false;
                   logger.debug("execute server " + this + " interrupted");
+                  channel.close();
                } else {
                   s = new Executor(channel); // ---,servers);
                   if ( goon ) { // better synchronize with terminate
@@ -154,6 +155,7 @@ public class ExecutableServer extends Thread {
                      logger.debug("server " + s + " started");
                   } else {
                      s = null;
+                     channel.close();
                   }
                }
           } catch (InterruptedException e) {
@@ -181,7 +183,9 @@ public class ExecutableServer extends Thread {
            Iterator it = servers.iterator();
            while ( it.hasNext() ) {
               Executor x = (Executor) it.next();
-              x.channel.close();
+	      if ( x.channel != null ) {
+                 x.channel.close();
+	      }
               try { 
                   while ( x.isAlive() ) {
                         //System.out.print(".");
@@ -220,7 +224,7 @@ public class ExecutableServer extends Thread {
 
 class Executor extends Thread /*implements Runnable*/ {
 
-    private static Logger logger = Logger.getLogger(Executor.class);
+    private static final Logger logger = Logger.getLogger(Executor.class);
 
 
     protected final SocketChannel channel;

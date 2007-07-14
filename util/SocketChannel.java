@@ -12,8 +12,8 @@ import java.net.Socket;
 
 
 /**
- * SocketChannel
- * This class provides a communication channel for Java objects 
+ * SocketChannel 
+ * provides a communication channel for Java objects 
  * using TCP/IP sockets. 
  * Refactored for java.util.concurrent.
  * @author Akitoshi Yoshida

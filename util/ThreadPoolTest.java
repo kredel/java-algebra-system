@@ -12,7 +12,7 @@ import junit.framework.TestSuite;
 import org.apache.log4j.BasicConfigurator;
 
 /**
- * ThreadPool Test using JUnit. 
+ * ThreadPool tests with JUnit. 
  * @author Akitoshi Yoshida
  * @author Heinz Kredel
  */

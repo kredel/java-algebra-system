@@ -17,7 +17,7 @@ import org.apache.log4j.Logger;
 //import edu.unima.ky.parallel.SocketChannel;
 
 /**
- * Class ExecutableChannels
+ * ExecutableChannels
  * used to receive and execute classes.
  * @author Heinz Kredel
  */
@@ -25,7 +25,7 @@ import org.apache.log4j.Logger;
 
 public class ExecutableChannels {
 
-    private static Logger logger = Logger.getLogger(ExecutableChannels.class);
+    private static final Logger logger = Logger.getLogger(ExecutableChannels.class);
 
 
     /**
@@ -297,7 +297,7 @@ public class ExecutableChannels {
    /**
     * getChannels.
     */ 
-    public SocketChannel[] getChannels() {
+    /*package*/ SocketChannel[] getChannels() {
         return channels;
     }
 

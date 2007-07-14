@@ -27,7 +27,7 @@ import org.apache.log4j.Logger;
  */
 public class DistributedListServer extends Thread {
 
-    private static Logger logger = Logger.getLogger(DistributedListServer.class);
+    private static final Logger logger = Logger.getLogger(DistributedListServer.class);
 
     public final static int DEFAULT_PORT = ChannelFactory.DEFAULT_PORT + 99;
     protected final ChannelFactory cf;
@@ -281,7 +281,7 @@ class Counter implements Serializable, Comparable {
 
 class Broadcaster extends Thread /*implements Runnable*/ {
 
-    private static Logger logger = Logger.getLogger(Broadcaster.class);
+    private static final Logger logger = Logger.getLogger(Broadcaster.class);
     private final SocketChannel channel;
     private final List bcaster;
     private Counter listElem;
