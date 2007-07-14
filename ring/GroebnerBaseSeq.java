@@ -18,7 +18,7 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.ring.OrderedPairlist;
 
 /**
- * Groebner Base sequential class.
+ * Groebner Base sequential algorithm.
  * Implements Groebner bases and GB test.
  * @author Heinz Kredel
  */

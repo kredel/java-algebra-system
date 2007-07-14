@@ -12,7 +12,7 @@ import edu.jas.structure.RingElem;
 
 
 /**
- * Solvable Polynomial Reduction interface.
+ * Solvable polynomial Reduction interface.
  * Defines S-Polynomial, normalform
  * and irreducible set.
  * @author Heinz Kredel

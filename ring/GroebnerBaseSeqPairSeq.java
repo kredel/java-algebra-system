@@ -20,8 +20,9 @@ import edu.jas.vector.BasicLinAlg;
 
 
 /**
- * Groebner Base sequential class.
+ * Groebner Base sequential algorithm.
  * Implements Groebner bases and GB test.
+ * Uses sequential pair list class.
  * @author Heinz Kredel
  */
 
@@ -467,7 +468,7 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>>
                           List<GenPolynomial<C>> Gp,
                           List<List<GenPolynomial<C>>> M) {  
         if ( Gp == null ) {
-           return new ExtendedGB<C>(null,Gp,null,M);
+	   return null; //new ExtendedGB<C>(null,Gp,null,M);
         }
         if ( Gp.size() <= 1 ) {
            return new ExtendedGB<C>(null,Gp,null,M);

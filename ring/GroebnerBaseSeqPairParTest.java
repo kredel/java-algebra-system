@@ -28,7 +28,7 @@ import edu.jas.poly.PolynomialList;
 import edu.jas.ring.GroebnerBase;
 
 /**
- * GroebnerBase Test using JUnit.
+ * Groebner base parallel, sequential pair list, tests with JUnit.
  * @author Heinz Kredel.
  */
 

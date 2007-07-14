@@ -23,7 +23,7 @@ import edu.jas.util.ThreadPool;
 
 
 /**
- * Groebner Base Parallel class.
+ * Groebner Base parallel algortihm.
  * Implements a shared memory parallel version of Groebner bases.
  * Slaves maintain pairlist.
  * @author Heinz Kredel
@@ -260,7 +260,7 @@ class Reducer<C extends RingElem<C>> implements Runnable {
     private OrderedPairlist<C> pairlist;
     private Terminator pool;
     private ReductionPar<C> red;
-    private static Logger logger = Logger.getLogger(Reducer.class);
+    private static final Logger logger = Logger.getLogger(Reducer.class);
 
     Reducer(Terminator fin, 
             List<GenPolynomial<C>> G, 
@@ -371,7 +371,7 @@ class MiReducer<C extends RingElem<C>> implements Runnable {
     private GenPolynomial<C> H;
     private ReductionPar<C> red;
     private Semaphore done = new Semaphore(0);
-    private static Logger logger = Logger.getLogger(MiReducer.class);
+    private static final Logger logger = Logger.getLogger(MiReducer.class);
 
     MiReducer(List<GenPolynomial<C>> G, 
               List<GenPolynomial<C>> F, 

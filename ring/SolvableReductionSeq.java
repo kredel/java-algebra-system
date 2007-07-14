@@ -15,15 +15,15 @@ import edu.jas.structure.RingElem;
 
 
 /**
- * Solvable Polynomial Reduction class.
- * Implements left normalform.
+ * Solvable polynomial Reduction algorithm.
+ * Implements left, right normalform.
  * @author Heinz Kredel
  */
 
 public class SolvableReductionSeq<C extends RingElem<C>>
              extends SolvableReductionAbstract<C> {
 
-    private static Logger logger = Logger.getLogger(SolvableReductionSeq.class);
+    private static final Logger logger = Logger.getLogger(SolvableReductionSeq.class);
 
 
     /**

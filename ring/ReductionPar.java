@@ -17,7 +17,7 @@ import edu.jas.util.DistHashTable;
 
 
 /**
- * Polynomial Reduction parallel class.
+ * Polynomial Reduction parallel usable algorithm.
  * Implements normalform.
  * @author Heinz Kredel
  */
@@ -25,7 +25,7 @@ import edu.jas.util.DistHashTable;
 public class ReductionPar<C extends RingElem<C>>
              extends ReductionAbstract<C> {
 
-    private static Logger logger = Logger.getLogger(ReductionPar.class);
+    private static final Logger logger = Logger.getLogger(ReductionPar.class);
 
 
     /**

@@ -32,7 +32,7 @@ import edu.jas.ring.GroebnerBase;
 import edu.jas.ring.GroebnerBaseSeq;
 
 /**
- * GroebnerBase Test using JUnit.
+ * Groebner base distributed, sequential pair list, tests with JUnit.
  * @author Heinz Kredel
  */
 

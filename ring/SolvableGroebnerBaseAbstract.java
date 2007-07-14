@@ -20,8 +20,8 @@ import edu.jas.structure.RingElem;
 
 /**
  * Solvable Groebner Bases abstract class.
- * Implements common left and twosided Groebner bases 
- * and left and twosided GB tests.
+ * Implements common left, right and twosided Groebner bases 
+ * and left, right and twosided GB tests.
  * @author Heinz Kredel.
  */
 
@@ -130,7 +130,9 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
         if ( Fp == null || Fp.size() == 0 ) { // 0 not 1
             return true;
         }
-        List<GenSolvablePolynomial<C>> X = generateUnivar( modv, Fp );
+        GenSolvablePolynomialRing<C> fac = Fp.get(0).ring; // assert != null
+        //List<GenSolvablePolynomial<C>> X = generateUnivar( modv, Fp );
+        List<GenSolvablePolynomial<C>> X = fac.univariateList( modv );
         List<GenSolvablePolynomial<C>> F 
             = new ArrayList<GenSolvablePolynomial<C>>( Fp.size() * (1+X.size()) );
         F.addAll( Fp );
@@ -167,33 +169,32 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
     }
 
 
-    /**
+    /* moved to GenSolvablePolynomialRing
      * Generate solvable polynomials in each variable.
      * @typeparam C coefficient type.
      * @param F solvable polynomial list.
      * @return a list of solvable univariate polynomials for each variable.
-     */
     protected List<GenSolvablePolynomial<C>> 
               generateUnivar(List<GenSolvablePolynomial<C>> F) {
         return generateUnivar(0,F);
     }
+     */
 
 
-    /**
+    /* moved to GenSolvablePolynomialRing
      * Generate solvable polynomials in each variable.
      * Module variable polynomials are not generated.
      * @typeparam C coefficient type.
      * @param modv number of module variables.
      * @param F solvable polynomial list.
      * @return a list of solvable univariate polynomials for each variable.
-     */
     protected List<GenSolvablePolynomial<C>> 
               generateUnivar(int modv, 
                              List<GenSolvablePolynomial<C>> F) {
         GenSolvablePolynomial<C> p = F.get(0);
         GenSolvablePolynomial<C> zero = p.ring.getZERO();
         C one = p.ring.coFac.getONE();
-        int r = p.numberOfVariables()-modv;
+        int r = p.ring.nvar-modv;
         ExpVector e;
         List<GenSolvablePolynomial<C>> pols 
             = new ArrayList<GenSolvablePolynomial<C>>(r);
@@ -207,6 +208,7 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
         }
         return pols;
     }
+     */
 
 
     /**

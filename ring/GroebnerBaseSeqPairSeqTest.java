@@ -31,7 +31,7 @@ import edu.jas.ring.ExtendedGB;
 
 
 /**
- * GroebnerBase Test using JUnit.
+ * Groebner base sequential, sequential pair list, tests with JUnit.
  * @author Heinz Kredel.
  */
 

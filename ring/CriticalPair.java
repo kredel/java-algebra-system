@@ -26,8 +26,8 @@ public class CriticalPair<C extends RingElem<C> >
     public final GenPolynomial<C> pj;
     public final int i;
     public final int j;
-    protected boolean inReduction;
-    protected GenPolynomial<C> reductum;
+    protected volatile boolean inReduction;
+    protected volatile GenPolynomial<C> reductum;
     //public final ExpVector sugar;
 
 

@@ -18,8 +18,8 @@ import edu.jas.structure.RingElem;
 
 
 /**
- * Solvable Polynomial Reduction abstract class.
- * Implements common left S-Polynomial, left normalform and 
+ * Solvable polynomial Reduction abstract class.
+ * Implements common left, right S-Polynomial, left normalform and 
  * left irreducible set.
  * @author Heinz Kredel
  */
@@ -27,7 +27,7 @@ import edu.jas.structure.RingElem;
 public abstract class SolvableReductionAbstract<C extends RingElem<C>>
                       implements SolvableReduction<C> {
 
-    private static Logger logger = Logger.getLogger(SolvableReductionAbstract.class);
+    private static final Logger logger = Logger.getLogger(SolvableReductionAbstract.class);
     private boolean debug = logger.isDebugEnabled();
 
 
@@ -230,6 +230,12 @@ public abstract class SolvableReductionAbstract<C extends RingElem<C>>
                              List<GenSolvablePolynomial<C>> Pp, 
                              GenSolvablePolynomial<C> Ap,
                              GenSolvablePolynomial<C> Np) {
+        if ( row == null && Pp == null ) {
+            if ( Ap == null ) {
+               return Np == null;
+	    }
+            return Ap.equals(Np);
+        }
         if ( row == null && Pp != null ) {
             return false;
         }

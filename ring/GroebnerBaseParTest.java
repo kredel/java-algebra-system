@@ -27,7 +27,7 @@ import edu.jas.poly.GenPolynomialTokenizer;
 import edu.jas.poly.PolynomialList;
 
 /**
- * GroebnerBase Test using JUnit.
+ * GroebnerBase parallel tests with JUnit.
  * @author Heinz Kredel.
  */
 

@@ -28,7 +28,7 @@ import edu.jas.structure.RingElem;
 public abstract class ReductionAbstract<C extends RingElem<C>>
                       implements Reduction<C> {
 
-    private static Logger logger = Logger.getLogger(ReductionAbstract.class);
+    private static final Logger logger = Logger.getLogger(ReductionAbstract.class);
     private boolean debug = logger.isDebugEnabled();
 
 
@@ -311,6 +311,12 @@ public abstract class ReductionAbstract<C extends RingElem<C>>
                          List<GenPolynomial<C>> Pp, 
                          GenPolynomial<C> Ap,
                          GenPolynomial<C> Np) {
+        if ( row == null && Pp == null ) {
+            if ( Ap == null ) {
+               return Np == null;
+	    }
+            return Ap.equals(Np);
+        }
         if ( row == null && Pp != null ) {
             return false;
         }

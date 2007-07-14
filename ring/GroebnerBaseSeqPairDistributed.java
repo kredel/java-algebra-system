@@ -31,10 +31,10 @@ import edu.jas.util.SocketChannel;
 
 
 /**
- * Groebner Base Distributed class.
+ * Groebner Base distributed algorithm.
  * Implements a distributed memory parallel version of Groebner bases.
- * Using pairlist class, slave threads maintain pairlist.
- * Distributed slaves do reduction.
+ * Using pairlist class, slave threads maintain pairlist,
+ * distributed slaves do reduction.
  * Makes some effort to produce the same sequence of critical pairs 
  * as in the sequential version.
  * However already reduced pairs are not rereduced if new
@@ -404,7 +404,7 @@ class ReducerServerSeqPair<C extends RingElem<C>> implements Runnable {
       private DistHashTable theList;
       //private List<GenPolynomial<C>> G;
       private CriticalPairList<C> pairlist;
-      private static Logger logger = Logger.getLogger(ReducerServerSeqPair.class);
+      private static final Logger logger = Logger.getLogger(ReducerServerSeqPair.class);
 
 
       ReducerServerSeqPair(Terminator fin, 
@@ -761,7 +761,7 @@ class ReducerClientSeqPair<C extends RingElem<C>> implements Runnable {
       private DistHashTable theList;
       private ReductionPar<C> red;
 
-      private static Logger logger = Logger.getLogger(ReducerClientSeqPair.class);
+      private static final Logger logger = Logger.getLogger(ReducerClientSeqPair.class);
 
       ReducerClientSeqPair(SocketChannel pc, DistHashTable dl) {
              pairChannel = pc;
@@ -920,7 +920,7 @@ class MiReducerServerSeqPair<C extends RingElem<C>> implements Runnable {
         private GenPolynomial<C> H;
         private Semaphore done = new Semaphore(0);
         private Reduction<C> red;
-        private static Logger logger = Logger.getLogger(MiReducerServerSeqPair.class);
+        private static final Logger logger = Logger.getLogger(MiReducerServerSeqPair.class);
 
       MiReducerServerSeqPair( List<GenPolynomial<C>> G, 
                        List<GenPolynomial<C>> F, 
@@ -969,7 +969,7 @@ class MiReducerClientSeqPair<C extends RingElem<C>> implements Runnable {
         private GenPolynomial<C> H;
         private Reduction<C> red;
         private Semaphore done = new Semaphore(0);
-        private static Logger logger = Logger.getLogger(MiReducerClientSeqPair.class);
+        private static final Logger logger = Logger.getLogger(MiReducerClientSeqPair.class);
 
       MiReducerClientSeqPair( List<GenPolynomial<C>> G, 
                        List<GenPolynomial<C>> F, 

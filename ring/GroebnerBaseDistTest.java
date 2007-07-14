@@ -29,7 +29,7 @@ import edu.jas.poly.PolynomialList;
 import edu.jas.structure.RingElem;
 
 /**
- * GroebnerBase Test using JUnit.
+ * GroebnerBase tests with JUnit.
  * @author Heinz Kredel
  */
 

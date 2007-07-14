@@ -16,7 +16,7 @@ import edu.jas.structure.RingElem;
 
 
 /**
- * Polynomial Reduction sequential class.
+ * Polynomial Reduction sequential use algorithm.
  * Implements normalform.
  * @author Heinz Kredel
  */
@@ -24,7 +24,7 @@ import edu.jas.structure.RingElem;
 public class ReductionSeq<C extends RingElem<C>>
              extends ReductionAbstract<C> {
 
-    private static Logger logger = Logger.getLogger(ReductionSeq.class);
+    private static final Logger logger = Logger.getLogger(ReductionSeq.class);
 
 
     /**

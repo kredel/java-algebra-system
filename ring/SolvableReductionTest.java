@@ -22,7 +22,7 @@ import edu.jas.poly.WeylRelations;
 
 
 /**
- * Reduction Test using JUnit.
+ * Solvable Reduction tests with JUnit.
  * @author Heinz Kredel.
  */
 

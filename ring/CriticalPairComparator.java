@@ -16,6 +16,7 @@ import edu.jas.poly.TermOrder;
 
 /**
  * Comparator for critical pairs of polynomials.
+ * Immutable objects.
  * @author Heinz Kredel.
  * @typeparam C coefficient factory.
  */

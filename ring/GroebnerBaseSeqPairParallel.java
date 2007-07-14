@@ -22,7 +22,7 @@ import edu.jas.util.ThreadPool;
 
 
 /**
- * Groebner Base Parallel class.
+ * Groebner Base parallel algorithm.
  * Makes some effort to produce the same sequence of critical pairs 
  * as in the sequential version.
  * However already reduced pairs are not rereduced if new
@@ -264,7 +264,7 @@ class ReducerSeqPair<C extends RingElem<C>> implements Runnable {
     private CriticalPairList<C> pairlist;
     private Terminator pool;
     private ReductionPar<C> red;
-    private static Logger logger = Logger.getLogger(ReducerSeqPair.class);
+    private static final Logger logger = Logger.getLogger(ReducerSeqPair.class);
 
     ReducerSeqPair(Terminator fin, 
                    List<GenPolynomial<C>> G, 
@@ -371,7 +371,7 @@ class MiReducerSeqPair<C extends RingElem<C>> implements Runnable {
     private GenPolynomial<C> H;
     private ReductionPar<C> red;
     private Semaphore done = new Semaphore(0);
-    private static Logger logger = Logger.getLogger(MiReducerSeqPair.class);
+    private static final Logger logger = Logger.getLogger(MiReducerSeqPair.class);
 
     MiReducerSeqPair(List<GenPolynomial<C>> G, 
                      List<GenPolynomial<C>> F, 

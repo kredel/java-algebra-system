@@ -39,7 +39,7 @@ public class OrderedPairlist<C extends RingElem<C> > {
     private int remCount;
     private final int moduleVars;
 
-    private static Logger logger = Logger.getLogger(OrderedPairlist.class);
+    private static final Logger logger = Logger.getLogger(OrderedPairlist.class);
 
     /**
      * Constructor for OrderedPairlist.
@@ -144,14 +144,14 @@ public class OrderedPairlist<C extends RingElem<C> > {
        boolean c = false;
        int i, j;
 
-       while ( !c & ip.hasNext() )  {
+       while ( !c && ip.hasNext() )  {
            Map.Entry<ExpVector,LinkedList<Pair<C>>> me = ip.next();
            ExpVector g =  me.getKey();
            LinkedList<Pair<C>> xl = me.getValue();
            if ( logger.isInfoEnabled() )
               logger.info("g  = " + g);
            pair = null;
-           while ( !c & xl.size() > 0 ) {
+           while ( !c && xl.size() > 0 ) {
                  pair = xl.removeFirst();
                  // xl is also modified in pairlist 
                  i = pair.i; 

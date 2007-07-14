@@ -14,8 +14,8 @@ import edu.jas.structure.RingElem;
 
 /**
  * Solvable Groebner Bases interface.
- * Defines methods for left and twosided Groebner bases 
- * and left and twosided GB tests.
+ * Defines methods for left, right and twosided Groebner bases 
+ * and left, right and twosided GB tests.
  * @author Heinz Kredel.
  */
 

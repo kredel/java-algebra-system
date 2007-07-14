@@ -48,7 +48,7 @@ public class CriticalPairList<C extends RingElem<C> > {
     private int remCount;
     private final int moduleVars;
 
-    private static Logger logger = Logger.getLogger(CriticalPairList.class);
+    private static final Logger logger = Logger.getLogger(CriticalPairList.class);
 
 
     /**

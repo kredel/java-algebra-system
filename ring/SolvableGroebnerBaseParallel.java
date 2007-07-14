@@ -15,6 +15,7 @@ import edu.jas.structure.RingElem;
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenSolvablePolynomial;
+import edu.jas.poly.GenSolvablePolynomialRing;
 
 import edu.jas.util.Terminator;
 import edu.jas.util.ThreadPool;
@@ -22,7 +23,7 @@ import edu.jas.util.ThreadPool;
 
 
 /**
- * Solvable Groebner Base Parallel class.
+ * Solvable Groebner Base parallel algorithm.
  * Makes some effort to produce the same sequence of critical pairs 
  * as in the sequential version.
  * However already reduced pairs are not rereduced if new
@@ -281,9 +282,11 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>>
            twosidedGB(int modv, 
                       List<GenSolvablePolynomial<C>> Fp) {
         if ( Fp == null || Fp.size() == 0 ) { // 0 not 1
-            return new ArrayList<GenSolvablePolynomial<C>>( Fp );
+            return new ArrayList<GenSolvablePolynomial<C>>( );
         }
-        List<GenSolvablePolynomial<C>> X = generateUnivar( modv, Fp );
+        GenSolvablePolynomialRing<C> fac = Fp.get(0).ring; // assert != null
+        //List<GenSolvablePolynomial<C>> X = generateUnivar( modv, Fp );
+        List<GenSolvablePolynomial<C>> X = fac.univariateList( modv );
         //System.out.println("X univ = " + X);
         List<GenSolvablePolynomial<C>> F 
             = new ArrayList<GenSolvablePolynomial<C>>( Fp.size() * (1+X.size()) );
@@ -356,7 +359,7 @@ class LeftSolvableReducer<C extends RingElem<C>> implements Runnable {
         private CriticalPairList<C> pairlist;
         private Terminator pool;
         private SolvableReductionPar<C> sred;
-        private static Logger logger = Logger.getLogger(LeftSolvableReducer.class);
+        private static final Logger logger = Logger.getLogger(LeftSolvableReducer.class);
         private static final boolean debug = logger.isDebugEnabled();
 
         LeftSolvableReducer(Terminator fin, 
@@ -464,7 +467,7 @@ class TwosidedSolvableReducer<C extends RingElem<C>> implements Runnable {
         private CriticalPairList<C> pairlist;
         private Terminator pool;
         private SolvableReductionPar<C> sred;
-        private static Logger logger = Logger.getLogger(TwosidedSolvableReducer.class);
+        private static final Logger logger = Logger.getLogger(TwosidedSolvableReducer.class);
         private static final boolean debug = logger.isDebugEnabled();
 
         TwosidedSolvableReducer(Terminator fin, 
@@ -593,7 +596,7 @@ class SolvableMiReducer<C extends RingElem<C>> implements Runnable {
         private GenSolvablePolynomial<C> H;
         private SolvableReductionPar<C> sred;
         private Semaphore done = new Semaphore(0);
-        private static Logger logger = Logger.getLogger(SolvableMiReducer.class);
+        private static final Logger logger = Logger.getLogger(SolvableMiReducer.class);
         private static final boolean debug = logger.isDebugEnabled();
 
         SolvableMiReducer(List<GenSolvablePolynomial<C>> G, 

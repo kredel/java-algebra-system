@@ -17,6 +17,7 @@ import edu.jas.vector.ModuleList;
 /**
   * Container for a GB and transformation matrices.
   * A container for F, G, calG and calF.
+  * Immutable objects.
   * @typeparam C coefficient type.
   * @param F an ideal base.
   * @param G a Groebner base of F.
@@ -41,15 +42,17 @@ public class ExtendedGB<C extends RingElem<C>> {
             this.F2G = F2G;
             this.G2F = G2F;
             GenPolynomialRing<C> r = null;
-            for ( GenPolynomial<C> p : G ) {
-                if ( p != null ) {
-                   r = p.ring;
-                   break;
-                }
-            }
-            if ( r.getVars() == null ) {
-                r.setVars( r.evzero.stdVars("y") );
-            }
+	    if ( G != null ) {
+               for ( GenPolynomial<C> p : G ) {
+                   if ( p != null ) {
+                      r = p.ring;
+                      break;
+                   }
+               }
+               if ( r != null && r.getVars() == null ) {
+                  r.setVars( r.evzero.stdVars("y") );
+               }
+	    }
             this.ring = r;
         }
 

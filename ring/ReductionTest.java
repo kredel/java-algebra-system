@@ -20,7 +20,7 @@ import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolynomialList;
 
 /**
- * Reduction Test using JUnit.
+ * Reduction tests with JUnit.
  * @author Heinz Kredel.
  */
 

@@ -15,7 +15,7 @@ import edu.jas.structure.RingElem;
 
 
 /**
- * Solvable Polynomial Reduction class.
+ * Solvable polynomial Reduction parallel usable algorithm.
  * Implements left normalform.
  * @author Heinz Kredel
  */
@@ -23,7 +23,7 @@ import edu.jas.structure.RingElem;
 public class SolvableReductionPar<C extends RingElem<C>>
              extends SolvableReductionAbstract<C> {
 
-    private static Logger logger = Logger.getLogger(SolvableReductionPar.class);
+    private static final Logger logger = Logger.getLogger(SolvableReductionPar.class);
 
 
     /**

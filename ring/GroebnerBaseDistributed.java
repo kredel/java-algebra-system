@@ -31,10 +31,10 @@ import edu.jas.util.SocketChannel;
 
 
 /**
- * Groebner Base Distributed class.
+ * Groebner Base distributed algorithm.
  * Implements a distributed memory parallel version of Groebner bases.
- * Using pairlist class, slaves maintain pairlist.
- * Distributed slaves do reduction.
+ * Using pairlist class, slaves maintain pairlist,
+ * distributed slaves do reduction.
  * @author Heinz Kredel
  */
 
@@ -361,7 +361,7 @@ class ReducerServer<C extends RingElem<C>> implements Runnable {
       private DistHashTable theList;
       //private List<GenPolynomial<C>> G;
       private OrderedPairlist<C> pairlist;
-      private static Logger logger = Logger.getLogger(ReducerServer.class);
+      private static final Logger logger = Logger.getLogger(ReducerServer.class);
 
 
       ReducerServer(Terminator fin, 
@@ -687,7 +687,7 @@ class ReducerClient<C extends RingElem<C>> implements Runnable {
       private DistHashTable theList;
       private ReductionPar<C> red;
 
-      private static Logger logger = Logger.getLogger(ReducerClient.class);
+      private static final Logger logger = Logger.getLogger(ReducerClient.class);
 
       ReducerClient(SocketChannel pc, DistHashTable dl) {
              pairChannel = pc;
@@ -823,7 +823,7 @@ class MiReducerServer<C extends RingElem<C>> implements Runnable {
         private GenPolynomial<C> H;
         private Semaphore done = new Semaphore(0);
         private Reduction<C> red;
-        private static Logger logger = Logger.getLogger(MiReducerServer.class);
+        private static final Logger logger = Logger.getLogger(MiReducerServer.class);
 
       MiReducerServer( List<GenPolynomial<C>> G, 
                        List<GenPolynomial<C>> F, 
@@ -872,7 +872,7 @@ class MiReducerClient<C extends RingElem<C>> implements Runnable {
         private GenPolynomial<C> H;
         private Reduction<C> red;
         private Semaphore done = new Semaphore(0);
-        private static Logger logger = Logger.getLogger(MiReducerClient.class);
+        private static final Logger logger = Logger.getLogger(MiReducerClient.class);
 
       MiReducerClient( List<GenPolynomial<C>> G, 
                        List<GenPolynomial<C>> F, 

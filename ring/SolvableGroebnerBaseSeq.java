@@ -20,9 +20,9 @@ import edu.jas.vector.SolvableBasicLinAlg;
 
 
 /**
- * Solvable Groebner Bases class, sequential algorithms.
- * Implements common left and twosided Groebner bases 
- * and left and twosided GB tests.
+ * Solvable Groebner bases sequential algorithms.
+ * Implements common left, right and twosided Groebner bases 
+ * and left, right and twosided GB tests.
  * @author Heinz Kredel.
  */
 
@@ -392,9 +392,11 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>>
                twosidedGB(int modv, 
                           List<GenSolvablePolynomial<C>> Fp) {  
         if ( Fp == null || Fp.size() == 0 ) { // 0 not 1
-            return new ArrayList<GenSolvablePolynomial<C>>( Fp );
+            return new ArrayList<GenSolvablePolynomial<C>>( );
         }
-        List<GenSolvablePolynomial<C>> X = generateUnivar( modv, Fp );
+        GenSolvablePolynomialRing<C> fac = Fp.get(0).ring; // assert != null
+        //List<GenSolvablePolynomial<C>> X = generateUnivar( modv, Fp );
+        List<GenSolvablePolynomial<C>> X = fac.univariateList( modv );
         //System.out.println("X univ = " + X);
         List<GenSolvablePolynomial<C>> F 
             = new ArrayList<GenSolvablePolynomial<C>>( Fp.size() * (1+X.size()) );
@@ -612,7 +614,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>>
                                   List<GenSolvablePolynomial<C>> Gp,
                                   List<List<GenSolvablePolynomial<C>>> M) {  
         if ( Gp == null ) {
-           return new SolvableExtendedGB<C>(null,Gp,null,M);
+	    return null; //new SolvableExtendedGB<C>(null,Gp,null,M);
         }
         if ( Gp.size() <= 1 ) {
            return new SolvableExtendedGB<C>(null,Gp,null,M);

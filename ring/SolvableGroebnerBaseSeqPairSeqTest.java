@@ -24,7 +24,7 @@ import edu.jas.poly.TermOrder;
 import edu.jas.poly.WeylRelations;
 
 /**
- * SolvableGroebnerBase Test using JUnit.
+ * SolvableGroebner base, sequential pair list, sequential tests with JUnit.
  * @author Heinz Kredel.
  */
 
