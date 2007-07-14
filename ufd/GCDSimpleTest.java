@@ -19,11 +19,11 @@ import edu.jas.poly.ExpVector;
 import edu.jas.poly.TermOrder;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
-import static edu.jas.poly.PolyUtil.*;
+import edu.jas.poly.PolyUtil;
 
 
 /**
- * GCD Simple PRS Algorithm Test using JUnit.
+ * GCD Simple PRS algorithm tests with JUnit.
  * @author Heinz Kredel.
  */
 
@@ -139,16 +139,16 @@ public class GCDSimpleTest extends TestCase {
          b = b.multiply(c);
 
          d = ufd.baseGcd(a,b);
-         e = ufd.basePseudoRemainder(d,c);
+         e = PolyUtil.<BigInteger>basePseudoRemainder(d,c);
          //System.out.println("d  = " + d);
          //System.out.println("c  = " + c);
          assertTrue("c | gcd(ac,bc) " + e, e.isZERO() );
 
-         e = ufd.basePseudoRemainder(a,d);
+         e = PolyUtil.<BigInteger>basePseudoRemainder(a,d);
          //System.out.println("e = " + e);
          assertTrue("gcd(a,b) | a" + e, e.isZERO() );
 
-         e = ufd.basePseudoRemainder(b,d);
+         e = PolyUtil.<BigInteger>basePseudoRemainder(b,d);
          //System.out.println("e = " + e);
          assertTrue("gcd(a,b) | b" + e, e.isZERO() );
      }
@@ -194,15 +194,15 @@ public class GCDSimpleTest extends TestCase {
          //System.out.println("cr = " + cr);
          //System.out.println("dr = " + dr);
 
-         er = ufd.recursivePseudoRemainder(dr,cr);
+         er = PolyUtil.<BigInteger>recursivePseudoRemainder(dr,cr);
          //System.out.println("er = " + er);
          assertTrue("c | gcd(ac,bc) " + er, er.isZERO() );
 
-         er = ufd.recursivePseudoRemainder(ar,dr);
+         er = PolyUtil.<BigInteger>recursivePseudoRemainder(ar,dr);
          //System.out.println("er = " + er);
          assertTrue("gcd(a,b) | a" + er, er.isZERO() );
 
-         er = ufd.recursivePseudoRemainder(br,dr);
+         er = PolyUtil.<BigInteger>recursivePseudoRemainder(br,dr);
          //System.out.println("er = " + er);
          assertTrue("gcd(a,b) | b" + er, er.isZERO() );
      }
@@ -245,15 +245,15 @@ public class GCDSimpleTest extends TestCase {
          //System.out.println("c = " + c);
          //System.out.println("d = " + d);
 
-         e = ufd.basePseudoRemainder(d,c);
+         e = PolyUtil.<BigInteger>basePseudoRemainder(d,c);
          //System.out.println("e = " + e);
          assertTrue("c | gcd(ac,bc) " + e, e.isZERO() );
 
-         e = ufd.basePseudoRemainder(a,d);
+         e = PolyUtil.<BigInteger>basePseudoRemainder(a,d);
          //System.out.println("e = " + e);
          assertTrue("gcd(a,b) | a " + e, e.isZERO() );
 
-         e = ufd.basePseudoRemainder(b,d);
+         e = PolyUtil.<BigInteger>basePseudoRemainder(b,d);
          //System.out.println("e = " + e);
          assertTrue("gcd(a,b) | b " + e, e.isZERO() );
      }

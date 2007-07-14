@@ -12,6 +12,7 @@ import edu.jas.structure.GcdRingElem;
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.ModInteger;
+import edu.jas.arith.ModIntegerRing;
 import edu.jas.arith.PrimeList;
 
 import edu.jas.poly.GenPolynomial;
@@ -33,9 +34,15 @@ public class GreatestCommonDivisorModular //<C extends GcdRingElem<C> >
     private boolean debug = logger.isInfoEnabled();
 
 
+    /*
+     * Modular gcd algorithm to use.
+     */ 
     protected final 
         GreatestCommonDivisorAbstract<ModInteger> mufd;
 
+    /*
+     * Integer gcd algorithm for fall back.
+     */ 
     protected final 
         GreatestCommonDivisorAbstract<BigInteger> iufd   
            = new GreatestCommonDivisorSubres<BigInteger>();
@@ -175,8 +182,8 @@ public class GreatestCommonDivisorModular //<C extends GcdRingElem<C> >
         int pn = 10; //primes.size();
         ExpVector wdegv = rdegv.subst( 0, rdegv.getVal(0) + 1 );
         // +1 seems to be a hack for the unlucky prime test
-        ModInteger cofac;
-        ModInteger cofacM = null;
+        ModIntegerRing cofac;
+        ModIntegerRing cofacM = null;
         GenPolynomial<ModInteger> qm;
         GenPolynomial<ModInteger> rm;
         GenPolynomialRing<ModInteger> mfac;
@@ -203,7 +210,7 @@ public class GreatestCommonDivisorModular //<C extends GcdRingElem<C> >
                 //break;
             }
             // initialize coefficient factory and map normalization factor
-            cofac = new ModInteger( p, true );
+            cofac = new ModIntegerRing( p, true );
             ModInteger nf = cofac.fromInteger( cc.getVal() );
             //System.out.println("nf = " + nf);
             if ( nf.isZERO() ) {
@@ -229,13 +236,9 @@ public class GreatestCommonDivisorModular //<C extends GcdRingElem<C> >
             // compute modular gcd
             cm = mufd.gcd(rm,qm);
             //System.out.println("cm = " + cm);
-            if ( Thread.currentThread().isInterrupted() ) { 
-               logger.info("isInterrupted()");
-               return P.ring.getZERO();
-            }
             if ( false && debug ) {
-               System.out.println("cm | rm = " + mufd.basePseudoRemainder(rm,cm));
-               System.out.println("cm | qm = " + mufd.basePseudoRemainder(qm,cm));
+               System.out.println("cm | rm = " + PolyUtil.<ModInteger>basePseudoRemainder(rm,cm));
+               System.out.println("cm | qm = " + PolyUtil.<ModInteger>basePseudoRemainder(qm,cm));
             }
             // test for constant g.c.d
             if ( cm.isConstant() ) {
@@ -295,7 +298,7 @@ public class GreatestCommonDivisorModular //<C extends GcdRingElem<C> >
                //System.out.println("mi = " + mi);
                M = M.multiply( new BigInteger(p) );
                //System.out.println("M = " + M);
-               cofacM = new ModInteger( M.getVal() );
+               cofacM = new ModIntegerRing( M.getVal() );
                rfac = new GenPolynomialRing<ModInteger>(cofacM,fac.nvar,fac.tord,fac.getVars());
                cp = PolyUtil.chineseRemainder(rfac,cp,mi,cm);
             }
@@ -320,20 +323,14 @@ public class GreatestCommonDivisorModular //<C extends GcdRingElem<C> >
                x = PolyUtil.integerFromModularCoefficients(fac,cp);
                x = basePrimitivePart( x ); 
                //x = x.abs().multiply( c ); 
-               if ( ! basePseudoRemainder(q,x).isZERO() ){
+               if ( ! PolyUtil.<BigInteger>basePseudoRemainder(q,x).isZERO() ){
                   continue;
                }
-               if ( ! basePseudoRemainder(r,x).isZERO() ){
+               if ( ! PolyUtil.<BigInteger>basePseudoRemainder(r,x).isZERO() ){
                   continue;
                }
                logger.info("done on exact division, #primes = " + i);
                break;
-            }
-            if ( Thread.currentThread().isInterrupted() ) { 
-               // return what we have computed up to now or zero?
-               logger.info("isInterrupted()");
-               return P.ring.getZERO();
-               //break;
             }
         }
         if ( debug ) {

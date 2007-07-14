@@ -19,11 +19,11 @@ import edu.jas.poly.ExpVector;
 import edu.jas.poly.TermOrder;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
-import static edu.jas.poly.PolyUtil.*;
+import edu.jas.poly.PolyUtil;
 
 
 /**
- * GCD Primitive PRS Algorithm Test using JUnit.
+ * GCD Primitive PRS algorithm tests with JUnit.
  * @author Heinz Kredel.
  */
 
@@ -136,7 +136,7 @@ public class GCDPrimitiveTest extends TestCase {
          
          b = a.multiply(c);
          //System.out.println("b  = " + b);
-         d = ufd.basePseudoRemainder(b,c);
+         d = PolyUtil.<BigInteger>basePseudoRemainder(b,c);
          //System.out.println("d  = " + d);
 
          assertTrue("rem(ac,c) == 0", d.isZERO() );
@@ -150,7 +150,7 @@ public class GCDPrimitiveTest extends TestCase {
 
          b = a.multiply(c);
          //System.out.println("b  = " + b);
-         d = ufd.basePseudoDivide(b,c);
+         d = PolyUtil.<BigInteger>basePseudoDivide(b,c);
          //System.out.println("d  = " + d);
 
          assertEquals("a == ac/c", a, d );
@@ -221,7 +221,7 @@ public class GCDPrimitiveTest extends TestCase {
          b = b.multiply(c);
 
          d = ufd.baseGcd(a,b);
-         e = ufd.basePseudoRemainder(d,c);
+         e = PolyUtil.<BigInteger>basePseudoRemainder(d,c);
          //System.out.println("d  = " + d);
 
          assertTrue("c | gcd(ac,bc) " + e, e.isZERO() );
@@ -264,8 +264,8 @@ public class GCDPrimitiveTest extends TestCase {
      //System.out.println("c  = " + c);
      //System.out.println("d  = " + d);
 
-     e = ufd.basePseudoRemainder(d,c);
-     //e = ufd.basePseudoRemainder(c,d);
+     e = PolyUtil.<BigInteger>basePseudoRemainder(d,c);
+     //e = PolyUtil.<BigInteger>basePseudoRemainder(c,d);
      //System.out.println("e  = " + e);
 
      assertTrue("abc | squarefree(aabbbc) " + e, e.isZERO() );
@@ -313,7 +313,7 @@ public class GCDPrimitiveTest extends TestCase {
          }
      }
      //System.out.println("e  = " + e);
-     e = ufd.basePseudoRemainder(d,e);
+     e = PolyUtil.<BigInteger>basePseudoRemainder(d,e);
      assertTrue("PROD squarefreefactors(aabbbc) | aabbbc " + e, e.isZERO() );
 
      e = dfac.getONE();
@@ -322,8 +322,8 @@ public class GCDPrimitiveTest extends TestCase {
      }
      //System.out.println("e  = " + e);
 
-     //e = ufd.basePseudoRemainder(e,c);
-     e = ufd.basePseudoRemainder(c,e);
+     //e = PolyUtil.<BigInteger>basePseudoRemainder(e,c);
+     e = PolyUtil.<BigInteger>basePseudoRemainder(c,e);
      //System.out.println("e  = " + e);
 
      assertTrue("squarefreefactors(aabbbc) | abc" + e, e.isZERO() );
@@ -346,12 +346,12 @@ public class GCDPrimitiveTest extends TestCase {
 
          c = dfac.random(kl*(i+1),ll+i,el+i,q);
          c = ufd.basePrimitivePart(a).abs();
-         cr = recursive(rfac,c);
+         cr = PolyUtil.<BigInteger>recursive(rfac,c);
 
          c = cfac.random(kl*(i+1),ll+2*i,el+2*i,q);
          c = ufd.basePrimitivePart(c).abs();
 
-         ar = recursive(rfac,a);
+         ar = PolyUtil.<BigInteger>recursive(rfac,a);
          //System.out.println("ar = " + ar);
          //System.out.println("a  = " + a);
          //System.out.println("c  = " + c);
@@ -368,18 +368,18 @@ public class GCDPrimitiveTest extends TestCase {
 
          br = ar.multiply(cr);
          //System.out.println("br = " + br);
-         dr = ufd.recursivePseudoRemainder(br,cr);
+         dr = PolyUtil.<BigInteger>recursivePseudoRemainder(br,cr);
          //System.out.println("dr = " + dr);
-         d = distribute(dfac,dr);
+         d = PolyUtil.<BigInteger>distribute(dfac,dr);
          //System.out.println("d  = " + d);
 
          assertTrue("rem(ac,c) == 0", d.isZERO() );
 
          br = ar.multiply(c);
          //System.out.println("br = " + br);
-         dr = ufd.recursiveDivide(br,c);
+         dr = PolyUtil.<BigInteger>recursiveDivide(br,c);
          //System.out.println("dr = " + dr);
-         d = distribute(dfac,dr);
+         d = PolyUtil.<BigInteger>distribute(dfac,dr);
          //System.out.println("d  = " + d);
 
          assertEquals("a == ac/c", a, d );
@@ -450,7 +450,7 @@ public class GCDPrimitiveTest extends TestCase {
          dr = ufd.recursiveGcd(ar,br);
          //System.out.println("dr = " + dr);
 
-         er = ufd.recursivePseudoRemainder(dr,cr);
+         er = PolyUtil.<BigInteger>recursivePseudoRemainder(dr,cr);
          //System.out.println("er = " + er);
 
          assertTrue("c | gcd(ac,bc) " + er, er.isZERO() );
@@ -491,7 +491,7 @@ public class GCDPrimitiveTest extends TestCase {
      //System.out.println("cr  = " + cr);
      //System.out.println("dr  = " + dr);
 
-     er = ufd.recursivePseudoRemainder(dr,cr);
+     er = PolyUtil.<BigInteger>recursivePseudoRemainder(dr,cr);
      //System.out.println("er  = " + er);
 
      assertTrue("abc | squarefree(aabbc) " + er, er.isZERO() );
@@ -540,7 +540,7 @@ public class GCDPrimitiveTest extends TestCase {
          }
      }
      //System.out.println("er  = " + er);
-     er = ufd.recursivePseudoRemainder(dr,er);
+     er = PolyUtil.<BigInteger>recursivePseudoRemainder(dr,er);
      assertTrue("PROD squarefreefactors(aabbbc) | aabbbc " + er, er.isZERO() );
 
 
@@ -550,8 +550,8 @@ public class GCDPrimitiveTest extends TestCase {
      }
      //System.out.println("er  = " + er);
 
-     //er = ufd.recursivePseudoRemainder(er,cr);
-     er = ufd.recursivePseudoRemainder(cr,er);
+     //er = PolyUtil.<BigInteger>recursivePseudoRemainder(er,cr);
+     er = PolyUtil.<BigInteger>recursivePseudoRemainder(cr,er);
      //System.out.println("er  = " + er);
 
      assertTrue("squarefreefactors(aabbc) | abc " + er, er.isZERO() );
@@ -618,7 +618,7 @@ public class GCDPrimitiveTest extends TestCase {
          d = ufd.gcd(a,b);
          //System.out.println("d = " + d);
 
-         e = ufd.basePseudoRemainder(d,c);
+         e = PolyUtil.<BigInteger>basePseudoRemainder(d,c);
          //System.out.println("e = " + e);
 
          assertTrue("c | gcd(ac,bc) " + e, e.isZERO() );
@@ -657,15 +657,15 @@ public class GCDPrimitiveTest extends TestCase {
          d = ufd.gcd(a,b);
          //System.out.println("d = " + d);
 
-         e = ufd.basePseudoRemainder(d,c);
+         e = PolyUtil.<BigInteger>basePseudoRemainder(d,c);
          //System.out.println("e = " + e);
          assertTrue("c | gcd(ac,bc) " + e, e.isZERO() );
 
-         e = ufd.basePseudoRemainder(a,d);
+         e = PolyUtil.<BigInteger>basePseudoRemainder(a,d);
          //System.out.println("e = " + e);
          assertTrue("gcd(a,b) | a " + e, e.isZERO() );
 
-         e = ufd.basePseudoRemainder(b,d);
+         e = PolyUtil.<BigInteger>basePseudoRemainder(b,d);
          //System.out.println("e = " + e);
          assertTrue("gcd(a,b) | b " + e, e.isZERO() );
      }
@@ -709,7 +709,7 @@ public class GCDPrimitiveTest extends TestCase {
          d = ufd.gcd(a,b);
          //System.out.println("d = " + d);
 
-         e = ufd.basePseudoRemainder(d,c);
+         e = PolyUtil.<BigRational>basePseudoRemainder(d,c);
          //System.out.println("e = " + e);
 
          assertTrue("c | gcd(ac,bc) " + e, e.isZERO() );
@@ -791,8 +791,8 @@ public class GCDPrimitiveTest extends TestCase {
      //System.out.println("c  = " + c);
      //System.out.println("d  = " + d);
 
-     e = ufd.basePseudoRemainder(d,c);
-     //e = ufd.basePseudoRemainder(c,d);
+     e = PolyUtil.<BigInteger>basePseudoRemainder(d,c);
+     //e = PolyUtil.<BigInteger>basePseudoRemainder(c,d);
      //System.out.println("e  = " + e);
 
      assertTrue("abc | squarefree(aabbc) " + e, e.isZERO() );
@@ -840,7 +840,7 @@ public class GCDPrimitiveTest extends TestCase {
          }
      }
      //System.out.println("e  = " + e);
-     e = ufd.basePseudoRemainder(d,e);
+     e = PolyUtil.<BigInteger>basePseudoRemainder(d,e);
      assertTrue("PROD squarefreefactors(aabbbc) | aabbbc " + e, e.isZERO() );
 
      e = dfac.getONE();
@@ -850,8 +850,8 @@ public class GCDPrimitiveTest extends TestCase {
      //System.out.println("c  = " + c);
      //System.out.println("e  = " + e);
 
-     //e = ufd.basePseudoRemainder(e,c);
-     e = ufd.basePseudoRemainder(c,e);
+     //e = PolyUtil.<BigInteger>basePseudoRemainder(e,c);
+     e = PolyUtil.<BigInteger>basePseudoRemainder(c,e);
      //System.out.println("e  = " + e);
 
      assertTrue("squarefreefactors(aabbbc) | abc " + e, e.isZERO() );

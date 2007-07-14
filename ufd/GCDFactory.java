@@ -12,6 +12,7 @@ import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
 
 import edu.jas.arith.ModInteger;
+import edu.jas.arith.ModIntegerRing;
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
 
@@ -82,7 +83,7 @@ public class GCDFactory /*<C extends GcdRingElem<C>>*/ {
      */
     public static <C extends ModInteger>
            GreatestCommonDivisor<ModInteger> 
-           getImplementation( ModInteger fac ) {
+           getImplementation( ModIntegerRing fac ) {
         GreatestCommonDivisor<ModInteger> ufd; 
         if ( fac.isField() ) {
            ufd = new GreatestCommonDivisorModEval();
@@ -100,7 +101,7 @@ public class GCDFactory /*<C extends GcdRingElem<C>>*/ {
      */
     public static <C extends ModInteger>
            GreatestCommonDivisor<ModInteger> 
-           getProxy( ModInteger fac ) {
+           getProxy( ModIntegerRing fac ) {
         GreatestCommonDivisor<ModInteger> ufd1, ufd2; 
         if ( fac.isField() ) {
            ufd1 = new GreatestCommonDivisorModEval();

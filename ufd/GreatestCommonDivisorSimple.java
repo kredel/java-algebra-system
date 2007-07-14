@@ -88,7 +88,7 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C> >
         }
         GenPolynomial<C> x;
         while ( !r.isZERO() ) {
-            x = basePseudoRemainder(q,r);
+            x = PolyUtil.<C>basePseudoRemainder(q,r);
             //System.out.println("x  = " + x);
             q = r;
             if ( field ) {
@@ -152,8 +152,8 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C> >
 
         GenPolynomial<C> c = gcd(a,b); // go to recursion
         //System.out.println("rgcd c = " + c);
-        r = recursiveDivide(r,a);
-        q = recursiveDivide(q,b);
+        r = PolyUtil.<C>recursiveDivide(r,a);
+        q = PolyUtil.<C>recursiveDivide(q,b);
         if ( r.isONE() ) {
            return r.multiply(c);
         }
@@ -168,12 +168,8 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C> >
         }
         GenPolynomial<GenPolynomial<C>> x;
         while ( !r.isZERO() ) {
-            x = recursivePseudoRemainder(q,r);
+            x = PolyUtil.<C>recursivePseudoRemainder(q,r);
             //System.out.println("rgcd x = " + x);
-            if ( Thread.currentThread().isInterrupted() ) { 
-               logger.info("isInterrupted()");
-               return P.ring.getZERO();
-            }
             q = r;
             if ( field ) {
                r = PolyUtil.<C>monic(x);

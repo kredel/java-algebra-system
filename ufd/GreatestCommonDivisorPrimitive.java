@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.ExpVector;
+import edu.jas.poly.PolyUtil;
 
 
 /**
@@ -77,7 +78,7 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C> >
         }
         GenPolynomial<C> x;
         while ( !r.isZERO() ) {
-            x = basePseudoRemainder(q,r);
+            x = PolyUtil.<C>basePseudoRemainder(q,r);
             //System.out.println("x  = " + x);
             q = r;
             r = basePrimitivePart( x );
@@ -132,8 +133,8 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C> >
 
         GenPolynomial<C> c = gcd(a,b); // go to recursion
         //System.out.println("rgcd c = " + c);
-        r = recursiveDivide(r,a);
-        q = recursiveDivide(q,b);
+        r = PolyUtil.<C>recursiveDivide(r,a);
+        q = PolyUtil.<C>recursiveDivide(q,b);
         if ( r.isONE() ) {
            return r.multiply(c);
         }
@@ -151,11 +152,7 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C> >
 
         GenPolynomial<GenPolynomial<C>> x;
         while ( !r.isZERO() ) {
-            x = recursivePseudoRemainder(q,r);
-            if ( Thread.currentThread().isInterrupted() ) { 
-               logger.info("isInterrupted()");
-               return P.ring.getZERO();
-            }
+            x = PolyUtil.<C>recursivePseudoRemainder(q,r);
             //System.out.println("rgcd x = " + x);
             //if ( !x.isZERO() && x.isConstant() ) {
             //   System.out.println("rpg x = is constant " + x);

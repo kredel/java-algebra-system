@@ -21,9 +21,13 @@ import edu.jas.structure.RingElem;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
 
-import edu.jas.arith.ModInteger;
-import edu.jas.arith.BigInteger;
-import edu.jas.arith.BigRational;
+//import edu.jas.kern.PreemptingException;
+import edu.jas.kern.ComputerThreads;
+
+//import edu.jas.arith.ModInteger;
+//import edu.jas.arith.ModIntegerRing;
+//import edu.jas.arith.BigInteger;
+//import edu.jas.arith.BigRational;
 
 import edu.jas.poly.GenPolynomial;
 
@@ -51,7 +55,6 @@ public class GCDProxy<C extends GcdRingElem<C>>
     /**
       * GCD engines.
       */
-
     public final GreatestCommonDivisor<C> e1;
 
     public final GreatestCommonDivisor<C> e2;
@@ -60,21 +63,18 @@ public class GCDProxy<C extends GcdRingElem<C>>
     /**
       * Thread pool.
       */
-
     protected ExecutorService pool; 
 
 
     /**
       * Thread pool size.
       */
+    protected static final int anzahl = 3;
 
-    protected static final int anzahl = 2;
 
-
-    /**
+    /*
       * Thread poll intervall.
       */
-
     protected static final int dauer = 5;
 
 
@@ -86,22 +86,31 @@ public class GCDProxy<C extends GcdRingElem<C>>
          this.e1 = e1; 
          this.e2 = e2; 
          if ( pool == null ) {
-            pool = Executors.newFixedThreadPool(anzahl);
+	    //pool = Executors.newFixedThreadPool(anzahl);
+            pool = ComputerThreads.getPool();
          }
      }                                              
 
 
-    /**
+    /*
      * Terminate proxy.
-     */
+     * no more required.
      public void terminate() {
-         List<Runnable> r = pool.shutdownNow();
-         if ( r.size() != 0 ) {
-            // throw new RuntimeException("there are unfinished tasks " + r);
-            // System.out.println("there are " + r.size() + " unfinished tasks ");
-            logger.info("there are " + r.size() + " unfinished tasks ");
+         if ( pool == null ) {
+            logger.info("already terminated");
+            return;
          }
+	 // synchronized( pool ) {
+            List<Runnable> r = pool.shutdownNow();
+            if ( r.size() != 0 ) {
+               // throw new RuntimeException("there are unfinished tasks " + r);
+               // System.out.println("there are " + r.size() + " unfinished tasks ");
+               logger.info("there are " + r.size() + " unfinished tasks ");
+            }
+	    pool = null;
+	 //}
      }
+     */
 
 
     /** Get the String representation as RingFactory.
@@ -159,7 +168,7 @@ public class GCDProxy<C extends GcdRingElem<C>>
                      public GenPolynomial<C> call() {
                          GenPolynomial<C> g = e1.gcd(P,S);
                          if ( debug ) {
-                            logger.info("GCDProxy done e1 " + e1);
+			     logger.info("GCDProxy done e1 " + e1.getClass().getName());
                          }
                          return g;
                      }
@@ -170,7 +179,7 @@ public class GCDProxy<C extends GcdRingElem<C>>
                      public GenPolynomial<C> call() {
                          GenPolynomial<C> g = e2.gcd(P,S);
                          if ( debug ) {
-                            logger.info("GCDProxy done e2 " + e2);
+                            logger.info("GCDProxy done e2 " + e2.getClass().getName());
                          }
                          return g;
                      }
@@ -180,8 +189,10 @@ public class GCDProxy<C extends GcdRingElem<C>>
          try {
              g = pool.invokeAny( cs );
          } catch (InterruptedException ignored) { 
+             logger.info("InterruptedException " + ignored);
              Thread.currentThread().interrupt();
-         } catch (ExecutionException ignored) { 
+         } catch (ExecutionException e) { 
+             logger.info("ExecutionException " + e);
              Thread.currentThread().interrupt();
          }
          return g;
@@ -195,7 +206,7 @@ public class GCDProxy<C extends GcdRingElem<C>>
      * @param S GenPolynomial.
      * @return gcd(P,S).
      */
-     public GenPolynomial<C> gcd2( final GenPolynomial<C> P, final GenPolynomial<C> S ) {
+     public GenPolynomial<C> gcdOld( final GenPolynomial<C> P, final GenPolynomial<C> S ) {
          GenPolynomial<C> g = null;
 
          Future<GenPolynomial<C>> f0;

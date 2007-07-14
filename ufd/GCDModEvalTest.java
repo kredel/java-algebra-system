@@ -13,17 +13,18 @@ import junit.framework.TestSuite;
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.ModInteger;
+import edu.jas.arith.ModIntegerRing;
 import edu.jas.arith.PrimeList;
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.TermOrder;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
-import static edu.jas.poly.PolyUtil.*;
+import edu.jas.poly.PolyUtil;
 
 
 /**
- * GCD Modular Evaluation Algorithm Test using JUnit.
+ * GCD Modular Evaluation algorithm tests with JUnit.
  * @author Heinz Kredel.
  */
 
@@ -62,7 +63,7 @@ public class GCDModEvalTest extends TestCase {
    GenPolynomialRing<GenPolynomial<ModInteger>> rfac;
 
    PrimeList primes = new PrimeList();
-   ModInteger mi;
+   ModIntegerRing mi;
 
    ModInteger ai;
    ModInteger bi;
@@ -92,7 +93,7 @@ public class GCDModEvalTest extends TestCase {
        a = b = c = d = e = null;
        ai = bi = ci = di = ei = null;
        ar = br = cr = dr = er = null;
-       mi = new ModInteger(primes.get(0),true);
+       mi = new ModIntegerRing(primes.get(0),true);
        ufd = new GreatestCommonDivisorPrimitive<ModInteger>();
        dfac = new GenPolynomialRing<ModInteger>(mi,rl,to);
        cfac = new GenPolynomialRing<ModInteger>(mi,rl-1,to);
@@ -144,16 +145,16 @@ public class GCDModEvalTest extends TestCase {
          d = ufd_me.gcd(a,b);
 
          c = ufd.basePrimitivePart(c).abs();
-         e = ufd.basePseudoRemainder(d,c);
+         e = PolyUtil.<ModInteger>basePseudoRemainder(d,c);
          //System.out.println("c  = " + c);
          //System.out.println("d  = " + d);
          assertTrue("c | gcd(ac,bc) " + e, e.isZERO() );
 
-         e = ufd.basePseudoRemainder(a,d);
+         e = PolyUtil.<ModInteger>basePseudoRemainder(a,d);
          //System.out.println("e = " + e);
          assertTrue("gcd(a,b) | a" + e, e.isZERO() );
 
-         e = ufd.basePseudoRemainder(b,d);
+         e = PolyUtil.<ModInteger>basePseudoRemainder(b,d);
          //System.out.println("e = " + e);
          assertTrue("gcd(a,b) | b" + e, e.isZERO() );
      }

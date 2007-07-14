@@ -10,9 +10,13 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Logger;
+
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.ModInteger;
+import edu.jas.arith.ModIntegerRing;
 import edu.jas.arith.BigComplex;
 
 import edu.jas.poly.AlgebraicNumber;
@@ -21,11 +25,11 @@ import edu.jas.poly.ExpVector;
 import edu.jas.poly.TermOrder;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
-import static edu.jas.poly.PolyUtil.*;
+import edu.jas.poly.PolyUtil;
 
 
 /**
- * GreatestCommonDivisor Test using JUnit.
+ * GreatestCommonDivisor factory tests with JUnit.
  * @author Heinz Kredel.
  */
 
@@ -35,6 +39,7 @@ public class GCDFactoryTest extends TestCase {
  * main.
  */
    public static void main (String[] args) {
+          BasicConfigurator.configure();
           junit.textui.TestRunner.run( suite() );
    }
 
@@ -123,14 +128,14 @@ public class GCDFactoryTest extends TestCase {
  * 
  */ 
  public void testModInteger() {
-     ModInteger mi = new ModInteger(19,0,true);
+     ModIntegerRing mi = new ModIntegerRing(19,true);
      GreatestCommonDivisor<ModInteger> ufd; 
 
      ufd = GCDFactory.<ModInteger>getImplementation(mi);
      //System.out.println("ufd = " + ufd);
      assertTrue("ufd != ModEval " + ufd, ufd instanceof GreatestCommonDivisorModEval);
 
-     mi = new ModInteger(30,0);
+     mi = new ModIntegerRing(30);
      ufd = GCDFactory.<ModInteger>getImplementation(mi);
      //System.out.println("ufd = " + ufd);
      assertTrue("ufd != Subres " + ufd, ufd instanceof GreatestCommonDivisorSubres);
@@ -174,7 +179,7 @@ public class GCDFactoryTest extends TestCase {
      GenPolynomialRing<BigRational> fac;
      fac = new GenPolynomialRing<BigRational>( b, 1 );
      GenPolynomial<BigRational> mo = fac.random(kl,ll,el,q);
-     while ( mo.isConstant() ) {
+     while ( mo.isZERO() || mo.isONE() || mo.isConstant() ) {
           mo = fac.random(kl,ll,el,q);
      }
 
@@ -203,11 +208,11 @@ public class GCDFactoryTest extends TestCase {
  * 
  */
  public void testAlgebraicNumberModInteger() {
-     ModInteger b = new ModInteger(19,0,true);
+     ModIntegerRing b = new ModIntegerRing(19,true);
      GenPolynomialRing<ModInteger> fac;
      fac = new GenPolynomialRing<ModInteger>( b, 1 );
      GenPolynomial<ModInteger> mo = fac.random(kl,ll,el,q);
-     while ( mo.isConstant() ) {
+     while ( mo.isZERO() || mo.isONE() || mo.isConstant() ) {
           mo = fac.random(kl,ll,el,q);
      }
 

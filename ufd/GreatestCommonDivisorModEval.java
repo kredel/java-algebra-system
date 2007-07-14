@@ -13,6 +13,7 @@ import edu.jas.structure.RingFactory;
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.ModInteger;
+import edu.jas.arith.ModIntegerRing;
 import edu.jas.arith.PrimeList;
 
 import edu.jas.poly.GenPolynomial;
@@ -33,6 +34,10 @@ public class GreatestCommonDivisorModEval //<C extends GcdRingElem<C> >
     private static final Logger logger = Logger.getLogger(GreatestCommonDivisorModEval.class);
     private boolean debug = logger.isDebugEnabled();
 
+
+    /*
+     * Modular gcd algorithm to use.
+     */ 
     protected final 
         GreatestCommonDivisorAbstract<ModInteger> mufd   
           // = new GreatestCommonDivisorModular();
@@ -40,6 +45,10 @@ public class GreatestCommonDivisorModEval //<C extends GcdRingElem<C> >
           // = new GreatestCommonDivisorPrimitive<ModInteger>();
           // = new GreatestCommonDivisorSubres<ModInteger>();
 
+
+    /*
+     * Integer gcd algorithm for fall back.
+     */ 
     protected final 
         GreatestCommonDivisorAbstract<BigInteger> iufd   
              = new GreatestCommonDivisorSubres<BigInteger>();
@@ -138,8 +147,8 @@ public class GreatestCommonDivisorModEval //<C extends GcdRingElem<C> >
         GenPolynomial<ModInteger> c = gcd(a,b);  
         //System.out.println("a = " + a);
         //System.out.println("b = " + b);
-        rr = recursiveDivide(rr,a); 
-        qr = recursiveDivide(qr,b); 
+        rr = PolyUtil.<ModInteger>recursiveDivide(rr,a); 
+        qr = PolyUtil.<ModInteger>recursiveDivide(qr,b); 
         //System.out.println("rr = " + rr);
         //System.out.println("qr = " + qr);
         if ( rr.isONE() ) {
@@ -223,15 +232,11 @@ public class GreatestCommonDivisorModEval //<C extends GcdRingElem<C> >
             // compute modular gcd in recursion
             //System.out.println("recursion +++++++++++++++++++++++++++++++++++");
             cm = gcd(rm,qm);
-            if ( Thread.currentThread().isInterrupted() ) { 
-               logger.info("isInterrupted()");
-               return P.ring.getZERO();
-            }
             //System.out.println("recursion -----------------------------------");
             //System.out.println("cm = " + cm);
             if ( false && debug ) {
-               logger.debug("cm | rm = " + mufd.basePseudoRemainder(rm,cm));
-               logger.debug("cm | qm = " + mufd.basePseudoRemainder(qm,cm));
+               logger.debug("cm | rm = " + PolyUtil.<ModInteger>basePseudoRemainder(rm,cm));
+               logger.debug("cm | qm = " + PolyUtil.<ModInteger>basePseudoRemainder(qm,cm));
             }
             // test for constant g.c.d
             if ( cm.isConstant() ) {
@@ -304,12 +309,6 @@ public class GreatestCommonDivisorModEval //<C extends GcdRingElem<C> >
                //System.out.println("done on cmn = " + cmn);
                // does not work: only if cofactors are also considered?
                // break;
-            }
-            if ( Thread.currentThread().isInterrupted() ) { 
-               // return what we have computed up to now or zero?
-               logger.info("isInterrupted()");
-               return P.ring.getZERO();
-               //break;
             }
         }
         if ( false && debug ) {

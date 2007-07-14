@@ -10,9 +10,13 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Logger;
+
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.ModInteger;
+import edu.jas.arith.ModIntegerRing;
 import edu.jas.arith.BigComplex;
 
 import edu.jas.poly.AlgebraicNumber;
@@ -21,11 +25,13 @@ import edu.jas.poly.ExpVector;
 import edu.jas.poly.TermOrder;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
-import static edu.jas.poly.PolyUtil.*;
+import edu.jas.poly.PolyUtil;
+
+import edu.jas.kern.ComputerThreads;
 
 
 /**
- * GreatestCommonDivisor Test using JUnit.
+ * GreatestCommonDivisor proxy tests with JUnit.
  * @author Heinz Kredel.
  */
 
@@ -35,8 +41,10 @@ public class GCDProxyTest extends TestCase {
  * main.
  */
    public static void main (String[] args) {
+          BasicConfigurator.configure();
           junit.textui.TestRunner.run( suite() );
-          System.exit(0);
+	  //ComputerThreads.terminate();
+          //System.out.println("System.exit(0)");
    }
 
 /**
@@ -163,11 +171,12 @@ public class GCDProxyTest extends TestCase {
          //System.out.println("d = " + d);
          //System.out.println("e = " + e);
 
-         e = ufd.basePseudoRemainder(d,c);
+         e = PolyUtil.<BigInteger>basePseudoRemainder(d,c);
          //System.out.println("e = " + e);
          assertTrue("c | gcd(ac,bc) " + e, e.isZERO() );
      }
-     ((GCDProxy<BigInteger>)ufd_par).terminate();
+     // obsolete ((GCDProxy<BigInteger>)ufd_par).terminate();
+     ComputerThreads.terminate();
  }
 
 
@@ -177,8 +186,8 @@ public class GCDProxyTest extends TestCase {
  */ 
  public void testModInteger() {
      long t;
-     // ModInteger mi = new ModInteger(19,0,true);
-     ModInteger mi = new ModInteger(536870909,0,true);
+     // ModIntegerRing mi = new ModIntegerRing(19,true);
+     ModIntegerRing mi = new ModIntegerRing(536870909,true);
 
      GenPolynomial<ModInteger> a, b, c, d, e;
 
@@ -236,11 +245,12 @@ public class GCDProxyTest extends TestCase {
          //System.out.println("d = " + d);
          //System.out.println("e = " + e);
 
-         e = ufd.basePseudoRemainder(d,c);
+         e = PolyUtil.<ModInteger>basePseudoRemainder(d,c);
          //System.out.println("e = " + e);
          assertTrue("c | gcd(ac,bc) " + e, e.isZERO() );
      }
-     ((GCDProxy<ModInteger>)ufd_par).terminate();
+     // obsolete ((GCDProxy<ModInteger>)ufd_par).terminate();
+     ComputerThreads.terminate();
  }
 
 
@@ -308,7 +318,7 @@ public class GCDProxyTest extends TestCase {
  * 
  */
  public void testAlgebraicNumberModInteger() {
-     ModInteger b = new ModInteger(19,0,true);
+     ModIntegerRing b = new ModIntegerRing(19,true);
      GenPolynomialRing<ModInteger> fac;
      fac = new GenPolynomialRing<ModInteger>( b, 1 );
      GenPolynomial<ModInteger> mo = fac.random(kl,ll,el,q);

@@ -10,11 +10,15 @@ import org.apache.log4j.Logger;
 
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
+import edu.jas.structure.Power;
+
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.ExpVector;
-import static edu.jas.poly.PolyUtil.distribute;
-import static edu.jas.poly.PolyUtil.recursive;
+
+//import static edu.jas.poly.PolyUtil.distribute;
+//import static edu.jas.poly.PolyUtil.recursive;
+import edu.jas.poly.PolyUtil;
 
 
 /**
@@ -137,10 +141,6 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C> >
             //System.out.println("r.degree = " + r.degree());
             //x = basePseudoRemainder(q,r);
             x = basePseudoRemainder(q,r);
-            if ( Thread.currentThread().isInterrupted() ) { 
-               logger.info("isInterrupted()");
-               return P.ring.getZERO();
-            }
             q = r;
             if ( !x.isZERO() ) {
                 //System.out.println("x  = " + x);
@@ -168,27 +168,6 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C> >
         //System.out.println("qp = " + q);
         return (q.multiply(c)).abs(); 
         //return q.abs(); 
-    }
-
-
-    /**
-     * Coefficient power.
-     * @param A coefficient
-     * @param i exponent.
-     * @return A^i.
-     */
-    public C power( RingFactory<C> fac, C A, long i ) {
-        if ( i == 0 ) {
-           return fac.getONE();
-        }
-        if ( A == null || A.isZERO() ) {
-           return A;
-        }
-        C p = A;
-        for ( long j = 1; j < i; j++ ) {
-            p = p.multiply(A);
-        }
-        return p;
     }
 
 
@@ -286,8 +265,8 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C> >
 
         GenPolynomial<C> c = gcd(a,b); // go to recursion
         //System.out.println("rgcd c = " + c);
-        r = recursiveDivide(r,a);
-        q = recursiveDivide(q,b);
+        r = PolyUtil.<C>recursiveDivide(r,a);
+        q = PolyUtil.<C>recursiveDivide(q,b);
         if ( r.isONE() ) {
            return r.multiply(c);
         }
@@ -317,11 +296,11 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C> >
                 //r = recursivePrimitivePart( x );
                 //r = x;
                 //r = x.divide( z );
-                r = recursiveDivide( x, z );
+                r = PolyUtil.<C>recursiveDivide( x, z );
                 //System.out.println("rgcd r = " + r);
                 g = q.leadingBaseCoefficient();
                     z = power( P.ring.coFac, g, delta );
-                h = basePseudoDivide(z, power( P.ring.coFac, h, delta-1 )  );
+                h = PolyUtil.<C>basePseudoDivide(z, power( P.ring.coFac, h, delta-1 )  );
                 //System.out.println("rgcd g  = " + g);
                 //System.out.println("rgcd h  = " + h);
             } else {
@@ -332,30 +311,6 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C> >
         q = recursivePrimitivePart( q );
         //System.out.println("q = " + q);
         return q.abs().multiply(c); //.abs();
-    }
-
-
-    /**
-     * Polynomial power.
-     * @param A polynomial.
-     * @param i exponent.
-     * @return A^i.
-     */
-    public GenPolynomial<C> 
-           power( RingFactory<GenPolynomial<C>> fac, 
-                  GenPolynomial<C> A, 
-                  long i ) {
-        if ( i == 0 ) {
-           return fac.getONE();
-        }
-        if ( A == null || A.isZERO() ) {
-           return A;
-        }
-        GenPolynomial<C> p = A;
-        for ( long j = 1; j < i; j++ ) {
-            p = p.multiply(A);
-        }
-        return p;
     }
 
 
@@ -495,8 +450,8 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C> >
         //System.out.println("rgcd a = " + a);
         GenPolynomial<C> b = recursiveContent(q);
         //System.out.println("rgcd b = " + b);
-        r = recursiveDivide(r,a);
-        q = recursiveDivide(q,b);
+        r = PolyUtil.<C>recursiveDivide(r,a);
+        q = PolyUtil.<C>recursiveDivide(q,b);
         RingFactory<GenPolynomial<C>> cofac = P.ring.coFac;
         GenPolynomial<C> g = cofac.getONE();
         GenPolynomial<C> h = cofac.getONE();
@@ -529,11 +484,11 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C> >
                 z = g.multiply( power( P.ring.coFac, h, delta ) );
                 //System.out.println("z  = " + z);
                 //r = x.divide( z );
-                r = recursiveDivide( x, z );
+                r = PolyUtil.<C>recursiveDivide( x, z );
                 //System.out.println("rgcd r = " + r);
                 g = q.leadingBaseCoefficient();
                     z = power( cofac, g, delta );
-                h = basePseudoDivide(z, power( cofac, h, delta-1 )  );
+                h = PolyUtil.<C>basePseudoDivide(z, power( cofac, h, delta-1 )  );
                 //System.out.println("rgcd g  = " + g);
                 //System.out.println("rgcd h  = " + h);
             } else {
@@ -541,7 +496,7 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C> >
             }
         }
         z = power( cofac, r.leadingBaseCoefficient(), q.degree(0) );
-        h = basePseudoDivide(z, power( cofac, h, q.degree(0)-1 )  );
+        h = PolyUtil.<C>basePseudoDivide(z, power( cofac, h, q.degree(0)-1 )  );
         //System.out.println("h  = " + h);
         //System.out.println("t = " + t);
         //System.out.println("s = " + s);
@@ -551,5 +506,30 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C> >
         //System.out.println("x = " + x);
         return x;
     }
+
+
+    /**
+     * Coefficient power.
+     * @param A coefficient
+     * @param i exponent.
+     * @return A^i.
+     */
+    C power( RingFactory<C> fac, C A, long i ) {
+	return Power.<C>power(fac,A,i);
+    }
+
+
+    /**
+     * Polynomial power.
+     * @param A polynomial.
+     * @param i exponent.
+     * @return A^i.
+     */
+    GenPolynomial<C> power( RingFactory<GenPolynomial<C>> fac, 
+                            GenPolynomial<C> A, 
+                            long i ) {
+	return Power.<GenPolynomial<C>>power(fac,A,i);
+    }
+
 
 }
