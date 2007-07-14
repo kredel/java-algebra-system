@@ -16,6 +16,60 @@
 </dd>
 -->
 
+<dt>2007, 7, 12</dt>
+<dd> 
+  New global class edu.jas.kern.ComputerThreads to represent a thread pool.
+  To stop JAS, when the pool has been started, it is required to call ComputerThreads.terminate().
+</dd>
+
+<dt>2007, 7, 11</dt>
+<dd> 
+  New preemptive cancellation handling. 
+  Introduced class PreemptingException as runtime exception and 
+  a global class PreemptStatus to allow or deny preemption cancellation.
+  GenPolynomialRing queries PreemptStatus upon creation.
+  GenPolynomial checks preempt cancellation handling and thread interrupt status
+  on construction. If preemption is requested, it throws PreemptingException.
+  This allows e.g. GCDProxy to ignore the respective sub-task and get the thread free.
+  Removed explicit isInterrupted() checks in edu.jas.ufd package.
+</dd>
+
+<dt>2007, 7, 10</dt>
+<dd> 
+  Refactored generation of (lists of) univariate polynomials
+  from SolvableGroebnerBase* to GenSolvablePolynomialRing and GenPolynomialRing.
+  Implemented generic Power class in edu.jas.structure, 
+  refactored power() in subresultant PRS.
+</dd>
+
+<dt>2007, 7, 9</dt>
+<dd> 
+  Added unit tests for distributive law in arith and poly packages.
+  Review of all documentation comments.
+</dd>
+
+<dt>2007, 7, 8</dt>
+<dd> 
+  Added assertions to check for number of polynomial variables in GenPolynomial.
+  In ModInteger and AlgebraicNumber inverse() now throws a NotInvertibleExecption,
+  which extends runtime exception.
+  Fixed some correctness bugs detected by Findbugs.
+</dd>
+
+<dt>2007, 7, 7</dt>
+<dd> 
+ Refactored ModInteger for ModIntegerRing factory.
+ Changed all depending classes.
+</dd>
+
+<dt>2007, 7, -6</dt>
+<dd> 
+ Refactored GenPolynomial.getMap() to return unmodifiable SortedMap.
+ Refactored GenPolynomial.val using methods from jas.ufd package to jas.poly package.
+ ExpVector.getVal() renamed and made package private.
+ Logger variables now also final.
+</dd>
+
 <dt>2007, 6, 10</dt>
 <dd> 
  Improved InterruptedException handling.
@@ -1532,7 +1586,7 @@ CPU TIME (ms) END
 <p>
 <!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
 <!-- hhmts start -->
-Last modified: Sun Jun 10 15:24:10 CEST 2007
+Last modified: Thu Jul 12 17:21:29 CEST 2007
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
