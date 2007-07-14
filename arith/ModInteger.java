@@ -9,7 +9,8 @@ import java.io.Reader;
 
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
-import edu.jas.structure.PrettyPrint;
+//import edu.jas.kern.PrettyPrint;
+import edu.jas.structure.NotInvertibleException;
 
 import edu.jas.util.StringUtil;
 
@@ -22,13 +23,12 @@ import edu.jas.util.StringUtil;
  * @see java.math.BigInteger
  */
 
-public final class ModInteger implements GcdRingElem<ModInteger>, 
-                                         RingFactory<ModInteger> {
+public final class ModInteger implements GcdRingElem<ModInteger> {
 
 
-    /** Module part of the factory data structure. 
+    /** ModIntegerRing reference. 
      */
-    protected final java.math.BigInteger modul;
+    public final ModIntegerRing ring;
 
 
     /** Value part of the element data structure. 
@@ -36,144 +36,43 @@ public final class ModInteger implements GcdRingElem<ModInteger>,
     protected final java.math.BigInteger val;
 
 
-    private final static Random random = new Random();
-
-
-    /** Indicator if this ring is a field.
-     */
-    protected int isField = -1; // initially unknown
-
-    /** Certainty if module is probable prime.
-     */
-    protected int certainty = 10;
-
-
     /** The constructor creates a ModInteger object 
      * from two BigInteger objects module and value part. 
-     * @param m math.BigInteger.
+     * @param m ModIntegerRing.
      * @param a math.BigInteger.
      */
-    public ModInteger(java.math.BigInteger m, java.math.BigInteger a) {
-        modul = m;
-        val = a.mod(modul);
-    }
-
-
-    /** The constructor creates a ModInteger object 
-     * from two BigInteger objects module and value part. 
-     * @param m math.BigInteger.
-     * @param a math.BigInteger.
-     * @param isField indicator if m is prime.
-     */
-    public ModInteger(java.math.BigInteger m, java.math.BigInteger a, 
-                      boolean isField) {
-        modul = m;
-        val = a.mod(modul);
-        this.isField = ( isField ? 1 :  0 );
+    public ModInteger(ModIntegerRing m, java.math.BigInteger a) {
+        ring = m;
+        val = a.mod(ring.modul);
     }
 
 
     /** The constructor creates a ModInteger object 
      * from two longs objects module and value part. 
-     * @param m long.
+     * @param m ModIntegerRing.
      * @param a long.
      */
-    public ModInteger(long m, long a) {
-        this( 
-             new java.math.BigInteger( String.valueOf(m) ),
-             new java.math.BigInteger( String.valueOf(a) )
-             );
-    }
-
-
-    /** The constructor creates a ModInteger object 
-     * from two longs objects module and value part. 
-     * @param m long.
-     * @param a long.
-     * @param isField indicator if m is prime.
-     */
-    public ModInteger(long m, long a, boolean isField) {
-        this( 
-             new java.math.BigInteger( String.valueOf(m) ),
-             new java.math.BigInteger( String.valueOf(a) ),
-             isField
-             );
+    public ModInteger(ModIntegerRing m, long a) {
+        this( m, new java.math.BigInteger( String.valueOf(a) ) );
     }
 
 
     /** The constructor creates a ModInteger object 
      * from two String objects module and value part. 
-     * @param m String.
+     * @param m ModIntegerRing.
      * @param s String.
      */
-    public ModInteger(String m, String s) {
-        this( 
-             new java.math.BigInteger( m.trim() ),
-             new java.math.BigInteger( s.trim() )
-             );
-    }
-
-
-    /** The constructor creates a ModInteger object 
-     * from a BigInteger object module and a String value part. 
-     * @param m BigInteger.
-     * @param s String.
-     */
-    public ModInteger(java.math.BigInteger m, String s) {
+    public ModInteger(ModIntegerRing m, String s) {
         this( m, new java.math.BigInteger( s.trim() ) );
     }
 
 
-    /** The constructor creates a ModInteger object 
-     * from a BigInteger object module and a String value part. 
-     * @param m BigInteger.
-     * @param s String.
-     * @param isField indicator if m is prime.
-     */
-    public ModInteger(java.math.BigInteger m, String s, boolean isField) {
-        this( m, new java.math.BigInteger( s.trim() ), isField );
-    }
-
-
-    /** The constructor creates a ModInteger object 
-     * from a BigInteger object module and a long value part. 
-     * @param m BigInteger.
-     * @param s long.
-     * @param isField indicator if m is prime.
-     */
-    public ModInteger(java.math.BigInteger m, long s, boolean isField) {
-        this( m, new java.math.BigInteger( String.valueOf(s) ), isField );
-    }
-
-
-    /** The constructor creates a ModInteger object 
-     * from a BigInteger object module and a long value part. 
-     * @param m BigInteger.
-     * @param s long.
-     */
-    public ModInteger(java.math.BigInteger m, long s) {
-        this( m, new java.math.BigInteger( String.valueOf(s) ) );
-    }
-
-
     /** The constructor creates a 0 ModInteger object 
      * from a BigInteger object module. 
-     * @param m BigInteger.
+     * @param m ModIntegerRing.
      */
-    public ModInteger(java.math.BigInteger m) {
+    public ModInteger(ModIntegerRing m) {
         this(m,java.math.BigInteger.ZERO);
-    }
-
-
-    /** The constructor creates a 0 ModInteger object 
-     * from a BigInteger object module. 
-     * @param m BigInteger.
-     * @param isField indicator if m is prime.
-     */
-    public ModInteger(java.math.BigInteger m, boolean isField) {
-        modul = m; // assert m != 0
-        val = java.math.BigInteger.ZERO;
-        this.isField = ( isField ? 1 :  0 );
     }
 
 
@@ -189,7 +88,7 @@ public final class ModInteger implements GcdRingElem<ModInteger>,
      * @return modul.
      */
     public java.math.BigInteger getModul() {
-        return modul;
+        return ring.modul;
     }
 
 
@@ -197,132 +96,7 @@ public final class ModInteger implements GcdRingElem<ModInteger>,
      * @see java.lang.Object#clone()
      */
     public ModInteger clone() {
-        if ( isField > 0 ) {
-           return new ModInteger( modul, val, true );
-        }
-        if ( isField == 0 ) {
-           return new ModInteger( modul, val, false );
-        }
-        return new ModInteger( modul, val );
-    }
-
-
-    /** Copy ModInteger element c.
-     * @param c
-     * @return a copy of c.
-     */
-    public ModInteger copy(ModInteger c) {
-        if ( c.isField > 0 ) {
-           return new ModInteger( modul, val, true );
-        }
-        if ( c.isField == 0 ) {
-           return new ModInteger( modul, val, false );
-        }
-        return new ModInteger( modul, val );
-    }
-
-
-    /** Get the zero element.
-     * @return 0 as ModInteger.
-     */
-    public ModInteger getZERO() {
-        if ( isField > 0 ) {
-           return new ModInteger( modul, java.math.BigInteger.ZERO, true );
-        }
-        if ( isField == 0 ) {
-           return new ModInteger( modul, java.math.BigInteger.ZERO, false );
-        }
-        return new ModInteger( modul, java.math.BigInteger.ZERO );
-    }
-
-
-    /**  Get the one element.
-     * @return 1 as ModInteger.
-     */
-    public ModInteger getONE() {
-        if ( isField > 0 ) {
-           return new ModInteger( modul, java.math.BigInteger.ONE, true );
-        }
-        if ( isField == 0 ) {
-           return new ModInteger( modul, java.math.BigInteger.ONE, false );
-        }
-        return new ModInteger( modul, java.math.BigInteger.ONE );
-    }
-
-
-    /**
-     * Query if this ring is commutative.
-     * @return true.
-     */
-    public boolean isCommutative() {
-        return true;
-    }
-
-
-    /**
-     * Query if this ring is associative.
-     * @return true.
-     */
-    public boolean isAssociative() {
-        return true;
-    }
-
-
-    /**
-     * Query if this ring is a field.
-     * @return true if module is prime, else false.
-     */
-    public boolean isField() {
-        if ( isField > 0 ) { 
-           return true;
-        }
-        if ( isField == 0 ) { 
-           return false;
-        }
-        if ( modul.isProbablePrime(certainty) ) {
-           isField = 1;
-           return true;
-        }
-        isField = 0;
-        return false;
-    }
-
-
-    /**
-     * Characteristic of this ring.
-     * @return characteristic of this ring.
-     */
-    public java.math.BigInteger characteristic() {
-        return modul;
-    }
-
-    /** Get a ModInteger element from a BigInteger value.
-     * @param a BigInteger.
-     * @return a ModInteger.
-     */
-    public ModInteger fromInteger(java.math.BigInteger a) {
-        if ( isField > 0 ) {
-           return new ModInteger( modul, a, true );
-        }
-        if ( isField == 0 ) {
-           return new ModInteger( modul, a, false );
-        }
-        return new ModInteger(modul,a);
-    }
-
-
-    /** Get a ModInteger element from a long value.
-     * @param a long.
-     * @return a ModInteger.
-     */
-    public ModInteger fromInteger(long a) {
-        if ( isField > 0 ) {
-           return new ModInteger( modul, a, true );
-        }
-        if ( isField == 0 ) {
-           return new ModInteger( modul, a, false );
-        }
-        return new ModInteger(modul, a );
+        return new ModInteger( ring, val );
     }
 
 
@@ -352,10 +126,10 @@ public final class ModInteger implements GcdRingElem<ModInteger>,
         if ( isZERO() ) {
            return false;
         }
-        if ( isField() ) {
+        if ( ring.isField() ) {
            return true;
         }
-        java.math.BigInteger g = modul.gcd( val ).abs();
+        java.math.BigInteger g = ring.modul.gcd( val ).abs();
         return ( g.equals( java.math.BigInteger.ONE ) );
     }
 
@@ -364,11 +138,7 @@ public final class ModInteger implements GcdRingElem<ModInteger>,
      * @see java.lang.Object#toString()
      */
     public String toString() {
-        if ( PrettyPrint.isTrue() ) {
-            return val.toString();
-        } else {
-            return val.toString() + " mod(" + modul.toString() + ")";
-        }
+        return val.toString();
     }
 
 
@@ -378,8 +148,8 @@ public final class ModInteger implements GcdRingElem<ModInteger>,
      */
     public int compareTo(ModInteger b) {
         java.math.BigInteger v = b.val;
-        if ( modul != b.modul ) {
-            v = v.mod( modul );
+        if ( ring != b.ring ) {
+            v = v.mod( ring.modul );
         }
         return val.compareTo( v );
     }
@@ -400,7 +170,7 @@ public final class ModInteger implements GcdRingElem<ModInteger>,
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
-        public boolean equals(Object b) {
+    public boolean equals(Object b) {
         if ( ! ( b instanceof ModInteger ) ) {
             return false;
         }
@@ -411,8 +181,9 @@ public final class ModInteger implements GcdRingElem<ModInteger>,
     /** Hash code for this ModInteger.
      * @see java.lang.Object#hashCode()
      */
+    @Override
     public int hashCode() {
-        return 37 * val.hashCode() + modul.hashCode();
+        return 37 * val.hashCode();
     }
 
 
@@ -421,13 +192,7 @@ public final class ModInteger implements GcdRingElem<ModInteger>,
      * @see edu.jas.structure.RingElem#abs()
      */
     public ModInteger abs() {
-        if ( isField > 0 ) {
-           return new ModInteger( modul, val.abs(), true );
-        }
-        if ( isField == 0 ) {
-           return new ModInteger( modul, val.abs(), false );
-        }
-        return new ModInteger( modul, val.abs() );
+        return new ModInteger( ring, val.abs() );
     }
 
 
@@ -446,13 +211,7 @@ public final class ModInteger implements GcdRingElem<ModInteger>,
      * @return -this.
      */
     public ModInteger negate() {
-        if ( isField > 0 ) {
-           return new ModInteger( modul, val.negate(), true );
-        }
-        if ( isField == 0 ) {
-           return new ModInteger( modul, val.negate(), false );
-        }
-        return new ModInteger( modul, val.negate() );
+        return new ModInteger( ring, val.negate() );
     }
 
 
@@ -490,13 +249,7 @@ public final class ModInteger implements GcdRingElem<ModInteger>,
      * @return this-S.
      */
     public ModInteger subtract(ModInteger S) {
-        if ( isField > 0 ) {
-           return new ModInteger( modul, val.subtract( S.val ), true );
-        }
-        if ( isField == 0 ) {
-           return new ModInteger( modul, val.subtract( S.val ), false );
-        }
-        return new ModInteger( modul, val.subtract( S.val ) );
+        return new ModInteger( ring, val.subtract( S.val ) );
     }
 
 
@@ -533,16 +286,15 @@ public final class ModInteger implements GcdRingElem<ModInteger>,
 
     /** ModInteger inverse.  
      * @see edu.jas.structure.RingElem#inverse()
+     * @throws NotInvertibleException if the element is not invertible.
      * @return S with S=1/this if defined. 
      */
-    public ModInteger inverse() {
-        if ( isField > 0 ) {
-           return new ModInteger( modul, val.modInverse( modul ), true );
-        }
-        if ( isField == 0 ) {
-           return new ModInteger( modul, val.modInverse( modul ), false );
-        }
-        return new ModInteger( modul, val.modInverse( modul ));
+    public ModInteger inverse() /*throws NotInvertibleException*/ {
+	try {
+            return new ModInteger( ring, val.modInverse( ring.modul ));
+	} catch (ArithmeticException e) {
+	    throw new NotInvertibleException(e.getCause());
+	}
     }
 
 
@@ -567,18 +319,12 @@ public final class ModInteger implements GcdRingElem<ModInteger>,
                                       + " division by zero");
         }
         if ( S.isONE()) {
-           return getZERO();
+           return ring.getZERO();
         }
         if ( S.isUnit() ) {
-           return getZERO();
+           return ring.getZERO();
         }
-        if ( isField > 0 ) {
-           return new ModInteger( modul, val.remainder( S.val ), true );
-        }
-        if ( isField == 0 ) {
-           return new ModInteger( modul, val.remainder( S.val ), false );
-        }
-        return new ModInteger( modul, val.remainder( S.val ) );
+        return new ModInteger( ring, val.remainder( S.val ) );
     }
 
 
@@ -593,44 +339,12 @@ public final class ModInteger implements GcdRingElem<ModInteger>,
     }
 
 
-    /** ModInteger random.
-     * @param n such that 0 &le; v &le; (2<sup>n</sup>-1).
-     * @return a random integer mod modul.
-     */
-    public ModInteger random(int n) {
-        return random( n, random );
-    }
-
-
-    /** ModInteger random.
-     * @param n such that 0 &le; v &le; (2<sup>n</sup>-1).
-     * @param rnd is a source for random bits.
-     * @return a random integer mod modul.
-     */
-    public ModInteger random(int n, Random rnd) {
-        java.math.BigInteger v = new java.math.BigInteger( n, rnd );
-        if ( isField > 0 ) {
-           return new ModInteger( modul, v, true );
-        }
-        if ( isField == 0 ) {
-           return new ModInteger( modul, v, false );
-        }
-        return new ModInteger( modul, v );
-    }
-
-
     /** ModInteger multiply.
      * @param S ModInteger.
      * @return this*S.
      */
     public ModInteger multiply(ModInteger S) {
-        if ( isField > 0 ) {
-           return new ModInteger( modul, val.multiply( S.val ), true );
-        }
-        if ( isField == 0 ) {
-           return new ModInteger( modul, val.multiply( S.val ), false );
-        }
-        return new ModInteger( modul, val.multiply( S.val ) );
+        return new ModInteger( ring, val.multiply( S.val ) );
     }
 
 
@@ -650,13 +364,7 @@ public final class ModInteger implements GcdRingElem<ModInteger>,
      * @return this+S.
      */
     public ModInteger sum(ModInteger S) {
-        if ( isField > 0 ) {
-           return new ModInteger( modul, val.add( S.val ), true );
-        }
-        if ( isField == 0 ) {
-           return new ModInteger( modul, val.add( S.val ), false );
-        }
-        return new ModInteger( modul, val.add( S.val ) );
+        return new ModInteger( ring, val.add( S.val ) );
     }
 
 
@@ -668,30 +376,6 @@ public final class ModInteger implements GcdRingElem<ModInteger>,
     public static ModInteger MISUM(ModInteger A, ModInteger B) {
         if ( A == null ) return null;
         return A.sum(B);
-    }
-
-
-    /** Parse ModInteger from String.
-     * @param s String.
-     * @return ModInteger from s.
-     */
-    public ModInteger parse(String s) {
-        if ( isField > 0 ) {
-           return new ModInteger( modul, s, true );
-        }
-        if ( isField == 0 ) {
-           return new ModInteger( modul, s, false );
-        }
-        return new ModInteger(modul,s);
-    }
-
-
-    /** Parse ModInteger from Reader.
-     * @param r Reader.
-     * @return next ModInteger from r.
-     */
-    public ModInteger parse(Reader r) {
-        return parse( StringUtil.nextString(r) );
     }
 
 
@@ -707,15 +391,9 @@ public final class ModInteger implements GcdRingElem<ModInteger>,
            return S;
         }
         if ( isUnit() || S.isUnit() ) {
-           return getONE();
+           return ring.getONE();
         }
-        if ( isField > 0 ) {
-           return new ModInteger( modul, val.gcd( S.val ), true );
-        }
-        if ( isField == 0 ) {
-           return new ModInteger( modul, val.gcd( S.val ), false );
-        }
-        return new ModInteger( modul, val.gcd( S.val ) );
+        return new ModInteger( ring, val.gcd( S.val ) );
     }
 
 
@@ -738,9 +416,9 @@ public final class ModInteger implements GcdRingElem<ModInteger>,
            return ret;
         }
         if ( this.isUnit() || S.isUnit() ) {
-           ret[0] = getONE();
+           ret[0] = ring.getONE();
            if ( this.isUnit() && S.isUnit() ) {
-              ModInteger half = fromInteger(2).inverse();
+              ModInteger half = ring.fromInteger(2).inverse();
               ret[1] = this.inverse().multiply(half);
               ret[2] = S.inverse().multiply(half);
               return ret;
@@ -748,12 +426,12 @@ public final class ModInteger implements GcdRingElem<ModInteger>,
            if ( this.isUnit() ) {
               // oder inverse(S-1)?
               ret[1] = this.inverse();
-              ret[2] = getZERO();
+              ret[2] = ring.getZERO();
               return ret;
            }
            // if ( S.isUnit() ) {
               // oder inverse(this-1)?
-              ret[1] = getZERO();
+              ret[1] = ring.getZERO();
               ret[2] = S.inverse();
               return ret;
            //}
@@ -779,51 +457,10 @@ public final class ModInteger implements GcdRingElem<ModInteger>,
             r = qr[1];
         }
         //System.out.println("q = " + q + "\n c1 = " + c1 + "\n c2 = " + c2);
-        if ( isField > 0 ) {
-           ret[0] = new ModInteger(modul,q, true); 
-           ret[1] = new ModInteger(modul,c1, true);
-           ret[2] = new ModInteger(modul,c2, true);
-        }
-        if ( isField == 0 ) {
-           ret[0] = new ModInteger(modul,q, false); 
-           ret[1] = new ModInteger(modul,c1, false);
-           ret[2] = new ModInteger(modul,c2, false);
-        }
-        ret[0] = new ModInteger(modul,q); 
-        ret[1] = new ModInteger(modul,c1);
-        ret[2] = new ModInteger(modul,c2);
+        ret[0] = new ModInteger(ring,q); 
+        ret[1] = new ModInteger(ring,c1);
+        ret[2] = new ModInteger(ring,c2);
         return ret;
-    }
-
-
-    /** ModInteger chinese remainder algorithm.  
-     * This is a factory method.
-     * Assert c.modul >= a.modul and c.modul * a.modul = this.modul.
-     * @param c ModInteger.
-     * @param ci inverse of c.modul in ring of a.
-     * @param a other ModInteger.
-     * @return S, with S mod c.modul == c and S mod a.modul == a. 
-     */
-    public ModInteger 
-           chineseRemainder(ModInteger c, 
-                            ModInteger ci, 
-                            ModInteger a) {
-        if ( false ) { // debug
-           if ( c.modul.compareTo( a.modul ) < 1 ) {
-               System.out.println("ModInteger error " + c + ", " + a);
-           }
-        }
-        ModInteger b = a.fromInteger( c.val ); // c mod a.modul
-        ModInteger d = a.subtract( b ); // a-c mod a.modul
-        if ( d.isZERO() ) {
-           return fromInteger( c.val );
-        }
-        b = d.multiply( ci ); // b = (a-c)*ci mod a.modul
-        // (c.modul*b)+c mod this.modul = c mod c.modul = 
-        // (c.modul*ci*(a-c)+c) mod a.modul = a mod a.modul
-        java.math.BigInteger s = c.modul.multiply( b.val );
-        s = s.add( c.val );
-        return fromInteger( s );
     }
 
 }
