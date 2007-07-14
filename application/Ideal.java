@@ -27,13 +27,13 @@ import edu.jas.ring.ReductionSeq;
 
 
 /**
- * Ideal. Some methods for ideal arithmetic.
+ * Ideal implements some methods for ideal arithmetic, e.g. intersection and quotient.
  * @author Heinz Kredel
  */
 public class Ideal<C extends RingElem<C>> implements Serializable {
 
 
-  private static Logger logger = Logger.getLogger(Ideal.class);
+  private static final Logger logger = Logger.getLogger(Ideal.class);
   private boolean debug = true || logger.isDebugEnabled();
 
 
@@ -95,8 +95,7 @@ public class Ideal<C extends RingElem<C>> implements Serializable {
    * @param list polynomial list
    */
   public Ideal( PolynomialList<C> list) {
-      this( list, 
-            ( list == null ? true : ( list.list == null ? true : false ) ) );
+      this( list, false );
   }
 
 
@@ -108,9 +107,7 @@ public class Ideal<C extends RingElem<C>> implements Serializable {
    */
   public Ideal( PolynomialList<C> list,
                 GroebnerBase<C> bb, Reduction<C> red) {
-      this( list, 
-            ( list == null ? true : ( list.list == null ? true : false ) ), 
-            bb, red );
+      this( list, false, bb, red );
   }
 
 
@@ -120,7 +117,7 @@ public class Ideal<C extends RingElem<C>> implements Serializable {
    * @param gb true if list is known to be a Groebner Base, else false
    */
   public Ideal( PolynomialList<C> list, boolean gb) {
-      this(list,gb, new GroebnerBaseSeqPairSeq<C>(), new ReductionSeq<C>() );
+      this(list, gb, new GroebnerBaseSeqPairSeq<C>(), new ReductionSeq<C>() );
   }
 
 
@@ -133,6 +130,9 @@ public class Ideal<C extends RingElem<C>> implements Serializable {
    */
     public Ideal( PolynomialList<C> list, boolean gb,
                   GroebnerBase<C> bb, Reduction<C> red) {
+      if ( list == null || list.list == null ) {
+	 throw new IllegalArgumentException("list and list.list may not be null");
+      }
       this.list = list;
       this.isGB = gb;
       this.testGB = ( gb ? true : false ); // ??
@@ -146,9 +146,6 @@ public class Ideal<C extends RingElem<C>> implements Serializable {
    * @return list.list
    */
   public List< GenPolynomial<C> > getList() {
-      if ( list == null ) {
-          return null;
-      }
       return list.list;
   }
 
@@ -158,9 +155,6 @@ public class Ideal<C extends RingElem<C>> implements Serializable {
    * @return list.ring
    */
   public GenPolynomialRing<C> getRing() {
-      if ( list == null ) {
-          return null;
-      }
       return list.ring;
   }
 
@@ -271,10 +265,7 @@ public class Ideal<C extends RingElem<C>> implements Serializable {
    * @return true, if B is contained in this, else false
    */
   public boolean contains( Ideal<C> B ) {
-      if ( B == null ) {
-          return true;
-      }
-      if ( B.isZERO() ) {
+      if ( B == null || B.isZERO() ) {
           return true;
       }
       if ( this.isONE() ) {
@@ -312,10 +303,7 @@ public class Ideal<C extends RingElem<C>> implements Serializable {
    * @return ideal(this+B)
    */
   public Ideal<C> sum( Ideal<C> B ) {
-      if ( B == null ) {
-          return this;
-      }
-      if ( B.isZERO() ) {
+      if ( B == null || B.isZERO() ) {
           return this;
       }
       if ( this.isZERO() ) {
@@ -343,10 +331,7 @@ public class Ideal<C extends RingElem<C>> implements Serializable {
    * @return ideal(this*B)
    */
   public Ideal<C> product( Ideal<C> B ) {
-      if ( B == null ) {
-          return B;
-      }
-      if ( B.isZERO() ) {
+      if ( B == null || B.isZERO() ) {
           return B;
       }
       if ( this.isZERO() ) {
@@ -377,10 +362,7 @@ public class Ideal<C extends RingElem<C>> implements Serializable {
    * @return ideal(this \cap B), a Groebner base
    */
   public Ideal<C> intersect( Ideal<C> B ) {
-      if ( B == null ) { // == (0)
-          return B;
-      }
-      if ( B.isZERO() ) { 
+      if ( B == null || B.isZERO() ) { // (0)
           return B;
       }
       if ( this.isZERO() ) { 
@@ -425,7 +407,7 @@ public class Ideal<C extends RingElem<C>> implements Serializable {
    */
   public Ideal<C> intersect( GenPolynomialRing<C> R ) {
       if ( R == null ) { 
-         throw new RuntimeException("R may not be null");
+         throw new IllegalArgumentException("R may not be null");
       }
       int d = getRing().nvar - R.nvar;
       if ( d <= 0 ) {

@@ -11,21 +11,20 @@ import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
-//import edu.jas.structure.PrettyPrint;
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 
 
 /**
- * Residue ring class based on GenPolynomial with RingElem interface.
+ * Residue ring factory based on GenPolynomial with RingFactory interface.
  * Objects of this class are immutable.
  * @author Heinz Kredel
  */
 public class ResidueRing<C extends RingElem<C> > 
              implements RingFactory< Residue<C> >  {
 
-    private static Logger logger = Logger.getLogger(ResidueRing.class);
+    private static final Logger logger = Logger.getLogger(ResidueRing.class);
     private boolean debug = logger.isDebugEnabled();
 
 

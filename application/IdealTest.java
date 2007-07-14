@@ -30,7 +30,7 @@ import edu.jas.ring.GroebnerBaseSeq;
 
 
 /**
- * Ideal Test using JUnit.
+ * Ideal tests with JUnit.
  * @author Heinz Kredel.
  */
 public class IdealTest extends TestCase {
@@ -106,11 +106,6 @@ public class IdealTest extends TestCase {
      Ideal<BigRational> I;
      Ideal<BigRational> J;
      Ideal<BigRational> K;
-
-     I = new Ideal<BigRational>(fac,L);
-     assertTrue("isZERO( I )", I.isZERO() );
-     assertTrue("not isONE( I )", !I.isONE() );
-     assertTrue("isGB( I )", I.isGB() );
 
      L = new ArrayList<GenPolynomial<BigRational>>();
 
@@ -230,11 +225,6 @@ public class IdealTest extends TestCase {
      Ideal<BigRational> J;
      Ideal<BigRational> K;
      Ideal<BigRational> H;
-
-     I = new Ideal<BigRational>(fac,L);
-     assertTrue("isZERO( I )", I.isZERO() );
-     assertTrue("not isONE( I )", !I.isONE() );
-     assertTrue("isGB( I )", I.isGB() );
 
      a = fac.random(kl, ll, el, q );
      b = fac.random(kl, ll, el, q );
@@ -360,11 +350,6 @@ public class IdealTest extends TestCase {
      Ideal<BigRational> K;
      Ideal<BigRational> H;
 
-     I = new Ideal<BigRational>(fac,L);
-     assertTrue("isZERO( I )", I.isZERO() );
-     assertTrue("not isONE( I )", !I.isONE() );
-     assertTrue("isGB( I )", I.isGB() );
-
      a = fac.random(kl, ll, el, q );
      b = fac.random(kl, ll, el, q );
      c = fac.random(kl, ll, el, q );
@@ -479,11 +464,6 @@ public class IdealTest extends TestCase {
      Ideal<BigRational> J;
      Ideal<BigRational> K;
 
-     I = new Ideal<BigRational>(fac,L);
-     assertTrue("isZERO( I )", I.isZERO() );
-     assertTrue("not isONE( I )", !I.isONE() );
-     assertTrue("isGB( I )", I.isGB() );
-
      a = fac.random(kl, ll, el, q );
      b = fac.random(kl, ll, el, q );
      c = fac.random(kl, ll, el, q );
@@ -565,11 +545,6 @@ public class IdealTest extends TestCase {
      Ideal<BigRational> J;
      Ideal<BigRational> K;
      Ideal<BigRational> JJ;
-
-     I = new Ideal<BigRational>(fac,L);
-     assertTrue("isZERO( I )", I.isZERO() );
-     assertTrue("not isONE( I )", !I.isONE() );
-     assertTrue("isGB( I )", I.isGB() );
 
      a = fac.random(kl-1, ll-1, el-1, q/2 );
      b = fac.random(kl-1, ll-1, el, q/2 );

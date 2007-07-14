@@ -15,15 +15,14 @@ import org.apache.log4j.BasicConfigurator;
 
 import edu.jas.arith.BigRational;
 
-//import edu.jas.structure.RingElem;
-
-//import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.TermOrder;
 
+import edu.jas.kern.ComputerThreads;
+
 
 /**
- * QuotientRat Test using JUnit. 
+ * Quotient over BigRational GenPolynomial tests with JUnit. 
  * @author Heinz Kredel.
  */
 
@@ -86,9 +85,10 @@ public class QuotientRatTest extends TestCase {
 
    protected void tearDown() {
        a = b = c = d = e = null;
-       eFac.terminate();
+       //eFac.terminate();
        eFac = null;
        zFac = null;
+       ComputerThreads.terminate();
    }
 
 

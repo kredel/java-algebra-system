@@ -10,12 +10,14 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import edu.jas.poly.GenPolynomial;
-import edu.jas.structure.PrettyPrint;
+
+import edu.jas.kern.PrettyPrint;
+
 import edu.jas.structure.RingElem;
 
 
 /**
- * Local class element based on GenPolynomial with RingElem interface.
+ * Local ring element based on GenPolynomial with RingElem interface.
  * Objects of this class are (nearly) immutable.
  * @author Heinz Kredel
  * @fix Not jet working because of monic GBs.
@@ -24,7 +26,7 @@ public class Local<C extends RingElem<C> >
              implements RingElem< Local<C> > {
 
 
-  private static Logger logger = Logger.getLogger(Local.class);
+  private static final Logger logger = Logger.getLogger(Local.class);
   private boolean debug = logger.isDebugEnabled();
 
 

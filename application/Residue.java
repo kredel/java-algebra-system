@@ -5,12 +5,14 @@
 package edu.jas.application;
 
 import edu.jas.poly.GenPolynomial;
-import edu.jas.structure.PrettyPrint;
+
+import edu.jas.kern.PrettyPrint;
+
 import edu.jas.structure.RingElem;
 
 
 /**
- * Residue class element based on GenPolynomial with RingElem interface.
+ * Residue ring element based on GenPolynomial with RingElem interface.
  * Objects of this class are (nearly) immutable.
  * @author Heinz Kredel
  */

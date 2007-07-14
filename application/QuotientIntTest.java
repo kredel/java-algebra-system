@@ -16,17 +16,16 @@ import org.apache.log4j.BasicConfigurator;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.BigInteger;
 
-//import edu.jas.structure.RingElem;
-import edu.jas.structure.PrettyPrint;
+import edu.jas.kern.PrettyPrint;
+import edu.jas.kern.ComputerThreads;
 
-//import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.TermOrder;
 
 
 /**
- * QuotientInt Test using JUnit. 
+ * Quotient over BigInteger GenPolynomial tests with JUnit. 
  * @author Heinz Kredel.
  */
 
@@ -84,8 +83,9 @@ public class QuotientIntTest extends TestCase {
 
    protected void tearDown() {
        a = b = c = d = e = null;
-       efac.terminate();
+       //efac.terminate();
        efac = null;
+       ComputerThreads.terminate();
    }
 
 

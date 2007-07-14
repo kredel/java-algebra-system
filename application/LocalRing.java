@@ -11,7 +11,6 @@ import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
-//import edu.jas.structure.PrettyPrint;
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
@@ -19,13 +18,13 @@ import edu.jas.poly.GenPolynomialRing;
 
 /**
  * Local ring class based on GenPolynomial with RingElem interface.
- * Objects of this class are immutable.
+ * Objects of this class are effective immutable.
  * @author Heinz Kredel
  */
 public class LocalRing<C extends RingElem<C> > 
              implements RingFactory< Local<C> >  {
 
-     private static Logger logger = Logger.getLogger(LocalRing.class);
+     private static final Logger logger = Logger.getLogger(LocalRing.class);
      private boolean debug = logger.isDebugEnabled();
 
 

@@ -17,13 +17,14 @@ import org.apache.log4j.Logger;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
-//import edu.jas.structure.PrettyPrint;
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.ModInteger;
+import edu.jas.arith.ModIntegerRing;
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
+import edu.jas.poly.PolyUtil;
 
 import edu.jas.ufd.GreatestCommonDivisor;
 import edu.jas.ufd.GreatestCommonDivisorAbstract;
@@ -37,14 +38,14 @@ import edu.jas.util.StringUtil;
 
 
 /**
- * Quotient ring class based on GenPolynomial with RingElem interface.
+ * Quotient ring factory based on GenPolynomial with RingElem interface.
  * Objects of this class are immutable.
  * @author Heinz Kredel
  */
 public class QuotientRing<C extends GcdRingElem<C> > 
              implements RingFactory< Quotient<C> >  {
 
-     private static Logger logger = Logger.getLogger(QuotientRing.class);
+     private static final Logger logger = Logger.getLogger(QuotientRing.class);
      private boolean debug = logger.isDebugEnabled();
 
 
@@ -91,7 +92,7 @@ public class QuotientRing<C extends GcdRingElem<C> >
            t = 1;
         } else {
            if ( ring.coFac.characteristic().signum() > 0 ) {
-              ModInteger m = new ModInteger(ring.coFac.characteristic(),1);
+              ModInteger m = new ModInteger(new ModIntegerRing(ring.coFac.characteristic()),1);
               C mc = ring.coFac.fromInteger(1);
               if ( m.equals( mc ) ) {
                  t = 2;
@@ -127,9 +128,8 @@ public class QuotientRing<C extends GcdRingElem<C> >
         //BigInteger b3 = (BigInteger)ring.coFac.fromInteger(1);
 
 
-    /**
+    /* no more required, see ComputerThreads
      * Terminate proxy engine.
-     */
     public void terminate() {
         if ( engine == null ) {
            return;
@@ -138,6 +138,7 @@ public class QuotientRing<C extends GcdRingElem<C> >
            ((GCDProxy)engine).terminate();
         }
     }
+     */
 
 
     /** Divide.
@@ -146,10 +147,10 @@ public class QuotientRing<C extends GcdRingElem<C> >
      * @return divide(n,d)
      */
     protected GenPolynomial<C> divide(GenPolynomial<C> n, GenPolynomial<C> d) {
-        if ( ufdGCD ) {
-           return engine.basePseudoDivide(n,d);
-        }
-        return n.divide(d);
+        //if ( ufdGCD ) {
+           return PolyUtil.<C>basePseudoDivide(n,d);
+	//}
+        //return n.divide(d);
     }
 
 
@@ -210,7 +211,7 @@ public class QuotientRing<C extends GcdRingElem<C> >
         }
         GenPolynomial<C> p = n.multiply(d);
         GenPolynomial<C> lcm = syzLcm(n,d);
-        GenPolynomial<C> gcd = p.divide(lcm);
+        GenPolynomial<C> gcd = divide(p,lcm);
         return gcd;
     }
 

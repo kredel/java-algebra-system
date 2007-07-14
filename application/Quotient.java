@@ -7,20 +7,22 @@ package edu.jas.application;
 import org.apache.log4j.Logger;
 
 import edu.jas.poly.GenPolynomial;
-import edu.jas.structure.PrettyPrint;
+
+import edu.jas.kern.PrettyPrint;
+
 import edu.jas.structure.RingElem;
 import edu.jas.structure.GcdRingElem;
 
 
 /**
- * Quotient class element based on GenPolynomial with RingElem interface.
+ * Quotient, i.e. rational function, based on GenPolynomial with RingElem interface.
  * Objects of this class are immutable.
  * @author Heinz Kredel
  */
 public class Quotient<C extends GcdRingElem<C> > 
              implements RingElem< Quotient<C> > {
 
-    private static Logger logger = Logger.getLogger(Quotient.class);
+    private static final Logger logger = Logger.getLogger(Quotient.class);
     private boolean debug = logger.isDebugEnabled();
 
 
@@ -97,7 +99,7 @@ public class Quotient<C extends GcdRingElem<C> >
         // must reduce to lowest terms
         GenPolynomial<C> gcd = ring.gcd( n, d );
         if ( false || debug ) {
-           logger.info("gcd = " + gcd.isONE());
+           logger.info("gcd = " + gcd.isONE() );
         }
         //GenPolynomial<C> gcd = ring.ring.getONE();
         if ( gcd.isONE() ) {

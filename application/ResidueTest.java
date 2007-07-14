@@ -24,7 +24,7 @@ import edu.jas.poly.GenPolynomialRing;
 
 
 /**
- * Residue Test using JUnit. 
+ * Residue tests with JUnit. 
  * @author Heinz Kredel.
  */
 
@@ -128,6 +128,9 @@ public class ResidueTest extends TestCase {
          //a = fac.random(ll+i);
          a = fac.random(kl*(i+1), ll+2*i, el+i, q );
          //System.out.println("a = " + a);
+	 if ( a.isZERO() || a.isONE() ) {
+            continue;
+	 }
          assertTrue("length( a"+i+" ) <> 0", a.val.length() >= 0);
          assertTrue(" not isZERO( a"+i+" )", !a.isZERO() );
          assertTrue(" not isONE( a"+i+" )", !a.isONE() );
