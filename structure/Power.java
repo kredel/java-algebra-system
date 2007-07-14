@@ -26,7 +26,7 @@ public class Power<C extends RingElem<C> > {
     /** The constructor creates a Power object.
      */
     public Power() {
-	this(null);
+        this(null);
     }
 
 
@@ -34,7 +34,7 @@ public class Power<C extends RingElem<C> > {
      * @param fac ring factory 
      */
     public Power(RingFactory<C> fac) {
-	this.fac = fac;
+        this.fac = fac;
     }
 
 
@@ -44,16 +44,16 @@ public class Power<C extends RingElem<C> > {
      * @return a^n.
      */
     public static <C extends RingElem<C>> C positivePower(C a, long n) {
-	if ( n <= 0 ) {
-	    throw new IllegalArgumentException("only positive n allowed");
-	}
-	if ( a.isZERO() || a.isONE() ) {
+        if ( n <= 0 ) {
+            throw new IllegalArgumentException("only positive n allowed");
+        }
+        if ( a.isZERO() || a.isONE() ) {
            return a;
-	}
-	C p = a;
-	for (long i = 1; i < n; i++ ) {
-	    p = p.multiply( a );
-	}
+        }
+        C p = a;
+        for (long i = 1; i < n; i++ ) {
+            p = p.multiply( a );
+        }
         return p;
     }
 
@@ -71,18 +71,35 @@ public class Power<C extends RingElem<C> > {
         if ( n == 0 ) {
            if ( fac == null ) {
               throw new IllegalArgumentException("fac may not be null for a^0");
-	   }
+           }
            return fac.getONE();
         }
+        if ( a.isONE() ) {
+           return a;
+        }
         C b = a;
-	if ( n < 0 ) {
+        if ( n < 0 ) {
            b = a.inverse();
-	   n = -n;
-	}
-	C p = b;
-	for (long i = 1; i < n; i++ ) {
-	    p = p.multiply( b );
-	}
+           n = -n;
+        }
+        if ( n == 1 ) {
+           return b;
+        }
+        C p = fac.getONE();
+        long i = n;
+        do {
+           if ( i % 2 == 1 ) {
+              p = p.multiply( b );
+           }
+           i = i / 2;
+           if ( i > 0 ) {
+              b = b.multiply( b );
+           }
+        } while ( i > 0 );
+        if ( n > 11 ) {
+            System.out.println("n  = " + n);
+            System.out.println("p  = " + p);
+        }
         return p;
     }
 
@@ -93,7 +110,7 @@ public class Power<C extends RingElem<C> > {
      * @return a^n, with 0^0 = 0.
      */
     public C power(C a, long n) {
-	return power( fac, a, n );
+        return power( fac, a, n );
     }
  
 }
