@@ -24,7 +24,7 @@ import edu.jas.poly.GenPolynomialRing;
 
 
 /**
- * ModuleList Test using JUnit.
+ * ModuleList tests with JUnit.
  * @author Heinz Kredel
  */
 

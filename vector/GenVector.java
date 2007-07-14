@@ -14,15 +14,15 @@ import edu.jas.structure.ModulElem;
 
 
 /**
- * GenVector generic vector implementing ModulElem.
- * vectors of n columns over C.
+ * GenVector implements generic vectors with RingElem entries.
+ * Vectors of n columns over C.
  * @author Heinz Kredel
  */
 
 public class GenVector<C extends RingElem<C> > 
     implements ModulElem<GenVector<C>,C> {
 
-    private static Logger logger = Logger.getLogger(GenVector.class);
+    private static final Logger logger = Logger.getLogger(GenVector.class);
 
     public final GenVectorModul< C > modul;
     public final List<C> val;

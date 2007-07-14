@@ -19,7 +19,7 @@ import edu.jas.poly.GenPolynomialRing;
 
 
 /**
- * List of vectors of polynomials.
+ * Ordered list of vectors of polynomials.
  * Mainly for storage and printing / toString and 
  * conversions to other representations.
  * Lists of polynomials in this list are sorted according to 
@@ -96,14 +96,14 @@ public class OrderedModuleList<C extends RingElem<C> >
                            GenPolynomial<C> p2 = l2.get(i);
                            ExpVector e1 = p1.leadingExpVector();
                            ExpVector e2 = p2.leadingExpVector();
+                           if ( e1 == e2 ) {
+                               continue; 
+                           }
                            if ( e1 == null && e2 != null ) {
                                return -1; 
                            }
                            if ( e1 != null && e2 == null ) {
                                return 1; 
-                           }
-                           if ( e1 == null && e2 == null ) {
-                               continue; 
                            }
                            if ( e1.length() != e2.length() ) {
                               if ( e1.length() > e2.length() ) {

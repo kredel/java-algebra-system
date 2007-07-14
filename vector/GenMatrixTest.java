@@ -17,7 +17,7 @@ import edu.jas.poly.GenPolynomialRing;
 
 
 /**
- * GenMatrix Test using JUnit 
+ * GenMatrix tests with JUnit 
  * @author Heinz Kredel.
  */
 

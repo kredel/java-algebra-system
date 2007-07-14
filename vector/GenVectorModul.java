@@ -24,15 +24,15 @@ import edu.jas.util.StringUtil;
 
 
 /**
- * GenVectorModul generic vector implementing ModulElem.
- * vectors of n columns over C.
+ * GenVectorModul implements a generic vector factory with RingElem entries.
+ * Vectors of n columns over C.
  * @author Heinz Kredel
  */
 
 public class GenVectorModul<C extends RingElem<C> > 
             implements ModulFactory< GenVector<C>, C > {
 
-    private static Logger logger = Logger.getLogger(GenVectorModul.class);
+    private static final Logger logger = Logger.getLogger(GenVectorModul.class);
 
     public final RingFactory< C > coFac;
 

@@ -51,7 +51,7 @@ public class ModuleList<C extends RingElem<C> > implements Serializable {
     public final int cols; // -1 is undefined
 
 
-    private static Logger logger = Logger.getLogger(ModuleList.class);
+    private static final Logger logger = Logger.getLogger(ModuleList.class);
 
 
     /**
@@ -109,6 +109,9 @@ public class ModuleList<C extends RingElem<C> > implements Serializable {
         if ( ! ring.equals( ml.ring ) ) {
             //System.out.println("Ring");
             return false;
+        }
+        if ( list == ml.list ) {
+            return true;
         }
         if ( list == null && ml.list != null ) {
             //System.out.println("List, null");

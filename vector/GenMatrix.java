@@ -11,19 +11,20 @@ import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
 import edu.jas.structure.AlgebraElem;
-import edu.jas.structure.PrettyPrint;
+
+import edu.jas.kern.PrettyPrint;
 
 
 /**
- * GenMatrix generic matrix implementing RingElem.
- * matrixs of n columns over C.
+ * GenMatrix implements a generic matrix algebra over RingElem entries.
+ * Matrix has n columns and m rows over C.
  * @author Heinz Kredel
  */
 
 public class GenMatrix<C extends RingElem<C> > 
     implements AlgebraElem<GenMatrix<C>,C> {
 
-    private static Logger logger = Logger.getLogger(GenMatrix.class);
+    private static final Logger logger = Logger.getLogger(GenMatrix.class);
 
     public final GenMatrixRing< C > ring;
     public final List<C> val; //remove 

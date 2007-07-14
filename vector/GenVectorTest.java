@@ -18,7 +18,7 @@ import edu.jas.poly.GenPolynomialRing;
 
 
 /**
- * GenVector Test using JUnit 
+ * GenVector tests with JUnit 
  * @author Heinz Kredel.
  */
 
@@ -106,6 +106,9 @@ public class GenVectorTest extends TestCase {
      for (int i = 0; i < 7; i++) {
          a = mfac.random(kl,q);
          //System.out.println("a = " + a);
+         if ( a.isZERO() ) {
+            continue;
+         }
          assertTrue(" not isZERO( a"+i+" )", !a.isZERO() );
      }
  }

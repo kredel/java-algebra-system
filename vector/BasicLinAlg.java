@@ -15,7 +15,7 @@ import edu.jas.structure.RingElem;
 
 
 /**
- * Basic linear algebra class.
+ * Basic linear algebra methods.
  * Implements Basic linear algebra computations and tests.
  * @author Heinz Kredel
  */

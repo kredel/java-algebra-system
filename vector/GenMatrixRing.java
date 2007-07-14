@@ -23,7 +23,7 @@ import edu.jas.structure.AlgebraFactory;
 import edu.jas.util.StringUtil;
 
 /**
- * GenMatrixRing generic matrix factory implementing RingFactory.
+ * GenMatrixRing implements a generic matrix algebra factory with RingFactory.
  * Matrices of n rows and m columns over C.
  * @author Heinz Kredel
  */
@@ -31,7 +31,7 @@ import edu.jas.util.StringUtil;
 public class GenMatrixRing<C extends RingElem<C> > 
             implements AlgebraFactory< GenMatrix<C>, C > {
 
-    private static Logger logger = Logger.getLogger(GenMatrixRing.class);
+    private static final Logger logger = Logger.getLogger(GenMatrixRing.class);
 
     public final RingFactory< C > coFac;
 

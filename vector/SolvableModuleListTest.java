@@ -27,7 +27,7 @@ import edu.jas.poly.RelationTable;
 
 
 /**
- * SolvableModuleList Test using JUnit.
+ * SolvableModuleList tests using JUnit.
  * @author Heinz Kredel.
  */
 

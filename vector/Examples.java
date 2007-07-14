@@ -19,7 +19,7 @@ import edu.jas.application.QuotientRing;
 
 
 /**
- * Examples.
+ * Examples for basic linear algebra.
  * @author Heinz Kredel.
  */
 
