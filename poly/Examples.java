@@ -10,10 +10,11 @@ import java.util.List;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.ModInteger;
+import edu.jas.arith.ModIntegerRing;
 
 
 /**
- * Examples.
+ * Examples for polynomials usage.
  * @author Heinz Kredel.
  */
 
@@ -117,7 +118,7 @@ public static void example4() {
        System.out.println("\n\n example 4");
 
        long prime = getPrime();
-       ModInteger cfac = new ModInteger(prime,1);
+       ModIntegerRing cfac = new ModIntegerRing(prime);
        System.out.println("cfac = " + cfac);
 
        GenPolynomialRing<ModInteger> mfac;

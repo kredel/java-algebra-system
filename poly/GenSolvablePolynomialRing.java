@@ -11,7 +11,8 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 
-//import java.util.List;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -19,7 +20,8 @@ import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
-import edu.jas.structure.PrettyPrint;
+
+import edu.jas.kern.PrettyPrint;
 
 //import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.TermOrder;
@@ -61,7 +63,7 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
     public final GenSolvablePolynomial<C> ONE;
 
 
-    private static Logger logger = Logger.getLogger(GenSolvablePolynomialRing.class);
+    private static final Logger logger = Logger.getLogger(GenSolvablePolynomialRing.class);
     private final boolean debug = logger.isDebugEnabled();
 
 
@@ -142,7 +144,7 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
         }
         ZERO = new GenSolvablePolynomial<C>( this );
         C coeff = coFac.getONE();
-        //evzero = new ExpVector(nvar);
+        //evzero = new ExpVector(nvar); // from super
         ONE  = new GenSolvablePolynomial<C>( this, coeff, evzero );
     }
 
@@ -424,6 +426,94 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
     public GenSolvablePolynomial<C> univariate(int i) {
         return (GenSolvablePolynomial<C>)super.univariate(i);
     }
+
+
+    /**
+     * Generate univariate solvable polynomial in a given variable with given exponent.
+     * @typeparam C coefficient type.
+     * @param i the index of the variable.
+     * @param e the exponent of the variable.
+     * @return X_i^e as solvable univariate polynomial.
+     */
+    public GenSolvablePolynomial<C> univariate(int i,long e) {
+        return (GenSolvablePolynomial<C>)super.univariate(i,e);
+    }
+
+
+    /**
+     * Generate univariate solvable polynomial in a given variable with given exponent.
+     * @typeparam C coefficient type.
+     * @param modv number of module variables.
+     * @param i the index of the variable.
+     * @param e the exponent of the variable.
+     * @return X_i^e as solvable univariate polynomial.
+     */
+    public GenSolvablePolynomial<C> univariate(int modv,int i,long e) {
+        return (GenSolvablePolynomial<C>)super.univariate(modv,i,e);
+    }
+
+
+    /**
+     * Generate list of univariate polynomials in all variables.
+     * @typeparam C coefficient type.
+     * @return List(X_1,...,X_n) a list of univariate polynomials.
+     */
+    public List<GenSolvablePolynomial<C>> univariateList() {
+	//return castToSolvableList( super.univariateList() );
+	return univariateList(0,1L);
+    }
+
+
+    /**
+     * Generate list of univariate polynomials in all variables.
+     * @typeparam C coefficient type.
+     * @param modv number of module variables.
+     * @return List(X_1,...,X_n) a list of univariate polynomials.
+     */
+    public List<GenSolvablePolynomial<C>> univariateList(int modv) {
+	return univariateList(modv,1L);
+    }
+
+
+    /**
+     * Generate list of univariate polynomials in all variables with given exponent.
+     * @typeparam C coefficient type.
+     * @param modv number of module variables.
+     * @param e the exponent of the variables.
+     * @return List(X_1^e,...,X_n^e) a list of univariate polynomials.
+     */
+    public List<GenSolvablePolynomial<C>> univariateList(int modv, long e) {
+        List<GenSolvablePolynomial<C>> pols = new ArrayList<GenSolvablePolynomial<C>>(nvar);
+	for ( int i = 0; i < nvar-modv; i++ ) {
+            GenSolvablePolynomial<C> p = univariate(modv,i,e);
+	    pols.add( p );
+	}
+        return pols;
+    }
+
+
+    /* include here ?
+     * Get list as List of GenSolvablePolynomials.
+     * Required because no List casts allowed. Equivalent to 
+     * cast (List&lt;GenSolvablePolynomial&lt;C&gt;&gt;) list.
+     * @return solvable polynomial list from this.
+    public List<GenSolvablePolynomial<C>> castToSolvableList(List<GenPolynomial<C>> list) {
+        List< GenSolvablePolynomial<C> > slist = null;
+        if ( list == null ) {
+            return slist;
+        }
+        slist = new ArrayList< GenSolvablePolynomial<C> >( list.size() ); 
+        GenSolvablePolynomial<C> s;
+        for ( GenPolynomial<C> p: list ) {
+            if ( ! (p instanceof GenSolvablePolynomial) ) {
+               throw new RuntimeException("no solvable polynomial "+p);
+            }
+            s = (GenSolvablePolynomial<C>) p;
+            slist.add( s );
+        }
+        return slist;
+    }
+     */
 
 
     /**

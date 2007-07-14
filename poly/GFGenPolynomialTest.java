@@ -12,6 +12,7 @@ import junit.framework.TestSuite;
 
 //import edu.jas.arith.BigRational;
 import edu.jas.arith.ModInteger;
+import edu.jas.arith.ModIntegerRing;
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.AlgebraicNumber;
@@ -19,7 +20,7 @@ import edu.jas.poly.AlgebraicNumberRing;
 
 
 /**
- * GFGenPolynomial Test using JUnit.
+ * Galois field coefficients GenPolynomial tests with JUnit.
  * @author Heinz Kredel.
  */
 
@@ -78,15 +79,15 @@ public class GFGenPolynomialTest extends TestCase {
    protected void setUp() {
        a = b = c = d = e = null;
        long prime = getPrime();
-       ModInteger r = new ModInteger(prime,1);
+       ModIntegerRing r = new ModIntegerRing(prime);
        // univariate minimal polynomial
        GenPolynomialRing<ModInteger> mfac =  
            new GenPolynomialRing<ModInteger>(r,1);
        GenPolynomial<ModInteger> modul = mfac.random(5); 
-       while ( modul.isZERO() || modul.isUnit() ) {
+       while ( modul.isZERO() || modul.isUnit() || modul.isConstant() ) {
              modul = mfac.random(5); 
        }
-       cfac = new AlgebraicNumberRing<ModInteger>(modul.monic());
+       cfac = new AlgebraicNumberRing<ModInteger>( modul.monic() );
        fac = new GenPolynomialRing<AlgebraicNumber<ModInteger>>(cfac,rl);
    }
 
@@ -252,6 +253,22 @@ public class GFGenPolynomialTest extends TestCase {
          d = e.multiply(b);
          assertEquals("b.monic() = (1/ldcf(b))*b",c,d);
      }
+ }
+
+
+/**
+ * Test distributive law.
+ * 
+ */
+ public void testDistributive() {
+     a = fac.random( ll );
+     b = fac.random( ll );
+     c = fac.random( ll );
+
+     d = a.multiply( b.sum(c) );
+     e = a.multiply( b ).sum( a.multiply(c) );
+
+     assertEquals("a(b+c) = ab+ac",d,e);
  }
 
 

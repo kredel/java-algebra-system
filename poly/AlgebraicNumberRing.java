@@ -10,7 +10,7 @@ import java.io.Reader;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
-import edu.jas.structure.PrettyPrint;
+//import edu.jas.kern.PrettyPrint;
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.PolyUtil;

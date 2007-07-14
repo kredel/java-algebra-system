@@ -12,6 +12,8 @@ import java.io.StringReader;
 
 import java.math.BigInteger;
 
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -19,9 +21,12 @@ import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
-import edu.jas.structure.PrettyPrint;
+
+import edu.jas.kern.PrettyPrint;
+import edu.jas.kern.PreemptStatus;
 
 import edu.jas.arith.ModInteger;
+import edu.jas.arith.ModIntegerRing;
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.TermOrder;
@@ -96,7 +101,14 @@ public class GenPolynomialRing<C extends RingElem<C> >
     protected int isField = -1; // initially unknown
 
 
-    private static Logger logger = Logger.getLogger(GenPolynomialRing.class);
+    /** Log4j logger object.
+     */
+    private static final Logger logger = Logger.getLogger(GenPolynomialRing.class);
+
+
+    /** Flag to enable if preemptive interrrupt is checked.
+     */
+    final boolean checkPreempt = PreemptStatus.isAllowed();
 
 
     /** The constructor creates a polynomial factory object
@@ -177,12 +189,12 @@ public class GenPolynomialRing<C extends RingElem<C> >
                      + rf.ring.varsToString()
                      + ") ";
            }
-           //if ( coFac instanceof ModInteger ) {
-           //   ModInteger mn = (ModInteger)coFac;  
-           //   res +=  "[ "
-           //          + mn.getModul()
-           //          + " ]";
-           //}
+           if ( ((Object)coFac) instanceof ModIntegerRing ) {
+              ModIntegerRing mn = (ModIntegerRing)((Object)coFac);  
+              res +=  "[ "
+                     + mn.getModul()
+                     + " ]";
+           }
            res +=   "(" 
                   + varsToString()
                   + ") " 
@@ -510,7 +522,7 @@ public class GenPolynomialRing<C extends RingElem<C> >
      * @return X_i as univariate polynomial.
      */
     public GenPolynomial<C> univariate(int i) {
-        return univariate(i,1L);
+        return univariate(0,i,1L);
     }
 
 
@@ -522,13 +534,68 @@ public class GenPolynomialRing<C extends RingElem<C> >
      * @return X_i^e as univariate polynomial.
      */
     public GenPolynomial<C> univariate(int i, long e) {
+        return univariate(0,i,e);
+    }
+
+
+    /**
+     * Generate univariate polynomial in a given variable with given exponent.
+     * @typeparam C coefficient type.
+     * @param modv number of module variables.
+     * @param i the index of the variable.
+     * @param e the exponent of the variable.
+     * @return X_i^e as univariate polynomial.
+     */
+    public GenPolynomial<C> univariate(int modv, int i, long e) {
         GenPolynomial<C> p = getZERO();
-        if ( 0 <= i && i < nvar ) {
+        int r = nvar - modv;
+        if ( 0 <= i && i < r ) {
            C one = coFac.getONE();
-           ExpVector f = new ExpVector(nvar,i,e);
+           ExpVector f = new ExpVector(r,i,e);
+           if ( modv > 0 ) {
+              f = f.extend(modv,0,0l);
+           }
            p = p.sum(one,f);
         }
         return p;
+    }
+
+
+    /**
+     * Generate list of univariate polynomials in all variables.
+     * @typeparam C coefficient type.
+     * @return List(X_1,...,X_n) a list of univariate polynomials.
+     */
+    public List<? extends GenPolynomial<C>> univariateList() {
+	return univariateList(0,1L);
+    }
+
+
+    /**
+     * Generate list of univariate polynomials in all variables.
+     * @typeparam C coefficient type.
+     * @param modv number of module variables.
+     * @return List(X_1,...,X_n) a list of univariate polynomials.
+     */
+    public List<? extends GenPolynomial<C>> univariateList(int modv) {
+	return univariateList(modv,1L);
+    }
+
+
+    /**
+     * Generate list of univariate polynomials in all variables with given exponent.
+     * @typeparam C coefficient type.
+     * @param modv number of module variables.
+     * @param e the exponent of the variables.
+     * @return List(X_1^e,...,X_n^e) a list of univariate polynomials.
+     */
+    public List<? extends GenPolynomial<C>> univariateList(int modv, long e) {
+        List<GenPolynomial<C>> pols = new ArrayList<GenPolynomial<C>>(nvar);
+	for ( int i = 0; i < nvar-modv; i++ ) {
+            GenPolynomial<C> p = univariate(modv,i,e);
+	    pols.add( p );
+	}
+        return pols;
     }
 
 

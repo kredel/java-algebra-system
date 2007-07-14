@@ -18,7 +18,7 @@ import edu.jas.poly.AlgebraicNumberRing;
 
 
 /**
- * ANumGenPolynomial Test using JUnit.
+ * AlgebraicNumber coefficients GenPolynomial tests with JUnit.
  * @author Heinz Kredel.
  */
 
@@ -71,7 +71,7 @@ public class ANumGenPolynomialTest extends TestCase {
        GenPolynomialRing<BigRational> mfac =  
            new GenPolynomialRing<BigRational>(r,1);
        GenPolynomial<BigRational> modul = mfac.random(3); 
-       while ( modul.isZERO() || modul.isUnit() ) {
+       while ( modul.isZERO() || modul.isUnit() || modul.isConstant() ) {
              modul = mfac.random(3); 
        }
 
@@ -245,6 +245,22 @@ public class ANumGenPolynomialTest extends TestCase {
 
 
 /**
+ * Test distributive law.
+ * 
+ */
+ public void testDistributive() {
+     a = fac.random( ll );
+     b = fac.random( ll );
+     c = fac.random( ll );
+
+     d = a.multiply( b.sum(c) );
+     e = a.multiply( b ).sum( a.multiply(c) );
+
+     assertEquals("a(b+c) = ab+ac",d,e);
+ }
+
+
+/**
  * Test object quotient and remainder.
  * 
  */
@@ -262,7 +278,7 @@ public class ANumGenPolynomialTest extends TestCase {
      GenPolynomial<AlgebraicNumber<BigRational>> h = a;
      GenPolynomial<AlgebraicNumber<BigRational>> g = fac.random(1).monic();
      assertTrue("not isZERO( g )", !g.isZERO() );
-     g = fac.getONE();
+     //g = fac.getONE();
      a = a.multiply(g);
      b = b.multiply(g);
      //System.out.println("ta = " + a);
@@ -294,7 +310,6 @@ public class ANumGenPolynomialTest extends TestCase {
      assertTrue("b mod gcd(a,b) = 0", b.remainder(c).isZERO() );
      //assertEquals("g = gcd(a,b)", c, g ); 
 
-
      GenPolynomial<AlgebraicNumber<BigRational>>[] gst;
      gst = a.egcd(b);
      //System.out.println("egcd = " + gst[0]);
@@ -311,7 +326,6 @@ public class ANumGenPolynomialTest extends TestCase {
      //System.out.println("x = " + x);
      assertEquals("gcd(a,b) = a s + b t", c, x );
 
-
      //System.out.println("a = " + a);
      //System.out.println("b = " + b);
      if ( a.isZERO() || b.isZERO() ) {
@@ -325,8 +339,8 @@ public class ANumGenPolynomialTest extends TestCase {
          assertTrue("a invertible mod b "+x, x.isUnit() );
      } catch (RuntimeException e) {
          // dann halt nicht
+	 // not invertible
      }
-
  }
 
 }

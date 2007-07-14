@@ -44,7 +44,7 @@ public class PolynomialList<C extends RingElem<C> > implements Serializable {
     public final List< GenPolynomial<C> > list;
 
 
-    private static Logger logger = Logger.getLogger(PolynomialList.class);
+    private static final Logger logger = Logger.getLogger(PolynomialList.class);
 
 
     /**
@@ -91,6 +91,9 @@ public class PolynomialList<C extends RingElem<C> > implements Serializable {
         if ( ! ring.equals( pl.ring ) ) {
             System.out.println("not same Ring");
             return false;
+        }
+        if ( list == pl.list ) {
+            return true;
         }
         if ( list == null && pl.list != null ) {
             return false;

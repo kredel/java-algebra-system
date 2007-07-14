@@ -37,7 +37,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
     public final GenSolvablePolynomialRing< C > ring;
 
 
-    private static Logger logger = Logger.getLogger(GenSolvablePolynomial.class);
+    private static final Logger logger = Logger.getLogger(GenSolvablePolynomial.class);
     private final boolean debug = logger.isDebugEnabled();
 
 
@@ -100,6 +100,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
         if ( this.isZERO() ) {
            return this;
         }
+	assert (ring.nvar == Bp.ring.nvar);
         if ( debug ) {
            logger.debug("ring = " + ring);
         }
@@ -112,7 +113,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
         GenSolvablePolynomial<C> C2 = null;
         //Map C = Cp.getMap();
         Map<ExpVector,C> A = val; //this.getMap();
-        Map<ExpVector,C> B = Bp.getMap();
+        Map<ExpVector,C> B = Bp.val; //getMap();
         Set<Map.Entry<ExpVector,C>> Bk = B.entrySet();
         for ( Map.Entry<ExpVector,C> y:  A.entrySet() ) {
             C a = y.getValue(); 
@@ -204,7 +205,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
         if ( b == null || b.isZERO() ) { 
             return Cp;
         }
-        Map<ExpVector,C> Cm = Cp.getMap();
+        Map<ExpVector,C> Cm = Cp.val; //getMap();
         Map<ExpVector,C> Am = val; 
         for ( Map.Entry<ExpVector,C> y: Am.entrySet() ) { 
             ExpVector e = y.getKey(); 
@@ -304,7 +305,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
         if ( b == null || b.isZERO() ) { 
             return Cp;
         }
-        Map<ExpVector,C> Cm = Cp.getMap();
+        Map<ExpVector,C> Cm = Cp.val; //getMap();
         Map<ExpVector,C> Am = val; 
         for ( Map.Entry<ExpVector,C> y: Am.entrySet() ) { 
             ExpVector e = y.getKey(); 

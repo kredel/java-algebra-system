@@ -14,7 +14,7 @@ import edu.jas.arith.BigRational;
 
 
 /**
- * RatGenSolvablePolynomial Test using JUnit.
+ * BigRational coefficients GenSolvablePolynomial tests with JUnit.
  * @author Heinz Kredel.
  */
 
@@ -104,6 +104,8 @@ public class RatGenSolvablePolynomialTest extends TestCase {
  * 
  */
  public void testRandom() {
+     assertTrue("isCommutative()",ring.isCommutative());
+
      for (int i = 0; i < 2; i++) {
          // a = ring.random(ll+2*i);
          a = ring.random(kl*(i+1), ll+2*i, el+i, q );
@@ -237,8 +239,8 @@ public class RatGenSolvablePolynomialTest extends TestCase {
      //System.out.println("table = " + table);
      //System.out.println("ring = " + ring);
 
-     boolean t = ring.isAssociative();
-     assertTrue("ring not isAssociative",t);
+     assertFalse("isCommutative()",ring.isCommutative());
+     assertTrue("isAssociative()",ring.isAssociative());
 
      a = ring.random(kl, ll, el, q );
      assertTrue("not isZERO( a )", !a.isZERO() );
@@ -287,4 +289,27 @@ public class RatGenSolvablePolynomialTest extends TestCase {
  }
 
 
+/**
+ * Test distributive law.
+ * 
+ */
+ public void testDistributive() {
+     int rloc = 4;
+     ring = new GenSolvablePolynomialRing<BigRational>(cfac,rloc);
+
+     WeylRelations<BigRational> wl = new WeylRelations<BigRational>(ring);
+     wl.generate();
+     //table = ring.table;
+     //System.out.println("table = " + table);
+     //System.out.println("ring = " + ring);
+
+     a = ring.random(kl,ll,el,q);
+     b = ring.random(kl,ll,el,q);
+     c = ring.random(kl,ll,el,q);
+
+     d = a.multiply( (GenSolvablePolynomial<BigRational>)b.sum(c) );
+     e = (GenSolvablePolynomial<BigRational>)a.multiply( b ).sum( a.multiply(c) );
+
+     assertEquals("a(b+c) = ab+ac",d,e);
+ }
 }

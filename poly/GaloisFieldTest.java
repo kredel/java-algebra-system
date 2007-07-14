@@ -10,6 +10,7 @@ import junit.framework.TestSuite;
 
 //import edu.jas.arith.BigRational;
 import edu.jas.arith.ModInteger;
+import edu.jas.arith.ModIntegerRing;
 
 import edu.jas.poly.GenPolynomial;
 
@@ -17,7 +18,7 @@ import edu.jas.poly.GenPolynomial;
 
 
 /**
- * GaloisField Test using JUnit.
+ * Galois field tests with JUnit.
  * @author Heinz Kredel.
  */
 public class GaloisFieldTest extends TestCase {
@@ -77,7 +78,7 @@ public class GaloisFieldTest extends TestCase {
    protected void setUp() {
        a = b = c = d = e = null;
        long prime = getPrime();
-       mfac = new GenPolynomialRing<ModInteger>( new ModInteger(prime,1), 1 );
+       mfac = new GenPolynomialRing<ModInteger>( new ModIntegerRing(prime), 1 );
        //System.out.println("mfac = " + mfac);
        GenPolynomial<ModInteger> mo = mfac.random(kl,ll,el,q);
        while ( mo.isConstant() ) {
@@ -212,11 +213,27 @@ public class GaloisFieldTest extends TestCase {
 
 
 /**
+ * Test distributive law.
+ * 
+ */
+ public void testDistributive() {
+     a = fac.random( ll );
+     b = fac.random( ll );
+     c = fac.random( ll );
+
+     d = a.multiply( b.sum(c) );
+     e = a.multiply( b ).sum( a.multiply(c) );
+
+     assertEquals("a(b+c) = ab+ac",d,e);
+ }
+
+
+/**
  * Test chinese remainder.
  * 
  */
  public void testChineseRemainder() {
-     ModInteger cfac;
+     ModIntegerRing cfac;
      GenPolynomialRing<ModInteger> m0fac;
      GenPolynomial<ModInteger> x0;
      GenPolynomial<ModInteger> x;
@@ -227,7 +244,7 @@ public class GaloisFieldTest extends TestCase {
      AlgebraicNumberRing<ModInteger> fac1;
      AlgebraicNumberRing<ModInteger> fac01;
 
-     cfac = new ModInteger(19,1);
+     cfac = new ModIntegerRing(19);
      //System.out.println("cfac = " + cfac.getModul());
      m0fac = new GenPolynomialRing<ModInteger>( cfac, 0 );
      //System.out.println("m0fac = " + m0fac);
@@ -277,7 +294,7 @@ public class GaloisFieldTest extends TestCase {
      assertEquals("cra(a mod (x-m0),a mod (x-m1)) = a (mod 19)",a,e);
 
 
-     cfac = new ModInteger(getPrime(),1);
+     cfac = new ModIntegerRing(getPrime());
      //System.out.println("cfac = " + cfac.getModul());
      m0fac = new GenPolynomialRing<ModInteger>( cfac, 0 );
      //System.out.println("m0fac = " + m0fac);
@@ -334,7 +351,7 @@ public class GaloisFieldTest extends TestCase {
  * 
  */
  public void testInterpolate() {
-     ModInteger cfac;
+     ModIntegerRing cfac;
      GenPolynomialRing<ModInteger> m0fac;
      GenPolynomial<ModInteger> x0;
      GenPolynomial<ModInteger> x;
@@ -349,7 +366,7 @@ public class GaloisFieldTest extends TestCase {
      ModInteger ci;
      ModInteger di;
 
-     cfac = new ModInteger(19,1);
+     cfac = new ModIntegerRing(19);
      //System.out.println("cfac = " + cfac.getModul());
      m0fac = new GenPolynomialRing<ModInteger>( cfac, 0 );
      //System.out.println("m0fac = " + m0fac);
@@ -405,7 +422,7 @@ public class GaloisFieldTest extends TestCase {
 
      assertEquals("cra(a mod (x-m0),a mod (x-m1)) = a (mod 19)",a,e);
 
-     cfac = new ModInteger(getPrime(),1);
+     cfac = new ModIntegerRing(getPrime());
      //System.out.println("cfac = " + cfac.getModul());
      m0fac = new GenPolynomialRing<ModInteger>( cfac, 0 );
      //System.out.println("m0fac = " + m0fac);

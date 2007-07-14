@@ -10,6 +10,7 @@ import junit.framework.TestSuite;
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.ModInteger;
+import edu.jas.arith.ModIntegerRing;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.BigComplex;
 
@@ -19,7 +20,7 @@ import edu.jas.poly.GenPolynomialRing;
 
 
 /**
- * PolyUtil Test using JUnit.
+ * PolyUtil tests with JUnit.
  * @author Heinz Kredel.
  */
 
@@ -207,7 +208,7 @@ public class PolyUtilTest extends TestCase {
  * 
  */
  public void testModularConversion() {
-     ModInteger pm = new ModInteger(getPrime1(),1);
+     ModIntegerRing pm = new ModIntegerRing(getPrime1());
      GenPolynomialRing<ModInteger> mfac
          = new GenPolynomialRing<ModInteger>(pm,rl,to);
 
@@ -243,19 +244,19 @@ public class PolyUtilTest extends TestCase {
      java.math.BigInteger p2 = getPrime2();
      java.math.BigInteger p12 = p1.multiply(p2);
 
-     ModInteger pm1 = new ModInteger(p1,1);
+     ModIntegerRing pm1 = new ModIntegerRing(p1);
      GenPolynomialRing<ModInteger> mfac1
          = new GenPolynomialRing<ModInteger>(pm1,rl,to);
 
-     ModInteger pm2 = new ModInteger(p2,1);
+     ModIntegerRing pm2 = new ModIntegerRing(p2);
      GenPolynomialRing<ModInteger> mfac2
          = new GenPolynomialRing<ModInteger>(pm2,rl,to);
 
-     ModInteger pm12 = new ModInteger(p12,1);
+     ModIntegerRing pm12 = new ModIntegerRing(p12);
      GenPolynomialRing<ModInteger> mfac
          = new GenPolynomialRing<ModInteger>(pm12,rl,to);
 
-     ModInteger di = new ModInteger(p2,p1);
+     ModInteger di = new ModInteger(pm2,p1);
      di = di.inverse();
      //System.out.println("di = " + di);
 
@@ -568,12 +569,12 @@ public class PolyUtilTest extends TestCase {
      ModInteger ai, bi, ci, di, ei, fi, gi, hi;
      GenPolynomial<ModInteger> a, b, c, d, e;
      GenPolynomialRing<ModInteger> cfac;
-     ModInteger fac;
+     ModIntegerRing fac;
      GenPolynomial<ModInteger> r;
      GenPolynomial<ModInteger> Q;
      GenPolynomial<ModInteger> Qp;
 
-     fac = new ModInteger(19,1);
+     fac = new ModIntegerRing(19);
      //System.out.println("fac.modul  = " + fac.getModul());
      cfac = new GenPolynomialRing<ModInteger>(fac,1,to);
      //System.out.println("cfac  = " + cfac);
@@ -650,14 +651,14 @@ public class PolyUtilTest extends TestCase {
      ModInteger ai, bi, ci, di, ei, fi, gi, hi;
      GenPolynomial<ModInteger> a, b, c, d, e;
      GenPolynomialRing<ModInteger> cfac;
-     ModInteger fac;
+     ModIntegerRing fac;
      GenPolynomial<ModInteger> r;
      GenPolynomial<ModInteger> Q;
      GenPolynomial<ModInteger> Qp;
 
      //long prime = 19;
      long prime = getPrime1().longValue();
-     fac = new ModInteger(prime,1);
+     fac = new ModIntegerRing(prime);
      //System.out.println("fac.modul  = " + fac.getModul());
      cfac = new GenPolynomialRing<ModInteger>(fac,1,to);
      //System.out.println("cfac  = " + cfac);
@@ -731,14 +732,14 @@ public class PolyUtilTest extends TestCase {
      GenPolynomialRing<GenPolynomial<ModInteger>> cfac;
      GenPolynomialRing<ModInteger> ufac;
      GenPolynomialRing<ModInteger> dfac;
-     ModInteger fac;
+     ModIntegerRing fac;
      GenPolynomial<GenPolynomial<ModInteger>> r;
      GenPolynomial<ModInteger> Q;
      GenPolynomial<ModInteger> Qp;
 
      //long prime = 19;
      long prime = getPrime1().longValue();
-     fac = new ModInteger(prime,1);
+     fac = new ModIntegerRing(prime);
      //System.out.println("fac.modul  = " + fac.getModul());
      ufac = new GenPolynomialRing<ModInteger>(fac,1,to);
      //System.out.println("ufac  = " + ufac);
@@ -912,7 +913,7 @@ public class PolyUtilTest extends TestCase {
 
 
 /**
- * Test Hensel listing.
+ * Test Hensel lifting.
  * 
  */
  public void testHenselLifting() {
@@ -925,7 +926,7 @@ public class PolyUtilTest extends TestCase {
 
      BigInteger mi = m;
 
-     ModInteger pm = new ModInteger(p,1);
+     ModIntegerRing pm = new ModIntegerRing(p);
      GenPolynomialRing<ModInteger> pfac
          = new GenPolynomialRing<ModInteger>(pm,1,to);
 
@@ -1029,7 +1030,7 @@ public class PolyUtilTest extends TestCase {
 
 
 /**
- * Test Hensel listing.
+ * Test Hensel lifting.
  * 
  */
  public void testHenselQuadraticLifting() {
@@ -1042,7 +1043,7 @@ public class PolyUtilTest extends TestCase {
 
      BigInteger mi = m;
 
-     ModInteger pm = new ModInteger(p,1);
+     ModIntegerRing pm = new ModIntegerRing(p);
      GenPolynomialRing<ModInteger> pfac
          = new GenPolynomialRing<ModInteger>(pm,1,to);
 

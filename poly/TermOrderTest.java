@@ -13,7 +13,7 @@ import junit.framework.TestSuite;
 import org.apache.log4j.BasicConfigurator;
 
 /**
- * TermOrder Test using JUnit.
+ * TermOrder tests with JUnit.
  * @author Heinz Kredel
  */
 

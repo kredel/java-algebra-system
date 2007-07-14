@@ -22,6 +22,7 @@ import edu.jas.structure.RingFactory;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.ModInteger;
+import edu.jas.arith.ModIntegerRing;
 import edu.jas.arith.BigComplex;
 import edu.jas.arith.BigQuaternion;
 
@@ -40,7 +41,7 @@ import edu.jas.vector.ModuleList;
 
 
 /**
- * GenPolynomialTokenizer Test using JUnit.
+ * GenPolynomialTokenizer tests with JUnit.
  * @author Heinz Kredel
  */
 
@@ -225,7 +226,7 @@ public void testModInteger() {
      assertTrue("f != null", f.list != null);
      assertTrue("length( f ) = 4", f.list.size() == 4);
 
-     ModInteger fac = new ModInteger(19,0);
+     ModIntegerRing fac = new ModIntegerRing(19);
      TermOrder tord = new TermOrder(TermOrder.INVLEX);
      String[] vars = new String[]{ "x", "y", "z" };
      int nvar = vars.length;
@@ -448,7 +449,7 @@ public void testSolvableModInteger() {
      assertTrue("f != null", f.list != null);
      assertTrue("length( f ) = 4", f.list.size() == 4);
 
-     ModInteger fac = new ModInteger(19,0);
+     ModIntegerRing fac = new ModIntegerRing(19);
      TermOrder tord = new TermOrder(TermOrder.INVLEX);
      String[] vars = new String[]{ "x", "y", "z" };
      int nvar = vars.length;

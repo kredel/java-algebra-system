@@ -24,7 +24,7 @@ import edu.jas.structure.RingElem;
 
 
 /**
- * GenPolynomial Test using JUnit.
+ * GenPolynomial tests with JUnit.
  * @author Heinz Kredel.
  */
 

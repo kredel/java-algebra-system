@@ -8,8 +8,9 @@ import java.io.Serializable;
 
 
 /**
- * ExpVectorPair.
- * implements exponent vectors for polynomials.
+ * ExpVectorPair 
+ * implements pairs of exponent vectors for S-polynomials.
+ * Objects of this class are immutable.
  * @author Heinz Kredel
  */
 

@@ -14,7 +14,7 @@ import edu.jas.arith.BigInteger;
 
 
 /**
- * IntGenPolynomial Test using JUnit.
+ * BigInteger coefficients GenPolynomial tests with JUnit.
  * @author Heinz Kredel.
  */
 
@@ -195,6 +195,22 @@ public class IntGenPolynomialTest extends TestCase {
 
      d = e.multiply(b);
      assertEquals("b*p(y,u) = p(y,u)*b",c,d);
+ }
+
+
+/**
+ * Test distributive law.
+ * 
+ */
+ public void testDistributive() {
+     a = fac.random(kl,ll,el,q);
+     b = fac.random(kl,ll,el,q);
+     c = fac.random(kl,ll,el,q);
+
+     d = a.multiply( b.sum(c) );
+     e = a.multiply( b ).sum( a.multiply(c) );
+
+     assertEquals("a(b+c) = ab+ac",d,e);
  }
 
 }

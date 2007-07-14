@@ -15,7 +15,7 @@ import org.apache.log4j.BasicConfigurator;
 import edu.jas.arith.BigRational;
 
 /**
- * RelationTable Test using JUnit.
+ * RelationTable tests with JUnit.
  * @author Heinz Kredel.
  */
 

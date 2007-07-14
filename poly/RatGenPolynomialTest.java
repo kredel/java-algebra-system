@@ -11,7 +11,7 @@ import edu.jas.arith.BigRational;
 
 
 /**
- * RatGenPolynomial Test using JUnit.
+ * BigRational coefficients GenPolynomial tests with JUnit.
  * @author Heinz Kredel.
  */
 
@@ -193,6 +193,22 @@ public class RatGenPolynomialTest extends TestCase {
 
      d = e.multiply(b);
      assertEquals("b.monic() = (1/ldcf(b) (0))*b",c,d);
+ }
+
+
+/**
+ * Test distributive law.
+ * 
+ */
+ public void testDistributive() {
+     a = fac.random(kl,ll,el,q);
+     b = fac.random(kl,ll,el,q);
+     c = fac.random(kl,ll,el,q);
+
+     d = a.multiply( b.sum(c) );
+     e = a.multiply( b ).sum( a.multiply(c) );
+
+     assertEquals("a(b+c) = ab+ac",d,e);
  }
 
 

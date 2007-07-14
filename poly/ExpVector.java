@@ -21,7 +21,7 @@ import java.io.Serializable;
  * @author Heinz Kredel
  */
 
-public class ExpVector implements Cloneable, Serializable {
+public final class ExpVector implements Cloneable, Serializable {
 
 
     /**
@@ -122,7 +122,7 @@ public class ExpVector implements Cloneable, Serializable {
      * Get the exponent vector. 
      * @return val.
      */
-    public long[] getval() {
+    /*package*/ long[] getVal() {
         return val;
     } 
 
@@ -304,7 +304,7 @@ public class ExpVector implements Cloneable, Serializable {
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
-        public boolean equals( Object B ) { 
+    public boolean equals( Object B ) { 
         if ( ! (B instanceof ExpVector) ) {
             return false;
         }
@@ -320,6 +320,7 @@ public class ExpVector implements Cloneable, Serializable {
      * and small number of variables, i.e. &le; 8.
      * @see java.lang.Object#hashCode()
      */
+    @Override
     public int hashCode() { 
         int h = 0;
         for (int i = 0; i < val.length; i++ ) {
@@ -399,8 +400,8 @@ public class ExpVector implements Cloneable, Serializable {
      * @return U+V.
      */
     public static ExpVector EVSUM( ExpVector U, ExpVector V ) {
-        long[] u = U.getval();
-        long[] v = V.getval();
+        long[] u = U.getVal();
+        long[] v = V.getVal();
         long[] w = new long[u.length];
         for (int i = 0; i < u.length; i++ ) {
             w[i] = u[i] + v[i];
@@ -426,8 +427,8 @@ public class ExpVector implements Cloneable, Serializable {
      * @return U-V.
      */
     public static ExpVector EVDIF( ExpVector U, ExpVector V ) {
-        long[] u = U.getval();
-        long[] v = V.getval();
+        long[] u = U.getVal();
+        long[] v = V.getVal();
         long[] w = new long[u.length];
         for (int i = 0; i < u.length; i++ ) { 
             w[i] = u[i] - v[i];
@@ -547,7 +548,7 @@ public class ExpVector implements Cloneable, Serializable {
     */
     public static int EVSIGN( ExpVector U ) {
         int t = 0;
-        long[] u = U.getval();
+        long[] u = U.getVal();
         for (int i = 0; i < u.length; i++ ) {
             if ( u[i] < 0 ) {
                 return -1;
@@ -567,7 +568,7 @@ public class ExpVector implements Cloneable, Serializable {
      */
     public static long EVTDEG( ExpVector U ) {
         long t = 0;
-        long[] u = U.getval();
+        long[] u = U.getVal();
         for (int i = 0; i < u.length; i++ ) {
             t += u[i];
         }
@@ -582,7 +583,7 @@ public class ExpVector implements Cloneable, Serializable {
      */
     public static long EVMDEG( ExpVector U ) {
         long t = 0;
-        long[] u = U.getval();
+        long[] u = U.getVal();
         for (int i = 0; i < u.length; i++ ) {
             if ( u[i] > t ) {
                t = u[i];
@@ -603,7 +604,7 @@ public class ExpVector implements Cloneable, Serializable {
             return EVTDEG( U ); // assume weight 1 
         }
         long t = 0;
-        long[] u = U.getval();
+        long[] u = U.getVal();
         for ( int j = 0; j < w.length; j++ ) {
             long[] wj = w[j];
             for (int i = 0; i < u.length; i++ ) {
@@ -621,8 +622,8 @@ public class ExpVector implements Cloneable, Serializable {
      * @return component wise maximum of U and V.
      */
     public static ExpVector EVLCM( ExpVector U, ExpVector V ) {
-        long[] u = U.getval();
-        long[] v = V.getval();
+        long[] u = U.getVal();
+        long[] v = V.getVal();
         long[] w = new long[u.length];
         for (int i = 0; i < u.length; i++ ) {
             w[i] = ( u[i] >= v[i] ? u[i] : v[i] );
@@ -638,8 +639,8 @@ public class ExpVector implements Cloneable, Serializable {
      * @return component wise minimum of U and V.
      */
     public static ExpVector EVGCD( ExpVector U, ExpVector V ) {
-        long[] u = U.getval();
-        long[] v = V.getval();
+        long[] u = U.getVal();
+        long[] v = V.getVal();
         long[] w = new long[u.length];
         for (int i = 0; i < u.length; i++ ) {
             w[i] = ( u[i] <= v[i] ? u[i] : v[i] );
@@ -695,8 +696,8 @@ public class ExpVector implements Cloneable, Serializable {
      * @return true if U is a multiple of V, else false.
      */
     public static boolean EVMT( ExpVector U, ExpVector V ) {
-        long[] u = U.getval();
-        long[] v = V.getval();
+        long[] u = U.getVal();
+        long[] v = V.getVal();
         boolean t = true;
         for (int i = 0; i < u.length; i++ ) {
             if ( u[i] < v[i] ) { 
@@ -714,8 +715,8 @@ public class ExpVector implements Cloneable, Serializable {
      * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
      */
     public static int EVILCP( ExpVector U, ExpVector V ) {
-        long[] u = U.getval();
-        long[] v = V.getval();
+        long[] u = U.getVal();
+        long[] v = V.getVal();
         int t = 0;
         for (int i = 0; i < u.length; i++ ) {
             if ( u[i] > v[i] ) return 1;
@@ -735,8 +736,8 @@ public class ExpVector implements Cloneable, Serializable {
      * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
      */
     public static int EVILCP( ExpVector U, ExpVector V, int begin, int end ) {
-        long[] u = U.getval();
-        long[] v = V.getval();
+        long[] u = U.getVal();
+        long[] v = V.getVal();
         int t = 0;
         for (int i = begin; i < end; i++ ) {
             if ( u[i] > v[i] ) return 1;
@@ -753,8 +754,8 @@ public class ExpVector implements Cloneable, Serializable {
      * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
      */
     public static int EVIGLC( ExpVector U, ExpVector V ) {
-        long[] u = U.getval();
-        long[] v = V.getval();
+        long[] u = U.getVal();
+        long[] v = V.getVal();
         int t = 0;
         int i;
         for ( i = 0; i < u.length; i++ ) {
@@ -795,8 +796,8 @@ public class ExpVector implements Cloneable, Serializable {
      * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
      */
     public static int EVIGLC( ExpVector U, ExpVector V, int begin, int end ) {
-        long[] u = U.getval();
-        long[] v = V.getval();
+        long[] u = U.getVal();
+        long[] v = V.getVal();
         int t = 0;
         int i;
         for ( i = begin; i < end; i++ ) {
@@ -834,8 +835,8 @@ public class ExpVector implements Cloneable, Serializable {
      * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
      */
     public static int EVRILCP( ExpVector U, ExpVector V ) {
-        long[] u = U.getval();
-        long[] v = V.getval();
+        long[] u = U.getVal();
+        long[] v = V.getVal();
         int t = 0;
         for (int i = u.length-1; i >= 0; i-- ) {
             if ( u[i] > v[i] ) return 1;
@@ -855,8 +856,8 @@ public class ExpVector implements Cloneable, Serializable {
      * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
      */
     public static int EVRILCP( ExpVector U, ExpVector V, int begin, int end ) {
-        long[] u = U.getval();
-        long[] v = V.getval();
+        long[] u = U.getVal();
+        long[] v = V.getVal();
         int t = 0;
         for (int i = end-1; i >= begin; i-- ) {
             if ( u[i] > v[i] ) return 1;
@@ -873,8 +874,8 @@ public class ExpVector implements Cloneable, Serializable {
      * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
      */
     public static int EVRIGLC( ExpVector U, ExpVector V ) {
-        long[] u = U.getval();
-        long[] v = V.getval();
+        long[] u = U.getVal();
+        long[] v = V.getVal();
         int t = 0;
         int i;
         for ( i = u.length-1; i >= 0; i-- ) {
@@ -915,8 +916,8 @@ public class ExpVector implements Cloneable, Serializable {
      * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
      */
     public static int EVRIGLC( ExpVector U, ExpVector V, int begin, int end ) {
-        long[] u = U.getval();
-        long[] v = V.getval();
+        long[] u = U.getVal();
+        long[] v = V.getVal();
         int t = 0;
         int i;
         for ( i = end-1; i >= begin; i-- ) {
@@ -955,8 +956,8 @@ public class ExpVector implements Cloneable, Serializable {
      * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
      */
     public static int EVIWLC( long[][] w, ExpVector U, ExpVector V ) {
-        long[] u = U.getval();
-        long[] v = V.getval();
+        long[] u = U.getVal();
+        long[] v = V.getVal();
         int t = 0;
         int i;
         for ( i = 0; i < u.length; i++ ) {
@@ -999,8 +1000,8 @@ public class ExpVector implements Cloneable, Serializable {
      * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
      */
     public static int EVIWLC( long[][] w, ExpVector U, ExpVector V, int begin, int end ) {
-        long[] u = U.getval();
-        long[] v = V.getval();
+        long[] u = U.getVal();
+        long[] v = V.getVal();
         int t = 0;
         int i;
         for ( i = begin; i < end; i++ ) {

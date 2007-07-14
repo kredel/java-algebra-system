@@ -11,7 +11,7 @@ import edu.jas.arith.BigQuaternion;
 
 
 /**
- * QuatGenPolynomial Test using JUnit.
+ * BigQuaternion coefficients GenPolynomial tests with JUnit.
  * @author Heinz Kredel.
  */
 

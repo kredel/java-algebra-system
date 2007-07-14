@@ -10,11 +10,12 @@ import junit.framework.TestSuite;
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.arith.ModInteger;
+import edu.jas.arith.ModIntegerRing;
 //import edu.jas.structure.RingElem;
 
 
 /**
- * ModGenPolynomial Test using JUnit.
+ * ModInteger coefficients GenPolynomial tests with JUnit.
  * @author Heinz Kredel.
  */
 
@@ -62,7 +63,7 @@ public class ModGenPolynomialTest extends TestCase {
 
    protected void setUp() {
        a = b = c = d = e = null;
-       fac = new GenPolynomialRing<ModInteger>(new ModInteger(ml,1),rl);
+       fac = new GenPolynomialRing<ModInteger>(new ModIntegerRing(ml),rl);
    }
 
    protected void tearDown() {
@@ -119,7 +120,7 @@ public class ModGenPolynomialTest extends TestCase {
      c = fac.random(ll);
 
      ExpVector u = ExpVector.EVRAND(rl,el,q);
-     ModInteger x = c.leadingBaseCoefficient().random(kl);
+     ModInteger x = c.leadingBaseCoefficient().ring.random(kl);
 
      b = new GenPolynomial<ModInteger>(fac,x, u);
      c = a.sum(b);
@@ -198,6 +199,22 @@ public class ModGenPolynomialTest extends TestCase {
 
      d = e.multiply(b);
      assertEquals("b.monic() = (1/ldcf(b) (0))*b",c,d);
+ }
+
+
+/**
+ * Test distributive law.
+ * 
+ */
+ public void testDistributive() {
+     a = fac.random(kl,ll,el,q);
+     b = fac.random(kl,ll,el,q);
+     c = fac.random(kl,ll,el,q);
+
+     d = a.multiply( b.sum(c) );
+     e = a.multiply( b ).sum( a.multiply(c) );
+
+     assertEquals("a(b+c) = ab+ac",d,e);
  }
 
 }

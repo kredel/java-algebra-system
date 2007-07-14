@@ -17,7 +17,8 @@ import java.io.Serializable;
 import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
-import edu.jas.structure.PrettyPrint;
+
+import edu.jas.kern.PrettyPrint;
 
 
 /**
@@ -48,9 +49,9 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
     public final GenSolvablePolynomialRing<C> ring;
 
 
-    private static Logger logger = Logger.getLogger(RelationTable.class);
+    private static final Logger logger = Logger.getLogger(RelationTable.class);
 
-    private final boolean debug = logger.isDebugEnabled() || true;
+    private final boolean debug = true; //logger.isDebugEnabled();
 
 
     /**

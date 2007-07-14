@@ -7,7 +7,9 @@ package edu.jas.poly;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
-import edu.jas.structure.PrettyPrint;
+
+import edu.jas.kern.PrettyPrint;
+import edu.jas.structure.NotInvertibleException;
 
 import edu.jas.poly.GenPolynomial;
 
@@ -50,12 +52,11 @@ public class AlgebraicNumber<C extends GcdRingElem<C> >
     public AlgebraicNumber(AlgebraicNumberRing<C> r, GenPolynomial<C> a) {
         ring = r; // assert r != 0
         val = a.remainder( ring.modul ); //.monic() no go
+        if ( val.isZERO() ) {
+           isunit = 0;
+        } 
         if ( ring.isField() ) {
-           if ( val.isZERO() ) {
-              isunit = 0;
-           } else {
-              isunit = 1;
-           }
+           isunit = 1;
         }
     }
 
@@ -115,14 +116,13 @@ public class AlgebraicNumber<C extends GcdRingElem<C> >
             return false;
         } 
         // not jet known
+        if ( val.isZERO() ) {
+           isunit = 0;
+           return false;
+        } 
         if ( ring.isField() ) {
-           if ( val.isZERO() ) {
-              isunit = 0;
-              return false;
-           } else {
-              isunit = 1;
-              return true;
-           }
+           isunit = 1;
+           return true;
         }
         boolean u = val.gcd( ring.modul ).isUnit();
         if ( u ) {
@@ -245,11 +245,15 @@ public class AlgebraicNumber<C extends GcdRingElem<C> >
 
     /** AlgebraicNumber inverse.  
      * @see edu.jas.structure.RingElem#inverse()
+     * @throws NotInvertibleException if the element is not invertible.
      * @return S with S = 1/this if defined. 
      */
     public AlgebraicNumber<C> inverse() {
-        GenPolynomial<C> x = val.modInverse( ring.modul );
-        return new AlgebraicNumber<C>( ring, x );
+	try {
+            return new AlgebraicNumber<C>( ring, val.modInverse( ring.modul ) );
+	} catch (NotInvertibleException e) {
+	    throw new NotInvertibleException(e.getCause());
+	}
     }
 
 

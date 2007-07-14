@@ -11,11 +11,12 @@ import junit.framework.TestSuite;
 import org.apache.log4j.BasicConfigurator;
 
 import edu.jas.arith.ModInteger;
+import edu.jas.arith.ModIntegerRing;
 //import edu.jas.structure.RingElem;
 
 
 /**
- * ModGenSolvablePolynomial Test using JUnit.
+ * ModInteger coefficients GenSolvablePolynomial tests with JUnit.
  * @author Heinz Kredel.
  */
 
@@ -64,10 +65,10 @@ public class ModGenSolvablePolynomialTest extends TestCase {
 
    RelationTable<ModInteger> table;
    GenSolvablePolynomialRing<ModInteger> ring;
-   ModInteger cfac;
+   ModIntegerRing cfac;
 
    protected void setUp() {
-       cfac = new ModInteger(ml,1);
+       cfac = new ModIntegerRing(ml);
        ring = new GenSolvablePolynomialRing<ModInteger>(cfac,rl);
        table = null; //ring.table;
        a = b = c = d = e = null;
@@ -107,6 +108,8 @@ public class ModGenSolvablePolynomialTest extends TestCase {
  * 
  */
  public void testRandom() {
+     assertTrue("isCommutative()",ring.isCommutative());
+
      for (int i = 0; i < 2; i++) {
          // a = ring.random(ll+2*i);
          a = ring.random(kl*(i+1), ll+2*i, el+i, q );
@@ -240,6 +243,8 @@ public class ModGenSolvablePolynomialTest extends TestCase {
      //System.out.println("table = " + table);
      //System.out.println("ring = " + ring);
 
+     assertFalse("isCommutative()",ring.isCommutative());
+     assertTrue("isAssociative()", ring.isAssociative());
 
      a = ring.random(kl, ll, el+2, q );
      assertTrue("not isZERO( a )", !a.isZERO() );
@@ -287,5 +292,29 @@ public class ModGenSolvablePolynomialTest extends TestCase {
      assertTrue("a(bc) = (ab)c", d.equals(e) );
  }
 
+
+/**
+ * Test distributive law.
+ * 
+ */
+ public void testDistributive() {
+     int rloc = 4;
+     ring = new GenSolvablePolynomialRing<ModInteger>(cfac,rloc);
+
+     WeylRelations<ModInteger> wl = new WeylRelations<ModInteger>(ring);
+     wl.generate();
+     //table = ring.table;
+     //System.out.println("table = " + table);
+     //System.out.println("ring = " + ring);
+
+     a = ring.random(kl,ll,el,q);
+     b = ring.random(kl,ll,el,q);
+     c = ring.random(kl,ll,el,q);
+
+     d = a.multiply( (GenSolvablePolynomial<ModInteger>)b.sum(c) );
+     e = (GenSolvablePolynomial<ModInteger>)a.multiply( b ).sum( a.multiply(c) );
+
+     assertEquals("a(b+c) = ab+ac",d,e);
+ }
 
 }

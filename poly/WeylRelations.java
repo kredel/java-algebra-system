@@ -25,7 +25,7 @@ public class WeylRelations<C extends RingElem<C>> {
     private final GenSolvablePolynomialRing<C> ring;
 
 
-    private static Logger logger = Logger.getLogger(WeylRelations.class);
+    private static final Logger logger = Logger.getLogger(WeylRelations.class);
 
 
     /** The constructor requires a ring factory.

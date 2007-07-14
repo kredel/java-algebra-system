@@ -22,6 +22,7 @@ import edu.jas.structure.RingFactory;
 
 import edu.jas.arith.BigRational;
 import edu.jas.arith.ModInteger;
+import edu.jas.arith.ModIntegerRing;
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigComplex;
 import edu.jas.arith.BigQuaternion;
@@ -570,7 +571,7 @@ public class GenPolynomialTokenizer  {
                 tt = tok.nextToken();
                 if ( tok.sval != null && tok.sval.length() > 0 ) {
                     if ( digit( tok.sval.charAt(0) ) ) {
-                        coeff = new ModInteger(tok.sval,"0");
+                        coeff = new ModIntegerRing(tok.sval);
                         ct = coeffType.ModInt;
                     } else {
                         tok.pushBack();
@@ -592,10 +593,10 @@ public class GenPolynomialTokenizer  {
                 tt = tok.nextToken();
                 if ( tt == '[' ) {
                     tt = tok.nextToken();
-                    RingFactory tcfac = new ModInteger("19","0");
+                    RingFactory tcfac = new ModIntegerRing("19");
                     if ( tok.sval != null && tok.sval.length() > 0 ) {
                         if ( digit( tok.sval.charAt(0) ) ) {
-                            tcfac = new ModInteger(tok.sval,"0");
+                            tcfac = new ModIntegerRing(tok.sval);
                         } else {
                             tcfac = new BigRational();
                             tok.pushBack();
@@ -616,7 +617,7 @@ public class GenPolynomialTokenizer  {
                     RingFactory tfac = fac;
                     fac = tcfac;
                     // pfac and fac used in nextPolynomial()
-                    if ( tcfac instanceof ModInteger ) {
+                    if ( tcfac instanceof ModIntegerRing ) {
                         pfac = new GenPolynomialRing<ModInteger>( tcfac, vs, new TermOrder(), anv );
                     } else {
                         pfac = new GenPolynomialRing<BigRational>( tcfac, vs, new TermOrder(), anv );
@@ -640,7 +641,7 @@ public class GenPolynomialTokenizer  {
                     pfac = tpfac;
                     fac = tfac;
                     vars = ovars;
-                    if ( tcfac instanceof ModInteger ) {
+                    if ( tcfac instanceof ModIntegerRing ) {
                         GenPolynomial<ModInteger> gfmod;
                         gfmod = (GenPolynomial<ModInteger>)mod;
                         coeff = new AlgebraicNumberRing<ModInteger>( gfmod );

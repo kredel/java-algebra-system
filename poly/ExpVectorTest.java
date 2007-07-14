@@ -15,7 +15,7 @@ import junit.framework.TestSuite;
 import org.apache.log4j.BasicConfigurator;
 
 /**
- * ExpVector Test using JUnit.
+ * ExpVector tests with JUnit.
  * @author Heinz Kredel.
  */
 

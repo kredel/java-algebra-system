@@ -12,6 +12,7 @@ import junit.framework.TestSuite;
 import edu.jas.arith.BigRational;
 
 //import edu.jas.structure.RingElem;
+import edu.jas.structure.NotInvertibleException;
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.AlgebraicNumber;
@@ -199,6 +200,29 @@ public class AlgebraicNumberTest extends TestCase {
      //System.out.println("c = " + c);
      //System.out.println("d = " + d);
      assertEquals("a*1/a = 1",fac.getONE(),d);
+
+     try {
+         a = fac.getZERO().inverse();
+     } catch(NotInvertibleException expected) {
+         return;
+     }
+     fail("0 invertible");
+ }
+
+
+/**
+ * Test distributive law.
+ * 
+ */
+ public void testDistributive() {
+     a = fac.random( ll );
+     b = fac.random( ll );
+     c = fac.random( ll );
+
+     d = a.multiply( b.sum(c) );
+     e = a.multiply( b ).sum( a.multiply(c) );
+
+     assertEquals("a(b+c) = ab+ac",d,e);
  }
 
 }
