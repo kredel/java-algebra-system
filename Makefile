@@ -63,15 +63,18 @@ cl=
 
 JASPATH=/home/kredel/jas
 DEFS=$(JASPATH)/arith:$(JASPATH)/poly:$(JASPATH)/vector:$(JASPATH)/ring:$(JASPATH)/ufd:$(JASPATH)/module:$(JASPATH)/util:$(JASPATH)/application
-DOCCLASSES=$(JUNITPATH):$(LOG4JPATH):$(JOMPPATH):$(TNJPATH)
+DOCCLASSES=$(JUNITPATH):$(LOG4JPATH):$(JOMPPATH)
+#:$(TNJPATH)
 DOCOPTS=-package
 #DOCOPTS=-package -version -author
 #DOCOPTS=-public -protected -package -author -version
 
-MYCLASSPATH = .:$(DEFS):$(JUNITPATH):$(LOG4JPATH):$(JOMPPATH):$(TNJPATH)
+MYCLASSPATH = .:$(DEFS):$(JUNITPATH):$(LOG4JPATH):$(JOMPPATH)
+#:$(TNJPATH)
 
 JAVAC=$(JDK)/javac -classpath $(MYCLASSPATH) -d . -Xlint:unchecked
 #-Xlint:unchecked
+#JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -verbose:gc 
 JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -server -Xms300M -Xmx600M -XX:+AggressiveHeap -XX:+UseParallelGC -XX:ParallelGCThreads=2 -verbose:gc 
 #-Xbatch
 #old#JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -Xms300M -Xmx600M -XX:+AggressiveHeap -XX:+UseParallelGC -verbose:gc 
@@ -91,7 +94,7 @@ GETC      = getc.pl
 
 .SUFFIXES :
 .SUFFIXES : .class .java 
-.PRECIOUS : %.java %.class edu/jas/arith/%.class edu/jas/poly/%.class edu/jas/ring/%.class edu/jas/vector/%.class edu/jas/ufd/%.class edu/jas/module/%.class edu/jas/structure/%.class edu/jas/util/%.class edu/jas/application/%.class edu/jas/%.class
+.PRECIOUS : %.java %.class edu/jas/arith/%.class edu/jas/poly/%.class edu/jas/ring/%.class edu/jas/vector/%.class edu/jas/ufd/%.class edu/jas/module/%.class edu/jas/structure/%.class edu/jas/util/%.class edu/jas/application/%.class edu/jas/kern/%.class edu/jas/%.class
 
 .PHONY    : clean doc
 
@@ -132,6 +135,9 @@ edu/jas/util/%.class: %.java
 edu/jas/application/%.class: %.java
 	$(JAVAC) $<
 
+edu/jas/kern/%.class: %.java
+	$(JAVAC) $<
+
 
 edu.jas.%: edu/jas/%.class
 	$(JAVA) $@ $(cl)
@@ -163,19 +169,22 @@ edu.jas.util.%: edu/jas/util/%.class
 edu.jas.application.%: edu/jas/application/%.class
 	$(JAVA) $@ $(cl)
 
+edu.jas.kern.%: edu/jas/kern/%.class
+	$(JAVA) $@ $(cl)
 
 
-#FILES=$(wildcard src/edu/jas/structure/*.java src/edu/jas/arith/*.java src/edu/jas/poly/*.java src/edu/jas/ring/*.java src/edu/jas/ufd/*.java src/edu/jas/application/*.java src/edu/jas/vector/*.java src/edu/jas/module/*.java src/edu/jas/util/*.java)
-FILES=$(wildcard src/edu/jas/structure/*.java src/edu/jas/arith/*.java src/edu/jas/poly/*.java src/edu/jas/ring/*.java src/edu/jas/application/*.java src/edu/jas/vector/*.java src/edu/jas/module/*.java src/edu/jas/util/*.java)
+
+#FILES=$(wildcard src/edu/jas/structure/*.java src/edu/jas/arith/*.java src/edu/jas/poly/*.java src/edu/jas/ring/*.java src/edu/jas/ufd/*.java src/edu/jas/application/*.java src/edu/jas/vector/*.java src/edu/jas/module/*.java src/edu/jas/util/*.java src/edu/jas/kern/*.java)
+FILES=$(wildcard src/edu/jas/structure/*.java src/edu/jas/arith/*.java src/edu/jas/poly/*.java src/edu/jas/ring/*.java src/edu/jas/application/*.java src/edu/jas/vector/*.java src/edu/jas/module/*.java src/edu/jas/util/*.java src/edu/jas/ufd/*.java src/edu/jas/kern/*.java)
 
 LIBS=$(JUNITPATH) $(LOG4JPATH) $(JOMPPATH) $(TNJPATH)
 
-#CLASSES=$(wildcard edu/jas/structure/*.java edu/jas/arith/*.class edu/jas/poly/*.class edu/jas/ring/*.class edu/jas/ufd/*.class edu/jas/application/*.class edu/jas/vector/*.class edu/jas/module/*.class edu/jas/util/*.class)
+#CLASSES=$(wildcard edu/jas/structure/*.java edu/jas/arith/*.class edu/jas/poly/*.class edu/jas/ring/*.class edu/jas/ufd/*.class edu/jas/application/*.class edu/jas/vector/*.class edu/jas/module/*.class edu/jas/util/*.class edu/jas/kern/*.class)
 #CLASSES=edu/jas
 
-#CLASSES=edu/jas/structure/ edu/jas/arith/ edu/jas/poly/ edu/jas/ring/ edu/jas/ufd/ edu/jas/application/ edu/jas/vector/ edu/jas/module/ edu/jas/util/
+#CLASSES=edu/jas/structure/ edu/jas/arith/ edu/jas/poly/ edu/jas/ring/ edu/jas/ufd/ edu/jas/application/ edu/jas/vector/ edu/jas/module/ edu/jas/util/ edu/jas/kern/
 
-CLASSES=edu/jas/structure/ edu/jas/arith/ edu/jas/poly/ edu/jas/ring/ edu/jas/application/ edu/jas/vector/ edu/jas/module/ edu/jas/util/
+CLASSES=edu/jas/structure/ edu/jas/arith/ edu/jas/poly/ edu/jas/ring/ edu/jas/application/ edu/jas/vector/ edu/jas/module/ edu/jas/util/ edu/jas/util/ edu/jas/kern/
 
 PYS=$(wildcard *.py)
 EXAMPY=$(wildcard examples/*.py)
@@ -191,6 +200,10 @@ ALLJAR=$(FILES) $(DOCU) Makefile build.xml log4j.properties $(PYS)
 jas-all.jar: $(ALLJAR)
 	$(JDK)/jar -cvf jas.jar $(ALLJAR) edu/ 
 	mv jas.jar /tmp/jas-`date +%Y%j`.jar
+
+jas.tgz: $(FILES) *.html */package.html TODO
+	tar -cvzf jas.tgz $(FILES) *.html */package.html TODO
+	mv jas.tgz /tmp/jas-`date +%Y%j`.tgz
 
 #	cp jas.jar /mnt/i/e/kredel/jas-`date +%Y%j`.jar
 #jas-run.jar: GBManifest.MF $(TOJAR)
@@ -209,7 +222,6 @@ jas-doc.jar: $(DOCU) doc/
 dist: jas.jar jas-run.jar jas-doc.jar $(LIBS)
 	tar -cvzf jas-dist.tgz jas.jar jas-run.jar jas-doc.jar $(LIBS)
 
-#links: arith/build.xml module/build.xml vector/build.xml ring/build.xml application/build.xml poly/build.xml ufd/build.xml structure/build.xml util/build.xml
 #
 
 jars: jas-run.jar jas-doc.jar
