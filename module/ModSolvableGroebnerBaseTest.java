@@ -38,7 +38,7 @@ import edu.jas.vector.ModuleList;
 
 
 /**
- * ModSolvableGroebnerBase Test using JUnit.
+ * ModSolvableGroebnerBase tests with JUnit.
  * @author Heinz Kredel.
  */
 
@@ -112,10 +112,12 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
        pfac = new GenSolvablePolynomialRing<BigRational>(cfac,rl,tord,vars);
        msbb = new ModSolvableGroebnerBaseAbstract<BigRational>();
 
-       a = pfac.random(kl, ll, el, q );
-       b = pfac.random(kl, ll, el, q );
-       c = pfac.random(kl, ll, el, q );
-       d = pfac.random(kl, ll, el, q );
+       do {
+          a = pfac.random(kl, ll, el, q );
+          b = pfac.random(kl, ll, el, q );
+          c = pfac.random(kl, ll, el, q );
+          d = pfac.random(kl, ll, el, q );
+       } while ( a.isZERO() || b.isZERO() || c.isZERO() || d.isZERO() );
        e = d; // = pfac.random(kl, ll, el, q );
        one =  pfac.getONE();
        zero = pfac.getZERO();
@@ -263,10 +265,12 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
      //System.out.println("table = ");
      //System.out.println("table = " + table.size());
 
-     a = pfac.random(kl, ll, el, q );
-     b = pfac.random(kl, ll, el, q );
-     c = pfac.random(kl, ll, el, q );
-     d = pfac.random(kl, ll, el, q );
+     do {
+        a = pfac.random(kl, ll, el, q );
+        b = pfac.random(kl, ll, el, q );
+        c = pfac.random(kl, ll, el, q );
+        d = pfac.random(kl, ll, el, q );
+     } while ( a.isZERO() || b.isZERO() || c.isZERO() || d.isZERO() );
      e = d; // = pfac.random(kl, ll, el, q );
      one =  pfac.getONE();
      zero = pfac.getZERO();
@@ -405,10 +409,12 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
      //System.out.println("table = ");
      //System.out.println("table = " + table.size());
 
-     a = pfac.random(kl, ll, el, q );
-     b = pfac.random(kl, ll, el, q );
-     c = pfac.random(kl, ll, el, q );
-     d = pfac.random(kl, ll, el, q );
+     do {
+        a = pfac.random(kl, ll, el, q );
+        b = pfac.random(kl, ll, el, q );
+        c = pfac.random(kl, ll, el, q );
+        d = pfac.random(kl, ll, el, q );
+     } while ( a.isZERO() || b.isZERO() || c.isZERO() || d.isZERO() );
      e = d; // = pfac.random(kl, ll, el, q );
      one =  pfac.getONE();
      zero = pfac.getZERO();

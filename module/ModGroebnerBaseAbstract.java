@@ -25,7 +25,7 @@ import edu.jas.vector.ModuleList;
 
 
 /**
- * Module Groebner Bases class.
+ * Module Groebner Bases abstract class.
  * Implements Groebner bases and GB test.
  * @author Heinz Kredel
  */

@@ -31,8 +31,8 @@ import edu.jas.vector.ModuleList;
 
 
 /**
- * Module Groebner Bases class.
- * Implements Groebner bases and GB test.
+ * Module solvable Groebner Bases class.
+ * Implements module solvable Groebner bases and GB test.
  * @author Heinz Kredel
  */
 

@@ -36,7 +36,7 @@ import edu.jas.vector.ModuleList;
 
 
 /**
- * SolvableSyzygy Test using JUnit. 
+ * SolvableSyzygy tests with JUnit. 
  * @author Heinz Kredel.
  */
 
@@ -118,10 +118,12 @@ public class SolvableSyzygyTest extends TestCase {
        K = null;
        V = null;
 
-       a = fac.random(kl, ll, el, q );
-       b = fac.random(kl, ll, el, q );
-       c = fac.random(kl, ll, el, q );
-       d = fac.random(kl, ll, el, q );
+       do {
+          a = fac.random(kl, ll, el, q );
+          b = fac.random(kl, ll, el, q );
+          c = fac.random(kl, ll, el, q );
+          d = fac.random(kl, ll, el, q );
+       } while ( a.isZERO() || b.isZERO() || c.isZERO() || d.isZERO() );
        e = d; //fac.random(kl, ll, el, q );
 
        one = fac.getONE();

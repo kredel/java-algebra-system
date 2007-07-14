@@ -14,7 +14,7 @@ import edu.jas.vector.ModuleList;
 
 /**
  * Module solvable Groebner Bases interface.
- * Defines moduel solvabe Groebner bases and GB test.
+ * Defines modull solvabe Groebner bases and GB test.
  * @author Heinz Kredel
  */
 

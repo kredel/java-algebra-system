@@ -434,7 +434,7 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
     public List<List<GenSolvablePolynomial<C>>> 
         leftZeroRelationsArbitrary(int modv, List<GenSolvablePolynomial<C>> F) {  
         if ( F == null ) {
-            return leftZeroRelations( modv, F );
+            return null; //leftZeroRelations( modv, F );
         }
         if ( F.size() <= 1 ) {
             return leftZeroRelations( modv, F );
