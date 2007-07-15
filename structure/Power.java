@@ -8,6 +8,8 @@ package edu.jas.structure;
 
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
+import edu.jas.structure.MonoidElem;
+import edu.jas.structure.MonoidFactory;
 
 
 /**
@@ -68,6 +70,18 @@ public class Power<C extends RingElem<C> > {
         if ( a == null || a.isZERO() ) {
            return a;
         }
+        //return a;
+        return (C) Power.<MonoidElem>power( (MonoidFactory)fac, a, n);
+    }
+
+
+    /**
+     * power of a to the n-th.
+     * @param a element.
+     * @param n integer exponent.
+     * @return a^n, with a^{-n} = {1/a}^n.
+     */
+    public static <C extends MonoidElem<C>> C power( MonoidFactory<C> fac, C a, long n ) {
         if ( n == 0 ) {
            if ( fac == null ) {
               throw new IllegalArgumentException("fac may not be null for a^0");
