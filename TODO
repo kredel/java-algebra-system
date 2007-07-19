@@ -27,6 +27,9 @@
 
 - test caching results of gcd computation
 
+- add version information in jas file names
+
+- refactor ExpVector for different array element types
 
 
 - define power(n) in RingElem and implement in edu.jas.structure.Power and classes, done
