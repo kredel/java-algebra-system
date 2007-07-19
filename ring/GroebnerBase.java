@@ -6,6 +6,8 @@ package edu.jas.ring;
 
 import java.util.List;
 
+import java.io.Serializable;
+
 import edu.jas.structure.RingElem;
 
 import edu.jas.poly.GenPolynomial;
@@ -17,7 +19,8 @@ import edu.jas.poly.GenPolynomial;
  * @author Heinz Kredel
  */
 
-public interface GroebnerBase<C extends RingElem<C>>  {
+public interface GroebnerBase<C extends RingElem<C>> 
+                 extends Serializable {
 
 
     /**

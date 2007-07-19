@@ -17,7 +17,7 @@ import edu.jas.poly.GenPolynomial;
  * @typeparam C coefficient factory.
  */
 public class Pair<C extends RingElem<C> > 
-             implements Serializable, Comparable {
+             implements Serializable, Comparable<Pair> {
 
     public final GenPolynomial<C> pi;
     public final GenPolynomial<C> pj;
@@ -102,15 +102,27 @@ public class Pair<C extends RingElem<C> >
 
 
     /**
+     * equals.
+     * @param ob an Object.
+     * @return true if this is equal to o, else false.
+     */
+    public boolean equals(Object ob) {
+        if ( ! (ob instanceof Pair) ) {
+           return false;
+           // throw new ClassCastException("Pair "+n+" o "+o);
+        }
+        return 0 == compareTo( (Pair)ob );
+    }
+
+
+    /**
      * compareTo used in TreeMap // not used at moment.
      * Comparison is based on the number of the pairs.
+     * @param p a Pair.
      * @return 1 if (this &lt; o), 0 if (this == o), -1 if (this &gt; o).
      */
-    public int compareTo(Object o) throws ClassCastException {
-        if ( ! (o instanceof Pair) ) {
-            throw new ClassCastException("Pair "+n+" o "+o);
-        }
-        int x = ((Pair)o).getPairNumber();
+    public int compareTo(Pair p) {
+        int x = p.getPairNumber();
         if ( n > x ) { 
            return 1;
         }
