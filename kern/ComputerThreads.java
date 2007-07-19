@@ -72,7 +72,7 @@ public class ComputerThreads {
     /**
       * Thread pool.
       */
-    protected static ThreadPoolExecutor pool = null;
+    static ThreadPoolExecutor pool = null;
 
 
     /**
