@@ -130,16 +130,16 @@ public class GenPolynomialTokenizer  {
         //in = r;
         // table = rt;
         nvars = 1;
-        if ( vars != null ) {
-            nvars = vars.length;
-        }
-        fac = null;
+        //if ( vars != null ) {
+        //    nvars = vars.length;
+        //}
+        //fac = null;
         fac = new BigRational(1);
         
-        pfac = null;
+        //pfac = null;
         pfac = new GenPolynomialRing<BigRational>(fac,nvars,tord,vars);
 
-        spfac = null;
+        //spfac = null;
         spfac = new GenSolvablePolynomialRing<BigRational>(fac,nvars,tord,vars);
 
         tok = new StreamTokenizer( r );
