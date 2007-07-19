@@ -12,6 +12,7 @@ import edu.jas.arith.BigInteger;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
 
+import edu.jas.ring.GroebnerBaseSeq;
 
 /**
  * Examples for polynomials usage.
@@ -34,8 +35,9 @@ public class Examples {
        //example6();
        //example7();
        //example8();
-       example9();
+       //example9();
        //example10();
+       example11();
    }
 
 /**
@@ -407,5 +409,56 @@ public static void example10() {
         System.out.println();
     }
 }
+
+
+/**
+ * example11.
+ * cyclic n-th roots polynomial systems.
+ *
+ */
+public static void example11() {
+    int n = 4;
+
+    BigInteger fac = new BigInteger();
+    String[] var = ExpVector.STDVARS(n);
+    GenPolynomialRing<BigInteger> ring
+           = new GenPolynomialRing<BigInteger>(fac,n,var);
+    System.out.println("ring = " + ring + "\n");
+
+    List<GenPolynomial<BigInteger>> cp = new ArrayList<GenPolynomial<BigInteger>>( n ); 
+    for ( int i = 1; i <= n; i++ ) {
+        GenPolynomial<BigInteger> p = cyclicPoly(ring, n, i);
+        cp.add( p );
+        System.out.println("p["+i+"] = " +  p);
+        System.out.println();
+    }
+    System.out.println("cp = " + cp + "\n");
+
+    List<GenPolynomial<BigInteger>> gb;
+    GroebnerBaseSeq<BigInteger> sgb = new GroebnerBaseSeq<BigInteger>();
+    gb = sgb.GB( cp );
+    System.out.println("gb = " + gb);
+
+}
+
+    static GenPolynomial<BigInteger> cyclicPoly(GenPolynomialRing<BigInteger> ring, int n, int i) {
+
+        List<? extends GenPolynomial<BigInteger> > X 
+            = /*(List<GenPolynomial<BigInteger>>)*/ ring.univariateList();
+
+        GenPolynomial<BigInteger> p = ring.getZERO();
+        for ( int j = 1; j <= n; j++ ) {
+            GenPolynomial<BigInteger> pi = ring.getONE();
+            for ( int k = j; k < j+i; k++ ) {
+                pi = pi.multiply( X.get( k % n ) );
+            }
+            p = p.sum( pi );
+            if ( i == n ) {
+               p = p.subtract( ring.getONE() );
+               break;
+            }
+        }
+        return p;
+    }
 
 }
