@@ -42,18 +42,18 @@ public class DistHashTableServer extends Thread {
     protected final SortedMap theList;
 
 
-/**
- * Constructs a new DistHashTableServer.
- */ 
+    /**
+     * Constructs a new DistHashTableServer.
+     */ 
     public DistHashTableServer() {
         this(DEFAULT_PORT);
     }
 
 
-/**
- * DistHashTableServer.
- * @param port to run server on.
- */
+    /**
+     * DistHashTableServer.
+     * @param port to run server on.
+     */
     public DistHashTableServer(int port) {
         this( new ChannelFactory(port) );
     }
@@ -237,54 +237,68 @@ public class DistHashTableServer extends Thread {
  * @unused
  */ 
 
-class DHTCounter implements Serializable, Comparable {
+class DHTCounter implements Serializable, Comparable<DHTCounter> {
 
     private int value;
 
 
-/**
- * DHTCounter.
- */
+   /**
+    * DHTCounter constructor.
+    */
     public DHTCounter() {
         this(0);
     }
 
 
-/**
- * DHTCounter.
- * @param v
- */
+   /**
+    * DHTCounter constructor..
+    * @param v initial value.
+    */
     public DHTCounter(int v) {
         value = v;
     }
 
 
-/**
- * intValue.
- * @return the value.
- */
+   /**
+    * intValue.
+    * @return the value.
+    */
     public int intValue() {
         return value;
     }
 
 
-/**
- * add.
- * @param v
- */
+   /**
+    * add.
+    * @param v value to add.
+    */
     public void add(int v) { // synchronized elsewhere
         value += v;
     }
 
 
-/**
- * compareTo.
- */
-    public int compareTo(Object o) throws ClassCastException {
-        if ( ! (o instanceof DHTCounter) ) {
-            throw new ClassCastException("DHTCounter "+value+" o "+o);
+    /**
+     * equals.
+     * @param ob an Object.
+     * @return true if this is equal to o, else false.
+     */
+    public boolean equals(Object ob) {
+        if ( ! (ob instanceof DHTCounter) ) {
+           return false;
         }
-        int x = ((DHTCounter)o).intValue();
+        return 0 == compareTo( (DHTCounter)ob );
+    }
+
+
+
+
+   /**
+    * compareTo.
+    * @param c a DHTCounter.
+    * @return 1 if (this &lt; c), 0 if (this == c), -1 if (this &gt; c).
+    */
+    public int compareTo(DHTCounter c) {
+        int x = c.intValue();
         if ( value > x ) { 
            return 1;
         }
@@ -295,9 +309,9 @@ class DHTCounter implements Serializable, Comparable {
     }
 
 
-/**
- * toString.
- */
+   /**
+    * toString.
+    */
     public String toString() {
         return "DHTCounter("+value+")";
     }

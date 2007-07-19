@@ -243,6 +243,9 @@ class PoolThread extends Thread {
             try {
                 logger.debug( "looking for a job" );
                 job = pool.getJob();
+                if ( job == null ) {
+                   break;
+                }
                 working = true;
                 if ( debug ) {
                    logger.info( "working" );

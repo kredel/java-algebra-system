@@ -207,7 +207,7 @@ public class DistributedListServer extends Thread {
  * Must implement Comparable so that TreeMap works with correct ordering.
  */ 
 
-class Counter implements Serializable, Comparable {
+class Counter implements Serializable, Comparable<Counter> {
 
     private int value;
 
@@ -248,13 +248,25 @@ class Counter implements Serializable, Comparable {
 
 
     /**
-     * compareTo.
+     * equals.
+     * @param ob an Object.
+     * @return true if this is equal to o, else false.
      */
-    public int compareTo(Object o) throws ClassCastException {
-        if ( ! (o instanceof Counter) ) {
-            throw new ClassCastException("Counter "+value+" o "+o);
+    public boolean equals(Object ob) {
+        if ( ! (ob instanceof Counter) ) {
+           return false;
         }
-        int x = ((Counter)o).intValue();
+        return 0 == compareTo( (Counter)ob );
+    }
+
+
+    /**
+     * compareTo.
+     * @param c a Counter.
+     * @return 1 if (this &lt; c), 0 if (this == c), -1 if (this &gt; c).
+     */
+    public int compareTo(Counter c) {
+        int x = c.intValue();
         if ( value > x ) { 
             return 1;
         }

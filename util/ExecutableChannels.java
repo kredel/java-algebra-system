@@ -97,6 +97,9 @@ public class ExecutableChannels {
                   break;
                }
                line = in.readLine();
+               if ( line == null ) {
+                  break;
+               }
                x = line.indexOf("#");
                if ( x >= 0 ) {
                    line = line.substring(0,x);
@@ -107,7 +110,12 @@ public class ExecutableChannels {
                }
                list.add(line);
             }
-        } catch (IOException e) {
+        } catch (IOException ignored) {
+        } finally {
+            try {
+                in.close();
+            } catch (IOException ignore) {
+            }
         }
         logger.debug("list.size() in " + mfile + " = " + list.size());
         if ( list.size() == 0 ) {
