@@ -479,7 +479,7 @@ public class Quotient<C extends GcdRingElem<C> >
      * @return [ gcd(this,b), c1, c2 ] with c1*this + c2*b = gcd(this,b).
      */
     public Quotient<C>[] egcd(Quotient<C> b) {
-        Quotient[] ret = new Quotient[3];
+        Quotient<C>[] ret = /*(Quotient<C>[])*/new Quotient[3];
         ret[0] = null;
         ret[1] = null;
         ret[2] = null;

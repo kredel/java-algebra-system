@@ -25,7 +25,7 @@ public class LocalRing<C extends RingElem<C> >
              implements RingFactory< Local<C> >  {
 
      private static final Logger logger = Logger.getLogger(LocalRing.class);
-     private boolean debug = logger.isDebugEnabled();
+     //private boolean debug = logger.isDebugEnabled();
 
 
     /** Polynomial ideal for localization. 

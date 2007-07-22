@@ -25,7 +25,7 @@ public class ResidueRing<C extends RingElem<C> >
              implements RingFactory< Residue<C> >  {
 
     private static final Logger logger = Logger.getLogger(ResidueRing.class);
-    private boolean debug = logger.isDebugEnabled();
+    //private boolean debug = logger.isDebugEnabled();
 
 
     /** Polynomial ideal for the reduction. 

@@ -13,7 +13,7 @@ import junit.framework.TestSuite;
 import org.apache.log4j.BasicConfigurator;
 //import org.apache.log4j.Logger;
 
-import edu.jas.arith.BigRational;
+//import edu.jas.arith.BigRational;
 import edu.jas.arith.BigInteger;
 
 import edu.jas.kern.PrettyPrint;
@@ -35,7 +35,7 @@ public class QuotIntPolynomialTest extends TestCase {
  * main.
  */
    public static void main (String[] args) {
-       //BasicConfigurator.configure();
+       BasicConfigurator.configure();
        junit.textui.TestRunner.run( suite() );
    }
 

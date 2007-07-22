@@ -5,16 +5,16 @@
 package edu.jas.application;
 
 import java.util.Random;
-import java.io.IOException;
+//import java.io.IOException;
 import java.io.Reader;
 //import java.io.StringReader;
-import java.io.StringWriter;
+//import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import edu.jas.structure.RingElem;
+//import edu.jas.structure.RingElem;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
 
@@ -26,7 +26,7 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
 
-import edu.jas.ufd.GreatestCommonDivisor;
+//import edu.jas.ufd.GreatestCommonDivisor;
 import edu.jas.ufd.GreatestCommonDivisorAbstract;
 import edu.jas.ufd.GreatestCommonDivisorSubres;
 import edu.jas.ufd.GreatestCommonDivisorSimple;
@@ -46,7 +46,7 @@ public class QuotientRing<C extends GcdRingElem<C> >
              implements RingFactory< Quotient<C> >  {
 
      private static final Logger logger = Logger.getLogger(QuotientRing.class);
-     private boolean debug = logger.isDebugEnabled();
+     //private boolean debug = logger.isDebugEnabled();
 
 
     /** Polynomial ring of the factory. 
@@ -104,19 +104,19 @@ public class QuotientRing<C extends GcdRingElem<C> >
            //engine = new GreatestCommonDivisorModular/*<BigInteger>*/();
            //engine = new GreatestCommonDivisorSubres<BigInteger>();
            //engine = new GreatestCommonDivisorModular/*<BigInteger>*/(true);
-           engine = new GCDProxy( 
+           engine = new GCDProxy<BigInteger>( 
                     new GreatestCommonDivisorSubres<BigInteger>(), 
            //         new GreatestCommonDivisorModular/*<BigInteger>*/(true) );
                     new GreatestCommonDivisorModular/*<BigInteger>*/() );
         } else if ( t == 2 ) {
            //engine = new GreatestCommonDivisorModEval/*<ModInteger>*/();
-           engine = new GCDProxy( 
+           engine = new GCDProxy/*<ModInteger>*/( 
                         new GreatestCommonDivisorSubres<BigInteger>(), 
                         new GreatestCommonDivisorModEval/*<ModInteger>*/() );
         } else {
            //engine = new GreatestCommonDivisorSimple<C>();
            //engine = new GreatestCommonDivisorSubres<C>();
-           engine = new GCDProxy( 
+           engine = new GCDProxy<C>( 
                         new GreatestCommonDivisorSubres<C>(), 
                         new GreatestCommonDivisorSimple<C>() );
         }
