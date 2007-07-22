@@ -4,12 +4,12 @@
 
 package edu.jas.vector;
 
-import java.util.ArrayList;
-import java.util.List;
+//import java.util.ArrayList;
+//import java.util.List;
 
-import edu.jas.arith.BigRational;
+//import edu.jas.arith.BigRational;
 import edu.jas.arith.BigInteger;
-import edu.jas.arith.ModInteger;
+//import edu.jas.arith.ModInteger;
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;

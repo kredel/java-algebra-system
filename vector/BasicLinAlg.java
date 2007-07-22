@@ -23,7 +23,7 @@ import edu.jas.structure.RingElem;
 public class BasicLinAlg<C extends RingElem<C>> {
 
     private static final Logger logger = Logger.getLogger(BasicLinAlg.class);
-    private final boolean debug = logger.isDebugEnabled();
+    //private final boolean debug = logger.isDebugEnabled();
 
 
     /**

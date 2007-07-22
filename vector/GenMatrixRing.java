@@ -20,7 +20,7 @@ import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.structure.AlgebraFactory;
 
-import edu.jas.util.StringUtil;
+//import edu.jas.util.StringUtil;
 
 /**
  * GenMatrixRing implements a generic matrix algebra factory with RingFactory.
