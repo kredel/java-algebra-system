@@ -10,7 +10,7 @@ import org.apache.log4j.Logger;
 
 import edu.jas.structure.GcdRingElem;
 import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.ExpVector;
+//import edu.jas.poly.ExpVector;
 import edu.jas.poly.PolyUtil;
 
 

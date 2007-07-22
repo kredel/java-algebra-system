@@ -13,7 +13,7 @@ import edu.jas.structure.RingFactory;
 import edu.jas.structure.Power;
 
 import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.GenPolynomialRing;
+//import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.ExpVector;
 
 //import static edu.jas.poly.PolyUtil.distribute;
@@ -31,7 +31,7 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C> >
 
 
     private static final Logger logger = Logger.getLogger(GreatestCommonDivisorSubres.class);
-    private boolean debug = logger.isDebugEnabled();
+    //private boolean debug = logger.isDebugEnabled();
 
 
     /**

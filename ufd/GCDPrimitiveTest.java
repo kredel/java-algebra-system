@@ -12,10 +12,10 @@ import junit.framework.TestSuite;
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
-import edu.jas.arith.ModInteger;
-import edu.jas.arith.PrimeList;
+//import edu.jas.arith.ModInteger;
+//import edu.jas.arith.PrimeList;
 
-import edu.jas.poly.ExpVector;
+//import edu.jas.poly.ExpVector;
 import edu.jas.poly.TermOrder;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;

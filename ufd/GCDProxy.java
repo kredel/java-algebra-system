@@ -7,36 +7,31 @@ package edu.jas.ufd;
 
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Map;
+//import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.CancellationException;
-import java.util.concurrent.Executors;
+//import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.Callable;
 
 import org.apache.log4j.Logger;
 
-import edu.jas.structure.RingElem;
+//import edu.jas.structure.RingElem;
 import edu.jas.structure.GcdRingElem;
-import edu.jas.structure.RingFactory;
+//import edu.jas.structure.RingFactory;
 
 //import edu.jas.kern.PreemptingException;
 import edu.jas.kern.ComputerThreads;
-
-//import edu.jas.arith.ModInteger;
-//import edu.jas.arith.ModIntegerRing;
-//import edu.jas.arith.BigInteger;
-//import edu.jas.arith.BigRational;
 
 import edu.jas.poly.GenPolynomial;
 
 import edu.jas.ufd.GreatestCommonDivisor;
 import edu.jas.ufd.GreatestCommonDivisorAbstract;
-import edu.jas.ufd.GreatestCommonDivisorSubres;
-import edu.jas.ufd.GreatestCommonDivisorPrimitive;
-import edu.jas.ufd.GreatestCommonDivisorModular;
-import edu.jas.ufd.GreatestCommonDivisorModEval;
+//import edu.jas.ufd.GreatestCommonDivisorSubres;
+//import edu.jas.ufd.GreatestCommonDivisorPrimitive;
+//import edu.jas.ufd.GreatestCommonDivisorModular;
+//import edu.jas.ufd.GreatestCommonDivisorModEval;
 
 
 /**

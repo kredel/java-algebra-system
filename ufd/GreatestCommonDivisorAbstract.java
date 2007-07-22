@@ -6,16 +6,16 @@
 package edu.jas.ufd;
 
 import java.util.Map;
-import java.util.SortedMap;
+//import java.util.SortedMap;
 import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 
-import edu.jas.structure.RingFactory;
+//import edu.jas.structure.RingFactory;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
-import edu.jas.poly.ExpVector;
+//import edu.jas.poly.ExpVector;
 import static edu.jas.poly.PolyUtil.distribute;
 import static edu.jas.poly.PolyUtil.recursive;
 import edu.jas.poly.PolyUtil;
@@ -31,7 +31,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C> >
 
 
     private static final Logger logger = Logger.getLogger(GreatestCommonDivisorAbstract.class);
-    private boolean debug = logger.isDebugEnabled();
+    //private boolean debug = logger.isDebugEnabled();
 
 
     /**

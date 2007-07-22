@@ -8,7 +8,7 @@ package edu.jas.ufd;
 
 import org.apache.log4j.Logger;
 
-import edu.jas.structure.GcdRingElem;
+//import edu.jas.structure.GcdRingElem;
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.ModInteger;
