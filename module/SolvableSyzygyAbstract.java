@@ -619,7 +619,7 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
             = new ArrayList<List<GenSolvablePolynomial<C>>>();
         for ( int i = 0; i < G.size(); i++ ) {
             List<GenSolvablePolynomial<C>> Gi = G.get(i);
-            List Zi = new ArrayList();
+            List<GenSolvablePolynomial<C>> Zi = new ArrayList<GenSolvablePolynomial<C>>();
             // System.out.println("\nG("+i+") = " + G.get(i));
             for ( int j = 0; j < Gi.size(); j++ ) {
                 //System.out.println("\nG("+i+","+j+") = " + Gi.get(j));

@@ -14,7 +14,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Logger;
+//import org.apache.log4j.Logger;
 
 
 //import edu.jas.structure.RingElem;
@@ -40,7 +40,7 @@ import edu.jas.vector.ModuleList;
 
 public class ModGroebnerBaseTest extends TestCase {
 
-    private static final Logger logger = Logger.getLogger(ModGroebnerBaseTest.class);
+    //private static final Logger logger = Logger.getLogger(ModGroebnerBaseTest.class);
 
 /**
  * main.

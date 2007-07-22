@@ -15,7 +15,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Logger;
+//import org.apache.log4j.Logger;
 
 import edu.jas.arith.BigRational;
 
@@ -42,7 +42,7 @@ import edu.jas.vector.ModuleList;
 
 public class SolvableSyzygyTest extends TestCase {
 
-    private static final Logger logger = Logger.getLogger(SolvableSyzygyTest.class);
+    //private static final Logger logger = Logger.getLogger(SolvableSyzygyTest.class);
 
 /**
  * main.

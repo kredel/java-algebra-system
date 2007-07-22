@@ -8,7 +8,7 @@ package edu.jas.module;
 import java.util.List;
 //import java.util.ListIterator;
 
-import org.apache.log4j.Logger;
+//import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
 
@@ -33,7 +33,7 @@ import edu.jas.vector.ModuleList;
 public class ModGroebnerBaseAbstract<C extends RingElem<C>> 
        implements ModGroebnerBase<C> {
 
-    private static final Logger logger = Logger.getLogger(ModGroebnerBase.class);
+    //private static final Logger logger = Logger.getLogger(ModGroebnerBase.class);
 
 
 /**
