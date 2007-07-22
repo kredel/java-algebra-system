@@ -12,7 +12,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Logger;
+//import org.apache.log4j.Logger;
 
 import edu.jas.arith.BigRational;
 import edu.jas.poly.ExpVector;
@@ -30,7 +30,7 @@ import edu.jas.poly.WeylRelations;
 
 public class SolvableGroebnerBaseParTest extends TestCase {
 
-    private static final Logger logger = Logger.getLogger(SolvableGroebnerBaseParTest.class);
+    //private static final Logger logger = Logger.getLogger(SolvableGroebnerBaseParTest.class);
 
 /**
  * main.

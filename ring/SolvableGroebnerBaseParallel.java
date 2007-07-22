@@ -37,7 +37,7 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>>
              extends SolvableGroebnerBaseAbstract<C>  {
 
     private static final Logger logger = Logger.getLogger(SolvableGroebnerBaseParallel.class);
-    private static final boolean debug = logger.isDebugEnabled();
+    //private static final boolean debug = logger.isDebugEnabled();
 
 
     /**

@@ -17,7 +17,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Logger;
+//import org.apache.log4j.Logger;
 
 import edu.jas.arith.BigRational;
 
@@ -35,7 +35,7 @@ import edu.jas.structure.RingElem;
 
 public class GroebnerBaseDistTest extends TestCase {
 
-    private static final Logger logger = Logger.getLogger(GroebnerBaseDistTest.class);
+    //private static final Logger logger = Logger.getLogger(GroebnerBaseDistTest.class);
 
 /**
  * main

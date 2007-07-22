@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+//import org.apache.log4j.Logger;
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
@@ -25,7 +25,7 @@ import edu.jas.util.DistHashTable;
 public class ReductionPar<C extends RingElem<C>>
              extends ReductionAbstract<C> {
 
-    private static final Logger logger = Logger.getLogger(ReductionPar.class);
+    //private static final Logger logger = Logger.getLogger(ReductionPar.class);
 
 
     /**

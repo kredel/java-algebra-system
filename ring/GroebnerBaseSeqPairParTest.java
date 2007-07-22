@@ -17,7 +17,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Logger;
+//import org.apache.log4j.Logger;
 
 import edu.jas.arith.BigRational;
 import edu.jas.poly.GenPolynomial;
@@ -34,7 +34,7 @@ import edu.jas.ring.GroebnerBase;
 
 public class GroebnerBaseSeqPairParTest extends TestCase {
 
-    private static final Logger logger = Logger.getLogger(GroebnerBaseSeqPairParTest.class);
+    //private static final Logger logger = Logger.getLogger(GroebnerBaseSeqPairParTest.class);
 
 /**
  * main

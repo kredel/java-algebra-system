@@ -17,7 +17,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Logger;
+//import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
 
@@ -38,7 +38,7 @@ import edu.jas.ring.GroebnerBaseSeq;
 
 public class GroebnerBaseSeqPairDistTest extends TestCase {
 
-    private static final Logger logger = Logger.getLogger(GroebnerBaseSeqPairDistTest.class);
+    //private static final Logger logger = Logger.getLogger(GroebnerBaseSeqPairDistTest.class);
 
 /**
  * main
