@@ -5,8 +5,7 @@
 package edu.jas.structure;
 
 import java.util.List;
-import java.io.Reader;
-import java.io.Serializable;
+
 
 /**
  * Module factory interface.

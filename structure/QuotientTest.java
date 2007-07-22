@@ -13,7 +13,7 @@ import junit.framework.TestSuite;
 import org.apache.log4j.BasicConfigurator;
 //import org.apache.log4j.Logger;
 
-import edu.jas.arith.BigRational;
+//import edu.jas.arith.BigRational;
 import edu.jas.arith.BigInteger;
 
 //import edu.jas.structure.RingElem;

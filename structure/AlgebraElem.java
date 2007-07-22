@@ -4,10 +4,6 @@
 
 package edu.jas.structure;
 
-import java.io.Serializable;
-
-import java.util.List;
-
 
 /**
  * Algabra element interface.

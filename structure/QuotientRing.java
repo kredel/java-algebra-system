@@ -11,7 +11,7 @@ import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
-import edu.jas.structure.GcdRingElem;
+//import edu.jas.structure.GcdRingElem;
 
 
 /**
@@ -23,7 +23,7 @@ public class QuotientRing<C extends RingElem<C> >
              implements RingFactory< Quotient<C> >  {
 
      private static final Logger logger = Logger.getLogger(QuotientRing.class);
-     private boolean debug = logger.isDebugEnabled();
+     //private boolean debug = logger.isDebugEnabled();
 
 
     /** Ring factory of this factory. 
@@ -205,6 +205,7 @@ public class QuotientRing<C extends RingElem<C> >
      */
     public Quotient<C> parse(Reader r) {
         C x = ring.parse( r );
+        logger.debug("x = " + x);
         return new Quotient<C>( this, x );
     }
 
