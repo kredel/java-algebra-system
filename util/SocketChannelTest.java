@@ -24,7 +24,7 @@ import org.apache.log4j.BasicConfigurator;
 public class SocketChannelTest extends TestCase {
 
    public static void main (String[] args) {
-       //BasicConfigurator.configure();
+       BasicConfigurator.configure();
        junit.textui.TestRunner.run( suite() );
    }
 
