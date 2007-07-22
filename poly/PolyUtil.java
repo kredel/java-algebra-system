@@ -1381,7 +1381,7 @@ public class PolyUtil {
         BigInteger M2 = M.multiply( M.fromInteger(2) );
         BigInteger Mq = Qi;
         GenPolynomialRing<ModInteger> qfac;
-        qfac = new GenPolynomialRing(Q,pfac.nvar,pfac.tord,pfac.vars);
+        qfac = new GenPolynomialRing<ModInteger>(Q,pfac.nvar,pfac.tord,pfac.vars);
         //System.out.println("M2  = " + M2);
         //System.out.println("Qi = " + Qi);
         //System.out.println("P  = " + P.getModul());
@@ -1561,7 +1561,7 @@ public class PolyUtil {
             Qi = new BigInteger( Q.getModul().multiply( Q.getModul() ) );
             Q = new ModIntegerRing( Qi.getVal() );
             //System.out.println("Q = " + Q.getModul());
-            qfac = new GenPolynomialRing(Q,pfac.nvar,pfac.tord,pfac.vars);
+            qfac = new GenPolynomialRing<ModInteger>(Q,pfac.nvar,pfac.tord,pfac.vars);
 
             Aq = PolyUtil.<ModInteger>fromIntegerCoefficients(qfac,Ai);
             Bq = PolyUtil.<ModInteger>fromIntegerCoefficients(qfac,Bi);

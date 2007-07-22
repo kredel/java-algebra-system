@@ -7,10 +7,9 @@ package edu.jas.poly;
 import java.util.Random;
 import java.io.Reader;
 
-import edu.jas.structure.RingElem;
+//import edu.jas.structure.RingElem;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
-//import edu.jas.kern.PrettyPrint;
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.PolyUtil;

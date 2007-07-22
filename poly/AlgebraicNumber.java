@@ -4,17 +4,14 @@
 
 package edu.jas.poly;
 
-import edu.jas.structure.RingElem;
+//import edu.jas.structure.RingElem;
 import edu.jas.structure.GcdRingElem;
-import edu.jas.structure.RingFactory;
 
 import edu.jas.kern.PrettyPrint;
 import edu.jas.structure.NotInvertibleException;
 
 import edu.jas.poly.GenPolynomial;
 
-import java.util.Random;
-import java.io.Reader;
 
 /**
  * Algebraic number class based on GenPolynomial with RingElem interface.

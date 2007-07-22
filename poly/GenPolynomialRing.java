@@ -25,7 +25,6 @@ import edu.jas.structure.RingFactory;
 import edu.jas.kern.PrettyPrint;
 import edu.jas.kern.PreemptStatus;
 
-import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
 
 import edu.jas.poly.GenPolynomial;

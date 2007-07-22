@@ -15,7 +15,6 @@ import java.io.InputStreamReader;
 import java.io.IOException;
 
 import org.apache.log4j.Logger;
-import org.apache.log4j.BasicConfigurator;
 
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
@@ -30,7 +29,7 @@ import edu.jas.arith.BigQuaternion;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolynomialList;
-import edu.jas.poly.OrderedPolynomialList;
+//import edu.jas.poly.OrderedPolynomialList;
 
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
