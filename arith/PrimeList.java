@@ -4,12 +4,12 @@
 
 package edu.jas.arith;
 
-import java.util.Random;
+//import java.util.Random;
 import java.util.List;
 import java.util.Iterator;
 import java.util.ArrayList;
 
-import edu.jas.util.StringUtil;
+//import edu.jas.util.StringUtil;
 
 
 /**
@@ -32,10 +32,10 @@ public final class PrimeList implements Iterable<java.math.BigInteger> {
 
     //private final static Random random = new Random();
 
-    private final static java.math.BigInteger p11 = new java.math.BigInteger(""+11);
-    private final static java.math.BigInteger p13 = new java.math.BigInteger(""+13);
-    private final static java.math.BigInteger p17 = new java.math.BigInteger(""+17);
-    private final static java.math.BigInteger p19 = new java.math.BigInteger(""+19);
+    final static java.math.BigInteger p11 = new java.math.BigInteger(""+11);
+    final static java.math.BigInteger p13 = new java.math.BigInteger(""+13);
+    final static java.math.BigInteger p17 = new java.math.BigInteger(""+17);
+    final static java.math.BigInteger p19 = new java.math.BigInteger(""+19);
 
     /**
      * Constructor for PrimeList.

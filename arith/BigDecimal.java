@@ -8,7 +8,7 @@ import java.util.Random;
 import java.math.MathContext;
 import java.io.Reader;
 
-import edu.jas.structure.RingElem;
+//import edu.jas.structure.RingElem;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
 
