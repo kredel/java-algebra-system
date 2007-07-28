@@ -236,7 +236,7 @@ public class GCDProxy<C extends GcdRingElem<C>>
                     }
                  }
                  if ( g == null ) {
-                    Thread.currentThread().sleep(dauer);
+                    Thread.sleep(dauer);
                  }
              } catch (InterruptedException ignored) { 
                  Thread.currentThread().interrupt();
