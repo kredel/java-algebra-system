@@ -5,6 +5,7 @@
 package edu.jas.poly;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import edu.jas.arith.BigRational;
@@ -37,7 +38,8 @@ public class Examples {
        //example8();
        //example9();
        //example10();
-       example11();
+       //example11();
+       example12();
    }
 
 /**
@@ -460,5 +462,76 @@ public static void example11() {
         }
         return p;
     }
+
+/**
+ * example12.
+ * degree matrix;
+ *
+ */
+public static void example12() {
+    int n = 50;
+    BigRational fac = new BigRational();
+    String[] var = ExpVector.STDVARS(n);
+    GenPolynomialRing<BigRational> ring
+           = new GenPolynomialRing<BigRational>(fac,n,var);
+    System.out.println("ring = " + ring + "\n");
+
+    GenPolynomial<BigRational> p = ring.random(5,3,6,0.5f);
+    System.out.println("p = " + p + "\n");
+
+    List<GenPolynomial<BigInteger>> dem 
+        = TermOrderOptimization.<BigRational>degreeMatrix( p );
+
+    System.out.println("dem = " + dem + "\n");
+
+    List<GenPolynomial<BigRational>> polys 
+        = new ArrayList<GenPolynomial<BigRational>>();
+    polys.add( p );
+    for ( int i = 0; i < 5; i++ ) {
+        polys.add( ring.random(5,3,6,0.1f) );
+    }
+    System.out.println("polys = " + polys + "\n");
+
+    dem = TermOrderOptimization.<BigRational>degreeMatrix( polys );
+    System.out.println("dem = " + dem + "\n");
+
+    List<Integer> perm;
+    perm = TermOrderOptimization.optimalPermutation( dem );
+    System.out.println("perm = " + perm + "\n");
+
+    List<GenPolynomial<BigInteger>> pdem; 
+    pdem = TermOrderOptimization.<GenPolynomial<BigInteger>>listPermutation( perm, dem );
+    System.out.println("pdem = " + pdem + "\n");
+
+    GenPolynomialRing<BigRational> pring;
+    pring = TermOrderOptimization.<BigRational>permutation( perm, ring );
+    System.out.println("ring  = " + ring);
+    System.out.println("pring = " + pring + "\n");
+
+    List<GenPolynomial<BigRational>> ppolys;
+    ppolys = TermOrderOptimization.<BigRational>permutation( perm, pring, polys );
+    System.out.println("ppolys = " + ppolys + "\n");
+
+    dem = TermOrderOptimization.<BigRational>degreeMatrix( ppolys );
+    //System.out.println("pdem = " + dem + "\n");
+
+    perm = TermOrderOptimization.optimalPermutation( dem );
+    //System.out.println("pperm = " + perm + "\n");
+    int i = 0;
+    for ( Integer j : perm ) {
+        if ( i != (int)j ) {
+           System.out.println("error = " + i + " != " + j + "\n");
+        }
+        i++;
+    }
+
+    OptimizedPolynomialList<BigRational> op;
+    op = TermOrderOptimization.<BigRational>optimizeTermOrder( ring, polys );
+    System.out.println("op:\n" + op);
+    if ( ! op.equals( new PolynomialList<BigRational>(pring,ppolys) ) ) {
+       System.out.println("error = " + "\n" + op);
+    }
+    
+}
 
 }
