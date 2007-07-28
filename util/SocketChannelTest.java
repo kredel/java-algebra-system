@@ -62,7 +62,7 @@ public class SocketChannelTest extends TestCase {
        sc1.close();
        sc2.close();
        try {
-           Thread.currentThread().sleep(1);
+           Thread.sleep(1);
        } catch(InterruptedException e) {
            fail("InterruptedException"+e);
        }
