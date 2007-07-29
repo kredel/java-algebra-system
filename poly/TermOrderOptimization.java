@@ -372,26 +372,3 @@ public class TermOrderOptimization {
     }
 
 }
-
-
-    /**
-     * Container for optimization results.
-     */
-    class OptimizedPolynomialList<C extends RingElem<C>> 
-                 extends PolynomialList<C> {
-
-        public final List<Integer> perm;
- 
-        public OptimizedPolynomialList( List<Integer> P, 
-                                        GenPolynomialRing<C> R, 
-                                        List<GenPolynomial<C>> L ) {
-            super(R,L);
-            perm = P;
-        }
-
-        public String toString() {
-            return "permutation = " + perm 
-                 + "\n" + super.toString();
-        }
-
-    }
