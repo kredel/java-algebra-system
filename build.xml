@@ -33,12 +33,62 @@
     </classpath>
   </taskdef>
 
-<target name="vorher" >
+<target name="vorher" depends="symlinks" >
   <!-- set properties DSTAMP, TSTAMP -->
   <tstamp />
   <mkdir dir="edu/jas"  />
   <mkdir dir="${test}"  />
 </target>
+
+<target name="symlinks" depends="symlinks.check" if="checklinks" >
+  <symlink resource="${src}/edu/jas/application" link="application" />
+  <symlink resource="${src}/edu/jas/arith"       link="arith" />
+  <symlink resource="${src}/edu/jas/kern"        link="kern" />
+  <symlink resource="${src}/edu/jas/module"      link="module" />
+  <symlink resource="${src}/edu/jas/poly"        link="poly" />
+  <symlink resource="${src}/edu/jas/ring"        link="ring" />
+  <symlink resource="${src}/edu/jas/structure"   link="structure" />
+  <symlink resource="${src}/edu/jas/ufd"         link="ufd" />
+  <symlink resource="${src}/edu/jas/util"        link="util" />
+  <symlink resource="${src}/edu/jas/vector"      link="vector" />
+</target>
+
+<target name="symlinks.check" >
+ <condition property="checklinks" >
+  <not>
+   <and>
+   <available file="application" />
+   <available file="arith" />
+   <available file="kern" />
+   <available file="module" />
+   <available file="poly" />
+   <available file="ring" />
+   <available file="structure" />
+   <available file="ufd" />
+   <available file="util" />
+   <available file="vector" />
+   </and>
+  </not>
+ </condition>
+<!-- need -T option in ln -s -->
+  <delete quiet="true" failonerror="false" file="./application/application" />
+  <delete quiet="true" failonerror="false" file="./arith/arith" />
+  <delete quiet="true" failonerror="false" file="./kern/kern" />
+  <delete quiet="true" failonerror="false" file="./module/module" />
+  <delete quiet="true" failonerror="false" file="./poly/poly" />
+  <delete quiet="true" failonerror="false" file="./ring/ring" />
+  <delete quiet="true" failonerror="false" file="./structure/structure" />
+  <delete quiet="true" failonerror="false" file="./ufd/ufd" />
+  <delete quiet="true" failonerror="false" file="./util/util" />
+  <delete quiet="true" failonerror="false" file="./vector/vector" />
+<!--
+  <delete quiet="true" >
+    <filelist dir="${build}" 
+              files="application/application arith/arith kern/kern module/module poly/poly ring/ring structure/structure ufd/ufd util/util vector/vector" /> 
+  </delete>
+-->
+</target>
+
 
 <target name="usage" >
   <echo message="ant &lt;name&gt; cl='cmd'"  />
@@ -67,9 +117,12 @@
   <javadoc sourcepath="${src}" destdir="${doc}" 
            classpath="${doccp}" 
            overview="overview.html" 
+           author="true" 
+           >
+<!--       
            private="true" 
-           author="true"
-           linksource="true" >
+           linksource="true" 
+-->
      <tag name="typeparam" description="Type parameter: " scope="all" />
      <tag name="param" />
      <tag name="return" />
@@ -212,6 +265,18 @@
      <fileset dir="." includes="**/*.jas"  />
      <fileset dir="." includes="build.xml Makefile log4j.properties"  />
      <fileset dir="edu/jas" />
+  </jar>
+</target>
+
+<target name="jar07" depends="vorher" >
+  <jar jarfile="/tmp/jas-ant-${DSTAMP}.jar"  >
+     <fileset dir="." includes="**/*.java" excludes="**/ufd/**" />
+     <fileset dir="." includes="**/*.html"  />
+     <fileset dir="." includes="*.py"  />
+     <fileset dir="." includes="examples/*.py"  />
+     <fileset dir="." includes="**/*.jas"  />
+     <fileset dir="." includes="build.xml Makefile log4j.properties"  />
+     <fileset dir="edu/jas" excludes="**/ufd/**" />
   </jar>
 </target>
 
