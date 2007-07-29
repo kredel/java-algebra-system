@@ -48,7 +48,7 @@ krum:
 	$(RSYNC) ./                krum:java/$(PART)
 
 pub:
-	$(RSYNC) --exclude=*ufd* --exclude=lisa* --exclude=*xml ./ krum:htdocs/$(PART)
+	$(RSYNC) --exclude=*ufd* --exclude=DTD --exclude=lisa* --exclude=*xml ./ krum:htdocs/$(PART)
 
 compute:
 	$(RSYNC) ./                compute:java/$(PART)
@@ -184,7 +184,7 @@ LIBS=$(JUNITPATH) $(LOG4JPATH) $(JOMPPATH) $(TNJPATH)
 
 #CLASSES=edu/jas/structure/ edu/jas/arith/ edu/jas/poly/ edu/jas/ring/ edu/jas/ufd/ edu/jas/application/ edu/jas/vector/ edu/jas/module/ edu/jas/util/ edu/jas/kern/
 
-CLASSES=edu/jas/structure/ edu/jas/arith/ edu/jas/poly/ edu/jas/ring/ edu/jas/application/ edu/jas/vector/ edu/jas/module/ edu/jas/util/ edu/jas/util/ edu/jas/kern/
+CLASSES=edu/jas/structure/ edu/jas/arith/ edu/jas/poly/ edu/jas/ring/ edu/jas/application/ edu/jas/vector/ edu/jas/module/ edu/jas/util/ edu/jas/ufd/ edu/jas/kern/
 
 PYS=$(wildcard *.py)
 EXAMPY=$(wildcard examples/*.py)
@@ -213,7 +213,8 @@ jas.tgz: $(FILES) *.html */package.html TODO
 TOJAR=$(FILES) $(CLASSES) Makefile build.xml log4j.properties $(EXAMPY) examples/machines.test $(wildcard COPYING*)
 
 jas.jar: $(FILES) Makefile build.xml log4j.properties $(EXAMPY)
-	$(JDK)/jar -cvf jas.jar $(TOJAR)
+#	$(JDK)/jar -cf jas.jar $(TOJAR)
+	$(JDK)/jar -cf jas.jar $(filter-out %/ufd/, $(filter-out src/edu/jas/ufd/%.java, $(TOJAR)))
 
 jas-doc.jar: $(DOCU) doc/
 	$(JDK)/jar -cvf jas-doc.jar $(DOCU) doc/
