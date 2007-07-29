@@ -1,6 +1,6 @@
 
 /*
- * $Id: TensorTest.java 759 2006-03-02 21:32:48Z kredel $
+ * $Id$
  */
 
 package edu.jas.application;
