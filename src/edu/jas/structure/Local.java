@@ -6,8 +6,6 @@ package edu.jas.structure;
 
 import org.apache.log4j.Logger;
 
-//import edu.jas.poly.GenPolynomial;
-
 import edu.jas.structure.RingElem;
 import edu.jas.structure.GcdRingElem;
 

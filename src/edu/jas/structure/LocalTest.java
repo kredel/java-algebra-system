@@ -16,8 +16,6 @@ import org.apache.log4j.BasicConfigurator;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.BigInteger;
 
-//import edu.jas.structure.RingElem;
-
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 
