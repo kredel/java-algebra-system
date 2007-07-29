@@ -6,7 +6,7 @@
 from jas import Ring
 from jas import Ideal
 
-from edu.jas import ring
+from edu.jas import application
 
 rs = """
 # polynomial ring:
@@ -42,7 +42,7 @@ ri = Ring( rsi );
 print "Ring: " + str(ri);
 
 
-y = ring.Ideal(g.pset).intersect(ri.ring);
+y = application.Ideal(g.pset).intersect(ri.ring);
 len = y.list.size();
 print "seq intersect y: ", y;
 
@@ -81,6 +81,6 @@ rb = Ring( rsb );
 print "Ring: " + str(rb);
 
 
-y = ring.Ideal(g.pset).intersect(rb.ring);
+y = application.Ideal(g.pset).intersect(rb.ring);
 len = y.list.size();
 print "seq intersect y: ", y;
