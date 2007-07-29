@@ -35,6 +35,8 @@ RSYNC=rsync -e ssh -avuz $(DRY) $(DELETE) --exclude=*~ --exclude=*.log* --exclud
 ####--exclude=*.ps --exclude=*.pdf --exclude=spin*
 ####--exclude=*/.jxta/
 PART=jas.j16
+VERSION=jas-2.0
+SVNVERSION=`grep committed-rev .svn/entries |head -1|awk -F = '{ print $2 }'|sed 's/"//g'`
 
 all:
 
@@ -237,5 +239,21 @@ lint:
 clean:
 	find . -name "*~" -follow -print -exec rm {} \;
 	rm -f application/application arith/arith kern/kern module/module poly/poly ring/ring structure/structure ufd/ufd util/util vector/vector
+
+
+export:
+	rm -rf ~/jas-versions/$(VERSION)
+	svn export --quiet file:///home/SUBVERSION/jas/trunk ~/jas-versions/$(VERSION)
+	cd ~/jas-versions/; jar -cf $(VERSION)-src.jar $(VERSION)/
+	cd ~/jas-versions/$(VERSION)/; /opt/apache-ant-1.7.0/bin/ant --noconfig compile
+	cd ~/jas-versions/$(VERSION)/; jar -cf ../$(VERSION)-bin.jar edu/
+	cd ~/jas-versions/$(VERSION)/; ant test
+	cd ~/jas-versions/$(VERSION)/; sh ./tests.sh > test.out
+	cd ~/jas-versions/$(VERSION)/; ant doc
+	cd ~/jas-versions/$(VERSION)/; jar -cf ../$(VERSION)-doc.jar doc/ *.html
+
+xxx:
+	grep committed-rev .svn/entries |head -1|awk -F = '{ print $$2 }'|sed 's/"//g' > make.svnversion
+	echo svn1 `cat make.svnversion`
 
 # -eof-
