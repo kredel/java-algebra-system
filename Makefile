@@ -247,11 +247,11 @@ export:
 	rm -rf ~/jas-versions/$(VERSION)
 	svn export --quiet file:///home/SUBVERSION/jas/trunk ~/jas-versions/$(VERSION)
 	cd ~/jas-versions/; jar -cf $(VERSION)-src.jar $(VERSION)/
-	cd ~/jas-versions/$(VERSION)/; ant compile
+	cd ~/jas-versions/$(VERSION)/; ant compile > ant_compile.out
 	cd ~/jas-versions/$(VERSION)/; jar -cf ../$(VERSION)-bin.jar edu/
 	cd ~/jas-versions/$(VERSION)/; ant test
 	cd ~/jas-versions/$(VERSION)/; sh ./tests.sh > test.out
-	cd ~/jas-versions/$(VERSION)/; ant doc
+	cd ~/jas-versions/$(VERSION)/; ant doc > ant_doc.out
 	cd ~/jas-versions/$(VERSION)/; jar -cf ../$(VERSION)-doc.jar doc/ *.html
 
 xxx:
