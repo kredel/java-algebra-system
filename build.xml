@@ -40,7 +40,7 @@
   <mkdir dir="${test}"  />
 </target>
 
-<!-- requires ant 1.7 
+<!-- requires ant 1.7 -->
 <target name="symlinks" depends="symlinks.check" if="checklinks" >
   <symlink resource="${src}/edu/jas/application" link="application" />
   <symlink resource="${src}/edu/jas/arith"       link="arith" />
@@ -82,7 +82,7 @@
   <delete quiet="true" failonerror="false" file="./util/util" />
   <delete quiet="true" failonerror="false" file="./vector/vector" />
 </target>
- requires ant 1.7 -->
+<!-- requires ant 1.7 -->
 
 
 <target name="usage" >

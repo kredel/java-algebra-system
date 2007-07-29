@@ -88,7 +88,7 @@ class Ideal:
         print "parallel-old %s executed in %s ms" % (th, t); 
         return Ideal(self.ring,"",G);
 
-    def distGB(self,th=2,machine="util/machines.localhost",port=7114):
+    def distGB(self,th=2,machine="examples/machines.localhost",port=7114):
         s = self.pset;
         F = s.list;
         t = System.currentTimeMillis();
