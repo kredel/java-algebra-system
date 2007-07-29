@@ -6,7 +6,7 @@
 from jas import SolvableRing
 from jas import SolvableIdeal
 
-from edu.jas.ring import Ideal
+from edu.jas.application import Ideal
 
 
 # U_sl_2 and WA_1 example

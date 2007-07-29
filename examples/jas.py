@@ -20,8 +20,8 @@ from edu                 import *
 
 from org.apache.log4j import BasicConfigurator;
 
-#def startLog():
-BasicConfigurator.configure();
+def startLog():
+    BasicConfigurator.configure();
 
 
 class Ring:
