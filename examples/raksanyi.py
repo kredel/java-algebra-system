@@ -32,4 +32,6 @@ rg = f.GB();
 print "GB:", rg;
 print;
 
-
+from edu.jas.kern import ComputerThreads;
+ComputerThreads.terminate();
+#sys.exit();

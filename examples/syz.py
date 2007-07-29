@@ -53,8 +53,8 @@ print "seq Output:", rg;
 print;
 
 from edu.jas.module import SyzygyAbstract;
-from edu.jas.module import ModuleList;
 from edu.jas.module import ModGroebnerBaseAbstract;
+from edu.jas.vector import ModuleList;
 
 s = SyzygyAbstract().zeroRelations( rg.list );
 sl = ModuleList(rg.pset.ring,s);

@@ -30,7 +30,7 @@ print "seq Output:", rg;
 print;
 
 from edu.jas.module import SyzygyAbstract;
-from edu.jas.module import ModuleList;
+from edu.jas.vector import ModuleList;
 from edu.jas.module import ModGroebnerBaseAbstract;
 
 s = SyzygyAbstract().zeroRelations( rg.list );

@@ -8,7 +8,7 @@ from jas import SolvableIdeal
 
 from edu.jas.ring   import SolvableGroebnerBaseSeq;
 from edu.jas.poly   import OrderedPolynomialList;
-from edu.jas.module import ModuleList;
+from edu.jas.vector import ModuleList;
 from edu.jas.module import SolvableSyzygyAbstract;
 
 # WA_32 example

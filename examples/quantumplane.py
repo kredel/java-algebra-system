@@ -60,8 +60,8 @@ print;
 
 
 from edu.jas.module import SolvableSyzygyAbstract;
-from edu.jas.module import ModuleList;
 from edu.jas.module import ModSolvableGroebnerBase;
+#from edu.jas.vector import ModuleList;
 
 s = SolvableSyzygyAbstract().leftZeroRelations( ftg.mset );
 #sl = ModuleList(f.pset.vars,f.pset.tord,s,f.pset.table);
