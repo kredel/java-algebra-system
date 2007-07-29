@@ -33,6 +33,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
 
 
     /** The factory for the solvable polynomial ring. 
+     * Hides super.ring.
      */
     public final GenSolvablePolynomialRing< C > ring;
 
