@@ -33,13 +33,14 @@
     </classpath>
   </taskdef>
 
-<target name="vorher" depends="symlinks" >
+<target name="vorher" >
   <!-- set properties DSTAMP, TSTAMP -->
   <tstamp />
   <mkdir dir="edu/jas"  />
   <mkdir dir="${test}"  />
 </target>
 
+<!-- requires ant 1.7 
 <target name="symlinks" depends="symlinks.check" if="checklinks" >
   <symlink resource="${src}/edu/jas/application" link="application" />
   <symlink resource="${src}/edu/jas/arith"       link="arith" />
@@ -70,7 +71,6 @@
    </and>
   </not>
  </condition>
-<!-- need -T option in ln -s -->
   <delete quiet="true" failonerror="false" file="./application/application" />
   <delete quiet="true" failonerror="false" file="./arith/arith" />
   <delete quiet="true" failonerror="false" file="./kern/kern" />
@@ -81,13 +81,8 @@
   <delete quiet="true" failonerror="false" file="./ufd/ufd" />
   <delete quiet="true" failonerror="false" file="./util/util" />
   <delete quiet="true" failonerror="false" file="./vector/vector" />
-<!--
-  <delete quiet="true" >
-    <filelist dir="${build}" 
-              files="application/application arith/arith kern/kern module/module poly/poly ring/ring structure/structure ufd/ufd util/util vector/vector" /> 
-  </delete>
--->
 </target>
+ requires ant 1.7 -->
 
 
 <target name="usage" >

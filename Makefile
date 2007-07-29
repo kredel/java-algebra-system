@@ -241,11 +241,13 @@ clean:
 	rm -f application/application arith/arith kern/kern module/module poly/poly ring/ring structure/structure ufd/ufd util/util vector/vector
 
 
+#svn copy file:///home/SUBVERSION/jas/trunk file:///home/SUBVERSION/jas/tags/$(VERSION)
+
 export:
 	rm -rf ~/jas-versions/$(VERSION)
 	svn export --quiet file:///home/SUBVERSION/jas/trunk ~/jas-versions/$(VERSION)
 	cd ~/jas-versions/; jar -cf $(VERSION)-src.jar $(VERSION)/
-	cd ~/jas-versions/$(VERSION)/; /opt/apache-ant-1.7.0/bin/ant --noconfig compile
+	cd ~/jas-versions/$(VERSION)/; ant compile
 	cd ~/jas-versions/$(VERSION)/; jar -cf ../$(VERSION)-bin.jar edu/
 	cd ~/jas-versions/$(VERSION)/; ant test
 	cd ~/jas-versions/$(VERSION)/; sh ./tests.sh > test.out
