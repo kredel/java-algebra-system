@@ -236,5 +236,6 @@ lint:
 
 clean:
 	find . -name "*~" -follow -print -exec rm {} \;
+	rm -f application/application arith/arith kern/kern module/module poly/poly ring/ring structure/structure ufd/ufd util/util vector/vector
 
 # -eof-
