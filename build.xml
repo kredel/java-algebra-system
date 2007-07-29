@@ -264,10 +264,11 @@
      <fileset dir="." includes="examples/*.py"  />
      <fileset dir="." includes="**/*.jas"  />
      <fileset dir="." includes="build.xml Makefile log4j.properties"  />
-     <fileset dir="edu/jas" />
   </jar>
 </target>
-
+<!--
+     <fileset dir="edu/jas" />
+-->
 <target name="jar07" depends="vorher" >
   <jar jarfile="/tmp/jas-ant-${DSTAMP}.jar"  >
      <fileset dir="." includes="**/*.java" excludes="**/ufd/**" />
