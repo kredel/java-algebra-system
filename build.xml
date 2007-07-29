@@ -256,7 +256,7 @@
   </jdepend>
 </target>
 
-<target name="jar" depends="vorher" >
+<target name="jar" >
   <jar jarfile="/tmp/jas-ant-${DSTAMP}.jar"  >
      <fileset dir="." includes="**/*.java"  />
      <fileset dir="." includes="**/*.html"  />
