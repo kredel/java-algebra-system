@@ -234,10 +234,12 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
            throw new IllegalArgumentException("RelationTable update p|e|f == null");
         }
         if ( debug ) {
-           int t = ring.tord.getDescendComparator().compare(e,f);
-           if ( t >= 0 ) { // check for suitable variable order
-              logger.error("error update e >= f " + e + " " + f);
-              throw new IllegalArgumentException("RelationTable update e >= f " + e + " " + f);
+           if ( ExpVector.EVTDEG(e) == 1 && ExpVector.EVTDEG(f) == 1 ) {
+              int t = ring.tord.getDescendComparator().compare(e,f);
+              if ( t <= 0 ) { // check for suitable variable order
+                 logger.error("error update e >= f " + e + " " + f + " " + ring.tord);
+                 //throw new IllegalArgumentException("RelationTable update e >= f " + e + " " + f + " " + ring.tord);
+              }
            }
            ExpVector ef = e.sum(f);
            ExpVector lp = p.leadingExpVector();
