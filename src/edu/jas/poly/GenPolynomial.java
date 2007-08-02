@@ -509,6 +509,7 @@ public class GenPolynomial<C extends RingElem<C> >
      * @param S GenPolynomial.
      * @return this+S.
      */
+    //public <T extends GenPolynomial<C>> T sum(T /*GenPolynomial<C>*/ S) {
     public GenPolynomial<C> sum(GenPolynomial<C> S) {
         if ( S == null ) {
             return this;

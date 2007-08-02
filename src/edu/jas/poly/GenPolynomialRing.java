@@ -169,13 +169,13 @@ public class GenPolynomialRing<C extends RingElem<C> >
      */
     @Override
     public String toString() {
-        String res = "";
+        String res = null;
         if ( PrettyPrint.isTrue() ) {
-           res = coFac.getClass().getSimpleName();
+           String scf = coFac.getClass().getSimpleName();
            if ( coFac instanceof AlgebraicNumberRing ) {
               AlgebraicNumberRing an = (AlgebraicNumberRing)coFac;  
               String[] v = an.ring.vars;
-              res +=  "[ ("
+              res =  "AN[ ("
                      + an.ring.varsToString()
                      + ") ("
                      + an.toString()
@@ -184,19 +184,23 @@ public class GenPolynomialRing<C extends RingElem<C> >
            if ( coFac instanceof QuotientRing ) {
               QuotientRing rf = (QuotientRing)coFac;  
               String[] v = rf.ring.vars;
-              res +=  "("
+              res =  "RatFunc"
+                     + "{ "
                      + rf.ring.varsToString()
-                     + ") ";
+                     + " } ";
            }
            if ( ((Object)coFac) instanceof ModIntegerRing ) {
               ModIntegerRing mn = (ModIntegerRing)((Object)coFac);  
-              res +=  "[ "
+              res =  "Mod "
                      + mn.getModul()
-                     + " ]";
+                     + " ";
            }
-           res +=   "(" 
+           if ( res == null ) {
+              res = scf;
+           }
+           res +=   "( " 
                   + varsToString()
-                  + ") " 
+                  + " ) " 
                   + tord.toString()
                   + " ";
         } else {
@@ -205,11 +209,24 @@ public class GenPolynomialRing<C extends RingElem<C> >
                  + coFac.getClass().getSimpleName();
            if ( coFac instanceof AlgebraicNumberRing ) {
               AlgebraicNumberRing an = (AlgebraicNumberRing)coFac;  
-              res +=  "[ ("
+              res =  "AN[ ("
                      + an.ring.varsToString()
                      + ") ("
                      + an.modul
                      + ") ]";
+           }
+           if ( coFac instanceof QuotientRing ) {
+              QuotientRing rf = (QuotientRing)coFac;  
+              String[] v = rf.ring.vars;
+              res =  "RatFunc{ "
+                     + rf.ring.varsToString()
+                     + " } ";
+           }
+           if ( ((Object)coFac) instanceof ModIntegerRing ) {
+              ModIntegerRing mn = (ModIntegerRing)((Object)coFac);  
+              res =  "Mod "
+                     + mn.getModul()
+                     + " ";
            }
            res +=  ", " + nvar
                   + ", " + tord.toString()

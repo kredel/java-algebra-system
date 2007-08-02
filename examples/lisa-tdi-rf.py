@@ -22,7 +22,11 @@ rs = """
 #    (b1,b2,b3,b4,b5,b6,c1,c2,c3,c4,c5,c6,E,D1,D2,D3,D4,D5,D6)
 #    G |7|
 
-RatFunc(b1,b2,b3,b4,b5,b6,c1,c2,c3,c4,c5,c6)
+# orig: #
+#RatFunc(b1,b2,b3,b4,b5,b6,c1,c2,c3,c4,c5,c6)
+#       (E,D1,D2,D3,D4,D5,D6)
+
+RatFunc{b1,b2,b3,b4,b5,b6,c1,c2,c3,c4,c5,c6}
        (E,D1,D2,D3,D4,D5,D6)
        G 
 
@@ -64,10 +68,12 @@ ps = """
 """;
 
 f = SolvableIdeal( r, ps );
-print "Ideal: " + str(f);
+print "SolvableIdeal: " + str(f);
 print;
 
-#sys.exit();
+from edu.jas.kern import ComputerThreads;
+ComputerThreads.terminate();
+sys.exit();
 
 from edu.jas.vector import ModuleList;
 from edu.jas.module import SolvableSyzygyAbstract;
@@ -157,3 +163,7 @@ else:
 ##   print "is left module GB";
 ## else:
 ##   print "is not left module GB";
+
+
+from edu.jas.kern import ComputerThreads;
+ComputerThreads.terminate();

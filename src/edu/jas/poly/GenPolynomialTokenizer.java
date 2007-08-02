@@ -500,12 +500,12 @@ public class GenPolynomialTokenizer  {
         int tt;
         tt = tok.nextToken();
         //System.out.println("vList tok = " + tok);
-        if ( tt == '(' ) {
+        if ( tt == '(' || tt == '{') {
             logger.debug("variable list");
             tt = tok.nextToken();
             while ( true ) {
                 if ( tt == StreamTokenizer.TT_EOF ) break;
-                if ( tt == ')' ) break;
+                if ( tt == ')' || tt == '}' ) break;
                 if ( tt == StreamTokenizer.TT_WORD ) {
                     //System.out.println("TT_WORD: " + tok.sval);
                     l.add( tok.sval );
@@ -568,6 +568,11 @@ public class GenPolynomialTokenizer  {
             }
             if ( tok.sval.equalsIgnoreCase("Mod") ) {
                 tt = tok.nextToken();
+                boolean openb = false;
+                if ( tt == '[' ) { // optional
+                    openb = true;
+                    tt = tok.nextToken();
+                }
                 if ( tok.sval != null && tok.sval.length() > 0 ) {
                     if ( digit( tok.sval.charAt(0) ) ) {
                         coeff = new ModIntegerRing(tok.sval);
@@ -577,6 +582,9 @@ public class GenPolynomialTokenizer  {
                     }
                 } else {
                     tok.pushBack();
+                }
+                if ( tt == ']' && openb ) { // optional
+                    tt = tok.nextToken();
                 }
             } else if ( tok.sval.equalsIgnoreCase("RatFunc") ) {
                 String[] rfv = nextVariableList();

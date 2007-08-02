@@ -36,6 +36,7 @@ public interface AbelianGroupElem<C extends AbelianGroupElem<C>>
      * @return this + S.
      */
     public C sum(C S);
+    //public <T extends C> T sum(T S);
 
 
     /**

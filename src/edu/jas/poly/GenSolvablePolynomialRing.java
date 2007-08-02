@@ -154,24 +154,28 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
      */
     @Override
     public String toString() {
-        String res = "";
+        String res = super.toString();
         if ( PrettyPrint.isTrue() ) {
+           /*
            res = coFac.getClass().getSimpleName()
                  + "(" 
                  + varsToString()
                  + ") " 
                  + tord.toString()
-                 + "\n"
-                 + table.toString(vars);
+           */
+           res += "\n"
+                + table.toString(vars);
         } else {
+           /*
            res = this.getClass().getSimpleName() 
                  + "[ " // + coFac.toString() + " : "
                  + coFac.getClass().getSimpleName()
                  + ", " + nvar
                  + ", " + tord.toString()
                  + ", " + varsToString()
-                 + ", #rel = " + table.size()
-                 + " ]";
+            */
+           res += ", #rel = " + table.size();
+           //     + " ]";
         }
         return res;
     }
