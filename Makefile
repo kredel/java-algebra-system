@@ -254,8 +254,11 @@ export:
 	cd ~/jas-versions/$(VERSION)/; ant doc > ant_doc.out
 	cd ~/jas-versions/$(VERSION)/; jar -cf ../$(VERSION)-doc.jar doc/ *.html
 
-xxx:
-	grep committed-rev .svn/entries |head -1|awk -F = '{ print $$2 }'|sed 's/"//g' > make.svnversion
+young:
+	svnlook youngest /home/SUBVERSION/jas > make.svnversion
 	echo svn1 `cat make.svnversion`
+	echo svn2 `svnlook youngest /home/SUBVERSION/jas`
+	REVNO=`svnlook youngest /home/SUBVERSION/jas`
+	echo svn3 $(REVNO)
 
 # -eof-
