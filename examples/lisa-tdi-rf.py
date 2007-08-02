@@ -23,11 +23,16 @@ rs = """
 #    G |7|
 
 # orig: #
-#RatFunc(b1,b2,b3,b4,b5,b6,c1,c2,c3,c4,c5,c6)
-#       (E,D1,D2,D3,D4,D5,D6)
-
-RatFunc{b1,b2,b3,b4,b5,b6,c1,c2,c3,c4,c5,c6}
+RatFunc(b1,b2,b3,b4,b5,b6,c1,c2,c3,c4,c5,c6)
        (E,D1,D2,D3,D4,D5,D6)
+
+# to opt: #
+#RatFunc(b2,c2,b4,c4,b1,b3,b5,b6,c1,c3,c5,c6)
+#       (D1,E,D4,D2,D3,D5,D6)
+
+# to opt rev: #
+#RatFunc(c6,c5,c3,c1,b6,b5,b3,b1,c4,b4,c2,b2)
+#       (D6,D5,D3,D2,D4,E,D1)
        G 
 
 RelationTable
