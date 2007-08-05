@@ -217,7 +217,7 @@ class SolvableIdeal:
         s = self.pset;
         F = s.list;
         t = System.currentTimeMillis();
-        b = SolvableGroebnerBaseSeq().IsightGB(F);
+        b = SolvableGroebnerBaseSeq().isRightGB(F);
         t = System.currentTimeMillis() - t;
         print "executed in %s ms" % t; 
         return b;
