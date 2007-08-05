@@ -17,11 +17,15 @@ from edu.jas.util        import *
 from edu.jas             import *
 from edu                 import *
 #PrettyPrint.setInternal();
+from edu.jas.kern        import ComputerThreads;
 
 from org.apache.log4j import BasicConfigurator;
 
 def startLog():
     BasicConfigurator.configure();
+
+def terminate():
+    ComputerThreads.terminate();
 
 
 class Ring:
@@ -65,6 +69,15 @@ class Ideal:
         t = System.currentTimeMillis() - t;
         print "sequential executed in %s ms" % t; 
         return Ideal(self.ring,"",G);
+
+    def isGB(self):
+        s = self.pset;
+        F = s.list;
+        t = System.currentTimeMillis();
+        b = GroebnerBaseSeq().isGB(F);
+        t = System.currentTimeMillis() - t;
+        print "isGB executed in %s ms" % t; 
+        return b;
 
     def parGB(self,th):
         s = self.pset;
@@ -164,6 +177,15 @@ class SolvableIdeal:
         print "executed in %s ms" % t; 
         return SolvableIdeal(self.ring,"",G);
 
+    def isLeftGB(self):
+        s = self.pset;
+        F = s.list;
+        t = System.currentTimeMillis();
+        b = SolvableGroebnerBaseSeq().isLeftGB(F);
+        t = System.currentTimeMillis() - t;
+        print "executed in %s ms" % t; 
+        return b;
+
     def twosidedGB(self):
         s = self.pset;
         F = s.list;
@@ -173,6 +195,15 @@ class SolvableIdeal:
         print "executed in %s ms" % t; 
         return SolvableIdeal(self.ring,"",G);
 
+    def isTwosidedGB(self):
+        s = self.pset;
+        F = s.list;
+        t = System.currentTimeMillis();
+        b = SolvableGroebnerBaseSeq().isTwosidedGB(F);
+        t = System.currentTimeMillis() - t;
+        print "executed in %s ms" % t; 
+        return b;
+
     def rightGB(self):
         s = self.pset;
         F = s.list;
@@ -181,6 +212,15 @@ class SolvableIdeal:
         t = System.currentTimeMillis() - t;
         print "executed in %s ms" % t; 
         return SolvableIdeal(self.ring,"",G);
+
+    def isRightGB(self):
+        s = self.pset;
+        F = s.list;
+        t = System.currentTimeMillis();
+        b = SolvableGroebnerBaseSeq().IsightGB(F);
+        t = System.currentTimeMillis() - t;
+        print "executed in %s ms" % t; 
+        return b;
 
     def intersect(self,ring):
         s = self.pset;
@@ -254,6 +294,13 @@ class SubModule:
         print "executed in %s ms" % t; 
         return SubModule(self.module,"",G.list);
 
+    def isGB(self):
+        t = System.currentTimeMillis();
+        b = ModGroebnerBaseAbstract().isGB(self.mset);
+        t = System.currentTimeMillis() - t;
+        print "executed in %s ms" % t; 
+        return b;
+
 
 
 class SolvableModule:
@@ -298,6 +345,13 @@ class SolvableSubModule:
         print "executed in %s ms" % t; 
         return SolvableSubModule(self.module,"",G.list);
 
+    def isLeftGB(self):
+        t = System.currentTimeMillis();
+        b = ModSolvableGroebnerBaseAbstract().isLeftGB(self.mset);
+        t = System.currentTimeMillis() - t;
+        print "executed in %s ms" % t; 
+        return b;
+
     def twosidedGB(self):
         t = System.currentTimeMillis();
         G = ModSolvableGroebnerBaseAbstract().twosidedGB(self.mset);
@@ -305,9 +359,23 @@ class SolvableSubModule:
         print "executed in %s ms" % t; 
         return SolvableSubModule(self.module,"",G.list);
 
+    def isTwosidedGB(self):
+        t = System.currentTimeMillis();
+        b = ModSolvableGroebnerBaseAbstract().isTwosidedGB(self.mset);
+        t = System.currentTimeMillis() - t;
+        print "executed in %s ms" % t; 
+        return b;
+
     def rightGB(self):
         t = System.currentTimeMillis();
         G = ModSolvableGroebnerBaseAbstract().rightGB(self.mset);
         t = System.currentTimeMillis() - t;
         print "executed in %s ms" % t; 
         return SolvableSubModule(self.module,"",G.list);
+
+    def isRightGB(self):
+        t = System.currentTimeMillis();
+        b = ModSolvableGroebnerBaseAbstract().isRightGB(self.mset);
+        t = System.currentTimeMillis() - t;
+        print "executed in %s ms" % t; 
+        return b;
