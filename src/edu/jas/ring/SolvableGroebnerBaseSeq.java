@@ -136,7 +136,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>>
                   return G; // since no threads are activated
               }
               if ( debug ) {
-                 logger.debug("H = " + H );
+                 logger.info("H = " + H );
               }
               if ( H.length() > 0 ) {
                  l++;
@@ -286,6 +286,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>>
               }
               H = sred.leftNormalform( rowh, G, S );
               if ( debug ) {
+                 System.out.println("H = " + H);
                  logger.debug("is reduction H = " 
                               + sred.isLeftReductionNF( rowh, G, S, H ) );
               }
