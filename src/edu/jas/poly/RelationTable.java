@@ -236,12 +236,14 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
         }
         if ( debug ) {
            if ( ExpVector.EVTDEG(e) == 1 && ExpVector.EVTDEG(f) == 1 ) {
-              int t = ring.tord.getDescendComparator().compare(e,f);
-              if ( t >= 0 ) { // check for suitable variable order
-                 //System.out.println("warning: update e >= f " + e + " " + f + " " + ring.tord);
+              int[] de = e.dependencyOnVariables();
+              int[] df = f.dependencyOnVariables();
+              System.out.println("update e ? f " + de[0] + " " + df[0]);
+              //int t = ring.tord.getDescendComparator().compare(e,f);
+              //System.out.println("update compare(e,f) = " + t);
+              if ( de[0] >= df[0] ) { // invalid update 
                  logger.error("warning: update e >= f " + e + " " + f + " " + ring.tord);
                  //throw new IllegalArgumentException("RelationTable update e >= f " + e + " " + f + " " + ring.tord);
-                 /*
                  ExpVector tmp = e;
                  e = f;
                  f = tmp;
@@ -249,7 +251,6 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
                  GenPolynomial<C> r = p.subtract( m.getValue(), m.getKey() );
                  r = r.negate();
                  p = (GenSolvablePolynomial<C>)r.sum( m.getValue(), m.getKey() );
-                 */
               }
            }
         }
