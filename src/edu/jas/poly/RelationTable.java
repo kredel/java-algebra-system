@@ -228,6 +228,7 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
     public synchronized void 
            update(ExpVector e, ExpVector f, GenSolvablePolynomial<C> p) {
         if ( debug ) {
+            //System.out.println("new relation = " + e + " .*. " + f + " = " + p);
             logger.info("new relation = " + e + " .*. " + f + " = " + p);
         }
         if ( p == null || e == null || f == null ) {
@@ -237,9 +238,10 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
            if ( ExpVector.EVTDEG(e) == 1 && ExpVector.EVTDEG(f) == 1 ) {
               int t = ring.tord.getDescendComparator().compare(e,f);
               if ( t >= 0 ) { // check for suitable variable order
-                 System.out.println("warning: update e >= f " + e + " " + f + " " + ring.tord);
+                 //System.out.println("warning: update e >= f " + e + " " + f + " " + ring.tord);
                  logger.error("warning: update e >= f " + e + " " + f + " " + ring.tord);
                  //throw new IllegalArgumentException("RelationTable update e >= f " + e + " " + f + " " + ring.tord);
+                 /*
                  ExpVector tmp = e;
                  e = f;
                  f = tmp;
@@ -247,20 +249,21 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
                  GenPolynomial<C> r = p.subtract( m.getValue(), m.getKey() );
                  r = r.negate();
                  p = (GenSolvablePolynomial<C>)r.sum( m.getValue(), m.getKey() );
+                 */
               }
            }
-           ExpVector ef = e.sum(f);
-           ExpVector lp = p.leadingExpVector();
-           if ( ! ef.equals(lp) ) { // check for suitable term order
-              logger.error("relation term order = " + ring.tord);
-              throw new IllegalArgumentException("RelationTable update e*f != lt(p)");
-           }
+        }
+        ExpVector ef = e.sum(f);
+        ExpVector lp = p.leadingExpVector();
+        if ( ! ef.equals(lp) ) { // check for suitable term order
+           logger.error("relation term order = " + ring.tord);
+           throw new IllegalArgumentException("RelationTable update e*f != lt(p)");
         }
         List<Integer> key = makeKey(e,f);
-        if ( key.size() >= 0 ) {
-           System.out.println("key = " + key);
-        }
         ExpVectorPair evp = new ExpVectorPair( e, f );
+        if ( key.size() != 2 ) {
+           System.out.println("key = " + key + ", evp = " + evp);
+        }
         List part = table.get( key );
         if ( part == null ) { // initialization only
            part = new LinkedList();
@@ -458,11 +461,15 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
             return;
         }
         // assert this.size() == 0
+        if ( table.size() != 0 ) {
+           logger.error("reverse table not empty");         
+        }
         int k = -1;
         if ( ring.tord.getEvord2() != 0 && ring.partial ) {
            k = ring.tord.getSplit();
         }
-        //logger.info("k split = " + k );
+        logger.debug("k split = " + k );
+        //System.out.println("k split = " + k );
         for ( List<Integer> key: tab.table.keySet() ) { 
             List val = tab.table.get( key );
             for ( Iterator jt = val.iterator(); jt.hasNext(); ) { 
@@ -493,10 +500,12 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
                    fx = f.reverse(); 
                 }
                 px = (GenSolvablePolynomial<C>)p.reverse(ring);
+                //System.out.println("change = " + change );
                 if ( ! change ) {
                    this.update( e, f, px ); // same order
                 } else {
                    this.update( fx, ex, px ); // opposite order
+                   //this.update( ex, fx, px ); // same order
                 }
             }
         }
