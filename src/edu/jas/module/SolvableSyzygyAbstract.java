@@ -683,7 +683,6 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
            return Z;
         }
         GenSolvablePolynomialRing<C> rring = ring.reverse(true);
-        ring = rring.reverse(true);
         GenSolvablePolynomial<C> q;
         List<GenSolvablePolynomial<C>> rF;
            rF = new ArrayList<GenSolvablePolynomial<C>>( F.size() );
@@ -699,6 +698,15 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
            System.out.println("reversed problem = " + pl);
         }
         List<List<GenSolvablePolynomial<C>>> rZ = leftZeroRelationsArbitrary(modv,rF);
+        if ( debug ) {
+           boolean isit = isLeftZeroRelation(rZ,rF);
+           logger.debug("isLeftZeroRelation = " + isit);
+        }
+        GenSolvablePolynomialRing<C> oring = rring.reverse(true);
+        if ( debug ) {
+           logger.debug("ring == oring: " + ring.equals(oring) );
+        }
+        ring = oring;
         Z = new ArrayList<List<GenSolvablePolynomial<C>>>( rZ.size() );
         for ( List<GenSolvablePolynomial<C>> z : rZ ) {
             if ( z == null ) {
