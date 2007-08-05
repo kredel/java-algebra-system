@@ -41,9 +41,10 @@ xs = """
 #       (D6,D5,D3,D2,D4,E,D1)
 
 rs = """
-# orig, base to opt: #
+# to opt, base to opt: #
 RatFunc(b2,c2,b4,c4,b1,b3,b5,b6,c1,c3,c5,c6)
-       (E,D1,D2,D3,D4,D5,D6)
+#       (D6,D5,D3,D2,D4,E,D1)
+       (D1,E,D4,D2,D3,D5,D6)
        G 
 
 RelationTable
