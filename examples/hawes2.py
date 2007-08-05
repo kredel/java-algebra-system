@@ -21,6 +21,7 @@ import sys;
 from jas import Ring
 from jas import Ideal
 from jas import startLog
+from jas import terminate
 
 #startLog();
 
@@ -49,7 +50,10 @@ rg = f.GB();
 print "GB:", rg;
 print;
 
-from edu.jas.kern import ComputerThreads;
-ComputerThreads.terminate();
+bg = rg.isGB();
+print "isGB:", bg;
+print;
+
+terminate();
 #sys.exit();
 
