@@ -407,14 +407,16 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
                rF.add( q );
             }
         }
-        if ( debug ) {
+        if ( true || debug ) {
            PolynomialList<C> pl = new PolynomialList<C>(rring,rF);
            logger.info("reversed problem = " + pl);
         }
         List<GenSolvablePolynomial<C>> rG = leftGB( modv, rF );
-        if ( debug ) {
+        if ( true || debug ) {
            PolynomialList<C> pl = new PolynomialList<C>(rring,rG);
            logger.info("reversed GB = " + pl);
+           boolean isit = isLeftGB( rG );
+           logger.info("is GB = " + isit);
         }
         List<GenSolvablePolynomial<C>> G;
            G = new ArrayList<GenSolvablePolynomial<C>>( rG.size() );
