@@ -232,7 +232,7 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
             logger.info("new relation = " + e + " .*. " + f + " = " + p);
         }
         if ( p == null || e == null || f == null ) {
-           throw new IllegalArgumentException("RelationTable update p|e|f == null");
+           throw new IllegalArgumentException("RelationTable update e|f|p == null");
         }
         if ( debug ) {
            if ( ExpVector.EVTDEG(e) == 1 && ExpVector.EVTDEG(f) == 1 ) {
@@ -241,9 +241,11 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
               System.out.println("update e ? f " + de[0] + " " + df[0]);
               //int t = ring.tord.getDescendComparator().compare(e,f);
               //System.out.println("update compare(e,f) = " + t);
-              if ( de[0] >= df[0] ) { // invalid update 
-                 logger.error("warning: update e >= f " + e + " " + f + " " + ring.tord);
-                 //throw new IllegalArgumentException("RelationTable update e >= f " + e + " " + f + " " + ring.tord);
+              if ( de[0] == df[0] ) { // error 
+                 throw new IllegalArgumentException("RelationTable update e==f");
+              }
+              if ( de[0] > df[0] ) { // invalid update 
+                 logger.error("warning: update e > f " + e + " " + f + " changed");
                  ExpVector tmp = e;
                  e = f;
                  f = tmp;
