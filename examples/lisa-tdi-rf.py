@@ -6,6 +6,7 @@ import sys;
 from jas import SolvableRing
 from jas import SolvableIdeal
 from jas import startLog
+from jas import terminate
 
 startLog();
 
@@ -13,7 +14,9 @@ startLog();
 # solvable module example
 # 2^60-93 = 1152921504606846883
 
-rs = """
+xs = """
+""";
+
 #solvable example
 # Di E = E Di
 # Dj * Di = Di Dj + bi cj E - bj ci E
@@ -30,12 +33,17 @@ rs = """
 #       (E,D1,D2,D3,D4,D5,D6)
 
 # to opt: #
-RatFunc(b2,c2,b4,c4,b1,b3,b5,b6,c1,c3,c5,c6)
-       (D1,E,D4,D2,D3,D5,D6)
+#RatFunc(b2,c2,b4,c4,b1,b3,b5,b6,c1,c3,c5,c6)
+#       (D1,E,D4,D2,D3,D5,D6)
 
 # to opt rev: #
 #RatFunc(c6,c5,c3,c1,b6,b5,b3,b1,c4,b4,c2,b2)
 #       (D6,D5,D3,D2,D4,E,D1)
+
+rs = """
+# orig, base to opt: #
+RatFunc(b2,c2,b4,c4,b1,b3,b5,b6,c1,c3,c5,c6)
+       (E,D1,D2,D3,D4,D5,D6)
        G 
 
 RelationTable
@@ -79,9 +87,16 @@ f = SolvableIdeal( r, ps );
 print "SolvableIdeal: " + str(f);
 print;
 
-#from edu.jas.kern import ComputerThreads;
-#ComputerThreads.terminate();
-#sys.exit();
+rg = f.rightGB();
+print "rightGB:", rg;
+print;
+
+brg = rg.isRightGB();
+print "is rightGB:", brg;
+print;
+
+terminate();
+sys.exit();
 
 from edu.jas.vector import ModuleList;
 from edu.jas.module import SolvableSyzygyAbstract;
@@ -112,8 +127,7 @@ if mz:
 else:
   print "not all right syzygies";
 
-from edu.jas.kern import ComputerThreads;
-ComputerThreads.terminate();
+terminate();
 sys.exit();
 
 ## t = System.currentTimeMillis();
@@ -175,5 +189,4 @@ else:
 ##   print "is not left module GB";
 
 
-from edu.jas.kern import ComputerThreads;
-ComputerThreads.terminate();
+terminate();
