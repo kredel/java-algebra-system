@@ -182,6 +182,7 @@ public class GCDProxy<C extends GcdRingElem<C>>
                  );
         
          try {
+             // System.out.println("invokeAny");
              g = pool.invokeAny( cs );
          } catch (InterruptedException ignored) { 
              logger.info("InterruptedException " + ignored);
