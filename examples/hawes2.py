@@ -20,6 +20,9 @@ import sys;
 
 from jas import Ring
 from jas import Ideal
+from jas import startLog
+
+#startLog();
 
 # Hawes & Gibson example 2
 # rational function coefficients

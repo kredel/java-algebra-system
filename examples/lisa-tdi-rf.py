@@ -5,6 +5,9 @@ import sys;
 
 from jas import SolvableRing
 from jas import SolvableIdeal
+from jas import startLog
+
+startLog();
 
 # LISA TDI computation
 # solvable module example
@@ -23,12 +26,12 @@ rs = """
 #    G |7|
 
 # orig: #
-RatFunc(b1,b2,b3,b4,b5,b6,c1,c2,c3,c4,c5,c6)
-       (E,D1,D2,D3,D4,D5,D6)
+#RatFunc(b1,b2,b3,b4,b5,b6,c1,c2,c3,c4,c5,c6)
+#       (E,D1,D2,D3,D4,D5,D6)
 
 # to opt: #
-#RatFunc(b2,c2,b4,c4,b1,b3,b5,b6,c1,c3,c5,c6)
-#       (D1,E,D4,D2,D3,D5,D6)
+RatFunc(b2,c2,b4,c4,b1,b3,b5,b6,c1,c3,c5,c6)
+       (D1,E,D4,D2,D3,D5,D6)
 
 # to opt rev: #
 #RatFunc(c6,c5,c3,c1,b6,b5,b3,b1,c4,b4,c2,b2)
@@ -76,9 +79,9 @@ f = SolvableIdeal( r, ps );
 print "SolvableIdeal: " + str(f);
 print;
 
-from edu.jas.kern import ComputerThreads;
-ComputerThreads.terminate();
-sys.exit();
+#from edu.jas.kern import ComputerThreads;
+#ComputerThreads.terminate();
+#sys.exit();
 
 from edu.jas.vector import ModuleList;
 from edu.jas.module import SolvableSyzygyAbstract;
@@ -98,7 +101,6 @@ print "#rightSyzygy for f = ", s.size();
 print "#rightSyzygy[0] for f = ", s[0].size();
 print;
 
-sys.exit();
 
 t = System.currentTimeMillis();
 mz = SolvableSyzygyAbstract().isRightZeroRelation(sr.list,f.list);
@@ -110,6 +112,9 @@ if mz:
 else:
   print "not all right syzygies";
 
+from edu.jas.kern import ComputerThreads;
+ComputerThreads.terminate();
+sys.exit();
 
 ## t = System.currentTimeMillis();
 ## s = SolvableSyzygyAbstract().leftZeroRelationsArbitrary( f.list );
