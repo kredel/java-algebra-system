@@ -246,6 +246,7 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
     public boolean 
            isRightZeroRelation(List<List<GenSolvablePolynomial<C>>> Z, 
                                List<GenSolvablePolynomial<C>> F) {  
+        boolean isit = true;
         for ( List<GenSolvablePolynomial<C>> row : Z ) {
             GenSolvablePolynomial<C> p = sblas.leftScalarProduct(F,row); // param order
             if ( p == null ) { 
@@ -253,10 +254,11 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
             }
             if ( ! p.isZERO() ) {
                 logger.info("is not ZeroRelation = " + p);
+                isit = false;
                 return false;
             }
         }
-        return true;
+        return isit; //true;
     }
 
 
