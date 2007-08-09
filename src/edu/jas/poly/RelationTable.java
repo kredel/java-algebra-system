@@ -238,7 +238,7 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
            if ( ExpVector.EVTDEG(e) == 1 && ExpVector.EVTDEG(f) == 1 ) {
               int[] de = e.dependencyOnVariables();
               int[] df = f.dependencyOnVariables();
-              System.out.println("update e ? f " + de[0] + " " + df[0]);
+              logger.debug("update e ? f " + de[0] + " " + df[0]);
               //int t = ring.tord.getDescendComparator().compare(e,f);
               //System.out.println("update compare(e,f) = " + t);
               if ( de[0] == df[0] ) { // error 
