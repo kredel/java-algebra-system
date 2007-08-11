@@ -9,8 +9,8 @@ package edu.jas.ufd;
 import org.apache.log4j.Logger;
 
 import edu.jas.structure.GcdRingElem;
+
 import edu.jas.poly.GenPolynomial;
-//import edu.jas.poly.ExpVector;
 import edu.jas.poly.PolyUtil;
 
 
@@ -47,9 +47,6 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C> >
         if ( P.ring.nvar > 1 ) {
            throw new RuntimeException(this.getClass().getName()
                                        + " no univariate polynomial");
-           //logger.info("pseudoGcd only for univaraite polynomials");
-           // guess
-           //return P.ring.getONE();
         }
         boolean field = P.ring.coFac.isField();
         long e = P.degree(0);
@@ -89,7 +86,6 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C> >
         GenPolynomial<C> x;
         while ( !r.isZERO() ) {
             x = PolyUtil.<C>basePseudoRemainder(q,r);
-            //System.out.println("x  = " + x);
             q = r;
             if ( field ) {
                r = x.monic();
@@ -98,7 +94,6 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C> >
             }
         }
         q = basePrimitivePart( q );
-        //System.out.println("q  = " + q);
         return (q.multiply(c)).abs(); 
     }
 
@@ -147,8 +142,6 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C> >
         }
         GenPolynomial<C> a = recursiveContent(r);
         GenPolynomial<C> b = recursiveContent(q);
-        //System.out.println("rgcd a = " + a);
-        //System.out.println("rgcd b = " + b);
 
         GenPolynomial<C> c = gcd(a,b); // go to recursion
         //System.out.println("rgcd c = " + c);
@@ -160,26 +153,17 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C> >
         if ( q.isONE() ) {
            return q.multiply(c);
         }
-        //System.out.println("rgcd q = " + q);
-        //System.out.println("rgcd r = " + r);
-        if ( false && debug ) {
-            System.out.println("rgcd r.a = " + r.multiply(a));
-            System.out.println("rgcd q.b = " + q.multiply(b));
-        }
         GenPolynomial<GenPolynomial<C>> x;
         while ( !r.isZERO() ) {
             x = PolyUtil.<C>recursivePseudoRemainder(q,r);
-            //System.out.println("rgcd x = " + x);
             q = r;
             if ( field ) {
                r = PolyUtil.<C>monic(x);
             } else {
                r = x;
             }
-            //System.out.println("rgcd r = " + r);
         }
         q = recursivePrimitivePart( q );
-        //System.out.println(" q = " + q);
         q = q.abs().multiply(c);
         return q; 
     }

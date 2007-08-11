@@ -9,8 +9,8 @@ package edu.jas.ufd;
 import org.apache.log4j.Logger;
 
 import edu.jas.structure.GcdRingElem;
+
 import edu.jas.poly.GenPolynomial;
-//import edu.jas.poly.ExpVector;
 import edu.jas.poly.PolyUtil;
 
 
@@ -45,9 +45,6 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C> >
         if ( P.ring.nvar > 1 ) {
            throw new RuntimeException(this.getClass().getName()
                                        + " no univariate polynomial");
-           //logger.info("pseudoGcd only for univaraite polynomials");
-           // guess
-           //return P.ring.getONE();
         }
         long e = P.degree(0);
         long f = S.degree(0);
@@ -79,11 +76,9 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C> >
         GenPolynomial<C> x;
         while ( !r.isZERO() ) {
             x = PolyUtil.<C>basePseudoRemainder(q,r);
-            //System.out.println("x  = " + x);
             q = r;
             r = basePrimitivePart( x );
         }
-        //System.out.println("q  = " + q);
         return (q.multiply(c)).abs(); 
     }
 
@@ -124,12 +119,8 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C> >
         }
         r = r.abs();
         q = q.abs();
-        //System.out.println("rgcd r = " + r);
-        //System.out.println("rgcd q = " + q);
         GenPolynomial<C> a = recursiveContent(r);
         GenPolynomial<C> b = recursiveContent(q);
-        //System.out.println("rgcd a = " + a);
-        //System.out.println("rgcd b = " + b);
 
         GenPolynomial<C> c = gcd(a,b); // go to recursion
         //System.out.println("rgcd c = " + c);
@@ -141,27 +132,13 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C> >
         if ( q.isONE() ) {
            return q.multiply(c);
         }
-        //System.out.println("rgcd q = " + q);
-        //System.out.println("rgcd r = " + r);
-        if ( debug && ( q.isConstant() || r.isConstant() ) ) {
-           System.out.println("rgcd q = " + q);
-           System.out.println("rgcd r = " + r);
-           throw new RuntimeException(this.getClass().getName()
-                                       + " error in recursive Content");
-        }
-
         GenPolynomial<GenPolynomial<C>> x;
         while ( !r.isZERO() ) {
             x = PolyUtil.<C>recursivePseudoRemainder(q,r);
             //System.out.println("rgcd x = " + x);
-            //if ( !x.isZERO() && x.isConstant() ) {
-            //   System.out.println("rpg x = is constant " + x);
-            //}
             q = r;
             r = recursivePrimitivePart( x );
-            //System.out.println("rgcd r = " + r);
         }
-        //System.out.println("sign q = " + q.signum());
         return q.abs().multiply(c); //.abs();
     }
 

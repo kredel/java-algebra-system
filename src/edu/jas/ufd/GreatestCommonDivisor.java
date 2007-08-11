@@ -37,7 +37,6 @@ public interface GreatestCommonDivisor<C extends GcdRingElem<C> > {
 
     /**
      * GenPolynomial content.
-     * Entry driver method.
      * @param P GenPolynomial.
      * @return cont(P).
      */
@@ -46,7 +45,6 @@ public interface GreatestCommonDivisor<C extends GcdRingElem<C> > {
 
     /**
      * GenPolynomial primitive part.
-     * Entry driver method.
      * @param P GenPolynomial.
      * @return pp(P).
      */
@@ -55,7 +53,6 @@ public interface GreatestCommonDivisor<C extends GcdRingElem<C> > {
 
     /**
      * GenPolynomial greatest comon divisor.
-     * Main entry driver method.
      * @param P GenPolynomial.
      * @param S GenPolynomial.
      * @return gcd(P,S).
@@ -65,7 +62,6 @@ public interface GreatestCommonDivisor<C extends GcdRingElem<C> > {
 
     /**
      * GenPolynomial least comon multiple.
-     * Main entry driver method.
      * @param P GenPolynomial.
      * @param S GenPolynomial.
      * @return lcm(P,S).
@@ -75,7 +71,6 @@ public interface GreatestCommonDivisor<C extends GcdRingElem<C> > {
 
     /**
      * GenPolynomial resultant.
-     * Main entry driver method.
      * @param P GenPolynomial.
      * @param S GenPolynomial.
      * @return res(P,S).
@@ -85,7 +80,6 @@ public interface GreatestCommonDivisor<C extends GcdRingElem<C> > {
 
     /**
      * GenPolynomial greatest squarefree divisor.
-     * Entry driver method.
      * @param P GenPolynomial.
      * @return squarefree(P).
      */
@@ -94,7 +88,6 @@ public interface GreatestCommonDivisor<C extends GcdRingElem<C> > {
 
     /**
      * GenPolynomial squarefree factorization.
-     * Entry driver method.
      * @param P GenPolynomial.
      * @return squarefreeFactors(P).
      */

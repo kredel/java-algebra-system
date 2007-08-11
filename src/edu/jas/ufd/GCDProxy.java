@@ -7,27 +7,23 @@ package edu.jas.ufd;
 
 import java.util.List;
 import java.util.ArrayList;
-//import java.util.Map;
+
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.CancellationException;
-//import java.util.concurrent.Executors;
+//import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
+//import java.util.concurrent.Future;
 import java.util.concurrent.Callable;
 
 import org.apache.log4j.Logger;
 
-//import edu.jas.structure.RingElem;
 import edu.jas.structure.GcdRingElem;
-//import edu.jas.structure.RingFactory;
 
-//import edu.jas.kern.PreemptingException;
 import edu.jas.kern.ComputerThreads;
 
 import edu.jas.poly.GenPolynomial;
 
-import edu.jas.ufd.GreatestCommonDivisor;
-import edu.jas.ufd.GreatestCommonDivisorAbstract;
+//import edu.jas.ufd.GreatestCommonDivisor;
+//import edu.jas.ufd.GreatestCommonDivisorAbstract;
 //import edu.jas.ufd.GreatestCommonDivisorSubres;
 //import edu.jas.ufd.GreatestCommonDivisorPrimitive;
 //import edu.jas.ufd.GreatestCommonDivisorModular;
@@ -87,27 +83,6 @@ public class GCDProxy<C extends GcdRingElem<C>>
      }                                              
 
 
-    /*
-     * Terminate proxy.
-     * no more required.
-     public void terminate() {
-         if ( pool == null ) {
-            logger.info("already terminated");
-            return;
-         }
-	 // synchronized( pool ) {
-            List<Runnable> r = pool.shutdownNow();
-            if ( r.size() != 0 ) {
-               // throw new RuntimeException("there are unfinished tasks " + r);
-               // System.out.println("there are " + r.size() + " unfinished tasks ");
-               logger.info("there are " + r.size() + " unfinished tasks ");
-            }
-	    pool = null;
-	 //}
-     }
-     */
-
-
     /** Get the String representation as RingFactory.
      * @see java.lang.Object#toString()
      */
@@ -154,11 +129,9 @@ public class GCDProxy<C extends GcdRingElem<C>>
      */
      public GenPolynomial<C> gcd( final GenPolynomial<C> P, final GenPolynomial<C> S ) {
          GenPolynomial<C> g = null;
-
          Callable<GenPolynomial<C>> c0;
          Callable<GenPolynomial<C>> c1;
          List<Callable<GenPolynomial<C>>> cs = new ArrayList<Callable<GenPolynomial<C>>>(2);
-         
          cs.add( new Callable<GenPolynomial<C>>() {
                      public GenPolynomial<C> call() {
                          GenPolynomial<C> g = e1.gcd(P,S);
@@ -169,7 +142,6 @@ public class GCDProxy<C extends GcdRingElem<C>>
                      }
                  }
                  );
-
          cs.add( new Callable<GenPolynomial<C>>() {
                      public GenPolynomial<C> call() {
                          GenPolynomial<C> g = e2.gcd(P,S);
@@ -180,9 +152,7 @@ public class GCDProxy<C extends GcdRingElem<C>>
                      }
                  }
                  );
-        
          try {
-             // System.out.println("invokeAny");
              g = pool.invokeAny( cs );
          } catch (InterruptedException ignored) { 
              logger.info("InterruptedException " + ignored);
@@ -201,7 +171,6 @@ public class GCDProxy<C extends GcdRingElem<C>>
      * @param P GenPolynomial.
      * @param S GenPolynomial.
      * @return gcd(P,S).
-     */
      public GenPolynomial<C> gcdOld( final GenPolynomial<C> P, final GenPolynomial<C> S ) {
          GenPolynomial<C> g = null;
 
@@ -219,17 +188,16 @@ public class GCDProxy<C extends GcdRingElem<C>>
                                }
                            }
                          );
-
          while ( g == null ) {
              try {
-                 if ( g == null && f0.isDone() /*&& ! f0.isCancelled()*/ ) {
+                 if ( g == null && f0.isDone() && ! f0.isCancelled() ) {
                     g = f0.get(); 
                     f1.cancel(true);
                     if ( debug ) {
                        logger.info("GCDProxy done e1 " + e1);
                     }
                  }
-                 if ( g == null && f1.isDone() /*&& ! f1.isCancelled()*/ ) {
+                 if ( g == null && f1.isDone() && ! f1.isCancelled() ) {
                     g = f1.get(); 
                     f0.cancel(true);
                     if ( debug ) {
@@ -252,5 +220,6 @@ public class GCDProxy<C extends GcdRingElem<C>>
          }
          return g;
      }
+     */
 
 }
