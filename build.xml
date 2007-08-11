@@ -232,6 +232,25 @@
   </junit>
 </target>
 
+<target name="testufd" 
+        depends="vorher" >
+  <!-- works with apache ant download -->
+  <!-- does not work with suse ant, optional for junit missing -->
+  <!-- ok in 2004 09 -->
+  <junit printsummary="yes" 
+         fork="yes" 
+         showoutput="yes"
+         haltonfailure="no" >
+     <classpath path="${cp}" />
+     <formatter type="plain" /> <!-- plain, xml, brief -->
+     <batchtest todir="${test}" >
+        <fileset dir="${build}">
+          <include name="edu/jas/ufd/*Test.class"/>
+        </fileset>
+     </batchtest>
+  </junit>
+</target>
+
 <target name="lint" depends="vorher" >
   <lint4j sourcepath="${src}" 
           classpath="${cp}:${jar}"
