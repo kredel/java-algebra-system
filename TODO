@@ -32,9 +32,15 @@
 - refactor ExpVector for different array element types
 
 
-- define power(n) in RingElem and implement in edu.jas.structure.Power and classes, done
 
-- refactor Hensel lifting to ufd package, not possible because of coefficient replacement trick
+- implement term order optimization from MAS, also for coefficients 
+  and solvable polynomials
+
+- define power(n) in RingElem and implement in edu.jas.structure.Power 
+  and classes, done
+
+- refactor Hensel lifting to ufd package, not possible because of 
+  coefficient replacement trick
 
 - check correct term order in recursive algorithms,
   in GCD ModEval only univariate cases are used, so term order is not a problem
