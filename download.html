@@ -13,14 +13,22 @@
 <h2>Download jar-files</h2>
 
 <ul>
-<li><p>The JAS jar-file <code>jas.jar</code>
+<li><p>This is JAS version: @VERSION@, subversion release: @SVNREV@.
+    </p>
+</li>
+<li><p>The JAS classes jar-file 
+    <a href="@VERSION@.@SVNREV@-bin.jar">@VERSION@.@SVNREV@-bin.jar</a>
     can be used the same way as any other Java archive during 
-    compilation and execution of Java programms.
+    compilation and execution of your Java programms.
     <br />
-    <a href="jas.jar">jas.jar</a> current version for JDK 1.6. 
+    The source code is in 
+    <a href="@VERSION@.@SVNREV@-src.jar">@VERSION@.@SVNREV@-src.jar</a> 
+    current version for JDK 1.6.  
     (right click on the link and chose "save link as")
     <br />
-    <a href="jas-doc.jar">jas-doc.jar</a> Javadoc for current version.
+    The Javadoc API documentation is in 
+    <a href="@VERSION@.@SVNREV@-doc.jar">@VERSION@.@SVNREV@-doc.jar</a> 
+    for current version.
     </p>
 </li>
 <li><p>Required libraries: 
@@ -29,11 +37,8 @@
     <br />
     <a href="lib/junit.jar">lib/junit.jar</a> (from Junit),
     <br />
-    <a href="lib/tnj.jar">lib/tnj.jar</a> (for Thread and Network Programming).
-    <br />
     In case you have the first two ones, just ensure they are in the 
     correct location (e.g. <code>./lib/</code>).
-    The last one you most likely do not have and you must download it.
     </p>
 </li>
 <li><p>Old versions of the JAS jar-file: 
@@ -41,6 +46,11 @@
     <a href="../jas.j15/jas.jar">jas.jar</a> version for JDK 1.5. 
     <br />
     <a href="../jas.j14/jas.jar">jas.jar</a> version for JDK 1.4. 
+    <br />
+    You also need the following library
+    <a href="lib/tnj.jar">lib/tnj.jar</a> (for Thread and Network Programming).
+    You most likely do not have it and you must download it.
+    </p>
 </li>
 </ul>
 
@@ -53,7 +63,7 @@
 </li>
 <li><p>If you want to develop with JAS, then extract the 
      jar-file in a new directory
-     <code>jat -xvf jas.jar</code>
+     <code>jar -xvf jas-[version]-src.jar</code>
     </p>
 </li>
 <li><p>Among the extracted files, there is an Ant build script
@@ -120,7 +130,7 @@
 
 <ul>
 <li><p>The JAS documentation is contained in the jar files 
-    <code>jas.jar</code> and <code>jas-doc.jar</code>. 
+    <code>jas-[version]-src.jar</code> and <code>jas-[version]-doc.jar</code>. 
     Extract the jar files and start exploring with any browser
     from the <code>index.html</code> file in the main directory.
     </p>
@@ -179,11 +189,11 @@
 <p>
 <!-- Created: Sat Mar 19 21:44:14 CET 2005 -->
 <!-- hhmts start -->
-Last modified: Sun Jun  3 14:35:16 CEST 2007
+Last modified: Sun Aug 12 19:39:04 CEST 2007
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
-$Id: intro.html 1116 2007-06-02 12:44:04Z kredel $
+$Id: $
 </p-->
   </body>
 </html>
