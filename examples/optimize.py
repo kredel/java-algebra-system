@@ -17,7 +17,7 @@ from jas import startLog
 #r = Ring( "Z(U3,U4,A46) L" );
 #r = Ring( "C(U3,U4,A46) L" );
 
-r = Ring( "Rat(U3,U4,A46) L" );
+r = Ring( "Rat(U3,U4,A46) G" );
 print "Ring: " + str(r);
 print;
 
