@@ -183,6 +183,7 @@ public class TermOrderOptimization {
 
     /**
      * Permutation of an array.
+     * Compiles, but does not work, requires JDK 1.6 to work.
      * @param a array.
      * @param P permutation.
      * @return P(a).
@@ -193,7 +194,30 @@ public class TermOrderOptimization {
         if ( a == null || a.length <= 1 ) {
            return a;
         }
-        T[] b = (T[]) new Object[a.length];        // jdk 1.5
+        T[] b = (T[]) new Object[a.length];    // jdk 1.5, does not work
+        //T[] b = Arrays.<T>copyOf( a, a.length ); // jdk 1.6, works
+        int j = 0;
+        for ( Integer i : P ) {
+            b[j] = a[ (int)i ];
+            j++;
+        }
+        return b;
+    }
+
+
+    /**
+     * Permutation of an array.
+     * @param a array.
+     * @param P permutation.
+     * @return P(a).
+     */
+    public static
+       String[]
+       stringArrayPermutation( List<Integer> P, String[] a ) {
+        if ( a == null || a.length <= 1 ) {
+           return a;
+        }
+        String[] b = new String[a.length];    // jdk 1.5
         //T[] b = Arrays.<T>copyOf( a, a.length ); // jdk 1.6
         int j = 0;
         for ( Integer i : P ) {
@@ -321,7 +345,7 @@ public class TermOrderOptimization {
            }
            tord = new TermOrder( w );
         }
-        String[] vars = TermOrderOptimization.<String>arrayPermutation( P, R.vars );
+        String[] vars = stringArrayPermutation( P, R.vars );
         S = new GenPolynomialRing<C>( R.coFac, R.nvar, tord, vars );
         return S;
     }
