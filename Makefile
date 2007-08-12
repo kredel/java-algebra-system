@@ -256,11 +256,11 @@ export:
 	cd ~/jas-versions/$(VERSION)/; sh ./tests.sh > test.out
 	cd ~/jas-versions/$(VERSION)/; ant doc > ant_doc.out
 	cd ~/jas-versions/$(VERSION)/; jar -cf ../$(VERSION).`$(SVNREV)`-doc.jar doc/ *.html
-	cp ~/jas-versions/$(VERSION).`$(SVNREV)`-*.jar ~/jas-versions/$(VERSION).`$(SVNREV)`/
+	mv ~/jas-versions/$(VERSION).`$(SVNREV)`-*.jar ~/jas-versions/$(VERSION)/
 
 deploy:
 	$(RSYNC) --delete --exclude=DTD --exclude=lisa* --exclude=*xml ~/jas-versions/$(VERSION)/ krum:htdocs/$(VERSION)
-#	$(RSYNC) ~/jas-versions/$(VERSION).`$(SVNREV)`-*.jar krum:htdocs/$(VERSION)
+
 
 young:
 	svnlook youngest /home/SUBVERSION/jas > make.svnversion
