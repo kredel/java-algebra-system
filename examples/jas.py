@@ -132,6 +132,12 @@ class Ideal:
         N = jas.ring.Ideal(s).intersect(ring.ring);
         return Ideal(self.ring,"",N.getList());
 
+    def optimize(self):
+        p = self.pset;
+        o = TermOrderOptimization.optimizeTermOrder(p);
+        r = Ring("",o.ring);
+        return Ideal(r,"",o.list);
+
 
 class SolvableRing:
 
