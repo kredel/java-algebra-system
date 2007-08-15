@@ -138,6 +138,12 @@ class Ideal:
         r = Ring("",o.ring);
         return Ideal(r,"",o.list);
 
+    def optimizeCoeff(self):
+        p = self.pset;
+        o = TermOrderOptimization.optimizeTermOrderOnCoefficients(p);
+        r = Ring("",o.ring);
+        return Ideal(r,"",o.list);
+
 
 class SolvableRing:
 
