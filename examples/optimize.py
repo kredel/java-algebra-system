@@ -11,12 +11,6 @@ from jas import startLog
 
 # example from rose (modified)
 
-#r = Ring( "Mod 19 (U3,U4,A46) L" );
-#r = Ring( "Mod 1152921504606846883 (U3,U4,A46) L" ); # 2^60-93
-#r = Ring( "Quat(U3,U4,A46) L" );
-#r = Ring( "Z(U3,U4,A46) L" );
-#r = Ring( "C(U3,U4,A46) L" );
-
 r = Ring( "Rat(U3,U4,A46) G" );
 print "Ring: " + str(r);
 print;
