@@ -7,6 +7,9 @@ package edu.jas.poly;
 import java.util.Map;
 //import java.util.Map.Entry;
 import java.util.SortedMap;
+import java.util.Collection;
+import java.util.List;
+import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
@@ -400,6 +403,31 @@ public class PolyUtil {
 
 
     /**
+     * Integral polynomial from rational function coefficients. 
+     * Represent as polynomial with integral polynomial coefficients by 
+     * multiplication with the lcm of the numerators of the 
+     * rational function coefficients.
+     * @param fac result polynomial factory.
+     * @param L list of polynomial with rational function coefficients to be converted.
+     * @return list of polynomials with integral polynomial coefficients.
+     */
+    public static <C extends GcdRingElem<C>> 
+        List<GenPolynomial<GenPolynomial<C>>>
+        integralFromQuotientCoefficients( GenPolynomialRing<GenPolynomial<C>> fac,
+                                          Collection<GenPolynomial<Quotient<C>>> L ) {
+        if ( L == null ) {
+           return null;
+        }
+        List<GenPolynomial<GenPolynomial<C>>> list 
+            = new ArrayList<GenPolynomial<GenPolynomial<C>>>( L.size() );
+        for ( GenPolynomial<Quotient<C>> p : L ) {
+            list.add( integralFromQuotientCoefficients(fac,p) );
+        }
+        return list;
+    }
+
+
+    /**
      * Rational function from integral polynomial coefficients. 
      * Represent as polynomial with type Quotient<C> coefficients.
      * @param fac result polynomial factory.
@@ -428,6 +456,29 @@ public class PolyUtil {
             }
         }
         return B;
+    }
+
+    /**
+     * Rational function from integral polynomial coefficients. 
+     * Represent as polynomial with type Quotient<C> coefficients.
+     * @param fac result polynomial factory.
+     * @param L list of polynomials with integral polynomial 
+     *        coefficients to be converted.
+     * @return list of polynomials with type Quotient<C> coefficients.
+     */
+    public static <C extends GcdRingElem<C>>
+        List<GenPolynomial<Quotient<C>>> 
+        quotientFromIntegralCoefficients( GenPolynomialRing<Quotient<C>> fac,
+                                          Collection<GenPolynomial<GenPolynomial<C>>> L ) {
+        if ( L == null ) {
+           return null;
+        }
+        List<GenPolynomial<Quotient<C>>> list 
+            = new ArrayList<GenPolynomial<Quotient<C>>>( L.size() );
+        for ( GenPolynomial<GenPolynomial<C>> p : L ) {
+            list.add( quotientFromIntegralCoefficients(fac,p) );
+        }
+        return list;
     }
 
 
