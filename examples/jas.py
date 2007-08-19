@@ -155,11 +155,11 @@ class Ideal:
         lp = PolyUtil.integralFromQuotientCoefficients(rc,l);
         pp = PolynomialList(rc,lp);
         oq = TermOrderOptimization.optimizeTermOrderOnCoefficients(pp);
-        o = PolyUtil.quotientFromIntegralCoefficients(r,oq.list);
         oor = oq.ring;
         qo = oor.coFac;
         cq = QuotientRing( qo );
         rq = GenPolynomialRing( cq, r.nvar, r.tord, r.vars );
+        o = PolyUtil.quotientFromIntegralCoefficients(rq,oq.list);
         #print "rq = ", rq;        
         r = Ring("",rq);
         return Ideal(r,"",o);
