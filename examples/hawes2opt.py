@@ -52,14 +52,15 @@ o = f.optimize();
 print "optimized Ideal: " + str(o);
 print;
 
-o = o.optimizeCoeff();
+o = o.optimizeCoeffQuot();
 print "optimized coeff Ideal: " + str(o);
 print;
 
-rg = o.GB();
-print "GB:", rg;
-print;
+#rg = o.GB();
+#print "GB:", rg;
+#print;
 
+rg = o;
 bg = rg.isGB();
 print "isGB:", bg;
 print;
