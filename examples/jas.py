@@ -159,8 +159,8 @@ class Ideal:
         qo = oor.coFac;
         cq = QuotientRing( qo );
         rq = GenPolynomialRing( cq, r.nvar, r.tord, r.vars );
-        o = PolyUtil.quotientFromIntegralCoefficients(rq,oq.list);
         #print "rq = ", rq;        
+        o = PolyUtil.quotientFromIntegralCoefficients(rq,oq.list);
         r = Ring("",rq);
         return Ideal(r,"",o);
 
