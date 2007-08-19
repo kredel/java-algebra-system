@@ -144,6 +144,26 @@ class Ideal:
         r = Ring("",o.ring);
         return Ideal(r,"",o.list);
 
+    def optimizeCoeffQuot(self):
+        p = self.pset;
+        l = p.list;
+        r = p.ring;
+        q = r.coFac;
+        c = q.ring;
+        rc = GenPolynomialRing( c, r.nvar, r.tord, r.vars );
+        #print "rc = ", rc;        
+        lp = PolyUtil.integralFromQuotientCoefficients(rc,l);
+        pp = PolynomialList(rc,lp);
+        oq = TermOrderOptimization.optimizeTermOrderOnCoefficients(pp);
+        o = PolyUtil.quotientFromIntegralCoefficients(r,oq.list);
+        oor = oq.ring;
+        qo = oor.coFac;
+        cq = QuotientRing( qo );
+        rq = GenPolynomialRing( cq, r.nvar, r.tord, r.vars );
+        #print "rq = ", rq;        
+        r = Ring("",rq);
+        return Ideal(r,"",o);
+
 
 class SolvableRing:
 
