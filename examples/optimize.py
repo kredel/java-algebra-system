@@ -11,6 +11,10 @@ from jas import startLog
 
 # example from rose (modified)
 
+# optimal is
+# Rat(A46, U3, U4)
+#
+
 r = Ring( "Rat(U3,U4,A46) G" );
 print "Ring: " + str(r);
 print;
