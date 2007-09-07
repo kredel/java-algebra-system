@@ -213,8 +213,7 @@ public class PolyUtilTest extends TestCase {
          = new GenPolynomialRing<ModInteger>(pm,rl,to);
 
      GenPolynomial<ModInteger> ar;
-     GenPolynomial<ModInteger> br;
-
+     
      for (int i = 0; i < 3; i++) {
          c = dfac.random(kl*(i+2),ll*(i+1),el+i,q).abs();
          //c = c.multiply( new BigInteger(99) ); // fails, since not primitive
@@ -493,7 +492,7 @@ public class PolyUtilTest extends TestCase {
      ei  = (new BigInteger()).random(kl);
      //System.out.println("ei  = " + ei);
 
-     GenPolynomial<BigInteger> ae, be, ce, de, ee;
+     GenPolynomial<BigInteger> ae, be, ce, de;
 
      GenPolynomialRing<BigInteger> fac;
      fac = new GenPolynomialRing<BigInteger>(new BigInteger(1),rl,to);
@@ -567,7 +566,7 @@ public class PolyUtilTest extends TestCase {
  */
  public void testInterpolateUnivariateOne() {
      ModInteger ai, bi, ci, di, ei, fi, gi, hi;
-     GenPolynomial<ModInteger> a, b, c, d, e;
+     GenPolynomial<ModInteger> a;
      GenPolynomialRing<ModInteger> cfac;
      ModIntegerRing fac;
      GenPolynomial<ModInteger> r;
@@ -648,8 +647,8 @@ public class PolyUtilTest extends TestCase {
  * 
  */
  public void testInterpolateUnivariate() {
-     ModInteger ai, bi, ci, di, ei, fi, gi, hi;
-     GenPolynomial<ModInteger> a, b, c, d, e;
+     ModInteger ai, ci, ei, fi;
+     GenPolynomial<ModInteger> a;
      GenPolynomialRing<ModInteger> cfac;
      ModIntegerRing fac;
      GenPolynomial<ModInteger> r;
@@ -726,9 +725,9 @@ public class PolyUtilTest extends TestCase {
  * 
  */
  public void testInterpolateMultivariate() {
-     ModInteger ai, bi, ci, di, ei, fi, gi, hi;
-     GenPolynomial<ModInteger> ap, bp, cp, dp, ep, fp, gp, hp;
-     GenPolynomial<GenPolynomial<ModInteger>> a, b, c, d, e;
+     ModInteger ci, ei, fi;
+     GenPolynomial<ModInteger> ap, bp;
+     GenPolynomial<GenPolynomial<ModInteger>> a;
      GenPolynomialRing<GenPolynomial<ModInteger>> cfac;
      GenPolynomialRing<ModInteger> ufac;
      GenPolynomialRing<ModInteger> dfac;
@@ -824,9 +823,9 @@ public class PolyUtilTest extends TestCase {
  * 
  */
  public void testInterpolateRationalMultivariate() {
-     BigRational ai, bi, ci, di, ei, fi, gi, hi;
-     GenPolynomial<BigRational> ap, bp, cp, dp, ep, fp, gp, hp;
-     GenPolynomial<GenPolynomial<BigRational>> a, b, c, d, e;
+     BigRational ci, ei, fi;
+     GenPolynomial<BigRational> ap, bp;
+     GenPolynomial<GenPolynomial<BigRational>> a;
      GenPolynomialRing<GenPolynomial<BigRational>> cfac;
      GenPolynomialRing<BigRational> ufac;
      GenPolynomialRing<BigRational> dfac;
@@ -932,9 +931,6 @@ public class PolyUtilTest extends TestCase {
 
      dfac = new GenPolynomialRing<BigInteger>(mi,1,to);
 
-     GenPolynomial<ModInteger> am;
-     GenPolynomial<ModInteger> bm;
-     GenPolynomial<ModInteger> cm;
      GenPolynomial<ModInteger> ap;
      GenPolynomial<ModInteger> bp;
      GenPolynomial<ModInteger> cp;
@@ -948,8 +944,6 @@ public class PolyUtilTest extends TestCase {
      GenPolynomial<BigInteger> a1;
      GenPolynomial<BigInteger> b1;
      GenPolynomial<BigInteger> c1;
-
-     ExpVector degv, qdegv;
 
      for (int i = 1; i < 5; i++) {
          a = dfac.random( kl+70*i, ll, el+5, q).abs();
@@ -1049,9 +1043,6 @@ public class PolyUtilTest extends TestCase {
 
      dfac = new GenPolynomialRing<BigInteger>(mi,1,to);
 
-     GenPolynomial<ModInteger> am;
-     GenPolynomial<ModInteger> bm;
-     GenPolynomial<ModInteger> cm;
      GenPolynomial<ModInteger> ap;
      GenPolynomial<ModInteger> bp;
      GenPolynomial<ModInteger> cp;
@@ -1065,8 +1056,6 @@ public class PolyUtilTest extends TestCase {
      GenPolynomial<BigInteger> a1;
      GenPolynomial<BigInteger> b1;
      GenPolynomial<BigInteger> c1;
-
-     ExpVector degv, qdegv;
 
      for (int i = 1; i < 5; i++) { // 70 better for quadratic
          a = dfac.random( kl+70*i, ll+10, el+5, q).abs();

@@ -375,7 +375,7 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
         ModuleList<C> MM = M;
         ModuleList<C> GM = null;
         ModuleList<C> Z;
-        ModSolvableGroebnerBase<C> msbb = new ModSolvableGroebnerBaseAbstract<C>();
+        //ModSolvableGroebnerBase<C> msbb = new ModSolvableGroebnerBaseAbstract<C>();
         while (true) {
             //GM = msbb.leftGB(MM);
           Z = leftZeroRelationsArbitrary(MM);
@@ -399,9 +399,9 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
            resolutionArbitrary(PolynomialList<C> F) {  
         List<List<GenSolvablePolynomial<C>>> Z;
         ModuleList<C> Zm;
-        List<GenSolvablePolynomial<C>> G;
+        //List<GenSolvablePolynomial<C>> G;
         PolynomialList<C> Gl = null;
-        SolvableGroebnerBase<C> sbb = new SolvableGroebnerBaseSeq<C>();
+        //SolvableGroebnerBase<C> sbb = new SolvableGroebnerBaseSeq<C>();
 
         //G = sbb.leftGB( F.castToSolvableList() );
         Z = leftZeroRelationsArbitrary( F.castToSolvableList() );
@@ -532,7 +532,7 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
         //ModuleList<C> ML = new ModuleList<C>( ring, M );
         //System.out.println("syz ML = " + ML);
         // debug only:
-        List<GenSolvablePolynomial<C>> F2 = new ArrayList<GenSolvablePolynomial<C>>( F.size() );
+        //List<GenSolvablePolynomial<C>> F2 = new ArrayList<GenSolvablePolynomial<C>>( F.size() );
         /* not true in general
         for ( List<GenSolvablePolynomial<C>> rr: M ) {
             GenSolvablePolynomial<C> rrg = sblas.leftScalarProduct( F, rr );

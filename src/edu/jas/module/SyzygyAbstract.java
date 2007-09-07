@@ -348,7 +348,7 @@ public class SyzygyAbstract<C extends RingElem<C>>
            resolutionArbitrary(PolynomialList<C> F) {  
         List<List<GenPolynomial<C>>> Z;
         ModuleList<C> Zm;
-        List<GenPolynomial<C>> G;
+        //List<GenPolynomial<C>> G;
         PolynomialList<C> Gl = null;
 
         //G = (new GroebnerBaseSeq<C>()).GB( F.list );
@@ -374,7 +374,7 @@ public class SyzygyAbstract<C extends RingElem<C>>
         ModuleList<C> MM = M;
         ModuleList<C> GM = null;
         ModuleList<C> Z;
-        ModGroebnerBase<C> mbb = new ModGroebnerBaseAbstract<C>();
+        //ModGroebnerBase<C> mbb = new ModGroebnerBaseAbstract<C>();
         while (true) {
           //GM = mbb.GB(MM);
           Z = zeroRelationsArbitrary(MM);

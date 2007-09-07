@@ -5,7 +5,7 @@
 package edu.jas.poly;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+//import java.util.Arrays;
 import java.util.List;
 
 import edu.jas.arith.BigRational;

@@ -79,7 +79,7 @@ public class GCDFactory /*<C extends GcdRingElem<C>>*/ {
      * @param fac ModInteger.
      * @return gcd algorithm implementation.
      */
-    public static <C extends ModInteger>
+    public static //<C extends ModInteger>
            GreatestCommonDivisor<ModInteger> 
            getImplementation( ModIntegerRing fac ) {
         GreatestCommonDivisor<ModInteger> ufd; 
@@ -97,7 +97,7 @@ public class GCDFactory /*<C extends GcdRingElem<C>>*/ {
      * @param fac ModInteger.
      * @return gcd algorithm implementation.
      */
-    public static <C extends ModInteger>
+    public static //<C extends ModInteger>
            GreatestCommonDivisor<ModInteger> 
            getProxy( ModIntegerRing fac ) {
         GreatestCommonDivisor<ModInteger> ufd1, ufd2; 
@@ -116,7 +116,7 @@ public class GCDFactory /*<C extends GcdRingElem<C>>*/ {
      * @param fac BigInteger.
      * @return gcd algorithm implementation.
      */
-    public static <C extends BigInteger>
+    public static //<C extends BigInteger>
            GreatestCommonDivisor<BigInteger> 
            getImplementation( BigInteger fac ) {
         GreatestCommonDivisor<BigInteger> ufd; 
@@ -134,7 +134,7 @@ public class GCDFactory /*<C extends GcdRingElem<C>>*/ {
      * @param fac BigInteger.
      * @return gcd algorithm implementation.
      */
-    public static <C extends BigInteger>
+    public static //<C extends BigInteger>
            GreatestCommonDivisor<BigInteger> 
            getProxy( BigInteger fac ) {
         GreatestCommonDivisor<BigInteger> ufd1, ufd2; 
@@ -149,7 +149,7 @@ public class GCDFactory /*<C extends GcdRingElem<C>>*/ {
      * @param fac BigRational.
      * @return gcd algorithm implementation.
      */
-    public static <C extends BigRational>
+    public static //<C extends BigRational>
            GreatestCommonDivisor<BigRational> 
            getImplementation( BigRational fac ) {
         GreatestCommonDivisor<BigRational> ufd; 
@@ -163,7 +163,7 @@ public class GCDFactory /*<C extends GcdRingElem<C>>*/ {
      * @param fac BigRational.
      * @return gcd algorithm implementation.
      */
-    public static <C extends BigRational>
+    public static //<C extends BigRational>
            GreatestCommonDivisor<BigRational> 
            getProxy( BigRational fac ) {
         GreatestCommonDivisor<BigRational> ufd1, ufd2; 

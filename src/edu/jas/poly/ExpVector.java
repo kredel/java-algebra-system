@@ -458,7 +458,7 @@ public final class ExpVector implements Cloneable, Serializable {
      */
     public static ExpVector EVSU( ExpVector U, int i, long d ) {
         ExpVector V = (ExpVector)U.clone();
-        long e = V.setVal( i, d );
+		long e = V.setVal( i, d );
         return V;
     }
 

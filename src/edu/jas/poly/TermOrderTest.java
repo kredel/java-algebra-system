@@ -133,7 +133,7 @@ public class TermOrderTest extends TestCase {
      //System.out.println("s = " + s);
 
      //int r = 5;
-     int sp = 3;
+     //int sp = 3;
      w = new long [][] { new long[] { 5l, 4l, 3l, 2l, 1l } };
 
      //s = new TermOrder(w,sp);

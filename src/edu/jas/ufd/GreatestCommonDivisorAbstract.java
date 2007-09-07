@@ -140,7 +140,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C> >
         GenPolynomial<C> d = PolyUtil.<C>baseDeriviative(pp);
         GenPolynomial<C> g = baseGcd(pp,d);
         GenPolynomial<C> q = PolyUtil.<C>basePseudoDivide(pp,g);
-        GenPolynomial<C> y = PolyUtil.<C>basePseudoDivide(d,g);
+        //GenPolynomial<C> y = PolyUtil.<C>basePseudoDivide(d,g);
         int j = 1;
         while ( g.leadingExpVector().getVal(0) >= 1 /*!g.isONE()*/ ) {
               GenPolynomial<C> c = baseGcd(g,q);
@@ -270,7 +270,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C> >
         GenPolynomial<GenPolynomial<C>> d = PolyUtil.<C>recursiveDeriviative(pp);
         GenPolynomial<GenPolynomial<C>> g = recursiveGcd(pp,d);
         GenPolynomial<GenPolynomial<C>> q = PolyUtil.<C>recursivePseudoDivide(pp,g);
-        GenPolynomial<GenPolynomial<C>> y = PolyUtil.<C>recursivePseudoDivide(d,g);
+        //GenPolynomial<GenPolynomial<C>> y = PolyUtil.<C>recursivePseudoDivide(d,g);
         int j = 1; 
         while ( g.leadingExpVector().getVal(0) >= 1 /*!g.abs().isONE()*/ ) {
               GenPolynomial<GenPolynomial<C>> c = recursiveGcd(g,q);

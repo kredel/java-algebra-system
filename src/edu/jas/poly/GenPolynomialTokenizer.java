@@ -263,9 +263,9 @@ public class GenPolynomialTokenizer  {
             logger.debug("a1 = " + a1);
         }
         GenPolynomial b = a1;
-        GenPolynomial c;
-        int tt, oldtt;
-        String rat = "";
+        //GenPolynomial c;
+        int tt; //, oldtt;
+        //String rat = "";
         char first;
         RingElem r;
         ExpVector e;
@@ -1264,7 +1264,8 @@ public class GenPolynomialTokenizer  {
     }
 
     // must also allow +/- // does not work with tokenizer
-    private boolean number(char x) {
+    @SuppressWarnings("unused")
+	private boolean number(char x) {
         return digit(x) || x == '-' || x == '+';
     }
 

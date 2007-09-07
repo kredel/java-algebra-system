@@ -226,7 +226,7 @@ public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>>
         }
 
         logger.debug("looking for clients");
-        long t = System.currentTimeMillis();
+        //long t = System.currentTimeMillis();
         // now in DL, uses resend for late clients
         //while ( dls.size() < threads ) { sleep(); }
 

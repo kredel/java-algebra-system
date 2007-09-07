@@ -217,8 +217,8 @@ public class GCDSubresTest extends TestCase {
  */
  public void testGCDsubres() {
 
-     GreatestCommonDivisorAbstract<BigInteger> ufd_pp; 
-     ufd_pp = ufd;
+     //GreatestCommonDivisorAbstract<BigInteger> ufd_pp; 
+     //ufd_pp = ufd;
 
      ufd = new GreatestCommonDivisorSubres<BigInteger>();
 

@@ -124,7 +124,7 @@ public class GCDProxyTest extends TestCase {
      GreatestCommonDivisor<BigInteger> ufd_par; 
      GreatestCommonDivisorAbstract<BigInteger> ufd; 
 
-     ufd_par = GCDFactory.<BigInteger>getProxy(bi);
+     ufd_par = GCDFactory./*<BigInteger>*/getProxy(bi);
      //System.out.println("ufd_par = " + ufd_par);
      assertTrue("ufd_par != null " + ufd_par, ufd_par != null);
 
@@ -194,7 +194,7 @@ public class GCDProxyTest extends TestCase {
      GreatestCommonDivisor<ModInteger> ufd_par; 
      GreatestCommonDivisorAbstract<ModInteger> ufd; 
 
-     ufd_par = GCDFactory.<ModInteger>getProxy(mi);
+     ufd_par = GCDFactory./*<ModInteger>*/getProxy(mi);
      //System.out.println("ufd_par = " + ufd_par);
      assertTrue("ufd_par != null " + ufd_par, ufd_par != null);
 
@@ -262,7 +262,7 @@ public class GCDProxyTest extends TestCase {
      BigRational b = new BigRational();
      GreatestCommonDivisor<BigRational> ufd; 
 
-     ufd = GCDFactory.<BigRational>getImplementation(b);
+     ufd = GCDFactory./*<BigRational>*/getImplementation(b);
      //System.out.println("ufd = " + ufd);
      assertTrue("ufd = Primitive " + ufd, ufd instanceof GreatestCommonDivisorPrimitive);
  }

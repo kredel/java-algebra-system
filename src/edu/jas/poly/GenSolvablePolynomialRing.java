@@ -13,7 +13,7 @@ import java.io.StringReader;
 
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Arrays;
+//import java.util.Arrays;
 import java.util.Random;
 
 import org.apache.log4j.Logger;
@@ -198,6 +198,9 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
         try {
            oring = (GenSolvablePolynomialRing<C>)other;
         } catch (ClassCastException ignored) {
+        }
+        if ( oring == null ) {
+           return false;
         }
         // @todo check same base relations
         //if ( ! table.equals(oring.table) ) {

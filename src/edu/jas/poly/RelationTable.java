@@ -279,7 +279,7 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
         int index = -1;
         for ( ListIterator it = part.listIterator(); it.hasNext(); ) {
             ExpVectorPair look = (ExpVectorPair)it.next();
-            o = it.next();
+            o = it.next(); // skip poly
             if ( look.isMultiple( evp ) ) {
                 index = it.nextIndex(); 
                 // last index of or first index of: break

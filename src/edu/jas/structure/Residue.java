@@ -113,7 +113,8 @@ public class Residue<C extends RingElem<C> >
      * @return If this is a unit then true is returned, else false.
      * @see edu.jas.structure.RingElem#isUnit()
      */
-    public boolean isUnit() {
+    @SuppressWarnings("unchecked")
+	public boolean isUnit() {
         if ( isunit > 0 ) {
             return true;
         } 
@@ -256,7 +257,8 @@ public class Residue<C extends RingElem<C> >
      * @see edu.jas.structure.RingElem#inverse()
      * @return S with S = 1/this if defined. 
      */
-    public Residue<C> inverse() {
+    @SuppressWarnings("unchecked")
+	public Residue<C> inverse() {
         if ( isunit == 0 ) {
            throw new RuntimeException("element not invertible (0) " + this);
         }

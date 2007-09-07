@@ -65,7 +65,7 @@ public class ArithTest extends TestCase {
  * Test static initialization and constants for BigInteger.
  */
  public void testIntegerConstants() {
-     BigInteger a, b, c, d, e;
+     BigInteger a, b, c, d;
      a = BigInteger.ZERO;
      b = BigInteger.ONE;
      c = b.subtract(b);
@@ -90,7 +90,7 @@ public class ArithTest extends TestCase {
  * Test string constructor and toString for BigInteger.
  */
  public void testIntegerConstructor() {
-     BigInteger a, b, c, d, e;
+     BigInteger a, b, c, d;
      a = new BigInteger( 1 );
      b = new BigInteger( -1 );
      c = new BigInteger( 0 );
@@ -129,7 +129,7 @@ public class ArithTest extends TestCase {
  * 
  */
  public void testIntegerRandom() {
-     BigInteger a, b, c, d, e;
+     BigInteger a, b, c;
      a = BigInteger.ZERO.random( 500 );
      b = new BigInteger( "" + a );
      c = b.subtract(a);
@@ -229,7 +229,7 @@ public class ArithTest extends TestCase {
  * 
  */
  public void testRationalConstants() {
-     BigRational a, b, c, d, e;
+     BigRational a, b, c, d;
      a = BigRational.ZERO;
      b = BigRational.ONE;
      //System.out.println("a = " + a);
@@ -255,7 +255,7 @@ public class ArithTest extends TestCase {
  * 
  */
  public void testComplexConstants() {
-     BigComplex a, b, c, d, e;
+     BigComplex a, b, c, d;
      a = BigComplex.ZERO;
      b = BigComplex.ONE;
      c = b.subtract(b);
@@ -279,7 +279,7 @@ public class ArithTest extends TestCase {
  * 
  */
  public void testQuaternionConstants() {
-     BigQuaternion a, b, c, d, e;
+     BigQuaternion a, b, c, d;
      a = BigQuaternion.ZERO;
      b = BigQuaternion.ONE;
      c = b.subtract(b);
@@ -305,7 +305,7 @@ public class ArithTest extends TestCase {
  * 
  */
  public void testRationalConstructor() {
-     BigRational a, b, c, d, e;
+     BigRational a, b, c, d;
      a = new BigRational( 1 );
      b = new BigRational( -1 );
      c = new BigRational( 0 );
@@ -342,7 +342,7 @@ public class ArithTest extends TestCase {
  * 
  */
  public void testComplexConstructor() {
-     BigComplex a, b, c, d, e;
+     BigComplex a, b, c, d;
      a = new BigComplex( 1 );
      b = new BigComplex( -1 );
      c = new BigComplex( 0 );
@@ -379,7 +379,7 @@ public class ArithTest extends TestCase {
  * 
  */
  public void testQuaternionConstructor() {
-     BigQuaternion a, b, c, d, e;
+     BigQuaternion a, b, c, d;
      a = new BigQuaternion( 1 );
      b = new BigQuaternion( -1 );
      c = new BigQuaternion( 0 );
@@ -420,7 +420,7 @@ public class ArithTest extends TestCase {
  * 
  */
  public void testRationalRandom() {
-     BigRational a, b, c, d, e;
+     BigRational a, b, c;
      a = BigRational.ZERO.random( 500 );
      b = new BigRational( "" + a );
      c = b.subtract(a);
@@ -435,7 +435,7 @@ public class ArithTest extends TestCase {
  * 
  */
  public void testComplexRandom() {
-     BigComplex a, b, c, d, e;
+     BigComplex a, b, c;
      a = BigComplex.ZERO.random( 500 );
      b = new BigComplex( "" + a );
      c = b.subtract(a);
@@ -450,7 +450,7 @@ public class ArithTest extends TestCase {
  * 
  */
  public void testQuaternionRandom() {
-     BigQuaternion a, b, c, d, e;
+     BigQuaternion a, b, c;
      a = BigQuaternion.ZERO.random( 500 );
      b = new BigQuaternion( "" + a );
      c = b.subtract(a);

@@ -243,7 +243,7 @@ public class GenMatrix<C extends RingElem<C> >
      */
     public GenMatrix<C> negate() {
         ArrayList<ArrayList<C>> m = new ArrayList<ArrayList<C>>( ring.rows );
-        int i = 0;
+        //int i = 0;
         for ( ArrayList<C> val : matrix ) {
             ArrayList<C> v = new ArrayList<C>( ring.cols );
             for ( C c : val ) {
@@ -275,7 +275,7 @@ public class GenMatrix<C extends RingElem<C> >
      */
     public GenMatrix<C> scalarMultiply(C s) {
         ArrayList<ArrayList<C>> m = new ArrayList<ArrayList<C>>( ring.rows );
-        int i = 0;
+        //int i = 0;
         for ( ArrayList<C> val : matrix ) {
             ArrayList<C> v = new ArrayList<C>( ring.cols );
             for ( C c : val ) {
@@ -294,7 +294,7 @@ public class GenMatrix<C extends RingElem<C> >
      */
     public GenMatrix<C> leftScalarMultiply(C s) {
         ArrayList<ArrayList<C>> m = new ArrayList<ArrayList<C>>( ring.rows );
-        int i = 0;
+        //int i = 0;
         for ( ArrayList<C> val : matrix ) {
             ArrayList<C> v = new ArrayList<C>( ring.cols );
             for ( C c : val ) {
@@ -438,7 +438,7 @@ public class GenMatrix<C extends RingElem<C> >
       //System.out.println("#blocks = " + (matrix.size()/na) + ", na = " + na 
       //    + " SeqMultBlockTrans");
       ArrayList<ArrayList<C>> m = matrix;
-      ArrayList<ArrayList<C>> s = S.matrix;
+      //ArrayList<ArrayList<C>> s = S.matrix;
 
       GenMatrixRing<C> tr = S.ring.transpose();
       GenMatrix<C> T = S.transpose(tr);

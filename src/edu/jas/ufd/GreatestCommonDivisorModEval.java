@@ -263,7 +263,7 @@ public class GreatestCommonDivisorModEval //<C extends GcdRingElem<C> >
             if ( M.degree(0) > G ) {
                break;
             }
-            long cmn = PolyUtil.<ModInteger>coeffMaxDegree(cp);
+            //long cmn = PolyUtil.<ModInteger>coeffMaxDegree(cp);
             //if ( M.degree(0) > cmn ) {
             // does not work: only if cofactors are also considered?
             // break;

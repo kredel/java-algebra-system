@@ -77,7 +77,8 @@ public class Quotient<C extends RingElem<C> >
      * @param d denominator.
      * @param isred true if gcd(n,d) == 1, else false.
      */
-    protected Quotient(QuotientRing<C> r, 
+    @SuppressWarnings("unchecked")
+	protected Quotient(QuotientRing<C> r, 
                        C n, C d,
                        boolean isred) {
         if ( d == null || d.isZERO() ) {

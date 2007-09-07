@@ -7,7 +7,7 @@ package edu.jas.poly;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Arrays;
+//import java.util.Arrays;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -34,7 +34,7 @@ public class TermOrderOptimization {
 
 
     private static final Logger logger = Logger.getLogger(TermOrderOptimization.class);
-    private static boolean debug = logger.isDebugEnabled();
+    //private static boolean debug = logger.isDebugEnabled();
 
 
     /**
