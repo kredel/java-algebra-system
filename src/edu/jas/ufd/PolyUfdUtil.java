@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
+import edu.jas.structure.RingElem;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
 
@@ -22,6 +23,7 @@ import edu.jas.arith.ModIntegerRing;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
+import edu.jas.poly.PolyUtil;
 
 import edu.jas.application.Quotient;
 import edu.jas.application.QuotientRing;
@@ -87,7 +89,8 @@ public class PolyUfdUtil {
             GenPolynomial<C> b = c.divide( a.den );
             GenPolynomial<C> p = a.num.multiply( b );
             //Bv.put( e, p );
-            B = B.sum( p, e ); // inefficient
+            //B = B.sum( p, e ); // inefficient
+            B.doPutToMap( e, p ); 
         }
         return B;
     }
@@ -143,8 +146,9 @@ public class PolyUfdUtil {
             //System.out.println("a = " + a);
             Quotient<C> p = new Quotient<C>(qfac, a); // can not be zero
             if ( p != null && !p.isZERO() ) {
-                //Bv.put( e, p );
-                B = B.sum( p, e ); // inefficient
+               //Bv.put( e, p );
+               //B = B.sum( p, e ); // inefficient
+               B.doPutToMap( e, p ); 
             }
         }
         return B;
@@ -173,5 +177,71 @@ public class PolyUfdUtil {
         }
         return list;
     }
+
+
+    /**
+     * From BigInteger coefficients. 
+     * Represent as polynomial with type GenPolynomial&lt;C&gt; coefficients,
+     * e.g. ModInteger or BigRational.
+     * @param fac result polynomial factory.
+     * @param A polynomial with GenPolynomial&lt;BigInteger&gt; coefficients to be converted.
+     * @return polynomial with type GenPolynomial&lt;C&gt; coefficients.
+     */
+    public static <C extends RingElem<C>>
+        GenPolynomial<GenPolynomial<C>> 
+        fromIntegerCoefficients( GenPolynomialRing<GenPolynomial<C>> fac,
+                                 GenPolynomial<GenPolynomial<BigInteger>> A ) {
+        GenPolynomial<GenPolynomial<C>> B = fac.getZERO().clone();
+        if ( A == null || A.isZERO() ) {
+           return B;
+        }
+        RingFactory<GenPolynomial<C>> cfac = fac.coFac;
+        GenPolynomialRing<C> rfac = (GenPolynomialRing<C>)cfac;
+        for ( Map.Entry<ExpVector,GenPolynomial<BigInteger>> y: A.getMap().entrySet() ) {
+            ExpVector e = y.getKey();
+            GenPolynomial<BigInteger> a = y.getValue();
+            //System.out.println("e = " + e);
+            //System.out.println("a = " + a);
+            GenPolynomial<C> p = PolyUtil.<C>fromIntegerCoefficients( rfac, a );
+            if ( p != null && !p.isZERO() ) {
+               //Bv.put( e, p );
+               //B = B.sum( p, e ); // inefficient
+               B.doPutToMap( e, p ); 
+            }
+        }
+        return B;
+    }
+
+
+    /**
+     * From BigInteger coefficients. 
+     * Represent as polynomial with type GenPolynomial&lt;C&gt; coefficients,
+     * e.g. ModInteger or BigRational.
+     * @param fac result polynomial factory.
+     * @param L polynomial list with GenPolynomial&lt;BigInteger&gt; 
+     * coefficients to be converted.
+     * @return polynomial list with polynomials with 
+     * type GenPolynomial&lt;C&gt; coefficients.
+     */
+    public static <C extends RingElem<C>>
+        List<GenPolynomial<GenPolynomial<C>>> 
+        fromIntegerCoefficients( GenPolynomialRing<GenPolynomial<C>> fac,
+                                 List<GenPolynomial<GenPolynomial<BigInteger>>> L ) {
+        List<GenPolynomial<GenPolynomial<C>>> K = null;
+        if ( L == null ) {
+           return K;
+        }
+        K = new ArrayList<GenPolynomial<GenPolynomial<C>>>( L.size() );
+        if ( L.size() == 0 ) {
+           return K;
+        }
+        for ( GenPolynomial<GenPolynomial<BigInteger>> a: L ) {
+            GenPolynomial<GenPolynomial<C>> b 
+               = fromIntegerCoefficients( fac, a );
+            K.add( b );
+        }
+        return K;
+    }
+
 
 }
