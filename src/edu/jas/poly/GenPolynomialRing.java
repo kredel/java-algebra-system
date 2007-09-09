@@ -184,9 +184,37 @@ public class GenPolynomialRing<C extends RingElem<C> >
            if ( coFac instanceof QuotientRing ) {
               QuotientRing rf = (QuotientRing)coFac;  
               String[] v = rf.ring.vars;
+              RingFactory cf = rf.ring.coFac;
+              String cs;
+              if ( cf instanceof ModIntegerRing ) {
+                 cs = cf.toString();
+              } else {
+                 cs = " " + cf.getClass().getSimpleName();
+              }
               res =  "RatFunc"
-                     + "{ "
+                     + "{"
+                     + cs
+                     + "( "
                      + rf.ring.varsToString()
+                     + " )"
+                     + " } ";
+           }
+           if ( coFac instanceof GenPolynomialRing ) {
+              GenPolynomialRing rf = (GenPolynomialRing)coFac;  
+              String[] v = rf.vars;
+              RingFactory cf = rf.coFac;
+              String cs;
+              if ( cf instanceof ModIntegerRing ) {
+                 cs = cf.toString();
+              } else {
+                 cs = " " + cf.getClass().getSimpleName();
+              }
+              res =  "IntFunc"
+                     + "{"
+                     + cs
+                     + "( "
+                     + rf.varsToString()
+                     + " )"
                      + " } ";
            }
            if ( ((Object)coFac) instanceof ModIntegerRing ) {
@@ -218,8 +246,35 @@ public class GenPolynomialRing<C extends RingElem<C> >
            if ( coFac instanceof QuotientRing ) {
               QuotientRing rf = (QuotientRing)coFac;  
               String[] v = rf.ring.vars;
+              RingFactory cf = rf.ring.coFac;
+              String cs;
+              if ( cf instanceof ModIntegerRing ) {
+                 cs = cf.toString();
+              } else {
+                 cs = " " + cf.getClass().getSimpleName();
+              }
               res =  "RatFunc{ "
+                     + cs
+                     + "( "
                      + rf.ring.varsToString()
+                     + " )"
+                     + " } ";
+           }
+           if ( coFac instanceof GenPolynomialRing ) {
+              GenPolynomialRing rf = (GenPolynomialRing)coFac;  
+              String[] v = rf.vars;
+              RingFactory cf = rf.coFac;
+              String cs;
+              if ( cf instanceof ModIntegerRing ) {
+                 cs = cf.toString();
+              } else {
+                 cs = " " + cf.getClass().getSimpleName();
+              }
+              res =  "IntFunc{ "
+                     + cs
+                     + "( "
+                     + rf.varsToString()
+                     + " )"
                      + " } ";
            }
            if ( ((Object)coFac) instanceof ModIntegerRing ) {
