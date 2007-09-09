@@ -15,7 +15,8 @@ from jas import Ideal
 #r = Ring( "Quat(U3,U4,A46) L" );
 #r = Ring( "Z(U3,U4,A46) L" );
 #r = Ring( "C(U3,U4,A46) L" );
-r = Ring( "Rat(U3,U4,A46) G" );
+
+r = Ring( "Rat(A46,U3,U4) G" );
 print "Ring: " + str(r);
 print;
 
@@ -43,6 +44,8 @@ print;
 rg = f.GB();
 #print "seq Output:", rg;
 #print;
+
+#sys.exit();
 
 rg = f.parGB(2);
 #print "par Output:", rg;
