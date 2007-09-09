@@ -53,7 +53,7 @@ public class GenPolynomial<C extends RingElem<C> >
 
 
     private static final Logger logger = Logger.getLogger(GenPolynomial.class);
-    //private final boolean debug = logger.isDebugEnabled();
+    private static final boolean debug = logger.isDebugEnabled();
 
 
     // protected GenPolynomial() { ring = null; val = null; } // don't use
@@ -137,6 +137,28 @@ public class GenPolynomial<C extends RingElem<C> >
     public SortedMap<ExpVector,C> getMap() { 
 	// return val;
         return Collections.<ExpVector,C>unmodifiableSortedMap(val); 
+    }
+
+
+    /**
+     * Put an ExpVector to coefficient entry into the internal map 
+     * of this GenPolynomial.
+     * <b>Note:</b> 
+     * Do not use this method unless you are constructing a new polynomial.
+     * this is modified and breaks the immutability promise of this class.
+     * @param c coefficient.
+     * @param e exponent.
+     */
+    public void doPutToMap(ExpVector e, C c) {
+        if ( debug ) {
+           C a = val.get( e );
+           if ( a != null ) {
+              logger.info("map entry exists " + e + " to " + a + " new " + c );
+           }
+        }
+        if ( ! c.isZERO() ) {
+           val.put(e,c);
+        }
     }
 
 
