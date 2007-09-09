@@ -47,8 +47,8 @@ fi = f.toInteger();
 print "Ideal: " + str(fi);
 print;
 #                    "1152921504606846883"
-#mf = ModIntegerRing( str(2**60-93), True );
-mf = ModIntegerRing( str(19), True );
+mf = ModIntegerRing( str(2**60-93), True );
+#mf = ModIntegerRing( str(19), True );
 fm = fi.toModular( mf );
 print "Ideal: " + str(fm);
 
