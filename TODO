@@ -27,8 +27,6 @@
 
 - test caching results of gcd computation
 
-- add version information in jas file names
-
 - refactor ExpVector for different array element types
 
 
@@ -54,6 +52,8 @@
 - incorporate gcd() in the Quotient class in edu.jas.application
 
 - rework junit tests to stop failing in case of zero polynomials
+
+- add version information in jas file names
 
 
 
