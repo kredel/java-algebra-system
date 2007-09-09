@@ -87,7 +87,7 @@ class Ideal:
         G = bbpar.GB(F);
         t = System.currentTimeMillis() - t;
         bbpar.terminate();
-        print "parallel %s executed in %s ms" % (th, t); 
+        print "parallel-new %s executed in %s ms" % (th, t); 
         return Ideal(self.ring,"",G);
 
     def parOldGB(self,th):
@@ -163,6 +163,24 @@ class Ideal:
         o = PolyUtil.quotientFromIntegralCoefficients(rq,oq.list);
         r = Ring("",rq);
         return Ideal(r,"",o);
+
+    def toInteger(self):
+        p = self.pset;
+        l = p.list;
+        r = p.ring;
+        ri = GenPolynomialRing( BigInteger(), r.nvar, r.tord, r.vars );
+        pi = PolyUtil.integerFromRationalCoefficients(ri,l);
+        r = Ring("",ri);
+        return Ideal(r,"",pi);
+
+    def toModular(self,mf):
+        p = self.pset;
+        l = p.list;
+        r = p.ring;
+        rm = GenPolynomialRing( mf, r.nvar, r.tord, r.vars );
+        pm = PolyUtil.fromIntegerCoefficients(rm,l);
+        r = Ring("",rm);
+        return Ideal(r,"",pm);
 
 
 class SolvableRing:
