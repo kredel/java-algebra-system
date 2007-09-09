@@ -185,6 +185,47 @@ class Ideal:
         r = Ring("",rm);
         return Ideal(r,"",pm);
 
+    def toIntegralCoeff(self):
+        p = self.pset;
+        l = p.list;
+        r = p.ring;
+        q = r.coFac;
+        c = q.ring;
+        rc = GenPolynomialRing( c, r.nvar, r.tord, r.vars );
+        #print "rc = ", rc;        
+        lp = PolyUfdUtil.integralFromQuotientCoefficients(rc,l);
+        #print "lp = ", lp;
+        r = Ring("",rc);
+        return Ideal(r,"",lp);
+
+    def toModularCoeff(self,mf):
+        p = self.pset;
+        l = p.list;
+        r = p.ring;
+        c = r.coFac;
+        #print "c = ", c;
+        cm = GenPolynomialRing( mf, c.nvar, c.tord, c.vars );
+        #print "cm = ", cm;
+        rm = GenPolynomialRing( cm, r.nvar, r.tord, r.vars );
+        #print "rm = ", rm;
+        pm = PolyUfdUtil.fromIntegerCoefficients(rm,l);
+        r = Ring("",rm);
+        return Ideal(r,"",pm);
+
+    def toQuotientCoeff(self):
+        p = self.pset;
+        l = p.list;
+        r = p.ring;
+        c = r.coFac;
+        #print "c = ", c;
+        q = QuotientRing(c);
+        #print "q = ", q;
+        qm = GenPolynomialRing( q, r.nvar, r.tord, r.vars );
+        #print "qm = ", qm;
+        pm = PolyUfdUtil.quotientFromIntegralCoefficients(qm,l);
+        r = Ring("",qm);
+        return Ideal(r,"",pm);
+
 
 class SolvableRing:
 
