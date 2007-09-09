@@ -29,6 +29,7 @@
 
 - refactor ExpVector for different array element types
 
+- develop modifiable polynomial constructor or put method
 
 
 - implement term order optimization from MAS, also for coefficients 
