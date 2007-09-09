@@ -237,7 +237,36 @@ public class PolyUtil {
 
 
     /**
-     * from BigInteger coefficients. 
+     * BigInteger from BigRational coefficients. 
+     * Represent as list of polynomials with BigInteger coefficients by 
+     * multiplication with the lcm of the numerators of the 
+     * BigRational coefficients of each polynomial.
+     * @param fac result polynomial factory.
+     * @param L list of polynomials with BigRational coefficients to be converted.
+     * @return polynomial list with BigInteger coefficients.
+     */
+    public static List<GenPolynomial<BigInteger>> 
+        integerFromRationalCoefficients( GenPolynomialRing<BigInteger> fac,
+                                         List<GenPolynomial<BigRational>> L ) {
+        List<GenPolynomial<BigInteger>> K = null;
+        if ( L == null ) {
+           return K;
+        }
+        K = new ArrayList<GenPolynomial<BigInteger>>( L.size() );
+        if ( L.size() == 0 ) {
+           return K;
+        }
+        for ( GenPolynomial<BigRational> a: L ) {
+            GenPolynomial<BigInteger> b 
+               = integerFromRationalCoefficients( fac, a );
+            K.add( b );
+        }
+        return K;
+    }
+
+
+    /**
+     * From BigInteger coefficients. 
      * Represent as polynomial with type C coefficients,
      * e.g. ModInteger or BigRational.
      * @param fac result polynomial factory.
@@ -265,6 +294,35 @@ public class PolyUtil {
             }
         }
         return B;
+    }
+
+
+    /**
+     * From BigInteger coefficients. 
+     * Represent as list of polynomials with type C coefficients,
+     * e.g. ModInteger or BigRational.
+     * @param fac result polynomial factory.
+     * @param L list of polynomials with BigInteger coefficients to be converted.
+     * @return list of polynomials with type C coefficients.
+     */
+    public static <C extends RingElem<C>>
+        List<GenPolynomial<C>> 
+        fromIntegerCoefficients( GenPolynomialRing<C> fac,
+                                 List<GenPolynomial<BigInteger>> L ) {
+        List<GenPolynomial<C>> K = null;
+        if ( L == null ) {
+           return K;
+        }
+        K = new ArrayList<GenPolynomial<C>>( L.size() );
+        if ( L.size() == 0 ) {
+           return K;
+        }
+        for ( GenPolynomial<BigInteger> a: L ) {
+            GenPolynomial<C> b 
+               = fromIntegerCoefficients( fac, a );
+            K.add( b );
+        }
+        return K;
     }
 
 
