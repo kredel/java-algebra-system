@@ -35,11 +35,11 @@ public class Examples {
        */
        //example6();
        //example7();
-       //example8();
+       example8();
        //example9();
        //example10();
        //example11();
-       example12();
+       //example12();
    }
 
 /**
@@ -291,8 +291,7 @@ public static void example7() {
  *  T(n) = 2x * T(n-1) - T(n-2)
  */
 public static void example8() {
-    int n = 10;
-
+    int m = 10;
     BigInteger fac = new BigInteger();
     String[] var = new String[]{ "x" };
 
@@ -300,7 +299,7 @@ public static void example8() {
         = new GenPolynomialRing<BigInteger>(fac,1,var);
 
     List<GenPolynomial<BigInteger>> T 
-       = new ArrayList<GenPolynomial<BigInteger>>(n);
+       = new ArrayList<GenPolynomial<BigInteger>>(m);
 
     GenPolynomial<BigInteger> t, one, x, x2, x2a, x2b;
 
@@ -313,12 +312,12 @@ public static void example8() {
 
     T.add( one );
     T.add( x );
-    for ( int i = 2; i < n; i++ ) {
-        t = x2.multiply( T.get(i-1) ).subtract( T.get(i-2) );
+    for ( int n = 2; n < m; n++ ) {
+        t = x2.multiply( T.get(n-1) ).subtract( T.get(n-2) );
         T.add( t );
     }
-    for ( int i = n-2; i < n; i++ ) {
-        System.out.println("T["+i+"] = " + T.get(i).toString(var) );
+    for ( int n = 0 /*m-2*/; n < m; n++ ) {
+        System.out.println("T["+n+"] = " + T.get(n) ); //.toString(var) );
     }
 }
 
