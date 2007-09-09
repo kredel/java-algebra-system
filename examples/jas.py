@@ -14,6 +14,7 @@ from edu.jas.module      import *
 from edu.jas.vector      import *
 from edu.jas.application import *
 from edu.jas.util        import *
+from edu.jas.ufd         import *
 from edu.jas             import *
 from edu                 import *
 #PrettyPrint.setInternal();
@@ -152,15 +153,17 @@ class Ideal:
         c = q.ring;
         rc = GenPolynomialRing( c, r.nvar, r.tord, r.vars );
         #print "rc = ", rc;        
-        lp = PolyUtil.integralFromQuotientCoefficients(rc,l);
+        lp = PolyUfdUtil.integralFromQuotientCoefficients(rc,l);
+        #print "lp = ", lp;
         pp = PolynomialList(rc,lp);
+        #print "pp = ", pp;        
         oq = TermOrderOptimization.optimizeTermOrderOnCoefficients(pp);
         oor = oq.ring;
         qo = oor.coFac;
         cq = QuotientRing( qo );
         rq = GenPolynomialRing( cq, r.nvar, r.tord, r.vars );
         #print "rq = ", rq;        
-        o = PolyUtil.quotientFromIntegralCoefficients(rq,oq.list);
+        o = PolyUfdUtil.quotientFromIntegralCoefficients(rq,oq.list);
         r = Ring("",rq);
         return Ideal(r,"",o);
 
