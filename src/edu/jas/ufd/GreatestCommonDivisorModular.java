@@ -20,7 +20,8 @@ import edu.jas.poly.PolyUtil;
 
 
 /**
- * Greatest common divisor algorithms with primitive polynomial remainder sequence.
+ * Greatest common divisor algorithms 
+ * with modular computation and chinese remainder algorithm.
  * @author Heinz Kredel
  */
 

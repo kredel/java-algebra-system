@@ -15,7 +15,8 @@ import edu.jas.poly.PolyUtil;
 
 
 /**
- * Greatest common divisor algorithms with primitive polynomial remainder sequence.
+ * Greatest common divisor algorithms 
+ * with primitive polynomial remainder sequence.
  * @author Heinz Kredel
  */
 

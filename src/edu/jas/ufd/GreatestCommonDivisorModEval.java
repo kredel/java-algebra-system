@@ -20,7 +20,8 @@ import edu.jas.poly.PolyUtil;
 
 
 /**
- * Greatest common divisor algorithms with primitive polynomial remainder sequence.
+ * Greatest common divisor algorithms 
+ * with modular evaluation algorithm for recursion.
  * @author Heinz Kredel
  */
 
@@ -83,7 +84,7 @@ public class GreatestCommonDivisorModEval //<C extends GcdRingElem<C> >
 
     /**
      * GenPolynomial greatest comon divisor, modular evaluation algorithm.
-     * Mathod name must be different because of parameter type erasure.
+     * Method name must be different because of parameter type erasure.
      * @param P GenPolynomial.
      * @param S GenPolynomial.
      * @return gcd(P,S).
