@@ -15,7 +15,7 @@
 
 - implement power series
 
-- implement factorization
+- implement polynomial factorization
 
 - implement matrices to vector
 
@@ -30,6 +30,12 @@
 - refactor ExpVector for different array element types
 
 - develop modifiable polynomial constructor or put method
+
+- rework parallel GB algorithms
+
+- implement comprehensive GB
+
+- refactor method names for groovy operator overloading
 
 
 - implement term order optimization from MAS, also for coefficients 
