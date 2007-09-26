@@ -4,7 +4,7 @@
 
 package edu.jas.structure;
 
-//import org.apache.log4j.Logger;
+import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
@@ -18,8 +18,8 @@ import edu.jas.structure.MonoidFactory;
  */
 public class Power<C extends RingElem<C> > {
 
-    //private static final Logger logger = Logger.getLogger(Residue.class);
-    //private boolean debug = logger.isDebugEnabled();
+    private static final Logger logger = Logger.getLogger(Power.class);
+    private static boolean debug = logger.isDebugEnabled();
 
 
     private final RingFactory<C> fac;
@@ -111,9 +111,8 @@ public class Power<C extends RingElem<C> > {
               b = b.multiply( b );
            }
         } while ( i > 0 );
-        if ( n > 11 ) {
-            System.out.println("n  = " + n);
-            System.out.println("p  = " + p);
+        if ( n > 11 && debug ) {
+            logger.info("n  = " + n + ", p  = " + p);
         }
         return p;
     }
