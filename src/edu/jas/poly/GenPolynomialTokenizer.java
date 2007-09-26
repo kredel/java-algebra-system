@@ -64,13 +64,14 @@ public class GenPolynomialTokenizer  {
     //private RingFactory<AlgebraicNumber<BigRational>> anfac;
     //private RingFactory<AlgebraicNumber<ModInteger>>  gffac;
     private static enum coeffType { BigRat, BigInt, ModInt, BigC, BigQ, 
-                                    ANrat, ANmod, RatFunc };
+                                    ANrat, ANmod, RatFunc, ModFunc  };
     private coeffType parsedCoeff = coeffType.BigRat;
 
 
     private GenPolynomialRing                pfac;
     private static enum polyType { PolBigRat, PolBigInt, PolModInt, PolBigC, 
-                                   PolBigQ, PolANrat, PolANmod, PolRatFunc };
+                                   PolBigQ, PolANrat, PolANmod, 
+                                   PolRatFunc, PolModFunc };
     private polyType parsedPoly = polyType.PolBigRat;
 
     private GenSolvablePolynomialRing        spfac;
@@ -194,6 +195,10 @@ public class GenPolynomialTokenizer  {
             pfac  = new GenPolynomialRing<Quotient<BigInteger>>(fac,nvars,tord,vars);
             parsedPoly = polyType.PolRatFunc;
             break;
+        case ModFunc: 
+            pfac  = new GenPolynomialRing<Quotient<ModInteger>>(fac,nvars,tord,vars);
+            parsedPoly = polyType.PolModFunc;
+            break;
         default: 
             pfac  = new GenPolynomialRing<BigRational>(fac,nvars,tord,vars);
             parsedPoly = polyType.PolBigRat;
@@ -235,6 +240,10 @@ public class GenPolynomialTokenizer  {
         case RatFunc: 
             spfac  = new GenSolvablePolynomialRing<Quotient<BigInteger>>(fac,nvars,tord,vars);
             parsedPoly = polyType.PolRatFunc;
+            break;
+        case ModFunc: 
+            spfac  = new GenSolvablePolynomialRing<Quotient<ModInteger>>(fac,nvars,tord,vars);
+            parsedPoly = polyType.PolModFunc;
             break;
         default: 
             spfac  = new GenSolvablePolynomialRing<BigRational>(fac,nvars,tord,vars);
@@ -527,7 +536,7 @@ public class GenPolynomialTokenizer  {
      * syntax: Rat | Q | Int | Z | Mod modul | Complex 
      *         | C | Quat 
      *         | AN[ (var) ( poly ) | AN[ modul (var) ( poly ) ]
-     *         | RatFunc (var_list)
+     *         | RatFunc (var_list) | ModFunc modul (var_list)
      * @return the next coefficient factory.
      * @throws IOException
      */
@@ -596,6 +605,26 @@ public class GenPolynomialTokenizer  {
                     = new GenPolynomialRing<BigInteger>( bi, vr, to, rfv );
                 coeff = new QuotientRing( pcf );
                 ct = coeffType.RatFunc;
+            } else if ( tok.sval.equalsIgnoreCase("ModFunc") ) {
+                tt = tok.nextToken();
+                RingFactory mi = new ModIntegerRing("19");
+                if ( tok.sval != null && tok.sval.length() > 0 ) {
+                   if ( digit( tok.sval.charAt(0) ) ) {
+                      mi = new ModIntegerRing(tok.sval);
+                   } else {
+                      tok.pushBack();
+                   }
+                } else {
+                   tok.pushBack();
+                }
+                String[] rfv = nextVariableList();
+                //System.out.println("rfv = " + rfv.length + " " + rfv[0]);
+                int vr = rfv.length;
+                TermOrder to = new TermOrder( TermOrder.INVLEX );
+                GenPolynomialRing<ModInteger> pcf 
+                    = new GenPolynomialRing<ModInteger>( mi, vr, to, rfv );
+                coeff = new QuotientRing( pcf );
+                ct = coeffType.ModFunc;
             } else if ( tok.sval.equalsIgnoreCase("AN") ) {
                 tt = tok.nextToken();
                 if ( tt == '[' ) {

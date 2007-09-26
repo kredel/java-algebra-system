@@ -185,13 +185,15 @@ public class GenPolynomialRing<C extends RingElem<C> >
               QuotientRing rf = (QuotientRing)coFac;  
               String[] v = rf.ring.vars;
               RingFactory cf = rf.ring.coFac;
+              String qf = "RatFunc";
               String cs;
               if ( cf instanceof ModIntegerRing ) {
                  cs = cf.toString();
+                 qf = "ModFunc";
               } else {
                  cs = " " + cf.getClass().getSimpleName();
               }
-              res =  "RatFunc"
+              res =  qf
                      + "{"
                      + cs
                      + "( "
