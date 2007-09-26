@@ -3,8 +3,9 @@
 # $Id$
 #
 
-from java.lang import System
-from java.io import StringReader
+from java.lang           import System
+from java.io             import StringReader
+from java.util           import ArrayList
 
 from edu.jas.structure   import *
 from edu.jas.arith       import *
@@ -225,6 +226,19 @@ class Ideal:
         pm = PolyUfdUtil.quotientFromIntegralCoefficients(qm,l);
         r = Ring("",qm);
         return Ideal(r,"",pm);
+
+    def squarefree(self):
+        s = self.pset;
+        F = s.list;
+        p = F[0];
+        t = System.currentTimeMillis();
+        f = GreatestCommonDivisorSubres().squarefreeFactors(p);
+        t = System.currentTimeMillis() - t;
+        #print "squarefee part %s " % f;
+        #S = ArrayList();
+        #S.add(f);
+        print "squarefee executed in %s ms" % t; 
+        return f;
 
 
 class SolvableRing:

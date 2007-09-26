@@ -26,12 +26,12 @@ def ps = """
 // ( B**2 + 33/50 B + 2673/10000 )
 
 def f = r.ideal( ps );
-println "Ideal: " + f.toString();
-println "";
+println "Ideal: " + f
+println ""
 
 def rg = f.GB();
-println "seq Output: " + rg.toString();
-println "";
+println "seq Output: " + rg
+println ""
 
 
 //terminate()

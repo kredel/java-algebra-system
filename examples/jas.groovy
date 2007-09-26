@@ -61,7 +61,7 @@ class Ring {
         }
     }
 
-    def toString() {
+    String toString() {
         return ring.toString();
     }
 
@@ -90,7 +90,7 @@ class Ideal {
         this.pset = new OrderedPolynomialList(ring.ring,this.list);
     }
 
-    def toString() {
+    String toString() {
         return pset.toString();
     }
 
