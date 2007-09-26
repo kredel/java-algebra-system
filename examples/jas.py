@@ -230,7 +230,7 @@ class Ideal:
     def squarefree(self):
         s = self.pset;
         F = s.list;
-        p = F[0];
+        p = F[0]; # only first polynomial
         t = System.currentTimeMillis();
         f = GreatestCommonDivisorSubres().squarefreeFactors(p);
         t = System.currentTimeMillis() - t;
