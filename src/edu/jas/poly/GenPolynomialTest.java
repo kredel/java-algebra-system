@@ -237,5 +237,73 @@ public class GenPolynomialTest extends TestCase {
  }
 
 
+/**
+ * Test accessors.
+ * 
+ */
+ public void testAccessors() {
+        // rational numbers
+        BigRational rf = new BigRational();
+        // System.out.println("rf = " + rf);
+
+        // polynomials over rational numbers
+        GenPolynomialRing<BigRational> pf 
+           = new GenPolynomialRing<BigRational>(rf,rl);
+        // System.out.println("pf = " + pf);
+
+        // test 1
+        GenPolynomial<BigRational> p = pf.getONE();
+        // System.out.println("p = " + p);
+
+        ExpVector e = p.leadingExpVector();
+        BigRational c = p.leadingBaseCoefficient();
+
+        GenPolynomial<BigRational> f 
+            = new GenPolynomial<BigRational>(pf,c,e);
+        assertEquals("1 == 1 ",p,f); 
+
+        GenPolynomial<BigRational> r = p.reductum(); 
+        assertTrue("red(1) == 0 ",r.isZERO()); 
+
+
+        // test 0
+        p = pf.getZERO();
+        // System.out.println("p = " + p);
+        e = p.leadingExpVector();
+        c = p.leadingBaseCoefficient();
+
+        f = new GenPolynomial<BigRational>(pf,c,e);
+        assertEquals("0 == 0 ",p,f); 
+
+        r = p.reductum(); 
+        assertTrue("red(0) == 0 ",r.isZERO()); 
+
+
+        // test random
+        p = pf.random(kl,2*ll,el,q);
+        // System.out.println("p = " + p);
+        e = p.leadingExpVector();
+        c = p.leadingBaseCoefficient();
+        r = p.reductum(); 
+
+        f = new GenPolynomial<BigRational>(pf,c,e);
+        f = r.sum(f);
+        assertEquals("p == lm(f)+red(f) ",p,f); 
+
+
+        // test iteration over random
+        GenPolynomial<BigRational> g;
+        g = p;
+        f = pf.getZERO();
+        while ( !g.isZERO() ) {
+              e = g.leadingExpVector();
+              c = g.leadingBaseCoefficient();
+              //System.out.println("c e = " + c + " " + e);
+              r = g.reductum(); 
+              f = f.sum(c,e);
+              g = r;
+        }
+        assertEquals("p == lm(f)+lm(red(f))+... ",p,f); 
+ }
 
 }

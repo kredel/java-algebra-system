@@ -442,6 +442,22 @@ public class GenPolynomial<C extends RingElem<C> >
 
 
     /**
+     * Reductum.
+     * @return this - leading monomial.
+     */
+    public GenPolynomial<C> reductum() {
+        if ( val.size() <= 1 ) {
+           return ring.getZERO();
+        }
+        Iterator<ExpVector> ai = val.keySet().iterator();
+        ExpVector lt = ai.next();
+        lt = ai.next(); // size > 1
+        SortedMap<ExpVector,C> red = val.tailMap(lt);
+        return new GenPolynomial<C>(ring,red);
+    }
+
+
+    /**
      * Degree in variable i.
      * @return maximal degree in the variable i.
      */
