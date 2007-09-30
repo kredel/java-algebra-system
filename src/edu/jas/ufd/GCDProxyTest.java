@@ -110,6 +110,7 @@ public class GCDProxyTest extends TestCase {
        dfac = null;
        cfac = null;
        rfac = null;
+       ComputerThreads.terminate();
    }
 
 
@@ -136,9 +137,9 @@ public class GCDProxyTest extends TestCase {
      dfac = new GenPolynomialRing<BigInteger>(bi,4,to);
 
      for (int i = 0; i < 1; i++) { // 10-50
-         a = dfac.random(kl+i*20,ll+i,2+el,q);
-         b = dfac.random(kl+i*20,ll+i,2+el,q);
-         c = dfac.random(kl+5,ll,el,q);
+         a = dfac.random(kl+i*10,ll+i,el,q);
+         b = dfac.random(kl+i*10,ll+i,el,q);
+         c = dfac.random(kl+2,ll,el,q);
          //c = dfac.getONE();
          //c = c.multiply( dfac.univariate(0) );
          c = ufd.primitivePart(c).abs();
@@ -207,8 +208,8 @@ public class GCDProxyTest extends TestCase {
      dfac = new GenPolynomialRing<ModInteger>(mi,4,to);
 
      for (int i = 0; i < 1; i++) {
-         a = dfac.random(kl+i*2,ll+i,2+el,q);
-         b = dfac.random(kl+i*2,ll+i,2+el,q);
+         a = dfac.random(kl+i*2,ll+i,el,q);
+         b = dfac.random(kl+i*2,ll+i,el,q);
          c = dfac.random(kl,ll,el,q);
          //a = dfac.random(kl,ll+i,el,q);
          //b = dfac.random(kl,ll+i,el,q);

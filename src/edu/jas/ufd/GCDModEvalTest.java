@@ -122,9 +122,9 @@ public class GCDModEvalTest extends TestCase {
         = new GreatestCommonDivisorModEval();
 
      for (int i = 0; i < 1; i++) {
-         a = dfac.random(kl*(i+2),ll+2*i,el+2*i,q);
-         b = dfac.random(kl*(i+2),ll+2*i,el+2*i,q);
-         c = dfac.random(kl*(i+2),ll+2*i,el+2*i,q);
+         a = dfac.random(kl*(i+2),ll+2*i,el+0*i,q);
+         b = dfac.random(kl*(i+2),ll+2*i,el+0*i,q);
+         c = dfac.random(kl*(i+2),ll+2*i,el+0*i,q);
          c = c.multiply( dfac.univariate(0) );
          //a = ufd.basePrimitivePart(a);
          //b = ufd.basePrimitivePart(b);

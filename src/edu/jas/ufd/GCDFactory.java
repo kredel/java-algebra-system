@@ -101,12 +101,12 @@ public class GCDFactory /*<C extends GcdRingElem<C>>*/ {
            GreatestCommonDivisor<ModInteger> 
            getProxy( ModIntegerRing fac ) {
         GreatestCommonDivisor<ModInteger> ufd1, ufd2; 
+        ufd1 = new GreatestCommonDivisorSubres<ModInteger>();
         if ( fac.isField() ) {
-           ufd1 = new GreatestCommonDivisorModEval();
+           ufd2 = new GreatestCommonDivisorModEval();
         } else {
-           ufd1 = new GreatestCommonDivisorSimple<ModInteger>();
+           ufd2 = new GreatestCommonDivisorSimple<ModInteger>();
         }
-        ufd2 = new GreatestCommonDivisorSubres<ModInteger>();
         return new GCDProxy<ModInteger>(ufd1,ufd2);
     }
 
@@ -138,8 +138,8 @@ public class GCDFactory /*<C extends GcdRingElem<C>>*/ {
            GreatestCommonDivisor<BigInteger> 
            getProxy( BigInteger fac ) {
         GreatestCommonDivisor<BigInteger> ufd1, ufd2; 
-        ufd1 = new GreatestCommonDivisorModular();
-        ufd2 = new GreatestCommonDivisorSubres<BigInteger>();
+        ufd1 = new GreatestCommonDivisorSubres<BigInteger>();
+        ufd2 = new GreatestCommonDivisorModular();
         return new GCDProxy<BigInteger>(ufd1,ufd2);
     }
 
@@ -167,8 +167,8 @@ public class GCDFactory /*<C extends GcdRingElem<C>>*/ {
            GreatestCommonDivisor<BigRational> 
            getProxy( BigRational fac ) {
         GreatestCommonDivisor<BigRational> ufd1, ufd2; 
-        ufd1 = new GreatestCommonDivisorSimple<BigRational>();
-        ufd2 = new GreatestCommonDivisorPrimitive<BigRational>();
+        ufd1 = new GreatestCommonDivisorSubres<BigRational>();
+        ufd2 = new GreatestCommonDivisorSimple<BigRational>();
         return new GCDProxy<BigRational>(ufd1,ufd2);
     }
 
