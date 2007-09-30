@@ -121,6 +121,9 @@ public class GreatestCommonDivisorModEval //<C extends GcdRingElem<C> >
         q = q.abs();
         // setup factories
         RingFactory<ModInteger> cofac = P.ring.coFac;
+        if ( ! cofac.isField() ) {
+           logger.warn("cofac is not a field: " + cofac);
+        }
         GenPolynomialRing<ModInteger> mfac
            = new GenPolynomialRing<ModInteger>(cofac,fac.nvar-1,fac.tord);
         GenPolynomialRing<ModInteger> ufac
