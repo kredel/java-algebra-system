@@ -22,6 +22,7 @@
 - use further util.concurrent algorithms where possible, e.g. in DHT
 
 - add product category to applications
+- implement discrete products of ring elements
 
 - refactor from BasicLinAlg to GenMatrix and GenVector 
 
@@ -35,7 +36,9 @@
 
 - implement comprehensive GB
 
-- refactor method names for groovy operator overloading
+- refactor method names for groovy operator overloading, make examples for usage
+
+- implement d- and e-reductions and d-/e-Groebner bases
 
 
 - implement term order optimization from MAS, also for coefficients 
@@ -60,7 +63,7 @@
 
 - rework junit tests to stop failing in case of zero polynomials
 
-- add version information in jas file names
+- add version information in jas jar-file names
 
 
 
