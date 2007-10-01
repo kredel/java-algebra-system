@@ -13,6 +13,7 @@ import junit.framework.TestSuite;
 
 import org.apache.log4j.BasicConfigurator;
 
+import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.BigComplex;
 import edu.jas.poly.GenPolynomial;
@@ -219,7 +220,6 @@ public static Test suite() {
  * Test Complex reduction.
  * 
  */
-
  public void testComplexReduction() {
 
      GenPolynomialRing<BigComplex> fac 
@@ -301,5 +301,69 @@ public static Test suite() {
      assertTrue("is Reduction ", red.isReductionNF(row,L,d,e) );
  }
 
+
+/**
+ * Test Integer reduction.
+ * 
+ */
+ public void testIntegerReduction() {
+
+     BigInteger bi = new BigInteger(0);
+     GenPolynomialRing<BigInteger> fac 
+          = new GenPolynomialRing<BigInteger>( bi, rl );
+
+     DReductionSeq<BigInteger> dred = new DReductionSeq<BigInteger>();
+
+     GenPolynomial<BigInteger> a = fac.random(kl, ll, el, q );
+     GenPolynomial<BigInteger> b = fac.random(kl, ll, el, q );
+
+     assertTrue("not isZERO( a )", !a.isZERO() );
+
+     List<GenPolynomial<BigInteger>> L 
+         = new ArrayList<GenPolynomial<BigInteger>>();
+     L.add(a);
+
+     GenPolynomial<BigInteger> e 
+         = dred.normalform( L, a );
+     System.out.println("a = " + a);
+     System.out.println("e = " + e);
+     assertTrue("isZERO( e )", e.isZERO() );
+
+     assertTrue("not isZERO( b )", !b.isZERO() );
+
+     L.add(b);
+     e = dred.normalform( L, a );
+     System.out.println("b = " + b);
+     System.out.println("e = " + e);
+     assertTrue("isZERO( e ) some times", e.isZERO() ); 
+
+     GenPolynomial<BigInteger> c = fac.getONE();
+     a = a.sum(c);
+     e = dred.normalform( L, a );
+     System.out.println("b = " + b);
+     System.out.println("e = " + e);
+     assertTrue("isONE( e ) some times", e.isONE() ); 
+
+     L = new ArrayList<GenPolynomial<BigInteger>>();
+     a = c.multiply( bi.fromInteger(4) );
+     b = c.multiply( bi.fromInteger(5) );
+     L.add( a );
+     e = dred.normalform( L, b );
+     System.out.println("a = " + a);
+     System.out.println("b = " + b);
+     System.out.println("e = " + e);
+     assertTrue("isONE( e ) some times", e.isONE() ); 
+
+     a = fac.random(kl, ll, el, q ); //.abs();
+     b = fac.random(kl, ll, el, q ); //.abs();
+     c = dred.DPolynomial( a, b );
+     e = dred.SPolynomial( a, b );
+     System.out.println("a = " + a);
+     System.out.println("b = " + b);
+     System.out.println("c = " + c);
+     System.out.println("e = " + e);
+
+
+ }
 
 }
