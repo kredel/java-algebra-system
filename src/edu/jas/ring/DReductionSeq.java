@@ -233,7 +233,7 @@ public class DReductionSeq<C extends RingElem<C>>
         C b = mb.getValue();
         C[] c = a.egcd(b);
 
-     System.out.println("egcd[0] " + c[0]);
+        //System.out.println("egcd[0] " + c[0]);
 
         GenPolynomial<C> App = Ap.multiply( c[1], e1 );
         GenPolynomial<C> Bpp = Bp.multiply( c[2], f1 );
