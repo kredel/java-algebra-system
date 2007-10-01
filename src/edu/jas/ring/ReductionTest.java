@@ -16,6 +16,8 @@ import org.apache.log4j.BasicConfigurator;
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.BigComplex;
+
+import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolynomialList;
@@ -325,23 +327,23 @@ public static Test suite() {
 
      GenPolynomial<BigInteger> e 
          = dred.normalform( L, a );
-     System.out.println("a = " + a);
-     System.out.println("e = " + e);
+     //System.out.println("a = " + a);
+     //System.out.println("e = " + e);
      assertTrue("isZERO( e )", e.isZERO() );
 
      assertTrue("not isZERO( b )", !b.isZERO() );
 
      L.add(b);
      e = dred.normalform( L, a );
-     System.out.println("b = " + b);
-     System.out.println("e = " + e);
+     //System.out.println("b = " + b);
+     //System.out.println("e = " + e);
      assertTrue("isZERO( e ) some times", e.isZERO() ); 
 
      GenPolynomial<BigInteger> c = fac.getONE();
      a = a.sum(c);
      e = dred.normalform( L, a );
-     System.out.println("b = " + b);
-     System.out.println("e = " + e);
+     //System.out.println("b = " + b);
+     //System.out.println("e = " + e);
      assertTrue("isONE( e ) some times", e.isONE() ); 
 
      L = new ArrayList<GenPolynomial<BigInteger>>();
@@ -349,20 +351,26 @@ public static Test suite() {
      b = c.multiply( bi.fromInteger(5) );
      L.add( a );
      e = dred.normalform( L, b );
-     System.out.println("a = " + a);
-     System.out.println("b = " + b);
-     System.out.println("e = " + e);
-     assertTrue("isONE( e ) some times", e.isONE() ); 
+     //System.out.println("a = " + a);
+     //System.out.println("b = " + b);
+     //System.out.println("e = " + e);
+     assertTrue("isONE( e )", e.isONE() ); 
 
      a = fac.random(kl, ll, el, q ); //.abs();
      b = fac.random(kl, ll, el, q ); //.abs();
      c = dred.DPolynomial( a, b );
      e = dred.SPolynomial( a, b );
-     System.out.println("a = " + a);
-     System.out.println("b = " + b);
-     System.out.println("c = " + c);
-     System.out.println("e = " + e);
+     //System.out.println("a = " + a);
+     //System.out.println("b = " + b);
+     //System.out.println("c = " + c);
+     //System.out.println("e = " + e);
 
+     BigInteger ci = a.leadingBaseCoefficient().gcd( b.leadingBaseCoefficient() );
+     assertEquals("gcd(lbc(a),lbc(b)) = lbc(c) ", ci, c.leadingBaseCoefficient() ); 
+
+     ExpVector ce = ExpVector.EVLCM(a.leadingExpVector(),b.leadingExpVector());
+     assertEquals("lcm(lt(a),lt(b)) == lt(c) ", ce, c.leadingExpVector() ); 
+     assertFalse("lcm(lt(a),lt(b)) != lt(e) ", ce.equals( e.leadingExpVector() ) ); 
 
  }
 
