@@ -465,6 +465,11 @@ public final class BigInteger implements GcdRingElem<BigInteger>,
             r = qr[1];
         }
         //System.out.println("q = " + q + "\n c1 = " + c1 + "\n c2 = " + c2);
+        if ( q.signum() < 0 ) {
+            q = q.negate();
+            c1 = c1.negate();
+            c2 = c2.negate();
+        }
         ret[0] = q; 
         ret[1] = c1;
         ret[2] = c2;
