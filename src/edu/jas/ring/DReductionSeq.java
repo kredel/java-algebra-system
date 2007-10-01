@@ -62,7 +62,7 @@ public class DReductionSeq<C extends RingElem<C>>
         }
         Map.Entry<ExpVector,C> m;
         ExpVector[] htl = new ExpVector[ l ];
-        C[] lbc = (C[]) new Object[ l ]; // want <C>
+        C[] lbc = (C[]) new RingElem[ l ]; // want <C>
         GenPolynomial<C>[] p = (GenPolynomial<C>[])new GenPolynomial[ l ];
         int i;
         int j = 0;
@@ -233,9 +233,11 @@ public class DReductionSeq<C extends RingElem<C>>
         C b = mb.getValue();
         C[] c = a.egcd(b);
 
+     System.out.println("egcd[0] " + c[0]);
+
         GenPolynomial<C> App = Ap.multiply( c[1], e1 );
         GenPolynomial<C> Bpp = Bp.multiply( c[2], f1 );
-        GenPolynomial<C> Cp = App.subtract(Bpp);
+        GenPolynomial<C> Cp = App.sum(Bpp);
         return Cp;
     }
 
