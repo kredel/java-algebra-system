@@ -4,6 +4,8 @@
 
 package edu.jas.ring;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -22,7 +24,8 @@ import edu.jas.structure.RingElem;
  */
 
 public class DReductionSeq<C extends RingElem<C>>
-             extends ReductionAbstract<C> {
+             extends ReductionAbstract<C> 
+             implements DReduction<C> {
 
     private static final Logger logger = Logger.getLogger(DReductionSeq.class);
 
@@ -161,6 +164,56 @@ public class DReductionSeq<C extends RingElem<C>>
 
 
     /**
+     * D-Polynomial with recording.
+     * @typeparam C coefficient type.
+     * @param S recording matrix, is modified.
+     * @param i index of Ap in basis list.
+     * @param Ap a polynomial.
+     * @param j index of Bp in basis list.
+     * @param Bp a polynomial.
+     * @return dpol(Ap, Bp), the d-Polynomial for Ap and Bp.
+     */
+    public GenPolynomial<C> 
+           DPolynomial(List<GenPolynomial<C>> S,
+                       int i,
+                       GenPolynomial<C> Ap, 
+                       int j,
+                       GenPolynomial<C> Bp) {
+        throw new RuntimeException("not jet implemented");
+    }
+
+
+    /**
+     * GB criterium 4.
+     * Use only for commutative polynomial rings.
+     * @typeparam C coefficient type.
+     * @param A polynomial.
+     * @param B polynomial.
+     * @param e = lcm(ht(A),ht(B))
+     * @return true if the S-polynomial(i,j) is required, else false.
+     */
+    public boolean criterion4(GenPolynomial<C> A, 
+                              GenPolynomial<C> B, 
+                              ExpVector e) {  
+        throw new RuntimeException("criterion4 does not hold");
+    }
+
+
+    /**
+     * GB criterium 4.
+     * Use only for commutative polynomial rings.
+     * @typeparam C coefficient type.
+     * @param A polynomial.
+     * @param B polynomial.
+     * @return true if the S-polynomial(i,j) is required, else false.
+     */
+    public boolean criterion4(GenPolynomial<C> A, 
+                              GenPolynomial<C> B) {  
+        throw new RuntimeException("criterion4 does not hold");
+    }
+
+
+    /**
      * Normalform with recording.
      * @typeparam C coefficient type.
      * @param row recording matrix, is modified.
@@ -248,6 +301,55 @@ public class DReductionSeq<C extends RingElem<C>>
         }
         return R;
         */
+    }
+
+
+    /**
+     * Irreducible set.
+     * @typeparam C coefficient type.
+     * @param Pp polynomial list.
+     * @return a list P of polynomials which are in normalform wrt. P.
+     */
+    public List<GenPolynomial<C>> irreducibleSet(List<GenPolynomial<C>> Pp) {  
+        ArrayList<GenPolynomial<C>> P = new ArrayList<GenPolynomial<C>>();
+        if ( Pp == null ) {
+           return null;
+        }
+        for ( GenPolynomial<C> a : Pp ) {
+            if ( !a.isZERO() ) {
+               P.add( a );
+            }
+        }
+        int l = P.size();
+        if ( l <= 1 ) return P;
+
+        int irr = 0;
+        ExpVector e;        
+        ExpVector f;        
+        GenPolynomial<C> a;
+        Iterator<GenPolynomial<C>> it;
+        logger.debug("irr = ");
+        while ( irr != l ) {
+            //it = P.listIterator(); 
+            a = P.get(0); //it.next();
+            P.remove(0);
+            e = a.leadingExpVector();
+            a = normalform( P, a );
+            logger.debug(String.valueOf(irr));
+            if ( a.isZERO() ) { l--;
+               if ( l <= 1 ) { return P; }
+            } else {
+               f = a.leadingExpVector();
+               if ( e.equals( f ) ) {
+                  irr++;
+               } else {
+                  irr = 0; 
+               }
+               P.add( a );
+            }
+        }
+        //System.out.println();
+        return P;
     }
 
 }

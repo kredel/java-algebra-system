@@ -4,6 +4,8 @@
 
 package edu.jas.ring;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -204,6 +206,59 @@ public class EReductionSeq<C extends RingElem<C>>
         }
         return R;
         */
+    }
+
+
+    /**
+     * Irreducible set.
+     * @typeparam C coefficient type.
+     * @param Pp polynomial list.
+     * @return a list P of polynomials which are in normalform wrt. P.
+     */
+    public List<GenPolynomial<C>> irreducibleSet(List<GenPolynomial<C>> Pp) {  
+        ArrayList<GenPolynomial<C>> P = new ArrayList<GenPolynomial<C>>();
+        if ( Pp == null ) {
+           return null;
+        }
+        for ( GenPolynomial<C> a : Pp ) {
+            if ( !a.isZERO() ) {
+               P.add( a );
+            }
+        }
+        int l = P.size();
+        if ( l <= 1 ) return P;
+
+        int irr = 0;
+        ExpVector e;        
+        ExpVector f;        
+        C c;
+        C d;
+        GenPolynomial<C> a;
+        Iterator<GenPolynomial<C>> it;
+        logger.debug("irr = ");
+        while ( irr != l ) {
+            //it = P.listIterator(); 
+            a = P.get(0); //it.next();
+            P.remove(0);
+            e = a.leadingExpVector();
+            c = a.leadingBaseCoefficient();
+            a = normalform( P, a );
+            logger.debug(String.valueOf(irr));
+            if ( a.isZERO() ) { l--;
+               if ( l <= 1 ) { return P; }
+            } else {
+               f = a.leadingExpVector();
+               d = a.leadingBaseCoefficient();
+               if ( e.equals( f ) && c.equals(d) ) {
+                  irr++;
+               } else {
+                  irr = 0; 
+               }
+               P.add( a );
+            }
+        }
+        //System.out.println();
+        return P;
     }
 
 }
