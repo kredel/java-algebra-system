@@ -190,6 +190,12 @@ public static Test suite() {
      L.add(b);
      e = red.normalform( L, a );
      assertTrue("isZERO( e ) some times", e.isZERO() ); 
+
+     e = red.SPolynomial( a, b );
+     //System.out.println("e = " + e);
+     ExpVector ce = ExpVector.EVLCM(a.leadingExpVector(),b.leadingExpVector());
+     ExpVector ee = e.leadingExpVector();
+     assertFalse("lcm(lt(a),lt(b)) != lt(e) ", ce.equals( e ) ); 
  }
 
 
