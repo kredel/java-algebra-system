@@ -314,7 +314,7 @@ public static Test suite() {
      GenPolynomialRing<BigInteger> fac 
           = new GenPolynomialRing<BigInteger>( bi, rl );
 
-     DReductionSeq<BigInteger> dred = new DReductionSeq<BigInteger>();
+     EReductionSeq<BigInteger> ered = new EReductionSeq<BigInteger>();
 
      GenPolynomial<BigInteger> a = fac.random(kl, ll, el, q );
      GenPolynomial<BigInteger> b = fac.random(kl, ll, el, q );
@@ -326,7 +326,7 @@ public static Test suite() {
      L.add(a);
 
      GenPolynomial<BigInteger> e 
-         = dred.normalform( L, a );
+         = ered.normalform( L, a );
      //System.out.println("a = " + a);
      //System.out.println("e = " + e);
      assertTrue("isZERO( e )", e.isZERO() );
@@ -334,14 +334,14 @@ public static Test suite() {
      assertTrue("not isZERO( b )", !b.isZERO() );
 
      L.add(b);
-     e = dred.normalform( L, a );
+     e = ered.normalform( L, a );
      //System.out.println("b = " + b);
      //System.out.println("e = " + e);
      assertTrue("isZERO( e ) some times", e.isZERO() ); 
 
      GenPolynomial<BigInteger> c = fac.getONE();
      a = a.sum(c);
-     e = dred.normalform( L, a );
+     e = ered.normalform( L, a );
      //System.out.println("b = " + b);
      //System.out.println("e = " + e);
      assertTrue("isONE( e ) some times", e.isONE() ); 
@@ -350,7 +350,7 @@ public static Test suite() {
      a = c.multiply( bi.fromInteger(4) );
      b = c.multiply( bi.fromInteger(5) );
      L.add( a );
-     e = dred.normalform( L, b );
+     e = ered.normalform( L, b );
      //System.out.println("a = " + a);
      //System.out.println("b = " + b);
      //System.out.println("e = " + e);
@@ -358,8 +358,8 @@ public static Test suite() {
 
      a = fac.random(kl, ll, el, q ); //.abs();
      b = fac.random(kl, ll, el, q ); //.abs();
-     c = dred.DPolynomial( a, b );
-     e = dred.SPolynomial( a, b );
+     c = ered.DPolynomial( a, b );
+     e = ered.SPolynomial( a, b );
      //System.out.println("a = " + a);
      //System.out.println("b = " + b);
      //System.out.println("c = " + c);

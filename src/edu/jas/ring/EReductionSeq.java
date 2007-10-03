@@ -16,13 +16,13 @@ import edu.jas.structure.RingElem;
 
 
 /**
- * Polynomial D-Reduction sequential use algorithm.
+ * Polynomial E-Reduction sequential use algorithm.
  * Implements normalform.
  * @author Heinz Kredel
  */
 
-public class DReductionSeq<C extends RingElem<C>>
-             extends ReductionAbstract<C> {
+public class EReductionSeq<C extends RingElem<C>>
+             extends DReductionSeq<C> {
 
     private static final Logger logger = Logger.getLogger(DReductionSeq.class);
 
@@ -30,12 +30,12 @@ public class DReductionSeq<C extends RingElem<C>>
     /**
      * Constructor.
      */
-    public DReductionSeq() {
+    public EReductionSeq() {
     }
 
 
     /**
-     * Normalform using d-reduction.
+     * Normalform using e-reduction.
      * @typeparam C coefficient type.
      * @param Ap polynomial.
      * @param Pp polynomial list.
@@ -62,7 +62,7 @@ public class DReductionSeq<C extends RingElem<C>>
         }
         Map.Entry<ExpVector,C> m;
         ExpVector[] htl = new ExpVector[ l ];
-        C[] lbc = (C[]) new Object[ l ]; // want <C>
+        C[] lbc = (C[]) new RingElem[ l ]; // want <C>
         GenPolynomial<C>[] p = (GenPolynomial<C>[])new GenPolynomial[ l ];
         int i;
         int j = 0;
@@ -81,6 +81,7 @@ public class DReductionSeq<C extends RingElem<C>>
         C a;
         boolean mt = false;
         GenPolynomial<C> R = Ap.ring.getZERO();
+        GenPolynomial<C> T = Ap.ring.getZERO();
         GenPolynomial<C> Q = null;
         GenPolynomial<C> S = Ap;
         while ( S.length() > 0 ) { 
@@ -98,65 +99,20 @@ public class DReductionSeq<C extends RingElem<C>>
                  S = S.reductum(); 
                  // System.out.println(" S = " + S);
               } else { 
-                 //logger.info("red div = " + e);
+                 ExpVector f = ExpVector.EVDIF( e, htl[i] );
+                 //logger.info("red div = " + f);
                  C r = a.remainder( lbc[i] );
-                 if ( ! r.isZERO() ) {
-                    //logger.debug("irred");
-                    R = R.sum( a, e );
-                    S = S.reductum(); 
-                 } else {
-                    ExpVector f = ExpVector.EVDIF( e, htl[i] );
-                    C b = a.divide( lbc[i] );
-                    Q = p[i].multiply( b, f );
+                 C b = a.divide( lbc[i] );
+                 Q = p[i].multiply( b, f );
+                 if ( r.isZERO() ) {
                     S = S.subtract( Q ); // ok also with reductum
+                 } else {
+                    T = T.sum( r, e );   // ok also with R
+                    S = S.reductum().subtract( Q.reductum() );
                  }
               }
         }
-        return R;
-    }
-
-
-    /**
-     * D-Polynomial.
-     * @typeparam C coefficient type.
-     * @param Ap polynomial.
-     * @param Bp polynomial.
-     * @return dpol(Ap,Bp) the D-polynomial of Ap and Bp.
-     */
-    public GenPolynomial<C> 
-           DPolynomial(GenPolynomial<C> Ap, 
-                       GenPolynomial<C> Bp) {  
-        if ( logger.isInfoEnabled() ) {
-           if ( Bp == null || Bp.isZERO() ) {
-              return Ap.ring.getZERO(); 
-           }
-           if ( Ap == null || Ap.isZERO() ) {
-              return Bp.ring.getZERO(); 
-           }
-           if ( ! Ap.ring.equals( Bp.ring ) ) { 
-              logger.error("rings not equal"); 
-           }
-        }
-        Map.Entry<ExpVector,C> ma = Ap.leadingMonomial();
-        Map.Entry<ExpVector,C> mb = Bp.leadingMonomial();
-
-        ExpVector e = ma.getKey();
-        ExpVector f = mb.getKey();
-
-        ExpVector g  = ExpVector.EVLCM(e,f);
-        ExpVector e1 = ExpVector.EVDIF(g,e);
-        ExpVector f1 = ExpVector.EVDIF(g,f);
-
-        C a = ma.getValue();
-        C b = mb.getValue();
-        C[] c = a.egcd(b);
-
-        //System.out.println("egcd[0] " + c[0]);
-
-        GenPolynomial<C> App = Ap.multiply( c[1], e1 );
-        GenPolynomial<C> Bpp = Bp.multiply( c[2], f1 );
-        GenPolynomial<C> Cp = App.sum(Bpp);
-        return Cp;
+        return R.sum(T);
     }
 
 
