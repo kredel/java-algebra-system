@@ -269,8 +269,8 @@ public abstract class ReductionAbstract<C extends RingElem<C>>
         Iterator<GenPolynomial<C>> it;
         logger.debug("irr = ");
         while ( irr != l ) {
-            it = P.listIterator(); 
-            a = it.next();
+            //it = P.listIterator(); 
+            a = P.get(0); //it.next();
             P.remove(0);
             e = a.leadingExpVector();
             a = normalform( P, a );
