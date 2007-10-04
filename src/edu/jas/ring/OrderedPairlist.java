@@ -68,6 +68,9 @@ public class OrderedPairlist<C extends RingElem<C> > {
          if ( ring instanceof GenSolvablePolynomialRing ) {
             useCriterion4 = false;
          }
+         if ( !ring.coFac.isField() ) {
+            useCriterion4 = false;
+         }
          reduction = new ReductionSeq<C>();
     }
 
@@ -156,7 +159,7 @@ public class OrderedPairlist<C extends RingElem<C> > {
                  // xl is also modified in pairlist 
                  i = pair.i; 
                  j = pair.j; 
-                 //System.out.println("pair(" + j + "," +i+") ");
+                 // System.out.println("pair(" + j + "," +i+") ");
                  if ( useCriterion4 ) {
                     c = reduction.criterion4( pair.pi, pair.pj, g ); 
                  } else {
