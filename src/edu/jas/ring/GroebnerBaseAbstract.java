@@ -184,7 +184,7 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>>
             if ( ! mt ) {
                 F.add( a );
             } else {
-                // System.out.println("dropped " + a.length());
+                //System.out.println("dropped " + a.length());
             }
         }
         G = F;
@@ -195,7 +195,7 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>>
         F = new ArrayList<GenPolynomial<C>>( G.size() );
         while ( G.size() > 0 ) {
             a = G.remove(0);
-            // System.out.println("doing " + a.length());
+            //System.out.println("doing " + a.length());
             a = red.normalform( G, a );
             a = red.normalform( F, a );
             F.add( a );

@@ -65,7 +65,7 @@ public class DReductionSeq<C extends RingElem<C>>
         }
         Map.Entry<ExpVector,C> m;
         ExpVector[] htl = new ExpVector[ l ];
-        C[] lbc = (C[]) new Object[ l ]; // want <C>
+        C[] lbc = (C[]) new RingElem[ l ]; // want <C>
         GenPolynomial<C>[] p = (GenPolynomial<C>[])new GenPolynomial[ l ];
         int i;
         int j = 0;
@@ -96,6 +96,7 @@ public class DReductionSeq<C extends RingElem<C>>
               }
               if ( ! mt ) { 
                  //logger.debug("irred");
+                 //System.out.print(".");
                  R = R.sum( a, e );
                  //S = S.subtract( a, e ); 
                  S = S.reductum(); 
@@ -105,16 +106,20 @@ public class DReductionSeq<C extends RingElem<C>>
                  C r = a.remainder( lbc[i] );
                  if ( ! r.isZERO() ) {
                     //logger.debug("irred");
+                    //System.out.print("+");
                     R = R.sum( a, e );
                     S = S.reductum(); 
                  } else {
+                    //System.out.print("-");
                     ExpVector f = ExpVector.EVDIF( e, htl[i] );
                     C b = a.divide( lbc[i] );
+                    R = R.sum( r, e );
                     Q = p[i].multiply( b, f );
-                    S = S.subtract( Q ); // ok also with reductum
+                    S = S.reductum().subtract( Q.reductum() ); // ok also with reductum
                  }
               }
         }
+        //System.out.println(" ");
         return R;
     }
 
