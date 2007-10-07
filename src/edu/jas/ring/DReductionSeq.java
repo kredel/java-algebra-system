@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.GenSolvablePolynomial;
 
 import edu.jas.structure.RingElem;
 
@@ -60,9 +61,10 @@ public class DReductionSeq<C extends RingElem<C>>
             P = (GenPolynomial<C>[])new GenPolynomial[l];
             //P = Pp.toArray();
             for ( int i = 0; i < Pp.size(); i++ ) {
-                P[i] = Pp.get(i);
+                P[i] = Pp.get(i).abs();
             }
         }
+        //System.out.println("l = " + l);
         Map.Entry<ExpVector,C> m;
         ExpVector[] htl = new ExpVector[ l ];
         C[] lbc = (C[]) new RingElem[ l ]; // want <C>
@@ -82,6 +84,7 @@ public class DReductionSeq<C extends RingElem<C>>
         l = j;
         ExpVector e;
         C a;
+        C r = null;
         boolean mt = false;
         GenPolynomial<C> R = Ap.ring.getZERO();
         GenPolynomial<C> Q = null;
@@ -92,6 +95,10 @@ public class DReductionSeq<C extends RingElem<C>>
               a = m.getValue();
               for ( i = 0; i < l; i++ ) {
                   mt = ExpVector.EVMT( e, htl[i] );
+                  if ( mt ) {
+                     r = a.remainder( lbc[i] );
+                     mt = r.isZERO(); // && mt
+                  }
                   if ( mt ) break; 
               }
               if ( ! mt ) { 
@@ -103,36 +110,75 @@ public class DReductionSeq<C extends RingElem<C>>
                  // System.out.println(" S = " + S);
               } else { 
                  //logger.info("red div = " + e);
-                 C r = a.remainder( lbc[i] );
-                 if ( ! r.isZERO() ) {
-                    //logger.debug("irred");
-                    //System.out.print("+");
-                    R = R.sum( a, e );
-                    S = S.reductum(); 
-                 } else {
-                    //System.out.print("-");
-                    ExpVector f = ExpVector.EVDIF( e, htl[i] );
-                    C b = a.divide( lbc[i] );
-                    R = R.sum( r, e );
-                    Q = p[i].multiply( b, f );
-                    S = S.reductum().subtract( Q.reductum() ); // ok also with reductum
-                 }
+                 //System.out.print("-");
+                 ExpVector f = ExpVector.EVDIF( e, htl[i] );
+                 C b = a.divide( lbc[i] );
+                 R = R.sum( r, e );
+                 Q = p[i].multiply( b, f );
+                 S = S.reductum().subtract( Q.reductum() ); // ok also with reductum
               }
         }
         //System.out.println(" ");
-        return R;
+        return R.abs();
     }
 
 
     /**
-     * D-Polynomial.
+     * S-Polynomial.
      * @typeparam C coefficient type.
      * @param Ap polynomial.
      * @param Bp polynomial.
-     * @return dpol(Ap,Bp) the D-polynomial of Ap and Bp.
+     * @return spol(Ap,Bp) the S-polynomial of Ap and Bp.
      */
     public GenPolynomial<C> 
-           DPolynomial(GenPolynomial<C> Ap, 
+           SPolynomial(GenPolynomial<C> Ap, 
+                       GenPolynomial<C> Bp) {  
+        if ( logger.isInfoEnabled() ) {
+           if ( Bp == null || Bp.isZERO() ) {
+              return Ap.ring.getZERO(); 
+           }
+           if ( Ap == null || Ap.isZERO() ) {
+              return Bp.ring.getZERO(); 
+           }
+           if ( ! Ap.ring.equals( Bp.ring ) ) { 
+              logger.error("rings not equal"); 
+           }
+        }
+        Map.Entry<ExpVector,C> ma = Ap.leadingMonomial();
+        Map.Entry<ExpVector,C> mb = Bp.leadingMonomial();
+
+        ExpVector e = ma.getKey();
+        ExpVector f = mb.getKey();
+
+        ExpVector g  = ExpVector.EVLCM(e,f);
+        ExpVector e1 = ExpVector.EVDIF(g,e);
+        ExpVector f1 = ExpVector.EVDIF(g,f);
+
+        C a = ma.getValue();
+        C b = mb.getValue();
+        C c = a.gcd(b);
+        C m = a.multiply(b);
+        C l = m.divide(c); // = lcm(a,b)
+
+        C a1 = l.divide(a);
+        C b1 = l.divide(b);
+
+        GenPolynomial<C> App = Ap.multiply( a1, e1 );
+        GenPolynomial<C> Bpp = Bp.multiply( b1, f1 );
+        GenPolynomial<C> Cp = App.subtract(Bpp);
+        return Cp;
+    }
+
+
+    /**
+     * G-Polynomial.
+     * @typeparam C coefficient type.
+     * @param Ap polynomial.
+     * @param Bp polynomial.
+     * @return gpol(Ap,Bp) the g-polynomial of Ap and Bp.
+     */
+    public GenPolynomial<C> 
+           GPolynomial(GenPolynomial<C> Ap, 
                        GenPolynomial<C> Bp) {  
         if ( logger.isInfoEnabled() ) {
            if ( Bp == null || Bp.isZERO() ) {
@@ -176,10 +222,10 @@ public class DReductionSeq<C extends RingElem<C>>
      * @param Ap a polynomial.
      * @param j index of Bp in basis list.
      * @param Bp a polynomial.
-     * @return dpol(Ap, Bp), the d-Polynomial for Ap and Bp.
+     * @return gpol(Ap, Bp), the g-Polynomial for Ap and Bp.
      */
     public GenPolynomial<C> 
-           DPolynomial(List<GenPolynomial<C>> S,
+           GPolynomial(List<GenPolynomial<C>> S,
                        int i,
                        GenPolynomial<C> Ap, 
                        int j,
@@ -191,6 +237,7 @@ public class DReductionSeq<C extends RingElem<C>>
     /**
      * GB criterium 4.
      * Use only for commutative polynomial rings.
+     * This version works also for d-Groebner bases.
      * @typeparam C coefficient type.
      * @param A polynomial.
      * @param B polynomial.
@@ -200,13 +247,38 @@ public class DReductionSeq<C extends RingElem<C>>
     public boolean criterion4(GenPolynomial<C> A, 
                               GenPolynomial<C> B, 
                               ExpVector e) {  
-        throw new RuntimeException("criterion4 does not hold");
+        if ( logger.isInfoEnabled() ) {
+           if ( ! A.ring.equals( B.ring ) ) { 
+              logger.error("rings equal"); 
+           }
+           if (   A instanceof GenSolvablePolynomial
+               || B instanceof GenSolvablePolynomial ) {
+              logger.error("GBCriterion4 not applicabable to SolvablePolynomials"); 
+              return true;
+           }
+        }
+        ExpVector ei = A.leadingExpVector();
+        ExpVector ej = B.leadingExpVector();
+        ExpVector g = ExpVector.EVSUM(ei,ej);
+        // boolean t =  g == e ;
+        ExpVector h = ExpVector.EVDIF(g,e);
+        int s = ExpVector.EVSIGN(h);
+        if ( s == 0 ) { // disjoint ht
+           C a = A.leadingBaseCoefficient();
+           C b = B.leadingBaseCoefficient();
+           C d = a.gcd(b);
+           if ( d.isONE() ) { // disjoint hc
+               return false; // can skip pair
+           }
+        }
+        return true; //! ( s == 0 );
     }
 
 
     /**
      * GB criterium 4.
      * Use only for commutative polynomial rings.
+     * This version works also for d-Groebner bases.
      * @typeparam C coefficient type.
      * @param A polynomial.
      * @param B polynomial.
@@ -214,7 +286,29 @@ public class DReductionSeq<C extends RingElem<C>>
      */
     public boolean criterion4(GenPolynomial<C> A, 
                               GenPolynomial<C> B) {  
-        throw new RuntimeException("criterion4 does not hold");
+        if ( logger.isInfoEnabled() ) {
+           if (   A instanceof GenSolvablePolynomial
+               || B instanceof GenSolvablePolynomial ) {
+               logger.error("GBCriterion4 not applicabable to SolvablePolynomials"); 
+               return true;
+           }
+        }
+        ExpVector ei = A.leadingExpVector();
+        ExpVector ej = B.leadingExpVector();
+        ExpVector g = ExpVector.EVSUM(ei,ej);
+        ExpVector e = ExpVector.EVLCM(ei,ej);
+        //        boolean t =  g == e ;
+        ExpVector h = ExpVector.EVDIF(g,e);
+        int s = ExpVector.EVSIGN(h);
+        if ( s == 0 ) { // disjoint ht
+           C a = A.leadingBaseCoefficient();
+           C b = B.leadingBaseCoefficient();
+           C d = a.gcd(b);
+           if ( d.isONE() ) { // disjoint hc
+              return false; // can skip pair
+           }
+        }
+        return true; //! ( s == 0 );
     }
 
 

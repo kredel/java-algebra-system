@@ -28,16 +28,16 @@ import edu.jas.structure.RingElem;
 
 public class OrderedPairlist<C extends RingElem<C> > {
 
-    private final ArrayList<GenPolynomial<C>> P;
-    private final TreeMap<ExpVector,LinkedList<Pair<C>>> pairlist;
-    private final ArrayList<BitSet> red;
-    private final GenPolynomialRing<C> ring;
-    private final Reduction<C> reduction;
-    private boolean oneInGB = false;
-    private boolean useCriterion4 = true;
-    private int putCount;
-    private int remCount;
-    private final int moduleVars;
+    protected final ArrayList<GenPolynomial<C>> P;
+    protected final TreeMap<ExpVector,LinkedList<Pair<C>>> pairlist;
+    protected final ArrayList<BitSet> red;
+    protected final GenPolynomialRing<C> ring;
+    protected final Reduction<C> reduction;
+    protected boolean oneInGB = false;
+    protected boolean useCriterion4 = true;
+    protected int putCount;
+    protected int remCount;
+    protected final int moduleVars;
 
     private static final Logger logger = Logger.getLogger(OrderedPairlist.class);
 
@@ -66,9 +66,6 @@ public class OrderedPairlist<C extends RingElem<C> > {
          putCount = 0;
          remCount = 0;
          if ( ring instanceof GenSolvablePolynomialRing ) {
-            useCriterion4 = false;
-         }
-         if ( !ring.coFac.isField() ) {
             useCriterion4 = false;
          }
          reduction = new ReductionSeq<C>();

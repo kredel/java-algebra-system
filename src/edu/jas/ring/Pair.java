@@ -23,8 +23,8 @@ public class Pair<C extends RingElem<C> >
     public final GenPolynomial<C> pj;
     public final int i;
     public final int j;
-    private int n;
-    private boolean toZero;
+    protected int n;
+    protected boolean toZero;
 
 
     /**

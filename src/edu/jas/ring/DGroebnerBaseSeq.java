@@ -12,10 +12,10 @@ import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
 
-//import edu.jas.poly.ExpVector;
+import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 
-import edu.jas.ring.OrderedPairlist;
+import edu.jas.ring.OrderedDPairlist;
 
 /**
  * D-Groebner Base sequential algorithm.
@@ -70,26 +70,24 @@ public class DGroebnerBaseSeq<C extends RingElem<C>>
                 if ( ! red.moduleCriterion( modv, pi, pj ) ) {
                    continue;
                 }
-                d = red.DPolynomial( pi, pj );
-                if ( d.isZERO() ) {
-                   continue;
+                d = red.GPolynomial( pi, pj );
+                if ( ! d.isZERO() ) {
+                   // better check for top reduction only
+                   d = red.normalform( F, d );
                 }
-                h = red.normalform( F, d );
-                // check for top reduction only
-                if ( ! h.isZERO() ) {
-                   System.out.println("d-pol != 0: " + h);
+                if ( ! d.isZERO() ) {
+                   System.out.println("d-pol("+i+","+j+") != 0: " + d);
                    return false;
                 }
                 //if ( ! red.criterion4( pi, pj ) ) { 
                 //   continue;
                 //}
                 s = red.SPolynomial( pi, pj );
-                if ( s.isZERO() ) {
-                   continue;
+                if ( ! s.isZERO() ) {
+                   s = red.normalform( F, s );
                 }
-                h = red.normalform( F, s );
-                if ( ! h.isZERO() ) {
-                   System.out.println("s-pol != 0: " + h);
+                if ( ! s.isZERO() ) {
+                   System.out.println("s-pol("+i+","+j+") != 0: " + s);
                    return false;
                 }
             }
@@ -111,19 +109,20 @@ public class DGroebnerBaseSeq<C extends RingElem<C>>
         //throw new RuntimeException("not jet implemented");
         GenPolynomial<C> p;
         List<GenPolynomial<C>> G = new ArrayList<GenPolynomial<C>>();
-        OrderedPairlist<C> pairlist = null; 
+        OrderedDPairlist<C> pairlist = null; 
         int l = F.size();
         ListIterator<GenPolynomial<C>> it = F.listIterator();
         while ( it.hasNext() ) { 
             p = it.next();
             if ( !p.isZERO() ) {
+               p = p.abs(); // not monic
                if ( p.isONE() ) {
                   G.clear(); G.add( p );
                   return G; // since no threads are activated
                }
                G.add( p );
                if ( pairlist == null ) {
-                  pairlist = new OrderedPairlist<C>( modv, p.ring );
+                  pairlist = new OrderedDPairlist<C>( modv, p.ring );
                }
                // putOne not required
                pairlist.put( p );
@@ -135,15 +134,43 @@ public class DGroebnerBaseSeq<C extends RingElem<C>>
            return G; // since no threads are activated
         }
 
-        Pair<C> pair;
+        DPair<C> pair;
         GenPolynomial<C> pi;
         GenPolynomial<C> pj;
         GenPolynomial<C> S;
         GenPolynomial<C> D;
         GenPolynomial<C> H;
+        int len = G.size();
+        System.out.println("len = " + len);
+        // D-polynomial case ----------------------
+        // len ok since others reduce to zero
+        /*
+        for ( int i = 0; i < len; i++ ) {
+            pi = G.get(i);
+            for ( int j = i+1; j < len; j++ ) {
+                pj = G.get(j);
+                D = red.GPolynomial( pi, pj );
+                //System.out.println("D_d = " + D);
+                if ( ! D.isZERO() ) {
+                   H = red.normalform( G, D );
+                   System.out.println("D_d_i = " + D);
+                   System.out.println("H_d_i = " + H);
+                   if ( H.isONE() ) {
+                      G.clear(); G.add( H );
+                      return G; // since no threads are activated
+                   }
+                   if ( !H.isZERO() ) {
+                      l++;
+                      G.add( H );
+                      pairlist.put( H );
+                   }
+                }
+            }
+        }
+        */
         while ( pairlist.hasNext() ) {
               pair = pairlist.removeNext();
-              //System.out.println("pair = " + pair);
+              System.out.println("pair = " + pair);
               if ( pair == null ) continue; 
 
               pi = pair.pi; 
@@ -154,59 +181,179 @@ public class DGroebnerBaseSeq<C extends RingElem<C>>
               }
 
               // D-polynomial case ----------------------
-              D = red.DPolynomial( pi, pj );
-              if ( ! D.isZERO() ) {
-                 H = red.normalform( G, D );
-                 if ( H.isONE() ) {
-                    G.clear(); G.add( H );
-                    return G; // since no threads are activated
-                 }
-                 if ( !H.isZERO() && !H.equals(D) ) {
-                    l++;
-                    G.add( H );
-                    pairlist.put( H );
+              if ( pair.getUseCriterion4() ) {
+                 D = red.GPolynomial( pi, pj );
+                 System.out.println("D_d = " + D);
+                 if ( ! D.isZERO() ) {
+                    H = red.normalform( G, D );
+                    //System.out.println("D_d_i = " + D);
+                    System.out.println("H_d_i = " + H);
+                    if ( H.isONE() ) {
+                       G.clear(); G.add( H );
+                       return G; // since no threads are activated
+                    }
+                    if ( !H.isZERO() ) {
+                       l++;
+                       G.add( H );
+                       pairlist.put( H );
+                    }
                  }
               }
 
               // S-polynomial case -----------------------
-              S = red.SPolynomial( pi, pj );
-              if ( S.isZERO() ) {
-                 pair.setZero();
-                 continue;
-              }
-              if ( logger.isDebugEnabled() ) {
-                 logger.debug("ht(S) = " + S.leadingExpVector() );
-              }
+              if ( pair.getUseCriterion3() ) {
+                  S = red.SPolynomial( pi, pj );
+                  System.out.println("S_d = " + S);
+                  if ( S.isZERO() ) {
+                      pair.setZero();
+                      continue;
+                  }
+                  if ( logger.isDebugEnabled() ) {
+                      logger.debug("ht(S) = " + S.leadingExpVector() );
+                  }
 
-              H = red.normalform( G, S );
-              if ( H.isZERO() ) {
-                 pair.setZero();
-                 continue;
-              }
-              if ( logger.isDebugEnabled() ) {
-                 logger.debug("ht(H) = " + H.leadingExpVector() );
-              }
+                  H = red.normalform( G, S );
+                  if ( H.isZERO() ) {
+                      pair.setZero();
+                      continue;
+                  }
+                  if ( logger.isDebugEnabled() ) {
+                      logger.debug("ht(H) = " + H.leadingExpVector() );
+                  }
 
-              if ( H.isONE() ) {
-                  G.clear(); G.add( H );
-                  return G; // since no threads are activated
-              }
-              if ( logger.isDebugEnabled() ) {
-                 logger.debug("H = " + H );
-              }
-              if ( !H.isZERO() && !H.equals(S) ) {
-                 l++;
-                 G.add( H );
-                 pairlist.put( H );
+                  if ( H.isONE() ) {
+                      G.clear(); G.add( H );
+                      return G; // since no threads are activated
+                  }
+                  if ( logger.isDebugEnabled() ) {
+                      logger.debug("H = " + H );
+                  }
+                  if ( !H.isZERO() ) {
+                      len = G.size();
+                      l++;
+                      G.add( H );
+                      pairlist.put( H );
+                      /*
+                      for ( int i = 0; i < len; i++ ) {
+                          pi = G.get(i);
+                          D = red.GPolynomial( pi, H );
+                          if ( ! D.isZERO() ) {
+                              H = red.normalform( G, D );
+                              //System.out.println("D_d = " + D);
+                              System.out.println("H_d = " + H);
+                              if ( H.isONE() ) {
+                                  G.clear(); G.add( H );
+                                  return G; // since no threads are activated
+                              }
+                              if ( !H.isZERO() ) {
+                                  l++;
+                                  G.add( H );
+                                  pairlist.put( H );
+                              }
+                          }
+                      }
+                      */
+                  }
               }
         }
-        logger.debug("#sequential list = "+G.size());
+        logger.debug("#sequential list = " + G.size());
         G = minimalGB(G);
         logger.info("pairlist #put = " + pairlist.putCount() 
                   + " #rem = " + pairlist.remCount()
                     // + " #total = " + pairlist.pairCount()
                    );
         return G;
+    }
+
+
+    /**
+     * Minimal ordered d-groebner basis.
+     * @typeparam C coefficient type.
+     * @param Gp a Groebner base.
+     * @return a d-reduced Groebner base of Gp.
+     */
+    public List<GenPolynomial<C>> 
+                minimalGB(List<GenPolynomial<C>> Gp) {  
+        if ( Gp == null ) {
+            return Gp;
+        }
+        GenPolynomial<C> a;
+        List<GenPolynomial<C>> G;
+        G = new ArrayList<GenPolynomial<C>>( Gp.size() );
+        ListIterator<GenPolynomial<C>> it = Gp.listIterator();
+        while ( it.hasNext() ) { 
+            a = it.next();
+            if ( a.length() != 0 ) { // always true
+               // already positive a = a.abs();
+               G.add( a );
+            }
+        }
+        if ( G.size() <= 1 ) {
+           return G;
+        }
+        ExpVector e;        
+        ExpVector f;        
+        GenPolynomial<C> p;
+        C c, d;
+        C r = null;
+        List<GenPolynomial<C>> F;
+        F = new ArrayList<GenPolynomial<C>>( G.size() );
+        boolean mt;
+        while ( G.size() > 0 ) {
+            a = G.remove(0);
+            e = a.leadingExpVector();
+            c = a.leadingBaseCoefficient();
+
+            it = G.listIterator();
+            mt = false;
+            while ( it.hasNext() && ! mt ) {
+               p = it.next();
+               f = p.leadingExpVector();
+               mt = ExpVector.EVMT( e, f );
+               if ( mt ) {
+                  d = p.leadingBaseCoefficient();
+                  r = c.remainder( d );
+                  mt = r.isZERO(); // && mt
+               }
+            }
+            it = F.listIterator();
+            while ( it.hasNext() && ! mt ) {
+               p = it.next();
+               f = p.leadingExpVector();
+               mt = ExpVector.EVMT( e, f );
+               if ( mt ) {
+                  d = p.leadingBaseCoefficient();
+                  r = c.remainder( d );
+                  mt = r.isZERO(); // && mt
+               }
+            }
+            if ( ! mt ) {
+                F.add( a );
+            } else {
+                System.out.println("dropped " + a);
+                List<GenPolynomial<C>> ff;
+                ff = new ArrayList<GenPolynomial<C>>( G );
+                ff.addAll(F);
+                a = red.normalform( ff, a );
+                if ( !a.isZERO() ) {
+                   System.out.println("error, nf(a) " + a);
+                }
+            }
+        }
+        G = F;
+        if ( G.size() <= 1 ) {
+           return G;
+        }
+
+        F = new ArrayList<GenPolynomial<C>>( G.size() );
+        while ( G.size() > 0 ) {
+            a = G.remove(0);
+            //System.out.println("doing " + a.length());
+            a = red.normalform( G, a );
+            a = red.normalform( F, a );
+            F.add( a );
+        }
+        return F;
     }
 
 }
