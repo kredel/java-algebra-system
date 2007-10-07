@@ -364,7 +364,7 @@ public static Test suite() {
 
      a = fac.random(kl, ll, el, q ); //.abs();
      b = fac.random(kl, ll, el, q ); //.abs();
-     c = ered.DPolynomial( a, b );
+     c = ered.GPolynomial( a, b );
      e = ered.SPolynomial( a, b );
      //System.out.println("a = " + a);
      //System.out.println("b = " + b);
