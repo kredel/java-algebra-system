@@ -79,6 +79,7 @@ public class DGroebnerBaseSeq<C extends RingElem<C>>
                    System.out.println("d-pol("+i+","+j+") != 0: " + d);
                    return false;
                 }
+                // works ok
                 //if ( ! red.criterion4( pi, pj ) ) { 
                 //   continue;
                 //}
@@ -142,9 +143,8 @@ public class DGroebnerBaseSeq<C extends RingElem<C>>
         GenPolynomial<C> H;
         int len = G.size();
         System.out.println("len = " + len);
-        // D-polynomial case ----------------------
-        // len ok since others reduce to zero
         /*
+        // D-polynomial case ----------------------
         for ( int i = 0; i < len; i++ ) {
             pi = G.get(i);
             for ( int j = i+1; j < len; j++ ) {
@@ -181,29 +181,26 @@ public class DGroebnerBaseSeq<C extends RingElem<C>>
               }
 
               // D-polynomial case ----------------------
-              if ( pair.getUseCriterion4() ) {
-                 D = red.GPolynomial( pi, pj );
-                 System.out.println("D_d = " + D);
-                 if ( ! D.isZERO() ) {
-                    H = red.normalform( G, D );
-                    //System.out.println("D_d_i = " + D);
-                    System.out.println("H_d_i = " + H);
-                    if ( H.isONE() ) {
-                       G.clear(); G.add( H );
-                       return G; // since no threads are activated
-                    }
-                    if ( !H.isZERO() ) {
-                       l++;
-                       G.add( H );
-                       pairlist.put( H );
-                    }
-                 }
+              D = red.GPolynomial( pi, pj );
+              //System.out.println("D_d = " + D);
+              if ( ! D.isZERO() ) {
+                  H = red.normalform( G, D );
+                  System.out.println("Dred = " + H);
+                  if ( H.isONE() ) {
+                      G.clear(); G.add( H );
+                      return G; // since no threads are activated
+                  }
+                  if ( !H.isZERO() ) {
+                      l++;
+                      G.add( H );
+                      pairlist.put( H );
+                  }
               }
 
               // S-polynomial case -----------------------
-              if ( pair.getUseCriterion3() ) {
+              if ( pair.getUseCriterion3() && pair.getUseCriterion4() ) {
                   S = red.SPolynomial( pi, pj );
-                  System.out.println("S_d = " + S);
+                  //System.out.println("S_d = " + S);
                   if ( S.isZERO() ) {
                       pair.setZero();
                       continue;
@@ -229,30 +226,11 @@ public class DGroebnerBaseSeq<C extends RingElem<C>>
                       logger.debug("H = " + H );
                   }
                   if ( !H.isZERO() ) {
+                      System.out.println("Sred = " + H);
                       len = G.size();
                       l++;
                       G.add( H );
                       pairlist.put( H );
-                      /*
-                      for ( int i = 0; i < len; i++ ) {
-                          pi = G.get(i);
-                          D = red.GPolynomial( pi, H );
-                          if ( ! D.isZERO() ) {
-                              H = red.normalform( G, D );
-                              //System.out.println("D_d = " + D);
-                              System.out.println("H_d = " + H);
-                              if ( H.isONE() ) {
-                                  G.clear(); G.add( H );
-                                  return G; // since no threads are activated
-                              }
-                              if ( !H.isZERO() ) {
-                                  l++;
-                                  G.add( H );
-                                  pairlist.put( H );
-                              }
-                          }
-                      }
-                      */
                   }
               }
         }
