@@ -268,7 +268,7 @@ public class DReductionSeq<C extends RingElem<C>>
            C b = B.leadingBaseCoefficient();
            C d = a.gcd(b);
            if ( d.isONE() ) { // disjoint hc
-               return false; // can skip pair
+              return false; // can skip pair
            }
         }
         return true; //! ( s == 0 );
