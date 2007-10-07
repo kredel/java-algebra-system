@@ -71,7 +71,7 @@ public class OrderedDPairlist<C extends RingElem<C> >
        boolean c = false;
        int i, j;
 
-       while ( /*!c &&*/ ip.hasNext() )  {
+       if  ( /*!c &&*/ ip.hasNext() )  {
            Map.Entry<ExpVector,LinkedList<Pair<C>>> me = ip.next();
            ExpVector g =  me.getKey();
            LinkedList<Pair<C>> xl = me.getValue();
