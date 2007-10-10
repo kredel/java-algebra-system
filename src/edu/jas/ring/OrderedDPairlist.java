@@ -86,7 +86,7 @@ public class OrderedDPairlist<C extends RingElem<C> >
                  j = pair.j; 
                  // System.out.println("pair(" + j + "," +i+") ");
                  if ( useCriterion4 ) {
-                    c = reduction.criterion4( pair.pi, pair.pj, g ); 
+                    c = dreduction.criterion4( pair.pi, pair.pj, g ); 
                  } else {
                     c = true;
                  }
