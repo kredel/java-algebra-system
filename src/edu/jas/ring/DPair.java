@@ -66,8 +66,8 @@ public class DPair<C extends RingElem<C> >
      * toString.
      */
     public String toString() {
-        return super.toString() + " useC4 = " + useCriterion4 
-                                + " useC3 = " + useCriterion3;
+        return super.toString() + ", useC4 = " + useCriterion4 
+                                + ", useC3 = " + useCriterion3;
     }
 
 

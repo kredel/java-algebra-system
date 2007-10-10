@@ -170,7 +170,7 @@ public class DGroebnerBaseSeq<C extends RingElem<C>>
         */
         while ( pairlist.hasNext() ) {
               pair = pairlist.removeNext();
-              System.out.println("pair = " + pair);
+              //System.out.println("pair = " + pair);
               if ( pair == null ) continue; 
 
               pi = pair.pi; 
@@ -185,7 +185,6 @@ public class DGroebnerBaseSeq<C extends RingElem<C>>
               //System.out.println("D_d = " + D);
               if ( ! D.isZERO() ) {
                   H = red.normalform( G, D );
-                  System.out.println("Dred = " + H);
                   if ( H.isONE() ) {
                       G.clear(); G.add( H );
                       return G; // since no threads are activated
@@ -194,6 +193,7 @@ public class DGroebnerBaseSeq<C extends RingElem<C>>
                       l++;
                       G.add( H );
                       pairlist.put( H );
+                      System.out.println("Dred = " + H);
                   }
               }
 
