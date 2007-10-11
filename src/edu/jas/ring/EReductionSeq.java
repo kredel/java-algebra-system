@@ -59,7 +59,7 @@ public class EReductionSeq<C extends RingElem<C>>
             P = (GenPolynomial<C>[])new GenPolynomial[l];
             //P = Pp.toArray();
             for ( int i = 0; i < Pp.size(); i++ ) {
-                P[i] = Pp.get(i);
+                P[i] = Pp.get(i).abs();
             }
         }
         Map.Entry<ExpVector,C> m;
@@ -79,42 +79,43 @@ public class EReductionSeq<C extends RingElem<C>>
             }
         }
         l = j;
-        ExpVector e;
-        C a;
-        boolean mt = false;
+        ExpVector e = null;
+        C a = null;
         GenPolynomial<C> R = Ap.ring.getZERO();
         GenPolynomial<C> T = Ap.ring.getZERO();
         GenPolynomial<C> Q = null;
         GenPolynomial<C> S = Ap;
         while ( S.length() > 0 ) { 
+              boolean mt = false;
               m = S.leadingMonomial();
               e = m.getKey();
               a = m.getValue();
               for ( i = 0; i < l; i++ ) {
                   mt = ExpVector.EVMT( e, htl[i] );
-                  if ( mt ) break; 
+                  if ( mt ) {
+                     ExpVector f = ExpVector.EVDIF( e, htl[i] );
+                     //logger.info("red div = " + f);
+                     C r = a.remainder( lbc[i] );
+                     C b = a.divide( lbc[i] );
+                     Q = p[i].multiply( b, f );
+                     S = S.subtract( Q ); // ok also with reductum
+                     //System.out.println(" r = " + r);
+                     a = r;
+                     if ( r.isZERO() ) {
+                        break;
+                     }
+                  }
               }
-              if ( ! mt ) { 
+              if ( !a.isZERO() ) { //! mt ) { 
                  //logger.debug("irred");
                  R = R.sum( a, e );
                  //S = S.subtract( a, e ); 
                  S = S.reductum(); 
-                 // System.out.println(" S = " + S);
-              } else { 
-                 ExpVector f = ExpVector.EVDIF( e, htl[i] );
-                 //logger.info("red div = " + f);
-                 C r = a.remainder( lbc[i] );
-                 C b = a.divide( lbc[i] );
-                 Q = p[i].multiply( b, f );
-                 if ( r.isZERO() ) {
-                    S = S.subtract( Q ); // ok also with reductum
-                 } else {
-                    T = T.sum( r, e );   // ok also with R
-                    S = S.reductum().subtract( Q.reductum() );
-                 }
               }
+              //System.out.println(" R = " + R);
+              //System.out.println(" S = " + S);
         }
-        return R.sum(T);
+        return R.abs();
     }
 
 
