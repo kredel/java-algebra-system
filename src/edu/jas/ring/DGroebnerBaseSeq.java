@@ -28,6 +28,8 @@ public class DGroebnerBaseSeq<C extends RingElem<C>>
 
 
     private static final Logger logger = Logger.getLogger(DGroebnerBaseSeq.class);
+    private final boolean debug = logger.isDebugEnabled();
+
 
 
     /**
@@ -80,9 +82,9 @@ public class DGroebnerBaseSeq<C extends RingElem<C>>
                    return false;
                 }
                 // works ok
-                //if ( ! red.criterion4( pi, pj ) ) { 
-                //   continue;
-                //}
+                if ( ! red.criterion4( pi, pj ) ) { 
+                   continue;
+                }
                 s = red.SPolynomial( pi, pj );
                 if ( ! s.isZERO() ) {
                    s = red.normalform( F, s );
@@ -141,33 +143,8 @@ public class DGroebnerBaseSeq<C extends RingElem<C>>
         GenPolynomial<C> S;
         GenPolynomial<C> D;
         GenPolynomial<C> H;
-        int len = G.size();
-        System.out.println("len = " + len);
-        /*
-        // D-polynomial case ----------------------
-        for ( int i = 0; i < len; i++ ) {
-            pi = G.get(i);
-            for ( int j = i+1; j < len; j++ ) {
-                pj = G.get(j);
-                D = red.GPolynomial( pi, pj );
-                //System.out.println("D_d = " + D);
-                if ( ! D.isZERO() ) {
-                   H = red.normalform( G, D );
-                   System.out.println("D_d_i = " + D);
-                   System.out.println("H_d_i = " + H);
-                   if ( H.isONE() ) {
-                      G.clear(); G.add( H );
-                      return G; // since no threads are activated
-                   }
-                   if ( !H.isZERO() ) {
-                      l++;
-                      G.add( H );
-                      pairlist.put( H );
-                   }
-                }
-            }
-        }
-        */
+        //int len = G.size();
+        //System.out.println("len = " + len);
         while ( pairlist.hasNext() ) {
               pair = pairlist.removeNext();
               //System.out.println("pair = " + pair);
@@ -190,10 +167,10 @@ public class DGroebnerBaseSeq<C extends RingElem<C>>
                       return G; // since no threads are activated
                   }
                   if ( !H.isZERO() ) {
+                      logger.info("Dred = " + H);
                       l++;
                       G.add( H );
                       pairlist.put( H );
-                      System.out.println("Dred = " + H);
                   }
               }
 
@@ -226,8 +203,8 @@ public class DGroebnerBaseSeq<C extends RingElem<C>>
                       logger.debug("H = " + H );
                   }
                   if ( !H.isZERO() ) {
-                      System.out.println("Sred = " + H);
-                      len = G.size();
+                      logger.info("Sred = " + H);
+                      //len = G.size();
                       l++;
                       G.add( H );
                       pairlist.put( H );
@@ -307,7 +284,7 @@ public class DGroebnerBaseSeq<C extends RingElem<C>>
             }
             if ( ! mt ) {
                 F.add( a );
-            } else {
+            } else if ( debug ) {
                 System.out.println("dropped " + a);
                 List<GenPolynomial<C>> ff;
                 ff = new ArrayList<GenPolynomial<C>>( G );

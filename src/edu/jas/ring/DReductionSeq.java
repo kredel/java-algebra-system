@@ -29,6 +29,7 @@ public class DReductionSeq<C extends RingElem<C>>
              implements DReduction<C> {
 
     private static final Logger logger = Logger.getLogger(DReductionSeq.class);
+    private final boolean debug = logger.isDebugEnabled();
 
 
     /**
@@ -43,7 +44,7 @@ public class DReductionSeq<C extends RingElem<C>>
      * @typeparam C coefficient type.
      * @param Ap polynomial.
      * @param Pp polynomial list.
-     * @return e-nf(Ap) with respect to Pp.
+     * @return d-nf(Ap) with respect to Pp.
      */
     //SuppressWarnings("unchecked") // not jet working
     public GenPolynomial<C> normalform(List<GenPolynomial<C>> Pp, 
@@ -103,14 +104,12 @@ public class DReductionSeq<C extends RingElem<C>>
               }
               if ( ! mt ) { 
                  //logger.debug("irred");
-                 //System.out.print(".");
                  R = R.sum( a, e );
                  //S = S.subtract( a, e ); 
                  S = S.reductum(); 
-                 // System.out.println(" S = " + S);
+                 //System.out.println(" S = " + S);
               } else { 
                  //logger.info("red div = " + e);
-                 //System.out.print("-");
                  ExpVector f = ExpVector.EVDIF( e, htl[i] );
                  C b = a.divide( lbc[i] );
                  R = R.sum( r, e );
@@ -118,7 +117,6 @@ public class DReductionSeq<C extends RingElem<C>>
                  S = S.reductum().subtract( Q.reductum() ); // ok also with reductum
               }
         }
-        //System.out.println(" ");
         return R.abs();
     }
 
