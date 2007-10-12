@@ -137,7 +137,7 @@ public class DGroebnerBaseSeq<C extends RingElem<C>>
            return G; // since no threads are activated
         }
 
-        DPair<C> pair;
+        Pair<C> pair;
         GenPolynomial<C> pi;
         GenPolynomial<C> pj;
         GenPolynomial<C> S;
