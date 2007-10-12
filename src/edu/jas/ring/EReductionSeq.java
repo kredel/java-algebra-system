@@ -24,7 +24,8 @@ import edu.jas.structure.RingElem;
  */
 
 public class EReductionSeq<C extends RingElem<C>>
-             extends DReductionSeq<C> {
+             extends DReductionSeq<C> 
+             implements EReduction<C> {
 
     private static final Logger logger = Logger.getLogger(DReductionSeq.class);
 

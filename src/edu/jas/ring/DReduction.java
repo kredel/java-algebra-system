@@ -6,7 +6,6 @@ package edu.jas.ring;
 
 import java.util.List;
 
-import java.io.Serializable;
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
