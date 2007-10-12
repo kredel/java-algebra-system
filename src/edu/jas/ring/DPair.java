@@ -21,9 +21,6 @@ public class DPair<C extends RingElem<C> >
              extends Pair<C>
              /*implements Serializable, Comparable<Pair>*/ {
 
-    protected boolean useCriterion4 = true;
-    protected boolean useCriterion3 = true;
-
     /**
      * DPair constructor.
      * @param a polynomial i (must be castable to GenPolynomial&lt;C&gt;).
@@ -59,51 +56,6 @@ public class DPair<C extends RingElem<C> >
         if ( p.isZero() ) {
            setZero();
         }
-    }
-
-
-    /**
-     * toString.
-     */
-    public String toString() {
-        return super.toString() + ", useC4 = " + useCriterion4 
-                                + ", useC3 = " + useCriterion3;
-    }
-
-
-    /**
-     * Set useCriterion4.
-     * @param b boolean value to set.
-     */
-    public void setUseCriterion4(boolean c) {
-        this.useCriterion4 = c;
-    }
-
-
-    /**
-     * Get useCriterion4.
-     * @return boolean value.
-     */
-    public boolean getUseCriterion4() {
-        return this.useCriterion4;
-    }
-
-
-    /**
-     * Set useCriterion3.
-     * @param b boolean value to set.
-     */
-    public void setUseCriterion3(boolean c) {
-        this.useCriterion3 = c;
-    }
-
-
-    /**
-     * Get useCriterion3.
-     * @return boolean value.
-     */
-    public boolean getUseCriterion3() {
-        return this.useCriterion3;
     }
 
 }
