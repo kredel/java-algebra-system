@@ -103,7 +103,7 @@ public class EGroebnerBaseSeqTest extends TestCase {
  * Test sequential GBase.
  * 
  */
- public void testSequentialGBase() {
+ public void xtestSequentialGBase() {
 
      L = new ArrayList<GenPolynomial<BigInteger>>();
 
@@ -118,33 +118,33 @@ public class EGroebnerBaseSeqTest extends TestCase {
      }
 
      L.add(a);
-     System.out.println("    L  = " + L );
+     //System.out.println("    L  = " + L );
      L = bb.GB( L );
-     System.out.println("eGB(L) = " + L );
+     //System.out.println("eGB(L) = " + L );
      assertTrue("isGB( { a } )", bb.isGB(L) );
 
      L.add(b);
-     System.out.println("    L  = " + L );
+     //System.out.println("    L  = " + L );
      L = bb.GB( L );
-     System.out.println("eGB(L) = " + L );
+     //System.out.println("eGB(L) = " + L );
      assertTrue("isGB( { a, b } )", bb.isGB(L) );
 
      L.add(c);
-     System.out.println("    L  = " + L );
+     //System.out.println("    L  = " + L );
      L = bb.GB( L );
-     System.out.println("eGB(L) = " + L );
+     //System.out.println("eGB(L) = " + L );
      assertTrue("isGB( { a, ,b, c } )", bb.isGB(L) );
 
      L.add(d);
-     System.out.println("    L  = " + L );
+     //System.out.println("    L  = " + L );
      L = bb.GB( L );
-     System.out.println("eGB(L) = " + L );
+     //System.out.println("eGB(L) = " + L );
      assertTrue("isGB( { a, ,b, c, d } )", bb.isGB(L) );
 
      L.add(e);
-     System.out.println("    L  = " + L );
+     //System.out.println("    L  = " + L );
      L = bb.GB( L );
-     System.out.println("eGB(L) = " + L );
+     //System.out.println("eGB(L) = " + L );
      assertTrue("isGB( { a, ,b, c, d, e } )", bb.isGB(L) );
  }
 
@@ -153,7 +153,7 @@ public class EGroebnerBaseSeqTest extends TestCase {
  * 
  */ 
  @SuppressWarnings("unchecked") // not jet working
- public void xtestTrinks7GBaseZ() {
+ public void testTrinks7GBaseZ() {
      String exam = "Z(B,S,T,Z,P,W) G "
                  + "( "  
                  + "( 45 P + 35 S - 165 B - 36 ), " 
