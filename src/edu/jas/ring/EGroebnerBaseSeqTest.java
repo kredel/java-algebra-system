@@ -45,7 +45,7 @@ public class EGroebnerBaseSeqTest extends TestCase {
  * main
  */
    public static void main (String[] args) {
-          BasicConfigurator.configure();
+       //BasicConfigurator.configure();
           junit.textui.TestRunner.run( suite() );
    }
 
@@ -103,7 +103,7 @@ public class EGroebnerBaseSeqTest extends TestCase {
  * Test sequential GBase.
  * 
  */
- public void xtestSequentialGBase() {
+ public void testSequentialGBase() {
 
      L = new ArrayList<GenPolynomial<BigInteger>>();
 
@@ -153,7 +153,7 @@ public class EGroebnerBaseSeqTest extends TestCase {
  * 
  */ 
  @SuppressWarnings("unchecked") // not jet working
- public void testTrinks7GBaseZ() {
+ public void xtestTrinks7GBaseZ() {
      String exam = "Z(B,S,T,Z,P,W) G "
                  + "( "  
                  + "( 45 P + 35 S - 165 B - 36 ), " 
