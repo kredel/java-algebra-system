@@ -93,14 +93,47 @@ public interface Reduction<C extends RingElem<C>>
 
 
     /**
+     * Is top reducible.
+     * @typeparam C coefficient type.
+     * @param A polynomial.
+     * @param P polynomial list.
+     * @return true if A is top reducible with respect to P.
+     */
+    public boolean isTopReducible(List<GenPolynomial<C>> P, 
+                                  GenPolynomial<C> A);
+
+
+    /**
+     * Is reducible.
+     * @typeparam C coefficient type.
+     * @param A polynomial.
+     * @param P polynomial list.
+     * @return true if A is reducible with respect to P.
+     */
+    public boolean isReducible(List<GenPolynomial<C>> P, 
+                               GenPolynomial<C> A);
+
+
+    /**
+     * Is in Normalform.
+     * @typeparam C coefficient type.
+     * @param A polynomial.
+     * @param P polynomial list.
+     * @return true if A is in normalform with respect to P.
+     */
+    public boolean isNormalform(List<GenPolynomial<C>> P, 
+                                GenPolynomial<C> A);
+
+
+    /**
      * Normalform.
      * @typeparam C coefficient type.
-     * @param Ap polynomial.
-     * @param Pp polynomial list.
-     * @return nf(Ap) with respect to Pp.
+     * @param A polynomial.
+     * @param P polynomial list.
+     * @return nf(A) with respect to P.
      */
-    public GenPolynomial<C> normalform(List<GenPolynomial<C>> Pp, 
-                                       GenPolynomial<C> Ap);
+    public GenPolynomial<C> normalform(List<GenPolynomial<C>> P, 
+                                       GenPolynomial<C> A);
 
 
     /**

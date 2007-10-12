@@ -244,6 +244,101 @@ public abstract class ReductionAbstract<C extends RingElem<C>>
     }
 
 
+    /**
+     * Is top reducible.
+     * @typeparam C coefficient type.
+     * @param A polynomial.
+     * @param P polynomial list.
+     * @return true if A is top reducible with respect to P.
+     */
+    //SuppressWarnings("unchecked") // not jet working
+    public boolean isTopReducible(List<GenPolynomial<C>> P, 
+                                  GenPolynomial<C> A) {  
+        if ( P == null || P.isEmpty() ) {
+           return false;
+        }
+        if ( A == null || A.isZERO() ) {
+           return false;
+        }
+        boolean mt = false;
+        ExpVector e = A.leadingExpVector();
+        for ( GenPolynomial<C> p : P ) {
+            mt = ExpVector.EVMT( e, p.leadingExpVector() );
+            if ( mt ) {
+               return true;
+            } 
+        }
+        return false;
+    }
+
+
+    /**
+     * Is reducible.
+     * @typeparam C coefficient type.
+     * @param Ap polynomial.
+     * @param Pp polynomial list.
+     * @return true if Ap is reducible with respect to Pp.
+     */
+    //SuppressWarnings("unchecked") // not jet working
+    public boolean isReducible(List<GenPolynomial<C>> Pp, 
+                               GenPolynomial<C> Ap) {  
+        return !isNormalform(Pp,Ap);
+    }
+
+
+    /**
+     * Is in Normalform.
+     * @typeparam C coefficient type.
+     * @param Ap polynomial.
+     * @param Pp polynomial list.
+     * @return true if Ap is in normalform with respect to Pp.
+     */
+    //SuppressWarnings("unchecked") // not jet working
+    public boolean isNormalform(List<GenPolynomial<C>> Pp, 
+                                GenPolynomial<C> Ap) {  
+        if ( Pp == null || Pp.isEmpty() ) {
+           return true;
+        }
+        if ( Ap == null || Ap.isZERO() ) {
+           return true;
+        }
+        int l;
+        GenPolynomial<C>[] P;
+        synchronized (Pp) {
+            l = Pp.size();
+            P = new GenPolynomial[l];
+            //P = Pp.toArray();
+            for ( int i = 0; i < Pp.size(); i++ ) {
+                P[i] = Pp.get(i);
+            }
+        }
+        ExpVector[] htl = new ExpVector[ l ];
+        GenPolynomial<C>[] p = new GenPolynomial[ l ];
+        Map.Entry<ExpVector,C> m;
+        int i;
+        int j = 0;
+        for ( i = 0; i < l; i++ ) { 
+            p[i] = P[i];
+            m = p[i].leadingMonomial();
+            if ( m != null ) { 
+               p[j] = p[i];
+               htl[j] = m.getKey();
+               j++;
+            }
+        }
+        l = j;
+        boolean mt = false;
+        for ( ExpVector e : Ap.getMap().keySet() ) { 
+            for ( i = 0; i < l; i++ ) {
+                mt = ExpVector.EVMT( e, htl[i] );
+                if ( mt ) {
+                   return false;
+                } 
+            }
+        }
+        return true;
+    }
+
 
     /**
      * Irreducible set.
