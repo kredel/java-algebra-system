@@ -196,6 +196,19 @@ public static Test suite() {
      ExpVector ce = ExpVector.EVLCM(a.leadingExpVector(),b.leadingExpVector());
      ExpVector ee = e.leadingExpVector();
      assertFalse("lcm(lt(a),lt(b)) != lt(e) ", ce.equals( e ) ); 
+
+
+     L = new ArrayList<GenPolynomial<BigRational>>();
+     L.add( a );
+     assertTrue("isTopRed( a )", red.isTopReducible(L,a) ); 
+     assertTrue("isRed( a )", red.isReducible(L,a) ); 
+     b = fac.random(kl, ll, el, q );
+     L.add( b );
+     assertTrue("isTopRed( b )", red.isTopReducible(L,b) ); 
+     assertTrue("isRed( b )", red.isReducible(L,b) ); 
+     c = fac.random(kl, ll, el, q );
+     e = red.normalform( L, c );
+     assertTrue("isNF( e )", red.isNormalform(L,e) ); 
  }
 
 
@@ -221,6 +234,18 @@ public static Test suite() {
      L.add(b);
      e = redpar.normalform( L, a );
      assertTrue("isZERO( e ) some times", e.isZERO() ); 
+
+     L = new ArrayList<GenPolynomial<BigRational>>();
+     L.add( a );
+     assertTrue("isTopRed( a )", redpar.isTopReducible(L,a) ); 
+     assertTrue("isRed( a )", redpar.isReducible(L,a) ); 
+     b = fac.random(kl, ll, el, q );
+     L.add( b );
+     assertTrue("isTopRed( b )", redpar.isTopReducible(L,b) ); 
+     assertTrue("isRed( b )", redpar.isReducible(L,b) ); 
+     c = fac.random(kl, ll, el, q );
+     e = redpar.normalform( L, c );
+     assertTrue("isNF( e )", redpar.isNormalform(L,e) ); 
  }
 
 
@@ -237,6 +262,7 @@ public static Test suite() {
 
      GenPolynomial<BigComplex> a = fac.random(kl, ll, el, q );
      GenPolynomial<BigComplex> b = fac.random(kl, ll, el, q );
+     GenPolynomial<BigComplex> c;
 
      assertTrue("not isZERO( a )", !a.isZERO() );
 
@@ -253,6 +279,18 @@ public static Test suite() {
      L.add(b);
      e = cred.normalform( L, a );
      assertTrue("isZERO( e ) some times", e.isZERO() ); 
+
+     L = new ArrayList<GenPolynomial<BigComplex>>();
+     L.add( a );
+     assertTrue("isTopRed( a )", cred.isTopReducible(L,a) ); 
+     assertTrue("isRed( a )", cred.isReducible(L,a) ); 
+     b = fac.random(kl, ll, el, q );
+     L.add( b );
+     assertTrue("isTopRed( b )", cred.isTopReducible(L,b) ); 
+     assertTrue("isRed( b )", cred.isReducible(L,b) ); 
+     c = fac.random(kl, ll, el, q );
+     e = cred.normalform( L, c );
+     assertTrue("isNF( e )", cred.isNormalform(L,e) ); 
  }
 
 
@@ -311,10 +349,10 @@ public static Test suite() {
 
 
 /**
- * Test Integer reduction.
+ * Test Integer e-reduction.
  * 
  */
- public void testIntegerReduction() {
+ public void testIntegerEReduction() {
 
      BigInteger bi = new BigInteger(0);
      GenPolynomialRing<BigInteger> fac 
@@ -378,6 +416,99 @@ public static Test suite() {
      assertEquals("lcm(lt(a),lt(b)) == lt(c) ", ce, c.leadingExpVector() ); 
      assertFalse("lcm(lt(a),lt(b)) != lt(e) ", ce.equals( e.leadingExpVector() ) ); 
 
+     L = new ArrayList<GenPolynomial<BigInteger>>();
+     L.add( a );
+     assertTrue("isTopRed( a )", ered.isTopReducible(L,a) ); 
+     assertTrue("isRed( a )", ered.isReducible(L,a) ); 
+     b = fac.random(kl, ll, el, q );
+     L.add( b );
+     assertTrue("isTopRed( b )", ered.isTopReducible(L,b) ); 
+     assertTrue("isRed( b )", ered.isReducible(L,b) ); 
+     c = fac.random(kl, ll, el, q );
+     e = ered.normalform( L, c );
+     assertTrue("isNF( e )", ered.isNormalform(L,e) ); 
+ }
+
+
+/**
+ * Test Integer d-reduction.
+ * 
+ */
+ public void testIntegerDReduction() {
+
+     BigInteger bi = new BigInteger(0);
+     GenPolynomialRing<BigInteger> fac 
+          = new GenPolynomialRing<BigInteger>( bi, rl );
+
+     DReductionSeq<BigInteger> dred = new DReductionSeq<BigInteger>();
+
+     GenPolynomial<BigInteger> a = fac.random(kl, ll, el, q );
+     GenPolynomial<BigInteger> b = fac.random(kl, ll, el, q );
+
+     assertTrue("not isZERO( a )", !a.isZERO() );
+
+     List<GenPolynomial<BigInteger>> L 
+         = new ArrayList<GenPolynomial<BigInteger>>();
+     L.add(a);
+
+     GenPolynomial<BigInteger> e 
+         = dred.normalform( L, a );
+     //System.out.println("a = " + a);
+     //System.out.println("e = " + e);
+     assertTrue("isZERO( e )", e.isZERO() );
+
+     assertTrue("not isZERO( b )", !b.isZERO() );
+
+     L.add(b);
+     e = dred.normalform( L, a );
+     //System.out.println("b = " + b);
+     //System.out.println("e = " + e);
+     assertTrue("isZERO( e ) some times", e.isZERO() ); 
+
+     GenPolynomial<BigInteger> c = fac.getONE();
+     a = a.sum(c);
+     e = dred.normalform( L, a );
+     //System.out.println("b = " + b);
+     //System.out.println("e = " + e);
+     assertTrue("isONE( e ) some times", e.isONE() ); 
+
+     L = new ArrayList<GenPolynomial<BigInteger>>();
+     a = c.multiply( bi.fromInteger(5) );
+     L.add( a );
+     b = c.multiply( bi.fromInteger(4) );
+     e = dred.normalform( L, b );
+     //System.out.println("a = " + a);
+     //System.out.println("b = " + b);
+     //System.out.println("e = " + e);
+     assertTrue("nf(b) = b ", e.equals(b) ); 
+
+     a = fac.random(kl, ll, el, q ); //.abs();
+     b = fac.random(kl, ll, el, q ); //.abs();
+     c = dred.GPolynomial( a, b );
+     e = dred.SPolynomial( a, b );
+     //System.out.println("a = " + a);
+     //System.out.println("b = " + b);
+     //System.out.println("c = " + c);
+     //System.out.println("e = " + e);
+
+     BigInteger ci = a.leadingBaseCoefficient().gcd( b.leadingBaseCoefficient() );
+     assertEquals("gcd(lbc(a),lbc(b)) = lbc(c) ", ci, c.leadingBaseCoefficient() ); 
+
+     ExpVector ce = ExpVector.EVLCM(a.leadingExpVector(),b.leadingExpVector());
+     assertEquals("lcm(lt(a),lt(b)) == lt(c) ", ce, c.leadingExpVector() ); 
+     assertFalse("lcm(lt(a),lt(b)) != lt(e) ", ce.equals( e.leadingExpVector() ) ); 
+
+     L = new ArrayList<GenPolynomial<BigInteger>>();
+     L.add( a );
+     assertTrue("isTopRed( a )", dred.isTopReducible(L,a) ); 
+     assertTrue("isRed( a )", dred.isReducible(L,a) ); 
+     b = fac.random(kl, ll, el, q );
+     L.add( b );
+     assertTrue("isTopRed( b )", dred.isTopReducible(L,b) ); 
+     assertTrue("isRed( b )", dred.isReducible(L,b) ); 
+     c = fac.random(kl, ll, el, q );
+     e = dred.normalform( L, c );
+     assertTrue("isNF( e )", dred.isNormalform(L,e) ); 
  }
 
 }
