@@ -40,6 +40,102 @@ public class DReductionSeq<C extends RingElem<C>>
 
 
     /**
+     * Is top reducible.
+     * @typeparam C coefficient type.
+     * @param A polynomial.
+     * @param P polynomial list.
+     * @return true if A is top reducible with respect to P.
+     */
+    //SuppressWarnings("unchecked") // not jet working
+    public boolean isTopReducible(List<GenPolynomial<C>> P, 
+                                  GenPolynomial<C> A) {  
+        if ( P == null || P.isEmpty() ) {
+           return false;
+        }
+        if ( A == null || A.isZERO() ) {
+           return false;
+        }
+        boolean mt = false;
+        ExpVector e = A.leadingExpVector();
+        C a = A.leadingBaseCoefficient();
+        for ( GenPolynomial<C> p : P ) {
+            mt = ExpVector.EVMT( e, p.leadingExpVector() );
+            if ( mt ) {
+               C b = p.leadingBaseCoefficient();
+               C r = a.remainder( b );
+               mt = r.isZERO();
+               if ( mt ) {
+                  return true;
+               } 
+            }
+        }
+        return false;
+    }
+
+
+    /**
+     * Is in Normalform.
+     * @typeparam C coefficient type.
+     * @param Ap polynomial.
+     * @param Pp polynomial list.
+     * @return true if Ap is in normalform with respect to Pp.
+     */
+    //SuppressWarnings("unchecked") // not jet working
+    public boolean isNormalform(List<GenPolynomial<C>> Pp, 
+                                GenPolynomial<C> Ap) {  
+        if ( Pp == null || Pp.isEmpty() ) {
+           return true;
+        }
+        if ( Ap == null || Ap.isZERO() ) {
+           return true;
+        }
+        int l;
+        GenPolynomial<C>[] P;
+        synchronized (Pp) {
+            l = Pp.size();
+            P = new GenPolynomial[l];
+            //P = Pp.toArray();
+            for ( int i = 0; i < Pp.size(); i++ ) {
+                P[i] = Pp.get(i);
+            }
+        }
+        ExpVector[] htl = new ExpVector[ l ];
+        C[] lbc = (C[]) new RingElem[ l ]; // want <C>
+        GenPolynomial<C>[] p = new GenPolynomial[ l ];
+        Map.Entry<ExpVector,C> m;
+        int i;
+        int j = 0;
+        for ( i = 0; i < l; i++ ) { 
+            p[i] = P[i];
+            m = p[i].leadingMonomial();
+            if ( m != null ) { 
+               p[j] = p[i];
+               htl[j] = m.getKey();
+               lbc[j] = m.getValue();
+               j++;
+            }
+        }
+        l = j;
+        boolean mt = false;
+        Map<ExpVector,C> Am = Ap.getMap();
+        for ( ExpVector e : Am.keySet() ) { 
+            for ( i = 0; i < l; i++ ) {
+                mt = ExpVector.EVMT( e, htl[i] );
+                if ( mt ) {
+                   C a = Am.get(e);
+                   C r = a.remainder( lbc[i] );
+                   mt = r.isZERO();
+                   if ( mt ) {
+                      return false;
+                   }
+                } 
+            }
+        }
+        return true;
+    }
+
+
+    /**
      * Normalform using d-reduction.
      * @typeparam C coefficient type.
      * @param Ap polynomial.
