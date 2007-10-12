@@ -24,7 +24,9 @@ public class Pair<C extends RingElem<C> >
     public final int i;
     public final int j;
     protected int n;
-    protected boolean toZero;
+    protected boolean toZero = false;
+    protected boolean useCriterion4 = true;
+    protected boolean useCriterion3 = true;
 
 
     /**
@@ -61,7 +63,12 @@ public class Pair<C extends RingElem<C> >
      * toString.
      */
     public String toString() {
-        return "pair[" + n + "](" + i + "," + j + "," + toZero + ")";
+        return "pair[" + n + "](" + i + "{" + pi.length() + "}," 
+                           + j + "{" + pj.length() + "}"
+                           + ", r0=" + toZero  
+                           + ", c4=" + useCriterion4  
+                           + ", c3=" + useCriterion3 
+                           + ")";
     }
 
 
@@ -130,6 +137,42 @@ public class Pair<C extends RingElem<C> >
            return -1;
         }
         return 0;
+    }
+
+
+    /**
+     * Set useCriterion4.
+     * @param b boolean value to set.
+     */
+    public void setUseCriterion4(boolean c) {
+        this.useCriterion4 = c;
+    }
+
+
+    /**
+     * Get useCriterion4.
+     * @return boolean value.
+     */
+    public boolean getUseCriterion4() {
+        return this.useCriterion4;
+    }
+
+
+    /**
+     * Set useCriterion3.
+     * @param b boolean value to set.
+     */
+    public void setUseCriterion3(boolean c) {
+        this.useCriterion3 = c;
+    }
+
+
+    /**
+     * Get useCriterion3.
+     * @return boolean value.
+     */
+    public boolean getUseCriterion3() {
+        return this.useCriterion3;
     }
 
 

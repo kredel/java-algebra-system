@@ -59,7 +59,7 @@ public class OrderedDPairlist<C extends RingElem<C> >
      * Appy the criterions 3 and 4 to see if the S-polynomial is required.
      * @return the next pair if one exists, otherwise null.
      */
-    public synchronized DPair<C> removeNext() { 
+    public synchronized Pair<C> removeNext() { 
        if ( oneInGB ) {
           return null;
        }
@@ -67,20 +67,22 @@ public class OrderedDPairlist<C extends RingElem<C> >
              = pairlist.entrySet().iterator();
 
        Pair<C> pair = null;
-       DPair<C> dpair = null;
+       //DPair<C> dpair = null;
        boolean c = false;
        int i, j;
+       ExpVector g = null;
 
        if  ( /*!c &&*/ ip.hasNext() )  {
            Map.Entry<ExpVector,LinkedList<Pair<C>>> me = ip.next();
-           ExpVector g =  me.getKey();
+           g =  me.getKey();
            LinkedList<Pair<C>> xl = me.getValue();
-           if ( logger.isInfoEnabled() )
-              logger.info("g  = " + g);
+           //if ( logger.isInfoEnabled() ) {
+           //   logger.info("g  = " + g);
+           //}
            pair = null;
            if    ( /*!c &&*/ xl.size() > 0 ) {
                  pair = xl.removeFirst();
-                 dpair = new DPair(pair);
+                 //dpair = new DPair(pair);
                  // xl is also modified in pairlist 
                  i = pair.i; 
                  j = pair.j; 
@@ -90,12 +92,12 @@ public class OrderedDPairlist<C extends RingElem<C> >
                  } else {
                     c = true;
                  }
-                 dpair.setUseCriterion4(c);
+                 pair.setUseCriterion4(c);
                  //System.out.println("c4  = " + c);  
                  if ( c ) {
                     c = criterion3( i, j, g );
                     //System.out.println("c3  = " + c); 
-                    dpair.setUseCriterion3(c);
+                    pair.setUseCriterion3(c);
                  }
                  red.get( j ).clear(i); // set(i,false) jdk1.4
            }
@@ -103,11 +105,14 @@ public class OrderedDPairlist<C extends RingElem<C> >
               // = pairlist.remove( g );
        }
        if ( ! c ) {
-          //dpair = null;
+          //pair = null;
        } else {
           remCount++; // count only real pairs
        }
-       return dpair; 
+       if ( logger.isInfoEnabled() ) {
+          logger.info("g  = " + g + " " + pair);
+       }
+       return pair; 
     }
 
 
