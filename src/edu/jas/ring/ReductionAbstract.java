@@ -365,8 +365,8 @@ public abstract class ReductionAbstract<C extends RingElem<C>>
         logger.debug("irr = ");
         while ( irr != l ) {
             //it = P.listIterator(); 
-            a = P.get(0); //it.next();
-            P.remove(0);
+            //a = P.get(0); //it.next();
+            a = P.remove(0);
             e = a.leadingExpVector();
             a = normalform( P, a );
             logger.debug(String.valueOf(irr));

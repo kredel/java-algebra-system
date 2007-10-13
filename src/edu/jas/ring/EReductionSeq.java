@@ -353,8 +353,8 @@ public class EReductionSeq<C extends RingElem<C>>
         logger.debug("irr = ");
         while ( irr != l ) {
             //it = P.listIterator(); 
-            a = P.get(0); //it.next();
-            P.remove(0);
+            //a = P.get(0); //it.next();
+            a = P.remove(0);
             e = a.leadingExpVector();
             c = a.leadingBaseCoefficient();
             a = normalform( P, a );
