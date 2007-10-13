@@ -51,11 +51,14 @@ like <code>GenVector</code> or <code>ModuleList</code>.
 <dt>edu.jas.ring:</dt>
 <dd>
 contains classes for polynomial and solvable polynomial reduction, 
-Groebner bases and ideal arithmetic
+Groebner bases over fields and ideal arithmetic
 as well as thread parallel and distributed versions of Buchbergers algorithm 
 like <code>ReductionSeq</code>, <code>GroebnerBaseAbstract</code>,
 <code>GroebnerBaseSeq</code>, <code>GroebnerBaseParallel</code>
 and <code>GroebnerBaseDistributed</code>.
+New are Groebner bases in polynomial rings over principal ideal domains 
+and Euclidean domains, so called D- and E-Groebner bases,
+e.g. <code>EGroebnerBaseSeq</code>.
 </dd>
 <dt>edu.jas.module:</dt>
 <dd>
@@ -225,7 +228,7 @@ the class edu.jas.ring.RunGB. E.g. <br />
 <p>
 <!-- Created: Sat Mar 19 21:44:14 CET 2005 -->
 <!-- hhmts start -->
-Last modified: Sat Sep  8 16:53:24 CEST 2007
+Last modified: Sat Oct 13 19:20:04 CEST 2007
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
