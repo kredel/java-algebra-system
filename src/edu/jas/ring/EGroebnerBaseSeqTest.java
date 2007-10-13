@@ -45,8 +45,8 @@ public class EGroebnerBaseSeqTest extends TestCase {
  * main
  */
    public static void main (String[] args) {
-       //BasicConfigurator.configure();
-          junit.textui.TestRunner.run( suite() );
+       BasicConfigurator.configure();
+       junit.textui.TestRunner.run( suite() );
    }
 
 /**
