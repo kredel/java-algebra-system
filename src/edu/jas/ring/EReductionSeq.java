@@ -177,11 +177,15 @@ public class EReductionSeq<C extends RingElem<C>>
         }
         l = j;
         ExpVector e = null;
+        ExpVector f = null;
         C a = null;
+        C b = null;
+        C r = null;
         GenPolynomial<C> R = Ap.ring.getZERO();
         GenPolynomial<C> T = Ap.ring.getZERO();
         GenPolynomial<C> Q = null;
         GenPolynomial<C> S = Ap;
+        try {
         while ( S.length() > 0 ) { 
               boolean mt = false;
               m = S.leadingMonomial();
@@ -190,11 +194,16 @@ public class EReductionSeq<C extends RingElem<C>>
               for ( i = 0; i < l; i++ ) {
                   mt = ExpVector.EVMT( e, htl[i] );
                   if ( mt ) {
-                     ExpVector f = ExpVector.EVDIF( e, htl[i] );
+                     f = ExpVector.EVDIF( e, htl[i] );
                      //logger.info("red div = " + f);
-                     C r = a.remainder( lbc[i] );
-                     C b = a.divide( lbc[i] );
-                     Q = p[i].multiply( b, f );
+                     r = a.remainder( lbc[i] );
+                     b = a.divide( lbc[i] );
+                     if ( f == null ) {
+                        System.out.println("f = null: " + e + ", " + htl[i]);
+                        Q = p[i].multiply( b );
+                     } else {
+                        Q = p[i].multiply( b, f );
+                     }
                      S = S.subtract( Q ); // ok also with reductum
                      //System.out.println(" r = " + r);
                      a = r;
@@ -211,6 +220,14 @@ public class EReductionSeq<C extends RingElem<C>>
               }
               //System.out.println(" R = " + R);
               //System.out.println(" S = " + S);
+        }
+        } catch (Exception ex) {
+            System.out.println("R = " + R);
+            System.out.println("S = " + S);
+            System.out.println("f = " + f + ", " + e + ", " + htl[i]);
+            System.out.println("a = " + a + ", " + b + ", " + r + ", " + lbc[i]);
+            //throw ex;
+            return T;
         }
         return R.abs();
     }
