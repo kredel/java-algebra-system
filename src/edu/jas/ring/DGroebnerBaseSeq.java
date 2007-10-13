@@ -125,7 +125,7 @@ public class DGroebnerBaseSeq<C extends RingElem<C>>
                   G.clear(); G.add( p );
                   return G; // since no threads are activated
                }
-               G.add( p );
+               G.add( p ); //G.add( 0, p ); //reverse list
                if ( pairlist == null ) {
                   pairlist = new OrderedDPairlist<C>( modv, p.ring );
                }
