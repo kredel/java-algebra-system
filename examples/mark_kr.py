@@ -10,6 +10,20 @@ from jas import Ideal
 from jas import startLog
 
 # mark, d-gb diplom example, due to kandri-rody 1984
+#
+# The MAS DIIPEGB implementation contains an error because the output e-GB
+# is not correct. Also the cited result from k-r contains this error.
+# The polynomial 
+#
+# ( 2 x * y^2 - x^13 + 2 x^11 -   x^9 + 2 x^7 - 2 x^3 ),
+#
+# is in the DIIPEGB output, but it must be
+#
+# ( 2 x * y^2 - x^13 + 2 x^11 - 3 x^9 + 2 x^7 - 2 x^3 ),
+#
+# Test by adding the polynomials to the input.
+# Frist polynomial produces a different e-GB. 
+# Second polynomial reproduces the e-GB with the second polynomial. 
 
 r = Ring( "Z(x,y) L" );
 print "Ring: " + str(r);
@@ -42,12 +56,12 @@ print "is e-GB:", egbs.isGB(eg);
 print;
 
 
-startLog();
+#startLog();
 
-dg = dgbs.GB( f.list );
-rg = r.ideal(list=dg);
-print "seq d-GB:", rg;
-print "is d-GB:", dgbs.isGB(dg);
-print;
+#dg = dgbs.GB( f.list );
+#rg = r.ideal(list=dg);
+#print "seq d-GB:", rg;
+#print "is d-GB:", dgbs.isGB(dg);
+#print;
 
-print "d-GB == e-GB:", eg.equals(dg);
+#print "d-GB == e-GB:", eg.equals(dg);
