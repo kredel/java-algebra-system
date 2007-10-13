@@ -104,7 +104,7 @@ public class EGroebnerBaseSeqTest extends TestCase {
  * Test sequential GBase.
  * 
  */
- public void xtestSequentialGBase() {
+ public void testSequentialGBase() {
 
      L = new ArrayList<GenPolynomial<BigInteger>>();
 
@@ -192,7 +192,7 @@ public class EGroebnerBaseSeqTest extends TestCase {
  * 
  */ 
  @SuppressWarnings("unchecked") 
- public void testTrinks7GBaseZ_B() {
+ public void xtestTrinks7GBaseZ_B() {
      String exam = "IntFunc{ B } (S,T,Z,P,W) G "
                  + "( "  
                  + "( { 45 } P + { 35 } S - { 165 B } - { 36 } ), " 
