@@ -184,15 +184,17 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>>
            return G;
         }
         // reduce remaining polynomials
-        F = new ArrayList<GenPolynomial<C>>( G.size() );
-        while ( G.size() > 0 ) {
+        int len = G.size();
+        int i = 0;
+        while ( i < len ) {
             a = G.remove(0);
             //System.out.println("doing " + a.length());
             a = red.normalform( G, a );
-            a = red.normalform( F, a );
-            F.add( a );
+            //a = red.normalform( F, a );
+            G.add( a ); // adds as last
+            i++;
         }
-        return F;
+        return G;
     }
 
 
