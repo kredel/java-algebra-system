@@ -45,7 +45,7 @@ public class EGroebnerBaseSeqTest extends TestCase {
  * main
  */
    public static void main (String[] args) {
-       BasicConfigurator.configure();
+       //BasicConfigurator.configure();
        junit.textui.TestRunner.run( suite() );
    }
 
@@ -152,9 +152,9 @@ public class EGroebnerBaseSeqTest extends TestCase {
  * Test Trinks7 GBase over Z.
  * 
  */ 
- @SuppressWarnings("unchecked") // not jet working
+ @SuppressWarnings("unchecked") 
  public void xtestTrinks7GBaseZ() {
-     String exam = "Z(B,S,T,Z,P,W) G "
+     String exam = "Z(B,S,T,Z,P,W) L "
                  + "( "  
                  + "( 45 P + 35 S - 165 B - 36 ), " 
                  + "( 35 P + 40 Z + 25 T - 27 S ), "
@@ -177,12 +177,11 @@ public class EGroebnerBaseSeqTest extends TestCase {
      System.out.println("F = " + F);
 
      G = bb.GB(F.list);
-     assertTrue("isGB( GB(Trinks7) )", bb.isGB(G) );
-     assertEquals("#GB(Trinks7) == 6", 6, G.size() );
      PolynomialList<BigInteger> trinks 
            = new PolynomialList<BigInteger>(F.ring,G);
      System.out.println("G = " + trinks);
-
+     assertTrue("isGB( eGB(Trinks7) )", bb.isGB(G) );
+     //assertEquals("#GB(Trinks7) == 44", 44, G.size() );
  }
 
 
@@ -191,7 +190,7 @@ public class EGroebnerBaseSeqTest extends TestCase {
  * 
  */ 
  @SuppressWarnings("unchecked") // not jet working
- public void xtestTrinks7GBaseQ() {
+ public void ytestTrinks7GBaseQ() {
      String exam = "RatFunc{ B } (S,T,Z,P,W) G "
                  + "( "  
                  + "( 45 P + 35 S - { 165 B } - { 36 } ), " 
