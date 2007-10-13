@@ -25,6 +25,7 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>>
                       implements GroebnerBase<C> {
 
     private static final Logger logger = Logger.getLogger(GroebnerBaseAbstract.class);
+    private final boolean debug = logger.isDebugEnabled();
 
 
     /**
@@ -134,13 +135,75 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>>
 
 
     /**
-     * Minimal ordered groebner basis.
+     * Minimal ordered Groebner basis.
      * @typeparam C coefficient type.
      * @param Gp a Groebner base.
      * @return a reduced Groebner base of Gp.
      */
     public List<GenPolynomial<C>> 
                 minimalGB(List<GenPolynomial<C>> Gp) {  
+        if ( Gp == null || Gp.size() <= 1 ) {
+            return Gp;
+        }
+        // remove zero polynomials
+        List<GenPolynomial<C>> G
+            = new ArrayList<GenPolynomial<C>>( Gp.size() );
+        for ( GenPolynomial<C> a : Gp ) { 
+            if ( a != null && !a.isZERO() ) { // always true in GB()
+               // already positive a = a.abs();
+               G.add( a );
+            }
+        }
+        if ( G.size() <= 1 ) {
+           return G;
+        }
+        // remove top reducible polynomials
+        GenPolynomial<C> a;
+        List<GenPolynomial<C>> F;
+        F = new ArrayList<GenPolynomial<C>>( G.size() );
+        while ( G.size() > 0 ) {
+            a = G.remove(0);
+            if ( red.isTopReducible(G,a) || red.isTopReducible(F,a) ) {
+               // drop polynomial 
+               if ( debug ) {
+                  System.out.println("dropped " + a);
+                  List<GenPolynomial<C>> ff;
+                  ff = new ArrayList<GenPolynomial<C>>( G );
+                  ff.addAll(F);
+                  a = red.normalform( ff, a );
+                  if ( !a.isZERO() ) {
+                     System.out.println("error, nf(a) " + a);
+                  }
+               }
+            } else {
+                F.add(a);
+            }
+        }
+        G = F;
+        if ( G.size() <= 1 ) {
+           return G;
+        }
+        // reduce remaining polynomials
+        F = new ArrayList<GenPolynomial<C>>( G.size() );
+        while ( G.size() > 0 ) {
+            a = G.remove(0);
+            //System.out.println("doing " + a.length());
+            a = red.normalform( G, a );
+            a = red.normalform( F, a );
+            F.add( a );
+        }
+        return F;
+    }
+
+
+    /**
+     * Minimal ordered groebner basis.
+     * @typeparam C coefficient type.
+     * @param Gp a Groebner base.
+     * @return a reduced Groebner base of Gp.
+     */
+    public List<GenPolynomial<C>> 
+                oldminimalGB(List<GenPolynomial<C>> Gp) {  
         if ( Gp == null ) {
             return Gp;
         }

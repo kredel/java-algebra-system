@@ -221,24 +221,21 @@ public class DGroebnerBaseSeq<C extends RingElem<C>>
     }
 
 
-    /**
+    /*
      * Minimal ordered d-groebner basis.
      * @typeparam C coefficient type.
      * @param Gp a Groebner base.
      * @return a d-reduced Groebner base of Gp.
-     */
     public List<GenPolynomial<C>> 
                 minimalGB(List<GenPolynomial<C>> Gp) {  
-        if ( Gp == null ) {
+        if ( Gp == null || Gp.size() <= 1 ) {
             return Gp;
         }
-        GenPolynomial<C> a;
-        List<GenPolynomial<C>> G;
-        G = new ArrayList<GenPolynomial<C>>( Gp.size() );
-        ListIterator<GenPolynomial<C>> it = Gp.listIterator();
-        while ( it.hasNext() ) { 
-            a = it.next();
-            if ( a.length() != 0 ) { // always true
+        // remove zero polynomials
+        List<GenPolynomial<C>> G
+            = new ArrayList<GenPolynomial<C>>( Gp.size() );
+        for ( GenPolynomial<C> a : Gp ) { 
+            if ( a != null && !a.isZERO() ) { // always true
                // already positive a = a.abs();
                G.add( a );
             }
@@ -246,60 +243,33 @@ public class DGroebnerBaseSeq<C extends RingElem<C>>
         if ( G.size() <= 1 ) {
            return G;
         }
-        ExpVector e;        
-        ExpVector f;        
-        GenPolynomial<C> p;
-        C c, d;
-        C r = null;
+        // remove top reducible polynomials
+        GenPolynomial<C> a;
         List<GenPolynomial<C>> F;
         F = new ArrayList<GenPolynomial<C>>( G.size() );
-        boolean mt;
         while ( G.size() > 0 ) {
             a = G.remove(0);
-            e = a.leadingExpVector();
-            c = a.leadingBaseCoefficient();
-
-            it = G.listIterator();
-            mt = false;
-            while ( it.hasNext() && ! mt ) {
-               p = it.next();
-               f = p.leadingExpVector();
-               mt = ExpVector.EVMT( e, f );
-               if ( mt ) {
-                  d = p.leadingBaseCoefficient();
-                  r = c.remainder( d );
-                  mt = r.isZERO(); // && mt
+            if ( red.isTopReducible(G,a) || red.isTopReducible(F,a) ) {
+               // drop polynomial 
+               if ( debug ) {
+                  System.out.println("dropped " + a);
+                  List<GenPolynomial<C>> ff;
+                  ff = new ArrayList<GenPolynomial<C>>( G );
+                  ff.addAll(F);
+                  a = red.normalform( ff, a );
+                  if ( !a.isZERO() ) {
+                     System.out.println("error, nf(a) " + a);
+                  }
                }
-            }
-            it = F.listIterator();
-            while ( it.hasNext() && ! mt ) {
-               p = it.next();
-               f = p.leadingExpVector();
-               mt = ExpVector.EVMT( e, f );
-               if ( mt ) {
-                  d = p.leadingBaseCoefficient();
-                  r = c.remainder( d );
-                  mt = r.isZERO(); // && mt
-               }
-            }
-            if ( ! mt ) {
-                F.add( a );
-            } else if ( debug ) {
-                System.out.println("dropped " + a);
-                List<GenPolynomial<C>> ff;
-                ff = new ArrayList<GenPolynomial<C>>( G );
-                ff.addAll(F);
-                a = red.normalform( ff, a );
-                if ( !a.isZERO() ) {
-                   System.out.println("error, nf(a) " + a);
-                }
+            } else {
+                F.add(a);
             }
         }
         G = F;
         if ( G.size() <= 1 ) {
            return G;
         }
-
+        // reduce remaining polynomials
         F = new ArrayList<GenPolynomial<C>>( G.size() );
         while ( G.size() > 0 ) {
             a = G.remove(0);
@@ -310,5 +280,6 @@ public class DGroebnerBaseSeq<C extends RingElem<C>>
         }
         return F;
     }
+     */
 
 }
