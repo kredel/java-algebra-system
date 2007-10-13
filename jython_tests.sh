@@ -18,6 +18,7 @@ time jython examples/syzsolv.py
 time jython examples/syzy2.py
 time jython examples/syzy3.py
 time jython examples/trinks.py
+time jython examples/mark.py
 time jython examples/u_2_wa_1.py
 time jython examples/u_sl_2.py
 time jython examples/u_sl_2_e.py
