@@ -20,6 +20,8 @@ import edu.jas.ring.OrderedDPairlist;
 /**
  * D-Groebner Base sequential algorithm.
  * Implements D-Groebner bases and GB test.
+ * <b>Note:</b> Minimal reduced GBs are not unique.
+ * see BWK, section 10.1.
  * @author Heinz Kredel
  */
 
@@ -160,7 +162,7 @@ public class DGroebnerBaseSeq<C extends RingElem<C>>
               // D-polynomial case ----------------------
               D = red.GPolynomial( pi, pj );
               //System.out.println("D_d = " + D);
-              if ( ! D.isZERO() ) {
+              if ( !D.isZERO() && !red.isTopReducible(G,D) ) {
                   H = red.normalform( G, D );
                   if ( H.isONE() ) {
                       G.clear(); G.add( H );
