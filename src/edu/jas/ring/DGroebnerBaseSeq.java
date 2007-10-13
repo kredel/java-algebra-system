@@ -35,7 +35,7 @@ public class DGroebnerBaseSeq<C extends RingElem<C>>
     /**
      * Reduction engine.
      */
-    protected DReduction<C> red;  // shadow super.red
+    protected DReduction<C> red;  // shadow super.red ??
 
 
     /**
@@ -219,67 +219,5 @@ public class DGroebnerBaseSeq<C extends RingElem<C>>
                    );
         return G;
     }
-
-
-    /*
-     * Minimal ordered d-groebner basis.
-     * @typeparam C coefficient type.
-     * @param Gp a Groebner base.
-     * @return a d-reduced Groebner base of Gp.
-    public List<GenPolynomial<C>> 
-                minimalGB(List<GenPolynomial<C>> Gp) {  
-        if ( Gp == null || Gp.size() <= 1 ) {
-            return Gp;
-        }
-        // remove zero polynomials
-        List<GenPolynomial<C>> G
-            = new ArrayList<GenPolynomial<C>>( Gp.size() );
-        for ( GenPolynomial<C> a : Gp ) { 
-            if ( a != null && !a.isZERO() ) { // always true
-               // already positive a = a.abs();
-               G.add( a );
-            }
-        }
-        if ( G.size() <= 1 ) {
-           return G;
-        }
-        // remove top reducible polynomials
-        GenPolynomial<C> a;
-        List<GenPolynomial<C>> F;
-        F = new ArrayList<GenPolynomial<C>>( G.size() );
-        while ( G.size() > 0 ) {
-            a = G.remove(0);
-            if ( red.isTopReducible(G,a) || red.isTopReducible(F,a) ) {
-               // drop polynomial 
-               if ( debug ) {
-                  System.out.println("dropped " + a);
-                  List<GenPolynomial<C>> ff;
-                  ff = new ArrayList<GenPolynomial<C>>( G );
-                  ff.addAll(F);
-                  a = red.normalform( ff, a );
-                  if ( !a.isZERO() ) {
-                     System.out.println("error, nf(a) " + a);
-                  }
-               }
-            } else {
-                F.add(a);
-            }
-        }
-        G = F;
-        if ( G.size() <= 1 ) {
-           return G;
-        }
-        // reduce remaining polynomials
-        F = new ArrayList<GenPolynomial<C>>( G.size() );
-        while ( G.size() > 0 ) {
-            a = G.remove(0);
-            //System.out.println("doing " + a.length());
-            a = red.normalform( G, a );
-            a = red.normalform( F, a );
-            F.add( a );
-        }
-        return F;
-    }
-     */
 
 }
