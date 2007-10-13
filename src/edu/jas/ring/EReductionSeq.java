@@ -185,7 +185,7 @@ public class EReductionSeq<C extends RingElem<C>>
         GenPolynomial<C> T = Ap.ring.getZERO();
         GenPolynomial<C> Q = null;
         GenPolynomial<C> S = Ap;
-        try {
+        try { // required to avoid a compiler error in the while loop
         while ( S.length() > 0 ) { 
               boolean mt = false;
               m = S.leadingMonomial();
@@ -198,7 +198,7 @@ public class EReductionSeq<C extends RingElem<C>>
                      //logger.info("red div = " + f);
                      r = a.remainder( lbc[i] );
                      b = a.divide( lbc[i] );
-                     if ( f == null ) {
+                     if ( f == null ) { // compiler produced this case
                         System.out.println("f = null: " + e + ", " + htl[i]);
                         Q = p[i].multiply( b );
                      } else {
