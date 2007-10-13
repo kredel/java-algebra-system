@@ -27,6 +27,7 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenPolynomialTokenizer;
 import edu.jas.poly.PolynomialList;
+import edu.jas.poly.PolyUtil;
 
 import edu.jas.ring.GroebnerBase;
 
@@ -148,11 +149,12 @@ public class DGroebnerBaseSeqTest extends TestCase {
      assertTrue("isGB( { a, ,b, c, d, e } )", bb.isGB(L) );
  }
 
+
 /**
  * Test Trinks7 GBase over Z.
  * 
  */ 
- @SuppressWarnings("unchecked") // not jet working
+ @SuppressWarnings("unchecked") // needs to long
  public void xtestTrinks7GBaseZ() {
      String exam = "Z(B,S,T,Z,P,W) L "
                  + "( "  
@@ -187,72 +189,30 @@ public class DGroebnerBaseSeqTest extends TestCase {
 
 
 /**
- * Test Trinks7 GBase over Q(B).
- * 
- */ 
- @SuppressWarnings("unchecked") // not jet working
- public void xtestTrinks7GBaseQ() {
-     String exam = "RatFunc{ B } (S,T,Z,P,W) G "
-                 + "( "  
-                 + "( 45 P + 35 S - { 165 B } - { 36 } ), " 
-                 + "( 35 P + 40 Z + 25 T - 27 S ), "
-                 + "( 15 W + 25 S P + 30 Z - 18 T - { 165 B**2 } ), "
-                 + "( - 9 W + 15 T P + 20 S Z ), "
-                 + "( P W + 2 T Z - { 11 B**3 } ), "
-                 + "( 99 W - { 11 B } S + { 3 B**2 } ), "
-                 + "( { 10000 B**2 + 6600 B + 2673 } ) "
-                 + ") ";
-     Reader source = new StringReader( exam );
-     GenPolynomialTokenizer parser
-                  = new GenPolynomialTokenizer( source );
-     DGroebnerBaseSeq<Quotient<BigInteger>> bb 
-         = new DGroebnerBaseSeq<Quotient<BigInteger>>();
-     PolynomialList<Quotient<BigInteger>> F = null;
-     List<GenPolynomial<Quotient<BigInteger>>> G = null;
-     try {
-         F = (PolynomialList<Quotient<BigInteger>>) parser.nextPolynomialSet();
-     } catch(ClassCastException e) {
-         fail(""+e);
-     } catch(IOException e) {
-         fail(""+e);
-     }
-     System.out.println("F = " + F);
-
-     G = bb.GB(F.list);
-     assertTrue("isGB( GB(Trinks7) )", bb.isGB(G) );
-     assertEquals("#GB(Trinks7) == 1", 1, G.size() );
-     PolynomialList<Quotient<BigInteger>> trinks 
-           = new PolynomialList<Quotient<BigInteger>>(F.ring,G);
-     System.out.println("G = " + trinks);
-     ComputerThreads.terminate();
- }
-
-
-/**
  * Test Trinks7 GBase over Z(B).
  * 
  */ 
- @SuppressWarnings("unchecked") // not working
- public void ytestTrinks7GBaseZ() {
+ @SuppressWarnings("unchecked") 
+ public void xtestTrinks7GBaseZ_B() {
      String exam = "IntFunc{ B } (S,T,Z,P,W) G "
                  + "( "  
-                 + "( 45 P + 35 S - { 165 B } - { 36 } ), " 
-                 + "( 35 P + 40 Z + 25 T - 27 S ), "
-                 + "( 15 W + 25 S P + 30 Z - 18 T - { 165 B**2 } ), "
-                 + "( - 9 W + 15 T P + 20 S Z ), "
-                 + "( P W + 2 T Z - { 11 B**3 } ), "
-                 + "( 99 W - { 11 B } S + { 3 B**2 } ), "
+                 + "( { 45 } P + { 35 } S - { 165 B } - { 36 } ), " 
+                 + "( { 35 } P + { 40 } Z + { 25 } T - { 27 } S ), "
+                 + "( { 15 } W + { 25 } S P + { 30 } Z - { 18 } T - { 165 B**2 } ), "
+                 + "( { - 9 } W + { 15 } T P + { 20 } S Z ), "
+                 + "( P W + { 2 } T Z - { 11 B**3 } ), "
+                 + "( { 99 } W - { 11 B } S + { 3 B**2 } ), "
                  + "( { 10000 B**2 + 6600 B + 2673 } ) "
                  + ") ";
      Reader source = new StringReader( exam );
      GenPolynomialTokenizer parser
                   = new GenPolynomialTokenizer( source );
-     DGroebnerBaseSeq<GenPolynomial<BigInteger>> bb 
-         = new DGroebnerBaseSeq<GenPolynomial<BigInteger>>();
-     PolynomialList<GenPolynomial<BigInteger>> F = null;
-     List<GenPolynomial<GenPolynomial<BigInteger>>> G = null;
+     DGroebnerBaseSeq<GenPolynomial<BigRational>> bb 
+         = new DGroebnerBaseSeq<GenPolynomial<BigRational>>();
+     PolynomialList<GenPolynomial<BigRational>> F = null;
+     List<GenPolynomial<GenPolynomial<BigRational>>> G = null;
      try {
-         F = (PolynomialList<GenPolynomial<BigInteger>>) parser.nextPolynomialSet();
+         F = (PolynomialList<GenPolynomial<BigRational>>) parser.nextPolynomialSet();
      } catch(ClassCastException e) {
          fail(""+e);
      } catch(IOException e) {
@@ -260,13 +220,29 @@ public class DGroebnerBaseSeqTest extends TestCase {
      }
      System.out.println("F = " + F);
 
-     G = bb.GB(F.list);
-     assertTrue("isGB( GB(Trinks7) )", bb.isGB(G) );
-     assertEquals("#GB(Trinks7) == 1", 1, G.size() );
-     PolynomialList<GenPolynomial<BigInteger>> trinks 
-           = new PolynomialList<GenPolynomial<BigInteger>>(F.ring,G);
+     List<GenPolynomial<GenPolynomial<BigRational>>> Fp 
+         = new ArrayList<GenPolynomial<GenPolynomial<BigRational>>>( F.list.size() );
+     for ( GenPolynomial<GenPolynomial<BigRational>> p : F.list ) {
+         p = PolyUtil.<BigRational>monic(p);
+         Fp.add( p );
+     }
+     //System.out.println("Fp = " + Fp);
+     G = bb.GB(Fp);
+     //System.out.println("G = " + G);
+
+     List<GenPolynomial<GenPolynomial<BigRational>>> Gp 
+         = new ArrayList<GenPolynomial<GenPolynomial<BigRational>>>( F.list.size() );
+     for ( GenPolynomial<GenPolynomial<BigRational>> p : G ) {
+         p = PolyUtil.<BigRational>monic(p);
+         Gp.add( p );
+     }
+     PolynomialList<GenPolynomial<BigRational>> trinks 
+           = new PolynomialList<GenPolynomial<BigRational>>(F.ring,Gp);
      System.out.println("G = " + trinks);
+     System.out.println("G.size() = " + Gp.size());
      ComputerThreads.terminate();
+     assertTrue("isGB( GB(Trinks7) )", bb.isGB(G) );
+     //assertEquals("#GB(Trinks7) == 1", 1, G.size() );
  }
 
 }
