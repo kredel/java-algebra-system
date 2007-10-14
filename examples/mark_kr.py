@@ -58,10 +58,10 @@ print;
 
 #startLog();
 
-#dg = dgbs.GB( f.list );
-#rg = r.ideal(list=dg);
-#print "seq d-GB:", rg;
-#print "is d-GB:", dgbs.isGB(dg);
-#print;
+dg = dgbs.GB( f.list );
+rg = r.ideal(list=dg);
+print "seq d-GB:", rg;
+print "is d-GB:", dgbs.isGB(dg);
+print;
 
-#print "d-GB == e-GB:", eg.equals(dg);
+print "d-GB == e-GB:", eg.equals(dg);
