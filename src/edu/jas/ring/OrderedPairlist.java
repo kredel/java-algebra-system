@@ -113,7 +113,8 @@ public class OrderedPairlist<C extends RingElem<C> > {
                } else {
                   xl = x; 
                }
-               xl.addLast( pair ); // first or last ?
+               //xl.addLast( pair ); // first or last ?
+               xl.addFirst( pair ); // first or last ? better for d- e-GBs
                pairlist.put( g, xl );
            }
            // System.out.println("pairlist.keys@put = " + pairlist.keySet() );  
