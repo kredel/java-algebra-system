@@ -38,8 +38,9 @@
 
 - refactor method names for groovy operator overloading, make examples for usage
 
-- implement d- and e-reductions and d-/e-Groebner bases
 
+
+- implement d- and e-reductions and d-/e-Groebner bases
 
 - implement term order optimization from MAS, also for coefficients 
   and solvable polynomials
