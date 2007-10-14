@@ -48,17 +48,32 @@ public class CriticalPairComparator<C extends RingElem<C> >
     public int compare(CriticalPair<C> p1, CriticalPair<C> p2) {
         int s = ec.compare( p1.e, p2.e );
         if ( s == 0 ) {
-           if ( p1.i < p2.i ) {
+            /* not ok  
+           if ( p1.j < p2.j ) {
               s = -1;
-           } else if ( p1.i > p2.i ) {
-               s = 1;
-           } else if ( p1.j < p2.j ) {
-               s = -1;
            } else if ( p1.j > p2.j ) {
+               s = 1;
+           } else if ( p1.i < p2.i ) {
+               s = -1;
+           } else if ( p1.i > p2.i ) {
                s = 1;
            } else {
                s = 0;
            }
+            */
+           /* ok */
+           if ( p1.j > p2.j ) {
+              s = -1;
+           } else if ( p1.j < p2.j ) {
+               s = 1;
+           } else if ( p1.i > p2.i ) {
+               s = -1;
+           } else if ( p1.i < p2.i ) {
+               s = 1;
+           } else {
+               s = 0;
+           }
+           /* */
         }
         return s;
     }
