@@ -291,7 +291,7 @@ public class GroebnerBaseSeqPairParTest extends TestCase {
                  + "( - 9 W + 15 T P + 20 S Z ), "
                  + "( P W + 2 T Z - 11 B**3 ), "
                  + "( 99 W - 11 B S + 3 B**2 ) "
-         //  + ", ( B**2 + 33/50 B + 2673/10000 ) "
+                 + ", ( B**2 + 33/50 B + 2673/10000 ) "
                  + ") ";
      Reader source = new StringReader( exam );
      GenPolynomialTokenizer parser
