@@ -216,7 +216,7 @@ public class GreatestCommonDivisorModular //<C extends GcdRingElem<C> >
             cm = mufd.gcd(rm,qm);
             // test for constant g.c.d
             if ( cm.isConstant() ) {
-               logger.info("cm, constant = " + cm ); 
+               logger.debug("cm, constant = " + cm ); 
                return fac.getONE().multiply( c );
                //return cm.abs().multiply( c );
             }
