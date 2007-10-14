@@ -10,7 +10,7 @@ from jas import SolvableIdeal
 from jas import startLog
 from jas import terminate
 
-startLog();
+#startLog();
 
 # LISA TDI computation
 # solvable module example
@@ -42,9 +42,9 @@ xs = """
 #RatFunc(c6,c5,c3,c1,b6,b5,b3,b1,c4,b4,c2,b2)
 #       (D6,D5,D3,D2,D4,E,D1)
 
-rs = """
+rsorig = """
 # to opt, base to opt: #
-ModFunc 3 (b2,c2,b4,c4,b1,b3,b5,b6,c1,c3,c5,c6)
+ModFunc 3  (b2,c2,b4,c4,b1,b3,b5,b6,c1,c3,c5,c6)
            (E,D4,D1,D6,D5,D3,D2)
 #          (D2,D3,D5,D6,D1,D4,E)
            G 
@@ -61,6 +61,68 @@ RelationTable
  ( D5 ), ( D2 ), ( D2 D5 - { b5 c2 } E + { b2 c5 } E ),
  ( D5 ), ( D3 ), ( D3 D5 - { b5 c3 } E + { b3 c5 } E ),
  ( D5 ), ( D4 ), ( D4 D5 - { b5 c4 } E + { b4 c5 } E ),
+ 
+ ( D4 ), ( D1 ), ( D1 D4 - { b4 c1 } E + { b1 c4 } E ),
+ ( D4 ), ( D2 ), ( D2 D4 - { b4 c2 } E + { b2 c4 } E ),
+ ( D4 ), ( D3 ), ( D3 D4 - { b4 c3 } E + { b3 c4 } E ),
+
+ ( D3 ), ( D1 ), ( D1 D3 - { b3 c1 } E + { b1 c3 } E ),
+ ( D3 ), ( D2 ), ( D2 D3 - { b3 c2 } E + { b2 c3 } E ),
+ 
+ ( D2 ), ( D1 ), ( D1 D2 - { b2 c1 } E + { b1 c2 } E )
+)    
+""";
+
+rspart = """
+# to opt, base to opt: #
+ModFunc 3  (b2,c2,b4,c4,b1,b3,b5,   c1,c3,c5  )
+           (E,D4,D1,D6,D5,D3,D2)
+#          (D2,D3,D5,D6,D1,D4,E)
+           G 
+
+RelationTable
+(
+ ( D6 ), ( D1 ), ( D1 D6 - {    c1 } E + { b1    } E ),
+ ( D6 ), ( D2 ), ( D2 D6 - {    c2 } E + { b2    } E ),
+ ( D6 ), ( D3 ), ( D3 D6 - {    c3 } E + { b3    } E ),
+ ( D6 ), ( D4 ), ( D4 D6 - {    c4 } E + { b4    } E ),
+ ( D6 ), ( D5 ), ( D5 D6 - {    c5 } E + { b5    } E ),
+
+ ( D5 ), ( D1 ), ( D1 D5 - { b5 c1 } E + { b1 c5 } E ),
+ ( D5 ), ( D2 ), ( D2 D5 - { b5 c2 } E + { b2 c5 } E ),
+ ( D5 ), ( D3 ), ( D3 D5 - { b5 c3 } E + { b3 c5 } E ),
+ ( D5 ), ( D4 ), ( D4 D5 - { b5 c4 } E + { b4 c5 } E ),
+ 
+ ( D4 ), ( D1 ), ( D1 D4 - { b4 c1 } E + { b1 c4 } E ),
+ ( D4 ), ( D2 ), ( D2 D4 - { b4 c2 } E + { b2 c4 } E ),
+ ( D4 ), ( D3 ), ( D3 D4 - { b4 c3 } E + { b3 c4 } E ),
+
+ ( D3 ), ( D1 ), ( D1 D3 - { b3 c1 } E + { b1 c3 } E ),
+ ( D3 ), ( D2 ), ( D2 D3 - { b3 c2 } E + { b2 c3 } E ),
+ 
+ ( D2 ), ( D1 ), ( D1 D2 - { b2 c1 } E + { b1 c2 } E )
+)    
+""";
+
+rs = """
+# to opt, base to opt: #
+ModFunc 3  (b2,c2,b4,c4,b1,b3,      c1,c3     )
+           (E,D4,D1,D6,D5,D3,D2)
+#          (D2,D3,D5,D6,D1,D4,E)
+           L 
+
+RelationTable
+(
+ ( D6 ), ( D1 ), ( D1 D6 - {    c1 } E + { b1    } E ),
+ ( D6 ), ( D2 ), ( D2 D6 - {    c2 } E + { b2    } E ),
+ ( D6 ), ( D3 ), ( D3 D6 - {    c3 } E + { b3    } E ),
+ ( D6 ), ( D4 ), ( D4 D6 - {    c4 } E + { b4    } E ),
+ ( D6 ), ( D5 ), ( D5 D6 - {       } E + {       } E ),
+
+ ( D5 ), ( D1 ), ( D1 D5 - {    c1 } E + { b1    } E ),
+ ( D5 ), ( D2 ), ( D2 D5 - {    c2 } E + { b2    } E ),
+ ( D5 ), ( D3 ), ( D3 D5 - {    c3 } E + { b3    } E ),
+ ( D5 ), ( D4 ), ( D4 D5 - {    c4 } E + { b4    } E ),
  
  ( D4 ), ( D1 ), ( D1 D4 - { b4 c1 } E + { b1 c4 } E ),
  ( D4 ), ( D2 ), ( D2 D4 - { b4 c2 } E + { b2 c4 } E ),
@@ -90,7 +152,16 @@ f = SolvableIdeal( r, ps );
 print "SolvableIdeal: " + str(f);
 print;
 
-#startLog();
+startLog();
+
+rg = f.leftGB();
+print "leftGB:", rg;
+print;
+
+brg = rg.isLeftGB();
+print "is LeftGB:", brg;
+print;
+
 
 rg = f.rightGB();
 print "rightGB:", rg;
