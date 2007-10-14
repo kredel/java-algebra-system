@@ -69,7 +69,7 @@ public class GenPolynomial<C extends RingElem<C> >
         val = t;
         if ( ring.checkPreempt ) {
            if ( Thread.currentThread().isInterrupted() ) {
-	      logger.info("throw PreemptingException");
+	      logger.debug("throw PreemptingException");
               throw new PreemptingException();
            }
         }
