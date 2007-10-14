@@ -244,6 +244,7 @@ clean:
 #svn copy file:///home/SUBVERSION/jas/trunk file:///home/SUBVERSION/jas/tags/$(VERSION)
 
 SVNREV=svnlook youngest /home/SUBVERSION/jas
+SVNDATE=svnlook date /home/SUBVERSION/jas
 
 export:
 	rm -rf ~/jas-versions/$(VERSION)
