@@ -23,8 +23,10 @@ the <a href="problems.html">problems</a> document.
 </p>
 
 
-<h2>0. Computation of the Legendre polynomials</h2>
+<h2>1. Computation of the Legendre polynomials</h2>
 
+At first we present an example for the usage of the JAS API
+with the computation of the Legendre polynomials.
 The Legendre polynomials can be defined by the following recursion
 <ul>
 <li>P[0](x) = 1
@@ -148,8 +150,173 @@ In the following sections we describe the
 central classes and interfaces for the polynomial API.
 </p>
 
+<h3>1.1 Algebraic structures and algorithms overview</h3>
 
-<h2>1. Recursive ring element design</h2>
+To get an idea of the scope of JAS we summarize 
+the implemented algebraic structures and 
+of the implemented algebraic algorithms.
+
+<table border="1" cellpadding="3" summary="JAS summary" >
+<tr>
+<td>class</td>
+<td>factory</td>
+<td>structure</td>
+<td>algorithms</td>
+</tr>
+
+<tr>
+<td><code>BigInteger</code></td>
+<td>self</td>
+<td>ring of arbitrary precision integers,
+    a facade for <code>java.math.BigInteger</code>
+</td>
+<td>arithmetic, gcd, primality test</td>
+</tr>
+
+<tr>
+<td><code>BigRational</code></td>
+<td>self</td>
+<td>ring of arbitrary precision rational numbers,
+    i.e. fractions of integers,
+    with Henrici optimizations for gcds
+</td>
+<td>arithmetic</td>
+</tr>
+
+<tr>
+<td><code>ModInteger</code></td>
+<td><code>ModIntegerRing</code></td>
+<td>ring of integers modulo some fixed (arbitrary precision) integer <code>n</code>,
+    if <code>n</code> is a prime number, the ring is a field
+</td>
+<td>arithmetic, chinese remainder</td>
+</tr>
+
+<tr>
+<td><code>BigDecimal</code></td>
+<td>self</td>
+<td>ring of arbitrary precision floating point numbers,
+    a facade for <code>java.math.BigDecimal</code>
+</td>
+<td>arithmetic, <code>compareTo()</code> with given precision</td>
+</tr>
+
+<tr>
+<td><code>BigComplex</code></td>
+<td>self</td>
+<td>ring of arbitrary precision complex numbers,
+    i.e. pairs of rational numbers
+</td>
+<td>arithmetic</td>
+</tr>
+
+<tr>
+<td><code>BigQuaternion</code></td>
+<td>self</td>
+<td>ring of arbitrary precision quaternion numbers,
+    i.e. quadruples of rational numbers
+</td>
+<td>arithmetic</td>
+</tr>
+
+<tr>
+<td><code>BigOctonion</code></td>
+<td>self</td>
+<td>ring of arbitrary precision octonion numbers,
+    i.e. implemented as pairs of quaternion numbers
+</td>
+<td>arithmetic</td>
+</tr>
+
+<tr>
+<td><code>GenPolynomial</code></td>
+<td><code>GenPolynomialRing</code></td>
+<td>ring of polynomials in <code>r</code> variables 
+    over any implemented coefficient ring
+    with respect to any implemented term ordering
+</td>
+<td>arithmetic, univariate gcd, norms, 
+    chinese remainders for coefficients, evaluation</td>
+</tr>
+
+<tr>
+<td><code>AlgebraicNumber</code></td>
+<td><code>AlgebraicNumber- Ring</code></td>
+<td>ring of algebraic numbers, represented as 
+    univariate polynomials 
+    over any implemented coefficient field
+</td>
+<td>arithmetic
+</td>
+</tr>
+
+<tr>
+<td><code>GenSolvable- Polynomial</code></td>
+<td><code>GenSolvable- PolynomialRing</code></td>
+<td>ring of non-commutative, solvable polynomials in <code>r</code> variables 
+    over any implemented coefficient ring
+    with respect to any implemented term ordering
+    (compatible with the multiplication)
+</td>
+<td>arithmetic</td>
+</tr>
+
+<tr>
+<td><code>Quotient</code></td>
+<td><code>QuotientRing</code></td>
+<td>ring of rational functions, 
+    i.e. fractions of multivariate polynomials
+    over any implemented unique factorization coefficient domains
+</td>
+<td>arithmetic
+</td>
+</tr>
+
+<tr>
+<td><code>Residue</code></td>
+<td><code>ResidueRing</code></td>
+<td>ring of polynomials modulo a given polynomial ideal,
+    over any implemented coefficient ring
+</td>
+<td>arithmetic
+</td>
+</tr>
+
+<tr>
+<td><code>Local</code></td>
+<td><code>LocalRing</code></td>
+<td>ring of polynomials fractions localized with respect to a given polynomial ideal,
+    over any implemented coefficient ring
+</td>
+<td>arithmetic
+</td>
+</tr>
+
+<tr>
+<td><code>GenVector</code></td>
+<td><code>GenVectorModule</code></td>
+<td>tuples (vectors) of any implemented 
+    ring elements
+</td>
+<td>arithmetic, scalar product
+</td>
+</tr>
+
+<tr>
+<td><code>GenMatrix</code></td>
+<td><code>GenMatrixModule</code></td>
+<td>matrices of any implemented ring elements
+</td>
+<td>arithmetic, scalar product
+</td>
+</tr>
+
+</table>
+
+To be continued.
+
+
+<h2>2. Recursive ring element design</h2>
 
 <p>
 The next figure gives an overview of the central interfaces and classes.
@@ -190,7 +357,7 @@ UML diagram of JAS types
 </p>
 
 
-<h2>2. Coefficients and polynomials</h2>
+<h2>3. Coefficients and polynomials</h2>
 
 <p>
 We continue the discussion of the next layer of classes in the
@@ -284,7 +451,7 @@ e.g. by <code>rfac.getONE()</code>,
 </p>
 
 
-<h2>3. Solvable polynomials</h2>
+<h2>4. Solvable polynomials</h2>
 
 <p>
 We turn now to the last layer of classes in the the above figure.
@@ -355,7 +522,7 @@ empty relation table and then to add the defining relations.
 </p>
 
 
-<h2>4. Ring element and factory functionality</h2>
+<h2>5. Ring element and factory functionality</h2>
 
 <p>
 The following sections and the next figure gives an overview 
@@ -453,7 +620,7 @@ UML diagram of JAS type functionality
 </p>
 
 
-<h2>5. Polynomial and polynomial factory functionality</h2>
+<h2>6. Polynomial and polynomial factory functionality</h2>
 
 <p>
 We continue the discussion of the above figure 
@@ -538,7 +705,7 @@ of two times the actual term order when ever possible.
 </p>
 
 
-<h2>6. Solvable polynomial and solvable polynomial factory functionality</h2>
+<h2>7. Solvable polynomial and solvable polynomial factory functionality</h2>
 
 <p>
 We continue the discussion of the above figure 
@@ -631,7 +798,7 @@ of the Java algebra system.
 <p>
 <!-- Created: Sat Mar 11 10:51:36 CET 2006 -->
 <!-- hhmts start -->
-Last modified: Sun Jun  3 13:18:42 CEST 2007
+Last modified: Thu Oct 18 23:33:24 CEST 2007
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
