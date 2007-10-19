@@ -23,7 +23,10 @@ the <a href="problems.html">problems</a> document.
 </p>
 
 
-<h2>1. Computation of the Legendre polynomials</h2>
+<h2>1. Getting started</h2>
+
+
+<h3>1.1. Computation of the Legendre polynomials</h3>
 
 At first we present an example for the usage of the JAS API
 with the computation of the Legendre polynomials.
@@ -150,18 +153,20 @@ In the following sections we describe the
 central classes and interfaces for the polynomial API.
 </p>
 
-<h3>1.1 Algebraic structures and algorithms overview</h3>
+<h3>1.2. Algebraic structures overview</h3>
 
+<p>
 To get an idea of the scope of JAS we summarize 
 the implemented algebraic structures and 
 of the implemented algebraic algorithms.
+</p>
 
-<table border="1" cellpadding="3" summary="JAS summary" >
+<table border="1" cellpadding="3" summary="JAS AS summary" >
 <tr>
 <td>class</td>
 <td>factory</td>
 <td>structure</td>
-<td>algorithms</td>
+<td>methods</td>
 </tr>
 
 <tr>
@@ -313,8 +318,199 @@ of the implemented algebraic algorithms.
 
 </table>
 
+<p>
+"Arithmetic" means implementation of the methods 
+defined in the interface <code>RingElem</code>.
 To be continued.
+</p>
 
+
+<h3>1.3. Algebraic algorithms overview</h3>
+
+<p>
+The following table contains an overview of 
+implemented algebraic algorithms.
+</p>
+
+<table border="1" cellpadding="3" summary="JAS AA summary" >
+<tr>
+<td>class / interface</td>
+<td>algorithm</td>
+<td>methods</td>
+</tr>
+
+<tr>
+<td><code>Reduction</code>,
+    <code>Reduction- Abstract</code>,
+    <code>ReductionSeq</code>,
+    <code>ReductionPar</code>
+</td>
+<td>Iterated subtraction of polynomials to eliminate terms from a given polynomial, 
+    i.e. reduction of polynomial(s) wrt. a set of polynomials.
+    Coefficients of polynomials must be from a field.
+    For *Par the list of polynomials can concurrently be modified.
+</td>
+<td>normalform,
+    S-polynomial,
+    criterions,
+    extended normalform
+</td>
+</tr>
+
+<tr>
+<td><code>DReduction</code>
+    <code>EReduction</code>
+    <code>DReductionSeq</code>
+    <code>EReductionSeq</code>
+</td>
+<td>Reduction of polynomial(s) wrt. a set of polynomials.
+    Coefficients of polynomials must be from a 
+    principial ideal domain (PID) or from an Euclidean domain.
+</td>
+<td>normalform,
+    S-polynomial,
+    G-polynomial,
+    criterions,
+    extended normalform
+</td>
+</tr>
+
+<tr>
+<td><code>SolvableReduction</code>
+    <code>SolvableReduction- Abstract</code>
+    <code>Solvable- ReductionSeq</code>
+    <code>Solvable- ReductionPar</code>
+</td>
+<td>Left and right reduction of solvable polynomial(s) wrt. a 
+    set of solvable polynomials.
+    Coefficients of polynomials must be from a field.
+</td>
+<td>left/right normalform,
+    left/right S-polynomial,
+    criterions,
+    extended left normalform
+</td>
+</tr>
+
+<tr>
+<td><code>GroebnerBase</code>,
+    <code>GroebnerBase- Abstract</code>,
+    <code>GroebnerBaseSeq</code>,
+    <code>GroebnerBase- Parallel</code>,
+    <code>GroebnerBase- Distributed</code>,
+    etc.
+</td>
+<td>Buchberger algorithm to compute Groebner bases 
+    of sets of polynomials.
+    Coefficients of polynomials must be from a field.
+    *Parallel is a multi-threaded and 
+    *Distributed is a message passing implementation.  
+</td>
+<td>GB, isGB, extended GB, minimal GB
+</td>
+</tr>
+
+<tr>
+<td><code>DGroebnerBaseSeq</code>,
+    <code>EGroebnerBaseSeq</code>
+</td>
+<td>Algorithm to compute D- and E- Groebner bases 
+    of sets of polynomials.
+    Coefficients of polynomials must be from a 
+    principial ideal domain (PID) or from an Euclidean domain.
+</td>
+<td>GB, isGB, minimal GB
+</td>
+</tr>
+
+<tr>
+<td><code>SolvableGroebnerBase</code>,
+    <code>SolvableGroebnerBase- Abstract</code>,
+    <code>SolvableGroebnerBaseSeq</code>,
+    <code>SolvableGroebnerBase- Parallel</code>
+</td>
+<td>Algorithm to compute left, right and two-sided Groebner bases 
+    of sets of solvable polynomials.
+    Coefficients of polynomials must be from a field.
+    *Parallel is a multi-threaded implementation.  
+</td>
+<td>left, right, two-sided versions of GB, isGB, extended GB, minimal GB
+</td>
+</tr>
+
+<tr>
+<td><code>Syzygy</code>,
+    <code>SyzygyAbstract</code>,
+    <code>ModGroebnerBase</code>,
+    <code>ModGroebnerBaseAbstract</code>,
+</td>
+<td>Algorithm to compute syzygies of lists of polynomials 
+    or Groebner Bases, free resolutions.
+    Groebner Bases for modules over polynomial rings.
+    Coefficients of polynomials must be from a field.
+</td>
+<td>zeroRelations, isZeroRelation, 
+    resolution, zeroRelationsArbitrary,
+    GB, isGB
+</td>
+</tr>
+
+<tr>
+<td><code>SolvableSyzygy</code>,
+    <code>Solvable- SyzygyAbstract</code>,
+    <code>ModSolvable- GroebnerBase</code>,
+    <code>ModSolvable- GroebnerBaseAbstract</code>,
+</td>
+<td>Algorithm to compute left and right syzygies of lists 
+    of solvable polynomials or Groebner Bases, free left resolutions.
+    Left, right and two-sided Groebner Bases for modules over solvable polynomial rings.
+    Coefficients of polynomials must be from a field.
+</td>
+<td>leftZeroRelations, rightZeroRelations, 
+    isLeftZeroRelation, isRightZeroRelation, 
+    (left) resolution, zeroRelationsArbitrary,
+    left, right, two-sided GB, isGB
+</td>
+</tr>
+
+<tr>
+<td><code>Ideal</code>
+</td>
+<td>Algorithms to compute sums, products, intersections, containment 
+    and (infinite)quotients of polynomial ideals.
+    Coefficients of polynomials must be from a field.
+</td>
+<td>sum, product, intersect, contains,
+    quotient, infiniteQuotient, inverse modulo ideal
+</td>
+</tr>
+
+<tr>
+<td><code>GreatestCommonDivisor</code>,
+    <code>GreatestCommonDivisorAbstract</code>,
+    <code>GreatestCommonDivisorSimple</code>,
+    <code>GreatestCommonDivisorPrimitive</code>,
+    <code>GreatestCommonDivisorSubres</code>,
+    <code>GreatestCommonDivisorModular</code>,
+    <code>GreatestCommonDivisorModEval</code>
+</td>
+<td>Algorithms to compute greatest common divisors of polynomials 
+    via different polynomial remainder sequences (PRS) and modular methods.
+    Coefficients of polynomials must be from a unique factorization domain (UFD).
+    <code>GCDFactory</code> helps with the optimal selection of an algorithm 
+    and <code>GCDProxy</code> uses multi-threading to compute with 
+    several implementations in parallel.
+</td>
+<td>gcd, lcm, content, primitivePart, 
+    squarefreePart, squarefreeFactors, resultant
+</td>
+</tr>
+
+
+</table>
+
+<p>
+</p>
 
 <h2>2. Recursive ring element design</h2>
 
@@ -798,7 +994,7 @@ of the Java algebra system.
 <p>
 <!-- Created: Sat Mar 11 10:51:36 CET 2006 -->
 <!-- hhmts start -->
-Last modified: Thu Oct 18 23:33:24 CEST 2007
+Last modified: Fri Oct 19 20:46:48 CEST 2007
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
