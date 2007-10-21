@@ -20,7 +20,7 @@ import edu.jas.structure.RingFactory;
 
 
 /**
- * Product ring factory based on RingElem and RingFactory module.
+ * Direct product ring factory based on RingElem and RingFactory module.
  * Objects of this class are immutable.
  * @author Heinz Kredel
  */
@@ -66,7 +66,7 @@ public class ProductRing<C extends RingElem<C> >
 
     /** The constructor creates a ProductRing object 
      * from an ring factory and a modul. 
-     * @param r list of ring factories.
+     * @param l list of ring factories.
      */
     public ProductRing(List<RingFactory<C>> l) {
         ringList = l;
@@ -341,7 +341,6 @@ public class ProductRing<C extends RingElem<C> >
     /** Product random.
      * @param n such that 0 &le; v &le; (2<sup>n</sup>-1).
      * @param q density of nozero entries.
-     * @param rnd is a source for random bits.
      * @return a random product element.
      */
     public Product<C> random(int n, float q) {

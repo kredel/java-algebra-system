@@ -105,7 +105,7 @@ public class Product<C extends RingElem<C> >
             if ( ! e.isONE() ) {
                return false;
             }
-        }
+        } 
         return true;
     }
 
@@ -114,8 +114,7 @@ public class Product<C extends RingElem<C> >
      * @return If this is a unit then true is returned, else false.
      * @see edu.jas.structure.RingElem#isUnit()
      */
-    @SuppressWarnings("unchecked")
-	public boolean isUnit() {
+    public boolean isUnit() {
         if ( isunit > 0 ) {
             return true;
         } 
@@ -140,7 +139,6 @@ public class Product<C extends RingElem<C> >
     /** Is Product idempotent. 
      * @return If this is a idempotent element then true is returned, else false.
      */
-    @SuppressWarnings("unchecked")
     public boolean isIdempotent() {
         //if ( isUnit() ) {
         //   return true;
@@ -203,7 +201,7 @@ public class Product<C extends RingElem<C> >
     /** Comparison with any other object.
      * @see java.lang.Object#equals(java.lang.Object)
      */
-    @SuppressWarnings("unchecked") // not jet working
+    @SuppressWarnings("unchecked") 
     @Override
     public boolean equals(Object b) {
         if ( ! ( b instanceof Product ) ) {
