@@ -17,7 +17,7 @@ import edu.jas.structure.GcdRingElem;
 
 
 /**
- * Direct product element based on RingElem residue.
+ * Direct product element based on RingElem.
  * Objects of this class are (nearly) immutable.
  * @author Heinz Kredel
  */
