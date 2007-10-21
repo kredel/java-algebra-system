@@ -142,7 +142,7 @@ public class Pair<C extends RingElem<C> >
 
     /**
      * Set useCriterion4.
-     * @param b boolean value to set.
+     * @param c boolean value to set.
      */
     public void setUseCriterion4(boolean c) {
         this.useCriterion4 = c;
@@ -160,7 +160,7 @@ public class Pair<C extends RingElem<C> >
 
     /**
      * Set useCriterion3.
-     * @param b boolean value to set.
+     * @param c boolean value to set.
      */
     public void setUseCriterion3(boolean c) {
         this.useCriterion3 = c;
