@@ -7,7 +7,7 @@ package edu.jas.structure;
 
 /**
  * Regular ring element interface.
- * Defines norm and conjugation.
+ * Defines idempotent and idempotent test.
  * @author Heinz Kredel
  */
 
