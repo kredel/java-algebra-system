@@ -22,7 +22,7 @@ import edu.jas.structure.GcdRingElem;
  * @author Heinz Kredel
  */
 public class Product<C extends RingElem<C> > 
-             implements RingElem< Product<C> > {
+             implements RegularRingElem< Product<C> > {
 
     private static final Logger logger = Logger.getLogger(Product.class);
     private boolean debug = logger.isDebugEnabled();
@@ -122,10 +122,10 @@ public class Product<C extends RingElem<C> >
         if ( isunit == 0 ) {
             return false;
         } 
-        if ( val.size() != ring.length() ) {
-           isunit = 0;
-           return false;
-        }
+        //if ( val.size() != ring.length() ) {
+        //   isunit = 0;
+        //   return false;
+        //}
         for ( C e : val.values() ) {
             if ( ! e.isUnit() ) {
                isunit = 0;
@@ -146,7 +146,7 @@ public class Product<C extends RingElem<C> >
         //   return true;
         //} 
         for ( C e : val.values() ) {
-            if ( ! e.isUnit() ) {
+            if ( ! e.isONE() ) {
                return false;
             }
         }
@@ -323,7 +323,7 @@ public class Product<C extends RingElem<C> >
     }
 
 
-    /** Product inverse.  
+    /** Product quasi-inverse.  
      * @see edu.jas.structure.RingElem#inverse()
      * @return S with S = 1/this if defined. 
      */
@@ -335,7 +335,7 @@ public class Product<C extends RingElem<C> >
         for ( Integer i : val.keySet() ) {
             C x = val.get( i );
             x = x.inverse();
-            if ( ! x.isZERO() ) {
+            if ( ! x.isZERO() ) { // cannot happen
                elem.put( i, x );
             }
         }

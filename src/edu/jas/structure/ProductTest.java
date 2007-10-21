@@ -5,8 +5,8 @@
 
 package edu.jas.structure;
 
-//import java.util.ArrayList;
-//import java.util.List;
+import java.util.ArrayList;
+import java.util.List;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -17,6 +17,8 @@ import org.apache.log4j.BasicConfigurator;
 
 import edu.jas.arith.BigRational;
 import edu.jas.arith.BigInteger;
+import edu.jas.arith.ModInteger;
+import edu.jas.arith.ModIntegerRing;
 
 //import edu.jas.structure.RingElem;
 
@@ -55,21 +57,21 @@ public class ProductTest extends TestCase {
      return suite;
    }
 
-   ProductRing<BigInteger> fac;
-   GenPolynomialRing<BigRational> pfac;
-   ProductRing< GenPolynomial<BigRational> > mfac;
+   ProductRing<BigRational> fac;
+   ModIntegerRing pfac;
+   ProductRing<ModInteger> mfac;
 
-   Product< BigInteger > a;
-   Product< BigInteger > b;
-   Product< BigInteger > c;
-   Product< BigInteger > d;
-   Product< BigInteger > e;
+   Product< BigRational > a;
+   Product< BigRational > b;
+   Product< BigRational > c;
+   Product< BigRational > d;
+   Product< BigRational > e;
 
-   Product< GenPolynomial<BigRational> > ap;
-   Product< GenPolynomial<BigRational> > bp;
-   Product< GenPolynomial<BigRational> > cp;
-   Product< GenPolynomial<BigRational> > dp;
-   Product< GenPolynomial<BigRational> > ep;
+   Product< ModInteger > ap;
+   Product< ModInteger > bp;
+   Product< ModInteger > cp;
+   Product< ModInteger > dp;
+   Product< ModInteger > ep;
 
 
    int pl = 3; 
@@ -77,17 +79,26 @@ public class ProductTest extends TestCase {
    int kl = 13;
    int ll = 7;
    int el = 3;
-   float q = 0.6f;
+   float q = 0.9f;
    int il = 2; 
    long p = 1152921504606846883L; // 2^60-93; 
 
    protected void setUp() {
        a = b = c = d = e = null;
        ap = bp = cp = dp = ep = null;
-       BigInteger cfac = new BigInteger(1);
-       fac = new ProductRing<BigInteger>( cfac, pl );
-       pfac = new GenPolynomialRing<BigRational>( new BigRational(1), 1 );
-       mfac = new ProductRing<GenPolynomial<BigRational>>( pfac, pl );
+       BigRational cfac = new BigRational(2,3);
+       fac = new ProductRing<BigRational>( cfac, pl );
+       List<RingFactory<ModInteger>> lpfac 
+           = new ArrayList<RingFactory<ModInteger>>();
+       pfac = new ModIntegerRing( 2 );
+       lpfac.add(pfac);
+       pfac = new ModIntegerRing( 3 );
+       lpfac.add(pfac);
+       pfac = new ModIntegerRing( 5 );
+       lpfac.add(pfac);
+       pfac = new ModIntegerRing( 7 );
+       lpfac.add(pfac);
+       mfac = new ProductRing<ModInteger>( lpfac );
    }
 
    protected void tearDown() {
@@ -103,7 +114,7 @@ public class ProductTest extends TestCase {
  * Test constructor for integer.
  * 
  */
- public void testIntConstruction() {
+ public void testRatConstruction() {
      c = fac.getONE();
      //System.out.println("c = " + c);
      assertTrue("isZERO( c )", !c.isZERO() );
@@ -120,7 +131,7 @@ public class ProductTest extends TestCase {
  * Test constructor for polynomial.
  * 
  */
- public void testPolyConstruction() {
+ public void testModConstruction() {
      cp = mfac.getONE();
      //System.out.println("cp = " + cp);
      assertTrue("isZERO( cp )", !cp.isZERO() );
@@ -137,7 +148,7 @@ public class ProductTest extends TestCase {
  * Test random integer.
  * 
  */
- public void testIntRandom() {
+ public void testRatRandom() {
      for (int i = 0; i < 7; i++) {
          a = fac.random(kl*(i+1));
          if ( a.isZERO() ) {
@@ -160,7 +171,7 @@ public class ProductTest extends TestCase {
  * Test random polynomial.
  * 
  */
- public void testPolyRandom() {
+ public void testModRandom() {
      for (int i = 0; i < 7; i++) {
          ap = mfac.random(kl,q);
          if ( ap.isZERO() ) {
@@ -177,10 +188,10 @@ public class ProductTest extends TestCase {
  * Test integer addition.
  * 
  */
- public void testIntAddition() {
+ public void testRatAddition() {
 
-     a = fac.random(kl);
-     b = fac.random(kl);
+     a = fac.random(kl,q);
+     b = fac.random(kl,q);
 
      c = a.sum(b);
      d = c.subtract(b);
@@ -198,7 +209,7 @@ public class ProductTest extends TestCase {
      //System.out.println("c = " + c);
      //System.out.println("d = " + d);
 
-     c = fac.random(kl);
+     c = fac.random(kl,q);
      d = c.sum( a.sum(b) );
      e = c.sum( a ).sum(b);
      assertEquals("c+(a+b) = (c+a)+b",d,e);
@@ -227,10 +238,10 @@ public class ProductTest extends TestCase {
  * Test polynomial addition.
  * 
  */
- public void testPolyAddition() {
+ public void testModAddition() {
 
-     ap = mfac.random(kl);
-     bp = mfac.random(kl);
+     ap = mfac.random(kl,q);
+     bp = mfac.random(kl,q);
      //System.out.println("a = " + a);
      //System.out.println("b = " + b);
 
@@ -245,7 +256,7 @@ public class ProductTest extends TestCase {
 
      assertEquals("a+b = b+a",cp,dp);
 
-     cp = mfac.random(kl);
+     cp = mfac.random(kl,q);
      dp = cp.sum( ap.sum(bp) );
      ep = cp.sum( ap ).sum(bp);
      assertEquals("c+(a+b) = (c+a)+b",dp,ep);
@@ -266,7 +277,7 @@ public class ProductTest extends TestCase {
  * 
  */
 
- public void testIntMultiplication() {
+ public void testRatMultiplication() {
 
      a = fac.random(kl);
      if ( a.isZERO() ) {
@@ -274,7 +285,7 @@ public class ProductTest extends TestCase {
      }
      assertTrue("not isZERO( a )", !a.isZERO() );
 
-     b = fac.random(kl);
+     b = fac.random(kl,q);
      if ( b.isZERO() ) {
         return;
      }
@@ -293,7 +304,7 @@ public class ProductTest extends TestCase {
      assertTrue("a*b = b*a", c.equals(d) );
      assertEquals("a*b = b*a",c,d);
 
-     c = fac.random(kl);
+     c = fac.random(kl,q);
      //System.out.println("c = " + c);
      d = a.multiply( b.multiply(c) );
      e = (a.multiply(b)).multiply(c);
@@ -313,10 +324,12 @@ public class ProductTest extends TestCase {
      if ( a.isUnit() ) {
         c = a.inverse();
         d = c.multiply(a);
+        e = a.idempotent();
         //System.out.println("a = " + a);
         //System.out.println("c = " + c);
         //System.out.println("d = " + d);
-        assertTrue("a*1/a = 1",d.isONE()); 
+        //System.out.println("e = " + e);
+        assertEquals("a*1/a = 1",e,d); 
      }
  }
 
@@ -325,15 +338,15 @@ public class ProductTest extends TestCase {
  * Test polynomial multiplication.
  * 
  */
- public void testPolyMultiplication() {
+ public void testModMultiplication() {
 
-     ap = mfac.random(kl);
+     ap = mfac.random(kl,q);
      if ( ap.isZERO() ) {
         return;
      }
      assertTrue("not isZERO( a )", !ap.isZERO() );
 
-     bp = mfac.random(kl);
+     bp = mfac.random(kl,q);
      if ( bp.isZERO() ) {
         return;
      }
@@ -352,7 +365,7 @@ public class ProductTest extends TestCase {
      assertTrue("a*b = b*a", cp.equals(dp) );
      assertEquals("a*b = b*a",cp,dp);
 
-     cp = mfac.random(kl);
+     cp = mfac.random(kl,q);
      //System.out.println("c = " + c);
      dp = ap.multiply( bp.multiply(cp) );
      ep = (ap.multiply(bp)).multiply(cp);
@@ -372,10 +385,12 @@ public class ProductTest extends TestCase {
      if ( ap.isUnit() ) {
         cp = ap.inverse();
         dp = cp.multiply(ap);
-        //System.out.println("a = " + a);
-        //System.out.println("c = " + c);
-        //System.out.println("d = " + d);
-        assertTrue("a*1/a = 1",dp.isONE()); 
+        ep = ap.idempotent();
+        //System.out.println("ap = " + ap);
+        //System.out.println("cp = " + cp);
+        //System.out.println("dp = " + dp);
+        //System.out.println("ep = " + ep);
+        assertEquals("a*1/a = 1",ep,dp); 
      }
  }
 

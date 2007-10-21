@@ -256,7 +256,8 @@ public class ProductRing<C extends RingElem<C> >
     public String toString() {
         if ( nCopies != 0 ) {
            return "ProductRing[ " 
-                + ring.getClass().getName() + "^" + nCopies + " ]";
+                + ring.toString() + "^" + nCopies + " ]";
+           //   + ring.getClass().getName() + "^" + nCopies + " ]";
         } else {
            StringBuffer sb = new StringBuffer("ProductRing[ ");
            int i = 0;
@@ -264,7 +265,7 @@ public class ProductRing<C extends RingElem<C> >
                if ( i != 0 ) {
                   sb.append( ", " );
                }
-               sb.append( f.getClass().getName() ); //toString() );
+               sb.append( f.toString() ); //f.getClass().getName() ); //toString() );
                i++;
            }
            sb.append(" ]");
@@ -371,7 +372,10 @@ public class ProductRing<C extends RingElem<C> >
            for ( int i = 0; i < nCopies; i++ ) {
                d = rnd.nextFloat();
                if ( d < q ) {
-                  elem.put( i, ring.random( n, rnd ) );
+                  C r = ring.random( n, rnd );
+                  if ( !r.isZERO() ) {
+                     elem.put( i, r );
+                  }
                }
            }
         } else {
@@ -379,7 +383,10 @@ public class ProductRing<C extends RingElem<C> >
            for ( RingFactory<C> f : ringList ) {
                d = rnd.nextFloat();
                if ( d < q ) {
-                  elem.put( i, f.random( n, rnd ) );
+                  C r = f.random( n, rnd );
+                  if ( !r.isZERO() ) {
+                     elem.put( i, r );
+                  }
                }
                i++;
            }
