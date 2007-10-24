@@ -156,8 +156,9 @@ public class Product<C extends RingElem<C> >
      * @see java.lang.Object#toString()
      */
     public String toString() {
-        return "Product[ " + val.toString() 
-                 + " ] @ " + ring.toString();
+        return val.toString(); 
+        //        return "Product[ " + val.toString() 
+        //     + " ] @ " + ring.toString();
     }
 
 
@@ -317,7 +318,7 @@ public class Product<C extends RingElem<C> >
      * @return this/S.
      */
     public Product<C> divide(Product<C> S) {
-       throw new RuntimeException("divide not implemented " + this.getClass().getName());
+        return multiply( S.inverse() );
     }
 
 
@@ -383,7 +384,7 @@ public class Product<C extends RingElem<C> >
      * @return this - (this/S)*S.
      */
     public Product<C> remainder(Product<C> S) {
-        throw new RuntimeException("remainder not implemented " + this.getClass().getName());
+        return subtract( this.divide( S ).multiply( S ) );
     }
 
 
