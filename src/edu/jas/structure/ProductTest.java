@@ -321,6 +321,13 @@ public class ProductTest extends TestCase {
      d = fac.getONE().multiply( a );
      assertEquals("a*1 = 1*a",c,d);
 
+     b = a.idempotent();
+     c = a.idemComplement();
+     d = b.multiply(c);
+     assertEquals("idem(a)*idemComp(a) = 0",d,fac.getZERO());
+     d = b.sum(c);
+     assertEquals("idem(a)+idemComp(a) = 1",d,fac.getONE());
+
      if ( a.isUnit() ) {
         c = a.inverse();
         d = c.multiply(a);
@@ -381,6 +388,13 @@ public class ProductTest extends TestCase {
      cp = ap.multiply( mfac.getONE() );
      dp = mfac.getONE().multiply( ap );
      assertEquals("a*1 = 1*a",cp,dp);
+
+     bp = ap.idempotent();
+     cp = ap.idemComplement();
+     dp = bp.multiply(cp);
+     assertEquals("idem(a)*idemComp(a) = 0",dp,mfac.getZERO());
+     dp = bp.sum(cp);
+     assertEquals("idem(a)+idemComp(a) = 1",dp,mfac.getONE());
 
      if ( ap.isUnit() ) {
         cp = ap.inverse();

@@ -342,7 +342,7 @@ public class Product<C extends RingElem<C> >
 
 
     /** Product idempotent.  
-     * @return S with this*S = this.
+     * @return smallest S with this*S = this.
      */
     public Product<C> idempotent() {
         if ( this.isZERO() ) {
@@ -353,6 +353,26 @@ public class Product<C extends RingElem<C> >
             RingFactory<C> f = ring.getFactory( i );
             C x = f.getONE();
             elem.put( i, x );
+        }
+        return new Product<C>( ring, elem );
+    }
+
+
+    /** Product idempotent complement.  
+     * @return 1-this.idempotent().
+     */
+    public Product<C> idemComplement() {
+        if ( this.isZERO() ) {
+            return ring.getONE();
+        }
+        SortedMap<Integer,C> elem = new TreeMap<Integer,C>();
+        for ( int i = 0; i < ring.length(); i++ ) {
+            C v = val.get( i );
+            if ( v == null ) {
+               RingFactory<C> f = ring.getFactory( i );
+               C x = f.getONE();
+               elem.put( i, x );
+            }
         }
         return new Product<C>( ring, elem );
     }
