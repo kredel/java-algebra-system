@@ -13,6 +13,10 @@ import junit.framework.TestSuite;
 
 import org.apache.log4j.BasicConfigurator;
 
+import edu.jas.structure.Product;
+import edu.jas.structure.ProductRing;
+import edu.jas.structure.RingFactory;
+
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.BigComplex;
@@ -509,6 +513,83 @@ public static Test suite() {
      c = fac.random(kl, ll, el, q );
      e = dred.normalform( L, c );
      assertTrue("isNF( e )", dred.isNormalform(L,e) ); 
+ }
+
+
+/**
+ * Test Rational r-reduction.
+ * 
+ */
+ public void testRationalRReduction() {
+
+     RingFactory<BigRational> bi = new BigRational(0);
+     ProductRing<BigRational> pr = new ProductRing<BigRational>(bi,3);
+
+     GenPolynomialRing<Product<BigRational>> fac 
+          = new GenPolynomialRing<Product<BigRational>>( pr, rl );
+
+     RReductionSeq<Product<BigRational>> rred 
+         = new RReductionSeq<Product<BigRational>>();
+
+     GenPolynomial<Product<BigRational>> a = fac.random(kl, ll, el, q );
+     GenPolynomial<Product<BigRational>> b = fac.random(kl, ll, el, q );
+
+     while ( a.isZERO() ) {
+         a = fac.random(kl, ll, el, q );
+     }
+     while ( b.isZERO() ) {
+         b = fac.random(kl, ll, el, q );
+     }
+
+     assertTrue("not isZERO( a )", !a.isZERO() );
+
+     List<GenPolynomial<Product<BigRational>>> L 
+         = new ArrayList<GenPolynomial<Product<BigRational>>>();
+     L.add(a);
+
+     GenPolynomial<Product<BigRational>> e 
+         = rred.normalform( L, a );
+     System.out.println("a = " + a);
+     System.out.println("e = " + e);
+     assertTrue("isNF( e )", rred.isNormalform(L,e) );
+
+     assertTrue("not isZERO( b )", !b.isZERO() );
+
+     L.add(b);
+     e = rred.normalform( L, a );
+     System.out.println("b = " + b);
+     System.out.println("e = " + e);
+     assertTrue("isNF( e )", rred.isNormalform(L,e) );
+
+     GenPolynomial<Product<BigRational>> c = fac.getONE();
+     a = a.sum(c);
+     e = rred.normalform( L, a );
+     System.out.println("a = " + a);
+     System.out.println("e = " + e);
+     assertTrue("isNF( e )", rred.isNormalform(L,e) ); 
+
+     L = new ArrayList<GenPolynomial<Product<BigRational>>>();
+     a = c.multiply( pr.fromInteger(5) );
+     L.add( a );
+     b = c.multiply( pr.fromInteger(4) );
+     e = rred.normalform( L, b );
+     System.out.println("a = " + a);
+     System.out.println("b = " + b);
+     System.out.println("e = " + e);
+     assertTrue("isZERO(e) ", e.isZERO() ); 
+
+
+     L = new ArrayList<GenPolynomial<Product<BigRational>>>();
+     L.add( a );
+     assertTrue("isTopRed( a )", rred.isTopReducible(L,a) ); 
+     assertTrue("isRed( a )", rred.isReducible(L,a) ); 
+     b = fac.random(kl, ll, el, q );
+     L.add( b );
+     assertTrue("isTopRed( b )", rred.isTopReducible(L,b) ); 
+     assertTrue("isRed( b )", rred.isReducible(L,b) ); 
+     c = fac.random(kl, ll, el, q );
+     e = rred.normalform( L, c );
+     assertTrue("isNF( e )", rred.isNormalform(L,e) ); 
  }
 
 }
