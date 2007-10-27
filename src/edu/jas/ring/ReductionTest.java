@@ -533,6 +533,7 @@ public static Test suite() {
 
      GenPolynomial<Product<BigRational>> a = fac.random(kl, ll, el, q );
      GenPolynomial<Product<BigRational>> b = fac.random(kl, ll, el, q );
+     GenPolynomial<Product<BigRational>> d;
 
      while ( a.isZERO() ) {
          a = fac.random(kl, ll, el, q );
@@ -569,6 +570,55 @@ public static Test suite() {
      assertTrue("isNF( e )", rred.isNormalform(L,e) ); 
 
      L = new ArrayList<GenPolynomial<Product<BigRational>>>();
+     L.add( a );
+     assertTrue("isTopRed( a )", rred.isTopReducible(L,a) ); 
+     assertTrue("isRed( a )", rred.isReducible(L,a) ); 
+     //b = fac.random(kl, ll, el, q );
+     L.add( b );
+     assertTrue("isTopRed( b )", rred.isTopReducible(L,b) ); 
+     assertTrue("isRed( b )", rred.isReducible(L,b) ); 
+     c = fac.random(kl, ll, el, q );
+     e = rred.normalform( L, c );
+     assertTrue("isNF( e )", rred.isNormalform(L,e) ); 
+
+     c = rred.booleanClosure(a);
+     System.out.println("a = " + a);
+     System.out.println("c = " + c);
+     assertTrue("isBC( c )", rred.isBooleanClosed(c) ); 
+
+     b = a.subtract(c);
+     System.out.println("b = " + b);
+     d = rred.booleanRemainder(a);
+     System.out.println("d = " + d);
+     assertEquals("a-BC(a)=BR(a)", b, d ); 
+
+     e = c.sum(d);
+     System.out.println("e = " + e);
+     assertEquals("a==BC(a)+BR(a)", a, e ); 
+
+     List<GenPolynomial<Product<BigRational>>> B;
+     L = new ArrayList<GenPolynomial<Product<BigRational>>>();
+     L.add( a );
+     B = rred.reducedBooleanClosure(L);
+     System.out.println("L = " + L);
+     System.out.println("B = " + B);
+     assertTrue("isBC( B )", rred.isBooleanClosed(B) ); 
+
+     L.add( b );
+     B = rred.reducedBooleanClosure(L);
+     System.out.println("L = " + L);
+     System.out.println("B = " + B);
+     assertTrue("isBC( B )", rred.isBooleanClosed(B) ); 
+
+     L.add( c );
+     B = rred.reducedBooleanClosure(L);
+     System.out.println("L = " + L);
+     System.out.println("B = " + B);
+     assertTrue("isBC( B )", rred.isBooleanClosed(B) ); 
+
+
+     /*
+     L = new ArrayList<GenPolynomial<Product<BigRational>>>();
      a = c.multiply( pr.fromInteger(5) );
      L.add( a );
      b = c.multiply( pr.fromInteger(4) );
@@ -577,19 +627,8 @@ public static Test suite() {
      System.out.println("b = " + b);
      System.out.println("e = " + e);
      assertTrue("isZERO(e) ", e.isZERO() ); 
+     */
 
-
-     L = new ArrayList<GenPolynomial<Product<BigRational>>>();
-     L.add( a );
-     assertTrue("isTopRed( a )", rred.isTopReducible(L,a) ); 
-     assertTrue("isRed( a )", rred.isReducible(L,a) ); 
-     b = fac.random(kl, ll, el, q );
-     L.add( b );
-     assertTrue("isTopRed( b )", rred.isTopReducible(L,b) ); 
-     assertTrue("isRed( b )", rred.isReducible(L,b) ); 
-     c = fac.random(kl, ll, el, q );
-     e = rred.normalform( L, c );
-     assertTrue("isNF( e )", rred.isNormalform(L,e) ); 
  }
 
 }

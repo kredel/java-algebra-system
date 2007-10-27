@@ -81,7 +81,7 @@ public class RReductionSeq<C extends RegularRingElem<C>>
      * @param Pp polynomial list.
      * @return true if Ap is in normalform with respect to Pp.
      */
-    //SuppressWarnings("unchecked") // not jet working
+    @SuppressWarnings("unchecked") // not jet working
     public boolean isNormalform(List<GenPolynomial<C>> Pp, 
                                 GenPolynomial<C> Ap) {  
         if ( Pp == null || Pp.isEmpty() ) {
@@ -143,7 +143,7 @@ public class RReductionSeq<C extends RegularRingElem<C>>
      * @param Pp polynomial list.
      * @return d-nf(Ap) with respect to Pp.
      */
-    //SuppressWarnings("unchecked") // not jet working
+    @SuppressWarnings("unchecked") // not jet working
     public GenPolynomial<C> normalform(List<GenPolynomial<C>> Pp, 
                                        GenPolynomial<C> Ap) {  
         if ( Pp == null || Pp.isEmpty() ) {
@@ -214,9 +214,10 @@ public class RReductionSeq<C extends RegularRingElem<C>>
                  //System.out.println("lbc[i] = " + lbc[i]);
                  //System.out.println("b      = " + b);
                  Q = p[i].multiply( b, f );
+                 // rest added to R if !mt
                  //System.out.println("Q      = " + Q);
-                 S = S.subtract( Q ); // ok also with reductum
-                 S = S.reductum().subtract( Q.reductum() ); // ok also with reductum
+                 S = S.subtract( Q ); // not ok with reductum
+                 //S = S.reductum().subtract( Q.reductum() ); // not ok with reductum
               }
         }
         return R.abs();
@@ -550,6 +551,145 @@ public class RReductionSeq<C extends RegularRingElem<C>>
         }
         //System.out.println();
         return P;
+    }
+
+
+    /*
+     * -------- boolean closure stuff -----------------------------------------
+     */
+
+
+    /**
+     * Is boolean closed, i.e.
+     * test if A == idempotent(ldcf(A)) A.
+     * @typeparam C coefficient type.
+     * @param A polynomial.
+     * @return true if A is boolean closed, else false.
+     */
+    @SuppressWarnings("unchecked") 
+    public boolean isBooleanClosed(GenPolynomial<C> A) {  
+        if ( A == null || A.isZERO() ) {
+           return true;
+        }
+        C a = A.leadingBaseCoefficient();
+        C i = (C)a.idempotent(); // why is ths cast needed?
+        GenPolynomial<C> Ap = A.multiply(i);
+        if ( A.equals(Ap) ) {
+           return true;
+        }
+        return false;
+    }
+
+
+    /**
+     * Is boolean closed, i.e.
+     * test if all A in F are boolean closed.
+     * @typeparam C coefficient type.
+     * @param F polynomial list.
+     * @return true if F is boolean closed, else false.
+     */
+    public boolean isBooleanClosed(List<GenPolynomial<C>> F) {  
+        if ( F == null || F.size() == 0 ) {
+           return true;
+        }
+        GenPolynomial<C> b;
+        GenPolynomial<C> r;
+        for ( GenPolynomial<C> a: F ) {
+            //System.out.println("a = " + a);
+            while ( ! a.isZERO() ) {
+                if ( ! isBooleanClosed(a) ) {
+                   b = booleanClosure( a );
+                   b = normalform(F,b);
+                   if ( ! b.isZERO() ) { //F.contains(r)
+                      return false;
+                   }
+                }
+                r = booleanRemainder(a);
+                r = normalform(F,r);
+                if ( ! r.isZERO() ) { //F.contains(r)
+                   return false;
+                }
+                //System.out.println("r = " + r);
+                a = r;
+            }
+        }
+        return true;
+    }
+
+
+    /**
+     * Boolean closure, i.e.
+     * compute idempotent(ldcf(A)) A.
+     * @typeparam C coefficient type.
+     * @param A polynomial.
+     * @return bc(A).
+     */
+    @SuppressWarnings("unchecked") 
+    public GenPolynomial<C> booleanClosure(GenPolynomial<C> A) {  
+        if ( A == null || A.isZERO() ) {
+           return A;
+        }
+        C a = A.leadingBaseCoefficient();
+        C i = (C) a.idempotent(); // why is ths cast needed?
+        GenPolynomial<C> Ap = A.multiply(i);
+        return Ap;
+    }
+
+
+    /**
+     * Boolean remainder, i.e.
+     * compute idemComplement(ldcf(A)) A.
+     * @typeparam C coefficient type.
+     * @param A polynomial.
+     * @return br(A).
+     */
+    @SuppressWarnings("unchecked") 
+    public GenPolynomial<C> booleanRemainder(GenPolynomial<C> A) {  
+        if ( A == null || A.isZERO() ) {
+           return A;
+        }
+        C a = A.leadingBaseCoefficient();
+        C i = (C) a.idemComplement(); // why is ths cast needed?
+        GenPolynomial<C> Ap = A.multiply(i);
+        return Ap;
+    }
+
+
+    /**
+     * Reduced boolean closure, i.e.
+     * compute BC(A) for all A in F.
+     * @typeparam C coefficient type.
+     * @param F polynomial list.
+     * @return red(bc(F)) = bc(red(F)).
+     */
+    public List<GenPolynomial<C>> reducedBooleanClosure(List<GenPolynomial<C>> F) {  
+        if ( F == null || F.size() == 0 ) {
+           return F;
+        }
+        List<GenPolynomial<C>> B = new ArrayList<GenPolynomial<C>>( F );
+        GenPolynomial<C> a;
+        GenPolynomial<C> b;
+        GenPolynomial<C> c;
+        int i = 0;
+        int len = B.size();
+        while ( i < len ) { //B.size() ) {
+            a = B.remove(0);
+            i++;
+            while ( ! a.isZERO() ) {
+                  System.out.println("a = " + a);
+                  b = booleanClosure(a);
+                  System.out.println("b = " + b);
+                  //b = booleanClosure( normalform( B, b ) );
+                  if ( ! b.isZERO() ) {
+                     B.add( b ); // adds as last
+                  }
+                  c = a.subtract(b); // = BR(a)
+                  System.out.println("c = " + c);
+                  c = normalform( B, c );
+                  a = c;
+            }
+        }
+        return B;
     }
 
 }
