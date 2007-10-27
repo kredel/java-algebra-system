@@ -87,7 +87,7 @@ public class RGroebnerBaseSeqTest extends TestCase {
 
    protected void setUp() {
        BigRational coeff = new BigRational(9);
-       pfac = new ProductRing(coeff,3);
+       pfac = new ProductRing<BigRational>(coeff,3);
        fac = new GenPolynomialRing<Product<BigRational>>(pfac,rl);
        a = b = c = d = e = null;
        bb = new RGroebnerBaseSeq<Product<BigRational>>();
