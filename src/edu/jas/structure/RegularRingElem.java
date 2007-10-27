@@ -27,4 +27,10 @@ public interface RegularRingElem<C extends RegularRingElem<C>>
     public RegularRingElem<C> idempotent();
 
 
+    /** Product idempotent complement.  
+     * @return 1-this.idempotent().
+     */
+    public RegularRingElem<C> idemComplement();
+
+
 }
