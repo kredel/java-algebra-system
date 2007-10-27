@@ -27,7 +27,7 @@ import edu.jas.structure.RegularRingElem;
 
 public class RReductionSeq<C extends RegularRingElem<C>>
              extends ReductionAbstract<C> 
-             implements Reduction<C> {
+             implements RReduction<C> {
 
     private static final Logger logger = Logger.getLogger(RReductionSeq.class);
     private final boolean debug = logger.isDebugEnabled();
@@ -622,6 +622,40 @@ public class RReductionSeq<C extends RegularRingElem<C>>
                   c = normalform( B, c );
                   a = c;
             }
+        }
+        return B;
+    }
+
+
+    /**
+     * Reduced boolean closure, i.e.
+     * compute BC(A) modulo F.
+     * @typeparam C coefficient type.
+     * @param A polynomial.
+     * @param F polynomial list.
+     * @return red(bc(A)).
+     */
+    public List<GenPolynomial<C>> reducedBooleanClosure(List<GenPolynomial<C>> F,
+                                                        GenPolynomial<C> A) {  
+        List<GenPolynomial<C>> B = new ArrayList<GenPolynomial<C>>();
+        if ( A == null || A.isZERO() ) {
+           return B;
+        }
+        GenPolynomial<C> a = A;
+        GenPolynomial<C> b;
+        GenPolynomial<C> c;
+        while ( ! a.isZERO() ) {
+            System.out.println("a = " + a);
+            b = booleanClosure(a);
+            System.out.println("b = " + b);
+            //b = booleanClosure( normalform( B, b ) );
+            if ( ! b.isZERO() ) {
+                B.add( b ); // adds as last
+            }
+            c = a.subtract(b); // = BR(a)
+            System.out.println("c = " + c);
+            c = normalform( F, c );
+            a = c;
         }
         return B;
     }
