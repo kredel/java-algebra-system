@@ -257,81 +257,15 @@ public class RReductionSeq<C extends RegularRingElem<C>>
 
         C a = ma.getValue();
         C b = mb.getValue();
-        C c = a.gcd(b);
-        C m = a.multiply(b);
-        C l = m.divide(c); // = lcm(a,b)
 
-        C a1 = l.divide(a);
-        C b1 = l.divide(b);
+        if ( a.multiply(b).isZERO() ) {
+           System.out.println("a*b == 0, a = " + a + ", b = " + b);
+        }
 
-        GenPolynomial<C> App = Ap.multiply( a1, e1 );
-        GenPolynomial<C> Bpp = Bp.multiply( b1, f1 );
+        GenPolynomial<C> App = Ap.multiply( b, e1 );
+        GenPolynomial<C> Bpp = Bp.multiply( a, f1 );
         GenPolynomial<C> Cp = App.subtract(Bpp);
         return Cp;
-    }
-
-
-    /**
-     * G-Polynomial.
-     * @typeparam C coefficient type.
-     * @param Ap polynomial.
-     * @param Bp polynomial.
-     * @return gpol(Ap,Bp) the g-polynomial of Ap and Bp.
-     */
-    public GenPolynomial<C> 
-           GPolynomial(GenPolynomial<C> Ap, 
-                       GenPolynomial<C> Bp) {  
-        if ( logger.isInfoEnabled() ) {
-           if ( Bp == null || Bp.isZERO() ) {
-              return Ap.ring.getZERO(); 
-           }
-           if ( Ap == null || Ap.isZERO() ) {
-              return Bp.ring.getZERO(); 
-           }
-           if ( ! Ap.ring.equals( Bp.ring ) ) { 
-              logger.error("rings not equal"); 
-           }
-        }
-        Map.Entry<ExpVector,C> ma = Ap.leadingMonomial();
-        Map.Entry<ExpVector,C> mb = Bp.leadingMonomial();
-
-        ExpVector e = ma.getKey();
-        ExpVector f = mb.getKey();
-
-        ExpVector g  = ExpVector.EVLCM(e,f);
-        ExpVector e1 = ExpVector.EVDIF(g,e);
-        ExpVector f1 = ExpVector.EVDIF(g,f);
-
-        C a = ma.getValue();
-        C b = mb.getValue();
-        C[] c = a.egcd(b);
-
-        //System.out.println("egcd[0] " + c[0]);
-
-        GenPolynomial<C> App = Ap.multiply( c[1], e1 );
-        GenPolynomial<C> Bpp = Bp.multiply( c[2], f1 );
-        GenPolynomial<C> Cp = App.sum(Bpp);
-        return Cp;
-    }
-
-
-    /**
-     * D-Polynomial with recording.
-     * @typeparam C coefficient type.
-     * @param S recording matrix, is modified.
-     * @param i index of Ap in basis list.
-     * @param Ap a polynomial.
-     * @param j index of Bp in basis list.
-     * @param Bp a polynomial.
-     * @return gpol(Ap, Bp), the g-Polynomial for Ap and Bp.
-     */
-    public GenPolynomial<C> 
-           GPolynomial(List<GenPolynomial<C>> S,
-                       int i,
-                       GenPolynomial<C> Ap, 
-                       int j,
-                       GenPolynomial<C> Bp) {
-        throw new RuntimeException("not jet implemented");
     }
 
 
