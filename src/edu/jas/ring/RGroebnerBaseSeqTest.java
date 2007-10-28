@@ -123,7 +123,7 @@ public class RGroebnerBaseSeqTest extends TestCase {
 
      L = bb.GB( L );
      assertTrue("isGB( { a } )", bb.isGB(L) );
-     System.out.println("L = " + L );
+     //System.out.println("L = " + L );
 
      assertTrue("not isZERO( b )", !b.isZERO() );
      L.add(b);
@@ -131,28 +131,28 @@ public class RGroebnerBaseSeqTest extends TestCase {
 
      L = bb.GB( L );
      assertTrue("isGB( { a, b } )", bb.isGB(L) );
-     System.out.println("L = " + L );
+     //System.out.println("L = " + L );
 
      assertTrue("not isZERO( c )", !c.isZERO() );
      L.add(c);
 
      L = bb.GB( L );
      assertTrue("isGB( { a, ,b, c } )", bb.isGB(L) );
-     System.out.println("L = " + L );
+     //System.out.println("L = " + L );
 
      assertTrue("not isZERO( d )", !d.isZERO() );
      L.add(d);
 
      L = bb.GB( L );
      assertTrue("isGB( { a, ,b, c, d } )", bb.isGB(L) );
-     System.out.println("L = " + L );
+     //System.out.println("L = " + L );
 
      assertTrue("not isZERO( e )", !e.isZERO() );
      L.add(e);
 
      L = bb.GB( L );
      assertTrue("isGB( { a, ,b, c, d, e } )", bb.isGB(L) );
-     System.out.println("L = " + L );
+     //System.out.println("L = " + L );
  }
 
 
