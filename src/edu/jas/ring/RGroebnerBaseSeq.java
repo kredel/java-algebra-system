@@ -256,9 +256,10 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>>
                      bcH = red.reducedBooleanClosure(G,a);
                      if ( bcH.size() > 1 ) {
                         System.out.println("bcH size = " + bcH.size());
+                        F.add(b); // do not replace
+                     } else {
+                        F.addAll( bcH );
                      }
-                     F.addAll( bcH );
-                     //F.add(a);
                   } else {
                      System.out.println("dropped " + b);
                   }
@@ -275,16 +276,17 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>>
         int len = G.size();
         int i = 0;
         while ( i < len ) {
-            a = G.remove(0);
+            a = G.remove(0); b = a;
             //System.out.println("doing " + a.length());
             a = red.normalform( G, a );
             //a = red.normalform( F, a );
             bcH = red.reducedBooleanClosure(G,a);
             if ( bcH.size() > 1 ) {
                System.out.println("bcH size = " + bcH.size());
+               G.add( b ); // do not reduce
+            } else {
+               F.addAll( bcH );
             }
-            F.addAll( bcH );
-            //G.add( a ); // adds as last
             i++;
         }
         F = new ArrayList<GenPolynomial<C>>( G.size() );
