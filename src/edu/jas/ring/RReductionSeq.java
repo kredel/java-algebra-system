@@ -258,9 +258,9 @@ public class RReductionSeq<C extends RegularRingElem<C>>
         C a = ma.getValue();
         C b = mb.getValue();
 
-        if ( a.multiply(b).isZERO() ) {
-           System.out.println("a*b == 0, a = " + a + ", b = " + b);
-        }
+        //if ( a.multiply(b).isZERO() ) { // happens very often
+        //   System.out.println("a*b == 0, a = " + a + ", b = " + b);
+        //}
 
         GenPolynomial<C> App = Ap.multiply( b, e1 );
         GenPolynomial<C> Bpp = Bp.multiply( a, f1 );
