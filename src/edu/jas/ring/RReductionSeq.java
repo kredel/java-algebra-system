@@ -301,8 +301,8 @@ public class RReductionSeq<C extends RegularRingElem<C>>
         if ( s == 0 ) { // disjoint ht
            C a = A.leadingBaseCoefficient();
            C b = B.leadingBaseCoefficient();
-           C d = a.gcd(b);
-           if ( d.isONE() ) { // disjoint hc
+           C d = a.multiply(b);
+           if ( d.isZERO() ) { // a guess
                //System.out.println("d1 = " + d + ", a = " + a + ", b = " + b);
               return false; // can skip pair
            }
@@ -339,8 +339,8 @@ public class RReductionSeq<C extends RegularRingElem<C>>
         if ( s == 0 ) { // disjoint ht
            C a = A.leadingBaseCoefficient();
            C b = B.leadingBaseCoefficient();
-           C d = a.gcd(b);
-           if ( d.isONE() ) { // disjoint hc
+           C d = a.multiply(b);
+           if ( d.isZERO() ) { // a guess
               return false; // can skip pair
            }
         }
@@ -610,15 +610,15 @@ public class RReductionSeq<C extends RegularRingElem<C>>
             a = B.remove(0);
             i++;
             while ( ! a.isZERO() ) {
-                  System.out.println("a = " + a);
+                  //System.out.println("a = " + a);
                   b = booleanClosure(a);
-                  System.out.println("b = " + b);
+                  //System.out.println("b = " + b);
                   //b = booleanClosure( normalform( B, b ) );
                   if ( ! b.isZERO() ) {
                      B.add( b ); // adds as last
                   }
                   c = a.subtract(b); // = BR(a)
-                  System.out.println("c = " + c);
+                  //System.out.println("c = " + c);
                   c = normalform( B, c );
                   a = c;
             }
@@ -645,15 +645,15 @@ public class RReductionSeq<C extends RegularRingElem<C>>
         GenPolynomial<C> b;
         GenPolynomial<C> c;
         while ( ! a.isZERO() ) {
-            System.out.println("a = " + a);
+            //System.out.println("a = " + a);
             b = booleanClosure(a);
-            System.out.println("b = " + b);
+            //System.out.println("b = " + b);
             //b = booleanClosure( normalform( B, b ) );
             if ( ! b.isZERO() ) {
                 B.add( b ); // adds as last
             }
             c = a.subtract(b); // = BR(a)
-            System.out.println("c = " + c);
+            //System.out.println("c = " + c);
             c = normalform( F, c );
             a = c;
         }
