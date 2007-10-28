@@ -197,8 +197,10 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>>
                       for ( GenPolynomial<C> h: bcH ) {
                           pairlist.put( h );
                       }
-                      if ( !pair.getUseCriterion3() || !pair.getUseCriterion4() ) {
-                         logger.info("H != 0 but: " + pair);
+                      if ( debug ) {
+                         if ( !pair.getUseCriterion3() || !pair.getUseCriterion4() ) {
+                            logger.info("H != 0 but: " + pair);
+                         }
                       }
                   }
               }
@@ -252,7 +254,7 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>>
                   ff.addAll(F);
                   a = red.normalform( ff, a );
                   if ( !a.isZERO() ) {
-                     System.out.println("error, nf(a) " + a);
+                     //System.out.println("error, nf(a) " + a);
                      bcH = red.reducedBooleanClosure(G,a);
                      if ( bcH.size() > 1 ) {
                         System.out.println("bcH size = " + bcH.size());
@@ -261,7 +263,7 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>>
                         F.addAll( bcH );
                      }
                   } else {
-                     System.out.println("dropped " + b);
+                     //System.out.println("dropped " + b);
                   }
                }
             } else {
