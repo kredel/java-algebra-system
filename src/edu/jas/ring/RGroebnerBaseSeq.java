@@ -16,7 +16,7 @@ import edu.jas.structure.RegularRingElem;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 
-import edu.jas.ring.OrderedDPairlist;
+import edu.jas.ring.OrderedRPairlist;
 
 /**
  * R-Groebner Base sequential algorithm.
@@ -106,14 +106,13 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>>
     public List<GenPolynomial<C>> 
              GB( int modv, 
                  List<GenPolynomial<C>> F ) {  
-        //throw new RuntimeException("not jet implemented");
         GenPolynomial<C> p;
         List<GenPolynomial<C>> G = new ArrayList<GenPolynomial<C>>();
 
         List<GenPolynomial<C>> bcF = red.reducedBooleanClosure(F);
         F = bcF;
 
-        OrderedPairlist<C> pairlist = null; 
+        OrderedRPairlist<C> pairlist = null; 
         int l = F.size();
         ListIterator<GenPolynomial<C>> it = F.listIterator();
         while ( it.hasNext() ) { 
@@ -126,7 +125,7 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>>
                }
                G.add( p ); //G.add( 0, p ); //reverse list
                if ( pairlist == null ) {
-                  pairlist = new OrderedPairlist<C>( modv, p.ring );
+                  pairlist = new OrderedRPairlist<C>( modv, p.ring );
                }
                // putOne not required
                pairlist.put( p );
@@ -160,7 +159,9 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>>
               }
 
               // S-polynomial -----------------------
-              if ( true || (pair.getUseCriterion3() && pair.getUseCriterion4()) ) {
+              if ( true ) {
+              //if ( pair.getUseCriterion3() ) { // correct ?
+              //if ( pair.getUseCriterion4() ) { // correct ?
                   S = red.SPolynomial( pi, pj );
                   //System.out.println("S_d = " + S);
                   if ( S.isZERO() ) {
@@ -196,15 +197,106 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>>
                       for ( GenPolynomial<C> h: bcH ) {
                           pairlist.put( h );
                       }
+                      if ( !pair.getUseCriterion3() || !pair.getUseCriterion4() ) {
+                         logger.info("H != 0 but: " + pair);
+                      }
                   }
               }
         }
         logger.debug("#sequential list = " + G.size());
         G = minimalGB(G);
+        //G = red.irreducibleSet(G);
         logger.info("pairlist #put = " + pairlist.putCount() 
                   + " #rem = " + pairlist.remCount()
                     // + " #total = " + pairlist.pairCount()
                    );
+        return G;
+    }
+
+
+    /**
+     * Minimal ordered Groebner basis.
+     * @typeparam C coefficient type.
+     * @param Gp a Groebner base.
+     * @return a reduced Groebner base of Gp.
+     */
+    public List<GenPolynomial<C>> 
+                minimalGB(List<GenPolynomial<C>> Gp) {  
+        if ( Gp == null || Gp.size() <= 1 ) {
+            return Gp;
+        }
+        // remove zero polynomials
+        List<GenPolynomial<C>> G
+            = new ArrayList<GenPolynomial<C>>( Gp.size() );
+        for ( GenPolynomial<C> a : Gp ) { 
+            if ( a != null && !a.isZERO() ) { // always true in GB()
+               // already positive a = a.abs();
+               G.add( a );
+            }
+        }
+        if ( G.size() <= 1 ) {
+           //wg monic   return G;
+        }
+        // remove top reducible polynomials
+        GenPolynomial<C> a, b;
+        List<GenPolynomial<C>> F;
+        List<GenPolynomial<C>> bcH;
+        F = new ArrayList<GenPolynomial<C>>( G.size() );
+        while ( G.size() > 0 ) {
+            a = G.remove(0); b = a;
+            if ( red.isTopReducible(G,a) || red.isTopReducible(F,a) ) {
+               // drop polynomial 
+               if ( true || debug ) {
+                  List<GenPolynomial<C>> ff;
+                  ff = new ArrayList<GenPolynomial<C>>( G );
+                  ff.addAll(F);
+                  a = red.normalform( ff, a );
+                  if ( !a.isZERO() ) {
+                     System.out.println("error, nf(a) " + a);
+                     bcH = red.reducedBooleanClosure(G,a);
+                     if ( bcH.size() > 1 ) {
+                        System.out.println("bcH size = " + bcH.size());
+                     }
+                     F.addAll( bcH );
+                     //F.add(a);
+                  } else {
+                     System.out.println("dropped " + b);
+                  }
+               }
+            } else {
+                F.add(a);
+            }
+        }
+        G = F;
+        if ( G.size() <= 1 ) {
+           // wg monicreturn G;
+        }
+        // reduce remaining polynomials
+        int len = G.size();
+        int i = 0;
+        while ( i < len ) {
+            a = G.remove(0);
+            //System.out.println("doing " + a.length());
+            a = red.normalform( G, a );
+            //a = red.normalform( F, a );
+            bcH = red.reducedBooleanClosure(G,a);
+            if ( bcH.size() > 1 ) {
+               System.out.println("bcH size = " + bcH.size());
+            }
+            F.addAll( bcH );
+            //G.add( a ); // adds as last
+            i++;
+        }
+        F = new ArrayList<GenPolynomial<C>>( G.size() );
+        for ( GenPolynomial<C> p : G ) {
+            a = p.monic();
+            if ( p.length() != a.length() ) {
+               System.out.println("#p != #a: a = " + a + ", p = " + p);
+               a = p; // dont make monic for now
+            }
+            F.add( a );
+        }
+        G = F;
         return G;
     }
 
