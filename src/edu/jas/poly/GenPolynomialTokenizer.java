@@ -18,6 +18,7 @@ import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
+import edu.jas.structure.Power;
 
 import edu.jas.arith.BigRational;
 import edu.jas.arith.ModInteger;
@@ -395,6 +396,10 @@ public class GenPolynomialTokenizer  {
             case '(': 
                 c = nextPolynomial();
                 if (debug) logger.debug("factor " + c);
+                ie = nextExponent();
+                if (debug) logger.debug("ie " + ie);
+                c = Power.positivePower(c,ie);
+                if (debug) logger.debug("factor^ie " + c);
                 b = b.multiply(c); 
                 tt = tok.nextToken();
                 if (debug) logger.debug("tt,digit = " + tok);
