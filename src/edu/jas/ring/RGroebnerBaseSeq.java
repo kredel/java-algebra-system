@@ -110,6 +110,9 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>>
         List<GenPolynomial<C>> G = new ArrayList<GenPolynomial<C>>();
 
         List<GenPolynomial<C>> bcF = red.reducedBooleanClosure(F);
+        //System.out.println("#bcF    = " + bcF.size());
+        //System.out.println("#F      = " + F.size());
+        logger.info("#bcF-#F = " + (bcF.size()-F.size()));
         F = bcF;
 
         OrderedRPairlist<C> pairlist = null; 
@@ -193,6 +196,7 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>>
                       //len = G.size();
                       l++;
                       bcH = red.reducedBooleanClosure(G,H);
+                      logger.info("#bcH = " + bcH.size());
                       G.addAll( bcH );
                       for ( GenPolynomial<C> h: bcH ) {
                           pairlist.put( h );
