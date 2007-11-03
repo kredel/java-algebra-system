@@ -121,7 +121,7 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>>
         while ( it.hasNext() ) { 
             p = it.next();
             if ( !p.isZERO() ) {
-               p = p.abs(); // not monic
+               p = p.monic(); //p.abs(); // not monic, monic if boolean closed
                if ( p.isONE() ) {
                   G.clear(); G.add( p );
                   return G; // since no threads are activated
@@ -180,6 +180,7 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>>
                       pair.setZero();
                       continue;
                   }
+                  //H = H.monic(); // only for boolean closed H
                   if ( logger.isDebugEnabled() ) {
                       logger.debug("ht(H) = " + H.leadingExpVector() );
                   }
@@ -199,7 +200,7 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>>
                       logger.info("#bcH = " + bcH.size());
                       G.addAll( bcH );
                       for ( GenPolynomial<C> h: bcH ) {
-                          pairlist.put( h );
+                          pairlist.put( h.monic() );
                       }
                       if ( debug ) {
                          if ( !pair.getUseCriterion3() || !pair.getUseCriterion4() ) {
