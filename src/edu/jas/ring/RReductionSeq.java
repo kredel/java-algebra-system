@@ -220,7 +220,7 @@ public class RReductionSeq<C extends RegularRingElem<C>>
                  //S = S.reductum().subtract( Q.reductum() ); // not ok with reductum
               }
         }
-        return R.abs();
+        return R.abs(); // not monic if not boolean closed
     }
 
 
@@ -506,7 +506,7 @@ public class RReductionSeq<C extends RegularRingElem<C>>
            return true;
         }
         C a = A.leadingBaseCoefficient();
-        C i = (C)a.idempotent(); // why is ths cast needed?
+        C i = a.idempotent(); 
         GenPolynomial<C> Ap = A.multiply(i);
         if ( A.equals(Ap) ) {
            return true;
@@ -564,7 +564,7 @@ public class RReductionSeq<C extends RegularRingElem<C>>
            return A;
         }
         C a = A.leadingBaseCoefficient();
-        C i = (C) a.idempotent(); // why is ths cast needed?
+        C i = a.idempotent(); 
         GenPolynomial<C> Ap = A.multiply(i);
         return Ap;
     }
@@ -583,7 +583,7 @@ public class RReductionSeq<C extends RegularRingElem<C>>
            return A;
         }
         C a = A.leadingBaseCoefficient();
-        C i = (C) a.idemComplement(); // why is ths cast needed?
+        C i = a.idemComplement(); 
         GenPolynomial<C> Ap = A.multiply(i);
         return Ap;
     }

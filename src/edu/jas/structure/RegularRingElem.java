@@ -24,13 +24,13 @@ public interface RegularRingElem<C extends RegularRingElem<C>>
     /** Idempotent.  
      * @return S with this*S = this.
      */
-    public RegularRingElem<C> idempotent();
+    public C idempotent();
 
 
     /** Product idempotent complement.  
      * @return 1-this.idempotent().
      */
-    public RegularRingElem<C> idemComplement();
+    public C idemComplement();
 
 
 }
