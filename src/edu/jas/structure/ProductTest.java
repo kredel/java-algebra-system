@@ -60,18 +60,28 @@ public class ProductTest extends TestCase {
    ProductRing<BigRational> fac;
    ModIntegerRing pfac;
    ProductRing<ModInteger> mfac;
+   ProductRing<BigInteger> ifac;
 
    Product< BigRational > a;
    Product< BigRational > b;
    Product< BigRational > c;
    Product< BigRational > d;
    Product< BigRational > e;
+   Product< BigRational > f;
 
    Product< ModInteger > ap;
    Product< ModInteger > bp;
    Product< ModInteger > cp;
    Product< ModInteger > dp;
    Product< ModInteger > ep;
+   Product< ModInteger > fp;
+
+   Product< BigInteger > ai;
+   Product< BigInteger > bi;
+   Product< BigInteger > ci;
+   Product< BigInteger > di;
+   Product< BigInteger > ei;
+   Product< BigInteger > fi;
 
 
    int pl = 3; 
@@ -81,11 +91,12 @@ public class ProductTest extends TestCase {
    int el = 3;
    float q = 0.9f;
    int il = 2; 
-   long p = 1152921504606846883L; // 2^60-93; 
+   //long p = 1152921504606846883L; // 2^60-93; 
 
    protected void setUp() {
        a = b = c = d = e = null;
        ap = bp = cp = dp = ep = null;
+       ai = bi = ci = di = ei = null;
        BigRational cfac = new BigRational(2,3);
        fac = new ProductRing<BigRational>( cfac, pl );
        List<RingFactory<ModInteger>> lpfac 
@@ -99,14 +110,18 @@ public class ProductTest extends TestCase {
        pfac = new ModIntegerRing( 7 );
        lpfac.add(pfac);
        mfac = new ProductRing<ModInteger>( lpfac );
+       BigInteger cifac = new BigInteger(3);
+       ifac = new ProductRing<BigInteger>( cifac, pl );
    }
 
    protected void tearDown() {
        a = b = c = d = e = null;
        ap = bp = cp = dp = ep = null;
+       ai = bi = ci = di = ei = null;
        fac = null;
        pfac = null;
        mfac = null;
+       ifac = null;
    }
 
 
@@ -185,7 +200,7 @@ public class ProductTest extends TestCase {
 
 
 /**
- * Test integer addition.
+ * Test rational addition.
  * 
  */
  public void testRatAddition() {
@@ -235,6 +250,56 @@ public class ProductTest extends TestCase {
 
 
 /**
+ * Test integer addition.
+ * 
+ */
+ public void testIntAddition() {
+
+     ai = ifac.random(kl,q);
+     bi = ifac.random(kl,q);
+
+     ci = ai.sum(bi);
+     di = ci.subtract(bi);
+     assertEquals("a+b-b = a",ai,di);
+
+     //System.out.println("a = " + a);
+     //System.out.println("b = " + b);
+     //System.out.println("c = " + c);
+     //System.out.println("d = " + d);
+
+     ci = ai.sum(bi);
+     di = bi.sum(ai);
+     assertEquals("a+b = b+a",ci,di);
+
+     //System.out.println("c = " + c);
+     //System.out.println("d = " + d);
+
+     ci = ifac.random(kl,q);
+     di = ci.sum( ai.sum(bi) );
+     ei = ci.sum( ai ).sum(bi);
+     assertEquals("c+(a+b) = (c+a)+b",di,ei);
+
+     //System.out.println("c = " + c);
+     //System.out.println("d = " + d);
+     //System.out.println("e = " + e);
+
+     ci = ai.sum( ifac.getZERO() );
+     di = ai.subtract( ifac.getZERO() );
+     assertEquals("a+0 = a-0",ci,di);
+
+     //System.out.println("c = " + c);
+     //System.out.println("d = " + d);
+
+     ci = ifac.getZERO().sum( ai );
+     di = ifac.getZERO().subtract( ai.negate() );
+     assertEquals("0+a = 0+(-a)",ci,di);
+
+     //System.out.println("c = " + c);
+     //System.out.println("d = " + d);
+ }
+
+
+/**
  * Test polynomial addition.
  * 
  */
@@ -273,10 +338,9 @@ public class ProductTest extends TestCase {
 
 
 /**
- * Test integer multiplication.
+ * Test rational multiplication.
  * 
  */
-
  public void testRatMultiplication() {
 
      a = fac.random(kl);
@@ -311,11 +375,21 @@ public class ProductTest extends TestCase {
 
      //System.out.println("d = " + d);
      //System.out.println("e = " + e);
-
      //System.out.println("d-e = " + d.subtract(c) );
 
      assertEquals("a(bc) = (ab)c",d,e);
      assertTrue("a(bc) = (ab)c", d.equals(e) );
+
+     c = a.divide(b);
+     d = a.remainder(b);
+     e = c.multiply(b).sum(d);
+     f = a.multiply( e.idempotent() );
+
+     //System.out.println("c = " + c);
+     //System.out.println("d = " + d);
+     //System.out.println("e = " + e);
+     //System.out.println("f = " + f);
+     assertEquals("a = (a/b)c+d ",e,f);
 
      c = a.multiply( fac.getONE() );
      d = fac.getONE().multiply( a );
@@ -337,6 +411,120 @@ public class ProductTest extends TestCase {
         //System.out.println("d = " + d);
         //System.out.println("e = " + e);
         assertEquals("a*1/a = 1",e,d); 
+     }
+ }
+
+
+/**
+ * Test integer multiplication.
+ * 
+ */
+ public void testIntMultiplication() {
+
+     ai = ifac.random(kl);
+     if ( ai.isZERO() ) {
+        return;
+     }
+     assertTrue("not isZERO( a )", !ai.isZERO() );
+
+     bi = ifac.random(kl,q);
+     if ( bi.isZERO() ) {
+        return;
+     }
+     assertTrue("not isZERO( b )", !bi.isZERO() );
+
+     ci = bi.multiply(ai);
+     di = ai.multiply(bi);
+     //assertTrue("not isZERO( c )", !c.isZERO() );
+     //assertTrue("not isZERO( d )", !d.isZERO() );
+
+     //System.out.println("a = " + ai);
+     //System.out.println("b = " + bi);
+     ei = di.subtract(ci);
+     assertTrue("isZERO( a*b-b*a ) " + ei, ei.isZERO() );
+
+     assertTrue("a*b = b*a", ci.equals(di) );
+     assertEquals("a*b = b*a",ci,di);
+
+     ci = ifac.random(kl,q);
+     //System.out.println("c = " + ci);
+     di = ai.multiply( bi.multiply(ci) );
+     ei = (ai.multiply(bi)).multiply(ci);
+
+     //System.out.println("d = " + di);
+     //System.out.println("e = " + ei);
+     //System.out.println("d-e = " + di.subtract(ci) );
+
+     assertEquals("a(bc) = (ab)c",di,ei);
+     assertTrue("a(bc) = (ab)c", di.equals(ei) );
+
+     ci = ai.divide(bi);
+     di = ai.remainder(bi);
+     ei = ci.multiply(bi).sum(di);
+     fi = ai.multiply( ei.idempotent() );
+
+     //System.out.println("c = " + ci);
+     //System.out.println("d = " + di);
+     //System.out.println("e = " + ei);
+     //System.out.println("f = " + fi);
+     assertEquals("a = (a/b)c+d ",ei,fi);
+
+
+     ci = ai.gcd(bi);
+     di = ai.remainder(ci);
+     ei = bi.remainder(ci);
+
+     //System.out.println("c = " + ci);
+     //System.out.println("d = " + di);
+     //System.out.println("e = " + ei);
+     assertTrue("gcd(a,b) | a ",di.isZERO());
+     assertTrue("gcd(a,b) | b ",ei.isZERO());
+
+
+     Product< BigInteger >[] gcd;
+     gcd = ai.egcd(bi);
+     ci = gcd[0];
+     di = ai.remainder(ci);
+     ei = bi.remainder(ci);
+
+     //System.out.println("c = " + ci);
+     //System.out.println("d = " + di);
+     //System.out.println("e = " + ei);
+     assertTrue("gcd(a,b) | a ",di.isZERO());
+     assertTrue("gcd(a,b) | b ",ei.isZERO());
+
+     di = ai.multiply(gcd[1]);
+     ei = bi.multiply(gcd[2]);
+     fi = di.sum(ei);
+
+     //System.out.println("c = " + ci);
+     //System.out.println("c1= " + gcd[1]);
+     //System.out.println("c2= " + gcd[2]);
+     //System.out.println("d = " + di);
+     //System.out.println("e = " + ei);
+     //System.out.println("f = " + fi);
+     assertEquals("gcd(a,b) = c1*a + c2*b ",ci,fi);
+
+     ci = ai.multiply( ifac.getONE() );
+     di = ifac.getONE().multiply( ai );
+     assertEquals("a*1 = 1*a",ci,di);
+
+     bi = ai.idempotent();
+     ci = ai.idemComplement();
+     di = bi.multiply(ci);
+     assertEquals("idem(a)*idemComp(a) = 0",di,ifac.getZERO());
+     di = bi.sum(ci);
+     assertEquals("idem(a)+idemComp(a) = 1",di,ifac.getONE());
+
+     if ( ai.isUnit() ) {
+        ci = ai.inverse();
+        di = ci.multiply(ai);
+        ei = ai.idempotent();
+        //System.out.println("a = " + a);
+        //System.out.println("c = " + c);
+        //System.out.println("d = " + d);
+        //System.out.println("e = " + e);
+        assertEquals("a*1/a = 1",ei,di); 
      }
  }
 
@@ -384,6 +572,18 @@ public class ProductTest extends TestCase {
 
      assertEquals("a(bc) = (ab)c",dp,ep);
      assertTrue("a(bc) = (ab)c", dp.equals(ep) );
+
+     cp = ap.divide(bp);
+     dp = ap.remainder(bp);
+     ep = cp.multiply(bp).sum(dp);
+     fp = ap.multiply( ep.idempotent() );
+
+     //System.out.println("cp = " + cp);
+     //System.out.println("dp = " + dp);
+     //System.out.println("ep = " + ep);
+     //System.out.println("fp = " + fp);
+     assertEquals("a = (a/b)c+d ",ep,fp);
+
 
      cp = ap.multiply( mfac.getONE() );
      dp = mfac.getONE().multiply( ap );

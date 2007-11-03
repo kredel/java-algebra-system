@@ -258,7 +258,7 @@ public class Product<C extends RingElem<C> >
         if ( this.isZERO() ) {
            return S;
         }
-        SortedMap<Integer,C> elem = new TreeMap<Integer,C>( val );
+        SortedMap<Integer,C> elem = new TreeMap<Integer,C>( val ); // clone
         SortedMap<Integer,C> sel = S.val;
         for ( Integer i : sel.keySet() ) {
             C x = elem.get( i );
@@ -311,15 +311,6 @@ public class Product<C extends RingElem<C> >
      */
     public Product<C> subtract(Product<C> S) {
         return sum( S.negate() );
-    }
-
-
-    /** Product division.
-     * @param S Product.
-     * @return this/S.
-     */
-    public Product<C> divide(Product<C> S) {
-        return multiply( S.inverse() );
     }
 
 
@@ -385,12 +376,65 @@ public class Product<C extends RingElem<C> >
     }
 
 
-    /** Product remainder.
+    /** Product quasi-division.
+     * @param S Product.
+     * @return this/S.
+     */
+    public Product<C> divide(Product<C> S) {
+        if ( S == null ) {
+           return ring.getZERO();
+        }
+        if ( S.isZERO() ) {
+           return S;
+        }
+        if ( this.isZERO() ) {
+           return this;
+        }
+        SortedMap<Integer,C> elem = new TreeMap<Integer,C>();
+        SortedMap<Integer,C> sel = S.val;
+        for ( Integer i : val.keySet() ) {
+            C y = sel.get( i ); 
+            if ( y != null ) {
+               C x = val.get( i );
+               x = x.divide(y);
+               if ( ! x.isZERO() ) {
+                  elem.put( i, x );
+               }
+            }
+        }
+        return new Product<C>( ring, elem );
+        // return multiply( S.inverse() );
+    }
+
+
+    /** Product quasi-remainder.
      * @param S Product.
      * @return this - (this/S)*S.
      */
     public Product<C> remainder(Product<C> S) {
-        return subtract( this.divide( S ).multiply( S ) );
+        if ( S == null ) {
+           return ring.getZERO();
+        }
+        if ( S.isZERO() ) {
+           return S;
+        }
+        if ( this.isZERO() ) {
+           return this;
+        }
+        SortedMap<Integer,C> elem = new TreeMap<Integer,C>();
+        SortedMap<Integer,C> sel = S.val;
+        for ( Integer i : val.keySet() ) {
+            C y = sel.get( i ); 
+            if ( y != null ) {
+               C x = val.get( i );
+               x = x.remainder(y);
+               if ( ! x.isZERO() ) {
+                  elem.put( i, x );
+               }
+            }
+        }
+        return new Product<C>( ring, elem );
+        // return subtract( this.divide( S ).multiply( S ) );
     }
 
 
@@ -426,23 +470,84 @@ public class Product<C extends RingElem<C> >
 
     /**
      * Greatest common divisor.
-     * <b>Note: </b>Not implemented, throws RuntimeException.
-     * @param b other element.
-     * @return gcd(this,b).
+     * @param S other element.
+     * @return gcd(this,S).
      */
-    public Product<C> gcd(Product<C> b) {
-        throw new RuntimeException("gcd not implemented " + this.getClass().getName());
+    public Product<C> gcd(Product<C> S) {
+        if ( S == null || S.isZERO() ) {
+           return this;
+        }
+        if ( this.isZERO() ) {
+           return S;
+        }
+        SortedMap<Integer,C> elem = new TreeMap<Integer,C>( val ); // clone
+        SortedMap<Integer,C> sel = S.val;
+        for ( Integer i : sel.keySet() ) {
+            C x = elem.get( i );
+            C y = sel.get( i ); // assert y != null
+            if ( x != null ) {
+                x = x.gcd(y);
+                if ( ! x.isZERO() ) {
+                    elem.put( i, x );
+                } else {
+                    elem.remove( i );
+                }
+            } else {
+                elem.put( i, y );
+            }
+        }
+        return new Product<C>( ring, elem );
+        // * <b>Note: </b>Not implemented, throws RuntimeException.
+        //throw new RuntimeException("gcd not implemented " + this.getClass().getName());
     }
 
 
     /**
      * Extended greatest common divisor.
-     * <b>Note: </b>Not implemented, throws RuntimeException.
-     * @param b other element.
-     * @return [ gcd(this,b), c1, c2 ] with c1*this + c2*b = gcd(this,b).
+     * @param S other element.
+     * @return [ gcd(this,S), c1, c2 ] with c1*this + c2*b = gcd(this,S).
      */
-    public Product<C>[] egcd(Product<C> b) {
-        throw new RuntimeException("egcd not implemented " + this.getClass().getName());
+    @SuppressWarnings("unchecked") 
+    public Product<C>[] egcd(Product<C> S) {
+        Product<C>[] ret = (Product<C>[]) new Product[3];
+        ret[0] = null;
+        ret[1] = null;
+        ret[2] = null;
+        if ( S == null || S.isZERO() ) {
+           ret[0] = this;
+           return ret;
+        }
+        if ( this.isZERO() ) {
+           ret[0] = S;
+           return ret;
+        }
+        SortedMap<Integer,C> elem = new TreeMap<Integer,C>( val ); // clone
+        SortedMap<Integer,C> elem1 = this.idempotent().val; // init by 1
+        SortedMap<Integer,C> elem2 = new TreeMap<Integer,C>(); 
+        SortedMap<Integer,C> sel = S.val;
+        for ( Integer i : sel.keySet() ) {
+            C x = elem.get( i );
+            C y = sel.get( i ); // assert y != null
+            if ( x != null ) {
+                C[] g = x.egcd(y);
+                if ( ! g[0].isZERO() ) {
+                    elem.put( i, g[0] );
+                    elem1.put( i, g[1] );
+                    elem2.put( i, g[2] );
+                } else {
+                    elem.remove( i );
+                }
+            } else {
+                elem.put( i, y );
+                elem2.put( i, ring.getFactory(i).getONE() );
+            }
+        }
+        ret[0] = new Product<C>( ring, elem );
+        ret[1] = new Product<C>( ring, elem1 );
+        ret[2] = new Product<C>( ring, elem2 );
+        return ret;
+        //* <b>Note: </b>Not implemented, throws RuntimeException.
+        //throw new RuntimeException("egcd not implemented " + this.getClass().getName());
     }
  
 }
