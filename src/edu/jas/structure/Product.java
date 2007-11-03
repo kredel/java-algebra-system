@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
 import edu.jas.structure.GcdRingElem;
+import edu.jas.structure.NotInvertibleException;
 
 
 /**
@@ -333,8 +334,13 @@ public class Product<C extends RingElem<C> >
         SortedMap<Integer,C> elem = new TreeMap<Integer,C>();
         for ( Integer i : val.keySet() ) {
             C x = val.get( i );
-            x = x.inverse();
-            if ( ! x.isZERO() ) { // cannot happen
+            try {
+                x = x.inverse();
+            } catch(NotInvertibleException e) {
+                // could happen for e.g. ModInteger or AlgebraicNumber
+                x = null; //ring.getFactory(i).getZERO();
+            }
+            if ( x != null && ! x.isZERO() ) { // can happen
                elem.put( i, x );
             }
         }
