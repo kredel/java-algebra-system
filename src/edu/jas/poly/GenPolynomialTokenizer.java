@@ -280,7 +280,7 @@ public class GenPolynomialTokenizer  {
             logger.debug("a1 = " + a1);
         }
         GenPolynomial b = a1;
-        //GenPolynomial c;
+        GenPolynomial c;
         int tt; //, oldtt;
         //String rat = "";
         char first;
@@ -391,6 +391,16 @@ public class GenPolynomialTokenizer  {
                     if (debug) logger.debug("tt,letter = " + tok);
                 }
                 break;
+
+            case '(': 
+                c = nextPolynomial();
+                if (debug) logger.debug("factor " + c);
+                b = b.multiply(c); 
+                tt = tok.nextToken();
+                if (debug) logger.debug("tt,digit = " + tok);
+                //no break;
+                break;
+
             default: //skip 
             }
             if ( done ) break; // unknown variable
