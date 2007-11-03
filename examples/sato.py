@@ -12,8 +12,9 @@ from jas import terminate
 
 #startLog();
 
-# Sato & Suzuki, ISSAC 1002, example 1
+# Sato & Suzuki, ISSAC 2001, example 1
 # regular ring GB
+# modified, not original example
 
 r = Ring( "IntFunc(a,b,c,d,e,f,g,h,i,j,k,l) (x,y,z) L" );
 print "Ring: " + str(r);
@@ -68,7 +69,7 @@ pfac = ProductRing( afac, 12 );
 print "pfac = " + str(pfac);
 
 #GenPolynomialRing fac; 
-fac = GenPolynomialRing(pfac,3); 
+fac = GenPolynomialRing(pfac,3,r.ring.vars); 
 print "fac = " + str(fac);
 
 rp = Ring( ring=fac );
