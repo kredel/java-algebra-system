@@ -20,7 +20,7 @@ import edu.jas.structure.RegularRingElem;
 
 
 /**
- * Polynomial D-Reduction sequential use algorithm.
+ * Polynomial Regular ring Reduction sequential use algorithm.
  * Implements normalform.
  * @author Heinz Kredel
  */
@@ -137,11 +137,11 @@ public class RReductionSeq<C extends RegularRingElem<C>>
 
 
     /**
-     * Normalform using d-reduction.
+     * Normalform using r-reduction.
      * @typeparam C coefficient type.
      * @param Ap polynomial.
      * @param Pp polynomial list.
-     * @return d-nf(Ap) with respect to Pp.
+     * @return r-nf(Ap) with respect to Pp.
      */
     @SuppressWarnings("unchecked") // not jet working
     public GenPolynomial<C> normalform(List<GenPolynomial<C>> Pp, 
@@ -272,7 +272,7 @@ public class RReductionSeq<C extends RegularRingElem<C>>
     /**
      * GB criterium 4.
      * Use only for commutative polynomial rings.
-     * This version works also for d-Groebner bases.
+     * <b>Note:</b> Experimental version for r-Groebner bases.
      * @typeparam C coefficient type.
      * @param A polynomial.
      * @param B polynomial.
@@ -314,7 +314,7 @@ public class RReductionSeq<C extends RegularRingElem<C>>
     /**
      * GB criterium 4.
      * Use only for commutative polynomial rings.
-     * This version works also for d-Groebner bases.
+     * <b>Note:</b> Experimental version for r-Groebner bases.
      * @typeparam C coefficient type.
      * @param A polynomial.
      * @param B polynomial.
@@ -476,6 +476,8 @@ public class RReductionSeq<C extends RegularRingElem<C>>
             } else {
                f = a.leadingExpVector();
                if ( e.equals( f ) ) {
+                  // lbcf(a) eventually shorter
+                  // correct since longer coeffs can reduce shorter coeffs
                   irr++;
                } else {
                   irr = 0; 
@@ -494,13 +496,12 @@ public class RReductionSeq<C extends RegularRingElem<C>>
 
 
     /**
-     * Is boolean closed, i.e.
+     * Is boolean closed, 
      * test if A == idempotent(ldcf(A)) A.
      * @typeparam C coefficient type.
      * @param A polynomial.
      * @return true if A is boolean closed, else false.
      */
-    @SuppressWarnings("unchecked") 
     public boolean isBooleanClosed(GenPolynomial<C> A) {  
         if ( A == null || A.isZERO() ) {
            return true;
@@ -516,7 +517,7 @@ public class RReductionSeq<C extends RegularRingElem<C>>
 
 
     /**
-     * Is boolean closed, i.e.
+     * Is boolean closed, 
      * test if all A in F are boolean closed.
      * @typeparam C coefficient type.
      * @param F polynomial list.
@@ -552,13 +553,12 @@ public class RReductionSeq<C extends RegularRingElem<C>>
 
 
     /**
-     * Boolean closure, i.e.
+     * Boolean closure, 
      * compute idempotent(ldcf(A)) A.
      * @typeparam C coefficient type.
      * @param A polynomial.
      * @return bc(A).
      */
-    @SuppressWarnings("unchecked") 
     public GenPolynomial<C> booleanClosure(GenPolynomial<C> A) {  
         if ( A == null || A.isZERO() ) {
            return A;
@@ -571,13 +571,12 @@ public class RReductionSeq<C extends RegularRingElem<C>>
 
 
     /**
-     * Boolean remainder, i.e.
+     * Boolean remainder, 
      * compute idemComplement(ldcf(A)) A.
      * @typeparam C coefficient type.
      * @param A polynomial.
      * @return br(A).
      */
-    @SuppressWarnings("unchecked") 
     public GenPolynomial<C> booleanRemainder(GenPolynomial<C> A) {  
         if ( A == null || A.isZERO() ) {
            return A;
@@ -590,7 +589,7 @@ public class RReductionSeq<C extends RegularRingElem<C>>
 
 
     /**
-     * Reduced boolean closure, i.e.
+     * Reduced boolean closure, 
      * compute BC(A) for all A in F.
      * @typeparam C coefficient type.
      * @param F polynomial list.
@@ -628,7 +627,7 @@ public class RReductionSeq<C extends RegularRingElem<C>>
 
 
     /**
-     * Reduced boolean closure, i.e.
+     * Reduced boolean closure, 
      * compute BC(A) modulo F.
      * @typeparam C coefficient type.
      * @param A polynomial.

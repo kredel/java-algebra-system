@@ -110,8 +110,6 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>>
         List<GenPolynomial<C>> G = new ArrayList<GenPolynomial<C>>();
 
         List<GenPolynomial<C>> bcF = red.reducedBooleanClosure(F);
-        //System.out.println("#bcF    = " + bcF.size());
-        //System.out.println("#F      = " + F.size());
         logger.info("#bcF-#F = " + (bcF.size()-F.size()));
         F = bcF;
 
@@ -242,7 +240,7 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>>
             }
         }
         if ( G.size() <= 1 ) {
-           //wg monic   return G;
+           //wg monic do not  return G;
         }
         // remove top reducible polynomials
         GenPolynomial<C> a, b;
@@ -296,6 +294,7 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>>
             }
             i++;
         }
+        // make monic if possible
         F = new ArrayList<GenPolynomial<C>>( G.size() );
         for ( GenPolynomial<C> p : G ) {
             a = p.monic();
