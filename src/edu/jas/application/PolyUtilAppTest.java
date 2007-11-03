@@ -213,7 +213,7 @@ public class PolyUtilAppTest extends TestCase {
 
      cp = PolyUtilApp.toANProductCoeff(fac,cr);
      //System.out.println("cp = " + cp);
-     assertTrue("isZERO( cp )", cp.isZERO() );
+     assertTrue("isONE( cp )", cp.isONE() );
      
      cr = rfac.random(kl,ll,el,q);
      //System.out.println("cr = " + cr);
