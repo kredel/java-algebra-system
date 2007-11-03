@@ -226,7 +226,11 @@ public class GenPolynomialRing<C extends RingElem<C> >
                      + " ";
            }
            if ( res == null ) {
-              res = scf;
+              if ( coFac != null ) {
+                 res = coFac.toString();
+              } else {
+                 res = scf;
+              }
            }
            res +=   "( " 
                   + varsToString()
