@@ -21,7 +21,9 @@ import edu.jas.poly.TermOrder;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.AlgebraicNumber;
+import edu.jas.poly.ANumRegular;
 import edu.jas.poly.AlgebraicNumberRing;
+import edu.jas.poly.ANumRegularRing;
 
 import edu.jas.structure.Product;
 import edu.jas.structure.ProductRing;
@@ -114,7 +116,7 @@ public class PolyUtilAppTest extends TestCase {
  * Test Product represenation conversion, rational numbers.
  * 
  */
- public void xtestProductConversionRN() {
+ public void testProductConversionRN() {
      GenPolynomialRing<BigRational> ufac;
      ufac = new GenPolynomialRing<BigRational>(new BigRational(1),1);
 
@@ -128,7 +130,7 @@ public class PolyUtilAppTest extends TestCase {
 
      cp = PolyUtilApp.toProduct(pfac,c);
      //System.out.println("cp = " + cp);
-     assertTrue("isZERO( cp )", cp.isZERO() );
+     assertTrue("isONE( cp )", cp.isONE() );
 
      c = dfac.random(kl,ll,el,q);
      //System.out.println("c = " + c);
@@ -143,7 +145,7 @@ public class PolyUtilAppTest extends TestCase {
  * Test Product represenation conversion, algebraic numbers.
  * 
  */
- public void xtestProductConversionAN() {
+ public void testProductConversionAN() {
      GenPolynomialRing<BigRational> ufac;
      ufac = new GenPolynomialRing<BigRational>(new BigRational(1),1);
 
@@ -166,13 +168,89 @@ public class PolyUtilAppTest extends TestCase {
 
      cp = PolyUtilApp.toANProduct(pfac,c);
      //System.out.println("cp = " + cp);
-     assertTrue("isZERO( cp )", cp.isZERO() );
+     assertTrue("isZERO( cp )", cp.isONE() );
      
      c = dfac.random(kl,ll,el,q);
      //System.out.println("c = " + c);
 
      cp = PolyUtilApp.toANProduct(pfac,c);
      //System.out.println("cp = " + cp);
+     assertTrue("!isONE( cp )", !cp.isONE() );
+ }
+
+
+/**
+ * Test Product represenation conversion, regular algebraic number, inverse.
+ * 
+ */
+ public void testProductConversionANregular() {
+     GenPolynomialRing<BigRational> ufac;
+     ufac = new GenPolynomialRing<BigRational>(new BigRational(1),1);
+
+     GenPolynomial<BigRational> m;
+     m = ufac.univariate(0,2);
+     m = m.subtract( ufac.univariate(0,1) );
+     System.out.println("m = " + m);
+
+     ANumRegularRing<BigRational> afac;
+     afac = new ANumRegularRing<BigRational>(m);
+     System.out.println("afac = " + afac);
+
+     AlgebraicNumber<BigRational> an;
+     AlgebraicNumber<BigRational> bn;
+     AlgebraicNumber<BigRational> cn;
+
+     an = afac.getONE();
+     System.out.println("an = " + an);
+     bn = an.inverse();
+     System.out.println("bn = " + bn);
+     cn = an.multiply(bn);
+     System.out.println("cn = " + cn);
+     assertEquals("a^2*inv(a) = a", bn, cn );
+
+     an = afac.getZERO();
+     System.out.println("an = " + an);
+     bn = an.inverse();
+     System.out.println("bn = " + bn);
+     cn = an.multiply(bn);
+     System.out.println("cn = " + cn);
+     assertTrue("isZERO( cn )", cn.isZERO() );
+
+     an = afac.random(5);
+     System.out.println("an = " + an);
+     bn = an.inverse();
+     System.out.println("bn = " + bn);
+     cn = an.multiply(bn);
+     System.out.println("cn = " + cn);
+     //assertEquals("a^2*inv(a) = a", bn, cn );
+     assertTrue("isONE( cn )", cn.isONE() );
+
+     an = new ANumRegular<BigRational>(afac,ufac.univariate(0,1));
+     System.out.println("an = " + an);
+     bn = an.inverse();
+     System.out.println("bn = " + bn);
+     cn = an.multiply(bn);
+     System.out.println("cn = " + cn);
+     assertEquals("a^2*inv(a) = a", bn, cn );
+
+
+     ProductRing<AlgebraicNumber<BigRational>> pfac;
+     pfac = new ProductRing<AlgebraicNumber<BigRational>>( afac, rl );
+
+     Product<AlgebraicNumber<BigRational>> cp;
+
+     c = dfac.getONE();
+     System.out.println("c = " + c);
+
+     cp = PolyUtilApp.toANProduct(pfac,c);
+     System.out.println("cp = " + cp);
+     assertTrue("isONE( cp )", cp.isONE() );
+     
+     c = dfac.random(kl,ll,el,q);
+     System.out.println("c = " + c);
+
+     cp = PolyUtilApp.toANProduct(pfac,c);
+     System.out.println("cp = " + cp);
      assertTrue("!isONE( cp )", !cp.isONE() );
  }
 

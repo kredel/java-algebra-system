@@ -17,6 +17,8 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
+import edu.jas.poly.ANumRegular;
+import edu.jas.poly.ANumRegularRing;
 
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingElem;
@@ -53,14 +55,50 @@ public class PolyUtilApp<C extends RingElem<C> > {
         for ( int i = 0; i < e.length(); i++ ) {
             RingFactory<GenPolynomial<C>> rfac = pfac.getFactory(i);
             GenPolynomialRing<C> fac = (GenPolynomialRing<C>) rfac;
+            //GenPolynomialRing<C> cfac = fac.ring;
             long a = e.getVal(i);
-            if ( a > 0 ) {
-               GenPolynomial<C> u = fac.univariate(0,a);
-               u = u.multiply(c);
-               elem.put( i, u );
+            GenPolynomial<C> u;
+            if ( a == 0 ) {
+               u = fac.getONE();
+            } else {
+               u = fac.univariate(0,a);
             }
+            u = u.multiply(c);
+            elem.put( i, u );
         }
         return new Product<GenPolynomial<C>>( pfac, elem );
+    }
+
+
+    /**
+     * Product representation for algebraic numbers.
+     * @param pfac product polynomial ring factory.
+     * @param c coefficient to be used.
+     * @param e exponent vector.
+     * @return Product represenation of c X^e in the ring pfac.
+     */
+    public static <C extends GcdRingElem<C>> 
+        Product<AlgebraicNumber<C>> 
+        toProductX( ProductRing<AlgebraicNumber<C>> pfac, 
+                    C c, ExpVector e ) {
+        SortedMap<Integer,AlgebraicNumber<C>> elem 
+            = new TreeMap<Integer,AlgebraicNumber<C>>();
+        for ( int i = 0; i < e.length(); i++ ) {
+            RingFactory<AlgebraicNumber<C>> rfac = pfac.getFactory(i);
+            AlgebraicNumberRing<C> fac = (AlgebraicNumberRing<C>) rfac;
+            GenPolynomialRing<C> cfac = fac.ring;
+            long a = e.getVal(i);
+            GenPolynomial<C> u;
+            if ( a == 0 ) {
+               u = cfac.getONE();
+            } else {
+               u = cfac.univariate(0,a);
+            }
+            u = u.multiply(c);
+            AlgebraicNumber<C> an = new AlgebraicNumber<C>(fac,u);
+            elem.put( i, an );
+        }
+        return new Product<AlgebraicNumber<C>>( pfac, elem );
     }
 
 
@@ -89,7 +127,14 @@ public class PolyUtilApp<C extends RingElem<C> > {
                u = cfac.univariate(0,a);
             }
             u = u.multiply(c);
-            AlgebraicNumber<C> an = new AlgebraicNumber<C>(fac,u);
+            AlgebraicNumber<C> an;
+            try {
+                ANumRegularRing<C> arfac = (ANumRegularRing<C>)fac;
+                an = new ANumRegular<C>(arfac,u);
+            } catch(ClassCastException cce) {
+                //System.out.println("toProduct cce " + fac);
+                an = new AlgebraicNumber<C>(fac,u);
+            }
             elem.put( i, an );
         }
         return new Product<AlgebraicNumber<C>>( pfac, elem );
