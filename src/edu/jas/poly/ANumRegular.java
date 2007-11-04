@@ -81,10 +81,15 @@ public class ANumRegular<C extends GcdRingElem<C> >
         if ( val.degree() > 1 ) { // cannot happen
            throw new RuntimeException("invalid value " + val);
         }
-        System.out.println("ANumRegular.inverse() " + this);
+        //System.out.println("ANumRegular.inverse() " + this);
         GenPolynomialRing<C> mring = ring.ring;
 	try {
-            C a = val.leadingBaseCoefficient();
+            C a;
+            if ( val.degree() == 1 ) {
+               a = val.leadingBaseCoefficient();
+            } else {
+               a = mring.coFac.getZERO();
+            }
             C b = val.trailingBaseCoefficient();
             //System.out.println("a = " + a);
             //System.out.println("b = " + b);
