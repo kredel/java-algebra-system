@@ -16,7 +16,7 @@ from jas import terminate
 # Sato & Suzuki, ISSAC 2001, example 2
 # regular ring GB
 
-r = Ring( "IntFunc(p1,p2,p3,p4) (x1,x2,x3,x4,a,b,c,u1,u2,u3,u4) L" );
+r = Ring( "IntFunc(p1,p2,p3,p4) (a,b,c,x1,x2,x3,x4,u1,u2,u3,u4) L" );
 print "Ring: " + str(r);
 print;
 
@@ -52,6 +52,7 @@ from edu.jas.poly import GenPolynomialRing;
 from edu.jas.poly import GenPolynomial;  
 from edu.jas.poly import AlgebraicNumberRing;  
 from edu.jas.poly import AlgebraicNumber;  
+from edu.jas.poly import ANumRegularRing;  
 from edu.jas.structure import Product;  
 from edu.jas.structure import ProductRing;  
 from edu.jas.application import PolyUtilApp;  
@@ -62,12 +63,14 @@ ufac = GenPolynomialRing(BigRational(1),1);
 
 #GenPolynomial m; original is: x^2 - x, test with complex: x^2 + 1
 m = ufac.univariate(0,2);
-##original##m = m.subtract( ufac.univariate(0,1) );
-m = m.sum( ufac.getONE() );
+##original##
+m = m.subtract( ufac.univariate(0,1) );
+##test complex# m = m.sum( ufac.getONE() );
 print "m = " + str(m);
 
 #AlgebraicNumberRing afac;
-afac = AlgebraicNumberRing(m);
+#afac = AlgebraicNumberRing(m);
+afac = ANumRegularRing(m);
 print "afac = " + str(afac);
 
 #ProductRing pfac;
@@ -75,7 +78,7 @@ pfac = ProductRing( afac, 4 );
 print "pfac = " + str(pfac);
 
 #GenPolynomialRing fac; 
-fac = GenPolynomialRing(pfac,11,r.ring.vars); 
+fac = GenPolynomialRing(pfac,11,r.ring.tord,r.ring.vars); 
 print "fac = " + str(fac);
 
 rp = Ring( ring=fac );
@@ -98,7 +101,7 @@ fp = rp.ideal( list=rg );
 print "Ideal, GB: " + str(fp);
 print;
 
-bg = fp.isGB();
+bg = RGroebnerBaseSeq().isGB(rg);
 print "isGB:", bg;
 print;
 

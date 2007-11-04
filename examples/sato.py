@@ -44,6 +44,7 @@ print;
 from edu.jas.arith import BigRational;  
 from edu.jas.poly import GenPolynomialRing;  
 from edu.jas.poly import GenPolynomial;  
+from edu.jas.poly import ANumRegularRing;  
 from edu.jas.poly import AlgebraicNumberRing;  
 from edu.jas.poly import AlgebraicNumber;  
 from edu.jas.structure import Product;  
@@ -56,12 +57,14 @@ ufac = GenPolynomialRing(BigRational(1),1);
 
 #GenPolynomial m; original is: x^2 - x, test with complex: x^2 + 1
 m = ufac.univariate(0,2);
-##original##m = m.subtract( ufac.univariate(0,1) );
-m = m.sum( ufac.getONE() );
+##original##
+m = m.subtract( ufac.univariate(0,1) );
+##test complex#m = m.sum( ufac.getONE() );
 print "m = " + str(m);
 
 #AlgebraicNumberRing afac;
-afac = AlgebraicNumberRing(m);
+#afac = AlgebraicNumberRing(m);
+afac = ANumRegularRing(m);
 print "afac = " + str(afac);
 
 #ProductRing pfac;
@@ -69,7 +72,7 @@ pfac = ProductRing( afac, 12 );
 print "pfac = " + str(pfac);
 
 #GenPolynomialRing fac; 
-fac = GenPolynomialRing(pfac,3,r.ring.vars); 
+fac = GenPolynomialRing(pfac,3,r.ring.tord,r.ring.vars); 
 print "fac = " + str(fac);
 
 rp = Ring( ring=fac );
@@ -92,7 +95,7 @@ fp = rp.ideal( list=rg );
 print "Ideal, GB: " + str(fp);
 print;
 
-bg = fp.isGB();
+bg = RGroebnerBaseSeq().isGB(rg);
 print "isGB:", bg;
 print;
 
