@@ -206,7 +206,8 @@ public class PolyUtilAppTest extends TestCase {
      System.out.println("bn = " + bn);
      cn = an.multiply(bn);
      System.out.println("cn = " + cn);
-     assertEquals("a^2*inv(a) = a", bn, cn );
+     assertTrue("isONE( cn )", cn.isONE() );
+     //assertEquals("a^2*inv(a) = a", bn, cn );
 
      an = afac.getZERO();
      System.out.println("an = " + an);
@@ -229,10 +230,19 @@ public class PolyUtilAppTest extends TestCase {
      System.out.println("an = " + an);
      bn = an.inverse();
      System.out.println("bn = " + bn);
-     cn = an.multiply(bn);
+     cn = an.multiply(an.multiply(bn));
      System.out.println("cn = " + cn);
-     assertEquals("a^2*inv(a) = a", bn, cn );
+     //assertTrue("isONE( cn )", cn.isONE() );
+     assertEquals("a^2*inv(a) = a", an, cn );
 
+     an = new ANumRegular<BigRational>(afac,ufac.univariate(0,1).subtract(ufac.getONE()));
+     System.out.println("an = " + an);
+     bn = an.inverse();
+     System.out.println("bn = " + bn);
+     cn = an.multiply(an.multiply(bn));
+     System.out.println("cn = " + cn);
+     //assertTrue("isONE( cn )", cn.isONE() );
+     assertEquals("a^2*inv(a) = a", an, cn );
 
      ProductRing<AlgebraicNumber<BigRational>> pfac;
      pfac = new ProductRing<AlgebraicNumber<BigRational>>( afac, rl );
