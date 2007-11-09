@@ -115,27 +115,31 @@ public class PolyUtilApp<C extends RingElem<C> > {
                    C c, ExpVector e ) {
         SortedMap<Integer,AlgebraicNumber<C>> elem 
             = new TreeMap<Integer,AlgebraicNumber<C>>();
+        boolean z = e.isZERO();
         for ( int i = 0; i < e.length(); i++ ) {
             RingFactory<AlgebraicNumber<C>> rfac = pfac.getFactory(i);
             AlgebraicNumberRing<C> fac = (AlgebraicNumberRing<C>) rfac;
             GenPolynomialRing<C> cfac = fac.ring;
             long a = e.getVal(i);
-            GenPolynomial<C> u;
-            if ( a == 0 ) {
+            GenPolynomial<C> u = null;
+            if ( z ) {
+               //continue; //skip // 
                u = cfac.getONE();
-            } else {
+            } else if ( a > 0 ) {
                u = cfac.univariate(0,a);
             }
-            u = u.multiply(c);
-            AlgebraicNumber<C> an;
-            try {
-                ANumRegularRing<C> arfac = (ANumRegularRing<C>)fac;
-                an = new ANumRegular<C>(arfac,u);
-            } catch(ClassCastException cce) {
-                //System.out.println("toProduct cce " + fac);
-                an = new AlgebraicNumber<C>(fac,u);
+            if ( u != null ) {
+               u = u.multiply(c);
+               AlgebraicNumber<C> an;
+               try {
+                   ANumRegularRing<C> arfac = (ANumRegularRing<C>)fac;
+                   an = new ANumRegular<C>(arfac,u);
+               } catch(ClassCastException cce) {
+                   System.out.println("toProduct cce " + fac);
+                   an = new AlgebraicNumber<C>(fac,u);
+               }
+               elem.put( i, an );
             }
-            elem.put( i, an );
         }
         return new Product<AlgebraicNumber<C>>( pfac, elem );
     }
