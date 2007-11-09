@@ -193,7 +193,8 @@ public class TermOrderOptimization {
         if ( a == null || a.length <= 1 ) {
            return a;
         }
-        T[] b = (T[]) new Object[a.length]; //Arrays.<T>copyOf( a, a.length );
+        T[] b = (T[]) new Object[a.length];        // jdk 1.5
+        //T[] b = Arrays.<T>copyOf( a, a.length ); // jdk 1.6
         int j = 0;
         for ( Integer i : P ) {
             b[j] = a[ (int)i ];
