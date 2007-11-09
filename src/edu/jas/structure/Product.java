@@ -468,6 +468,20 @@ public class Product<C extends RingElem<C> >
     }
 
 
+    /** Product multiply by coefficient.
+     * @param c coefficient.
+     * @return this*c.
+     */
+    public Product<C> multiply(C c) {
+        SortedMap<Integer,C> elem = new TreeMap<Integer,C>();
+        for ( Integer i : val.keySet() ) {
+            C v = val.get(i).multiply(c);
+            elem.put( i, v );
+        }
+        return new Product<C>( ring, elem );
+    }
+
+
     /**
      * Greatest common divisor.
      * @param S other element.
