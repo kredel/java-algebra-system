@@ -297,7 +297,7 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>>
         // make monic if possible
         F = new ArrayList<GenPolynomial<C>>( G.size() );
         for ( GenPolynomial<C> p : G ) {
-            a = p.monic();
+            a = p.monic().abs();
             if ( p.length() != a.length() ) {
                System.out.println("#p != #a: a = " + a + ", p = " + p);
                a = p; // dont make monic for now
