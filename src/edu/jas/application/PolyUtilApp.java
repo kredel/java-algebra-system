@@ -17,8 +17,6 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
-import edu.jas.poly.ANumRegular;
-import edu.jas.poly.ANumRegularRing;
 
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingElem;
@@ -122,22 +120,23 @@ public class PolyUtilApp<C extends RingElem<C> > {
             GenPolynomialRing<C> cfac = fac.ring;
             long a = e.getVal(i);
             GenPolynomial<C> u = null;
+            /* variant with mostly zero components */
             if ( z ) {
-               //continue; //skip // 
+               //not ok: continue; skip  
                u = cfac.getONE();
             } else if ( a > 0 ) {
                u = cfac.univariate(0,a);
-            }
+            } // else a == 0
+            /*
+            if ( a == 0 ) {
+               u = cfac.getONE();
+            } else {
+               u = cfac.univariate(0,a);
+            } 
+            */
             if ( u != null ) {
                u = u.multiply(c);
-               AlgebraicNumber<C> an;
-               try {
-                   ANumRegularRing<C> arfac = (ANumRegularRing<C>)fac;
-                   an = new ANumRegular<C>(arfac,u);
-               } catch(ClassCastException cce) {
-                   System.out.println("toProduct cce " + fac);
-                   an = new AlgebraicNumber<C>(fac,u);
-               }
+               AlgebraicNumber<C> an = new AlgebraicNumber<C>(fac,u);
                elem.put( i, an );
             }
         }
