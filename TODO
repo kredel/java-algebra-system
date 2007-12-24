@@ -22,7 +22,7 @@
 - use further util.concurrent algorithms where possible, e.g. in DHT
 
 - add product category to applications
-- implement discrete products of ring elements
+- implement direct products of ring elements
 
 - refactor from BasicLinAlg to GenMatrix and GenVector 
 
@@ -37,6 +37,8 @@
 - implement comprehensive GB
 
 - refactor method names for groovy operator overloading, make examples for usage
+
+- define FieldElem and Field factory interfaces and use them for GB coefficients
 
 
 
