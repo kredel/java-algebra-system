@@ -252,7 +252,7 @@ export:
 	cd ~/jas-versions/$(VERSION); jas_dosed $(VERSION) `$(SVNREV)` download.html
 	cd ~/jas-versions/; jar -cf $(VERSION).`$(SVNREV)`-src.jar $(VERSION)/
 	cd ~/jas-versions/$(VERSION)/; ant compile > ant_compile.out
-	cd ~/jas-versions/$(VERSION)/; jar -cf ../$(VERSION).`$(SVNREV)`-bin.jar edu/
+	cd ~/jas-versions/$(VERSION)/; jar -cf ../$(VERSION).`$(SVNREV)`-bin.jar edu/ COPYING*
 	cd ~/jas-versions/$(VERSION)/; ant test > ant_test.out
 	cd ~/jas-versions/$(VERSION)/; sh ./jython_tests.sh >jython_tests.out 2>&1
 	cd ~/jas-versions/$(VERSION)/; ant doc > ant_doc.out
@@ -260,7 +260,7 @@ export:
 	mv ~/jas-versions/$(VERSION).`$(SVNREV)`-*.jar ~/jas-versions/$(VERSION)/
 
 deploy:
-	$(RSYNC) --delete --exclude=DTD --exclude=lisa* --exclude=*xml ~/jas-versions/$(VERSION)/ krum:htdocs/$(VERSION)
+	$(RSYNC) --delete-after --exclude=DTD --exclude=lisa* --exclude=*xml ~/jas-versions/$(VERSION)/ krum:htdocs/$(VERSION)
 
 
 young:
