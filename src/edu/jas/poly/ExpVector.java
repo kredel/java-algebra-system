@@ -30,6 +30,12 @@ public final class ExpVector implements Cloneable, Serializable {
     private final long[] val;
 
 
+    /**
+     * Stored hash code.
+     */
+    protected int hash = 0;
+
+
     private final static Random random = new Random();
 
 
@@ -322,11 +328,12 @@ public final class ExpVector implements Cloneable, Serializable {
      */
     @Override
     public int hashCode() { 
-        int h = 0;
-        for (int i = 0; i < val.length; i++ ) {
-            h = h<<4 + (int)val[i];
+        if ( hash == 0 ) {
+           for (int i = 0; i < val.length; i++ ) {
+               hash = hash<<4 + (int)val[i];
+           }
         }
-        return h;
+        return hash;
     }
 
 
