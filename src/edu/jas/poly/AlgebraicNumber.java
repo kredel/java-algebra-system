@@ -246,11 +246,6 @@ public class AlgebraicNumber<C extends GcdRingElem<C> >
      * @return S with S = 1/this if defined. 
      */
     public AlgebraicNumber<C> inverse() {
-        if ( ring instanceof ANumRegularRing ) {
-           ANumRegularRing<C> r = (ANumRegularRing<C>)ring;
-           ANumRegular<C> t = new ANumRegular<C>(r,val);
-           return t.inverse();
-        }
 	try {
             return new AlgebraicNumber<C>( ring, val.modInverse( ring.modul ) );
 	} catch (NotInvertibleException e) {
