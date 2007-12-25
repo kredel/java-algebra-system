@@ -396,14 +396,19 @@ public class Product<C extends RingElem<C> >
             C y = sel.get( i ); 
             if ( y != null ) {
                C x = val.get( i );
-               x = x.divide(y);
-               if ( ! x.isZERO() ) {
+               try {
+                   x = x.divide(y);
+               } catch(NotInvertibleException e) {
+                   //System.out.println("x = " + x + ", y = " + y);
+                   // could happen for e.g. ModInteger or AlgebraicNumber
+                   x = null; //ring.getFactory(i).getZERO();
+               }
+               if ( x != null && ! x.isZERO() ) { // can happen
                   elem.put( i, x );
                }
             }
         }
         return new Product<C>( ring, elem );
-        // return multiply( S.inverse() );
     }
 
 
@@ -427,14 +432,18 @@ public class Product<C extends RingElem<C> >
             C y = sel.get( i ); 
             if ( y != null ) {
                C x = val.get( i );
-               x = x.remainder(y);
-               if ( ! x.isZERO() ) {
+               try {
+                   x = x.remainder(y);
+               } catch(NotInvertibleException e) {
+                   // could happen for e.g. ModInteger or AlgebraicNumber
+                   x = null; //ring.getFactory(i).getZERO();
+               }
+               if ( x != null && ! x.isZERO() ) { // can happen
                   elem.put( i, x );
                }
             }
         }
         return new Product<C>( ring, elem );
-        // return subtract( this.divide( S ).multiply( S ) );
     }
 
 
