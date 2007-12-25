@@ -18,18 +18,25 @@ import junit.framework.TestSuite;
 import org.apache.log4j.BasicConfigurator;
 //import org.apache.log4j.Logger;
 
-
+import edu.jas.structure.RingFactory;
 import edu.jas.structure.Product;
 import edu.jas.structure.ProductRing;
 
 import edu.jas.arith.BigRational;
+import edu.jas.arith.BigInteger;
+import edu.jas.arith.ModInteger;
+import edu.jas.arith.ModIntegerRing;
 
+import edu.jas.poly.TermOrder;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenPolynomialTokenizer;
 import edu.jas.poly.PolynomialList;
 
 import edu.jas.ring.GroebnerBase;
+
+import edu.jas.application.PolyUtilApp;
+
 
 /**
  * R-Groebner base sequential tests with JUnit.
@@ -153,6 +160,78 @@ public class RGroebnerBaseSeqTest extends TestCase {
      L = bb.GB( L );
      assertTrue("isGB( { a, ,b, c, d, e } )", bb.isGB(L) );
      //System.out.println("L = " + L );
+ }
+
+
+/**
+ * Test Trinks7 GBase.
+ * 
+ */
+ @SuppressWarnings("unchecked") 
+ public void testTrinks7() {
+     String exam = "Z(B,S,T,Z,P,W) L "
+                 + "( "  
+                 + "( 45 P + 35 S - 165 B - 36 ), " 
+                 + "( 35 P + 40 Z + 25 T - 27 S ), "
+                 + "( 15 W + 25 S P + 30 Z - 18 T - 165 B**2 ), "
+                 + "( - 9 W + 15 T P + 20 S Z ), "
+                 + "( P W + 2 T Z - 11 B**3 ), "
+                 + "( 99 W - 11 B S + 3 B**2 ), "
+                 + "( 10000 B**2 + 6600 B + 2673 ) "
+                 + ") ";
+     Reader source = new StringReader( exam );
+     GenPolynomialTokenizer parser
+                  = new GenPolynomialTokenizer( source );
+
+     PolynomialList<BigInteger> F = null;
+
+     try {
+         F = (PolynomialList<BigInteger>) parser.nextPolynomialSet();
+     } catch(ClassCastException e) {
+         fail(""+e);
+     } catch(IOException e) {
+         fail(""+e);
+     }
+     //System.out.println("F = " + F);
+     int rl = F.ring.nvar;
+     TermOrder to = F.ring.tord;
+     String[] vars = F.ring.getVars();
+
+     List<RingFactory<ModInteger>> colist;
+     colist = new ArrayList<RingFactory<ModInteger>>();
+
+     colist.add( new ModIntegerRing(2) );
+     colist.add( new ModIntegerRing(3) );
+     colist.add( new ModIntegerRing(5) );
+     //colist.add( new ModIntegerRing(30) ); // not possible
+     //colist.add( new ModIntegerRing(11) );
+     //colist.add( new ModIntegerRing((2<<30)-19) );
+     //System.out.println("colist = " + colist);
+
+     ProductRing<ModInteger> pfac;
+     pfac = new ProductRing<ModInteger>( colist );
+     //System.out.println("pfac = " + pfac);
+
+     GenPolynomialRing<Product<ModInteger>> fac;
+     fac = new GenPolynomialRing<Product<ModInteger>>(pfac,rl,to,vars);
+     //System.out.println("fac = " + fac);
+
+     List<GenPolynomial<Product<ModInteger>>> 
+         Fp = PolyUtilApp.toProduct( fac, F.list );
+     //System.out.println("Fp = " + Fp);
+
+     GroebnerBase<Product<ModInteger>> 
+         bbr = new RGroebnerBaseSeq<Product<ModInteger>>();
+
+     List<GenPolynomial<Product<ModInteger>>> G;
+     G = bbr.GB( Fp );
+     //System.out.println("gb = " + G );
+     assertTrue("isGB( GB(Trinks7) )", bbr.isGB(G) );
+
+     //assertEquals("#GB(Trinks7) == 6", 6, G.size() );
+     PolynomialList<Product<ModInteger>> trinks 
+           = new PolynomialList<Product<ModInteger>>(fac,G);
+     //System.out.println("G = " + trinks);
  }
 
 
