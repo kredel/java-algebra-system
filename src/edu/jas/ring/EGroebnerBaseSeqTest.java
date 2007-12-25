@@ -154,7 +154,7 @@ public class EGroebnerBaseSeqTest extends TestCase {
  * 
  */ 
  @SuppressWarnings("unchecked") 
-     public void xtestTrinks7GBaseZ() { // needs very long
+     public void xtestTrinks7GBaseZ() { // needs 20 sec
      String exam = "Z(B,S,T,Z,P,W) L "
                  + "( "  
                  + "( 45 P + 35 S - 165 B - 36 ), " 
