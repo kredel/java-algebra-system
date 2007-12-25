@@ -262,7 +262,18 @@ public final class ModInteger implements GcdRingElem<ModInteger> {
      * @return this/S.
      */
     public ModInteger divide(ModInteger S) {
-        return multiply( S.inverse() );
+        try {
+            return multiply( S.inverse() );
+        } catch (NotInvertibleException e) {
+            try {
+                if ( val.remainder( S.val ).equals( java.math.BigInteger.ZERO ) ) {
+                   return new ModInteger( ring, val.divide( S.val ) );
+                }
+                throw new NotInvertibleException(e.getCause());
+            } catch (ArithmeticException a) {
+                throw new NotInvertibleException(a.getCause());
+            }
+        }
     }
 
 
@@ -283,11 +294,11 @@ public final class ModInteger implements GcdRingElem<ModInteger> {
      * @return S with S=1/this if defined. 
      */
     public ModInteger inverse() /*throws NotInvertibleException*/ {
-	try {
+        try {
             return new ModInteger( ring, val.modInverse( ring.modul ));
-	} catch (ArithmeticException e) {
-	    throw new NotInvertibleException(e.getCause());
-	}
+        } catch (ArithmeticException e) {
+            throw new NotInvertibleException(e.getCause());
+        }
     }
 
 
