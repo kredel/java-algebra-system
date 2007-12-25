@@ -12,18 +12,22 @@ import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 
-import edu.jas.poly.ExpVector;
-import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.GenPolynomialRing;
-import edu.jas.poly.AlgebraicNumber;
-import edu.jas.poly.AlgebraicNumberRing;
-
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.structure.RegularRingElem;
 import edu.jas.structure.Product;
 import edu.jas.structure.ProductRing;
+
+import edu.jas.arith.BigInteger;
+import edu.jas.arith.ModInteger;
+import edu.jas.arith.ModIntegerRing;
+
+import edu.jas.poly.ExpVector;
+import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.GenPolynomialRing;
+import edu.jas.poly.AlgebraicNumber;
+import edu.jas.poly.AlgebraicNumberRing;
 
 
 /**
@@ -244,6 +248,79 @@ public class PolyUtilApp<C extends RingElem<C> > {
             K.add( b );
         }
         return K;
+    }
+
+
+    /**
+     * Product representation.
+     * @param pfac product ring factory.
+     * @param c coefficient to be represented.
+     * @return Product represenation of c in the ring pfac.
+     */
+    public static 
+        Product<ModInteger> toProduct( ProductRing<ModInteger> pfac, BigInteger c) {
+
+        SortedMap<Integer,ModInteger> elem = new TreeMap<Integer,ModInteger>();
+        for ( int i = 0; i < pfac.length(); i++ ) {
+            RingFactory<ModInteger> rfac = pfac.getFactory(i);
+            ModIntegerRing fac = (ModIntegerRing) rfac;
+            ModInteger u = fac.fromInteger( c.getVal() );
+            if ( u != null && !u.isZERO() ) {
+               elem.put( i, u );
+            }
+        }
+        return new Product<ModInteger>( pfac, elem );
+    }
+
+
+    /**
+     * Product representation.
+     * @param pfac polynomial ring factory.
+     * @param A polynomial to be represented.
+     * @return Product represenation of A in the polynomial ring pfac.
+     */
+    public static 
+        GenPolynomial<Product<ModInteger>> 
+        toProduct( GenPolynomialRing<Product<ModInteger>> pfac, 
+                   GenPolynomial<BigInteger> A) {
+
+        GenPolynomial<Product<ModInteger>> P = pfac.getZERO();
+        RingFactory<Product<ModInteger>> rpfac = pfac.coFac;
+        ProductRing<ModInteger> fac = (ProductRing<ModInteger>)rpfac;
+        for ( Map.Entry<ExpVector,BigInteger> y: A.getMap().entrySet() ) {
+            ExpVector e = y.getKey();
+            BigInteger a = y.getValue();
+            //System.out.println("e = " + e);
+            //System.out.println("a = " + a);
+            Product<ModInteger> p = toProduct(fac,a);
+            //System.out.println("p = " + p);
+            P = P.sum( p , e );
+        }
+        return P;
+    }
+
+
+    /**
+     * Product representation.
+     * @param pfac polynomial ring factory.
+     * @param L list of polynomials to be represented.
+     * @return Product represenation of L in the polynomial ring pfac.
+     */
+    public static 
+        List<GenPolynomial<Product<ModInteger>>> 
+        toProduct( GenPolynomialRing<Product<ModInteger>> pfac, 
+                   List<GenPolynomial<BigInteger>> L) {
+
+        List<GenPolynomial<Product<ModInteger>>> 
+            list = new ArrayList<GenPolynomial<Product<ModInteger>>>();
+        if ( L == null || L.size() == 0 ) {
+           return list;
+        }
+        for ( GenPolynomial<BigInteger> a : L ) {
+            GenPolynomial<Product<ModInteger>> b = toProduct( pfac, a );
+            list.add( b );
+        }
+        return list;
     }
 
 
