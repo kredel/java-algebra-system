@@ -213,6 +213,9 @@ public class RReductionSeq<C extends RegularRingElem<C>>
                  //System.out.println("a      = " + a);
                  //System.out.println("lbc[i] = " + lbc[i]);
                  //System.out.println("b      = " + b);
+                 if ( b == null || b.isZERO() ) { // can happen 
+                    throw new RuntimeException("b is zero");
+                 } 
                  Q = p[i].multiply( b, f );
                  // rest added to R if !mt
                  //System.out.println("Q      = " + Q);
