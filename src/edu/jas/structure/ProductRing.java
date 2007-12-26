@@ -128,6 +128,25 @@ public class ProductRing<C extends RingElem<C> >
     }
 
 
+    /** Get an atomic element.
+     * @param i index.
+     * @return e_i as Product.
+     */
+    public Product<C> getAtomic(int i) {
+        if ( i < 0 || i >= length() ) {
+           throw new RuntimeException("index out of bounds " + i);
+        }
+        SortedMap<Integer,C> elem = new TreeMap<Integer,C>();
+        if ( nCopies != 0 ) {
+           elem.put( i, ring.getONE() );
+        } else {
+           RingFactory<C> f = ringList.get(i);
+           elem.put( i, f.getONE() );
+        }
+        return new Product<C>( this, elem );
+    }
+
+
     /** Get the number of factors of this ring.
      * @return nCopies or ringList.size().
      */
