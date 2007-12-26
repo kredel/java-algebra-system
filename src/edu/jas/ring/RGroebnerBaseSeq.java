@@ -7,6 +7,10 @@ package edu.jas.ring;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 
@@ -87,6 +91,9 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>>
                    s = red.normalform( F, s );
                 }
                 if ( ! s.isZERO() ) {
+                   System.out.println("p"+i+" = "+pi);
+                   System.out.println("p"+j+" = "+pj);
+                   System.out.println("s-pol = " + red.SPolynomial( pi, pj ) );
                    System.out.println("s-pol("+i+","+j+") != 0: " + s);
                    return false;
                 }
@@ -257,16 +264,17 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>>
                   ff.addAll(F);
                   a = red.normalform( ff, a );
                   if ( !a.isZERO() ) {
-                     //System.out.println("error, nf(a) " + a);
+                     System.out.println("minGB nf(a) != 0 " + a);
                      bcH = red.reducedBooleanClosure(G,a);
                      if ( bcH.size() > 1 ) {
-                        System.out.println("bcH size = " + bcH.size());
+                        System.out.println("minGB bcH size = " + bcH.size());
                         F.add(b); // do not replace
                      } else {
+                        System.out.println("minGB add bc(a): a = " + a + ", bc(a) = " + bcH.get(0));
                         F.addAll( bcH );
                      }
                   } else {
-                     //System.out.println("dropped " + b);
+                     System.out.println("minGB dropped " + b);
                   }
                }
             } else {
@@ -279,32 +287,77 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>>
         }
         // reduce remaining polynomials
         int len = G.size();
-        int i = 0;
-        while ( i < len ) {
+        int el = 0;
+        while ( el < len ) {
             a = G.remove(0); b = a;
             //System.out.println("doing " + a.length());
             a = red.normalform( G, a );
             //a = red.normalform( F, a );
             bcH = red.reducedBooleanClosure(G,a);
             if ( bcH.size() > 1 ) {
-               System.out.println("bcH size = " + bcH.size());
+               System.out.println("minGB bcH size = " + bcH.size());
                G.add( b ); // do not reduce
             } else {
                F.addAll( bcH );
             }
-            i++;
+            el++;
         }
         // make monic if possible
         F = new ArrayList<GenPolynomial<C>>( G.size() );
         for ( GenPolynomial<C> p : G ) {
             a = p.monic().abs();
             if ( p.length() != a.length() ) {
-               System.out.println("#p != #a: a = " + a + ", p = " + p);
+               System.out.println("minGB #p != #a: a = " + a + ", p = " + p);
                a = p; // dont make monic for now
             }
             F.add( a );
         }
         G = F;
+
+        /* stratify: collect polynomials with equal leading terms */
+        ExpVector e, f;
+        F = new ArrayList<GenPolynomial<C>>( G.size() );
+        for ( int i = 0; i < G.size(); i++ ) {
+            a = G.get(i);
+            if ( a == null || a.isZERO() ) {
+               continue;
+            }
+            e = a.leadingExpVector();
+            for ( int j = i+1; j < G.size(); j++ ) {
+                b = G.get(j);
+                if ( b == null || b.isZERO() ) {
+                   continue;
+                }
+                f = b.leadingExpVector();
+                if ( e.equals(f) ) {
+                   System.out.println("minGB e == f: " + a + ", " + b);
+                   a = a.sum(b);
+                   G.set(j,null);
+                }
+            }
+            F.add( a );
+        }
+        G = F;
+
+        /* info on boolean algebra element blocks */
+        Map<C,List<GenPolynomial<C>>> bd = new TreeMap<C,List<GenPolynomial<C>>>();
+        for ( GenPolynomial<C> p : G ) { 
+            C cf = p.leadingBaseCoefficient();
+            cf = cf.idempotent();
+            List<GenPolynomial<C>> block = bd.get( cf );
+            if ( block == null ) {
+               block = new ArrayList<GenPolynomial<C>>();
+            }
+            block.add( p ); 
+            bd.put( cf, block );
+        }
+        System.out.println("\nminGB bd:");
+        for( C k: bd.keySet() ) {
+           System.out.println("\nkey = " + k + ":");
+           System.out.println("val = " + bd.get(k));
+        }
+        System.out.println();
+
         return G;
     }
 
