@@ -111,7 +111,7 @@ public class RGroebnerBaseSeqTest extends TestCase {
  * Test sequential GBase.
  * 
  */
- public void testSequentialGBase() {
+ public void xtestSequentialGBase() {
 
      L = new ArrayList<GenPolynomial<Product<BigRational>>>();
 
@@ -192,33 +192,47 @@ public class RGroebnerBaseSeqTest extends TestCase {
      } catch(IOException e) {
          fail(""+e);
      }
-     //System.out.println("F = " + F);
+     System.out.println("F = " + F);
      int rl = F.ring.nvar;
      TermOrder to = F.ring.tord;
      String[] vars = F.ring.getVars();
+     PolynomialList<Product<ModInteger>> trinks;
 
      List<RingFactory<ModInteger>> colist;
      colist = new ArrayList<RingFactory<ModInteger>>();
 
-     colist.add( new ModIntegerRing(2) );
-     colist.add( new ModIntegerRing(3) );
-     colist.add( new ModIntegerRing(5) );
-     //colist.add( new ModIntegerRing(30) ); // not possible
-     //colist.add( new ModIntegerRing(11) );
+     //colist.add( new ModIntegerRing(2) );
+     //colist.add( new ModIntegerRing(3) );
+     //colist.add( new ModIntegerRing(5) );
+     //colist.add( new ModIntegerRing(30) ); // now ok, was not possible
+     colist.add( new ModIntegerRing(19) );
+     colist.add( new ModIntegerRing(23) );
      //colist.add( new ModIntegerRing((2<<30)-19) );
-     //System.out.println("colist = " + colist);
+     System.out.println("colist = " + colist);
 
      ProductRing<ModInteger> pfac;
      pfac = new ProductRing<ModInteger>( colist );
-     //System.out.println("pfac = " + pfac);
+     System.out.println("pfac   = " + pfac);
 
      GenPolynomialRing<Product<ModInteger>> fac;
      fac = new GenPolynomialRing<Product<ModInteger>>(pfac,rl,to,vars);
-     //System.out.println("fac = " + fac);
+     System.out.println("fac    = " + fac);
 
-     List<GenPolynomial<Product<ModInteger>>> 
-         Fp = PolyUtilApp.toProduct( fac, F.list );
-     //System.out.println("Fp = " + Fp);
+     List<GenPolynomial<Product<ModInteger>>> Fp;
+     Fp = PolyUtilApp.toProduct( fac, F.list );
+
+     List<GenPolynomial<Product<ModInteger>>> Fpp;
+     Fpp = new ArrayList<GenPolynomial<Product<ModInteger>>>();
+
+     for ( GenPolynomial<Product<ModInteger>> a: Fp ) {
+         Fpp.add( a.multiply( pfac.getAtomic(0) ) );
+         Fpp.add( a.multiply( pfac.getAtomic(1) ) );
+         //Fpp.add( a );
+     }
+     Fp = Fpp;
+
+     trinks = new PolynomialList<Product<ModInteger>>(fac,Fp);
+     System.out.println("Fp     = " + trinks);
 
      GroebnerBase<Product<ModInteger>> 
          bbr = new RGroebnerBaseSeq<Product<ModInteger>>();
@@ -226,12 +240,13 @@ public class RGroebnerBaseSeqTest extends TestCase {
      List<GenPolynomial<Product<ModInteger>>> G;
      G = bbr.GB( Fp );
      //System.out.println("gb = " + G );
-     assertTrue("isGB( GB(Trinks7) )", bbr.isGB(G) );
 
      //assertEquals("#GB(Trinks7) == 6", 6, G.size() );
-     PolynomialList<Product<ModInteger>> trinks 
-           = new PolynomialList<Product<ModInteger>>(fac,G);
-     //System.out.println("G = " + trinks);
+     System.out.println("Fp = " + trinks);
+     trinks = new PolynomialList<Product<ModInteger>>(fac,G);
+     System.out.println("G  = " + trinks);
+
+     assertTrue("isGB( GB(Trinks7) )", bbr.isGB(G) );
  }
 
 
