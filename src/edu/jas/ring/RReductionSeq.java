@@ -180,8 +180,8 @@ public class RReductionSeq<C extends RegularRingElem<C>>
             }
         }
         l = j;
-        ExpVector e;
-        C a;
+        ExpVector e, f;
+        C a, b;
         C r = null;
         boolean mt = false;
         GenPolynomial<C> R = Ap.ring.getZERO();
@@ -197,30 +197,29 @@ public class RReductionSeq<C extends RegularRingElem<C>>
                      r = a.multiply( lbc[i] );
                      //System.out.println("r = " + r);
                      mt = ! r.isZERO(); // && mt
+                     if ( mt ) {
+                        b = a.divide( lbc[i] );
+                        if ( b.isZERO() ) {
+                           //System.out.println("b == zero: r = " + r);
+                           continue;
+                        }
+                        f = ExpVector.EVDIF( e, htl[i] );
+                        //logger.info("red div = " + f);
+                        Q = p[i].multiply( b, f );
+                        S = S.subtract( Q ); // not ok with reductum
+                        f = S.leadingExpVector();
+                        if ( !e.equals(f) ) {
+                           a = Ap.ring.coFac.getZERO();
+                           break;
+                        } 
+                        a = S.leadingBaseCoefficient();
+                     }
                   }
-                  if ( mt ) break; 
               }
-              if ( ! mt ) { 
+              if ( !a.isZERO() ) { //! mt ) { 
                  //logger.debug("irred");
                  R = R.sum( a, e );
-                 //S = S.subtract( a, e ); 
                  S = S.reductum(); 
-                 //System.out.println(" S = " + S);
-              } else { 
-                 //logger.info("red div = " + e);
-                 ExpVector f = ExpVector.EVDIF( e, htl[i] );
-                 C b = a.divide( lbc[i] );
-                 //System.out.println("a      = " + a);
-                 //System.out.println("lbc[i] = " + lbc[i]);
-                 //System.out.println("b      = " + b);
-                 if ( b == null || b.isZERO() ) { // can happen 
-                    throw new RuntimeException("b is zero");
-                 } 
-                 Q = p[i].multiply( b, f );
-                 // rest added to R if !mt
-                 //System.out.println("Q      = " + Q);
-                 S = S.subtract( Q ); // not ok with reductum
-                 //S = S.reductum().subtract( Q.reductum() ); // not ok with reductum
               }
         }
         return R.abs(); // not monic if not boolean closed
