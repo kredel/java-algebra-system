@@ -394,7 +394,7 @@ public abstract class ReductionAbstract<C extends RingElem<C>>
 
     /**
      * Is reduction of normal form.
-     * @param row recording matrix, is modified.
+     * @param row recording matrix.
      * @param Pp a polynomial list for reduction.
      * @param Ap a polynomial.
      * @param Np nf(Pp,Ap), a normal form of Ap wrt. Pp.
