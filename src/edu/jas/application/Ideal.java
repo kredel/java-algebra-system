@@ -13,6 +13,7 @@ import java.io.Serializable;
 import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
+import edu.jas.structure.NotInvertibleException;
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
@@ -693,12 +694,10 @@ public class Ideal<C extends RingElem<C>> implements Serializable {
    */
   public GenPolynomial<C> inverse( GenPolynomial<C> h ) {
       if ( h == null || h.isZERO() ) { 
-         throw new RuntimeException(this.getClass().getName()
-                                    + " not invertible");
+         throw new RuntimeException(" zero not invertible");
       }
       if ( this.isZERO() ) { 
-         throw new RuntimeException(this.getClass().getName()
-                                    + " not invertible");
+         throw new NotInvertibleException(" zero ideal");
       }
       List<GenPolynomial<C>> F = new ArrayList<GenPolynomial<C>>( 1 + list.list.size() );
       F.add( h );
@@ -718,14 +717,12 @@ public class Ideal<C extends RingElem<C>> implements Serializable {
           }
       }
       if ( one == null ) { 
-         throw new RuntimeException(this.getClass().getName()
-                                    + " not invertible");
+         throw new NotInvertibleException(" h = " + h);
       }
       List<GenPolynomial<C>> row = x.G2F.get( i ); // != -1
       GenPolynomial<C> g = row.get(0);
       if ( g == null || g.isZERO() ) { 
-         throw new RuntimeException(this.getClass().getName()
-                                    + " not invertible " + h);
+         throw new NotInvertibleException(" h = " + h);
       }
       // adjust g to get g*h == 1
       GenPolynomial<C> f = g.multiply(h);
@@ -746,8 +743,7 @@ public class Ideal<C extends RingElem<C>> implements Serializable {
          k = red.normalform(list.list,f);
          logger.info("inv k = " + k);
          if ( ! k.isUnit() ) {
-            throw new RuntimeException(this.getClass().getName()
-                                       + " not invertible");
+            throw new NotInvertibleException(" k = " + k);
          }
       }
       return g;
