@@ -43,7 +43,7 @@ print;
 print "product decomposition:", pl;
 print;
 
-sys.exit();
+#sys.exit();
 
 startLog();
 
