@@ -617,4 +617,81 @@ public static Test suite() {
      assertTrue("isBC( B )", rred.isBooleanClosed(B) ); 
  }
 
+
+/**
+ * Test Integer pseudo-reduction.
+ * 
+ */
+ public void testIntegerPseudoReduction() {
+
+     BigInteger bi = new BigInteger(0);
+     GenPolynomialRing<BigInteger> fac 
+          = new GenPolynomialRing<BigInteger>( bi, rl );
+
+     PseudoReductionSeq<BigInteger> pred = new PseudoReductionSeq<BigInteger>();
+
+     GenPolynomial<BigInteger> a = fac.random(kl, ll, el, q );
+     GenPolynomial<BigInteger> b = fac.random(kl, ll, el, q );
+
+     if ( a.isZERO() || b.isZERO() ) {
+        return;
+     }
+
+     assertTrue("not isZERO( a )", !a.isZERO() );
+
+     List<GenPolynomial<BigInteger>> L 
+         = new ArrayList<GenPolynomial<BigInteger>>();
+     L.add(a);
+
+     GenPolynomial<BigInteger> e;
+     e = pred.normalform( L, a );
+     //System.out.println("a = " + a);
+     //System.out.println("e = " + e);
+     assertTrue("isZERO( e )", e.isZERO() );
+
+     assertTrue("not isZERO( b )", !b.isZERO() );
+
+     L.add(b);
+     e = pred.normalform( L, a );
+     //System.out.println("b = " + b);
+     //System.out.println("e = " + e);
+     assertTrue("isZERO( e ) some times", e.isZERO() ); 
+
+
+     GenPolynomial<BigInteger> c = fac.getONE();
+     a = a.sum(c);
+     e = pred.normalform( L, a );
+     //System.out.println("b = " + b);
+     //System.out.println("e = " + e);
+     assertTrue("isConstant( e ) some times", e.isConstant() ); 
+
+     L = new ArrayList<GenPolynomial<BigInteger>>();
+     a = c.multiply( bi.fromInteger(4) );
+     b = c.multiply( bi.fromInteger(5) );
+     L.add( a );
+     e = pred.normalform( L, b );
+     //System.out.println("a = " + a);
+     //System.out.println("b = " + b);
+     //System.out.println("e = " + e);
+     assertTrue("isZERO( e )", e.isZERO() ); 
+
+     a = fac.random(kl, ll, el, q ); //.abs();
+     b = fac.random(kl, ll, el, q ); //.abs();
+     //System.out.println("a = " + a);
+     //System.out.println("b = " + b);
+
+     L = new ArrayList<GenPolynomial<BigInteger>>();
+     L.add( a );
+     assertTrue("isTopRed( a )", pred.isTopReducible(L,a) ); 
+     assertTrue("isRed( a )", pred.isReducible(L,a) ); 
+     b = fac.random(kl, ll, el, q );
+     L.add( b );
+     assertTrue("isTopRed( b )", pred.isTopReducible(L,b) ); 
+     assertTrue("isRed( b )", pred.isReducible(L,b) ); 
+     c = fac.random(kl, ll, el, q );
+     e = pred.normalform( L, c );
+     assertTrue("isNF( e )", pred.isNormalform(L,e) ); 
+     
+ }
+
 }
