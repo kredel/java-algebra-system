@@ -401,7 +401,9 @@ public class PolyUtilApp<C extends RingElem<C> > {
             //System.out.println("ideal = " + I);
             ResidueRing<BigRational> rr = new ResidueRing<BigRational>( I );
             System.out.println("rr    = " + rr);
-            lfac.add( rr );
+            if ( !lfac.contains( rr ) ) {
+               lfac.add( rr );
+            }
         }
         //System.out.println("lfac = " + lfac);
         ProductRing<Residue<BigRational>> nr 
