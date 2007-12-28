@@ -13,6 +13,7 @@ import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 
 import edu.jas.structure.RingElem;
+import edu.jas.structure.FieldElem;
 
 
 /**
@@ -21,7 +22,7 @@ import edu.jas.structure.RingElem;
  * @author Heinz Kredel
  */
 
-public class ReductionSeq<C extends RingElem<C>>
+public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
              extends ReductionAbstract<C> {
 
     //private static final Logger logger = Logger.getLogger(ReductionSeq.class);
@@ -41,7 +42,7 @@ public class ReductionSeq<C extends RingElem<C>>
      * @param Pp polynomial list.
      * @return nf(Ap) with respect to Pp.
      */
-    @SuppressWarnings("unchecked") // not jet working
+    @SuppressWarnings("unchecked") 
     public GenPolynomial<C> normalform(List<GenPolynomial<C>> Pp, 
                                        GenPolynomial<C> Ap) {  
         if ( Pp == null || Pp.isEmpty() ) {
@@ -49,6 +50,9 @@ public class ReductionSeq<C extends RingElem<C>>
         }
         if ( Ap == null || Ap.isZERO() ) {
            return Ap;
+        }
+        if ( ! Ap.ring.coFac.isField() ) {
+           throw new RuntimeException("coefficients not from a field");
         }
         Map.Entry<ExpVector,C> m;
         int l;
@@ -62,7 +66,7 @@ public class ReductionSeq<C extends RingElem<C>>
             }
         }
         ExpVector[] htl = new ExpVector[ l ];
-        Object[] lbc = new Object[ l ]; // want <C>
+        Object[] lbc = new Object[ l ]; // want C[]
         GenPolynomial<C>[] p = new GenPolynomial[ l ];
         int i;
         int j = 0;
@@ -119,6 +123,7 @@ public class ReductionSeq<C extends RingElem<C>>
      * @param Ap a polynomial.
      * @return nf(Pp,Ap), the normal form of Ap wrt. Pp.
      */
+    @SuppressWarnings("unchecked") 
     public GenPolynomial<C> 
         normalform(List<GenPolynomial<C>> row,
                    List<GenPolynomial<C>> Pp, 
@@ -129,6 +134,9 @@ public class ReductionSeq<C extends RingElem<C>>
         if ( Ap == null || Ap.isZERO() ) {
             return Ap;
         }
+        if ( ! Ap.ring.coFac.isField() ) {
+           throw new RuntimeException("coefficients not from a field");
+        }
         int l = Pp.size();
         GenPolynomial<C>[] P = new GenPolynomial[l];
         synchronized (Pp) {
@@ -138,7 +146,7 @@ public class ReductionSeq<C extends RingElem<C>>
             }
         }
         ExpVector[] htl = new ExpVector[ l ];
-        Object[] lbc = new Object[ l ]; // want <C>
+        Object[] lbc = new Object[ l ]; // want C[]
         GenPolynomial<C>[] p = new GenPolynomial[ l ];
         Map.Entry<ExpVector,C> m;
         int j = 0;
@@ -181,7 +189,7 @@ public class ReductionSeq<C extends RingElem<C>>
             } else { 
                 e = ExpVector.EVDIF( e, htl[i] );
                 //logger.info("red div = " + e);
-                C c = (C)lbc[i];
+                C c = (C) lbc[i];
                 a = a.divide( c );
                 Q = p[i].multiply( a, e );
                 S = S.subtract( Q );
