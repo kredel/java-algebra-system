@@ -691,7 +691,109 @@ public static Test suite() {
      c = fac.random(kl, ll, el, q );
      e = pred.normalform( L, c );
      assertTrue("isNF( e )", pred.isNormalform(L,e) ); 
-     
+ }
+
+
+/**
+ * Test integer r-reduction.
+ * 
+ */
+ public void testIntegerRReduction() {
+
+     RingFactory<BigInteger> bi = new BigInteger(0);
+     ProductRing<BigInteger> pr = new ProductRing<BigInteger>(bi,3);
+
+     GenPolynomialRing<Product<BigInteger>> fac 
+          = new GenPolynomialRing<Product<BigInteger>>( pr, rl );
+
+     RReductionSeq<Product<BigInteger>> rpred 
+         = new RPseudoReductionSeq<Product<BigInteger>>();
+
+     GenPolynomial<Product<BigInteger>> a = fac.random(kl, ll, el, q );
+     GenPolynomial<Product<BigInteger>> b = fac.random(kl, ll, el, q );
+     GenPolynomial<Product<BigInteger>> d;
+
+     while ( a.isZERO() ) {
+         a = fac.random(kl, ll, el, q );
+     }
+     while ( b.isZERO() ) {
+         b = fac.random(kl, ll, el, q );
+     }
+
+     assertTrue("not isZERO( a )", !a.isZERO() );
+
+     List<GenPolynomial<Product<BigInteger>>> L 
+         = new ArrayList<GenPolynomial<Product<BigInteger>>>();
+     L.add(a);
+
+     GenPolynomial<Product<BigInteger>> e 
+         = rpred.normalform( L, a );
+     //System.out.println("a = " + a);
+     //System.out.println("e = " + e);
+     assertTrue("isNF( e )", rpred.isNormalform(L,e) );
+
+     assertTrue("not isZERO( b )", !b.isZERO() );
+
+     L.add(b);
+     e = rpred.normalform( L, a );
+     //System.out.println("b = " + b);
+     //System.out.println("e = " + e);
+     assertTrue("isNF( e )", rpred.isNormalform(L,e) );
+
+     GenPolynomial<Product<BigInteger>> c = fac.getONE();
+     a = a.sum(c);
+     e = rpred.normalform( L, a );
+     //System.out.println("a = " + a);
+     //System.out.println("e = " + e);
+     assertTrue("isNF( e )", rpred.isNormalform(L,e) ); 
+
+     L = new ArrayList<GenPolynomial<Product<BigInteger>>>();
+     L.add( a );
+     assertTrue("isTopRed( a )", rpred.isTopReducible(L,a) ); 
+     assertTrue("isRed( a )", rpred.isReducible(L,a) ); 
+     //b = fac.random(kl, ll, el, q );
+     L.add( b );
+     assertTrue("isTopRed( b )", rpred.isTopReducible(L,b) ); 
+     assertTrue("isRed( b )", rpred.isReducible(L,b) ); 
+     c = fac.random(kl, ll, el, q );
+     e = rpred.normalform( L, c );
+     assertTrue("isNF( e )", rpred.isNormalform(L,e) ); 
+
+     c = rpred.booleanClosure(a);
+     //System.out.println("\nboolean closure");
+     //System.out.println("a = " + a);
+     //System.out.println("c = " + c);
+     assertTrue("isBC( c )", rpred.isBooleanClosed(c) ); 
+
+     b = a.subtract(c);
+     //System.out.println("b = " + b);
+     d = rpred.booleanRemainder(a);
+     //System.out.println("d = " + d);
+     assertEquals("a-BC(a)=BR(a)", b, d ); 
+
+     e = c.sum(d);
+     //System.out.println("e = " + e);
+     assertEquals("a==BC(a)+BR(a)", a, e ); 
+
+     List<GenPolynomial<Product<BigInteger>>> B;
+     L = new ArrayList<GenPolynomial<Product<BigInteger>>>();
+     L.add( a );
+     B = rpred.reducedBooleanClosure(L);
+     //System.out.println("L = " + L);
+     //System.out.println("B = " + B);
+     assertTrue("isBC( B )", rpred.isBooleanClosed(B) ); 
+
+     L.add( b );
+     B = rpred.reducedBooleanClosure(L);
+     //System.out.println("L = " + L);
+     //System.out.println("B = " + B);
+     assertTrue("isBC( B )", rpred.isBooleanClosed(B) ); 
+
+     L.add( c );
+     B = rpred.reducedBooleanClosure(L);
+     //System.out.println("L = " + L);
+     //System.out.println("B = " + B);
+     assertTrue("isBC( B )", rpred.isBooleanClosed(B) ); 
  }
 
 }
