@@ -21,7 +21,7 @@ import edu.jas.structure.RegularRingElem;
 
 /**
  * Polynomial Regular ring Reduction sequential use algorithm.
- * Implements normalform.
+ * Implements normalform and boolean closure stuff.
  * @author Heinz Kredel
  */
 
@@ -47,7 +47,6 @@ public class RReductionSeq<C extends RegularRingElem<C>>
      * @param P polynomial list.
      * @return true if A is top reducible with respect to P.
      */
-    //SuppressWarnings("unchecked") // not jet working
     public boolean isTopReducible(List<GenPolynomial<C>> P, 
                                   GenPolynomial<C> A) {  
         if ( P == null || P.isEmpty() ) {
@@ -81,7 +80,7 @@ public class RReductionSeq<C extends RegularRingElem<C>>
      * @param Pp polynomial list.
      * @return true if Ap is in normalform with respect to Pp.
      */
-    @SuppressWarnings("unchecked") // not jet working
+    @SuppressWarnings("unchecked") 
     public boolean isNormalform(List<GenPolynomial<C>> Pp, 
                                 GenPolynomial<C> Ap) {  
         if ( Pp == null || Pp.isEmpty() ) {
@@ -143,7 +142,7 @@ public class RReductionSeq<C extends RegularRingElem<C>>
      * @param Pp polynomial list.
      * @return r-nf(Ap) with respect to Pp.
      */
-    @SuppressWarnings("unchecked") // not jet working
+    @SuppressWarnings("unchecked") 
     public GenPolynomial<C> normalform(List<GenPolynomial<C>> Pp, 
                                        GenPolynomial<C> Ap) {  
         if ( Pp == null || Pp.isEmpty() ) {
@@ -194,13 +193,14 @@ public class RReductionSeq<C extends RegularRingElem<C>>
               for ( i = 0; i < l; i++ ) {
                   mt = ExpVector.EVMT( e, htl[i] );
                   if ( mt ) {
-                     r = a.multiply( lbc[i] );
+                     r = a.idempotent().multiply( lbc[i].idempotent() );
+                     //r = a.multiply( lbc[i] );
                      //System.out.println("r = " + r);
                      mt = ! r.isZERO(); // && mt
                      if ( mt ) {
                         b = a.divide( lbc[i] );
-                        if ( b.isZERO() ) {
-                           //System.out.println("b == zero: r = " + r);
+                        if ( b.isZERO() ) { // strange case in regular rings
+                           System.out.println("b == zero: r = " + r);
                            continue;
                         }
                         f = ExpVector.EVDIF( e, htl[i] );
@@ -313,7 +313,7 @@ public class RReductionSeq<C extends RegularRingElem<C>>
      * @param Ap a polynomial.
      * @return nf(Pp,Ap), the normal form of Ap wrt. Pp.
      */
-    @SuppressWarnings("unchecked") // not jet working
+    @SuppressWarnings("unchecked")
     public GenPolynomial<C> 
         normalform(List<GenPolynomial<C>> row,
                    List<GenPolynomial<C>> Pp, 
@@ -324,75 +324,90 @@ public class RReductionSeq<C extends RegularRingElem<C>>
         if ( Ap == null || Ap.isZERO() ) {
             return Ap;
         }
-        throw new RuntimeException("not jet implemented");
-        /*
-        int l = Pp.size();
-        GenPolynomial<C>[] P = new GenPolynomial[l];
+        //throw new RuntimeException("not jet implemented");
+        int l;
+        GenPolynomial<C>[] P;
         synchronized (Pp) {
+            l = Pp.size();
+            P = (GenPolynomial<C>[])new GenPolynomial[l];
             //P = Pp.toArray();
             for ( int i = 0; i < Pp.size(); i++ ) {
-                P[i] = Pp.get(i);
+                P[i] = Pp.get(i).abs();
             }
         }
-        ExpVector[] htl = new ExpVector[ l ];
-        Object[] lbc = new Object[ l ]; // want <C>
-        GenPolynomial<C>[] p = new GenPolynomial[ l ];
+        //System.out.println("l = " + l);
         Map.Entry<ExpVector,C> m;
-        int j = 0;
+        ExpVector[] htl = new ExpVector[ l ];
+        C[] lbc = (C[]) new RegularRingElem[ l ]; // want <C>
+        GenPolynomial<C>[] p = (GenPolynomial<C>[])new GenPolynomial[ l ];
         int i;
+        int j = 0;
         for ( i = 0; i < l; i++ ) { 
             p[i] = P[i];
             m = p[i].leadingMonomial();
             if ( m != null ) { 
-                p[j] = p[i];
-                htl[j] = m.getKey();
-                lbc[j] = m.getValue();
-                j++;
+               p[j] = p[i];
+               htl[j] = m.getKey();
+               lbc[j] = m.getValue();
+               j++;
             }
         }
         l = j;
-        ExpVector e;
-        C a;
+        ExpVector e, f;
+        C a, b;
+        C r = null;
         boolean mt = false;
+        GenPolynomial<C> fac = null;
         GenPolynomial<C> zero = Ap.ring.getZERO();
         GenPolynomial<C> R = Ap.ring.getZERO();
-
-        GenPolynomial<C> fac = null;
-        // GenPolynomial<C> T = null;
         GenPolynomial<C> Q = null;
         GenPolynomial<C> S = Ap;
         while ( S.length() > 0 ) { 
-            m = S.leadingMonomial();
-            e = m.getKey();
-            a = m.getValue();
-            for ( i = 0; i < l; i++ ) {
-                mt = ExpVector.EVMT( e, htl[i] );
-                if ( mt ) break; 
-            }
-            if ( ! mt ) { 
-                //logger.debug("irred");
-                R = R.sum( a, e );
-                S = S.subtract( a, e ); 
-                // System.out.println(" S = " + S);
-                //throw new RuntimeException("Syzygy no GB");
-            } else { 
-                e = ExpVector.EVDIF( e, htl[i] );
-                //logger.info("red div = " + e);
-                C c = (C)lbc[i];
-                a = a.divide( c );
-                Q = p[i].multiply( a, e );
-                S = S.subtract( Q );
-                fac = row.get(i);
-                if ( fac == null ) {
-                    fac = zero.sum( a, e );
-                } else {
-                    fac = fac.sum( a, e );
-                }
-                row.set(i,fac);
-            }
+              m = S.leadingMonomial();
+              e = m.getKey();
+              a = m.getValue();
+              for ( i = 0; i < l; i++ ) {
+                  mt = ExpVector.EVMT( e, htl[i] );
+                  if ( mt ) {
+                     r = a.idempotent().multiply( lbc[i].idempotent() );
+                     //r = a.multiply( lbc[i] );
+                     //System.out.println("r = " + r);
+                     mt = ! r.isZERO(); // && mt
+                     if ( mt ) {
+                        a = a.divide( lbc[i] );
+                        if ( a.isZERO() ) { // strange case in regular rings
+                           System.out.println("b == zero: r = " + r);
+                           continue;
+                        }
+                        f = ExpVector.EVDIF( e, htl[i] );
+                        //logger.info("red div = " + f);
+                        Q = p[i].multiply( a, f );
+                        S = S.subtract( Q ); // not ok with reductum
+
+                        fac = row.get(i);
+                        if ( fac == null ) {
+                            fac = zero.sum( a, f );
+                        } else {
+                            fac = fac.sum( a, f );
+                        }
+                        row.set(i,fac);
+
+                        f = S.leadingExpVector();
+                        if ( !e.equals(f) ) {
+                           a = Ap.ring.coFac.getZERO();
+                           break;
+                        } 
+                        a = S.leadingBaseCoefficient();
+                     }
+                  }
+              }
+              if ( !a.isZERO() ) { //! mt ) { 
+                 //logger.debug("irred");
+                 R = R.sum( a, e );
+                 S = S.reductum(); 
+              }
         }
-        return R;
-        */
+        return R; //.abs(); // not monic if not boolean closed
     }
 
 
