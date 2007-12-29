@@ -227,51 +227,6 @@ public class RReductionSeq<C extends RegularRingElem<C>>
 
 
     /**
-     * S-Polynomial.
-     * @typeparam C coefficient type.
-     * @param Ap polynomial.
-     * @param Bp polynomial.
-     * @return spol(Ap,Bp) the S-polynomial of Ap and Bp.
-     */
-    public GenPolynomial<C> 
-           SPolynomial(GenPolynomial<C> Ap, 
-                       GenPolynomial<C> Bp) {  
-        if ( logger.isInfoEnabled() ) {
-           if ( Bp == null || Bp.isZERO() ) {
-              return Ap.ring.getZERO(); 
-           }
-           if ( Ap == null || Ap.isZERO() ) {
-              return Bp.ring.getZERO(); 
-           }
-           if ( ! Ap.ring.equals( Bp.ring ) ) { 
-              logger.error("rings not equal"); 
-           }
-        }
-        Map.Entry<ExpVector,C> ma = Ap.leadingMonomial();
-        Map.Entry<ExpVector,C> mb = Bp.leadingMonomial();
-
-        ExpVector e = ma.getKey();
-        ExpVector f = mb.getKey();
-
-        ExpVector g  = ExpVector.EVLCM(e,f);
-        ExpVector e1 = ExpVector.EVDIF(g,e);
-        ExpVector f1 = ExpVector.EVDIF(g,f);
-
-        C a = ma.getValue();
-        C b = mb.getValue();
-
-        //if ( a.multiply(b).isZERO() ) { // happens very often
-        //   System.out.println("a*b == 0, a = " + a + ", b = " + b);
-        //}
-
-        GenPolynomial<C> App = Ap.multiply( b, e1 );
-        GenPolynomial<C> Bpp = Bp.multiply( a, f1 );
-        GenPolynomial<C> Cp = App.subtract(Bpp);
-        return Cp;
-    }
-
-
-    /**
      * GB criterium 4.
      * Use only for commutative polynomial rings.
      * <b>Note:</b> Experimental version for r-Groebner bases.
@@ -443,6 +398,7 @@ public class RReductionSeq<C extends RegularRingElem<C>>
 
     /**
      * Irreducible set.
+     * May not be boolean closed.
      * @typeparam C coefficient type.
      * @param Pp polynomial list.
      * @return a list P of polynomials which are in normalform wrt. P.
@@ -472,6 +428,7 @@ public class RReductionSeq<C extends RegularRingElem<C>>
             a = P.remove(0);
             e = a.leadingExpVector();
             a = normalform( P, a );
+            // no not make monic because of boolean closure
             logger.debug(String.valueOf(irr));
             if ( a.isZERO() ) { l--;
                if ( l <= 1 ) { return P; }
@@ -495,7 +452,6 @@ public class RReductionSeq<C extends RegularRingElem<C>>
     /*
      * -------- boolean closure stuff -----------------------------------------
      */
-
 
     /**
      * Is boolean closed, 
