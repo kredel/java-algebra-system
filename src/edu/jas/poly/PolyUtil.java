@@ -482,6 +482,29 @@ public class PolyUtil {
 
 
     /**
+     * Polynomial list monic. 
+     * @param L list of polynomials with field coefficients.
+     * @return list of polynomials with leading coefficient 1.
+     */
+    public static <C extends RingElem<C>>
+        List<GenPolynomial<C>> monic( List<GenPolynomial<C>> L ) {
+        List<GenPolynomial<C>> K = null;
+        if ( L == null ) {
+           return K;
+        }
+        K = new ArrayList<GenPolynomial<C>>( L.size() );
+        if ( L.size() == 0 ) {
+           return K;
+        }
+        for ( GenPolynomial<C> a: L ) {
+            GenPolynomial<C> b = a.monic();
+            K.add( b );
+        }
+        return K;
+    }
+
+
+    /**
      * GenPolynomial coefficient wise remainder.
      * @param P GenPolynomial.
      * @param s nonzero coefficient.
