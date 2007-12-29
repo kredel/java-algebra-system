@@ -123,7 +123,8 @@ public class RReductionSeq<C extends RegularRingElem<C>>
                 mt = ExpVector.EVMT( e, htl[i] );
                 if ( mt ) {
                    C a = Am.get(e);
-                   C r = a.multiply( lbc[i] );
+                   //C r = a.multiply( lbc[i] );
+                   C r = a.idempotent().multiply( lbc[i].idempotent() );
                    mt = ! r.isZERO();
                    if ( mt ) {
                       return false;
