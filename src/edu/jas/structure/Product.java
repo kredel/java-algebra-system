@@ -141,9 +141,6 @@ public class Product<C extends RingElem<C> >
      * @return If this is a idempotent element then true is returned, else false.
      */
     public boolean isIdempotent() {
-        //if ( isUnit() ) {
-        //   return true;
-        //} 
         for ( C e : val.values() ) {
             if ( ! e.isONE() ) {
                return false;
@@ -158,8 +155,6 @@ public class Product<C extends RingElem<C> >
      */
     public String toString() {
         return val.toString(); 
-        //        return "Product[ " + val.toString() 
-        //     + " ] @ " + ring.toString();
     }
 
 
@@ -196,7 +191,7 @@ public class Product<C extends RingElem<C> >
         if ( bi.hasNext() ) {
            return 1;
         }
-        return 0;
+        return 0; // not reached
     }
 
 
@@ -324,7 +319,7 @@ public class Product<C extends RingElem<C> >
         }
         SortedMap<Integer,C> elem = new TreeMap<Integer,C>();
         for ( Integer i : val.keySet() ) {
-            C x = val.get( i );
+            C x = val.get( i ); // is non zero
             try {
                 x = x.inverse();
             } catch(NotInvertibleException e) {
@@ -398,8 +393,8 @@ public class Product<C extends RingElem<C> >
                C x = val.get( i );
                try {
                    x = x.divide(y);
-               } catch(NotInvertibleException e) {
-                   //System.out.println("x = " + x + ", y = " + y);
+               } catch(NotInvertibleException e) { // should not happen any more
+                   System.out.println("product divide error: x = " + x + ", y = " + y);
                    // could happen for e.g. ModInteger or AlgebraicNumber
                    x = null; //ring.getFactory(i).getZERO();
                }
@@ -432,12 +427,12 @@ public class Product<C extends RingElem<C> >
             C y = sel.get( i ); 
             if ( y != null ) {
                C x = val.get( i );
-               try {
-                   x = x.remainder(y);
-               } catch(NotInvertibleException e) {
+                   //try {
+               x = x.remainder(y);
+                   //} catch(NotInvertibleException e) {
                    // could happen for e.g. ModInteger or AlgebraicNumber
-                   x = null; //ring.getFactory(i).getZERO();
-               }
+                   //x = null; //ring.getFactory(i).getZERO();
+                   //}
                if ( x != null && ! x.isZERO() ) { // can happen
                   elem.put( i, x );
                }
@@ -468,7 +463,7 @@ public class Product<C extends RingElem<C> >
             if ( y != null ) {
                C x = val.get( i );
                x = x.multiply(y);
-               if ( ! x.isZERO() ) {
+               if ( x != null && ! x.isZERO() ) {
                   elem.put( i, x );
                }
             }
@@ -485,7 +480,9 @@ public class Product<C extends RingElem<C> >
         SortedMap<Integer,C> elem = new TreeMap<Integer,C>();
         for ( Integer i : val.keySet() ) {
             C v = val.get(i).multiply(c);
-            elem.put( i, v );
+            if ( v != null && ! v.isZERO() ) {
+               elem.put( i, v );
+            }
         }
         return new Product<C>( ring, elem );
     }
@@ -510,7 +507,7 @@ public class Product<C extends RingElem<C> >
             C y = sel.get( i ); // assert y != null
             if ( x != null ) {
                 x = x.gcd(y);
-                if ( ! x.isZERO() ) {
+                if ( x != null && ! x.isZERO() ) {
                     elem.put( i, x );
                 } else {
                     elem.remove( i );
@@ -520,8 +517,6 @@ public class Product<C extends RingElem<C> >
             }
         }
         return new Product<C>( ring, elem );
-        // * <b>Note: </b>Not implemented, throws RuntimeException.
-        //throw new RuntimeException("gcd not implemented " + this.getClass().getName());
     }
 
 
@@ -569,8 +564,6 @@ public class Product<C extends RingElem<C> >
         ret[1] = new Product<C>( ring, elem1 );
         ret[2] = new Product<C>( ring, elem2 );
         return ret;
-        //* <b>Note: </b>Not implemented, throws RuntimeException.
-        //throw new RuntimeException("egcd not implemented " + this.getClass().getName());
     }
  
 }
