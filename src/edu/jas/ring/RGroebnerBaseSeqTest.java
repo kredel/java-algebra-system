@@ -242,9 +242,9 @@ public class RGroebnerBaseSeqTest extends TestCase {
      //System.out.println("gb = " + G );
 
      //assertEquals("#GB(Trinks7) == 6", 6, G.size() );
-     System.out.println("Fp = " + trinks);
+     //System.out.println("Fp = " + trinks);
      trinks = new PolynomialList<Product<ModInteger>>(fac,G);
-     System.out.println("G  = " + trinks);
+     //System.out.println("G  = " + trinks);
 
      assertTrue("isGB( GB(Trinks7) )", bbr.isGB(G) );
  }
