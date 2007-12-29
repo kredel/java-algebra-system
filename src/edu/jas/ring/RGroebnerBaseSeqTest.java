@@ -111,7 +111,7 @@ public class RGroebnerBaseSeqTest extends TestCase {
  * Test sequential GBase.
  * 
  */
- public void xtestSequentialGBase() {
+ public void testSequentialGBase() {
 
      L = new ArrayList<GenPolynomial<Product<BigRational>>>();
 
@@ -192,7 +192,7 @@ public class RGroebnerBaseSeqTest extends TestCase {
      } catch(IOException e) {
          fail(""+e);
      }
-     System.out.println("F = " + F);
+     //System.out.println("F = " + F);
      int rl = F.ring.nvar;
      TermOrder to = F.ring.tord;
      String[] vars = F.ring.getVars();
@@ -208,15 +208,15 @@ public class RGroebnerBaseSeqTest extends TestCase {
      colist.add( new ModIntegerRing(19) );
      colist.add( new ModIntegerRing(23) );
      //colist.add( new ModIntegerRing((2<<30)-19) );
-     System.out.println("colist = " + colist);
+     //System.out.println("colist = " + colist);
 
      ProductRing<ModInteger> pfac;
      pfac = new ProductRing<ModInteger>( colist );
-     System.out.println("pfac   = " + pfac);
+     //System.out.println("pfac   = " + pfac);
 
      GenPolynomialRing<Product<ModInteger>> fac;
      fac = new GenPolynomialRing<Product<ModInteger>>(pfac,rl,to,vars);
-     System.out.println("fac    = " + fac);
+     //System.out.println("fac    = " + fac);
 
      List<GenPolynomial<Product<ModInteger>>> Fp;
      Fp = PolyUtilApp.toProduct( fac, F.list );
@@ -232,7 +232,7 @@ public class RGroebnerBaseSeqTest extends TestCase {
      Fp = Fpp;
 
      trinks = new PolynomialList<Product<ModInteger>>(fac,Fp);
-     System.out.println("Fp     = " + trinks);
+     //System.out.println("Fp     = " + trinks);
 
      GroebnerBase<Product<ModInteger>> 
          bbr = new RGroebnerBaseSeq<Product<ModInteger>>();
