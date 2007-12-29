@@ -5,9 +5,10 @@
 package edu.jas.ring;
 
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 
-//import org.apache.log4j.Logger;
+import org.apache.log4j.Logger;
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
@@ -26,7 +27,7 @@ import edu.jas.structure.RingElem;
 public class PseudoReductionSeq<C extends RingElem<C>>
              extends ReductionAbstract<C> {
 
-    //private static final Logger logger = Logger.getLogger(PseudoReductionSeq.class);
+    private static final Logger logger = Logger.getLogger(PseudoReductionSeq.class);
 
 
     /**
@@ -105,7 +106,7 @@ public class PseudoReductionSeq<C extends RingElem<C>>
                  e = ExpVector.EVDIF( e, htl[i] );
                  //logger.info("red div = " + e);
                  C c = (C) lbc[i];
-                 if ( c.isUnit() ) {
+                 if ( a.remainder(c).isZERO() ) {   //c.isUnit() ) {
                     a = a.divide( c );
                  } else {
                     S = S.multiply( c );
@@ -121,15 +122,38 @@ public class PseudoReductionSeq<C extends RingElem<C>>
 
     /**
      * Normalform with recording.
+     * <b>Note:</b> do not use, multiplication factor is lost. 
+     * Will be removed or replaced in future.
      * @typeparam C coefficient type.
      * @param row recording matrix, is modified.
      * @param Pp a polynomial list for reduction.
      * @param Ap a polynomial.
      * @return nf(Pp,Ap), the normal form of Ap wrt. Pp.
+     * @deprecated multiplication factor will be lost.
+     */
+    public GenPolynomial<C> 
+        normalform(List<GenPolynomial<C>> row,
+                   List<GenPolynomial<C>> Pp, 
+                   GenPolynomial<C> Ap) {  
+        List<C> mf = new ArrayList<C>(1);
+        logger.error("multiplication factor is lost");
+        return normalform(mf,row,Pp,Ap);
+    }
+
+
+    /**
+     * Normalform with recording.
+     * @typeparam C coefficient type.
+     * @param row recording matrix, is modified.
+     * @param mf  multiplication factor for Ap, is modified.
+     * @param Pp a polynomial list for reduction.
+     * @param Ap a polynomial.
+     * @return nf(Pp,mf*Ap), the normal form of mf*Ap wrt. Pp.
      */
     @SuppressWarnings("unchecked") 
     public GenPolynomial<C> 
-        normalform(List<GenPolynomial<C>> row,
+        normalform(List<C> mf,
+                   List<GenPolynomial<C>> row,
                    List<GenPolynomial<C>> Pp, 
                    GenPolynomial<C> Ap) {  
         if ( Pp == null || Pp.isEmpty() ) {
@@ -168,7 +192,10 @@ public class PseudoReductionSeq<C extends RingElem<C>>
         boolean mt = false;
         GenPolynomial<C> zero = Ap.ring.getZERO();
         GenPolynomial<C> R = Ap.ring.getZERO();
-
+        C mfac = mf.get(0);
+        if ( mfac == null ) {
+           mfac = Ap.ring.getONECoefficient();
+        }
         GenPolynomial<C> fac = null;
         // GenPolynomial<C> T = null;
         GenPolynomial<C> Q = null;
@@ -191,9 +218,10 @@ public class PseudoReductionSeq<C extends RingElem<C>>
                 e = ExpVector.EVDIF( e, htl[i] );
                 //logger.info("red div = " + e);
                 C c = (C) lbc[i];
-                if ( c.isUnit() ) {
+                if ( a.remainder(c).isZERO() ) { //c.isUnit() ) {
                    a = a.divide( c );
                 } else {
+                   mfac = mfac.multiply( c );
                    S = S.multiply( c );
                    R = R.multiply( c );
                 }
@@ -208,6 +236,7 @@ public class PseudoReductionSeq<C extends RingElem<C>>
                 row.set(i,fac);
             }
         }
+        mf.set(0,mfac);
         return R;
     }
 
