@@ -100,10 +100,11 @@ public class RPseudoReductionSeq<C extends RegularRingElem<C>>
                   if ( mt ) {
                      C c = lbc[i];
                      r = a.idempotent().multiply( c.idempotent() );
-                     //System.out.println("r = " + r);
+                     //System.out.println("--r = " + r);
                      mt = ! r.isZERO(); // && mt
                      if ( mt ) {
                         b = a.remainder( c );
+                        //System.out.println("--b = " + b);
                         if ( b.isZERO() ) {
                            a = a.divide( c );
                         } else {
