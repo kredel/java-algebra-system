@@ -163,6 +163,17 @@ public class GenPolynomialRing<C extends RingElem<C> >
     }
 
 
+    /** The constructor creates a polynomial factory object
+     * with the the same term order, number of variables 
+     * and variable names as the given polynomial factory,
+     * only the coefficient factories differ.
+     * @param cf factory for coefficients of type C.
+     * @param o other polynomial ring.
+     */
+    public GenPolynomialRing(RingFactory< C > cf, GenPolynomialRing o) {
+        this(cf,o.nvar,o.tord,o.getVars());
+    }
+
 
     /** Get the String representation.
      * @see java.lang.Object#toString()
@@ -228,6 +239,9 @@ public class GenPolynomialRing<C extends RingElem<C> >
            if ( res == null ) {
               if ( coFac != null ) {
                  res = coFac.toString();
+                 if ( res.matches("[0-9].*") ) {
+                    res = scf;
+                 } 
               } else {
                  res = scf;
               }

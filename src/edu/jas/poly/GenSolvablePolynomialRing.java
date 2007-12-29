@@ -149,6 +149,19 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
     }
 
 
+    /** The constructor creates a solvable polynomial factory object
+     * with the the same term order, number of variables
+     * and variable names as the given polynomial factory,
+     * only the coefficient factories differ and 
+     * the solvable multiplication relations are <b>empty</b>.
+     * @param cf factory for coefficients of type C.
+     * @param o other solvable polynomial ring.
+     */
+    public GenSolvablePolynomialRing(RingFactory< C > cf, GenSolvablePolynomialRing o) {
+        this(cf,o.nvar,o.tord,o.getVars(),null);
+    }
+
+
     /** Get the String representation.
      * @see java.lang.Object#toString()
      */
