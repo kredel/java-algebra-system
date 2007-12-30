@@ -22,7 +22,7 @@ import edu.jas.structure.RingElem;
 import edu.jas.structure.RegularRingElem;
 
 /**
- * Pair list management for d-Groebner bases.
+ * Pair list management for R-Groebner bases.
  * Implemented using GenPolynomial, TreeMap and BitSet.
  * @author Heinz Kredel
  */
