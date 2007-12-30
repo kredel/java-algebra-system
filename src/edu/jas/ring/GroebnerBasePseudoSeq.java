@@ -27,7 +27,7 @@ import edu.jas.ufd.GCDFactory;
 
 
 /**
- * Groebner Base sequential algorithm with pseudo reduction.
+ * Groebner Base with pseudo reduction sequential algorithm.
  * Implements Groebner bases and GB test.
  * @author Heinz Kredel
  */
