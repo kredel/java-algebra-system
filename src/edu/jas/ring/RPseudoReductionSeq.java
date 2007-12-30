@@ -63,7 +63,7 @@ public class RPseudoReductionSeq<C extends RegularRingElem<C>>
             P = (GenPolynomial<C>[])new GenPolynomial[l];
             //P = Pp.toArray();
             for ( int i = 0; i < Pp.size(); i++ ) {
-                P[i] = Pp.get(i).abs();
+                P[i] = Pp.get(i);
             }
         }
         //System.out.println("l = " + l);
@@ -74,7 +74,10 @@ public class RPseudoReductionSeq<C extends RegularRingElem<C>>
         int i;
         int j = 0;
         for ( i = 0; i < l; i++ ) { 
-            p[i] = P[i];
+            if ( P[i] == null ) {
+               continue;
+            }
+            p[i] = P[i].abs();
             m = p[i].leadingMonomial();
             if ( m != null ) { 
                p[j] = p[i];
@@ -184,7 +187,7 @@ public class RPseudoReductionSeq<C extends RegularRingElem<C>>
             P = (GenPolynomial<C>[])new GenPolynomial[l];
             //P = Pp.toArray();
             for ( int i = 0; i < Pp.size(); i++ ) {
-                P[i] = Pp.get(i).abs();
+                P[i] = Pp.get(i);
             }
         }
         //System.out.println("l = " + l);
@@ -195,7 +198,10 @@ public class RPseudoReductionSeq<C extends RegularRingElem<C>>
         int i;
         int j = 0;
         for ( i = 0; i < l; i++ ) { 
-            p[i] = P[i];
+            if ( P[i] == null ) {
+               continue;
+            }
+            p[i] = P[i].abs();
             m = p[i].leadingMonomial();
             if ( m != null ) { 
                p[j] = p[i];

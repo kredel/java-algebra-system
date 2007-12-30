@@ -62,7 +62,8 @@ public class RReductionSeq<C extends RegularRingElem<C>>
             mt = ExpVector.EVMT( e, p.leadingExpVector() );
             if ( mt ) {
                C b = p.leadingBaseCoefficient();
-               C r = a.multiply( b );
+               //C r = a.multiply( b );
+               C r = a.idempotent().multiply( b.idempotent() );
                mt = ! r.isZERO();
                if ( mt ) {
                   return true;
@@ -106,6 +107,9 @@ public class RReductionSeq<C extends RegularRingElem<C>>
         int i;
         int j = 0;
         for ( i = 0; i < l; i++ ) { 
+            if ( P[i] == null ) {
+               continue;
+            }
             p[i] = P[i];
             m = p[i].leadingMonomial();
             if ( m != null ) { 
@@ -144,8 +148,8 @@ public class RReductionSeq<C extends RegularRingElem<C>>
      * @return r-nf(Ap) with respect to Pp.
      */
     @SuppressWarnings("unchecked") 
-    public GenPolynomial<C> normalform(List<GenPolynomial<C>> Pp, 
-                                       GenPolynomial<C> Ap) {  
+    public GenPolynomial<C> normalform( List<GenPolynomial<C>> Pp, 
+                                        GenPolynomial<C> Ap) {  
         if ( Pp == null || Pp.isEmpty() ) {
            return Ap;
         }
@@ -159,7 +163,7 @@ public class RReductionSeq<C extends RegularRingElem<C>>
             P = (GenPolynomial<C>[])new GenPolynomial[l];
             //P = Pp.toArray();
             for ( int i = 0; i < Pp.size(); i++ ) {
-                P[i] = Pp.get(i).abs();
+                P[i] = Pp.get(i);
             }
         }
         //System.out.println("l = " + l);
@@ -170,7 +174,10 @@ public class RReductionSeq<C extends RegularRingElem<C>>
         int i;
         int j = 0;
         for ( i = 0; i < l; i++ ) { 
-            p[i] = P[i];
+            if ( P[i] == null ) {
+               continue;
+            }
+            p[i] = P[i].abs();
             m = p[i].leadingMonomial();
             if ( m != null ) { 
                p[j] = p[i];
@@ -223,7 +230,7 @@ public class RReductionSeq<C extends RegularRingElem<C>>
                  S = S.reductum(); 
               }
         }
-        return R.abs(); // not monic if not boolean closed
+        return R; //.abs(); // not monic if not boolean closed
     }
 
 
@@ -333,7 +340,7 @@ public class RReductionSeq<C extends RegularRingElem<C>>
             P = (GenPolynomial<C>[])new GenPolynomial[l];
             //P = Pp.toArray();
             for ( int i = 0; i < Pp.size(); i++ ) {
-                P[i] = Pp.get(i).abs();
+                P[i] = Pp.get(i);
             }
         }
         //System.out.println("l = " + l);
@@ -344,7 +351,10 @@ public class RReductionSeq<C extends RegularRingElem<C>>
         int i;
         int j = 0;
         for ( i = 0; i < l; i++ ) { 
-            p[i] = P[i];
+            if ( P[i] == null ) {
+               continue;
+            }
+            p[i] = P[i].abs();
             m = p[i].leadingMonomial();
             if ( m != null ) { 
                p[j] = p[i];
@@ -505,6 +515,9 @@ public class RReductionSeq<C extends RegularRingElem<C>>
         GenPolynomial<C> r;
         for ( GenPolynomial<C> a: F ) {
             //System.out.println("a = " + a);
+            if ( a == null ) {
+               continue;
+            }
             while ( ! a.isZERO() ) {
                 if ( ! isBooleanClosed(a) ) {
                    b = booleanClosure( a );
@@ -582,6 +595,9 @@ public class RReductionSeq<C extends RegularRingElem<C>>
         while ( i < len ) { //B.size() ) {
             a = B.remove(0);
             i++;
+            if ( a == null ) {
+               continue;
+            }
             while ( ! a.isZERO() ) {
                   //System.out.println("a = " + a);
                   b = booleanClosure(a);
