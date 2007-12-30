@@ -23,10 +23,8 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.ring.OrderedRPairlist;
 
 /**
- * R-Groebner Base sequential algorithm.
+ * Regular ring Groebner Base sequential algorithm.
  * Implements R-Groebner bases and GB test.
- * <b>Note:</b> Minimal reduced GBs are not unique.
- * see BWK, section 10.1.
  * @author Heinz Kredel
  */
 
@@ -55,7 +53,7 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>>
 
     /**
      * Constructor.
-     * @param red D-Reduction engine
+     * @param red R-Reduction engine
      */
     public RGroebnerBaseSeq(RReduction<C> red) {
         super(red);
@@ -68,7 +66,7 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>>
      * @typeparam C coefficient type.
      * @param modv module variable number.
      * @param F polynomial list.
-     * @return true, if F is a D-Groebner base, else false.
+     * @return true, if F is a R-Groebner base, else false.
      */
     public boolean isGB(int modv, List<GenPolynomial<C>> F) {  
         if ( ! red.isBooleanClosed(F) ) {
@@ -125,7 +123,7 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>>
                p = p.monic(); //p.abs(); // not monic, monic if boolean closed
                if ( p.isONE() ) {
                   G.clear(); G.add( p );
-                  return G; // since no threads are activated
+                  return G; // since boolean closed and no threads are activated
                }
                G.add( p ); //G.add( 0, p ); //reverse list
                if ( pairlist == null ) {
@@ -185,8 +183,8 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>>
                   }
 
                   if ( H.isONE() ) { // mostly useless
-                      G.clear(); G.add( H );
-                      return G; // since no threads are activated
+                     G.clear(); G.add( H );
+                     return G; // not boolean closed ok, since no threads are activated
                   }
                   if ( logger.isDebugEnabled() ) {
                       logger.debug("H = " + H );
@@ -196,9 +194,10 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>>
                       //len = G.size();
                       bcH = red.reducedBooleanClosure(G,H);
                       logger.info("#bcH = " + bcH.size());
-                      G.addAll( bcH );
                       for ( GenPolynomial<C> h: bcH ) {
-                          pairlist.put( h.monic() );
+                          h = h.monic(); // monic() ok, since boolean closed
+                          G.add( h );
+                          pairlist.put( h ); 
                       }
                       if ( debug ) {
                          if ( !pair.getUseCriterion3() || !pair.getUseCriterion4() ) {
