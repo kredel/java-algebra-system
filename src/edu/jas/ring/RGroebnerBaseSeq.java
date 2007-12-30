@@ -69,6 +69,9 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>>
      * @return true, if F is a R-Groebner base, else false.
      */
     public boolean isGB(int modv, List<GenPolynomial<C>> F) {  
+        if ( F == null ) {
+           return true;
+        }
         if ( ! red.isBooleanClosed(F) ) {
            return false;
         }
@@ -85,14 +88,16 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>>
                 //   continue;
                 //}
                 s = red.SPolynomial( pi, pj );
-                if ( ! s.isZERO() ) {
-                   s = red.normalform( F, s );
+                if ( s.isZERO() ) {
+                   continue;
                 }
+                s = red.normalform( F, s );
                 if ( ! s.isZERO() ) {
                    System.out.println("p"+i+" = "+pi);
                    System.out.println("p"+j+" = "+pj);
                    System.out.println("s-pol = " + red.SPolynomial( pi, pj ) );
                    System.out.println("s-pol("+i+","+j+") != 0: " + s);
+                   System.out.println("red = " + red.getClass().getName());
                    return false;
                 }
             }
@@ -290,7 +295,7 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>>
                System.out.println("minGB not bc: bcH size = " + bcH.size());
                G.add( b ); // do not reduce
             } else {
-               F.addAll( bcH );
+               G.addAll( bcH );
             }
             el++;
         }
