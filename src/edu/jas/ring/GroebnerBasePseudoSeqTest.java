@@ -35,9 +35,9 @@ import edu.jas.ring.GroebnerBase;
  * @author Heinz Kredel.
  */
 
-public class GroebnerBaseSeqPseudoTest extends TestCase {
+public class GroebnerBasePseudoSeqTest extends TestCase {
 
-    //private static final Logger logger = Logger.getLogger(GroebnerBaseSeqPseudoTest.class);
+    //private static final Logger logger = Logger.getLogger(GroebnerBasePseudoSeqTest.class);
 
 /**
  * main
@@ -48,10 +48,10 @@ public class GroebnerBaseSeqPseudoTest extends TestCase {
    }
 
 /**
- * Constructs a <CODE>GroebnerBaseSeqPseudoTest</CODE> object.
+ * Constructs a <CODE>GroebnerBasePseudoSeqTest</CODE> object.
  * @param name String.
  */
-   public GroebnerBaseSeqPseudoTest(String name) {
+   public GroebnerBasePseudoSeqTest(String name) {
           super(name);
    }
 
@@ -59,7 +59,7 @@ public class GroebnerBaseSeqPseudoTest extends TestCase {
  * suite.
  */ 
  public static Test suite() {
-     TestSuite suite= new TestSuite(GroebnerBaseSeqPseudoTest.class);
+     TestSuite suite= new TestSuite(GroebnerBasePseudoSeqTest.class);
      return suite;
    }
 
@@ -87,7 +87,7 @@ public class GroebnerBaseSeqPseudoTest extends TestCase {
        BigInteger coeff = new BigInteger(9);
        fac = new GenPolynomialRing<BigInteger>(coeff,rl);
        a = b = c = d = e = null;
-       bb = new GroebnerBaseSeqPseudo<BigInteger>(coeff);
+       bb = new GroebnerBasePseudoSeq<BigInteger>(coeff);
    }
 
    protected void tearDown() {

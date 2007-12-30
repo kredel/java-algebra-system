@@ -32,10 +32,10 @@ import edu.jas.ufd.GCDFactory;
  * @author Heinz Kredel
  */
 
-public class GroebnerBaseSeqPseudo<C extends GcdRingElem<C>> 
+public class GroebnerBasePseudoSeq<C extends GcdRingElem<C>> 
        extends GroebnerBaseAbstract<C>  {
 
-    private static final Logger logger = Logger.getLogger(GroebnerBaseSeqPseudo.class);
+    private static final Logger logger = Logger.getLogger(GroebnerBasePseudoSeq.class);
     private final boolean debug = logger.isDebugEnabled();
 
 
@@ -55,8 +55,8 @@ public class GroebnerBaseSeqPseudo<C extends GcdRingElem<C>>
      * Constructor.
      * @param rf coefficient ring factory.
      */
-    public GroebnerBaseSeqPseudo(RingFactory<C> rf) {
-        this( new PseudoReductionSeq(), rf );
+    public GroebnerBasePseudoSeq(RingFactory<C> rf) {
+        this( new PseudoReductionSeq<C>(), rf );
     }
 
 
@@ -66,7 +66,7 @@ public class GroebnerBaseSeqPseudo<C extends GcdRingElem<C>>
      * @param rf coefficient ring factory.
      * <b>Note:</b> red must be an instance of PseudoReductionSeq.
      */
-    public GroebnerBaseSeqPseudo(Reduction<C> red, RingFactory<C> rf) {
+    public GroebnerBasePseudoSeq(Reduction<C> red, RingFactory<C> rf) {
         super(red);
         if ( ! (red instanceof PseudoReductionSeq) ) {
            throw new IllegalArgumentException("red must be a PseudoReductionSeq");
