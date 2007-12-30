@@ -111,6 +111,18 @@ public class Product<C extends RingElem<C> >
     }
 
 
+    /** Is Product full. 
+     * @return If every component occurs, then true is returned, else false.
+     * @see edu.jas.structure.RingElem#isONE()
+     */
+    public boolean isFull() {
+        if ( val.size() != ring.length() ) {
+           return false;
+        }
+        return true;
+    }
+
+
     /** Is Product unit. 
      * @return If this is a unit then true is returned, else false.
      * @see edu.jas.structure.RingElem#isUnit()

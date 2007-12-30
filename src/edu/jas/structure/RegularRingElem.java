@@ -12,7 +12,14 @@ package edu.jas.structure;
  */
 
 public interface RegularRingElem<C extends RegularRingElem<C>> 
-                 extends RingElem<C> {
+                 extends GcdRingElem<C> {
+
+
+    /** Is Product full. 
+     * @return If every component occurs, then true is returned, else false.
+     * @see edu.jas.structure.RingElem#isONE()
+     */
+    public boolean isFull();
 
 
     /** Is idempotent. 
