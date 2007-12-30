@@ -274,9 +274,12 @@ public class ProductRing<C extends RingElem<C> >
      */
     public String toString() {
         if ( nCopies != 0 ) {
+           String cf = ring.toString();
+           if ( cf.matches("[0-9].*") ) {
+               cf = ring.getClass().getSimpleName();
+           } 
            return "ProductRing[ " 
-                + ring.toString() + "^" + nCopies + " ]";
-           //   + ring.getClass().getName() + "^" + nCopies + " ]";
+                + cf + "^" + nCopies + " ]";
         } else {
            StringBuffer sb = new StringBuffer("ProductRing[ ");
            int i = 0;
@@ -284,7 +287,11 @@ public class ProductRing<C extends RingElem<C> >
                if ( i != 0 ) {
                   sb.append( ", " );
                }
-               sb.append( f.toString() ); //f.getClass().getName() ); //toString() );
+               String cf = f.toString();
+               if ( cf.matches("[0-9].*") ) {
+                  cf = f.getClass().getSimpleName();
+               } 
+               sb.append( cf ); 
                i++;
            }
            sb.append(" ]");
