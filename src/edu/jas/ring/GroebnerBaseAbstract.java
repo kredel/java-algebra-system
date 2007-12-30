@@ -70,6 +70,9 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>>
      * @return true, if F is a Groebner base, else false.
      */
     public boolean isGB(int modv, List<GenPolynomial<C>> F) {  
+        if ( F == null ) {
+           return true;
+        }
         GenPolynomial<C> pi, pj, s, h;
         for ( int i = 0; i < F.size(); i++ ) {
             pi = F.get(i);
