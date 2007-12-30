@@ -349,7 +349,7 @@ public class SolvableGroebnerBaseSeqPairSeqTest extends TestCase {
 
      exgb = sbb.extLeftGB( L );
      //System.out.println("exgb = " + exgb );
-     assertTrue("isLeftGB( { a, ,b, c } )", sbb.isLeftGB(exgb.G) );
+     assertTrue("isLeftGB( { a, b, c } )", sbb.isLeftGB(exgb.G) );
      assertTrue("isRmat( { a, b, c } )", sbb.isLeftReductionMatrix(exgb) );
 
      assertTrue("not isZERO( d )", !d.isZERO() );
@@ -357,7 +357,7 @@ public class SolvableGroebnerBaseSeqPairSeqTest extends TestCase {
 
      exgb = sbb.extLeftGB( L );
      //System.out.println("exgb = " + exgb );
-     assertTrue("isLeftGB( { a, ,b, c, d } )", sbb.isLeftGB(exgb.G) );
+     assertTrue("isLeftGB( { a, b, c, d } )", sbb.isLeftGB(exgb.G) );
      assertTrue("isRmat( { a, b, c, d } )", sbb.isLeftReductionMatrix(exgb) );
 
 
@@ -366,7 +366,7 @@ public class SolvableGroebnerBaseSeqPairSeqTest extends TestCase {
 
      exgb = sbb.extLeftGB( L );
      //System.out.println("exgb = " + exgb );
-     assertTrue("isLeftGB( { a, ,b, c, d, e } )", sbb.isLeftGB(exgb.G) );
+     assertTrue("isLeftGB( { a, b, c, d, e } )", sbb.isLeftGB(exgb.G) );
      assertTrue("isRmat( { a, b, c, d, e } )", sbb.isLeftReductionMatrix(exgb) );
  }
 
@@ -416,7 +416,7 @@ public class SolvableGroebnerBaseSeqPairSeqTest extends TestCase {
 
      exgb = sbb.extLeftGB( L );
      //System.out.println("exgb = " + exgb );
-     assertTrue("isLeftGB( { a, ,b, c } )", sbb.isLeftGB(exgb.G) );
+     assertTrue("isLeftGB( { a, b, c } )", sbb.isLeftGB(exgb.G) );
      assertTrue("isRmat( { a, b, c } )", sbb.isLeftReductionMatrix(exgb) );
 
      assertTrue("not isZERO( d )", !d.isZERO() );
@@ -424,7 +424,7 @@ public class SolvableGroebnerBaseSeqPairSeqTest extends TestCase {
 
      exgb = sbb.extLeftGB( L );
      //System.out.println("exgb = " + exgb );
-     assertTrue("isLeftGB( { a, ,b, c, d } )", sbb.isLeftGB(exgb.G) );
+     assertTrue("isLeftGB( { a, b, c, d } )", sbb.isLeftGB(exgb.G) );
      assertTrue("isRmat( { a, b, c, d } )", sbb.isLeftReductionMatrix(exgb) );
 
      assertTrue("not isZERO( e )", !e.isZERO() );
@@ -432,7 +432,7 @@ public class SolvableGroebnerBaseSeqPairSeqTest extends TestCase {
 
      exgb = sbb.extLeftGB( L );
      //System.out.println("exgb = " + exgb );
-     assertTrue("isLeftGB( { a, ,b, c, d, e } )", sbb.isLeftGB(exgb.G) );
+     assertTrue("isLeftGB( { a, b, c, d, e } )", sbb.isLeftGB(exgb.G) );
      assertTrue("isRmat( { a, b, c, d, e } )", sbb.isLeftReductionMatrix(exgb) );
  }
 

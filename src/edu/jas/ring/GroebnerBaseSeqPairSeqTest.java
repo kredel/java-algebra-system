@@ -132,19 +132,19 @@ public class GroebnerBaseSeqPairSeqTest extends TestCase {
      L.add(c);
 
      L = bb.GB( L );
-     assertTrue("isGB( { a, ,b, c } )", bb.isGB(L) );
+     assertTrue("isGB( { a, b, c } )", bb.isGB(L) );
 
      assertTrue("not isZERO( d )", !d.isZERO() );
      L.add(d);
 
      L = bb.GB( L );
-     assertTrue("isGB( { a, ,b, c, d } )", bb.isGB(L) );
+     assertTrue("isGB( { a, b, c, d } )", bb.isGB(L) );
 
      assertTrue("not isZERO( e )", !e.isZERO() );
      L.add(e);
 
      L = bb.GB( L );
-     assertTrue("isGB( { a, ,b, c, d, e } )", bb.isGB(L) );
+     assertTrue("isGB( { a, b, c, d, e } )", bb.isGB(L) );
  }
 
 
@@ -229,7 +229,7 @@ public class GroebnerBaseSeqPairSeqTest extends TestCase {
 
      exgb = bb.extGB( L );
      //System.out.println("exgb = " + exgb );
-     assertTrue("isGB( { a, ,b, c } )", bb.isGB(exgb.G) );
+     assertTrue("isGB( { a, b, c } )", bb.isGB(exgb.G) );
      assertTrue("isRmat( { a, b, c } )", bb.isReductionMatrix(exgb) );
 
      assertTrue("not isZERO( d )", !d.isZERO() );
@@ -237,7 +237,7 @@ public class GroebnerBaseSeqPairSeqTest extends TestCase {
 
      exgb = bb.extGB( L );
      //System.out.println("exgb = " + exgb );
-     assertTrue("isGB( { a, ,b, c, d } )", bb.isGB(exgb.G) );
+     assertTrue("isGB( { a, b, c, d } )", bb.isGB(exgb.G) );
      assertTrue("isRmat( { a, b, c, d } )", bb.isReductionMatrix(exgb) );
 
 
@@ -246,7 +246,7 @@ public class GroebnerBaseSeqPairSeqTest extends TestCase {
 
      exgb = bb.extGB( L );
      //System.out.println("exgb = " + exgb );
-     assertTrue("isGB( { a, ,b, c, d, e } )", bb.isGB(exgb.G) );
+     assertTrue("isGB( { a, b, c, d, e } )", bb.isGB(exgb.G) );
      assertTrue("isRmat( { a, b, c, d, e } )", bb.isReductionMatrix(exgb) );
  }
 

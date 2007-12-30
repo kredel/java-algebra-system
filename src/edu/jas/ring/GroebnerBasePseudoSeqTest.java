@@ -31,7 +31,7 @@ import edu.jas.ring.GroebnerBase;
 
 
 /**
- * Groebner base sequential pseudo reduction tests with JUnit.
+ * Groebner base pseudo reduction sequential tests with JUnit.
  * @author Heinz Kredel.
  */
 
@@ -132,19 +132,19 @@ public class GroebnerBasePseudoSeqTest extends TestCase {
      L.add(c);
 
      L = bb.GB( L );
-     assertTrue("isGB( { a, ,b, c } )", bb.isGB(L) );
+     assertTrue("isGB( { a, b, c } )", bb.isGB(L) );
 
      assertTrue("not isZERO( d )", !d.isZERO() );
      L.add(d);
 
      L = bb.GB( L );
-     assertTrue("isGB( { a, ,b, c, d } )", bb.isGB(L) );
+     assertTrue("isGB( { a, b, c, d } )", bb.isGB(L) );
 
      assertTrue("not isZERO( e )", !e.isZERO() );
      L.add(e);
 
      L = bb.GB( L );
-     assertTrue("isGB( { a, ,b, c, d, e } )", bb.isGB(L) );
+     assertTrue("isGB( { a, b, c, d, e } )", bb.isGB(L) );
  }
 
 /**

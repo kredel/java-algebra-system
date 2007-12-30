@@ -144,21 +144,21 @@ public class RGroebnerBaseSeqTest extends TestCase {
      L.add(c);
 
      L = bb.GB( L );
-     assertTrue("isGB( { a, ,b, c } )", bb.isGB(L) );
+     assertTrue("isGB( { a, b, c } )", bb.isGB(L) );
      //System.out.println("L = " + L );
 
      assertTrue("not isZERO( d )", !d.isZERO() );
      L.add(d);
 
      L = bb.GB( L );
-     assertTrue("isGB( { a, ,b, c, d } )", bb.isGB(L) );
+     assertTrue("isGB( { a, b, c, d } )", bb.isGB(L) );
      //System.out.println("L = " + L );
 
      assertTrue("not isZERO( e )", !e.isZERO() );
      L.add(e);
 
      L = bb.GB( L );
-     assertTrue("isGB( { a, ,b, c, d, e } )", bb.isGB(L) );
+     assertTrue("isGB( { a, b, c, d, e } )", bb.isGB(L) );
      //System.out.println("L = " + L );
  }
 

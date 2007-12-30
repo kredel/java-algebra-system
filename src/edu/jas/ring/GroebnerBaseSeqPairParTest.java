@@ -139,19 +139,19 @@ public class GroebnerBaseSeqPairParTest extends TestCase {
      L.add(c);
 
      L = bbspar.GB( L );
-     assertTrue("isGB( { a, ,b, c } )", bbspar.isGB(L) );
+     assertTrue("isGB( { a, b, c } )", bbspar.isGB(L) );
 
      assertTrue("not isZERO( d )", !d.isZERO() );
      L.add(d);
 
      L = bbspar.GB( L );
-     assertTrue("isGB( { a, ,b, c, d } )", bbspar.isGB(L) );
+     assertTrue("isGB( { a, b, c, d } )", bbspar.isGB(L) );
 
      assertTrue("not isZERO( e )", !e.isZERO() );
      L.add(e);
 
      L = bbspar.GB( L );
-     assertTrue("isGB( { a, ,b, c, d, e } )", bbspar.isGB(L) );
+     assertTrue("isGB( { a, b, c, d, e } )", bbspar.isGB(L) );
  }
 
 

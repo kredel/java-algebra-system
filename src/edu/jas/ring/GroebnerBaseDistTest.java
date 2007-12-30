@@ -172,7 +172,7 @@ public GroebnerBaseDistTest(String name) {
      clients = startThreads();
      L = bbdist.GB( L );
      stopThreads( clients );
-     assertTrue("isGB( { a, ,b, c } )", bbseq.isGB(L) );
+     assertTrue("isGB( { a, b, c } )", bbseq.isGB(L) );
 
      assertTrue("not isZERO( d )", !d.isZERO() );
      L.add(d);
@@ -180,7 +180,7 @@ public GroebnerBaseDistTest(String name) {
      clients = startThreads();
      L = bbdist.GB( L );
      stopThreads( clients );
-     assertTrue("isGB( { a, ,b, c, d } )", bbseq.isGB(L) );
+     assertTrue("isGB( { a, b, c, d } )", bbseq.isGB(L) );
 
      assertTrue("not isZERO( e )", !e.isZERO() );
      L.add(e);
@@ -188,7 +188,7 @@ public GroebnerBaseDistTest(String name) {
      clients = startThreads();
      L = bbdist.GB( L );
      stopThreads( clients );
-     assertTrue("isGB( { a, ,b, c, d, e } )", bbseq.isGB(L) );
+     assertTrue("isGB( { a, b, c, d, e } )", bbseq.isGB(L) );
  }
 
 

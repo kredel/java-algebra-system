@@ -134,19 +134,19 @@ public class GroebnerBaseParTest extends TestCase {
      L.add(c);
 
      L = bbpar.GB( L );
-     assertTrue("isGB( { a, ,b, c } )", bbpar.isGB(L) );
+     assertTrue("isGB( { a, b, c } )", bbpar.isGB(L) );
 
      assertTrue("not isZERO( d )", !d.isZERO() );
      L.add(d);
 
      L = bbpar.GB( L );
-     assertTrue("isGB( { a, ,b, c, d } )", bbpar.isGB(L) );
+     assertTrue("isGB( { a, b, c, d } )", bbpar.isGB(L) );
 
      assertTrue("not isZERO( e )", !e.isZERO() );
      L.add(e);
 
      L = bbpar.GB( L );
-     assertTrue("isGB( { a, ,b, c, d, e } )", bbpar.isGB(L) );
+     assertTrue("isGB( { a, b, c, d, e } )", bbpar.isGB(L) );
  }
 
 

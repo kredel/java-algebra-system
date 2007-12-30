@@ -134,19 +134,19 @@ public class EGroebnerBaseSeqTest extends TestCase {
      //System.out.println("    L  = " + L );
      L = bb.GB( L );
      //System.out.println("eGB(L) = " + L );
-     assertTrue("isGB( { a, ,b, c } )", bb.isGB(L) );
+     assertTrue("isGB( { a, b, c } )", bb.isGB(L) );
 
      L.add(d);
      //System.out.println("    L  = " + L );
      L = bb.GB( L );
      //System.out.println("eGB(L) = " + L );
-     assertTrue("isGB( { a, ,b, c, d } )", bb.isGB(L) );
+     assertTrue("isGB( { a, b, c, d } )", bb.isGB(L) );
 
      L.add(e);
      //System.out.println("    L  = " + L );
      L = bb.GB( L );
      //System.out.println("eGB(L) = " + L );
-     assertTrue("isGB( { a, ,b, c, d, e } )", bb.isGB(L) );
+     assertTrue("isGB( { a, b, c, d, e } )", bb.isGB(L) );
  }
 
 /**
