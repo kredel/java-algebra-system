@@ -271,6 +271,82 @@ public class PolyUtilApp<C extends RingElem<C> > {
      * @param c coefficient to be represented.
      * @return Product represenation of c in the ring pfac.
      */
+    public static <C extends GcdRingElem<C>>
+        Product<C> toProductGen( ProductRing<C> pfac, C c) {
+
+        SortedMap<Integer,C> elem = new TreeMap<Integer,C>();
+        for ( int i = 0; i < pfac.length(); i++ ) {
+            RingFactory<C> rfac = pfac.getFactory(i);
+            C u = rfac.copy( c );
+            if ( u != null && !u.isZERO() ) {
+               elem.put( i, u );
+            }
+        }
+        return new Product<C>( pfac, elem );
+    }
+
+
+    /**
+     * Product representation.
+     * @param pfac polynomial ring factory.
+     * @param A polynomial to be represented.
+     * @return Product represenation of A in the polynomial ring pfac.
+     */
+    public static <C extends GcdRingElem<C>>
+        GenPolynomial<Product<C>> 
+        toProductGen( GenPolynomialRing<Product<C>> pfac, 
+                      GenPolynomial<C> A) {
+
+        GenPolynomial<Product<C>> P = pfac.getZERO();
+        if ( A == null || A.isZERO() ) {
+           return P;
+        }
+        RingFactory<Product<C>> rpfac = pfac.coFac;
+        ProductRing<C> rfac = (ProductRing<C>) rpfac;
+        for ( Map.Entry<ExpVector,C> y: A.getMap().entrySet() ) {
+            ExpVector e = y.getKey();
+            C a = y.getValue();
+            //System.out.println("e = " + e);
+            //System.out.println("a = " + a);
+            Product<C> p = toProductGen(rfac,a);
+            //System.out.println("p = " + p);
+            P = P.sum( p , e );
+        }
+        return P;
+    }
+
+
+    /**
+     * Product representation.
+     * @param pfac polynomial ring factory.
+     * @param L list of polynomials to be represented.
+     * @return Product represenation of L in the polynomial ring pfac.
+     */
+    public static <C extends GcdRingElem<C>>
+        List<GenPolynomial<Product<C>>> 
+        toProductGen( GenPolynomialRing<Product<C>> pfac, 
+                      List<GenPolynomial<C>> L) {
+
+        List<GenPolynomial<Product<C>>> 
+            list = new ArrayList<GenPolynomial<Product<C>>>();
+        if ( L == null || L.size() == 0 ) {
+           return list;
+        }
+        for ( GenPolynomial<C> a : L ) {
+            GenPolynomial<Product<C>> b = toProductGen( pfac, a );
+            list.add( b );
+        }
+        return list;
+    }
+
+
+
+    /**
+     * Product representation.
+     * @param pfac product ring factory.
+     * @param c coefficient to be represented.
+     * @return Product represenation of c in the ring pfac.
+     */
     public static 
         Product<ModInteger> toProduct( ProductRing<ModInteger> pfac, BigInteger c) {
 
