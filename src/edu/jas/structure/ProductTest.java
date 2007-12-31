@@ -84,7 +84,7 @@ public class ProductTest extends TestCase {
    Product< BigInteger > fi;
 
 
-   int pl = 3; 
+   int pl = 5; 
    int rl = 1; 
    int kl = 13;
    int ll = 7;
@@ -126,7 +126,7 @@ public class ProductTest extends TestCase {
 
 
 /**
- * Test constructor for integer.
+ * Test constructor for rational.
  * 
  */
  public void testRatConstruction() {
@@ -143,7 +143,7 @@ public class ProductTest extends TestCase {
 
 
 /**
- * Test constructor for polynomial.
+ * Test constructor for modular.
  * 
  */
  public void testModConstruction() {
@@ -160,7 +160,7 @@ public class ProductTest extends TestCase {
 
 
 /**
- * Test random integer.
+ * Test random rational.
  * 
  */
  public void testRatRandom() {
@@ -183,7 +183,7 @@ public class ProductTest extends TestCase {
 
 
 /**
- * Test random polynomial.
+ * Test random modular.
  * 
  */
  public void testModRandom() {
@@ -300,7 +300,7 @@ public class ProductTest extends TestCase {
 
 
 /**
- * Test polynomial addition.
+ * Test modular addition.
  * 
  */
  public void testModAddition() {
@@ -422,14 +422,14 @@ public class ProductTest extends TestCase {
  public void testIntMultiplication() {
 
      ai = ifac.random(kl);
-     if ( ai.isZERO() ) {
-        return;
+     while ( ai.isZERO() ) {
+        ai = ifac.random(kl);
      }
      assertTrue("not isZERO( a )", !ai.isZERO() );
 
      bi = ifac.random(kl,q);
      if ( bi.isZERO() ) {
-        return;
+        bi = ifac.random(kl,q);
      }
      assertTrue("not isZERO( b )", !bi.isZERO() );
 
@@ -487,6 +487,7 @@ public class ProductTest extends TestCase {
      di = ai.remainder(ci);
      ei = bi.remainder(ci);
 
+     //System.out.println();
      //System.out.println("c = " + ci);
      //System.out.println("d = " + di);
      //System.out.println("e = " + ei);
@@ -530,7 +531,7 @@ public class ProductTest extends TestCase {
 
 
 /**
- * Test polynomial multiplication.
+ * Test modular multiplication.
  * 
  */
  public void testModMultiplication() {
