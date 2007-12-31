@@ -76,6 +76,7 @@ public class RGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
         }
         cofac = rf;
         engine = (GreatestCommonDivisorAbstract<C>)GCDFactory.getImplementation( rf );
+        System.out.println("engine = " + engine.getClass().getName());
     }
 
 
@@ -101,7 +102,6 @@ public class RGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
         OrderedRPairlist<C> pairlist = null; 
         for ( GenPolynomial<C> p : F ) { 
             if ( !p.isZERO() ) {
-               System.out.println("cont(p) = " + engine.baseContent(p));
                p = engine.basePrimitivePart(p); // not monic, no field
                p = p.abs();
                if ( p.isConstant() && p.leadingBaseCoefficient().isFull() ) { 
@@ -163,8 +163,8 @@ public class RGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
                   if ( logger.isDebugEnabled() ) {
                       logger.debug("ht(H) = " + H.leadingExpVector() );
                   }
-                  //System.out.println("cont(H) = " + engine.baseContent(H));
-                  // must be bc: H = engine.basePrimitivePart(H); 
+                  // must be bc: 
+                  H = engine.basePrimitivePart(H); 
                   H = H.abs(); // not monic, no field
                   if ( H.isConstant() && H.leadingBaseCoefficient().isFull() ) { 
                      // mostly useless
@@ -181,9 +181,9 @@ public class RGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
                       logger.info("#bcH = " + bcH.size());
                       //G.addAll( bcH );
                       for ( GenPolynomial<C> h: bcH ) {
-                          System.out.println("cont(h) = " + engine.baseContent(h));
                           h = engine.basePrimitivePart(h); 
                           h = h.abs(); // monic() not ok, since no field
+                          logger.info("bc(Sred) = " + h);
                           G.add( h );
                           pairlist.put( h );
                       }
@@ -196,9 +196,9 @@ public class RGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
               }
         }
         logger.debug("#sequential list = " + G.size());
-        System.out.println("isGB() = " + isGB(G));
+        //System.out.println("isGB() = " + isGB(G));
         G = minimalGB(G);
-        //G = red.irreducibleSet(G);
+        //G = red.irreducibleSet(G); // not correct since not boolean closed
         logger.info("pairlist #put = " + pairlist.putCount() 
                   + " #rem = " + pairlist.remCount()
                     // + " #total = " + pairlist.pairCount()
@@ -216,6 +216,113 @@ public class RGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
      */
     public List<GenPolynomial<C>> 
                 minimalGB(List<GenPolynomial<C>> Gp) {  
+        if ( Gp == null || Gp.size() <= 1 ) {
+            return Gp;
+        }
+        // remove zero polynomials
+        List<GenPolynomial<C>> G
+            = new ArrayList<GenPolynomial<C>>( Gp.size() );
+        for ( GenPolynomial<C> a : Gp ) { 
+            if ( a != null && !a.isZERO() ) { // always true in GB()
+               a = a.abs();  // already positive in GB
+               G.add( a );
+            }
+        }
+        // remove top reducible polynomials
+        GenPolynomial<C> a, b;
+        List<GenPolynomial<C>> F;
+        F = new ArrayList<GenPolynomial<C>>( G.size() );
+        while ( G.size() > 0 ) {
+            a = G.remove(0); b = a;
+            if ( red.isTopReducible(G,a) || red.isTopReducible(F,a) ) {
+               // try to drop polynomial 
+               List<GenPolynomial<C>> ff;
+               ff = new ArrayList<GenPolynomial<C>>( G );
+               ff.addAll(F);
+               a = red.normalform( ff, a );
+               if ( a.isZERO() ) {
+                  if ( !isGB( ff ) ) { // is really required, but why?
+                     System.out.println("minGB not dropped " + b);
+                     F.add(b);
+                  } else {
+                     System.out.println("minGB dropped " + b);
+                  }
+               } else {
+                  F.add(a);
+               }
+            } else { // not top reducible, keep polynomial
+               F.add(a);
+            }
+        }
+        G = F;
+        // reduce remaining polynomials
+        int len = G.size();
+        int el = 0;
+        while ( el < len ) {
+            el++;
+            a = G.remove(0); b = a;
+            a = red.normalform( G, a );
+            a = engine.basePrimitivePart(a); // not a.monic() since no field
+            a = a.abs();
+            if ( red.isBooleanClosed(a) ) {
+               List<GenPolynomial<C>> ff;
+               ff = new ArrayList<GenPolynomial<C>>( G );
+               ff.add( a );
+               if ( isGB( ff ) ) {
+                  System.out.println("minGB reduced " + b + " to " +a);
+                  G.add( a ); 
+               } else {
+                  System.out.println("minGB not reduced " + b + " to " +a);
+                  G.add( b ); 
+               }
+               continue;
+            } else {
+                G.add( b ); // do not reduce 
+            }
+        }
+        /* stratify: collect polynomials with equal leading terms */
+        ExpVector e, f;
+        F = new ArrayList<GenPolynomial<C>>( G.size() );
+        List<GenPolynomial<C>> ff;
+        ff = new ArrayList<GenPolynomial<C>>( G );
+        for ( int i = 0; i < ff.size(); i++ ) {
+            a = ff.get(i);
+            if ( a == null || a.isZERO() ) {
+               continue;
+            }
+            e = a.leadingExpVector();
+            for ( int j = i+1; j < ff.size(); j++ ) {
+                b = ff.get(j);
+                if ( b == null || b.isZERO() ) {
+                   continue;
+                }
+                f = b.leadingExpVector();
+                if ( e.equals(f) ) {
+                   //System.out.println("minGB e == f: " + a + ", " + b);
+                   a = a.sum(b);
+                   ff.set(j,null);
+                }
+            }
+            F.add( a );
+        }
+        if ( isGB(F) ) {
+           G = F;
+        } else {
+           System.out.println("minGB not stratified " + F);
+        }
+        return G;
+    }
+
+
+    /*
+     * Minimal ordered Groebner basis.
+     * @typeparam C coefficient type.
+     * @param Gp a Groebner base.
+     * @return a reduced Groebner base of Gp.
+     * @todo use primitivePart
+     */
+    public List<GenPolynomial<C>> 
+                minimalGBtesting(List<GenPolynomial<C>> Gp) {  
         if ( Gp == null || Gp.size() <= 1 ) {
             return Gp;
         }
@@ -257,12 +364,16 @@ public class RGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
                         //F.addAll( bcH );
                      }
                   } else {
-                     System.out.println("minGB dropped " + b);
-                     F.add(b);
+                     if ( !isGB( ff ) ) {
+                        System.out.println("minGB not dropped " + b);
+                        F.add(b);
+                     } else {
+                        System.out.println("minGB dropped " + b);
+                     }
                   }
                }
-            } else {
-                F.add(a);
+            } else { // not top reducible, keep polynomial
+               F.add(a);
             }
         }
         G = F;
@@ -272,15 +383,28 @@ public class RGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
         // reduce remaining polynomials
         int len = G.size();
         int el = 0;
+        //System.out.println("minGB reducing " + len);
         while ( el < len ) {
+            el++;
             a = G.remove(0); b = a;
-            //System.out.println("doing " + a.length());
+            //System.out.println("minGB doing " + el + ", a = " + a);
             a = red.normalform( G, a );
-            //System.out.println("cont(a) = " + engine.baseContent(a));
-            //not bc: a = engine.basePrimitivePart(a); // not a.monic() since no field
-            if ( ! red.isBooleanClosed(a) ) {
-                System.out.println("minGB not bc: a = " + a + "\n BC(a) = " + red.booleanClosure(a) + ", BR(a) = " + red.booleanRemainder(a) );
+            //not bc: 
+            a = engine.basePrimitivePart(a); // not a.monic() since no field
+            if ( red.isBooleanClosed(a) ) {
+               List<GenPolynomial<C>> ff;
+               ff = new ArrayList<GenPolynomial<C>>( G );
+               ff.add( a );
+               if ( isGB( ff ) ) {
+                  System.out.println("minGB reduced " + b + " to " +a);
+                  G.add( a ); 
+               } else {
+                  System.out.println("minGB not reduced " + b + " to " +a);
+                  G.add( b ); 
+               }
+               continue;
             }
+            System.out.println("minGB not bc: a = " + a + "\n BC(a) = " + red.booleanClosure(a) + ", BR(a) = " + red.booleanRemainder(a) );
             bcH = red.reducedBooleanClosure(G,a);
             if ( bcH.size() > 1 ) {
                System.out.println("minGB not bc: bcH size = " + bcH.size());
@@ -289,13 +413,11 @@ public class RGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
                //G.addAll( bcH );
                G.add( b ); // do not reduce
                for ( GenPolynomial<C> h: bcH ) {
-                   System.out.println("cont(h) = " + engine.baseContent(h));
                    h = engine.basePrimitivePart(h); 
                    h = h.abs(); // monic() not ok, since no field
                    //G.add( h );
                }
             }
-            el++;
         }
         // make abs if possible
         F = new ArrayList<GenPolynomial<C>>( G.size() );
@@ -305,7 +427,7 @@ public class RGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
         }
         G = F;
 
-        if ( true ) {
+        if ( false ) {
            return G;
         }
 
