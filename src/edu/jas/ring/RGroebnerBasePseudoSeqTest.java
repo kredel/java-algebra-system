@@ -128,42 +128,42 @@ public class RGroebnerBasePseudoSeqTest extends TestCase {
 
      assertTrue("not isZERO( a )", !a.isZERO() );
      L.add(a);
-     System.out.println("L = " + L );
+     //System.out.println("L = " + L );
 
      L = bb.GB( L );
-     System.out.println("L = " + L );
+     //System.out.println("L = " + L );
      assertTrue("isGB( { a } )", bb.isGB(L) );
 
      assertTrue("not isZERO( b )", !b.isZERO() );
      L.add(b);
-     System.out.println("L = " + L );
+     //System.out.println("L = " + L );
 
      L = bb.GB( L );
-     System.out.println("L = " + L );
+     //System.out.println("L = " + L );
      assertTrue("isGB( { a, b } )", bb.isGB(L) );
 
      //assertTrue("not isZERO( c )", !c.isZERO() );
      L.add(c);
-     System.out.println("L = " + L );
+     //System.out.println("L = " + L );
 
      L = bb.GB( L );
-     System.out.println("L = " + L );
+     //System.out.println("L = " + L );
      assertTrue("isGB( { a, b, c } )", bb.isGB(L) );
 
      //assertTrue("not isZERO( d )", !d.isZERO() );
      L.add(d);
-     System.out.println("L = " + L );
+     //System.out.println("L = " + L );
 
      L = bb.GB( L );
-     System.out.println("L = " + L );
+     //System.out.println("L = " + L );
      assertTrue("isGB( { a, b, c, d } )", bb.isGB(L) );
 
      //assertTrue("not isZERO( e )", !e.isZERO() );
      L.add(e);
-     System.out.println("L = " + L );
+     //System.out.println("L = " + L );
 
      L = bb.GB( L );
-     System.out.println("L = " + L );
+     //System.out.println("L = " + L );
      assertTrue("isGB( { a, b, c, d, e } )", bb.isGB(L) );
  }
 
@@ -173,7 +173,7 @@ public class RGroebnerBasePseudoSeqTest extends TestCase {
  * 
  */
  @SuppressWarnings("unchecked") 
- public void xtestTrinks7() {
+ public void testTrinks7() {
      String exam = "Z(B,S,T,Z,P,W) L "
                  + "( "  
                  + "( 45 P + 35 S - 165 B - 36 ), " 
@@ -243,9 +243,9 @@ public class RGroebnerBasePseudoSeqTest extends TestCase {
      //System.out.println("gb = " + G );
 
      //assertEquals("#GB(Trinks7) == 6", 6, G.size() );
-     System.out.println("Fp = " + trinks);
+     //System.out.println("Fp = " + trinks);
      trinks = new PolynomialList<Product<BigInteger>>(fac,G);
-     System.out.println("G  = " + trinks);
+     //System.out.println("G  = " + trinks);
 
      assertTrue("isGB( GB(Trinks7) )", bbri.isGB(G) );
  }
