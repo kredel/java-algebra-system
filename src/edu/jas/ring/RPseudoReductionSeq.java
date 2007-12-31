@@ -110,6 +110,9 @@ public class RPseudoReductionSeq<C extends RegularRingElem<C>>
                         //System.out.println("--b = " + b);
                         if ( b.isZERO() ) {
                            a = a.divide( c );
+                           if ( a.isZERO() ) {
+                              throw new RuntimeException("a.isZERO()");
+                           }
                         } else {
                            S = S.multiply( c );
                            R = R.multiply( c );
