@@ -77,6 +77,7 @@ public class RGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
         cofac = rf;
         engine = (GreatestCommonDivisorAbstract<C>)GCDFactory.getImplementation( rf );
         System.out.println("engine = " + engine.getClass().getName());
+        System.out.println("cofac  = " + cofac);
     }
 
 
@@ -95,7 +96,7 @@ public class RGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
         }
         /* boolean closure */
         List<GenPolynomial<C>> bcF = red.reducedBooleanClosure(F);
-           logger.info("#bcF-#F = " + (bcF.size()-F.size()));
+        logger.info("#bcF-#F = " + (bcF.size()-F.size()));
         F = bcF;
         /* normalize input */
         List<GenPolynomial<C>> G = new ArrayList<GenPolynomial<C>>();
@@ -127,8 +128,6 @@ public class RGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
         GenPolynomial<C> D;
         GenPolynomial<C> H;
         List<GenPolynomial<C>> bcH;
-        //int len = G.size();
-        //System.out.println("len = " + len);
         while ( pairlist.hasNext() ) {
               pair = pairlist.removeNext();
               //System.out.println("pair = " + pair);
@@ -140,7 +139,6 @@ public class RGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
                  logger.debug("pi    = " + pi );
                  logger.debug("pj    = " + pj );
               }
-
               // S-polynomial -----------------------
               if ( true ) {
               //if ( pair.getUseCriterion3() ) { // correct ?
@@ -163,7 +161,6 @@ public class RGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
                   if ( logger.isDebugEnabled() ) {
                       logger.debug("ht(H) = " + H.leadingExpVector() );
                   }
-                  // must be bc: 
                   H = engine.basePrimitivePart(H); 
                   H = H.abs(); // not monic, no field
                   if ( H.isConstant() && H.leadingBaseCoefficient().isFull() ) { 
@@ -175,10 +172,10 @@ public class RGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
                       logger.debug("H = " + H );
                   }
                   if ( !H.isZERO() ) {
-                      logger.info("Sred = " + H);
+                      //logger.info("Sred = " + H);
                       //len = G.size();
                       bcH = red.reducedBooleanClosure(G,H);
-                      logger.info("#bcH = " + bcH.size());
+                      //logger.info("#bcH = " + bcH.size());
                       //G.addAll( bcH );
                       for ( GenPolynomial<C> h: bcH ) {
                           h = engine.basePrimitivePart(h); 
@@ -242,10 +239,12 @@ public class RGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
                a = red.normalform( ff, a );
                if ( a.isZERO() ) {
                   if ( !isGB( ff ) ) { // is really required, but why?
-                     System.out.println("minGB not dropped " + b);
+                     logger.info("minGB not dropped " + b);
                      F.add(b);
                   } else {
-                     System.out.println("minGB dropped " + b);
+                     if ( debug ) {
+                        logger.debug("minGB dropped " + b);
+                     }
                   }
                } else {
                   F.add(a);
@@ -269,10 +268,12 @@ public class RGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
                ff = new ArrayList<GenPolynomial<C>>( G );
                ff.add( a );
                if ( isGB( ff ) ) {
-                  System.out.println("minGB reduced " + b + " to " +a);
+                  if ( debug ) {
+                     logger.debug("minGB reduced " + b + " to " +a);
+                  }
                   G.add( a ); 
                } else {
-                  System.out.println("minGB not reduced " + b + " to " +a);
+                  logger.info("minGB not reduced " + b + " to " +a);
                   G.add( b ); 
                }
                continue;
@@ -308,7 +309,7 @@ public class RGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
         if ( isGB(F) ) {
            G = F;
         } else {
-           System.out.println("minGB not stratified " + F);
+           logger.info("minGB not stratified " + F);
         }
         return G;
     }
