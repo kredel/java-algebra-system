@@ -93,11 +93,13 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>>
                 }
                 s = red.normalform( F, s );
                 if ( ! s.isZERO() ) {
-                   System.out.println("p"+i+" = "+pi);
-                   System.out.println("p"+j+" = "+pj);
-                   System.out.println("s-pol = " + red.SPolynomial( pi, pj ) );
-                   System.out.println("s-pol("+i+","+j+") != 0: " + s);
-                   System.out.println("red = " + red.getClass().getName());
+                   if ( true || debug ) {
+                      System.out.println("p"+i+" = "+pi);
+                      System.out.println("p"+j+" = "+pj);
+                      System.out.println("s-pol = " + red.SPolynomial( pi, pj ) );
+                      System.out.println("s-pol("+i+","+j+") != 0: " + s);
+                      //System.out.println("red = " + red.getClass().getName());
+                   }
                    return false;
                 }
             }
