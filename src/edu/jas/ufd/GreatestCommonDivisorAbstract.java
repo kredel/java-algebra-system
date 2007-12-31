@@ -28,7 +28,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C> >
 
 
     private static final Logger logger = Logger.getLogger(GreatestCommonDivisorAbstract.class);
-    //private boolean debug = logger.isDebugEnabled();
+    private boolean debug = logger.isDebugEnabled();
 
 
     /**
@@ -76,7 +76,14 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C> >
         if ( d.isONE() ) {
             return P;
         }
-        return P.divide(d);
+        GenPolynomial<C> pp = P.divide(d);
+        if ( debug ) {
+           GenPolynomial<C> p = pp.multiply(d);
+           if ( ! p.equals(P) ) {
+              throw new RuntimeException("pp(p)*cont(p) != p: ");
+           }
+        }
+        return pp;
     }
 
 
