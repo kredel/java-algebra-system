@@ -86,15 +86,16 @@ public class RGroebnerBasePseudoSeqTest extends TestCase {
    GenPolynomial<Product<BigInteger>> d;
    GenPolynomial<Product<BigInteger>> e;
 
+   int pl = 3; 
    int rl = 3; //4; //3; 
-   int kl = 10;
+   int kl = 7; //10;
    int ll = 7;
    int el = 3;
-   float q = 0.4f; //0.4f
+   float q = 0.3f; //0.4f
 
    protected void setUp() {
        BigInteger coeff = new BigInteger(9);
-       pfac = new ProductRing<BigInteger>(coeff,2);
+       pfac = new ProductRing<BigInteger>(coeff,pl);
        fac = new GenPolynomialRing<Product<BigInteger>>(pfac,rl);
        a = b = c = d = e = null;
        bb = new RGroebnerBasePseudoSeq<Product<BigInteger>>( pfac );
