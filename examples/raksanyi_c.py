@@ -47,15 +47,36 @@ print;
 
 startLog();
 
-from edu.jas.ring import RGroebnerBaseSeq;  
+from edu.jas.ring import RGroebnerBasePseudoSeq;  
 
-rg = RGroebnerBaseSeq().GB(pl);
-
-#fp = rp.ideal( list=rg );
-#print "Ideal, GB: " + str(fp);
+#print "pl.get(0)            = ", pl.get(0);
+#print "pl.get(0).ring       = ", pl.get(0).ring;
+#print "pl.get(0).ring.coFac = ", pl.get(0).ring.coFac;
 #print;
 
-bg = RGroebnerBaseSeq().isGB(rg);
+pr = Ring( ring=pl.get(0).ring );
+
+pf = pr.ideal( list=pl );
+print "Ideal, pf: " + str(pf);
+print;
+
+cofac = pl.get(0).ring.coFac;
+rgbp = RGroebnerBasePseudoSeq( cofac );
+#print "rgbp                 = ", rgbp.getClass().getName();
+
+#sys.exit();
+
+bg = rgbp.isGB(pl);
+print "isGB:", bg;
+print;
+
+rg = rgbp.GB(pl);
+
+pg = pr.ideal( list=rg );
+print "Ideal, GB: " + str(pg);
+print;
+
+bg = rgbp.isGB(rg);
 print "isGB:", bg;
 print;
 
