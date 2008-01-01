@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.HashMap;
 
 import org.apache.log4j.Logger;
 
@@ -30,6 +31,7 @@ import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.PolyUtil;
+import edu.jas.poly.PolynomialList;
 
 import edu.jas.ring.GroebnerBase;
 import edu.jas.ring.GroebnerBaseSeq;
@@ -419,17 +421,20 @@ public class PolyUtilApp<C extends RingElem<C> > {
 
     /**
      * Product cover decomposition.
-     * @param L list of polynomials with  to be represented.
-     * @return Product represenation of L in the polynomial ring pfac.
+     * @param L list of polynomials to be represented.
+     * @return Product representaion of L in the polynomial ring pfac.
      */
     public static 
-        List<GenPolynomial<Product<Residue<BigRational>>>> 
+        PolynomialList<Product<Residue<BigRational>>>
         productDecomposition( List<GenPolynomial<GenPolynomial<BigRational>>> L ) {
+
+        PolynomialList<Product<Residue<BigRational>>> polylist;
 
         List<GenPolynomial<Product<Residue<BigRational>>>> plist
             = new ArrayList<GenPolynomial<Product<Residue<BigRational>>>>( L.size() );
         if ( L == null || L.size() == 0 ) {
-           return plist;
+           polylist = new PolynomialList<Product<Residue<BigRational>>>( null, plist );
+           return polylist;
         }
 
         /* compute list of lists of polynomials set to zero */
@@ -494,7 +499,8 @@ public class PolyUtilApp<C extends RingElem<C> > {
         for ( GenPolynomial<Product<Residue<BigRational>>> p: plist ) {
             System.out.println("\np    = " + p);
         }
-        return plist;
+        polylist = new PolynomialList<Product<Residue<BigRational>>>( pfac, plist );
+        return polylist;
     }
 
 
@@ -576,6 +582,134 @@ public class PolyUtilApp<C extends RingElem<C> > {
             }
         }
         return new Product<Residue<BigRational>>( pfac, elem );
+    }
+
+
+    /**
+     * Product slice.
+     * @param L list of polynomials with  to be represented.
+     * @return Product represenation of L in the polynomial ring pfac.
+     */
+    public static 
+        Map<Ideal<BigRational>,PolynomialList<GenPolynomial<BigRational>>>
+        productSlice( PolynomialList<Product<Residue<BigRational>>> L ) {
+
+        Map<Ideal<BigRational>,PolynomialList<GenPolynomial<BigRational>>> map;
+        RingFactory<Product<Residue<BigRational>>> fpr = L.ring.coFac;
+        ProductRing<Residue<BigRational>> pr = (ProductRing<Residue<BigRational>>)fpr;
+        int s = pr.length();
+        map = new HashMap<Ideal<BigRational>,PolynomialList<GenPolynomial<BigRational>>>();
+        List<GenPolynomial<GenPolynomial<BigRational>>> slist;
+
+        List<GenPolynomial<Product<Residue<BigRational>>>> plist = L.list;
+        PolynomialList<GenPolynomial<BigRational>> spl;
+
+        for ( int i = 0; i < s; i++ ) {
+            RingFactory<Residue<BigRational>> r = pr.getFactory( i );
+            ResidueRing<BigRational> rr = (ResidueRing<BigRational>) r;
+            Ideal<BigRational> id = rr.ideal;
+            GenPolynomialRing<BigRational> cof = rr.ring;
+            GenPolynomialRing<GenPolynomial<BigRational>> pfc; 
+            pfc = new GenPolynomialRing<GenPolynomial<BigRational>>(cof,L.ring);
+            slist = fromProduct( pfc, plist, i );
+            spl = new PolynomialList<GenPolynomial<BigRational>>(pfc,slist);
+            PolynomialList<GenPolynomial<BigRational>> d = map.get( id );
+            if ( d != null ) {
+               throw new RuntimeException("ideal exists twice " + id);
+            }
+            map.put( id, spl );
+        }
+        return map;
+    }
+
+
+    /**
+     * From product representation.
+     * @param pfac polynomial ring factory.
+     * @param L list of polynomials to be converted from product representation.
+     * @param i index of product representation to be taken.
+     * @return Represenation of i-slice of L in the polynomial ring pfac.
+     */
+    public static 
+        List<GenPolynomial<GenPolynomial<BigRational>>>
+        fromProduct( GenPolynomialRing<GenPolynomial<BigRational>> pfac,
+                     List<GenPolynomial<Product<Residue<BigRational>>>> L,
+                     int i ) {
+
+        List<GenPolynomial<GenPolynomial<BigRational>>> 
+            list = new ArrayList<GenPolynomial<GenPolynomial<BigRational>>>();
+
+        if ( L == null || L.size() == 0 ) {
+           return list;
+        }
+        GenPolynomial<GenPolynomial<BigRational>> b;
+        for ( GenPolynomial<Product<Residue<BigRational>>> a : L ) {
+            b = fromProduct( pfac, a, i );
+            if ( b != null && !b.isZERO() ) {
+               list.add( b.abs() );
+            }
+        }
+        return list;
+    }
+
+
+    /**
+     * From product representation.
+     * @param pfac polynomial ring factory.
+     * @param P polynomial to be converted from product representation.
+     * @param i index of product representation to be taken.
+     * @return Represenation of i-slice of P in the polynomial ring pfac.
+     */
+    public static 
+        GenPolynomial<GenPolynomial<BigRational>>
+        fromProduct( GenPolynomialRing<GenPolynomial<BigRational>> pfac,
+                     GenPolynomial<Product<Residue<BigRational>>> P,
+                     int i ) {
+
+        GenPolynomial<GenPolynomial<BigRational>> b = pfac.getZERO();
+        if ( P == null || P.isZERO() ) {
+           return b;
+        }
+        RingFactory<GenPolynomial<BigRational>> cf = pfac.coFac;
+        GenPolynomialRing<BigRational> fac = (GenPolynomialRing<BigRational>)cf;
+
+        for ( Map.Entry<ExpVector,Product<Residue<BigRational>>> y: P.getMap().entrySet() ) {
+            ExpVector e = y.getKey();
+            Product<Residue<BigRational>> a = y.getValue();
+            //System.out.println("e = " + e);
+            //System.out.println("a = " + a);
+
+            Residue<BigRational> r = a.get(i);
+            if ( r != null && !r.isZERO() ) {
+               GenPolynomial<BigRational> p = r.val;
+               //System.out.println("p = " + p);
+               b = b.sum( p , e );
+            }
+        }
+        return b;
+    }
+
+
+    /**
+     * Product slice to String.
+     * @param L list of polynomials with  to be represented.
+     * @return Product represenation of L in the polynomial ring pfac.
+     */
+    public static 
+        String
+        productSliceToString( Map<Ideal<BigRational>,PolynomialList<GenPolynomial<BigRational>>> L ) {
+        StringBuffer sb = new StringBuffer("\nproductSlice ------------------------- begin");
+        for ( Ideal<BigRational> id: L.keySet() ) {
+            sb.append("\n\ncondition == 0:\n");
+            sb.append( id.list.toString() );
+            PolynomialList<GenPolynomial<BigRational>> pl = L.get( id );
+            //GenPolynomialRing<GenPolynomial<BigRational>> r = pl.ring;
+            //List<GenPolynomial<GenPolynomial<BigRational>>> ll = pl.list;
+            sb.append("\ncorresponding ideal:\n");
+            sb.append( pl.toString() );
+        }
+        sb.append("\nproductSlice ------------------------- end");
+        return sb.toString();
     }
 
 }
