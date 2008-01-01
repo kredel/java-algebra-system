@@ -77,7 +77,7 @@ public class RGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
         cofac = rf;
         engine = (GreatestCommonDivisorAbstract<C>)GCDFactory.getImplementation( rf );
         System.out.println("engine = " + engine.getClass().getName());
-        System.out.println("cofac  = " + cofac);
+        System.out.println("cofac  = " + cofac.getClass().getName());
     }
 
 
@@ -226,6 +226,7 @@ public class RGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
             }
         }
         // remove top reducible polynomials
+        logger.info("minGB start with " + G.size() );
         GenPolynomial<C> a, b;
         List<GenPolynomial<C>> F;
         F = new ArrayList<GenPolynomial<C>>( G.size() );
@@ -311,6 +312,7 @@ public class RGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
         } else {
            logger.info("minGB not stratified " + F);
         }
+        logger.info("minGB end   with " + G.size() );
         return G;
     }
 
