@@ -77,6 +77,15 @@ public class Product<C extends RingElem<C> >
     }
 
 
+    /** Get component.
+     * @param i index of component.
+     * @return val(i).
+     */
+    public C get(int i) {
+        return val.get(i); // auto-boxing
+    }
+
+
     /**  Clone this.
      * @see java.lang.Object#clone()
      */
@@ -113,7 +122,6 @@ public class Product<C extends RingElem<C> >
 
     /** Is Product full. 
      * @return If every component occurs, then true is returned, else false.
-     * @see edu.jas.structure.RingElem#isONE()
      */
     public boolean isFull() {
         if ( val.size() != ring.length() ) {
