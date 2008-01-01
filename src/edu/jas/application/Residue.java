@@ -5,10 +5,12 @@
 package edu.jas.application;
 
 import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.PolyUtil;
 
 import edu.jas.kern.PrettyPrint;
 
 import edu.jas.structure.RingElem;
+import edu.jas.structure.GcdRingElem;
 
 
 /**
@@ -16,7 +18,7 @@ import edu.jas.structure.RingElem;
  * Objects of this class are (nearly) immutable.
  * @author Heinz Kredel
  */
-public class Residue<C extends RingElem<C> > 
+public class Residue<C extends GcdRingElem<C> > 
              implements RingElem< Residue<C> > {
 
 
@@ -74,6 +76,9 @@ public class Residue<C extends RingElem<C> >
         if ( val.isONE() ) {
            isunit = 1;
         }
+        if ( val.isZERO() ) {
+           isunit = 0;
+        }
     }
 
 
@@ -81,7 +86,7 @@ public class Residue<C extends RingElem<C> >
      * @see java.lang.Object#clone()
      */
     public Residue<C> clone() {
-        return new Residue<C>( ring, val );
+        return new Residue<C>( ring, val, isunit );
     }
    
 
@@ -189,7 +194,7 @@ public class Residue<C extends RingElem<C> >
      * @see edu.jas.structure.RingElem#abs()
      */
     public Residue<C> abs() {
-        return new Residue<C>( ring, val.abs() );
+        return new Residue<C>( ring, val.abs(), isunit );
     }
 
 
@@ -207,7 +212,7 @@ public class Residue<C extends RingElem<C> >
      * @see edu.jas.structure.RingElem#negate()
      */
     public Residue<C> negate() {
-        return new Residue<C>( ring, val.negate() );
+        return new Residue<C>( ring, val.negate(), isunit );
     }
 
 
@@ -234,7 +239,9 @@ public class Residue<C extends RingElem<C> >
      * @return this/S.
      */
     public Residue<C> divide(Residue<C> S) {
-        return multiply( S.inverse() );
+        // return multiply( S.inverse() );
+        GenPolynomial<C> x = PolyUtil.<C>basePseudoDivide( val, S.val );
+        return new Residue<C>( ring, x );
     }
 
 
@@ -244,7 +251,7 @@ public class Residue<C extends RingElem<C> >
      */
     public Residue<C> inverse() {
         GenPolynomial<C> x = ring.ideal.inverse( val );
-        return new Residue<C>( ring, x );
+        return new Residue<C>( ring, x, 1 );
     }
 
 
@@ -253,7 +260,8 @@ public class Residue<C extends RingElem<C> >
      * @return this - (this/S)*S.
      */
     public Residue<C> remainder(Residue<C> S) {
-        GenPolynomial<C> x = val.remainder( S.val );
+        //GenPolynomial<C> x = val.remainder( S.val );
+        GenPolynomial<C> x = PolyUtil.<C>basePseudoRemainder( val, S.val );
         return new Residue<C>( ring, x );
     }
 
@@ -264,7 +272,13 @@ public class Residue<C extends RingElem<C> >
      */
     public Residue<C> multiply(Residue<C> S) {
         GenPolynomial<C> x = val.multiply( S.val );
-        return new Residue<C>( ring, x );
+        int i = -1;
+        if ( isunit == 1 && S.isunit == 1 ) {
+           i = 1;
+        } else if ( isunit == 0 || S.isunit == 0 ) {
+           i = 0;
+        }
+        return new Residue<C>( ring, x, i );
     }
 
  
@@ -272,18 +286,23 @@ public class Residue<C extends RingElem<C> >
      * @return this with monic value part.
      */
     public Residue<C> monic() {
-        return new Residue<C>( ring, val.monic() );
+        return new Residue<C>( ring, val.monic(), isunit );
     }
 
 
     /**
      * Greatest common divisor.
-     * <b>Note: </b>Not implemented, throws RuntimeException.
      * @param b other element.
      * @return gcd(this,b).
      */
     public Residue<C> gcd(Residue<C> b) {
-        throw new RuntimeException("gcd not implemented " + this.getClass().getName());
+        GenPolynomial<C> x = ring.engine.gcd( val, b.val );
+        System.out.println("Residue gcd = " + x);
+        int i = -1; // gcd might become a unit
+        if ( isunit == 1 && b.isunit == 1 ) {
+           i = 1;
+        }
+        return new Residue<C>( ring, x, i );
     }
 
 

@@ -10,10 +10,15 @@ import java.io.Reader;
 import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
+import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
+
+import edu.jas.ufd.GreatestCommonDivisor;
+import edu.jas.ufd.GreatestCommonDivisorAbstract;
+import edu.jas.ufd.GCDFactory;
 
 
 /**
@@ -21,11 +26,17 @@ import edu.jas.poly.GenPolynomialRing;
  * Objects of this class are immutable.
  * @author Heinz Kredel
  */
-public class ResidueRing<C extends RingElem<C> > 
+public class ResidueRing<C extends GcdRingElem<C> > 
              implements RingFactory< Residue<C> >  {
 
     private static final Logger logger = Logger.getLogger(ResidueRing.class);
     //private boolean debug = logger.isDebugEnabled();
+
+
+    /**
+     * Greatest common divisor engine for coefficient content and primitive parts.
+     */
+    protected final GreatestCommonDivisorAbstract<C> engine;
 
 
     /** Polynomial ideal for the reduction. 
@@ -51,6 +62,10 @@ public class ResidueRing<C extends RingElem<C> >
     public ResidueRing(Ideal<C> i) {
         ideal = i.GB(); // cheap if isGB
         ring = ideal.list.ring;
+        engine = (GreatestCommonDivisorAbstract<C>)GCDFactory.getImplementation( ring.coFac );
+        System.out.println("rr engine = " + engine.getClass().getName());
+        System.out.println("rr ring   = " + ring.getClass().getName());
+        System.out.println("rr cofac  = " + ring.coFac.getClass().getName());
     }
 
 
@@ -148,7 +163,7 @@ public class ResidueRing<C extends RingElem<C> >
      * @see java.lang.Object#toString()
      */
     public String toString() {
-        return "Residue[ " 
+        return "ResidueRing[ " 
                 + ideal.toString() + " ]";
     }
 
