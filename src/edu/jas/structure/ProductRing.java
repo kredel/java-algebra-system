@@ -150,7 +150,7 @@ public class ProductRing<C extends RingElem<C> >
     /** Get the number of factors of this ring.
      * @return nCopies or ringList.size().
      */
-    public long length() {
+    public int length() {
         if ( nCopies != 0 ) {
            return nCopies;
         } else {
