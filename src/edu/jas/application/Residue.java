@@ -95,7 +95,8 @@ public class Residue<C extends GcdRingElem<C> >
      * @see edu.jas.structure.RingElem#isZERO()
      */
     public boolean isZERO() {
-        return val.equals( ring.ring.getZERO() );
+        // ??return val.equals( ring.ring.getZERO() );
+        return val.isZERO();
     }
 
 
@@ -104,7 +105,8 @@ public class Residue<C extends GcdRingElem<C> >
      * @see edu.jas.structure.RingElem#isONE()
      */
     public boolean isONE() {
-        return val.equals( ring.ring.getONE() );
+        // ?? return val.equals( ring.ring.getONE() );
+        return val.isONE();
     }
 
 
