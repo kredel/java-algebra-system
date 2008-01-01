@@ -562,7 +562,7 @@ public class PolyUtil {
                 f = ExpVector.EVDIF( f, e );
                 //logger.info("red div = " + e);
                 C x = a.remainder(c);
-                if ( false && x.isZERO() ) {
+                if ( /*false && */ x.isZERO() ) {
                    C y = a.divide(c);
                    //System.out.println("y = " + y);
                    h = S.multiply( y, f ); // coeff a
@@ -1226,6 +1226,7 @@ public class PolyUtil {
      * @param M bound on the coefficients of A1 and B1 as factors of C.
      * @return [A1,B1] = lift(C,A,B), with C = A1 * B1.
      */
+    @SuppressWarnings("unchecked") 
     public static //<C extends RingElem<C>>
         GenPolynomial<BigInteger>[] 
         liftHensel( GenPolynomial<BigInteger> C,
@@ -1234,7 +1235,7 @@ public class PolyUtil {
                     GenPolynomial<ModInteger> B, 
                     GenPolynomial<ModInteger> S,
                     GenPolynomial<ModInteger> T ) {
-        GenPolynomial<BigInteger>[] AB = new GenPolynomial[2];
+        GenPolynomial<BigInteger>[] AB = (GenPolynomial<BigInteger>[])new GenPolynomial[2];
         if ( C == null || C.isZERO() ) {
            AB[0] = C;
            AB[1] = C;
@@ -1437,6 +1438,7 @@ public class PolyUtil {
      * @param M bound on the coefficients of A1 and B1 as factors of C.
      * @return [A1,B1] = lift(C,A,B), with C = A1 * B1.
      */
+    @SuppressWarnings("unchecked") 
     public static //<C extends RingElem<C>>
         GenPolynomial<BigInteger>[] 
         liftHenselQuadratic( GenPolynomial<BigInteger> C,
@@ -1445,7 +1447,7 @@ public class PolyUtil {
                              GenPolynomial<ModInteger> B, 
                              GenPolynomial<ModInteger> S,
                              GenPolynomial<ModInteger> T ) {
-        GenPolynomial<BigInteger>[] AB = new GenPolynomial[2];
+        GenPolynomial<BigInteger>[] AB = (GenPolynomial<BigInteger>[])new GenPolynomial[2];
         if ( C == null || C.isZERO() ) {
            AB[0] = C;
            AB[1] = C;
