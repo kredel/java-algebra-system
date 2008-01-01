@@ -32,15 +32,23 @@ f = r.ideal( ps );
 print "Ideal: " + str(f);
 print;
 
-#rg = f.GB();
-#print "GB:", rg;
-#print;
 
 from edu.jas.application import PolyUtilApp;
+from edu.jas.poly import PolynomialList;
 
 pl = PolyUtilApp.productDecomposition( f.list );
 print;
 print "product decomposition:", pl;
+print;
+
+sl = PolyUtilApp.productSlice( pl );
+#print;
+#print "product slice:", sl;
+#print;
+
+ssl = PolyUtilApp.productSliceToString( sl );
+print;
+print "product slice:", ssl;
 print;
 
 #sys.exit();
@@ -49,32 +57,40 @@ startLog();
 
 from edu.jas.ring import RGroebnerBasePseudoSeq;  
 
-#print "pl.get(0)            = ", pl.get(0);
-#print "pl.get(0).ring       = ", pl.get(0).ring;
-#print "pl.get(0).ring.coFac = ", pl.get(0).ring.coFac;
-#print;
+pr = Ring( ring=pl.ring );
 
-pr = Ring( ring=pl.get(0).ring );
-
-pf = pr.ideal( list=pl );
-print "Ideal, pf: " + str(pf);
+pf = pr.ideal( list=pl.list );
+print;
+print "Ideal of product decomposition: \n" + str(pf);
 print;
 
-cofac = pl.get(0).ring.coFac;
+cofac = pl.ring.coFac;
 rgbp = RGroebnerBasePseudoSeq( cofac );
-#print "rgbp                 = ", rgbp.getClass().getName();
 
 #sys.exit();
 
-bg = rgbp.isGB(pl);
+bg = rgbp.isGB(pl.list);
 print "isGB:", bg;
 print;
 
-rg = rgbp.GB(pl);
+rg = rgbp.GB(pl.list);
 
 pg = pr.ideal( list=rg );
 print "Ideal, GB: " + str(pg);
 print;
+
+rgl = PolynomialList(pl.ring,rg);
+
+sl = PolyUtilApp.productSlice( rgl );
+#print;
+#print "product slice:", sl;
+#print;
+
+ssl = PolyUtilApp.productSliceToString( sl );
+print;
+print "product slice:", ssl;
+print;
+
 
 bg = rgbp.isGB(rg);
 print "isGB:", bg;
