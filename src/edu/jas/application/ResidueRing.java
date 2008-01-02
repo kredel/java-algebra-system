@@ -47,7 +47,7 @@ public class ResidueRing<C extends GcdRingElem<C> >
     /** Polynomial ring of the factory. 
      * Shortcut to ideal.list.ring. 
      */
-    protected final GenPolynomialRing<C> ring;
+    public final GenPolynomialRing<C> ring;
 
 
     /** Indicator if this ring is a field.
@@ -63,9 +63,9 @@ public class ResidueRing<C extends GcdRingElem<C> >
         ideal = i.GB(); // cheap if isGB
         ring = ideal.list.ring;
         engine = (GreatestCommonDivisorAbstract<C>)GCDFactory.getImplementation( ring.coFac );
-        System.out.println("rr engine = " + engine.getClass().getName());
-        System.out.println("rr ring   = " + ring.getClass().getName());
-        System.out.println("rr cofac  = " + ring.coFac.getClass().getName());
+        //System.out.println("rr engine = " + engine.getClass().getName());
+        //System.out.println("rr ring   = " + ring.getClass().getName());
+        //System.out.println("rr cofac  = " + ring.coFac.getClass().getName());
     }
 
 
@@ -74,7 +74,11 @@ public class ResidueRing<C extends GcdRingElem<C> >
      * @return a copy of c.
      */
     public Residue<C> copy(Residue<C> c) {
-        return new Residue<C>( c.ring, c.val );
+        //System.out.println("rr copy in    = " + c.val);
+        Residue<C> r = new Residue<C>( this, c.val );
+        //System.out.println("rr copy out   = " + r.val);
+        //System.out.println("rr copy ideal = " + ideal.list.list);
+        return r; //new Residue<C>( c.ring, c.val );
     }
 
 
