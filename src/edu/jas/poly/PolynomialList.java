@@ -4,6 +4,9 @@
 
 package edu.jas.poly;
 
+
+import java.lang.Comparable;
+
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
@@ -31,7 +34,8 @@ import edu.jas.vector.ModuleList;
  * @author Heinz Kredel
  */
 
-public class PolynomialList<C extends RingElem<C> > implements Serializable {
+public class PolynomialList<C extends RingElem<C> > 
+       implements Comparable<PolynomialList<C>>, Serializable {
 
 
     /** The factory for the solvable polynomial ring. 
@@ -73,8 +77,8 @@ public class PolynomialList<C extends RingElem<C> > implements Serializable {
     /** Comparison with any other object.
      * @see java.lang.Object#equals(java.lang.Object)
      */
-    @Override
-    @SuppressWarnings("unchecked") // not jet working
+    @Override 
+    @SuppressWarnings("unchecked")
     public boolean equals(Object p) {
         if ( ! (p instanceof PolynomialList) ) {
             System.out.println("no PolynomialList");
@@ -92,33 +96,39 @@ public class PolynomialList<C extends RingElem<C> > implements Serializable {
             System.out.println("not same Ring");
             return false;
         }
-        if ( list == pl.list ) {
-            return true;
+        return ( compareTo(pl) == 0 );
+        // otherwise tables may be different
+    }
+
+
+    /** Polynomial list comparison.  
+     * @param L other PolynomialList.
+     * @return lexicographical comparison, sign of first different polynomials.
+     */
+    @Override
+    public int compareTo(PolynomialList<C> L) {
+        int si = L.list.size();
+        if ( list.size() < si ) { // minimum
+            si = list.size();
         }
-        if ( list == null && pl.list != null ) {
-            return false;
-        }
-        if ( list != null && pl.list == null ) {
-            return false;
-        }
-        if ( list.size() != pl.list.size() ) {
-            return false;
-        }
-        // compare sorted lists
+        int s = 0;
         List<GenPolynomial<C>> l1 = OrderedPolynomialList.<C>sort( ring, list );
-        List<GenPolynomial<C>> l2 = OrderedPolynomialList.<C>sort( ring, pl.list );
-        for ( int i = 0; i < list.size(); i++ ) {
+        List<GenPolynomial<C>> l2 = OrderedPolynomialList.<C>sort( ring, L.list );
+        for ( int i = 0; i < si; i++ ) {
             GenPolynomial<C> a = l1.get(i);
             GenPolynomial<C> b = l2.get(i);
-            if ( ! a.equals( b ) ) {
-               logger.info("PolynomialList not equals");
-               logger.info("a = " + a);
-               logger.info("b = " + b);
-               return false;
+            s = a.compareTo(b);
+            if ( s != 0 ) {
+               return s;
             }
         }
-        // otherwise tables may be different
-        return true;
+        if ( list.size() > si ) { 
+            return 1;
+        }
+        if ( L.list.size() > si ) { 
+            return -1;
+        }
+        return s;
     }
 
 
@@ -138,6 +148,7 @@ public class PolynomialList<C extends RingElem<C> > implements Serializable {
      * String representation of the polynomial list.
      * @see java.lang.Object#toString()
      */
+    @Override
     public String toString() {
         StringBuffer erg = new StringBuffer();
         String[] vars = null;
@@ -176,6 +187,7 @@ public class PolynomialList<C extends RingElem<C> > implements Serializable {
      * @param i number of variables to be contract form the polynomials.
      * @return module list corresponding to this.
      */
+    @SuppressWarnings("unchecked")
     public ModuleList<C> getModuleList(int i) {
         GenPolynomialRing< C > pfac = ring.contract(i);
         logger.debug("contracted ring = " + pfac);
