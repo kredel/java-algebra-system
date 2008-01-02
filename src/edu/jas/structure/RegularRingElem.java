@@ -15,6 +15,13 @@ public interface RegularRingElem<C extends RegularRingElem<C>>
                  extends GcdRingElem<C> {
 
 
+    /* Get component. Not possible.
+     * @param i index of component.
+     * @return val(i).
+    public C get(int i);
+     */
+
+
     /** Is Product full. 
      * @return If every component occurs, then true is returned, else false.
      * @see edu.jas.structure.RingElem#isONE()
