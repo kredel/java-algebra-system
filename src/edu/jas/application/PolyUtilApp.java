@@ -476,7 +476,7 @@ public class PolyUtilApp<C extends RingElem<C> > {
             lfac = new ArrayList<RingFactory<Residue<BigRational>>>();
         for ( List<GenPolynomial<BigRational>> pr: list ) {
             //System.out.println("\npr    = " + pr);
-            if ( pr.size() > 2 ) {
+            if ( pr.size() > 1 ) {
                 continue; // i.e. only simple decomposition
             }
             pr = bb.GB( pr );
@@ -731,6 +731,7 @@ public class PolyUtilApp<C extends RingElem<C> > {
      * @param i index of slice.
      * @return Slice of of L at i.
      */
+    @SuppressWarnings("unchecked") 
     public static <C extends RegularRingElem<C>>
         PolynomialList<C>
         productSliceRaw( PolynomialList<C> L, int i ) {
@@ -834,6 +835,7 @@ public class PolyUtilApp<C extends RingElem<C> > {
      * @param L list of already represented polynomials.
      * @return Product representaion of L togehher with P in the polynomial ring pfac.
      */
+    @SuppressWarnings("unchecked") 
     public static <C extends RegularRingElem<C>>
         PolynomialList<C>
         productDecomposition( PolynomialList<C> L,
@@ -911,24 +913,65 @@ public class PolyUtilApp<C extends RingElem<C> > {
             = new ArrayList<GenPolynomial<Product<Residue<BigRational>>>>( Lp.list );
         Npp.add( Pp );
         List<GenPolynomial<Product<Residue<BigRational>>>> Mpp 
-            = new ArrayList<GenPolynomial<Product<Residue<BigRational>>>>( Npp.size() );
-        for ( GenPolynomial<Product<Residue<BigRational>>> b : Npp ) {
-            //System.out.println("b      = " + b);
-            GenPolynomial<Product<Residue<BigRational>>> n = pring.getZERO();
-            for ( Map.Entry<ExpVector,Product<Residue<BigRational>>> m: b.getMap().entrySet() ) {
-                ExpVector e = m.getKey();
-                Product<Residue<BigRational>> c = m.getValue();
-                Product<Residue<BigRational>> d = c.extend(pr);
-                n = n.sum( d, e );
-            }
-            //System.out.println("n      = " + n);
-            if ( ! n.isZERO() ) {
-               Mpp.add( n );
-            }
-        }
+            = PolyUtilApp.<Residue<BigRational>>productCoefficientExtension(Npp,0,pr.length()-1); 
         PolynomialList<C> M 
           = (PolynomialList)new PolynomialList<Product<Residue<BigRational>>>(pring,Mpp);
         return M;
     }
+
+
+    /**
+     * Polynomial product coefficient extension.
+     * @param A polynomial to be extended.
+     * @param i from index.
+     * @param j to index.
+     * @return Product coefficient extension P.
+     */
+    public static <C extends RingElem<C>>
+        GenPolynomial<Product<C>>
+        productCoefficientExtension( GenPolynomial<Product<C>> A, 
+                                     int i, int j) {
+        if ( A == null || A.isZERO() ) {
+           return A;
+        }
+        GenPolynomial<Product<C>> B = A.ring.getZERO();
+        for ( Map.Entry<ExpVector,Product<C>> m: A.getMap().entrySet() ) {
+            ExpVector e = m.getKey();
+            Product<C> c = m.getValue();
+            Product<C> d = c.extend(i,j);
+            B = B.sum( d, e );
+        }
+        return B;
+    }
+
+
+    /**
+     * List of polynomials product coefficient extension.
+     * @param L list of polynomials to be extended.
+     * @param i from index.
+     * @param j to index.
+     * @return Product coefficient extension of the elements of L.
+     */
+    public static <C extends RingElem<C>>
+        List<GenPolynomial<Product<C>>>
+        productCoefficientExtension( List<GenPolynomial<Product<C>>> L, 
+                                     int i, int j) {
+        if ( L == null || L.size() == 0 ) {
+           return L;
+        }
+        List<GenPolynomial<Product<C>>> M 
+            = new ArrayList<GenPolynomial<Product<C>>>( L.size() );
+        for ( GenPolynomial<Product<C>> a : L ) {
+            //System.out.println("a      = " + a);
+            GenPolynomial<Product<C>> b 
+                = PolyUtilApp.<C>productCoefficientExtension(a,i,j);
+            //System.out.println("b      = " + b);
+            if ( ! b.isZERO() ) {
+               M.add( b );
+            }
+        }
+        return M;
+    }
+
 
 }
