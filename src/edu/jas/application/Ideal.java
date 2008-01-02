@@ -4,6 +4,8 @@
 
 package edu.jas.application;
 
+import java.lang.Comparable;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +33,8 @@ import edu.jas.ring.ReductionSeq;
  * Ideal implements some methods for ideal arithmetic, e.g. intersection and quotient.
  * @author Heinz Kredel
  */
-public class Ideal<C extends RingElem<C>> implements Serializable {
+public class Ideal<C extends RingElem<C>> 
+    implements Comparable<Ideal<C>>, Serializable {
 
 
   private static final Logger logger = Logger.getLogger(Ideal.class);
@@ -175,7 +178,7 @@ public class Ideal<C extends RingElem<C>> implements Serializable {
    * @see java.lang.Object#equals(java.lang.Object)
    */
   @Override
-  @SuppressWarnings("unchecked") // not jet working
+  @SuppressWarnings("unchecked") 
   public boolean equals(Object b) {
       if ( ! (b instanceof Ideal) ) {
          logger.warn("equals no Ideal");
@@ -192,6 +195,16 @@ public class Ideal<C extends RingElem<C>> implements Serializable {
       return this.contains( B ) && B.contains( this );
       //}
   }
+
+
+    /** Ideal list comparison.  
+     * @param L other Ideal.
+     * @return compareTo() of polynomial lists.
+     */
+    @Override
+    public int compareTo(Ideal<C> L) {
+        return list.compareTo( L.list );
+    }
 
 
    /** Hash code for this ideal.
