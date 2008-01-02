@@ -132,6 +132,14 @@ public class Residue<C extends GcdRingElem<C> >
     }
 
 
+    /** Is Residue a constant. 
+     * @return If this.val is a constant polynomial then true is returned, else false.
+     */
+    public boolean isConstant() {
+        return val.isConstant();
+    }
+
+
     /** Get the String representation as RingElem.
      * @see java.lang.Object#toString()
      */
