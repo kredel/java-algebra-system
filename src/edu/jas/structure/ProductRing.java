@@ -21,7 +21,7 @@ import edu.jas.structure.RingFactory;
 
 /**
  * Direct product ring factory based on RingElem and RingFactory module.
- * Objects of this class are immutable.
+ * Objects of this class are <b>mutable</b>.
  * @author Heinz Kredel
  */
 public class ProductRing<C extends RingElem<C> > 
