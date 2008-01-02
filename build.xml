@@ -104,7 +104,7 @@
          classpath="${cp}"
          listfiles="true"
   >
-  <compilerarg value="-Xlint:{unchecked}" />
+  <compilerarg value="-Xlint:unchecked" />
   </javac>
 <!--     listfiles="true"
 -->
