@@ -248,6 +248,23 @@ public class Product<C extends RingElem<C> >
     }
 
 
+    /** Product extend.
+     * @param pr extended product factory.
+     * @return the extended value of this.
+     */
+    public Product<C> extend( ProductRing<C> pr ) {
+        // ring == pr already
+        RingFactory<C> rf = pr.getFactory( pr.length()-1 );
+        SortedMap<Integer,C> elem = new TreeMap<Integer,C>( val );
+        C v = val.get(0);
+        C w = rf.copy( v );
+        if ( ! w.isZERO() ) {
+           elem.put( pr.length()-1 , w );
+        }
+        return new Product<C>( pr, elem );
+    }
+
+
     /** Product absolute value.
      * @return the absolute value of this.
      * @see edu.jas.structure.RingElem#abs()

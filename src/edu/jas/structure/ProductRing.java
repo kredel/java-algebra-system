@@ -33,7 +33,7 @@ public class ProductRing<C extends RingElem<C> >
 
     /** Ring factory is n copies. 
      */
-    protected final int nCopies;
+    protected int nCopies;
 
 
     /** One Ring factory. 
@@ -87,6 +87,37 @@ public class ProductRing<C extends RingElem<C> >
            throw new RuntimeException("index out of bound " + this.getClass().getName());
         } else {
            return ringList.get(i);
+        }
+    }
+
+
+    /** Add a ring factory.
+     * @param rf new ring factory.
+     */
+    public synchronized void addFactory(RingFactory<C> rf) {
+        if ( nCopies != 0 ) {
+           if ( ring.equals(rf) ) {
+              nCopies++;
+           }
+           throw new RuntimeException("wrong RingFactory: " + rf);
+        } else {
+           ringList.add(rf);
+        }
+    }
+
+
+    /** Contains a ring factory.
+     * @param rf ring factory.
+     * @return true, if rf is contained in this, else false.
+     */
+    public boolean containsFactory(RingFactory<C> rf) {
+        if ( nCopies != 0 ) {
+           if ( ring.equals(rf) ) {
+              return true;
+           }
+           return false; // misleading
+        } else {
+           return ringList.contains(rf);
         }
     }
 
