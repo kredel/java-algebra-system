@@ -249,19 +249,19 @@ public class Product<C extends RingElem<C> >
 
 
     /** Product extend.
-     * @param pr extended product factory.
+     * @param i from index.
+     * @param j to index.
      * @return the extended value of this.
      */
-    public Product<C> extend( ProductRing<C> pr ) {
-        // ring == pr already
-        RingFactory<C> rf = pr.getFactory( pr.length()-1 );
+    public Product<C> extend( int i, int j ) {
+        RingFactory<C> rf = ring.getFactory( j );
         SortedMap<Integer,C> elem = new TreeMap<Integer,C>( val );
-        C v = val.get(0);
+        C v = val.get( i );
         C w = rf.copy( v );
         if ( ! w.isZERO() ) {
-           elem.put( pr.length()-1 , w );
+           elem.put( j , w );
         }
-        return new Product<C>( pr, elem );
+        return new Product<C>( ring, elem );
     }
 
 
