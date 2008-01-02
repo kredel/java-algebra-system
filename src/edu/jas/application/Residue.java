@@ -307,8 +307,12 @@ public class Residue<C extends GcdRingElem<C> >
      */
     public Residue<C> gcd(Residue<C> b) {
         GenPolynomial<C> x = ring.engine.gcd( val, b.val );
-        System.out.println("Residue gcd = " + x);
         int i = -1; // gcd might become a unit
+        if ( x.isONE() ) {
+            i = 1;
+        } else {
+           System.out.println("Residue gcd = " + x);
+        }
         if ( isunit == 1 && b.isunit == 1 ) {
            i = 1;
         }
