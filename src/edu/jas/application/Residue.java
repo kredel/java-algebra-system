@@ -19,7 +19,7 @@ import edu.jas.structure.GcdRingElem;
  * @author Heinz Kredel
  */
 public class Residue<C extends GcdRingElem<C> > 
-             implements RingElem< Residue<C> > {
+             implements GcdRingElem< Residue<C> > {
 
 
     /** Residue class factory data structure. 
@@ -169,8 +169,8 @@ public class Residue<C extends GcdRingElem<C> >
     /** Comparison with any other object.
      * @see java.lang.Object#equals(java.lang.Object)
      */
-    @SuppressWarnings("unchecked") // not jet working
     @Override
+    @SuppressWarnings("unchecked") 
     public boolean equals(Object b) {
         if ( ! ( b instanceof Residue ) ) {
            return false;
