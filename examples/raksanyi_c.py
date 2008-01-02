@@ -36,7 +36,7 @@ print;
 from edu.jas.application import PolyUtilApp;
 from edu.jas.poly import PolynomialList;
 
-pl = PolyUtilApp.productDecomposition( f.list );
+pl = PolyUtilApp.productEmptyDecomposition( f.list );
 print;
 print "product decomposition:", pl;
 print;
@@ -55,7 +55,7 @@ print;
 
 startLog();
 
-from edu.jas.ring import RGroebnerBasePseudoSeq;  
+from edu.jas.ring import RCGroebnerBasePseudoSeq;  
 
 pr = Ring( ring=pl.ring );
 
@@ -65,7 +65,7 @@ print "Ideal of product decomposition: \n" + str(pf);
 print;
 
 cofac = pl.ring.coFac;
-rgbp = RGroebnerBasePseudoSeq( cofac );
+rgbp = RCGroebnerBasePseudoSeq( cofac );
 
 #sys.exit();
 
