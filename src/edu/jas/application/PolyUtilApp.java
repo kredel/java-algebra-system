@@ -450,6 +450,9 @@ public class PolyUtilApp<C extends RingElem<C> > {
                rfac = A.ring;
                fac = (GenPolynomialRing<BigRational>)rfac.coFac;
             }
+            if ( true ) {
+               break;
+            }
             for ( GenPolynomial<BigRational> a : A.getMap().values() ) {
                 // a != 0
                 if ( !a.isConstant() ) {
@@ -492,7 +495,7 @@ public class PolyUtilApp<C extends RingElem<C> > {
         //System.out.println("nr   = " + nr);
 
         GenPolynomialRing<Product<Residue<BigRational>>> pfac
-        = new GenPolynomialRing<Product<Residue<BigRational>>>(nr,rfac.nvar,rfac.tord,rfac.getVars());
+           = new GenPolynomialRing<Product<Residue<BigRational>>>(nr,rfac);
 
         plist = toProductRes( pfac, L );
         System.out.println("\nplist ====================== ");
@@ -710,6 +713,110 @@ public class PolyUtilApp<C extends RingElem<C> > {
         }
         sb.append("\nproductSlice ------------------------- end");
         return sb.toString();
+    }
+
+
+    /**
+     * Product cover decomposition.
+     * @param P polynomial to be represented.
+     * @param L list of already represented polynomials.
+     * @return Product representaion of L togehher with P in the polynomial ring pfac.
+     */
+    public static <C extends RegularRingElem<C>>
+        PolynomialList<C>
+        productDecomposition( PolynomialList<C> L,
+                              GenPolynomial<C> P ) {
+        if ( P == null || P.isZERO() ) {
+           return L;
+        }
+        // this is a hack for the moment
+        PolynomialList<Product<Residue<BigRational>>> Lp = null;
+        GenPolynomial<Product<Residue<BigRational>>> Pp = null;
+        ProductRing<Residue<BigRational>> pr = null;
+        GenPolynomialRing<BigRational> rfac = null;
+        GenPolynomialRing<C> fac = L.ring;
+        if ( fac.coFac instanceof ProductRing ) {
+            ProductRing pp = (ProductRing) fac.coFac;
+            if ( pp.getFactory(0) instanceof ResidueRing ) {
+                ResidueRing rr = (ResidueRing)pp.getFactory(0); 
+                if ( rr.ring.coFac instanceof BigRational ) {
+                    Lp = (PolynomialList/*<Product<Residue<BigRational>>>*/)L; 
+                    Pp = (GenPolynomial/*<Product<Residue<BigRational>>>*/)P;
+                    pr = pp;
+                    rfac = rr.ring;
+                }
+            }
+        }
+        if ( Lp == null || Pp == null ) {
+            throw new RuntimeException("ring not correct");
+        }
+        boolean changed = false;
+        GroebnerBase<BigRational> bb = new GroebnerBaseSeq<BigRational>(); 
+        for ( Product<Residue<BigRational>> a : Pp.getMap().values() ) {
+            // a != 0
+            if ( a.get(0) == null || a.get(0).isZERO() ) {
+               continue;
+            }
+            if ( a.get(0).isConstant() || changed ) {
+               break;
+            } else {
+               System.out.println("decomp a = " + a);
+               GenPolynomial<BigRational> A = a.get(0).val;
+               for ( int i = 0; i < pr.length() /*&& (!changed)*/; i++ ) {
+                   RingFactory<Residue<BigRational>> rrr = pr.getFactory(i); 
+                   ResidueRing<BigRational> rr = (ResidueRing<BigRational>)rrr; 
+                   Ideal<BigRational> id = rr.ideal;
+                   List<GenPolynomial<BigRational>> fl = id.list.list;
+                   if ( !id.contains(A) ) {
+                      List<GenPolynomial<BigRational>> nl 
+                          = new ArrayList<GenPolynomial<BigRational>>( fl );
+                      nl.add(A);
+                      nl = bb.GB(nl);
+                      //System.out.println("decomp nl = " + nl);
+                      Ideal<BigRational> I = new Ideal<BigRational>(rfac, nl, true);
+                      //System.out.println("ideal = " + I);
+                      ResidueRing<BigRational> rrn = new ResidueRing<BigRational>( I );
+                      System.out.println("rrn    = " + rrn);
+                      //System.out.println("pr     = " + pr);
+                      if ( ! pr.containsFactory( rrn ) ) {
+                         pr.addFactory( rrn );
+                         System.out.println("pr     = " + pr);
+                         changed = true;
+                         break;
+                      }
+                   }
+               }
+            }
+        }
+        if ( ! changed ) {
+           List<GenPolynomial<C>> ll = new ArrayList<GenPolynomial<C>>( L.list );
+           ll.add( P );
+           PolynomialList<C> M = new PolynomialList<C>(L.ring,ll);
+           return M;
+        }
+        GenPolynomialRing<Product<Residue<BigRational>>> pring = Lp.ring;
+        List<GenPolynomial<Product<Residue<BigRational>>>> Npp 
+            = new ArrayList<GenPolynomial<Product<Residue<BigRational>>>>( Lp.list );
+        Npp.add( Pp );
+        List<GenPolynomial<Product<Residue<BigRational>>>> Mpp 
+            = new ArrayList<GenPolynomial<Product<Residue<BigRational>>>>( Npp.size() );
+        for ( GenPolynomial<Product<Residue<BigRational>>> b : Npp ) {
+            System.out.println("b      = " + b);
+            GenPolynomial<Product<Residue<BigRational>>> n = pring.getZERO();
+            for ( Map.Entry<ExpVector,Product<Residue<BigRational>>> m: b.getMap().entrySet() ) {
+                ExpVector e = m.getKey();
+                Product<Residue<BigRational>> c = m.getValue();
+                Product<Residue<BigRational>> d = c.extend(pr);
+                n = n.sum( d, e );
+            }
+            System.out.println("n      = " + n);
+            if ( ! n.isZERO() ) {
+               Mpp.add( n );
+            }
+        }
+        PolynomialList<C> M 
+          = (PolynomialList)new PolynomialList<Product<Residue<BigRational>>>(pring,Mpp);
+        return M;
     }
 
 }
