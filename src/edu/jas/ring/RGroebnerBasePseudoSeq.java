@@ -20,8 +20,12 @@ import edu.jas.structure.RegularRingElem;
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.GenPolynomialRing;
+import edu.jas.poly.PolynomialList;
 
 import edu.jas.ring.OrderedRPairlist;
+
+import edu.jas.application.PolyUtilApp;
 
 import edu.jas.ufd.GreatestCommonDivisor;
 import edu.jas.ufd.GreatestCommonDivisorAbstract;
@@ -101,6 +105,7 @@ public class RGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
         /* normalize input */
         List<GenPolynomial<C>> G = new ArrayList<GenPolynomial<C>>();
         OrderedRPairlist<C> pairlist = null; 
+        GenPolynomialRing<C> pring = null;
         for ( GenPolynomial<C> p : F ) { 
             if ( !p.isZERO() ) {
                p = engine.basePrimitivePart(p); // not monic, no field
@@ -108,6 +113,9 @@ public class RGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
                if ( p.isConstant() && p.leadingBaseCoefficient().isFull() ) { 
                   G.clear(); G.add( p );
                   return G; // since boolean closed and no threads are activated
+               }
+               if ( pring == null ) {
+                  pring = p.ring;
                }
                G.add( p ); //G.add( 0, p ); //reverse list
                if ( pairlist == null ) {
@@ -133,11 +141,11 @@ public class RGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
               //System.out.println("pair = " + pair);
               if ( pair == null ) continue; 
 
-              pi = pair.pi; 
-              pj = pair.pj; 
+              pi = G.get( pair.i ); 
+              pj = G.get( pair.j ); 
               if ( logger.isDebugEnabled() ) {
-                 logger.debug("pi    = " + pi );
-                 logger.debug("pj    = " + pj );
+                 logger.info("pi    = " + pi );
+                 logger.info("pj    = " + pj );
               }
               // S-polynomial -----------------------
               if ( true ) {
@@ -181,7 +189,11 @@ public class RGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
                           h = engine.basePrimitivePart(h); 
                           h = h.abs(); // monic() not ok, since no field
                           logger.info("bc(Sred) = " + h);
-                          G.add( h );
+                          PolynomialList<C> PL = new PolynomialList<C>(pring,G);
+                          PL = PolyUtilApp.<C>productDecomposition( PL, h );
+                          //G.add( h );
+                          G = PL.list;
+                          h = G.get( G.size()-1 );
                           pairlist.put( h );
                       }
                       if ( debug ) {
