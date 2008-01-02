@@ -298,6 +298,36 @@ public class Ideal<C extends RingElem<C>> implements Serializable {
 
 
   /**
+   * Ideal containment. Test if b is contained in this ideal.
+   * Note: this is eventually modified to become a Groebner Base.
+   * @param b polynomial
+   * @return true, if b is contained in this, else false
+   */
+  public boolean contains( GenPolynomial<C> b ) {
+      if ( b == null || b.isZERO() ) {
+          return true;
+      }
+      if ( this.isONE() ) {
+          return true;
+      }
+      if ( !isGB ) {
+         logger.warn("contains computing GB");
+         List< GenPolynomial<C> > c = getList();
+         c = bb.GB( c );
+         list = new PolynomialList<C>( getRing(), c );
+         isGB = true;
+         testGB = true;
+      }
+      GenPolynomial<C> z;
+      z = red.normalform( getList(), b );
+      if ( z == null || z.isZERO() ) {
+          return true;
+      }
+      return false;
+  }
+
+
+  /**
    * Summation. Generators for the sum of ideals.
    * Note: if both ideals are Groebner bases, a Groebner base is returned.
    * @param B ideal
