@@ -142,8 +142,8 @@ public class RCGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
               //System.out.println("pair = " + pair);
               if ( pair == null ) continue; 
 
-              pi = G.get( pair.i ); 
-              pj = G.get( pair.j ); 
+              pi = G.get( pair.i ); // pair.pi not up-to-date
+              pj = G.get( pair.j ); // pair.pj not up-to-date
               if ( logger.isDebugEnabled() ) {
                  logger.info("pi    = " + pi );
                  logger.info("pj    = " + pj );
@@ -181,34 +181,42 @@ public class RCGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
                       logger.debug("H = " + H );
                   }
                   if ( !H.isZERO() ) {
-                      //logger.info("Sred = " + H);
-                      //len = G.size();
-                      bcH = red.reducedBooleanClosure(G,H);
-                      //logger.info("#bcH = " + bcH.size());
-                      //G.addAll( bcH );
-                      for ( GenPolynomial<C> h: bcH ) {
-                          h = engine.basePrimitivePart(h); 
-                          h = h.abs(); // monic() not ok, since no field
-                          logger.info("bc(Sred) = " + h);
-                          PL = new PolynomialList<C>(pring,G);
-                          PL = PolyUtilApp.<C>productDecomposition( PL, h );
-                          //G.add( h );
-                          G = PL.list;
-                          h = G.get( G.size()-1 );
-                          pairlist.put( h );
-                      }
-                      if ( debug ) {
-                         if ( !pair.getUseCriterion3() || !pair.getUseCriterion4() ) {
-                            logger.info("H != 0 but: " + pair);
+                     logger.info("Sred = " + H);
+                     int g1 = G.size();
+                     PL = new PolynomialList<C>(pring,G);
+                     PL = PolyUtilApp.<C>productDecomposition( PL, H );
+                     //G.add( H );
+                     G = PL.list; // overwite G, pairlist not up-to-date
+                     int g2 = G.size();
+                     for ( int i = g1; i < g2; i++ ) {
+                         //GenPolynomial<C> hh = G.get( i ); // since hh stays != 0
+                         GenPolynomial<C> hh = G.remove( g1 ); // since hh stays != 0
+                         logger.info("extend(Sred)_"+i+" = " + hh);
+                         bcH = red.reducedBooleanClosure(G,hh);
+                         //logger.info("#bcH = " + bcH.size());
+                         //G.addAll( bcH );
+                         for ( GenPolynomial<C> h: bcH ) {
+                             h = engine.basePrimitivePart(h); 
+                             h = h.abs(); // monic() not ok, since no field
+                             logger.info("bc(extend(Sred)) = " + h);
+                             G.add( h );
+                             pairlist.put( h );
                          }
-                      }
+                     }
+                     if ( debug ) {
+                        if ( !pair.getUseCriterion3() || !pair.getUseCriterion4() ) {
+                           logger.info("H != 0 but: " + pair);
+                        }
+                     }
                   }
               }
         }
         logger.debug("#sequential list = " + G.size());
+        System.out.println("\nisGB = " + isGB(G));
 
         PL = new PolynomialList<C>(pring,G);
-        System.out.println("GB.slice(0) = " + PolyUtilApp.productSliceRaw(PL,0));
+        System.out.println("\nGB = " + PL);
+        System.out.println("\nGB.slice(0) = " + PolyUtilApp.productSliceRaw(PL,0));
 
         G = minimalGB(G);
 
