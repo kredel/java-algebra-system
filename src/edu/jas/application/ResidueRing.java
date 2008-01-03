@@ -75,6 +75,9 @@ public class ResidueRing<C extends GcdRingElem<C> >
      */
     public Residue<C> copy(Residue<C> c) {
         //System.out.println("rr copy in    = " + c.val);
+        if ( c == null ) { // where does this happen?
+           return getZERO(); // or null?
+        } 
         Residue<C> r = new Residue<C>( this, c.val );
         //System.out.println("rr copy out   = " + r.val);
         //System.out.println("rr copy ideal = " + ideal.list.list);
@@ -176,7 +179,7 @@ public class ResidueRing<C extends GcdRingElem<C> >
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
-    @SuppressWarnings("unchecked") // not jet working
+    @SuppressWarnings("unchecked") 
     public boolean equals(Object b) {
         if ( ! ( b instanceof ResidueRing ) ) {
            return false;
