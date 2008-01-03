@@ -73,6 +73,9 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>>
            return true;
         }
         if ( ! red.isBooleanClosed(F) ) {
+           if ( true || debug ) {
+              System.out.println("not boolean closed");
+           }
            return false;
         }
         GenPolynomial<C> pi, pj, s, h, d;
