@@ -80,8 +80,8 @@ public class RGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
         }
         cofac = rf;
         engine = (GreatestCommonDivisorAbstract<C>)GCDFactory.getImplementation( rf );
-        System.out.println("engine = " + engine.getClass().getName());
-        System.out.println("cofac  = " + cofac.getClass().getName());
+        //System.out.println("engine = " + engine.getClass().getName());
+        //System.out.println("cofac  = " + cofac.getClass().getName());
     }
 
 
