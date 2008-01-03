@@ -63,13 +63,13 @@ public class Ideal<C extends RingElem<C>>
   /** 
    * Groebner base engine. 
    */
-  protected GroebnerBase<C> bb;
+  protected final GroebnerBase<C> bb;
 
 
   /**
    * Reduction engine.
    */
-  protected Reduction<C> red;
+  protected final Reduction<C> red;
 
 
   /**
@@ -258,6 +258,23 @@ public class Ideal<C extends RingElem<C>>
 
 
   /**
+   * Do Groebner Base. compute the Groebner Base for this ideal.
+   */
+  public void doGB() {
+      if ( isGB ) {
+          return;
+      }
+      logger.warn("GB computing");
+      List< GenPolynomial<C> > G = getList();
+      G = bb.GB( G );
+      list = new PolynomialList<C>( getRing(), G );
+      isGB = true;
+      testGB = true;
+      return;
+  }
+
+
+  /**
    * Groebner Base. Get a Groebner Base for this ideal.
    * @return GB(this)
    */
@@ -265,10 +282,8 @@ public class Ideal<C extends RingElem<C>>
       if ( isGB ) {
           return this;
       }
-      logger.warn("GB computing");
-      List< GenPolynomial<C> > c = getList();
-      c = bb.GB( c );
-      return new Ideal<C>( getRing(), c, true );
+      doGB();
+      return this;
   }
 
 
@@ -286,12 +301,7 @@ public class Ideal<C extends RingElem<C>>
           return true;
       }
       if ( !isGB ) {
-         logger.warn("contains computing GB");
-         List< GenPolynomial<C> > c = getList();
-         c = bb.GB( c );
-         list = new PolynomialList<C>( getRing(), c );
-         isGB = true;
-         testGB = true;
+         doGB();
       }
       List< GenPolynomial<C> > z;
       z = red.normalform( getList(), B.getList() );
@@ -324,12 +334,7 @@ public class Ideal<C extends RingElem<C>>
           return true;
       }
       if ( !isGB ) {
-         logger.warn("contains computing GB");
-         List< GenPolynomial<C> > c = getList();
-         c = bb.GB( c );
-         list = new PolynomialList<C>( getRing(), c );
-         isGB = true;
-         testGB = true;
+         doGB();
       }
       GenPolynomial<C> z;
       z = red.normalform( getList(), b );
@@ -358,13 +363,11 @@ public class Ideal<C extends RingElem<C>>
       c = new ArrayList<GenPolynomial<C>>( s );
       c.addAll( getList() );
       c.addAll( B.getList() );
+      Ideal<C> I = new Ideal<C>( getRing(), c, false );
       if ( isGB && B.isGB ) {
-         logger.warn("sum computing GB");
-         c = bb.GB( c );
-         return new Ideal<C>( getRing(), c, true );
-      } else {
-         return new Ideal<C>( getRing(), c, false );
+         I.doGB();
       }
+      return I;
   }
 
 
@@ -390,13 +393,11 @@ public class Ideal<C extends RingElem<C>>
               c.add(q);
           }
       }
+      Ideal<C> I = new Ideal<C>( getRing(), c, false );
       if ( isGB && B.isGB ) {
-         logger.warn("product computing GB");
-         c = bb.GB( c );
-         return new Ideal<C>( getRing(), c, true );
-      } else {
-         return new Ideal<C>( getRing(), c, false );
+         I.doGB();
       }
+      return I;
   }
 
 
