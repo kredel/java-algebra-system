@@ -80,8 +80,8 @@ public class RCGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
         }
         cofac = rf;
         engine = (GreatestCommonDivisorAbstract<C>)GCDFactory.getImplementation( rf );
-        System.out.println("engine = " + engine.getClass().getName());
-        System.out.println("cofac  = " + cofac.getClass().getName());
+        //System.out.println("engine = " + engine.getClass().getName());
+        //System.out.println("cofac  = " + cofac.getClass().getName());
     }
 
 
@@ -108,7 +108,9 @@ public class RCGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
         GenPolynomialRing<C> pring = null;
         for ( GenPolynomial<C> p : F ) { 
             if ( !p.isZERO() ) {
-               p = engine.basePrimitivePart(p); // not monic, no field
+               if ( !p.isConstant() ) { // do not remove all factors
+                  p = engine.basePrimitivePart(p); // not monic, no field
+               }
                p = p.abs();
                if ( p.isConstant() && p.leadingBaseCoefficient().isFull() ) { 
                   G.clear(); G.add( p );
@@ -170,7 +172,9 @@ public class RCGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
                   if ( logger.isDebugEnabled() ) {
                       logger.debug("ht(H) = " + H.leadingExpVector() );
                   }
-                  H = engine.basePrimitivePart(H); 
+                  if ( !H.isConstant() ) { // do not remove all factors
+                     H = engine.basePrimitivePart(H); 
+                  }
                   H = H.abs(); // not monic, no field
                   if ( H.isConstant() && H.leadingBaseCoefficient().isFull() ) { 
                      // mostly useless
@@ -187,8 +191,8 @@ public class RCGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
                      PL = PolyUtilApp.<C>productDecomposition( PL, H );
                      //G.add( H );
                      G = PL.list; // overwite G, pairlist not up-to-date
-                     int g2 = G.size();
-                     for ( int i = g1; i < g2; i++ ) {
+                     int g2 = G.size(); 
+                     for ( int i = g1; i < g2; i++ ) { // g2-g1 == 1
                          //GenPolynomial<C> hh = G.get( i ); // since hh stays != 0
                          GenPolynomial<C> hh = G.remove( g1 ); // since hh stays != 0
                          logger.info("extend(Sred)_"+i+" = " + hh);
@@ -196,11 +200,13 @@ public class RCGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
                          //logger.info("#bcH = " + bcH.size());
                          //G.addAll( bcH );
                          for ( GenPolynomial<C> h: bcH ) {
-                             h = engine.basePrimitivePart(h); 
+                             if ( !h.isConstant() ) { // do not remove all factors
+                                h = engine.basePrimitivePart(h); 
+                             }
                              h = h.abs(); // monic() not ok, since no field
                              logger.info("bc(extend(Sred)) = " + h);
                              G.add( h );
-                             pairlist.put( h );
+                             pairlist.put( h ); // old polynomials not up-to-date
                          }
                      }
                      if ( debug ) {
@@ -212,7 +218,7 @@ public class RCGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
               }
         }
         logger.debug("#sequential list = " + G.size());
-        System.out.println("\nisGB = " + isGB(G));
+        //System.out.println("\nisGB = " + isGB(G));
 
         PL = new PolynomialList<C>(pring,G);
         System.out.println("\nGB = " + PL);
@@ -290,7 +296,9 @@ public class RCGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
             el++;
             a = G.remove(0); b = a;
             a = red.normalform( G, a );
-            a = engine.basePrimitivePart(a); // not a.monic() since no field
+            if ( !a.isConstant() ) { // do not remove all factors
+               a = engine.basePrimitivePart(a); // not a.monic() since no field
+            }
             a = a.abs();
             if ( red.isBooleanClosed(a) ) {
                List<GenPolynomial<C>> ff;
