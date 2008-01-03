@@ -871,15 +871,15 @@ public class PolyUtilApp<C extends RingElem<C> > {
         if ( Lp == null || Pp == null ) {
             throw new RuntimeException("ring not correct");
         }
+        System.out.println("ProductRing = " + pr);
         GenPolynomialRing<Product<Residue<BigRational>>> pring = Lp.ring;
         List<GenPolynomial<Product<Residue<BigRational>>>> Npp 
             = new ArrayList<GenPolynomial<Product<Residue<BigRational>>>>( Lp.list );
         Npp.add( Pp );
         boolean changed = false;
         GroebnerBase<BigRational> bb = new GroebnerBaseSeq<BigRational>(); 
-        int cfi = pr.length();
-        int cfj = pr.length();
-        System.out.println("cfi = " + cfi);
+        int cfi = pr.length(); // fix since Pp not updated
+        //System.out.println("cfi = " + cfi);
         for ( int j = 0; j < cfi; j++ ) {
             for ( Product<Residue<BigRational>> a : Pp.getMap().values() ) {
                 // a != 0
@@ -892,21 +892,20 @@ public class PolyUtilApp<C extends RingElem<C> > {
                     break; // "red coefficients"
                 } 
                 if ( changed ) {
-                    //break; // "white coefficients"
+                    //break; // more "white coefficients"?
                 } 
-                //System.out.println("decomp a_"+j+" = " + a);
-                System.out.println("pr     = " + pr);
                 GenPolynomial<BigRational> A = ar.val;
                 boolean isZero = false;
+                // search slice where A is zero
                 for ( int i = 0; i < pr.length(); i++ ) {
                     if ( i == j ) {
                        continue;
                     }
                     RingFactory<Residue<BigRational>> rrr = pr.getFactory(i); 
-                    //System.out.println("rrr_" + i + "   = " + rrr);
                     ResidueRing<BigRational> rr = (ResidueRing<BigRational>)rrr; 
                     Ideal<BigRational> id = rr.ideal;
                     if ( id.contains(A) ) {
+                       System.out.println("isZero @ rrr_" + i + "   = " + rrr);
                        isZero = true;
                        break;
                     }
@@ -917,21 +916,18 @@ public class PolyUtilApp<C extends RingElem<C> > {
                    ResidueRing<BigRational> rr = (ResidueRing<BigRational>)rrr; 
                    Ideal<BigRational> id = rr.ideal;
                    List<GenPolynomial<BigRational>> fl = id.list.list;
-                   System.out.println("id = " + id);
+                   //System.out.println("id = " + id);
                    List<GenPolynomial<BigRational>> nl 
                        = new ArrayList<GenPolynomial<BigRational>>( fl );
                    nl.add(A);
                    nl = bb.GB(nl);
-                   //System.out.println("decomp nl = " + nl);
                    Ideal<BigRational> I = new Ideal<BigRational>(rfac, nl, true);
                    //System.out.println("ideal = " + I);
                    ResidueRing<BigRational> rrn = new ResidueRing<BigRational>( I );
                    //System.out.println("pr     = " + pr);
                    if ( ! pr.containsFactory( rrn ) ) { // always true?
-                      System.out.println("new factory =================== " + pr.length());
-                      System.out.println("rrn = --------------------------\n" + rrn);
+                      System.out.println("new ResidueRing = " + rrn);
                       pr.addFactory( rrn );
-                      //System.out.println("pr     = " + pr);
 
                       Npp = PolyUtilApp.<Residue<BigRational>>productCoefficientExtension(Npp,j,pr.length()-1); 
                       // pr is updated, Pp is not updated
@@ -940,7 +936,6 @@ public class PolyUtilApp<C extends RingElem<C> > {
                       //break;
                    }
                 }
-                //System.out.println("pr_new  = " + pr);
             }
         }
         PolynomialList<C> M = null;
