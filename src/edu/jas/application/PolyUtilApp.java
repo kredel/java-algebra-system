@@ -842,6 +842,26 @@ public class PolyUtilApp<C extends RingElem<C> > {
 
     /**
      * Product cover decomposition.
+     * @param L list of polynomials to be represented.
+     * @return Product representaion of L in the polynomial ring pfac.
+     */
+    public static <C extends RegularRingElem<C>>
+        PolynomialList<C>
+        productDecomposition( PolynomialList<C> L ) {
+        if ( L == null ) {
+           return L;
+        }
+        List<GenPolynomial<C>> Dp = new ArrayList<GenPolynomial<C>>( L.list.size() );
+        PolynomialList<C> D = new PolynomialList<C>( L.ring, Dp );
+        for ( GenPolynomial<C> p: L.list ) {
+            D = PolyUtilApp.<C>productDecomposition( D, p );
+        }
+        return D;
+    }
+
+
+    /**
+     * Product cover decomposition.
      * @param P polynomial to be represented.
      * @param L list of already represented polynomials.
      * @return Product representaion of L togehher with P in the polynomial ring pfac.
