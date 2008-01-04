@@ -261,7 +261,7 @@ public class Ideal<C extends RingElem<C>>
    * Do Groebner Base. compute the Groebner Base for this ideal.
    */
   public void doGB() {
-      if ( isGB ) {
+      if ( isGB && testGB ) {
           return;
       }
       logger.warn("GB computing");
