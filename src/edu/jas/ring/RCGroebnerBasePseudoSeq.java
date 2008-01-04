@@ -98,38 +98,47 @@ public class RCGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
         if ( F == null ) {
            return F;
         }
-        /* boolean closure */
-        List<GenPolynomial<C>> bcF = red.reducedBooleanClosure(F);
-        logger.info("#bcF-#F = " + (bcF.size()-F.size()));
-        F = bcF;
+        boolean usePP = false;
         /* normalize input */
-        List<GenPolynomial<C>> G = new ArrayList<GenPolynomial<C>>();
-        OrderedRPairlist<C> pairlist = null; 
         GenPolynomialRing<C> pring = null;
+        List<GenPolynomial<C>> G = new ArrayList<GenPolynomial<C>>();
         for ( GenPolynomial<C> p : F ) { 
-            if ( !p.isZERO() ) {
-               if ( !p.isConstant() ) { // do not remove all factors
+            if ( p != null && !p.isZERO() ) {
+               if ( usePP && !p.isConstant() ) { // do not remove all factors
                   p = engine.basePrimitivePart(p); // not monic, no field
                }
                p = p.abs();
-               if ( p.isConstant() && p.leadingBaseCoefficient().isFull() ) { 
-                  G.clear(); G.add( p );
-                  return G; // since boolean closed and no threads are activated
-               }
                if ( pring == null ) {
                   pring = p.ring;
                }
                G.add( p ); //G.add( 0, p ); //reverse list
-               if ( pairlist == null ) {
-                  pairlist = new OrderedRPairlist<C>( modv, p.ring );
-               }
-               // putOne not required
-               pairlist.put( p );
             }
         }
+
+        /* initial decompostition */
+        PolynomialList<C> PL = null;
+        PL = new PolynomialList<C>(pring,G);
+        PL = PolyUtilApp.<C>productDecomposition(PL);
+        G = PL.list;
+
+        /* boolean closure */
+        List<GenPolynomial<C>> bcF = red.reducedBooleanClosure(G);
+        logger.info("#bcF-#F = " + (bcF.size()-G.size()));
+        G = bcF;
         if ( G.size() <= 1 ) {
            return G; // since boolean closed and no threads are activated
         }
+
+        /* setup pair list */
+        OrderedRPairlist<C> pairlist = null; 
+        for ( GenPolynomial<C> p : F ) { 
+            if ( pairlist == null ) {
+               pairlist = new OrderedRPairlist<C>( modv, p.ring );
+            }
+            // putOne not required
+            pairlist.put( p );
+        }
+
         /* loop on critical pairs */
         Pair<C> pair;
         GenPolynomial<C> pi;
@@ -138,7 +147,6 @@ public class RCGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
         GenPolynomial<C> D;
         GenPolynomial<C> H;
         List<GenPolynomial<C>> bcH;
-        PolynomialList<C> PL = null;
         while ( pairlist.hasNext() ) {
               pair = pairlist.removeNext();
               //System.out.println("pair = " + pair);
@@ -172,7 +180,7 @@ public class RCGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
                   if ( logger.isDebugEnabled() ) {
                       logger.debug("ht(H) = " + H.leadingExpVector() );
                   }
-                  if ( !H.isConstant() ) { // do not remove all factors
+                  if ( usePP && !H.isConstant() ) { // do not remove all factors
                      H = engine.basePrimitivePart(H); 
                   }
                   H = H.abs(); // not monic, no field
@@ -200,7 +208,7 @@ public class RCGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
                          //logger.info("#bcH = " + bcH.size());
                          //G.addAll( bcH );
                          for ( GenPolynomial<C> h: bcH ) {
-                             if ( !h.isConstant() ) { // do not remove all factors
+                             if ( usePP && !h.isConstant() ) { // do not remove all factors
                                 h = engine.basePrimitivePart(h); 
                              }
                              h = h.abs(); // monic() not ok, since no field
@@ -250,6 +258,7 @@ public class RCGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
         if ( Gp == null || Gp.size() <= 1 ) {
             return Gp;
         }
+        boolean usePP = false;
         // remove zero polynomials
         List<GenPolynomial<C>> G
             = new ArrayList<GenPolynomial<C>>( Gp.size() );
@@ -296,7 +305,7 @@ public class RCGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
             el++;
             a = G.remove(0); b = a;
             a = red.normalform( G, a );
-            if ( !a.isConstant() ) { // do not remove all factors
+            if ( usePP && !a.isConstant() ) { // do not remove all factors
                a = engine.basePrimitivePart(a); // not a.monic() since no field
             }
             a = a.abs();
