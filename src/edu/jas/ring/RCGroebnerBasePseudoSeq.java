@@ -53,6 +53,12 @@ public class RCGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
 
 
     /**
+     * Flag if engine should be used.
+     */
+    private final boolean usePP = false;
+
+
+    /**
      * Coefficient ring factory.
      */
     protected final RingFactory<C> cofac;
@@ -98,7 +104,6 @@ public class RCGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
         if ( F == null ) {
            return F;
         }
-        boolean usePP = false;
         /* normalize input */
         GenPolynomialRing<C> pring = null;
         List<GenPolynomial<C>> G = new ArrayList<GenPolynomial<C>>();
@@ -120,6 +125,7 @@ public class RCGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
         PL = new PolynomialList<C>(pring,G);
         PL = PolyUtilApp.<C>productDecomposition(PL);
         G = PL.list;
+        System.out.println("initial rcgb: " + PolyUtilApp.productSliceToString( PolyUtilApp.productSlice( (PolynomialList)PL ) ) );
 
         /* boolean closure */
         List<GenPolynomial<C>> bcF = red.reducedBooleanClosure(G);
@@ -128,10 +134,9 @@ public class RCGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
         if ( G.size() <= 1 ) {
            return G; // since boolean closed and no threads are activated
         }
-
         /* setup pair list */
         OrderedRPairlist<C> pairlist = null; 
-        for ( GenPolynomial<C> p : F ) { 
+        for ( GenPolynomial<C> p : G ) { 
             if ( pairlist == null ) {
                pairlist = new OrderedRPairlist<C>( modv, p.ring );
             }
@@ -226,22 +231,23 @@ public class RCGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
               }
         }
         logger.debug("#sequential list = " + G.size());
-        //System.out.println("\nisGB = " + isGB(G));
-
-        PL = new PolynomialList<C>(pring,G);
-        System.out.println("\nGB = " + PL);
-        System.out.println("\nGB.slice(0) = " + PolyUtilApp.productSliceRaw(PL,0));
-
-        G = minimalGB(G);
-
-        PL = new PolynomialList<C>(pring,G);
-        System.out.println("GB.slice(0) = " + PolyUtilApp.productSliceRaw(PL,0));
-
-        //G = red.irreducibleSet(G); // not correct since not boolean closed
+        System.out.println("\nisGB = " + isGB(G));
         logger.info("pairlist #put = " + pairlist.putCount() 
                   + " #rem = " + pairlist.remCount()
                     // + " #total = " + pairlist.pairCount()
                    );
+
+        PL = new PolynomialList<C>(pring,G);
+        System.out.println("\nGB = " + PL);
+
+        System.out.println("final rcgb: " + PolyUtilApp.productSliceToString( PolyUtilApp.productSlice( (PolynomialList)PL ) ) );
+
+        G = minimalGB(G);
+
+        //PL = new PolynomialList<C>(pring,G);
+        //System.out.println("GB.slice(0) = " + PolyUtilApp.productSliceRaw(PL,0));
+
+        //G = red.irreducibleSet(G); // not correct since not boolean closed
         return G;
     }
 
@@ -258,7 +264,6 @@ public class RCGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
         if ( Gp == null || Gp.size() <= 1 ) {
             return Gp;
         }
-        boolean usePP = false;
         // remove zero polynomials
         List<GenPolynomial<C>> G
             = new ArrayList<GenPolynomial<C>>( Gp.size() );
