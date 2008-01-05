@@ -851,11 +851,17 @@ public class PolyUtilApp<C extends RingElem<C> > {
         if ( L == null ) {
            return L;
         }
-        List<GenPolynomial<C>> Dp = new ArrayList<GenPolynomial<C>>( L.list.size() );
+        List<GenPolynomial<C>> Dp = new ArrayList<GenPolynomial<C>>( L.list );
         PolynomialList<C> D = new PolynomialList<C>( L.ring, Dp );
-        for ( GenPolynomial<C> p: L.list ) {
+        int s = L.list.size();
+        GenPolynomial<C> p;
+        for ( int i = 0; i < s; i++ ) {
+            p = D.list.remove(0);
             D = PolyUtilApp.<C>productDecomposition( D, p );
         }
+        //for ( GenPolynomial<C> p: L.list ) {
+        //    D = PolyUtilApp.<C>productDecomposition( D, p );
+        //}
         return D;
     }
 
