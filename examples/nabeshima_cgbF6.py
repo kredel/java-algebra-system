@@ -14,7 +14,7 @@ from jas import terminate
 # Nabashima, ISSAC 2007, example F6
 # rational function coefficients
 
-r = Ring( "IntFunc(a, b,c, d) (w,z,y,x) L" );
+r = Ring( "IntFunc(a, b,c, d) (x) L" );
 print "Ring: " + str(r);
 print;
 

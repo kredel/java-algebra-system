@@ -11,18 +11,18 @@ from jas import startLog
 from jas import terminate
 
 
-# Nabashima, ISSAC 2007, example F1
+# Nabashima, ISSAC 2007, example F00
 # rational function coefficients
 
-r = Ring( "IntFunc(a, b) (y,x) L" );
+r = Ring( "IntFunc(a, b, c) (x) L" );
 print "Ring: " + str(r);
 print;
 
 ps = """
 (
- ( { a } x^4 y + x y^2 + { b } x ),
- ( x^3 + 2 x y ),
- ( { b } x^2 + x^2 y )
+ ( { a } x^3 ),
+ ( { b } x^2 ),
+ ( { c } x )
 ) 
 """;
 
