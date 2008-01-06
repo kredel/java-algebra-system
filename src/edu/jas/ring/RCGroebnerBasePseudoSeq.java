@@ -168,7 +168,7 @@ public class RCGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
               //if ( pair.getUseCriterion3() ) { // correct ?
               //if ( pair.getUseCriterion4() ) { // correct ? no, not applicable
                   S = red.SPolynomial( pi, pj );
-                  //System.out.println("S_d = " + S);
+                  System.out.println("S("+pair.pi+","+pair.pj+") = " + S);
                   if ( S.isZERO() ) {
                       pair.setZero();
                       continue;
@@ -260,7 +260,7 @@ public class RCGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
      * @todo use primitivePart
      */
     public List<GenPolynomial<C>> 
-                minimalGB(List<GenPolynomial<C>> Gp) {  
+        minimalGB(List<GenPolynomial<C>> Gp) {  
         if ( Gp == null || Gp.size() <= 1 ) {
             return Gp;
         }
@@ -280,7 +280,7 @@ public class RCGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
         F = new ArrayList<GenPolynomial<C>>( G.size() );
         while ( G.size() > 0 ) {
             a = G.remove(0); b = a;
-            if ( red.isTopReducible(G,a) || red.isTopReducible(F,a) ) {
+            if ( red.isStrongTopReducible(G,a) || red.isStrongTopReducible(F,a) ) {
                // try to drop polynomial 
                List<GenPolynomial<C>> ff;
                ff = new ArrayList<GenPolynomial<C>>( G );
@@ -309,7 +309,9 @@ public class RCGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
         while ( el < len ) {
             el++;
             a = G.remove(0); b = a;
+            System.out.println("minGB a = " + a);
             a = red.normalform( G, a );
+            System.out.println("minGB red(a) = " + a);
             if ( usePP && !a.isConstant() ) { // do not remove all factors
                a = engine.basePrimitivePart(a); // not a.monic() since no field
             }
