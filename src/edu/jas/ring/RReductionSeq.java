@@ -75,6 +75,38 @@ public class RReductionSeq<C extends RegularRingElem<C>>
 
 
     /**
+     * Is strong top reducible.
+     * @typeparam C coefficient type.
+     * @param A polynomial.
+     * @param P polynomial list.
+     * @return true if A is string top reducible with respect to P.
+     */
+    public boolean isStrongTopReducible(List<GenPolynomial<C>> P, 
+                                        GenPolynomial<C> A) {  
+        if ( P == null || P.isEmpty() ) {
+           return false;
+        }
+        if ( A == null || A.isZERO() ) {
+           return false;
+        }
+        boolean mt = false;
+        ExpVector e = A.leadingExpVector();
+        C a = A.leadingBaseCoefficient();
+        for ( GenPolynomial<C> p : P ) {
+            mt = ExpVector.EVMT( e, p.leadingExpVector() );
+            if ( mt ) {
+               C b = p.leadingBaseCoefficient();
+               mt = a.idempotent().equals( b.idempotent() );
+               if ( mt ) {
+                  return true;
+               } 
+            }
+        }
+        return false;
+    }
+
+
+    /**
      * Is in Normalform.
      * @typeparam C coefficient type.
      * @param Ap polynomial.
