@@ -98,29 +98,45 @@ public class RPseudoReductionSeq<C extends RegularRingElem<C>>
               m = S.leadingMonomial();
               e = m.getKey();
               a = m.getValue();
+              System.out.println("--a = " + a);
               for ( i = 0; i < l; i++ ) {
                   mt = ExpVector.EVMT( e, htl[i] );
                   if ( mt ) {
                      C c = lbc[i];
+                     System.out.println("--c = " + c);
                      r = a.idempotent().multiply( c.idempotent() );
-                     //System.out.println("--r = " + r);
+                     System.out.println("--r = " + r);
+                     C s = a.idempotent().sum( c.idempotent() );
+                     System.out.println("--s = " + s);
+                     s = s.subtract( r );
+                     s = s.subtract( r );
+                     System.out.println("--s = " + s);
                      mt = ! r.isZERO(); // && mt
                      if ( mt ) {
                         b = a.remainder( c );
-                        //System.out.println("--b = " + b);
+                        System.out.println("--b = " + b);
                         if ( b.isZERO() ) {
                            a = a.divide( c );
                            if ( a.isZERO() ) {
                               throw new RuntimeException("a.isZERO()");
                            }
                         } else {
+                           c = c.sum( s );
+                           System.out.println("--c = " + c);
                            S = S.multiply( c );
                            R = R.multiply( c );
+                           System.out.println("--S = " + S);
+                           System.out.println("--R = " + R);
                         }
                         f = ExpVector.EVDIF( e, htl[i] );
                         //logger.info("red div = " + f);
+                        System.out.println("--p["+i+"] = " + p[i]);
+                        a = a.sum( s.multiply(a.idempotent()) );
+                        System.out.println("--a = " + a);
                         Q = p[i].multiply( a, f );
+                        System.out.println("--Q = " + Q);
                         S = S.subtract( Q ); // not ok with reductum
+                        System.out.println("--S = " + S);
                         f = S.leadingExpVector();
                         if ( !e.equals(f) ) {
                            a = Ap.ring.coFac.getZERO();
