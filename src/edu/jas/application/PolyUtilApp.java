@@ -936,7 +936,7 @@ public class PolyUtilApp<C extends RingElem<C> > {
                     Ideal<BigRational> id = rr.ideal;
                     if ( id.contains(A) ) {
                        System.out.println("isZero @ rr_" + i + " = " + rr.ideal.list.list);
-                       isZero = true;
+                       //isZero = true;
                        break;
                     }
                 }
