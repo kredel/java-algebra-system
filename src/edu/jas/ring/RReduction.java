@@ -26,6 +26,17 @@ public interface RReduction<C extends RegularRingElem<C>>
 
 
     /**
+     * Is strong top reducible.
+     * @typeparam C coefficient type.
+     * @param A polynomial.
+     * @param P polynomial list.
+     * @return true if A is string top reducible with respect to P.
+     */
+    public boolean isStrongTopReducible(List<GenPolynomial<C>> P, 
+                                        GenPolynomial<C> A);
+
+
+    /**
      * Is boolean closed, i.e.
      * test if A == idempotent(ldcf(A)) A.
      * @typeparam C coefficient type.
