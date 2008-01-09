@@ -39,11 +39,13 @@ public class Examples {
        //example9();
        //example10();
        //example11();
-       //example12();
    }
+
 
 /**
  * example1.
+ * random polynomial with rational coefficients.
+ * Q[x_1,...x_7]
  */
 public static void example1() {
        System.out.println("\n\n example 1");
@@ -60,8 +62,11 @@ public static void example1() {
        System.out.println("a = " + a);
    }
 
+
 /**
  * example2.
+ * random polynomial with coefficients of rational polynomials.
+ * Q[x_1,...x_7][y_1,...,y_3]
  */
 public static void example2() {
        System.out.println("\n\n example 2");
@@ -80,8 +85,11 @@ public static void example2() {
        System.out.println("a = " + a);
    }
 
+
 /**
  * example3.
+ * random rational algebraic number.
+ * Q(alpha)
  */
 public static void example3() {
        System.out.println("\n\n example 3");
@@ -115,8 +123,11 @@ public static void example3() {
        return prime;
    }
 
+
 /**
  * example4.
+ * random modular algebraic number.
+ * Z_p(alpha)
  */
 public static void example4() {
        System.out.println("\n\n example 4");
@@ -144,6 +155,8 @@ public static void example4() {
 
 /**
  * example5.
+ * random solvable polynomial with rational coefficients.
+ * Q{x_1,...x_6, {x_2 * x_1 = x_1 x_2 +1, ...} } 
  */
 public static void example5() {
        System.out.println("\n\n example 5");
@@ -174,6 +187,8 @@ public static void example5() {
 
 /**
  * example6.
+ * Fateman benchmark: p = (x+y+z)^20; q = p * (p+1)
+ * Z[z,y,x]
  */
 public static void example6() {
        System.out.println("\n\n example 6");
@@ -228,6 +243,8 @@ public static void example6() {
 
 /**
  * example7.
+ * Fateman benchmark: p = (x+y+z)^20; q = p * (p+1)
+ * Q[z,y,x]
  */
 public static void example7() {
        System.out.println("\n\n example 7");
@@ -281,6 +298,7 @@ public static void example7() {
        System.out.println("q2 = " + q2.length());
        System.out.println("time = " + t + " ms");
    }
+
 
 /**
  * example8.
@@ -414,60 +432,10 @@ public static void example10() {
 
 /**
  * example11.
- * cyclic n-th roots polynomial systems.
- *
- */
-public static void example11() {
-    int n = 4;
-
-    BigInteger fac = new BigInteger();
-    String[] var = ExpVector.STDVARS(n);
-    GenPolynomialRing<BigInteger> ring
-           = new GenPolynomialRing<BigInteger>(fac,n,var);
-    System.out.println("ring = " + ring + "\n");
-
-    List<GenPolynomial<BigInteger>> cp = new ArrayList<GenPolynomial<BigInteger>>( n ); 
-    for ( int i = 1; i <= n; i++ ) {
-        GenPolynomial<BigInteger> p = cyclicPoly(ring, n, i);
-        cp.add( p );
-        System.out.println("p["+i+"] = " +  p);
-        System.out.println();
-    }
-    System.out.println("cp = " + cp + "\n");
-
-    List<GenPolynomial<BigInteger>> gb;
-    GroebnerBaseSeq<BigInteger> sgb = new GroebnerBaseSeq<BigInteger>();
-    gb = sgb.GB( cp );
-    System.out.println("gb = " + gb);
-
-}
-
-    static GenPolynomial<BigInteger> cyclicPoly(GenPolynomialRing<BigInteger> ring, int n, int i) {
-
-        List<? extends GenPolynomial<BigInteger> > X 
-            = /*(List<GenPolynomial<BigInteger>>)*/ ring.univariateList();
-
-        GenPolynomial<BigInteger> p = ring.getZERO();
-        for ( int j = 1; j <= n; j++ ) {
-            GenPolynomial<BigInteger> pi = ring.getONE();
-            for ( int k = j; k < j+i; k++ ) {
-                pi = pi.multiply( X.get( k % n ) );
-            }
-            p = p.sum( pi );
-            if ( i == n ) {
-               p = p.subtract( ring.getONE() );
-               break;
-            }
-        }
-        return p;
-    }
-
-/**
- * example12.
  * degree matrix;
  *
  */
-public static void example12() {
+public static void example11() {
     int n = 50;
     BigRational fac = new BigRational();
     String[] var = ExpVector.STDVARS(n);
