@@ -20,6 +20,7 @@ import java.util.Random;
 import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
+import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
 
 import edu.jas.kern.PrettyPrint;
@@ -32,6 +33,10 @@ import edu.jas.poly.TermOrder;
 import edu.jas.poly.ExpVector;
 
 import edu.jas.application.QuotientRing;
+
+import edu.jas.ufd.GreatestCommonDivisor;
+import edu.jas.ufd.GreatestCommonDivisorSubres;
+import edu.jas.ufd.GCDFactory;
 
 
 /**
@@ -110,6 +115,11 @@ public class GenPolynomialRing<C extends RingElem<C> >
     final boolean checkPreempt = PreemptStatus.isAllowed();
 
 
+    /** GCD engine of the factory. 
+     */
+    public final GreatestCommonDivisor/*<C>*/ engine;
+
+
     /** The constructor creates a polynomial factory object
      * with the default term order.
      * @param cf factory for coefficients of type C.
@@ -160,6 +170,8 @@ public class GenPolynomialRing<C extends RingElem<C> >
         if ( vars == null && PrettyPrint.isTrue() ) {
            vars = evzero.stdVars();
         }
+        //engine = GCDFactory.<C>getImplementation(coFac);
+        engine = new GreatestCommonDivisorSubres();
     }
 
 

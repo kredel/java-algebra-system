@@ -15,7 +15,7 @@ import java.util.Collections;
 import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
-//import edu.jas.structure.GcdRingElem;
+import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.NotInvertibleException;
 
 import edu.jas.kern.PrettyPrint;
@@ -40,7 +40,7 @@ import edu.jas.poly.GenPolynomialRing;
  */
 
 public class GenPolynomial<C extends RingElem<C> > 
-             implements /*Gcd*/RingElem< GenPolynomial<C> > {
+    implements /**/GcdRingElem< GenPolynomial<C> > {
 
     /** The factory for the polynomial ring. 
      */
@@ -1039,8 +1039,11 @@ public class GenPolynomial<C extends RingElem<C> >
             return S;
         }
         if ( ring.nvar != 1 ) {
-           throw new RuntimeException(this.getClass().getName()
-                                      + " not univariate polynomials" + ring);
+           //throw new RuntimeException(this.getClass().getName()
+           //                       + " not univariate polynomials" + ring);
+           //System.out.println("this = " + this);
+           //System.out.println("S    = " + S);
+           return ring.engine.gcd(this,S);
         }
         GenPolynomial<C> x;
         GenPolynomial<C> q = this;
