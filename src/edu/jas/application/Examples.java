@@ -110,9 +110,12 @@ public static void example2() {
         p = pfac.random(5,4,3,0.4f);
         F.add(p);
     }
+    //System.out.println("F = " + F);
 
     Ideal<BigRational> id = new Ideal<BigRational>(pfac,F);
+    id.doGB();
     ResidueRing<BigRational> rr = new ResidueRing<BigRational>(id);
+    System.out.println("rr = " + rr);
 
     ProductRing<Residue<BigRational>> pr = null;
     pr = new ProductRing<Residue<BigRational>>(rr,4);
@@ -127,10 +130,11 @@ public static void example2() {
         L.add(pp);
     }
 
-    PolynomialList<Product<Residue<BigRational>>> Lp = null;
-    Lp = new PolynomialList<Product<Residue<BigRational>>>(fac,L);
+    System.out.println("L = " + L);
 
-    System.out.println("Lp = " + Lp);
+    //PolynomialList<Product<Residue<BigRational>>> Lp = null;
+    //Lp = new PolynomialList<Product<Residue<BigRational>>>(fac,L);
+    //System.out.println("Lp = " + Lp);
 
 }
 
