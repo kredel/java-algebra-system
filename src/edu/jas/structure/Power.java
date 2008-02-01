@@ -67,7 +67,7 @@ public class Power<C extends RingElem<C> > {
      * @return a^n, with 0^0 = 0 and a^{-n} = {1/a}^n.
      */
     @SuppressWarnings("unchecked")
-	public static <C extends RingElem<C>> C power( RingFactory<C> fac, C a, long n ) {
+    public static <C extends RingElem<C>> C power( RingFactory<C> fac, C a, long n ) {
         if ( a == null || a.isZERO() ) {
            return a;
         }
