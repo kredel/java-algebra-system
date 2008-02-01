@@ -83,7 +83,7 @@ public class GCDProxy<C extends GcdRingElem<C>>
      }                                              
 
 
-    /** Get the String representation as RingFactory.
+    /** Get the String representation with gcd engines.
      * @see java.lang.Object#toString()
      */
     public String toString() {
@@ -165,7 +165,7 @@ public class GCDProxy<C extends GcdRingElem<C>>
      }
 
 
-    /**
+    /*
      * GenPolynomial greatest comon divisor.
      * Main entry driver method.
      * @param P GenPolynomial.
