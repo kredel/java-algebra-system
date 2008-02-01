@@ -5,6 +5,8 @@
 
 package edu.jas.ufd;
 
+import java.io.Serializable;
+
 import java.util.Map;
 
 import edu.jas.structure.GcdRingElem;
@@ -32,7 +34,8 @@ import edu.jas.poly.GenPolynomial;
  * @see edu.jas.ufd.GCDFactory#getImplementation( edu.jas.structure.RingFactory f)
  */
 
-public interface GreatestCommonDivisor<C extends GcdRingElem<C> > {
+public interface GreatestCommonDivisor<C extends GcdRingElem<C> > 
+                 extends Serializable {
 
 
     /**
