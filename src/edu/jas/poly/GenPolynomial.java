@@ -40,7 +40,7 @@ import edu.jas.poly.GenPolynomialRing;
  */
 
 public class GenPolynomial<C extends RingElem<C> > 
-    implements /**/GcdRingElem< GenPolynomial<C> > {
+    implements RingElem< GenPolynomial<C> > {
 
     /** The factory for the polynomial ring. 
      */
@@ -894,6 +894,8 @@ public class GenPolynomial<C extends RingElem<C> >
         if ( this.isZERO() ) {
             return this;
         }
+        //C t = s.inverse();
+        //return multiply(t);
         GenPolynomial<C> p = ring.getZERO().clone(); 
         SortedMap<ExpVector,C> pv = p.val;
         for ( Map.Entry<ExpVector,C> m : val.entrySet() ) {
@@ -1039,11 +1041,10 @@ public class GenPolynomial<C extends RingElem<C> >
             return S;
         }
         if ( ring.nvar != 1 ) {
-           //throw new RuntimeException(this.getClass().getName()
-           //                       + " not univariate polynomials" + ring);
+           throw new RuntimeException(this.getClass().getName()
+                                  + " not univariate polynomials" + ring);
            //System.out.println("this = " + this);
            //System.out.println("S    = " + S);
-           return ring.engine.gcd(this,S);
         }
         GenPolynomial<C> x;
         GenPolynomial<C> q = this;

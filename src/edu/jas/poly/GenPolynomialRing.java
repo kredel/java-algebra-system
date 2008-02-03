@@ -115,11 +115,6 @@ public class GenPolynomialRing<C extends RingElem<C> >
     final boolean checkPreempt = PreemptStatus.isAllowed();
 
 
-    /** GCD engine of the factory. 
-     */
-    public final GreatestCommonDivisor/*<C>*/ engine;
-
-
     /** The constructor creates a polynomial factory object
      * with the default term order.
      * @param cf factory for coefficients of type C.
@@ -170,8 +165,6 @@ public class GenPolynomialRing<C extends RingElem<C> >
         if ( vars == null && PrettyPrint.isTrue() ) {
            vars = evzero.stdVars();
         }
-        //engine = GCDFactory.<C>getImplementation(coFac);
-        engine = new GreatestCommonDivisorSubres();
     }
 
 
