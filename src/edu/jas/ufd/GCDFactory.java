@@ -5,7 +5,7 @@
 
 package edu.jas.ufd;
 
-//import org.apache.log4j.Logger;
+import org.apache.log4j.Logger;
 
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
@@ -63,7 +63,7 @@ import edu.jas.ufd.GreatestCommonDivisorModEval;
 
 public class GCDFactory /*<C extends GcdRingElem<C>>*/ {
 
-    //private static final Logger logger = Logger.getLogger(GCDFactory.class);
+    private static final Logger logger = Logger.getLogger(GCDFactory.class);
 
 
 
@@ -181,13 +181,38 @@ public class GCDFactory /*<C extends GcdRingElem<C>>*/ {
     public static <C extends GcdRingElem<C>>
            GreatestCommonDivisor<C> 
            getImplementation( RingFactory<C> fac ) {
-        GreatestCommonDivisor<C> ufd; 
-        if ( fac.isField() ) {
-           ufd = new GreatestCommonDivisorSimple<C>();
-           return ufd;
+        GreatestCommonDivisor ufd; 
+        logger.info("fac = " + fac.getClass().getName());
+        int t = 0;
+        BigInteger b = new BigInteger(1);
+        C bc = fac.fromInteger(1);
+        if ( b.equals( bc ) ) {
+           t = 1;
+        } else {
+           if ( fac.characteristic().signum() > 0 ) {
+              ModInteger m = new ModInteger(new ModIntegerRing(fac.characteristic()),1);
+              C mc = fac.fromInteger(1);
+              if ( m.equals( mc ) ) {
+                 t = 2;
+              }
+           }
         }
-        ufd = new GreatestCommonDivisorSubres<C>();
-        return ufd;
+        //System.out.println("t     = " + t);
+        if ( t == 1 ) {
+           ufd = new GreatestCommonDivisorModular/*<BigInteger>*/();
+           //ufd = new GreatestCommonDivisorSubres<BigInteger>();
+           //ufd = new GreatestCommonDivisorModular/*<BigInteger>*/(true);
+        } else if ( t == 2 ) {
+           ufd = new GreatestCommonDivisorModEval/*<ModInteger>*/();
+        } else {
+           if ( fac.isField() ) {
+              ufd = new GreatestCommonDivisorSimple<C>();
+           } else {
+              ufd = new GreatestCommonDivisorSubres<C>();
+           }
+        }
+        logger.info("ufd = " + ufd);
+        return (GreatestCommonDivisor<C>) ufd;
     }
 
 
@@ -199,10 +224,45 @@ public class GCDFactory /*<C extends GcdRingElem<C>>*/ {
     public static <C extends GcdRingElem<C>>
            GreatestCommonDivisor<C> 
            getProxy( RingFactory<C> fac ) {
-        GreatestCommonDivisor<C> ufd1, ufd2; 
-        ufd1 = new GreatestCommonDivisorSimple<C>();
-        ufd2 = new GreatestCommonDivisorSubres<C>();
-        return new GCDProxy<C>(ufd1,ufd2);
+        GreatestCommonDivisor ufd; 
+        logger.info("fac = " + fac.getClass().getName());
+        int t = 0;
+        BigInteger b = new BigInteger(1);
+        C bc = fac.fromInteger(1);
+        if ( b.equals( bc ) ) {
+           t = 1;
+        } else {
+           if ( fac.characteristic().signum() > 0 ) {
+              ModInteger m = new ModInteger(new ModIntegerRing(fac.characteristic()),1);
+              C mc = fac.fromInteger(1);
+              if ( m.equals( mc ) ) {
+                 t = 2;
+              }
+           }
+        }
+        //System.out.println("t     = " + t);
+        if ( t == 1 ) {
+           ufd = new GCDProxy<BigInteger>( 
+                     new GreatestCommonDivisorSubres<BigInteger>(), 
+                     new GreatestCommonDivisorModular/*<BigInteger>*/() );
+           //    new GreatestCommonDivisorModular/*<BigInteger>*/(true) );
+        } else if ( t == 2 ) {
+           ufd = new GCDProxy<ModInteger>( 
+                     new GreatestCommonDivisorSubres<ModInteger>(), 
+                     new GreatestCommonDivisorModEval/*<ModInteger>*/() );
+        } else {
+           if ( fac.isField() ) {
+              ufd = new GCDProxy<C>(
+                        new GreatestCommonDivisorSimple<C>(), 
+                        new GreatestCommonDivisorSubres<C>() );
+           } else {
+              ufd = new GCDProxy<C>( 
+                        new GreatestCommonDivisorSubres<C>(), 
+                        new GreatestCommonDivisorSimple<C>() );
+           }
+        }
+        logger.info("ufd = " + ufd);
+        return (GCDProxy<C>) ufd;
     }
 
 
