@@ -9,7 +9,7 @@
 
 - check the 187 exceptions (170 runtime exceptions) that are thrown
 
-- implement proxys for GB computation
+- implement parallel proxys for GB computation
 
 - check solvable polynomials with non integral coefficients
 
@@ -21,16 +21,13 @@
 
 - use further util.concurrent algorithms where possible, e.g. in DHT
 
-- add product category to applications
-- implement direct products of ring elements
-
 - refactor from BasicLinAlg to GenMatrix and GenVector 
 
 - test caching results of gcd computation
 
 - refactor ExpVector for different array element types
 
-- develop modifiable polynomial constructor or put method
+- develop modifiable polynomial constructor or put method and iterators
 
 - rework parallel GB algorithms
 
@@ -38,9 +35,20 @@
 
 - refactor method names for groovy operator overloading, make examples for usage
 
+- define divideAndRemainder in RingElem interface and implement
+
+- let arith implementations extend Power as abstract class
+  add divide, subtract, abs, remainder to Power, 
+  name e.g RingElemAbstract
+  clean structure of compareTo, signum and equals
+
+
+
+
 - define FieldElem and Field factory interfaces and use them for GB coefficients
 
-
+- add product category to applications
+- implement direct products of ring elements
 
 - implement d- and e-reductions and d-/e-Groebner bases
 
@@ -60,13 +68,14 @@
   nvar in GenPolynomial and GenSolvablePolynomial done
 
 - make examples with rational function field coefficients, 
-  e.g. lisa-tdi example
+  e.g. raksanyi example
 
 - incorporate gcd() in the Quotient class in edu.jas.application
 
 - rework junit tests to stop failing in case of zero polynomials
 
 - add version information in jas jar-file names
+
 
 
 
