@@ -7,8 +7,6 @@ package edu.jas.application;
 import java.util.Random;
 //import java.io.IOException;
 import java.io.Reader;
-//import java.io.StringReader;
-//import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,13 +24,8 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
 
-//import edu.jas.ufd.GreatestCommonDivisor;
-import edu.jas.ufd.GreatestCommonDivisorAbstract;
-import edu.jas.ufd.GreatestCommonDivisorSubres;
-import edu.jas.ufd.GreatestCommonDivisorSimple;
-import edu.jas.ufd.GreatestCommonDivisorModular;
-import edu.jas.ufd.GreatestCommonDivisorModEval;
-import edu.jas.ufd.GCDProxy;
+import edu.jas.ufd.GreatestCommonDivisor;
+import edu.jas.ufd.GCDFactory;
 
 import edu.jas.util.StringUtil;
 
@@ -56,7 +49,7 @@ public class QuotientRing<C extends GcdRingElem<C> >
 
     /** GCD engine of the factory. 
      */
-    public final GreatestCommonDivisorAbstract/*<C>*/ engine;
+    public final GreatestCommonDivisor<C> engine;
 
 
     /** Use GCD of package edu.jas.ufd. 
@@ -84,6 +77,11 @@ public class QuotientRing<C extends GcdRingElem<C> >
            engine = null;
            return;
         }
+        engine = GCDFactory.<C>getProxy( ring.coFac );
+    }
+
+
+        /*
         logger.info("coFac = " + ring.coFac.getClass().getName());
         int t = 0;
         BigInteger b = new BigInteger(1);
@@ -101,18 +99,18 @@ public class QuotientRing<C extends GcdRingElem<C> >
         }
         //System.out.println("t     = " + t);
         if ( t == 1 ) {
-           //engine = new GreatestCommonDivisorModular/*<BigInteger>*/();
+           //engine = new GreatestCommonDivisorModular<BigInteger>();
            //engine = new GreatestCommonDivisorSubres<BigInteger>();
-           //engine = new GreatestCommonDivisorModular/*<BigInteger>*/(true);
+           //engine = new GreatestCommonDivisorModular<BigInteger>(true);
            engine = new GCDProxy<BigInteger>( 
                     new GreatestCommonDivisorSubres<BigInteger>(), 
-           //         new GreatestCommonDivisorModular/*<BigInteger>*/(true) );
-                    new GreatestCommonDivisorModular/*<BigInteger>*/() );
+           //         new GreatestCommonDivisorModular<BigInteger>(true) );
+                    new GreatestCommonDivisorModular<BigInteger>() );
         } else if ( t == 2 ) {
-           //engine = new GreatestCommonDivisorModEval/*<ModInteger>*/();
-           engine = new GCDProxy/*<ModInteger>*/( 
+           //engine = new GreatestCommonDivisorModEval<ModInteger>();
+           engine = new GCDProxy<ModInteger>( 
                         new GreatestCommonDivisorSubres<BigInteger>(), 
-                        new GreatestCommonDivisorModEval/*<ModInteger>*/() );
+                        new GreatestCommonDivisorModEval<ModInteger>() );
         } else {
            //engine = new GreatestCommonDivisorSimple<C>();
            //engine = new GreatestCommonDivisorSubres<C>();
@@ -121,24 +119,7 @@ public class QuotientRing<C extends GcdRingElem<C> >
                         new GreatestCommonDivisorSimple<C>() );
         }
         logger.info("engine = " + engine);
-    }
-        //RingFactory<BigInteger> b0  = (RingFactory<BigInteger>)ring.coFac;
-        //BigInteger b1 = (RingFactory)ring.coFac;
-        //BigInteger b2 = (BigInteger)ring.coFac;
-        //BigInteger b3 = (BigInteger)ring.coFac.fromInteger(1);
-
-
-    /* no more required, see ComputerThreads
-     * Terminate proxy engine.
-    public void terminate() {
-        if ( engine == null ) {
-           return;
-        }
-        if ( engine instanceof GCDProxy ) {
-           ((GCDProxy)engine).terminate();
-        }
-    }
-     */
+        */
 
 
     /** Divide.
@@ -147,10 +128,7 @@ public class QuotientRing<C extends GcdRingElem<C> >
      * @return divide(n,d)
      */
     protected GenPolynomial<C> divide(GenPolynomial<C> n, GenPolynomial<C> d) {
-        //if ( ufdGCD ) {
-           return PolyUtil.<C>basePseudoDivide(n,d);
-	//}
-        //return n.divide(d);
+        return PolyUtil.<C>basePseudoDivide(n,d);
     }
 
 
@@ -419,28 +397,5 @@ public class QuotientRing<C extends GcdRingElem<C> >
         String s = StringUtil.nextString(r,'}');
         return parse( s );
     }
-
-
-    /* Parse Quotient from Reader.
-     * @param r Reader.
-     * @return next Quotient from r.
-    public Quotient<C> parse(Reader r) {
-        StringWriter sw = new StringWriter();
-        int c;
-        try {
-            while ( (c = r.read()) >= 0 ) {
-                if ( c == '}' ) {
-                    break;
-                }
-                sw.write(c);
-            }
-        } catch (IOException e) {
-            logger.error(e.toString()+ " parse " + this);
-            return getZERO();
-        }
-        String s = sw.toString();
-        return parse( s );
-    }
-     */
 
 }
