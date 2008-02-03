@@ -468,7 +468,6 @@ public class Quotient<C extends GcdRingElem<C> >
             return b;
         }
         return ring.getONE();
-        // throw new RuntimeException("gcd not implemented " + this.getClass().getName());
     }
 
 
@@ -479,7 +478,7 @@ public class Quotient<C extends GcdRingElem<C> >
      * @return [ gcd(this,b), c1, c2 ] with c1*this + c2*b = gcd(this,b).
      */
     public Quotient<C>[] egcd(Quotient<C> b) {
-        Quotient<C>[] ret = /*(Quotient<C>[])*/new Quotient[3];
+        Quotient<C>[] ret = (Quotient<C>[]) new Quotient[3];
         ret[0] = null;
         ret[1] = null;
         ret[2] = null;
@@ -496,6 +495,5 @@ public class Quotient<C extends GcdRingElem<C> >
         ret[1] = (this.multiply(two)).inverse();
         ret[2] = (b.multiply(two)).inverse();
         return ret;
-        // throw new RuntimeException("egcd not implemented " + this.getClass().getName());
     }
 }
