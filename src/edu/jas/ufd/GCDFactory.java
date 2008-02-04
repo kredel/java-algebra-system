@@ -101,7 +101,7 @@ public class GCDFactory /*<C extends GcdRingElem<C>>*/ {
     public static //<C extends ModInteger>
            GreatestCommonDivisor<ModInteger> 
            getProxy( ModIntegerRing fac ) {
-        GreatestCommonDivisor<ModInteger> ufd1, ufd2; 
+        GreatestCommonDivisorAbstract<ModInteger> ufd1, ufd2; 
         ufd1 = new GreatestCommonDivisorSubres<ModInteger>();
         if ( fac.isField() ) {
            ufd2 = new GreatestCommonDivisorModEval();
@@ -138,7 +138,7 @@ public class GCDFactory /*<C extends GcdRingElem<C>>*/ {
     public static //<C extends BigInteger>
            GreatestCommonDivisor<BigInteger> 
            getProxy( BigInteger fac ) {
-        GreatestCommonDivisor<BigInteger> ufd1, ufd2; 
+        GreatestCommonDivisorAbstract<BigInteger> ufd1, ufd2; 
         ufd1 = new GreatestCommonDivisorSubres<BigInteger>();
         ufd2 = new GreatestCommonDivisorModular();
         return new GCDProxy<BigInteger>(ufd1,ufd2);
@@ -167,7 +167,7 @@ public class GCDFactory /*<C extends GcdRingElem<C>>*/ {
     public static //<C extends BigRational>
            GreatestCommonDivisor<BigRational> 
            getProxy( BigRational fac ) {
-        GreatestCommonDivisor<BigRational> ufd1, ufd2; 
+        GreatestCommonDivisorAbstract<BigRational> ufd1, ufd2; 
         ufd1 = new GreatestCommonDivisorSubres<BigRational>();
         ufd2 = new GreatestCommonDivisorSimple<BigRational>();
         return new GCDProxy<BigRational>(ufd1,ufd2);
@@ -183,18 +183,20 @@ public class GCDFactory /*<C extends GcdRingElem<C>>*/ {
            GreatestCommonDivisor<C> 
            getImplementation( RingFactory<C> fac ) {
         GreatestCommonDivisor ufd; 
-        logger.info("fac = " + fac.getClass().getName());
+        logger.debug("fac = " + fac.getClass().getName());
         int t = 0;
         BigInteger b = new BigInteger(1);
         RingElem<C> bc = fac.fromInteger(1);
         if ( b.equals( bc ) ) {
            t = 1;
+           System.out.println("getProxy = BigInteger");
         } else {
            if ( fac.characteristic().signum() > 0 ) {
               ModIntegerRing m = new ModIntegerRing( fac.characteristic() );
               //C mc = fac.fromInteger(1);
               if ( m.equals( fac ) ) {
                  t = 2;
+                 System.out.println("getProxy = ModInteger");
               }
            }
         }
@@ -212,7 +214,7 @@ public class GCDFactory /*<C extends GcdRingElem<C>>*/ {
               ufd = new GreatestCommonDivisorSubres<C>();
            }
         }
-        logger.info("ufd = " + ufd);
+        logger.debug("ufd = " + ufd);
         return (GreatestCommonDivisor<C>) ufd;
     }
 
@@ -226,18 +228,20 @@ public class GCDFactory /*<C extends GcdRingElem<C>>*/ {
            GreatestCommonDivisor<C> 
            getProxy( RingFactory<C> fac ) {
         GreatestCommonDivisor ufd; 
-        logger.info("fac = " + fac.getClass().getName());
+        logger.debug("fac = " + fac.getClass().getName());
         int t = 0;
         BigInteger b = new BigInteger(1);
         RingElem<C> bc = fac.fromInteger(1);
         if ( b.equals( bc ) ) {
            t = 1;
+           System.out.println("getProxy = BigInteger");
         } else {
            if ( fac.characteristic().signum() > 0 ) {
               ModIntegerRing m = new ModIntegerRing( fac.characteristic() );
               //C mc = fac.fromInteger(1);
               if ( m.equals( fac ) ) {
                  t = 2;
+                 System.out.println("getProxy = ModInteger");
               }
            }
         }
@@ -262,7 +266,7 @@ public class GCDFactory /*<C extends GcdRingElem<C>>*/ {
                         new GreatestCommonDivisorPrimitive<C>() );
            }
         }
-        logger.info("ufd = " + ufd);
+        logger.debug("ufd = " + ufd);
         return (GCDProxy<C>) ufd;
     }
 
