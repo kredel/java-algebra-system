@@ -22,13 +22,6 @@ import edu.jas.kern.ComputerThreads;
 
 import edu.jas.poly.GenPolynomial;
 
-//import edu.jas.ufd.GreatestCommonDivisor;
-//import edu.jas.ufd.GreatestCommonDivisorAbstract;
-//import edu.jas.ufd.GreatestCommonDivisorSubres;
-//import edu.jas.ufd.GreatestCommonDivisorPrimitive;
-//import edu.jas.ufd.GreatestCommonDivisorModular;
-//import edu.jas.ufd.GreatestCommonDivisorModEval;
-
 
 /**
  * Greatest common divisor parallel proxy.
@@ -128,6 +121,18 @@ public class GCDProxy<C extends GcdRingElem<C>>
      * @return gcd(P,S).
      */
      public GenPolynomial<C> gcd( final GenPolynomial<C> P, final GenPolynomial<C> S ) {
+         if ( S == null || S.isZERO() ) {
+            return P;
+         }
+         if ( P == null || P.isZERO() ) {
+            return S;
+         }
+         //GenPolynomialRing<C> pfac = P.ring;
+         //if ( pfac.nvar <= 1 ) {
+         //   GenPolynomial<C> T = e1.baseGcd(P,S);
+         //   return T;
+         //}
+         // parallel case
          GenPolynomial<C> g = null;
          Callable<GenPolynomial<C>> c0;
          Callable<GenPolynomial<C>> c1;
