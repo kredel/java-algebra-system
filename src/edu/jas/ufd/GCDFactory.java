@@ -258,7 +258,7 @@ public class GCDFactory /*<C extends GcdRingElem<C>>*/ {
            } else {
               ufd = new GCDProxy<C>( 
                         new GreatestCommonDivisorSubres<C>(), 
-                        new GreatestCommonDivisorSimple<C>() );
+                        new GreatestCommonDivisorPrimitive<C>() );
            }
         }
         logger.info("ufd = " + ufd);
