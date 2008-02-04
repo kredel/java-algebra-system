@@ -85,9 +85,8 @@ public class RCGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
            throw new IllegalArgumentException("red must be a RPseudoReductionSeq");
         }
         cofac = rf;
-        engine = (GreatestCommonDivisorAbstract<C>)GCDFactory.getImplementation( rf );
-        //System.out.println("engine = " + engine.getClass().getName());
-        //System.out.println("cofac  = " + cofac.getClass().getName());
+        engine = (GreatestCommonDivisorAbstract<C>)GCDFactory.<C>getImplementation( rf );
+        //not used: engine = (GreatestCommonDivisorAbstract<C>)GCDFactory.<C>getProxy( rf );
     }
 
 

@@ -72,7 +72,8 @@ public class GroebnerBasePseudoSeq<C extends GcdRingElem<C>>
            throw new IllegalArgumentException("red must be a PseudoReductionSeq");
         }
         cofac = rf;
-        engine = (GreatestCommonDivisorAbstract<C>)GCDFactory.getImplementation( rf );
+        engine = (GreatestCommonDivisorAbstract<C>)GCDFactory.<C>getImplementation( rf );
+        //not used: engine = (GreatestCommonDivisorAbstract<C>)GCDFactory.<C>getProxy( rf );
     }
 
 
