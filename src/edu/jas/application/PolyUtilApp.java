@@ -941,9 +941,6 @@ public class PolyUtilApp<C extends RingElem<C> > {
                     List<GenPolynomial<BigRational>> nl 
                         = new ArrayList<GenPolynomial<BigRational>>( fl );
                     A = rr.engine.squarefreePart( A );
-                    if ( A.isConstant() ) {
-                       System.out.println("A.isConstant() " + A + " von " + ar.val);
-                    }
                     nl.add(A);
                     nl = bb.GB(nl); //wrong: done in ResidueRing constructor, not yet required
                     Ideal<BigRational> I = new Ideal<BigRational>(rfac, nl, true);
@@ -983,8 +980,24 @@ public class PolyUtilApp<C extends RingElem<C> > {
            System.out.println("existing ResidueRing = " + r);
            return false;
         }
+        ResidueRing<BigRational> rc = factoryContainsContains(P,r);
+        if ( rc == null ) {
+           System.out.println("new ResidueRing = " + r);
+           P.addFactory( r );
+           return true;
+        }
+        System.out.println("containing ResidueRing = " + rc);
+        Ideal<BigRational> irc = rc.ideal;
+        Ideal<BigRational> ir  = r.ideal;
+        Ideal<BigRational> iq  = ir.quotient(irc);
+        ResidueRing<BigRational> rrq = new ResidueRing<BigRational>( iq );
+        System.out.println("new ResidueRing quotient = " + rrq);
         System.out.println("new ResidueRing = " + r);
-        P.addFactory( r );
+        if ( factoryContainsEquals( P, rrq ) ) { 
+           System.out.println("existing quotient ResidueRing = " + rrq);
+           return false;
+        }
+        P.addFactory( rrq );
         return true;
     }
 
@@ -1026,28 +1039,28 @@ public class PolyUtilApp<C extends RingElem<C> > {
      * @param r ResidueRing&lt;BigRational&gt; factory.
      * @return true, if r is contained in an residue ring of P, else false.
      */
-    public static boolean
+    public static ResidueRing<BigRational> 
         factoryContainsContains( ProductRing<Residue<BigRational>> P,
                                  ResidueRing<BigRational> r ) {
         if ( r == null ) {
-           return true;
+           return r;
         }
         if ( P == null || P.length() == 0 ) {
-           return false;
+           return r;
         }
         Ideal<BigRational> rid = r.ideal;
-        if ( rid == null || rid.isZERO() ) {
-           return true;
-        }
+        //if ( rid == null || rid.isZERO() ) {
+        //   return r;
+        //}
         for ( int i = 0; i < P.length(); i++ ) {
             RingFactory<Residue<BigRational>> rrr = P.getFactory(i); 
             ResidueRing<BigRational> rr = (ResidueRing<BigRational>)rrr; 
             Ideal<BigRational> id = rr.ideal;
             if ( id.contains( rid ) ) {
-               return true;
+               return rr;
             }
         }
-        return false;
+        return null;
     }
 
 
