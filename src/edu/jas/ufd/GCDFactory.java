@@ -7,6 +7,7 @@ package edu.jas.ufd;
 
 import org.apache.log4j.Logger;
 
+import edu.jas.structure.RingElem;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
 
@@ -185,14 +186,14 @@ public class GCDFactory /*<C extends GcdRingElem<C>>*/ {
         logger.info("fac = " + fac.getClass().getName());
         int t = 0;
         BigInteger b = new BigInteger(1);
-        C bc = fac.fromInteger(1);
+        RingElem<C> bc = fac.fromInteger(1);
         if ( b.equals( bc ) ) {
            t = 1;
         } else {
            if ( fac.characteristic().signum() > 0 ) {
-              ModInteger m = new ModInteger(new ModIntegerRing(fac.characteristic()),1);
-              C mc = fac.fromInteger(1);
-              if ( m.equals( mc ) ) {
+              ModIntegerRing m = new ModIntegerRing( fac.characteristic() );
+              //C mc = fac.fromInteger(1);
+              if ( m.equals( fac ) ) {
                  t = 2;
               }
            }
@@ -228,14 +229,14 @@ public class GCDFactory /*<C extends GcdRingElem<C>>*/ {
         logger.info("fac = " + fac.getClass().getName());
         int t = 0;
         BigInteger b = new BigInteger(1);
-        C bc = fac.fromInteger(1);
+        RingElem<C> bc = fac.fromInteger(1);
         if ( b.equals( bc ) ) {
            t = 1;
         } else {
            if ( fac.characteristic().signum() > 0 ) {
-              ModInteger m = new ModInteger(new ModIntegerRing(fac.characteristic()),1);
-              C mc = fac.fromInteger(1);
-              if ( m.equals( mc ) ) {
+              ModIntegerRing m = new ModIntegerRing( fac.characteristic() );
+              //C mc = fac.fromInteger(1);
+              if ( m.equals( fac ) ) {
                  t = 2;
               }
            }
