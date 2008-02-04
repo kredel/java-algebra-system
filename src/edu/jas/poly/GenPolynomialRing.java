@@ -20,7 +20,7 @@ import java.util.Random;
 import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
-import edu.jas.structure.GcdRingElem;
+//import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
 
 import edu.jas.kern.PrettyPrint;
@@ -33,10 +33,6 @@ import edu.jas.poly.TermOrder;
 import edu.jas.poly.ExpVector;
 
 import edu.jas.application.QuotientRing;
-
-import edu.jas.ufd.GreatestCommonDivisor;
-import edu.jas.ufd.GreatestCommonDivisorSubres;
-import edu.jas.ufd.GCDFactory;
 
 
 /**
