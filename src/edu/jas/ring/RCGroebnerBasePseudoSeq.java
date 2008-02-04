@@ -167,11 +167,11 @@ public class RCGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
               //if ( pair.getUseCriterion3() ) { // correct ?
               //if ( pair.getUseCriterion4() ) { // correct ? no, not applicable
                   S = red.SPolynomial( pi, pj );
-                  System.out.println("S("+pair.pi+","+pair.pj+") = " + S);
                   if ( S.isZERO() ) {
                       pair.setZero();
                       continue;
                   }
+                  //System.out.println("S("+pair.pi+","+pair.pj+") = " + S);
                   if ( logger.isDebugEnabled() ) {
                       logger.debug("ht(S) = " + S.leadingExpVector() );
                   }
@@ -184,7 +184,7 @@ public class RCGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
                   if ( logger.isDebugEnabled() ) {
                       logger.debug("ht(H) = " + H.leadingExpVector() );
                   }
-                  if ( usePP && !H.isConstant() ) { // do not remove all factors
+                  if ( /*usePP &&*/ !H.isConstant() ) { // do not remove all factors
                      H = engine.basePrimitivePart(H); 
                   }
                   H = H.abs(); // not monic, no field
@@ -212,7 +212,7 @@ public class RCGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
                          //logger.info("#bcH = " + bcH.size());
                          //G.addAll( bcH );
                          for ( GenPolynomial<C> h: bcH ) {
-                             if ( usePP && !h.isConstant() ) { // do not remove all factors
+                             if ( /*usePP &&*/ !h.isConstant() ) { // do not remove all factors
                                 h = engine.basePrimitivePart(h); 
                              }
                              h = h.abs(); // monic() not ok, since no field
