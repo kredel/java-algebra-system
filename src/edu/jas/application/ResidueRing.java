@@ -36,7 +36,7 @@ public class ResidueRing<C extends GcdRingElem<C> >
     /**
      * Greatest common divisor engine for coefficient content and primitive parts.
      */
-    protected final GreatestCommonDivisorAbstract<C> engine;
+    protected final GreatestCommonDivisor<C> engine;
 
 
     /** Polynomial ideal for the reduction. 
@@ -62,7 +62,8 @@ public class ResidueRing<C extends GcdRingElem<C> >
     public ResidueRing(Ideal<C> i) {
         ideal = i.GB(); // cheap if isGB
         ring = ideal.list.ring;
-        engine = (GreatestCommonDivisorAbstract<C>)GCDFactory.getImplementation( ring.coFac );
+        //engine = GCDFactory.<C>getImplementation( ring.coFac );
+        engine = GCDFactory.<C>getProxy( ring.coFac );
         //System.out.println("rr engine = " + engine.getClass().getName());
         //System.out.println("rr ring   = " + ring.getClass().getName());
         //System.out.println("rr cofac  = " + ring.coFac.getClass().getName());
