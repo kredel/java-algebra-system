@@ -96,7 +96,7 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>>
                 }
                 s = red.normalform( F, s );
                 if ( ! s.isZERO() ) {
-                   if ( true || debug ) {
+                   if ( debug ) {
                       System.out.println("p"+i+" = "+pi);
                       System.out.println("p"+j+" = "+pj);
                       System.out.println("s-pol = " + red.SPolynomial( pi, pj ) );
