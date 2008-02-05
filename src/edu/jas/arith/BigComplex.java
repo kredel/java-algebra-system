@@ -116,7 +116,8 @@ public final class BigComplex implements StarRingElem<BigComplex>,
     /** Clone this.
      * @see java.lang.Object#clone()
      */
-    public BigComplex clone() {
+    @Override
+	public BigComplex clone() {
         return new BigComplex( re, im );
     }
 
@@ -232,7 +233,8 @@ public final class BigComplex implements StarRingElem<BigComplex>,
 
     /** Get the String representation.
      */
-    public String toString() {
+    @Override
+	public String toString() {
         String s = "" + re;
         int i = im.compareTo( BigRational.ZERO );
         //logger.info("compareTo "+im+" ? 0 = "+i);
@@ -303,7 +305,8 @@ public final class BigComplex implements StarRingElem<BigComplex>,
     /** Comparison with any other object.
      * @see java.lang.Object#equals(java.lang.Object)
      */
-    public boolean equals(Object b) {
+    @Override
+	public boolean equals(Object b) {
         if ( ! ( b instanceof BigComplex ) ) {
            return false;
         }
@@ -316,7 +319,8 @@ public final class BigComplex implements StarRingElem<BigComplex>,
     /** Hash code for this BigComplex.
      * @see java.lang.Object#hashCode()
      */
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         return 37 * re.hashCode() + im.hashCode();
     }
 

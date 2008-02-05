@@ -6,15 +6,8 @@ package edu.jas.ring;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.TreeMap;
-
 import org.apache.log4j.Logger;
 
-import edu.jas.structure.RingElem;
 import edu.jas.structure.RegularRingElem;
 
 import edu.jas.poly.ExpVector;
@@ -68,7 +61,8 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>>
      * @param F polynomial list.
      * @return true, if F is a R-Groebner base, else false.
      */
-    public boolean isGB(int modv, List<GenPolynomial<C>> F) {  
+    @Override
+	public boolean isGB(int modv, List<GenPolynomial<C>> F) {  
         if ( F == null ) {
            return true;
         }
@@ -78,7 +72,7 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>>
            }
            return false;
         }
-        GenPolynomial<C> pi, pj, s, h, d;
+        GenPolynomial<C> pi, pj, s, h;
         for ( int i = 0; i < F.size(); i++ ) {
             pi = F.get(i);
             for ( int j = i+1; j < F.size(); j++ ) {
@@ -151,7 +145,7 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>>
         GenPolynomial<C> pi;
         GenPolynomial<C> pj;
         GenPolynomial<C> S;
-        GenPolynomial<C> D;
+        //GenPolynomial<C> D;
         GenPolynomial<C> H;
         List<GenPolynomial<C>> bcH;
         //int len = G.size();
@@ -234,7 +228,8 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>>
      * @param Gp a Groebner base.
      * @return a reduced Groebner base of Gp.
      */
-    public List<GenPolynomial<C>> 
+    @Override
+	public List<GenPolynomial<C>> 
                 minimalGB(List<GenPolynomial<C>> Gp) {  
         if ( Gp == null || Gp.size() <= 1 ) {
             return Gp;

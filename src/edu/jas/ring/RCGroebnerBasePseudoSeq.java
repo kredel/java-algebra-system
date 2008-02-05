@@ -6,15 +6,8 @@ package edu.jas.ring;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.TreeMap;
-
 import org.apache.log4j.Logger;
 
-import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.structure.RegularRingElem;
 
@@ -27,7 +20,6 @@ import edu.jas.ring.OrderedRPairlist;
 
 import edu.jas.application.PolyUtilApp;
 
-import edu.jas.ufd.GreatestCommonDivisor;
 import edu.jas.ufd.GreatestCommonDivisorAbstract;
 import edu.jas.ufd.GCDFactory;
 
@@ -97,7 +89,8 @@ public class RCGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
      * @param F polynomial list.
      * @return GB(F) a R-Groebner base of F.
      */
-    public List<GenPolynomial<C>> 
+    @Override
+	public List<GenPolynomial<C>> 
              GB( int modv, 
                  List<GenPolynomial<C>> F ) {  
         if ( F == null ) {
@@ -148,7 +141,7 @@ public class RCGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
         GenPolynomial<C> pi;
         GenPolynomial<C> pj;
         GenPolynomial<C> S;
-        GenPolynomial<C> D;
+        //GenPolynomial<C> D;
         GenPolynomial<C> H;
         List<GenPolynomial<C>> bcH;
         while ( pairlist.hasNext() ) {
@@ -258,7 +251,8 @@ public class RCGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
      * @return a reduced Groebner base of Gp.
      * @todo use primitivePart
      */
-    public List<GenPolynomial<C>> 
+    @Override
+	public List<GenPolynomial<C>> 
         minimalGB(List<GenPolynomial<C>> Gp) {  
         if ( Gp == null || Gp.size() <= 1 ) {
             return Gp;

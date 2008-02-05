@@ -594,7 +594,8 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>>
      * @param exgb an SolvableExtendedGB container.
      * @return true, if exgb contains a left reduction matrix, else false.
      */
-    public boolean
+    @Override
+	public boolean
            isLeftReductionMatrix(SolvableExtendedGB<C> exgb) {  
         if ( exgb == null ) {
             return true;

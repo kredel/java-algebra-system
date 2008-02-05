@@ -36,7 +36,8 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C> >
      * @param S univariate GenPolynomial.
      * @return gcd(P,S).
      */
-    public GenPolynomial<C> baseGcd( GenPolynomial<C> P,
+    @Override
+	public GenPolynomial<C> baseGcd( GenPolynomial<C> P,
                                      GenPolynomial<C> S ) {
         if ( S == null || S.isZERO() ) {
             return P;
@@ -105,7 +106,8 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C> >
      * @param S univariate recursive GenPolynomial.
      * @return gcd(P,S).
      */
-    public GenPolynomial<GenPolynomial<C>> 
+    @Override
+	public GenPolynomial<GenPolynomial<C>> 
         recursiveGcd( GenPolynomial<GenPolynomial<C>> P,
                       GenPolynomial<GenPolynomial<C>> S ) {
         if ( S == null || S.isZERO() ) {

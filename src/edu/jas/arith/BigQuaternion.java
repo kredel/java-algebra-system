@@ -184,7 +184,8 @@ public final class BigQuaternion implements StarRingElem<BigQuaternion>,
     /** Clone this.
      * @see java.lang.Object#clone()
      */
-    public BigQuaternion clone() {
+    @Override
+	public BigQuaternion clone() {
         return new BigQuaternion( re, im, jm, km );
     }
 
@@ -331,7 +332,8 @@ public final class BigQuaternion implements StarRingElem<BigQuaternion>,
      * Is compatible with the string constructor.
      * @see java.lang.Object#toString()
      */
-    public String toString() {
+    @Override
+	public String toString() {
         String s = "" + re;
         int i = im.compareTo( BigRational.ZERO );
         int j = jm.compareTo( BigRational.ZERO );
@@ -414,7 +416,8 @@ public final class BigQuaternion implements StarRingElem<BigQuaternion>,
     /** Comparison with any other object.
      * @see java.lang.Object#equals(java.lang.Object)
      */
-    public boolean equals(Object b) {
+    @Override
+	public boolean equals(Object b) {
         if ( ! ( b instanceof BigQuaternion ) ) return false;
         BigQuaternion B = (BigQuaternion) b;
         return    re.equals( B.re ) 
@@ -427,7 +430,8 @@ public final class BigQuaternion implements StarRingElem<BigQuaternion>,
     /** Hash code for this BigQuaternion.
      * @see java.lang.Object#hashCode()
      */
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         int h;
         h  = 37 * re.hashCode();
         h += 37 * im.hashCode();

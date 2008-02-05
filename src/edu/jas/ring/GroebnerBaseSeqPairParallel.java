@@ -179,7 +179,8 @@ public class GroebnerBaseSeqPairParallel<C extends RingElem<C>>
      * @param Fp a Groebner base.
      * @return minimalGB(F) a minimal Groebner base of Fp.
      */
-    public List<GenPolynomial<C>> 
+    @Override
+	public List<GenPolynomial<C>> 
         minimalGB(List<GenPolynomial<C>> Fp) {  
         GenPolynomial<C> a;
         ArrayList<GenPolynomial<C>> G;

@@ -60,7 +60,8 @@ public class ExtendedGB<C extends RingElem<C>> {
         /** Get the String representation.
          * @see java.lang.Object#toString()
          */
-        public String toString() {
+        @Override
+		public String toString() {
             PolynomialList<C> P;
             ModuleList<C> M;
             StringBuffer s = new StringBuffer("ExtendedGB: \n\n");

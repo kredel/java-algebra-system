@@ -130,7 +130,8 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>,
     /** Clone this.
      * @see java.lang.Object#clone()
      */
-    public BigDecimal clone() {
+    @Override
+	public BigDecimal clone() {
         return new BigDecimal( val, context );
     }
 
@@ -261,7 +262,8 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>,
     /** Get the String representation.
      * @see java.lang.Object#toString()
      */
-    public String toString() {
+    @Override
+	public String toString() {
         //return val.toString() + "(ulp=" + val.ulp() + ")";
         return val.toString();
     }
@@ -301,7 +303,8 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>,
     /** Comparison with any other object.
      * @see java.lang.Object#equals(java.lang.Object)
      */
-    public boolean equals(Object b) {
+    @Override
+	public boolean equals(Object b) {
         if ( ! ( b instanceof BigDecimal ) ) {
             return false;
         }
@@ -313,7 +316,8 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>,
     /** Hash code for this BigDecimal.
      * @see java.lang.Object#hashCode()
      */
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         return val.hashCode();
     }
 

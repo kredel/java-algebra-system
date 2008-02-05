@@ -145,7 +145,8 @@ public class LocalRing<C extends RingElem<C> >
     /** Get the String representation as RingFactory.
      * @see java.lang.Object#toString()
      */
-    public String toString() {
+    @Override
+	public String toString() {
         return "Local[ " 
                 + ideal.toString() + " ]";
     }

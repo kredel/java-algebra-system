@@ -594,7 +594,8 @@ public class GenPolynomialRing<C extends RingElem<C> >
      * @param r Reader.
      * @return next GenPolynomial from r.
      */
-    public GenPolynomial<C> parse(Reader r) {
+    @SuppressWarnings("unchecked")
+	public GenPolynomial<C> parse(Reader r) {
         GenPolynomialTokenizer pt = new GenPolynomialTokenizer(this,r);
         GenPolynomial<C> p = null;
         try {

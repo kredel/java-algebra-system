@@ -12,7 +12,6 @@ import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
 
-import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 
 import edu.jas.ring.OrderedDPairlist;
@@ -65,8 +64,9 @@ public class DGroebnerBaseSeq<C extends RingElem<C>>
      * @param F polynomial list.
      * @return true, if F is a D-Groebner base, else false.
      */
-    public boolean isGB(int modv, List<GenPolynomial<C>> F) {  
-        GenPolynomial<C> pi, pj, s, h, d;
+    @Override
+	public boolean isGB(int modv, List<GenPolynomial<C>> F) {  
+        GenPolynomial<C> pi, pj, s, d;
         for ( int i = 0; i < F.size(); i++ ) {
             pi = F.get(i);
             for ( int j = i+1; j < F.size(); j++ ) {

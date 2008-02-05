@@ -4,21 +4,14 @@
 
 package edu.jas.ring;
 
-import java.util.ArrayList;
-import java.util.BitSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.TreeMap;
-
 import org.apache.log4j.Logger;
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
-import edu.jas.poly.GenSolvablePolynomialRing;
-
-import edu.jas.structure.RingElem;
 import edu.jas.structure.RegularRingElem;
 
 /**
@@ -60,7 +53,8 @@ public class OrderedRPairlist<C extends RegularRingElem<C> >
      * Appy the criterions 3 and 4 to see if the S-polynomial is required.
      * @return the next pair if one exists, otherwise null.
      */
-    public synchronized Pair<C> removeNext() { 
+    @Override
+	public synchronized Pair<C> removeNext() { 
        if ( oneInGB ) {
           return null;
        }
@@ -119,7 +113,8 @@ public class OrderedRPairlist<C extends RegularRingElem<C> >
      * GB criterium 3.
      * @return true if the S-polynomial(i,j) is required.
      */
-    public boolean criterion3(int i, int j, ExpVector eij) {  
+    @Override
+	public boolean criterion3(int i, int j, ExpVector eij) {  
         // assert i < j;
         boolean s;
         s = red.get( j ).get(i); 

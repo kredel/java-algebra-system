@@ -144,7 +144,8 @@ public class ChannelFactory extends Thread {
   /**
    * Eun the servers accept() in an infinite loop.
    */
-  public void run() {
+  @Override
+public void run() {
     while (true) {
       try {
           logger.info("waiting for connection");

@@ -123,7 +123,8 @@ public final class BigOctonion implements StarRingElem<BigOctonion>,
     /** Clone this.
      * @see java.lang.Object#clone()
      */
-    public BigOctonion clone() {
+    @Override
+	public BigOctonion clone() {
         return new BigOctonion( or, oi );
     }
 
@@ -244,7 +245,8 @@ public final class BigOctonion implements StarRingElem<BigOctonion>,
      * Is compatible with the string constructor.
      * @see java.lang.Object#toString()
      */
-    public String toString() {
+    @Override
+	public String toString() {
         String s = "" + or;
         int i = oi.compareTo( BigQuaternion.ZERO );
         logger.debug("compareTo "+i+" ? 0 = "+oi);
@@ -315,7 +317,8 @@ public final class BigOctonion implements StarRingElem<BigOctonion>,
     /** Comparison with any other object.
      * @see java.lang.Object#equals(java.lang.Object)
      */
-    public boolean equals(Object b) {
+    @Override
+	public boolean equals(Object b) {
         if ( ! ( b instanceof BigOctonion ) ) return false;
         BigOctonion B = (BigOctonion) b;
         return    or.equals( B.or ) 
@@ -326,7 +329,8 @@ public final class BigOctonion implements StarRingElem<BigOctonion>,
     /** Hash code for this BigOctonion.
      * @see java.lang.Object#hashCode()
      */
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         int h;
         h  = 41 * or.hashCode();
         h += 41 * oi.hashCode();

@@ -158,7 +158,8 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>>
      * @param F polynomial list.
      * @return a container for an extended Groebner base of F.
      */
-    public ExtendedGB<C> 
+    @Override
+	public ExtendedGB<C> 
              extGB( int modv, 
                     List<GenPolynomial<C>> F ) {  
         List<GenPolynomial<C>> G = new ArrayList<GenPolynomial<C>>();

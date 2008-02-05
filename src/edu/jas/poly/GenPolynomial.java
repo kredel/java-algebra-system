@@ -15,7 +15,6 @@ import java.util.Collections;
 import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
-import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.NotInvertibleException;
 
 import edu.jas.kern.PrettyPrint;
@@ -115,7 +114,8 @@ public class GenPolynomial<C extends RingElem<C> >
      * Clone this GenPolynomial.
      * @see java.lang.Object#clone()
      */
-    public GenPolynomial<C> clone() {
+    @Override
+	public GenPolynomial<C> clone() {
         //return ring.copy(this);
         return new GenPolynomial<C>(ring,this.val);
     }
@@ -166,7 +166,8 @@ public class GenPolynomial<C extends RingElem<C> >
      * String representation of GenPolynomial.
      * @see java.lang.Object#toString()
      */
-    public String toString() {
+    @Override
+	public String toString() {
         if ( ring.vars != null ) {
             return toString(ring.vars);
         }

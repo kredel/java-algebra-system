@@ -45,7 +45,8 @@ public class EReductionSeq<C extends RingElem<C>>
      * @return true if A is top reducible with respect to P.
      */
     //SuppressWarnings("unchecked") // not jet working
-    public boolean isTopReducible(List<GenPolynomial<C>> P, 
+    @Override
+	public boolean isTopReducible(List<GenPolynomial<C>> P, 
                                   GenPolynomial<C> A) {  
         if ( P == null || P.isEmpty() ) {
            return false;
@@ -79,7 +80,8 @@ public class EReductionSeq<C extends RingElem<C>>
      * @return true if Ap is in normalform with respect to Pp.
      */
     //SuppressWarnings("unchecked") // not jet working
-    public boolean isNormalform(List<GenPolynomial<C>> Pp, 
+    @Override
+	public boolean isNormalform(List<GenPolynomial<C>> Pp, 
                                 GenPolynomial<C> Ap) {  
         if ( Pp == null || Pp.isEmpty() ) {
            return true;
@@ -141,7 +143,8 @@ public class EReductionSeq<C extends RingElem<C>>
      * @return e-nf(Ap) with respect to Pp.
      */
     //SuppressWarnings("unchecked") // not jet working
-    public GenPolynomial<C> normalform(List<GenPolynomial<C>> Pp, 
+    @Override
+	public GenPolynomial<C> normalform(List<GenPolynomial<C>> Pp, 
                                        GenPolynomial<C> Ap) {  
         if ( Pp == null || Pp.isEmpty() ) {
            return Ap;
@@ -241,7 +244,8 @@ public class EReductionSeq<C extends RingElem<C>>
      * @param Ap a polynomial.
      * @return nf(Pp,Ap), the normal form of Ap wrt. Pp.
      */
-    @SuppressWarnings("unchecked") // not jet working
+    @Override
+	@SuppressWarnings("unchecked") // not jet working
     public GenPolynomial<C> 
         normalform(List<GenPolynomial<C>> row,
                    List<GenPolynomial<C>> Pp, 
@@ -330,7 +334,8 @@ public class EReductionSeq<C extends RingElem<C>>
      * @param Pp polynomial list.
      * @return a list P of polynomials which are in normalform wrt. P.
      */
-    public List<GenPolynomial<C>> irreducibleSet(List<GenPolynomial<C>> Pp) {  
+    @Override
+	public List<GenPolynomial<C>> irreducibleSet(List<GenPolynomial<C>> Pp) {  
         ArrayList<GenPolynomial<C>> P = new ArrayList<GenPolynomial<C>>();
         if ( Pp == null ) {
            return null;

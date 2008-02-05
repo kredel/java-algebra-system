@@ -76,7 +76,8 @@ public class GreatestCommonDivisorModular //<C extends GcdRingElem<C> >
      * @param S univariate GenPolynomial.
      * @return gcd(P,S).
      */
-    public GenPolynomial<BigInteger> baseGcd( GenPolynomial<BigInteger> P,
+    @Override
+	public GenPolynomial<BigInteger> baseGcd( GenPolynomial<BigInteger> P,
                                               GenPolynomial<BigInteger> S ) {
         return iufd.baseGcd(P,S);
     }
@@ -89,7 +90,8 @@ public class GreatestCommonDivisorModular //<C extends GcdRingElem<C> >
      * @param S univariate recursive GenPolynomial.
      * @return gcd(P,S).
      */
-    public GenPolynomial<GenPolynomial<BigInteger>> 
+    @Override
+	public GenPolynomial<GenPolynomial<BigInteger>> 
         recursiveGcd( GenPolynomial<GenPolynomial<BigInteger>> P,
                       GenPolynomial<GenPolynomial<BigInteger>> S ) {
         return iufd.recursiveGcd(P,S);
@@ -102,7 +104,8 @@ public class GreatestCommonDivisorModular //<C extends GcdRingElem<C> >
      * @param S GenPolynomial.
      * @return gcd(P,S).
      */
-    public GenPolynomial<BigInteger> gcd( GenPolynomial<BigInteger> P,
+    @Override
+	public GenPolynomial<BigInteger> gcd( GenPolynomial<BigInteger> P,
                                           GenPolynomial<BigInteger> S ) {
         if ( S == null || S.isZERO() ) {
             return P;

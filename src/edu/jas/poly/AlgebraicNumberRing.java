@@ -164,7 +164,8 @@ public class AlgebraicNumberRing<C extends GcdRingElem<C> >
     /** Get the String representation as RingFactory.
      * @see java.lang.Object#toString()
      */
-    public String toString() {
+    @Override
+	public String toString() {
         return "AlgebraicNumberRing[ " 
               + modul.toString() + " | isField="
               + isField + " :: "
@@ -196,7 +197,8 @@ public class AlgebraicNumberRing<C extends GcdRingElem<C> >
     /** Hash code for this AlgebraicNumber.
      * @see java.lang.Object#hashCode()
      */
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         return 37 * modul.hashCode() + ring.hashCode();
     }
 

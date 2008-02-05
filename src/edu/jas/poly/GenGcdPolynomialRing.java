@@ -6,37 +6,14 @@
 package edu.jas.poly;
 
 
-import java.io.IOException;
-import java.io.Reader;
-import java.io.StringReader;
-
-import java.math.BigInteger;
-
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Random;
-
 import org.apache.log4j.Logger;
 
-import edu.jas.structure.RingElem;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
 
-import edu.jas.kern.PrettyPrint;
-import edu.jas.kern.PreemptStatus;
-
-import edu.jas.arith.ModIntegerRing;
-
-import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.TermOrder;
-import edu.jas.poly.ExpVector;
-
-import edu.jas.application.QuotientRing;
-
 import edu.jas.ufd.GreatestCommonDivisor;
 import edu.jas.ufd.GreatestCommonDivisorSubres;
-import edu.jas.ufd.GCDFactory;
 
 
 /**
@@ -122,7 +99,8 @@ public class GenGcdPolynomialRing<C extends GcdRingElem<C> >
      * @param i number of variables to extend.
      * @return extended polynomial ring factory.
      */
-    public GenGcdPolynomialRing<C> extend(int i) {
+    @Override
+	public GenGcdPolynomialRing<C> extend(int i) {
         // add module variable names
         String[] v = null;
         if ( vars != null ) {
@@ -147,7 +125,8 @@ public class GenGcdPolynomialRing<C extends GcdRingElem<C> >
      * @param i number of variables to remove.
      * @return contracted polynomial ring factory.
      */
-    public GenGcdPolynomialRing<C> contract(int i) {
+    @Override
+	public GenGcdPolynomialRing<C> contract(int i) {
         String[] v = null;
         if ( vars != null ) {
            v = new String[ vars.length - i ];
@@ -166,7 +145,8 @@ public class GenGcdPolynomialRing<C extends GcdRingElem<C> >
      * Reverse variables. Used e.g. in opposite rings.
      * @return polynomial ring factory with reversed variables.
      */
-    public GenGcdPolynomialRing<C> reverse() {
+    @Override
+	public GenGcdPolynomialRing<C> reverse() {
         return reverse(false);
     }
 
@@ -176,7 +156,8 @@ public class GenGcdPolynomialRing<C extends GcdRingElem<C> >
      * @param partial true for partialy reversed term orders.
      * @return polynomial ring factory with reversed variables.
      */
-    public GenGcdPolynomialRing<C> reverse(boolean partial) {
+    @Override
+	public GenGcdPolynomialRing<C> reverse(boolean partial) {
         String[] v = null;
         if ( vars != null ) { // vars are not inversed
            v = new String[ vars.length ];

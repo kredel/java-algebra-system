@@ -86,7 +86,8 @@ public class Residue<C extends RingElem<C> >
     /**  Clone this.
      * @see java.lang.Object#clone()
      */
-    public Residue<C> clone() {
+    @Override
+	public Residue<C> clone() {
         return new Residue<C>( ring, val );
     }
    
@@ -147,7 +148,8 @@ public class Residue<C extends RingElem<C> >
     /** Get the String representation as RingElem.
      * @see java.lang.Object#toString()
      */
-    public String toString() {
+    @Override
+	public String toString() {
         return "Residue[ " + val.toString() 
                  + " mod " + ring.toString() + " ]";
     }

@@ -13,8 +13,6 @@ import edu.jas.arith.BigInteger;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
 
-import edu.jas.ring.GroebnerBaseSeq;
-
 /**
  * Examples for polynomials usage.
  * @author Heinz Kredel.

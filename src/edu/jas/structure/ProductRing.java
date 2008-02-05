@@ -8,7 +8,6 @@ import java.io.Reader;
 import java.io.StringReader;
 
 import java.util.List;
-import java.util.ArrayList;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.Random;
@@ -303,7 +302,8 @@ public class ProductRing<C extends RingElem<C> >
     /** Get the String representation as RingFactory.
      * @see java.lang.Object#toString()
      */
-    public String toString() {
+    @Override
+	public String toString() {
         if ( nCopies != 0 ) {
            String cf = ring.toString();
            if ( cf.matches("[0-9].*") ) {

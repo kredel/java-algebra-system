@@ -16,10 +16,6 @@ import org.apache.log4j.Logger;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
 
-import edu.jas.arith.BigInteger;
-import edu.jas.arith.ModInteger;
-import edu.jas.arith.ModIntegerRing;
-
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
@@ -276,7 +272,8 @@ public class QuotientRing<C extends GcdRingElem<C> >
     /** Get the String representation as RingFactory.
      * @see java.lang.Object#toString()
      */
-    public String toString() {
+    @Override
+	public String toString() {
         return "Quotient[ " 
                 + ring.toString() + " ]";
     }

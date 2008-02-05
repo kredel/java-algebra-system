@@ -109,7 +109,8 @@ public class SocketChannel {
   /**
    * to string
    */
-  public String toString() {
+  @Override
+public String toString() {
     return "socketChannel("+soc+")";
   }
 

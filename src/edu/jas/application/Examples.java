@@ -13,14 +13,9 @@ import edu.jas.structure.ProductRing;
 
 import edu.jas.arith.BigRational;
 import edu.jas.arith.BigInteger;
-import edu.jas.arith.ModInteger;
-import edu.jas.arith.ModIntegerRing;
-
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
-import edu.jas.poly.PolynomialList;
-
 import edu.jas.ring.GroebnerBaseSeq;
 
 /**

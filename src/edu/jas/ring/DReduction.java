@@ -7,7 +7,6 @@ package edu.jas.ring;
 import java.util.List;
 
 
-import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.structure.RingElem;
 

@@ -22,7 +22,8 @@ class MiniPair implements Serializable {
             this.j = new Integer(j);
       }
 
-      public String toString() {
+      @Override
+	public String toString() {
           return "miniPair(" + i + "," + j + ")";
       }
 

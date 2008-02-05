@@ -105,7 +105,6 @@ public class PolynomialList<C extends RingElem<C> >
      * @param L other PolynomialList.
      * @return lexicographical comparison, sign of first different polynomials.
      */
-    @Override
     public int compareTo(PolynomialList<C> L) {
         int si = L.list.size();
         if ( list.size() < si ) { // minimum

@@ -271,7 +271,8 @@ public class GroebnerBaseDistributed<C extends RingElem<C>>
      * @param Fp a Groebner base.
      * @return a reduced Groebner base of Fp.
      */
-    public List<GenPolynomial<C>> 
+    @Override
+	public List<GenPolynomial<C>> 
                 minimalGB(List<GenPolynomial<C>> Fp) {  
         GenPolynomial<C> a;
         ArrayList<GenPolynomial<C>> G;
@@ -551,7 +552,8 @@ class GBTransportMess implements Serializable {
     /**
      * toString.
      */
-    public String toString() {
+    @Override
+	public String toString() {
         return "" + this.getClass().getName();
     }
 }
@@ -598,7 +600,8 @@ class GBTransportMessPoly<C extends RingElem<C>> extends GBTransportMess {
     /**
      * toString.
      */
-    public String toString() {
+    @Override
+	public String toString() {
         return super.toString() + "( " + pol + " )";
     }
 }
@@ -622,7 +625,8 @@ class GBTransportMessPair<C extends RingElem<C>> extends GBTransportMess {
     /**
      * toString.
      */
-    public String toString() {
+    @Override
+	public String toString() {
         return super.toString() + "( " + pair + " )";
     }
 }
@@ -671,7 +675,8 @@ class GBTransportMessPairIndex extends GBTransportMess {
     /**
      * toString.
      */
-    public String toString() {
+    @Override
+	public String toString() {
         return super.toString() + "( " + i + "," +j + " )";
     }
 }

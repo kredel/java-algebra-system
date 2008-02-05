@@ -4,7 +4,6 @@
 
 package edu.jas.structure;
 
-import java.util.Set;
 import java.util.Map;
 import java.util.Iterator;
 import java.util.SortedMap;
@@ -13,7 +12,6 @@ import java.util.TreeMap;
 import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
-import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.NotInvertibleException;
 
 
@@ -89,7 +87,8 @@ public class Product<C extends RingElem<C> >
     /**  Clone this.
      * @see java.lang.Object#clone()
      */
-    public Product<C> clone() {
+    @Override
+	public Product<C> clone() {
         return new Product<C>( ring, val );
     }
    
@@ -173,7 +172,8 @@ public class Product<C extends RingElem<C> >
     /** Get the String representation as RingElem.
      * @see java.lang.Object#toString()
      */
-    public String toString() {
+    @Override
+	public String toString() {
         return val.toString(); 
     }
 

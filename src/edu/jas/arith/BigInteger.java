@@ -91,7 +91,8 @@ public final class BigInteger implements GcdRingElem<BigInteger>,
     /** Clone this.
      * @see java.lang.Object#clone()
      */
-    public BigInteger clone() {
+    @Override
+	public BigInteger clone() {
         return new BigInteger( val );
     }
 
@@ -220,7 +221,8 @@ public final class BigInteger implements GcdRingElem<BigInteger>,
     /** Get the String representation.
      * @see java.lang.Object#toString()
      */
-    public String toString() {
+    @Override
+	public String toString() {
         return val.toString();
     }
 
@@ -250,7 +252,8 @@ public final class BigInteger implements GcdRingElem<BigInteger>,
     /** Comparison with any other object.
      * @see java.lang.Object#equals(java.lang.Object)
      */
-    public boolean equals(Object b) {
+    @Override
+	public boolean equals(Object b) {
         if ( ! ( b instanceof BigInteger ) ) {
             return false;
         }
@@ -262,7 +265,8 @@ public final class BigInteger implements GcdRingElem<BigInteger>,
     /** Hash code for this BigInteger.
      * @see java.lang.Object#hashCode()
      */
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         return val.hashCode();
     }
 

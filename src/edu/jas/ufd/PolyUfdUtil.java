@@ -16,10 +16,6 @@ import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
 
 import edu.jas.arith.BigInteger;
-import edu.jas.arith.BigRational;
-import edu.jas.arith.ModInteger;
-import edu.jas.arith.ModIntegerRing;
-
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;

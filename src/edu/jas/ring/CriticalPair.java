@@ -55,7 +55,8 @@ public class CriticalPair<C extends RingElem<C> >
     /**
      * toString.
      */
-    public String toString() {
+    @Override
+	public String toString() {
         StringBuffer s = new StringBuffer("pair( ");
         s.append(e + "," + i);
         if ( pi != null ) {

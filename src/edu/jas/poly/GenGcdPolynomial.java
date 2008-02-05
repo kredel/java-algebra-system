@@ -9,20 +9,10 @@ import java.util.Map;
 //import java.util.Map.Entry;
 import java.util.SortedMap;
 import java.util.TreeMap;
-import java.util.Iterator;
-import java.util.Collections;
-
 import org.apache.log4j.Logger;
 
-import edu.jas.structure.RingElem;
 import edu.jas.structure.GcdRingElem;
-import edu.jas.structure.NotInvertibleException;
-
-import edu.jas.kern.PrettyPrint;
-import edu.jas.kern.PreemptingException;
-
 import edu.jas.poly.ExpVector;
-import edu.jas.poly.GenPolynomialRing;
 
 
 /**
@@ -110,7 +100,8 @@ public class GenGcdPolynomial<C extends GcdRingElem<C> >
      * Clone this GenPolynomial.
      * @see java.lang.Object#clone()
      */
-    public GenGcdPolynomial<C> clone() {
+    @Override
+	public GenGcdPolynomial<C> clone() {
         //return ring.copy(this);
         return new GenGcdPolynomial<C>(gring,this.val);
     }
@@ -134,7 +125,8 @@ public class GenGcdPolynomial<C extends GcdRingElem<C> >
      * @param e exponent.
      * @return this + a x<sup>e</sup>.
      */
-    public GenGcdPolynomial<C> sum(C a, ExpVector e) {
+    @Override
+	public GenGcdPolynomial<C> sum(C a, ExpVector e) {
         return new GenGcdPolynomial<C>(gring, super.sum(a,e).val );
     }
 
@@ -156,7 +148,8 @@ public class GenGcdPolynomial<C extends GcdRingElem<C> >
      * @param e exponent.
      * @return this - a x<sup>e</sup>.
      */
-    public GenGcdPolynomial<C> subtract(C a, ExpVector e) {
+    @Override
+	public GenGcdPolynomial<C> subtract(C a, ExpVector e) {
         return new GenGcdPolynomial<C>(gring, super.subtract(a,e).val );
     }
 
@@ -165,7 +158,8 @@ public class GenGcdPolynomial<C extends GcdRingElem<C> >
      * GenGcdPolynomial negation. 
      * @return -this.
      */
-    public GenGcdPolynomial<C> negate() {
+    @Override
+	public GenGcdPolynomial<C> negate() {
         return new GenGcdPolynomial<C>(gring, super.negate().val );
     }
 
@@ -174,7 +168,8 @@ public class GenGcdPolynomial<C extends GcdRingElem<C> >
      * GenPolynomial absolute value, i.e. leadingCoefficient &gt; 0.
      * @return abs(this).
      */
-    public GenGcdPolynomial<C> abs() {
+    @Override
+	public GenGcdPolynomial<C> abs() {
         return new GenGcdPolynomial<C>(gring, super.abs().val );
     }
 
@@ -195,7 +190,8 @@ public class GenGcdPolynomial<C extends GcdRingElem<C> >
      * @param s coefficient.
      * @return this*s.
      */
-    public GenGcdPolynomial<C> multiply(C s) {
+    @Override
+	public GenGcdPolynomial<C> multiply(C s) {
         return new GenGcdPolynomial<C>(gring, super.multiply(s).val );
     }
 
@@ -205,7 +201,8 @@ public class GenGcdPolynomial<C extends GcdRingElem<C> >
      * If leadingCoefficient is not invertible returns this unmodified.
      * @return monic(this).
      */
-    public GenGcdPolynomial<C> monic() {
+    @Override
+	public GenGcdPolynomial<C> monic() {
         return new GenGcdPolynomial<C>(gring, super.monic().val );
     }
 
@@ -217,7 +214,8 @@ public class GenGcdPolynomial<C extends GcdRingElem<C> >
      * @param e exponent.
      * @return this * s x<sup>e</sup>.
      */
-    public GenGcdPolynomial<C> multiply(C s, ExpVector e) {
+    @Override
+	public GenGcdPolynomial<C> multiply(C s, ExpVector e) {
         return new GenGcdPolynomial<C>(gring, super.multiply(s,e).val );
     }
 
@@ -228,7 +226,8 @@ public class GenGcdPolynomial<C extends GcdRingElem<C> >
      * @param e exponent (!= null).
      * @return this * x<sup>e</sup>.
      */
-    public GenGcdPolynomial<C> multiply(ExpVector e) {
+    @Override
+	public GenGcdPolynomial<C> multiply(ExpVector e) {
         return new GenGcdPolynomial<C>(gring, super.multiply(e).val );
     }
 
@@ -239,7 +238,8 @@ public class GenGcdPolynomial<C extends GcdRingElem<C> >
      * @param m 'monomial'.
      * @return this * m.
      */
-    public GenGcdPolynomial<C> multiply(Map.Entry<ExpVector,C> m) {
+    @Override
+	public GenGcdPolynomial<C> multiply(Map.Entry<ExpVector,C> m) {
         return new GenGcdPolynomial<C>(gring, super.multiply(m).val );
     }
 
@@ -251,7 +251,8 @@ public class GenGcdPolynomial<C extends GcdRingElem<C> >
      * @param s coefficient.
      * @return this/s.
      */
-    public GenPolynomial<C> divide(C s) {
+    @Override
+	public GenPolynomial<C> divide(C s) {
         if ( s == null || s.isZERO() ) {
            throw new RuntimeException(this.getClass().getName()
                                       + " division by zero");
@@ -292,7 +293,8 @@ public class GenGcdPolynomial<C extends GcdRingElem<C> >
      * @return [ quotient , remainder ] with this = quotient * S + remainder.
      * @see edu.jas.poly.PolyUtil#basePseudoRemainder(edu.jas.poly.GenPolynomial,edu.jas.poly.GenPolynomial).
      */
-    public GenPolynomial<C>[] divideAndRemainder(GenPolynomial<C> S) {
+    @Override
+	public GenPolynomial<C>[] divideAndRemainder(GenPolynomial<C> S) {
         if ( S == null || S.isZERO() ) {
             throw new RuntimeException(this.getClass().getName()
                                        + " division by zero");
@@ -344,7 +346,8 @@ public class GenGcdPolynomial<C extends GcdRingElem<C> >
      * @return quotient with this = quotient * S + remainder.
      * @see edu.jas.poly.PolyUtil#basePseudoRemainder(edu.jas.poly.GenPolynomial,edu.jas.poly.GenPolynomial).
      */
-    public GenPolynomial<C> divide(GenPolynomial<C> S) {
+    @Override
+	public GenPolynomial<C> divide(GenPolynomial<C> S) {
         return divideAndRemainder(S)[0];
     }
 
@@ -358,7 +361,8 @@ public class GenGcdPolynomial<C extends GcdRingElem<C> >
      * @return remainder with this = quotient * S + remainder.
      * @see edu.jas.poly.PolyUtil#basePseudoRemainder(edu.jas.poly.GenPolynomial,edu.jas.poly.GenPolynomial).
      */
-    public GenPolynomial<C> remainder(GenPolynomial<C> S) {
+    @Override
+	public GenPolynomial<C> remainder(GenPolynomial<C> S) {
         if ( S == null || S.isZERO() ) {
            throw new RuntimeException(this.getClass().getName()
                                       + " division by zero");
@@ -396,7 +400,8 @@ public class GenGcdPolynomial<C extends GcdRingElem<C> >
      * @param S GenPolynomial.
      * @return gcd(this,S).
      */
-    public GenPolynomial<C> gcd(GenPolynomial<C> S) {
+    @Override
+	public GenPolynomial<C> gcd(GenPolynomial<C> S) {
         if ( S == null || S.isZERO() ) {
             return this;
         }
@@ -428,7 +433,8 @@ public class GenGcdPolynomial<C extends GcdRingElem<C> >
      * @param S GenPolynomial.
      * @return [ gcd(this,S), a, b ] with a*this + b*S = gcd(this,S).
      */
-    public GenPolynomial<C>[] egcd(GenPolynomial<C> S) {
+    @Override
+	public GenPolynomial<C>[] egcd(GenPolynomial<C> S) {
         GenPolynomial<C>[] ret = new GenPolynomial[3];
         ret[0] = null;
         ret[1] = null;
@@ -490,7 +496,8 @@ public class GenGcdPolynomial<C extends GcdRingElem<C> >
      * Required by RingElem.
      * Throws not implemented exception.
      */
-    public GenGcdPolynomial<C> inverse() {
+    @Override
+	public GenGcdPolynomial<C> inverse() {
         return new GenGcdPolynomial<C>(gring, super.inverse().val );
     }
 

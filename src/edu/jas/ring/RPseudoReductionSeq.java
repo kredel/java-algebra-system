@@ -5,7 +5,6 @@
 package edu.jas.ring;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -13,9 +12,6 @@ import org.apache.log4j.Logger;
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.GenSolvablePolynomial;
-
-import edu.jas.structure.RingElem;
 import edu.jas.structure.RegularRingElem;
 
 
@@ -47,7 +43,8 @@ public class RPseudoReductionSeq<C extends RegularRingElem<C>>
      * @param Pp polynomial list.
      * @return r-nf(Ap) with respect to Pp.
      */
-    @SuppressWarnings("unchecked") 
+    @Override
+	@SuppressWarnings("unchecked") 
     public GenPolynomial<C> normalform(List<GenPolynomial<C>> Pp, 
                                        GenPolynomial<C> Ap) {  
         if ( Pp == null || Pp.isEmpty() ) {
@@ -167,7 +164,8 @@ public class RPseudoReductionSeq<C extends RegularRingElem<C>>
      * @return nf(Pp,Ap), the normal form of Ap wrt. Pp.
      * @deprecated multiplication factor will be lost.
      */
-    public GenPolynomial<C> 
+    @Override
+	public GenPolynomial<C> 
         normalform(List<GenPolynomial<C>> row,
                    List<GenPolynomial<C>> Pp, 
                    GenPolynomial<C> Ap) {  

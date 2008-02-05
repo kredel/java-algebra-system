@@ -15,7 +15,6 @@ import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
 
-import edu.jas.structure.RingElem;
 import edu.jas.structure.RegularRingElem;
 
 
@@ -47,7 +46,8 @@ public class RReductionSeq<C extends RegularRingElem<C>>
      * @param P polynomial list.
      * @return true if A is top reducible with respect to P.
      */
-    public boolean isTopReducible(List<GenPolynomial<C>> P, 
+    @Override
+	public boolean isTopReducible(List<GenPolynomial<C>> P, 
                                   GenPolynomial<C> A) {  
         if ( P == null || P.isEmpty() ) {
            return false;
@@ -113,7 +113,8 @@ public class RReductionSeq<C extends RegularRingElem<C>>
      * @param Pp polynomial list.
      * @return true if Ap is in normalform with respect to Pp.
      */
-    @SuppressWarnings("unchecked") 
+    @Override
+	@SuppressWarnings("unchecked") 
     public boolean isNormalform(List<GenPolynomial<C>> Pp, 
                                 GenPolynomial<C> Ap) {  
         if ( Pp == null || Pp.isEmpty() ) {
@@ -276,7 +277,8 @@ public class RReductionSeq<C extends RegularRingElem<C>>
      * @param e = lcm(ht(A),ht(B))
      * @return true if the S-polynomial(i,j) is required, else false.
      */
-    public boolean criterion4(GenPolynomial<C> A, 
+    @Override
+	public boolean criterion4(GenPolynomial<C> A, 
                               GenPolynomial<C> B, 
                               ExpVector e) {  
         if ( logger.isInfoEnabled() ) {
@@ -317,7 +319,8 @@ public class RReductionSeq<C extends RegularRingElem<C>>
      * @param B polynomial.
      * @return true if the S-polynomial(i,j) is required, else false.
      */
-    public boolean criterion4(GenPolynomial<C> A, 
+    @Override
+	public boolean criterion4(GenPolynomial<C> A, 
                               GenPolynomial<C> B) {  
         if ( logger.isInfoEnabled() ) {
            if (   A instanceof GenSolvablePolynomial
@@ -397,7 +400,7 @@ public class RReductionSeq<C extends RegularRingElem<C>>
         }
         l = j;
         ExpVector e, f;
-        C a, b;
+        C a;
         C r = null;
         boolean mt = false;
         GenPolynomial<C> fac = null;
@@ -461,7 +464,8 @@ public class RReductionSeq<C extends RegularRingElem<C>>
      * @param Pp polynomial list.
      * @return a list P of polynomials which are in normalform wrt. P.
      */
-    public List<GenPolynomial<C>> irreducibleSet(List<GenPolynomial<C>> Pp) {  
+    @Override
+	public List<GenPolynomial<C>> irreducibleSet(List<GenPolynomial<C>> Pp) {  
         ArrayList<GenPolynomial<C>> P = new ArrayList<GenPolynomial<C>>();
         if ( Pp == null ) {
            return null;

@@ -32,7 +32,6 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
-import edu.jas.poly.PolyUtil;
 import edu.jas.poly.PolynomialList;
 
 import edu.jas.ring.GroebnerBase;
@@ -448,6 +447,9 @@ public class PolyUtilApp<C extends RingElem<C> > {
             li = new ArrayList<GenPolynomial<BigRational>>();
         list.add( li );
         for ( GenPolynomial<GenPolynomial<BigRational>> A : L ) {
+        	if ( A == null ) {
+        		continue;
+        	}
             if ( rfac == null && A != null ) {
                rfac = A.ring;
                fac = (GenPolynomialRing<BigRational>)rfac.coFac;

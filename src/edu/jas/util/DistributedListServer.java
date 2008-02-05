@@ -99,7 +99,8 @@ public class DistributedListServer extends Thread {
     /**
      * main server method.
      */ 
-    public void run() {
+    @Override
+	public void run() {
         SocketChannel channel = null;
         Broadcaster s = null;
         mythread = Thread.currentThread();
@@ -252,7 +253,8 @@ class Counter implements Serializable, Comparable<Counter> {
      * @param ob an Object.
      * @return true if this is equal to o, else false.
      */
-    public boolean equals(Object ob) {
+    @Override
+	public boolean equals(Object ob) {
         if ( ! (ob instanceof Counter) ) {
            return false;
         }
@@ -280,7 +282,8 @@ class Counter implements Serializable, Comparable<Counter> {
     /**
      * toString.
      */  
-    public String toString() {
+    @Override
+	public String toString() {
         return "Counter("+value+")";
     }
 
@@ -377,7 +380,8 @@ class Broadcaster extends Thread /*implements Runnable*/ {
     /**
      * run.
      */
-    public void run() {
+    @Override
+	public void run() {
         Object o;
         boolean goon = true;
         while (goon) {
@@ -405,7 +409,8 @@ class Broadcaster extends Thread /*implements Runnable*/ {
      * toString.
      * @return a string representation of this.
      */
-    public String toString() {
+    @Override
+	public String toString() {
         return "Broadcaster("+channel+","+bcaster.size()+","+listElem+")";
     }
 

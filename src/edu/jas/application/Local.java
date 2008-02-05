@@ -14,6 +14,7 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.kern.PrettyPrint;
 
 import edu.jas.structure.RingElem;
+import edu.jas.structure.GcdRingElem;
 
 
 /**
@@ -22,7 +23,7 @@ import edu.jas.structure.RingElem;
  * @author Heinz Kredel
  * @fix Not jet working because of monic GBs.
  */
-public class Local<C extends RingElem<C> > 
+public class Local<C extends GcdRingElem<C> > 
              implements RingElem< Local<C> > {
 
 
@@ -186,7 +187,8 @@ public class Local<C extends RingElem<C> >
     /**  Clone this.
      * @see java.lang.Object#clone()
      */
-    public Local<C> clone() {
+    @Override
+	public Local<C> clone() {
         return new Local<C>( ring, num, den, true );
     }
    
@@ -239,7 +241,8 @@ public class Local<C extends RingElem<C> >
     /** Get the String representation as RingElem.
      * @see java.lang.Object#toString()
      */
-    public String toString() {
+    @Override
+	public String toString() {
         if ( PrettyPrint.isTrue() ) {
            return num.toString( ring.ring.getVars() ) 
                   + "///" + den.toString( ring.ring.getVars() );

@@ -132,7 +132,8 @@ public class ExecutableServer extends Thread {
    /**
     * run is main server method.
     */ 
-    public void run() {
+    @Override
+	public void run() {
        SocketChannel channel = null;
        Executor s = null;
        mythread = Thread.currentThread();
@@ -240,7 +241,8 @@ class Executor extends Thread /*implements Runnable*/ {
    /**
     * run.
     */    
-    public void run() {
+    @Override
+	public void run() {
         Object o;
         RemoteExecutable re = null;
         String d;

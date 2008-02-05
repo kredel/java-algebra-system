@@ -15,9 +15,6 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import org.apache.log4j.BasicConfigurator;
-//import org.apache.log4j.Logger;
-
 import edu.jas.kern.ComputerThreads;
 
 import edu.jas.arith.BigRational;
@@ -30,8 +27,6 @@ import edu.jas.poly.PolynomialList;
 import edu.jas.poly.PolyUtil;
 
 import edu.jas.ring.GroebnerBase;
-
-import edu.jas.application.Quotient;
 
 /**
  * EGroebner base sequential tests with JUnit.

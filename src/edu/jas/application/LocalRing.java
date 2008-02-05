@@ -9,7 +9,7 @@ import java.io.Reader;
 
 import org.apache.log4j.Logger;
 
-import edu.jas.structure.RingElem;
+import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
 
 import edu.jas.poly.GenPolynomial;
@@ -21,7 +21,7 @@ import edu.jas.poly.GenPolynomialRing;
  * Objects of this class are effective immutable.
  * @author Heinz Kredel
  */
-public class LocalRing<C extends RingElem<C> > 
+public class LocalRing<C extends GcdRingElem<C> > 
              implements RingFactory< Local<C> >  {
 
      private static final Logger logger = Logger.getLogger(LocalRing.class);
@@ -148,7 +148,8 @@ public class LocalRing<C extends RingElem<C> >
     /** Get the String representation as RingFactory.
      * @see java.lang.Object#toString()
      */
-    public String toString() {
+    @Override
+	public String toString() {
         return "Local[ " 
                 + ideal.toString() + " ]";
     }

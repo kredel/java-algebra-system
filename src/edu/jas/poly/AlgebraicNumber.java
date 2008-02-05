@@ -78,7 +78,8 @@ public class AlgebraicNumber<C extends GcdRingElem<C> >
     /**  Clone this.
      * @see java.lang.Object#clone()
      */
-    public AlgebraicNumber<C> clone() {
+    @Override
+	public AlgebraicNumber<C> clone() {
         return new AlgebraicNumber<C>( ring, val );
     }
 
@@ -134,7 +135,8 @@ public class AlgebraicNumber<C extends GcdRingElem<C> >
     /** Get the String representation as RingElem.
      * @see java.lang.Object#toString()
      */
-    public String toString() {
+    @Override
+	public String toString() {
         if ( PrettyPrint.isTrue() ) {
             return val.toString( ring.ring.vars );
         } else {
@@ -181,7 +183,8 @@ public class AlgebraicNumber<C extends GcdRingElem<C> >
     /** Hash code for this AlgebraicNumber.
      * @see java.lang.Object#hashCode()
      */
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         return 37 * val.hashCode() + ring.hashCode();
     }
 

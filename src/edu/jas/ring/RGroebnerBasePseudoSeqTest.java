@@ -22,12 +22,7 @@ import edu.jas.structure.RingFactory;
 import edu.jas.structure.Product;
 import edu.jas.structure.ProductRing;
 
-import edu.jas.arith.BigRational;
 import edu.jas.arith.BigInteger;
-import edu.jas.arith.ModInteger;
-import edu.jas.arith.ModIntegerRing;
-
-import edu.jas.poly.TermOrder;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenPolynomialTokenizer;

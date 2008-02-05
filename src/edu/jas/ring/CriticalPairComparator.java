@@ -82,7 +82,8 @@ public class CriticalPairComparator<C extends RingElem<C> >
     /**
      * toString.
      */
-    public String toString() {
+    @Override
+	public String toString() {
         return "CriticalPairComparator(" + tord + ")";
     }
 

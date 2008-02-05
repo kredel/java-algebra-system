@@ -232,7 +232,8 @@ class PoolThread extends Thread {
    /**
     * Run the thread.
     */
-    public void run() {
+    @Override
+	public void run() {
         logger.info( "ready" );
         Runnable job;
         int done = 0;

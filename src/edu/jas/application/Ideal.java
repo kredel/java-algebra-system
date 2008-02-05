@@ -14,7 +14,6 @@ import java.io.Serializable;
 
 import org.apache.log4j.Logger;
 
-import edu.jas.structure.RingElem;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.NotInvertibleException;
 
@@ -30,7 +29,6 @@ import edu.jas.ring.GroebnerBaseSeqPairSeq;
 import edu.jas.ring.ReductionSeq;
 
 import edu.jas.ufd.GreatestCommonDivisor;
-import edu.jas.ufd.GreatestCommonDivisorAbstract;
 import edu.jas.ufd.GCDFactory;
 
 
@@ -179,7 +177,8 @@ public class Ideal<C extends GcdRingElem<C>>
    * String representation of the ideal.
    * @see java.lang.Object#toString()
    */
-  public String toString() {
+  @Override
+public String toString() {
       return list.toString();
   }
 
@@ -200,6 +199,7 @@ public class Ideal<C extends GcdRingElem<C>>
       try {
           B = (Ideal<C>)b;
       } catch (ClassCastException ignored) {
+          return false;
       }
       //if ( isGB && B.isGB ) {
       //   return list.equals( B.list ); requires also monic polys
@@ -213,7 +213,6 @@ public class Ideal<C extends GcdRingElem<C>>
      * @param L other Ideal.
      * @return compareTo() of polynomial lists.
      */
-    @Override
     public int compareTo(Ideal<C> L) {
         return list.compareTo( L.list );
     }

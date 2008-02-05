@@ -9,7 +9,6 @@ import java.io.Reader;
 
 import org.apache.log4j.Logger;
 
-import edu.jas.structure.RingElem;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
 
@@ -17,7 +16,6 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 
 import edu.jas.ufd.GreatestCommonDivisor;
-import edu.jas.ufd.GreatestCommonDivisorAbstract;
 import edu.jas.ufd.GCDFactory;
 
 
@@ -170,7 +168,8 @@ public class ResidueRing<C extends GcdRingElem<C> >
     /** Get the String representation as RingFactory.
      * @see java.lang.Object#toString()
      */
-    public String toString() {
+    @Override
+	public String toString() {
         return "ResidueRing[ " 
                 + ideal.toString() + " ]";
     }

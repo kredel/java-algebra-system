@@ -138,7 +138,8 @@ public class GenMatrix<C extends RingElem<C> >
     /** Hash code for this GenMatrix.
      * @see java.lang.Object#hashCode()
      */
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         if ( hashValue == 0 ) {
            hashValue = 37 * matrix.hashCode() + ring.hashCode();
            if ( hashValue == 0 ) {

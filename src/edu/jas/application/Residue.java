@@ -9,7 +9,6 @@ import edu.jas.poly.PolyUtil;
 
 import edu.jas.kern.PrettyPrint;
 
-import edu.jas.structure.RingElem;
 import edu.jas.structure.GcdRingElem;
 
 
@@ -85,7 +84,8 @@ public class Residue<C extends GcdRingElem<C> >
     /**  Clone this.
      * @see java.lang.Object#clone()
      */
-    public Residue<C> clone() {
+    @Override
+	public Residue<C> clone() {
         return new Residue<C>( ring, val, isunit );
     }
    
@@ -143,7 +143,8 @@ public class Residue<C extends GcdRingElem<C> >
     /** Get the String representation as RingElem.
      * @see java.lang.Object#toString()
      */
-    public String toString() {
+    @Override
+	public String toString() {
         if ( PrettyPrint.isTrue() ) {
            return val.toString( ring.ring.getVars() );
         } else {

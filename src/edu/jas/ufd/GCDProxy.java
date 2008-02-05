@@ -80,7 +80,8 @@ public class GCDProxy<C extends GcdRingElem<C>>
     /** Get the String representation with gcd engines.
      * @see java.lang.Object#toString()
      */
-    public String toString() {
+    @Override
+	public String toString() {
         return "GCDProxy[ " 
             + e1.getClass().getName() + ", "
             + e2.getClass().getName() + " ]";
@@ -94,7 +95,8 @@ public class GCDProxy<C extends GcdRingElem<C>>
      * @param S univariate GenPolynomial.
      * @return gcd(P,S).
      */
-    public GenPolynomial<C> baseGcd( final GenPolynomial<C> P,
+    @Override
+	public GenPolynomial<C> baseGcd( final GenPolynomial<C> P,
                                      final GenPolynomial<C> S ) {
          //throw new RuntimeException("baseGcd not implemented");
          if ( S == null || S.isZERO() ) {
@@ -105,8 +107,8 @@ public class GCDProxy<C extends GcdRingElem<C>>
          }
          // parallel case
          GenPolynomial<C> g = null;
-         Callable<GenPolynomial<C>> c0;
-         Callable<GenPolynomial<C>> c1;
+         //Callable<GenPolynomial<C>> c0;
+         //Callable<GenPolynomial<C>> c1;
          List<Callable<GenPolynomial<C>>> cs = new ArrayList<Callable<GenPolynomial<C>>>(2);
          cs.add( new Callable<GenPolynomial<C>>() {
                      public GenPolynomial<C> call() {
@@ -148,7 +150,8 @@ public class GCDProxy<C extends GcdRingElem<C>>
      * @param S univariate recursive GenPolynomial.
      * @return gcd(P,S).
      */
-    public GenPolynomial<GenPolynomial<C>> 
+    @Override
+	public GenPolynomial<GenPolynomial<C>> 
            recursiveGcd( final GenPolynomial<GenPolynomial<C>> P,
                          final GenPolynomial<GenPolynomial<C>> S ) {
            // throw new RuntimeException("recursiveGcd not implemented");
@@ -160,8 +163,8 @@ public class GCDProxy<C extends GcdRingElem<C>>
          }
          // parallel case
          GenPolynomial<GenPolynomial<C>> g = null;
-         Callable<GenPolynomial<GenPolynomial<C>>> c0;
-         Callable<GenPolynomial<GenPolynomial<C>>> c1;
+         //Callable<GenPolynomial<GenPolynomial<C>>> c0;
+         //Callable<GenPolynomial<GenPolynomial<C>>> c1;
          List<Callable<GenPolynomial<GenPolynomial<C>>>> cs = new ArrayList<Callable<GenPolynomial<GenPolynomial<C>>>>(2);
          cs.add( new Callable<GenPolynomial<GenPolynomial<C>>>() {
                      public GenPolynomial<GenPolynomial<C>> call() {
@@ -203,7 +206,8 @@ public class GCDProxy<C extends GcdRingElem<C>>
      * @param S GenPolynomial.
      * @return gcd(P,S).
      */
-     public GenPolynomial<C> gcd( final GenPolynomial<C> P, final GenPolynomial<C> S ) {
+     @Override
+	public GenPolynomial<C> gcd( final GenPolynomial<C> P, final GenPolynomial<C> S ) {
          if ( S == null || S.isZERO() ) {
             return P;
          }
@@ -212,8 +216,8 @@ public class GCDProxy<C extends GcdRingElem<C>>
          }
          // parallel case
          GenPolynomial<C> g = null;
-         Callable<GenPolynomial<C>> c0;
-         Callable<GenPolynomial<C>> c1;
+         //Callable<GenPolynomial<C>> c0;
+         //Callable<GenPolynomial<C>> c1;
          List<Callable<GenPolynomial<C>>> cs = new ArrayList<Callable<GenPolynomial<C>>>(2);
          cs.add( new Callable<GenPolynomial<C>>() {
                      public GenPolynomial<C> call() {

@@ -6,11 +6,8 @@ package edu.jas.ring;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
-
 import org.apache.log4j.Logger;
 
-import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.structure.RingElem;
 

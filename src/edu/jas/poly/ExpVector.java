@@ -117,7 +117,8 @@ public final class ExpVector implements Cloneable, Serializable {
     /** Clone this.
      * @see java.lang.Object#clone()
      */
-    public Object clone() {
+    @Override
+	public Object clone() {
         long[] w = new long[ val.length ];
         System.arraycopy(val,0,w,0,val.length);
         return new ExpVector( w );
@@ -260,7 +261,8 @@ public final class ExpVector implements Cloneable, Serializable {
     /** Get the string representation.
      * @see java.lang.Object#toString()
      */
-    public String toString() {
+    @Override
+	public String toString() {
         // if ( vars != null ) return toString(vars);
         StringBuffer s = new StringBuffer("(");
         for (int i = 0; i < val.length; i++ ) {

@@ -20,11 +20,6 @@ import edu.jas.arith.BigInteger;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
 
-//import edu.jas.structure.RingElem;
-
-import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.GenPolynomialRing;
-
 
 /**
  * Product test with JUnit. 

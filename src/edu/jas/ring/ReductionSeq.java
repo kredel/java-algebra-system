@@ -13,7 +13,6 @@ import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 
 import edu.jas.structure.RingElem;
-import edu.jas.structure.FieldElem;
 
 
 /**

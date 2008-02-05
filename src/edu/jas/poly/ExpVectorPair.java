@@ -51,7 +51,8 @@ public class ExpVectorPair implements Serializable {
     /**
      * toString.
      */
-    public String toString() {
+    @Override
+	public String toString() {
         StringBuffer s = new StringBuffer("ExpVectorPair[");
         s.append(e1.toString());
         s.append(",");
@@ -66,7 +67,8 @@ public class ExpVectorPair implements Serializable {
      * @param B other.
      * @return true, if this == b, else false.
      */
-    public boolean equals(Object B) { 
+    @Override
+	public boolean equals(Object B) { 
        if ( ! (B instanceof ExpVectorPair) ) return false;
        return equals( (ExpVectorPair)B );
     }

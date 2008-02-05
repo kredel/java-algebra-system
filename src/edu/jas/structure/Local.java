@@ -133,7 +133,8 @@ public class Local<C extends RingElem<C> >
     /**  Clone this.
      * @see java.lang.Object#clone()
      */
-    public Local<C> clone() {
+    @Override
+	public Local<C> clone() {
         return new Local<C>( ring, num, den, true );
     }
    
@@ -186,7 +187,8 @@ public class Local<C extends RingElem<C> >
     /** Get the String representation as RingElem.
      * @see java.lang.Object#toString()
      */
-    public String toString() {
+    @Override
+	public String toString() {
         return "Local[ " + num.toString() 
                  + " / " + den.toString() + " ]";
     }

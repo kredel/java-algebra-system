@@ -10,18 +10,14 @@ import java.util.ListIterator;
 
 import org.apache.log4j.Logger;
 
-import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.structure.GcdRingElem;
-
-import edu.jas.arith.BigInteger;
 
 //import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 
 import edu.jas.ring.OrderedPairlist;
 
-import edu.jas.ufd.GreatestCommonDivisor;
 import edu.jas.ufd.GreatestCommonDivisorAbstract;
 import edu.jas.ufd.GCDFactory;
 
@@ -179,7 +175,8 @@ public class GroebnerBasePseudoSeq<C extends GcdRingElem<C>>
      * @param Gp a Groebner base.
      * @return a reduced Groebner base of Gp.
      */
-    public List<GenPolynomial<C>> 
+    @Override
+	public List<GenPolynomial<C>> 
                 minimalGB(List<GenPolynomial<C>> Gp) {  
         if ( Gp == null || Gp.size() <= 1 ) {
             return Gp;
