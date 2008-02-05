@@ -234,14 +234,14 @@ public class GCDFactory /*<C extends GcdRingElem<C>>*/ {
         RingElem<C> bc = fac.fromInteger(1);
         if ( b.equals( bc ) ) {
            t = 1;
-           System.out.println("getProxy = BigInteger");
+           logger.debug("getProxy = BigInteger");
         } else {
            if ( fac.characteristic().signum() > 0 ) {
               ModIntegerRing m = new ModIntegerRing( fac.characteristic() );
               //C mc = fac.fromInteger(1);
               if ( m.equals( fac ) ) {
                  t = 2;
-                 System.out.println("getProxy = ModInteger");
+                 logger.debug("getProxy = ModInteger");
               }
            }
         }
