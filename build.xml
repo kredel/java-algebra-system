@@ -115,6 +115,7 @@
            classpath="${doccp}" 
            overview="overview.html" 
            author="true" 
+           linksource="true" 
            >
 <!--       
            private="true" 
