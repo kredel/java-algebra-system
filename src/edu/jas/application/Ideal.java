@@ -15,6 +15,7 @@ import java.io.Serializable;
 import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
+import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.NotInvertibleException;
 
 import edu.jas.poly.ExpVector;
@@ -28,12 +29,16 @@ import edu.jas.ring.Reduction;
 import edu.jas.ring.GroebnerBaseSeqPairSeq;
 import edu.jas.ring.ReductionSeq;
 
+import edu.jas.ufd.GreatestCommonDivisor;
+import edu.jas.ufd.GreatestCommonDivisorAbstract;
+import edu.jas.ufd.GCDFactory;
+
 
 /**
  * Ideal implements some methods for ideal arithmetic, e.g. intersection and quotient.
  * @author Heinz Kredel
  */
-public class Ideal<C extends RingElem<C>> 
+public class Ideal<C extends GcdRingElem<C>> 
     implements Comparable<Ideal<C>>, Serializable {
 
 
@@ -70,6 +75,12 @@ public class Ideal<C extends RingElem<C>>
    * Reduction engine.
    */
   protected final Reduction<C> red;
+
+
+  /**
+    * Greatest common divisor engine.
+    */
+  protected final GreatestCommonDivisor<C> engine;
 
 
   /**
@@ -142,6 +153,7 @@ public class Ideal<C extends RingElem<C>>
       this.testGB = ( gb ? true : false ); // ??
       this.bb = bb;
       this.red = red;
+      this.engine = GCDFactory.<C>getProxy( list.ring.coFac );
   }
 
 
@@ -821,5 +833,33 @@ public class Ideal<C extends RingElem<C>>
       return false;
   }
 
+
+  /**
+   * Radical approximation. Squarefree generators for the ideal.
+   * @return squarefree(this), a Groebner base
+   */
+  public Ideal<C> squarefree() {
+      if ( this.isZERO() ) { 
+          return this;
+      }
+      Ideal<C> R = this;
+      Ideal<C> Rp = null;
+      List<GenPolynomial<C>> li, ri;
+      while ( true ) {
+          li = R.getList();
+          ri = new ArrayList<GenPolynomial<C>>( li.size() );
+          for ( GenPolynomial<C> h : li ) {
+              GenPolynomial<C> r = engine.squarefreePart( h );
+              ri.add( r );
+          }
+          Rp = new Ideal<C>( R.getRing(), ri, false ); 
+          Rp.doGB();
+          if ( R.equals( Rp ) ) {
+             break;
+          }
+          R = Rp;
+      }
+      return R;
+  }
 
 }
