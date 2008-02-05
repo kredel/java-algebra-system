@@ -854,14 +854,13 @@ public class PolyUtilApp<C extends RingElem<C> > {
         List<GenPolynomial<C>> Dp = new ArrayList<GenPolynomial<C>>( L.list );
         PolynomialList<C> D = new PolynomialList<C>( L.ring, Dp );
         int s = L.list.size();
+        System.out.println("productDecomposition s  = " + s);
         GenPolynomial<C> p;
         for ( int i = 0; i < s; i++ ) {
             p = D.list.remove(0);
             D = PolyUtilApp.<C>productDecomposition( D, p );
         }
-        //for ( GenPolynomial<C> p: L.list ) {
-        //    D = PolyUtilApp.<C>productDecomposition( D, p );
-        //}
+        System.out.println("productDecomposition s* = " + D.list.size());
         return D;
     }
 
@@ -901,7 +900,7 @@ public class PolyUtilApp<C extends RingElem<C> > {
         if ( Lp == null || Pp == null ) {
             throw new RuntimeException("ring not correct");
         }
-        System.out.println("ProductRing = " + pr);
+        System.out.println("productDecomposition pr = " + pr);
         GenPolynomialRing<Product<Residue<BigRational>>> pring = Lp.ring;
         List<GenPolynomial<Product<Residue<BigRational>>>> Npp 
             = new ArrayList<GenPolynomial<Product<Residue<BigRational>>>>( Lp.list );
@@ -911,7 +910,7 @@ public class PolyUtilApp<C extends RingElem<C> > {
         int cfi = pr.length(); // fix since Pp not updated
         //System.out.println("cfi = " + cfi);
         for ( int j = 0; j < cfi; j++ ) {
-            int cfj = pr.length(); 
+            int cfj = cfi; //pr.length(); 
             for ( Product<Residue<BigRational>> a : Pp.getMap().values() ) {
                 // a != 0
                 Residue<BigRational> ar = a.get(j);
@@ -944,13 +943,16 @@ public class PolyUtilApp<C extends RingElem<C> > {
                     nl.add(A);
                     nl = bb.GB(nl); //wrong: done in ResidueRing constructor, not yet required
                     Ideal<BigRational> I = new Ideal<BigRational>(rfac, nl, true);
+                    I = I.squarefree();
                     //System.out.println("ideal = " + I);
                     ResidueRing<BigRational> rrn = new ResidueRing<BigRational>( I );
                     //System.out.println("pr     = " + pr);
                     if ( factoryInsert( pr, rrn ) ) {
                        // pr is updated, Pp is not updated
-                       Npp = PolyUtilApp.<Residue<BigRational>>productCoefficientExtension(Npp,j,pr.length()-1); 
-                       changed = true;
+                       if ( pr.length() >= 0 ) {
+                          Npp = PolyUtilApp.<Residue<BigRational>>productCoefficientExtension(Npp,j,pr.length()-1); 
+                          changed = true;
+                       }
                     }
                 }
             }
@@ -986,17 +988,27 @@ public class PolyUtilApp<C extends RingElem<C> > {
            P.addFactory( r );
            return true;
         }
+        System.out.println("to check ResidueRing   = " + r);
         System.out.println("containing ResidueRing = " + rc);
+        if ( true ) {
+           System.out.println("skiped -------------------- ");
+           return false;
+        }
         Ideal<BigRational> irc = rc.ideal;
         Ideal<BigRational> ir  = r.ideal;
         Ideal<BigRational> iq  = ir.quotient(irc);
-        ResidueRing<BigRational> rrq = new ResidueRing<BigRational>( iq );
-        System.out.println("new ResidueRing quotient = " + rrq);
-        System.out.println("new ResidueRing = " + r);
+        System.out.println("quotient ideal = " + iq);
+        Ideal<BigRational> iqr  = iq.squarefree();
+        if ( irc.contains( iqr ) ) {
+           System.out.println("quotient radical contained in Ideal = " + iqr);
+           return false;
+        }
+        ResidueRing<BigRational> rrq = new ResidueRing<BigRational>( iqr );
         if ( factoryContainsEquals( P, rrq ) ) { 
            System.out.println("existing quotient ResidueRing = " + rrq);
            return false;
         }
+        System.out.println("new ResidueRing quotient radical = " + rrq);
         P.addFactory( rrq );
         return true;
     }
@@ -1046,12 +1058,9 @@ public class PolyUtilApp<C extends RingElem<C> > {
            return r;
         }
         if ( P == null || P.length() == 0 ) {
-           return r;
+           return null;
         }
         Ideal<BigRational> rid = r.ideal;
-        //if ( rid == null || rid.isZERO() ) {
-        //   return r;
-        //}
         for ( int i = 0; i < P.length(); i++ ) {
             RingFactory<Residue<BigRational>> rrr = P.getFactory(i); 
             ResidueRing<BigRational> rr = (ResidueRing<BigRational>)rrr; 
