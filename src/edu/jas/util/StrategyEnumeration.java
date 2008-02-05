@@ -22,7 +22,7 @@ public final class StrategyEnumeration {
  * toString.
  */    
     @Override
-	public String toString() {
+     public String toString() {
         if (this == FIFO) {
            return "FIFO strategy";
         } else {

@@ -188,7 +188,7 @@ public class Local<C extends GcdRingElem<C> >
      * @see java.lang.Object#clone()
      */
     @Override
-	public Local<C> clone() {
+     public Local<C> clone() {
         return new Local<C>( ring, num, den, true );
     }
    
@@ -242,7 +242,7 @@ public class Local<C extends GcdRingElem<C> >
      * @see java.lang.Object#toString()
      */
     @Override
-	public String toString() {
+     public String toString() {
         if ( PrettyPrint.isTrue() ) {
            return num.toString( ring.ring.getVars() ) 
                   + "///" + den.toString( ring.ring.getVars() );

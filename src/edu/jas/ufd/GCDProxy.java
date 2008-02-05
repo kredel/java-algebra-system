@@ -71,7 +71,7 @@ public class GCDProxy<C extends GcdRingElem<C>>
          this.e1 = e1; 
          this.e2 = e2; 
          if ( pool == null ) {
-	    //pool = Executors.newFixedThreadPool(anzahl);
+         //pool = Executors.newFixedThreadPool(anzahl);
             pool = ComputerThreads.getPool();
          }
      }                                              
@@ -81,7 +81,7 @@ public class GCDProxy<C extends GcdRingElem<C>>
      * @see java.lang.Object#toString()
      */
     @Override
-	public String toString() {
+     public String toString() {
         return "GCDProxy[ " 
             + e1.getClass().getName() + ", "
             + e2.getClass().getName() + " ]";
@@ -96,7 +96,7 @@ public class GCDProxy<C extends GcdRingElem<C>>
      * @return gcd(P,S).
      */
     @Override
-	public GenPolynomial<C> baseGcd( final GenPolynomial<C> P,
+     public GenPolynomial<C> baseGcd( final GenPolynomial<C> P,
                                      final GenPolynomial<C> S ) {
          //throw new RuntimeException("baseGcd not implemented");
          if ( S == null || S.isZERO() ) {
@@ -114,7 +114,7 @@ public class GCDProxy<C extends GcdRingElem<C>>
                      public GenPolynomial<C> call() {
                          GenPolynomial<C> g = e1.baseGcd(P,S);
                          if ( debug ) {
-			     logger.info("GCDProxy done e1 " + e1.getClass().getName());
+                    logger.info("GCDProxy done e1 " + e1.getClass().getName());
                          }
                          return g;
                      }
@@ -151,7 +151,7 @@ public class GCDProxy<C extends GcdRingElem<C>>
      * @return gcd(P,S).
      */
     @Override
-	public GenPolynomial<GenPolynomial<C>> 
+     public GenPolynomial<GenPolynomial<C>> 
            recursiveGcd( final GenPolynomial<GenPolynomial<C>> P,
                          final GenPolynomial<GenPolynomial<C>> S ) {
            // throw new RuntimeException("recursiveGcd not implemented");
@@ -170,7 +170,7 @@ public class GCDProxy<C extends GcdRingElem<C>>
                      public GenPolynomial<GenPolynomial<C>> call() {
                          GenPolynomial<GenPolynomial<C>> g = e1.recursiveGcd(P,S);
                          if ( debug ) {
-			     logger.info("GCDProxy done e1 " + e1.getClass().getName());
+                    logger.info("GCDProxy done e1 " + e1.getClass().getName());
                          }
                          return g;
                      }
@@ -207,7 +207,7 @@ public class GCDProxy<C extends GcdRingElem<C>>
      * @return gcd(P,S).
      */
      @Override
-	public GenPolynomial<C> gcd( final GenPolynomial<C> P, final GenPolynomial<C> S ) {
+     public GenPolynomial<C> gcd( final GenPolynomial<C> P, final GenPolynomial<C> S ) {
          if ( S == null || S.isZERO() ) {
             return P;
          }
@@ -223,7 +223,7 @@ public class GCDProxy<C extends GcdRingElem<C>>
                      public GenPolynomial<C> call() {
                          GenPolynomial<C> g = e1.gcd(P,S);
                          if ( debug ) {
-			     logger.info("GCDProxy done e1 " + e1.getClass().getName());
+                    logger.info("GCDProxy done e1 " + e1.getClass().getName());
                          }
                          return g;
                      }

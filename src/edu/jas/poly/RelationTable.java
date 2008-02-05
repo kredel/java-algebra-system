@@ -559,7 +559,7 @@ class TableRelation<C extends RingElem<C>> implements Serializable {
      * @see java.lang.Object#toString()
      */
     @Override
-	public String toString() {
+     public String toString() {
         StringBuffer s = new StringBuffer("TableRelation[");
         s.append(""+e);
         s.append(" | ");

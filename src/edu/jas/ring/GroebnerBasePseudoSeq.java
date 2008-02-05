@@ -176,7 +176,7 @@ public class GroebnerBasePseudoSeq<C extends GcdRingElem<C>>
      * @return a reduced Groebner base of Gp.
      */
     @Override
-	public List<GenPolynomial<C>> 
+     public List<GenPolynomial<C>> 
                 minimalGB(List<GenPolynomial<C>> Gp) {  
         if ( Gp == null || Gp.size() <= 1 ) {
             return Gp;

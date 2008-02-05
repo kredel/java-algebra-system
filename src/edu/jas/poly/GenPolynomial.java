@@ -68,7 +68,7 @@ public class GenPolynomial<C extends RingElem<C> >
         val = t;
         if ( ring.checkPreempt ) {
            if ( Thread.currentThread().isInterrupted() ) {
-	      logger.debug("throw PreemptingException");
+           logger.debug("throw PreemptingException");
               throw new PreemptingException();
            }
         }
@@ -115,7 +115,7 @@ public class GenPolynomial<C extends RingElem<C> >
      * @see java.lang.Object#clone()
      */
     @Override
-	public GenPolynomial<C> clone() {
+     public GenPolynomial<C> clone() {
         //return ring.copy(this);
         return new GenPolynomial<C>(ring,this.val);
     }
@@ -135,7 +135,7 @@ public class GenPolynomial<C extends RingElem<C> >
      * @return val as unmodifiable SortedMap.
      */
     public SortedMap<ExpVector,C> getMap() { 
-	// return val;
+     // return val;
         return Collections.<ExpVector,C>unmodifiableSortedMap(val); 
     }
 
@@ -167,7 +167,7 @@ public class GenPolynomial<C extends RingElem<C> >
      * @see java.lang.Object#toString()
      */
     @Override
-	public String toString() {
+     public String toString() {
         if ( ring.vars != null ) {
             return toString(ring.vars);
         }
@@ -565,7 +565,7 @@ public class GenPolynomial<C extends RingElem<C> >
         if ( this.isZERO() ) {
             return S;
         }
-	assert (ring.nvar == S.ring.nvar);
+     assert (ring.nvar == S.ring.nvar);
         GenPolynomial<C> n = this.clone(); //new GenPolynomial<C>(ring, val); 
         SortedMap<ExpVector,C> nv = n.val;
         SortedMap<ExpVector,C> sv = S.val;
@@ -634,7 +634,7 @@ public class GenPolynomial<C extends RingElem<C> >
         if ( this.isZERO() ) {
             return S.negate();
         }
-	assert (ring.nvar == S.ring.nvar);
+     assert (ring.nvar == S.ring.nvar);
         GenPolynomial<C> n = this.clone(); //new GenPolynomial<C>(ring, val); 
         SortedMap<ExpVector,C> nv = n.val;
         SortedMap<ExpVector,C> sv = S.val;
@@ -732,7 +732,7 @@ public class GenPolynomial<C extends RingElem<C> >
         if ( this.isZERO() ) {
             return this;
         }
-	assert (ring.nvar == S.ring.nvar);
+     assert (ring.nvar == S.ring.nvar);
         GenPolynomial<C> p = ring.getZERO().clone(); 
         SortedMap<ExpVector,C> pv = p.val;
         for ( Map.Entry<ExpVector,C> m1 : val.entrySet() ) {
@@ -941,7 +941,7 @@ public class GenPolynomial<C extends RingElem<C> >
                                        + " lbcf not invertible " + c);
         }
         C ci = c.inverse();
-	assert (ring.nvar == S.ring.nvar);
+     assert (ring.nvar == S.ring.nvar);
         ExpVector e = S.leadingExpVector();
         //System.out.println("e = " + e);
         GenPolynomial<C> h;
@@ -1007,7 +1007,7 @@ public class GenPolynomial<C extends RingElem<C> >
                                       + " lbc not invertible " + c);
         }
         C ci = c.inverse();
-	assert (ring.nvar == S.ring.nvar);
+     assert (ring.nvar == S.ring.nvar);
         ExpVector e = S.leadingExpVector();
         GenPolynomial<C> h;
         GenPolynomial<C> r = this.clone(); 
@@ -1110,7 +1110,7 @@ public class GenPolynomial<C extends RingElem<C> >
             c1 = c1.multiply( h );
             c2 = c2.multiply( h );
         }        
-	//assert ( ((c1.multiply(this)).sum( c2.multiply(S)).equals(q) )); 
+     //assert ( ((c1.multiply(this)).sum( c2.multiply(S)).equals(q) )); 
         //if ( c1.isZERO() ) {
         //   System.out.println("this = " + this + "\n S = " + S);
         //   System.out.println("q = " + q + "\n c1 = " + c1 + "\n c2 = " + c2);
@@ -1171,7 +1171,7 @@ public class GenPolynomial<C extends RingElem<C> >
         GenPolynomial<C> Cp = pfac.getZERO().clone();
         if ( this.isZERO() ) { 
            return Cp;
-	}
+     }
         int i = pfac.nvar - ring.nvar;
         Map<ExpVector,C> C = Cp.val; //getMap();
         Map<ExpVector,C> A = val;
@@ -1202,7 +1202,7 @@ public class GenPolynomial<C extends RingElem<C> >
             = new TreeMap<ExpVector,GenPolynomial<C>>( t.getAscendComparator() );
         if ( this.isZERO() ) { 
            return B;
-	}
+     }
         int i = ring.nvar - pfac.nvar;
         Map<ExpVector,C> A = val;
         for ( Map.Entry<ExpVector,C> y: A.entrySet() ) {
@@ -1232,7 +1232,7 @@ public class GenPolynomial<C extends RingElem<C> >
         GenPolynomial<C> Cp = oring.getZERO().clone();
         if ( this.isZERO() ) { 
            return Cp;
-	}
+     }
         int k = -1;
         if ( oring.tord.getEvord2() != 0 && oring.partial ) {
             k = oring.tord.getSplit();

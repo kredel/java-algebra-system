@@ -41,7 +41,7 @@ public class SolvableExtendedGB<C extends RingElem<C>> {
             this.F2G = F2G;
             this.G2F = G2F;
             GenSolvablePolynomialRing<C> r = null;
-	    if ( G != null ) {
+         if ( G != null ) {
                for ( GenSolvablePolynomial<C> p : G ) {
                    if ( p != null ) {
                       r = p.ring;
@@ -51,7 +51,7 @@ public class SolvableExtendedGB<C extends RingElem<C>> {
                if ( r != null && r.getVars() == null ) {
                   r.setVars( r.evzero.stdVars("y") );
                }
-	    }
+         }
             this.ring = r;
         }
 
@@ -60,7 +60,7 @@ public class SolvableExtendedGB<C extends RingElem<C>> {
          * @see java.lang.Object#toString()
          */
         @Override
-		public String toString() {
+          public String toString() {
             PolynomialList<C> P;
             ModuleList<C> M;
             StringBuffer s = new StringBuffer("SolvableExtendedGB: \n\n");

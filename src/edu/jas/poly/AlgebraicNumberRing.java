@@ -165,7 +165,7 @@ public class AlgebraicNumberRing<C extends GcdRingElem<C> >
      * @see java.lang.Object#toString()
      */
     @Override
-	public String toString() {
+    public String toString() {
         return "AlgebraicNumberRing[ " 
               + modul.toString() + " | isField="
               + isField + " :: "
@@ -177,8 +177,8 @@ public class AlgebraicNumberRing<C extends GcdRingElem<C> >
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
-        @SuppressWarnings("unchecked") // not jet working
-        public boolean equals(Object b) {
+    @SuppressWarnings("unchecked") // not jet working
+    public boolean equals(Object b) {
         if ( ! ( b instanceof AlgebraicNumberRing ) ) {
             return false;
         }
@@ -198,7 +198,7 @@ public class AlgebraicNumberRing<C extends GcdRingElem<C> >
      * @see java.lang.Object#hashCode()
      */
     @Override
-	public int hashCode() {
+    public int hashCode() {
         return 37 * modul.hashCode() + ring.hashCode();
     }
 

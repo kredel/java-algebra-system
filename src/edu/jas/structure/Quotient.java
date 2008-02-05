@@ -125,7 +125,7 @@ public class Quotient<C extends RingElem<C> >
      * @see java.lang.Object#clone()
      */
     @Override
-	public Quotient<C> clone() {
+     public Quotient<C> clone() {
         return new Quotient<C>( ring, num, den, true );
     }
    
@@ -165,7 +165,7 @@ public class Quotient<C extends RingElem<C> >
      * @see java.lang.Object#toString()
      */
     @Override
-	public String toString() {
+     public String toString() {
         return "Quotient[ " + num.toString() 
                    + " / " + den.toString() + " ]";
     }

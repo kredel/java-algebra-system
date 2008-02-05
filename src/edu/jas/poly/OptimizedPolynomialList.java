@@ -40,7 +40,7 @@ public class OptimizedPolynomialList<C extends RingElem<C>>
  * String representation.
  */
       @Override
-	public String toString() {
+     public String toString() {
              return "permutation = " + perm 
                  + "\n" + super.toString();
       }

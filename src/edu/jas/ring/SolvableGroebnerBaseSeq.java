@@ -595,7 +595,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>>
      * @return true, if exgb contains a left reduction matrix, else false.
      */
     @Override
-	public boolean
+     public boolean
            isLeftReductionMatrix(SolvableExtendedGB<C> exgb) {  
         if ( exgb == null ) {
             return true;
@@ -616,7 +616,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>>
                                   List<GenSolvablePolynomial<C>> Gp,
                                   List<List<GenSolvablePolynomial<C>>> M) {  
         if ( Gp == null ) {
-	    return null; //new SolvableExtendedGB<C>(null,Gp,null,M);
+         return null; //new SolvableExtendedGB<C>(null,Gp,null,M);
         }
         if ( Gp.size() <= 1 ) {
            return new SolvableExtendedGB<C>(null,Gp,null,M);

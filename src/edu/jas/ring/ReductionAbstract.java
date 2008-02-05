@@ -409,7 +409,7 @@ public abstract class ReductionAbstract<C extends RingElem<C>>
         if ( row == null && Pp == null ) {
             if ( Ap == null ) {
                return Np == null;
-	    }
+         }
             return Ap.equals(Np);
         }
         if ( row == null && Pp != null ) {

@@ -65,7 +65,7 @@ public class DGroebnerBaseSeq<C extends RingElem<C>>
      * @return true, if F is a D-Groebner base, else false.
      */
     @Override
-	public boolean isGB(int modv, List<GenPolynomial<C>> F) {  
+     public boolean isGB(int modv, List<GenPolynomial<C>> F) {  
         GenPolynomial<C> pi, pj, s, d;
         for ( int i = 0; i < F.size(); i++ ) {
             pi = F.get(i);

@@ -87,7 +87,7 @@ public class Residue<C extends RingElem<C> >
      * @see java.lang.Object#clone()
      */
     @Override
-	public Residue<C> clone() {
+     public Residue<C> clone() {
         return new Residue<C>( ring, val );
     }
    
@@ -115,7 +115,7 @@ public class Residue<C extends RingElem<C> >
      * @see edu.jas.structure.RingElem#isUnit()
      */
     @SuppressWarnings("unchecked")
-	public boolean isUnit() {
+     public boolean isUnit() {
         if ( isunit > 0 ) {
             return true;
         } 
@@ -149,7 +149,7 @@ public class Residue<C extends RingElem<C> >
      * @see java.lang.Object#toString()
      */
     @Override
-	public String toString() {
+     public String toString() {
         return "Residue[ " + val.toString() 
                  + " mod " + ring.toString() + " ]";
     }
@@ -260,7 +260,7 @@ public class Residue<C extends RingElem<C> >
      * @return S with S = 1/this if defined. 
      */
     @SuppressWarnings("unchecked")
-	public Residue<C> inverse() {
+     public Residue<C> inverse() {
         if ( isunit == 0 ) {
            throw new RuntimeException("element not invertible (0) " + this);
         }

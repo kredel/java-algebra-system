@@ -46,7 +46,7 @@ public class EReductionSeq<C extends RingElem<C>>
      */
     //SuppressWarnings("unchecked") // not jet working
     @Override
-	public boolean isTopReducible(List<GenPolynomial<C>> P, 
+     public boolean isTopReducible(List<GenPolynomial<C>> P, 
                                   GenPolynomial<C> A) {  
         if ( P == null || P.isEmpty() ) {
            return false;
@@ -81,7 +81,7 @@ public class EReductionSeq<C extends RingElem<C>>
      */
     //SuppressWarnings("unchecked") // not jet working
     @Override
-	public boolean isNormalform(List<GenPolynomial<C>> Pp, 
+     public boolean isNormalform(List<GenPolynomial<C>> Pp, 
                                 GenPolynomial<C> Ap) {  
         if ( Pp == null || Pp.isEmpty() ) {
            return true;
@@ -144,7 +144,7 @@ public class EReductionSeq<C extends RingElem<C>>
      */
     //SuppressWarnings("unchecked") // not jet working
     @Override
-	public GenPolynomial<C> normalform(List<GenPolynomial<C>> Pp, 
+     public GenPolynomial<C> normalform(List<GenPolynomial<C>> Pp, 
                                        GenPolynomial<C> Ap) {  
         if ( Pp == null || Pp.isEmpty() ) {
            return Ap;
@@ -245,7 +245,7 @@ public class EReductionSeq<C extends RingElem<C>>
      * @return nf(Pp,Ap), the normal form of Ap wrt. Pp.
      */
     @Override
-	@SuppressWarnings("unchecked") // not jet working
+     @SuppressWarnings("unchecked") // not jet working
     public GenPolynomial<C> 
         normalform(List<GenPolynomial<C>> row,
                    List<GenPolynomial<C>> Pp, 
@@ -335,7 +335,7 @@ public class EReductionSeq<C extends RingElem<C>>
      * @return a list P of polynomials which are in normalform wrt. P.
      */
     @Override
-	public List<GenPolynomial<C>> irreducibleSet(List<GenPolynomial<C>> Pp) {  
+     public List<GenPolynomial<C>> irreducibleSet(List<GenPolynomial<C>> Pp) {  
         ArrayList<GenPolynomial<C>> P = new ArrayList<GenPolynomial<C>>();
         if ( Pp == null ) {
            return null;

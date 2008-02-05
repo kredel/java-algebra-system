@@ -138,7 +138,7 @@ public class Katsura {
      * @return Katsura problem as string.
      */
     @Override
-	public String toString() {
+     public String toString() {
            StringBuffer s = new StringBuffer();
            s.append(varList(order));
            s.append(System.getProperty("line.separator"));

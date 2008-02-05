@@ -107,7 +107,7 @@ public class GenVector<C extends RingElem<C> >
      * @see java.lang.Object#hashCode()
      */
     @Override
-	public int hashCode() {
+     public int hashCode() {
         return 37 * val.hashCode() + modul.hashCode();
     }
 

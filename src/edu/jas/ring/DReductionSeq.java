@@ -48,7 +48,7 @@ public class DReductionSeq<C extends RingElem<C>>
      */
     //SuppressWarnings("unchecked") // not jet working
     @Override
-	public boolean isTopReducible(List<GenPolynomial<C>> P, 
+     public boolean isTopReducible(List<GenPolynomial<C>> P, 
                                   GenPolynomial<C> A) {  
         if ( P == null || P.isEmpty() ) {
            return false;
@@ -83,7 +83,7 @@ public class DReductionSeq<C extends RingElem<C>>
      */
     //SuppressWarnings("unchecked") // not jet working
     @Override
-	public boolean isNormalform(List<GenPolynomial<C>> Pp, 
+     public boolean isNormalform(List<GenPolynomial<C>> Pp, 
                                 GenPolynomial<C> Ap) {  
         if ( Pp == null || Pp.isEmpty() ) {
            return true;
@@ -227,7 +227,7 @@ public class DReductionSeq<C extends RingElem<C>>
      * @return spol(Ap,Bp) the S-polynomial of Ap and Bp.
      */
     @Override
-	public GenPolynomial<C> 
+     public GenPolynomial<C> 
            SPolynomial(GenPolynomial<C> Ap, 
                        GenPolynomial<C> Bp) {  
         if ( logger.isInfoEnabled() ) {
@@ -342,7 +342,7 @@ public class DReductionSeq<C extends RingElem<C>>
      * @return true if the S-polynomial(i,j) is required, else false.
      */
     @Override
-	public boolean criterion4(GenPolynomial<C> A, 
+     public boolean criterion4(GenPolynomial<C> A, 
                               GenPolynomial<C> B, 
                               ExpVector e) {  
         if ( logger.isInfoEnabled() ) {
@@ -384,7 +384,7 @@ public class DReductionSeq<C extends RingElem<C>>
      * @return true if the S-polynomial(i,j) is required, else false.
      */
     @Override
-	public boolean criterion4(GenPolynomial<C> A, 
+     public boolean criterion4(GenPolynomial<C> A, 
                               GenPolynomial<C> B) {  
         if ( logger.isInfoEnabled() ) {
            if (   A instanceof GenSolvablePolynomial
@@ -510,7 +510,7 @@ public class DReductionSeq<C extends RingElem<C>>
      * @return a list P of polynomials which are in normalform wrt. P.
      */
     @Override
-	public List<GenPolynomial<C>> irreducibleSet(List<GenPolynomial<C>> Pp) {  
+     public List<GenPolynomial<C>> irreducibleSet(List<GenPolynomial<C>> Pp) {  
         ArrayList<GenPolynomial<C>> P = new ArrayList<GenPolynomial<C>>();
         if ( Pp == null ) {
            return null;

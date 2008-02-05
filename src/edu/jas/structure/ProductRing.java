@@ -303,7 +303,7 @@ public class ProductRing<C extends RingElem<C> >
      * @see java.lang.Object#toString()
      */
     @Override
-	public String toString() {
+     public String toString() {
         if ( nCopies != 0 ) {
            String cf = ring.toString();
            if ( cf.matches("[0-9].*") ) {

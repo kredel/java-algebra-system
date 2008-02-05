@@ -149,7 +149,7 @@ public class LocalRing<C extends GcdRingElem<C> >
      * @see java.lang.Object#toString()
      */
     @Override
-	public String toString() {
+     public String toString() {
         return "Local[ " 
                 + ideal.toString() + " ]";
     }

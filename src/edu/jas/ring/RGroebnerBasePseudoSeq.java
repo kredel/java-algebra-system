@@ -79,7 +79,7 @@ public class RGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
      * @return GB(F) a R-Groebner base of F.
      */
     @Override
-	public List<GenPolynomial<C>> 
+     public List<GenPolynomial<C>> 
              GB( int modv, 
                  List<GenPolynomial<C>> F ) {  
         if ( F == null ) {
@@ -202,7 +202,7 @@ public class RGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
      * @todo use primitivePart
      */
     @Override
-	public List<GenPolynomial<C>> 
+     public List<GenPolynomial<C>> 
                 minimalGB(List<GenPolynomial<C>> Gp) {  
         if ( Gp == null || Gp.size() <= 1 ) {
             return Gp;

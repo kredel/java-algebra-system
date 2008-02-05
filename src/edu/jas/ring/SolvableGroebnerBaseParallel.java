@@ -183,7 +183,7 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>>
      * @return minimalGB(F) a minimal Groebner base of Fp.
      */
     @Override
-	public List<GenSolvablePolynomial<C>> 
+     public List<GenSolvablePolynomial<C>> 
            leftMinimalGB(List<GenSolvablePolynomial<C>> Fp) {  
         GenSolvablePolynomial<C> a;
         ArrayList<GenSolvablePolynomial<C>> G;

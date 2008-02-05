@@ -62,7 +62,7 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>>
      * @return true, if F is a R-Groebner base, else false.
      */
     @Override
-	public boolean isGB(int modv, List<GenPolynomial<C>> F) {  
+     public boolean isGB(int modv, List<GenPolynomial<C>> F) {  
         if ( F == null ) {
            return true;
         }
@@ -229,7 +229,7 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>>
      * @return a reduced Groebner base of Gp.
      */
     @Override
-	public List<GenPolynomial<C>> 
+     public List<GenPolynomial<C>> 
                 minimalGB(List<GenPolynomial<C>> Gp) {  
         if ( Gp == null || Gp.size() <= 1 ) {
             return Gp;

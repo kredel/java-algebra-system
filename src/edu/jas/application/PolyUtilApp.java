@@ -447,9 +447,9 @@ public class PolyUtilApp<C extends RingElem<C> > {
             li = new ArrayList<GenPolynomial<BigRational>>();
         list.add( li );
         for ( GenPolynomial<GenPolynomial<BigRational>> A : L ) {
-        	if ( A == null ) {
-        		continue;
-        	}
+          if ( A == null ) {
+               continue;
+          }
             if ( rfac == null && A != null ) {
                rfac = A.ring;
                fac = (GenPolynomialRing<BigRational>)rfac.coFac;

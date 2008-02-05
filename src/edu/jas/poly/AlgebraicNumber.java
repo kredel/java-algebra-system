@@ -79,7 +79,7 @@ public class AlgebraicNumber<C extends GcdRingElem<C> >
      * @see java.lang.Object#clone()
      */
     @Override
-	public AlgebraicNumber<C> clone() {
+    public AlgebraicNumber<C> clone() {
         return new AlgebraicNumber<C>( ring, val );
     }
 
@@ -136,7 +136,7 @@ public class AlgebraicNumber<C extends GcdRingElem<C> >
      * @see java.lang.Object#toString()
      */
     @Override
-	public String toString() {
+    public String toString() {
         if ( PrettyPrint.isTrue() ) {
             return val.toString( ring.ring.vars );
         } else {
@@ -163,8 +163,8 @@ public class AlgebraicNumber<C extends GcdRingElem<C> >
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
-        @SuppressWarnings("unchecked") // not jet working
-        public boolean equals(Object b) {
+    @SuppressWarnings("unchecked") // not jet working
+    public boolean equals(Object b) {
         if ( ! ( b instanceof AlgebraicNumber ) ) {
             return false;
         }
@@ -184,7 +184,7 @@ public class AlgebraicNumber<C extends GcdRingElem<C> >
      * @see java.lang.Object#hashCode()
      */
     @Override
-	public int hashCode() {
+    public int hashCode() {
         return 37 * val.hashCode() + ring.hashCode();
     }
 
@@ -249,11 +249,11 @@ public class AlgebraicNumber<C extends GcdRingElem<C> >
      * @return S with S = 1/this if defined. 
      */
     public AlgebraicNumber<C> inverse() {
-	try {
+     try {
             return new AlgebraicNumber<C>( ring, val.modInverse( ring.modul ) );
-	} catch (NotInvertibleException e) {
-	    throw new NotInvertibleException(e.getCause());
-	}
+     } catch (NotInvertibleException e) {
+         throw new NotInvertibleException(e.getCause());
+     }
     }
 
 

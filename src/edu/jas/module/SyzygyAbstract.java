@@ -645,7 +645,7 @@ class ResPart<C extends RingElem<C>> implements Serializable {
  * toString.
  */
     @Override
-	public String toString() {
+     public String toString() {
         StringBuffer s = new StringBuffer("ResPart(\n");
         s.append("module = " + module);
         s.append("\n GB = " + GB);
@@ -682,7 +682,7 @@ class ResPolPart<C extends RingElem<C>> implements Serializable {
      * toString.
      */
     @Override
-	public String toString() {
+     public String toString() {
         StringBuffer s = new StringBuffer("ResPolPart(\n");
         s.append("ideal = " + ideal);
         s.append("\n GB = " + GB);

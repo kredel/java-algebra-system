@@ -86,7 +86,7 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C> >
      * @return gcd(P,S).
      */
     @Override
-	public GenPolynomial<C> baseGcd( GenPolynomial<C> P,
+     public GenPolynomial<C> baseGcd( GenPolynomial<C> P,
                                      GenPolynomial<C> S ) {
         if ( S == null || S.isZERO() ) {
             return P;
@@ -208,7 +208,7 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C> >
      * @return gcd(P,S).
      */
     @Override
-	public GenPolynomial<GenPolynomial<C>> 
+     public GenPolynomial<GenPolynomial<C>> 
         recursiveGcd( GenPolynomial<GenPolynomial<C>> P,
                       GenPolynomial<GenPolynomial<C>> S ) {
         if ( S == null || S.isZERO() ) {
@@ -439,7 +439,7 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C> >
      * @return A^i.
      */
     C power( RingFactory<C> fac, C A, long i ) {
-	return Power.<C>power(fac,A,i);
+     return Power.<C>power(fac,A,i);
     }
 
 
@@ -452,7 +452,7 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C> >
     GenPolynomial<C> power( RingFactory<GenPolynomial<C>> fac, 
                             GenPolynomial<C> A, 
                             long i ) {
-	return Power.<GenPolynomial<C>>power(fac,A,i);
+     return Power.<GenPolynomial<C>>power(fac,A,i);
     }
 
 

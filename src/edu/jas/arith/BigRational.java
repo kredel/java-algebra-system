@@ -149,7 +149,7 @@ public final class BigRational implements GcdRingElem<BigRational>,
      * @see java.lang.Object#clone()
      */
     @Override
-	public BigRational clone() {
+     public BigRational clone() {
         return new BigRational( num, den );
     }
 
@@ -183,7 +183,7 @@ public final class BigRational implements GcdRingElem<BigRational>,
      * @see java.lang.Object#toString()
      */
     @Override
-	public String toString() {
+     public String toString() {
         StringBuffer s = new StringBuffer();
         s.append(num);
         if ( ! den.equals(BigInteger.ONE) ) {
@@ -326,7 +326,7 @@ public final class BigRational implements GcdRingElem<BigRational>,
      * @see java.lang.Object#hashCode()
      */
     @Override
-	public int hashCode() {
+     public int hashCode() {
         return 37 * num.hashCode() + den.hashCode();
     }
 

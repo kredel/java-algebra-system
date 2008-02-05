@@ -89,7 +89,7 @@ public final class ModInteger implements GcdRingElem<ModInteger> {
      * @see java.lang.Object#clone()
      */
     @Override
-	public ModInteger clone() {
+     public ModInteger clone() {
         return new ModInteger( ring, val );
     }
 
@@ -132,7 +132,7 @@ public final class ModInteger implements GcdRingElem<ModInteger> {
      * @see java.lang.Object#toString()
      */
     @Override
-	public String toString() {
+     public String toString() {
         return val.toString();
     }
 

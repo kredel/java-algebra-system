@@ -63,7 +63,7 @@ public class Pair<C extends RingElem<C> >
      * toString.
      */
     @Override
-	public String toString() {
+     public String toString() {
         return "pair[" + n + "](" + i + "{" + pi.length() + "}," 
                            + j + "{" + pj.length() + "}"
                            + ", r0=" + toZero  
@@ -115,7 +115,7 @@ public class Pair<C extends RingElem<C> >
      * @return true if this is equal to o, else false.
      */
     @Override
-	public boolean equals(Object ob) {
+     public boolean equals(Object ob) {
         if ( ! (ob instanceof Pair) ) {
            return false;
            // throw new ClassCastException("Pair "+n+" o "+o);

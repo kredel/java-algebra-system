@@ -177,7 +177,7 @@ public class GroebnerBaseParallel<C extends RingElem<C>>
      * @return minimalGB(F) a minimal Groebner base of Fp.
      */
     @Override
-	public List<GenPolynomial<C>> 
+     public List<GenPolynomial<C>> 
         minimalGB(List<GenPolynomial<C>> Fp) {  
         GenPolynomial<C> a;
         ArrayList<GenPolynomial<C>> G;

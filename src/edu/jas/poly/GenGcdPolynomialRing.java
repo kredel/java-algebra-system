@@ -100,7 +100,7 @@ public class GenGcdPolynomialRing<C extends GcdRingElem<C> >
      * @return extended polynomial ring factory.
      */
     @Override
-	public GenGcdPolynomialRing<C> extend(int i) {
+     public GenGcdPolynomialRing<C> extend(int i) {
         // add module variable names
         String[] v = null;
         if ( vars != null ) {
@@ -126,7 +126,7 @@ public class GenGcdPolynomialRing<C extends GcdRingElem<C> >
      * @return contracted polynomial ring factory.
      */
     @Override
-	public GenGcdPolynomialRing<C> contract(int i) {
+     public GenGcdPolynomialRing<C> contract(int i) {
         String[] v = null;
         if ( vars != null ) {
            v = new String[ vars.length - i ];
@@ -146,7 +146,7 @@ public class GenGcdPolynomialRing<C extends GcdRingElem<C> >
      * @return polynomial ring factory with reversed variables.
      */
     @Override
-	public GenGcdPolynomialRing<C> reverse() {
+     public GenGcdPolynomialRing<C> reverse() {
         return reverse(false);
     }
 
@@ -157,7 +157,7 @@ public class GenGcdPolynomialRing<C extends GcdRingElem<C> >
      * @return polynomial ring factory with reversed variables.
      */
     @Override
-	public GenGcdPolynomialRing<C> reverse(boolean partial) {
+     public GenGcdPolynomialRing<C> reverse(boolean partial) {
         String[] v = null;
         if ( vars != null ) { // vars are not inversed
            v = new String[ vars.length ];

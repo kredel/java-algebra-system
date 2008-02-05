@@ -47,7 +47,7 @@ public class RReductionSeq<C extends RegularRingElem<C>>
      * @return true if A is top reducible with respect to P.
      */
     @Override
-	public boolean isTopReducible(List<GenPolynomial<C>> P, 
+     public boolean isTopReducible(List<GenPolynomial<C>> P, 
                                   GenPolynomial<C> A) {  
         if ( P == null || P.isEmpty() ) {
            return false;
@@ -114,7 +114,7 @@ public class RReductionSeq<C extends RegularRingElem<C>>
      * @return true if Ap is in normalform with respect to Pp.
      */
     @Override
-	@SuppressWarnings("unchecked") 
+     @SuppressWarnings("unchecked") 
     public boolean isNormalform(List<GenPolynomial<C>> Pp, 
                                 GenPolynomial<C> Ap) {  
         if ( Pp == null || Pp.isEmpty() ) {
@@ -278,7 +278,7 @@ public class RReductionSeq<C extends RegularRingElem<C>>
      * @return true if the S-polynomial(i,j) is required, else false.
      */
     @Override
-	public boolean criterion4(GenPolynomial<C> A, 
+     public boolean criterion4(GenPolynomial<C> A, 
                               GenPolynomial<C> B, 
                               ExpVector e) {  
         if ( logger.isInfoEnabled() ) {
@@ -320,7 +320,7 @@ public class RReductionSeq<C extends RegularRingElem<C>>
      * @return true if the S-polynomial(i,j) is required, else false.
      */
     @Override
-	public boolean criterion4(GenPolynomial<C> A, 
+     public boolean criterion4(GenPolynomial<C> A, 
                               GenPolynomial<C> B) {  
         if ( logger.isInfoEnabled() ) {
            if (   A instanceof GenSolvablePolynomial
@@ -465,7 +465,7 @@ public class RReductionSeq<C extends RegularRingElem<C>>
      * @return a list P of polynomials which are in normalform wrt. P.
      */
     @Override
-	public List<GenPolynomial<C>> irreducibleSet(List<GenPolynomial<C>> Pp) {  
+     public List<GenPolynomial<C>> irreducibleSet(List<GenPolynomial<C>> Pp) {  
         ArrayList<GenPolynomial<C>> P = new ArrayList<GenPolynomial<C>>();
         if ( Pp == null ) {
            return null;

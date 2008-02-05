@@ -118,7 +118,7 @@ public class Quotient<C extends GcdRingElem<C> >
      * @see java.lang.Object#clone()
      */
     @Override
-	public Quotient<C> clone() {
+     public Quotient<C> clone() {
         return new Quotient<C>( ring, num, den, true );
     }
    
@@ -158,7 +158,7 @@ public class Quotient<C extends GcdRingElem<C> >
      * @see java.lang.Object#toString()
      */
     @Override
-	public String toString() {
+     public String toString() {
         if ( PrettyPrint.isTrue() ) {
            String s = "{ " + num.toString( ring.ring.getVars() );
            if ( !den.isONE() ) {

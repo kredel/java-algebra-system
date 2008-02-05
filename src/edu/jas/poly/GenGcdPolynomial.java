@@ -101,7 +101,7 @@ public class GenGcdPolynomial<C extends GcdRingElem<C> >
      * @see java.lang.Object#clone()
      */
     @Override
-	public GenGcdPolynomial<C> clone() {
+     public GenGcdPolynomial<C> clone() {
         //return ring.copy(this);
         return new GenGcdPolynomial<C>(gring,this.val);
     }
@@ -126,7 +126,7 @@ public class GenGcdPolynomial<C extends GcdRingElem<C> >
      * @return this + a x<sup>e</sup>.
      */
     @Override
-	public GenGcdPolynomial<C> sum(C a, ExpVector e) {
+     public GenGcdPolynomial<C> sum(C a, ExpVector e) {
         return new GenGcdPolynomial<C>(gring, super.sum(a,e).val );
     }
 
@@ -149,7 +149,7 @@ public class GenGcdPolynomial<C extends GcdRingElem<C> >
      * @return this - a x<sup>e</sup>.
      */
     @Override
-	public GenGcdPolynomial<C> subtract(C a, ExpVector e) {
+     public GenGcdPolynomial<C> subtract(C a, ExpVector e) {
         return new GenGcdPolynomial<C>(gring, super.subtract(a,e).val );
     }
 
@@ -159,7 +159,7 @@ public class GenGcdPolynomial<C extends GcdRingElem<C> >
      * @return -this.
      */
     @Override
-	public GenGcdPolynomial<C> negate() {
+     public GenGcdPolynomial<C> negate() {
         return new GenGcdPolynomial<C>(gring, super.negate().val );
     }
 
@@ -169,7 +169,7 @@ public class GenGcdPolynomial<C extends GcdRingElem<C> >
      * @return abs(this).
      */
     @Override
-	public GenGcdPolynomial<C> abs() {
+     public GenGcdPolynomial<C> abs() {
         return new GenGcdPolynomial<C>(gring, super.abs().val );
     }
 
@@ -191,7 +191,7 @@ public class GenGcdPolynomial<C extends GcdRingElem<C> >
      * @return this*s.
      */
     @Override
-	public GenGcdPolynomial<C> multiply(C s) {
+     public GenGcdPolynomial<C> multiply(C s) {
         return new GenGcdPolynomial<C>(gring, super.multiply(s).val );
     }
 
@@ -202,7 +202,7 @@ public class GenGcdPolynomial<C extends GcdRingElem<C> >
      * @return monic(this).
      */
     @Override
-	public GenGcdPolynomial<C> monic() {
+     public GenGcdPolynomial<C> monic() {
         return new GenGcdPolynomial<C>(gring, super.monic().val );
     }
 
@@ -215,7 +215,7 @@ public class GenGcdPolynomial<C extends GcdRingElem<C> >
      * @return this * s x<sup>e</sup>.
      */
     @Override
-	public GenGcdPolynomial<C> multiply(C s, ExpVector e) {
+     public GenGcdPolynomial<C> multiply(C s, ExpVector e) {
         return new GenGcdPolynomial<C>(gring, super.multiply(s,e).val );
     }
 
@@ -227,7 +227,7 @@ public class GenGcdPolynomial<C extends GcdRingElem<C> >
      * @return this * x<sup>e</sup>.
      */
     @Override
-	public GenGcdPolynomial<C> multiply(ExpVector e) {
+     public GenGcdPolynomial<C> multiply(ExpVector e) {
         return new GenGcdPolynomial<C>(gring, super.multiply(e).val );
     }
 
@@ -239,7 +239,7 @@ public class GenGcdPolynomial<C extends GcdRingElem<C> >
      * @return this * m.
      */
     @Override
-	public GenGcdPolynomial<C> multiply(Map.Entry<ExpVector,C> m) {
+     public GenGcdPolynomial<C> multiply(Map.Entry<ExpVector,C> m) {
         return new GenGcdPolynomial<C>(gring, super.multiply(m).val );
     }
 
@@ -252,7 +252,7 @@ public class GenGcdPolynomial<C extends GcdRingElem<C> >
      * @return this/s.
      */
     @Override
-	public GenPolynomial<C> divide(C s) {
+     public GenPolynomial<C> divide(C s) {
         if ( s == null || s.isZERO() ) {
            throw new RuntimeException(this.getClass().getName()
                                       + " division by zero");
@@ -294,7 +294,7 @@ public class GenGcdPolynomial<C extends GcdRingElem<C> >
      * @see edu.jas.poly.PolyUtil#basePseudoRemainder(edu.jas.poly.GenPolynomial,edu.jas.poly.GenPolynomial).
      */
     @Override
-	public GenPolynomial<C>[] divideAndRemainder(GenPolynomial<C> S) {
+     public GenPolynomial<C>[] divideAndRemainder(GenPolynomial<C> S) {
         if ( S == null || S.isZERO() ) {
             throw new RuntimeException(this.getClass().getName()
                                        + " division by zero");
@@ -305,7 +305,7 @@ public class GenGcdPolynomial<C extends GcdRingElem<C> >
                                        + " lbcf not invertible " + c);
         }
         C ci = c.inverse();
-	assert (ring.nvar == S.ring.nvar);
+     assert (ring.nvar == S.ring.nvar);
         ExpVector e = S.leadingExpVector();
         //System.out.println("e = " + e);
         GenPolynomial<C> h;
@@ -347,7 +347,7 @@ public class GenGcdPolynomial<C extends GcdRingElem<C> >
      * @see edu.jas.poly.PolyUtil#basePseudoRemainder(edu.jas.poly.GenPolynomial,edu.jas.poly.GenPolynomial).
      */
     @Override
-	public GenPolynomial<C> divide(GenPolynomial<C> S) {
+     public GenPolynomial<C> divide(GenPolynomial<C> S) {
         return divideAndRemainder(S)[0];
     }
 
@@ -362,7 +362,7 @@ public class GenGcdPolynomial<C extends GcdRingElem<C> >
      * @see edu.jas.poly.PolyUtil#basePseudoRemainder(edu.jas.poly.GenPolynomial,edu.jas.poly.GenPolynomial).
      */
     @Override
-	public GenPolynomial<C> remainder(GenPolynomial<C> S) {
+     public GenPolynomial<C> remainder(GenPolynomial<C> S) {
         if ( S == null || S.isZERO() ) {
            throw new RuntimeException(this.getClass().getName()
                                       + " division by zero");
@@ -373,7 +373,7 @@ public class GenGcdPolynomial<C extends GcdRingElem<C> >
                                       + " lbc not invertible " + c);
         }
         C ci = c.inverse();
-	assert (ring.nvar == S.ring.nvar);
+     assert (ring.nvar == S.ring.nvar);
         ExpVector e = S.leadingExpVector();
         GenPolynomial<C> h;
         GenPolynomial<C> r = this.clone(); 
@@ -401,7 +401,7 @@ public class GenGcdPolynomial<C extends GcdRingElem<C> >
      * @return gcd(this,S).
      */
     @Override
-	public GenPolynomial<C> gcd(GenPolynomial<C> S) {
+     public GenPolynomial<C> gcd(GenPolynomial<C> S) {
         if ( S == null || S.isZERO() ) {
             return this;
         }
@@ -434,7 +434,7 @@ public class GenGcdPolynomial<C extends GcdRingElem<C> >
      * @return [ gcd(this,S), a, b ] with a*this + b*S = gcd(this,S).
      */
     @Override
-	public GenPolynomial<C>[] egcd(GenPolynomial<C> S) {
+     public GenPolynomial<C>[] egcd(GenPolynomial<C> S) {
         GenPolynomial<C>[] ret = new GenPolynomial[3];
         ret[0] = null;
         ret[1] = null;
@@ -479,7 +479,7 @@ public class GenGcdPolynomial<C extends GcdRingElem<C> >
             c1 = c1.multiply( h );
             c2 = c2.multiply( h );
         }        
-	//assert ( ((c1.multiply(this)).sum( c2.multiply(S)).equals(q) )); 
+     //assert ( ((c1.multiply(this)).sum( c2.multiply(S)).equals(q) )); 
         //if ( c1.isZERO() ) {
         //   System.out.println("this = " + this + "\n S = " + S);
         //   System.out.println("q = " + q + "\n c1 = " + c1 + "\n c2 = " + c2);
@@ -497,7 +497,7 @@ public class GenGcdPolynomial<C extends GcdRingElem<C> >
      * Throws not implemented exception.
      */
     @Override
-	public GenGcdPolynomial<C> inverse() {
+     public GenGcdPolynomial<C> inverse() {
         return new GenGcdPolynomial<C>(gring, super.inverse().val );
     }
 
@@ -540,7 +540,7 @@ public class GenGcdPolynomial<C extends GcdRingElem<C> >
             = new TreeMap<ExpVector,GenGcdPolynomial<C>>( t.getAscendComparator() );
         if ( this.isZERO() ) { 
            return B;
-	}
+     }
         int i = ring.nvar - pfac.nvar;
         Map<ExpVector,C> A = val;
         for ( Map.Entry<ExpVector,C> y: A.entrySet() ) {

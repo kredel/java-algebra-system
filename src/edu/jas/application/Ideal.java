@@ -144,7 +144,7 @@ public class Ideal<C extends GcdRingElem<C>>
     public Ideal( PolynomialList<C> list, boolean gb,
                   GroebnerBase<C> bb, Reduction<C> red) {
       if ( list == null || list.list == null ) {
-	 throw new IllegalArgumentException("list and list.list may not be null");
+      throw new IllegalArgumentException("list and list.list may not be null");
       }
       this.list = list;
       this.isGB = gb;

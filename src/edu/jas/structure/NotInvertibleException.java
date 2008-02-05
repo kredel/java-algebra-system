@@ -15,22 +15,22 @@ public class NotInvertibleException extends RuntimeException {
 
 
     public NotInvertibleException() {
-	super("NotInvertibleException");
+     super("NotInvertibleException");
     }
 
 
     public NotInvertibleException(String c) {
-	super(c);
+     super(c);
     }
 
 
     public NotInvertibleException(String c, Throwable t) {
-	super(c,t);
+     super(c,t);
     }
 
 
     public NotInvertibleException(Throwable t) {
-	super("NotInvertibleException",t);
+     super("NotInvertibleException",t);
     }
 
 }

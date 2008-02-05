@@ -131,7 +131,7 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>,
      * @see java.lang.Object#clone()
      */
     @Override
-	public BigDecimal clone() {
+     public BigDecimal clone() {
         return new BigDecimal( val, context );
     }
 
@@ -263,7 +263,7 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>,
      * @see java.lang.Object#toString()
      */
     @Override
-	public String toString() {
+     public String toString() {
         //return val.toString() + "(ulp=" + val.ulp() + ")";
         return val.toString();
     }
@@ -304,7 +304,7 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>,
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
-	public boolean equals(Object b) {
+     public boolean equals(Object b) {
         if ( ! ( b instanceof BigDecimal ) ) {
             return false;
         }
@@ -317,7 +317,7 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>,
      * @see java.lang.Object#hashCode()
      */
     @Override
-	public int hashCode() {
+     public int hashCode() {
         return val.hashCode();
     }
 
@@ -400,7 +400,7 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>,
      * @return gcd(this,S).
      */
     public BigDecimal gcd(BigDecimal S) {
-	throw new RuntimeException("BigDecimal.gcd() not implemented");
+     throw new RuntimeException("BigDecimal.gcd() not implemented");
         //return new BigDecimal( val.gcd( S.val ) );
     }
 
@@ -411,7 +411,7 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>,
      * @return [ gcd(this,S), a, b ] with a*this + b*S = gcd(this,S).
      */
     public BigDecimal[] egcd(BigDecimal S) {
-	throw new RuntimeException("BigDecimal.egcd() not implemented");
+     throw new RuntimeException("BigDecimal.egcd() not implemented");
     }
 
 

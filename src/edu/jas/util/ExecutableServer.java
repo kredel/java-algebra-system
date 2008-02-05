@@ -133,7 +133,7 @@ public class ExecutableServer extends Thread {
     * run is main server method.
     */ 
     @Override
-	public void run() {
+     public void run() {
        SocketChannel channel = null;
        Executor s = null;
        mythread = Thread.currentThread();
@@ -184,9 +184,9 @@ public class ExecutableServer extends Thread {
            Iterator it = servers.iterator();
            while ( it.hasNext() ) {
               Executor x = (Executor) it.next();
-	      if ( x.channel != null ) {
+           if ( x.channel != null ) {
                  x.channel.close();
-	      }
+           }
               try { 
                   while ( x.isAlive() ) {
                         //System.out.print(".");
@@ -242,7 +242,7 @@ class Executor extends Thread /*implements Runnable*/ {
     * run.
     */    
     @Override
-	public void run() {
+     public void run() {
         Object o;
         RemoteExecutable re = null;
         String d;

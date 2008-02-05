@@ -123,7 +123,7 @@ public class QuotientRing<C extends RingElem<C> >
      * @see java.lang.Object#toString()
      */
     @Override
-	public String toString() {
+     public String toString() {
         return "Quotient[ " 
                 + ring.toString() + " ]";
     }

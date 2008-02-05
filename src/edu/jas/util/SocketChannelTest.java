@@ -48,12 +48,12 @@ public class SocketChannelTest extends TestCase {
        port = 4711;
        cf = new ChannelFactory(port);       
        try {
-	   sc1 = cf.getChannel(host,port);
-	   sc2 = cf.getChannel();
+        sc1 = cf.getChannel(host,port);
+        sc2 = cf.getChannel();
        } catch(IOException e) {
            fail("IOException"+e);
        } catch (InterruptedException e) {
-	   fail("InterruptedException"+e);
+        fail("InterruptedException"+e);
        }
    }
 

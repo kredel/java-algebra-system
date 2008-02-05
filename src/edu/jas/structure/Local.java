@@ -85,7 +85,7 @@ public class Local<C extends RingElem<C> >
      * @param isred true if gcd(n,d) == 1, else false.
      */
     @SuppressWarnings("unchecked")
-	protected Local(LocalRing<C> r, C n, C d, boolean isred) {
+     protected Local(LocalRing<C> r, C n, C d, boolean isred) {
         if ( d == null || d.isZERO() ) {
            throw new RuntimeException("denominator may not be zero");
         }
@@ -134,7 +134,7 @@ public class Local<C extends RingElem<C> >
      * @see java.lang.Object#clone()
      */
     @Override
-	public Local<C> clone() {
+     public Local<C> clone() {
         return new Local<C>( ring, num, den, true );
     }
    
@@ -188,7 +188,7 @@ public class Local<C extends RingElem<C> >
      * @see java.lang.Object#toString()
      */
     @Override
-	public String toString() {
+     public String toString() {
         return "Local[ " + num.toString() 
                  + " / " + den.toString() + " ]";
     }

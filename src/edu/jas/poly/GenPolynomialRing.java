@@ -595,7 +595,7 @@ public class GenPolynomialRing<C extends RingElem<C> >
      * @return next GenPolynomial from r.
      */
     @SuppressWarnings("unchecked")
-	public GenPolynomial<C> parse(Reader r) {
+     public GenPolynomial<C> parse(Reader r) {
         GenPolynomialTokenizer pt = new GenPolynomialTokenizer(this,r);
         GenPolynomial<C> p = null;
         try {
@@ -660,7 +660,7 @@ public class GenPolynomialRing<C extends RingElem<C> >
      * @return List(X_1,...,X_n) a list of univariate polynomials.
      */
     public List<? extends GenPolynomial<C>> univariateList() {
-	return univariateList(0,1L);
+     return univariateList(0,1L);
     }
 
 
@@ -671,7 +671,7 @@ public class GenPolynomialRing<C extends RingElem<C> >
      * @return List(X_1,...,X_n) a list of univariate polynomials.
      */
     public List<? extends GenPolynomial<C>> univariateList(int modv) {
-	return univariateList(modv,1L);
+     return univariateList(modv,1L);
     }
 
 
@@ -684,10 +684,10 @@ public class GenPolynomialRing<C extends RingElem<C> >
      */
     public List<? extends GenPolynomial<C>> univariateList(int modv, long e) {
         List<GenPolynomial<C>> pols = new ArrayList<GenPolynomial<C>>(nvar);
-	for ( int i = 0; i < nvar-modv; i++ ) {
+     for ( int i = 0; i < nvar-modv; i++ ) {
             GenPolynomial<C> p = univariate(modv,i,e);
-	    pols.add( p );
-	}
+         pols.add( p );
+     }
         return pols;
     }
 

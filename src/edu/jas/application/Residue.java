@@ -85,7 +85,7 @@ public class Residue<C extends GcdRingElem<C> >
      * @see java.lang.Object#clone()
      */
     @Override
-	public Residue<C> clone() {
+     public Residue<C> clone() {
         return new Residue<C>( ring, val, isunit );
     }
    
@@ -144,7 +144,7 @@ public class Residue<C extends GcdRingElem<C> >
      * @see java.lang.Object#toString()
      */
     @Override
-	public String toString() {
+     public String toString() {
         if ( PrettyPrint.isTrue() ) {
            return val.toString( ring.ring.getVars() );
         } else {

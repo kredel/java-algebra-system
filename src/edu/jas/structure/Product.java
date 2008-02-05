@@ -88,7 +88,7 @@ public class Product<C extends RingElem<C> >
      * @see java.lang.Object#clone()
      */
     @Override
-	public Product<C> clone() {
+     public Product<C> clone() {
         return new Product<C>( ring, val );
     }
    
@@ -173,7 +173,7 @@ public class Product<C extends RingElem<C> >
      * @see java.lang.Object#toString()
      */
     @Override
-	public String toString() {
+     public String toString() {
         return val.toString(); 
     }
 

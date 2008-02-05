@@ -102,7 +102,7 @@ public class DistHashTableServer extends Thread {
  * main server method.
  */ 
     @Override
-	public void run() {
+     public void run() {
        SocketChannel channel = null;
        DHTBroadcaster s = null;
        mythread = Thread.currentThread();
@@ -284,7 +284,7 @@ class DHTCounter implements Serializable, Comparable<DHTCounter> {
      * @return true if this is equal to o, else false.
      */
     @Override
-	public boolean equals(Object ob) {
+     public boolean equals(Object ob) {
         if ( ! (ob instanceof DHTCounter) ) {
            return false;
         }
@@ -315,7 +315,7 @@ class DHTCounter implements Serializable, Comparable<DHTCounter> {
     * toString.
     */
     @Override
-	public String toString() {
+     public String toString() {
         return "DHTCounter("+value+")";
     }
 
@@ -438,7 +438,7 @@ class DHTBroadcaster extends Thread /*implements Runnable*/ {
  * run.
  */
     @Override
-	public void run() {
+     public void run() {
         Object o;
         boolean goon = true;
         while (goon) {
@@ -475,7 +475,7 @@ class DHTBroadcaster extends Thread /*implements Runnable*/ {
  * @return a string representation of this.
  */
     @Override
-	public String toString() {
+     public String toString() {
         return "DHTBroadcaster("+channel+","+bcaster.size()+","+listElem+")";
     }
 

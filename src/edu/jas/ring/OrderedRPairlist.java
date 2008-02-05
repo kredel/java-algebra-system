@@ -54,7 +54,7 @@ public class OrderedRPairlist<C extends RegularRingElem<C> >
      * @return the next pair if one exists, otherwise null.
      */
     @Override
-	public synchronized Pair<C> removeNext() { 
+     public synchronized Pair<C> removeNext() { 
        if ( oneInGB ) {
           return null;
        }
@@ -114,7 +114,7 @@ public class OrderedRPairlist<C extends RegularRingElem<C> >
      * @return true if the S-polynomial(i,j) is required.
      */
     @Override
-	public boolean criterion3(int i, int j, ExpVector eij) {  
+     public boolean criterion3(int i, int j, ExpVector eij) {  
         // assert i < j;
         boolean s;
         s = red.get( j ).get(i); 
