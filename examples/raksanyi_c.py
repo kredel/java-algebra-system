@@ -12,7 +12,7 @@ from jas import terminate
 
 
 # Raksanyi & Walter example
-# rational function coefficients
+# integral/rational function coefficients
 
 #r = Ring( "RatFunc(a1, a2, a3, a4) (x1, x2, x3, x4) L" );
 r = Ring( "IntFunc(a1, a2, a3, a4) (x1, x2, x3, x4) L" );
