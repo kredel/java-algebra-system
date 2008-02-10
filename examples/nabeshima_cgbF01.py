@@ -11,10 +11,10 @@ from jas import startLog
 from jas import terminate
 
 
-# Nabashima, ISSAC 2007, example F01
-# rational function coefficients
+# Nabashima, ISSAC 2007, example Ex-4.3
+# integral function coefficients
 
-r = Ring( "IntFunc(a, b) (y,x) L" );
+r = Ring( "IntFunc(a, b) (x,y) L" );
 print "Ring: " + str(r);
 print;
 

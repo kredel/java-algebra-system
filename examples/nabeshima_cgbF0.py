@@ -11,8 +11,8 @@ from jas import startLog
 from jas import terminate
 
 
-# Nabashima, ISSAC 2007, example F0
-# rational function coefficients
+# Nabashima, ISSAC 2007, example Ex-4.8
+# integral function coefficients
 
 r = Ring( "IntFunc(a, b, c) (y,x) L" );
 print "Ring: " + str(r);

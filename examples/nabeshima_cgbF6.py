@@ -12,7 +12,7 @@ from jas import terminate
 
 
 # Nabashima, ISSAC 2007, example F6
-# rational function coefficients
+# integral function coefficients
 
 r = Ring( "IntFunc(a, b,c, d) (x) L" );
 print "Ring: " + str(r);
