@@ -58,12 +58,13 @@ public class RReductionSeq<C extends RegularRingElem<C>>
         boolean mt = false;
         ExpVector e = A.leadingExpVector();
         C a = A.leadingBaseCoefficient();
+        a = a.idempotent();
         for ( GenPolynomial<C> p : P ) {
             mt = ExpVector.EVMT( e, p.leadingExpVector() );
             if ( mt ) {
                C b = p.leadingBaseCoefficient();
                //C r = a.multiply( b );
-               C r = a.idempotent().multiply( b.idempotent() );
+               C r = a.multiply( b.idempotent() );
                mt = ! r.isZERO();
                if ( mt ) {
                   return true;
@@ -92,11 +93,12 @@ public class RReductionSeq<C extends RegularRingElem<C>>
         boolean mt = false;
         ExpVector e = A.leadingExpVector();
         C a = A.leadingBaseCoefficient();
+        a = a.idempotent();
         for ( GenPolynomial<C> p : P ) {
             mt = ExpVector.EVMT( e, p.leadingExpVector() );
             if ( mt ) {
                C b = p.leadingBaseCoefficient();
-               mt = a.idempotent().equals( b.idempotent() );
+               mt = a.equals( b.idempotent() );
                if ( mt ) {
                   return true;
                } 
