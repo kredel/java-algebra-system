@@ -44,7 +44,7 @@ public class RPseudoReductionSeq<C extends RegularRingElem<C>>
      * @return r-nf(Ap) with respect to Pp.
      */
     @Override
-     @SuppressWarnings("unchecked") 
+    @SuppressWarnings("unchecked") 
     public GenPolynomial<C> normalform(List<GenPolynomial<C>> Pp, 
                                        GenPolynomial<C> Ap) {  
         if ( Pp == null || Pp.isEmpty() ) {
@@ -91,6 +91,7 @@ public class RPseudoReductionSeq<C extends RegularRingElem<C>>
         GenPolynomial<C> R = Ap.ring.getZERO();
         GenPolynomial<C> Q = null;
         GenPolynomial<C> S = Ap;
+        GenPolynomial<C> Rp, Sp;
         while ( S.length() > 0 ) { 
               m = S.leadingMonomial();
               e = m.getKey();
@@ -120,10 +121,22 @@ public class RPseudoReductionSeq<C extends RegularRingElem<C>>
                         } else {
                            c = c.sum( s );
                            //System.out.println("--c = " + c);
-                           S = S.multiply( c );
-                           R = R.multiply( c );
+                           Sp = S.multiply( c );
+                           Rp = R.multiply( c );
                            //System.out.println("--S = " + S.leadingBaseCoefficient());
                            //System.out.println("--R = " + R.leadingBaseCoefficient());
+                           if ( debug ) {
+                               if ( S.length() != Sp.length() ) {
+                                  logger.error("lost terms in S: " + S.subtract(Sp) );
+                                  throw new RuntimeException("lost terms");
+                               }
+                               if ( R.length() != Rp.length() ) {
+                                  logger.error("lost terms in R: " + R.subtract(Rp) );
+                                  throw new RuntimeException("lost terms");
+                               }
+                           }
+                           S = Sp;
+                           R = Rp;
                         }
                         f = ExpVector.EVDIF( e, htl[i] );
                         //logger.info("red div = " + f);
