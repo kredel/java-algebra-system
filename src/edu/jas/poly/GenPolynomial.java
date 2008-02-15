@@ -1259,4 +1259,30 @@ public class GenPolynomial<C extends RingElem<C> >
     }
 
 
+    /**
+     * Iterator over coefficients. 
+     * @return val.values().iterator().
+     */
+    public Iterator<C> coefficientIterator() {
+        return val.values().iterator();
+    }
+
+
+    /**
+     * Iterator over exponents. 
+     * @return val.keySet().iterator().
+     */
+    public Iterator<ExpVector> exponentIterator() {
+        return val.keySet().iterator();
+    }
+
+
+    /**
+     * Iterator over monomials. 
+     * @return a PolyIterator.
+     */
+    public Iterator<Monomial<C>> monomialIterator() {
+        return new PolyIterator<C>( val );
+    }
+
 }
