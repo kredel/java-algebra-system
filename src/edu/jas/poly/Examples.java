@@ -33,10 +33,11 @@ public class Examples {
        */
        //example6();
        //example7();
-       example8();
+       //example8();
        //example9();
        //example10();
        //example11();
+       example12();
    }
 
 
@@ -58,7 +59,7 @@ public static void example1() {
 
        GenPolynomial<BigRational> a = fac.random(10);
        System.out.println("a = " + a);
-   }
+}
 
 
 /**
@@ -81,7 +82,7 @@ public static void example2() {
 
        GenPolynomial<GenPolynomial<BigRational>> a = gfac.random(10);
        System.out.println("a = " + a);
-   }
+}
 
 
 /**
@@ -109,7 +110,7 @@ public static void example3() {
 
        AlgebraicNumber< BigRational > a = fac.random(15);
        System.out.println("a = " + a);
-   }
+}
 
    protected static long getPrime() {
        long prime = 2; //2^60-93; // 2^30-35; //19; knuth (2,390)
@@ -148,7 +149,7 @@ public static void example4() {
 
        AlgebraicNumber< ModInteger > a = fac.random(12);
        System.out.println("a = " + a);
-   }
+}
 
 
 /**
@@ -180,7 +181,7 @@ public static void example5() {
        System.out.println("b = " + b.toString( sfac.vars ) );
 
        System.out.println("sfac = " + sfac);
-   }
+}
 
 
 /**
@@ -236,7 +237,7 @@ public static void example6() {
 
        System.out.println("q2 = " + q2.length());
        System.out.println("time = " + t + " ms");
-   }
+}
 
 
 /**
@@ -295,7 +296,7 @@ public static void example7() {
 
        System.out.println("q2 = " + q2.length());
        System.out.println("time = " + t + " ms");
-   }
+}
 
 
 /**
@@ -336,6 +337,7 @@ public static void example8() {
         System.out.println("T["+n+"] = " + T.get(n) ); //.toString(var) );
     }
 }
+
 
 /**
  * example9.
@@ -496,7 +498,49 @@ public static void example11() {
     if ( ! op.equals( new PolynomialList<BigRational>(pring,ppolys) ) ) {
        System.out.println("error = " + "\n" + op);
     }
-    
+}
+
+
+/**
+ * example12.
+ * type games.
+ */
+public static void example12() {
+       System.out.println("\n\n example 12");
+
+       BigRational t1 = new BigRational();
+       System.out.println("t1 = " + t1);
+
+       BigInteger t2 = new BigInteger();
+       System.out.println("t2 = " + t2);
+
+       System.out.println("t1.isAssignableFrom(t2) = " 
+            + t1.getClass().isAssignableFrom(t2.getClass()));
+       System.out.println("t2.isAssignableFrom(t1) = " 
+            + t2.getClass().isAssignableFrom(t1.getClass()));
+
+       GenPolynomialRing<BigInteger> t3 
+          = new GenPolynomialRing<BigInteger>(t2,3);
+       System.out.println("t3 = " + t3);
+
+       GenSolvablePolynomialRing<BigInteger> t4 
+          = new GenSolvablePolynomialRing<BigInteger>(t2,3);
+       System.out.println("t4 = " + t4);
+
+       System.out.println("t3.isAssignableFrom(t4) = " 
+            + t3.getClass().isAssignableFrom(t4.getClass()));
+       System.out.println("t4.isAssignableFrom(t3) = " 
+            + t4.getClass().isAssignableFrom(t3.getClass()));
+
+
+       GenPolynomialRing<BigRational> t5 
+          = new GenPolynomialRing<BigRational>(t1,3);
+       System.out.println("t5 = " + t5);
+
+       System.out.println("t3.isAssignableFrom(t5) = " 
+            + t3.getClass().isAssignableFrom(t5.getClass()));
+       System.out.println("t5.isAssignableFrom(t3) = " 
+            + t5.getClass().isAssignableFrom(t3.getClass()));
 }
 
 }
