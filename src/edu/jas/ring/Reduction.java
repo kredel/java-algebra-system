@@ -126,6 +126,15 @@ public interface Reduction<C extends RingElem<C>>
 
 
     /**
+     * Is in Normalform.
+     * @typeparam C coefficient type.
+     * @param Pp polynomial list.
+     * @return true if each A in Pp is in normalform with respect to Pp\{A}.
+     */
+    public boolean isNormalform( List<GenPolynomial<C>> Pp );
+
+
+    /**
      * Normalform.
      * @typeparam C coefficient type.
      * @param A polynomial.

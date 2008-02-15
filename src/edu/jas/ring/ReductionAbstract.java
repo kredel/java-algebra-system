@@ -7,6 +7,7 @@ package edu.jas.ring;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.LinkedList;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -49,13 +50,16 @@ public abstract class ReductionAbstract<C extends RingElem<C>>
     public GenPolynomial<C> 
            SPolynomial(GenPolynomial<C> Ap, 
                        GenPolynomial<C> Bp) {  
-        if ( logger.isInfoEnabled() ) {
-           if ( Bp == null || Bp.isZERO() ) {
-              return Ap.ring.getZERO(); 
-           }
-           if ( Ap == null || Ap.isZERO() ) {
-              return Bp.ring.getZERO(); 
-           }
+        if ( Bp == null || Bp.isZERO() ) {
+           if ( Ap == null ) {
+              return Bp;
+           } 
+           return Ap.ring.getZERO(); 
+        }
+        if ( Ap == null || Ap.isZERO() ) {
+           return Bp.ring.getZERO(); 
+        }
+        if ( debug ) {
            if ( ! Ap.ring.equals( Bp.ring ) ) { 
               logger.error("rings not equal"); 
            }
@@ -251,7 +255,6 @@ public abstract class ReductionAbstract<C extends RingElem<C>>
      * @param P polynomial list.
      * @return true if A is top reducible with respect to P.
      */
-    //SuppressWarnings("unchecked") // not jet working
     public boolean isTopReducible(List<GenPolynomial<C>> P, 
                                   GenPolynomial<C> A) {  
         if ( P == null || P.isEmpty() ) {
@@ -279,7 +282,6 @@ public abstract class ReductionAbstract<C extends RingElem<C>>
      * @param Pp polynomial list.
      * @return true if Ap is reducible with respect to Pp.
      */
-    //SuppressWarnings("unchecked") // not jet working
     public boolean isReducible(List<GenPolynomial<C>> Pp, 
                                GenPolynomial<C> Ap) {  
         return !isNormalform(Pp,Ap);
@@ -293,7 +295,7 @@ public abstract class ReductionAbstract<C extends RingElem<C>>
      * @param Pp polynomial list.
      * @return true if Ap is in normalform with respect to Pp.
      */
-    //SuppressWarnings("unchecked") // not jet working
+    @SuppressWarnings("unchecked") 
     public boolean isNormalform(List<GenPolynomial<C>> Pp, 
                                 GenPolynomial<C> Ap) {  
         if ( Pp == null || Pp.isEmpty() ) {
@@ -335,6 +337,30 @@ public abstract class ReductionAbstract<C extends RingElem<C>>
                    return false;
                 } 
             }
+        }
+        return true;
+    }
+
+
+    /**
+     * Is in Normalform.
+     * @typeparam C coefficient type.
+     * @param Pp polynomial list.
+     * @return true if each Ap in Pp is in normalform with respect to Pp\{Ap}.
+     */
+    public boolean isNormalform( List<GenPolynomial<C>> Pp ) {  
+        if ( Pp == null || Pp.isEmpty() ) {
+           return true;
+        }
+        GenPolynomial<C> Ap;
+        List<GenPolynomial<C>> P = new LinkedList<GenPolynomial<C>>( Pp );
+        int s = P.size();
+        for ( int i = 0; i < s; i++ ) {
+            Ap = P.remove(i);
+            if ( ! isNormalform(P,Ap) ) {
+               return false;
+            }
+            P.add(Ap);
         }
         return true;
     }
