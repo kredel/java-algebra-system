@@ -530,8 +530,8 @@ public class RReductionSeq<C extends RegularRingElem<C>>
         }
         C a = A.leadingBaseCoefficient();
         C i = a.idempotent(); 
-        GenPolynomial<C> Ap = A.multiply(i);
-        if ( A.equals(Ap) ) {
+        GenPolynomial<C> B = A.multiply(i);
+        if ( A.equals(B) ) {
            return true;
         }
         return false;
@@ -546,6 +546,30 @@ public class RReductionSeq<C extends RegularRingElem<C>>
      * @return true if F is boolean closed, else false.
      */
     public boolean isBooleanClosed(List<GenPolynomial<C>> F) {  
+        if ( F == null || F.size() == 0 ) {
+           return true;
+        }
+        for ( GenPolynomial<C> a: F ) {
+            if ( a == null || a.isZERO() ) {
+               continue;
+            }
+            //System.out.println("a = " + a);
+            if ( ! isBooleanClosed( a ) ) {
+               return false;
+            }
+        }
+        return true;
+    }
+
+
+    /**
+     * Is reduced boolean closed, 
+     * test if all A in F are boolean closed or br(A) reduces to zero.
+     * @typeparam C coefficient type.
+     * @param F polynomial list.
+     * @return true if F is boolean closed, else false.
+     */
+    public boolean isReducedBooleanClosed(List<GenPolynomial<C>> F) {  
         if ( F == null || F.size() == 0 ) {
            return true;
         }
@@ -590,8 +614,8 @@ public class RReductionSeq<C extends RegularRingElem<C>>
         }
         C a = A.leadingBaseCoefficient();
         C i = a.idempotent(); 
-        GenPolynomial<C> Ap = A.multiply(i);
-        return Ap;
+        GenPolynomial<C> B = A.multiply(i);
+        return B;
     }
 
 
@@ -608,8 +632,34 @@ public class RReductionSeq<C extends RegularRingElem<C>>
         }
         C a = A.leadingBaseCoefficient();
         C i = a.idemComplement(); 
-        GenPolynomial<C> Ap = A.multiply(i);
-        return Ap;
+        GenPolynomial<C> B = A.multiply(i);
+        return B;
+    }
+
+
+    /**
+     * Boolean closure, 
+     * compute BC(A) for all A in F.
+     * @typeparam C coefficient type.
+     * @param F polynomial list.
+     * @return bc(F).
+     */
+    public List<GenPolynomial<C>> booleanClosure(List<GenPolynomial<C>> F) {  
+        if ( F == null || F.size() == 0 ) {
+           return F;
+        }
+        List<GenPolynomial<C>> B = new ArrayList<GenPolynomial<C>>( F.size() );
+        for ( GenPolynomial<C> a : F ) {
+            if ( a == null ) {
+               continue;
+            }
+            while ( !a.isZERO() ) {
+                  GenPolynomial<C> b = booleanClosure(a);
+                  B.add( b );
+                  a = booleanRemainder( a );
+            }
+        }
+        return B;
     }
 
 
@@ -628,11 +678,9 @@ public class RReductionSeq<C extends RegularRingElem<C>>
         GenPolynomial<C> a;
         GenPolynomial<C> b;
         GenPolynomial<C> c;
-        int i = 0;
         int len = B.size();
-        while ( i < len ) { //B.size() ) {
+        for ( int i = 0; i < len; i++ ) { // not B.size(), it changes
             a = B.remove(0);
-            i++;
             if ( a == null ) {
                continue;
             }
@@ -640,11 +688,12 @@ public class RReductionSeq<C extends RegularRingElem<C>>
                   //System.out.println("a = " + a);
                   b = booleanClosure(a);
                   //System.out.println("b = " + b);
-                  //b = booleanClosure( normalform( B, b ) );
-                  if ( ! b.isZERO() ) {
-                     B.add( b ); // adds as last
+                  b = booleanClosure( normalform( B, b ) );
+                  if ( b.isZERO() ) {
+                     break;
                   }
-                  c = a.subtract(b); // = BR(a)
+                  B.add( b ); // adds as last
+                  c = a.subtract(b); // = BR(a mod B)
                   //System.out.println("c = " + c);
                   c = normalform( B, c );
                   a = c;
@@ -673,15 +722,17 @@ public class RReductionSeq<C extends RegularRingElem<C>>
         GenPolynomial<C> c;
         while ( ! a.isZERO() ) {
             //System.out.println("a = " + a);
-            b = booleanClosure(a);
+            b = booleanClosure( a );
             //System.out.println("b = " + b);
-            //b = booleanClosure( normalform( B, b ) );
-            if ( ! b.isZERO() ) {
-                B.add( b ); // adds as last
+            b = booleanClosure( normalform( F, b ) );
+            if ( b.isZERO() ) {
+               break;
             }
-            c = a.subtract(b); // = BR(a)
+            B.add( b ); // adds as last
+            c = a.subtract(b); // = BR(a mod F) 
             //System.out.println("c = " + c);
             c = normalform( F, c );
+            //System.out.println("c = " + c);
             a = c;
         }
         return B;
