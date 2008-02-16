@@ -35,7 +35,7 @@ public interface RReduction<C extends RegularRingElem<C>>
 
 
     /**
-     * Is boolean closed, i.e.
+     * Is boolean closed, 
      * test if A == idempotent(ldcf(A)) A.
      * @typeparam C coefficient type.
      * @param A polynomial.
@@ -45,7 +45,7 @@ public interface RReduction<C extends RegularRingElem<C>>
 
 
     /**
-     * Is boolean closed, i.e.
+     * Is boolean closed, 
      * test if all A in F are boolean closed.
      * @typeparam C coefficient type.
      * @param F polynomial list.
@@ -55,7 +55,7 @@ public interface RReduction<C extends RegularRingElem<C>>
 
 
     /**
-     * Boolean closure, i.e.
+     * Boolean closure, 
      * compute idempotent(ldcf(A)) A.
      * @typeparam C coefficient type.
      * @param A polynomial.
@@ -65,7 +65,7 @@ public interface RReduction<C extends RegularRingElem<C>>
 
 
     /**
-     * Boolean remainder, i.e.
+     * Boolean remainder, 
      * compute idemComplement(ldcf(A)) A.
      * @typeparam C coefficient type.
      * @param A polynomial.
@@ -75,7 +75,7 @@ public interface RReduction<C extends RegularRingElem<C>>
 
 
     /**
-     * Reduced boolean closure, i.e.
+     * Reduced boolean closure, 
      * compute BC(A) for all A in F.
      * @typeparam C coefficient type.
      * @param F polynomial list.
@@ -85,7 +85,7 @@ public interface RReduction<C extends RegularRingElem<C>>
 
 
     /**
-     * Reduced boolean closure, i.e.
+     * Reduced boolean closure, 
      * compute BC(A) modulo F.
      * @typeparam C coefficient type.
      * @param A polynomial.
