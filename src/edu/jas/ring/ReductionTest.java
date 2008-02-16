@@ -77,8 +77,8 @@ public static Test suite() {
 
    int rl = 4; 
    int kl = 10;
-   int ll = 7;
-   int el = 3;
+   int ll = 11;
+   int el = 5;
    float q = 0.6f;
 
    protected void setUp() {
@@ -135,9 +135,9 @@ public static Test suite() {
 
 
 /**
- * Test ReductionMod with constants and empty list reduction.
+ * Test parallel reduction with constants and empty list reduction.
  */
- public void testRatReduction1() {
+ public void testRatReductionPar0() {
      L = new ArrayList<GenPolynomial<BigRational>>();
 
      a = fac.random(kl, ll, el, q );
@@ -173,7 +173,7 @@ public static Test suite() {
 
 
 /**
- * Test Rat reduction.
+ * Test rational coefficient reduction.
  * 
  */
  public void testRatReduction() {
@@ -217,10 +217,10 @@ public static Test suite() {
 
 
 /**
- * Test Rat reduction Mod.
+ * Test rational coefficient parallel reduction.
  * 
  */
- public void testRatReductionMod() {
+ public void testRatReductionPar() {
 
      a = fac.random(kl, ll, el, q );
      b = fac.random(kl, ll, el, q );
@@ -254,7 +254,7 @@ public static Test suite() {
 
 
 /**
- * Test Complex reduction.
+ * Test complex coefficient reduction.
  * 
  */
  public void testComplexReduction() {
@@ -299,7 +299,7 @@ public static Test suite() {
 
 
 /**
- * Test Rat reduction recording.
+ * Test rational coefficient reduction with recording.
  * 
  */
  public void testRatReductionRecording() {
@@ -353,7 +353,7 @@ public static Test suite() {
 
 
 /**
- * Test Integer e-reduction.
+ * Test integer coefficient e-reduction.
  * 
  */
  public void testIntegerEReduction() {
@@ -435,7 +435,7 @@ public static Test suite() {
 
 
 /**
- * Test Integer d-reduction.
+ * Test integer coefficient d-reduction.
  * 
  */
  public void testIntegerDReduction() {
@@ -517,7 +517,7 @@ public static Test suite() {
 
 
 /**
- * Test Rational r-reduction.
+ * Test rational coefficient r-reduction.
  * 
  */
  public void testRationalRReduction() {
@@ -597,29 +597,62 @@ public static Test suite() {
      assertEquals("a==BC(a)+BR(a)", a, e ); 
 
      List<GenPolynomial<Product<BigRational>>> B;
+     List<GenPolynomial<Product<BigRational>>> Br;
      L = new ArrayList<GenPolynomial<Product<BigRational>>>();
      L.add( a );
-     B = rred.reducedBooleanClosure(L);
-     //System.out.println("L = " + L);
+     B  = rred.booleanClosure(L);
+     Br = rred.reducedBooleanClosure(L);
+     //System.out.println("L  = " + L);
      //System.out.println("B = " + B);
+     //System.out.println("Br = " + Br);
      assertTrue("isBC( B )", rred.isBooleanClosed(B) ); 
+     assertTrue("isBC( Br )", rred.isReducedBooleanClosed(Br) ); 
+     assertTrue("isBC( Br )", rred.isBooleanClosed(Br) ); 
+     //not always: assertEquals("B == Br", B, Br ); 
 
      L.add( b );
-     B = rred.reducedBooleanClosure(L);
+     B  = rred.booleanClosure(L);
+     Br = rred.reducedBooleanClosure(L);
      //System.out.println("L = " + L);
      //System.out.println("B = " + B);
+     //System.out.println("Br = " + Br);
      assertTrue("isBC( B )", rred.isBooleanClosed(B) ); 
+     assertTrue("isBC( Br )", rred.isReducedBooleanClosed(Br) ); 
+     assertTrue("isBC( Br )", rred.isBooleanClosed(Br) ); 
+     //not always: assertEquals("B == Br", B, Br ); 
 
+     while ( c.isZERO() ) {
+         c = fac.random(kl, ll, el, q );
+     }
      L.add( c );
-     B = rred.reducedBooleanClosure(L);
+     B  = rred.booleanClosure(L);
+     Br = rred.reducedBooleanClosure(L);
      //System.out.println("L = " + L);
      //System.out.println("B = " + B);
+     //System.out.println("Br = " + Br);
      assertTrue("isBC( B )", rred.isBooleanClosed(B) ); 
+     assertTrue("isBC( Br )", rred.isReducedBooleanClosed(Br) ); 
+     assertTrue("isBC( Br )", rred.isBooleanClosed(Br) ); 
+     //not always: assertEquals("B == Br", B, Br ); 
+
+     while ( d.isZERO() ) {
+         d = fac.random(kl, ll, el, q );
+     }
+     L.add( d );
+     B  = rred.booleanClosure(L);
+     Br = rred.reducedBooleanClosure(L);
+     //System.out.println("L = " + L);
+     //System.out.println("B = " + B);
+     //System.out.println("Br = " + Br);
+     assertTrue("isBC( B )", rred.isBooleanClosed(B) ); 
+     assertTrue("isBC( Br )", rred.isReducedBooleanClosed(Br) ); 
+     assertTrue("isBC( Br )", rred.isBooleanClosed(Br) ); 
+     //not always: assertEquals("B == Br", B, Br ); 
  }
 
 
 /**
- * Test Integer pseudo-reduction.
+ * Test integer coefficient pseudo-reduction.
  * 
  */
  public void testIntegerPseudoReduction() {
@@ -695,7 +728,7 @@ public static Test suite() {
 
 
 /**
- * Test integer r-reduction.
+ * Test integer coefficient pseudo r-reduction.
  * 
  */
  public void testIntegerRReduction() {
@@ -776,24 +809,54 @@ public static Test suite() {
      assertEquals("a==BC(a)+BR(a)", a, e ); 
 
      List<GenPolynomial<Product<BigInteger>>> B;
+     List<GenPolynomial<Product<BigInteger>>> Br;
      L = new ArrayList<GenPolynomial<Product<BigInteger>>>();
      L.add( a );
-     B = rpred.reducedBooleanClosure(L);
-     //System.out.println("L = " + L);
-     //System.out.println("B = " + B);
+     B  = rpred.booleanClosure(L);
+     Br = rpred.reducedBooleanClosure(L);
+     //System.out.println("L  = " + L);
+     //System.out.println("B  = " + B);
+     //System.out.println("Br = " + Br);
      assertTrue("isBC( B )", rpred.isBooleanClosed(B) ); 
+     assertTrue("isBC( Br )", rpred.isReducedBooleanClosed(Br) ); 
+     assertTrue("isBC( Br )", rpred.isBooleanClosed(Br) ); 
+     //not always: assertEquals("B == Br", B, Br ); 
 
      L.add( b );
-     B = rpred.reducedBooleanClosure(L);
+     B  = rpred.booleanClosure(L);
+     Br = rpred.reducedBooleanClosure(L);
      //System.out.println("L = " + L);
      //System.out.println("B = " + B);
+     //System.out.println("Br = " + Br);
      assertTrue("isBC( B )", rpred.isBooleanClosed(B) ); 
+     assertTrue("isBC( Br )", rpred.isReducedBooleanClosed(Br) ); 
+     assertTrue("isBC( Br )", rpred.isBooleanClosed(Br) ); 
+     //not always: assertEquals("B == Br", B, Br ); 
 
      L.add( c );
-     B = rpred.reducedBooleanClosure(L);
+     B  = rpred.booleanClosure(L);
+     Br = rpred.reducedBooleanClosure(L);
      //System.out.println("L = " + L);
      //System.out.println("B = " + B);
+     //System.out.println("Br = " + Br);
      assertTrue("isBC( B )", rpred.isBooleanClosed(B) ); 
+     assertTrue("isBC( Br )", rpred.isReducedBooleanClosed(Br) ); 
+     assertTrue("isBC( Br )", rpred.isBooleanClosed(Br) ); 
+     //not always: assertEquals("B == Br", B, Br ); 
+
+     while ( d.isZERO() ) {
+         d = fac.random(kl, ll, el, q );
+     }
+     L.add( d );
+     B  = rpred.booleanClosure(L);
+     Br = rpred.reducedBooleanClosure(L);
+     //System.out.println("L = " + L);
+     //System.out.println("B = " + B);
+     //System.out.println("Br = " + Br);
+     assertTrue("isBC( B )", rpred.isBooleanClosed(B) ); 
+     assertTrue("isBC( Br )", rpred.isReducedBooleanClosed(Br) ); 
+     assertTrue("isBC( Br )", rpred.isBooleanClosed(Br) ); 
+     //not always: assertEquals("B == Br", B, Br ); 
  }
 
 }
