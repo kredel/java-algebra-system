@@ -408,6 +408,99 @@ public class Product<C extends RingElem<C> >
     }
 
 
+    /** Product idempotent and.  
+     * @param S Product.
+     * @return this.idempotent() and S.idempotent().
+     */
+    public Product<C> idempotentAnd(Product<C> S) {
+        if ( this.isZERO() && S.isZERO() ) {
+           return this;
+        }
+        SortedMap<Integer,C> elem = new TreeMap<Integer,C>();
+        for ( int i = 0; i < ring.length(); i++ ) {
+            C v = val.get( i );
+            C w = S.val.get( i );
+            if ( v != null && w != null ) {
+               RingFactory<C> f = ring.getFactory( i );
+               C x = f.getONE();
+               elem.put( i, x );
+            }
+        }
+        return new Product<C>( ring, elem );
+    }
+
+
+    /** Product idempotent or.  
+     * @param S Product.
+     * @return this.idempotent() or S.idempotent().
+     */
+    public Product<C> idempotentOr(Product<C> S) {
+        if ( this.isZERO() && S.isZERO() ) {
+           return this;
+        }
+        SortedMap<Integer,C> elem = new TreeMap<Integer,C>();
+        for ( int i = 0; i < ring.length(); i++ ) {
+            C v = val.get( i );
+            C w = S.val.get( i );
+            if ( v != null || w != null ) {
+               RingFactory<C> f = ring.getFactory( i );
+               C x = f.getONE();
+               elem.put( i, x );
+            }
+        }
+        return new Product<C>( ring, elem );
+    }
+
+
+    /** Product fill with idempotent.  
+     * @param S Product.
+     * @return fill this with S.idempotent().
+     */
+    public Product<C> fillIdempotent(Product<C> S) {
+        if ( S.isZERO() ) {
+           return this;
+        }
+        SortedMap<Integer,C> elem = new TreeMap<Integer,C>( val );
+        for ( int i = 0; i < ring.length(); i++ ) {
+            C v = elem.get( i );
+            if ( v != null ) {
+               continue;
+            }
+            C w = S.val.get( i );
+            if ( w != null ) {
+               RingFactory<C> f = ring.getFactory( i );
+               C x = f.getONE();
+               elem.put( i, x );
+            }
+        }
+        return new Product<C>( ring, elem );
+    }
+
+
+    /** Product fill with one.  
+     * @return fill this with one.
+     */
+    public Product<C> fillOne() {
+        if ( this.isFull() ) {
+           return this;
+        }
+        if ( this.isZERO() ) {
+           return ring.getONE();
+        }
+        SortedMap<Integer,C> elem = new TreeMap<Integer,C>( val );
+        for ( int i = 0; i < ring.length(); i++ ) {
+            C v = elem.get( i );
+            if ( v != null ) {
+               continue;
+            }
+            RingFactory<C> f = ring.getFactory( i );
+            C x = f.getONE();
+            elem.put( i, x );
+        }
+        return new Product<C>( ring, elem );
+    }
+
+
     /** Product quasi-division.
      * @param S Product.
      * @return this/S.
