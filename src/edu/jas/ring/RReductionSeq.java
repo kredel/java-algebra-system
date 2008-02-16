@@ -40,14 +40,15 @@ public class RReductionSeq<C extends RegularRingElem<C>>
 
 
     /**
-     * Is top reducible.
+     * Is top reducible,
+     * condition a b != 0, for some a in coeff(A) and b=ldcf(B) for some B in F.
      * @typeparam C coefficient type.
      * @param A polynomial.
      * @param P polynomial list.
      * @return true if A is top reducible with respect to P.
      */
     @Override
-     public boolean isTopReducible(List<GenPolynomial<C>> P, 
+    public boolean isTopReducible(List<GenPolynomial<C>> P, 
                                   GenPolynomial<C> A) {  
         if ( P == null || P.isEmpty() ) {
            return false;
@@ -76,7 +77,9 @@ public class RReductionSeq<C extends RegularRingElem<C>>
 
 
     /**
-     * Is strong top reducible.
+     * Is strong top reducible,
+     * condition idempotent(a) == idempotent(b), 
+     * for some a in coeff(A) and b=ldcf(B) for some B in F.
      * @typeparam C coefficient type.
      * @param A polynomial.
      * @param P polynomial list.
@@ -116,7 +119,7 @@ public class RReductionSeq<C extends RegularRingElem<C>>
      * @return true if Ap is in normalform with respect to Pp.
      */
     @Override
-     @SuppressWarnings("unchecked") 
+    @SuppressWarnings("unchecked") 
     public boolean isNormalform(List<GenPolynomial<C>> Pp, 
                                 GenPolynomial<C> Ap) {  
         if ( Pp == null || Pp.isEmpty() ) {
