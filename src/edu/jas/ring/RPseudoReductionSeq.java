@@ -178,7 +178,7 @@ public class RPseudoReductionSeq<C extends RegularRingElem<C>>
      * @deprecated multiplication factor will be lost.
      */
     @Override
-     public GenPolynomial<C> 
+    public GenPolynomial<C> 
         normalform(List<GenPolynomial<C>> row,
                    List<GenPolynomial<C>> Pp, 
                    GenPolynomial<C> Ap) {  
