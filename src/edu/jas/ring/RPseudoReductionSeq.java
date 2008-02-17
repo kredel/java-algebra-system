@@ -254,6 +254,7 @@ public class RPseudoReductionSeq<C extends RegularRingElem<C>>
                    List<GenPolynomial<C>> Pp, 
                    GenPolynomial<C> Ap) {  
         List<C> mf = new ArrayList<C>(1);
+        mf.add(null);
         logger.error("multiplication factor is lost");
         return normalform(mf,row,Pp,Ap);
     }
@@ -300,10 +301,7 @@ public class RPseudoReductionSeq<C extends RegularRingElem<C>>
         int i;
         int j = 0;
         for ( i = 0; i < l; i++ ) { 
-            if ( P[i] == null ) {
-               continue;
-            }
-            p[i] = P[i].abs();
+            p[i] = P[i];
             m = p[i].leadingMonomial();
             if ( m != null ) { 
                p[j] = p[i];
@@ -341,10 +339,14 @@ public class RPseudoReductionSeq<C extends RegularRingElem<C>>
                         b = a.remainder( c );
                         if ( b.isZERO() ) {
                            a = a.divide( c );
+                           if ( a.isZERO() ) {
+                              throw new RuntimeException("a.isZERO()");
+                           }
                         } else {
-                           mfac = mfac.multiply( c );
+                           c = c.fillOne();
                            S = S.multiply( c );
                            R = R.multiply( c );
+                           mfac = mfac.multiply( c );
                         }
                         f = ExpVector.EVDIF( e, htl[i] );
                         //logger.info("red div = " + f);
