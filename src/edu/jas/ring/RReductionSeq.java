@@ -391,10 +391,7 @@ public class RReductionSeq<C extends RegularRingElem<C>>
         int i;
         int j = 0;
         for ( i = 0; i < l; i++ ) { 
-            if ( P[i] == null ) {
-               continue;
-            }
-            p[i] = P[i].abs();
+            p[i] = P[i];
             m = p[i].leadingMonomial();
             if ( m != null ) { 
                p[j] = p[i];
@@ -458,7 +455,7 @@ public class RReductionSeq<C extends RegularRingElem<C>>
                  S = S.reductum(); 
               }
         }
-        return R; //.abs(); // not monic if not boolean closed
+        return R; //.abs(); not for recording 
     }
 
 
