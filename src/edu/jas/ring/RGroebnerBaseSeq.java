@@ -33,7 +33,7 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>>
     /**
      * Reduction engine.
      */
-    protected RReduction<C> red;  // shadow super.red ??
+    protected RReduction<C> red;  // shadow super.red 
 
 
     /**
@@ -51,6 +51,7 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>>
     public RGroebnerBaseSeq(RReduction<C> red) {
         super(red);
         this.red = red;
+        assert super.red == this.red;
     }
 
 
@@ -62,7 +63,7 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>>
      * @return true, if F is a R-Groebner base, else false.
      */
     @Override
-     public boolean isGB(int modv, List<GenPolynomial<C>> F) {  
+    public boolean isGB(int modv, List<GenPolynomial<C>> F) {  
         if ( F == null ) {
            return true;
         }
@@ -80,10 +81,7 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>>
                 if ( ! red.moduleCriterion( modv, pi, pj ) ) {
                    continue;
                 }
-                // works ? no, not applicable
-                //if ( ! red.criterion4( pi, pj ) ) { 
-                //   continue;
-                //}
+                // red.criterion4 not applicable
                 s = red.SPolynomial( pi, pj );
                 if ( s.isZERO() ) {
                    continue;
@@ -151,65 +149,64 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>>
         //int len = G.size();
         //System.out.println("len = " + len);
         while ( pairlist.hasNext() ) {
-              pair = pairlist.removeNext();
-              //System.out.println("pair = " + pair);
-              if ( pair == null ) continue; 
+            pair = pairlist.removeNext();
+            //System.out.println("pair = " + pair);
+            if ( pair == null ) continue; 
 
-              pi = pair.pi; 
-              pj = pair.pj; 
-              if ( logger.isDebugEnabled() ) {
-                 logger.debug("pi    = " + pi );
-                 logger.debug("pj    = " + pj );
-              }
+            pi = pair.pi; 
+            pj = pair.pj; 
+            if ( logger.isDebugEnabled() ) {
+                logger.debug("pi    = " + pi );
+                logger.debug("pj    = " + pj );
+            }
+            if ( ! red.moduleCriterion( modv, pi, pj ) ) {
+                continue;
+            }
 
-              // S-polynomial -----------------------
-              if ( true ) {
-              //if ( pair.getUseCriterion3() ) { // correct ?
-              //if ( pair.getUseCriterion4() ) { // correct ? no, not applicable
-                  S = red.SPolynomial( pi, pj );
-                  //System.out.println("S_d = " + S);
-                  if ( S.isZERO() ) {
-                      pair.setZero();
-                      continue;
-                  }
-                  if ( logger.isDebugEnabled() ) {
-                      logger.debug("ht(S) = " + S.leadingExpVector() );
-                  }
+            // S-polynomial -----------------------
+            // Criterion3() Criterion4() not applicable
+            S = red.SPolynomial( pi, pj );
+            if ( S.isZERO() ) {
+                pair.setZero();
+                continue;
+            }
+            if ( logger.isDebugEnabled() ) {
+                logger.debug("ht(S) = " + S.leadingExpVector() );
+            }
 
-                  H = red.normalform( G, S );
-                  if ( H.isZERO() ) {
-                      pair.setZero();
-                      continue;
-                  }
-                  //H = H.monic(); // only for boolean closed H
-                  if ( logger.isDebugEnabled() ) {
-                      logger.debug("ht(H) = " + H.leadingExpVector() );
-                  }
+            H = red.normalform( G, S );
+            if ( H.isZERO() ) {
+                pair.setZero();
+                continue;
+            }
+            //H = H.monic(); // only for boolean closed H
+            if ( logger.isDebugEnabled() ) {
+                logger.debug("ht(H) = " + H.leadingExpVector() );
+            }
 
-                  if ( H.isONE() ) { // mostly useless
-                     G.clear(); G.add( H );
-                     return G; // not boolean closed ok, since no threads are activated
-                  }
-                  if ( logger.isDebugEnabled() ) {
-                      logger.debug("H = " + H );
-                  }
-                  if ( !H.isZERO() ) {
-                      logger.info("Sred = " + H);
-                      //len = G.size();
-                      bcH = red.reducedBooleanClosure(G,H);
-                      logger.info("#bcH = " + bcH.size());
-                      for ( GenPolynomial<C> h: bcH ) {
-                          h = h.monic(); // monic() ok, since boolean closed
-                          G.add( h );
-                          pairlist.put( h ); 
-                      }
-                      if ( debug ) {
-                         if ( !pair.getUseCriterion3() || !pair.getUseCriterion4() ) {
-                            logger.info("H != 0 but: " + pair);
-                         }
-                      }
-                  }
-              }
+            if ( H.isONE() ) { // mostly useless
+                G.clear(); G.add( H );
+                return G; // not boolean closed ok, since no threads are activated
+            }
+            if ( logger.isDebugEnabled() ) {
+                logger.debug("H = " + H );
+            }
+            if ( !H.isZERO() ) {
+                logger.info("Sred = " + H);
+                //len = G.size();
+                bcH = red.reducedBooleanClosure(G,H);
+                logger.info("#bcH = " + bcH.size());
+                for ( GenPolynomial<C> h: bcH ) {
+                    h = h.monic(); // monic() ok, since boolean closed
+                    G.add( h );
+                    pairlist.put( h ); 
+                }
+                if ( debug ) {
+                    if ( !pair.getUseCriterion3() || !pair.getUseCriterion4() ) {
+                        logger.info("H != 0 but: " + pair);
+                    }
+                }
+            }
         }
         logger.debug("#sequential list = " + G.size());
         G = minimalGB(G);
@@ -229,7 +226,7 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>>
      * @return a reduced Groebner base of Gp.
      */
     @Override
-     public List<GenPolynomial<C>> 
+    public List<GenPolynomial<C>> 
                 minimalGB(List<GenPolynomial<C>> Gp) {  
         if ( Gp == null || Gp.size() <= 1 ) {
             return Gp;
@@ -289,7 +286,6 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>>
             a = G.remove(0); b = a;
             //System.out.println("doing " + a.length());
             a = red.normalform( G, a );
-            //a = red.normalform( F, a );
             bcH = red.reducedBooleanClosure(G,a);
             if ( bcH.size() > 1 ) {
                System.out.println("minGB not bc: bcH size = " + bcH.size());

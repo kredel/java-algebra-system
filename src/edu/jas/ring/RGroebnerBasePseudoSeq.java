@@ -58,7 +58,7 @@ public class RGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
      * Constructor.
      * @param red R-pseuso-Reduction engine
      * @param rf coefficient ring factory.
-     * <b>Note:</b> red must be an instance of PseudoReductionSeq.
+     * <b>Note:</b> red must be an instance of RPseudoReductionSeq.
      */
     public RGroebnerBasePseudoSeq(RReduction<C> red, RingFactory<C> rf) {
         super(red);
@@ -120,68 +120,68 @@ public class RGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
         GenPolynomial<C> H;
         List<GenPolynomial<C>> bcH;
         while ( pairlist.hasNext() ) {
-              pair = pairlist.removeNext();
-              //System.out.println("pair = " + pair);
-              if ( pair == null ) continue; 
+            pair = pairlist.removeNext();
+            //System.out.println("pair = " + pair);
+            if ( pair == null ) continue; 
 
-              pi = pair.pi; 
-              pj = pair.pj; 
-              if ( logger.isDebugEnabled() ) {
-                 logger.info("pi    = " + pi );
-                 logger.info("pj    = " + pj );
-              }
-              // S-polynomial -----------------------
-              if ( true ) {
-              //if ( pair.getUseCriterion3() ) { // correct ?
-              //if ( pair.getUseCriterion4() ) { // correct ? no, not applicable
-                  S = red.SPolynomial( pi, pj );
-                  //System.out.println("S_d = " + S);
-                  if ( S.isZERO() ) {
-                      pair.setZero();
-                      continue;
-                  }
-                  if ( logger.isDebugEnabled() ) {
-                      logger.debug("ht(S) = " + S.leadingExpVector() );
-                  }
+            pi = pair.pi; 
+            pj = pair.pj; 
+            if ( logger.isDebugEnabled() ) {
+                logger.info("pi    = " + pi );
+                logger.info("pj    = " + pj );
+            }
+            if ( ! red.moduleCriterion( modv, pi, pj ) ) {
+                continue;
+            }
 
-                  H = red.normalform( G, S );
-                  if ( H.isZERO() ) {
-                      pair.setZero();
-                      continue;
-                  }
-                  if ( logger.isDebugEnabled() ) {
-                      logger.debug("ht(H) = " + H.leadingExpVector() );
-                  }
-                  H = engine.basePrimitivePart(H); 
-                  H = H.abs(); // not monic, no field
-                  if ( H.isConstant() && H.leadingBaseCoefficient().isFull() ) { 
-                     // mostly useless
-                     G.clear(); G.add( H );
-                     return G; // not boolean closed ok, no threads are activated
-                  }
-                  if ( logger.isDebugEnabled() ) {
-                      logger.debug("H = " + H );
-                  }
-                  if ( !H.isZERO() ) {
-                      //logger.info("Sred = " + H);
-                      //len = G.size();
-                      bcH = red.reducedBooleanClosure(G,H);
-                      //logger.info("#bcH = " + bcH.size());
-                      //G.addAll( bcH );
-                      for ( GenPolynomial<C> h: bcH ) {
-                          h = engine.basePrimitivePart(h); 
-                          h = h.abs(); // monic() not ok, since no field
-                          logger.info("bc(Sred) = " + h);
-                          G.add( h );
-                          pairlist.put( h );
-                      }
-                      if ( debug ) {
-                         if ( !pair.getUseCriterion3() || !pair.getUseCriterion4() ) {
-                            logger.info("H != 0 but: " + pair);
-                         }
-                      }
-                  }
-              }
+            // S-polynomial -----------------------
+            // Criterion3(), Criterion4() not applicable
+            S = red.SPolynomial( pi, pj );
+            if ( S.isZERO() ) {
+                pair.setZero();
+                continue;
+            }
+            if ( logger.isDebugEnabled() ) {
+                logger.debug("ht(S) = " + S.leadingExpVector() );
+            }
+
+            H = red.normalform( G, S );
+            if ( H.isZERO() ) {
+                pair.setZero();
+                continue;
+            }
+            if ( logger.isDebugEnabled() ) {
+                logger.debug("ht(H) = " + H.leadingExpVector() );
+            }
+            H = engine.basePrimitivePart(H); 
+            H = H.abs(); // not monic, no field
+            if ( H.isConstant() && H.leadingBaseCoefficient().isFull() ) { 
+                // mostly useless
+                G.clear(); G.add( H );
+                return G; // not boolean closed ok, no threads are activated
+            }
+            if ( logger.isDebugEnabled() ) {
+                logger.debug("H = " + H );
+            }
+            if ( !H.isZERO() ) {
+                //logger.info("Sred = " + H);
+                //len = G.size();
+                bcH = red.reducedBooleanClosure(G,H);
+                //logger.info("#bcH = " + bcH.size());
+                //G.addAll( bcH );
+                for ( GenPolynomial<C> h: bcH ) {
+                    h = engine.basePrimitivePart(h); 
+                    h = h.abs(); // monic() not ok, since no field
+                    logger.info("bc(Sred) = " + h);
+                    G.add( h );
+                    pairlist.put( h );
+                }
+                if ( debug ) {
+                    if ( !pair.getUseCriterion3() || !pair.getUseCriterion4() ) {
+                        logger.info("H != 0 but: " + pair);
+                    }
+                }
+            }
         }
         logger.debug("#sequential list = " + G.size());
         G = minimalGB(G);
@@ -230,7 +230,7 @@ public class RGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
                ff.addAll(F);
                a = red.normalform( ff, a );
                if ( a.isZERO() ) {
-                  if ( !isGB( ff ) ) { // is really required, but why?
+                  if ( false && !isGB( ff ) ) { // is really required, but why?
                      logger.info("minGB not dropped " + b);
                      F.add(b);
                   } else {
@@ -259,7 +259,7 @@ public class RGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
                List<GenPolynomial<C>> ff;
                ff = new ArrayList<GenPolynomial<C>>( G );
                ff.add( a );
-               if ( isGB( ff ) ) {
+               if ( true || isGB( ff ) ) {
                   if ( debug ) {
                      logger.debug("minGB reduced " + b + " to " +a);
                   }
@@ -298,7 +298,7 @@ public class RGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
             }
             F.add( a );
         }
-        if ( isGB(F) ) {
+        if ( true || isGB(F) ) {
            G = F;
         } else {
            logger.info("minGB not stratified " + F);
@@ -314,7 +314,6 @@ public class RGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
      * @param Gp a Groebner base.
      * @return a reduced Groebner base of Gp.
      * @todo use primitivePart
-     */
     public List<GenPolynomial<C>> 
                 minimalGBtesting(List<GenPolynomial<C>> Gp) {  
         if ( Gp == null || Gp.size() <= 1 ) {
@@ -425,7 +424,7 @@ public class RGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
            return G;
         }
 
-        /* stratify: collect polynomials with equal leading terms */
+        // stratify: collect polynomials with equal leading terms 
         ExpVector e, f;
         F = new ArrayList<GenPolynomial<C>>( G.size() );
         for ( int i = 0; i < G.size(); i++ ) {
@@ -450,7 +449,7 @@ public class RGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
         }
         G = F;
 
-        /* info on boolean algebra element blocks 
+        // info on boolean algebra element blocks 
         Map<C,List<GenPolynomial<C>>> bd = new TreeMap<C,List<GenPolynomial<C>>>();
         for ( GenPolynomial<C> p : G ) { 
             C cf = p.leadingBaseCoefficient();
@@ -468,8 +467,9 @@ public class RGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
            System.out.println("val = " + bd.get(k));
         }
         System.out.println();
-        */
+        //
         return G;
-    }
+     }
+     */
 
 }
