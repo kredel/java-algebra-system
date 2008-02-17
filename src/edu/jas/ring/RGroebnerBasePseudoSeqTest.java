@@ -18,6 +18,8 @@ import junit.framework.TestSuite;
 import org.apache.log4j.BasicConfigurator;
 //import org.apache.log4j.Logger;
 
+//import edu.jas.kern.ComputerThreads;
+
 import edu.jas.structure.RingFactory;
 import edu.jas.structure.Product;
 import edu.jas.structure.ProductRing;
@@ -48,6 +50,7 @@ public class RGroebnerBasePseudoSeqTest extends TestCase {
    public static void main (String[] args) {
           BasicConfigurator.configure();
           junit.textui.TestRunner.run( suite() );
+          //ComputerThreads.terminate();
    }
 
 /**
