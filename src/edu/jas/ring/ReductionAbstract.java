@@ -435,7 +435,7 @@ public abstract class ReductionAbstract<C extends RingElem<C>>
         if ( row == null && Pp == null ) {
             if ( Ap == null ) {
                return Np == null;
-         }
+            }
             return Ap.equals(Np);
         }
         if ( row == null && Pp != null ) {
@@ -448,6 +448,7 @@ public abstract class ReductionAbstract<C extends RingElem<C>>
             return false;
         }
         GenPolynomial<C> t = Np;
+        //System.out.println("t0 = " + t );
         GenPolynomial<C> r;
         GenPolynomial<C> p;
         for ( int m = 0; m < Pp.size(); m++ ) {
@@ -463,10 +464,7 @@ public abstract class ReductionAbstract<C extends RingElem<C>>
             //System.out.println("r = " + r );
             //System.out.println("p = " + p );
         }
-        if ( debug ) {
-           logger.info("t = " + t );
-           logger.info("a = " + Ap );
-        }
+        //System.out.println("t+ = " + t );
         if ( t == null ) {
            if ( Ap == null ) {
               return true;
@@ -474,8 +472,13 @@ public abstract class ReductionAbstract<C extends RingElem<C>>
               return Ap.isZERO();
            }
         } else {
-           t = t.subtract( Ap );
-           return t.isZERO();
+           r = t.subtract( Ap );
+           if ( !r.isZERO() && debug ) {
+              logger.info("t = " + t );
+              logger.info("a = " + Ap );
+              logger.info("t-a = " + r );
+           }
+           return r.isZERO();
         }
     }
 }
