@@ -247,6 +247,10 @@ public class RPseudoReductionSeq<C extends RegularRingElem<C>>
 
     /**
      * Normalform with recording.
+     * <b>Note:</b> Only meaningfull if all divisions are exact. 
+     * Compute first the multiplication factor <code>m</code> 
+     * with <code>normalform(Pp,Ap,m)</code>,
+     * then call this method with <code>normalform(row,Pp,m*Ap)</code>.
      * @typeparam C coefficient type.
      * @param row recording matrix, is modified.
      * @param Pp a polynomial list for reduction.
