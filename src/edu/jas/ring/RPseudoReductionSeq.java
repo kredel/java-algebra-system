@@ -252,7 +252,6 @@ public class RPseudoReductionSeq<C extends RegularRingElem<C>>
      * @param Pp a polynomial list for reduction.
      * @param Ap a polynomial.
      * @return nf(Pp,Ap), the normal form of Ap wrt. Pp.
-     * @deprecated multiplication factor will be lost.
      */
     @Override
     @SuppressWarnings("unchecked") 
