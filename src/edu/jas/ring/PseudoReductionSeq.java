@@ -136,6 +136,7 @@ public class PseudoReductionSeq<C extends RingElem<C>>
                    List<GenPolynomial<C>> Pp, 
                    GenPolynomial<C> Ap) {  
         List<C> mf = new ArrayList<C>(1);
+        mf.add(null);
         logger.error("multiplication factor is lost");
         return normalform(mf,row,Pp,Ap);
     }
@@ -220,10 +221,12 @@ public class PseudoReductionSeq<C extends RingElem<C>>
                 C c = (C) lbc[i];
                 if ( a.remainder(c).isZERO() ) { //c.isUnit() ) {
                    a = a.divide( c );
+                   //System.out.print("|");
                 } else {
-                   mfac = mfac.multiply( c );
+                   //System.out.print("*");
                    S = S.multiply( c );
                    R = R.multiply( c );
+                   mfac = mfac.multiply( c );
                 }
                 Q = p[i].multiply( a, e );
                 S = S.subtract( Q );
@@ -236,6 +239,7 @@ public class PseudoReductionSeq<C extends RingElem<C>>
                 row.set(i,fac);
             }
         }
+        //System.out.println(".");
         mf.set(0,mfac);
         return R;
     }
