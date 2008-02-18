@@ -257,8 +257,8 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>>
                   ff = new ArrayList<GenPolynomial<C>>( G );
                   ff.addAll(F);
                   a = red.normalform( ff, a );
-                  if ( !a.isZERO() ) {
-                     //System.out.println("minGB nf(a) != 0 " + a);
+                  if ( !a.isZERO() ) { // happens
+                     logger.info("minGB not zero " + a);
                      bcH = red.reducedBooleanClosure(G,a);
                      if ( bcH.size() > 1 ) { // never happend so far
                         System.out.println("minGB not bc: bcH size = " + bcH.size());

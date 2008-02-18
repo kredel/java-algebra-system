@@ -199,7 +199,6 @@ public class RGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
      * @typeparam C coefficient type.
      * @param Gp a Groebner base.
      * @return a reduced Groebner base of Gp.
-     * @todo use primitivePart
      */
     @Override
     public List<GenPolynomial<C>> 
@@ -238,7 +237,8 @@ public class RGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
                         logger.debug("minGB dropped " + b);
                      }
                   }
-               } else {
+               } else { // happens
+                  logger.info("minGB not zero " + a);
                   F.add(a);
                }
             } else { // not top reducible, keep polynomial
@@ -270,6 +270,7 @@ public class RGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
                }
                continue;
             } else {
+                logger.info("minGB not boolean closed " + a);
                 G.add( b ); // do not reduce 
             }
         }
