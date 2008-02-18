@@ -101,7 +101,8 @@ public class RPseudoReductionSeq<C extends RegularRingElem<C>>
                   mt = ExpVector.EVMT( e, htl[i] );
                   if ( mt ) {
                      C c = lbc[i];
-                     r = a.idempotent().multiply( c.idempotent() );
+                     //r = a.idempotent().multiply( c.idempotent() );
+                     r = a.idempotentAnd( c );
                      mt = ! r.isZERO(); // && mt
                      if ( mt ) {
                         f = ExpVector.EVDIF( e, htl[i] );
@@ -207,7 +208,8 @@ public class RPseudoReductionSeq<C extends RegularRingElem<C>>
                   mt = ExpVector.EVMT( e, htl[i] );
                   if ( mt ) {
                      C c = lbc[i];
-                     r = a.idempotent().multiply( c.idempotent() );
+                     //r = a.idempotent().multiply( c.idempotent() );
+                     r = a.idempotentAnd( c );
                      mt = ! r.isZERO(); // && mt
                      if ( mt ) {
                         f = ExpVector.EVDIF( e, htl[i] );
@@ -315,7 +317,8 @@ public class RPseudoReductionSeq<C extends RegularRingElem<C>>
                   mt = ExpVector.EVMT( e, htl[i] );
                   if ( mt ) {
                      C c = lbc[i];
-                     r = a.idempotent().multiply( c.idempotent() );
+                     //r = a.idempotent().multiply( c.idempotent() );
+                     r = a.idempotentAnd( c );
                      //System.out.println("r = " + r);
                      mt = ! r.isZERO(); // && mt
                      if ( mt ) {

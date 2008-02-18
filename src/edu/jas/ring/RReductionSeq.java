@@ -65,7 +65,8 @@ public class RReductionSeq<C extends RegularRingElem<C>>
             if ( mt ) {
                C b = p.leadingBaseCoefficient();
                //C r = a.multiply( b );
-               C r = a.multiply( b.idempotent() );
+               //C r = a.multiply( b.idempotent() );
+               C r = a.idempotentAnd( b );
                mt = ! r.isZERO();
                if ( mt ) {
                   return true;
@@ -166,7 +167,8 @@ public class RReductionSeq<C extends RegularRingElem<C>>
                 if ( mt ) {
                    C a = Am.get(e);
                    //C r = a.multiply( lbc[i] );
-                   C r = a.idempotent().multiply( lbc[i].idempotent() );
+                   //C r = a.idempotent().multiply( lbc[i].idempotent() );
+                   C r = a.idempotentAnd( lbc[i] );
                    mt = ! r.isZERO();
                    if ( mt ) {
                       return false;
@@ -239,7 +241,8 @@ public class RReductionSeq<C extends RegularRingElem<C>>
               for ( i = 0; i < l; i++ ) {
                   mt = ExpVector.EVMT( e, htl[i] );
                   if ( mt ) {
-                     r = a.idempotent().multiply( lbc[i].idempotent() );
+                      //r = a.idempotent().multiply( lbc[i].idempotent() );
+                     r = a.idempotentAnd( lbc[i] );
                      //r = a.multiply( lbc[i] );
                      //System.out.println("r = " + r);
                      mt = ! r.isZERO(); // && mt
@@ -417,8 +420,9 @@ public class RReductionSeq<C extends RegularRingElem<C>>
               for ( i = 0; i < l; i++ ) {
                   mt = ExpVector.EVMT( e, htl[i] );
                   if ( mt ) {
-                     r = a.idempotent().multiply( lbc[i].idempotent() );
+                     //r = a.idempotent().multiply( lbc[i].idempotent() );
                      //r = a.multiply( lbc[i] );
+                     r = a.idempotentAnd( lbc[i] );
                      //System.out.println("r = " + r);
                      mt = ! r.isZERO(); // && mt
                      if ( mt ) {
