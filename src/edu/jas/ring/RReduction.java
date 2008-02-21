@@ -25,6 +25,8 @@ public interface RReduction<C extends RegularRingElem<C>>
 
     /**
      * Is strong top reducible.
+     * Condition is idempotent(a) == idempotent(b), 
+     * for a=ldcf(A) and b=ldcf(B) and lt(B) | lt(A) for some B in F.
      * @typeparam C coefficient type.
      * @param A polynomial.
      * @param P polynomial list.
@@ -69,7 +71,7 @@ public interface RReduction<C extends RegularRingElem<C>>
      * compute idemComplement(ldcf(A)) A.
      * @typeparam C coefficient type.
      * @param A polynomial.
-     * @return br(A).
+     * @return br(A) = A - bc(A).
      */
     public GenPolynomial<C> booleanRemainder(GenPolynomial<C> A);
 

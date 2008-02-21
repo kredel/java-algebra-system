@@ -94,6 +94,7 @@ public interface Reduction<C extends RingElem<C>>
 
     /**
      * Is top reducible.
+     * Condition is lt(B) | lt(A) for some B in F.
      * @typeparam C coefficient type.
      * @param A polynomial.
      * @param P polynomial list.

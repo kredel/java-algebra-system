@@ -40,8 +40,9 @@ public class RReductionSeq<C extends RegularRingElem<C>>
 
 
     /**
-     * Is top reducible,
-     * condition a b != 0, for some a in coeff(A) and b=ldcf(B) for some B in F.
+     * Is top reducible.
+     * Condition is a b != 0, for a=ldcf(A) and b=ldcf(B) 
+     * and lt(B) | lt(A) for some B in F.
      * @typeparam C coefficient type.
      * @param A polynomial.
      * @param P polynomial list.
@@ -78,9 +79,9 @@ public class RReductionSeq<C extends RegularRingElem<C>>
 
 
     /**
-     * Is strong top reducible,
-     * condition idempotent(a) == idempotent(b), 
-     * for some a in coeff(A) and b=ldcf(B) for some B in F.
+     * Is strong top reducible.
+     * Condition is idempotent(a) == idempotent(b), 
+     * for a=ldcf(A) and b=ldcf(B) and lt(B) | lt(A) for some B in F.
      * @typeparam C coefficient type.
      * @param A polynomial.
      * @param P polynomial list.
@@ -241,9 +242,9 @@ public class RReductionSeq<C extends RegularRingElem<C>>
               for ( i = 0; i < l; i++ ) {
                   mt = ExpVector.EVMT( e, htl[i] );
                   if ( mt ) {
-                      //r = a.idempotent().multiply( lbc[i].idempotent() );
-                     r = a.idempotentAnd( lbc[i] );
                      //r = a.multiply( lbc[i] );
+                     //r = a.idempotent().multiply( lbc[i].idempotent() );
+                     r = a.idempotentAnd( lbc[i] );
                      //System.out.println("r = " + r);
                      mt = ! r.isZERO(); // && mt
                      if ( mt ) {
@@ -362,7 +363,7 @@ public class RReductionSeq<C extends RegularRingElem<C>>
      * @param row recording matrix, is modified.
      * @param Pp a polynomial list for reduction.
      * @param Ap a polynomial.
-     * @return nf(Pp,Ap), the normal form of Ap wrt. Pp.
+     * @return Ap - row*Pp = nf(Pp,Ap) , the normal form of Ap wrt. Pp.
      */
     @SuppressWarnings("unchecked")
     public GenPolynomial<C> 
@@ -535,6 +536,7 @@ public class RReductionSeq<C extends RegularRingElem<C>>
         C a = A.leadingBaseCoefficient();
         C i = a.idempotent(); 
         GenPolynomial<C> B = A.multiply(i);
+        // better run idemAnd on coefficients
         if ( A.equals(B) ) {
            return true;
         }
