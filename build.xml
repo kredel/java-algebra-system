@@ -122,8 +122,8 @@
            linksource="true" 
 -->
      <tag name="typeparam" description="Type parameter: " scope="all" />
-     <tag name="param" />
-     <tag name="return" />
+     <!--tag name="param" /-->
+     <!--tag name="return" /-->
      <tag name="todo"      description="To do"            scope="all" />
      <tag name="fix"       description="Fix me"           scope="all" />
      <tag name="unused"    description="Not used"         scope="all" />
