@@ -7,7 +7,7 @@ package edu.jas.structure;
 
 /**
  * Regular ring element interface.
- * Defines idempotent and idempotent test.
+ * Defines idempotent operations and idempotent tests.
  * @author Heinz Kredel
  */
 
@@ -15,7 +15,8 @@ public interface RegularRingElem<C extends RegularRingElem<C>>
                  extends GcdRingElem<C> {
 
 
-    /* Get component. Not possible.
+    /* Get component. 
+     * Not possible to define in interface.
      * @param i index of component.
      * @return val(i).
     public C get(int i);
@@ -23,8 +24,8 @@ public interface RegularRingElem<C extends RegularRingElem<C>>
 
 
     /** Is regular ring element full. 
-     * @return If every component occurs, then true is returned, else false.
-     * @see edu.jas.structure.RingElem#isONE()
+     * @return If every component is non zero, 
+     *         then true is returned, else false.
      */
     public boolean isFull();
 

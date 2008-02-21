@@ -83,7 +83,8 @@ public class ProductRing<C extends RingElem<C> >
            if ( 0 <= i && i < nCopies ) {
               return ring;
            }
-           throw new RuntimeException("index out of bound " + this.getClass().getName());
+           throw new RuntimeException("index out of bound " 
+                                     + this.getClass().getName());
         } else {
            return ringList.get(i);
         }
@@ -126,7 +127,7 @@ public class ProductRing<C extends RingElem<C> >
      * @return a copy of c.
      */
     public Product<C> copy(Product<C> c) {
-        return new Product<C>( c.ring, c.val );
+        return new Product<C>( c.ring, c.val, c.isunit );
     }
 
 
@@ -154,7 +155,7 @@ public class ProductRing<C extends RingElem<C> >
                i++;
            }
         }
-        return new Product<C>( this, elem );
+        return new Product<C>( this, elem, 1 );
     }
 
 
@@ -173,7 +174,7 @@ public class ProductRing<C extends RingElem<C> >
            RingFactory<C> f = ringList.get(i);
            elem.put( i, f.getONE() );
         }
-        return new Product<C>( this, elem );
+        return new Product<C>( this, elem, 1 );
     }
 
 
@@ -202,8 +203,8 @@ public class ProductRing<C extends RingElem<C> >
                   return false;
                }
            }
+           return true;
         }
-        return true;
     }
 
 
@@ -220,8 +221,8 @@ public class ProductRing<C extends RingElem<C> >
                   return false;
                }
            }
+           return true;
         }
-        return true;
     }
 
 
@@ -245,7 +246,7 @@ public class ProductRing<C extends RingElem<C> >
 
     /**
      * Characteristic of this ring.
-     * @return characteristic of this ring.
+     * @return minimal characteristic of ring component.
      */
     public java.math.BigInteger characteristic() {
         if ( nCopies != 0 ) {
@@ -258,7 +259,7 @@ public class ProductRing<C extends RingElem<C> >
                   c = f.characteristic();
                } else {
                   d = f.characteristic();
-                  if ( c.compareTo(d) >= 0 ) {
+                  if ( c.compareTo(d) > 0 ) { // c > d
                      c = d;
                   }
                }
@@ -303,14 +304,14 @@ public class ProductRing<C extends RingElem<C> >
      * @see java.lang.Object#toString()
      */
     @Override
-     public String toString() {
+    public String toString() {
         if ( nCopies != 0 ) {
            String cf = ring.toString();
            if ( cf.matches("[0-9].*") ) {
                cf = ring.getClass().getSimpleName();
            } 
            return "ProductRing[ " 
-                + cf + "^" + nCopies + " ]";
+                  + cf + "^" + nCopies + " ]";
         } else {
            StringBuffer sb = new StringBuffer("ProductRing[ ");
            int i = 0;
@@ -335,7 +336,7 @@ public class ProductRing<C extends RingElem<C> >
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
-    @SuppressWarnings("unchecked") // not jet working
+    @SuppressWarnings("unchecked") 
     public boolean equals(Object b) {
         if ( ! ( b instanceof ProductRing ) ) {
            return false;
@@ -388,30 +389,30 @@ public class ProductRing<C extends RingElem<C> >
 
     /** Product random.
      * @param n such that 0 &le; v &le; (2<sup>n</sup>-1).
-     * @return a random product element.
+     * @return a random product element v.
      */
     public Product<C> random(int n) {
-        return random(n,0.5f);
+        return random( n, 0.5f );
     }
 
 
     /** Product random.
      * @param n such that 0 &le; v &le; (2<sup>n</sup>-1).
      * @param q density of nozero entries.
-     * @return a random product element.
+     * @return a random product element v.
      */
     public Product<C> random(int n, float q) {
-        return random(n,q,random);
+        return random( n, q, random );
     }
 
 
     /** Product random.
      * @param n such that 0 &le; v &le; (2<sup>n</sup>-1).
      * @param rnd is a source for random bits.
-     * @return a random product element.
+     * @return a random product element v.
      */
     public Product<C> random(int n, Random rnd) {
-        return random(n,0.5f,random);
+        return random( n, 0.5f, random );
     }
 
 
@@ -419,7 +420,7 @@ public class ProductRing<C extends RingElem<C> >
      * @param n such that 0 &le; v &le; (2<sup>n</sup>-1).
      * @param q density of nozero entries.
      * @param rnd is a source for random bits.
-     * @return a random product element.
+     * @return a random product element v.
      */
     public Product<C> random(int n, float q, Random rnd) {
         SortedMap<Integer,C> elem = new TreeMap<Integer,C>();
@@ -462,6 +463,7 @@ public class ProductRing<C extends RingElem<C> >
 
 
     /** Parse Product from Reader.
+     * Syntax: p1 ... pn (no commas)
      * @param r Reader.
      * @return next Product from r.
      */

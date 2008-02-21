@@ -37,7 +37,7 @@ public class Product<C extends RingElem<C> >
     protected final SortedMap<Integer,C> val;
 
 
-    /** Flag to remember if this residue element is a unit.
+    /** Flag to remember if this product element is a unit in each cmponent.
      * -1 is unknown, 1 is unit, 0 not a unit.
      */
     protected int isunit = -1; // initially unknown
@@ -89,7 +89,7 @@ public class Product<C extends RingElem<C> >
      */
     @Override
      public Product<C> clone() {
-        return new Product<C>( ring, val );
+        return new Product<C>( ring, val, isunit );
     }
    
 
@@ -120,7 +120,8 @@ public class Product<C extends RingElem<C> >
 
 
     /** Is Product full. 
-     * @return If every component occurs, then true is returned, else false.
+     * @return If every component is non-zero, 
+     *         then true is returned, else false.
      */
     public boolean isFull() {
         if ( val.size() != ring.length() ) {
@@ -141,10 +142,10 @@ public class Product<C extends RingElem<C> >
         if ( isunit == 0 ) {
             return false;
         } 
-        //if ( val.size() != ring.length() ) {
-        //   isunit = 0;
-        //   return false;
-        //}
+        if ( isZERO() ) {
+           isunit = 0;
+           return false;
+        }
         for ( C e : val.values() ) {
             if ( ! e.isUnit() ) {
                isunit = 0;
@@ -173,7 +174,7 @@ public class Product<C extends RingElem<C> >
      * @see java.lang.Object#toString()
      */
     @Override
-     public String toString() {
+    public String toString() {
         return val.toString(); 
     }
 
@@ -202,16 +203,13 @@ public class Product<C extends RingElem<C> >
                return s;
             }
         }
-        if ( !ti.hasNext() && !bi.hasNext() ) {
-           return 0;
-        }
         if ( ti.hasNext() ) {
            return -1;
         }
         if ( bi.hasNext() ) {
            return 1;
         }
-        return 0; // not reached
+        return 0; 
     }
 
 
@@ -241,14 +239,14 @@ public class Product<C extends RingElem<C> >
      */
     @Override
     public int hashCode() { 
-       int h;
-       h = ring.hashCode();
+       int h = ring.hashCode();
        h = 37 * h + val.hashCode();
        return h;
     }
 
 
     /** Product extend.
+     * Add new component j with value of component i.
      * @param i from index.
      * @param j to index.
      * @return the extended value of this.
@@ -257,11 +255,11 @@ public class Product<C extends RingElem<C> >
         RingFactory<C> rf = ring.getFactory( j );
         SortedMap<Integer,C> elem = new TreeMap<Integer,C>( val );
         C v = val.get( i );
-        C w = rf.copy( v );
+        C w = rf.copy( v ); // valueOf
         if ( ! w.isZERO() ) {
            elem.put( j , w );
         }
-        return new Product<C>( ring, elem );
+        return new Product<C>( ring, elem, isunit );
     }
 
 
@@ -275,7 +273,7 @@ public class Product<C extends RingElem<C> >
             C v = val.get(i).abs();
             elem.put( i, v );
         }
-        return new Product<C>( ring, elem );
+        return new Product<C>( ring, elem, isunit );
     }
 
 
@@ -320,13 +318,13 @@ public class Product<C extends RingElem<C> >
             C v = val.get(i).negate();
             elem.put( i, v );
         }
-        return new Product<C>( ring, elem );
+        return new Product<C>( ring, elem, isunit );
     }
 
 
     /** Product signum.
      * @see edu.jas.structure.RingElem#signum()
-     * @return signum(this).
+     * @return signum of first non-zero component.
      */
     public int signum() {
         if ( val.size() == 0 ) {
@@ -354,6 +352,7 @@ public class Product<C extends RingElem<C> >
         if ( this.isZERO() ) {
            return this;
         }
+        int isu = 0;
         SortedMap<Integer,C> elem = new TreeMap<Integer,C>();
         for ( Integer i : val.keySet() ) {
             C x = val.get( i ); // is non zero
@@ -365,9 +364,10 @@ public class Product<C extends RingElem<C> >
             }
             if ( x != null && ! x.isZERO() ) { // can happen
                elem.put( i, x );
+               isu = 1;
             }
         }
-        return new Product<C>( ring, elem );
+        return new Product<C>( ring, elem, isu );
     }
 
 
@@ -384,7 +384,7 @@ public class Product<C extends RingElem<C> >
             C x = f.getONE();
             elem.put( i, x );
         }
-        return new Product<C>( ring, elem );
+        return new Product<C>( ring, elem, 1 );
     }
 
 
@@ -395,6 +395,7 @@ public class Product<C extends RingElem<C> >
         if ( this.isZERO() ) {
             return ring.getONE();
         }
+        int isu = 0;
         SortedMap<Integer,C> elem = new TreeMap<Integer,C>();
         for ( int i = 0; i < ring.length(); i++ ) {
             C v = val.get( i );
@@ -402,9 +403,10 @@ public class Product<C extends RingElem<C> >
                RingFactory<C> f = ring.getFactory( i );
                C x = f.getONE();
                elem.put( i, x );
+               isu = 1;
             }
         }
-        return new Product<C>( ring, elem );
+        return new Product<C>( ring, elem, isu );
     }
 
 
@@ -416,6 +418,7 @@ public class Product<C extends RingElem<C> >
         if ( this.isZERO() && S.isZERO() ) {
            return this;
         }
+        int isu = 0;
         SortedMap<Integer,C> elem = new TreeMap<Integer,C>();
         for ( int i = 0; i < ring.length(); i++ ) {
             C v = val.get( i );
@@ -424,9 +427,10 @@ public class Product<C extends RingElem<C> >
                RingFactory<C> f = ring.getFactory( i );
                C x = f.getONE();
                elem.put( i, x );
+               isu = 1;
             }
         }
-        return new Product<C>( ring, elem );
+        return new Product<C>( ring, elem, isu );
     }
 
 
@@ -438,6 +442,7 @@ public class Product<C extends RingElem<C> >
         if ( this.isZERO() && S.isZERO() ) {
            return this;
         }
+        int isu = 0;
         SortedMap<Integer,C> elem = new TreeMap<Integer,C>();
         for ( int i = 0; i < ring.length(); i++ ) {
             C v = val.get( i );
@@ -446,9 +451,10 @@ public class Product<C extends RingElem<C> >
                RingFactory<C> f = ring.getFactory( i );
                C x = f.getONE();
                elem.put( i, x );
+               isu = 1;
             }
         }
-        return new Product<C>( ring, elem );
+        return new Product<C>( ring, elem, isu );
     }
 
 
@@ -473,7 +479,7 @@ public class Product<C extends RingElem<C> >
                elem.put( i, x );
             }
         }
-        return new Product<C>( ring, elem );
+        return new Product<C>( ring, elem, isunit );
     }
 
 
@@ -497,7 +503,7 @@ public class Product<C extends RingElem<C> >
             C x = f.getONE();
             elem.put( i, x );
         }
-        return new Product<C>( ring, elem );
+        return new Product<C>( ring, elem, isunit );
     }
 
 
@@ -523,7 +529,8 @@ public class Product<C extends RingElem<C> >
                C x = val.get( i );
                try {
                    x = x.divide(y);
-               } catch(NotInvertibleException e) { // should not happen any more
+               } catch(NotInvertibleException e) { 
+                   // should not happen any more
                    System.out.println("product divide error: x = " + x + ", y = " + y);
                    // could happen for e.g. ModInteger or AlgebraicNumber
                    x = null; //ring.getFactory(i).getZERO();
@@ -543,10 +550,10 @@ public class Product<C extends RingElem<C> >
      */
     public Product<C> remainder(Product<C> S) {
         if ( S == null ) {
-           return ring.getZERO();
+            return this; //ring.getZERO();
         }
         if ( S.isZERO() ) {
-           return S;
+           return this;
         }
         if ( this.isZERO() ) {
            return this;
@@ -557,12 +564,7 @@ public class Product<C extends RingElem<C> >
             C y = sel.get( i ); 
             if ( y != null ) {
                C x = val.get( i );
-                   //try {
                x = x.remainder(y);
-                   //} catch(NotInvertibleException e) {
-                   // could happen for e.g. ModInteger or AlgebraicNumber
-                   //x = null; //ring.getFactory(i).getZERO();
-                   //}
                if ( x != null && ! x.isZERO() ) { // can happen
                   elem.put( i, x );
                }
@@ -670,8 +672,8 @@ public class Product<C extends RingElem<C> >
            return ret;
         }
         SortedMap<Integer,C> elem = new TreeMap<Integer,C>( val ); // clone
-        SortedMap<Integer,C> elem1 = this.idempotent().val; // init by 1
-        SortedMap<Integer,C> elem2 = new TreeMap<Integer,C>(); 
+        SortedMap<Integer,C> elem1 = this.idempotent().val; // init with 1
+        SortedMap<Integer,C> elem2 = new TreeMap<Integer,C>(); // zero
         SortedMap<Integer,C> sel = S.val;
         for ( Integer i : sel.keySet() ) {
             C x = elem.get( i );
