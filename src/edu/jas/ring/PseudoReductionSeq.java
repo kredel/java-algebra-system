@@ -25,7 +25,8 @@ import edu.jas.structure.RingElem;
  */
 
 public class PseudoReductionSeq<C extends RingElem<C>>
-             extends ReductionAbstract<C> {
+             extends ReductionAbstract<C>
+             implements PseudoReduction<C> {
 
     private static final Logger logger = Logger.getLogger(PseudoReductionSeq.class);
 

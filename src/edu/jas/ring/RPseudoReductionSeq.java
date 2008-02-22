@@ -23,7 +23,7 @@ import edu.jas.structure.RegularRingElem;
 
 public class RPseudoReductionSeq<C extends RegularRingElem<C>>
              extends RReductionSeq<C> 
-             /*implements RReduction<C>*/ {
+             implements PseudoReduction<C> {
 
     private static final Logger logger = Logger.getLogger(RPseudoReductionSeq.class);
     private final boolean debug = logger.isDebugEnabled();
