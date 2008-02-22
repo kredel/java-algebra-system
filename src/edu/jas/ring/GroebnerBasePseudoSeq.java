@@ -42,6 +42,12 @@ public class GroebnerBasePseudoSeq<C extends GcdRingElem<C>>
 
 
     /**
+     * Pseudo reduction engine.
+     */
+    protected final PseudoReduction<C> red;
+
+
+    /**
      * Coefficient ring factory.
      */
     protected final RingFactory<C> cofac;
@@ -62,11 +68,9 @@ public class GroebnerBasePseudoSeq<C extends GcdRingElem<C>>
      * @param rf coefficient ring factory.
      * <b>Note:</b> red must be an instance of PseudoReductionSeq.
      */
-    public GroebnerBasePseudoSeq(Reduction<C> red, RingFactory<C> rf) {
+    public GroebnerBasePseudoSeq(PseudoReduction<C> red, RingFactory<C> rf) {
         super(red);
-        if ( ! (red instanceof PseudoReductionSeq) ) {
-           throw new IllegalArgumentException("red must be a PseudoReductionSeq");
-        }
+        this.red = red;
         cofac = rf;
         engine = (GreatestCommonDivisorAbstract<C>)GCDFactory.<C>getImplementation( rf );
         //not used: engine = (GreatestCommonDivisorAbstract<C>)GCDFactory.<C>getProxy( rf );
