@@ -126,20 +126,25 @@ public class PseudoReductionSeq<C extends RingElem<C>>
     /**
      * Normalform.
      * @typeparam C coefficient type.
-     * @param mf multiplication factor for Ap, is modified.
      * @param Pp polynomial list.
      * @param Ap polynomial.
-     * @return nf(Ap) with respect to Pp.
+     * @return ( nf(Ap), mf ) with respect to Pp and 
+               mf as multiplication factor for Ap.
      */
     @SuppressWarnings("unchecked") 
-    public GenPolynomial<C> normalform(List<GenPolynomial<C>> Pp, 
-                                       GenPolynomial<C> Ap,
-                                       List<C> mf) {  
-        if ( Pp == null || Pp.isEmpty() ) {
-           return Ap;
+    public PseudoReductionEntry<C> normalformFactor(
+                                         List<GenPolynomial<C>> Pp, 
+                                         GenPolynomial<C> Ap) {  
+        if ( Ap == null ) {
+           return null;
         }
-        if ( Ap == null || Ap.isZERO() ) {
-           return Ap;
+        C mfac = Ap.ring.getONECoefficient();
+        PseudoReductionEntry<C> pf = new PseudoReductionEntry<C>(Ap, mfac);
+        if ( Pp == null || Pp.isEmpty() ) {
+           return pf;
+        }
+        if ( Ap.isZERO() ) {
+           return pf;
         }
         Map.Entry<ExpVector,C> m;
         int l;
@@ -175,10 +180,6 @@ public class PseudoReductionSeq<C extends RingElem<C>>
         C a;
         boolean mt = false;
         GenPolynomial<C> R = Ap.ring.getZERO();
-        C mfac = mf.get(0);
-        if ( mfac == null ) {
-           mfac = Ap.ring.getONECoefficient();
-        }
 
         //GenPolynomial<C> T = null;
         GenPolynomial<C> Q = null;
@@ -212,8 +213,8 @@ public class PseudoReductionSeq<C extends RingElem<C>>
                  S = S.subtract( Q );
               }
         }
-       mf.set(0,mfac);
-       return R;
+        pf = new PseudoReductionEntry<C>(R, mfac);
+        return pf;
     }
 
 

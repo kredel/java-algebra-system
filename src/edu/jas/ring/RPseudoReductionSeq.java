@@ -143,18 +143,23 @@ public class RPseudoReductionSeq<C extends RegularRingElem<C>>
      * @typeparam C coefficient type.
      * @param Pp polynomial list.
      * @param Ap polynomial.
-     * @param mf multiplication factor for Ap, is modified.
-     * @return r-nf(Ap) with respect to Pp.
+     * @return ( nf(Ap), mf ) with respect to Pp and 
+               mf as multiplication factor for Ap.
      */
     @SuppressWarnings("unchecked") 
-    public GenPolynomial<C> normalform(List<GenPolynomial<C>> Pp, 
-                                       GenPolynomial<C> Ap,
-                                       List<C> mf ) {  
-        if ( Pp == null || Pp.isEmpty() ) {
-           return Ap;
+    public PseudoReductionEntry<C> normalformFactor(
+                                       List<GenPolynomial<C>> Pp, 
+                                       GenPolynomial<C> Ap) {  
+        if ( Ap == null ) {
+           return null;
         }
-        if ( Ap == null || Ap.isZERO() ) {
-           return Ap;
+        C mfac = Ap.ring.getONECoefficient();
+        PseudoReductionEntry<C> pf = new PseudoReductionEntry<C>(Ap, mfac);
+        if ( Pp == null || Pp.isEmpty() ) {
+           return pf;
+        }
+        if ( Ap.isZERO() ) {
+           return pf;
         }
         int l;
         GenPolynomial<C>[] P;
@@ -191,10 +196,6 @@ public class RPseudoReductionSeq<C extends RegularRingElem<C>>
         C a, b;
         C r = null;
         boolean mt = false;
-        C mfac = mf.get(0);
-        if ( mfac == null ) {
-           mfac = Ap.ring.getONECoefficient();
-        }
         GenPolynomial<C> R = Ap.ring.getZERO();
         GenPolynomial<C> Q = null;
         GenPolynomial<C> S = Ap;
@@ -242,8 +243,8 @@ public class RPseudoReductionSeq<C extends RegularRingElem<C>>
                  S = S.reductum(); 
               }
         }
-        mf.set(0,mfac);
-        return R; //.abs(); // not monic if not boolean closed
+        pf = new PseudoReductionEntry<C>(R, mfac); //.abs(); // not monic if not boolean closed
+        return pf;
     }
 
 

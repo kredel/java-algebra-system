@@ -789,7 +789,7 @@ public static Test suite() {
      b = fac.random(kl, ll, el, q ); //.abs();
      //System.out.println("a = " + a);
      //System.out.println("b = " + b);
-
+ 
      L = new ArrayList<GenPolynomial<BigInteger>>();
      L.add( a );
      assertTrue("isTopRed( a )", pred.isTopReducible(L,a) ); 
@@ -839,8 +839,7 @@ public static Test suite() {
      List<GenPolynomial<BigInteger>> row = null;
      List<GenPolynomial<BigInteger>> L;
 
-     List<BigInteger> mf = new ArrayList<BigInteger>();
-     mf.add(null);
+     PseudoReductionEntry<BigInteger> mf;
 
      assertTrue("not isZERO( a )", !a.isZERO() );
      assertTrue("not isZERO( b )", !b.isZERO() );
@@ -852,10 +851,9 @@ public static Test suite() {
      for ( int m = 0; m < L.size(); m++ ) {
          row.add(null);
      }
-     mf.set(0,null);
-     e = pred.normalform( L, a, mf );
-     f = a.multiply( mf.get(0) );
-     mf.set(0,null);
+     mf = pred.normalformFactor( L, a );
+     e = mf.pol;
+     f = a.multiply( mf.multiplicator );
      e = pred.normalform( row, L, f );
      assertTrue("isZERO( e )", e.isZERO() );
      assertTrue("is Reduction ", pred.isNormalform(L,e) );
@@ -866,9 +864,9 @@ public static Test suite() {
      for ( int m = 0; m < L.size(); m++ ) {
          row.add(null);
      }
-     mf.set(0,null);
-     e = pred.normalform( L, b, mf );
-     f = b.multiply( mf.get(0) );
+     mf = pred.normalformFactor( L, a );
+     e = mf.pol;
+     f = a.multiply( mf.multiplicator );
      e = pred.normalform( row, L, f );
      assertTrue("is Reduction ", pred.isNormalform(L,e) );
      assertTrue("is ReductionNF ", pred.isReductionNF(row,L,f,e) );
@@ -878,9 +876,9 @@ public static Test suite() {
      for ( int m = 0; m < L.size(); m++ ) {
          row.add(null);
      }
-     mf.set(0,null);
-     e = pred.normalform( L, c, mf );
-     f = c.multiply( mf.get(0) );
+     mf = pred.normalformFactor( L, a );
+     e = mf.pol;
+     f = a.multiply( mf.multiplicator );
      e = pred.normalform( row, L, f );
      assertTrue("is Reduction ", pred.isNormalform(L,e) );
      assertTrue("is ReductionNF ", pred.isReductionNF(row,L,f,e) );
@@ -890,9 +888,9 @@ public static Test suite() {
      for ( int m = 0; m < L.size(); m++ ) {
          row.add(null);
      }
-     mf.set(0,null);
-     e = pred.normalform( L, d, mf );
-     f = d.multiply( mf.get(0) );
+     mf = pred.normalformFactor( L, a );
+     e = mf.pol;
+     f = a.multiply( mf.multiplicator );
      e = pred.normalform( row, L, f );
      assertTrue("is Reduction ", pred.isNormalform(L,e) );
      assertTrue("is ReductionNF ", pred.isReductionNF(row,L,f,e) );
@@ -1049,8 +1047,7 @@ public static Test suite() {
      List<GenPolynomial<Product<BigInteger>>> row = null;
      List<GenPolynomial<Product<BigInteger>>> L;
 
-     List<Product<BigInteger>> mf = new ArrayList<Product<BigInteger>>();
-     mf.add(null);
+     PseudoReductionEntry<Product<BigInteger>> mf;
 
      L = new ArrayList<GenPolynomial<Product<BigInteger>>>();
 
@@ -1059,11 +1056,11 @@ public static Test suite() {
      for ( int m = 0; m < L.size(); m++ ) {
          row.add(null);
      }
-     mf.set(0,null);
-     e = rpred.normalform( L, a, mf );
-     f = a.multiply( mf.get(0) );
-     //not for regular rings: assertTrue("isZERO( e )", e.isZERO() );
+     mf = rpred.normalformFactor( L, a );
+     e = mf.pol;
+     f = a.multiply( mf.multiplicator );
      e = rpred.normalform( row, L, f );
+     //not for regular rings: assertTrue("isZERO( e )", e.isZERO() );
      assertTrue("is Reduction ", rpred.isNormalform(L,e) );
      assertTrue("is ReductionNF ", rpred.isReductionNF(row,L,f,e) );
 
@@ -1072,9 +1069,9 @@ public static Test suite() {
      for ( int m = 0; m < L.size(); m++ ) {
          row.add(null);
      }
-     mf.set(0,null);
-     e = rpred.normalform( L, b, mf );
-     f = b.multiply( mf.get(0) );
+     mf = rpred.normalformFactor( L, a );
+     e = mf.pol;
+     f = a.multiply( mf.multiplicator );
      e = rpred.normalform( row, L, f );
      assertTrue("is Reduction ", rpred.isNormalform(L,e) );
      assertTrue("is ReductionNF ", rpred.isReductionNF(row,L,f,e) );
@@ -1084,9 +1081,9 @@ public static Test suite() {
      for ( int m = 0; m < L.size(); m++ ) {
          row.add(null);
      }
-     mf.set(0,null);
-     e = rpred.normalform( L, c, mf );
-     f = c.multiply( mf.get(0) );
+     mf = rpred.normalformFactor( L, a );
+     e = mf.pol;
+     f = a.multiply( mf.multiplicator );
      e = rpred.normalform( row, L, f );
      assertTrue("is Reduction ", rpred.isNormalform(L,e) );
      assertTrue("is ReductionNF ", rpred.isReductionNF(row,L,f,e) );
@@ -1096,9 +1093,9 @@ public static Test suite() {
      for ( int m = 0; m < L.size(); m++ ) {
          row.add(null);
      }
-     mf.set(0,null);
-     e = rpred.normalform( L, d, mf );
-     f = d.multiply( mf.get(0) );
+     mf = rpred.normalformFactor( L, a );
+     e = mf.pol;
+     f = a.multiply( mf.multiplicator );
      e = rpred.normalform( row, L, f );
      assertTrue("is Reduction ", rpred.isNormalform(L,e) );
      assertTrue("is ReductionNF ", rpred.isReductionNF(row,L,f,e) );
