@@ -14,6 +14,7 @@ import edu.jas.structure.RingElem;
 /**
  * Polynomial pseudo reduction interface.
  * Defines additionaly normalformFactor.
+ * @param <C> coefficient type.
  * @author Heinz Kredel
  */
 
@@ -22,8 +23,7 @@ public interface PseudoReduction<C extends RingElem<C>>
 
 
     /**
-     * Normalform.
-     * @typeparam C coefficient type.
+     * Normalform with multiplication factor.
      * @param Pp polynomial list.
      * @param Ap polynomial.
      * @return ( nf(Ap), mf ) with respect to Pp and 
