@@ -44,6 +44,7 @@ public class PolyUtil {
      * Recursive representation. 
      * Represent as polynomial in i variables with coefficients in n-i variables.
      * Works for arbitrary term orders.
+     * @param <C> coefficient type.
      * @param rfac recursive polynomial ring factory.
      * @param A polynomial to be converted.
      * @return Recursive represenations of this in the ring rfac.
@@ -82,6 +83,7 @@ public class PolyUtil {
     /**
      * Distribute a recursive polynomial to a generic polynomial. 
      * Works for arbitrary term orders.
+     * @param <C> coefficient type.
      * @param dfac combined polynomial ring factory of coefficients and this.
      * @param B polynomial to be converted.
      * @return distributed polynomial.
@@ -264,6 +266,7 @@ public class PolyUtil {
      * From BigInteger coefficients. 
      * Represent as polynomial with type C coefficients,
      * e.g. ModInteger or BigRational.
+     * @param <C> coefficient type.
      * @param fac result polynomial factory.
      * @param A polynomial with BigInteger coefficients to be converted.
      * @return polynomial with type C coefficients.
@@ -296,6 +299,7 @@ public class PolyUtil {
      * From BigInteger coefficients. 
      * Represent as list of polynomials with type C coefficients,
      * e.g. ModInteger or BigRational.
+     * @param <C> coefficient type.
      * @param fac result polynomial factory.
      * @param L list of polynomials with BigInteger coefficients to be converted.
      * @return list of polynomials with type C coefficients.
@@ -458,6 +462,7 @@ public class PolyUtil {
     /**
      * GenPolynomial monic, i.e. leadingBaseCoefficient == 1.
      * If leadingBaseCoefficient is not invertible returns this unmodified.
+     * @param <C> coefficient type.
      * @param p recursive GenPolynomial<GenPolynomial<C>>.
      * @return monic(p).
      */
@@ -481,6 +486,7 @@ public class PolyUtil {
 
     /**
      * Polynomial list monic. 
+     * @param <C> coefficient type.
      * @param L list of polynomials with field coefficients.
      * @return list of polynomials with leading coefficient 1.
      */
@@ -504,6 +510,7 @@ public class PolyUtil {
 
     /**
      * GenPolynomial coefficient wise remainder.
+     * @param <C> coefficient type.
      * @param P GenPolynomial.
      * @param s nonzero coefficient.
      * @return coefficient wise remainder.
@@ -531,6 +538,7 @@ public class PolyUtil {
     /**
      * GenPolynomial sparse pseudo remainder.
      * For univariate polynomials.
+     * @param <C> coefficient type.
      * @param P GenPolynomial.
      * @param S nonzero GenPolynomial.
      * @return remainder with ldcf(S)<sup>m'</sup> P = quotient * S + remainder.
@@ -580,6 +588,7 @@ public class PolyUtil {
     /**
      * GenPolynomial pseudo divide.
      * For univariate polynomials or exact division.
+     * @param <C> coefficient type.
      * @param P GenPolynomial.
      * @param S nonzero GenPolynomial.
      * @return quotient with ldcf(S)<sup>m'</sup> P = quotient * S + remainder.
@@ -640,6 +649,7 @@ public class PolyUtil {
      * GenPolynomial pseudo divide.
      * For recursive polynomials.
      * Division by coefficient ring element.
+     * @param <C> coefficient type.
      * @param P recursive GenPolynomial.
      * @param s GenPolynomial.
      * @return this/s.
@@ -676,6 +686,7 @@ public class PolyUtil {
     /**
      * GenPolynomial sparse pseudo remainder.
      * For recursive polynomials.
+     * @param <C> coefficient type.
      * @param P recursive GenPolynomial.
      * @param S nonzero recursive GenPolynomial.
      * @return remainder with ldcf(S)<sup>m'</sup> P = quotient * S + remainder.
@@ -726,6 +737,7 @@ public class PolyUtil {
     /**
      * GenPolynomial pseudo divide.
      * For recursive polynomials.
+     * @param <C> coefficient type.
      * @param P recursive GenPolynomial.
      * @param S nonzero recursive GenPolynomial.
      * @return quotient with ldcf(S)<sup>m</sup> P = quotient * S + remainder.
@@ -785,6 +797,7 @@ public class PolyUtil {
 
     /**
      * GenPolynomial polynomial derivative main variable.
+     * @param <C> coefficient type.
      * @param P GenPolynomial.
      * @return deriviative(P).
      */
@@ -820,6 +833,7 @@ public class PolyUtil {
 
     /**
      * GenPolynomial recursive polynomial derivative main variable.
+     * @param <C> coefficient type.
      * @param P recursive GenPolynomial.
      * @return deriviative(P).
      */
@@ -887,6 +901,7 @@ public class PolyUtil {
 
     /**
      * Evaluate at main variable. 
+     * @param <C> coefficient type.
      * @param cfac coefficent polynomial ring factory.
      * @param A polynomial to be evaluated.
      * @param a value to evaluate at.
@@ -932,6 +947,7 @@ public class PolyUtil {
 
     /**
      * Evaluate at main variable. 
+     * @param <C> coefficient type.
      * @param cfac coefficent ring factory.
      * @param A univariate polynomial to be evaluated.
      * @param a value to evaluate at.
@@ -977,6 +993,7 @@ public class PolyUtil {
 
     /**
      * Evaluate at k-th variable. 
+     * @param <C> coefficient type.
      * @param cfac coefficient polynomial ring in k variables 
      *        C[x_1, ..., x_k] factory.
      * @param rfac coefficient polynomial ring 
@@ -1027,6 +1044,7 @@ public class PolyUtil {
 
     /**
      * Evaluate at first (lowest) variable. 
+     * @param <C> coefficient type.
      * @param cfac coefficient polynomial ring in first variable 
      *        C[x_1] factory.
      * @param dfac polynomial ring in n-1 variables.
@@ -1064,6 +1082,7 @@ public class PolyUtil {
 
     /**
      * Evaluate at first (lowest) variable. 
+     * @param <C> coefficient type.
      * Could also be called evaluateFirst(), but type erasure of A parameter
      * does not allow same name.
      * @param cfac coefficient polynomial ring in first variable 
@@ -1102,6 +1121,7 @@ public class PolyUtil {
 
 
     /** ModInteger interpolate on first variable.
+     * @param <C> coefficient type.
      * @param fac GenPolynomial<C> result factory.
      * @param A GenPolynomial<C>.
      * @param M GenPolynomial<C> interpolation modul of A.
@@ -1157,6 +1177,7 @@ public class PolyUtil {
 
 
     /** Univariate polynomial interpolation.
+     * @param <C> coefficient type.
      * @param fac GenPolynomial<C> result factory.
      * @param A GenPolynomial<C>.
      * @param M GenPolynomial<C> interpolation modul of A.
@@ -1191,6 +1212,7 @@ public class PolyUtil {
 
     /**
      * Maximal degree in the coefficient polynomials.
+     * @param <C> coefficient type.
      * @return maximal degree in the coefficients.
      */
     public static <C extends RingElem<C>>
