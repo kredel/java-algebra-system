@@ -115,7 +115,7 @@ public class GenPolynomial<C extends RingElem<C> >
      * @see java.lang.Object#clone()
      */
     @Override
-     public GenPolynomial<C> clone() {
+    public GenPolynomial<C> clone() {
         //return ring.copy(this);
         return new GenPolynomial<C>(ring,this.val);
     }
@@ -150,7 +150,7 @@ public class GenPolynomial<C extends RingElem<C> >
      * @param e exponent.
      */
     public void doPutToMap(ExpVector e, C c) {
-        if ( debug ) {
+        if ( false && debug ) {
            C a = val.get( e );
            if ( a != null ) {
               logger.info("map entry exists " + e + " to " + a + " new " + c );
@@ -167,7 +167,7 @@ public class GenPolynomial<C extends RingElem<C> >
      * @see java.lang.Object#toString()
      */
     @Override
-     public String toString() {
+    public String toString() {
         if ( ring.vars != null ) {
             return toString(ring.vars);
         }
@@ -336,7 +336,7 @@ public class GenPolynomial<C extends RingElem<C> >
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
-    @SuppressWarnings("unchecked") // not jet working
+    @SuppressWarnings("unchecked")
     public boolean equals( Object B ) { 
        if ( ! ( B instanceof GenPolynomial ) ) {
           return false;
@@ -903,7 +903,7 @@ public class GenPolynomial<C extends RingElem<C> >
             ExpVector e = m.getKey();
             C c1 = m.getValue();
             C c = c1.divide(s);
-            if ( true ) {
+            if ( false ) {
                 C x = c1.remainder(s);
                 if ( !x.isZERO() ) {
                    System.out.println("divide x = " + x);
@@ -930,6 +930,7 @@ public class GenPolynomial<C extends RingElem<C> >
      * @return [ quotient , remainder ] with this = quotient * S + remainder.
      * @see edu.jas.poly.PolyUtil#basePseudoRemainder(edu.jas.poly.GenPolynomial,edu.jas.poly.GenPolynomial).
      */
+    @SuppressWarnings("unchecked")
     public GenPolynomial<C>[] divideAndRemainder(GenPolynomial<C> S) {
         if ( S == null || S.isZERO() ) {
             throw new RuntimeException(this.getClass().getName()
@@ -943,29 +944,22 @@ public class GenPolynomial<C extends RingElem<C> >
         C ci = c.inverse();
      assert (ring.nvar == S.ring.nvar);
         ExpVector e = S.leadingExpVector();
-        //System.out.println("e = " + e);
         GenPolynomial<C> h;
         GenPolynomial<C> q = ring.getZERO().clone();
         GenPolynomial<C> r = this.clone(); 
-        //GenPolynomial<C> rx; 
         while ( ! r.isZERO() ) {
             ExpVector f = r.leadingExpVector();
-            //System.out.println("f = " + f);
             if ( ExpVector.EVMT(f,e) ) {
                 C a = r.leadingBaseCoefficient();
                 f = ExpVector.EVDIF( f, e );
-                //logger.info("red div = " + e);
-                //C ax = a;
                 a = a.multiply( ci );
                 q = q.sum( a, f );
                 h = S.multiply( a, f );
-                //rx = r;
                 r = r.subtract( h );
             } else {
                 break;
             }
         }
-        //System.out.println("q = " + q + ", r = " +r);
         GenPolynomial<C>[] ret = new GenPolynomial[2];
         ret[0] = q;
         ret[1] = r;
@@ -1044,8 +1038,6 @@ public class GenPolynomial<C extends RingElem<C> >
         if ( ring.nvar != 1 ) {
            throw new RuntimeException(this.getClass().getName()
                                   + " not univariate polynomials" + ring);
-           //System.out.println("this = " + this);
-           //System.out.println("S    = " + S);
         }
         GenPolynomial<C> x;
         GenPolynomial<C> q = this;
@@ -1065,6 +1057,7 @@ public class GenPolynomial<C extends RingElem<C> >
      * @param S GenPolynomial.
      * @return [ gcd(this,S), a, b ] with a*this + b*S = gcd(this,S).
      */
+    @SuppressWarnings("unchecked")
     public GenPolynomial<C>[] egcd(GenPolynomial<C> S) {
         GenPolynomial<C>[] ret = new GenPolynomial[3];
         ret[0] = null;
@@ -1082,7 +1075,6 @@ public class GenPolynomial<C extends RingElem<C> >
            throw new RuntimeException(this.getClass().getName()
                                       + " not univariate polynomials" + ring);
         }
-        //System.out.println("this = " + this + ", S = " + S);
         GenPolynomial<C>[] qr;
         GenPolynomial<C> q = this; 
         GenPolynomial<C> r = S;
@@ -1110,11 +1102,7 @@ public class GenPolynomial<C extends RingElem<C> >
             c1 = c1.multiply( h );
             c2 = c2.multiply( h );
         }        
-     //assert ( ((c1.multiply(this)).sum( c2.multiply(S)).equals(q) )); 
-        //if ( c1.isZERO() ) {
-        //   System.out.println("this = " + this + "\n S = " + S);
-        //   System.out.println("q = " + q + "\n c1 = " + c1 + "\n c2 = " + c2);
-        //} 
+        //assert ( ((c1.multiply(this)).sum( c2.multiply(S)).equals(q) )); 
         ret[0] = q;
         ret[1] = c1;
         ret[2] = c2;
@@ -1177,11 +1165,8 @@ public class GenPolynomial<C extends RingElem<C> >
         Map<ExpVector,C> A = val;
         for ( Map.Entry<ExpVector,C> y: A.entrySet() ) {
             ExpVector e = y.getKey();
-            //System.out.println("e = " + e);
             C a = y.getValue();
-            //System.out.println("a = " + a);
             ExpVector f = e.extend(i,j,k);
-            //System.out.println("e = " + e + ", f = " + f);
             C.put( f, a );
         }
         return Cp;
@@ -1207,12 +1192,9 @@ public class GenPolynomial<C extends RingElem<C> >
         Map<ExpVector,C> A = val;
         for ( Map.Entry<ExpVector,C> y: A.entrySet() ) {
             ExpVector e = y.getKey();
-            //System.out.println("e = " + e);
             C a = y.getValue();
-            //System.out.println("a = " + a);
             ExpVector f = e.contract(0,i);
             ExpVector g = e.contract(i,e.length()-i);
-            //System.out.println("e = " + e + ", f = " + f + ", g = " + g );
             GenPolynomial<C> p = B.get(f);
             if ( p == null ) {
                 p = zero;
@@ -1237,22 +1219,18 @@ public class GenPolynomial<C extends RingElem<C> >
         if ( oring.tord.getEvord2() != 0 && oring.partial ) {
             k = oring.tord.getSplit();
         }
-        // logger.debug("poly k split = " + k );
 
         Map<ExpVector,C> C = Cp.val; //getMap();
         Map<ExpVector,C> A = val;
         ExpVector f;
         for ( Map.Entry<ExpVector,C> y: A.entrySet() ) {
             ExpVector e = y.getKey();
-            //System.out.println("e = " + e);
             if ( k >= 0 ) {
                 f = e.reverse(k);
             } else {
                 f = e.reverse();
             }
-            //System.out.println("e = " + e + ", f = " + f);
             C a = y.getValue();
-            //System.out.println("a = " + a);
             C.put( f, a );
         }
         return Cp;
