@@ -23,6 +23,7 @@ import edu.jas.vector.BasicLinAlg;
  * Groebner Base sequential algorithm.
  * Implements Groebner bases and GB test.
  * Uses sequential pair list class.
+ * @param <C> coefficient type
  * @author Heinz Kredel
  */
 
@@ -57,7 +58,6 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>>
 
     /**
      * Groebner base using pairlist class.
-     * @typeparam C coefficient type.
      * @param modv module variable number.
      * @param F polynomial list.
      * @return GB(F) a Groebner base of F.
@@ -153,7 +153,6 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>>
 
     /**
      * Extended Groebner base using critical pair class.
-     * @typeparam C coefficient type.
      * @param modv module variable number.
      * @param F polynomial list.
      * @return a container for an extended Groebner base of F.
@@ -387,7 +386,6 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>>
     /**
      * Normalize M.
      * Make all rows the same size and make certain column elements zero.
-     * @typeparam C coefficient type.
      * @param M a reduction matrix.
      * @return normalized M.
      */
@@ -459,7 +457,6 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>>
 
     /**
      * Minimal extended groebner basis.
-     * @typeparam C coefficient type.
      * @param Gp a Groebner base.
      * @param M a reduction matrix, is modified.
      * @return a (partially) reduced Groebner base of Gp in a container.

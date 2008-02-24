@@ -18,6 +18,7 @@ import edu.jas.ring.OrderedRPairlist;
 /**
  * Regular ring Groebner Base sequential algorithm.
  * Implements R-Groebner bases and GB test.
+ * @param <C> coefficient type
  * @author Heinz Kredel
  */
 
@@ -57,7 +58,6 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>>
 
     /**
      * R-Groebner base test.
-     * @typeparam C coefficient type.
      * @param modv module variable number.
      * @param F polynomial list.
      * @return true, if F is a R-Groebner base, else false.
@@ -105,7 +105,6 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>>
 
     /**
      * R-Groebner base using pairlist class.
-     * @typeparam C coefficient type.
      * @param modv module variable number.
      * @param F polynomial list.
      * @return GB(F) a R-Groebner base of F.
@@ -221,7 +220,6 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>>
 
     /**
      * Minimal ordered Groebner basis.
-     * @typeparam C coefficient type.
      * @param Gp a Groebner base.
      * @return a reduced Groebner base of Gp.
      */

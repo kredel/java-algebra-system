@@ -15,6 +15,7 @@ import edu.jas.structure.RingElem;
  * Solvable polynomial Reduction interface.
  * Defines S-Polynomial, normalform
  * and irreducible set.
+ * @param <C> coefficient type
  * @author Heinz Kredel
  */
 
@@ -23,7 +24,6 @@ public interface SolvableReduction<C extends RingElem<C>>  {
 
     /**
      * Left S-Polynomial.
-     * @typeparam C coefficient type.
      * @param Ap solvable polynomial.
      * @param Bp solvable polynomial.
      * @return left-spol(Ap,Bp) the left S-polynomial of Ap and Bp.
@@ -35,7 +35,6 @@ public interface SolvableReduction<C extends RingElem<C>>  {
 
     /**
      * S-Polynomial with recording.
-     * @typeparam C coefficient type.
      * @param S recording matrix, is modified.
      * @param i index of Ap in basis list.
      * @param Ap a polynomial.
@@ -53,7 +52,6 @@ public interface SolvableReduction<C extends RingElem<C>>  {
 
     /**
      * Left Normalform.
-     * @typeparam C coefficient type.
      * @param Ap solvable polynomial.
      * @param Pp solvable polynomial list.
      * @return left-nf(Ap) with respect to Pp.
@@ -65,7 +63,6 @@ public interface SolvableReduction<C extends RingElem<C>>  {
 
     /**
      * LeftNormalform with recording.
-     * @typeparam C coefficient type.
      * @param row recording matrix, is modified.
      * @param Pp a polynomial list for reduction.
      * @param Ap a polynomial.
@@ -79,7 +76,6 @@ public interface SolvableReduction<C extends RingElem<C>>  {
 
     /**
      * Left Normalform Set.
-     * @typeparam C coefficient type.
      * @param Ap solvable polynomial list.
      * @param Pp solvable polynomial list.
      * @return list of left-nf(a) with respect to Pp for all a in Ap.
@@ -91,7 +87,6 @@ public interface SolvableReduction<C extends RingElem<C>>  {
 
     /**
      * Left irreducible set.
-     * @typeparam C coefficient type.
      * @param Pp solvable polynomial list.
      * @return a list P of solvable polynomials which are in normalform wrt. P.
      */
@@ -117,7 +112,6 @@ public interface SolvableReduction<C extends RingElem<C>>  {
 
     /**
      * Right S-Polynomial.
-     * @typeparam C coefficient type.
      * @param Ap solvable polynomial.
      * @param Bp solvable polynomial.
      * @return right-spol(Ap,Bp) the right S-polynomial of Ap and Bp.
@@ -129,7 +123,6 @@ public interface SolvableReduction<C extends RingElem<C>>  {
 
     /**
      * Right Normalform.
-     * @typeparam C coefficient type.
      * @param Ap solvable polynomial.
      * @param Pp solvable polynomial list.
      * @return right-nf(Ap) with respect to Pp.

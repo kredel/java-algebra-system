@@ -21,6 +21,7 @@ import edu.jas.structure.RegularRingElem;
 /**
  * Polynomial Regular ring Reduction sequential use algorithm.
  * Implements normalform and boolean closure stuff.
+ * @param <C> coefficient type
  * @author Heinz Kredel
  */
 
@@ -43,7 +44,6 @@ public class RReductionSeq<C extends RegularRingElem<C>>
      * Is top reducible.
      * Condition is a b != 0, for a=ldcf(A) and b=ldcf(B) 
      * and lt(B) | lt(A) for some B in F.
-     * @typeparam C coefficient type.
      * @param A polynomial.
      * @param P polynomial list.
      * @return true if A is top reducible with respect to P.
@@ -82,7 +82,6 @@ public class RReductionSeq<C extends RegularRingElem<C>>
      * Is strong top reducible.
      * Condition is idempotent(a) == idempotent(b), 
      * for a=ldcf(A) and b=ldcf(B) and lt(B) | lt(A) for some B in F.
-     * @typeparam C coefficient type.
      * @param A polynomial.
      * @param P polynomial list.
      * @return true if A is string top reducible with respect to P.
@@ -115,7 +114,6 @@ public class RReductionSeq<C extends RegularRingElem<C>>
 
     /**
      * Is in Normalform.
-     * @typeparam C coefficient type.
      * @param Ap polynomial.
      * @param Pp polynomial list.
      * @return true if Ap is in normalform with respect to Pp.
@@ -183,7 +181,6 @@ public class RReductionSeq<C extends RegularRingElem<C>>
 
     /**
      * Normalform using r-reduction.
-     * @typeparam C coefficient type.
      * @param Ap polynomial.
      * @param Pp polynomial list.
      * @return r-nf(Ap) with respect to Pp.
@@ -280,7 +277,6 @@ public class RReductionSeq<C extends RegularRingElem<C>>
      * GB criterium 4.
      * Use only for commutative polynomial rings.
      * <b>Note:</b> Experimental version for r-Groebner bases.
-     * @typeparam C coefficient type.
      * @param A polynomial.
      * @param B polynomial.
      * @param e = lcm(ht(A),ht(B))
@@ -323,7 +319,6 @@ public class RReductionSeq<C extends RegularRingElem<C>>
      * GB criterium 4.
      * Use only for commutative polynomial rings.
      * <b>Note:</b> Experimental version for r-Groebner bases.
-     * @typeparam C coefficient type.
      * @param A polynomial.
      * @param B polynomial.
      * @return true if the S-polynomial(i,j) is required, else false.
@@ -359,7 +354,6 @@ public class RReductionSeq<C extends RegularRingElem<C>>
 
     /**
      * Normalform with recording.
-     * @typeparam C coefficient type.
      * @param row recording matrix, is modified.
      * @param Pp a polynomial list for reduction.
      * @param Ap a polynomial.
@@ -467,7 +461,6 @@ public class RReductionSeq<C extends RegularRingElem<C>>
     /**
      * Irreducible set.
      * May not be boolean closed.
-     * @typeparam C coefficient type.
      * @param Pp polynomial list.
      * @return a list P of polynomials which are in normalform wrt. P.
      */
@@ -525,7 +518,6 @@ public class RReductionSeq<C extends RegularRingElem<C>>
     /**
      * Is boolean closed, 
      * test if A == idempotent(ldcf(A)) A.
-     * @typeparam C coefficient type.
      * @param A polynomial.
      * @return true if A is boolean closed, else false.
      */
@@ -547,7 +539,6 @@ public class RReductionSeq<C extends RegularRingElem<C>>
     /**
      * Is boolean closed, 
      * test if all A in F are boolean closed.
-     * @typeparam C coefficient type.
      * @param F polynomial list.
      * @return true if F is boolean closed, else false.
      */
@@ -571,7 +562,6 @@ public class RReductionSeq<C extends RegularRingElem<C>>
     /**
      * Is reduced boolean closed, 
      * test if all A in F are boolean closed or br(A) reduces to zero.
-     * @typeparam C coefficient type.
      * @param F polynomial list.
      * @return true if F is boolean closed, else false.
      */
@@ -610,7 +600,6 @@ public class RReductionSeq<C extends RegularRingElem<C>>
     /**
      * Boolean closure, 
      * compute idempotent(ldcf(A)) A.
-     * @typeparam C coefficient type.
      * @param A polynomial.
      * @return bc(A).
      */
@@ -628,7 +617,6 @@ public class RReductionSeq<C extends RegularRingElem<C>>
     /**
      * Boolean remainder, 
      * compute idemComplement(ldcf(A)) A.
-     * @typeparam C coefficient type.
      * @param A polynomial.
      * @return br(A).
      */
@@ -646,7 +634,6 @@ public class RReductionSeq<C extends RegularRingElem<C>>
     /**
      * Boolean closure, 
      * compute BC(A) for all A in F.
-     * @typeparam C coefficient type.
      * @param F polynomial list.
      * @return bc(F).
      */
@@ -672,7 +659,6 @@ public class RReductionSeq<C extends RegularRingElem<C>>
     /**
      * Reduced boolean closure, 
      * compute BC(A) for all A in F.
-     * @typeparam C coefficient type.
      * @param F polynomial list.
      * @return red(bc(F)) = bc(red(F)).
      */
@@ -712,7 +698,6 @@ public class RReductionSeq<C extends RegularRingElem<C>>
     /**
      * Reduced boolean closure, 
      * compute BC(A) modulo F.
-     * @typeparam C coefficient type.
      * @param A polynomial.
      * @param F polynomial list.
      * @return red(bc(A)).

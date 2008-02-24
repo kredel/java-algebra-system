@@ -25,6 +25,7 @@ import edu.jas.ufd.GCDFactory;
 /**
  * Groebner Base with pseudo reduction sequential algorithm.
  * Implements Groebner bases and GB test.
+ * @param <C> coefficient type
  * @author Heinz Kredel
  */
 
@@ -79,7 +80,6 @@ public class GroebnerBasePseudoSeq<C extends GcdRingElem<C>>
 
     /**
      * Groebner base using pairlist class.
-     * @typeparam C coefficient type.
      * @param modv module variable number.
      * @param F polynomial list.
      * @return GB(F) a Groebner base of F.
@@ -175,7 +175,6 @@ public class GroebnerBasePseudoSeq<C extends GcdRingElem<C>>
 
     /**
      * Minimal ordered Groebner basis.
-     * @typeparam C coefficient type.
      * @param Gp a Groebner base.
      * @return a reduced Groebner base of Gp.
      */

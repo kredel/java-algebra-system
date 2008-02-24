@@ -29,6 +29,7 @@ import edu.jas.util.ThreadPool;
  * polynomials appear.
  * Implements a shared memory parallel version of Groebner bases.
  * Slaves maintain pairlist.
+ * @param <C> coefficient type
  * @author Heinz Kredel
  */
 
@@ -120,7 +121,6 @@ public class GroebnerBaseSeqPairParallel<C extends RingElem<C>>
     /**
      * Parallel Groebner base using sequential pair order class.
      * Slaves maintain pairlist.
-     * @typeparam C coefficient type.
      * @param modv number of module variables.
      * @param F polynomial list.
      * @return GB(F) a Groebner base of F.
@@ -175,7 +175,6 @@ public class GroebnerBaseSeqPairParallel<C extends RingElem<C>>
 
     /**
      * Minimal ordered groebner basis, parallel.
-     * @typeparam C coefficient type.
      * @param Fp a Groebner base.
      * @return minimalGB(F) a minimal Groebner base of Fp.
      */

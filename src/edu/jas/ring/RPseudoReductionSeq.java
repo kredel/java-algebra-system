@@ -18,6 +18,7 @@ import edu.jas.structure.RegularRingElem;
 /**
  * Polynomial regular ring pseudo reduction sequential use algorithm.
  * Implements fraction free normalform algorithm.
+ * @param <C> coefficient type
  * @author Heinz Kredel
  */
 
@@ -38,7 +39,6 @@ public class RPseudoReductionSeq<C extends RegularRingElem<C>>
 
     /**
      * Normalform using r-reduction.
-     * @typeparam C coefficient type.
      * @param Ap polynomial.
      * @param Pp polynomial list.
      * @return r-nf(Ap) with respect to Pp.
@@ -140,7 +140,6 @@ public class RPseudoReductionSeq<C extends RegularRingElem<C>>
 
     /**
      * Normalform using r-reduction.
-     * @typeparam C coefficient type.
      * @param Pp polynomial list.
      * @param Ap polynomial.
      * @return ( nf(Ap), mf ) with respect to Pp and 
@@ -254,7 +253,6 @@ public class RPseudoReductionSeq<C extends RegularRingElem<C>>
      * Compute first the multiplication factor <code>m</code> 
      * with <code>normalform(Pp,Ap,m)</code>,
      * then call this method with <code>normalform(row,Pp,m*Ap)</code>.
-     * @typeparam C coefficient type.
      * @param row recording matrix, is modified.
      * @param Pp a polynomial list for reduction.
      * @param Ap a polynomial.

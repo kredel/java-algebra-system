@@ -30,6 +30,7 @@ import edu.jas.util.ThreadPool;
  * polynomials appear.
  * Implements a shared memory parallel version of Groebner bases.
  * Slaves maintain pairlist.
+ * @param <C> coefficient type
  * @author Heinz Kredel
  */
 
@@ -123,7 +124,6 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>>
     /**
      * Parallel Groebner base using sequential pair order class.
      * Slaves maintain pairlist.
-     * @typeparam C coefficient type.
      * @param modv number of module variables.
      * @param F polynomial list.
      * @return GB(F) a Groebner base of F.
@@ -178,7 +178,6 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>>
 
     /**
      * Minimal ordered groebner basis, parallel.
-     * @typeparam C coefficient type.
      * @param Fp a Groebner base.
      * @return minimalGB(F) a minimal Groebner base of Fp.
      */
@@ -260,7 +259,6 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>>
 
     /**
      * Solvable Extended Groebner base using critical pair class.
-     * @typeparam C coefficient type.
      * @param modv module variable number.
      * @param F solvable polynomial list.
      * @return a container for an extended left Groebner base of F.
@@ -274,7 +272,6 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>>
 
     /**
      * Twosided Groebner base using pairlist class.
-     * @typeparam C coefficient type.
      * @param modv number of module variables.
      * @param Fp solvable polynomial list.
      * @return tsGB(Fp) a twosided Groebner base of F.
@@ -354,6 +351,7 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>>
 
 /**
  * Reducing left worker threads.
+ * @param <C> coefficient type
  */
 class LeftSolvableReducer<C extends RingElem<C>> implements Runnable {
         private List<GenSolvablePolynomial<C>> G;
@@ -461,6 +459,7 @@ class LeftSolvableReducer<C extends RingElem<C>> implements Runnable {
 
 /**
  * Reducing twosided worker threads.
+ * @param <C> coefficient type
  */
 class TwosidedSolvableReducer<C extends RingElem<C>> implements Runnable {
         private List<GenSolvablePolynomial<C>> X;
@@ -589,6 +588,7 @@ class TwosidedSolvableReducer<C extends RingElem<C>> implements Runnable {
 
 /**
  * Reducing worker threads for minimal GB.
+ * @param <C> coefficient type
  */
 class SolvableMiReducer<C extends RingElem<C>> implements Runnable {
         private List<GenSolvablePolynomial<C>> G;

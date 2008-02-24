@@ -21,6 +21,7 @@ import edu.jas.structure.RingElem;
 /**
  * Polynomial D-Reduction sequential use algorithm.
  * Implements normalform.
+ * @param <C> coefficient type
  * @author Heinz Kredel
  */
 
@@ -41,7 +42,6 @@ public class DReductionSeq<C extends RingElem<C>>
 
     /**
      * Is top reducible.
-     * @typeparam C coefficient type.
      * @param A polynomial.
      * @param P polynomial list.
      * @return true if A is top reducible with respect to P.
@@ -76,7 +76,6 @@ public class DReductionSeq<C extends RingElem<C>>
 
     /**
      * Is in Normalform.
-     * @typeparam C coefficient type.
      * @param Ap polynomial.
      * @param Pp polynomial list.
      * @return true if Ap is in normalform with respect to Pp.
@@ -139,7 +138,6 @@ public class DReductionSeq<C extends RingElem<C>>
 
     /**
      * Normalform using d-reduction.
-     * @typeparam C coefficient type.
      * @param Ap polynomial.
      * @param Pp polynomial list.
      * @return d-nf(Ap) with respect to Pp.
@@ -221,7 +219,6 @@ public class DReductionSeq<C extends RingElem<C>>
 
     /**
      * S-Polynomial.
-     * @typeparam C coefficient type.
      * @param Ap polynomial.
      * @param Bp polynomial.
      * @return spol(Ap,Bp) the S-polynomial of Ap and Bp.
@@ -269,7 +266,6 @@ public class DReductionSeq<C extends RingElem<C>>
 
     /**
      * G-Polynomial.
-     * @typeparam C coefficient type.
      * @param Ap polynomial.
      * @param Bp polynomial.
      * @return gpol(Ap,Bp) the g-polynomial of Ap and Bp.
@@ -313,7 +309,6 @@ public class DReductionSeq<C extends RingElem<C>>
 
     /**
      * D-Polynomial with recording.
-     * @typeparam C coefficient type.
      * @param S recording matrix, is modified.
      * @param i index of Ap in basis list.
      * @param Ap a polynomial.
@@ -335,7 +330,6 @@ public class DReductionSeq<C extends RingElem<C>>
      * GB criterium 4.
      * Use only for commutative polynomial rings.
      * This version works also for d-Groebner bases.
-     * @typeparam C coefficient type.
      * @param A polynomial.
      * @param B polynomial.
      * @param e = lcm(ht(A),ht(B))
@@ -378,7 +372,6 @@ public class DReductionSeq<C extends RingElem<C>>
      * GB criterium 4.
      * Use only for commutative polynomial rings.
      * This version works also for d-Groebner bases.
-     * @typeparam C coefficient type.
      * @param A polynomial.
      * @param B polynomial.
      * @return true if the S-polynomial(i,j) is required, else false.
@@ -414,7 +407,6 @@ public class DReductionSeq<C extends RingElem<C>>
 
     /**
      * Normalform with recording.
-     * @typeparam C coefficient type.
      * @param row recording matrix, is modified.
      * @param Pp a polynomial list for reduction.
      * @param Ap a polynomial.
@@ -505,7 +497,6 @@ public class DReductionSeq<C extends RingElem<C>>
 
     /**
      * Irreducible set.
-     * @typeparam C coefficient type.
      * @param Pp polynomial list.
      * @return a list P of polynomials which are in normalform wrt. P.
      */

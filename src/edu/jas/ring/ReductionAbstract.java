@@ -23,6 +23,7 @@ import edu.jas.structure.RingElem;
  * Polynomial Reduction abstract class.
  * Implements common S-Polynomial, normalform, criterion 4 
  * module criterion and irreducible set.
+ * @param <C> coefficient type
  * @author Heinz Kredel
  */
 
@@ -42,7 +43,6 @@ public abstract class ReductionAbstract<C extends RingElem<C>>
 
     /**
      * S-Polynomial.
-     * @typeparam C coefficient type.
      * @param Ap polynomial.
      * @param Bp polynomial.
      * @return spol(Ap,Bp) the S-polynomial of Ap and Bp.
@@ -86,7 +86,6 @@ public abstract class ReductionAbstract<C extends RingElem<C>>
 
     /**
      * S-Polynomial with recording.
-     * @typeparam C coefficient type.
      * @param S recording matrix, is modified. 
      *        <b>Note</b> the negative Spolynomial is recorded as 
      *        required by all applications.
@@ -142,7 +141,6 @@ public abstract class ReductionAbstract<C extends RingElem<C>>
 
     /**
      * Module criterium.
-     * @typeparam C coefficient type.
      * @param modv number of module variables.
      * @param A polynomial.
      * @param B polynomial.
@@ -166,7 +164,6 @@ public abstract class ReductionAbstract<C extends RingElem<C>>
     /**
      * GB criterium 4.
      * Use only for commutative polynomial rings.
-     * @typeparam C coefficient type.
      * @param A polynomial.
      * @param B polynomial.
      * @param e = lcm(ht(A),ht(B))
@@ -197,8 +194,6 @@ public abstract class ReductionAbstract<C extends RingElem<C>>
 
     /**
      * GB criterium 4.
-     * Use only for commutative polynomial rings.
-     * @typeparam C coefficient type.
      * @param A polynomial.
      * @param B polynomial.
      * @return true if the S-polynomial(i,j) is required, else false.
@@ -225,7 +220,6 @@ public abstract class ReductionAbstract<C extends RingElem<C>>
 
     /**
      * Normalform Set.
-     * @typeparam C coefficient type.
      * @param Ap polynomial list.
      * @param Pp polynomial list.
      * @return list of nf(a) with respect to Pp for all a in Ap.
@@ -250,7 +244,6 @@ public abstract class ReductionAbstract<C extends RingElem<C>>
 
     /**
      * Is top reducible.
-     * @typeparam C coefficient type.
      * @param A polynomial.
      * @param P polynomial list.
      * @return true if A is top reducible with respect to P.
@@ -277,7 +270,6 @@ public abstract class ReductionAbstract<C extends RingElem<C>>
 
     /**
      * Is reducible.
-     * @typeparam C coefficient type.
      * @param Ap polynomial.
      * @param Pp polynomial list.
      * @return true if Ap is reducible with respect to Pp.
@@ -290,7 +282,6 @@ public abstract class ReductionAbstract<C extends RingElem<C>>
 
     /**
      * Is in Normalform.
-     * @typeparam C coefficient type.
      * @param Ap polynomial.
      * @param Pp polynomial list.
      * @return true if Ap is in normalform with respect to Pp.
@@ -344,7 +335,6 @@ public abstract class ReductionAbstract<C extends RingElem<C>>
 
     /**
      * Is in Normalform.
-     * @typeparam C coefficient type.
      * @param Pp polynomial list.
      * @return true if each Ap in Pp is in normalform with respect to Pp\{Ap}.
      */
@@ -368,7 +358,6 @@ public abstract class ReductionAbstract<C extends RingElem<C>>
 
     /**
      * Irreducible set.
-     * @typeparam C coefficient type.
      * @param Pp polynomial list.
      * @return a list P of polynomials which are in normalform wrt. P.
      */

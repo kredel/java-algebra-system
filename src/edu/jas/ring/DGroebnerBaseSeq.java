@@ -21,6 +21,7 @@ import edu.jas.ring.OrderedDPairlist;
  * Implements D-Groebner bases and GB test.
  * <b>Note:</b> Minimal reduced GBs are not unique.
  * see BWK, section 10.1.
+ * @param <C> coefficient type
  * @author Heinz Kredel
  */
 
@@ -59,7 +60,6 @@ public class DGroebnerBaseSeq<C extends RingElem<C>>
 
     /**
      * D-Groebner base test.
-     * @typeparam C coefficient type.
      * @param modv module variable number.
      * @param F polynomial list.
      * @return true, if F is a D-Groebner base, else false.
@@ -103,7 +103,6 @@ public class DGroebnerBaseSeq<C extends RingElem<C>>
 
     /**
      * D-Groebner base using pairlist class.
-     * @typeparam C coefficient type.
      * @param modv module variable number.
      * @param F polynomial list.
      * @return GB(F) a D-Groebner base of F.

@@ -18,7 +18,7 @@ import edu.jas.vector.ModuleList;
   * Container for a GB and transformation matrices.
   * A container for F, G, calG and calF.
   * Immutable objects.
-  * @typeparam C coefficient type.
+  * @param <C> coefficient type
   * @param F an ideal base.
   * @param G a Groebner base of F.
   * @param F2G a transformation matrix from F to G.

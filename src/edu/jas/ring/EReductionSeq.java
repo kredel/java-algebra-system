@@ -20,6 +20,7 @@ import edu.jas.structure.RingElem;
 /**
  * Polynomial E-Reduction sequential use algorithm.
  * Implements normalform.
+ * @param <C> coefficient type
  * @author Heinz Kredel
  */
 
@@ -39,7 +40,6 @@ public class EReductionSeq<C extends RingElem<C>>
 
     /**
      * Is top reducible.
-     * @typeparam C coefficient type.
      * @param A polynomial.
      * @param P polynomial list.
      * @return true if A is top reducible with respect to P.
@@ -74,7 +74,6 @@ public class EReductionSeq<C extends RingElem<C>>
 
     /**
      * Is in Normalform.
-     * @typeparam C coefficient type.
      * @param Ap polynomial.
      * @param Pp polynomial list.
      * @return true if Ap is in normalform with respect to Pp.
@@ -137,7 +136,6 @@ public class EReductionSeq<C extends RingElem<C>>
 
     /**
      * Normalform using e-reduction.
-     * @typeparam C coefficient type.
      * @param Ap polynomial.
      * @param Pp polynomial list.
      * @return e-nf(Ap) with respect to Pp.
@@ -238,7 +236,6 @@ public class EReductionSeq<C extends RingElem<C>>
 
     /**
      * Normalform with recording.
-     * @typeparam C coefficient type.
      * @param row recording matrix, is modified.
      * @param Pp a polynomial list for reduction.
      * @param Ap a polynomial.
@@ -330,7 +327,6 @@ public class EReductionSeq<C extends RingElem<C>>
 
     /**
      * Irreducible set.
-     * @typeparam C coefficient type.
      * @param Pp polynomial list.
      * @return a list P of polynomials which are in normalform wrt. P.
      */

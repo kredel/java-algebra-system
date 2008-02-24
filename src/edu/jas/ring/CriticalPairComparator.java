@@ -17,8 +17,8 @@ import edu.jas.poly.TermOrder;
 /**
  * Comparator for critical pairs of polynomials.
  * Immutable objects.
+ * @param <C> coefficient type
  * @author Heinz Kredel.
- * @typeparam C coefficient factory.
  */
 public class CriticalPairComparator<C extends RingElem<C> > 
              implements Serializable, Comparator<CriticalPair<C>> {

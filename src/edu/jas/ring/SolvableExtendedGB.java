@@ -17,7 +17,7 @@ import edu.jas.structure.RingElem;
   * Container for a GB and transformation matrices.
   * A container for F, G, calG and calF.
   * Immutable objects.
-  * @typeparam C coefficient type.
+  * @param <C> coefficient type
   * @param F an ideal base.
   * @param G a Groebner base of F.
   * @param F2G a transformation matrix from F to G.
@@ -60,7 +60,7 @@ public class SolvableExtendedGB<C extends RingElem<C>> {
          * @see java.lang.Object#toString()
          */
         @Override
-          public String toString() {
+        public String toString() {
             PolynomialList<C> P;
             ModuleList<C> M;
             StringBuffer s = new StringBuffer("SolvableExtendedGB: \n\n");

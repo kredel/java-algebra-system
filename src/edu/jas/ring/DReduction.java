@@ -14,6 +14,7 @@ import edu.jas.structure.RingElem;
 /**
  * Polynomial D Reduction interface.
  * Defines additionally D-Polynomial.
+ * @param <C> coefficient type
  * @author Heinz Kredel
  */
 
@@ -23,7 +24,6 @@ public interface DReduction<C extends RingElem<C>>
 
     /**
      * G-Polynomial.
-     * @typeparam C coefficient type.
      * @param Ap polynomial.
      * @param Bp polynomial.
      * @return gpol(Ap,Bp) the g-polynomial of Ap and Bp.
@@ -34,7 +34,6 @@ public interface DReduction<C extends RingElem<C>>
 
     /**
      * D-Polynomial with recording.
-     * @typeparam C coefficient type.
      * @param S recording matrix, is modified.
      * @param i index of Ap in basis list.
      * @param Ap a polynomial.

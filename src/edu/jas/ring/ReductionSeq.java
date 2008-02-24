@@ -18,6 +18,7 @@ import edu.jas.structure.RingElem;
 /**
  * Polynomial Reduction sequential use algorithm.
  * Implements normalform.
+ * @param <C> coefficient type
  * @author Heinz Kredel
  */
 
@@ -36,7 +37,6 @@ public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
 
     /**
      * Normalform.
-     * @typeparam C coefficient type.
      * @param Ap polynomial.
      * @param Pp polynomial list.
      * @return nf(Ap) with respect to Pp.
@@ -116,7 +116,6 @@ public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
 
     /**
      * Normalform with recording.
-     * @typeparam C coefficient type.
      * @param row recording matrix, is modified.
      * @param Pp a polynomial list for reduction.
      * @param Ap a polynomial.

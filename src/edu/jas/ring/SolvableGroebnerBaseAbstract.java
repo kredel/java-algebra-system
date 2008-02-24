@@ -22,6 +22,7 @@ import edu.jas.structure.RingElem;
  * Solvable Groebner Bases abstract class.
  * Implements common left, right and twosided Groebner bases 
  * and left, right and twosided GB tests.
+ * @param <C> coefficient type
  * @author Heinz Kredel.
  */
 
@@ -66,7 +67,6 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
 
     /**
      * Left Groebner base test.
-     * @typeparam C coefficient type.
      * @param F solvable polynomial list.
      * @return true, if F is a left Groebner base, else false.
      */
@@ -77,7 +77,6 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
 
     /**
      * Left Groebner base test.
-     * @typeparam C coefficient type.
      * @param modv number of module variables.
      * @param F solvable polynomial list.
      * @return true, if F is a left Groebner base, else false.
@@ -109,7 +108,6 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
 
     /**
      * Twosided Groebner base test.
-     * @typeparam C coefficient type.
      * @param Fp solvable polynomial list.
      * @return true, if Fp is a two-sided Groebner base, else false.
      */
@@ -120,7 +118,6 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
 
     /**
      * Twosided Groebner base test.
-     * @typeparam C coefficient type.
      * @param modv number of module variables.
      * @param Fp solvable polynomial list.
      * @return true, if Fp is a two-sided Groebner base, else false.
@@ -169,51 +166,8 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
     }
 
 
-    /* moved to GenSolvablePolynomialRing
-     * Generate solvable polynomials in each variable.
-     * @typeparam C coefficient type.
-     * @param F solvable polynomial list.
-     * @return a list of solvable univariate polynomials for each variable.
-    protected List<GenSolvablePolynomial<C>> 
-              generateUnivar(List<GenSolvablePolynomial<C>> F) {
-        return generateUnivar(0,F);
-    }
-     */
-
-
-    /* moved to GenSolvablePolynomialRing
-     * Generate solvable polynomials in each variable.
-     * Module variable polynomials are not generated.
-     * @typeparam C coefficient type.
-     * @param modv number of module variables.
-     * @param F solvable polynomial list.
-     * @return a list of solvable univariate polynomials for each variable.
-    protected List<GenSolvablePolynomial<C>> 
-              generateUnivar(int modv, 
-                             List<GenSolvablePolynomial<C>> F) {
-        GenSolvablePolynomial<C> p = F.get(0);
-        GenSolvablePolynomial<C> zero = p.ring.getZERO();
-        C one = p.ring.coFac.getONE();
-        int r = p.ring.nvar-modv;
-        ExpVector e;
-        List<GenSolvablePolynomial<C>> pols 
-            = new ArrayList<GenSolvablePolynomial<C>>(r);
-        for ( int i = 0; i < r; i++ ) {
-            e = new ExpVector(r,i,1);
-            if ( modv > 0 ) {
-                e = e.extend(modv,0,0l);
-            }
-            p = (GenSolvablePolynomial<C>)zero.sum(one,e);
-            pols.add( p );
-        }
-        return pols;
-    }
-     */
-
-
     /**
      * Right Groebner base test.
-     * @typeparam C coefficient type.
      * @param F solvable polynomial list.
      * @return true, if F is a right Groebner base, else false.
      */
@@ -224,7 +178,6 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
 
     /**
      * Right Groebner base test.
-     * @typeparam C coefficient type.
      * @param modv number of module variables.
      * @param F solvable polynomial list.
      * @return true, if F is a right Groebner base, else false.
@@ -261,7 +214,6 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
 
     /**
      * Left Groebner base using pairlist class.
-     * @typeparam C coefficient type.
      * @param F solvable polynomial list.
      * @return leftGB(F) a left Groebner base of F.
      */
@@ -273,7 +225,6 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
 
     /** 
      * Solvable Extended Groebner base using critical pair class.
-     * @typeparam C coefficient type.
      * @param F solvable polynomial list.
      * @return a container for an extended left Groebner base of F.
      */
@@ -285,7 +236,6 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
 
     /**
      * Left minimal ordered groebner basis.
-     * @typeparam C coefficient type.
      * @param Gp a left Groebner base.
      * @return leftGBmi(F) a minimal left Groebner base of Gp.
      */
@@ -354,7 +304,6 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
 
     /**
      * Twosided Groebner base using pairlist class.
-     * @typeparam C coefficient type.
      * @param Fp solvable polynomial list.
      * @return tsGB(Fp) a twosided Groebner base of Fp.
      */
@@ -366,7 +315,6 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
 
     /**
      * Right Groebner base using opposite ring left GB.
-     * @typeparam C coefficient type.
      * @param F solvable polynomial list.
      * @return rightGB(F) a right Groebner base of F.
      */
@@ -378,7 +326,6 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
 
     /**
      * Right Groebner base using opposite ring left GB.
-     * @typeparam C coefficient type.
      * @param modv number of module variables.
      * @param F solvable polynomial list.
      * @return rightGB(F) a right Groebner base of F.
@@ -432,7 +379,6 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
 
     /**
      * Test if left reduction matrix.
-     * @typeparam C coefficient type.
      * @param exgb an SolvableExtendedGB container.
      * @return true, if exgb contains a left reduction matrix, else false.
      */
@@ -447,7 +393,6 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
 
     /**
      * Test if left reduction matrix.
-     * @typeparam C coefficient type.
      * @param F a solvable polynomial list.
      * @param G a left Groebner base.
      * @param Mf a possible left reduction matrix.

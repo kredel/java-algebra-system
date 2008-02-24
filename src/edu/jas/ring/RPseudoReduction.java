@@ -11,6 +11,7 @@ import edu.jas.structure.RegularRingElem;
 /**
  * Polynomial R pseudo reduction interface.
  * Combines RReduction and PseudoReduction.
+ * @param <C> coefficient type
  * @author Heinz Kredel
  */
 

@@ -20,6 +20,7 @@ import edu.jas.ring.OrderedPairlist;
 /**
  * Groebner Base sequential algorithm.
  * Implements Groebner bases and GB test.
+ * @param <C> coefficient type
  * @author Heinz Kredel
  */
 
@@ -48,7 +49,6 @@ public class GroebnerBaseSeq<C extends RingElem<C>>
 
     /**
      * Groebner base using pairlist class.
-     * @typeparam C coefficient type.
      * @param modv module variable number.
      * @param F polynomial list.
      * @return GB(F) a Groebner base of F.

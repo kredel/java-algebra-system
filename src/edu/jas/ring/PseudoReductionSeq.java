@@ -21,6 +21,7 @@ import edu.jas.structure.RingElem;
  * Coefficients of polynomials must not be from a field, 
  * i.e. the fraction free reduction is implemented.
  * Implements normalform.
+ * @param <C> coefficient type
  * @author Heinz Kredel
  */
 
@@ -40,7 +41,6 @@ public class PseudoReductionSeq<C extends RingElem<C>>
 
     /**
      * Normalform.
-     * @typeparam C coefficient type.
      * @param Ap polynomial.
      * @param Pp polynomial list.
      * @return nf(Ap) with respect to Pp.
@@ -126,7 +126,6 @@ public class PseudoReductionSeq<C extends RingElem<C>>
 
     /**
      * Normalform.
-     * @typeparam C coefficient type.
      * @param Pp polynomial list.
      * @param Ap polynomial.
      * @return ( nf(Ap), mf ) with respect to Pp and 
@@ -225,7 +224,6 @@ public class PseudoReductionSeq<C extends RingElem<C>>
      * Compute first the multiplication factor <code>m</code> 
      * with <code>normalform(Pp,Ap,m)</code>,
      * then call this method with <code>normalform(row,Pp,m*Ap)</code>.
-     * @typeparam C coefficient type.
      * @param row recording matrix, is modified.
      * @param Pp a polynomial list for reduction.
      * @param Ap a polynomial.
