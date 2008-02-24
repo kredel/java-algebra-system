@@ -24,6 +24,7 @@ import edu.jas.structure.RingElem;
  * Only the coefficients are modeled with generic types,
  * the exponents are fixed to ExpVector with long entries 
  * (this will eventually be changed in the future). 
+ * @param <C> coefficient type
  * @author Heinz Kredel
  */
 
@@ -113,13 +114,11 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
 
         GenSolvablePolynomial<C> C1 = null;
         GenSolvablePolynomial<C> C2 = null;
-        //Map C = Cp.getMap();
-        Map<ExpVector,C> A = val; //this.getMap();
-        Map<ExpVector,C> B = Bp.val; //getMap();
+        Map<ExpVector,C> A = val; 
+        Map<ExpVector,C> B = Bp.val; 
         Set<Map.Entry<ExpVector,C>> Bk = B.entrySet();
         for ( Map.Entry<ExpVector,C> y:  A.entrySet() ) {
             C a = y.getValue(); 
-            //logger.debug("a = " + a);
             ExpVector e = y.getKey(); 
             if ( debug ) logger.debug("e = " + e);
             int[] ep = e.dependencyOnVariables();
@@ -130,7 +129,6 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
             int el1s = ring.nvar + 1 - el1; 
             for ( Map.Entry<ExpVector,C> x: Bk ) {
                 C b = x.getValue(); 
-                //logger.debug("b = " + b);
                 ExpVector f = x.getKey(); 
                 if ( debug ) logger.debug("f = " + f);
                 int[] fp = f.dependencyOnVariables();
@@ -139,11 +137,13 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
                    fl1 = fp[fp.length-1];
                 }
                 int fl1s = ring.nvar + 1 - fl1; 
-                if ( debug ) logger.debug("el1s = " + el1s + " fl1s = " + fl1s);
+                if ( debug ) {
+                   logger.debug("el1s = " + el1s + " fl1s = " + fl1s);
+                }
                 GenSolvablePolynomial<C> Cs = null;
                 if ( el1s <= fl1s ) { // symmetric
                     ExpVector g = ExpVector.EVSUM(e,f); 
-                    if ( debug ) logger.debug("g = " + g);
+                    //if ( debug ) logger.debug("g = " + g);
                     Cs = (GenSolvablePolynomial<C>)zero.sum( one, g ); // symmetric!
                     //Cs = new GenSolvablePolynomial<C>(ring,one,g); // symmetric!
                 } else { // unsymmetric
@@ -153,8 +153,8 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
                     ExpVector e4;
                     ExpVector f1 = f.subst(fl1,0);
                     ExpVector f2 = Z.subst(fl1,f.getVal(fl1));
-                    if ( debug ) logger.debug("e1 = " + e1 + " e2 = " + e2);
-                    if ( debug ) logger.debug("f1 = " + f1 + " f2 = " + f2);
+                    //if ( debug ) logger.debug("e1 = " + e1 + " e2 = " + e2);
+                    //if ( debug ) logger.debug("f1 = " + f1 + " f2 = " + f2);
                     TableRelation<C> rel = ring.table.lookup(e2,f2); 
                     //logger.info("relation = " + rel);
                     Cs = rel.p; //ring.copy( rel.p ); // do not clone() 
@@ -187,7 +187,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
                 C c = a.multiply(b);
                 //logger.debug("c = " + c);
                 Cs = Cs.multiply( c ); // symmetric!
-                if ( debug ) logger.debug("Cs = " + Cs);
+                //if ( debug ) logger.debug("Cs = " + Cs);
                 Cp = (GenSolvablePolynomial<C>)Cp.sum( Cs );
             }
         }
@@ -203,7 +203,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
      * @return this*b, where * is usual multiplication.
      */
     @Override
-     public GenSolvablePolynomial<C> multiply(C b) {  
+    public GenSolvablePolynomial<C> multiply(C b) {  
         GenSolvablePolynomial<C> Cp = ring.getZERO().clone(); 
         if ( b == null || b.isZERO() ) { 
             return Cp;
@@ -212,11 +212,8 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
         Map<ExpVector,C> Am = val; 
         for ( Map.Entry<ExpVector,C> y: Am.entrySet() ) { 
             ExpVector e = y.getKey(); 
-            //System.out.println("e = " + e);
             C a = y.getValue(); 
-            //System.out.println("a = " + a);
             C c = a.multiply(b);
-            //System.out.println("c = " + c);
             Cm.put( e, c );
         }
         return Cp;
@@ -231,7 +228,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
      * where * denotes solvable multiplication.
      */
     @Override
-     public GenSolvablePolynomial<C> multiply(ExpVector e) {  
+    public GenSolvablePolynomial<C> multiply(ExpVector e) {  
         GenSolvablePolynomial<C> Cp = ring.getZERO().clone(); 
         if ( e == null || e.isZERO() ) { 
             return this;
@@ -251,7 +248,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
      * where * denotes solvable multiplication.
      */
     @Override
-     public GenSolvablePolynomial<C> multiply(C b, ExpVector e) {  
+    public GenSolvablePolynomial<C> multiply(C b, ExpVector e) {  
         GenSolvablePolynomial<C> Cp = ring.getZERO().clone(); 
         if ( b == null || b.isZERO() ) { 
             return Cp;
@@ -314,11 +311,8 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
         Map<ExpVector,C> Am = val; 
         for ( Map.Entry<ExpVector,C> y: Am.entrySet() ) { 
             ExpVector e = y.getKey(); 
-            //System.out.println("e = " + e);
             C a = y.getValue(); 
-            //System.out.println("a = " + a);
             C c = b.multiply(a);
-            //System.out.println("c = " + c);
             Cm.put( e, c );
         }
         return Cp;
@@ -339,20 +333,4 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
         return multiplyLeft( m.getValue(), m.getKey() );
     }
 
-
-    /* @inherit 
-     * Extend variables. Used e.g. in module embedding.
-     * Extend all ExpVectors by i elements and multiply by x_j^k.
-     */
-
-
-    /* @inherit 
-     * Contract variables. Used e.g. in module embedding.
-     * remove i elements of each ExpVector.
-     */
-
-     /* @inherit
-     * Reverse variables. Used e.g. in opposite rings.
-     */
-  
 }

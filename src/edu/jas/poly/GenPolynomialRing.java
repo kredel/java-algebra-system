@@ -39,6 +39,7 @@ import edu.jas.application.QuotientRing;
  * GenPolynomialRing generic polynomial factory implementing RingFactory;
  * Factory for n-variate ordered polynomials over C.
  * Almost immutable object, except variable names.
+ * @param <C> coefficient type
  * @author Heinz Kredel
  */
 
@@ -610,7 +611,6 @@ public class GenPolynomialRing<C extends RingElem<C> >
 
     /**
      * Generate univariate polynomial in a given variable.
-     * @typeparam C coefficient type.
      * @param i the index of the variable.
      * @return X_i as univariate polynomial.
      */
@@ -621,7 +621,6 @@ public class GenPolynomialRing<C extends RingElem<C> >
 
     /**
      * Generate univariate polynomial in a given variable with given exponent.
-     * @typeparam C coefficient type.
      * @param i the index of the variable.
      * @param e the exponent of the variable.
      * @return X_i^e as univariate polynomial.
@@ -633,7 +632,6 @@ public class GenPolynomialRing<C extends RingElem<C> >
 
     /**
      * Generate univariate polynomial in a given variable with given exponent.
-     * @typeparam C coefficient type.
      * @param modv number of module variables.
      * @param i the index of the variable.
      * @param e the exponent of the variable.
@@ -656,7 +654,6 @@ public class GenPolynomialRing<C extends RingElem<C> >
 
     /**
      * Generate list of univariate polynomials in all variables.
-     * @typeparam C coefficient type.
      * @return List(X_1,...,X_n) a list of univariate polynomials.
      */
     public List<? extends GenPolynomial<C>> univariateList() {
@@ -666,7 +663,6 @@ public class GenPolynomialRing<C extends RingElem<C> >
 
     /**
      * Generate list of univariate polynomials in all variables.
-     * @typeparam C coefficient type.
      * @param modv number of module variables.
      * @return List(X_1,...,X_n) a list of univariate polynomials.
      */
@@ -677,7 +673,6 @@ public class GenPolynomialRing<C extends RingElem<C> >
 
     /**
      * Generate list of univariate polynomials in all variables with given exponent.
-     * @typeparam C coefficient type.
      * @param modv number of module variables.
      * @param e the exponent of the variables.
      * @return List(X_1^e,...,X_n^e) a list of univariate polynomials.

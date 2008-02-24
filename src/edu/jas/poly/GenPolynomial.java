@@ -35,6 +35,7 @@ import edu.jas.poly.GenPolynomialRing;
  * (this will eventually be changed in the future).
  * C can also be a non integral domain, e.g. a ModInteger, 
  * i.e. it may contain zero divisors, since multiply() does now check for zeros.
+ * @param <C> coefficient type
  * @author Heinz Kredel
  */
 

@@ -36,6 +36,7 @@ import edu.jas.poly.ExpVector;
  * a relation table.
  * Almost immutable object, except variable names and  
  * relation table contents.
+ * @param <C> coefficient type.
  * @author Heinz Kredel
  */
 
@@ -169,26 +170,10 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
     public String toString() {
         String res = super.toString();
         if ( PrettyPrint.isTrue() ) {
-           /*
-           res = coFac.getClass().getSimpleName()
-                 + "(" 
-                 + varsToString()
-                 + ") " 
-                 + tord.toString()
-           */
            res += "\n"
                 + table.toString(vars);
         } else {
-           /*
-           res = this.getClass().getSimpleName() 
-                 + "[ " // + coFac.toString() + " : "
-                 + coFac.getClass().getSimpleName()
-                 + ", " + nvar
-                 + ", " + tord.toString()
-                 + ", " + varsToString()
-            */
            res += ", #rel = " + table.size();
-           //     + " ]";
         }
         return res;
     }
@@ -198,7 +183,7 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
-    @SuppressWarnings("unchecked") // not jet working
+    @SuppressWarnings("unchecked") 
     public boolean equals( Object other ) { 
         if ( ! (other instanceof GenSolvablePolynomialRing) ) {
            return false;
@@ -239,7 +224,7 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
      * @return 0 as GenSolvablePolynomial<C>.
      */
     @Override
-     public GenSolvablePolynomial<C> getZERO() {
+    public GenSolvablePolynomial<C> getZERO() {
         return ZERO;
     }
 
@@ -248,7 +233,7 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
      * @return 1 as GenSolvablePolynomial<C>.
      */
     @Override
-     public GenSolvablePolynomial<C> getONE() {
+    public GenSolvablePolynomial<C> getONE() {
         return ONE;
     }
 
@@ -258,7 +243,7 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
      * @return true if this ring is commutative, else false.
      */
     @Override
-     public boolean isCommutative() {
+    public boolean isCommutative() {
         if ( table.size() == 0 ) {
            return super.isCommutative();
         }
@@ -270,11 +255,10 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
     /**
      * Query if this ring is associative.
      * Test if the relations define an associative solvable ring.
-     * @typeparam C coefficient type.
      * @return true, if this ring is associative, else false.
      */
     @Override
-     public boolean isAssociative() {
+    public boolean isAssociative() {
         GenSolvablePolynomial<C> Xi;
         GenSolvablePolynomial<C> Xj;
         GenSolvablePolynomial<C> Xk;
@@ -308,7 +292,7 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
      * @return a GenSolvablePolynomial<C>.
      */
     @Override
-     public GenSolvablePolynomial<C> fromInteger(long a) {
+    public GenSolvablePolynomial<C> fromInteger(long a) {
         return new GenSolvablePolynomial<C>( this, coFac.fromInteger(a), 
                                                    evzero );
     }
@@ -320,7 +304,7 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
      * @return a GenSolvablePolynomial<C>.
      */
     @Override
-     public GenSolvablePolynomial<C> fromInteger(BigInteger a) {
+    public GenSolvablePolynomial<C> fromInteger(BigInteger a) {
         return new GenSolvablePolynomial<C>( this, coFac.fromInteger(a), 
                                                    evzero );
     }
@@ -337,7 +321,7 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
      * @return a random solvable polynomial.
      */
     @Override
-     public GenSolvablePolynomial<C> random(int n) {
+    public GenSolvablePolynomial<C> random(int n) {
         return random(n,random);
     }
  
@@ -354,7 +338,7 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
      * @return a random solvable polynomial.
      */
     @Override
-     public GenSolvablePolynomial<C> random(int n, Random rnd) {
+    public GenSolvablePolynomial<C> random(int n, Random rnd) {
         if ( nvar == 1 ) {
             return random(5,n,n,0.7f,rnd);
         } else {
@@ -372,7 +356,7 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
      * @return a random solvable polynomial.
      */
     @Override
-     public GenSolvablePolynomial<C> random(int k, int l, int d, float q) {
+    public GenSolvablePolynomial<C> random(int k, int l, int d, float q) {
         return random(k,l,d,q,random);
     }
 
@@ -387,8 +371,8 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
      * @return a random solvable polynomial.
      */
     @Override
-     public GenSolvablePolynomial<C> random(int k, int l, int d, float q,
-                                   Random rnd) {
+    public GenSolvablePolynomial<C> random(int k, int l, int d, float q,
+                                           Random rnd) {
         GenSolvablePolynomial<C> r = getZERO(); //.clone();
                  // copy( ZERO ); 
                  // new GenPolynomial<C>( this, getZERO().val );
@@ -401,7 +385,6 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
             r = (GenSolvablePolynomial<C>)r.sum(a,e); 
                 // somewhat inefficient but clean
         }
-        // System.out.println("r = " + r);
         return r;
     }
 
@@ -412,7 +395,6 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
      * @return a copy of c.
      */
     public GenSolvablePolynomial<C> copy(GenSolvablePolynomial<C> c) {
-        //System.out.println("GSP copy = " + this);
         return new GenSolvablePolynomial<C>( this, c.val );
     }
 
@@ -423,7 +405,7 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
      * @return GenSolvablePolynomial from s.
      */
     @Override
-     public GenSolvablePolynomial<C> parse(String s) {
+    public GenSolvablePolynomial<C> parse(String s) {
         //return getZERO();
         return parse( new StringReader(s) );
     }
@@ -435,8 +417,8 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
      * @return next GenSolvablePolynomial from r.
      */
     @Override
-     public GenSolvablePolynomial<C> parse(Reader r) {
-        //return getZERO();
+    @SuppressWarnings("unchecked") 
+    public GenSolvablePolynomial<C> parse(Reader r) {
         GenPolynomialTokenizer pt = new GenPolynomialTokenizer(this,r);
         GenSolvablePolynomial<C> p = null;
         try {
@@ -451,81 +433,76 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
 
     /**
      * Generate univariate solvable polynomial in a given variable.
-     * @typeparam C coefficient type.
      * @param i the index of the variable.
      * @return X_i as solvable univariate polynomial.
      */
     @Override
-     public GenSolvablePolynomial<C> univariate(int i) {
+    public GenSolvablePolynomial<C> univariate(int i) {
         return (GenSolvablePolynomial<C>)super.univariate(i);
     }
 
 
     /**
      * Generate univariate solvable polynomial in a given variable with given exponent.
-     * @typeparam C coefficient type.
      * @param i the index of the variable.
      * @param e the exponent of the variable.
      * @return X_i^e as solvable univariate polynomial.
      */
     @Override
-     public GenSolvablePolynomial<C> univariate(int i,long e) {
+    public GenSolvablePolynomial<C> univariate(int i,long e) {
         return (GenSolvablePolynomial<C>)super.univariate(i,e);
     }
 
 
     /**
      * Generate univariate solvable polynomial in a given variable with given exponent.
-     * @typeparam C coefficient type.
      * @param modv number of module variables.
      * @param i the index of the variable.
      * @param e the exponent of the variable.
      * @return X_i^e as solvable univariate polynomial.
      */
     @Override
-     public GenSolvablePolynomial<C> univariate(int modv,int i,long e) {
+    public GenSolvablePolynomial<C> univariate(int modv,int i,long e) {
         return (GenSolvablePolynomial<C>)super.univariate(modv,i,e);
     }
 
 
     /**
      * Generate list of univariate polynomials in all variables.
-     * @typeparam C coefficient type.
      * @return List(X_1,...,X_n) a list of univariate polynomials.
      */
     @Override
-     public List<GenSolvablePolynomial<C>> univariateList() {
-     //return castToSolvableList( super.univariateList() );
-     return univariateList(0,1L);
+    public List<GenSolvablePolynomial<C>> univariateList() {
+        //return castToSolvableList( super.univariateList() );
+        return univariateList(0,1L);
     }
 
 
     /**
      * Generate list of univariate polynomials in all variables.
-     * @typeparam C coefficient type.
      * @param modv number of module variables.
      * @return List(X_1,...,X_n) a list of univariate polynomials.
      */
     @Override
-     public List<GenSolvablePolynomial<C>> univariateList(int modv) {
-     return univariateList(modv,1L);
+    public List<GenSolvablePolynomial<C>> univariateList(int modv) {
+        return univariateList(modv,1L);
     }
 
 
     /**
      * Generate list of univariate polynomials in all variables with given exponent.
-     * @typeparam C coefficient type.
      * @param modv number of module variables.
      * @param e the exponent of the variables.
      * @return List(X_1^e,...,X_n^e) a list of univariate polynomials.
      */
     @Override
-     public List<GenSolvablePolynomial<C>> univariateList(int modv, long e) {
-        List<GenSolvablePolynomial<C>> pols = new ArrayList<GenSolvablePolynomial<C>>(nvar);
-     for ( int i = 0; i < nvar-modv; i++ ) {
+    public List<GenSolvablePolynomial<C>> univariateList(int modv, long e) {
+        List<GenSolvablePolynomial<C>> pols 
+            = new ArrayList<GenSolvablePolynomial<C>>(nvar);
+        for ( int i = 0; i < nvar-modv; i++ ) {
             GenSolvablePolynomial<C> p = univariate(modv,i,e);
-         pols.add( p );
-     }
+            pols.add( p );
+        }
         return pols;
     }
 
@@ -561,7 +538,7 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
      * @return extended solvable polynomial ring factory.
      */
     @Override
-     public GenSolvablePolynomialRing<C> extend(int i) {
+    public GenSolvablePolynomialRing<C> extend(int i) {
         GenPolynomialRing<C> pfac = super.extend(i);
         GenSolvablePolynomialRing<C> spfac 
             = new GenSolvablePolynomialRing<C>(pfac.coFac, pfac.nvar,
@@ -578,7 +555,7 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
      * @return contracted solvable polynomial ring factory.
      */
     @Override
-     public GenSolvablePolynomialRing<C> contract(int i) {
+    public GenSolvablePolynomialRing<C> contract(int i) {
         GenPolynomialRing<C> pfac = super.contract(i);
         GenSolvablePolynomialRing<C> spfac 
             = new GenSolvablePolynomialRing<C>(pfac.coFac, pfac.nvar,
@@ -593,7 +570,7 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
      * @return solvable polynomial ring factory with reversed variables.
      */
     @Override
-     public GenSolvablePolynomialRing<C> reverse() {
+    public GenSolvablePolynomialRing<C> reverse() {
         return reverse(false);
     }
 
@@ -604,7 +581,7 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
      * @return solvable polynomial ring factory with reversed variables.
      */
     @Override
-     public GenSolvablePolynomialRing<C> reverse(boolean partial) {
+    public GenSolvablePolynomialRing<C> reverse(boolean partial) {
         GenPolynomialRing<C> pfac = super.reverse(partial);
         GenSolvablePolynomialRing<C> spfac 
             = new GenSolvablePolynomialRing<C>(pfac.coFac, pfac.nvar,
