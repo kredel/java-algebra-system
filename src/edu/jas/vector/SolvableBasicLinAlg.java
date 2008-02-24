@@ -18,6 +18,7 @@ import edu.jas.structure.RingElem;
 /**
  * Basic linear algebra for solvable polynomials.
  * Implements basic linear algebra computations and tests.
+ * @param <C> coefficient type
  * @author Heinz Kredel
  */
 
@@ -36,7 +37,6 @@ public class SolvableBasicLinAlg<C extends RingElem<C>> {
 
     /**
      * Scalar product of vectors of polynomials.
-     * @typeparam C coefficient type.
      * @param r a polynomial list.
      * @param F a polynomial list.
      * @return the left scalar product of r and F.
@@ -68,7 +68,6 @@ public class SolvableBasicLinAlg<C extends RingElem<C>> {
 
     /**
      * Product of vector and matrix of polynomials.
-     * @typeparam C coefficient type.
      * @param r a polynomial list.
      * @param F a polynomial list.
      * @return the left scalar product of r and F.
@@ -104,7 +103,6 @@ public class SolvableBasicLinAlg<C extends RingElem<C>> {
 
     /**
      * Product of vector and matrix of polynomials.
-     * @typeparam C coefficient type.
      * @param r a polynomial list.
      * @param F a polynomial list.
      * @return the right scalar product of r and F.
@@ -140,7 +138,6 @@ public class SolvableBasicLinAlg<C extends RingElem<C>> {
 
     /**
      * Addition of vectors of polynomials.
-     * @typeparam C coefficient type.
      * @param a a polynomial list.
      * @param b a polynomial list.
      * @return a+b, the vector sum of a and b.
@@ -174,7 +171,6 @@ public class SolvableBasicLinAlg<C extends RingElem<C>> {
 
     /**
      * test vector of zero polynomials.
-     * @typeparam C coefficient type.
      * @param a a polynomial list.
      * @return true, if all polynomial in a are zero, else false.
      */
@@ -197,7 +193,6 @@ public class SolvableBasicLinAlg<C extends RingElem<C>> {
 
     /**
      * Scalar product of polynomial with vector of polynomials.
-     * @typeparam C coefficient type.
      * @param p a polynomial.
      * @param F a polynomial list.
      * @return the left scalar product of p and F.
@@ -217,7 +212,6 @@ public class SolvableBasicLinAlg<C extends RingElem<C>> {
 
     /**
      * Scalar product of vector of polynomials with polynomial.
-     * @typeparam C coefficient type.
      * @param F a polynomial list.
      * @param p a polynomial.
      * @return the left scalar product of F and p.
