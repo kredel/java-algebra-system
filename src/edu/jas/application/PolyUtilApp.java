@@ -39,8 +39,9 @@ import edu.jas.ring.GroebnerBaseSeq;
 
 
 /**
- * Polynomial utilities for applications, e.g. 
- * conversion ExpVector to Product
+ * Polynomial utilities for applications,  
+ * for example conversion ExpVector to Product.
+ * @param <C> coefficient type
  * @author Heinz Kredel
  */
 public class PolyUtilApp<C extends RingElem<C> > {
@@ -173,10 +174,7 @@ public class PolyUtilApp<C extends RingElem<C> > {
         for ( Map.Entry<ExpVector,C> y: A.getMap().entrySet() ) {
             ExpVector e = y.getKey();
             C a = y.getValue();
-            //System.out.println("e = " + e);
-            //System.out.println("a = " + a);
             Product<GenPolynomial<C>> p = toProduct(pfac,a,e);
-            //System.out.println("p = " + p);
             P = P.sum( p );
         }
         return P;
@@ -200,10 +198,7 @@ public class PolyUtilApp<C extends RingElem<C> > {
         for ( Map.Entry<ExpVector,C> y: A.getMap().entrySet() ) {
             ExpVector e = y.getKey();
             C a = y.getValue();
-            //System.out.println("e = " + e);
-            //System.out.println("a = " + a);
             Product<AlgebraicNumber<C>> p = toProduct(pfac,a,e);
-            //System.out.println("p = " + p);
             P = P.sum( p );
         }
         return P;
@@ -230,10 +225,7 @@ public class PolyUtilApp<C extends RingElem<C> > {
         for ( Map.Entry<ExpVector,GenPolynomial<C>> y: A.getMap().entrySet() ) {
             ExpVector e = y.getKey();
             GenPolynomial<C> a = y.getValue();
-            //System.out.println("e = " + e);
-            //System.out.println("a = " + a);
             Product<AlgebraicNumber<C>> p = toANProduct(pfac,a);
-            //System.out.println("p = " + p);
             P = P.sum( p , e );
         }
         return P;
@@ -309,10 +301,7 @@ public class PolyUtilApp<C extends RingElem<C> > {
         for ( Map.Entry<ExpVector,C> y: A.getMap().entrySet() ) {
             ExpVector e = y.getKey();
             C a = y.getValue();
-            //System.out.println("e = " + e);
-            //System.out.println("a = " + a);
             Product<C> p = toProductGen(rfac,a);
-            //System.out.println("p = " + p);
             P = P.sum( p , e );
         }
         return P;
@@ -386,10 +375,7 @@ public class PolyUtilApp<C extends RingElem<C> > {
         for ( Map.Entry<ExpVector,BigInteger> y: A.getMap().entrySet() ) {
             ExpVector e = y.getKey();
             BigInteger a = y.getValue();
-            //System.out.println("e = " + e);
-            //System.out.println("a = " + a);
             Product<ModInteger> p = toProduct(fac,a);
-            //System.out.println("p = " + p);
             P = P.sum( p , e );
         }
         return P;
@@ -625,10 +611,7 @@ public class PolyUtilApp<C extends RingElem<C> > {
         for ( Map.Entry<ExpVector,GenPolynomial<BigRational>> y: A.getMap().entrySet() ) {
             ExpVector e = y.getKey();
             GenPolynomial<BigRational> a = y.getValue();
-            //System.out.println("e = " + e);
-            //System.out.println("a = " + a);
             p = toProductRes(fac,a);
-            //System.out.println("p = " + p);
             P = P.sum( p , e );
         }
         return P;
@@ -796,13 +779,9 @@ public class PolyUtilApp<C extends RingElem<C> > {
         for ( Map.Entry<ExpVector,Product<Residue<BigRational>>> y: P.getMap().entrySet() ) {
             ExpVector e = y.getKey();
             Product<Residue<BigRational>> a = y.getValue();
-            //System.out.println("e = " + e);
-            //System.out.println("a = " + a);
-
             Residue<BigRational> r = a.get(i);
             if ( r != null && !r.isZERO() ) {
                GenPolynomial<BigRational> p = r.val;
-               //System.out.println("p = " + p);
                b = b.sum( p , e );
             }
         }
@@ -1155,16 +1134,13 @@ public class PolyUtilApp<C extends RingElem<C> > {
         List<GenPolynomial<Product<C>>> M 
             = new ArrayList<GenPolynomial<Product<C>>>( L.size() );
         for ( GenPolynomial<Product<C>> a : L ) {
-            //System.out.println("a      = " + a);
             GenPolynomial<Product<C>> b 
                 = PolyUtilApp.<C>productCoefficientExtension(a,i,j);
-            //System.out.println("b      = " + b);
             if ( ! b.isZERO() ) {
                M.add( b );
             }
         }
         return M;
     }
-
 
 }
