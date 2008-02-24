@@ -8,6 +8,7 @@ package edu.jas.structure;
 /**
  * Field element interface.
  * Empty interface since inverse is already in RingElem.
+ * @param <C> field element type
  * @author Heinz Kredel
  */
 

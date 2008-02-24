@@ -8,6 +8,7 @@ package edu.jas.structure;
 /**
  * Regular ring element interface.
  * Defines idempotent operations and idempotent tests.
+ * @param <C> regular ring element type
  * @author Heinz Kredel
  */
 

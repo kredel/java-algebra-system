@@ -7,9 +7,9 @@ package edu.jas.structure;
 
 /**
  * Algabra element interface.
+ * @param <A> algebra type
+ * @param <C> scalar type
  * @author Heinz Kredel
- * @typeparam A algebra type.
- * @typeparam C scalar type.
  */
 public interface AlgebraElem<A extends AlgebraElem<A,C>,
                              C extends RingElem<C>> 

@@ -8,6 +8,7 @@ package edu.jas.structure;
 /**
  * Star ring element interface.
  * Defines norm and conjugation.
+ * @param <C> ring element type
  * @author Heinz Kredel
  */
 

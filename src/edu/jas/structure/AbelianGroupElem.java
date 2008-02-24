@@ -8,8 +8,8 @@ package edu.jas.structure;
 /**
  * Abelian group element interface.
  * Defines the additive methods.
+ * @param <C> element type
  * @author Heinz Kredel
- * @typeparam C element type.
  */
 
 public interface AbelianGroupElem<C extends AbelianGroupElem<C>> 

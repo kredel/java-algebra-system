@@ -10,8 +10,8 @@ import java.io.Serializable;
 /**
  * Element interface.
  * Basic functionality of elements, e.g. compareTo, equals, clone.
+ * @param <C> element type.
  * @author Heinz Kredel
- * @typeparam C element type.
  */
 
 public interface Element<C extends Element<C>> extends Cloneable, 

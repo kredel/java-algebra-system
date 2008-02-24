@@ -9,8 +9,8 @@ package edu.jas.structure;
  * Ring element interface.
  * Combines aditive and multiplicative methods.
  * Adds also gcd because of polynomials.
+ * @param <C> ring element type
  * @author Heinz Kredel
- * @typeparam C element type.
  */
 
 public interface RingElem<C extends RingElem<C>> 

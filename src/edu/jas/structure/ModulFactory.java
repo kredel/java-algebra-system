@@ -10,9 +10,9 @@ import java.util.List;
 /**
  * Module factory interface.
  * Defines conversion from list and sparse random.
+ * @param <M> module type
+ * @param <C> coefficient type
  * @author Heinz Kredel
- * @param M module type.
- * @typeparam C coefficient type.
  */
 public interface ModulFactory<M extends ModulElem<M,C>,
                               C extends RingElem<C>> 

@@ -11,9 +11,9 @@ import java.util.List;
 /**
  * Module element interface.
  * Defines scalar operations.
+ * @param <M> module type
+ * @param <C> scalar type
  * @author Heinz Kredel
- * @typeparam M module type.
- * @typeparam C scalar type.
  */
 public interface ModulElem<M extends ModulElem<M,C>,
                            C extends RingElem<C>> 

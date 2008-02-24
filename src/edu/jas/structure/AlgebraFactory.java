@@ -10,9 +10,9 @@ import java.util.List;
 /**
  * Algebra factory interface.
  * Defines conversion from list of lists and sparse random.
+ * @param <A> algebra type
+ * @param <C> coefficient type
  * @author Heinz Kredel
- * @param A algebra type.
- * @typeparam C coefficient type.
  */
 public interface AlgebraFactory<A extends AlgebraElem<A,C>,
                                 C extends RingElem<C>> 

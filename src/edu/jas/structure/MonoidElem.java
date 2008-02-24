@@ -8,8 +8,8 @@ package edu.jas.structure;
 /**
  * Monoid element interface.
  * Defines the multiplicative methods.
+ * @param <C> element type
  * @author Heinz Kredel
- * @typeparam C element type.
  */
 
 public interface MonoidElem<C extends MonoidElem<C>> 
