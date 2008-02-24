@@ -16,6 +16,7 @@ import edu.jas.vector.GenVector;
 /**
  * Syzygy interface.
  * Defines Syzygy computations and tests.
+ * @param <C> coefficient type
  * @author Heinz Kredel
  */
 
@@ -25,7 +26,6 @@ public interface Syzygy<C extends RingElem<C>>  {
     /**
      * Syzygy module from Groebner base.
      * F must be a Groebner base.
-     * @typeparam C coefficient type.
      * @param F a Groebner base.
      * @return syz(F), a basis for the module of syzygies for F.
      */
@@ -36,7 +36,6 @@ public interface Syzygy<C extends RingElem<C>>  {
     /**
      * Syzygy module from Groebner base.
      * F must be a Groebner base.
-     * @typeparam C coefficient type.
      * @param modv number of module variables.
      * @param F a Groebner base.
      * @return syz(F), a basis for the module of syzygies for F.
@@ -48,7 +47,6 @@ public interface Syzygy<C extends RingElem<C>>  {
     /**
      * Syzygy module from Groebner base.
      * v must be a Groebner base.
-     * @typeparam C coefficient type.
      * @param modv number of module variables.
      * @param v a Groebner base.
      * @return syz(v), a basis for the module of syzygies for v.
@@ -60,7 +58,6 @@ public interface Syzygy<C extends RingElem<C>>  {
     /**
      * Syzygy module from module Groebner base.
      * M must be a module Groebner base.
-     * @typeparam C coefficient type.
      * @param M a module Groebner base.
      * @return syz(M), a basis for the module of syzygies for M.
      */
@@ -70,7 +67,6 @@ public interface Syzygy<C extends RingElem<C>>  {
 
     /**
      * Test if sysygy.
-     * @typeparam C coefficient type.
      * @param Z list of sysygies.
      * @param F a polynomial list.
      * @return true, if Z is a list of syzygies for F, else false.
@@ -82,7 +78,6 @@ public interface Syzygy<C extends RingElem<C>>  {
 
     /**
      * Test if sysygy of modules.
-     * @typeparam C coefficient type.
      * @param Z list of sysygies.
      * @param F a module list.
      * @return true, if Z is a list of syzygies for F, else false.
@@ -94,7 +89,6 @@ public interface Syzygy<C extends RingElem<C>>  {
     /**
      * Resolution of a module.
      * Only with direct GBs.
-     * @typeparam C coefficient type.
      * @param M a module list of a Groebner basis.
      * @return a resolution of M.
      */
@@ -105,7 +99,6 @@ public interface Syzygy<C extends RingElem<C>>  {
     /**
      * Resolution of a polynomial list.
      * Only with direct GBs.
-     * @typeparam C coefficient type.
      * @param F a polynomial list of a Groebner basis.
      * @return a resolution of F.
      */
@@ -115,7 +108,6 @@ public interface Syzygy<C extends RingElem<C>>  {
 
     /**
      * Resolution of a polynomial list.
-     * @typeparam C coefficient type.
      * @param F a polynomial list of an arbitrary basis.
      * @return a resolution of F.
      */
@@ -125,7 +117,6 @@ public interface Syzygy<C extends RingElem<C>>  {
 
     /**
      * Resolution of a module.
-     * @typeparam C coefficient type.
      * @param M a module list of an arbitrary basis.
      * @return a resolution of M.
      */
@@ -135,7 +126,6 @@ public interface Syzygy<C extends RingElem<C>>  {
 
     /**
      * Syzygy module from arbitrary base.
-     * @typeparam C coefficient type.
      * @param F a polynomial list.
      * @return syz(F), a basis for the module of syzygies for F.
      */
@@ -145,7 +135,6 @@ public interface Syzygy<C extends RingElem<C>>  {
 
     /**
      * Syzygy module from arbitrary base.
-     * @typeparam C coefficient type.
      * @param modv number of module variables.
      * @param F a polynomial list.
      * @return syz(F), a basis for the module of syzygies for F.
@@ -156,7 +145,6 @@ public interface Syzygy<C extends RingElem<C>>  {
 
     /**
      * Syzygy module from arbitrary module base.
-     * @typeparam C coefficient type.
      * @param M an arbitrary module base.
      * @return syz(M), a basis for the module of syzygies for M.
      */

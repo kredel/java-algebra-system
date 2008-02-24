@@ -15,6 +15,7 @@ import edu.jas.vector.ModuleList;
 /**
  * Module solvable Groebner Bases interface.
  * Defines modull solvabe Groebner bases and GB test.
+ * @param <C> coefficient type
  * @author Heinz Kredel
  */
 
@@ -23,7 +24,6 @@ public interface ModSolvableGroebnerBase<C extends RingElem<C>> {
 
     /**
      * Module left Groebner base test.
-     * @typeparam C coefficient type.
      * @param modv number of modul variables.
      * @param F a module basis.
      * @return true, if F is a left Groebner base, else false.
@@ -34,7 +34,6 @@ public interface ModSolvableGroebnerBase<C extends RingElem<C>> {
 
     /**
      * Module left Groebner base test.
-     * @typeparam C coefficient type.
      * @param M a module basis.
      * @return true, if M is a left Groebner base, else false.
      */
@@ -44,7 +43,6 @@ public interface ModSolvableGroebnerBase<C extends RingElem<C>> {
 
     /**
      * Left Groebner base using pairlist class.
-     * @typeparam C coefficient type.
      * @param modv number of modul variables.
      * @param F a module basis.
      * @return leftGB(F) a left Groebner base for F.
@@ -55,7 +53,6 @@ public interface ModSolvableGroebnerBase<C extends RingElem<C>> {
 
     /**
      * Left Groebner base using pairlist class.
-     * @typeparam C coefficient type.
      * @param M a module basis.
      * @return leftGB(M) a left Groebner base for M.
      */
@@ -65,7 +62,6 @@ public interface ModSolvableGroebnerBase<C extends RingElem<C>> {
 
     /**
      * Module twosided Groebner base test.
-     * @typeparam C coefficient type.
      * @param modv number of modul variables.
      * @param F a module basis.
      * @return true, if F is a twosided Groebner base, else false.
@@ -76,7 +72,6 @@ public interface ModSolvableGroebnerBase<C extends RingElem<C>> {
 
     /**
      * Module twosided Groebner base test.
-     * @typeparam C coefficient type.
      * @param M a module basis.
      * @return true, if M is a twosided Groebner base, else false.
      */
@@ -86,7 +81,6 @@ public interface ModSolvableGroebnerBase<C extends RingElem<C>> {
 
     /**
      * Twosided Groebner base using pairlist class.
-     * @typeparam C coefficient type.
      * @param modv number of modul variables.
      * @param F a module basis.
      * @return tsGB(F) a twosided Groebner base for F.
@@ -97,7 +91,6 @@ public interface ModSolvableGroebnerBase<C extends RingElem<C>> {
 
     /**
      * Twosided Groebner base using pairlist class.
-     * @typeparam C coefficient type.
      * @param M a module basis.
      * @return tsGB(M) a twosided Groebner base for M.
      */
@@ -107,7 +100,6 @@ public interface ModSolvableGroebnerBase<C extends RingElem<C>> {
 
     /**
      * Module right Groebner base test.
-     * @typeparam C coefficient type.
      * @param modv number of modul variables.
      * @param F a module basis.
      * @return true, if F is a right Groebner base, else false.
@@ -118,7 +110,6 @@ public interface ModSolvableGroebnerBase<C extends RingElem<C>> {
 
     /**
      * Module right Groebner base test.
-     * @typeparam C coefficient type.
      * @param M a module basis.
      * @return true, if M is a right Groebner base, else false.
      */
@@ -128,7 +119,6 @@ public interface ModSolvableGroebnerBase<C extends RingElem<C>> {
 
     /**
      * Right Groebner base using pairlist class.
-     * @typeparam C coefficient type.
      * @param modv number of modul variables.
      * @param F a module basis.
      * @return rightGB(F) a right Groebner base for F.
@@ -139,7 +129,6 @@ public interface ModSolvableGroebnerBase<C extends RingElem<C>> {
 
     /**
      * Right Groebner base using pairlist class.
-     * @typeparam C coefficient type.
      * @param M a module basis.
      * @return rightGB(M) a right Groebner base for M.
      */
