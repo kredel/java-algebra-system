@@ -72,11 +72,8 @@ public class RCGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
      * @param rf coefficient ring factory.
      * <b>Note:</b> red must be an instance of PseudoReductionSeq.
      */
-    public RCGroebnerBasePseudoSeq(RReduction<C> red, RingFactory<C> rf) {
+    public RCGroebnerBasePseudoSeq(RPseudoReduction<C> red, RingFactory<C> rf) {
         super(red);
-        if ( ! (red instanceof RPseudoReductionSeq) ) {
-           throw new IllegalArgumentException("red must be a RPseudoReductionSeq");
-        }
         cofac = rf;
         engine = (GreatestCommonDivisorAbstract<C>)GCDFactory.<C>getImplementation( rf );
         //not used: engine = (GreatestCommonDivisorAbstract<C>)GCDFactory.<C>getProxy( rf );
@@ -90,7 +87,7 @@ public class RCGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
      * @return GB(F) a R-Groebner base of F.
      */
     @Override
-     public List<GenPolynomial<C>> 
+    public List<GenPolynomial<C>> 
              GB( int modv, 
                  List<GenPolynomial<C>> F ) {  
         if ( F == null ) {
@@ -251,7 +248,7 @@ public class RCGroebnerBasePseudoSeq<C extends RegularRingElem<C>>
      * @todo use primitivePart
      */
     @Override
-     public List<GenPolynomial<C>> 
+    public List<GenPolynomial<C>> 
         minimalGB(List<GenPolynomial<C>> Gp) {  
         if ( Gp == null || Gp.size() <= 1 ) {
             return Gp;
