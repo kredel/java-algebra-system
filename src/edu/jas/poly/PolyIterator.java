@@ -43,7 +43,6 @@ public class PolyIterator<C extends RingElem<C> >
      * Test for availability of a next monomial.
      * @return true if the iteration has more monomials, else false.
      */
-    @Override
     public boolean hasNext() {
         return ms.hasNext();
     }
@@ -53,7 +52,6 @@ public class PolyIterator<C extends RingElem<C> >
      * Get next monomial element.
      * @return next monomial.
      */
-    @Override
     public Monomial<C> next() {
         return new Monomial<C>( ms.next() );
     }
@@ -62,7 +60,6 @@ public class PolyIterator<C extends RingElem<C> >
     /** 
      * Remove next monomial from underlying set if allowed.
      */
-    @Override
     public void remove() {
         ms.remove();
     }
