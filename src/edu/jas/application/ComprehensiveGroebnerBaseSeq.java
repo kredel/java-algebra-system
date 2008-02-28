@@ -85,13 +85,54 @@ public class ComprehensiveGroebnerBaseSeq<C extends RegularRingElem<C>>
 
 
     /**
+     * R-Groebner base test.
+     * @param modv module variable number.
+     * @param F polynomial list.
+     * @return true, if F is a R-Groebner base, else false.
+     */
+    @Override
+    public boolean isGB(int modv, List<GenPolynomial<C>> F) {  
+        if ( F == null ) {
+           return true;
+        }
+        GenPolynomial<C> pi, pj, s, h;
+        for ( int i = 0; i < F.size(); i++ ) {
+            pi = F.get(i);
+            for ( int j = i+1; j < F.size(); j++ ) {
+                pj = F.get(j);
+                if ( ! red.moduleCriterion( modv, pi, pj ) ) {
+                   continue;
+                }
+                // red.criterion4 not applicable
+                s = red.SPolynomial( pi, pj );
+                if ( s.isZERO() ) {
+                   continue;
+                }
+                s = red.normalform( F, s );
+                if ( ! s.isZERO() ) {
+                   if ( debug ) {
+                      System.out.println("p"+i+" = "+pi);
+                      System.out.println("p"+j+" = "+pj);
+                      System.out.println("s-pol = " + red.SPolynomial( pi, pj ) );
+                      System.out.println("s-pol("+i+","+j+") != 0: " + s);
+                      //System.out.println("red = " + red.getClass().getName());
+                   }
+                   return false;
+                }
+            }
+        }
+        return true;
+    }
+
+
+    /**
      * R-Groebner base using pairlist class.
      * @param modv module variable number.
      * @param F polynomial list.
      * @return GB(F) a R-Groebner base of F.
      */
     @Override
-     public List<GenPolynomial<C>> 
+    public List<GenPolynomial<C>> 
              GB( int modv, 
                  List<GenPolynomial<C>> F ) {  
         if ( F == null ) {
@@ -121,9 +162,9 @@ public class ComprehensiveGroebnerBaseSeq<C extends RegularRingElem<C>>
         System.out.println("initial rcgb: " + PolyUtilApp.productSliceToString( PolyUtilApp.productSlice( (PolynomialList)PL ) ) );
 
         /* boolean closure */
-        List<GenPolynomial<C>> bcF = red.reducedBooleanClosure(G);
-        logger.info("#bcF-#F = " + (bcF.size()-G.size()));
-        G = bcF;
+        //List<GenPolynomial<C>> bcF = red.reducedBooleanClosure(G);
+        //logger.info("#bcF-#F = " + (bcF.size()-G.size()));
+        //G = bcF;
         if ( G.size() <= 1 ) {
            return G; // since boolean closed and no threads are activated
         }
@@ -156,70 +197,71 @@ public class ComprehensiveGroebnerBaseSeq<C extends RegularRingElem<C>>
                  logger.info("pi    = " + pi );
                  logger.info("pj    = " + pj );
               }
-              // S-polynomial -----------------------
-              if ( true ) {
-              //if ( pair.getUseCriterion3() ) { // correct ?
-              //if ( pair.getUseCriterion4() ) { // correct ? no, not applicable
-                  S = red.SPolynomial( pi, pj );
-                  if ( S.isZERO() ) {
-                      pair.setZero();
-                      continue;
-                  }
-                  //System.out.println("S("+pair.pi+","+pair.pj+") = " + S);
-                  if ( logger.isDebugEnabled() ) {
-                      logger.debug("ht(S) = " + S.leadingExpVector() );
-                  }
+              if ( ! red.moduleCriterion( modv, pi, pj ) ) {
+                 continue;
+              }
 
-                  H = red.normalform( G, S );
-                  if ( H.isZERO() ) {
-                      pair.setZero();
-                      continue;
+              // S-polynomial -----------------------
+              //if ( pair.getUseCriterion3() ) { // correct ?
+              //if ( pair.getUseCriterion4() ) { // correct ?
+              S = red.SPolynomial( pi, pj );
+              if ( S.isZERO() ) {
+                  pair.setZero();
+                  continue;
+              }
+              //System.out.println("S("+pair.pi+","+pair.pj+") = " + S);
+              if ( logger.isDebugEnabled() ) {
+                  logger.debug("ht(S) = " + S.leadingExpVector() );
+              }
+
+              H = red.normalform( G, S );
+              if ( H.isZERO() ) {
+                  pair.setZero();
+                  continue;
+              }
+              if ( logger.isDebugEnabled() ) {
+                  logger.debug("ht(H) = " + H.leadingExpVector() );
+              }
+              if ( /*usePP &&*/ !H.isConstant() ) { // do not remove all factors
+                  H = engine.basePrimitivePart(H); 
+              }
+              H = H.abs(); // not monic, no field
+              if ( H.isConstant() && H.leadingBaseCoefficient().isFull() ) { 
+                  // mostly useless
+                  G.clear(); G.add( H );
+                  return G; // not boolean closed ok, no threads are activated
+              }
+              if ( logger.isDebugEnabled() ) {
+                  logger.debug("H = " + H );
+              }
+              if ( !H.isZERO() ) {
+                  logger.info("Sred = " + H);
+                  int g1 = G.size();
+                  PL = new PolynomialList<C>(pring,G);
+                  PL = PolyUtilApp.<C>productDecomposition( PL, H );
+                  //G.add( H );
+                  G = PL.list; // overwite G, pairlist not up-to-date
+                  int g2 = G.size(); 
+                  for ( int i = g1; i < g2; i++ ) { // g2-g1 == 1
+                      //GenPolynomial<C> hh = G.get( i ); // since hh stays != 0
+                      GenPolynomial<C> h = G.remove( g1 ); // since hh stays != 0
+                      //logger.info("extend(Sred)_"+i+" = " + h);
+                      //bcH = red.reducedBooleanClosure(G,hh);
+                      //logger.info("#bcH = " + bcH.size());
+                      //for ( GenPolynomial<C> h: bcH ) {
+                      if ( /*usePP &&*/ !h.isConstant() ) { // do not remove all factors
+                          h = engine.basePrimitivePart(h); 
+                      }
+                      h = h.abs(); // monic() not ok, since no field
+                      logger.info("decomp(Sred) = " + h);
+                      G.add( h );
+                      pairlist.put( h ); // old polynomials not up-to-date
+                      //}
                   }
-                  if ( logger.isDebugEnabled() ) {
-                      logger.debug("ht(H) = " + H.leadingExpVector() );
-                  }
-                  if ( /*usePP &&*/ !H.isConstant() ) { // do not remove all factors
-                     H = engine.basePrimitivePart(H); 
-                  }
-                  H = H.abs(); // not monic, no field
-                  if ( H.isConstant() && H.leadingBaseCoefficient().isFull() ) { 
-                     // mostly useless
-                     G.clear(); G.add( H );
-                     return G; // not boolean closed ok, no threads are activated
-                  }
-                  if ( logger.isDebugEnabled() ) {
-                      logger.debug("H = " + H );
-                  }
-                  if ( !H.isZERO() ) {
-                     logger.info("Sred = " + H);
-                     int g1 = G.size();
-                     PL = new PolynomialList<C>(pring,G);
-                     PL = PolyUtilApp.<C>productDecomposition( PL, H );
-                     //G.add( H );
-                     G = PL.list; // overwite G, pairlist not up-to-date
-                     int g2 = G.size(); 
-                     for ( int i = g1; i < g2; i++ ) { // g2-g1 == 1
-                         //GenPolynomial<C> hh = G.get( i ); // since hh stays != 0
-                         GenPolynomial<C> hh = G.remove( g1 ); // since hh stays != 0
-                         logger.info("extend(Sred)_"+i+" = " + hh);
-                         bcH = red.reducedBooleanClosure(G,hh);
-                         //logger.info("#bcH = " + bcH.size());
-                         //G.addAll( bcH );
-                         for ( GenPolynomial<C> h: bcH ) {
-                             if ( /*usePP &&*/ !h.isConstant() ) { // do not remove all factors
-                                h = engine.basePrimitivePart(h); 
-                             }
-                             h = h.abs(); // monic() not ok, since no field
-                             logger.info("bc(extend(Sred)) = " + h);
-                             G.add( h );
-                             pairlist.put( h ); // old polynomials not up-to-date
-                         }
-                     }
-                     if ( debug ) {
-                        if ( !pair.getUseCriterion3() || !pair.getUseCriterion4() ) {
-                           logger.info("H != 0 but: " + pair);
-                        }
-                     }
+                  if ( debug ) {
+                      if ( !pair.getUseCriterion3() || !pair.getUseCriterion4() ) {
+                          logger.info("H != 0 but: " + pair);
+                      }
                   }
               }
         }
@@ -252,7 +294,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends RegularRingElem<C>>
      * @todo use primitivePart
      */
     @Override
-     public List<GenPolynomial<C>> 
+    public List<GenPolynomial<C>> 
         minimalGB(List<GenPolynomial<C>> Gp) {  
         if ( Gp == null || Gp.size() <= 1 ) {
             return Gp;
@@ -309,6 +351,8 @@ public class ComprehensiveGroebnerBaseSeq<C extends RegularRingElem<C>>
                a = engine.basePrimitivePart(a); // not a.monic() since no field
             }
             a = a.abs();
+            G.add( a );
+            /*
             if ( red.isBooleanClosed(a) ) {
                List<GenPolynomial<C>> ff;
                ff = new ArrayList<GenPolynomial<C>>( G );
@@ -326,8 +370,10 @@ public class ComprehensiveGroebnerBaseSeq<C extends RegularRingElem<C>>
             } else {
                 G.add( b ); // do not reduce 
             }
+            */
         }
         /* stratify: collect polynomials with equal leading terms */
+        /*
         ExpVector e, f;
         F = new ArrayList<GenPolynomial<C>>( G.size() );
         List<GenPolynomial<C>> ff;
@@ -357,151 +403,11 @@ public class ComprehensiveGroebnerBaseSeq<C extends RegularRingElem<C>>
         } else {
            logger.info("minGB not stratified " + F);
         }
+        */
         logger.info("minGB end   with " + G.size() );
         return G;
     }
 
-
-    /*
-     * Minimal ordered Groebner basis.
-     * @param Gp a Groebner base.
-     * @return a reduced Groebner base of Gp.
-     * @todo use primitivePart
-     */
-    public List<GenPolynomial<C>> 
-                minimalGBtesting(List<GenPolynomial<C>> Gp) {  
-        if ( Gp == null || Gp.size() <= 1 ) {
-            return Gp;
-        }
-        // remove zero polynomials
-        List<GenPolynomial<C>> G
-            = new ArrayList<GenPolynomial<C>>( Gp.size() );
-        for ( GenPolynomial<C> a : Gp ) { 
-            if ( a != null && !a.isZERO() ) { // always true in GB()
-               // already positive a = a.abs();
-               G.add( a );
-            }
-        }
-        if ( G.size() <= 1 ) {
-           //wg monic do not return G;
-        }
-        // remove top reducible polynomials
-        GenPolynomial<C> a, b;
-        List<GenPolynomial<C>> F;
-        List<GenPolynomial<C>> bcH;
-        F = new ArrayList<GenPolynomial<C>>( G.size() );
-        while ( G.size() > 0 ) {
-            a = G.remove(0); b = a;
-            if ( red.isTopReducible(G,a) || red.isTopReducible(F,a) ) {
-               // drop polynomial 
-               if ( true || debug ) {
-                  List<GenPolynomial<C>> ff;
-                  ff = new ArrayList<GenPolynomial<C>>( G );
-                  ff.addAll(F);
-                  a = red.normalform( ff, a );
-                  if ( !a.isZERO() ) {
-                     System.out.println("minGB nf(a) != 0 " + a);
-                     bcH = red.reducedBooleanClosure(G,a);
-                     if ( bcH.size() > 1 ) { // never happend so far
-                        System.out.println("minGB not bc: bcH size = " + bcH.size());
-                        F.add(b); // do not replace, stay with b
-                     } else {
-                        //System.out.println("minGB add bc(a): a = " + a + ", bc(a) = " + bcH.get(0));
-                        F.add(b); // do not replace, stay with b
-                        //F.addAll( bcH );
-                     }
-                  } else {
-                     if ( !isGB( ff ) ) {
-                        System.out.println("minGB not dropped " + b);
-                        F.add(b);
-                     } else {
-                        System.out.println("minGB dropped " + b);
-                     }
-                  }
-               }
-            } else { // not top reducible, keep polynomial
-               F.add(a);
-            }
-        }
-        G = F;
-        if ( G.size() <= 1 ) {
-           // wg monic return G;
-        }
-        // reduce remaining polynomials
-        int len = G.size();
-        int el = 0;
-        //System.out.println("minGB reducing " + len);
-        while ( el < len ) {
-            el++;
-            a = G.remove(0); b = a;
-            //System.out.println("minGB doing " + el + ", a = " + a);
-            a = red.normalform( G, a );
-            //not bc: 
-            a = engine.basePrimitivePart(a); // not a.monic() since no field
-            if ( red.isBooleanClosed(a) ) {
-               List<GenPolynomial<C>> ff;
-               ff = new ArrayList<GenPolynomial<C>>( G );
-               ff.add( a );
-               if ( isGB( ff ) ) {
-                  System.out.println("minGB reduced " + b + " to " +a);
-                  G.add( a ); 
-               } else {
-                  System.out.println("minGB not reduced " + b + " to " +a);
-                  G.add( b ); 
-               }
-               continue;
-            }
-            System.out.println("minGB not bc: a = " + a + "\n BC(a) = " + red.booleanClosure(a) + ", BR(a) = " + red.booleanRemainder(a) );
-            bcH = red.reducedBooleanClosure(G,a);
-            if ( bcH.size() > 1 ) {
-               System.out.println("minGB not bc: bcH size = " + bcH.size());
-               G.add( b ); // do not reduce
-            } else {
-               //G.addAll( bcH );
-               G.add( b ); // do not reduce
-               for ( GenPolynomial<C> h: bcH ) {
-                   h = engine.basePrimitivePart(h); 
-                   h = h.abs(); // monic() not ok, since no field
-                   //G.add( h );
-               }
-            }
-        }
-        // make abs if possible
-        F = new ArrayList<GenPolynomial<C>>( G.size() );
-        for ( GenPolynomial<C> p : G ) {
-            a = p.abs();
-            F.add( a );
-        }
-        G = F;
-
-        if ( false ) {
-           return G;
-        }
-
-        /* stratify: collect polynomials with equal leading terms */
-        ExpVector e, f;
-        F = new ArrayList<GenPolynomial<C>>( G.size() );
-        for ( int i = 0; i < G.size(); i++ ) {
-            a = G.get(i);
-            if ( a == null || a.isZERO() ) {
-               continue;
-            }
-            e = a.leadingExpVector();
-            for ( int j = i+1; j < G.size(); j++ ) {
-                b = G.get(j);
-                if ( b == null || b.isZERO() ) {
-                   continue;
-                }
-                f = b.leadingExpVector();
-                if ( e.equals(f) ) {
-                   //System.out.println("minGB e == f: " + a + ", " + b);
-                   a = a.sum(b);
-                   G.set(j,null);
-                }
-            }
-            F.add( a );
-        }
-        G = F;
 
         /* info on boolean algebra element blocks 
         Map<C,List<GenPolynomial<C>>> bd = new TreeMap<C,List<GenPolynomial<C>>>();
@@ -522,7 +428,5 @@ public class ComprehensiveGroebnerBaseSeq<C extends RegularRingElem<C>>
         }
         System.out.println();
         */
-        return G;
-    }
 
 }
