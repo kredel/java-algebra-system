@@ -56,6 +56,7 @@ print;
 startLog();
 
 from edu.jas.ring import RCGroebnerBasePseudoSeq;  
+from edu.jas.application import ComprehensiveGroebnerBaseSeq;  
 
 pr = Ring( ring=pl.ring );
 
@@ -65,15 +66,18 @@ print "Ideal of product decomposition: \n" + str(pf);
 print;
 
 cofac = pl.ring.coFac;
-rgbp = RCGroebnerBasePseudoSeq( cofac );
+#rgbp = RCGroebnerBasePseudoSeq( cofac );
+cgb = ComprehensiveGroebnerBaseSeq( cofac );
 
 #sys.exit();
 
-bg = rgbp.isGB(pl.list);
+#bg = rgbp.isGB(pl.list);
+bg = cgb.isGB(pl.list);
 print "isGB:", bg;
 print;
 
-rg = rgbp.GB(pl.list);
+#rg = rgbp.GB(pl.list);
+rg = cgb.GB(pl.list);
 
 pg = pr.ideal( list=rg );
 print "Ideal, GB: " + str(pg);
@@ -92,7 +96,8 @@ print "product slice:", ssl;
 print;
 
 
-bg = rgbp.isGB(rg);
+#bg = rgbp.isGB(rg);
+bg = cgb.isGB(rg);
 print "isGB:", bg;
 print;
 

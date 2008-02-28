@@ -2,6 +2,19 @@
 # jython examples for jas.
 # $Id$
 #
+## \begin{PossoExample}
+## \Name{Hawes2}
+## \Parameters{a;b;c}
+## \Variables{x;y[2];z[2]}
+## \begin{Equations}
+## x+2y_1z_1+3ay_1^2+5y_1^4+2cy_1 \&
+## x+2y_2z_2+3ay_2^2+5y_2^4+2cy_2 \&
+## 2 z_2+6ay_2+20 y_2^3+2c \&
+## 3 z_1^2+y_1^2+b \&
+## 3z_2^2+y_2^2+b \&
+## \end{Equations}
+## \end{PossoExample}
+
 
 import sys;
 
@@ -10,25 +23,28 @@ from jas import Ideal
 from jas import startLog
 from jas import terminate
 
+#startLog();
 
-# Nabashima, ISSAC 2007, example F6
-# integral function coefficients
+# Hawes & Gibson example 2
+# rational function coefficients
 
-r = Ring( "IntFunc(a, b,c, d) (x) L" );
+r = Ring( "IntFunc(a, c, b) (y2, y1, z1, z2, x) L" );
 print "Ring: " + str(r);
 print;
 
 ps = """
 (
- ( x^4 + { a } x^3 + { b } x2 + { c } x + { d } ),
- ( 4 x^3 + { 3 a } x^2 + { 2 b } x + { c } )
+ ( x + 2 y1 z1 + { 3 a } y1^2 + 5 y1^4 + { 2 c } y1 ),
+ ( x + 2 y2 z2 + { 3 a } y2^2 + 5 y2^4 + { 2 c } y2 ), 
+ ( 2 z2 + { 6 a } y2 + 20 y2^3 + { 2 c } ), 
+ ( 3 z1^2 + y1^2 + { b } ), 
+ ( 3 z2^2 + y2^2 + { b } ) 
 ) 
 """;
 
 f = r.ideal( ps );
 print "Ideal: " + str(f);
 print;
-
 
 from edu.jas.application import PolyUtilApp;
 from edu.jas.poly import PolynomialList;
@@ -48,11 +64,8 @@ print;
 print "product slice:", ssl;
 print;
 
-#sys.exit();
 
-startLog();
-
-from edu.jas.ring import RCGroebnerBasePseudoSeq;  
+from edu.jas.ring import GroebnerBasePseudoSeq;
 from edu.jas.application import ComprehensiveGroebnerBaseSeq;  
 
 pr = Ring( ring=pl.ring );
@@ -67,6 +80,8 @@ cofac = pl.ring.coFac;
 cgb = ComprehensiveGroebnerBaseSeq( cofac );
 
 #sys.exit();
+
+#startLog();
 
 #bg = rgbp.isGB(pl.list);
 bg = cgb.isGB(pl.list);
@@ -92,11 +107,13 @@ print;
 print "product slice:", ssl;
 print;
 
-
 #bg = rgbp.isGB(rg);
 bg = cgb.isGB(rg);
 print "isGB:", bg;
 print;
 
+startLog();
+
 terminate();
 #sys.exit();
+
