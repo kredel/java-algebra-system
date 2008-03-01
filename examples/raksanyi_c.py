@@ -53,7 +53,7 @@ print;
 
 #sys.exit();
 
-startLog();
+#startLog();
 
 from edu.jas.ring import RCGroebnerBasePseudoSeq;  
 from edu.jas.application import ComprehensiveGroebnerBaseSeq;  
@@ -101,5 +101,18 @@ bg = cgb.isGB(rg);
 print "isGB:", bg;
 print;
 
+cpl = PolyUtilApp.productSlice( rgl, 0 );
+cplist = cpl.list;
+bg = cgb.isCGB(0,cplist);
+print "isCGB:", bg;
+print;
+
+cpl = PolyUtilApp.productSlicesUnion( rgl );
+cplist = cpl.list;
+bg = cgb.isCGB(0,cplist);
+print "isCGB:", bg;
+print;
+
+startLog();
 terminate();
 #sys.exit();
