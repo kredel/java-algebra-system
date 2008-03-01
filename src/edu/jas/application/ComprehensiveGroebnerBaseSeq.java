@@ -112,7 +112,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>,
         this.red = red;
         pcofac = rf;
         GenPolynomialRing<C> rfp = new GenPolynomialRing<C>( rf, 0 );
-        Ideal<C> id = new Ideal<C>( rfp, null );
+        Ideal<C> id = new Ideal<C>( rfp, new ArrayList<GenPolynomial<C>>(), true );
         RingFactory<Residue<C>> rr = new ResidueRing<C>( id );
         List<RingFactory<Residue<C>>> rl = new ArrayList<RingFactory<Residue<C>>>();
         rl.add(rr);
@@ -213,8 +213,9 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>,
         }
 
         /* initial decompostition */
+        /*
         GenPolynomialRing<C> rfp = new GenPolynomialRing<C>( pcofac, cpring );
-        Ideal<C> id = new Ideal<C>( rfp, null );
+        Ideal<C> id = new Ideal<C>( rfp, new ArrayList<GenPolynomial<C>>(), true );
         RingFactory<Residue<C>> rr = new ResidueRing<C>( id );
         List<RingFactory<Residue<C>>> rl = new ArrayList<RingFactory<Residue<C>>>();
         rl.add(rr);
@@ -226,9 +227,14 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>,
         for ( GenPolynomial<GenPolynomial<C>> g : Gr ) {
             G.add( (GenPolynomial) g ); // hack but decomp works with it
         }
+        */
         PolynomialList<R> PL = null;
-        PL = new PolynomialList<R>(rpring,G);
+        //PL = new PolynomialList<R>(rpring,G);
+        PL = (PolynomialList) PolyUtilApp.<C>productEmptyDecomposition( Gr );
+        GenPolynomialRing<R> rpring = PL.ring;
+
         PL = PolyUtilApp.<R>productDecomposition( PL );
+        List<GenPolynomial<R>> G;
         G = PL.list;
         System.out.println("initial rcgb: " + PolyUtilApp.productSliceToString( PolyUtilApp.productSlice( (PolynomialList)PL ) ) );
 
