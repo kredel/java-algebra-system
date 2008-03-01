@@ -38,7 +38,8 @@ import edu.jas.ufd.GCDFactory;
 
 
 /**
- * Comprehensive Groebner Base with regular ring pseudo reduction sequential algorithm.
+ * Comprehensive Groebner Base with 
+ * regular ring pseudo reduction sequential algorithm.
  * Implements C-Groebner bases and GB test.
  * @param <C> coefficient type
  * @author Heinz Kredel
