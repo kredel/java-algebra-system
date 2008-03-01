@@ -31,6 +31,36 @@ f = r.ideal( ps );
 print "Ideal: " + str(f);
 print;
 
+from edu.jas.application import PolyUtilApp;
+from edu.jas.poly import PolynomialList;
+from edu.jas.application import ComprehensiveGroebnerBaseSeq;  
+
+startLog();
+
+cofac = r.ring.coFac.coFac;
+print "cofac:", cofac;
+print;
+cgb = ComprehensiveGroebnerBaseSeq( cofac );
+#print "cgb:", cgb;
+#print;
+
+cl = cgb.GB( f.list );
+#print "cl:", cl;
+#print;
+c = r.ideal( list=cl );
+print "c:", c;
+print;
+
+bg = cgb.isGB( cl );
+if bg:
+    print "isCGB: true";
+else:
+    print "isCGB: false";
+print;
+
+terminate();
+#------------------------------------------
+sys.exit();
 
 from edu.jas.application import PolyUtilApp;
 from edu.jas.poly import PolynomialList;

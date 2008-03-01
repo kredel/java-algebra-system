@@ -30,9 +30,40 @@ f = r.ideal( ps );
 print "Ideal: " + str(f);
 print;
 
-
 from edu.jas.application import PolyUtilApp;
 from edu.jas.poly import PolynomialList;
+from edu.jas.application import ComprehensiveGroebnerBaseSeq;  
+
+startLog();
+
+cofac = r.ring.coFac.coFac;
+print "cofac:", cofac;
+print;
+cgb = ComprehensiveGroebnerBaseSeq( cofac );
+#print "cgb:", cgb;
+#print;
+
+print "f.list:", f.list;
+print;
+cl = cgb.GB( f.list );
+#print "cl:", cl;
+#print;
+c = r.ideal( list=cl );
+print "c:", c;
+print;
+
+bg = cgb.isGB(cl);
+if bg:
+    print "isCGB: true";
+else:
+    print "isCGB: false";
+print;
+
+terminate();
+#------------------------------------------
+sys.exit();
+
+from edu.jas.ring import RCGroebnerBasePseudoSeq;  
 
 pl = PolyUtilApp.productEmptyDecomposition( f.list );
 print;
@@ -51,11 +82,6 @@ print;
 
 #sys.exit();
 
-startLog();
-
-from edu.jas.ring import RCGroebnerBasePseudoSeq;  
-from edu.jas.application import ComprehensiveGroebnerBaseSeq;  
-
 pr = Ring( ring=pl.ring );
 
 pf = pr.ideal( list=pl.list );
@@ -63,11 +89,6 @@ print;
 print "Ideal of product decomposition: \n" + str(pf);
 print;
 
-cofac = pl.ring.coFac;
-#rgbp = RCGroebnerBasePseudoSeq( cofac );
-cgb = ComprehensiveGroebnerBaseSeq( cofac );
-
-#sys.exit();
 
 #bg = rgbp.isGB(pl.list);
 bg = cgb.isGB(pl.list);
