@@ -6,9 +6,15 @@ package edu.jas.application;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.Collection;
+
 import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingFactory;
+import edu.jas.structure.RingElem;
+import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RegularRingElem;
 
 import edu.jas.poly.ExpVector;
@@ -16,6 +22,9 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolynomialList;
 
+import edu.jas.ring.GroebnerBase;
+import edu.jas.ring.GroebnerBaseAbstract;
+import edu.jas.ring.GroebnerBaseSeq;
 import edu.jas.ring.OrderedRPairlist;
 import edu.jas.ring.RGroebnerBaseSeq;
 import edu.jas.ring.RPseudoReduction;
@@ -36,7 +45,7 @@ import edu.jas.ufd.GCDFactory;
  */
 
 public class ComprehensiveGroebnerBaseSeq<C extends RegularRingElem<C>> 
-       extends RGroebnerBaseSeq<C>  {
+       extends GroebnerBaseAbstract<C>  {
 
 
     private static final Logger logger = Logger.getLogger(ComprehensiveGroebnerBaseSeq.class);
@@ -47,6 +56,18 @@ public class ComprehensiveGroebnerBaseSeq<C extends RegularRingElem<C>>
      * Greatest common divisor engine for coefficient content and primitive parts.
      */
     protected final GreatestCommonDivisorAbstract<C> engine;
+
+
+    /**
+     * Coefficient Groebner base engine.
+     */
+    protected final GroebnerBase<Residue<C>> bb;
+
+
+    /**
+     * Reduction engine.
+     */
+    protected RPseudoReduction<C> red;  // shadow super.red 
 
 
     /**
@@ -74,18 +95,19 @@ public class ComprehensiveGroebnerBaseSeq<C extends RegularRingElem<C>>
      * Constructor.
      * @param red R-pseuso-Reduction engine
      * @param rf coefficient ring factory.
-     * <b>Note:</b> red must be an instance of PseudoReductionSeq.
      */
     public ComprehensiveGroebnerBaseSeq(RPseudoReduction<C> red, RingFactory<C> rf) {
         super(red);
+        this.red = red;
         cofac = rf;
         engine = (GreatestCommonDivisorAbstract<C>)GCDFactory.<C>getImplementation( rf );
         //not used: engine = (GreatestCommonDivisorAbstract<C>)GCDFactory.<C>getProxy( rf );
+        bb = new GroebnerBaseSeq<Residue<C>>();
     }
 
 
     /**
-     * R-Groebner base test.
+     * ?-Groebner base test.
      * @param modv module variable number.
      * @param F polynomial list.
      * @return true, if F is a R-Groebner base, else false.
@@ -119,6 +141,61 @@ public class ComprehensiveGroebnerBaseSeq<C extends RegularRingElem<C>>
                    }
                    return false;
                 }
+            }
+        }
+        return true;
+    }
+
+
+    /**
+     * Comprehensive-Groebner base test.
+     * @param modv module variable number.
+     * @param F polynomial list.
+     * @return true, if F is a Comprehensive-Groebner base, else false.
+     */
+    //@Override
+    public boolean isCGB(int modv, List<GenPolynomial<GenPolynomial<C>>> F) {  
+        if ( F == null || F.size() == 0 ) {
+           return true;
+        }
+        GenPolynomialRing<GenPolynomial<C>> pfac = null;
+        Set<GenPolynomial<C>> coeffs = new HashSet<GenPolynomial<C>>();
+        for ( GenPolynomial<GenPolynomial<C>> p : F ) {
+            if ( pfac == null ) {
+               if ( p != null ) {
+                  pfac = p.ring;
+               }
+            }
+            Collection<GenPolynomial<C>> c = p.getMap().values();
+            coeffs.addAll( c );
+        }
+        if ( coeffs.size() == 0 ) { // only zero polynomials
+            return true;
+        }
+        System.out.println("isCGB coeffs = " + coeffs);
+        GenPolynomial<C> a = coeffs.iterator().next();
+        RingFactory<GenPolynomial<C>> rcfac = a.ring;
+        GenPolynomialRing<C> cfac = (GenPolynomialRing<C>)rcfac;
+        PolynomialList<C> plist;
+        List<GenPolynomial<C>> pl;
+        Ideal<C> ideal;
+        List<GenPolynomial<Residue<C>>> f;
+        ResidueRing<C> rfac;
+        GenPolynomialRing<Residue<C>> rpfac;
+        for ( GenPolynomial<C> s : coeffs ) {
+            if ( s.isConstant() ) {
+               continue;
+            }
+            pl = new ArrayList<GenPolynomial<C>>( 1 );
+            pl.add( s );
+            plist = new PolynomialList<C>( cfac, pl );
+            ideal = new Ideal<C>( plist, true ); // one element GB
+            rfac = new ResidueRing<C>( ideal );
+            rpfac = new GenPolynomialRing<Residue<C>>( rfac, pfac );
+            f = PolyUtilApp.<C>toResidue( rpfac, F );
+            System.out.println("isCGB sigma(F) = " + f);
+            if ( ! bb.isGB( f ) ) {
+               return false;
             }
         }
         return true;
@@ -161,10 +238,6 @@ public class ComprehensiveGroebnerBaseSeq<C extends RegularRingElem<C>>
         G = PL.list;
         System.out.println("initial rcgb: " + PolyUtilApp.productSliceToString( PolyUtilApp.productSlice( (PolynomialList)PL ) ) );
 
-        /* boolean closure */
-        //List<GenPolynomial<C>> bcF = red.reducedBooleanClosure(G);
-        //logger.info("#bcF-#F = " + (bcF.size()-G.size()));
-        //G = bcF;
         if ( G.size() <= 1 ) {
            return G; // since boolean closed and no threads are activated
         }
@@ -243,12 +316,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends RegularRingElem<C>>
                   G = PL.list; // overwite G, pairlist not up-to-date
                   int g2 = G.size(); 
                   for ( int i = g1; i < g2; i++ ) { // g2-g1 == 1
-                      //GenPolynomial<C> hh = G.get( i ); // since hh stays != 0
                       GenPolynomial<C> h = G.remove( g1 ); // since hh stays != 0
-                      //logger.info("extend(Sred)_"+i+" = " + h);
-                      //bcH = red.reducedBooleanClosure(G,hh);
-                      //logger.info("#bcH = " + bcH.size());
-                      //for ( GenPolynomial<C> h: bcH ) {
                       if ( /*usePP &&*/ !h.isConstant() ) { // do not remove all factors
                           h = engine.basePrimitivePart(h); 
                       }
@@ -256,7 +324,6 @@ public class ComprehensiveGroebnerBaseSeq<C extends RegularRingElem<C>>
                       logger.info("decomp(Sred) = " + h);
                       G.add( h );
                       pairlist.put( h ); // old polynomials not up-to-date
-                      //}
                   }
                   if ( debug ) {
                       if ( !pair.getUseCriterion3() || !pair.getUseCriterion4() ) {
@@ -279,10 +346,6 @@ public class ComprehensiveGroebnerBaseSeq<C extends RegularRingElem<C>>
 
         G = minimalGB(G);
 
-        //PL = new PolynomialList<C>(pring,G);
-        //System.out.println("GB.slice(0) = " + PolyUtilApp.productSliceRaw(PL,0));
-
-        //G = red.irreducibleSet(G); // not correct since not boolean closed
         return G;
     }
 
