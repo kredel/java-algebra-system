@@ -37,8 +37,8 @@ from edu.jas.application import ComprehensiveGroebnerBaseSeq;
 startLog();
 
 cofac = r.ring.coFac.coFac;
-print "cofac:", cofac;
-print;
+#print "cofac:", cofac;
+#print;
 cgb = ComprehensiveGroebnerBaseSeq( cofac );
 #print "cgb:", cgb;
 #print;
