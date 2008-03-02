@@ -43,8 +43,8 @@ cgb = ComprehensiveGroebnerBaseSeq( cofac );
 #print "cgb:", cgb;
 #print;
 
-print "f.list:", f.list;
-print;
+#print "f.list:", f.list;
+#print;
 cl = cgb.GB( f.list );
 #print "cl:", cl;
 #print;
