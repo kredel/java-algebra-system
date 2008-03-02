@@ -7,6 +7,7 @@ package edu.jas.application;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.Iterator;
 import java.util.HashSet;
 import java.util.Collection;
 
@@ -137,7 +138,29 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>,
             coeffs.addAll( c );
         }
         if ( coeffs.size() == 0 ) { // only zero polynomials
-            return true;
+           return true;
+        }
+        GenPolynomialRing<C> pcfac = (GenPolynomialRing<C>) pfac.coFac;
+        boolean isField = pcfac.coFac.isField();
+        Set<GenPolynomial<C>> cfs = new HashSet<GenPolynomial<C>>();
+        for ( GenPolynomial<C> p : coeffs ) {
+            if ( p.isZERO() || p.isConstant() ) { // all are non zero
+               continue;
+            }
+            if ( isField ) {
+               p = p.monic();
+            } else {
+               p = p.abs();
+            }
+            cfs.add( p );
+        }
+        coeffs = cfs;
+        if ( coeffs.size() == 0 ) { // only constant coefficients
+           if ( ! super.isGB( modv, F ) ) {
+              System.out.println("isCGB F = ");
+              return false;
+           }
+           return true;
         }
         System.out.println("isCGB coeffs = " + coeffs);
         // specialization anf test for GB
@@ -151,9 +174,6 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>,
         ResidueRing<C> rfac;
         GenPolynomialRing<Residue<C>> rpfac;
         for ( GenPolynomial<C> s : coeffs ) { // need power set
-            if ( s.isConstant() ) {
-               continue;
-            }
             pl = new ArrayList<GenPolynomial<C>>( 1 );
             pl.add( s );
             plist = new PolynomialList<C>( cfac, pl );
@@ -161,8 +181,30 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>,
             rfac = new ResidueRing<C>( ideal );
             rpfac = new GenPolynomialRing<Residue<C>>( rfac, pfac );
             f = PolyUtilApp.<C>toResidue( rpfac, F );
-            System.out.println("isCGB sigma(F) = " + f);
-            if ( ! bb.isGB( f ) ) {
+            if ( ! bb.isGB( modv, f ) ) {
+               System.out.println("isCGB sigma(F) = " + f);
+               return false;
+            }
+        }
+        GenPolynomial<C> s1, s2;
+        // not correct
+        for ( Iterator<GenPolynomial<C>> ci = coeffs.iterator(); 
+              ci.hasNext();   ) { // need power set
+            s1 = ci.next();
+            pl = new ArrayList<GenPolynomial<C>>( 2 );
+            pl.add( s1 );
+            if ( !ci.hasNext() ) {
+               break;
+            }
+            s2 = ci.next(); // not correct
+            pl.add( s2 );
+            plist = new PolynomialList<C>( cfac, pl );
+            ideal = new Ideal<C>( plist ); // one element GB
+            rfac = new ResidueRing<C>( ideal );
+            rpfac = new GenPolynomialRing<Residue<C>>( rfac, pfac );
+            f = PolyUtilApp.<C>toResidue( rpfac, F );
+            if ( ! bb.isGB( modv, f ) ) {
+               System.out.println("isCGB sigma(F) = " + f);
                return false;
             }
         }
