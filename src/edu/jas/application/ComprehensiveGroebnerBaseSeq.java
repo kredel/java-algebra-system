@@ -83,13 +83,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>,
     /**
      * Polynomial coefficient ring factory.
      */
-    protected final RingFactory<C> pcofac;
-
-
-    /**
-     * Coefficient ring factory.
-     */
-    protected final RingFactory<R> cofac;
+    protected final RingFactory<C> cofac;
 
 
     /**
@@ -106,21 +100,15 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>,
      * @param red R-pseuso-Reduction engine
      * @param rf base coefficient ring factory.
      */
+    @SuppressWarnings("unchecked") 
     public ComprehensiveGroebnerBaseSeq(RPseudoReduction<R> red, 
                                         RingFactory<C> rf) {
         super(null); // red not possible since type of type
         this.red = red;
-        pcofac = rf;
-        GenPolynomialRing<C> rfp = new GenPolynomialRing<C>( rf, 0 );
-        Ideal<C> id = new Ideal<C>( rfp, new ArrayList<GenPolynomial<C>>(), true );
-        RingFactory<Residue<C>> rr = new ResidueRing<C>( id );
-        List<RingFactory<Residue<C>>> rl = new ArrayList<RingFactory<Residue<C>>>();
-        rl.add(rr);
-        ProductRing<Residue<C>> pr = new ProductRing<Residue<C>>(rl);
-        RingFactory<Product<Residue<C>>> rpr = (RingFactory<Product<Residue<C>>>)pr;
-        cofac = (RingFactory)rpr; // want <R>
-        engine = (GreatestCommonDivisorAbstract<R>)GCDFactory.<R>getImplementation( cofac );
-        //not used: engine = (GreatestCommonDivisorAbstract<R>)GCDFactory.<R>getProxy( rf );
+        cofac = rf;
+        // selection for C but used for R:
+        engine = (GreatestCommonDivisorAbstract<R>) GCDFactory.<C>getImplementation( cofac );
+        //not used: engine = (GreatestCommonDivisorAbstract<C>)GCDFactory.<R>getProxy( rf );
         bb = new GroebnerBaseSeq<Residue<C>>();
     }
 
@@ -136,6 +124,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>,
         if ( F == null || F.size() == 0 ) {
            return true;
         }
+        // collect coefficients
         GenPolynomialRing<GenPolynomial<C>> pfac = null;
         Set<GenPolynomial<C>> coeffs = new HashSet<GenPolynomial<C>>();
         for ( GenPolynomial<GenPolynomial<C>> p : F ) {
@@ -151,6 +140,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>,
             return true;
         }
         System.out.println("isCGB coeffs = " + coeffs);
+        // specialization anf test for GB
         GenPolynomial<C> a = coeffs.iterator().next();
         RingFactory<GenPolynomial<C>> rcfac = a.ring;
         GenPolynomialRing<C> cfac = (GenPolynomialRing<C>)rcfac;
@@ -160,7 +150,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>,
         List<GenPolynomial<Residue<C>>> f;
         ResidueRing<C> rfac;
         GenPolynomialRing<Residue<C>> rpfac;
-        for ( GenPolynomial<C> s : coeffs ) {
+        for ( GenPolynomial<C> s : coeffs ) { // need power set
             if ( s.isConstant() ) {
                continue;
             }
@@ -178,6 +168,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>,
         }
         return true;
     }
+
 
     /**
      * R-Groebner base using pairlist class.
@@ -212,34 +203,16 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>,
             }
         }
 
-        /* initial decompostition */
-        /*
-        GenPolynomialRing<C> rfp = new GenPolynomialRing<C>( pcofac, cpring );
-        Ideal<C> id = new Ideal<C>( rfp, new ArrayList<GenPolynomial<C>>(), true );
-        RingFactory<Residue<C>> rr = new ResidueRing<C>( id );
-        List<RingFactory<Residue<C>>> rl = new ArrayList<RingFactory<Residue<C>>>();
-        rl.add(rr);
-        ProductRing<Residue<C>> pr = new ProductRing<Residue<C>>(rl);
-        RingFactory<Product<Residue<C>>> rpr = (RingFactory<Product<Residue<C>>>)pr;
-        RingFactory<R> rcofac = (RingFactory)rpr; // want <R>
-        GenPolynomialRing<R> rpring = new GenPolynomialRing<R>( rcofac, pring );
-        List<GenPolynomial<R>> G = new ArrayList<GenPolynomial<R>>();
-        for ( GenPolynomial<GenPolynomial<C>> g : Gr ) {
-            G.add( (GenPolynomial) g ); // hack but decomp works with it
-        }
-        */
-        PolynomialList<R> PL = null;
-        //PL = new PolynomialList<R>(rpring,G);
-        PL = (PolynomialList) PolyUtilApp.<C>productEmptyDecomposition( Gr );
+        /* initial setup and starting decompostition */
+        PolynomialList<R> PL
+           = (PolynomialList) PolyUtilApp.<C>productEmptyDecomposition( Gr );
         GenPolynomialRing<R> rpring = PL.ring;
-
         PL = PolyUtilApp.<R>productDecomposition( PL );
-        List<GenPolynomial<R>> G;
-        G = PL.list;
+        List<GenPolynomial<R>> G = PL.list;
         System.out.println("initial rcgb: " + PolyUtilApp.productSliceToString( PolyUtilApp.productSlice( (PolynomialList)PL ) ) );
 
         if ( G.size() <= 1 ) {
-            // return Gr; // since boolean closed and no threads are activated
+           // return Gr; // since boolean closed and no threads are activated
         }
         /* setup pair list */
         OrderedRPairlist<R> pairlist = null; 
@@ -265,7 +238,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>,
 
               pi = G.get( pair.i ); // pair.pi not up-to-date
               pj = G.get( pair.j ); // pair.pj not up-to-date
-              if ( logger.isDebugEnabled() ) {
+              if ( debug ) {
                  logger.info("pi    = " + pi );
                  logger.info("pj    = " + pj );
               }
@@ -282,7 +255,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>,
                   continue;
               }
               //System.out.println("S("+pair.pi+","+pair.pj+") = " + S);
-              if ( logger.isDebugEnabled() ) {
+              if ( debug ) {
                   logger.debug("ht(S) = " + S.leadingExpVector() );
               }
 
@@ -291,7 +264,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>,
                   pair.setZero();
                   continue;
               }
-              if ( logger.isDebugEnabled() ) {
+              if ( debug ) {
                   logger.debug("ht(H) = " + H.leadingExpVector() );
               }
               if ( /*usePP &&*/ !H.isConstant() ) { // do not remove all factors
@@ -304,10 +277,10 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>,
                   break;
                   //return Gr; // not boolean closed ok, no threads are activated
               }
-              if ( logger.isDebugEnabled() ) {
+              if ( debug ) {
                   logger.debug("H = " + H );
               }
-              if ( !H.isZERO() ) {
+              if ( ! H.isZERO() ) {
                   logger.info("Sred = " + H);
                   int g1 = G.size();
                   PL = new PolynomialList<R>(rpring,G);
@@ -316,7 +289,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>,
                   G = PL.list; // overwite G, pairlist not up-to-date
                   int g2 = G.size(); 
                   for ( int i = g1; i < g2; i++ ) { // g2-g1 == 1
-                      GenPolynomial<R> h = G.remove( g1 ); // since hh stays != 0
+                      GenPolynomial<R> h = G.remove( g1 ); // since h stays != 0
                       if ( /*usePP &&*/ !h.isConstant() ) { // do not remove all factors
                           h = engine.basePrimitivePart(h); 
                       }
@@ -325,7 +298,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>,
                       G.add( h );
                       pairlist.put( h ); // old polynomials not up-to-date
                   }
-                  if ( debug ) {
+                  if ( false && debug ) {
                       if ( !pair.getUseCriterion3() || !pair.getUseCriterion4() ) {
                           logger.info("H != 0 but: " + pair);
                       }
@@ -340,7 +313,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>,
                    );
 
         PL = new PolynomialList<R>(rpring,G);
-        System.out.println("\nGB = " + PL);
+        System.out.println("\nRGB = " + PL);
 
         System.out.println("final rcgb: " + PolyUtilApp.productSliceToString( PolyUtilApp.productSlice( (PolynomialList)PL ) ) );
 
@@ -397,6 +370,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>,
                    //  }
                   }
                } else {
+                  logger.info("minGB cannot drop " + b + " reduced to " + a);
                   F.add(a);
                }
             } else { // not top reducible, keep polynomial
@@ -418,80 +392,9 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>,
             }
             a = a.abs();
             G.add( a );
-            /*
-            if ( red.isBooleanClosed(a) ) {
-               List<GenPolynomial<R>> ff;
-               ff = new ArrayList<GenPolynomial<R>>( G );
-               ff.add( a );
-               if ( isGB( ff ) ) {
-                  if ( debug ) {
-                     logger.debug("minGB reduced " + b + " to " +a);
-                  }
-                  G.add( a ); 
-               } else {
-                  logger.info("minGB not reduced " + b + " to " +a);
-                  G.add( b ); 
-               }
-               continue;
-            } else {
-                G.add( b ); // do not reduce 
-            }
-            */
         }
-        /* stratify: collect polynomials with equal leading terms */
-        /*
-        ExpVector e, f;
-        F = new ArrayList<GenPolynomial<R>>( G.size() );
-        List<GenPolynomial<R>> ff;
-        ff = new ArrayList<GenPolynomial<R>>( G );
-        for ( int i = 0; i < ff.size(); i++ ) {
-            a = ff.get(i);
-            if ( a == null || a.isZERO() ) {
-               continue;
-            }
-            e = a.leadingExpVector();
-            for ( int j = i+1; j < ff.size(); j++ ) {
-                b = ff.get(j);
-                if ( b == null || b.isZERO() ) {
-                   continue;
-                }
-                f = b.leadingExpVector();
-                if ( e.equals(f) ) {
-                   //System.out.println("minGB e == f: " + a + ", " + b);
-                   a = a.sum(b);
-                   ff.set(j,null);
-                }
-            }
-            F.add( a );
-        }
-        if ( isGB(F) ) {
-           G = F;
-        } else {
-           logger.info("minGB not stratified " + F);
-        }
-        */
         logger.info("minGB end   with " + G.size() );
         return G;
     }
 
-
-        /* info on boolean algebra element blocks 
-        Map<C,List<GenPolynomial<R>>> bd = new TreeMap<C,List<GenPolynomial<R>>>();
-        for ( GenPolynomialR p : G ) { 
-            C cf = p.leadingBaseCoefficient();
-            cf = cf.idempotent();
-            List<GenPolynomial<R>> block = bd.get( cf );
-            if ( block == null ) {
-               block = new ArrayList<GenPolynomial<R>>();
-            }
-            block.add( p ); 
-            bd.put( cf, block );
-        }
-        System.out.println("\nminGB bd:");
-        for( C k: bd.keySet() ) {
-           System.out.println("\nkey = " + k + ":");
-           System.out.println("val = " + bd.get(k));
-        }
-        System.out.println();
-        */
 }
