@@ -27,7 +27,7 @@ import edu.jas.poly.PolynomialList;
 
 import edu.jas.ring.GroebnerBase;
 import edu.jas.ring.GroebnerBaseAbstract;
-import edu.jas.ring.GroebnerBaseSeq;
+import edu.jas.ring.GroebnerBasePseudoSeq;
 import edu.jas.ring.OrderedRPairlist;
 import edu.jas.ring.RGroebnerBaseSeq;
 import edu.jas.ring.RPseudoReduction;
@@ -61,12 +61,6 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>,
      * Greatest common divisor engine for coefficient content and primitive parts.
      */
     protected final GreatestCommonDivisorAbstract<R> engine;
-
-
-    /**
-     * Coefficient Groebner base engine.
-     */
-    protected final GroebnerBase<Residue<C>> bb;
 
 
     /**
@@ -110,7 +104,8 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>,
         // selection for C but used for R:
         engine = (GreatestCommonDivisorAbstract<R>) GCDFactory.<C>getImplementation( cofac );
         //not used: engine = (GreatestCommonDivisorAbstract<C>)GCDFactory.<R>getProxy( rf );
-        bb = new GroebnerBaseSeq<Residue<C>>();
+        // protected final GroebnerBase<Residue<C>> bb;
+        // don't know here: bb = new GroebnerBasePseudoSeq<Residue<C>>( cofac );
     }
 
 
@@ -163,7 +158,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>,
            return true;
         }
         System.out.println("isCGB coeffs = " + coeffs);
-        // specialization anf test for GB
+        // specialization and test for GB
         GenPolynomial<C> a = coeffs.iterator().next();
         RingFactory<GenPolynomial<C>> rcfac = a.ring;
         GenPolynomialRing<C> cfac = (GenPolynomialRing<C>)rcfac;
@@ -173,12 +168,16 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>,
         List<GenPolynomial<Residue<C>>> f;
         ResidueRing<C> rfac;
         GenPolynomialRing<Residue<C>> rpfac;
+        GroebnerBase<Residue<C>> bb = null;
         for ( GenPolynomial<C> s : coeffs ) { // need power set
             pl = new ArrayList<GenPolynomial<C>>( 1 );
             pl.add( s );
             plist = new PolynomialList<C>( cfac, pl );
             ideal = new Ideal<C>( plist, true ); // one element GB
             rfac = new ResidueRing<C>( ideal );
+            if ( bb == null ) {
+               bb = new GroebnerBasePseudoSeq<Residue<C>>( rfac );
+            }
             rpfac = new GenPolynomialRing<Residue<C>>( rfac, pfac );
             f = PolyUtilApp.<C>toResidue( rpfac, F );
             if ( ! bb.isGB( modv, f ) ) {
@@ -362,7 +361,8 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>,
         G = minimalCGB(G);
 
         PL = new PolynomialList<R>(rpring,G);
-        PolynomialList<C> Gpl = PolyUtilApp.<C>productSlicesUnion( (PolynomialList)PL );
+        //PolynomialList<C> Gpl = PolyUtilApp.<C>productSlicesUnion( (PolynomialList)PL );
+        PolynomialList<C> Gpl = PolyUtilApp.<C>productSlice( (PolynomialList)PL, 0 );
         Gr = (List) Gpl.list;
         return Gr;
     }
@@ -407,10 +407,10 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>,
                    //  logger.info("minGB not dropped " + b);
                    //  F.add(b);
                    //} else {
-                   if ( debug ) {
-                      logger.debug("minGB dropped " + b);
-                   //  }
-                  }
+                   if ( true || debug ) {
+                      logger.info("minGB dropped " + b);
+                   }
+                   //}
                } else {
                   logger.info("minGB cannot drop " + b + " reduced to " + a);
                   F.add(a);
@@ -428,8 +428,12 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>,
             a = G.remove(0); b = a;
             System.out.println("minGB a = " + a);
             a = red.normalform( G, a );
+            if ( a.isZERO() ) {
+               G.add(b);
+               continue;
+            }
             System.out.println("minGB red(a) = " + a);
-            if ( usePP && !a.isConstant() ) { // do not remove all factors
+            if ( /*usePP &&*/ !a.isConstant() ) { // do not remove all factors
                a = engine.basePrimitivePart(a); // not a.monic() since no field
             }
             a = a.abs();
