@@ -678,7 +678,9 @@ public class PolyUtilApp<C extends RingElem<C> > {
         GenPolynomial<Residue<C>> b;
         for ( GenPolynomial<GenPolynomial<C>> a : L ) {
             b = toResidue( pfac, a );
-            list.add( b );
+            if ( b != null && !b.isZERO() ) {
+               list.add( b );
+            }
         }
         return list;
     }
@@ -705,7 +707,9 @@ public class PolyUtilApp<C extends RingElem<C> > {
             ExpVector e = y.getKey();
             GenPolynomial<C> a = y.getValue();
             p = new Residue<C>(fac,a);
-            P.doPutToMap( e, p );
+            if ( p != null && !p.isZERO() ) {
+               P.doPutToMap( e, p );
+            }
         }
         return P;
     }
