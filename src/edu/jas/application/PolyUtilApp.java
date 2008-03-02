@@ -501,10 +501,10 @@ public class PolyUtilApp<C extends RingElem<C> > {
            = new GenPolynomialRing<Product<Residue<C>>>(nr,rfac);
 
         plist = toProductRes( pfac, L );
-        System.out.println("\nplist ====================== ");
-        for ( GenPolynomial<Product<Residue<C>>> p: plist ) {
-            System.out.println("\np    = " + p);
-        }
+        //System.out.println("\nplist ====================== ");
+        //for ( GenPolynomial<Product<Residue<C>>> p: plist ) {
+        //    System.out.println("\np    = " + p);
+        //}
         polylist = new PolynomialList<Product<Residue<C>>>( pfac, plist );
         return polylist;
     }
