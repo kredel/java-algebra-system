@@ -64,15 +64,15 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>,
 
 
     /**
-     * Reduction engine.
+     * Flag if gcd engine should be used.
      */
-    protected RPseudoReduction<R> red;  // shadow super.red 
+    private final boolean notFaithfull = false;
 
 
     /**
-     * Flag if engine should be used.
+     * Reduction engine.
      */
-    private final boolean usePP = false;
+    protected RPseudoReduction<R> red;  // shadow super.red 
 
 
     /**
@@ -181,7 +181,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>,
             rpfac = new GenPolynomialRing<Residue<C>>( rfac, pfac );
             f = PolyUtilApp.<C>toResidue( rpfac, F );
             if ( ! bb.isGB( modv, f ) ) {
-               System.out.println("isCGB sigma(F) = " + f);
+               System.out.println("isCGB sigma" + pl  + "(F) = " + f);
                return false;
             }
         }
@@ -203,7 +203,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>,
             rpfac = new GenPolynomialRing<Residue<C>>( rfac, pfac );
             f = PolyUtilApp.<C>toResidue( rpfac, F );
             if ( ! bb.isGB( modv, f ) ) {
-               System.out.println("isCGB sigma(F) = " + f);
+               System.out.println("isCGB sigma" + pl  + "(F) = " + f);
                return false;
             }
         }
@@ -232,7 +232,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>,
             = new ArrayList<GenPolynomial<GenPolynomial<C>>>();
         for ( GenPolynomial<GenPolynomial<C>> p : F ) { 
             if ( p != null && !p.isZERO() ) {
-                //if ( usePP && !p.isConstant() ) { // do not remove all factors
+                //if ( notFaithfull && !p.isConstant() ) { // do not remove all factors
                 //  p = engine.basePrimitivePart(p); // not monic, no field
                 //}
                p = p.abs();
@@ -308,13 +308,14 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>,
               if ( debug ) {
                   logger.debug("ht(H) = " + H.leadingExpVector() );
               }
-              if ( /*usePP &&*/ !H.isConstant() ) { // do not remove all factors
+              if ( notFaithfull && !H.isConstant() ) { // do not remove all factors
                   H = engine.basePrimitivePart(H); 
               }
               H = H.abs(); // not monic, no field
               if ( H.isConstant() && H.leadingBaseCoefficient().isFull() ) { 
                   // mostly useless
                   G.clear(); G.add( H );
+                  logger.info("full constant = " + H);
                   break;
                   //return Gr; // not boolean closed ok, no threads are activated
               }
@@ -331,7 +332,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>,
                   int g2 = G.size(); 
                   for ( int i = g1; i < g2; i++ ) { // g2-g1 == 1
                       GenPolynomial<R> h = G.remove( g1 ); // since h stays != 0
-                      if ( /*usePP &&*/ !h.isConstant() ) { // do not remove all factors
+                      if ( notFaithfull && !h.isConstant() ) { // do not remove all factors
                           h = engine.basePrimitivePart(h); 
                       }
                       h = h.abs(); // monic() not ok, since no field
@@ -355,13 +356,16 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>,
 
         PL = new PolynomialList<R>(rpring,G);
         System.out.println("\nRGB = " + PL);
-
         System.out.println("final rcgb: " + PolyUtilApp.productSliceToString( PolyUtilApp.productSlice( (PolynomialList)PL ) ) );
 
         G = minimalCGB(G);
 
         PL = new PolynomialList<R>(rpring,G);
         //PolynomialList<C> Gpl = PolyUtilApp.<C>productSlicesUnion( (PolynomialList)PL );
+
+        System.out.println("\nreduced RGB = " + PL);
+        System.out.println("reduced rcgb: " + PolyUtilApp.productSliceToString( PolyUtilApp.productSlice( (PolynomialList)PL ) ) );
+
         PolynomialList<C> Gpl = PolyUtilApp.<C>productSlice( (PolynomialList)PL, 0 );
         Gr = (List) Gpl.list;
         return Gr;
@@ -433,7 +437,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>,
                continue;
             }
             System.out.println("minGB red(a) = " + a);
-            if ( /*usePP &&*/ !a.isConstant() ) { // do not remove all factors
+            if ( notFaithfull && /*true ||*/ !a.isConstant() ) { // do not remove all factors
                a = engine.basePrimitivePart(a); // not a.monic() since no field
             }
             a = a.abs();

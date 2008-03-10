@@ -716,7 +716,7 @@ public class PolyUtilApp<C extends RingElem<C> > {
         RingFactory<Product<Residue<C>>> fpr = L.ring.coFac;
         ProductRing<Residue<C>> pr = (ProductRing<Residue<C>>)fpr;
         int s = pr.length();
-        map = new HashMap<Ideal<C>,PolynomialList<GenPolynomial<C>>>();
+        map = new TreeMap<Ideal<C>,PolynomialList<GenPolynomial<C>>>();
         List<GenPolynomial<GenPolynomial<C>>> slist;
 
         List<GenPolynomial<Product<Residue<C>>>> plist = L.list;
@@ -811,7 +811,10 @@ public class PolyUtilApp<C extends RingElem<C> > {
         for ( GenPolynomial<Product<Residue<C>>> a : L ) {
             b = fromProduct( pfac, a, i );
             if ( b != null && !b.isZERO() ) {
-               list.add( b.abs() );
+               b = b.abs();
+               if ( ! list.contains( b ) ) {
+                  list.add( b );
+               }
             }
         }
         return list;
@@ -1078,7 +1081,7 @@ public class PolyUtilApp<C extends RingElem<C> > {
         }
         System.out.println("to check ResidueRing   = " + r);
         System.out.println("containing ResidueRing = " + rc);
-        if ( true ) {
+        if ( false && true ) {
            System.out.println("skiped -------------------- ");
            return false;
         }
@@ -1173,35 +1176,25 @@ public class PolyUtilApp<C extends RingElem<C> > {
      * @return true, if an residue ring of P is contained in r, else false.
      */
     public static <C extends GcdRingElem<C>>
-        boolean
+        ResidueRing<C> 
         factoryIsContained( ProductRing<Residue<C>> P,
                             ResidueRing<C> r ) {
-        /*
         if ( r == null ) {
-           return false;
+           return r;
         }
         if ( P == null || P.length() == 0 ) {
-           return true;
+           return null;
         }
-        */
         Ideal<C> rid = r.ideal;
-        /*
-        if ( rid == null || rid.isZERO() ) {
-           return false;
-        }
-        */
         for ( int i = 0; i < P.length(); i++ ) {
             RingFactory<Residue<C>> rrr = P.getFactory(i); 
             ResidueRing<C> rr = (ResidueRing<C>)rrr; 
             Ideal<C> id = rr.ideal;
-            if ( id.isZERO() ) { // is contained
-               continue; 
-            }
             if ( rid.contains( id ) ) {
-               return true;
+               return rr;
             }
         }
-        return false;
+        return null;
     }
 
 
