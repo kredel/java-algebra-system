@@ -80,6 +80,7 @@ public class ResidueTest extends TestCase {
    int il = 2; 
    long p = 1152921504606846883L; // 2^60-93; 
 
+   @Override
    protected void setUp() {
        a = b = c = d = e = null;
        ap = bp = cp = dp = ep = null;
@@ -93,6 +94,7 @@ public class ResidueTest extends TestCase {
        mfac = new ResidueRing<GenPolynomial<BigRational>>( pfac, mo );
    }
 
+   @Override
    protected void tearDown() {
        a = b = c = d = e = null;
        ap = bp = cp = dp = ep = null;
