@@ -86,8 +86,8 @@ public class PolyUtilAppTest extends TestCase {
        ai = bi = ci = di = ei = null;
        ar = br = cr = dr = er = null;
        dfac = new GenPolynomialRing<BigRational>(new BigRational(1),rl,to);
-       cfac = new GenPolynomialRing<BigRational>(new BigRational(1),rl-1,to);
-       rfac = new GenPolynomialRing<GenPolynomial<BigRational>>(cfac,1,to);
+       cfac = null; //new GenPolynomialRing<BigRational>(new BigRational(1),rl-1,to);
+       rfac = null; //new GenPolynomialRing<GenPolynomial<BigRational>>(cfac,1,to);
    }
 
    protected void tearDown() {
@@ -101,7 +101,7 @@ public class PolyUtilAppTest extends TestCase {
 
 
 /**
- * Test Product represenation conversion, rational numbers.
+ * Test product represenation conversion, rational numbers.
  * 
  */
  public void testProductConversionRN() {
@@ -116,24 +116,24 @@ public class PolyUtilAppTest extends TestCase {
      c = dfac.getONE();
      //System.out.println("c = " + c);
 
-     cp = PolyUtilApp.toProduct(pfac,c);
+     cp = PolyUtilApp.<BigRational>toProduct(pfac,c);
      //System.out.println("cp = " + cp);
      assertTrue("isONE( cp )", cp.isONE() );
 
      c = dfac.random(kl,ll,el,q);
      //System.out.println("c = " + c);
 
-     cp = PolyUtilApp.toProduct(pfac,c);
+     cp = PolyUtilApp.<BigRational>toProduct(pfac,c);
      //System.out.println("cp = " + cp);
      assertTrue("!isONE( cp )", !cp.isONE() );
  }
 
 
 /**
- * Test Product represenation conversion, algebraic numbers.
+ * Test polynomal over product represenation conversion, algebraic numbers.
  * 
  */
- public void testProductConversionAN() {
+ public void testPolyProductConversionAN() {
      GenPolynomialRing<BigRational> ufac;
      ufac = new GenPolynomialRing<BigRational>(new BigRational(1),1);
 
@@ -149,19 +149,27 @@ public class PolyUtilAppTest extends TestCase {
      ProductRing<AlgebraicNumber<BigRational>> pfac;
      pfac = new ProductRing<AlgebraicNumber<BigRational>>( afac, rl );
 
-     Product<AlgebraicNumber<BigRational>> cp;
+     GenPolynomialRing<Product<AlgebraicNumber<BigRational>>> dpfac;
+     dpfac = new GenPolynomialRing<Product<AlgebraicNumber<BigRational>>>( pfac, 2 );
+
+     GenPolynomialRing<AlgebraicNumber<BigRational>> dfac;
+     dfac = new GenPolynomialRing<AlgebraicNumber<BigRational>>( afac, 2, to);
+
+
+     GenPolynomial<AlgebraicNumber<BigRational>> c;
+     GenPolynomial<Product<AlgebraicNumber<BigRational>>> cp;
 
      c = dfac.getONE();
      //System.out.println("c = " + c);
 
-     cp = PolyUtilApp.toANProduct(pfac,c);
+     cp = PolyUtilApp.<AlgebraicNumber<BigRational>>toProductGen(dpfac,c);
      //System.out.println("cp = " + cp);
      assertTrue("isZERO( cp )", cp.isONE() );
      
      c = dfac.random(kl,ll,el,q);
      //System.out.println("c = " + c);
 
-     cp = PolyUtilApp.toANProduct(pfac,c);
+     cp = PolyUtilApp.<AlgebraicNumber<BigRational>>toProductGen(dpfac,c);
      //System.out.println("cp = " + cp);
      assertTrue("!isONE( cp )", !cp.isONE() );
  }
