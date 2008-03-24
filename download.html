@@ -208,13 +208,13 @@ public class mytests {
     public static void main(String[] args) {
          BigRational fac = new BigRational();
          String[] var = new String[]{ "x" };
-         GenPolynomialRing<BigRational> ring
-             = new GenPolynomialRing<BigRational>(fac,1,var);
+         GenPolynomialRing&lt;BigRational&gt; ring
+             = new GenPolynomialRing&lt;BigRational&gt;(fac,1,var);
 
          int n = 10;
-         List<GenPolynomial<BigRational>> P 
-             = new ArrayList<GenPolynomial<BigRational>>(n);
-         GenPolynomial<BigRational> t, one, x, xc;
+         List&lt;GenPolynomial&lt;BigRational&gt;&gt; P 
+             = new ArrayList&lt;GenPolynomial&lt;BigRational&gt;&gt;(n);
+         GenPolynomial&lt;BigRational&gt; t, one, x, xc;
          BigRational n21, nn;
 
          one = ring.getONE();
@@ -222,7 +222,7 @@ public class mytests {
 
          P.add( one );
          P.add( x );
-         for ( int i = 2; i < n; i++ ) {
+         for ( int i = 2; i &lt; n; i++ ) {
              n21 = new BigRational( 2*i-1 );
              xc = x.multiply( n21 );
              t = xc.multiply( P.get(i-1) );  // (2n-1) x P[n-1]
@@ -233,7 +233,7 @@ public class mytests {
              t = t.multiply( nn );           // 1/n t
              P.add( t );
          }
-         for ( int i = 0; i < n; i++ ) {
+         for ( int i = 0; i &lt; n; i++ ) {
              System.out.println("P["+i+"] = " + P.get(i) );
          }
     }
@@ -286,7 +286,7 @@ public class mytests {
 <p>
 <!-- Created: Sat Mar 19 21:44:14 CET 2005 -->
 <!-- hhmts start -->
-Last modified: Mon Mar 24 18:55:39 CET 2008
+Last modified: Mon Mar 24 20:35:30 CET 2008
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
