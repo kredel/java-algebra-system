@@ -34,10 +34,11 @@ import edu.jas.ring.RPseudoReduction;
 import edu.jas.ring.Pair;
 import edu.jas.ring.RPseudoReductionSeq;
 
-import edu.jas.application.PolyUtilApp;
-
 import edu.jas.ufd.GreatestCommonDivisorAbstract;
 import edu.jas.ufd.GCDFactory;
+
+import edu.jas.application.PolyUtilApp;
+import edu.jas.application.PolyUtilComp;
 
 
 /**
@@ -253,11 +254,11 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>,
 
         /* initial setup and starting decompostition */
         PolynomialList<R> PL
-           = (PolynomialList) PolyUtilApp.<C>productEmptyDecomposition( Gr );
+           = (PolynomialList) PolyUtilComp.<C>productEmptyDecomposition( Gr );
         GenPolynomialRing<R> rpring = PL.ring;
-        PL = PolyUtilApp.<R>productDecomposition( PL );
+        PL = PolyUtilComp.<R>productDecomposition( PL );
         List<GenPolynomial<R>> G = PL.list;
-        System.out.println("initial rcgb: " + PolyUtilApp.productSliceToString( PolyUtilApp.productSlice( (PolynomialList)PL ) ) );
+        System.out.println("initial rcgb: " + PolyUtilComp.productSliceToString( PolyUtilComp.productSlice( (PolynomialList)PL ) ) );
 
         if ( G.size() <= 1 ) {
            // return Gr; // since boolean closed and no threads are activated
@@ -340,7 +341,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>,
                       logger.info("Sred = " + H);
                       int g1 = G.size();
                       PL = new PolynomialList<R>(rpring,G);
-                      PL = PolyUtilApp.<R>productDecomposition( PL, H );
+                      PL = PolyUtilComp.<R>productDecomposition( PL, H );
                       //G.add( H );
                       G = PL.list; // overwite G, pairlist not up-to-date
                       int g2 = G.size(); 
@@ -371,17 +372,17 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>,
 
         PL = new PolynomialList<R>(rpring,G);
         System.out.println("\nRGB = " + PL);
-        System.out.println("final rcgb: " + PolyUtilApp.productSliceToString( PolyUtilApp.productSlice( (PolynomialList)PL ) ) );
+        System.out.println("final rcgb: " + PolyUtilComp.productSliceToString( PolyUtilComp.productSlice( (PolynomialList)PL ) ) );
 
         G = minimalCGB(G);
 
         PL = new PolynomialList<R>(rpring,G);
-        //PolynomialList<C> Gpl = PolyUtilApp.<C>productSlicesUnion( (PolynomialList)PL );
+        //PolynomialList<C> Gpl = PolyUtilComp.<C>productSlicesUnion( (PolynomialList)PL );
 
         System.out.println("\nreduced RGB = " + PL);
-        System.out.println("reduced rcgb: " + PolyUtilApp.productSliceToString( PolyUtilApp.productSlice( (PolynomialList)PL ) ) );
+        System.out.println("reduced rcgb: " + PolyUtilComp.productSliceToString( PolyUtilComp.productSlice( (PolynomialList)PL ) ) );
 
-        PolynomialList<C> Gpl = PolyUtilApp.<C>productSlice( (PolynomialList)PL, 0 );
+        PolynomialList<C> Gpl = PolyUtilComp.<C>productSlice( (PolynomialList)PL, 0 );
         Gr = (List) Gpl.list;
         return Gr;
     }
