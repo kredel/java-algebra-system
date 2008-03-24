@@ -76,6 +76,12 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>,
 
 
     /**
+     * Comprehensive reduction engine.
+     */
+    protected final RComprehensivePseudoReductionSeq<R> cred;  
+
+
+    /**
      * Polynomial coefficient ring factory.
      */
     protected final RingFactory<C> cofac;
@@ -106,6 +112,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>,
         //not used: engine = (GreatestCommonDivisorAbstract<C>)GCDFactory.<R>getProxy( rf );
         // protected final GroebnerBase<Residue<C>> bb;
         // don't know here: bb = new GroebnerBasePseudoSeq<Residue<C>>( cofac );
+        cred = new RComprehensivePseudoReductionSeq<R>();
     }
 
 
@@ -272,6 +279,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>,
         GenPolynomial<R> S;
         //GenPolynomial<R> D;
         GenPolynomial<R> H;
+        List<GenPolynomial<R>> spl;
         while ( pairlist.hasNext() ) {
               pair = pairlist.removeNext();
               //System.out.println("pair = " + pair);
@@ -290,59 +298,66 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>,
               // S-polynomial -----------------------
               //if ( pair.getUseCriterion3() ) { // correct ?
               //if ( pair.getUseCriterion4() ) { // correct ?
-              S = red.SPolynomial( pi, pj );
-              if ( S.isZERO() ) {
-                  pair.setZero();
-                  continue;
-              }
-              //System.out.println("S("+pair.pi+","+pair.pj+") = " + S);
-              if ( debug ) {
-                  logger.debug("ht(S) = " + S.leadingExpVector() );
-              }
-
-              H = red.normalform( G, S );
-              if ( H.isZERO() ) {
-                  pair.setZero();
-                  continue;
-              }
-              if ( debug ) {
-                  logger.debug("ht(H) = " + H.leadingExpVector() );
-              }
-              if ( notFaithfull && !H.isConstant() ) { // do not remove all factors
-                  H = engine.basePrimitivePart(H); 
-              }
-              H = H.abs(); // not monic, no field
-              if ( H.isConstant() && H.leadingBaseCoefficient().isFull() ) { 
-                  // mostly useless
-                  G.clear(); G.add( H );
-                  logger.info("full constant = " + H);
-                  break;
-                  //return Gr; // not boolean closed ok, no threads are activated
-              }
-              if ( debug ) {
-                  logger.debug("H = " + H );
-              }
-              if ( ! H.isZERO() ) {
-                  logger.info("Sred = " + H);
-                  int g1 = G.size();
-                  PL = new PolynomialList<R>(rpring,G);
-                  PL = PolyUtilApp.<R>productDecomposition( PL, H );
-                  //G.add( H );
-                  G = PL.list; // overwite G, pairlist not up-to-date
-                  int g2 = G.size(); 
-                  for ( int i = g1; i < g2; i++ ) { // g2-g1 == 1
-                      GenPolynomial<R> h = G.remove( g1 ); // since h stays != 0
-                      if ( notFaithfull && !h.isConstant() ) { // do not remove all factors
-                          h = engine.basePrimitivePart(h); 
-                      }
-                      h = h.abs(); // monic() not ok, since no field
-                      logger.info("decomp(Sred) = " + h);
-                      G.add( h );
-                      pairlist.put( h ); // old polynomials not up-to-date
+              //S = red.SPolynomial( pi, pj );
+              spl = cred.SPolynomialList( pi, pj );
+              //System.out.println("\nS   = " + S);
+              System.out.println("spl = " + spl.size());
+              for ( GenPolynomial<R> SS : spl ) {
+                  System.out.println("S   = " + SS);
+                  S = SS;
+                  if ( S.isZERO() ) {
+                      pair.setZero();
+                      continue;
                   }
-                  if ( false && debug ) {
-                      if ( !pair.getUseCriterion3() || !pair.getUseCriterion4() ) {
-                          logger.info("H != 0 but: " + pair);
+                  //System.out.println("S("+pair.pi+","+pair.pj+") = " + S);
+                  if ( debug ) {
+                      logger.debug("ht(S) = " + S.leadingExpVector() );
+                  }
+
+                  H = red.normalform( G, S );
+                  if ( H.isZERO() ) {
+                      pair.setZero();
+                      continue;
+                  }
+                  if ( debug ) {
+                      logger.debug("ht(H) = " + H.leadingExpVector() );
+                  }
+                  if ( notFaithfull && !H.isConstant() ) { // do not remove all factors
+                      H = engine.basePrimitivePart(H); 
+                  }
+                  H = H.abs(); // not monic, no field
+                  if ( H.isConstant() && H.leadingBaseCoefficient().isFull() ) { 
+                      // mostly useless
+                      G.clear(); G.add( H );
+                      logger.info("full constant = " + H);
+                      break;
+                      //return Gr; // not boolean closed ok, no threads are activated
+                  }
+                  if ( debug ) {
+                      logger.debug("H = " + H );
+                  }
+                  if ( ! H.isZERO() ) {
+                      logger.info("Sred = " + H);
+                      int g1 = G.size();
+                      PL = new PolynomialList<R>(rpring,G);
+                      PL = PolyUtilApp.<R>productDecomposition( PL, H );
+                      //G.add( H );
+                      G = PL.list; // overwite G, pairlist not up-to-date
+                      int g2 = G.size(); 
+                      for ( int i = g1; i < g2; i++ ) { // g2-g1 == 1
+                          GenPolynomial<R> h = G.remove( g1 ); // since h stays != 0
+                          if ( notFaithfull && !h.isConstant() ) { // do not remove all factors
+                              h = engine.basePrimitivePart(h); 
+                          }
+                          h = h.abs(); // monic() not ok, since no field
+                          logger.info("decomp(Sred) = " + h);
+                          G.add( h );
+                          pairlist.put( h ); // old polynomials not up-to-date
+                      }
+                      if ( false && debug ) {
+                          if ( !pair.getUseCriterion3() || !pair.getUseCriterion4() ) {
+                              logger.info("H != 0 but: " + pair);
+                          }
                       }
                   }
               }
