@@ -298,6 +298,16 @@ of the implemented algebraic algorithms.
 </tr>
 
 <tr>
+<td><code>Product</code></td>
+<td><code>ProductRing</code></td>
+<td>(finite) direct product of fields and rings 
+    over any implemented coefficient ring
+</td>
+<td>arithmetic, idempotent elements
+</td>
+</tr>
+
+<tr>
 <td><code>GenVector</code></td>
 <td><code>GenVectorModule</code></td>
 <td>tuples (vectors) of any implemented 
@@ -335,7 +345,7 @@ implemented algebraic algorithms.
 <table border="1" cellpadding="3" summary="JAS AA summary" >
 <tr>
 <td>class / interface</td>
-<td>algorithm</td>
+<td>algorithm&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 <td>methods</td>
 </tr>
 
@@ -343,11 +353,13 @@ implemented algebraic algorithms.
 <td><code>Reduction</code>,
     <code>Reduction- Abstract</code>,
     <code>ReductionSeq</code>,
-    <code>ReductionPar</code>
+    <code>ReductionPar</code>,
+    <code>PseudoReduction</code>
 </td>
 <td>Iterated subtraction of polynomials to eliminate terms from a given polynomial, 
     i.e. reduction of polynomial(s) wrt. a set of polynomials.
-    Coefficients of polynomials must be from a field.
+    Coefficients of polynomials must be from a field and for the 
+    Pseudo* version from a ring with gcd.
     For *Par the list of polynomials can concurrently be modified.
 </td>
 <td>normalform,
@@ -393,18 +405,40 @@ implemented algebraic algorithms.
 </tr>
 
 <tr>
+<td><code>RReduction</code>,
+    <code>RPseudoReduction</code>,
+    <code>RReductionSeq</code>,
+    <code>RPseudoReductionSeq</code>
+</td>
+<td>Iterated subtraction of polynomials to eliminate terms from a given polynomial, 
+    i.e. reduction of polynomial(s) wrt. a set of polynomials.
+    Coefficients of polynomials must be from a regular ring and for the 
+    Pseudo* version from a regular ring with gcd.
+    Boolean closure and boolean remainder of polynomials.
+</td>
+<td>normalform,
+    S-polynomial,
+    <!--extended normalform,-->
+    boolean closure
+</td>
+</tr>
+
+<tr>
 <td><code>GroebnerBase</code>,
     <code>GroebnerBase- Abstract</code>,
     <code>GroebnerBaseSeq</code>,
     <code>GroebnerBase- Parallel</code>,
     <code>GroebnerBase- Distributed</code>,
+    <code>GroebnerBase- PseudoSeq</code>,
     etc.
 </td>
 <td>Buchberger algorithm to compute Groebner bases 
     of sets of polynomials.
     Coefficients of polynomials must be from a field.
-    *Parallel is a multi-threaded and 
-    *Distributed is a message passing implementation.  
+    <code>*Parallel</code> is a multi-threaded and 
+    <code>*Distributed</code> is a message passing implementation.  
+    The <code>*Pseudo</code> version is for non-field coefficients.
+
 </td>
 <td>GB, isGB, extended GB, minimal GB
 </td>
@@ -435,6 +469,18 @@ implemented algebraic algorithms.
     *Parallel is a multi-threaded implementation.  
 </td>
 <td>left, right, two-sided versions of GB, isGB, extended GB, minimal GB
+</td>
+</tr>
+
+<tr>
+<td><code>RGroebnerBaseSeq</code>,
+    <code>RGroebnerBasePseudoSeq</code>
+</td>
+<td>Algorithm to compute Groebner bases in polynomial rings over regular rings.
+    Coefficients of polynomials must be from a 
+    product of fields or Euclidean domains.
+</td>
+<td>GB, isGB, minimal GB
 </td>
 </tr>
 
@@ -996,7 +1042,7 @@ of the Java algebra system.
 <p>
 <!-- Created: Sat Mar 11 10:51:36 CET 2006 -->
 <!-- hhmts start -->
-Last modified: Mon Mar 24 20:36:15 CET 2008
+Last modified: Thu Mar 27 10:18:43 CET 2008
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
