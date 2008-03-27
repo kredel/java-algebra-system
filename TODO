@@ -1,7 +1,14 @@
+List of things to be resolved or accomplished:
+
+issues to consider:
+
+- implement polynomial factorization
+
+- implement power series
+
+- implement matrices to vector
 
 - check for safe publication idiom in polynomial construction
-
-- make final variables public (?)
 
 - make hashCode to reuse computed value --> not immutable
 
@@ -11,13 +18,7 @@
 
 - implement parallel proxys for GB computation
 
-- check solvable polynomials with non integral coefficients
-
-- implement power series
-
-- implement polynomial factorization
-
-- implement matrices to vector
+- check solvable polynomials with integral domain coefficients
 
 - use further util.concurrent algorithms where possible, e.g. in DHT
 
@@ -26,8 +27,6 @@
 - test caching results of gcd computation
 
 - refactor ExpVector for different array element types
-
-- develop modifiable polynomial constructor or put method and iterators
 
 - rework parallel GB algorithms
 
@@ -42,21 +41,26 @@
   name e.g RingElemAbstract
   clean structure of compareTo, signum and equals
 
+- make final variables public (?)
 
 
 
-- define FieldElem and Field factory interfaces and use them for GB coefficients
+partially resolved and completed issues:
 
 - add product category to applications
 - implement direct products of ring elements
 
 - implement d- and e-reductions and d-/e-Groebner bases
 
+- implement Groebner bases for regular rings
+
 - implement term order optimization from MAS, also for coefficients 
   and solvable polynomials
 
 - define power(n) in RingElem and implement in edu.jas.structure.Power 
   and classes, done
+
+- define FieldElem and Field factory interfaces and use them for GB coefficients
 
 - refactor Hensel lifting to ufd package, not possible because of 
   coefficient replacement trick
@@ -76,8 +80,11 @@
 
 - add version information in jas jar-file names
 
+- develop modifiable polynomial constructor or put method and iterators
 
 
+
+resolved and completed issues:
 
 - refactor univPoly in solvable implementations, done
 
