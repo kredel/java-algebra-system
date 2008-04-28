@@ -130,8 +130,14 @@ class Ideal:
         return Ideal(self.ring,"",N);
 
     def intersect(self,ring):
-        s = self.pset;
-        N = jas.ring.Ideal(s).intersect(ring.ring);
+        s = jas.application.Ideal(self.pset);
+        N = s.intersect(ring.ring);
+        return Ideal(self.ring,"",N.getList());
+
+    def sum(self,other):
+        s = jas.application.Ideal(self.pset);
+        t = jas.application.Ideal(other.pset);
+        N = s.sum( t );
         return Ideal(self.ring,"",N.getList());
 
     def optimize(self):
@@ -331,8 +337,14 @@ class SolvableIdeal:
         return b;
 
     def intersect(self,ring):
-        s = self.pset;
-        N = jas.ring.Ideal(s).intersect(ring.ring);
+        s = jas.application.SolvableIdeal(self.pset);
+        N = s.intersect(ring.ring);
+        return SolvableIdeal(self.ring,"",N.getList());
+
+    def sum(self,other):
+        s = jas.application.SolvableIdeal(self.pset);
+        t = jas.application.SolvableIdeal(other.pset);
+        N = s.sum( t );
         return SolvableIdeal(self.ring,"",N.getList());
 
     def parLeftGB(self,th):
