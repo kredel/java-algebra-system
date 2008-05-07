@@ -194,6 +194,10 @@ public class DistThreadPool /*extends ThreadPool*/ {
     * Terminates the threads.
     */
     public void terminate() {
+	ShutdownRequest sdr = new ShutdownRequest();
+        for (int i = 0; i < workers.length; i++) {
+	    addJob( sdr );
+	}
         while ( hasJobs() ) {
             try {
                 Thread.sleep(100);
@@ -292,6 +296,19 @@ public class DistThreadPool /*extends ThreadPool*/ {
 
 
 /**
+ * Implements a shutdown task.
+ */
+class ShutdownRequest implements Runnable {
+  /**
+   * Run the thread.
+   */
+   public void run() {
+       System.out.println("ShutdownRequest");
+   }
+}
+
+
+/**
  * Implements one local part of the distributed thread.
  */
 class DistPoolThread extends Thread {
@@ -340,7 +357,11 @@ public void run() {
                 t = System.currentTimeMillis();
                 // send and wait, like rmi
                 try {
-                    ec.send( myId, job );
+		    if ( job instanceof ShutdownRequest ) {
+                       ec.send( myId, ExecutableServer.STOP );
+		    } else {
+                       ec.send( myId, job );
+		    }
                 } catch (IOException e) {
                     e.printStackTrace();
                     working = false;

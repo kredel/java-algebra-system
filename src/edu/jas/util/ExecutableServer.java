@@ -261,8 +261,10 @@ class Executor extends Thread /*implements Runnable*/ {
                          d = (String)o;
                          if ( ExecutableServer.STOP.equals( d ) ) {
                             goon = false; // stop this thread
+                            channel.send( ExecutableServer.DONE );
                          } else {
                             goon = false; // stop this thread
+                            channel.send( ExecutableServer.DONE );
                          }
                       }
                       // check permission
