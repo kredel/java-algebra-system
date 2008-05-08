@@ -34,7 +34,7 @@ public class RunGB {
       BasicConfigurator.configure();
 
       String usage = "Usage: RunGB "
-                    + "[ seq | par | dist | cli [port] ] "
+                    + "[ seq | par | dist | dist1 | cli [port] ] "
                     + "<file> "
                     + "#procs "
                     + "[machinefile]";
@@ -44,7 +44,7 @@ public class RunGB {
       }
 
       String kind = args[0];
-      String[] allkinds = new String[] { "seq", "par", "dist", "cli"  };
+      String[] allkinds = new String[] { "seq", "par", "dist", "dist1", "cli" };
       boolean sup = false;
       for ( int i = 0; i < allkinds.length; i++ ) {
           if ( kind.equals( allkinds[i] ) ) {
@@ -56,6 +56,7 @@ public class RunGB {
           return;
       }
 
+      boolean once = false;
       final int GB_SERVER_PORT = 7114; 
       //inal int EX_CLIENT_PORT = GB_SERVER_PORT + 1000; 
       int port = GB_SERVER_PORT;
@@ -84,7 +85,7 @@ public class RunGB {
       }
 
       int threads = 0;
-      if ( kind.equals("par") || kind.equals("dist") ) {
+      if ( kind.equals("par") || kind.startsWith("dist") ) {
           if ( args.length < 3 ) {
             System.out.println(usage);
             return;
@@ -99,7 +100,7 @@ public class RunGB {
       }
 
       String mfile = null;
-      if ( kind.equals("dist") ) {
+      if ( kind.startsWith("dist") ) {
           if ( args.length >= 4 ) {
               mfile = args[3];
           } else {
@@ -135,26 +136,55 @@ public class RunGB {
       if ( kind.equals("dist") ) {
           runMaster( S, threads, mfile, port );
       }
+      if ( kind.equals("dist1") ) {
+          runMasterOnce( S, threads, mfile, port );
+      }
 
   }
 
 
   @SuppressWarnings("unchecked")
-static void runMaster(PolynomialList S, int threads, String mfile, int port) {
+  static void runMaster(PolynomialList S, int threads, String mfile, int port) {
       List L = S.list; 
       List G = null;
-      long t;
+      long t, t1;
 
       t = System.currentTimeMillis();
       System.out.println("\nGroebner base distributed ..."); 
-
-      G = (new GBDist(threads, mfile, port)).execute( L );
-
+      GBDist gbd = new GBDist(threads, mfile, port);
+      t1 = System.currentTimeMillis();
+      G = gbd.execute( L );
+      t1 = System.currentTimeMillis() - t1;
+      gbd.terminate(false);
       S = new PolynomialList( S.ring, G );
       System.out.println("G =\n" + S ); 
       System.out.println("G.size() = " + G.size() ); 
       t = System.currentTimeMillis() - t;
-      System.out.println("time = " + t + " milliseconds" ); 
+      System.out.println("time = " + t1 + " milliseconds, " 
+                                   + (t-t1) + "start-up"); 
+      System.out.println(""); 
+  }
+
+
+  @SuppressWarnings("unchecked")
+  static void runMasterOnce(PolynomialList S, int threads, String mfile, int port) {
+      List L = S.list; 
+      List G = null;
+      long t, t1;
+
+      t = System.currentTimeMillis();
+      System.out.println("\nGroebner base distributed ..."); 
+      GBDist gbd = new GBDist(threads, mfile, port);
+      t1 = System.currentTimeMillis();
+      G = gbd.execute( L );
+      t1 = System.currentTimeMillis() - t1;
+      gbd.terminate(true);
+      S = new PolynomialList( S.ring, G );
+      System.out.println("G =\n" + S ); 
+      System.out.println("G.size() = " + G.size() ); 
+      t = System.currentTimeMillis() - t;
+      System.out.println("time = " + t1 + " milliseconds, " 
+                                   + (t-t1) + "start-up"); 
       System.out.println(""); 
   }
 
@@ -168,7 +198,7 @@ static void runMaster(PolynomialList S, int threads, String mfile, int port) {
 
 
   @SuppressWarnings("unchecked")
-static void runParallel(PolynomialList S, int threads) {
+  static void runParallel(PolynomialList S, int threads) {
       List L = S.list; 
       List G;
       long t;
@@ -188,7 +218,7 @@ static void runParallel(PolynomialList S, int threads) {
 
 
   @SuppressWarnings("unchecked")
-static void runSequential(PolynomialList S) {
+  static void runSequential(PolynomialList S) {
       List L = S.list; 
       List G;
       long t;

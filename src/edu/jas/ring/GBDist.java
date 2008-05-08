@@ -40,11 +40,16 @@ public class GBDist<C extends RingElem<C>> {
     protected final int port;
 
 
-
     /**
      * GB algorithm to use.
      */
     private final GroebnerBaseDistributed<C> bbd;
+
+
+    /**
+     * Distributed thread pool to use.
+     */
+    private final DistThreadPool dtp;
 
 
     /**
@@ -64,6 +69,7 @@ public class GBDist<C extends RingElem<C>> {
         }
         this.port = port;
         bbd = new GroebnerBaseDistributed<C>(threads,port);
+        dtp = new DistThreadPool(threads,mfile);
     }
 
 
@@ -73,14 +79,10 @@ public class GBDist<C extends RingElem<C>> {
      * Obsolete version.
      * @param F list of polynomials
      * @return GB(F) a Groebner base for F.
-     */
     public List<GenPolynomial<C>> 
            executeOld(List<GenPolynomial<C>> F) {
-
         final int numc = threads;
-
         List<GenPolynomial<C>> G = null;
-
         ExecutableChannels ec = null;
         try {
             ec = new ExecutableChannels( mfile );
@@ -94,7 +96,6 @@ public class GBDist<C extends RingElem<C>> {
             e.printStackTrace();
             return G;
         }
-
         GBClient<C> gbc 
           = new GBClient<C>( ec.getMasterHost(), ec.getMasterPort() );
         try {
@@ -105,9 +106,7 @@ public class GBDist<C extends RingElem<C>> {
             e.printStackTrace();
             return G;
         }
-
         G = bbd.GB( F );
-
         try {
             for ( int i = 0; i < numc; i++ ) {
                Object o = ec.receive( i );
@@ -121,9 +120,9 @@ public class GBDist<C extends RingElem<C>> {
         }
         ec.close();
         bbd.terminate();
-
         return G;
     }
+     */
 
 
     /**
@@ -133,21 +132,28 @@ public class GBDist<C extends RingElem<C>> {
      * @return GB(F) a Groebner base for F.
      */
     public List<GenPolynomial<C>> execute( List<GenPolynomial<C>> F ) {
-        DistThreadPool dtp = new DistThreadPool(threads,mfile);
         String master = dtp.getEC().getMasterHost();
         int port =  dtp.getEC().getMasterPort();
-
         GBClient<C> gbc = new GBClient<C>( master, port );
         for ( int i = 0; i < threads; i++ ) {
             // schedule remote clients
             dtp.addJob( gbc );
         }
-
         // run master
         List<GenPolynomial<C>> G = bbd.GB( F );
-        bbd.terminate();
-        dtp.terminate();
         return G;
+    }
+
+
+   /**
+    * Terminates the distributed thread pools.
+    * @param shutDown true, if shut-down of the 
+    * remote executable servers is requested, 
+    * false, if remote executable servers stay alive.
+    */
+    public void terminate(boolean shutDown) {
+        bbd.terminate();
+        dtp.terminate(shutDown);
     }
 
 }
