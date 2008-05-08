@@ -192,12 +192,25 @@ public class DistThreadPool /*extends ThreadPool*/ {
 
    /**
     * Terminates the threads.
+    * @param shutDown true, if shut-down of the 
+    * remote executable servers is requested, 
+    * false, if remote executable servers stay alive.
+    */
+    public void terminate(boolean shutDown) {
+        if ( shutDown ) {
+           ShutdownRequest sdr = new ShutdownRequest();
+           for (int i = 0; i < workers.length; i++) {
+               addJob( sdr );
+           }
+        }
+        terminate();
+    }
+
+
+   /**
+    * Terminates the threads.
     */
     public void terminate() {
-	ShutdownRequest sdr = new ShutdownRequest();
-        for (int i = 0; i < workers.length; i++) {
-	    addJob( sdr );
-	}
         while ( hasJobs() ) {
             try {
                 Thread.sleep(100);
