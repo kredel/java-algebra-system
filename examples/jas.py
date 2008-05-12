@@ -108,9 +108,14 @@ class Ideal:
         F = s.list;
         t = System.currentTimeMillis();
         # G = GroebnerBaseDistributed.Server(F,th);
-        G = GBDist(th,machine,port).execute(F);
+        #G = GBDist(th,machine,port).execute(F);
+        gbd = GBDist(th,machine,port);
+        t1 = System.currentTimeMillis();
+        G = gbd.execute(F);
+        t1 = System.currentTimeMillis() - t1;
+        gbd.terminate(0);
         t = System.currentTimeMillis() - t;
-        print "distributed %s executed in %s ms" % (th,t); 
+        print "distributed %s executed in %s ms (%s ms start-up)" % (th,t1,t-t1); 
         return Ideal(self.ring,"",G);
 
     def distClient(self,port=8114):
