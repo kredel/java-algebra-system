@@ -6,8 +6,10 @@
 package edu.jas.util;
 
 import java.io.IOException;
+
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.BindException;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -74,6 +76,9 @@ public class ChannelFactory extends Thread {
         srv = new ServerSocket(port);
         this.start();
         logger.info("server started on port "+port);
+    } catch (BindException e) { 
+        srv = null;
+        logger.info("server not started, port used "+port);
     } catch (IOException e) { 
         logger.debug("IOException "+e);
         if ( logger.isDebugEnabled() ) {
@@ -142,10 +147,13 @@ public class ChannelFactory extends Thread {
 
 
   /**
-   * Eun the servers accept() in an infinite loop.
+   * Run the servers accept() in an infinite loop.
    */
   @Override
-public void run() {
+  public void run() {
+    if ( srv == null ) {
+       return; // nothing to do
+    }
     while (true) {
       try {
           logger.info("waiting for connection");

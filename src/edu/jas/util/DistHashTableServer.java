@@ -30,7 +30,7 @@ public class DistHashTableServer extends Thread {
 
     private static final Logger logger = Logger.getLogger(DistHashTableServer.class);
 
-    public final static int DEFAULT_PORT = ChannelFactory.DEFAULT_PORT + 99;
+    public final static int DEFAULT_PORT = 9009; //ChannelFactory.DEFAULT_PORT + 99;
     protected final ChannelFactory cf;
 
     protected List<DHTBroadcaster> servers;
