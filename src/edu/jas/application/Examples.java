@@ -4,6 +4,8 @@
 
 package edu.jas.application;
 
+import org.apache.log4j.BasicConfigurator;
+
 import java.util.ArrayList;
 //import java.util.Arrays;
 import java.util.List;
@@ -11,12 +13,20 @@ import java.util.List;
 import edu.jas.structure.Product;
 import edu.jas.structure.ProductRing;
 
+import edu.jas.kern.ComputerThreads;
+
 import edu.jas.arith.BigRational;
 import edu.jas.arith.BigInteger;
+
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
+
+import edu.jas.ring.GroebnerBase;
 import edu.jas.ring.GroebnerBaseSeq;
+import edu.jas.ring.GroebnerBasePseudoSeq;
+import edu.jas.ring.RGroebnerBasePseudoSeq;
+
 
 /**
  * Examples for polynomials usage.
@@ -29,9 +39,12 @@ public class Examples {
  * main.
  */
    public static void main (String[] args) {
+       BasicConfigurator.configure();
        //example1();
        example2();
+       //example3();
    }
+
 
 /**
  * example1.
@@ -103,6 +116,78 @@ public static void example2() {
     GenPolynomial<BigRational> p = null;
     for ( int i = 0; i < 2; i++) {
         p = pfac.random(5,4,3,0.4f);
+        if ( !p.isConstant() ) {
+           F.add(p);
+        }
+    }
+    //System.out.println("F = " + F);
+
+    Ideal<BigRational> id = new Ideal<BigRational>(pfac,F);
+    id.doGB();
+    if ( id.isONE() || id.isZERO() ) {
+       System.out.println("id zero or one = " + id);
+       return;
+    }
+    ResidueRing<BigRational> rr = new ResidueRing<BigRational>(id);
+    System.out.println("rr = " + rr);
+
+    ProductRing<Residue<BigRational>> pr = null;
+    pr = new ProductRing<Residue<BigRational>>(rr,3);
+
+    String[] vars = new String[] { "a", "b" };
+    GenPolynomialRing<Product<Residue<BigRational>>> fac;
+    fac = new GenPolynomialRing<Product<Residue<BigRational>>>(pr,2,vars);
+
+    GenPolynomial<Product<Residue<BigRational>>> pp;
+    for ( int i = 0; i < 1; i++) {
+        pp = fac.random(2,4,4,0.4f);
+        if ( !pp.isConstant() ) {
+           L.add(pp);
+        }
+    }
+
+    System.out.println("L = " + L);
+
+    //PolynomialList<Product<Residue<BigRational>>> Lp = null;
+    //Lp = new PolynomialList<Product<Residue<BigRational>>>(fac,L);
+    //System.out.println("Lp = " + Lp);
+
+    GroebnerBase<Product<Residue<BigRational>>> bb 
+        = new RGroebnerBasePseudoSeq<Product<Residue<BigRational>>>(pr);
+
+    System.out.println("isGB(L) = " + bb.isGB(L));
+
+    List<GenPolynomial<Product<Residue<BigRational>>>> G = null;
+
+    G = bb.GB(L);
+    System.out.println("G = " + G);
+    System.out.println("isGB(G) = " + bb.isGB(G));
+
+    ComputerThreads.terminate();
+
+}
+
+
+/**
+ * example3.
+ * abtract types: GB of List<GenPolynomial<Residue<BigRational>>>.
+ *
+ */
+public static void example3() {
+    List<GenPolynomial<Residue<BigRational>>> L = null;
+    L = new ArrayList<GenPolynomial<Residue<BigRational>>>();
+
+    BigRational bfac = new BigRational(1);
+    GenPolynomialRing<BigRational> pfac = null;
+    pfac = new GenPolynomialRing<BigRational>(bfac,1);
+
+    List<GenPolynomial<BigRational>> F = null;
+    F = new ArrayList<GenPolynomial<BigRational>>();
+
+    GenPolynomial<BigRational> p = null;
+    for ( int i = 0; i < 3; i++) {
+        p = pfac.random(5,5,5,0.4f);
+        //p = pfac.parse("x0^2 -2" );
         F.add(p);
     }
     //System.out.println("F = " + F);
@@ -112,25 +197,31 @@ public static void example2() {
     ResidueRing<BigRational> rr = new ResidueRing<BigRational>(id);
     System.out.println("rr = " + rr);
 
-    ProductRing<Residue<BigRational>> pr = null;
-    pr = new ProductRing<Residue<BigRational>>(rr,4);
-
     String[] vars = new String[] { "a", "b" };
-    GenPolynomialRing<Product<Residue<BigRational>>> fac;
-    fac = new GenPolynomialRing<Product<Residue<BigRational>>>(pr,2,vars);
+    GenPolynomialRing<Residue<BigRational>> fac;
+    fac = new GenPolynomialRing<Residue<BigRational>>(rr,2,vars);
 
-    GenPolynomial<Product<Residue<BigRational>>> pp;
-    for ( int i = 0; i < 3; i++) {
-        pp = fac.random(2,4,4,0.4f);
-        L.add(pp);
+    GenPolynomial<Residue<BigRational>> pp;
+    for ( int i = 0; i < 2; i++) {
+        pp = fac.random(2,4,6,0.2f);
+        if ( !pp.isConstant() ) {
+           L.add(pp);
+        }
     }
-
     System.out.println("L = " + L);
 
-    //PolynomialList<Product<Residue<BigRational>>> Lp = null;
-    //Lp = new PolynomialList<Product<Residue<BigRational>>>(fac,L);
-    //System.out.println("Lp = " + Lp);
+    GroebnerBase<Residue<BigRational>> bb 
+        = new GroebnerBasePseudoSeq<Residue<BigRational>>(rr);
 
+    System.out.println("isGB(L) = " + bb.isGB(L));
+
+    List<GenPolynomial<Residue<BigRational>>> G = null;
+
+    G = bb.GB(L);
+    System.out.println("G = " + G);
+    System.out.println("isGB(G) = " + bb.isGB(G));
+
+    ComputerThreads.terminate();
 }
 
 }
