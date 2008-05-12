@@ -7,6 +7,9 @@ import sys;
 
 from jas import Ring
 from jas import Ideal
+from jas import startLog
+from jas import terminate
+
 
 # trinks 6/7 example
 
@@ -28,7 +31,7 @@ ps = """
  ( - 9 W + 15 T P + 20 S Z ), 
  ( P W + 2 T Z - 11 B**3 ), 
  ( 99 W - 11 B S + 3 B**2 ),
- ( B**2 + 33/50 B + 2673/10000 )
+ ( 10000 B**2 + 6600 B + 2673 )
 ) 
 """;
 
@@ -43,10 +46,11 @@ f = r.ideal( ps );
 print "Ideal: " + str(f);
 print;
 
-rg = f.GB();
-print "seq Output:", rg;
-print;
+#startLog();
 
+rg = f.GB();
+#print "seq Output:", rg;
+#print;
 
 rg = f.parGB(2);
 #print "par Output:", rg;
@@ -57,5 +61,6 @@ rg = f.distGB(2);
 #print "dist Output:", rg;
 #print;
 
+terminate();
 sys.exit();
 
