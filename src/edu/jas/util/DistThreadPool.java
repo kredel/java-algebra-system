@@ -370,11 +370,11 @@ public void run() {
                 t = System.currentTimeMillis();
                 // send and wait, like rmi
                 try {
-		    if ( job instanceof ShutdownRequest ) {
+              if ( job instanceof ShutdownRequest ) {
                        ec.send( myId, ExecutableServer.STOP );
-		    } else {
+              } else {
                        ec.send( myId, job );
-		    }
+              }
                 } catch (IOException e) {
                     e.printStackTrace();
                     working = false;
