@@ -58,8 +58,21 @@ public class ResidueRing<C extends GcdRingElem<C> >
      * @param i polynomial ideal.
      */
     public ResidueRing(Ideal<C> i) {
+        this(i,false);
+    }
+
+
+    /** The constructor creates a ResidueRing object 
+     * from an Ideal. 
+     * @param i polynomial ideal.
+     * @param isMaximal, true if ideal is maxmal.
+     */
+    public ResidueRing(Ideal<C> i, boolean isMaximal) {
         ideal = i.GB(); // cheap if isGB
         ring = ideal.list.ring;
+        if ( isMaximal ) {
+           isField = 1;
+        }
         //engine = GCDFactory.<C>getImplementation( ring.coFac );
         engine = GCDFactory.<C>getProxy( ring.coFac );
         //System.out.println("rr engine = " + engine.getClass().getName());
@@ -133,7 +146,7 @@ public class ResidueRing<C extends GcdRingElem<C> >
         if ( isField == 0 ) { 
            return false;
         }
-        // ideal is prime ?
+        // ideal is prime or maximal ?
         return false;
     }
 
