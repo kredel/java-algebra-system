@@ -41,8 +41,8 @@ public class Examples {
    public static void main (String[] args) {
        BasicConfigurator.configure();
        //example1();
-       example2();
-       //example3();
+       //example2();
+       example3();
    }
 
 
@@ -179,21 +179,27 @@ public static void example3() {
 
     BigRational bfac = new BigRational(1);
     GenPolynomialRing<BigRational> pfac = null;
-    pfac = new GenPolynomialRing<BigRational>(bfac,1);
+    pfac = new GenPolynomialRing<BigRational>(bfac,2);
 
     List<GenPolynomial<BigRational>> F = null;
     F = new ArrayList<GenPolynomial<BigRational>>();
 
     GenPolynomial<BigRational> p = null;
-    for ( int i = 0; i < 3; i++) {
+    for ( int i = 0; i < 2; i++) {
         p = pfac.random(5,5,5,0.4f);
         //p = pfac.parse("x0^2 -2" );
-        F.add(p);
+        if ( !p.isConstant() ) {
+           F.add(p);
+        }
     }
     //System.out.println("F = " + F);
 
     Ideal<BigRational> id = new Ideal<BigRational>(pfac,F);
     id.doGB();
+    if ( id.isONE() || id.isZERO() ) {
+       System.out.println("id zero or one = " + id);
+       return;
+    }
     ResidueRing<BigRational> rr = new ResidueRing<BigRational>(id);
     System.out.println("rr = " + rr);
 
