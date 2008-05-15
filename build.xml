@@ -12,7 +12,7 @@
   <property name="test"      value="test" />
   <property name="jar"       value="jas.jar" />
 
-  <property name="libs"      value="/home/kredel/java/lib" />
+  <property name="libs"      value="${basedir}/../lib" />
   <property name="log4j"     value="${libs}/log4j.jar" />
   <property name="junit"     value="${libs}/junit.jar" />
   <property name="jomp"      value="${libs}/jomp1.0b.jar" />
@@ -27,11 +27,13 @@
   <property name="doccp"    value="${log4j}:${junit}" />
   <property name="version"  value="0.1" />
 
+<!--
   <taskdef name="lint4j" classname="com.jutils.lint4j.ant.Lint4jAntTask">
     <classpath>
       <pathelement location="${lint}"/>
     </classpath>
   </taskdef>
+-->
 
 <target name="vorher" >
   <!-- set properties DSTAMP, TSTAMP -->
@@ -87,6 +89,7 @@
 
 <target name="usage" >
   <echo message="ant &lt;name&gt; cl='cmd'"  />
+  <echo message="basedir = ${basedir}"  />
   <echoproperties />
 </target>
 
@@ -180,9 +183,6 @@
 
 <target name="test" 
         depends="vorher" >
-  <!-- works with apache ant download -->
-  <!-- does not work with suse ant, optional for junit missing -->
-  <!-- ok in 2004 09 -->
   <junit printsummary="yes" 
          fork="yes" 
          showoutput="yes"
@@ -199,9 +199,6 @@
 
 <target name="testarith" 
         depends="vorher" >
-  <!-- works with apache ant download -->
-  <!-- does not work with suse ant, optional for junit missing -->
-  <!-- ok in 2004 09 -->
   <junit printsummary="yes" 
          fork="yes" 
          showoutput="yes"
@@ -218,9 +215,6 @@
 
 <target name="testpoly" 
         depends="vorher" >
-  <!-- works with apache ant download -->
-  <!-- does not work with suse ant, optional for junit missing -->
-  <!-- ok in 2004 09 -->
   <junit printsummary="yes" 
          fork="yes" 
          showoutput="yes"
@@ -237,9 +231,6 @@
 
 <target name="testufd" 
         depends="vorher" >
-  <!-- works with apache ant download -->
-  <!-- does not work with suse ant, optional for junit missing -->
-  <!-- ok in 2004 09 -->
   <junit printsummary="yes" 
          fork="yes" 
          showoutput="yes"
