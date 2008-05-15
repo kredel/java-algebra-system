@@ -21,6 +21,8 @@ JDK=/usr/lib/jvm/java/bin
 #JDK=/opt/jdk1.2.2/bin
 #JDK=/usr/lib/java/bin
 
+JASPATH=/home/kredel/jas
+SVNREPO=/home/SUBVERSION
 LIBPATH=/home/kredel/java/lib
 JUNITPATH=$(LIBPATH)/junit.jar
 LOG4JPATH=$(LIBPATH)/log4j.jar
@@ -57,6 +59,8 @@ pub:
 compute:
 	$(RSYNC) ./                compute:java/$(PART)
 
+# --- end syncing ----------
+
 
 # no need to change below this line
 
@@ -65,7 +69,6 @@ cl=
 
 #.EXPORT_ALL_VARIABLES :
 
-JASPATH=/home/kredel/jas
 DEFS=$(JASPATH)/arith:$(JASPATH)/poly:$(JASPATH)/vector:$(JASPATH)/ring:$(JASPATH)/ufd:$(JASPATH)/module:$(JASPATH)/util:$(JASPATH)/application
 DOCCLASSES=$(JUNITPATH):$(LOG4JPATH):$(JOMPPATH)
 #:$(TNJPATH)
@@ -209,7 +212,7 @@ jas.tgz: $(FILES) *.html */package.html TODO
 	tar -cvzf jas.tgz $(FILES) *.html */package.html TODO
 	mv jas.tgz /tmp/jas-`date +%Y%j`.tgz
 
-#	cp jas.jar /mnt/i/e/kredel/jas-`date +%Y%j`.jar
+#	cp jas.jar ...../jas-`date +%Y%j`.jar
 #jas-run.jar: GBManifest.MF $(TOJAR)
 #	$(JDK)/jar -cvfm jas-run.jar GBManifest.MF $(TOJAR)
 
@@ -243,14 +246,14 @@ clean:
 	rm -f application/application arith/arith kern/kern module/module poly/poly ring/ring structure/structure ufd/ufd util/util vector/vector
 
 
-#svn copy file:///home/SUBVERSION/jas/trunk file:///home/SUBVERSION/jas/tags/$(VERSION)
+#svn copy file:///$(SVNREPO)/jas/trunk file:///$(SVNREPO)/jas/tags/$(VERSION)
 
-SVNREV=svnlook youngest /home/SUBVERSION/jas
-SVNDATE=svnlook date /home/SUBVERSION/jas
+SVNREV=svnlook youngest $(SVNREPO)/jas
+SVNDATE=svnlook date $(SVNREPO)/jas
 
 export:
 	rm -rf ~/jas-versions/$(VERSION)
-	svn export --quiet file:///home/SUBVERSION/jas/trunk ~/jas-versions/$(VERSION)
+	svn export --quiet file:///$(SVNREPO)/jas/trunk ~/jas-versions/$(VERSION)
 	cd ~/jas-versions/$(VERSION); jas_dosed $(VERSION) `$(SVNREV)` download.html
 	cd ~/jas-versions/; jar -cf $(VERSION).`$(SVNREV)`-src.jar $(VERSION)/
 	cd ~/jas-versions/$(VERSION)/; ant compile > ant_compile.out
@@ -266,10 +269,10 @@ deploy:
 
 
 young:
-	svnlook youngest /home/SUBVERSION/jas > make.svnversion
+	svnlook youngest $(SVNREPO)/jas > make.svnversion
 	echo svn1 `cat make.svnversion`
-	echo svn2 `svnlook youngest /home/SUBVERSION/jas`
-	REVNO=`svnlook youngest /home/SUBVERSION/jas`
+	echo svn2 `svnlook youngest $(SVNREPO)/jas`
+	REVNO=`svnlook youngest $(SVNREPO)/jas`
 	echo svn3 $(REVNO)
 
 subst:
