@@ -339,7 +339,7 @@ public class ANumGenPolynomialTest extends TestCase {
          assertTrue("a invertible mod b "+x, x.isUnit() );
      } catch (RuntimeException e) {
          // dann halt nicht
-	 // not invertible
+      // not invertible
      }
  }
 
