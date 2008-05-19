@@ -6,7 +6,9 @@ package edu.jas.poly;
 
 import java.util.Random;
 import java.util.Vector;
-import java.io.Serializable;
+//import java.io.Serializable;
+
+import edu.jas.structure.AbelianGroupElem;
 
 
 /**
@@ -21,7 +23,8 @@ import java.io.Serializable;
  * @author Heinz Kredel
  */
 
-public final class ExpVector implements Cloneable, Serializable {
+public final class ExpVector implements AbelianGroupElem<ExpVector>
+                                 /*Cloneable, Serializable*/ {
 
 
     /**
@@ -118,7 +121,7 @@ public final class ExpVector implements Cloneable, Serializable {
      * @see java.lang.Object#clone()
      */
     @Override
-     public Object clone() {
+    public ExpVector clone() {
         long[] w = new long[ val.length ];
         System.arraycopy(val,0,w,0,val.length);
         return new ExpVector( w );
@@ -262,7 +265,7 @@ public final class ExpVector implements Cloneable, Serializable {
      * @see java.lang.Object#toString()
      */
     @Override
-     public String toString() {
+    public String toString() {
         // if ( vars != null ) return toString(vars);
         StringBuffer s = new StringBuffer("(");
         for (int i = 0; i < val.length; i++ ) {
@@ -404,6 +407,58 @@ public final class ExpVector implements Cloneable, Serializable {
 
 
     /**
+     * ExpVector absolute value.
+     * @param U
+     * @return abs(U).
+     */
+    public static ExpVector EVABS( ExpVector U ) {
+        long[] u = U.getVal();
+        long[] w = new long[u.length];
+        for (int i = 0; i < u.length; i++ ) {
+            if ( u[i] >= 0L ) {
+               w[i] = u[i];
+            } else {
+               w[i] = - u[i];
+            }
+        }
+        return new ExpVector( w );
+    }
+
+
+    /**
+     * ExpVector absolute value.
+     * @return abs(this).
+     */
+    public ExpVector abs( ) {
+        return EVABS(this);
+    }
+
+
+    /**
+     * ExpVector negate.
+     * @param U
+     * @return -U.
+     */
+    public static ExpVector EVNEG( ExpVector U ) {
+        long[] u = U.getVal();
+        long[] w = new long[u.length];
+        for (int i = 0; i < u.length; i++ ) {
+            w[i] = - u[i];
+        }
+        return new ExpVector( w );
+    }
+
+
+    /**
+     * ExpVector negate.
+     * @return -this.
+     */
+    public ExpVector negate( ) {
+        return EVNEG(this);
+    }
+
+
+    /**
      * ExpVector summation.
      * @param U
      * @param V
@@ -418,6 +473,7 @@ public final class ExpVector implements Cloneable, Serializable {
         }
         return new ExpVector( w );
     }
+
 
     /**
      * ExpVector summation.
@@ -448,12 +504,12 @@ public final class ExpVector implements Cloneable, Serializable {
 
 
     /**
-     * ExpVector difference.
+     * ExpVector subtract.
      * Result may have negative entries.
      * @param V
      * @return this-V.
      */
-    public ExpVector dif( ExpVector V ) {
+    public ExpVector subtract( ExpVector V ) {
         return EVDIF(this, V);
     }
 
@@ -568,6 +624,16 @@ public final class ExpVector implements Cloneable, Serializable {
             }
         }
         return t;
+    }
+
+
+    /**
+     * ExpVector sign.
+     * @return 0 if this is zero, -1 if some entry is negative, 
+     *  1 if no entry is negativ and at least one entry is positive.
+     */
+    public int signum( ) {
+        return EVSIGN(this);
     }
 
 
@@ -716,6 +782,18 @@ public final class ExpVector implements Cloneable, Serializable {
         }
         return t;
     }
+
+
+    /**
+     * ExpVector compareTo.
+     * @param V
+     * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
+     */
+    @Override
+    public int compareTo( ExpVector V ) {
+        return EVILCP(this, V);
+    }
+
 
 
     /**

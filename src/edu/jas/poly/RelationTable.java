@@ -322,8 +322,8 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
             look = (ExpVectorPair)it.next();
             p = (GenSolvablePolynomial<C>)it.next();
             if ( evp.isMultiple( look ) ) {
-                ep = e.dif( look.getFirst() );
-                fp = f.dif( look.getSecond() );
+                ep = e.subtract( look.getFirst() );
+                fp = f.subtract( look.getSecond() );
                 if ( ep.isZERO() ) {
                     ep = null;
                 }

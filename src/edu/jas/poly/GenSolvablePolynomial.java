@@ -164,7 +164,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
                        if ( rel.e == null ) {
                           e4 = e2;
                        } else {
-                          e4 = e2.dif( rel.e );
+                          e4 = e2.subtract( rel.e );
                        }
                        ring.table.update(e4,f2,Cs);
                     }
