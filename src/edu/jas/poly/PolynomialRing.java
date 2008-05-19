@@ -20,7 +20,7 @@ import edu.jas.structure.RingFactory;
  */
 
 public interface PolynomialRing<C extends RingElem<C>> 
-                 extends RingFactory<C> {
+                 extends RingFactory< Polynomial<C> > {
 
 
     /**

@@ -21,7 +21,7 @@ import edu.jas.structure.RingFactory;
  */
 
 public interface Polynomial<C extends RingElem<C>> 
-                 extends RingElem<C> {
+                 extends RingElem< Polynomial<C> > {
 
     /**
      * Leading monomial.

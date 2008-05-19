@@ -40,7 +40,7 @@ import edu.jas.poly.GenPolynomialRing;
  */
 
 public class GenPolynomial<C extends RingElem<C> > 
-    implements RingElem< GenPolynomial<C> > {
+    implements RingElem< GenPolynomial<C> > /* not jet Polynomial<C> */ {
 
     /** The factory for the polynomial ring. 
      */
