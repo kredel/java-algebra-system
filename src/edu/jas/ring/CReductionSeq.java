@@ -5,6 +5,7 @@
 package edu.jas.ring;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -29,8 +30,8 @@ import edu.jas.application.Ideal;
  */
 
 public class CReductionSeq<C extends GcdRingElem<C>>
-    extends ReductionAbstract<C> 
-            /*implements CReduction<C>*/ {
+             /*extends ReductionAbstract<C>*/ 
+             /*implements CReduction<C>*/ {
 
     private static final Logger logger = Logger.getLogger(CReductionSeq.class);
     private final boolean debug = logger.isDebugEnabled();
@@ -44,21 +45,242 @@ public class CReductionSeq<C extends GcdRingElem<C>>
 
 
     /**
+     * S-Polynomial.
+     * @param Ap polynomial.
+     * @param Bp polynomial.
+     * @return spol(Ap,Bp) the S-polynomial of Ap and Bp.
+     */
+    public ColorPolynomial<C> 
+           SPolynomial(ColorPolynomial<C> Ap, 
+                       ColorPolynomial<C> Bp) {  
+        if ( Bp == null || Bp.isZERO() ) {
+           return Bp;
+        }
+        if ( Ap == null || Ap.isZERO() ) {
+            return Ap;
+        }
+
+        Map.Entry<ExpVector,GenPolynomial<C>> ma = Ap.red.leadingMonomial();
+        Map.Entry<ExpVector,GenPolynomial<C>> mb = Bp.red.leadingMonomial();
+
+        ExpVector e = ma.getKey();
+        ExpVector f = mb.getKey();
+
+        ExpVector g  = ExpVector.EVLCM(e,f);
+        ExpVector e1 = ExpVector.EVDIF(g,e);
+        ExpVector f1 = ExpVector.EVDIF(g,f);
+
+        GenPolynomial<C> a = ma.getValue();
+        GenPolynomial<C> b = mb.getValue();
+
+        ColorPolynomial<C> App = Ap.multiply( b, e1 );
+        ColorPolynomial<C> Bpp = Bp.multiply( a, f1 );
+        ColorPolynomial<C> Cp = App.subtract(Bpp);
+        return Cp;
+    }
+
+
+    /**
+     * S-Polynomial with recording.
+     * @param S recording matrix, is modified. 
+     *        <b>Note</b> the negative Spolynomial is recorded as 
+     *        required by all applications.
+     * @param i index of Ap in basis list.
+     * @param Ap a polynomial.
+     * @param j index of Bp in basis list.
+     * @param Bp a polynomial.
+     * @return Spol(Ap, Bp), the S-Polynomial for Ap and Bp.
+     */
+    public GenPolynomial<C> 
+        SPolynomial(List<GenPolynomial<C>> S,
+                    int i,
+                    GenPolynomial<C> Ap, 
+                    int j,
+                    GenPolynomial<C> Bp) {  
+        throw new RuntimeException("not implemented");
+    }
+
+
+    /**
+     * Is reducible.
+     * @param Ap polynomial.
+     * @param Pp polynomial list.
+     * @return true if Ap is reducible with respect to Pp.
+     */
+    public boolean isReducible(List<ColorPolynomial<C>> Pp, 
+                               ColorPolynomial<C> Ap) {  
+        return !isNormalform(Pp,Ap);
+    }
+
+
+    /**
+     * Is in Normalform.
+     * @param Ap polynomial.
+     * @param Pp polynomial list.
+     * @return true if Ap is in normalform with respect to Pp.
+     */
+    @SuppressWarnings("unchecked") 
+    public boolean isNormalform(List<ColorPolynomial<C>> Pp, 
+                                ColorPolynomial<C> Ap) {  
+        if ( Pp == null || Pp.isEmpty() ) {
+           return true;
+        }
+        if ( Ap == null || Ap.isZERO() ) {
+           return true;
+        }
+        int l;
+        ColorPolynomial<C>[] P;
+        synchronized (Pp) {
+            l = Pp.size();
+            P = new ColorPolynomial[l];
+            //P = Pp.toArray();
+            for ( int i = 0; i < Pp.size(); i++ ) {
+                P[i] = Pp.get(i);
+            }
+        }
+        ExpVector[] htl = new ExpVector[ l ];
+        ColorPolynomial<C>[] p = new ColorPolynomial[ l ];
+        Map.Entry<ExpVector,GenPolynomial<C>> m;
+        int i;
+        int j = 0;
+        for ( i = 0; i < l; i++ ) { 
+            p[i] = P[i];
+            m = p[i].red.leadingMonomial();
+            if ( m != null ) { 
+               p[j] = p[i];
+               htl[j] = m.getKey();
+               j++;
+            }
+        }
+        l = j;
+        boolean mt = false;
+        for ( ExpVector e : Ap.red.getMap().keySet() ) { 
+            for ( i = 0; i < l; i++ ) {
+                mt = ExpVector.EVMT( e, htl[i] );
+                if ( mt ) {
+                   return false;
+                } 
+            }
+        }
+        for ( ExpVector e : Ap.white.getMap().keySet() ) { 
+            for ( i = 0; i < l; i++ ) {
+                mt = ExpVector.EVMT( e, htl[i] );
+                if ( mt ) {
+                   return false;
+                } 
+            }
+        }
+        return true;
+    }
+
+
+    /**
+     * Is in Normalform.
+     * @param Pp polynomial list.
+     * @return true if each Ap in Pp is in normalform with respect to Pp\{Ap}.
+     */
+    public boolean isNormalform( List<ColorPolynomial<C>> Pp ) {  
+        if ( Pp == null || Pp.isEmpty() ) {
+           return true;
+        }
+        ColorPolynomial<C> Ap;
+        List<ColorPolynomial<C>> P = new LinkedList<ColorPolynomial<C>>( Pp );
+        int s = P.size();
+        for ( int i = 0; i < s; i++ ) {
+            Ap = P.remove(i);
+            if ( ! isNormalform(P,Ap) ) {
+               return false;
+            }
+            P.add(Ap);
+        }
+        return true;
+    }
+
+
+    /**
      * Normalform.
      * @param Ap polynomial.
      * @param Pp polynomial list.
      * @return nf(Ap) with respect to Pp.
      */
-    //@SuppressWarnings("unchecked") 
-    public GenPolynomial<C> normalform(List<GenPolynomial<C>> Pp, 
-                                       GenPolynomial<C> Ap) {  
+    @SuppressWarnings("unchecked") 
+    public ColorPolynomial<C> normalform(List<ColorPolynomial<C>> Pp, 
+                                         ColorPolynomial<C> Ap) {  
         if ( Pp == null || Pp.isEmpty() ) {
-            return Ap;
+           return Ap;
         }
         if ( Ap == null || Ap.isZERO() ) {
-            return Ap;
+           return Ap;
         }
-        return Ap;
+        Map.Entry<ExpVector,GenPolynomial<C>> m;
+        int l;
+        ColorPolynomial<C>[] P;
+        synchronized (Pp) {
+            l = Pp.size();
+            P = new ColorPolynomial[l];
+            //P = Pp.toArray();
+            for ( int i = 0; i < Pp.size(); i++ ) {
+                P[i] = Pp.get(i);
+            }
+        }
+        ExpVector[] htl = new ExpVector[ l ];
+        Object[] lbc = new Object[ l ]; // want C[] 
+        ColorPolynomial<C>[] p = new ColorPolynomial[ l ];
+        int i;
+        int j = 0;
+        for ( i = 0; i < l; i++ ) { 
+            if ( P[i] == null ) {
+               continue;
+            }
+            p[i] = P[i];
+            m = p[i].red.leadingMonomial();
+            if ( m != null ) { 
+               p[j] = p[i];
+               htl[j] = m.getKey();
+               lbc[j] = m.getValue();
+               j++;
+            }
+        }
+        l = j;
+        ExpVector e;
+        GenPolynomial<C> a;
+        boolean mt = false;
+        GenPolynomial<GenPolynomial<C>> zero = p[0].red.ring.getZERO();
+        ColorPolynomial<C> R = new ColorPolynomial<C>(zero,zero,zero);
+
+        //ColorPolynomial<C> T = null;
+        ColorPolynomial<C> Q = null;
+        ColorPolynomial<C> S = Ap;
+        while ( S.length() > 0 ) { 
+              m = S.leadingMonomial();
+              e = m.getKey();
+              a = m.getValue();
+              //System.out.println("NF, e = " + e);
+              for ( i = 0; i < l; i++ ) {
+                  mt = ExpVector.EVMT( e, htl[i] );
+                  if ( mt ) break; 
+              }
+              if ( ! mt ) { 
+                 //logger.debug("irred");
+                 //T = new OrderedMapPolynomial( a, e );
+                 R = R.sum( a, e );
+                 S = S.subtract( a, e ); 
+                 // System.out.println(" S = " + S);
+              } else { 
+                 e = ExpVector.EVDIF( e, htl[i] );
+                 //logger.info("red div = " + e);
+                 GenPolynomial<C> c = (GenPolynomial<C>) lbc[i];
+                 if ( a.remainder(c).isZERO() ) {   //c.isUnit() ) {
+                    a = a.divide( c );
+                 } else {
+                    S = S.multiply( c );
+                    R = R.multiply( c );
+                 }
+                 Q = p[i].multiply( a, e );
+                 S = S.subtract( Q );
+              }
+        }
+        return R;
     }
 
 
@@ -70,17 +292,18 @@ public class CReductionSeq<C extends GcdRingElem<C>>
      * @return nf(Pp,Ap), the normal form of Ap wrt. Pp.
      */
     @SuppressWarnings("unchecked") 
-        public GenPolynomial<C> 
-        normalform(List<GenPolynomial<C>> row,
-                   List<GenPolynomial<C>> Pp, 
-                   GenPolynomial<C> Ap) {  
+        public ColorPolynomial<C> 
+        normalform(List<ColorPolynomial<C>> row,
+                   List<ColorPolynomial<C>> Pp, 
+                   ColorPolynomial<C> Ap) {  
         if ( Pp == null || Pp.isEmpty() ) {
             return Ap;
         }
         if ( Ap == null || Ap.isZERO() ) {
             return Ap;
         }
-        return Ap;
+        throw new RuntimeException("not implemented");
+        //return Ap;
     }
 
 
@@ -160,17 +383,6 @@ public class CReductionSeq<C extends GcdRingElem<C>>
                 Ap = Bp;
             }
         }
-        /*
-        CS = NCS;
-        NCS = new ArrayList<ColoredSystem<C>>( CS.size() );
-        for ( ColoredSystem<C> cs : CS ) {
-            if ( cs.conditions.isONE() ) {
-               System.out.println("dropping " + cs);
-            } else {
-               NCS.add(cs);
-            }
-        }
-        */
         return NCS;
     }
 
