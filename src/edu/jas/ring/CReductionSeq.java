@@ -109,7 +109,7 @@ public class CReductionSeq<C extends GcdRingElem<C>>
             GenPolynomial<GenPolynomial<C>> Bp;
             ColorPolynomial<C> nz;
             ColoredSystem<C> NS;
-            Ideal<C> id = cs.conditions.clone();
+            Ideal<C> id = cs.conditions; //.clone();
             System.out.println("starting id = " + id);
             List<ColorPolynomial<C>> S = cs.S;
             List<ColorPolynomial<C>> Sp;
@@ -126,6 +126,7 @@ public class CReductionSeq<C extends GcdRingElem<C>>
                    Sp = new ArrayList<ColorPolynomial<C>>( S );
                    Sp.add( nz );
                    NS = new ColoredSystem<C>( id, Sp );
+                   NS = NS.reDetermine();
                    System.out.println("NS = " + NS);
                    NCS.add( NS );
                    break;
@@ -142,19 +143,34 @@ public class CReductionSeq<C extends GcdRingElem<C>>
                 //System.out.println("nz = " + nz);
                 Sp = new ArrayList<ColorPolynomial<C>>( S );
                 Sp.add( nz );
+                // re determine existing polynomials
                 NS = new ColoredSystem<C>( id, Sp );
+                NS = NS.reDetermine();
                 System.out.println("NS = " + NS);
                 NCS.add( NS );
 
                 id = id.sum( c );
                 System.out.println("id = " + id);
-                if ( id.isONE() ) { // can treat remaining coeffs as red
-                   break;
+                if ( id.isONE() ) { // can treat remaining coeffs as green
+                   System.out.println("dropping " + cs);
+                   System.out.println("by green " + green.sum(c,e));
+                   break; // drop system
                 }
                 green = green.sum(c,e);
                 Ap = Bp;
             }
         }
+        /*
+        CS = NCS;
+        NCS = new ArrayList<ColoredSystem<C>>( CS.size() );
+        for ( ColoredSystem<C> cs : CS ) {
+            if ( cs.conditions.isONE() ) {
+               System.out.println("dropping " + cs);
+            } else {
+               NCS.add(cs);
+            }
+        }
+        */
         return NCS;
     }
 
