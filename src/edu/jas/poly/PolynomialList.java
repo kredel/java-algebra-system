@@ -35,7 +35,7 @@ import edu.jas.vector.ModuleList;
  */
 
 public class PolynomialList<C extends RingElem<C> > 
-       implements Comparable<PolynomialList<C>>, Serializable {
+    implements Comparable<PolynomialList<C>>, Serializable, Cloneable {
 
 
     /** The factory for the solvable polynomial ring. 
@@ -71,6 +71,16 @@ public class PolynomialList<C extends RingElem<C> >
     public PolynomialList( GenSolvablePolynomialRing< C > r,
                            List<GenSolvablePolynomial< C >> l) {
         this( r, PolynomialList.<C>castToList(l) ); 
+    }
+
+
+    /**
+     * Clone this.
+     * @return a copy of this.
+     */
+    @Override
+    public PolynomialList<C> clone() {
+        return new PolynomialList<C>(ring,new ArrayList<GenPolynomial<C>>(list));
     }
 
 
