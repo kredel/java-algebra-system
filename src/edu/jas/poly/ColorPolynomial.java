@@ -6,22 +6,22 @@
 package edu.jas.poly;
 
 import java.util.Map;
-//import java.util.Map.Entry;
-import java.util.SortedMap;
-import java.util.TreeMap;
-import java.util.Iterator;
-import java.util.Collections;
+import java.util.List;
+import java.util.ArrayList;
+//import java.util.Iterator;
+import java.util.Collection;
+import java.util.Comparator;
 
 import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
-import edu.jas.structure.NotInvertibleException;
+//import edu.jas.structure.NotInvertibleException;
 
-import edu.jas.kern.PrettyPrint;
-import edu.jas.kern.PreemptingException;
+//import edu.jas.kern.PrettyPrint;
+//import edu.jas.kern.PreemptingException;
 
-import edu.jas.poly.ExpVector;
-import edu.jas.poly.GenPolynomialRing;
+//import edu.jas.poly.ExpVector;
+//import edu.jas.poly.GenPolynomialRing;
 
 
 /**
@@ -36,17 +36,17 @@ public class ColorPolynomial<C extends RingElem<C> >
 
     /** The part with green (= zero) terms and coefficients.
      */
-    public final GenPolynomial<C> green;
+    public final GenPolynomial<GenPolynomial<C>> green;
 
 
     /** The part with red (= non zero) terms and coefficients.
      */
-    public final GenPolynomial<C> red;
+    public final GenPolynomial<GenPolynomial<C>> red;
 
 
     /** The part with white (= unknown color) terms and coefficients.
      */
-    public final GenPolynomial<C> white;
+    public final GenPolynomial<GenPolynomial<C>> white;
 
 
     /** The constructor creates a colored polynomial from
@@ -55,7 +55,9 @@ public class ColorPolynomial<C extends RingElem<C> >
      * @param r red colored terms and coefficients.
      * @param w white colored terms and coefficients.
      */
-    public ColorPolynomial(GenPolynomial<C> g, GenPolynomial<C> r, GenPolynomial<C> w) {
+    public ColorPolynomial(GenPolynomial<GenPolynomial<C>> g, 
+                           GenPolynomial<GenPolynomial<C>> r, 
+                           GenPolynomial<GenPolynomial<C>> w) {
         if ( g == null || r == null || w == null ) {
            throw new IllegalArgumentException("g,r,w may not be null");
         }
@@ -66,12 +68,108 @@ public class ColorPolynomial<C extends RingElem<C> >
 
 
     /**
+     * String representation of GenPolynomial.
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        StringBuffer s = new StringBuffer();
+        s.append( ":green: " );
+        s.append( green.toString() );
+        s.append( " :red: " );
+        s.append( red.toString() );
+        s.append( " :white: " );
+        s.append( white.toString() );
+        return s.toString();
+    }
+
+
+    /**
+     * Is this polynomial ZERO.
+     * return true, if there are only green terms, else false.
+     */
+    public boolean isZERO() {
+        return ( red.isZERO() && white.isZERO() );
+    }
+
+
+    /**
+     * Is this polynomial determined.
+     * return true, if there are nonzero red terms, else false.
+     */
+    public boolean isDetermined() {
+        return ( !red.isZERO() );
+    }
+
+
+    /**
+     * Check ordering invariants.
+     * TT(green) > LT(red) and TT(red) > LT(green).
+     * return true, if all ordering invariants are met, else false.
+     */
+    public boolean checkInvariant() {
+        boolean t = true;
+        ExpVector ttg, ltr, ttr, ltw;
+        Comparator<ExpVector> cmp;
+        if ( green.isZERO() && red.isZERO() && white.isZERO() ) {
+           return true;
+        }
+        if ( green.isZERO() && red.isZERO() ) {
+           return true;
+        } 
+        if ( red.isZERO() && white.isZERO() ) {
+           return true;
+        } 
+
+        if ( !green.isZERO() && !red.isZERO() ) {
+           ttg = green.trailingExpVector();
+           ltr = red.leadingExpVector();
+           cmp = green.ring.tord.getDescendComparator();
+           t = t && ( cmp.compare(ttg,ltr) < 0 );
+        }
+        if ( !red.isZERO() && !white.isZERO() ) {
+           ttr = red.trailingExpVector();
+           ltw = white.leadingExpVector();
+           cmp = white.ring.tord.getDescendComparator();
+           t = t && ( cmp.compare(ttr,ltw) < 0 );
+        }
+        if ( red.isZERO() && !green.isZERO() && !white.isZERO() ) {
+           ttg = green.trailingExpVector();
+           ltw = white.leadingExpVector();
+           cmp = white.ring.tord.getDescendComparator();
+           t = t && ( cmp.compare(ttg,ltw) < 0 );
+        }
+        return t;
+    }
+
+
+    /**
+     * Get zero condition on coefficients. 
+     * @return green coefficients.
+     */
+    public List<GenPolynomial<C>> getConditionZero() {
+        Collection<GenPolynomial<C>> c = green.getMap().values();
+        return new ArrayList<GenPolynomial<C>>( c );
+    }
+
+
+    /**
+     * Get non zero condition on coefficients. 
+     * @return red coefficients.
+     */
+    public List<GenPolynomial<C>> getConditionNonZero() {
+        Collection<GenPolynomial<C>> c = red.getMap().values();
+        return new ArrayList<GenPolynomial<C>>( c );
+    }
+
+
+    /**
      * ColorPolynomial summation. 
      * @param S ColorPolynomial.
      * @return this+S.
      */
     public ColorPolynomial<C> sum( ColorPolynomial<C> S ) {
-        GenPolynomial<C> g, r, w;
+        GenPolynomial<GenPolynomial<C>> g, r, w;
         g = green.sum( S.green );
         r = red.sum( S.red );
         w = white.sum( S.white );
@@ -87,7 +185,7 @@ public class ColorPolynomial<C extends RingElem<C> >
      * @return this-S.
      */
     public ColorPolynomial<C> subtract( ColorPolynomial<C> S ) {
-        GenPolynomial<C> g, r, w;
+        GenPolynomial<GenPolynomial<C>> g, r, w;
         g = green.subtract( S.green );
         r = red.subtract( S.red );
         w = white.subtract( S.white );
@@ -103,8 +201,8 @@ public class ColorPolynomial<C extends RingElem<C> >
      * @param s Expvector.
      * @return this * (c t).
      */
-    public ColorPolynomial<C> multiply( C s, ExpVector e ) {
-        GenPolynomial<C> g, r, w;
+    public ColorPolynomial<C> multiply( GenPolynomial<C> s, ExpVector e ) {
+        GenPolynomial<GenPolynomial<C>> g, r, w;
         g = green.multiply( s, e );
         r = red.multiply( s, e );
         w = white.multiply( s, e );
