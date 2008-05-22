@@ -58,7 +58,7 @@ public class PolyIterator<C extends RingElem<C> >
 
 
     /** 
-     * Remove next monomial from underlying set if allowed.
+     * Remove the last monomial returned from underlying set if allowed.
      */
     public void remove() {
         ms.remove();
