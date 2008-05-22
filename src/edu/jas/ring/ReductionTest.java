@@ -6,6 +6,7 @@ package edu.jas.ring;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -23,8 +24,12 @@ import edu.jas.arith.BigComplex;
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.ColorPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolynomialList;
+
+import edu.jas.application.Ideal;
+
 
 /**
  * Reduction tests with JUnit.
@@ -1099,6 +1104,107 @@ public static Test suite() {
      e = rpred.normalform( row, L, f );
      assertTrue("is Reduction ", rpred.isNormalform(L,e) );
      assertTrue("is ReductionNF ", rpred.isReductionNF(row,L,f,e) );
+ }
+
+
+/**
+ * Test rational coefficient polynomial parametric reduction.
+ * 
+ */
+ public void testRatPolReduction() {
+
+     RingFactory<BigRational> bi = new BigRational(0);
+     GenPolynomialRing<BigRational> pr 
+         = new GenPolynomialRing<BigRational>(bi,2, new String[] { "a", "b" } );
+     GenPolynomialRing<GenPolynomial<BigRational>> fac 
+        = new GenPolynomialRing<GenPolynomial<BigRational>>(pr,rl);
+
+     CReductionSeq<BigRational> cred 
+         = new CReductionSeq<BigRational>();
+
+     GenPolynomial<GenPolynomial<BigRational>> a = fac.random(5, ll, el, q );
+     while ( a.isZERO() ) {
+         a = fac.random(kl, ll, el, q );
+     }
+     GenPolynomial<GenPolynomial<BigRational>> b = fac.random(5, ll, el, q );
+     while ( b.isZERO() ) {
+         b = fac.random(kl, ll, el, q );
+     }
+     GenPolynomial<GenPolynomial<BigRational>> g = fac.getZERO();
+
+     Map.Entry<ExpVector,GenPolynomial<BigRational>> m = a.leadingMonomial();
+     ExpVector e = m.getKey();
+     GenPolynomial<BigRational> c = m.getValue();
+
+     GenPolynomial<GenPolynomial<BigRational>> r = fac.getZERO();
+     r = r.sum(c,e);
+
+     GenPolynomial<GenPolynomial<BigRational>> w = a.reductum();
+
+     ColorPolynomial<BigRational> p 
+         = new ColorPolynomial<BigRational>(g,r,w); 
+     System.out.println("p = " + p);
+     System.out.println("check(p) = " + p.checkInvariant());
+     System.out.println("deter(p) = " + p.isDetermined());
+     System.out.println("cond != 0: " + p.getConditionNonZero());
+     System.out.println("cond == 0: " + p.getConditionZero());
+
+     p = new ColorPolynomial<BigRational>(r,g,w); 
+     System.out.println("p = " + p);
+     System.out.println("check(p) = " + p.checkInvariant());
+     System.out.println("deter(p) = " + p.isDetermined());
+     System.out.println("cond != 0: " + p.getConditionNonZero());
+     System.out.println("cond == 0: " + p.getConditionZero());
+
+     p = new ColorPolynomial<BigRational>(r,w,g); 
+     System.out.println("p = " + p);
+     System.out.println("check(p) = " + p.checkInvariant());
+     System.out.println("deter(p) = " + p.isDetermined());
+     System.out.println("cond != 0: " + p.getConditionNonZero());
+     System.out.println("cond == 0: " + p.getConditionZero());
+
+     p = new ColorPolynomial<BigRational>(w,g,g); 
+     System.out.println("p = " + p);
+     System.out.println("check(p) = " + p.checkInvariant());
+     System.out.println("deter(p) = " + p.isDetermined());
+     System.out.println("p == 0: " + p.isZERO());
+     System.out.println("cond != 0: " + p.getConditionNonZero());
+     System.out.println("cond == 0: " + p.getConditionZero());
+
+     List<GenPolynomial<BigRational>> i 
+        = new ArrayList<GenPolynomial<BigRational>>();
+     Ideal<BigRational> id = new Ideal<BigRational>(pr,i); 
+     List<ColorPolynomial<BigRational>> cp 
+        = new ArrayList<ColorPolynomial<BigRational>>();
+     ColoredSystem<BigRational> s 
+        = new ColoredSystem<BigRational>(id,cp);
+     //System.out.println("s = " + s);
+
+     List<ColoredSystem<BigRational>> CS 
+         = new ArrayList<ColoredSystem<BigRational>>();
+     CS.add(s);
+     //System.out.println("CS = " + CS);
+     List<ColoredSystem<BigRational>> CSp = CS; 
+
+     System.out.println("\na = " + a + "\n");
+
+     CS = cred.determine(CS,a);
+     System.out.println("CS = " + CS);
+
+     CS = cred.determine(CS,a);
+     System.out.println("CS = " + CS);
+
+     List<GenPolynomial<GenPolynomial<BigRational>>> L;
+     L = new ArrayList<GenPolynomial<GenPolynomial<BigRational>>>();
+     L.add(a);
+     L.add(b);
+
+     System.out.println("determine ---------------------------------------------");
+     CS = cred.determine(CSp,L);
+     System.out.println("CS ======================================\n" + CS);
+
+     /*
+     */
  }
 
 }
