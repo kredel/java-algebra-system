@@ -1180,6 +1180,9 @@ public static Test suite() {
         = new ColoredSystem<BigRational>(id,cp);
      //System.out.println("s = " + s);
 
+     assertTrue("isDetermined ", s.isDetermined()); 
+     assertTrue("checkInvariant ", s.checkInvariant()); 
+
      List<ColoredSystem<BigRational>> CS 
          = new ArrayList<ColoredSystem<BigRational>>();
      CS.add(s);
@@ -1190,9 +1193,17 @@ public static Test suite() {
 
      CS = cred.determine(CS,a);
      System.out.println("CS = " + CS);
+     for ( ColoredSystem<BigRational> x : CS ) {
+         assertTrue("isDetermined ", x.isDetermined()); 
+         assertTrue("checkInvariant ", x.checkInvariant()); 
+     }
 
      CS = cred.determine(CS,a);
      System.out.println("CS = " + CS);
+     for ( ColoredSystem<BigRational> x : CS ) {
+         assertTrue("isDetermined ", x.isDetermined()); 
+         assertTrue("checkInvariant ", x.checkInvariant()); 
+     }
 
      List<GenPolynomial<GenPolynomial<BigRational>>> L;
      L = new ArrayList<GenPolynomial<GenPolynomial<BigRational>>>();
@@ -1200,8 +1211,17 @@ public static Test suite() {
      L.add(b);
 
      System.out.println("determine ---------------------------------------------");
-     CS = cred.determine(CSp,L);
-     System.out.println("CS ======================================\n" + CS);
+     CSp = cred.determine(CSp,L);
+     System.out.println("CS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" + CSp);
+     System.out.println("++++++++++++++++++++++++++++++++++++++");
+     for ( ColoredSystem<BigRational> x : CSp ) {
+         assertTrue("isDetermined ", x.isDetermined()); 
+         assertTrue("checkInvariant ", x.checkInvariant()); 
+         System.out.println("condition == 0: " + x.getConditionZero());
+         System.out.println("condition != 0: " + x.getConditionNonZero());
+         System.out.println("polynomial list: " + x.getPolynomialList());
+         System.out.println("++++++++++++++++++++++++++++++++++++++");
+     }
 
      /*
      */
