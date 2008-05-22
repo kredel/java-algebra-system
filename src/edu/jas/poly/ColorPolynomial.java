@@ -179,6 +179,28 @@ public class ColorPolynomial<C extends RingElem<C> >
 
 
     /**
+     * Length of red and white parts. 
+     * @return length of essential parts.
+     */
+    public int length() {
+        int s = red.length() + white.length();
+        return s;
+    }
+
+
+    /**
+     * Get leading monomial. 
+     * @return LM of red or white parts.
+     */
+    public Map.Entry<ExpVector,GenPolynomial<C>> leadingMonomial() {
+        if ( !red.isZERO() ) {
+           return red.leadingMonomial();
+        }
+        return white.leadingMonomial();
+    }
+
+
+    /**
      * ColorPolynomial summation. 
      * @param S ColorPolynomial.
      * @return this+S.
@@ -188,6 +210,30 @@ public class ColorPolynomial<C extends RingElem<C> >
         g = green.sum( S.green );
         r = red.sum( S.red );
         w = white.sum( S.white );
+        //throw new RuntimeException("not jet ready");
+        //assert g.trailingExpvector() > r.leadingExpvector();
+        //assert r.trailingExpvector() > w.leadingExpvector();
+        return new ColorPolynomial<C>(g,r,w);
+    }
+
+
+    /**
+     * ColorPolynomial summation. 
+     * @param s GenPolynomial.
+     * @param e exponent vector.
+     * @return this+(c e).
+     */
+    public ColorPolynomial<C> sum( GenPolynomial<C> s, ExpVector e ) {
+        GenPolynomial<GenPolynomial<C>> g, r, w;
+        g = green; //.sum( s, e );
+        // assert !green.getMap().keySet().contains( e )
+        if ( red.getMap().keySet().contains( e ) ) {
+           r = red.sum( s, e );
+           w = white; 
+        } else {
+           r = red;
+           w = white.sum( s, e );
+        }
         //assert g.trailingExpvector() > r.leadingExpvector();
         //assert r.trailingExpvector() > w.leadingExpvector();
         return new ColorPolynomial<C>(g,r,w);
@@ -202,8 +248,20 @@ public class ColorPolynomial<C extends RingElem<C> >
     public ColorPolynomial<C> subtract( ColorPolynomial<C> S ) {
         GenPolynomial<GenPolynomial<C>> g, r, w;
         g = green.subtract( S.green );
-        r = red.subtract( S.red );
-        w = white.subtract( S.white );
+        Comparator<ExpVector> cmp;
+        if ( red.isZERO() ) {
+           r = red;
+           w = white.subtract(S.red ).subtract( S.white );
+        } else {
+           r = red.subtract( S.red );
+           w = white.subtract( S.white );
+        }
+        //if ( !green.isZERO() && !red.isZERO() ) {
+        //   ttg = green.trailingExpVector();
+        //   ltr = red.leadingExpVector();
+        //   cmp = green.ring.tord.getDescendComparator();
+        //   t = t && ( cmp.compare(ttg,ltr) < 0 );
+        //}
         //assert g.trailingExpvector() > r.leadingExpvector();
         //assert r.trailingExpvector() > w.leadingExpvector();
         return new ColorPolynomial<C>(g,r,w);
@@ -211,8 +269,32 @@ public class ColorPolynomial<C extends RingElem<C> >
 
 
     /**
-     * ColorPolynomial multiplicatinon by monomial. 
-     * @param e Coefficient.
+     * ColorPolynomial subtract. 
+     * @param s GenPolynomial.
+     * @param e exponent vector.
+     * @return this-(c e).
+     */
+    public ColorPolynomial<C> subtract( GenPolynomial<C> s, ExpVector e ) {
+        GenPolynomial<GenPolynomial<C>> g, r, w;
+        g = green; //.subtract( s, e );
+        // assert !green.getMap().keySet().contains( e )
+        if ( red.getMap().keySet().contains( e ) ) {
+           r = red.subtract( s, e );
+           w = white; 
+        } else {
+           r = red;
+           w = white.subtract( s, e );
+        }
+        //assert g.trailingExpvector() > r.leadingExpvector();
+        //assert r.trailingExpvector() > w.leadingExpvector();
+        return new ColorPolynomial<C>(g,r,w);
+    }
+
+
+
+    /**
+     * ColorPolynomial multiplication by monomial. 
+     * @param c Coefficient.
      * @param s Expvector.
      * @return this * (c t).
      */
@@ -221,6 +303,20 @@ public class ColorPolynomial<C extends RingElem<C> >
         g = green.multiply( s, e );
         r = red.multiply( s, e );
         w = white.multiply( s, e );
+        return new ColorPolynomial<C>(g,r,w);
+    }
+
+
+    /**
+     * ColorPolynomial multiplication by coefficient. 
+     * @param c Coefficient.
+     * @return this * (c).
+     */
+    public ColorPolynomial<C> multiply( GenPolynomial<C> s ) {
+        GenPolynomial<GenPolynomial<C>> g, r, w;
+        g = green.multiply( s );
+        r = red.multiply( s );
+        w = white.multiply( s );
         return new ColorPolynomial<C>(g,r,w);
     }
 
