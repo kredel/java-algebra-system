@@ -5,6 +5,7 @@
 package edu.jas.application;
 
 import java.lang.Comparable;
+import java.lang.Cloneable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +38,7 @@ import edu.jas.ufd.GCDFactory;
  * @author Heinz Kredel
  */
 public class Ideal<C extends GcdRingElem<C>> 
-    implements Comparable<Ideal<C>>, Serializable {
+    implements Comparable<Ideal<C>>, Serializable, Cloneable {
 
 
   private static final Logger logger = Logger.getLogger(Ideal.class);
@@ -152,6 +153,16 @@ public class Ideal<C extends GcdRingElem<C>>
       this.bb = bb;
       this.red = red;
       this.engine = GCDFactory.<C>getProxy( list.ring.coFac );
+  }
+
+
+  /**
+   * Clone this.
+   * @return a copy of this.
+   */
+  @Override
+  public Ideal<C> clone() {
+      return new Ideal<C>( list.clone(), isGB, bb, red);
   }
 
 
@@ -376,6 +387,29 @@ public String toString() {
       c.addAll( B.getList() );
       Ideal<C> I = new Ideal<C>( getRing(), c, false );
       if ( isGB && B.isGB ) {
+         I.doGB();
+      }
+      return I;
+  }
+
+
+  /**
+   * Summation. Generators for the sum of ideal and a polynomial.
+   * Note: if this ideal is a Groebner base, a Groebner base is returned.
+   * @param b polynomial
+   * @return ideal(this+{b})
+   */
+  public Ideal<C> sum( GenPolynomial<C> b ) {
+      if ( b == null || b.isZERO() ) {
+          return this;
+      }
+      int s = getList().size() + 1;
+      List< GenPolynomial<C> > c;
+      c = new ArrayList<GenPolynomial<C>>( s );
+      c.addAll( getList() );
+      c.add( b );
+      Ideal<C> I = new Ideal<C>( getRing(), c, false );
+      if ( isGB ) {
          I.doGB();
       }
       return I;
