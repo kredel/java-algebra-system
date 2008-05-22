@@ -164,6 +164,21 @@ public class ColorPolynomial<C extends RingElem<C> >
 
 
     /**
+     * Get full polynomial. 
+     * @return sum of al parts.
+     */
+    public GenPolynomial<GenPolynomial<C>> getPolynomial() {
+        GenPolynomial<GenPolynomial<C>> f = green.sum(red).sum(white);
+        int s = green.length() + red.length() + white.length();
+        int t = f.length();
+        if ( t != s ) {
+           throw new RuntimeException("illegal coloring state " + s + " != " + t );
+        }
+        return f;
+    }
+
+
+    /**
      * ColorPolynomial summation. 
      * @param S ColorPolynomial.
      * @return this+S.
