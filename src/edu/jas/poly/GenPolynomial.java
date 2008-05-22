@@ -425,6 +425,18 @@ public class GenPolynomial<C extends RingElem<C> >
 
 
     /**
+     * Trailing exponent vector.
+     * @return last exponent.
+     */
+    public ExpVector trailingExpVector() {
+        if ( val.size() == 0 ) {
+           return null; // ring.evzero or null ?;
+        }
+        return val.lastKey(); 
+    }
+
+
+    /**
      * Leading base coefficient.
      * @return first coefficient.
      */
