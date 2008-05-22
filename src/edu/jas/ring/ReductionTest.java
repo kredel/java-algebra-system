@@ -1189,7 +1189,8 @@ public static Test suite() {
      //System.out.println("CS = " + CS);
      List<ColoredSystem<BigRational>> CSp = CS; 
 
-     System.out.println("\na = " + a + "\n");
+     System.out.println("\na = " + a);
+     System.out.println("b = " + b + "\n");
 
      CS = cred.determine(CS,a);
      System.out.println("CS = " + CS);
@@ -1222,6 +1223,27 @@ public static Test suite() {
          System.out.println("polynomial list: " + x.getPolynomialList());
          System.out.println("++++++++++++++++++++++++++++++++++++++");
      }
+
+     ColorPolynomial<BigRational> q, h;
+     for ( ColoredSystem<BigRational> x : CSp ) {
+         int k = x.S.size();
+         for ( int j = 0; j < k; j++ ) {
+             p = x.S.get(j);
+             for ( int l = j+1; l < k; l++ ) {
+                 q = x.S.get(l);
+                 h = cred.SPolynomial(p,q);
+                 //System.out.println("spol(a,b) = " + h);
+                 boolean t = cred.isNormalform( x.S, h );
+                 System.out.println("isNF(spol(a,b)) = " + t);
+                 h = cred.normalform( x.S, h );
+                 //System.out.println("NF(spol(a,b)) = " + h);
+                 t = cred.isNormalform( x.S, h );
+                 System.out.println("isNF(NF(spol(a,b))) = " + t);
+                 assertTrue("isNF(NF(spol(a,b))) ", t); 
+             }
+         }
+     }
+
 
      /*
      */
