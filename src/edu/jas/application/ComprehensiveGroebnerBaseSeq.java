@@ -22,6 +22,7 @@ import edu.jas.structure.Product;
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.ColorPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolynomialList;
 
@@ -34,7 +35,7 @@ import edu.jas.ring.RPseudoReduction;
 import edu.jas.ring.Pair;
 import edu.jas.ring.RPseudoReductionSeq;
 
-import edu.jas.ufd.GreatestCommonDivisorAbstract;
+import edu.jas.ufd.GreatestCommonDivisor;
 import edu.jas.ufd.GCDFactory;
 
 import edu.jas.application.PolyUtilApp;
@@ -59,7 +60,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
     /**
      * Greatest common divisor engine for coefficient content and primitive parts.
      */
-    protected final GreatestCommonDivisorAbstract<C> engine;
+    protected final GreatestCommonDivisor<C> engine;
 
 
     /**
@@ -101,11 +102,8 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         cred = red;
         cofac = rf;
         // selection for C but used for R:
-        engine = (GreatestCommonDivisorAbstract<R>) GCDFactory.<C>getImplementation( cofac );
-        //not used: engine = (GreatestCommonDivisorAbstract<C>)GCDFactory.<R>getProxy( rf );
-        // protected final GroebnerBase<Residue<C>> bb;
-        // don't know here: bb = new GroebnerBasePseudoSeq<Residue<C>>( cofac );
-        //cred = new RComprehensivePseudoReductionSeq<R>();
+        engine = GCDFactory.<C>getImplementation( cofac );
+        //not used: engine = GCDFactory.<R>getProxy( rf );
     }
 
 
@@ -115,14 +113,66 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
      * @param F polynomial list.
      * @return true, if F is a Comprehensive-Groebner base, else false.
      */
-    @Override
-    public boolean isGB(int modv, List<GenPolynomial<GenPolynomial<C>>> F) {  
+    //@Override
+    public boolean isGB(List<GenPolynomial<GenPolynomial<C>>> F) {  
         if ( F == null || F.size() == 0 ) {
-           return true;
+            return true;
         }
-
-
-
+        // extract coefficient factory
+        GenPolynomial<GenPolynomial<C>> f = F.get(0);
+        GenPolynomialRing<GenPolynomial<C>> fac = f.ring;
+        RingFactory<GenPolynomial<C>> prfac = fac.coFac;
+        GenPolynomialRing<C> pr = (GenPolynomialRing<C>) prfac;
+        // setup condition ideal
+        List<GenPolynomial<C>> fi = new ArrayList<GenPolynomial<C>>();
+        Ideal<C> id = new Ideal<C>(pr,fi); 
+        // setup list of empty colored system
+        List<ColorPolynomial<C>> cp = new ArrayList<ColorPolynomial<C>>();
+        ColoredSystem<C> s = new ColoredSystem<C>(id,cp);
+        //System.out.println("s = " + s);
+        List<ColoredSystem<C>> CSp = new ArrayList<ColoredSystem<C>>();
+        CSp.add(s);
+        //System.out.println("CSp = " + CSp);
+        // determine polynomials
+        List<ColoredSystem<C>> CS = cred.determine(CSp,F);
+        System.out.println("CS = " + CS);
+        // check if all S-polynomials reduce to zero
+        ColorPolynomial<C> p, q, h;
+        for ( ColoredSystem<C> cs : CS ) {
+            if ( true || debug ) {
+               if ( !cs.isDetermined() ) {
+                  System.out.println("not determined, cs = " + cs);
+                  return false;
+               }
+               if ( !cs.checkInvariant() ) {
+                  System.out.println("not invariant, cs = " + cs);
+                  return false;
+               }
+            }
+            int k = cs.S.size();
+            for ( int j = 0; j < k; j++ ) {
+                p = cs.S.get(j);
+                for ( int l = j+1; l < k; l++ ) {
+                    q = cs.S.get(l);
+                    h = cred.SPolynomial(p,q);
+                    //System.out.println("spol(a,b) = " + h);
+                    h = cred.normalform( cs.S, h );
+                    //System.out.println("NF(spol(a,b)) = " + h);
+                    if ( true || debug ) {
+                       if ( !cred.isNormalform( cs.S, h ) ) {
+                          System.out.println("not normalform, h = " + h);
+                          return false;
+                       }
+                    }
+                    if ( !h.isZERO() ) {
+                       System.out.println("p = " + p);
+                       System.out.println("q = " + q);
+                       System.out.println("NF(spol(p,q)) = " + h);
+                       return false;
+                    }
+                }
+            }
+        }
         return true;
     }
 
