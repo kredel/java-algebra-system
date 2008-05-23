@@ -2,7 +2,7 @@
  * $Id$
  */
 
-package edu.jas.ring;
+package edu.jas.application;
 
 import java.util.List;
 import java.util.ArrayList;
