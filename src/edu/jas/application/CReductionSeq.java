@@ -308,7 +308,7 @@ public class CReductionSeq<C extends GcdRingElem<C>>
 
 
     /*
-     * -------- coloring and condition stuff -----------------------------------------
+     * -------- coloring and condition stuff ------------------------------
      */
 
     /**

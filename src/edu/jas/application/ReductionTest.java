@@ -241,9 +241,19 @@ public static Test suite() {
     ComprehensiveGroebnerBaseSeq<BigRational> cgb = 
         new ComprehensiveGroebnerBaseSeq<BigRational>(cred,bi);
 
-    System.out.println("isGB(L) = " + cgb.isGB(L));
+    System.out.println("isGB(L) = " + cgb.isGB(L) );
 
+    List<ColoredSystem<BigRational>> Gsys = cgb.GBsys( L ); 
+    System.out.println("GBsys(L) = " + Gsys );
 
+    if ( true ) { 
+       return; 
+    }
+
+    List<GenPolynomial<GenPolynomial<BigRational>>> G;
+    G = cgb.GB(L);
+    System.out.println("GB(L) = " + G );
+    System.out.println("isGB(G) = " + cgb.isGB(G) );
  }
 
 }

@@ -149,17 +149,18 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
                   return false;
                }
             }
-            int k = cs.S.size();
+            List<ColorPolynomial<C>> S = cs.S;
+            int k = S.size();
             for ( int j = 0; j < k; j++ ) {
-                p = cs.S.get(j);
+                p = S.get(j);
                 for ( int l = j+1; l < k; l++ ) {
-                    q = cs.S.get(l);
+                    q = S.get(l);
                     h = cred.SPolynomial(p,q);
                     //System.out.println("spol(a,b) = " + h);
-                    h = cred.normalform( cs.S, h );
+                    h = cred.normalform( S, h );
                     //System.out.println("NF(spol(a,b)) = " + h);
                     if ( true || debug ) {
-                       if ( !cred.isNormalform( cs.S, h ) ) {
+                       if ( !cred.isNormalform( S, h ) ) {
                           System.out.println("not normalform, h = " + h);
                           return false;
                        }
@@ -178,20 +179,82 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
 
 
     /**
-     * R-Groebner base using pairlist class.
-     * @param modv module variable number.
+     * Comprehensive Groebner base system using pairlist class.
      * @param F polynomial list.
-     * @return GB(F) a R-Groebner base of F.
+     * @return GBsys(F) a Comprehensive Groebner base system of F.
+     */
+    //@Override
+    //@SuppressWarnings("unchecked") 
+    public List<ColoredSystem<C>> 
+           GBsys( List<GenPolynomial<GenPolynomial<C>>> F ) {  
+        if ( F == null ) {
+           return null;
+        }
+        // extract coefficient factory
+        GenPolynomial<GenPolynomial<C>> f = F.get(0);
+        GenPolynomialRing<GenPolynomial<C>> fac = f.ring;
+        RingFactory<GenPolynomial<C>> prfac = fac.coFac;
+        GenPolynomialRing<C> pr = (GenPolynomialRing<C>) prfac;
+        // setup condition ideal
+        List<GenPolynomial<C>> fi = new ArrayList<GenPolynomial<C>>();
+        Ideal<C> id = new Ideal<C>(pr,fi); 
+        // setup list of empty colored system
+        List<ColorPolynomial<C>> cp = new ArrayList<ColorPolynomial<C>>();
+        ColoredSystem<C> s = new ColoredSystem<C>(id,cp);
+        //System.out.println("s = " + s);
+        List<ColoredSystem<C>> CSp = new ArrayList<ColoredSystem<C>>();
+        CSp.add(s);
+        //System.out.println("CSp = " + CSp);
+        // determine polynomials
+        List<ColoredSystem<C>> CS = cred.determine(CSp,F);
+        System.out.println("CS = " + CS);
+
+
+
+        return CS;
+    }
+
+
+    /**
+     * Comprehensive Groebner base using pairlist class.
+     * @param F polynomial list.
+     * @return GB(F) a Comprehensive Groebner base of F.
      */
     //@Override
     //@SuppressWarnings("unchecked") 
     public List<GenPolynomial<GenPolynomial<C>>> 
-             GB( int modv, 
-                 List<GenPolynomial<GenPolynomial<C>>> F ) {  
+             GB( List<GenPolynomial<GenPolynomial<C>>> F ) {  
         if ( F == null ) {
            return F;
         }
-        return F;
+        // compute Groebner system
+        List<ColoredSystem<C>> Gsys = GBsys( F );
+
+        // combine for CGB
+        Set<GenPolynomial<GenPolynomial<C>>> Gs = 
+            new HashSet<GenPolynomial<GenPolynomial<C>>>();
+        ColorPolynomial<C> p, q, h;
+        GenPolynomial<GenPolynomial<C>> f;
+        for ( ColoredSystem<C> cs : Gsys ) {
+            if ( true || debug ) {
+               if ( !cs.isDetermined() ) {
+                  System.out.println("not determined, cs = " + cs);
+               }
+               if ( !cs.checkInvariant() ) {
+                  System.out.println("not invariant, cs = " + cs);
+               }
+            }
+            List<ColorPolynomial<C>> S = cs.S;
+            int k = S.size();
+            for ( int j = 0; j < k; j++ ) {
+                p = S.get(j);
+                f = p.getPolynomial();
+                Gs.add( f );
+            }
+        }
+        List<GenPolynomial<GenPolynomial<C>>> G = 
+            new ArrayList<GenPolynomial<GenPolynomial<C>>>( Gs );
+        return G;
     }
 
 }
