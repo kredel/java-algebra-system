@@ -47,6 +47,9 @@ class Ring:
     def ideal(self,ringstr="",list=None):
         return Ideal(self,ringstr,list);
 
+    def paramideal(self,ringstr="",list=None,gbsys=None):
+        return ParamIdeal(self,ringstr,list,gbsys);
+
 
 class Ideal:
 
@@ -250,6 +253,62 @@ class Ideal:
         #S.add(f);
         print "squarefee executed in %s ms" % t; 
         return f;
+
+
+class ParamIdeal:
+
+    def __init__(self,ring,ringstr="",list=None,gbsys=None):
+        self.ring = ring;
+        if list == None:
+           sr = StringReader( ringstr );
+           tok = GenPolynomialTokenizer(ring.pset.ring,sr);
+           self.list = tok.nextPolynomialList();
+        else:
+           self.list = list;
+        self.gbsys = gbsys;
+        self.pset = OrderedPolynomialList(ring.ring,self.list);
+
+    def __str__(self):
+        if self.gbsys == None:
+            return str(self.pset);
+        else:
+            return str(self.pset) + "\n" + str(self.gbsys);
+
+    def CGB(self):
+        s = self.pset;
+        F = s.list;
+        t = System.currentTimeMillis();
+        G = ComprehensiveGroebnerBaseSeq(self.ring.ring).GB(F);
+        t = System.currentTimeMillis() - t;
+        print "sequential comprehensive executed in %s ms" % t; 
+        return ParamIdeal(self.ring,"",G);
+
+    def CGBsystem(self):
+        s = self.pset;
+        F = s.list;
+        t = System.currentTimeMillis();
+        S = ComprehensiveGroebnerBaseSeq(self.ring.ring).GBsys(F);
+        t = System.currentTimeMillis() - t;
+        print "sequential comprehensive system executed in %s ms" % t; 
+        return ParamIdeal(self.ring,"",None,S);
+
+    def isCGB(self):
+        s = self.pset;
+        F = s.list;
+        t = System.currentTimeMillis();
+        b = ComprehensiveGroebnerBaseSeq(self.ring.ring).isGB(F);
+        t = System.currentTimeMillis() - t;
+        print "isCGB executed in %s ms" % t; 
+        return b;
+
+    def isCGBsystem(self):
+        s = self.pset;
+        S = self.gbsys;
+        t = System.currentTimeMillis();
+        b = ComprehensiveGroebnerBaseSeq(self.ring.ring).isGBsys(S);
+        t = System.currentTimeMillis() - t;
+        print "isCGB executed in %s ms" % t; 
+        return b;
 
 
 class SolvableRing:
