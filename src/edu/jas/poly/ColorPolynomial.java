@@ -86,7 +86,7 @@ public class ColorPolynomial<C extends RingElem<C> >
 
     /**
      * Is this polynomial ZERO.
-     * return true, if there are only green terms, else false.
+     * @return true, if there are only green terms, else false.
      */
     public boolean isZERO() {
         return ( red.isZERO() && white.isZERO() );
@@ -94,18 +94,28 @@ public class ColorPolynomial<C extends RingElem<C> >
 
 
     /**
+     * Is this polynomial ONE.
+     * @return true, if the only non green term is 1, else false.
+     */
+    public boolean isONE() {
+        return (    ( red.isZERO() && white.isONE() ) 
+                 || ( red.isONE() && white.isZERO() ) );
+    }
+
+
+    /**
      * Is this polynomial determined.
-     * return true, if there are nonzero red terms, else false.
+     * @return true, if there are nonzero red terms or if this == 0, else false.
      */
     public boolean isDetermined() {
-        return ( !red.isZERO() );
+        return ( !red.isZERO() || white.isZERO() );
     }
 
 
     /**
      * Check ordering invariants.
      * TT(green) > LT(red) and TT(red) > LT(green).
-     * return true, if all ordering invariants are met, else false.
+     * @return true, if all ordering invariants are met, else false.
      */
     public boolean checkInvariant() {
         boolean t = true;
@@ -185,6 +195,18 @@ public class ColorPolynomial<C extends RingElem<C> >
     public int length() {
         int s = red.length() + white.length();
         return s;
+    }
+
+
+    /**
+     * Get leading exponent vector. 
+     * @return LR of red or white parts.
+     */
+    public ExpVector leadingExpVector() {
+        if ( !red.isZERO() ) {
+           return red.leadingExpVector();
+        }
+        return white.leadingExpVector();
     }
 
 
