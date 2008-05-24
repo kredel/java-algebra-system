@@ -149,7 +149,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
                   return false;
                }
             }
-            List<ColorPolynomial<C>> S = cs.S;
+            List<ColorPolynomial<C>> S = cs.list;
             int k = S.size();
             for ( int j = 0; j < k; j++ ) {
                 p = S.get(j);
@@ -209,9 +209,110 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         List<ColoredSystem<C>> CS = cred.determine(CSp,F);
         System.out.println("CS = " + CS);
 
+        // setup pair lists
+        List<ColoredSystem<C>> CSs = new ArrayList<ColoredSystem<C>>();
+        for ( ColoredSystem<C> cs : CS ) {
+            OrderedCPairlist<C> pairlist = new OrderedCPairlist<C>( fac );
+            for ( ColorPolynomial<C> p : cs.list ) {
+                pairlist.put( p );
+            }
+            ColoredSystem<C> css = new ColoredSystem<C>( cs.conditions, cs.list, pairlist );
+            CSs.add(css);
+        }
 
+        // main loop
+        List<ColoredSystem<C>> CSb = new ArrayList<ColoredSystem<C>>();
+        while ( CSs.size() > 0 ) {
+            ColoredSystem<C> cs = CSs.remove(0);
+            OrderedCPairlist<C> pairlist = cs.pairlist;
+            List<ColorPolynomial<C>> G = cs.list;
+            logger.info( pairlist.toString() );
 
-        return CS;
+            CPair<C> pair;
+            ColorPolynomial<C> pi;
+            ColorPolynomial<C> pj;
+            ColorPolynomial<C> S;
+            ColorPolynomial<C> H;
+            while ( pairlist.hasNext() ) {
+                pair = pairlist.removeNext();
+                if ( pair == null ) continue; 
+
+                pi = pair.pi; 
+                pj = pair.pj; 
+                if ( logger.isDebugEnabled() ) {
+                    logger.debug("pi    = " + pi );
+                    logger.debug("pj    = " + pj );
+                }
+
+                S = cred.SPolynomial( pi, pj );
+                if ( S.isZERO() ) {
+                    pair.setZero();
+                    continue;
+                }
+                if ( logger.isDebugEnabled() ) {
+                    logger.debug("ht(S) = " + S.leadingExpVector() );
+                }
+
+                H = cred.normalform( G, S );
+                if ( H.isZERO() ) {
+                    pair.setZero();
+                    continue;
+                }
+                if ( true || logger.isDebugEnabled() ) {
+                    logger.info("ht(H) = " + H.leadingExpVector() );
+                }
+
+                //H = H.monic();
+                //if ( H.isONE() ) {
+                //    G.clear(); G.add( H );
+                //    return G; // since no threads are activated
+                //}
+                if ( logger.isDebugEnabled() ) {
+                    logger.debug("H = " + H );
+                }
+                logger.info("H = " + H );
+                if ( ! H.isZERO() ) {
+                   List<ColoredSystem<C>> ncs = cred.determine( cs, H );
+                   int len = ncs.size()-1;
+                   int i = -1;
+                   int gsi = G.size();
+                   for ( ColoredSystem<C> cpp : ncs ) {
+                       i++;
+                       if ( cpp.list.size() <= gsi ) { // no new polynomial added
+                          cs = new ColoredSystem<C>(cpp.conditions,G,pairlist); //replace my cs with new conditions
+                          continue;
+                       }
+                       ColorPolynomial<C> Hc = cpp.list.get( gsi ); // assert added is last
+                       System.out.println("Hc = " + Hc);
+                       if ( i == len ) { // non cloneing must be last!
+                          if ( !Hc.isZERO() ) {
+                             G.add( Hc );
+                             pairlist.put( Hc ); // not cloned
+                          }
+                          cs = new ColoredSystem<C>(cpp.conditions,G,pairlist); //replace my cs with new conditions
+                       } else { // cloneing
+                           if ( !Hc.isZERO() ) { // should always be true
+                             OrderedCPairlist<C> plp = pairlist.clone();
+                             plp.put( Hc );
+                             ColoredSystem<C> cppp = new ColoredSystem<C>(cpp.conditions,cpp.list,plp);
+                             CSs.add( cppp );
+                          }
+                       }
+                   }
+                }
+            }
+            // all spols reduce to zero in this branch
+            cs = new ColoredSystem<C>(cs.conditions,G,pairlist);
+
+            logger.info("#sequential list = " + G.size());
+            //G = minimalGB(G);
+            logger.info( pairlist.toString() );
+            CSb.add( cs );
+            if ( false ) {
+               break;
+            }
+        }
+        return CSb;
     }
 
 
@@ -244,7 +345,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
                   System.out.println("not invariant, cs = " + cs);
                }
             }
-            List<ColorPolynomial<C>> S = cs.S;
+            List<ColorPolynomial<C>> S = cs.list;
             int k = S.size();
             for ( int j = 0; j < k; j++ ) {
                 p = S.get(j);

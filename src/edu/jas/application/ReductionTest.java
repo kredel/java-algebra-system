@@ -80,10 +80,10 @@ public static Test suite() {
     //ReductionSeq<BigRational> red;
     //Reduction<BigRational> redpar;
 
-   int rl = 4; 
-   int kl = 10;
-   int ll = 11;
-   int el = 5;
+   int rl = 1; 
+   int kl = 4;
+   int ll = 5;
+   int el = 3;
    float q = 0.6f;
 
    protected void setUp() {
@@ -116,11 +116,11 @@ public static Test suite() {
      CReductionSeq<BigRational> cred 
          = new CReductionSeq<BigRational>();
 
-     GenPolynomial<GenPolynomial<BigRational>> a = fac.random(5, ll, el, q );
+     GenPolynomial<GenPolynomial<BigRational>> a = fac.random(kl, ll, el, q );
      while ( a.isZERO() ) {
          a = fac.random(kl, ll, el, q );
      }
-     GenPolynomial<GenPolynomial<BigRational>> b = fac.random(5, ll, el, q );
+     GenPolynomial<GenPolynomial<BigRational>> b = fac.random(kl, ll, el, q );
      while ( b.isZERO() ) {
          b = fac.random(kl, ll, el, q );
      }
@@ -160,8 +160,16 @@ public static Test suite() {
      p = new ColorPolynomial<BigRational>(w,g,g); 
      //System.out.println("p = " + p);
      assertTrue("check(p) ", p.checkInvariant());
-     assertFalse("deter(p) ", p.isDetermined());
+     assertTrue("deter(p) ", p.isDetermined());
      assertTrue("p == 0 ", p.isZERO());
+     //System.out.println("cond != 0: " + p.getConditionNonZero());
+     //System.out.println("cond == 0: " + p.getConditionZero());
+
+     p = new ColorPolynomial<BigRational>(w,g,r); 
+     //System.out.println("p = " + p);
+     assertFalse("check(p) ", p.checkInvariant());
+     assertFalse("deter(p) ", p.isDetermined());
+     assertFalse("p == 0 ", p.isZERO());
      //System.out.println("cond != 0: " + p.getConditionNonZero());
      //System.out.println("cond == 0: " + p.getConditionZero());
 
@@ -220,18 +228,18 @@ public static Test suite() {
 
      ColorPolynomial<BigRational> q, h;
      for ( ColoredSystem<BigRational> x : CSp ) {
-         int k = x.S.size();
+         int k = x.list.size();
          for ( int j = 0; j < k; j++ ) {
-             p = x.S.get(j);
+             p = x.list.get(j);
              for ( int l = j+1; l < k; l++ ) {
-                 q = x.S.get(l);
+                 q = x.list.get(l);
                  h = cred.SPolynomial(p,q);
                  //System.out.println("spol(a,b) = " + h);
-                 boolean t = cred.isNormalform( x.S, h );
+                 boolean t = cred.isNormalform( x.list, h );
                  //System.out.println("isNF(spol(a,b)) = " + t);
-                 h = cred.normalform( x.S, h );
+                 h = cred.normalform( x.list, h );
                  //System.out.println("NF(spol(a,b)) = " + h);
-                 t = cred.isNormalform( x.S, h );
+                 t = cred.isNormalform( x.list, h );
                  //System.out.println("isNF(NF(spol(a,b))) = " + t);
                  assertTrue("isNF(NF(spol(a,b))) ", t); 
              }
@@ -246,7 +254,7 @@ public static Test suite() {
     List<ColoredSystem<BigRational>> Gsys = cgb.GBsys( L ); 
     System.out.println("GBsys(L) = " + Gsys );
 
-    if ( true ) { 
+    if ( false ) { 
        return; 
     }
 

@@ -334,7 +334,7 @@ public class CReductionSeq<C extends GcdRingElem<C>>
             ColoredSystem<C> NS;
             Ideal<C> id = cs.conditions; //.clone();
             //System.out.println("starting id = " + id);
-            List<ColorPolynomial<C>> S = cs.S;
+            List<ColorPolynomial<C>> S = cs.list;
             List<ColorPolynomial<C>> Sp;
             while( !Ap.isZERO() ) {
                 Map.Entry<ExpVector,GenPolynomial<C>> m = Ap.leadingMonomial();
@@ -401,6 +401,83 @@ public class CReductionSeq<C extends GcdRingElem<C>>
         List<ColoredSystem<C>> NCS = CS;
         for ( GenPolynomial<GenPolynomial<C>> A : H ) {
             NCS = determine( NCS, A );
+        }
+        return NCS;
+    }
+
+
+    /**
+     * Determine polynomial relative to conditions in F.
+     * @param A color polynomial.
+     * @return new F.
+     */
+    public List<ColoredSystem<C>> 
+        determine( ColoredSystem<C> cs, 
+                   ColorPolynomial<C> A) {  
+        List<ColoredSystem<C>> NCS = new ArrayList<ColoredSystem<C>>();
+        if ( A == null || A.isZERO() ) {
+            return NCS;
+        }
+        if ( A.isDetermined() ) {
+            return NCS;
+        }
+        GenPolynomial<GenPolynomial<C>> zero = A.green.ring.getZERO();
+        GenPolynomial<GenPolynomial<C>> green = A.green;
+        GenPolynomial<GenPolynomial<C>> red = A.red; // assert red == 0 
+        GenPolynomial<GenPolynomial<C>> white;
+        GenPolynomial<GenPolynomial<C>> Ap = A.white;
+        GenPolynomial<GenPolynomial<C>> Bp;
+        ColorPolynomial<C> nz;
+        ColoredSystem<C> NS;
+        Ideal<C> id = cs.conditions; //.clone();
+        //System.out.println("starting id = " + id);
+        List<ColorPolynomial<C>> S = cs.list;
+        List<ColorPolynomial<C>> Sp;
+        while( !Ap.isZERO() ) {
+            Map.Entry<ExpVector,GenPolynomial<C>> m = Ap.leadingMonomial();
+            ExpVector e = m.getKey();
+            GenPolynomial<C> c = m.getValue();
+            Bp = Ap.reductum();
+            if ( c.isConstant() ) { // already red
+                red = zero.sum(c,e);
+                white = Bp;
+                nz = new ColorPolynomial<C>(green,red,white); 
+                //System.out.println("nz = " + nz);
+                Sp = new ArrayList<ColorPolynomial<C>>( S );
+                Sp.add( nz );
+                NS = new ColoredSystem<C>( id, Sp );
+                NS = NS.reDetermine();
+                //System.out.println("NS = " + NS);
+                NCS.add( NS );
+                break;
+            }
+            if ( id.contains(c) ) { // already green
+                System.out.println("c in id = " + c);
+                green = green.sum(c,e);
+                Ap = Bp;
+                continue;
+            }
+            red = zero.sum(c,e); // make red
+            white = Bp;
+            nz = new ColorPolynomial<C>(green,red,white); 
+            //System.out.println("nz = " + nz);
+            Sp = new ArrayList<ColorPolynomial<C>>( S );
+            Sp.add( nz );
+            // re determine existing polynomials
+            NS = new ColoredSystem<C>( id, Sp );
+            NS = NS.reDetermine();
+            //System.out.println("NS = " + NS);
+            NCS.add( NS );
+
+            id = id.sum( c ); // make green
+            //System.out.println("id = " + id);
+            if ( id.isONE() ) { // can treat remaining coeffs as green
+                //System.out.println("dropping " + cs);
+                //System.out.println("by green " + green.sum(c,e));
+                break; // drop system
+            }
+            green = green.sum(c,e);
+            Ap = Bp;
         }
         return NCS;
     }
