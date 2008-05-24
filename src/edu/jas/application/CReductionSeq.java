@@ -416,10 +416,21 @@ public class CReductionSeq<C extends GcdRingElem<C>>
                    ColorPolynomial<C> A) {  
         List<ColoredSystem<C>> NCS = new ArrayList<ColoredSystem<C>>();
         if ( A == null || A.isZERO() ) {
-            return NCS;
+           //NCS.add( cs );
+           return NCS;
         }
+        List<ColorPolynomial<C>> S = cs.list;
+        Ideal<C> id = cs.conditions; //.clone();
+        List<ColorPolynomial<C>> Sp;
+        ColorPolynomial<C> nz;
+        ColoredSystem<C> NS;
         if ( A.isDetermined() ) {
-            return NCS;
+           Sp = new ArrayList<ColorPolynomial<C>>( S );
+           Sp.add( A );
+           NS = new ColoredSystem<C>( id, Sp );
+           NS = NS.reDetermine();
+           NCS.add(NS);
+           return NCS;
         }
         GenPolynomial<GenPolynomial<C>> zero = A.green.ring.getZERO();
         GenPolynomial<GenPolynomial<C>> green = A.green;
@@ -427,12 +438,7 @@ public class CReductionSeq<C extends GcdRingElem<C>>
         GenPolynomial<GenPolynomial<C>> white;
         GenPolynomial<GenPolynomial<C>> Ap = A.white;
         GenPolynomial<GenPolynomial<C>> Bp;
-        ColorPolynomial<C> nz;
-        ColoredSystem<C> NS;
-        Ideal<C> id = cs.conditions; //.clone();
         //System.out.println("starting id = " + id);
-        List<ColorPolynomial<C>> S = cs.list;
-        List<ColorPolynomial<C>> Sp;
         while( !Ap.isZERO() ) {
             Map.Entry<ExpVector,GenPolynomial<C>> m = Ap.leadingMonomial();
             ExpVector e = m.getKey();

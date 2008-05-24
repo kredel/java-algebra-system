@@ -80,11 +80,11 @@ public static Test suite() {
     //ReductionSeq<BigRational> red;
     //Reduction<BigRational> redpar;
 
-   int rl = 1; 
-   int kl = 4;
-   int ll = 5;
+   int rl = 2; 
+   int kl = 2;
+   int ll = 3;
    int el = 3;
-   float q = 0.6f;
+   float q = 0.4f;
 
    protected void setUp() {
        a = b = c = d = e = null;
@@ -146,7 +146,9 @@ public static Test suite() {
      p = new ColorPolynomial<BigRational>(r,g,w); 
      //System.out.println("p = " + p);
      assertTrue("check(p) ", p.checkInvariant());
-     assertFalse("deter(p) ", p.isDetermined());
+     if ( !w.isZERO() ) {
+        assertFalse("deter(p) ", p.isDetermined());
+     }
      //System.out.println("cond != 0: " + p.getConditionNonZero());
      //System.out.println("cond == 0: " + p.getConditionZero());
 
@@ -167,7 +169,9 @@ public static Test suite() {
 
      p = new ColorPolynomial<BigRational>(w,g,r); 
      //System.out.println("p = " + p);
-     assertFalse("check(p) ", p.checkInvariant());
+     if ( !w.isZERO() ) {
+        assertFalse("check(p) ", p.checkInvariant());
+     }
      assertFalse("deter(p) ", p.isDetermined());
      assertFalse("p == 0 ", p.isZERO());
      //System.out.println("cond != 0: " + p.getConditionNonZero());
@@ -253,8 +257,9 @@ public static Test suite() {
 
     List<ColoredSystem<BigRational>> Gsys = cgb.GBsys( L ); 
     System.out.println("GBsys(L) = " + Gsys );
+    System.out.println("isGBsys(G) = " + cgb.isGBsys(Gsys) );
 
-    if ( false ) { 
+    if ( true ) { 
        return; 
     }
 

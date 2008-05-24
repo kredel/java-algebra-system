@@ -179,6 +179,60 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
 
 
     /**
+     * Comprehensive-Groebner base test.
+     * @param modv module variable number.
+     * @param F polynomial list.
+     * @return true, if F is a Comprehensive-Groebner base, else false.
+     */
+    //@Override
+    public boolean isGBsys(List<ColoredSystem<C>> CS) {  
+        if ( CS == null || CS.size() == 0 ) {
+            return true;
+        }
+        ColorPolynomial<C> p, q, h;
+        for ( ColoredSystem<C> cs : CS ) {
+            if ( true || debug ) {
+               if ( !cs.isDetermined() ) {
+                  System.out.println("not determined, cs = " + cs);
+                  return false;
+               }
+               if ( !cs.checkInvariant() ) {
+                  System.out.println("not invariant, cs = " + cs);
+                  return false;
+               }
+            }
+            List<ColorPolynomial<C>> S = cs.list;
+            int k = S.size();
+            for ( int j = 0; j < k; j++ ) {
+                p = S.get(j);
+                for ( int l = j+1; l < k; l++ ) {
+                    q = S.get(l);
+                    h = cred.SPolynomial(p,q);
+                    //System.out.println("spol(a,b) = " + h);
+                    h = cred.normalform( S, h );
+                    //System.out.println("NF(spol(a,b)) = " + h);
+                    if ( true || debug ) {
+                       if ( !cred.isNormalform( S, h ) ) {
+                          System.out.println("not normalform, h = " + h);
+                          System.out.println("cs = " + cs);
+                          return false;
+                       }
+                    }
+                    if ( !h.isZERO() ) {
+                       System.out.println("p = " + p);
+                       System.out.println("q = " + q);
+                       System.out.println("NF(spol(p,q)) = " + h);
+                       System.out.println("cs = " + cs);
+                       return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+
+    /**
      * Comprehensive Groebner base system using pairlist class.
      * @param F polynomial list.
      * @return GBsys(F) a Comprehensive Groebner base system of F.
@@ -279,24 +333,24 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
                    for ( ColoredSystem<C> cpp : ncs ) {
                        i++;
                        if ( cpp.list.size() <= gsi ) { // no new polynomial added
+                          System.out.println("no new polynomial in " + cpp );
                           cs = new ColoredSystem<C>(cpp.conditions,G,pairlist); //replace my cs with new conditions
                           continue;
                        }
                        ColorPolynomial<C> Hc = cpp.list.get( gsi ); // assert added is last
                        System.out.println("Hc = " + Hc);
+                       if ( Hc.isZERO() ) {
+                          continue;
+                       }
                        if ( i == len ) { // non cloneing must be last!
-                          if ( !Hc.isZERO() ) {
-                             G.add( Hc );
-                             pairlist.put( Hc ); // not cloned
-                          }
+                          G = cpp.list;
+                          pairlist.put( Hc ); // not cloned
                           cs = new ColoredSystem<C>(cpp.conditions,G,pairlist); //replace my cs with new conditions
                        } else { // cloneing
-                           if ( !Hc.isZERO() ) { // should always be true
-                             OrderedCPairlist<C> plp = pairlist.clone();
-                             plp.put( Hc );
-                             ColoredSystem<C> cppp = new ColoredSystem<C>(cpp.conditions,cpp.list,plp);
-                             CSs.add( cppp );
-                          }
+                          OrderedCPairlist<C> plp = pairlist.clone();
+                          plp.put( Hc );
+                          ColoredSystem<C> cppp = new ColoredSystem<C>(cpp.conditions,cpp.list,plp);
+                          CSs.add( cppp );
                        }
                    }
                 }
@@ -304,7 +358,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
             // all spols reduce to zero in this branch
             cs = new ColoredSystem<C>(cs.conditions,G,pairlist);
 
-            logger.info("#sequential list = " + G.size());
+            logger.info("#sequential done = " + cs.conditions);
             //G = minimalGB(G);
             logger.info( pairlist.toString() );
             CSb.add( cs );
