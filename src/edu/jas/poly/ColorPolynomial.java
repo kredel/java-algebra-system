@@ -149,6 +149,9 @@ public class ColorPolynomial<C extends RingElem<C> >
            cmp = white.ring.tord.getDescendComparator();
            t = t && ( cmp.compare(ttg,ltw) < 0 );
         }
+        if ( !t ) {
+           System.out.println("not invariant " + this);
+        }
         return t;
     }
 
