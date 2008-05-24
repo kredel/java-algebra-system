@@ -166,10 +166,14 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
                        }
                     }
                     if ( !h.isZERO() ) {
-                       System.out.println("p = " + p);
-                       System.out.println("q = " + q);
-                       System.out.println("NF(spol(p,q)) = " + h);
-                       return false;
+                       h = cs.reDetermine( h );
+                       if ( !h.isZERO() ) {
+                          System.out.println("p = " + p);
+                          System.out.println("q = " + q);
+                          System.out.println("NF(spol(p,q)) = " + h);
+                          System.out.println("cs = " + cs);
+                          return false;
+                       }
                     }
                 }
             }
@@ -219,11 +223,14 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
                        }
                     }
                     if ( !h.isZERO() ) {
-                       System.out.println("p = " + p);
-                       System.out.println("q = " + q);
-                       System.out.println("NF(spol(p,q)) = " + h);
-                       System.out.println("cs = " + cs);
-                       return false;
+                       h = cs.reDetermine( h );
+                       if ( !h.isZERO() ) {
+                          System.out.println("p = " + p);
+                          System.out.println("q = " + q);
+                          System.out.println("NF(spol(p,q)) = " + h);
+                          System.out.println("cs = " + cs);
+                          return false;
+                       }
                     }
                 }
             }
