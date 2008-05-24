@@ -236,15 +236,18 @@ public class OrderedCPairlist<C extends GcdRingElem<C> >
            LinkedList<CPair<C>> x;
            LinkedList<CPair<C>> xl;
            e = p.leadingExpVector();
+           //System.out.println("p = " + p);
            int l = P.size();
            for ( int j = 0; j < l; j++ ) {
                pj = P.get(j);
+               //System.out.println("pj = " + pj);
                f = pj.leadingExpVector(); 
                if ( moduleVars > 0 ) {
                    if ( ExpVector.EVILCP( e, f, 0, moduleVars ) != 0 ) {
                        continue; // skip pair
                    }
                }
+               //System.out.println("e = " + e + ", f = " + f);
                g = ExpVector.EVLCM( e, f );
                pair = new CPair<C>( pj, p, j, l);
                // redi = (BitSet)red.get(j);

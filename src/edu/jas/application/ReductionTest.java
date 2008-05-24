@@ -255,18 +255,19 @@ public static Test suite() {
 
     System.out.println("isGB(L) = " + cgb.isGB(L) );
 
-    List<ColoredSystem<BigRational>> Gsys = cgb.GBsys( L ); 
-    System.out.println("GBsys(L) = " + Gsys );
-    System.out.println("isGBsys(G) = " + cgb.isGBsys(Gsys) );
-
-    if ( true ) { 
-       return; 
+    if ( false ) {
+       List<ColoredSystem<BigRational>> Gsys = cgb.GBsys( L ); 
+       System.out.println("GBsys(L) = " + Gsys );
+       System.out.println("isGBsys(G) = " + cgb.isGBsys(Gsys) );
     }
 
-    List<GenPolynomial<GenPolynomial<BigRational>>> G;
-    G = cgb.GB(L);
-    System.out.println("GB(L) = " + G );
-    System.out.println("isGB(G) = " + cgb.isGB(G) );
+    if ( true ) { 
+       List<GenPolynomial<GenPolynomial<BigRational>>> G;
+       G = cgb.GB(L);
+       System.out.println("GB(L) = " + G );
+       System.out.println("isGB(G) = " + cgb.isGB(G) );
+    }
+
  }
 
 }

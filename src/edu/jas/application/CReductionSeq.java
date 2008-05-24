@@ -355,7 +355,7 @@ public class CReductionSeq<C extends GcdRingElem<C>>
                    break;
                 }
                 if ( id.contains(c) ) {
-                   System.out.println("c in id = " + c);
+                   //System.out.println("c in id = " + c);
                    green = green.sum(c,e);
                    Ap = Bp;
                    continue;
@@ -458,7 +458,7 @@ public class CReductionSeq<C extends GcdRingElem<C>>
                 break;
             }
             if ( id.contains(c) ) { // already green
-                System.out.println("c in id = " + c);
+                //System.out.println("c in id = " + c);
                 green = green.sum(c,e);
                 Ap = Bp;
                 continue;

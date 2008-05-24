@@ -135,7 +135,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         //System.out.println("CSp = " + CSp);
         // determine polynomials
         List<ColoredSystem<C>> CS = cred.determine(CSp,F);
-        System.out.println("CS = " + CS);
+        //System.out.println("CS = " + CS);
         // check if all S-polynomials reduce to zero
         ColorPolynomial<C> p, q, h;
         for ( ColoredSystem<C> cs : CS ) {
@@ -268,13 +268,14 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         //System.out.println("CSp = " + CSp);
         // determine polynomials
         List<ColoredSystem<C>> CS = cred.determine(CSp,F);
-        System.out.println("CS = " + CS);
+        //System.out.println("CS = " + CS);
 
         // setup pair lists
         List<ColoredSystem<C>> CSs = new ArrayList<ColoredSystem<C>>();
         for ( ColoredSystem<C> cs : CS ) {
             OrderedCPairlist<C> pairlist = new OrderedCPairlist<C>( fac );
             for ( ColorPolynomial<C> p : cs.list ) {
+                //System.out.println("p = " + p);
                 pairlist.put( p );
             }
             ColoredSystem<C> css = new ColoredSystem<C>( cs.conditions, cs.list, pairlist );
@@ -345,7 +346,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
                           continue;
                        }
                        ColorPolynomial<C> Hc = cpp.list.get( gsi ); // assert added is last
-                       System.out.println("Hc = " + Hc);
+                       logger.info("Hc = " + Hc);
                        if ( Hc.isZERO() ) {
                           continue;
                        }
@@ -391,6 +392,8 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         }
         // compute Groebner system
         List<ColoredSystem<C>> Gsys = GBsys( F );
+        //System.out.println("\n\nGBsys = " + Gsys);
+        System.out.println("isGBsys() = " + isGBsys(Gsys) + "\n--------------------");
 
         // combine for CGB
         Set<GenPolynomial<GenPolynomial<C>>> Gs = 
