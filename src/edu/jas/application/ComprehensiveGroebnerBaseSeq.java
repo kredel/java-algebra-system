@@ -370,10 +370,12 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
                 }
             }
             // all spols reduce to zero in this branch
-            cs = new ColoredSystem<C>(cs.conditions,G,pairlist);
+            System.out.println("G = " + G );
+            G = minimalGB(cs,G);
+            System.out.println("min(G) = " + G );
 
+            cs = new ColoredSystem<C>(cs.conditions,G,pairlist);
             logger.info("#sequential done = " + cs.conditions);
-            //G = minimalGB(G);
             logger.info( pairlist.toString() );
             CSb.add( cs );
             if ( false ) {
@@ -427,5 +429,75 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
             new ArrayList<GenPolynomial<GenPolynomial<C>>>( Gs );
         return G;
     }
+
+
+    /**
+     * Minimal ordered Groebner basis.
+     * @param cs colored system.
+     * @param Gp a Groebner base.
+     * @return a reduced Groebner base of Gp.
+     */
+    //@Override
+    public List<ColorPolynomial<C>> minimalGB( ColoredSystem<C> cs,
+                                               List<ColorPolynomial<C>> Gp ) {  
+        if ( Gp == null || Gp.size() <= 1 ) {
+            return Gp;
+        }
+        // remove zero polynomials
+        List<ColorPolynomial<C>> G
+            = new ArrayList<ColorPolynomial<C>>( Gp.size() );
+        for ( ColorPolynomial<C> a : Gp ) { 
+            if ( a != null && !a.isZERO() ) { // always true in GB()
+               // already positive a = a.abs();
+               G.add( a );
+            }
+        }
+        if ( G.size() <= 1 ) {
+           return G;
+        }
+        // remove top reducible polynomials
+        ColorPolynomial<C> a;
+        List<ColorPolynomial<C>> F;
+        F = new ArrayList<ColorPolynomial<C>>( G.size() );
+        while ( G.size() > 0 ) {
+            a = G.remove(0);
+            if ( cred.isTopReducible(G,a) || cred.isTopReducible(F,a) ) {
+               // drop polynomial 
+               if ( true || debug ) {
+                  System.out.println("dropped " + a);
+                  List<ColorPolynomial<C>> ff;
+                  ff = new ArrayList<ColorPolynomial<C>>( G );
+                  ff.addAll(F);
+                  a = cred.normalform( ff, a );
+                  a = cs.reDetermine( a );
+                  if ( !a.isZERO() ) {
+                     System.out.println("error, nf(a) " + a);
+                  }
+               }
+            } else {
+                F.add(a);
+            }
+        }
+        G = F;
+        if ( G.size() <= 1 ) {
+           return G;
+        }
+        // reduce remaining polynomials
+        int len = G.size();
+        int i = 0;
+        while ( i < len ) {
+            a = G.remove(0);
+            //System.out.println("doing " + a.length());
+            a = cred.normalform( G, a );
+            a = cs.reDetermine( a );
+            //a = engine.basePrimitivePart(a); //a.monic(); was not required
+            //a = a.abs();
+            //a = red.normalform( F, a );
+            G.add( a ); // adds as last
+            i++;
+        }
+        return G;
+    }
+
 
 }
