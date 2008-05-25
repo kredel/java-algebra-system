@@ -267,7 +267,13 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         CSp.add(s);
         //System.out.println("CSp = " + CSp);
         // determine polynomials
-        List<ColoredSystem<C>> CS = cred.determine(CSp,F);
+        //List<ColoredSystem<C>> CS = cred.determine(CSp,F);
+        List<ColoredSystem<C>> CS = cred.determine(F); //new
+        //System.out.println("CS = " + CS);
+        //CS.remove(0); // empty colored system
+        if ( logger.isInfoEnabled() ) {
+           logger.info("determined polynomials =\n" + CS );
+        }
         //System.out.println("CS = " + CS);
 
         // setup pair lists
