@@ -259,7 +259,7 @@ class ParamIdeal:
 
     def __init__(self,ring,ringstr="",list=None,gbsys=None):
         self.ring = ring;
-        if list == None:
+        if list == None and ringstr!= None:
            sr = StringReader( ringstr );
            tok = GenPolynomialTokenizer(ring.pset.ring,sr);
            self.list = tok.nextPolynomialList();
@@ -272,7 +272,10 @@ class ParamIdeal:
         if self.gbsys == None:
             return str(self.pset);
         else:
-            return str(self.pset) + "\n" + str(self.gbsys);
+           if self.pset == None:
+              return str(self.ring)
+           else:
+              return str(self.pset) + "\n" + str(self.gbsys);
 
     def CGB(self):
         s = self.pset;
