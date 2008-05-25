@@ -26,6 +26,7 @@ import edu.jas.structure.RingElem;
 
 /**
  * Colored Polynomials implementing RingElem.
+ * <b>Note:</b> not general purpose, use only in comprehensive GB. 
  * @param <C> coefficient type
  * @author Heinz Kredel
  */
@@ -178,11 +179,26 @@ public class ColorPolynomial<C extends RingElem<C> >
 
     /**
      * Get full polynomial. 
-     * @return sum of al parts.
+     * @return sum of all parts.
      */
     public GenPolynomial<GenPolynomial<C>> getPolynomial() {
         GenPolynomial<GenPolynomial<C>> f = green.sum(red).sum(white);
         int s = green.length() + red.length() + white.length();
+        int t = f.length();
+        if ( t != s ) {
+           throw new RuntimeException("illegal coloring state " + s + " != " + t );
+        }
+        return f;
+    }
+
+
+    /**
+     * Get essential polynomial. 
+     * @return sum of red and white parts.
+     */
+    public GenPolynomial<GenPolynomial<C>> getEssentialPolynomial() {
+        GenPolynomial<GenPolynomial<C>> f = red.sum(white);
+        int s = red.length() + white.length();
         int t = f.length();
         if ( t != s ) {
            throw new RuntimeException("illegal coloring state " + s + " != " + t );
