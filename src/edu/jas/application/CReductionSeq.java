@@ -470,13 +470,14 @@ public class CReductionSeq<C extends GcdRingElem<C>>
         GenPolynomial<GenPolynomial<C>> zero = H.get(0).ring.getZERO();
         for ( Ideal<C> id : cd ) {
             if ( id.isONE() ) {
-                continue; // can treat all coeffs as green
+               System.out.println("ideal is one = " + id);
+               continue; // can treat all coeffs as green
             }
             List<ColorPolynomial<C>> S = new ArrayList<ColorPolynomial<C>>();
             for ( GenPolynomial<GenPolynomial<C>> A : H ) {
                 GenPolynomial<GenPolynomial<C>> green = zero;
-                GenPolynomial<GenPolynomial<C>> red;
-                GenPolynomial<GenPolynomial<C>> white;
+                GenPolynomial<GenPolynomial<C>> red = zero;
+                GenPolynomial<GenPolynomial<C>> white = zero;
                 GenPolynomial<GenPolynomial<C>> Ap = A;
                 GenPolynomial<GenPolynomial<C>> Bp;
                 ColorPolynomial<C> nz;
@@ -496,14 +497,21 @@ public class CReductionSeq<C extends GcdRingElem<C>>
                     if ( id.contains( c ) ) {
                         //System.out.println("c in id = " + c);
                         green = green.sum(c,e);
+                        Ap = Bp;
                     } else {
                         red = zero.sum(c,e);
                         white = Bp;
                         nz = new ColorPolynomial<C>(green,red,white); 
                         //System.out.println("nz = " + nz);
                         S.add( nz );
+                        break;
                     }
-                    Ap = Bp;
+                }
+                if ( red.isZERO() ) {
+                   if ( !white.isZERO() ) {
+                      System.out.println("error, white non zero = " + white);
+                   }
+                   System.out.println("all green terms, dropped = " + green);
                 }
             }
         ColoredSystem<C> cs = new ColoredSystem<C>( id, S );
@@ -538,6 +546,7 @@ public class CReductionSeq<C extends GcdRingElem<C>>
            NS = new ColoredSystem<C>( id, Sp );
            NS = NS.reDetermine();
            NCS.add(NS);
+           System.out.println("new determination = " + NCS);
            return NCS;
         }
         GenPolynomial<GenPolynomial<C>> zero = A.green.ring.getZERO();
@@ -593,6 +602,7 @@ public class CReductionSeq<C extends GcdRingElem<C>>
             green = green.sum(c,e);
             Ap = Bp;
         }
+        System.out.println("new determination = " + NCS);
         return NCS;
     }
 
