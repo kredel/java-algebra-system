@@ -70,11 +70,21 @@ public class ColoredSystem<C extends GcdRingElem<C>> {
      */
     @Override
     public String toString() {
-        StringBuffer s = new StringBuffer("ColoredSystem: \n\n");
-        s.append("conditions: " + conditions + "\n\n");
-        s.append("system: " + list + "\n\n");
+        StringBuffer s = new StringBuffer("\nColoredSystem: \n");
+        if ( list.size() > 0 ) {
+           s.append("polynomial ring : " + list.get(0).green.ring + "\n");
+        } else {
+           s.append("parameter polynomial ring : " + conditions.list.ring + "\n");
+        }
+        //s.append("condition ideal == 0 : " + conditions.list + "\n");
+        s.append("conditions == 0 : " + getConditionZero() + "\n");
+        s.append("conditions != 0 : " + getConditionNonZero() + "\n");
+        s.append("colored polynomials:\n" + list + "\n");
+        s.append("uncolored polynomials:\n" + getPolynomialList() + "\n");
+        s.append("essential polynomials:\n" + getEssentialPolynomialList() + "\n");
+        s.append("green coefficients:\n" + getGreenCoefficientsList() + "\n");
         if ( pairlist != null ) {
-           s.append(pairlist.toString() + "\n");
+           s.append( pairlist.toString() + "\n" );
         }
         return s.toString();
     }
@@ -115,6 +125,29 @@ public class ColoredSystem<C extends GcdRingElem<C>> {
 
 
     /**
+     * Get list of green coefficients of polynomials. 
+     * @return list of all green coefficients of polynomials.
+     */
+    public List<GenPolynomial<C>> getGreenCoefficientsList() {
+        List<GenPolynomial<C>> F
+            = new ArrayList<GenPolynomial<C>>();
+        for ( ColorPolynomial<C> s : list ) {
+            F.addAll( s.green.getMap().values() );
+        }
+        List<GenPolynomial<C>> M = new ArrayList<GenPolynomial<C>>();
+        for ( GenPolynomial<C> c : F ) {
+            if ( c.isONE() ) {
+               continue;
+            }
+            if ( !M.contains( c ) ) {
+               M.add( c );
+            }
+        }
+        return M;
+    }
+
+
+    /**
      * Get list of full polynomials. 
      * @return list of all full polynomials.
      */
@@ -123,6 +156,20 @@ public class ColoredSystem<C extends GcdRingElem<C>> {
             = new ArrayList<GenPolynomial<GenPolynomial<C>>>();
         for ( ColorPolynomial<C> s : list ) {
             F.add( s.getPolynomial() );
+        }
+        return F;
+    }
+
+
+    /**
+     * Get list of essential polynomials. 
+     * @return list of all essential polynomials.
+     */
+    public List<GenPolynomial<GenPolynomial<C>>> getEssentialPolynomialList() {
+        List<GenPolynomial<GenPolynomial<C>>> F
+            = new ArrayList<GenPolynomial<GenPolynomial<C>>>();
+        for ( ColorPolynomial<C> s : list ) {
+            F.add( s.getEssentialPolynomial() );
         }
         return F;
     }
