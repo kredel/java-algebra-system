@@ -104,6 +104,32 @@ public class CReductionSeq<C extends GcdRingElem<C>>
 
 
     /**
+     * Is top reducible.
+     * @param A polynomial.
+     * @param P polynomial list.
+     * @return true if A is top reducible with respect to P.
+     */
+    public boolean isTopReducible(List<ColorPolynomial<C>> P, 
+                                  ColorPolynomial<C> A) {  
+        if ( P == null || P.isEmpty() ) {
+           return false;
+        }
+        if ( A == null || A.isZERO() ) {
+           return false;
+        }
+        boolean mt = false;
+        ExpVector e = A.leadingExpVector();
+        for ( ColorPolynomial<C> p : P ) {
+            mt = ExpVector.EVMT( e, p.leadingExpVector() );
+            if ( mt ) {
+               return true;
+            } 
+        }
+        return false;
+    }
+
+
+    /**
      * Is reducible.
      * @param Ap polynomial.
      * @param Pp polynomial list.
