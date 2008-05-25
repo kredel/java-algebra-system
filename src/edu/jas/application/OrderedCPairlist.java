@@ -209,11 +209,20 @@ public class OrderedCPairlist<C extends GcdRingElem<C> >
      */
     @Override
     public String toString() {
-        return "OrderedCPairlist( pairCount=" + pairCount()
-               + ", bitCount=" + bitCount() 
-               + ", putCount=" + putCount 
-               + ", remCount=" + remCount 
-               + " )";
+        int p = pairCount();
+        int b = bitCount();
+        if ( p != b ) {
+           return "OrderedCPairlist( pairCount=" + p
+                + ", bitCount=" + b 
+                + ", putCount=" + putCount 
+                + ", remCount=" + remCount 
+                + " )";
+        } else {
+           return "OrderedCPairlist( pairCount=" + p
+                + ", putCount=" + putCount 
+                + ", remCount=" + remCount 
+                + " )";
+        }
     }
 
 
