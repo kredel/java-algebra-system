@@ -189,7 +189,7 @@ public class Ideal<C extends GcdRingElem<C>>
    * @see java.lang.Object#toString()
    */
   @Override
-public String toString() {
+  public String toString() {
       return list.toString();
   }
 
@@ -354,6 +354,9 @@ public String toString() {
       }
       if ( this.isONE() ) {
           return true;
+      }
+      if ( this.isZERO() ) {
+          return false;
       }
       if ( !isGB ) {
          doGB();
