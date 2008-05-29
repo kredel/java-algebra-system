@@ -242,6 +242,49 @@ public class ColorPolynomial<C extends RingElem<C> >
 
 
     /**
+     * ColorPolynomial absolute value. 
+     * @return abs(this).
+     */
+    public ColorPolynomial<C> abs() {
+        GenPolynomial<GenPolynomial<C>> g, r, w;
+        int s = green.signum();
+        if ( s > 0 ) {
+           return this;
+        }
+        if ( s < 0 ) {
+           g = green.negate();
+           r = red.negate();
+           w = white.negate();
+           return new ColorPolynomial<C>(g,r,w);
+        }
+        // green == 0
+        g = green;
+        s = red.signum();
+        if ( s > 0 ) {
+           return this;
+        }
+        if ( s < 0 ) {
+           r = red.negate();
+           w = white.negate();
+           return new ColorPolynomial<C>(g,r,w);
+        }
+        // red == 0
+        r = red;
+        s = white.signum();
+        if ( s > 0 ) {
+           return this;
+        }
+        if ( s < 0 ) {
+           w = white.negate();
+           return new ColorPolynomial<C>(g,r,w);
+        }
+        // white == 0
+        w = white;
+        return new ColorPolynomial<C>(g,r,w);
+    }
+
+
+    /**
      * ColorPolynomial summation. 
      * @param S ColorPolynomial.
      * @return this+S.
@@ -350,14 +393,28 @@ public class ColorPolynomial<C extends RingElem<C> >
 
     /**
      * ColorPolynomial multiplication by coefficient. 
-     * @param c Coefficient.
-     * @return this * (c).
+     * @param s Coefficient.
+     * @return this * (s).
      */
     public ColorPolynomial<C> multiply( GenPolynomial<C> s ) {
         GenPolynomial<GenPolynomial<C>> g, r, w;
         g = green.multiply( s );
         r = red.multiply( s );
         w = white.multiply( s );
+        return new ColorPolynomial<C>(g,r,w);
+    }
+
+
+    /**
+     * ColorPolynomial division by coefficient. 
+     * @param s Coefficient.
+     * @return this / (s).
+     */
+    public ColorPolynomial<C> divide( GenPolynomial<C> s ) {
+        GenPolynomial<GenPolynomial<C>> g, r, w;
+        g = green.divide( s );
+        r = red.divide( s );
+        w = white.divide( s );
         return new ColorPolynomial<C>(g,r,w);
     }
 
