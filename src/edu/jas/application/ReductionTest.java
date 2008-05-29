@@ -28,7 +28,7 @@ import edu.jas.poly.ColorPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolynomialList;
 
-import edu.jas.application.Ideal;
+//import edu.jas.application.Ideal;
 
 
 /**
@@ -182,8 +182,10 @@ public static Test suite() {
      Ideal<BigRational> id = new Ideal<BigRational>(pr,i); 
      List<ColorPolynomial<BigRational>> cp 
         = new ArrayList<ColorPolynomial<BigRational>>();
+
+     Condition<BigRational> cond = new Condition<BigRational>(id);
      ColoredSystem<BigRational> s 
-        = new ColoredSystem<BigRational>(id,cp);
+        = new ColoredSystem<BigRational>(cond,cp);
      //System.out.println("s = " + s);
 
      assertTrue("isDetermined ", s.isDetermined()); 
@@ -216,6 +218,21 @@ public static Test suite() {
      L = new ArrayList<GenPolynomial<GenPolynomial<BigRational>>>();
      L.add(a);
      L.add(b);
+
+     System.out.println("\na = " + a);
+     System.out.println("b = " + b + "\n");
+
+     List<Condition<BigRational>> Ccond; 
+     System.out.println("caseDistinction ----------------------------------");
+     Ccond = cred.caseDistinction(L);
+     System.out.println("Ccond ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+     for ( Condition<BigRational> cnd : Ccond ) {
+         System.out.println("" + cnd);
+     }
+     if ( true ) {
+        return;
+     }
+
 
      //System.out.println("determine ---------------------------------------------");
      CSp = cred.determine(CSp,L);
@@ -255,13 +272,13 @@ public static Test suite() {
 
     System.out.println("isGB(L) = " + cgb.isGB(L) );
 
-    if ( false ) {
+    if ( true ) {
        List<ColoredSystem<BigRational>> Gsys = cgb.GBsys( L ); 
        System.out.println("GBsys(L) = " + Gsys );
        System.out.println("isGBsys(G) = " + cgb.isGBsys(Gsys) );
     }
 
-    if ( true ) { 
+    if ( false ) { 
        List<GenPolynomial<GenPolynomial<BigRational>>> G;
        G = cgb.GB(L);
        System.out.println("GB(L) = " + G );

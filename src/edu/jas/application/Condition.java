@@ -42,11 +42,20 @@ public class Condition<C extends GcdRingElem<C> >
 
 
     /**
+     * Condition constructor.
+     * @param id an ideal of zero polynomials.
+     */
+    public Condition(Ideal<C> z) {
+        this(z, new ArrayList<GenPolynomial<C>>());
+    }
+
+
+    /**
      * toString.
      */
     @Override
     public String toString() {
-        return "Contition[ 0 == " + zero.toString() 
+        return "Contition[ 0 == " + zero.list.list.toString() 
                       + ", 0 != " + nonZero + "]";
     }
 

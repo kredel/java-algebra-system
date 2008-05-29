@@ -30,7 +30,7 @@ import edu.jas.application.Ideal;
 public class ColoredSystem<C extends GcdRingElem<C>> {
 
 
-    public final Ideal<C> conditions;
+    public final Condition<C> condition;
 
 
     public final List<ColorPolynomial<C>> list;
@@ -41,25 +41,25 @@ public class ColoredSystem<C extends GcdRingElem<C>> {
 
     /**
      * Constructor for a colored polynomial system.
-     * @param id an ideal base.
+     * @param cond a condition.
      * @param S a list of colored polynomials.
      */
-    public ColoredSystem( Ideal<C> id,
+    public ColoredSystem( Condition<C> cond,
                           List<ColorPolynomial<C>> S) {
-        this(id,S,null);
+        this(cond,S,null);
     }
 
 
     /**
      * Constructor for a colored polynomial system.
-     * @param id an ideal base.
+     * @param cond a condition.
      * @param S a list of colored polynomials.
      * @param pl a ordered pair list.
      */
-    public ColoredSystem( Ideal<C> id,
+    public ColoredSystem( Condition<C> cond,
                           List<ColorPolynomial<C>> S, 
                           OrderedCPairlist<C> pl ) {
-        this.conditions = id;
+        this.condition = cond;
         this.list = S;
         this.pairlist = pl;
     }
@@ -74,9 +74,8 @@ public class ColoredSystem<C extends GcdRingElem<C>> {
         if ( list.size() > 0 ) {
            s.append("polynomial ring : " + list.get(0).green.ring + "\n");
         } else {
-           s.append("parameter polynomial ring : " + conditions.list.ring + "\n");
+           s.append("parameter polynomial ring : " + condition.zero.list.ring + "\n");
         }
-        //s.append("condition ideal == 0 : " + conditions.list + "\n");
         s.append("conditions == 0 : " + getConditionZero() + "\n");
         s.append("conditions != 0 : " + getConditionNonZero() + "\n");
         s.append("colored polynomials:\n" + list + "\n");
@@ -95,7 +94,7 @@ public class ColoredSystem<C extends GcdRingElem<C>> {
      * @return green coefficients.
      */
     public List<GenPolynomial<C>> getConditionZero() {
-        List<GenPolynomial<C>> c = conditions.getList();
+        List<GenPolynomial<C>> c = condition.zero.getList();
         return new ArrayList<GenPolynomial<C>>( c );
     }
 
@@ -183,7 +182,7 @@ public class ColoredSystem<C extends GcdRingElem<C>> {
         if ( !isDetermined() ) {
            return false;
         }
-        Ideal<C> id = conditions;
+        Ideal<C> id = condition.zero;
         for ( ColorPolynomial<C> s : list ) {
             if ( !s.checkInvariant() ) {
                System.out.println("notInvariant " + s);
@@ -219,7 +218,7 @@ public class ColoredSystem<C extends GcdRingElem<C>> {
         for ( ColorPolynomial<C> s : list ) {
             if ( !s.isDetermined() ) {
                System.out.println("notDetermined " + s);
-               System.out.println("Ideal: " + conditions);
+               System.out.println("condition: " + condition);
                return false;
             }
         }
@@ -233,7 +232,7 @@ public class ColoredSystem<C extends GcdRingElem<C>> {
      * @return determined colored polynomial wrt. this.conditions.
      */
     public ColorPolynomial<C> reDetermine( ColorPolynomial<C> s ) {
-        Ideal<C> id = conditions;
+        Ideal<C> id = condition.zero;
         if ( id.isONE() ) {
            return s;
         }
@@ -273,7 +272,7 @@ public class ColoredSystem<C extends GcdRingElem<C>> {
      * @return re determined colored polynomials wrt. this.conditions.
      */
     public ColoredSystem<C> reDetermine() {
-        if ( conditions.isONE() ) {
+        if ( condition.zero.isONE() ) {
            return this;
         }
         List<ColorPolynomial<C>> Sn = new ArrayList<ColorPolynomial<C>>( list.size() );
@@ -283,7 +282,7 @@ public class ColoredSystem<C extends GcdRingElem<C>> {
                Sn.add( a );
             }
         }
-        return new ColoredSystem<C>(conditions,Sn);
+        return new ColoredSystem<C>(condition,Sn);
     }
 
 }

@@ -130,7 +130,8 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         Ideal<C> id = new Ideal<C>(pr,fi); 
         // setup list of empty colored system
         List<ColorPolynomial<C>> cp = new ArrayList<ColorPolynomial<C>>();
-        ColoredSystem<C> s = new ColoredSystem<C>(id,cp);
+        Condition<C> ids = new Condition<C>(id);
+        ColoredSystem<C> s = new ColoredSystem<C>(ids,cp);
         //System.out.println("s = " + s);
         List<ColoredSystem<C>> CSp = new ArrayList<ColoredSystem<C>>();
         CSp.add(s);
@@ -264,7 +265,8 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         Ideal<C> id = new Ideal<C>(pr,fi); 
         // setup list of empty colored system
         List<ColorPolynomial<C>> cp = new ArrayList<ColorPolynomial<C>>();
-        ColoredSystem<C> s = new ColoredSystem<C>(id,cp);
+        Condition<C> ids = new Condition<C>(id);
+        ColoredSystem<C> s = new ColoredSystem<C>(ids,cp);
         //System.out.println("s = " + s);
         List<ColoredSystem<C>> CSp = new ArrayList<ColoredSystem<C>>();
         CSp.add(s);
@@ -287,7 +289,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
                 //System.out.println("p = " + p);
                 pairlist.put( p );
             }
-            ColoredSystem<C> css = new ColoredSystem<C>( cs.conditions, cs.list, pairlist );
+            ColoredSystem<C> css = new ColoredSystem<C>( cs.condition, cs.list, pairlist );
             CSs.add(css);
         }
 
@@ -361,7 +363,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
                        i++;
                        if ( cpp.list.size() <= gsi ) { // no new polynomial added
                           System.out.println("no new polynomial in " + cpp );
-                          cs = new ColoredSystem<C>(cpp.conditions,G,pairlist); //replace my cs with new conditions
+                          cs = new ColoredSystem<C>(cpp.condition,G,pairlist); //replace my cs with new conditions
                           continue;
                        }
                        ColorPolynomial<C> Hc = cpp.list.get( gsi ); // assert added is last
@@ -373,11 +375,11 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
                        if ( i == len ) { // non cloneing must be last!
                           G = cpp.list;
                           pairlist.put( Hc ); // not cloned
-                          cs = new ColoredSystem<C>(cpp.conditions,G,pairlist); //replace my cs with new conditions
+                          cs = new ColoredSystem<C>(cpp.condition,G,pairlist); //replace my cs with new conditions
                        } else { // cloneing
                           OrderedCPairlist<C> plp = pairlist.clone();
                           plp.put( Hc );
-                          ColoredSystem<C> cppp = new ColoredSystem<C>(cpp.conditions,cpp.list,plp);
+                          ColoredSystem<C> cppp = new ColoredSystem<C>(cpp.condition,cpp.list,plp);
                           logger.info("pushed GBsys = " + cppp);
                           CSs.add( cppp );
                        }
@@ -389,8 +391,8 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
             G = minimalGB(cs,G);
             System.out.println("min(G) = " + G );
 
-            cs = new ColoredSystem<C>(cs.conditions,G,pairlist);
-            logger.info("#sequential done = " + cs.conditions);
+            cs = new ColoredSystem<C>(cs.condition,G,pairlist);
+            logger.info("#sequential done = " + cs.condition);
             logger.info( pairlist.toString() );
             CSb.add( cs );
             if ( false ) {

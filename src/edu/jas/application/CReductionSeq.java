@@ -360,7 +360,7 @@ public class CReductionSeq<C extends GcdRingElem<C>>
             GenPolynomial<GenPolynomial<C>> Bp;
             ColorPolynomial<C> nz;
             ColoredSystem<C> NS;
-            Ideal<C> id = cs.conditions; //.clone();
+            Ideal<C> id = cs.condition.zero; //.clone();
             //System.out.println("starting id = " + id);
             List<ColorPolynomial<C>> S = cs.list;
             List<ColorPolynomial<C>> Sp;
@@ -376,7 +376,8 @@ public class CReductionSeq<C extends GcdRingElem<C>>
                    //System.out.println("nz = " + nz);
                    Sp = new ArrayList<ColorPolynomial<C>>( S );
                    Sp.add( nz );
-                   NS = new ColoredSystem<C>( id, Sp );
+                   Condition<C> ids = new Condition<C>(id);
+                   NS = new ColoredSystem<C>( ids, Sp );
                    NS = NS.reDetermine();
                    //System.out.println("NS = " + NS);
                    NCS.add( NS );
@@ -395,7 +396,8 @@ public class CReductionSeq<C extends GcdRingElem<C>>
                 Sp = new ArrayList<ColorPolynomial<C>>( S );
                 Sp.add( nz );
                 // re determine existing polynomials
-                NS = new ColoredSystem<C>( id, Sp );
+                Condition<C> ids = new Condition<C>(id);
+                NS = new ColoredSystem<C>( ids, Sp );
                 if ( logger.isDebugEnabled() ) {
                    logger.info("new determined " + NS);
                 }
@@ -424,7 +426,8 @@ public class CReductionSeq<C extends GcdRingElem<C>>
                         Sp = new ArrayList<ColorPolynomial<C>>( S );
                         Sp.add( nz );
                         // re determine existing polynomials
-                        NS = new ColoredSystem<C>( id, Sp );
+                        ids = new Condition<C>(id);
+                        NS = new ColoredSystem<C>( ids, Sp );
                         if ( logger.isDebugEnabled() ) {
                             logger.info("new determined " + NS);
                         }
@@ -475,28 +478,28 @@ public class CReductionSeq<C extends GcdRingElem<C>>
            List<ColoredSystem<C>> CS = new ArrayList<ColoredSystem<C>>();
            return CS;
         }
-        List<Ideal<C>> cd = caseDistinction( H );
-        return determineCd(cd,H);
+        List<Condition<C>> cd = caseDistinction( H );
+        return determineCond(cd,H);
     }
 
 
     /**
      * Determine polynomial list.
      * @param H polynomial list.
-     * @param cd case distiction, an ideal list.
+     * @param cd case distiction, an condition list.
      * @return new determined list of colored systems.
      */
     public List<ColoredSystem<C>> 
-           determineCd( List<Ideal<C>> cd,
-                        List<GenPolynomial<GenPolynomial<C>>> H) {  
+           determineCond( List<Condition<C>> cd,
+                          List<GenPolynomial<GenPolynomial<C>>> H) {  
         List<ColoredSystem<C>> CS = new ArrayList<ColoredSystem<C>>();
         if ( H == null || H.size() == 0 ) {
            return CS;
         }
         GenPolynomial<GenPolynomial<C>> zero = H.get(0).ring.getZERO();
-        for ( Ideal<C> id : cd ) {
-            if ( id.isONE() ) {
-               System.out.println("ideal is one = " + id);
+        for ( Condition<C> cond : cd ) {
+            if ( cond.zero.isONE() ) {
+               System.out.println("ideal is one = " + cond.zero);
                continue; // can treat all coeffs as green
             }
             List<ColorPolynomial<C>> S = new ArrayList<ColorPolynomial<C>>();
@@ -520,7 +523,7 @@ public class CReductionSeq<C extends GcdRingElem<C>>
                         S.add( nz );
                         break;
                     }
-                    if ( id.contains( c ) ) {
+                    if ( cond.zero.contains( c ) ) {
                         //System.out.println("c in id = " + c);
                         green = green.sum(c,e);
                         Ap = Bp;
@@ -540,7 +543,7 @@ public class CReductionSeq<C extends GcdRingElem<C>>
                    System.out.println("all green terms, dropped = " + green);
                 }
             }
-        ColoredSystem<C> cs = new ColoredSystem<C>( id, S );
+        ColoredSystem<C> cs = new ColoredSystem<C>( cond, S );
         //System.out.println("cs = " + cs);
         CS.add( cs );
         }
@@ -557,7 +560,7 @@ public class CReductionSeq<C extends GcdRingElem<C>>
         determine( ColoredSystem<C> cs, 
                    ColorPolynomial<C> A) {  
 
-        List<Ideal<C>> Il = caseDistinction(cs,A);
+        List<Condition<C>> Il = caseDistinction(cs,A);
         //System.out.println("new case distinction = " + Il);
 
         List<ColoredSystem<C>> NCS = new ArrayList<ColoredSystem<C>>();
@@ -566,14 +569,15 @@ public class CReductionSeq<C extends GcdRingElem<C>>
            return NCS;
         }
         List<ColorPolynomial<C>> S = cs.list;
-        Ideal<C> id = cs.conditions; //.clone();
+        Ideal<C> id = cs.condition.zero; //.clone();
         List<ColorPolynomial<C>> Sp;
         ColorPolynomial<C> nz;
         ColoredSystem<C> NS;
         if ( A.isDetermined() ) {
            Sp = new ArrayList<ColorPolynomial<C>>( S );
            Sp.add( A );
-           NS = new ColoredSystem<C>( id, Sp );
+           Condition<C> ids = new Condition<C>(id);
+           NS = new ColoredSystem<C>( ids, Sp );
            NS = NS.reDetermine();
            NCS.add(NS);
            System.out.println("new determination = " + NCS);
@@ -599,7 +603,8 @@ public class CReductionSeq<C extends GcdRingElem<C>>
                 //System.out.println("nz = " + nz);
                 Sp = new ArrayList<ColorPolynomial<C>>( S );
                 Sp.add( nz );
-                NS = new ColoredSystem<C>( id, Sp );
+                Condition<C> ids = new Condition<C>(id);
+                NS = new ColoredSystem<C>( ids, Sp );
                 NS = NS.reDetermine();
                 //System.out.println("NS = " + NS);
                 NCS.add( NS );
@@ -618,7 +623,8 @@ public class CReductionSeq<C extends GcdRingElem<C>>
             Sp = new ArrayList<ColorPolynomial<C>>( S );
             Sp.add( nz );
             // re determine existing polynomials
-            NS = new ColoredSystem<C>( id, Sp );
+            Condition<C> ids = new Condition<C>(id);
+            NS = new ColoredSystem<C>( ids, Sp );
             NS = NS.reDetermine();
             //System.out.println("NS = " + NS);
             NCS.add( NS );
@@ -639,54 +645,64 @@ public class CReductionSeq<C extends GcdRingElem<C>>
 
 
     /**
-     * Case distinction ideals of parametric polynomial list.
+     * Case distinction conditions of parametric polynomial list.
      * @param L list of parametric polynomials.
-     * @return List of case distinction ideals.
+     * @return list of conditions as case distinction.
      */
-    public List<Ideal<C>> caseDistinction( List<GenPolynomial<GenPolynomial<C>>> L) {  
-        List<Ideal<C>> cd = new ArrayList<Ideal<C>>();
+    public List<Condition<C>> caseDistinction( List<GenPolynomial<GenPolynomial<C>>> L) {  
+        List<Condition<C>> cd = new ArrayList<Condition<C>>();
         if ( L == null || L.size() == 0 ) {
             return cd;
         }
         GenPolynomialRing<GenPolynomial<C>> fac = L.get(0).ring;
         RingFactory<GenPolynomial<C>> crfac = fac.coFac;
         GenPolynomialRing<C> cfac = (GenPolynomialRing<C>) crfac;
-
         List<GenPolynomial<C>> F = new ArrayList<GenPolynomial<C>>();
+        Ideal<C> I = new Ideal<C>(cfac,F);
 
+        List<GenPolynomial<C>> NZ = new ArrayList<GenPolynomial<C>>();
+        Condition<C> sc = new Condition<C>( I, NZ );
+        System.out.println("starting cond = " + sc);
+        cd.add(sc);
+
+        List<Condition<C>> C = cd;
         GenPolynomial<GenPolynomial<C>> zero = fac.getZERO();
         GenPolynomial<GenPolynomial<C>> Ap;
         GenPolynomial<GenPolynomial<C>> Bp;
-        Ideal<C> I = new Ideal<C>(cfac,F);
-        System.out.println("starting I = " + I);
-        cd.add(I);
-        List<Ideal<C>> C = cd;
 
         for ( GenPolynomial<GenPolynomial<C>> A : L ) {
             Ap = A;
-            while( !Ap.isZERO() ) {
-                GenPolynomial<C> c = Ap.leadingBaseCoefficient();
-                Bp = Ap.reductum();
-                if ( c.isConstant() ) {
-                   break;
-                }
-                C = new ArrayList<Ideal<C>>( cd );
-                for ( Ideal<C> id : cd ) {
-                    if ( id.contains(c) ) {
-                        //System.out.println("c in id = " + c);
+            C = new ArrayList<Condition<C>>(cd);
+            for ( Condition<C> cond : cd ) {
+                Condition<C> cz = cond;
+                while( !Ap.isZERO() ) {
+                    GenPolynomial<C> c = Ap.leadingBaseCoefficient();
+                    Bp = Ap.reductum();
+                    if ( c.isConstant() ) { // red
+                        break;
+                    }
+                    if ( cz.zero.contains( c ) ) { // green
+                        //System.out.println("c in zero = " + c);
                         Ap = Bp;
                         continue;
                     }
-                    id = id.sum( c );
-                    C.add( id );
-                    if ( id.isONE() ) { // can treat remaining coeffs as green
-                       System.out.println("dropping " + id);
+                    if ( cz.nonZero.contains( c ) ) { // red
+                        //System.out.println("c in zero = " + c);
+                        break;
+                    }
+                    // white
+                    Condition<C> nc = cz.sumNonZero( c );
+                    C.add( nc );
+                    cz = cz.sumZero( c );
+                    if ( cz.zero.isONE() ) { // can treat remaining coeffs as green
+                       System.out.println("dropping " + nc);
                        break; // drop system
                     }
+                    Ap = Bp;
+                    C.add( cz );
                 }
-                Ap = Bp;
-                cd = C;
             }
+            cd = C;
         }
         //System.out.println("cd = " + cd);
         return cd;
@@ -697,26 +713,23 @@ public class CReductionSeq<C extends GcdRingElem<C>>
      * Case distinction ideals of parametric polynomial list.
      * @param L list of parametric polynomials.
      * @param cd colored system.
-     * @return List of case distinction ideals.
+     * @return List of case distinction conditions.
      */
-    public List<Ideal<C>> caseDistinction( ColoredSystem<C> cs,
-                                           ColorPolynomial<C> A) {  
-        List<Ideal<C>> cd = new ArrayList<Ideal<C>>();
+    public List<Condition<C>> caseDistinction( ColoredSystem<C> cs,
+                                               ColorPolynomial<C> A) {  
+        List<Condition<C>> cd = new ArrayList<Condition<C>>();
         if ( A == null || A.isZERO() ) {
             return cd;
         }
+        Ideal<C> I = cs.condition.zero;
+        System.out.println("starting I = " + I.list.list);
+        Condition<C> cond = new Condition<C>(I);
+        cd.add( cond );
         if ( A.isDetermined() ) {
            return cd;
         }
-        Ideal<C> I = cs.conditions;
-        System.out.println("starting I = " + I.list.list);
-        cd.add(I);
-        List<Ideal<C>> C = new ArrayList<Ideal<C>>( cd );
-        List<GenPolynomial<C>> nz = new ArrayList<GenPolynomial<C>>();
-        List<List<GenPolynomial<C>>> N = new ArrayList<List<GenPolynomial<C>>>();
-        N.add(nz);
-        List<List<GenPolynomial<C>>> M = new ArrayList<List<GenPolynomial<C>>>();
 
+        List<Condition<C>> C = new ArrayList<Condition<C>>( cd );
         GenPolynomial<GenPolynomial<C>> Ap = A.white;
         GenPolynomial<GenPolynomial<C>> Bp;
 
@@ -724,58 +737,31 @@ public class CReductionSeq<C extends GcdRingElem<C>>
             GenPolynomial<C> c = Ap.leadingBaseCoefficient();
             System.out.println("next c = " + c);
             Bp = Ap.reductum();
-            if ( c.isConstant() ) {
+            if ( c.isConstant() ) { // red
                 break;
             }
-            C = new ArrayList<Ideal<C>>(cd);
-            M = new ArrayList<List<GenPolynomial<C>>>(N);
-            Iterator<List<GenPolynomial<C>>> Ni = N.iterator(); 
-            for ( Ideal<C> id : cd ) {
-                nz = Ni.next();
-                System.out.println("id = " + id.list.list);
-                System.out.println("nz = " + nz);
-                if ( id.contains(c) ) {
-                    System.out.println("c in id = " + c);
-                    Ap = Bp;
-                    continue;
-                }
-                if ( nz.contains(c) ) {
-                    System.out.println("c in nz = " + c);
-                    Ap = Bp;
-                    continue;
-                }
-                Ideal<C> idp = id.sum( c );
-                System.out.println("make c green = " + c);
-                C.add( idp );
-                M.add( nz );
-                System.out.println("make c red = " + c);
-                boolean drin = false;
-                for ( GenPolynomial<C> a : nz ) {
-                    if ( a.equals(c) ) {
-                       drin = true;
-                       break;
-                    } 
-                }
-                if ( !drin ) {
-                   nz.add( c );
-                } 
-                C.add( id );
-                M.add( nz );
-                //if ( id.isONE() ) { // can treat remaining coeffs as green
-                //    System.out.println("dropping " + id);
-                //    break; // drop system
-                //}
+            if ( cond.zero.contains( c ) ) { // green
+                //System.out.println("c in zero = " + c);
+                Ap = Bp;
+                continue;
+            }
+            if ( cond.nonZero.contains( c ) ) { // red
+                //System.out.println("c in non-zero = " + c);
+                break;
+            }
+            // white
+            Condition<C> nc = cond.sumNonZero( c ); // red
+            C.add( nc );
+            cond = cond.sumZero( c ); // white
+            if ( cond.zero.isONE() ) { // can treat remaining coeffs as green
+                System.out.println("dropping " + nc);
+                break; // drop system
             }
             Ap = Bp;
-            cd = C;
-            N = M;
-            System.out.println("x cd = " + cd);
-            System.out.println("x N  = " + N);
         }
-
+        cd = C;
         System.out.println("new case distinction:");
         System.out.println("cd = " + cd);
-        System.out.println("N  = " + N);
         return cd;
     }
 
