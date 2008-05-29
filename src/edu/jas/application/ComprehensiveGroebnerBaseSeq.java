@@ -36,6 +36,7 @@ import edu.jas.ring.Pair;
 import edu.jas.ring.RPseudoReductionSeq;
 
 import edu.jas.ufd.GreatestCommonDivisor;
+import edu.jas.ufd.GreatestCommonDivisorAbstract;
 import edu.jas.ufd.GCDFactory;
 
 import edu.jas.application.PolyUtilApp;
@@ -60,7 +61,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
     /**
      * Greatest common divisor engine for coefficient content and primitive parts.
      */
-    protected final GreatestCommonDivisor<C> engine;
+    protected final GreatestCommonDivisorAbstract<C> engine;
 
 
     /**
@@ -96,13 +97,14 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
      * @param rf base coefficient ring factory.
      */
     @SuppressWarnings("unchecked") 
-    public ComprehensiveGroebnerBaseSeq(CReductionSeq<C> red, 
-                                        RingFactory<C> rf) {
+    public ComprehensiveGroebnerBaseSeq( CReductionSeq<C> red, 
+                                         RingFactory<C> rf ) {
         //super(null); // red not possible since type of type
         cred = red;
         cofac = rf;
         // selection for C but used for R:
-        engine = GCDFactory.<C>getImplementation( cofac );
+        GreatestCommonDivisor<C> e = GCDFactory.<C>getImplementation( cofac );
+        engine = (GreatestCommonDivisorAbstract<C>) e;
         //not used: engine = GCDFactory.<R>getProxy( rf );
     }
 
@@ -134,7 +136,8 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         CSp.add(s);
         //System.out.println("CSp = " + CSp);
         // determine polynomials
-        List<ColoredSystem<C>> CS = cred.determine(CSp,F);
+        //List<ColoredSystem<C>> CS = cred.determine(CSp,F);
+        List<ColoredSystem<C>> CS = cred.determine(F); //new
         //System.out.println("CS = " + CS);
         // check if all S-polynomials reduce to zero
         ColorPolynomial<C> p, q, h;
@@ -292,9 +295,10 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         List<ColoredSystem<C>> CSb = new ArrayList<ColoredSystem<C>>();
         while ( CSs.size() > 0 ) {
             ColoredSystem<C> cs = CSs.remove(0);
+            logger.info("poped GBsys = " + cs);
             OrderedCPairlist<C> pairlist = cs.pairlist;
             List<ColorPolynomial<C>> G = cs.list;
-            logger.info( pairlist.toString() );
+            //logger.info( pairlist.toString() );
 
             CPair<C> pair;
             ColorPolynomial<C> pi;
@@ -330,7 +334,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
                     logger.info("ht(H) = " + H.leadingExpVector() );
                 }
 
-                //H = H.monic();
+                H = H.abs();
                 //if ( H.isONE() ) {
                 //    G.clear(); G.add( H );
                 //    return G; // since no threads are activated
@@ -340,6 +344,15 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
                 }
                 logger.info("H = " + H );
                 if ( ! H.isZERO() ) {
+                    //GenPolynomial<GenPolynomial<C>> Hp =H.getPolynomial();
+                    //GenPolynomial<C> cont = engine.recursiveContent( H.getPolynomial() );
+                    //logger.info("cont(H) = " + cont );
+                   //H = H.divide( cont );
+                   //logger.info("pp(H) = " + H );
+                   //if ( !H.divide(cont).multiply(cont).equals( H ) ) {
+                    // logger.info("pp(H)cont(H) != H");
+                    //}
+
                    List<ColoredSystem<C>> ncs = cred.determine( cs, H );
                    int len = ncs.size()-1;
                    int i = -1;
@@ -352,6 +365,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
                           continue;
                        }
                        ColorPolynomial<C> Hc = cpp.list.get( gsi ); // assert added is last
+                       Hc = Hc.abs();
                        logger.info("Hc = " + Hc);
                        if ( Hc.isZERO() ) {
                           continue;
@@ -364,6 +378,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
                           OrderedCPairlist<C> plp = pairlist.clone();
                           plp.put( Hc );
                           ColoredSystem<C> cppp = new ColoredSystem<C>(cpp.conditions,cpp.list,plp);
+                          logger.info("pushed GBsys = " + cppp);
                           CSs.add( cppp );
                        }
                    }
