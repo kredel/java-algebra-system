@@ -671,35 +671,50 @@ public class CReductionSeq<C extends GcdRingElem<C>>
         GenPolynomial<GenPolynomial<C>> Bp;
 
         for ( GenPolynomial<GenPolynomial<C>> A : L ) {
-            Ap = A;
-            C = new ArrayList<Condition<C>>(cd);
+            C = new ArrayList<Condition<C>>( /*leer!*/ );
             for ( Condition<C> cond : cd ) {
                 Condition<C> cz = cond;
+                Ap = A;
                 while( !Ap.isZERO() ) {
                     GenPolynomial<C> c = Ap.leadingBaseCoefficient();
                     Bp = Ap.reductum();
                     if ( c.isConstant() ) { // red
+                        System.out.println("c constant = " + c);
+                        Ap = Bp;
                         break;
                     }
                     if ( cz.zero.contains( c ) ) { // green
-                        //System.out.println("c in zero = " + c);
+                        System.out.println("c in zero = " + c);
                         Ap = Bp;
                         continue;
                     }
                     if ( cz.nonZero.contains( c ) ) { // red
-                        //System.out.println("c in zero = " + c);
+                        System.out.println("c in nonZero = " + c);
+                        Ap = Bp;
                         break;
                     }
                     // white
+                    System.out.println("c white = " + c);
                     Condition<C> nc = cz.sumNonZero( c );
                     C.add( nc );
                     cz = cz.sumZero( c );
+                    Ap = Bp;
                     if ( cz.zero.isONE() ) { // can treat remaining coeffs as green
-                       System.out.println("dropping " + nc);
+                       System.out.println("dropping " + cz);
                        break; // drop system
                     }
-                    Ap = Bp;
-                    C.add( cz );
+                }
+                if ( C.contains(cz) ) {
+                   System.out.println("double entry " + cz);
+                }
+                if ( !cz.zero.isONE() ) { // can treat remaining coeffs as green
+                   C.add( cz );
+                } else {
+                  System.out.println("dropped " + cz);
+                }
+                if ( C.size() == 0 ) {
+                   System.out.println("readd starting cond = " + sc);
+                   C.add(sc);
                 }
             }
             cd = C;
