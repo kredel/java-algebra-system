@@ -219,24 +219,21 @@ public static Test suite() {
      L.add(a);
      L.add(b);
 
-     System.out.println("\na = " + a);
-     System.out.println("b = " + b + "\n");
+     //System.out.println("\na = " + a);
+     //System.out.println("b = " + b + "\n");
 
      List<Condition<BigRational>> Ccond; 
-     System.out.println("caseDistinction ----------------------------------");
+     //System.out.println("caseDistinction ----------------------------------");
      Ccond = cred.caseDistinction(L);
-     System.out.println("Ccond ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-     for ( Condition<BigRational> cnd : Ccond ) {
-         System.out.println("" + cnd);
-     }
-     if ( true ) {
-        return;
-     }
+     //System.out.println("Ccond ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+     //for ( Condition<BigRational> cnd : Ccond ) {
+     //    System.out.println("" + cnd);
+     //}
 
 
-     //System.out.println("determine ---------------------------------------------");
-     CSp = cred.determine(CSp,L);
-     //System.out.println("CS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" + CSp);
+     //System.out.println("determine ---------------------------------");
+     CSp = cred.determine(L);
+     //System.out.println("CSp ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" + CSp);
      //System.out.println("++++++++++++++++++++++++++++++++++++++");
      for ( ColoredSystem<BigRational> x : CSp ) {
          assertTrue("isDetermined ", x.isDetermined()); 
@@ -248,6 +245,7 @@ public static Test suite() {
      }
 
      ColorPolynomial<BigRational> q, h;
+     List<ColoredSystem<BigRational>> NCS;
      for ( ColoredSystem<BigRational> x : CSp ) {
          int k = x.list.size();
          for ( int j = 0; j < k; j++ ) {
@@ -263,27 +261,37 @@ public static Test suite() {
                  t = cred.isNormalform( x.list, h );
                  //System.out.println("isNF(NF(spol(a,b))) = " + t);
                  assertTrue("isNF(NF(spol(a,b))) ", t); 
+                 NCS = cred.determine( x, h );
+                 for ( ColoredSystem<BigRational> cpp : NCS ) {
+                     assertTrue("isDetermined( cpp ) ", cpp.isDetermined() ); 
+                 }
              }
          }
      }
 
-    ComprehensiveGroebnerBaseSeq<BigRational> cgb = 
-        new ComprehensiveGroebnerBaseSeq<BigRational>(cred,bi);
+     if ( false ) {
+         return;
+     }
 
-    System.out.println("isGB(L) = " + cgb.isGB(L) );
+     ComprehensiveGroebnerBaseSeq<BigRational> cgb = 
+         new ComprehensiveGroebnerBaseSeq<BigRational>(cred,bi);
 
-    if ( true ) {
-       List<ColoredSystem<BigRational>> Gsys = cgb.GBsys( L ); 
-       System.out.println("GBsys(L) = " + Gsys );
-       System.out.println("isGBsys(G) = " + cgb.isGBsys(Gsys) );
-    }
+     System.out.println("isGB(L) = " + cgb.isGB(L) );
 
-    if ( false ) { 
-       List<GenPolynomial<GenPolynomial<BigRational>>> G;
-       G = cgb.GB(L);
-       System.out.println("GB(L) = " + G );
-       System.out.println("isGB(G) = " + cgb.isGB(G) );
-    }
+     if ( true ) {
+         List<ColoredSystem<BigRational>> Gsys = cgb.GBsys( L ); 
+         //System.out.println("GBsys(L) = " + Gsys );
+         //System.out.println("isGBsys(G) = " + cgb.isGBsys(Gsys) );
+         assertTrue("isGBsys( GBsys(G) ) ", cgb.isGBsys(Gsys) ); 
+     }
+
+     if ( false ) { 
+         List<GenPolynomial<GenPolynomial<BigRational>>> G;
+         G = cgb.GB(L);
+         //System.out.println("GB(L) = " + G );
+         //System.out.println("isGB(G) = " + cgb.isGB(G) );
+         assertTrue("isGB( GB(G) ) ", cgb.isGB(G) ); 
+     }
 
  }
 
