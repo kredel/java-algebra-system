@@ -290,9 +290,9 @@ public class ColoredSystem<C extends GcdRingElem<C>> {
         List<ColorPolynomial<C>> Sn = new ArrayList<ColorPolynomial<C>>( list.size() );
         for ( ColorPolynomial<C> c : list ) {
             ColorPolynomial<C> a = reDetermine( c ); 
-            if ( !a.isZERO() ) {
-               Sn.add( a );
-            }
+            //if ( !a.isZERO() ) {
+            Sn.add( a ); // must also add zeros
+            //}
         }
         return new ColoredSystem<C>(condition,Sn);
     }
