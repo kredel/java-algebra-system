@@ -65,7 +65,7 @@ public class ResidueRing<C extends GcdRingElem<C> >
     /** The constructor creates a ResidueRing object 
      * from an Ideal. 
      * @param i polynomial ideal.
-     * @param isMaximal, true if ideal is maxmal.
+     * @param isMaximal true, if ideal is maxmal.
      */
     public ResidueRing(Ideal<C> i, boolean isMaximal) {
         ideal = i.GB(); // cheap if isGB
