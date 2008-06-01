@@ -70,9 +70,22 @@ public class Condition<C extends GcdRingElem<C> >
         if ( ! (ob instanceof Condition) ) {
            return false;
         }
-        Condition c = (Condition) ob;
-        boolean t = zero.equals( c.zero ) && nonZero.equals( c.nonZero );
-        return t;
+        Condition<C> c = (Condition<C>) ob;
+        if ( ! zero.equals( c.zero ) ) {
+           return false;
+        }
+        for ( GenPolynomial<C> p : nonZero ) {
+            if ( ! c.nonZero.contains( p ) ) {
+               return false;
+            }
+        }
+        List<GenPolynomial<C>> cnz = c.nonZero;
+        for ( GenPolynomial<C> p : c.nonZero ) {
+            if ( ! nonZero.contains( p ) ) {
+               return false;
+            }
+        }
+        return true;
     }
 
 
