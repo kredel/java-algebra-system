@@ -378,8 +378,8 @@ public class ColorPolynomial<C extends RingElem<C> >
 
     /**
      * ColorPolynomial multiplication by monomial. 
-     * @param c Coefficient.
-     * @param s Expvector.
+     * @param s Coefficient.
+     * @param e Expvector.
      * @return this * (c t).
      */
     public ColorPolynomial<C> multiply( GenPolynomial<C> s, ExpVector e ) {
