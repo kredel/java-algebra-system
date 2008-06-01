@@ -264,6 +264,7 @@ public static Test suite() {
                  NCS = cred.determine( x, h );
                  for ( ColoredSystem<BigRational> cpp : NCS ) {
                      assertTrue("isDetermined( cpp ) ", cpp.isDetermined() ); 
+                     assertTrue("checkInvariant ", cpp.checkInvariant()); 
                  }
              }
          }
@@ -278,14 +279,14 @@ public static Test suite() {
 
      System.out.println("isGB(L) = " + cgb.isGB(L) );
 
-     if ( true ) {
+     if ( false ) {
          List<ColoredSystem<BigRational>> Gsys = cgb.GBsys( L ); 
          //System.out.println("GBsys(L) = " + Gsys );
          //System.out.println("isGBsys(G) = " + cgb.isGBsys(Gsys) );
          assertTrue("isGBsys( GBsys(G) ) ", cgb.isGBsys(Gsys) ); 
      }
 
-     if ( false ) { 
+     if ( true ) { 
          List<GenPolynomial<GenPolynomial<BigRational>>> G;
          G = cgb.GB(L);
          //System.out.println("GB(L) = " + G );
