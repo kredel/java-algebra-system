@@ -111,12 +111,23 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
 
     /**
      * Comprehensive-Groebner base test.
-     * @param modv module variable number.
      * @param F polynomial list.
      * @return true, if F is a Comprehensive-Groebner base, else false.
      */
     //@Override
     public boolean isGB(List<GenPolynomial<GenPolynomial<C>>> F) {  
+        return isGB(0,F);
+    }
+
+
+    /**
+     * Comprehensive-Groebner base test.
+     * @param modv module variable number.
+     * @param F polynomial list.
+     * @return true, if F is a Comprehensive-Groebner base, else false.
+     */
+    //@Override
+    public boolean isGB(int modv, List<GenPolynomial<GenPolynomial<C>>> F) {  
         if ( F == null || F.size() == 0 ) {
             return true;
         }
@@ -188,12 +199,23 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
 
     /**
      * Comprehensive-Groebner base test.
-     * @param modv module variable number.
-     * @param F polynomial list.
-     * @return true, if F is a Comprehensive-Groebner base, else false.
+     * @param CS list of colored systems.
+     * @return true, if CS is a Comprehensive-Groebner system, else false.
      */
     //@Override
     public boolean isGBsys(List<ColoredSystem<C>> CS) {  
+        return isGBsys(0,CS);
+    }
+
+
+    /**
+     * Comprehensive-Groebner base test.
+     * @param modv module variable number.
+     * @param CS list of colored systems.
+     * @return true, if CS is a Comprehensive-Groebner system, else false.
+     */
+    //@Override
+    public boolean isGBsys(int modv, List<ColoredSystem<C>> CS) {  
         if ( CS == null || CS.size() == 0 ) {
             return true;
         }
@@ -331,7 +353,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
                 if ( H.isZERO() ) {
                     pair.setZero();
                     continue;
-                }
+                } 
                 if ( true || logger.isDebugEnabled() ) {
                     logger.info("ht(H) = " + H.leadingExpVector() );
                 }
@@ -358,7 +380,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
                    List<ColoredSystem<C>> ncs = cred.determine( cs, H );
                    int len = ncs.size()-1;
                    int i = -1;
-                   int gsi = G.size();
+                   int gsi = G.size(); // index of last polynomial
                    for ( ColoredSystem<C> cpp : ncs ) {
                        i++;
                        if ( cpp.list.size() <= gsi ) { // no new polynomial added
