@@ -272,7 +272,7 @@ public static Test suite() {
 
      System.out.println("isGB(L) = " + cgb.isGB(L) );
 
-     if ( false ) {
+     if ( true ) {
          List<ColoredSystem<BigRational>> Gsys = cgb.GBsys( L ); 
          //System.out.println("GBsys(L) = " + Gsys );
          //System.out.println("isGBsys(G) = " + cgb.isGBsys(Gsys) );
