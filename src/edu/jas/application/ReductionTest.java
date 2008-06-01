@@ -159,14 +159,6 @@ public static Test suite() {
      //System.out.println("cond != 0: " + p.getConditionNonZero());
      //System.out.println("cond == 0: " + p.getConditionZero());
 
-     p = new ColorPolynomial<BigRational>(w,g,g); 
-     //System.out.println("p = " + p);
-     assertTrue("check(p) ", p.checkInvariant());
-     assertTrue("deter(p) ", p.isDetermined());
-     assertTrue("p == 0 ", p.isZERO());
-     //System.out.println("cond != 0: " + p.getConditionNonZero());
-     //System.out.println("cond == 0: " + p.getConditionZero());
-
      p = new ColorPolynomial<BigRational>(w,g,r); 
      //System.out.println("p = " + p);
      if ( !w.isZERO() ) {
@@ -174,6 +166,14 @@ public static Test suite() {
      }
      assertFalse("deter(p) ", p.isDetermined());
      assertFalse("p == 0 ", p.isZERO());
+     //System.out.println("cond != 0: " + p.getConditionNonZero());
+     //System.out.println("cond == 0: " + p.getConditionZero());
+
+     p = new ColorPolynomial<BigRational>(w,g,g); 
+     //System.out.println("p = " + p);
+     assertTrue("check(p) ", p.checkInvariant());
+     assertTrue("deter(p) ", p.isDetermined());
+     assertTrue("p == 0 ", p.isZERO());
      //System.out.println("cond != 0: " + p.getConditionNonZero());
      //System.out.println("cond == 0: " + p.getConditionZero());
 
@@ -200,14 +200,7 @@ public static Test suite() {
      //System.out.println("\na = " + a);
      //System.out.println("b = " + b + "\n");
 
-     CS = cred.determine(CS,a);
-     //System.out.println("CS = " + CS);
-     for ( ColoredSystem<BigRational> x : CS ) {
-         assertTrue("isDetermined ", x.isDetermined()); 
-         assertTrue("checkInvariant ", x.checkInvariant()); 
-     }
-
-     CS = cred.determine(CS,a);
+     CS = cred.determine(s,p);
      //System.out.println("CS = " + CS);
      for ( ColoredSystem<BigRational> x : CS ) {
          assertTrue("isDetermined ", x.isDetermined()); 
