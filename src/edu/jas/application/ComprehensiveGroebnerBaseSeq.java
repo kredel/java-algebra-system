@@ -131,69 +131,8 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         if ( F == null || F.size() == 0 ) {
             return true;
         }
-        // extract coefficient factory
-        GenPolynomial<GenPolynomial<C>> f = F.get(0);
-        GenPolynomialRing<GenPolynomial<C>> fac = f.ring;
-        RingFactory<GenPolynomial<C>> prfac = fac.coFac;
-        GenPolynomialRing<C> pr = (GenPolynomialRing<C>) prfac;
-        // setup condition ideal
-        List<GenPolynomial<C>> fi = new ArrayList<GenPolynomial<C>>();
-        Ideal<C> id = new Ideal<C>(pr,fi); 
-        // setup list of empty colored system
-        List<ColorPolynomial<C>> cp = new ArrayList<ColorPolynomial<C>>();
-        Condition<C> ids = new Condition<C>(id);
-        ColoredSystem<C> s = new ColoredSystem<C>(ids,cp);
-        //System.out.println("s = " + s);
-        List<ColoredSystem<C>> CSp = new ArrayList<ColoredSystem<C>>();
-        CSp.add(s);
-        //System.out.println("CSp = " + CSp);
-        // determine polynomials
-        //List<ColoredSystem<C>> CS = cred.determine(CSp,F);
-        List<ColoredSystem<C>> CS = cred.determine(F); //new
-        //System.out.println("CS = " + CS);
-        // check if all S-polynomials reduce to zero
-        ColorPolynomial<C> p, q, h;
-        for ( ColoredSystem<C> cs : CS ) {
-            if ( true || debug ) {
-               if ( !cs.isDetermined() ) {
-                  System.out.println("not determined, cs = " + cs);
-                  return false;
-               }
-               if ( !cs.checkInvariant() ) {
-                  System.out.println("not invariant, cs = " + cs);
-                  return false;
-               }
-            }
-            List<ColorPolynomial<C>> S = cs.list;
-            int k = S.size();
-            for ( int j = 0; j < k; j++ ) {
-                p = S.get(j);
-                for ( int l = j+1; l < k; l++ ) {
-                    q = S.get(l);
-                    h = cred.SPolynomial(p,q);
-                    //System.out.println("spol(a,b) = " + h);
-                    h = cred.normalform( S, h );
-                    //System.out.println("NF(spol(a,b)) = " + h);
-                    if ( true || debug ) {
-                       if ( !cred.isNormalform( S, h ) ) {
-                          System.out.println("not normalform, h = " + h);
-                          return false;
-                       }
-                    }
-                    if ( !h.isZERO() ) {
-                       h = cs.reDetermine( h );
-                       if ( !h.isZERO() ) {
-                          System.out.println("p = " + p);
-                          System.out.println("q = " + q);
-                          System.out.println("NF(spol(p,q)) = " + h);
-                          System.out.println("cs = " + cs);
-                          return false;
-                       }
-                    }
-                }
-            }
-        }
-        return true;
+        List<ColoredSystem<C>> CS = cred.determine(F); 
+        return isGBsys(modv,CS);
     }
 
 
@@ -219,7 +158,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         if ( CS == null || CS.size() == 0 ) {
             return true;
         }
-        ColorPolynomial<C> p, q, h;
+        ColorPolynomial<C> p, q, h, hp;
         for ( ColoredSystem<C> cs : CS ) {
             if ( true || debug ) {
                if ( !cs.isDetermined() ) {
@@ -249,11 +188,12 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
                        }
                     }
                     if ( !h.isZERO() ) {
-                       h = cs.reDetermine( h );
-                       if ( !h.isZERO() ) {
+                       hp = cs.reDetermine( h );
+                       if ( !hp.isZERO() ) {
                           System.out.println("p = " + p);
                           System.out.println("q = " + q);
                           System.out.println("NF(spol(p,q)) = " + h);
+                          System.out.println("redetermine(NF(spol(p,q))) = " + hp);
                           System.out.println("cs = " + cs);
                           return false;
                        }
@@ -440,7 +380,9 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         // compute Groebner system
         List<ColoredSystem<C>> Gsys = GBsys( F );
         //System.out.println("\n\nGBsys = " + Gsys);
-        System.out.println("isGBsys() = " + isGBsys(Gsys) + "\n-------------------");
+        //System.out.println("isGBsys() = " + isGBsys(Gsys) + "\n-------------------");
+        List<Condition<C>> cd = new ArrayList<Condition<C>>();
+        List<Condition<C>> cds;
 
         // combine for CGB
         Set<GenPolynomial<GenPolynomial<C>>> Gs = 
@@ -456,6 +398,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
                   System.out.println("not invariant, cs = " + cs);
                }
             }
+            cd.add( cs.condition );
             List<ColorPolynomial<C>> S = cs.list;
             int k = S.size();
             for ( int j = 0; j < k; j++ ) {
@@ -466,6 +409,20 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         }
         List<GenPolynomial<GenPolynomial<C>>> G = 
             new ArrayList<GenPolynomial<GenPolynomial<C>>>( Gs );
+        cds = cred.caseDistinction( G );
+        System.out.println("-------------------------------------------");
+        for ( Condition<C> cond : cd ) {
+            if ( ! cds.contains( cond ) ) {
+               System.out.println("cd_i not in cds = " + cond);
+            }
+        }
+        System.out.println("-------------------------------------------");
+        for ( Condition<C> cond : cds ) {
+            if ( ! cd.contains( cond ) ) {
+               System.out.println("cd_i not in cd = " + cond);
+            }
+        }
+        System.out.println("-------------------------------------------");
         return G;
     }
 
