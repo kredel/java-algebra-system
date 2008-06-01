@@ -440,7 +440,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         // compute Groebner system
         List<ColoredSystem<C>> Gsys = GBsys( F );
         //System.out.println("\n\nGBsys = " + Gsys);
-        System.out.println("isGBsys() = " + isGBsys(Gsys) + "\n--------------------");
+        System.out.println("isGBsys() = " + isGBsys(Gsys) + "\n-------------------");
 
         // combine for CGB
         Set<GenPolynomial<GenPolynomial<C>>> Gs = 

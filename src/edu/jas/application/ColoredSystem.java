@@ -225,6 +225,9 @@ public class ColoredSystem<C extends GcdRingElem<C>> {
      */
     public boolean isDetermined() {
         for ( ColorPolynomial<C> s : list ) {
+            if ( s.isZERO() ) {
+               continue;
+            }
             if ( !s.isDetermined() ) {
                System.out.println("notDetermined " + s);
                System.out.println("condition: " + condition);
