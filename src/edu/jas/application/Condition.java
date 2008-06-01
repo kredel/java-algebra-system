@@ -29,8 +29,8 @@ public class Condition<C extends GcdRingElem<C> >
 
     /**
      * Condition constructor.
-     * @param id an ideal of zero polynomials.
-     * @param list a list of non-zero polynomials.
+     * @param z an ideal of zero polynomials.
+     * @param nz a list of non-zero polynomials.
      */
     public Condition(Ideal<C> z, List<GenPolynomial<C>> nz) {
         if ( z == null || nz == null ) {
@@ -43,7 +43,7 @@ public class Condition<C extends GcdRingElem<C> >
 
     /**
      * Condition constructor.
-     * @param id an ideal of zero polynomials.
+     * @param z an ideal of zero polynomials.
      */
     public Condition(Ideal<C> z) {
         this(z, new ArrayList<GenPolynomial<C>>());
@@ -55,7 +55,7 @@ public class Condition<C extends GcdRingElem<C> >
      */
     @Override
     public String toString() {
-        return "Contition[ 0 == " + zero.list.list.toString() 
+        return "Condition[ 0 == " + zero.list.list.toString() 
                       + ", 0 != " + nonZero + "]";
     }
 
@@ -73,6 +73,15 @@ public class Condition<C extends GcdRingElem<C> >
         Condition c = (Condition) ob;
         boolean t = zero.equals( c.zero ) && nonZero.equals( c.nonZero );
         return t;
+    }
+
+
+    /**
+     * Is empty condition.
+     * @return true if this is the empty condition, else false.
+     */
+    public boolean isEmpty() {
+        return ( zero.isZERO() && nonZero.size() == 0 );
     }
 
 
