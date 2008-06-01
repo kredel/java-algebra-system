@@ -502,7 +502,7 @@ public class CReductionSeq<C extends GcdRingElem<C>>
                System.out.println("ideal is one = " + cond.zero);
                continue; // can treat all coeffs as green
             }
-            //if ( cond.isEmpty() ) { 
+            //if ( cond.isEmpty() ) { // not use this code
             //   System.out.println("condition is empty = " + cond);
             //   continue; // can skip condition (?)
             //}
@@ -577,7 +577,7 @@ public class CReductionSeq<C extends GcdRingElem<C>>
             if ( !white.isZERO() ) { // debug
                throw new RuntimeException("error, white non zero = " + white);
             }
-            System.out.println("all green terms = " + green);
+            //System.out.println("all green terms = " + green);
             cp = new ColorPolynomial<C>(green,red,white); 
         }
         return cp;
@@ -608,15 +608,15 @@ public class CReductionSeq<C extends GcdRingElem<C>>
         List<ColorPolynomial<C>> Sp;
         ColorPolynomial<C> nz;
         ColoredSystem<C> NS;
-        if ( A.isDetermined() ) {
-           Sp = new ArrayList<ColorPolynomial<C>>( S );
-           Sp.add( A );
-           NS = new ColoredSystem<C>( cond, Sp, pl );
-           //NS = NS.reDetermine();
-           NCS.add(NS);
-           System.out.println("new determination = " + NCS);
-           return NCS;
-        }
+//         if ( A.isDetermined() ) { // dont use this code
+//            Sp = new ArrayList<ColorPolynomial<C>>( S );
+//            Sp.add( A );
+//            NS = new ColoredSystem<C>( cond, Sp, pl );
+//            //NS = NS.reDetermine();
+//            NCS.add(NS);
+//            System.out.println("new determination = " + NCS);
+//            return NCS;
+//         }
         System.out.println("to determine = " + A);
         List<Condition<C>> cd = caseDistinction( cs, A );
         for ( Condition<C> cnd : cd ) {
@@ -773,22 +773,22 @@ public class CReductionSeq<C extends GcdRingElem<C>>
                 GenPolynomial<C> c = Ap.leadingBaseCoefficient();
                 Bp = Ap.reductum();
                 if ( c.isConstant() ) { // red
-                    System.out.println("c constant = " + c);
+                    //System.out.println("c constant = " + c);
                     Ap = Bp;
                     break;
                 }
                 if ( cz.zero.contains( c ) ) { // green
-                    System.out.println("c in zero = " + c);
+                    //System.out.println("c in zero = " + c);
                     Ap = Bp;
                     continue;
                 }
                 if ( cz.nonZero.contains( c ) ) { // red
-                    System.out.println("c in nonZero = " + c);
+                    //System.out.println("c in nonZero = " + c);
                     Ap = Bp;
                     break;
                 }
                 // white
-                System.out.println("c white = " + c);
+                //System.out.println("c white = " + c);
                 Condition<C> nc = cz.sumNonZero( c );
                 C.add( nc );
                 cz = cz.sumZero( c );
@@ -807,7 +807,7 @@ public class CReductionSeq<C extends GcdRingElem<C>>
                System.out.println("dropped " + cz);
             }
             if ( C.size() == 0 ) {
-               System.out.println("readd starting cond = " + sc);
+               System.out.println("re-add starting cond = " + sc);
                C.add(sc);
             }
         }
@@ -829,16 +829,16 @@ public class CReductionSeq<C extends GcdRingElem<C>>
             return cd;
         }
         Condition<C> cond = cs.condition;
-        System.out.println("starting condition = " + cond);
+        //System.out.println("starting condition = " + cond);
         cd.add( cond );
-        if ( A.isDetermined() ) {
-           return cd;
-        }
+        //if ( A.isDetermined() ) {
+        //   return cd;
+        //}
         //GenPolynomial<GenPolynomial<C>> Ap = A.getEssentialPolynomial();
         GenPolynomial<GenPolynomial<C>> Ap = A.getPolynomial();
         cd = caseDistinction( cd, Ap );
-        System.out.println("new case distinction:");
-        System.out.println("cd = " + cd);
+        //System.out.println("new case distinction:");
+        //System.out.println("cd = " + cd);
         return cd;
     }
 
