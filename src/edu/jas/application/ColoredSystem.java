@@ -65,6 +65,15 @@ public class ColoredSystem<C extends GcdRingElem<C>> {
     }
 
 
+    /**
+     * clone this colored polynomial system.
+     * @return a clone of this.
+     */
+    public ColoredSystem<C> clone() {
+        return new ColoredSystem<C>(condition,list,pairlist.clone());
+    }
+
+
     /** Get the String representation.
      * @see java.lang.Object#toString()
      */
