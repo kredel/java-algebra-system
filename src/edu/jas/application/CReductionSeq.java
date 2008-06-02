@@ -563,7 +563,8 @@ public class CReductionSeq<C extends GcdRingElem<C>>
                 Ap = Bp;
             } else {
                 if ( !cond.nonZero.contains( c ) ) {
-                   System.out.println("error, c non zero = " + c);
+                   //System.out.println("error, c non zero = " + c);
+                   throw new RuntimeException("error, c non zero = " + c);
                 }
                 red = zero.sum(c,e);
                 white = Bp;
@@ -572,13 +573,13 @@ public class CReductionSeq<C extends GcdRingElem<C>>
                 break;
             }
         }
-        // return null for zero polynomial
+        // return zero for zero or green polynomial
         if ( red.isZERO() ) {
-            if ( !white.isZERO() ) { // debug
-               throw new RuntimeException("error, white non zero = " + white);
-            }
-            //System.out.println("all green terms = " + green);
-            cp = new ColorPolynomial<C>(green,red,white); 
+           if ( !white.isZERO() ) { // debug
+              throw new RuntimeException("error, white non zero = " + white);
+           }
+           //System.out.println("all green terms = " + green);
+           cp = new ColorPolynomial<C>(green,red,white); 
         }
         return cp;
     }
@@ -649,6 +650,7 @@ public class CReductionSeq<C extends GcdRingElem<C>>
         System.out.println("to determine = " + A);
         GenPolynomial<GenPolynomial<C>> Ap = A.getPolynomial();
         List<Condition<C>> cd = caseDistinction( cs, A );
+        System.out.println("# cases = " + cd.size());
         for ( Condition<C> cnd : cd ) {
            Sp = new ArrayList<ColorPolynomial<C>>( S );
            nz = determine( cnd, Ap );
