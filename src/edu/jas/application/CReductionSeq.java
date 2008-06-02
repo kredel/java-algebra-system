@@ -585,18 +585,14 @@ public class CReductionSeq<C extends GcdRingElem<C>>
 
 
     /**
-     * Determine polynomial relative to conditions in F.
+     * Determine polynomial relative to a condition.
      * @param cs a colored system.
      * @param A color polynomial.
-     * @return new F.
+     * @return list of colored systems.
      */
     public List<ColoredSystem<C>> 
         determine( ColoredSystem<C> cs, 
                    ColorPolynomial<C> A ) {  
-
-        List<Condition<C>> Il = caseDistinction(cs,A);
-        //System.out.println("new case distinction = " + Il);
-
         List<ColoredSystem<C>> NCS = new ArrayList<ColoredSystem<C>>();
         if ( A == null || A.isZERO() ) {
            //NCS.add( cs );
@@ -608,20 +604,13 @@ public class CReductionSeq<C extends GcdRingElem<C>>
         List<ColorPolynomial<C>> Sp;
         ColorPolynomial<C> nz;
         ColoredSystem<C> NS;
-//         if ( A.isDetermined() ) { // dont use this code
-//            Sp = new ArrayList<ColorPolynomial<C>>( S );
-//            Sp.add( A );
-//            NS = new ColoredSystem<C>( cond, Sp, pl );
-//            //NS = NS.reDetermine();
-//            NCS.add(NS);
-//            System.out.println("new determination = " + NCS);
-//            return NCS;
-//         }
+//         if ( A.isDetermined() ) { ... } // dont use this   
         System.out.println("to determine = " + A);
+        GenPolynomial<GenPolynomial<C>> Ap = A.getPolynomial();
         List<Condition<C>> cd = caseDistinction( cs, A );
         for ( Condition<C> cnd : cd ) {
            Sp = new ArrayList<ColorPolynomial<C>>( S );
-           nz = determine( cnd, A.getPolynomial() );
+           nz = determine( cnd, Ap );
            if ( nz == null || nz.isZERO() ) {
               continue;
            }
@@ -629,7 +618,50 @@ public class CReductionSeq<C extends GcdRingElem<C>>
            Sp.add( nz );
            NS = new ColoredSystem<C>( cnd, Sp, pl );
            //NS = NS.reDetermine();
-           NCS.add(NS);
+           NCS.add( NS );
+        }
+        //System.out.println("new determination = " + NCS);
+        return NCS;
+    }
+
+
+    /**
+     * Determine polynomial relative to a condition and add pairs.
+     * @param cs a colored system.
+     * @param A color polynomial.
+     * @return list of colored systems.
+     */
+    public List<ColoredSystem<C>> 
+        determineAddPairs( ColoredSystem<C> cs, 
+                           ColorPolynomial<C> A ) {  
+        List<ColoredSystem<C>> NCS = new ArrayList<ColoredSystem<C>>();
+        if ( A == null || A.isZERO() ) {
+           //NCS.add( cs );
+           return NCS;
+        }
+        List<ColorPolynomial<C>> S = cs.list;
+        Condition<C> cond = cs.condition; //.clone(); done in Condition itself
+        OrderedCPairlist<C> pl = cs.pairlist;
+        List<ColorPolynomial<C>> Sp;
+        ColorPolynomial<C> nz;
+        ColoredSystem<C> NS;
+//         if ( A.isDetermined() ) { ... } // dont use this   
+        System.out.println("to determine = " + A);
+        GenPolynomial<GenPolynomial<C>> Ap = A.getPolynomial();
+        List<Condition<C>> cd = caseDistinction( cs, A );
+        for ( Condition<C> cnd : cd ) {
+           Sp = new ArrayList<ColorPolynomial<C>>( S );
+           nz = determine( cnd, Ap );
+           if ( nz == null || nz.isZERO() ) {
+              continue;
+           }
+           System.out.println("new determinated nz = " + nz);
+           Sp.add( nz );
+           OrderedCPairlist<C> PL = pl.clone();
+           PL.put( nz );
+           NS = new ColoredSystem<C>( cnd, Sp, PL );
+           //NS = NS.reDetermine();
+           NCS.add( NS );
         }
         //System.out.println("new determination = " + NCS);
         return NCS;
