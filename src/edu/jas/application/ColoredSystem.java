@@ -192,26 +192,33 @@ public class ColoredSystem<C extends GcdRingElem<C>> {
            return false;
         }
         Ideal<C> id = condition.zero;
+        List<GenPolynomial<C>> nz = condition.nonZero;
         for ( ColorPolynomial<C> s : list ) {
             if ( !s.checkInvariant() ) {
                System.out.println("notInvariant " + s);
-               System.out.println("Ideal: " + id);
+               System.out.println("condition:   " + condition);
                return false;
             }
             for ( GenPolynomial<C> g : s.green.getMap().values() ) {
                 if ( ! id.contains( g ) ) {
-                   System.out.println("notGreen " + g);
-                   System.out.println("Ideal: " + id);
-                   System.out.println("colors: " + s);
+                   System.out.println("notGreen   " + g);
+                   System.out.println("condition: " + condition);
+                   System.out.println("colors:    " + s);
                    return false;
                 }
             }
             for ( GenPolynomial<C> r : s.red.getMap().values() ) {
-                if ( id.contains( r ) ) {
-                   System.out.println("notRed " + r);
-                   System.out.println("Ideal: " + id);
-                   System.out.println("colors: " + s);
+                if ( r.isConstant() ) {
+                   continue;
+                }
+                if ( !nz.contains( r ) ) {
+                   System.out.println("notRed     " + r);
+                   System.out.println("condition: " + condition);
+                   System.out.println("colors:    " + s);
                    return false;
+                }
+                if ( id.contains( r ) ) {
+                   System.out.println("warning in consistent condition " + condition);
                 }
             }
         }
