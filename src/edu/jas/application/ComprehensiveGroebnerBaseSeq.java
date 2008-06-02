@@ -192,7 +192,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
                        if ( !hp.isZERO() ) {
                           System.out.println("p = " + p);
                           System.out.println("q = " + q);
-                          System.out.println("NF(spol(p,q)) = " + h);
+                          System.out.println("not zero:   NF(spol(p,q))  = " + h);
                           System.out.println("redetermine(NF(spol(p,q))) = " + hp);
                           System.out.println("cs = " + cs);
                           return false;
@@ -213,26 +213,30 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
     //@Override
     //@SuppressWarnings("unchecked") 
     public List<ColoredSystem<C>> 
-           GBsys( List<GenPolynomial<GenPolynomial<C>>> F ) {  
+           GBsysOld( List<GenPolynomial<GenPolynomial<C>>> F ) {  
         if ( F == null ) {
            return null;
+        }
+        List<ColoredSystem<C>> CSp = new ArrayList<ColoredSystem<C>>();
+        if ( F.size() == 0 ) {
+           return CSp;
         }
         // extract coefficient factory
         GenPolynomial<GenPolynomial<C>> f = F.get(0);
         GenPolynomialRing<GenPolynomial<C>> fac = f.ring;
-        RingFactory<GenPolynomial<C>> prfac = fac.coFac;
-        GenPolynomialRing<C> pr = (GenPolynomialRing<C>) prfac;
-        // setup condition ideal
-        List<GenPolynomial<C>> fi = new ArrayList<GenPolynomial<C>>();
-        Ideal<C> id = new Ideal<C>(pr,fi); 
-        // setup list of empty colored system
-        List<ColorPolynomial<C>> cp = new ArrayList<ColorPolynomial<C>>();
-        Condition<C> ids = new Condition<C>(id);
-        ColoredSystem<C> s = new ColoredSystem<C>(ids,cp);
-        //System.out.println("s = " + s);
-        List<ColoredSystem<C>> CSp = new ArrayList<ColoredSystem<C>>();
-        CSp.add(s);
-        //System.out.println("CSp = " + CSp);
+//         RingFactory<GenPolynomial<C>> prfac = fac.coFac;
+//         GenPolynomialRing<C> pr = (GenPolynomialRing<C>) prfac;
+//         // setup condition ideal
+//         List<GenPolynomial<C>> fi = new ArrayList<GenPolynomial<C>>();
+//         Ideal<C> id = new Ideal<C>(pr,fi); 
+//         // setup list of empty colored system
+//         List<ColorPolynomial<C>> cp = new ArrayList<ColorPolynomial<C>>();
+//         Condition<C> ids = new Condition<C>(id);
+//         ColoredSystem<C> s = new ColoredSystem<C>(ids,cp);
+//         //System.out.println("s = " + s);
+//         List<ColoredSystem<C>> CSp = new ArrayList<ColoredSystem<C>>();
+//         CSp.add(s);
+//         //System.out.println("CSp = " + CSp);
         // determine polynomials
         //List<ColoredSystem<C>> CS = cred.determine(CSp,F);
         List<ColoredSystem<C>> CS = cred.determine(F); //new
@@ -361,6 +365,149 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
                break;
             }
         }
+        return CSb;
+    }
+
+
+
+    /**
+     * Comprehensive Groebner base system using pairlist class.
+     * @param F polynomial list.
+     * @return GBsys(F) a Comprehensive Groebner base system of F.
+     */
+    //@Override
+    //@SuppressWarnings("unchecked") 
+    public List<ColoredSystem<C>> 
+           GBsys( List<GenPolynomial<GenPolynomial<C>>> F ) {  
+        if ( F == null ) {
+           return null;
+        }
+        List<ColoredSystem<C>> CSp = new ArrayList<ColoredSystem<C>>();
+        if ( F.size() == 0 ) {
+           return CSp;
+        }
+        // extract coefficient factory
+        GenPolynomial<GenPolynomial<C>> f = F.get(0);
+        GenPolynomialRing<GenPolynomial<C>> fac = f.ring;
+        // determine polynomials
+        List<ColoredSystem<C>> CS = cred.determine( F ); 
+        //System.out.println("CS = " + CS);
+        //CS.remove(0); // empty colored system
+        if ( logger.isInfoEnabled() ) {
+           logger.info("determined polynomials =\n" + CS );
+        }
+
+        // setup pair lists
+        List<ColoredSystem<C>> CSs = new ArrayList<ColoredSystem<C>>();
+        ColoredSystem<C> css;
+        for ( ColoredSystem<C> cs : CS ) {
+            OrderedCPairlist<C> pairlist = new OrderedCPairlist<C>( fac );
+            for ( ColorPolynomial<C> p : cs.list ) {
+                //System.out.println("p = " + p);
+                pairlist.put( p );
+            }
+            css = new ColoredSystem<C>( cs.condition, cs.list, pairlist );
+            CSs.add(css);
+        }
+
+        // main loop
+        List<ColoredSystem<C>> CSb = new ArrayList<ColoredSystem<C>>();
+        List<ColoredSystem<C>> CSh, CSbh, ncs;
+        ColoredSystem<C> cs;
+        List<ColorPolynomial<C>> G;
+        OrderedCPairlist<C> pairlist;
+        while ( CSs.size() > 0 ) {
+            cs = CSs.get(0); //remove(0);
+            logger.info("poped GBsys with condition = " + cs.condition);
+            logger.info("poped GBsys with pairlist  = " + cs.pairlist);
+            pairlist = cs.pairlist;
+            G = cs.list;
+            //logger.info( pairlist.toString() );
+
+            CPair<C> pair;
+            ColorPolynomial<C> pi;
+            ColorPolynomial<C> pj;
+            ColorPolynomial<C> S;
+            ColorPolynomial<C> H;
+            while ( pairlist.hasNext() ) {
+                pair = pairlist.removeNext();
+                if ( pair == null ) continue; 
+
+                pi = pair.pi; 
+                pj = pair.pj; 
+                if ( logger.isDebugEnabled() ) {
+                    logger.debug("pi    = " + pi );
+                    logger.debug("pj    = " + pj );
+                }
+
+                S = cred.SPolynomial( pi, pj );
+                if ( S.isZERO() ) {
+                    pair.setZero();
+                    continue;
+                }
+                if ( logger.isDebugEnabled() ) {
+                    logger.debug("ht(S) = " + S.leadingExpVector() );
+                }
+
+                H = cred.normalform( G, S );
+                if ( H.isZERO() ) {
+                    pair.setZero();
+                    continue;
+                } 
+                if ( true || logger.isDebugEnabled() ) {
+                    logger.info("ht(H) = " + H.leadingExpVector() );
+                }
+
+                H = H.abs();
+                if ( logger.isDebugEnabled() ) {
+                    logger.debug("H = " + H );
+                }
+                logger.info("H = " + H );
+                if ( ! H.isZERO() ) {
+                   CSh = new ArrayList<ColoredSystem<C>>();
+                   CSbh = new ArrayList<ColoredSystem<C>>();
+                   for ( ColoredSystem<C> x : CSs ) {
+                       ncs = cred.determineAddPairs( x, H );
+                       for ( ColoredSystem<C> y : ncs ) {
+                           if ( y.pairlist.hasNext() ) {
+                              CSh.add( y );
+                           } else {
+                              CSbh.add( y );
+                           }
+                       }
+                   }
+                   for ( ColoredSystem<C> x : CSb ) {
+                       ncs = cred.determineAddPairs( x, H );
+                       for ( ColoredSystem<C> y : ncs ) {
+                           if ( y.pairlist.hasNext() ) {
+                              CSh.add( y );
+                           } else {
+                              CSbh.add( y );
+                           }
+                       }
+                   }
+                   System.out.println("#new  systems = " + ( CSh.size() - CSs.size() ) );
+                   System.out.println("#done systems = " + ( CSbh.size() - CSb.size() ) );
+                   CSs = CSh;
+                   CSb = CSbh;
+                }
+            }
+            // all spols reduce to zero in this branch
+            CSb.add( cs );
+            CSs.remove(0);
+        }
+        // all branches done
+        CSbh = new ArrayList<ColoredSystem<C>>();
+        for ( ColoredSystem<C> x : CSb ) {
+            System.out.println("G = " + x.list );
+            G = minimalGB(x,x.list);
+            System.out.println("min(G) = " + G );
+            cs = new ColoredSystem<C>( x.condition, G, x.pairlist );
+            CSbh.add( cs );
+            logger.info("#sequential done = " + x.condition);
+            logger.info( x.pairlist.toString() );
+        }
+        CSb = CSbh;
         return CSb;
     }
 
