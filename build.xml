@@ -12,7 +12,7 @@
   <property name="test"      value="test" />
   <property name="jar"       value="jas.jar" />
 
-  <property name="libs"      value="${basedir}/../lib" />
+  <property name="libs"      value="${basedir}/../java/lib" />
   <property name="log4j"     value="${libs}/log4j.jar" />
   <property name="junit"     value="${libs}/junit.jar" />
   <property name="jomp"      value="${libs}/jomp1.0b.jar" />
