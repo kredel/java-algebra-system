@@ -102,6 +102,14 @@ public static Test suite() {
 
 
 /**
+ * Test dummy.
+ * 
+ */
+ public void testDummy() {
+ }
+
+
+/**
  * Test rational coefficient polynomial parametric reduction.
  * 
  */
