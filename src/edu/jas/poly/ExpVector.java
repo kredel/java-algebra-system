@@ -789,7 +789,7 @@ public final class ExpVector implements AbelianGroupElem<ExpVector>
      * @param V
      * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
      */
-    @Override
+    //@Override
     public int compareTo( ExpVector V ) {
         return EVILCP(this, V);
     }

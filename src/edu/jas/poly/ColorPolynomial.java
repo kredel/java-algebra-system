@@ -105,6 +105,26 @@ public class ColorPolynomial<C extends RingElem<C> >
 
 
     /**
+     * Is this polynomial equal to other.
+     * @param p other polynomial.
+     * @return true, if this is equal to other, else false.
+     */
+    @Override
+    public boolean equals(Object p) {
+        ColorPolynomial<C> cp = null;
+        try {
+            cp = (ColorPolynomial<C>) p;
+        } catch (ClassCastException e) {
+            return false;
+        }
+        if ( cp == null ) {
+           return false;
+        }
+        return ( green.equals(cp.green) && red.equals(cp.red) && white.equals(cp.white) );
+    }
+
+
+    /**
      * Is this polynomial determined.
      * @return true, if there are nonzero red terms or if this == 0, else false.
      */
