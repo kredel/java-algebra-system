@@ -652,18 +652,25 @@ public class CReductionSeq<C extends GcdRingElem<C>>
         List<Condition<C>> cd = caseDistinction( cs, A );
         System.out.println("# cases = " + cd.size());
         for ( Condition<C> cnd : cd ) {
-           Sp = new ArrayList<ColorPolynomial<C>>( S );
            nz = determine( cnd, Ap );
            if ( nz == null || nz.isZERO() ) {
               continue;
            }
+           if ( S.contains( nz ) ) {
+              System.out.println("*** S.contains(nz) ***");
+              continue;
+           }
            System.out.println("new determinated nz = " + nz);
+           Sp = new ArrayList<ColorPolynomial<C>>( S );
            Sp.add( nz );
            OrderedCPairlist<C> PL = pl.clone();
            PL.put( nz );
            NS = new ColoredSystem<C>( cnd, Sp, PL );
            //NS = NS.reDetermine();
            NCS.add( NS );
+        }
+        if ( NCS.size() == 0 ) { // keep self
+            NCS.add( cs );
         }
         //System.out.println("new determination = " + NCS);
         return NCS;

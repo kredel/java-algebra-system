@@ -412,7 +412,8 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
 
         // main loop
         List<ColoredSystem<C>> CSb = new ArrayList<ColoredSystem<C>>();
-        List<ColoredSystem<C>> CSh, CSbh, ncs;
+        List<ColoredSystem<C>> ncs;
+        List<ColoredSystem<C>> CSh, CSbh;
         ColoredSystem<C> cs;
         List<ColorPolynomial<C>> G;
         OrderedCPairlist<C> pairlist;
@@ -488,8 +489,8 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
                    }
                    System.out.println("#new  systems = " + ( CSh.size() - CSs.size() ) );
                    System.out.println("#done systems = " + ( CSbh.size() - CSb.size() ) );
-                   CSs = CSh;
-                   CSb = CSbh;
+                   CSs = new ArrayList<ColoredSystem<C>>( CSh );
+                   CSb = new ArrayList<ColoredSystem<C>>( CSbh );
                 }
             }
             // all spols reduce to zero in this branch
@@ -497,17 +498,17 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
             CSs.remove(0);
         }
         // all branches done
-        CSbh = new ArrayList<ColoredSystem<C>>();
+        CSh = new ArrayList<ColoredSystem<C>>();
         for ( ColoredSystem<C> x : CSb ) {
             System.out.println("G = " + x.list );
             G = minimalGB(x,x.list);
             System.out.println("min(G) = " + G );
             cs = new ColoredSystem<C>( x.condition, G, x.pairlist );
-            CSbh.add( cs );
+            CSh.add( cs );
             logger.info("#sequential done = " + x.condition);
             logger.info( x.pairlist.toString() );
         }
-        CSb = CSbh;
+        CSb = new ArrayList<ColoredSystem<C>>( CSh );
         return CSb;
     }
 

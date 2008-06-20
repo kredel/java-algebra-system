@@ -67,10 +67,12 @@ public class Condition<C extends GcdRingElem<C> >
      */
     @Override
     public boolean equals(Object ob) {
-        if ( ! (ob instanceof Condition) ) {
-           return false;
+        Condition<C> c = null;
+        try {
+            c = (Condition<C>) ob;
+        } catch (ClassCastException e) {
+            return false;
         }
-        Condition<C> c = (Condition<C>) ob;
         if ( ! zero.equals( c.zero ) ) {
            return false;
         }

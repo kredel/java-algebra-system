@@ -99,6 +99,27 @@ public class ColoredSystem<C extends GcdRingElem<C>> {
 
 
     /**
+     * Is this colored system equal to other.
+     * @param c other colored system.
+     * @return true, if this is equal to other, else false.
+     */
+    @Override
+    public boolean equals(Object c) {
+        ColoredSystem<C> cs = null;
+        try {
+            cs = (ColoredSystem<C>) c;
+        } catch (ClassCastException e) {
+            return false;
+        }
+        if ( cs == null ) {
+           return false;
+        }
+        return ( condition.equals(cs.condition) && list.equals(cs.list) );
+        // check pairlists??
+    }
+
+
+    /**
      * Get zero condition on coefficients. 
      * @return green coefficients.
      */

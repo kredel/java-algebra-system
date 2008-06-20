@@ -105,7 +105,7 @@ public static Test suite() {
  * Test rational coefficient polynomial parametric reduction.
  * 
  */
- public void testRatPolReduction() {
+ public void xtestRatPolReduction() {
 
      RingFactory<BigRational> bi = new BigRational(0);
      GenPolynomialRing<BigRational> pr 
