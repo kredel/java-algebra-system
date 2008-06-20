@@ -145,6 +145,9 @@ edu/jas/application/%.class: %.java
 edu/jas/kern/%.class: %.java
 	$(JAVAC) $<
 
+edu/mas/kern/%.class: %.java
+	$(JAVAC) $<
+
 
 edu.jas.%: edu/jas/%.class
 	$(JAVA) $@ $(cl)
@@ -179,6 +182,8 @@ edu.jas.application.%: edu/jas/application/%.class
 edu.jas.kern.%: edu/jas/kern/%.class
 	$(JAVA) $@ $(cl)
 
+edu.mas.kern.%: edu/mas/kern/%.class
+	$(JAVA) $@ $(cl)
 
 
 #FILES=$(wildcard src/edu/jas/structure/*.java src/edu/jas/arith/*.java src/edu/jas/poly/*.java src/edu/jas/ring/*.java src/edu/jas/ufd/*.java src/edu/jas/application/*.java src/edu/jas/vector/*.java src/edu/jas/module/*.java src/edu/jas/util/*.java src/edu/jas/kern/*.java)
@@ -220,8 +225,8 @@ jas.tgz: $(FILES) *.html */package.html TODO
 TOJAR=$(FILES) $(CLASSES) Makefile build.xml log4j.properties $(EXAMPY) examples/machines.test $(wildcard COPYING*)
 
 jas.jar: $(FILES) Makefile build.xml log4j.properties $(EXAMPY)
-#	$(JDK)/jar -cf jas.jar $(TOJAR)
-	$(JDK)/jar -cf jas.jar $(filter-out %/ufd/, $(filter-out src/edu/jas/ufd/%.java, $(TOJAR)))
+	$(JDK)/jar -cf jas.jar $(TOJAR)
+#	$(JDK)/jar -cf jas.jar $(filter-out %/ufd/, $(filter-out src/edu/jas/ufd/%.java, $(TOJAR)))
 
 jas-doc.jar: $(DOCU) doc/
 	$(JDK)/jar -cvf jas-doc.jar $(DOCU) doc/
