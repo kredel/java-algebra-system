@@ -535,9 +535,9 @@ public class PolyUtil {
         GenPolynomial<C> r = P; 
         while ( ! r.isZERO() ) {
             ExpVector f = r.leadingExpVector();
-            if ( ExpVector.EVMT(f,e) ) {
+            if ( f.multipleOf(e) ) {
                 C a = r.leadingBaseCoefficient();
-                f = ExpVector.EVDIF( f, e );
+                f =  f.subtract( e );
                 C x = a.remainder(c);
                 if ( x.isZERO() ) {
                    C y = a.divide(c);
@@ -587,9 +587,9 @@ public class PolyUtil {
 
         while ( ! r.isZERO() ) {
             ExpVector f = r.leadingExpVector();
-            if ( ExpVector.EVMT(f,e) ) {
+            if ( f.multipleOf(e) ) {
                 C a = r.leadingBaseCoefficient();
-                f = ExpVector.EVDIF( f, e );
+                f =  f.subtract( e );
                 C x = a.remainder(c);
                 if ( x.isZERO() ) {
                    C y = a.divide(c);
@@ -674,9 +674,9 @@ public class PolyUtil {
         GenPolynomial<GenPolynomial<C>> r = P; 
         while ( ! r.isZERO() ) {
             ExpVector f = r.leadingExpVector();
-            if ( ExpVector.EVMT(f,e) ) {
+            if ( f.multipleOf(e) ) {
                 GenPolynomial<C> a = r.leadingBaseCoefficient();
-                f = ExpVector.EVDIF( f, e );
+                f =  f.subtract( e );
                 GenPolynomial<C> x = c; //test basePseudoRemainder(a,c);
                 if ( x.isZERO() ) {
                    GenPolynomial<C> y = PolyUtil.<C>basePseudoDivide(a,c);
@@ -729,9 +729,9 @@ public class PolyUtil {
         GenPolynomial<GenPolynomial<C>> q = S.ring.getZERO().clone();
         while ( ! r.isZERO() ) {
             ExpVector f = r.leadingExpVector();
-            if ( ExpVector.EVMT(f,e) ) {
+            if ( f.multipleOf(e) ) {
                 GenPolynomial<C> a = r.leadingBaseCoefficient();
-                f = ExpVector.EVDIF( f, e );
+                f =  f.subtract( e );
                 GenPolynomial<C> x = PolyUtil.<C>basePseudoRemainder(a,c);
                 if ( x.isZERO() ) {
                    GenPolynomial<C> y = PolyUtil.<C>basePseudoDivide(a,c);

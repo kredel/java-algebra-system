@@ -235,7 +235,7 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
            throw new IllegalArgumentException("RelationTable update e|f|p == null");
         }
         if ( debug ) {
-           if ( ExpVector.EVTDEG(e) == 1 && ExpVector.EVTDEG(f) == 1 ) {
+           if ( e.totalDeg() == 1 && f.totalDeg() == 1 ) {
               int[] de = e.dependencyOnVariables();
               int[] df = f.dependencyOnVariables();
               logger.debug("update e ? f " + de[0] + " " + df[0]);
@@ -309,7 +309,7 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
         List<Integer> key = makeKey(e,f);
         List part = table.get( key );
         if ( part == null ) { // symmetric product
-            ExpVector ef = ExpVector.EVSUM( e, f );
+            ExpVector ef =  e.sum( f );
             GenSolvablePolynomial<C> p = ring.getONE().multiply( ef );
             return new TableRelation<C>(null,null,p);
         }

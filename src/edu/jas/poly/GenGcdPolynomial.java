@@ -315,9 +315,9 @@ public class GenGcdPolynomial<C extends GcdRingElem<C> >
         while ( ! r.isZERO() ) {
             ExpVector f = r.leadingExpVector();
             //System.out.println("f = " + f);
-            if ( ExpVector.EVMT(f,e) ) {
+            if ( f.multipleOf(e) ) {
                 C a = r.leadingBaseCoefficient();
-                f = ExpVector.EVDIF( f, e );
+                f =  f.subtract( e );
                 //logger.info("red div = " + e);
                 //C ax = a;
                 a = a.multiply( ci );
@@ -379,9 +379,9 @@ public class GenGcdPolynomial<C extends GcdRingElem<C> >
         GenPolynomial<C> r = this.clone(); 
         while ( ! r.isZERO() ) {
             ExpVector f = r.leadingExpVector();
-            if ( ExpVector.EVMT(f,e) ) {
+            if ( f.multipleOf(e) ) {
                 C a = r.leadingBaseCoefficient();
-                f = ExpVector.EVDIF( f, e );
+                f =  f.subtract( e );
                 //logger.info("red div = " + e);
                 a = a.multiply( ci );
                 h = S.multiply( a, f );

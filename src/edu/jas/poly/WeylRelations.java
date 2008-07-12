@@ -58,7 +58,7 @@ public class WeylRelations<C extends RingElem<C>> {
             ExpVector f = new ExpVector(r,i,1); 
             int j = i - m;
             ExpVector e = new ExpVector(r,j,1);
-            ExpVector ef = ExpVector.EVSUM(e,f);
+            ExpVector ef = e.sum(f);
             GenSolvablePolynomial<C> b = one.multiply(ef);
             GenSolvablePolynomial<C> rel 
                 = (GenSolvablePolynomial<C>)b.sum(one);

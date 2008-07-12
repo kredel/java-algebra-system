@@ -226,15 +226,14 @@ public class ANumGenPolynomialTest extends TestCase {
         assertEquals("a.monic() = a(1/ldcf(a))",c,d);
      }
 
-     ExpVector u = new ExpVector(rl);
      AlgebraicNumber<BigRational> y = b.leadingBaseCoefficient();
      if ( y.isUnit() ) {
          y = y.inverse();
          c = b.monic();
-         d = b.multiply(y,u);
+         d = b.multiply(y);
          assertEquals("b.monic() = b(1/ldcf(b))",c,d);
 
-         e = new GenPolynomial<AlgebraicNumber<BigRational>>(fac,y,u);
+         e = new GenPolynomial<AlgebraicNumber<BigRational>>(fac,y);
          d = b.multiply(e);
          assertEquals("b.monic() = b(1/ldcf(b))",c,d);
 

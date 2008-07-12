@@ -32,12 +32,13 @@ public class Examples {
        example5();
        */
        //example6();
-       //example7();
+       example7();
+       example7();
        //example8();
        //example9();
        //example10();
        //example11();
-       example12();
+       //example12();
    }
 
 
@@ -54,7 +55,6 @@ public static void example1() {
        GenPolynomialRing<BigRational> fac;
                 fac = new GenPolynomialRing<BigRational>(cfac,7);
        //System.out.println("fac = " + fac);
-       //fac.setVars( ExpVector.STDVARS(7) );
        System.out.println("fac = " + fac);
 
        GenPolynomial<BigRational> a = fac.random(10);
@@ -165,8 +165,6 @@ public static void example5() {
        GenSolvablePolynomialRing<BigRational> sfac;
                 sfac = new GenSolvablePolynomialRing<BigRational>(cfac,6);
        //System.out.println("sfac = " + sfac);
-       sfac.setVars( ExpVector.STDVARS(6) );
-       //System.out.println("sfac = " + sfac);
 
        WeylRelations<BigRational> wl = new WeylRelations<BigRational>(sfac);
        wl.generate();
@@ -275,13 +273,15 @@ public static void example7() {
 
        GenPolynomial<BigRational> p = x.sum(y).sum(z).sum( fac.getONE());
        BigRational f = cfac.fromInteger(10000000001L);
-       f = f.multiply( f );
-       p = p.multiply( f );
+       //f = f.multiply( f );
+       //p = p.multiply( f );
        System.out.println("p = " + p);
        System.out.println("p = " + p.toString( fac.vars ) );
 
+       int mpow = 15;
+       System.out.println("mpow = " + mpow);
        GenPolynomial<BigRational> q = p;
-       for ( int i = 1; i < 20; i++ ) {
+       for ( int i = 1; i < mpow; i++ ) {
            q = q.multiply(p);
        }
        //System.out.println("q = " + q.toString( fac.vars ) );
@@ -438,9 +438,8 @@ public static void example10() {
 public static void example11() {
     int n = 50;
     BigRational fac = new BigRational();
-    String[] var = ExpVector.STDVARS(n);
     GenPolynomialRing<BigRational> ring
-           = new GenPolynomialRing<BigRational>(fac,n,var);
+           = new GenPolynomialRing<BigRational>(fac,n);
     System.out.println("ring = " + ring + "\n");
 
     GenPolynomial<BigRational> p = ring.random(5,3,6,0.5f);

@@ -187,13 +187,12 @@ public class ModGenPolynomialTest extends TestCase {
      d = a.multiply(x);
      assertEquals("a.monic() = a(1/ldcf(a))",c,d);
 
-     ExpVector u = new ExpVector(rl);
      ModInteger y = b.leadingBaseCoefficient().inverse();
      c = b.monic();
-     d = b.multiply(y,u);
+     d = b.multiply(y);
      assertEquals("b.monic() = b(1/ldcf(b))",c,d);
 
-     e = new GenPolynomial<ModInteger>(fac,y,u);
+     e = new GenPolynomial<ModInteger>(fac,y);
      d = b.multiply(e);
      assertEquals("b.monic() = b(1/ldcf(b))",c,d);
 

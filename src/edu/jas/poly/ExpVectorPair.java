@@ -101,11 +101,11 @@ public class ExpVectorPair implements Serializable {
      * @return true, if this is a multiple of b, else false.
      */
     public boolean isMultiple(ExpVectorPair p) {
-       boolean w = ExpVector.EVMT( e1, p.getFirst() );
+       boolean w =  e1.multipleOf( p.getFirst() );
        if ( !w ) {
            return w;
        }
-       w = ExpVector.EVMT( e2, p.getSecond() );
+       w =  e2.multipleOf( p.getSecond() );
        if ( !w ) {
            return w;
        }

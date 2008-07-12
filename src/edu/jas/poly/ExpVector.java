@@ -338,6 +338,9 @@ public final class ExpVector implements AbelianGroupElem<ExpVector>
            for (int i = 0; i < val.length; i++ ) {
                hash = hash<<4 + (int)val[i];
            }
+	   if ( hash == 0 ) {
+	      hash = 1;
+	   }
         }
         return hash;
     }
@@ -628,9 +631,9 @@ public final class ExpVector implements AbelianGroupElem<ExpVector>
 
 
     /**
-     * ExpVector sign.
+     * ExpVector signum.
      * @return 0 if this is zero, -1 if some entry is negative, 
-     *  1 if no entry is negativ and at least one entry is positive.
+     *  1 if no entry is negative and at least one entry is positive.
      */
     public int signum( ) {
         return EVSIGN(this);
@@ -653,6 +656,15 @@ public final class ExpVector implements AbelianGroupElem<ExpVector>
 
 
     /**
+     * ExpVector total degree.
+     * @return sum of all exponents.
+     */
+    public long totalDeg( ) {
+        return EVTDEG(this);
+    }
+
+
+    /**
      * ExpVector maximal degree.
      * @param U
      * @return maximal exponent.
@@ -666,6 +678,15 @@ public final class ExpVector implements AbelianGroupElem<ExpVector>
             }
         }
         return t;
+    }
+
+
+    /**
+     * ExpVector maximal degree.
+     * @return maximal exponents.
+     */
+    public long maxDeg( ) {
+        return EVMDEG(this);
     }
 
 
@@ -709,6 +730,16 @@ public final class ExpVector implements AbelianGroupElem<ExpVector>
 
 
     /**
+     * ExpVector least common multiple.
+     * @param V
+     * @return component wise maximum of this and V.
+     */
+    public ExpVector lcm( ExpVector V ) {
+        return EVLCM(this, V);
+    }
+
+
+    /**
      * ExpVector greatest common divisor.
      * @param U
      * @param V
@@ -722,6 +753,16 @@ public final class ExpVector implements AbelianGroupElem<ExpVector>
             w[i] = ( u[i] <= v[i] ? u[i] : v[i] );
         }
         return new ExpVector( w );
+    }
+
+
+    /**
+     * ExpVector greatest common divisor.
+     * @param V
+     * @return component wise minimum of this and V.
+     */
+    public ExpVector gcd( ExpVector V ) {
+        return EVGCD(this, V);
     }
 
 
@@ -785,6 +826,28 @@ public final class ExpVector implements AbelianGroupElem<ExpVector>
 
 
     /**
+     * ExpVector multiple test.
+     * Test if this is component wise greater or equal to V.
+     * @param V
+     * @return true if this is a multiple of V, else false.
+     */
+    public boolean multipleOf( ExpVector V ) {
+        return EVMT(this, V);
+    }
+
+
+    /**
+     * ExpVector divides test.
+     * Test if V is component wise greater or equal to this.
+     * @param V
+     * @return true if this divides V, else false.
+     */
+    public boolean divides( ExpVector V ) {
+        return EVMT(V, this);
+    }
+
+
+    /**
      * ExpVector compareTo.
      * @param V
      * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
@@ -793,7 +856,6 @@ public final class ExpVector implements AbelianGroupElem<ExpVector>
     public int compareTo( ExpVector V ) {
         return EVILCP(this, V);
     }
-
 
 
     /**
@@ -815,6 +877,16 @@ public final class ExpVector implements AbelianGroupElem<ExpVector>
 
 
     /**
+     * ExpVector inverse lexicographical compareTo.
+     * @param V
+     * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
+     */
+    public int invLexCompareTo( ExpVector V ) {
+        return EVILCP(this, V);
+    }
+
+
+    /**
      * Inverse lexicographical compare part.
      * Compare entries between begin and end (-1).
      * @param U
@@ -832,6 +904,18 @@ public final class ExpVector implements AbelianGroupElem<ExpVector>
             if ( u[i] < v[i] ) return -1;
         }
         return t;
+    }
+
+
+    /**
+     * ExpVector inverse lexicographical compareTo.
+     * @param V
+     * @param begin
+     * @param end
+     * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
+     */
+    public int invLexCompareTo( ExpVector V, int begin, int end  ) {
+        return EVILCP(this, V, begin, end);
     }
 
 
@@ -871,6 +955,16 @@ public final class ExpVector implements AbelianGroupElem<ExpVector>
             }
         }
         return t;
+    }
+
+
+    /**
+     * ExpVector inverse graded lexicographical compareTo.
+     * @param V
+     * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
+     */
+    public int invGradCompareTo( ExpVector V ) {
+        return EVIGLC(this, V);
     }
 
 
@@ -917,6 +1011,18 @@ public final class ExpVector implements AbelianGroupElem<ExpVector>
 
 
     /**
+     * ExpVector inverse graded lexicographical compareTo.
+     * @param V
+     * @param begin
+     * @param end
+     * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
+     */
+    public int invGradCompareTo( ExpVector V, int begin, int end ) {
+        return EVIGLC(this, V, begin, end);
+    }
+
+
+    /**
      * Reverse inverse lexicographical compare.
      * @param U
      * @param V
@@ -931,6 +1037,16 @@ public final class ExpVector implements AbelianGroupElem<ExpVector>
             if ( u[i] < v[i] ) return -1;
         }
         return t;
+    }
+
+
+    /**
+     * ExpVector reverse inverse lexicographical compareTo.
+     * @param V
+     * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
+     */
+    public int revInvLexCompareTo( ExpVector V ) {
+        return EVRILCP(this, V);
     }
 
 
@@ -952,6 +1068,18 @@ public final class ExpVector implements AbelianGroupElem<ExpVector>
             if ( u[i] < v[i] ) return -1;
         }
         return t;
+    }
+
+
+    /**
+     * ExpVector reverse inverse lexicographical compareTo.
+     * @param V
+     * @param begin
+     * @param end
+     * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
+     */
+    public int revInvLexCompareTo( ExpVector V, int begin, int end ) {
+        return EVRILCP(this, V, begin, end);
     }
 
 
@@ -991,6 +1119,16 @@ public final class ExpVector implements AbelianGroupElem<ExpVector>
             }
         }
         return t;
+    }
+
+
+    /**
+     * ExpVector reverse inverse graded compareTo.
+     * @param V
+     * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
+     */
+    public int revInvGradCompareTo( ExpVector V ) {
+        return EVRIGLC(this, V);
     }
 
 
@@ -1037,6 +1175,18 @@ public final class ExpVector implements AbelianGroupElem<ExpVector>
 
 
     /**
+     * ExpVector reverse inverse graded compareTo.
+     * @param V
+     * @param begin
+     * @param end
+     * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
+     */
+    public int revInvGradCompareTo( ExpVector V, int begin, int end ) {
+        return EVRIGLC(this, V, begin, end);
+    }
+
+
+    /**
      * Inverse weighted lexicographical compare.
      * @param w weight array.
      * @param U
@@ -1074,6 +1224,17 @@ public final class ExpVector implements AbelianGroupElem<ExpVector>
             }
         }
         return t;
+    }
+
+
+    /**
+     * ExpVector inverse weighted lexicographical compareTo.
+     * @param w weight array.
+     * @param V
+     * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
+     */
+    public int invWeightCompareTo( long[][] w, ExpVector V ) {
+        return EVIWLC(w, this, V);
     }
 
 
@@ -1119,5 +1280,19 @@ public final class ExpVector implements AbelianGroupElem<ExpVector>
         }
         return t;
     }
+
+
+    /**
+     * ExpVector inverse weighted lexicographical compareTo.
+     * @param w weight array.
+     * @param V
+     * @param begin
+     * @param end
+     * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
+     */
+    public int invWeightCompareTo( long[][] w, ExpVector V, int begin, int end ) {
+        return EVIWLC(w, this, V, begin, end);
+    }
+
 
 }

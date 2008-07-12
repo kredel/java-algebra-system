@@ -14,6 +14,7 @@ import org.apache.log4j.BasicConfigurator;
 
 /**
  * TermOrder tests with JUnit.
+ * Tests also ExpVector comparisons.
  * @author Heinz Kredel
  */
 
@@ -152,41 +153,6 @@ public class TermOrderTest extends TestCase {
    }
 
 
-
-/**
- * Test compare.
- * 
- public void testCompare() {
-     float q = (float) 0.9;
-
-     a = ExpVector.EVRAND(5,10,q);
-     b = ExpVector.EVRAND(5,10,q);
-
-     c = ExpVector.EVSUM(a,b);
-
-     t = new TermOrder();
-
-     int x = ExpVector.EVCOMP(t.getEvord(),c,a);
-     int y = ExpVector.EVCOMP(t.getEvord(),c,b);
-
-     assertEquals("x = 1",1,x);
-     assertEquals("y = 1",1,y);
-
-     x = ExpVector.EVCOMP(t.getEvord(),a,c);
-     y = ExpVector.EVCOMP(t.getEvord(),b,c);
-
-     assertEquals("x = -1",-1,x);
-     assertEquals("y = -1",-1,y);
-
-     x = ExpVector.EVCOMP(t.getEvord(),a,a);
-     y = ExpVector.EVCOMP(t.getEvord(),b,b);
-
-     assertEquals("x = 0",0,x);
-     assertEquals("y = 0",0,y);
-   }
- */
-
-
 /**
  * Test compare weight.
  * 
@@ -197,7 +163,7 @@ public class TermOrderTest extends TestCase {
      a = ExpVector.EVRAND(5,10,q);
      b = ExpVector.EVRAND(5,10,q);
 
-     c = ExpVector.EVSUM(a,b);
+     c = a.sum(b);
 
      long [][] w = new long [][] { new long[] { 1l, 1l, 1l, 1l, 1l } };
 
@@ -233,7 +199,7 @@ public class TermOrderTest extends TestCase {
      a = ExpVector.EVRAND(5,10,q);
      b = ExpVector.EVRAND(5,10,q);
 
-     c = ExpVector.EVSUM(a,b);
+     c = a.sum(b);
 
      long [][] w = new long [][] { new long[] { 1l, 1l, 1l, 1l, 1l },
                                    new long[] { 1l, 1l, 1l, 1l, 1l } };
@@ -261,54 +227,6 @@ public class TermOrderTest extends TestCase {
 
 
 /**
- * Test compare split TO.
- * 
- public void testCompareSplit() {
-     float q = (float) 0.9;
-     int r = 10;
-     int sp = 5;
-
-     a = ExpVector.EVRAND(r,10,q);
-     b = ExpVector.EVRAND(r,10,q);
-     c = ExpVector.EVSUM(a,b);
-
-     t = new TermOrder(r,sp);
-
-     int x = ExpVector.EVCOMP(t.getEvord(),c,a,0,sp);
-     int y = ExpVector.EVCOMP(t.getEvord(),c,b,0,sp);
-     assertEquals("x = 1",1,x);
-     assertEquals("y = 1",1,y);
-
-     x = ExpVector.EVCOMP(t.getEvord2(),c,a,sp,r);
-     y = ExpVector.EVCOMP(t.getEvord2(),c,b,sp,r);
-     assertEquals("x = 1",1,x);
-     assertEquals("y = 1",1,y);
-
-     x = ExpVector.EVCOMP(t.getEvord(),a,c,0,sp);
-     y = ExpVector.EVCOMP(t.getEvord(),b,c,0,sp);
-     assertEquals("x = -1",-1,x);
-     assertEquals("y = -1",-1,y);
-
-     x = ExpVector.EVCOMP(t.getEvord2(),a,c,sp,r);
-     y = ExpVector.EVCOMP(t.getEvord2(),b,c,sp,r);
-     assertEquals("x = -1",-1,x);
-     assertEquals("y = -1",-1,y);
-
-
-     x = ExpVector.EVCOMP(t.getEvord(),a,a,0,sp);
-     y = ExpVector.EVCOMP(t.getEvord(),b,b,0,sp);
-     assertEquals("x = 0",0,x);
-     assertEquals("y = 0",0,y);
-
-     x = ExpVector.EVCOMP(t.getEvord2(),a,a,sp,r);
-     y = ExpVector.EVCOMP(t.getEvord2(),b,b,sp,r);
-     assertEquals("x = 0",0,x);
-     assertEquals("y = 0",0,y);
-   }
- */
-
-
-/**
  * Test compare weight split.
  * 
  */
@@ -319,7 +237,7 @@ public class TermOrderTest extends TestCase {
 
      a = ExpVector.EVRAND(r,10,q);
      b = ExpVector.EVRAND(r,10,q);
-     c = ExpVector.EVSUM(a,b);
+     c = a.sum(b);
 
      long [][] w = new long [][] { new long[] { 1l, 1l, 1l, 1l, 1l, 1l, 1l, 1l } };
 
@@ -440,7 +358,7 @@ public class TermOrderTest extends TestCase {
      a = ExpVector.EVRAND(5,10,q);
      b = ExpVector.EVRAND(5,10,q);
 
-     c = ExpVector.EVSUM(a,b);
+     c = a.sum(b);
 
      t = new TermOrder();
 
@@ -476,7 +394,7 @@ public class TermOrderTest extends TestCase {
 
      a = ExpVector.EVRAND(r,10,q);
      b = ExpVector.EVRAND(r,10,q);
-     c = ExpVector.EVSUM(a,b);
+     c = a.sum(b);
 
      t = new TermOrder(r,sp);
 
@@ -512,7 +430,7 @@ public class TermOrderTest extends TestCase {
 
      a = ExpVector.EVRAND(r,10,q);
      b = ExpVector.EVRAND(r,10,q);
-     c = ExpVector.EVSUM(a,b);
+     c = a.sum(b);
 
      // t = new TermOrder(w,sp);
      t = new TermOrder(w2);
@@ -572,7 +490,7 @@ public class TermOrderTest extends TestCase {
      a = ExpVector.EVRAND(5,10,q);
      b = ExpVector.EVRAND(5,10,q);
 
-     c = ExpVector.EVSUM(a,b);
+     c = a.sum(b);
 
      t = new TermOrder();
 
@@ -608,7 +526,7 @@ public class TermOrderTest extends TestCase {
 
      a = ExpVector.EVRAND(r,10,q);
      b = ExpVector.EVRAND(r,10,q);
-     c = ExpVector.EVSUM(a,b);
+     c = a.sum(b);
 
      t = new TermOrder(r,sp);
 
@@ -644,7 +562,7 @@ public class TermOrderTest extends TestCase {
 
      a = ExpVector.EVRAND(r,10,q);
      b = ExpVector.EVRAND(r,10,q);
-     c = ExpVector.EVSUM(a,b);
+     c = a.sum(b);
 
      //t = new TermOrder(w,sp);
      t = new TermOrder(w2);
@@ -819,7 +737,5 @@ public class TermOrderTest extends TestCase {
      }
      fail("IllegalArgumentException");
    }
-
-
 
 }

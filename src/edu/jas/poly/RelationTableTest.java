@@ -88,7 +88,7 @@ public class RelationTableTest extends TestCase {
      ExpVector e = new ExpVector(rl,2,1);
      ExpVector f = new ExpVector(rl,3,1); // insert in empty
 
-     ExpVector ef = ExpVector.EVSUM(e,f);
+     ExpVector ef = e.sum(f);
 
      GenSolvablePolynomial<BigRational> a = ring.getONE();
      GenSolvablePolynomial<BigRational> b = ring.getONE().multiply(ef);
@@ -101,7 +101,7 @@ public class RelationTableTest extends TestCase {
      e = new ExpVector(rl,2,2);
      f = new ExpVector(rl,3,1); // insert in beginning
 
-     ef = ExpVector.EVSUM(e,f);
+     ef = e.sum(f);
      b = ring.getONE().multiply(ef);
      rel = (GenSolvablePolynomial<BigRational>)a.sum(b);
 
@@ -111,7 +111,7 @@ public class RelationTableTest extends TestCase {
      e = new ExpVector(rl,2,2);
      f = new ExpVector(rl,3,2);
 
-     ef = ExpVector.EVSUM(e,f);
+     ef = e.sum(f);
      b = ring.getONE().multiply(ef);
      rel = (GenSolvablePolynomial<BigRational>)a.sum(b);
 
@@ -121,7 +121,7 @@ public class RelationTableTest extends TestCase {
      e = new ExpVector(rl,2,2);
      f = new ExpVector(rl,3,4);
 
-     ef = ExpVector.EVSUM(e,f);
+     ef = e.sum(f);
      b = ring.getONE().multiply(ef);
      rel = (GenSolvablePolynomial<BigRational>)a.sum(b);
 
@@ -131,7 +131,7 @@ public class RelationTableTest extends TestCase {
      e = new ExpVector(rl,2,2);
      f = new ExpVector(rl,3,3); // insert in middle
 
-     ef = ExpVector.EVSUM(e,f);
+     ef = e.sum(f);
      b = ring.getONE().multiply(ef);
      rel = (GenSolvablePolynomial<BigRational>)a.sum(b);
 
@@ -154,7 +154,7 @@ public class RelationTableTest extends TestCase {
      ExpVector e = new ExpVector(rl,2,1);
      ExpVector f = new ExpVector(rl,3,1); // insert in empty
 
-     ExpVector ef = ExpVector.EVSUM(e,f);
+     ExpVector ef = e.sum(f);
 
      GenSolvablePolynomial<BigRational> a = ring.getONE();
      GenSolvablePolynomial<BigRational> b = ring.getONE().multiply(ef);
@@ -167,7 +167,7 @@ public class RelationTableTest extends TestCase {
      e = new ExpVector(rl,0,1);
      f = new ExpVector(rl,2,1);
 
-     ef = ExpVector.EVSUM(e,f);
+     ef = e.sum(f);
 
      b = ring.getONE().multiply(ef);
      rel = (GenSolvablePolynomial<BigRational>)a.sum(b);
@@ -178,7 +178,7 @@ public class RelationTableTest extends TestCase {
      e = new ExpVector(rl,2,1);
      f = new ExpVector(rl,4,1);
 
-     ef = ExpVector.EVSUM(e,f);
+     ef = e.sum(f);
      b = ring.getONE().multiply(ef);
      rel = (GenSolvablePolynomial<BigRational>)a.sum(b);
 
@@ -201,7 +201,7 @@ public class RelationTableTest extends TestCase {
      ExpVector e = new ExpVector(rl,2,1);
      ExpVector f = new ExpVector(rl,3,1); // insert in empty
 
-     ExpVector ef = ExpVector.EVSUM(e,f);
+     ExpVector ef = e.sum(f);
      GenSolvablePolynomial<BigRational> a = ring.getONE();
      GenSolvablePolynomial<BigRational> b = ring.getONE().multiply(ef);
      GenSolvablePolynomial<BigRational> rel 
@@ -221,7 +221,7 @@ public class RelationTableTest extends TestCase {
      e = new ExpVector(rl,2,2);
      f = new ExpVector(rl,3,1); // insert in beginning
 
-     ef = ExpVector.EVSUM(e,f);
+     ef = e.sum(f);
      b = ring.getONE().multiply(ef);
      rel = (GenSolvablePolynomial<BigRational>)a.sum(b);
 
@@ -237,7 +237,7 @@ public class RelationTableTest extends TestCase {
      e = new ExpVector(rl,2,2);
      f = new ExpVector(rl,3,2);
 
-     ef = ExpVector.EVSUM(e,f);
+     ef = e.sum(f);
      b = ring.getONE().multiply(ef);
      rel = (GenSolvablePolynomial<BigRational>)a.sum(b);
 
@@ -253,7 +253,7 @@ public class RelationTableTest extends TestCase {
      e = new ExpVector(rl,2,2);
      f = new ExpVector(rl,3,4);
 
-     ef = ExpVector.EVSUM(e,f);
+     ef = e.sum(f);
      b = ring.getONE().multiply(ef);
      rel = (GenSolvablePolynomial<BigRational>)a.sum(b);
 
@@ -269,7 +269,7 @@ public class RelationTableTest extends TestCase {
      e = new ExpVector(rl,2,2);
      f = new ExpVector(rl,3,3); // insert in middle
 
-     ef = ExpVector.EVSUM(e,f);
+     ef = e.sum(f);
      b = ring.getONE().multiply(ef);
      rel = (GenSolvablePolynomial<BigRational>)a.sum(b);
 
@@ -307,7 +307,7 @@ public class RelationTableTest extends TestCase {
      ExpVector e = new ExpVector(rl,2,1);
      ExpVector f = new ExpVector(rl,3,1);
 
-     ExpVector ef = ExpVector.EVSUM(e,f);
+     ExpVector ef = e.sum(f);
      GenSolvablePolynomial<BigRational> a = ring.getONE();
      GenSolvablePolynomial<BigRational> b = ring.getONE().multiply(ef);
      GenSolvablePolynomial<BigRational> rel 
@@ -324,7 +324,7 @@ public class RelationTableTest extends TestCase {
 
      e = new ExpVector(rl,0,1);
      f = new ExpVector(rl,2,1);
-     ef = ExpVector.EVSUM(e,f);
+     ef = e.sum(f);
      b = ring.getONE().multiply(ef);
      rel = (GenSolvablePolynomial<BigRational>)a.sum(b);
 
@@ -339,7 +339,7 @@ public class RelationTableTest extends TestCase {
 
      e = new ExpVector(rl,2,1);
      f = new ExpVector(rl,4,1);
-     ef = ExpVector.EVSUM(e,f);
+     ef = e.sum(f);
      b = ring.getONE().multiply(ef);
      rel = (GenSolvablePolynomial<BigRational>)a.sum(b);
 
@@ -368,7 +368,7 @@ public class RelationTableTest extends TestCase {
      ExpVector e = new ExpVector(rl,2,1);
      ExpVector f = new ExpVector(rl,3,1);
 
-     ExpVector ef = ExpVector.EVSUM(e,f);
+     ExpVector ef = e.sum(f);
 
      //GenSolvablePolynomial<BigRational> a = ring.getONE();
      GenSolvablePolynomial<BigRational> b = ring.getONE().multiply(ef);
@@ -384,7 +384,7 @@ public class RelationTableTest extends TestCase {
 
      e = new ExpVector(rl,0,1);
      f = new ExpVector(rl,2,1);
-     ef = ExpVector.EVSUM(e,f);
+     ef = e.sum(f);
      b = ring.getONE().multiply(ef);
 
      r = table.lookup(e,f);
@@ -395,7 +395,7 @@ public class RelationTableTest extends TestCase {
 
      e = new ExpVector(rl,2,1);
      f = new ExpVector(rl,4,1);
-     ef = ExpVector.EVSUM(e,f);
+     ef = e.sum(f);
      b = ring.getONE().multiply(ef);
 
      r = table.lookup(e,f);

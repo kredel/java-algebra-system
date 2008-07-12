@@ -181,13 +181,12 @@ public class RatGenPolynomialTest extends TestCase {
      d = a.multiply(x);
      assertEquals("a.monic() = a(1/ldcf(a))",c,d);
 
-     ExpVector u = new ExpVector(rl);
      BigRational y = b.leadingBaseCoefficient().inverse();
      c = b.monic();
-     d = b.multiply(y,u);
+     d = b.multiply(y);
      assertEquals("b.monic() = b(1/ldcf(b))",c,d);
 
-     e = new GenPolynomial<BigRational>(fac,y,u);
+     e = new GenPolynomial<BigRational>(fac,y);
      d = b.multiply(e);
      assertEquals("b.monic() = b(1/ldcf(b))",c,d);
 

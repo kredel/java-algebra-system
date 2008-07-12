@@ -100,6 +100,16 @@ public class GenPolynomial<C extends RingElem<C> >
 
 
     /**
+     * Constructor for GenPolynomial c * x<sup>0</sup>.
+     * @param r polynomial ring factory.
+     * @param c coefficient.
+     */
+    public GenPolynomial(GenPolynomialRing< C > r, C c) {
+        this(r,c,r.evzero);
+    }
+
+
+    /**
      * Constructor for GenPolynomial.
      * @param r polynomial ring factory.
      * @param v the SortedMap of some other polynomial.
@@ -507,7 +517,7 @@ public class GenPolynomial<C extends RingElem<C> >
         }
         long deg = 0;
         for ( ExpVector e : val.keySet() ) {
-            long d = ExpVector.EVMDEG( e );
+            long d =  e .maxDeg();
             if ( d > deg ) {
                deg = d;
             }
@@ -526,7 +536,7 @@ public class GenPolynomial<C extends RingElem<C> >
            return deg; 
         }
         for ( ExpVector e : val.keySet() ) {
-            deg = ExpVector.EVLCM( deg, e );
+            deg =  deg.lcm( e );
         }
         return deg;
     }
@@ -962,9 +972,9 @@ public class GenPolynomial<C extends RingElem<C> >
         GenPolynomial<C> r = this.clone(); 
         while ( ! r.isZERO() ) {
             ExpVector f = r.leadingExpVector();
-            if ( ExpVector.EVMT(f,e) ) {
+            if ( f.multipleOf(e) ) {
                 C a = r.leadingBaseCoefficient();
-                f = ExpVector.EVDIF( f, e );
+                f =  f.subtract( e );
                 a = a.multiply( ci );
                 q = q.sum( a, f );
                 h = S.multiply( a, f );
@@ -1020,9 +1030,9 @@ public class GenPolynomial<C extends RingElem<C> >
         GenPolynomial<C> r = this.clone(); 
         while ( ! r.isZERO() ) {
             ExpVector f = r.leadingExpVector();
-            if ( ExpVector.EVMT(f,e) ) {
+            if ( f.multipleOf(e) ) {
                 C a = r.leadingBaseCoefficient();
-                f = ExpVector.EVDIF( f, e );
+                f =  f.subtract( e );
                 //logger.info("red div = " + e);
                 a = a.multiply( ci );
                 h = S.multiply( a, f );

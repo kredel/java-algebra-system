@@ -142,7 +142,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
                 }
                 GenSolvablePolynomial<C> Cs = null;
                 if ( el1s <= fl1s ) { // symmetric
-                    ExpVector g = ExpVector.EVSUM(e,f); 
+                    ExpVector g = e.sum(f); 
                     //if ( debug ) logger.debug("g = " + g);
                     Cs = (GenSolvablePolynomial<C>)zero.sum( one, g ); // symmetric!
                     //Cs = new GenSolvablePolynomial<C>(ring,one,g); // symmetric!
