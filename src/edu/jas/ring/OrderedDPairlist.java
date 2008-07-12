@@ -135,7 +135,7 @@ public class OrderedDPairlist<C extends RingElem<C> >
         for ( int k = 0; k < P.size(); k++ ) {
             A = P.get( k );
             ek = A.leadingExpVector();
-            m = ExpVector.EVMT(eij,ek);
+            m = eij.multipleOf(ek);
             if ( m ) {
                ck = A.leadingBaseCoefficient();
                C r = c.remainder(ck);

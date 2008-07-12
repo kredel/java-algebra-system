@@ -62,7 +62,7 @@ public class RReductionSeq<C extends RegularRingElem<C>>
         C a = A.leadingBaseCoefficient();
         a = a.idempotent();
         for ( GenPolynomial<C> p : P ) {
-            mt = ExpVector.EVMT( e, p.leadingExpVector() );
+            mt =  e.multipleOf( p.leadingExpVector() );
             if ( mt ) {
                C b = p.leadingBaseCoefficient();
                //C r = a.multiply( b );
@@ -99,7 +99,7 @@ public class RReductionSeq<C extends RegularRingElem<C>>
         C a = A.leadingBaseCoefficient();
         a = a.idempotent();
         for ( GenPolynomial<C> p : P ) {
-            mt = ExpVector.EVMT( e, p.leadingExpVector() );
+            mt =  e.multipleOf( p.leadingExpVector() );
             if ( mt ) {
                C b = p.leadingBaseCoefficient();
                mt = a.equals( b.idempotent() );
@@ -162,7 +162,7 @@ public class RReductionSeq<C extends RegularRingElem<C>>
         Map<ExpVector,C> Am = Ap.getMap();
         for ( ExpVector e : Am.keySet() ) { 
             for ( i = 0; i < l; i++ ) {
-                mt = ExpVector.EVMT( e, htl[i] );
+                mt =  e.multipleOf( htl[i] );
                 if ( mt ) {
                    C a = Am.get(e);
                    //C r = a.multiply( lbc[i] );
@@ -237,7 +237,7 @@ public class RReductionSeq<C extends RegularRingElem<C>>
               e = m.getKey();
               a = m.getValue();
               for ( i = 0; i < l; i++ ) {
-                  mt = ExpVector.EVMT( e, htl[i] );
+                  mt =  e.multipleOf( htl[i] );
                   if ( mt ) {
                      //r = a.multiply( lbc[i] );
                      //r = a.idempotent().multiply( lbc[i].idempotent() );
@@ -250,7 +250,7 @@ public class RReductionSeq<C extends RegularRingElem<C>>
                            System.out.println("b == zero: r = " + r);
                            continue;
                         }
-                        f = ExpVector.EVDIF( e, htl[i] );
+                        f =  e.subtract( htl[i] );
                         //logger.info("red div = " + f);
                         Q = p[i].multiply( b, f );
                         S = S.subtract( Q ); // not ok with reductum
@@ -298,10 +298,10 @@ public class RReductionSeq<C extends RegularRingElem<C>>
         }
         ExpVector ei = A.leadingExpVector();
         ExpVector ej = B.leadingExpVector();
-        ExpVector g = ExpVector.EVSUM(ei,ej);
+        ExpVector g = ei.sum(ej);
         // boolean t =  g == e ;
-        ExpVector h = ExpVector.EVDIF(g,e);
-        int s = ExpVector.EVSIGN(h);
+        ExpVector h = g.subtract(e);
+        int s = h.signum();
         if ( s == 0 ) { // disjoint ht
            C a = A.leadingBaseCoefficient();
            C b = B.leadingBaseCoefficient();
@@ -335,11 +335,11 @@ public class RReductionSeq<C extends RegularRingElem<C>>
         }
         ExpVector ei = A.leadingExpVector();
         ExpVector ej = B.leadingExpVector();
-        ExpVector g = ExpVector.EVSUM(ei,ej);
-        ExpVector e = ExpVector.EVLCM(ei,ej);
+        ExpVector g = ei.sum(ej);
+        ExpVector e = ei.lcm(ej);
         //        boolean t =  g == e ;
-        ExpVector h = ExpVector.EVDIF(g,e);
-        int s = ExpVector.EVSIGN(h);
+        ExpVector h = g.subtract(e);
+        int s = h.signum();
         if ( s == 0 ) { // disjoint ht
            C a = A.leadingBaseCoefficient();
            C b = B.leadingBaseCoefficient();
@@ -413,7 +413,7 @@ public class RReductionSeq<C extends RegularRingElem<C>>
               e = m.getKey();
               a = m.getValue();
               for ( i = 0; i < l; i++ ) {
-                  mt = ExpVector.EVMT( e, htl[i] );
+                  mt =  e.multipleOf( htl[i] );
                   if ( mt ) {
                      //r = a.idempotent().multiply( lbc[i].idempotent() );
                      //r = a.multiply( lbc[i] );
@@ -426,7 +426,7 @@ public class RReductionSeq<C extends RegularRingElem<C>>
                            System.out.println("b == zero: r = " + r);
                            continue;
                         }
-                        f = ExpVector.EVDIF( e, htl[i] );
+                        f =  e.subtract( htl[i] );
                         //logger.info("red div = " + f);
                         Q = p[i].multiply( a, f );
                         S = S.subtract( Q ); // not ok with reductum

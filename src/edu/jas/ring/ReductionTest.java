@@ -202,7 +202,7 @@ public static Test suite() {
 
      e = red.SPolynomial( a, b );
      //System.out.println("e = " + e);
-     ExpVector ce = ExpVector.EVLCM(a.leadingExpVector(),b.leadingExpVector());
+     ExpVector ce = a.leadingExpVector().lcm(b.leadingExpVector());
      ExpVector ee = e.leadingExpVector();
      assertFalse("lcm(lt(a),lt(b)) != lt(e) ", ce.equals( e ) ); 
 
@@ -421,7 +421,7 @@ public static Test suite() {
      BigInteger ci = a.leadingBaseCoefficient().gcd( b.leadingBaseCoefficient() );
      assertEquals("gcd(lbc(a),lbc(b)) = lbc(c) ", ci, c.leadingBaseCoefficient() ); 
 
-     ExpVector ce = ExpVector.EVLCM(a.leadingExpVector(),b.leadingExpVector());
+     ExpVector ce = a.leadingExpVector().lcm(b.leadingExpVector());
      assertEquals("lcm(lt(a),lt(b)) == lt(c) ", ce, c.leadingExpVector() ); 
      assertFalse("lcm(lt(a),lt(b)) != lt(e) ", ce.equals( e.leadingExpVector() ) ); 
 
@@ -503,7 +503,7 @@ public static Test suite() {
      BigInteger ci = a.leadingBaseCoefficient().gcd( b.leadingBaseCoefficient() );
      assertEquals("gcd(lbc(a),lbc(b)) = lbc(c) ", ci, c.leadingBaseCoefficient() ); 
 
-     ExpVector ce = ExpVector.EVLCM(a.leadingExpVector(),b.leadingExpVector());
+     ExpVector ce = a.leadingExpVector().lcm(b.leadingExpVector());
      assertEquals("lcm(lt(a),lt(b)) == lt(c) ", ce, c.leadingExpVector() ); 
      assertFalse("lcm(lt(a),lt(b)) != lt(e) ", ce.equals( e.leadingExpVector() ) ); 
 

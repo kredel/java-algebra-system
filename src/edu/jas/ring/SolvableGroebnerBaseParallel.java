@@ -214,13 +214,13 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>>
             while ( it.hasNext() && ! mt ) {
                p = it.next();
                f = p.leadingExpVector();
-               mt = ExpVector.EVMT( e, f );
+               mt =  e.multipleOf( f );
             }
             it = F.listIterator();
             while ( it.hasNext() && ! mt ) {
                p = it.next();
                f = p.leadingExpVector();
-               mt = ExpVector.EVMT( e, f );
+               mt =  e.multipleOf( f );
             }
             if ( ! mt ) {
                 F.add( a ); // no thread at this point

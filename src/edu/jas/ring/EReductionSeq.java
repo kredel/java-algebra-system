@@ -58,7 +58,7 @@ public class EReductionSeq<C extends RingElem<C>>
         ExpVector e = A.leadingExpVector();
         C a = A.leadingBaseCoefficient();
         for ( GenPolynomial<C> p : P ) {
-            mt = ExpVector.EVMT( e, p.leadingExpVector() );
+            mt =  e.multipleOf( p.leadingExpVector() );
             if ( mt ) {
                C b = p.leadingBaseCoefficient();
                C r = a.remainder( b );
@@ -119,7 +119,7 @@ public class EReductionSeq<C extends RingElem<C>>
         Map<ExpVector,C> Am = Ap.getMap();
         for ( ExpVector e : Am.keySet() ) { 
             for ( i = 0; i < l; i++ ) {
-                mt = ExpVector.EVMT( e, htl[i] );
+                mt =  e.multipleOf( htl[i] );
                 if ( mt ) {
                    C a = Am.get(e);
                    C r = a.remainder( lbc[i] );
@@ -193,9 +193,9 @@ public class EReductionSeq<C extends RingElem<C>>
               e = m.getKey();
               a = m.getValue();
               for ( i = 0; i < l; i++ ) {
-                  mt = ExpVector.EVMT( e, htl[i] );
+                  mt =  e.multipleOf( htl[i] );
                   if ( mt ) {
-                     f = ExpVector.EVDIF( e, htl[i] );
+                     f =  e.subtract( htl[i] );
                      //logger.info("red div = " + f);
                      r = a.remainder( lbc[i] );
                      b = a.divide( lbc[i] );
@@ -295,7 +295,7 @@ public class EReductionSeq<C extends RingElem<C>>
             e = m.getKey();
             a = m.getValue();
             for ( i = 0; i < l; i++ ) {
-                mt = ExpVector.EVMT( e, htl[i] );
+                mt =  e.multipleOf( htl[i] );
                 if ( mt ) break; 
             }
             if ( ! mt ) { 
@@ -305,7 +305,7 @@ public class EReductionSeq<C extends RingElem<C>>
                 // System.out.println(" S = " + S);
                 //throw new RuntimeException("Syzygy no GB");
             } else { 
-                e = ExpVector.EVDIF( e, htl[i] );
+                e =  e.subtract( htl[i] );
                 //logger.info("red div = " + e);
                 C c = (C)lbc[i];
                 a = a.divide( c );

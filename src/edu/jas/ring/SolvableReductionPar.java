@@ -93,7 +93,7 @@ public class SolvableReductionPar<C extends RingElem<C>>
                   p = P[i];
                   f = p.leadingExpVector();
                   if ( f != null ) {
-                     mt = ExpVector.EVMT( e, f );
+                     mt =  e.multipleOf( f );
                      if ( mt ) break; 
                   }
               }
@@ -104,7 +104,7 @@ public class SolvableReductionPar<C extends RingElem<C>>
                  // System.out.println(" S = " + S);
               } else { 
                  //logger.debug("red");
-                 e = ExpVector.EVDIF( e, f );
+                 e =  e.subtract( f );
                  Q = p.multiplyLeft( e );
                  a = a.divide( Q.leadingBaseCoefficient() );
                  Q = Q.multiplyLeft( a );
@@ -189,7 +189,7 @@ public class SolvableReductionPar<C extends RingElem<C>>
                   p = P[i];
                   f = p.leadingExpVector();
                   if ( f != null ) {
-                     mt = ExpVector.EVMT( e, f );
+                     mt =  e.multipleOf( f );
                      if ( mt ) break; 
                   }
               }
@@ -200,7 +200,7 @@ public class SolvableReductionPar<C extends RingElem<C>>
                  // System.out.println(" S = " + S);
               } else { 
                  //logger.debug("red");
-                 e = ExpVector.EVDIF( e, f );
+                 e =  e.subtract( f );
                  Q = p.multiply( e );
                  a = a.divide( Q.leadingBaseCoefficient() );
                  Q = Q.multiply( a );

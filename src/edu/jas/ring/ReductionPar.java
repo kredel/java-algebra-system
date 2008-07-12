@@ -96,7 +96,7 @@ public class ReductionPar<C extends RingElem<C>>
                   p = P[i];
                   f = p.leadingExpVector();
                   if ( f != null ) {
-                     mt = ExpVector.EVMT( e, f );
+                     mt =  e.multipleOf( f );
                      if ( mt ) break; 
                   }
               }
@@ -109,7 +109,7 @@ public class ReductionPar<C extends RingElem<C>>
               } else { 
                  //logger.debug("red");
                  m1 = p.leadingMonomial();
-                 e = ExpVector.EVDIF( e, f );
+                 e =  e.subtract( f );
                  a = a.divide( m1.getValue() );
                  Q = p.multiply( a, e );
                  S = S.subtract( Q );
@@ -202,7 +202,7 @@ public class ReductionPar<C extends RingElem<C>>
                   p = P[i];
                   f = p.leadingExpVector();
                   if ( f != null ) {
-                     mt = ExpVector.EVMT( e, f );
+                     mt =  e.multipleOf( f );
                      if ( mt ) break; 
                   }
               }
@@ -215,7 +215,7 @@ public class ReductionPar<C extends RingElem<C>>
               } else { 
                  //logger.debug("red");
                  m1 = p.leadingMonomial();
-                 e = ExpVector.EVDIF( e, f );
+                 e =  e.subtract( f );
                  a = a.divide( m1.getValue() );
                  Q = p.multiply( a, e );
                  S = S.subtract( Q );

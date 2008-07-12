@@ -100,7 +100,7 @@ public class OrderedPairlist<C extends RingElem<C> > {
                        continue; // skip pair
                    }
                }
-               g = ExpVector.EVLCM( e, f );
+               g =  e.lcm( f );
                pair = new Pair<C>( pj, p, j, l);
                // redi = (BitSet)red.get(j);
                ///if ( j < l ) redi.set( l );
@@ -259,7 +259,7 @@ public class OrderedPairlist<C extends RingElem<C> > {
         for ( int k = 0; k < P.size(); k++ ) {
             A = P.get( k );
             ek = A.leadingExpVector();
-            m = ExpVector.EVMT(eij,ek);
+            m = eij.multipleOf(ek);
             if ( m ) {
                 if ( k < i ) {
                    // System.out.println("k < i "+k+" "+i); 

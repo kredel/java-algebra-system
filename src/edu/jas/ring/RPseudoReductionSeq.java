@@ -98,14 +98,14 @@ public class RPseudoReductionSeq<C extends RegularRingElem<C>>
               a = m.getValue();
               //System.out.println("--a = " + a);
               for ( i = 0; i < l; i++ ) {
-                  mt = ExpVector.EVMT( e, htl[i] );
+                  mt =  e.multipleOf( htl[i] );
                   if ( mt ) {
                      C c = lbc[i];
                      //r = a.idempotent().multiply( c.idempotent() );
                      r = a.idempotentAnd( c );
                      mt = ! r.isZERO(); // && mt
                      if ( mt ) {
-                        f = ExpVector.EVDIF( e, htl[i] );
+                        f =  e.subtract( htl[i] );
                         if ( a.remainder(c).isZERO() ) {   //c.isUnit() ) {
                            a = a.divide( c );
                            if ( a.isZERO() ) {
@@ -205,14 +205,14 @@ public class RPseudoReductionSeq<C extends RegularRingElem<C>>
               a = m.getValue();
               //System.out.println("--a = " + a);
               for ( i = 0; i < l; i++ ) {
-                  mt = ExpVector.EVMT( e, htl[i] );
+                  mt =  e.multipleOf( htl[i] );
                   if ( mt ) {
                      C c = lbc[i];
                      //r = a.idempotent().multiply( c.idempotent() );
                      r = a.idempotentAnd( c );
                      mt = ! r.isZERO(); // && mt
                      if ( mt ) {
-                        f = ExpVector.EVDIF( e, htl[i] );
+                        f =  e.subtract( htl[i] );
                         if ( a.remainder(c).isZERO() ) {   //c.isUnit() ) {
                            a = a.divide( c );
                            if ( a.isZERO() ) {
@@ -313,7 +313,7 @@ public class RPseudoReductionSeq<C extends RegularRingElem<C>>
               e = m.getKey();
               a = m.getValue();
               for ( i = 0; i < l; i++ ) {
-                  mt = ExpVector.EVMT( e, htl[i] );
+                  mt =  e.multipleOf( htl[i] );
                   if ( mt ) {
                      C c = lbc[i];
                      //r = a.idempotent().multiply( c.idempotent() );
@@ -332,7 +332,7 @@ public class RPseudoReductionSeq<C extends RegularRingElem<C>>
                            S = S.multiply( c );
                            R = R.multiply( c );
                         }
-                        f = ExpVector.EVDIF( e, htl[i] );
+                        f =  e.subtract( htl[i] );
                         //logger.info("red div = " + f);
                         Q = p[i].multiply( a, f );
                         S = S.subtract( Q ); // not ok with reductum

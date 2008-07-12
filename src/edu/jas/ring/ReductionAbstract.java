@@ -70,9 +70,9 @@ public abstract class ReductionAbstract<C extends RingElem<C>>
         ExpVector e = ma.getKey();
         ExpVector f = mb.getKey();
 
-        ExpVector g  = ExpVector.EVLCM(e,f);
-        ExpVector e1 = ExpVector.EVDIF(g,e);
-        ExpVector f1 = ExpVector.EVDIF(g,f);
+        ExpVector g  = e.lcm(f);
+        ExpVector e1 = g.subtract(e);
+        ExpVector f1 = g.subtract(f);
 
         C a = ma.getValue();
         C b = mb.getValue();
@@ -118,9 +118,9 @@ public abstract class ReductionAbstract<C extends RingElem<C>>
         ExpVector e = ma.getKey();
         ExpVector f = mb.getKey();
 
-        ExpVector g  = ExpVector.EVLCM(e,f);
-        ExpVector e1 = ExpVector.EVDIF(g,e);
-        ExpVector f1 = ExpVector.EVDIF(g,f);
+        ExpVector g  = e.lcm(f);
+        ExpVector e1 = g.subtract(e);
+        ExpVector f1 = g.subtract(f);
 
         C a = ma.getValue();
         C b = mb.getValue();
@@ -184,10 +184,10 @@ public abstract class ReductionAbstract<C extends RingElem<C>>
         }
         ExpVector ei = A.leadingExpVector();
         ExpVector ej = B.leadingExpVector();
-        ExpVector g = ExpVector.EVSUM(ei,ej);
+        ExpVector g = ei.sum(ej);
         // boolean t =  g == e ;
-        ExpVector h = ExpVector.EVDIF(g,e);
-        int s = ExpVector.EVSIGN(h);
+        ExpVector h = g.subtract(e);
+        int s = h.signum();
         return ! ( s == 0 );
     }
 
@@ -209,11 +209,11 @@ public abstract class ReductionAbstract<C extends RingElem<C>>
         }
         ExpVector ei = A.leadingExpVector();
         ExpVector ej = B.leadingExpVector();
-        ExpVector g = ExpVector.EVSUM(ei,ej);
-        ExpVector e = ExpVector.EVLCM(ei,ej);
+        ExpVector g = ei.sum(ej);
+        ExpVector e = ei.lcm(ej);
         //        boolean t =  g == e ;
-        ExpVector h = ExpVector.EVDIF(g,e);
-        int s = ExpVector.EVSIGN(h);
+        ExpVector h = g.subtract(e);
+        int s = h.signum();
         return ! ( s == 0 );
     }
 
@@ -259,7 +259,7 @@ public abstract class ReductionAbstract<C extends RingElem<C>>
         boolean mt = false;
         ExpVector e = A.leadingExpVector();
         for ( GenPolynomial<C> p : P ) {
-            mt = ExpVector.EVMT( e, p.leadingExpVector() );
+            mt =  e.multipleOf( p.leadingExpVector() );
             if ( mt ) {
                return true;
             } 
@@ -323,7 +323,7 @@ public abstract class ReductionAbstract<C extends RingElem<C>>
         boolean mt = false;
         for ( ExpVector e : Ap.getMap().keySet() ) { 
             for ( i = 0; i < l; i++ ) {
-                mt = ExpVector.EVMT( e, htl[i] );
+                mt =  e.multipleOf( htl[i] );
                 if ( mt ) {
                    return false;
                 } 
@@ -389,7 +389,7 @@ public abstract class ReductionAbstract<C extends RingElem<C>>
                if ( l <= 1 ) { return P; }
             } else {
                f = a.leadingExpVector();
-               if ( ExpVector.EVSIGN( f ) == 0 ) { 
+               if (  f .signum() == 0 ) { 
                   P = new ArrayList<GenPolynomial<C>>(); 
                   P.add( a.monic() ); 
                   return P;

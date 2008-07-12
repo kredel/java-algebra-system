@@ -15,7 +15,6 @@ import org.apache.log4j.BasicConfigurator;
 //import org.apache.log4j.Logger;
 
 import edu.jas.arith.BigRational;
-import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.PolynomialList;
@@ -74,7 +73,6 @@ public class SolvableGroebnerBaseSeqPairSeqTest extends TestCase {
    SolvableGroebnerBase<BigRational> sbb;
 
    BigRational cfac;
-   String[] vars;
    TermOrder tord;
    RelationTable<BigRational> table;
 
@@ -86,9 +84,8 @@ public class SolvableGroebnerBaseSeqPairSeqTest extends TestCase {
 
    protected void setUp() {
        cfac = new BigRational(9);
-       vars = ExpVector.STDVARS( rl );
        tord = new TermOrder();
-       ring = new GenSolvablePolynomialRing<BigRational>(cfac,rl,tord,vars);
+       ring = new GenSolvablePolynomialRing<BigRational>(cfac,rl,tord);
        table = ring.table;
        a = b = c = d = e = null;
        sbb = new SolvableGroebnerBaseSeq<BigRational>();
@@ -103,7 +100,6 @@ public class SolvableGroebnerBaseSeqPairSeqTest extends TestCase {
    protected void tearDown() {
        a = b = c = d = e = null;
        ring = null;
-       vars = null;
        tord = null;
        table = null;
        cfac = null;

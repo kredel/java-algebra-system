@@ -97,7 +97,7 @@ public class PseudoReductionSeq<C extends RingElem<C>>
               e = m.getKey();
               a = m.getValue();
               for ( i = 0; i < l; i++ ) {
-                  mt = ExpVector.EVMT( e, htl[i] );
+                  mt =  e.multipleOf( htl[i] );
                   if ( mt ) break; 
               }
               if ( ! mt ) { 
@@ -107,7 +107,7 @@ public class PseudoReductionSeq<C extends RingElem<C>>
                  S = S.subtract( a, e ); 
                  // System.out.println(" S = " + S);
               } else { 
-                 e = ExpVector.EVDIF( e, htl[i] );
+                 e =  e.subtract( htl[i] );
                  //logger.info("red div = " + e);
                  C c = (C) lbc[i];
                  if ( a.remainder(c).isZERO() ) {   //c.isUnit() ) {
@@ -189,7 +189,7 @@ public class PseudoReductionSeq<C extends RingElem<C>>
               e = m.getKey();
               a = m.getValue();
               for ( i = 0; i < l; i++ ) {
-                  mt = ExpVector.EVMT( e, htl[i] );
+                  mt =  e.multipleOf( htl[i] );
                   if ( mt ) break; 
               }
               if ( ! mt ) { 
@@ -199,7 +199,7 @@ public class PseudoReductionSeq<C extends RingElem<C>>
                  S = S.subtract( a, e ); 
                  // System.out.println(" S = " + S);
               } else { 
-                 e = ExpVector.EVDIF( e, htl[i] );
+                 e =  e.subtract( htl[i] );
                  //logger.info("red div = " + e);
                  C c = (C) lbc[i];
                  if ( a.remainder(c).isZERO() ) {   //c.isUnit() ) {
@@ -279,7 +279,7 @@ public class PseudoReductionSeq<C extends RingElem<C>>
             e = m.getKey();
             a = m.getValue();
             for ( i = 0; i < l; i++ ) {
-                mt = ExpVector.EVMT( e, htl[i] );
+                mt =  e.multipleOf( htl[i] );
                 if ( mt ) break; 
             }
             if ( ! mt ) { 
@@ -289,7 +289,7 @@ public class PseudoReductionSeq<C extends RingElem<C>>
                 // System.out.println(" S = " + S);
                 //throw new RuntimeException("Syzygy no GB");
             } else { 
-                e = ExpVector.EVDIF( e, htl[i] );
+                e =  e.subtract( htl[i] );
                 //logger.info("red div = " + e);
                 C c = (C) lbc[i];
                 if ( a.remainder(c).isZERO() ) { //c.isUnit() ) {

@@ -69,9 +69,9 @@ public abstract class SolvableReductionAbstract<C extends RingElem<C>>
         ExpVector e = ma.getKey();
         ExpVector f = mb.getKey();
 
-        ExpVector g = ExpVector.EVLCM(e,f);
-        ExpVector e1 = ExpVector.EVDIF(g,e);
-        ExpVector f1 = ExpVector.EVDIF(g,f);
+        ExpVector g = e.lcm(f);
+        ExpVector e1 = g.subtract(e);
+        ExpVector f1 = g.subtract(f);
 
         C a = ma.getValue();
         C b = mb.getValue();
@@ -115,9 +115,9 @@ public abstract class SolvableReductionAbstract<C extends RingElem<C>>
         ExpVector e = ma.getKey();
         ExpVector f = mb.getKey();
 
-        ExpVector g  = ExpVector.EVLCM(e,f);
-        ExpVector e1 = ExpVector.EVDIF(g,e);
-        ExpVector f1 = ExpVector.EVDIF(g,f);
+        ExpVector g  = e.lcm(f);
+        ExpVector e1 = g.subtract(e);
+        ExpVector f1 = g.subtract(f);
 
         C a = ma.getValue();
         C b = mb.getValue();
@@ -195,7 +195,7 @@ public abstract class SolvableReductionAbstract<C extends RingElem<C>>
                if ( l <= 1 ) { return P; }
             } else {
                f = a.leadingExpVector();
-               if ( ExpVector.EVSIGN( f ) == 0 ) { 
+               if (  f .signum() == 0 ) { 
                   P = new ArrayList<GenSolvablePolynomial<C>>(); 
                   P.add( (GenSolvablePolynomial<C>)a.monic() ); 
                   return P;
@@ -302,9 +302,9 @@ public abstract class SolvableReductionAbstract<C extends RingElem<C>>
         ExpVector e = Ap.leadingExpVector();
         ExpVector f = Bp.leadingExpVector();
 
-        ExpVector g = ExpVector.EVLCM(e,f);
-        ExpVector e1 = ExpVector.EVDIF(g,e);
-        ExpVector f1 = ExpVector.EVDIF(g,f);
+        ExpVector g = e.lcm(f);
+        ExpVector e1 = g.subtract(e);
+        ExpVector f1 = g.subtract(f);
 
         GenSolvablePolynomial<C> App = Ap.multiply( e1 );
         GenSolvablePolynomial<C> Bpp = Bp.multiply( f1 );

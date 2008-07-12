@@ -111,7 +111,7 @@ public class CriticalPairList<C extends RingElem<C> > {
                   continue; // skip pair
                }
             }
-            g = ExpVector.EVLCM( e, f );
+            g =  e.lcm( f );
             pair = new CriticalPair<C>( g, pj, p, j, len );
             //System.out.println("put pair = " + pair );
             pairlist.add( pair );
@@ -377,7 +377,7 @@ public class CriticalPairList<C extends RingElem<C> > {
             if ( i != k && j != k ) {
                GenPolynomial<C> A = P.get( k );
                ExpVector ek = A.leadingExpVector();
-               boolean m = ExpVector.EVMT(eij,ek);
+               boolean m = eij.multipleOf(ek);
                if ( m ) {
                   if ( k < i ) {
                      s =    red.get( i ).get(k) 

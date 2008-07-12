@@ -60,7 +60,7 @@ public class DReductionSeq<C extends RingElem<C>>
         ExpVector e = A.leadingExpVector();
         C a = A.leadingBaseCoefficient();
         for ( GenPolynomial<C> p : P ) {
-            mt = ExpVector.EVMT( e, p.leadingExpVector() );
+            mt =  e.multipleOf( p.leadingExpVector() );
             if ( mt ) {
                C b = p.leadingBaseCoefficient();
                C r = a.remainder( b );
@@ -121,7 +121,7 @@ public class DReductionSeq<C extends RingElem<C>>
         Map<ExpVector,C> Am = Ap.getMap();
         for ( ExpVector e : Am.keySet() ) { 
             for ( i = 0; i < l; i++ ) {
-                mt = ExpVector.EVMT( e, htl[i] );
+                mt =  e.multipleOf( htl[i] );
                 if ( mt ) {
                    C a = Am.get(e);
                    C r = a.remainder( lbc[i] );
@@ -191,7 +191,7 @@ public class DReductionSeq<C extends RingElem<C>>
               e = m.getKey();
               a = m.getValue();
               for ( i = 0; i < l; i++ ) {
-                  mt = ExpVector.EVMT( e, htl[i] );
+                  mt =  e.multipleOf( htl[i] );
                   if ( mt ) {
                      r = a.remainder( lbc[i] );
                      mt = r.isZERO(); // && mt
@@ -206,7 +206,7 @@ public class DReductionSeq<C extends RingElem<C>>
                  //System.out.println(" S = " + S);
               } else { 
                  //logger.info("red div = " + e);
-                 ExpVector f = ExpVector.EVDIF( e, htl[i] );
+                 ExpVector f =  e.subtract( htl[i] );
                  C b = a.divide( lbc[i] );
                  R = R.sum( r, e );
                  Q = p[i].multiply( b, f );
@@ -244,9 +244,9 @@ public class DReductionSeq<C extends RingElem<C>>
         ExpVector e = ma.getKey();
         ExpVector f = mb.getKey();
 
-        ExpVector g  = ExpVector.EVLCM(e,f);
-        ExpVector e1 = ExpVector.EVDIF(g,e);
-        ExpVector f1 = ExpVector.EVDIF(g,f);
+        ExpVector g  = e.lcm(f);
+        ExpVector e1 = g.subtract(e);
+        ExpVector f1 = g.subtract(f);
 
         C a = ma.getValue();
         C b = mb.getValue();
@@ -290,9 +290,9 @@ public class DReductionSeq<C extends RingElem<C>>
         ExpVector e = ma.getKey();
         ExpVector f = mb.getKey();
 
-        ExpVector g  = ExpVector.EVLCM(e,f);
-        ExpVector e1 = ExpVector.EVDIF(g,e);
-        ExpVector f1 = ExpVector.EVDIF(g,f);
+        ExpVector g  = e.lcm(f);
+        ExpVector e1 = g.subtract(e);
+        ExpVector f1 = g.subtract(f);
 
         C a = ma.getValue();
         C b = mb.getValue();
@@ -351,10 +351,10 @@ public class DReductionSeq<C extends RingElem<C>>
         }
         ExpVector ei = A.leadingExpVector();
         ExpVector ej = B.leadingExpVector();
-        ExpVector g = ExpVector.EVSUM(ei,ej);
+        ExpVector g = ei.sum(ej);
         // boolean t =  g == e ;
-        ExpVector h = ExpVector.EVDIF(g,e);
-        int s = ExpVector.EVSIGN(h);
+        ExpVector h = g.subtract(e);
+        int s = h.signum();
         if ( s == 0 ) { // disjoint ht
            C a = A.leadingBaseCoefficient();
            C b = B.leadingBaseCoefficient();
@@ -388,11 +388,11 @@ public class DReductionSeq<C extends RingElem<C>>
         }
         ExpVector ei = A.leadingExpVector();
         ExpVector ej = B.leadingExpVector();
-        ExpVector g = ExpVector.EVSUM(ei,ej);
-        ExpVector e = ExpVector.EVLCM(ei,ej);
+        ExpVector g = ei.sum(ej);
+        ExpVector e = ei.lcm(ej);
         //        boolean t =  g == e ;
-        ExpVector h = ExpVector.EVDIF(g,e);
-        int s = ExpVector.EVSIGN(h);
+        ExpVector h = g.subtract(e);
+        int s = h.signum();
         if ( s == 0 ) { // disjoint ht
            C a = A.leadingBaseCoefficient();
            C b = B.leadingBaseCoefficient();
@@ -465,7 +465,7 @@ public class DReductionSeq<C extends RingElem<C>>
             e = m.getKey();
             a = m.getValue();
             for ( i = 0; i < l; i++ ) {
-                mt = ExpVector.EVMT( e, htl[i] );
+                mt =  e.multipleOf( htl[i] );
                 if ( mt ) break; 
             }
             if ( ! mt ) { 
@@ -475,7 +475,7 @@ public class DReductionSeq<C extends RingElem<C>>
                 // System.out.println(" S = " + S);
                 //throw new RuntimeException("Syzygy no GB");
             } else { 
-                e = ExpVector.EVDIF( e, htl[i] );
+                e =  e.subtract( htl[i] );
                 //logger.info("red div = " + e);
                 C c = (C)lbc[i];
                 a = a.divide( c );

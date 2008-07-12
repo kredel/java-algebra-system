@@ -90,7 +90,7 @@ public class SolvableReductionSeq<C extends RingElem<C>>
               //logger.info("red = " + e);
               a = m.getValue();
               for ( i = 0; i < l; i++ ) {
-                  mt = ExpVector.EVMT( e, htl[i] );
+                  mt =  e.multipleOf( htl[i] );
                   if ( mt ) break; 
               }
               if ( ! mt ) { 
@@ -101,7 +101,7 @@ public class SolvableReductionSeq<C extends RingElem<C>>
                  // System.out.println(" S = " + S);
               } else { 
                  //logger.debug("red");
-                 e = ExpVector.EVDIF( e, htl[i] );
+                 e =  e.subtract( htl[i] );
                  //a = a.divide( (C)lbc[i] );
                  Q = p[i].multiplyLeft( e );
                  a = a.divide( Q.leadingBaseCoefficient() );
@@ -170,7 +170,7 @@ public class SolvableReductionSeq<C extends RingElem<C>>
             e = m.getKey();
             a = m.getValue();
             for ( i = 0; i < l; i++ ) {
-                mt = ExpVector.EVMT( e, htl[i] );
+                mt =  e.multipleOf( htl[i] );
                 if ( mt ) break; 
             }
             if ( ! mt ) { 
@@ -180,7 +180,7 @@ public class SolvableReductionSeq<C extends RingElem<C>>
                 // System.out.println(" S = " + S);
                 // throw new RuntimeException("Syzygy no leftGB");
             } else { 
-                e = ExpVector.EVDIF( e, htl[i] );
+                e =  e.subtract( htl[i] );
                 //logger.info("red div = " + e);
                 //a = a.divide( (C)lbc[i] );
                 //Q = p[i].multiplyLeft( a, e );
@@ -257,7 +257,7 @@ public class SolvableReductionSeq<C extends RingElem<C>>
             //logger.info("red = " + e);
             a = m.getValue();
             for ( i = 0; i < l; i++ ) {
-                mt = ExpVector.EVMT( e, htl[i] );
+                mt =  e.multipleOf( htl[i] );
                 if ( mt ) break; 
             }
             if ( ! mt ) { 
@@ -268,7 +268,7 @@ public class SolvableReductionSeq<C extends RingElem<C>>
                 // System.out.println(" S = " + S);
             } else { 
                 //logger.debug("red");
-                e = ExpVector.EVDIF( e, htl[i] );
+                e =  e.subtract( htl[i] );
                 //a = a.divide( (C)lbc[i] );
                 Q = p[i].multiply( e );
                 a = a.divide( Q.leadingBaseCoefficient() );
