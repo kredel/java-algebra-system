@@ -648,7 +648,7 @@ public class IdealTest extends TestCase {
 
      L = new ArrayList<GenPolynomial<BigRational>>();
      a = fac.random(kl, ll, el, q );
-     if ( !a.isZERO() && !a.isONE() ) {
+     if ( !a.isZERO() && !a.isConstant() ) {
         L.add(a);
         I = new Ideal<BigRational>(fac,L,true);
         assertEquals("commonZeroTest( I )", I.commonZeroTest(), 1 );
@@ -661,6 +661,74 @@ public class IdealTest extends TestCase {
      L.remove(0);
      I = new Ideal<BigRational>(fac,L,true);
      assertEquals("commonZeroTest( I )", I.commonZeroTest(), 1 );
+ }
+
+
+/**
+ * Test Ideal dimension.
+ * 
+ */
+ public void testIdealDimension() {
+
+     Ideal<BigRational> I;
+     L = new ArrayList<GenPolynomial<BigRational>>();
+     Ideal.Dim dim;
+
+     I = new Ideal<BigRational>(fac,L,true);
+     assertEquals("dimension( I )", rl, I.dimension().d );
+
+     a = fac.getZERO();
+     L.add(a);
+     I = new Ideal<BigRational>(fac,L,true);
+     assertEquals("dimension( I )", rl, I.dimension().d );
+
+     b = fac.getONE();
+     L.add(b);
+     I = new Ideal<BigRational>(fac,L,true);
+     assertEquals("dimension( I )", -1, I.dimension().d );
+
+     L = new ArrayList<GenPolynomial<BigRational>>();
+     a = fac.random(kl, ll, el, q );
+     if ( !a.isZERO() && !a.isConstant() ) {
+        L.add(a);
+        I = new Ideal<BigRational>(fac,L,true);
+	//System.out.println("a = " + a);
+	dim = I.dimension();
+	//System.out.println("dim(I) = " + dim);
+        assertTrue("dimension( I )", dim.d >= 1 );
+     }
+
+     L = (List<GenPolynomial<BigRational>>) fac.univariateList();
+     I = new Ideal<BigRational>(fac,L,true);
+     dim = I.dimension();
+     assertEquals("dimension( I )", 0, dim.d );
+
+     while ( L.size() > 0 ) {
+	 L.remove(0);
+	 I = new Ideal<BigRational>(fac,L,true);
+	 //System.out.println("I = " + I);
+	 dim = I.dimension();
+	 //System.out.println("dim(I) = " + dim);
+	 assertEquals("dimension( I )", rl-L.size(), dim.d );
+     }
+
+     L = (List<GenPolynomial<BigRational>>) fac.univariateList();
+     I = new Ideal<BigRational>(fac,L,true);
+     I = I.product( I );
+     //System.out.println("I = " + I);
+     dim = I.dimension();
+     //System.out.println("dim(I) = " + dim);
+     assertEquals("dimension( I )", 0, dim.d );
+
+     L = I.getList();
+     while ( L.size() > 0 ) {
+	 L.remove(0);
+	 I = new Ideal<BigRational>(fac,L,true);
+	 //System.out.println("I = " + I);
+	 dim = I.dimension();
+	 //System.out.println("dim(I) = " + dim);
+	 assertTrue("dimension( I )", dim.d > 0);
+     }
  }
 
 }

@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.Arrays;
 
 import java.io.Serializable;
 
@@ -907,36 +908,36 @@ public class Ideal<C extends GcdRingElem<C>>
    */
   public int commonZeroTest() {
       if ( this.isZERO() ) {
-	 return 1;
+         return 1;
       }
       if ( !isGB ) {
          doGB();
       }
       if ( this.isONE() ) {
-	 return -1;
+         return -1;
       }
       if ( this.list.ring.nvar <= 0 ) {
-	 return -1;
+         return -1;
       }
       //int uht = 0;
       Set<Integer> v = new HashSet<Integer>(); // for non reduced GBs
       // List<GenPolynomial<C>> Z = this.list.list;
       for ( GenPolynomial<C> p : getList() ) {
-	  ExpVector e = p.leadingExpVector();
+          ExpVector e = p.leadingExpVector();
           if ( e == null ) {
              continue;
           }
-	  int[] u = e.dependencyOnVariables();
+          int[] u = e.dependencyOnVariables();
           if ( u == null ) {
              continue;
           }
           if ( u.length == 1 ) {
-	     //uht++;
-	     v.add( u[0] );
+             //uht++;
+             v.add( u[0] );
           }
       }
       if ( this.list.ring.nvar == v.size() ) {
-	 return 0;
+         return 0;
       }
       return 1;
   }
@@ -944,57 +945,173 @@ public class Ideal<C extends GcdRingElem<C>>
 
   /**
    * Ideal dimension.
-   * @return -1, 0 or 1 if dimension(this) &eq; -1, 0 or &ge; 1.
+   * @return a dimension container (dim,maxIndep,list(maxIndep)).
    */
   public Dim dimension() {
       int t = commonZeroTest();
-      if ( t <= 0 ) {
-         return new Dim(t,null,null);
-      }
-      int d = 0;
       Set<Integer> S = new HashSet<Integer>();
       Set<Set<Integer>> M = new HashSet<Set<Integer>>();
+      if ( t <= 0 ) {
+	 return new Dim(t,S,M,null);
+      }
+      int d = 0;
       Set<Integer> U = new HashSet<Integer>();
       for ( int i = 0; i < this.list.ring.nvar; i++ ) {
-	  U.add( i );
+          U.add( i );
       }
       M = dimension(S,U,M);
       for ( Set<Integer> m : M ) {
-	  int dp = m.size();
-	  if ( dp > d ) {
-	     d = dp;
-	     S = m;
-	  }
+          int dp = m.size();
+          if ( dp > d ) {
+             d = dp;
+             S = m;
+          }
       }
-      return new Dim(d,S,M);
+      return new Dim(d,S,M,this.list.ring.getVars());
   }
 
 
   /**
    * Ideal dimension.
-   * S is a maximal independent set of variables.
-   * U is a set of variables of unknown status.
-   * M and MP are lists of maximal independent sets of variables.  *)
-   * @return -1, 0 or 1 if dimension(this) &eq; -1, 0 or &ge; 1.
+   * @param S is a set of independent variables.
+   * @param U is a set of variables of unknown status.
+   * @param M is a list of maximal sets of independent variables.
+   * @return a list of maximal sets of independent variables, eventually containing S.
    */
   protected Set<Set<Integer>> dimension(Set<Integer> S, Set<Integer> U, Set<Set<Integer>> M) {
-
-
-      return M;
+      Set<Set<Integer>> MP = M;
+      Set<Integer> UP = new HashSet<Integer>( U );
+      for ( Integer j : U ) {
+          UP.remove( j );
+          Set<Integer> SP = new HashSet<Integer>( S );
+          SP.add( j );
+          if ( ! containsHT( SP, getList() ) ) {
+             MP = dimension( SP, UP, MP );
+          }
+      }
+      boolean contained = false;
+      for ( Set<Integer> m : MP ) {
+          if ( m.containsAll( S ) ) {
+             contained = true;
+             break;
+	  }
+      }
+      if ( ! contained ) {
+         MP.add( S );
+      }
+      return MP;
   }
 
 
-    public static class Dim implements Serializable {
-	public final int d;
-	public final Set<Integer> S;
-	public final Set<Set<Integer>> M;
+  /**
+   * Ideal head term containment test.
+   * @param G list of polynomials.
+   * @param H index set.
+   * @return true, if the vaiables of the head terms of each polynomial in G are contained in H, 
+   * else false.
+   */
+  protected boolean containsHT(Set<Integer> H, List<GenPolynomial<C>> G) {
+      Set<Integer> S = null;
+      for ( GenPolynomial<C> p : G ) {
+          if ( p == null ) {
+             continue;
+          }
+          ExpVector e = p.leadingExpVector();
+          if ( e == null ) {
+             continue;
+          }
+          int[] v = e.dependencyOnVariables();
+          if ( v == null ) {
+             continue;
+          }
+	  // System.out.println("v = " + Arrays.toString(v));
+	  if ( S == null ) { // revert indices
+	     S = new HashSet<Integer>( H.size() );
+	     int r = e.length()-1;
+	     for ( Integer i : H ) {
+		 S.add( r-i );
+	     }
+	  }
+          if ( contains( v, S ) ) { // v \subset S
+             return true;
+          }
+      }
+      return false;
+  }
 
-	public Dim(int d, Set<Integer> S, Set<Set<Integer>> M) {
-	    this.d = d;
-	    this.S = S;
-	    this.M = M;
+
+  /**
+   * Set containment.
+   * is v \subset H.
+   * @param v index array.
+   * @param H index set.
+   * @return true, if each element of v is contained in H, else false .
+   */
+  protected boolean contains(int[] v, Set<Integer> H) {
+      for ( int i = 0; i < v.length; i++ ) {
+          if ( ! H.contains( v[i] ) ) {
+             return false;
+          }
+      }
+      return true;
+  }
+
+
+  /**
+   * Container for dimension parameters.
+   */
+  public static class Dim implements Serializable {
+        public final int d;
+        public final Set<Integer> S;
+        public final Set<Set<Integer>> M;
+        public final String[] v;
+
+
+
+     public Dim(int d, Set<Integer> S, Set<Set<Integer>> M, String[] v) {
+            this.d = d;
+            this.S = S;
+            this.M = M;
+            this.v = v;
+     }
+
+
+     /**
+      * String representation of the ideal.
+      * @see java.lang.Object#toString()
+      */
+     @Override
+     public String toString() {
+	StringBuffer sb = new StringBuffer("Dimension( " + d + ", ");
+	if ( v == null ) {
+	    sb.append( "" + S + ", " + M + " )" );
+	    return sb.toString();
 	}
+	String[] s = new String[ S.size() ];
+	int j = 0;
+	for ( Integer i : S ) {
+	    s[j] = v[i]; j++;
+	}
+	sb.append( Arrays.toString( s ) + ", " );
+	sb.append("[ ");
+	boolean first = true;
+	for ( Set<Integer> m : M ) {
+	    if ( first ) {
+	       first = false;
+	    } else {
+               sb.append( ", " );
+	    }
+	    s = new String[ m.size() ];
+	    j = 0;
+	    for ( Integer i : m ) {
+		s[j] = v[i]; j++;
+	    }
+	    sb.append( Arrays.toString( s ) );
+	}
+	sb.append(" ] )");
+        return sb.toString();
+     }
 
-    }
+  }
 
 }
