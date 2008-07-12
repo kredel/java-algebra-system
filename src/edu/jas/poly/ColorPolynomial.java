@@ -110,6 +110,7 @@ public class ColorPolynomial<C extends RingElem<C> >
      * @return true, if this is equal to other, else false.
      */
     @Override
+    @SuppressWarnings("unchecked")
     public boolean equals(Object p) {
         ColorPolynomial<C> cp = null;
         try {
@@ -181,7 +182,7 @@ public class ColorPolynomial<C extends RingElem<C> >
      * Get zero condition on coefficients. 
      * @return green coefficients.
      */
-    public List<GenPolynomial<C>> getConditionZero() {
+    public List<GenPolynomial<C>> getGreenCoefficients() {
         Collection<GenPolynomial<C>> c = green.getMap().values();
         return new ArrayList<GenPolynomial<C>>( c );
     }
@@ -191,7 +192,7 @@ public class ColorPolynomial<C extends RingElem<C> >
      * Get non zero condition on coefficients. 
      * @return red coefficients.
      */
-    public List<GenPolynomial<C>> getConditionNonZero() {
+    public List<GenPolynomial<C>> getRedCoefficients() {
         Collection<GenPolynomial<C>> c = red.getMap().values();
         return new ArrayList<GenPolynomial<C>>( c );
     }
@@ -349,13 +350,13 @@ public class ColorPolynomial<C extends RingElem<C> >
      * @param S ColorPolynomial.
      * @return this-S.
      */
-    public ColorPolynomial<C> subtract( ColorPolynomial<C> S ) {
+    public ColorPolynomial<C> subtractComponent( ColorPolynomial<C> S ) {
         GenPolynomial<GenPolynomial<C>> g, r, w;
         g = green.subtract( S.green );
-        Comparator<ExpVector> cmp;
+        //Comparator<ExpVector> cmp;
         if ( red.isZERO() ) {
            r = red;
-           w = white.subtract(S.red ).subtract( S.white );
+           w = white.subtract( S.red ).subtract( S.white );
         } else {
            r = red.subtract( S.red );
            w = white.subtract( S.white );
@@ -368,6 +369,20 @@ public class ColorPolynomial<C extends RingElem<C> >
         //}
         //assert g.trailingExpvector() > r.leadingExpvector();
         //assert r.trailingExpvector() > w.leadingExpvector();
+        return new ColorPolynomial<C>(g,r,w);
+    }
+
+
+    /**
+     * ColorPolynomial subtraction. 
+     * @param S ColorPolynomial.
+     * @return this-S.
+     */
+    public ColorPolynomial<C> subtract( ColorPolynomial<C> S ) {
+        GenPolynomial<GenPolynomial<C>> g, r, w;
+        g = green.subtract( S.green );
+     r = red.ring.getZERO();
+     w = getEssentialPolynomial().subtract( S.getEssentialPolynomial() );
         return new ColorPolynomial<C>(g,r,w);
     }
 

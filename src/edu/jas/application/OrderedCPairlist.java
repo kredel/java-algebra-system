@@ -227,6 +227,31 @@ public class OrderedCPairlist<C extends GcdRingElem<C> >
 
 
     /**
+     * equals.
+     * @param ob an Object.
+     * @return true if this is equal to o, else false.
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public boolean equals(Object ob) {
+        OrderedCPairlist<C> c = null;
+        try {
+            c = (OrderedCPairlist<C>) ob;
+        } catch (ClassCastException e) {
+            return false;
+        }
+        if ( c == null ) {
+           return false;
+        }
+     boolean t = pairCount() == c.pairCount();
+     if ( ! t ) {
+         return t;
+     }
+     return true;
+    }
+
+
+    /**
      * Put one Polynomial to the pairlist and reduction matrix.
      * @param p polynomial.
      * @return the index of the added polynomial.

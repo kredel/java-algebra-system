@@ -34,7 +34,7 @@ public class Condition<C extends GcdRingElem<C> >
      */
     public Condition(Ideal<C> z, List<GenPolynomial<C>> nz) {
         if ( z == null || nz == null ) {
-            throw new RuntimeException("only for non nill condition parts");
+            throw new RuntimeException("only for non null condition parts");
         }
         zero = z;
         nonZero = nz;
@@ -56,7 +56,7 @@ public class Condition<C extends GcdRingElem<C> >
     @Override
     public String toString() {
         return "Condition[ 0 == " + zero.list.list.toString() 
-                      + ", 0 != " + nonZero + "]";
+                      + ", 0 != " + nonZero + "]\n";
     }
 
 
@@ -66,6 +66,7 @@ public class Condition<C extends GcdRingElem<C> >
      * @return true if this is equal to o, else false.
      */
     @Override
+    @SuppressWarnings("unchecked")
     public boolean equals(Object ob) {
         Condition<C> c = null;
         try {
@@ -73,6 +74,7 @@ public class Condition<C extends GcdRingElem<C> >
         } catch (ClassCastException e) {
             return false;
         }
+     // if ( ! zero.getList().equals( c.zero.getList() ) ) {
         if ( ! zero.equals( c.zero ) ) {
            return false;
         }
@@ -105,6 +107,10 @@ public class Condition<C extends GcdRingElem<C> >
      * @param z a zero polynomial.
      */
     public Condition<C> sumZero(GenPolynomial<C> z) {
+        //List<GenPolynomial<C>> list = new ArrayList<GenPolynomial<C>>( zero.getList() );
+        //list.add( z.monic() );
+     //Ideal<C> id = new Ideal<C>( zero.getRing(), list );
+        //return new Condition<C>( id, nonZero );
         return new Condition<C>( zero.sum( z ), nonZero );
     }
 
@@ -115,7 +121,7 @@ public class Condition<C extends GcdRingElem<C> >
      */
     public Condition<C> sumNonZero(GenPolynomial<C> nz) {
         List<GenPolynomial<C>> list = new ArrayList<GenPolynomial<C>>( nonZero );
-        list.add( nz );
+        list.add( nz.monic() );
         return new Condition<C>( zero, list );
     }
 

@@ -56,7 +56,7 @@ public static void example1() {
 
     BigInteger fac = new BigInteger();
     GenPolynomialRing<BigInteger> ring
-	= new GenPolynomialRing<BigInteger>(fac,n); //,var);
+     = new GenPolynomialRing<BigInteger>(fac,n); //,var);
     System.out.println("ring = " + ring + "\n");
 
     List<GenPolynomial<BigInteger>> cp = new ArrayList<GenPolynomial<BigInteger>>( n ); 
