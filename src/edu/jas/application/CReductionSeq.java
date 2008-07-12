@@ -390,14 +390,7 @@ public class CReductionSeq<C extends GcdRingElem<C>>
             //if ( cond.isEmpty() ) { // do not use this code
             //   continue; // can skip condition (?)
             //}
-            List<ColorPolynomial<C>> S = new ArrayList<ColorPolynomial<C>>();
-            for ( GenPolynomial<GenPolynomial<C>> A : H ) {
-                ColorPolynomial<C> nz = determine( cond, A );
-                System.out.println("nz = " + nz);
-                if ( nz!= null && !nz.isZERO() ) {
-                   S.add( nz );
-                }
-            }
+            List<ColorPolynomial<C>> S = cond.determine( H );
             ColoredSystem<C> cs = new ColoredSystem<C>( cond, S );
             CS.add( cs );
         }
@@ -410,7 +403,6 @@ public class CReductionSeq<C extends GcdRingElem<C>>
      * @param A polynomial.
      * @param cond a condition.
      * @return new determined colored polynomial.
-     */
     public ColorPolynomial<C> 
            determine( Condition<C> cond,
                       GenPolynomial<GenPolynomial<C>> A) {  
@@ -467,6 +459,7 @@ public class CReductionSeq<C extends GcdRingElem<C>>
         }
         return cp;
     }
+     */
 
 
     /**
@@ -495,7 +488,7 @@ public class CReductionSeq<C extends GcdRingElem<C>>
         List<Condition<C>> cd = caseDistinction( cond, Ap );
         for ( Condition<C> cnd : cd ) {
            Sp = new ArrayList<ColorPolynomial<C>>( S );
-           nz = determine( cnd, Ap );
+           nz = cnd.determine( Ap );
            if ( nz == null || nz.isZERO() ) {
               Sp = new ArrayList<ColorPolynomial<C>>( S );
               NS = new ColoredSystem<C>( cnd, Sp, pl );
@@ -542,7 +535,7 @@ public class CReductionSeq<C extends GcdRingElem<C>>
         List<Condition<C>> cd = caseDistinction( cond, Ap );
         System.out.println("# cases = " + cd.size());
         for ( Condition<C> cnd : cd ) {
-           nz = determine( cnd, Ap );
+           nz = cnd.determine( Ap );
            if ( nz == null || nz.isZERO() ) {
               System.out.println("***** condition with zero polynomial");
               Sp = new ArrayList<ColorPolynomial<C>>( S );
@@ -578,86 +571,6 @@ public class CReductionSeq<C extends GcdRingElem<C>>
      * Case distinction conditions of parametric polynomial list.
      * @param L list of parametric polynomials.
      * @return list of conditions as case distinction.
-    public List<Condition<C>> oldCaseDistinction( List<GenPolynomial<GenPolynomial<C>>> L) {  
-        List<Condition<C>> cd = new ArrayList<Condition<C>>();
-        if ( L == null || L.size() == 0 ) {
-            return cd;
-        }
-        GenPolynomialRing<GenPolynomial<C>> fac = L.get(0).ring;
-        RingFactory<GenPolynomial<C>> crfac = fac.coFac;
-        GenPolynomialRing<C> cfac = (GenPolynomialRing<C>) crfac;
-        List<GenPolynomial<C>> F = new ArrayList<GenPolynomial<C>>();
-        Ideal<C> I = new Ideal<C>(cfac,F);
-
-        List<GenPolynomial<C>> NZ = new ArrayList<GenPolynomial<C>>();
-        Condition<C> sc = new Condition<C>( I, NZ );
-        System.out.println("starting cond = " + sc);
-        cd.add(sc);
-
-        List<Condition<C>> C = cd;
-        GenPolynomial<GenPolynomial<C>> zero = fac.getZERO();
-        GenPolynomial<GenPolynomial<C>> Ap;
-        GenPolynomial<GenPolynomial<C>> Bp;
-
-        for ( GenPolynomial<GenPolynomial<C>> A : L ) {
-            C = new ArrayList<Condition<C>>( ) ;//leer! );
-            for ( Condition<C> cond : cd ) {
-                Condition<C> cz = cond;
-                Ap = A;
-                while( !Ap.isZERO() ) {
-                    GenPolynomial<C> c = Ap.leadingBaseCoefficient();
-                    Bp = Ap.reductum();
-                    if ( c.isConstant() ) { // red
-                        System.out.println("c constant = " + c);
-                        Ap = Bp;
-                        break;
-                    }
-                    if ( cz.zero.contains( c ) ) { // green
-                        System.out.println("c in zero = " + c);
-                        Ap = Bp;
-                        continue;
-                    }
-                    if ( cz.nonZero.contains( c ) ) { // red
-                        System.out.println("c in nonZero = " + c);
-                        Ap = Bp;
-                        break;
-                    }
-                    // white
-                    System.out.println("c white = " + c);
-                    Condition<C> nc = cz.sumNonZero( c );
-                    C.add( nc );
-                    cz = cz.sumZero( c );
-                    Ap = Bp;
-                    if ( cz.zero.isONE() ) { // can treat remaining coeffs as green
-                       System.out.println("dropping " + cz);
-                       break; // drop system
-                    }
-                }
-                if ( C.contains(cz) ) {
-                   System.out.println("double entry " + cz);
-                }
-                if ( !cz.zero.isONE() ) { // can treat remaining coeffs as green
-                   C.add( cz );
-                } else {
-                  System.out.println("dropped " + cz);
-                }
-                if ( C.size() == 0 ) {
-                   System.out.println("re-add starting cond = " + sc);
-                   C.add(sc);
-                }
-            }
-            cd = C;
-        }
-        //System.out.println("cd = " + cd);
-        return cd;
-    }
-     */
-
-
-    /**
-     * Case distinction conditions of parametric polynomial list.
-     * @param L list of parametric polynomials.
-     * @return list of conditions as case distinction.
      */
     public List<Condition<C>> caseDistinction( List<GenPolynomial<GenPolynomial<C>>> L) {  
         List<Condition<C>> cd = new ArrayList<Condition<C>>();
@@ -683,21 +596,15 @@ public class CReductionSeq<C extends GcdRingElem<C>>
     public List<Condition<C>> caseDistinction( List<Condition<C>> cd,
                                                GenPolynomial<GenPolynomial<C>> A) {  
         if ( A == null || A.isZERO() ) {
-            return cd;
+           return cd;
         }
         if ( cd == null ) {
            cd = new ArrayList<Condition<C>>();
         }
-        if ( cd.size() == 0 ) {
-           // construct empty condition
-           GenPolynomialRing<GenPolynomial<C>> fac = A.ring;
-           RingFactory<GenPolynomial<C>> crfac = fac.coFac;
+        if ( cd.size() == 0 ) { // construct empty condition
+           RingFactory<GenPolynomial<C>> crfac = A.ring.coFac;
            GenPolynomialRing<C> cfac = (GenPolynomialRing<C>) crfac;
-           List<GenPolynomial<C>> F = new ArrayList<GenPolynomial<C>>();
-           Ideal<C> I = new Ideal<C>(cfac,F);
-           List<GenPolynomial<C>> NZ = new ArrayList<GenPolynomial<C>>();
-           Condition<C> sc = new Condition<C>( I, NZ );
-           //System.out.println("starting cond = " + sc);
+           Condition<C> sc = new Condition<C>( cfac );
            cd.add(sc);
         }
         GenPolynomial<GenPolynomial<C>> Ap;
@@ -710,15 +617,30 @@ public class CReductionSeq<C extends GcdRingElem<C>>
             while( ! Ap.isZERO() ) {
                 GenPolynomial<C> c = Ap.leadingBaseCoefficient();
                 Bp = Ap.reductum();
-                if ( c.isConstant() ) { // red
-                    //System.out.println("c constant = " + c);
-                    break;
+                switch ( cz.color( c ) ) {
+                case GREEN:
+                    Ap = Bp;
+                    continue;
+                case RED:
+                    C.add( cz );
+                    return C;
+                    //break;
+                case WHITE:
+                default: 
+                    Condition<C> nc = cz.extendNonZero( c );
+                    C.add( nc );
+                    cz = cz.extendZero( c );
+                    Ap = Bp;
                 }
-                //if ( cz.zero.getList().contains( c.monic() ) ) { // green
+                /*
                 if ( cz.zero.contains( c ) ) { // green
                     //System.out.println("c in zero = " + c);
                     Ap = Bp;
                     continue;
+                }
+                if ( c.isConstant() ) { // red
+                    //System.out.println("c constant = " + c);
+                    break;
                 }
                 if ( cz.nonZero.contains( c.monic() ) ) { // red
                     //System.out.println("c in nonZero = " + c);
@@ -726,14 +648,15 @@ public class CReductionSeq<C extends GcdRingElem<C>>
                 }
                 // white
                 //System.out.println("c white = " + c);
-                Condition<C> nc = cz.sumNonZero( c );
+                Condition<C> nc = cz.extendNonZero( c );
                 C.add( nc );
-                cz = cz.sumZero( c );
+                cz = cz.extendZero( c );
                 Ap = Bp;
                 //if ( cz.zero.isONE() ) { // can treat remaining coeffs as green
                 //    System.out.println("dropping " + cz);
                 //    break; // drop system
                 //}
+                */
             }
             if ( C.contains(cz) ) {
                System.out.println("double entry " + cz);
