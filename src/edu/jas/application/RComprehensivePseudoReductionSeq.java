@@ -68,9 +68,9 @@ public class RComprehensivePseudoReductionSeq<C extends RegularRingElem<C>>
         ExpVector e = ma.getKey();
         ExpVector f = mb.getKey();
 
-        ExpVector g  = ExpVector.EVLCM(e,f);
-        ExpVector e1 = ExpVector.EVDIF(g,e);
-        ExpVector f1 = ExpVector.EVDIF(g,f);
+        ExpVector g  = e.lcm( f ); // EVLCM(e,f);
+        ExpVector e1 = g.subtract( e ); // EVDIF(g,e);
+        ExpVector f1 = g.subtract( f ); // EVDIF(g,f);
 
         C a = ma.getValue();
         C b = mb.getValue();
@@ -120,9 +120,9 @@ public class RComprehensivePseudoReductionSeq<C extends RegularRingElem<C>>
             Map.Entry<ExpVector,C> mb = Bp.leadingMonomial();
             ExpVector e = ma.getKey();
             ExpVector f = mb.getKey();
-            ExpVector g  = ExpVector.EVLCM(e,f);
-            ExpVector e1 = ExpVector.EVDIF(g,e);
-            ExpVector f1 = ExpVector.EVDIF(g,f);
+            ExpVector g  = e.lcm( f ); // EVLCM(e,f);
+            ExpVector e1 = g.subtract( e ); // EVDIF(g,e);
+            ExpVector f1 = g.subtract( f ); // EVDIF(g,f);
 
             C a = ma.getValue();
             C b = mb.getValue();

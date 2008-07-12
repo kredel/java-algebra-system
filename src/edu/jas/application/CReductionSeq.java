@@ -68,9 +68,9 @@ public class CReductionSeq<C extends GcdRingElem<C>>
         ExpVector e = ma.getKey();
         ExpVector f = mb.getKey();
 
-        ExpVector g  = ExpVector.EVLCM(e,f);
-        ExpVector e1 = ExpVector.EVDIF(g,e);
-        ExpVector f1 = ExpVector.EVDIF(g,f);
+        ExpVector g  = e.lcm( f ); // EVLCM(e,f);
+        ExpVector e1 = g.subtract( e ); // EVDIF(g,e);
+        ExpVector f1 = g.subtract( f ); // EVDIF(g,f);
 
         GenPolynomial<C> a = ma.getValue();
         GenPolynomial<C> b = mb.getValue();
@@ -120,7 +120,7 @@ public class CReductionSeq<C extends GcdRingElem<C>>
         boolean mt = false;
         ExpVector e = A.leadingExpVector();
         for ( ColorPolynomial<C> p : P ) {
-            mt = ExpVector.EVMT( e, p.leadingExpVector() );
+            mt = e.multipleOf( p.leadingExpVector() ); // EVMT( e, p.leadingExpVector() );
             if ( mt ) {
                return true;
             } 
@@ -184,7 +184,7 @@ public class CReductionSeq<C extends GcdRingElem<C>>
         boolean mt = false;
         for ( ExpVector e : Ap.red.getMap().keySet() ) { 
             for ( i = 0; i < l; i++ ) {
-                mt = ExpVector.EVMT( e, htl[i] );
+                mt = e.multipleOf( htl[i] ); // EVMT( e, htl[i] );
                 if ( mt ) {
                    return false;
                 } 
@@ -192,7 +192,7 @@ public class CReductionSeq<C extends GcdRingElem<C>>
         }
         for ( ExpVector e : Ap.white.getMap().keySet() ) { 
             for ( i = 0; i < l; i++ ) {
-                mt = ExpVector.EVMT( e, htl[i] );
+                mt = e.multipleOf( htl[i] ); // EVMT( e, htl[i] );
                 if ( mt ) {
                    return false;
                 } 
@@ -285,7 +285,7 @@ public class CReductionSeq<C extends GcdRingElem<C>>
               a = m.getValue();
               //System.out.println("NF, e = " + e);
               for ( i = 0; i < l; i++ ) {
-                  mt = ExpVector.EVMT( e, htl[i] );
+                  mt = e.multipleOf( htl[i] ); // EVMT( e, htl[i] );
                   if ( mt ) break; 
               }
               if ( ! mt ) { 
@@ -295,7 +295,7 @@ public class CReductionSeq<C extends GcdRingElem<C>>
                  S = S.subtract( a, e ); 
                  // System.out.println(" S = " + S);
               } else { 
-                 e = ExpVector.EVDIF( e, htl[i] );
+		 e = e.subtract( htl[i] ); // EVDIF( e, htl[i] );
                  //logger.info("red div = " + e);
                  GenPolynomial<C> c = (GenPolynomial<C>) lbc[i];
                  if ( a.remainder(c).isZERO() ) {   //c.isUnit() ) {

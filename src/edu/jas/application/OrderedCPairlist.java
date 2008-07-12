@@ -257,7 +257,7 @@ public class OrderedCPairlist<C extends GcdRingElem<C> >
                    }
                }
                //System.out.println("e = " + e + ", f = " + f);
-               g = ExpVector.EVLCM( e, f );
+               g = e.lcm( f ); // EVLCM( e, f );
                pair = new CPair<C>( pj, p, j, l);
                // redi = (BitSet)red.get(j);
                ///if ( j < l ) redi.set( l );
@@ -417,7 +417,7 @@ public class OrderedCPairlist<C extends GcdRingElem<C> >
         for ( int k = 0; k < P.size(); k++ ) {
             A = P.get( k );
             ek = A.leadingExpVector();
-            m = ExpVector.EVMT(eij,ek);
+            m = eij.multipleOf( ek ); // EVMT(eij,ek);
             if ( m ) {
                 if ( k < i ) {
                    // System.out.println("k < i "+k+" "+i); 

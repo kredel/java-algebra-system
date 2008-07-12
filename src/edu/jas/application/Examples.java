@@ -18,7 +18,7 @@ import edu.jas.kern.ComputerThreads;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.BigInteger;
 
-import edu.jas.poly.ExpVector;
+//import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 
@@ -55,9 +55,8 @@ public static void example1() {
     int n = 4;
 
     BigInteger fac = new BigInteger();
-    String[] var = ExpVector.STDVARS(n);
     GenPolynomialRing<BigInteger> ring
-           = new GenPolynomialRing<BigInteger>(fac,n,var);
+	= new GenPolynomialRing<BigInteger>(fac,n); //,var);
     System.out.println("ring = " + ring + "\n");
 
     List<GenPolynomial<BigInteger>> cp = new ArrayList<GenPolynomial<BigInteger>>( n ); 

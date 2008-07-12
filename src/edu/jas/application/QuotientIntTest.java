@@ -19,7 +19,6 @@ import edu.jas.arith.BigInteger;
 import edu.jas.kern.PrettyPrint;
 import edu.jas.kern.ComputerThreads;
 
-import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.TermOrder;
 
@@ -76,8 +75,7 @@ public class QuotientIntTest extends TestCase {
        a = b = c = d = e = null;
        BigInteger cfac = new BigInteger(1);
        TermOrder to = new TermOrder( TermOrder.INVLEX );
-       String[] v = ExpVector.STDVARS("x",rl);
-       mfac = new GenPolynomialRing<BigInteger>( cfac, rl, to, v );
+       mfac = new GenPolynomialRing<BigInteger>( cfac, rl, to );
        efac = new QuotientRing<BigInteger>( mfac );
    }
 
