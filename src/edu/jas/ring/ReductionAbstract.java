@@ -154,7 +154,7 @@ public abstract class ReductionAbstract<C extends RingElem<C>>
         }
         ExpVector ei = A.leadingExpVector();
         ExpVector ej = B.leadingExpVector();
-	return moduleCriterion(modv,ei,ej);
+     return moduleCriterion(modv,ei,ej);
     }
 
 
