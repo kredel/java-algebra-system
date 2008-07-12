@@ -17,7 +17,6 @@ import edu.jas.arith.BigRational;
 
 import edu.jas.poly.PolynomialList;
 import edu.jas.poly.TermOrder;
-import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 //import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenSolvablePolynomial;
@@ -80,8 +79,7 @@ public class SolvableModuleListTest extends TestCase {
        a = b = c = d = e = null;
        cfac = new BigRational(1);
        TermOrder tord = new TermOrder();
-       String[] vars = ExpVector.STDVARS(rl);
-       pfac = new GenSolvablePolynomialRing<BigRational>(cfac,rl,tord,vars);
+       pfac = new GenSolvablePolynomialRing<BigRational>(cfac,rl,tord);
        m = null;
        p = null;
    }

@@ -17,7 +17,6 @@ import edu.jas.arith.BigRational;
 
 import edu.jas.poly.PolynomialList;
 import edu.jas.poly.TermOrder;
-import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 
@@ -78,8 +77,7 @@ public static Test suite() {
        a = b = c = d = e = null;
        cfac = new BigRational(1);
        TermOrder tord = new TermOrder();
-       String[] vars = ExpVector.STDVARS(rl);
-       pfac = new GenPolynomialRing<BigRational>(cfac,rl,tord,vars);
+       pfac = new GenPolynomialRing<BigRational>(cfac,rl,tord);
        m = null;
        p = null;
    }
