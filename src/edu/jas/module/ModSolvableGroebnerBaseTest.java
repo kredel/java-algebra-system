@@ -26,7 +26,6 @@ import edu.jas.arith.BigRational;
 import edu.jas.poly.PolynomialList;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
-import edu.jas.poly.ExpVector;
 import edu.jas.poly.TermOrder;
 import edu.jas.poly.RelationTable;
 import edu.jas.poly.WeylRelations;
@@ -81,7 +80,6 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
    GenSolvablePolynomial<BigRational> c;
    GenSolvablePolynomial<BigRational> d;
    GenSolvablePolynomial<BigRational> e;
-   String[] vars;
    TermOrder tord;
    GenSolvablePolynomial<BigRational> one;
    GenSolvablePolynomial<BigRational> zero;
@@ -108,8 +106,7 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
 
        cfac = new BigRational(1);
        tord = new TermOrder();
-       vars = ExpVector.STDVARS(rl);
-       pfac = new GenSolvablePolynomialRing<BigRational>(cfac,rl,tord,vars);
+       pfac = new GenSolvablePolynomialRing<BigRational>(cfac,rl,tord);
        msbb = new ModSolvableGroebnerBaseAbstract<BigRational>();
 
        do {
@@ -252,8 +249,7 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
  public void testSequentialLeftModSolvableWeylGB() {
 
      int rloc = 4;
-     String[] vars = ExpVector.STDVARS(rloc);
-     pfac = new GenSolvablePolynomialRing<BigRational>(cfac,rloc,tord,vars);
+     pfac = new GenSolvablePolynomialRing<BigRational>(cfac,rloc,tord);
      //System.out.println("pfac = " + pfac);
      //System.out.println("pfac end");
 
@@ -396,8 +392,7 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
  public void testSequentialRightModSolvableWeylGB() {
 
      int rloc = 4;
-     String[] vars = ExpVector.STDVARS(rloc);
-     pfac = new GenSolvablePolynomialRing<BigRational>(cfac,rloc,tord,vars);
+     pfac = new GenSolvablePolynomialRing<BigRational>(cfac,rloc,tord);
      //System.out.println("pfac = " + pfac);
      //System.out.println("pfac end");
 

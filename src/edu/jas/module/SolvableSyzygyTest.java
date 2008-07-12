@@ -20,7 +20,6 @@ import org.apache.log4j.BasicConfigurator;
 import edu.jas.arith.BigRational;
 
 import edu.jas.poly.PolynomialList;
-import edu.jas.poly.ExpVector;
 import edu.jas.poly.TermOrder;
 import edu.jas.poly.GenPolynomialTokenizer;
 import edu.jas.poly.GenSolvablePolynomial;
@@ -84,7 +83,6 @@ public class SolvableSyzygyTest extends TestCase {
    GenSolvablePolynomial<BigRational> zero;
    GenSolvablePolynomial<BigRational> one;
 
-   String[] vars;
    TermOrder tord;
    RelationTable table;
 
@@ -109,9 +107,8 @@ public class SolvableSyzygyTest extends TestCase {
 
    protected void setUp() {
        cfac = new BigRational(1);
-       vars = ExpVector.STDVARS( rl );
        tord = new TermOrder();
-       fac = new GenSolvablePolynomialRing<BigRational>(cfac,rl,tord,vars);
+       fac = new GenSolvablePolynomialRing<BigRational>(cfac,rl,tord);
        table = fac.table; 
        a = b = c = d = e = null;
        L = null;
@@ -140,7 +137,6 @@ public class SolvableSyzygyTest extends TestCase {
        K = null;
        V = null;
        fac = null;
-       vars = null;
        tord = null;
        table = null;
        sbb = null;

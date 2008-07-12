@@ -25,7 +25,6 @@ import edu.jas.arith.BigRational;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolynomialList;
-import edu.jas.poly.ExpVector;
 import edu.jas.poly.TermOrder;
 import edu.jas.poly.GenPolynomialTokenizer;
 
@@ -90,7 +89,6 @@ public class SyzygyTest extends TestCase {
    GenPolynomial<BigRational> zero;
    GenPolynomial<BigRational> one;
 
-   String[] vars;
    TermOrder tord;
 
    List<GenPolynomial<BigRational>> L;
@@ -109,9 +107,8 @@ public class SyzygyTest extends TestCase {
 
    protected void setUp() {
        BigRational coeff = new BigRational(9);
-       vars = ExpVector.STDVARS( rl );
        tord = new TermOrder();
-       fac = new GenPolynomialRing<BigRational>(coeff,rl,tord,vars);
+       fac = new GenPolynomialRing<BigRational>(coeff,rl,tord);
 
        bb = new GroebnerBaseSeq<BigRational>();
        mbb = new ModGroebnerBaseAbstract<BigRational>();
@@ -140,7 +137,6 @@ public class SyzygyTest extends TestCase {
        K = null;
        V = null;
        fac = null;
-       vars = null;
        tord = null;
        bb = null;
        mbb = null;

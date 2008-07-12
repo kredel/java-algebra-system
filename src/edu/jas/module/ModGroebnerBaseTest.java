@@ -24,7 +24,6 @@ import edu.jas.arith.BigRational;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolynomialList;
-import edu.jas.poly.ExpVector;
 import edu.jas.poly.TermOrder;
 
 //import edu.jas.ring.Reduction;
@@ -80,7 +79,6 @@ public class ModGroebnerBaseTest extends TestCase {
    GenPolynomial<BigRational> d;
    GenPolynomial<BigRational> e;
 
-   String[] vars;
    TermOrder tord;
 
    List<List<GenPolynomial<BigRational>>> L;
@@ -98,9 +96,8 @@ public class ModGroebnerBaseTest extends TestCase {
 
    protected void setUp() {
        BigRational coeff = new BigRational(9);
-       vars = ExpVector.STDVARS( rl );
        tord = new TermOrder();
-       fac = new GenPolynomialRing<BigRational>(coeff,rl,tord,vars);
+       fac = new GenPolynomialRing<BigRational>(coeff,rl,tord);
        mbb = new ModGroebnerBaseAbstract<BigRational>();
        a = b = c = d = e = null;
 
@@ -117,7 +114,6 @@ public class ModGroebnerBaseTest extends TestCase {
        mbb = null;
        a = b = c = d = e = null;
        fac = null;
-       vars = null;
        tord = null;
    }
 
