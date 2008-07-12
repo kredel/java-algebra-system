@@ -80,7 +80,7 @@ public class ExpVectorTest extends TestCase {
 
      String s = "(0,0,0,0,0,0,0,0,0,0)";
      a = ExpVector.create( s );
-     String t = a.toString();
+     String t = a.toString().substring(0,s.length());
 
      assertEquals("stringConstr = toString",s,t);
      assertTrue("isZERO( ( 10e ) )",a.isZERO());
@@ -95,7 +95,11 @@ public class ExpVectorTest extends TestCase {
      float q = (float) 0.2;
 
      a = ExpVector.EVRAND(5,10,q);
-     b = ExpVector.create( "" + a );
+     String s = a.toString();
+     if ( s.indexOf(":") >= 0 ) {
+      s = s.substring(0,s.indexOf(":"));
+     }
+     b = ExpVector.create( s );
 
      assertEquals("a == b", true, a.equals(b) );
 
@@ -310,7 +314,7 @@ public class ExpVectorTest extends TestCase {
      c = ExpVector.EVSUM(a,b);
      exp = new int[] { 3, 5 };
      dep = ExpVector.EVDOV(c);
-     assertTrue("[3,5] = [3,5]",Arrays.equals(exp,dep));
+     assertTrue("[3,5] = [3,5] "+Arrays.toString(exp)+","+Arrays.toString(dep),Arrays.equals(exp,dep));
 
      b = ExpVector.create(10);
      exp = new int[] { };
@@ -552,7 +556,7 @@ public class ExpVectorTest extends TestCase {
      c = a.sum(b);
      exp = new int[] { 3, 5 };
      dep = c.dependencyOnVariables();
-     assertTrue("[3,5] = [3,5]",Arrays.equals(exp,dep));
+     assertTrue("[3,5] = [3,5] "+Arrays.toString(exp)+","+Arrays.toString(dep),Arrays.equals(exp,dep));
 
      b = ExpVector.create(10);
      exp = new int[] { };

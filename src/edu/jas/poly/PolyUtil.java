@@ -839,11 +839,10 @@ public class PolyUtil {
         if ( e == null || e.isZERO() ) {
            return BigInteger.ONE;
         }
-        long[] val = e.getVal();
-        for ( int i = 0; i < val.length; i++ ) {
-            if ( val[i] > 0 ) {
-               n += ( 2*val[i] - 1 );
-               v = new java.math.BigInteger( "" + (val[i] - 1) );
+        for ( int i = 0; i < e.length(); i++ ) {
+            if ( e.getVal(i) > 0 ) {
+               n += ( 2*e.getVal(i) - 1 );
+               v = new java.math.BigInteger( "" + (e.getVal(i) - 1) );
                p = p.multiply( v );
             }
         }

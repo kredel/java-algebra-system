@@ -259,23 +259,23 @@ public static void example7() {
        System.out.println("fac = " + fac);
 
        long mi = 1L;
-       //long mi = Integer.MAX_VALUE;
+       //long mi = Byte.MAX_VALUE;
        GenPolynomial<BigRational> x = fac.univariate(0,mi);
        GenPolynomial<BigRational> y = fac.univariate(1,mi);
        GenPolynomial<BigRational> z = fac.univariate(2,mi);
 
-       System.out.println("x = " + x);
+       // System.out.println("x = " + x);
        System.out.println("x = " + x.toString( fac.vars ) );
-       System.out.println("y = " + y);
+       // System.out.println("y = " + y);
        System.out.println("y = " + y.toString( fac.vars ) );
-       System.out.println("z = " + z);
+       // System.out.println("z = " + z);
        System.out.println("z = " + z.toString( fac.vars ) );
 
        GenPolynomial<BigRational> p = x.sum(y).sum(z).sum( fac.getONE());
        BigRational f = cfac.fromInteger(10000000001L);
        //f = f.multiply( f );
        //p = p.multiply( f );
-       System.out.println("p = " + p);
+       // System.out.println("p = " + p);
        System.out.println("p = " + p.toString( fac.vars ) );
 
        int mpow = 15;
@@ -285,7 +285,8 @@ public static void example7() {
            q = q.multiply(p);
        }
        //System.out.println("q = " + q.toString( fac.vars ) );
-       System.out.println("q = " + q.length());
+       System.out.println("len(q) = " + q.length());
+       System.out.println("deg(q) = " + q.degree());
 
        GenPolynomial<BigRational> q1 = q.sum( fac.getONE() );
 
@@ -294,7 +295,8 @@ public static void example7() {
        q2 = q.multiply(q1); 
        t = System.currentTimeMillis() - t;
 
-       System.out.println("q2 = " + q2.length());
+       System.out.println("len(q2) = " + q2.length());
+       System.out.println("deg(q2) = " + q2.degree());
        System.out.println("time = " + t + " ms");
 }
 
