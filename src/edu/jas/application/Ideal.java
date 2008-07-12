@@ -25,6 +25,8 @@ import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolynomialList;
+import edu.jas.poly.OptimizedPolynomialList;
+import edu.jas.poly.TermOrderOptimization;
 
 import edu.jas.ring.ExtendedGB;
 import edu.jas.ring.GroebnerBase;
@@ -65,6 +67,12 @@ public class Ideal<C extends GcdRingElem<C>>
    * Indicator if test has been performed if this is a Groebner Base. 
    */
   protected boolean testGB;
+
+
+  /** 
+   * Indicator if list has optimized term order. 
+   */
+  protected boolean isTopt;
 
 
   /** 
@@ -109,6 +117,19 @@ public class Ideal<C extends GcdRingElem<C>>
 
   /**
    * Constructor.
+   * @param ring polynomial ring
+   * @param F list of polynomials
+   * @param gb true if F is known to be a Groebner Base, else false
+   * @param topt true if term order is optimized, else false
+   */
+  public Ideal( GenPolynomialRing<C> ring, 
+                List<GenPolynomial<C>> F, boolean gb, boolean topt ) {
+      this( new PolynomialList<C>( ring, F ), gb, topt );
+  }
+
+
+  /**
+   * Constructor.
    * @param list polynomial list
    */
   public Ideal( PolynomialList<C> list) {
@@ -142,16 +163,42 @@ public class Ideal<C extends GcdRingElem<C>>
    * Constructor.
    * @param list polynomial list
    * @param gb true if list is known to be a Groebner Base, else false
+   * @param topt true if term order is optimized, else false
+   */
+    public Ideal( PolynomialList<C> list, boolean gb, boolean topt) {
+	this(list, gb, topt, new GroebnerBaseSeqPairSeq<C>(), new ReductionSeq<C>() );
+  }
+
+
+  /**
+   * Constructor.
+   * @param list polynomial list
+   * @param gb true if list is known to be a Groebner Base, else false
    * @param bb Groebner Base engine
    * @param red Reduction engine
    */
-    public Ideal( PolynomialList<C> list, boolean gb,
-                  GroebnerBase<C> bb, Reduction<C> red) {
+  public Ideal( PolynomialList<C> list, boolean gb,
+                GroebnerBase<C> bb, Reduction<C> red) {
+       this(list, gb, false, new GroebnerBaseSeqPairSeq<C>(), new ReductionSeq<C>() );
+   }
+
+
+  /**
+   * Constructor.
+   * @param list polynomial list
+   * @param gb true if list is known to be a Groebner Base, else false
+   * @param topt true if term order is optimized, else false
+   * @param bb Groebner Base engine
+   * @param red Reduction engine
+   */
+   public Ideal( PolynomialList<C> list, boolean gb, boolean topt,
+                GroebnerBase<C> bb, Reduction<C> red) {
       if ( list == null || list.list == null ) {
-      throw new IllegalArgumentException("list and list.list may not be null");
+         throw new IllegalArgumentException("list and list.list may not be null");
       }
       this.list = list;
       this.isGB = gb;
+      this.isTopt = topt;
       this.testGB = ( gb ? true : false ); // ??
       this.bb = bb;
       this.red = red;
@@ -165,7 +212,7 @@ public class Ideal<C extends GcdRingElem<C>>
    */
   @Override
   public Ideal<C> clone() {
-      return new Ideal<C>( list.clone(), isGB, bb, red);
+      return new Ideal<C>( list.clone(), isGB, isTopt, bb, red);
   }
 
 
@@ -268,12 +315,29 @@ public class Ideal<C extends GcdRingElem<C>>
 
 
   /**
+   * Optimize the term order.
+   */
+  public void doToptimize() {
+      if ( isTopt ) {
+          return;
+      }
+      list = TermOrderOptimization.<C>optimizeTermOrder( list );
+      isTopt = true;
+      if ( isGB ) {
+	 isGB = false;
+         doGB();
+      }
+      return;
+  }
+
+
+  /**
    * Test if this is a Groebner base.
    * @return true, if this is a Groebner base, else false
    */
   public boolean isGB() {
       if ( testGB ) {
-          return isGB;
+         return isGB;
       }
       logger.warn("isGB computing");
       isGB = bb.isGB( getList() );
@@ -287,12 +351,17 @@ public class Ideal<C extends GcdRingElem<C>>
    */
   public void doGB() {
       if ( isGB && testGB ) {
-          return;
+         return;
       }
       logger.warn("GB computing");
       List< GenPolynomial<C> > G = getList();
       G = bb.GB( G );
-      list = new PolynomialList<C>( getRing(), G );
+      if ( isTopt ) { 
+         List<Integer> perm = ((OptimizedPolynomialList<C>) list).perm;
+         list = new OptimizedPolynomialList<C>( perm, getRing(), G );
+      } else {
+         list = new PolynomialList<C>( getRing(), G );
+      }
       isGB = true;
       testGB = true;
       return;
@@ -529,7 +598,7 @@ public class Ideal<C extends GcdRingElem<C>>
              }
           }
       }
-      return new Ideal<C>( R, h, isGB );
+      return new Ideal<C>( R, h, isGB, isTopt );
   }
 
 

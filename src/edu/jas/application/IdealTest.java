@@ -731,4 +731,96 @@ public class IdealTest extends TestCase {
      }
  }
 
+
+/**
+ * Test Ideal term order optimization.
+ * 
+ */
+ public void testIdealTopt() {
+
+     Ideal<BigRational> I;
+     Ideal<BigRational> J;
+     Ideal<BigRational> K;
+
+     L = new ArrayList<GenPolynomial<BigRational>>();
+
+     a = fac.random(kl, ll, el, q );
+     b = fac.random(kl, ll, el, q );
+     c = fac.random(kl, ll, el, q );
+     d = fac.random(kl, ll, el, q );
+     e = d; //fac.random(kl, ll, el, q );
+
+     if ( a.isZERO() || b.isZERO() || c.isZERO() || d.isZERO() ) {
+        return;
+     }
+
+     assertTrue("not isZERO( a )", !a.isZERO() );
+     L.add(a);
+
+     I = new Ideal<BigRational>(fac,L);
+     I.doGB();
+     assertTrue("not isZERO( I )", !I.isZERO() );
+     assertTrue("isGB( I )", I.isGB() );
+     //System.out.println("I = " + I);
+
+     J = I.clone(); //new Ideal<BigRational>(fac,L);
+     J.doToptimize();
+     assertTrue("not isZERO( J )", !J.isZERO() );
+     assertTrue("isGB( J )", J.isGB() );
+     //System.out.println("J = " + J);
+
+     if ( I.isONE() ) {
+	return;
+     }
+
+     assertTrue("not isZERO( b )", !b.isZERO() );
+     L.add(b);
+
+     I = new Ideal<BigRational>(fac,L);
+     K = I.clone();
+     I.doGB();
+     assertTrue("not isZERO( I )", !I.isZERO() );
+     assertTrue("isGB( I )", I.isGB() );
+     //System.out.println("GB(I) = " + I);
+
+     K.doToptimize();
+     K.doGB();
+     assertTrue("not isZERO( K )", !K.isZERO() );
+     assertTrue("isGB( K )", K.isGB() );
+     //System.out.println("GB(opt(K)) = " + K);
+
+     J = I.clone(); 
+     J.doToptimize();
+     assertTrue("not isZERO( J )", !J.isZERO() );
+     assertTrue("isGB( J )", J.isGB() );
+     //System.out.println("opt(GB(J)) = " + J);
+
+     if ( I.isONE() ) {
+	return;
+     }
+
+     assertTrue("not isZERO( c )", !c.isZERO() );
+     L.add(c);
+
+     I = new Ideal<BigRational>(fac,L);
+     K = I.clone();
+     I.doGB();
+     assertTrue("not isZERO( I )", !I.isZERO() );
+     assertTrue("isGB( I )", I.isGB() );
+     //System.out.println("GB(I) = " + I);
+
+     K.doToptimize();
+     K.doGB();
+     assertTrue("not isZERO( K )", !K.isZERO() );
+     assertTrue("isGB( K )", K.isGB() );
+     //System.out.println("GB(opt(K)) = " + K);
+
+     J = I.clone(); 
+     J.doToptimize();
+     assertTrue("not isZERO( J )", !J.isZERO() );
+     assertTrue("isGB( J )", J.isGB() );
+     //System.out.println("opt(GB(J)) = " + J);
+
+ }
+
 }
