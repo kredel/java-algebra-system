@@ -5,7 +5,12 @@
 package edu.mas.kern;
 
 
+import edu.jas.arith.BigRational;
+
 import static edu.mas.kern.LIST.*;
+
+import java.util.List;
+import java.util.ArrayList;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -169,6 +174,88 @@ public class LISTTest extends TestCase {
      assertEquals("len(a) == 2 ", LENGTH(a), 2 );
      LIST<Object> c = COMP( n, b );
      assertEquals("len(c) == 2 ", LENGTH(c), 2 );
+     assertTrue("a == c ", EQUAL(a,c) );
+ }
+
+
+/**
+ * Test static LIST recursive structures.
+ */
+ public void testLISTrecursive() {
+     Object n = 5; 
+     LIST<Object> a = LIST1( n );
+     LIST<LIST<Object>> b = LIST2( a, a );
+     LIST<LIST<LIST<Object>>> c = LIST3( b, b, b );
+     //System.out.println("a = " + a);
+     //System.out.println("b = " + b);
+     //System.out.println("c = " + c);
+     assertEquals("len(a) == 1 ", LENGTH(a), 1 );
+     assertEquals("len(b) == 2 ", LENGTH(b), 2 );
+     assertEquals("len(c) == 3 ", LENGTH(c), 3 );
+
+     //System.out.println("EXTENT(a) = " + EXTENT(a));
+     //System.out.println("EXTENT(b) = " + EXTENT(b));
+     //System.out.println("EXTENT(c) = " + EXTENT(c));
+     assertEquals("EXTENT(a) == 1 ", EXTENT(a), 1 );
+     assertEquals("EXTENT(b) == 2 ", EXTENT(b), 2 );
+     assertEquals("EXTENT(c) == 6 ", EXTENT(c), 6 );
+
+     //System.out.println("ORDER(a) = " + ORDER(a));
+     //System.out.println("ORDER(b) = " + ORDER(b));
+     //System.out.println("ORDER(c) = " + ORDER(c));
+     assertEquals("ORDER(a) == 1 ", ORDER(a), 1 );
+     assertEquals("ORDER(b) == 2 ", ORDER(b), 2 );
+     assertEquals("ORDER(c) == 3 ", ORDER(c), 3 );
+ }
+
+
+/**
+ * Test static LIST rational content.
+ */
+ public void testLISTcontent() {
+     int max = 5000;
+     long t0, t1;
+     BigRational cf = new BigRational(2,3);
+     BigRational n; 
+     LIST<BigRational> a = null;
+     t0 = System.currentTimeMillis();
+     for ( int i = 0; i < max; i++ ) {
+         n = cf.random(5); 
+         a = COMP( n, a );
+     }
+     t1 = System.currentTimeMillis();
+     System.out.println("t.comp = " + (t1-t0));
+     //System.out.println("a = " + LENGTH(a));
+     assertEquals("len(a) == "+max+" ", LENGTH(a), max );
+
+     List<BigRational> b = new ArrayList<BigRational>();
+     /* is/was inefficient */
+     LIST<BigRational> ap = a;
+     t0 = System.currentTimeMillis();
+     while ( ! isEmpty( ap ) ) {
+         n = FIRST(ap); ap = RED(ap); 
+         b.add( n );
+         //System.out.println("n = " + n);
+     }
+     t1 = System.currentTimeMillis();
+     System.out.println("t.red  = " + (t1-t0));
+     //System.out.println("b = " + b.size());
+     assertEquals("size(b) == "+max+" ", b.size(), max );
+
+     b = new ArrayList<BigRational>();
+     int len = LENGTH( a );
+     t0 = System.currentTimeMillis();
+     for ( int i = 0; i < len; i++ ) {
+         n = LELT(a,i);
+         b.add( n );
+     }
+     t1 = System.currentTimeMillis();
+     System.out.println("t.lelt = " + (t1-t0));
+     //System.out.println("b = " + b.size());
+
+     LIST<BigRational> c = new LIST<BigRational>( b );
+     //System.out.println("c = " + LENGTH(c));
+     assertEquals("len(c) == "+max+" ", LENGTH(c), max );
      assertTrue("a == c ", EQUAL(a,c) );
  }
 
