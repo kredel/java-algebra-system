@@ -10,6 +10,8 @@ import java.lang.Cloneable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.HashSet;
 
 import java.io.Serializable;
 
@@ -897,5 +899,102 @@ public class Ideal<C extends GcdRingElem<C>>
       }
       return R;
   }
+
+
+  /**
+   * Ideal common zero test.
+   * @return -1, 0 or 1 if dimension(this) &eq; -1, 0 or &ge; 1.
+   */
+  public int commonZeroTest() {
+      if ( this.isZERO() ) {
+	 return 1;
+      }
+      if ( !isGB ) {
+         doGB();
+      }
+      if ( this.isONE() ) {
+	 return -1;
+      }
+      if ( this.list.ring.nvar <= 0 ) {
+	 return -1;
+      }
+      //int uht = 0;
+      Set<Integer> v = new HashSet<Integer>(); // for non reduced GBs
+      // List<GenPolynomial<C>> Z = this.list.list;
+      for ( GenPolynomial<C> p : getList() ) {
+	  ExpVector e = p.leadingExpVector();
+          if ( e == null ) {
+             continue;
+          }
+	  int[] u = e.dependencyOnVariables();
+          if ( u == null ) {
+             continue;
+          }
+          if ( u.length == 1 ) {
+	     //uht++;
+	     v.add( u[0] );
+          }
+      }
+      if ( this.list.ring.nvar == v.size() ) {
+	 return 0;
+      }
+      return 1;
+  }
+
+
+  /**
+   * Ideal dimension.
+   * @return -1, 0 or 1 if dimension(this) &eq; -1, 0 or &ge; 1.
+   */
+  public Dim dimension() {
+      int t = commonZeroTest();
+      if ( t <= 0 ) {
+         return new Dim(t,null,null);
+      }
+      int d = 0;
+      Set<Integer> S = new HashSet<Integer>();
+      Set<Set<Integer>> M = new HashSet<Set<Integer>>();
+      Set<Integer> U = new HashSet<Integer>();
+      for ( int i = 0; i < this.list.ring.nvar; i++ ) {
+	  U.add( i );
+      }
+      M = dimension(S,U,M);
+      for ( Set<Integer> m : M ) {
+	  int dp = m.size();
+	  if ( dp > d ) {
+	     d = dp;
+	     S = m;
+	  }
+      }
+      return new Dim(d,S,M);
+  }
+
+
+  /**
+   * Ideal dimension.
+   * S is a maximal independent set of variables.
+   * U is a set of variables of unknown status.
+   * M and MP are lists of maximal independent sets of variables.  *)
+   * @return -1, 0 or 1 if dimension(this) &eq; -1, 0 or &ge; 1.
+   */
+  protected Set<Set<Integer>> dimension(Set<Integer> S, Set<Integer> U, Set<Set<Integer>> M) {
+
+
+      return M;
+  }
+
+
+    public static class Dim implements Serializable {
+	public final int d;
+	public final Set<Integer> S;
+	public final Set<Set<Integer>> M;
+
+	public Dim(int d, Set<Integer> S, Set<Set<Integer>> M) {
+	    this.d = d;
+	    this.S = S;
+	    this.M = M;
+	}
+
+    }
 
 }

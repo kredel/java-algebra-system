@@ -4,8 +4,6 @@
 
 package edu.jas.application;
 
-//import edu.jas.poly.GroebnerBase;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,9 +22,7 @@ import edu.jas.poly.PolynomialList;
 import edu.jas.poly.TermOrder;
 
 import edu.jas.ring.GroebnerBase;
-//import edu.jas.ring.Reduction;
 import edu.jas.ring.GroebnerBaseSeq;
-//import edu.jas.ring.ReductionSeq;
 
 
 /**
@@ -67,6 +63,7 @@ public class IdealTest extends TestCase {
    List<GenPolynomial<BigRational>> L;
    PolynomialList<BigRational> F;
    List<GenPolynomial<BigRational>> G;
+   List<? extends GenPolynomial<BigRational>> M;
 
    GroebnerBase<BigRational> bb;
 
@@ -624,6 +621,46 @@ public class IdealTest extends TestCase {
      assertTrue("equals(J,I)", J.equals(I) ); // GBs only
      JJ = I.infiniteQuotient( a );
      assertTrue("equals(J,JJ)", J.equals(JJ) ); // GBs only
+ }
+
+
+/**
+ * Test Ideal common zeros.
+ * 
+ */
+ public void testIdealCommonZeros() {
+
+     Ideal<BigRational> I;
+     L = new ArrayList<GenPolynomial<BigRational>>();
+
+     I = new Ideal<BigRational>(fac,L,true);
+     assertEquals("commonZeroTest( I )", I.commonZeroTest(), 1 );
+
+     a = fac.getZERO();
+     L.add(a);
+     I = new Ideal<BigRational>(fac,L,true);
+     assertEquals("commonZeroTest( I )", I.commonZeroTest(), 1 );
+
+     b = fac.getONE();
+     L.add(b);
+     I = new Ideal<BigRational>(fac,L,true);
+     assertEquals("commonZeroTest( I )", I.commonZeroTest(), -1 );
+
+     L = new ArrayList<GenPolynomial<BigRational>>();
+     a = fac.random(kl, ll, el, q );
+     if ( !a.isZERO() && !a.isONE() ) {
+        L.add(a);
+        I = new Ideal<BigRational>(fac,L,true);
+        assertEquals("commonZeroTest( I )", I.commonZeroTest(), 1 );
+     }
+
+     L = (List<GenPolynomial<BigRational>>) fac.univariateList();
+     I = new Ideal<BigRational>(fac,L,true);
+     assertEquals("commonZeroTest( I )", I.commonZeroTest(), 0 );
+
+     L.remove(0);
+     I = new Ideal<BigRational>(fac,L,true);
+     assertEquals("commonZeroTest( I )", I.commonZeroTest(), 1 );
  }
 
 }
