@@ -154,7 +154,22 @@ public abstract class ReductionAbstract<C extends RingElem<C>>
         }
         ExpVector ei = A.leadingExpVector();
         ExpVector ej = B.leadingExpVector();
-        if ( ExpVector.EVILCP( ei, ej, 0, modv ) != 0 ) {
+	return moduleCriterion(modv,ei,ej);
+    }
+
+
+    /**
+     * Module criterium.
+     * @param modv number of module variables.
+     * @param ei ExpVector.
+     * @param ej ExpVector.
+     * @return true if the module S-polynomial(i,j) is required.
+     */
+    public boolean moduleCriterion(int modv, ExpVector ei, ExpVector ej) {  
+        if ( modv == 0 ) {
+            return true;
+        }
+        if ( ei.invLexCompareTo( ej, 0, modv ) != 0 ) {
            return false; // skip pair
         }
         return true;

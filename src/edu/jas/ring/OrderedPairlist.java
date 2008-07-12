@@ -96,9 +96,9 @@ public class OrderedPairlist<C extends RingElem<C> > {
                pj = P.get(j);
                f = pj.leadingExpVector(); 
                if ( moduleVars > 0 ) {
-                   if ( ExpVector.EVILCP( e, f, 0, moduleVars ) != 0 ) {
-                       continue; // skip pair
-                   }
+                  if ( !reduction.moduleCriterion( moduleVars, e, f) ) {
+                     continue; // skip pair
+                  }
                }
                g =  e.lcm( f );
                pair = new Pair<C>( pj, p, j, l);

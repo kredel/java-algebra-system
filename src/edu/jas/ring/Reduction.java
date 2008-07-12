@@ -65,6 +65,16 @@ public interface Reduction<C extends RingElem<C>>
 
 
     /**
+     * Module criterium.
+     * @param modv number of module variables.
+     * @param ei ExpVector.
+     * @param ej ExpVector.
+     * @return true if the module S-polynomial(i,j) is required.
+     */
+    public boolean moduleCriterion(int modv, ExpVector ei, ExpVector ej);
+
+
+    /**
      * GB criterium 4.
      * Use only for commutative polynomial rings.
      * @param A polynomial.
