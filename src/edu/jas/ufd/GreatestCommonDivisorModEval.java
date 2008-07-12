@@ -239,11 +239,11 @@ public class GreatestCommonDivisorModEval //<C extends GcdRingElem<C> >
                }
             } else { // TL = 3
                boolean ok = false;
-               if ( ExpVector.EVMT(wdegv,mdegv) ) { // TL = 2
+               if ( wdegv.multipleOf( mdegv ) ) { // TL = 2 // EVMT(wdegv,mdegv)
                   M = null;  // init chinese remainder
                   ok = true; // prime ok
                }
-               if ( ExpVector.EVMT(mdegv,wdegv) ) { // TL = 1
+               if ( mdegv.multipleOf( wdegv ) ) { // TL = 1 // EVMT(mdegv,wdegv)
                   continue; // skip this prime
                }
                if ( !ok ) {
@@ -257,7 +257,7 @@ public class GreatestCommonDivisorModEval //<C extends GcdRingElem<C> >
                // initialize interpolation
                M = ufac.getONE();
                cp = rfac.getZERO();
-               wdegv = ExpVector.EVGCD(wdegv,mdegv);
+               wdegv = wdegv.gcd( mdegv ); //EVGCD(wdegv,mdegv);
             }
             // interpolate
             mi = PolyUtil.<ModInteger>evaluateMain( cofac, M, d );

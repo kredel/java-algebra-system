@@ -65,7 +65,7 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C> >
             if ( i == k ) {
                 ExpVector f = r.leadingExpVector();
                 C a = r.leadingBaseCoefficient();
-                f = ExpVector.EVDIF( f, e );
+                f = f.subtract( e ); // EVDIF( f, e );
                 //System.out.println("red div = " + f);
                 r = r.multiply( c );    // coeff ac
                 h = S.multiply( a, f ); // coeff ac
@@ -187,7 +187,7 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C> >
             if ( i == k ) {
                 ExpVector f = r.leadingExpVector();
                 GenPolynomial<C> a = r.leadingBaseCoefficient();
-                f = ExpVector.EVDIF( f, e );
+                f = f.subtract( e ); //EVDIF( f, e );
                 //System.out.println("red div = " + f);
                 r = r.multiply( c );    // coeff ac
                 h = S.multiply( a, f ); // coeff ac

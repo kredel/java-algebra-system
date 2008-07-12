@@ -235,11 +235,11 @@ public class GreatestCommonDivisorModular //<C extends GcdRingElem<C> >
                }
             } else { // TL = 3
                boolean ok = false;
-               if ( ExpVector.EVMT(wdegv,mdegv) ) { // TL = 2
+               if ( wdegv.multipleOf( mdegv ) ) { // TL = 2 // EVMT(wdegv,mdegv)
                   M = null;  // init chinese remainder
                   ok = true; // prime ok
                }
-               if ( ExpVector.EVMT(mdegv,wdegv) ) { // TL = 1
+               if ( mdegv.multipleOf( wdegv ) ) { // TL = 1 // EVMT(mdegv,wdegv)
                   continue; // skip this prime
                }
                if ( !ok ) {
@@ -256,7 +256,7 @@ public class GreatestCommonDivisorModular //<C extends GcdRingElem<C> >
                cofacM = cofac;
                rfac = mfac;
                cp = cm; 
-               wdegv = ExpVector.EVGCD(wdegv,mdegv);
+               wdegv = wdegv.gcd( mdegv ); //EVGCD(wdegv,mdegv);
                cfe = cf;
                for ( int k = 0; k < wdegv.length(); k++ ) {
                    cfe = cfe.multiply( new BigInteger( wdegv.getVal(k)+1 ) );
