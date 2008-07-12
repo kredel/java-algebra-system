@@ -385,7 +385,7 @@ public class GenPolynomialTokenizer  {
                     ie = nextExponent();
                     //  System.out.println("ie: " + ie);
                     // r = BigRational.RNONE;
-                    e = new ExpVector( vars.length, ix, ie);
+                    e = ExpVector.create( vars.length, ix, ie);
                     //c = new GenPolynomial<BigRational>(r,e);
                     b = b.multiply(e); 
                     tt = tok.nextToken();

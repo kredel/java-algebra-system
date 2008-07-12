@@ -66,20 +66,20 @@ public class ExpVectorTest extends TestCase {
  * 
  */
  public void testConstructor() {
-     a = new ExpVector( 0 );
-     b = new ExpVector( 0 );
+     a = ExpVector.create( 0 );
+     b = ExpVector.create( 0 );
      assertEquals("() = ()",a,b);
      assertEquals("length( () ) = 0",a.length(),0);
      assertTrue("isZERO( () )",a.isZERO());
 
-     a = new ExpVector( 10 );
-     b = new ExpVector( 10 );
+     a = ExpVector.create( 10 );
+     b = ExpVector.create( 10 );
      assertEquals("10e = 10e",a,b);
      assertEquals("length( 10e ) = 10",a.length(),10);
      assertTrue("isZERO( ( 10e ) )",a.isZERO());
 
      String s = "(0,0,0,0,0,0,0,0,0,0)";
-     a = new ExpVector( s );
+     a = ExpVector.create( s );
      String t = a.toString();
 
      assertEquals("stringConstr = toString",s,t);
@@ -95,7 +95,7 @@ public class ExpVectorTest extends TestCase {
      float q = (float) 0.2;
 
      a = ExpVector.EVRAND(5,10,q);
-     b = new ExpVector( "" + a );
+     b = ExpVector.create( "" + a );
 
      assertEquals("a == b", true, a.equals(b) );
 
@@ -161,7 +161,7 @@ public class ExpVectorTest extends TestCase {
  * 
  */
  public void testTdeg() {
-     a = new ExpVector( 100 );
+     a = ExpVector.create( 100 );
      assertTrue("tdeg(a) = 0", ExpVector.EVTDEG(a) == 0 );
 
      float q = (float) 0.2;
@@ -194,7 +194,7 @@ public class ExpVectorTest extends TestCase {
  * 
  */
  public void testWeightdeg() {
-     a = new ExpVector( 100 );
+     a = ExpVector.create( 100 );
      assertTrue("tdeg(a) = 0", ExpVector.EVTDEG(a) == 0 );
      assertTrue("wdeg(a) = 0", ExpVector.EVWDEG(null,a) == 0 );
 
@@ -297,12 +297,12 @@ public class ExpVectorTest extends TestCase {
      int[] exp;
      int[] dep;
 
-     a = new ExpVector(10,5,2l);
+     a = ExpVector.create(10,5,2l);
      exp = new int[] { 5 };
      dep = ExpVector.EVDOV(a);
      assertTrue("[5] = [5]",Arrays.equals(exp,dep));
 
-     b = new ExpVector(10,3,9l);
+     b = ExpVector.create(10,3,9l);
      exp = new int[] { 3 };
      dep = ExpVector.EVDOV(b);
      assertTrue("[3] = [3]",Arrays.equals(exp,dep));
@@ -312,17 +312,17 @@ public class ExpVectorTest extends TestCase {
      dep = ExpVector.EVDOV(c);
      assertTrue("[3,5] = [3,5]",Arrays.equals(exp,dep));
 
-     b = new ExpVector(10);
+     b = ExpVector.create(10);
      exp = new int[] { };
      dep = ExpVector.EVDOV(b);
      assertTrue("[] = []",Arrays.equals(exp,dep));
 
-     b = new ExpVector(0);
+     b = ExpVector.create(0);
      exp = new int[] { };
      dep = ExpVector.EVDOV(b);
      assertTrue("[] = []",Arrays.equals(exp,dep));
 
-     b = new ExpVector(1,0,1l);
+     b = ExpVector.create(1,0,1l);
      exp = new int[] { 0 };
      dep = ExpVector.EVDOV(b);
      assertTrue("[0] = [0]",Arrays.equals(exp,dep));
@@ -337,7 +337,7 @@ public class ExpVectorTest extends TestCase {
      float q = (float) 0.2;
 
      a = ExpVector.EVRAND(5,10,q);
-     b = new ExpVector( "" + a );
+     b = ExpVector.create( "" + a );
 
      assertEquals("a == b", true, a.equals(b) );
 
@@ -403,7 +403,7 @@ public class ExpVectorTest extends TestCase {
  * 
  */
  public void testTdeg2() {
-     a = new ExpVector( 100 );
+     a = ExpVector.create( 100 );
      assertTrue("tdeg(a) = 0", ExpVector.EVTDEG(a) == 0 );
 
      float q = (float) 0.2;
@@ -436,7 +436,7 @@ public class ExpVectorTest extends TestCase {
  * 
  */
  public void testWeightdeg2() {
-     a = new ExpVector( 100 );
+     a = ExpVector.create( 100 );
      assertTrue("tdeg(a) = 0", ExpVector.EVTDEG(a) == 0 );
      assertTrue("wdeg(a) = 0", ExpVector.EVWDEG(null,a) == 0 );
 
@@ -539,12 +539,12 @@ public class ExpVectorTest extends TestCase {
      int[] exp;
      int[] dep;
 
-     a = new ExpVector(10,5,2l);
+     a = ExpVector.create(10,5,2l);
      exp = new int[] { 5 };
      dep = a.dependencyOnVariables();
      assertTrue("[5] = [5]",Arrays.equals(exp,dep));
 
-     b = new ExpVector(10,3,9l);
+     b = ExpVector.create(10,3,9l);
      exp = new int[] { 3 };
      dep = b.dependencyOnVariables();
      assertTrue("[3] = [3]",Arrays.equals(exp,dep));
@@ -554,17 +554,17 @@ public class ExpVectorTest extends TestCase {
      dep = c.dependencyOnVariables();
      assertTrue("[3,5] = [3,5]",Arrays.equals(exp,dep));
 
-     b = new ExpVector(10);
+     b = ExpVector.create(10);
      exp = new int[] { };
      dep = b.dependencyOnVariables();
      assertTrue("[] = []",Arrays.equals(exp,dep));
 
-     b = new ExpVector(0);
+     b = ExpVector.create(0);
      exp = new int[] { };
      dep = b.dependencyOnVariables();
      assertTrue("[] = []",Arrays.equals(exp,dep));
 
-     b = new ExpVector(1,0,1l);
+     b = ExpVector.create(1,0,1l);
      exp = new int[] { 0 };
      dep = b.dependencyOnVariables();
      assertTrue("[0] = [0]",Arrays.equals(exp,dep));

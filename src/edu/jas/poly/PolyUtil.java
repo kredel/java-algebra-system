@@ -780,7 +780,7 @@ public class PolyUtil {
                C cf = rf.fromInteger( fl );
                C a = m.getValue(); 
                C x = a.multiply(cf);
-               ExpVector e = new ExpVector( 1, 0, fl-1L );  
+               ExpVector e = ExpVector.create( 1, 0, fl-1L );  
                dm.put(e,x);
             }
         }
@@ -817,7 +817,7 @@ public class PolyUtil {
                C cf = rf.fromInteger( fl );
                GenPolynomial<C> a = m.getValue(); 
                GenPolynomial<C> x = a.multiply(cf);
-               ExpVector e = new ExpVector( 1, 0, fl-1L );  
+               ExpVector e = ExpVector.create( 1, 0, fl-1L );  
                dm.put(e,x);
             }
         }

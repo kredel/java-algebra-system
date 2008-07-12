@@ -157,7 +157,7 @@ public class GenPolynomialRing<C extends RingElem<C> >
         vars = v;
         ZERO = new GenPolynomial<C>( this );
         C coeff = coFac.getONE();
-        evzero = new ExpVector(nvar);
+        evzero = ExpVector.create(nvar);
         ONE  = new GenPolynomial<C>( this, coeff, evzero );
         if ( vars == null && PrettyPrint.isTrue() ) {
            vars = evzero.stdVars();
@@ -642,7 +642,7 @@ public class GenPolynomialRing<C extends RingElem<C> >
         int r = nvar - modv;
         if ( 0 <= i && i < r ) {
            C one = coFac.getONE();
-           ExpVector f = new ExpVector(r,i,e);
+           ExpVector f = ExpVector.create(r,i,e);
            if ( modv > 0 ) {
               f = f.extend(modv,0,0l);
            }

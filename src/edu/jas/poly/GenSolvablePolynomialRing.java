@@ -145,7 +145,7 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
         }
         ZERO = new GenSolvablePolynomial<C>( this );
         C coeff = coFac.getONE();
-        //evzero = new ExpVector(nvar); // from super
+        //evzero = ExpVector.create(nvar); // from super
         ONE  = new GenSolvablePolynomial<C>( this, coeff, evzero );
     }
 

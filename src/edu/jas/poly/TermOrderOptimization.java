@@ -84,7 +84,7 @@ public class TermOrderOptimization {
        for ( int i = 0; i < dm.size() && i < e.length(); i++ ) {
            GenPolynomial<BigInteger> p = dm.get(i);
            long u = e.getVal(i);
-           ExpVector f = new ExpVector(1,0,u);
+           ExpVector f = ExpVector.create(1,0,u);
            p = p.sum( p.ring.getONECoefficient(), f );
            dm.set(i,p);
        }
@@ -305,7 +305,7 @@ public class TermOrderOptimization {
            return e;
         }
         long[] u = longArrayPermutation( P, e.getVal() );
-        ExpVector f = new ExpVector( u );
+        ExpVector f = ExpVector.create( u );
         return f;
     }
 
