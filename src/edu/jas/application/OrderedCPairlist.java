@@ -252,9 +252,9 @@ public class OrderedCPairlist<C extends GcdRingElem<C> >
                //System.out.println("pj = " + pj);
                f = pj.leadingExpVector(); 
                if ( moduleVars > 0 ) {
-                   if ( ExpVector.EVILCP( e, f, 0, moduleVars ) != 0 ) {
-                       continue; // skip pair
-                   }
+                  if ( e.invLexCompareTo( f, 0, moduleVars ) != 0 ) {
+                     continue; // skip pair
+                  }
                }
                //System.out.println("e = " + e + ", f = " + f);
                g = e.lcm( f ); // EVLCM( e, f );
