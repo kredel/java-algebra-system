@@ -47,6 +47,9 @@ public class LISTTest extends TestCase {
      return suite;
    }
 
+
+   boolean timing =false;
+
    protected void setUp() {
        //a = b = c = d = e = null;
    }
@@ -224,7 +227,7 @@ public class LISTTest extends TestCase {
          a = COMP( n, a );
      }
      t1 = System.currentTimeMillis();
-     System.out.println("t.comp = " + (t1-t0));
+     if ( timing ) System.out.println("t.comp = " + (t1-t0));
      //System.out.println("a = " + LENGTH(a));
      assertEquals("len(a) == "+max+" ", LENGTH(a), max );
 
@@ -238,7 +241,7 @@ public class LISTTest extends TestCase {
          //System.out.println("n = " + n);
      }
      t1 = System.currentTimeMillis();
-     System.out.println("t.red  = " + (t1-t0));
+     if ( timing ) System.out.println("t.red  = " + (t1-t0));
      //System.out.println("b = " + b.size());
      assertEquals("size(b) == "+max+" ", b.size(), max );
 
@@ -250,7 +253,7 @@ public class LISTTest extends TestCase {
          b.add( n );
      }
      t1 = System.currentTimeMillis();
-     System.out.println("t.lelt = " + (t1-t0));
+     if ( timing ) System.out.println("t.lelt = " + (t1-t0));
      //System.out.println("b = " + b.size());
 
      LIST<BigRational> c = new LIST<BigRational>( b );

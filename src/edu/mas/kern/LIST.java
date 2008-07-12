@@ -73,9 +73,9 @@ public class LIST<C> {
         if ( isNull( L ) || L.list.isEmpty() ) {
            return true;
         }
-	if ( L.iter != null ) {
-	   return ! L.iter.hasNext();
-	}
+     if ( L.iter != null ) {
+        return ! L.iter.hasNext();
+     }
         return false;
     }
 
@@ -95,15 +95,15 @@ public class LIST<C> {
     public static <C> C FIRST(LIST<C> L) {
         if ( isNull( L ) ) {
            return null;
-	}
-	if ( L.iter != null ) {
+     }
+     if ( L.iter != null ) {
            if ( L.iter.hasNext() ) {
               return L.iter.next();
-	   } else {
-	      L.iter = null;
-	      return null;
-	   }
-	}
+        } else {
+           L.iter = null;
+           return null;
+        }
+     }
         return L.list.getFirst();
     }
 
@@ -115,13 +115,13 @@ public class LIST<C> {
            return L;
         }
         LIST<C> LP = L;
-	// ok: LP = new LIST<C>( L.list.subList(1,L.list.size()) );
-	if ( L.iter == null ) {
-	   LP = new LIST<C>( L.list );
+     // ok: LP = new LIST<C>( L.list.subList(1,L.list.size()) );
+     if ( L.iter == null ) {
+        LP = new LIST<C>( L.list );
            LP.iter = LP.list.iterator();
            C x = LP.iter.next();
            //System.out.println("x = " + x);
-	} // else noop
+     } // else noop
         return LP;
     }
 
