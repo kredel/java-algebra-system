@@ -274,6 +274,12 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C> >
                      + " only for univariate polynomials");
         }
         GenPolynomial<GenPolynomial<C>> pp = P;
+
+        // factors of content
+        GenPolynomial<C> Pc = recursiveContent( P );
+        SortedMap<Integer,GenPolynomial<C>> rsf = squarefreeFactors( Pc );
+        //System.out.println("rsf = " + rsf);
+
         GenPolynomial<GenPolynomial<C>> d = PolyUtil.<C>recursiveDeriviative(pp);
         GenPolynomial<GenPolynomial<C>> g = recursiveGcd(pp,d);
         GenPolynomial<GenPolynomial<C>> q = PolyUtil.<C>recursivePseudoDivide(pp,g);
@@ -282,7 +288,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C> >
         while ( g.leadingExpVector().getVal(0) >= 1 /*!g.abs().isONE()*/ ) {
               GenPolynomial<GenPolynomial<C>> c = recursiveGcd(g,q);
               GenPolynomial<GenPolynomial<C>> z = PolyUtil.<C>recursivePseudoDivide(q,c);
-              if ( z.leadingExpVector().getVal(0) > 0 /*!z.isONE()*/ ) {
+              if ( z.leadingExpVector().getVal(0) > 0 /*! z.isONE()*/ ) {
                  sfactors.put(j,z);
               }
               j++;
@@ -290,6 +296,15 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C> >
               g = PolyUtil.<C>recursivePseudoDivide(g,c);
         }
         sfactors.put(j,q);
+        // add factors of content
+        for ( Integer k : rsf.keySet() ) {
+            GenPolynomial<GenPolynomial<C>> c = sfactors.get(k);
+            if ( c == null ) {
+               c = pfac.getONE();
+            }
+            c = c.multiply( rsf.get(k) );
+            sfactors.put(k,c);
+        }
         return sfactors;
     }
 
