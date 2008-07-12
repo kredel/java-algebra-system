@@ -107,7 +107,7 @@ public class CriticalPairList<C extends RingElem<C> > {
             pj = P.get(j);
             f = pj.leadingExpVector(); 
             if ( moduleVars > 0 ) { // test moduleCriterion
-               if ( ExpVector.EVILCP( e, f, 0, moduleVars ) != 0 ) {
+	       if ( !reduction.moduleCriterion( moduleVars, e, f) ) {
                   continue; // skip pair
                }
             }
