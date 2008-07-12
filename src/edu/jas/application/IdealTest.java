@@ -692,9 +692,9 @@ public class IdealTest extends TestCase {
      if ( !a.isZERO() && !a.isConstant() ) {
         L.add(a);
         I = new Ideal<BigRational>(fac,L,true);
-	//System.out.println("a = " + a);
-	dim = I.dimension();
-	//System.out.println("dim(I) = " + dim);
+     //System.out.println("a = " + a);
+     dim = I.dimension();
+     //System.out.println("dim(I) = " + dim);
         assertTrue("dimension( I )", dim.d >= 1 );
      }
 
@@ -704,12 +704,12 @@ public class IdealTest extends TestCase {
      assertEquals("dimension( I )", 0, dim.d );
 
      while ( L.size() > 0 ) {
-	 L.remove(0);
-	 I = new Ideal<BigRational>(fac,L,true);
-	 //System.out.println("I = " + I);
-	 dim = I.dimension();
-	 //System.out.println("dim(I) = " + dim);
-	 assertEquals("dimension( I )", rl-L.size(), dim.d );
+      L.remove(0);
+      I = new Ideal<BigRational>(fac,L,true);
+      //System.out.println("I = " + I);
+      dim = I.dimension();
+      //System.out.println("dim(I) = " + dim);
+      assertEquals("dimension( I )", rl-L.size(), dim.d );
      }
 
      L = (List<GenPolynomial<BigRational>>) fac.univariateList();
@@ -722,12 +722,12 @@ public class IdealTest extends TestCase {
 
      L = I.getList();
      while ( L.size() > 0 ) {
-	 L.remove(0);
-	 I = new Ideal<BigRational>(fac,L,true);
-	 //System.out.println("I = " + I);
-	 dim = I.dimension();
-	 //System.out.println("dim(I) = " + dim);
-	 assertTrue("dimension( I )", dim.d > 0);
+      L.remove(0);
+      I = new Ideal<BigRational>(fac,L,true);
+      //System.out.println("I = " + I);
+      dim = I.dimension();
+      //System.out.println("dim(I) = " + dim);
+      assertTrue("dimension( I )", dim.d > 0);
      }
  }
 
@@ -770,7 +770,7 @@ public class IdealTest extends TestCase {
      //System.out.println("J = " + J);
 
      if ( I.isONE() ) {
-	return;
+     return;
      }
 
      assertTrue("not isZERO( b )", !b.isZERO() );
@@ -796,7 +796,7 @@ public class IdealTest extends TestCase {
      //System.out.println("opt(GB(J)) = " + J);
 
      if ( I.isONE() ) {
-	return;
+     return;
      }
 
      assertTrue("not isZERO( c )", !c.isZERO() );

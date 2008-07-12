@@ -166,7 +166,7 @@ public class Ideal<C extends GcdRingElem<C>>
    * @param topt true if term order is optimized, else false
    */
     public Ideal( PolynomialList<C> list, boolean gb, boolean topt) {
-	this(list, gb, topt, new GroebnerBaseSeqPairSeq<C>(), new ReductionSeq<C>() );
+     this(list, gb, topt, new GroebnerBaseSeqPairSeq<C>(), new ReductionSeq<C>() );
   }
 
 
@@ -324,7 +324,7 @@ public class Ideal<C extends GcdRingElem<C>>
       list = TermOrderOptimization.<C>optimizeTermOrder( list );
       isTopt = true;
       if ( isGB ) {
-	 isGB = false;
+      isGB = false;
          doGB();
       }
       return;
@@ -1021,7 +1021,7 @@ public class Ideal<C extends GcdRingElem<C>>
       Set<Integer> S = new HashSet<Integer>();
       Set<Set<Integer>> M = new HashSet<Set<Integer>>();
       if ( t <= 0 ) {
-	 return new Dim(t,S,M,null);
+      return new Dim(t,S,M,null);
       }
       int d = 0;
       Set<Integer> U = new HashSet<Integer>();
@@ -1063,7 +1063,7 @@ public class Ideal<C extends GcdRingElem<C>>
           if ( m.containsAll( S ) ) {
              contained = true;
              break;
-	  }
+       }
       }
       if ( ! contained ) {
          MP.add( S );
@@ -1093,14 +1093,14 @@ public class Ideal<C extends GcdRingElem<C>>
           if ( v == null ) {
              continue;
           }
-	  // System.out.println("v = " + Arrays.toString(v));
-	  if ( S == null ) { // revert indices
-	     S = new HashSet<Integer>( H.size() );
-	     int r = e.length()-1;
-	     for ( Integer i : H ) {
-		 S.add( r-i );
-	     }
-	  }
+       // System.out.println("v = " + Arrays.toString(v));
+       if ( S == null ) { // revert indices
+          S = new HashSet<Integer>( H.size() );
+          int r = e.length()-1;
+          for ( Integer i : H ) {
+           S.add( r-i );
+          }
+       }
           if ( contains( v, S ) ) { // v \subset S
              return true;
           }
@@ -1151,33 +1151,33 @@ public class Ideal<C extends GcdRingElem<C>>
       */
      @Override
      public String toString() {
-	StringBuffer sb = new StringBuffer("Dimension( " + d + ", ");
-	if ( v == null ) {
-	    sb.append( "" + S + ", " + M + " )" );
-	    return sb.toString();
-	}
-	String[] s = new String[ S.size() ];
-	int j = 0;
-	for ( Integer i : S ) {
-	    s[j] = v[i]; j++;
-	}
-	sb.append( Arrays.toString( s ) + ", " );
-	sb.append("[ ");
-	boolean first = true;
-	for ( Set<Integer> m : M ) {
-	    if ( first ) {
-	       first = false;
-	    } else {
+     StringBuffer sb = new StringBuffer("Dimension( " + d + ", ");
+     if ( v == null ) {
+         sb.append( "" + S + ", " + M + " )" );
+         return sb.toString();
+     }
+     String[] s = new String[ S.size() ];
+     int j = 0;
+     for ( Integer i : S ) {
+         s[j] = v[i]; j++;
+     }
+     sb.append( Arrays.toString( s ) + ", " );
+     sb.append("[ ");
+     boolean first = true;
+     for ( Set<Integer> m : M ) {
+         if ( first ) {
+            first = false;
+         } else {
                sb.append( ", " );
-	    }
-	    s = new String[ m.size() ];
-	    j = 0;
-	    for ( Integer i : m ) {
-		s[j] = v[i]; j++;
-	    }
-	    sb.append( Arrays.toString( s ) );
-	}
-	sb.append(" ] )");
+         }
+         s = new String[ m.size() ];
+         j = 0;
+         for ( Integer i : m ) {
+          s[j] = v[i]; j++;
+         }
+         sb.append( Arrays.toString( s ) );
+     }
+     sb.append(" ] )");
         return sb.toString();
      }
 
