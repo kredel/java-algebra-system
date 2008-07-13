@@ -146,7 +146,25 @@ public class Condition<C extends GcdRingElem<C> >
         //list.add( z.monic() );
         //Ideal<C> id = new Ideal<C>( zero.getRing(), list );
         //return new Condition<C>( id, nonZero );
-        return new Condition<C>( zero.sum( z ), nonZero );
+       //z = zero.engine.squarefreePart( z ); // leads to errors in nonZero
+       Ideal<C> idz = zero.sum( z );
+       List<GenPolynomial<C>> list = idz.normalform( nonZero );
+       if ( list.size() != nonZero.size() ) { // contradiction
+          System.out.println("zero    = " + zero.getList());
+          System.out.println("z       = " + z);
+          System.out.println("idz     = " + idz.getList());
+          System.out.println("list    = " + list);
+          System.out.println("nonZero = " + nonZero);
+          return null;
+       }
+       List<GenPolynomial<C>> L = new ArrayList<GenPolynomial<C>>( list.size() );
+       for ( GenPolynomial<C> h : list ) {
+           if ( h != null && !h.isZERO() ) {
+              GenPolynomial<C> r = h.monic();
+              L.add( r );
+           }
+       }
+       return new Condition<C>( idz, L );
     }
 
 
@@ -155,8 +173,7 @@ public class Condition<C extends GcdRingElem<C> >
      * @param nz a polynomial to be treated as non-zero.
      */
     public Condition<C> extendNonZero(GenPolynomial<C> nz) {
-        List<GenPolynomial<C>> list = new ArrayList<GenPolynomial<C>>( nonZero );
-        nz = nz.monic();
+        //nz = nz.monic();
         /*
         ll.add( nz );
         Ideal<C> p = new Ideal<C>( zero.getRing(), ll );
@@ -169,11 +186,18 @@ public class Condition<C extends GcdRingElem<C> >
            list.add( nz );
         }
         */
+        /*
         List<GenPolynomial<C>> ll = new ArrayList<GenPolynomial<C>>( zero.engine.squarefreeFactors(nz).values() );
         System.out.println("squarefree..... of " + nz + ":");
         System.out.println("squarefreeFactors = " + ll);
         GenPolynomial<C> n = zero.engine.squarefreePart(nz);
         System.out.println("squarefreePart = " + n);
+        */
+        nz = zero.normalform(nz).monic();
+        if ( nz == null || nz.isZERO() ) {
+           return this;
+        } 
+        List<GenPolynomial<C>> list = new ArrayList<GenPolynomial<C>>( nonZero );
         list.add( nz );
         return new Condition<C>( zero, list );
     }
@@ -184,6 +208,7 @@ public class Condition<C extends GcdRingElem<C> >
      * @param c polynomial to be colored.
      */
     public Color color(GenPolynomial<C> c) {
+        c = zero.normalform(c).monic();
         if ( zero.contains( c ) ) { 
            //System.out.println("c in id = " + c);
            return Color.GREEN;
@@ -192,7 +217,7 @@ public class Condition<C extends GcdRingElem<C> >
            //System.out.println("c constant " + c);
            return Color.RED;
         }
-        if ( nonZero.contains( c.monic() ) ) {
+        if ( nonZero.contains( c ) ) {
            //System.out.println("c in nonzero " + c);
            return Color.RED;
         }
