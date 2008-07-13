@@ -852,6 +852,32 @@ public class Ideal<C extends GcdRingElem<C>>
 
 
   /**
+   * Normalform for list of elements.
+   * @param L polynomial list
+   * @return list of normalforms of the elements of L with respect to this
+   */
+  public List<GenPolynomial<C>> normalform( List<GenPolynomial<C>> L ) {
+      if ( L == null ) { 
+          return L;
+      }
+      if ( L.size() == 0 ) { 
+          return L;
+      }
+      if ( this.isZERO() ) { 
+          return L;
+      }
+      List<GenPolynomial<C>> M = new ArrayList<GenPolynomial<C>>( L.size() );
+      for ( GenPolynomial<C> h : L ) {
+          GenPolynomial<C> r = normalform( h );
+          if ( r != null && !r.isZERO() ) {
+             M.add( r );
+          }
+      }
+      return M;
+  }
+
+
+  /**
    * Inverse for element modulo this ideal.
    * @param h polynomial
    * @return inverse of h with respect to this, if defined
