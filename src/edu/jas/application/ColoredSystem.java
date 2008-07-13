@@ -230,8 +230,7 @@ public class ColoredSystem<C extends GcdRingElem<C>> {
         if ( !isDetermined() ) {
            return false;
         }
-        Ideal<C> id = condition.zero;
-        List<GenPolynomial<C>> nz = condition.nonZero;
+        // Condition<C> cond = condition;
         for ( ColorPolynomial<C> s : list ) {
             if ( !s.checkInvariant() ) {
                System.out.println("notInvariant " + s);
@@ -239,7 +238,7 @@ public class ColoredSystem<C extends GcdRingElem<C>> {
                return false;
             }
             for ( GenPolynomial<C> g : s.green.getMap().values() ) {
-                if ( ! id.contains( g ) ) {
+                if ( condition.color( g ) != Condition.Color.GREEN ) {
                    System.out.println("notGreen   " + g);
                    System.out.println("condition: " + condition);
                    System.out.println("colors:    " + s);
@@ -247,17 +246,20 @@ public class ColoredSystem<C extends GcdRingElem<C>> {
                 }
             }
             for ( GenPolynomial<C> r : s.red.getMap().values() ) {
-                if ( r.isConstant() ) {
-                   continue;
-                }
-                if ( !nz.contains( r ) ) {
+                if ( condition.color( r ) != Condition.Color.RED ) {
                    System.out.println("notRed     " + r);
                    System.out.println("condition: " + condition);
                    System.out.println("colors:    " + s);
                    return false;
                 }
-                if ( id.contains( r ) ) {
-                   System.out.println("warning in consistent condition " + condition);
+            }
+            for ( GenPolynomial<C> w : s.white.getMap().values() ) {
+                if ( condition.color( w ) != Condition.Color.WHITE ) {
+                   System.out.println("notWhite   " + w);
+                   System.out.println("condition: " + condition);
+                   System.out.println("colors:    " + s);
+                   continue; // no error
+                   //return false;
                 }
             }
         }

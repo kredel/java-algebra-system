@@ -170,6 +170,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
                   return false;
                }
             }
+            Condition<C> cond = cs.condition;
             List<ColorPolynomial<C>> S = cs.list;
             int k = S.size();
             for ( int j = 0; j < k; j++ ) {
@@ -178,7 +179,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
                     q = S.get(l);
                     h = cred.SPolynomial(p,q);
                     //System.out.println("spol(a,b) = " + h);
-                    h = cred.normalform( S, h );
+                    h = cred.normalform( cond, S, h );
                     //System.out.println("NF(spol(a,b)) = " + h);
                     if ( true || debug ) {
                        if ( !cred.isNormalform( S, h ) ) {
@@ -252,6 +253,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         ColoredSystem<C> cs;
         List<ColorPolynomial<C>> G;
         OrderedCPairlist<C> pairlist;
+        Condition<C> cond;
         int si = 0;
         while ( CSs.size() > 0 ) {
             cs = CSs.get(0); //remove(0);
@@ -264,6 +266,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
             }
             pairlist = cs.pairlist;
             G = cs.list;
+            cond = cs.condition;
             //logger.info( pairlist.toString() );
 
             CPair<C> pair;
@@ -293,7 +296,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
                     logger.info("S = " + S );
                 }
 
-                H = cred.normalform( G, S );
+                H = cred.normalform( cond, G, S );
                 if ( H.isZERO() ) {
                     pair.setZero();
                     continue;
@@ -322,6 +325,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
                              cs = y;
                              pairlist = cs.pairlist;
                              G = cs.list;
+                             cond = cs.condition; // ==
                           }
                        } else {
                           CSh.add( y );
@@ -403,19 +407,19 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         List<GenPolynomial<GenPolynomial<C>>> G = 
             new ArrayList<GenPolynomial<GenPolynomial<C>>>( Gs );
         cds = cred.caseDistinction( G );
-        System.out.println("-------------------------------------------");
+        System.out.println("------------------------------------------");
         for ( Condition<C> cond : cd ) {
             if ( ! cds.contains( cond ) ) {
                System.out.println("cd_i not in cds = " + cond);
             }
         }
-        System.out.println("-------------------------------------------");
+        System.out.println("------------------------------------------");
         for ( Condition<C> cond : cds ) {
             if ( ! cd.contains( cond ) ) {
                System.out.println("cd_i not in cd = " + cond);
             }
         }
-        System.out.println("-------------------------------------------");
+        System.out.println("------------------------------------------");
         return G;
     }
 
@@ -446,12 +450,17 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         }
         //System.out.println("G check " + G);
         // remove top reducible polynomials
+        Condition<C> cond = cs.condition;
         ColorPolynomial<C> a, b;
         List<ColorPolynomial<C>> F;
         F = new ArrayList<ColorPolynomial<C>>( G.size() );
         while ( G.size() > 0 ) {
             a = G.remove(0); b = a;
             //System.out.println("check " + b);
+            if ( a.red.leadingBaseCoefficient().isConstant() ) { // dont drop these
+               F.add(a);
+               continue;
+            }
             if ( cred.isTopReducible(G,a) || cred.isTopReducible(F,a) ) {
                // drop polynomial 
                if ( true || debug ) {
@@ -459,7 +468,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
                   List<ColorPolynomial<C>> ff;
                   ff = new ArrayList<ColorPolynomial<C>>( G );
                   ff.addAll(F);
-                  a = cred.normalform( ff, a );
+                  a = cred.normalform( cond, ff, a );
                   a = cs.reDetermine( a );
                   if ( !a.isZERO() ) {
                      System.out.println("error, nf(a) != 0 " + a);
@@ -481,7 +490,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
             a = G.remove(0); b = a;
 	    ExpVector e = a.red.leadingExpVector();
             System.out.println("reducing " + a);
-            a = cred.normalform( G, a ); // unchanged by top reduction
+            a = cred.normalform( cond, G, a ); // unchanged by top reduction
             a = cs.reDetermine( a );
 	    ExpVector f = a.red.leadingExpVector();
             //a = engine.basePrimitivePart(a); //a.monic(); was not required

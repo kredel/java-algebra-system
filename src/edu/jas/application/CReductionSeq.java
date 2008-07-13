@@ -239,10 +239,12 @@ public class CReductionSeq<C extends GcdRingElem<C>>
      * Normalform.
      * @param Ap polynomial.
      * @param Pp polynomial list.
+     * @param cond condition for these polynomials.
      * @return nf(Ap) with respect to Pp.
      */
     @SuppressWarnings("unchecked") 
-    public ColorPolynomial<C> normalform(List<ColorPolynomial<C>> Pp, 
+    public ColorPolynomial<C> normalform(Condition<C> cond,
+                                         List<ColorPolynomial<C>> Pp, 
                                          ColorPolynomial<C> Ap) {  
         if ( Pp == null || Pp.isEmpty() ) {
            return Ap;
@@ -294,6 +296,18 @@ public class CReductionSeq<C extends GcdRingElem<C>>
               m = S.leadingMonomial();
               e = m.getKey();
               a = m.getValue();
+              Condition.Color col = cond.color( a );
+              if ( col == Condition.Color.GREEN ) { // move to green terms
+                 //System.out.println("S.old = " + S);
+                 GenPolynomial<GenPolynomial<C>> g = S.green.sum(a,e);
+                 GenPolynomial<GenPolynomial<C>> w = S.white.subtract(a,e);
+                 S = new ColorPolynomial<C>(g,S.red,w);
+                 //System.out.println("S.new = " + S);
+                 continue;
+              }
+              if ( col == Condition.Color.WHITE ) { // refine condition
+                 System.out.println("white = " + zero.sum(a,e));
+              }
               //System.out.println("NF, e = " + e);
               for ( i = 0; i < l; i++ ) {
                   mt = e.multipleOf( htl[i] ); // EVMT( e, htl[i] );
@@ -632,19 +646,24 @@ public class CReductionSeq<C extends GcdRingElem<C>>
                     Condition<C> nc = cz.extendNonZero( c );
                     if ( ! cz.equals( nc ) ) { 
                        C.add( nc );
-                    } 
+                    } else {
+                       cz = null;
+                       Ap = A.ring.getZERO();
+                       continue;
+                    }
                     Condition<C> ez = cz.extendZero( c );
                     if ( ez != null ) {
                        cz = ez;
                     } else { // contradiction
+                       cz = null;
                        Ap = A.ring.getZERO();
                        continue;
                     }
                     Ap = Bp;
                 }
             }
-            if ( C.contains(cz) ) {
-               System.out.println("double entry " + cz);
+            if ( cz == null | C.contains(cz) ) {
+               System.out.println("not added entry " + cz);
             } else {
                C.add( cz );
             }
