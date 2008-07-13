@@ -259,7 +259,7 @@ public static void example7() {
        System.out.println("fac = " + fac);
 
        long mi = 1L;
-       //long mi = Byte.MAX_VALUE;
+       //long mi = Integer.MAX_VALUE;
        GenPolynomial<BigRational> x = fac.univariate(0,mi);
        GenPolynomial<BigRational> y = fac.univariate(1,mi);
        GenPolynomial<BigRational> z = fac.univariate(2,mi);
@@ -273,12 +273,12 @@ public static void example7() {
 
        GenPolynomial<BigRational> p = x.sum(y).sum(z).sum( fac.getONE());
        BigRational f = cfac.fromInteger(10000000001L);
-       //f = f.multiply( f );
+           //f = f.multiply( f );
        //p = p.multiply( f );
        // System.out.println("p = " + p);
        System.out.println("p = " + p.toString( fac.vars ) );
 
-       int mpow = 15;
+       int mpow = 20;
        System.out.println("mpow = " + mpow);
        GenPolynomial<BigRational> q = p;
        for ( int i = 1; i < mpow; i++ ) {
@@ -295,9 +295,10 @@ public static void example7() {
        q2 = q.multiply(q1); 
        t = System.currentTimeMillis() - t;
 
-       System.out.println("len(q2) = " + q2.length());
-       System.out.println("deg(q2) = " + q2.degree());
-       System.out.println("time = " + t + " ms");
+       System.out.println("len(q2)    = " + q2.length());
+       System.out.println("deg(q2)    = " + q2.degree());
+       System.out.println("LeadEV(q2) = " + q2.leadingExpVector());
+       System.out.println("time       = " + t + " ms");
 }
 
 
