@@ -623,40 +623,25 @@ public class CReductionSeq<C extends GcdRingElem<C>>
                     continue;
                 case RED:
                     C.add( cz );
-                    return C;
+                    // wrong: return C;
+                    Ap = A.ring.getZERO();
+                    continue;
                     //break;
                 case WHITE:
                 default: 
                     Condition<C> nc = cz.extendNonZero( c );
-                    C.add( nc );
-                    cz = cz.extendZero( c );
+                    if ( ! cz.equals( nc ) ) { 
+                       C.add( nc );
+                    } 
+                    Condition<C> ez = cz.extendZero( c );
+                    if ( ez != null ) {
+                       cz = ez;
+                    } else { // contradiction
+                       Ap = A.ring.getZERO();
+                       continue;
+                    }
                     Ap = Bp;
                 }
-                /*
-                if ( cz.zero.contains( c ) ) { // green
-                    //System.out.println("c in zero = " + c);
-                    Ap = Bp;
-                    continue;
-                }
-                if ( c.isConstant() ) { // red
-                    //System.out.println("c constant = " + c);
-                    break;
-                }
-                if ( cz.nonZero.contains( c.monic() ) ) { // red
-                    //System.out.println("c in nonZero = " + c);
-                    break;
-                }
-                // white
-                //System.out.println("c white = " + c);
-                Condition<C> nc = cz.extendNonZero( c );
-                C.add( nc );
-                cz = cz.extendZero( c );
-                Ap = Bp;
-                //if ( cz.zero.isONE() ) { // can treat remaining coeffs as green
-                //    System.out.println("dropping " + cz);
-                //    break; // drop system
-                //}
-                */
             }
             if ( C.contains(cz) ) {
                System.out.println("double entry " + cz);
