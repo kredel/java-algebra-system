@@ -355,6 +355,7 @@ public class Ideal<C extends GcdRingElem<C>>
       }
       logger.warn("GB computing");
       List< GenPolynomial<C> > G = getList();
+      logger.info("GB computing = " + G);
       G = bb.GB( G );
       if ( isTopt ) { 
          List<Integer> perm = ((OptimizedPolynomialList<C>) list).perm;

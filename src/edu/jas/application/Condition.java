@@ -91,7 +91,7 @@ public class Condition<C extends GcdRingElem<C> >
     @Override
     public String toString() {
         return "Condition[ 0 == " + zero.list.list.toString() 
-                      + ", 0 != " + nonZero + "]";
+                      + ", 0 != " + nonZero + " ]";
     }
 
 

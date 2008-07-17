@@ -94,6 +94,13 @@ public class CReductionSeq<C extends GcdRingElem<C>>
         GenPolynomial<C> a = ma.getValue();
         GenPolynomial<C> b = mb.getValue();
 
+        GenPolynomial<C> c = engine.gcd(a,b);
+        if ( ! c.isONE() ) {
+            System.out.println("gcd =s " + c);
+            a = a.divide( c );
+            b = b.divide( c );
+        }
+
         ColorPolynomial<C> App = Ap.multiply( b, e1 );
         ColorPolynomial<C> Bpp = Bp.multiply( a, f1 );
         ColorPolynomial<C> Cp = App.subtract(Bpp);
@@ -347,7 +354,7 @@ public class CReductionSeq<C extends GcdRingElem<C>>
                  GenPolynomial<C> c = (GenPolynomial<C>) lbc[i];
                  GenPolynomial<C> g = engine.gcd(a,c);
                  if ( ! g.isONE() ) {
-                    System.out.println("ggt = " + g);
+                    System.out.println("gcd = " + g);
                     a = a.divide( g );
                     c = c.divide( g );
                  }
