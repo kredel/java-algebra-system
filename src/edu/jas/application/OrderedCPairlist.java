@@ -25,6 +25,7 @@ import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenSolvablePolynomialRing;
 
 import edu.jas.structure.RingElem;
+import edu.jas.structure.RingFactory;
 import edu.jas.structure.GcdRingElem;
 
 
@@ -98,12 +99,14 @@ public class OrderedCPairlist<C extends GcdRingElem<C> >
          if ( ring instanceof GenSolvablePolynomialRing ) {
             useCriterion4 = false;
          }
-         reduction = new CReductionSeq<C>();
+         RingFactory<GenPolynomial<C>> rf = ring.coFac;
+         GenPolynomialRing<C> cf = (GenPolynomialRing<C>) rf;
+         reduction = new CReductionSeq<C>( cf.coFac );
     }
 
 
     /**
-     * Constructor for OrderedPairlist.
+     * Internal constructor for OrderedPairlist.
      * @param m number of module variables.
      * @param r polynomial factory.
      */

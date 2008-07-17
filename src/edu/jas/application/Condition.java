@@ -146,7 +146,7 @@ public class Condition<C extends GcdRingElem<C> >
         //list.add( z.monic() );
         //Ideal<C> id = new Ideal<C>( zero.getRing(), list );
         //return new Condition<C>( id, nonZero );
-       z = zero.engine.squarefreePart( z ); // leads to errors in nonZero
+       z = zero.engine.squarefreePart( z ); // leads to errors in nonZero? -no more
        Ideal<C> idz = zero.sum( z );
        List<GenPolynomial<C>> list = idz.normalform( nonZero );
        if ( list.size() != nonZero.size() ) { // contradiction

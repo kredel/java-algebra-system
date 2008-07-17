@@ -87,7 +87,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
      * @param rf base coefficient ring factory.
      */
     public ComprehensiveGroebnerBaseSeq(RingFactory<C> rf) {
-        this( new CReductionSeq<C>(), rf );
+        this( new CReductionSeq<C>(rf), rf );
     }
 
 

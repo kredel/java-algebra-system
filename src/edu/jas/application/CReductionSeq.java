@@ -21,6 +21,10 @@ import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.structure.GcdRingElem;
 
+import edu.jas.ufd.GreatestCommonDivisor;
+import edu.jas.ufd.GreatestCommonDivisorAbstract;
+import edu.jas.ufd.GCDFactory;
+
 import edu.jas.application.Ideal;
 
 
@@ -40,9 +44,24 @@ public class CReductionSeq<C extends GcdRingElem<C>>
 
 
     /**
+     * Greatest common divisor engine.
+     */
+    protected final GreatestCommonDivisor<C> engine;
+
+
+    /**
+     * Polynomial coefficient ring factory.
+     */
+    protected final RingFactory<C> cofac;
+
+
+    /**
      * Constructor.
      */
-    public CReductionSeq() {
+    public CReductionSeq(RingFactory<C> rf) {
+        cofac = rf;
+        System.out.println("cofac = " + cofac);
+        engine = GCDFactory.<C>getImplementation( cofac );
     }
 
 
@@ -307,6 +326,7 @@ public class CReductionSeq<C extends GcdRingElem<C>>
               }
               if ( col == Condition.Color.WHITE ) { // refine condition
                  System.out.println("white = " + zero.sum(a,e));
+                 // return S; // return for new case distinction
               }
               //System.out.println("NF, e = " + e);
               for ( i = 0; i < l; i++ ) {
@@ -325,12 +345,18 @@ public class CReductionSeq<C extends GcdRingElem<C>>
                  e = e.subtract( htl[i] ); // EVDIF( e, htl[i] );
                  //logger.info("red div = " + e);
                  GenPolynomial<C> c = (GenPolynomial<C>) lbc[i];
-                 if ( a.remainder(c).isZERO() ) {   //c.isUnit() ) {
-                    a = a.divide( c );
-                 } else {
-                    S = S.multiply( c );
-                    R = R.multiply( c );
+                 GenPolynomial<C> g = engine.gcd(a,c);
+                 if ( ! g.isONE() ) {
+                    System.out.println("ggt = " + g);
+                    a = a.divide( g );
+                    c = c.divide( g );
                  }
+//                  if ( a.remainder(c).isZERO() ) {   //c.isUnit() ) {
+//                     a = a.divide( c );
+//                  } else {
+//                  }
+                 S = S.multiply( c );
+                   R = R.multiply( c );
                  Q = p[i].multiply( a, e );
                  S = S.subtract( Q );
               }
