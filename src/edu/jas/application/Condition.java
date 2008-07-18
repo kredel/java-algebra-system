@@ -197,8 +197,19 @@ public class Condition<C extends GcdRingElem<C> >
         if ( nz == null || nz.isZERO() ) {
            return this;
         } 
-        List<GenPolynomial<C>> list = new ArrayList<GenPolynomial<C>>( nonZero );
-        list.add( nz );
+        GenPolynomial<C> n = zero.engine.squarefreePart( nz );
+        if ( !n.equals(nz) ) {
+           System.out.println("squarefree... of " + nz + ":");
+           System.out.println("squarefreePart = " + n);
+           GenPolynomial<C> q = nz.divide(n);
+           List<GenPolynomial<C>> list = addNonZero( n );
+           Condition<C> nc = new Condition<C>( zero, list );
+           list = nc.addNonZero( q );
+           return new Condition<C>( zero, list );
+        }
+        //List<GenPolynomial<C>> list = new ArrayList<GenPolynomial<C>>( nonZero );
+        // list.add( nz );
+        List<GenPolynomial<C>> list = addNonZero( nz );
         return new Condition<C>( zero, list );
     }
 
@@ -217,11 +228,87 @@ public class Condition<C extends GcdRingElem<C> >
            //System.out.println("c constant " + c);
            return Color.RED;
         }
-        if ( nonZero.contains( c ) ) {
-           //System.out.println("c in nonzero " + c);
+        // if ( nonZero.contains( c ) ) {
+        if ( isNonZero( c ) ) {
+           System.out.println("c in nonzero " + c);
            return Color.RED;
         }
         return Color.WHITE;
+    }
+
+
+    /**
+     * Test if a polynomial is contained in nonZero.
+     * NonZero is treated as multiplicative set.
+     * @param c polynomial searched in nonZero.
+     */
+    public boolean isNonZero(GenPolynomial<C> c) {
+        if ( c == null || c.isZERO() ) { // do not look into zero
+           return false;
+        }
+        if ( nonZero == null || nonZero.size() == 0 ) {
+           return false;
+        }
+        for ( GenPolynomial<C> n : nonZero ) {
+            GenPolynomial<C> q;
+            GenPolynomial<C> r;
+            do {
+                GenPolynomial<C>[] qr = c.divideAndRemainder( n );
+                q = qr[0];
+                r = qr[1];
+                if ( r != null && ! r.isZERO() ) {
+                    continue;
+                }
+                if ( q != null && q.isConstant() ) {
+                    return true;
+                }
+                c = q;
+            } while ( r.isZERO() && !c.isConstant() );
+        }
+        return false;
+    }
+
+
+    /**
+     * A polynomial to nonZero.
+     * NonZero is treated as multiplicative set.
+     * @param c polynomial to bee added to nonZero.
+     */
+    public List<GenPolynomial<C>> addNonZero(GenPolynomial<C> c) {
+        if ( c == null || c.isZERO() ) { // do not look into zero
+           return nonZero;
+        }
+        List<GenPolynomial<C>> list;
+        if ( nonZero == null ) { // cannot happen
+           list = new ArrayList<GenPolynomial<C>>();
+           list.add( c );
+           return list;
+        }
+        list = new ArrayList<GenPolynomial<C>>( nonZero );
+        if ( nonZero.size() == 0 ) {
+           System.out.println("added to empty nonzero = " + c);
+           list.add( c );
+           return list;
+        }
+        for ( GenPolynomial<C> n : nonZero ) {
+            GenPolynomial<C> q;
+            GenPolynomial<C> r;
+            do {
+                GenPolynomial<C>[] qr = c.divideAndRemainder( n );
+                q = qr[0];
+                r = qr[1];
+                if ( r != null && ! r.isZERO() ) {
+                    continue;
+                }
+                if ( q != null && q.isConstant() ) {
+                    return list;
+                }
+                c = q;
+            } while ( r.isZERO() && !c.isConstant() );
+        }
+        System.out.println("added to nonzero = " + c);
+        list.add( c );
+        return list;
     }
 
 

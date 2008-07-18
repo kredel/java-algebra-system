@@ -257,8 +257,8 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         int si = 0;
         while ( CSs.size() > 0 ) {
             cs = CSs.get(0); //remove(0);
-            logger.info("poped GBsys "+si+" with condition = " + cs.condition);
-            logger.info("poped GBsys "+si+" with pairlist  = " + cs.pairlist);
+            logger.info("poped GBsys no "+si        +" with condition = " + cs.condition);
+            logger.info("poped GBsys of "+CSs.size()+" with pairlist  = " + cs.pairlist);
             if ( si++ > 30 ) {
                logger.info("stopped GBsys ----------------------------------");
                CSb.addAll( CSs );
