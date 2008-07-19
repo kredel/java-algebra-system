@@ -358,10 +358,6 @@ public class CReductionSeq<C extends GcdRingElem<C>>
                     a = a.divide( g );
                     c = c.divide( g );
                  }
-//                  if ( a.remainder(c).isZERO() ) {   //c.isUnit() ) {
-//                     a = a.divide( c );
-//                  } else {
-//                  }
                  S = S.multiply( c );
                    R = R.multiply( c );
                  Q = p[i].multiply( a, e );
@@ -549,92 +545,6 @@ public class CReductionSeq<C extends GcdRingElem<C>>
            NS = new ColoredSystem<C>( cnd, Sp, pl );
            //NS = NS.reDetermine();
            NCS.add( NS );
-        }
-        //System.out.println("new determination = " + NCS);
-        return NCS;
-    }
-
-
-    /**
-     * Determine polynomial relative to a condition of a colored system and add pairs.
-     * @param cs a colored system.
-     * @param A color polynomial.
-     * @return list of colored systems, the conditions extending the condition of cs.
-     */
-    public List<ColoredSystem<C>> 
-        determineAddPairs( ColoredSystem<C> cs, 
-                           ColorPolynomial<C> A ) {  
-        List<ColoredSystem<C>> NCS = new ArrayList<ColoredSystem<C>>();
-        if ( A == null || A.isZERO() ) {
-           //NCS.add( cs );
-           return NCS;
-        }
-        List<ColorPolynomial<C>> S = cs.list;
-        Condition<C> cond = cs.condition; //.clone(); done in Condition itself
-        OrderedCPairlist<C> pl = cs.pairlist;
-
-        List<ColorPolynomial<C>> Sp;
-        ColorPolynomial<C> nz;
-        ColoredSystem<C> NS;
-//         if ( A.isDetermined() ) { ... } // dont use this   
-        //System.out.println("to determine = " + A);
-        GenPolynomial<GenPolynomial<C>> Ap = A.getPolynomial();
-        List<Condition<C>> cd = caseDistinction( cond, Ap );
-        System.out.println("# cases = " + cd.size());
-        for ( Condition<C> cnd : cd ) {
-           nz = cnd.determine( Ap );
-           if ( nz == null || nz.isZERO() ) {
-              System.out.println("zero determined nz = " + nz);
-              Sp = new ArrayList<ColorPolynomial<C>>( S );
-              OrderedCPairlist<C> PL = pl.clone();
-              NS = new ColoredSystem<C>( cnd, Sp, PL );
-              //NS = NS.reDetermine();
-              List<ColoredSystem<C>> NCSp = new ArrayList<ColoredSystem<C>>( NCS.size() );
-              boolean contained = false;
-              for ( ColoredSystem<C> x : NCS ) {
-                  if ( x.condition.equals( NS.condition ) && x.list.equals( NS.list ) ){
-                  //if ( x.equals( NS ) ) {
-                      System.out.println("replaced system z = " + x);
-                      NCSp.add( NS );
-                      contained = true;
-                  } else {
-                      NCSp.add( x );
-                  }
-              }
-              if ( !contained ) {
-                 NCSp.add( NS );
-              }
-              NCS = NCSp;
-              continue;
-           }
-           if ( S.contains( nz ) ) {
-              System.out.println("*** S.contains(nz) ***");
-              continue;
-           }
-           System.out.println("new  determined nz = " + nz);
-           Sp = new ArrayList<ColorPolynomial<C>>( S );
-           Sp.add( nz );
-           OrderedCPairlist<C> PL = pl.clone();
-           PL.put( nz );
-           NS = new ColoredSystem<C>( cnd, Sp, PL );
-           //NS = NS.reDetermine();
-           List<ColoredSystem<C>> NCSp = new ArrayList<ColoredSystem<C>>( NCS.size() );
-           boolean contained = false;
-           for ( ColoredSystem<C> x : NCS ) {
-               if ( x.condition.equals( NS.condition ) && x.list.equals( NS.list ) ) {
-                   //if ( x.equals( NS ) ) {
-                  System.out.println("replaced system = " + x);
-                  NCSp.add( NS );
-                  contained = true;
-               } else {
-                  //System.out.println("keped   system = " + x);
-                  NCSp.add( x );
-               }
-           }
-           if ( !contained ) {
-              NCSp.add( NS );
-           }
-           NCS = NCSp;
         }
         //System.out.println("new determination = " + NCS);
         return NCS;

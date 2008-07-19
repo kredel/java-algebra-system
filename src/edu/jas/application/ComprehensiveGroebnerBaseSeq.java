@@ -257,9 +257,9 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         int si = 0;
         while ( CSs.size() > 0 ) {
             cs = CSs.get(0); //remove(0);
-            logger.info("poped GBsys no "+si        +" with condition = " + cs.condition);
-            logger.info("poped GBsys of "+CSs.size()+" with pairlist  = " + cs.pairlist);
-            if ( si++ > 30 ) {
+            logger.info("poped GBsys number    "+si        +" with condition = " + cs.condition);
+            logger.info("poped GBsys remaining "+CSs.size()+" with pairlist  = " + cs.pairlist);
+            if ( si++ >= 4 ) {
                logger.info("stopped GBsys ----------------------------------");
                CSb.addAll( CSs );
                break;
@@ -312,7 +312,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
                 logger.info("H = " + H );
                 if ( ! H.isZERO() ) {
                    CSh = new ArrayList<ColoredSystem<C>>();
-                   ncs = cred.determineAddPairs( cs, H );
+                   ncs = determineAddPairs( cs, H );
                    boolean set = false;
                    for ( ColoredSystem<C> y : ncs ) {
                        if ( cs.condition.equals( y.condition ) ) {
@@ -326,19 +326,40 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
                              pairlist = cs.pairlist;
                              G = cs.list;
                              cond = cs.condition; // ==
+                             System.out.println("replaced main branch = " + cond);
                           }
                        } else {
                           CSh.add( y );
                        }
                    }
                    System.out.println("#new systems       = " + CSh.size() );
+                   ncs = CSh;
                    int yi = 0;
-                   for ( ColoredSystem<C> y : CSh ) {
-                       if ( ! CSs.contains( y ) ) {
-                          CSs.add( y );
-                          yi++;
+                   for ( ColoredSystem<C> x : ncs ) {
+                       boolean contained = false;
+                       CSh = new ArrayList<ColoredSystem<C>>();
+                       for ( ColoredSystem<C> y : CSs ) {
+                           if ( x.condition.equals( y.condition ) && x.list.equals( y.list ) ){
+                              //if ( x.equals( NS ) ) {
+                              System.out.println("replaced other branch = " + y.condition);
+                              CSh.add( x );
+                              contained = true;
+                           } else {
+                              CSh.add( y );
+                           }
                        }
+                       if ( !contained ) {
+                          yi++;
+                          CSh.add( x );
+                       }
+                       CSs = CSh;
                    }
+//                    for ( ColoredSystem<C> y : CSh ) {
+//                        if ( ! CSs.contains( y ) ) {
+//                           CSs.add( y );
+//                           yi++;
+//                        }
+//                    }
                    System.out.println("#new systems added = " + yi );
                 }
             }
@@ -360,6 +381,92 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         }
         CSb = new ArrayList<ColoredSystem<C>>( CSh );
         return CSb;
+    }
+
+
+    /**
+     * Determine polynomial relative to a condition of a colored system and add pairs.
+     * @param cs a colored system.
+     * @param A color polynomial.
+     * @return list of colored systems, the conditions extending the condition of cs.
+     */
+    public List<ColoredSystem<C>> 
+        determineAddPairs( ColoredSystem<C> cs, 
+                           ColorPolynomial<C> A ) {  
+        List<ColoredSystem<C>> NCS = new ArrayList<ColoredSystem<C>>();
+        if ( A == null || A.isZERO() ) {
+           //NCS.add( cs );
+           return NCS;
+        }
+        List<ColorPolynomial<C>> S = cs.list;
+        Condition<C> cond = cs.condition; //.clone(); done in Condition itself
+        OrderedCPairlist<C> pl = cs.pairlist;
+
+        List<ColorPolynomial<C>> Sp;
+        ColorPolynomial<C> nz;
+        ColoredSystem<C> NS;
+//         if ( A.isDetermined() ) { ... } // dont use this   
+        //System.out.println("to determine = " + A);
+        GenPolynomial<GenPolynomial<C>> Ap = A.getPolynomial();
+        List<Condition<C>> cd = cred.caseDistinction( cond, Ap );
+        System.out.println("# cases = " + cd.size());
+        for ( Condition<C> cnd : cd ) {
+           nz = cnd.determine( Ap );
+           if ( nz == null || nz.isZERO() ) {
+              System.out.println("zero determined nz = " + nz);
+              Sp = new ArrayList<ColorPolynomial<C>>( S );
+              OrderedCPairlist<C> PL = pl.clone();
+              NS = new ColoredSystem<C>( cnd, Sp, PL );
+              //NS = NS.reDetermine();
+              List<ColoredSystem<C>> NCSp = new ArrayList<ColoredSystem<C>>( NCS.size() );
+              boolean contained = false;
+              for ( ColoredSystem<C> x : NCS ) {
+                  if ( x.condition.equals( NS.condition ) && x.list.equals( NS.list ) ){
+                  //if ( x.equals( NS ) ) {
+                      System.out.println("replaced system z = " + x);
+                      NCSp.add( NS );
+                      contained = true;
+                  } else {
+                      NCSp.add( x );
+                  }
+              }
+              if ( !contained ) {
+                 NCSp.add( NS );
+              }
+              NCS = NCSp;
+              continue;
+           }
+           if ( S.contains( nz ) ) {
+              System.out.println("*** S.contains(nz) ***");
+              continue;
+           }
+           System.out.println("new  determined nz = " + nz);
+           Sp = new ArrayList<ColorPolynomial<C>>( S );
+           Sp.add( nz );
+           OrderedCPairlist<C> PL = pl.clone();
+           PL.put( nz );
+           NS = new ColoredSystem<C>( cnd, Sp, PL );
+           //NS = NS.reDetermine();
+           List<ColoredSystem<C>> NCSp = new ArrayList<ColoredSystem<C>>( NCS.size() );
+           boolean contained = false;
+           for ( ColoredSystem<C> x : NCS ) {
+               if ( x.condition.equals( NS.condition ) && x.list.equals( NS.list ) ) {
+                   //if ( x.equals( NS ) ) {
+                  System.out.println("replaced system = " + x);
+                  NCSp.add( NS );
+                  contained = true;
+               } else {
+                  //System.out.println("keped   system = " + x);
+                  NCSp.add( x );
+               }
+           }
+           if ( !contained ) {
+              NCSp.add( NS );
+           }
+           NCS = NCSp;
+        }
+        //System.out.println("new determination = " + NCS);
+        return NCS;
     }
 
 
