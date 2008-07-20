@@ -114,17 +114,17 @@ public class ColoredSystem<C extends GcdRingElem<C>> {
             return false;
         }
         if ( cs == null ) {
-           return false;
+            return false;
         }
         boolean t = ( condition.equals(cs.condition) && list.equals(cs.list) );
-     if ( ! t ) {
-        return t;
-     }
-     // now t == true
-     t = pairlist.equals( cs.pairlist );
-     if ( !t ) {
-        System.out.println("pairlists not equal " + pairlist + ", " + cs.pairlist);
-     }
+        if ( ! t ) {
+            return t;
+        }
+        // now t == true
+        t = pairlist.equals( cs.pairlist );
+        if ( !t ) {
+            System.out.println("pairlists not equal " + pairlist + ", " + cs.pairlist);
+        }
         return true; // if lists are equal ignore pairlists
     }
 
@@ -302,20 +302,20 @@ public class ColoredSystem<C extends GcdRingElem<C>> {
         Iterator<Monomial<GenPolynomial<C>>> ri = red.monomialIterator();
         while ( ri.hasNext() ) {
             Monomial<GenPolynomial<C>> m = ri.next();
-         if ( m.c.isConstant() ) { // red
-            break;
-         }
+            if ( m.c.isConstant() ) { // red
+                break;
+            }
             //if ( id.getList().contains( m.c ) ) { // green
             if ( id.contains( m.c ) ) { // green
-               ri.remove();
-               green = green.sum( m.c, m.e );
+                ri.remove();
+                green = green.sum( m.c, m.e );
             } else if ( condition.nonZero.contains( m.c ) ) { // red
-               break;
+                break;
             } else { // white
-            white = white.sum( red );
-            red = red.ring.getZERO();
-               break;
-         }
+                white = white.sum( red );
+                red = red.ring.getZERO();
+                break;
+            }
         }
         if ( !red.isZERO() ) {
            return new ColorPolynomial<C>( green, red, white );
@@ -325,22 +325,22 @@ public class ColoredSystem<C extends GcdRingElem<C>> {
         Iterator<Monomial<GenPolynomial<C>>> wi = white.monomialIterator();
         while ( wi.hasNext() ) {
             Monomial<GenPolynomial<C>> m = wi.next();
-         if ( m.c.isConstant() ) { // red
-               wi.remove();
-               red = red.sum( m.c, m.e );
-            break;
-         }
+            if ( m.c.isConstant() ) { // red
+                wi.remove();
+                red = red.sum( m.c, m.e );
+                break;
+            }
             //if ( id.getList().contains( m.c ) ) { // green
             if ( id.contains( m.c ) ) { // green
-               wi.remove();
-               green = green.sum( m.c, m.e );
+                wi.remove();
+                green = green.sum( m.c, m.e );
             } else if ( condition.nonZero.contains( m.c ) ) { // red
-               wi.remove();
-               red = red.sum( m.c, m.e );
-               break;
+                wi.remove();
+                red = red.sum( m.c, m.e );
+                break;
             } else { // white
-               break;
-         }
+                break;
+            }
         }
         return new ColorPolynomial<C>( green, red, white );
     }
