@@ -255,9 +255,9 @@ public class ColoredSystem<C extends GcdRingElem<C>> {
             }
             for ( GenPolynomial<C> w : s.white.getMap().values() ) {
                 if ( condition.color( w ) != Condition.Color.WHITE ) {
-                   System.out.println("notWhite   " + w);
-                   System.out.println("condition: " + condition);
-                   System.out.println("colors:    " + s);
+                   //System.out.println("notWhite   " + w);
+                   //System.out.println("condition: " + condition);
+                   //System.out.println("colors:    " + s);
                    continue; // no error
                    //return false;
                 }
