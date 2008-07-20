@@ -18,13 +18,29 @@
 
 <dt>2008, 7 </dt>
 <dd> 
+ Finished implementation of comprehensive Groebner bases via Groebner systems.
+ Object oriented class layout uses <code>Condition</code>
+ and <code>ColoredSystem</code> classes. 
+ <code>Condition</code>s consist of an ideal 
+ (with lazy Groebner base computation) for the conditions equal to zero 
+ and a multiplicative set for the conditions not equal to zero.
+ Non-zero condition polynomials are reduced modulo the ideal of 
+ condition zero polynomials. 
+ The squarefree part from both condition polynomials is used.
+ It differs from the MAS implementation by Schoenfeld, Pesch and others 
+ by the ideal used to store the zero conditions and smoe more details. 
+</dd>
+
+<dt>2008, 6 </dt>
+<dd> 
  Added dimension computation to Ideal.
  Added term order optimization method to Ideal.
  Refactored ExpVector for different storage unit implementations of the exponent arrays.
  Supported storage units are <code>long</code>, 
  <code>int</code> (now the default, as seems to be the fastest), 
  <code>short</code> and <code>byte</code>.
- The respective classes are <code>ExpVectorLong</code>, <code>ExpVectorInteger</code>,
+ The respective classes are <code>ExpVectorLong</code>, 
+ <code>ExpVectorInteger</code>,
  <code>ExpVectorShort</code> and <code>ExpVectorByte</code>.
 </dd>
 
@@ -1649,7 +1665,7 @@ CPU TIME (ms) END
 <p>
 <!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
 <!-- hhmts start -->
-Last modified: Sun Jul  6 12:46:37 CEST 2008
+Last modified: Sun Jul 20 20:48:23 CEST 2008
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
