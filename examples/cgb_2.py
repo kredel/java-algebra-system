@@ -47,13 +47,13 @@ else:
     print "isCGBsystem: false";
 print;
 
-#sys.exit();
+sys.exit();
 
 gs = f.CGB();
 print "CGB: " + str(gs);
 print;
 
-sys.exit();
+#sys.exit();
 
 bg = gs.isCGB();
 if bg:
@@ -62,6 +62,7 @@ else:
     print "isCGB: false";
 print;
 
+sys.exit();
 
 #terminate();
 

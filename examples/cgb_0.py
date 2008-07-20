@@ -60,6 +60,7 @@ else:
     print "isCGB: false";
 print;
 
+sys.exit();
 
 #terminate();
 
