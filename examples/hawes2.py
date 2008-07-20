@@ -28,7 +28,7 @@ from jas import terminate
 # Hawes & Gibson example 2
 # rational function coefficients
 
-r = Ring( "RatFunc(a, c, b) (y2, y1, z1, z2, x) L" );
+r = Ring( "RatFunc(a, c, b) (y2, y1, z1, z2, x) G" );
 print "Ring: " + str(r);
 print;
 
@@ -46,6 +46,7 @@ f = r.ideal( ps );
 print "Ideal: " + str(f);
 print;
 
+rg = f.GB();
 rg = f.GB();
 print "GB:", rg;
 print;
