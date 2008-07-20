@@ -122,7 +122,7 @@ public static Test suite() {
         = new GenPolynomialRing<GenPolynomial<BigRational>>(pr,rl);
 
      CReductionSeq<BigRational> cred 
-         = new CReductionSeq<BigRational>();
+         = new CReductionSeq<BigRational>( bi );
 
      GenPolynomial<GenPolynomial<BigRational>> a = fac.random(kl, ll, el, q );
      while ( a.isZERO() ) {
@@ -257,7 +257,7 @@ public static Test suite() {
                  //System.out.println("spol(a,b) = " + h);
                  boolean t = cred.isNormalform( x.list, h );
                  //System.out.println("isNF(spol(a,b)) = " + t);
-                 h = cred.normalform( x.list, h );
+                 h = cred.normalform( x.condition, x.list, h );
                  //System.out.println("NF(spol(a,b)) = " + h);
                  t = cred.isNormalform( x.list, h );
                  //System.out.println("isNF(NF(spol(a,b))) = " + t);
