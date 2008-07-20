@@ -535,7 +535,6 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
     /**
      * Minimal ordered Groebner basis.
      * @param cs colored system.
-     * @param Gp a Groebner base.
      * @return a reduced Groebner base of Gp.
      */
     //@Override
