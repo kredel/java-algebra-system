@@ -42,6 +42,39 @@ ps = """
 ) 
 """;
 
+#startLog();
+
+f = r.paramideal( ps );
+print "ParamIdeal: " + str(f);
+print;
+
+gs = f.CGBsystem();
+print "CGBsystem: " + str(gs);
+print;
+
+bg = gs.isCGBsystem();
+if bg:
+    print "isCGBsystem: true";
+else:
+    print "isCGBsystem: false";
+print;
+
+#sys.exit();
+
+gs = f.CGB();
+print "CGB: " + str(gs);
+print;
+
+bg = gs.isCGB();
+if bg:
+    print "isCGB: true";
+else:
+    print "isCGB: false";
+print;
+
+sys.exit();
+
+
 f = r.ideal( ps );
 print "Ideal: " + str(f);
 print;
