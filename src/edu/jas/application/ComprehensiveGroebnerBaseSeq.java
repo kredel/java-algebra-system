@@ -257,9 +257,9 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         int si = 0;
         while ( CSs.size() > 0 ) {
             cs = CSs.get(0); //remove(0);
-            logger.info("poped GBsys number    "+si        +" with condition = " + cs.condition);
-            logger.info("poped GBsys remaining "+CSs.size()+" with pairlist  = " + cs.pairlist);
-            if ( si++ >= 4 ) {
+            logger.info("poped GBsys number    "+si            +" with condition = " + cs.condition);
+            logger.info("poped GBsys remaining "+(CSs.size()-1)+" with pairlist  = " + cs.pairlist);
+            if ( si++ < 0 ) {
                logger.info("stopped GBsys ----------------------------------");
                CSb.addAll( CSs );
                break;
@@ -313,27 +313,34 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
                 if ( ! H.isZERO() ) {
                    CSh = new ArrayList<ColoredSystem<C>>();
                    ncs = determineAddPairs( cs, H );
-                   boolean set = false;
-                   for ( ColoredSystem<C> y : ncs ) {
-                       if ( cs.condition.equals( y.condition ) ) {
-                          System.out.println("equal condition = " + y.condition );
-                          if ( set ) {
-                             System.out.println("ERROR allready set");
-                             CSh.add( y );
-                          } else {
-                             set = true;
-                             cs = y;
-                             pairlist = cs.pairlist;
-                             G = cs.list;
-                             cond = cs.condition; // ==
-                             System.out.println("replaced main branch = " + cond);
-                          }
-                       } else {
-                          CSh.add( y );
-                       }
+                   if ( ncs == null || ncs.size() == 0 ) {
+                      continue;
                    }
-                   System.out.println("#new systems       = " + CSh.size() );
-                   ncs = CSh;
+                   cs = ncs.remove(0); // remove other?
+                   pairlist = cs.pairlist;
+                   G = cs.list;
+                   cond = cs.condition; 
+                   System.out.println("replaced main branch = " + cond);
+//                    boolean set = false;
+//                    for ( ColoredSystem<C> y : ncs ) {
+//                        if ( cs.condition.equals( y.condition ) ) {
+//                           System.out.println("equal condition = " + y.condition );
+//                           if ( set ) {
+//                              System.out.println("ERROR allready set");
+//                              CSh.add( y );
+//                           } else {
+//                              set = true;
+//                              cs = y;
+//                              pairlist = cs.pairlist;
+//                              G = cs.list;
+//                              cond = cs.condition; // ==
+//                              System.out.println("replaced main branch = " + cond);
+//                           }
+//                        } else {
+//                           CSh.add( y );
+//                        }
+//                    }
+                   System.out.println("#new systems       = " + ncs.size() );
                    int yi = 0;
                    for ( ColoredSystem<C> x : ncs ) {
                        boolean contained = false;
@@ -354,16 +361,10 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
                        }
                        CSs = CSh;
                    }
-//                    for ( ColoredSystem<C> y : CSh ) {
-//                        if ( ! CSs.contains( y ) ) {
-//                           CSs.add( y );
-//                           yi++;
-//                        }
-//                    }
                    System.out.println("#new systems added = " + yi );
                 }
             }
-            // all spols reduce to zero in this branch
+            // all s-pols reduce to zero in this branch
             CSb.add( cs );
             CSs.remove(0);
             System.out.println("done with = " + cs );
@@ -598,6 +599,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
 	    ExpVector e = a.red.leadingExpVector();
             System.out.println("reducing " + a);
             a = cred.normalform( cond, G, a ); // unchanged by top reduction
+            System.out.println("reduced  " + a);
             a = cs.reDetermine( a );
 	    ExpVector f = a.red.leadingExpVector();
             //a = engine.basePrimitivePart(a); //a.monic(); was not required
