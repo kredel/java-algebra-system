@@ -43,6 +43,7 @@ issues to consider:
 
 - make final variables public (?)
 
+- rename divideAndRemainder to quotientRemainder
 
 
 partially resolved and completed issues:
