@@ -34,18 +34,22 @@ print;
 
 #sys.exit();
 
-#startLog();
+startLog();
 
-## gs = f.CGBsystem();
-## print "CGBsystem: " + str(gs);
-## print;
+gs = f.CGBsystem();
+print "CGBsystem: " + str(gs);
+print;
 
-## bg = gs.isCGBsystem();
-## if bg:
-##     print "isCGBsystem: true";
-## else:
-##     print "isCGBsystem: false";
-## print;
+#sys.exit();
+
+bg = gs.isCGBsystem();
+if bg:
+    print "isCGBsystem: true";
+else:
+    print "isCGBsystem: false";
+print;
+
+sys.exit();
 
 gs = f.CGB();
 print "CGB: " + str(gs);
