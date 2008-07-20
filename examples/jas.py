@@ -290,7 +290,7 @@ class ParamIdeal:
         s = self.pset;
         F = s.list;
         t = System.currentTimeMillis();
-        S = ComprehensiveGroebnerBaseSeq(self.ring.ring).GBsys(F);
+        S = ComprehensiveGroebnerBaseSeq(self.ring.ring.coFac).GBsys(F);
         t = System.currentTimeMillis() - t;
         print "sequential comprehensive system executed in %s ms" % t; 
         return ParamIdeal(self.ring,"",None,S);
@@ -310,7 +310,7 @@ class ParamIdeal:
         t = System.currentTimeMillis();
         b = ComprehensiveGroebnerBaseSeq(self.ring.ring).isGBsys(S);
         t = System.currentTimeMillis() - t;
-        print "isCGB executed in %s ms" % t; 
+        print "isCGBsystem executed in %s ms" % t; 
         return b;
 
 
