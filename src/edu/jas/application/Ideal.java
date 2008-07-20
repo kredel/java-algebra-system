@@ -353,7 +353,7 @@ public class Ideal<C extends GcdRingElem<C>>
       if ( isGB && testGB ) {
          return;
       }
-      logger.warn("GB computing");
+      //logger.warn("GB computing");
       List< GenPolynomial<C> > G = getList();
       logger.info("GB computing = " + G);
       G = bb.GB( G );
