@@ -143,6 +143,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         return isGBcol(0,F);
     }
 
+
     /**
      * Comprehensive-Groebner base test using colored systems.
      * @param modv module variable number.
@@ -253,7 +254,6 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         }
         GenPolynomial<GenPolynomial<C>> f = F.get(0); // assert non Zero
         GenPolynomialRing<GenPolynomial<C>> cf = f.ring;
-        //GenPolynomialRing<C> ccf = (GenPolynomialRing<C>)cf.coFac;
 
         List<ColoredSystem<C>> CS = cred.determine( F ); 
         // substitute zero conditions into parameter coefficients and test
@@ -268,6 +268,29 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
                System.out.println("no GB for residue coefficients = " + list);
                return false;
             }
+        }
+ 
+        // substitute random ideal into parameter coefficients and test
+        GenPolynomialRing<C> ccf = (GenPolynomialRing<C>)cf.coFac;
+        int nv = ccf.nvar-2;
+        if ( nv < 1 ) {
+           nv = 1;
+        }
+        List<GenPolynomial<C>> il = new ArrayList<GenPolynomial<C>>();
+        for ( int i = 0; i < nv; i++ ) {
+            GenPolynomial<C> p = ccf.random(i+1);
+            il.add(p);
+        }
+        System.out.println("random ideal = " + il);
+        Ideal<C> id = new Ideal<C>(ccf,il);
+        ResidueRing<C> r = new ResidueRing<C>(id);
+        GenPolynomialRing<Residue<C>> rf = new GenPolynomialRing<Residue<C>>(r,cf);
+        List<GenPolynomial<Residue<C>>> list = PolyUtilApp.<C>toResidue(rf,F);
+        GroebnerBase<Residue<C>> bb = new GroebnerBasePseudoSeq<Residue<C>>( r );
+        boolean t = bb.isGB( list );
+        if ( ! t ) {
+            System.out.println("no GB for residue coefficients = " + list);
+            return false;
         }
         return true;
     }
