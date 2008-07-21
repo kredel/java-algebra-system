@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
+import org.apache.log4j.Logger;
+
 import edu.jas.structure.RingElem;
 import edu.jas.structure.GcdRingElem;
 
@@ -30,12 +32,25 @@ import edu.jas.application.Ideal;
 public class ColoredSystem<C extends GcdRingElem<C>> {
 
 
+    private static final Logger logger = Logger.getLogger(ColoredSystem.class);
+    private final boolean debug = logger.isDebugEnabled();
+
+
+    /**
+     * Condition determinig this colored system.
+     */
     public final Condition<C> condition;
 
 
+    /**
+     * Colored polynomials of this system.
+     */
     public final List<ColorPolynomial<C>> list;
 
 
+    /**
+     * Groebner base pair list of this system.
+     */
     public final OrderedCPairlist<C> pairlist;
 
 
@@ -87,11 +102,15 @@ public class ColoredSystem<C extends GcdRingElem<C>> {
         }
         s.append("conditions == 0 : " + getConditionZero() + "\n");
         s.append("conditions != 0 : " + getConditionNonZero() + "\n");
-        s.append("green coefficients:\n"    + getGreenCoefficients() + "\n");
-        s.append("red coefficients:\n"      + getRedCoefficients() + "\n");
+        if ( debug ) {
+           s.append("green coefficients:\n"    + getGreenCoefficients() + "\n");
+           s.append("red coefficients:\n"      + getRedCoefficients() + "\n");
+        }
         s.append("colored polynomials:\n"   + list + "\n");
         s.append("uncolored polynomials:\n" + getPolynomialList() + "\n");
-        s.append("essential polynomials:\n" + getEssentialPolynomialList() + "\n");
+        if ( debug ) {
+           s.append("essential polynomials:\n" + getEssentialPolynomialList() + "\n");
+        }
         if ( pairlist != null ) {
            s.append( pairlist.toString() + "\n" );
         }
