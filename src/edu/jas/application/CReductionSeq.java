@@ -330,11 +330,16 @@ public class CReductionSeq<C extends GcdRingElem<C>>
               a = m.getValue();
               Condition.Color col = cond.color( a );
               if ( col == Condition.Color.GREEN ) { // move to green terms
-                 //System.out.println("S.old = " + S);
                  GenPolynomial<GenPolynomial<C>> g = S.green.sum(a,e);
-                 GenPolynomial<GenPolynomial<C>> w = S.white.subtract(a,e);
-                 S = new ColorPolynomial<C>(g,S.red,w);
-                 //System.out.println("S.new = " + S);
+                 GenPolynomial<GenPolynomial<C>> r = S.red;
+                 GenPolynomial<GenPolynomial<C>> w = S.white;
+                 if ( S.red.isZERO() ) {
+                    w = w.subtract(a,e);
+                 } else { // only in minimalGB
+                    System.out.println("green_red = " + zero.sum(a,e));
+                    r = r.subtract(a,e);
+                 }
+                 S = new ColorPolynomial<C>(g,r,w);
                  continue;
               }
               if ( col == Condition.Color.WHITE ) { // refine condition
