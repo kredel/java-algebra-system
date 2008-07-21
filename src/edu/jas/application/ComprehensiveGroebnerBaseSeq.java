@@ -279,6 +279,9 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         List<GenPolynomial<C>> il = new ArrayList<GenPolynomial<C>>();
         for ( int i = 0; i < nv; i++ ) {
             GenPolynomial<C> p = ccf.random(i+1);
+            if ( p.isConstant() ) {
+               continue;
+            }
             p = engine.squarefreePart(p);
             il.add(p);
         }
