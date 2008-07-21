@@ -279,6 +279,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         List<GenPolynomial<C>> il = new ArrayList<GenPolynomial<C>>();
         for ( int i = 0; i < nv; i++ ) {
             GenPolynomial<C> p = ccf.random(i+1);
+            p = engine.squarefreePart(p);
             il.add(p);
         }
         System.out.println("random ideal = " + il);
@@ -286,6 +287,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         ResidueRing<C> r = new ResidueRing<C>(id);
         GenPolynomialRing<Residue<C>> rf = new GenPolynomialRing<Residue<C>>(r,cf);
         List<GenPolynomial<Residue<C>>> list = PolyUtilApp.<C>toResidue(rf,F);
+        System.out.println("random residue = " + r.ideal.getList());
         GroebnerBase<Residue<C>> bb = new GroebnerBasePseudoSeq<Residue<C>>( r );
         boolean t = bb.isGB( list );
         if ( ! t ) {
