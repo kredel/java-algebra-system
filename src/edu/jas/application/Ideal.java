@@ -39,7 +39,8 @@ import edu.jas.ufd.GCDFactory;
 
 
 /**
- * Ideal implements some methods for ideal arithmetic, e.g. intersection and quotient.
+ * Ideal implements some methods for ideal arithmetic, 
+ * for example intersection and quotient.
  * @author Heinz Kredel
  */
 public class Ideal<C extends GcdRingElem<C>> 

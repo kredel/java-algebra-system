@@ -45,7 +45,7 @@ import edu.jas.application.PolyUtilComp;
 
 /**
  * Comprehensive Groebner Base sequential algorithm.
- * Implements C-Groebner bases and GB test.
+ * Implements comprehensive Groebner bases via Groebner systems and CGB test.
  * @param <C> coefficient type
  * @author Heinz Kredel
  */
@@ -213,7 +213,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
                        }
                     }
                     if ( !h.isZERO() ) {
-                       hp = cs.reDetermine( h );
+                       hp = cond.reDetermine( h );
                        if ( !hp.isZERO() ) {
                           System.out.println("p = " + p);
                           System.out.println("q = " + q);
@@ -376,7 +376,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
 
                 pi = pair.pi; 
                 pj = pair.pj; 
-                if ( logger.isDebugEnabled() ) {
+                if ( debug ) {
                     logger.info("pi    = " + pi );
                     logger.info("pj    = " + pj );
                 }
@@ -386,7 +386,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
                     pair.setZero();
                     continue;
                 }
-                if ( true || logger.isDebugEnabled() ) {
+                if ( debug ) {
                     //logger.info("ht(S) = " + S.leadingExpVector() );
                     logger.info("S = " + S );
                 }
@@ -396,12 +396,12 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
                     pair.setZero();
                     continue;
                 } 
-                if ( logger.isDebugEnabled() ) {
+                if ( debug ) {
                     logger.info("ht(H) = " + H.leadingExpVector() );
                 }
 
                 H = H.abs();
-                if ( logger.isDebugEnabled() ) {
+                if ( debug ) {
                     logger.debug("H = " + H );
                 }
                 logger.info("H = " + H );
@@ -448,9 +448,9 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         // all branches done
         CSh = new ArrayList<ColoredSystem<C>>();
         for ( ColoredSystem<C> x : CSb ) {
-            System.out.println("G = " + x.list );
+            //System.out.println("G = " + x.list );
             cs = minimalGB(x);
-            System.out.println("min(G) = " + cs.list );
+            //System.out.println("min(G) = " + cs.list );
             //cs = new ColoredSystem<C>( x.condition, G, x.pairlist );
             CSh.add( cs );
             logger.info("#sequential done = " + x.condition);
@@ -494,7 +494,6 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
               Sp = new ArrayList<ColorPolynomial<C>>( S );
               OrderedCPairlist<C> PL = pl.clone();
               NS = new ColoredSystem<C>( cnd, Sp, PL );
-              //NS = NS.reDetermine();
               List<ColoredSystem<C>> NCSp = new ArrayList<ColoredSystem<C>>( NCS.size() );
               boolean contained = false;
               for ( ColoredSystem<C> x : NCS ) {
@@ -523,7 +522,6 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
            OrderedCPairlist<C> PL = pl.clone();
            PL.put( nz );
            NS = new ColoredSystem<C>( cnd, Sp, PL );
-           //NS = NS.reDetermine();
            List<ColoredSystem<C>> NCSp = new ArrayList<ColoredSystem<C>>( NCS.size() );
            boolean contained = false;
            for ( ColoredSystem<C> x : NCS ) {
@@ -569,7 +567,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         Set<GenPolynomial<GenPolynomial<C>>> Gs = 
                          new HashSet<GenPolynomial<GenPolynomial<C>>>();
         for ( ColoredSystem<C> cs : Gsys ) {
-            if ( true || debug ) {
+            if ( false || debug ) {
                if ( !cs.isDetermined() ) {
                   System.out.println("not determined, cs = " + cs);
                }
@@ -588,19 +586,19 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
             new ArrayList<GenPolynomial<GenPolynomial<C>>>( Gs );
         if ( true | debug ) {
             cds = cred.caseDistinction( G );
-            System.out.println("------------------------------------------");
+            //System.out.println("------------------------------------------");
             for ( Condition<C> cond : cd ) {
                 if ( ! cds.contains( cond ) ) {
                     System.out.println("cd_i not in cds = " + cond);
                 }
             }
-            System.out.println("------------------------------------------");
+            //System.out.println("------------------------------------------");
             for ( Condition<C> cond : cds ) {
                 if ( ! cd.contains( cond ) ) {
-                    System.out.println("cd_i not in cd = " + cond);
+                    System.out.println("cds_i not in cd = " + cond);
                 }
             }
-            System.out.println("------------------------------------------");
+            //System.out.println("------------------------------------------");
         }
         return G;
     }
@@ -645,14 +643,14 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
             if ( cred.isTopReducible(G,a) || cred.isTopReducible(F,a) ) {
                // drop polynomial 
                if ( true || debug ) {
-                  System.out.println("trying to drop " + a);
+                  //System.out.println("trying to drop " + a);
                   List<ColorPolynomial<C>> ff;
                   ff = new ArrayList<ColorPolynomial<C>>( G );
                   ff.addAll(F);
                   a = cred.normalform( cond, ff, a );
-                  a = cs.reDetermine( a );
+                  a = cond.reDetermine( a );
                   if ( !a.isZERO() ) {
-                     System.out.println("error, nf(a) != 0 " + a);
+                     System.out.println("error, nf(a) != 0 " + b + ", " + a);
                      F.add(b);
                   }
                }
@@ -670,10 +668,10 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         while ( i < len ) {
             a = G.remove(0); b = a;
 	    ExpVector e = a.red.leadingExpVector();
-            System.out.println("reducing " + a);
+            //System.out.println("reducing " + a);
             a = cred.normalform( cond, G, a ); // unchanged by top reduction
-            System.out.println("reduced  " + a);
-            a = cs.reDetermine( a );
+            //System.out.println("reduced  " + a);
+            a = cond.reDetermine( a );
 	    ExpVector f = a.red.leadingExpVector();
             //a = engine.basePrimitivePart(a); //a.monic(); was not required
             //a = a.abs();
@@ -681,7 +679,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
 	    if ( e.equals(f) ) {
                G.add( a ); // adds as last
 	    } else {
-               System.out.println("error, nf(a) not determined " + a);
+               System.out.println("error, nf(a) not determined " + b + ", " + a);
                G.add( b ); // adds as last
 	    }
             i++;

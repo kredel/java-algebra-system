@@ -20,7 +20,8 @@ import edu.jas.poly.ExpVector;
 
 
 /**
- * Condition as a pair of zero and non-zero polynomials.
+ * Condition. 
+ * A pair of lists of polynomials to be considered zero respectively non-zero.
  * @param <C> coefficient type
  * @author Heinz Kredel.
  */
@@ -32,8 +33,6 @@ public class Condition<C extends GcdRingElem<C> >
      * Colors.
      */
     public static enum Color { GREEN, RED, WHITE };
-
-
 
 
     /**
@@ -48,10 +47,9 @@ public class Condition<C extends GcdRingElem<C> >
     public final List<GenPolynomial<C>> nonZero;
 
 
-
-
     /**
      * Condition constructor.
+     * Constructs an empty condition.
      * @param ring polynomial ring factory for coefficients.
      */
     public Condition(GenPolynomialRing<C> ring) {
@@ -109,7 +107,7 @@ public class Condition<C extends GcdRingElem<C> >
         } catch (ClassCastException e) {
             return false;
         }
-     // if ( ! zero.getList().equals( c.zero.getList() ) ) {
+        // if ( ! zero.getList().equals( c.zero.getList() ) ) {
         if ( ! zero.equals( c.zero ) ) {
            return false;
         }
@@ -138,7 +136,7 @@ public class Condition<C extends GcdRingElem<C> >
 
 
     /**
-     * Extend with condition zero polynomial.
+     * Extend condition with zero polynomial.
      * @param z a polynomial to be treated as zero.
      */
     public Condition<C> extendZero(GenPolynomial<C> z) {
@@ -165,7 +163,7 @@ public class Condition<C extends GcdRingElem<C> >
 
 
     /**
-     * Extend with condition non-zero polynomial.
+     * Extend condition with non-zero polynomial.
      * @param nz a polynomial to be treated as non-zero.
      */
     public Condition<C> extendNonZero(GenPolynomial<C> nz) {
@@ -218,7 +216,7 @@ public class Condition<C extends GcdRingElem<C> >
      * @param c polynomial searched in nonZero.
      */
     public boolean isNonZero(GenPolynomial<C> c) {
-        if ( c == null || c.isZERO() ) { // do not look into zero
+        if ( c == null || c.isZERO() ) { // do not look into zero list
            return false;
         }
         if ( nonZero == null || nonZero.size() == 0 ) {
@@ -250,7 +248,7 @@ public class Condition<C extends GcdRingElem<C> >
      * @param c polynomial to bee added to nonZero.
      */
     public List<GenPolynomial<C>> addNonZero(GenPolynomial<C> c) {
-        if ( c == null || c.isZERO() ) { // do not look into zero
+        if ( c == null || c.isZERO() ) { // do not look into zero list
            return nonZero;
         }
         List<GenPolynomial<C>> list;
@@ -337,10 +335,71 @@ public class Condition<C extends GcdRingElem<C> >
 
 
     /**
+     * Re determine colored polynomial.
+     * @param s colored polynomial.
+     * @return determined colored polynomial wrt. this.conditions.
+     */
+    public ColorPolynomial<C> reDetermine( ColorPolynomial<C> s ) {
+        return determine( s.getPolynomial() );
+//         Ideal<C> id = condition.zero;
+//         //if ( id.isONE() ) {
+//         //   return s;
+//         //}
+//         GenPolynomial<GenPolynomial<C>> green = s.green;
+//         GenPolynomial<GenPolynomial<C>> red = s.red.clone();
+//         GenPolynomial<GenPolynomial<C>> white = s.white.clone();
+//         Iterator<Monomial<GenPolynomial<C>>> ri = red.monomialIterator();
+//         while ( ri.hasNext() ) {
+//             Monomial<GenPolynomial<C>> m = ri.next();
+//             if ( m.c.isConstant() ) { // red
+//                 break;
+//             }
+//             //if ( id.getList().contains( m.c ) ) { // green
+//             if ( id.contains( m.c ) ) { // green
+//                 ri.remove();
+//                 green = green.sum( m.c, m.e );
+//             } else if ( condition.nonZero.contains( m.c ) ) { // red
+//                 break;
+//             } else { // white
+//                 white = white.sum( red );
+//                 red = red.ring.getZERO();
+//                 break;
+//             }
+//         }
+//         if ( !red.isZERO() ) {
+//            return new ColorPolynomial<C>( green, red, white );
+//         }
+//         // now red == 0
+//         //white = s.white.clone();
+//         Iterator<Monomial<GenPolynomial<C>>> wi = white.monomialIterator();
+//         while ( wi.hasNext() ) {
+//             Monomial<GenPolynomial<C>> m = wi.next();
+//             if ( m.c.isConstant() ) { // red
+//                 wi.remove();
+//                 red = red.sum( m.c, m.e );
+//                 break;
+//             }
+//             //if ( id.getList().contains( m.c ) ) { // green
+//             if ( id.contains( m.c ) ) { // green
+//                 wi.remove();
+//                 green = green.sum( m.c, m.e );
+//             } else if ( condition.nonZero.contains( m.c ) ) { // red
+//                 wi.remove();
+//                 red = red.sum( m.c, m.e );
+//                 break;
+//             } else { // white
+//                 break;
+//             }
+//         }
+//         return new ColorPolynomial<C>( green, red, white );
+    }
+
+
+    /**
      * Determine list of polynomials.
      * If this condition does not determine all polynomials, then 
      * a run-time exception is thrown.
-     * The returned list does not contain zero polynomials with all green terms.
+     * The returned list does not contain polynomials with all green terms.
      * @param L list of polynomial.
      * @return new determined list of colored polynomials.
      */

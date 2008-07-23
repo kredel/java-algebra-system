@@ -29,12 +29,11 @@ import edu.jas.application.Ideal;
 
 
 /**
- * Polynomial parametric ring Reduction sequential use algorithm.
- * Implements normalform and coloring and condition stuff.
+ * Polynomial parametric ring reduction sequential use algorithm.
+ * Implements normalform and condition stuff.
  * @param <C> coefficient type
  * @author Heinz Kredel
  */
-
 public class CReductionSeq<C extends GcdRingElem<C>>
              /*extends ReductionAbstract<C>*/ 
              /*implements CReduction<C>*/ {
@@ -67,7 +66,7 @@ public class CReductionSeq<C extends GcdRingElem<C>>
      */
     public CReductionSeq(RingFactory<C> rf) {
         cofac = rf;
-        System.out.println("cofac = " + cofac);
+        // System.out.println("cofac = " + cofac);
         engine = GCDFactory.<C>getImplementation( cofac );
     }
 
@@ -566,51 +565,6 @@ public class CReductionSeq<C extends GcdRingElem<C>>
             CS.add( cs );
         }
         return CS;
-    }
-
-
-    /**
-     * Determine polynomial relative to a condition.
-     * @param cs a colored system.
-     * @param A color polynomial.
-     * @return list of colored systems.
-     */
-    public List<ColoredSystem<C>> unusedDetermine( ColoredSystem<C> cs, 
-                                                   ColorPolynomial<C> A ) {  
-        List<ColoredSystem<C>> NCS = new ArrayList<ColoredSystem<C>>();
-        if ( A == null || A.isZERO() ) {
-           //NCS.add( cs );
-           return NCS;
-        }
-        List<ColorPolynomial<C>> S = cs.list;
-        Condition<C> cond = cs.condition; //.clone();
-        OrderedCPairlist<C> pl = cs.pairlist;
-        List<ColorPolynomial<C>> Sp;
-        ColorPolynomial<C> nz;
-        ColoredSystem<C> NS;
-//         if ( A.isDetermined() ) { ... } // dont use this   
-        System.out.println("to determine = " + A);
-        GenPolynomial<GenPolynomial<C>> Ap = A.getPolynomial();
-        List<Condition<C>> cd = caseDistinction( cond, Ap );
-        for ( Condition<C> cnd : cd ) {
-           Sp = new ArrayList<ColorPolynomial<C>>( S );
-           nz = cnd.determine( Ap );
-           if ( nz == null || nz.isZERO() ) {
-              Sp = new ArrayList<ColorPolynomial<C>>( S );
-              NS = new ColoredSystem<C>( cnd, Sp, pl );
-              //NS = NS.reDetermine();
-              NCS.add( NS );
-              continue;
-           }
-           System.out.println("new determinated nz = " + nz);
-           Sp = new ArrayList<ColorPolynomial<C>>( S );
-           Sp.add( nz );
-           NS = new ColoredSystem<C>( cnd, Sp, pl );
-           //NS = NS.reDetermine();
-           NCS.add( NS );
-        }
-        //System.out.println("new determination = " + NCS);
-        return NCS;
     }
 
 }

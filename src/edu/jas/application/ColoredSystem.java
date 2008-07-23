@@ -4,6 +4,8 @@
 
 package edu.jas.application;
 
+import java.util.Set;
+import java.util.HashSet;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,22 +16,22 @@ import org.apache.log4j.Logger;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.GcdRingElem;
 
-import edu.jas.poly.Monomial;
+//import edu.jas.poly.Monomial;
 import edu.jas.poly.ColorPolynomial;
 import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.PolyIterator;
+//import edu.jas.poly.PolyIterator;
 import edu.jas.poly.GenPolynomialRing;
 
 import edu.jas.application.Ideal;
 
 
-
 /**
-  * Container for a condition and corresponding colored polynomial system.
+  * Container for a condition, a corresponding colored polynomial system 
+  * and a Groebner base pair list.
   * @param <C> coefficient type
-  * @param F an ideal base.
   */
-public class ColoredSystem<C extends GcdRingElem<C>> {
+public class ColoredSystem<C extends GcdRingElem<C>> 
+             implements Cloneable {
 
 
     private static final Logger logger = Logger.getLogger(ColoredSystem.class);
@@ -81,7 +83,7 @@ public class ColoredSystem<C extends GcdRingElem<C>> {
 
 
     /**
-     * clone this colored polynomial system.
+     * Clone this colored polynomial system.
      * @return a clone of this.
      */
     public ColoredSystem<C> clone() {
@@ -153,8 +155,7 @@ public class ColoredSystem<C extends GcdRingElem<C>> {
      * @return condition.zero.
      */
     public List<GenPolynomial<C>> getConditionZero() {
-        List<GenPolynomial<C>> c = condition.zero.getList();
-        return new ArrayList<GenPolynomial<C>>( c );
+        return condition.zero.getList(); 
     }
 
 
@@ -172,20 +173,19 @@ public class ColoredSystem<C extends GcdRingElem<C>> {
      * @return list of all red coefficients of polynomials.
      */
     public List<GenPolynomial<C>> getRedCoefficients() {
-        List<GenPolynomial<C>> F
-            = new ArrayList<GenPolynomial<C>>();
+        Set<GenPolynomial<C>> F = new HashSet<GenPolynomial<C>>();
         for ( ColorPolynomial<C> s : list ) {
             F.addAll( s.red.getMap().values() );
         }
-        List<GenPolynomial<C>> M = new ArrayList<GenPolynomial<C>>();
-        for ( GenPolynomial<C> c : F ) {
-            //if ( c.isONE() ) {
-            //   continue;
-            //}
-            if ( !M.contains( c ) ) {
-               M.add( c );
-            }
-        }
+        List<GenPolynomial<C>> M = new ArrayList<GenPolynomial<C>>( F );
+//         for ( GenPolynomial<C> c : F ) {
+//             //if ( c.isONE() ) {
+//             //   continue;
+//             //}
+//             if ( !M.contains( c ) ) {
+//                M.add( c );
+//             }
+//         }
         return M;
     }
 
@@ -195,20 +195,16 @@ public class ColoredSystem<C extends GcdRingElem<C>> {
      * @return list of all green coefficients of polynomials.
      */
     public List<GenPolynomial<C>> getGreenCoefficients() {
-        List<GenPolynomial<C>> F
-            = new ArrayList<GenPolynomial<C>>();
+        Set<GenPolynomial<C>> F = new HashSet<GenPolynomial<C>>();
         for ( ColorPolynomial<C> s : list ) {
             F.addAll( s.green.getMap().values() );
         }
-        List<GenPolynomial<C>> M = new ArrayList<GenPolynomial<C>>();
-        for ( GenPolynomial<C> c : F ) {
-            //if ( c.isONE() ) {
-            //   continue;
-            //}
-            if ( !M.contains( c ) ) {
-               M.add( c );
-            }
-        }
+        List<GenPolynomial<C>> M = new ArrayList<GenPolynomial<C>>( F );
+//         for ( GenPolynomial<C> c : F ) {
+//             if ( !M.contains( c ) ) {
+//                M.add( c );
+//             }
+//         }
         return M;
     }
 
@@ -243,7 +239,9 @@ public class ColoredSystem<C extends GcdRingElem<C>> {
 
     /**
      * Check invariants.
-     * return true, if all invariants are met, else false.
+     * Check if all polynomials are determined and 
+     * if the color of all coefficients is correct with respect to the condition.
+     * @return true, if all invariants are met, else false.
      */
     public boolean checkInvariant() {
         if ( !isDetermined() ) {
@@ -288,7 +286,7 @@ public class ColoredSystem<C extends GcdRingElem<C>> {
 
     /**
      * Is this colored system completely determined.
-     * return true, if each ColorPolynomial is determined, else false.
+     * @return true, if each ColorPolynomial is determined, else false.
      */
     public boolean isDetermined() {
         for ( ColorPolynomial<C> s : list ) {
@@ -306,66 +304,6 @@ public class ColoredSystem<C extends GcdRingElem<C>> {
 
 
     /**
-     * Re determine colored polynomial.
-     * @param s colored polynomial.
-     * @return determined colored polynomial wrt. this.conditions.
-     */
-    public ColorPolynomial<C> reDetermine( ColorPolynomial<C> s ) {
-        Ideal<C> id = condition.zero;
-        //if ( id.isONE() ) {
-        //   return s;
-        //}
-        GenPolynomial<GenPolynomial<C>> green = s.green;
-        GenPolynomial<GenPolynomial<C>> red = s.red.clone();
-        GenPolynomial<GenPolynomial<C>> white = s.white.clone();
-        Iterator<Monomial<GenPolynomial<C>>> ri = red.monomialIterator();
-        while ( ri.hasNext() ) {
-            Monomial<GenPolynomial<C>> m = ri.next();
-            if ( m.c.isConstant() ) { // red
-                break;
-            }
-            //if ( id.getList().contains( m.c ) ) { // green
-            if ( id.contains( m.c ) ) { // green
-                ri.remove();
-                green = green.sum( m.c, m.e );
-            } else if ( condition.nonZero.contains( m.c ) ) { // red
-                break;
-            } else { // white
-                white = white.sum( red );
-                red = red.ring.getZERO();
-                break;
-            }
-        }
-        if ( !red.isZERO() ) {
-           return new ColorPolynomial<C>( green, red, white );
-        }
-        // now red == 0
-        //white = s.white.clone();
-        Iterator<Monomial<GenPolynomial<C>>> wi = white.monomialIterator();
-        while ( wi.hasNext() ) {
-            Monomial<GenPolynomial<C>> m = wi.next();
-            if ( m.c.isConstant() ) { // red
-                wi.remove();
-                red = red.sum( m.c, m.e );
-                break;
-            }
-            //if ( id.getList().contains( m.c ) ) { // green
-            if ( id.contains( m.c ) ) { // green
-                wi.remove();
-                green = green.sum( m.c, m.e );
-            } else if ( condition.nonZero.contains( m.c ) ) { // red
-                wi.remove();
-                red = red.sum( m.c, m.e );
-                break;
-            } else { // white
-                break;
-            }
-        }
-        return new ColorPolynomial<C>( green, red, white );
-    }
-
-
-    /**
      * Re determine colorings of polynomials.
      * @return re determined colored polynomials wrt. this.conditions.
      */
@@ -375,7 +313,7 @@ public class ColoredSystem<C extends GcdRingElem<C>> {
         }
         List<ColorPolynomial<C>> Sn = new ArrayList<ColorPolynomial<C>>( list.size() );
         for ( ColorPolynomial<C> c : list ) {
-            ColorPolynomial<C> a = reDetermine( c ); 
+            ColorPolynomial<C> a = condition.reDetermine( c ); 
             //if ( !a.isZERO() ) {
             Sn.add( a ); // must also add zeros
             //}
