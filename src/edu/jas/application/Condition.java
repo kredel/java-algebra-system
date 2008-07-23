@@ -15,7 +15,6 @@ import edu.jas.structure.GcdRingElem;
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
-import edu.jas.poly.ColorPolynomial;
 import edu.jas.poly.ExpVector;
 
 

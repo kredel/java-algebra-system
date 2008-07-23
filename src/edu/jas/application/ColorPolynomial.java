@@ -3,7 +3,7 @@
  * $Id$
  */
 
-package edu.jas.poly;
+package edu.jas.application;
 
 import java.util.Map;
 import java.util.List;
@@ -20,8 +20,8 @@ import edu.jas.structure.RingElem;
 //import edu.jas.kern.PrettyPrint;
 //import edu.jas.kern.PreemptingException;
 
-//import edu.jas.poly.ExpVector;
-//import edu.jas.poly.GenPolynomialRing;
+import edu.jas.poly.ExpVector;
+import edu.jas.poly.GenPolynomial;
 
 
 /**
@@ -121,7 +121,9 @@ public class ColorPolynomial<C extends RingElem<C> >
         if ( cp == null ) {
            return false;
         }
-        return ( green.equals(cp.green) && red.equals(cp.red) && white.equals(cp.white) );
+        return (    green.equals(cp.green) 
+                 && red.equals(cp.red) 
+                 && white.equals(cp.white) );
     }
 
 
@@ -381,8 +383,8 @@ public class ColorPolynomial<C extends RingElem<C> >
     public ColorPolynomial<C> subtract( ColorPolynomial<C> S ) {
         GenPolynomial<GenPolynomial<C>> g, r, w;
         g = green.subtract( S.green );
-     r = red.ring.getZERO();
-     w = getEssentialPolynomial().subtract( S.getEssentialPolynomial() );
+        r = red.ring.getZERO();
+        w = getEssentialPolynomial().subtract( S.getEssentialPolynomial() );
         return new ColorPolynomial<C>(g,r,w);
     }
 

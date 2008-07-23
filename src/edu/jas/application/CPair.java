@@ -8,8 +8,6 @@ import java.io.Serializable;
 
 import edu.jas.structure.RingElem;
 
-import edu.jas.poly.ColorPolynomial;
-
 
 /**
  * Serializable subclass to hold pairs of polynomials.
