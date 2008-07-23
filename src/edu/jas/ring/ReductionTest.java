@@ -24,7 +24,6 @@ import edu.jas.arith.BigComplex;
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.ColorPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolynomialList;
 
