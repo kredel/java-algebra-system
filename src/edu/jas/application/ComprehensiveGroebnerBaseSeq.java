@@ -276,13 +276,21 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
            nv = 1;
         }
         List<GenPolynomial<C>> il = new ArrayList<GenPolynomial<C>>();
-        for ( int i = 0; i < nv; i++ ) {
-            GenPolynomial<C> p = ccf.random(i+1);
+        int i = 0;
+        int j = 1;
+        while ( i < nv ) {
+            j++;
+            GenPolynomial<C> p = ccf.random(j+1);
+            //System.out.println("p = " + p);
             if ( p.isConstant() ) {
+               continue;
+            }
+            if ( p.isZERO() ) {
                continue;
             }
             p = engine.squarefreePart(p);
             il.add(p);
+            i++;
         }
         System.out.println("random ideal = " + il);
         Ideal<C> id = new Ideal<C>(ccf,il);
@@ -647,7 +655,10 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
                   ff = new ArrayList<ColorPolynomial<C>>( G );
                   ff.addAll(F);
                   a = cred.normalform( cond, ff, a );
-                  a = cond.reDetermine( a );
+                  try {
+                      a = cond.reDetermine( a );
+                  } catch ( RuntimeException ignored ) {
+                  }
                   if ( !a.isZERO() ) {
                      System.out.println("error, nf(a) != 0 " + b + ", " + a);
                      F.add(b);
@@ -670,7 +681,10 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
             //System.out.println("reducing " + a);
             a = cred.normalform( cond, G, a ); // unchanged by top reduction
             //System.out.println("reduced  " + a);
-            a = cond.reDetermine( a );
+            try {
+                a = cond.reDetermine( a );
+            } catch ( RuntimeException ignored ) {
+            }
 	    ExpVector f = a.red.leadingExpVector();
             //a = engine.basePrimitivePart(a); //a.monic(); was not required
             //a = a.abs();
