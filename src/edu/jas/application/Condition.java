@@ -151,6 +151,15 @@ public class Condition<C extends GcdRingElem<C> >
 
 
     /**
+     * Is contradictory.
+     * @return true if this condition is contradictory, else false.
+     */
+    public boolean isContradictory() {
+        return ( zero.isONE() || nonZero.contains( zero.getRing().getZERO() ) );
+    }
+
+
+    /**
      * Extend condition with zero polynomial.
      * @param z a polynomial to be treated as zero.
      */
