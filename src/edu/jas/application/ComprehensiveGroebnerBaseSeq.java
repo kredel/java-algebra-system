@@ -660,7 +660,9 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
                   } catch ( RuntimeException ignored ) {
                   }
                   if ( !a.isZERO() ) {
-                     System.out.println("error, nf(a) != 0 " + b + ", " + a);
+                     if ( false || debug ) {
+                        System.out.println("error, nf(a) != 0 " + b + ", " + a);
+                     }
                      F.add(b);
                   }
                }
@@ -692,7 +694,9 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
 	    if ( e.equals(f) ) {
                G.add( a ); // adds as last
 	    } else {
-               System.out.println("error, nf(a) not determined " + b + ", " + a);
+               if ( false || debug ) {
+                  System.out.println("error, nf(a) not determined " + b + ", " + a);
+               }
                G.add( b ); // adds as last
 	    }
             i++;
