@@ -140,6 +140,17 @@ public class CPair<C extends RingElem<C> >
     }
 
 
+    /** Hash code for this pair.
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() { 
+        int h;
+        h = getPairNumber();
+        return h;
+    }
+
+
     /**
      * Set useCriterion4.
      * @param c boolean value to set.

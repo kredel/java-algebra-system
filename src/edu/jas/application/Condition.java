@@ -125,6 +125,21 @@ public class Condition<C extends GcdRingElem<C> >
     }
 
 
+    /** Hash code for this condition.
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() { 
+        int h;
+        h = zero.getList().hashCode();
+        h = h << 17;
+        h += nonZero.hashCode();
+        //h = h << 11;
+        //h += pairlist.hashCode();
+        return h;
+    }
+
+
     /**
      * Is empty condition.
      * @return true if this is the empty condition, else false.

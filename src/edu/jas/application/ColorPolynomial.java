@@ -127,6 +127,21 @@ public class ColorPolynomial<C extends RingElem<C> >
     }
 
 
+   /** Hash code for this colored polynomial.
+    * @see java.lang.Object#hashCode()
+    */
+   @Override
+   public int hashCode() { 
+      int h;
+      h = green.hashCode();
+      h = h << 11;
+      h += red.hashCode();
+      h = h << 11;
+      h += white.hashCode();
+      return h;
+   }
+
+
     /**
      * Is this polynomial determined.
      * @return true, if there are nonzero red terms or if this == 0, else false.
@@ -309,17 +324,15 @@ public class ColorPolynomial<C extends RingElem<C> >
 
     /**
      * ColorPolynomial summation. 
+     * <b>Note:</b> green coefficients stay green, all others become white.
      * @param S ColorPolynomial.
      * @return this+S.
      */
     public ColorPolynomial<C> sum( ColorPolynomial<C> S ) {
         GenPolynomial<GenPolynomial<C>> g, r, w;
         g = green.sum( S.green );
-        r = red.sum( S.red );
-        w = white.sum( S.white );
-        //throw new RuntimeException("not jet ready");
-        //assert g.trailingExpvector() > r.leadingExpvector();
-        //assert r.trailingExpvector() > w.leadingExpvector();
+        r = red.ring.getZERO();
+        w = getEssentialPolynomial().sum( S.getEssentialPolynomial() );
         return new ColorPolynomial<C>(g,r,w);
     }
 
@@ -332,51 +345,23 @@ public class ColorPolynomial<C extends RingElem<C> >
      */
     public ColorPolynomial<C> sum( GenPolynomial<C> s, ExpVector e ) {
         GenPolynomial<GenPolynomial<C>> g, r, w;
-        g = green; //.sum( s, e );
-        // assert !green.getMap().keySet().contains( e )
-        if ( red.getMap().keySet().contains( e ) ) {
-           r = red.sum( s, e );
-           w = white; 
+        g = green;
+        r = red;
+        w = white;
+        if ( green.getMap().keySet().contains( e ) ) {
+           g = green.sum( s, e ); 
+        } else if ( red.getMap().keySet().contains( e ) ) {
+            r = red.sum( s, e );
         } else {
-           r = red;
            w = white.sum( s, e );
         }
-        //assert g.trailingExpvector() > r.leadingExpvector();
-        //assert r.trailingExpvector() > w.leadingExpvector();
         return new ColorPolynomial<C>(g,r,w);
     }
 
 
     /**
      * ColorPolynomial subtraction. 
-     * @param S ColorPolynomial.
-     * @return this-S.
-     */
-    public ColorPolynomial<C> subtractComponent( ColorPolynomial<C> S ) {
-        GenPolynomial<GenPolynomial<C>> g, r, w;
-        g = green.subtract( S.green );
-        //Comparator<ExpVector> cmp;
-        if ( red.isZERO() ) {
-           r = red;
-           w = white.subtract( S.red ).subtract( S.white );
-        } else {
-           r = red.subtract( S.red );
-           w = white.subtract( S.white );
-        }
-        //if ( !green.isZERO() && !red.isZERO() ) {
-        //   ttg = green.trailingExpVector();
-        //   ltr = red.leadingExpVector();
-        //   cmp = green.ring.tord.getDescendComparator();
-        //   t = t && ( cmp.compare(ttg,ltr) < 0 );
-        //}
-        //assert g.trailingExpvector() > r.leadingExpvector();
-        //assert r.trailingExpvector() > w.leadingExpvector();
-        return new ColorPolynomial<C>(g,r,w);
-    }
-
-
-    /**
-     * ColorPolynomial subtraction. 
+     * <b>Note:</b> green coefficients stay green, all others become white.
      * @param S ColorPolynomial.
      * @return this-S.
      */
@@ -397,17 +382,16 @@ public class ColorPolynomial<C extends RingElem<C> >
      */
     public ColorPolynomial<C> subtract( GenPolynomial<C> s, ExpVector e ) {
         GenPolynomial<GenPolynomial<C>> g, r, w;
-        g = green; //.subtract( s, e );
-        // assert !green.getMap().keySet().contains( e )
-        if ( red.getMap().keySet().contains( e ) ) {
+        g = green;
+        r = red;
+        w = white;
+        if ( green.getMap().keySet().contains( e ) ) {
+           g = green.subtract( s, e ); 
+        } else if ( red.getMap().keySet().contains( e ) ) {
            r = red.subtract( s, e );
-           w = white; 
         } else {
-           r = red;
            w = white.subtract( s, e );
         }
-        //assert g.trailingExpvector() > r.leadingExpvector();
-        //assert r.trailingExpvector() > w.leadingExpvector();
         return new ColorPolynomial<C>(g,r,w);
     }
 

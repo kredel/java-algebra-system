@@ -149,6 +149,21 @@ public class ColoredSystem<C extends GcdRingElem<C>>
     }
 
 
+    /** Hash code for this colored system.
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() { 
+        int h;
+        h = condition.hashCode();
+        h = h << 17;
+        h += list.hashCode();
+        //h = h << 11;
+        //h += pairlist.hashCode();
+        return h;
+    }
+
+
     /**
      * Get zero condition on coefficients. 
      * @return condition.zero.

@@ -229,7 +229,7 @@ public class OrderedCPairlist<C extends GcdRingElem<C> >
 
 
     /**
-     * equals.
+     * Simple equals.
      * @param ob an Object.
      * @return true if this is equal to o, else false.
      */
@@ -250,6 +250,17 @@ public class OrderedCPairlist<C extends GcdRingElem<C> >
          return t;
      }
      return true;
+    }
+
+
+    /** Simple hash code for this pair list.
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() { 
+        int h;
+        h = pairCount();
+        return h;
     }
 
 
