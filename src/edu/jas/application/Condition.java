@@ -20,7 +20,8 @@ import edu.jas.poly.ExpVector;
 
 /**
  * Condition. 
- * A pair of lists of polynomials to be considered zero respectively non-zero.
+ * An ideal of polynomials considered to be zero 
+ * and a list of polynomials considered to be non-zero.
  * @param <C> coefficient type
  * @author Heinz Kredel.
  */
@@ -259,7 +260,7 @@ public class Condition<C extends GcdRingElem<C> >
     /**
      * Add polynomial to nonZero.
      * NonZero is treated as multiplicative set.
-     * @param c polynomial to bee added to nonZero.
+     * @param c polynomial to be added to nonZero.
      */
     public List<GenPolynomial<C>> addNonZero(GenPolynomial<C> c) {
         if ( c == null || c.isZERO() ) { // do not look into zero list

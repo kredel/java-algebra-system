@@ -10,7 +10,7 @@ import edu.jas.structure.RingElem;
 
 
 /**
- * Serializable subclass to hold pairs of polynomials.
+ * Serializable subclass to hold pairs of colored polynomials.
  * @param <C> coefficient type
  * @author Heinz Kredel.
  */
@@ -25,18 +25,6 @@ public class CPair<C extends RingElem<C> >
     protected boolean toZero = false;
     protected boolean useCriterion4 = true;
     protected boolean useCriterion3 = true;
-
-
-    /**
-     * Pair constructor.
-     * @param a polynomial i (must be castable to ColorPolynomial&lt;C&gt;).
-     * @param b polynomial j.
-     * @param i first index.
-     * @param j second index.
-    public CPair(Object a, ColorPolynomial<C> b, int i, int j) {
-        this( (ColorPolynomial<C>)a, b, i, j); 
-    }
-     */
 
 
     /**
@@ -113,7 +101,7 @@ public class CPair<C extends RingElem<C> >
      * @return true if this is equal to o, else false.
      */
     @Override
-     public boolean equals(Object ob) {
+    public boolean equals(Object ob) {
         if ( ! (ob instanceof CPair) ) {
            return false;
            // throw new ClassCastException("Pair "+n+" o "+o);
@@ -128,6 +116,7 @@ public class CPair<C extends RingElem<C> >
      * @param p a Pair.
      * @return 1 if (this &lt; o), 0 if (this == o), -1 if (this &gt; o).
      */
+    @Override
     public int compareTo(CPair p) {
         int x = p.getPairNumber();
         if ( n > x ) { 

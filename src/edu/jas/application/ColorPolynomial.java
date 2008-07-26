@@ -25,7 +25,8 @@ import edu.jas.poly.GenPolynomial;
 
 
 /**
- * Colored Polynomials implementing RingElem.
+ * Colored Polynomials with green, red and white coefficients.
+ * Not implementing RingElem.
  * <b>Note:</b> not general purpose, use only in comprehensive GB. 
  * @param <C> coefficient type
  * @author Heinz Kredel
@@ -257,7 +258,7 @@ public class ColorPolynomial<C extends RingElem<C> >
 
     /**
      * Get leading exponent vector. 
-     * @return LR of red or white parts.
+     * @return LT of red or white parts.
      */
     public ExpVector leadingExpVector() {
         if ( !red.isZERO() ) {

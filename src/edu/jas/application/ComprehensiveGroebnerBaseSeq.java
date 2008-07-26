@@ -92,7 +92,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
 
     /**
      * Constructor.
-     * @param red C-pseuso-Reduction engine
+     * @param red C-pseudo-Reduction engine
      * @param rf base coefficient ring factory.
      */
     @SuppressWarnings("unchecked") 
@@ -160,7 +160,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
 
 
     /**
-     * Comprehensive-Groebner base test.
+     * Comprehensive-Groebner system test.
      * @param CS list of colored systems.
      * @return true, if CS is a Comprehensive-Groebner system, else false.
      */
@@ -171,7 +171,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
 
 
     /**
-     * Comprehensive-Groebner base test.
+     * Comprehensive-Groebner system test.
      * @param modv module variable number.
      * @param CS list of colored systems.
      * @return true, if CS is a Comprehensive-Groebner system, else false.

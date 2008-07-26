@@ -30,12 +30,14 @@ import edu.jas.structure.GcdRingElem;
 
 /**
  * Pair list management.
- * Implemented using ColorPolynomial, TreeMap and BitSet.
+ * Implemented for ColorPolynomials using TreeMap and BitSet.
  * @author Heinz Kredel
  */
 
 public class OrderedCPairlist<C extends GcdRingElem<C> > 
              implements Serializable, Cloneable {
+
+    private static final Logger logger = Logger.getLogger(OrderedCPairlist.class);
 
 
     protected final GenPolynomialRing<GenPolynomial<C>> ring;
@@ -66,9 +68,6 @@ public class OrderedCPairlist<C extends GcdRingElem<C> >
 
 
     protected final int moduleVars; // unused
-
-
-    private static final Logger logger = Logger.getLogger(OrderedCPairlist.class);
 
 
     /**
@@ -106,6 +105,7 @@ public class OrderedCPairlist<C extends GcdRingElem<C> >
 
     /**
      * Internal constructor for OrderedPairlist.
+     * Used to clone this pair list.
      * @param m number of module variables.
      * @param r polynomial factory.
      */
@@ -165,8 +165,8 @@ public class OrderedCPairlist<C extends GcdRingElem<C> >
 
 
     /**
-     * pairCount.
-     * @return number of pairs in this pairlist.
+     * Count remaining Pairs.
+     * @return number of pairs remaining in this pairlist.
      */
     public int pairCount() {
         int c = 0;
@@ -194,7 +194,7 @@ public class OrderedCPairlist<C extends GcdRingElem<C> >
 
     /**
      * bitCount.
-     * @return number of set bits in this bitset.
+     * @return number of bits set in this bitset.
      */
     public int bitCount() {
         int c = 0;
@@ -229,7 +229,7 @@ public class OrderedCPairlist<C extends GcdRingElem<C> >
 
 
     /**
-     * Simple equals.
+     * Equals.
      * @param ob an Object.
      * @return true if this is equal to o, else false.
      */
@@ -245,20 +245,26 @@ public class OrderedCPairlist<C extends GcdRingElem<C> >
         if ( c == null ) {
            return false;
         }
-     boolean t = pairCount() == c.pairCount();
-     if ( ! t ) {
-         return t;
-     }
-     return true;
+        boolean t = getList().equals( c.getList() );
+        if ( ! t ) {
+           return t;
+        }
+        t = pairCount() == c.pairCount();
+        if ( ! t ) {
+           return t;
+        }
+        return true;
     }
 
 
-    /** Simple hash code for this pair list.
+    /** Hash code for this pair list.
      * @see java.lang.Object#hashCode()
      */
     @Override
     public int hashCode() { 
         int h;
+        h = getList().hashCode();
+        h = h << 7;
         h = pairCount();
         return h;
     }

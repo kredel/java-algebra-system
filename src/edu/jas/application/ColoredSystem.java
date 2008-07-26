@@ -165,7 +165,7 @@ public class ColoredSystem<C extends GcdRingElem<C>>
 
 
     /**
-     * Get zero condition on coefficients. 
+     * Get zero condition. 
      * @return condition.zero.
      */
     public List<GenPolynomial<C>> getConditionZero() {
@@ -174,7 +174,7 @@ public class ColoredSystem<C extends GcdRingElem<C>>
 
 
     /**
-     * Get non zero condition on coefficients. 
+     * Get non zero condition. 
      * @return condition.nonZero.
      */
     public List<GenPolynomial<C>> getConditionNonZero() {
@@ -192,14 +192,6 @@ public class ColoredSystem<C extends GcdRingElem<C>>
             F.addAll( s.red.getMap().values() );
         }
         List<GenPolynomial<C>> M = new ArrayList<GenPolynomial<C>>( F );
-//         for ( GenPolynomial<C> c : F ) {
-//             //if ( c.isONE() ) {
-//             //   continue;
-//             //}
-//             if ( !M.contains( c ) ) {
-//                M.add( c );
-//             }
-//         }
         return M;
     }
 
@@ -214,11 +206,6 @@ public class ColoredSystem<C extends GcdRingElem<C>>
             F.addAll( s.green.getMap().values() );
         }
         List<GenPolynomial<C>> M = new ArrayList<GenPolynomial<C>>( F );
-//         for ( GenPolynomial<C> c : F ) {
-//             if ( !M.contains( c ) ) {
-//                M.add( c );
-//             }
-//         }
         return M;
     }
 
@@ -319,20 +306,21 @@ public class ColoredSystem<C extends GcdRingElem<C>>
 
     /**
      * Re determine colorings of polynomials.
-     * @return re determined colored polynomials wrt. this.conditions.
+     * @param cond a condition.
+     * @return re determined colored polynomials wrt. condition.
      */
-    public ColoredSystem<C> reDetermine() {
-        if ( condition.zero.isONE() ) {
+    public ColoredSystem<C> reDetermine(Condition<C> cond) {  // unused
+        if ( cond == null || cond.zero.isONE() ) {
            return this;
         }
         List<ColorPolynomial<C>> Sn = new ArrayList<ColorPolynomial<C>>( list.size() );
         for ( ColorPolynomial<C> c : list ) {
-            ColorPolynomial<C> a = condition.reDetermine( c ); 
+            ColorPolynomial<C> a = cond.reDetermine( c ); 
             //if ( !a.isZERO() ) {
             Sn.add( a ); // must also add zeros
             //}
         }
-        return new ColoredSystem<C>(condition,Sn);
+        return new ColoredSystem<C>(cond,Sn);
     }
 
 }

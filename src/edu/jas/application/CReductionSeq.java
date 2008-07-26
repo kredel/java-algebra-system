@@ -113,7 +113,7 @@ public class CReductionSeq<C extends GcdRingElem<C>>
     }
 
 
-    /**
+    /*
      * S-Polynomial with recording.
      * @param S recording matrix, is modified. 
      *        <b>Note</b> the negative Spolynomial is recorded as 
@@ -123,7 +123,6 @@ public class CReductionSeq<C extends GcdRingElem<C>>
      * @param j index of Bp in basis list.
      * @param Bp a polynomial.
      * @return Spol(Ap, Bp), the S-Polynomial for Ap and Bp.
-     */
     public GenPolynomial<C> 
         SPolynomial(List<GenPolynomial<C>> S,
                     int i,
@@ -132,6 +131,7 @@ public class CReductionSeq<C extends GcdRingElem<C>>
                     GenPolynomial<C> Bp) {  
         throw new RuntimeException("not implemented");
     }
+     */
 
 
     /**
@@ -377,13 +377,12 @@ public class CReductionSeq<C extends GcdRingElem<C>>
     }
 
 
-    /**
+    /*
      * Normalform with recording.
      * @param row recording matrix, is modified.
      * @param Pp a polynomial list for reduction.
      * @param Ap a polynomial.
      * @return nf(Pp,Ap), the normal form of Ap wrt. Pp.
-     */
     @SuppressWarnings("unchecked") 
     public ColorPolynomial<C> 
         normalform(List<ColorPolynomial<C>> row,
@@ -398,6 +397,7 @@ public class CReductionSeq<C extends GcdRingElem<C>>
         throw new RuntimeException("not implemented");
         //return Ap;
     }
+     */
 
 
     /*
@@ -406,10 +406,11 @@ public class CReductionSeq<C extends GcdRingElem<C>>
 
     /**
      * Case distinction conditions of parametric polynomial list.
+     * The returned condition determines the polynomial list.
      * @param L list of parametric polynomials.
      * @return list of conditions as case distinction.
      */
-    public List<Condition<C>> caseDistinction( List<GenPolynomial<GenPolynomial<C>>> L) {  
+    public List<Condition<C>> caseDistinction( List<GenPolynomial<GenPolynomial<C>>> L ) {
         List<Condition<C>> cd = new ArrayList<Condition<C>>();
         if ( L == null || L.size() == 0 ) {
             return cd;
@@ -431,7 +432,7 @@ public class CReductionSeq<C extends GcdRingElem<C>>
      * @return list of conditions as case distinction extending the conditions in cd.
      */
     public List<Condition<C>> caseDistinction( List<Condition<C>> cd,
-                                               GenPolynomial<GenPolynomial<C>> A) {  
+                                               GenPolynomial<GenPolynomial<C>> A ) {  
         if ( A == null || A.isZERO() ) {
            return cd;
         }
@@ -497,13 +498,13 @@ public class CReductionSeq<C extends GcdRingElem<C>>
 
 
     /**
-     * Case distinction ideals of parametric polynomial list.
+     * Case distinction conditions of parametric polynomial list.
      * @param A a parametric polynomial.
      * @param cond a condition.
      * @return list of case distinction conditions.
      */
     public List<Condition<C>> caseDistinction( Condition<C> cond, 
-                                               GenPolynomial<GenPolynomial<C>> A) {  
+                                               GenPolynomial<GenPolynomial<C>> A ) {  
         List<Condition<C>> cd = new ArrayList<Condition<C>>();
         if ( A == null || A.isZERO() ) {
             return cd;
@@ -528,7 +529,7 @@ public class CReductionSeq<C extends GcdRingElem<C>>
      * @param H polynomial list.
      * @return new determined list of colored systems.
      */
-    public List<ColoredSystem<C>> determine( List<GenPolynomial<GenPolynomial<C>>> H) {  
+    public List<ColoredSystem<C>> determine( List<GenPolynomial<GenPolynomial<C>>> H ) { 
         if ( H == null || H.size() == 0 ) {
            List<ColoredSystem<C>> CS = new ArrayList<ColoredSystem<C>>();
            return CS;
@@ -541,11 +542,11 @@ public class CReductionSeq<C extends GcdRingElem<C>>
     /**
      * Determine polynomial list.
      * @param H polynomial list.
-     * @param cd case distiction, an condition list.
+     * @param cd case distiction, a condition list.
      * @return new determined list of colored systems.
      */
     public List<ColoredSystem<C>> determine( List<Condition<C>> cd,
-                                             List<GenPolynomial<GenPolynomial<C>>> H) {  
+                                             List<GenPolynomial<GenPolynomial<C>>> H ) { 
         List<ColoredSystem<C>> CS = new ArrayList<ColoredSystem<C>>();
         if ( H == null || H.size() == 0 ) {
            return CS;
