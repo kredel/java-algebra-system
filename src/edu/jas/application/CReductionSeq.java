@@ -486,7 +486,7 @@ public class CReductionSeq<C extends GcdRingElem<C>>
                     Ap = Bp;
                 }
             }
-            if ( cz == null | C.contains(cz) ) {
+            if ( cz == null || cz.isContradictory() || C.contains(cz) ) {
                //System.out.println("not added entry " + cz);
             } else {
                C.add( cz );
