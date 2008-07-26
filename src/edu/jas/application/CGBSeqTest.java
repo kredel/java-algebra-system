@@ -80,13 +80,15 @@ public class CGBSeqTest extends TestCase {
    int rl = 2; //4; //3; 
    int kl = 2;
    int ll = 3;
-   int el = 2;
+   int el = 3;
    float q = 0.2f; //0.4f
 
    protected void setUp() {
        BigRational coeff = new BigRational(kl);
-       cfac = new GenPolynomialRing<BigRational>(coeff,1);
-       fac = new GenPolynomialRing<GenPolynomial<BigRational>>(cfac,1);
+       String[] cv = { "a" }; //, "b" }; 
+       cfac = new GenPolynomialRing<BigRational>(coeff,1,cv);
+       String[] v = { "x" }; //, "y" }; 
+       fac = new GenPolynomialRing<GenPolynomial<BigRational>>(cfac,1,v);
        a = b = c = d = e = null;
        bb = new ComprehensiveGroebnerBaseSeq<BigRational>(coeff);
    }
@@ -100,6 +102,14 @@ public class CGBSeqTest extends TestCase {
 
 
 /**
+ * Dummy test method for jUnit.
+ * 
+ */
+ public void testDummy() {
+ }
+
+
+/**
  * Test sequential CGB.
  * 
  */
@@ -109,7 +119,7 @@ public class CGBSeqTest extends TestCase {
 
      a = fac.random(kl, ll, el, q );
      b = fac.random(kl, ll, el, q );
-     c = fac.random(kl, ll, el, q );
+     c = a; //fac.random(kl, ll, el, q );
      d = c; //fac.random(kl, ll, el, q );
      e = d; //fac.random(kl, ll, el, q );
 
