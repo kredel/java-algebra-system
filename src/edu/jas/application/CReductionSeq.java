@@ -57,7 +57,7 @@ public class CReductionSeq<C extends GcdRingElem<C>>
     /**
      * Flag if top-reduction only should be used.
      */
-    protected boolean top = true; // false;
+    protected boolean top = true; //false;
 
 
     /**
@@ -450,16 +450,20 @@ public class CReductionSeq<C extends GcdRingElem<C>>
 
         List<Condition<C>> C = new ArrayList<Condition<C>>( /*leer!*/ );
         for ( Condition<C> cond : cd ) {
+            //System.out.println("caseDist: " + cond);
             Condition<C> cz = cond;
             Ap = A;
             while( ! Ap.isZERO() ) {
                 GenPolynomial<C> c = Ap.leadingBaseCoefficient();
                 Bp = Ap.reductum();
+                //System.out.println("to color: " + c);
                 switch ( cz.color( c ) ) {
                 case GREEN:
+                    //System.out.println("color green: " + c);
                     Ap = Bp;
                     continue;
                 case RED:
+                    //System.out.println("color red: " + c);
                     C.add( cz );
                     // wrong: return C;
                     Ap = A.ring.getZERO();
@@ -467,6 +471,7 @@ public class CReductionSeq<C extends GcdRingElem<C>>
                     //break;
                 case WHITE:
                 default: 
+                    //System.out.println("color white: " + c);
                     Condition<C> nc = cz.extendNonZero( c );
                     if ( ! cz.equals( nc ) ) { 
                        C.add( nc );
@@ -486,6 +491,7 @@ public class CReductionSeq<C extends GcdRingElem<C>>
                     Ap = Bp;
                 }
             }
+            //System.out.println("cond cz: " + cz);
             if ( cz == null || cz.isContradictory() || C.contains(cz) ) {
                //System.out.println("not added entry " + cz);
             } else {
@@ -535,6 +541,7 @@ public class CReductionSeq<C extends GcdRingElem<C>>
            return CS;
         }
         List<Condition<C>> cd = caseDistinction( H );
+        //System.out.println("case Distinction = " + cd);
         return determine( cd, H );
     }
 
