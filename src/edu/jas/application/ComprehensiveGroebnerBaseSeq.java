@@ -255,6 +255,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         GenPolynomialRing<GenPolynomial<C>> cf = f.ring;
 
         List<ColoredSystem<C>> CS = cred.determine( F ); 
+        //System.out.println("determined F = " + CS);
         // substitute zero conditions into parameter coefficients and test
         for ( ColoredSystem<C> cs : CS ) {
             Ideal<C> id = cs.condition.zero;
@@ -264,6 +265,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
             GroebnerBase<Residue<C>> bb = new GroebnerBasePseudoSeq<Residue<C>>( r );
             boolean t = bb.isGB( list );
             if ( ! t ) {
+               System.out.println("test condition = " + cs.condition);
                System.out.println("no GB for residue coefficients = " + list);
                return false;
             }
@@ -523,7 +525,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
               System.out.println("*** S.contains(nz) ***");
               continue;
            }
-           System.out.println("new  determined nz = " + nz);
+           System.out.println("new determined nz = " + nz);
            Sp = new ArrayList<ColorPolynomial<C>>( S );
            Sp.add( nz );
            OrderedCPairlist<C> PL = pl.clone();
@@ -643,13 +645,15 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         while ( G.size() > 0 ) {
             a = G.remove(0); b = a;
             //System.out.println("check " + b);
-            if ( a.red.leadingBaseCoefficient().isConstant() ) { // dont drop these
-               F.add(a);
-               continue;
+            if ( false || debug ) {
+                if ( a.red.leadingBaseCoefficient().isConstant() ) { // dont drop these
+                    F.add(a);
+                    continue;
+                }
             }
             if ( cred.isTopReducible(G,a) || cred.isTopReducible(F,a) ) {
                // drop polynomial 
-               if ( true || debug ) {
+               if ( false || debug ) {
                   //System.out.println("trying to drop " + a);
                   List<ColorPolynomial<C>> ff;
                   ff = new ArrayList<ColorPolynomial<C>>( G );
