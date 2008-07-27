@@ -85,6 +85,7 @@ public class Condition<C extends GcdRingElem<C> >
 
     /**
      * toString.
+     * @see java.lang.Object#toString()
      */
     @Override
     public String toString() {
@@ -122,6 +123,13 @@ public class Condition<C extends GcdRingElem<C> >
                return false;
             }
         }
+        // does not work:
+//         if ( ! isNonZero( c.nonZero ) ) {
+//            return false;
+//         }
+//         if ( ! c.isNonZero( nonZero ) ) {
+//            return false;
+//         }
         return true;
     }
 
@@ -162,6 +170,7 @@ public class Condition<C extends GcdRingElem<C> >
     /**
      * Extend condition with zero polynomial.
      * @param z a polynomial to be treated as zero.
+     * @return new condition.
      */
     public Condition<C> extendZero(GenPolynomial<C> z) {
        z = zero.engine.squarefreePart( z ); // leads to errors in nonZero? -no more
@@ -189,6 +198,7 @@ public class Condition<C extends GcdRingElem<C> >
     /**
      * Extend condition with non-zero polynomial.
      * @param nz a polynomial to be treated as non-zero.
+     * @return new condition.
      */
     public Condition<C> extendNonZero(GenPolynomial<C> nz) {
         GenPolynomial<C> n = zero.normalform( nz ).monic();
@@ -214,22 +224,24 @@ public class Condition<C extends GcdRingElem<C> >
     /**
      * Determine color of polynomial.
      * @param c polynomial to be colored.
+     * @return color of c.
      */
     public Color color(GenPolynomial<C> c) {
-        c = zero.normalform(c).monic();
-        if ( zero.contains( c ) ) { 
-           //System.out.println("c in id = " + c);
+        GenPolynomial<C> m = zero.normalform(c).monic();
+        if ( zero.contains( m ) ) { 
+           //System.out.println("m in id = " + m);
            return Color.GREEN;
         } 
-        if ( c.isConstant() ) {
-           //System.out.println("c constant " + c);
+        if ( m.isConstant() ) {
+           //System.out.println("m constant " + m);
            return Color.RED;
         }
         // if ( nonZero.contains( c ) ) {
-        if ( isNonZero( c ) ) {
-           //System.out.println("c in nonzero " + c);
+        if ( isNonZero( m ) ) {
+           //System.out.println("m in nonzero " + m);
            return Color.RED;
         }
+        //System.out.println("m white " + m);
         return Color.WHITE;
     }
 
@@ -237,16 +249,22 @@ public class Condition<C extends GcdRingElem<C> >
     /**
      * Test if a polynomial is contained in nonZero.
      * NonZero is treated as multiplicative set.
-     * @param c polynomial searched in nonZero.
+     * @param cc polynomial searched in nonZero.
+     * @return true, if c != 0 wrt. this condition, else false
      */
-    public boolean isNonZero(GenPolynomial<C> c) {
-        if ( c == null || c.isZERO() ) { // do not look into zero list
+    public boolean isNonZero(GenPolynomial<C> cc) {
+        if ( cc == null || cc.isZERO() ) { // do not look into zero list
            return false;
         }
         if ( nonZero == null || nonZero.size() == 0 ) {
            return false;
         }
+        GenPolynomial<C> c = cc;
         for ( GenPolynomial<C> n : nonZero ) {
+            //System.out.println("nonZero n = " + n);
+            if ( n.isONE() ) { // do not use 1
+               continue;
+            }
             GenPolynomial<C> q;
             GenPolynomial<C> r;
             do {
@@ -267,27 +285,51 @@ public class Condition<C extends GcdRingElem<C> >
 
 
     /**
+     * Test if a list of polynomials is contained in nonZero.
+     * NonZero is treated as multiplicative set.
+     * @param L list of polynomials to be searched in nonZero.
+     * @return true, if all c in L != 0 wrt. this condition, else false
+     */
+    public boolean isNonZero(List<GenPolynomial<C>> L) {
+        if ( L == null || L.size() == 0 ) {
+           return true;
+        }
+        for ( GenPolynomial<C> c : L ) {
+            if ( ! isNonZero( c ) ) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    /**
      * Add polynomial to nonZero.
      * NonZero is treated as multiplicative set.
-     * @param c polynomial to be added to nonZero.
+     * @param cc polynomial to be added to nonZero.
+     * @return new list of non-zero polynomials.
      */
-    public List<GenPolynomial<C>> addNonZero(GenPolynomial<C> c) {
-        if ( c == null || c.isZERO() ) { // do not look into zero list
+    public List<GenPolynomial<C>> addNonZero(GenPolynomial<C> cc) {
+        if ( cc == null || cc.isZERO() ) { // do not look into zero list
            return nonZero;
         }
         List<GenPolynomial<C>> list;
         if ( nonZero == null ) { // cannot happen
            list = new ArrayList<GenPolynomial<C>>();
-           list.add( c );
+           list.add( cc );
            return list;
         }
         list = new ArrayList<GenPolynomial<C>>( nonZero );
         if ( nonZero.size() == 0 ) {
-           System.out.println("added to empty nonzero = " + c);
-           list.add( c );
+           System.out.println("added to empty nonzero = " + cc);
+           list.add( cc );
            return list;
         }
+        GenPolynomial<C> c =cc;
         for ( GenPolynomial<C> n : nonZero ) {
+            if ( n.isONE() ) { // do not use 1
+               continue;
+            }
             GenPolynomial<C> q;
             GenPolynomial<C> r;
             do {
