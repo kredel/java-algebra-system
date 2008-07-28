@@ -253,7 +253,7 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C> >
         GenPolynomial<C> g = r.ring.getONECoefficient();
         GenPolynomial<C> h = r.ring.getONECoefficient();
         GenPolynomial<GenPolynomial<C>> x;
-        GenPolynomial<C> z;
+        GenPolynomial<C> z = null;
         while ( !r.isZERO() ) {
             long delta = q.degree(0) - r.degree(0);
             //System.out.println("rgcd delta = " + delta);
