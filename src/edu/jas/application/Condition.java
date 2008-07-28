@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 
 import edu.jas.structure.GcdRingElem;
 
@@ -27,6 +28,10 @@ import edu.jas.poly.ExpVector;
  */
 public class Condition<C extends GcdRingElem<C> > 
              implements Serializable /*, Comparable<Condition>*/ {
+
+
+    private static final Logger logger = Logger.getLogger(Condition.class);
+    private final boolean debug = logger.isDebugEnabled();
 
 
     /**
@@ -177,11 +182,13 @@ public class Condition<C extends GcdRingElem<C> >
        Ideal<C> idz = zero.sum( z );
        List<GenPolynomial<C>> list = idz.normalform( nonZero );
        if ( list.size() != nonZero.size() ) { // contradiction
-          System.out.println("zero    = " + zero.getList());
-          System.out.println("z       = " + z);
-          System.out.println("idz     = " + idz.getList());
-          System.out.println("list    = " + list);
-          System.out.println("nonZero = " + nonZero);
+           if ( debug ) {
+               logger.info("zero    = " + zero.getList());
+               logger.info("z       = " + z);
+               logger.info("idz     = " + idz.getList());
+               logger.info("list    = " + list);
+               logger.info("nonZero = " + nonZero);
+           }
           return null;
        }
        List<GenPolynomial<C>> L = new ArrayList<GenPolynomial<C>>( list.size() );
@@ -210,9 +217,11 @@ public class Condition<C extends GcdRingElem<C> >
            List<GenPolynomial<C>> list = addNonZero( n );
            return new Condition<C>( zero, list );
         }
-        System.out.println("squarefree...    " + nz );
-        System.out.println("squarefree... of " + n  );
-        System.out.println("squarefreePart = " + nq );
+        if ( debug ) {
+            logger.info("squarefree...    " + nz );
+            logger.info("squarefree... of " + n  );
+            logger.info("squarefreePart = " + nq );
+        }
         GenPolynomial<C> q = n.divide(nq);
         List<GenPolynomial<C>> list = addNonZero( nq );
         Condition<C> nc = new Condition<C>( zero, list );
@@ -321,7 +330,7 @@ public class Condition<C extends GcdRingElem<C> >
         }
         list = new ArrayList<GenPolynomial<C>>( nonZero );
         if ( nonZero.size() == 0 ) {
-           System.out.println("added to empty nonzero = " + cc);
+           logger.info("added to empty nonzero = " + cc);
            list.add( cc );
            return list;
         }
@@ -345,7 +354,7 @@ public class Condition<C extends GcdRingElem<C> >
                 c = q;
             } while ( r.isZERO() && !c.isConstant() );
         }
-        System.out.println("added to nonzero = " + c);
+        logger.info("added to nonzero = " + c);
         list.add( c );
         return list;
     }

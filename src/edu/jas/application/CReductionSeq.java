@@ -334,7 +334,7 @@ public class CReductionSeq<C extends GcdRingElem<C>>
                  if ( S.red.isZERO() ) {
                     w = w.subtract(a,e);
                  } else { // only in minimalGB
-                    System.out.println("green_red = " + zero.sum(a,e));
+                    logger.info("green_red = " + zero.sum(a,e));
                     r = r.subtract(a,e);
                  }
                  S = new ColorPolynomial<C>(g,r,w);
@@ -559,7 +559,7 @@ public class CReductionSeq<C extends GcdRingElem<C>>
            return CS;
         }
         for ( Condition<C> cond : cd ) {
-            System.out.println("cond = " + cond);
+            logger.info("cond = " + cond);
             if ( cond.zero.isONE() ) { // should not happen
                System.out.println("ideal is one = " + cond.zero);
                //continue; // can treat all coeffs as green
