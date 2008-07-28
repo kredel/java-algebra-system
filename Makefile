@@ -38,8 +38,8 @@ RSYNC=rsync -e ssh -avuz $(DRY) $(DELETE) --exclude=*~ --exclude=*.log* --exclud
 ####--exclude=*.ps --exclude=*.pdf --exclude=spin*
 ####--exclude=*/.jxta/
 PART=jas.j16
-VERSION=jas-2.1
-BRANCH=2.1
+VERSION=jas-2.2
+BRANCH=2.2
 SVNVERSION=`grep committed-rev .svn/entries |head -1|awk -F = '{ print $2 }'|sed 's/"//g'`
 
 all:
