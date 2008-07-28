@@ -57,14 +57,14 @@ public abstract class ExpVector implements AbelianGroupElem<ExpVector>
      * Used storage representation of exponent arrays.
      * <b>Note:</b> Set this only statically and not dynamically. 
      */
-    public final static StorUnit storunit = StorUnit.BYTE;
+    public final static StorUnit storunit = StorUnit.SHORT;
 
 
     /**
      * Constructor for ExpVector.
      */
     public ExpVector() {
-     hash = 0;
+       hash = 0;
     }
 
 
@@ -77,9 +77,9 @@ public abstract class ExpVector implements AbelianGroupElem<ExpVector>
         case INT:   return new ExpVectorInteger(n);
         case LONG:  return new ExpVectorLong(n);
         case SHORT: return new ExpVectorShort(n);
-     case BYTE:  return new ExpVectorByte(n);
-     default:    return new ExpVectorInteger(n);
-     }
+        case BYTE:  return new ExpVectorByte(n);
+        default:    return new ExpVectorInteger(n);
+        }
     }
 
 
@@ -95,9 +95,9 @@ public abstract class ExpVector implements AbelianGroupElem<ExpVector>
         case INT:   return new ExpVectorInteger(n, i, e);
         case LONG:  return new ExpVectorLong(n, i, e);
         case SHORT: return new ExpVectorShort(n, i, e);
-     case BYTE:  return new ExpVectorByte(n, i, e);
-     default:    return new ExpVectorInteger(n, i, e);
-     }
+        case BYTE:  return new ExpVectorByte(n, i, e);
+        default:    return new ExpVectorInteger(n, i, e);
+        }
     }
 
 
@@ -111,9 +111,9 @@ public abstract class ExpVector implements AbelianGroupElem<ExpVector>
         case INT:   return new ExpVectorInteger(v);
         case LONG:  return new ExpVectorLong(v);
         case SHORT: return new ExpVectorShort(v);
-     case BYTE:  return new ExpVectorByte(v);
-     default:    return new ExpVectorInteger(v);
-     }
+        case BYTE:  return new ExpVectorByte(v);
+        default:    return new ExpVectorInteger(v);
+        }
     }
 
 
@@ -128,9 +128,9 @@ public abstract class ExpVector implements AbelianGroupElem<ExpVector>
         case INT:   return new ExpVectorInteger(s);
         case LONG:  return new ExpVectorLong(s);
         case SHORT: return new ExpVectorShort(s);
-     case BYTE:  return new ExpVectorByte(s);
-     default:    return new ExpVectorInteger(s);
-     }
+        case BYTE:  return new ExpVectorByte(s);
+        default:    return new ExpVectorInteger(s);
+        }
     }
 
 

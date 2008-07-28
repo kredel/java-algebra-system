@@ -33,7 +33,13 @@ public class ExpVectorShort extends ExpVector
     /**
      * Largest short.
      */
-    public static long maxShort = (long)Short.MAX_VALUE;
+    public static long maxShort = (long)Short.MAX_VALUE / 2;
+
+
+    /**
+     * Smallest short.
+     */
+    public static long minShort = (long)Short.MIN_VALUE / 2;
 
 
     /**
@@ -67,7 +73,7 @@ public class ExpVectorShort extends ExpVector
      */
     public ExpVectorShort(int n, int i, long e) {
         this( n );
-     if ( e >= maxShort ) {
+     if ( e >= maxShort || e <= minShort ) {
         throw new IllegalArgumentException("exponent to large: "+e);
      }
         val[i] = (short)e;
@@ -93,7 +99,7 @@ public class ExpVectorShort extends ExpVector
     protected ExpVectorShort(long[] v) {
      this( v.length );
      for ( int i = 0; i < v.length; i++ ) {
-            if ( v[i] >= maxShort ) {
+            if ( v[i] >= maxShort || v[i] <= minShort ) {
             throw new IllegalArgumentException("exponent to large: "+v[i]);
          }
         val[i] = (short)v[i];
@@ -187,9 +193,9 @@ public class ExpVectorShort extends ExpVector
      */
     protected long setVal(int i, long e) {
         short x = val[i];
-     if ( e >= maxShort ) {
-        throw new IllegalArgumentException("exponent to large: "+e);
-     }
+        if ( e >= maxShort || e <= minShort ) {
+           throw new IllegalArgumentException("exponent to large: "+e);
+        }
         val[i] = (short)e;
         hash = 0; // beware of race condition
         return x;
@@ -233,9 +239,9 @@ public class ExpVectorShort extends ExpVector
         if ( j >= i ) {
            throw new RuntimeException("i "+i+" <= j "+j+" invalid");
         }
-     if ( e >= maxShort ) {
-        throw new IllegalArgumentException("exponent to large: "+e);
-     }
+        if ( e >= maxShort || e <= minShort ) {
+           throw new IllegalArgumentException("exponent to large: "+e);
+        }
         w[j] = (short)e;
         return new ExpVectorShort( w );
     }

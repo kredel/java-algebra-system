@@ -625,7 +625,7 @@ public class PolyUtil {
                             GenPolynomial<C> s ) {
         if ( s == null || s.isZERO() ) {
             throw new RuntimeException(P.getClass().getName()
-                                       + " division by zero");
+                                       + " division by zero " + P + ", " + s);
         }
         if ( P.isZERO() ) {
             return P;
@@ -639,7 +639,14 @@ public class PolyUtil {
             GenPolynomial<C> c1 = m1.getValue();
             ExpVector e1 = m1.getKey();
             GenPolynomial<C> c = PolyUtil.<C>basePseudoDivide(c1,s);
-            pv.put( e1, c ); // or m1.setValue( c )
+            if ( !c.isZERO() ) {
+               pv.put( e1, c ); // or m1.setValue( c )
+            } else {
+               System.out.println("pu, c1 = " + c1);
+               System.out.println("pu, s  = " + s);
+               System.out.println("pu, c  = " + c);
+               throw new RuntimeException("something is wrong");
+            }
         }
         return p;
     }

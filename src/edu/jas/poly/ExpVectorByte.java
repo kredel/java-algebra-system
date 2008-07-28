@@ -33,7 +33,13 @@ public class ExpVectorByte extends ExpVector
     /**
      * Largest byte.
      */
-    public static long maxByte = (long)Byte.MAX_VALUE;
+    public static long maxByte = (long)Byte.MAX_VALUE / 2;
+
+
+    /**
+     * Smallest byte.
+     */
+    public static long minByte = (long)Byte.MIN_VALUE / 2;
 
 
     /**
@@ -67,7 +73,7 @@ public class ExpVectorByte extends ExpVector
      */
     public ExpVectorByte(int n, int i, long e) {
         this( n );
-     if ( e >= maxByte ) {
+     if ( e >= maxByte || e <= minByte ) {
         throw new IllegalArgumentException("exponent to large: "+e);
      }
         val[i] = (byte)e;
@@ -93,7 +99,7 @@ public class ExpVectorByte extends ExpVector
     protected ExpVectorByte(long[] v) {
      this( v.length );
      for ( int i = 0; i < v.length; i++ ) {
-            if ( v[i] >= maxByte ) {
+            if ( v[i] >= maxByte || v[i] <= minByte ) {
             throw new IllegalArgumentException("exponent to large: "+v[i]);
          }
         val[i] = (byte)v[i];
@@ -187,9 +193,9 @@ public class ExpVectorByte extends ExpVector
      */
     protected long setVal(int i, long e) {
         byte x = val[i];
-     if ( e >= maxByte ) {
-        throw new IllegalArgumentException("exponent to large: "+e);
-     }
+        if ( e >= maxByte || e <= minByte ) {
+           throw new IllegalArgumentException("exponent to large: "+e);
+        }
         val[i] = (byte)e;
         hash = 0; // beware of race condition
         return x;
@@ -233,9 +239,9 @@ public class ExpVectorByte extends ExpVector
         if ( j >= i ) {
            throw new RuntimeException("i "+i+" <= j "+j+" invalid");
         }
-     if ( e >= maxByte ) {
-        throw new IllegalArgumentException("exponent to large: "+e);
-     }
+        if ( e >= maxByte || e <= minByte ) {
+           throw new IllegalArgumentException("exponent to large: "+e);
+        }
         w[j] = (byte)e;
         return new ExpVectorByte( w );
     }

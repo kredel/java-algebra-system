@@ -33,7 +33,13 @@ public class ExpVectorInteger extends ExpVector
     /**
      * Largest integer.
      */
-    public static long maxInt = (long)Integer.MAX_VALUE;
+    public static long maxInt = (long)Integer.MAX_VALUE / 2;
+
+
+    /**
+     * Smallest integer.
+     */
+    public static long minInt = (long)Integer.MIN_VALUE / 2;
 
 
     /**
@@ -67,7 +73,7 @@ public class ExpVectorInteger extends ExpVector
      */
     public ExpVectorInteger(int n, int i, long e) {
         this( n );
-     if ( e >= maxInt ) {
+     if ( e >= maxInt || e <= minInt ) {
         throw new IllegalArgumentException("exponent to large: "+e);
      }
         val[i] = (int)e;
@@ -93,7 +99,7 @@ public class ExpVectorInteger extends ExpVector
     protected ExpVectorInteger(long[] v) {
      this( v.length );
      for ( int i = 0; i < v.length; i++ ) {
-            if ( v[i] >= maxInt ) {
+            if ( v[i] >= maxInt || v[i] <= minInt ) {
             throw new IllegalArgumentException("exponent to large: "+v[i]);
          }
         val[i] = (int)v[i];
@@ -187,9 +193,9 @@ public class ExpVectorInteger extends ExpVector
      */
     protected long setVal(int i, long e) {
         int x = val[i];
-     if ( e >= maxInt ) {
-        throw new IllegalArgumentException("exponent to large: "+e);
-     }
+        if ( e >= maxInt || e <= minInt) {
+           throw new IllegalArgumentException("exponent to large: "+e);
+        }
         val[i] = (int)e;
         hash = 0; // beware of race condition
         return x;
@@ -233,9 +239,9 @@ public class ExpVectorInteger extends ExpVector
         if ( j >= i ) {
            throw new RuntimeException("i "+i+" <= j "+j+" invalid");
         }
-     if ( e >= maxInt ) {
-        throw new IllegalArgumentException("exponent to large: "+e);
-     }
+        if ( e >= maxInt || e <= minInt) {
+           throw new IllegalArgumentException("exponent to large: "+e);
+        }
         w[j] = (int)e;
         return new ExpVectorInteger( w );
     }
