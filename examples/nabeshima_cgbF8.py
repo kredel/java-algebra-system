@@ -12,20 +12,33 @@ from jas import terminate
 
 
 # Nabashima, ISSAC 2007, example F8
+# modified, take care
 # integral function coefficients
 
-r = Ring( "IntFunc(a, b,c, d) (w,z,y,x) L" );
+
+#r = Ring( "IntFunc(d, b, c, a) (w,z,y,x) G" );
+#r = Ring( "IntFunc(b, c, a) (w,x,z,y) L" );
+#r = Ring( "IntFunc(b, c) (z,y,w,x) L" );
+#r = Ring( "IntFunc(b) (z,y,w,x) L" );
+#r = Ring( "IntFunc(c) (z,y,w,x) L" );
+r = Ring( "IntFunc(d) (z,y,w,x) L" );
 print "Ring: " + str(r);
 print;
 
 ps = """
 (
- ( { a } x^2 + { b } y ),
- ( { c } w^2 + z ),
+ ( { 1 } x^2 + { 1 } y ),
+ ( { 1 } w^2 + z ),
  ( ( x - z )^2 + ( y - w)^2 ),
- ( { 2 d } x w - { 2 b } y )
+ ( { 2 } x w - { 2 1 } y )
 ) 
 """;
+
+# ( { 1 } x^2 + { b } y ),
+# ( { c } w^2 + z ),
+# ( { a } x^2 + { b } y ),
+# ( { 2 d } x w - { 2 b } y )
+
 
 #startLog();
 
