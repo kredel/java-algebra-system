@@ -4,9 +4,9 @@
 
 package edu.jas.application;
 
+
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -15,30 +15,29 @@ import org.apache.log4j.Logger;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
-
-import edu.jas.structure.RingElem;
-import edu.jas.structure.RingFactory;
 import edu.jas.structure.GcdRingElem;
-
-import edu.jas.ufd.GreatestCommonDivisor;
-import edu.jas.ufd.GreatestCommonDivisorAbstract;
+import edu.jas.structure.RingFactory;
 import edu.jas.ufd.GCDFactory;
-
-import edu.jas.application.Ideal;
+import edu.jas.ufd.GreatestCommonDivisor;
 
 
 /**
- * Polynomial parametric ring reduction sequential use algorithm.
- * Implements normalform and condition stuff.
+ * Polynomial parametric ring reduction sequential use algorithm. Implements
+ * normalform and condition stuff.
  * @param <C> coefficient type
  * @author Heinz Kredel
  */
 public class CReductionSeq<C extends GcdRingElem<C>>
-             /*extends ReductionAbstract<C>*/ 
-             /*implements CReduction<C>*/ {
+       /* extends ReductionAbstract<C> */
+       /* implements CReduction<C> */ {
+
 
     private static final Logger logger = Logger.getLogger(CReductionSeq.class);
+
+
     private final boolean debug = logger.isDebugEnabled();
+
+
     private final boolean info = logger.isInfoEnabled();
 
 
@@ -57,7 +56,7 @@ public class CReductionSeq<C extends GcdRingElem<C>>
     /**
      * Flag if top-reduction only should be used.
      */
-    protected boolean top = true; //false;
+    protected boolean top = true; // false;
 
 
     /**
@@ -66,7 +65,7 @@ public class CReductionSeq<C extends GcdRingElem<C>>
     public CReductionSeq(RingFactory<C> rf) {
         cofac = rf;
         // System.out.println("cofac = " + cofac);
-        engine = GCDFactory.<C>getImplementation( cofac );
+        engine = GCDFactory.<C> getImplementation(cofac);
     }
 
 
@@ -76,62 +75,39 @@ public class CReductionSeq<C extends GcdRingElem<C>>
      * @param Bp polynomial.
      * @return spol(Ap,Bp) the S-polynomial of Ap and Bp.
      */
-    public ColorPolynomial<C> 
-           SPolynomial(ColorPolynomial<C> Ap, 
-                       ColorPolynomial<C> Bp) {  
-        if ( Bp == null || Bp.isZERO() ) {
-           return Bp;
+    public ColorPolynomial<C> SPolynomial(ColorPolynomial<C> Ap, ColorPolynomial<C> Bp) {
+        if (Bp == null || Bp.isZERO()) {
+            return Bp;
         }
-        if ( Ap == null || Ap.isZERO() ) {
+        if (Ap == null || Ap.isZERO()) {
             return Ap;
         }
 
-        Map.Entry<ExpVector,GenPolynomial<C>> ma = Ap.red.leadingMonomial();
-        Map.Entry<ExpVector,GenPolynomial<C>> mb = Bp.red.leadingMonomial();
+        Map.Entry<ExpVector, GenPolynomial<C>> ma = Ap.red.leadingMonomial();
+        Map.Entry<ExpVector, GenPolynomial<C>> mb = Bp.red.leadingMonomial();
 
         ExpVector e = ma.getKey();
         ExpVector f = mb.getKey();
 
-        ExpVector g  = e.lcm( f ); // EVLCM(e,f);
-        ExpVector e1 = g.subtract( e ); // EVDIF(g,e);
-        ExpVector f1 = g.subtract( f ); // EVDIF(g,f);
+        ExpVector g = e.lcm(f); // EVLCM(e,f);
+        ExpVector e1 = g.subtract(e); // EVDIF(g,e);
+        ExpVector f1 = g.subtract(f); // EVDIF(g,f);
 
         GenPolynomial<C> a = ma.getValue();
         GenPolynomial<C> b = mb.getValue();
 
-        GenPolynomial<C> c = engine.gcd(a,b);
-        if ( ! c.isONE() ) {
-            //System.out.println("gcd =s " + c);
-            a = a.divide( c );
-            b = b.divide( c );
+        GenPolynomial<C> c = engine.gcd(a, b);
+        if (!c.isONE()) {
+            // System.out.println("gcd =s " + c);
+            a = a.divide(c);
+            b = b.divide(c);
         }
 
-        ColorPolynomial<C> App = Ap.multiply( b, e1 );
-        ColorPolynomial<C> Bpp = Bp.multiply( a, f1 );
+        ColorPolynomial<C> App = Ap.multiply(b, e1);
+        ColorPolynomial<C> Bpp = Bp.multiply(a, f1);
         ColorPolynomial<C> Cp = App.subtract(Bpp);
         return Cp;
     }
-
-
-    /*
-     * S-Polynomial with recording.
-     * @param S recording matrix, is modified. 
-     *        <b>Note</b> the negative Spolynomial is recorded as 
-     *        required by all applications.
-     * @param i index of Ap in basis list.
-     * @param Ap a polynomial.
-     * @param j index of Bp in basis list.
-     * @param Bp a polynomial.
-     * @return Spol(Ap, Bp), the S-Polynomial for Ap and Bp.
-    public GenPolynomial<C> 
-        SPolynomial(List<GenPolynomial<C>> S,
-                    int i,
-                    GenPolynomial<C> Ap, 
-                    int j,
-                    GenPolynomial<C> Bp) {  
-        throw new RuntimeException("not implemented");
-    }
-     */
 
 
     /**
@@ -140,31 +116,30 @@ public class CReductionSeq<C extends GcdRingElem<C>>
      * @param P polynomial list.
      * @return true if A is top reducible with respect to P.
      */
-    public boolean isTopReducible(List<ColorPolynomial<C>> P, 
-                                  ColorPolynomial<C> A) {  
-        if ( P == null || P.isEmpty() ) {
-           return false;
+    public boolean isTopReducible(List<ColorPolynomial<C>> P, ColorPolynomial<C> A) {
+        if (P == null || P.isEmpty()) {
+            return false;
         }
-        if ( A == null || A.isZERO() ) {
-           return false;
+        if (A == null || A.isZERO()) {
+            return false;
         }
         boolean mt = false;
         ExpVector e = A.leadingExpVector();
-        for ( ColorPolynomial<C> p : P ) {
-            if ( p == null ) {
-               return false;
+        for (ColorPolynomial<C> p : P) {
+            if (p == null) {
+                return false;
             }
             ExpVector f = p.leadingExpVector();
-            if ( f == null ) {
-               return false;
+            if (f == null) {
+                return false;
             }
-            if ( e == null ) {
-               return false;
+            if (e == null) {
+                return false;
             }
-            mt = e.multipleOf( f ); // EVMT( e, p.leadingExpVector() );
-            if ( mt ) {
-               return true;
-            } 
+            mt = e.multipleOf(f); // EVMT( e, p.leadingExpVector() );
+            if (mt) {
+                return true;
+            }
         }
         return false;
     }
@@ -176,9 +151,8 @@ public class CReductionSeq<C extends GcdRingElem<C>>
      * @param Pp polynomial list.
      * @return true if Ap is reducible with respect to Pp.
      */
-    public boolean isReducible(List<ColorPolynomial<C>> Pp, 
-                               ColorPolynomial<C> Ap) {  
-        return !isNormalform(Pp,Ap);
+    public boolean isReducible(List<ColorPolynomial<C>> Pp, ColorPolynomial<C> Ap) {
+        return !isNormalform(Pp, Ap);
     }
 
 
@@ -188,55 +162,54 @@ public class CReductionSeq<C extends GcdRingElem<C>>
      * @param Pp polynomial list.
      * @return true if Ap is in normalform with respect to Pp.
      */
-    @SuppressWarnings("unchecked") 
-    public boolean isNormalform(List<ColorPolynomial<C>> Pp, 
-                                ColorPolynomial<C> Ap) {  
-        if ( Pp == null || Pp.isEmpty() ) {
-           return true;
+    @SuppressWarnings("unchecked")
+    public boolean isNormalform(List<ColorPolynomial<C>> Pp, ColorPolynomial<C> Ap) {
+        if (Pp == null || Pp.isEmpty()) {
+            return true;
         }
-        if ( Ap == null || Ap.isZERO() ) {
-           return true;
+        if (Ap == null || Ap.isZERO()) {
+            return true;
         }
         int l;
         ColorPolynomial<C>[] P;
         synchronized (Pp) {
             l = Pp.size();
             P = new ColorPolynomial[l];
-            //P = Pp.toArray();
-            for ( int i = 0; i < Pp.size(); i++ ) {
+            // P = Pp.toArray();
+            for (int i = 0; i < Pp.size(); i++) {
                 P[i] = Pp.get(i);
             }
         }
-        ExpVector[] htl = new ExpVector[ l ];
-        ColorPolynomial<C>[] p = new ColorPolynomial[ l ];
-        Map.Entry<ExpVector,GenPolynomial<C>> m;
+        ExpVector[] htl = new ExpVector[l];
+        ColorPolynomial<C>[] p = new ColorPolynomial[l];
+        Map.Entry<ExpVector, GenPolynomial<C>> m;
         int i;
         int j = 0;
-        for ( i = 0; i < l; i++ ) { 
+        for (i = 0; i < l; i++) {
             p[i] = P[i];
             m = p[i].red.leadingMonomial();
-            if ( m != null ) { 
-               p[j] = p[i];
-               htl[j] = m.getKey();
-               j++;
+            if (m != null) {
+                p[j] = p[i];
+                htl[j] = m.getKey();
+                j++;
             }
         }
         l = j;
         boolean mt = false;
-        for ( ExpVector e : Ap.red.getMap().keySet() ) { 
-            for ( i = 0; i < l; i++ ) {
-                mt = e.multipleOf( htl[i] ); // EVMT( e, htl[i] );
-                if ( mt ) {
-                   return false;
-                } 
+        for (ExpVector e : Ap.red.getMap().keySet()) {
+            for (i = 0; i < l; i++) {
+                mt = e.multipleOf(htl[i]); // EVMT( e, htl[i] );
+                if (mt) {
+                    return false;
+                }
             }
         }
-        for ( ExpVector e : Ap.white.getMap().keySet() ) { 
-            for ( i = 0; i < l; i++ ) {
-                mt = e.multipleOf( htl[i] ); // EVMT( e, htl[i] );
-                if ( mt ) {
-                   return false;
-                } 
+        for (ExpVector e : Ap.white.getMap().keySet()) {
+            for (i = 0; i < l; i++) {
+                mt = e.multipleOf(htl[i]); // EVMT( e, htl[i] );
+                if (mt) {
+                    return false;
+                }
             }
         }
         return true;
@@ -248,17 +221,17 @@ public class CReductionSeq<C extends GcdRingElem<C>>
      * @param Pp polynomial list.
      * @return true if each Ap in Pp is in normalform with respect to Pp\{Ap}.
      */
-    public boolean isNormalform( List<ColorPolynomial<C>> Pp ) {  
-        if ( Pp == null || Pp.isEmpty() ) {
-           return true;
+    public boolean isNormalform(List<ColorPolynomial<C>> Pp) {
+        if (Pp == null || Pp.isEmpty()) {
+            return true;
         }
         ColorPolynomial<C> Ap;
-        List<ColorPolynomial<C>> P = new LinkedList<ColorPolynomial<C>>( Pp );
+        List<ColorPolynomial<C>> P = new LinkedList<ColorPolynomial<C>>(Pp);
         int s = P.size();
-        for ( int i = 0; i < s; i++ ) {
+        for (int i = 0; i < s; i++) {
             Ap = P.remove(i);
-            if ( ! isNormalform(P,Ap) ) {
-               return false;
+            if (!isNormalform(P, Ap)) {
+                return false;
             }
             P.add(Ap);
         }
@@ -273,43 +246,42 @@ public class CReductionSeq<C extends GcdRingElem<C>>
      * @param cond condition for these polynomials.
      * @return nf(Ap) with respect to Pp.
      */
-    @SuppressWarnings("unchecked") 
-    public ColorPolynomial<C> normalform(Condition<C> cond,
-                                         List<ColorPolynomial<C>> Pp, 
-                                         ColorPolynomial<C> Ap) {  
-        if ( Pp == null || Pp.isEmpty() ) {
-           return Ap;
+    @SuppressWarnings("unchecked")
+    public ColorPolynomial<C> normalform(Condition<C> cond, List<ColorPolynomial<C>> Pp,
+            ColorPolynomial<C> Ap) {
+        if (Pp == null || Pp.isEmpty()) {
+            return Ap;
         }
-        if ( Ap == null || Ap.isZERO() ) {
-           return Ap;
+        if (Ap == null || Ap.isZERO()) {
+            return Ap;
         }
-        Map.Entry<ExpVector,GenPolynomial<C>> m;
+        Map.Entry<ExpVector, GenPolynomial<C>> m;
         int l;
         ColorPolynomial<C>[] P;
         synchronized (Pp) {
             l = Pp.size();
             P = new ColorPolynomial[l];
-            //P = Pp.toArray();
-            for ( int i = 0; i < Pp.size(); i++ ) {
+            // P = Pp.toArray();
+            for (int i = 0; i < Pp.size(); i++) {
                 P[i] = Pp.get(i);
             }
         }
-        ExpVector[] htl = new ExpVector[ l ];
-        Object[] lbc = new Object[ l ]; // want C[] 
-        ColorPolynomial<C>[] p = new ColorPolynomial[ l ];
+        ExpVector[] htl = new ExpVector[l];
+        Object[] lbc = new Object[l]; // want C[]
+        ColorPolynomial<C>[] p = new ColorPolynomial[l];
         int i;
         int j = 0;
-        for ( i = 0; i < l; i++ ) { 
-            if ( P[i] == null ) {
-               continue;
+        for (i = 0; i < l; i++) {
+            if (P[i] == null) {
+                continue;
             }
             p[i] = P[i];
             m = p[i].red.leadingMonomial();
-            if ( m != null ) { 
-               p[j] = p[i];
-               htl[j] = m.getKey();
-               lbc[j] = m.getValue();
-               j++;
+            if (m != null) {
+                p[j] = p[i];
+                htl[j] = m.getKey();
+                lbc[j] = m.getValue();
+                j++;
             }
         }
         l = j;
@@ -317,87 +289,65 @@ public class CReductionSeq<C extends GcdRingElem<C>>
         GenPolynomial<C> a;
         boolean mt = false;
         GenPolynomial<GenPolynomial<C>> zero = p[0].red.ring.getZERO();
-        ColorPolynomial<C> R = new ColorPolynomial<C>(zero,zero,zero);
+        ColorPolynomial<C> R = new ColorPolynomial<C>(zero, zero, zero);
 
-        //ColorPolynomial<C> T = null;
+        // ColorPolynomial<C> T = null;
         ColorPolynomial<C> Q = null;
         ColorPolynomial<C> S = Ap;
-        while ( S.length() > 0 ) { 
-              m = S.leadingMonomial();
-              e = m.getKey();
-              a = m.getValue();
-              Condition.Color col = cond.color( a );
-              if ( col == Condition.Color.GREEN ) { // move to green terms
-                 GenPolynomial<GenPolynomial<C>> g = S.green.sum(a,e);
-                 GenPolynomial<GenPolynomial<C>> r = S.red;
-                 GenPolynomial<GenPolynomial<C>> w = S.white;
-                 if ( S.red.isZERO() ) {
-                    w = w.subtract(a,e);
-                 } else { // only in minimalGB
-                    logger.info("green_red = " + zero.sum(a,e));
-                    r = r.subtract(a,e);
-                 }
-                 S = new ColorPolynomial<C>(g,r,w);
-                 continue;
-              }
-              if ( col == Condition.Color.WHITE ) { // refine condition
-                 //System.out.println("white = " + zero.sum(a,e));
-                 // return S; // return for new case distinction
-              }
-              //System.out.println("NF, e = " + e);
-              for ( i = 0; i < l; i++ ) {
-                  mt = e.multipleOf( htl[i] ); // EVMT( e, htl[i] );
-                  if ( mt ) break; 
-              }
-              if ( ! mt ) { 
-                 //logger.debug("irred");
-                 if ( top ) {
+        while (S.length() > 0) {
+            m = S.leadingMonomial();
+            e = m.getKey();
+            a = m.getValue();
+            Condition.Color col = cond.color(a);
+            if (col == Condition.Color.GREEN) { // move to green terms
+                GenPolynomial<GenPolynomial<C>> g = S.green.sum(a, e);
+                GenPolynomial<GenPolynomial<C>> r = S.red;
+                GenPolynomial<GenPolynomial<C>> w = S.white;
+                if (S.red.isZERO()) {
+                    w = w.subtract(a, e);
+                } else { // only in minimalGB
+                    logger.info("green_red = " + zero.sum(a, e));
+                    r = r.subtract(a, e);
+                }
+                S = new ColorPolynomial<C>(g, r, w);
+                continue;
+            }
+            if (col == Condition.Color.WHITE) { // refine condition
+                // System.out.println("white = " + zero.sum(a,e));
+                // return S; // return for new case distinction
+            }
+            // System.out.println("NF, e = " + e);
+            for (i = 0; i < l; i++) {
+                mt = e.multipleOf(htl[i]); // EVMT( e, htl[i] );
+                if (mt)
+                    break;
+            }
+            if (!mt) {
+                // logger.debug("irred");
+                if (top) {
                     return S;
-                 }
-                 R = R.sum( a, e );
-                 S = S.subtract( a, e ); 
-                 // System.out.println(" S = " + S);
-              } else { 
-                 e = e.subtract( htl[i] ); // EVDIF( e, htl[i] );
-                 //logger.info("red div = " + e);
-                 GenPolynomial<C> c = (GenPolynomial<C>) lbc[i];
-                 GenPolynomial<C> g = engine.gcd(a,c);
-                 if ( ! g.isONE() ) {
-                    //System.out.println("gcd = " + g);
-                    a = a.divide( g );
-                    c = c.divide( g );
-                 }
-                 S = S.multiply( c );
-                   R = R.multiply( c );
-                 Q = p[i].multiply( a, e );
-                 S = S.subtract( Q );
-              }
+                }
+                R = R.sum(a, e);
+                S = S.subtract(a, e);
+                // System.out.println(" S = " + S);
+            } else {
+                e = e.subtract(htl[i]); // EVDIF( e, htl[i] );
+                // logger.info("red div = " + e);
+                GenPolynomial<C> c = (GenPolynomial<C>) lbc[i];
+                GenPolynomial<C> g = engine.gcd(a, c);
+                if (!g.isONE()) {
+                    // System.out.println("gcd = " + g);
+                    a = a.divide(g);
+                    c = c.divide(g);
+                }
+                S = S.multiply(c);
+                R = R.multiply(c);
+                Q = p[i].multiply(a, e);
+                S = S.subtract(Q);
+            }
         }
         return R;
     }
-
-
-    /*
-     * Normalform with recording.
-     * @param row recording matrix, is modified.
-     * @param Pp a polynomial list for reduction.
-     * @param Ap a polynomial.
-     * @return nf(Pp,Ap), the normal form of Ap wrt. Pp.
-    @SuppressWarnings("unchecked") 
-    public ColorPolynomial<C> 
-        normalform(List<ColorPolynomial<C>> row,
-                   List<ColorPolynomial<C>> Pp, 
-                   ColorPolynomial<C> Ap) {  
-        if ( Pp == null || Pp.isEmpty() ) {
-            return Ap;
-        }
-        if ( Ap == null || Ap.isZERO() ) {
-            return Ap;
-        }
-        throw new RuntimeException("not implemented");
-        //return Ap;
-    }
-     */
 
 
     /*
@@ -405,22 +355,22 @@ public class CReductionSeq<C extends GcdRingElem<C>>
      */
 
     /**
-     * Case distinction conditions of parametric polynomial list.
-     * The returned condition determines the polynomial list.
+     * Case distinction conditions of parametric polynomial list. The returned
+     * condition determines the polynomial list.
      * @param L list of parametric polynomials.
      * @return list of conditions as case distinction.
      */
-    public List<Condition<C>> caseDistinction( List<GenPolynomial<GenPolynomial<C>>> L ) {
+    public List<Condition<C>> caseDistinction(List<GenPolynomial<GenPolynomial<C>>> L) {
         List<Condition<C>> cd = new ArrayList<Condition<C>>();
-        if ( L == null || L.size() == 0 ) {
+        if (L == null || L.size() == 0) {
             return cd;
         }
-        for ( GenPolynomial<GenPolynomial<C>> A : L ) {
-            if ( A != null && !A.isZERO() ) {
-               cd = caseDistinction( cd, A );
+        for (GenPolynomial<GenPolynomial<C>> A : L) {
+            if (A != null && !A.isZERO()) {
+                cd = caseDistinction(cd, A);
             }
         }
-        //System.out.println("cd = " + cd);
+        // System.out.println("cd = " + cd);
         return cd;
     }
 
@@ -429,76 +379,81 @@ public class CReductionSeq<C extends GcdRingElem<C>>
      * Case distinction conditions of parametric polynomial list.
      * @param cd a list of conditions.
      * @param A a parametric polynomial.
-     * @return list of conditions as case distinction extending the conditions in cd.
+     * @return list of conditions as case distinction extending the conditions
+     *         in cd.
      */
-    public List<Condition<C>> caseDistinction( List<Condition<C>> cd,
-                                               GenPolynomial<GenPolynomial<C>> A ) {  
-        if ( A == null || A.isZERO() ) {
-           return cd;
+    public List<Condition<C>> caseDistinction(List<Condition<C>> cd,
+            GenPolynomial<GenPolynomial<C>> A) {
+        if (A == null || A.isZERO()) {
+            return cd;
         }
-        if ( cd == null ) {
-           cd = new ArrayList<Condition<C>>();
+        if (cd == null) {
+            cd = new ArrayList<Condition<C>>();
         }
-        if ( cd.size() == 0 ) { // construct empty condition
-           RingFactory<GenPolynomial<C>> crfac = A.ring.coFac;
-           GenPolynomialRing<C> cfac = (GenPolynomialRing<C>) crfac;
-           Condition<C> sc = new Condition<C>( cfac );
-           cd.add(sc);
+        if (cd.size() == 0) { // construct empty condition
+            RingFactory<GenPolynomial<C>> crfac = A.ring.coFac;
+            GenPolynomialRing<C> cfac = (GenPolynomialRing<C>) crfac;
+            Condition<C> sc = new Condition<C>(cfac);
+            cd.add(sc);
         }
         GenPolynomial<GenPolynomial<C>> Ap;
         GenPolynomial<GenPolynomial<C>> Bp;
 
-        List<Condition<C>> C = new ArrayList<Condition<C>>( /*leer!*/ );
-        for ( Condition<C> cond : cd ) {
-            //System.out.println("caseDist: " + cond);
+        List<Condition<C>> C = new ArrayList<Condition<C>>( /* leer! */);
+        for (Condition<C> cond : cd) {
+            // System.out.println("caseDist: " + cond);
             Condition<C> cz = cond;
             Ap = A;
-            while( ! Ap.isZERO() ) {
+            while (!Ap.isZERO()) {
                 GenPolynomial<C> c = Ap.leadingBaseCoefficient();
                 Bp = Ap.reductum();
-                //System.out.println("to color: " + c);
-                switch ( cz.color( c ) ) {
+                // System.out.println("to color: " + c);
+                switch (cz.color(c)) {
                 case GREEN:
-                    //System.out.println("color green: " + c);
+                    // System.out.println("color green: " + c);
                     Ap = Bp;
                     continue;
                 case RED:
-                    //System.out.println("color red: " + c);
-                    C.add( cz );
+                    // System.out.println("color red: " + c);
+                    C.add(cz);
                     // wrong: return C;
                     Ap = A.ring.getZERO();
                     continue;
-                    //break;
+                    // break;
                 case WHITE:
-                default: 
-                    //System.out.println("color white: " + c);
-                    Condition<C> nc = cz.extendNonZero( c );
-                    if ( ! cz.equals( nc ) ) { 
-                       C.add( nc );
+                default:
+                    // System.out.println("color white: " + c);
+                    Condition<C> nc = cz.extendNonZero(c);
+                    if (nc != null) { // no contradiction
+                        if (!cz.equals(nc)) {
+                            C.add(nc);
+                        } else {
+                            cz = null;
+                            Ap = A.ring.getZERO();
+                            continue;
+                        }
                     } else {
-                       cz = null;
-                       Ap = A.ring.getZERO();
-                       continue;
+                        System.out.println("this should not be printed " + c);
                     }
-                    Condition<C> ez = cz.extendZero( c );
-                    if ( ez != null ) {
-                       cz = ez;
+                    Condition<C> ez = cz.extendZero(c);
+                    if (ez != null) {
+                        cz = ez;
                     } else { // contradiction
-                       cz = null;
-                       Ap = A.ring.getZERO();
-                       continue;
+                        cz = null;
+                        Ap = A.ring.getZERO();
+                        continue;
                     }
                     Ap = Bp;
                 }
             }
-            //System.out.println("cond cz: " + cz);
-            if ( cz == null || cz.isContradictory() || C.contains(cz) ) {
-               //System.out.println("not added entry " + cz);
+            // System.out.println("cond cz: " + cz);
+            if (cz == null || cz.isContradictory() || C.contains(cz)) {
+                // System.out.println("not added entry " + cz);
             } else {
-               C.add( cz );
+                C.add(cz);
             }
         }
-        //System.out.println("C = " + C);
+        // System.out.println("C = " + C);
         return C;
     }
 
@@ -509,22 +464,22 @@ public class CReductionSeq<C extends GcdRingElem<C>>
      * @param cond a condition.
      * @return list of case distinction conditions.
      */
-    public List<Condition<C>> caseDistinction( Condition<C> cond, 
-                                               GenPolynomial<GenPolynomial<C>> A ) {  
+    public List<Condition<C>> caseDistinction(Condition<C> cond,
+            GenPolynomial<GenPolynomial<C>> A) {
         List<Condition<C>> cd = new ArrayList<Condition<C>>();
-        if ( A == null || A.isZERO() ) {
+        if (A == null || A.isZERO()) {
             return cd;
         }
-        cd.add( cond );
-        cd = caseDistinction( cd, A );
-        if ( info ) {
-           StringBuffer s = new StringBuffer("extending condition: " + cond + "\n");
-           s.append("case distinctions: [ ");
-           for ( Condition<C> c : cd ) {
-               s.append( c.toString() + "\n" );
-           }
-           s.append("]");
-           logger.info( s.toString() );
+        cd.add(cond);
+        cd = caseDistinction(cd, A);
+        if (info) {
+            StringBuffer s = new StringBuffer("extending condition: " + cond + "\n");
+            s.append("case distinctions: [ ");
+            for (Condition<C> c : cd) {
+                s.append(c.toString() + "\n");
+            }
+            s.append("]");
+            logger.info(s.toString());
         }
         return cd;
     }
@@ -535,14 +490,14 @@ public class CReductionSeq<C extends GcdRingElem<C>>
      * @param H polynomial list.
      * @return new determined list of colored systems.
      */
-    public List<ColoredSystem<C>> determine( List<GenPolynomial<GenPolynomial<C>>> H ) { 
-        if ( H == null || H.size() == 0 ) {
-           List<ColoredSystem<C>> CS = new ArrayList<ColoredSystem<C>>();
-           return CS;
+    public List<ColoredSystem<C>> determine(List<GenPolynomial<GenPolynomial<C>>> H) {
+        if (H == null || H.size() == 0) {
+            List<ColoredSystem<C>> CS = new ArrayList<ColoredSystem<C>>();
+            return CS;
         }
-        List<Condition<C>> cd = caseDistinction( H );
-        //System.out.println("case Distinction = " + cd);
-        return determine( cd, H );
+        List<Condition<C>> cd = caseDistinction(H);
+        // System.out.println("case Distinction = " + cd);
+        return determine(cd, H);
     }
 
 
@@ -552,24 +507,24 @@ public class CReductionSeq<C extends GcdRingElem<C>>
      * @param cd case distiction, a condition list.
      * @return new determined list of colored systems.
      */
-    public List<ColoredSystem<C>> determine( List<Condition<C>> cd,
-                                             List<GenPolynomial<GenPolynomial<C>>> H ) { 
+    public List<ColoredSystem<C>> determine(List<Condition<C>> cd,
+            List<GenPolynomial<GenPolynomial<C>>> H) {
         List<ColoredSystem<C>> CS = new ArrayList<ColoredSystem<C>>();
-        if ( H == null || H.size() == 0 ) {
-           return CS;
+        if (H == null || H.size() == 0) {
+            return CS;
         }
-        for ( Condition<C> cond : cd ) {
+        for (Condition<C> cond : cd) {
             logger.info("cond = " + cond);
-            if ( cond.zero.isONE() ) { // should not happen
-               System.out.println("ideal is one = " + cond.zero);
-               //continue; // can treat all coeffs as green
+            if (cond.zero.isONE()) { // should not happen
+                System.out.println("ideal is one = " + cond.zero);
+                // continue; // can treat all coeffs as green
             }
-            //if ( cond.isEmpty() ) { // do not use this code
-            //   continue; // can skip condition (?)
-            //}
-            List<ColorPolynomial<C>> S = cond.determine( H );
-            ColoredSystem<C> cs = new ColoredSystem<C>( cond, S );
-            CS.add( cs );
+            // if ( cond.isEmpty() ) { // do not use this code
+            // continue; // can skip condition (?)
+            // }
+            List<ColorPolynomial<C>> S = cond.determine(H);
+            ColoredSystem<C> cs = new ColoredSystem<C>(cond, S);
+            CS.add(cs);
         }
         return CS;
     }
