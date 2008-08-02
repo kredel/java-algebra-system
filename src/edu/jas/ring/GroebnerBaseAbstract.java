@@ -86,6 +86,8 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>>
                 }
                 h = red.normalform( F, s );
                 if ( ! h.isZERO() ) {
+                   System.out.println("pi = " + pi + ", pj = " + pj);
+                   System.out.println("s  = " + s  + ", h = " + h);
                    return false;
                 }
             }
