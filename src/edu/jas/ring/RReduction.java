@@ -4,50 +4,44 @@
 
 package edu.jas.ring;
 
-import java.util.List;
 
+import java.util.List;
 
 import edu.jas.structure.RegularRingElem;
 
 import edu.jas.poly.GenPolynomial;
 
 
-
 /**
- * Polynomial R Reduction interface.
- * Defines additionally boolean closure methods.
+ * Polynomial R Reduction interface. Defines additionally boolean closure
+ * methods.
  * @param <C> coefficient type
  * @author Heinz Kredel
  */
 
-public interface RReduction<C extends RegularRingElem<C>> 
-                 extends Reduction<C> {
+public interface RReduction<C extends RegularRingElem<C>> extends Reduction<C> {
 
 
     /**
-     * Is strong top reducible.
-     * Condition is idempotent(a) == idempotent(b), 
-     * for a=ldcf(A) and b=ldcf(B) and lt(B) | lt(A) for some B in F.
+     * Is strong top reducible. Condition is idempotent(a) == idempotent(b), for
+     * a=ldcf(A) and b=ldcf(B) and lt(B) | lt(A) for some B in F.
      * @param A polynomial.
      * @param P polynomial list.
      * @return true if A is string top reducible with respect to P.
      */
-    public boolean isStrongTopReducible(List<GenPolynomial<C>> P, 
-                                        GenPolynomial<C> A);
+    public boolean isStrongTopReducible(List<GenPolynomial<C>> P, GenPolynomial<C> A);
 
 
     /**
-     * Is boolean closed, 
-     * test if A == idempotent(ldcf(A)) A.
+     * Is boolean closed, test if A == idempotent(ldcf(A)) A.
      * @param A polynomial.
      * @return true if A is boolean closed, else false.
      */
-     public boolean isBooleanClosed(GenPolynomial<C> A);
+    public boolean isBooleanClosed(GenPolynomial<C> A);
 
 
     /**
-     * Is boolean closed, 
-     * test if all A in F are boolean closed.
+     * Is boolean closed, test if all A in F are boolean closed.
      * @param F polynomial list.
      * @return true if F is boolean closed, else false.
      */
@@ -55,8 +49,7 @@ public interface RReduction<C extends RegularRingElem<C>>
 
 
     /**
-     * Boolean closure, 
-     * compute idempotent(ldcf(A)) A.
+     * Boolean closure, compute idempotent(ldcf(A)) A.
      * @param A polynomial.
      * @return bc(A).
      */
@@ -64,8 +57,7 @@ public interface RReduction<C extends RegularRingElem<C>>
 
 
     /**
-     * Boolean remainder, 
-     * compute idemComplement(ldcf(A)) A.
+     * Boolean remainder, compute idemComplement(ldcf(A)) A.
      * @param A polynomial.
      * @return br(A) = A - bc(A).
      */
@@ -73,8 +65,7 @@ public interface RReduction<C extends RegularRingElem<C>>
 
 
     /**
-     * Reduced boolean closure, 
-     * compute BC(A) for all A in F.
+     * Reduced boolean closure, compute BC(A) for all A in F.
      * @param F polynomial list.
      * @return red(bc(F)) = bc(red(F)).
      */
@@ -82,14 +73,13 @@ public interface RReduction<C extends RegularRingElem<C>>
 
 
     /**
-     * Reduced boolean closure, 
-     * compute BC(A) modulo F.
+     * Reduced boolean closure, compute BC(A) modulo F.
      * @param A polynomial.
      * @param F polynomial list.
      * @return red(bc(A)).
      */
     public List<GenPolynomial<C>> reducedBooleanClosure(List<GenPolynomial<C>> F,
-                                                        GenPolynomial<C> A);
+            GenPolynomial<C> A);
 
 
 }
