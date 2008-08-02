@@ -4,6 +4,7 @@
 
 package edu.jas.application;
 
+
 import java.io.Serializable;
 
 import edu.jas.structure.RingElem;
@@ -14,16 +15,30 @@ import edu.jas.structure.RingElem;
  * @param <C> coefficient type
  * @author Heinz Kredel.
  */
-public class CPair<C extends RingElem<C> > 
-             implements Serializable, Comparable<CPair> {
+public class CPair<C extends RingElem<C>> implements Serializable, Comparable<CPair<C>> {
+
 
     public final ColorPolynomial<C> pi;
+
+
     public final ColorPolynomial<C> pj;
+
+
     public final int i;
+
+
     public final int j;
+
+
     protected int n;
+
+
     protected boolean toZero = false;
+
+
     protected boolean useCriterion4 = true;
+
+
     protected boolean useCriterion3 = true;
 
 
@@ -34,11 +49,10 @@ public class CPair<C extends RingElem<C> >
      * @param i first index.
      * @param j second index.
      */
-    public CPair(ColorPolynomial<C> a, ColorPolynomial<C> b, 
-                 int i, int j) {
-        pi = a; 
-        pj = b; 
-        this.i = i; 
+    public CPair(ColorPolynomial<C> a, ColorPolynomial<C> b, int i, int j) {
+        pi = a;
+        pj = b;
+        this.i = i;
         this.j = j;
         this.n = 0;
         toZero = false; // ok
@@ -50,12 +64,9 @@ public class CPair<C extends RingElem<C> >
      */
     @Override
     public String toString() {
-        return "pair[" + n + "](" + i + "{" + pi.length() + "}," 
-                           + j + "{" + pj.length() + "}"
-                           + ", r0=" + toZero  
-                           + ", c4=" + useCriterion4  
-                           + ", c3=" + useCriterion3 
-                           + ")";
+        return "pair[" + n + "](" + i + "{" + pi.length() + "}," + j + "{" + pj.length()
+                + "}" + ", r0=" + toZero + ", c4=" + useCriterion4 + ", c3="
+                + useCriterion3 + ")";
     }
 
 
@@ -78,8 +89,7 @@ public class CPair<C extends RingElem<C> >
 
 
     /**
-     * Set zero reduction.
-     * The S-polynomial of this Pair was reduced to zero.
+     * Set zero reduction. The S-polynomial of this Pair was reduced to zero.
      */
     public void setZero() {
         toZero = true;
@@ -88,7 +98,8 @@ public class CPair<C extends RingElem<C> >
 
     /**
      * Is reduced to zero.
-     * @return true if the S-polynomial of this Pair was reduced to zero, else false.
+     * @return true if the S-polynomial of this Pair was reduced to zero, else
+     *         false.
      */
     public boolean isZero() {
         return toZero;
@@ -98,42 +109,48 @@ public class CPair<C extends RingElem<C> >
     /**
      * equals.
      * @param ob an Object.
-     * @return true if this is equal to o, else false.
+     * @return true if this is equal to ob, else false.
      */
     @Override
+    @SuppressWarnings("unchecked")
     public boolean equals(Object ob) {
-        if ( ! (ob instanceof CPair) ) {
-           return false;
-           // throw new ClassCastException("Pair "+n+" o "+o);
+        CPair<C> cp = null;
+        try {
+            cp = (CPair<C>) ob;
+        } catch ( ClassCastException e) {
+            return false;
         }
-        return 0 == compareTo( (CPair)ob );
+        if ( cp == null ) {
+            return false;
+        }
+        return 0 == compareTo(cp);
     }
 
 
     /**
-     * compareTo used in TreeMap // not used at moment.
+     * compareTo used in TreeMap. 
      * Comparison is based on the number of the pairs.
      * @param p a Pair.
-     * @return 1 if (this &lt; o), 0 if (this == o), -1 if (this &gt; o).
+     * @return 1 if (this &lt; p), 0 if (this == o), -1 if (this &gt; p).
      */
-    @Override
-    public int compareTo(CPair p) {
+    public int compareTo(CPair<C> p) { // not used at moment
         int x = p.getPairNumber();
-        if ( n > x ) { 
-           return 1;
+        if (n > x) {
+            return 1;
         }
-        if ( n < x ) { 
-           return -1;
+        if (n < x) {
+            return -1;
         }
         return 0;
     }
 
 
-    /** Hash code for this pair.
+    /**
+     * Hash code for this pair.
      * @see java.lang.Object#hashCode()
      */
     @Override
-    public int hashCode() { 
+    public int hashCode() {
         int h;
         h = getPairNumber();
         return h;
