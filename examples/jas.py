@@ -272,10 +272,8 @@ class ParamIdeal:
         if self.gbsys == None:
             return str(self.pset);
         else:
-           if self.pset == None:
-              return str(self.ring)
-           else:
-              return str(self.pset) + "\n" + str(self.gbsys);
+            return str(self.gbsys);
+#            return str(self.pset) + "\n" + str(self.gbsys);
 
     def CGB(self):
         s = self.pset;
@@ -293,7 +291,7 @@ class ParamIdeal:
         S = ComprehensiveGroebnerBaseSeq(self.ring.ring.coFac).GBsys(F);
         t = System.currentTimeMillis() - t;
         print "sequential comprehensive system executed in %s ms" % t; 
-        return ParamIdeal(self.ring,"",None,S);
+        return ParamIdeal(self.ring,None,F,S);
 
     def isCGB(self):
         s = self.pset;
