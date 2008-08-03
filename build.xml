@@ -13,9 +13,12 @@
   <property name="jar"       value="jas.jar" />
 
   <property name="libs"      value="${basedir}/../java/lib" />
+  <property name="meditorbase" value="${basedir}/../java/meditor" />
   <property name="log4j"     value="${libs}/log4j.jar" />
   <property name="junit"     value="${libs}/junit.jar" />
   <property name="jomp"      value="${libs}/jomp1.0b.jar" />
+  <property name="jython"    value="${libs}/jython.jar" />
+  <property name="meditor"   value="${libs}/meditor.jar" />
   <property name="tnj"       value="${libs}/tnj.jar" />
   <property name="lint"      value="${libs}/lint4j.jar" />
   <property name="l4j.level" value="3" />
@@ -90,7 +93,8 @@
 <target name="usage" >
   <echo message="ant &lt;name&gt; cl='cmd'"  />
   <echo message="basedir = ${basedir}"  />
-  <echoproperties />
+  <echo message="libs = ${libs}"  />
+  <!--echoproperties /-->
 </target>
 
 <target name="recompile" depends="vorher" >
@@ -301,6 +305,13 @@
     <fileset dir="${src}" includes="**/*.class"  />
     <fileset dir="${build}" includes="**/*.class"  />
   </delete>
+</target>
+
+<target name="meditor" depends="vorher" >
+  <jar jarfile="jas-meditor.jar"  >
+     <fileset dir="meditor" includes="**/*.java"  />
+     <fileset dir="meditor" includes="build.xml Makefile log4j.properties"  />
+  </jar>
 </target>
 
 <target name="untabify-isdone" depends="vorher" >
