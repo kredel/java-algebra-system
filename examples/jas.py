@@ -1,7 +1,7 @@
-#
-# jython interface to jas.
+'''jython interface to JAS.
+'''
+
 # $Id$
-#
 
 from java.lang           import System
 from java.io             import StringReader
@@ -31,6 +31,8 @@ def terminate():
 
 
 class Ring:
+    '''Represent a JAS ring object.
+    '''
 
     def __init__(self,ringstr="",ring=None):
         if ring == None:
@@ -338,7 +340,6 @@ class ParamIdeal:
 
     def stringSlice(self):
         s = self.pset;
-        F = s.list;
         b = PolyUtilApp.productToString(s);
         return b;
 
