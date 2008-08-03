@@ -559,7 +559,8 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         List<ColoredSystem<C>> Gsys = GBsys(F);
         // System.out.println("\n\nGBsys = " + Gsys);
         List<Condition<C>> cds;
-        List<GenPolynomial<GenPolynomial<C>>> G = combineGBsys(Gsys);
+        List<GenPolynomial<GenPolynomial<C>>> G 
+            = ComprehensiveGroebnerBaseSeq.<C>combineGBsys(Gsys);
         /*
         if (debug) {
             cds = cred.caseDistinction(G);
