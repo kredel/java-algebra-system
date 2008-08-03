@@ -447,11 +447,12 @@ public class Condition<C extends GcdRingElem<C>> implements Serializable {
                 return new ColorPolynomial<C>(green, red, white);
                 // since break is not possible
             default:
-                System.out.println("error cond = " + this);
-                System.out.println("error poly = " + A);
-                System.out.println("error poly = " + green);
-                System.out.println("error poly = " + Ap);
+                System.out.println("error cond       = " + this);
+                System.out.println("error poly     A = " + A);
+                System.out.println("error poly green = " + green);
+                System.out.println("error poly    Ap = " + Ap);
                 throw new RuntimeException("error, c is white = " + c);
+                // is catched in minimalGB
             }
         }
         cp = new ColorPolynomial<C>(green, red, white);
