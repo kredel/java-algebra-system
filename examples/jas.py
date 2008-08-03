@@ -279,7 +279,7 @@ class ParamIdeal:
         s = self.pset;
         F = s.list;
         t = System.currentTimeMillis();
-        G = ComprehensiveGroebnerBaseSeq(self.ring.ring).GB(F);
+        G = ComprehensiveGroebnerBaseSeq(self.ring.ring.coFac).GB(F);
         t = System.currentTimeMillis() - t;
         print "sequential comprehensive executed in %s ms" % t; 
         return ParamIdeal(self.ring,"",G);
@@ -297,7 +297,7 @@ class ParamIdeal:
         s = self.pset;
         F = s.list;
         t = System.currentTimeMillis();
-        b = ComprehensiveGroebnerBaseSeq(self.ring.ring).isGB(F);
+        b = ComprehensiveGroebnerBaseSeq(self.ring.ring.coFac).isGB(F);
         t = System.currentTimeMillis() - t;
         print "isCGB executed in %s ms" % t; 
         return b;
@@ -306,7 +306,7 @@ class ParamIdeal:
         s = self.pset;
         S = self.gbsys;
         t = System.currentTimeMillis();
-        b = ComprehensiveGroebnerBaseSeq(self.ring.ring).isGBsys(S);
+        b = ComprehensiveGroebnerBaseSeq(self.ring.ring.coFac).isGBsys(S);
         t = System.currentTimeMillis() - t;
         print "isCGBsystem executed in %s ms" % t; 
         return b;
@@ -322,7 +322,7 @@ class ParamIdeal:
         s = self.pset;
         F = s.list;
         t = System.currentTimeMillis();
-        G = RGroebnerBasePseudoSeq(self.ring.ring).GB(F);
+        G = RGroebnerBasePseudoSeq(self.ring.ring.coFac).GB(F);
         t = System.currentTimeMillis() - t;
         print "sequential regular GB executed in %s ms" % t; 
         return ParamIdeal(self.ring,None,G);
@@ -331,9 +331,15 @@ class ParamIdeal:
         s = self.pset;
         F = s.list;
         t = System.currentTimeMillis();
-        b = RGroebnerBasePseudoSeq(self.ring.ring).isGB(F);
+        b = RGroebnerBasePseudoSeq(self.ring.ring.coFac).isGB(F);
         t = System.currentTimeMillis() - t;
         print "isRegularGB executed in %s ms" % t; 
+        return b;
+
+    def stringSlice(self):
+        s = self.pset;
+        F = s.list;
+        b = PolyUtilApp.productToString(s);
         return b;
 
 
