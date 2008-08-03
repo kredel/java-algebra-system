@@ -34,7 +34,7 @@ print;
 
 #sys.exit();
 
-startLog();
+#startLog();
 
 gs = f.CGBsystem();
 print "CGBsystem: " + str(gs);

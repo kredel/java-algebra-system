@@ -32,7 +32,7 @@ print;
 
 #sys.exit();
 
-startLog();
+#startLog();
 
 gs = f.CGBsystem();
 print "CGBsystem: " + str(gs);
@@ -47,7 +47,7 @@ else:
     print "isCGBsystem: false";
 print;
 
-sys.exit();
+#sys.exit();
 
 gs = f.CGB();
 print "CGB: " + str(gs);
@@ -62,7 +62,7 @@ else:
     print "isCGB: false";
 print;
 
-sys.exit();
+terminate();
+#sys.exit();
 
-#terminate();
 

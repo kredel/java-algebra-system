@@ -14,7 +14,7 @@ from jas import terminate
 # Nabashima, ISSAC 2007, example F4
 # integral function coefficients
 
-r = Ring( "IntFunc(a, b, c, d) (y,x) L" );
+r = Ring( "IntFunc(a, b, c, d) (y, x) L" );
 print "Ring: " + str(r);
 print;
 
@@ -28,7 +28,7 @@ ps = """
 ) 
 """;
 
-startLog();
+#startLog();
 
 f = r.paramideal( ps );
 print "ParamIdeal: " + str(f);

@@ -26,7 +26,7 @@ ps = """
 ) 
 """;
 
-startLog();
+#startLog();
 
 f = r.paramideal( ps );
 print "ParamIdeal: " + str(f);
@@ -59,6 +59,5 @@ else:
 print;
 
 terminate();
-
 #------------------------------------------
 #sys.exit();
