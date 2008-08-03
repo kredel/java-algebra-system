@@ -346,6 +346,50 @@ public class PolyUtilApp<C extends RingElem<C> > {
 
 
     /**
+     * Product residue representation.
+     * @param <C> coefficient type.
+     * @param CS list of ColoredSystems from comprehensive GB system.
+     * @return Product residue represenation of CS.
+     */
+    public static <C extends GcdRingElem<C>>
+        List<GenPolynomial<Product<Residue<C>>>> 
+        toProductRes(List<ColoredSystem<C>> CS) {
+
+        List<GenPolynomial<Product<Residue<C>>>> 
+            list = new ArrayList<GenPolynomial<Product<Residue<C>>>>();
+        if ( CS == null || CS.size() == 0 ) {
+           return list;
+        }
+        GenPolynomialRing<GenPolynomial<C>> pr = null; 
+        List<RingFactory<Residue<C>>> rrl 
+            = new ArrayList<RingFactory<Residue<C>>>( CS.size() ); 
+        for (ColoredSystem<C> cs : CS) {
+            Ideal<C> id = cs.condition.zero;
+            ResidueRing<C> r = new ResidueRing<C>(id);
+            if ( ! rrl.contains(r) ) {
+                rrl.add(r);
+            }
+            if ( pr == null ) {
+                if ( cs.list.size() > 0 ) {
+                    pr = cs.list.get(0).green.ring;
+                }
+            }
+        }
+        ProductRing<Residue<C>> pfac;
+        pfac = new ProductRing<Residue<C>>(rrl);
+        System.out.println("pfac = " + pfac);
+
+        GenPolynomialRing<Product<Residue<C>>> rf 
+            = new GenPolynomialRing<Product<Residue<C>>>(pfac,pr.nvar,pr.tord,pr.getVars());
+        List<GenPolynomial<GenPolynomial<C>>> F 
+            = ComprehensiveGroebnerBaseSeq.<C> combineGBsys(CS);
+
+        list = PolyUtilApp.<C> toProductRes(rf, F);
+        return list;
+    }
+
+
+    /**
      * Residue coefficient representation.
      * @param pfac polynomial ring factory.
      * @param L list of polynomials to be represented.
