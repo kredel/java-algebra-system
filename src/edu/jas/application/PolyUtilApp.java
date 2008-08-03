@@ -377,14 +377,12 @@ public class PolyUtilApp<C extends RingElem<C> > {
         }
         ProductRing<Residue<C>> pfac;
         pfac = new ProductRing<Residue<C>>(rrl);
-        System.out.println("pfac = " + pfac);
-
+        //System.out.println("pfac = " + pfac);
         GenPolynomialRing<Product<Residue<C>>> rf 
             = new GenPolynomialRing<Product<Residue<C>>>(pfac,pr.nvar,pr.tord,pr.getVars());
         List<GenPolynomial<GenPolynomial<C>>> F 
-            = ComprehensiveGroebnerBaseSeq.<C> combineGBsys(CS);
-
-        list = PolyUtilApp.<C> toProductRes(rf, F);
+             = ComprehensiveGroebnerBaseSeq.<C> combineGBsys(CS);
+        list = PolyUtilApp.<C>toProductRes(rf, F);
         return list;
     }
 
@@ -441,6 +439,191 @@ public class PolyUtilApp<C extends RingElem<C> > {
             }
         }
         return P;
+    }
+
+
+    /**
+     * Product slice.
+     * @param <C> coefficient type.
+     * @param L list of polynomials with product coefficients.
+     * @return Slices represenation of L.
+     */
+    public static <C extends GcdRingElem<C>>
+        Map<Ideal<C>,PolynomialList<GenPolynomial<C>>>
+        productSlice( PolynomialList<Product<Residue<C>>> L ) {
+
+        Map<Ideal<C>,PolynomialList<GenPolynomial<C>>> map;
+        RingFactory<Product<Residue<C>>> fpr = L.ring.coFac;
+        ProductRing<Residue<C>> pr = (ProductRing<Residue<C>>)fpr;
+        int s = pr.length();
+        map = new TreeMap<Ideal<C>,PolynomialList<GenPolynomial<C>>>();
+        List<GenPolynomial<GenPolynomial<C>>> slist;
+
+        List<GenPolynomial<Product<Residue<C>>>> plist = L.list;
+        PolynomialList<GenPolynomial<C>> spl;
+
+        for ( int i = 0; i < s; i++ ) {
+            RingFactory<Residue<C>> r = pr.getFactory( i );
+            ResidueRing<C> rr = (ResidueRing<C>) r;
+            Ideal<C> id = rr.ideal;
+            GenPolynomialRing<C> cof = rr.ring;
+            GenPolynomialRing<GenPolynomial<C>> pfc; 
+            pfc = new GenPolynomialRing<GenPolynomial<C>>(cof,L.ring);
+            slist = fromProduct( pfc, plist, i );
+            spl = new PolynomialList<GenPolynomial<C>>(pfc,slist);
+            PolynomialList<GenPolynomial<C>> d = map.get( id );
+            if ( d != null ) {
+               throw new RuntimeException("ideal exists twice " + id);
+            }
+            map.put( id, spl );
+        }
+        return map;
+    }
+
+
+    /**
+     * Product slice at i.
+     * @param <C> coefficient type.
+     * @param L list of polynomials with product coeffients.
+     * @param i index of slice.
+     * @return Slice of of L at i.
+     */
+    public static <C extends GcdRingElem<C>>
+        PolynomialList<GenPolynomial<C>>
+        productSlice( PolynomialList<Product<Residue<C>>> L, int i ) {
+
+        RingFactory<Product<Residue<C>>> fpr = L.ring.coFac;
+        ProductRing<Residue<C>> pr = (ProductRing<Residue<C>>)fpr;
+        int s = pr.length();
+        List<GenPolynomial<GenPolynomial<C>>> slist;
+
+        List<GenPolynomial<Product<Residue<C>>>> plist = L.list;
+        PolynomialList<GenPolynomial<C>> spl;
+
+        RingFactory<Residue<C>> r = pr.getFactory( i );
+        ResidueRing<C> rr = (ResidueRing<C>) r;
+        Ideal<C> id = rr.ideal;
+        GenPolynomialRing<C> cof = rr.ring;
+        GenPolynomialRing<GenPolynomial<C>> pfc; 
+        pfc = new GenPolynomialRing<GenPolynomial<C>>(cof,L.ring);
+        slist = fromProduct( pfc, plist, i );
+        spl = new PolynomialList<GenPolynomial<C>>(pfc,slist);
+        return spl;
+    }
+
+
+    /**
+     * From product representation.
+     * @param <C> coefficient type.
+     * @param pfac polynomial ring factory.
+     * @param L list of polynomials to be converted from product representation.
+     * @param i index of product representation to be taken.
+     * @return Represenation of i-slice of L in the polynomial ring pfac.
+     */
+    public static <C extends GcdRingElem<C>>
+        List<GenPolynomial<GenPolynomial<C>>>
+        fromProduct( GenPolynomialRing<GenPolynomial<C>> pfac,
+                     List<GenPolynomial<Product<Residue<C>>>> L,
+                     int i ) {
+
+        List<GenPolynomial<GenPolynomial<C>>> 
+            list = new ArrayList<GenPolynomial<GenPolynomial<C>>>();
+
+        if ( L == null || L.size() == 0 ) {
+           return list;
+        }
+        GenPolynomial<GenPolynomial<C>> b;
+        for ( GenPolynomial<Product<Residue<C>>> a : L ) {
+            b = fromProduct( pfac, a, i );
+            if ( b != null && !b.isZERO() ) {
+               b = b.abs();
+               if ( ! list.contains( b ) ) {
+                  list.add( b );
+               }
+            }
+        }
+        return list;
+    }
+
+
+    /**
+     * From product representation.
+     * @param <C> coefficient type.
+     * @param pfac polynomial ring factory.
+     * @param P polynomial to be converted from product representation.
+     * @param i index of product representation to be taken.
+     * @return Represenation of i-slice of P in the polynomial ring pfac.
+     */
+    public static <C extends GcdRingElem<C>>
+        GenPolynomial<GenPolynomial<C>>
+        fromProduct( GenPolynomialRing<GenPolynomial<C>> pfac,
+                     GenPolynomial<Product<Residue<C>>> P,
+                     int i ) {
+
+        GenPolynomial<GenPolynomial<C>> b = pfac.getZERO().clone();
+        if ( P == null || P.isZERO() ) {
+           return b;
+        }
+        RingFactory<GenPolynomial<C>> cf = pfac.coFac;
+        GenPolynomialRing<C> fac = (GenPolynomialRing<C>)cf;
+
+        for ( Map.Entry<ExpVector,Product<Residue<C>>> y: P.getMap().entrySet() ) {
+            ExpVector e = y.getKey();
+            Product<Residue<C>> a = y.getValue();
+            Residue<C> r = a.get(i);
+            if ( r != null && !r.isZERO() ) {
+               GenPolynomial<C> p = r.val;
+               if ( p != null && !p.isZERO() ) {
+                  b.doPutToMap( e, p );
+               }        
+            }
+        }
+        return b;
+    }
+
+
+    /**
+     * Product slice to String.
+     * @param <C> coefficient type.
+     * @param L list of polynomials with  to be represented.
+     * @return Product represenation of L in the polynomial ring pfac.
+     */
+    public static <C extends GcdRingElem<C>>
+        String
+        productSliceToString( Map<Ideal<C>,PolynomialList<GenPolynomial<C>>> L ) {
+        Set<GenPolynomial<GenPolynomial<C>>> sl 
+           = new TreeSet<GenPolynomial<GenPolynomial<C>>>();
+        PolynomialList<GenPolynomial<C>> pl = null;
+        StringBuffer sb = new StringBuffer(); //"\nproductSlice ----------------- begin");
+        for ( Ideal<C> id: L.keySet() ) {
+            sb.append("\n\ncondition == 0:\n");
+            sb.append( id.list.toString() );
+            pl = L.get( id );
+            sl.addAll( pl.list );
+            sb.append("\ncorresponding ideal:\n");
+            sb.append( pl.toString() );
+        }
+        //List<GenPolynomial<GenPolynomial<C>>> sll 
+        //   = new ArrayList<GenPolynomial<GenPolynomial<C>>>( sl );
+        //pl = new PolynomialList<GenPolynomial<C>>(pl.ring,sll);
+        // sb.append("\nunion = " + pl.toString());
+        //sb.append("\nproductSlice ------------------------- end\n");
+        return sb.toString();
+    }
+
+
+    /**
+     * Product slice to String.
+     * @param <C> coefficient type.
+     * @param L list of polynomials with product coefficients.
+     * @return string represenation of slices of L.
+     */
+    public static <C extends GcdRingElem<C>>
+        String productToString( PolynomialList<Product<Residue<C>>> L ) {
+        Map<Ideal<C>,PolynomialList<GenPolynomial<C>>> M;
+        M = productSlice( L ); 
+        String s = productSliceToString( M );
+        return s;
     }
 
 }
