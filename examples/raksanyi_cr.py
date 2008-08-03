@@ -51,10 +51,10 @@ print;
 
 
 rs = gs.regularRepresentation();
-print "regular CGBsystem: " + str(rs);
+print "regular representation: " + str(rs);
 print;
 
-startLog();
+#startLog();
 
 rsg = rs.regularGB();
 print "regular GB: " + str(rsg);
@@ -66,6 +66,10 @@ if bg:
 else:
     print "isRegularGB: false";
 print;
+
+
+ss = rsg.stringSlice();
+print "regular string slice: " + str(ss);
 
 terminate();
 #sys.exit();
