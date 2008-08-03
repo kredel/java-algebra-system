@@ -311,6 +311,31 @@ class ParamIdeal:
         print "isCGBsystem executed in %s ms" % t; 
         return b;
 
+    def regularRepresentation(self):
+        if self.gbsys == None:
+            return None;
+        G = PolyUtilApp.toProductRes(self.gbsys);
+        ring = Ring(None,G[0].ring);
+        return ParamIdeal(ring,None,G);
+
+    def regularGB(self):
+        s = self.pset;
+        F = s.list;
+        t = System.currentTimeMillis();
+        G = RGroebnerBasePseudoSeq(self.ring.ring).GB(F);
+        t = System.currentTimeMillis() - t;
+        print "sequential regular GB executed in %s ms" % t; 
+        return ParamIdeal(self.ring,None,G);
+
+    def isRegularGB(self):
+        s = self.pset;
+        F = s.list;
+        t = System.currentTimeMillis();
+        b = RGroebnerBasePseudoSeq(self.ring.ring).isGB(F);
+        t = System.currentTimeMillis() - t;
+        print "isRegularGB executed in %s ms" % t; 
+        return b;
+
 
 class SolvableRing:
 
