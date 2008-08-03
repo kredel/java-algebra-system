@@ -39,7 +39,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
             .getLogger(ComprehensiveGroebnerBaseSeq.class);
 
 
-    private final boolean debug = logger.isDebugEnabled();
+    private static final boolean debug = logger.isDebugEnabled();
 
 
     /**
@@ -558,13 +558,46 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         // compute Groebner system
         List<ColoredSystem<C>> Gsys = GBsys(F);
         // System.out.println("\n\nGBsys = " + Gsys);
-        List<Condition<C>> cd = new ArrayList<Condition<C>>();
         List<Condition<C>> cds;
+        List<GenPolynomial<GenPolynomial<C>>> G = combineGBsys(Gsys);
+        /*
+        if (debug) {
+            cds = cred.caseDistinction(G);
+            // System.out.println("------------------------------------------");
+            for (Condition<C> cond : cd) {
+                if (!cds.contains(cond)) {
+                    System.out.println("cd_i not in cds = " + cond);
+                }
+            }
+            // System.out.println("------------------------------------------");
+            for (Condition<C> cond : cds) {
+                if (!cd.contains(cond)) {
+                    System.out.println("cds_i not in cd = " + cond);
+                }
+            }
+            // System.out.println("------------------------------------------");
+        }
+        */
+        return G;
+    }
 
+
+    /**
+     * Comprehensive Groebner base from Groebner system.
+     * @param CS list of colored systems.
+     * @return GB(CS) a Comprehensive Groebner base from CS.
+     */
+    // @Override
+    // @SuppressWarnings("unchecked")
+    public static <C extends GcdRingElem<C>>
+           List<GenPolynomial<GenPolynomial<C>>> 
+               combineGBsys( List<ColoredSystem<C>> CS ) {
         // combine for CGB
-        Set<GenPolynomial<GenPolynomial<C>>> Gs = new HashSet<GenPolynomial<GenPolynomial<C>>>();
-        for (ColoredSystem<C> cs : Gsys) {
-            if (false || debug) {
+        Set<GenPolynomial<GenPolynomial<C>>> Gs 
+           = new HashSet<GenPolynomial<GenPolynomial<C>>>();
+        List<Condition<C>> cd = new ArrayList<Condition<C>>();
+        for (ColoredSystem<C> cs : CS) {
+            if (debug) {
                 if (!cs.isDetermined()) {
                     System.out.println("not determined, cs = " + cs);
                 }
@@ -582,22 +615,6 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         System.out.println("CGB conditions:\n" + cd);
         List<GenPolynomial<GenPolynomial<C>>> G 
             = new ArrayList<GenPolynomial<GenPolynomial<C>>>(Gs);
-        if (debug) {
-            cds = cred.caseDistinction(G);
-            // System.out.println("------------------------------------------");
-            for (Condition<C> cond : cd) {
-                if (!cds.contains(cond)) {
-                    System.out.println("cd_i not in cds = " + cond);
-                }
-            }
-            // System.out.println("------------------------------------------");
-            for (Condition<C> cond : cds) {
-                if (!cd.contains(cond)) {
-                    System.out.println("cds_i not in cd = " + cond);
-                }
-            }
-            // System.out.println("------------------------------------------");
-        }
         return G;
     }
 
