@@ -558,8 +558,6 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         // compute Groebner system
         List<ColoredSystem<C>> Gsys = GBsys(F);
         // System.out.println("\n\nGBsys = " + Gsys);
-        // System.out.println("isGBsys() = " + isGBsys(Gsys) +
-        // "\n-------------------");
         List<Condition<C>> cd = new ArrayList<Condition<C>>();
         List<Condition<C>> cds;
 
@@ -581,9 +579,10 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
                 Gs.add(f);
             }
         }
-        List<GenPolynomial<GenPolynomial<C>>> G = new ArrayList<GenPolynomial<GenPolynomial<C>>>(
-                Gs);
-        if (false || debug) {
+        System.out.println("CGB conditions:\n" + cd);
+        List<GenPolynomial<GenPolynomial<C>>> G 
+            = new ArrayList<GenPolynomial<GenPolynomial<C>>>(Gs);
+        if (debug) {
             cds = cred.caseDistinction(G);
             // System.out.println("------------------------------------------");
             for (Condition<C> cond : cd) {
@@ -635,7 +634,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
             a = G.remove(0);
             b = a;
             // System.out.println("check " + b);
-            if (false || debug) {
+            if (false) {
                 if (a.red.leadingBaseCoefficient().isConstant()) { // dont drop
                                                                     // these
                     F.add(a);
@@ -644,7 +643,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
             }
             if (cred.isTopReducible(G, a) || cred.isTopReducible(F, a)) {
                 // drop polynomial
-                if (false || debug) {
+                if (false) {
                     // System.out.println("trying to drop " + a);
                     List<ColorPolynomial<C>> ff;
                     ff = new ArrayList<ColorPolynomial<C>>(G);
@@ -689,8 +688,8 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
             // a = red.normalform( F, a );
             if (e.equals(f)) {
                 G.add(a); // adds as last
-            } else {
-                if (false || debug) {
+            } else { // should not happen
+                if (false) {
                     System.out.println("error, nf(a) not determined " + b + ", " + a);
                 }
                 G.add(b); // adds as last
