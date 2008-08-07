@@ -424,6 +424,24 @@ implemented algebraic algorithms.
 </tr>
 
 <tr>
+<td><code>CReductionSeq</code>,
+    <code>Condition</code>,
+    <code>ColorPolynomial</code>
+</td>
+<td>Iterated subtraction of polynomials to eliminate terms from a given polynomial, 
+    i.e. reduction of polynomial(s) wrt. a set of polynomials.
+    Coefficients of polynomials must be from a polynomial ring.
+    Case distinction and determination of polynomaials with respect to conditions 
+    leading to colored polynomials.
+</td>
+<td>normalform,
+    S-polynomial,
+    <!--extended normalform,-->
+    color, determine
+</td>
+</tr>
+
+<tr>
 <td><code>GroebnerBase</code>,
     <code>GroebnerBase- Abstract</code>,
     <code>GroebnerBaseSeq</code>,
@@ -481,6 +499,19 @@ implemented algebraic algorithms.
     product of fields or Euclidean domains.
 </td>
 <td>GB, isGB, minimal GB
+</td>
+</tr>
+
+<tr>
+<td><code>ComprehensiveGroebnerBaseSeq</code>,
+    <code>ColoredSystem</code>
+</td>
+<td>Algorithm to compute comprehensive Groebner bases in polynomial rings over 
+    parameter rings.
+    Coefficients of polynomials must be from a polynomial ring.
+    Computation is done via Groebner systems (lists of colored systems).
+</td>
+<td>GBsys, isGBsys, GB, isGB, minimalGB
 </td>
 </tr>
 
@@ -1042,7 +1073,7 @@ of the Java algebra system.
 <p>
 <!-- Created: Sat Mar 11 10:51:36 CET 2006 -->
 <!-- hhmts start -->
-Last modified: Thu Mar 27 10:18:43 CET 2008
+Last modified: Fri Aug  8 00:10:51 CEST 2008
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
