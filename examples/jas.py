@@ -16,12 +16,12 @@ from edu.jas.vector      import *
 from edu.jas.application import *
 from edu.jas.util        import *
 from edu.jas.ufd         import *
-from edu.jas             import *
-from edu                 import *
+#from edu.jas             import *
+#from edu                 import *
 #PrettyPrint.setInternal();
 from edu.jas.kern        import ComputerThreads;
 
-from org.apache.log4j import BasicConfigurator;
+from org.apache.log4j    import BasicConfigurator;
 
 def startLog():
     BasicConfigurator.configure();
@@ -31,7 +31,7 @@ def terminate():
 
 
 class Ring:
-    '''Represent a JAS ring object.
+    '''Represents a JAS polynomial ring: GenPolynomialRing.
     '''
 
     def __init__(self,ringstr="",ring=None):
@@ -54,6 +54,10 @@ class Ring:
 
 
 class Ideal:
+    '''Represents a JAS polynomial ideal: PolynomialList and Ideal.
+
+    Methods for Groebner basees, ideal sum, intersection and others.
+    '''
 
     def __init__(self,ring,ringstr="",list=None):
         self.ring = ring;
@@ -258,6 +262,8 @@ class Ideal:
 
 
 class ParamIdeal:
+    '''Represents a JAS polynomial ideal with polynomial coefficients.
+    '''
 
     def __init__(self,ring,ringstr="",list=None,gbsys=None):
         self.ring = ring;
@@ -345,6 +351,8 @@ class ParamIdeal:
 
 
 class SolvableRing:
+    '''Represents a JAS solvable polynomial ring: GenSolvablePolynomialRing.
+    '''
 
     def __init__(self,ringstr="",ring=None):
         if ring == None:
@@ -365,6 +373,10 @@ class SolvableRing:
 
 
 class SolvableIdeal:
+    '''Represents a JAS solvable polynomial ideal.
+
+    Methods for left, right two-sided Groebner basees and others.
+    '''
 
     def __init__(self,ring,ringstr="",list=None):
         self.ring = ring;
@@ -468,6 +480,8 @@ class SolvableIdeal:
 
 
 class Module:
+    '''Represents a JAS module over a polynomial ring.
+    '''
 
     def __init__(self,modstr="",ring=None):
         if ring == None:
@@ -486,6 +500,8 @@ class Module:
 
 
 class SubModule:
+    '''Represents a JAS sub-module over a polynomial ring.
+    '''
 
     def __init__(self,module,modstr="",list=None):
         self.module = module;
@@ -521,6 +537,8 @@ class SubModule:
 
 
 class SolvableModule:
+    '''Represents a JAS module over a solvable polynomial ring.
+    '''
 
     def __init__(self,modstr="",ring=None):
         if ring == None:
@@ -539,6 +557,8 @@ class SolvableModule:
 
 
 class SolvableSubModule:
+    '''Represents a JAS sub-module over a solvable polynomial ring.
+    '''
 
     def __init__(self,module,modstr="",list=None):
         self.module = module;
