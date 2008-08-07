@@ -30,8 +30,6 @@ issues to consider:
 
 - rework parallel GB algorithms
 
-- implement comprehensive GB
-
 - refactor method names for groovy operator overloading, make examples for usage
 
 - define divideAndRemainder in RingElem interface and implement
@@ -45,8 +43,13 @@ issues to consider:
 
 - rename divideAndRemainder to quotientRemainder
 
+- make use of gcd in pseudo reduction, needs other coefficient type
+
+
 
 partially resolved and completed issues:
+
+- implement comprehensive GB
 
 - add product category to applications
 - implement direct products of ring elements
@@ -111,3 +114,6 @@ resolved and completed issues:
 - split RingFactory to ElemFactory, done
 
 - split AlgebraicNumber to AlgebraicNumberRing factory, done
+
+
+$Id: $
