@@ -33,7 +33,7 @@ LINTPATH=$(LIBPATH)/lint4j.jar
 # --- syncing ----------
 DRY=--dry-run
 DELETE=
-RSYNC=rsync -e ssh -avuz $(DRY) $(DELETE) --exclude=*~ --exclude=*.log* --exclude=*.out* --exclude=*.txt* --exclude=.svn 
+RSYNC=rsync -e ssh -avuz $(DRY) $(DELETE) --exclude=*~ --include=svn_change.log --exclude=*.log* --exclude=*.out* --exclude=*.txt* --exclude=.svn 
 ####--exclude=./test
 ####--exclude=*.ps --exclude=*.pdf --exclude=spin*
 ####--exclude=*/.jxta/
@@ -272,7 +272,7 @@ export:
 	mv ~/jas-versions/$(VERSION).`$(SVNREV)`-*.jar ~/jas-versions/$(VERSION)/
 
 deploy:
-	$(RSYNC) --delete-after --exclude=DTD --exclude=lisa* --exclude=*xml ~/jas-versions/$(VERSION)/ krum:htdocs/$(VERSION)
+	$(RSYNC) --delete-after --exclude=DTD --exclude=*xml ~/jas-versions/$(VERSION)/ krum:htdocs/$(VERSION)
 
 
 young:
