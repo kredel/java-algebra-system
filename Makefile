@@ -273,7 +273,7 @@ export:
 	cp ~/jas-versions/$(VERSION).`$(SVNREV)`-bin.jar ~/jas-versions/$(VERSION)/jas.jar
 	mv ~/jas-versions/$(VERSION).`$(SVNREV)`-*.jar ~/jas-versions/$(VERSION)/
 	cd ~/jas-versions/$(VERSION)/meditor; jas_dosed $(VERSION) `$(SVNREV)` manifest.mf
-	cd ~/jas-versions/$(VERSION)/meditor; make
+	cd ~/jas-versions/$(VERSION)/meditor; make > make_meditor.out
 
 deploy:
 	$(RSYNC) --delete-after --exclude=DTD --exclude=*xml ~/jas-versions/$(VERSION)/ krum:htdocs/$(VERSION)
