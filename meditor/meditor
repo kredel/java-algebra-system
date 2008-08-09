@@ -17,4 +17,4 @@ JAS=$JASPATH/jas.jar:$JASPATH/jas-meditor.jar
 CLASSPATH=$UTILS:$JAS:$MEDITOR:$LIBPATH/meditor.jar
 
 mkdir -p test
-java -classpath $CLASSPATH jscl.editor.Editor
+java -classpath $CLASSPATH -Duser.home=$JASPATH/examples jscl.editor.Editor
