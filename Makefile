@@ -288,9 +288,9 @@ subst:
 
 # lines of code and number of classes
 loc:
-	find src -name "*.java" | wc
-	find src -name "*.java" | grep -v Test | wc
-	find src -name "*.java" | grep    Test | wc
+	find src -name "*.java" | wc -l
+	find src -name "*.java" | grep -v Test | wc -l
+	find src -name "*.java" | grep    Test | wc -l 
 	find src -name "*.java" | xargs cat | wc
 	find src -name "*.java" | grep -v Test | xargs cat | wc
 	find src -name "*.java" | grep    Test | xargs cat | wc

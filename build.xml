@@ -12,7 +12,7 @@
   <property name="test"      value="test" />
   <property name="jar"       value="jas.jar" />
 
-  <property name="libs"      value="${basedir}/../java/lib" />
+  <property name="libs"      value="${basedir}/../lib" />
   <property name="meditorbase" value="${basedir}/../java/meditor" />
   <property name="log4j"     value="${libs}/log4j.jar" />
   <property name="junit"     value="${libs}/junit.jar" />
