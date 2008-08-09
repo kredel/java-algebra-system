@@ -275,18 +275,13 @@ export:
 	cd ~/jas-versions/$(VERSION)/meditor; jas_dosed $(VERSION) `$(SVNREV)` manifest.mf
 	cd ~/jas-versions/$(VERSION)/meditor; make > make_meditor.out
 
+
 deploy:
 	$(RSYNC) --delete-after --exclude=DTD --exclude=*xml ~/jas-versions/$(VERSION)/ krum:htdocs/$(VERSION)
 
-##	cp meditor/jas-meditor.jar meditor/meditor ~/jas-versions/$(VERSION)/
-
 
 young:
-	svnlook youngest $(SVNREPO)/jas > make.svnversion
-	echo svn1 `cat make.svnversion`
-	echo svn2 `svnlook youngest $(SVNREPO)/jas`
-	REVNO=`svnlook youngest $(SVNREPO)/jas`
-	echo svn3 $(REVNO)
+	echo youngest revision `svnlook youngest $(SVNREPO)/jas`
 
 subst:
 	cd ~/jas-versions/$(VERSION); jas_dosed $(VERSION) `$(SVNREV)` download.html
