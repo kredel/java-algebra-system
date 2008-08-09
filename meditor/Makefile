@@ -33,6 +33,7 @@ jas-meditor.jar: $(CLASSES) $(JASPATH)/examples/jas.py manifest.mf services/jscl
 	cp -a services/* classes/META-INF/services/
 	jar cMf jas-meditor.jar src -C classes .
 	cp -f jas-meditor.jar $(LIBPATH)
+	rm -rf classes
 
 clean:
 	rm -rf classes
