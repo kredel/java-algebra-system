@@ -3,8 +3,8 @@ Class-Path: retrotranslator-runtime-1.2.6.jar backport-util-concurrent-3.1.jar l
 
 Name: edu/jas/editorengine/
 Specification-Title: JAS
-Specification-Version: 2.2
+Specification-Version: @VERSION@
 Specification-Vendor: Heinz Kredel
 Implementation-Title: edu.jas.editorengine
-Implementation-Version: 2008
+Implementation-Version: @SVNREV@
 Implementation-Vendor: Heinz Kredel
