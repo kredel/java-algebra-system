@@ -1,5 +1,5 @@
 #
-# $Id: $
+# $Id$
 #
 # Makefile for the interface of JAS to meditor
 # by Raphael Jolly, Heinz kredel
