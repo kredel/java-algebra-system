@@ -86,7 +86,7 @@
     Also be sure to use the correct JDK version, e.g. via setting the     
     <code>JAVA_HOME</code> environment variable.
     <br />
-    To use the make file, you must edit the <code>Makefile</code>
+    To use the Gnu make file, you must edit the <code>Makefile</code>
     and adjust the <code>JDK</code> and the <code>LIBPATH</code> variables.
     </p>
 </li>
@@ -100,9 +100,9 @@
     <br />
     <code>ant clean</code> remove backup files,
     <br />
-    <code>ant distcleanclean</code> remove all class files,
+    <code>ant distclean</code> remove all class files,
     <br />
-    <code>ant doc</code> create ne Javadocs.
+    <code>ant doc</code> create the Javadocs.
     </p>
 </li>
 <li><p>Most useful make file targets:
@@ -120,6 +120,10 @@
 <ul>
 <li><p>Unit tests can be run with the "test" target for ant, e.g. 
     <code>ant test</code>
+    </p>
+</li>
+<li><p>The output of the unit tests is collected in the directory 
+    <code>test</code> for inspection.
     </p>
 </li>
 <li><p>The test units work mainly with generated random polynomials.
@@ -290,7 +294,7 @@ public class mytests {
 <p>
 <!-- Created: Sat Mar 19 21:44:14 CET 2005 -->
 <!-- hhmts start -->
-Last modified: Thu Aug  7 23:21:05 CEST 2008
+Last modified: Sat Aug  9 13:43:56 CEST 2008
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
