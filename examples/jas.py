@@ -16,8 +16,8 @@ from edu.jas.vector      import *
 from edu.jas.application import *
 from edu.jas.util        import *
 from edu.jas.ufd         import *
-#from edu.jas             import *
-#from edu                 import *
+from edu.jas             import *
+from edu                 import *
 #PrettyPrint.setInternal();
 from edu.jas.kern        import ComputerThreads;
 
