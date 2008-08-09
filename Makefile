@@ -272,6 +272,7 @@ export:
 	cp ~/jas-versions/$(VERSION).`$(SVNREV)`-bin.jar $(LIBPATH)/jas.jar
 	cp ~/jas-versions/$(VERSION).`$(SVNREV)`-bin.jar ~/jas-versions/$(VERSION)/jas.jar
 	mv ~/jas-versions/$(VERSION).`$(SVNREV)`-*.jar ~/jas-versions/$(VERSION)/
+	cd ~/jas-versions/$(VERSION)/meditor; jas_dosed $(VERSION) `$(SVNREV)` manifest.mf
 	cd ~/jas-versions/$(VERSION)/meditor; make
 
 deploy:
