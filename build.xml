@@ -13,7 +13,6 @@
   <property name="jar"       value="jas.jar" />
 
   <property name="libs"      value="${basedir}/../lib" />
-  <property name="meditorbase" value="${basedir}/../java/meditor" />
   <property name="log4j"     value="${libs}/log4j.jar" />
   <property name="junit"     value="${libs}/junit.jar" />
   <property name="jomp"      value="${libs}/jomp1.0b.jar" />
@@ -305,13 +304,6 @@
     <fileset dir="${src}" includes="**/*.class"  />
     <fileset dir="${build}" includes="**/*.class"  />
   </delete>
-</target>
-
-<target name="meditor" depends="vorher" >
-  <jar jarfile="jas-meditor.jar"  >
-     <fileset dir="meditor" includes="**/*.java"  />
-     <fileset dir="meditor" includes="build.xml Makefile log4j.properties"  />
-  </jar>
 </target>
 
 <target name="untabify-isdone" depends="vorher" >
