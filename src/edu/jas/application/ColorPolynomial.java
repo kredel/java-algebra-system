@@ -144,7 +144,7 @@ public class ColorPolynomial<C extends RingElem<C>>
 
 
     /**
-     * Check ordering invariants. TT(green) > LT(red) and TT(red) > LT(green).
+     * Check ordering invariants. TT(green) > LT(red) and TT(red) > LT(white).
      * @return true, if all ordering invariants are met, else false.
      */
     public boolean checkInvariant() {
