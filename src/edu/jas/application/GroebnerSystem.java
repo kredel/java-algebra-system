@@ -79,17 +79,31 @@ public class GroebnerSystem<C extends GcdRingElem<C>> {
             }
             sb.append( cs.toString() );
         }
-        if ( conds == null ) {
-           sb.append("Conditions not jet determined");
-        } else {
-           sb.append("Conditions:\n");
-           sb.append( getConditions().toString() );
+        sb.append("Conditions:\n");
+        first = true;
+        for ( Condition<C> cond : getConditions() ) {
+            if ( first ) {
+                first = false;
+            } else {
+                sb.append("\n");
+            }
+            sb.append( cond.toString() );
         }
+        sb.append("\n");
         if ( cgb == null ) {
-           sb.append("Comprehensive Groebner Base not jet determined");
+           sb.append("Comprehensive Groebner Base not jet determined\n");
         } else {
            sb.append("Comprehensive Groebner Base:\n");
-           sb.append( getCGB().toString() );
+           first = true;
+           for ( GenPolynomial<GenPolynomial<C>> p : getCGB() ) {
+               if ( first ) {
+                  first = false;
+               } else {
+                  sb.append(",\n");
+               }
+               sb.append( p.toString() );
+           }
+           sb.append("\n");
         }
         return sb.toString();
     }
@@ -197,8 +211,7 @@ public class GroebnerSystem<C extends GcdRingElem<C>> {
                     System.out.println("not invariant, cs = " + cs);
                 }
             }
-            List<ColorPolynomial<C>> S = cs.list;
-            for (ColorPolynomial<C> p : S) {
+            for (ColorPolynomial<C> p : cs.list) {
                 GenPolynomial<GenPolynomial<C>> f = p.getPolynomial();
                 Gs.add(f);
             }
