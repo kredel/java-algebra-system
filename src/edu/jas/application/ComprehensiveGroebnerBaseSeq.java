@@ -345,15 +345,11 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         int si = 0;
         while (CSs.size() > 0) {
             cs = CSs.get(0); // remove(0);
+            si++;
             logger.info("poped GBsys number    " + si + " with condition = "
                     + cs.condition);
             logger.info("poped GBsys remaining " + (CSs.size() - 1)
                     + " with pairlist  = " + cs.pairlist);
-            if (si++ < 0) {
-                logger.info("stopped GBsys ----------------------------------");
-                CSb.addAll(CSs);
-                break;
-            }
             pairlist = cs.pairlist;
             G = cs.list;
             cond = cs.condition;
@@ -466,7 +462,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
      *         of cs.
      */
     public List<ColoredSystem<C>> determineAddPairs(ColoredSystem<C> cs,
-            ColorPolynomial<C> A) {
+                                                    ColorPolynomial<C> A) {
         List<ColoredSystem<C>> NCS = new ArrayList<ColoredSystem<C>>();
         if (A == null || A.isZERO()) {
             // NCS.add( cs );
@@ -550,73 +546,15 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
      */
     // @Override
     // @SuppressWarnings("unchecked")
-    public List<GenPolynomial<GenPolynomial<C>>> GB(
-            List<GenPolynomial<GenPolynomial<C>>> F) {
+    public List<GenPolynomial<GenPolynomial<C>>> GB(List<GenPolynomial<GenPolynomial<C>>> F) {
         if (F == null) {
             return F;
         }
         // compute Groebner system
         List<ColoredSystem<C>> Gsys = GBsys(F);
         // System.out.println("\n\nGBsys = " + Gsys);
-        List<Condition<C>> cds;
-        List<GenPolynomial<GenPolynomial<C>>> G 
-            = ComprehensiveGroebnerBaseSeq.<C>combineGBsys(Gsys);
-        /*
-        if (debug) {
-            cds = cred.caseDistinction(G);
-            // System.out.println("------------------------------------------");
-            for (Condition<C> cond : cd) {
-                if (!cds.contains(cond)) {
-                    System.out.println("cd_i not in cds = " + cond);
-                }
-            }
-            // System.out.println("------------------------------------------");
-            for (Condition<C> cond : cds) {
-                if (!cd.contains(cond)) {
-                    System.out.println("cds_i not in cd = " + cond);
-                }
-            }
-            // System.out.println("------------------------------------------");
-        }
-        */
-        return G;
-    }
-
-
-    /**
-     * Comprehensive Groebner base from Groebner system.
-     * @param CS list of colored systems.
-     * @return GB(CS) a Comprehensive Groebner base from CS.
-     */
-    // @Override
-    // @SuppressWarnings("unchecked")
-    public static <C extends GcdRingElem<C>>
-           List<GenPolynomial<GenPolynomial<C>>> 
-               combineGBsys( List<ColoredSystem<C>> CS ) {
-        // combine for CGB
-        Set<GenPolynomial<GenPolynomial<C>>> Gs 
-           = new HashSet<GenPolynomial<GenPolynomial<C>>>();
-        List<Condition<C>> cd = new ArrayList<Condition<C>>();
-        for (ColoredSystem<C> cs : CS) {
-            if (debug) {
-                if (!cs.isDetermined()) {
-                    System.out.println("not determined, cs = " + cs);
-                }
-                if (!cs.checkInvariant()) {
-                    System.out.println("not invariant, cs = " + cs);
-                }
-            }
-            cd.add(cs.condition);
-            List<ColorPolynomial<C>> S = cs.list;
-            for (ColorPolynomial<C> p : S) {
-                GenPolynomial<GenPolynomial<C>> f = p.getPolynomial();
-                Gs.add(f);
-            }
-        }
-        System.out.println("CGB conditions:\n" + cd);
-        List<GenPolynomial<GenPolynomial<C>>> G 
-            = new ArrayList<GenPolynomial<GenPolynomial<C>>>(Gs);
-        return G;
+        GroebnerSystem<C> gs = new GroebnerSystem<C>( Gsys );
+        return gs.getCGB();
     }
 
 
