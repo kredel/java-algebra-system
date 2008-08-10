@@ -296,19 +296,53 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
 
 
     /**
+     * Comprehensive-Groebner system test.
+     * @param F Groebner system.
+     * @return true, if F is a Comprehensive-Groebner system, else false.
+     */
+    // @Override
+    public boolean isGBsys(GroebnerSystem<C> F) {
+        return isGBsys(0, F.list);
+    }
+
+
+    /**
+     * Comprehensive-Groebner base test.
+     * @param F Groebner system.
+     * @return true, if F is a Comprehensive-Groebner base, else false.
+     */
+    // @Override
+    public boolean isCGB(GroebnerSystem<C> F) {
+        return isGB( F.getCGB() );
+    }
+
+
+    /**
+     * Comprehensive-Groebner system and base test.
+     * @param F Groebner system.
+     * @return true, if F is a Comprehensive-Groebner system and base, else false.
+     */
+    // @Override
+    public boolean isGB(GroebnerSystem<C> F) {
+        return isGBsys(0, F.list) && isGB(F.getCGB());
+    }
+
+
+    /**
      * Comprehensive Groebner base system using pairlist class.
      * @param F polynomial list.
-     * @return GBsys(F) a Comprehensive Groebner base system of F.
+     * @return GBsys(F) a Comprehensive Groebner system of F.
      */
     // @Override
     // @SuppressWarnings("unchecked")
-    public List<ColoredSystem<C>> GBsys(List<GenPolynomial<GenPolynomial<C>>> F) {
+    //public List<ColoredSystem<C>> GBsys(List<GenPolynomial<GenPolynomial<C>>> F) {
+    public GroebnerSystem<C> GBsys(List<GenPolynomial<GenPolynomial<C>>> F) {
         if (F == null) {
             return null;
         }
         List<ColoredSystem<C>> CSp = new ArrayList<ColoredSystem<C>>();
         if (F.size() == 0) {
-            return CSp;
+            return new GroebnerSystem<C>( CSp );
         }
         // extract coefficient factory
         GenPolynomial<GenPolynomial<C>> f = F.get(0);
@@ -449,7 +483,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
             logger.info(x.pairlist.toString());
         }
         CSb = new ArrayList<ColoredSystem<C>>(CSh);
-        return CSb;
+        return new GroebnerSystem<C>( CSb );
     }
 
 
@@ -540,7 +574,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
 
 
     /**
-     * Comprehensive Groebner base using pairlist class.
+     * Comprehensive Groebner base via Groebner system.
      * @param F polynomial list.
      * @return GB(F) a Comprehensive Groebner base of F.
      */
@@ -551,9 +585,8 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
             return F;
         }
         // compute Groebner system
-        List<ColoredSystem<C>> Gsys = GBsys(F);
-        // System.out.println("\n\nGBsys = " + Gsys);
-        GroebnerSystem<C> gs = new GroebnerSystem<C>( Gsys );
+        GroebnerSystem<C> gs = GBsys(F);
+        // System.out.println("\n\nGBsys = " + gs);
         return gs.getCGB();
     }
 
