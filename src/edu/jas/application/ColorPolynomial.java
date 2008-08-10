@@ -181,6 +181,7 @@ public class ColorPolynomial<C extends RingElem<C>>
         }
         if (!t) {
             System.out.println("not invariant " + this);
+            // throw new RuntimeException("test");
         }
         return t;
     }
