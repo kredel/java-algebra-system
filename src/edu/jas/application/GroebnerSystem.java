@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 
 import edu.jas.poly.PolynomialList;
 import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.GenPolynomialRing;
 import edu.jas.structure.GcdRingElem;
 
 
@@ -34,9 +35,15 @@ public class GroebnerSystem<C extends GcdRingElem<C>> {
 
 
     /**
-     * List of coloreds systems.
+     * List of colored systems.
      */
     public final List<ColoredSystem<C>> list;
+
+
+    /**
+     * List of conditions for this Groebner system.
+     */
+    protected List<Condition<C>> conds;
 
 
     /**
@@ -51,6 +58,7 @@ public class GroebnerSystem<C extends GcdRingElem<C>> {
      */
     public GroebnerSystem(List<ColoredSystem<C>> S) {
         this.list = S;
+        this.conds = null;
         this.cgb = null;
     }
 
@@ -58,31 +66,33 @@ public class GroebnerSystem<C extends GcdRingElem<C>> {
     /**
      * Get the String representation.
      * @see java.lang.Object#toString()
+     */
     @Override
     public String toString() {
-        StringBuffer s = new StringBuffer("\nGroebnerSystem: \n");
-        if (list.size() > 0) {
-            s.append("polynomial ring : " + list.get(0).green.ring + "\n");
+        StringBuffer sb = new StringBuffer("GroebnerSystem: \n");
+        boolean first = true;
+        for (ColoredSystem<C> cs : list) {
+            if ( first ) {
+               first = false;
+            } else {
+               sb.append("\n");
+            }
+            sb.append( cs.toString() );
+        }
+        if ( conds == null ) {
+           sb.append("Conditions not jet determined");
         } else {
-            s.append("parameter polynomial ring : " + condition.zero.list.ring + "\n");
+           sb.append("Conditions:\n");
+           sb.append( getConditions().toString() );
         }
-        s.append("conditions == 0 : " + getConditionZero() + "\n");
-        s.append("conditions != 0 : " + getConditionNonZero() + "\n");
-        if (debug) {
-            s.append("green coefficients:\n" + getGreenCoefficients() + "\n");
-            s.append("red coefficients:\n" + getRedCoefficients() + "\n");
+        if ( cgb == null ) {
+           sb.append("Comprehensive Groebner Base not jet determined");
+        } else {
+           sb.append("Comprehensive Groebner Base:\n");
+           sb.append( getCGB().toString() );
         }
-        s.append("colored polynomials:\n" + list + "\n");
-        s.append("uncolored polynomials:\n" + getPolynomialList() + "\n");
-        if (debug) {
-            s.append("essential polynomials:\n" + getEssentialPolynomialList() + "\n");
-        }
-        if (pairlist != null) {
-            s.append(pairlist.toString() + "\n");
-        }
-        return s.toString();
+        return sb.toString();
     }
-     */
 
 
     /**
@@ -120,67 +130,85 @@ public class GroebnerSystem<C extends GcdRingElem<C>> {
 
 
     /**
-     * Check invariants. Check if all polynomials are determined and if the
-     * color of all coefficients is correct with respect to the condition.
+     * Check invariants. Check if all colored systems are determined and 
+     * all invariants are met.
      * @return true, if all invariants are met, else false.
+     */
     public boolean checkInvariant() {
-        if (!isDetermined()) {
-            return false;
-        }
-        // Condition<C> cond = condition;
-        for (ColorPolynomial<C> s : list) {
+        for (ColoredSystem<C> s : list) {
             if (!s.checkInvariant()) {
-                System.out.println("notInvariant " + s);
-                System.out.println("condition:   " + condition);
                 return false;
-            }
-            for (GenPolynomial<C> g : s.green.getMap().values()) {
-                if (condition.color(g) != Condition.Color.GREEN) {
-                    System.out.println("notGreen   " + g);
-                    System.out.println("condition: " + condition);
-                    System.out.println("colors:    " + s);
-                    return false;
-                }
-            }
-            for (GenPolynomial<C> r : s.red.getMap().values()) {
-                if (condition.color(r) != Condition.Color.RED) {
-                    System.out.println("notRed     " + r);
-                    System.out.println("condition: " + condition);
-                    System.out.println("colors:    " + s);
-                    return false;
-                }
-            }
-            for (GenPolynomial<C> w : s.white.getMap().values()) {
-                if (condition.color(w) != Condition.Color.WHITE) {
-                    // System.out.println("notWhite " + w);
-                    // System.out.println("condition: " + condition);
-                    // System.out.println("colors: " + s);
-                    continue; // no error
-                    // return false;
-                }
             }
         }
         return true;
     }
-     */
 
 
     /**
-     * Is this colored system completely determined.
-     * @return true, if each ColorPolynomial is determined, else false.
+     * Is each colored system completely determined.
+     * @return true, if each ColoredSystem is determined, else false.
+     */
     public boolean isDetermined() {
-        for (ColorPolynomial<C> s : list) {
-            if (s.isZERO()) {
-                continue;
-            }
+        for (ColoredSystem<C> s : list) {
             if (!s.isDetermined()) {
-                System.out.println("notDetermined " + s);
-                System.out.println("condition: " + condition);
                 return false;
             }
         }
         return true;
     }
+
+
+    /**
+     * Get list of conditions determining this Groebner system. 
+     * @return list of determining conditions.
      */
+    public List<Condition<C>> getConditions() {
+        if ( conds != null ) {
+           return conds;
+        }
+        List<Condition<C>> cd = new ArrayList<Condition<C>>( list.size() );
+        for (ColoredSystem<C> cs : list) {
+            cd.add(cs.condition);
+        }
+        conds = cd;
+        return conds;
+    }
+
+
+    /**
+     * Get comprehensive Groebner base. 
+     * @return the comprehensive Groebner base for this Groebner system.
+     */
+    public List<GenPolynomial<GenPolynomial<C>>> getCGB() {
+        if ( cgb != null ) {
+           return cgb.list;
+        }
+        // combine for CGB
+        Set<GenPolynomial<GenPolynomial<C>>> Gs 
+           = new HashSet<GenPolynomial<GenPolynomial<C>>>();
+        for (ColoredSystem<C> cs : list) {
+            if (debug) {
+                if (!cs.isDetermined()) {
+                    System.out.println("not determined, cs = " + cs);
+                }
+                if (!cs.checkInvariant()) {
+                    System.out.println("not invariant, cs = " + cs);
+                }
+            }
+            List<ColorPolynomial<C>> S = cs.list;
+            for (ColorPolynomial<C> p : S) {
+                GenPolynomial<GenPolynomial<C>> f = p.getPolynomial();
+                Gs.add(f);
+            }
+        }
+        List<GenPolynomial<GenPolynomial<C>>> G 
+            = new ArrayList<GenPolynomial<GenPolynomial<C>>>(Gs);
+        GenPolynomialRing<GenPolynomial<C>> ring = null;
+        if ( G.size() > 0 ) {
+           ring = G.get(0).ring;
+        }
+        cgb = new PolynomialList<GenPolynomial<C>>(ring,G);
+        return G;
+    }
 
 }
