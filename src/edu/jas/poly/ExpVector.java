@@ -57,7 +57,7 @@ public abstract class ExpVector implements AbelianGroupElem<ExpVector>
      * Used storage representation of exponent arrays.
      * <b>Note:</b> Set this only statically and not dynamically. 
      */
-    public final static StorUnit storunit = StorUnit.SHORT;
+    public final static StorUnit storunit = StorUnit.LONG;
 
 
     /**
