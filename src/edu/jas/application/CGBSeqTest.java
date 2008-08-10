@@ -99,19 +99,19 @@ public class CGBSeqTest extends TestCase {
     }
 
 
-    /**
+    /*
      * Dummy test method for jUnit.
      * 
-     */
     public void testDummy() {
     }
+     */
 
 
     /**
      * Test sequential CGB.
      * 
      */
-    public void xtestSequentialCGB() {
+    public void testSequentialCGB() {
 
         L = new ArrayList<GenPolynomial<GenPolynomial<BigRational>>>();
 
@@ -193,15 +193,11 @@ public class CGBSeqTest extends TestCase {
         }
         //System.out.println("F = " + F);
 
-//         Gs = bb.GBsys(F.list);
-//         System.out.println("Gs = " + Gs);
-//         assertTrue("isGBsys( GB(Trinks7) )", bb.isGBsys(Gs) );
-
         G = bb.GB(F.list);
         assertTrue("isGB( GB(Trinks7) )", bb.isGB(G) );
-        //assertEquals("#GB(Trinks7) == 6", 6, G.size() );
-        PolynomialList<GenPolynomial<BigRational>> trinks 
-            = new PolynomialList<GenPolynomial<BigRational>>(F.ring,G);
+
+        //PolynomialList<GenPolynomial<BigRational>> trinks 
+        //    = new PolynomialList<GenPolynomial<BigRational>>(F.ring,G);
         //System.out.println("G = " + trinks);
         //System.out.println("G = " + G);
     }
