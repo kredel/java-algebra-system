@@ -183,6 +183,8 @@ public class GroebnerSystem<C extends GcdRingElem<C>> {
         if ( cgb != null ) {
            return cgb.list;
         }
+        // assure conditions are collected
+        List<Condition<C>> unused = getConditions();
         // combine for CGB
         Set<GenPolynomial<GenPolynomial<C>>> Gs 
            = new HashSet<GenPolynomial<GenPolynomial<C>>>();
