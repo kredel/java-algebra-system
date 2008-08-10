@@ -88,7 +88,7 @@ public class ColoredSystem<C extends GcdRingElem<C>> implements Cloneable {
      */
     @Override
     public String toString() {
-        StringBuffer s = new StringBuffer("\nColoredSystem: \n");
+        StringBuffer s = new StringBuffer("ColoredSystem: \n");
         if (list.size() > 0) {
             s.append("polynomial ring : " + list.get(0).green.ring + "\n");
         } else {
