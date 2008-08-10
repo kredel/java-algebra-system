@@ -14,6 +14,8 @@ import junit.framework.TestSuite;
 
 import org.apache.log4j.BasicConfigurator;
 
+import edu.jas.kern.ComputerThreads;
+
 import edu.jas.structure.Product;
 import edu.jas.structure.ProductRing;
 import edu.jas.structure.RingFactory;
@@ -43,6 +45,7 @@ public class ReductionTest extends TestCase {
    public static void main (String[] args) {
           BasicConfigurator.configure();
           junit.textui.TestRunner.run( suite() );
+          ComputerThreads.terminate();
    }
 
 /**
@@ -100,19 +103,20 @@ public static Test suite() {
    }
 
 
-/**
+/*
  * Test dummy.
  * 
- */
  public void testDummy() {
  }
+ */
 
 
 /**
- * Test rational coefficient polynomial parametric reduction.
+ * Test rational coefficient polynomial parametric reduction, 
+ * caseDistinction and determination.
  * 
  */
- public void xtestRatPolReduction() {
+ public void testRatPolReduction() {
 
      RingFactory<BigRational> bi = new BigRational(0);
      GenPolynomialRing<BigRational> pr 
@@ -223,27 +227,19 @@ public static Test suite() {
      //System.out.println("b = " + b + "\n");
 
      List<Condition<BigRational>> Ccond; 
-     //System.out.println("caseDistinction ----------------------------------");
      Ccond = cred.caseDistinction(L);
-     //System.out.println("Ccond ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
      //for ( Condition<BigRational> cnd : Ccond ) {
      //    System.out.println("" + cnd);
      //}
 
-
-     //System.out.println("determine ---------------------------------");
+     // check if polynomials are determined
      CSp = cred.determine(L);
-     //System.out.println("CSp ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" + CSp);
-     //System.out.println("++++++++++++++++++++++++++++++++++++++");
      for ( ColoredSystem<BigRational> x : CSp ) {
          assertTrue("isDetermined ", x.isDetermined()); 
          assertTrue("checkInvariant ", x.checkInvariant()); 
-         //System.out.println("condition == 0: " + x.getConditionZero());
-         //System.out.println("condition != 0: " + x.getConditionNonZero());
-         //System.out.println("polynomial list: " + x.getPolynomialList());
-         //System.out.println("++++++++++++++++++++++++++++++++++++++");
      }
 
+     // check if reduced polynomials are in normalform
      ColorPolynomial<BigRational> q, h;
      List<ColoredSystem<BigRational>> NCS;
      for ( ColoredSystem<BigRational> x : CSp ) {
@@ -265,31 +261,6 @@ public static Test suite() {
              }
          }
      }
-
-     if ( false ) {
-         return;
-     }
-
-     ComprehensiveGroebnerBaseSeq<BigRational> cgb = 
-         new ComprehensiveGroebnerBaseSeq<BigRational>(cred,bi);
-
-     System.out.println("isGB(L) = " + cgb.isGB(L) );
-
-     if ( true ) {
-         List<ColoredSystem<BigRational>> Gsys = cgb.GBsys( L ); 
-         //System.out.println("GBsys(L) = " + Gsys );
-         //System.out.println("isGBsys(G) = " + cgb.isGBsys(Gsys) );
-         assertTrue("isGBsys( GBsys(G) ) ", cgb.isGBsys(Gsys) ); 
-     }
-
-     if ( true ) { 
-         List<GenPolynomial<GenPolynomial<BigRational>>> G;
-         G = cgb.GB(L);
-         //System.out.println("GB(L) = " + G );
-         //System.out.println("isGB(G) = " + cgb.isGB(G) );
-         assertTrue("isGB( GB(G) ) ", cgb.isGB(G) ); 
-     }
-
  }
 
 }
