@@ -380,8 +380,8 @@ public class PolyUtilApp<C extends RingElem<C> > {
         //System.out.println("pfac = " + pfac);
         GenPolynomialRing<Product<Residue<C>>> rf 
             = new GenPolynomialRing<Product<Residue<C>>>(pfac,pr.nvar,pr.tord,pr.getVars());
-        List<GenPolynomial<GenPolynomial<C>>> F 
-             = ComprehensiveGroebnerBaseSeq.<C> combineGBsys(CS);
+        GroebnerSystem<C> gs = new GroebnerSystem<C>( CS ); 
+        List<GenPolynomial<GenPolynomial<C>>> F = gs.getCGB();
         list = PolyUtilApp.<C>toProductRes(rf, F);
         return list;
     }
