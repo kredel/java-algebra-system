@@ -200,16 +200,24 @@ public class CReductionSeq<C extends GcdRingElem<C>>
             for (i = 0; i < l; i++) {
                 mt = e.multipleOf(htl[i]); // EVMT( e, htl[i] );
                 if (mt) {
-                    return false;
+                   System.out.println("not normalform " + Ap + ", P[i] = " + P[i]);
+                   return false;
                 }
+            }
+            if ( top ) {
+               return true;
             }
         }
         for (ExpVector e : Ap.white.getMap().keySet()) {
             for (i = 0; i < l; i++) {
                 mt = e.multipleOf(htl[i]); // EVMT( e, htl[i] );
                 if (mt) {
-                    return false;
+                   System.out.println("not normalform " + Ap + ", P[i] = " + P[i]);
+                   return false;
                 }
+            }
+            if ( top ) {
+               return true;
             }
         }
         return true;
