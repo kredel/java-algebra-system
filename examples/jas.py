@@ -287,10 +287,12 @@ class ParamIdeal:
         s = self.pset;
         F = s.list;
         t = System.currentTimeMillis();
-        G = ComprehensiveGroebnerBaseSeq(self.ring.ring.coFac).GB(F);
+        if self.gbsys == None:
+            self.gbsys = ComprehensiveGroebnerBaseSeq(self.ring.ring.coFac).GBsys(F);
+        G = self.gbsys.getCGB();
         t = System.currentTimeMillis() - t;
         print "sequential comprehensive executed in %s ms" % t; 
-        return ParamIdeal(self.ring,"",G);
+        return ParamIdeal(self.ring,"",G,self.gbsys);
 
     def CGBsystem(self):
         s = self.pset;
@@ -322,7 +324,7 @@ class ParamIdeal:
     def regularRepresentation(self):
         if self.gbsys == None:
             return None;
-        G = PolyUtilApp.toProductRes(self.gbsys);
+        G = PolyUtilApp.toProductRes(self.gbsys.list);
         ring = Ring(None,G[0].ring);
         return ParamIdeal(ring,None,G);
 
