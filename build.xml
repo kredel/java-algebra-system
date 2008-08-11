@@ -8,7 +8,7 @@
   <property name="src"       value="src" />
   <property name="bin"       value="edu" />
   <property name="build"     value="." />
-  <property name="doc"       value="doc" />
+  <property name="doc"       value="doc/api" />
   <property name="test"      value="test" />
   <property name="jar"       value="jas.jar" />
 
@@ -42,6 +42,7 @@
   <tstamp />
   <mkdir dir="edu/jas"  />
   <mkdir dir="${test}"  />
+  <mkdir dir="doc"  />
 </target>
 
 <!-- requires ant 1.7 -->

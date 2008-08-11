@@ -207,6 +207,9 @@ DOCU=$(wildcard jas-log.html index.html problems.html design.html COPYING* sampl
 doc: $(FILES)
 	$(DOC) $(DOCOPTS) -d doc $(FILES) 
 
+epydoc: examples/jas.py
+	epydoc -o doc/jython -n JAS -u ../../index.html examples/jas.py
+
 ALLJAR=$(FILES) $(DOCU) Makefile build.xml log4j.properties $(PYS)
 
 jas-all.jar: $(ALLJAR)
@@ -268,6 +271,7 @@ export:
 	cd ~/jas-versions/$(VERSION)/; ant test > ant_test.out
 	cd ~/jas-versions/$(VERSION)/; sh ./jython_tests.sh >jython_tests.out 2>&1
 	cd ~/jas-versions/$(VERSION)/; ant doc > ant_doc.out
+	cd ~/jas-versions/$(VERSION)/; epydoc -o doc/jython -n JAS -u ../../index.html examples/jas.py > epydoc.out
 	cd ~/jas-versions/$(VERSION)/; jar -cf ../$(VERSION).`$(SVNREV)`-doc.jar doc/ *.html
 	cp ~/jas-versions/$(VERSION).`$(SVNREV)`-bin.jar $(LIBPATH)/jas.jar
 	cp ~/jas-versions/$(VERSION).`$(SVNREV)`-bin.jar ~/jas-versions/$(VERSION)/jas.jar
