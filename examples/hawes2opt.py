@@ -52,15 +52,17 @@ o = f.optimize();
 print "optimized Ideal: " + str(o);
 print;
 
-o = o.optimizeCoeffQuot();
-print "optimized coeff Ideal: " + str(o);
+p = o.paramideal();
+
+p = p.optimizeCoeffQuot();
+print "optimized coeff Ideal: " + str(p);
 print;
 
 #rg = o.GB();
 #print "GB:", rg;
 #print;
 
-rg = o;
+rg = p;
 bg = rg.isGB();
 print "isGB:", bg;
 print;

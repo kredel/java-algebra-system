@@ -44,7 +44,7 @@ ps = """
 ) 
 """;
 
-f = r.ideal( ps );
+f = r.paramideal( ps );
 print "Ideal: " + str(f);
 print;
 
