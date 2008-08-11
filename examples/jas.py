@@ -24,17 +24,25 @@ from edu.jas.kern        import ComputerThreads;
 from org.apache.log4j    import BasicConfigurator;
 
 def startLog():
+    '''Configure the log4j system and start logging.
+    '''
     BasicConfigurator.configure();
 
 def terminate():
+    '''Terminate the running thread pools.
+    '''
     ComputerThreads.terminate();
 
 
 class Ring:
     '''Represents a JAS polynomial ring: GenPolynomialRing.
+
+       Methods to create ideals and ideals with parametric coefficients.
     '''
 
     def __init__(self,ringstr="",ring=None):
+        '''Ring constructor.
+        '''
         if ring == None:
            sr = StringReader( ringstr );
            tok = GenPolynomialTokenizer(sr);
@@ -44,12 +52,18 @@ class Ring:
            self.ring = ring;
 
     def __str__(self):
+        '''toString.
+        '''
         return str(self.ring);
 
     def ideal(self,ringstr="",list=None):
+        '''Create an ideal.
+        '''
         return Ideal(self,ringstr,list);
 
     def paramideal(self,ringstr="",list=None,gbsys=None):
+        '''Create an ideal in a polynomial ring with parameter coefficients.
+        '''
         return ParamIdeal(self,ringstr,list,gbsys);
 
 
@@ -60,6 +74,8 @@ class Ideal:
     '''
 
     def __init__(self,ring,ringstr="",list=None):
+        '''Ideal constructor.
+        '''
         self.ring = ring;
         if list == None:
            sr = StringReader( ringstr );
@@ -160,6 +176,64 @@ class Ideal:
         r = Ring("",o.ring);
         return Ideal(r,"",o.list);
 
+    def toInteger(self):
+        p = self.pset;
+        l = p.list;
+        r = p.ring;
+        ri = GenPolynomialRing( BigInteger(), r.nvar, r.tord, r.vars );
+        pi = PolyUtil.integerFromRationalCoefficients(ri,l);
+        r = Ring("",ri);
+        return Ideal(r,"",pi);
+
+    def toModular(self,mf):
+        p = self.pset;
+        l = p.list;
+        r = p.ring;
+        rm = GenPolynomialRing( mf, r.nvar, r.tord, r.vars );
+        pm = PolyUtil.fromIntegerCoefficients(rm,l);
+        r = Ring("",rm);
+        return Ideal(r,"",pm);
+
+    def squarefree(self):
+        s = self.pset;
+        F = s.list;
+        p = F[0]; # only first polynomial
+        t = System.currentTimeMillis();
+        f = GreatestCommonDivisorSubres().squarefreeFactors(p);
+        t = System.currentTimeMillis() - t;
+        #print "squarefee part %s " % f;
+        #S = ArrayList();
+        #S.add(f);
+        print "squarefee executed in %s ms" % t; 
+        return f;
+
+
+class ParamIdeal:
+    '''Represents a JAS polynomial ideal with polynomial coefficients.
+
+    Methods to compute comprehensive Groebner bases.
+    '''
+
+    def __init__(self,ring,ringstr="",list=None,gbsys=None):
+        '''Parametric ideal constructor.
+        '''
+        self.ring = ring;
+        if list == None and ringstr!= None:
+           sr = StringReader( ringstr );
+           tok = GenPolynomialTokenizer(ring.pset.ring,sr);
+           self.list = tok.nextPolynomialList();
+        else:
+           self.list = list;
+        self.gbsys = gbsys;
+        self.pset = OrderedPolynomialList(ring.ring,self.list);
+
+    def __str__(self):
+        if self.gbsys == None:
+            return str(self.pset);
+        else:
+            return str(self.gbsys);
+#            return str(self.pset) + "\n" + str(self.gbsys);
+
     def optimizeCoeff(self):
         p = self.pset;
         o = TermOrderOptimization.optimizeTermOrderOnCoefficients(p);
@@ -187,24 +261,6 @@ class Ideal:
         o = PolyUfdUtil.quotientFromIntegralCoefficients(rq,oq.list);
         r = Ring("",rq);
         return Ideal(r,"",o);
-
-    def toInteger(self):
-        p = self.pset;
-        l = p.list;
-        r = p.ring;
-        ri = GenPolynomialRing( BigInteger(), r.nvar, r.tord, r.vars );
-        pi = PolyUtil.integerFromRationalCoefficients(ri,l);
-        r = Ring("",ri);
-        return Ideal(r,"",pi);
-
-    def toModular(self,mf):
-        p = self.pset;
-        l = p.list;
-        r = p.ring;
-        rm = GenPolynomialRing( mf, r.nvar, r.tord, r.vars );
-        pm = PolyUtil.fromIntegerCoefficients(rm,l);
-        r = Ring("",rm);
-        return Ideal(r,"",pm);
 
     def toIntegralCoeff(self):
         p = self.pset;
@@ -246,42 +302,6 @@ class Ideal:
         pm = PolyUfdUtil.quotientFromIntegralCoefficients(qm,l);
         r = Ring("",qm);
         return Ideal(r,"",pm);
-
-    def squarefree(self):
-        s = self.pset;
-        F = s.list;
-        p = F[0]; # only first polynomial
-        t = System.currentTimeMillis();
-        f = GreatestCommonDivisorSubres().squarefreeFactors(p);
-        t = System.currentTimeMillis() - t;
-        #print "squarefee part %s " % f;
-        #S = ArrayList();
-        #S.add(f);
-        print "squarefee executed in %s ms" % t; 
-        return f;
-
-
-class ParamIdeal:
-    '''Represents a JAS polynomial ideal with polynomial coefficients.
-    '''
-
-    def __init__(self,ring,ringstr="",list=None,gbsys=None):
-        self.ring = ring;
-        if list == None and ringstr!= None:
-           sr = StringReader( ringstr );
-           tok = GenPolynomialTokenizer(ring.pset.ring,sr);
-           self.list = tok.nextPolynomialList();
-        else:
-           self.list = list;
-        self.gbsys = gbsys;
-        self.pset = OrderedPolynomialList(ring.ring,self.list);
-
-    def __str__(self):
-        if self.gbsys == None:
-            return str(self.pset);
-        else:
-            return str(self.gbsys);
-#            return str(self.pset) + "\n" + str(self.gbsys);
 
     def CGB(self):
         s = self.pset;
@@ -354,9 +374,13 @@ class ParamIdeal:
 
 class SolvableRing:
     '''Represents a JAS solvable polynomial ring: GenSolvablePolynomialRing.
+
+    Method to create ideals.
     '''
 
     def __init__(self,ringstr="",ring=None):
+        '''Solvable polynomial ring constructor.
+        '''
         if ring == None:
            sr = StringReader( ringstr );
            tok = GenPolynomialTokenizer(sr);
@@ -381,6 +405,8 @@ class SolvableIdeal:
     '''
 
     def __init__(self,ring,ringstr="",list=None):
+        '''Constructor for an ideal in a solvable polynomial ring.
+        '''
         self.ring = ring;
         if list == None:
            sr = StringReader( ringstr );
@@ -483,9 +509,13 @@ class SolvableIdeal:
 
 class Module:
     '''Represents a JAS module over a polynomial ring.
+
+    Method to create sub-modules.
     '''
 
     def __init__(self,modstr="",ring=None):
+        '''Module constructor.
+        '''
         if ring == None:
            sr = StringReader( modstr );
            tok = GenPolynomialTokenizer(sr);
@@ -503,9 +533,13 @@ class Module:
 
 class SubModule:
     '''Represents a JAS sub-module over a polynomial ring.
+
+    Methods to compute Groebner bases.
     '''
 
     def __init__(self,module,modstr="",list=None):
+        '''Constructor for a sub-module.
+        '''
         self.module = module;
         if list == None:
            sr = StringReader( modstr );
@@ -540,9 +574,13 @@ class SubModule:
 
 class SolvableModule:
     '''Represents a JAS module over a solvable polynomial ring.
+
+    Method to create solvable sub-modules.
     '''
 
     def __init__(self,modstr="",ring=None):
+        '''Solvable module constructor.
+        '''
         if ring == None:
            sr = StringReader( modstr );
            tok = GenPolynomialTokenizer(sr);
@@ -560,9 +598,13 @@ class SolvableModule:
 
 class SolvableSubModule:
     '''Represents a JAS sub-module over a solvable polynomial ring.
+
+    Methods to compute left, right and two-sided Groebner bases.
     '''
 
     def __init__(self,module,modstr="",list=None):
+        '''Constructor for sub-module over a solvable polynomial ring.
+        '''
         self.module = module;
         if list == None:
            sr = StringReader( modstr );
