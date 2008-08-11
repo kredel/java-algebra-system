@@ -96,6 +96,8 @@ class Ideal:
         return ParamIdeal(self.ring,"",self.list);
 
     def GB(self):
+        '''Compute a Groebner base.
+        '''
         s = self.pset;
         F = s.list;
         t = System.currentTimeMillis();
@@ -105,6 +107,8 @@ class Ideal:
         return Ideal(self.ring,"",G);
 
     def isGB(self):
+        '''Test if this is a Groebner base.
+        '''
         s = self.pset;
         F = s.list;
         t = System.currentTimeMillis();
@@ -114,6 +118,8 @@ class Ideal:
         return b;
 
     def parGB(self,th):
+        '''Compute in parallel a Groebner base.
+        '''
         s = self.pset;
         F = s.list;
         bbpar = GroebnerBaseSeqPairParallel(th);
@@ -125,6 +131,8 @@ class Ideal:
         return Ideal(self.ring,"",G);
 
     def parOldGB(self,th):
+        '''Compute in parallel a Groebner base.
+        '''
         s = self.pset;
         F = s.list;
         bbpar = GroebnerBaseParallel(th);
@@ -136,6 +144,8 @@ class Ideal:
         return Ideal(self.ring,"",G);
 
     def distGB(self,th=2,machine="examples/machines.localhost",port=7114):
+        '''Compute on a distributed system a Groebner base.
+        '''
         s = self.pset;
         F = s.list;
         t = System.currentTimeMillis();
@@ -151,12 +161,16 @@ class Ideal:
         return Ideal(self.ring,"",G);
 
     def distClient(self,port=8114):
+        '''Client for a distributed computation.
+        '''
         s = self.pset;
         es = ExecutableServer( port );
         es.init();
         return None;
 
     def NF(self,reducer):
+        '''Compute a normal form of this ideal with respect to reducer.
+        '''
         s = self.pset;
         F = s.list;
         G = reducer.list;
@@ -167,17 +181,23 @@ class Ideal:
         return Ideal(self.ring,"",N);
 
     def intersect(self,ring):
+        '''Compute the intersection of this and the given polynomial ring.
+        '''
         s = jas.application.Ideal(self.pset);
         N = s.intersect(ring.ring);
         return Ideal(self.ring,"",N.getList());
 
     def sum(self,other):
+        '''Compute the sum of this and the ideal.
+        '''
         s = jas.application.Ideal(self.pset);
         t = jas.application.Ideal(other.pset);
         N = s.sum( t );
         return Ideal(self.ring,"",N.getList());
 
     def optimize(self):
+        '''Optimize the term order on the variables.
+        '''
         p = self.pset;
         o = TermOrderOptimization.optimizeTermOrder(p);
         r = Ring("",o.ring);
@@ -244,12 +264,16 @@ class ParamIdeal:
 #            return str(self.pset) + "\n" + str(self.gbsys);
 
     def optimizeCoeff(self):
+        '''Optimize the term order on the variables of the coefficients.
+        '''
         p = self.pset;
         o = TermOrderOptimization.optimizeTermOrderOnCoefficients(p);
         r = Ring("",o.ring);
         return ParamIdeal(r,"",o.list);
 
     def optimizeCoeffQuot(self):
+        '''Optimize the term order on the variables of the quotient coefficients.
+        '''
         p = self.pset;
         l = p.list;
         r = p.ring;
@@ -313,6 +337,8 @@ class ParamIdeal:
         return ParamIdeal(r,"",pm);
 
     def GB(self):
+        '''Compute a Groebner base.
+        '''
         s = self.pset;
         F = s.list;
         t = System.currentTimeMillis();
@@ -322,6 +348,8 @@ class ParamIdeal:
         return ParamIdeal(self.ring,"",G);
 
     def isGB(self):
+        '''Test if this is a Groebner base.
+        '''
         s = self.pset;
         F = s.list;
         t = System.currentTimeMillis();
@@ -331,6 +359,8 @@ class ParamIdeal:
         return b;
 
     def CGB(self):
+        '''Compute a comprehensive Groebner base.
+        '''
         s = self.pset;
         F = s.list;
         t = System.currentTimeMillis();
@@ -342,6 +372,8 @@ class ParamIdeal:
         return ParamIdeal(self.ring,"",G,self.gbsys);
 
     def CGBsystem(self):
+        '''Compute a comprehensive Groebner system.
+        '''
         s = self.pset;
         F = s.list;
         t = System.currentTimeMillis();
@@ -351,6 +383,8 @@ class ParamIdeal:
         return ParamIdeal(self.ring,None,F,S);
 
     def isCGB(self):
+        '''Test if this is a comprehensive Groebner base.
+        '''
         s = self.pset;
         F = s.list;
         t = System.currentTimeMillis();
@@ -360,6 +394,8 @@ class ParamIdeal:
         return b;
 
     def isCGBsystem(self):
+        '''Test if this is a comprehensive Groebner system.
+        '''
         s = self.pset;
         S = self.gbsys;
         t = System.currentTimeMillis();
@@ -369,6 +405,8 @@ class ParamIdeal:
         return b;
 
     def regularRepresentation(self):
+        '''Convert Groebner system to a representation with regular ring coefficents.
+        '''
         if self.gbsys == None:
             return None;
         G = PolyUtilApp.toProductRes(self.gbsys.list);
@@ -376,6 +414,8 @@ class ParamIdeal:
         return ParamIdeal(ring,None,G);
 
     def regularGB(self):
+        '''Compute a Groebner base over a regular ring.
+        '''
         s = self.pset;
         F = s.list;
         t = System.currentTimeMillis();
@@ -385,6 +425,8 @@ class ParamIdeal:
         return ParamIdeal(self.ring,None,G);
 
     def isRegularGB(self):
+        '''Test if this is Groebner base over a regular ring.
+        '''
         s = self.pset;
         F = s.list;
         t = System.currentTimeMillis();
@@ -424,6 +466,8 @@ class SolvableRing:
         return str(self.ring);
 
     def ideal(self,ringstr="",list=None):
+        '''Create a solvable ideal.
+        '''
         return SolvableIdeal(self,ringstr,list);
 
 
@@ -446,9 +490,13 @@ class SolvableIdeal:
         self.pset = OrderedPolynomialList(ring.ring,self.list);
 
     def __str__(self):
+        '''Create a string representation.
+        '''
         return str(self.pset);
 
     def leftGB(self):
+        '''Compute a left Groebner base.
+        '''
         s = self.pset;
         F = s.list;
         t = System.currentTimeMillis();
@@ -458,6 +506,8 @@ class SolvableIdeal:
         return SolvableIdeal(self.ring,"",G);
 
     def isLeftGB(self):
+        '''Test if this is a left Groebner base.
+        '''
         s = self.pset;
         F = s.list;
         t = System.currentTimeMillis();
@@ -467,6 +517,8 @@ class SolvableIdeal:
         return b;
 
     def twosidedGB(self):
+        '''Compute a two-sided Groebner base.
+        '''
         s = self.pset;
         F = s.list;
         t = System.currentTimeMillis();
@@ -476,6 +528,8 @@ class SolvableIdeal:
         return SolvableIdeal(self.ring,"",G);
 
     def isTwosidedGB(self):
+        '''Test if this is a two-sided Groebner base.
+        '''
         s = self.pset;
         F = s.list;
         t = System.currentTimeMillis();
@@ -485,6 +539,8 @@ class SolvableIdeal:
         return b;
 
     def rightGB(self):
+        '''Compute a right Groebner base.
+        '''
         s = self.pset;
         F = s.list;
         t = System.currentTimeMillis();
@@ -494,6 +550,8 @@ class SolvableIdeal:
         return SolvableIdeal(self.ring,"",G);
 
     def isRightGB(self):
+        '''Test if this is a right Groebner base.
+        '''
         s = self.pset;
         F = s.list;
         t = System.currentTimeMillis();
@@ -503,11 +561,15 @@ class SolvableIdeal:
         return b;
 
     def intersect(self,ring):
+        '''Compute the intersection of this and the polynomial ring.
+        '''
         s = jas.application.SolvableIdeal(self.pset);
         N = s.intersect(ring.ring);
         return SolvableIdeal(self.ring,"",N.getList());
 
     def sum(self,other):
+        '''Compute the sum of this and the ideal.
+        '''
         s = jas.application.SolvableIdeal(self.pset);
         t = jas.application.SolvableIdeal(other.pset);
         N = s.sum( t );
@@ -559,6 +621,8 @@ class Module:
         return str(self.mset);
 
     def submodul(self,modstr="",list=None):
+        '''Create a sub-module.
+        '''
         return Submodule(self,modstr,list);
 
 
@@ -590,6 +654,8 @@ class SubModule:
         return str(self.mset); # + "\n\n" + str(self.pset);
 
     def GB(self):
+        '''Compute a Groebner base.
+        '''
         t = System.currentTimeMillis();
         G = ModGroebnerBaseAbstract().GB(self.mset);
         t = System.currentTimeMillis() - t;
@@ -597,6 +663,8 @@ class SubModule:
         return SubModule(self.module,"",G.list);
 
     def isGB(self):
+        '''Test if this is a Groebner base.
+        '''
         t = System.currentTimeMillis();
         b = ModGroebnerBaseAbstract().isGB(self.mset);
         t = System.currentTimeMillis() - t;
@@ -628,6 +696,8 @@ class SolvableModule:
         return str(self.mset);
 
     def solvsubmodul(self,modstr="",list=None):
+        '''Create a solvable sub-module.
+        '''
         return Submodule(self,modstr,list);
 
 
@@ -657,6 +727,8 @@ class SolvableSubModule:
         return str(self.mset); # + "\n\n" + str(self.pset);
 
     def leftGB(self):
+        '''Compute a left Groebner base.
+        '''
         t = System.currentTimeMillis();
         G = ModSolvableGroebnerBaseAbstract().leftGB(self.mset);
         t = System.currentTimeMillis() - t;
@@ -664,6 +736,8 @@ class SolvableSubModule:
         return SolvableSubModule(self.module,"",G.list);
 
     def isLeftGB(self):
+        '''Test if this is a left Groebner base.
+        '''
         t = System.currentTimeMillis();
         b = ModSolvableGroebnerBaseAbstract().isLeftGB(self.mset);
         t = System.currentTimeMillis() - t;
@@ -671,6 +745,8 @@ class SolvableSubModule:
         return b;
 
     def twosidedGB(self):
+        '''Compute a two-sided Groebner base.
+        '''
         t = System.currentTimeMillis();
         G = ModSolvableGroebnerBaseAbstract().twosidedGB(self.mset);
         t = System.currentTimeMillis() - t;
@@ -678,6 +754,8 @@ class SolvableSubModule:
         return SolvableSubModule(self.module,"",G.list);
 
     def isTwosidedGB(self):
+        '''Test if this is a two-sided Groebner base.
+        '''
         t = System.currentTimeMillis();
         b = ModSolvableGroebnerBaseAbstract().isTwosidedGB(self.mset);
         t = System.currentTimeMillis() - t;
@@ -685,6 +763,8 @@ class SolvableSubModule:
         return b;
 
     def rightGB(self):
+        '''Compute a right Groebner base.
+        '''
         t = System.currentTimeMillis();
         G = ModSolvableGroebnerBaseAbstract().rightGB(self.mset);
         t = System.currentTimeMillis() - t;
@@ -692,6 +772,8 @@ class SolvableSubModule:
         return SolvableSubModule(self.module,"",G.list);
 
     def isRightGB(self):
+        '''Test if this is a right Groebner base.
+        '''
         t = System.currentTimeMillis();
         b = ModSolvableGroebnerBaseAbstract().isRightGB(self.mset);
         t = System.currentTimeMillis() - t;
