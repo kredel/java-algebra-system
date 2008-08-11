@@ -52,7 +52,7 @@ class Ring:
            self.ring = ring;
 
     def __str__(self):
-        '''toString.
+        '''Create a string representation.
         '''
         return str(self.ring);
 
@@ -86,7 +86,14 @@ class Ideal:
         self.pset = OrderedPolynomialList(ring.ring,self.list);
 
     def __str__(self):
+        '''Create a string representation.
+        '''
         return str(self.pset);
+
+    def paramideal(self):
+        '''Create an ideal in a polynomial ring with parameter coefficients.
+        '''
+        return ParamIdeal(self.ring,"",self.list);
 
     def GB(self):
         s = self.pset;
@@ -228,6 +235,8 @@ class ParamIdeal:
         self.pset = OrderedPolynomialList(ring.ring,self.list);
 
     def __str__(self):
+        '''Create a string representation.
+        '''
         if self.gbsys == None:
             return str(self.pset);
         else:
@@ -238,7 +247,7 @@ class ParamIdeal:
         p = self.pset;
         o = TermOrderOptimization.optimizeTermOrderOnCoefficients(p);
         r = Ring("",o.ring);
-        return Ideal(r,"",o.list);
+        return ParamIdeal(r,"",o.list);
 
     def optimizeCoeffQuot(self):
         p = self.pset;
@@ -260,7 +269,7 @@ class ParamIdeal:
         #print "rq = ", rq;        
         o = PolyUfdUtil.quotientFromIntegralCoefficients(rq,oq.list);
         r = Ring("",rq);
-        return Ideal(r,"",o);
+        return ParamIdeal(r,"",o);
 
     def toIntegralCoeff(self):
         p = self.pset;
@@ -273,7 +282,7 @@ class ParamIdeal:
         lp = PolyUfdUtil.integralFromQuotientCoefficients(rc,l);
         #print "lp = ", lp;
         r = Ring("",rc);
-        return Ideal(r,"",lp);
+        return ParamIdeal(r,"",lp);
 
     def toModularCoeff(self,mf):
         p = self.pset;
@@ -287,7 +296,7 @@ class ParamIdeal:
         #print "rm = ", rm;
         pm = PolyUfdUtil.fromIntegerCoefficients(rm,l);
         r = Ring("",rm);
-        return Ideal(r,"",pm);
+        return ParamIdeal(r,"",pm);
 
     def toQuotientCoeff(self):
         p = self.pset;
@@ -301,7 +310,25 @@ class ParamIdeal:
         #print "qm = ", qm;
         pm = PolyUfdUtil.quotientFromIntegralCoefficients(qm,l);
         r = Ring("",qm);
-        return Ideal(r,"",pm);
+        return ParamIdeal(r,"",pm);
+
+    def GB(self):
+        s = self.pset;
+        F = s.list;
+        t = System.currentTimeMillis();
+        G = GroebnerBaseSeq().GB(F);
+        t = System.currentTimeMillis() - t;
+        print "sequential executed in %s ms" % t; 
+        return ParamIdeal(self.ring,"",G);
+
+    def isGB(self):
+        s = self.pset;
+        F = s.list;
+        t = System.currentTimeMillis();
+        b = GroebnerBaseSeq().isGB(F);
+        t = System.currentTimeMillis() - t;
+        print "isGB executed in %s ms" % t; 
+        return b;
 
     def CGB(self):
         s = self.pset;
@@ -392,6 +419,8 @@ class SolvableRing:
            print "warning: ring is not associative";
 
     def __str__(self):
+        '''Create a string representation.
+        '''
         return str(self.ring);
 
     def ideal(self,ringstr="",list=None):
@@ -525,6 +554,8 @@ class Module:
         self.ring = self.mset.ring;
 
     def __str__(self):
+        '''Create a string representation.
+        '''
         return str(self.mset);
 
     def submodul(self,modstr="",list=None):
@@ -554,6 +585,8 @@ class SubModule:
         #self.pset = self.mset.getPolynomialList();
 
     def __str__(self):
+        '''Create a string representation.
+        '''
         return str(self.mset); # + "\n\n" + str(self.pset);
 
     def GB(self):
@@ -590,6 +623,8 @@ class SolvableModule:
         self.ring = self.mset.ring;
 
     def __str__(self):
+        '''Create a string representation.
+        '''
         return str(self.mset);
 
     def solvsubmodul(self,modstr="",list=None):
@@ -617,6 +652,8 @@ class SolvableSubModule:
         self.rows = self.mset.rows;
 
     def __str__(self):
+        '''Create a string representation.
+        '''
         return str(self.mset); # + "\n\n" + str(self.pset);
 
     def leftGB(self):
