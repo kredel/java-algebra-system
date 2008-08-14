@@ -99,9 +99,21 @@ class Ideal:
         '''Compute a Groebner base.
         '''
         s = self.pset;
+        cofac = s.ring.coFac;
         F = s.list;
         t = System.currentTimeMillis();
-        G = GroebnerBaseSeq().GB(F);
+        if cofac.isField():
+            G = GroebnerBaseSeq().GB(F);
+        else:
+            v = None;
+            try:
+                v = cofac.vars;
+            except:
+                pass
+            if v == None:
+                G = GroebnerBasePseudoSeq(cofac).GB(F);
+            else:
+                G = GroebnerBasePseudoRecSeq(cofac).GB(F);
         t = System.currentTimeMillis() - t;
         print "sequential executed in %s ms" % t; 
         return Ideal(self.ring,"",G);
