@@ -30,24 +30,12 @@ f = r.ideal( ps );
 print "Ideal: " + str(f);
 print;
 
-from edu.jas.ring import GroebnerBasePseudoSeq;
+#startLog();
 
-startLog();
-
-cf = r.ring.coFac;
-#rg = f.GB();
-rgl = GroebnerBasePseudoSeq(cf).GB( f.list );
-
-print "GB:", rgl;
+rg = f.GB();
+rg = f.GB();
+print "Ideal: " + str(rg);
 print;
-
-g = r.ideal( list=rgl );
-print "Ideal: " + str(g);
-print;
-
-#bg = rg.isGB();
-#print "isGB:", bg;
-#print;
 
 terminate();
 #sys.exit();
