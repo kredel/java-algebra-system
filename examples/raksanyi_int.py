@@ -26,7 +26,7 @@ ps = """
 ) 
 """;
 
-f = r.ideal( ps );
+f = r.paramideal( ps );
 print "Ideal: " + str(f);
 print;
 
@@ -35,6 +35,13 @@ print;
 rg = f.GB();
 rg = f.GB();
 print "Ideal: " + str(rg);
+print;
+
+bg = rg.isGB();
+if bg:
+    print "isGB: true";
+else:
+    print "isGB: false";
 print;
 
 terminate();
