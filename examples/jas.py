@@ -120,7 +120,7 @@ class Ideal:
             else:
                 G = GroebnerBasePseudoRecSeq(cofac).GB(F);
         t = System.currentTimeMillis() - t;
-        print "sequential executed in %s ms" % t; 
+        print "sequential GB executed in %s ms" % t; 
         return Ideal(self.ring,"",G);
 
     def isGB(self):
@@ -194,7 +194,7 @@ class Ideal:
         t = System.currentTimeMillis();
         N = ReductionSeq().normalform(G,F);
         t = System.currentTimeMillis() - t;
-        print "sequential executed in %s ms" % t; 
+        print "sequential NF executed in %s ms" % t; 
         return Ideal(self.ring,"",N);
 
     def intersect(self,ring):
@@ -524,7 +524,7 @@ class SolvableIdeal:
         t = System.currentTimeMillis();
         G = SolvableGroebnerBaseSeq().leftGB(F);
         t = System.currentTimeMillis() - t;
-        print "executed in %s ms" % t; 
+        print "executed leftGB in %s ms" % t; 
         return SolvableIdeal(self.ring,"",G);
 
     def isLeftGB(self):
@@ -535,7 +535,7 @@ class SolvableIdeal:
         t = System.currentTimeMillis();
         b = SolvableGroebnerBaseSeq().isLeftGB(F);
         t = System.currentTimeMillis() - t;
-        print "executed in %s ms" % t; 
+        print "isLeftGB executed in %s ms" % t; 
         return b;
 
     def twosidedGB(self):
@@ -546,7 +546,7 @@ class SolvableIdeal:
         t = System.currentTimeMillis();
         G = SolvableGroebnerBaseSeq().twosidedGB(F);
         t = System.currentTimeMillis() - t;
-        print "executed in %s ms" % t; 
+        print "executed twosidedGB in %s ms" % t; 
         return SolvableIdeal(self.ring,"",G);
 
     def isTwosidedGB(self):
@@ -557,7 +557,7 @@ class SolvableIdeal:
         t = System.currentTimeMillis();
         b = SolvableGroebnerBaseSeq().isTwosidedGB(F);
         t = System.currentTimeMillis() - t;
-        print "executed in %s ms" % t; 
+        print "isTwosidedGB executed in %s ms" % t; 
         return b;
 
     def rightGB(self):
@@ -568,7 +568,7 @@ class SolvableIdeal:
         t = System.currentTimeMillis();
         G = SolvableGroebnerBaseSeq().rightGB(F);
         t = System.currentTimeMillis() - t;
-        print "executed in %s ms" % t; 
+        print "executed rightGB in %s ms" % t; 
         return SolvableIdeal(self.ring,"",G);
 
     def isRightGB(self):
@@ -579,7 +579,7 @@ class SolvableIdeal:
         t = System.currentTimeMillis();
         b = SolvableGroebnerBaseSeq().isRightGB(F);
         t = System.currentTimeMillis() - t;
-        print "executed in %s ms" % t; 
+        print "isRightGB executed in %s ms" % t; 
         return b;
 
     def intersect(self,ring):
@@ -607,7 +607,7 @@ class SolvableIdeal:
         G = bbpar.leftGB(F);
         t = System.currentTimeMillis() - t;
         bbpar.terminate();
-        print "parallel %s executed in %s ms" % (th, t); 
+        print "parallel %s leftGB executed in %s ms" % (th, t); 
         return Ideal(self.ring,"",G);
 
     def parTwosidedGB(self,th):
@@ -620,7 +620,7 @@ class SolvableIdeal:
         G = bbpar.twosidedGB(F);
         t = System.currentTimeMillis() - t;
         bbpar.terminate();
-        print "parallel %s executed in %s ms" % (th, t); 
+        print "parallel %s twosidedGB executed in %s ms" % (th, t); 
         return Ideal(self.ring,"",G);
 
 
@@ -685,7 +685,7 @@ class SubModule:
         t = System.currentTimeMillis();
         G = ModGroebnerBaseAbstract().GB(self.mset);
         t = System.currentTimeMillis() - t;
-        print "executed in %s ms" % t; 
+        print "executed module GB in %s ms" % t; 
         return SubModule(self.module,"",G.list);
 
     def isGB(self):
@@ -694,7 +694,7 @@ class SubModule:
         t = System.currentTimeMillis();
         b = ModGroebnerBaseAbstract().isGB(self.mset);
         t = System.currentTimeMillis() - t;
-        print "executed in %s ms" % t; 
+        print "module isGB executed in %s ms" % t; 
         return b;
 
 
@@ -758,7 +758,7 @@ class SolvableSubModule:
         t = System.currentTimeMillis();
         G = ModSolvableGroebnerBaseAbstract().leftGB(self.mset);
         t = System.currentTimeMillis() - t;
-        print "executed in %s ms" % t; 
+        print "executed left module GB in %s ms" % t; 
         return SolvableSubModule(self.module,"",G.list);
 
     def isLeftGB(self):
@@ -767,7 +767,7 @@ class SolvableSubModule:
         t = System.currentTimeMillis();
         b = ModSolvableGroebnerBaseAbstract().isLeftGB(self.mset);
         t = System.currentTimeMillis() - t;
-        print "executed in %s ms" % t; 
+        print "module isLeftGB executed in %s ms" % t; 
         return b;
 
     def twosidedGB(self):
@@ -785,7 +785,7 @@ class SolvableSubModule:
         t = System.currentTimeMillis();
         b = ModSolvableGroebnerBaseAbstract().isTwosidedGB(self.mset);
         t = System.currentTimeMillis() - t;
-        print "executed in %s ms" % t; 
+        print "module isTwosidedGB executed in %s ms" % t; 
         return b;
 
     def rightGB(self):
@@ -794,7 +794,7 @@ class SolvableSubModule:
         t = System.currentTimeMillis();
         G = ModSolvableGroebnerBaseAbstract().rightGB(self.mset);
         t = System.currentTimeMillis() - t;
-        print "executed in %s ms" % t; 
+        print "executed module rightGB in %s ms" % t; 
         return SolvableSubModule(self.module,"",G.list);
 
     def isRightGB(self):
@@ -803,5 +803,5 @@ class SolvableSubModule:
         t = System.currentTimeMillis();
         b = ModSolvableGroebnerBaseAbstract().isRightGB(self.mset);
         t = System.currentTimeMillis() - t;
-        print "executed in %s ms" % t; 
+        print "module isRightGB executed in %s ms" % t; 
         return b;
