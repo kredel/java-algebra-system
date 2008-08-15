@@ -24,9 +24,10 @@ import edu.jas.ufd.GCDFactory;
 
 
 /**
- * Groebner Base with pseudo reduction sequential algorithm.
+ * Groebner Base with pseudo reduction sequential algorithm for 
+ * integral function coeffcients.
  * Implements Groebner bases and GB test.
- * @param <C> coefficient type
+ * @param <C> base coefficient type
  * @author Heinz Kredel
  */
 
@@ -83,8 +84,9 @@ public class GroebnerBasePseudoRecSeq<C extends GcdRingElem<C>>
         cofac = rf;
         GenPolynomialRing<C> rp = (GenPolynomialRing<C>)cofac;
         baseCofac = rp.coFac;
-        engine = (GreatestCommonDivisorAbstract<C>)GCDFactory.<C>getImplementation( baseCofac );
-        //not used: engine = (GreatestCommonDivisorAbstract<C>)GCDFactory.<C>getProxy( rf );
+        //engine = (GreatestCommonDivisorAbstract<C>)GCDFactory.<C>getImplementation( baseCofac );
+        //not used: 
+        engine = (GreatestCommonDivisorAbstract<C>)GCDFactory.<C>getProxy( baseCofac );
     }
 
 
@@ -94,11 +96,13 @@ public class GroebnerBasePseudoRecSeq<C extends GcdRingElem<C>>
      * @param F polynomial list.
      * @return GB(F) a Groebner base of F.
      */
+    @Override
     public List<GenPolynomial<GenPolynomial<C>>> 
              GB( int modv, 
                  List<GenPolynomial<GenPolynomial<C>>> F ) {  
         GenPolynomial<GenPolynomial<C>> p;
-        List<GenPolynomial<GenPolynomial<C>>> G = new ArrayList<GenPolynomial<GenPolynomial<C>>>();
+        List<GenPolynomial<GenPolynomial<C>>> G 
+            = new ArrayList<GenPolynomial<GenPolynomial<C>>>();
         OrderedPairlist<GenPolynomial<C>> pairlist = null; 
         int l = F.size();
         ListIterator<GenPolynomial<GenPolynomial<C>>> it = F.listIterator();
@@ -189,7 +193,7 @@ public class GroebnerBasePseudoRecSeq<C extends GcdRingElem<C>>
      * @return a reduced Groebner base of Gp.
      */
     @Override
-     public List<GenPolynomial<GenPolynomial<C>>> 
+    public List<GenPolynomial<GenPolynomial<C>>> 
                 minimalGB(List<GenPolynomial<GenPolynomial<C>>> Gp) {  
         if ( Gp == null || Gp.size() <= 1 ) {
             return Gp;
