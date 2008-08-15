@@ -66,6 +66,11 @@ class Ring:
         '''
         return ParamIdeal(self,ringstr,list,gbsys);
 
+    def gens(self):
+        '''Get list of generators of the ring.
+        '''
+        return self.ring.univariateList();
+
 
 class Ideal:
     '''Represents a JAS polynomial ideal: PolynomialList and Ideal.
