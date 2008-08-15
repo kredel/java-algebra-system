@@ -37,7 +37,7 @@ def terminate():
 class Ring:
     '''Represents a JAS polynomial ring: GenPolynomialRing.
 
-       Methods to create ideals and ideals with parametric coefficients.
+    Methods to create ideals and ideals with parametric coefficients.
     '''
 
     def __init__(self,ringstr="",ring=None):
@@ -70,7 +70,7 @@ class Ring:
 class Ideal:
     '''Represents a JAS polynomial ideal: PolynomialList and Ideal.
 
-    Methods for Groebner basees, ideal sum, intersection and others.
+    Methods for Groebner bases, ideal sum, intersection and others.
     '''
 
     def __init__(self,ring,ringstr="",list=None):
@@ -216,6 +216,8 @@ class Ideal:
         return Ideal(r,"",o.list);
 
     def toInteger(self):
+        '''Convert rational coefficients to integer coefficients.
+        '''
         p = self.pset;
         l = p.list;
         r = p.ring;
@@ -225,6 +227,8 @@ class Ideal:
         return Ideal(r,"",pi);
 
     def toModular(self,mf):
+        '''Convert integer coefficients to modular coefficients.
+        '''
         p = self.pset;
         l = p.list;
         r = p.ring;
@@ -233,7 +237,9 @@ class Ideal:
         r = Ring("",rm);
         return Ideal(r,"",pm);
 
-    def squarefree(self):
+    def squarefreeFactors(self):
+        '''Compute squarefree factors of first polynomial.
+        '''
         s = self.pset;
         F = s.list;
         p = F[0]; # only first polynomial
@@ -243,7 +249,7 @@ class Ideal:
         #print "squarefee part %s " % f;
         #S = ArrayList();
         #S.add(f);
-        print "squarefee executed in %s ms" % t; 
+        print "squarefee factors executed in %s ms" % t; 
         return f;
 
 
@@ -308,6 +314,8 @@ class ParamIdeal:
         return ParamIdeal(r,"",o);
 
     def toIntegralCoeff(self):
+        '''Convert rational function coefficients to integral function coefficients.
+        '''
         p = self.pset;
         l = p.list;
         r = p.ring;
@@ -321,6 +329,8 @@ class ParamIdeal:
         return ParamIdeal(r,"",lp);
 
     def toModularCoeff(self,mf):
+        '''Convert integral function coefficients to modular function coefficients.
+        '''
         p = self.pset;
         l = p.list;
         r = p.ring;
@@ -335,6 +345,8 @@ class ParamIdeal:
         return ParamIdeal(r,"",pm);
 
     def toQuotientCoeff(self):
+        '''Convert integral function coefficients to rational function coefficients.
+        '''
         p = self.pset;
         l = p.list;
         r = p.ring;
@@ -351,24 +363,15 @@ class ParamIdeal:
     def GB(self):
         '''Compute a Groebner base.
         '''
-        s = self.pset;
-        F = s.list;
-        t = System.currentTimeMillis();
-        G = GroebnerBaseSeq().GB(F);
-        t = System.currentTimeMillis() - t;
-        print "sequential executed in %s ms" % t; 
-        return ParamIdeal(self.ring,"",G);
+        I = Ideal(self.ring,"",self.pset.list);
+        g = I.GB();
+        return ParamIdeal(g.ring,"",g.pset.list);
 
     def isGB(self):
         '''Test if this is a Groebner base.
         '''
-        s = self.pset;
-        F = s.list;
-        t = System.currentTimeMillis();
-        b = GroebnerBaseSeq().isGB(F);
-        t = System.currentTimeMillis() - t;
-        print "isGB executed in %s ms" % t; 
-        return b;
+        I = Ideal(self.ring,"",self.pset.list);
+        return I.isGB();
 
     def CGB(self):
         '''Compute a comprehensive Groebner base.
@@ -448,6 +451,8 @@ class ParamIdeal:
         return b;
 
     def stringSlice(self):
+        '''Get each component (slice) of regular ring coefficients separate.
+        '''
         s = self.pset;
         b = PolyUtilApp.productToString(s);
         return b;
@@ -456,7 +461,7 @@ class ParamIdeal:
 class SolvableRing:
     '''Represents a JAS solvable polynomial ring: GenSolvablePolynomialRing.
 
-    Method to create ideals.
+    Has a method to create solvable ideals.
     '''
 
     def __init__(self,ringstr="",ring=None):
@@ -588,6 +593,8 @@ class SolvableIdeal:
         return SolvableIdeal(self.ring,"",N.getList());
 
     def parLeftGB(self,th):
+        '''Compute a left Groebner base in parallel.
+        '''
         s = self.pset;
         F = s.list;
         bbpar = SolvableGroebnerBaseParallel(th);
@@ -599,6 +606,8 @@ class SolvableIdeal:
         return Ideal(self.ring,"",G);
 
     def parTwosidedGB(self,th):
+        '''Compute a two-sided Groebner base in parallel.
+        '''
         s = self.pset;
         F = s.list;
         bbpar = SolvableGroebnerBaseParallel(th);
