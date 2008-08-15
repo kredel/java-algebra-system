@@ -678,12 +678,13 @@ public class GenPolynomialRing<C extends RingElem<C> >
      * @return List(X_1^e,...,X_n^e) a list of univariate polynomials.
      */
     public List<? extends GenPolynomial<C>> univariateList(int modv, long e) {
-        List<GenPolynomial<C>> pols = new ArrayList<GenPolynomial<C>>(nvar);
-     for ( int i = 0; i < nvar-modv; i++ ) {
-            GenPolynomial<C> p = univariate(modv,i,e);
+     List<GenPolynomial<C>> pols = new ArrayList<GenPolynomial<C>>(nvar);
+     int nm = nvar-modv;
+     for ( int i = 0; i < nm; i++ ) {
+         GenPolynomial<C> p = univariate(modv,nm-1-i,e);
          pols.add( p );
      }
-        return pols;
+     return pols;
     }
 
 
