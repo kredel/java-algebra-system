@@ -64,7 +64,7 @@ class Ring:
     def ideal(self,ringstr="",list=None):
         '''Create an ideal.
         '''
-        print "list type(%s) = %s" % (list,type(list));
+        #print "list type(%s) = %s" % (list,type(list));
         if isinstance(list,PyList):
             L = ArrayList();
             for e in list:
@@ -73,7 +73,7 @@ class Ring:
                 else:
                     L.add(e);
             list = L;
-        print "list type(%s) = %s" % (list,type(list));
+        #print "list type(%s) = %s" % (list,type(list));
         return Ideal(self,ringstr,list);
 
     def paramideal(self,ringstr="",list=None,gbsys=None):
@@ -858,7 +858,7 @@ class RingElem:
         '''
         return self; 
 
-    def __coerce__(self,other):
+    def no__coerce__(self,other):
         '''Coerce elements.
         '''
         print "self  type(%s) = %s" % (self,type(self));
@@ -879,6 +879,20 @@ class RingElem:
                 s = self;
         return ( s, o ); 
 #        return ( RingElem(s), RingElem(o) ); 
+
+    def coerce(self,other):
+        '''Coerce other to self.
+        '''
+        #print "self  type(%s) = %s" % (self,type(self));
+        print "other type(%s) = %s" % (other,type(other));
+        if isinstance(other,RingElem):
+            return other;
+        if isinstance(other,PyInteger):
+            o = self.elem.ring.fromInteger(other);
+        else:
+            o = other;
+        return RingElem(o);
+
 
     def isBigInteger(self):
         '''Test if this is a BigInteger.
@@ -926,60 +940,41 @@ class RingElem:
         else:
             return False;
 
-    def toPolynomial(self,other):
-        '''Coerce other to a polynomial.
-
-        self must be a polynomial.
-        '''
-        if other.isPolynomial():
-            return other;
-        else:
-            if other.isBigInteger():
-                return RingElem( self.elem.ring.getONE().multiply(BigRational(other.elem)) );
-            if other.isBigRational():
-                return RingElem( self.elem.ring.getONE().multiply(other.elem) );
-            else:
-                return None;
-
     def __mul__(self,other):
         '''Multiply two ring elements.
         '''
-        if not self.isPolynomial():
-            return RingElem( other.elem.multiply(self.elem) );
-        else:
-            print "self isRatPolynomial(%s) = %s" % (self,self.isRatPolynomial());
-            print "self isIntPolynomial(%s) = %s" % (self,self.isIntPolynomial());
-            return RingElem( self.elem.multiply(other.elem) ); 
+        o = self.coerce(other);
+        return RingElem( self.elem.multiply( o.elem ) ); 
 
     def __rmul__(self,other):
         '''Multiply two ring elements.
         '''
-        if not other.isPolynomial():
-            return RingElem( self.elem.multiply(other.elem) );
-        else:
-            print "other isRatPolynomial(%s) = %s" % (other,other.isRatPolynomial());
-            print "other isIntPolynomial(%s) = %s" % (other,other.isIntPolynomial());
-            return RingElem( other.elem.multiply(self.elem) ); 
+        o = self.coerce(other);
+        return o.__mul__(self);
 
     def __add__(self,other):
         '''Add two ring elements.
         '''
-        if not self.isPolynomial():
-            p = other.toPolynomial(self);
-            return RingElem( other.elem.sum(p.elem) );
-        else:
-            p = self.toPolynomial(other);
-            return RingElem( self.elem.sum(p.elem) ); 
+        o = self.coerce(other);
+        return RingElem( self.elem.sum( o.elem ) ); 
+
+    def __radd__(self,other):
+        '''Add two ring elements.
+        '''
+        o = self.coerce(other);
+        return o.__add__(self);
 
     def __sub__(self,other):
         '''Subtract two ring elements.
         '''
-        if not self.isPolynomial():
-            p = other.toPolynomial(self);
-            return RingElem( other.elem.subtract(p.elem) );
-        else:
-            p = self.toPolynomial(other);
-            return RingElem( self.elem.subtract(p.elem) ); 
+        o = self.coerce(other);
+        return RingElem( self.elem.subtract( o.elem ) ); 
+
+    def __rsub__(self,other):
+        '''Subtract two ring elements.
+        '''
+        o = self.coerce(other);
+        return o.__sub__(self);
 
     def __div__(self,other):
         '''Divide two ring elements.
@@ -994,12 +989,14 @@ class RingElem:
     def __pow__(self,other):
         '''Modular remainder of two ring elements.
         '''
-        print "other type(%s) = %s" % (other,type(other));
-        n = other.elem;
-        if isinstance(n,BigRational):
-            n = n.numerator().intValue();
-        else:
-            if n.isBigRational():
-                n = n.elem.numerator().intValue();
-        return RingElem( Power().positivePower(self.elem,n) ); 
+        print "pow other type(%s) = %s" % (other,type(other));
+        if isinstance(other,PyInteger):
+            n = other;
+        if isinstance(other,RingElem):
+            n = other.elem;
+            if isinstance(n,BigRational):
+                n = n.numerator().intValue();
+            if isinstance(n,BigInteger):
+                n = n.intValue();
+        return RingElem( Power().positivePower( self.elem, n ) ); 
 
