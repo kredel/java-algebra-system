@@ -858,33 +858,11 @@ class RingElem:
         '''
         return self; 
 
-    def no__coerce__(self,other):
-        '''Coerce elements.
-        '''
-        print "self  type(%s) = %s" % (self,type(self));
-        print "other type(%s) = %s" % (other,type(other));
-        if isinstance(other,PyInstance):
-            o = other;
-        else:
-            if isinstance(other,PyInteger):
-                o = RingElem(BigRational(other));
-            else:
-                o = other;
-        if isinstance(self,PyInstance):
-            s = self;
-        else:
-            if isinstance(self,PyInteger):
-                s = RingElem(BigRational(self));
-            else:
-                s = self;
-        return ( s, o ); 
-#        return ( RingElem(s), RingElem(o) ); 
-
     def coerce(self,other):
         '''Coerce other to self.
         '''
         #print "self  type(%s) = %s" % (self,type(self));
-        print "other type(%s) = %s" % (other,type(other));
+        #print "other type(%s) = %s" % (other,type(other));
         if isinstance(other,RingElem):
             return other;
         if isinstance(other,PyInteger):
@@ -987,9 +965,9 @@ class RingElem:
         return RingElem( self.elem.remainder(other.elem) ); 
 
     def __pow__(self,other):
-        '''Modular remainder of two ring elements.
+        '''Power of this to other.
         '''
-        print "pow other type(%s) = %s" % (other,type(other));
+        #print "pow other type(%s) = %s" % (other,type(other));
         if isinstance(other,PyInteger):
             n = other;
         if isinstance(other,RingElem):
