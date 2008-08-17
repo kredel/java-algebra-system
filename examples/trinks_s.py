@@ -10,6 +10,7 @@ from jas import Ideal
 from jas import startLog
 from jas import terminate
 
+#import rational;
 
 # trinks 6/7 example
 
@@ -37,9 +38,9 @@ f4 = - 9 * W + 15 * T * P + 20 * S * Z;
 f5 = P * W + 2 * T * Z - 11 * B**3;
 f6 = 99 * W - 11 *B * S + 3 * B**2;
 f7 = 10000 * B**2 + 6600 * B + 2673;
-f7 = f7 + e * f6**0;
+#f7 = f7 + e * f6**0;
 #f7 = f7 + 5959345574908321469098512640906154241024000000**2 * f6;
-#f7 = f7 + 35555/332 * f1;
+f7 = f7 + 35555./332 * f1;
 F = [ f1, f2, f3, f4, f5, f6, f7 ];
 #F = [ f1, f2, f3, f4, f5, f6 ]; 
 #print "F = ", [ str(f) for f in F ];
