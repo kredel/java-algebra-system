@@ -66,16 +66,6 @@ class Ring:
     def ideal(self,ringstr="",list=None):
         '''Create an ideal.
         '''
-        #print "list type(%s) = %s" % (list,type(list));
-        if isinstance(list,PyList):
-            L = ArrayList();
-            for e in list:
-                if isinstance(e,RingElem):
-                    L.add( e.elem );
-                else:
-                    L.add(e);
-            list = L;
-        #print "list type(%s) = %s" % (list,type(list));
         return Ideal(self,ringstr,list);
 
     def paramideal(self,ringstr="",list=None,gbsys=None):
@@ -121,7 +111,7 @@ class Ideal:
            tok = GenPolynomialTokenizer(ring.pset.ring,sr);
            self.list = tok.nextPolynomialList();
         else:
-           self.list = list;
+           self.list = pylist2arraylist(list);
         self.pset = OrderedPolynomialList(ring.ring,self.list);
 
     def __str__(self):
@@ -307,7 +297,7 @@ class ParamIdeal:
            tok = GenPolynomialTokenizer(ring.pset.ring,sr);
            self.list = tok.nextPolynomialList();
         else:
-           self.list = list;
+           self.list = pylist2arraylist(list);
         self.gbsys = gbsys;
         self.pset = OrderedPolynomialList(ring.ring,self.list);
 
@@ -542,7 +532,7 @@ class SolvableIdeal:
            tok = GenPolynomialTokenizer(ring.ring,sr);
            self.list = tok.nextSolvablePolynomialList();
         else:
-           self.list = list;
+           self.list = pylist2arraylist(list);
         self.pset = OrderedPolynomialList(ring.ring,self.list);
 
     def __str__(self):
@@ -701,7 +691,7 @@ class SubModule:
            tok = GenPolynomialTokenizer(module.ring,sr);
            self.list = tok.nextSubModuleList();
         else:
-           self.list = list;
+           self.list = pylist2arraylist(list);
         self.mset = OrderedModuleList(module.ring,self.list);
         self.cols = self.mset.cols;
         self.rows = self.mset.rows;
@@ -730,7 +720,6 @@ class SubModule:
         t = System.currentTimeMillis() - t;
         print "module isGB executed in %s ms" % t; 
         return b;
-
 
 
 class SolvableModule:
@@ -776,7 +765,7 @@ class SolvableSubModule:
            tok = GenPolynomialTokenizer(module.ring,sr);
            self.list = tok.nextSolvableSubModuleList();
         else:
-           self.list = list;
+           self.list = pylist2arraylist(list);
         self.mset = OrderedModuleList(module.ring,self.list);
         self.cols = self.mset.cols;
         self.rows = self.mset.rows;
@@ -841,10 +830,24 @@ class SolvableSubModule:
         return b;
 
 
+def pylist2arraylist(list):
+   #print "list type(%s) = %s" % (list,type(list));
+   if isinstance(list,PyList):
+       L = ArrayList();
+       for e in list:
+           if isinstance(e,RingElem):
+               L.add( e.elem );
+           else:
+               L.add( e );
+       list = L;
+   #print "list type(%s) = %s" % (list,type(list));
+   return list
+
+
 class RingElem:
     '''Proxy for JAS ring elements.
 
-    Methods to be used as + - * / %.
+    Methods to be used as + - * ** / %.
     '''
 
     def __init__(self,elem):
