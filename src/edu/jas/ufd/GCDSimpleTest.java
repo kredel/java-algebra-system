@@ -190,7 +190,7 @@ public class GCDSimpleTest extends TestCase {
          //System.out.println("ar = " + ar);
          //System.out.println("br = " + br);
 
-         dr = ufd.recursiveGcd(ar,br);
+         dr = ufd.recursiveUnivariateGcd(ar,br);
          //System.out.println("cr = " + cr);
          //System.out.println("dr = " + dr);
 

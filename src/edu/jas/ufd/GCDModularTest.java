@@ -389,7 +389,7 @@ public class GCDModularTest extends TestCase {
           //System.out.println("bc/c-b = 0 " + er);
           //assertTrue("bc/c-b != 0 " + er, er.isZERO() );
 
-         dr = ufd.recursiveGcd(arc,brc);
+         dr = ufd.recursiveUnivariateGcd(arc,brc);
          dr = PolyUtil.<ModInteger>monic( dr );
          //System.out.println("cr = " + cr);
          //System.out.println("dr = " + dr);

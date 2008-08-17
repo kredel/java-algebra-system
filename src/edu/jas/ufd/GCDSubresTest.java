@@ -193,7 +193,7 @@ public class GCDSubresTest extends TestCase {
          //System.out.println("br = " + br);
          //System.out.println("cr = " + cr);
 
-         dr = ufd.recursiveGcd(ar,br);
+         dr = ufd.recursiveUnivariateGcd(ar,br);
          //System.out.println("dr = " + dr);
 
          er = PolyUtil.<BigInteger>recursivePseudoRemainder(dr,cr);
@@ -354,7 +354,7 @@ public class GCDSubresTest extends TestCase {
          dr = ufd.recursiveResultant(ar,br);
          //System.out.println("cr = " + cr);
          //System.out.println("dr = " + dr);
-         er = ufd.recursiveGcd(ar,br);
+         er = ufd.recursiveUnivariateGcd(ar,br);
          //System.out.println("er = " + er);
 
          if ( er.isZERO() ) { // cannot happen since a, b, c != 0

@@ -447,7 +447,7 @@ public class GCDPrimitiveTest extends TestCase {
          //System.out.println("ar = " + ar);
          //System.out.println("br = " + br);
 
-         dr = ufd.recursiveGcd(ar,br);
+         dr = ufd.recursiveUnivariateGcd(ar,br);
          //System.out.println("dr = " + dr);
 
          er = PolyUtil.<BigInteger>recursivePseudoRemainder(dr,cr);

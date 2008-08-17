@@ -92,9 +92,9 @@ public class GreatestCommonDivisorModular //<C extends GcdRingElem<C> >
      */
     @Override
      public GenPolynomial<GenPolynomial<BigInteger>> 
-        recursiveGcd( GenPolynomial<GenPolynomial<BigInteger>> P,
+        recursiveUnivariateGcd( GenPolynomial<GenPolynomial<BigInteger>> P,
                       GenPolynomial<GenPolynomial<BigInteger>> S ) {
-        return iufd.recursiveGcd(P,S);
+        return iufd.recursiveUnivariateGcd(P,S);
     }
 
 

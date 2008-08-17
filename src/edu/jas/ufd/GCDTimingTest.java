@@ -236,7 +236,7 @@ public class GCDTimingTest extends TestCase {
                                    + ", c = " + cr.degree());  
 
          t = System.currentTimeMillis();
-         dr = ufd_si.recursiveGcd(ar,br);
+         dr = ufd_si.recursiveUnivariateGcd(ar,br);
          t = System.currentTimeMillis() - t;
          //System.out.println("dr = " + dr);
 
@@ -249,7 +249,7 @@ public class GCDTimingTest extends TestCase {
          */
 
          t = System.currentTimeMillis();
-         dr = ufd_pp.recursiveGcd(ar,br);
+         dr = ufd_pp.recursiveUnivariateGcd(ar,br);
          t = System.currentTimeMillis() - t;
          //System.out.println("dr = " + dr);
 
@@ -261,7 +261,7 @@ public class GCDTimingTest extends TestCase {
 
 
          t = System.currentTimeMillis();
-         dr = ufd_sr.recursiveGcd(ar,br);
+         dr = ufd_sr.recursiveUnivariateGcd(ar,br);
          t = System.currentTimeMillis() - t;
          //System.out.println("dr = " + dr);
 

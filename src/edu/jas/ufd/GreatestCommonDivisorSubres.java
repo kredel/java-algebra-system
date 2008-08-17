@@ -209,7 +209,7 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C> >
      */
     @Override
      public GenPolynomial<GenPolynomial<C>> 
-        recursiveGcd( GenPolynomial<GenPolynomial<C>> P,
+        recursiveUnivariateGcd( GenPolynomial<GenPolynomial<C>> P,
                       GenPolynomial<GenPolynomial<C>> S ) {
         if ( S == null || S.isZERO() ) {
             return P;

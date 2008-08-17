@@ -152,7 +152,7 @@ public class GCDProxy<C extends GcdRingElem<C>>
      */
     @Override
      public GenPolynomial<GenPolynomial<C>> 
-           recursiveGcd( final GenPolynomial<GenPolynomial<C>> P,
+           recursiveUnivariateGcd( final GenPolynomial<GenPolynomial<C>> P,
                          final GenPolynomial<GenPolynomial<C>> S ) {
            // throw new RuntimeException("recursiveGcd not implemented");
          if ( S == null || S.isZERO() ) {
@@ -168,7 +168,7 @@ public class GCDProxy<C extends GcdRingElem<C>>
          List<Callable<GenPolynomial<GenPolynomial<C>>>> cs = new ArrayList<Callable<GenPolynomial<GenPolynomial<C>>>>(2);
          cs.add( new Callable<GenPolynomial<GenPolynomial<C>>>() {
                      public GenPolynomial<GenPolynomial<C>> call() {
-                         GenPolynomial<GenPolynomial<C>> g = e1.recursiveGcd(P,S);
+                         GenPolynomial<GenPolynomial<C>> g = e1.recursiveUnivariateGcd(P,S);
                          if ( debug ) {
                     logger.info("GCDProxy done e1 " + e1.getClass().getName());
                          }
@@ -178,7 +178,7 @@ public class GCDProxy<C extends GcdRingElem<C>>
                  );
          cs.add( new Callable<GenPolynomial<GenPolynomial<C>>>() {
                      public GenPolynomial<GenPolynomial<C>> call() {
-                         GenPolynomial<GenPolynomial<C>> g = e2.recursiveGcd(P,S);
+                         GenPolynomial<GenPolynomial<C>> g = e2.recursiveUnivariateGcd(P,S);
                          if ( debug ) {
                             logger.info("GCDProxy done e2 " + e2.getClass().getName());
                          }
