@@ -25,6 +25,7 @@ from org.apache.log4j    import BasicConfigurator;
 
 from org.python.core     import PyInstance
 from org.python.core     import PyInteger
+from org.python.core     import PyLong
 from org.python.core     import PyList
 
 
@@ -85,6 +86,20 @@ class Ring:
         '''Get list of generators of the ring.
         '''
         L = self.ring.univariateList();
+        c = self.ring.coFac;
+        nv = None;
+        try:
+            nv = c.nvar;
+        except:
+            pass
+        #print "type(coFac) = ", type(self.ring.coFac);
+        #if isinstance(c,GenPolynomial):
+        if nv:
+            Lp = c.univariateList();
+            i = 0;
+            for l in Lp:
+                L.add( i, GenPolynomial(self.ring,l) );
+                i += 1;
         N = [ RingElem(e) for e in L ];
         return N;
 
@@ -868,53 +883,19 @@ class RingElem:
         if isinstance(other,PyInteger):
             o = self.elem.ring.fromInteger(other);
         else:
-            o = other;
+            if isinstance(other,PyLong):
+                o = self.elem.ring.fromInteger(other);
+            else:
+                o = other;
         return RingElem(o);
-
-
-    def isBigInteger(self):
-        '''Test if this is a BigInteger.
-        '''
-        if isinstance(self.elem,BigInteger):
-            return True;
-        else:
-            return False;
-
-    def isBigRational(self):
-        '''Test if this is a BigRational.
-        '''
-        if isinstance(self.elem,BigRational):
-            return True;
-        else:
-            return False;
 
     def isPolynomial(self):
         '''Test if this is a polynomial.
+
+        Does not work.
         '''
-        if isinstance(self.elem,GenPolynomial):
+        if isinstance(self.elem,GenPolynomial): # does not work
             return True;
-        else:
-            return False;
-
-    def isRatPolynomial(self):
-        '''Test if this is a polynomial with rational coefficients.
-        '''
-        if self.isPolynomial():
-            if isinstance(self.elem.ring.coFac,BigRational):
-                return True;
-            else:
-                return False;
-        else:
-            return False;
-
-    def isIntPolynomial(self):
-        '''Test if this is a polynomial with integer coefficients.
-        '''
-        if self.isPolynomial():
-            if isinstance(self.elem.ring.coFac,BigInteger):
-                return True;
-            else:
-                return False;
         else:
             return False;
 
