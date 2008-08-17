@@ -30,3 +30,5 @@ time jython examples/u_so_3.py
 time jython examples/wa_1.py
 time jython examples/wa_32.py
 time jython examples/wa_32_syz.py
+time jython examples/chebyshev.py
+time jython examples/legendre.py
