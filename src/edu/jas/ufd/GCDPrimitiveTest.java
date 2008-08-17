@@ -459,6 +459,48 @@ public class GCDPrimitiveTest extends TestCase {
 
 
 /**
+ * Test arbitrary recursive gcd.
+ * 
+ */
+ public void testArbitraryRecursiveGCD() {
+     di = new BigInteger( 1 );
+     dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),2,to);
+     cfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),2-1,to);
+     rfac = new GenPolynomialRing<GenPolynomial<BigInteger>>(cfac,1,to);
+
+     for (int i = 0; i < 2; i++) {
+         ar = rfac.random(kl,ll,el+i,q);
+         br = rfac.random(kl,ll,el,q);
+         cr = rfac.random(kl,ll,el,q);
+         //System.out.println("ar = " + ar);
+         //System.out.println("br = " + br);
+         //System.out.println("cr = " + cr);
+
+         if ( ar.isZERO() || br.isZERO() || cr.isZERO() ) {
+            // skip for this turn
+            continue;
+         }
+         assertTrue("length( cr"+i+" ) <> 0", cr.length() > 0);
+         //assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
+         //assertTrue(" not isONE( c"+i+" )", !c.isONE() );
+         
+         ar = ar.multiply(cr);
+         br = br.multiply(cr);
+         //System.out.println("ar = " + ar);
+         //System.out.println("br = " + br);
+
+         dr = ufd.recursiveGcd(ar,br);
+         //System.out.println("dr = " + dr);
+
+         er = PolyUtil.<BigInteger>recursivePseudoRemainder(dr,cr);
+         //System.out.println("er = " + er);
+
+         assertTrue("c | gcd(ac,bc) " + er, er.isZERO() );
+     }
+ }
+
+
+/**
  * Test recursive squarefree.
  * 
  */

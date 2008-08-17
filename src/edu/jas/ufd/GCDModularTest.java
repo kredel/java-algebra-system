@@ -403,6 +403,63 @@ public class GCDModularTest extends TestCase {
 
 
 /**
+ * Test arbitrary recursive gcd modular coefficients. 
+ * 
+ */
+ public void testArbitraryRecursiveGCDModular() {
+
+     dfac = new GenPolynomialRing<ModInteger>(mi,2,to);
+     cfac = new GenPolynomialRing<ModInteger>(mi,2-1,to);
+     rfac = new GenPolynomialRing<GenPolynomial<ModInteger>>(cfac,1,to);
+
+     //     GreatestCommonDivisorAbstract<ModInteger> ufd 
+     //     = new GreatestCommonDivisorPrimitive<ModInteger>();
+
+     for (int i = 0; i < 1; i++) {
+         ar = rfac.random(kl,2,el+2,q);
+         br = rfac.random(kl,2,el+2,q);
+         cr = rfac.random(kl,2,el+2,q);
+         ar = PolyUtil.<ModInteger>monic( ar );
+         br = PolyUtil.<ModInteger>monic( br );
+         cr = PolyUtil.<ModInteger>monic( cr );
+         //System.out.println("ar = " + ar);
+         //System.out.println("br = " + br);
+         //System.out.println("cr = " + cr);
+
+         if ( ar.isZERO() || br.isZERO() || cr.isZERO() ) {
+            // skip for this turn
+            continue;
+         }
+         assertTrue("length( cr"+i+" ) <> 0", cr.length() > 0);
+         //assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
+         //assertTrue(" not isONE( c"+i+" )", !c.isONE() );
+         
+         arc = ar.multiply(cr);
+         brc = br.multiply(cr);
+         //System.out.println("arc = " + arc);
+         //System.out.println("brc = " + brc);
+
+          //er = PolyUtil.<ModInteger>recursivePseudoRemainder(arc,cr);
+          //System.out.println("ac/c-a = 0 " + er);
+          //assertTrue("ac/c-a != 0 " + er, er.isZERO() );
+          //er = PolyUtil.<ModInteger>recursivePseudoRemainder(brc,cr);
+          //System.out.println("bc/c-b = 0 " + er);
+          //assertTrue("bc/c-b != 0 " + er, er.isZERO() );
+
+         dr = ufd.recursiveGcd(arc,brc);
+         dr = PolyUtil.<ModInteger>monic( dr );
+         //System.out.println("cr = " + cr);
+         //System.out.println("dr = " + dr);
+
+         er = PolyUtil.<ModInteger>recursivePseudoRemainder(dr,cr);
+         //System.out.println("er = " + er);
+
+         assertTrue("c | gcd(ac,bc) " + er, er.isZERO() );
+     }
+ }
+
+
+/**
  * Test gcd modular coefficients.
  * 
  */
