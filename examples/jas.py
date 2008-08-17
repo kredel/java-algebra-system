@@ -83,7 +83,7 @@ class Ring:
         return ParamIdeal(self,ringstr,list,gbsys);
 
     def gens(self):
-        '''Get list of generators of the ring.
+        '''Get list of generators of the polynomial ring.
         '''
         L = self.ring.univariateList();
         c = self.ring.coFac;
@@ -93,9 +93,10 @@ class Ring:
         except:
             pass
         #print "type(coFac) = ", type(self.ring.coFac);
-        #if isinstance(c,GenPolynomial):
+        #if isinstance(c,GenPolynomial): # does not work
         if nv:
             Lp = c.univariateList();
+            #Ls = [ GenPolynomial(self.ring,l) for l in Lp ];
             i = 0;
             for l in Lp:
                 L.add( i, GenPolynomial(self.ring,l) );
@@ -951,11 +952,13 @@ class RingElem:
         #print "pow other type(%s) = %s" % (other,type(other));
         if isinstance(other,PyInteger):
             n = other;
-        if isinstance(other,RingElem):
-            n = other.elem;
-            if isinstance(n,BigRational):
-                n = n.numerator().intValue();
-            if isinstance(n,BigInteger):
-                n = n.intValue();
-        return RingElem( Power().positivePower( self.elem, n ) ); 
+        else:
+            if isinstance(other,RingElem): 
+                n = other.elem;
+                if isinstance(n,BigRational): # does not work
+                    n = n.numerator().intValue();
+                if isinstance(n,BigInteger):  # does not work
+                    n = n.intValue();
+        p = Power(self.elem.ring).power( self.elem, n );
+        return RingElem( p ); 
 
