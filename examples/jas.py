@@ -24,9 +24,10 @@ from edu.jas.kern        import ComputerThreads;
 from org.apache.log4j    import BasicConfigurator;
 
 from org.python.core     import PyInstance
+from org.python.core     import PyList
 from org.python.core     import PyInteger
 from org.python.core     import PyLong
-from org.python.core     import PyList
+from org.python.core     import PyFloat
 
 
 def startLog():
@@ -887,7 +888,10 @@ class RingElem:
             if isinstance(other,PyLong):
                 o = self.elem.ring.fromInteger(other);
             else:
-                o = other;
+                if isinstance(other,PyFloat): # ?? what to do ??
+                    o = self.elem.ring.fromInteger(int(other));
+                else:
+                    o = other;
         return RingElem(o);
 
     def isPolynomial(self):
