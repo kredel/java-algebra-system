@@ -831,6 +831,10 @@ class SolvableSubModule:
 
 
 def pylist2arraylist(list):
+    '''Convert a Python list to a Java ArrayList.
+
+    If list is a Python list it is converted, else list is left unchanged.
+    '''
    #print "list type(%s) = %s" % (list,type(list));
    if isinstance(list,PyList):
        L = ArrayList();
