@@ -22,14 +22,48 @@ Documentation see index.html.
 Usage
 -----
 
-javac -cp ...:jas.jar:...  ...
+javac -cp {other_jar_files}:jas-<version>-bin.jar:.  <your sample code>
 
-java -cp ...:jas.jar:...  ...
+javac -cp {other_jar_files}:jas-<version>-bin.jar:.  <your sample class>
 
 or
 
-jython input_file 
+jython examples/<some input file> 
 
+
+Versions and Jar files
+----------------------
+
+JAS is distributed in 4 Jar files:
+
+jas-<version>-bin.jar: the Java class files 
+jas-<version>-src.jar: the java source code
+jas-<version>-doc.jar: the Java doc and epydoc files
+jas-meditor.jar:       the interface to meditor
+
+
+The version is specified by a two digit major.minor number
+and a subversion revision number. For example in
+
+jas-2.2.2088-bin.jar
+
+"2.2"  is the JAS version number and
+"2088" is the subversion revision number
+
+The jas-.-bin.jar and jas-.-doc.jar can be generated from jas-.-src.jar.
+The fastest way to get a complete JAS install, is 
+
+> jar -xf jas-<version>-src.jar
+> cd <JAS version number>
+> jar -xf jas-<version>-bin.jar
+> jar -xf jas-<version>-doc.jar
+
+If you have a working ant, the last two steps can be replaced by
+
+> ant compile
+> ant doc
+
+provided you have setup built.xml and the required libraries.
 
 
 $Id$
