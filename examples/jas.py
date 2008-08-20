@@ -950,12 +950,14 @@ class RingElem:
     def __div__(self,other):
         '''Divide two ring elements.
         '''
-        return RingElem( self.elem.divide(other.elem) ); 
+        o = self.coerce(other);
+        return RingElem( self.elem.divide( o.elem ) ); 
 
     def __mod__(self,other):
         '''Modular remainder of two ring elements.
         '''
-        return RingElem( self.elem.remainder(other.elem) ); 
+        o = self.coerce(other);
+        return RingElem( self.elem.remainder( o.elem ) ); 
 
     def __pow__(self,other):
         '''Power of this to other.
