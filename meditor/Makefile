@@ -5,7 +5,8 @@
 # by Raphael Jolly, Heinz kredel
 #
 
-JASPATH=$(HOME)/jas
+#JASPATH=$(HOME)/jas
+JASPATH=..
 LIBPATH=$(HOME)/java/lib
 MEDITORPATH=$(HOME)/java/meditor3.0
 
@@ -26,12 +27,12 @@ $(CLASSES): $(FILES)
 	javac -g -source 1.4 -target 1.4 -classpath $(CLASSPATH) -sourcepath src -d classes src/edu/jas/editorengine/*.java
 
 jas-meditor.jar: $(CLASSES) $(JASPATH)/examples/jas.py manifest.mf services/jscl.editor.EngineFactory
-	cp -a $(JASPATH)/examples/jas.py classes/
+	cp -a $(JASPATH)/examples/jas.py $(JASPATH)/examples/jas$py.class classes/
 	mkdir classes/META-INF
 	mkdir classes/META-INF/services
 	cp -a manifest.mf classes/META-INF/MANIFEST.MF
 	cp -a services/jscl.editor.EngineFactory classes/META-INF/services/
-	jar cfM jas-meditor.jar src -C classes .
+	jar cfM jas-meditor.jar -C classes .
 	cp -f jas-meditor.jar $(LIBPATH)
 	cp -f jas-meditor.jar ..
 	rm -rf classes
