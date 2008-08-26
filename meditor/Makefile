@@ -27,7 +27,7 @@ $(CLASSES): $(FILES)
 	javac -g -source 1.4 -target 1.4 -classpath $(CLASSPATH) -sourcepath src -d classes src/edu/jas/editorengine/*.java
 
 jas-meditor.jar: $(CLASSES) $(JASPATH)/examples/jas.py manifest.mf services/jscl.editor.EngineFactory
-	cp -a $(JASPATH)/examples/jas.py $(JASPATH)/examples/jas$py.class classes/
+	cp -a $(JASPATH)/examples/jas.py $(JASPATH)/examples/jas*py.class classes/
 	mkdir classes/META-INF
 	mkdir classes/META-INF/services
 	cp -a manifest.mf classes/META-INF/MANIFEST.MF
