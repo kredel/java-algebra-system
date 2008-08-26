@@ -833,10 +833,10 @@ class SolvableSubModule:
 def pylist2arraylist(list):
     '''Convert a Python list to a Java ArrayList.
 
-    If list is a Python list it is converted, else list is left unchanged.
+    If list is a Python list, it is converted, else list is left unchanged.
     '''
-   #print "list type(%s) = %s" % (list,type(list));
-   if isinstance(list,PyList):
+    #print "list type(%s) = %s" % (list,type(list));
+    if isinstance(list,PyList):
        L = ArrayList();
        for e in list:
            if isinstance(e,RingElem):
@@ -844,8 +844,8 @@ def pylist2arraylist(list):
            else:
                L.add( e );
        list = L;
-   #print "list type(%s) = %s" % (list,type(list));
-   return list
+    #print "list type(%s) = %s" % (list,type(list));
+    return list
 
 
 class RingElem:
