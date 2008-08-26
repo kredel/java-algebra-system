@@ -5,11 +5,11 @@
 # by Raphael Jolly, Heinz kredel
 #
 
-JASPATH=/home/kredel/jas
-LIBPATH=/home/kredel/java/lib
-JSCLPATH=.
+JASPATH=$(HOME)/jas
+LIBPATH=$(HOME)/java/lib
+MEDITORPATH=$(HOME)/java/meditor3.0
 
-CLASSPATH=$(LIBPATH)/jython.jar:$(LIBPATH)/meditor.jar
+CLASSPATH=$(LIBPATH)/jython.jar:$(MEDITORPATH)/meditor.jar
 
 .SUFFIXES : .class .java .jar 
 .PHONY    : clean
@@ -22,16 +22,16 @@ CLASSES=$(subst src,classes,$(subst java,class,$(FILES)))
 all: jas-meditor.jar
 
 $(CLASSES): $(FILES)
-	mkdir -p classes
+	mkdir classes
 	javac -g -source 1.4 -target 1.4 -classpath $(CLASSPATH) -sourcepath src -d classes src/edu/jas/editorengine/*.java
 
 jas-meditor.jar: $(CLASSES) $(JASPATH)/examples/jas.py manifest.mf services/jscl.editor.EngineFactory
 	cp -a $(JASPATH)/examples/jas.py classes/
-	mkdir -p classes/META-INF
-	mkdir -p classes/META-INF/services
+	mkdir classes/META-INF
+	mkdir classes/META-INF/services
 	cp -a manifest.mf classes/META-INF/MANIFEST.MF
-	cp -a services/* classes/META-INF/services/
-	jar cMf jas-meditor.jar src -C classes .
+	cp -a services/jscl.editor.EngineFactory classes/META-INF/services/
+	jar cfM jas-meditor.jar src -C classes .
 	cp -f jas-meditor.jar $(LIBPATH)
 	cp -f jas-meditor.jar ..
 	rm -rf classes

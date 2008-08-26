@@ -4,17 +4,16 @@
 # $Id$
 
 LIBPATH=~/java/lib
-MEDITORLIB=~/java/meditor3.0/lib
+MEDITORPATH=~/java/meditor3.0
 JASPATH=.
 
 UTILS=$LIBPATH/jython.jar:$LIBPATH/log4j.jar
 
-MEDITOR=$MEDITORLIB/bsh-2.0b4.jar:$MEDITORLIB/fop.jar:$MEDITORLIB/google-api-translate-java-0.4.jar:$MEDITORLIB/jeuclid-core-3.0.3-PATCHED.jar:$MEDITORLIB/jeuclid-fop-3.0.3.jar:$MEDITORLIB/jlfgr-1_0.jar:$MEDITORLIB/stylesheets.jar:$MEDITORLIB/swing-layout-1.0.3.jar:$MEDITORLIB/jscl.jar
-
 JAS=$JASPATH/jas.jar:$JASPATH/jas-meditor.jar
-#JAS=jas.jar:jas-meditor.jar
 
-CLASSPATH=$UTILS:$JAS:$MEDITOR:$LIBPATH/meditor.jar
+MEDITOR=$MEDITORPATH/meditor.jar
+
+CLASSPATH=$UTILS:$JAS:$MEDITOR
 
 mkdir -p test
 java -classpath $CLASSPATH -Duser.home=$JASPATH/examples jscl.editor.Editor
