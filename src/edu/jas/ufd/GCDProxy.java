@@ -71,7 +71,7 @@ public class GCDProxy<C extends GcdRingElem<C>>
          this.e1 = e1; 
          this.e2 = e2; 
          if ( pool == null ) {
-         //pool = Executors.newFixedThreadPool(anzahl);
+            //pool = Executors.newFixedThreadPool(anzahl);
             pool = ComputerThreads.getPool();
          }
      }                                              
@@ -81,7 +81,7 @@ public class GCDProxy<C extends GcdRingElem<C>>
      * @see java.lang.Object#toString()
      */
     @Override
-     public String toString() {
+    public String toString() {
         return "GCDProxy[ " 
             + e1.getClass().getName() + ", "
             + e2.getClass().getName() + " ]";
@@ -96,7 +96,7 @@ public class GCDProxy<C extends GcdRingElem<C>>
      * @return gcd(P,S).
      */
     @Override
-     public GenPolynomial<C> baseGcd( final GenPolynomial<C> P,
+    public GenPolynomial<C> baseGcd( final GenPolynomial<C> P,
                                      final GenPolynomial<C> S ) {
          //throw new RuntimeException("baseGcd not implemented");
          if ( S == null || S.isZERO() ) {
@@ -151,9 +151,9 @@ public class GCDProxy<C extends GcdRingElem<C>>
      * @return gcd(P,S).
      */
     @Override
-     public GenPolynomial<GenPolynomial<C>> 
+    public GenPolynomial<GenPolynomial<C>> 
            recursiveUnivariateGcd( final GenPolynomial<GenPolynomial<C>> P,
-                         final GenPolynomial<GenPolynomial<C>> S ) {
+                                   final GenPolynomial<GenPolynomial<C>> S ) {
            // throw new RuntimeException("recursiveGcd not implemented");
          if ( S == null || S.isZERO() ) {
             return P;
