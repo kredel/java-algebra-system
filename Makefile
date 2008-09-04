@@ -265,6 +265,7 @@ export:
 	cd ~/jas-versions/$(VERSION); jas_dosed $(VERSION) `$(SVNREV)` download.html
 #	svn log -v -r HEAD:BASE src > ~/jas-versions/$(VERSION)/svn_change.log
 	svn log -v -r HEAD:1584 src > ~/jas-versions/$(VERSION)/svn_change.log
+	cp ~/jas-versions/$(VERSION)/examples/jas.py ~/jas-versions/$(VERSION)/
 	cd ~/jas-versions/; jar -cf $(VERSION).`$(SVNREV)`-src.jar $(VERSION)/
 	cd ~/jas-versions/$(VERSION)/; ant compile > ant_compile.out
 	cd ~/jas-versions/$(VERSION)/; jar -cf ../$(VERSION).`$(SVNREV)`-bin.jar edu/ COPYING*
