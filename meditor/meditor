@@ -15,9 +15,9 @@ if [[ ! -f "jas.py" ]]; then
    cp $JASPATH/examples/jas.py .
 fi
 
-MEDITOR=$MEDITORPATH/meditor.jar
+MEDITOR=$MEDITORPATH/meditor.jar:$MEDITORPATH/lib/jscl.jar
 
-CLASSPATH=$UTILS:$JAS:$MEDITOR
+CLASSPATH=$UTILS:$JAS:$MEDITOR:.
 
 mkdir -p test
 java -classpath $CLASSPATH -Duser.home=$JASPATH/examples jscl.editor.Editor
