@@ -7,7 +7,7 @@ public class EditorEngine extends Engine {
 	PythonInterpreter interp=new PythonInterpreter();
 
 	public EditorEngine() {
-		interp.execfile(EditorEngine.class.getResourceAsStream("/jas.py"));
+                //interp.execfile(EditorEngine.class.getResourceAsStream("/jas.py"));
 	}
 
 	public String eval(String str) {
