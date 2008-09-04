@@ -11,6 +11,10 @@ UTILS=$LIBPATH/jython.jar:$LIBPATH/log4j.jar
 
 JAS=$JASPATH/jas.jar:$JASPATH/jas-meditor.jar
 
+if [[ ! -f "jas.py" ]]; then
+   cp $JASPATH/examples/jas.py .
+fi
+
 MEDITOR=$MEDITORPATH/meditor.jar
 
 CLASSPATH=$UTILS:$JAS:$MEDITOR
