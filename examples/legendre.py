@@ -18,19 +18,21 @@ from edu.jas.arith import BigRational
 # P(n) = 1/n [ (2n-1) * x * P(n-1) - (n-1) * P(n-2) ]
 
 r = Ring( "Q(x) L" );
+#r = Ring( "C(x) L" );
 print "Ring: " + str(r);
 print;
 
 # sage like: with generators for the polynomial ring
 [x] = r.gens();
 
-one = x**0;
+one = r.one();
 
 N = 10;
 P = [one,x];
 for n in range(2,N):
     p = (2*n-1) * x * P[n-1] - (n-1) * P[n-2];
-    r = BigRational(1,n); # no rational numbers in python
+    r = [1,n]; # no rational numbers in python
+    #r = [[1,n]]; # no complex rational numbers in python
     p = p * r; # only on left side
     P.append( p );
 

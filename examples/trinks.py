@@ -62,5 +62,5 @@ rg = f.distGB(2);
 #print;
 
 terminate();
-sys.exit();
+sys.exit(); # required because of distClient
 

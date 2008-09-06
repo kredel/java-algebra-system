@@ -23,6 +23,7 @@ print;
 [x] = r.gens();
 
 one = x**0;
+one = r.one();
 x2 = 2 * x;
 
 N = 10;
