@@ -32,7 +32,7 @@ jas-meditor.jar: $(CLASSES) $(JASPATH)/examples/jas.py manifest.mf services/jscl
 	cp -a manifest.mf classes/META-INF/MANIFEST.MF
 	cp -a services/jscl.editor.EngineFactory classes/META-INF/services/
 	jar cfM jas-meditor.jar -C classes .
-	jar uf jas-meditor.jat $(JASPATH)/examples/jas.py $(JASPATH)/examples/jas*py.class
+	jar uf jas-meditor.jar -C $(JASPATH)/examples jas.py
 	cp -f jas-meditor.jar $(LIBPATH)
 	cp -f jas-meditor.jar ..
 	rm -rf classes

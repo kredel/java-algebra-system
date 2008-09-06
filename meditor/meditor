@@ -12,7 +12,7 @@ UTILS=$LIBPATH/jython.jar:$LIBPATH/log4j.jar
 JAS=$JASPATH/jas.jar:$JASPATH/jas-meditor.jar
 
 if [[ ! -f "jas.py" ]]; then
-   jar xf $JASPATH/jas-meditor.jar jas.py jas*py.class
+   jar xf $JASPATH/jas-meditor.jar jas.py
 fi
 
 MEDITOR=$MEDITORPATH/meditor.jar:$MEDITORPATH/lib/jscl.jar
