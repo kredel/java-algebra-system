@@ -34,7 +34,7 @@ for n in range(2,N):
     r = (1,n); # no rational numbers in python
     #r = [(1,n)]; # no complex rational numbers in python
     #r = ((1,n),(0,1)); # no complex rational numbers in python
-    p = p * r; # only on left side
+    p = r * p; 
     P.append( p );
 
 for n in range(0,N):

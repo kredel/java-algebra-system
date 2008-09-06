@@ -22,6 +22,7 @@ from jas import terminate
 #r = Ring( "Z(B,S,T,Z,P,W) L" );
 #r = Ring( "IntFunc(e,f)(B,S,T,Z,P,W) L" );
 r = Ring( "Z(B,S,T,Z,P,W) L" );
+#r = Ring( "Q(B,S,T,Z,P,W) L" );
 print "Ring: " + str(r);
 print;
 

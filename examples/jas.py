@@ -1020,6 +1020,8 @@ class RingElem:
     def __mul__(self,other):
         '''Multiply two ring elements.
         '''
+        if not self.isPolynomial() and other.isPolynomial():
+            return other.__mul__(self);
         o = self.coerce(other);
         return RingElem( self.elem.multiply( o.elem ) ); 
 
@@ -1032,6 +1034,8 @@ class RingElem:
     def __add__(self,other):
         '''Add two ring elements.
         '''
+        if not self.isPolynomial() and other.isPolynomial():
+            return other.__add__(self);
         o = self.coerce(other);
         return RingElem( self.elem.sum( o.elem ) ); 
 
@@ -1044,6 +1048,8 @@ class RingElem:
     def __sub__(self,other):
         '''Subtract two ring elements.
         '''
+        if not self.isPolynomial() and other.isPolynomial():
+            return other.__sub__(self);
         o = self.coerce(other);
         return RingElem( self.elem.subtract( o.elem ) ); 
 
