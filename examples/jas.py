@@ -25,6 +25,7 @@ from org.apache.log4j    import BasicConfigurator;
 
 from org.python.core     import PyInstance
 from org.python.core     import PyList
+from org.python.core     import PyTuple
 from org.python.core     import PyInteger
 from org.python.core     import PyLong
 from org.python.core     import PyFloat
@@ -94,6 +95,17 @@ class Ring:
                 i += 1;
         N = [ RingElem(e) for e in L ];
         return N;
+
+    def one(self):
+        '''Get the one of the polynomial ring.
+        '''
+        return RingElem( self.ring.getONE() );
+
+    def zero(self):
+        '''Get the zero of the polynomial ring.
+        '''
+        return RingElem( self.ring.getZERO() );
+
 
 
 class Ideal:
@@ -516,6 +528,38 @@ class SolvableRing:
         '''
         return SolvableIdeal(self,ringstr,list);
 
+    def gens(self):
+        '''Get list of generators of the solvable polynomial ring.
+        '''
+        L = self.ring.univariateList();
+        c = self.ring.coFac;
+        nv = None;
+        try:
+            nv = c.nvar;
+        except:
+            pass
+        #print "type(coFac) = ", type(self.ring.coFac);
+        #if isinstance(c,GenPolynomial): # does not work
+        if nv:
+            Lp = c.univariateList();
+            #Ls = [ GenPolynomial(self.ring,l) for l in Lp ];
+            i = 0;
+            for l in Lp:
+                L.add( i, GenPolynomial(self.ring,l) );
+                i += 1;
+        N = [ RingElem(e) for e in L ];
+        return N;
+
+    def one(self):
+        '''Get the one of the solvable polynomial ring.
+        '''
+        return RingElem( self.ring.getONE() );
+
+    def zero(self):
+        '''Get the zero of the solvable polynomial ring.
+        '''
+        return RingElem( self.ring.getZERO() );
+
 
 class SolvableIdeal:
     '''Represents a JAS solvable polynomial ideal.
@@ -848,6 +892,35 @@ def pylist2arraylist(list):
     return list
 
 
+def makeJasArith(item):
+    '''Construct a jas.arith object.
+    If item is a python tuple or list then a BigRational, BigComplex is constructed. 
+    If item is a python float then a BigDecimal is constructed. 
+    '''
+    #print "item type(%s) = %s" % (item,type(item));
+    if isinstance(item,PyInteger) or isinstance(item,PyLong):
+        return Biginteger( item );
+    if isinstance(item,PyFloat): # ?? what to do ??
+        return BigDecimal( str(item) );
+    if isinstance(item,PyTuple) or isinstance(item,PyList):
+        if isinstance(item[0],PyTuple) or isinstance(item[0],PyList):
+            if len(item) > 1:
+                re = makeJasArith( item[0] );
+                im = makeJasArith( item[1] );
+                jasArith = BigComplex( re, im );
+            else:
+                re = makeJasArith( item[0] );
+                jasArith = BigComplex( re );
+        else:
+            if len(item) > 1:
+                jasArith = BigRational( item[0], item[1] );
+            else:
+                jasArith = BigRational( item[0] );
+        return jasArith;
+    print "unknown item type(%s) = %s" % (item,type(item));
+    return item;
+
+
 class RingElem:
     '''Proxy for JAS ring elements.
 
@@ -889,27 +962,50 @@ class RingElem:
         #print "other type(%s) = %s" % (other,type(other));
         if isinstance(other,RingElem):
             return other;
-        if isinstance(other,PyInteger):
-            o = self.elem.ring.fromInteger(other);
-        else:
-            if isinstance(other,PyLong):
-                o = self.elem.ring.fromInteger(other);
+        if isinstance(other,PyTuple) or isinstance(other,PyList):
+            # assume BigRational or BigComplex
+            # assume self will be compatible with them. todo: check this
+            o = makeJasArith(other);
+            return RingElem(o);
+        # test if self.elem is a factory itself
+        fac = None;
+        try:
+            fac = self.elem.ring;
+        except:
+            pass
+        if fac == None:
+            if isinstance(other,PyInteger) or isinstance(other,PyLong):
+                o = self.elem.fromInteger(other);
             else:
                 if isinstance(other,PyFloat): # ?? what to do ??
-                    o = self.elem.ring.fromInteger(int(other));
+                    o = self.elem.fromInteger( int(other) );
                 else:
+                    print "unknown other type(%s) = %s" % (other,type(other));
                     o = other;
+            return RingElem(o);
+        # self.elem has a ring factory
+        if isinstance(other,PyInteger) or isinstance(other,PyLong):
+            o = self.elem.ring.fromInteger(other);
+        else:
+            if isinstance(other,PyFloat): # ?? what to do ??
+                o = self.elem.ring.fromInteger( int(other) );
+            else:
+                print "unknown other type(%s) = %s" % (other,type(other));
+                o = other;
         return RingElem(o);
 
     def isPolynomial(self):
         '''Test if this is a polynomial.
-
-        Does not work.
         '''
-        if isinstance(self.elem,GenPolynomial): # does not work
-            return True;
-        else:
+        try:
+            nv = self.elem.ring.nvar;
+        except:
             return False;
+        return True;
+##         if isinstance(self.elem,GenPolynomial): # does not work
+##             return True;
+##         else:
+##             return False;
 
     def __mul__(self,other):
         '''Multiply two ring elements.
