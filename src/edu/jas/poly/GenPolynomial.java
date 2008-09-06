@@ -643,6 +643,17 @@ public class GenPolynomial<C extends RingElem<C> >
 
 
     /**
+     * GenPolynomial addition. 
+     * This method is not very efficient, since this is copied.
+     * @param a coefficient.
+     * @return this + a x<sup>0</sup>.
+     */
+    public GenPolynomial<C> sum(C a) {
+        return sum(a,ring.evzero);
+    }
+
+
+    /**
      * GenPolynomial subtraction. 
      * @param S GenPolynomial.
      * @return this-S.
@@ -707,6 +718,16 @@ public class GenPolynomial<C extends RingElem<C> >
             nv.put( e, a.negate() );
         }
         return n;
+    }
+
+    /**
+     * GenPolynomial subtract. 
+     * This method is not very efficient, since this is copied.
+     * @param a coefficient.
+     * @return this + a x<sup>0</sup>.
+     */
+    public GenPolynomial<C> subtract(C a) {
+        return subtract(a,ring.evzero);
     }
 
 
