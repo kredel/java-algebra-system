@@ -899,14 +899,24 @@ def makeJasArith(item):
     '''
     #print "item type(%s) = %s" % (item,type(item));
     if isinstance(item,PyInteger) or isinstance(item,PyLong):
-        return Biginteger( item );
+        return BigInteger( item );
     if isinstance(item,PyFloat): # ?? what to do ??
         return BigDecimal( str(item) );
     if isinstance(item,PyTuple) or isinstance(item,PyList):
-        if isinstance(item[0],PyTuple) or isinstance(item[0],PyList):
+        if len(item) > 2:
+            print "len(item) > 2, remaining items ignored";
+        #print "item[0] type(%s) = %s" % (item[0],type(item[0]));
+        isc = isinstance(item[0],PyTuple) or isinstance(item[0],PyList)
+        if len(item) > 1:
+            isc = isc or isinstance(item[1],PyTuple) or isinstance(item[1],PyList);
+        if isc:
             if len(item) > 1:
                 re = makeJasArith( item[0] );
+                if not re.isField():
+                    re = BigRational( re.val );
                 im = makeJasArith( item[1] );
+                if not im.isField():
+                    im = BigRational( im.val );
                 jasArith = BigComplex( re, im );
             else:
                 re = makeJasArith( item[0] );
