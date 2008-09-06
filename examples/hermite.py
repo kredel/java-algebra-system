@@ -22,7 +22,6 @@ print;
 # sage like: with generators for the polynomial ring
 [x] = r.gens();
 
-one = x**0;
 one = r.one();
 x2 = 2 * x;
 
