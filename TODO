@@ -26,21 +26,19 @@ issues to consider:
 
 - test caching results of gcd computation
 
-- refactor ExpVector for different array element types
-
 - rework parallel GB algorithms
 
 - refactor method names for groovy operator overloading, make examples for usage
-
-- define divideAndRemainder in RingElem interface and implement
 
 - let arith implementations extend Power as abstract class
   add divide, subtract, abs, remainder to Power, 
   name e.g RingElemAbstract
   clean structure of compareTo, signum and equals
+  - is not possible
 
 - make final variables public (?)
 
+- define divideAndRemainder in RingElem interface and implement
 - rename divideAndRemainder to quotientRemainder
 
 - make use of gcd in pseudo reduction, needs other coefficient type
@@ -48,6 +46,8 @@ issues to consider:
 
 
 partially resolved and completed issues:
+
+- refactor ExpVector for different array element types
 
 - implement comprehensive GB
 
