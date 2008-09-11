@@ -931,6 +931,47 @@ def makeJasArith(item):
     return item;
 
 
+def QQ(d=0,n=1):
+    '''Create JAS BigRational as ring element.
+    '''
+    if isinstance(d,PyTuple) or isinstance(d,PyList):
+        r = makeJasArith( d );
+        return RingElem(r);
+    if isinstance(d,RingElem):
+        d = d.elem;
+    if isinstance(n,RingElem):
+        n = n.elem;
+    if n == 1:
+        if d == 0:
+            r = BigRational();
+        else:
+            r = BigRational(d);
+    else:
+        r = BigRational(d,n);
+    return RingElem(r);
+
+
+def CC(re=BigRational(),im=BigRational()):
+    '''Create JAS BigComplex as ring element.
+    '''
+    if isinstance(re,PyTuple) or isinstance(re,PyList):
+        re = makeJasArith( re );
+    if isinstance(im,PyTuple) or isinstance(im,PyList):
+        im = makeJasArith( im );
+    if isinstance(re,RingElem):
+        re = re.elem;
+    if isinstance(im,RingElem):
+        im = im.elem;
+    if im.isZERO():
+        if re.isZERO():
+            c = BigComplex();
+        else:
+            c = BigComplex(re);
+    else:
+        c = BigComplex(re,im);
+    return RingElem(c);
+
+
 class RingElem:
     '''Proxy for JAS ring elements.
 
@@ -949,6 +990,22 @@ class RingElem:
         '''Create a string representation.
         '''
         return str(self.elem); 
+
+    def zero(self):
+        '''Zero element of this ring.
+        '''
+        if self.isFactory():
+            return RingElem( self.elem.getZERO() );
+        else:
+            return RingElem( self.elem.ring.getZERO() );
+
+    def one(self):
+        '''One element of this ring.
+        '''
+        if self.isFactory():
+            return RingElem( self.elem.getONE() );
+        else:
+            return RingElem( self.elem.ring.getONE() );
 
     def __abs__(self):
         '''Absolute value.
@@ -978,12 +1035,7 @@ class RingElem:
             o = makeJasArith(other);
             return RingElem(o);
         # test if self.elem is a factory itself
-        fac = None;
-        try:
-            fac = self.elem.ring;
-        except:
-            pass
-        if fac == None:
+        if self.isFactory():
             if isinstance(other,PyInteger) or isinstance(other,PyLong):
                 o = self.elem.fromInteger(other);
             else:
@@ -1003,6 +1055,15 @@ class RingElem:
                 print "unknown other type(%s) = %s" % (other,type(other));
                 o = other;
         return RingElem(o);
+
+    def isFactory(self):
+        '''Test if this is itself a ring factory.
+        '''
+        try:
+            r = self.elem.ring;
+        except:
+            return True;
+        return False;
 
     def isPolynomial(self):
         '''Test if this is a polynomial.
@@ -1084,6 +1145,9 @@ class RingElem:
                     n = n.numerator().intValue();
                 if isinstance(n,BigInteger):  # does not work
                     n = n.intValue();
-        p = Power(self.elem.ring).power( self.elem, n );
+        if self.isFactory():
+            p = Power(self.elem).power( self.elem, n );
+        else:
+            p = Power(self.elem.ring).power( self.elem, n );
         return RingElem( p ); 
 
