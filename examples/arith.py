@@ -19,10 +19,12 @@ from jas import terminate
 rn = QQ(1,2);
 print "rn:", rn;
 print "rn^2:", rn*rn;
+print;
 
 rn = QQ((3,2));
 print "rn:", rn;
 print "rn^2:", rn*rn;
+print;
 
 c = CC();
 print "c:", c;
@@ -31,9 +33,11 @@ print "c:", c;
 c = CC((2,),(3,));
 print "c:", c;
 print "c^5:", c**5 + c.one();
+print;
 
 c = CC( (2,),rn );
 print "c:", c;
+print;
 
 
 r = Ring( "Q(x,y) L" );
@@ -50,12 +54,10 @@ try:
 except:
     f = None;
 print "f: " + str(f);
-print;
 
 d = x**2 + 5 * x - 6;
 f = RF(d);
 print "f: " + str(f);
-print;
 
 n = d*d + y + 1;
 f = RF(d,n);
@@ -64,24 +66,20 @@ print;
 
 # beware not to mix expressions
 f = f**2 - f;
-print "f^3: " + str(f);
+print "f^2-f: " + str(f);
 print;
 
 f = f/f;
 print "f/f: " + str(f);
-print;
 
 f = RF(d,one);
 print "f: " + str(f);
-print;
 
 f = RF(zero);
 print "f: " + str(f);
-print;
 
 f = RF( (d,y) );
 print "f: " + str(f);
-print;
 
 print "one:  " + str(f.one());
 print "zero: " + str(f.zero());
