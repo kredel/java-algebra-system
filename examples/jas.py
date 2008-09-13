@@ -951,6 +951,25 @@ def QQ(d=0,n=1):
     return RingElem(r);
 
 
+def RF(d,n=1):
+    '''Create JAS rational function Quotient as ring element.
+    '''
+    if isinstance(d,PyTuple) or isinstance(d,PyList):
+        if len(d) > 1:
+            n = d[1];
+        d = d[0];
+    if isinstance(d,RingElem):
+        d = d.elem;
+    if isinstance(n,RingElem):
+        n = n.elem;
+    qr = QuotientRing(d.ring);
+    if n == 1:
+        r = Quotient(qr,d);
+    else:
+        r = Quotient(qr,d,n);
+    return RingElem(r);
+
+
 def CC(re=BigRational(),im=BigRational()):
     '''Create JAS BigComplex as ring element.
     '''
