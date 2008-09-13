@@ -32,7 +32,7 @@ c = CC((2,),(3,));
 print "c:", c;
 print "c^5:", c**5 + c.one();
 
-c = CC((2,),rn);
+c = CC( (2,),rn );
 print "c:", c;
 
 

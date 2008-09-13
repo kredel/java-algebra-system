@@ -935,8 +935,11 @@ def QQ(d=0,n=1):
     '''Create JAS BigRational as ring element.
     '''
     if isinstance(d,PyTuple) or isinstance(d,PyList):
-        r = makeJasArith( d );
-        return RingElem(r);
+        if n != 1:
+            print "%s ignored" % n;
+        if len(d) > 1:
+            n = d[1];
+        d = d[0];
     if isinstance(d,RingElem):
         d = d.elem;
     if isinstance(n,RingElem):
@@ -955,6 +958,8 @@ def RF(d,n=1):
     '''Create JAS rational function Quotient as ring element.
     '''
     if isinstance(d,PyTuple) or isinstance(d,PyList):
+        if n != 1:
+            print "%s ignored" % n;
         if len(d) > 1:
             n = d[1];
         d = d[0];
@@ -974,9 +979,16 @@ def CC(re=BigRational(),im=BigRational()):
     '''Create JAS BigComplex as ring element.
     '''
     if isinstance(re,PyTuple) or isinstance(re,PyList):
-        re = makeJasArith( re );
+        if isinstance(re[0],PyTuple) or isinstance(re[0],PyList):
+            if len(re) > 1:
+                im = QQ( re[1] );
+            re = QQ( re[0] );
+        else:
+            re = QQ(re);
+#        re = makeJasArith( re );
     if isinstance(im,PyTuple) or isinstance(im,PyList):
-        im = makeJasArith( im );
+        im = QQ( im );
+#        im = makeJasArith( im );
     if isinstance(re,RingElem):
         re = re.elem;
     if isinstance(im,RingElem):
