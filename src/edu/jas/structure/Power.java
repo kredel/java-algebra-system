@@ -52,10 +52,48 @@ public class Power<C extends RingElem<C> > {
         if ( a.isZERO() || a.isONE() ) {
            return a;
         }
-        C p = a;
-        for (long i = 1; i < n; i++ ) {
-            p = p.multiply( a );
+        C b = a;
+        long i = n-1;
+        C p = b;
+        do {
+           if ( i % 2 == 1 ) {
+              p = p.multiply( b );
+           }
+           i = i / 2;
+           if ( i > 0 ) {
+              b = b.multiply( b );
+           }
+        } while ( i > 0 );
+        return p;
+    }
+
+
+    /** power of a to the n-th, n positive, modulo m. 
+     * @param a element. 
+     * @param n integer exponent > 0.
+     * @param m modulus. 
+     * @return a^n mod m.
+     */
+    public static <C extends RingElem<C>> C modPositivePower(C a, long n, C m) {
+        if ( n <= 0 ) {
+            throw new IllegalArgumentException("only positive n allowed");
         }
+        if ( a.isZERO() || a.isONE() ) {
+           return a;
+        }
+
+        C b = a.remainder(m);
+        long i = n-1;
+        C p = b;
+        do {
+           if ( i % 2 == 1 ) {
+              p = p.multiply( b ).remainder(m);
+           }
+           i = i / 2;
+           if ( i > 0 ) {
+              b = b.multiply( b ).remainder(m);
+           }
+        } while ( i > 0 );
         return p;
     }
 
@@ -118,6 +156,49 @@ public class Power<C extends RingElem<C> > {
     }
 
 
+    /**
+     * power of a to the n-th modulo m.
+     * @param a element.
+     * @param n integer exponent.
+     * @param m modulus.
+     * @return a^n mod m, with a^{-n} = {1/a}^n.
+     */
+    public static <C extends MonoidElem<C>> C modPower( MonoidFactory<C> fac, C a, long n, C m) {
+        if ( n == 0 ) {
+           if ( fac == null ) {
+              throw new IllegalArgumentException("fac may not be null for a^0");
+           }
+           return fac.getONE();
+        }
+        if ( a.isONE() ) {
+           return a;
+        }
+        C b = a.remainder(m);
+        if ( n < 0 ) {
+           b = a.inverse().remainder(m);
+           n = -n;
+        }
+        if ( n == 1 ) {
+           return b;
+        }
+        C p = fac.getONE();
+        long i = n;
+        do {
+           if ( i % 2 == 1 ) {
+              p = p.multiply( b ).remainder(m);
+           }
+           i = i / 2;
+           if ( i > 0 ) {
+              b = b.multiply( b ).remainder(m);
+           }
+        } while ( i > 0 );
+        if ( n > 11 && debug ) {
+            logger.info("n  = " + n + ", p  = " + p);
+        }
+        return p;
+    }
+
+
     /** power of a to the n-th. 
      * @param a element. 
      * @param n integer exponent.
@@ -125,6 +206,17 @@ public class Power<C extends RingElem<C> > {
      */
     public C power(C a, long n) {
         return power( fac, a, n );
+    }
+
+
+    /** power of a to the n-th mod m. 
+     * @param a element. 
+     * @param n integer exponent.
+     * @param m modulus. 
+     * @return a^n mod m, with 0^0 = 0.
+     */
+    public C modPower(C a, long n, C m) {
+        return modPower( fac, a, n, m );
     }
  
 }

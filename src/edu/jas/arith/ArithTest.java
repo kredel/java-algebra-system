@@ -5,6 +5,8 @@
 package edu.jas.arith;
 
 
+import edu.jas.structure.Power;
+
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.BigComplex;
@@ -715,6 +717,86 @@ public class ArithTest extends TestCase {
      c = a.multiply(b);
      d = b.multiply(a);
      assertEquals("J*K = -K*J", c, d.negate() );
+ }
+
+
+/**
+ * Test power for Rational.
+ * 
+ */
+ public void testRationalPower() {
+     BigRational a, b, c, d, e;
+     a = BigRational.ZERO.random( 500 );
+
+     // power operations
+     b = Power.<BigRational>positivePower(a,1);
+     assertEquals("a^1 = a",b,a);
+
+     Power<BigRational> pow = new Power<BigRational>( BigRational.ONE );
+     b = pow.power(a,1);
+     assertEquals("a^1 = a",b,a);
+
+     b = pow.power(a,2);
+     c = a.multiply(a);
+     assertEquals("a^2 = a*a",b,c);
+
+     d = pow.power(a,-2);
+     c = b.multiply(d);
+     assertTrue("a^2 * a^-2 = 1",c.isONE());
+
+     b = pow.power(a,3);
+     c = a.multiply(a).multiply(a);
+     assertEquals("a^3 = a*a*a",b,c);
+
+     d = pow.power(a,-3);
+     c = b.multiply(d);
+     assertTrue("a^3 * a^-3 = 1",c.isONE());
+ }
+
+
+/**
+ * Test power for Integer.
+ * 
+ */
+ public void testIntegerPower() {
+     BigInteger a, b, c, d, e;
+     a = BigInteger.ZERO.random( 500 );
+
+     // power operations
+     b = Power.<BigInteger>positivePower(a,1);
+     assertEquals("a^1 = a",b,a);
+
+     Power<BigInteger> pow = new Power<BigInteger>( BigInteger.ONE );
+     b = pow.power(a,1);
+     assertEquals("a^1 = a",b,a);
+
+     b = pow.power(a,2);
+     c = a.multiply(a);
+     assertEquals("a^2 = a*a",b,c);
+
+     b = pow.power(a,3);
+     c = a.multiply(a).multiply(a);
+     assertEquals("a^3 = a*a*a",b,c);
+
+     // mod power operations
+     a = new BigInteger( 3 );
+     b = Power.<BigInteger>positivePower(a,1);
+     assertEquals("a^1 = a",b,a);
+
+     a = new BigInteger( 11 );
+     e = new BigInteger( 2 );
+     c = Power.<BigInteger>modPositivePower(a,10,e);
+     assertTrue("3^n mod 2 = 1",c.isONE());
+
+     // little fermat
+     a = BigInteger.ZERO.random( 500 );
+     b = new BigInteger( 11 );
+     c = Power.<BigInteger>modPositivePower(a,11,b);
+     d = a.remainder(b);
+     assertEquals("a^p = a mod p",c,d);
+
+     c = pow.modPower(a,11,b);
+     assertEquals("a^p = a mod p",c,d);
  }
 
 }
