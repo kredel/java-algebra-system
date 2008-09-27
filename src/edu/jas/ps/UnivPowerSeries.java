@@ -27,10 +27,10 @@ public class UnivPowerSeries<C extends RingElem<C>>
 
     /**
      * Interface for generating function of coefficients.
-     */
     interface Coefficients<C extends RingElem<C>> {
         C get(int index);
     }
+     */
 
 
     /**
@@ -509,6 +509,24 @@ public class UnivPowerSeries<C extends RingElem<C>>
 	    throw new RuntimeException("division by non unit");
 	}
         return multiply( ps.inverse() );
+    }
+
+
+    /**
+     * Differentiate.
+     * @return differentiate(this).
+     */
+    public UnivPowerSeries<C> differentiate() {
+        return new UnivPowerSeries<C>(
+                   new Coefficients<C>() {
+                       public C get(int i) {
+			   C v = coefficient( i + 1 );
+			   System.out.println("not implemented: fac.fromInteger(i+1)");
+			   //v = v.multiply( fac.fromInteger(i+1) );
+			   return v;
+                       }
+                   }
+                                       );
     }
 
 
