@@ -52,6 +52,7 @@
   <symlink resource="${src}/edu/jas/kern"        link="kern" />
   <symlink resource="${src}/edu/jas/module"      link="module" />
   <symlink resource="${src}/edu/jas/poly"        link="poly" />
+  <symlink resource="${src}/edu/jas/ps"          link="ps" />
   <symlink resource="${src}/edu/jas/ring"        link="ring" />
   <symlink resource="${src}/edu/jas/structure"   link="structure" />
   <symlink resource="${src}/edu/jas/ufd"         link="ufd" />
@@ -68,6 +69,7 @@
    <available file="kern" />
    <available file="module" />
    <available file="poly" />
+   <available file="ps" />
    <available file="ring" />
    <available file="structure" />
    <available file="ufd" />
