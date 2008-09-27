@@ -101,6 +101,7 @@ public class UnivPowerSeriesTest {
     public static void example2() {
         UnivPowerSeries<BigInteger> integers = integersFrom(0);
 
+        System.out.print("integer coefficients = ");
         UnivPowerSeries<BigInteger> s = integers;
         for (int i = 0; i < 20; i++ ) {
             BigInteger c = s.leadingCoefficient();
