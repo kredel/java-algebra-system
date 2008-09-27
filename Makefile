@@ -51,7 +51,7 @@ heinz:
 	$(RSYNC) ./                heinz@heinz2:$(PART)
 
 krum:
-	$(RSYNC) ./                krum:java/$(PART)
+	$(RSYNC) -e 'ssh -p 2222' ./                krum:java/$(PART)
 
 pub:
 	$(RSYNC) --exclude=*ufd* --exclude=DTD --exclude=lisa* --exclude=*xml ./ krum:htdocs/$(PART)
@@ -69,7 +69,7 @@ cl=
 
 #.EXPORT_ALL_VARIABLES :
 
-DEFS=$(JASPATH)/arith:$(JASPATH)/poly:$(JASPATH)/vector:$(JASPATH)/ring:$(JASPATH)/ufd:$(JASPATH)/module:$(JASPATH)/util:$(JASPATH)/application
+DEFS=$(JASPATH)/arith:$(JASPATH)/poly:$(JASPATH)/ps:$(JASPATH)/vector:$(JASPATH)/ring:$(JASPATH)/ufd:$(JASPATH)/module:$(JASPATH)/util:$(JASPATH)/application
 DOCCLASSES=$(JUNITPATH):$(LOG4JPATH):$(JOMPPATH)
 #:$(TNJPATH)
 DOCOPTS=-package
@@ -101,7 +101,7 @@ GETC      = getc.pl
 
 .SUFFIXES :
 .SUFFIXES : .class .java 
-.PRECIOUS : %.java %.class edu/jas/arith/%.class edu/jas/poly/%.class edu/jas/ring/%.class edu/jas/vector/%.class edu/jas/ufd/%.class edu/jas/module/%.class edu/jas/structure/%.class edu/jas/util/%.class edu/jas/application/%.class edu/jas/kern/%.class edu/jas/%.class
+.PRECIOUS : %.java %.class edu/jas/arith/%.class edu/jas/poly/%.class edu/jas/ps/%.class edu/jas/ring/%.class edu/jas/vector/%.class edu/jas/ufd/%.class edu/jas/module/%.class edu/jas/structure/%.class edu/jas/util/%.class edu/jas/application/%.class edu/jas/kern/%.class edu/jas/%.class
 
 .PHONY    : clean doc
 
@@ -119,6 +119,9 @@ edu/jas/arith/%.class: %.java
 	$(JAVAC) $<
 
 edu/jas/poly/%.class: %.java
+	$(JAVAC) $<
+
+edu/jas/ps/%.class: %.java
 	$(JAVAC) $<
 
 edu/jas/ring/%.class: %.java
@@ -158,6 +161,9 @@ edu.jas.arith.%: edu/jas/arith/%.class
 edu.jas.poly.%: edu/jas/poly/%.class
 	$(JAVA) $@ $(cl)
 
+edu.jas.ps.%: edu/jas/ps/%.class
+	$(JAVA) $@ $(cl)
+
 edu.jas.ring.%: edu/jas/ring/%.class
 	$(JAVA) $@ $(cl)
 
@@ -186,17 +192,17 @@ edu.mas.kern.%: edu/mas/kern/%.class
 	$(JAVA) $@ $(cl)
 
 
-#FILES=$(wildcard src/edu/jas/structure/*.java src/edu/jas/arith/*.java src/edu/jas/poly/*.java src/edu/jas/ring/*.java src/edu/jas/ufd/*.java src/edu/jas/application/*.java src/edu/jas/vector/*.java src/edu/jas/module/*.java src/edu/jas/util/*.java src/edu/jas/kern/*.java)
-FILES=$(wildcard src/edu/jas/structure/*.java src/edu/jas/arith/*.java src/edu/jas/poly/*.java src/edu/jas/ring/*.java src/edu/jas/application/*.java src/edu/jas/vector/*.java src/edu/jas/module/*.java src/edu/jas/util/*.java src/edu/jas/ufd/*.java src/edu/jas/kern/*.java)
+#FILES=$(wildcard src/edu/jas/structure/*.java src/edu/jas/arith/*.java src/edu/jas/poly/*.java src/edu/jas/ps/*.java src/edu/jas/ring/*.java src/edu/jas/ufd/*.java src/edu/jas/application/*.java src/edu/jas/vector/*.java src/edu/jas/module/*.java src/edu/jas/util/*.java src/edu/jas/kern/*.java)
+FILES=$(wildcard src/edu/jas/structure/*.java src/edu/jas/arith/*.java src/edu/jas/poly/*.java src/edu/jas/ps/*.java src/edu/jas/ring/*.java src/edu/jas/application/*.java src/edu/jas/vector/*.java src/edu/jas/module/*.java src/edu/jas/util/*.java src/edu/jas/ufd/*.java src/edu/jas/kern/*.java)
 
 LIBS=$(JUNITPATH) $(LOG4JPATH) $(JOMPPATH) $(TNJPATH)
 
-#CLASSES=$(wildcard edu/jas/structure/*.java edu/jas/arith/*.class edu/jas/poly/*.class edu/jas/ring/*.class edu/jas/ufd/*.class edu/jas/application/*.class edu/jas/vector/*.class edu/jas/module/*.class edu/jas/util/*.class edu/jas/kern/*.class)
+#CLASSES=$(wildcard edu/jas/structure/*.java edu/jas/arith/*.class edu/jas/poly/*.class edu/jas/ps/*.class edu/jas/ring/*.class edu/jas/ufd/*.class edu/jas/application/*.class edu/jas/vector/*.class edu/jas/module/*.class edu/jas/util/*.class edu/jas/kern/*.class)
 #CLASSES=edu/jas
 
-#CLASSES=edu/jas/structure/ edu/jas/arith/ edu/jas/poly/ edu/jas/ring/ edu/jas/ufd/ edu/jas/application/ edu/jas/vector/ edu/jas/module/ edu/jas/util/ edu/jas/kern/
+#CLASSES=edu/jas/structure/ edu/jas/arith/ edu/jas/poly/ edu/jas/ps/ edu/jas/ring/ edu/jas/ufd/ edu/jas/application/ edu/jas/vector/ edu/jas/module/ edu/jas/util/ edu/jas/kern/
 
-CLASSES=edu/jas/structure/ edu/jas/arith/ edu/jas/poly/ edu/jas/ring/ edu/jas/application/ edu/jas/vector/ edu/jas/module/ edu/jas/util/ edu/jas/ufd/ edu/jas/kern/
+CLASSES=edu/jas/structure/ edu/jas/arith/ edu/jas/poly/ edu/jas/ps/ edu/jas/ring/ edu/jas/application/ edu/jas/vector/ edu/jas/module/ edu/jas/util/ edu/jas/ufd/ edu/jas/kern/
 
 PYS=$(wildcard *.py)
 EXAMPY=$(wildcard examples/*.py)
@@ -251,7 +257,7 @@ lint:
 
 clean:
 	find . -name "*~" -follow -print -exec rm {} \;
-	rm -f application/application arith/arith kern/kern module/module poly/poly ring/ring structure/structure ufd/ufd util/util vector/vector
+	rm -f application/application arith/arith kern/kern module/module poly/poly ps/ps ring/ring structure/structure ufd/ufd util/util vector/vector
 
 
 #svn copy file:///$(SVNREPO)/jas/trunk file:///$(SVNREPO)/jas/tags/$(VERSION)
@@ -281,7 +287,7 @@ export:
 
 
 deploy:
-	$(RSYNC) --delete-after --exclude=DTD --exclude=*xml ~/jas-versions/$(VERSION)/ krum:htdocs/$(VERSION)
+	$(RSYNC) -e 'ssh -p 2222' --delete-after --exclude=DTD --exclude=*xml ~/jas-versions/$(VERSION)/ krum:htdocs/$(VERSION)
 
 
 young:
