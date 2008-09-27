@@ -120,7 +120,7 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
         this.order = order;
 	this.var = name;
         this.ONE = new UnivPowerSeries<C>(
-                   new UnivPowerSeries.Coefficients<C>() {
+                   new Coefficients<C>() {
                        public C get(int i) {
                            if ( i == 0 ) { 
                                return coFac.getONE();
@@ -131,7 +131,7 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
                    }//, null
                                               );
         this.ZERO = new UnivPowerSeries<C>(
-                    new UnivPowerSeries.Coefficients<C>() {
+                    new Coefficients<C>() {
                         public C get(int i) {
                             return coFac.getZERO();
                         }
@@ -287,7 +287,7 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
      */
     public UnivPowerSeries<C> random(final int k, final float q, final Random rnd) {
         return new UnivPowerSeries<C>(
-                   new UnivPowerSeries.Coefficients<C>() {
+                   new Coefficients<C>() {
                        public C get(int i) {
                            float f = rnd.nextFloat(); 
                            if ( f < q ) { 

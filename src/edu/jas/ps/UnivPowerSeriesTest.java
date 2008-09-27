@@ -41,7 +41,7 @@ public class UnivPowerSeriesTest {
 
     static UnivPowerSeries<BigInteger> integersFrom(final int start) {
         return new UnivPowerSeries<BigInteger>( 
-                                                new UnivPowerSeries.Coefficients<BigInteger>() {
+                                                new Coefficients<BigInteger>() {
                                                     public BigInteger get(int i) {
                                                         return new BigInteger(i); 
                                                     }
@@ -193,7 +193,7 @@ public class UnivPowerSeriesTest {
         UnivPowerSeries<BigInteger> integers = integersFrom(0);
         System.out.println("      integers = " + integers);
         UnivPowerSeries<BigInteger> ONE = new UnivPowerSeries<BigInteger>(
-                   new UnivPowerSeries.Coefficients<BigInteger>() {
+                   new Coefficients<BigInteger>() {
                        public BigInteger get(int i) {
                            if ( i == 0 ) { 
                                return fac.getONE();
@@ -205,7 +205,7 @@ public class UnivPowerSeriesTest {
                                                        );
         System.out.println("ONE  = " + ONE);
         UnivPowerSeries<BigInteger> ZERO = new UnivPowerSeries<BigInteger>(
-                   new UnivPowerSeries.Coefficients<BigInteger>() {
+                   new Coefficients<BigInteger>() {
                        public BigInteger get(int i) {
                            return fac.getZERO();
                        }
