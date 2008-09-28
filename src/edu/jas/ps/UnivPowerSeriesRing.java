@@ -307,6 +307,17 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
 
 
    /**
+     * Generate a random power series with
+     * @param k bitsize of random coefficients.
+     * @param q density of non-zero coefficients.
+     * @return a random power series.
+     */
+    public UnivPowerSeries<C> random(int k, float q) {
+        return random(k,q,random);
+    }
+
+
+   /**
      * Generate a random power series.
      * @param k bitsize of random coefficients.
      * @param q density of non-zero coefficients.
