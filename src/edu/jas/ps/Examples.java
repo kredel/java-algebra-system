@@ -16,12 +16,12 @@ import edu.jas.arith.BigInteger;
 
 
 /**
- * Test univariate power series implementations.
+ * Examples for univariate power series implementations.
  * @param <C> ring element type
  * @author Heinz Kredel
  */
 
-public class UnivPowerSeriesTest {
+public class Examples {
 
     public static void main(String[] args) {
         example2();
