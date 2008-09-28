@@ -458,7 +458,7 @@ public class UnivPowerSeries<C extends RingElem<C>>
 
     /**
      * Set truncate.
-     * @parem t new truncate index.
+     * @param t new truncate index.
      * @return old truncate index of power series.
      */
     public int setTruncate(int t) {
@@ -649,8 +649,8 @@ public class UnivPowerSeries<C extends RingElem<C>>
 
     /**
      * Power series remainder.
-     * @param S nonzero power series with invertible leading coefficient.
-     * @return remainder with this = quotient * S + remainder.
+     * @param ps nonzero power series with invertible leading coefficient.
+     * @return remainder with this = quotient * ps + remainder.
      */
     public UnivPowerSeries<C> remainder( UnivPowerSeries<C> ps ) {
         int m = order();

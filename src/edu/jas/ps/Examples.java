@@ -17,7 +17,6 @@ import edu.jas.arith.BigInteger;
 
 /**
  * Examples for univariate power series implementations.
- * @param <C> ring element type
  * @author Heinz Kredel
  */
 

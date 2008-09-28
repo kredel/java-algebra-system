@@ -275,7 +275,6 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
      * Generate a random power series with
      * k = 5, 
      * d = 0.7.
-     * @param rnd is a source for random bits.
      * @return a random power series.
      */
     public UnivPowerSeries<C> random() {
