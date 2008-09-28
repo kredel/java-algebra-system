@@ -59,8 +59,9 @@ public class UnivPowerSeries<C extends RingElem<C>>
 
 
     /**
-     * Private constructor.
+     * Package constructor.
      * Use in fixPoint only, must be accessible in factory.
+     * @param ring power series ring.
      */
     /*package*/ UnivPowerSeries(UnivPowerSeriesRing<C> ring) {
         this.ring = ring;
@@ -71,6 +72,8 @@ public class UnivPowerSeries<C extends RingElem<C>>
 
     /**
      * Constructor.
+     * @param ring power series ring.
+     * @param lazyCoeffs generating function for coefficients.
      */
     public UnivPowerSeries(UnivPowerSeriesRing<C> ring, Coefficients<C> lazyCoeffs) {
         this( ring, lazyCoeffs, new HashMap<Integer,C>() );
@@ -79,6 +82,9 @@ public class UnivPowerSeries<C extends RingElem<C>>
 
     /**
      * Constructor.
+     * @param ring power series ring.
+     * @param lazyCoeffs generating function for coefficients.
+     * @param coeffs cache for already known coefficients.
      */
     public UnivPowerSeries(UnivPowerSeriesRing<C> ring, Coefficients<C> lazyCoeffs, HashMap<Integer,C> coeffs) {
         if ( lazyCoeffs == null || ring == null ) {
@@ -91,9 +97,10 @@ public class UnivPowerSeries<C extends RingElem<C>>
 
 
     /**
-     * To String.
-     * @return string representation of this.
+     * String representation of power series.
+     * @see java.lang.Object#toString()
      */
+    @Override
     public String toString() {
         return toString(order);
     }
@@ -134,8 +141,9 @@ public class UnivPowerSeries<C extends RingElem<C>>
 
 
     /**
-     * Get element at.
-     * @return element at i.
+     * Get coefficient.
+     * @param index number of requested coefficient.
+     * @return coefficient at index.
      */
     public C coefficient(int index) {
         if ( index < 0 ) {
@@ -183,6 +191,7 @@ public class UnivPowerSeries<C extends RingElem<C>>
 
     /**
      * Prepend a new leading coefficient.
+     * @param h new coefficient.
      * @return new power series.
      */
     public UnivPowerSeries<C> prepend(final C h) {
@@ -201,8 +210,9 @@ public class UnivPowerSeries<C extends RingElem<C>>
 
 
     /**
-     * Select elements.
-     * @return new power series.
+     * Select coefficients.
+     * @param sel selector functor.
+     * @return new power series with selected coefficients.
      */
     public UnivPowerSeries<C> select(final Selector<? super C> sel) {
         return new UnivPowerSeries<C>(ring,
@@ -226,7 +236,8 @@ public class UnivPowerSeries<C extends RingElem<C>>
 
     /**
      * Map a unary function to this power series.
-     * @return new power series.
+     * @param f evaluation functor.
+     * @return new power series with coefficients f(this(i)).
      */
     public UnivPowerSeries<C> map(final UnaryFunctor<? super C,C> f) {
         return new UnivPowerSeries<C>(ring,
@@ -240,7 +251,9 @@ public class UnivPowerSeries<C extends RingElem<C>>
 
 
     /**
-     * Map a binary function to elements of this and another power series.
+     * Map a binary function to this and another power series.
+     * @param f evaluation functor with coefficients f(this(i),other(i)).
+     * @param ps other power series.
      * @return new power series.
      */
     public <C2 extends RingElem<C2>> 
@@ -258,20 +271,7 @@ public class UnivPowerSeries<C extends RingElem<C>>
     }
 
 
-    /**
-     * Fix point construction.
-     * @return fix point wrt map.
-    public static <C extends RingElem<C>> 
-        UnivPowerSeries<C> fixPoint(PowerSeriesMap<C> map) {
-             UnivPowerSeries<C> ps1 = new UnivPowerSeries<C>(null);
-             UnivPowerSeries<C> ps2 = (UnivPowerSeries<C>) map.map(ps1);
-             ps1.lazyCoeffs = ps2.lazyCoeffs;
-             return ps2;
-    }
-     */
-
-
-    /* arithmetic methods */
+    /* arithmetic method functors */
 
 
     static class Sum<C extends RingElem<C>> implements BinaryFunctor<C,C,C> {

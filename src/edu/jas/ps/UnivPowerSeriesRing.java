@@ -251,7 +251,7 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
     }
 
 
-    /** Get a (constant) UnivPowerSeries<C> element from a long value.
+    /** Get a (constant) UnivPowerSeries<C> from a long value.
      * @param a long.
      * @return a UnivPowerSeries<C>.
      */
@@ -260,7 +260,7 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
     }
 
 
-    /** Get a (constant) UnivPowerSeries<C> element from a java.math.BigInteger.
+    /** Get a (constant) UnivPowerSeries<C> from a java.math.BigInteger.
      * @param a BigInteger.
      * @return a UnivPowerSeries<C>.
      */
