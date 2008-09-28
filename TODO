@@ -4,8 +4,6 @@ issues to consider:
 
 - implement polynomial factorization
 
-- implement power series
-
 - implement matrices to vector
 
 - check for safe publication idiom in polynomial construction
@@ -46,6 +44,8 @@ issues to consider:
 
 
 partially resolved and completed issues:
+
+- implement power series
 
 - refactor ExpVector for different array element types
 
