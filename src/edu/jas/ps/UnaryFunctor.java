@@ -9,7 +9,7 @@ import edu.jas.structure.RingElem;
 
 
 /**
- * Unitra functor interface.
+ * Unary functor interface.
  * @param <C> ring element type
  * @param <D> ring element type
  * @author Heinz Kredel

@@ -280,6 +280,9 @@ public class Examples {
 
         System.out.println("sign(qr1-ints2) = " + qr1.compareTo(ints2));
         System.out.println("sign(qr2-integers) = " + qr2.compareTo(integers));
+
+        UnivPowerSeries<BigInteger> g = ints2.gcd(integers);
+        System.out.println("g               = " + g);
     }
 
 }

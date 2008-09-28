@@ -703,12 +703,20 @@ public class UnivPowerSeries<C extends RingElem<C>>
 
     /**
      * Power series greatest common divisor.
-     * <b>Note:</b> not implemented.
-     * @param S power series.
-     * @return gcd(this,S).
+     * @param ps power series.
+     * @return gcd(this,ps).
      */
-    public UnivPowerSeries<C> gcd(UnivPowerSeries<C> S) {
-        throw new RuntimeException("gcd for power series not implemented");
+    public UnivPowerSeries<C> gcd(UnivPowerSeries<C> ps) {
+        if ( ps.isZERO() ) {
+            return this;
+        }
+        if ( this.isZERO() ) {
+            return ps;
+        }
+        int m = order();
+        int n = ps.order();
+        int l = ( m < n ) ? m : n;
+        return ring.getONE().shift(-l);
     }
 
 
