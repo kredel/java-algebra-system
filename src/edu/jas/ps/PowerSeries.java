@@ -58,17 +58,19 @@ public interface PowerSeries<C extends RingElem<C>>
     /**
      * Map a unary function to this power series.
      * @return new power series.
+     * <D extends RingElem<D>> 
      */
-    public <D extends RingElem<D>> PowerSeries<D> map(UnaryFunctor<? super C,D> f);
+    public PowerSeries<C> map(UnaryFunctor<? super C,C> f);
 
 
     /**
      * Map a binary function to elements of this and another power series.
      * @return new power series.
+     * , D extends RingElem<D>
      */
-    public <C2 extends RingElem<C2>, D extends RingElem<D>> 
-	PowerSeries<D> zip(
-	    BinaryFunctor<? super C,? super C2,D> f,
+    public <C2 extends RingElem<C2>> 
+	PowerSeries<C> zip(
+	    BinaryFunctor<? super C,? super C2,C> f,
 	    PowerSeries<C2> ps
 	    );
 
