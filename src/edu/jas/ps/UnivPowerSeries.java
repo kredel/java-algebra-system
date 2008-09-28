@@ -103,7 +103,7 @@ public class UnivPowerSeries<C extends RingElem<C>>
 
 
     /**
-     * Clone this poer series.
+     * Clone this power series.
      * @see java.lang.Object#clone()
      */
     @Override

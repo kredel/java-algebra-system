@@ -307,7 +307,7 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
 
 
    /**
-     * Generate a random power series with
+     * Generate a random power series.
      * @param k bitsize of random coefficients.
      * @param q density of non-zero coefficients.
      * @return a random power series.
