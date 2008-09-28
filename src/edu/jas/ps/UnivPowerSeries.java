@@ -51,10 +51,16 @@ public class UnivPowerSeries<C extends RingElem<C>>
 
 
     /**
+     * Order of power series.
+     */
+    private int order = -1; // == unknown
+
+
+    /**
      * Private constructor.
      */
     private UnivPowerSeries() {
-	throw new RuntimeException("do not use no-argument constructor");
+        throw new RuntimeException("do not use no-argument constructor");
     }
 
 
@@ -127,24 +133,24 @@ public class UnivPowerSeries<C extends RingElem<C>>
         //System.out.println("cache = " + s.coeffCache);
         for (int i = 0; i < truncate; i++ ) {
             C c = s.coefficient(i);
-	    int si = c.signum();
-	    if ( si != 0 ) {
-		if ( si > 0 ) {
-		    if ( i > 0 ) {
+            int si = c.signum();
+            if ( si != 0 ) {
+                if ( si > 0 ) {
+                    if ( i > 0 ) {
                        sb.append(" + ");
-		    }
+                    }
                     sb.append(c.toString() + " * x^" + i);
-		} else {
+                } else {
                     c = c.negate();
                     sb.append(" - " + c.toString() + " * x^" + i);
-		}
+                }
             //sb.append(c.toString() + ", ");
-	    }
+            }
             //System.out.println("cache = " + s.coeffCache);
         }
-	if ( sb.length() == 0 ) {
+        if ( sb.length() == 0 ) {
            sb.append("0");
-	}
+        }
         sb.append(" + BigO(x^" + truncate + ")");
         //sb.append("...");
         return sb.toString();
@@ -318,22 +324,22 @@ public class UnivPowerSeries<C extends RingElem<C>>
 
 
     static class Abs<C extends RingElem<C>> implements UnaryFunctor<C,C> {
-	int sign = 0;
+        int sign = 0;
         public C eval(C c) {
-	    int s = c.signum();
-	    if ( s == 0 ) {
-	       return c;
-	    }
-	    if ( sign > 0 ) {
+            int s = c.signum();
+            if ( s == 0 ) {
                return c;
-	    } else if ( sign < 0 ) {
+            }
+            if ( sign > 0 ) {
+               return c;
+            } else if ( sign < 0 ) {
                return c.negate();
-	    }
-	    // first non zero coefficient:
-	    sign = s;
-	    if ( s > 0 ) {
-	       return c;
-	    }
+            }
+            // first non zero coefficient:
+            sign = s;
+            if ( s > 0 ) {
+               return c;
+            }
             return c.negate();
         }
     }
@@ -393,13 +399,55 @@ public class UnivPowerSeries<C extends RingElem<C>>
      */
     public C evaluate(C e) {
         C v = coefficient( 0 );
-	C p = e;
-	for ( int i = 1; i < truncate; i++ ) {
+        C p = e;
+        for ( int i = 1; i < truncate; i++ ) {
             C c = coefficient( i ).multiply( p );
             v = v.sum( c );
-	    p = p.multiply(e);
+            p = p.multiply(e);
         }
         return v;
+    }
+
+
+    /**
+     * Order.
+     * @return index of first non zero coefficient.
+     */
+    public int order() {
+        if ( order < 0 ) { // compute it
+            for ( int i = 0; i <= truncate; i ++ ) {
+                if ( !coefficient(i).isZERO() ) {
+                    order = i;
+                    break;
+                }
+                order = truncate+1;
+            }
+        }
+        return order;
+    }
+
+
+    /**
+     * Truncate.
+     * @return truncate index of power series.
+     */
+    public int truncate() {
+        return truncate;
+    }
+
+
+    /**
+     * Set truncate.
+     * @parem t new truncate index.
+     * @return old truncate index of power series.
+     */
+    public int setTruncate(int t) {
+        if ( t < 0 ) {
+            throw new RuntimeException("negative truncate not allowed");
+        }
+        int ot = truncate;
+        truncate = t;
+        return ot;
     }
 
 
@@ -424,10 +472,10 @@ public class UnivPowerSeries<C extends RingElem<C>>
      */
     public int compareTo(UnivPowerSeries<C> ps) {
         int s = 0;
-	int pos = 0;
+        int pos = 0;
         do { 
             s = coefficient( pos ).compareTo( ps.coefficient( pos ) );
-	    pos++;
+            pos++;
         } while( s == 0 && pos <= truncate );
         return s;
     }
@@ -486,7 +534,7 @@ public class UnivPowerSeries<C extends RingElem<C>>
        //h += val.hashCode();
        for ( int i = 0; i <= truncate; i++ ) { 
            h += coefficient( i ).hashCode();
-	   h = ( h << 23 );
+           h = ( h << 23 );
        };
        return h;
     }
@@ -509,16 +557,16 @@ public class UnivPowerSeries<C extends RingElem<C>>
         return new UnivPowerSeries<C>(ring,
                    new Coefficients<C>() {
                        public C get(int i) {
-			   C c = null; //fac.getZERO();
-			   for ( int k = 0; k <= i; k++ ) {
+                           C c = null; //fac.getZERO();
+                           for ( int k = 0; k <= i; k++ ) {
                                C m = coefficient(k).multiply( ps.coefficient(i-k) );
-			       if ( c == null ) {
-				   c = m;
-			       } else {
-				   c = c.sum(m);
-			       }
-			   }
-			   return c;
+                               if ( c == null ) {
+                                   c = m;
+                               } else {
+                                   c = c.sum(m);
+                               }
+                           }
+                           return c;
                        }
                    }
                                        );
@@ -533,20 +581,20 @@ public class UnivPowerSeries<C extends RingElem<C>>
         return new UnivPowerSeries<C>(ring,
                    new Coefficients<C>() {
                        public C get(int i) {
-			   C d = leadingCoefficient().inverse(); // may fail
-			   if ( i == 0 ) {
-			      return d;
-			   }
-			   C c = null; //fac.getZERO();
-			   for ( int k = 0; k < i; k++ ) {
+                           C d = leadingCoefficient().inverse(); // may fail
+                           if ( i == 0 ) {
+                              return d;
+                           }
+                           C c = null; //fac.getZERO();
+                           for ( int k = 0; k < i; k++ ) {
                                C m = coefficient(i-k).multiply( get(k) );
-			       if ( c == null ) {
-				   c = m;
-			       } else {
-				   c = c.sum(m);
-			       }
-			   }
-			   return c.multiply( d.negate() );
+                               if ( c == null ) {
+                                   c = m;
+                               } else {
+                                   c = c.sum(m);
+                               }
+                           }
+                           return c.multiply( d.negate() );
                        }
                    }
                                        );
@@ -558,9 +606,9 @@ public class UnivPowerSeries<C extends RingElem<C>>
      * @return this * ps^{-1}.
      */
     public UnivPowerSeries<C> divide( UnivPowerSeries<C> ps ) {
-	if ( ! ps.isUnit() ) {
-	    throw new RuntimeException("division by non unit");
-	}
+        if ( ! ps.isUnit() ) {
+            throw new RuntimeException("division by non unit");
+        }
         return multiply( ps.inverse() );
     }
 
@@ -584,10 +632,10 @@ public class UnivPowerSeries<C extends RingElem<C>>
         return new UnivPowerSeries<C>(ring,
                    new Coefficients<C>() {
                        public C get(int i) {
-			   C v = coefficient( i + 1 );
-			   System.out.println("not implemented: fac.fromInteger(i+1)");
-			   //v = v.multiply( fac.fromInteger(i+1) );
-			   return v;
+                           C v = coefficient( i + 1 );
+                           System.out.println("not implemented: fac.fromInteger(i+1)");
+                           //v = v.multiply( fac.fromInteger(i+1) );
+                           return v;
                        }
                    }
                                        );
@@ -602,13 +650,13 @@ public class UnivPowerSeries<C extends RingElem<C>>
         return new UnivPowerSeries<C>(ring,
                    new Coefficients<C>() {
                        public C get(int i) {
-			   if ( i == 0 ) {
-			      return c;
-			   }
-			   C v = coefficient( i - 1 );
-			   System.out.println("not implemented: fac.fromInteger(i)");
-			   //v = v.divide( fac.fromInteger(i) );
-			   return v;
+                           if ( i == 0 ) {
+                              return c;
+                           }
+                           C v = coefficient( i - 1 );
+                           System.out.println("not implemented: fac.fromInteger(i)");
+                           //v = v.divide( fac.fromInteger(i) );
+                           return v;
                        }
                    }
                                        );

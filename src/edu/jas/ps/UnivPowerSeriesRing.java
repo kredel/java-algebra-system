@@ -37,15 +37,15 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
 
 
     /**
-     * Default order.
+     * Default truncate.
      */
-    public final static int DEFAULT_ORDER = 11;
+    public final static int DEFAULT_TRUNCATE = 11;
 
 
     /**
-     * Order.
+     * Truncate.
      */
-    int order;
+    int truncate;
 
 
 
@@ -94,15 +94,15 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
      * Constructor.
      */
     public UnivPowerSeriesRing(RingFactory<C> coFac) {
-	this( coFac, DEFAULT_ORDER, DEFAULT_NAME );
+	this( coFac, DEFAULT_TRUNCATE, DEFAULT_NAME );
     }
 
 
     /**
      * Constructor.
      */
-    public UnivPowerSeriesRing(RingFactory<C> coFac, int order) {
-	this( coFac, order, DEFAULT_NAME );
+    public UnivPowerSeriesRing(RingFactory<C> coFac, int truncate) {
+	this( coFac, truncate, DEFAULT_NAME );
     }
 
 
@@ -110,16 +110,16 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
      * Constructor.
      */
     public UnivPowerSeriesRing(RingFactory<C> coFac, String name) {
-	this( coFac, DEFAULT_ORDER, name );
+	this( coFac, DEFAULT_TRUNCATE, name );
     }
 
 
     /**
      * Constructor.
      */
-    public UnivPowerSeriesRing(final RingFactory<C> coFac, int order, String name) {
+    public UnivPowerSeriesRing(final RingFactory<C> coFac, int truncate, String name) {
 	this.coFac = coFac;
-        this.order = order;
+        this.truncate = truncate;
 	this.var = name;
         this.ONE = new UnivPowerSeries<C>(this,
                    new Coefficients<C>() {
@@ -195,7 +195,7 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
     public int hashCode() { 
        int h = 0;
        h = ( var.hashCode() << 27 );
-       h += order;
+       h += truncate;
        return h;
     }
 
