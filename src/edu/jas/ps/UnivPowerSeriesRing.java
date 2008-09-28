@@ -5,6 +5,8 @@
 package edu.jas.ps;
 
 
+import java.io.Reader;
+
 import java.util.Random;
 import java.util.Map;
 import java.util.HashMap;
@@ -25,7 +27,7 @@ import edu.jas.structure.RingFactory;
  */
 
 public class UnivPowerSeriesRing<C extends RingElem<C>> 
-    /* implements RingFactory< PowerSeries<C> >,*/ {
+             implements RingFactory< UnivPowerSeries<C> > {
 
 
     /**
@@ -293,6 +295,18 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
 
 
    /**
+     * Generate a random power series with
+     * d = 0.7.
+     * @param k bitsize of random coefficients.
+     * @param rnd is a source for random bits.
+     * @return a random power series.
+     */
+    public UnivPowerSeries<C> random(int k, Random rnd) {
+        return random(k,0.7f,rnd);
+    }
+
+
+   /**
      * Generate a random power series.
      * @param k bitsize of random coefficients.
      * @param q density of non-zero coefficients.
@@ -313,5 +327,36 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
                    }//, null
                                               );
      }
+
+
+    /**
+     * Copy power series.
+     * @param c
+     * @return a copy of c.
+     */
+    public UnivPowerSeries<C> copy(UnivPowerSeries<C> c) {
+        System.out.println("GP copy = " + this);
+        return new UnivPowerSeries<C>( this, c.lazyCoeffs, c.coeffCache );
+    }
+
+
+    /**
+     * Parse a power series.
+     * @param s String.
+     * @return power series from s.
+     */
+    public UnivPowerSeries<C> parse(String s) {
+        throw new RuntimeException("parse for power series not implemented");
+    }
+
+
+    /**
+     * Parse a power series.
+     * @param r Reader.
+     * @return next power series from r.
+     */
+    public UnivPowerSeries<C> parse(Reader r) {
+        throw new RuntimeException("parse for power series not implemented");
+    }
 
 }

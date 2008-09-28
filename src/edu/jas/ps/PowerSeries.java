@@ -16,8 +16,7 @@ import edu.jas.structure.RingFactory;
  * @author Heinz Kredel
  */
 
-public interface PowerSeries<C extends RingElem<C>> 
-                 /*extends RingElem< PowerSeries<C> >*/ {
+public interface PowerSeries<C extends RingElem<C>> {
 
 
     /**
@@ -74,19 +73,17 @@ public interface PowerSeries<C extends RingElem<C>>
 	    PowerSeries<C2> ps
 	    );
 
+    /**
+     * Differentiate.
+     * @return differentiate(this).
+     */
+    public PowerSeries<C> differentiate();
+
 
     /**
-     * Is unit.
-     * @return true, if this power series is invertible, else false.
+     * Integrate with given constant.
+     * @return integrate(this).
      */
-    public boolean isUnit();
-
-
-    /**
-     * Inverse power series.
-     * @return ps with this * ps = 1.
-     */
-    public PowerSeries<C> inverse();
-
+    public PowerSeries<C> integrate( final C c );
 
 }

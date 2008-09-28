@@ -22,7 +22,7 @@ import edu.jas.structure.RingFactory;
  */
 
 public class UnivPowerSeries<C extends RingElem<C>> 
-    implements /*RingElem< PowerSeries<C> >,*/ PowerSeries<C> {
+    implements RingElem<UnivPowerSeries<C>>, PowerSeries<C> {
 
 
     /**
@@ -93,6 +93,17 @@ public class UnivPowerSeries<C extends RingElem<C>>
         this.ring = ring;
         this.lazyCoeffs = lazyCoeffs;
         this.coeffCache = coeffs;
+    }
+
+
+    /**
+     * Clone this poer series.
+     * @see java.lang.Object#clone()
+     */
+    @Override
+    public UnivPowerSeries<C> clone() {
+        //return ring.copy(this);
+        return new UnivPowerSeries<C>(ring,lazyCoeffs,coeffCache);
     }
 
 
@@ -408,9 +419,10 @@ public class UnivPowerSeries<C extends RingElem<C>>
 
     /**
      * Compare to.
+     * <b>Note: </b> compare only up to order.
      * @return sign of first non zero coefficient of this-ps.
      */
-    public int compareTo(PowerSeries<C> ps) {
+    public int compareTo(UnivPowerSeries<C> ps) {
         int s = 0;
 	int pos = 0;
         do { 
@@ -421,7 +433,28 @@ public class UnivPowerSeries<C extends RingElem<C>>
     }
 
 
+    /** Is power series zero. 
+     * <b>Note: </b> compare only up to order.
+     * @return If this is 0 then true is returned, else false.
+     * @see edu.jas.structure.RingElem#isZERO()
+     */
+    public boolean isZERO() {
+        return ( compareTo(ring.ZERO) == 0 );
+    }
+
+
+    /** Is power series one. 
+     * <b>Note: </b> compare only up to order.
+     * @return If this is 1 then true is returned, else false.
+     * @see edu.jas.structure.RingElem#isONE()
+     */
+    public boolean isONE() {
+        return ( compareTo(ring.ONE) == 0 );
+    }
+
+
     /** Comparison with any other object.
+     * <b>Note: </b> compare only up to order.
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
@@ -430,9 +463,9 @@ public class UnivPowerSeries<C extends RingElem<C>>
        if ( ! ( B instanceof PowerSeries ) ) {
           return false;
        }
-       PowerSeries<C> a = null;
+       UnivPowerSeries<C> a = null;
        try {
-           a = (PowerSeries<C>) B;
+           a = (UnivPowerSeries<C>) B;
        } catch (ClassCastException ignored) {
        }
        if ( a == null ) {
@@ -443,6 +476,7 @@ public class UnivPowerSeries<C extends RingElem<C>>
 
 
     /** Hash code for this polynomial.
+     * <b>Note: </b> only up to order.
      * @see java.lang.Object#hashCode()
      */
     @Override
@@ -471,7 +505,7 @@ public class UnivPowerSeries<C extends RingElem<C>>
      * Multiply by another power series.
      * @return this * ps.
      */
-    public UnivPowerSeries<C> multiply( final PowerSeries<C> ps ) {
+    public UnivPowerSeries<C> multiply( final UnivPowerSeries<C> ps ) {
         return new UnivPowerSeries<C>(ring,
                    new Coefficients<C>() {
                        public C get(int i) {
@@ -523,11 +557,22 @@ public class UnivPowerSeries<C extends RingElem<C>>
      * Divide by another power series.
      * @return this * ps^{-1}.
      */
-    public UnivPowerSeries<C> divide( PowerSeries<C> ps ) {
+    public UnivPowerSeries<C> divide( UnivPowerSeries<C> ps ) {
 	if ( ! ps.isUnit() ) {
 	    throw new RuntimeException("division by non unit");
 	}
         return multiply( ps.inverse() );
+    }
+
+
+    /**
+     * Power series remainder.
+     * <b>Note:</b> not implemented.
+     * @param S nonzero power series with invertible leading coefficient.
+     * @return remainder with this = quotient * S + remainder.
+     */
+    public UnivPowerSeries<C> remainder( UnivPowerSeries<C> ps ) {
+        throw new RuntimeException("remainder for power series not implemented");
     }
 
 
@@ -567,6 +612,29 @@ public class UnivPowerSeries<C extends RingElem<C>>
                        }
                    }
                                        );
+    }
+
+
+    /**
+     * Power series greatest common divisor.
+     * <b>Note:</b> not implemented.
+     * @param S power series.
+     * @return gcd(this,S).
+     */
+    public UnivPowerSeries<C> gcd(UnivPowerSeries<C> S) {
+        throw new RuntimeException("gcd for power series not implemented");
+    }
+
+
+    /**
+     * Power series extended greatest common divisor.
+     * <b>Note:</b> not implemented.
+     * @param S power series.
+     * @return [ gcd(this,S), a, b ] with a*this + b*S = gcd(this,S).
+     */
+    //SuppressWarnings("unchecked")
+    public UnivPowerSeries<C>[] egcd(UnivPowerSeries<C>  S) {
+        throw new RuntimeException("egcd for power series not implemented");
     }
 
 }
