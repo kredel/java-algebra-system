@@ -10,6 +10,7 @@ from java.util           import ArrayList
 from edu.jas.structure   import *
 from edu.jas.arith       import *
 from edu.jas.poly        import *
+from edu.jas.ps          import *
 from edu.jas.ring        import *
 from edu.jas.module      import *
 from edu.jas.vector      import *
@@ -872,6 +873,50 @@ class SolvableSubModule:
         t = System.currentTimeMillis() - t;
         print "module isRightGB executed in %s ms" % t; 
         return b;
+
+
+class SeriesRing:
+    '''Represents a JAS power series ring: UnivPowerSeriesRing.
+
+    Methods for power series arithmetic.
+    '''
+
+    def __init__(self,ringstr="",truncate=None,ring=None):
+        '''Ring constructor.
+        '''
+        if ring == None:
+           sr = StringReader( ringstr );
+           tok = GenPolynomialTokenizer(sr);
+           pset = tok.nextPolynomialSet();
+           ring = pset.ring;
+           vname = ring.vars;
+           name = vname[0];
+           if truncate == None:
+               self.ring = UnivPowerSeriesRing(ring.coFac,name);
+           else:
+               self.ring = UnivPowerSeriesRing(ring.coFac,truncate,name);
+        else:
+           self.ring = ring;
+
+    def __str__(self):
+        '''Create a string representation.
+        '''
+        return str(self.ring);
+
+    def one(self):
+        '''Get the one of the power series ring.
+        '''
+        return RingElem( self.ring.getONE() );
+
+    def zero(self):
+        '''Get the zero of the power series ring.
+        '''
+        return RingElem( self.ring.getZERO() );
+
+    def random(self,n):
+        '''Get a random power series.
+        '''
+        return RingElem( self.ring.random(n) );
 
 
 def pylist2arraylist(list):
