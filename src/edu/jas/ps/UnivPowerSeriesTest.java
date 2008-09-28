@@ -40,7 +40,8 @@ public class UnivPowerSeriesTest {
     }
 
     static UnivPowerSeries<BigInteger> integersFrom(final int start) {
-        return new UnivPowerSeries<BigInteger>( 
+        UnivPowerSeriesRing<BigInteger> pfac = new UnivPowerSeriesRing<BigInteger>(new BigInteger());
+        return new UnivPowerSeries<BigInteger>(pfac, 
                                                 new Coefficients<BigInteger>() {
                                                     public BigInteger get(int i) {
                                                         return new BigInteger(i); 
@@ -136,8 +137,9 @@ public class UnivPowerSeriesTest {
 
 
     public static void example6() {
+        UnivPowerSeriesRing<BigInteger> pfac = new UnivPowerSeriesRing<BigInteger>(new BigInteger());
         UnivPowerSeries<BigInteger> integers;
-        integers = UnivPowerSeries.<BigInteger>fixPoint(
+        integers = pfac.fixPoint(
                new PowerSeriesMap<BigInteger>() {
                    public PowerSeries<BigInteger> map(PowerSeries<BigInteger> ps) {
                           return ps.map(
@@ -158,8 +160,9 @@ public class UnivPowerSeriesTest {
     public static void example8() {
         final BigInteger z = new BigInteger(0);
         final BigInteger one = new BigInteger(1);
+        UnivPowerSeriesRing<BigInteger> pfac = new UnivPowerSeriesRing<BigInteger>(z);
         UnivPowerSeries<BigInteger> fibs;
-        fibs = UnivPowerSeries.<BigInteger>fixPoint(
+        fibs = pfac.fixPoint(
                new PowerSeriesMap<BigInteger>() {
                    public PowerSeries<BigInteger> map( PowerSeries<BigInteger> ps ) {
                           return ps.zip( new Sum<BigInteger>(),
@@ -190,9 +193,10 @@ public class UnivPowerSeriesTest {
 
     public static void example10() {
 	final BigInteger fac = new BigInteger();
+        UnivPowerSeriesRing<BigInteger> pfac = new UnivPowerSeriesRing<BigInteger>(fac);
         UnivPowerSeries<BigInteger> integers = integersFrom(0);
         System.out.println("      integers = " + integers);
-        UnivPowerSeries<BigInteger> ONE = new UnivPowerSeries<BigInteger>(
+        UnivPowerSeries<BigInteger> ONE = new UnivPowerSeries<BigInteger>(pfac,
                    new Coefficients<BigInteger>() {
                        public BigInteger get(int i) {
                            if ( i == 0 ) { 
@@ -204,7 +208,7 @@ public class UnivPowerSeriesTest {
                    }//, null
                                                        );
         System.out.println("ONE  = " + ONE);
-        UnivPowerSeries<BigInteger> ZERO = new UnivPowerSeries<BigInteger>(
+        UnivPowerSeries<BigInteger> ZERO = new UnivPowerSeries<BigInteger>(pfac,
                    new Coefficients<BigInteger>() {
                        public BigInteger get(int i) {
                            return fac.getZERO();

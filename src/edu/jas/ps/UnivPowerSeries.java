@@ -26,49 +26,67 @@ public class UnivPowerSeries<C extends RingElem<C>>
 
 
     /**
-     * Interface for generating function of coefficients.
-    interface Coefficients<C extends RingElem<C>> {
-        C get(int index);
-    }
+     * Power series ring factory.
      */
+    public final UnivPowerSeriesRing<C> ring;
 
 
     /**
-     * Internal data structure.
+     * Data structure / generating function for coeffcients.
+     * Cannot be final because of fixPoint, must be accessible in factory.
      */
-    private HashMap<Integer,C> coeffs;
-    private Coefficients<C> lazyCoeffs;
+    /*package*/ Coefficients<C> lazyCoeffs;
 
+
+    /**
+     * Cache for already computed coefficients.
+     */
+    public final HashMap<Integer,C> coeffCache;
+
+
+    /**
+     * Order for truncation of computations.
+     */
     private int order = 11;
-
-    public final RingFactory<C> fac = null;
 
 
     /**
      * Private constructor.
      */
     private UnivPowerSeries() {
-        // coeffs = new HashMap<Integer,C>();
+	throw new RuntimeException("do not use no-argument constructor");
+    }
+
+
+    /**
+     * Private constructor.
+     * Use in fixPoint only, must be accessible in factory.
+     */
+    /*package*/ UnivPowerSeries(UnivPowerSeriesRing<C> ring) {
+        this.ring = ring;
+        this.lazyCoeffs = null;
+        this.coeffCache = null;
     }
 
 
     /**
      * Constructor.
      */
-    public UnivPowerSeries(Coefficients<C> lazyCoeffs) {
-        this( lazyCoeffs, new HashMap<Integer,C>() );
+    public UnivPowerSeries(UnivPowerSeriesRing<C> ring, Coefficients<C> lazyCoeffs) {
+        this( ring, lazyCoeffs, new HashMap<Integer,C>() );
     }
 
 
     /**
      * Constructor.
      */
-    public UnivPowerSeries(Coefficients<C> lazyCoeffs, HashMap<Integer,C> coeffs) {
-        if ( lazyCoeffs == null) {
-            throw new IllegalArgumentException("null not allowed");
+    public UnivPowerSeries(UnivPowerSeriesRing<C> ring, Coefficients<C> lazyCoeffs, HashMap<Integer,C> coeffs) {
+        if ( lazyCoeffs == null || ring == null ) {
+            throw new IllegalArgumentException("null not allowed: ring = " + ring + ", lazyCoeffs = " + lazyCoeffs);
         }
+        this.ring = ring;
         this.lazyCoeffs = lazyCoeffs;
-        this.coeffs = coeffs;
+        this.coeffCache = coeffs;
     }
 
 
@@ -88,7 +106,7 @@ public class UnivPowerSeries<C extends RingElem<C>>
     public String toString(int order) {
         StringBuffer sb = new StringBuffer();
         UnivPowerSeries<C> s = this;
-        //System.out.println("cache = " + s.coeffs);
+        //System.out.println("cache = " + s.coeffCache);
         for (int i = 0; i < order; i++ ) {
             C c = s.coefficient(i);
 	    int si = c.signum();
@@ -104,7 +122,7 @@ public class UnivPowerSeries<C extends RingElem<C>>
 		}
             //sb.append(c.toString() + ", ");
 	    }
-            //System.out.println("cache = " + s.coeffs);
+            //System.out.println("cache = " + s.coeffCache);
         }
 	if ( sb.length() == 0 ) {
            sb.append("0");
@@ -123,15 +141,15 @@ public class UnivPowerSeries<C extends RingElem<C>>
         if ( index < 0 ) {
             throw new IndexOutOfBoundsException("negative index not allowed");
         }
-        //System.out.println("cache = " + coeffs);
-        if ( coeffs != null ) {
+        //System.out.println("cache = " + coeffCache);
+        if ( coeffCache != null ) {
            Integer i = index;
-           C c = coeffs.get( i );
+           C c = coeffCache.get( i );
            if ( c != null ) {
               return c;
            }
            c = lazyCoeffs.get( index );
-           coeffs.put( i, c );
+           coeffCache.put( i, c );
            return c;
         } else {
             return lazyCoeffs.get( index );
@@ -153,7 +171,7 @@ public class UnivPowerSeries<C extends RingElem<C>>
      * @return this - leading monomial.
      */
     public UnivPowerSeries<C> reductum() {
-        return new UnivPowerSeries<C>(
+        return new UnivPowerSeries<C>(ring,
                    new Coefficients<C>() {
                        public C get(int i) {
                               return UnivPowerSeries.this.coefficient(i+1);
@@ -168,7 +186,7 @@ public class UnivPowerSeries<C extends RingElem<C>>
      * @return new power series.
      */
     public UnivPowerSeries<C> prepend(final C h) {
-        return new UnivPowerSeries<C>(
+        return new UnivPowerSeries<C>(ring,
                    new Coefficients<C>() {
                        public C get(int i) {
                               if ( i == 0 ) {
@@ -187,7 +205,7 @@ public class UnivPowerSeries<C extends RingElem<C>>
      * @return new power series.
      */
     public UnivPowerSeries<C> select(final Selector<? super C> sel) {
-        return new UnivPowerSeries<C>(
+        return new UnivPowerSeries<C>(ring,
                    new Coefficients<C>() {
                        int pos = 0;
                        public C get(int i) {
@@ -210,28 +228,29 @@ public class UnivPowerSeries<C extends RingElem<C>>
      * Map a unary function to this power series.
      * @return new power series.
      */
-    public <D extends RingElem<D>> UnivPowerSeries<D> map(final UnaryFunctor<? super C,D> f) {
-        return new UnivPowerSeries<D>(
-                   new Coefficients<D>() {
-                       public D get(int i) {
+    public UnivPowerSeries<C> map(final UnaryFunctor<? super C,C> f) {
+        return new UnivPowerSeries<C>(ring,
+                   new Coefficients<C>() {
+                       public C get(int i) {
                               return f.eval( UnivPowerSeries.this.coefficient(i) );
                        }
                    }
                                        );
     }
 
+
     /**
      * Map a binary function to elements of this and another power series.
      * @return new power series.
      */
-    public <C2 extends RingElem<C2>, D extends RingElem<D>> 
-        UnivPowerSeries<D> zip(
-            final BinaryFunctor<? super C,? super C2,D> f,
+    public <C2 extends RingElem<C2>> 
+        UnivPowerSeries<C> zip(
+            final BinaryFunctor<? super C,? super C2,C> f,
             final PowerSeries<C2> ps
                            ) {
-        return new UnivPowerSeries<D>(
-                   new Coefficients<D>() {
-                       public D get(int i) {
+        return new UnivPowerSeries<C>(ring,
+                   new Coefficients<C>() {
+                       public C get(int i) {
                               return f.eval( UnivPowerSeries.this.coefficient(i), ps.coefficient(i) );
                        }
                    }
@@ -242,14 +261,14 @@ public class UnivPowerSeries<C extends RingElem<C>>
     /**
      * Fix point construction.
      * @return fix point wrt map.
-     */
     public static <C extends RingElem<C>> 
         UnivPowerSeries<C> fixPoint(PowerSeriesMap<C> map) {
-             UnivPowerSeries<C> ps1 = new UnivPowerSeries<C>();
+             UnivPowerSeries<C> ps1 = new UnivPowerSeries<C>(null);
              UnivPowerSeries<C> ps2 = (UnivPowerSeries<C>) map.map(ps1);
              ps1.lazyCoeffs = ps2.lazyCoeffs;
              return ps2;
     }
+     */
 
 
     /* arithmetic methods */
@@ -453,7 +472,7 @@ public class UnivPowerSeries<C extends RingElem<C>>
      * @return this * ps.
      */
     public UnivPowerSeries<C> multiply( final PowerSeries<C> ps ) {
-        return new UnivPowerSeries<C>(
+        return new UnivPowerSeries<C>(ring,
                    new Coefficients<C>() {
                        public C get(int i) {
 			   C c = null; //fac.getZERO();
@@ -477,7 +496,7 @@ public class UnivPowerSeries<C extends RingElem<C>>
      * @return ps with this * ps = 1.
      */
     public UnivPowerSeries<C> inverse() {
-        return new UnivPowerSeries<C>(
+        return new UnivPowerSeries<C>(ring,
                    new Coefficients<C>() {
                        public C get(int i) {
 			   C d = leadingCoefficient().inverse(); // may fail
@@ -517,7 +536,7 @@ public class UnivPowerSeries<C extends RingElem<C>>
      * @return differentiate(this).
      */
     public UnivPowerSeries<C> differentiate() {
-        return new UnivPowerSeries<C>(
+        return new UnivPowerSeries<C>(ring,
                    new Coefficients<C>() {
                        public C get(int i) {
 			   C v = coefficient( i + 1 );
@@ -535,7 +554,7 @@ public class UnivPowerSeries<C extends RingElem<C>>
      * @return integrate(this).
      */
     public UnivPowerSeries<C> integrate( final C c ) {
-        return new UnivPowerSeries<C>(
+        return new UnivPowerSeries<C>(ring,
                    new Coefficients<C>() {
                        public C get(int i) {
 			   if ( i == 0 ) {

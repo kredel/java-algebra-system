@@ -119,7 +119,7 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
 	this.coFac = coFac;
         this.order = order;
 	this.var = name;
-        this.ONE = new UnivPowerSeries<C>(
+        this.ONE = new UnivPowerSeries<C>(this,
                    new Coefficients<C>() {
                        public C get(int i) {
                            if ( i == 0 ) { 
@@ -130,13 +130,26 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
                        }
                    }//, null
                                               );
-        this.ZERO = new UnivPowerSeries<C>(
+        this.ZERO = new UnivPowerSeries<C>(this,
                     new Coefficients<C>() {
                         public C get(int i) {
                             return coFac.getZERO();
                         }
                     }//, null
                                                     );
+    }
+
+
+    /**
+     * Fix point construction.
+     * Cannot be a static method because a power series ring is required.
+     * @return fix point wrt map.
+     */
+    public UnivPowerSeries<C> fixPoint(PowerSeriesMap<C> map) {
+             UnivPowerSeries<C> ps1 = new UnivPowerSeries<C>(this);
+             UnivPowerSeries<C> ps2 = (UnivPowerSeries<C>) map.map(ps1);
+             ps1.lazyCoeffs = ps2.lazyCoeffs;
+             return ps2;
     }
 
 
@@ -286,7 +299,7 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
      * @return a random power series.
      */
     public UnivPowerSeries<C> random(final int k, final float q, final Random rnd) {
-        return new UnivPowerSeries<C>(
+        return new UnivPowerSeries<C>(this,
                    new Coefficients<C>() {
                        public C get(int i) {
                            float f = rnd.nextFloat(); 
