@@ -639,10 +639,22 @@ public class UnivPowerSeries<C extends RingElem<C>>
         }
         // now m >= n
         UnivPowerSeries<C> st, sps, q, sq;
-        st = shift(m);
-        sps = ps.shift(n);
+        if ( m == 0 ) {
+            st = this;
+        } else {
+            st = this.shift(m);
+        }
+        if ( n == 0 ) {
+            sps = ps;
+        } else {
+            sps = ps.shift(n);
+        }
         q = st.multiply( sps.inverse() );
-        sq = q.shift( -(m-n) );
+        if ( m == n ) {
+            sq = q;
+        } else {
+            sq = q.shift( -(m-n) );
+        }
         return sq;
     }
 
