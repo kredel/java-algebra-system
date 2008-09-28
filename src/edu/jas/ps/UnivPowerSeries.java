@@ -227,6 +227,26 @@ public class UnivPowerSeries<C extends RingElem<C>>
 
 
     /**
+     * Shift coefficients.
+     * @param k shift index.
+     * @return new power series with coefficient(i) = old.coefficient(i+k).
+     */
+    public UnivPowerSeries<C> shift(final int k) {
+        return new UnivPowerSeries<C>(ring,
+                   new Coefficients<C>() {
+                       public C get(int i) {
+                              if ( k+i < 0 ) {
+                                  return ring.coFac.getZERO();
+                              } else {
+                                  return UnivPowerSeries.this.coefficient(i+k);
+                              }
+                       }
+                   }
+                                       );
+    }
+
+
+    /**
      * Select coefficients.
      * @param sel selector functor.
      * @return new power series with selected coefficients.
@@ -606,21 +626,39 @@ public class UnivPowerSeries<C extends RingElem<C>>
      * @return this * ps^{-1}.
      */
     public UnivPowerSeries<C> divide( UnivPowerSeries<C> ps ) {
-        if ( ! ps.isUnit() ) {
-            throw new RuntimeException("division by non unit");
+        if ( ps.isUnit() ) {
+           return multiply( ps.inverse() );
         }
-        return multiply( ps.inverse() );
+        int m = order();
+        int n = ps.order();
+        if ( m < n ) {
+            return ring.getZERO();
+        }
+        if ( ! ps.coefficient(n).isUnit() ) {
+            throw new RuntimeException("division by non unit coefficient");
+        }
+        // now m >= n
+        UnivPowerSeries<C> st, sps, q, sq;
+        st = shift(m);
+        sps = ps.shift(n);
+        q = st.multiply( sps.inverse() );
+        sq = q.shift( -(m-n) );
+        return sq;
     }
 
 
     /**
      * Power series remainder.
-     * <b>Note:</b> not implemented.
      * @param S nonzero power series with invertible leading coefficient.
      * @return remainder with this = quotient * S + remainder.
      */
     public UnivPowerSeries<C> remainder( UnivPowerSeries<C> ps ) {
-        throw new RuntimeException("remainder for power series not implemented");
+        int m = order();
+        int n = ps.order();
+        if ( m >= n ) {
+            return ring.getZERO();
+        }
+        return this;
     }
 
 

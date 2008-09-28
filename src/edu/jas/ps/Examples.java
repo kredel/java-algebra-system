@@ -26,7 +26,6 @@ public class Examples {
     public static void main(String[] args) {
         example2();
         example4();
-        //example5();
         example6();
         //example31();
         //example32();
@@ -37,6 +36,7 @@ public class Examples {
         example11();
 	example1();
         example3();
+        example5();
     }
 
     static UnivPowerSeries<BigInteger> integersFrom(final int start) {
@@ -252,6 +252,34 @@ public class Examples {
         System.out.println("2*integers == integers = " + int2.equals(integers));
         System.out.println("integers == integers   = " + integers.equals(integers));
         System.out.println("integers.hashCode()    = " + integers.hashCode());
+    }
+
+
+    public static void example5() {
+	final BigInteger fac = new BigInteger();
+        UnivPowerSeriesRing<BigInteger> pfac = new UnivPowerSeriesRing<BigInteger>(fac);
+        UnivPowerSeries<BigInteger> integers = integersFrom(0);
+        System.out.println("      integers = " + integers);
+        UnivPowerSeries<BigInteger> ints2 = integers.multiply(integers);
+        System.out.println("integers 2     = " + ints2);
+
+        UnivPowerSeries<BigInteger> q1 = ints2.divide(integers);
+        System.out.println("q1             = " + q1);
+        UnivPowerSeries<BigInteger> q2 = integers.divide(ints2);
+        System.out.println("q2             = " + q2);
+
+        UnivPowerSeries<BigInteger> r1 = ints2.remainder(integers);
+        System.out.println("r1             = " + r1);
+        UnivPowerSeries<BigInteger> r2 = integers.remainder(ints2);
+        System.out.println("r2             = " + r2);
+
+        UnivPowerSeries<BigInteger> qr1 = q1.multiply(integers).sum(r1);
+        System.out.println("qr1            = " + qr1);
+        UnivPowerSeries<BigInteger> qr2 = q2.multiply(ints2).sum(r2);
+        System.out.println("qr2            = " + qr2);
+
+        System.out.println("sign(qr1-ints2) = " + qr1.compareTo(ints2));
+        System.out.println("sign(qr2-integers) = " + qr2.compareTo(integers));
     }
 
 }
