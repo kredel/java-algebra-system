@@ -45,9 +45,9 @@ public class UnivPowerSeries<C extends RingElem<C>>
 
 
     /**
-     * Order for truncation of computations.
+     * Truncation of computations.
      */
-    private int order = 11;
+    private int truncate = 11;
 
 
     /**
@@ -113,19 +113,19 @@ public class UnivPowerSeries<C extends RingElem<C>>
      */
     @Override
     public String toString() {
-        return toString(order);
+        return toString(truncate);
     }
 
 
     /**
-     * To String with given order.
-     * @return string representation of this to given order.
+     * To String with given truncate.
+     * @return string representation of this to given truncate.
      */
-    public String toString(int order) {
+    public String toString(int truncate) {
         StringBuffer sb = new StringBuffer();
         UnivPowerSeries<C> s = this;
         //System.out.println("cache = " + s.coeffCache);
-        for (int i = 0; i < order; i++ ) {
+        for (int i = 0; i < truncate; i++ ) {
             C c = s.coefficient(i);
 	    int si = c.signum();
 	    if ( si != 0 ) {
@@ -145,7 +145,7 @@ public class UnivPowerSeries<C extends RingElem<C>>
 	if ( sb.length() == 0 ) {
            sb.append("0");
 	}
-        sb.append(" + BigO(x^" + order + ")");
+        sb.append(" + BigO(x^" + truncate + ")");
         //sb.append("...");
         return sb.toString();
     }
@@ -394,7 +394,7 @@ public class UnivPowerSeries<C extends RingElem<C>>
     public C evaluate(C e) {
         C v = coefficient( 0 );
 	C p = e;
-	for ( int i = 1; i < order; i++ ) {
+	for ( int i = 1; i < truncate; i++ ) {
             C c = coefficient( i ).multiply( p );
             v = v.sum( c );
 	    p = p.multiply(e);
@@ -412,14 +412,14 @@ public class UnivPowerSeries<C extends RingElem<C>>
         C c = null;
         do { 
             c = coefficient( pos++ );
-        } while( c.isZERO() && pos <= order );
+        } while( c.isZERO() && pos <= truncate );
         return c.signum();
     }
 
 
     /**
      * Compare to.
-     * <b>Note: </b> compare only up to order.
+     * <b>Note: </b> compare only up to truncate.
      * @return sign of first non zero coefficient of this-ps.
      */
     public int compareTo(UnivPowerSeries<C> ps) {
@@ -428,13 +428,13 @@ public class UnivPowerSeries<C extends RingElem<C>>
         do { 
             s = coefficient( pos ).compareTo( ps.coefficient( pos ) );
 	    pos++;
-        } while( s == 0 && pos <= order );
+        } while( s == 0 && pos <= truncate );
         return s;
     }
 
 
     /** Is power series zero. 
-     * <b>Note: </b> compare only up to order.
+     * <b>Note: </b> compare only up to truncate.
      * @return If this is 0 then true is returned, else false.
      * @see edu.jas.structure.RingElem#isZERO()
      */
@@ -444,7 +444,7 @@ public class UnivPowerSeries<C extends RingElem<C>>
 
 
     /** Is power series one. 
-     * <b>Note: </b> compare only up to order.
+     * <b>Note: </b> compare only up to truncate.
      * @return If this is 1 then true is returned, else false.
      * @see edu.jas.structure.RingElem#isONE()
      */
@@ -454,7 +454,7 @@ public class UnivPowerSeries<C extends RingElem<C>>
 
 
     /** Comparison with any other object.
-     * <b>Note: </b> compare only up to order.
+     * <b>Note: </b> compare only up to truncate.
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
@@ -476,7 +476,7 @@ public class UnivPowerSeries<C extends RingElem<C>>
 
 
     /** Hash code for this polynomial.
-     * <b>Note: </b> only up to order.
+     * <b>Note: </b> only up to truncate.
      * @see java.lang.Object#hashCode()
      */
     @Override
@@ -484,7 +484,7 @@ public class UnivPowerSeries<C extends RingElem<C>>
        int h = 0;
        //h = ( ring.hashCode() << 27 );
        //h += val.hashCode();
-       for ( int i = 0; i <= order; i++ ) { 
+       for ( int i = 0; i <= truncate; i++ ) { 
            h += coefficient( i ).hashCode();
 	   h = ( h << 23 );
        };
