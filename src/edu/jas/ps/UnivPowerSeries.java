@@ -199,7 +199,7 @@ public class UnivPowerSeries<C extends RingElem<C>>
         return new UnivPowerSeries<C>(ring,
                    new Coefficients<C>() {
                        public C get(int i) {
-                              return UnivPowerSeries.this.coefficient(i+1);
+                              return coefficient(i+1);
                        }
                    }
                                        );
@@ -218,7 +218,7 @@ public class UnivPowerSeries<C extends RingElem<C>>
                               if ( i == 0 ) {
                                   return h;
                               } else {
-                                  return UnivPowerSeries.this.coefficient(i-1);
+                                  return coefficient(i-1);
                               }
                        }
                    }
@@ -238,7 +238,7 @@ public class UnivPowerSeries<C extends RingElem<C>>
                               if ( k+i < 0 ) {
                                   return ring.coFac.getZERO();
                               } else {
-                                  return UnivPowerSeries.this.coefficient(i+k);
+                                  return coefficient(i+k);
                               }
                        }
                    }
@@ -262,7 +262,7 @@ public class UnivPowerSeries<C extends RingElem<C>>
                            //  }
                               C c = null;
                               do { 
-                                   c = UnivPowerSeries.this.coefficient( pos++ );
+                                   c = coefficient( pos++ );
                               } while( !sel.select(c));
                               return c;
                        }
@@ -280,7 +280,7 @@ public class UnivPowerSeries<C extends RingElem<C>>
         return new UnivPowerSeries<C>(ring,
                    new Coefficients<C>() {
                        public C get(int i) {
-                              return f.eval( UnivPowerSeries.this.coefficient(i) );
+                              return f.eval( coefficient(i) );
                        }
                    }
                                        );
@@ -301,7 +301,7 @@ public class UnivPowerSeries<C extends RingElem<C>>
         return new UnivPowerSeries<C>(ring,
                    new Coefficients<C>() {
                        public C get(int i) {
-                              return f.eval( UnivPowerSeries.this.coefficient(i), ps.coefficient(i) );
+                              return f.eval( coefficient(i), ps.coefficient(i) );
                        }
                    }
                                        );
@@ -727,8 +727,8 @@ public class UnivPowerSeries<C extends RingElem<C>>
         }
         int m = order();
         int n = ps.order();
-        int l = ( m < n ) ? m : n;
-        return ring.getONE().shift(-l);
+        int ll = ( m < n ) ? m : n;
+        return ring.getONE().shift(-ll);
     }
 
 
