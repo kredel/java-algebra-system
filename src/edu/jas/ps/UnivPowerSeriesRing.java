@@ -159,7 +159,8 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
      */
     public String toString() {
         StringBuffer sb = new StringBuffer();
-        sb.append(coFac.toString() + "((" + var + "))");
+        String scf = coFac.getClass().getSimpleName();
+        sb.append(scf + "((" + var + "))");
         return sb.toString();
     }
 
