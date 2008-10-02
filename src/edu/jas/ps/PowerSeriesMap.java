@@ -18,10 +18,17 @@ import edu.jas.structure.RingElem;
 public interface PowerSeriesMap<C extends RingElem<C>> {
 
 
+    /*
+     * Map.
+     * @return new power series resulting from mapping elements of ps.
+    public PowerSeries<C> map(PowerSeries<C> ps);
+     */
+
+
     /**
      * Map.
      * @return new power series resulting from mapping elements of ps.
      */
-    public PowerSeries<C> map(PowerSeries<C> ps);
+    public UnivPowerSeries<C> map(UnivPowerSeries<C> ps);
 
 }
