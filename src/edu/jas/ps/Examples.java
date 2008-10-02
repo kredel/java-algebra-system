@@ -5,8 +5,7 @@
 package edu.jas.ps;
 
 
-import java.util.Map;
-import java.util.Iterator;
+import java.util.HashMap;
 
 
 import edu.jas.structure.RingElem;
@@ -14,6 +13,7 @@ import edu.jas.structure.RingFactory;
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
+import edu.jas.arith.BigComplex;
 
 
 /**
@@ -31,10 +31,11 @@ public class Examples {
         example9();
         example10();
         example11();
-	example1();
+        example1();
         example3();
         example5();
         example7();
+        //example12();
     }
 
 
@@ -61,21 +62,21 @@ public class Examples {
 
 
     static class Odds<C extends RingElem<C>> implements Selector<C> {
-	C two;
-	RingFactory<C> fac;
-	public Odds(RingFactory<C> fac) {
-	    this.fac = fac;
+        C two;
+        RingFactory<C> fac;
+        public Odds(RingFactory<C> fac) {
+            this.fac = fac;
             two = fac.fromInteger(2);
-	    //System.out.println("two = " + two);
-	}
+            //System.out.println("two = " + two);
+        }
         public boolean select(C c) {
-	    //System.out.print("c = " + c);
-	    if ( c.remainder( two ).isONE() ) {
-	        //System.out.println(" odd");
-		return true;
-	    } else { 
+            //System.out.print("c = " + c);
+            if ( c.remainder( two ).isONE() ) {
+                //System.out.println(" odd");
+                return true;
+            } else { 
                 //System.out.println(" even");
-		return false;
+                return false;
             }
         }
     }
@@ -88,13 +89,13 @@ public class Examples {
         UnivPowerSeries<BigInteger> integers = integersFrom(0);
 
         BigInteger e = new BigInteger( 1 );
-	BigInteger v = integers.evaluate( e );
+        BigInteger v = integers.evaluate( e );
         System.out.println("integers(" + e + ") = " + v);
         e = new BigInteger( 0 );
-	v = integers.evaluate( e );
+        v = integers.evaluate( e );
         System.out.println("integers(" + e + ") = " + v);
         e = new BigInteger( 2 );
-	v = integers.evaluate( e );
+        v = integers.evaluate( e );
         System.out.println("integers(" + e + ") = " + v);
     }
 
@@ -126,6 +127,7 @@ public class Examples {
 
         UnivPowerSeries<BigInteger> rnd = ups.random();
         System.out.println("rnd = " + rnd);
+        System.out.println("rnd = " + rnd);
         System.out.println("rnd.isUnit()       = " + rnd.isUnit());
     }
 
@@ -141,7 +143,7 @@ public class Examples {
         UnivPowerSeries<BigInteger> integers;
         integers = pfac.fixPoint(
                new PowerSeriesMap<BigInteger>() {
-                   public PowerSeries<BigInteger> map(PowerSeries<BigInteger> ps) {
+                   public UnivPowerSeries<BigInteger> map(UnivPowerSeries<BigInteger> ps) {
                           return ps.map(
                                         new UnaryFunctor<BigInteger,BigInteger>() {
                                             public BigInteger eval( BigInteger s ) {
@@ -151,7 +153,7 @@ public class Examples {
                                          ).prepend(new BigInteger(0));
                    }
                }
-							 );
+                                                         );
         System.out.println("integers1 = " + integers);
         System.out.println("integers2 = " + integers);
     }
@@ -164,7 +166,7 @@ public class Examples {
         UnivPowerSeries<BigInteger> fibs;
         fibs = pfac.fixPoint(
                new PowerSeriesMap<BigInteger>() {
-                   public PowerSeries<BigInteger> map( PowerSeries<BigInteger> ps ) {
+                   public UnivPowerSeries<BigInteger> map( UnivPowerSeries<BigInteger> ps ) {
                           return ps.zip( new Sum<BigInteger>(),
                                          ps.prepend( one )
                                          ).prepend(z );
@@ -182,7 +184,7 @@ public class Examples {
         System.out.println("doubleintegers = " + doubleintegers);
         UnivPowerSeries<BigInteger> nulls = integers.subtract(integers);
         System.out.println("null  integers = " + nulls);
-	doubleintegers = integers.multiply(new BigInteger(2));
+        doubleintegers = integers.multiply(new BigInteger(2));
         System.out.println("doubleintegers = " + doubleintegers);
         nulls = integers.multiply(new BigInteger(0));
         System.out.println("null  integers = " + nulls);
@@ -192,7 +194,7 @@ public class Examples {
 
 
     public static void example10() {
-	final BigInteger fac = new BigInteger();
+        final BigInteger fac = new BigInteger();
         UnivPowerSeriesRing<BigInteger> pfac = new UnivPowerSeriesRing<BigInteger>(fac);
         UnivPowerSeries<BigInteger> integers = integersFrom(0);
         System.out.println("      integers = " + integers);
@@ -242,7 +244,7 @@ public class Examples {
 
 
     public static void example11() {
-	final BigInteger fac = new BigInteger();
+        final BigInteger fac = new BigInteger();
         UnivPowerSeries<BigInteger> integers = integersFrom(0);
         System.out.println("      integers = " + integers);
         UnivPowerSeries<BigInteger> int2     = integers.multiply(new BigInteger(2));
@@ -256,7 +258,7 @@ public class Examples {
 
 
     public static void example5() {
-	final BigInteger fac = new BigInteger();
+        final BigInteger fac = new BigInteger();
         UnivPowerSeriesRing<BigInteger> pfac = new UnivPowerSeriesRing<BigInteger>(fac);
         UnivPowerSeries<BigInteger> integers = integersFrom(0);
         System.out.println("      integers = " + integers);
@@ -287,11 +289,11 @@ public class Examples {
 
 
     public static void example7() {
-	final BigRational fac = new BigRational();
-        final UnivPowerSeriesRing<BigRational> pfac = new UnivPowerSeriesRing<BigRational>(fac);
+        final BigRational fac = new BigRational();
+        final UnivPowerSeriesRing<BigRational> pfac = new UnivPowerSeriesRing<BigRational>(fac,11,"y");
         UnivPowerSeries<BigRational> exp = pfac.fixPoint(
                   new PowerSeriesMap<BigRational>() {
-                      public PowerSeries<BigRational> map(PowerSeries<BigRational> e) {
+                      public UnivPowerSeries<BigRational> map(UnivPowerSeries<BigRational> e) {
                           return e.integrate( fac.getONE() );
                       }
                   }
@@ -299,14 +301,158 @@ public class Examples {
         System.out.println("exp = " + exp);
         UnivPowerSeries<BigRational> tan = pfac.fixPoint(
                   new PowerSeriesMap<BigRational>() {
-                      public PowerSeries<BigRational> map(PowerSeries<BigRational> t) {
-                          UnivPowerSeries<BigRational> tt = (UnivPowerSeries<BigRational> ) t;
-
-                          return tt.multiply(tt).sum( pfac.getONE() ).integrate( fac.getZERO() );
+                      public UnivPowerSeries<BigRational> map(UnivPowerSeries<BigRational> t) {
+                          return t.multiply(t).sum( pfac.getONE() ).integrate( fac.getZERO() );
                       }
                   }
                                                         );
         System.out.println("tan = " + tan);
+        UnivPowerSeries<BigRational> sin = new UnivPowerSeries<BigRational>(pfac,
+                   new Coefficients<BigRational>() {
+                       HashMap<Integer,BigRational> cache = new HashMap<Integer,BigRational>();
+                       public BigRational get(int i) {
+                           BigRational c = cache.get( i );
+                           if ( c != null ) {
+                               return c;
+                           }
+                           if ( i == 0 ) { 
+                               c = fac.getZERO();
+                           } else if ( i == 1 ) {
+                               c = fac.getONE();
+                           } else {
+                               c = get( i-2 ).negate();
+                               c = c.divide( fac.fromInteger(i) ).divide( fac.fromInteger(i-1));
+                           }
+                           cache.put( i, c );
+                           return c;
+                       }
+                   }//, null
+                                                       );
+        System.out.println("sin = " + sin);
+        UnivPowerSeries<BigRational> sin1 = pfac.fixPoint(
+                  new PowerSeriesMap<BigRational>() {
+                      public UnivPowerSeries<BigRational> map(UnivPowerSeries<BigRational> e) {
+                          return e.negate().integrate( fac.getONE() ).integrate( fac.getZERO() );
+                      }
+                  }
+                                                        );
+        System.out.println("sin1 = " + sin1);
+
+        UnivPowerSeries<BigRational> cos = new UnivPowerSeries<BigRational>(pfac,
+                   new Coefficients<BigRational>() {
+                       HashMap<Integer,BigRational> cache = new HashMap<Integer,BigRational>();
+                       public BigRational get(int i) {
+                           BigRational c = cache.get( i );
+                           if ( c != null ) {
+                               return c;
+                           }
+                           if ( i == 0 ) { 
+                               c = fac.getONE();
+                           } else if ( i == 1 ) {
+                               c = fac.getZERO();
+                           } else {
+                               c = get( i-2 ).negate();
+                               c = c.divide( fac.fromInteger(i) ).divide( fac.fromInteger(i-1));
+                           }
+                           cache.put( i, c );
+                           return c;
+                       }
+                   }//, null
+                                                       );
+        System.out.println("cos = " + cos);
+        UnivPowerSeries<BigRational> cos1 = pfac.fixPoint(
+                  new PowerSeriesMap<BigRational>() {
+                      public UnivPowerSeries<BigRational> map(UnivPowerSeries<BigRational> e) {
+                          return e.negate().integrate( fac.getZERO() ).integrate( fac.getONE() );
+                      }
+                  }
+                                                        );
+        System.out.println("cos1 = " + cos1);
+
+        UnivPowerSeries<BigRational> sinh = new UnivPowerSeries<BigRational>(pfac,
+                   new Coefficients<BigRational>() {
+                       HashMap<Integer,BigRational> cache = new HashMap<Integer,BigRational>();
+                       public BigRational get(int i) {
+                           BigRational c = cache.get( i );
+                           if ( c != null ) {
+                               return c;
+                           }
+                           if ( i == 0 ) { 
+                               c = fac.getZERO();
+                           } else if ( i == 1 ) {
+                               c = fac.getONE();
+                           } else {
+                               c = get( i-2 );
+                               c = c.divide( fac.fromInteger(i) ).divide( fac.fromInteger(i-1));
+                           }
+                           cache.put( i, c );
+                           return c;
+                       }
+                   }//, null
+                                                       );
+        System.out.println("sinh = " + sinh);
+        UnivPowerSeries<BigRational> cosh = new UnivPowerSeries<BigRational>(pfac,
+                   new Coefficients<BigRational>() {
+                       HashMap<Integer,BigRational> cache = new HashMap<Integer,BigRational>();
+                       public BigRational get(int i) {
+                           BigRational c = cache.get( i );
+                           if ( c != null ) {
+                               return c;
+                           }
+                           if ( i == 0 ) { 
+                               c = fac.getONE();
+                           } else if ( i == 1 ) {
+                               c = fac.getZERO();
+                           } else {
+                               c = get( i-2 );
+                               c = c.divide( fac.fromInteger(i) ).divide( fac.fromInteger(i-1));
+                           }
+                           cache.put( i, c );
+                           return c;
+                       }
+                   }//, null
+                                                       );
+        System.out.println("cosh = " + cosh);
+
+        UnivPowerSeries<BigRational> sinhcosh = sinh.sum(cosh);
+        System.out.println("sinh+cosh = " + sinhcosh);
+        System.out.println("sinh+cosh == exp: " + sinhcosh.equals(exp));
+    }
+
+
+    public static void example12() {
+        final BigComplex fac = new BigComplex();
+        final BigComplex I = fac.I;
+        final UnivPowerSeriesRing<BigComplex> pfac = new UnivPowerSeriesRing<BigComplex>(fac);
+        UnivPowerSeries<BigComplex> exp = pfac.fixPoint(
+                  new PowerSeriesMap<BigComplex>() {
+                      public UnivPowerSeries<BigComplex> map(UnivPowerSeries<BigComplex> e) {
+                          return e.integrate( I );
+                      }
+                  }
+                                                        );
+        //System.out.println("exp = " + exp);
+
+        UnivPowerSeries<BigComplex> sin = pfac.fixPoint(
+                  new PowerSeriesMap<BigComplex>() {
+                      public UnivPowerSeries<BigComplex> map(UnivPowerSeries<BigComplex> e) {
+                          return e.negate().integrate( fac.getONE() ).integrate( fac.getZERO() );
+                      }
+                  }
+                                                        );
+        System.out.println("sin = " + sin);
+
+        UnivPowerSeries<BigComplex> cos = pfac.fixPoint(
+                  new PowerSeriesMap<BigComplex>() {
+                      public UnivPowerSeries<BigComplex> map(UnivPowerSeries<BigComplex> e) {
+                          return e.negate().integrate( fac.getZERO() ).integrate( fac.getONE() );
+                      }
+                  }
+                                                      );
+        System.out.println("cos = " + cos);
+
+        UnivPowerSeries<BigComplex> cpis = cos.sum( sin.multiply( I ) );
+        System.out.println("cpis = " + cpis);
     }
 
 }
