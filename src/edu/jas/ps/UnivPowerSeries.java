@@ -105,6 +105,7 @@ public class UnivPowerSeries<C extends RingElem<C>>
         this.ring = ring;
         this.lazyCoeffs = lazyCoeffs;
         this.coeffCache = coeffs;
+        this.truncate = ring.truncate;
     }
 
 
@@ -136,6 +137,7 @@ public class UnivPowerSeries<C extends RingElem<C>>
     public String toString(int truncate) {
         StringBuffer sb = new StringBuffer();
         UnivPowerSeries<C> s = this;
+        String var = ring.var;
         //System.out.println("cache = " + s.coeffCache);
         for (int i = 0; i < truncate; i++ ) {
             C c = s.coefficient(i);
@@ -153,9 +155,9 @@ public class UnivPowerSeries<C extends RingElem<C>>
                 if ( i == 0 ) {
                     sb.append(" ");
                 } else if ( i == 1 ) {
-                    sb.append(" * x");
+                    sb.append(" * " + var);
                 } else {
-                    sb.append(" * x^" + i);
+                    sb.append(" * " + var + "^" + i);
                 }
             //sb.append(c.toString() + ", ");
             }
@@ -164,7 +166,7 @@ public class UnivPowerSeries<C extends RingElem<C>>
         if ( sb.length() == 0 ) {
            sb.append("0");
         }
-        sb.append(" + BigO(x^" + truncate + ")");
+        sb.append(" + BigO(" + var + "^" + truncate + ")");
         //sb.append("...");
         return sb.toString();
     }

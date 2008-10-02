@@ -147,7 +147,7 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
      */
     public UnivPowerSeries<C> fixPoint(PowerSeriesMap<C> map) {
              UnivPowerSeries<C> ps1 = new UnivPowerSeries<C>(this);
-             UnivPowerSeries<C> ps2 = (UnivPowerSeries<C>) map.map(ps1);
+             UnivPowerSeries<C> ps2 = map.map(ps1);
              ps1.lazyCoeffs = ps2.lazyCoeffs;
              return ps2;
     }
