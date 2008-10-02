@@ -103,13 +103,21 @@ public class UnivPowerSeriesTest extends TestCase {
      b = fac.random(kl);
 
      c = a.sum(b);
+     d = b.sum(a);
+     assertEquals("a+b = b+a",c,d);
+
      d = c.subtract(b);
      assertEquals("a+b-b = a",a,d);
+
+     c = fac.random(kl);
+     d = a.sum( b.sum(c) );
+     e = a.sum( b ).sum(c);
+     assertEquals("a+(b+c) = (a+b)+c",d,e);
  }
 
 
 /**
- * Test object multiplication.
+ * Test multiplication.
  * 
  */
  public void testMultiplication() {
