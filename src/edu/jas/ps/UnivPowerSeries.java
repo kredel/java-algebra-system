@@ -17,6 +17,8 @@ import edu.jas.structure.RingFactory;
 /**
  * Univariate power series implementation.
  * Uses inner classes and lazy evaluated generating function for coefficients.
+ * All ring element methods use lazy evaluation except where noted otherwise.
+ * Eager evaluated methods are <code>toString()</code>, <code>order()</code> 
  * @param <C> ring element type
  * @author Heinz Kredel
  */
@@ -139,10 +141,20 @@ public class UnivPowerSeries<C extends RingElem<C>>
                     if ( i > 0 ) {
                        sb.append(" + ");
                     }
-                    sb.append(c.toString() + " * x^" + i);
+                    //if ( !c.isONE() || i == 0 ) {
+                       sb.append(c.toString());
+                    //}
                 } else {
                     c = c.negate();
-                    sb.append(" - " + c.toString() + " * x^" + i);
+                    sb.append(" - ");
+                    sb.append(c.toString());
+                }
+                if ( i == 0 ) {
+                    sb.append(" ");
+                } else if ( i == 1 ) {
+                    sb.append(" * x");
+                } else {
+                    sb.append(" * x^" + i);
                 }
             //sb.append(c.toString() + ", ");
             }
@@ -255,15 +267,21 @@ public class UnivPowerSeries<C extends RingElem<C>>
         return new UnivPowerSeries<C>(ring,
                    new Coefficients<C>() {
                        int pos = 0;
+                       HashMap<Integer,C> cache = new HashMap<Integer,C>();
                        public C get(int i) {
-                           //if ( i > 0 ) {
-                                  //  C c = get(i-1);
-                                  //System.out.println("warning: select get c = " + c);
-                           //  }
+                              if ( i > 0 ) {
+                                  C c = cache.get( (i-1) );
+                                  System.out.println("warning: select get c = " + c);
+                                  if ( c == null ) {
+                                     c = get( (i-1) );
+                                     // done in get: cache.put( (i-1), c );
+                                  }
+                              }
                               C c = null;
                               do { 
                                    c = coefficient( pos++ );
                               } while( !sel.select(c));
+                              cache.put( i, c );
                               return c;
                        }
                    }
@@ -342,7 +360,7 @@ public class UnivPowerSeries<C extends RingElem<C>>
         }
     }
 
-
+    /*
     static class Abs<C extends RingElem<C>> implements UnaryFunctor<C,C> {
         int sign = 0;
         public C eval(C c) {
@@ -363,6 +381,7 @@ public class UnivPowerSeries<C extends RingElem<C>>
             return c.negate();
         }
     }
+    */
 
 
     /**
@@ -409,7 +428,12 @@ public class UnivPowerSeries<C extends RingElem<C>>
      * @return abs(this).
      */
     public UnivPowerSeries<C> abs() {
-        return map( new Abs<C>() );
+        if ( signum() < 0 ) {
+            return negate();
+        } else {
+            return this; 
+        }
+        // return map( new Abs<C>() );
     }
 
 
@@ -438,10 +462,10 @@ public class UnivPowerSeries<C extends RingElem<C>>
             for ( int i = 0; i <= truncate; i ++ ) {
                 if ( !coefficient(i).isZERO() ) {
                     order = i;
-                    break;
+                    return order;
                 }
-                order = truncate+1;
             }
+            order = truncate+1;
         }
         return order;
     }
@@ -476,12 +500,7 @@ public class UnivPowerSeries<C extends RingElem<C>>
      * @return sign of first non zero coefficient.
      */
     public int signum() {
-        int pos = 0;
-        C c = null;
-        do { 
-            c = coefficient( pos++ );
-        } while( c.isZERO() && pos <= truncate );
-        return c.signum();
+        return coefficient( order() ).signum();
     }
 
 
@@ -491,12 +510,14 @@ public class UnivPowerSeries<C extends RingElem<C>>
      * @return sign of first non zero coefficient of this-ps.
      */
     public int compareTo(UnivPowerSeries<C> ps) {
+        int m = order();
+        int n = ps.order();
+        int pos = ( m <= n ) ? m : n;
         int s = 0;
-        int pos = 0;
-        do { 
-            s = coefficient( pos ).compareTo( ps.coefficient( pos ) );
-            pos++;
-        } while( s == 0 && pos <= truncate );
+        do {
+           s = coefficient( pos ).compareTo( ps.coefficient( pos ) );
+           pos++;
+        } while ( s == 0 && pos <= truncate );
         return s;
     }
 
@@ -528,7 +549,7 @@ public class UnivPowerSeries<C extends RingElem<C>>
     @Override
     @SuppressWarnings("unchecked")
     public boolean equals( Object B ) { 
-       if ( ! ( B instanceof PowerSeries ) ) {
+       if ( ! ( B instanceof UnivPowerSeries ) ) {
           return false;
        }
        UnivPowerSeries<C> a = null;
@@ -600,21 +621,25 @@ public class UnivPowerSeries<C extends RingElem<C>>
     public UnivPowerSeries<C> inverse() {
         return new UnivPowerSeries<C>(ring,
                    new Coefficients<C>() {
+                       HashMap<Integer,C> cache = new HashMap<Integer,C>();
                        public C get(int i) {
                            C d = leadingCoefficient().inverse(); // may fail
                            if ( i == 0 ) {
+                              cache.put( i, d );
                               return d;
                            }
                            C c = null; //fac.getZERO();
                            for ( int k = 0; k < i; k++ ) {
-                               C m = coefficient(i-k).multiply( get(k) );
+                               C m = coefficient(i-k).multiply( cache.get(k) );
                                if ( c == null ) {
                                    c = m;
                                } else {
                                    c = c.sum(m);
                                }
                            }
-                           return c.multiply( d.negate() );
+                           c = c.multiply( d.negate() );
+                           cache.put( i, c );
+                           return c;
                        }
                    }
                                        );
@@ -683,8 +708,7 @@ public class UnivPowerSeries<C extends RingElem<C>>
                    new Coefficients<C>() {
                        public C get(int i) {
                            C v = coefficient( i + 1 );
-                           System.out.println("not implemented: fac.fromInteger(i+1)");
-                           //v = v.multiply( fac.fromInteger(i+1) );
+                           v = v.multiply( ring.coFac.fromInteger(i+1) );
                            return v;
                        }
                    }
@@ -704,8 +728,7 @@ public class UnivPowerSeries<C extends RingElem<C>>
                               return c;
                            }
                            C v = coefficient( i - 1 );
-                           System.out.println("not implemented: fac.fromInteger(i)");
-                           //v = v.divide( fac.fromInteger(i) );
+                           v = v.divide( ring.coFac.fromInteger(i) );
                            return v;
                        }
                    }

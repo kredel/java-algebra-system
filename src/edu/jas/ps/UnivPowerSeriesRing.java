@@ -130,14 +130,14 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
                                return coFac.getZERO();
                            }
                        }
-                   }//, null
+                   }, null
                                               );
         this.ZERO = new UnivPowerSeries<C>(this,
                     new Coefficients<C>() {
                         public C get(int i) {
                             return coFac.getZERO();
                         }
-                    }//, null
+                    }, null
                                                     );
     }
 
@@ -308,27 +308,27 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
    /**
      * Generate a random power series.
      * @param k bitsize of random coefficients.
-     * @param q density of non-zero coefficients.
+     * @param d density of non-zero coefficients.
      * @return a random power series.
      */
-    public UnivPowerSeries<C> random(int k, float q) {
-        return random(k,q,random);
+    public UnivPowerSeries<C> random(int k, float d) {
+        return random(k,d,random);
     }
 
 
    /**
      * Generate a random power series.
      * @param k bitsize of random coefficients.
-     * @param q density of non-zero coefficients.
+     * @param d density of non-zero coefficients.
      * @param rnd is a source for random bits.
      * @return a random power series.
      */
-    public UnivPowerSeries<C> random(final int k, final float q, final Random rnd) {
+    public UnivPowerSeries<C> random(final int k, final float d, final Random rnd) {
         return new UnivPowerSeries<C>(this,
                    new Coefficients<C>() {
                        public C get(int i) {
                            float f = rnd.nextFloat(); 
-                           if ( f < q ) { 
+                           if ( f < d ) { 
                                return coFac.random(k,rnd);
                            } else {
                                return coFac.getZERO();

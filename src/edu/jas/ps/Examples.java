@@ -13,6 +13,7 @@ import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
 
 import edu.jas.arith.BigInteger;
+import edu.jas.arith.BigRational;
 
 
 /**
@@ -26,9 +27,6 @@ public class Examples {
         example2();
         example4();
         example6();
-        //example31();
-        //example32();
-        //example7();
         example8();
         example9();
         example10();
@@ -36,7 +34,9 @@ public class Examples {
 	example1();
         example3();
         example5();
+        example7();
     }
+
 
     static UnivPowerSeries<BigInteger> integersFrom(final int start) {
         UnivPowerSeriesRing<BigInteger> pfac = new UnivPowerSeriesRing<BigInteger>(new BigInteger());
@@ -79,6 +79,7 @@ public class Examples {
             }
         }
     }
+
 
     //----------------------
 
@@ -282,6 +283,30 @@ public class Examples {
 
         UnivPowerSeries<BigInteger> g = ints2.gcd(integers);
         System.out.println("g               = " + g);
+    }
+
+
+    public static void example7() {
+	final BigRational fac = new BigRational();
+        final UnivPowerSeriesRing<BigRational> pfac = new UnivPowerSeriesRing<BigRational>(fac);
+        UnivPowerSeries<BigRational> exp = pfac.fixPoint(
+                  new PowerSeriesMap<BigRational>() {
+                      public PowerSeries<BigRational> map(PowerSeries<BigRational> e) {
+                          return e.integrate( fac.getONE() );
+                      }
+                  }
+                                                        );
+        System.out.println("exp = " + exp);
+        UnivPowerSeries<BigRational> tan = pfac.fixPoint(
+                  new PowerSeriesMap<BigRational>() {
+                      public PowerSeries<BigRational> map(PowerSeries<BigRational> t) {
+                          UnivPowerSeries<BigRational> tt = (UnivPowerSeries<BigRational> ) t;
+
+                          return tt.multiply(tt).sum( pfac.getONE() ).integrate( fac.getZERO() );
+                      }
+                  }
+                                                        );
+        System.out.println("tan = " + tan);
     }
 
 }

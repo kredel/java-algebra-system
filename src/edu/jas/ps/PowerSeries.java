@@ -48,6 +48,14 @@ public interface PowerSeries<C extends RingElem<C>> {
 
 
     /**
+     * Shift coefficients.
+     * @param k shift index.
+     * @return new power series with coefficient(i) = old.coefficient(i+k).
+     */
+    public UnivPowerSeries<C> shift(int k);
+
+
+    /**
      * Select elements.
      * @return new power series.
      */
