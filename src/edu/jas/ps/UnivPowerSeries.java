@@ -18,7 +18,11 @@ import edu.jas.structure.RingFactory;
  * Univariate power series implementation.
  * Uses inner classes and lazy evaluated generating function for coefficients.
  * All ring element methods use lazy evaluation except where noted otherwise.
- * Eager evaluated methods are <code>toString()</code>, <code>order()</code> 
+ * Eager evaluated methods are <code>toString()</code>, <code>compareTo()</code>,
+ * <code>equals()</code>, <code>evaluate()</code>,
+ * or they use the <code>order()</code> method, like 
+ * <code>signum()</code>, <code>abs()</code>, <code>divide()</code>, 
+ * <code>remainder()</code> and <code>gcd()</code>. 
  * @param <C> ring element type
  * @author Heinz Kredel
  */
@@ -141,14 +145,11 @@ public class UnivPowerSeries<C extends RingElem<C>>
                     if ( i > 0 ) {
                        sb.append(" + ");
                     }
-                    //if ( !c.isONE() || i == 0 ) {
-                       sb.append(c.toString());
-                    //}
                 } else {
                     c = c.negate();
                     sb.append(" - ");
-                    sb.append(c.toString());
                 }
+                sb.append(c.toString());
                 if ( i == 0 ) {
                     sb.append(" ");
                 } else if ( i == 1 ) {
@@ -266,18 +267,44 @@ public class UnivPowerSeries<C extends RingElem<C>>
     public UnivPowerSeries<C> select(final Selector<? super C> sel) {
         return new UnivPowerSeries<C>(ring,
                    new Coefficients<C>() {
+                       public C get(int i) {
+                              C c = coefficient( i );
+                              if ( sel.select(c) ) {
+                                  return c;
+                              } else {
+                                  return ring.coFac.getZERO();
+                              }
+                       }
+                   }
+                                       );
+    }
+
+
+    /**
+     * Shift select coefficients.
+     * Not selected coefficients are removed from the result series.
+     * @param sel selector functor.
+     * @return new power series with shifted selected coefficients.
+     */
+    public UnivPowerSeries<C> shiftSelect(final Selector<? super C> sel) {
+        return new UnivPowerSeries<C>(ring,
+                   new Coefficients<C>() {
                        int pos = 0;
                        HashMap<Integer,C> cache = new HashMap<Integer,C>();
                        public C get(int i) {
+                              C c =cache.get( i );
+                              if ( c != null ) {
+                                  return c;
+                              }
                               if ( i > 0 ) {
-                                  C c = cache.get( (i-1) );
-                                  System.out.println("warning: select get c = " + c);
+                                  c = cache.get( (i-1) );
                                   if ( c == null ) {
+                                     //System.out.println("warning: select get c = " + c);
                                      c = get( (i-1) );
                                      // done in get: cache.put( (i-1), c );
                                   }
                               }
-                              C c = null;
+                              c = null;
                               do { 
                                    c = coefficient( pos++ );
                               } while( !sel.select(c));
@@ -313,9 +340,9 @@ public class UnivPowerSeries<C extends RingElem<C>>
      */
     public <C2 extends RingElem<C2>> 
         UnivPowerSeries<C> zip(
-            final BinaryFunctor<? super C,? super C2,C> f,
-            final PowerSeries<C2> ps
-                           ) {
+                               final BinaryFunctor<? super C,? super C2,C> f,
+                               final PowerSeries<C2> ps
+                              ) {
         return new UnivPowerSeries<C>(ring,
                    new Coefficients<C>() {
                        public C get(int i) {
@@ -360,7 +387,8 @@ public class UnivPowerSeries<C extends RingElem<C>>
         }
     }
 
-    /*
+
+    /* only for sequential access:
     static class Abs<C extends RingElem<C>> implements UnaryFunctor<C,C> {
         int sign = 0;
         public C eval(C c) {
@@ -623,14 +651,22 @@ public class UnivPowerSeries<C extends RingElem<C>>
                    new Coefficients<C>() {
                        HashMap<Integer,C> cache = new HashMap<Integer,C>();
                        public C get(int i) {
+                           C c =cache.get( i );
+                           if ( c != null ) {
+                               return c;
+                           }
                            C d = leadingCoefficient().inverse(); // may fail
                            if ( i == 0 ) {
                               cache.put( i, d );
                               return d;
                            }
-                           C c = null; //fac.getZERO();
+                           c = null; //fac.getZERO();
                            for ( int k = 0; k < i; k++ ) {
-                               C m = coefficient(i-k).multiply( cache.get(k) );
+                               C m = cache.get(k);
+                               if ( m == null ) {
+                                   m = get( k );
+                               }
+                               m = coefficient(i-k).multiply( m );
                                if ( c == null ) {
                                    c = m;
                                } else {

@@ -16,12 +16,10 @@ import java.util.Iterator;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
 
-//import edu.jas.arith.BigInteger;
-
 
 /**
- * Univariate power series implementation.
- * Uses inner classes and lazy evaluated generating function for coefficients.
+ * Univariate power series ring implementation.
+ * Uses lazy evaluated generating function for coefficients.
  * @param <C> ring element type
  * @author Heinz Kredel
  */
@@ -143,7 +141,7 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
 
 
     /**
-     * Fix point construction.
+     * Fixed point construction.
      * Cannot be a static method because a power series ring is required.
      * @return fix point wrt map.
      */
@@ -326,13 +324,21 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
     public UnivPowerSeries<C> random(final int k, final float d, final Random rnd) {
         return new UnivPowerSeries<C>(this,
                    new Coefficients<C>() {
+                       // must use cache for reproducibility
+                       HashMap<Integer,C> cache = new HashMap<Integer,C>();
                        public C get(int i) {
+                           C c = cache.get( i );
+                           if ( c!= null ) {
+                               return c;
+                           }
                            float f = rnd.nextFloat(); 
                            if ( f < d ) { 
-                               return coFac.random(k,rnd);
+                               c = coFac.random(k,rnd);
                            } else {
-                               return coFac.getZERO();
+                               c = coFac.getZERO();
                            }
+                           cache.put( i, c );
+                           return c;
                        }
                    }//, null
                                               );
@@ -345,7 +351,7 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
      * @return a copy of c.
      */
     public UnivPowerSeries<C> copy(UnivPowerSeries<C> c) {
-        System.out.println("GP copy = " + this);
+        //System.out.println("GP copy = " + this);
         return new UnivPowerSeries<C>( this, c.lazyCoeffs, c.coeffCache );
     }
 
