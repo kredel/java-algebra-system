@@ -90,6 +90,7 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
 
     /**
      * Constructor.
+     * @param coFac coefficient ring factory.
      */
     public UnivPowerSeriesRing(RingFactory<C> coFac) {
 	this( coFac, DEFAULT_TRUNCATE, DEFAULT_NAME );
@@ -98,6 +99,8 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
 
     /**
      * Constructor.
+     * @param coFac coefficient ring factory.
+     * @param truncate index of truncation.
      */
     public UnivPowerSeriesRing(RingFactory<C> coFac, int truncate) {
 	this( coFac, truncate, DEFAULT_NAME );
@@ -106,6 +109,8 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
 
     /**
      * Constructor.
+     * @param coFac coefficient ring factory.
+     * @param name of the variable.
      */
     public UnivPowerSeriesRing(RingFactory<C> coFac, String name) {
 	this( coFac, DEFAULT_TRUNCATE, name );
@@ -114,6 +119,9 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
 
     /**
      * Constructor.
+     * @param coFac coefficient ring factory.
+     * @param truncate index of truncation.
+     * @param name of the variable.
      */
     public UnivPowerSeriesRing(final RingFactory<C> coFac, int truncate, String name) {
 	this.coFac = coFac;
@@ -142,9 +150,10 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
 
     /**
      * Fixed point construction.
-     * Cannot be a static method because a power series ring is required.
+     * @param map a mapping of power series.
      * @return fix point wrt map.
      */
+    // Cannot be a static method because a power series ring is required.
     public UnivPowerSeries<C> fixPoint(PowerSeriesMap<C> map) {
              UnivPowerSeries<C> ps1 = new UnivPowerSeries<C>(this);
              UnivPowerSeries<C> ps2 = map.map(ps1);
@@ -199,7 +208,7 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
 
 
     /** Get the zero element.
-     * @return 0 as UnivPowerSeriesRing<C>.
+     * @return 0 as UnivPowerSeries<C>.
      */
     public UnivPowerSeries<C> getZERO() {
         return ZERO;
@@ -207,12 +216,67 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
 
 
     /** Get the one element.
-     * @return 1 as UnivPowerSeriesRing<C>.
+     * @return 1 as UnivPowerSeries<C>.
      */
     public UnivPowerSeries<C> getONE() {
         return ONE;
     }
 
+
+    /** Get the power series of the exponential function.
+     * @return exp(x) as UnivPowerSeries<C>.
+     */
+    public UnivPowerSeries<C> getEXP() {
+        return fixPoint(
+               new PowerSeriesMap<C>() {
+                   public UnivPowerSeries<C> map(UnivPowerSeries<C> e) {
+                      return e.integrate( coFac.getONE() );
+                   }
+               }
+                       );
+    }
+
+
+    /** Get the power series of the sinus function.
+     * @return sin(x) as UnivPowerSeries<C>.
+     */
+    public UnivPowerSeries<C> getSIN() {
+        return fixPoint(
+               new PowerSeriesMap<C>() {
+                   public UnivPowerSeries<C> map(UnivPowerSeries<C> s) {
+                      return s.negate().integrate( coFac.getONE() ).integrate( coFac.getZERO() );
+                   }
+               }
+                       );
+    }
+
+
+    /** Get the power series of the cosinus function.
+     * @return cos(x) as UnivPowerSeries<C>.
+     */
+    public UnivPowerSeries<C> getCOS() {
+        return fixPoint(
+               new PowerSeriesMap<C>() {
+                   public UnivPowerSeries<C> map(UnivPowerSeries<C> c) {
+                      return c.negate().integrate( coFac.getZERO() ).integrate( coFac.getONE() );
+                   }
+               }
+                       );
+    }
+
+
+    /** Get the power series of the tangens function.
+     * @return tan(x) as UnivPowerSeries<C>.
+     */
+    public UnivPowerSeries<C> getTAN() {
+        return fixPoint(
+               new PowerSeriesMap<C>() {
+                   public UnivPowerSeries<C> map(UnivPowerSeries<C> t) {
+                      return t.multiply(t).sum( getONE() ).integrate( coFac.getZERO() );
+                   }
+               }
+                       );
+    }
 
 
     /**
@@ -347,7 +411,7 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
 
     /**
      * Copy power series.
-     * @param c
+     * @param c a power series.
      * @return a copy of c.
      */
     public UnivPowerSeries<C> copy(UnivPowerSeries<C> c) {
@@ -358,6 +422,7 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
 
     /**
      * Parse a power series.
+     * <b>Note:</b> not implemented.
      * @param s String.
      * @return power series from s.
      */
@@ -368,6 +433,7 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
 
     /**
      * Parse a power series.
+     * <b>Note:</b> not implemented.
      * @param r Reader.
      * @return next power series from r.
      */
