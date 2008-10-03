@@ -7,29 +7,38 @@ from java.lang           import System
 from java.io             import StringReader
 from java.util           import ArrayList
 
-from edu.jas.structure   import *
-from edu.jas.arith       import *
-from edu.jas.poly        import *
-from edu.jas.ps          import *
-from edu.jas.ring        import *
-from edu.jas.module      import *
-from edu.jas.vector      import *
-from edu.jas.application import *
-from edu.jas.util        import *
-from edu.jas.ufd         import *
-from edu.jas             import *
-from edu                 import *
-#PrettyPrint.setInternal();
-from edu.jas.kern        import ComputerThreads;
-
 from org.apache.log4j    import BasicConfigurator;
 
-from org.python.core     import PyInstance
-from org.python.core     import PyList
-from org.python.core     import PyTuple
-from org.python.core     import PyInteger
-from org.python.core     import PyLong
-from org.python.core     import PyFloat
+from edu.jas.structure   import RingElem, RingFactory, Power
+from edu.jas.arith       import BigInteger, BigRational, BigComplex, BigDecimal
+from edu.jas.poly        import GenPolynomial, GenPolynomialRing,\
+                                GenSolvablePolynomial, GenSolvablePolynomialRing,\
+                                GenPolynomialTokenizer, OrderedPolynomialList, PolyUtil,\
+                                TermOrderOptimization, TermOrder, PolynomialList
+from edu.jas.ps          import UnivPowerSeries, UnivPowerSeriesRing,\
+                                PowerSeriesMap, Coefficients  
+from edu.jas.ring        import DGroebnerBaseSeq, EGroebnerBaseSeq,\
+                                GroebnerBaseDistributed, GBDist, GroebnerBaseParallel,\
+                                GroebnerBaseSeq, GroebnerBaseSeqPairSeq,\
+                                GroebnerBasePseudoRecSeq, GroebnerBasePseudoSeq,\
+                                ReductionSeq, GroebnerBaseSeqPairParallel,\
+                                RGroebnerBasePseudoSeq, RGroebnerBaseSeq,\
+                                SolvableGroebnerBaseParallel, SolvableGroebnerBaseSeq
+from edu.jas.module      import ModGroebnerBaseAbstract, ModSolvableGroebnerBaseAbstract,\
+                                SolvableSyzygyAbstract, SyzygyAbstract
+from edu.jas.vector      import OrderedModuleList, ModuleList
+from edu.jas.application import ComprehensiveGroebnerBaseSeq, PolyUtilApp,\
+                                Residue, ResidueRing, Ideal, Quotient, QuotientRing
+from edu.jas.kern        import ComputerThreads;
+from edu.jas.ufd         import GreatestCommonDivisorSubres, PolyUfdUtil, GCDFactory
+from edu.jas.util        import ExecutableServer
+from edu.jas             import structure, arith, poly, ps, ring, module, vector,\
+                                application, util, ufd
+from edu                 import jas
+#PrettyPrint.setInternal();
+
+from org.python.core     import PyInstance, PyList, PyTuple,\
+                                PyInteger, PyLong, PyFloat
 
 
 def startLog():
