@@ -30,7 +30,7 @@ f = r.paramideal( ps );
 print "ParamIdeal: " + str(f);
 print;
 
-#sys.exit();
+sys.exit(); # long run time
 
 #startLog();
 
