@@ -11,6 +11,7 @@ from jas import SeriesRing
 from jas import startLog
 
 from edu.jas.ps import Coefficients
+from edu.jas.ps import PowerSeriesMap
 
 # example for power series
 #
@@ -157,5 +158,21 @@ print;
 ps7 = ps6 - s;
 print "ps7:", ps7;
 print;
+
+
+class cosmap( PowerSeriesMap ):
+    def __init__(self,cofac):
+        self.coFac = cofac;
+    def map(self,ps):
+        return ps.negate().integrate( self.coFac.getZERO() ).integrate( self.coFac.getONE() );
+
+ps8 = pr.fixPoint( cosmap( pr.ring.coFac ) );
+print "ps8:", ps8;
+print;
+
+ps9 = ps8 - c;
+print "ps9:", ps9;
+print;
+
 
 #sys.exit();

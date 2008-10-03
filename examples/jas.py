@@ -963,6 +963,13 @@ class SeriesRing:
             ps = UnivPowerSeries( self.ring, clazz );
         return RingElem( ps );
 
+    def fixPoint(self,psmap):
+        '''Create a power series as fixed point of the given mapping.
+
+        psmap must implement the PowerSeriesMap interface.
+        '''
+        ps = self.ring.fixPoint( psmap );
+        return RingElem( ps );
 
 
 def pylist2arraylist(list):
