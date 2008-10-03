@@ -76,7 +76,7 @@ print "integer Output:", ri;
 print;
 
 
-rfi = ri.squarefree();
+rfi = ri.squarefreeFactors();
 print "squarefree Output:", rfi;
 print;
 
