@@ -10,6 +10,8 @@ from jas import DD
 from jas import SeriesRing
 from jas import startLog
 
+from edu.jas.ps import Coefficients
+
 # example for power series
 #
 #
@@ -89,6 +91,71 @@ print;
 
 d01 = de.evaluate( DD(0.000000000000000001) );
 print "d01:", d01;
+print;
+
+
+def f(a):
+    return a*a;
+
+ps = pr.create(f);
+print "ps:", ps;
+print;
+
+
+def g(a):
+    return a+a;
+
+ps1 = pr.create(g);
+print "ps1:", ps1;
+print;
+
+ps2 = ps * ps1;
+print "ps2:", ps2;
+print;
+
+
+def h(a):
+    return pr.ring.coFac.fromInteger( 2*a );
+
+ps3 = pr.create(jfunc=h);
+print "ps3:", ps3;
+print;
+
+ps4 = ps3 * ps1;
+print "ps4:", ps4;
+print;
+
+
+def k(a):
+    if a > 0:
+        return get(a-1).multiply( pr.ring.coFac.fromInteger( 2*a ) );
+    else:
+        return pr.ring.coFac.fromInteger( 2*a );
+
+ps5 = pr.create(jfunc=k);
+print "ps5:", ps5;
+print;
+
+
+class coeff( Coefficients ):
+    def __init__(self,cofac):
+        self.coFac = cofac;
+    def get(self,i):
+        if i == 0:
+            return self.coFac.getZERO();
+        else:
+            if i == 1:
+                return self.coFac.getONE();
+            else:
+                c = self.get( i-2 ).negate();
+                return c.divide( self.coFac.fromInteger(i) ).divide( self.coFac.fromInteger(i-1) );
+
+ps6 = pr.create( clazz=coeff(pr.ring.coFac) );
+print "ps6:", ps6;
+print;
+
+ps7 = ps6 - s;
+print "ps7:", ps7;
 print;
 
 #sys.exit();

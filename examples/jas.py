@@ -942,6 +942,28 @@ class SeriesRing:
         '''
         return RingElem( self.ring.getTAN() );
 
+    def create(self,ifunc=None,jfunc=None,clazz=None):
+        '''Create a power series with given generating function.
+
+        ifunc(int i) must return a value which is used in RingFactory.fromInteger().
+        jfunc(int i) must return a value of type ring.coFac.
+        clazz must implement the Coefficients interface.
+        '''
+        class coeff( Coefficients ):
+            def __init__(self,cofac):
+                self.coFac = cofac;
+            def get(self,i):
+                if jfunc == None:
+                    return self.coFac.fromInteger( ifunc(i) );
+                else:
+                    return jfunc(i);
+        if clazz == None:
+            ps = UnivPowerSeries( self.ring, coeff(self.ring.coFac) );
+        else:
+            ps = UnivPowerSeries( self.ring, clazz );
+        return RingElem( ps );
+
+
 
 def pylist2arraylist(list):
     '''Convert a Python list to a Java ArrayList.
