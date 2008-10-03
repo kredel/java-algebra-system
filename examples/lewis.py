@@ -38,7 +38,9 @@ f = r.ideal( ps );
 print "ParamIdeal: " + str(f);
 print;
 
-startLog();
+sys.exit();
+
+#startLog();
 
 rg = f.GB();
 #rg = f.GB();
