@@ -881,20 +881,24 @@ class SeriesRing:
     Methods for power series arithmetic.
     '''
 
-    def __init__(self,ringstr="",truncate=None,ring=None):
+    def __init__(self,ringstr="",truncate=None,ring=None,cofac=None,name="z"):
         '''Ring constructor.
         '''
         if ring == None:
-           sr = StringReader( ringstr );
-           tok = GenPolynomialTokenizer(sr);
-           pset = tok.nextPolynomialSet();
-           ring = pset.ring;
-           vname = ring.vars;
-           name = vname[0];
-           if truncate == None:
-               self.ring = UnivPowerSeriesRing(ring.coFac,name);
-           else:
-               self.ring = UnivPowerSeriesRing(ring.coFac,truncate,name);
+            if len(ringstr) > 0:
+                sr = StringReader( ringstr );
+                tok = GenPolynomialTokenizer(sr);
+                pset = tok.nextPolynomialSet();
+                ring = pset.ring;
+                vname = ring.vars;
+                name = vname[0];
+                cofac = ring.coFac;
+            if isinstance(cofac,RingElem):
+                cofac = cofac.elem;
+            if truncate == None:
+                self.ring = UnivPowerSeriesRing(cofac,name);
+            else:
+                self.ring = UnivPowerSeriesRing(cofac,truncate,name);
         else:
            self.ring = ring;
 
@@ -917,6 +921,26 @@ class SeriesRing:
         '''Get a random power series.
         '''
         return RingElem( self.ring.random(n) );
+
+    def exp(self):
+        '''Get the exponential power series.
+        '''
+        return RingElem( self.ring.getEXP() );
+
+    def sin(self):
+        '''Get the sinus power series.
+        '''
+        return RingElem( self.ring.getSIN() );
+
+    def cos(self):
+        '''Get the cosinus power series.
+        '''
+        return RingElem( self.ring.getCOS() );
+
+    def tan(self):
+        '''Get the tangens power series.
+        '''
+        return RingElem( self.ring.getTAN() );
 
 
 def pylist2arraylist(list):
@@ -1046,6 +1070,21 @@ def CC(re=BigRational(),im=BigRational()):
     else:
         c = BigComplex(re,im);
     return RingElem(c);
+
+
+def DD(d=0):
+    '''Create JAS BigDecimal as ring element.
+    '''
+    if isinstance(d,RingElem):
+        d = d.elem;
+    if isinstance(d,PyFloat):
+        d = str(d);
+    #print "d type(%s) = %s" % (d,type(d));
+    if d == 0:
+       r = BigDecimal();
+    else:
+       r = BigDecimal(d);
+    return RingElem(r);
 
 
 class RingElem:
@@ -1227,3 +1266,20 @@ class RingElem:
             p = Power(self.elem.ring).power( self.elem, n );
         return RingElem( p ); 
 
+    def evaluate(self,a):
+        '''Evaluate at a for power series.
+        '''
+        #print "self  type(%s) = %s" % (self,type(self));
+        #print "a     type(%s) = %s" % (a,type(a));
+        x = None;
+        if isinstance(a,RingElem):
+            x = a.elem;
+        if isinstance(a,PyTuple) or isinstance(a,PyList):
+            # assume BigRational or BigComplex
+            # assume self will be compatible with them. todo: check this
+            x = makeJasArith(a);
+        try:
+            e = self.elem.evaluate(x);
+        except:
+            e = None;            
+        return RingElem( e );
