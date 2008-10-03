@@ -14,6 +14,7 @@ import edu.jas.structure.RingFactory;
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.BigComplex;
+import edu.jas.arith.BigDecimal;
 
 
 /**
@@ -36,6 +37,7 @@ public class Examples {
         example5();
         example7();
         //example12();
+        example13();
     }
 
 
@@ -453,6 +455,23 @@ public class Examples {
 
         UnivPowerSeries<BigComplex> cpis = cos.sum( sin.multiply( I ) );
         System.out.println("cpis = " + cpis);
+    }
+
+
+    public static void example13() {
+        BigRational fac = new BigRational();
+        UnivPowerSeriesRing<BigRational> pfac = new UnivPowerSeriesRing<BigRational>(fac,11,"y");
+        UnivPowerSeries<BigRational> exp = pfac.getEXP();
+        System.out.println("exp = " + exp);
+        System.out.println("exp(1) = " + exp.evaluate( fac.getONE() ));
+        System.out.println("exp(0) = " + exp.evaluate( fac.getZERO() ));
+
+        BigDecimal dfac = new BigDecimal();
+        UnivPowerSeriesRing<BigDecimal> dpfac = new UnivPowerSeriesRing<BigDecimal>(dfac,11,"z");
+        UnivPowerSeries<BigDecimal> dexp = dpfac.getEXP();
+        System.out.println("exp = " + dexp);
+        System.out.println("exp(1) = " + dexp.evaluate( dfac.getONE() ));
+        System.out.println("exp(0) = " + dexp.evaluate( dfac.getZERO() ));
     }
 
 }
