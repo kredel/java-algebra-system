@@ -36,7 +36,7 @@ gs = f.CGBsystem();
 print "CGBsystem: " + str(gs);
 print;
 
-#sys.exit();
+sys.exit();
 
 bg = gs.isCGBsystem();
 if bg:
