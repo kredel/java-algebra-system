@@ -127,6 +127,7 @@ print "ps4:", ps4;
 print;
 
 
+# does not work, since get() is not known
 def k(a):
     if a > 0:
         return get(a-1).multiply( pr.ring.coFac.fromInteger( 2*a ) );
