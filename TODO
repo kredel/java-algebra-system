@@ -41,6 +41,7 @@ issues to consider:
 
 - make use of gcd in pseudo reduction, needs other coefficient type
 
+- implement power series composition and power
 
 
 partially resolved and completed issues:
