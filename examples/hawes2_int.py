@@ -26,7 +26,7 @@ from jas import terminate
 #startLog();
 
 # Hawes & Gibson example 2
-# rational function coefficients
+# integral function coefficients
 
 r = Ring( "IntFunc(a, c, b) (y2, y1, z1, z2, x) L" );
 print "Ring: " + str(r);
@@ -46,24 +46,15 @@ f = r.ideal( ps );
 print "Ideal: " + str(f);
 print;
 
-from edu.jas.ring import GroebnerBasePseudoSeq;
+#startLog();
 
-startLog();
-
-cf = r.ring.coFac;
-#rg = f.GB();
-rgl = GroebnerBasePseudoSeq(cf).GB( f.list );
-
+rgl = f.GB();
 print "GB:", rgl;
 print;
 
-g = r.ideal( list=rgl );
-print "Ideal: " + str(g);
+bg = rgl.isGB();
+print "isGB:", bg;
 print;
-
-#bg = rg.isGB();
-#print "isGB:", bg;
-#print;
 
 terminate();
 #sys.exit();
