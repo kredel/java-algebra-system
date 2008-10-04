@@ -686,7 +686,7 @@ public class UnivPowerSeries<C extends RingElem<C>>
 
     /**
      * Divide by another power series.
-     * @return this * ps^{-1}.
+     * @return this / ps.
      */
     public UnivPowerSeries<C> divide( UnivPowerSeries<C> ps ) {
         if ( ps.isUnit() ) {
