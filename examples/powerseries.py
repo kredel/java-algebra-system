@@ -36,10 +36,20 @@ print;
 r1 = pr.random(4);
 print "r1:", r1;
 print;
+print "r1:", r1;
+print;
+print "r1-r1:", r1-r1;
+print;
 
 r2 = pr.random(4);
 print "r2:", r2;
 print;
+print "r2:", r2;
+print;
+print "r2-r2:", r2-r2;
+print;
+
+#sys.exit();
 
 r3 = r1 + r2;
 print "r3:", r3;

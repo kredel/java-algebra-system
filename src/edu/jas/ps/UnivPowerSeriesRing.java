@@ -136,14 +136,14 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
                                return coFac.getZERO();
                            }
                        }
-                   }, null
+                    }, null // no cache 
                                               );
         this.ZERO = new UnivPowerSeries<C>(this,
                     new Coefficients<C>() {
                         public C get(int i) {
                             return coFac.getZERO();
                         }
-                    }, null
+                    }, null // no cache
                                                     );
     }
 
@@ -388,20 +388,20 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
     public UnivPowerSeries<C> random(final int k, final float d, final Random rnd) {
         return new UnivPowerSeries<C>(this,
                    new Coefficients<C>() {
-                       // must use cache for reproducibility
-                       HashMap<Integer,C> cache = new HashMap<Integer,C>();
+                       // no: must use cache for reproducibility
+                       //HashMap<Integer,C> cache = new HashMap<Integer,C>();
                        public C get(int i) {
-                           C c = cache.get( i );
-                           if ( c!= null ) {
-                               return c;
-                           }
+                           C c; // = cache.get( i );
+                           //if ( c!= null ) {
+                           //    return c;
+                           //}
                            float f = rnd.nextFloat(); 
                            if ( f < d ) { 
                                c = coFac.random(k,rnd);
                            } else {
                                c = coFac.getZERO();
                            }
-                           cache.put( i, c );
+                           //cache.put( i, c );
                            return c;
                        }
                    }//, null
