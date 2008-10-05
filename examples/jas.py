@@ -68,6 +68,7 @@ class Ring:
            self.ring = self.pset.ring;
         else:
            self.ring = ring;
+        self.engine = GCDFactory.getProxy(self.ring.coFac);
 
     def __str__(self):
         '''Create a string representation.
@@ -116,6 +117,22 @@ class Ring:
         '''
         return RingElem( self.ring.getZERO() );
 
+    def random(self,k=5,l=7,d=3,q=0.3):
+        '''Get a random polynomial.
+        '''
+        r = self.ring.random(k,l,d,q);
+        if self.ring.coFac.isField():
+            r = r.monic();
+        return RingElem( r );
+
+    def gcd(self,a,b):
+        '''Compute the greatest common divisor of a and b.
+        '''
+        if isinstance(a,RingElem):
+            a = a.elem;
+        if isinstance(b,RingElem):
+            b = b.elem;
+        return RingElem( self.engine.gcd(a,b) );
 
 
 class Ideal:
@@ -1230,6 +1247,12 @@ class RingElem:
 ##             return True;
 ##         else:
 ##             return False;
+
+    def __cmp__(self,other):
+        '''Compare two ring elements.
+        '''
+        o = self.coerce(other);
+        return self.elem.compareTo( o.elem ); 
 
     def __mul__(self,other):
         '''Multiply two ring elements.
