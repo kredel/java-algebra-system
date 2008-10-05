@@ -314,9 +314,9 @@ As tuple literal it is written <code>(1,n)</code> and
 as list literal it can be written as <code>[1,n]</code>.
 </p>
 <pre>
-  p = (2*n-1) * x * P[n-1] - (n-1) * P[n-2];
-  r = (1,n); # no rational numbers in python, use tuple notation
-  p = r * p; 
+p = (2*n-1) * x * P[n-1] - (n-1) * P[n-2];
+r = (1,n); # no rational numbers in python, use tuple notation
+p = r * p; 
 </pre>
 <p>
 In the same way complex rational numbers can be written as nested tuples.
@@ -340,9 +340,81 @@ For example in <code>(1,n) + (0,(1,n))</code> the exception
 will be thrown.
 </p>
 <p>Further examples can be found in the jython files
+<a href="examples/polynomial.py" target="jython"><code>polynomial.py</code></a>,
 <a href="examples/legendre.py" target="jython"><code>legendre.py</code></a>,
 <a href="examples/hermite.py" target="jython"><code>hermite.py</code></a> or
 <a href="examples/chebyshev.py" target="jython"><code>chebyshev.py</code></a>.
+</p>
+
+
+<h4>Univariate power series</h4>
+
+<p>Univariate power series can be constructed via 
+the <code>SeriesRing</code> class. 
+In the following example we create a new power series ring 
+<code>pr</code> in the variable <code>y</code> over the rational numbers.
+The creation of power series is done in the same way as 
+polynomials are created. There are additional methods like 
+<code>r.exp()</code> or <code>r.sin()</code> to create the 
+exponential power series or the power series for the sinus function.
+</p>
+<pre>
+pr = SeriesRing("Q(y)");
+print "pr:", pr;
+
+one = pr.one();
+r1 = pr.random(4);
+r2 = pr.random(4);
+
+print "one:", one;
+print "r1:", r1;
+print "r2:", r2;
+
+r4 = r1 * r2 + one;
+e = pr.exp();
+r5 = r1 * r2 + e;
+
+print "e:", e;
+print "r4:", r4;
+print "r5:", r5;
+</pre>
+<p>Once power series are created, for example 
+<code>r1, r2, e</code> above, it is possible to use 
+arithmetic operators to built expressions of power series like
+'<code>r1 * r2 + one</code>' or '<code>r1 * r2 + e</code>'.
+</p>
+<pre>
+pr: BigRational((y))
+
+one: 1  + BigO(y^11)
+r1:  - 14/3 * y + 3/5 * y^6 + 1/12 * y^8 + 1/7 * y^10 + BigO(y^11)
+r2:  - 9/11  - 11/9 * y - 4/3 * y^4 + 7/9 * y^5 + 3 * y^6 - 3/2 * y^8 + BigO(y^11)
+
+e: 1  + 1 * y + 1/2 * y^2 + 1/6 * y^3 + 1/24 * y^4 + 1/120 * y^5 + 1/720 * y^6 + 1/5040 * y^7 + 1/40320 * y^8 + 1/362880 * y^9 + 1/3628800 * y^10 + BigO(y^11)
+r4: 1  + 42/11 * y + 154/27 * y^2 + 56/9 * y^5 - 6119/1485 * y^6 - 221/15 * y^7 - 3/44 * y^8 + 745/108 * y^9 - 353/385 * y^10 + BigO(y^11)
+r5: 1  + 53/11 * y + 335/54 * y^2 + 1/6 * y^3 + 1/24 * y^4 + 2243/360 * y^5 - 97871/23760 * y^6 - 14851/1008 * y^7 - 30229/443520 * y^8 + 2503201/362880 * y^9 - 36599029/39916800 * y^10 + BigO(y^11)
+</pre>
+<p>
+It is also possible to create power series by defining a generating function 
+or by defining a fixed point with respect to a map between power series. 
+</p>
+<pre>
+def g(a):
+    return a+a;
+ps1 = pr.create(g);
+
+class coeff( Coefficients ):
+    def get(self,i):
+        ...
+ps6 = pr.create( clazz=coeff( pr.ring.coFac ) );
+
+class cosmap( PowerSeriesMap ):
+    def map(self,ps):
+        ...
+ps8 = pr.fixPoint( cosmap( pr.ring.coFac ) );
+</pre>
+<p>More details and further examples can be found in the jython file
+<a href="examples/powerseries.py" target="jython"><code>powerseries.py</code></a>.
 </p>
 
 
@@ -453,7 +525,7 @@ and a solvable module example is in
 <p>
 <!-- Created: Sun Feb 19 15:49:14 CET 2006 -->
 <!-- hhmts start -->
-Last modified: Thu Sep 11 22:59:39 CEST 2008
+Last modified: Sun Oct  5 20:39:39 CEST 2008
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
