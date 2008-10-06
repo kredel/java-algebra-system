@@ -7,6 +7,7 @@ import sys;
 
 from jas import QQ
 from jas import DD
+from jas import Ring
 from jas import SeriesRing
 from jas import startLog
 
@@ -21,19 +22,19 @@ from edu.jas.ps import PowerSeriesMap
 # rational number examples
 #
 
-pr = SeriesRing("Q(y)");
-print "pr:", pr;
+psr = SeriesRing("Q(y)");
+print "psr:", psr;
 print;
 
-one = pr.one();
+one = psr.one();
 print "one:", one;
 print;
 
-zero = pr.zero();
+zero = psr.zero();
 print "zero:", zero;
 print;
 
-r1 = pr.random(4);
+r1 = psr.random(4);
 print "r1:", r1;
 print;
 print "r1:", r1;
@@ -41,7 +42,7 @@ print;
 print "r1-r1:", r1-r1;
 print;
 
-r2 = pr.random(4);
+r2 = psr.random(4);
 print "r2:", r2;
 print;
 print "r2:", r2;
@@ -59,7 +60,7 @@ r4 = r1 * r2 + one;
 print "r4:", r4;
 print;
 
-e = pr.exp();
+e = psr.exp();
 print "e:", e;
 print;
 
@@ -67,15 +68,34 @@ r5 = r1 * r2 + e;
 print "r5:", r5;
 print;
 
-s = pr.sin();
+y = psr.gens();
+print "y:", y;
+print;
+
+r6 = one - y;
+print "r6:", r6;
+print;
+
+r7 = one / r6;
+print "r7:", r7;
+print;
+
+
+s = psr.sin();
 print "s:", s;
 print;
+
+r8 = psr.gcd(y,s);
+print "r8:", r8;
+print;
+
+
 
 s1 = s.evaluate( QQ(0) );
 print "s1:", s1;
 print;
 
-c = pr.cos();
+c = psr.cos();
 print "c:", c;
 print;
 
@@ -112,7 +132,7 @@ print;
 def f(a):
     return a*a;
 
-ps = pr.create(f);
+ps = psr.create(f);
 print "ps:", ps;
 print;
 
@@ -120,7 +140,7 @@ print;
 def g(a):
     return a+a;
 
-ps1 = pr.create(g);
+ps1 = psr.create(g);
 print "ps1:", ps1;
 print;
 
@@ -130,9 +150,9 @@ print;
 
 
 def h(a):
-    return pr.ring.coFac.fromInteger( 2*a );
+    return psr.ring.coFac.fromInteger( 2*a );
 
-ps3 = pr.create(jfunc=h);
+ps3 = psr.create(jfunc=h);
 print "ps3:", ps3;
 print;
 
@@ -144,11 +164,11 @@ print;
 # does not work, since get() is not known
 def k(a):
     if a > 0:
-        return get(a-1).multiply( pr.ring.coFac.fromInteger( 2*a ) );
+        return get(a-1).multiply( psr.ring.coFac.fromInteger( 2*a ) );
     else:
-        return pr.ring.coFac.fromInteger( 2*a );
+        return psr.ring.coFac.fromInteger( 2*a );
 
-ps5 = pr.create(jfunc=k);
+ps5 = psr.create(jfunc=k);
 print "ps5:", ps5;
 print;
 
@@ -166,7 +186,7 @@ class coeff( Coefficients ):
                 c = self.get( i-2 ).negate();
                 return c.divide( self.coFac.fromInteger(i) ).divide( self.coFac.fromInteger(i-1) );
 
-ps6 = pr.create( clazz=coeff(pr.ring.coFac) );
+ps6 = psr.create( clazz=coeff(psr.ring.coFac) );
 print "ps6:", ps6;
 print;
 
@@ -181,12 +201,61 @@ class cosmap( PowerSeriesMap ):
     def map(self,ps):
         return ps.negate().integrate( self.coFac.getZERO() ).integrate( self.coFac.getONE() );
 
-ps8 = pr.fixPoint( cosmap( pr.ring.coFac ) );
+ps8 = psr.fixPoint( cosmap( psr.ring.coFac ) );
 print "ps8:", ps8;
 print;
 
 ps9 = ps8 - c;
 print "ps9:", ps9;
 print;
+
+
+# conversion from polynomials
+
+pr = Ring("Q(y) L");
+print "pr:", pr;
+print;
+
+[yp] = pr.gens();
+
+one = pr.one();
+p1 = one;
+p2 = one - yp;
+
+ps1 = psr.from(p1);
+ps2 = psr.from(p2);
+
+# rational function as power series:
+ps3 = ps1 / ps2;
+
+print "p1:", p1;
+print "p2:", p2;
+print "ps1:", ps1;
+print "ps2:", ps2;
+print "ps3:", ps3;
+print;
+
+
+p1 = one * 2 + yp**3 - yp**5;
+p2 = one - yp**2 + yp**4;
+
+ps1 = psr.from(p1);
+ps2 = psr.from(p2);
+
+# rational function as power series:
+ps3 = ps1 / ps2;
+
+ps4 = ps3.integrate( QQ(1) );
+ps5 = ps3.differentiate();
+
+print "p1:", p1;
+print "p2:", p2;
+print "ps1:", ps1;
+print "ps2:", ps2;
+print "ps3:", ps3;
+print "ps4:", ps4;
+print "ps5:", ps5;
+print;
+
 
 #sys.exit();

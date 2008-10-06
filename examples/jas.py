@@ -933,6 +933,11 @@ class SeriesRing:
         '''
         return str(self.ring);
 
+    def gens(self):
+        '''Get the generator of the power series ring.
+        '''
+        return RingElem( self.ring.getONE().shift(1) );
+
     def one(self):
         '''Get the one of the power series ring.
         '''
@@ -996,6 +1001,22 @@ class SeriesRing:
         '''
         ps = self.ring.fixPoint( psmap );
         return RingElem( ps );
+
+    def gcd(self,a,b):
+        '''Compute the greatest common divisor of a and b.
+        '''
+        if isinstance(a,RingElem):
+            a = a.elem;
+        if isinstance(b,RingElem):
+            b = b.elem;
+        return RingElem( a.gcd(b) );
+
+    def from(self,a):
+        '''Convert a GenPolynomial to a power series.
+        '''
+        if isinstance(a,RingElem):
+            a = a.elem;
+        return RingElem( self.ring.fromPolynomial(a) );
 
 
 def pylist2arraylist(list):
@@ -1341,6 +1362,33 @@ class RingElem:
             x = makeJasArith(a);
         try:
             e = self.elem.evaluate(x);
+        except:
+            e = None;            
+        return RingElem( e );
+
+    def integrate(self,a):
+        '''Integrate a power series with constant a.
+        '''
+        #print "self  type(%s) = %s" % (self,type(self));
+        #print "a     type(%s) = %s" % (a,type(a));
+        x = None;
+        if isinstance(a,RingElem):
+            x = a.elem;
+        if isinstance(a,PyTuple) or isinstance(a,PyList):
+            # assume BigRational or BigComplex
+            # assume self will be compatible with them. todo: check this
+            x = makeJasArith(a);
+        try:
+            e = self.elem.integrate(x);
+        except:
+            e = None;            
+        return RingElem( e );
+
+    def differentiate(self):
+        '''Differentiate a power series.
+        '''
+        try:
+            e = self.elem.differentiate();
         except:
             e = None;            
         return RingElem( e );

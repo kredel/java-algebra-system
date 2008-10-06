@@ -144,20 +144,25 @@ public class UnivPowerSeries<C extends RingElem<C>>
             int si = c.signum();
             if ( si != 0 ) {
                 if ( si > 0 ) {
-                    if ( i > 0 ) {
+                    if ( sb.length() > 0 ) {
                        sb.append(" + ");
                     }
                 } else {
                     c = c.negate();
                     sb.append(" - ");
                 }
-                sb.append(c.toString());
+                if ( !c.isONE() || i == 0 ) {
+                   sb.append( c.toString() );
+                   if ( i > 0 ) {
+                      sb.append( " * " );
+                   }
+                }
                 if ( i == 0 ) {
-                    sb.append(" ");
+                    //skip; sb.append(" ");
                 } else if ( i == 1 ) {
-                    sb.append(" * " + var);
+                    sb.append(var);
                 } else {
-                    sb.append(" * " + var + "^" + i);
+                    sb.append(var + "^" + i);
                 }
             //sb.append(c.toString() + ", ");
             }
@@ -244,16 +249,16 @@ public class UnivPowerSeries<C extends RingElem<C>>
     /**
      * Shift coefficients.
      * @param k shift index.
-     * @return new power series with coefficient(i) = old.coefficient(i+k).
+     * @return new power series with coefficient(i) = old.coefficient(i-k).
      */
     public UnivPowerSeries<C> shift(final int k) {
         return new UnivPowerSeries<C>(ring,
                    new Coefficients<C>() {
                        public C get(int i) {
-                              if ( k+i < 0 ) {
+                              if ( i-k < 0 ) {
                                   return ring.coFac.getZERO();
                               } else {
-                                  return coefficient(i+k);
+                                  return coefficient(i-k);
                               }
                        }
                    }
@@ -705,18 +710,18 @@ public class UnivPowerSeries<C extends RingElem<C>>
         if ( m == 0 ) {
             st = this;
         } else {
-            st = this.shift(m);
+            st = this.shift(-m);
         }
         if ( n == 0 ) {
             sps = ps;
         } else {
-            sps = ps.shift(n);
+            sps = ps.shift(-n);
         }
         q = st.multiply( sps.inverse() );
         if ( m == n ) {
             sq = q;
         } else {
-            sq = q.shift( -(m-n) );
+            sq = q.shift( m-n );
         }
         return sq;
     }
@@ -789,7 +794,7 @@ public class UnivPowerSeries<C extends RingElem<C>>
         int m = order();
         int n = ps.order();
         int ll = ( m < n ) ? m : n;
-        return ring.getONE().shift(-ll);
+        return ring.getONE().shift(ll);
     }
 
 

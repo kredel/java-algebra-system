@@ -16,6 +16,9 @@ import java.util.Iterator;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
 
+import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.Monomial;
+
 
 /**
  * Univariate power series ring implementation.
@@ -119,12 +122,12 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
 
     /**
      * Constructor.
-     * @param coFac coefficient ring factory.
+     * @param cofac coefficient ring factory.
      * @param truncate index of truncation.
      * @param name of the variable.
      */
-    public UnivPowerSeriesRing(final RingFactory<C> coFac, int truncate, String name) {
-	this.coFac = coFac;
+    public UnivPowerSeriesRing(RingFactory<C> cofac, int truncate, String name) {
+	this.coFac = cofac;
         this.truncate = truncate;
 	this.var = name;
         this.ONE = new UnivPowerSeries<C>(this,
@@ -333,6 +336,37 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
     }
 
 
+    /** Get a UnivPowerSeries<C> from a GenPolynomial<C>.
+     * @param a GenPolynomial<C>.
+     * @return a UnivPowerSeries<C>.
+     */
+    public UnivPowerSeries<C> fromPolynomial(GenPolynomial<C> a) {
+        if ( a == null || a.isZERO() ) {
+           return ZERO;
+        }
+        if ( a.isONE() ) {
+           return ONE;
+        }
+        if ( a.ring.nvar > 1 ) {
+           throw new RuntimeException("only for univariate polynomials");
+        }
+        HashMap<Integer,C> cache = new HashMap<Integer,C>( a.length() );
+        Iterator<Monomial<C>> it = a.monomialIterator();
+        while ( it.hasNext() ) {
+            Monomial<C> m = it.next();
+            long e = m.exponent().getVal(0);
+            cache.put( (int)e, m.coefficient() );
+        }
+        return new UnivPowerSeries<C>(this,
+                   new Coefficients<C>() {
+                       public C get(int i) {
+                           return coFac.getZERO();
+                       }
+                   }, cache
+                                           );
+    }
+
+
     /**
      * Generate a random power series with
      * k = 5, 
@@ -388,23 +422,17 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
     public UnivPowerSeries<C> random(final int k, final float d, final Random rnd) {
         return new UnivPowerSeries<C>(this,
                    new Coefficients<C>() {
-                       // no: must use cache for reproducibility
-                       //HashMap<Integer,C> cache = new HashMap<Integer,C>();
                        public C get(int i) {
-                           C c; // = cache.get( i );
-                           //if ( c!= null ) {
-                           //    return c;
-                           //}
+                           C c; 
                            float f = rnd.nextFloat(); 
                            if ( f < d ) { 
                                c = coFac.random(k,rnd);
                            } else {
                                c = coFac.getZERO();
                            }
-                           //cache.put( i, c );
                            return c;
                        }
-                   }//, null
+                   } //, no not use null
                                               );
      }
 
@@ -415,7 +443,6 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
      * @return a copy of c.
      */
     public UnivPowerSeries<C> copy(UnivPowerSeries<C> c) {
-        //System.out.println("GP copy = " + this);
         return new UnivPowerSeries<C>( this, c.lazyCoeffs, c.coeffCache );
     }
 
