@@ -11,7 +11,8 @@ import edu.jas.structure.RingElem;
 
 
 /**
- * Interface for generating functions for coefficients of power series.
+ * Abstract class for generating functions for coefficients of power series.
+ * Was an interface, now this class handles the caching itself.
  * @param <C> ring element type
  * @author Heinz Kredel
  */
@@ -47,6 +48,9 @@ public abstract class Coefficients<C extends RingElem<C>> {
      * @return coefficient at index.
      */
     public C get(int index) {
+        if ( coeffCache == null ) {
+            return generate( index );
+        }
         Integer i = index;
         C c = coeffCache.get( i );
         if ( c != null ) {

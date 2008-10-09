@@ -983,7 +983,7 @@ class SeriesRing:
         class coeff( Coefficients ):
             def __init__(self,cofac):
                 self.coFac = cofac;
-            def get(self,i):
+            def generate(self,i):
                 if jfunc == None:
                     return self.coFac.fromInteger( ifunc(i) );
                 else:
