@@ -176,7 +176,7 @@ print;
 class coeff( Coefficients ):
     def __init__(self,cofac):
         self.coFac = cofac;
-    def get(self,i):
+    def generate(self,i):
         if i == 0:
             return self.coFac.getZERO();
         else:

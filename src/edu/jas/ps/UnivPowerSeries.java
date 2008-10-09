@@ -45,12 +45,6 @@ public class UnivPowerSeries<C extends RingElem<C>>
 
 
     /**
-     * Cache for already computed coefficients.
-     */
-    public final HashMap<Integer,C> coeffCache;
-
-
-    /**
      * Truncation of computations.
      */
     private int truncate = 11;
@@ -78,7 +72,6 @@ public class UnivPowerSeries<C extends RingElem<C>>
     /*package*/ UnivPowerSeries(UnivPowerSeriesRing<C> ring) {
         this.ring = ring;
         this.lazyCoeffs = null;
-        this.coeffCache = null;
     }
 
 
@@ -88,23 +81,11 @@ public class UnivPowerSeries<C extends RingElem<C>>
      * @param lazyCoeffs generating function for coefficients.
      */
     public UnivPowerSeries(UnivPowerSeriesRing<C> ring, Coefficients<C> lazyCoeffs) {
-        this( ring, lazyCoeffs, new HashMap<Integer,C>() );
-    }
-
-
-    /**
-     * Constructor.
-     * @param ring power series ring.
-     * @param lazyCoeffs generating function for coefficients.
-     * @param coeffs cache for already known coefficients.
-     */
-    public UnivPowerSeries(UnivPowerSeriesRing<C> ring, Coefficients<C> lazyCoeffs, HashMap<Integer,C> coeffs) {
         if ( lazyCoeffs == null || ring == null ) {
             throw new IllegalArgumentException("null not allowed: ring = " + ring + ", lazyCoeffs = " + lazyCoeffs);
         }
         this.ring = ring;
         this.lazyCoeffs = lazyCoeffs;
-        this.coeffCache = coeffs;
         this.truncate = ring.truncate;
     }
 
@@ -116,7 +97,7 @@ public class UnivPowerSeries<C extends RingElem<C>>
     @Override
     public UnivPowerSeries<C> clone() {
         //return ring.copy(this);
-        return new UnivPowerSeries<C>(ring,lazyCoeffs,coeffCache);
+        return new UnivPowerSeries<C>(ring,lazyCoeffs);
     }
 
 
@@ -187,18 +168,7 @@ public class UnivPowerSeries<C extends RingElem<C>>
             throw new IndexOutOfBoundsException("negative index not allowed");
         }
         //System.out.println("cache = " + coeffCache);
-        if ( coeffCache != null ) {
-           Integer i = index;
-           C c = coeffCache.get( i );
-           if ( c != null ) {
-              return c;
-           }
-           c = lazyCoeffs.get( index );
-           coeffCache.put( i, c );
-           return c;
-        } else {
-            return lazyCoeffs.get( index );
-        }
+        return lazyCoeffs.get( index );
     }
 
 
@@ -218,7 +188,7 @@ public class UnivPowerSeries<C extends RingElem<C>>
     public UnivPowerSeries<C> reductum() {
         return new UnivPowerSeries<C>(ring,
                    new Coefficients<C>() {
-                       public C get(int i) {
+                       public C generate(int i) {
                               return coefficient(i+1);
                        }
                    }
@@ -234,7 +204,7 @@ public class UnivPowerSeries<C extends RingElem<C>>
     public UnivPowerSeries<C> prepend(final C h) {
         return new UnivPowerSeries<C>(ring,
                    new Coefficients<C>() {
-                       public C get(int i) {
+                       public C generate(int i) {
                               if ( i == 0 ) {
                                   return h;
                               } else {
@@ -254,7 +224,7 @@ public class UnivPowerSeries<C extends RingElem<C>>
     public UnivPowerSeries<C> shift(final int k) {
         return new UnivPowerSeries<C>(ring,
                    new Coefficients<C>() {
-                       public C get(int i) {
+                       public C generate(int i) {
                               if ( i-k < 0 ) {
                                   return ring.coFac.getZERO();
                               } else {
@@ -274,7 +244,7 @@ public class UnivPowerSeries<C extends RingElem<C>>
     public UnivPowerSeries<C> select(final Selector<? super C> sel) {
         return new UnivPowerSeries<C>(ring,
                    new Coefficients<C>() {
-                       public C get(int i) {
+                       public C generate(int i) {
                               C c = coefficient( i );
                               if ( sel.select(c) ) {
                                   return c;
@@ -297,25 +267,15 @@ public class UnivPowerSeries<C extends RingElem<C>>
         return new UnivPowerSeries<C>(ring,
                    new Coefficients<C>() {
                        int pos = 0;
-                       HashMap<Integer,C> cache = new HashMap<Integer,C>();
-                       public C get(int i) {
-                              C c =cache.get( i );
-                              if ( c != null ) {
-                                  return c;
-                              }
+                       public C generate(int i) {
+                              C c; 
                               if ( i > 0 ) {
-                                  c = cache.get( (i-1) );
-                                  if ( c == null ) {
-                                     //System.out.println("warning: select get c = " + c);
-                                     c = get( (i-1) );
-                                     // done in get: cache.put( (i-1), c );
-                                  }
+                                  c = get( (i-1) );
                               }
                               c = null;
                               do { 
                                    c = coefficient( pos++ );
                               } while( !sel.select(c));
-                              cache.put( i, c );
                               return c;
                        }
                    }
@@ -331,7 +291,7 @@ public class UnivPowerSeries<C extends RingElem<C>>
     public UnivPowerSeries<C> map(final UnaryFunctor<? super C,C> f) {
         return new UnivPowerSeries<C>(ring,
                    new Coefficients<C>() {
-                       public C get(int i) {
+                       public C generate(int i) {
                               return f.eval( coefficient(i) );
                        }
                    }
@@ -346,13 +306,11 @@ public class UnivPowerSeries<C extends RingElem<C>>
      * @return new power series.
      */
     public <C2 extends RingElem<C2>> 
-        UnivPowerSeries<C> zip(
-                               final BinaryFunctor<? super C,? super C2,C> f,
-                               final PowerSeries<C2> ps
-                              ) {
+        UnivPowerSeries<C> zip(final BinaryFunctor<? super C,? super C2,C> f,
+                               final PowerSeries<C2> ps ) {
         return new UnivPowerSeries<C>(ring,
                    new Coefficients<C>() {
-                       public C get(int i) {
+                       public C generate(int i) {
                               return f.eval( coefficient(i), ps.coefficient(i) );
                        }
                    }
@@ -632,7 +590,7 @@ public class UnivPowerSeries<C extends RingElem<C>>
     public UnivPowerSeries<C> multiply( final UnivPowerSeries<C> ps ) {
         return new UnivPowerSeries<C>(ring,
                    new Coefficients<C>() {
-                       public C get(int i) {
+                       public C generate(int i) {
                            C c = null; //fac.getZERO();
                            for ( int k = 0; k <= i; k++ ) {
                                C m = coefficient(k).multiply( ps.coefficient(i-k) );
@@ -656,23 +614,14 @@ public class UnivPowerSeries<C extends RingElem<C>>
     public UnivPowerSeries<C> inverse() {
         return new UnivPowerSeries<C>(ring,
                    new Coefficients<C>() {
-                       HashMap<Integer,C> cache = new HashMap<Integer,C>();
-                       public C get(int i) {
-                           C c =cache.get( i );
-                           if ( c != null ) {
-                               return c;
-                           }
+                       public C generate(int i) {
                            C d = leadingCoefficient().inverse(); // may fail
                            if ( i == 0 ) {
-                              cache.put( i, d );
                               return d;
                            }
-                           c = null; //fac.getZERO();
+                           C c = null; //fac.getZERO();
                            for ( int k = 0; k < i; k++ ) {
-                               C m = cache.get(k);
-                               if ( m == null ) {
-                                   m = get( k );
-                               }
+                               C m = get(k); // cached value
                                m = coefficient(i-k).multiply( m );
                                if ( c == null ) {
                                    c = m;
@@ -681,7 +630,6 @@ public class UnivPowerSeries<C extends RingElem<C>>
                                }
                            }
                            c = c.multiply( d.negate() );
-                           cache.put( i, c );
                            return c;
                        }
                    }
@@ -703,7 +651,7 @@ public class UnivPowerSeries<C extends RingElem<C>>
             return ring.getZERO();
         }
         if ( ! ps.coefficient(n).isUnit() ) {
-            throw new RuntimeException("division by non unit coefficient");
+            throw new RuntimeException("division by non unit coefficient " + ps.coefficient(n) + ", n = " + n);
         }
         // now m >= n
         UnivPowerSeries<C> st, sps, q, sq;
@@ -749,7 +697,7 @@ public class UnivPowerSeries<C extends RingElem<C>>
     public UnivPowerSeries<C> differentiate() {
         return new UnivPowerSeries<C>(ring,
                    new Coefficients<C>() {
-                       public C get(int i) {
+                       public C generate(int i) {
                            C v = coefficient( i + 1 );
                            v = v.multiply( ring.coFac.fromInteger(i+1) );
                            return v;
@@ -766,7 +714,7 @@ public class UnivPowerSeries<C extends RingElem<C>>
     public UnivPowerSeries<C> integrate( final C c ) {
         return new UnivPowerSeries<C>(ring,
                    new Coefficients<C>() {
-                       public C get(int i) {
+                       public C generate(int i) {
                            if ( i == 0 ) {
                               return c;
                            }

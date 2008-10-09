@@ -132,21 +132,21 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
 	this.var = name;
         this.ONE = new UnivPowerSeries<C>(this,
                    new Coefficients<C>() {
-                       public C get(int i) {
+                       public C generate(int i) {
                            if ( i == 0 ) { 
                                return coFac.getONE();
                            } else {
                                return coFac.getZERO();
                            }
                        }
-                    }, null // no cache 
+                    }
                                               );
         this.ZERO = new UnivPowerSeries<C>(this,
                     new Coefficients<C>() {
-                        public C get(int i) {
+                        public C generate(int i) {
                             return coFac.getZERO();
                         }
-                    }, null // no cache
+                    }
                                                     );
     }
 
@@ -347,7 +347,7 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
         if ( a.isONE() ) {
            return ONE;
         }
-        if ( a.ring.nvar > 1 ) {
+        if ( a.ring.nvar != 1 ) {
            throw new RuntimeException("only for univariate polynomials");
         }
         HashMap<Integer,C> cache = new HashMap<Integer,C>( a.length() );
@@ -358,11 +358,12 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
             cache.put( (int)e, m.coefficient() );
         }
         return new UnivPowerSeries<C>(this,
-                   new Coefficients<C>() {
-                       public C get(int i) {
+                   new Coefficients<C>(cache) {
+                       public C generate(int i) {
+                           // cached coefficients returned by get
                            return coFac.getZERO();
                        }
-                   }, cache
+                   }
                                            );
     }
 
@@ -422,7 +423,8 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
     public UnivPowerSeries<C> random(final int k, final float d, final Random rnd) {
         return new UnivPowerSeries<C>(this,
                    new Coefficients<C>() {
-                       public C get(int i) {
+                       public C generate(int i) {
+                           // cached coefficients returned by get
                            C c; 
                            float f = rnd.nextFloat(); 
                            if ( f < d ) { 
@@ -432,7 +434,7 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
                            }
                            return c;
                        }
-                   } //, no not use null
+                   } 
                                               );
      }
 
@@ -443,7 +445,7 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
      * @return a copy of c.
      */
     public UnivPowerSeries<C> copy(UnivPowerSeries<C> c) {
-        return new UnivPowerSeries<C>( this, c.lazyCoeffs, c.coeffCache );
+        return new UnivPowerSeries<C>( this, c.lazyCoeffs );
     }
 
 
