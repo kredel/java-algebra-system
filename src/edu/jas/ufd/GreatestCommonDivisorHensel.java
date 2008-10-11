@@ -112,6 +112,7 @@ public class GreatestCommonDivisorHensel //<C extends GcdRingElem<C> >
         ModIntegerRing cofacM = null;
         GenPolynomial<ModInteger> qm;
         GenPolynomial<ModInteger> rm;
+        GenPolynomial<ModInteger> rmf;
         GenPolynomialRing<ModInteger> mfac;
         GenPolynomialRing<ModInteger> rfac = null;
         int i = 0;
@@ -167,15 +168,23 @@ public class GreatestCommonDivisorHensel //<C extends GcdRingElem<C> >
                return fac.getONE().multiply( c );
                //return cm.abs().multiply( c );
             }
-
             sm = ecm[1];
             tm = ecm[2];
+            rmf = rm.divide(cm);
 
-            lift = PolyUfdUtil.liftHensel(c,mi,rm,qm,sm,tm);
-            cm = lift[0];
+            System.out.println("r   = " + r);
+            System.out.println("n   = " + n);
+            System.out.println("cm  = " + cm);
+            System.out.println("rmf = " + rmf);
+            System.out.println("sm  = " + sm);
+            System.out.println("tm  = " + tm);
+            //lift = PolyUfdUtil.liftHensel(r,n,cm,rmf,sm,tm);
+            lift = PolyUfdUtil.liftHenselQuadratic(r,n,cm,rmf,sm,tm);
+            q = lift[0];
+            System.out.println("q   = " + q);
+            System.out.println("qf  = " + lift[1]);
+            break;
         }
-
-
         q = basePrimitivePart( q );
         return (q.multiply(c)).abs(); 
     }
