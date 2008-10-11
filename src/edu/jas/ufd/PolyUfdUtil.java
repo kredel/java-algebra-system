@@ -30,7 +30,7 @@ import edu.jas.application.QuotientRing;
 
 
 /**
- * Polynomial udf utilities, e.g. 
+ * Polynomial ufd utilities, like 
  * conversion between different representations and Hensel lifting.
  * @author Heinz Kredel
  */
