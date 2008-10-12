@@ -319,7 +319,7 @@ public class ModIntegerTest extends TestCase {
 
      //System.out.println("primes = " + primes);
 
-     assertTrue("all primes ", PrimeList.checkPrimes() );
+     assertTrue("all primes ", primes.checkPrimes() );
    }
 
 }

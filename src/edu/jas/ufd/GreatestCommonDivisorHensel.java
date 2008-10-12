@@ -118,7 +118,7 @@ public class GreatestCommonDivisorHensel //<C extends GcdRingElem<C> >
         ExpVector rdegv = r.degreeVector();
         ExpVector qdegv = q.degreeVector();
         //initialize prime list and degree vector
-        PrimeList primes = new PrimeList( PrimeList.Range.small );
+        PrimeList primes = new PrimeList( PrimeList.Range.medium );
         int pn = 50; //primes.size();
 
         ModIntegerRing cofac;
