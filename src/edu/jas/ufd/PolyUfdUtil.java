@@ -331,7 +331,7 @@ public class PolyUfdUtil {
             E = E.divide( Qi );
             // E mod p
             Ep = PolyUtil.<ModInteger>fromIntegerCoefficients(pfac,E); 
-            logger.info("Ep = " + Ep);
+            //logger.info("Ep = " + Ep);
 
             // construct approximation mod p
             Ap = S.multiply( Ep ); // S,T ++ T,S

@@ -34,7 +34,30 @@ public class GreatestCommonDivisorHensel //<C extends GcdRingElem<C> >
 
 
     private static final Logger logger = Logger.getLogger(GreatestCommonDivisorHensel.class);
-    private boolean debug = logger.isDebugEnabled();
+    private boolean debug = /*true ||*/ logger.isDebugEnabled();
+
+
+    /**
+     * Flag for linear or quadratic Hensel lift.
+     */
+    public final boolean quadratic;
+
+
+    /**
+     * Constructor.
+     */
+    public GreatestCommonDivisorHensel() {
+        this(true);
+    }
+
+
+    /**
+     * Constructor.
+     * @param q use quadratic Hensel lift.
+     */
+    public GreatestCommonDivisorHensel(boolean quadratic) {
+        this.quadratic = quadratic;
+    }
 
 
     /**
@@ -91,22 +114,12 @@ public class GreatestCommonDivisorHensel //<C extends GcdRingElem<C> >
         BigInteger ac = r.leadingBaseCoefficient();
         BigInteger bc = q.leadingBaseCoefficient();
         BigInteger cc = gcd(ac,bc);  // indirection
-        // compute norms
-        BigInteger an = r.maxNorm();
-        BigInteger bn = q.maxNorm();
-        BigInteger n = ( an.compareTo(bn) < 0 ? bn : an );
-        n = n.multiply( cc ).multiply( n.fromInteger(2) );
         // compute degree vectors, only univeriate
         ExpVector rdegv = r.degreeVector();
         ExpVector qdegv = q.degreeVector();
-        //compute factor coefficient bounds
-        BigInteger af = an.multiply( PolyUtil.factorBound( rdegv ) );
-        BigInteger bf = bn.multiply( PolyUtil.factorBound( qdegv ) );
-        BigInteger cf = ( af.compareTo(bf) < 0 ? bf : af );
-        cf = cf.multiply( cc.multiply( cc.fromInteger(8) ) );
         //initialize prime list and degree vector
-        PrimeList primes = new PrimeList();
-        int pn = 10; //primes.size();
+        PrimeList primes = new PrimeList( PrimeList.Range.small );
+        int pn = 50; //primes.size();
 
         ModIntegerRing cofac;
         ModIntegerRing cofacM = null;
@@ -117,7 +130,6 @@ public class GreatestCommonDivisorHensel //<C extends GcdRingElem<C> >
         GenPolynomial<ModInteger> cmf, cmf1, cmf2;
         GenPolynomialRing<ModInteger> mfac;
         GenPolynomialRing<ModInteger> rfac = null;
-        int i = 0;
         BigInteger M = null;
         BigInteger cfe = null;
         GenPolynomial<ModInteger> cp = null;
@@ -130,20 +142,29 @@ public class GreatestCommonDivisorHensel //<C extends GcdRingElem<C> >
         if ( debug ) {
            logger.debug("c = " + c);
            logger.debug("cc = " + cc);
-           logger.debug("n  = " + n);
-           logger.debug("cf = " + cf);
+           System.out.println("primes = " + primes);
         }
 
+        int i = 0;
         for ( java.math.BigInteger p : primes ) {
             //System.out.println("next run ++++++++++++++++++++++++++++++++++");
             if ( ++i >= pn ) {
                 logger.error("prime list exhausted, pn = " + pn);
-                //return iufd.gcd(P,S);
-                throw new RuntimeException("prime list exhausted");
+                logger.info("primes = " + primes);
+                return super.baseGcd(P,S);
+                //throw new RuntimeException("prime list exhausted");
             }
             // initialize coefficient factory and map normalization factor
             cofac = new ModIntegerRing( p, true );
             ModInteger nf = cofac.fromInteger( cc.getVal() );
+            if ( nf.isZERO() ) {
+                continue;
+            }
+            nf = cofac.fromInteger( q.leadingBaseCoefficient().getVal() );
+            if ( nf.isZERO() ) {
+                continue;
+            }
+            nf = cofac.fromInteger( r.leadingBaseCoefficient().getVal() );
             if ( nf.isZERO() ) {
                 continue;
             }
@@ -176,7 +197,7 @@ public class GreatestCommonDivisorHensel //<C extends GcdRingElem<C> >
             rmf = rm.divide(cm); // rm = cm * rmf
             ecm = cm.egcd(rmf);
             if ( ecm[0].isONE() ) {
-                System.out.println("gcd() first factor " + rmf);
+                //logger.debug("gcd() first factor " + rmf);
                 crq = r;
                 cmf = rmf;
                 sm = ecm[1];
@@ -185,44 +206,66 @@ public class GreatestCommonDivisorHensel //<C extends GcdRingElem<C> >
                 qmf = qm.divide(cm); // qm = cm * qmf
                 ecm = cm.egcd(qmf);
                 if ( ecm[0].isONE() ) {
-                    System.out.println("gcd() second factor " + qmf);
+                    //logger.debug("gcd() second factor " + qmf);
                     crq = q;
                     cmf = qmf;
                     sm = ecm[1];
                     tm = ecm[2];
                 } else {
-                    System.out.println("gcd() not one " + ecm[0]);
-                    cmf1 = rmf; 
-                    cmf2 = qmf;
-                    boolean t;
-                    do {
-                       cmf = cmf1.sum(cmf2); // x * rmf + 1 * qmf
-                       ecm = cm.egcd(cmf);
-                       t = ecm[0].isONE();
-                       if ( ! t ) {
-                           cmf1 = cmf1.sum(rmf);
-                       }
-                    } while ( ! t );
-                    crq = r.sum(q);
-                    sm = ecm[1];
-                    tm = ecm[2];
+                    logger.info("giving up on Hensel gcd reverting to Subres gcd");
+                    return super.baseGcd(P,S);
+//                     System.out.println("gcd() not one " + ecm[0]);
+//                     cmf1 = rmf; 
+//                     cmf2 = qmf;
+//                     boolean t;
+//                     do {
+//                        cmf = cmf1.sum(cmf2); // x * rmf + 1 * qmf
+//                        ecm = cm.egcd(cmf);
+//                        t = ecm[0].isONE();
+//                        if ( ! t ) {
+//                            cmf1 = cmf1.sum(rmf);
+//                        }
+//                     } while ( ! t );
+//                     crq = r.sum(q);
+//                     sm = ecm[1];
+//                     tm = ecm[2];
                 }
             }
-            System.out.println("crq = " + crq);
-            System.out.println("n   = " + n);
-            System.out.println("cm  = " + cm);
-            System.out.println("cmf = " + cmf);
-            System.out.println("sm  = " + sm);
-            System.out.println("tm  = " + tm);
-            //lift = PolyUfdUtil.liftHensel(crq,n,cm,cmf,sm,tm);
-            lift = PolyUfdUtil.liftHenselQuadratic(crq,n,cm,cmf,sm,tm);
+            BigInteger cn = crq.maxNorm();
+            cn = cn.multiply( crq.leadingBaseCoefficient().abs() );
+            cn = cn.multiply( cn.fromInteger(2) );
+            if ( debug ) {
+                System.out.println("crq = " + crq);
+                System.out.println("cm  = " + cm);
+                System.out.println("cmf = " + cmf);
+                System.out.println("sm  = " + sm);
+                System.out.println("tm  = " + tm);
+                //System.out.println("n   = " + n);
+                System.out.println("cn  = " + cn);
+            }
+            if ( quadratic ) {
+               lift = PolyUfdUtil.liftHenselQuadratic(crq,cn,cm,cmf,sm,tm);
+            } else {
+               lift = PolyUfdUtil.liftHensel(crq,cn,cm,cmf,sm,tm);
+            }
             q = lift[0];
-            System.out.println("q   = " + q);
-            System.out.println("qf  = " + lift[1]);
-            break;
+            if ( debug ) {
+               System.out.println("q   = " + q);
+               System.out.println("qf  = " + lift[1]);
+            }
+            q = basePrimitivePart( q );
+            q = q.multiply(c).abs();
+            if (    PolyUtil.<BigInteger>basePseudoRemainder(P,q).isZERO() 
+                 && PolyUtil.<BigInteger>basePseudoRemainder(S,q).isZERO() ) {
+               break;
+            } else { // else should not happen at this point
+               logger.info("final devision not successfull");
+               //System.out.println("P rem q = " + PolyUtil.<BigInteger>basePseudoRemainder(P,q));
+               //System.out.println("S rem q = " + PolyUtil.<BigInteger>basePseudoRemainder(S,q));
+               //break;
+            }
         }
-        q = basePrimitivePart( q );
-        return (q.multiply(c)).abs(); 
+        return q; 
     }
 
 }

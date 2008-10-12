@@ -986,7 +986,7 @@ public class GenPolynomial<C extends RingElem<C> >
                                        + " lbcf not invertible " + c);
         }
         C ci = c.inverse();
-     assert (ring.nvar == S.ring.nvar);
+        assert (ring.nvar == S.ring.nvar);
         ExpVector e = S.leadingExpVector();
         GenPolynomial<C> h;
         GenPolynomial<C> q = ring.getZERO().clone();
@@ -1045,7 +1045,7 @@ public class GenPolynomial<C extends RingElem<C> >
                                       + " lbc not invertible " + c);
         }
         C ci = c.inverse();
-     assert (ring.nvar == S.ring.nvar);
+        assert (ring.nvar == S.ring.nvar);
         ExpVector e = S.leadingExpVector();
         GenPolynomial<C> h;
         GenPolynomial<C> r = this.clone(); 

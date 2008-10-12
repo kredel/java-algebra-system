@@ -10,6 +10,8 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import org.apache.log4j.BasicConfigurator;
+
 import edu.jas.arith.BigInteger;
 //import edu.jas.arith.BigRational;
 import edu.jas.arith.ModInteger;
@@ -34,6 +36,7 @@ public class GCDHenselTest extends TestCase {
  * main.
  */
    public static void main (String[] args) {
+       //BasicConfigurator.configure();
           junit.textui.TestRunner.run( suite() );
    }
 
@@ -55,6 +58,7 @@ public class GCDHenselTest extends TestCase {
    //private final static int bitlen = 100;
 
    GreatestCommonDivisorAbstract<BigInteger> ufd; 
+   GreatestCommonDivisorAbstract<BigInteger> ufd1; 
 
    TermOrder to = new TermOrder( TermOrder.INVLEX );
 
@@ -89,9 +93,9 @@ public class GCDHenselTest extends TestCase {
    GenPolynomial<GenPolynomial<BigInteger>> brc;
 
    int rl = 3; 
-   int kl = 64;
+   int kl = 34;
    int ll = 5;
-   int el = 5; //3;
+   int el = 4; //3;
    float q = 0.3f;
 
    protected void setUp() {
@@ -147,23 +151,98 @@ public class GCDHenselTest extends TestCase {
          //assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
          //assertTrue(" not isONE( c"+i+" )", !c.isONE() );
 
-         System.out.println("a  = " + a);
-         System.out.println("b  = " + b);
-         System.out.println("c  = " + c);
+         //System.out.println("a  = " + a);
+         //System.out.println("b  = " + b);
+         //System.out.println("c  = " + c);
          
          a = a.multiply(c); //.multiply(c);
          b = b.multiply(c);
 
-         System.out.println("a c = " + a);
-         System.out.println("b c = " + b);
+         //System.out.println("a c = " + a);
+         //System.out.println("b c = " + b);
 
          d = ufd.gcd(a,b);
          //d = ufd.baseGcd(a,b);
 
          c = ufd.basePrimitivePart(c).abs();
          e = PolyUtil.<BigInteger>basePseudoRemainder(d,c);
-         System.out.println("c  = " + c);
-         System.out.println("d  = " + d);
+         //System.out.println("c  = " + c);
+         //System.out.println("d  = " + d);
+         //System.out.println("e  = " + e);
+
+         assertTrue("c | gcd(ac,bc): " + e, e.isZERO() );
+
+         e = PolyUtil.<BigInteger>basePseudoRemainder(a,d);
+         //System.out.println("e  = " + e);
+         assertTrue("gcd(a,b) | a: " + e, e.isZERO() );
+
+         e = PolyUtil.<BigInteger>basePseudoRemainder(b,d);
+         //System.out.println("e  = " + e);
+         assertTrue("gcd(a,b) | b: " + e, e.isZERO() );
+     }
+ }
+
+
+/**
+ * Test univariate linear Hensel algorithm gcd with subres PRS recursive algorithm.
+ * 
+ */
+ public void testHenselLinearSubresGcd() {
+
+     ufd1 = new GreatestCommonDivisorHensel/*<BigInteger>*/(false);
+
+     GenPolynomial<BigInteger> a;
+     GenPolynomial<BigInteger> b;
+     GenPolynomial<BigInteger> c;
+     GenPolynomial<BigInteger> d;
+     GenPolynomial<BigInteger> e;
+
+     GenPolynomialRing<BigInteger> dfac 
+         = new GenPolynomialRing<BigInteger>(cofac,rl,to);
+
+     for (int i = 0; i < 1; i++) {
+         a = dfac.random(kl,ll+i,el+i,q);
+         b = dfac.random(kl,ll+i,el+i,q);
+         c = dfac.random(kl,ll+i,el+i,q);
+         c = c.multiply( dfac.univariate(0) );
+         //a = ufd.basePrimitivePart(a);
+         //b = ufd.basePrimitivePart(b);
+
+         if ( a.isZERO() || b.isZERO() || c.isZERO() ) {
+            // skip for this turn
+            continue;
+         }
+         assertTrue("length( c"+i+" ) <> 0", c.length() > 0);
+         //assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
+         //assertTrue(" not isONE( c"+i+" )", !c.isONE() );
+
+         //System.out.println("a  = " + a);
+         //System.out.println("b  = " + b);
+         //System.out.println("c  = " + c);
+         
+         a = a.multiply(c); //.multiply(c);
+         b = b.multiply(c);
+
+         //System.out.println("a c = " + a);
+         //System.out.println("b c = " + b);
+
+         long t = System.currentTimeMillis();
+         d = ufd1.gcd(a,b);
+         t = System.currentTimeMillis() - t;
+         //d = ufd.baseGcd(a,b);
+
+         long tq = System.currentTimeMillis();
+         //e = ufd.gcd(a,b);
+         tq = System.currentTimeMillis() - tq;
+
+
+         //System.out.println("Hensel quadratic, time = " + tq);
+         //System.out.println("Hensel linear, time    = " + t);
+
+         c = ufd.basePrimitivePart(c).abs();
+         e = PolyUtil.<BigInteger>basePseudoRemainder(d,c);
+         //System.out.println("c  = " + c);
+         //System.out.println("d  = " + d);
          //System.out.println("e  = " + e);
 
          assertTrue("c | gcd(ac,bc): " + e, e.isZERO() );
