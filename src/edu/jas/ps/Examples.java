@@ -45,7 +45,7 @@ public class Examples {
         UnivPowerSeriesRing<BigInteger> pfac = new UnivPowerSeriesRing<BigInteger>(new BigInteger());
         return new UnivPowerSeries<BigInteger>(pfac, 
                                                 new Coefficients<BigInteger>() {
-                                                    public BigInteger get(int i) {
+                                                    public BigInteger generate(int i) {
                                                         return new BigInteger(i); 
                                                     }
                                                   }
@@ -202,7 +202,7 @@ public class Examples {
         System.out.println("      integers = " + integers);
         UnivPowerSeries<BigInteger> ONE = new UnivPowerSeries<BigInteger>(pfac,
                    new Coefficients<BigInteger>() {
-                       public BigInteger get(int i) {
+                       public BigInteger generate(int i) {
                            if ( i == 0 ) { 
                                return fac.getONE();
                            } else {
@@ -214,7 +214,7 @@ public class Examples {
         System.out.println("ONE  = " + ONE);
         UnivPowerSeries<BigInteger> ZERO = new UnivPowerSeries<BigInteger>(pfac,
                    new Coefficients<BigInteger>() {
-                       public BigInteger get(int i) {
+                       public BigInteger generate(int i) {
                            return fac.getZERO();
                        }
                    }//, null
@@ -311,12 +311,8 @@ public class Examples {
         System.out.println("tan = " + tan);
         UnivPowerSeries<BigRational> sin = new UnivPowerSeries<BigRational>(pfac,
                    new Coefficients<BigRational>() {
-                       HashMap<Integer,BigRational> cache = new HashMap<Integer,BigRational>();
-                       public BigRational get(int i) {
-                           BigRational c = cache.get( i );
-                           if ( c != null ) {
-                               return c;
-                           }
+                       public BigRational generate(int i) {
+                           BigRational c;
                            if ( i == 0 ) { 
                                c = fac.getZERO();
                            } else if ( i == 1 ) {
@@ -325,10 +321,9 @@ public class Examples {
                                c = get( i-2 ).negate();
                                c = c.divide( fac.fromInteger(i) ).divide( fac.fromInteger(i-1));
                            }
-                           cache.put( i, c );
                            return c;
                        }
-                   }//, null
+                   }
                                                        );
         System.out.println("sin = " + sin);
         UnivPowerSeries<BigRational> sin1 = pfac.fixPoint(
@@ -342,12 +337,8 @@ public class Examples {
 
         UnivPowerSeries<BigRational> cos = new UnivPowerSeries<BigRational>(pfac,
                    new Coefficients<BigRational>() {
-                       HashMap<Integer,BigRational> cache = new HashMap<Integer,BigRational>();
-                       public BigRational get(int i) {
-                           BigRational c = cache.get( i );
-                           if ( c != null ) {
-                               return c;
-                           }
+                       public BigRational generate(int i) {
+                           BigRational c;
                            if ( i == 0 ) { 
                                c = fac.getONE();
                            } else if ( i == 1 ) {
@@ -356,10 +347,9 @@ public class Examples {
                                c = get( i-2 ).negate();
                                c = c.divide( fac.fromInteger(i) ).divide( fac.fromInteger(i-1));
                            }
-                           cache.put( i, c );
                            return c;
                        }
-                   }//, null
+                   }
                                                        );
         System.out.println("cos = " + cos);
         UnivPowerSeries<BigRational> cos1 = pfac.fixPoint(
@@ -373,12 +363,8 @@ public class Examples {
 
         UnivPowerSeries<BigRational> sinh = new UnivPowerSeries<BigRational>(pfac,
                    new Coefficients<BigRational>() {
-                       HashMap<Integer,BigRational> cache = new HashMap<Integer,BigRational>();
-                       public BigRational get(int i) {
-                           BigRational c = cache.get( i );
-                           if ( c != null ) {
-                               return c;
-                           }
+                       public BigRational generate(int i) {
+                           BigRational c;
                            if ( i == 0 ) { 
                                c = fac.getZERO();
                            } else if ( i == 1 ) {
@@ -387,20 +373,15 @@ public class Examples {
                                c = get( i-2 );
                                c = c.divide( fac.fromInteger(i) ).divide( fac.fromInteger(i-1));
                            }
-                           cache.put( i, c );
                            return c;
                        }
-                   }//, null
+                   }
                                                        );
         System.out.println("sinh = " + sinh);
         UnivPowerSeries<BigRational> cosh = new UnivPowerSeries<BigRational>(pfac,
                    new Coefficients<BigRational>() {
-                       HashMap<Integer,BigRational> cache = new HashMap<Integer,BigRational>();
-                       public BigRational get(int i) {
-                           BigRational c = cache.get( i );
-                           if ( c != null ) {
-                               return c;
-                           }
+                       public BigRational generate(int i) {
+                           BigRational c;
                            if ( i == 0 ) { 
                                c = fac.getONE();
                            } else if ( i == 1 ) {
@@ -409,7 +390,6 @@ public class Examples {
                                c = get( i-2 );
                                c = c.divide( fac.fromInteger(i) ).divide( fac.fromInteger(i-1));
                            }
-                           cache.put( i, c );
                            return c;
                        }
                    }//, null
