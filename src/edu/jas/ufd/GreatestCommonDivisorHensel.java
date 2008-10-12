@@ -111,8 +111,10 @@ public class GreatestCommonDivisorHensel //<C extends GcdRingElem<C> >
         ModIntegerRing cofac;
         ModIntegerRing cofacM = null;
         GenPolynomial<ModInteger> qm;
+        GenPolynomial<ModInteger> qmf;
         GenPolynomial<ModInteger> rm;
         GenPolynomial<ModInteger> rmf;
+        GenPolynomial<ModInteger> cmf, cmf1, cmf2;
         GenPolynomialRing<ModInteger> mfac;
         GenPolynomialRing<ModInteger> rfac = null;
         int i = 0;
@@ -160,26 +162,60 @@ public class GreatestCommonDivisorHensel //<C extends GcdRingElem<C> >
             }
 
             // compute univariate modular gcd
-            ecm = rm.egcd(qm);
-            cm = ecm[0];
+            cm = qm.gcd(rm);
+
             // test for constant g.c.d
             if ( cm.isConstant() ) {
                logger.debug("cm, constant = " + cm ); 
                return fac.getONE().multiply( c );
                //return cm.abs().multiply( c );
             }
-            sm = ecm[1];
-            tm = ecm[2];
-            rmf = rm.divide(cm);
 
-            System.out.println("r   = " + r);
+            // compute factors and gcd with factor
+            GenPolynomial<BigInteger> crq;
+            rmf = rm.divide(cm); // rm = cm * rmf
+            ecm = cm.egcd(rmf);
+            if ( ecm[0].isONE() ) {
+                System.out.println("gcd() first factor " + rmf);
+                crq = r;
+                cmf = rmf;
+                sm = ecm[1];
+                tm = ecm[2];
+            } else {
+                qmf = qm.divide(cm); // qm = cm * qmf
+                ecm = cm.egcd(qmf);
+                if ( ecm[0].isONE() ) {
+                    System.out.println("gcd() second factor " + qmf);
+                    crq = q;
+                    cmf = qmf;
+                    sm = ecm[1];
+                    tm = ecm[2];
+                } else {
+                    System.out.println("gcd() not one " + ecm[0]);
+                    cmf1 = rmf; 
+                    cmf2 = qmf;
+                    boolean t;
+                    do {
+                       cmf = cmf1.sum(cmf2); // x * rmf + 1 * qmf
+                       ecm = cm.egcd(cmf);
+                       t = ecm[0].isONE();
+                       if ( ! t ) {
+                           cmf1 = cmf1.sum(rmf);
+                       }
+                    } while ( ! t );
+                    crq = r.sum(q);
+                    sm = ecm[1];
+                    tm = ecm[2];
+                }
+            }
+            System.out.println("crq = " + crq);
             System.out.println("n   = " + n);
             System.out.println("cm  = " + cm);
-            System.out.println("rmf = " + rmf);
+            System.out.println("cmf = " + cmf);
             System.out.println("sm  = " + sm);
             System.out.println("tm  = " + tm);
-            //lift = PolyUfdUtil.liftHensel(r,n,cm,rmf,sm,tm);
-            lift = PolyUfdUtil.liftHenselQuadratic(r,n,cm,rmf,sm,tm);
+            //lift = PolyUfdUtil.liftHensel(crq,n,cm,cmf,sm,tm);
+            lift = PolyUfdUtil.liftHenselQuadratic(crq,n,cm,cmf,sm,tm);
             q = lift[0];
             System.out.println("q   = " + q);
             System.out.println("qf  = " + lift[1]);

@@ -89,9 +89,9 @@ public class GCDHenselTest extends TestCase {
    GenPolynomial<GenPolynomial<BigInteger>> brc;
 
    int rl = 3; 
-   int kl = 4;
+   int kl = 64;
    int ll = 5;
-   int el = 3;
+   int el = 5; //3;
    float q = 0.3f;
 
    protected void setUp() {
@@ -151,7 +151,7 @@ public class GCDHenselTest extends TestCase {
          System.out.println("b  = " + b);
          System.out.println("c  = " + c);
          
-         a = a.multiply(c);
+         a = a.multiply(c); //.multiply(c);
          b = b.multiply(c);
 
          System.out.println("a c = " + a);
@@ -162,17 +162,18 @@ public class GCDHenselTest extends TestCase {
 
          c = ufd.basePrimitivePart(c).abs();
          e = PolyUtil.<BigInteger>basePseudoRemainder(d,c);
+         System.out.println("c  = " + c);
          System.out.println("d  = " + d);
-         System.out.println("e  = " + e);
+         //System.out.println("e  = " + e);
 
          assertTrue("c | gcd(ac,bc): " + e, e.isZERO() );
 
          e = PolyUtil.<BigInteger>basePseudoRemainder(a,d);
-         System.out.println("e = " + e);
+         //System.out.println("e  = " + e);
          assertTrue("gcd(a,b) | a: " + e, e.isZERO() );
 
          e = PolyUtil.<BigInteger>basePseudoRemainder(b,d);
-         System.out.println("e = " + e);
+         //System.out.println("e  = " + e);
          assertTrue("gcd(a,b) | b: " + e, e.isZERO() );
      }
  }
