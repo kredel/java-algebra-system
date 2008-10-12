@@ -53,7 +53,7 @@ public class GreatestCommonDivisorHensel //<C extends GcdRingElem<C> >
 
     /**
      * Constructor.
-     * @param q use quadratic Hensel lift.
+     * @param quadratic use quadratic Hensel lift.
      */
     public GreatestCommonDivisorHensel(boolean quadratic) {
         this.quadratic = quadratic;
@@ -62,7 +62,7 @@ public class GreatestCommonDivisorHensel //<C extends GcdRingElem<C> >
 
     /**
      * Univariate GenPolynomial greatest comon divisor.
-     * Uses pseudoRemainder for remainder.
+     * Uses univariate Hensel lifting.
      * @param P univariate GenPolynomial.
      * @param S univariate GenPolynomial.
      * @return gcd(P,S).

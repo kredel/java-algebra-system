@@ -978,7 +978,7 @@ class SeriesRing:
 
         ifunc(int i) must return a value which is used in RingFactory.fromInteger().
         jfunc(int i) must return a value of type ring.coFac.
-        clazz must implement the Coefficients interface.
+        clazz must implement the Coefficients abstract class.
         '''
         class coeff( Coefficients ):
             def __init__(self,cofac):
