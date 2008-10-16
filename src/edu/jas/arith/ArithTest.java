@@ -799,4 +799,30 @@ public class ArithTest extends TestCase {
      assertEquals("a^p = a mod p",c,d);
  }
 
+
+/**
+ * Test Combinatoric.
+ */
+ public void testCombinatoric() {
+     BigInteger a, b, c, d;
+
+     a = Combinatoric.binCoeff(5,0);
+     assertTrue("(5 0) == 1 ",a.isONE());
+
+     a = Combinatoric.binCoeff(5,7);
+     assertTrue("(5 7) == 0 ",a.isZERO());
+
+     int n = 5;
+     for (int k = 0; k <=n; k++) {
+        a = Combinatoric.binCoeff(n,k);
+        //System.out.println(n + " over " + k + " = " + a);
+     }
+     assertTrue("(5 5) == 1 ",a.isONE());
+
+     b = Combinatoric.binCoeffSum(n,n);
+     //System.out.println("sum( " + n + " over " + n + " ) = " + b);
+     c = new BigInteger(32);
+     assertEquals("sum(5 5) == 1 ",b,c);
+   }
+
 }
