@@ -815,6 +815,8 @@ public class ArithTest extends TestCase {
      int n = 5;
      for (int k = 0; k <=n; k++) {
         a = Combinatoric.binCoeff(n,k);
+        b = Combinatoric.binCoeff(n,n-k);
+        assertEquals("(5 k) == (5 5-k) ",b,a);
         //System.out.println(n + " over " + k + " = " + a);
      }
      assertTrue("(5 5) == 1 ",a.isONE());
