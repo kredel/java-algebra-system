@@ -70,4 +70,72 @@ public class Combinatoric {
         return S;
     }
 
+
+    /** Integer n-th root.  
+     * R is the n-th root of A.
+     */
+
+    public static BigInteger root(BigInteger A, int n) {
+        if ( n == 1 ) {
+            return A;
+        }
+        if ( n == 2 ) {
+            return sqrt(A);
+        }
+        if ( n < 1 ) {
+            throw new RuntimeException("negative root not defined");
+        }
+        return A;
+    }
+
+
+    /** Integer square root.  
+     * R is the square root of A.
+     */
+    public static BigInteger sqrt(BigInteger A) {
+        int s = A.signum();
+        if ( s < 0 ) {
+            throw new RuntimeException("root of negative not defined");
+        }
+        if ( s == 0 ) {
+            return A;
+        }
+        BigInteger R, R1, d;
+        int log2 = A.val.bitLength();
+        //System.out.println("A = " + A + ", log2 = " + log2);
+        int rootlog2 = log2 - log2 / 2;
+        R = new BigInteger( A.val.shiftRight(rootlog2) );
+        //System.out.println("R = " + R + ", rootlog2 = " + rootlog2);
+        d = R;
+        while ( !d.isZERO() ) {
+            d = new BigInteger( d.val.shiftRight(1) ); // div 2
+            R1 = R.sum(d);
+            s = A.compareTo( R1.multiply(R1) );
+            if ( s == 0 ) {
+                return R1;
+            }
+            if ( s > 0 ) {
+                R = R1;
+            }
+            //System.out.println("R1 = " + R1);
+            //System.out.println("d  = " + d);
+        }
+        while ( true ) {
+            R1 = R.sum( BigInteger.ONE );
+            System.out.println("R1 = " + R1);
+            s = A.compareTo( R1.multiply(R1) );
+            if ( s == 0 ) {
+                return R1;
+            }
+            if ( s > 0 ) {
+                R = R1;
+            }
+            if ( s < 0 ) {
+                return R;
+            }
+        }
+        //return R;
+    }
+
+
 }

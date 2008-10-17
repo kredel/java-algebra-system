@@ -804,7 +804,7 @@ public class ArithTest extends TestCase {
  * Test Combinatoric.
  */
  public void testCombinatoric() {
-     BigInteger a, b, c, d;
+     BigInteger a, b, c, d, e, f;
 
      a = Combinatoric.binCoeff(5,0);
      assertTrue("(5 0) == 1 ",a.isONE());
@@ -822,9 +822,23 @@ public class ArithTest extends TestCase {
      assertTrue("(5 5) == 1 ",a.isONE());
 
      b = Combinatoric.binCoeffSum(n,n);
-     //System.out.println("sum( " + n + " over " + n + " ) = " + b);
+     System.out.println("sum( " + n + " over " + n + " ) = " + b);
      c = new BigInteger(32);
      assertEquals("sum(5 5) == 1 ",b,c);
+
+     //c = new BigInteger(32*32);
+     b = a.random(67).abs();
+     //b = c.multiply(c);
+     d = Combinatoric.sqrt(b);
+     System.out.println("b          = " + b);
+     System.out.println("root       = " + d);
+     e = d.multiply(d);
+     System.out.println("root^2     = " + e);
+     assertTrue("root^2 <= a ", e.compareTo(b) <= 0);
+     d = d.sum( BigInteger.ONE );
+     f = d.multiply(d);
+     System.out.println("(root+1)^2 = " + f);
+     assertTrue("(root+1)^2 >= a ", f.compareTo(b) >= 0);
    }
 
 }
