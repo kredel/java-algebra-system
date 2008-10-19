@@ -837,7 +837,7 @@ public class ArithTest extends TestCase {
 
      b = a.random(67).abs();
      //b = c.multiply(c);
-     d = Combinatoric.sqrtInt(b);
+     d = Roots.sqrtInt(b);
      //System.out.println("b          = " + b);
      //System.out.println("root       = " + d);
      e = d.multiply(d);
@@ -848,7 +848,7 @@ public class ArithTest extends TestCase {
      //System.out.println("(root+1)^2 = " + f);
      assertTrue("(root+1)^2 >= a ", f.compareTo(b) >= 0);
 
-     c = Combinatoric.sqrt(b);
+     c = Roots.sqrt(b);
      //System.out.println("b          = " + b);
      //System.out.println("root       = " + c);
      e = c.multiply(c);
@@ -870,7 +870,7 @@ public class ArithTest extends TestCase {
 
      b = a.random(67).abs();
      for ( int n = 2; n < 8; n++ ) {
-         d = Combinatoric.root(b,n);
+         d = Roots.root(b,n);
          //System.out.println("b          = " + b);
          //System.out.println(n+"-th root       = " + d);
          e = Power.positivePower(d,n);
@@ -880,6 +880,33 @@ public class ArithTest extends TestCase {
          f = Power.positivePower(d,n);
          //System.out.println("(root+1)^"+n+" = " + f);
          assertTrue("(root+1)^"+n+" >= a ", f.compareTo(b) >= 0);
+     }
+   }
+
+
+/**
+ * Test root decimal.
+ */
+ public void testRootDecimal() {
+     BigDecimal a, b, c, d, e, f;
+     a = BigDecimal.ONE;
+
+     b = a.random(37).abs();
+     for ( int n = 1; n < 8; n++ ) {
+         d = Roots.root(b,n);
+         //System.out.println("b         = " + b);
+         //System.out.println(n+"-th root = " + d);
+         e = Power.positivePower(d,n);
+         //System.out.println("root^"+n+"    = " + e);
+         e = e.subtract(d).abs();
+         //System.out.println("e         = " + e);
+         e = e.divide(b);
+         //System.out.println("e         = " + e);
+         if ( b.compareTo(a) > 0 ) {
+            assertTrue("root^"+n+" == a: " + e, a.compareTo(e) >= 0);
+         } else {
+            assertTrue("root^"+n+" == a: " + e, a.compareTo(e) <= 0);
+         }
      }
    }
 
