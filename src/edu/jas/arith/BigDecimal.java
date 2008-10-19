@@ -37,7 +37,7 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>,
 
     // should go to factory:
     static final int DEFAULT_PRECISION = 50;
-    static final MathContext DEFAULT_CONTEXT = new MathContext(100);
+    static final MathContext DEFAULT_CONTEXT = new MathContext(DEFAULT_PRECISION);
     public final MathContext context; 
 
 
@@ -68,8 +68,8 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>,
      * @param mc MathContext.
      */
     public BigDecimal(java.math.BigDecimal a, MathContext mc) {
-        context = mc;
         val = a;
+        context = mc;
     }
 
 
@@ -89,6 +89,63 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>,
      */
     public BigDecimal(long a, MathContext mc) {
         this( new java.math.BigDecimal( String.valueOf(a) ), mc );
+    }
+
+
+    /**
+     * Constructor for BigDecimal from double.
+     * @param a double.
+     */
+    public BigDecimal(double a) {
+        this(a,DEFAULT_CONTEXT);
+    }
+
+
+    /**
+     * Constructor for BigDecimal from double and a context.
+     * @param a double.
+     * @param mc MathContext.
+     */
+    public BigDecimal(double a, MathContext mc) {
+        this( new java.math.BigDecimal(a), mc );
+    }
+
+
+    /**
+     * Constructor for BigDecimal from java.math.BigInteger.
+     * @param a java.math.BigInteger.
+     */
+    public BigDecimal(java.math.BigInteger a) {
+        this(a,DEFAULT_CONTEXT);
+    }
+
+
+    /**
+     * Constructor for BigDecimal from java.math.BigInteger.
+     * @param a java.math.BigInteger.
+     * @param mc MathContext.
+     */
+    public BigDecimal(java.math.BigInteger a, MathContext mc) {
+        this(new java.math.BigDecimal(a),mc);
+    }
+
+
+    /**
+     * Constructor for BigDecimal from BigRational.
+     * @param a edu.jas.arith.BigRational.
+     */
+    public BigDecimal(BigRational a) {
+        this(a,DEFAULT_CONTEXT);
+    }
+
+
+    /**
+     * Constructor for BigDecimal from BigRational.
+     * @param a edu.jas.arith.BigRational.
+     * @param mc MathContext.
+     */
+    public BigDecimal(BigRational a, MathContext mc) {
+        this( (new java.math.BigDecimal(a.num)).divide(new java.math.BigDecimal(a.den),mc),mc);
     }
 
 
