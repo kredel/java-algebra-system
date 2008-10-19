@@ -28,8 +28,12 @@ public class Combinatoric {
      * or equal to k less than or equal to n.  A is the
      * binomial coefficient n over k.  B is the binomial coefficient n
      * over k+1.
+     * @param A previous induction result.
+     * @param n long.
+     * @param k long.
+     * @return the binomial coefficient n over k+1.
      */
-    public static BigInteger binCoeffInduction(BigInteger A, int n, int k) {
+    public static BigInteger binCoeffInduction(BigInteger A, long n, long k) {
         BigInteger B;
         BigInteger kp, np;
         np = new BigInteger(n-k);
@@ -43,6 +47,9 @@ public class Combinatoric {
      * n and k are beta-integers with 0 less than 
      * or equal to k less than or equal to n.  
      * A is the binomial coefficient n over k.
+     * @param n long.
+     * @param k long.
+     * @return the binomial coefficient n over k+1.
      */
     public static BigInteger binCoeff(int n, int k) {
         BigInteger A;
@@ -60,6 +67,9 @@ public class Combinatoric {
      * n and k are integers, 0 le k le n.  
      * A is the sum on i, from 0 to k, of the
      * binomial coefficient n over i.
+     * @param n long.
+     * @param k long.
+     * @return the binomial coefficient partial sum n over i.
      */
     public static BigInteger binCoeffSum(int n, int k) {
         BigInteger B, S;
@@ -76,6 +86,9 @@ public class Combinatoric {
     /** Integer n-th root.  
      * Uses BigDecimal and newton iteration.
      * R is the n-th root of A.
+     * @param A big integer.
+     * @param n long.
+     * @return the n-th root of A.
      */
     public static BigInteger root(BigInteger A, int n) {
         if ( n == 1 ) {
@@ -118,6 +131,8 @@ public class Combinatoric {
     /** Integer square root.  
      * Uses BigDecimal and newton iteration.
      * R is the square root of A.
+     * @param A big integer.
+     * @return the square root of A.
      */
     public static BigInteger sqrt(BigInteger A) {
         // ensure enough precision
@@ -146,7 +161,10 @@ public class Combinatoric {
 
 
     /** Integer square root.  
+     * Uses BigInteger only.
      * R is the square root of A.
+     * @param A big integer.
+     * @return the square root of A.
      */
     public static BigInteger sqrtInt(BigInteger A) {
         int s = A.signum();
