@@ -9,13 +9,17 @@ import java.util.List;
 import java.util.Iterator;
 import java.util.ArrayList;
 
+import java.math.MathContext;
+
+
+import edu.jas.structure.Power;
+
 
 /**
  * Combinatoric algorithms.
  * Similar to ALDES/SAC2 SACCOMB module.
  * @author Heinz Kredel
  */
-
 public class Combinatoric {
 
 
@@ -40,7 +44,6 @@ public class Combinatoric {
      * or equal to k less than or equal to n.  
      * A is the binomial coefficient n over k.
      */
-
     public static BigInteger binCoeff(int n, int k) {
         BigInteger A;
         int kp;
@@ -58,7 +61,6 @@ public class Combinatoric {
      * A is the sum on i, from 0 to k, of the
      * binomial coefficient n over i.
      */
-
     public static BigInteger binCoeffSum(int n, int k) {
         BigInteger B, S;
         S = BigInteger.ONE;
@@ -72,9 +74,9 @@ public class Combinatoric {
 
 
     /** Integer n-th root.  
+     * Uses BigDecimal and newton iteration.
      * R is the n-th root of A.
      */
-
     public static BigInteger root(BigInteger A, int n) {
         if ( n == 1 ) {
             return A;
@@ -85,14 +87,68 @@ public class Combinatoric {
         if ( n < 1 ) {
             throw new RuntimeException("negative root not defined");
         }
-        return A;
+        // ensure enough precision
+        int s = A.val.bitLength();
+        MathContext mc = new MathContext( s ); 
+        //System.out.println("mc = " + mc);
+        // newton iteration
+        BigDecimal Ap = new BigDecimal( A.val, mc );
+        //System.out.println("Ap = " + Ap);
+        BigDecimal N = new BigDecimal( n, mc ); 
+        BigDecimal ninv = new BigDecimal( 1.0/n, mc ); 
+        BigDecimal nsub = BigDecimal.ONE.subtract( ninv ); 
+        BigDecimal P, R1, R = Ap.multiply(ninv); // initial guess
+        BigDecimal d;
+        while ( true ) {
+            P = Power.positivePower( R, n-1 );
+            R1 = Ap.divide( P.multiply(N) ); 
+            R1 = R.multiply( nsub ).sum( R1 );
+            d = R.subtract(R1).abs();
+            R = R1;
+            if ( d.compareTo(BigDecimal.ONE) <= 0 ) {
+                //System.out.println("d  = " + d);
+                break;
+            }
+        }
+        java.math.BigInteger RP = R.val.toBigInteger(); 
+        return new BigInteger(RP);
+    }
+
+
+    /** Integer square root.  
+     * Uses BigDecimal and newton iteration.
+     * R is the square root of A.
+     */
+    public static BigInteger sqrt(BigInteger A) {
+        // ensure enough precision
+        int s = A.val.bitLength();
+        MathContext mc = new MathContext( s ); 
+        //System.out.println("mc = " + mc);
+        // newton iteration
+        BigDecimal Ap = new BigDecimal( A.val, mc );
+        //System.out.println("Ap = " + Ap);
+        BigDecimal ninv = new BigDecimal( 0.5, mc ); 
+        BigDecimal R1, R = Ap.multiply(ninv); // initial guess
+        BigDecimal d;
+        while ( true ) {
+            R1 = R.sum( Ap.divide( R ) );
+            R1 = R1.multiply(ninv); // div n
+            d = R.subtract(R1).abs();
+            R = R1;
+            if ( d.compareTo(BigDecimal.ONE) <= 0 ) {
+                //System.out.println("d  = " + d);
+                break;
+            }
+        }
+        java.math.BigInteger RP = R.val.toBigInteger(); 
+        return new BigInteger(RP);
     }
 
 
     /** Integer square root.  
      * R is the square root of A.
      */
-    public static BigInteger sqrt(BigInteger A) {
+    public static BigInteger sqrtInt(BigInteger A) {
         int s = A.signum();
         if ( s < 0 ) {
             throw new RuntimeException("root of negative not defined");
@@ -122,7 +178,7 @@ public class Combinatoric {
         }
         while ( true ) {
             R1 = R.sum( BigInteger.ONE );
-            System.out.println("R1 = " + R1);
+            //System.out.println("R1 = " + R1);
             s = A.compareTo( R1.multiply(R1) );
             if ( s == 0 ) {
                 return R1;

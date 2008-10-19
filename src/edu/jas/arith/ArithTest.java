@@ -812,7 +812,7 @@ public class ArithTest extends TestCase {
      a = Combinatoric.binCoeff(5,7);
      assertTrue("(5 7) == 0 ",a.isZERO());
 
-     int n = 5;
+     int n = 7;
      for (int k = 0; k <=n; k++) {
         a = Combinatoric.binCoeff(n,k);
         b = Combinatoric.binCoeff(n,n-k);
@@ -822,23 +822,65 @@ public class ArithTest extends TestCase {
      assertTrue("(5 5) == 1 ",a.isONE());
 
      b = Combinatoric.binCoeffSum(n,n);
-     System.out.println("sum( " + n + " over " + n + " ) = " + b);
-     c = new BigInteger(32);
+     //System.out.println("sum( " + n + " over " + n + " ) = " + b);
+     c = Power.positivePower(new BigInteger(2),n);
      assertEquals("sum(5 5) == 1 ",b,c);
+   }
 
-     //c = new BigInteger(32*32);
+
+/**
+ * Test square root.
+ */
+ public void testSquareRoot() {
+     BigInteger a, b, c, d, e, f;
+     a = BigInteger.ONE;
+
      b = a.random(67).abs();
      //b = c.multiply(c);
-     d = Combinatoric.sqrt(b);
-     System.out.println("b          = " + b);
-     System.out.println("root       = " + d);
+     d = Combinatoric.sqrtInt(b);
+     //System.out.println("b          = " + b);
+     //System.out.println("root       = " + d);
      e = d.multiply(d);
-     System.out.println("root^2     = " + e);
+     //System.out.println("root^2     = " + e);
      assertTrue("root^2 <= a ", e.compareTo(b) <= 0);
      d = d.sum( BigInteger.ONE );
      f = d.multiply(d);
-     System.out.println("(root+1)^2 = " + f);
+     //System.out.println("(root+1)^2 = " + f);
      assertTrue("(root+1)^2 >= a ", f.compareTo(b) >= 0);
+
+     c = Combinatoric.sqrt(b);
+     //System.out.println("b          = " + b);
+     //System.out.println("root       = " + c);
+     e = c.multiply(c);
+     //System.out.println("root^2     = " + e);
+     assertTrue("root^2 <= a ", e.compareTo(b) <= 0);
+     c = c.sum( BigInteger.ONE );
+     f = c.multiply(c);
+     //System.out.println("(root+1)^2 = " + f);
+     assertTrue("(root+1)^2 >= a ", f.compareTo(b) >= 0);
+   }
+
+
+/**
+ * Test root.
+ */
+ public void testRoot() {
+     BigInteger a, b, c, d, e, f;
+     a = BigInteger.ONE;
+
+     b = a.random(67).abs();
+     for ( int n = 2; n < 8; n++ ) {
+         d = Combinatoric.root(b,n);
+         //System.out.println("b          = " + b);
+         //System.out.println(n+"-th root       = " + d);
+         e = Power.positivePower(d,n);
+         //System.out.println("root^"+n+"     = " + e);
+         assertTrue("root^2 <= a ", e.compareTo(b) <= 0);
+         d = d.sum( BigInteger.ONE );
+         f = Power.positivePower(d,n);
+         //System.out.println("(root+1)^"+n+" = " + f);
+         assertTrue("(root+1)^"+n+" >= a ", f.compareTo(b) >= 0);
+     }
    }
 
 }
