@@ -170,10 +170,15 @@ public class Roots {
         if ( A == null || A.isZERO() || A.isONE() ) {
            return A;
         }
+        // for small A use root of inverse
+        if ( A.compareTo( BigDecimal.ONE ) <= 0 ) {
+            BigDecimal Ap = A.inverse();
+            Ap = sqrt(Ap);
+            return Ap.inverse();
+        }
         MathContext mc = A.context;
         // newton iteration
         BigDecimal Ap = new BigDecimal( A.val, mc );
-        //System.out.println("Ap = " + Ap);
         BigDecimal ninv = new BigDecimal( 0.5, mc ); 
         BigDecimal R1, R = Ap.multiply(ninv); // initial guess
         BigDecimal d;
@@ -222,7 +227,8 @@ public class Roots {
         BigDecimal Ap = A;
         BigDecimal N = new BigDecimal( n, mc ); 
         BigDecimal ninv = new BigDecimal( 1.0/n, mc ); 
-        BigDecimal nsub = BigDecimal.ONE.subtract( ninv ); 
+        BigDecimal nsub = new BigDecimal( 1.0, mc ); // because of precision
+        nsub = nsub.subtract( ninv ); 
         BigDecimal P, R1, R = Ap.multiply(ninv); // initial guess
         BigDecimal d;
         while ( true ) {

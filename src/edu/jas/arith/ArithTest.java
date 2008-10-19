@@ -835,7 +835,7 @@ public class ArithTest extends TestCase {
      BigInteger a, b, c, d, e, f;
      a = BigInteger.ONE;
 
-     b = a.random(67).abs();
+     b = a.random(47).abs();
      //b = c.multiply(c);
      d = Roots.sqrtInt(b);
      //System.out.println("b          = " + b);
@@ -868,7 +868,7 @@ public class ArithTest extends TestCase {
      BigInteger a, b, c, d, e, f;
      a = BigInteger.ONE;
 
-     b = a.random(67).abs();
+     b = a.random(47).abs();
      for ( int n = 2; n < 8; n++ ) {
          d = Roots.root(b,n);
          //System.out.println("b          = " + b);
