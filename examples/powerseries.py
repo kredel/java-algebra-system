@@ -103,6 +103,10 @@ c1 = c.evaluate( QQ(0) );
 print "c1:", c1;
 print;
 
+s2c2 = s*s+c*c; # sin^2 + cos^2 = 1
+print "s2c2:", s2c2;
+print;
+
 
 #
 # floating point examples
