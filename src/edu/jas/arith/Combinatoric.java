@@ -34,11 +34,10 @@ public class Combinatoric {
      * @return the binomial coefficient n over k+1.
      */
     public static BigInteger binCoeffInduction(BigInteger A, long n, long k) {
-        BigInteger B;
         BigInteger kp, np;
         np = new BigInteger(n-k);
         kp = new BigInteger(k+1);
-        B = A.multiply(np).divide(kp);
+        BigInteger B = A.multiply(np).divide(kp);
         return B;
     }
 
@@ -52,11 +51,9 @@ public class Combinatoric {
      * @return the binomial coefficient n over k+1.
      */
     public static BigInteger binCoeff(int n, int k) {
-        BigInteger A;
-        int kp;
-        kp = ( k < n-k ? k : n-k ); 
-        A = BigInteger.ONE;
-        for (int j = 0; j < k; j++) {
+        BigInteger A = BigInteger.ONE;
+        int kp = ( k < n-k ? k : n-k ); 
+        for (int j = 0; j < kp; j++) {
             A = binCoeffInduction( A, n, j );
         }
         return A;
