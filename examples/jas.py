@@ -1190,6 +1190,11 @@ class RingElem:
         else:
             return RingElem( self.elem.ring.getZERO() );
 
+    def isZERO(self):
+        '''Test if this is the zero element of the ring.
+        '''
+        return self.elem.isZERO();
+
     def one(self):
         '''One element of this ring.
         '''
@@ -1197,6 +1202,11 @@ class RingElem:
             return RingElem( self.elem.getONE() );
         else:
             return RingElem( self.elem.ring.getONE() );
+
+    def isONE(self):
+        '''Test if this is the one element of the ring.
+        '''
+        return self.elem.isONE();
 
     def __abs__(self):
         '''Absolute value.
