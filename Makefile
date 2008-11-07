@@ -57,7 +57,7 @@ pub:
 	$(RSYNC) --exclude=*ufd* --exclude=DTD --exclude=lisa* --exclude=*xml ./ krum:htdocs/$(PART)
 
 compute:
-	$(RSYNC) ./                compute:java/$(PART)
+	$(RSYNC) ./                compute:java/$(VERSION)
 
 # --- end syncing ----------
 
