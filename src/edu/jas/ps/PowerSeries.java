@@ -76,10 +76,10 @@ public interface PowerSeries<C extends RingElem<C>> {
      * , D extends RingElem<D>
      */
     public <C2 extends RingElem<C2>> 
-	PowerSeries<C> zip(
-	    BinaryFunctor<? super C,? super C2,C> f,
-	    PowerSeries<C2> ps
-	    );
+     PowerSeries<C> zip(
+         BinaryFunctor<? super C,? super C2,C> f,
+         PowerSeries<C2> ps
+         );
 
     /**
      * Differentiate.

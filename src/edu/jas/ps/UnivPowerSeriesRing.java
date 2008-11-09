@@ -84,10 +84,10 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
      * No argument constructor.
      */
     private UnivPowerSeriesRing() {
-	throw new RuntimeException("do not use no-argument constructor");
-	//coFac = null;
-	//ONE = null;
-	//ZERO = null;
+        throw new RuntimeException("do not use no-argument constructor");
+        //coFac = null;
+        //ONE = null;
+        //ZERO = null;
     }
 
 
@@ -96,7 +96,7 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
      * @param coFac coefficient ring factory.
      */
     public UnivPowerSeriesRing(RingFactory<C> coFac) {
-	this( coFac, DEFAULT_TRUNCATE, DEFAULT_NAME );
+        this( coFac, DEFAULT_TRUNCATE, DEFAULT_NAME );
     }
 
 
@@ -106,7 +106,7 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
      * @param truncate index of truncation.
      */
     public UnivPowerSeriesRing(RingFactory<C> coFac, int truncate) {
-	this( coFac, truncate, DEFAULT_NAME );
+        this( coFac, truncate, DEFAULT_NAME );
     }
 
 
@@ -116,7 +116,7 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
      * @param name of the variable.
      */
     public UnivPowerSeriesRing(RingFactory<C> coFac, String name) {
-	this( coFac, DEFAULT_TRUNCATE, name );
+        this( coFac, DEFAULT_TRUNCATE, name );
     }
 
 
@@ -127,9 +127,9 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
      * @param name of the variable.
      */
     public UnivPowerSeriesRing(RingFactory<C> cofac, int truncate, String name) {
-	this.coFac = cofac;
+        this.coFac = cofac;
         this.truncate = truncate;
-	this.var = name;
+        this.var = name;
         this.ONE = new UnivPowerSeries<C>(this,
                    new Coefficients<C>() {
                        public C generate(int i) {
@@ -158,10 +158,10 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
      */
     // Cannot be a static method because a power series ring is required.
     public UnivPowerSeries<C> fixPoint(PowerSeriesMap<C> map) {
-             UnivPowerSeries<C> ps1 = new UnivPowerSeries<C>(this);
-             UnivPowerSeries<C> ps2 = map.map(ps1);
-             ps1.lazyCoeffs = ps2.lazyCoeffs;
-             return ps2;
+        UnivPowerSeries<C> ps1 = new UnivPowerSeries<C>(this);
+        UnivPowerSeries<C> ps2 = map.map(ps1);
+        ps1.lazyCoeffs = ps2.lazyCoeffs;
+        return ps2;
     }
 
 
@@ -183,18 +183,18 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
     @Override
     @SuppressWarnings("unchecked")
     public boolean equals( Object B ) { 
-       if ( ! ( B instanceof UnivPowerSeriesRing ) ) {
-          return false;
-       }
-       UnivPowerSeriesRing<C> a = null;
-       try {
-           a = (UnivPowerSeriesRing<C>) B;
-       } catch (ClassCastException ignored) {
-       }
-       if ( var.equals( a.var ) ) {
-           return true;
-       }
-       return false;
+        if ( ! ( B instanceof UnivPowerSeriesRing ) ) {
+           return false;
+        }
+        UnivPowerSeriesRing<C> a = null;
+        try {
+            a = (UnivPowerSeriesRing<C>) B;
+        } catch (ClassCastException ignored) {
+        }
+        if ( var.equals( a.var ) ) {
+            return true;
+        }
+        return false;
     }
 
 
@@ -203,10 +203,10 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
      */
     @Override
     public int hashCode() { 
-       int h = 0;
-       h = ( var.hashCode() << 27 );
-       h += truncate;
-       return h;
+        int h = 0;
+        h = ( var.hashCode() << 27 );
+        h += truncate;
+        return h;
     }
 
 
