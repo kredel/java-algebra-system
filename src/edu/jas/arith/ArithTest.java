@@ -810,7 +810,8 @@ public class ArithTest extends TestCase {
      assertTrue("(5 0) == 1 ",a.isONE());
 
      a = Combinatoric.binCoeff(5,7);
-     assertTrue("(5 7) == 0 ",a.isZERO());
+     //System.out.println(5 + " over " + 7 + " = " + a);
+     assertTrue("(5 7) == 1 ",a.isONE());
 
      int n = 7;
      for (int k = 0; k <=n; k++) {
