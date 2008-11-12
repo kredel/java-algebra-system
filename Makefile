@@ -9,7 +9,7 @@
 # todo 
 
 # set this to your jdk binaries path
-JDK=/usr/lib/jvm/java/bin
+#JDK=/usr/lib/jvm/java/bin
 #JDK=/usr/java/jdk1.6.0_02/bin
 #JDK=/usr/lib/jvm/java-1.5.0/bin
 #JDK=/usr/java/jdk1.5.0_01/bin
@@ -20,6 +20,7 @@ JDK=/usr/lib/jvm/java/bin
 #JDK=/usr/lib/jdk1.3/bin
 #JDK=/opt/jdk1.2.2/bin
 #JDK=/usr/lib/java/bin
+JDK=/usr/java/latest/bin
 
 JASPATH=/home/kredel/jas
 SVNREPO=/home/SUBVERSION
