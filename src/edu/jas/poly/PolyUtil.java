@@ -9,11 +9,13 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.List;
 import java.util.ArrayList;
+//import java.util.LinkedList;
 
 import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
+//import edu.jas.structure.UnaryFunctor;
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;

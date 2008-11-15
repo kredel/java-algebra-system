@@ -4,9 +4,17 @@
 
 package edu.jas.poly;
 
+
+import java.util.List;
+import java.util.ArrayList;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+
+
+import edu.jas.structure.RingElem;
+import edu.jas.structure.UnaryFunctor;
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.ModInteger;
