@@ -42,7 +42,7 @@ import edu.jas.poly.GenPolynomialRing;
  */
 
 public class GenPolynomial<C extends RingElem<C> > 
-    implements RingElem< GenPolynomial<C> >, /* not jet Polynomial<C> */ 
+    implements RingElem< GenPolynomial<C> >, /* not yet Polynomial<C> */ 
                Iterable<Monomial<C>> {
 
     /** The factory for the polynomial ring. 
@@ -1320,9 +1320,9 @@ public class GenPolynomial<C extends RingElem<C> >
         GenPolynomial<C> n = ring.getZERO().clone(); 
         SortedMap<ExpVector,C> nv = n.val;
         for ( Monomial<C> m : this ) {
-            C c = f.eval( m.coefficient() );
+            C c = f.eval( m.c );
             if ( c != null && !c.isZERO() ) {
-                nv.put( m.exponent(), c );
+                nv.put( m.e, c );
             }
         }
         return n;
