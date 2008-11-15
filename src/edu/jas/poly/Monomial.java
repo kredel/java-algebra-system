@@ -72,4 +72,13 @@ public final class Monomial<C extends RingElem<C> > {
         return c;
     }
 
+    /**
+     * String representation of Monomial.
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return c.toString() + " " + e.toString();
+    }
+
 }

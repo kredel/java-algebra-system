@@ -7,6 +7,7 @@ package edu.jas.poly;
 import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 
 import junit.framework.Test;
@@ -15,12 +16,14 @@ import junit.framework.TestSuite;
 
 
 import edu.jas.arith.BigRational;
+import edu.jas.arith.BigInteger;
 
+import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 
 import edu.jas.structure.RingElem;
-//import edu.jas.structure.RingFactory;
+import edu.jas.structure.UnaryFunctor;
 
 
 /**
@@ -306,4 +309,93 @@ public class GenPolynomialTest extends TestCase {
         assertEquals("p == lm(f)+lm(red(f))+... ",p,f); 
  }
 
+
+/**
+ * Test iterators.
+ * 
+ */
+ public void testIterators() {
+        // integers
+        BigInteger rf = new BigInteger();
+        // System.out.println("rf = " + rf);
+
+        // polynomials over integral numbers
+        GenPolynomialRing<BigInteger> pf 
+           = new GenPolynomialRing<BigInteger>(rf,rl);
+        // System.out.println("pf = " + pf);
+
+        // random polynomial
+        GenPolynomial<BigInteger> p = pf.random(kl,2*ll,el,q);
+        //System.out.println("p = " + p);
+
+        // test monomials
+        for ( Monomial<BigInteger> m : p ) {
+            //System.out.println("m = " + m);
+            assertFalse("m.c == 0 ",m.coefficient().isZERO()); 
+            assertFalse("m.e < (0) ",m.exponent().signum()<0); 
+        }
+
+        // test exponents
+        Iterator<ExpVector> et = p.exponentIterator();
+        while ( et.hasNext() ) {
+            ExpVector e = et.next();
+            //System.out.println("e = " + e);
+            assertFalse("e < (0) ", e.signum() < 0); 
+        }
+
+        // test coefficents
+        Iterator<BigInteger> ct = p.coefficientIterator();
+        while ( ct.hasNext() ) {
+            BigInteger i = ct.next();
+            //System.out.println("i = " + i);
+            assertFalse("i == 0 ", i.isZERO()); 
+        }
+ }
+
+
+/**
+ * Test coefficient map function.
+ * 
+ */
+ public void testMap() {
+        // integers
+        BigInteger rf = new BigInteger();
+        // System.out.println("rf = " + rf);
+
+        // polynomials over integral numbers
+        GenPolynomialRing<BigInteger> pf 
+           = new GenPolynomialRing<BigInteger>(rf,rl);
+        // System.out.println("pf = " + pf);
+
+        // random polynomial
+        GenPolynomial<BigInteger> p = pf.random(kl,2*ll,el,q);
+        //System.out.println("p = " + p);
+
+        // test times 1
+        GenPolynomial<BigInteger> q;
+        q = p.map( new Multiply<BigInteger>( rf.getONE() ) );
+        assertEquals("p == q ",p,q); 
+
+        // test times 0
+        q = p.map( new Multiply<BigInteger>( rf.getZERO() ) );
+        assertTrue("q == 0 ",q.isZERO()); 
+
+        // test times -1
+        q = p.map( new Multiply<BigInteger>( rf.getONE().negate() ) );
+        assertEquals("p == q ",p.negate(),q); 
+ }
+
+}
+
+/**
+ * Internal scalar multiplication functor.
+ */
+class Multiply<C extends RingElem<C>> implements UnaryFunctor<C,C> {
+        C x;
+        public Multiply(C x) {
+            this.x = x;
+        }
+        public C eval(C c) {
+            return c.multiply(x);
+        }
 }

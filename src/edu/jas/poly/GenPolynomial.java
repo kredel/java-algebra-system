@@ -5,6 +5,7 @@
 
 package edu.jas.poly;
 
+import java.lang.Iterable;
 import java.util.Map;
 //import java.util.Map.Entry;
 import java.util.SortedMap;
@@ -16,6 +17,7 @@ import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
 import edu.jas.structure.NotInvertibleException;
+import edu.jas.structure.UnaryFunctor;
 
 import edu.jas.kern.PrettyPrint;
 import edu.jas.kern.PreemptingException;
@@ -40,7 +42,8 @@ import edu.jas.poly.GenPolynomialRing;
  */
 
 public class GenPolynomial<C extends RingElem<C> > 
-    implements RingElem< GenPolynomial<C> > /* not jet Polynomial<C> */ {
+    implements RingElem< GenPolynomial<C> >, /* not jet Polynomial<C> */ 
+               Iterable<Monomial<C>> {
 
     /** The factory for the polynomial ring. 
      */
@@ -588,7 +591,7 @@ public class GenPolynomial<C extends RingElem<C> >
         if ( this.isZERO() ) {
             return S;
         }
-     assert (ring.nvar == S.ring.nvar);
+        assert (ring.nvar == S.ring.nvar);
         GenPolynomial<C> n = this.clone(); //new GenPolynomial<C>(ring, val); 
         SortedMap<ExpVector,C> nv = n.val;
         SortedMap<ExpVector,C> sv = S.val;
@@ -1303,8 +1306,26 @@ public class GenPolynomial<C extends RingElem<C> >
      * Iterator over monomials. 
      * @return a PolyIterator.
      */
-    public Iterator<Monomial<C>> monomialIterator() {
+    public Iterator<Monomial<C>> iterator() {
         return new PolyIterator<C>( val );
+    }
+
+
+    /**
+     * Map a unary function to the coefficients.
+     * @param f evaluation functor.
+     * @return new polynomial with coefficients f(this(e)).
+     */
+    public GenPolynomial<C> map(final UnaryFunctor<? super C,C> f) {
+        GenPolynomial<C> n = ring.getZERO().clone(); 
+        SortedMap<ExpVector,C> nv = n.val;
+        for ( Monomial<C> m : this ) {
+            C c = f.eval( m.coefficient() );
+            if ( c != null && !c.isZERO() ) {
+                nv.put( m.exponent(), c );
+            }
+        }
+        return n;
     }
 
 }
