@@ -12,6 +12,9 @@ import java.util.Iterator;
 
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
+import edu.jas.structure.BinaryFunctor;
+import edu.jas.structure.UnaryFunctor;
+import edu.jas.structure.Selector;
 
 
 /**
@@ -316,65 +319,6 @@ public class UnivPowerSeries<C extends RingElem<C>>
                    }
                                        );
     }
-
-
-    /* arithmetic method functors */
-
-
-    static class Sum<C extends RingElem<C>> implements BinaryFunctor<C,C,C> {
-        public C eval(C c1, C c2) {
-            return c1.sum(c2);
-        }
-    }
-
-
-    static class Subtract<C extends RingElem<C>> implements BinaryFunctor<C,C,C> {
-        public C eval(C c1, C c2) {
-            return c1.subtract(c2);
-        }
-    }
-
-
-    static class Multiply<C extends RingElem<C>> implements UnaryFunctor<C,C> {
-        C x;
-        public Multiply(C x) {
-            this.x = x;
-        }
-        public C eval(C c) {
-            return c.multiply(x);
-        }
-    }
-
-
-    static class Negate<C extends RingElem<C>> implements UnaryFunctor<C,C> {
-        public C eval(C c) {
-            return c.negate();
-        }
-    }
-
-
-    /* only for sequential access:
-    static class Abs<C extends RingElem<C>> implements UnaryFunctor<C,C> {
-        int sign = 0;
-        public C eval(C c) {
-            int s = c.signum();
-            if ( s == 0 ) {
-               return c;
-            }
-            if ( sign > 0 ) {
-               return c;
-            } else if ( sign < 0 ) {
-               return c.negate();
-            }
-            // first non zero coefficient:
-            sign = s;
-            if ( s > 0 ) {
-               return c;
-            }
-            return c.negate();
-        }
-    }
-    */
 
 
     /**
@@ -758,3 +702,73 @@ public class UnivPowerSeries<C extends RingElem<C>>
     }
 
 }
+
+/* arithmetic method functors */
+
+
+/**
+ * Internal summation functor.
+ */
+class Sum<C extends RingElem<C>> implements BinaryFunctor<C,C,C> {
+        public C eval(C c1, C c2) {
+            return c1.sum(c2);
+        }
+}
+
+
+/**
+ * Internal subtraction functor.
+ */
+class Subtract<C extends RingElem<C>> implements BinaryFunctor<C,C,C> {
+        public C eval(C c1, C c2) {
+            return c1.subtract(c2);
+        }
+}
+
+
+/**
+ * Internal scalar multiplication functor.
+ */
+class Multiply<C extends RingElem<C>> implements UnaryFunctor<C,C> {
+        C x;
+        public Multiply(C x) {
+            this.x = x;
+        }
+        public C eval(C c) {
+            return c.multiply(x);
+        }
+}
+
+
+/**
+ * Internal negation functor.
+ */
+class Negate<C extends RingElem<C>> implements UnaryFunctor<C,C> {
+        public C eval(C c) {
+            return c.negate();
+        }
+}
+
+
+/* only for sequential access:
+class Abs<C extends RingElem<C>> implements UnaryFunctor<C,C> {
+        int sign = 0;
+        public C eval(C c) {
+            int s = c.signum();
+            if ( s == 0 ) {
+               return c;
+            }
+            if ( sign > 0 ) {
+               return c;
+            } else if ( sign < 0 ) {
+               return c.negate();
+            }
+            // first non zero coefficient:
+            sign = s;
+            if ( s > 0 ) {
+               return c;
+            }
+            return c.negate();
+        }
+}
+*/

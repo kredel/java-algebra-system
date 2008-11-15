@@ -7,6 +7,9 @@ package edu.jas.ps;
 
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
+import edu.jas.structure.BinaryFunctor;
+import edu.jas.structure.UnaryFunctor;
+import edu.jas.structure.Selector;
 
 
 /**

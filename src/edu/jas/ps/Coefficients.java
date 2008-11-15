@@ -27,7 +27,7 @@ public abstract class Coefficients<C extends RingElem<C>> {
 
 
     /**
-     * Protected no arguments constructor.
+     * Public no arguments constructor.
      */
     public Coefficients() {
         this( new HashMap<Integer,C>() );
@@ -35,7 +35,8 @@ public abstract class Coefficients<C extends RingElem<C>> {
 
 
     /**
-     * Public no arguments constructor.
+     * Public constructor with pre-filled cache.
+     * @param cache pre-filled coefficient cache.
      */
     public Coefficients(HashMap<Integer,C> cache) {
         coeffCache = cache;

@@ -2,10 +2,7 @@
  * $Id$
  */
 
-package edu.jas.ps;
-
-
-import edu.jas.structure.RingElem;
+package edu.jas.structure;
 
 
 /**
