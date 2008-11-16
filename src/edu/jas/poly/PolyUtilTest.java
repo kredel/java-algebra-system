@@ -926,59 +926,59 @@ public class PolyUtilTest extends TestCase {
  public void testMap() {
         // integers
         BigInteger fi = new BigInteger();
-        System.out.println("fi = " + fi);
+        //System.out.println("fi = " + fi);
 
         // rational numbers
         BigRational fr = new BigRational();
-        System.out.println("fr = " + fr);
+        //System.out.println("fr = " + fr);
 
         // modular integers
         ModIntegerRing fm = new ModIntegerRing(17);
-        System.out.println("fm = " + fm);
+        //System.out.println("fm = " + fm);
 
         // polynomials over integral numbers
         GenPolynomialRing<BigInteger> pfi 
            = new GenPolynomialRing<BigInteger>(fi,rl);
-        System.out.println("pfi = " + pfi);
+        //System.out.println("pfi = " + pfi);
 
         // polynomials over rational numbers
         GenPolynomialRing<BigRational> pfr 
            = new GenPolynomialRing<BigRational>(fr,rl);
-        System.out.println("pfr = " + pfr);
+        //System.out.println("pfr = " + pfr);
 
         // polynomials over modular integers
         GenPolynomialRing<ModInteger> pfm 
            = new GenPolynomialRing<ModInteger>(fm,rl);
-        System.out.println("pfm = " + pfm);
+        //System.out.println("pfm = " + pfm);
 
 
         // random polynomial
         GenPolynomial<BigInteger> pi = pfi.random(kl,2*ll,el,q);
-        System.out.println("pi = " + pi);
+        //System.out.println("pi = " + pi);
 
         // random polynomial
         GenPolynomial<BigRational> pr = pfr.random(kl,2*ll,el,q);
-        System.out.println("pr = " + pr);
+        //System.out.println("pr = " + pr);
 
         // random polynomial
         GenPolynomial<ModInteger> pm = pfm.random(kl,2*ll,el,q);
-        System.out.println("pm = " + pm);
+        //System.out.println("pm = " + pm);
 
         // test integer to rational and back
         GenPolynomial<BigRational> qr;
         GenPolynomial<BigInteger> qi;
         qr = PolyUtil.<BigInteger,BigRational>map(pfr,pi, new IntToRat() );
         qi = PolyUtil.<BigRational,BigInteger>map(pfi,qr, new RatNumer() );
-        System.out.println("qr = " + qr);
-        System.out.println("qi = " + qi);
+        //System.out.println("qr = " + qr);
+        //System.out.println("qi = " + qi);
         assertEquals("pi == qi ",pi,qi); 
 
         // test modular integer to integer and back
         GenPolynomial<ModInteger> qm;
         qi = PolyUtil.<ModInteger,BigInteger>map(pfi,pm, new ModToInt() );
         qm = PolyUtil.<BigInteger,ModInteger>map(pfm,qi, new IntToMod(fm) );
-        System.out.println("qi = " + qi);
-        System.out.println("qm = " + qm);
+        //System.out.println("qi = " + qi);
+        //System.out.println("qm = " + qm);
         assertEquals("pm == qm ",pm,qm); 
  }
 
@@ -993,7 +993,7 @@ class IntToRat implements UnaryFunctor<BigInteger,BigRational> {
         if ( c == null ) {
             return new BigRational();
         } else {
-            return new BigRational( c.getVal() );
+            return new BigRational( c );
         }
     }
 }
