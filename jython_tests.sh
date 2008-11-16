@@ -32,3 +32,6 @@ time jython examples/wa_32.py
 time jython examples/wa_32_syz.py
 time jython examples/chebyshev.py
 time jython examples/legendre.py
+time jython examples/arith.py
+time jython examples/powerseries.py
+time jython examples/polynomial.py
