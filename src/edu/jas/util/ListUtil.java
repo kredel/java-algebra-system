@@ -31,7 +31,7 @@ public class ListUtil {
     /**
      * Map a unary function to the list.
      * @param f evaluation functor.
-     * @return new list elements f(this(e)).
+     * @return new list elements f(list(i)).
      */
     public static <C extends RingElem<C>,D extends RingElem<D>>
            List<D> map(List<C> list, UnaryFunctor<C,D> f) {
