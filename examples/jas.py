@@ -125,13 +125,25 @@ class Ring:
             r = r.monic();
         return RingElem( r );
 
+    def element(self,polystr):
+        '''Create an element from a string.
+        '''
+        I = Ideal(self,polystr);
+        list = I.pset.list;
+        if len(list) > 0:
+            return RingElem( list[0] );
+
     def gcd(self,a,b):
         '''Compute the greatest common divisor of a and b.
         '''
         if isinstance(a,RingElem):
             a = a.elem;
+        else:
+            a = self.element( str(a) );
         if isinstance(b,RingElem):
             b = b.elem;
+        else:
+            b = self.element( str(b) );
         return RingElem( self.engine.gcd(a,b) );
 
 
@@ -141,12 +153,12 @@ class Ideal:
     Methods for Groebner bases, ideal sum, intersection and others.
     '''
 
-    def __init__(self,ring,ringstr="",list=None):
+    def __init__(self,ring,polystr="",list=None):
         '''Ideal constructor.
         '''
         self.ring = ring;
         if list == None:
-           sr = StringReader( ringstr );
+           sr = StringReader( polystr );
            tok = GenPolynomialTokenizer(ring.pset.ring,sr);
            self.list = tok.nextPolynomialList();
         else:
@@ -327,12 +339,12 @@ class ParamIdeal:
     Methods to compute comprehensive Groebner bases.
     '''
 
-    def __init__(self,ring,ringstr="",list=None,gbsys=None):
+    def __init__(self,ring,polystr="",list=None,gbsys=None):
         '''Parametric ideal constructor.
         '''
         self.ring = ring;
-        if list == None and ringstr!= None:
-           sr = StringReader( ringstr );
+        if list == None and polystr != None:
+           sr = StringReader( polystr );
            tok = GenPolynomialTokenizer(ring.pset.ring,sr);
            self.list = tok.nextPolynomialList();
         else:
@@ -1163,6 +1175,16 @@ def DD(d=0):
     return RingElem(r);
 
 
+def coercePair(a,b):
+    if not a.isPolynomial() and b.isPolynomial():
+        s = b.coerce(a);
+        o = b;
+    else:
+        s = a;
+        o = a.coerce(b);
+    return [s,o];
+    
+
 class RingElem:
     '''Proxy for JAS ring elements.
 
@@ -1176,6 +1198,10 @@ class RingElem:
             self.elem = elem.elem;
         else:
             self.elem = elem;
+        try:
+            self.ring = self.elem.ring;
+        except:
+            self.ring = self.elem;
 
     def __str__(self):
         '''Create a string representation.
@@ -1229,12 +1255,17 @@ class RingElem:
         #print "self  type(%s) = %s" % (self,type(self));
         #print "other type(%s) = %s" % (other,type(other));
         if isinstance(other,RingElem):
+            if self.isPolynomial() and not other.isPolynomial():
+                o = self.ring.parse( str(other) );
+                return RingElem( o );
             return other;
+        #print "--1";
         if isinstance(other,PyTuple) or isinstance(other,PyList):
             # assume BigRational or BigComplex
             # assume self will be compatible with them. todo: check this
             o = makeJasArith(other);
             return RingElem(o);
+        #print "--2";
         # test if self.elem is a factory itself
         if self.isFactory():
             if isinstance(other,PyInteger) or isinstance(other,PyLong):
@@ -1246,6 +1277,7 @@ class RingElem:
                     print "unknown other type(%s) = %s" % (other,type(other));
                     o = other;
             return RingElem(o);
+        #print "--3";
         # self.elem has a ring factory
         if isinstance(other,PyInteger) or isinstance(other,PyLong):
             o = self.elem.ring.fromInteger(other);
@@ -1255,6 +1287,7 @@ class RingElem:
             else:
                 print "unknown other type(%s) = %s" % (other,type(other));
                 o = other;
+        #print "--4";
         return RingElem(o);
 
     def isFactory(self):
@@ -1282,62 +1315,56 @@ class RingElem:
     def __cmp__(self,other):
         '''Compare two ring elements.
         '''
-        o = self.coerce(other);
-        return self.elem.compareTo( o.elem ); 
+        [s,o] = coercePair(self,other);
+        return s.elem.compareTo( o.elem ); 
 
     def __mul__(self,other):
         '''Multiply two ring elements.
         '''
-        if not self.isPolynomial() and other.isPolynomial():
-            return other.__mul__(self);
-        o = self.coerce(other);
-        return RingElem( self.elem.multiply( o.elem ) ); 
+        [s,o] = coercePair(self,other);
+        return RingElem( s.elem.multiply( o.elem ) ); 
 
     def __rmul__(self,other):
-        '''Multiply two ring elements.
+        '''Reversw multiply two ring elements.
         '''
-        o = self.coerce(other);
+        [s,o] = coercePair(self,other);
         return o.__mul__(self);
 
     def __add__(self,other):
         '''Add two ring elements.
         '''
-        if not self.isPolynomial() and other.isPolynomial():
-            return other.__add__(self);
-        o = self.coerce(other);
-        return RingElem( self.elem.sum( o.elem ) ); 
+        [s,o] = coercePair(self,other);
+        return RingElem( s.elem.sum( o.elem ) ); 
 
     def __radd__(self,other):
         '''Add two ring elements.
         '''
-        o = self.coerce(other);
+        [s,o] = coercePair(self,other);
         return o.__add__(self);
 
     def __sub__(self,other):
         '''Subtract two ring elements.
         '''
-        if not self.isPolynomial() and other.isPolynomial():
-            return other.__sub__(self);
-        o = self.coerce(other);
-        return RingElem( self.elem.subtract( o.elem ) ); 
+        [s,o] = coercePair(self,other);
+        return RingElem( s.elem.subtract( o.elem ) ); 
 
     def __rsub__(self,other):
         '''Subtract two ring elements.
         '''
-        o = self.coerce(other);
+        [s,o] = coercePair(self,other);
         return o.__sub__(self);
 
     def __div__(self,other):
         '''Divide two ring elements.
         '''
-        o = self.coerce(other);
-        return RingElem( self.elem.divide( o.elem ) ); 
+        [s,o] = coercePair(self,other);
+        return RingElem( s.elem.divide( o.elem ) ); 
 
     def __mod__(self,other):
         '''Modular remainder of two ring elements.
         '''
-        o = self.coerce(other);
-        return RingElem( self.elem.remainder( o.elem ) ); 
+        [s,o] = coercePair(self,other);
+        return RingElem( s.elem.remainder( o.elem ) ); 
 
     def __pow__(self,other):
         '''Power of this to other.
