@@ -10,6 +10,9 @@ import java.util.HashMap;
 
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
+import edu.jas.structure.BinaryFunctor;
+import edu.jas.structure.UnaryFunctor;
+import edu.jas.structure.Selector;
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
