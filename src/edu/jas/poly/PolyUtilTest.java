@@ -973,13 +973,30 @@ public class PolyUtilTest extends TestCase {
         //System.out.println("qi = " + qi);
         assertEquals("pi == qi ",pi,qi); 
 
-        // test modular integer to integer and back
+        // test symetric modular integer to integer and back
         GenPolynomial<ModInteger> qm;
+        qi = PolyUtil.<ModInteger,BigInteger>map(pfi,pm, new ModSymToInt() );
+        qm = PolyUtil.<BigInteger,ModInteger>map(pfm,qi, new IntToMod(fm) );
+        //System.out.println("qi = " + qi);
+        //System.out.println("qm = " + qm);
+        assertEquals("pm == qm ",pm,qm); 
+
+        // test modular integer to integer and back
         qi = PolyUtil.<ModInteger,BigInteger>map(pfi,pm, new ModToInt() );
         qm = PolyUtil.<BigInteger,ModInteger>map(pfm,qi, new IntToMod(fm) );
         //System.out.println("qi = " + qi);
         //System.out.println("qm = " + qm);
         assertEquals("pm == qm ",pm,qm); 
+
+        // test symetric modular integer to integer to rational and back
+        qi = PolyUtil.<ModInteger,BigInteger>map(pfi,pm, new ModSymToInt() );
+        qr = PolyUtil.<BigInteger,BigRational>map(pfr,qi, new IntToRat() );
+        qi = PolyUtil.<BigRational,BigInteger>map(pfi,qr, new RatNumer() );
+        qm = PolyUtil.<BigInteger,ModInteger>map(pfm,qi, new IntToMod(fm) );
+        //System.out.println("qi = " + qi);
+        //System.out.println("qm = " + qm);
+        assertEquals("pm == qm ",pm,qm); 
+
  }
 
 }
@@ -1014,6 +1031,20 @@ class RatNumer implements UnaryFunctor<BigRational,BigInteger> {
 
 
 /**
+ * Conversion of symmetric ModInteger to BigInteger functor.
+ */
+class ModSymToInt implements UnaryFunctor<ModInteger,BigInteger> {
+    public BigInteger eval(ModInteger c) {
+        if ( c == null ) {
+            return new BigInteger();
+        } else {
+            return new BigInteger( c.getSymmetricVal() );
+        }
+    }
+}
+
+
+/**
  * Conversion of ModInteger to BigInteger functor.
  */
 class ModToInt implements UnaryFunctor<ModInteger,BigInteger> {
@@ -1021,7 +1052,7 @@ class ModToInt implements UnaryFunctor<ModInteger,BigInteger> {
         if ( c == null ) {
             return new BigInteger();
         } else {
-            return new BigInteger( c.getSymmetricVal() );
+            return new BigInteger( c.getVal() );
         }
     }
 }
