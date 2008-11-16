@@ -1176,6 +1176,8 @@ def DD(d=0):
 
 
 def coercePair(a,b):
+    '''Coerce type a to type b or type b to type a.
+    '''
     if not a.isPolynomial() and b.isPolynomial():
         s = b.coerce(a);
         o = b;

@@ -16,8 +16,8 @@ import edu.jas.structure.UnaryFunctor;
 
 
 /**
- * List utilities, e.g. 
- * map functor on list elements.
+ * List utilities.
+ * For example map functor on list elements.
  * @author Heinz Kredel
  */
 
