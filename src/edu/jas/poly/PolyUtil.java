@@ -1086,7 +1086,7 @@ public class PolyUtil {
     public static <C extends RingElem<C>, D extends RingElem<D>>
            GenPolynomial<D> map(GenPolynomialRing<D> ring,
                                 GenPolynomial<C> p,
-                                final UnaryFunctor<C,D> f) {
+                                UnaryFunctor<C,D> f) {
         GenPolynomial<D> n = ring.getZERO().clone(); 
         SortedMap<ExpVector,D> nv = n.val;
         for ( Monomial<C> m : p ) {

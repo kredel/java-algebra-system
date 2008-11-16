@@ -36,7 +36,7 @@ public class ListUtil {
     public static <C extends RingElem<C>,D extends RingElem<D>>
            List<D> map(List<C> list, UnaryFunctor<C,D> f) {
         if ( list == null ) {
-            return (List<D>)list;
+            return (List<D>)null;
         }
         List<D> nl;
         if ( list instanceof ArrayList ) {
