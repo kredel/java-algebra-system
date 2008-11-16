@@ -918,4 +918,128 @@ public class PolyUtilTest extends TestCase {
      assertEquals("interpolate(a mod (x-e1),...,a mod (x-ei)) = a (mod 19)",a,r);
  }
 
+
+/**
+ * Test coefficient map function.
+ * 
+ */
+ public void testMap() {
+        // integers
+        BigInteger fi = new BigInteger();
+        System.out.println("fi = " + fi);
+
+        // rational numbers
+        BigRational fr = new BigRational();
+        System.out.println("fr = " + fr);
+
+        // modular integers
+        ModIntegerRing fm = new ModIntegerRing(17);
+        System.out.println("fm = " + fm);
+
+        // polynomials over integral numbers
+        GenPolynomialRing<BigInteger> pfi 
+           = new GenPolynomialRing<BigInteger>(fi,rl);
+        System.out.println("pfi = " + pfi);
+
+        // polynomials over rational numbers
+        GenPolynomialRing<BigRational> pfr 
+           = new GenPolynomialRing<BigRational>(fr,rl);
+        System.out.println("pfr = " + pfr);
+
+        // polynomials over modular integers
+        GenPolynomialRing<ModInteger> pfm 
+           = new GenPolynomialRing<ModInteger>(fm,rl);
+        System.out.println("pfm = " + pfm);
+
+
+        // random polynomial
+        GenPolynomial<BigInteger> pi = pfi.random(kl,2*ll,el,q);
+        System.out.println("pi = " + pi);
+
+        // random polynomial
+        GenPolynomial<BigRational> pr = pfr.random(kl,2*ll,el,q);
+        System.out.println("pr = " + pr);
+
+        // random polynomial
+        GenPolynomial<ModInteger> pm = pfm.random(kl,2*ll,el,q);
+        System.out.println("pm = " + pm);
+
+        // test integer to rational and back
+        GenPolynomial<BigRational> qr;
+        GenPolynomial<BigInteger> qi;
+        qr = PolyUtil.<BigInteger,BigRational>map(pfr,pi, new IntToRat() );
+        qi = PolyUtil.<BigRational,BigInteger>map(pfi,qr, new RatNumer() );
+        System.out.println("qr = " + qr);
+        System.out.println("qi = " + qi);
+        assertEquals("pi == qi ",pi,qi); 
+
+        // test modular integer to integer and back
+        GenPolynomial<ModInteger> qm;
+        qi = PolyUtil.<ModInteger,BigInteger>map(pfi,pm, new ModToInt() );
+        qm = PolyUtil.<BigInteger,ModInteger>map(pfm,qi, new IntToMod(fm) );
+        System.out.println("qi = " + qi);
+        System.out.println("qm = " + qm);
+        assertEquals("pm == qm ",pm,qm); 
+ }
+
+}
+
+
+/**
+ * Conversion of BigInteger to BigRational functor.
+ */
+class IntToRat implements UnaryFunctor<BigInteger,BigRational> {
+    public BigRational eval(BigInteger c) {
+        if ( c == null ) {
+            return new BigRational();
+        } else {
+            return new BigRational( c.getVal() );
+        }
+    }
+}
+
+
+/**
+ * BigRational numerator functor.
+ */
+class RatNumer implements UnaryFunctor<BigRational,BigInteger> {
+    public BigInteger eval(BigRational c) {
+        if ( c == null ) {
+            return new BigInteger();
+        } else {
+            return new BigInteger( c.numerator() );
+        }
+    }
+}
+
+
+/**
+ * Conversion of ModInteger to BigInteger functor.
+ */
+class ModToInt implements UnaryFunctor<ModInteger,BigInteger> {
+    public BigInteger eval(ModInteger c) {
+        if ( c == null ) {
+            return new BigInteger();
+        } else {
+            return new BigInteger( c.getSymmetricVal() );
+        }
+    }
+}
+
+
+/**
+ * Conversion of BigInteger to ModInteger functor.
+ */
+class IntToMod implements UnaryFunctor<BigInteger,ModInteger> {
+    ModIntegerRing ring;
+    public IntToMod(ModIntegerRing ring) {
+        this.ring = ring;
+    }
+    public ModInteger eval(BigInteger c) {
+        if ( c == null ) {
+            return ring.getZERO();
+        } else {
+            return ring.fromInteger( c.getVal() );
+        }
+    }
 }

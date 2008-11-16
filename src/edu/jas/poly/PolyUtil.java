@@ -15,7 +15,7 @@ import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
-//import edu.jas.structure.UnaryFunctor;
+import edu.jas.structure.UnaryFunctor;
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
@@ -128,13 +128,7 @@ public class PolyUtil {
         for ( Map.Entry<ExpVector,ModInteger> y: A.getMap().entrySet() ) {
             ExpVector e = y.getKey();
             ModInteger a = y.getValue();
-            java.math.BigInteger av = a.getVal();
-            java.math.BigInteger am = a.getModul();
-            if ( av.add( av ).compareTo( am ) > 0 ) {
-               // a > m/2, make symmetric to 0
-               av = av.subtract( am );
-            }
-            BigInteger p = new BigInteger( av );
+            BigInteger p = new BigInteger( a.getSymmetricVal() );
             Bv.put( e, p );
         }
         return B;
@@ -1189,6 +1183,29 @@ public class PolyUtil {
             }
         }
         return deg;
+    }
+
+
+    /**
+     * Map a unary function to the coefficients.
+     * @param ring result polynomial ring factory.
+     * @param p polynomial.
+     * @param f evaluation functor.
+     * @return new polynomial with coefficients f(p(e)).
+     */
+    public static <C extends RingElem<C>, D extends RingElem<D>>
+           GenPolynomial<D> map(GenPolynomialRing<D> ring,
+                                GenPolynomial<C> p,
+                                final UnaryFunctor<C,D> f) {
+        GenPolynomial<D> n = ring.getZERO().clone(); 
+        SortedMap<ExpVector,D> nv = n.val;
+        for ( Monomial<C> m : p ) {
+            D c = f.eval( m.c );
+            if ( c != null && !c.isZERO() ) {
+                nv.put( m.e, c );
+            }
+        }
+        return n;
     }
 
 }

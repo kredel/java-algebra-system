@@ -85,6 +85,14 @@ public final class BigRational implements GcdRingElem<BigRational>,
     } 
 
 
+    /** Constructor for a BigRational from jas.arith.BigIntegers.
+     * @param n edu.jas.arith.BigInteger.
+     */
+    public BigRational(edu.jas.arith.BigInteger n) {
+        this( n.getVal() ); 
+    } 
+
+
     /** Constructor for a BigRational from longs.
      * @param n long.
      * @param d long.

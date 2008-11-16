@@ -85,11 +85,23 @@ public final class ModInteger implements GcdRingElem<ModInteger> {
     }
 
 
+    /** Get the symmetric value part. 
+     * @return val with -modul/2 <= val < modul/2.
+     */
+    public java.math.BigInteger getSymmetricVal() {
+        if ( val.add( val ).compareTo( ring.modul ) > 0 ) {
+            // val > m/2 as 2*val > m, make symmetric to 0
+            return val.subtract( ring.modul );
+        }
+        return val;
+    }
+
+
     /**  Clone this.
      * @see java.lang.Object#clone()
      */
     @Override
-     public ModInteger clone() {
+    public ModInteger clone() {
         return new ModInteger( ring, val );
     }
 
