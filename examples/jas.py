@@ -697,7 +697,7 @@ class SolvableIdeal:
         return SolvableIdeal(self.ring,"",N.getList());
 
     def sum(self,other):
-        '''Compute the sum of this and the ideal.
+        '''Compute the sum of this and the other ideal.
         '''
         s = jas.application.SolvableIdeal(self.pset);
         t = jas.application.SolvableIdeal(other.pset);
@@ -1368,9 +1368,15 @@ class RingElem:
         [s,o] = coercePair(self,other);
         return RingElem( s.elem.remainder( o.elem ) ); 
 
+    def __xor__(self,other):
+        '''Can not be used as power.
+        '''
+        return None;
+
     def __pow__(self,other):
         '''Power of this to other.
         '''
+        #print "self  type(%s) = %s" % (self,type(self));
         #print "pow other type(%s) = %s" % (other,type(other));
         if isinstance(other,PyInteger):
             n = other;

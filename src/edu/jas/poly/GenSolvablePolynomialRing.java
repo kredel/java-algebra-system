@@ -499,12 +499,37 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
     public List<GenSolvablePolynomial<C>> univariateList(int modv, long e) {
         List<GenSolvablePolynomial<C>> pols 
             = new ArrayList<GenSolvablePolynomial<C>>(nvar);
-        for ( int i = 0; i < nvar-modv; i++ ) {
-            GenSolvablePolynomial<C> p = univariate(modv,i,e);
+        int nm = nvar-modv;
+        for ( int i = 0; i < nm; i++ ) {
+            GenSolvablePolynomial<C> p = univariate(modv,nm-1-i,e);
             pols.add( p );
         }
         return pols;
     }
+
+
+    /**
+     * Generate list of univariate polynomials in all variables with given exponent.
+     * @param modv number of module variables.
+     * @param e the exponent of the variables.
+     * @return List(X_1^e,...,X_n^e) a list of univariate polynomials.
+    @Override
+    public List<GenSolvablePolynomial<C>> univariateList(int modv, long e) {
+        List<GenPolynomial<C>> pol = super.univariateList(modv,e);
+        UnaryFunctor<GenPolynomial<C>,GenSolvablePolynomial<C>> fc 
+            = new UnaryFunctor<GenPolynomial<C>,GenSolvablePolynomial<C>>() {
+            public GenSolvablePolynomial<C> eval(GenPolynomial<C> p) {
+                if ( ! (p instanceof GenSolvablePolynomial) ) {
+                   throw new RuntimeException("no solvable polynomial "+p);
+                }
+                return (GenSolvablePolynomial<C>) p;
+            }
+        };
+        List<GenSolvablePolynomial<C>> pols 
+            = ListUtil.<GenPolynomial<C>,GenSolvablePolynomial<C>>map(this,pol,fc);
+        return pols;
+    }
+     */
 
 
     /* include here ?
