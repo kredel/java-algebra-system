@@ -355,7 +355,7 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
         }
         HashMap<Integer,C> cache = new HashMap<Integer,C>( a.length() );
         //Iterator<Monomial<C>> it = a.monomialIterator();
-        for ( Monomial<BigInteger> m : a ) {
+        for ( Monomial<C> m : a ) {
             //while ( it.hasNext() ) {
             //Monomial<C> m = it.next();
             long e = m.exponent().getVal(0);
