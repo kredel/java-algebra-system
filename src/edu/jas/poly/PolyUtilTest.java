@@ -967,110 +967,35 @@ public class PolyUtilTest extends TestCase {
         // test integer to rational and back
         GenPolynomial<BigRational> qr;
         GenPolynomial<BigInteger> qi;
-        qr = PolyUtil.<BigInteger,BigRational>map(pfr,pi, new IntToRat() );
+        qr = PolyUtil.<BigInteger,BigRational>map(pfr,pi, new FromInteger<BigRational>(fr) );
         qi = PolyUtil.<BigRational,BigInteger>map(pfi,qr, new RatNumer() );
         //System.out.println("qr = " + qr);
         //System.out.println("qi = " + qi);
         assertEquals("pi == qi ",pi,qi); 
 
-        // test symetric modular integer to integer and back
+        // test symmetric modular integer to integer and back
         GenPolynomial<ModInteger> qm;
         qi = PolyUtil.<ModInteger,BigInteger>map(pfi,pm, new ModSymToInt() );
-        qm = PolyUtil.<BigInteger,ModInteger>map(pfm,qi, new IntToMod(fm) );
+        qm = PolyUtil.<BigInteger,ModInteger>map(pfm,qi, new FromInteger<ModInteger>(fm) );
         //System.out.println("qi = " + qi);
         //System.out.println("qm = " + qm);
         assertEquals("pm == qm ",pm,qm); 
 
         // test modular integer to integer and back
         qi = PolyUtil.<ModInteger,BigInteger>map(pfi,pm, new ModToInt() );
-        qm = PolyUtil.<BigInteger,ModInteger>map(pfm,qi, new IntToMod(fm) );
+        qm = PolyUtil.<BigInteger,ModInteger>map(pfm,qi, new FromInteger<ModInteger>(fm) );
         //System.out.println("qi = " + qi);
         //System.out.println("qm = " + qm);
         assertEquals("pm == qm ",pm,qm); 
 
-        // test symetric modular integer to integer to rational and back
+        // test symmetric modular integer to integer to rational and back
         qi = PolyUtil.<ModInteger,BigInteger>map(pfi,pm, new ModSymToInt() );
-        qr = PolyUtil.<BigInteger,BigRational>map(pfr,qi, new IntToRat() );
+        qr = PolyUtil.<BigInteger,BigRational>map(pfr,qi, new FromInteger<BigRational>(fr) );
         qi = PolyUtil.<BigRational,BigInteger>map(pfi,qr, new RatNumer() );
-        qm = PolyUtil.<BigInteger,ModInteger>map(pfm,qi, new IntToMod(fm) );
+        qm = PolyUtil.<BigInteger,ModInteger>map(pfm,qi, new FromInteger<ModInteger>(fm) );
         //System.out.println("qi = " + qi);
         //System.out.println("qm = " + qm);
         assertEquals("pm == qm ",pm,qm); 
-
  }
 
-}
-
-
-/**
- * Conversion of BigInteger to BigRational functor.
- */
-class IntToRat implements UnaryFunctor<BigInteger,BigRational> {
-    public BigRational eval(BigInteger c) {
-        if ( c == null ) {
-            return new BigRational();
-        } else {
-            return new BigRational( c );
-        }
-    }
-}
-
-
-/**
- * BigRational numerator functor.
- */
-class RatNumer implements UnaryFunctor<BigRational,BigInteger> {
-    public BigInteger eval(BigRational c) {
-        if ( c == null ) {
-            return new BigInteger();
-        } else {
-            return new BigInteger( c.numerator() );
-        }
-    }
-}
-
-
-/**
- * Conversion of symmetric ModInteger to BigInteger functor.
- */
-class ModSymToInt implements UnaryFunctor<ModInteger,BigInteger> {
-    public BigInteger eval(ModInteger c) {
-        if ( c == null ) {
-            return new BigInteger();
-        } else {
-            return new BigInteger( c.getSymmetricVal() );
-        }
-    }
-}
-
-
-/**
- * Conversion of ModInteger to BigInteger functor.
- */
-class ModToInt implements UnaryFunctor<ModInteger,BigInteger> {
-    public BigInteger eval(ModInteger c) {
-        if ( c == null ) {
-            return new BigInteger();
-        } else {
-            return new BigInteger( c.getVal() );
-        }
-    }
-}
-
-
-/**
- * Conversion of BigInteger to ModInteger functor.
- */
-class IntToMod implements UnaryFunctor<BigInteger,ModInteger> {
-    ModIntegerRing ring;
-    public IntToMod(ModIntegerRing ring) {
-        this.ring = ring;
-    }
-    public ModInteger eval(BigInteger c) {
-        if ( c == null ) {
-            return ring.getZERO();
-        } else {
-            return ring.fromInteger( c.getVal() );
-        }
-    }
 }

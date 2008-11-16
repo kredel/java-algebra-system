@@ -119,7 +119,7 @@ public class ListUtilTest extends TestCase {
      }
      bi = ai.getONE();
      List<BigInteger> nl;
-     nl = ListUtil.<BigInteger>map( list, new Multiply<BigInteger>(bi) );
+     nl = ListUtil.<BigInteger,BigInteger>map( list, new Multiply<BigInteger>(bi) );
      assertEquals("list == nl ",list,nl);
 
      List<GenPolynomial<BigInteger>> plist 
@@ -129,7 +129,7 @@ public class ListUtilTest extends TestCase {
      }
      b = dfac.getONE();
      List<GenPolynomial<BigInteger>> pnl;
-     pnl = ListUtil.<GenPolynomial<BigInteger>>map( plist, 
+     pnl = ListUtil.<GenPolynomial<BigInteger>,GenPolynomial<BigInteger>>map( plist, 
                     new Multiply<GenPolynomial<BigInteger>>(b) );
      assertEquals("plist == pnl ",plist,pnl);
  }

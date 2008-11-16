@@ -33,22 +33,22 @@ public class ListUtil {
      * @param f evaluation functor.
      * @return new list elements f(this(e)).
      */
-    public static <C extends RingElem<C>>
-           List<C> map(List<C> list, UnaryFunctor<? super C,C> f) {
-        if ( list == null || list.size() == 0) {
-            return list;
+    public static <C extends RingElem<C>,D extends RingElem<D>>
+           List<D> map(List<C> list, UnaryFunctor<C,D> f) {
+        if ( list == null ) {
+            return (List<D>)list;
         }
-        List<C> nl;
+        List<D> nl;
         if ( list instanceof ArrayList ) {
-            nl = new ArrayList<C>( list.size() );
+            nl = new ArrayList<D>( list.size() );
         } else if ( list instanceof LinkedList ) {
-            nl = new LinkedList<C>();
+            nl = new LinkedList<D>();
         } else {
             throw new RuntimeException("list type not implemented");
         }
         for ( C c : list ) {
-            C n = f.eval( c );
-            nl.add( c );
+            D n = f.eval( c );
+            nl.add( n );
         }
         return nl;
     }

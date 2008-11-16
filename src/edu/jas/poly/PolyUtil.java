@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.List;
 import java.util.ArrayList;
-//import java.util.LinkedList;
 
 import org.apache.log4j.Logger;
 
@@ -22,6 +21,8 @@ import edu.jas.arith.BigRational;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
 import edu.jas.arith.BigComplex;
+
+import edu.jas.util.ListUtil;
 
 
 /**
@@ -120,18 +121,7 @@ public class PolyUtil {
     public static GenPolynomial<BigInteger> 
         integerFromModularCoefficients( GenPolynomialRing<BigInteger> fac,
                                         GenPolynomial<ModInteger> A ) {
-        GenPolynomial<BigInteger> B = fac.getZERO().clone();
-        if ( A == null || A.isZERO() ) {
-           return B;
-        }
-        Map<ExpVector,BigInteger> Bv = B.val; //getMap();
-        for ( Map.Entry<ExpVector,ModInteger> y: A.getMap().entrySet() ) {
-            ExpVector e = y.getKey();
-            ModInteger a = y.getValue();
-            BigInteger p = new BigInteger( a.getSymmetricVal() );
-            Bv.put( e, p );
-        }
-        return B;
+        return PolyUtil.<ModInteger,BigInteger>map(fac,A, new ModSymToInt() );
     }
 
 
@@ -146,19 +136,7 @@ public class PolyUtil {
     public static GenPolynomial<BigInteger> 
         integerFromModularCoefficientsPositive( GenPolynomialRing<BigInteger> fac,
                                                 GenPolynomial<ModInteger> A ) {
-        GenPolynomial<BigInteger> B = fac.getZERO().clone();
-        if ( A == null || A.isZERO() ) {
-           return B;
-        }
-        Map<ExpVector,BigInteger> Bv = B.val; //getMap();
-        for ( Map.Entry<ExpVector,ModInteger> y: A.getMap().entrySet() ) {
-            ExpVector e = y.getKey();
-            ModInteger a = y.getValue();
-            java.math.BigInteger av = a.getVal();
-            BigInteger p = new BigInteger( av );
-            Bv.put( e, p );
-        }
-        return B;
+        return PolyUtil.<ModInteger,BigInteger>map(fac,A, new ModToInt() );
     }
 
 
@@ -174,39 +152,27 @@ public class PolyUtil {
     public static GenPolynomial<BigInteger> 
         integerFromRationalCoefficients( GenPolynomialRing<BigInteger> fac,
                                          GenPolynomial<BigRational> A ) {
-        GenPolynomial<BigInteger> B = fac.getZERO().clone();
         if ( A == null || A.isZERO() ) {
-           return B;
+           return fac.getZERO();
         }
         java.math.BigInteger c = null;
-        java.math.BigInteger d;
-        java.math.BigInteger x;
         int s = 0;
         // lcm of denominators
         for ( BigRational y: A.val.values() ) {
-            x = y.denominator();
+            java.math.BigInteger x = y.denominator();
             // c = lcm(c,x)
             if ( c == null ) {
                c = x; 
                s = x.signum();
             } else {
-               d = c.gcd( x );
+               java.math.BigInteger d = c.gcd( x );
                c = c.multiply( x.divide( d ) );
             }
         }
         if ( s < 0 ) {
            c = c.negate();
         }
-        Map<ExpVector,BigInteger> Bv = B.val; //getMap();
-        for ( Map.Entry<ExpVector,BigRational> y: A.getMap().entrySet() ) {
-            ExpVector e = y.getKey();
-            BigRational a = y.getValue();
-            // p = n*(c/d)
-            java.math.BigInteger b = c.divide( a.denominator() );
-            BigInteger p = new BigInteger( a.numerator().multiply( b ) );
-            Bv.put( e, p );
-        }
-        return B;
+        return PolyUtil.<BigRational,BigInteger>map(fac,A, new RatToInt( c ) );
     }
 
 
@@ -222,20 +188,9 @@ public class PolyUtil {
     public static List<GenPolynomial<BigInteger>> 
         integerFromRationalCoefficients( GenPolynomialRing<BigInteger> fac,
                                          List<GenPolynomial<BigRational>> L ) {
-        List<GenPolynomial<BigInteger>> K = null;
-        if ( L == null ) {
-           return K;
-        }
-        K = new ArrayList<GenPolynomial<BigInteger>>( L.size() );
-        if ( L.size() == 0 ) {
-           return K;
-        }
-        for ( GenPolynomial<BigRational> a: L ) {
-            GenPolynomial<BigInteger> b 
-               = integerFromRationalCoefficients( fac, a );
-            K.add( b );
-        }
-        return K;
+        return ListUtil.<GenPolynomial<BigRational>,GenPolynomial<BigInteger>>map( 
+                                                    L, 
+                                                    new RatToIntPoly(fac) );
     }
 
 
@@ -252,21 +207,7 @@ public class PolyUtil {
         GenPolynomial<C> 
         fromIntegerCoefficients( GenPolynomialRing<C> fac,
                                  GenPolynomial<BigInteger> A ) {
-        GenPolynomial<C> B = fac.getZERO().clone();
-        if ( A == null || A.isZERO() ) {
-           return B;
-        }
-        RingFactory<C> cfac = fac.coFac;
-        Map<ExpVector,C> Bv = B.val; //getMap();
-        for ( Map.Entry<ExpVector,BigInteger> y: A.getMap().entrySet() ) {
-            ExpVector e = y.getKey();
-            BigInteger a = y.getValue();
-            C p = cfac.fromInteger( a.getVal() ); // can be zero
-            if ( p != null && !p.isZERO() ) {
-               Bv.put( e, p );
-            }
-        }
-        return B;
+        return PolyUtil.<BigInteger,C>map(fac,A, new FromInteger<C>(fac.coFac) );
     }
 
 
@@ -283,20 +224,8 @@ public class PolyUtil {
         List<GenPolynomial<C>> 
         fromIntegerCoefficients( GenPolynomialRing<C> fac,
                                  List<GenPolynomial<BigInteger>> L ) {
-        List<GenPolynomial<C>> K = null;
-        if ( L == null ) {
-           return K;
-        }
-        K = new ArrayList<GenPolynomial<C>>( L.size() );
-        if ( L.size() == 0 ) {
-           return K;
-        }
-        for ( GenPolynomial<BigInteger> a: L ) {
-            GenPolynomial<C> b 
-               = fromIntegerCoefficients( fac, a );
-            K.add( b );
-        }
-        return K;
+        return ListUtil.<GenPolynomial<BigInteger>,GenPolynomial<C>>map( L, 
+                                                   new FromIntegerPoly<C>(fac) );
     }
 
 
@@ -309,20 +238,7 @@ public class PolyUtil {
     public static GenPolynomial<BigRational> 
         realPart( GenPolynomialRing<BigRational> fac,
                   GenPolynomial<BigComplex> A ) {
-        GenPolynomial<BigRational> B = fac.getZERO().clone();
-        if ( A == null || A.isZERO() ) {
-           return B;
-        }
-        Map<ExpVector,BigRational> Bv = B.val; //getMap();
-        for ( Map.Entry<ExpVector,BigComplex> y: A.getMap().entrySet() ) {
-            ExpVector e = y.getKey();
-            BigComplex a = y.getValue();
-            BigRational p = a.getRe();
-            if ( p != null && !p.isZERO() ) {
-               Bv.put( e, p );
-            }
-        }
-        return B;
+        return PolyUtil.<BigComplex,BigRational>map(fac,A, new RealPart() );
     }
 
 
@@ -335,20 +251,7 @@ public class PolyUtil {
     public static GenPolynomial<BigRational> 
         imaginaryPart( GenPolynomialRing<BigRational> fac,
                        GenPolynomial<BigComplex> A ) {
-        GenPolynomial<BigRational> B = fac.getZERO().clone();
-        if ( A == null || A.isZERO() ) {
-           return B;
-        }
-        Map<ExpVector,BigRational> Bv = B.val; //getMap();
-        for ( Map.Entry<ExpVector,BigComplex> y: A.getMap().entrySet() ) {
-            ExpVector e = y.getKey();
-            BigComplex a = y.getValue();
-            BigRational p = a.getIm();
-            if ( p != null && !p.isZERO() ) {
-               Bv.put( e, p );
-            }
-        }
-        return B;
+        return PolyUtil.<BigComplex,BigRational>map(fac,A, new ImagPart() );
     }
 
 
@@ -361,18 +264,7 @@ public class PolyUtil {
     public static GenPolynomial<BigComplex> 
         complexFromRational( GenPolynomialRing<BigComplex> fac,
                              GenPolynomial<BigRational> A ) {
-        GenPolynomial<BigComplex> B = fac.getZERO().clone();
-        if ( A == null || A.isZERO() ) {
-           return B;
-        }
-        Map<ExpVector,BigComplex> Bv = B.val; //getMap();
-        for ( Map.Entry<ExpVector,BigRational> y: A.getMap().entrySet() ) {
-            ExpVector e = y.getKey();
-            BigRational a = y.getValue();
-            BigComplex p = new BigComplex( a );
-            Bv.put( e, p );
-        }
-        return B;
+        return PolyUtil.<BigRational,BigComplex>map(fac,A, new RatToCompl() );
     }
 
 
@@ -460,19 +352,17 @@ public class PolyUtil {
      */
     public static <C extends RingElem<C>>
         List<GenPolynomial<C>> monic( List<GenPolynomial<C>> L ) {
-        List<GenPolynomial<C>> K = null;
-        if ( L == null ) {
-           return K;
-        }
-        K = new ArrayList<GenPolynomial<C>>( L.size() );
-        if ( L.size() == 0 ) {
-           return K;
-        }
-        for ( GenPolynomial<C> a: L ) {
-            GenPolynomial<C> b = a.monic();
-            K.add( b );
-        }
-        return K;
+        return ListUtil.<GenPolynomial<C>,GenPolynomial<C>>map( L, 
+                        new UnaryFunctor<GenPolynomial<C>,GenPolynomial<C>>() {
+                            public GenPolynomial<C> eval(GenPolynomial<C> c) {
+                                if ( c == null ) {
+                                     return null;
+                                } else {
+                                     return c.monic();
+                                }
+                            }
+                        }
+                                                              );
     }
 
 
@@ -1208,4 +1098,182 @@ public class PolyUtil {
         return n;
     }
 
+}
+
+
+/**
+ * BigRational numerator functor.
+ */
+class RatNumer implements UnaryFunctor<BigRational,BigInteger> {
+    public BigInteger eval(BigRational c) {
+        if ( c == null ) {
+            return new BigInteger();
+        } else {
+            return new BigInteger( c.numerator() );
+        }
+    }
+}
+
+
+/**
+ * Conversion of symmetric ModInteger to BigInteger functor.
+ */
+class ModSymToInt implements UnaryFunctor<ModInteger,BigInteger> {
+    public BigInteger eval(ModInteger c) {
+        if ( c == null ) {
+            return new BigInteger();
+        } else {
+            return new BigInteger( c.getSymmetricVal() );
+        }
+    }
+}
+
+
+/**
+ * Conversion of ModInteger to BigInteger functor.
+ */
+class ModToInt implements UnaryFunctor<ModInteger,BigInteger> {
+    public BigInteger eval(ModInteger c) {
+        if ( c == null ) {
+            return new BigInteger();
+        } else {
+            return new BigInteger( c.getVal() );
+        }
+    }
+}
+
+
+/**
+ * Conversion of BigRational to BigInteger with division by lcm functor.
+ * result = num*(lcm/denom).
+ */
+class RatToInt implements UnaryFunctor<BigRational,BigInteger> {
+    java.math.BigInteger lcm;
+    public RatToInt(java.math.BigInteger lcm) {
+        this.lcm = lcm; //.getVal();
+    }
+    public BigInteger eval(BigRational c) {
+        if ( c == null ) {
+            return new BigInteger();
+        } else {
+            // p = num*(lcm/denom)
+            java.math.BigInteger b = lcm.divide( c.denominator() );
+            return new BigInteger( c.numerator().multiply( b ) );
+        }
+    }
+}
+
+
+/**
+ * Conversion from BigInteger functor.
+ */
+class FromInteger<D extends RingElem<D>> 
+      implements UnaryFunctor<BigInteger,D> {
+    RingFactory<D> ring;
+    public FromInteger(RingFactory<D> ring) {
+        this.ring = ring;
+    }
+    public D eval(BigInteger c) {
+        if ( c == null ) {
+            return ring.getZERO();
+        } else {
+            return ring.fromInteger( c.getVal() );
+        }
+    }
+}
+
+
+/**
+ * Conversion from GenPolynomial<BigInteger> functor.
+ */
+class FromIntegerPoly<D extends RingElem<D>> 
+      implements UnaryFunctor<GenPolynomial<BigInteger>,GenPolynomial<D>> {
+
+    GenPolynomialRing<D> ring;
+    FromInteger<D> fi;
+
+
+    public FromIntegerPoly(GenPolynomialRing<D> ring) {
+        if ( ring == null ) {
+            throw new IllegalArgumentException("ring must not be null");
+        }
+        this.ring = ring;
+        fi = new FromInteger<D>(ring.coFac);
+    }
+
+
+    public GenPolynomial<D> eval(GenPolynomial<BigInteger> c) {
+        if ( c == null ) {
+            return ring.getZERO();
+        } else {
+            return PolyUtil.<BigInteger,D>map( ring, c, fi );
+        }
+    }
+}
+
+
+/**
+ * Conversion from GenPolynomial<BigRational> to GenPolynomial<BigInteger> functor.
+ */
+class RatToIntPoly
+    implements UnaryFunctor<GenPolynomial<BigRational>,GenPolynomial<BigInteger>> {
+
+    GenPolynomialRing<BigInteger> ring;
+
+    public RatToIntPoly(GenPolynomialRing<BigInteger> ring) {
+        if ( ring == null ) {
+            throw new IllegalArgumentException("ring must not be null");
+        }
+        this.ring = ring;
+    }
+
+    public GenPolynomial<BigInteger> eval(GenPolynomial<BigRational> c) {
+        if ( c == null ) {
+            return ring.getZERO();
+        } else {
+            return PolyUtil.integerFromRationalCoefficients( ring, c );
+        }
+    }
+}
+
+
+/**
+ * Real part functor.
+ */
+class RealPart implements UnaryFunctor<BigComplex,BigRational> {
+    public BigRational eval(BigComplex c) {
+        if ( c == null ) {
+            return new BigRational();
+        } else {
+            return c.getRe();
+        }
+    }
+}
+
+
+/**
+ * Imaginary part functor.
+ */
+class ImagPart implements UnaryFunctor<BigComplex,BigRational> {
+    public BigRational eval(BigComplex c) {
+        if ( c == null ) {
+            return new BigRational();
+        } else {
+            return c.getIm();
+        }
+    }
+}
+
+
+/**
+ * Rational to complex functor.
+ */
+class RatToCompl implements UnaryFunctor<BigRational,BigComplex> {
+    public BigComplex eval(BigRational c) {
+        if ( c == null ) {
+            return new BigComplex();
+        } else {
+            return new BigComplex( c );
+        }
+    }
 }
