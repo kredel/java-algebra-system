@@ -15,6 +15,9 @@ import java.util.Iterator;
 
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
+import edu.jas.structure.BinaryFunctor;
+import edu.jas.structure.UnaryFunctor;
+import edu.jas.structure.Selector;
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.Monomial;
@@ -351,9 +354,10 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
            throw new RuntimeException("only for univariate polynomials");
         }
         HashMap<Integer,C> cache = new HashMap<Integer,C>( a.length() );
-        Iterator<Monomial<C>> it = a.monomialIterator();
-        while ( it.hasNext() ) {
-            Monomial<C> m = it.next();
+        //Iterator<Monomial<C>> it = a.monomialIterator();
+        for ( Monomial<BigInteger> m : a ) {
+            //while ( it.hasNext() ) {
+            //Monomial<C> m = it.next();
             long e = m.exponent().getVal(0);
             cache.put( (int)e, m.coefficient() );
         }
