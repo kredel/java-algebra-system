@@ -11,13 +11,13 @@ UTILS=$LIBPATH/jython.jar:$LIBPATH/log4j.jar
 
 JAS=$JASPATH/jas.jar:$JASPATH/jas-meditor.jar
 
-if [[ ! -f "jas.py" ]]; then
-   jar xf $JASPATH/jas-meditor.jar jas.py
-fi
+#if [[ ! -f "jas.py" ]]; then
+#  jar xf $JASPATH/jas-meditor.jar jas.py
+#fi
 
 MEDITOR=$MEDITORPATH/meditor.jar:$MEDITORPATH/lib/jscl.jar
 
 CLASSPATH=$UTILS:$JAS:$MEDITOR:.
 
 mkdir -p test
-java -classpath $CLASSPATH -Duser.home=$JASPATH/examples jscl.editor.Editor
+java -classpath $CLASSPATH -Duser.home=$JASPATH/examples -Dpython.home=$JASPATH/examples jscl.editor.Editor
