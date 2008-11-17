@@ -27,7 +27,8 @@ one = r.one();
 a = r.random();
 b = r.random();
 c = abs(r.random());
-#c = 10; 
+#c = 1; 
+#a = 0;
 
 f = x * a + b * y**2 + one * z**7;
 

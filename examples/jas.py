@@ -128,7 +128,7 @@ class Ring:
     def element(self,polystr):
         '''Create an element from a string.
         '''
-        I = Ideal(self,polystr);
+        I = Ideal(self, "( " + polystr + " )");
         list = I.pset.list;
         if len(list) > 0:
             return RingElem( list[0] );
@@ -140,10 +140,12 @@ class Ring:
             a = a.elem;
         else:
             a = self.element( str(a) );
+            a = a.elem;
         if isinstance(b,RingElem):
             b = b.elem;
         else:
             b = self.element( str(b) );
+            b = b.elem;
         return RingElem( self.engine.gcd(a,b) );
 
 
