@@ -265,13 +265,16 @@ clean:
 
 SVNREV=svnlook youngest $(SVNREPO)/jas
 SVNDATE=svnlook date $(SVNREPO)/jas
+# Jan 2008 #SVNSRT=1584 
+# Jun 2008
+SVNSRT=1882
 
 export:
 	rm -rf ~/jas-versions/$(VERSION)
 	svn export --quiet file:///$(SVNREPO)/jas/trunk ~/jas-versions/$(VERSION)
 	cd ~/jas-versions/$(VERSION); jas_dosed $(VERSION) `$(SVNREV)` download.html
 #	svn log -v -r HEAD:BASE src > ~/jas-versions/$(VERSION)/svn_change.log
-	svn log -v -r HEAD:1584 file:///$(SVNREPO)/jas/trunk src examples > ~/jas-versions/$(VERSION)/svn_change.log
+	svn log -v -r HEAD:$(SVNSRT) file:///$(SVNREPO)/jas/trunk src examples > ~/jas-versions/$(VERSION)/svn_change.log
 	cd ~/jas-versions/; jar -cf $(VERSION).`$(SVNREV)`-src.jar $(VERSION)/
 	cd ~/jas-versions/$(VERSION)/; ant compile > ant_compile.out
 	cd ~/jas-versions/$(VERSION)/; jar -cf ../$(VERSION).`$(SVNREV)`-bin.jar edu/ COPYING*
