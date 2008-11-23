@@ -601,6 +601,14 @@ class SolvableRing:
         '''
         return RingElem( self.ring.getZERO() );
 
+    def element(self,polystr):
+        '''Create an element from a string.
+        '''
+        I = SolvableIdeal(self, "( " + polystr + " )");
+        list = I.pset.list;
+        if len(list) > 0:
+            return RingElem( list[0] );
+
 
 class SolvableIdeal:
     '''Represents a JAS solvable polynomial ideal.
@@ -760,6 +768,14 @@ class Module:
         '''
         return Submodule(self,modstr,list);
 
+    def element(self,modstr):
+        '''Create an element from a string.
+        '''
+        I = SubModule(self, "( " + modstr + " )");
+        list = I.mset.list;
+        if len(list) > 0:
+            return RingElem( list[0] );
+
 
 class SubModule:
     '''Represents a JAS sub-module over a polynomial ring.
@@ -833,6 +849,14 @@ class SolvableModule:
         '''Create a solvable sub-module.
         '''
         return Submodule(self,modstr,list);
+
+    def element(self,modstr):
+        '''Create an element from a string.
+        '''
+        I = SolvableSubModule(self, "( " + modstr + " )");
+        list = I.mset.list;
+        if len(list) > 0:
+            return RingElem( list[0] );
 
 
 class SolvableSubModule:
