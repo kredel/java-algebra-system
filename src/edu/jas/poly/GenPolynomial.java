@@ -72,7 +72,7 @@ public class GenPolynomial<C extends RingElem<C> >
         val = t;
         if ( ring.checkPreempt ) {
            if ( Thread.currentThread().isInterrupted() ) {
-           logger.debug("throw PreemptingException");
+              logger.debug("throw PreemptingException");
               throw new PreemptingException();
            }
         }
@@ -1320,6 +1320,7 @@ public class GenPolynomial<C extends RingElem<C> >
         GenPolynomial<C> n = ring.getZERO().clone(); 
         SortedMap<ExpVector,C> nv = n.val;
         for ( Monomial<C> m : this ) {
+            //logger.info("m = " + m);
             C c = f.eval( m.c );
             if ( c != null && !c.isZERO() ) {
                 nv.put( m.e, c );

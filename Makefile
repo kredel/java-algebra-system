@@ -27,6 +27,7 @@ SVNREPO=/home/SUBVERSION
 LIBPATH=/home/kredel/java/lib
 JUNITPATH=$(LIBPATH)/junit.jar
 LOG4JPATH=$(LIBPATH)/log4j.jar
+#LOG4JPATH=$(LIBPATH)/mylog.jar
 JOMPPATH=$(LIBPATH)/jomp1.0b.jar
 TNJPATH=$(LIBPATH)/tnj.jar
 LINTPATH=$(LIBPATH)/lint4j.jar
@@ -77,11 +78,13 @@ DOCOPTS=-package
 #DOCOPTS=-package -version -author
 #DOCOPTS=-public -protected -package -author -version
 
-MYCLASSPATH = .:$(DEFS):$(JUNITPATH):$(LOG4JPATH):$(JOMPPATH)
+#MYCLASSPATH = .:$(DEFS):$(JUNITPATH):$(JOMPPATH)
+MYCLASSPATH = $(LOG4JPATH):.:$(DEFS):$(JUNITPATH):$(JOMPPATH)
 #:$(TNJPATH)
 
 JAVAC=$(JDK)/javac -classpath $(MYCLASSPATH) -d . -Xlint:unchecked
 #-Xlint:unchecked
+#-Djava.util.logging.config.file=logging.properties 
 #JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -verbose:gc 
 JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -server -Xms300M -Xmx600M -XX:+AggressiveHeap -XX:+UseParallelGC -XX:ParallelGCThreads=2 -verbose:gc 
 #-Xbatch

@@ -16,7 +16,7 @@ import junit.framework.TestSuite;
 
 
 import org.apache.log4j.BasicConfigurator;
-//import edu.jas.kern.LogConfigurator;
+
 
 import edu.jas.arith.BigRational;
 import edu.jas.arith.BigInteger;
