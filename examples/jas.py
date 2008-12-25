@@ -30,7 +30,8 @@ from edu.jas.vector      import OrderedModuleList, ModuleList
 from edu.jas.application import ComprehensiveGroebnerBaseSeq, PolyUtilApp,\
                                 Residue, ResidueRing, Ideal, Quotient, QuotientRing
 from edu.jas.kern        import ComputerThreads;
-from edu.jas.ufd         import GreatestCommonDivisorSubres, PolyUfdUtil, GCDFactory
+from edu.jas.ufd         import GreatestCommonDivisorSubres, PolyUfdUtil, GCDFactory,\
+                                FactorModular;
 from edu.jas.util        import ExecutableServer
 from edu.jas             import structure, arith, poly, ps, ring, module, vector,\
                                 application, util, ufd
@@ -1346,6 +1347,11 @@ class RingElem:
         [s,o] = coercePair(self,other);
         return s.elem.compareTo( o.elem ); 
 
+    def __hash__(self):
+        '''Hash value.
+        '''
+        return self.elem.hashCode(); 
+
     def __mul__(self,other):
         '''Multiply two ring elements.
         '''
@@ -1463,3 +1469,15 @@ class RingElem:
         except:
             e = None;            
         return RingElem( e );
+
+    def factors(self):
+        '''Compute irreducible factorization.
+        '''
+        try:
+            e = FactorModular().baseFactors( self.elem );
+        except:
+            e = None;
+        L = {};
+        for a in e.keySet():
+            L[ RingElem( a ) ] = e.get(a);
+        return L;
