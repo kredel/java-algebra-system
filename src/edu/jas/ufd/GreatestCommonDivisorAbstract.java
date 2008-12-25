@@ -119,6 +119,12 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
             return pp;
         }
         GenPolynomial<C> d = PolyUtil.<C> baseDeriviative(pp);
+        if ( d.isZERO() ) {
+            // modulo: pp = q**n 
+            throw new RuntimeException(this.getClass().getName()
+                                       + " squarefree only for char = 0 coefficients "
+                                       + pfac.characteristic());
+        }
         GenPolynomial<C> g = baseGcd(pp, d);
         GenPolynomial<C> q = PolyUtil.<C> basePseudoDivide(pp, g);
         return q;
@@ -143,6 +149,12 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         }
         GenPolynomial<C> pp = P;
         GenPolynomial<C> d = PolyUtil.<C> baseDeriviative(pp);
+        if ( d.isZERO() ) {
+            // modulo: pp = q**n 
+            throw new RuntimeException(this.getClass().getName()
+                                       + " squarefree only for char = 0 coefficients "
+                                       + pfac.characteristic());
+        }
         GenPolynomial<C> g = baseGcd(pp, d);
         GenPolynomial<C> q = PolyUtil.<C> basePseudoDivide(pp, g);
         //GenPolynomial<C> y = PolyUtil.<C>basePseudoDivide(d,g);
@@ -275,6 +287,12 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
             return pp;
         }
         GenPolynomial<GenPolynomial<C>> d = PolyUtil.<C> recursiveDeriviative(pp);
+        if ( d.isZERO() ) {
+            // modulo: pp = q**n 
+            throw new RuntimeException(this.getClass().getName()
+                                       + " squarefree only for char = 0 coefficients "
+                                       + pfac.characteristic());
+        }
         GenPolynomial<GenPolynomial<C>> g = recursiveUnivariateGcd(pp, d);
         GenPolynomial<GenPolynomial<C>> q = PolyUtil.<C> recursivePseudoDivide(pp, g);
         return q;
@@ -306,6 +324,12 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         //System.out.println("rsf = " + rsf);
 
         GenPolynomial<GenPolynomial<C>> d = PolyUtil.<C> recursiveDeriviative(pp);
+        if ( d.isZERO() ) {
+            // modulo: pp = q**n 
+            throw new RuntimeException(this.getClass().getName()
+                                       + " squarefree only for char = 0 coefficients "
+                                       + pfac.characteristic());
+        }
         GenPolynomial<GenPolynomial<C>> g = recursiveUnivariateGcd(pp, d);
         GenPolynomial<GenPolynomial<C>> q = PolyUtil.<C> recursivePseudoDivide(pp, g);
         //GenPolynomial<GenPolynomial<C>> y = PolyUtil.<C>recursivePseudoDivide(d,g);
