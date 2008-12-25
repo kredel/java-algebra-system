@@ -120,7 +120,7 @@ public class FactorModular //<C extends GcdRingElem<C> >
         GreatestCommonDivisor<ModInteger> engine = GCDFactory.<ModInteger>getImplementation( pfac.coFac );
         Power<GenPolynomial<ModInteger>> pow = new Power<GenPolynomial<ModInteger>>( pfac );
         GenPolynomial<ModInteger> g = null;
-        while ( g == null ) {
+        do {
             r = pfac.random(7,deg,2*deg-1,0.5f).monic();
             System.out.println("r = " + r);
             BigInteger di = Power.<BigInteger>positivePower(new BigInteger(m),deg);
@@ -128,10 +128,8 @@ public class FactorModular //<C extends GcdRingElem<C> >
             h = pow.modPower( r, d/2, f );
             g = engine.gcd( h.subtract(one), f );
             System.out.println("g = " + g);
-            if ( g.degree(0) == 0 || g.degree(0) == f.degree(0) ) {
-                g = null;
             }
-        }
+        } while ( g.degree(0) == 0 || g.degree(0) == f.degree(0) );
         f = f.divide(g);
         facs.addAll( baseEqualDegreeFactors(f,deg) );
         facs.addAll( baseEqualDegreeFactors(g,deg) );
