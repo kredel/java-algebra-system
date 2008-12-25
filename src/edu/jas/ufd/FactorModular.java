@@ -88,6 +88,58 @@ public class FactorModular //<C extends GcdRingElem<C> >
 
 
     /**
+     * GenPolynomial base equal degree factorization.
+     * @param P GenPolynomial<ModInteger>.
+     * @return (P).
+     */
+        public List<GenPolynomial<ModInteger>> baseEqualDegreeFactors(GenPolynomial<ModInteger> P, int deg) {
+        if ( P == null ) {
+            throw new RuntimeException(this.getClass().getName() + " P != null");
+        }
+        List<GenPolynomial<ModInteger>> facs = new ArrayList<GenPolynomial<ModInteger>>();
+        if ( P.isZERO() ) {
+            return facs;
+        }
+        GenPolynomialRing<ModInteger> pfac = P.ring;
+        if ( pfac.nvar > 1 ) {
+            // baseContent not possible by return type
+            throw new RuntimeException(this.getClass().getName()
+                    + " only for univariate polynomials");
+        }
+        if ( P.degree(0) == deg ) {
+            facs.add( P );
+            return facs;
+        }
+        ModIntegerRing mr = (ModIntegerRing)pfac.coFac;
+        java.math.BigInteger bi = mr.modul;
+        long m = bi.longValue();
+        GenPolynomial<ModInteger> one = pfac.getONE();
+        GenPolynomial<ModInteger> r;
+        GenPolynomial<ModInteger> h;
+        GenPolynomial<ModInteger> f = P;
+        GreatestCommonDivisor<ModInteger> engine = GCDFactory.<ModInteger>getImplementation( pfac.coFac );
+        Power<GenPolynomial<ModInteger>> pow = new Power<GenPolynomial<ModInteger>>( pfac );
+        GenPolynomial<ModInteger> g = null;
+        while ( g == null ) {
+            r = pfac.random(7,deg,2*deg-1,0.5f).monic();
+            System.out.println("r = " + r);
+            BigInteger di = Power.<BigInteger>positivePower(new BigInteger(m),deg);
+            long d = di.getVal().longValue()-1;
+            h = pow.modPower( r, d/2, f );
+            g = engine.gcd( h.subtract(one), f );
+            System.out.println("g = " + g);
+            if ( g.degree(0) == 0 || g.degree(0) == f.degree(0) ) {
+                g = null;
+            }
+        }
+        f = f.divide(g);
+        facs.addAll( baseEqualDegreeFactors(f,deg) );
+        facs.addAll( baseEqualDegreeFactors(g,deg) );
+        return facs;
+    }
+
+
+    /**
      * GenPolynomial base factorization.
      * @param P GenPolynomial<ModInteger>.
      * @return (P).
@@ -111,6 +163,7 @@ public class FactorModular //<C extends GcdRingElem<C> >
         GreatestCommonDivisorAbstract<ModInteger> engine 
          = (GreatestCommonDivisorAbstract<ModInteger>)GCDFactory.<ModInteger>getImplementation( pfac.coFac );
         SortedMap<Integer,GenPolynomial<ModInteger>> facs = engine.baseSquarefreeFactors(P);
+        System.out.println("facs    = " + facs);
         for ( Integer d : facs.keySet() ) {
             GenPolynomial<ModInteger> g = facs.get( d );
             SortedMap<Long,GenPolynomial<ModInteger>> dfacs = baseDistinctDegreeFactors(g);
@@ -119,6 +172,7 @@ public class FactorModular //<C extends GcdRingElem<C> >
                 factors.put( f, d );
             }
         }
+        System.out.println("factors = " + factors);
         return factors;
     }
 
