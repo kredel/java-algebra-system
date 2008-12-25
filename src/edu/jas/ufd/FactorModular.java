@@ -92,7 +92,7 @@ public class FactorModular //<C extends GcdRingElem<C> >
      * @param P GenPolynomial<ModInteger>.
      * @return (P).
      */
-        public List<GenPolynomial<ModInteger>> baseEqualDegreeFactors(GenPolynomial<ModInteger> P, int deg) {
+    public List<GenPolynomial<ModInteger>> baseEqualDegreeFactors(GenPolynomial<ModInteger> P, long deg) {
         if ( P == null ) {
             throw new RuntimeException(this.getClass().getName() + " P != null");
         }
@@ -120,15 +120,21 @@ public class FactorModular //<C extends GcdRingElem<C> >
         GreatestCommonDivisor<ModInteger> engine = GCDFactory.<ModInteger>getImplementation( pfac.coFac );
         Power<GenPolynomial<ModInteger>> pow = new Power<GenPolynomial<ModInteger>>( pfac );
         GenPolynomial<ModInteger> g = null;
+        int degi = (int) deg; //f.degree(0);
+        //System.out.println("deg = " + deg);
         do {
-            r = pfac.random(7,deg,2*deg-1,0.5f).monic();
-            System.out.println("r = " + r);
+            r = pfac.random(17,degi,2*degi,1.0f);
+            if ( r.degree(0) > f.degree(0) ) {
+                r = r.remainder(f);
+            }
+            r = r.monic();
+            //System.out.println("r = " + r);
             BigInteger di = Power.<BigInteger>positivePower(new BigInteger(m),deg);
             long d = di.getVal().longValue()-1;
             h = pow.modPower( r, d/2, f );
             g = engine.gcd( h.subtract(one), f );
-            System.out.println("g = " + g);
-            }
+            //System.out.println("g = " + g);
+            degi++;
         } while ( g.degree(0) == 0 || g.degree(0) == f.degree(0) );
         f = f.divide(g);
         facs.addAll( baseEqualDegreeFactors(f,deg) );
@@ -142,7 +148,7 @@ public class FactorModular //<C extends GcdRingElem<C> >
      * @param P GenPolynomial<ModInteger>.
      * @return (P).
      */
-        public SortedMap<GenPolynomial<ModInteger>,Integer> baseFactors(GenPolynomial<ModInteger> P) {
+    public SortedMap<GenPolynomial<ModInteger>,Integer> baseFactors(GenPolynomial<ModInteger> P) {
         if ( P == null ) {
             throw new RuntimeException(this.getClass().getName() + " P != null");
         }
@@ -153,21 +159,31 @@ public class FactorModular //<C extends GcdRingElem<C> >
         }
         GenPolynomialRing<ModInteger> pfac = P.ring;
         if ( pfac.nvar > 1 ) {
-            // baseContent not possible by return type
             throw new RuntimeException(this.getClass().getName()
                     + " only for univariate polynomials");
         }
         ModIntegerRing mr = (ModIntegerRing)pfac.coFac;
         GreatestCommonDivisorAbstract<ModInteger> engine 
          = (GreatestCommonDivisorAbstract<ModInteger>)GCDFactory.<ModInteger>getImplementation( pfac.coFac );
+        ModInteger c = engine.baseContent(P);
+        if ( ! c.isONE() ) {
+           GenPolynomial<ModInteger> pc = pfac.getONE().multiply( c );
+           factors.put( pc, 1 );
+           P = P.divide(c); // make primitive
+        }
         SortedMap<Integer,GenPolynomial<ModInteger>> facs = engine.baseSquarefreeFactors(P);
         System.out.println("facs    = " + facs);
         for ( Integer d : facs.keySet() ) {
             GenPolynomial<ModInteger> g = facs.get( d );
             SortedMap<Long,GenPolynomial<ModInteger>> dfacs = baseDistinctDegreeFactors(g);
+            System.out.println("dfacs    = " + dfacs);
             for ( Long e : dfacs.keySet() ) {
                 GenPolynomial<ModInteger> f = dfacs.get( e );
-                factors.put( f, d );
+                List<GenPolynomial<ModInteger>> efacs = baseEqualDegreeFactors(f,e);
+                System.out.println("efacs    = " + efacs);
+                for ( GenPolynomial<ModInteger> h : efacs ) {
+                    factors.put( h, d );
+                }
             }
         }
         System.out.println("factors = " + factors);

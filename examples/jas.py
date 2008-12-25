@@ -1473,11 +1473,12 @@ class RingElem:
     def factors(self):
         '''Compute irreducible factorization.
         '''
-        try:
-            e = FactorModular().baseFactors( self.elem );
-        except:
-            e = None;
         L = {};
+        e = FactorModular().baseFactors( self.elem );
         for a in e.keySet():
-            L[ RingElem( a ) ] = e.get(a);
+            i = e.get(a);
+            if i == None:
+                print "a = ", a, ", i = ", i, " *** why does this happen? ***";
+                i = 1;
+            L[ RingElem( a ) ] = i;
         return L;

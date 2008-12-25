@@ -723,6 +723,88 @@ public class PolyUtil {
 
 
     /**
+     * GenPolynomial mod p-th root main variable.
+     * @param <C> base coefficient type must be ModInteger.
+     * @param P GenPolynomial.
+     * @param mp modulus.
+     * @return mod_p-th_rootOf(P).
+     */
+    public static <C extends RingElem<C>>
+      GenPolynomial<C> baseModRoot( GenPolynomial<C> P, long mp ) {
+        if ( P == null || P.isZERO() ) {
+            return P;
+        }
+        GenPolynomialRing<C> pfac = P.ring;
+        if ( pfac.nvar > 1 ) { 
+           // basePthRoot not possible by return type
+           throw new RuntimeException(P.getClass().getName()
+                     + " only for univariate polynomials");
+        }
+        RingFactory<C> rf = pfac.coFac;
+        if ( rf.characteristic().signum() != 1  ) { 
+           // basePthRoot not possible
+           throw new RuntimeException(P.getClass().getName()
+                     + " only for ModInteger polynomials " + rf);
+        }
+        GenPolynomial<C> d = pfac.getZERO().clone();
+        Map<ExpVector,C> dm = d.val; //getMap();
+        for ( Map.Entry<ExpVector,C> m : P.getMap().entrySet() ) {
+            ExpVector f = m.getKey();  
+            long fl = f.getVal(0);
+            if ( fl % mp != 0 ) {
+                 throw new RuntimeException(P.getClass().getName()
+                       + " exponent not divisible by m " + fl);
+            }
+            fl = fl / mp;
+            ExpVector e = ExpVector.create( 1, 0, fl );  
+            dm.put(e,m.getValue());
+        }
+        return d; 
+    }
+
+
+    /**
+     * GenPolynomial mod p-th root main variable.
+     * @param <C> base coefficient type must be ModInteger.
+     * @param P recursive univariate GenPolynomial.
+     * @param mp modulus.
+     * @return mod_p-th_rootOf(P).
+     */
+    public static <C extends RingElem<C>>
+      GenPolynomial<GenPolynomial<C>> recursiveModRoot( GenPolynomial<GenPolynomial<C>> P, long mp ) {
+        if ( P == null || P.isZERO() ) {
+            return P;
+        }
+        GenPolynomialRing<GenPolynomial<C>> pfac = P.ring;
+        if ( pfac.nvar > 1 ) { 
+           // basePthRoot not possible by return type
+           throw new RuntimeException(P.getClass().getName()
+                     + " only for univariate polynomials");
+        }
+        RingFactory<GenPolynomial<C>> rf = pfac.coFac;
+        if ( rf.characteristic().signum() != 1  ) { 
+           // basePthRoot not possible
+           throw new RuntimeException(P.getClass().getName()
+                     + " only for ModInteger polynomials " + rf);
+        }
+        GenPolynomial<GenPolynomial<C>> d = pfac.getZERO().clone();
+        Map<ExpVector,GenPolynomial<C>> dm = d.val; //getMap();
+        for ( Map.Entry<ExpVector,GenPolynomial<C>> m : P.getMap().entrySet() ) {
+            ExpVector f = m.getKey();  
+            long fl = f.getVal(0);
+            if ( fl % mp != 0 ) {
+                 throw new RuntimeException(P.getClass().getName()
+                       + " exponent not divisible by m " + fl);
+            }
+            fl = fl / mp;
+            ExpVector e = ExpVector.create( 1, 0, fl );  
+            dm.put(e,m.getValue());
+        }
+        return d; 
+    }
+
+
+    /**
      * Factor coefficient bound.
      * See SACIPOL.IPFCB: the product of all maxNorms of potential factors
      * is less than or equal to 2**b times the maxNorm of A.

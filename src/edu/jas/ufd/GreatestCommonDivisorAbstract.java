@@ -110,7 +110,6 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         }
         GenPolynomialRing<C> pfac = P.ring;
         if (pfac.nvar > 1) {
-            // baseContent not possible by return type
             throw new RuntimeException(this.getClass().getName()
                     + " only for univariate polynomials");
         }
@@ -122,7 +121,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         if ( d.isZERO() ) {
             // modulo: pp = q**n 
             throw new RuntimeException(this.getClass().getName()
-                                       + " squarefree only for char = 0 coefficients "
+                                       + " squarefree only for char 0 coefficients "
                                        + pfac.characteristic());
         }
         GenPolynomial<C> g = baseGcd(pp, d);
@@ -138,27 +137,34 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
      */
     public SortedMap<Integer, GenPolynomial<C>> baseSquarefreeFactors(GenPolynomial<C> P) {
         SortedMap<Integer, GenPolynomial<C>> sfactors = new TreeMap<Integer, GenPolynomial<C>>();
-        if (P == null || P.isZERO()) {
+        if ( P == null || P.isZERO() ) {
+            return sfactors;
+        }
+        if ( P.isConstant() ) {
+            sfactors.put(1,P);
             return sfactors;
         }
         GenPolynomialRing<C> pfac = P.ring;
-        if (pfac.nvar > 1) {
-            // baseContent not possible by return type
+        if ( pfac.nvar > 1 ) {
             throw new RuntimeException(this.getClass().getName()
                     + " only for univariate polynomials");
         }
         GenPolynomial<C> pp = P;
-        GenPolynomial<C> d = PolyUtil.<C> baseDeriviative(pp);
-        if ( d.isZERO() ) {
-            // modulo: pp = q**n 
-            throw new RuntimeException(this.getClass().getName()
-                                       + " squarefree only for char = 0 coefficients "
-                                       + pfac.characteristic());
-        }
+        GenPolynomial<C> d;
+        int j = 1;
+        while ( true ) { 
+            d = PolyUtil.<C> baseDeriviative(pp);
+            System.out.println("d = " + d);
+            if ( !d.isZERO() ) { // || pp.isConstant()
+                break;
+            }
+            int mp = pfac.characteristic().intValue(); // assert != 0
+            pp = PolyUtil.<C> baseModRoot(pp,mp);
+            j = j * mp;
+        } 
         GenPolynomial<C> g = baseGcd(pp, d);
         GenPolynomial<C> q = PolyUtil.<C> basePseudoDivide(pp, g);
         //GenPolynomial<C> y = PolyUtil.<C>basePseudoDivide(d,g);
-        int j = 1;
         while (g.leadingExpVector().getVal(0) >= 1 /*!g.isONE()*/) {
             GenPolynomial<C> c = baseGcd(g, q);
             GenPolynomial<C> z = PolyUtil.<C> basePseudoDivide(q, c);
@@ -290,7 +296,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         if ( d.isZERO() ) {
             // modulo: pp = q**n 
             throw new RuntimeException(this.getClass().getName()
-                                       + " squarefree only for char = 0 coefficients "
+                                       + " squarefree only for char 0 coefficients "
                                        + pfac.characteristic());
         }
         GenPolynomial<GenPolynomial<C>> g = recursiveUnivariateGcd(pp, d);
@@ -327,7 +333,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         if ( d.isZERO() ) {
             // modulo: pp = q**n 
             throw new RuntimeException(this.getClass().getName()
-                                       + " squarefree only for char = 0 coefficients "
+                                       + " squarefree only for char 0 coefficients "
                                        + pfac.characteristic());
         }
         GenPolynomial<GenPolynomial<C>> g = recursiveUnivariateGcd(pp, d);
