@@ -27,7 +27,7 @@ import edu.jas.poly.PolyUtil;
 
 
 /**
- * Modular factorization algorithms.
+ * Modular coefficients factorization algorithms.
  * @author Heinz Kredel
  */
 

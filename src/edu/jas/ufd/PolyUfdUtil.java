@@ -630,7 +630,7 @@ public class PolyUfdUtil {
             lift.add( g );
             return lift;
         }
-        // one Hensel step on each half of the list
+        // split list in two parts and prepare polynomials
         int k = n/2;
         List<GenPolynomial<ModInteger>> F1 = new ArrayList<GenPolynomial<ModInteger>>( k );
         GenPolynomial<ModInteger> A = mfac.getONE();
@@ -648,6 +648,7 @@ public class PolyUfdUtil {
             B = B.multiply( fi );
             F2.add( fi );
         }
+        // one Hensel step on part polynomials
         GenPolynomial<ModInteger>[] gst = A.egcd( B );
         if ( ! gst[0].isONE() ) {
            throw new RuntimeException("A and B not coprime");
@@ -657,7 +658,7 @@ public class PolyUfdUtil {
         GenPolynomial<BigInteger>[] ab = liftHenselQuadratic(C,M,A,B,s,t);
         GenPolynomial<BigInteger> A1 = ab[0];
         GenPolynomial<BigInteger> B1 = ab[1];
-        // recursion
+        // recursion on list parts
         List<GenPolynomial<BigInteger>> G1 = liftHenselQuadratic(A1,M,F1);
         List<GenPolynomial<BigInteger>> G2 = liftHenselQuadratic(B1,M,F2);
         lift.addAll( G1 );
