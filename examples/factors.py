@@ -17,7 +17,8 @@ from jas import startLog
 #r = Ring( "Rat(x,y,z) L" );
 #r = Ring( "C(x,y,z) L" );
 #r = Ring( "Z(x,y,z) L" );
-r = Ring( "Mod 11 (x) L" );
+r = Ring( "Z(x) L" );
+#r = Ring( "Mod 11 (x) L" );
 
 print "Ring: " + str(r);
 print;
@@ -32,9 +33,9 @@ c = abs(r.random());
 #a = 0;
 
 #f = x**15 - 1;
-#f = x * ( x + 1 )**2 * ( x**2 + x + 1 )**3;
+f = x * ( x + 1 )**2 * ( x**2 + x + 1 )**3;
 #f = x**6 - 3 * x**5 + x**4 - 3 * x**3 - x**2 - 3 * x+ 1;
-f = x**(3*11*11) + 3 * x**(2*11*11) - x**(11*11);
+#f = x**(3*11*11) + 3 * x**(2*11*11) - x**(11*11);
 #f = x**(3*11*11*11) + 3 * x**(2*11*11*11) - x**(11*11*11);
 
 print "a = ", a;

@@ -31,7 +31,7 @@ from edu.jas.application import ComprehensiveGroebnerBaseSeq, PolyUtilApp,\
                                 Residue, ResidueRing, Ideal, Quotient, QuotientRing
 from edu.jas.kern        import ComputerThreads;
 from edu.jas.ufd         import GreatestCommonDivisorSubres, PolyUfdUtil, GCDFactory,\
-                                FactorModular;
+                                FactorModular, FactorInteger;
 from edu.jas.util        import ExecutableServer
 from edu.jas             import structure, arith, poly, ps, ring, module, vector,\
                                 application, util, ufd
@@ -1474,7 +1474,12 @@ class RingElem:
         '''Compute irreducible factorization.
         '''
         L = {};
-        e = FactorModular().baseFactors( self.elem );
+        ci = self.elem.ring.characteristic();
+        #print "ci = ", ci;
+        if ci.signum() == 0:
+            e = FactorInteger().baseFactors( self.elem );
+        else:
+            e = FactorModular().baseFactors( self.elem );
         for a in e.keySet():
             i = e.get(a);
             if i == None:
