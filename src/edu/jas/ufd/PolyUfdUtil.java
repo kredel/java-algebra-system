@@ -593,4 +593,76 @@ public class PolyUfdUtil {
         return AB;
     }
 
+
+    /** ModInteger Hensel lifting algorithm on coefficients.
+     * Let p = f_i.ring.coFac.modul() i = 0, ..., n-1
+     * and assume C == prod_{0,...,n-1} f_i mod p with ggt(f_i,f_j) == 1 mod p for i != j
+     * @param C GenPolynomial<BigInteger>.
+     * @param F = [f_0,...,f_{n-1}] List<GenPolynomial<ModInteger>>.
+     * @param M bound on the coefficients of g_i as factors of C.
+     * @return [g_0,...,g_{n-1}] = lift(C,F), with C = prod_{0,...,n-1} g_i mod p**e.
+     */
+    //@SuppressWarnings("unchecked") 
+    public static //<C extends RingElem<C>>
+        List<GenPolynomial<BigInteger>>
+        liftHenselQuadratic( GenPolynomial<BigInteger> C,
+                             BigInteger M,
+                             List<GenPolynomial<ModInteger>> F) {
+        if ( C == null || C.isZERO() || F == null || F.size() == 0 ) {
+           throw new RuntimeException("C must be nonzero and F must be nonempty");
+        }
+        GenPolynomialRing<BigInteger> fac = C.ring;
+        if ( fac.nvar != 1 ) { // todo assert
+           throw new RuntimeException("polynomial ring not univariate");
+        }
+        List<GenPolynomial<BigInteger>> lift = new ArrayList<GenPolynomial<BigInteger>>( F.size() );
+        int n = F.size();
+        BigInteger lc = C.leadingBaseCoefficient();
+        GenPolynomial<ModInteger> f = F.get(0);
+        GenPolynomialRing<ModInteger> mfac = f.ring;
+        ModIntegerRing mr = (ModIntegerRing)mfac.coFac;
+        //BigInteger p = new BigInteger( mr.modul );
+        if ( n == 1 ) {
+            BigInteger[] gst = lc.egcd( M );
+            BigInteger s = gst[1];
+            GenPolynomial<BigInteger> g = PolyUtil.integerFromModularCoefficients(fac,f);
+            g = g.multiply(s);
+            lift.add( g );
+            return lift;
+        }
+        // one Hensel step on each half of the list
+        int k = n/2;
+        List<GenPolynomial<ModInteger>> F1 = new ArrayList<GenPolynomial<ModInteger>>( k );
+        GenPolynomial<ModInteger> A = mfac.getONE();
+        ModInteger mlc = mr.fromInteger( lc.getVal() );
+        A = A.multiply( mlc );
+        for ( int i = 0; i < k; i++ ) {
+            GenPolynomial<ModInteger> fi = F.get(i);
+            A = A.multiply( fi );
+            F1.add( fi );
+        }
+        List<GenPolynomial<ModInteger>> F2 = new ArrayList<GenPolynomial<ModInteger>>( k );
+        GenPolynomial<ModInteger> B = mfac.getONE();
+        for ( int i = k; i < n; i++ ) {
+            GenPolynomial<ModInteger> fi = F.get(i);
+            B = B.multiply( fi );
+            F2.add( fi );
+        }
+        GenPolynomial<ModInteger>[] gst = A.egcd( B );
+        if ( ! gst[0].isONE() ) {
+           throw new RuntimeException("A and B not coprime");
+        }
+        GenPolynomial<ModInteger> s = gst[1];
+        GenPolynomial<ModInteger> t = gst[2];
+        GenPolynomial<BigInteger>[] ab = liftHenselQuadratic(C,M,A,B,s,t);
+        GenPolynomial<BigInteger> A1 = ab[0];
+        GenPolynomial<BigInteger> B1 = ab[1];
+        // recursion
+        List<GenPolynomial<BigInteger>> G1 = liftHenselQuadratic(A1,M,F1);
+        List<GenPolynomial<BigInteger>> G2 = liftHenselQuadratic(B1,M,F2);
+        lift.addAll( G1 );
+        lift.addAll( G2 );
+        return lift;
+    }
+
 }

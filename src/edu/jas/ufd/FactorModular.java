@@ -198,7 +198,6 @@ public class FactorModular //<C extends GcdRingElem<C> >
             throw new RuntimeException(this.getClass().getName()
                     + " only for univariate polynomials");
         }
-        ModIntegerRing mr = (ModIntegerRing)pfac.coFac;
         GreatestCommonDivisorAbstract<ModInteger> engine 
          = (GreatestCommonDivisorAbstract<ModInteger>)GCDFactory.<ModInteger>getImplementation( pfac.coFac );
         ModInteger c = engine.baseContent(P);
