@@ -144,6 +144,42 @@ public class FactorModular //<C extends GcdRingElem<C> >
 
 
     /**
+     * GenPolynomial base factorization of a squarefree polynomial.
+     * @param P squarefree and primitive! GenPolynomial<ModInteger>.
+     * @return (P).
+     */
+    public List<GenPolynomial<ModInteger>> baseFactorsSquarefree(GenPolynomial<ModInteger> P) {
+        if ( P == null ) {
+            throw new RuntimeException(this.getClass().getName() + " P == null");
+        }
+        List<GenPolynomial<ModInteger>> factors = new ArrayList<GenPolynomial<ModInteger>>();
+        if ( P.isZERO() ) {
+            return factors;
+        }
+        if ( P.isONE() ) {
+            factors.add(P);
+            return factors;
+        }
+        GenPolynomialRing<ModInteger> pfac = P.ring;
+        if ( pfac.nvar > 1 ) {
+            throw new RuntimeException(this.getClass().getName()
+                    + " only for univariate polynomials");
+        }
+        SortedMap<Long,GenPolynomial<ModInteger>> dfacs = baseDistinctDegreeFactors(P);
+        System.out.println("dfacs    = " + dfacs);
+        for ( Long e : dfacs.keySet() ) {
+            GenPolynomial<ModInteger> f = dfacs.get( e );
+            List<GenPolynomial<ModInteger>> efacs = baseEqualDegreeFactors(f,e);
+            System.out.println("efacs    = " + efacs);
+            for ( GenPolynomial<ModInteger> h : efacs ) {
+                factors.add( h );
+            }
+        }
+        return factors;
+    }
+
+
+    /**
      * GenPolynomial base factorization.
      * @param P GenPolynomial<ModInteger>.
      * @return (P).
@@ -175,19 +211,25 @@ public class FactorModular //<C extends GcdRingElem<C> >
         System.out.println("facs    = " + facs);
         for ( Integer d : facs.keySet() ) {
             GenPolynomial<ModInteger> g = facs.get( d );
-            SortedMap<Long,GenPolynomial<ModInteger>> dfacs = baseDistinctDegreeFactors(g);
-            System.out.println("dfacs    = " + dfacs);
-            for ( Long e : dfacs.keySet() ) {
-                GenPolynomial<ModInteger> f = dfacs.get( e );
-                List<GenPolynomial<ModInteger>> efacs = baseEqualDegreeFactors(f,e);
-                System.out.println("efacs    = " + efacs);
-                for ( GenPolynomial<ModInteger> h : efacs ) {
-                    factors.put( h, d );
-                }
+            List<GenPolynomial<ModInteger>> sfacs = baseFactorsSquarefree(g);
+            //System.out.println("sfacs   = " + sfacs);
+            for ( GenPolynomial<ModInteger> h : sfacs ) {
+                factors.put( h, d );
             }
         }
         System.out.println("factors = " + factors);
         return factors;
     }
+
+//             SortedMap<Long,GenPolynomial<ModInteger>> dfacs = baseDistinctDegreeFactors(g);
+//             System.out.println("dfacs    = " + dfacs);
+//             for ( Long e : dfacs.keySet() ) {
+//                 GenPolynomial<ModInteger> f = dfacs.get( e );
+//                 List<GenPolynomial<ModInteger>> efacs = baseEqualDegreeFactors(f,e);
+//                 System.out.println("efacs    = " + efacs);
+//                 for ( GenPolynomial<ModInteger> h : efacs ) {
+//                     factors.put( h, d );
+//                 }
+//             }
 
 }
