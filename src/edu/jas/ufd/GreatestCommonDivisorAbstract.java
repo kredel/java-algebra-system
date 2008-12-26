@@ -124,7 +124,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         int j = 1;
         while ( true ) { 
             d = PolyUtil.<C> baseDeriviative(pp);
-            System.out.println("d = " + d);
+            //System.out.println("d = " + d);
             if ( !d.isZERO() ) { // || pp.isConstant()
                 break;
             }
@@ -162,7 +162,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         int j = 1;
         while ( true ) { 
             d = PolyUtil.<C> baseDeriviative(pp);
-            System.out.println("d = " + d);
+            //System.out.println("d = " + d);
             if ( !d.isZERO() ) { // || pp.isConstant()
                 break;
             }
@@ -309,7 +309,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         GenPolynomial<GenPolynomial<C>> d;
         while ( true ) { 
             d = PolyUtil.<C>recursiveDeriviative(pp);
-            System.out.println("d = " + d);
+            //System.out.println("d = " + d);
             if ( !d.isZERO() ) { // || pp.isConstant()
                 break;
             }
@@ -355,7 +355,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         int j = 1;
         while ( true ) { 
             d = PolyUtil.<C>recursiveDeriviative(pp);
-            System.out.println("d = " + d);
+            //System.out.println("d = " + d);
             if ( !d.isZERO() ) { // || pp.isConstant()
                 break;
             }
