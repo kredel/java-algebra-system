@@ -25,6 +25,8 @@ import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.PolyUtil;
 
+import edu.jas.util.PowerSet;
+
 
 /**
  * Integer coefficients factorization algorithms.
@@ -91,6 +93,9 @@ public class FactorInteger //<C extends GcdRingElem<C> >
                 logger.error("prime list exhausted, pn = " + pn);
                 throw new RuntimeException("prime list exhausted");
             }
+            if ( i < 2 ) {
+                p = new java.math.BigInteger("11");
+            }
             cofac = new ModIntegerRing( p, true );
             ModInteger nf = cofac.fromInteger( ac.getVal() );
             if ( nf.isZERO() ) {
@@ -118,7 +123,33 @@ public class FactorInteger //<C extends GcdRingElem<C> >
         System.out.println("mlist = " + mlist);
         List<GenPolynomial<BigInteger>> ilist = PolyUfdUtil.liftHenselQuadratic(P,M,mlist);
         System.out.println("ilist = " + ilist);
-        factors.addAll( ilist );
+
+        if ( ilist.size() <= 1 ) {
+             factors.addAll( ilist );
+             return factors;
+        }
+     
+        int dl = (ilist.size()+1)/2;
+        GenPolynomial<BigInteger> u = P;
+        PowerSet<GenPolynomial<BigInteger>> ps = new PowerSet<GenPolynomial<BigInteger>>( ilist );
+        for ( List<GenPolynomial<BigInteger>> flist : ps ) {
+            if ( flist.size() > 0 && flist.size() <= dl ) {
+               GenPolynomial<BigInteger> trial = pfac.getONE();
+               for ( int k = 0; k < flist.size(); k++ ) {
+                   trial = trial.multiply( flist.get(k) );
+               }
+               System.out.println("trial = " + trial);
+               if ( u.remainder(trial).isZERO() ) {
+                   factors.add( trial );
+                   u = u.divide( trial );
+               } else {
+                   System.out.println("trial remainder = " + u.remainder(trial));
+               }
+            }
+        }
+        if ( factors.size() == 0 ) {
+            factors.add( P );
+        }
         return factors;
     }
 
