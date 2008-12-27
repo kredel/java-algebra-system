@@ -73,7 +73,7 @@ public class FactorInteger //<C extends GcdRingElem<C> >
         M = M.multiply( ac.multiply( ac.fromInteger(8) ) );
 
         //initialize prime list and degree vector
-        PrimeList primes = new PrimeList();
+        PrimeList primes = new PrimeList( PrimeList.Range.small );
         int pn = 10; //primes.size();
         ModIntegerRing cofac = new ModIntegerRing( 13, true );
         GreatestCommonDivisorAbstract<ModInteger> engine 
@@ -93,9 +93,9 @@ public class FactorInteger //<C extends GcdRingElem<C> >
                 logger.error("prime list exhausted, pn = " + pn);
                 throw new RuntimeException("prime list exhausted");
             }
-            if ( i < 2 ) {
-                p = new java.math.BigInteger("11");
-            }
+//             if ( i < 2 ) {
+//                 p = new java.math.BigInteger("11");
+//             }
             cofac = new ModIntegerRing( p, true );
             ModInteger nf = cofac.fromInteger( ac.getVal() );
             if ( nf.isZERO() ) {
@@ -138,16 +138,21 @@ public class FactorInteger //<C extends GcdRingElem<C> >
                for ( int k = 0; k < flist.size(); k++ ) {
                    trial = trial.multiply( flist.get(k) );
                }
-               System.out.println("trial = " + trial);
                if ( u.remainder(trial).isZERO() ) {
+                   System.out.println("trial = " + trial);
                    factors.add( trial );
                    u = u.divide( trial );
                } else {
-                   System.out.println("trial remainder = " + u.remainder(trial));
+                   //System.out.println("trial remainder = " + u.remainder(trial));
                }
             }
         }
+        if ( !u.isONE() && !u.equals(P) ) {
+            System.out.println("rest u = " + u);
+            factors.add( u );
+        }
         if ( factors.size() == 0 ) {
+            System.out.println("irred u = " + u);
             factors.add( P );
         }
         return factors;

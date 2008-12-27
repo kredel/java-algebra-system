@@ -113,6 +113,7 @@ public class FactorModular //<C extends GcdRingElem<C> >
         ModIntegerRing mr = (ModIntegerRing)pfac.coFac;
         java.math.BigInteger bi = mr.modul;
         long m = bi.longValue();
+        System.out.println("m = " + m + ", deg = " + deg);
         GenPolynomial<ModInteger> one = pfac.getONE();
         GenPolynomial<ModInteger> r;
         GenPolynomial<ModInteger> h;
@@ -130,7 +131,9 @@ public class FactorModular //<C extends GcdRingElem<C> >
             r = r.monic();
             //System.out.println("r = " + r);
             BigInteger di = Power.<BigInteger>positivePower(new BigInteger(m),deg);
+            //System.out.println("di = " + di);
             long d = di.getVal().longValue()-1;
+            //System.out.println("d = " + d);
             h = pow.modPower( r, d/2, f );
             g = engine.gcd( h.subtract(one), f );
             //System.out.println("g = " + g);
