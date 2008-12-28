@@ -113,7 +113,10 @@ public class FactorModular //<C extends GcdRingElem<C> >
         ModIntegerRing mr = (ModIntegerRing)pfac.coFac;
         java.math.BigInteger bi = mr.modul;
         long m = bi.longValue();
-        System.out.println("m = " + m + ", deg = " + deg);
+        if ( m < 0 || m > Integer.MAX_VALUE ) {
+           System.out.println("warning: m = " + m + ", deg = " + deg);
+           logger.warn("m = " + m + ", deg = " + deg);
+        }
         GenPolynomial<ModInteger> one = pfac.getONE();
         GenPolynomial<ModInteger> r;
         GenPolynomial<ModInteger> h;
