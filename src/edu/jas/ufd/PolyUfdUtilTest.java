@@ -363,4 +363,28 @@ public class PolyUfdUtilTest extends TestCase {
      }
  }
 
+
+/**
+ * Test Kronecker substitution.
+ * 
+ */
+ public void testKroneckerSubstitution() {
+
+     for ( int i = 0; i < 10; i++ ) {
+         a = dfac.random(kl,ll*2,el*5,q);
+         long d = a.degree() + 1L;
+         //System.out.println("\na        = " + a);
+         //System.out.println("deg(a)+1 = " + d);
+
+         b = PolyUfdUtil.<BigInteger>substituteKronecker(a,d);
+         //System.out.println("b        = " + b);
+
+         c = PolyUfdUtil.<BigInteger>backSubstituteKronecker(dfac,b,d);
+         //System.out.println("c        = " + c);
+         e = a.subtract(c);
+         //System.out.println("e        = " + e);
+         assertTrue("back(subst(a)) = a",e.isZERO());
+     }
+ }
+
 }

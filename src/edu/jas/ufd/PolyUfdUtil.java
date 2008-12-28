@@ -710,4 +710,91 @@ public class PolyUfdUtil {
         return lift;
     }
 
+
+    /**
+     * Kronecker substitution. 
+     * Substitute x_i by x**d**(i-1) to construct a univariate polynomial.
+     * @param A polynomial to be converted.
+     * @return a univariate polynomial.
+     */
+    public static <C extends GcdRingElem<C>> 
+      GenPolynomial<C> substituteKronecker( GenPolynomial<C> A ) {
+        if ( A == null ) {
+            return A;
+        }
+        long d = A.degree() + 1L;
+        return substituteKronecker( A, d );
+    }
+
+
+    /**
+     * Kronecker substitution. 
+     * Substitute x_i by x**d**(i-1) to construct a univariate polynomial.
+     * @param A polynomial to be converted.
+     * @return a univariate polynomial.
+     */
+    public static <C extends GcdRingElem<C>> 
+      GenPolynomial<C> substituteKronecker( GenPolynomial<C> A, long d ) {
+        if ( A == null ) {
+            return A;
+        }
+        RingFactory<C> cfac = A.ring.coFac; 
+        GenPolynomialRing<C> ufac = new GenPolynomialRing<C>(cfac,1);
+        GenPolynomial<C> B = ufac.getZERO().clone();
+        if ( A.isZERO() ) {
+           return B;
+        }
+        for ( Map.Entry<ExpVector,C> y : A.getMap().entrySet() ) {
+            ExpVector e = y.getKey();
+            C a = y.getValue();
+            long f = 0L;
+            long h = 1L;
+            for ( int i = 0; i < e.length(); i++ ) {
+                long j = e.getVal(i) * h;
+                f += j;
+                h *= d;
+            }
+            ExpVector g = ExpVector.create(1,0,f);
+            B.doPutToMap( g, a );
+        }
+        return B;
+    }
+
+
+    /**
+     * Kronecker back substitution. 
+     * Substitute x**d**(i-1) to x_i to construct a multivariate polynomial.
+     * @param A polynomial to be converted.
+     * @param fac result polynomial factory.
+     * @return a multivariate polynomial.
+     */
+    public static <C extends GcdRingElem<C>> 
+      GenPolynomial<C> backSubstituteKronecker( GenPolynomialRing<C> fac, GenPolynomial<C> A, long d ) {
+        if ( A == null ) {
+            return A;
+        }
+        if ( fac == null ) {
+            throw new IllegalArgumentException("null factory not allowed ");
+        }
+        int n = fac.nvar;
+        GenPolynomial<C> B = fac.getZERO().clone();
+        if ( A.isZERO() ) {
+           return B;
+        }
+        for ( Map.Entry<ExpVector,C> y : A.getMap().entrySet() ) {
+            ExpVector e = y.getKey();
+            C a = y.getValue();
+            long f = e.getVal(0);
+            ExpVector g = ExpVector.create(n);
+            long h = 1L;
+            for ( int i = 0; i < n; i++ ) {
+                long j = f % d;
+                f /= d;
+                g = g.subst(i,j);
+            }
+            B.doPutToMap( g, a );
+        }
+        return B;
+    }
+
 }
