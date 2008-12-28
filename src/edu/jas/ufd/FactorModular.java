@@ -43,7 +43,8 @@ public class FactorModular //<C extends GcdRingElem<C> >
     /**
      * GenPolynomial base distinct degree factorization.
      * @param P GenPolynomial<ModInteger>.
-     * @return (P).
+     * @return [e_1 -> p_1, ..., e_k -> p_k] with P = prod_{i=1,...,k} p_i 
+     *         and p_i has only factors of degree e_i.
      */
     public SortedMap<Long,GenPolynomial<ModInteger>> baseDistinctDegreeFactors(GenPolynomial<ModInteger> P) {
         if ( P == null ) {
@@ -55,7 +56,6 @@ public class FactorModular //<C extends GcdRingElem<C> >
         }
         GenPolynomialRing<ModInteger> pfac = P.ring;
         if ( pfac.nvar > 1 ) {
-            // baseContent not possible by return type
             throw new RuntimeException(this.getClass().getName()
                     + " only for univariate polynomials");
         }
@@ -90,7 +90,8 @@ public class FactorModular //<C extends GcdRingElem<C> >
     /**
      * GenPolynomial base equal degree factorization.
      * @param P GenPolynomial<ModInteger>.
-     * @return (P).
+     * @param deg such that P has only irreducible factors of degree deg.
+     * @return [p_1,...,p_k] with P = prod_{i=1,...,r} p_i.
      */
     public List<GenPolynomial<ModInteger>> baseEqualDegreeFactors(GenPolynomial<ModInteger> P, long deg) {
         if ( P == null ) {
@@ -152,7 +153,7 @@ public class FactorModular //<C extends GcdRingElem<C> >
     /**
      * GenPolynomial base factorization of a squarefree polynomial.
      * @param P squarefree and primitive! GenPolynomial<ModInteger>.
-     * @return (P).
+     * @return [p_1,...,p_k] with P = prod_{i=1,...,r} p_i.
      */
     public List<GenPolynomial<ModInteger>> baseFactorsSquarefree(GenPolynomial<ModInteger> P) {
         if ( P == null ) {
@@ -188,7 +189,7 @@ public class FactorModular //<C extends GcdRingElem<C> >
     /**
      * GenPolynomial base factorization.
      * @param P GenPolynomial<ModInteger>.
-     * @return (P).
+     * @return [p_1 -> e_1, ..., p_k->e_k] with P = prod_{i=1,...,k} p_i**e_i.
      */
     public SortedMap<GenPolynomial<ModInteger>,Integer> baseFactors(GenPolynomial<ModInteger> P) {
         if ( P == null ) {

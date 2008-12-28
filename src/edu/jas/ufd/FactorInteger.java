@@ -46,7 +46,7 @@ public class FactorInteger //<C extends GcdRingElem<C> >
     /**
      * GenPolynomial base factorization of a squarefree polynomial.
      * @param P squarefree and primitive! GenPolynomial<BigInteger>.
-     * @return (P).
+     * @return [p_1,...,p_k] with P = prod_{i=1, ..., k} p_i.
      */
     public List<GenPolynomial<BigInteger>> baseFactorsSquarefree(GenPolynomial<BigInteger> P) {
         if ( P == null ) {
@@ -171,7 +171,7 @@ public class FactorInteger //<C extends GcdRingElem<C> >
     /**
      * GenPolynomial base factorization.
      * @param P GenPolynomial<BigInteger>.
-     * @return (P).
+     * @return [p_1 -> e_1, ..., p_k -> e_k] with P = prod_{i=1,...,k} p_i**e_i.
      */
     public SortedMap<GenPolynomial<BigInteger>,Integer> baseFactors(GenPolynomial<BigInteger> P) {
         if ( P == null ) {
