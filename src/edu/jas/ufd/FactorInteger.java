@@ -26,6 +26,7 @@ import edu.jas.poly.ExpVector;
 import edu.jas.poly.PolyUtil;
 
 import edu.jas.util.PowerSet;
+import edu.jas.util.KsubSet;
 
 
 /**
@@ -131,20 +132,20 @@ public class FactorInteger //<C extends GcdRingElem<C> >
      
         int dl = (ilist.size()+1)/2;
         GenPolynomial<BigInteger> u = P;
-        PowerSet<GenPolynomial<BigInteger>> ps = new PowerSet<GenPolynomial<BigInteger>>( ilist );
-        for ( List<GenPolynomial<BigInteger>> flist : ps ) {
-            if ( flist.size() > 0 && flist.size() <= dl ) {
-               GenPolynomial<BigInteger> trial = pfac.getONE();
-               for ( int k = 0; k < flist.size(); k++ ) {
-                   trial = trial.multiply( flist.get(k) );
-               }
-               if ( u.remainder(trial).isZERO() ) {
-                   System.out.println("trial = " + trial);
-                   factors.add( trial );
-                   u = u.divide( trial );
-               } else {
-                   //System.out.println("trial remainder = " + u.remainder(trial));
-               }
+        for ( int j = 1; j <= dl; j++ ) {
+            KsubSet<GenPolynomial<BigInteger>> ps = new KsubSet<GenPolynomial<BigInteger>>( ilist, j );
+            //System.out.println("ps = " + (new ArrayList<GenPolynomial<BigInteger>>(ps)));
+            for ( List<GenPolynomial<BigInteger>> flist : ps ) {
+                System.out.println("flist = " + flist);
+                GenPolynomial<BigInteger> trial = pfac.getONE();
+                for ( int k = 0; k < flist.size(); k++ ) {
+                    trial = trial.multiply( flist.get(k) );
+                }
+                if ( u.remainder(trial).isZERO() ) {
+                    System.out.println("trial = " + trial);
+                    factors.add( trial );
+                    u = u.divide( trial );
+                }
             }
         }
         if ( !u.isONE() && !u.equals(P) ) {
