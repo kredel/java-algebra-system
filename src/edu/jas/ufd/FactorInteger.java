@@ -134,9 +134,8 @@ public class FactorInteger //<C extends GcdRingElem<C> >
         GenPolynomial<BigInteger> u = P;
         for ( int j = 1; j <= dl; j++ ) {
             KsubSet<GenPolynomial<BigInteger>> ps = new KsubSet<GenPolynomial<BigInteger>>( ilist, j );
-            //System.out.println("ps = " + (new ArrayList<GenPolynomial<BigInteger>>(ps)));
             for ( List<GenPolynomial<BigInteger>> flist : ps ) {
-                System.out.println("flist = " + flist);
+                //System.out.println("flist = " + flist);
                 GenPolynomial<BigInteger> trial = pfac.getONE();
                 for ( int k = 0; k < flist.size(); k++ ) {
                     trial = trial.multiply( flist.get(k) );
@@ -145,6 +144,15 @@ public class FactorInteger //<C extends GcdRingElem<C> >
                     System.out.println("trial = " + trial);
                     factors.add( trial );
                     u = u.divide( trial );
+                    if ( ilist.removeAll( flist ) ) {
+                        System.out.println("new ilist = " + ilist);
+                        dl = (ilist.size()+1)/2;
+                        j = 1;
+                        ps = new KsubSet<GenPolynomial<BigInteger>>( ilist, j );
+                        break;
+                    } else {
+                       System.out.println("error removing flist from ilist = " + ilist);
+                    }
                 }
             }
         }
