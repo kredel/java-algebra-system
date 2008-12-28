@@ -54,17 +54,13 @@ public class PowerSetTest extends TestCase {
    }
 
    BigInteger ai;
-   BigInteger bi;
-   BigInteger ci;
-   BigInteger di;
-   BigInteger ei;
 
    protected void setUp() {
-       ai = bi = ci = di = ei = null;
+       ai = null;
    }
 
    protected void tearDown() {
-       ai = bi = ci = di = ei = null;
+       ai = null;
    }
 
 
@@ -73,7 +69,7 @@ public class PowerSetTest extends TestCase {
  * 
  */
  public void testIterator() {
-     final int N = 20;
+     final int N = 10;
      ai = new BigInteger();
      List<BigInteger> list = new ArrayList<BigInteger>();
      for ( int i = 0; i < N; i++ ) {
@@ -176,7 +172,7 @@ public class PowerSetTest extends TestCase {
  * 
  */
  public void testAnyKSubsetIterator() {
-     final int N = 30;
+     final int N = 10;
      ai = new BigInteger();
      List<BigInteger> list = new ArrayList<BigInteger>();
      for ( int i = 0; i < N; i++ ) {
