@@ -595,6 +595,49 @@ public class PolyUfdUtil {
 
 
     /** ModInteger Hensel lifting algorithm on coefficients.
+     * Let p = A.ring.coFac.modul() = B.ring.coFac.modul() 
+     * and assume C == A*B mod p with ggt(A,B) == 1 mod p. 
+     * See algorithm 6.1. in Geddes et.al. and algorithms 3.5.{5,6} in Cohen. 
+     * Quadratic version.
+     * @param C GenPolynomial<BigInteger>.
+     * @param A GenPolynomial<ModInteger>.
+     * @param B other GenPolynomial<ModInteger>.
+     * @param M bound on the coefficients of A1 and B1 as factors of C.
+     * @return [A1,B1] = lift(C,A,B), with C = A1 * B1.
+     */
+    @SuppressWarnings("unchecked") 
+    public static //<C extends RingElem<C>>
+        GenPolynomial<BigInteger>[] 
+        liftHenselQuadratic( GenPolynomial<BigInteger> C,
+                             BigInteger M,
+                             GenPolynomial<ModInteger> A,
+                             GenPolynomial<ModInteger> B ) {
+        GenPolynomial<BigInteger>[] AB = (GenPolynomial<BigInteger>[])new GenPolynomial[2];
+        if ( C == null || C.isZERO() ) {
+           AB[0] = C;
+           AB[1] = C;
+           return AB;
+        }
+        if ( A == null || A.isZERO() || B == null || B.isZERO() ) {
+           throw new RuntimeException("A and B must be nonzero");
+        }
+        GenPolynomialRing<BigInteger> fac = C.ring;
+        if ( fac.nvar != 1 ) { // todo assert
+           throw new RuntimeException("polynomial ring not univariate");
+        }
+        // one Hensel step on part polynomials
+        GenPolynomial<ModInteger>[] gst = A.egcd( B );
+        if ( ! gst[0].isONE() ) {
+           throw new RuntimeException("A and B not coprime");
+        }
+        GenPolynomial<ModInteger> s = gst[1];
+        GenPolynomial<ModInteger> t = gst[2];
+        GenPolynomial<BigInteger>[] ab = liftHenselQuadratic(C,M,A,B,s,t);
+        return ab;
+    }
+
+
+    /** ModInteger Hensel lifting algorithm on coefficients.
      * Let p = f_i.ring.coFac.modul() i = 0, ..., n-1
      * and assume C == prod_{0,...,n-1} f_i mod p with ggt(f_i,f_j) == 1 mod p for i != j
      * @param C GenPolynomial<BigInteger>.
@@ -649,13 +692,14 @@ public class PolyUfdUtil {
             F2.add( fi );
         }
         // one Hensel step on part polynomials
-        GenPolynomial<ModInteger>[] gst = A.egcd( B );
-        if ( ! gst[0].isONE() ) {
-           throw new RuntimeException("A and B not coprime");
-        }
-        GenPolynomial<ModInteger> s = gst[1];
-        GenPolynomial<ModInteger> t = gst[2];
-        GenPolynomial<BigInteger>[] ab = liftHenselQuadratic(C,M,A,B,s,t);
+//         GenPolynomial<ModInteger>[] gst = A.egcd( B );
+//         if ( ! gst[0].isONE() ) {
+//            throw new RuntimeException("A and B not coprime");
+//         }
+//         GenPolynomial<ModInteger> s = gst[1];
+//         GenPolynomial<ModInteger> t = gst[2];
+//         GenPolynomial<BigInteger>[] ab = liftHenselQuadratic(C,M,A,B,s,t);
+        GenPolynomial<BigInteger>[] ab = liftHenselQuadratic(C,M,A,B);
         GenPolynomial<BigInteger> A1 = ab[0];
         GenPolynomial<BigInteger> B1 = ab[1];
         // recursion on list parts
