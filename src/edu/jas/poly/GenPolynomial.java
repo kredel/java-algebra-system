@@ -385,10 +385,36 @@ public class GenPolynomial<C extends RingElem<C> >
      */
     public int compareTo(GenPolynomial<C> b) { 
         if ( b == null ) {
-            return this.signum();
+            return 1; 
         }
-        int s = this.subtract( b ).signum();
-        return s;
+        SortedMap<ExpVector,C> av = this.val;
+        SortedMap<ExpVector,C> bv = b.val;
+        Iterator<ExpVector> ai = av.keySet().iterator();
+        Iterator<ExpVector> bi = bv.keySet().iterator();
+        int s = 0;
+        int c = 0;
+        while ( ai.hasNext() && bi.hasNext() ) {
+            ExpVector ae = ai.next();
+            ExpVector be = bi.next();
+            s = ae.compareTo( be );
+            //System.out.println("s = " + s + ", " + ae + ", " +be);
+            if ( s != 0 ) {
+                return s;
+            }
+            if ( c == 0 ) {
+                C ac = av.get(ae);
+                C bc = bv.get(be);
+                c = ac.compareTo(bc);
+            }
+        }
+        if ( ai.hasNext() ) {
+            return 1;
+        }
+        if ( bi.hasNext() ) {
+            return -1;
+        }
+        // now all keys are equal
+        return c;
     }
 
 
