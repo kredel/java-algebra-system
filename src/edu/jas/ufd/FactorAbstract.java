@@ -184,6 +184,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C> >
         GreatestCommonDivisorAbstract<C> engine 
          = (GreatestCommonDivisorAbstract<C>)GCDFactory.<C>getImplementation( pfac.coFac );
         C c = engine.baseContent(P);
+        System.out.println("c = " + c);
         if ( ! c.isONE() ) {
            GenPolynomial<C> pc = pfac.getONE().multiply( c );
            factors.put( pc, 1 );

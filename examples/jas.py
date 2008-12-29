@@ -1484,6 +1484,6 @@ class RingElem:
             i = e.get(a);
             if i == None:
                 print "a = ", a, ", i = ", i, " *** why does this happen? ***";
-                i = 1;
+                #i = 1;
             L[ RingElem( a ) ] = i;
         return L;
