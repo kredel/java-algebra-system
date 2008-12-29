@@ -124,7 +124,7 @@ public class FactorInteger //<C extends GcdRingElem<C> >
         List<GenPolynomial<BigInteger>> ilist = PolyUfdUtil.liftHenselQuadratic(P,M,mlist);
         System.out.println("ilist = " + ilist);
         if ( ilist.size() <= 1 ) {
-             factors.addAll( ilist );
+             factors.add( P );
              return factors;
         }
         // combine trial factors
@@ -138,10 +138,10 @@ public class FactorInteger //<C extends GcdRingElem<C> >
                 for ( int k = 0; k < flist.size(); k++ ) {
                     trial = trial.multiply( flist.get(k) );
                 }
-                if ( u.remainder(trial).isZERO() ) {
+                if ( PolyUtil.<BigInteger>basePseudoRemainder(u, trial).isZERO() ) {
                     System.out.println("trial = " + trial);
                     factors.add( trial );
-                    u = u.divide( trial );
+                    u = PolyUtil.<BigInteger> basePseudoDivide(u, trial); //u.divide( trial );
                     if ( ilist.removeAll( flist ) ) {
                         System.out.println("new ilist = " + ilist);
                         dl = (ilist.size()+1)/2;
@@ -173,16 +173,16 @@ public class FactorInteger //<C extends GcdRingElem<C> >
      * @param P GenPolynomial<BigInteger>.
      * @return [p_1 -> e_1, ..., p_k -> e_k] with P = prod_{i=1,...,k} p_i**e_i.
      */
-    public SortedMap<GenPolynomial<BigInteger>,Integer> baseFactors(GenPolynomial<BigInteger> P) {
+    public SortedMap<GenPolynomial<BigInteger>,Integer> oldbaseFactors(GenPolynomial<BigInteger> P) {
         if ( P == null ) {
             throw new RuntimeException(this.getClass().getName() + " P != null");
         }
+        GenPolynomialRing<BigInteger> pfac = P.ring;
         SortedMap<GenPolynomial<BigInteger>,Integer> factors
-           = new TreeMap<GenPolynomial<BigInteger>,Integer>();
+           = new TreeMap<GenPolynomial<BigInteger>,Integer>( pfac.getComparator() );
         if ( P.isZERO() ) {
             return factors;
         }
-        GenPolynomialRing<BigInteger> pfac = P.ring;
         if ( pfac.nvar > 1 ) {
             throw new RuntimeException(this.getClass().getName()
                     + " only for univariate polynomials");

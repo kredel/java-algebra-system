@@ -8,8 +8,10 @@ package edu.jas.ufd;
 import java.io.Serializable;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.SortedMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -100,6 +102,9 @@ public abstract class FactorAbstract<C extends GcdRingElem<C> >
              System.out.println("kr not squarefree ");
              SortedMap<GenPolynomial<C>,Integer> slist = baseFactors( kr );
              System.out.println("slist = " + slist);
+             if ( !isFactorization( kr, slist ) ) {
+                throw new RuntimeException("no factorization");
+             }
              klist = new ArrayList<GenPolynomial<C>>( slist.keySet() );
         }
 //         if ( klist.size() == 1 ) {
@@ -112,6 +117,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C> >
 
         // combine trial factors
         int dl = (klist.size()+1)/2;
+        int ti = 0;
         GenPolynomial<C> u = P;
         for ( int j = 1; j <= dl; j++ ) {
             KsubSet<GenPolynomial<C>> ps = new KsubSet<GenPolynomial<C>>( klist, j );
@@ -120,6 +126,10 @@ public abstract class FactorAbstract<C extends GcdRingElem<C> >
                 GenPolynomial<C> trial = pfac.getONE();
                 for ( int k = 0; k < flist.size(); k++ ) {
                     trial = trial.multiply( flist.get(k) );
+                }
+                ti++;
+                if ( ti % 10 == 0 ) {
+                   System.out.println("ti = " + ti);
                 }
                 //GenPolynomial<C> trial = PolyUfdUtil.<C> backSubstituteKronecker( pfac, utrial, d ); 
                 if ( u.remainder(trial).isZERO() ) {
@@ -157,7 +167,41 @@ public abstract class FactorAbstract<C extends GcdRingElem<C> >
      * @param P GenPolynomial<C> in one variable.
      * @return [p_1 -> e_1, ..., p_k -> e_k] with P = prod_{i=1,...,k} p_i**e_i.
      */
-    public abstract SortedMap<GenPolynomial<C>,Integer> baseFactors( GenPolynomial<C> P );
+    public SortedMap<GenPolynomial<C>,Integer> baseFactors( GenPolynomial<C> P ) {
+        if ( P == null ) {
+            throw new RuntimeException(this.getClass().getName() + " P != null");
+        }
+        GenPolynomialRing<C> pfac = P.ring;
+        SortedMap<GenPolynomial<C>,Integer> factors
+           = new TreeMap<GenPolynomial<C>,Integer>( pfac.getComparator() );
+        if ( P.isZERO() ) {
+            return factors;
+        }
+        if ( pfac.nvar > 1 ) {
+            throw new RuntimeException(this.getClass().getName()
+                    + " only for univariate polynomials");
+        }
+        GreatestCommonDivisorAbstract<C> engine 
+         = (GreatestCommonDivisorAbstract<C>)GCDFactory.<C>getImplementation( pfac.coFac );
+        C c = engine.baseContent(P);
+        if ( ! c.isONE() ) {
+           GenPolynomial<C> pc = pfac.getONE().multiply( c );
+           factors.put( pc, 1 );
+           P = P.divide(c); // make primitive
+        }
+        SortedMap<Integer,GenPolynomial<C>> facs = engine.baseSquarefreeFactors(P);
+        System.out.println("facs    = " + facs);
+        for ( Integer d : facs.keySet() ) {
+            GenPolynomial<C> g = facs.get( d );
+            List<GenPolynomial<C>> sfacs = baseFactorsSquarefree(g);
+            //System.out.println("sfacs   = " + sfacs);
+            for ( GenPolynomial<C> h : sfacs ) {
+                factors.put( h, d );
+            }
+        }
+        System.out.println("factors = " + factors);
+        return factors;
+    }
 
 
     /**
@@ -181,7 +225,8 @@ public abstract class FactorAbstract<C extends GcdRingElem<C> >
         if ( pfac.nvar == 1 ) {
             return baseFactors( P );
         }
-        SortedMap<GenPolynomial<C>,Integer> factors = new TreeMap<GenPolynomial<C>,Integer>();
+        SortedMap<GenPolynomial<C>,Integer> factors 
+           = new TreeMap<GenPolynomial<C>,Integer>( pfac.getComparator() );
         if ( P.isZERO() ) {
             return factors;
         }
@@ -265,15 +310,30 @@ public abstract class FactorAbstract<C extends GcdRingElem<C> >
      * @param F = [p_1 -> e_1, ..., p_k -> e_k].
      * @return true if P = prod_{i=1,...,k} p_i**e_i , else false.
      */
-    public boolean isFactorization( GenPolynomial<C> P, SortedMap<GenPolynomial<C>,Integer>  F ) {
+    public boolean isFactorization( GenPolynomial<C> P, SortedMap<GenPolynomial<C>,Integer> F ) {
         if ( P == null || F == null ) {
             throw new IllegalArgumentException("P and F may not be null");
         }
+        if ( P.isZERO() && F.size() == 0 ) {
+            return true;
+        }
         GenPolynomial<C> t = P.ring.getONE();
         for ( GenPolynomial<C> f: F.keySet() ) {
-            int e = F.get(f);
-            GenPolynomial<C> g = Power.<GenPolynomial<C>> positivePower( f, e );
-            t = t.multiply( g );
+            Integer E = F.get(f);
+            if ( E != null ) {
+                int e = E.intValue();
+                GenPolynomial<C> g = Power.<GenPolynomial<C>> positivePower( f, e );
+                t = t.multiply( g );
+            } else {
+                //t = t.multiply( f );
+                Set<GenPolynomial<C>> ks = F.keySet();
+                System.out.println("\n\nE == null: " + f);
+                System.out.println("F.keySet(): " + ks);
+                System.out.println("F.values(): " + F.values());
+                System.out.println("F.compar(): " + F.comparator());
+                System.out.println("f in ks:    " + ks.contains(f));
+                throw new RuntimeException("wrong TreeMap entries");
+            }
         }
         return P.equals(t);
     }

@@ -190,16 +190,16 @@ public class FactorModular //<C extends GcdRingElem<C> >
      * @param P GenPolynomial<ModInteger>.
      * @return [p_1 -> e_1, ..., p_k->e_k] with P = prod_{i=1,...,k} p_i**e_i.
      */
-    public SortedMap<GenPolynomial<ModInteger>,Integer> baseFactors(GenPolynomial<ModInteger> P) {
+    public SortedMap<GenPolynomial<ModInteger>,Integer> oldbaseFactors(GenPolynomial<ModInteger> P) {
         if ( P == null ) {
             throw new RuntimeException(this.getClass().getName() + " P != null");
         }
+        GenPolynomialRing<ModInteger> pfac = P.ring;
         SortedMap<GenPolynomial<ModInteger>,Integer> factors
-           = new TreeMap<GenPolynomial<ModInteger>,Integer>();
+           = new TreeMap<GenPolynomial<ModInteger>,Integer>( pfac.getComparator() );
         if ( P.isZERO() ) {
             return factors;
         }
-        GenPolynomialRing<ModInteger> pfac = P.ring;
         if ( pfac.nvar > 1 ) {
             throw new RuntimeException(this.getClass().getName()
                     + " only for univariate polynomials");
@@ -225,16 +225,5 @@ public class FactorModular //<C extends GcdRingElem<C> >
         System.out.println("factors = " + factors);
         return factors;
     }
-
-//             SortedMap<Long,GenPolynomial<ModInteger>> dfacs = baseDistinctDegreeFactors(g);
-//             System.out.println("dfacs    = " + dfacs);
-//             for ( Long e : dfacs.keySet() ) {
-//                 GenPolynomial<ModInteger> f = dfacs.get( e );
-//                 List<GenPolynomial<ModInteger>> efacs = baseEqualDegreeFactors(f,e);
-//                 System.out.println("efacs    = " + efacs);
-//                 for ( GenPolynomial<ModInteger> h : efacs ) {
-//                     factors.put( h, d );
-//                 }
-//             }
 
 }
