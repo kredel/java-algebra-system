@@ -773,4 +773,23 @@ public class GenPolynomialRing<C extends RingElem<C> >
         return pfac;
     }
 
+
+    /**
+     * Get PolynomialComparator.
+     * @return polynomial comparator.
+     */
+    public PolynomialComparator<C> getComparator() {
+        return new PolynomialComparator<C>(tord,false);
+    }
+
+
+    /**
+     * Get PolynomialComparator.
+     * @param rev for reverse comparator.
+     * @return polynomial comparator.
+     */
+    public PolynomialComparator<C> getComparator(boolean rev) {
+        return new PolynomialComparator<C>(tord,rev);
+    }
+
 }
