@@ -41,6 +41,14 @@ public interface Factorization<C extends GcdRingElem<C> >
 
 
     /**
+     * GenPolynomial test if is squarefree.
+     * @param P GenPolynomial<C>.
+     * @return true if P is squarefree, else false.
+     */
+    public boolean isSquarefree( GenPolynomial<C> P );
+
+
+    /**
      * GenPolynomial factorization of a squarefree polynomial.
      * @param P squarefree and primitive! GenPolynomial<C>.
      * @return [p_1,...,p_k] with P = prod_{i=1,...,r} p_i.

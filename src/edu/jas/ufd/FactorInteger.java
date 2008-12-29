@@ -124,12 +124,11 @@ public class FactorInteger //<C extends GcdRingElem<C> >
         System.out.println("mlist = " + mlist);
         List<GenPolynomial<BigInteger>> ilist = PolyUfdUtil.liftHenselQuadratic(P,M,mlist);
         System.out.println("ilist = " + ilist);
-
         if ( ilist.size() <= 1 ) {
              factors.addAll( ilist );
              return factors;
         }
-     
+        // combine trial factors
         int dl = (ilist.size()+1)/2;
         GenPolynomial<BigInteger> u = P;
         for ( int j = 1; j <= dl; j++ ) {
