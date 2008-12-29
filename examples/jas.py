@@ -1475,11 +1475,11 @@ class RingElem:
         '''
         L = {};
         ci = self.elem.ring.characteristic();
-        #print "ci = ", ci;
+        print "char = ", ci;
         if ci.signum() == 0:
-            e = FactorInteger().baseFactors( self.elem );
+            e = FactorInteger().factors( self.elem );
         else:
-            e = FactorModular().baseFactors( self.elem );
+            e = FactorModular().factors( self.elem );
         for a in e.keySet():
             i = e.get(a);
             if i == None:

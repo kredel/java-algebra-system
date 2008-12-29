@@ -32,8 +32,7 @@ import edu.jas.poly.PolyUtil;
  */
 
 public class FactorModular //<C extends GcdRingElem<C> > 
-       //extends FactorAbstract<BigInteger>
-    {
+       extends FactorAbstract<ModInteger> {
 
 
     private static final Logger logger = Logger.getLogger(FactorModular.class);

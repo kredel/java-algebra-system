@@ -4,12 +4,8 @@
 
 package edu.jas.util;
 
-//import java.util.Random;
-import java.util.Set;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Iterator;
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 
@@ -265,6 +261,5 @@ class ZeroSubSetIterator<E> implements Iterator<List<E>> {
     public void remove() {
         throw new UnsupportedOperationException("cannnot remove subsets");
     }
-
 
 }

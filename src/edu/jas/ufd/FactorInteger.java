@@ -35,8 +35,7 @@ import edu.jas.util.KsubSet;
  */
 
 public class FactorInteger //<C extends GcdRingElem<C> > 
-       //extends FactorAbstract<BigInteger>
-    {
+       extends FactorAbstract<BigInteger> {
 
 
     private static final Logger logger = Logger.getLogger(FactorInteger.class);
@@ -147,7 +146,9 @@ public class FactorInteger //<C extends GcdRingElem<C> >
                         System.out.println("new ilist = " + ilist);
                         dl = (ilist.size()+1)/2;
                         j = 1;
-                        ps = new KsubSet<GenPolynomial<BigInteger>>( ilist, j );
+                        if ( ilist.size() > 0 ) {
+                           ps = new KsubSet<GenPolynomial<BigInteger>>( ilist, j );
+                        }
                         break;
                     } else {
                        System.out.println("error removing flist from ilist = " + ilist);

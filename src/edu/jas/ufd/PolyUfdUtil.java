@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
+import edu.jas.structure.UnaryFunctor;
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
@@ -24,6 +25,8 @@ import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
+
+import edu.jas.util.ListUtil;
 
 import edu.jas.application.Quotient;
 import edu.jas.application.QuotientRing;
@@ -762,6 +765,21 @@ public class PolyUfdUtil {
 
 
     /**
+     * Kronecker substitution. 
+     * Substitute x_i by x**d**(i-1) to construct a univariate polynomials.
+     * @param A list of polynomials to be converted.
+     * @return a list of univariate polynomials.
+     */
+    public static <C extends GcdRingElem<C>> 
+      List<GenPolynomial<C>> substituteKronecker( List<GenPolynomial<C>> A, int d ) {
+        if ( A == null || A.get(0) == null ) {
+            return null;
+        }
+        return ListUtil.<GenPolynomial<C>,GenPolynomial<C>>map( A, new SubstKronecker<C>(d) );
+    }
+
+
+    /**
      * Kronecker back substitution. 
      * Substitute x**d**(i-1) to x_i to construct a multivariate polynomial.
      * @param A polynomial to be converted.
@@ -797,4 +815,64 @@ public class PolyUfdUtil {
         return B;
     }
 
+
+    /**
+     * Kronecker back substitution. 
+     * Substitute x**d**(i-1) to x_i to construct a multivariate polynomials.
+     * @param A list of polynomials to be converted.
+     * @param fac result polynomial factory.
+     * @return a list of multivariate polynomials.
+     */
+    public static <C extends GcdRingElem<C>> 
+      List<GenPolynomial<C>> backSubstituteKronecker( GenPolynomialRing<C> fac, 
+                                                      List<GenPolynomial<C>> A, long d ) {
+        return ListUtil.<GenPolynomial<C>,GenPolynomial<C>>map( A, new BackSubstKronecker<C>(fac,d) );
+    }
+
+}
+
+
+/**
+ * Kronecker substitutuion functor.
+ */
+class SubstKronecker<C extends GcdRingElem<C>>  
+      implements UnaryFunctor<GenPolynomial<C>,GenPolynomial<C>> {
+
+    final long d;
+
+    public SubstKronecker(long d) {
+        this.d = d;
+    }
+
+    public GenPolynomial<C> eval(GenPolynomial<C> c) {
+        if ( c == null ) {
+            return null;
+        } else {
+            return PolyUfdUtil.<C>substituteKronecker(c,d);
+        }
+    }
+}
+
+
+/**
+ * Kronecker back substitutuion functor.
+ */
+class BackSubstKronecker<C extends GcdRingElem<C>> 
+       implements UnaryFunctor<GenPolynomial<C>,GenPolynomial<C>> {
+
+    final long d;
+    final GenPolynomialRing<C> fac;
+
+    public BackSubstKronecker(GenPolynomialRing<C> fac, long d) {
+        this.d = d;
+        this.fac = fac;
+    }
+
+    public GenPolynomial<C> eval(GenPolynomial<C> c) {
+        if ( c == null ) {
+            return null;
+        } else {
+            return PolyUfdUtil.<C>backSubstituteKronecker(fac,c,d);
+        }
+    }
 }

@@ -90,13 +90,26 @@ public abstract class FactorAbstract<C extends GcdRingElem<C> >
         }
         long d = P.degree() + 1L;
         GenPolynomial<C> kr = PolyUfdUtil.<C> substituteKronecker( P, d ); 
-        // factor univariate
-        List<GenPolynomial<C>> klist = baseFactorsSquarefree( kr );
-        if ( klist.size() == 1 ) {
-            factors.add( P );
-            return factors;
+        System.out.println("subs(P,d=" + d + ") = " + kr);
+
+        List<GenPolynomial<C>> klist;
+        // check if kr is also squarefree and factor univariate
+        if ( isSquarefree( kr ) ) {
+             klist = baseFactorsSquarefree( kr );
+        } else {
+             System.out.println("kr not squarefree ");
+             SortedMap<GenPolynomial<C>,Integer> slist = baseFactors( kr );
+             System.out.println("slist = " + slist);
+             klist = new ArrayList<GenPolynomial<C>>( slist.keySet() );
         }
+//         if ( klist.size() == 1 ) {
+//             factors.add( P );
+//             return factors;
+//         }
         System.out.println("klist = " + klist);
+        klist = PolyUfdUtil.<C>backSubstituteKronecker(pfac,klist,d);
+        System.out.println("back(klist) = " + klist);
+
         // combine trial factors
         int dl = (klist.size()+1)/2;
         GenPolynomial<C> u = P;
@@ -104,11 +117,11 @@ public abstract class FactorAbstract<C extends GcdRingElem<C> >
             KsubSet<GenPolynomial<C>> ps = new KsubSet<GenPolynomial<C>>( klist, j );
             for ( List<GenPolynomial<C>> flist : ps ) {
                 //System.out.println("flist = " + flist);
-                GenPolynomial<C> utrial = pfac.getONE();
+                GenPolynomial<C> trial = pfac.getONE();
                 for ( int k = 0; k < flist.size(); k++ ) {
-                    utrial = utrial.multiply( flist.get(k) );
+                    trial = trial.multiply( flist.get(k) );
                 }
-                GenPolynomial<C> trial = PolyUfdUtil.<C> backSubstituteKronecker( pfac, utrial, d ); 
+                //GenPolynomial<C> trial = PolyUfdUtil.<C> backSubstituteKronecker( pfac, utrial, d ); 
                 if ( u.remainder(trial).isZERO() ) {
                     System.out.println("trial = " + trial);
                     factors.add( trial );
@@ -117,7 +130,9 @@ public abstract class FactorAbstract<C extends GcdRingElem<C> >
                         System.out.println("new klist = " + klist);
                         dl = (klist.size()+1)/2;
                         j = 1;
-                        ps = new KsubSet<GenPolynomial<C>>( klist, j );
+                        if ( klist.size() > 0 ) {
+                           ps = new KsubSet<GenPolynomial<C>>( klist, j );
+                        }
                         break;
                     } else {
                        System.out.println("error removing flist from klist = " + klist);
@@ -174,6 +189,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C> >
            = (GreatestCommonDivisorAbstract<C>)GCDFactory.<C>getImplementation( pfac.coFac );
         C c = engine.baseContent(P); // is this meaningful?
         if ( ! c.isONE() ) {
+           System.out.println("baseContent = " + c);
            GenPolynomial<C> pc = pfac.getONE().multiply( c );
            factors.put( pc, 1 );
            P = P.divide(c); // make base primitive
