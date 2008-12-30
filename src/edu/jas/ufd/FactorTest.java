@@ -270,7 +270,7 @@ public class FactorTest extends TestCase {
          if ( b.degree() > 0 ) {
              facs++;
          }
-         a = b; //c.multiply( b );
+         a = c; //c.multiply( b );
          System.out.println("\na = " + a);
          System.out.println("b = " + b);
          System.out.println("c = " + c);
@@ -282,6 +282,7 @@ public class FactorTest extends TestCase {
          //boolean t = fac.isFactorization( a, sm );
          //System.out.println("t        = " + t);
          //assertTrue("prod(factor(a)) = a",t);
+         ComputerThreads.terminate();
      }
  }
 

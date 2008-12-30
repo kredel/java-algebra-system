@@ -82,7 +82,7 @@ public class FactorAlgebraic <C extends GcdRingElem<C>>
             Pc.doPutToMap(m.e,ac);
         }
         System.out.println("Pc = " + Pc);
-        GenPolynomial<GenPolynomial<C>> Ac = rfac.getONE().clone();
+        GenPolynomial<GenPolynomial<C>> Ac = rfac.getONE(); //.clone();
         Ac = Ac.multiply(agen);
         System.out.println("Ac = " + Ac);
 
@@ -90,17 +90,51 @@ public class FactorAlgebraic <C extends GcdRingElem<C>>
             = new GreatestCommonDivisorSubres<C>( /*cfac.coFac*/ );
         //         = (GreatestCommonDivisorAbstract<C>)GCDFactory.<C>getImplementation( cfac.coFac );
 
-        GenPolynomial<GenPolynomial<C>> Rc = engine.recursiveResultant(Pc,Ac);
-        System.out.println("Rc = " + Rc);
-        GenPolynomial<C> Res = Rc.leadingBaseCoefficient();
-        GenPolynomial<BigRational> rRes = (GenPolynomial<BigRational>)Res;
-
-
         FactorRational rfengine = new FactorRational();
+        GenPolynomial<BigRational> rRes = null;
+        while ( true ) {
+            GenPolynomial<GenPolynomial<C>> Rc = engine.recursiveResultant(Pc,Ac);
+            System.out.println("Rc = " + Rc);
+            GenPolynomial<C> Res = Rc.leadingBaseCoefficient();
+            Object o = Res;
+            rRes = (GenPolynomial<BigRational>)o;
+            System.out.println("rRes = " + rRes);
 
-        boolean sq = rfengine.isSquarefree(rRes);
-        System.out.println("sq = " + sq);
+            boolean sq = rfengine.isSquarefree(rRes);
+            System.out.println("sq = " + sq);
+            if ( sq ) {
+                break;
+            } else {
+                break; // also
+            }
+        }
+        // new rRes is squarefree
+        SortedMap<GenPolynomial<BigRational>,Integer> nfacs = rfengine.baseFactors( rRes );
+        System.out.println("nfacs = " + nfacs);
 
+        Object o = pfac.getZERO().clone();
+        GenPolynomial<AlgebraicNumber<BigRational>> Ni = (GenPolynomial<AlgebraicNumber<BigRational>>)o;
+
+        o = afac;
+        AlgebraicNumberRing<BigRational> rafac = (AlgebraicNumberRing<BigRational>)o;
+
+        o = cfac;
+        GenPolynomialRing<BigRational> rcfac = (GenPolynomialRing<BigRational>)o;
+
+        for ( GenPolynomial<BigRational> nfi : nfacs.keySet() ) {
+             System.out.println("nfi = " + nfi);
+             for ( Monomial<BigRational> m : nfi ) {
+                 ExpVector e = m.e;
+                 BigRational c = m.c;
+                 AlgebraicNumber<BigRational> ac = rafac.getONE();
+                 //GenPolynomial<BigRational> pc = rcfac.getONE(); 
+                 GenPolynomial<BigRational> pc = rcfac.univariate(0); 
+                 pc = pc.multiply( c ); 
+                 ac = new AlgebraicNumber<BigRational>( rafac, pc );
+                 Ni.doPutToMap(e,ac); 
+             }
+             System.out.println("Ni = " + Ni);
+        }
 
 
 //         System.out.println("ldcf = " + ldcf);
