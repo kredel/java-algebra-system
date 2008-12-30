@@ -142,7 +142,7 @@ public final class BigInteger implements GcdRingElem<BigInteger>,
 
     /**
      * Query if this ring is a field.
-     * @return true.
+     * @return false.
      */
     public boolean isField() {
         return false;
