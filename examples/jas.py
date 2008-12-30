@@ -1477,12 +1477,18 @@ class RingElem:
         ci = self.elem.ring.characteristic();
         print "char = ", ci;
         if ci.signum() == 0:
-            e = FactorInteger().factors( self.elem );
+            fi = self.elem.ring.coFac.isField();
+            print "isField = ", fi;
+            if fi:
+                e = FactorRational().factors( self.elem );
+            else:
+                e = FactorInteger().factors( self.elem );
         else:
             e = FactorModular().factors( self.elem );
         for a in e.keySet():
             i = e.get(a);
             if i == None:
+                # should be resolved: was compareTo of polynomial
                 print "a = ", a, ", i = ", i, " *** why does this happen? ***";
                 #i = 1;
             L[ RingElem( a ) ] = i;

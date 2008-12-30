@@ -71,7 +71,7 @@ public class FactorTest extends TestCase {
  * Test modular factorization.
  * 
  */
- public void testModularFactorization() {
+ public void xtestModularFactorization() {
 
      TermOrder to = new TermOrder(TermOrder.INVLEX);
      ModIntegerRing cfac = new ModIntegerRing(13);
@@ -90,7 +90,7 @@ public class FactorTest extends TestCase {
 
          boolean t = fac.isFactorization( a, sm );
          //System.out.println("t        = " + t);
-         assertTrue("prod(factor)) = a",t);
+         assertTrue("prod(factor(a)) = a",t);
      }
  }
 
@@ -99,7 +99,7 @@ public class FactorTest extends TestCase {
  * Test multivariate modular factorization.
  * 
  */
- public void testMultivariateModularFactorization() {
+ public void xtestMultivariateModularFactorization() {
 
      TermOrder to = new TermOrder(TermOrder.INVLEX);
      ModIntegerRing cfac = new ModIntegerRing(13);
@@ -118,7 +118,7 @@ public class FactorTest extends TestCase {
 
          boolean t = fac.isFactorization( a, sm );
          //System.out.println("t        = " + t);
-         assertTrue("prod(factor)) = a",t);
+         assertTrue("prod(factor(a)) = a",t);
      }
      ComputerThreads.terminate();
  }
@@ -128,10 +128,10 @@ public class FactorTest extends TestCase {
  * Test integer factorization.
  * 
  */
- public void testIntegerFactorization() {
+ public void xtestIntegerFactorization() {
 
      TermOrder to = new TermOrder(TermOrder.INVLEX);
-     BigInteger cfac = new BigInteger(1);
+     BigInteger cfac = new BigInteger(4);
      GenPolynomialRing<BigInteger> pfac = new GenPolynomialRing<BigInteger>(cfac,1,to);
      FactorInteger fac = new FactorInteger();
 
@@ -140,7 +140,9 @@ public class FactorTest extends TestCase {
          if ( ! a.leadingBaseCoefficient().isUnit() ) {
              //continue;
              ExpVector e = a.leadingExpVector();
-             a.doPutToMap(e,cfac.getONE());
+             //a.doPutToMap(e,cfac.getONE());
+             //a.doPutToMap(e,cfac.negate());
+             //a = a.multiply( cfac );
          }
          System.out.println("\na = " + a);
 
@@ -149,7 +151,7 @@ public class FactorTest extends TestCase {
 
          boolean t = fac.isFactorization( a, sm );
          //System.out.println("t        = " + t);
-         assertTrue("prod(factor)) = a",t);
+         assertTrue("prod(factor(a)) = a",t);
      }
  }
 
@@ -167,10 +169,10 @@ public class FactorTest extends TestCase {
 
      for ( int i = 1; i < 6; i++ ) {
          GenPolynomial<BigInteger> a = pfac.random(kl,ll*(i+1),el,q);
-         if ( ! a.leadingBaseCoefficient().isUnit() ) {
+         if ( false && ! a.leadingBaseCoefficient().isUnit() ) {
              //continue;
-             ExpVector e = a.leadingExpVector();
-             a.doPutToMap(e,cfac.getONE());
+             //ExpVector e = a.leadingExpVector();
+             //a.doPutToMap(e,cfac.getONE());
          }
          System.out.println("\na = " + a);
 
@@ -179,7 +181,7 @@ public class FactorTest extends TestCase {
 
          boolean t = fac.isFactorization( a, sm );
          //System.out.println("t        = " + t);
-         assertTrue("prod(factor)) = a",t);
+         assertTrue("prod(factor(a)) = a",t);
      }
      ComputerThreads.terminate();
  }
@@ -189,7 +191,7 @@ public class FactorTest extends TestCase {
  * Test rational factorization.
  * 
  */
- public void xtestRationalFactorization() {
+ public void testRationalFactorization() {
 
      TermOrder to = new TermOrder(TermOrder.INVLEX);
      BigRational cfac = new BigRational(1);
@@ -198,10 +200,10 @@ public class FactorTest extends TestCase {
 
      for ( int i = 1; i < 6; i++ ) {
          GenPolynomial<BigRational> a = pfac.random(kl,ll*(i+1),el*(i+1),q);
-         if ( ! a.leadingBaseCoefficient().isONE() ) {
+         if ( false && ! a.leadingBaseCoefficient().isONE() ) {
              //continue;
-             ExpVector e = a.leadingExpVector();
-             a.doPutToMap(e,cfac.getONE());
+             //ExpVector e = a.leadingExpVector();
+             //a.doPutToMap(e,cfac.getONE());
          }
          System.out.println("\na = " + a);
 
@@ -210,7 +212,7 @@ public class FactorTest extends TestCase {
 
          boolean t = fac.isFactorization( a, sm );
          //System.out.println("t        = " + t);
-         assertTrue("prod(factor)) = a",t);
+         assertTrue("prod(factor(a)) = a",t);
      }
  }
 

@@ -7,6 +7,8 @@ package edu.jas.ufd;
 
 import java.io.Serializable;
 
+import org.apache.log4j.Logger;
+
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -21,6 +23,7 @@ import edu.jas.structure.RingFactory;
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
+import edu.jas.poly.PolyUtil;
 
 import edu.jas.util.KsubSet;
 
@@ -32,6 +35,9 @@ import edu.jas.util.KsubSet;
 
 public abstract class FactorAbstract<C extends GcdRingElem<C> > 
                       implements Factorization<C> {
+
+    private static final Logger logger = Logger.getLogger(FactorAbstract.class);
+    private boolean debug = logger.isInfoEnabled();
 
 
     /**
@@ -94,26 +100,54 @@ public abstract class FactorAbstract<C extends GcdRingElem<C> >
         GenPolynomial<C> kr = PolyUfdUtil.<C> substituteKronecker( P, d ); 
         System.out.println("subs(P,d=" + d + ") = " + kr);
 
-        List<GenPolynomial<C>> klist;
-        // check if kr is also squarefree and factor univariate
-        if ( isSquarefree( kr ) ) {
-             klist = baseFactorsSquarefree( kr );
-        } else {
-             System.out.println("kr not squarefree ");
-             SortedMap<GenPolynomial<C>,Integer> slist = baseFactors( kr );
-             System.out.println("slist = " + slist);
-             if ( !isFactorization( kr, slist ) ) {
-                throw new RuntimeException("no factorization");
-             }
-             klist = new ArrayList<GenPolynomial<C>>( slist.keySet() );
+        // factor Kronecker polynomial
+        List<GenPolynomial<C>> klist = new ArrayList<GenPolynomial<C>>();
+        // kr might not be squarefree so complete factor univariate
+        SortedMap<GenPolynomial<C>,Integer> slist = baseFactors( kr );
+        System.out.println("slist = " + slist);
+        if ( debug && !isFactorization( kr, slist ) ) {
+            throw new RuntimeException("no factorization");
         }
-//         if ( klist.size() == 1 ) {
-//             factors.add( P );
-//             return factors;
-//         }
+        for ( GenPolynomial<C> g : slist.keySet() ) {
+            int e = slist.get(g);
+            for ( int i = 0; i < e; i++ ) { // is this really required? 
+                klist.add(g);
+            }
+        }
         System.out.println("klist = " + klist);
+        if ( klist.size() == 1 ) {
+             factors.add( P );
+             return factors;
+        }
         klist = PolyUfdUtil.<C>backSubstituteKronecker(pfac,klist,d);
         System.out.println("back(klist) = " + klist);
+
+        // remove constants
+        GenPolynomial<C> cnst = null;
+        GenPolynomial<C> ng = null;
+        for ( GenPolynomial<C> g : klist ) {
+            if ( g.isConstant() ) {
+                cnst = g;
+            } else if ( g.signum() < 0 ) {
+                ng = g;
+            }
+        }
+        if ( cnst != null ) {
+           System.out.println("*** cnst = " + cnst);
+           System.out.println("*** ng   = " + ng);
+           if ( ng != null ) {
+               klist.remove(cnst);
+               klist.remove(ng);
+               cnst = cnst.negate();
+               ng = ng.negate();
+               if ( ! cnst.isONE() ) {
+                  klist.add(cnst);
+               }
+               klist.add(ng);
+               System.out.println("back(klist) = " + klist);
+           //} else {
+           }
+        }
 
         // combine trial factors
         int dl = (klist.size()+1)/2;
@@ -132,10 +166,10 @@ public abstract class FactorAbstract<C extends GcdRingElem<C> >
                    System.out.println("ti = " + ti);
                 }
                 //GenPolynomial<C> trial = PolyUfdUtil.<C> backSubstituteKronecker( pfac, utrial, d ); 
-                if ( u.remainder(trial).isZERO() ) {
+                if ( PolyUtil.<C>basePseudoRemainder(u, trial).isZERO() ) {
                     System.out.println("trial = " + trial);
                     factors.add( trial );
-                    u = u.divide( trial );
+                    u = PolyUtil.<C>basePseudoDivide(u, trial); //u = u.divide( trial );
                     if ( klist.removeAll( flist ) ) {
                         System.out.println("new klist = " + klist);
                         dl = (klist.size()+1)/2;
@@ -145,7 +179,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C> >
                         }
                         break;
                     } else {
-                       System.out.println("error removing flist from klist = " + klist);
+                        System.out.println("error removing flist from klist = " + klist);
                     }
                 }
             }
@@ -184,11 +218,18 @@ public abstract class FactorAbstract<C extends GcdRingElem<C> >
         GreatestCommonDivisorAbstract<C> engine 
          = (GreatestCommonDivisorAbstract<C>)GCDFactory.<C>getImplementation( pfac.coFac );
         C c = engine.baseContent(P);
-        System.out.println("c = " + c);
+        // move sign to the content
+        if ( P.signum() < 0 && c.signum() > 0 ) {
+            c = c.negate();
+            P = P.negate();
+            //System.out.println("c = " + c);
+            //System.out.println("P = " + P);
+        }
         if ( ! c.isONE() ) {
+           System.out.println("c = " + c);
            GenPolynomial<C> pc = pfac.getONE().multiply( c );
            factors.put( pc, 1 );
-           P = P.divide(c); // make primitive
+           P = P.divide( c.abs() ); // make primitive
         }
         SortedMap<Integer,GenPolynomial<C>> facs = engine.baseSquarefreeFactors(P);
         System.out.println("facs    = " + facs);
@@ -233,12 +274,19 @@ public abstract class FactorAbstract<C extends GcdRingElem<C> >
         }
         GreatestCommonDivisorAbstract<C> engine 
            = (GreatestCommonDivisorAbstract<C>)GCDFactory.<C>getImplementation( pfac.coFac );
-        C c = engine.baseContent(P); // is this meaningful?
+        C c = engine.baseContent(P); // is this meaningful? yes for sign
+        // move sign to base content
+        if ( P.signum() < 0 && c.signum() > 0 ) {
+            c = c.negate();
+            P = P.negate();
+            //System.out.println("c = " + c);
+            //System.out.println("P = " + P);
+        }
         if ( ! c.isONE() ) {
            System.out.println("baseContent = " + c);
            GenPolynomial<C> pc = pfac.getONE().multiply( c );
            factors.put( pc, 1 );
-           P = P.divide(c); // make base primitive
+           P = P.divide( c.abs() ); // make base primitive
         }
         SortedMap<Integer,GenPolynomial<C>> facs = engine.squarefreeFactors(P);
         System.out.println("facs    = " + facs);
