@@ -198,17 +198,30 @@ public class FactorTest extends TestCase {
      GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(cfac,1,to);
      FactorRational fac = new FactorRational();
 
-     for ( int i = 1; i < 6; i++ ) {
-         GenPolynomial<BigRational> a = pfac.random(kl,ll*(i+1),el*(i+1),q);
-         if ( false && ! a.leadingBaseCoefficient().isONE() ) {
+     for ( int i = 1; i < 3; i++ ) {
+         int facs = 0;
+         GenPolynomial<BigRational> a;
+         GenPolynomial<BigRational> c = pfac.random(kl,ll*(i+1),el+(i+1),q).monic();
+         GenPolynomial<BigRational> b = pfac.random(kl,ll,el+1,q).monic();
+         //         if ( false && ! a.leadingBaseCoefficient().isONE() ) {
              //continue;
              //ExpVector e = a.leadingExpVector();
              //a.doPutToMap(e,cfac.getONE());
+         //}
+         if ( c.degree() > 0 ) {
+             facs++;
          }
+         if ( b.degree() > 0 ) {
+             facs++;
+         }
+         a = c.multiply( b );
          System.out.println("\na = " + a);
+         System.out.println("b = " + b);
+         System.out.println("c = " + c);
 
          SortedMap<GenPolynomial<BigRational>,Integer> sm = fac.baseFactors( a );
          System.out.println("sm = " + sm);
+         assertTrue("#facs < " + facs , sm.size() >= facs );
 
          boolean t = fac.isFactorization( a, sm );
          //System.out.println("t        = " + t);

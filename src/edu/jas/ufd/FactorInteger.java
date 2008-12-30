@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 
@@ -71,15 +72,21 @@ public class FactorInteger //<C extends GcdRingElem<C> >
         ExpVector degv = P.degreeVector();
         BigInteger M = an.multiply( PolyUtil.factorBound( degv ) );
         M = M.multiply( ac.multiply( ac.fromInteger(8) ) );
+        System.out.println("M = " + M);
 
         //initialize prime list and degree vector
         PrimeList primes = new PrimeList( PrimeList.Range.small );
-        int pn = 10; //primes.size();
+        int pn = 30; //primes.size();
         ModIntegerRing cofac = new ModIntegerRing( 13, true );
         GreatestCommonDivisorAbstract<ModInteger> engine 
            = (GreatestCommonDivisorAbstract<ModInteger>)GCDFactory.<ModInteger>getImplementation( cofac );
         GenPolynomial<ModInteger> am = null;
         GenPolynomialRing<ModInteger> mfac;
+        final int TT = 5;
+        List<GenPolynomial<ModInteger>>[] modfac = (List<GenPolynomial<ModInteger>>[]) new List[TT];
+        List<GenPolynomial<BigInteger>>[] intfac = (List<GenPolynomial<BigInteger>>[]) new List[TT];
+        List<GenPolynomial<ModInteger>> mlist = null;
+        List<GenPolynomial<BigInteger>> ilist = null;
         int i = 0;
         if ( debug ) {
            logger.debug("an  = " + an);
@@ -87,83 +94,130 @@ public class FactorInteger //<C extends GcdRingElem<C> >
            logger.debug("M   = " + M);
            logger.info("degv = " + degv);
         }
-        for ( java.math.BigInteger p : primes ) {
-            //System.out.println("next run ++++++++++++++++++++++++++++++++++");
-            if ( ++i >= pn ) {
-                logger.error("prime list exhausted, pn = " + pn);
-                throw new RuntimeException("prime list exhausted");
-            }
-//             if ( i < 2 ) {
-//                 p = new java.math.BigInteger("11");
+        Iterator<java.math.BigInteger> pit = primes.iterator();
+//         for ( int k = 0; k < 100; k++ ) {
+//             if ( pit.hasNext() ) {
+//                 java.math.BigInteger p = pit.next();
 //             }
-            cofac = new ModIntegerRing( p, true );
-            ModInteger nf = cofac.fromInteger( ac.getVal() );
-            if ( nf.isZERO() ) {
-                continue;
-            }
-            // initialize polynomial factory and map polynomial
-            mfac = new GenPolynomialRing<ModInteger>(cofac,pfac);
-            am = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,P);
-            if ( ! am.degreeVector().equals( degv ) ) { // allways true
-                continue;
-            }
-            GenPolynomial<ModInteger> ap = PolyUtil.<ModInteger> baseDeriviative(am);
-            if ( ap.isZERO() ) {
-                continue;
-            }
-            GenPolynomial<ModInteger> g = engine.baseGcd(am, ap);
-            if ( g.isONE() ) {
-                break;
-            }
-        }
-        // now am is also squarefree mod p, so factor mod p
-        FactorModular mengine = new FactorModular();
-        List<GenPolynomial<ModInteger>> mlist = mengine.baseFactorsSquarefree(am);
-        // lift via Hensel
-        System.out.println("mlist = " + mlist);
-        List<GenPolynomial<BigInteger>> ilist = PolyUfdUtil.liftHenselQuadratic(P,M,mlist);
-        System.out.println("ilist = " + ilist);
-        if ( ilist.size() <= 1 ) {
-             factors.add( P );
-             return factors;
-        }
-        // combine trial factors
-        int dl = (ilist.size()+1)/2;
-        GenPolynomial<BigInteger> u = P;
-        for ( int j = 1; j <= dl; j++ ) {
-            KsubSet<GenPolynomial<BigInteger>> ps = new KsubSet<GenPolynomial<BigInteger>>( ilist, j );
-            for ( List<GenPolynomial<BigInteger>> flist : ps ) {
-                //System.out.println("flist = " + flist);
-                GenPolynomial<BigInteger> trial = pfac.getONE();
-                for ( int k = 0; k < flist.size(); k++ ) {
-                    trial = trial.multiply( flist.get(k) );
+//         }
+        for ( int k = 0; k < TT; k++ ) {
+            // for ( java.math.BigInteger p : primes ) {
+            while ( pit.hasNext() ) {
+                java.math.BigInteger p = pit.next();
+                //System.out.println("next run ++++++++++++++++++++++++++++++++++");
+                if ( ++i >= pn ) {
+                    logger.error("prime list exhausted, pn = " + pn);
+                    throw new RuntimeException("prime list exhausted");
                 }
-                if ( PolyUtil.<BigInteger>basePseudoRemainder(u, trial).isZERO() ) {
-                    System.out.println("trial = " + trial);
-                    factors.add( trial );
-                    u = PolyUtil.<BigInteger> basePseudoDivide(u, trial); //u.divide( trial );
-                    if ( ilist.removeAll( flist ) ) {
-                        System.out.println("new ilist = " + ilist);
-                        dl = (ilist.size()+1)/2;
-                        j = 1;
-                        if ( ilist.size() > 0 ) {
-                           ps = new KsubSet<GenPolynomial<BigInteger>>( ilist, j );
+                //             if ( i < 2 ) {
+                //                 p = new java.math.BigInteger("23");
+                //             }
+                cofac = new ModIntegerRing( p, true );
+                ModInteger nf = cofac.fromInteger( ac.getVal() );
+                if ( nf.isZERO() ) {
+                    System.out.println("unlucky prime = " + p);
+                    continue;
+                }
+                // initialize polynomial factory and map polynomial
+                mfac = new GenPolynomialRing<ModInteger>(cofac,pfac);
+                am = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,P);
+                if ( ! am.degreeVector().equals( degv ) ) { // allways true
+                    System.out.println("unlucky prime = " + p);
+                    continue;
+                }
+                GenPolynomial<ModInteger> ap = PolyUtil.<ModInteger> baseDeriviative(am);
+                if ( ap.isZERO() ) {
+                    System.out.println("unlucky prime = " + p);
+                    continue;
+                }
+                GenPolynomial<ModInteger> g = engine.baseGcd(am, ap);
+                if ( g.isONE() ) {
+                    System.out.println("**lucky prime = " + p);
+                    break;
+                }
+            }
+            // now am is also squarefree mod p, so factor mod p
+            FactorModular mengine = new FactorModular();
+            mlist = mengine.baseFactorsSquarefree(am);
+            System.out.println("modlist  = " + mlist);
+            if ( mlist.size() <= 1 ) {
+                factors.add( P );
+                return factors;
+            }
+            modfac[k] = mlist;
+        }
+
+        int min = Integer.MAX_VALUE;
+        for ( int k = 0; k < TT; k++ ) {
+            int s = modfac[k].size();
+            System.out.println("s = " + s);
+            if ( s < min ) {
+                min = s;
+                mlist = modfac[k];
+            }
+        }
+
+        for ( int k = 0; k < TT; k++ ) {
+            factors = new ArrayList<GenPolynomial<BigInteger>>();
+            mlist = modfac[k];
+            GenPolynomial<BigInteger> PP = P;
+            System.out.println("modlist  = " + mlist);
+            // lift via Hensel
+            ilist = PolyUfdUtil.liftHenselQuadratic(PP,M,mlist);
+            System.out.println("intlist  = " + ilist);
+
+            // combine trial factors
+            int dl = (ilist.size()+1)/2;
+            GenPolynomial<BigInteger> u = PP;
+            for ( int j = 1; j <= dl; j++ ) {
+                KsubSet<GenPolynomial<BigInteger>> ps = new KsubSet<GenPolynomial<BigInteger>>( ilist, j );
+                for ( List<GenPolynomial<BigInteger>> flist : ps ) {
+                    //System.out.println("flist = " + flist);
+                    GenPolynomial<BigInteger> trial = pfac.getONE();
+                    for ( int kk = 0; kk < flist.size(); kk++ ) {
+                        trial = trial.multiply( flist.get(kk) );
+                    }
+                    //System.out.println("t   = " + trial); 
+                    //System.out.println("p rem = " + PolyUtil.<BigInteger>basePseudoRemainder(u, trial));
+                    if ( PolyUtil.<BigInteger>basePseudoRemainder(u, trial).isZERO() ) {
+                        System.out.println("trial    = " + trial);
+                        factors.add( trial );
+                        u = PolyUtil.<BigInteger> basePseudoDivide(u, trial); //u.divide( trial );
+                        if ( ilist.removeAll( flist ) ) {
+                            System.out.println("new ilist= " + ilist);
+                            dl = (ilist.size()+1)/2;
+                            j = 1;
+                            if ( ilist.size() > 0 ) {
+                                ps = new KsubSet<GenPolynomial<BigInteger>>( ilist, j );
+                            }
+                            break;
+                        } else {
+                            System.out.println("error removing flist from ilist = " + ilist);
                         }
-                        break;
-                    } else {
-                       System.out.println("error removing flist from ilist = " + ilist);
                     }
                 }
             }
+            if ( !u.isONE() && !u.equals(P) ) {
+                System.out.println("rest u = " + u);
+                factors.add( u );
+            }
+            if ( factors.size() == 0 ) {
+                System.out.println("irred u = " + u);
+                factors.add( PP );
+            }
+            intfac[k] = factors;
         }
-        if ( !u.isONE() && !u.equals(P) ) {
-            System.out.println("rest u = " + u);
-            factors.add( u );
+        
+        int max = 0;
+        for ( int k = 0; k < TT; k++ ) {
+            int s = intfac[k].size();
+            System.out.println("s = " + s);
+            if ( s > max ) {
+                max = s;
+                ilist = intfac[k];
+            }
         }
-        if ( factors.size() == 0 ) {
-            System.out.println("irred u = " + u);
-            factors.add( P );
-        }
+        factors = ilist;
         return factors;
     }
 

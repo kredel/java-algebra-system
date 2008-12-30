@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 
@@ -177,10 +179,16 @@ public class FactorModular //<C extends GcdRingElem<C> >
             GenPolynomial<ModInteger> f = dfacs.get( e );
             List<GenPolynomial<ModInteger>> efacs = baseEqualDegreeFactors(f,e);
             System.out.println("efacs    = " + efacs);
-            for ( GenPolynomial<ModInteger> h : efacs ) {
-                factors.add( h );
-            }
+            factors.addAll( efacs );
+//             for ( GenPolynomial<ModInteger> h : efacs ) {
+//                 factors.add( h );
+//             }
         }
+        System.out.println("factors  = " + factors);
+        SortedSet<GenPolynomial<ModInteger>> ss = new TreeSet<GenPolynomial<ModInteger>>( factors );
+        //System.out.println("sorted   = " + ss);
+        factors.clear();
+        factors.addAll( ss );
         return factors;
     }
 

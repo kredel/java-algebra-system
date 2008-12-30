@@ -589,7 +589,16 @@ public class PolyUfdUtil {
         BigInteger ai = ufd.baseContent(Ai);
         Ai = Ai.divide( ai );
         BigInteger bi = c.divide(ai);
-        Bi = Bi.divide( bi ); // divide( c/a )
+        try {
+            Bi = Bi.divide( bi ); // divide( c/a )
+        } catch ( Exception e ) {
+            System.out.println("C  = " + C );
+            System.out.println("Ai = " + Ai );
+            System.out.println("Bi = " + Bi );
+            System.out.println("c  = " + c );
+            System.out.println("ai = " + ai );
+            System.out.println("bi = " + bi );
+        }
 
         AB[0] = Ai;
         AB[1] = Bi;
@@ -667,13 +676,8 @@ public class PolyUfdUtil {
         GenPolynomial<ModInteger> f = F.get(0);
         GenPolynomialRing<ModInteger> mfac = f.ring;
         ModIntegerRing mr = (ModIntegerRing)mfac.coFac;
-        //BigInteger p = new BigInteger( mr.modul );
-        if ( n == 1 ) {
-            BigInteger[] gst = lc.egcd( M );
-            BigInteger s = gst[1];
-            GenPolynomial<BigInteger> g = PolyUtil.integerFromModularCoefficients(fac,f);
-            g = g.multiply(s);
-            lift.add( g );
+        if ( n == 1 ) { // use C itself
+            lift.add( C );
             return lift;
         }
         // split list in two parts and prepare polynomials
@@ -695,13 +699,6 @@ public class PolyUfdUtil {
             F2.add( fi );
         }
         // one Hensel step on part polynomials
-//         GenPolynomial<ModInteger>[] gst = A.egcd( B );
-//         if ( ! gst[0].isONE() ) {
-//            throw new RuntimeException("A and B not coprime");
-//         }
-//         GenPolynomial<ModInteger> s = gst[1];
-//         GenPolynomial<ModInteger> t = gst[2];
-//         GenPolynomial<BigInteger>[] ab = liftHenselQuadratic(C,M,A,B,s,t);
         GenPolynomial<BigInteger>[] ab = liftHenselQuadratic(C,M,A,B);
         GenPolynomial<BigInteger> A1 = ab[0];
         GenPolynomial<BigInteger> B1 = ab[1];
