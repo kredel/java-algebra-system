@@ -68,10 +68,12 @@ public class FactorRational //<C extends GcdRingElem<C> >
         BigInteger bi = BigInteger.ONE;
         GenPolynomialRing<BigInteger> ifac = new GenPolynomialRing<BigInteger>(bi,pfac);
         GenPolynomial<BigInteger> Pi =  PolyUtil.integerFromRationalCoefficients(ifac,P);
+        System.out.println("Pi = " + Pi);
         FactorInteger faci = new FactorInteger();
         List<GenPolynomial<BigInteger>> ifacts = faci.baseFactorsSquarefree(Pi);
+        System.out.println("ifacts = " + ifacts);
         List<GenPolynomial<BigRational>> rfacts = PolyUtil.fromIntegerCoefficients(pfac,ifacts);
-        factors.addAll( rfacts);
+        factors.addAll( rfacts );
         return factors;
     }
 
