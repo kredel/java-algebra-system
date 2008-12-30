@@ -23,6 +23,8 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.poly.ExpVector;
+import edu.jas.poly.AlgebraicNumberRing;
+import edu.jas.poly.AlgebraicNumber;
 
 
 /**
@@ -191,7 +193,7 @@ public class FactorTest extends TestCase {
  * Test rational factorization.
  * 
  */
- public void testRationalFactorization() {
+ public void xtestRationalFactorization() {
 
      TermOrder to = new TermOrder(TermOrder.INVLEX);
      BigRational cfac = new BigRational(1);
@@ -226,6 +228,60 @@ public class FactorTest extends TestCase {
          boolean t = fac.isFactorization( a, sm );
          //System.out.println("t        = " + t);
          assertTrue("prod(factor(a)) = a",t);
+     }
+ }
+
+
+/**
+ * Test algebraic factorization.
+ * 
+ */
+ public void testAlgebraicFactorization() {
+
+     TermOrder to = new TermOrder(TermOrder.INVLEX);
+     BigRational cfac = new BigRational(1);
+     String[] vars = new String[] { "alpha" };
+     GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(cfac,1,to,vars);
+     GenPolynomial<BigRational> agen = pfac.univariate(0,2);
+     agen = agen.sum( pfac.getONE() ); // x^2 + 1
+     AlgebraicNumberRing<BigRational> afac = new AlgebraicNumberRing<BigRational>(agen,true);
+     GenPolynomialRing<AlgebraicNumber<BigRational>> apfac 
+         = new GenPolynomialRing<AlgebraicNumber<BigRational>>(afac,1,to); // univariate
+
+     System.out.println("agen  = " + agen);
+     System.out.println("afac  = " + afac);
+     System.out.println("apfac = " + apfac);
+
+     FactorAlgebraic<BigRational> fac = new FactorAlgebraic<BigRational>();
+
+     for ( int i = 1; i < 2; i++ ) {
+         int facs = 0;
+         GenPolynomial<AlgebraicNumber<BigRational>> a;
+         GenPolynomial<AlgebraicNumber<BigRational>> c = apfac.random(kl,ll*(i+1),el+(i+1),q).monic();
+         GenPolynomial<AlgebraicNumber<BigRational>> b = apfac.random(kl,ll,el+1,q).monic();
+         //         if ( false && ! a.leadingBaseCoefficient().isONE() ) {
+             //continue;
+             //ExpVector e = a.leadingExpVector();
+             //a.doPutToMap(e,cfac.getONE());
+         //}
+         if ( c.degree() > 0 ) {
+             facs++;
+         }
+         if ( b.degree() > 0 ) {
+             facs++;
+         }
+         a = b; //c.multiply( b );
+         System.out.println("\na = " + a);
+         System.out.println("b = " + b);
+         System.out.println("c = " + c);
+
+         SortedMap<GenPolynomial<AlgebraicNumber<BigRational>>,Integer> sm = fac.baseFactors( a );
+         System.out.println("sm = " + sm);
+         //assertTrue("#facs < " + facs , sm.size() >= facs );
+
+         //boolean t = fac.isFactorization( a, sm );
+         //System.out.println("t        = " + t);
+         //assertTrue("prod(factor(a)) = a",t);
      }
  }
 
