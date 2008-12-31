@@ -523,7 +523,7 @@ public class GenPolynomialRing<C extends RingElem<C> >
      */
     public GenPolynomial<C> random(int n, Random rnd) {
         if ( nvar == 1 ) {
-            return random(5,n,n,0.7f,rnd);
+            return random(3,n,n,0.7f,rnd);
         } else {
             return random(5,n,3,0.3f,rnd);
         }

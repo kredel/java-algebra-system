@@ -257,8 +257,8 @@ public class FactorTest extends TestCase {
      for ( int i = 1; i < 2; i++ ) {
          int facs = 0;
          GenPolynomial<AlgebraicNumber<BigRational>> a;
-         GenPolynomial<AlgebraicNumber<BigRational>> c = apfac.random(kl,ll*(i+1),el+(i+1),q).monic();
-         GenPolynomial<AlgebraicNumber<BigRational>> b = apfac.random(kl,ll,el+1,q).monic();
+         GenPolynomial<AlgebraicNumber<BigRational>> c = apfac.random(2,ll,el+i,q).monic();
+         GenPolynomial<AlgebraicNumber<BigRational>> b = apfac.random(2,ll,el+1,q).monic();
          //         if ( false && ! a.leadingBaseCoefficient().isONE() ) {
              //continue;
              //ExpVector e = a.leadingExpVector();
@@ -270,9 +270,9 @@ public class FactorTest extends TestCase {
          if ( b.degree() > 0 ) {
              facs++;
          }
-         a = apfac.univariate(0,2).sum( apfac.getONE() ); // x^2 + 1 
+         //a = apfac.univariate(0,2).sum( apfac.getONE() ); // x^2 + 1 
          //a = apfac.univariate(0,2).subtract( apfac.getONE() ); // x^2 - 1 
-         //a = c.multiply( b );
+         a = c.multiply( b );
          System.out.println("\na = " + a);
          //System.out.println("b = " + b);
          //System.out.println("c = " + c);
@@ -280,11 +280,11 @@ public class FactorTest extends TestCase {
          SortedMap<GenPolynomial<AlgebraicNumber<BigRational>>,Integer> sm = fac.baseFactors( a );
          System.out.println("\na  =  " + a);
          System.out.println("sm = " + sm);
-         //assertTrue("#facs < " + facs , sm.size() >= facs );
+         assertTrue("#facs < " + facs , sm.size() >= facs );
 
          boolean t = fac.isFactorization( a, sm );
          System.out.println("t        = " + t);
-         //assertTrue("prod(factor(a)) = a",t);
+         assertTrue("prod(factor(a)) = a",t);
          ComputerThreads.terminate();
      }
  }
