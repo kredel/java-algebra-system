@@ -89,40 +89,60 @@ public class FactorAlgebraic <C extends GcdRingElem<C>>
             factors.add(P);
             return factors;
         }
+        System.out.println("\nP = " + P);
         GenPolynomialRing<AlgebraicNumber<C>> pfac = P.ring;
         if ( pfac.nvar > 1 ) {
             throw new RuntimeException(this.getClass().getName()
                     + " only for univariate polynomials");
         }
-        System.out.println("\nP = " + P);
         AlgebraicNumberRing<C> afac = (AlgebraicNumberRing<C>)pfac.coFac;
-        GenPolynomial<C> agen = afac.modul;
-        GenPolynomialRing<C> cfac = afac.ring;
-        GenPolynomialRing<GenPolynomial<C>> rfac = new GenPolynomialRing<GenPolynomial<C>>(cfac,pfac);
-        GenPolynomialRing<C> dfac = cfac.extend(1);
-        GenPolynomial<GenPolynomial<C>> Pc = rfac.getZERO().clone();
-        // transform to bi-variate polynomial
-        for ( Monomial<AlgebraicNumber<C>> m : P ) {
-            AlgebraicNumber<C> c = m.c;
-            GenPolynomial<C> ac = c.val;
-            Pc.doPutToMap(m.e,ac);
-        }
-        System.out.println("Pc = " + Pc);
-        GenPolynomial<GenPolynomial<C>> Ac = rfac.getONE(); //.clone();
-        Ac = Ac.multiply(agen);
-        System.out.println("Ac = " + Ac);
 
         GreatestCommonDivisorSubres<C> engine 
             = new GreatestCommonDivisorSubres<C>( /*cfac.coFac*/ );
-        //         = (GreatestCommonDivisorAbstract<C>)GCDFactory.<C>getImplementation( cfac.coFac );
-
+              // = (GreatestCommonDivisorAbstract<C>)GCDFactory.<C>getImplementation( cfac.coFac );
         GreatestCommonDivisor<AlgebraicNumber<C>> aengine 
-            //= new GreatestCommonDivisorSubres<AlgebraicNumber<C>>( /*cfac.coFac*/ );
-            = GCDFactory.<AlgebraicNumber<C>>getImplementation( afac );
+            = GCDFactory.<AlgebraicNumber<C>>getProxy( afac );
+              //= new GreatestCommonDivisorSubres<AlgebraicNumber<C>>( /*cfac.coFac*/ );
+
+        GenPolynomial<C> agen = afac.modul;
+        GenPolynomialRing<C> cfac = afac.ring;
+        GenPolynomialRing<GenPolynomial<C>> rfac = new GenPolynomialRing<GenPolynomial<C>>(cfac,pfac);
+        //GenPolynomialRing<C> dfac = cfac.extend(1);
+
+        // transform minimal polynomial to bi-variate polynomial
+        GenPolynomial<GenPolynomial<C>> Ac = rfac.getONE().clone(); 
+        //Ac = Ac.multiply(agen); // to lower variable 
+        GenPolynomial<C> fx = cfac.getONE();
+        for ( Monomial<C> m : agen ) {
+            C c = m.c;
+            GenPolynomial<C> ac = fx.multiply(c); // to upper variable
+            Ac.doPutToMap(m.e,ac);
+        }
+        System.out.println("Ac = " + Ac);
 
         // search squarefree resultant
+        long k = 0;
         GenPolynomial<C> res = null;
+        GenPolynomial<GenPolynomial<C>> Pc;
         while ( true ) {
+            // transform to bi-variate polynomial, switching varaible sequence
+            Pc = rfac.getZERO().clone();
+            GenPolynomial<C> fy = cfac.getONE();
+            for ( Monomial<AlgebraicNumber<C>> mx : P ) {
+                //ExpVector e = mx.e;
+                AlgebraicNumber<C> c = mx.c;
+                GenPolynomial<C> ac = c.val;
+                for ( Monomial<C> my : ac ) {
+                    ExpVector ey = my.e;
+                    C cy = my.c;
+                    GenPolynomial<C> ay = fy.multiply(cy,mx.e);
+                    Pc = Pc.sum(ay,my.e);
+                }
+            }
+            System.out.println("Pc = " + Pc);
+            Pc = PolyUtil.<C>monic(Pc);
+            System.out.println("Pc = " + Pc);
+
             GenPolynomial<GenPolynomial<C>> Rc = engine.recursiveResultant(Pc,Ac);
             System.out.println("Rc = " + Rc);
             res = Rc.leadingBaseCoefficient();
@@ -133,8 +153,10 @@ public class FactorAlgebraic <C extends GcdRingElem<C>>
             if ( sq ) {
                 break;
             } else {
+                k++;
                 break; // also
             }
+            //k++;
         }
         // Res is now squarefree, so we can factor it
         SortedMap<GenPolynomial<C>,Integer> nfacs = factorCoeff.baseFactors( res );

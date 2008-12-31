@@ -276,11 +276,12 @@ public class FactorTest extends TestCase {
          System.out.println("c = " + c);
 
          SortedMap<GenPolynomial<AlgebraicNumber<BigRational>>,Integer> sm = fac.baseFactors( a );
+         System.out.println("\na = " + a);
          System.out.println("sm = " + sm);
          //assertTrue("#facs < " + facs , sm.size() >= facs );
 
-         //boolean t = fac.isFactorization( a, sm );
-         //System.out.println("t        = " + t);
+         boolean t = fac.isFactorization( a, sm );
+         System.out.println("t        = " + t);
          //assertTrue("prod(factor(a)) = a",t);
          ComputerThreads.terminate();
      }
