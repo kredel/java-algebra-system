@@ -15,17 +15,17 @@ from jas import terminate
 
 #r = Ring( "Rat(t,x,y,z) L" );
 #r = Ring( "Z(t,x,y,z) L" );
-r = Ring( "Mod 11(t,x,y,z) L" );
+#r = Ring( "Mod 11(t,x,y,z) L" );
+r = Ring( "Rat(t,x,y) L" );
 print "Ring: " + str(r);
 print;
 
 
 ps = """
 ( 
- ( t - x - 3 * y - 5 * z ), 
- ( x**2 + 2 ), 
- ( y**2 + 5 ), 
- ( z**2 + 3 ) 
+ ( t - x - 2 y ), 
+ ( x**2 + 1 ), 
+ ( y**2 + 1 ) 
 ) 
 """;
 
