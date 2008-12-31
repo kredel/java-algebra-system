@@ -203,7 +203,7 @@ public class FactorAlgebraic <C extends GcdRingElem<C>>
                  AlgebraicNumber<C> ac = new AlgebraicNumber<C>( afac, pc ); // in Q(alpha)
                  GenPolynomial<AlgebraicNumber<C>> Nix = pfac.univariate(0).sum( ac );
                  Nix = Power.<GenPolynomial<AlgebraicNumber<C>>> power(pfac,Nix,e.getVal(0));
-                 Nix = Nix.multiply( afac.getONE().multiply(c) );
+                 Nix = Nix.multiply( afac.getZERO().sum(c) );
                  Ni = Ni.sum( Nix ); 
              }
              System.out.println("Ni = " + Ni);
