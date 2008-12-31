@@ -90,7 +90,7 @@ public class FactorAlgebraic <C extends GcdRingElem<C>>
             return factors;
         }
         System.out.println("\nP = " + P);
-        GenPolynomialRing<AlgebraicNumber<C>> pfac = P.ring;
+        GenPolynomialRing<AlgebraicNumber<C>> pfac = P.ring; // Q(alpha)[x]
         if ( pfac.nvar > 1 ) {
             throw new RuntimeException(this.getClass().getName()
                     + " only for univariate polynomials");
@@ -107,15 +107,16 @@ public class FactorAlgebraic <C extends GcdRingElem<C>>
         GenPolynomial<C> agen = afac.modul;
         GenPolynomialRing<C> cfac = afac.ring;
         GenPolynomialRing<GenPolynomial<C>> rfac = new GenPolynomialRing<GenPolynomial<C>>(cfac,pfac);
+        // Q[alpha][x] = Q[X][alpha]
         //GenPolynomialRing<C> dfac = cfac.extend(1);
 
         // transform minimal polynomial to bi-variate polynomial
         GenPolynomial<GenPolynomial<C>> Ac = rfac.getONE().clone(); 
         //Ac = Ac.multiply(agen); // to lower variable 
-        GenPolynomial<C> fx = cfac.getONE();
+        GenPolynomial<C> f = cfac.getONE();
         for ( Monomial<C> m : agen ) {
             C c = m.c;
-            GenPolynomial<C> ac = fx.multiply(c); // to upper variable
+            GenPolynomial<C> ac = f.multiply(c); // to upper variable
             Ac.doPutToMap(m.e,ac);
         }
         System.out.println("Ac = " + Ac);
@@ -124,64 +125,95 @@ public class FactorAlgebraic <C extends GcdRingElem<C>>
         long k = 0;
         GenPolynomial<C> res = null;
         GenPolynomial<GenPolynomial<C>> Pc;
+        GenPolynomial<GenPolynomial<C>> kc;
+        GenPolynomial<GenPolynomial<C>> fx;
+        GenPolynomial<GenPolynomial<C>> fy;
         while ( true ) {
+            if ( k > 3 ) {
+                break;
+            }
             // transform to bi-variate polynomial, switching varaible sequence
-            Pc = rfac.getZERO().clone();
-            GenPolynomial<C> fy = cfac.getONE();
+            Pc = rfac.getZERO().clone(); // Q[X][alpha] or Q[x,alpha]
+            fy = rfac.univariate(0);
+            fx = rfac.getONE().multiply( cfac.univariate(0) );
+            kc = rfac.fromInteger(k);
+            System.out.println("fy = " + fy);
+            System.out.println("fx = " + fx);
+            System.out.println("kc = " + kc);
             for ( Monomial<AlgebraicNumber<C>> mx : P ) {
                 //ExpVector e = mx.e;
                 AlgebraicNumber<C> c = mx.c;
                 GenPolynomial<C> ac = c.val;
                 for ( Monomial<C> my : ac ) {
-                    ExpVector ey = my.e;
+                    //ExpVector ey = my.e;
+                    //long e = my.e.getVal(0);
                     C cy = my.c;
-                    GenPolynomial<C> ay = fy.multiply(cy,mx.e);
-                    Pc = Pc.sum(ay,my.e);
+                    //GenPolynomial<C> ay = fy.multiply(cy,mx.e);
+                    GenPolynomial<GenPolynomial<C>> ay = fy.subtract( fx.multiply(kc) ); // y-kx
+                    //System.out.println("ay = " + ay);
+                    ay = Power.<GenPolynomial<GenPolynomial<C>>> power(rfac,ay,mx.e.getVal(0));
+                    //System.out.println("ay = " + ay);
+                    ay = ay.multiply( cfac.getONE().multiply(cy) );
+                    //System.out.println("ay = " + ay);
+
+                    //ay = Power.<GenPolynomial<GenPolynomial<C>>> power(rfac,ay,my.e.getVal(0));
+                    // System.out.println("my.e.getVal(0) = " + my.e.getVal(0));
+                    ay = ay.multiply( Power.<GenPolynomial<GenPolynomial<C>>> power(rfac,fx,my.e.getVal(0)) );
+                    System.out.println("ay = " + ay);
+
+                    Pc = Pc.sum(ay);
                 }
             }
             System.out.println("Pc = " + Pc);
             Pc = PolyUtil.<C>monic(Pc);
             System.out.println("Pc = " + Pc);
+            System.out.println("Ac = " + Ac);
 
             GenPolynomial<GenPolynomial<C>> Rc = engine.recursiveResultant(Pc,Ac);
             System.out.println("Rc = " + Rc);
             res = Rc.leadingBaseCoefficient();
             System.out.println("res = " + res);
+            if ( res.isZERO() ) {
+                k++;
+                continue;
+            }
 
             boolean sq = factorCoeff.isSquarefree(res);
             System.out.println("sq = " + sq);
             if ( sq ) {
                 break;
-            } else {
-                k++;
-                break; // also
             }
-            //k++;
+            k++;
         }
         // Res is now squarefree, so we can factor it
         SortedMap<GenPolynomial<C>,Integer> nfacs = factorCoeff.baseFactors( res );
-        System.out.println("nfacs = " + nfacs);
+        System.out.println("\nnfacs = " + nfacs); // Q[X]
 
-        // compute gcds of factors with polynomial
+        // compute gcds of factors with polynomial in Q(alpha)[X]
         GenPolynomial<AlgebraicNumber<C>> Ni = pfac.getZERO().clone();
+        GenPolynomial<C> ka = cfac.fromInteger(k);
         for ( GenPolynomial<C> nfi : nfacs.keySet() ) {
              System.out.println("nfi = " + nfi);
              // transform to Q(alpha) coefficients
-             for ( Monomial<C> m : nfi ) {
+             for ( Monomial<C> m : nfi ) { // Q[X]
                  ExpVector e = m.e;
                  C c = m.c;
-                 AlgebraicNumber<C> ac = afac.getONE();
                  GenPolynomial<C> pc = cfac.univariate(0); 
-                 pc = pc.multiply( c ); 
-                 ac = new AlgebraicNumber<C>( afac, pc );
-                 Ni.doPutToMap(e,ac); 
+                 pc = pc.multiply( ka ); // k alpha 
+                 AlgebraicNumber<C> ac = new AlgebraicNumber<C>( afac, pc ); // in Q(alpha)
+                 GenPolynomial<AlgebraicNumber<C>> Nix = pfac.univariate(0).sum( ac );
+                 Nix = Power.<GenPolynomial<AlgebraicNumber<C>>> power(pfac,Nix,e.getVal(0));
+                 Nix = Nix.multiply( afac.getONE().multiply(c) );
+                 Ni = Ni.sum( Nix ); 
              }
              System.out.println("Ni = " + Ni);
 
              // compute gcds of factors with polynomial
              GenPolynomial<AlgebraicNumber<C>> pni = aengine.gcd(Ni,P);
-             System.out.println("pni = " + pni);
-             factors.add( pni );
+             System.out.println("gcd(Ni,P) = " + pni);
+             if ( !pni.isONE() ) {
+                factors.add( pni );
+             }
         }
         System.out.println("factors = " + factors);
         return factors;

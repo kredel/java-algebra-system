@@ -270,13 +270,15 @@ public class FactorTest extends TestCase {
          if ( b.degree() > 0 ) {
              facs++;
          }
-         a = c; //c.multiply( b );
+         a = apfac.univariate(0,2).sum( apfac.getONE() ); // x^2 + 1 
+         //a = apfac.univariate(0,2).subtract( apfac.getONE() ); // x^2 - 1 
+         //a = c.multiply( b );
          System.out.println("\na = " + a);
-         System.out.println("b = " + b);
-         System.out.println("c = " + c);
+         //System.out.println("b = " + b);
+         //System.out.println("c = " + c);
 
          SortedMap<GenPolynomial<AlgebraicNumber<BigRational>>,Integer> sm = fac.baseFactors( a );
-         System.out.println("\na = " + a);
+         System.out.println("\na  =  " + a);
          System.out.println("sm = " + sm);
          //assertTrue("#facs < " + facs , sm.size() >= facs );
 
