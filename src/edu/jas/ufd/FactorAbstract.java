@@ -75,7 +75,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C> >
      */
     public boolean isSquarefree( GenPolynomial<C> P ) {
         GenPolynomial<C> S = squarefreePart( P );
-        GenPolynomial<C> Ps = primitivePart( P );
+        GenPolynomial<C> Ps = basePrimitivePart( P );
         return Ps.equals( S );
     }
 
@@ -335,6 +335,23 @@ public abstract class FactorAbstract<C extends GcdRingElem<C> >
         RingFactory<C> cfac = P.ring.coFac;
         GreatestCommonDivisor<C> engine = GCDFactory.<C> getProxy( cfac );
         return engine.primitivePart(P);
+    }
+
+
+    /**
+     * GenPolynomial base primitive part.
+     * Delegates computation to a GreatestCommonDivisor class.
+     * @param P GenPolynomial.
+     * @return basePrimitivePart(P).
+     */
+    public GenPolynomial<C> basePrimitivePart( GenPolynomial<C> P ) {
+        if ( P == null ) {
+            throw new IllegalArgumentException("P and F may not be null");
+        }
+        //GenPolynomialRing<C> pfac = P.ring;
+        RingFactory<C> cfac = P.ring.coFac;
+        GreatestCommonDivisorAbstract<C> engine = (GreatestCommonDivisorAbstract<C>)GCDFactory.<C> getProxy( cfac );
+        return engine.basePrimitivePart(P);
     }
 
 
