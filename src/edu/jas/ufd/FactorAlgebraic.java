@@ -48,6 +48,30 @@ public class FactorAlgebraic <C extends GcdRingElem<C>>
 
 
     /**
+     * Factorization engine for base coefficients.
+     */
+    protected final FactorAbstract<C> factorCoeff;
+
+
+    /**
+     * No argument constructor.
+     * <b>Note:</b> can't use this constructor.
+     */
+    protected FactorAlgebraic() {
+        throw new IllegalArgumentException("don't use this constructor");
+    }
+
+
+    /**
+     * Constructor.
+     * @parm factorCoeff factorization engine for base coefficients.
+     */
+    public FactorAlgebraic(FactorAbstract<C> factorCoeff) {
+        this.factorCoeff = factorCoeff;
+    }
+
+
+    /**
      * GenPolynomial base factorization of a squarefree polynomial.
      * @param P squarefree and primitive! GenPolynomial<AlgebraicNumber<C>>.
      * @return [p_1,...,p_k] with P = prod_{i=1, ..., k} p_i.
@@ -70,12 +94,14 @@ public class FactorAlgebraic <C extends GcdRingElem<C>>
             throw new RuntimeException(this.getClass().getName()
                     + " only for univariate polynomials");
         }
+        System.out.println("\nP = " + P);
         AlgebraicNumberRing<C> afac = (AlgebraicNumberRing<C>)pfac.coFac;
         GenPolynomial<C> agen = afac.modul;
         GenPolynomialRing<C> cfac = afac.ring;
         GenPolynomialRing<GenPolynomial<C>> rfac = new GenPolynomialRing<GenPolynomial<C>>(cfac,pfac);
         GenPolynomialRing<C> dfac = cfac.extend(1);
         GenPolynomial<GenPolynomial<C>> Pc = rfac.getZERO().clone();
+        // transform to bi-variate polynomial
         for ( Monomial<AlgebraicNumber<C>> m : P ) {
             AlgebraicNumber<C> c = m.c;
             GenPolynomial<C> ac = c.val;
@@ -90,17 +116,19 @@ public class FactorAlgebraic <C extends GcdRingElem<C>>
             = new GreatestCommonDivisorSubres<C>( /*cfac.coFac*/ );
         //         = (GreatestCommonDivisorAbstract<C>)GCDFactory.<C>getImplementation( cfac.coFac );
 
-        FactorRational rfengine = new FactorRational();
-        GenPolynomial<BigRational> rRes = null;
+        GreatestCommonDivisor<AlgebraicNumber<C>> aengine 
+            //= new GreatestCommonDivisorSubres<AlgebraicNumber<C>>( /*cfac.coFac*/ );
+            = GCDFactory.<AlgebraicNumber<C>>getImplementation( afac );
+
+        // search squarefree resultant
+        GenPolynomial<C> res = null;
         while ( true ) {
             GenPolynomial<GenPolynomial<C>> Rc = engine.recursiveResultant(Pc,Ac);
             System.out.println("Rc = " + Rc);
-            GenPolynomial<C> Res = Rc.leadingBaseCoefficient();
-            Object o = Res;
-            rRes = (GenPolynomial<BigRational>)o;
-            System.out.println("rRes = " + rRes);
+            res = Rc.leadingBaseCoefficient();
+            System.out.println("res = " + res);
 
-            boolean sq = rfengine.isSquarefree(rRes);
+            boolean sq = factorCoeff.isSquarefree(res);
             System.out.println("sq = " + sq);
             if ( sq ) {
                 break;
@@ -108,57 +136,32 @@ public class FactorAlgebraic <C extends GcdRingElem<C>>
                 break; // also
             }
         }
-        // new rRes is squarefree
-        SortedMap<GenPolynomial<BigRational>,Integer> nfacs = rfengine.baseFactors( rRes );
+        // Res is now squarefree, so we can factor it
+        SortedMap<GenPolynomial<C>,Integer> nfacs = factorCoeff.baseFactors( res );
         System.out.println("nfacs = " + nfacs);
 
-        Object o = pfac.getZERO().clone();
-        GenPolynomial<AlgebraicNumber<BigRational>> Ni = (GenPolynomial<AlgebraicNumber<BigRational>>)o;
-
-        o = afac;
-        AlgebraicNumberRing<BigRational> rafac = (AlgebraicNumberRing<BigRational>)o;
-
-        o = cfac;
-        GenPolynomialRing<BigRational> rcfac = (GenPolynomialRing<BigRational>)o;
-
-        for ( GenPolynomial<BigRational> nfi : nfacs.keySet() ) {
+        // compute gcds of factors with polynomial
+        GenPolynomial<AlgebraicNumber<C>> Ni = pfac.getZERO().clone();
+        for ( GenPolynomial<C> nfi : nfacs.keySet() ) {
              System.out.println("nfi = " + nfi);
-             for ( Monomial<BigRational> m : nfi ) {
+             // transform to Q(alpha) coefficients
+             for ( Monomial<C> m : nfi ) {
                  ExpVector e = m.e;
-                 BigRational c = m.c;
-                 AlgebraicNumber<BigRational> ac = rafac.getONE();
-                 //GenPolynomial<BigRational> pc = rcfac.getONE(); 
-                 GenPolynomial<BigRational> pc = rcfac.univariate(0); 
+                 C c = m.c;
+                 AlgebraicNumber<C> ac = afac.getONE();
+                 GenPolynomial<C> pc = cfac.univariate(0); 
                  pc = pc.multiply( c ); 
-                 ac = new AlgebraicNumber<BigRational>( rafac, pc );
+                 ac = new AlgebraicNumber<C>( afac, pc );
                  Ni.doPutToMap(e,ac); 
              }
              System.out.println("Ni = " + Ni);
+
+             // compute gcds of factors with polynomial
+             GenPolynomial<AlgebraicNumber<C>> pni = aengine.gcd(Ni,P);
+             System.out.println("pni = " + pni);
+             factors.add( pni );
         }
-
-
-//         System.out.println("ldcf = " + ldcf);
-//         BigInteger bi = BigInteger.ONE;
-//         GenPolynomialRing<BigInteger> ifac = new GenPolynomialRing<BigInteger>(bi,pfac);
-//         GenPolynomial<BigInteger> Pi =  PolyUtil.integerFromRationalCoefficients(ifac,P);
-//         System.out.println("Pi = " + Pi);
-//         FactorInteger faci = new FactorInteger();
-//         List<GenPolynomial<BigInteger>> ifacts = faci.baseFactorsSquarefree(Pi);
-//         if ( ifacts.size() <= 1 ) {
-//             factors.add( P.multiply(ldcf) );
-//             return factors;
-//         }
-//         System.out.println("ifacts = " + ifacts);
-//         List<GenPolynomial<AlgebraicNumber<C>>> rfacts = PolyUtil.fromIntegerCoefficients(pfac,ifacts);
-//         System.out.println("rfacts = " + rfacts);
-//         rfacts = PolyUtil.monic(rfacts);
-//         System.out.println("rfacts = " + rfacts);
-//         GenPolynomial<AlgebraicNumber<C>> r = rfacts.get(0); 
-//         rfacts.remove(r);
-//         r = r.multiply(ldcf);
-//         rfacts.add(0,r);
-//         System.out.println("rfacts = " + rfacts);
-//         factors.addAll( rfacts );
+        System.out.println("factors = " + factors);
         return factors;
     }
 
