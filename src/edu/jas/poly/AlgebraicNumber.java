@@ -207,6 +207,24 @@ public class AlgebraicNumber<C extends GcdRingElem<C> >
     }
 
 
+    /** AlgebraicNumber summation.
+     * @param c coefficient.
+     * @return this+c.
+     */
+    public AlgebraicNumber<C> sum(GenPolynomial<C> c) {
+        return new AlgebraicNumber<C>( ring, val.sum( c ) );
+    }
+
+
+    /** AlgebraicNumber summation.
+     * @param c polynomial.
+     * @return this+c.
+     */
+    public AlgebraicNumber<C> sum(C c) {
+        return new AlgebraicNumber<C>( ring, val.sum( c ) );
+    }
+
+
     /** AlgebraicNumber negate.
      * @return -this.
      * @see edu.jas.structure.RingElem#negate()
@@ -273,6 +291,26 @@ public class AlgebraicNumber<C extends GcdRingElem<C> >
      */
     public AlgebraicNumber<C> multiply(AlgebraicNumber<C> S) {
         GenPolynomial<C> x = val.multiply( S.val );
+        return new AlgebraicNumber<C>( ring, x );
+    }
+
+
+    /** AlgebraicNumber multiplication.
+     * @param c coefficient.
+     * @return this*c.
+     */
+    public AlgebraicNumber<C> multiply(C c) {
+        GenPolynomial<C> x = val.multiply( c );
+        return new AlgebraicNumber<C>( ring, x );
+    }
+
+
+    /** AlgebraicNumber multiplication.
+     * @param c polynomial.
+     * @return this*c.
+     */
+    public AlgebraicNumber<C> multiply(GenPolynomial<C> c) {
+        GenPolynomial<C> x = val.multiply( c );
         return new AlgebraicNumber<C>( ring, x );
     }
 
