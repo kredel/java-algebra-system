@@ -129,15 +129,16 @@ public class FactorAlgebraic <C extends GcdRingElem<C>>
         GenPolynomial<GenPolynomial<C>> fx;
         GenPolynomial<GenPolynomial<C>> fy;
         while ( true ) {
-            if ( k > 3 ) {
-                break;
+            if ( k > 4 ) {
+                k = -1;
+                //break;
             }
             // transform to bi-variate polynomial, switching varaible sequence
             Pc = rfac.getZERO().clone(); // Q[X][alpha] or Q[x,alpha]
             fy = rfac.univariate(0);
             fx = rfac.getONE().multiply( cfac.univariate(0) );
             kc = rfac.fromInteger(k);
-            System.out.println("fy = " + fy);
+            System.out.println("\nfy = " + fy);
             System.out.println("fx = " + fx);
             System.out.println("kc = " + kc);
             for ( Monomial<AlgebraicNumber<C>> mx : P ) {
@@ -173,14 +174,17 @@ public class FactorAlgebraic <C extends GcdRingElem<C>>
             System.out.println("Rc = " + Rc);
             res = Rc.leadingBaseCoefficient();
             System.out.println("res = " + res);
-            if ( res.isZERO() ) {
+            if ( res.isZERO() || res.isConstant() ) {
                 k++;
                 continue;
             }
 
             boolean sq = factorCoeff.isSquarefree(res);
-            System.out.println("sq = " + sq);
+            System.out.println("sq = " + sq + "\n");
             if ( sq ) {
+                break;
+            }
+            if ( k < 0 ) {
                 break;
             }
             k++;
@@ -188,12 +192,16 @@ public class FactorAlgebraic <C extends GcdRingElem<C>>
         // Res is now squarefree, so we can factor it
         SortedMap<GenPolynomial<C>,Integer> nfacs = factorCoeff.baseFactors( res );
         System.out.println("\nnfacs = " + nfacs); // Q[X]
+        System.out.println("isFactorization = " + factorCoeff.isFactorization( res, nfacs )); 
 
         // compute gcds of factors with polynomial in Q(alpha)[X]
-        GenPolynomial<AlgebraicNumber<C>> Ni = pfac.getZERO().clone();
+        GenPolynomial<AlgebraicNumber<C>> Pp = P;
         GenPolynomial<C> ka = cfac.fromInteger(k);
+        System.out.println("ka = " + ka);
         for ( GenPolynomial<C> nfi : nfacs.keySet() ) {
              System.out.println("nfi = " + nfi);
+             GenPolynomial<AlgebraicNumber<C>> Ni = pfac.getZERO().clone();
+             System.out.println("Ni = " + Ni);
              // transform to Q(alpha) coefficients
              for ( Monomial<C> m : nfi ) { // Q[X]
                  ExpVector e = m.e;
@@ -201,19 +209,38 @@ public class FactorAlgebraic <C extends GcdRingElem<C>>
                  GenPolynomial<C> pc = cfac.univariate(0); 
                  pc = pc.multiply( ka ); // k alpha 
                  AlgebraicNumber<C> ac = new AlgebraicNumber<C>( afac, pc ); // in Q(alpha)
-                 GenPolynomial<AlgebraicNumber<C>> Nix = pfac.univariate(0).sum( ac );
+             System.out.println("ac = " + ac);
+                 GenPolynomial<AlgebraicNumber<C>> Nix = pfac.univariate(0).sum( ac ); // x + k alpha
+             System.out.println("Nix = " + Nix);
                  Nix = Power.<GenPolynomial<AlgebraicNumber<C>>> power(pfac,Nix,e.getVal(0));
+             System.out.println("Nix = " + Nix);
                  Nix = Nix.multiply( afac.getZERO().sum(c) );
+             System.out.println("Nix = " + Nix);
                  Ni = Ni.sum( Nix ); 
+             System.out.println("Ni = " + Ni);
              }
+             System.out.println("Pp = " + Pp);
              System.out.println("Ni = " + Ni);
 
              // compute gcds of factors with polynomial
-             GenPolynomial<AlgebraicNumber<C>> pni = aengine.gcd(Ni,P);
+             GenPolynomial<AlgebraicNumber<C>> pni = aengine.gcd(Ni,Pp);
              System.out.println("gcd(Ni,P) = " + pni);
              if ( !pni.isONE() ) {
                 factors.add( pni );
+             } else {
+                GenPolynomial<AlgebraicNumber<C>> qni = Pp.divide(Ni);
+                GenPolynomial<AlgebraicNumber<C>> rni = Pp.remainder(Ni);
+                System.out.println("div qni = " + qni);
+                System.out.println("div rni = " + rni);
              }
+             GenPolynomial<AlgebraicNumber<C>> qni = Pp.divide(pni);
+             GenPolynomial<AlgebraicNumber<C>> rni = Pp.remainder(pni);
+             System.out.println("qni = " + qni);
+             System.out.println("rni = " + rni);
+             Pp = Pp.divide(pni);
+        }
+        if ( ! Pp.isZERO() && ! Pp.isONE() ) {
+            factors.add( Pp );
         }
         System.out.println("factors = " + factors);
         return factors;

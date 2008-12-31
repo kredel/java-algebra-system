@@ -150,7 +150,7 @@ public class FactorInteger //<C extends GcdRingElem<C> >
         int min = Integer.MAX_VALUE;
         for ( int k = 0; k < TT; k++ ) {
             int s = modfac[k].size();
-            System.out.println("s = " + s);
+            System.out.println("mod s = " + s);
             if ( s < min ) {
                 min = s;
                 mlist = modfac[k];
@@ -211,7 +211,7 @@ public class FactorInteger //<C extends GcdRingElem<C> >
         int max = 0;
         for ( int k = 0; k < TT; k++ ) {
             int s = intfac[k].size();
-            System.out.println("s = " + s);
+            System.out.println("int s = " + s);
             if ( s > max ) {
                 max = s;
                 ilist = intfac[k];
