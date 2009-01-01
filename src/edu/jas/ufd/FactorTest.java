@@ -81,7 +81,7 @@ public class FactorTest extends TestCase {
  * Test modular factorization.
  * 
  */
- public void testModularFactorization() {
+ public void xtestModularFactorization() {
 
      PrimeList pl = new PrimeList(PrimeList.Range.small);
      TermOrder to = new TermOrder(TermOrder.INVLEX);
@@ -137,7 +137,7 @@ public class FactorTest extends TestCase {
  * Test multivariate modular factorization.
  * 
  */
- public void testMultivariateModularFactorization() {
+ public void xtestMultivariateModularFactorization() {
 
      TermOrder to = new TermOrder(TermOrder.INVLEX);
      ModIntegerRing cfac = new ModIntegerRing(13);
@@ -192,26 +192,56 @@ public class FactorTest extends TestCase {
  * Test integer factorization.
  * 
  */
- public void xtestIntegerFactorization() {
+ public void testIntegerFactorization() {
 
      TermOrder to = new TermOrder(TermOrder.INVLEX);
      BigInteger cfac = new BigInteger(4);
+     BigInteger one = cfac.getONE(); 
      GenPolynomialRing<BigInteger> pfac = new GenPolynomialRing<BigInteger>(cfac,1,to);
      FactorInteger fac = new FactorInteger();
 
      for ( int i = 1; i < 6; i++ ) {
-         GenPolynomial<BigInteger> a = pfac.random(kl,ll*(i+1),el*(i+1),q);
-         if ( ! a.leadingBaseCoefficient().isUnit() ) {
-             //continue;
-             ExpVector e = a.leadingExpVector();
-             //a.doPutToMap(e,cfac.getONE());
-             //a.doPutToMap(e,cfac.negate());
-             //a = a.multiply( cfac );
+         int facs = 0;
+         GenPolynomial<BigInteger> a = null; //pfac.random(kl,ll*(i+1),el*(i+1),q);
+         GenPolynomial<BigInteger> b = pfac.random(kl,ll*(i+1),el*(i+1),q);
+         GenPolynomial<BigInteger> c = pfac.random(kl,ll*(i+1),el*(i+1),q);
+         if ( b.isZERO() || c.isZERO() ) {
+             continue;
+         }
+         if ( c.degree() > 0 ) {
+             facs++;
+         }
+         if ( b.degree() > 0 ) {
+             facs++;
+         }
+         if ( ! c.leadingBaseCoefficient().isUnit() ) {
+             ExpVector e = c.leadingExpVector();
+             c.doPutToMap(e,one);
+         }
+         if ( ! b.leadingBaseCoefficient().isUnit() ) {
+             ExpVector e = b.leadingExpVector();
+             b.doPutToMap(e,one);
+         }
+         a = c.multiply( b );
+         if ( a.isConstant() ) {
+             continue;
          }
          System.out.println("\na = " + a);
+         //System.out.println("b = " + b);
+         //System.out.println("c = " + c);
 
          SortedMap<GenPolynomial<BigInteger>,Integer> sm = fac.baseFactors( a );
          System.out.println("sm = " + sm);
+
+         if ( sm.size() >= facs ) {
+            assertTrue("#facs < " + facs , sm.size() >= facs );
+         } else {
+             long sf = 1;
+             for ( Integer e : sm.values() ) {
+                 sf *= e;
+             }
+            assertTrue("#facs < " + facs , sf >= facs );
+         }
 
          boolean t = fac.isFactorization( a, sm );
          //System.out.println("t        = " + t);

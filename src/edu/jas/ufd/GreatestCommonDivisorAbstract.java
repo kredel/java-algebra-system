@@ -186,11 +186,15 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
             }
             if ( V.isConstant() ) { 
                 mp = pfac.characteristic().longValue(); // assert != 0
-                T0 = PolyUtil.<C> baseModRoot(T,mp);
-                System.out.println("T0 = " + T0);
-                e = e * mp;
-                init = true;
-                continue;
+                if ( mp > 0 ) {
+                   T0 = PolyUtil.<C> baseModRoot(T,mp);
+                   System.out.println("T0 = " + T0);
+                   e = e * mp;
+                   init = true;
+                   continue;
+                } else {
+                   break;
+                }
             }
             k++;
             if ( mp != 0L && k % mp == 0L ) {

@@ -178,7 +178,7 @@ public class FactorModular //<C extends GcdRingElem<C> >
         for ( Long e : dfacs.keySet() ) {
             GenPolynomial<ModInteger> f = dfacs.get( e );
             List<GenPolynomial<ModInteger>> efacs = baseEqualDegreeFactors(f,e);
-            System.out.println("efacs    = " + efacs);
+            System.out.println("efacs " + e + "   = " + efacs);
             factors.addAll( efacs );
 //             for ( GenPolynomial<ModInteger> h : efacs ) {
 //                 factors.add( h );

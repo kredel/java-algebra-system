@@ -100,6 +100,7 @@ public class FactorInteger //<C extends GcdRingElem<C> >
 //                 java.math.BigInteger p = pit.next();
 //             }
 //         }
+        ModInteger nf = null;
         for ( int k = 0; k < TT; k++ ) {
             // for ( java.math.BigInteger p : primes ) {
             while ( pit.hasNext() ) {
@@ -113,7 +114,7 @@ public class FactorInteger //<C extends GcdRingElem<C> >
                 //                 p = new java.math.BigInteger("23");
                 //             }
                 cofac = new ModIntegerRing( p, true );
-                ModInteger nf = cofac.fromInteger( ac.getVal() );
+                nf = cofac.fromInteger( ac.getVal() );
                 if ( nf.isZERO() ) {
                     System.out.println("unlucky prime = " + p);
                     continue;
@@ -136,13 +137,24 @@ public class FactorInteger //<C extends GcdRingElem<C> >
                     break;
                 }
             }
-            // now am is also squarefree mod p, so factor mod p
+            // now am is squarefree mod p, so factor mod p
             FactorModular mengine = new FactorModular();
+            if ( !nf.isONE() ) {
+                System.out.println("nf = " + nf);
+                am = am.divide(nf);
+            }
             mlist = mengine.baseFactorsSquarefree(am);
             System.out.println("modlist  = " + mlist);
             if ( mlist.size() <= 1 ) {
                 factors.add( P );
                 return factors;
+            }
+            if ( !nf.isONE() ) {
+               GenPolynomial<ModInteger> mp = mlist.get(0);
+               System.out.println("mp = " + mp);
+               mp = mp.multiply( nf );
+               System.out.println("mp = " + mp);
+               mlist.set(0,mp);
             }
             modfac[k] = mlist;
         }
