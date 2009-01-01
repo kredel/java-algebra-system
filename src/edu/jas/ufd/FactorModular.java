@@ -153,7 +153,7 @@ public class FactorModular //<C extends GcdRingElem<C> >
 
     /**
      * GenPolynomial base factorization of a squarefree polynomial.
-     * @param P squarefree and primitive! GenPolynomial<ModInteger>.
+     * @param P squarefree and monic! GenPolynomial<ModInteger>.
      * @return [p_1,...,p_k] with P = prod_{i=1,...,r} p_i.
      */
     public List<GenPolynomial<ModInteger>> baseFactorsSquarefree(GenPolynomial<ModInteger> P) {

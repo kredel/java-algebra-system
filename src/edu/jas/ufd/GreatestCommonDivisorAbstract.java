@@ -41,20 +41,20 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
      * @return cont(P).
      */
     public C baseContent(GenPolynomial<C> P) {
-        if (P == null) {
+        if ( P == null ) {
             throw new RuntimeException(this.getClass().getName() + " P != null");
         }
-        if (P.isZERO()) {
+        if ( P.isZERO() ) {
             return P.ring.getZEROCoefficient();
         }
         C d = null;
-        for (C c : P.getMap().values()) {
-            if (d == null) {
+        for ( C c : P.getMap().values() ) {
+            if ( d == null ) {
                 d = c;
             } else {
                 d = d.gcd(c);
             }
-            if (d.isONE()) {
+            if ( d.isONE() ) {
                 return d;
             }
         }
@@ -114,23 +114,24 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
                     + " only for univariate polynomials");
         }
         GenPolynomial<C> pp = basePrimitivePart(P);
-        if (pp.leadingExpVector().getVal(0) < 1) {
-            return pp;
-        }
         if ( pp.isConstant() ) {
             return pp;
         }
         GenPolynomial<C> d;
-        int j = 1;
+        long k = pp.degree(0);
+        long j = 1;
         while ( true ) { 
             d = PolyUtil.<C> baseDeriviative(pp);
             //System.out.println("d = " + d);
             if ( !d.isZERO() ) { // || pp.isConstant()
                 break;
             }
-            int mp = pfac.characteristic().intValue(); // assert != 0
+            long mp = pfac.characteristic().longValue(); // assert != 0
             pp = PolyUtil.<C> baseModRoot(pp,mp);
             j = j * mp;
+            if ( j > k ) {
+               throw new RuntimeException("polynomial mod " + mp + ", pp = " + pp + ", d = " + d);
+            }
         } 
         GenPolynomial<C> g = baseGcd(pp, d);
         GenPolynomial<C> q = PolyUtil.<C> basePseudoDivide(pp, g);
@@ -140,50 +141,76 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
 
     /**
      * GenPolynomial polynomial squarefee factorization.
-     * @param P primitive! GenPolynomial.
-     * @return squarefreeFactors(P).
+     * @param A primitive! GenPolynomial (and monic if computing mod p) .
+     * @return [e_1 -> p_1, ..., e_k -> p_k ] with P = prod_{i=1,...,k} p_k^{e_k} and p_i squarefree.
      */
-    public SortedMap<Integer, GenPolynomial<C>> baseSquarefreeFactors(GenPolynomial<C> P) {
+    public SortedMap<Integer, GenPolynomial<C>> baseSquarefreeFactors(GenPolynomial<C> A) {
         SortedMap<Integer, GenPolynomial<C>> sfactors = new TreeMap<Integer, GenPolynomial<C>>();
-        if ( P == null || P.isZERO() ) {
+        if ( A == null || A.isZERO() ) {
             return sfactors;
         }
-        if ( P.isConstant() ) {
-            sfactors.put(1,P);
+        if ( A.isConstant() ) {
+            sfactors.put(1,A);
             return sfactors;
         }
-        GenPolynomialRing<C> pfac = P.ring;
+        GenPolynomialRing<C> pfac = A.ring;
         if ( pfac.nvar > 1 ) {
             throw new RuntimeException(this.getClass().getName()
                     + " only for univariate polynomials");
         }
-        GenPolynomial<C> pp = P;
-        GenPolynomial<C> d;
-        int j = 1;
-        while ( true ) { 
-            d = PolyUtil.<C> baseDeriviative(pp);
-            //System.out.println("d = " + d);
-            if ( !d.isZERO() ) { // || pp.isConstant()
-                break;
-            }
-            int mp = pfac.characteristic().intValue(); // assert != 0
-            pp = PolyUtil.<C> baseModRoot(pp,mp);
-            j = j * mp;
-        } 
-        GenPolynomial<C> g = baseGcd(pp, d);
-        GenPolynomial<C> q = PolyUtil.<C> basePseudoDivide(pp, g);
-        //GenPolynomial<C> y = PolyUtil.<C>basePseudoDivide(d,g);
-        while (g.leadingExpVector().getVal(0) >= 1 /*!g.isONE()*/) {
-            GenPolynomial<C> c = baseGcd(g, q);
-            GenPolynomial<C> z = PolyUtil.<C> basePseudoDivide(q, c);
-            if (z.leadingExpVector().getVal(0) > 0 /*!z.isONE()*/) {
-                sfactors.put(j, z);
-            }
-            j++;
-            q = c;
-            g = PolyUtil.<C> basePseudoDivide(g, c);
+        if ( pfac.characteristic().signum() > 0 && !A.leadingBaseCoefficient().isONE() ) {
+            throw new RuntimeException("A mod p not monic");
         }
-        sfactors.put(j, q);
+        GenPolynomial<C> T0 = A;
+        long e = 1L;
+        GenPolynomial<C> Tp;
+        GenPolynomial<C> T = null;
+        GenPolynomial<C> V = null;
+        long k = 0L;
+        long mp = 0L;
+        boolean init = true;
+        while ( true ) { 
+            if ( init ) {
+                if ( T0.isConstant() || T0.isZERO() ) {
+                     break;
+                }
+                Tp = PolyUtil.<C> baseDeriviative(T0);
+                T = baseGcd(T0,Tp);
+                V = PolyUtil.<C> basePseudoDivide(T0,T);
+                //System.out.println("Tp = " + Tp);
+                //System.out.println("T = " + T);
+                System.out.println("V = " + V);
+                k = 0L;
+                mp = 0L;
+                init = false;
+            }
+            if ( V.isConstant() ) { 
+                mp = pfac.characteristic().longValue(); // assert != 0
+                T0 = PolyUtil.<C> baseModRoot(T,mp);
+                System.out.println("T0 = " + T0);
+                e = e * mp;
+                init = true;
+                continue;
+            }
+            k++;
+            if ( mp != 0L && k % mp == 0L ) {
+                T = PolyUtil.<C> basePseudoDivide(T, V);
+                System.out.println("k = " + k);
+                //System.out.println("T = " + T);
+                k++;
+            }
+            GenPolynomial<C> W = baseGcd(T,V);
+            GenPolynomial<C> z = PolyUtil.<C> basePseudoDivide(V, W);
+            //System.out.println("W = " + W);
+            //System.out.println("z = " + z);
+            V = W;
+            T = PolyUtil.<C> basePseudoDivide(T, V);
+            //System.out.println("V = " + V);
+            //System.out.println("T = " + T);
+            if ( z.degree(0) > 0 ) {
+                sfactors.put((int)(e*k), z);
+            }
+        }
         return sfactors;
     }
 

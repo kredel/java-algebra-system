@@ -16,7 +16,7 @@ import edu.jas.arith.BigInteger;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
 import edu.jas.arith.BigRational;
-import edu.jas.arith.BigComplex;
+import edu.jas.arith.PrimeList;
 
 import edu.jas.poly.TermOrder;
 import edu.jas.poly.GenPolynomial;
@@ -81,22 +81,50 @@ public class FactorTest extends TestCase {
  * Test modular factorization.
  * 
  */
- public void xtestModularFactorization() {
+ public void testModularFactorization() {
 
+     PrimeList pl = new PrimeList(PrimeList.Range.small);
      TermOrder to = new TermOrder(TermOrder.INVLEX);
-     ModIntegerRing cfac = new ModIntegerRing(13);
+     ModIntegerRing cfac = new ModIntegerRing(pl.get(0));
+     System.out.println("cfac = " + cfac);
      GenPolynomialRing<ModInteger> pfac = new GenPolynomialRing<ModInteger>(cfac,1,to);
      FactorModular fac = new FactorModular();
 
-     for ( int i = 0; i < 8; i++ ) {
-         GenPolynomial<ModInteger> a = pfac.random(kl,ll*(i+1),el*(i+1),q);
+     for ( int i = 0; i < 7; i++ ) {
+         int facs = 0;
+         GenPolynomial<ModInteger> a = null; //pfac.random(kl,ll*(i+1),el*(i+1),q);
+         GenPolynomial<ModInteger> b = pfac.random(kl,ll*(i+1),el*(i+1),q);
+         GenPolynomial<ModInteger> c = pfac.random(kl,ll*(i+1),el*(i+1),q);
+         if ( b.isZERO() || c.isZERO() ) {
+             continue;
+         }
+         if ( c.degree() > 0 ) {
+             facs++;
+         }
+         if ( b.degree() > 0 ) {
+             facs++;
+         }
+         a = c.multiply( b );
          if ( a.isConstant() ) {
              continue;
          }
+         a = a.monic();
          System.out.println("\na = " + a);
+         //System.out.println("b = " + b);
+         //System.out.println("c = " + c);
 
          SortedMap<GenPolynomial<ModInteger>,Integer> sm = fac.baseFactors( a );
          System.out.println("sm = " + sm);
+
+         if ( sm.size() >= facs ) {
+            assertTrue("#facs < " + facs , sm.size() >= facs );
+         } else {
+             long sf = 1;
+             for ( Integer e : sm.values() ) {
+                 sf *= e;
+             }
+            assertTrue("#facs < " + facs , sf >= facs );
+         }
 
          boolean t = fac.isFactorization( a, sm );
          //System.out.println("t        = " + t);
@@ -109,22 +137,48 @@ public class FactorTest extends TestCase {
  * Test multivariate modular factorization.
  * 
  */
- public void xtestMultivariateModularFactorization() {
+ public void testMultivariateModularFactorization() {
 
      TermOrder to = new TermOrder(TermOrder.INVLEX);
      ModIntegerRing cfac = new ModIntegerRing(13);
      GenPolynomialRing<ModInteger> pfac = new GenPolynomialRing<ModInteger>(cfac,rl,to);
      FactorModular fac = new FactorModular();
 
-     for ( int i = 0; i < 6; i++ ) {
-         GenPolynomial<ModInteger> a = pfac.random(kl,ll*(i+1),el,q);
+     for ( int i = 0; i < 4; i++ ) {
+         int facs = 0;
+         GenPolynomial<ModInteger> a = null; //pfac.random(kl,ll*(i+1),el,q);
+         GenPolynomial<ModInteger> b = pfac.random(2,ll,el,q);
+         GenPolynomial<ModInteger> c = pfac.random(2,ll,el,q);
+         if ( b.isZERO() || c.isZERO() ) {
+             continue;
+         }
+         if ( c.degree() > 0 ) {
+             facs++;
+         }
+         if ( b.degree() > 0 ) {
+             facs++;
+         }
+         a = c.multiply( b );
          if ( a.isConstant() ) {
              continue;
          }
+         a = a.monic();
          System.out.println("\na = " + a);
+         //System.out.println("b = " + b);
+         //System.out.println("c = " + c);
 
          SortedMap<GenPolynomial<ModInteger>,Integer> sm = fac.factors( a );
          System.out.println("sm = " + sm);
+
+         if ( sm.size() >= facs ) {
+            assertTrue("#facs < " + facs , sm.size() >= facs );
+         } else {
+             long sf = 1;
+             for ( Integer e : sm.values() ) {
+                 sf *= e;
+             }
+            assertTrue("#facs < " + facs , sf >= facs );
+         }
 
          boolean t = fac.isFactorization( a, sm );
          //System.out.println("t        = " + t);

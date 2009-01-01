@@ -82,7 +82,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C> >
 
     /**
      * GenPolynomial factorization of a squarefree polynomial.
-     * @param P squarefree and primitive! GenPolynomial<C>.
+     * @param P squarefree and primitive! (respectively monic) GenPolynomial<C>.
      * @return [p_1,...,p_k] with P = prod_{i=1,...,r} p_i.
      */
     public List<GenPolynomial<C>> factorsSquarefree( GenPolynomial<C> P ) {
@@ -100,6 +100,9 @@ public abstract class FactorAbstract<C extends GcdRingElem<C> >
         long d = P.degree() + 1L;
         GenPolynomial<C> kr = PolyUfdUtil.<C> substituteKronecker( P, d ); 
         System.out.println("subs(P,d=" + d + ") = " + kr);
+        if ( kr.degree(0) > 100 ) {
+            logger.warn("Kronecker substitution has to high degree");
+        }
 
         // factor Kronecker polynomial
         List<GenPolynomial<C>> klist = new ArrayList<GenPolynomial<C>>();
@@ -152,6 +155,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C> >
 
         // combine trial factors
         int dl = (klist.size()+1)/2;
+        System.out.println("dl = " + dl);
         int ti = 0;
         GenPolynomial<C> u = P;
         for ( int j = 1; j <= dl; j++ ) {
@@ -217,8 +221,13 @@ public abstract class FactorAbstract<C extends GcdRingElem<C> >
                     + " only for univariate polynomials");
         }
         GreatestCommonDivisorAbstract<C> engine 
-         = (GreatestCommonDivisorAbstract<C>)GCDFactory.<C>getImplementation( pfac.coFac );
-        C c = engine.baseContent(P);
+              = (GreatestCommonDivisorAbstract<C>)GCDFactory.<C>getImplementation( pfac.coFac );
+        C c;
+        if ( pfac.characteristic().signum() > 0 ) {
+            c = P.leadingBaseCoefficient();
+        } else {
+            c = engine.baseContent(P);
+        }
         // move sign to the content
         if ( P.signum() < 0 && c.signum() > 0 ) {
             c = c.negate();
@@ -230,10 +239,10 @@ public abstract class FactorAbstract<C extends GcdRingElem<C> >
            System.out.println("c = " + c);
            GenPolynomial<C> pc = pfac.getONE().multiply( c );
            factors.put( pc, 1 );
-           P = P.divide( c.abs() ); // make primitive
+           P = P.divide( c.abs() ); // make primitive or monic
         }
         SortedMap<Integer,GenPolynomial<C>> facs = engine.baseSquarefreeFactors(P);
-        System.out.println("facs    = " + facs);
+        System.out.println("sfacs   = " + facs);
         for ( Integer d : facs.keySet() ) {
             GenPolynomial<C> g = facs.get( d );
             List<GenPolynomial<C>> sfacs = baseFactorsSquarefree(g);
@@ -269,14 +278,19 @@ public abstract class FactorAbstract<C extends GcdRingElem<C> >
             return baseFactors( P );
         }
         SortedMap<GenPolynomial<C>,Integer> factors 
-           = new TreeMap<GenPolynomial<C>,Integer>( pfac.getComparator() );
+                 = new TreeMap<GenPolynomial<C>,Integer>( pfac.getComparator() );
         if ( P.isZERO() ) {
             return factors;
         }
         GreatestCommonDivisorAbstract<C> engine 
            = (GreatestCommonDivisorAbstract<C>)GCDFactory.<C>getImplementation( pfac.coFac );
-        C c = engine.baseContent(P); // is this meaningful? yes for sign
-        // move sign to base content
+        C c;
+        if ( pfac.characteristic().signum() > 0 ) {
+            c = P.leadingBaseCoefficient();
+        } else {
+            c = engine.baseContent(P);
+        }
+        // move sign to the content
         if ( P.signum() < 0 && c.signum() > 0 ) {
             c = c.negate();
             P = P.negate();
@@ -287,10 +301,10 @@ public abstract class FactorAbstract<C extends GcdRingElem<C> >
            System.out.println("baseContent = " + c);
            GenPolynomial<C> pc = pfac.getONE().multiply( c );
            factors.put( pc, 1 );
-           P = P.divide( c.abs() ); // make base primitive
+           P = P.divide( c.abs() ); // make base primitive or monic
         }
         SortedMap<Integer,GenPolynomial<C>> facs = engine.squarefreeFactors(P);
-        System.out.println("facs    = " + facs);
+        System.out.println("sfacs   = " + facs);
         for ( Integer d : facs.keySet() ) {
             GenPolynomial<C> g = facs.get( d );
             List<GenPolynomial<C>> sfacs = factorsSquarefree( g );
