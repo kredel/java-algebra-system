@@ -689,6 +689,47 @@ public class PolyUtil {
 
 
     /**
+     * GenPolynomial pseudo divide.
+     * For polynomials.
+     * @param <C> coefficient type.
+     * @param P GenPolynomial.
+     * @param s nonzero coefficient.
+     * @return quotient with ldcf(s)<sup>m</sup> P = quotient * s + remainder.
+     * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
+     */
+    public static <C extends RingElem<C>>
+           GenPolynomial<C> coefficientBasePseudoDivide( GenPolynomial<C> P, C s) {
+        if ( s == null || s.isZERO() ) {
+           throw new RuntimeException(" division by zero");
+        }
+        if ( P.isZERO() ) {
+            return P;
+        }
+        GenPolynomial<C> p = P.ring.getZERO().clone(); 
+        SortedMap<ExpVector,C> pv = p.val;
+        for ( Map.Entry<ExpVector,C> m : P.getMap().entrySet() ) {
+            ExpVector e = m.getKey();
+            C c1 = m.getValue();
+            C c = c1.divide(s);
+            if ( false ) {
+                C x = c1.remainder(s);
+                if ( !x.isZERO() ) {
+                   System.out.println("divide x = " + x);
+                   throw new RuntimeException(" no exact division: " + c1 + "/" + s);
+                }
+            }
+            if ( c.isZERO() ) {
+               System.out.println(" no exact division: " + c1 + "/" + s);
+               //throw new RuntimeException(" no exact division: " + c1 + "/" + s);
+            } else {
+               pv.put( e, c ); // or m1.setValue( c )
+            }
+        }
+        return p;
+    }
+
+
+    /**
      * GenPolynomial polynomial derivative main variable.
      * @param <C> coefficient type.
      * @param P GenPolynomial.

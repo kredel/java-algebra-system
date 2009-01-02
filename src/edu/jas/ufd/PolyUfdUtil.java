@@ -429,6 +429,10 @@ public class PolyUfdUtil {
         BigInteger Mq = Qi;
         GenPolynomialRing<ModInteger> qfac;
         qfac = new GenPolynomialRing<ModInteger>(Q,pfac);
+        GenPolynomialRing<ModInteger> mfac;
+        BigInteger Qm = new BigInteger( Q.getModul().multiply( Q.getModul() ) );
+        ModIntegerRing Qmm = new ModIntegerRing( Qm.getVal() );
+        mfac = new GenPolynomialRing<ModInteger>(Qmm,qfac);
 
         // normalize c and a, b factors, assert p is prime
         GenPolynomial<BigInteger> Ai;
@@ -495,10 +499,32 @@ public class PolyUfdUtil {
                logger.info("leaving on zero error");
                break;
             }
-            E = E.divide( Qi );
+            try {
+                E = E.divide( Qi );
+            } catch (RuntimeException e) {
+                System.out.println("E % Qi != 0 " + e);
+                System.out.println("E =  " + E);
+                // first mod p^e and back
+//                 Ep = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,C).subtract(
+//                         PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,Ai).multiply(
+//                               PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,Bi)
+//                         ) ); 
+//                 System.out.println("Ep =  " + Ep);
+//                 E = PolyUtil.integerFromModularCoefficients(fac,Ep);
+//                 System.out.println("E =  " + E);
+//                 E = PolyUtil.<BigInteger> coefficientBasePseudoDivide(E,Qi);
+                // ignore division errors:
+                E = PolyUtil.<BigInteger> coefficientBasePseudoDivide(E,Qi);
+                System.out.println("E =  " + E);
+            }
             // E mod p
             Ep = PolyUtil.<ModInteger>fromIntegerCoefficients(qfac,E); 
             //logger.info("Ep = " + Ep);
+            if ( Ep.isZERO() ) {
+               //System.out.println("leaving on zero error");
+               logger.info("leaving on zero error Ep");
+               break;
+            }
 
             // construct approximation mod p
             Ap = Sp.multiply( Ep ); // S,T ++ T,S
@@ -568,6 +594,9 @@ public class PolyUfdUtil {
             Qi = new BigInteger( Q.getModul().multiply( Q.getModul() ) );
             Q = new ModIntegerRing( Qi.getVal() );
             qfac = new GenPolynomialRing<ModInteger>(Q,pfac);
+            Qm = new BigInteger( Q.getModul().multiply( Q.getModul() ) );
+            Qmm = new ModIntegerRing( Qm.getVal() );
+            mfac = new GenPolynomialRing<ModInteger>(Qmm,qfac);
 
             Aq = PolyUtil.<ModInteger>fromIntegerCoefficients(qfac,Ai);
             Bq = PolyUtil.<ModInteger>fromIntegerCoefficients(qfac,Bi);

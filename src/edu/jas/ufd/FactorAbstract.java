@@ -435,7 +435,13 @@ public abstract class FactorAbstract<C extends GcdRingElem<C> >
                 throw new RuntimeException("wrong TreeMap entries");
             }
         }
-        return P.equals(t);
+        boolean f = P.equals(t);
+        if ( !f ) {
+           System.out.println("factorization: " + f);
+           System.out.println("P = " + P);
+           System.out.println("t = " + t);
+        }
+        return f;
     }
 
 }

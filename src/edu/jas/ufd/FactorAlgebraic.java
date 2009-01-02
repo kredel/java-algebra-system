@@ -122,7 +122,7 @@ public class FactorAlgebraic <C extends GcdRingElem<C>>
         System.out.println("Ac = " + Ac);
 
         // search squarefree resultant
-        long k = 0;
+        long k = 1;
         GenPolynomial<C> res = null;
         GenPolynomial<GenPolynomial<C>> Pc;
         GenPolynomial<GenPolynomial<C>> kc;
@@ -189,7 +189,8 @@ public class FactorAlgebraic <C extends GcdRingElem<C>>
             k++;
         }
         // Res is now squarefree, so we can factor it
-        SortedMap<GenPolynomial<C>,Long> nfacs = factorCoeff.baseFactors( res );
+        //SortedMap<GenPolynomial<C>,Long> nfacs = factorCoeff.baseFactors( res );
+        List<GenPolynomial<C>> nfacs = factorCoeff.baseFactorsSquarefree( res );
         System.out.println("\nnfacs = " + nfacs); // Q[X]
         if ( !factorCoeff.isFactorization( res, nfacs ) ) {
            System.out.println("isFactorization = false"); 
@@ -198,7 +199,7 @@ public class FactorAlgebraic <C extends GcdRingElem<C>>
         GenPolynomial<AlgebraicNumber<C>> Pp = P;
         GenPolynomial<C> ka = cfac.fromInteger(k);
         //System.out.println("ka = " + ka);
-        for ( GenPolynomial<C> nfi : nfacs.keySet() ) {
+        for ( GenPolynomial<C> nfi : nfacs ) { // .keySet()
              System.out.println("nfi = " + nfi);
              GenPolynomial<AlgebraicNumber<C>> Ni = pfac.getZERO().clone();
              //System.out.println("Ni = " + Ni);

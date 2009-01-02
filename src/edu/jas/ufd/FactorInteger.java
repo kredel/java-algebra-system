@@ -81,7 +81,7 @@ public class FactorInteger //<C extends GcdRingElem<C> >
         GreatestCommonDivisorAbstract<ModInteger> engine = (GreatestCommonDivisorAbstract<ModInteger>) GCDFactory
                 .<ModInteger> getImplementation(mcofac);
         GenPolynomial<ModInteger> am = null;
-        GenPolynomialRing<ModInteger> mfac;
+        GenPolynomialRing<ModInteger> mfac = null;
         final int TT = 5;
         List<GenPolynomial<ModInteger>>[] modfac = (List<GenPolynomial<ModInteger>>[]) new List[TT];
         List<GenPolynomial<BigInteger>>[] intfac = (List<GenPolynomial<BigInteger>>[]) new List[TT];
@@ -150,11 +150,11 @@ public class FactorInteger //<C extends GcdRingElem<C> >
                 return factors;
             }
             if (!nf.isONE()) {
-                GenPolynomial<ModInteger> mp = mlist.get(0);
+                GenPolynomial<ModInteger> mp = mlist.get(0); //mfac.getONE(); //mlist.get(0);
                 System.out.println("mp = " + mp);
                 mp = mp.multiply(nf);
                 System.out.println("mp = " + mp);
-                mlist.set(0, mp);
+                mlist.set(0,mp); //add(0, mp); // set(0,mp);
             }
             modfac[k] = mlist;
         }

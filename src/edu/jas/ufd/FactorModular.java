@@ -173,6 +173,9 @@ public class FactorModular //<C extends GcdRingElem<C> >
             throw new RuntimeException(this.getClass().getName()
                     + " only for univariate polynomials");
         }
+        if ( !P.leadingBaseCoefficient().isONE() ) {
+            System.out.println("ldcf(P) != 1 " + P.leadingBaseCoefficient().isONE());
+        }
         SortedMap<Long,GenPolynomial<ModInteger>> dfacs = baseDistinctDegreeFactors(P);
         System.out.println("dfacs    = " + dfacs);
         for ( Long e : dfacs.keySet() ) {
