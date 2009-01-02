@@ -192,46 +192,4 @@ public class FactorModular //<C extends GcdRingElem<C> >
         return factors;
     }
 
-
-    /**
-     * GenPolynomial base factorization.
-     * @param P GenPolynomial<ModInteger>.
-     * @return [p_1 -> e_1, ..., p_k->e_k] with P = prod_{i=1,...,k} p_i**e_i.
-     */
-    public SortedMap<GenPolynomial<ModInteger>,Integer> oldbaseFactors(GenPolynomial<ModInteger> P) {
-        if ( P == null ) {
-            throw new RuntimeException(this.getClass().getName() + " P != null");
-        }
-        GenPolynomialRing<ModInteger> pfac = P.ring;
-        SortedMap<GenPolynomial<ModInteger>,Integer> factors
-           = new TreeMap<GenPolynomial<ModInteger>,Integer>( pfac.getComparator() );
-        if ( P.isZERO() ) {
-            return factors;
-        }
-        if ( pfac.nvar > 1 ) {
-            throw new RuntimeException(this.getClass().getName()
-                    + " only for univariate polynomials");
-        }
-        GreatestCommonDivisorAbstract<ModInteger> engine 
-         = (GreatestCommonDivisorAbstract<ModInteger>)GCDFactory.<ModInteger>getImplementation( pfac.coFac );
-        ModInteger c = engine.baseContent(P);
-        if ( ! c.isONE() ) {
-           GenPolynomial<ModInteger> pc = pfac.getONE().multiply( c );
-           factors.put( pc, 1 );
-           P = P.divide(c); // make primitive
-        }
-        SortedMap<Integer,GenPolynomial<ModInteger>> facs = engine.baseSquarefreeFactors(P);
-        System.out.println("facs    = " + facs);
-        for ( Integer d : facs.keySet() ) {
-            GenPolynomial<ModInteger> g = facs.get( d );
-            List<GenPolynomial<ModInteger>> sfacs = baseFactorsSquarefree(g);
-            //System.out.println("sfacs   = " + sfacs);
-            for ( GenPolynomial<ModInteger> h : sfacs ) {
-                factors.put( h, d );
-            }
-        }
-        System.out.println("factors = " + factors);
-        return factors;
-    }
-
 }

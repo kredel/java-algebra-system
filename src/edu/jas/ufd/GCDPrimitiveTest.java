@@ -300,14 +300,14 @@ public class GCDPrimitiveTest extends TestCase {
      c = ufd.basePrimitivePart(c);
      d = ufd.basePrimitivePart(d);
 
-     Map<Integer,GenPolynomial<BigInteger>> sfactors;
+     Map<GenPolynomial<BigInteger>,Long> sfactors;
      sfactors = ufd.baseSquarefreeFactors(d);
      //System.out.println("sfactors = " + sfactors);
 
      e = dfac.getONE();
-     for ( Map.Entry<Integer,GenPolynomial<BigInteger>> m : sfactors.entrySet() ) {
-         GenPolynomial<BigInteger> p = m.getValue();
-         int j = m.getKey();
+     for ( Map.Entry<GenPolynomial<BigInteger>,Long> m : sfactors.entrySet() ) {
+         GenPolynomial<BigInteger> p = m.getKey();
+         long j = m.getValue();
          for ( int i = 0; i < j; i++ ) {
              e = e.multiply(p);
          }
@@ -317,7 +317,7 @@ public class GCDPrimitiveTest extends TestCase {
      assertTrue("PROD squarefreefactors(aabbbc) | aabbbc " + e, e.isZERO() );
 
      e = dfac.getONE();
-     for ( GenPolynomial<BigInteger> p : sfactors.values() ) {
+     for ( GenPolynomial<BigInteger> p : sfactors.keySet() ) {
          e = e.multiply(p);
      }
      //System.out.println("e  = " + e);
@@ -569,14 +569,14 @@ public class GCDPrimitiveTest extends TestCase {
      cr = ufd.recursivePrimitivePart(cr);
      dr = ufd.recursivePrimitivePart(dr);
 
-     Map<Integer,GenPolynomial<GenPolynomial<BigInteger>>> sfactors;
+     Map<GenPolynomial<GenPolynomial<BigInteger>>,Long> sfactors;
      sfactors = ufd.recursiveSquarefreeFactors(dr);
      //System.out.println("sfactors = " + sfactors);
 
      er = rfac.getONE();
-     for ( Map.Entry<Integer,GenPolynomial<GenPolynomial<BigInteger>>> m : sfactors.entrySet() ) {
-         GenPolynomial<GenPolynomial<BigInteger>> p = m.getValue();
-         int j = m.getKey();
+     for ( Map.Entry<GenPolynomial<GenPolynomial<BigInteger>>,Long> m : sfactors.entrySet() ) {
+         GenPolynomial<GenPolynomial<BigInteger>> p = m.getKey();
+         long j = m.getValue();
          for ( int i = 0; i < j; i++ ) {
              er = er.multiply(p);
          }
@@ -587,7 +587,7 @@ public class GCDPrimitiveTest extends TestCase {
 
 
      er = rfac.getONE();
-     for ( GenPolynomial<GenPolynomial<BigInteger>> p : sfactors.values() ) {
+     for ( GenPolynomial<GenPolynomial<BigInteger>> p : sfactors.keySet() ) {
          er = er.multiply(p);
      }
      //System.out.println("er  = " + er);
@@ -869,14 +869,14 @@ public class GCDPrimitiveTest extends TestCase {
      c = ufd.primitivePart(c);
      d = ufd.primitivePart(d);
 
-     Map<Integer,GenPolynomial<BigInteger>> sfactors;
+     Map<GenPolynomial<BigInteger>,Long> sfactors;
      sfactors = ufd.squarefreeFactors(d);
      //System.out.println("sfactors = " + sfactors);
 
      e = dfac.getONE();
-     for ( Map.Entry<Integer,GenPolynomial<BigInteger>> m : sfactors.entrySet() ) {
-         GenPolynomial<BigInteger> p = m.getValue();
-         int j = m.getKey();
+     for ( Map.Entry<GenPolynomial<BigInteger>,Long> m : sfactors.entrySet() ) {
+         GenPolynomial<BigInteger> p = m.getKey();
+         long j = m.getValue();
          for ( int i = 0; i < j; i++ ) {
              e = e.multiply(p);
          }
@@ -886,7 +886,7 @@ public class GCDPrimitiveTest extends TestCase {
      assertTrue("PROD squarefreefactors(aabbbc) | aabbbc " + e, e.isZERO() );
 
      e = dfac.getONE();
-     for ( GenPolynomial<BigInteger> p : sfactors.values() ) {
+     for ( GenPolynomial<BigInteger> p : sfactors.keySet() ) {
          e = e.multiply(p);
      }
      //System.out.println("c  = " + c);

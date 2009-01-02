@@ -189,7 +189,7 @@ public class FactorAlgebraic <C extends GcdRingElem<C>>
             k++;
         }
         // Res is now squarefree, so we can factor it
-        SortedMap<GenPolynomial<C>,Integer> nfacs = factorCoeff.baseFactors( res );
+        SortedMap<GenPolynomial<C>,Long> nfacs = factorCoeff.baseFactors( res );
         System.out.println("\nnfacs = " + nfacs); // Q[X]
         if ( !factorCoeff.isFactorization( res, nfacs ) ) {
            System.out.println("isFactorization = false"); 

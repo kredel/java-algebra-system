@@ -7,7 +7,7 @@ package edu.jas.ufd;
 
 import java.io.Serializable;
 
-import java.util.Map;
+import java.util.SortedMap;
 
 import edu.jas.structure.GcdRingElem;
 import edu.jas.poly.GenPolynomial;
@@ -92,8 +92,8 @@ public interface GreatestCommonDivisor<C extends GcdRingElem<C> >
     /**
      * GenPolynomial squarefree factorization.
      * @param P GenPolynomial.
-     * @return squarefreeFactors(P).
+     * @return [p_1 -> e_1, ..., p_k -> e_k] with P = prod_{i=1,...,k} p_i^{e_i} and p_i squarefree.
      */
-    public Map<Integer,GenPolynomial<C>> squarefreeFactors( GenPolynomial<C> P );
+    public SortedMap<GenPolynomial<C>,Long> squarefreeFactors( GenPolynomial<C> P );
 
 }

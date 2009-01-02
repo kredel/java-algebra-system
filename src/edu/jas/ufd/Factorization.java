@@ -61,7 +61,7 @@ public interface Factorization<C extends GcdRingElem<C> >
      * @param P GenPolynomial<C>.
      * @return [p_1 -> e_1, ..., p_k -> e_k] with P = prod_{i=1,...,k} p_i**e_i.
      */
-    public SortedMap<GenPolynomial<C>,Integer> factors( GenPolynomial<C> P );
+    public SortedMap<GenPolynomial<C>,Long> factors( GenPolynomial<C> P );
 
 
     /**
@@ -75,9 +75,9 @@ public interface Factorization<C extends GcdRingElem<C> >
     /**
      * GenPolynomial squarefree factorization.
      * @param P GenPolynomial.
-     * @return squarefreeFactors(P).
+     * @return [p_1 -> e_1, ..., p_k -> e_k] with P = prod_{i=1,...,k} p_i^{e_i} and p_i squarefree.
      */
-    public Map<Integer,GenPolynomial<C>> squarefreeFactors( GenPolynomial<C> P );
+    public SortedMap<GenPolynomial<C>,Long> squarefreeFactors( GenPolynomial<C> P );
 
 
     /**
@@ -95,6 +95,6 @@ public interface Factorization<C extends GcdRingElem<C> >
      * @param F = [p_1 -> e_1, ..., p_k -> e_k].
      * @return true if P = prod_{i=1,...,k} p_i**e_i , else false.
      */
-    public boolean isFactorization( GenPolynomial<C> P, SortedMap<GenPolynomial<C>,Integer>  F );
+    public boolean isFactorization( GenPolynomial<C> P, SortedMap<GenPolynomial<C>,Long>  F );
 
 }
