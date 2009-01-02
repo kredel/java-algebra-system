@@ -168,7 +168,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C> >
                 }
                 ti++;
                 if ( ti % 10 == 0 ) {
-                   System.out.println("ti = " + ti);
+                   System.out.print("ti(" + ti + ") ");
                 }
                 //GenPolynomial<C> trial = PolyUfdUtil.<C> backSubstituteKronecker( pfac, utrial, d ); 
                 if ( PolyUtil.<C>basePseudoRemainder(u, trial).isZERO() ) {

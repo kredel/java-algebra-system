@@ -61,8 +61,8 @@ public class FactorModular //<C extends GcdRingElem<C> >
                     + " only for univariate polynomials");
         }
         ModIntegerRing mr = (ModIntegerRing)pfac.coFac;
-        java.math.BigInteger bi = mr.modul;
-        long m = bi.longValue();
+        java.math.BigInteger m = mr.modul;
+        //long m = bi.longValue();
         GenPolynomial<ModInteger> one = pfac.getONE();
         GenPolynomial<ModInteger> x = pfac.univariate(0);
         GenPolynomial<ModInteger> h = x;
@@ -113,12 +113,13 @@ public class FactorModular //<C extends GcdRingElem<C> >
             return facs;
         }
         ModIntegerRing mr = (ModIntegerRing)pfac.coFac;
-        java.math.BigInteger bi = mr.modul;
-        long m = bi.longValue();
-        if ( m < 0 || m > Integer.MAX_VALUE ) {
-           System.out.println("warning: m = " + m + ", deg = " + deg);
-           logger.warn("m = " + m + ", deg = " + deg);
-        }
+        java.math.BigInteger m = mr.modul;
+        //System.out.println("m = " + m);
+        //long m = bi.longValue();
+//         if ( m < 0 || m > Integer.MAX_VALUE ) {
+//            System.out.println("warning: m = " + m + ", deg = " + deg);
+//            logger.warn("m = " + m + ", deg = " + deg);
+//         }
         GenPolynomial<ModInteger> one = pfac.getONE();
         GenPolynomial<ModInteger> r;
         GenPolynomial<ModInteger> h;
@@ -137,9 +138,10 @@ public class FactorModular //<C extends GcdRingElem<C> >
             //System.out.println("r = " + r);
             BigInteger di = Power.<BigInteger>positivePower(new BigInteger(m),deg);
             //System.out.println("di = " + di);
-            long d = di.getVal().longValue()-1;
+            java.math.BigInteger d = di.getVal(); //.longValue()-1;
             //System.out.println("d = " + d);
-            h = pow.modPower( r, d/2, f );
+            d = d.shiftRight(1); // divide by 2
+            h = pow.modPower( r, d, f );
             g = engine.gcd( h.subtract(one), f );
             //System.out.println("g = " + g);
             degi++;
@@ -183,9 +185,6 @@ public class FactorModular //<C extends GcdRingElem<C> >
             List<GenPolynomial<ModInteger>> efacs = baseEqualDegreeFactors(f,e);
             System.out.println("efacs " + e + "   = " + efacs);
             factors.addAll( efacs );
-//             for ( GenPolynomial<ModInteger> h : efacs ) {
-//                 factors.add( h );
-//             }
         }
         System.out.println("factors  = " + factors);
         SortedSet<GenPolynomial<ModInteger>> ss = new TreeSet<GenPolynomial<ModInteger>>( factors );

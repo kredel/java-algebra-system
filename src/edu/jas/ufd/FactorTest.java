@@ -97,7 +97,7 @@ public class FactorTest extends TestCase {
      */
     public void xtestModularFactorization() {
 
-        PrimeList pl = new PrimeList(PrimeList.Range.small);
+        PrimeList pl = new PrimeList(PrimeList.Range.medium);
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         ModIntegerRing cfac = new ModIntegerRing(pl.get(0));
         System.out.println("cfac = " + cfac);
@@ -154,8 +154,9 @@ public class FactorTest extends TestCase {
      */
     public void xtestMultivariateModularFactorization() {
 
+        PrimeList pl = new PrimeList(PrimeList.Range.small);
         TermOrder to = new TermOrder(TermOrder.INVLEX);
-        ModIntegerRing cfac = new ModIntegerRing(13);
+        ModIntegerRing cfac = new ModIntegerRing(pl.get(5)); // 13
         GenPolynomialRing<ModInteger> pfac = new GenPolynomialRing<ModInteger>(cfac, rl,
                 to);
         FactorModular fac = new FactorModular();
@@ -279,7 +280,7 @@ public class FactorTest extends TestCase {
                 to);
         FactorInteger fac = new FactorInteger();
 
-        for (int i = 1; i < 6; i++) {
+        for (int i = 1; i < 4; i++) {
             GenPolynomial<BigInteger> a = pfac.random(kl, ll * (i + 1), el, q);
             if (false && !a.leadingBaseCoefficient().isUnit()) {
                 //continue;
@@ -303,7 +304,7 @@ public class FactorTest extends TestCase {
      * Test rational factorization.
      * 
      */
-    public void testRationalFactorization() {
+    public void xtestRationalFactorization() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigRational cfac = new BigRational(1);
@@ -339,6 +340,16 @@ public class FactorTest extends TestCase {
             System.out.println("sm = " + sm);
             assertTrue("#facs < " + facs, sm.size() >= facs);
 
+            if (sm.size() >= facs) {
+                assertTrue("#facs < " + facs, sm.size() >= facs);
+            } else {
+                long sf = 1;
+                for (Long e : sm.values()) {
+                    sf *= e;
+                }
+                assertTrue("#facs < " + facs, sf >= facs);
+            }
+
             boolean t = fac.isFactorization(a, sm);
             //System.out.println("t        = " + t);
             assertTrue("prod(factor(a)) = a", t);
@@ -350,7 +361,7 @@ public class FactorTest extends TestCase {
      * Test algebraic factorization.
      * 
      */
-    public void xtestAlgebraicFactorization() {
+    public void testAlgebraicFactorization() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigRational cfac = new BigRational(1);

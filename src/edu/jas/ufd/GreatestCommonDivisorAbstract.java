@@ -394,9 +394,11 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         //System.out.println("rsf = " + rsf);
         // add factors of content
         for (GenPolynomial<C> c : rsf.keySet()) {
-            GenPolynomial<GenPolynomial<C>>  cr = pfac.getONE().multiply(c);
-            Long rk = rsf.get(c);
-            sfactors.put(cr,rk);
+            if ( !c.isONE() ) {
+               GenPolynomial<GenPolynomial<C>>  cr = pfac.getONE().multiply(c);
+               Long rk = rsf.get(c);
+               sfactors.put(cr,rk);
+            }
         }
 
         // factors of recursive polynomial
@@ -644,8 +646,8 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
             return sfactors;
         }
         GenPolynomialRing<C> cfac = pfac.contract(1);
-        GenPolynomialRing<GenPolynomial<C>> rfac = new GenPolynomialRing<GenPolynomial<C>>(
-                cfac, 1);
+        GenPolynomialRing<GenPolynomial<C>> rfac 
+            = new GenPolynomialRing<GenPolynomial<C>>(cfac, 1);
 
         GenPolynomial<GenPolynomial<C>> Pr = PolyUtil.<C> recursive(rfac, P);
         SortedMap<GenPolynomial<GenPolynomial<C>>,Long> PP = recursiveSquarefreeFactors(Pr);
