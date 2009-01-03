@@ -7,6 +7,8 @@ package edu.jas.ufd;
 
 import java.util.SortedMap;
 
+import org.apache.log4j.BasicConfigurator;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -37,6 +39,7 @@ public class FactorTest extends TestCase {
      * main.
      */
     public static void main(String[] args) {
+        BasicConfigurator.configure();
         junit.textui.TestRunner.run(suite());
     }
 
@@ -209,7 +212,7 @@ public class FactorTest extends TestCase {
      * Test integer factorization.
      * 
      */
-    public void xtestIntegerFactorization() {
+    public void testIntegerFactorization() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(4);
@@ -249,6 +252,9 @@ public class FactorTest extends TestCase {
             //System.out.println("c = " + c);
 
             SortedMap<GenPolynomial<BigInteger>, Long> sm = fac.baseFactors(a);
+            System.out.println("\na   = " + a);
+            System.out.println("b   = " + b);
+            System.out.println("c   = " + c);
             System.out.println("sm = " + sm);
 
             if (sm.size() >= facs) {
@@ -361,7 +367,7 @@ public class FactorTest extends TestCase {
      * Test algebraic factorization.
      * 
      */
-    public void testAlgebraicFactorization() {
+    public void xtestAlgebraicFactorization() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigRational cfac = new BigRational(1);
