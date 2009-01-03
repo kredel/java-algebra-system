@@ -241,6 +241,37 @@ public class PolyUfdUtil {
 
 
     /**
+     * Introduce lower variable. 
+     * Represent as polynomial with type GenPolynomial&lt;C&gt; coefficients.
+     * @param rfac result polynomial factory.
+     * @param A polynomial to be extended.
+     * @return polynomial with type GenPolynomial&lt;C&gt; coefficients.
+     */
+    public static <C extends GcdRingElem<C>>
+      GenPolynomial<GenPolynomial<C>> 
+      introduceLowerVariable( GenPolynomialRing<GenPolynomial<C>> rfac,
+                              GenPolynomial<C> A ) {
+        if ( A == null || rfac == null ) {
+            return null;
+        }
+        GenPolynomial<GenPolynomial<C>> Pc = rfac.getZERO().clone(); // Q[x][y] or Q[x,y]
+        if ( A.isZERO() ) {
+            return Pc;
+        }
+        if ( !rfac.coFac.equals(A.ring) ) {
+            throw new RuntimeException("rings not equal");
+        }
+        GenPolynomial<C> f = rfac.coFac.getONE();
+        for ( Monomial<C> m : A ) {
+            C c = m.c;
+            GenPolynomial<C> ac = f.multiply(c); // to upper variable
+            Pc.doPutToMap(m.e,ac);
+        }
+        return Pc;
+    }
+
+
+    /**
      * From AlgebraicNumber coefficients. 
      * Represent as polynomial with type GenPolynomial&lt;C&gt; coefficients,
      * e.g. ModInteger or BigRational.
