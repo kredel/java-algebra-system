@@ -65,22 +65,25 @@ public class FactorRational //<C extends GcdRingElem<C> >
             throw new RuntimeException(this.getClass().getName()
                     + " only for univariate polynomials");
         }
+        GenPolynomial<BigRational> Pr =  P;
         BigRational ldcf = P.leadingBaseCoefficient();
         if ( !ldcf.isONE() ) {
-            P = P.monic();
+            System.out.println("ldcf = " + ldcf);
+            Pr = Pr.monic();
         }
-        System.out.println("ldcf = " + ldcf);
         BigInteger bi = BigInteger.ONE;
         GenPolynomialRing<BigInteger> ifac = new GenPolynomialRing<BigInteger>(bi,pfac);
-        GenPolynomial<BigInteger> Pi =  PolyUtil.integerFromRationalCoefficients(ifac,P);
+        GenPolynomial<BigInteger> Pi =  PolyUtil.integerFromRationalCoefficients(ifac,Pr);
         System.out.println("Pi = " + Pi);
         FactorInteger faci = new FactorInteger();
         List<GenPolynomial<BigInteger>> ifacts = faci.baseFactorsSquarefree(Pi);
+        if ( logger.isInfoEnabled() ) {
+           logger.info("ifacts = " + ifacts);
+        }
         if ( ifacts.size() <= 1 ) {
-            factors.add( P.multiply(ldcf) );
+            factors.add( P );
             return factors;
         }
-        System.out.println("ifacts = " + ifacts);
         List<GenPolynomial<BigRational>> rfacts = PolyUtil.fromIntegerCoefficients(pfac,ifacts);
         System.out.println("rfacts = " + rfacts);
         rfacts = PolyUtil.monic(rfacts);
@@ -89,7 +92,9 @@ public class FactorRational //<C extends GcdRingElem<C> >
         rfacts.remove(r);
         r = r.multiply(ldcf);
         rfacts.add(0,r);
-        System.out.println("rfacts = " + rfacts);
+        if ( logger.isInfoEnabled() ) {
+           logger.info("rfacts = " + rfacts);
+        }
         factors.addAll( rfacts );
         return factors;
     }
