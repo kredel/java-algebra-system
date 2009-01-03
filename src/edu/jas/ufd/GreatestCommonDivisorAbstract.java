@@ -179,7 +179,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
                 V = PolyUtil.<C> basePseudoDivide(T0,T);
                 //System.out.println("Tp = " + Tp);
                 //System.out.println("T = " + T);
-                System.out.println("V = " + V);
+                //System.out.println("V = " + V);
                 k = 0L;
                 mp = 0L;
                 init = false;
@@ -420,7 +420,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
                 V = PolyUtil.<C> recursivePseudoDivide(T0,T);
                 //System.out.println("Tp = " + Tp);
                 //System.out.println("T = " + T);
-                System.out.println("V = " + V);
+                //System.out.println("V = " + V);
                 k = 0L;
                 mp = 0L;
                 init = false;
