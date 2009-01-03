@@ -15,6 +15,7 @@ import edu.jas.structure.RingElem;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.structure.UnaryFunctor;
+import edu.jas.structure.Power;
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
@@ -22,9 +23,12 @@ import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
 
 import edu.jas.poly.ExpVector;
+import edu.jas.poly.Monomial;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
+import edu.jas.poly.AlgebraicNumber;
+import edu.jas.poly.AlgebraicNumberRing;
 
 import edu.jas.util.ListUtil;
 
@@ -234,6 +238,101 @@ public class PolyUfdUtil {
         }
         return K;
     }
+
+
+    /**
+     * From AlgebraicNumber coefficients. 
+     * Represent as polynomial with type GenPolynomial&lt;C&gt; coefficients,
+     * e.g. ModInteger or BigRational.
+     * @param rfac result polynomial factory.
+     * @param A polynomial with AlgebraicNumber coefficients to be converted.
+     * @param k for (y-k x) substitution.
+     * @return polynomial with type GenPolynomial&lt;C&gt; coefficients.
+     */
+    public static <C extends GcdRingElem<C>>
+      GenPolynomial<GenPolynomial<C>> 
+      fromAlgebraicCoefficients( GenPolynomialRing<GenPolynomial<C>> rfac,
+                                 GenPolynomial<AlgebraicNumber<C>> A, long k ) {
+        if ( A == null || rfac == null ) {
+            return null;
+        }
+        GenPolynomial<GenPolynomial<C>> Pc = rfac.getZERO().clone(); // Q[x][alpha] or Q[x,alpha]
+        if ( A.isZERO() ) {
+            return Pc;
+        }
+        GenPolynomialRing<C> cfac = (GenPolynomialRing<C>)rfac.coFac;
+        GenPolynomial<GenPolynomial<C>> fy = rfac.univariate(0);
+        GenPolynomial<GenPolynomial<C>> fx = rfac.getONE().multiply( cfac.univariate(0) );
+        GenPolynomial<GenPolynomial<C>> kc = rfac.fromInteger(k);
+        System.out.println("\nfy = " + fy);
+        System.out.println("fx = " + fx);
+        System.out.println("kc = " + kc);
+        for ( Monomial<AlgebraicNumber<C>> mx : A ) {
+            AlgebraicNumber<C> c = mx.c;
+            GenPolynomial<C> ac = c.val;
+            for ( Monomial<C> my : ac ) {
+                C cy = my.c;
+                GenPolynomial<GenPolynomial<C>> ay = fy.subtract( fx.multiply(kc) ); // y-kx
+                //System.out.println("ay = " + ay);
+                ay = Power.<GenPolynomial<GenPolynomial<C>>> power(rfac,ay,mx.e.getVal(0));
+                //System.out.println("ay = " + ay);
+                ay = ay.multiply( cfac.getONE().multiply(cy) ); // cy (y-kx)^ex 
+                //System.out.println("ay = " + ay);
+                ay = ay.multiply( Power.<GenPolynomial<GenPolynomial<C>>> power(rfac,fx,my.e.getVal(0)) );
+                // cy (y-kx)^ex x^ey 
+                //System.out.println("ay = " + ay);
+                Pc = Pc.sum(ay);
+            }
+        }
+        return Pc;
+    }
+
+
+  /**
+     * Convert to AlgebraicNumber coefficients. 
+     * Represent as polynomial with AlgebraicNumber<C> coefficients,
+     * C is e.g. ModInteger or BigRational.
+     * @param pfac result polynomial factory.
+     * @param A polynomial with GenPolynomial&lt;BigInteger&gt; 
+     * coefficients to be converted.
+     * @param k for (y-k x) substitution.
+     * @return polynomial with AlgebraicNumber&lt;C&gt; coefficients.
+     */
+    public static <C extends GcdRingElem<C>>
+      GenPolynomial<AlgebraicNumber<C>> 
+      convertToAlgebraicCoefficients( GenPolynomialRing<AlgebraicNumber<C>> pfac,
+                                      GenPolynomial<C> A, long k ) {
+        if ( A == null || pfac == null ) {
+            return null;
+        }
+        GenPolynomial<AlgebraicNumber<C>> N = pfac.getZERO().clone(); // Q(alpha)[x] 
+        if ( A.isZERO() ) {
+            return N;
+        }
+        AlgebraicNumberRing<C> afac = (AlgebraicNumberRing<C>)pfac.coFac;
+        GenPolynomialRing<C> cfac = afac.ring;
+        GenPolynomial<C> ka = cfac.fromInteger(k);
+        System.out.println("ka = " + ka);
+        // transform to Q(alpha) coefficients
+        for ( Monomial<C> m : A ) { // Q[x] ?
+            ExpVector e = m.e;
+            C c = m.c;
+            GenPolynomial<C> pc = cfac.univariate(0); 
+            pc = pc.multiply( ka ); // k alpha 
+            AlgebraicNumber<C> ac = new AlgebraicNumber<C>( afac, pc ); // in Q(alpha)
+            //System.out.println("ac = " + ac);
+            GenPolynomial<AlgebraicNumber<C>> xk = pfac.univariate(0).sum( ac ); // x + k alpha
+            //System.out.println("xk = " + xk);
+            xk = Power.<GenPolynomial<AlgebraicNumber<C>>> power(pfac,xk,e.getVal(0));
+            //System.out.println("xk = " + xk);  // (x+k alpha)^me
+            xk = xk.multiply( afac.getZERO().sum(c) ); // c (x + k alpha)^me
+            //System.out.println("Nix = " + Nix);
+            N = N.sum( xk ); 
+            //System.out.println("Ni = " + Ni);
+        }
+        return N;
+    }
+
 
     /** ModInteger Hensel lifting algorithm on coefficients.
      * Let p = A.ring.coFac.modul() = B.ring.coFac.modul() 
