@@ -89,41 +89,31 @@ public class FactorAlgebraic <C extends GcdRingElem<C>>
             factors.add(P);
             return factors;
         }
-        System.out.println("\nP = " + P);
         GenPolynomialRing<AlgebraicNumber<C>> pfac = P.ring; // Q(alpha)[x]
         if ( pfac.nvar > 1 ) {
-            throw new RuntimeException(this.getClass().getName()
-                    + " only for univariate polynomials");
+            throw new RuntimeException("only for univariate polynomials");
         }
         AlgebraicNumberRing<C> afac = (AlgebraicNumberRing<C>)pfac.coFac;
+        GenPolynomialRing<C> cfac = afac.ring;
+        GenPolynomialRing<GenPolynomial<C>> rfac = new GenPolynomialRing<GenPolynomial<C>>(cfac,pfac);
 
-        GreatestCommonDivisorSubres<C> engine 
-            = new GreatestCommonDivisorSubres<C>( /*cfac.coFac*/ );
-              // = (GreatestCommonDivisorAbstract<C>)GCDFactory.<C>getImplementation( cfac.coFac );
+        AlgebraicNumber<C> ldcf = P.leadingBaseCoefficient();
+        if ( !ldcf.isONE() ) {
+            P = P.monic();
+            factors.add( pfac.getONE().multiply(ldcf) );
+        }
+        System.out.println("\nP = " + P);
+
         GreatestCommonDivisor<AlgebraicNumber<C>> aengine 
             //= GCDFactory.<AlgebraicNumber<C>>getProxy( afac );
             = new GreatestCommonDivisorSubres<AlgebraicNumber<C>>( /*cfac.coFac*/ );
 
-        GenPolynomial<C> agen = afac.modul;
-        GenPolynomialRing<C> cfac = afac.ring;
-        GenPolynomialRing<GenPolynomial<C>> rfac = new GenPolynomialRing<GenPolynomial<C>>(cfac,pfac);
-        // Q[alpha][x] = Q[X][alpha]
-        //GenPolynomialRing<C> dfac = cfac.extend(1);
-
-        // transform minimal polynomial to bi-variate polynomial
-        GenPolynomial<GenPolynomial<C>> Ac = PolyUfdUtil.<C>  introduceLowerVariable(rfac,agen);
-        System.out.println("Ac = " + Ac);
-
-        // search squarefree resultant
+        // search squarefree norm
         long k = 0L;
-        long ks = 0L;
+        long ks = k;
         GenPolynomial<C> res = null;
-        GenPolynomial<GenPolynomial<C>> Pc; // Q[X][alpha] or Q[x,alpha]
-        GenPolynomial<GenPolynomial<C>> kc;
-        GenPolynomial<GenPolynomial<C>> fx;
-        GenPolynomial<GenPolynomial<C>> fy;
         boolean sqf = false;
-        while ( true ) {
+        while ( !sqf ) {
             if ( k > 4 ) {
                 k = -1;
                 //break;
@@ -131,28 +121,16 @@ public class FactorAlgebraic <C extends GcdRingElem<C>>
             if ( k < -1 ) {
                 break;
             }
-            // transform to bi-variate polynomial, switching varaible sequence
+            // compute norm with x -> ( y - k x )
             ks = k;
-            Pc = PolyUfdUtil.<C>  fromAlgebraicCoefficients( rfac, P, ks );
-            Pc = PolyUtil.<C>monic(Pc);
-            System.out.println("\nPc = " + Pc);
-            //System.out.println("Ac = " + Ac);
-
-            GenPolynomial<GenPolynomial<C>> Rc = engine.recursiveResultant(Pc,Ac);
-            System.out.println("Rc = " + Rc);
-            res = Rc.leadingBaseCoefficient();
-            res = res.monic();
+            res = PolyUfdUtil.<C> norm( P, ks );
             System.out.println("res = " + res);
             if ( res.isZERO() || res.isConstant() ) {
                 k++;
                 continue;
             }
-
             sqf = factorCoeff.isSquarefree(res);
             System.out.println("sqf = " + sqf + "\n");
-            if ( sqf ) {
-                break;
-            }
             if ( k < 0 ) {
                 k--;
             } else {
@@ -183,32 +161,31 @@ public class FactorAlgebraic <C extends GcdRingElem<C>>
         GenPolynomial<AlgebraicNumber<C>> Pp = P;
         System.out.println("Pp = " + Pp);
         GenPolynomial<AlgebraicNumber<C>> Ni;
-        for ( GenPolynomial<C> nfi : nfacs ) { // .keySet()
+        for ( GenPolynomial<C> nfi : nfacs ) { 
              System.out.println("nfi = " + nfi);
-             // check with transformed polynomials 
-             // GenPolynomial<GenPolynomial<C>> nfi2 = PolyUfdUtil.<C>  introduceLowerVariable(rfac,nfi);
-//              GenPolynomial<GenPolynomial<C>> pnt = engine.recursiveUnivariateGcd(nfi2,Pc);
-//              System.out.println("gcd(nfi2,Pc) = " + pnt);
-//              if ( pnt.isONE() ) {
-//                 System.out.println("nfi2 = " + nfi2);
-//                 System.out.println("Pc   = " + Pc);
-//              }
-
              Ni = PolyUfdUtil.<C> convertToAlgebraicCoefficients(pfac,nfi,ks);
              System.out.println("Ni = " + Ni);
              // compute gcds of factors with polynomial
              GenPolynomial<AlgebraicNumber<C>> pni = aengine.gcd(Ni,Pp);
-             System.out.println("gcd(Ni,P) = " + pni);
+             System.out.println("gcd(Ni,Pp) = " + pni);
              pni = pni.monic();
-             System.out.println("gcd(Ni,P) = " + pni);
+             System.out.println("gcd(Ni,Pp) = " + pni);
              if ( !pni.isONE() ) {
                 factors.add( pni );
                 Pp = Pp.divide( pni );
              } else {
-                GenPolynomial<AlgebraicNumber<C>> qni = Pp.divide(Ni);
-                GenPolynomial<AlgebraicNumber<C>> rni = Pp.remainder(Ni);
-                System.out.println("div qni = " + qni);
-                System.out.println("div rni = " + rni);
+                pni = aengine.gcd(Ni,P);
+                System.out.println("gcd(Ni,P) = " + pni);
+                pni = pni.monic();
+                if ( !pni.isONE() ) {
+                   factors.add( pni );
+                   Pp = Pp.divide( pni );
+                } else {
+                   GenPolynomial<AlgebraicNumber<C>> qni = Pp.divide(Ni);
+                   GenPolynomial<AlgebraicNumber<C>> rni = Pp.remainder(Ni);
+                   System.out.println("div qni = " + qni);
+                   System.out.println("div rni = " + rni);
+                }
              }
         }
         if ( ! Pp.isZERO() && ! Pp.isONE() ) { // hack to pretend factorization

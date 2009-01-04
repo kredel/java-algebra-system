@@ -365,6 +365,68 @@ public class PolyUfdUtil {
     }
 
 
+    /**
+     * Norm of a polynomial with AlgebraicNumber coefficients. 
+     * @param A polynomial from GenPolynomial&lt;AlgebraicNumber&lt;C&gt;&gt;.
+     * @param k for (y - k x) substitution.
+     * @return norm(A) = res_x(A(x,y),m(x)) in GenPolynomial&lt;C&gt;.
+     */
+    public static <C extends GcdRingElem<C>>
+      GenPolynomial<C> norm( GenPolynomial<AlgebraicNumber<C>> A, long k ) {
+        if ( A == null ) {
+            return null;
+        }
+        GenPolynomialRing<AlgebraicNumber<C>> pfac = A.ring; // Q(alpha)[x]
+        if ( pfac.nvar > 1 ) {
+            throw new RuntimeException("only for univariate polynomials");
+        }
+        AlgebraicNumberRing<C> afac = (AlgebraicNumberRing<C>)pfac.coFac;
+        GenPolynomial<C> agen = afac.modul;
+        GenPolynomialRing<C> cfac = afac.ring;
+        if ( A.isZERO() ) {
+            return cfac.getZERO();
+        }
+        AlgebraicNumber<C> ldcf = A.leadingBaseCoefficient();
+        if ( !ldcf.isONE() ) {
+            A = A.monic();
+        }
+        GenPolynomialRing<GenPolynomial<C>> rfac 
+             = new GenPolynomialRing<GenPolynomial<C>>(cfac,pfac);
+
+        // transform minimal polynomial to bi-variate polynomial
+        GenPolynomial<GenPolynomial<C>> Ac 
+           = PolyUfdUtil.<C>  introduceLowerVariable(rfac,agen);
+        System.out.println("Ac = " + Ac);
+
+        // transform to bi-variate polynomial, switching varaible sequence Q[X][alpha] or Q[x,alpha]
+        GenPolynomial<GenPolynomial<C>> Pc          
+           = PolyUfdUtil.<C>  fromAlgebraicCoefficients( rfac, A, k );
+        Pc = PolyUtil.<C>monic(Pc);
+        System.out.println("Pc = " + Pc);
+
+        GreatestCommonDivisorSubres<C> engine 
+            = new GreatestCommonDivisorSubres<C>( /*cfac.coFac*/ );
+              // = (GreatestCommonDivisorAbstract<C>)GCDFactory.<C>getImplementation( cfac.coFac );
+
+        GenPolynomial<GenPolynomial<C>> Rc = engine.recursiveResultant(Pc,Ac);
+        System.out.println("Rc = " + Rc);
+        GenPolynomial<C> res = Rc.leadingBaseCoefficient();
+        res = res.monic();
+        return res;
+    }
+
+
+    /**
+     * Norm of a polynomial with AlgebraicNumber coefficients. 
+     * @param A polynomial from GenPolynomial&lt;AlgebraicNumber&lt;C&gt;&gt;.
+     * @return norm(A) = resultant_x( A(x,y), m(x) ) in K[y].
+     */
+    public static <C extends GcdRingElem<C>>
+      GenPolynomial<C> norm( GenPolynomial<AlgebraicNumber<C>> A ) {
+        return norm(A,0L);
+    }
+
+
     /** ModInteger Hensel lifting algorithm on coefficients.
      * Let p = A.ring.coFac.modul() = B.ring.coFac.modul() 
      * and assume C == A*B mod p with ggt(A,B) == 1 mod p and
