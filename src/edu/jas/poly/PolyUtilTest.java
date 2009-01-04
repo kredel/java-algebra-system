@@ -998,4 +998,74 @@ public class PolyUtilTest extends TestCase {
         assertEquals("pm == qm ",pm,qm); 
  }
 
+
+/**
+ * Test substitution.
+ * 
+ */
+ public void testSubstitution() {
+       dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),1,to);
+
+       // subs = x - 7
+       GenPolynomial<BigInteger> s  = dfac.univariate(0).subtract( dfac.fromInteger(7) ); 
+       GenPolynomial<BigInteger> s1 = dfac.univariate(0).sum( dfac.fromInteger(7) ); 
+       //System.out.println("s = " + s);
+       //System.out.println("s1 = " + s1);
+
+       for ( int i = 0; i < 5; i++ ) {
+           a = dfac.random(kl,ll,el,q);
+           //System.out.println("a = " + a);
+           b = PolyUtil.<BigInteger> substituteMain(a,s);
+           c = PolyUtil.<BigInteger> substituteMain(b,s1);
+           //System.out.println("b = " + b);
+           //System.out.println("c = " + c);
+           //System.out.println("a == c " + a.equals(c));
+           assertEquals("a == c ",a,c); 
+       }
+ }
+
+
+/**
+ * Test algebraic substitution.
+ * 
+ */
+ public void testAlgebraicSubstitution() {
+
+     BigRational cfac = new BigRational(1);
+     String[] alpha = new String[] { "alpha" };
+     String[] vars = new String[] { "z" };
+     GenPolynomialRing<BigRational> pfac 
+         = new GenPolynomialRing<BigRational>(cfac, 1, to, alpha);
+     GenPolynomial<BigRational> agen = pfac.univariate(0, 2);
+     agen = agen.sum(pfac.getONE()); // x^2 + 1
+     AlgebraicNumberRing<BigRational> afac 
+         = new AlgebraicNumberRing<BigRational>(agen, true);
+     GenPolynomialRing<AlgebraicNumber<BigRational>> apfac 
+         = new GenPolynomialRing<AlgebraicNumber<BigRational>>(afac, 1, to, vars); // univariate
+
+     //System.out.println("agen  = " + agen);
+     //System.out.println("afac  = " + afac);
+     //System.out.println("apfac = " + apfac);
+
+     // subs = x - 7
+     GenPolynomial<AlgebraicNumber<BigRational>> s  
+         = apfac.univariate(0).subtract( apfac.fromInteger(7).multiply( afac.getGenerator() ) ); 
+     GenPolynomial<AlgebraicNumber<BigRational>> s1 
+         = apfac.univariate(0).sum( apfac.fromInteger(7).multiply( afac.getGenerator() ) ); 
+     //System.out.println("s = " + s);
+     //System.out.println("s1 = " + s1);
+
+     GenPolynomial<AlgebraicNumber<BigRational>> a, b, c;
+     for ( int i = 0; i < 5; i++ ) {
+         a = apfac.random(kl,ll,el,q);
+         //System.out.println("a = " + a);
+         b = PolyUtil.<AlgebraicNumber<BigRational>> substituteMain(a,s);
+         c = PolyUtil.<AlgebraicNumber<BigRational>> substituteMain(b,s1);
+         //System.out.println("b = " + b);
+         //System.out.println("c = " + c);
+         //System.out.println("a == c " + a.equals(c));
+         assertEquals("a == c ",a,c); 
+     }
+ }
+
 }

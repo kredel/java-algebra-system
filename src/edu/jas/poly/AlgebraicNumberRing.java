@@ -48,6 +48,9 @@ public class AlgebraicNumberRing<C extends GcdRingElem<C> >
     public AlgebraicNumberRing(GenPolynomial<C> m) {
         ring = m.ring;
         modul = m; // assert m != 0
+        if ( ring.nvar > 1 ) {
+            throw new IllegalArgumentException("only univariate polynomials allowed");
+        }
     }
 
 
@@ -60,6 +63,9 @@ public class AlgebraicNumberRing<C extends GcdRingElem<C> >
         ring = m.ring;
         modul = m; // assert m != 0
         this.isField = ( isField ? 1 :  0 );
+        if ( ring.nvar > 1 ) {
+            throw new IllegalArgumentException("only univariate polynomials allowed");
+        }
     }
 
 
@@ -93,6 +99,14 @@ public class AlgebraicNumberRing<C extends GcdRingElem<C> >
      */
     public AlgebraicNumber<C> getONE() {
         return new AlgebraicNumber<C>( this, ring.getONE() );
+    }
+
+    
+    /**  Get the generating element.
+     * @return alpha as AlgebraicNumber.
+     */
+    public AlgebraicNumber<C> getGenerator() {
+        return new AlgebraicNumber<C>( this, ring.univariate(0) );
     }
 
     

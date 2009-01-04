@@ -15,6 +15,7 @@ import org.apache.log4j.Logger;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.structure.UnaryFunctor;
+import edu.jas.structure.Power;
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
@@ -1131,6 +1132,40 @@ public class PolyUtil {
             if ( d != null && !d.isZERO() ) {
                Bm.put(e,d);
             }
+        }
+        return B;
+    }
+
+
+    /**
+     * Substitute main variable. 
+     * @param A univariate polynomial.
+     * @param s polynomial for substitution.
+     * @return polynomial A(x <- s).
+     */
+    public static <C extends RingElem<C>>
+      GenPolynomial<C> substituteMain( GenPolynomial<C> A, GenPolynomial<C> s ) {
+        if ( A == null || s == null ) {
+            return null;
+        }
+        GenPolynomialRing<C> pfac = A.ring;
+        if ( A.isZERO() ) {
+            return pfac.getZERO();
+        }
+        if ( pfac.nvar > 1 ) {
+            throw new RuntimeException("only for univariate polynomials");
+        }
+        GenPolynomial<C> B = pfac.getZERO().clone();
+        for ( Monomial<C> m : A ) {
+            ExpVector em = m.e;
+            long e = em.getVal(0);
+            if ( e == 0 ) {
+                B = B.sum(m.c,em);
+                continue;
+            }
+            GenPolynomial<C> x = Power.<GenPolynomial<C>>positivePower( s, e );
+            x = x.multiply( m.c );
+            B = B.sum( x );
         }
         return B;
     }

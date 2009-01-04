@@ -371,15 +371,16 @@ public class FactorTest extends TestCase {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigRational cfac = new BigRational(1);
-        String[] vars = new String[] { "alpha" };
+        String[] alpha = new String[] { "alpha" };
+        String[] vars = new String[] { "z" };
         GenPolynomialRing<BigRational> pfac 
-           = new GenPolynomialRing<BigRational>(cfac, 1, to, vars);
+           = new GenPolynomialRing<BigRational>(cfac, 1, to, alpha);
         GenPolynomial<BigRational> agen = pfac.univariate(0, 2);
         agen = agen.sum(pfac.getONE()); // x^2 + 1
         AlgebraicNumberRing<BigRational> afac 
            = new AlgebraicNumberRing<BigRational>(agen, true);
         GenPolynomialRing<AlgebraicNumber<BigRational>> apfac 
-           = new GenPolynomialRing<AlgebraicNumber<BigRational>>(afac, 1, to); // univariate
+            = new GenPolynomialRing<AlgebraicNumber<BigRational>>(afac, 1, to, vars); // univariate
 
         System.out.println("agen  = " + agen);
         System.out.println("afac  = " + afac);
@@ -412,11 +413,15 @@ public class FactorTest extends TestCase {
                 facs++;
             }
             //a = apfac.univariate(0,2).sum( apfac.getONE() ); // x^2 + 1 
-            //a = apfac.univariate(0,2).subtract( apfac.getONE() ); // x^2 - 1 
+            //a = a.multiply(a);
+            //a = a.multiply( apfac.univariate(0,2).subtract( apfac.getONE() ) ); // x^2 - 1 
+            //a = apfac.univariate(0,3).subtract( apfac.getONE() ); // x^3 - 1 
+            //a = apfac.univariate(0,3).sum( apfac.getONE() ); // x^3 + 1 
             a = c.multiply(b);
+            //a = a.monic();
             System.out.println("\na = " + a);
-            System.out.println("b = " + b);
-            System.out.println("c = " + c);
+            System.out.println("b = " + b.monic());
+            System.out.println("c = " + c.monic());
 
             SortedMap<GenPolynomial<AlgebraicNumber<BigRational>>, Long> sm 
                 = fac.baseFactors(a);
