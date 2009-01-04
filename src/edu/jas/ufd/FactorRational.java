@@ -85,9 +85,9 @@ public class FactorRational //<C extends GcdRingElem<C> >
             return factors;
         }
         List<GenPolynomial<BigRational>> rfacts = PolyUtil.fromIntegerCoefficients(pfac,ifacts);
-        System.out.println("rfacts = " + rfacts);
+        //System.out.println("rfacts = " + rfacts);
         rfacts = PolyUtil.monic(rfacts);
-        System.out.println("rfacts = " + rfacts);
+        //System.out.println("rfacts = " + rfacts);
         GenPolynomial<BigRational> r = rfacts.get(0); 
         rfacts.remove(r);
         r = r.multiply(ldcf);

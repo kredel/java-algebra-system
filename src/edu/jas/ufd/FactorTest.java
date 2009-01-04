@@ -212,7 +212,7 @@ public class FactorTest extends TestCase {
      * Test integer factorization.
      * 
      */
-    public void xtestIntegerFactorization() {
+    public void testIntegerFactorization() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(4);
@@ -367,7 +367,7 @@ public class FactorTest extends TestCase {
      * Test algebraic factorization.
      * 
      */
-    public void testAlgebraicFactorization() {
+    public void xtestAlgebraicFactorization() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigRational cfac = new BigRational(1);
