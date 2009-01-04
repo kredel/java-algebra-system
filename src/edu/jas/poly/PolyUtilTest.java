@@ -1068,4 +1068,46 @@ public class PolyUtilTest extends TestCase {
      }
  }
 
+
+/**
+ * Test algebraic conversions.
+ * 
+ */
+ public void testAlgebraicConversions() {
+
+     BigRational cfac = new BigRational(1);
+     String[] alpha = new String[] { "alpha" };
+     String[] vars = new String[] { "z" };
+     GenPolynomialRing<BigRational> pfac 
+         = new GenPolynomialRing<BigRational>(cfac, 1, to, alpha);
+     GenPolynomial<BigRational> agen = pfac.univariate(0, 2);
+     agen = agen.sum(pfac.getONE()); // x^2 + 1
+     AlgebraicNumberRing<BigRational> afac 
+         = new AlgebraicNumberRing<BigRational>(agen, true);
+     GenPolynomialRing<AlgebraicNumber<BigRational>> apfac 
+         = new GenPolynomialRing<AlgebraicNumber<BigRational>>(afac, rl, to); 
+     GenPolynomialRing<GenPolynomial<BigRational>> rfac 
+         = new GenPolynomialRing<GenPolynomial<BigRational>>(pfac, rl, to);
+
+     //System.out.println("agen  = " + agen);
+     //System.out.println("afac  = " + afac);
+     //System.out.println("apfac = " + apfac);
+     //System.out.println("pfac  = " + pfac);
+     //System.out.println("rfac  = " + rfac);
+
+     GenPolynomial<AlgebraicNumber<BigRational>> a, c;
+     GenPolynomial<GenPolynomial<BigRational>> b;
+     for ( int i = 0; i < 5; i++ ) {
+         a = apfac.random(kl,ll,el,q);
+         //System.out.println("a = " + a);
+         b = PolyUtil.<BigRational> fromAlgebraicCoefficients(rfac,a);
+         c = PolyUtil.<BigRational> convertRecursiveToAlgebraicCoefficients(apfac,b);
+         //System.out.println("b = " + b);
+         //System.out.println("c = " + c);
+         //System.out.println("a == c " + a.equals(c));
+         assertEquals("a == c ",a,c); 
+     }
+
+ }
+
 }

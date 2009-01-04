@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
+import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.structure.UnaryFunctor;
 import edu.jas.structure.Power;
@@ -266,6 +267,57 @@ public class PolyUtil {
         complexFromRational( GenPolynomialRing<BigComplex> fac,
                              GenPolynomial<BigRational> A ) {
         return PolyUtil.<BigRational,BigComplex>map(fac,A, new RatToCompl() );
+    }
+
+
+    /**
+     * From AlgebraicNumber coefficients. 
+     * Represent as polynomial with type GenPolynomial&lt;C&gt; coefficients,
+     * e.g. ModInteger or BigRational.
+     * @param rfac result polynomial factory.
+     * @param A polynomial with AlgebraicNumber coefficients to be converted.
+     * @return polynomial with type GenPolynomial&lt;C&gt; coefficients.
+     */
+    public static <C extends GcdRingElem<C>>
+      GenPolynomial<GenPolynomial<C>> 
+      fromAlgebraicCoefficients( GenPolynomialRing<GenPolynomial<C>> rfac,
+                                 GenPolynomial<AlgebraicNumber<C>> A ) {
+        return PolyUtil.<AlgebraicNumber<C>,GenPolynomial<C>>map(rfac,A, new AlgToPoly<C>() );
+    }
+
+
+    /**
+     * Convert to AlgebraicNumber coefficients. 
+     * Represent as polynomial with AlgebraicNumber<C> coefficients,
+     * C is e.g. ModInteger or BigRational.
+     * @param pfac result polynomial factory.
+     * @param A polynomial with C coefficients to be converted.
+     * @return polynomial with AlgebraicNumber&lt;C&gt; coefficients.
+     */
+    public static <C extends GcdRingElem<C>>
+      GenPolynomial<AlgebraicNumber<C>> 
+      convertToAlgebraicCoefficients( GenPolynomialRing<AlgebraicNumber<C>> pfac,
+                                      GenPolynomial<C> A ) {
+        AlgebraicNumberRing<C> afac = (AlgebraicNumberRing<C>) pfac.coFac;
+        return PolyUtil.<C,AlgebraicNumber<C>>map(pfac,A, new CoeffToAlg<C>(afac) );
+    }
+
+
+    /**
+     * Convert to AlgebraicNumber coefficients. 
+     * Represent as polynomial with AlgebraicNumber<C> coefficients,
+     * C is e.g. ModInteger or BigRational.
+     * @param pfac result polynomial factory.
+     * @param A recursive polynomial with GenPolynomial&lt;BigInteger&gt; 
+     * coefficients to be converted.
+     * @return polynomial with AlgebraicNumber&lt;C&gt; coefficients.
+     */
+    public static <C extends GcdRingElem<C>>
+      GenPolynomial<AlgebraicNumber<C>> 
+      convertRecursiveToAlgebraicCoefficients( GenPolynomialRing<AlgebraicNumber<C>> pfac,
+                                               GenPolynomial<GenPolynomial<C>> A ) {
+        AlgebraicNumberRing<C> afac = (AlgebraicNumberRing<C>) pfac.coFac;
+        return PolyUtil.<GenPolynomial<C>,AlgebraicNumber<C>>map(pfac,A, new PolyToAlg<C>(afac) );
     }
 
 
@@ -1482,3 +1534,72 @@ class RatToCompl implements UnaryFunctor<BigRational,BigComplex> {
         }
     }
 }
+
+
+/**
+ * Algebraic to polynomial functor.
+ */
+class AlgToPoly<C extends GcdRingElem<C>> 
+               implements UnaryFunctor<AlgebraicNumber<C>,GenPolynomial<C>> {
+    public GenPolynomial<C> eval(AlgebraicNumber<C> c) {
+        if ( c == null ) {
+            return null;
+        } else {
+            return c.val;
+        }
+    }
+}
+
+
+/**
+ * Polynomial to algebriac functor.
+ */
+class PolyToAlg<C extends GcdRingElem<C>> 
+               implements UnaryFunctor<GenPolynomial<C>,AlgebraicNumber<C>> {
+
+    final protected AlgebraicNumberRing<C> afac;
+
+    public PolyToAlg(AlgebraicNumberRing<C> fac) {
+        if ( fac == null ) {
+            throw new IllegalArgumentException("fac must not be null");
+        }
+        afac = fac;
+    }
+
+    public AlgebraicNumber<C> eval(GenPolynomial<C> c) {
+        if ( c == null ) {
+            return afac.getZERO();
+        } else {
+            return new AlgebraicNumber<C>(afac,c);
+        }
+    }
+}
+
+
+/**
+ * Coefficient to algebriac functor.
+ */
+class CoeffToAlg<C extends GcdRingElem<C>> 
+                implements UnaryFunctor<C,AlgebraicNumber<C>> {
+
+    final protected AlgebraicNumberRing<C> afac;
+    final protected GenPolynomial<C> zero;
+
+    public CoeffToAlg(AlgebraicNumberRing<C> fac) {
+        if ( fac == null ) {
+            throw new IllegalArgumentException("fac must not be null");
+        }
+        afac = fac;
+        GenPolynomialRing<C> pfac = afac.ring;
+        zero = pfac.getZERO();
+    }
+
+    public AlgebraicNumber<C> eval(C c) {
+        if ( c == null ) {
+            return afac.getZERO();
+        } else {
+            return new AlgebraicNumber<C>(afac,zero.sum(c));
+        }
+    }
+}
+
