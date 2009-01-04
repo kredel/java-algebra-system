@@ -1312,6 +1312,39 @@ public class PolyUtil {
 
 
     /**
+     * Recursive GenPolynomial switch varaible blocks.
+     * @param <C> coefficient type.
+     * @param P recursive GenPolynomial in R[X,Y].
+     * @return this in R[Y,X].
+     */
+    public static <C extends RingElem<C>>
+      GenPolynomial<GenPolynomial<C>> 
+      switchVariables( GenPolynomial<GenPolynomial<C>> P ) {
+        if ( P == null ) {
+            throw new IllegalArgumentException("P == null");
+        }
+        GenPolynomialRing<GenPolynomial<C>> rfac1 = P.ring;
+        GenPolynomialRing<C> cfac1 = (GenPolynomialRing<C>) rfac1.coFac;
+        GenPolynomialRing<C> cfac2 = new GenPolynomialRing<C>(cfac1.coFac,rfac1);
+        GenPolynomial<C> zero = cfac2.getZERO(); 
+        GenPolynomialRing<GenPolynomial<C>> rfac2 
+            = new GenPolynomialRing<GenPolynomial<C>>(cfac2,cfac1);
+        GenPolynomial<GenPolynomial<C>> B = rfac2.getZERO().clone(); 
+        if ( P.isZERO() ) {
+            return B;
+        }
+        for ( Monomial<GenPolynomial<C>> mr : P ) {
+            GenPolynomial<C> cr = mr.c;
+            for ( Monomial<C> mc : cr ) {
+                GenPolynomial<C> c = zero.sum(mc.c,mr.e);
+                B = B.sum(c,mc.e);
+            }
+        }
+        return B;
+    }
+
+
+    /**
      * Maximal degree in the coefficient polynomials.
      * @param <C> coefficient type.
      * @return maximal degree in the coefficients.
@@ -1602,4 +1635,3 @@ class CoeffToAlg<C extends GcdRingElem<C>>
         }
     }
 }
-

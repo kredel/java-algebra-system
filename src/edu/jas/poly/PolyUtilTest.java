@@ -1070,6 +1070,36 @@ public class PolyUtilTest extends TestCase {
 
 
 /**
+ * Test switch variables.
+ * 
+ */
+    public void testSwitchVariables() {
+
+     BigRational cfac = new BigRational(1);
+     GenPolynomialRing<BigRational> pfac 
+         = new GenPolynomialRing<BigRational>(cfac, rl, to);
+     GenPolynomialRing<GenPolynomial<BigRational>> rfac 
+         = new GenPolynomialRing<GenPolynomial<BigRational>>(pfac, rl, to);
+
+     //System.out.println("pfac  = " + pfac);
+     //System.out.println("rfac  = " + rfac);
+
+     GenPolynomial<GenPolynomial<BigRational>> a, c;
+     GenPolynomial<GenPolynomial<BigRational>> b;
+     for ( int i = 0; i < 5; i++ ) {
+         a = rfac.random(kl,ll,el,q);
+         //System.out.println("a = " + a);
+         b = PolyUtil.<BigRational> switchVariables(a);
+         c = PolyUtil.<BigRational> switchVariables(b);
+         //System.out.println("b = " + b);
+         //System.out.println("c = " + c);
+         //System.out.println("a == c " + a.equals(c));
+         assertEquals("a == c ",a,c); 
+     }
+ }
+
+
+/**
  * Test algebraic conversions.
  * 
  */

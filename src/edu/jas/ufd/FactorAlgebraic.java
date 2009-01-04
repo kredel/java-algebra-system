@@ -105,8 +105,8 @@ public class FactorAlgebraic <C extends GcdRingElem<C>>
         System.out.println("\nP = " + P);
 
         GreatestCommonDivisor<AlgebraicNumber<C>> aengine 
-            //= GCDFactory.<AlgebraicNumber<C>>getProxy( afac );
-            = new GreatestCommonDivisorSubres<AlgebraicNumber<C>>( /*cfac.coFac*/ );
+            = GCDFactory.<AlgebraicNumber<C>>getProxy( afac );
+            //= new GreatestCommonDivisorSubres<AlgebraicNumber<C>>( /*cfac.coFac*/ );
 
         // search squarefree norm
         long k = 0L;
@@ -151,7 +151,7 @@ public class FactorAlgebraic <C extends GcdRingElem<C>>
               System.out.println("isFactorization = false"); 
            }
         }
-        System.out.println("\nnfacs = " + nfacs); // Q[X]
+        //System.out.println("\nnfacs = " + nfacs); // Q[X]
         if ( nfacs.size() == 1 ) {
             factors.add(P);
             return factors;
@@ -159,39 +159,36 @@ public class FactorAlgebraic <C extends GcdRingElem<C>>
 
         // compute gcds of factors with polynomial in Q(alpha)[X]
         GenPolynomial<AlgebraicNumber<C>> Pp = P;
-        System.out.println("Pp = " + Pp);
+        //System.out.println("Pp = " + Pp);
         GenPolynomial<AlgebraicNumber<C>> Ni;
         for ( GenPolynomial<C> nfi : nfacs ) { 
-             System.out.println("nfi = " + nfi);
+             //System.out.println("nfi = " + nfi);
              Ni = PolyUfdUtil.<C> convertToAlgebraicCoefficients(pfac,nfi,ks);
-             System.out.println("Ni = " + Ni);
+             if ( logger.isInfoEnabled() ) {
+                logger.info("Ni = " + Ni);
+             }
              // compute gcds of factors with polynomial
              GenPolynomial<AlgebraicNumber<C>> pni = aengine.gcd(Ni,Pp);
-             System.out.println("gcd(Ni,Pp) = " + pni);
-             pni = pni.monic();
-             System.out.println("gcd(Ni,Pp) = " + pni);
-             if ( !pni.isONE() ) {
-                factors.add( pni );
-                Pp = Pp.divide( pni );
-             } else {
-                pni = aengine.gcd(Ni,P);
-                System.out.println("gcd(Ni,P) = " + pni);
+             if ( !pni.leadingBaseCoefficient().isONE() ) {
+                System.out.println("gcd(Ni,Pp) not monic " + pni);
                 pni = pni.monic();
-                if ( !pni.isONE() ) {
-                   factors.add( pni );
-                   Pp = Pp.divide( pni );
-                } else {
-                   GenPolynomial<AlgebraicNumber<C>> qni = Pp.divide(Ni);
-                   GenPolynomial<AlgebraicNumber<C>> rni = Pp.remainder(Ni);
-                   System.out.println("div qni = " + qni);
-                   System.out.println("div rni = " + rni);
-                }
+             }
+             //System.out.println("gcd(Ni,Pp) = " + pni);
+             if ( !pni.isONE() ) {
+                 factors.add( pni );
+                 Pp = Pp.divide( pni );
+             } else {
+                 GenPolynomial<AlgebraicNumber<C>> qni = Pp.divide(Ni);
+                 GenPolynomial<AlgebraicNumber<C>> rni = Pp.remainder(Ni);
+                 System.out.println("div qni = " + qni);
+                 System.out.println("div rni = " + rni);
+                 throw new RuntimeException("gcd(Ni,Pp) == 1");
              }
         }
         if ( ! Pp.isZERO() && ! Pp.isONE() ) { // hack to pretend factorization
             factors.add( Pp );
         }
-        System.out.println("factors = " + factors);
+        System.out.println("afactors = " + factors);
         return factors;
     }
 

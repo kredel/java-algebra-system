@@ -254,19 +254,11 @@ public class PolyUfdUtil {
         if ( A == null || rfac == null ) {
             return null;
         }
-        GenPolynomial<GenPolynomial<C>> Pc = rfac.getZERO().clone(); // Q[x][y] or Q[x,y]
-        if ( A.isZERO() ) {
+        GenPolynomial<GenPolynomial<C>> Pc = rfac.getONE().multiply(A);
+        if ( Pc.isZERO() ) {
             return Pc;
         }
-        if ( !rfac.coFac.equals(A.ring) ) {
-            throw new RuntimeException("rings not equal");
-        }
-        GenPolynomial<C> f = rfac.coFac.getONE();
-        for ( Monomial<C> m : A ) {
-            C c = m.c;
-            GenPolynomial<C> ac = f.multiply(c); // to upper variable
-            Pc.doPutToMap(m.e,ac);
-        }
+        Pc = PolyUtil.<C> switchVariables(Pc);
         return Pc;
     }
 
@@ -287,34 +279,21 @@ public class PolyUfdUtil {
         if ( A == null || rfac == null ) {
             return null;
         }
-        GenPolynomial<GenPolynomial<C>> Pc = rfac.getZERO().clone(); // Q[x][alpha] or Q[x,alpha]
         if ( A.isZERO() ) {
-            return Pc;
+            return rfac.getZERO();
         }
-        GenPolynomialRing<C> cfac = (GenPolynomialRing<C>)rfac.coFac;
-        GenPolynomial<GenPolynomial<C>> fy = rfac.univariate(0);
-        GenPolynomial<GenPolynomial<C>> fx = rfac.getONE().multiply( cfac.univariate(0) );
-        GenPolynomial<GenPolynomial<C>> kc = rfac.fromInteger(k);
-        System.out.println("\nfy = " + fy);
-        System.out.println("fx = " + fx);
-        System.out.println("kc = " + kc);
-        for ( Monomial<AlgebraicNumber<C>> mx : A ) {
-            AlgebraicNumber<C> c = mx.c;
-            GenPolynomial<C> ac = c.val;
-            for ( Monomial<C> my : ac ) {
-                C cy = my.c;
-                GenPolynomial<GenPolynomial<C>> ay = fy.subtract( fx.multiply(kc) ); // y-kx
-                //System.out.println("ay = " + ay);
-                ay = Power.<GenPolynomial<GenPolynomial<C>>> power(rfac,ay,mx.e.getVal(0));
-                //System.out.println("ay = " + ay);
-                ay = ay.multiply( cfac.getONE().multiply(cy) ); // cy (y-kx)^ex 
-                //System.out.println("ay = " + ay);
-                ay = ay.multiply( Power.<GenPolynomial<GenPolynomial<C>>> power(rfac,fx,my.e.getVal(0)) );
-                // cy (y-kx)^ex x^ey 
-                //System.out.println("ay = " + ay);
-                Pc = Pc.sum(ay);
-            }
-        }
+        // setup x - k alpha
+        GenPolynomialRing<AlgebraicNumber<C>> apfac = A.ring;
+        GenPolynomial<AlgebraicNumber<C>> x = apfac.univariate(0);
+        AlgebraicNumberRing<C> afac = (AlgebraicNumberRing<C>) A.ring.coFac;
+        AlgebraicNumber<C> alpha = afac.getGenerator();
+        AlgebraicNumber<C> ka = afac.fromInteger(k);
+        GenPolynomial<AlgebraicNumber<C>> s = x.subtract( ka.multiply( alpha) ); // x - k alpha
+        // substitute, convert and switch
+        GenPolynomial<AlgebraicNumber<C>> B = PolyUtil.<AlgebraicNumber<C>> substituteMain(A,s); 
+        GenPolynomial<GenPolynomial<C>> Pc  
+           = PolyUtil.<C> fromAlgebraicCoefficients(rfac,B); // Q[alpha][x]
+        Pc = PolyUtil.<C> switchVariables(Pc); // Q[x][alpha]
         return Pc;
     }
 
@@ -336,31 +315,19 @@ public class PolyUfdUtil {
         if ( A == null || pfac == null ) {
             return null;
         }
-        GenPolynomial<AlgebraicNumber<C>> N = pfac.getZERO().clone(); // Q(alpha)[x] 
         if ( A.isZERO() ) {
-            return N;
+            return pfac.getZERO();
         }
-        AlgebraicNumberRing<C> afac = (AlgebraicNumberRing<C>)pfac.coFac;
-        GenPolynomialRing<C> cfac = afac.ring;
-        GenPolynomial<C> ka = cfac.fromInteger(k);
-        System.out.println("ka = " + ka);
-        // transform to Q(alpha) coefficients
-        for ( Monomial<C> m : A ) { // Q[x] ?
-            ExpVector e = m.e;
-            C c = m.c;
-            GenPolynomial<C> pc = cfac.univariate(0); 
-            pc = pc.multiply( ka ); // k alpha 
-            AlgebraicNumber<C> ac = new AlgebraicNumber<C>( afac, pc ); // in Q(alpha)
-            //System.out.println("ac = " + ac);
-            GenPolynomial<AlgebraicNumber<C>> xk = pfac.univariate(0).sum( ac ); // x + k alpha
-            //System.out.println("xk = " + xk);
-            xk = Power.<GenPolynomial<AlgebraicNumber<C>>> power(pfac,xk,e.getVal(0));
-            //System.out.println("xk = " + xk);  // (x+k alpha)^me
-            xk = xk.multiply( afac.getZERO().sum(c) ); // c (x + k alpha)^me
-            //System.out.println("Nix = " + Nix);
-            N = N.sum( xk ); 
-            //System.out.println("Ni = " + Ni);
-        }
+        // convert to Q(alpha)[x]
+        GenPolynomial<AlgebraicNumber<C>> B = PolyUtil.<C> convertToAlgebraicCoefficients(pfac,A);
+        // setup x _+_ k alpha for back substitution
+        GenPolynomial<AlgebraicNumber<C>> x = pfac.univariate(0);
+        AlgebraicNumberRing<C> afac = (AlgebraicNumberRing<C>) pfac.coFac;
+        AlgebraicNumber<C> alpha = afac.getGenerator();
+        AlgebraicNumber<C> ka = afac.fromInteger(k);
+        GenPolynomial<AlgebraicNumber<C>> s = x.sum( ka.multiply( alpha) ); // x + k alpha
+        // substitute
+        GenPolynomial<AlgebraicNumber<C>> N = PolyUtil.<AlgebraicNumber<C>> substituteMain(B,s); 
         return N;
     }
 
@@ -395,10 +362,11 @@ public class PolyUfdUtil {
 
         // transform minimal polynomial to bi-variate polynomial
         GenPolynomial<GenPolynomial<C>> Ac 
-           = PolyUfdUtil.<C>  introduceLowerVariable(rfac,agen);
+            = PolyUfdUtil.<C>  introduceLowerVariable(rfac,agen);
         System.out.println("Ac = " + Ac);
 
-        // transform to bi-variate polynomial, switching varaible sequence Q[X][alpha] or Q[x,alpha]
+        // transform to bi-variate polynomial, 
+        // switching varaible sequence from Q[alpha][x] to Q[X][alpha]
         GenPolynomial<GenPolynomial<C>> Pc          
            = PolyUfdUtil.<C>  fromAlgebraicCoefficients( rfac, A, k );
         Pc = PolyUtil.<C>monic(Pc);
