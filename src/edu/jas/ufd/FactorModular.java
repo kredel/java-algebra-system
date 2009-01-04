@@ -62,7 +62,10 @@ public class FactorModular //<C extends GcdRingElem<C> >
         }
         ModIntegerRing mr = (ModIntegerRing)pfac.coFac;
         java.math.BigInteger m = mr.modul;
-        //long m = bi.longValue();
+        if ( m.longValue() == 2L ) {
+            throw new RuntimeException(this.getClass().getName()
+                    + " case p = 2 not implemented");
+        }
         GenPolynomial<ModInteger> one = pfac.getONE();
         GenPolynomial<ModInteger> x = pfac.univariate(0);
         GenPolynomial<ModInteger> h = x;
@@ -104,7 +107,6 @@ public class FactorModular //<C extends GcdRingElem<C> >
         }
         GenPolynomialRing<ModInteger> pfac = P.ring;
         if ( pfac.nvar > 1 ) {
-            // baseContent not possible by return type
             throw new RuntimeException(this.getClass().getName()
                     + " only for univariate polynomials");
         }
@@ -115,11 +117,10 @@ public class FactorModular //<C extends GcdRingElem<C> >
         ModIntegerRing mr = (ModIntegerRing)pfac.coFac;
         java.math.BigInteger m = mr.modul;
         //System.out.println("m = " + m);
-        //long m = bi.longValue();
-//         if ( m < 0 || m > Integer.MAX_VALUE ) {
-//            System.out.println("warning: m = " + m + ", deg = " + deg);
-//            logger.warn("m = " + m + ", deg = " + deg);
-//         }
+        if ( m.longValue() == 2L ) {
+            throw new RuntimeException(this.getClass().getName()
+                    + " case p = 2 not implemented");
+        }
         GenPolynomial<ModInteger> one = pfac.getONE();
         GenPolynomial<ModInteger> r;
         GenPolynomial<ModInteger> h;
