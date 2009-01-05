@@ -4,9 +4,19 @@
 
 package edu.jas.ufd;
 
+import java.util.SortedMap;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.SortedSet;
+import java.util.TreeSet;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+
+import edu.jas.structure.Power;
+
+import edu.jas.kern.ComputerThreads;
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.ModInteger;
@@ -15,9 +25,12 @@ import edu.jas.arith.BigRational;
 import edu.jas.arith.BigComplex;
 
 import edu.jas.poly.TermOrder;
+import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
+
+import edu.jas.util.KsubSet;
 
 
 /**
@@ -83,6 +96,7 @@ public class PolyUfdUtilTest extends TestCase {
        rfac = new GenPolynomialRing<GenPolynomial<BigInteger>>(cfac,1,to);
    }
 
+
    protected void tearDown() {
        a = b = c = d = e = null;
        ai = bi = ci = di = ei = null;
@@ -103,6 +117,7 @@ public class PolyUfdUtilTest extends TestCase {
        return new java.math.BigInteger(""+prime);
    }
 
+
    protected static java.math.BigInteger getPrime2() {
        long prime = 2; //2^60-93; // 2^30-35; //19; knuth (2,390)
        for ( int i = 1; i < 30; i++ ) {
@@ -119,7 +134,7 @@ public class PolyUfdUtilTest extends TestCase {
  * Test Hensel lifting.
  * 
  */
- public void testHenselLifting() {
+ public void xtestHenselLifting() {
      java.math.BigInteger p;
      p = getPrime1();
      //p = new java.math.BigInteger("19");
@@ -129,7 +144,7 @@ public class PolyUfdUtilTest extends TestCase {
 
      BigInteger mi = m;
 
-     ModIntegerRing pm = new ModIntegerRing(p);
+     ModIntegerRing pm = new ModIntegerRing(p,true);
      GenPolynomialRing<ModInteger> pfac
          = new GenPolynomialRing<ModInteger>(pm,1,to);
 
@@ -149,7 +164,7 @@ public class PolyUfdUtilTest extends TestCase {
      GenPolynomial<BigInteger> b1;
      GenPolynomial<BigInteger> c1;
 
-     for (int i = 1; i < 5; i++) {
+     for (int i = 1; i < 3; i++) {
          a = dfac.random( kl+70*i, ll, el+5, q).abs();
          b = dfac.random( kl+70*i, ll, el+5, q).abs();
          //a = dfac.univariate(0).sum( dfac.fromInteger(30) );
@@ -222,16 +237,16 @@ public class PolyUfdUtilTest extends TestCase {
          //assertEquals("lift(a mod p) = a",a,a1);
          //assertEquals("lift(b mod p) = b",b,b1);
          assertEquals("lift(a b mod p) = a b",c,c1);
-         break;
+         //break;
      }
  }
 
 
 /**
- * Test Hensel lifting.
+ * Test Hensel quadratic lifting.
  * 
  */
- public void testHenselQuadraticLifting() {
+ public void xtestHenselQuadraticLifting() {
      java.math.BigInteger p;
      //p = getPrime1();
      p = new java.math.BigInteger("19");
@@ -241,7 +256,7 @@ public class PolyUfdUtilTest extends TestCase {
 
      BigInteger mi = m;
 
-     ModIntegerRing pm = new ModIntegerRing(p);
+     ModIntegerRing pm = new ModIntegerRing(p,true);
      GenPolynomialRing<ModInteger> pfac
          = new GenPolynomialRing<ModInteger>(pm,1,to);
 
@@ -261,7 +276,7 @@ public class PolyUfdUtilTest extends TestCase {
      GenPolynomial<BigInteger> b1;
      GenPolynomial<BigInteger> c1;
 
-     for (int i = 1; i < 5; i++) { // 70 better for quadratic
+     for (int i = 1; i < 3; i++) { // 70 better for quadratic
          a = dfac.random( kl+70*i, ll+10, el+5, q).abs();
          b = dfac.random( kl+70*i, ll+10, el+5, q).abs();
          //a = dfac.univariate(0).sum( dfac.fromInteger(30) );
@@ -359,8 +374,323 @@ public class PolyUfdUtilTest extends TestCase {
             System.out.println("\nquadratic Hensel time = " + tq);
             System.out.println("linear    Hensel time = " + t);
          }
-         break;
+         //break;
      }
+ }
+
+
+/**
+ * Test Hensel quadratic lifting with gcd.
+ * 
+ */
+ public void xtestHenselQuadraticLiftingGcd() {
+     java.math.BigInteger p;
+     //p = getPrime1();
+     p = new java.math.BigInteger("19");
+     //p = new java.math.BigInteger("5");
+     BigInteger m = new BigInteger( p ); 
+     //.multiply(p).multiply(p).multiply(p);
+
+     BigInteger mi = m;
+
+     ModIntegerRing pm = new ModIntegerRing(p,true);
+     GenPolynomialRing<ModInteger> pfac
+         = new GenPolynomialRing<ModInteger>(pm,1,to);
+
+     dfac = new GenPolynomialRing<BigInteger>(mi,1,to);
+
+     GenPolynomial<ModInteger> ap;
+     GenPolynomial<ModInteger> bp;
+     GenPolynomial<ModInteger> cp;
+
+     GenPolynomial<BigInteger>[] lift;
+     GenPolynomial<BigInteger> a1;
+     GenPolynomial<BigInteger> b1;
+     GenPolynomial<BigInteger> c1;
+
+     for (int i = 1; i < 3; i++) { // 70 better for quadratic
+         a = dfac.random( kl+70*i, ll+10, el+5, q).abs();
+         b = dfac.random( kl+70*i, ll+10, el+5, q).abs();
+         //a = dfac.univariate(0).sum( dfac.fromInteger(30) );
+         //b = dfac.univariate(0).subtract( dfac.fromInteger(20) );
+         //b = b.multiply( dfac.univariate(0) ).sum( dfac.fromInteger(168));
+         c = a.multiply(b);
+         if ( a.degree(0) < 1 || b.degree(0) < 2 ) {
+            continue;
+         }
+
+         ap = PolyUtil.fromIntegerCoefficients(pfac,a);
+         if ( !a.degreeVector().equals( ap.degreeVector() ) ) {
+            continue;
+         }
+         bp = PolyUtil.fromIntegerCoefficients(pfac,b);
+         if ( !b.degreeVector().equals( bp.degreeVector() ) ) {
+            continue;
+         }
+         cp = PolyUtil.fromIntegerCoefficients(pfac,c);
+         if ( !c.degreeVector().equals( cp.degreeVector() ) ) {
+            continue;
+         }
+
+         BigInteger an = a.maxNorm();
+         BigInteger bn = b.maxNorm();
+         if ( an.compareTo(bn) > 0 ) {
+             mi = an;
+         } else {
+             mi = bn;
+         }
+         BigInteger cn = c.maxNorm();
+         if ( cn.compareTo(mi) > 0 ) {
+             mi = cn;
+         }
+
+         //System.out.println("a     = " + a);
+         //System.out.println("b     = " + b);
+         //System.out.println("c     = " + c);
+         //--System.out.println("mi    = " + mi);
+         //System.out.println("ap    = " + ap);
+         //System.out.println("bp    = " + bp);
+         //System.out.println("cp    = " + cp);
+         // System.out.println("ap*bp = " + ap.multiply(bp));
+         //System.out.println("gcd   = " + egcd[0]);
+         //System.out.println("gcd   = " + ap1.multiply(sp).sum(bp1.multiply(tp)));
+         //System.out.println("sp    = " + sp);
+         //System.out.println("tp    = " + tp);
+
+         long tq = System.currentTimeMillis();
+         try {
+             lift = PolyUfdUtil.liftHenselQuadratic(c,mi,ap,bp);
+             tq = System.currentTimeMillis() - tq;
+             a1 = lift[0];
+             b1 = lift[1];
+             c1 = a1.multiply(b1);
+             assertEquals("lift(a b mod p) = a b",c,c1);
+         } catch(RuntimeException e) {
+             // a and b not coprime
+             System.out.println("e = " +e);
+         }
+
+         //System.out.println("\na     = " + a);
+         //System.out.println("b     = " + b);
+         //System.out.println("c     = " + c);
+         //System.out.println("a1    = " + a1);
+         //System.out.println("b1    = " + b1);
+         //System.out.println("a1*b1 = " + c1);
+
+         //assertEquals("lift(a mod p) = a",a,a1);
+         //assertEquals("lift(b mod p) = b",b,b1);
+     }
+ }
+
+
+/**
+ * Test Hensel quadratic lifting of list.
+ * 
+ */
+ public void testHenselQuadraticLiftingList() {
+     java.math.BigInteger p;
+     //p = getPrime1();
+     //p = new java.math.BigInteger("19");
+     p = new java.math.BigInteger("23");
+     BigInteger m = new BigInteger( p ); 
+     //.multiply(p).multiply(p).multiply(p);
+
+     BigInteger mi = m;
+
+     ModIntegerRing pm = new ModIntegerRing(p,true);
+     GenPolynomialRing<ModInteger> pfac
+         = new GenPolynomialRing<ModInteger>(pm,1,to);
+
+     dfac = new GenPolynomialRing<BigInteger>(mi,1,to);
+
+     BigInteger one = mi.getONE();
+
+     GenPolynomial<ModInteger> ap;
+     GenPolynomial<ModInteger> bp;
+     GenPolynomial<ModInteger> cp;
+     GenPolynomial<ModInteger> dp;
+
+     List<GenPolynomial<BigInteger>> lift;
+     GenPolynomial<BigInteger> cl;
+
+     for (int i = 1; i < 7; i++) { // 70 better for quadratic
+         a = dfac.random( kl+i, ll+0, el+i, q).abs();
+         b = dfac.random( kl+i, ll+0, el+1, q).abs();
+         d = dfac.random( kl+i, ll+0, el+i, q).abs();
+         //a = dfac.univariate(0).sum( dfac.fromInteger(30) );
+         //b = dfac.univariate(0).subtract( dfac.fromInteger(20) );
+         //b = b.multiply( dfac.univariate(0) ).sum( dfac.fromInteger(168));
+         if ( a.degree(0) < 1 || b.degree(0) < 2 || d.degree(0) < 1 ) {
+            continue;
+         }
+         if (!a.leadingBaseCoefficient().isUnit()) {
+             ExpVector e = a.leadingExpVector();
+             a.doPutToMap(e, one);
+         }
+         if (!b.leadingBaseCoefficient().isUnit()) {
+             ExpVector e = b.leadingExpVector();
+             b.doPutToMap(e, one);
+         }
+         if (!d.leadingBaseCoefficient().isUnit()) {
+             ExpVector e = d.leadingExpVector();
+             d.doPutToMap(e, one);
+         }
+//          a = engine.basePrimitivePart(a);
+//          b = engine.basePrimitivePart(b);
+//          d = engine.basePrimitivePart(d);
+         GreatestCommonDivisorAbstract<BigInteger> engine 
+             = (GreatestCommonDivisorAbstract<BigInteger>)GCDFactory.<BigInteger>getProxy( mi );
+         GenPolynomial<BigInteger> g;
+         g = engine.baseGcd(a,b);
+         if ( !g.isConstant() ) {
+             a = a.divide(g);
+             b = b.divide(g);
+         }
+         g = engine.baseGcd(a,d);
+         if ( !g.isConstant() ) {
+             a = a.divide(g);
+             d = d.divide(g);
+         }
+         g = engine.baseGcd(b,d);
+         if ( !g.isConstant() ) {
+             b = b.divide(g);
+             d = d.divide(g);
+         }
+         c = a.multiply(b).multiply(d);
+
+         ap = PolyUtil.fromIntegerCoefficients(pfac,a);
+         if ( !a.degreeVector().equals( ap.degreeVector() ) ) {
+            continue;
+         }
+         bp = PolyUtil.fromIntegerCoefficients(pfac,b);
+         if ( !b.degreeVector().equals( bp.degreeVector() ) ) {
+            continue;
+         }
+         dp = PolyUtil.fromIntegerCoefficients(pfac,d);
+         if ( !d.degreeVector().equals( dp.degreeVector() ) ) {
+            continue;
+         }
+         cp = PolyUtil.fromIntegerCoefficients(pfac,c);
+         if ( !c.degreeVector().equals( cp.degreeVector() ) ) {
+            continue;
+         }
+
+         BigInteger an = a.maxNorm();
+         BigInteger bn = b.maxNorm();
+         mi = ( an.compareTo(bn) > 0 ? an : bn );
+         BigInteger dn = d.maxNorm();
+         mi = ( mi.compareTo(dn) > 0 ? mi : dn );
+         BigInteger cn = c.maxNorm();
+         mi = ( mi.compareTo(cn) > 0 ? mi : cn );
+
+         BigInteger mip = m;
+         while ( mip.compareTo(mi) < 0 ) {
+             mip = mip.multiply(m);
+         }
+         mip = mip.multiply(m);
+
+         List<GenPolynomial<BigInteger>> ilist = new ArrayList<GenPolynomial<BigInteger>>();
+         ilist.add(a);
+         ilist.add(b);
+         ilist.add(d);
+
+         List<GenPolynomial<ModInteger>> mlist = new ArrayList<GenPolynomial<ModInteger>>();
+         mlist.add(ap);
+         mlist.add(bp);
+         mlist.add(dp);
+         System.out.println("mlist = " + mlist);
+         // ensure coprime
+         GreatestCommonDivisorAbstract<ModInteger> mengine 
+             = (GreatestCommonDivisorAbstract<ModInteger>)GCDFactory.<ModInteger>getProxy( pm );
+
+         if ( false ) {
+             boolean done;
+             int iks = 0;
+             do {
+                 done = true; iks++;
+                 SortedSet<GenPolynomial<ModInteger>> mset 
+                     = new TreeSet<GenPolynomial<ModInteger>>();
+                 KsubSet<GenPolynomial<ModInteger>> ps 
+                     = new KsubSet<GenPolynomial<ModInteger>>( mlist, 2 );
+                 for ( List<GenPolynomial<ModInteger>> flist : ps ) {
+                     GenPolynomial<ModInteger> ma = flist.get(0);
+                     GenPolynomial<ModInteger> mb = flist.get(1);
+                     GenPolynomial<ModInteger> mg = mengine.baseGcd(ma,mb);
+                     if ( !mg.isConstant() ) {
+                         System.out.println("mg = " + mg);
+                         ma = ma.divide(mg);
+                         mb = mb.divide(mg);
+                         mset.add(mg);
+                         done = false;
+                     }
+                     if ( !ma.isConstant() ) {
+                         mset.add(ma);
+                     }
+                     if ( !mb.isConstant() ) {
+                         mset.add(mb);
+                     }
+                 }
+                 System.out.println("mset = " + mset);
+                 mlist = new ArrayList<GenPolynomial<ModInteger>>( mset );
+             } while ( !done && iks < 10 );
+             long deg = 0;
+             for ( GenPolynomial<ModInteger> f : mlist ) {
+                 deg += f.degree(0);
+             }
+             if ( deg != c.degree(0) ) {
+                 continue;
+             }
+         }
+         System.out.println("\na     = " + a);
+         System.out.println("b     = " + b);
+         System.out.println("d     = " + d);
+         System.out.println("c     = " + c);
+         System.out.println("mi    = " + mi);
+         System.out.println("mip   = " + mip);
+         System.out.println("ap    = " + ap);
+         System.out.println("bp    = " + bp);
+         System.out.println("dp    = " + dp);
+         System.out.println("cp    = " + cp);
+
+         System.out.println("mlist = " + mlist);
+
+         if ( true ) {
+             FactorModular mfact = new FactorModular();
+             SortedMap<GenPolynomial<ModInteger>,Long> factors = mfact.baseFactors( cp );
+             mlist = new ArrayList<GenPolynomial<ModInteger>>( factors.size() );
+             for ( GenPolynomial<ModInteger> f : factors.keySet() ) {
+                 long e = factors.get(f);
+                 GenPolynomial<ModInteger> pp = Power.<GenPolynomial<ModInteger>> positivePower(f,e);
+                 mlist.add(pp);
+                 System.out.println("f^" + e + " = " + pp);
+             }
+         }
+
+         long tq = System.currentTimeMillis();
+         lift = PolyUfdUtil.liftHenselQuadratic(c,mi,mlist);
+         tq = System.currentTimeMillis() - tq;
+         cl = dfac.getONE();
+         for ( GenPolynomial<BigInteger> fl : lift ) {
+             System.out.println("fl = " + fl);
+             cl = cl.multiply( fl );
+         }
+         System.out.println("\nc  = " + c);
+         System.out.println("cl = " + cl);
+
+         ModIntegerRing qm = new ModIntegerRing( mip.getVal() );
+         GenPolynomialRing<ModInteger> qfac
+             = new GenPolynomialRing<ModInteger>(qm,1,to);
+
+         GenPolynomial<ModInteger> clp = PolyUtil.fromIntegerCoefficients(qfac,cl);
+         GenPolynomial<ModInteger> cpp = PolyUtil.fromIntegerCoefficients(qfac,c);
+
+         System.out.println("\ncpp = " + cpp);
+         System.out.println("clp = " + clp);
+
+         //assertEquals("lift(list[a_i mod p]) = prod(a_i) mod p^e",cpp,clp);
+         //assertEquals("lift(list[a_i mod p]) = prod(a_i)",c,cl);
+     }
+      ComputerThreads.terminate();
  }
 
 
@@ -368,7 +698,7 @@ public class PolyUfdUtilTest extends TestCase {
  * Test Kronecker substitution.
  * 
  */
- public void testKroneckerSubstitution() {
+ public void xtestKroneckerSubstitution() {
 
      for ( int i = 0; i < 10; i++ ) {
          a = dfac.random(kl,ll*2,el*5,q);

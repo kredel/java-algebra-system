@@ -163,7 +163,7 @@ public class FactorAlgebraic <C extends GcdRingElem<C>>
         GenPolynomial<AlgebraicNumber<C>> Ni;
         for ( GenPolynomial<C> nfi : nfacs ) { 
              //System.out.println("nfi = " + nfi);
-             Ni = PolyUfdUtil.<C> convertToAlgebraicCoefficients(pfac,nfi,ks);
+             Ni = PolyUfdUtil.<C> substituteConvertToAlgebraicCoefficients(pfac,nfi,ks);
              if ( logger.isInfoEnabled() ) {
                 logger.info("Ni = " + Ni);
              }
