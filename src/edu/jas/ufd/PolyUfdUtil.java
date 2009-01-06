@@ -983,9 +983,7 @@ public class PolyUfdUtil {
         System.out.println("*** version for factorization *** ");
         GenPolynomial<BigInteger>[] AB = (GenPolynomial<BigInteger>[])new GenPolynomial[2];
         if ( C == null || C.isZERO() ) {
-           AB[0] = C;
-           AB[1] = C;
-           return AB;
+           throw new RuntimeException("C must be nonzero");
         }
         if ( A == null || A.isZERO() || B == null || B.isZERO() ) {
            throw new RuntimeException("A and B must be nonzero");
@@ -1006,10 +1004,10 @@ public class PolyUfdUtil {
         GenPolynomialRing<ModInteger> qfac;
         qfac = new GenPolynomialRing<ModInteger>(Q,pfac); // mod p
         GenPolynomialRing<ModInteger> mfac;
-        BigInteger Qm = new BigInteger( Q.getModul().multiply( Q.getModul() ) );
-        ModIntegerRing Qmm = new ModIntegerRing( Qm.getVal() );
+        BigInteger Mi = new BigInteger( Q.getModul().multiply( Q.getModul() ) );
+        ModIntegerRing Qmm = new ModIntegerRing( Mi.getVal() );
         mfac = new GenPolynomialRing<ModInteger>(Qmm,qfac);   // mod p^e
-        ModInteger Qq = Qmm.fromInteger( Qi.getVal() );
+        ModInteger Qm = Qmm.fromInteger( Qi.getVal() );
 
         // normalize c and a, b factors, assert p is prime
         GenPolynomial<BigInteger> Ai;
@@ -1049,13 +1047,23 @@ public class PolyUfdUtil {
         GenPolynomial<ModInteger> Tp = T;
 
         // polynomials mod q
-        GenPolynomial<ModInteger> Cq; 
         GenPolynomial<ModInteger> Aq; 
         GenPolynomial<ModInteger> Bq;
         GenPolynomial<ModInteger> Eq;
         GenPolynomial<ModInteger> Eqp;
-        GenPolynomial<ModInteger> Sq;
-        GenPolynomial<ModInteger> Tq;
+
+        // polynomials mod p^e
+        GenPolynomial<ModInteger> Cm; 
+        GenPolynomial<ModInteger> Am; 
+        GenPolynomial<ModInteger> Bm;
+        GenPolynomial<ModInteger> Em;
+        GenPolynomial<ModInteger> Emp;
+        GenPolynomial<ModInteger> Sm;
+        GenPolynomial<ModInteger> Tm;
+        GenPolynomial<ModInteger> Ema;
+        GenPolynomial<ModInteger> Emb;
+        GenPolynomial<ModInteger> Ema1;
+        GenPolynomial<ModInteger> Emb1;
 
         // polynomials over the integers
         GenPolynomial<BigInteger> E;
@@ -1069,178 +1077,147 @@ public class PolyUfdUtil {
         Si = PolyUtil.integerFromModularCoefficients( fac, S );
         Ti = PolyUtil.integerFromModularCoefficients( fac, T );
 
-        Cq = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,C); 
-        Aq = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,Ai); 
-        Bq = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,Bi); 
-        Sq = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,Si); 
-        Tq = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,Ti); 
+        Aq = PolyUtil.<ModInteger>fromIntegerCoefficients(qfac,Ai); 
+        Bq = PolyUtil.<ModInteger>fromIntegerCoefficients(qfac,Bi); 
+
+        Cm = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,C); 
+        Am = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,Ai); 
+        Bm = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,Bi); 
+        Sm = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,Si); 
+        Tm = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,Ti); 
+        System.out.println("Am =  " + Am);
+        System.out.println("Bm =  " + Bm);
+        System.out.println("Ai =  " + Ai);
+        System.out.println("Bi =  " + Bi);
+        System.out.println("mfac =  " + mfac);
 
         while ( Mq.compareTo(M2) < 0 ) {
-            // compute E=(C-AB)/q over the integers
-            E = C.subtract( Ai.multiply(Bi) );
-            // compute E=(C-AB)/p mod q
-            Eq = Cq.subtract( Aq.multiply(Bq) );
-            System.out.println("E  =  " + E);
-            System.out.println("Eq =  " + Eq);
-            if ( E.isZERO() ) {
-               //System.out.println("leaving on zero error");
+            // compute E=(C-AB)/p mod p^e
+            Em = Cm.subtract( Am.multiply(Bm) );
+            System.out.println("Em =  " + Em);
+            if ( Em.isZERO() ) {
+               System.out.println("leaving on zero error");
                logger.info("leaving on zero error");
                break;
             }
-            try {
-                Eq = Eq.divide( Qq );
-                System.out.println("Eq =  " + Eq);
-                E = E.divide( Qi );
-                System.out.println("E  =  " + E);
-            } catch (RuntimeException e) {
-                System.out.println("E % Qi != 0 " + e);
-                System.out.println("E =  " + E);
-                // ignore division errors:
-                E = PolyUtil.<BigInteger> coefficientBasePseudoDivide(E,Qi);
-                Eq = PolyUtil.<ModInteger> coefficientBasePseudoDivide(Eq,Qq);
-                System.out.println("E =  " + E);
-            }
-            // E mod p
-            Eqp = PolyUtil.<ModInteger>fromIntegerCoefficients(qfac,
-                           PolyUtil.integerFromModularCoefficients(fac,Eq) ); 
-            System.out.println("Eqp =  " + Eqp);
-            Ep = PolyUtil.<ModInteger>fromIntegerCoefficients(qfac,E); 
-            System.out.println("Ep =  " + Ep);
-            //logger.info("Ep = " + Ep);
-            if ( Ep.isZERO() ) {
-               //System.out.println("leaving on zero error");
-               logger.info("leaving on zero error Ep");
+            Em = Em.divide( Qm );
+            System.out.println("Em =  " + Em);
+
+            // Em mod p
+            Emp = PolyUtil.<ModInteger>fromIntegerCoefficients(qfac,
+                           PolyUtil.integerFromModularCoefficients(fac,Em) ); 
+            System.out.println("Emp =  " + Emp);
+            //logger.info("Emp = " + Emp);
+            if ( Emp.isZERO() ) {
+               System.out.println("leaving on zero error");
+               logger.info("leaving on zero error Emp");
                break;
             }
 
             // construct approximation mod p
-            Ap = Sp.multiply( Eqp ); // S,T ++ T,S // Ep Eqp
-            Bp = Tp.multiply( Eqp );               // Ep Eqp
+            Ap = Sp.multiply( Emp ); // S,T ++ T,S 
+            Bp = Tp.multiply( Emp );               
             GenPolynomial<ModInteger>[] QR = null;
-            try {
-               QR = Ap.divideAndRemainder( Bq );      // Bq Bp !
-            } catch (RuntimeException e) {
-                System.out.println("Ap =  " + Ap);
-                System.out.println("Bp =  " + Bp);
-                System.out.println("Aq =  " + Aq);
-                System.out.println("Bq =  " + Bq);
-                System.out.println("Bq.ring =  " + Bq.ring);
-                System.out.println("Bq.ldcf().isUnit() =  " + Bq.leadingBaseCoefficient().isUnit());
-                ModInteger aql = Bq.leadingBaseCoefficient();
-                ModIntegerRing aqlr = aql.ring;
-                java.math.BigInteger ggg = aql.getVal().gcd( aqlr.modul );
-                System.out.println("ggg =  " + ggg);
-                throw new RuntimeException("nichts geht mehr " +e);
-            }
-            GenPolynomial<ModInteger> Qp;
-            GenPolynomial<ModInteger> Rp;
-            Qp = QR[0];
-            Rp = QR[1];
+            QR = Ap.divideAndRemainder( Bq );   // Bq !
+            GenPolynomial<ModInteger> Qp = QR[0];
+            GenPolynomial<ModInteger> Rp = QR[1];
             A1p = Rp;
-            B1p = Bp.sum( Aq.multiply( Qp ) );
+            B1p = Bp.sum( Aq.multiply( Qp ) );  // Aq !
+            System.out.println("A1p =  " + A1p);
+            System.out.println("B1p =  " + B1p);
 
-            // construct q-adic approximation, convert to integer
-            Ea = PolyUtil.integerFromModularCoefficients(fac,A1p);
-            Eb = PolyUtil.integerFromModularCoefficients(fac,B1p);
-            Ea1 = Ea.multiply( Qi );
-            Eb1 = Eb.multiply( Qi );
-            Ea = Ai.sum( Eb1 ); // Eb1 and Ea1 are required
-            Eb = Bi.sum( Ea1 ); //--------------------------
-            assert ( Ea.degree(0)+Eb.degree(0) <= C.degree(0) );
-            //if ( Ea.degree(0)+Eb.degree(0) > C.degree(0) ) { // debug
-            //   throw new RuntimeException("deg(A)+deg(B) > deg(C)");
-            //}
-            Ai = Ea;
-            Bi = Eb;
+            // construct q-adic approximation
+            Ema = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,
+                           PolyUtil.integerFromModularCoefficients(fac,A1p) );
+            Emb = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,
+                           PolyUtil.integerFromModularCoefficients(fac,B1p) );
+            System.out.println("Ema =  " + Ema);
+            System.out.println("Emb =  " + Emb);
+            Ema1 = Ema.multiply( Qm );
+            Emb1 = Emb.multiply( Qm );
+            Ema = Am.sum( Emb1 ); // Eb1 and Ea1 are required
+            Emb = Bm.sum( Ema1 ); //--------------------------
+            assert ( Ema.degree(0)+Emb.degree(0) <= Cm.degree(0) );
+            if ( Ema.degree(0)+Emb.degree(0) > Cm.degree(0) ) { // debug
+               throw new RuntimeException("deg(A)+deg(B) > deg(C)");
+            }
+            Am = Ema; 
+            Bm = Emb;
+            Ai = PolyUtil.integerFromModularCoefficients(fac,Am);
+            Bi = PolyUtil.integerFromModularCoefficients(fac,Bm);
+            System.out.println("Am =  " + Am);
+            System.out.println("Bm =  " + Bm);
+            System.out.println("Ai =  " + Ai);
+            System.out.println("Bi =  " + Bi);
 
             // gcd representation factors error --------------------------------
-            // compute E=(1-SA-TB)/q over the integers
-            Eq = mfac.getONE();
-            Eq = Eq.subtract( Sq.multiply(Aq) ).subtract( Tq.multiply(Bq) );
-            Eq = Eq.divide( Qq );
-            System.out.println("#Eq =  " + Eq);
+            // compute E=(1-SA-TB)/p mod p^e
+            Em = mfac.getONE();
+            Em = Em.subtract( Sm.multiply(Am) ).subtract( Tm.multiply(Bm) );
+            Em = Em.divide( Qm );
+            System.out.println("Em  =  " + Em);
+            Emp = PolyUtil.<ModInteger>fromIntegerCoefficients(qfac,
+                           PolyUtil.integerFromModularCoefficients(fac,Em) );
+            System.out.println("Emp =  " + Emp);
 
-            E = fac.getONE();
-            E = E.subtract( Si.multiply(Ai) ).subtract( Ti.multiply(Bi) );
-            E = E.divide( Qi );
-            System.out.println("#E =  " + E);
-
-            // E mod q? p?
-            Eqp = PolyUtil.<ModInteger>fromIntegerCoefficients(qfac,
-                           PolyUtil.integerFromModularCoefficients(fac,Eq) ); 
-            System.out.println("#Eqp =  " + Eqp);
-            Ep = PolyUtil.<ModInteger>fromIntegerCoefficients(qfac,E); 
-            System.out.println("#Ep =  " + Ep);
-            //logger.info("Ep2 = " + Ep);
-
-            // construct approximation mod q
-            Ap = Sp.multiply( Eqp ); // S,T ++ T,S // Ep Eqp
-            Bp = Tp.multiply( Eqp );               // Ep Eqp
-            try {
-               QR = Bp.divideAndRemainder( Aq );      // Ap Aq ! // Ai == A mod p ?
-            } catch (RuntimeException e) {
-                System.out.println("Ap =  " + Ap);
-                System.out.println("Bp =  " + Bp);
-                System.out.println("Aq =  " + Aq);
-                System.out.println("Bq =  " + Bq);
-                System.out.println("Aq.ring =  " + Aq.ring);
-                System.out.println("Aq.ldcf().isUnit() =  " + Aq.leadingBaseCoefficient().isUnit());
-                ModInteger aql = Aq.leadingBaseCoefficient();
-                ModIntegerRing aqlr = aql.ring;
-                java.math.BigInteger ggg = aql.getVal().gcd( aqlr.modul );
-                System.out.println("ggg =  " + ggg);
-                throw new RuntimeException("nichts geht mehr " + e);
-            }
+            // construct approximation mod p
+            Ap = Sp.multiply( Emp ); // S,T ++ T,S // Ep Eqp
+            Bp = Tp.multiply( Emp );               // Ep Eqp
+            QR = Bp.divideAndRemainder( Aq );      // Ap Aq ! // Ai == A mod p ?
             Qp = QR[0];
             Rp = QR[1];
             B1p = Rp;
             A1p = Ap.sum( Bq.multiply( Qp ) );
+            System.out.println("A1p =  " + A1p);
+            System.out.println("B1p =  " + B1p);
 
-            if ( false && debug ) {
-               Eq = A1p.multiply(Aq).sum(B1p.multiply(Bq)).subtract(Eqp);
-               if ( !Eq.isZERO() ) {
-                  System.out.println("A*A1p+B*B1p-Ep2 != 0 " + Eq );
-                  throw new RuntimeException("A*A1p+B*B1p-Ep2 != 0 mod " + Q.getModul());
-               }
-            }
-
-            // construct q-adic approximation, convert to integer
-            Ea = PolyUtil.integerFromModularCoefficients(fac,A1p);
-            Eb = PolyUtil.integerFromModularCoefficients(fac,B1p);
-            Ea1 = Ea.multiply( Qi );
-            Eb1 = Eb.multiply( Qi );
-            Ea = Si.sum( Ea1 ); // Eb1 and Ea1 are required
-            Eb = Ti.sum( Eb1 ); //--------------------------
-            Si = Ea;
-            Ti = Eb;
+            // construct p^e-adic approximation
+            Ema = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,
+                           PolyUtil.integerFromModularCoefficients(fac,A1p));
+            Emb =  PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,
+                          PolyUtil.integerFromModularCoefficients(fac,B1p));
+            Ema1 = Ema.multiply( Qm );
+            Emb1 = Emb.multiply( Qm );
+            Ema = Sm.sum( Ema1 ); // Emb1 and Ema1 are required
+            Emb = Tm.sum( Emb1 ); //--------------------------
+            Sm = Ema;
+            Tm = Emb;
+            Si = PolyUtil.integerFromModularCoefficients(fac,Sm); 
+            Ti = PolyUtil.integerFromModularCoefficients(fac,Tm);
+            System.out.println("Sm =  " + Sm);
+            System.out.println("Tm =  " + Tm);
+            System.out.println("Si =  " + Si);
+            System.out.println("Ti =  " + Ti);
 
             // prepare for next iteration
-            //Qi = new BigInteger( Q.getModul().multiply( P.getModul() ) );
             Mq = Qi;
             Qi = new BigInteger( Q.getModul().multiply( Q.getModul() ) );
             Q = new ModIntegerRing( Qi.getVal() );
             qfac = new GenPolynomialRing<ModInteger>(Q,pfac);
-            Qm = new BigInteger( Q.getModul().multiply( Q.getModul() ) );
-            Qmm = new ModIntegerRing( Qm.getVal() );
+            Qmm = new ModIntegerRing( Qmm.getModul().multiply( Qmm.getModul() ) );
             mfac = new GenPolynomialRing<ModInteger>(Qmm,qfac);
+            Qm = Qmm.fromInteger( Qi.getVal() );
 
-            Cq = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,C);
-            Aq = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,Ai);
-            Bq = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,Bi);
-            Sq = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,Si); 
-            Tq = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,Ti); 
+            Cm = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,C);
+            Am = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,Ai);
+            Bm = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,Bi);
+            Sm = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,Si);
+            Tm = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,Ti);
 
-            Sp = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,Si);
-            Tp = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,Ti);
-            if ( false && debug ) {
-               E = Ai.multiply(Si).sum( Bi.multiply(Ti) );
-               Eq = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,E); 
-               if ( !Eq.isONE() ) {
-                  System.out.println("Ai*Si+Bi*Ti=1 " + Eq );
-                  throw new RuntimeException("Ai*Si+Bi*Ti != 1 mod " + Q.getModul());
-               }
-            }
+            Aq = PolyUtil.<ModInteger>fromIntegerCoefficients(qfac,Ai);
+            Bq = PolyUtil.<ModInteger>fromIntegerCoefficients(qfac,Bi);
+            Sp = PolyUtil.<ModInteger>fromIntegerCoefficients(qfac,Si);
+            Tp = PolyUtil.<ModInteger>fromIntegerCoefficients(qfac,Ti);
+
+            System.out.println("Am =  " + Am);
+            System.out.println("Bm =  " + Bm);
+            System.out.println("Sm =  " + Sm);
+            System.out.println("Tm =  " + Tm);
+            System.out.println("mfac =  " + mfac);
         }
+        System.out.println("*Ai =  " + Ai);
+        System.out.println("*Bi =  " + Bi);
+
         GreatestCommonDivisorAbstract<BigInteger> ufd
             = new GreatestCommonDivisorPrimitive<BigInteger>();
 
@@ -1248,17 +1225,7 @@ public class PolyUfdUtil {
         BigInteger ai = ufd.baseContent(Ai);
         Ai = Ai.divide( ai );
         BigInteger bi = c.divide(ai);
-        try {
-            Bi = Bi.divide( bi ); // divide( c/a )
-        } catch ( Exception e ) {
-            System.out.println("C  = " + C );
-            System.out.println("Ai = " + Ai );
-            System.out.println("Bi = " + Bi );
-            System.out.println("c  = " + c );
-            System.out.println("ai = " + ai );
-            System.out.println("bi = " + bi );
-        }
-
+        Bi = Bi.divide( bi ); // divide( c/a )
         AB[0] = Ai;
         AB[1] = Bi;
         return AB;

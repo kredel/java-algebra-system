@@ -687,7 +687,7 @@ public class PolyUfdUtilTest extends TestCase {
          System.out.println("\ncpp = " + cpp);
          System.out.println("clp = " + clp);
 
-         //assertEquals("lift(list[a_i mod p]) = prod(a_i) mod p^e",cpp,clp);
+         assertEquals("lift(list[a_i mod p]) = prod(a_i) mod p^e",cpp,clp);
          //assertEquals("lift(list[a_i mod p]) = prod(a_i)",c,cl);
      }
       ComputerThreads.terminate();
