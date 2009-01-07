@@ -659,24 +659,7 @@ public class PolyUfdUtil {
                logger.info("leaving on zero error");
                break;
             }
-            try {
-                E = E.divide( Qi );
-            } catch (RuntimeException e) {
-                System.out.println("E % Qi != 0 " + e);
-                System.out.println("E =  " + E);
-                // first mod p^e and back
-//                 Ep = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,C).subtract(
-//                         PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,Ai).multiply(
-//                               PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,Bi)
-//                         ) ); 
-//                 System.out.println("Ep =  " + Ep);
-//                 E = PolyUtil.integerFromModularCoefficients(fac,Ep);
-//                 System.out.println("E =  " + E);
-//                 E = PolyUtil.<BigInteger> coefficientBasePseudoDivide(E,Qi);
-                // ignore division errors:
-                E = PolyUtil.<BigInteger> coefficientBasePseudoDivide(E,Qi);
-                System.out.println("E =  " + E);
-            }
+            E = E.divide( Qi );
             // E mod p
             Ep = PolyUtil.<ModInteger>fromIntegerCoefficients(qfac,E); 
             //logger.info("Ep = " + Ep);
@@ -889,7 +872,6 @@ public class PolyUfdUtil {
      * @param M bound on the coefficients of g_i as factors of C.
      * @return [g_0,...,g_{n-1}] = lift(C,F), with C = prod_{0,...,n-1} g_i mod p**e.
      */
-    //@SuppressWarnings("unchecked") 
     public static //<C extends RingElem<C>>
         List<GenPolynomial<BigInteger>>
         liftHenselQuadratic( GenPolynomial<BigInteger> C,
@@ -1246,15 +1228,14 @@ public class PolyUfdUtil {
 
 
     /** ModInteger Hensel lifting test.
-     * Let p = f_i.ring.coFac.modul() i = 0, ..., n-1
-     * and assume C == prod_{0,...,n-1} f_i mod p with ggt(f_i,f_j) == 1 mod p for i != j
+     * Let p be a prime number and 
+     * assume C == prod_{0,...,n-1} g_i mod p with ggt(g_i,g_j) == 1 mod p for i != j.
      * @param C GenPolynomial<BigInteger>.
      * @param G = [g_0,...,g_{n-1}] List<GenPolynomial<ModInteger>>.
      * @param M bound on the coefficients of g_i as factors of C.
      * @param p prime number.
-     * @return true if [g_0,...,g_{n-1}] = lift(C,F), with C = prod_{0,...,n-1} g_i mod p**e, else false.
+     * @return true if C = prod_{0,...,n-1} g_i mod p**e, else false.
      */
-    //@SuppressWarnings("unchecked") 
     public static //<C extends RingElem<C>>
         boolean isHenselLift( GenPolynomial<BigInteger> C,
                               BigInteger M,
@@ -1281,6 +1262,28 @@ public class PolyUfdUtil {
         }
         GenPolynomial<ModInteger> cp = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,C);
         return cp.equals(cl);
+    }
+
+
+    /** ModInteger Hensel lifting test.
+     * Let p be a prime number and assume C == A * B mod p with ggt(A,B) == 1 mod p.
+     * @param C GenPolynomial<BigInteger>.
+     * @param A GenPolynomial<BigInteger>.
+     * @param B GenPolynomial<BigInteger>.
+     * @param M bound on the coefficients of A and B as factors of C.
+     * @param p prime number.
+     * @return true if C = A * B mod p**e, else false.
+     */
+    public static //<C extends RingElem<C>>
+        boolean isHenselLift( GenPolynomial<BigInteger> C,
+                              BigInteger M,
+                              BigInteger p,
+                              GenPolynomial<BigInteger> A,
+                              GenPolynomial<BigInteger> B) {
+        List<GenPolynomial<BigInteger>> G = new ArrayList<GenPolynomial<BigInteger>>(2);
+        G.add(A);
+        G.add(B);
+        return isHenselLift(C,M,p,G);
     }
 
 
