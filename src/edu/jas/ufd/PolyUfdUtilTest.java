@@ -45,6 +45,7 @@ public class PolyUfdUtilTest extends TestCase {
  */
    public static void main (String[] args) {
           junit.textui.TestRunner.run( suite() );
+          ComputerThreads.terminate();
    }
 
 /**
@@ -666,6 +667,9 @@ public class PolyUfdUtilTest extends TestCase {
              }
          }
 
+         boolean ih = PolyUfdUtil.isHenselLift(c,mi,m,ilist);
+         System.out.println("ih = " + ih);
+
          long tq = System.currentTimeMillis();
          lift = PolyUfdUtil.liftHenselQuadratic(c,mi,mlist);
          tq = System.currentTimeMillis() - tq;
@@ -687,7 +691,7 @@ public class PolyUfdUtilTest extends TestCase {
          System.out.println("\ncpp = " + cpp);
          System.out.println("clp = " + clp);
 
-         boolean ih = PolyUfdUtil.isHenselLift(c,mi,m,lift);
+         ih = PolyUfdUtil.isHenselLift(c,mi,m,lift);
          System.out.println("ih = " + ih);
 
          assertEquals("lift(list[a_i mod p]) = prod(a_i) mod p^e",cpp,clp);
