@@ -117,7 +117,7 @@ public final class BigComplex implements StarRingElem<BigComplex>,
      * @see java.lang.Object#clone()
      */
     @Override
-     public BigComplex clone() {
+    public BigComplex clone() {
         return new BigComplex( re, im );
     }
 
@@ -306,7 +306,7 @@ public final class BigComplex implements StarRingElem<BigComplex>,
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
-     public boolean equals(Object b) {
+    public boolean equals(Object b) {
         if ( ! ( b instanceof BigComplex ) ) {
            return false;
         }
@@ -320,28 +320,29 @@ public final class BigComplex implements StarRingElem<BigComplex>,
      * @see java.lang.Object#hashCode()
      */
     @Override
-     public int hashCode() {
+    public int hashCode() {
         return 37 * re.hashCode() + im.hashCode();
     }
 
 
-    /** since complex numbers are unordered, there is 
-     * no compareTo method. 
-     * We define the result to be 
-     * @return 0 if b is equal to this
-     * @return 1 else
+    /** Since complex numbers are unordered, 
+     * we use lexicographical order of re and im.
+     * @return 0 if this is equal to b;
+     *         1 if re > b.re, or re == b.re and im > b.im;
+     *        -1 if re < b.re, or re == b.re and im < b.im
      */
+    @Override
     public int compareTo(BigComplex b) {
-        if ( this.equals(b) ) { 
-            return 0;
-        } else {
-            return 1;
+        int s = re.compareTo( b.re );
+        if ( s != 0 ) { 
+            return s;
         }
+        return im.compareTo( b.im );
     }
 
-    /** since complex numbers are unordered, there is 
-     * no signum method. 
-     * We define the result to be 
+
+    /** Since complex numbers are unordered, 
+     * we use lexicographical order of re and im.
      * @return 0 if this is equal to 0;
      *         1 if re > 0, or re == 0 and im > 0;
      *        -1 if re < 0, or re == 0 and im < 0

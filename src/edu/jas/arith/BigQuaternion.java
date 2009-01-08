@@ -441,24 +441,31 @@ public final class BigQuaternion implements StarRingElem<BigQuaternion>,
     }
 
 
-    /** since quaternion numbers are unordered, there is 
-     * no compareTo method. 
+    /** Since quaternion numbers are unordered, 
+     * we use lexicographical order of re, im, jm and km.
      * @param b BigQuaternion.
-     * We define the result to be 
-     * @return 0 if b is equal to this, 1 else.
+     * @return 0 if b is equal to this, 1 if this is greater b and -1 else.
      */
+    @Override
     public int compareTo(BigQuaternion b) {
-        if ( equals(b) ) { 
-            return 0;
-        } else {
-            return 1;
+        int s = re.compareTo(b.re);
+        if ( s != 0 ) {
+            return s;
         }
+        s = im.compareTo(b.im);
+        if ( s != 0 ) {
+            return s;
+        }
+        s = jm.compareTo(b.jm);
+        if ( s != 0 ) {
+            return s;
+        }
+        return km.compareTo(b.km);
     }
 
 
-    /** since quaternion numbers are unordered, there is 
-     * no signum method. 
-     * We define the result to be 
+    /** Since quaternion numbers are unordered, 
+     * we use lexicographical order of re, im, jm and km.
      * @return 0 if this is equal to 0;
      *         1 if re > 0, or re == 0 and im > 0, or ...;
      *        -1 if re < 0, or re == 0 and im < 0, or ...

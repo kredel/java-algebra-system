@@ -330,7 +330,7 @@ public final class BigOctonion implements StarRingElem<BigOctonion>,
      * @see java.lang.Object#hashCode()
      */
     @Override
-     public int hashCode() {
+    public int hashCode() {
         int h;
         h  = 41 * or.hashCode();
         h += 41 * oi.hashCode();
@@ -338,27 +338,26 @@ public final class BigOctonion implements StarRingElem<BigOctonion>,
     }
 
 
-    /** since quaternion numbers are unordered, there is 
-     * no compareTo method. 
+    /** Since quaternion numbers are unordered, 
+     * we use lexicographical order of re, im, jm and km.
      * @param b BigOctonion.
-     * We define the result to be 
-     * @return 0 if b is equal to this, 1 else.
+     * @return 0 if b is equal to this, 1 if this is greater b and -1 else.
      */
+    @Override
     public int compareTo(BigOctonion b) {
-        if ( equals(b) ) { 
-            return 0;
-        } else {
-            return 1;
+        int s = or.compareTo( b.or );
+        if ( s != 0 ) {
+            return s;
         }
+        return oi.compareTo( b.oi );
     }
 
 
-    /** since quaternion numbers are unordered, there is 
-     * no signum method. 
-     * We define the result to be 
+    /** Since quaternion numbers are unordered, 
+     * we use lexicographical order of re, im, jm and km.
      * @return 0 if this is equal to 0;
-     *         1 if re > 0, or re == 0 and im > 0, or ...;
-     *        -1 if re < 0, or re == 0 and im < 0, or ...
+     *         1 if or > 0, or or == 0 and oi > 0;
+     *        -1 if or < 0, or or == 0 and oi < 0.
      * @see edu.jas.structure.RingElem#signum()
      */
     public int signum() {
