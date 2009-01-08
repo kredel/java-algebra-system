@@ -1410,7 +1410,7 @@ class RingElem:
         '''
         #print "self  type(%s) = %s" % (self,type(self));
         #print "pow other type(%s) = %s" % (other,type(other));
-        if isinstance(other,PyInteger):
+        if isinstance(other,PyInteger) or isinstance(other,PyLong):
             n = other;
         else:
             if isinstance(other,RingElem): 
