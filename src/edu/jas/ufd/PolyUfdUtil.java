@@ -901,6 +901,7 @@ public class PolyUfdUtil {
         GenPolynomial<ModInteger> f = F.get(0);
         GenPolynomialRing<ModInteger> mfac = f.ring;
         ModIntegerRing mr = (ModIntegerRing)mfac.coFac;
+        BigInteger P = new BigInteger( mr.modul );
         // split list in two parts and prepare polynomials
         int k = n/2;
         List<GenPolynomial<ModInteger>> F1 = new ArrayList<GenPolynomial<ModInteger>>( k );
@@ -933,12 +934,21 @@ public class PolyUfdUtil {
         GenPolynomial<BigInteger>[] ab = liftHenselQuadraticFac(C,M,A,B);
         GenPolynomial<BigInteger> A1 = ab[0];
         GenPolynomial<BigInteger> B1 = ab[1];
-        // recursion on list parts
         System.out.println("A1 = " + A1 + ", B1 = " + B1);
+        if ( ! isHenselLift(C,M,P,A1,B1) ) {
+           throw new RuntimeException("no lifting A1, B1");
+        }
+        // recursion on list parts
         List<GenPolynomial<BigInteger>> G1 = liftHenselQuadratic(A1,M,F1);
         System.out.println("G1 = " + G1);
+        if ( ! isHenselLift(A1,M,P,G1) ) {
+           throw new RuntimeException("no lifting G1");
+        }
         List<GenPolynomial<BigInteger>> G2 = liftHenselQuadratic(B1,M,F2);
         System.out.println("G2 = " + G2);
+        if ( ! isHenselLift(A1,M,P,G2) ) {
+           throw new RuntimeException("no lifting G2");
+        }
         lift.addAll( G1 );
         lift.addAll( G2 );
         return lift;
@@ -1014,6 +1024,11 @@ public class PolyUfdUtil {
            T = T.multiply( b );
         }
         ModInteger ci = P.fromInteger( c.getVal() );
+        if ( ci.isZERO() ) {
+            System.out.println("c =  " + c);
+            System.out.println("P =  " + P);
+            throw new RuntimeException("c == 0 not meaningful");
+        }
         A = A.multiply( ci );
         B = B.multiply( ci );
         T = T.divide( ci );
@@ -1244,24 +1259,50 @@ public class PolyUfdUtil {
         if ( C == null || C.isZERO() ) {
             return false;
         }
+        GenPolynomialRing<BigInteger> pfac = C.ring;
+        ModIntegerRing pm = new ModIntegerRing(p.getVal(),true);
+        GenPolynomialRing<ModInteger> mfac
+             = new GenPolynomialRing<ModInteger>(pm,pfac);
+
+        // check mod p
+        GenPolynomial<ModInteger> cl = mfac.getONE();
+        GenPolynomial<ModInteger> hlp;
+        for ( GenPolynomial<BigInteger> hl : G ) {
+             System.out.println("hl       = " + hl);
+             hlp = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,hl);
+             System.out.println("hl mod p = " + hlp);
+             cl = cl.multiply( hlp );
+        }
+        GenPolynomial<ModInteger> cp = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,C);
+        if ( !cp.equals(cl) ) {
+            System.out.println("Hensel precondition wrong!");
+            System.out.println("cp-cl = " + cp.subtract(cl));
+            return false;
+        }
+
+        // check mod p^e 
         BigInteger mip = p;
         while ( mip.compareTo(M) < 0 ) {
             mip = mip.multiply(p);
         }
         mip = mip.multiply(p);
-        GenPolynomialRing<BigInteger> pfac = C.ring;
-        ModIntegerRing pm = new ModIntegerRing(mip.getVal(),false);
-        GenPolynomialRing<ModInteger> mfac
-             = new GenPolynomialRing<ModInteger>(pm,pfac);
+        pm = new ModIntegerRing(mip.getVal(),false);
+        mfac = new GenPolynomialRing<ModInteger>(pm,pfac);
 
-        GenPolynomial<ModInteger> cl = mfac.getONE();
-        for ( GenPolynomial<BigInteger> fl : G ) {
-             System.out.println("fl = " + fl);
-             GenPolynomial<ModInteger> flp = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,fl);
-;            cl = cl.multiply( flp );
+        cl = mfac.getONE();
+        for ( GenPolynomial<BigInteger> hl : G ) {
+             System.out.println("hl         = " + hl);
+             hlp = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,hl);
+             System.out.println("hl mod p^e = " + hlp);
+             cl = cl.multiply( hlp );
         }
-        GenPolynomial<ModInteger> cp = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,C);
-        return cp.equals(cl);
+        cp = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,C);
+        if ( !cp.equals(cl) ) {
+            System.out.println("Hensel post condition wrong!");
+            System.out.println("cp-cl = " + cp.subtract(cl));
+            return false;
+        }
+        return true;
     }
 
 
