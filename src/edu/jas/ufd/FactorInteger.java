@@ -95,6 +95,7 @@ public class FactorInteger //<C extends GcdRingElem<C> >
             logger.info("degv = " + degv);
         }
         Iterator<java.math.BigInteger> pit = primes.iterator();
+        pit.next();
         ModInteger nf = null;
         for (int k = 0; k < TT; k++) {
             if ( k == TT-2 ) {
