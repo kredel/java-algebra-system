@@ -524,10 +524,10 @@ public class PolyUfdUtilTest extends TestCase {
          if ( a.degree(0) < 1 || b.degree(0) < 2 || d.degree(0) < 1 ) {
             continue;
          }
-         if (!a.leadingBaseCoefficient().isUnit()) {
-             ExpVector e = a.leadingExpVector();
-             a.doPutToMap(e, one);
-         }
+//          if (!a.leadingBaseCoefficient().isUnit()) {
+//              ExpVector e = a.leadingExpVector();
+//              a.doPutToMap(e, one);
+//          }
          if (!b.leadingBaseCoefficient().isUnit()) {
              ExpVector e = b.leadingExpVector();
              b.doPutToMap(e, one);
@@ -536,11 +536,12 @@ public class PolyUfdUtilTest extends TestCase {
              ExpVector e = d.leadingExpVector();
              d.doPutToMap(e, one);
          }
-//          a = engine.basePrimitivePart(a);
-//          b = engine.basePrimitivePart(b);
-//          d = engine.basePrimitivePart(d);
          GreatestCommonDivisorAbstract<BigInteger> engine 
              = (GreatestCommonDivisorAbstract<BigInteger>)GCDFactory.<BigInteger>getProxy( mi );
+         a = engine.basePrimitivePart(a);
+//          b = engine.basePrimitivePart(b);
+//          d = engine.basePrimitivePart(d);
+
          GenPolynomial<BigInteger> g;
          g = engine.baseGcd(a,b);
          if ( !g.isConstant() ) {
@@ -673,29 +674,11 @@ public class PolyUfdUtilTest extends TestCase {
          long tq = System.currentTimeMillis();
          lift = PolyUfdUtil.liftHenselQuadratic(c,mi,mlist);
          tq = System.currentTimeMillis() - tq;
-         cl = dfac.getONE();
-         for ( GenPolynomial<BigInteger> fl : lift ) {
-             System.out.println("fl = " + fl);
-             cl = cl.multiply( fl );
-         }
-         System.out.println("\nc  = " + c);
-         System.out.println("cl = " + cl);
-
-         ModIntegerRing qm = new ModIntegerRing( mip.getVal() );
-         GenPolynomialRing<ModInteger> qfac
-             = new GenPolynomialRing<ModInteger>(qm,1,to);
-
-         GenPolynomial<ModInteger> clp = PolyUtil.fromIntegerCoefficients(qfac,cl);
-         GenPolynomial<ModInteger> cpp = PolyUtil.fromIntegerCoefficients(qfac,c);
-
-         System.out.println("\ncpp = " + cpp);
-         System.out.println("clp = " + clp);
 
          ih = PolyUfdUtil.isHenselLift(c,mi,m,lift);
          System.out.println("ih = " + ih);
 
-         assertEquals("lift(list[a_i mod p]) = prod(a_i) mod p^e",cpp,clp);
-         //assertEquals("lift(list[a_i mod p]) = prod(a_i)",c,cl);
+         assertTrue("isHenselLift ",ih);
      }
      ComputerThreads.terminate();
  }

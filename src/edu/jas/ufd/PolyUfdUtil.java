@@ -1014,7 +1014,7 @@ public class PolyUfdUtil {
         GenPolynomial<BigInteger> Ai;
         GenPolynomial<BigInteger> Bi;
         BigInteger c = C.leadingBaseCoefficient();
-        C = C.multiply(c); // sic
+        //##C = C.multiply(c); // sic
         ModInteger a = A.leadingBaseCoefficient();
         if ( !a.isONE() ) { // A = A.monic();
            A = A.divide( a );
@@ -1029,19 +1029,20 @@ public class PolyUfdUtil {
         if ( ci.isZERO() ) {
             System.out.println("c =  " + c);
             System.out.println("P =  " + P);
-            throw new RuntimeException("c == 0 not meaningful");
+            throw new RuntimeException("c mod p == 0 not meaningful");
         }
+        // mod p
         A = A.multiply( ci );
-        B = B.multiply( ci );
-        T = T.divide( ci );
         S = S.divide( ci );
+        //##B = B.multiply( ci );
+        //##T = T.divide( ci );
         Ai = PolyUtil.integerFromModularCoefficients( fac, A );
         Bi = PolyUtil.integerFromModularCoefficients( fac, B );
         // replace leading base coefficients
         ExpVector ea = Ai.leadingExpVector();
         ExpVector eb = Bi.leadingExpVector();
-        Ai.doPutToMap(ea,c);
-        Bi.doPutToMap(eb,c);
+        //##Ai.doPutToMap(ea,c);
+        //##Bi.doPutToMap(eb,c);
 
         // polynomials mod p
         GenPolynomial<ModInteger> Ap; 
@@ -1249,21 +1250,29 @@ public class PolyUfdUtil {
         System.out.println("*Ai =  " + Ai);
         System.out.println("*Bi =  " + Bi);
 
-        GreatestCommonDivisorAbstract<BigInteger> ufd
-            = new GreatestCommonDivisorPrimitive<BigInteger>();
-
         // remove normalization
-        BigInteger ai = ufd.baseContent(Ai);
-        Ai = Ai.divide( ai );
-        System.out.println("*Ai =  " + Ai);
-        System.out.println("*ai =  " + ai);
-        BigInteger bi = c.divide(ai);
-        System.out.println("*c  =  " + c);
-        System.out.println("*bi =  " + bi);
-        if ( !bi.isZERO() ) {
-            Bi = Bi.divide( bi ); // divide( c/a )
+        //##C = C.divide(c);
+        if ( false /*C.subtract(Ai.multiply(Bi)).isZERO()*/ ) {
+            GreatestCommonDivisorAbstract<BigInteger> ufd
+                = new GreatestCommonDivisorPrimitive<BigInteger>();
+
+            // remove normalization
+            BigInteger ai = ufd.baseContent(Ai);
+            Ai = Ai.divide( ai );
+            System.out.println("*Ai =  " + Ai);
+            System.out.println("*ai =  " + ai);
+            BigInteger bi = c.divide(ai);
+            System.out.println("*c  =  " + c);
+            System.out.println("*bi =  " + bi);
+            if ( !bi.isZERO() && !bi.isONE() ) {
+                Bi = Bi.divide( bi ); // divide( c/a )
+            }
+            System.out.println("*Bi =  " + Bi);
+            boolean ih = isHenselLift(C.divide(c),Mi,PP,Ai,Bi);
+            System.out.println("*is Hensel lift =  " + ih);
+        //##} else {
+        //##    System.out.println("*no exact factorization: " + C.subtract(Ai.multiply(Bi)));
         }
-        System.out.println("*Bi =  " + Bi);
         AB[0] = Ai;
         AB[1] = Bi;
         return AB;
@@ -1296,9 +1305,9 @@ public class PolyUfdUtil {
         GenPolynomial<ModInteger> cl = mfac.getONE();
         GenPolynomial<ModInteger> hlp;
         for ( GenPolynomial<BigInteger> hl : G ) {
-             System.out.println("hl       = " + hl);
+            //System.out.println("hl       = " + hl);
              hlp = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,hl);
-             System.out.println("hl mod p = " + hlp);
+             //System.out.println("hl mod p = " + hlp);
              cl = cl.multiply( hlp );
         }
         GenPolynomial<ModInteger> cp = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,C);
@@ -1323,14 +1332,16 @@ public class PolyUfdUtil {
 
         cl = mfac.getONE();
         for ( GenPolynomial<BigInteger> hl : G ) {
-             System.out.println("hl         = " + hl);
+            //System.out.println("hl         = " + hl);
              hlp = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,hl);
-             System.out.println("hl mod p^e = " + hlp);
+             //System.out.println("hl mod p^e = " + hlp);
              cl = cl.multiply( hlp );
         }
         cp = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,C);
         if ( !cp.equals(cl) ) {
             System.out.println("Hensel post condition wrong!");
+            System.out.println("cl    = " + cl);
+            System.out.println("cp    = " + cp);
             System.out.println("cp-cl = " + cp.subtract(cl));
             return false;
         }
