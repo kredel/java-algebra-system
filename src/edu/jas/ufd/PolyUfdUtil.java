@@ -928,27 +928,31 @@ public class PolyUfdUtil {
                 System.out.println("B = " + B + ", fi = " + fi);
             }
         }
-        System.out.println("A = " + A + ", F1 = " + F1);
-        System.out.println("B = " + B + ", F2 = " + F2);
         // one Hensel step on part polynomials
         GenPolynomial<BigInteger>[] ab = liftHenselQuadraticFac(C,M,A,B);
         GenPolynomial<BigInteger> A1 = ab[0];
         GenPolynomial<BigInteger> B1 = ab[1];
-        System.out.println("A1 = " + A1 + ", B1 = " + B1);
         if ( ! isHenselLift(C,M,P,A1,B1) ) {
-           throw new RuntimeException("no lifting A1, B1");
+            System.out.println("A = " + A + ", F1 = " + F1);
+            System.out.println("B = " + B + ", F2 = " + F2);
+            System.out.println("A1 = " + A1 + ", B1 = " + B1);
+            //throw new RuntimeException("no lifting A1, B1");
         }
         BigInteger Mh = M.divide( new BigInteger(2) );
         // recursion on list parts
         List<GenPolynomial<BigInteger>> G1 = liftHenselQuadratic(A1,Mh,F1);
-        System.out.println("G1 = " + G1);
         if ( ! isHenselLift(A1,Mh,P,G1) ) {
-           throw new RuntimeException("no lifting G1");
+            System.out.println("A = " + A + ", F1 = " + F1);
+            System.out.println("B = " + B + ", F2 = " + F2);
+            System.out.println("G1 = " + G1);
+            //throw new RuntimeException("no lifting G1");
         }
         List<GenPolynomial<BigInteger>> G2 = liftHenselQuadratic(B1,Mh,F2);
-        System.out.println("G2 = " + G2);
         if ( ! isHenselLift(B1,Mh,P,G2) ) {
-           throw new RuntimeException("no lifting G2");
+            System.out.println("A = " + A + ", F1 = " + F1);
+            System.out.println("B = " + B + ", F2 = " + F2);
+            System.out.println("G2 = " + G2);
+            //throw new RuntimeException("no lifting G2");
         }
         lift.addAll( G1 );
         lift.addAll( G2 );
@@ -1000,6 +1004,10 @@ public class PolyUfdUtil {
         BigInteger PP = new BigInteger( Q.getModul() );
         BigInteger Qi = PP;
         BigInteger M2 = M.multiply( M.fromInteger(2) );
+        if ( debug ) {
+            //System.out.println("M2 =  " + M2);
+            logger.debug("M2 =  " + M2);
+        }
         BigInteger Mq = Qi;
         GenPolynomialRing<ModInteger> qfac;
         qfac = new GenPolynomialRing<ModInteger>(Q,pfac); // mod p
@@ -1010,7 +1018,7 @@ public class PolyUfdUtil {
         ModInteger Pm = Qmm.fromInteger( P.getModul() );
         ModInteger Qm = Qmm.fromInteger( Qi.getVal() );
 
-        // normalize c and a, b factors, assert p is prime
+        // partly normalize c and a, b factors, assert p is prime
         GenPolynomial<BigInteger> Ai;
         GenPolynomial<BigInteger> Bi;
         BigInteger c = C.leadingBaseCoefficient();
@@ -1038,9 +1046,9 @@ public class PolyUfdUtil {
         //##T = T.divide( ci );
         Ai = PolyUtil.integerFromModularCoefficients( fac, A );
         Bi = PolyUtil.integerFromModularCoefficients( fac, B );
-        // replace leading base coefficients
-        ExpVector ea = Ai.leadingExpVector();
-        ExpVector eb = Bi.leadingExpVector();
+        //##// replace leading base coefficients
+        //##ExpVector ea = Ai.leadingExpVector();
+        //##ExpVector eb = Bi.leadingExpVector();
         //##Ai.doPutToMap(ea,c);
         //##Bi.doPutToMap(eb,c);
 
@@ -1093,21 +1101,24 @@ public class PolyUfdUtil {
         Bm = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,Bi); 
         Sm = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,Si); 
         Tm = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,Ti); 
-        System.out.println("Cm =  " + Cm);
-        System.out.println("Am =  " + Am);
-        System.out.println("Bm =  " + Bm);
-        System.out.println("Ai =  " + Ai);
-        System.out.println("Bi =  " + Bi);
+        //System.out.println("Cm =  " + Cm);
+        //System.out.println("Am =  " + Am);
+        //System.out.println("Bm =  " + Bm);
+        //System.out.println("Ai =  " + Ai);
+        //System.out.println("Bi =  " + Bi);
         //System.out.println("mfac =  " + mfac);
 
         while ( Mq.compareTo(M2) < 0 ) {
             // compute E=(C-AB)/p mod p^e
-            System.out.println("\nmfac =  " + Cm.ring);
+            if ( debug ) {
+                //System.out.println("mfac =  " + Cm.ring);
+                logger.debug("mfac =  " + Cm.ring);
+            }
             Em = Cm.subtract( Am.multiply(Bm) );
-            System.out.println("Em =  " + Em);
+            //System.out.println("Em =  " + Em);
             if ( Em.isZERO() ) {
                 if ( C.subtract( Ai.multiply(Bi) ).isZERO() ) {
-                    System.out.println("leaving on zero error");
+                    //System.out.println("leaving on zero error");
                     logger.info("leaving on zero error");
                     break;
                 }
@@ -1115,17 +1126,17 @@ public class PolyUfdUtil {
             // Em = Em.divide( Qm );
             Ei = PolyUtil.integerFromModularCoefficients(fac,Em);
             Ei = Ei.divide( Qi );
-            System.out.println("Ei =  " + Ei);
+            //System.out.println("Ei =  " + Ei);
 
             // Ei mod p
             Emp = PolyUtil.<ModInteger>fromIntegerCoefficients(qfac,Ei);
             //            Emp = PolyUtil.<ModInteger>fromIntegerCoefficients(qfac,
             //               PolyUtil.integerFromModularCoefficients(fac,Em) ); 
-            System.out.println("Emp =  " + Emp);
+            //System.out.println("Emp =  " + Emp);
             //logger.info("Emp = " + Emp);
             if ( Emp.isZERO() ) {
                 if ( C.subtract( Ai.multiply(Bi) ).isZERO() ) {
-                    System.out.println("leaving on zero error Emp");
+                    //System.out.println("leaving on zero error Emp");
                     logger.info("leaving on zero error Emp");
                     break;
                 }
@@ -1140,16 +1151,16 @@ public class PolyUfdUtil {
             GenPolynomial<ModInteger> Rp = QR[1];
             A1p = Rp;
             B1p = Bp.sum( Aq.multiply( Qp ) );  // Aq !
-            System.out.println("A1p =  " + A1p);
-            System.out.println("B1p =  " + B1p);
+            //System.out.println("A1p =  " + A1p);
+            //System.out.println("B1p =  " + B1p);
 
             // construct q-adic approximation
             Ema = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,
                            PolyUtil.integerFromModularCoefficients(fac,A1p) );
             Emb = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,
                            PolyUtil.integerFromModularCoefficients(fac,B1p) );
-            System.out.println("Ema =  " + Ema);
-            System.out.println("Emb =  " + Emb);
+            //System.out.println("Ema =  " + Ema);
+            //System.out.println("Emb =  " + Emb);
             Ema1 = Ema.multiply( Qm );
             Emb1 = Emb.multiply( Qm );
             Ema = Am.sum( Emb1 ); // Eb1 and Ea1 are required
@@ -1162,27 +1173,26 @@ public class PolyUfdUtil {
             Bm = Emb;
             Ai = PolyUtil.integerFromModularCoefficients(fac,Am);
             Bi = PolyUtil.integerFromModularCoefficients(fac,Bm);
-            System.out.println("Am =  " + Am);
-            System.out.println("Bm =  " + Bm);
-            System.out.println("Ai =  " + Ai);
-            System.out.println("Bi =  " + Bi + "\n");
+            //System.out.println("Am =  " + Am);
+            //System.out.println("Bm =  " + Bm);
+            //System.out.println("Ai =  " + Ai);
+            //System.out.println("Bi =  " + Bi + "\n");
 
             // gcd representation factors error --------------------------------
             // compute E=(1-SA-TB)/p mod p^e
             Em = mfac.getONE();
             Em = Em.subtract( Sm.multiply(Am) ).subtract( Tm.multiply(Bm) );
-            System.out.println("Em  =  " + Em);
+            //System.out.println("Em  =  " + Em);
             // Em = Em.divide( Pm );
 
             Ei = PolyUtil.integerFromModularCoefficients(fac,Em);
             Ei = Ei.divide( Qi );
-            System.out.println("Ei =  " + Ei);
+            //System.out.println("Ei =  " + Ei);
             // Ei mod p
             Emp = PolyUtil.<ModInteger>fromIntegerCoefficients(qfac,Ei);
-
             //Emp = PolyUtil.<ModInteger>fromIntegerCoefficients(qfac,
             //               PolyUtil.integerFromModularCoefficients(fac,Em) );
-            System.out.println("Emp =  " + Emp);
+            //System.out.println("Emp =  " + Emp);
 
             // construct approximation mod p
             Ap = Sp.multiply( Emp ); // S,T ++ T,S // Ep Eqp
@@ -1192,8 +1202,8 @@ public class PolyUfdUtil {
             Rp = QR[1];
             B1p = Rp;
             A1p = Ap.sum( Bq.multiply( Qp ) );
-            System.out.println("A1p =  " + A1p);
-            System.out.println("B1p =  " + B1p);
+            //System.out.println("A1p =  " + A1p);
+            //System.out.println("B1p =  " + B1p);
 
             // construct p^e-adic approximation
             Ema = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,
@@ -1208,10 +1218,10 @@ public class PolyUfdUtil {
             Tm = Emb;
             Si = PolyUtil.integerFromModularCoefficients(fac,Sm); 
             Ti = PolyUtil.integerFromModularCoefficients(fac,Tm);
-            System.out.println("Sm =  " + Sm);
-            System.out.println("Tm =  " + Tm);
-            System.out.println("Si =  " + Si);
-            System.out.println("Ti =  " + Ti + "\n");
+            //System.out.println("Sm =  " + Sm);
+            //System.out.println("Tm =  " + Tm);
+            //System.out.println("Si =  " + Si);
+            //System.out.println("Ti =  " + Ti + "\n");
 
             // prepare for next iteration
             Qi = new BigInteger( Q.getModul().multiply( Q.getModul() ) );
@@ -1228,8 +1238,8 @@ public class PolyUfdUtil {
             Sm = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,Si);
             Tm = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,Ti);
 
-            boolean ih = isHenselLift(C,Mi,PP,Ai,Bi);
-            System.out.println("is Hensel lift =  " + ih);
+            assert ( isHenselLift(C,Mi,PP,Ai,Bi) );
+            //System.out.println("is Hensel lift =  " + ih);
             Mi = Mi.fromInteger( Qmm.getModul() );
 
             Aq = PolyUtil.<ModInteger>fromIntegerCoefficients(qfac,Ai);
@@ -1237,18 +1247,15 @@ public class PolyUfdUtil {
             Sp = PolyUtil.<ModInteger>fromIntegerCoefficients(qfac,Si);
             Tp = PolyUtil.<ModInteger>fromIntegerCoefficients(qfac,Ti);
 
-            System.out.println("Am =  " + Am);
-            System.out.println("Bm =  " + Bm);
-            System.out.println("Sm =  " + Sm);
-            System.out.println("Tm =  " + Tm);
-            System.out.println("mfac =  " + mfac);
-            System.out.println("Qmm = " + Qmm + ", M2   =  " + M2 + ", Mq   =  " + Mq + "\n");
-            if ( !ih ) {
-                //throw new RuntimeException("no list to go");
-            }
+            //System.out.println("Am =  " + Am);
+            //System.out.println("Bm =  " + Bm);
+            //System.out.println("Sm =  " + Sm);
+            //System.out.println("Tm =  " + Tm);
+            //System.out.println("mfac =  " + mfac);
+            //System.out.println("Qmm = " + Qmm + ", M2   =  " + M2 + ", Mq   =  " + Mq + "\n");
         }
-        System.out.println("*Ai =  " + Ai);
-        System.out.println("*Bi =  " + Bi);
+        //System.out.println("*Ai =  " + Ai);
+        //System.out.println("*Bi =  " + Bi);
 
         // remove normalization not ok when not exact factorization
         //##C = C.divide(c);
@@ -1322,12 +1329,11 @@ public class PolyUfdUtil {
         // check mod p^e 
         BigInteger mip = p;
         while ( mip.compareTo(M) < 0 ) {
-            mip = mip.multiply(p);
+            mip = mip.multiply(mip); // p
         }
-        //        mip = mip.multiply(p);
+        // mip = mip.multiply(p);
         pm = new ModIntegerRing(mip.getVal(),false);
         mfac = new GenPolynomialRing<ModInteger>(pm,pfac);
-        System.out.println("M = " + M + ", p = " + p + ", p^e = " + mip);
 
         cl = mfac.getONE();
         for ( GenPolynomial<BigInteger> hl : G ) {
@@ -1342,6 +1348,7 @@ public class PolyUfdUtil {
             System.out.println("cl    = " + cl);
             System.out.println("cp    = " + cp);
             System.out.println("cp-cl = " + cp.subtract(cl));
+            System.out.println("M = " + M + ", p = " + p + ", p^e = " + mip);
             return false;
         }
         return true;

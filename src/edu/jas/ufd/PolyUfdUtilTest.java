@@ -528,10 +528,10 @@ public class PolyUfdUtilTest extends TestCase {
 //              ExpVector e = a.leadingExpVector();
 //              a.doPutToMap(e, one);
 //          }
-         if (!b.leadingBaseCoefficient().isUnit()) {
-             ExpVector e = b.leadingExpVector();
-             b.doPutToMap(e, one);
-         }
+//          if (!b.leadingBaseCoefficient().isUnit()) {
+//              ExpVector e = b.leadingExpVector();
+//              b.doPutToMap(e, one);
+//          }
          if (!d.leadingBaseCoefficient().isUnit()) {
              ExpVector e = d.leadingExpVector();
              d.doPutToMap(e, one);
@@ -539,7 +539,7 @@ public class PolyUfdUtilTest extends TestCase {
          GreatestCommonDivisorAbstract<BigInteger> engine 
              = (GreatestCommonDivisorAbstract<BigInteger>)GCDFactory.<BigInteger>getProxy( mi );
          a = engine.basePrimitivePart(a);
-//          b = engine.basePrimitivePart(b);
+         b = engine.basePrimitivePart(b);
 //          d = engine.basePrimitivePart(d);
 
          GenPolynomial<BigInteger> g;
@@ -589,7 +589,7 @@ public class PolyUfdUtilTest extends TestCase {
          while ( mip.compareTo(mi) < 0 ) {
              mip = mip.multiply(m);
          }
-         mip = mip.multiply(m);
+         //mip = mip.multiply(m);
 
          List<GenPolynomial<BigInteger>> ilist = new ArrayList<GenPolynomial<BigInteger>>();
          ilist.add(a);
@@ -600,7 +600,7 @@ public class PolyUfdUtilTest extends TestCase {
          mlist.add(ap);
          mlist.add(bp);
          mlist.add(dp);
-         System.out.println("mlist = " + mlist);
+         //System.out.println("mlist = " + mlist);
          // ensure coprime
          GreatestCommonDivisorAbstract<ModInteger> mengine 
              = (GreatestCommonDivisorAbstract<ModInteger>)GCDFactory.<ModInteger>getProxy( pm );
@@ -643,18 +643,17 @@ public class PolyUfdUtilTest extends TestCase {
                  continue;
              }
          }
-         System.out.println("\na     = " + a);
-         System.out.println("b     = " + b);
-         System.out.println("d     = " + d);
-         System.out.println("c     = " + c);
-         System.out.println("mi    = " + mi);
-         System.out.println("mip   = " + mip);
-         System.out.println("ap    = " + ap);
-         System.out.println("bp    = " + bp);
-         System.out.println("dp    = " + dp);
-         System.out.println("cp    = " + cp);
-
-         System.out.println("mlist = " + mlist);
+//          System.out.println("\na     = " + a);
+//          System.out.println("b     = " + b);
+//          System.out.println("d     = " + d);
+//          System.out.println("c     = " + c);
+//          System.out.println("mi    = " + mi);
+//          System.out.println("mip   = " + mip);
+//          System.out.println("ap    = " + ap);
+//          System.out.println("bp    = " + bp);
+//          System.out.println("dp    = " + dp);
+//          System.out.println("cp    = " + cp);
+//          System.out.println("mlist = " + mlist);
 
          if ( true ) {
              FactorModular mfact = new FactorModular();
@@ -668,16 +667,15 @@ public class PolyUfdUtilTest extends TestCase {
              }
          }
 
-         boolean ih = PolyUfdUtil.isHenselLift(c,mi,m,ilist);
-         System.out.println("ih = " + ih);
+         //boolean ih = PolyUfdUtil.isHenselLift(c,mip,m,ilist);
+         //System.out.println("ih = " + ih);
 
          long tq = System.currentTimeMillis();
-         lift = PolyUfdUtil.liftHenselQuadratic(c,mi,mlist);
+         lift = PolyUfdUtil.liftHenselQuadratic(c,mip,mlist);
          tq = System.currentTimeMillis() - tq;
 
-         ih = PolyUfdUtil.isHenselLift(c,mi,m,lift);
-         System.out.println("ih = " + ih);
-
+         boolean ih = PolyUfdUtil.isHenselLift(c,mip,m,lift);
+         //System.out.println("ih = " + ih);
          assertTrue("isHenselLift ",ih);
      }
      ComputerThreads.terminate();
