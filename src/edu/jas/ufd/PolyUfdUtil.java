@@ -1250,29 +1250,28 @@ public class PolyUfdUtil {
         System.out.println("*Ai =  " + Ai);
         System.out.println("*Bi =  " + Bi);
 
-        // remove normalization
+        // remove normalization not ok when not exact factorization
         //##C = C.divide(c);
-        if ( false /*C.subtract(Ai.multiply(Bi)).isZERO()*/ ) {
-            GreatestCommonDivisorAbstract<BigInteger> ufd
-                = new GreatestCommonDivisorPrimitive<BigInteger>();
-
-            // remove normalization
-            BigInteger ai = ufd.baseContent(Ai);
-            Ai = Ai.divide( ai );
-            System.out.println("*Ai =  " + Ai);
-            System.out.println("*ai =  " + ai);
-            BigInteger bi = c.divide(ai);
-            System.out.println("*c  =  " + c);
-            System.out.println("*bi =  " + bi);
-            if ( !bi.isZERO() && !bi.isONE() ) {
-                Bi = Bi.divide( bi ); // divide( c/a )
-            }
-            System.out.println("*Bi =  " + Bi);
-            boolean ih = isHenselLift(C.divide(c),Mi,PP,Ai,Bi);
-            System.out.println("*is Hensel lift =  " + ih);
-        //##} else {
-        //##    System.out.println("*no exact factorization: " + C.subtract(Ai.multiply(Bi)));
-        }
+//         if ( false /*C.subtract(Ai.multiply(Bi)).isZERO()*/ ) {
+//             GreatestCommonDivisorAbstract<BigInteger> ufd
+//                 = new GreatestCommonDivisorPrimitive<BigInteger>();
+//             // remove normalization
+//             BigInteger ai = ufd.baseContent(Ai);
+//             Ai = Ai.divide( ai );
+//             System.out.println("*Ai =  " + Ai);
+//             System.out.println("*ai =  " + ai);
+//             BigInteger bi = c.divide(ai);
+//             System.out.println("*c  =  " + c);
+//             System.out.println("*bi =  " + bi);
+//             if ( !bi.isZERO() && !bi.isONE() ) {
+//                 Bi = Bi.divide( bi ); // divide( c/a )
+//             }
+//             System.out.println("*Bi =  " + Bi);
+//             boolean ih = isHenselLift(C.divide(c),Mi,PP,Ai,Bi);
+//             System.out.println("*is Hensel lift =  " + ih);
+//         //##} else {
+//         //##    System.out.println("*no exact factorization: " + C.subtract(Ai.multiply(Bi)));
+//         }
         AB[0] = Ai;
         AB[1] = Bi;
         return AB;
