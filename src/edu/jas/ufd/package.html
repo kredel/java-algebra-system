@@ -16,6 +16,17 @@
   greatest squarefree factor <code>squarefreeFactor()</code>.
   The different classes implement variants of polynomial remainder sequences (PRS) 
   and modular methods.
+  The factorization of polynomials is still experimental.
+  There is a <code>Factorization</code> interface with an 
+  <code>FactorAbstract</code> class with common codes.
+  Factorization of univariate polynomials with several coefficient rings: 
+  modulo primes in class <code>FactorModular</code>,
+  over integers in class <code>FactorInteger</code>,
+  over rational numbers in class <code>FactorRational</code> and
+  over algebraic numbers in class <code>FactorAlgebraic&lt;C&gt;</code> 
+  (where <code>C</code> can be <code>ModInteger</code> or <code>BigRational</code>).
+  Multivatiate polynomials are reduced to the univariate polynomials via Kronecker substitution 
+  and are therefore not very efficient.
 </p>
 
 
@@ -24,7 +35,7 @@
 <p>
 <!-- Created: Sun Mar  4 16:46:52 CET 2007 -->
 <!-- hhmts start -->
-Last modified: Mon Jul  9 17:39:01 CEST 2007
+Last modified: Sun Jan 11 14:31:18 CET 2009
 <!-- hhmts end -->
 </p>
 <p>$Id$ 
