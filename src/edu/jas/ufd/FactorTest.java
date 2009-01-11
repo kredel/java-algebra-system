@@ -224,8 +224,8 @@ public class FactorTest extends TestCase {
         for (int i = 1; i < 3; i++) {
             int facs = 0;
             GenPolynomial<BigInteger> a = null; //pfac.random(kl,ll*(i+1),el*(i+1),q);
-            GenPolynomial<BigInteger> b = pfac.random(kl, ll * (i + 1), el * (i + 1), q);
-            GenPolynomial<BigInteger> c = pfac.random(kl, ll * (i + 1), el * (i + 1), q);
+            GenPolynomial<BigInteger> b = pfac.random(kl*3, ll * (i + 1), el * (i + 1), q);
+            GenPolynomial<BigInteger> c = pfac.random(kl, ll * (i + 1), el * (i + 3), q);
             if (b.isZERO() || c.isZERO()) {
                 continue;
             }
@@ -235,22 +235,22 @@ public class FactorTest extends TestCase {
             if (b.degree() > 0) {
                 facs++;
             }
-            if (!c.leadingBaseCoefficient().isUnit()) {
-                ExpVector e = c.leadingExpVector();
-                c.doPutToMap(e, one);
-            }
-            if (!b.leadingBaseCoefficient().isUnit()) {
-                ExpVector e = b.leadingExpVector();
-                b.doPutToMap(e, one);
-            }
+//             if (!c.leadingBaseCoefficient().isUnit()) {
+//                 ExpVector e = c.leadingExpVector();
+//                 c.doPutToMap(e, one);
+//             }
+//             if (!b.leadingBaseCoefficient().isUnit()) {
+//                 ExpVector e = b.leadingExpVector();
+//                 b.doPutToMap(e, one);
+//             }
             a = c.multiply(b);
             if (a.isConstant()) {
                 continue;
             }
             GreatestCommonDivisorAbstract<BigInteger> engine 
                 = (GreatestCommonDivisorAbstract<BigInteger>)GCDFactory.<BigInteger>getProxy( cfac );
-            a = engine.basePrimitivePart(a);
-            a = a.abs();
+            //a = engine.basePrimitivePart(a);
+            // a = a.abs();
             System.out.println("\na = " + a);
             //System.out.println("b = " + b);
             //System.out.println("c = " + c);

@@ -82,7 +82,7 @@ public class FactorInteger //<C extends GcdRingElem<C> >
            = (GreatestCommonDivisorAbstract<ModInteger>) GCDFactory.<ModInteger> getImplementation(mcofac);
         GenPolynomial<ModInteger> am = null;
         GenPolynomialRing<ModInteger> mfac = null;
-        final int TT = 7;
+        final int TT = 4; // 7
         List<GenPolynomial<ModInteger>>[] modfac = (List<GenPolynomial<ModInteger>>[]) new List[TT];
         List<GenPolynomial<BigInteger>>[] intfac = (List<GenPolynomial<BigInteger>>[]) new List[TT];
         List<GenPolynomial<ModInteger>> mlist = null;
@@ -98,11 +98,11 @@ public class FactorInteger //<C extends GcdRingElem<C> >
         pit.next();
         ModInteger nf = null;
         for (int k = 0; k < TT; k++) {
-            if ( k == TT-2 ) {
+            if ( k == TT-1 ) { // -2
                 primes = new PrimeList(PrimeList.Range.medium);
                 pit = primes.iterator();
             }
-            if ( k == TT-1 ) { // -1
+            if ( k == TT+1 ) { // -1
                 primes = new PrimeList(PrimeList.Range.large);
                 pit = primes.iterator();
             }
@@ -338,7 +338,8 @@ public class FactorInteger //<C extends GcdRingElem<C> >
         if ( ct.isConstant() ) {
             nf = ct.leadingBaseCoefficient();
             mlist.remove(ct);
-            System.out.println("=== nf = " + nf);
+            System.out.println("=== nf   = " + nf);
+            System.out.println("=== ldcf = " + C.leadingBaseCoefficient());
         } else {
             nf = ct.ring.coFac.getONE();
         }
@@ -373,7 +374,8 @@ public class FactorInteger //<C extends GcdRingElem<C> >
 
                 // lift via Hensel
                 try {
-                    ilist = PolyUfdUtil.liftHenselQuadraticFac(PP, M, trial, cofactor);
+                    // ilist = PolyUfdUtil.liftHenselQuadraticFac(PP, M, trial, cofactor);
+                    ilist = PolyUfdUtil.liftHenselQuadratic(PP, M, trial, cofactor);
                 } catch ( RuntimeException e) {
                     // no liftable factors
                     continue;
@@ -399,7 +401,6 @@ public class FactorInteger //<C extends GcdRingElem<C> >
                     um = cofactor;
                     System.out.println("u        = " + u);
                     //System.out.println("um       = " + um);
-
                     if (mlist.removeAll(flist)) {
                         System.out.println("new mlist= " + mlist);
                         dl = (mlist.size() + 1) / 2;
@@ -412,7 +413,6 @@ public class FactorInteger //<C extends GcdRingElem<C> >
                         System.out.println("error removing flist from ilist = "
                                            + mlist);
                     }
-
                 }
             }
         }

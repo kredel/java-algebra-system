@@ -757,21 +757,23 @@ public class PolyUfdUtil {
         GreatestCommonDivisorAbstract<BigInteger> ufd
             = new GreatestCommonDivisorPrimitive<BigInteger>();
 
-        // remove normalization
+        // remove normalization if possible
         BigInteger ai = ufd.baseContent(Ai);
         Ai = Ai.divide( ai );
-        BigInteger bi = c.divide(ai);
+        BigInteger bi = null;
         try {
+            bi = c.divide(ai);
             Bi = Bi.divide( bi ); // divide( c/a )
-        } catch ( Exception e ) {
-            System.out.println("C  = " + C );
-            System.out.println("Ai = " + Ai );
-            System.out.println("Bi = " + Bi );
-            System.out.println("c  = " + c );
-            System.out.println("ai = " + ai );
-            System.out.println("bi = " + bi );
+        } catch ( RuntimeException e ) {
+            //System.out.println("C  = " + C );
+            //System.out.println("Ai = " + Ai );
+            //System.out.println("Bi = " + Bi );
+            //System.out.println("c  = " + c );
+            //System.out.println("ai = " + ai );
+            //System.out.println("bi = " + bi );
+            System.out.println("no exact lifting possible");
+            throw new RuntimeException("no exact lifting possible");
         }
-
         AB[0] = Ai;
         AB[1] = Bi;
         return AB;
