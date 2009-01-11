@@ -235,10 +235,10 @@ public class FactorTest extends TestCase {
             if (b.degree() > 0) {
                 facs++;
             }
-//             if (!c.leadingBaseCoefficient().isUnit()) {
-//                 ExpVector e = c.leadingExpVector();
-//                 c.doPutToMap(e, one);
-//             }
+            if (!c.leadingBaseCoefficient().isUnit()) {
+                ExpVector e = c.leadingExpVector();
+                c.doPutToMap(e, one);
+            }
             if (!b.leadingBaseCoefficient().isUnit()) {
                 ExpVector e = b.leadingExpVector();
                 b.doPutToMap(e, one);

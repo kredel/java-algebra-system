@@ -1285,80 +1285,37 @@ public class PolyUfdUtil {
         //System.out.println("*Ai =  " + Ai);
         //System.out.println("*Bi =  " + Bi);
 
-        // remove normalization not ok when not exact factorization
-        // c = ldcf(C.orig)
-        //#--#C = C.divide(c);
+        // remove normalization not possible when not exact factorization
         GreatestCommonDivisorAbstract<BigInteger> ufd
             = new GreatestCommonDivisorPrimitive<BigInteger>();
         // remove normalization if possible
         BigInteger ai = ufd.baseContent(Ai);
         Ai = Ai.divide( ai ); // Ai=pp(Ai)
-        System.out.println("*Ai =  " + Ai);
-        System.out.println("*ai =  " + ai);
         BigInteger[] qr = c.divideAndRemainder(ai);
-        BigInteger bi;
-        System.out.println("*Bi =  " + Bi);
+        BigInteger bi = null;
+        boolean exact = true;
         if ( qr[1].isZERO() ) {
             bi = qr[0];
-            System.out.println("*c  =  " + c);
-            System.out.println("*bi =  " + bi);
             try {
                 Bi = Bi.divide( bi ); // divide( c/a )
             } catch (RuntimeException e) {
                 System.out.println("*catch: no exact factorization: " + bi + ", e = " + e);
-                BigInteger bci = ufd.baseContent(Bi);
-                Bi = Bi.divide(bci);
+                exact = false;
             }
-            System.out.println("*Bi =  " + Bi);
         } else {
             System.out.println("*remainder: no exact factorization: q = " + qr[0] + ", r = "  + qr[1]);
-            BigInteger bci = ufd.baseContent(Bi);
-            Bi = Bi.divide(bci);
+            exact = false;
         }
-        // fix lfcd(bi) mod p^e: ldcf(C) = ldcf(Ai) ldcf(Bi) mod p^e 
-        ai = Ai.leadingBaseCoefficient();
-        bi = Bi.leadingBaseCoefficient();
-        if ( ! c.equals( ai.multiply(bi) ) ) {
-            System.out.println("*lmfac = " + lmfac);
-            Am = PolyUtil.<ModInteger>fromIntegerCoefficients(lmfac,Ai);
-            Bm = PolyUtil.<ModInteger>fromIntegerCoefficients(lmfac,Bi);
-            System.out.println("*Am = " + Am);
-            System.out.println("*Bm = " + Bm);
-            ModIntegerRing mr = (ModIntegerRing)lmfac.coFac;
-            ModInteger cq = mr.fromInteger( xc.getVal() );
-            ModInteger aq = mr.fromInteger( ai.getVal() );
-            ModInteger bq = mr.fromInteger( bi.getVal() );
-            ModInteger bb = cq.multiply(aq.inverse()); //  c/ai
-            System.out.println("*C  = " + C);
-            System.out.println("*Cx = " + Cx);
-            System.out.println("*xc = " + xc);
-            System.out.println("*cq = " + cq);
-            System.out.println("*aq = " + aq);
-            System.out.println("*bq = " + bq);
-            System.out.println("*bb = " + bb);
-            bb = bb.multiply(bq.inverse());   // (c/ai)/bi
-            System.out.println("*bb = " + bb);
-            Bm = Bm.multiply(bb); // now ldcf(Bm) = c/ai mod p^e
-            //Bm = Bm.monic().multiply(cq); // now ldcf(Bm) = c/ai mod p^e
-            Bi = PolyUtil.integerFromModularCoefficients(fac,Bm);
-            System.out.println("*Bm = " + Bm);
-            System.out.println("*Bi = " + Bi);
-            if ( !cq.equals( aq.multiply( Bm.leadingBaseCoefficient() ) ) ) {
-                System.out.println("*c/ai*ai = " + cq.divide(aq).multiply(aq) );
-                System.out.println("*c/ai/bi = " + cq.divide(aq).divide(bq) );
-                System.out.println("*c/ai/bi*bi = " + cq.divide(aq).divide(bq).multiply(bq) );
-                Bm = PolyUtil.<ModInteger>fromIntegerCoefficients(lmfac,Bi);
-                System.out.println("*Bm/bi = " + Bm.multiply(bq.inverse()) );
-                System.out.println("*Bm.monic() = " + Bm.monic() );
-                throw new RuntimeException("cq != ldcf(Bm) " + Bm.leadingBaseCoefficient());
-            }
-            if ( ! c.equals( ai.multiply(Bi.leadingBaseCoefficient()) ) ) {
-                throw new RuntimeException("c != ldcf(Bi) " + Bi.leadingBaseCoefficient());
-            }
+        if ( ! exact ) {
+            System.out.println("*Ai =  " + Ai);
+            System.out.println("*ai =  " + ai);
+            System.out.println("*Bi =  " + Bi);
+            System.out.println("*bi =  " + bi);
+            System.out.println("*c  =  " + c);
+            throw new RuntimeException("no exact lifting possible");
         }
-        boolean ih = isHenselLift(C.divide(c),Mi,PP,Ai,Bi);
-        System.out.println("*is Hensel lift =  " + ih);
-
+        //boolean ih = isHenselLift(C.divide(c),Mi,PP,Ai,Bi);
+        //System.out.println("*is Hensel lift =  " + ih);
         AB[0] = Ai;
         AB[1] = Bi;
         return AB;

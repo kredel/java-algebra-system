@@ -524,22 +524,22 @@ public class PolyUfdUtilTest extends TestCase {
          if ( a.degree(0) < 1 || b.degree(0) < 2 || d.degree(0) < 1 ) {
             continue;
          }
-//          if (!a.leadingBaseCoefficient().isUnit()) {
-//              ExpVector e = a.leadingExpVector();
-//              a.doPutToMap(e, one);
-//          }
-//          if (!b.leadingBaseCoefficient().isUnit()) {
-//              ExpVector e = b.leadingExpVector();
-//              b.doPutToMap(e, one);
-//          }
+         if (!a.leadingBaseCoefficient().isUnit()) {
+             ExpVector e = a.leadingExpVector();
+             a.doPutToMap(e, one);
+         }
+         if (!b.leadingBaseCoefficient().isUnit()) {
+             ExpVector e = b.leadingExpVector();
+             b.doPutToMap(e, one);
+         }
          if (!d.leadingBaseCoefficient().isUnit()) {
              ExpVector e = d.leadingExpVector();
              d.doPutToMap(e, one);
          }
          GreatestCommonDivisorAbstract<BigInteger> engine 
              = (GreatestCommonDivisorAbstract<BigInteger>)GCDFactory.<BigInteger>getProxy( mi );
-         a = engine.basePrimitivePart(a);
-         b = engine.basePrimitivePart(b);
+//          a = engine.basePrimitivePart(a);
+//          b = engine.basePrimitivePart(b);
 //          d = engine.basePrimitivePart(d);
 
          GenPolynomial<BigInteger> g;
@@ -667,15 +667,16 @@ public class PolyUfdUtilTest extends TestCase {
              }
          }
 
-         //boolean ih = PolyUfdUtil.isHenselLift(c,mip,m,ilist);
-         //System.out.println("ih = " + ih);
+         boolean ih = true;
+         ih = PolyUfdUtil.isHenselLift(c,mip,m,ilist);
+         System.out.println("ih = " + ih);
 
          long tq = System.currentTimeMillis();
          lift = PolyUfdUtil.liftHenselQuadratic(c,mip,mlist);
          tq = System.currentTimeMillis() - tq;
 
-         boolean ih = PolyUfdUtil.isHenselLift(c,mip,m,lift);
-         //System.out.println("ih = " + ih);
+         ih = PolyUfdUtil.isHenselLift(c,mip,m,lift);
+         System.out.println("ih = " + ih);
          assertTrue("isHenselLift ",ih);
      }
      ComputerThreads.terminate();
