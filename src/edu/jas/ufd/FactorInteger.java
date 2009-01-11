@@ -71,7 +71,7 @@ public class FactorInteger //<C extends GcdRingElem<C> >
         ExpVector degv = P.degreeVector();
         BigInteger M = an.multiply(PolyUtil.factorBound(degv));
         M = M.multiply(ac.multiply(ac.fromInteger(8)));
-        System.out.println("M = " + M);
+        //System.out.println("M = " + M);
 
         //initialize prime list and degree vector
         PrimeList primes = new PrimeList(PrimeList.Range.small);
@@ -140,7 +140,7 @@ public class FactorInteger //<C extends GcdRingElem<C> >
             // now am is squarefree mod p, make monic and factor mod p
             FactorModular mengine = new FactorModular();
             if (!nf.isONE()) {
-                System.out.println("nf = " + nf);
+                //System.out.println("nf = " + nf);
                 am = am.divide(nf); // make monic
             }
             mlist = mengine.baseFactorsSquarefree(am);
@@ -151,7 +151,7 @@ public class FactorInteger //<C extends GcdRingElem<C> >
                 GenPolynomial<ModInteger> mp = mfac.getONE(); //mlist.get(0);
                 //System.out.println("mp = " + mp);
                 mp = mp.multiply(nf);
-                System.out.println("mp = " + mp);
+                //System.out.println("mp = " + mp);
                 mlist.add(0, mp); // set(0,mp);
             }
             modfac[k] = mlist;
@@ -222,7 +222,7 @@ public class FactorInteger //<C extends GcdRingElem<C> >
       searchFactorsMonic( GenPolynomial<BigInteger> C,
                           BigInteger M,
                           List<GenPolynomial<ModInteger>> F) {
-        System.out.println("*** monic factor combination ***");
+        //System.out.println("*** monic factor combination ***");
         if ( C == null || C.isZERO() || F == null || F.size() == 0 ) {
            throw new RuntimeException("C must be nonzero and F must be nonempty");
         }
@@ -239,7 +239,7 @@ public class FactorInteger //<C extends GcdRingElem<C> >
         if ( ct.isConstant() ) {
             nf = ct.leadingBaseCoefficient();
             mlist.remove(ct);
-            System.out.println("=== nf = " + nf);
+            //System.out.println("=== nf = " + nf);
             if ( mlist.size() <= 1 ) {
                 factors.add(C);
                 return factors;
@@ -248,13 +248,13 @@ public class FactorInteger //<C extends GcdRingElem<C> >
             nf = ct.ring.coFac.getONE();
         }
         GenPolynomial<BigInteger> PP = C, P = C;
-        System.out.println("modlist  = " + mlist); // includes not ldcf
+        //System.out.println("modlist  = " + mlist); // includes not ldcf
         // lift via Hensel
         ilist = PolyUfdUtil.liftHenselQuadratic(PP, M, mlist);
         if ( logger.isInfoEnabled() ) {
             logger.info("lifted intlist = " + ilist);
         }
-        System.out.println("intlist  = " + ilist); 
+        //System.out.println("intlist  = " + ilist); 
 
         GreatestCommonDivisorAbstract<BigInteger> iengine 
             = (GreatestCommonDivisorAbstract<BigInteger>) 
@@ -276,17 +276,17 @@ public class FactorInteger //<C extends GcdRingElem<C> >
                 }
                 //trial = iengine.basePrimitivePart( trial.multiply(ldcf) );
                 trial = iengine.basePrimitivePart( trial );
-                System.out.println("pp(trial)= " + trial);
+                //System.out.println("pp(trial)= " + trial);
                 if (PolyUtil.<BigInteger> basePseudoRemainder(u, trial).isZERO()) {
-                    //System.out.println("trial    = " + trial);
-                    System.out.println("flist    = " + flist);
-                    trial = iengine.basePrimitivePart(trial);
-                    System.out.println("pp(trial)= " + trial);
+                    System.out.println("trial    = " + trial);
+                    //System.out.println("flist    = " + flist);
+                    //trial = iengine.basePrimitivePart(trial);
+                    //System.out.println("pp(trial)= " + trial);
                     factors.add(trial);
                     u = PolyUtil.<BigInteger> basePseudoDivide(u, trial); //u.divide( trial );
                     //System.out.println("u        = " + u);
                     if (ilist.removeAll(flist)) {
-                        System.out.println("new ilist= " + ilist);
+                        //System.out.println("new ilist= " + ilist);
                         dl = (ilist.size() + 1) / 2;
                         j = 1;
                         if (ilist.size() > 0) {
@@ -294,7 +294,7 @@ public class FactorInteger //<C extends GcdRingElem<C> >
                         }
                         break;
                     } else {
-                        System.out.println("error removing flist from ilist = "
+                        logger.error("error removing flist from ilist = "
                                            + ilist);
                     }
                 }
@@ -325,7 +325,7 @@ public class FactorInteger //<C extends GcdRingElem<C> >
       searchFactorsNonMonic( GenPolynomial<BigInteger> C,
                              BigInteger M,
                              List<GenPolynomial<ModInteger>> F) {
-        System.out.println("*** non monic factor combination ***");
+        // System.out.println("*** non monic factor combination ***");
         if ( C == null || C.isZERO() || F == null || F.size() == 0 ) {
            throw new RuntimeException("C must be nonzero and F must be nonempty");
         }
@@ -342,8 +342,8 @@ public class FactorInteger //<C extends GcdRingElem<C> >
         if ( ct.isConstant() ) {
             nf = ct.leadingBaseCoefficient();
             mlist.remove(ct);
-            System.out.println("=== nf   = " + nf);
-            System.out.println("=== ldcf = " + C.leadingBaseCoefficient());
+            //System.out.println("=== nf   = " + nf);
+            //System.out.println("=== ldcf = " + C.leadingBaseCoefficient());
             if ( mlist.size() <= 1 ) {
                 factors.add(C);
                 return factors;
@@ -351,7 +351,7 @@ public class FactorInteger //<C extends GcdRingElem<C> >
         } else {
             nf = ct.ring.coFac.getONE();
         }
-        System.out.println("modlist  = " + mlist); // includes not ldcf
+        //System.out.println("modlist  = " + mlist); // includes not ldcf
         GenPolynomialRing<ModInteger> mfac = ct.ring;
         GenPolynomial<ModInteger> Pm = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,C);
         GenPolynomial<BigInteger> PP = C, P = C;
@@ -398,18 +398,18 @@ public class FactorInteger //<C extends GcdRingElem<C> >
                 //System.out.println("pp(trial)= " + itrial);
                 if (PolyUtil.<BigInteger> basePseudoRemainder(u, itrial).isZERO()) {
                     System.out.println("trial    = " + itrial);
-                    System.out.println("cofactor = " + icofactor);
-                    System.out.println("flist    = " + flist);
+                    //System.out.println("cofactor = " + icofactor);
+                    //System.out.println("flist    = " + flist);
                     //itrial = iengine.basePrimitivePart(itrial);
                     //System.out.println("pp(itrial)= " + itrial);
                     factors.add(itrial);
                     //u = PolyUtil.<BigInteger> basePseudoDivide(u, itrial); //u.divide( trial );
                     u = icofactor;
                     um = cofactor;
-                    System.out.println("u        = " + u);
+                    //System.out.println("u        = " + u);
                     //System.out.println("um       = " + um);
                     if (mlist.removeAll(flist)) {
-                        System.out.println("new mlist= " + mlist);
+                        //System.out.println("new mlist= " + mlist);
                         dl = (mlist.size() + 1) / 2;
                         j = 1;
                         if (mlist.size() > 0) {
@@ -417,7 +417,7 @@ public class FactorInteger //<C extends GcdRingElem<C> >
                         }
                         break;
                     } else {
-                        System.out.println("error removing flist from ilist = "
+                        logger.error("error removing flist from ilist = "
                                            + mlist);
                     }
                 }

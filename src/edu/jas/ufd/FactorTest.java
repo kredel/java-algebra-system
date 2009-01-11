@@ -39,7 +39,7 @@ public class FactorTest extends TestCase {
      * main.
      */
     public static void main(String[] args) {
-        BasicConfigurator.configure();
+        //BasicConfigurator.configure();
         junit.textui.TestRunner.run(suite());
     }
 
@@ -102,8 +102,8 @@ public class FactorTest extends TestCase {
 
         PrimeList pl = new PrimeList(PrimeList.Range.medium);
         TermOrder to = new TermOrder(TermOrder.INVLEX);
-        ModIntegerRing cfac = new ModIntegerRing(pl.get(0));
-        System.out.println("cfac = " + cfac);
+        ModIntegerRing cfac = new ModIntegerRing(pl.get(3));
+        //System.out.println("cfac = " + cfac);
         GenPolynomialRing<ModInteger> pfac = new GenPolynomialRing<ModInteger>(cfac, 1,
                 to);
         FactorModular fac = new FactorModular();
@@ -127,12 +127,12 @@ public class FactorTest extends TestCase {
                 continue;
             }
             a = a.monic();
-            System.out.println("\na = " + a);
+            //System.out.println("\na = " + a);
             //System.out.println("b = " + b);
             //System.out.println("c = " + c);
 
             SortedMap<GenPolynomial<ModInteger>, Long> sm = fac.baseFactors(a);
-            System.out.println("sm = " + sm);
+            //System.out.println("sm = " + sm);
 
             if (sm.size() >= facs) {
                 assertTrue("#facs < " + facs, sm.size() >= facs);
@@ -183,12 +183,12 @@ public class FactorTest extends TestCase {
                 continue;
             }
             a = a.monic();
-            System.out.println("\na = " + a);
+            //System.out.println("\na = " + a);
             //System.out.println("b = " + b);
             //System.out.println("c = " + c);
 
             SortedMap<GenPolynomial<ModInteger>, Long> sm = fac.factors(a);
-            System.out.println("sm = " + sm);
+            //System.out.println("sm = " + sm);
 
             if (sm.size() >= facs) {
                 assertTrue("#facs < " + facs, sm.size() >= facs);
@@ -251,15 +251,15 @@ public class FactorTest extends TestCase {
                 = (GreatestCommonDivisorAbstract<BigInteger>)GCDFactory.<BigInteger>getProxy( cfac );
             //a = engine.basePrimitivePart(a);
             // a = a.abs();
-            System.out.println("\na = " + a);
+            //System.out.println("\na = " + a);
             //System.out.println("b = " + b);
             //System.out.println("c = " + c);
 
             SortedMap<GenPolynomial<BigInteger>, Long> sm = fac.baseFactors(a);
-            System.out.println("\na   = " + a);
-            System.out.println("b   = " + b);
-            System.out.println("c   = " + c);
-            System.out.println("sm = " + sm);
+//             System.out.println("\na   = " + a);
+//             System.out.println("b   = " + b);
+//             System.out.println("c   = " + c);
+//             System.out.println("sm = " + sm);
 
             if (sm.size() >= facs) {
                 assertTrue("#facs < " + facs, sm.size() >= facs);
@@ -300,10 +300,10 @@ public class FactorTest extends TestCase {
 //                 //a.doPutToMap(e,cfac.getONE());
 //             }
             a = b.multiply(c);
-            System.out.println("\na = " + a);
+            //System.out.println("\na = " + a);
 
             SortedMap<GenPolynomial<BigInteger>, Long> sm = fac.factors(a);
-            System.out.println("sm = " + sm);
+            //System.out.println("sm = " + sm);
 
             boolean t = fac.isFactorization(a, sm);
             //System.out.println("t        = " + t);
@@ -344,13 +344,13 @@ public class FactorTest extends TestCase {
                 facs++;
             }
             a = c.multiply(b);
-            System.out.println("\na = " + a);
-            System.out.println("b = " + b);
-            System.out.println("c = " + c);
+            //System.out.println("\na = " + a);
+            //System.out.println("b = " + b);
+            //System.out.println("c = " + c);
 
             SortedMap<GenPolynomial<BigRational>, Long> sm = fac.baseFactors(a);
-            System.out.println("\na   = " + a);
-            System.out.println("sm = " + sm);
+            //System.out.println("\na   = " + a);
+            //System.out.println("sm = " + sm);
             assertTrue("#facs < " + facs, sm.size() >= facs);
 
             if (sm.size() >= facs) {
@@ -389,9 +389,9 @@ public class FactorTest extends TestCase {
         GenPolynomialRing<AlgebraicNumber<BigRational>> apfac 
             = new GenPolynomialRing<AlgebraicNumber<BigRational>>(afac, 1, to, vars); // univariate
 
-        System.out.println("agen  = " + agen);
-        System.out.println("afac  = " + afac);
-        System.out.println("apfac = " + apfac);
+        //System.out.println("agen  = " + agen);
+        //System.out.println("afac  = " + afac);
+        //System.out.println("apfac = " + apfac);
 
         FactorAlgebraic<BigRational> fac 
            = new FactorAlgebraic<BigRational>(new FactorRational());
@@ -426,21 +426,21 @@ public class FactorTest extends TestCase {
             //a = apfac.univariate(0,3).sum( apfac.getONE() ); // x^3 + 1 
             a = c.multiply(b);
             //a = a.monic();
-            System.out.println("\na = " + a);
-            System.out.println("b = " + b.monic());
-            System.out.println("c = " + c.monic());
+            //System.out.println("\na = " + a);
+            //System.out.println("b = " + b.monic());
+            //System.out.println("c = " + c.monic());
 
             SortedMap<GenPolynomial<AlgebraicNumber<BigRational>>, Long> sm 
                 = fac.baseFactors(a);
-            System.out.println("\na   =  " + a);
-            System.out.println("sm = " + sm);
+            //System.out.println("\na   =  " + a);
+            //System.out.println("sm = " + sm);
             if ( sm.size() >= facs ) {
                assertTrue("#facs < " + facs, sm.size() >= facs);
             } else {
                System.out.println("sm.size() < facs = " + facs);
             }
             boolean t = fac.isFactorization(a, sm);
-            System.out.println("t        = " + t);
+            //System.out.println("t        = " + t);
             assertTrue("prod(factor(a)) = a", t);
             ComputerThreads.terminate();
         }

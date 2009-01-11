@@ -643,10 +643,10 @@ public class PolyUfdUtilTest extends TestCase {
                  continue;
              }
          }
-         System.out.println("\na     = " + a);
-         System.out.println("b     = " + b);
-         System.out.println("d     = " + d);
-         System.out.println("c     = " + c);
+//          System.out.println("\na     = " + a);
+//          System.out.println("b     = " + b);
+//          System.out.println("d     = " + d);
+//          System.out.println("c     = " + c);
 //          System.out.println("mi    = " + mi);
 //          System.out.println("mip   = " + mip);
 //          System.out.println("ap    = " + ap);
@@ -663,20 +663,20 @@ public class PolyUfdUtilTest extends TestCase {
                  long e = factors.get(f);
                  GenPolynomial<ModInteger> pp = Power.<GenPolynomial<ModInteger>> positivePower(f,e);
                  mlist.add(pp);
-                 System.out.println("f^" + e + " = " + pp);
+                 //System.out.println("f^" + e + " = " + pp);
              }
          }
 
          boolean ih = true;
          ih = PolyUfdUtil.isHenselLift(c,mip,m,ilist);
-         System.out.println("ih = " + ih);
+         //System.out.println("ih = " + ih);
 
          long tq = System.currentTimeMillis();
          lift = PolyUfdUtil.liftHenselQuadratic(c,mip,mlist);
          tq = System.currentTimeMillis() - tq;
 
          ih = PolyUfdUtil.isHenselLift(c,mip,m,lift);
-         System.out.println("ih = " + ih);
+         //System.out.println("ih = " + ih);
          assertTrue("isHenselLift ",ih);
      }
      ComputerThreads.terminate();

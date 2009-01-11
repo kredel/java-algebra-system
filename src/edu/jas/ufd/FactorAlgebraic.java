@@ -102,7 +102,7 @@ public class FactorAlgebraic <C extends GcdRingElem<C>>
             P = P.monic();
             factors.add( pfac.getONE().multiply(ldcf) );
         }
-        System.out.println("\nP = " + P);
+        //System.out.println("\nP = " + P);
 
         GreatestCommonDivisor<AlgebraicNumber<C>> aengine 
             = GCDFactory.<AlgebraicNumber<C>>getProxy( afac );
@@ -124,13 +124,13 @@ public class FactorAlgebraic <C extends GcdRingElem<C>>
             // compute norm with x -> ( y - k x )
             ks = k;
             res = PolyUfdUtil.<C> norm( P, ks );
-            System.out.println("res = " + res);
+            //System.out.println("res = " + res);
             if ( res.isZERO() || res.isConstant() ) {
                 k++;
                 continue;
             }
             sqf = factorCoeff.isSquarefree(res);
-            System.out.println("sqf = " + sqf + "\n");
+            //System.out.println("sqf = " + sqf + "\n");
             if ( k < 0 ) {
                 k--;
             } else {
@@ -142,13 +142,13 @@ public class FactorAlgebraic <C extends GcdRingElem<C>>
         if ( !sqf ) {
            SortedMap<GenPolynomial<C>,Long> nfacsx = factorCoeff.baseFactors( res );
            if ( !factorCoeff.isFactorization( res, nfacsx ) ) {
-              System.out.println("isFactorization = false"); 
+              throw new RuntimeException("isFactorization = false"); 
            }
            nfacs = new ArrayList<GenPolynomial<C>>( nfacsx.keySet() );
         } else {
            nfacs = factorCoeff.baseFactorsSquarefree( res );
            if ( !factorCoeff.isFactorization( res, nfacs ) ) {
-              System.out.println("isFactorization = false"); 
+              throw new RuntimeException("isFactorization = false"); 
            }
         }
         //System.out.println("\nnfacs = " + nfacs); // Q[X]
@@ -188,7 +188,7 @@ public class FactorAlgebraic <C extends GcdRingElem<C>>
         if ( ! Pp.isZERO() && ! Pp.isONE() ) { // hack to pretend factorization
             factors.add( Pp );
         }
-        System.out.println("afactors = " + factors);
+        //System.out.println("afactors = " + factors);
         return factors;
     }
 

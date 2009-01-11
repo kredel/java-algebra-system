@@ -177,17 +177,17 @@ public class FactorModular //<C extends GcdRingElem<C> >
                     + " only for univariate polynomials");
         }
         if ( !P.leadingBaseCoefficient().isONE() ) {
-            System.out.println("ldcf(P) != 1 " + P.leadingBaseCoefficient().isONE());
+           throw new RuntimeException("ldcf(P) != 1 " + P.leadingBaseCoefficient().isONE());
         }
         SortedMap<Long,GenPolynomial<ModInteger>> dfacs = baseDistinctDegreeFactors(P);
-        System.out.println("dfacs    = " + dfacs);
+        //System.out.println("dfacs    = " + dfacs);
         for ( Long e : dfacs.keySet() ) {
             GenPolynomial<ModInteger> f = dfacs.get( e );
             List<GenPolynomial<ModInteger>> efacs = baseEqualDegreeFactors(f,e);
-            System.out.println("efacs " + e + "   = " + efacs);
+            //System.out.println("efacs " + e + "   = " + efacs);
             factors.addAll( efacs );
         }
-        System.out.println("factors  = " + factors);
+        //System.out.println("factors  = " + factors);
         SortedSet<GenPolynomial<ModInteger>> ss = new TreeSet<GenPolynomial<ModInteger>>( factors );
         //System.out.println("sorted   = " + ss);
         factors.clear();

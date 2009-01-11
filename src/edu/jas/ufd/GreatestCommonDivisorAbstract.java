@@ -188,7 +188,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
                 mp = pfac.characteristic().longValue(); // assert != 0
                 if ( mp > 0 ) {
                    T0 = PolyUtil.<C> baseModRoot(T,mp);
-                   System.out.println("T0b = " + T0 + ", Tb = " + T);
+                   //System.out.println("T0b = " + T0 + ", Tb = " + T);
                    e = e * mp;
                    init = true;
                    continue;
@@ -429,7 +429,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
                 mp = pfac.characteristic().longValue(); // assert != 0
                 if ( mp > 0 ) {
                    T0 = PolyUtil.<C> recursiveModRoot(T,mp);
-                   System.out.println("T0r = " + T0 + ", Tr = " + T);
+                   //System.out.println("T0r = " + T0 + ", Tr = " + T);
                    e = e * mp;
                    init = true;
                    continue;

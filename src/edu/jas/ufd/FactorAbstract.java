@@ -99,7 +99,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C> >
         }
         long d = P.degree() + 1L;
         GenPolynomial<C> kr = PolyUfdUtil.<C> substituteKronecker( P, d ); 
-        System.out.println("subs(P,d=" + d + ") = " + kr);
+        //System.out.println("subs(P,d=" + d + ") = " + kr);
         if ( kr.degree(0) > 100 ) {
             logger.warn("Kronecker substitution has to high degree");
         }
@@ -108,7 +108,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C> >
         List<GenPolynomial<C>> klist = new ArrayList<GenPolynomial<C>>();
         // kr might not be squarefree so complete factor univariate
         SortedMap<GenPolynomial<C>,Long> slist = baseFactors( kr );
-        System.out.println("slist = " + slist);
+        //System.out.println("slist = " + slist);
         if ( debug && !isFactorization( kr, slist ) ) {
             throw new RuntimeException("no factorization");
         }
@@ -118,13 +118,13 @@ public abstract class FactorAbstract<C extends GcdRingElem<C> >
                 klist.add(g);
             }
         }
-        System.out.println("klist = " + klist);
+        //System.out.println("klist = " + klist);
         if ( klist.size() == 1 ) {
              factors.add( P );
              return factors;
         }
         klist = PolyUfdUtil.<C>backSubstituteKronecker(pfac,klist,d);
-        System.out.println("back(klist) = " + klist);
+        //System.out.println("back(klist) = " + klist);
 
         // remove constants
         GenPolynomial<C> cnst = null;
@@ -137,8 +137,8 @@ public abstract class FactorAbstract<C extends GcdRingElem<C> >
             }
         }
         if ( cnst != null ) {
-           System.out.println("*** cnst = " + cnst);
-           System.out.println("*** ng   = " + ng);
+           //System.out.println("*** cnst = " + cnst);
+           //System.out.println("*** ng   = " + ng);
            if ( ng != null ) {
                klist.remove(cnst);
                klist.remove(ng);
@@ -148,14 +148,14 @@ public abstract class FactorAbstract<C extends GcdRingElem<C> >
                   klist.add(cnst);
                }
                klist.add(ng);
-               System.out.println("back(klist) = " + klist);
+               //System.out.println("back(klist) = " + klist);
            //} else {
            }
         }
 
         // combine trial factors
         int dl = (klist.size()+1)/2;
-        System.out.println("dl = " + dl);
+        //System.out.println("dl = " + dl);
         int ti = 0;
         GenPolynomial<C> u = P;
         for ( int j = 1; j <= dl; j++ ) {
@@ -167,7 +167,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C> >
                     trial = trial.multiply( flist.get(k) );
                 }
                 ti++;
-                if ( ti % 10 == 0 ) {
+                if ( ti % 100 == 0 ) {
                    System.out.print("ti(" + ti + ") ");
                 }
                 //GenPolynomial<C> trial = PolyUfdUtil.<C> backSubstituteKronecker( pfac, utrial, d ); 
@@ -176,7 +176,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C> >
                     factors.add( trial );
                     u = PolyUtil.<C>basePseudoDivide(u, trial); //u = u.divide( trial );
                     if ( klist.removeAll( flist ) ) {
-                        System.out.println("new klist = " + klist);
+                        //System.out.println("new klist = " + klist);
                         dl = (klist.size()+1)/2;
                         j = 1;
                         if ( klist.size() > 0 ) {
@@ -184,7 +184,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C> >
                         }
                         break;
                     } else {
-                        System.out.println("error removing flist from klist = " + klist);
+                        logger.error("error removing flist from klist = " + klist);
                     }
                 }
             }
@@ -236,13 +236,13 @@ public abstract class FactorAbstract<C extends GcdRingElem<C> >
             //System.out.println("P = " + P);
         }
         if ( ! c.isONE() ) {
-           System.out.println("c = " + c);
+            //System.out.println("c = " + c);
            GenPolynomial<C> pc = pfac.getONE().multiply( c );
            factors.put( pc, 1L );
            P = P.divide( c.abs() ); // make primitive or monic
         }
         SortedMap<GenPolynomial<C>,Long> facs = engine.baseSquarefreeFactors(P);
-        System.out.println("sfacs   = " + facs);
+        //System.out.println("sfacs   = " + facs);
         for ( GenPolynomial<C> g : facs.keySet() ) {
             Long k = facs.get( g );
             List<GenPolynomial<C>> sfacs = baseFactorsSquarefree(g);
@@ -251,7 +251,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C> >
                 factors.put( h, k );
             }
         }
-        System.out.println("factors = " + factors);
+        //System.out.println("factors = " + factors);
         return factors;
     }
 
@@ -298,13 +298,13 @@ public abstract class FactorAbstract<C extends GcdRingElem<C> >
             //System.out.println("P = " + P);
         }
         if ( ! c.isONE() ) {
-           System.out.println("baseContent = " + c);
+           //System.out.println("baseContent = " + c);
            GenPolynomial<C> pc = pfac.getONE().multiply( c );
            factors.put( pc, 1L );
            P = P.divide( c.abs() ); // make base primitive or monic
         }
         SortedMap<GenPolynomial<C>,Long> facs = engine.squarefreeFactors(P);
-        System.out.println("sfacs   = " + facs);
+        //System.out.println("sfacs   = " + facs);
         for ( GenPolynomial<C> g: facs.keySet() ) {
             Long d = facs.get( g );
             List<GenPolynomial<C>> sfacs = factorsSquarefree( g );
@@ -313,7 +313,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C> >
                 factors.put( h, d );
             }
         }
-        System.out.println("factors = " + factors);
+        //System.out.println("factors = " + factors);
         return factors;
     }
 
@@ -424,20 +424,20 @@ public abstract class FactorAbstract<C extends GcdRingElem<C> >
                 long e = E.longValue();
                 GenPolynomial<C> g = Power.<GenPolynomial<C>> positivePower( f, e );
                 t = t.multiply( g );
-            } else {
-                //t = t.multiply( f );
-                Set<GenPolynomial<C>> ks = F.keySet();
-                System.out.println("\n\nE == null: " + f);
-                System.out.println("F.keySet(): " + ks);
-                System.out.println("F.values(): " + F.values());
-                System.out.println("F.compar(): " + F.comparator());
-                System.out.println("f in ks:    " + ks.contains(f));
-                throw new RuntimeException("wrong TreeMap entries");
+//             } else {
+//                 //t = t.multiply( f );
+//                 Set<GenPolynomial<C>> ks = F.keySet();
+//                 System.out.println("\n\nE == null: " + f);
+//                 System.out.println("F.keySet(): " + ks);
+//                 System.out.println("F.values(): " + F.values());
+//                 System.out.println("F.compar(): " + F.comparator());
+//                 System.out.println("f in ks:    " + ks.contains(f));
+//                 throw new RuntimeException("wrong TreeMap entries");
             }
         }
         boolean f = P.equals(t);
         if ( !f ) {
-           System.out.println("factorization: " + f);
+           System.out.println("\nfactorization: " + f);
            System.out.println("P = " + P);
            System.out.println("t = " + t);
         }
