@@ -168,7 +168,7 @@ public class FactorTest extends TestCase {
             int facs = 0;
             GenPolynomial<ModInteger> a = null; //pfac.random(kl,ll*(i+1),el,q);
             GenPolynomial<ModInteger> b = pfac.random(kl, ll, el, q);
-            GenPolynomial<ModInteger> c = pfac.random(kl, ll, el, q);
+            GenPolynomial<ModInteger> c = pfac.random(kl, 2, el, q);
             if (b.isZERO() || c.isZERO()) {
                 continue;
             }
@@ -292,7 +292,7 @@ public class FactorTest extends TestCase {
 
         for (int i = 1; i < 2; i++) {
             GenPolynomial<BigInteger> b = pfac.random(kl, ll, el, q);
-            GenPolynomial<BigInteger> c = pfac.random(kl, ll, el, q);
+            GenPolynomial<BigInteger> c = pfac.random(kl, 2, el, q);
             GenPolynomial<BigInteger> a;
 //             if ( !a.leadingBaseCoefficient().isUnit()) {
 //                 //continue;
