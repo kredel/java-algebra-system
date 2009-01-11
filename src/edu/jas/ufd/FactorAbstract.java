@@ -167,7 +167,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C> >
                     trial = trial.multiply( flist.get(k) );
                 }
                 ti++;
-                if ( ti % 100 == 0 ) {
+                if ( ti % 1000 == 0 ) {
                    System.out.print("ti(" + ti + ") ");
                 }
                 //GenPolynomial<C> trial = PolyUfdUtil.<C> backSubstituteKronecker( pfac, utrial, d ); 
@@ -400,7 +400,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C> >
         for ( GenPolynomial<C> f: F ) {
             t = t.multiply( f );
         }
-        return P.equals(t);
+        return P.equals(t) || P.equals(t.negate());
     }
 
 
@@ -435,7 +435,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C> >
 //                 throw new RuntimeException("wrong TreeMap entries");
             }
         }
-        boolean f = P.equals(t);
+        boolean f = P.equals(t) || P.equals(t.negate());
         if ( !f ) {
            System.out.println("\nfactorization: " + f);
            System.out.println("P = " + P);
