@@ -98,7 +98,7 @@ public class FactorTest extends TestCase {
      * Test modular factorization.
      * 
      */
-    public void xtestModularFactorization() {
+    public void testModularFactorization() {
 
         PrimeList pl = new PrimeList(PrimeList.Range.medium);
         TermOrder to = new TermOrder(TermOrder.INVLEX);
@@ -155,20 +155,20 @@ public class FactorTest extends TestCase {
      * Test multivariate modular factorization.
      * 
      */
-    public void xtestMultivariateModularFactorization() {
+    public void testMultivariateModularFactorization() {
 
         PrimeList pl = new PrimeList(PrimeList.Range.small);
         TermOrder to = new TermOrder(TermOrder.INVLEX);
-        ModIntegerRing cfac = new ModIntegerRing(pl.get(5)); // 13
+        ModIntegerRing cfac = new ModIntegerRing(pl.get(13)); // 13
         GenPolynomialRing<ModInteger> pfac = new GenPolynomialRing<ModInteger>(cfac, rl,
                 to);
         FactorModular fac = new FactorModular();
 
-        for (int i = 0; i < 4; i++) {
+        for (int i = 1; i < 2; i++) {
             int facs = 0;
             GenPolynomial<ModInteger> a = null; //pfac.random(kl,ll*(i+1),el,q);
-            GenPolynomial<ModInteger> b = pfac.random(2, ll, el, q);
-            GenPolynomial<ModInteger> c = pfac.random(2, ll, el, q);
+            GenPolynomial<ModInteger> b = pfac.random(kl, ll, el, q);
+            GenPolynomial<ModInteger> c = pfac.random(kl, ll, el, q);
             if (b.isZERO() || c.isZERO()) {
                 continue;
             }
@@ -282,7 +282,7 @@ public class FactorTest extends TestCase {
      * Test multivariate integer factorization.
      * 
      */
-    public void xtestMultivariateIntegerFactorization() {
+    public void testMultivariateIntegerFactorization() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(1);
@@ -290,13 +290,16 @@ public class FactorTest extends TestCase {
                 to);
         FactorInteger fac = new FactorInteger();
 
-        for (int i = 1; i < 4; i++) {
-            GenPolynomial<BigInteger> a = pfac.random(kl, ll * (i + 1), el, q);
-            if (false && !a.leadingBaseCoefficient().isUnit()) {
-                //continue;
-                //ExpVector e = a.leadingExpVector();
-                //a.doPutToMap(e,cfac.getONE());
-            }
+        for (int i = 1; i < 2; i++) {
+            GenPolynomial<BigInteger> b = pfac.random(kl, ll, el, q);
+            GenPolynomial<BigInteger> c = pfac.random(kl, ll, el, q);
+            GenPolynomial<BigInteger> a;
+//             if ( !a.leadingBaseCoefficient().isUnit()) {
+//                 //continue;
+//                 //ExpVector e = a.leadingExpVector();
+//                 //a.doPutToMap(e,cfac.getONE());
+//             }
+            a = b.multiply(c);
             System.out.println("\na = " + a);
 
             SortedMap<GenPolynomial<BigInteger>, Long> sm = fac.factors(a);
@@ -314,7 +317,7 @@ public class FactorTest extends TestCase {
      * Test rational factorization.
      * 
      */
-    public void xtestRationalFactorization() {
+    public void testRationalFactorization() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigRational cfac = new BigRational(1);
@@ -371,7 +374,7 @@ public class FactorTest extends TestCase {
      * Test algebraic factorization.
      * 
      */
-    public void xtestAlgebraicFactorization() {
+    public void testAlgebraicFactorization() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigRational cfac = new BigRational(1);

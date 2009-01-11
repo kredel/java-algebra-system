@@ -135,7 +135,7 @@ public class PolyUfdUtilTest extends TestCase {
  * Test Hensel lifting.
  * 
  */
- public void xtestHenselLifting() {
+ public void testHenselLifting() {
      java.math.BigInteger p;
      p = getPrime1();
      //p = new java.math.BigInteger("19");
@@ -247,7 +247,7 @@ public class PolyUfdUtilTest extends TestCase {
  * Test Hensel quadratic lifting.
  * 
  */
- public void xtestHenselQuadraticLifting() {
+ public void testHenselQuadraticLifting() {
      java.math.BigInteger p;
      //p = getPrime1();
      p = new java.math.BigInteger("19");
@@ -384,7 +384,7 @@ public class PolyUfdUtilTest extends TestCase {
  * Test Hensel quadratic lifting with gcd.
  * 
  */
- public void xtestHenselQuadraticLiftingGcd() {
+ public void testHenselQuadraticLiftingGcd() {
      java.math.BigInteger p;
      //p = getPrime1();
      p = new java.math.BigInteger("19");
@@ -687,7 +687,7 @@ public class PolyUfdUtilTest extends TestCase {
  * Test Kronecker substitution.
  * 
  */
- public void xtestKroneckerSubstitution() {
+ public void testKroneckerSubstitution() {
 
      for ( int i = 0; i < 10; i++ ) {
          a = dfac.random(kl,ll*2,el*5,q);

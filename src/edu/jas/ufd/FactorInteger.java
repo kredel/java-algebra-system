@@ -240,6 +240,10 @@ public class FactorInteger //<C extends GcdRingElem<C> >
             nf = ct.leadingBaseCoefficient();
             mlist.remove(ct);
             System.out.println("=== nf = " + nf);
+            if ( mlist.size() <= 1 ) {
+                factors.add(C);
+                return factors;
+            }
         } else {
             nf = ct.ring.coFac.getONE();
         }
@@ -340,14 +344,17 @@ public class FactorInteger //<C extends GcdRingElem<C> >
             mlist.remove(ct);
             System.out.println("=== nf   = " + nf);
             System.out.println("=== ldcf = " + C.leadingBaseCoefficient());
+            if ( mlist.size() <= 1 ) {
+                factors.add(C);
+                return factors;
+            }
         } else {
             nf = ct.ring.coFac.getONE();
         }
+        System.out.println("modlist  = " + mlist); // includes not ldcf
         GenPolynomialRing<ModInteger> mfac = ct.ring;
-
         GenPolynomial<ModInteger> Pm = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,C);
         GenPolynomial<BigInteger> PP = C, P = C;
-        System.out.println("modlist  = " + mlist); // includes not ldcf
 
         GreatestCommonDivisorAbstract<BigInteger> iengine 
             = (GreatestCommonDivisorAbstract<BigInteger>) 
