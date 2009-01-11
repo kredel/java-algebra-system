@@ -643,10 +643,10 @@ public class PolyUfdUtilTest extends TestCase {
                  continue;
              }
          }
-//          System.out.println("\na     = " + a);
-//          System.out.println("b     = " + b);
-//          System.out.println("d     = " + d);
-//          System.out.println("c     = " + c);
+         System.out.println("\na     = " + a);
+         System.out.println("b     = " + b);
+         System.out.println("d     = " + d);
+         System.out.println("c     = " + c);
 //          System.out.println("mi    = " + mi);
 //          System.out.println("mip   = " + mip);
 //          System.out.println("ap    = " + ap);

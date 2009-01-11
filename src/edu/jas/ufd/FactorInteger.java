@@ -82,7 +82,7 @@ public class FactorInteger //<C extends GcdRingElem<C> >
            = (GreatestCommonDivisorAbstract<ModInteger>) GCDFactory.<ModInteger> getImplementation(mcofac);
         GenPolynomial<ModInteger> am = null;
         GenPolynomialRing<ModInteger> mfac = null;
-        final int TT = 5;
+        final int TT = 1; //7;
         List<GenPolynomial<ModInteger>>[] modfac = (List<GenPolynomial<ModInteger>>[]) new List[TT];
         List<GenPolynomial<BigInteger>>[] intfac = (List<GenPolynomial<BigInteger>>[]) new List[TT];
         List<GenPolynomial<ModInteger>> mlist = null;
@@ -98,11 +98,11 @@ public class FactorInteger //<C extends GcdRingElem<C> >
         pit.next();
         ModInteger nf = null;
         for (int k = 0; k < TT; k++) {
-            if ( k == TT-2 ) {
+            if ( k == TT+2 ) {
                 primes = new PrimeList(PrimeList.Range.medium);
                 pit = primes.iterator();
             }
-            if ( k == TT-1 ) {
+            if ( k == TT+1 ) { // -1
                 primes = new PrimeList(PrimeList.Range.large);
                 pit = primes.iterator();
             }
@@ -151,7 +151,7 @@ public class FactorInteger //<C extends GcdRingElem<C> >
                 GenPolynomial<ModInteger> mp = mfac.getONE(); //mlist.get(0);
                 //System.out.println("mp = " + mp);
                 mp = mp.multiply(nf);
-                //System.out.println("mp = " + mp);
+                System.out.println("mp = " + mp);
                 mlist.add(0, mp); // set(0,mp);
             }
             modfac[k] = mlist;
@@ -180,9 +180,9 @@ public class FactorInteger //<C extends GcdRingElem<C> >
             if ( ct.isConstant() ) {
                 nf = ct.leadingBaseCoefficient();
                 mlist.remove(ct);
-                ct = mlist.get(0);
-                ct = ct.multiply( nf );
-                mlist.set(0,ct);
+                System.out.println("nf = " + nf);
+            } else {
+                nf = ct.ring.coFac.getONE();
             }
             GenPolynomial<BigInteger> PP = P;
             System.out.println("modlist  = " + mlist); // includes not ldcf
@@ -191,11 +191,13 @@ public class FactorInteger //<C extends GcdRingElem<C> >
             if ( logger.isInfoEnabled() ) {
                 logger.info("lifted intlist = " + ilist);
             }
+            System.out.println("intlist  = " + ilist); 
             GenPolynomial<BigInteger> ml1 = null;
             for (GenPolynomial<BigInteger> ml : ilist ) {
                 if ( !ml.leadingBaseCoefficient().isONE() ) {
                     ml1 = ml;
-                    // System.out.println("ml = " + ml); 
+                    System.out.println("ml1 = " + ml1); 
+                    break;
                 }
             }
 
@@ -219,7 +221,7 @@ public class FactorInteger //<C extends GcdRingElem<C> >
                     }
                     //trial = iengine.basePrimitivePart( trial.multiply(ldcf) );
                     trial = iengine.basePrimitivePart( trial );
-                    //System.out.println("pp(trial)= " + trial);
+                    System.out.println("pp(trial)= " + trial);
                     if (PolyUtil.<BigInteger> basePseudoRemainder(u, trial).isZERO()) {
                         //System.out.println("trial    = " + trial);
                         System.out.println("flist    = " + flist);

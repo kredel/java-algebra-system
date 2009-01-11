@@ -247,6 +247,10 @@ public class FactorTest extends TestCase {
             if (a.isConstant()) {
                 continue;
             }
+            GreatestCommonDivisorAbstract<BigInteger> engine 
+                = (GreatestCommonDivisorAbstract<BigInteger>)GCDFactory.<BigInteger>getProxy( cfac );
+            a = engine.basePrimitivePart(a);
+            a = a.abs();
             System.out.println("\na = " + a);
             //System.out.println("b = " + b);
             //System.out.println("c = " + c);

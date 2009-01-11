@@ -885,18 +885,38 @@ public class PolyUfdUtil {
            throw new RuntimeException("polynomial ring not univariate");
         }
         List<GenPolynomial<BigInteger>> lift = new ArrayList<GenPolynomial<BigInteger>>( F.size() );
+        GenPolynomial<ModInteger> cnst = null;
+        GenPolynomial<BigInteger> icnst = null;
+        for ( GenPolynomial<ModInteger> ct : F ) {
+            if ( ct.isConstant() ) {
+                if ( cnst == null ) {
+                    cnst = ct;
+                } else {
+                    throw new RuntimeException("more than one constant " + cnst + ", " +ct);
+                }
+            }
+        }
+        if ( cnst != null ) {
+            F.remove(cnst);
+            BigInteger ilc = new BigInteger( cnst.leadingBaseCoefficient().getSymmetricVal() );
+            icnst = fac.getONE().multiply( ilc );
+        } else {
+            // cnst = F.get(0).ring.getONE();
+        }
         int n = F.size();
         if ( n == 1 ) { // use C itself
             lift.add( C );
             return lift;
         }
         if ( n == 2 ) { // only one step
+            if ( icnst != null ) {
+                lift.add( icnst );
+            }
             GenPolynomial<BigInteger>[] ab = liftHenselQuadraticFac(C,M,F.get(0),F.get(1));
             lift.add( ab[0] );
             lift.add( ab[1] );
             return lift;
         }
-
         BigInteger lc = C.leadingBaseCoefficient();
         GenPolynomial<ModInteger> f = F.get(0);
         GenPolynomialRing<ModInteger> mfac = f.ring;
@@ -954,6 +974,9 @@ public class PolyUfdUtil {
             System.out.println("G2 = " + G2);
             //throw new RuntimeException("no lifting G2");
         }
+        if ( icnst != null ) {
+            lift.add( icnst );
+        }
         lift.addAll( G1 );
         lift.addAll( G2 );
         return lift;
@@ -966,7 +989,7 @@ public class PolyUfdUtil {
      * S A + T B == 1 mod p. 
      * See algorithm 6.1. in Geddes et.al. and algorithms 3.5.{5,6} in Cohen. 
      * Quadratic version, as it also lifts S A + T B == 1 mod p^{e+1}.
-     * @param C GenPolynomial<BigInteger>.
+     * @param C primitive GenPolynomial<BigInteger>.
      * @param A GenPolynomial<ModInteger>.
      * @param B other GenPolynomial<ModInteger>.
      * @param S GenPolynomial<ModInteger>.
@@ -1012,17 +1035,21 @@ public class PolyUfdUtil {
         GenPolynomialRing<ModInteger> qfac;
         qfac = new GenPolynomialRing<ModInteger>(Q,pfac); // mod p
         GenPolynomialRing<ModInteger> mfac;
+        GenPolynomialRing<ModInteger> lmfac;
         BigInteger Mi = new BigInteger( Q.getModul().multiply( Q.getModul() ) );
         ModIntegerRing Qmm = new ModIntegerRing( Mi.getVal() );
         mfac = new GenPolynomialRing<ModInteger>(Qmm,qfac);   // mod p^e
+        lmfac = mfac; // old mfac
         ModInteger Pm = Qmm.fromInteger( P.getModul() );
         ModInteger Qm = Qmm.fromInteger( Qi.getVal() );
 
         // partly normalize c and a, b factors, assert p is prime
+        GenPolynomial<BigInteger> Cx = C; 
         GenPolynomial<BigInteger> Ai;
         GenPolynomial<BigInteger> Bi;
         BigInteger c = C.leadingBaseCoefficient();
-        //##C = C.multiply(c); // sic
+        BigInteger xc = c;
+        C = C.multiply(c); // sic
         ModInteger a = A.leadingBaseCoefficient();
         if ( !a.isONE() ) { // A = A.monic();
            A = A.divide( a );
@@ -1042,15 +1069,15 @@ public class PolyUfdUtil {
         // mod p
         A = A.multiply( ci );
         S = S.divide( ci );
-        //##B = B.multiply( ci );
-        //##T = T.divide( ci );
+        B = B.multiply( ci );
+        T = T.divide( ci );
         Ai = PolyUtil.integerFromModularCoefficients( fac, A );
         Bi = PolyUtil.integerFromModularCoefficients( fac, B );
-        //##// replace leading base coefficients
-        //##ExpVector ea = Ai.leadingExpVector();
-        //##ExpVector eb = Bi.leadingExpVector();
-        //##Ai.doPutToMap(ea,c);
-        //##Bi.doPutToMap(eb,c);
+        // replace leading base coefficients
+        ExpVector ea = Ai.leadingExpVector();
+        ExpVector eb = Bi.leadingExpVector();
+        Ai.doPutToMap(ea,c);
+        Bi.doPutToMap(eb,c);
 
         // polynomials mod p
         GenPolynomial<ModInteger> Ap; 
@@ -1226,6 +1253,7 @@ public class PolyUfdUtil {
             // prepare for next iteration
             Qi = new BigInteger( Q.getModul().multiply( Q.getModul() ) );
             Mq = Qi;
+            lmfac = mfac;
             Q = new ModIntegerRing( Qi.getVal() );
             qfac = new GenPolynomialRing<ModInteger>(Q,pfac);
             Qmm = new ModIntegerRing( Qmm.getModul().multiply( Qmm.getModul() ) );
@@ -1258,27 +1286,79 @@ public class PolyUfdUtil {
         //System.out.println("*Bi =  " + Bi);
 
         // remove normalization not ok when not exact factorization
-        //##C = C.divide(c);
-//         if ( false /*C.subtract(Ai.multiply(Bi)).isZERO()*/ ) {
-//             GreatestCommonDivisorAbstract<BigInteger> ufd
-//                 = new GreatestCommonDivisorPrimitive<BigInteger>();
-//             // remove normalization
-//             BigInteger ai = ufd.baseContent(Ai);
-//             Ai = Ai.divide( ai );
-//             System.out.println("*Ai =  " + Ai);
-//             System.out.println("*ai =  " + ai);
-//             BigInteger bi = c.divide(ai);
-//             System.out.println("*c  =  " + c);
-//             System.out.println("*bi =  " + bi);
-//             if ( !bi.isZERO() && !bi.isONE() ) {
-//                 Bi = Bi.divide( bi ); // divide( c/a )
-//             }
-//             System.out.println("*Bi =  " + Bi);
-//             boolean ih = isHenselLift(C.divide(c),Mi,PP,Ai,Bi);
-//             System.out.println("*is Hensel lift =  " + ih);
-//         //##} else {
-//         //##    System.out.println("*no exact factorization: " + C.subtract(Ai.multiply(Bi)));
-//         }
+        // c = ldcf(C.orig)
+        //#--#C = C.divide(c);
+        GreatestCommonDivisorAbstract<BigInteger> ufd
+            = new GreatestCommonDivisorPrimitive<BigInteger>();
+        // remove normalization if possible
+        BigInteger ai = ufd.baseContent(Ai);
+        Ai = Ai.divide( ai ); // Ai=pp(Ai)
+        System.out.println("*Ai =  " + Ai);
+        System.out.println("*ai =  " + ai);
+        BigInteger[] qr = c.divideAndRemainder(ai);
+        BigInteger bi;
+        System.out.println("*Bi =  " + Bi);
+        if ( qr[1].isZERO() ) {
+            bi = qr[0];
+            System.out.println("*c  =  " + c);
+            System.out.println("*bi =  " + bi);
+            try {
+                Bi = Bi.divide( bi ); // divide( c/a )
+            } catch (RuntimeException e) {
+                System.out.println("*catch: no exact factorization: " + bi + ", e = " + e);
+                BigInteger bci = ufd.baseContent(Bi);
+                Bi = Bi.divide(bci);
+            }
+            System.out.println("*Bi =  " + Bi);
+        } else {
+            System.out.println("*remainder: no exact factorization: q = " + qr[0] + ", r = "  + qr[1]);
+            BigInteger bci = ufd.baseContent(Bi);
+            Bi = Bi.divide(bci);
+        }
+        // fix lfcd(bi) mod p^e: ldcf(C) = ldcf(Ai) ldcf(Bi) mod p^e 
+        ai = Ai.leadingBaseCoefficient();
+        bi = Bi.leadingBaseCoefficient();
+        if ( ! c.equals( ai.multiply(bi) ) ) {
+            System.out.println("*lmfac = " + lmfac);
+            Am = PolyUtil.<ModInteger>fromIntegerCoefficients(lmfac,Ai);
+            Bm = PolyUtil.<ModInteger>fromIntegerCoefficients(lmfac,Bi);
+            System.out.println("*Am = " + Am);
+            System.out.println("*Bm = " + Bm);
+            ModIntegerRing mr = (ModIntegerRing)lmfac.coFac;
+            ModInteger cq = mr.fromInteger( xc.getVal() );
+            ModInteger aq = mr.fromInteger( ai.getVal() );
+            ModInteger bq = mr.fromInteger( bi.getVal() );
+            ModInteger bb = cq.multiply(aq.inverse()); //  c/ai
+            System.out.println("*C  = " + C);
+            System.out.println("*Cx = " + Cx);
+            System.out.println("*xc = " + xc);
+            System.out.println("*cq = " + cq);
+            System.out.println("*aq = " + aq);
+            System.out.println("*bq = " + bq);
+            System.out.println("*bb = " + bb);
+            bb = bb.multiply(bq.inverse());   // (c/ai)/bi
+            System.out.println("*bb = " + bb);
+            Bm = Bm.multiply(bb); // now ldcf(Bm) = c/ai mod p^e
+            //Bm = Bm.monic().multiply(cq); // now ldcf(Bm) = c/ai mod p^e
+            Bi = PolyUtil.integerFromModularCoefficients(fac,Bm);
+            System.out.println("*Bm = " + Bm);
+            System.out.println("*Bi = " + Bi);
+            if ( !cq.equals( aq.multiply( Bm.leadingBaseCoefficient() ) ) ) {
+                System.out.println("*c/ai*ai = " + cq.divide(aq).multiply(aq) );
+                System.out.println("*c/ai/bi = " + cq.divide(aq).divide(bq) );
+                System.out.println("*c/ai/bi*bi = " + cq.divide(aq).divide(bq).multiply(bq) );
+                Bm = PolyUtil.<ModInteger>fromIntegerCoefficients(lmfac,Bi);
+                System.out.println("*Bm/bi = " + Bm.multiply(bq.inverse()) );
+                System.out.println("*Bm.monic() = " + Bm.monic() );
+                throw new RuntimeException("cq != ldcf(Bm) " + Bm.leadingBaseCoefficient());
+            }
+            if ( ! c.equals( ai.multiply(Bi.leadingBaseCoefficient()) ) ) {
+                throw new RuntimeException("c != ldcf(Bi) " + Bi.leadingBaseCoefficient());
+            }
+        }
+        boolean ih = isHenselLift(C.divide(c),Mi,PP,Ai,Bi);
+        System.out.println("*is Hensel lift =  " + ih);
+
         AB[0] = Ai;
         AB[1] = Bi;
         return AB;
