@@ -147,6 +147,10 @@ public class FactorInteger //<C extends GcdRingElem<C> >
             if ( logger.isInfoEnabled() ) {
                 logger.info("modlist  = " + mlist);
             }
+            if (mlist.size() <= 1) {
+                factors.add(P);
+                return factors;
+            }
             if (!nf.isONE()) {
                 GenPolynomial<ModInteger> mp = mfac.getONE(); //mlist.get(0);
                 //System.out.println("mp = " + mp);
@@ -168,6 +172,7 @@ public class FactorInteger //<C extends GcdRingElem<C> >
             }
         }
         if (mlist.size() <= 1) {
+            System.out.println("int s = 1");
             factors.add(P);
             return factors;
         }
