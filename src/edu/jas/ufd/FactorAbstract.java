@@ -109,7 +109,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C> >
         // kr might not be squarefree so complete factor univariate
         SortedMap<GenPolynomial<C>,Long> slist = baseFactors( kr );
         //System.out.println("slist = " + slist);
-        if ( debug && !isFactorization( kr, slist ) ) {
+        if ( true && !isFactorization( kr, slist ) ) {
             throw new RuntimeException("no factorization");
         }
         for ( GenPolynomial<C> g : slist.keySet() ) {
@@ -119,7 +119,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C> >
             }
         }
         //System.out.println("klist = " + klist);
-        if ( klist.size() == 1 ) {
+        if ( klist.size() == 1 && klist.get(0).degree() == P.degree() ) {
              factors.add( P );
              return factors;
         }
@@ -158,6 +158,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C> >
         //System.out.println("dl = " + dl);
         int ti = 0;
         GenPolynomial<C> u = P;
+        long deg = (u.degree()+1L)/2L; 
         for ( int j = 1; j <= dl; j++ ) {
             KsubSet<GenPolynomial<C>> ps = new KsubSet<GenPolynomial<C>>( klist, j );
             for ( List<GenPolynomial<C>> flist : ps ) {
@@ -166,9 +167,18 @@ public abstract class FactorAbstract<C extends GcdRingElem<C> >
                 for ( int k = 0; k < flist.size(); k++ ) {
                     trial = trial.multiply( flist.get(k) );
                 }
+                if ( trial.degree() > deg ) {
+                    continue;
+                }
                 ti++;
                 if ( ti % 1000 == 0 ) {
                    System.out.print("ti(" + ti + ") ");
+                   if ( ti % 1000 == 0 ) {
+                       System.out.println("\ndl   = " + dl + ", deg(u) = " + deg);
+                       System.out.println("klist = " + klist);
+                       System.out.println("kr    = " + kr);
+                       System.out.println("u     = " + u);
+                   }
                 }
                 //GenPolynomial<C> trial = PolyUfdUtil.<C> backSubstituteKronecker( pfac, utrial, d ); 
                 if ( PolyUtil.<C>basePseudoRemainder(u, trial).isZERO() ) {
