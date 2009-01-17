@@ -268,6 +268,7 @@ public class FactorInteger //<C extends GcdRingElem<C> >
         // combine trial factors
         int dl = (ilist.size() + 1) / 2;
         GenPolynomial<BigInteger> u = PP;
+        long deg = (u.degree(0)+1L)/2L; 
         BigInteger ldcf = u.leadingBaseCoefficient();
         //System.out.println("ldcf = " + ldcf); 
         for (int j = 1; j <= dl; j++) {
@@ -278,6 +279,9 @@ public class FactorInteger //<C extends GcdRingElem<C> >
                 for (int kk = 0; kk < flist.size(); kk++) {
                     GenPolynomial<BigInteger> fk = flist.get(kk);
                     trial = trial.multiply(fk);
+                }
+                if ( trial.degree(0) > deg ) {
+                    continue;
                 }
                 //trial = iengine.basePrimitivePart( trial.multiply(ldcf) );
                 trial = iengine.basePrimitivePart( trial );
@@ -368,6 +372,7 @@ public class FactorInteger //<C extends GcdRingElem<C> >
         // combine trial factors
         int dl = (mlist.size() + 1) / 2;
         GenPolynomial<BigInteger> u = PP;
+        long deg = (u.degree(0)+1L)/2L; 
         GenPolynomial<ModInteger> um = Pm;
         BigInteger ldcf = u.leadingBaseCoefficient();
         //System.out.println("ldcf = " + ldcf); 
@@ -380,7 +385,10 @@ public class FactorInteger //<C extends GcdRingElem<C> >
                     GenPolynomial<ModInteger> fk = flist.get(kk);
                     trial = trial.multiply(fk);
                 }
-                GenPolynomial<ModInteger> cofactor = um.divide(trial);
+                if ( trial.degree(0) > deg ) {
+                    continue;
+                }
+                 GenPolynomial<ModInteger> cofactor = um.divide(trial);
                 //System.out.println("trial    = " + trial);
                 //System.out.println("cofactor = " + cofactor);
 
