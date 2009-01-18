@@ -108,7 +108,7 @@ public class FactorTest extends TestCase {
                 to);
         FactorModular fac = new FactorModular();
 
-        for (int i = 0; i < 7; i++) {
+        for (int i = 1; i < 5; i++) {
             int facs = 0;
             GenPolynomial<ModInteger> a = null; //pfac.random(kl,ll*(i+1),el*(i+1),q);
             GenPolynomial<ModInteger> b = pfac.random(kl, ll * (i + 1), el * (i + 1), q);
