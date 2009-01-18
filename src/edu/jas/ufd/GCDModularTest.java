@@ -548,8 +548,8 @@ public class GCDModularTest extends TestCase {
      F.add(e);
 
      List<GenPolynomial<ModInteger>> P = ufd.coPrime(F);
-     System.out.println("F = " + F);
-     System.out.println("P = " + P);
+     //System.out.println("F = " + F);
+     //System.out.println("P = " + P);
 
      assertTrue("is co-prime ", ufd.isCoPrime(P) );
      assertTrue("is co-prime of ", ufd.isCoPrime(P,F) );
