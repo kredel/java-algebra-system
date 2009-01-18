@@ -117,7 +117,7 @@ public class FactorModular //<C extends GcdRingElem<C> >
         ModIntegerRing mr = (ModIntegerRing)pfac.coFac;
         java.math.BigInteger m = mr.modul;
         //System.out.println("m = " + m);
-        if ( m.longValue() == 2L ) {
+        if ( m.equals( java.math.BigInteger.valueOf(2L) ) ) {
             throw new RuntimeException(this.getClass().getName()
                     + " case p = 2 not implemented");
         }
