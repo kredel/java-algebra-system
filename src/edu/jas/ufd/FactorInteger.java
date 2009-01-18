@@ -116,24 +116,28 @@ public class FactorInteger //<C extends GcdRingElem<C> >
                 cofac = new ModIntegerRing(p, true);
                 nf = cofac.fromInteger(ac.getVal());
                 if (nf.isZERO()) {
-                    System.out.println("unlucky prime (nf) = " + p);
+                    logger.info("unlucky prime (nf) = " + p);
+                    //System.out.println("unlucky prime (nf) = " + p);
                     continue;
                 }
                 // initialize polynomial factory and map polynomial
                 mfac = new GenPolynomialRing<ModInteger>(cofac, pfac);
                 am = PolyUtil.<ModInteger> fromIntegerCoefficients(mfac, P);
                 if (!am.degreeVector().equals(degv)) { // allways true
-                    System.out.println("unlucky prime (deg) = " + p);
+                    logger.info("unlucky prime (deg) = " + p);
+                    //System.out.println("unlucky prime (deg) = " + p);
                     continue;
                 }
                 GenPolynomial<ModInteger> ap = PolyUtil.<ModInteger> baseDeriviative(am);
                 if (ap.isZERO()) {
-                    System.out.println("unlucky prime (a')= " + p);
+                    logger.info("unlucky prime (a')= " + p);
+                    //System.out.println("unlucky prime (a')= " + p);
                     continue;
                 }
                 GenPolynomial<ModInteger> g = engine.baseGcd(am, ap);
                 if (g.isONE()) {
-                    System.out.println("**lucky prime = " + p);
+                    logger.info("**lucky prime = " + p);
+                    //System.out.println("**lucky prime = " + p);
                     break;
                 }
             }
@@ -165,14 +169,16 @@ public class FactorInteger //<C extends GcdRingElem<C> >
         int min = Integer.MAX_VALUE;
         for (int k = 0; k < TT; k++) {
             int s = modfac[k].size();
-            System.out.println("mod s = " + s);
+            logger.info("mod s = " + s);
+            //System.out.println("mod s = " + s);
             if (s < min) {
                 min = s;
                 mlist = modfac[k];
             }
         }
         if (mlist.size() <= 1) {
-            System.out.println("int s = 1");
+            logger.info("mod s = 1");
+            //System.out.println("int s = 1");
             factors.add(P);
             return factors;
         }
@@ -287,7 +293,8 @@ public class FactorInteger //<C extends GcdRingElem<C> >
                 trial = iengine.basePrimitivePart( trial );
                 //System.out.println("pp(trial)= " + trial);
                 if (PolyUtil.<BigInteger> basePseudoRemainder(u, trial).isZERO()) {
-                    System.out.println("trial    = " + trial);
+                    logger.info("trial    = " + trial);
+                    //System.out.println("trial    = " + trial);
                     //System.out.println("flist    = " + flist);
                     //trial = iengine.basePrimitivePart(trial);
                     //System.out.println("pp(trial)= " + trial);
@@ -310,11 +317,13 @@ public class FactorInteger //<C extends GcdRingElem<C> >
             }
         }
         if (!u.isONE() && !u.equals(P)) {
-            System.out.println("rest u = " + u);
+            logger.info("rest u = " + u);
+            //System.out.println("rest u = " + u);
             factors.add(u);
         }
         if (factors.size() == 0) {
-            System.out.println("irred u = " + u);
+            logger.info("irred u = " + u);
+            //System.out.println("irred u = " + u);
             factors.add(PP);
         }
         return factors;
@@ -410,7 +419,8 @@ public class FactorInteger //<C extends GcdRingElem<C> >
                 itrial = iengine.basePrimitivePart( itrial );
                 //System.out.println("pp(trial)= " + itrial);
                 if (PolyUtil.<BigInteger> basePseudoRemainder(u, itrial).isZERO()) {
-                    System.out.println("trial    = " + itrial);
+                    logger.info("trial    = " + itrial);
+                    //System.out.println("trial    = " + itrial);
                     //System.out.println("cofactor = " + icofactor);
                     //System.out.println("flist    = " + flist);
                     //itrial = iengine.basePrimitivePart(itrial);
@@ -437,11 +447,13 @@ public class FactorInteger //<C extends GcdRingElem<C> >
             }
         }
         if (!u.isONE() && !u.equals(P)) {
-            System.out.println("rest u = " + u);
+            logger.info("rest u = " + u);
+            //System.out.println("rest u = " + u);
             factors.add(u);
         }
         if (factors.size() == 0) {
-            System.out.println("irred u = " + u);
+            logger.info("irred u = " + u);
+            //System.out.println("irred u = " + u);
             factors.add(PP);
         }
         return factors;

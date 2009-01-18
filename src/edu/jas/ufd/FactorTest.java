@@ -98,7 +98,7 @@ public class FactorTest extends TestCase {
      * Test modular factorization.
      * 
      */
-    public void xtestModularFactorization() {
+    public void testModularFactorization() {
 
         PrimeList pl = new PrimeList(PrimeList.Range.medium);
         TermOrder to = new TermOrder(TermOrder.INVLEX);
@@ -211,7 +211,7 @@ public class FactorTest extends TestCase {
      * Test integer factorization.
      * 
      */
-    public void xtestIntegerFactorization() {
+    public void testIntegerFactorization() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(4);
@@ -281,7 +281,7 @@ public class FactorTest extends TestCase {
      * Test multivariate integer factorization.
      * 
      */
-    public void testMultivariateIntegerFactorization() {
+    public void xtestMultivariateIntegerFactorization() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(1);
@@ -316,7 +316,7 @@ public class FactorTest extends TestCase {
      * Test rational factorization.
      * 
      */
-    public void xtestRationalFactorization() {
+    public void testRationalFactorization() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigRational cfac = new BigRational(1);
@@ -373,7 +373,7 @@ public class FactorTest extends TestCase {
      * Test algebraic factorization.
      * 
      */
-    public void xtestAlgebraicFactorization() {
+    public void testAlgebraicFactorization() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigRational cfac = new BigRational(1);
