@@ -5,6 +5,8 @@
 package edu.jas.ufd;
 
 import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -897,6 +899,48 @@ public class GCDPrimitiveTest extends TestCase {
      //System.out.println("e  = " + e);
 
      assertTrue("squarefreefactors(aabbbc) | abc " + e, e.isZERO() );
+ }
+
+
+/**
+ * Test co-prime factors.
+ * 
+ */
+ public void testCoPrime() {
+
+     dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),3,to);
+
+     a = dfac.random(kl,3,2,q);
+     b = dfac.random(kl,3,2,q);
+     c = dfac.random(kl,3,2,q);
+     //System.out.println("a  = " + a);
+     //System.out.println("b  = " + b);
+     //System.out.println("c  = " + c);
+
+     if ( a.isZERO() || b.isZERO() || c.isZERO() ) {
+        // skip for this turn
+        return;
+     }
+     assertTrue("length( a ) <> 0", a.length() > 0);
+         
+     d = a.multiply(a).multiply(b).multiply(b).multiply(b).multiply(c);
+     e = a.multiply(b).multiply(c);
+     //System.out.println("d  = " + d);
+     //System.out.println("c  = " + c);
+
+     List<GenPolynomial<BigInteger>> F = new ArrayList<GenPolynomial<BigInteger>>(5);
+     F.add(a);
+     F.add(b);
+     F.add(c);
+     F.add(d);
+     F.add(e);
+
+     List<GenPolynomial<BigInteger>> P = ufd.coPrime(F);
+     System.out.println("F = " + F);
+     System.out.println("P = " + P);
+
+     assertTrue("is co-prime ", ufd.isCoPrime(P) );
+     assertTrue("is co-prime of ", ufd.isCoPrime(P,F) );
  }
 
 }

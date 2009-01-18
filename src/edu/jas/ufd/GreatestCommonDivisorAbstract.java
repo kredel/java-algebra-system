@@ -8,6 +8,8 @@ package edu.jas.ufd;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.List;
+import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
@@ -692,6 +694,106 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         GenPolynomial<GenPolynomial<C>> Dr = ufd_sr.recursiveResultant(Pr, Sr);
         GenPolynomial<C> D = PolyUtil.<C> distribute(pfac, Dr);
         return D;
+    }
+
+
+    /**
+     * GenPolynomial co-prime list.
+     * @param A list of GenPolynomials.
+     * @return B with ggt(b,c) = 1 for all b != c in B and for all a in A there exists b in B with b|a.
+     */
+    public List<GenPolynomial<C>> coPrime(List<GenPolynomial<C>> A) {
+        if (A == null || A.isEmpty()) {
+            return A;
+        }
+        List<GenPolynomial<C>> B = new ArrayList<GenPolynomial<C>>( A.size() );
+        // make a coprime to rest of list
+        GenPolynomial<C> a = A.get(0);
+        if ( !a.isZERO() && ! a.isConstant() ) {
+            for ( int i = 1; i < A.size(); i++ ) {
+                GenPolynomial<C> b = A.get(i);
+                GenPolynomial<C> g = gcd(a,b).abs();
+                if ( !g.isONE() ) {
+                    a = PolyUtil.<C> basePseudoDivide(a,g);
+                    b = PolyUtil.<C> basePseudoDivide(b,g);
+                    B.add(g);
+                } 
+                if ( !b.isONE() ) {
+                    B.add(b);
+                }
+            }
+        } else {
+            B.addAll( A.subList(1,A.size()) );
+        }
+        // make rest coprime
+        B = coPrime(B);
+        if ( !a.isZERO() && !a.isConstant() && !B.contains(a) ) {
+            B.add(a);
+        }
+        return B;
+    }
+
+
+    /**
+     * GenPolynomial test for co-prime list.
+     * @param A list of GenPolynomials.
+     * @return true if ggt(b,c) = 1 for all b != c in B, else false.
+     */
+    public boolean isCoPrime(List<GenPolynomial<C>> A) {
+        if (A == null || A.isEmpty()) {
+            return true;
+        }
+        if ( A.size() == 1 ) {
+            return true;
+        }
+        for ( int i = 0; i < A.size(); i++ ) {
+            GenPolynomial<C> a = A.get(i);
+            for ( int j = i+1; j < A.size(); j++ ) {
+                GenPolynomial<C> b = A.get(j);
+                GenPolynomial<C> g = gcd(a,b);
+                if ( !g.isONE() ) {
+                    System.out.println("not co-prime, a: " + a);
+                    System.out.println("not co-prime, b: " + b);
+                    System.out.println("not co-prime, g: " + g);
+                    return false;
+                } 
+            }
+        }
+        return true;
+    }
+
+
+    /**
+     * GenPolynomial test for co-prime list of given list.
+     * @param A list of GenPolynomials.
+     * @param P list of co-prime GenPolynomials.
+     * @return true if isCoPrime(P) and for all a in A exists p in P with p | a, else false.
+     */
+    public boolean isCoPrime(List<GenPolynomial<C>> P, List<GenPolynomial<C>> A) {
+        if ( !isCoPrime(P) ) {
+            return false;
+        }
+        if (A == null || A.isEmpty()) {
+            return true;
+        }
+        for ( GenPolynomial<C> q : A ) {
+            if ( q.isZERO() || q.isConstant() ) {
+                continue;
+            }
+            boolean divides = false;
+            for ( GenPolynomial<C> p : P ) {
+                GenPolynomial<C> a = PolyUtil.<C> basePseudoRemainder(q,p);
+                if ( a.isZERO() ) { // p divides q
+                    divides = true;
+                    break;
+                }
+            }
+            if ( !divides ) {
+                System.out.println("no divisor for: " + q);
+                return false;
+            } 
+        }
+        return true;
     }
 
 }
