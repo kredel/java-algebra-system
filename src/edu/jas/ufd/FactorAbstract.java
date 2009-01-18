@@ -173,7 +173,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C> >
                 ti++;
                 if ( ti % 1000 == 0 ) {
                    System.out.print("ti(" + ti + ") ");
-                   if ( ti % 1000 == 0 ) {
+                   if ( ti % 10000 == 0 ) {
                        System.out.println("\ndl   = " + dl + ", deg(u) = " + deg);
                        System.out.println("klist = " + klist);
                        System.out.println("kr    = " + kr);
@@ -182,7 +182,8 @@ public abstract class FactorAbstract<C extends GcdRingElem<C> >
                 }
                 //GenPolynomial<C> trial = PolyUfdUtil.<C> backSubstituteKronecker( pfac, utrial, d ); 
                 if ( PolyUtil.<C>basePseudoRemainder(u, trial).isZERO() ) {
-                    System.out.println("trial = " + trial);
+                    logger.info("trial = " + trial);
+                    //System.out.println("trial = " + trial);
                     factors.add( trial );
                     u = PolyUtil.<C>basePseudoDivide(u, trial); //u = u.divide( trial );
                     if ( klist.removeAll( flist ) ) {
@@ -200,11 +201,13 @@ public abstract class FactorAbstract<C extends GcdRingElem<C> >
             }
         }
         if ( !u.isONE() && !u.equals(P) ) {
-            System.out.println("rest u = " + u);
+            logger.info("rest u = " + u);
+            //System.out.println("rest u = " + u);
             factors.add( u );
         }
         if ( factors.size() == 0 ) {
-            System.out.println("irred u = " + u);
+            logger.info("irred u = " + u);
+            //System.out.println("irred u = " + u);
             factors.add( P );
         }
         return factors;
@@ -430,19 +433,10 @@ public abstract class FactorAbstract<C extends GcdRingElem<C> >
         GenPolynomial<C> t = P.ring.getONE();
         for ( GenPolynomial<C> f: F.keySet() ) {
             Long E = F.get(f);
-            if ( E != null ) {
+            if ( E != null ) { // test obsolet, always true
                 long e = E.longValue();
                 GenPolynomial<C> g = Power.<GenPolynomial<C>> positivePower( f, e );
                 t = t.multiply( g );
-//             } else {
-//                 //t = t.multiply( f );
-//                 Set<GenPolynomial<C>> ks = F.keySet();
-//                 System.out.println("\n\nE == null: " + f);
-//                 System.out.println("F.keySet(): " + ks);
-//                 System.out.println("F.values(): " + F.values());
-//                 System.out.println("F.compar(): " + F.comparator());
-//                 System.out.println("f in ks:    " + ks.contains(f));
-//                 throw new RuntimeException("wrong TreeMap entries");
             }
         }
         boolean f = P.equals(t) || P.equals(t.negate());
