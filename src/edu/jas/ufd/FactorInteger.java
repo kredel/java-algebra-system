@@ -8,8 +8,6 @@ package edu.jas.ufd;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.SortedMap;
-import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 
@@ -45,9 +43,9 @@ public class FactorInteger //<C extends GcdRingElem<C> >
      * @param P squarefree and primitive! GenPolynomial<BigInteger>.
      * @return [p_1,...,p_k] with P = prod_{i=1, ..., k} p_i.
      */
+    @SuppressWarnings("unchecked")
     @Override
-    public List<GenPolynomial<BigInteger>> baseFactorsSquarefree(
-            GenPolynomial<BigInteger> P) {
+    public List<GenPolynomial<BigInteger>> baseFactorsSquarefree(GenPolynomial<BigInteger> P) {
         if (P == null) {
             throw new RuntimeException(this.getClass().getName() + " P == null");
         }
@@ -61,8 +59,7 @@ public class FactorInteger //<C extends GcdRingElem<C> >
         }
         GenPolynomialRing<BigInteger> pfac = P.ring;
         if (pfac.nvar > 1) {
-            throw new RuntimeException(this.getClass().getName()
-                    + " only for univariate polynomials");
+            throw new RuntimeException(this.getClass().getName() + " only for univariate polynomials");
         }
         // compute norm
         BigInteger an = P.maxNorm();
@@ -78,8 +75,8 @@ public class FactorInteger //<C extends GcdRingElem<C> >
         int pn = 30; //primes.size();
         ModIntegerRing cofac = new ModIntegerRing(13, true);
         RingFactory<ModInteger> mcofac = new ModIntegerRing(13, true);
-        GreatestCommonDivisorAbstract<ModInteger> engine 
-           = (GreatestCommonDivisorAbstract<ModInteger>) GCDFactory.<ModInteger> getImplementation(mcofac);
+        GreatestCommonDivisorAbstract<ModInteger> engine = (GreatestCommonDivisorAbstract<ModInteger>) GCDFactory
+                .<ModInteger> getImplementation(mcofac);
         GenPolynomial<ModInteger> am = null;
         GenPolynomialRing<ModInteger> mfac = null;
         final int TT = 4; // 7
@@ -98,11 +95,11 @@ public class FactorInteger //<C extends GcdRingElem<C> >
         pit.next();
         ModInteger nf = null;
         for (int k = 0; k < TT; k++) {
-            if ( k == TT-1 ) { // -2
+            if (k == TT - 1) { // -2
                 primes = new PrimeList(PrimeList.Range.medium);
                 pit = primes.iterator();
             }
-            if ( k == TT+1 ) { // -1
+            if (k == TT + 1) { // -1
                 primes = new PrimeList(PrimeList.Range.large);
                 pit = primes.iterator();
             }
@@ -148,7 +145,7 @@ public class FactorInteger //<C extends GcdRingElem<C> >
                 am = am.divide(nf); // make monic
             }
             mlist = mengine.baseFactorsSquarefree(am);
-            if ( logger.isInfoEnabled() ) {
+            if (logger.isInfoEnabled()) {
                 logger.info("modlist  = " + mlist);
             }
             if (mlist.size() <= 1) {
@@ -184,23 +181,23 @@ public class FactorInteger //<C extends GcdRingElem<C> >
         }
 
         boolean allLists = false;
-        if ( allLists ) {
+        if (allLists) {
             // try each factor list
             for (int k = 0; k < TT; k++) {
                 mlist = modfac[k];
-                if ( false && P.leadingBaseCoefficient().isONE() ) {
-                    factors = searchFactorsMonic(P,M,mlist);
+                if (false && P.leadingBaseCoefficient().isONE()) {
+                    factors = searchFactorsMonic(P, M, mlist);
                 } else {
-                    factors = searchFactorsNonMonic(P,M,mlist);
+                    factors = searchFactorsNonMonic(P, M, mlist);
                 }
                 intfac[k] = factors;
             }
         } else {
             // try only shortest factor list
-            if ( false && P.leadingBaseCoefficient().isONE() ) {
-               factors = searchFactorsMonic(P,M,mlist);
+            if (false && P.leadingBaseCoefficient().isONE()) {
+                factors = searchFactorsMonic(P, M, mlist);
             } else {
-               factors = searchFactorsNonMonic(P,M,mlist);
+                factors = searchFactorsNonMonic(P, M, mlist);
             }
             return factors;
         }
@@ -220,38 +217,38 @@ public class FactorInteger //<C extends GcdRingElem<C> >
     }
 
 
-    /** Factor search with ModInteger Hensel lifting algorithm.
-     * Let p = f_i.ring.coFac.modul() i = 0, ..., n-1
-     * and assume C == prod_{0,...,n-1} f_i mod p with ggt(f_i,f_j) == 1 mod p for i != j
+    /**
+     * Factor search with ModInteger Hensel lifting algorithm. Let p =
+     * f_i.ring.coFac.modul() i = 0, ..., n-1 and assume C == prod_{0,...,n-1}
+     * f_i mod p with ggt(f_i,f_j) == 1 mod p for i != j
      * @param C GenPolynomial<BigInteger>.
      * @param F = [f_0,...,f_{n-1}] List<GenPolynomial<ModInteger>>.
      * @param M bound on the coefficients of g_i as factors of C.
-     * @return [g_0,...,g_{n-1}] = lift(C,F), with C = prod_{0,...,n-1} g_i mod p**e.
+     * @return [g_0,...,g_{n-1}] = lift(C,F), with C = prod_{0,...,n-1} g_i mod
+     *         p**e.
      */
-    public static //<C extends RingElem<C>>
-      List<GenPolynomial<BigInteger>>
-      searchFactorsMonic( GenPolynomial<BigInteger> C,
-                          BigInteger M,
-                          List<GenPolynomial<ModInteger>> F) {
+    public static//<C extends RingElem<C>>
+    List<GenPolynomial<BigInteger>> searchFactorsMonic(GenPolynomial<BigInteger> C, BigInteger M,
+            List<GenPolynomial<ModInteger>> F) {
         //System.out.println("*** monic factor combination ***");
-        if ( C == null || C.isZERO() || F == null || F.size() == 0 ) {
-           throw new RuntimeException("C must be nonzero and F must be nonempty");
+        if (C == null || C.isZERO() || F == null || F.size() == 0) {
+            throw new RuntimeException("C must be nonzero and F must be nonempty");
         }
         GenPolynomialRing<BigInteger> pfac = C.ring;
-        if ( pfac.nvar != 1 ) { // todo assert
-           throw new RuntimeException("polynomial ring not univariate");
+        if (pfac.nvar != 1) { // todo assert
+            throw new RuntimeException("polynomial ring not univariate");
         }
-        List<GenPolynomial<BigInteger>> factors = new ArrayList<GenPolynomial<BigInteger>>( F.size() );
+        List<GenPolynomial<BigInteger>> factors = new ArrayList<GenPolynomial<BigInteger>>(F.size());
         List<GenPolynomial<ModInteger>> mlist = F;
         List<GenPolynomial<BigInteger>> ilist = null;
 
         ModInteger nf = null;
         GenPolynomial<ModInteger> ct = mlist.get(0);
-        if ( ct.isConstant() ) {
+        if (ct.isConstant()) {
             nf = ct.leadingBaseCoefficient();
             mlist.remove(ct);
             //System.out.println("=== nf = " + nf);
-            if ( mlist.size() <= 1 ) {
+            if (mlist.size() <= 1) {
                 factors.add(C);
                 return factors;
             }
@@ -262,19 +259,18 @@ public class FactorInteger //<C extends GcdRingElem<C> >
         //System.out.println("modlist  = " + mlist); // includes not ldcf
         // lift via Hensel
         ilist = PolyUfdUtil.liftHenselQuadratic(PP, M, mlist);
-        if ( logger.isInfoEnabled() ) {
+        if (logger.isInfoEnabled()) {
             logger.info("lifted intlist = " + ilist);
         }
         //System.out.println("intlist  = " + ilist); 
 
-        GreatestCommonDivisorAbstract<BigInteger> iengine 
-            = (GreatestCommonDivisorAbstract<BigInteger>) 
-                       GCDFactory.<BigInteger> getImplementation(pfac.coFac);
+        GreatestCommonDivisorAbstract<BigInteger> iengine = (GreatestCommonDivisorAbstract<BigInteger>) GCDFactory
+                .<BigInteger> getImplementation(pfac.coFac);
 
         // combine trial factors
         int dl = (ilist.size() + 1) / 2;
         GenPolynomial<BigInteger> u = PP;
-        long deg = (u.degree(0)+1L)/2L; 
+        long deg = (u.degree(0) + 1L) / 2L;
         BigInteger ldcf = u.leadingBaseCoefficient();
         //System.out.println("ldcf = " + ldcf); 
         for (int j = 1; j <= dl; j++) {
@@ -286,11 +282,11 @@ public class FactorInteger //<C extends GcdRingElem<C> >
                     GenPolynomial<BigInteger> fk = flist.get(kk);
                     trial = trial.multiply(fk);
                 }
-                if ( trial.degree(0) > deg ) {
+                if (trial.degree(0) > deg) {
                     continue;
                 }
                 //trial = iengine.basePrimitivePart( trial.multiply(ldcf) );
-                trial = iengine.basePrimitivePart( trial );
+                trial = iengine.basePrimitivePart(trial);
                 //System.out.println("pp(trial)= " + trial);
                 if (PolyUtil.<BigInteger> basePseudoRemainder(u, trial).isZERO()) {
                     logger.info("trial    = " + trial);
@@ -310,8 +306,7 @@ public class FactorInteger //<C extends GcdRingElem<C> >
                         }
                         break;
                     } else {
-                        logger.error("error removing flist from ilist = "
-                                           + ilist);
+                        logger.error("error removing flist from ilist = " + ilist);
                     }
                 }
             }
@@ -330,39 +325,39 @@ public class FactorInteger //<C extends GcdRingElem<C> >
     }
 
 
-    /** Factor search with ModInteger Hensel lifting algorithm.
-     * Let p = f_i.ring.coFac.modul() i = 0, ..., n-1
-     * and assume C == prod_{0,...,n-1} f_i mod p with ggt(f_i,f_j) == 1 mod p for i != j
+    /**
+     * Factor search with ModInteger Hensel lifting algorithm. Let p =
+     * f_i.ring.coFac.modul() i = 0, ..., n-1 and assume C == prod_{0,...,n-1}
+     * f_i mod p with ggt(f_i,f_j) == 1 mod p for i != j
      * @param C GenPolynomial<BigInteger>.
      * @param F = [f_0,...,f_{n-1}] List<GenPolynomial<ModInteger>>.
      * @param M bound on the coefficients of g_i as factors of C.
-     * @return [g_0,...,g_{n-1}] = lift(C,F), with C = prod_{0,...,n-1} g_i mod p**e.
+     * @return [g_0,...,g_{n-1}] = lift(C,F), with C = prod_{0,...,n-1} g_i mod
+     *         p**e.
      */
-    public static //<C extends RingElem<C>>
-      List<GenPolynomial<BigInteger>>
-      searchFactorsNonMonic( GenPolynomial<BigInteger> C,
-                             BigInteger M,
-                             List<GenPolynomial<ModInteger>> F) {
+    public static//<C extends RingElem<C>>
+    List<GenPolynomial<BigInteger>> searchFactorsNonMonic(GenPolynomial<BigInteger> C, BigInteger M,
+            List<GenPolynomial<ModInteger>> F) {
         // System.out.println("*** non monic factor combination ***");
-        if ( C == null || C.isZERO() || F == null || F.size() == 0 ) {
-           throw new RuntimeException("C must be nonzero and F must be nonempty");
+        if (C == null || C.isZERO() || F == null || F.size() == 0) {
+            throw new RuntimeException("C must be nonzero and F must be nonempty");
         }
         GenPolynomialRing<BigInteger> pfac = C.ring;
-        if ( pfac.nvar != 1 ) { // todo assert
-           throw new RuntimeException("polynomial ring not univariate");
+        if (pfac.nvar != 1) { // todo assert
+            throw new RuntimeException("polynomial ring not univariate");
         }
-        List<GenPolynomial<BigInteger>> factors = new ArrayList<GenPolynomial<BigInteger>>( F.size() );
+        List<GenPolynomial<BigInteger>> factors = new ArrayList<GenPolynomial<BigInteger>>(F.size());
         List<GenPolynomial<ModInteger>> mlist = F;
         GenPolynomial<BigInteger>[] ilist = null;
 
         ModInteger nf = null;
         GenPolynomial<ModInteger> ct = mlist.get(0);
-        if ( ct.isConstant() ) {
+        if (ct.isConstant()) {
             nf = ct.leadingBaseCoefficient();
             mlist.remove(ct);
             //System.out.println("=== nf   = " + nf);
             //System.out.println("=== ldcf = " + C.leadingBaseCoefficient());
-            if ( mlist.size() <= 1 ) {
+            if (mlist.size() <= 1) {
                 factors.add(C);
                 return factors;
             }
@@ -371,17 +366,16 @@ public class FactorInteger //<C extends GcdRingElem<C> >
         }
         //System.out.println("modlist  = " + mlist); // includes not ldcf
         GenPolynomialRing<ModInteger> mfac = ct.ring;
-        GenPolynomial<ModInteger> Pm = PolyUtil.<ModInteger>fromIntegerCoefficients(mfac,C);
+        GenPolynomial<ModInteger> Pm = PolyUtil.<ModInteger> fromIntegerCoefficients(mfac, C);
         GenPolynomial<BigInteger> PP = C, P = C;
 
-        GreatestCommonDivisorAbstract<BigInteger> iengine 
-            = (GreatestCommonDivisorAbstract<BigInteger>) 
-                       GCDFactory.<BigInteger> getImplementation(pfac.coFac);
+        GreatestCommonDivisorAbstract<BigInteger> iengine = (GreatestCommonDivisorAbstract<BigInteger>) GCDFactory
+                .<BigInteger> getImplementation(pfac.coFac);
 
         // combine trial factors
         int dl = (mlist.size() + 1) / 2;
         GenPolynomial<BigInteger> u = PP;
-        long deg = (u.degree(0)+1L)/2L; 
+        long deg = (u.degree(0) + 1L) / 2L;
         GenPolynomial<ModInteger> um = Pm;
         BigInteger ldcf = u.leadingBaseCoefficient();
         //System.out.println("ldcf = " + ldcf); 
@@ -394,10 +388,10 @@ public class FactorInteger //<C extends GcdRingElem<C> >
                     GenPolynomial<ModInteger> fk = flist.get(kk);
                     trial = trial.multiply(fk);
                 }
-                if ( trial.degree(0) > deg ) {
+                if (trial.degree(0) > deg) {
                     continue;
                 }
-                 GenPolynomial<ModInteger> cofactor = um.divide(trial);
+                GenPolynomial<ModInteger> cofactor = um.divide(trial);
                 //System.out.println("trial    = " + trial);
                 //System.out.println("cofactor = " + cofactor);
 
@@ -405,18 +399,18 @@ public class FactorInteger //<C extends GcdRingElem<C> >
                 try {
                     // ilist = PolyUfdUtil.liftHenselQuadraticFac(PP, M, trial, cofactor);
                     ilist = PolyUfdUtil.liftHenselQuadratic(PP, M, trial, cofactor);
-                } catch ( RuntimeException e) {
+                } catch (RuntimeException e) {
                     // no liftable factors
                     continue;
                 }
                 GenPolynomial<BigInteger> itrial = ilist[0];
                 GenPolynomial<BigInteger> icofactor = ilist[1];
-                if ( logger.isDebugEnabled() ) {
+                if (logger.isDebugEnabled()) {
                     logger.info("lifted intlist = " + itrial + ", cofactor " + icofactor);
                 }
                 //System.out.println("lifted intlist = " + itrial + ", cofactor " + icofactor); 
 
-                itrial = iengine.basePrimitivePart( itrial );
+                itrial = iengine.basePrimitivePart(itrial);
                 //System.out.println("pp(trial)= " + itrial);
                 if (PolyUtil.<BigInteger> basePseudoRemainder(u, itrial).isZERO()) {
                     logger.info("trial    = " + itrial);
@@ -440,8 +434,7 @@ public class FactorInteger //<C extends GcdRingElem<C> >
                         }
                         break;
                     } else {
-                        logger.error("error removing flist from ilist = "
-                                           + mlist);
+                        logger.error("error removing flist from ilist = " + mlist);
                     }
                 }
             }
