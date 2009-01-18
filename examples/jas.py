@@ -1471,7 +1471,7 @@ class RingElem:
         return RingElem( e );
 
     def factors(self):
-        '''Compute irreducible factorization.
+        '''Compute irreducible factorization for modular, integer and rational number coefficients.
         '''
         L = {};
         ci = self.elem.ring.characteristic();
