@@ -935,8 +935,8 @@ public class PolyUfdUtil {
             if ( fi != null && !fi.isZERO() ) {
                 A = A.multiply( fi );
                 F1.add( fi );
-            } else {
-                System.out.println("A = " + A + ", fi = " + fi);
+          //} else {
+                //System.out.println("A = " + A + ", fi = " + fi);
             }
         }
         List<GenPolynomial<ModInteger>> F2 = new ArrayList<GenPolynomial<ModInteger>>( k );
@@ -946,8 +946,8 @@ public class PolyUfdUtil {
             if ( fi != null && !fi.isZERO() ) {
                 B = B.multiply( fi );
                 F2.add( fi );
-            } else {
-                System.out.println("B = " + B + ", fi = " + fi);
+          //} else {
+                //System.out.println("B = " + B + ", fi = " + fi);
             }
         }
         // one Hensel step on part polynomials

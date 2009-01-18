@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import org.apache.log4j.BasicConfigurator;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -44,8 +46,9 @@ public class PolyUfdUtilTest extends TestCase {
  * main.
  */
    public static void main (String[] args) {
-          junit.textui.TestRunner.run( suite() );
-          ComputerThreads.terminate();
+       //BasicConfigurator.configure();
+       junit.textui.TestRunner.run( suite() );
+       ComputerThreads.terminate();
    }
 
 /**
