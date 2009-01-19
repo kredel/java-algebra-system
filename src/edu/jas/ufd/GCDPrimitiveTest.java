@@ -929,13 +929,13 @@ public class GCDPrimitiveTest extends TestCase {
      //System.out.println("c  = " + c);
 
      List<GenPolynomial<BigInteger>> F = new ArrayList<GenPolynomial<BigInteger>>(5);
+     F.add(d);
      F.add(a);
      F.add(b);
      F.add(c);
-     F.add(d);
      F.add(e);
 
-     List<GenPolynomial<BigInteger>> P = ufd.coPrime(F);
+     List<GenPolynomial<BigInteger>> P = ufd.coPrimeSquarefree(F);
      //System.out.println("F = " + F);
      //System.out.println("P = " + P);
 

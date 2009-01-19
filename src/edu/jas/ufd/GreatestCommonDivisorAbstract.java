@@ -15,10 +15,13 @@ import org.apache.log4j.Logger;
 
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
+import edu.jas.structure.UnaryFunctor;
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
+
+import edu.jas.util.ListUtil;
 
 
 /**
@@ -698,9 +701,30 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
 
 
     /**
+     * GenPolynomial squarefree and co-prime list.
+     * @param A list of GenPolynomials.
+     * @return B with ggt(b,c) = 1 for all b != c in B 
+     *         and for all non-constant a in A there exists b in B with b|a
+     *         and each b in B is squarefree. 
+     *         B does not contain zero or constant polynomials.
+     */
+    public List<GenPolynomial<C>> coPrimeSquarefree(List<GenPolynomial<C>> A) {
+        if (A == null || A.isEmpty()) {
+            return A;
+        }
+        List<GenPolynomial<C>> S 
+            = ListUtil.<GenPolynomial<C>,GenPolynomial<C>>map( A, new SquarefreeFunc<C>(this) );
+        List<GenPolynomial<C>> B = coPrime(S);
+        return B;
+    }
+
+
+    /**
      * GenPolynomial co-prime list.
      * @param A list of GenPolynomials.
-     * @return B with ggt(b,c) = 1 for all b != c in B and for all a in A there exists b in B with b|a.
+     * @return B with ggt(b,c) = 1 for all b != c in B 
+     *         and for all non-constant a in A there exists b in B with b|a.
+     *         B does not contain zero or constant polynomials.
      */
     public List<GenPolynomial<C>> coPrime(List<GenPolynomial<C>> A) {
         if (A == null || A.isEmpty()) {
@@ -709,7 +733,8 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         List<GenPolynomial<C>> B = new ArrayList<GenPolynomial<C>>( A.size() );
         // make a coprime to rest of list
         GenPolynomial<C> a = A.get(0);
-        if ( !a.isZERO() && ! a.isConstant() ) {
+        //System.out.println("a = " + a);
+        if ( !a.isZERO() && !a.isConstant() ) {
             for ( int i = 1; i < A.size(); i++ ) {
                 GenPolynomial<C> b = A.get(i);
                 GenPolynomial<C> g = gcd(a,b).abs();
@@ -718,17 +743,36 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
                     b = PolyUtil.<C> basePseudoDivide(b,g);
                     B.add(g);
                 } 
-                if ( !b.isONE() ) {
+                if ( !b.isZERO() && !b.isConstant() ) {
                     B.add(b);
                 }
             }
         } else {
             B.addAll( A.subList(1,A.size()) );
         }
+        a = a.abs();
         // make rest coprime
         B = coPrime(B);
-        if ( !a.isZERO() && !a.isConstant() && !B.contains(a) ) {
-            B.add(a);
+        //System.out.println("B = " + B);
+        //System.out.println("red(a) = " + a);
+        if ( !a.isZERO() && !a.isConstant() /*&& !B.contains(a)*/ ) {
+            for ( int i = 0; i < B.size(); i++ ) {
+                GenPolynomial<C> b = B.get(i);
+                GenPolynomial<C> g = gcd(a,b).abs();
+                if ( !g.isONE() ) { // but is constant
+                    System.out.println("ggt(red(a),b) = " + g);
+                    a = PolyUtil.<C> basePseudoDivide(a,g);
+                    b = PolyUtil.<C> basePseudoDivide(b,g);
+                    B.set(i,b);
+                    if ( !g.isConstant() ) {
+                       System.out.println("ggt(red(a),b) not constant: this cannot happen");
+                       B.add(g);
+                    }
+                } 
+            }
+            if ( !a.isConstant() ) {
+                B.add(a);
+            }
         }
         return B;
     }
@@ -796,4 +840,26 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         return true;
     }
 
+}
+
+
+/**
+ * Squarefree part functor.
+ */
+class SquarefreeFunc<C extends GcdRingElem<C>>  
+      implements UnaryFunctor<GenPolynomial<C>,GenPolynomial<C>> {
+
+    final GreatestCommonDivisorAbstract<C> engine;
+
+    public SquarefreeFunc(GreatestCommonDivisorAbstract<C> engine) {
+        this.engine = engine;
+    }
+
+    public GenPolynomial<C> eval(GenPolynomial<C> c) {
+        if ( c == null ) {
+            return null;
+        } else {
+            return engine.squarefreePart(c);
+        }
+    }
 }
