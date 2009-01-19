@@ -741,10 +741,20 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
                 if ( !g.isONE() ) {
                     a = PolyUtil.<C> basePseudoDivide(a,g);
                     b = PolyUtil.<C> basePseudoDivide(b,g);
-                    B.add(g);
+                    GenPolynomial<C> gp = gcd(a,g).abs();
+                    while ( !gp.isONE() ) {
+                       a = PolyUtil.<C> basePseudoDivide(a,gp);
+                       g = PolyUtil.<C> basePseudoDivide(g,gp);
+                       B.add(g); // ggt(a,g) == 1
+                       g = gp;
+                       gp = gcd(a,gp).abs();
+                    }
+                    if ( !g.isZERO() && !g.isConstant() /*&& !B.contains(g)*/ ) {
+                        B.add(g); // ggt(a,g) == 1
+                    }
                 } 
                 if ( !b.isZERO() && !b.isConstant() ) {
-                    B.add(b);
+                    B.add(b); // ggt(a,b) == 1
                 }
             }
         } else {
@@ -756,23 +766,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         //System.out.println("B = " + B);
         //System.out.println("red(a) = " + a);
         if ( !a.isZERO() && !a.isConstant() /*&& !B.contains(a)*/ ) {
-            for ( int i = 0; i < B.size(); i++ ) {
-                GenPolynomial<C> b = B.get(i);
-                GenPolynomial<C> g = gcd(a,b).abs();
-                if ( !g.isONE() ) { // but is constant
-                    System.out.println("ggt(red(a),b) = " + g);
-                    a = PolyUtil.<C> basePseudoDivide(a,g);
-                    b = PolyUtil.<C> basePseudoDivide(b,g);
-                    B.set(i,b);
-                    if ( !g.isConstant() ) {
-                       System.out.println("ggt(red(a),b) not constant: this cannot happen");
-                       B.add(g);
-                    }
-                } 
-            }
-            if ( !a.isConstant() ) {
-                B.add(a);
-            }
+            B.add(a);
         }
         return B;
     }
