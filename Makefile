@@ -291,7 +291,8 @@ export:
 	mv ~/jas-versions/$(VERSION).`$(SVNREV)`-*.jar ~/jas-versions/$(VERSION)/
 	cd ~/jas-versions/$(VERSION)/meditor; jas_dosed $(VERSION) `$(SVNREV)` manifest.mf
 	cd ~/jas-versions/$(VERSION)/meditor; make > make_meditor.out
-
+	cd ~/jas-versions/log4j_adapter; make > make_mylog.out
+	cp ~/java/lib/mylog.jar ~/jas-versions/$(VERSION)/
 
 deploy:
 	$(RSYNC) -e 'ssh -p 2222' --delete-after --exclude=DTD --exclude=*xml ~/jas-versions/$(VERSION)/ krum:htdocs/$(VERSION)
