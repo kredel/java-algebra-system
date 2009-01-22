@@ -950,6 +950,14 @@ public class GCDPrimitiveTest extends TestCase {
 
      assertTrue("is co-prime ", ufd.isCoPrime(P) );
      assertTrue("is co-prime of ", ufd.isCoPrime(P,F) );
+
+
+     P = ufd.coPrimeRec(F);
+     //System.out.println("F = " + F);
+     //System.out.println("P = " + P);
+
+     assertTrue("is co-prime ", ufd.isCoPrime(P) );
+     assertTrue("is co-prime of ", ufd.isCoPrime(P,F) );
  }
 
 }

@@ -703,7 +703,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
     /**
      * GenPolynomial squarefree and co-prime list.
      * @param A list of GenPolynomials.
-     * @return B with ggt(b,c) = 1 for all b != c in B 
+     * @return B with gcd(b,c) = 1 for all b != c in B 
      *         and for all non-constant a in A there exists b in B with b|a
      *         and each b in B is squarefree. 
      *         B does not contain zero or constant polynomials.
@@ -712,8 +712,11 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         if (A == null || A.isEmpty()) {
             return A;
         }
-        List<GenPolynomial<C>> S 
-            = ListUtil.<GenPolynomial<C>,GenPolynomial<C>>map( A, new SquarefreeFunc<C>(this) );
+        List<GenPolynomial<C>> S = new ArrayList<GenPolynomial<C>>();
+        for ( GenPolynomial<C> g : A ) {
+            SortedMap<GenPolynomial<C>,Long> sm = squarefreeFactors(g);
+            S.addAll( sm.keySet() );
+        }
         List<GenPolynomial<C>> B = coPrime(S);
         return B;
     }
@@ -722,7 +725,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
     /**
      * GenPolynomial co-prime list.
      * @param A list of GenPolynomials.
-     * @return B with ggt(b,c) = 1 for all b != c in B 
+     * @return B with gcd(b,c) = 1 for all b != c in B 
      *         and for all non-constant a in A there exists b in B with b|a.
      *         B does not contain zero or constant polynomials.
      */
@@ -745,16 +748,16 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
                     while ( !gp.isONE() ) {
                        a = PolyUtil.<C> basePseudoDivide(a,gp);
                        g = PolyUtil.<C> basePseudoDivide(g,gp);
-                       B.add(g); // ggt(a,g) == 1
+                       B.add(g); // gcd(a,g) == 1
                        g = gp;
                        gp = gcd(a,gp).abs();
                     }
                     if ( !g.isZERO() && !g.isConstant() /*&& !B.contains(g)*/ ) {
-                        B.add(g); // ggt(a,g) == 1
+                        B.add(g); // gcd(a,g) == 1
                     }
                 } 
                 if ( !b.isZERO() && !b.isConstant() ) {
-                    B.add(b); // ggt(a,b) == 1
+                    B.add(b); // gcd(a,b) == 1
                 }
             }
         } else {
@@ -773,9 +776,89 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
 
 
     /**
+     * GenPolynomial co-prime list.
+     * @param A list of GenPolynomials.
+     * @return B with gcd(b,c) = 1 for all b != c in B 
+     *         and for all non-constant a in A there exists b in B with b|a.
+     *         B does not contain zero or constant polynomials.
+     */
+    public List<GenPolynomial<C>> coPrimeRec(List<GenPolynomial<C>> A) {
+        if (A == null || A.isEmpty()) {
+            return A;
+        }
+        List<GenPolynomial<C>> B = new ArrayList<GenPolynomial<C>>();
+        // make a co-prime to rest of list
+        for ( GenPolynomial<C> a : A ) {
+            //System.out.println("a = " + a);
+            B = coPrime(a,B);
+            //System.out.println("B = " + B);
+        }
+        return B;
+    }
+
+
+    /**
+     * GenPolynomial co-prime list.
+     * @param a GenPolynomial.
+     * @param P co-prime list of GenPolynomials.
+     * @return B with gcd(b,c) = 1 for all b != c in B 
+     *         and for non-constant a there exists b in P with b|a.
+     *         B does not contain zero or constant polynomials.
+     */
+    public List<GenPolynomial<C>> coPrime(GenPolynomial<C> a, List<GenPolynomial<C>> P) {
+        if ( a == null || a.isZERO() || a.isConstant() ) {
+            return P;
+        }
+        List<GenPolynomial<C>> B = new ArrayList<GenPolynomial<C>>( P.size()+1 );
+        // make a coprime to elements of the list P
+        for ( int i = 0; i < P.size(); i++ ) {
+            GenPolynomial<C> b = P.get(i);
+            GenPolynomial<C> g = gcd(a,b).abs();
+            if ( !g.isONE() ) {
+                a = PolyUtil.<C> basePseudoDivide(a,g);
+                b = PolyUtil.<C> basePseudoDivide(b,g);
+                GenPolynomial<C> gp = gcd(a,g).abs();
+                while ( !gp.isONE() ) {
+                    a = PolyUtil.<C> basePseudoDivide(a,gp);
+                    g = PolyUtil.<C> basePseudoDivide(g,gp);
+                    if ( !g.isZERO() && !g.isConstant() && !B.contains(g) ) {
+                        B.add(g); // gcd(a,g) == 1 and gcd(g,c) == 1 for c in P, B
+                    }
+                    g = gp;
+                    gp = gcd(a,gp).abs();
+                }
+                if ( !g.isZERO() && !g.isConstant() && !B.contains(g) ) {
+                    B.add(g); // gcd(a,g) == 1 and gcd(g,c) == 1 for c in P, B
+                }
+                gp = gcd(b,g).abs();
+                while ( !gp.isONE() ) {
+                    b = PolyUtil.<C> basePseudoDivide(b,gp);
+                    g = PolyUtil.<C> basePseudoDivide(g,gp);
+                    if ( !g.isZERO() && !g.isConstant() && !B.contains(g) ) {
+                        B.add(g); // gcd(a,g) == 1 and gcd(g,c) == 1 for c in P, B
+                    }
+                    g = gp;
+                    gp = gcd(b,gp).abs();
+                }
+                if ( !g.isZERO() && !g.isConstant() && !B.contains(g) ) {
+                    B.add(g); // gcd(a,g) == 1 and gcd(g,c) == 1 for c in P, B
+                }
+            }
+            if ( !b.isZERO() && !b.isConstant() && !B.contains(b) ) {
+                B.add(b); // gcd(a,b) == 1 and gcd(b,c) == 1 for c in P, B
+            }
+        }
+        if ( !a.isZERO() && !a.isConstant() && !B.contains(a) ) {
+            B.add(a);
+        }
+        return B;
+    }
+
+
+    /**
      * GenPolynomial test for co-prime list.
      * @param A list of GenPolynomials.
-     * @return true if ggt(b,c) = 1 for all b != c in B, else false.
+     * @return true if gcd(b,c) = 1 for all b != c in B, else false.
      */
     public boolean isCoPrime(List<GenPolynomial<C>> A) {
         if (A == null || A.isEmpty()) {
@@ -834,26 +917,4 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         return true;
     }
 
-}
-
-
-/**
- * Squarefree part functor.
- */
-class SquarefreeFunc<C extends GcdRingElem<C>>  
-      implements UnaryFunctor<GenPolynomial<C>,GenPolynomial<C>> {
-
-    final GreatestCommonDivisorAbstract<C> engine;
-
-    public SquarefreeFunc(GreatestCommonDivisorAbstract<C> engine) {
-        this.engine = engine;
-    }
-
-    public GenPolynomial<C> eval(GenPolynomial<C> c) {
-        if ( c == null ) {
-            return null;
-        } else {
-            return engine.squarefreePart(c);
-        }
-    }
 }
