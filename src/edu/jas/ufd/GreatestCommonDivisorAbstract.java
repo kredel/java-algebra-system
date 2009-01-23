@@ -817,38 +817,37 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
             if ( !g.isONE() ) {
                 a = PolyUtil.<C> basePseudoDivide(a,g);
                 b = PolyUtil.<C> basePseudoDivide(b,g);
+                // make g co-prime to new a, g is co-prime to c != b in P, B
                 GenPolynomial<C> gp = gcd(a,g).abs();
                 while ( !gp.isONE() ) {
                     a = PolyUtil.<C> basePseudoDivide(a,gp);
                     g = PolyUtil.<C> basePseudoDivide(g,gp);
-                    if ( !g.isZERO() && !g.isConstant() && !B.contains(g) ) {
-                        B.add(g); // gcd(a,g) == 1 and gcd(g,c) == 1 for c in P, B
+                    if ( !g.isZERO() && !g.isConstant() /*&& !B.contains(g)*/ ) {
+                        B.add(g); // gcd(a,g) == 1 and gcd(g,c) == 1 for c != b in P, B
                     }
                     g = gp;
                     gp = gcd(a,gp).abs();
                 }
-                if ( !g.isZERO() && !g.isConstant() && !B.contains(g) ) {
-                    B.add(g); // gcd(a,g) == 1 and gcd(g,c) == 1 for c in P, B
-                }
+                // make new g co-prime to new b
                 gp = gcd(b,g).abs();
                 while ( !gp.isONE() ) {
                     b = PolyUtil.<C> basePseudoDivide(b,gp);
                     g = PolyUtil.<C> basePseudoDivide(g,gp);
-                    if ( !g.isZERO() && !g.isConstant() && !B.contains(g) ) {
-                        B.add(g); // gcd(a,g) == 1 and gcd(g,c) == 1 for c in P, B
+                    if ( !g.isZERO() && !g.isConstant() /*&& !B.contains(g)*/ ) {
+                        B.add(g); // gcd(a,g) == 1 and gcd(g,c) == 1 for c != b in P, B
                     }
                     g = gp;
                     gp = gcd(b,gp).abs();
                 }
-                if ( !g.isZERO() && !g.isConstant() && !B.contains(g) ) {
-                    B.add(g); // gcd(a,g) == 1 and gcd(g,c) == 1 for c in P, B
+                if ( !g.isZERO() && !g.isConstant() /*&& !B.contains(g)*/ ) {
+                    B.add(g); // gcd(a,g) == 1 and gcd(g,c) == 1 for c != b in P, B
                 }
             }
-            if ( !b.isZERO() && !b.isConstant() && !B.contains(b) ) {
-                B.add(b); // gcd(a,b) == 1 and gcd(b,c) == 1 for c in P, B
+            if ( !b.isZERO() && !b.isConstant() /*&& !B.contains(b)*/ ) {
+                B.add(b); // gcd(a,b) == 1 and gcd(b,c) == 1 for c != b in P, B
             }
         }
-        if ( !a.isZERO() && !a.isConstant() && !B.contains(a) ) {
+        if ( !a.isZERO() && !a.isConstant() /*&& !B.contains(a)*/ ) {
             B.add(a);
         }
         return B;
