@@ -81,8 +81,8 @@ public class GCDFactory /*<C extends GcdRingElem<C>>*/ {
      * @return gcd algorithm implementation.
      */
     public static //<C extends ModInteger>
-           GreatestCommonDivisor<ModInteger> getImplementation( ModIntegerRing fac ) {
-        GreatestCommonDivisor<ModInteger> ufd; 
+           GreatestCommonDivisorAbstract<ModInteger> getImplementation( ModIntegerRing fac ) {
+        GreatestCommonDivisorAbstract<ModInteger> ufd; 
         if ( fac.isField() ) {
            ufd = new GreatestCommonDivisorModEval();
            return ufd;
@@ -98,7 +98,7 @@ public class GCDFactory /*<C extends GcdRingElem<C>>*/ {
      * @return gcd algorithm implementation.
      */
     public static //<C extends ModInteger>
-           GreatestCommonDivisor<ModInteger> getProxy( ModIntegerRing fac ) {
+           GreatestCommonDivisorAbstract<ModInteger> getProxy( ModIntegerRing fac ) {
         GreatestCommonDivisorAbstract<ModInteger> ufd1, ufd2; 
         ufd1 = new GreatestCommonDivisorSubres<ModInteger>();
         if ( fac.isField() ) {
@@ -116,8 +116,8 @@ public class GCDFactory /*<C extends GcdRingElem<C>>*/ {
      * @return gcd algorithm implementation.
      */
     public static //<C extends BigInteger>
-           GreatestCommonDivisor<BigInteger> getImplementation( BigInteger fac ) {
-        GreatestCommonDivisor<BigInteger> ufd; 
+           GreatestCommonDivisorAbstract<BigInteger> getImplementation( BigInteger fac ) {
+        GreatestCommonDivisorAbstract<BigInteger> ufd; 
         if ( true ) {
            ufd = new GreatestCommonDivisorModular();
            return ufd;
@@ -133,7 +133,7 @@ public class GCDFactory /*<C extends GcdRingElem<C>>*/ {
      * @return gcd algorithm implementation.
      */
     public static //<C extends BigInteger>
-           GreatestCommonDivisor<BigInteger> getProxy( BigInteger fac ) {
+           GreatestCommonDivisorAbstract<BigInteger> getProxy( BigInteger fac ) {
         GreatestCommonDivisorAbstract<BigInteger> ufd1, ufd2; 
         ufd1 = new GreatestCommonDivisorSubres<BigInteger>();
         ufd2 = new GreatestCommonDivisorModular();
@@ -147,8 +147,8 @@ public class GCDFactory /*<C extends GcdRingElem<C>>*/ {
      * @return gcd algorithm implementation.
      */
     public static //<C extends BigRational>
-           GreatestCommonDivisor<BigRational> getImplementation( BigRational fac ) {
-        GreatestCommonDivisor<BigRational> ufd; 
+           GreatestCommonDivisorAbstract<BigRational> getImplementation( BigRational fac ) {
+        GreatestCommonDivisorAbstract<BigRational> ufd; 
         ufd = new GreatestCommonDivisorPrimitive<BigRational>();
         return ufd;
     }
@@ -160,7 +160,7 @@ public class GCDFactory /*<C extends GcdRingElem<C>>*/ {
      * @return gcd algorithm implementation.
      */
     public static //<C extends BigRational>
-           GreatestCommonDivisor<BigRational> getProxy( BigRational fac ) {
+           GreatestCommonDivisorAbstract<BigRational> getProxy( BigRational fac ) {
         GreatestCommonDivisorAbstract<BigRational> ufd1, ufd2; 
         ufd1 = new GreatestCommonDivisorSubres<BigRational>();
         ufd2 = new GreatestCommonDivisorSimple<BigRational>();
@@ -175,8 +175,8 @@ public class GCDFactory /*<C extends GcdRingElem<C>>*/ {
      */
     @SuppressWarnings("unchecked")
     public static <C extends GcdRingElem<C>>
-           GreatestCommonDivisor<C> getImplementation( RingFactory<C> fac ) {
-        GreatestCommonDivisor/*raw type<C>*/ ufd; 
+           GreatestCommonDivisorAbstract<C> getImplementation( RingFactory<C> fac ) {
+        GreatestCommonDivisorAbstract/*raw type<C>*/ ufd; 
         logger.debug("fac = " + fac.getClass().getName());
         int t = 0;
         BigInteger b = new BigInteger(1);
@@ -209,7 +209,7 @@ public class GCDFactory /*<C extends GcdRingElem<C>>*/ {
            }
         }
         logger.debug("ufd = " + ufd);
-        return (GreatestCommonDivisor<C>) ufd;
+        return (GreatestCommonDivisorAbstract<C>) ufd;
     }
 
 
@@ -220,8 +220,8 @@ public class GCDFactory /*<C extends GcdRingElem<C>>*/ {
      */
     @SuppressWarnings("unchecked")
     public static <C extends GcdRingElem<C>>
-           GreatestCommonDivisor<C> getProxy( RingFactory<C> fac ) {
-        GreatestCommonDivisor/*raw type<C>*/ ufd; 
+           GreatestCommonDivisorAbstract<C> getProxy( RingFactory<C> fac ) {
+        GreatestCommonDivisorAbstract/*raw type<C>*/ ufd; 
         logger.debug("fac = " + fac.getClass().getName());
         int t = 0;
         BigInteger b = new BigInteger(1);
