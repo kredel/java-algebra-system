@@ -30,15 +30,15 @@ import edu.jas.ufd.GreatestCommonDivisorModEval;
  * of polynomials. 
  * Incorporate also number of CPUs / threads available (done with GCDProxy).
  * @author Heinz Kredel
- * @usage To create classes that implement this interface use the
- * GreatestCommonDivisorFactory. It will select an appropriate 
+ * @usage To create classes that implement the <code>GreatestCommonDivisor</code> interface use the
+ * <code>GCDFactory</code>. It will select an appropriate 
  * implementation based on the types of polynomial coefficients CT.
  * There are two methods to obtain an implementation: 
- * getProxy() and getImplementation(). 
- * getImplementation() returns an object of a class which implements the
- * GreatestCommonDivisor interface.
- * getProxy() returns a proxy object of a class which implements the
- * GreatestCommonDivisor interface. The proxy will run two implementations 
+ * <code>getProxy()</code> and <code>getImplementation()</code>. 
+ * <code>getImplementation()</code> returns an object of a class which implements the
+ * <code>GreatestCommonDivisor</code> interface.
+ * <code>getProxy()</code> returns a proxy object of a class which implements the
+ * <code>GreatestCommonDiviso</code>r interface. The proxy will run two implementations 
  * in parallel, return the first computed result 
  * and cancel the second running task. 
  * On systems with one CPU the computing time will be two times 
@@ -183,14 +183,14 @@ public class GCDFactory /*<C extends GcdRingElem<C>>*/ {
         RingElem<C> bc = fac.fromInteger(1);
         if ( b.equals( bc ) ) {
            t = 1;
-           logger.debug("getProxy = BigInteger");
+           logger.debug("getImplementation = BigInteger");
         } else {
            if ( fac.characteristic().signum() > 0 ) {
               ModIntegerRing m = new ModIntegerRing( fac.characteristic() );
               //C mc = fac.fromInteger(1);
               if ( m.equals( fac ) ) {
                  t = 2;
-                 logger.debug("getProxy = ModInteger");
+                 logger.debug("getImplementation = ModInteger");
               }
            }
         }
