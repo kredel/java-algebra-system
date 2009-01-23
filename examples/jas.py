@@ -31,7 +31,7 @@ from edu.jas.application import ComprehensiveGroebnerBaseSeq, PolyUtilApp,\
                                 Residue, ResidueRing, Ideal, Quotient, QuotientRing
 from edu.jas.kern        import ComputerThreads;
 from edu.jas.ufd         import GreatestCommonDivisorSubres, PolyUfdUtil, GCDFactory,\
-                                FactorModular, FactorInteger;
+                                FactorFactory;
 from edu.jas.util        import ExecutableServer
 from edu.jas             import structure, arith, poly, ps, ring, module, vector,\
                                 application, util, ufd
@@ -70,6 +70,7 @@ class Ring:
         else:
            self.ring = ring;
         self.engine = GCDFactory.getProxy(self.ring.coFac);
+        self.factor = FactorFactory.getImplementation(self.ring.coFac);
 
     def __str__(self):
         '''Create a string representation.
@@ -1473,23 +1474,10 @@ class RingElem:
     def factors(self):
         '''Compute irreducible factorization for modular, integer and rational number coefficients.
         '''
+        factor = FactorFactory.getImplementation(self.ring.coFac);
+        e = factor.factors( self.elem );
         L = {};
-        ci = self.elem.ring.characteristic();
-        print "char = ", ci;
-        if ci.signum() == 0:
-            fi = self.elem.ring.coFac.isField();
-            print "isField = ", fi;
-            if fi:
-                e = FactorRational().factors( self.elem );
-            else:
-                e = FactorInteger().factors( self.elem );
-        else:
-            e = FactorModular().factors( self.elem );
         for a in e.keySet():
             i = e.get(a);
-            if i == None:
-                # should be resolved: was compareTo of polynomial
-                print "a = ", a, ", i = ", i, " *** why does this happen? ***";
-                #i = 1;
             L[ RingElem( a ) ] = i;
         return L;
