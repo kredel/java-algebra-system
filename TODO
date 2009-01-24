@@ -2,8 +2,6 @@ List of things to be resolved or accomplished:
 
 issues to consider:
 
-- implement polynomial factorization
-
 - implement matrices to vector
 
 - check for safe publication idiom in polynomial construction
@@ -28,12 +26,6 @@ issues to consider:
 
 - refactor method names for groovy operator overloading, make examples for usage
 
-- let arith implementations extend Power as abstract class
-  add divide, subtract, abs, remainder to Power, 
-  name e.g RingElemAbstract
-  clean structure of compareTo, signum and equals
-  - is not possible
-
 - make final variables public (?)
 
 - define divideAndRemainder in RingElem interface and implement
@@ -43,10 +35,26 @@ issues to consider:
 
 - implement power series composition and power
 
+- implement multivariate Hensel lifting for multivariate polynomial factorization
+
+- implement Boolean with RingElem interface
+
+- implement AlgebraicNumber primitive element computation
+
+
 
 partially resolved and completed issues:
 
+- implement univaiate and multivariate polynomial factorization
+  case prime 2 is still to do
+
 - implement power series
+
+- let arith implementations extend Power as abstract class
+  add divide, subtract, abs, remainder to Power, 
+  name e.g RingElemAbstract
+  clean structure of compareTo, signum and equals
+  - is not possible
 
 - refactor ExpVector for different array element types
 
