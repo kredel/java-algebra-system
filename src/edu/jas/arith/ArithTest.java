@@ -876,7 +876,7 @@ public class ArithTest extends TestCase {
          //System.out.println(n+"-th root       = " + d);
          e = Power.positivePower(d,n);
          //System.out.println("root^"+n+"     = " + e);
-         assertTrue("root^2 <= a ", e.compareTo(b) <= 0);
+         assertTrue("root^"+n+" <= a "+(b.subtract(e)), e.compareTo(b) <= 0);
          d = d.sum( BigInteger.ONE );
          f = Power.positivePower(d,n);
          //System.out.println("(root+1)^"+n+" = " + f);
