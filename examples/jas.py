@@ -150,8 +150,24 @@ class Ring:
             b = b.elem;
         return RingElem( self.engine.gcd(a,b) );
 
+    def squarefreeFactors(self,a):
+        '''Compute squarefree factors of polynomial.
+        '''
+        if isinstance(a,RingElem):
+            a = a.elem;
+        else:
+            a = self.element( str(a) );
+            a = a.elem;
+        e = self.engine.squarefreeFactors( a );
+        L = {};
+        for a in e.keySet():
+            i = e.get(a);
+            L[ RingElem( a ) ] = i;
+        return L;
+
     def factors(self,a):
-        '''Compute irreducible factorization for modular, integer and rational number coefficients.
+        '''Compute irreducible factorization for modular, integer,
+        rational number and algebriac number coefficients.
         '''
         if isinstance(a,RingElem):
             a = a.elem;
@@ -335,21 +351,6 @@ class Ideal:
         pm = PolyUtil.fromIntegerCoefficients(rm,l);
         r = Ring("",rm);
         return Ideal(r,"",pm);
-
-    def squarefreeFactors(self):
-        '''Compute squarefree factors of first polynomial.
-        '''
-        s = self.pset;
-        F = s.list;
-        p = F[0]; # only first polynomial
-        t = System.currentTimeMillis();
-        f = GreatestCommonDivisorSubres().squarefreeFactors(p);
-        t = System.currentTimeMillis() - t;
-        #print "squarefee part %s " % f;
-        #S = ArrayList();
-        #S.add(f);
-        print "squarefee factors executed in %s ms" % t; 
-        return f;
 
 
 class ParamIdeal:
