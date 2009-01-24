@@ -40,6 +40,15 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
     private final boolean debug = logger.isDebugEnabled();
 
 
+    /** Get the String representation.
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return getClass().getName();
+    }
+
+
     /**
      * GenPolynomial base coefficient content.
      * @param P GenPolynomial.

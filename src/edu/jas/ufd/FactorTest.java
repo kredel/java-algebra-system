@@ -241,8 +241,7 @@ public class FactorTest extends TestCase {
             if (a.isConstant()) {
                 continue;
             }
-            GreatestCommonDivisorAbstract<BigInteger> engine = (GreatestCommonDivisorAbstract<BigInteger>) GCDFactory
-                    .getProxy(cfac);
+            GreatestCommonDivisorAbstract<BigInteger> engine = GCDFactory.getProxy(cfac);
             //a = engine.basePrimitivePart(a);
             // a = a.abs();
             //System.out.println("\na = " + a);
@@ -320,7 +319,7 @@ public class FactorTest extends TestCase {
         for (int i = 1; i < 3; i++) {
             int facs = 0;
             GenPolynomial<BigRational> a;
-            GenPolynomial<BigRational> c = pfac.random(kl, ll * (i + 1), el + (i + 1), q);
+            GenPolynomial<BigRational> c = pfac.random(kl, ll * i, el + i, q);
             // a = a.monic();
             GenPolynomial<BigRational> b = pfac.random(kl, ll, el + 1, q);
             //b = b.monic();
@@ -430,6 +429,35 @@ public class FactorTest extends TestCase {
             assertTrue("prod(factor(a)) = a", t);
             ComputerThreads.terminate();
         }
+    }
+
+
+    /**
+     * Test factory.
+     * 
+     */
+    public void testFactory() {
+        ModIntegerRing mi = new ModIntegerRing(19,true);
+        Factorization<ModInteger> ufdm = FactorFactory.getImplementation(mi);
+        //System.out.println("ufdm = " + ufdm);
+        assertTrue("ufd != Modular " + ufdm, ufdm instanceof FactorModular );
+
+        BigInteger bi = new BigInteger(1);
+        Factorization<BigInteger> ufdi = FactorFactory.getImplementation(bi);
+        //System.out.println("ufdi = " + ufdi);
+        assertTrue("ufd != Integer " + ufdi, ufdi instanceof FactorInteger );
+
+        BigRational br = new BigRational(1);
+        Factorization<BigRational> ufdr = FactorFactory.getImplementation(br);
+        //System.out.println("ufdr = " + ufdr);
+        assertTrue("ufd != Rational " + ufdr, ufdr instanceof FactorRational );
+
+        GenPolynomialRing<ModInteger> pmfac = new GenPolynomialRing<ModInteger>(mi, 1);
+        GenPolynomial<ModInteger> pm = pmfac.univariate(0);
+        AlgebraicNumberRing<ModInteger> am = new AlgebraicNumberRing<ModInteger>(pm);
+        Factorization<AlgebraicNumber<ModInteger>> ufdam = FactorFactory.getImplementation(am);
+        //System.out.println("ufdam = " + ufdam);
+        assertTrue("ufd != AlgebraicNumber<Modular> " + ufdam, ufdam instanceof FactorAlgebraic );
     }
 
 }

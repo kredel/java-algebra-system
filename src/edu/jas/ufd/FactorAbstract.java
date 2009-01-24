@@ -26,13 +26,23 @@ import edu.jas.util.KsubSet;
  * @author Heinz Kredel
  */
 
-public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factorization<C> {
+public abstract class FactorAbstract<C extends GcdRingElem<C>> 
+                      implements Factorization<C> {
 
 
     private static final Logger logger = Logger.getLogger(FactorAbstract.class);
 
 
     private final boolean debug = logger.isInfoEnabled();
+
+
+    /** Get the String representation.
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return getClass().getName();
+    }
 
 
     /**

@@ -17,7 +17,7 @@ import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
-//import edu.jas.arith.BigComplex;
+import edu.jas.arith.BigComplex;
 
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
@@ -117,7 +117,7 @@ public class GCDFactoryTest extends TestCase {
      BigInteger bi = new BigInteger();
      GreatestCommonDivisor<BigInteger> ufd; 
      
-     ufd = GCDFactory./*<BigInteger>*/getImplementation(bi);
+     ufd = GCDFactory.getImplementation(bi);
      //System.out.println("ufd = " + ufd);
      assertTrue("ufd = Modular " + ufd, ufd instanceof GreatestCommonDivisorModular);
  }
@@ -131,12 +131,12 @@ public class GCDFactoryTest extends TestCase {
      ModIntegerRing mi = new ModIntegerRing(19,true);
      GreatestCommonDivisor<ModInteger> ufd; 
 
-     ufd = GCDFactory./*<ModInteger>*/getImplementation(mi);
+     ufd = GCDFactory.getImplementation(mi);
      //System.out.println("ufd = " + ufd);
      assertTrue("ufd != ModEval " + ufd, ufd instanceof GreatestCommonDivisorModEval);
 
      mi = new ModIntegerRing(30);
-     ufd = GCDFactory./*<ModInteger>*/getImplementation(mi);
+     ufd = GCDFactory.getImplementation(mi);
      //System.out.println("ufd = " + ufd);
      assertTrue("ufd != Subres " + ufd, ufd instanceof GreatestCommonDivisorSubres);
  }
@@ -150,7 +150,7 @@ public class GCDFactoryTest extends TestCase {
      BigRational b = new BigRational();
      GreatestCommonDivisor<BigRational> ufd; 
 
-     ufd = GCDFactory./*<BigRational>*/getImplementation(b);
+     ufd = GCDFactory.getImplementation(b);
      //System.out.println("ufd = " + ufd);
      assertTrue("ufd = Primitive " + ufd, ufd instanceof GreatestCommonDivisorPrimitive);
  }
@@ -159,6 +159,7 @@ public class GCDFactoryTest extends TestCase {
 /**
  * Test get BigComplex implementation.
  * 
+ */
  public void testBigComplex() {
      BigComplex b = new BigComplex();
      GreatestCommonDivisor<BigComplex> ufd; 
@@ -167,7 +168,6 @@ public class GCDFactoryTest extends TestCase {
      //System.out.println("ufd = " + ufd);
      assertTrue("ufd != Simple " + ufd, ufd instanceof GreatestCommonDivisorSimple);
  }
- */
 
 
 /**
@@ -189,7 +189,7 @@ public class GCDFactoryTest extends TestCase {
      GreatestCommonDivisor<AlgebraicNumber<BigRational>> ufd; 
 
      ufd = GCDFactory.<AlgebraicNumber<BigRational>>getImplementation(afac);
-     //System.out.println("ufd = " + ufd);
+     //System.out.println("ufd1 = " + ufd);
      assertTrue("ufd = Subres " + ufd, ufd instanceof GreatestCommonDivisorSubres);
 
 
@@ -197,9 +197,8 @@ public class GCDFactoryTest extends TestCase {
      afac = new AlgebraicNumberRing<BigRational>( mo, true );
 
      ufd = GCDFactory.<AlgebraicNumber<BigRational>>getImplementation(afac);
-     //System.out.println("ufd = " + ufd);
+     //System.out.println("ufd1 = " + ufd);
      assertTrue("ufd = Simple " + ufd, ufd instanceof GreatestCommonDivisorSimple);
-
  }
 
 
@@ -219,14 +218,12 @@ public class GCDFactoryTest extends TestCase {
      AlgebraicNumberRing<ModInteger> afac;
      afac = new AlgebraicNumberRing<ModInteger>( mo );
 
-
      AlgebraicNumber<ModInteger> a = afac.getONE();
      GreatestCommonDivisor<AlgebraicNumber<ModInteger>> ufd; 
 
      ufd = GCDFactory.<AlgebraicNumber<ModInteger>>getImplementation(afac);
-     //System.out.println("ufd = " + ufd);
+     //System.out.println("ufd2 = " + ufd);
      assertTrue("ufd = Subres " + ufd, ufd instanceof GreatestCommonDivisorSubres);
  }
-
 
 }
