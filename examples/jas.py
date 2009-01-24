@@ -150,6 +150,21 @@ class Ring:
             b = b.elem;
         return RingElem( self.engine.gcd(a,b) );
 
+    def factors(self,a):
+        '''Compute irreducible factorization for modular, integer and rational number coefficients.
+        '''
+        if isinstance(a,RingElem):
+            a = a.elem;
+        else:
+            a = self.element( str(a) );
+            a = a.elem;
+        e = self.factor.factors( a );
+        L = {};
+        for a in e.keySet():
+            i = e.get(a);
+            L[ RingElem( a ) ] = i;
+        return L;
+
 
 class Ideal:
     '''Represents a JAS polynomial ideal: PolynomialList and Ideal.
@@ -1470,14 +1485,3 @@ class RingElem:
         except:
             e = None;            
         return RingElem( e );
-
-    def factors(self):
-        '''Compute irreducible factorization for modular, integer and rational number coefficients.
-        '''
-        factor = FactorFactory.getImplementation(self.ring.coFac);
-        e = factor.factors( self.elem );
-        L = {};
-        for a in e.keySet():
-            i = e.get(a);
-            L[ RingElem( a ) ] = i;
-        return L;

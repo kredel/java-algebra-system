@@ -56,7 +56,7 @@ print;
 startLog();
 
 t = System.currentTimeMillis();
-G = f.factors();
+G = r.factors(f);
 t = System.currentTimeMillis() - t;
 print "G = ", G;
 #print "factor time =", t, "milliseconds";
