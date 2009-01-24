@@ -70,7 +70,10 @@ class Ring:
         else:
            self.ring = ring;
         self.engine = GCDFactory.getProxy(self.ring.coFac);
-        self.factor = FactorFactory.getImplementation(self.ring.coFac);
+        try:
+            self.factor = FactorFactory.getImplementation(self.ring.coFac);
+        except:
+            pass
 
     def __str__(self):
         '''Create a string representation.
@@ -174,12 +177,15 @@ class Ring:
         else:
             a = self.element( str(a) );
             a = a.elem;
-        e = self.factor.factors( a );
-        L = {};
-        for a in e.keySet():
-            i = e.get(a);
-            L[ RingElem( a ) ] = i;
-        return L;
+        try:
+            e = self.factor.factors( a );
+            L = {};
+            for a in e.keySet():
+                i = e.get(a);
+                L[ RingElem( a ) ] = i;
+            return L;
+        except:
+            return None
 
 
 class Ideal:
