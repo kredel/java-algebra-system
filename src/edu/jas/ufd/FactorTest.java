@@ -218,8 +218,8 @@ public class FactorTest extends TestCase {
         for (int i = 1; i < 3; i++) {
             int facs = 0;
             GenPolynomial<BigInteger> a = null; //pfac.random(kl,ll*(i+1),el*(i+1),q);
-            GenPolynomial<BigInteger> b = pfac.random(kl * 3, ll * (i + 1), el * (i + 1), q);
-            GenPolynomial<BigInteger> c = pfac.random(kl, ll * (i + 1), el * (i + 3), q);
+            GenPolynomial<BigInteger> b = pfac.random(kl * 2, ll * (i), el * (i + 1), q);
+            GenPolynomial<BigInteger> c = pfac.random(kl, ll * (i), el * (i + 2), q);
             if (b.isZERO() || c.isZERO()) {
                 continue;
             }
@@ -319,9 +319,9 @@ public class FactorTest extends TestCase {
         for (int i = 1; i < 3; i++) {
             int facs = 0;
             GenPolynomial<BigRational> a;
-            GenPolynomial<BigRational> c = pfac.random(kl, ll * i, el + i, q);
+            GenPolynomial<BigRational> c = pfac.random(kl-2, ll * i, el + i, q);
             // a = a.monic();
-            GenPolynomial<BigRational> b = pfac.random(kl, ll, el + 1, q);
+            GenPolynomial<BigRational> b = pfac.random(kl-2, ll, el, q);
             //b = b.monic();
             //         if ( false && ! a.leadingBaseCoefficient().isONE() ) {
             //continue;
