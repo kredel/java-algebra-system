@@ -8,10 +8,6 @@ package edu.jas.ufd;
 
 import org.apache.log4j.Logger;
 
-import edu.jas.structure.GcdRingElem;
-import edu.jas.structure.RingFactory;
-import edu.jas.structure.Power;
-
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
@@ -122,22 +118,16 @@ public class GreatestCommonDivisorHensel //<C extends GcdRingElem<C> >
         int pn = 50; //primes.size();
 
         ModIntegerRing cofac;
-        ModIntegerRing cofacM = null;
         GenPolynomial<ModInteger> qm;
         GenPolynomial<ModInteger> qmf;
         GenPolynomial<ModInteger> rm;
         GenPolynomial<ModInteger> rmf;
-        GenPolynomial<ModInteger> cmf, cmf1, cmf2;
+        GenPolynomial<ModInteger> cmf;
         GenPolynomialRing<ModInteger> mfac;
-        GenPolynomialRing<ModInteger> rfac = null;
-        BigInteger M = null;
-        BigInteger cfe = null;
-        GenPolynomial<ModInteger> cp = null;
         GenPolynomial<ModInteger> cm = null;
         GenPolynomial<ModInteger>[] ecm = null;
         GenPolynomial<ModInteger> sm = null;
         GenPolynomial<ModInteger> tm = null;
-        GenPolynomial<BigInteger> cpi = null;
         GenPolynomial<BigInteger>[] lift = null;
         if ( debug ) {
            logger.debug("c = " + c);
@@ -189,7 +179,6 @@ public class GreatestCommonDivisorHensel //<C extends GcdRingElem<C> >
             if ( cm.isConstant() ) {
                logger.debug("cm, constant = " + cm ); 
                return fac.getONE().multiply( c );
-               //return cm.abs().multiply( c );
             }
 
             // compute factors and gcd with factor
@@ -214,21 +203,6 @@ public class GreatestCommonDivisorHensel //<C extends GcdRingElem<C> >
                 } else {
                     logger.info("giving up on Hensel gcd reverting to Subres gcd");
                     return super.baseGcd(P,S);
-//                     System.out.println("gcd() not one " + ecm[0]);
-//                     cmf1 = rmf; 
-//                     cmf2 = qmf;
-//                     boolean t;
-//                     do {
-//                        cmf = cmf1.sum(cmf2); // x * rmf + 1 * qmf
-//                        ecm = cm.egcd(cmf);
-//                        t = ecm[0].isONE();
-//                        if ( ! t ) {
-//                            cmf1 = cmf1.sum(rmf);
-//                        }
-//                     } while ( ! t );
-//                     crq = r.sum(q);
-//                     sm = ecm[1];
-//                     tm = ecm[2];
                 }
             }
             BigInteger cn = crq.maxNorm();
@@ -240,7 +214,6 @@ public class GreatestCommonDivisorHensel //<C extends GcdRingElem<C> >
                 System.out.println("cmf = " + cmf);
                 System.out.println("sm  = " + sm);
                 System.out.println("tm  = " + tm);
-                //System.out.println("n   = " + n);
                 System.out.println("cn  = " + cn);
             }
             if ( quadratic ) {
