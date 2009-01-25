@@ -48,7 +48,7 @@ public class FactorAlgebraic<C extends GcdRingElem<C>> extends FactorAbstract<Al
 
     /**
      * Constructor.
-     * @parm factorCoeff factorization engine for base coefficients.
+     * @param factorCoeff factorization engine for base coefficients.
      */
     public FactorAlgebraic(FactorAbstract<C> factorCoeff) {
         this.factorCoeff = factorCoeff;

@@ -25,7 +25,7 @@ public class KsubSet<E> implements Iterable<List<E>> {
 
     /**
      * KsubSet constructor.
-     * @param S generating set.
+     * @param set generating set.
      * @param k size of subsets.
      */
     public KsubSet(List<E> set, int k) {
@@ -41,8 +41,8 @@ public class KsubSet<E> implements Iterable<List<E>> {
 
 
     /**
-     * get an iterator over subsets.
-     * @returns an iterator.
+     * Get an iterator over subsets.
+     * @return an iterator.
      */
     public Iterator<List<E>> iterator() {
         if ( k == 0 ) {
@@ -77,7 +77,7 @@ class KsubSetIterator<E> implements Iterator<List<E>> {
 
     /**
      * KsubSetIterator constructor.
-     * @param S generating set.
+     * @param set generating set.
      * @param k subset size.
      */
     public KsubSetIterator(List<E> set, int k) {

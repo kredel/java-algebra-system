@@ -28,7 +28,7 @@ public class PowerSet<E> implements Iterable<List<E>> {
 
     /**
      * PowerSet constructor.
-     * @param S generating set.
+     * @param set generating set.
      */
     public PowerSet(List<E> set) {
         this.set = set;
@@ -37,7 +37,7 @@ public class PowerSet<E> implements Iterable<List<E>> {
 
     /**
      * get an iterator over subsets.
-     * @returns an iterator.
+     * @return an iterator.
      */
     public Iterator<List<E>> iterator() {
         return new PowerSetIterator<E>(set);
@@ -66,7 +66,7 @@ class PowerSetIterator<E> implements Iterator<List<E>> {
 
     /**
      * PowerSetIterator constructor.
-     * @param S generating set.
+     * @param set generating set.
      */
     public PowerSetIterator(List<E> set) {
         this.set = set;
@@ -136,6 +136,5 @@ class PowerSetIterator<E> implements Iterator<List<E>> {
     public void remove() {
         throw new UnsupportedOperationException("cannnot remove subsets");
     }
-
 
 }

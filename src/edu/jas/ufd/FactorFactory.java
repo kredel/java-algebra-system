@@ -42,7 +42,7 @@ import edu.jas.poly.AlgebraicNumberRing;
  *     engine = GCDFactory.&lt;BigInteger&gt;getImplementation( cofac );
  * c = engine.factors(a);
  * </pre>
- * @see edu.jas.ufd.Factorization#factor( edu.jas.poly.GenPolynomial P)
+ * @see edu.jas.ufd.Factorization#factors(edu.jas.poly.GenPolynomial P)
  */
 
 public class FactorFactory {
