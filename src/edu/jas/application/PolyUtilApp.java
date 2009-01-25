@@ -101,7 +101,7 @@ public class PolyUtilApp<C extends RingElem<C> > {
             ExpVector e = y.getKey();
             C a = y.getValue();
             Product<GenPolynomial<C>> p = toProduct(pfac,a,e);
-            P = P.sum( p );
+            P = P.sum( p ); 
         }
         return P;
     }
@@ -494,7 +494,6 @@ public class PolyUtilApp<C extends RingElem<C> > {
 
         RingFactory<Product<Residue<C>>> fpr = L.ring.coFac;
         ProductRing<Residue<C>> pr = (ProductRing<Residue<C>>)fpr;
-        int s = pr.length();
         List<GenPolynomial<GenPolynomial<C>>> slist;
 
         List<GenPolynomial<Product<Residue<C>>>> plist = L.list;
@@ -502,7 +501,6 @@ public class PolyUtilApp<C extends RingElem<C> > {
 
         RingFactory<Residue<C>> r = pr.getFactory( i );
         ResidueRing<C> rr = (ResidueRing<C>) r;
-        Ideal<C> id = rr.ideal;
         GenPolynomialRing<C> cof = rr.ring;
         GenPolynomialRing<GenPolynomial<C>> pfc; 
         pfc = new GenPolynomialRing<GenPolynomial<C>>(cof,L.ring);
@@ -564,8 +562,6 @@ public class PolyUtilApp<C extends RingElem<C> > {
         if ( P == null || P.isZERO() ) {
            return b;
         }
-        RingFactory<GenPolynomial<C>> cf = pfac.coFac;
-        GenPolynomialRing<C> fac = (GenPolynomialRing<C>)cf;
 
         for ( Map.Entry<ExpVector,Product<Residue<C>>> y: P.getMap().entrySet() ) {
             ExpVector e = y.getKey();

@@ -187,7 +187,7 @@ public class GenPolynomialRing<C extends RingElem<C> >
            String scf = coFac.getClass().getSimpleName();
            if ( coFac instanceof AlgebraicNumberRing ) {
               AlgebraicNumberRing an = (AlgebraicNumberRing)coFac;  
-              String[] v = an.ring.vars;
+              //String[] v = an.ring.vars;
               res =  "AN[ ("
                      + an.ring.varsToString()
                      + ") ("
@@ -196,7 +196,7 @@ public class GenPolynomialRing<C extends RingElem<C> >
            }
            if ( coFac instanceof QuotientRing ) {
               QuotientRing rf = (QuotientRing)coFac;  
-              String[] v = rf.ring.vars;
+              //String[] v = rf.ring.vars;
               RingFactory cf = rf.ring.coFac;
               String qf = "RatFunc";
               String cs;
@@ -216,7 +216,7 @@ public class GenPolynomialRing<C extends RingElem<C> >
            }
            if ( coFac instanceof GenPolynomialRing ) {
               GenPolynomialRing rf = (GenPolynomialRing)coFac;  
-              String[] v = rf.vars;
+              //String[] v = rf.vars;
               RingFactory cf = rf.coFac;
               String cs;
               if ( cf instanceof ModIntegerRing ) {
@@ -267,7 +267,7 @@ public class GenPolynomialRing<C extends RingElem<C> >
            }
            if ( coFac instanceof QuotientRing ) {
               QuotientRing rf = (QuotientRing)coFac;  
-              String[] v = rf.ring.vars;
+              //String[] v = rf.ring.vars;
               RingFactory cf = rf.ring.coFac;
               String cs;
               if ( cf instanceof ModIntegerRing ) {
@@ -284,7 +284,7 @@ public class GenPolynomialRing<C extends RingElem<C> >
            }
            if ( coFac instanceof GenPolynomialRing ) {
               GenPolynomialRing rf = (GenPolynomialRing)coFac;  
-              String[] v = rf.vars;
+              //String[] v = rf.vars;
               RingFactory cf = rf.coFac;
               String cs;
               if ( cf instanceof ModIntegerRing ) {

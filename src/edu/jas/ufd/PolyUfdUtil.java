@@ -1040,12 +1040,7 @@ public class PolyUfdUtil {
         GenPolynomial<ModInteger> Emb1;
 
         // polynomials over the integers
-        GenPolynomial<BigInteger> E;
         GenPolynomial<BigInteger> Ei;
-        GenPolynomial<BigInteger> Ea;
-        GenPolynomial<BigInteger> Eb;
-        GenPolynomial<BigInteger> Ea1;
-        GenPolynomial<BigInteger> Eb1;
         GenPolynomial<BigInteger> Si;
         GenPolynomial<BigInteger> Ti;
 
@@ -1425,7 +1420,6 @@ public class PolyUfdUtil {
             C a = y.getValue();
             long f = e.getVal(0);
             ExpVector g = ExpVector.create(n);
-            long h = 1L;
             for (int i = 0; i < n; i++) {
                 long j = f % d;
                 f /= d;

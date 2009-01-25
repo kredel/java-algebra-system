@@ -78,8 +78,8 @@ public class FactorAlgebraic<C extends GcdRingElem<C>> extends FactorAbstract<Al
             throw new RuntimeException("only for univariate polynomials");
         }
         AlgebraicNumberRing<C> afac = (AlgebraicNumberRing<C>) pfac.coFac;
-        GenPolynomialRing<C> cfac = afac.ring;
-        GenPolynomialRing<GenPolynomial<C>> rfac = new GenPolynomialRing<GenPolynomial<C>>(cfac, pfac);
+        //GenPolynomialRing<C> cfac = afac.ring;
+        //GenPolynomialRing<GenPolynomial<C>> rfac = new GenPolynomialRing<GenPolynomial<C>>(cfac, pfac);
 
         AlgebraicNumber<C> ldcf = P.leadingBaseCoefficient();
         if (!ldcf.isONE()) {

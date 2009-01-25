@@ -242,10 +242,10 @@ public class FactorInteger //<C extends GcdRingElem<C> >
         List<GenPolynomial<ModInteger>> mlist = F;
         List<GenPolynomial<BigInteger>> ilist = null;
 
-        ModInteger nf = null;
+        //ModInteger nf = null;
         GenPolynomial<ModInteger> ct = mlist.get(0);
         if (ct.isConstant()) {
-            nf = ct.leadingBaseCoefficient();
+            //nf = ct.leadingBaseCoefficient();
             mlist.remove(ct);
             //System.out.println("=== nf = " + nf);
             if (mlist.size() <= 1) {
@@ -253,7 +253,7 @@ public class FactorInteger //<C extends GcdRingElem<C> >
                 return factors;
             }
         } else {
-            nf = ct.ring.coFac.getONE();
+            //nf = ct.ring.coFac.getONE();
         }
         GenPolynomial<BigInteger> PP = C, P = C;
         //System.out.println("modlist  = " + mlist); // includes not ldcf
@@ -271,7 +271,7 @@ public class FactorInteger //<C extends GcdRingElem<C> >
         int dl = (ilist.size() + 1) / 2;
         GenPolynomial<BigInteger> u = PP;
         long deg = (u.degree(0) + 1L) / 2L;
-        BigInteger ldcf = u.leadingBaseCoefficient();
+        //BigInteger ldcf = u.leadingBaseCoefficient();
         //System.out.println("ldcf = " + ldcf); 
         for (int j = 1; j <= dl; j++) {
             KsubSet<GenPolynomial<BigInteger>> ps = new KsubSet<GenPolynomial<BigInteger>>(ilist, j);

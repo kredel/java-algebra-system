@@ -60,7 +60,6 @@ public class FactorModular //<C extends GcdRingElem<C> >
         if (m.longValue() == 2L) {
             throw new RuntimeException(this.getClass().getName() + " case p = 2 not implemented");
         }
-        GenPolynomial<ModInteger> one = pfac.getONE();
         GenPolynomial<ModInteger> x = pfac.univariate(0);
         GenPolynomial<ModInteger> h = x;
         GenPolynomial<ModInteger> f = P;
