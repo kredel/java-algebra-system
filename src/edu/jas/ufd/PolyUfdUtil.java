@@ -549,10 +549,6 @@ public class PolyUfdUtil {
         BigInteger Mq = Qi;
         GenPolynomialRing<ModInteger> qfac;
         qfac = new GenPolynomialRing<ModInteger>(Q, pfac);
-        GenPolynomialRing<ModInteger> mfac;
-        BigInteger Qm = new BigInteger(Q.getModul().multiply(Q.getModul()));
-        ModIntegerRing Qmm = new ModIntegerRing(Qm.getVal());
-        mfac = new GenPolynomialRing<ModInteger>(Qmm, qfac);
 
         // normalize c and a, b factors, assert p is prime
         GenPolynomial<BigInteger> Ai;
@@ -692,14 +688,10 @@ public class PolyUfdUtil {
             Ti = Eb;
 
             // prepare for next iteration
-            //Qi = new BigInteger( Q.getModul().multiply( P.getModul() ) );
             Mq = Qi;
             Qi = new BigInteger(Q.getModul().multiply(Q.getModul()));
             Q = new ModIntegerRing(Qi.getVal());
             qfac = new GenPolynomialRing<ModInteger>(Q, pfac);
-            Qm = new BigInteger(Q.getModul().multiply(Q.getModul()));
-            Qmm = new ModIntegerRing(Qm.getVal());
-            mfac = new GenPolynomialRing<ModInteger>(Qmm, qfac);
 
             Aq = PolyUtil.<ModInteger> fromIntegerCoefficients(qfac, Ai);
             Bq = PolyUtil.<ModInteger> fromIntegerCoefficients(qfac, Bi);
@@ -751,7 +743,7 @@ public class PolyUfdUtil {
      * @return [A1,B1] = lift(C,A,B), with C = A1 * B1.
      */
     @SuppressWarnings("unchecked")
-    public static//<C extends RingElem<C>>
+    public static //<C extends RingElem<C>>
     GenPolynomial<BigInteger>[] liftHenselQuadratic(GenPolynomial<BigInteger> C, BigInteger M,
             GenPolynomial<ModInteger> A, GenPolynomial<ModInteger> B) {
         GenPolynomial<BigInteger>[] AB = (GenPolynomial<BigInteger>[]) new GenPolynomial[2];
@@ -794,7 +786,6 @@ public class PolyUfdUtil {
     public static//<C extends RingElem<C>>
     GenPolynomial<BigInteger>[] liftHenselQuadraticFac(GenPolynomial<BigInteger> C, BigInteger M,
             GenPolynomial<ModInteger> A, GenPolynomial<ModInteger> B) {
-        GenPolynomial<BigInteger>[] AB = (GenPolynomial<BigInteger>[]) new GenPolynomial[2];
         if (C == null || C.isZERO()) {
             throw new RuntimeException("C must be nonzero");
         }
@@ -827,7 +818,7 @@ public class PolyUfdUtil {
      * @return [g_0,...,g_{n-1}] = lift(C,F), with C = prod_{0,...,n-1} g_i mod
      *         p**e.
      */
-    public static//<C extends RingElem<C>>
+    public static //<C extends RingElem<C>>
     List<GenPolynomial<BigInteger>> liftHenselQuadratic(GenPolynomial<BigInteger> C, BigInteger M,
             List<GenPolynomial<ModInteger>> F) {
         if (C == null || C.isZERO() || F == null || F.size() == 0) {
@@ -984,20 +975,15 @@ public class PolyUfdUtil {
         GenPolynomialRing<ModInteger> qfac;
         qfac = new GenPolynomialRing<ModInteger>(Q, pfac); // mod p
         GenPolynomialRing<ModInteger> mfac;
-        GenPolynomialRing<ModInteger> lmfac;
         BigInteger Mi = new BigInteger(Q.getModul().multiply(Q.getModul()));
         ModIntegerRing Qmm = new ModIntegerRing(Mi.getVal());
         mfac = new GenPolynomialRing<ModInteger>(Qmm, qfac); // mod p^e
-        lmfac = mfac; // old mfac
-        ModInteger Pm = Qmm.fromInteger(P.getModul());
         ModInteger Qm = Qmm.fromInteger(Qi.getVal());
 
         // partly normalize c and a, b factors, assert p is prime
-        GenPolynomial<BigInteger> Cx = C;
         GenPolynomial<BigInteger> Ai;
         GenPolynomial<BigInteger> Bi;
         BigInteger c = C.leadingBaseCoefficient();
-        BigInteger xc = c;
         C = C.multiply(c); // sic
         ModInteger a = A.leadingBaseCoefficient();
         if (!a.isONE()) { // A = A.monic();
@@ -1033,15 +1019,12 @@ public class PolyUfdUtil {
         GenPolynomial<ModInteger> Bp;
         GenPolynomial<ModInteger> A1p;
         GenPolynomial<ModInteger> B1p;
-        GenPolynomial<ModInteger> Ep;
         GenPolynomial<ModInteger> Sp = S;
         GenPolynomial<ModInteger> Tp = T;
 
         // polynomials mod q
         GenPolynomial<ModInteger> Aq;
         GenPolynomial<ModInteger> Bq;
-        GenPolynomial<ModInteger> Eq;
-        GenPolynomial<ModInteger> Eqp;
 
         // polynomials mod p^e
         GenPolynomial<ModInteger> Cm;
@@ -1202,7 +1185,7 @@ public class PolyUfdUtil {
             // prepare for next iteration
             Qi = new BigInteger(Q.getModul().multiply(Q.getModul()));
             Mq = Qi;
-            lmfac = mfac;
+            //lmfac = mfac;
             Q = new ModIntegerRing(Qi.getVal());
             qfac = new GenPolynomialRing<ModInteger>(Q, pfac);
             Qmm = new ModIntegerRing(Qmm.getModul().multiply(Qmm.getModul()));
@@ -1216,7 +1199,6 @@ public class PolyUfdUtil {
             Tm = PolyUtil.<ModInteger> fromIntegerCoefficients(mfac, Ti);
 
             assert (isHenselLift(C, Mi, PP, Ai, Bi));
-            //System.out.println("is Hensel lift =  " + ih);
             Mi = Mi.fromInteger(Qmm.getModul());
 
             Aq = PolyUtil.<ModInteger> fromIntegerCoefficients(qfac, Ai);
@@ -1277,7 +1259,7 @@ public class PolyUfdUtil {
      * @param p prime number.
      * @return true if C = prod_{0,...,n-1} g_i mod p**e, else false.
      */
-    public static//<C extends RingElem<C>>
+    public static //<C extends RingElem<C>>
     boolean isHenselLift(GenPolynomial<BigInteger> C, BigInteger M, BigInteger p,
             List<GenPolynomial<BigInteger>> G) {
         if (C == null || C.isZERO()) {
