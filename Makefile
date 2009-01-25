@@ -314,12 +314,14 @@ subst:
 
 
 # lines of code and number of classes
-loc:
+loc: young
 	find src -name "*.java" | wc -l
 	find src -name "*.java" | grep -v Test | wc -l
 	find src -name "*.java" | grep    Test | wc -l 
 	find src -name "*.java" | xargs cat | wc
 	find src -name "*.java" | grep -v Test | xargs cat | wc
 	find src -name "*.java" | grep    Test | xargs cat | wc
+	cat examples/jas.py | wc
+	find examples -name "*.py" | grep -v jas.py | xargs cat | wc
 
 # -eof-
