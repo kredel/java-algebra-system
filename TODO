@@ -37,7 +37,7 @@ issues to consider:
 
 - implement multivariate Hensel lifting for multivariate polynomial factorization
 
-- implement Boolean with RingElem interface
+- implement Boolean with RingElem interface (?)
 
 - implement AlgebraicNumber primitive element computation
 
