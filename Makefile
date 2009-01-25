@@ -215,10 +215,18 @@ DOCU=$(wildcard jas-log.html index.html problems.html design.html COPYING* sampl
 # */package.html 
 
 doc: $(FILES)
-	$(DOC) $(DOCOPTS) -d doc $(FILES) 
+	$(DOC) $(DOCOPTS) -d doc/api $(FILES) 
 
 epydoc: examples/jas.py
 	epydoc -o doc/jython -n JAS -u ../../index.html examples/jas.py
+
+texdoc: $(FILES)
+	mkdir -p doc/tex
+	rm -f doc/tex/*
+	$(DOC) $(DOCOPTS) -doclet TexGen -docletpath ~/java/lib/texgen.jar -dest doc/tex $(FILES) 
+	ls doc/tex/* | grep -v Test | grep -v allclasses | xargs cat > doc/tex/allclasses.tex
+	sed -i -f doc/totex.sed doc/tex/allclasses.tex
+	cd doc; pdflatex jas_texgen.tex
 
 ALLJAR=$(FILES) $(DOCU) Makefile build.xml log4j.properties $(PYS)
 
