@@ -14,19 +14,23 @@ import org.apache.log4j.Logger;
 
 import edu.jas.application.Quotient;
 import edu.jas.application.QuotientRing;
+
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
+
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
+
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.structure.UnaryFunctor;
+
 import edu.jas.util.ListUtil;
 
 
@@ -307,7 +311,7 @@ public class PolyUfdUtil {
      * Norm of a polynomial with AlgebraicNumber coefficients.
      * @param A polynomial from GenPolynomial&lt;AlgebraicNumber&lt;C&gt;&gt;.
      * @param k for (y - k x) substitution.
-     * @return norm(A) = res_x(A(x,y),m(x)) in GenPolynomial&lt;C&gt;.
+     * @return norm(A) = res_x(A(x,y),m(x)) in GenPolynomialRing&lt;C&gt;.
      */
     public static <C extends GcdRingElem<C>> GenPolynomial<C> norm(GenPolynomial<AlgebraicNumber<C>> A, long k) {
         if (A == null) {
