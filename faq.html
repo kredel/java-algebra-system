@@ -22,6 +22,8 @@
 </li>
 <li><a href="#no004">After compiling a sample code I get NoClassDefFoundError: org/apache/log4j/Logger</a>
 </li>
+<li><a href="#no005">I can not use Apache log4j in my project for some reason.</a>
+</li>
 
 <!--
 <li><a href="#no002"></a>
@@ -57,12 +59,21 @@ See <a href="http://java.sun.com/" target="sun">Java.sun.com</a>
 for the latest Java releases.
 </p>
 
-
 <h4><a name="no004">After compiling a sample code I get NoClassDefFoundError: org/apache/log4j/Logger</a></h4>
 <p>
 You must include the Log4j classes in the classpath. e.g.
 <br />
 <code>java -cp log4j.jar:. mysample</code>
+</p>
+
+<h4><a name="no005">I can not use Apache log4j in my project for some reason.</a></h4>
+<p>
+We provide an adapter package for Java logging with <a href="mylog.jar">mylog.jar</a>. 
+The package contians classes which delegate all logging calls to <code>java.util.logging</code> 
+classes. Java logging must be configured to your needs - we do not provide sample configurations.
+You use it inplace of <code>log4j.jar</code>, for example  
+<br />
+<code>java -cp mylog.jar:. mysample</code>
 </p>
 
 <!--
@@ -76,7 +87,7 @@ You must include the Log4j classes in the classpath. e.g.
 <p>
 <!-- Created: Sun Nov 11 15:56:30 CET 2007 -->
 <!-- hhmts start -->
-Last modified: Sun Nov 11 18:17:06 CET 2007
+Last modified: Thu Jan 29 22:23:30 CET 2009
 <!-- hhmts end -->
 </p>
 <!--
