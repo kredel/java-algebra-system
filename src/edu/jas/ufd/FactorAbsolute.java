@@ -83,7 +83,7 @@ public class FactorAbsolute<C extends GcdRingElem<C>> extends FactorAbstract<C> 
         if (P.isZERO()) {
             return factors;
         }
-        GenPolynomialRing<C> pfac = P.ring; // K)[x]
+        GenPolynomialRing<C> pfac = P.ring; // K[x]
         if (pfac.nvar > 1) {
             throw new RuntimeException("only for univariate polynomials");
         }
@@ -120,14 +120,15 @@ public class FactorAbsolute<C extends GcdRingElem<C>> extends FactorAbstract<C> 
         if (P.isZERO()) {
             return factors;
         }
-        GenPolynomialRing<C> pfac = P.ring; // K)[x]
+        GenPolynomialRing<C> pfac = P.ring; // K[x]
         if (pfac.nvar > 1) {
             throw new RuntimeException("only for univariate polynomials");
         }
         // setup field extension K(alpha)
+        String[] vars = new String[] { "z" };
         AlgebraicNumberRing<C> afac = new AlgebraicNumberRing<C>(P,true); // since irreducible
         GenPolynomialRing<AlgebraicNumber<C>> pafac 
-           = new GenPolynomialRing<AlgebraicNumber<C>>(afac, P.ring);
+            = new GenPolynomialRing<AlgebraicNumber<C>>(afac, P.ring.nvar,P.ring.tord,vars);
         // convert to K(alpha)
         GenPolynomial<AlgebraicNumber<C>> Pa 
             = PolyUtil.<C> convertToAlgebraicCoefficients(pafac, P);

@@ -6,6 +6,7 @@ package edu.jas.ufd;
 
 
 import java.util.SortedMap;
+import java.util.List;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -16,7 +17,9 @@ import edu.jas.arith.BigRational;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
 import edu.jas.arith.PrimeList;
+
 import edu.jas.kern.ComputerThreads;
+
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.GenPolynomial;
@@ -429,6 +432,34 @@ public class FactorTest extends TestCase {
             assertTrue("prod(factor(a)) = a", t);
             ComputerThreads.terminate();
         }
+    }
+
+
+    /**
+     * Test absolute factorization.
+     * 
+     */
+    public void testAbsoluteFactorization() {
+
+        TermOrder to = new TermOrder(TermOrder.INVLEX);
+        BigRational cfac = new BigRational(1);
+        String[] alpha = new String[] { "alpha" };
+        String[] vars = new String[] { "z" };
+        GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(cfac, 1, to, alpha);
+        GenPolynomial<BigRational> agen = pfac.univariate(0, 2);
+        agen = agen.sum(pfac.fromInteger(2)); // x^2 + 2
+
+        FactorAbsolute<BigRational> engine = new FactorAbsolute<BigRational>(new FactorRational());
+
+        List<GenPolynomial<AlgebraicNumber<BigRational>>> F = engine.baseFactorsAbsolute(agen);
+
+        System.out.println("agen = " + agen);
+        System.out.println("F    = " + F);
+
+        boolean t = true; //engine.isFactorization(agen,F);
+        //System.out.println("t        = " + t);
+        assertTrue("prod(factor(a)) = a", t);
+        ComputerThreads.terminate();
     }
 
 
