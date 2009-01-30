@@ -37,7 +37,7 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C> >
      * @return gcd(P,S).
      */
     @Override
-     public GenPolynomial<C> baseGcd( GenPolynomial<C> P,
+    public GenPolynomial<C> baseGcd( GenPolynomial<C> P,
                                      GenPolynomial<C> S ) {
         if ( S == null || S.isZERO() ) {
             return P;
@@ -85,6 +85,8 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C> >
            return q.multiply(c);
         }
         GenPolynomial<C> x;
+        //System.out.println("q = " + q);
+        //System.out.println("r = " + r);
         while ( !r.isZERO() ) {
             x = PolyUtil.<C>basePseudoRemainder(q,r);
             q = r;
@@ -93,6 +95,8 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C> >
             } else {
                r = x;
             }
+            //System.out.println("q = " + q);
+            //System.out.println("r = " + r);
         }
         q = basePrimitivePart( q );
         return (q.multiply(c)).abs(); 
@@ -107,9 +111,9 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C> >
      * @return gcd(P,S).
      */
     @Override
-     public GenPolynomial<GenPolynomial<C>> 
-        recursiveUnivariateGcd( GenPolynomial<GenPolynomial<C>> P,
-                      GenPolynomial<GenPolynomial<C>> S ) {
+    public GenPolynomial<GenPolynomial<C>> 
+     recursiveUnivariateGcd( GenPolynomial<GenPolynomial<C>> P,
+                             GenPolynomial<GenPolynomial<C>> S ) {
         if ( S == null || S.isZERO() ) {
             return P;
         }
