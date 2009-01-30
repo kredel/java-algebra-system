@@ -86,10 +86,10 @@ public class FactorAlgebraic<C extends GcdRingElem<C>> extends FactorAbstract<Al
             P = P.monic();
             factors.add(pfac.getONE().multiply(ldcf));
         }
-        //System.out.println("\nP = " + P);
+        System.out.println("\nP = " + P);
 
-        GreatestCommonDivisor<AlgebraicNumber<C>> aengine = GCDFactory.<AlgebraicNumber<C>> getProxy(afac);
-        //= new GreatestCommonDivisorSubres<AlgebraicNumber<C>>( /*cfac.coFac*/ );
+        GreatestCommonDivisor<AlgebraicNumber<C>> aengine //= GCDFactory.<AlgebraicNumber<C>> getProxy(afac);
+          = new GreatestCommonDivisorSimple<AlgebraicNumber<C>>( /*cfac.coFac*/ );
 
         // search squarefree norm
         long k = 0L;
@@ -97,42 +97,49 @@ public class FactorAlgebraic<C extends GcdRingElem<C>> extends FactorAbstract<Al
         GenPolynomial<C> res = null;
         boolean sqf = false;
         while (!sqf) {
+            if (k >= 6) {
+                break;
+            }
             if (k > 4) {
                 k = -1;
                 //break;
             }
-            if (k < -1) {
-                break;
+            if (k < -4) {
+                k = 17;
             }
             // compute norm with x -> ( y - k x )
             ks = k;
             res = PolyUfdUtil.<C> norm(P, ks);
             //System.out.println("res = " + res);
             if (res.isZERO() || res.isConstant()) {
-                k++;
+                if (k < 0) {
+                    k--;
+                } else {
+                    k++;
+                }
                 continue;
             }
             sqf = factorCoeff.isSquarefree(res);
-            //System.out.println("sqf = " + sqf + "\n");
+            //System.out.println("sqf("+ks+") = " + sqf + "\n");
+            //System.out.println("resfact = " + factorCoeff.baseFactors(res) + "\n");
             if (k < 0) {
                 k--;
             } else {
                 k++;
             }
         }
-        // if Res is now squarefree, we can factor it, else must use complete factorization
+        // if Res is now squarefree, we can factor it, else must stop
         List<GenPolynomial<C>> nfacs;
         if (!sqf) {
-            SortedMap<GenPolynomial<C>, Long> nfacsx = factorCoeff.baseFactors(res);
-            if (!factorCoeff.isFactorization(res, nfacsx)) {
-                throw new RuntimeException("isFactorization = false");
-            }
-            nfacs = new ArrayList<GenPolynomial<C>>(nfacsx.keySet());
-        } else {
-            nfacs = factorCoeff.baseFactorsSquarefree(res);
-            if (!factorCoeff.isFactorization(res, nfacs)) {
-                throw new RuntimeException("isFactorization = false");
-            }
+            System.out.println("\nres = " + res); 
+            System.out.println("sqf("+ks+") = " + sqf + "\n");
+            throw new RuntimeException("resultant not squarefree after 10 tries");
+        } 
+        nfacs = factorCoeff.baseFactorsSquarefree(res);
+        if (!factorCoeff.isFactorization(res, nfacs)) {
+            System.out.println("\nres = " + res); 
+            System.out.println("nfacs = " + nfacs); 
+            throw new RuntimeException("isFactorization = false");
         }
         //System.out.println("\nnfacs = " + nfacs); // Q[X]
         if (nfacs.size() == 1) {
@@ -150,8 +157,11 @@ public class FactorAlgebraic<C extends GcdRingElem<C>> extends FactorAbstract<Al
             if (logger.isInfoEnabled()) {
                 logger.info("Ni = " + Ni);
             }
+            System.out.println("Pp = " + Pp);
+            System.out.println("Ni = " + Ni);
             // compute gcds of factors with polynomial
             GenPolynomial<AlgebraicNumber<C>> pni = aengine.gcd(Ni, Pp);
+            System.out.println("pni = " + pni);
             if (!pni.leadingBaseCoefficient().isONE()) {
                 System.out.println("gcd(Ni,Pp) not monic " + pni);
                 pni = pni.monic();
