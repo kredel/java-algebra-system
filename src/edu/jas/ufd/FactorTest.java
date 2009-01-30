@@ -446,8 +446,8 @@ public class FactorTest extends TestCase {
         String[] alpha = new String[] { "alpha" };
         String[] vars = new String[] { "z" };
         GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(cfac, 1, to, alpha);
-        GenPolynomial<BigRational> agen = pfac.univariate(0, 3);
-        agen = agen.sum(pfac.fromInteger(8)); // x^2 + 2
+        GenPolynomial<BigRational> agen = pfac.univariate(0, 4);
+        agen = agen.sum(pfac.fromInteger(4)); // x^2 + 2
 
         FactorAbsolute<BigRational> engine = new FactorAbsolute<BigRational>(new FactorRational());
 
