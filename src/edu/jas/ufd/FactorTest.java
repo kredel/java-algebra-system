@@ -439,7 +439,7 @@ public class FactorTest extends TestCase {
      * Test absolute factorization.
      * 
      */
-    public void testAbsoluteFactorization() {
+    public void testBaseAbsoluteFactorization() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigRational cfac = new BigRational(1);
@@ -449,11 +449,12 @@ public class FactorTest extends TestCase {
         GenPolynomial<BigRational> agen = pfac.univariate(0, 4);
         agen = agen.sum(pfac.fromInteger(4)); // x^2 + 2
 
-        FactorAbsolute<BigRational> engine = new FactorAbsolute<BigRational>(new FactorRational());
+        FactorRational engine = new FactorRational();
 
-        List<GenPolynomial<AlgebraicNumber<BigRational>>> F 
-            //= engine.baseFactorsAbsolute(agen);
-          = engine.baseFactorsSquarefreeAbsolute(agen);
+        SortedMap<GenPolynomial<AlgebraicNumber<BigRational>>,Long> F 
+            //= engine.baseFactorsAbsoluteSquarefree(agen);
+            //= engine.baseFactorsAbsoluteIrreducible(agen);
+          = engine.baseFactorsAbsolute(agen);
         System.out.println("agen = " + agen);
         System.out.println("F    = " + F);
 
