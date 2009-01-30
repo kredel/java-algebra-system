@@ -125,7 +125,7 @@ public class FactorAbsolute<C extends GcdRingElem<C>> extends FactorAbstract<C> 
             throw new RuntimeException("only for univariate polynomials");
         }
         // setup field extension K(alpha)
-        String[] vars = new String[] { "z" };
+        String[] vars = new String[] { "z_"+"17" /*"pfac.getVars().hashCode()*/ };
         AlgebraicNumberRing<C> afac = new AlgebraicNumberRing<C>(P,true); // since irreducible
         GenPolynomialRing<AlgebraicNumber<C>> pafac 
             = new GenPolynomialRing<AlgebraicNumber<C>>(afac, P.ring.nvar,P.ring.tord,vars);
@@ -136,6 +136,7 @@ public class FactorAbsolute<C extends GcdRingElem<C>> extends FactorAbstract<C> 
             factors.add(Pa);
             return factors;
         }
+        System.out.println("Pa = " + Pa);
         // factor over K(alpha)
         FactorAbstract<AlgebraicNumber<C>> engine = FactorFactory.<C>getImplementation(afac);
         factors = engine.baseFactorsSquarefree( Pa );
