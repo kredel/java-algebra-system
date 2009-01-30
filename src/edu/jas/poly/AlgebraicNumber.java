@@ -160,11 +160,14 @@ public class AlgebraicNumber<C extends GcdRingElem<C>> implements GcdRingElem<Al
      * @return sign(this-b).
      */
     public int compareTo(AlgebraicNumber<C> b) {
-        GenPolynomial<C> v = b.val;
-        if (ring != b.ring) {
-            v = v.remainder(ring.modul);
+        int s = 0;
+        if ( ring.modul != b.ring.modul ) { // avoid compareTo if possible
+           s = ring.modul.compareTo( b.ring.modul );
         }
-        return val.compareTo(v);
+        if ( s != 0 ) {
+            return s;
+        }
+        return val.compareTo(b.val);
     }
 
 
@@ -185,6 +188,9 @@ public class AlgebraicNumber<C extends GcdRingElem<C>> implements GcdRingElem<Al
         } catch (ClassCastException e) {
         }
         if (a == null) {
+            return false;
+        }
+        if ( !ring.equals( a.ring ) ) {
             return false;
         }
         return (0 == compareTo(a));
