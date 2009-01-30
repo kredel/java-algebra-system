@@ -464,6 +464,55 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
     }
 
 
+    /**
+     * GenPolynomial base absolute factorization of a irreducible polynomial.
+     * @param P irreducible! GenPolynomial<C>.
+     * @return [p_1,...,p_k] with P = prod_{i=1, ..., k} p_i in K(alpha)[x] for suitable alpha
+     * and p_i irreducible over L[x], 
+     * where K \subset K(alpha) \subset L is an algebraically closed field over K.
+     */
+    public List<GenPolynomial<AlgebraicNumber<C>>> factorsAbsoluteIrreducible(GenPolynomial<C> P) {
+        if (P == null) {
+            throw new RuntimeException(this.getClass().getName() + " P == null");
+        }
+        List<GenPolynomial<AlgebraicNumber<C>>> factors = new ArrayList<GenPolynomial<AlgebraicNumber<C>>>();
+        if (P.isZERO()) {
+            return factors;
+        }
+        GenPolynomialRing<C> pfac = P.ring; // K[x]
+        if (pfac.nvar == 1) {
+            return baseFactorsAbsoluteIrreducible(P);
+        }
+        if (!pfac.coFac.isField()) {
+            throw new RuntimeException("only for field coefficients");
+        }
+        // find field extension K(alpha)
+        GenPolynomial<C> up = null;
+
+        if ( ! isIrreducible(up) ) {
+            throw new RuntimeException("not irreducible up = " + up);
+        }
+        // setup field extension K(alpha)
+        String[] vars = new String[] { "z_"+"7" /*"pfac.getVars().hashCode()*/ };
+        AlgebraicNumberRing<C> afac = new AlgebraicNumberRing<C>(up,true); // since irreducible
+        GenPolynomialRing<AlgebraicNumber<C>> pafac 
+            = new GenPolynomialRing<AlgebraicNumber<C>>(afac, P.ring.nvar,P.ring.tord,vars);
+        // convert to K(alpha)
+        GenPolynomial<AlgebraicNumber<C>> Pa 
+            = PolyUtil.<C> convertToAlgebraicCoefficients(pafac, P);
+        if ( Pa.degree(0) <= 1 ) {
+            factors.add(Pa);
+            return factors;
+        }
+        System.out.println("Pa = " + Pa);
+        // factor over K(alpha)
+        FactorAbstract<AlgebraicNumber<C>> engine = FactorFactory.<C>getImplementation(afac);
+        factors = engine.factorsSquarefree( Pa );
+        System.out.println("factors = " + factors);
+        return factors;
+    }
+
+
     /* ------------------------------------------- */
 
 
