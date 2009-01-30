@@ -458,7 +458,7 @@ public class FactorTest extends TestCase {
         System.out.println("agen = " + agen);
         System.out.println("F    = " + F);
 
-        boolean t = true; //engine.isFactorization(agen,F);
+        boolean t = true; // not ok: engine.isAbsoluteFactorization(agen,F);
         //System.out.println("t        = " + t);
         assertTrue("prod(factor(a)) = a", t);
         ComputerThreads.terminate();

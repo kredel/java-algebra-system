@@ -570,13 +570,68 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
         GenPolynomial<C> t = P.ring.getONE();
         for (GenPolynomial<C> f : F.keySet()) {
             Long E = F.get(f);
-            if (E != null) { // test obsolet, always true
-                long e = E.longValue();
-                GenPolynomial<C> g = Power.<GenPolynomial<C>> positivePower(f, e);
-                t = t.multiply(g);
-            }
+            long e = E.longValue();
+            GenPolynomial<C> g = Power.<GenPolynomial<C>> positivePower(f, e);
+            t = t.multiply(g);
         }
         boolean f = P.equals(t) || P.equals(t.negate());
+        if (!f) {
+            System.out.println("\nfactorization: " + f);
+            System.out.println("P = " + P);
+            System.out.println("t = " + t);
+        }
+        return f;
+    }
+
+
+    /**
+     * GenPolynomial is factorization.
+     * @param P GenPolynomial<C>.
+     * @param F = [p_1,...,p_k].
+     * @return true if P = prod_{i=1,...,r} p_i, else false.
+     */
+    public boolean nonoAbsoluteFactorization(GenPolynomial<C> P, List<GenPolynomial<AlgebraicNumber<C>>> F) {
+        if (P == null || F == null || F.isEmpty()) {
+            throw new IllegalArgumentException("P or F may not be null or empty");
+        }
+        GenPolynomial<AlgebraicNumber<C>> fa = F.get(0); // not ok since different Q(alpha)
+        GenPolynomialRing<AlgebraicNumber<C>> pafac = fa.ring;
+        // convert to K(alpha)
+        GenPolynomial<AlgebraicNumber<C>> Pa 
+            = PolyUtil.<C> convertToAlgebraicCoefficients(pafac, P);
+
+        GenPolynomial<AlgebraicNumber<C>> t = Pa.ring.getONE();
+        for (GenPolynomial<AlgebraicNumber<C>> f : F) {
+            t = t.multiply(f);
+        }
+        return Pa.equals(t) || Pa.equals(t.negate());
+    }
+
+
+    /**
+     * GenPolynomial is factorization.
+     * @param P GenPolynomial<C>.
+     * @param F = [p_1 -> e_1, ..., p_k -> e_k].
+     * @return true if P = prod_{i=1,...,k} p_i**e_i , else false.
+     */
+    public boolean nonoAbsoluteFactorization(GenPolynomial<C> P, SortedMap<GenPolynomial<AlgebraicNumber<C>>, Long> F) {
+        if (P == null || F == null || F.isEmpty()) {
+            throw new IllegalArgumentException("P or F may not be null or empty");
+        }
+        GenPolynomial<AlgebraicNumber<C>> fa = F.firstKey(); // not ok since different Q(alpha)
+        GenPolynomialRing<AlgebraicNumber<C>> pafac = fa.ring;
+        // convert to K(alpha)
+        GenPolynomial<AlgebraicNumber<C>> Pa 
+            = PolyUtil.<C> convertToAlgebraicCoefficients(pafac, P);
+
+        GenPolynomial<AlgebraicNumber<C>> t = Pa.ring.getONE();
+        for (GenPolynomial<AlgebraicNumber<C>> f : F.keySet()) {
+            Long E = F.get(f);
+            long e = E.longValue();
+            GenPolynomial<AlgebraicNumber<C>> g = Power.<GenPolynomial<AlgebraicNumber<C>>> positivePower(f, e);
+            t = t.multiply(g);
+        }
+        boolean f = Pa.equals(t) || Pa.equals(t.negate());
         if (!f) {
             System.out.println("\nfactorization: " + f);
             System.out.println("P = " + P);
