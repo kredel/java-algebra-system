@@ -108,7 +108,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
         }
         long d = P.degree() + 1L;
         GenPolynomial<C> kr = PolyUfdUtil.<C> substituteKronecker(P, d);
-        //System.out.println("subs(P,d=" + d + ") = " + kr);
+        System.out.println("subs(P,d=" + d + ") = " + kr);
         if (kr.degree(0) > 100) {
             logger.warn("Kronecker substitution has to high degree");
         }
@@ -117,8 +117,8 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
         List<GenPolynomial<C>> klist = new ArrayList<GenPolynomial<C>>();
         // kr might not be squarefree so complete factor univariate
         SortedMap<GenPolynomial<C>, Long> slist = baseFactors(kr);
-        //System.out.println("slist = " + slist);
-        if (true && !isFactorization(kr, slist)) {
+        System.out.println("slist = " + slist);
+        if ( !isFactorization(kr, slist)) {
             throw new RuntimeException("no factorization");
         }
         for (GenPolynomial<C> g : slist.keySet()) {
@@ -133,7 +133,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
             return factors;
         }
         klist = PolyUfdUtil.<C> backSubstituteKronecker(pfac, klist, d);
-        //System.out.println("back(klist) = " + klist);
+        System.out.println("back(klist) = " + klist);
 
         // remove constants
         GenPolynomial<C> cnst = null;
@@ -192,7 +192,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
                 //GenPolynomial<C> trial = PolyUfdUtil.<C> backSubstituteKronecker( pfac, utrial, d ); 
                 if (PolyUtil.<C> basePseudoRemainder(u, trial).isZERO()) {
                     logger.info("trial = " + trial);
-                    //System.out.println("trial = " + trial);
+                    System.out.println("trial = " + trial);
                     factors.add(trial);
                     u = PolyUtil.<C> basePseudoDivide(u, trial); //u = u.divide( trial );
                     if (klist.removeAll(flist)) {
@@ -211,12 +211,12 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
         }
         if (!u.isONE() && !u.equals(P)) {
             logger.info("rest u = " + u);
-            //System.out.println("rest u = " + u);
+            System.out.println("rest u = " + u);
             factors.add(u);
         }
         if (factors.size() == 0) {
             logger.info("irred u = " + u);
-            //System.out.println("irred u = " + u);
+            System.out.println("irred u = " + u);
             factors.add(P);
         }
         return factors;
@@ -341,44 +341,6 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
 
 
     /**
-     * GenPolynomial absolute base factorization of a squarefree polynomial.
-     * @param P squarefree and primitive GenPolynomial<C>.
-     * @return [p_1,...,p_k] with P = prod_{i=1, ..., k} p_i.
-     */
-    // @Override
-    public List<GenPolynomial<AlgebraicNumber<C>>> baseFactorsAbsoluteSquarefree(GenPolynomial<C> P) {
-        if (P == null) {
-            throw new RuntimeException(this.getClass().getName() + " P == null");
-        }
-        List<GenPolynomial<AlgebraicNumber<C>>> factors = new ArrayList<GenPolynomial<AlgebraicNumber<C>>>();
-        if (P.isZERO()) {
-            return factors;
-        }
-        //System.out.println("\nP = " + P);
-        GenPolynomialRing<C> pfac = P.ring; // K[x]
-        if (pfac.nvar > 1) {
-            throw new RuntimeException("only for univariate polynomials");
-        }
-        if (!pfac.coFac.isField()) {
-            throw new RuntimeException("only for field coefficients");
-        }
-        // factor over K (=C)
-        List<GenPolynomial<C>> facs = baseFactorsSquarefree(P);
-        if (debug && !isFactorization(P, facs)) {
-             throw new RuntimeException("isFactorization = false");
-        }
-        System.out.println("\nall K factors = " + facs); // K[X]
-        // factor over K(alpha)
-        for ( GenPolynomial<C> p : facs ) {
-            List<GenPolynomial<AlgebraicNumber<C>>> afacs = baseFactorsAbsoluteIrreducible(p);
-            factors.addAll( afacs );
-        }
-        System.out.println("factors = " + factors);
-        return factors;
-    }
-
-
-    /**
      * GenPolynomial absolute base factorization of a polynomial.
      * @param P GenPolynomial<C>.
      * @return [p_1,...,p_k] with P = prod_{i=1, ..., k} p_i.
@@ -417,6 +379,44 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
             }
         }
         System.out.println("Q(alpha) factors = " + factors);
+        return factors;
+    }
+
+
+    /**
+     * GenPolynomial absolute base factorization of a squarefree polynomial.
+     * @param P squarefree and primitive GenPolynomial<C>.
+     * @return [p_1,...,p_k] with P = prod_{i=1, ..., k} p_i.
+     */
+    // @Override
+    public List<GenPolynomial<AlgebraicNumber<C>>> baseFactorsAbsoluteSquarefree(GenPolynomial<C> P) {
+        if (P == null) {
+            throw new RuntimeException(this.getClass().getName() + " P == null");
+        }
+        List<GenPolynomial<AlgebraicNumber<C>>> factors = new ArrayList<GenPolynomial<AlgebraicNumber<C>>>();
+        if (P.isZERO()) {
+            return factors;
+        }
+        //System.out.println("\nP = " + P);
+        GenPolynomialRing<C> pfac = P.ring; // K[x]
+        if (pfac.nvar > 1) {
+            throw new RuntimeException("only for univariate polynomials");
+        }
+        if (!pfac.coFac.isField()) {
+            throw new RuntimeException("only for field coefficients");
+        }
+        // factor over K (=C)
+        List<GenPolynomial<C>> facs = baseFactorsSquarefree(P);
+        if (debug && !isFactorization(P, facs)) {
+             throw new RuntimeException("isFactorization = false");
+        }
+        System.out.println("\nall K factors = " + facs); // K[X]
+        // factor over K(alpha)
+        for ( GenPolynomial<C> p : facs ) {
+            List<GenPolynomial<AlgebraicNumber<C>>> afacs = baseFactorsAbsoluteIrreducible(p);
+            factors.addAll( afacs );
+        }
+        System.out.println("factors = " + factors);
         return factors;
     }
 
@@ -465,6 +465,87 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
 
 
     /**
+     * GenPolynomial absolute base factorization of a polynomial.
+     * @param P GenPolynomial<C>.
+     * @return [p_1,...,p_k] with P = prod_{i=1, ..., k} p_i.
+     */
+    // @Override
+    public SortedMap<GenPolynomial<AlgebraicNumber<C>>,Long> factorsAbsolute(GenPolynomial<C> P) {
+        if (P == null) {
+            throw new RuntimeException(this.getClass().getName() + " P == null");
+        }
+        SortedMap<GenPolynomial<AlgebraicNumber<C>>,Long> factors 
+            = new TreeMap<GenPolynomial<AlgebraicNumber<C>>,Long>();
+        if (P.isZERO()) {
+            return factors;
+        }
+        //System.out.println("\nP = " + P);
+        GenPolynomialRing<C> pfac = P.ring; // K[x]
+        if (pfac.nvar <= 1) {
+            return baseFactorsAbsolute(P);
+        }
+        if (!pfac.coFac.isField()) {
+            throw new RuntimeException("only for field coefficients");
+        }
+        // factor over K (=C)
+        SortedMap<GenPolynomial<C>,Long> facs = factors(P);
+        if (!isFactorization(P, facs)) {
+             throw new RuntimeException("isFactorization = false");
+        }
+        System.out.println("\nall K factors = " + facs); // Q[X]
+        // factor over K(alpha)
+        for ( GenPolynomial<C> p : facs.keySet() ) {
+            Long e = facs.get(p);
+            List<GenPolynomial<AlgebraicNumber<C>>> afacs = factorsAbsoluteIrreducible(p);
+            for ( GenPolynomial<AlgebraicNumber<C>> ap : afacs ) {
+                //System.out.println("ap = (" + ap + ")**" + e + " over " + ap.ring.coFac);
+                factors.put(ap,e);
+            }
+        }
+        System.out.println("Q(alpha) factors = " + factors);
+        return factors;
+    }
+
+
+    /**
+     * GenPolynomial absolute base factorization of a squarefree polynomial.
+     * @param P squarefree and primitive GenPolynomial<C>.
+     * @return [p_1,...,p_k] with P = prod_{i=1, ..., k} p_i.
+     */
+    // @Override
+    public List<GenPolynomial<AlgebraicNumber<C>>> factorsAbsoluteSquarefree(GenPolynomial<C> P) {
+        if (P == null) {
+            throw new RuntimeException(this.getClass().getName() + " P == null");
+        }
+        List<GenPolynomial<AlgebraicNumber<C>>> factors = new ArrayList<GenPolynomial<AlgebraicNumber<C>>>();
+        if (P.isZERO()) {
+            return factors;
+        }
+        //System.out.println("\nP = " + P);
+        GenPolynomialRing<C> pfac = P.ring; // K[x]
+        if (pfac.nvar <= 1) {
+            return baseFactorsAbsoluteSquarefree(P);
+        }
+        if (!pfac.coFac.isField()) {
+            throw new RuntimeException("only for field coefficients");
+        }
+        // factor over K (=C)
+        List<GenPolynomial<C>> facs = factorsSquarefree(P);
+        if (debug && !isFactorization(P, facs)) {
+             throw new RuntimeException("isFactorization = false");
+        }
+        System.out.println("\nall K factors = " + facs); // K[X]
+        // factor over K(alpha)
+        for ( GenPolynomial<C> p : facs ) {
+            List<GenPolynomial<AlgebraicNumber<C>>> afacs = factorsAbsoluteIrreducible(p);
+            factors.addAll( afacs );
+        }
+        System.out.println("factors = " + factors);
+        return factors;
+    }
+
+
+    /**
      * GenPolynomial base absolute factorization of a irreducible polynomial.
      * @param P irreducible! GenPolynomial<C>.
      * @return [p_1,...,p_k] with P = prod_{i=1, ..., k} p_i in K(alpha)[x] for suitable alpha
@@ -480,26 +561,61 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
             return factors;
         }
         GenPolynomialRing<C> pfac = P.ring; // K[x]
-        if (pfac.nvar == 1) {
+        if (pfac.nvar <= 1) {
             return baseFactorsAbsoluteIrreducible(P);
         }
         if (!pfac.coFac.isField()) {
             throw new RuntimeException("only for field coefficients");
         }
         // find field extension K(alpha)
-        GenPolynomial<C> up = null;
-
-        if ( ! isIrreducible(up) ) {
+        GenPolynomial<C> up = P;
+        RingFactory<C> cf = pfac.coFac;
+        long rp = 0L;
+        for ( int i = 0; i < (pfac.nvar-1); i++ ) {
+            GenPolynomialRing<C> nfac = pfac.contract(1);
+            String[] vn = new String[] { pfac.getVars()[pfac.nvar-1] };
+            GenPolynomialRing<GenPolynomial<C>> rfac 
+               = new GenPolynomialRing<GenPolynomial<C>>(nfac,1,pfac.tord,vn);
+            GenPolynomial<GenPolynomial<C>> upr = PolyUtil.<C>recursive(rfac,up);
+            System.out.println("upr = " + upr);
+            GenPolynomial<C> ep;
+            do {
+                C r = cf.fromInteger(rp); //cf.random(rp);
+                System.out.println("r   = " + r);
+                ep = PolyUtil.<C>evaluateMain(nfac,upr,r);
+                System.out.println("ep  = " + ep);
+                rp++;
+            } while( !isSquarefree(ep) );
+            up = ep;
+            pfac = nfac;
+        }
+        up = up.monic();
+        System.out.println("up  = " + up);
+        if ( ! isSquarefree(up) ) {
             throw new RuntimeException("not irreducible up = " + up);
         }
+        // find irreducible factor of up
+        List<GenPolynomial<C>> UF = baseFactorsSquarefree(up);
+        System.out.println("UF  = " + UF);
+        if ( UF.size() > 1 ) {
+           up = UF.get(0);
+        } else { // what to take ? zero would be correct but cannot be used for Q(alpha)
+           up = UF.get(0);
+        }
+        System.out.println("up  = " + up);
+
         // setup field extension K(alpha)
         String[] vars = new String[] { "z_"+"7" /*"pfac.getVars().hashCode()*/ };
+        String[] ovars = pfac.setVars(vars); 
+        up = pfac.copy(up); // hack
+
         AlgebraicNumberRing<C> afac = new AlgebraicNumberRing<C>(up,true); // since irreducible
+        System.out.println("afac = " + afac);
         GenPolynomialRing<AlgebraicNumber<C>> pafac 
-            = new GenPolynomialRing<AlgebraicNumber<C>>(afac, P.ring.nvar,P.ring.tord,vars);
+            = new GenPolynomialRing<AlgebraicNumber<C>>(afac, P.ring.nvar,P.ring.tord,P.ring.getVars());
+        //System.out.println("pafac = " + pafac);
         // convert to K(alpha)
-        GenPolynomial<AlgebraicNumber<C>> Pa 
-            = PolyUtil.<C> convertToAlgebraicCoefficients(pafac, P);
+        GenPolynomial<AlgebraicNumber<C>> Pa = PolyUtil.<C> convertToAlgebraicCoefficients(pafac, P);
         if ( Pa.degree(0) <= 1 ) {
             factors.add(Pa);
             return factors;
