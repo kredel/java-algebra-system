@@ -12,6 +12,9 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import org.apache.log4j.BasicConfigurator;
+
+
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.ModInteger;
@@ -39,7 +42,7 @@ public class FactorTest extends TestCase {
      * main.
      */
     public static void main(String[] args) {
-        //BasicConfigurator.configure();
+        BasicConfigurator.configure();
         junit.textui.TestRunner.run(suite());
     }
 
@@ -90,7 +93,7 @@ public class FactorTest extends TestCase {
      * Test dummy for Junit.
      * 
      */
-    public void testDummy() {
+    public void xtestDummy() {
     }
 
 
@@ -478,7 +481,7 @@ public class FactorTest extends TestCase {
         GenPolynomial<BigRational> xp = pfac.univariate(0, 2);
         GenPolynomial<BigRational> yp = pfac.univariate(1, 2);
         GenPolynomial<BigRational> g = xp.sum(yp); // x^2 + y^2
-        //GenPolynomial<BigRational> g = x3.subtract(y2); // x^2 + y^2
+        //GenPolynomial<BigRational> g = xp.subtract(yp); // x^2 - y^2
 
         FactorRational engine = new FactorRational();
 

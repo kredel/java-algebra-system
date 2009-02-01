@@ -141,7 +141,7 @@ public class FactorAlgebraic<C extends GcdRingElem<C>> extends FactorAbstract<Al
             System.out.println("nfacs = " + nfacs); 
             throw new RuntimeException("isFactorization = false");
         }
-        //System.out.println("\nnfacs = " + nfacs); // Q[X]
+        System.out.println("\nnfacs = " + nfacs); // Q[X]
         if (nfacs.size() == 1) {
             factors.add(P);
             return factors;
@@ -181,7 +181,7 @@ public class FactorAlgebraic<C extends GcdRingElem<C>> extends FactorAbstract<Al
         if (!Pp.isZERO() && !Pp.isONE()) { // hack to pretend factorization
             factors.add(Pp);
         }
-        //System.out.println("afactors = " + factors);
+        System.out.println("afactors = " + factors);
         return factors;
     }
 
