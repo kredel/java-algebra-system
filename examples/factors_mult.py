@@ -19,12 +19,12 @@ from jas import startLog
 #r = Ring( "Z(x,y,z) L" );
 #r = Ring( "Z(x) L" );
 #r = Ring( "Mod 3 (x,y,z) L" );
-r = Ring( "Z(x,y,z) L" );
+r = Ring( "Z(x,y) L" );
 
 print "Ring: " + str(r);
 print;
 
-[x,y,z] = r.gens();
+[x,y] = r.gens();
 one = r.one();
 
 a = r.random();
@@ -44,7 +44,9 @@ c = abs(r.random());
 ##     + ( y + 1 ) * z**3 + ( y + 1 ) * z**2 + ( y**3 + y**2 ) * z + y**3 + y**2;
 
 #f = ( x + y * z + y + z + 1 ) * ( x**2 + ( y + z ) * x + y**2 + z**2 );
-f = ( x + y * z + y + z + 1 ) * ( x**2 + ( y + z ) * x + y**2 + 1 );
+#f = ( x + y * z + y + z + 1 ) * ( x**2 + ( y + z ) * x + y**2 + 1 );
+
+f = ( y + x ) * ( y - x);
 
 
 print "a = ", a;
