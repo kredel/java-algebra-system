@@ -206,7 +206,8 @@ public class FactorInteger //<C extends GcdRingElem<C> >
         int max = 0;
         for (int k = 0; k < TT; k++) {
             int s = intfac[k].size();
-            System.out.println("int s = " + s);
+            logger.info("int s = " + s);
+            //System.out.println("int s = " + s);
             if (s > max) {
                 max = s;
                 ilist = intfac[k];
@@ -230,7 +231,7 @@ public class FactorInteger //<C extends GcdRingElem<C> >
     public static//<C extends RingElem<C>>
     List<GenPolynomial<BigInteger>> searchFactorsMonic(GenPolynomial<BigInteger> C, BigInteger M,
                                                        List<GenPolynomial<ModInteger>> F) {
-        //System.out.println("*** monic factor combination ***");
+        System.out.println("*** monic factor combination ***");
         if (C == null || C.isZERO() || F == null || F.size() == 0) {
             throw new RuntimeException("C must be nonzero and F must be nonempty");
         }
@@ -288,7 +289,7 @@ public class FactorInteger //<C extends GcdRingElem<C> >
                 if (trial.degree(0) > deg) {
                     continue;
                 }
-                System.out.println("+trial    = " + trial);
+                //System.out.println("+trial    = " + trial);
                 //System.out.println("+flist    = " + flist);
                 //trial = iengine.basePrimitivePart( trial.multiply(ldcf) );
                 trial = iengine.basePrimitivePart(trial);
@@ -383,7 +384,7 @@ public class FactorInteger //<C extends GcdRingElem<C> >
         BigInteger ldcf = u.leadingBaseCoefficient();
         //System.out.println("ldcf = " + ldcf); 
         for (int j = 1; j <= dl; j++) {
-            System.out.println("j = " + j + ", dl = " + dl + ", ilist = " + ilist); 
+            //System.out.println("j = " + j + ", dl = " + dl + ", ilist = " + ilist); 
             KsubSet<GenPolynomial<ModInteger>> ps = new KsubSet<GenPolynomial<ModInteger>>(mlist, j);
             for (List<GenPolynomial<ModInteger>> flist : ps) {
                 //System.out.println("flist = " + flist);

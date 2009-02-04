@@ -93,7 +93,7 @@ public class FactorTest extends TestCase {
      * Test dummy for Junit.
      * 
      */
-    public void xtestDummy() {
+    public void testDummy() {
     }
 
 
@@ -101,7 +101,7 @@ public class FactorTest extends TestCase {
      * Test modular factorization.
      * 
      */
-    public void xtestModularFactorization() {
+    public void testModularFactorization() {
 
         PrimeList pl = new PrimeList(PrimeList.Range.medium);
         TermOrder to = new TermOrder(TermOrder.INVLEX);
@@ -157,7 +157,7 @@ public class FactorTest extends TestCase {
      * Test multivariate modular factorization.
      * 
      */
-    public void xtestMultivariateModularFactorization() {
+    public void testMultivariateModularFactorization() {
 
         PrimeList pl = new PrimeList(PrimeList.Range.small);
         TermOrder to = new TermOrder(TermOrder.INVLEX);
@@ -213,7 +213,7 @@ public class FactorTest extends TestCase {
      * Test integer factorization.
      * 
      */
-    public void xtestIntegerFactorization() {
+    public void testIntegerFactorization() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(4);
@@ -315,7 +315,7 @@ public class FactorTest extends TestCase {
      * Test rational factorization.
      * 
      */
-    public void xtestRationalFactorization() {
+    public void testRationalFactorization() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigRational cfac = new BigRational(1);
@@ -371,7 +371,7 @@ public class FactorTest extends TestCase {
      * Test algebraic factorization.
      * 
      */
-    public void xtestAlgebraicFactorization() {
+    public void testAlgebraicFactorization() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigRational cfac = new BigRational(1);
@@ -442,7 +442,7 @@ public class FactorTest extends TestCase {
      * Test absolute factorization.
      * 
      */
-    public void xtestBaseAbsoluteFactorization() {
+    public void testBaseAbsoluteFactorization() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigRational cfac = new BigRational(1);
@@ -458,8 +458,8 @@ public class FactorTest extends TestCase {
             //= engine.baseFactorsAbsoluteSquarefree(agen);
             //= engine.baseFactorsAbsoluteIrreducible(agen);
           = engine.baseFactorsAbsolute(agen);
-        System.out.println("agen = " + agen);
-        System.out.println("F    = " + F);
+        //System.out.println("agen = " + agen);
+        //System.out.println("F    = " + F);
 
         boolean t = true; // not ok: engine.isAbsoluteFactorization(agen,F);
         //System.out.println("t        = " + t);
@@ -489,8 +489,8 @@ public class FactorTest extends TestCase {
             //= engine.baseFactorsAbsoluteSquarefree(agen);
             //= engine.baseFactorsAbsoluteIrreducible(agen);
           = engine.factorsAbsolute(g);
-        System.out.println("g    = " + g);
-        System.out.println("F    = " + F);
+        //System.out.println("g    = " + g);
+        //System.out.println("F    = " + F);
 
         boolean t = true; // not ok: engine.isAbsoluteFactorization(agen,F);
         //System.out.println("t        = " + t);
@@ -503,7 +503,7 @@ public class FactorTest extends TestCase {
      * Test factory.
      * 
      */
-    public void xtestFactory() {
+    public void testFactory() {
         ModIntegerRing mi = new ModIntegerRing(19,true);
         Factorization<ModInteger> ufdm = FactorFactory.getImplementation(mi);
         //System.out.println("ufdm = " + ufdm);

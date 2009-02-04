@@ -86,7 +86,7 @@ public class FactorAlgebraic<C extends GcdRingElem<C>> extends FactorAbstract<Al
             P = P.monic();
             factors.add(pfac.getONE().multiply(ldcf));
         }
-        System.out.println("\nP = " + P);
+        //System.out.println("\nP = " + P);
 
         GreatestCommonDivisor<AlgebraicNumber<C>> aengine //= GCDFactory.<AlgebraicNumber<C>> getProxy(afac);
           = new GreatestCommonDivisorSimple<AlgebraicNumber<C>>( /*cfac.coFac*/ );
@@ -136,12 +136,15 @@ public class FactorAlgebraic<C extends GcdRingElem<C>> extends FactorAbstract<Al
             throw new RuntimeException("resultant not squarefree after 10 tries");
         } 
         nfacs = factorCoeff.baseFactorsSquarefree(res);
-        if (!factorCoeff.isFactorization(res, nfacs)) {
+        if (debug && !factorCoeff.isFactorization(res, nfacs)) {
             System.out.println("\nres = " + res); 
             System.out.println("nfacs = " + nfacs); 
             throw new RuntimeException("isFactorization = false");
         }
-        System.out.println("\nnfacs = " + nfacs); // Q[X]
+        if ( debug ) {
+            logger.info("res facs = " + nfacs); // Q[X]
+            //System.out.println("\nnfacs = " + nfacs); // Q[X]
+        }
         if (nfacs.size() == 1) {
             factors.add(P);
             return factors;
@@ -157,11 +160,11 @@ public class FactorAlgebraic<C extends GcdRingElem<C>> extends FactorAbstract<Al
             if (logger.isInfoEnabled()) {
                 logger.info("Ni = " + Ni);
             }
-            System.out.println("Pp = " + Pp);
-            System.out.println("Ni = " + Ni);
+            //System.out.println("Pp = " + Pp);
+            //System.out.println("Ni = " + Ni);
             // compute gcds of factors with polynomial
             GenPolynomial<AlgebraicNumber<C>> pni = aengine.gcd(Ni, Pp);
-            System.out.println("pni = " + pni);
+            //System.out.println("pni = " + pni);
             if (!pni.leadingBaseCoefficient().isONE()) {
                 System.out.println("gcd(Ni,Pp) not monic " + pni);
                 pni = pni.monic();
@@ -181,7 +184,7 @@ public class FactorAlgebraic<C extends GcdRingElem<C>> extends FactorAbstract<Al
         if (!Pp.isZERO() && !Pp.isONE()) { // hack to pretend factorization
             factors.add(Pp);
         }
-        System.out.println("afactors = " + factors);
+        //System.out.println("afactors = " + factors);
         return factors;
     }
 
