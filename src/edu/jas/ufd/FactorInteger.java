@@ -185,8 +185,8 @@ public class FactorInteger //<C extends GcdRingElem<C> >
             // try each factor list
             for (int k = 0; k < TT; k++) {
                 mlist = modfac[k];
-                if (P.leadingBaseCoefficient().isONE()) {
-                    factors = searchFactorsMonic(P, M, mlist);
+                if ( false && P.leadingBaseCoefficient().isONE()) {
+                    factors = searchFactorsMonic(P, M, mlist); // dosn't work
                 } else {
                     factors = searchFactorsNonMonic(P, M, mlist);
                 }
@@ -194,8 +194,8 @@ public class FactorInteger //<C extends GcdRingElem<C> >
             }
         } else {
             // try only shortest factor list
-            if ( P.leadingBaseCoefficient().isONE()) {
-                factors = searchFactorsMonic(P, M, mlist);
+            if ( false && P.leadingBaseCoefficient().isONE()) {
+                factors = searchFactorsMonic(P, M, mlist); // dosn't work
             } else {
                 factors = searchFactorsNonMonic(P, M, mlist);
             }
