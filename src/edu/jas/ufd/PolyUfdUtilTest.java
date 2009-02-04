@@ -567,8 +567,7 @@ public class PolyUfdUtilTest extends TestCase {
                 ExpVector e = d.leadingExpVector();
                 d.doPutToMap(e, one);
             }
-            GreatestCommonDivisorAbstract<BigInteger> engine = (GreatestCommonDivisorAbstract<BigInteger>) GCDFactory
-                    .getProxy(mi);
+            GreatestCommonDivisorAbstract<BigInteger> engine = GCDFactory.getProxy(mi);
             //          a = engine.basePrimitivePart(a);
             //          b = engine.basePrimitivePart(b);
             //          d = engine.basePrimitivePart(d);
@@ -633,68 +632,16 @@ public class PolyUfdUtilTest extends TestCase {
             mlist.add(dp);
             //System.out.println("mlist = " + mlist);
             // ensure coprime
-            GreatestCommonDivisorAbstract<ModInteger> mengine = (GreatestCommonDivisorAbstract<ModInteger>) GCDFactory
-                    .getProxy(pm);
+            GreatestCommonDivisorAbstract<ModInteger> mengine = GCDFactory.getProxy(pm);
 
-            if (false) {
-                boolean done;
-                int iks = 0;
-                do {
-                    done = true;
-                    iks++;
-                    SortedSet<GenPolynomial<ModInteger>> mset = new TreeSet<GenPolynomial<ModInteger>>();
-                    KsubSet<GenPolynomial<ModInteger>> ps = new KsubSet<GenPolynomial<ModInteger>>(mlist, 2);
-                    for (List<GenPolynomial<ModInteger>> flist : ps) {
-                        GenPolynomial<ModInteger> ma = flist.get(0);
-                        GenPolynomial<ModInteger> mb = flist.get(1);
-                        GenPolynomial<ModInteger> mg = mengine.baseGcd(ma, mb);
-                        if (!mg.isConstant()) {
-                            System.out.println("mg = " + mg);
-                            ma = ma.divide(mg);
-                            mb = mb.divide(mg);
-                            mset.add(mg);
-                            done = false;
-                        }
-                        if (!ma.isConstant()) {
-                            mset.add(ma);
-                        }
-                        if (!mb.isConstant()) {
-                            mset.add(mb);
-                        }
-                    }
-                    System.out.println("mset = " + mset);
-                    mlist = new ArrayList<GenPolynomial<ModInteger>>(mset);
-                } while (!done && iks < 10);
-                long deg = 0;
-                for (GenPolynomial<ModInteger> f : mlist) {
-                    deg += f.degree(0);
-                }
-                if (deg != c.degree(0)) {
-                    continue;
-                }
-            }
-            //          System.out.println("\na     = " + a);
-            //          System.out.println("b     = " + b);
-            //          System.out.println("d     = " + d);
-            //          System.out.println("c     = " + c);
-            //          System.out.println("mi    = " + mi);
-            //          System.out.println("mip   = " + mip);
-            //          System.out.println("ap    = " + ap);
-            //          System.out.println("bp    = " + bp);
-            //          System.out.println("dp    = " + dp);
-            //          System.out.println("cp    = " + cp);
-            //          System.out.println("mlist = " + mlist);
-
-            if (true) {
-                FactorModular mfact = new FactorModular();
-                SortedMap<GenPolynomial<ModInteger>, Long> factors = mfact.baseFactors(cp);
-                mlist = new ArrayList<GenPolynomial<ModInteger>>(factors.size());
-                for (GenPolynomial<ModInteger> f : factors.keySet()) {
-                    long e = factors.get(f);
-                    GenPolynomial<ModInteger> pp = Power.<GenPolynomial<ModInteger>> positivePower(f, e);
-                    mlist.add(pp);
-                    //System.out.println("f^" + e + " = " + pp);
-                }
+            FactorModular mfact = new FactorModular();
+            SortedMap<GenPolynomial<ModInteger>, Long> factors = mfact.baseFactors(cp);
+            mlist = new ArrayList<GenPolynomial<ModInteger>>(factors.size());
+            for (GenPolynomial<ModInteger> f : factors.keySet()) {
+                long e = factors.get(f);
+                GenPolynomial<ModInteger> pp = Power.<GenPolynomial<ModInteger>> positivePower(f, e);
+                mlist.add(pp);
+                //System.out.println("f^" + e + " = " + pp);
             }
 
             boolean ih = true;

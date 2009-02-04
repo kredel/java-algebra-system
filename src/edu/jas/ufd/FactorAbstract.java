@@ -125,7 +125,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
         }
         for (GenPolynomial<C> g : slist.keySet()) {
             long e = slist.get(g);
-            for (int i = 0; i < e; i++) { // is this really required? 
+            for (int i = 0; i < e; i++) { // is this really required? yes!
                 ulist.add(g);
             }
         }
@@ -135,38 +135,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
             return factors;
         }
         //List<GenPolynomial<C>> klist = PolyUfdUtil.<C> backSubstituteKronecker(pfac, ulist, d);
-        System.out.println("back(klist) = " + PolyUfdUtil.<C> backSubstituteKronecker(pfac, ulist, d));
-
-        // remove constants
-//         GenPolynomial<C> cnst = null;
-//         GenPolynomial<C> ng = null;
-//         for (GenPolynomial<C> g : ulist) {
-//             if (g.isConstant()) {
-//                 cnst = g;
-//             } else if (g.signum() < 0) {
-//                 ng = g;
-//             }
-//         }
-//         if (cnst != null) {
-//             System.out.println("*** cnst = " + cnst);
-//             System.out.println("*** ng   = " + ng);
-//             if (ng != null) {
-//                 ulist.remove(cnst);
-//                 ulist.remove(ng);
-//                 cnst = cnst.negate();
-//                 ng = ng.negate();
-//                 if (!cnst.isONE()) {
-//                     ulist.add(cnst);
-//                 }
-//                 ulist.add(ng);
-//             } else if ( ulist.size() > 1 ) {
-//                 ulist.remove(cnst);
-//                 ng = ulist.get(0);
-//                 ulist.remove(ng);
-//                 ng = ng.multiply( cnst.leadingBaseCoefficient() );
-//                 ulist.add(ng);
-//             }
-//         }
+        //System.out.println("back(klist) = " + PolyUfdUtil.<C> backSubstituteKronecker(pfac, ulist, d));
         System.out.println("ulist = " + ulist);
 
         // combine trial factors
@@ -214,10 +183,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
                     if (ulist.removeAll(flist)) {
                         //System.out.println("new ulist = " + ulist);
                         dl = (ulist.size() + 1) / 2;
-                        j = 1;
-                        if (ulist.size() > 0) {
-                            ps = new KsubSet<GenPolynomial<C>>(ulist, j);
-                        }
+                        j = 0; // since j++
                         break;
                     } else {
                         logger.error("error removing flist from ulist = " + ulist);
