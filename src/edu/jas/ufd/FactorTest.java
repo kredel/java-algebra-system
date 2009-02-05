@@ -42,7 +42,7 @@ public class FactorTest extends TestCase {
      * main.
      */
     public static void main(String[] args) {
-        BasicConfigurator.configure();
+        //BasicConfigurator.configure();
         junit.textui.TestRunner.run(suite());
     }
 
@@ -281,11 +281,11 @@ public class FactorTest extends TestCase {
      * Test multivariate integer factorization.
      * 
      */
-    public void xxtestMultivariateIntegerFactorization() {
+    public void testMultivariateIntegerFactorization() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(1);
-        GenPolynomialRing<BigInteger> pfac = new GenPolynomialRing<BigInteger>(cfac, rl, to);
+        GenPolynomialRing<BigInteger> pfac = new GenPolynomialRing<BigInteger>(cfac, 2, to);
         FactorInteger fac = new FactorInteger();
 
         for (int i = 1; i < 2; i++) {
@@ -381,8 +381,8 @@ public class FactorTest extends TestCase {
         GenPolynomial<BigRational> agen = pfac.univariate(0, 2);
         agen = agen.sum(pfac.getONE()); // x^2 + 1
         AlgebraicNumberRing<BigRational> afac = new AlgebraicNumberRing<BigRational>(agen, true);
-        GenPolynomialRing<AlgebraicNumber<BigRational>> apfac = new GenPolynomialRing<AlgebraicNumber<BigRational>>(
-                afac, 1, to, vars); // univariate
+        GenPolynomialRing<AlgebraicNumber<BigRational>> apfac 
+            = new GenPolynomialRing<AlgebraicNumber<BigRational>>(afac, 1, to, vars); // univariate
 
         //System.out.println("agen  = " + agen);
         //System.out.println("afac  = " + afac);
@@ -439,10 +439,10 @@ public class FactorTest extends TestCase {
 
 
     /**
-     * Test absolute factorization.
+     * Test rational absolute factorization.
      * 
      */
-    public void testBaseAbsoluteFactorization() {
+    public void testBaseRationalAbsoluteFactorization() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigRational cfac = new BigRational(1);
@@ -450,7 +450,7 @@ public class FactorTest extends TestCase {
         String[] vars = new String[] { "z" };
         GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(cfac, 1, to, alpha);
         GenPolynomial<BigRational> agen = pfac.univariate(0, 4);
-        agen = agen.sum(pfac.fromInteger(4)); // x^2 + 2
+        agen = agen.sum(pfac.fromInteger(4)); // x^4 + 4
 
         FactorRational engine = new FactorRational();
 
@@ -458,8 +458,40 @@ public class FactorTest extends TestCase {
             //= engine.baseFactorsAbsoluteSquarefree(agen);
             //= engine.baseFactorsAbsoluteIrreducible(agen);
           = engine.baseFactorsAbsolute(agen);
-        //System.out.println("agen = " + agen);
-        //System.out.println("F    = " + F);
+        System.out.println("agen     = " + agen);
+        System.out.println("F        = " + F);
+        System.out.println("Q(alpha) = " + F.firstKey().ring.coFac);
+
+        boolean t = true; // not ok: engine.isAbsoluteFactorization(agen,F);
+        //System.out.println("t        = " + t);
+        assertTrue("prod(factor(a)) = a", t);
+        ComputerThreads.terminate();
+    }
+
+
+    /**
+     * Test modular absolute factorization.
+     * 
+     */
+    public void testBaseModularAbsoluteFactorization() {
+
+        TermOrder to = new TermOrder(TermOrder.INVLEX);
+        ModIntegerRing cfac = new ModIntegerRing(17);
+        String[] alpha = new String[] { "alpha" };
+        String[] vars = new String[] { "z" };
+        GenPolynomialRing<ModInteger> pfac = new GenPolynomialRing<ModInteger>(cfac, 1, to, alpha);
+        GenPolynomial<ModInteger> agen = pfac.univariate(0, 4);
+        agen = agen.sum(pfac.fromInteger(1)); // x^5 + 1
+
+        FactorModular engine = new FactorModular();
+
+        SortedMap<GenPolynomial<AlgebraicNumber<ModInteger>>,Long> F 
+            //= engine.baseFactorsAbsoluteSquarefree(agen);
+            //= engine.baseFactorsAbsoluteIrreducible(agen);
+          = engine.baseFactorsAbsolute(agen);
+        System.out.println("agen        = " + agen);
+        System.out.println("F           = " + F);
+        System.out.println("Z_17(alpha) = " + F.firstKey().ring.coFac);
 
         boolean t = true; // not ok: engine.isAbsoluteFactorization(agen,F);
         //System.out.println("t        = " + t);

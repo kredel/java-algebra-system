@@ -28,8 +28,7 @@ import edu.jas.util.KsubSet;
  * @author Heinz Kredel
  */
 
-public class FactorInteger //<C extends GcdRingElem<C> > 
-        extends FactorAbstract<BigInteger> {
+public class FactorInteger extends FactorAbstract<BigInteger> {
 
 
     private static final Logger logger = Logger.getLogger(FactorInteger.class);

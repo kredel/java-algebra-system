@@ -22,8 +22,7 @@ import edu.jas.poly.PolyUtil;
  * @author Heinz Kredel
  */
 
-public class FactorRational //<C extends GcdRingElem<C> > 
-        extends FactorAbstract<BigRational> {
+public class FactorRational extends FactorAbsolute<BigRational> {
 
 
     private static final Logger logger = Logger.getLogger(FactorRational.class);

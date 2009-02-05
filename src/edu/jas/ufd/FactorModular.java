@@ -27,8 +27,7 @@ import edu.jas.structure.Power;
  * @author Heinz Kredel
  */
 
-public class FactorModular //<C extends GcdRingElem<C> > 
-        extends FactorAbstract<ModInteger> {
+public class FactorModular extends FactorAbsolute<ModInteger> {
 
 
     private static final Logger logger = Logger.getLogger(FactorModular.class);
