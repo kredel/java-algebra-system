@@ -91,6 +91,10 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
                 if ( debug ) {
                     logger.info("K(alpha) factors = " + ap + ", alpha: " + ap.ring.coFac); // Q(alpha)[X]
                 }
+                if ( factors.get(ap) != null ) {
+                   System.out.println("ap = (" + ap + ")**" + e); 
+                   throw new RuntimeException("multiple factors");
+                }
                 factors.put(ap,e);
             }
         }
@@ -196,7 +200,6 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
      * @param P GenPolynomial<C>.
      * @return [p_1,...,p_k] with P = prod_{i=1, ..., k} p_i.
      */
-    // @Override
     public SortedMap<GenPolynomial<AlgebraicNumber<C>>,Long> factorsAbsolute(GenPolynomial<C> P) {
         if (P == null) {
             throw new RuntimeException(this.getClass().getName() + " P == null");
@@ -230,6 +233,10 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
             for ( GenPolynomial<AlgebraicNumber<C>> ap : afacs ) {
                 if ( debug ) {
                     logger.info("K(alpha) factors = " + ap + ", alpha: " + ap.ring.coFac); // Q(alpha)[X]
+                }
+                if ( factors.get(ap) != null ) {
+                   System.out.println("ap = (" + ap + ")**" + e); 
+                   throw new RuntimeException("multiple factors");
                 }
                 factors.put(ap,e);
             }
