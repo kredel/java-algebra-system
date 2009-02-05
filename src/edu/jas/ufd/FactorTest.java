@@ -473,7 +473,7 @@ public class FactorTest extends TestCase {
      * Test modular absolute factorization.
      * 
      */
-    public void testBaseModularAbsoluteFactorization() {
+    public void ytestBaseModularAbsoluteFactorization() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         ModIntegerRing cfac = new ModIntegerRing(17);

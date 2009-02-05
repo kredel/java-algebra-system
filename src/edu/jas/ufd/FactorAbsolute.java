@@ -302,7 +302,7 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
             throw new RuntimeException(this.getClass().getName() + " P == null");
         }
         List<GenPolynomial<AlgebraicNumber<C>>> factors = new ArrayList<GenPolynomial<AlgebraicNumber<C>>>();
-        if (P.isZERO()) {
+        if ( P.isZERO() || P.degree() <= 1 ) { // max deg
             return factors;
         }
         GenPolynomialRing<C> pfac = P.ring; // K[x]
@@ -331,7 +331,7 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
                 ep = PolyUtil.<C>evaluateMain(nfac,upr,r);
                 //System.out.println("ep  = " + ep);
                 rp++;
-            } while( !isSquarefree(ep) );
+            } while( !isSquarefree(ep) || ep.degree() <= 1 ); // max deg
             up = ep;
             pfac = nfac;
         }
@@ -346,9 +346,19 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
         // find irreducible factor of up
         List<GenPolynomial<C>> UF = baseFactorsSquarefree(up);
         //System.out.println("UF  = " + UF);
-        up = UF.get(0);
-        if ( up.degree(0) == 0 ) {
+        long e = up.degree(0);
+        // search factor polynomial with smallest degree 
+        for ( int i = 1; i < UF.size(); i++ ) {
+            GenPolynomial<C> upi = UF.get(i);
+            long d = upi.degree(0);
+            if ( 1 <= d && d <= e ) {
+                up = upi;
+                e = up.degree(0);
+            }
+        }
+        if ( up.degree(0) <= 1 ) {
             // what to take ? zero would be correct but cannot be used for Q(alpha)
+            System.out.println("up degree too small: " + up);
         }
         if ( debug ) {
             logger.info("field extension by " + up); 
@@ -366,7 +376,7 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
         //System.out.println("pafac = " + pafac);
         // convert to K(alpha)
         GenPolynomial<AlgebraicNumber<C>> Pa = PolyUtil.<C> convertToAlgebraicCoefficients(pafac, P);
-        if ( Pa.degree(0) <= 1 ) {
+        if ( Pa.degree() <= 1 ) { // max deg
             factors.add(Pa);
             return factors;
         }
