@@ -50,6 +50,24 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
 
 
     /**
+     * GenPolynomial test if is absolute irreducible.
+     * @param P GenPolynomial<C>.
+     * @return true if P is absolute irreducible, else false.
+     */
+    public boolean isAbsoluteIrreducible(GenPolynomial<C> P) {
+        if (!isIrreducible(P)) {
+            return false;
+        }
+        List<GenPolynomial<AlgebraicNumber<C>>> F = factorsAbsoluteIrreducible(P);
+        if (F.size() == 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+    /**
      * GenPolynomial absolute base factorization of a polynomial.
      * @param P GenPolynomial<C>.
      * @return [p_1,...,p_k] with P = prod_{i=1, ..., k} p_i.
