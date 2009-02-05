@@ -281,7 +281,7 @@ public class FactorTest extends TestCase {
      * Test multivariate integer factorization.
      * 
      */
-    public void testMultivariateIntegerFactorization() {
+    public void ytestMultivariateIntegerFactorization() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(1);
@@ -458,9 +458,9 @@ public class FactorTest extends TestCase {
             //= engine.baseFactorsAbsoluteSquarefree(agen);
             //= engine.baseFactorsAbsoluteIrreducible(agen);
           = engine.baseFactorsAbsolute(agen);
-        System.out.println("agen     = " + agen);
-        System.out.println("F        = " + F);
-        System.out.println("Q(alpha) = " + F.firstKey().ring.coFac);
+        //System.out.println("agen     = " + agen);
+        //System.out.println("F        = " + F);
+        //System.out.println("Q(alpha) = " + F.firstKey().ring.coFac);
 
         boolean t = true; // not ok: engine.isAbsoluteFactorization(agen,F);
         //System.out.println("t        = " + t);
@@ -489,9 +489,9 @@ public class FactorTest extends TestCase {
             //= engine.baseFactorsAbsoluteSquarefree(agen);
             //= engine.baseFactorsAbsoluteIrreducible(agen);
           = engine.baseFactorsAbsolute(agen);
-        System.out.println("agen        = " + agen);
-        System.out.println("F           = " + F);
-        System.out.println("Z_17(alpha) = " + F.firstKey().ring.coFac);
+        //System.out.println("agen        = " + agen);
+        //System.out.println("F           = " + F);
+        //System.out.println("Z_17(alpha) = " + F.firstKey().ring.coFac);
 
         boolean t = true; // not ok: engine.isAbsoluteFactorization(agen,F);
         //System.out.println("t        = " + t);
@@ -501,10 +501,10 @@ public class FactorTest extends TestCase {
 
 
     /**
-     * Test absolute factorization.
+     * Test rational absolute factorization.
      * 
      */
-    public void testAbsoluteFactorization() {
+    public void testRationalAbsoluteFactorization() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigRational cfac = new BigRational(1);
