@@ -308,6 +308,16 @@ public class AlgebraicNumber<C extends GcdRingElem<C>> implements GcdRingElem<Al
      * @return this - (this/S)*S.
      */
     public AlgebraicNumber<C> remainder(AlgebraicNumber<C> S) {
+        if ( S == null || S.isZERO()) {
+           throw new RuntimeException(this.getClass().getName()
+                                      + " division by zero");
+        }
+        if ( S.isONE()) {
+           return ring.getZERO();
+        }
+        if ( S.isUnit() ) {
+           return ring.getZERO();
+        }
         GenPolynomial<C> x = val.remainder(S.val);
         return new AlgebraicNumber<C>(ring, x);
     }
