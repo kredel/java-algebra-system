@@ -222,8 +222,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
         if (pfac.nvar > 1) {
             throw new RuntimeException(this.getClass().getName() + " only for univariate polynomials");
         }
-        GreatestCommonDivisorAbstract<C> engine = (GreatestCommonDivisorAbstract<C>) GCDFactory
-                .<C> getImplementation(pfac.coFac);
+        GreatestCommonDivisorAbstract<C> engine = GCDFactory.<C> getImplementation(pfac.coFac);
         C c;
         if (pfac.characteristic().signum() > 0) {
             c = P.leadingBaseCoefficient();
@@ -257,6 +256,10 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
                //System.out.println("sfacs   = " + sfacs);
             }
             for (GenPolynomial<C> h : sfacs) {
+                if ( factors.get(h) != null ) {
+                   System.out.println("h = (" + h + ")**" + k); 
+                   throw new RuntimeException("multiple factors");
+                }
                 factors.put(h, k);
             }
         }
@@ -290,8 +293,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
         if (P.isZERO()) {
             return factors;
         }
-        GreatestCommonDivisorAbstract<C> engine = (GreatestCommonDivisorAbstract<C>) GCDFactory
-                .<C> getImplementation(pfac.coFac);
+        GreatestCommonDivisorAbstract<C> engine = GCDFactory.<C> getImplementation(pfac.coFac);
         C c;
         if (pfac.characteristic().signum() > 0) {
             c = P.leadingBaseCoefficient();
@@ -324,6 +326,10 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
                //System.out.println("sfacs   = " + sfacs);
             }
             for (GenPolynomial<C> h : sfacs) {
+                if ( factors.get(h) != null ) {
+                   System.out.println("h = (" + h + ")**" + d); 
+                   throw new RuntimeException("multiple factors");
+                }
                 factors.put(h, d);
             }
         }
@@ -378,8 +384,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
         }
         //GenPolynomialRing<C> pfac = P.ring;
         RingFactory<C> cfac = P.ring.coFac;
-        GreatestCommonDivisorAbstract<C> engine = (GreatestCommonDivisorAbstract<C>) GCDFactory
-                .<C> getProxy(cfac);
+        GreatestCommonDivisorAbstract<C> engine = GCDFactory.<C> getProxy(cfac);
         return engine.basePrimitivePart(P);
     }
 
@@ -446,30 +451,6 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
             System.out.println("t = " + t);
         }
         return f;
-    }
-
-
-    /**
-     * GenPolynomial is factorization.
-     * @param P GenPolynomial<C>.
-     * @param F = [p_1,...,p_k].
-     * @return true if P = prod_{i=1,...,r} p_i, else false.
-     */
-    public boolean nonoAbsoluteFactorization(GenPolynomial<C> P, List<GenPolynomial<AlgebraicNumber<C>>> F) {
-        if (P == null || F == null || F.isEmpty()) {
-            throw new IllegalArgumentException("P or F may not be null or empty");
-        }
-        GenPolynomial<AlgebraicNumber<C>> fa = F.get(0); // not ok since different Q(alpha)
-        GenPolynomialRing<AlgebraicNumber<C>> pafac = fa.ring;
-        // convert to K(alpha)
-        GenPolynomial<AlgebraicNumber<C>> Pa 
-            = PolyUtil.<C> convertToAlgebraicCoefficients(pafac, P);
-
-        GenPolynomial<AlgebraicNumber<C>> t = Pa.ring.getONE();
-        for (GenPolynomial<AlgebraicNumber<C>> f : F) {
-            t = t.multiply(f);
-        }
-        return Pa.equals(t) || Pa.equals(t.negate());
     }
 
 }
