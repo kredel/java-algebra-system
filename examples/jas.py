@@ -17,14 +17,14 @@ from edu.jas.poly        import GenPolynomial, GenPolynomialRing,\
                                 TermOrderOptimization, TermOrder, PolynomialList
 from edu.jas.ps          import UnivPowerSeries, UnivPowerSeriesRing,\
                                 PowerSeriesMap, Coefficients  
-from edu.jas.ring        import DGroebnerBaseSeq, EGroebnerBaseSeq,\
+from edu.jas.gb          import DGroebnerBaseSeq, EGroebnerBaseSeq,\
                                 GroebnerBaseDistributed, GBDist, GroebnerBaseParallel,\
                                 GroebnerBaseSeq, GroebnerBaseSeqPairSeq,\
                                 GroebnerBasePseudoRecSeq, GroebnerBasePseudoSeq,\
                                 ReductionSeq, GroebnerBaseSeqPairParallel,\
                                 RGroebnerBasePseudoSeq, RGroebnerBaseSeq,\
                                 SolvableGroebnerBaseParallel, SolvableGroebnerBaseSeq
-from edu.jas.module      import ModGroebnerBaseAbstract, ModSolvableGroebnerBaseAbstract,\
+from edu.jas.gbmod       import ModGroebnerBaseAbstract, ModSolvableGroebnerBaseAbstract,\
                                 SolvableSyzygyAbstract, SyzygyAbstract
 from edu.jas.vector      import OrderedModuleList, ModuleList
 from edu.jas.application import ComprehensiveGroebnerBaseSeq, PolyUtilApp,\
@@ -33,7 +33,7 @@ from edu.jas.kern        import ComputerThreads;
 from edu.jas.ufd         import GreatestCommonDivisorSubres, PolyUfdUtil, GCDFactory,\
                                 FactorFactory;
 from edu.jas.util        import ExecutableServer
-from edu.jas             import structure, arith, poly, ps, ring, module, vector,\
+from edu.jas             import structure, arith, poly, ps, gb, gbmod, vector,\
                                 application, util, ufd
 from edu                 import jas
 #PrettyPrint.setInternal();
