@@ -6,7 +6,7 @@
 from jas import Ring
 from jas import Ideal
 
-from edu.jas.ring import Katsura;
+from edu.jas.gb import Katsura;
 
 # katsura examples
 

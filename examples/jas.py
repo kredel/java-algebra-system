@@ -749,7 +749,7 @@ class SolvableIdeal:
         t = System.currentTimeMillis() - t;
         bbpar.terminate();
         print "parallel %s leftGB executed in %s ms" % (th, t); 
-        return Ideal(self.ring,"",G);
+        return SolvableIdeal(self.ring,"",G);
 
     def parTwosidedGB(self,th):
         '''Compute a two-sided Groebner base in parallel.
@@ -762,7 +762,7 @@ class SolvableIdeal:
         t = System.currentTimeMillis() - t;
         bbpar.terminate();
         print "parallel %s twosidedGB executed in %s ms" % (th, t); 
-        return Ideal(self.ring,"",G);
+        return SolvableIdeal(self.ring,"",G);
 
 
 class Module:

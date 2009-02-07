@@ -41,8 +41,8 @@ f = r.ideal( ps );
 print "Ideal: " + str(f);
 print;
 
-from edu.jas.ring import EGroebnerBaseSeq;
-from edu.jas.ring import DGroebnerBaseSeq;
+from edu.jas.gb import EGroebnerBaseSeq;
+from edu.jas.gb import DGroebnerBaseSeq;
 
 egbs = EGroebnerBaseSeq();
 dgbs = DGroebnerBaseSeq();

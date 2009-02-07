@@ -40,9 +40,8 @@ rg = f.leftGB();
 print "seq left GB:", rg;
 print;
 
-from edu.jas.ring   import SolvableGroebnerBaseSeq;
 
-if SolvableGroebnerBaseSeq().isLeftGB( rg.list ):
+if rg.isLeftGB():
    print "is left GB";
 else:
    print "is not left GB";
@@ -53,17 +52,17 @@ rg = f.twosidedGB();
 print "seq twosided GB:", rg;
 print;
 
-if SolvableGroebnerBaseSeq().isLeftGB( rg.list ):
+if rg.isLeftGB():
    print "twosided GB is left GB";
 else:
    print "twosided GB is not left GB";
 
-if SolvableGroebnerBaseSeq().isRightGB( rg.list ):
+if rg.isRightGB():
    print "twosided GB is right GB";
 else:
    print "twosided GB is not right GB";
 
-if SolvableGroebnerBaseSeq().isTwosidedGB( rg.list ):
+if rg.isTwosidedGB():
    print "is twosided GB";
 else:
    print "is not twosided GB";
@@ -74,7 +73,7 @@ rg = f.rightGB();
 print "seq right GB:", rg;
 print;
 
-if SolvableGroebnerBaseSeq().isRightGB( rg.list ):
+if rg.isRightGB():
    print "is right GB";
 else:
    print "is not right GB";

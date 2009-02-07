@@ -11,8 +11,8 @@ import java.io.StringReader
 import edu.jas.structure.*
 import edu.jas.arith.*
 import edu.jas.poly.*
-import edu.jas.ring.*
-import edu.jas.module.*
+import edu.jas.gb.*
+import edu.jas.gbmod.*
 import edu.jas.vector.*
 import edu.jas.application.*
 import edu.jas.util.*

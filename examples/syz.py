@@ -52,8 +52,8 @@ rg = f.GB();
 print "seq Output:", rg;
 print;
 
-from edu.jas.module import SyzygyAbstract;
-from edu.jas.module import ModGroebnerBaseAbstract;
+from edu.jas.gbmod  import SyzygyAbstract;
+from edu.jas.gbmod  import ModGroebnerBaseAbstract;
 from edu.jas.vector import ModuleList;
 
 s = SyzygyAbstract().zeroRelations( rg.list );

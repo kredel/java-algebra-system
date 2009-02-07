@@ -48,9 +48,8 @@ flg = f.leftGB();
 print "seq left GB:", flg;
 print;
 
-from edu.jas.module   import ModSolvableGroebnerBaseAbstract;
 
-if ModSolvableGroebnerBaseAbstract().isLeftGB( flg.mset ):
+if flg.isLeftGB():
    print "is left GB";
 else:
    print "is not left GB";
@@ -61,17 +60,17 @@ ftg = f.twosidedGB();
 print "seq twosided GB:", ftg;
 print;
 
-if ModSolvableGroebnerBaseAbstract().isLeftGB( ftg.mset ):
+if ftg.isLeftGB():
    print "twosided GB is left GB";
 else:
    print "twosided GB is not left GB";
 
-if ModSolvableGroebnerBaseAbstract().isRightGB( ftg.mset ):
+if ftg.isRightGB():
    print "twosided GB is right GB";
 else:
    print "twosided GB is not right GB";
 
-if ModSolvableGroebnerBaseAbstract().isTwosidedGB( ftg.mset ):
+if ftg.isTwosidedGB():
    print "is twosided GB";
 else:
    print "is not twosided GB";
@@ -84,7 +83,7 @@ frg = f.rightGB();
 print "seq right GB:", frg;
 print;
 
-if ModSolvableGroebnerBaseAbstract().isRightGB( frg.mset ):
+if frg.isRightGB():
    print "is right GB";
 else:
    print "is not right GB";

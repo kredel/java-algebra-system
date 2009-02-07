@@ -29,9 +29,9 @@ rg = f.GB();
 print "seq Output:", rg;
 print;
 
-from edu.jas.module import SyzygyAbstract;
+from edu.jas.gbmod  import SyzygyAbstract;
 from edu.jas.vector import ModuleList;
-from edu.jas.module import ModGroebnerBaseAbstract;
+from edu.jas.gbmod  import ModGroebnerBaseAbstract;
 
 s = SyzygyAbstract().zeroRelations( rg.list );
 sl = ModuleList(rg.pset.ring,s);

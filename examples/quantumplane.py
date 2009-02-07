@@ -59,9 +59,8 @@ print "seq twosided GB Output:", ftg;
 print;
 
 
-from edu.jas.module import SolvableSyzygyAbstract;
-from edu.jas.module import ModSolvableGroebnerBase;
-#from edu.jas.vector import ModuleList;
+from edu.jas.gbmod  import SolvableSyzygyAbstract;
+from edu.jas.gbmod  import ModSolvableGroebnerBase;
 
 s = SolvableSyzygyAbstract().leftZeroRelations( ftg.mset );
 #sl = ModuleList(f.pset.vars,f.pset.tord,s,f.pset.table);

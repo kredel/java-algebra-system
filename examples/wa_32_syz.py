@@ -6,10 +6,8 @@
 from jas import SolvableRing
 from jas import SolvableIdeal
 
-from edu.jas.ring   import SolvableGroebnerBaseSeq;
-from edu.jas.poly   import OrderedPolynomialList;
 from edu.jas.vector import ModuleList;
-from edu.jas.module import SolvableSyzygyAbstract;
+from edu.jas.gbmod  import SolvableSyzygyAbstract;
 
 # WA_32 example
 
@@ -42,7 +40,6 @@ print;
 
 
 Z = SolvableSyzygyAbstract().leftZeroRelationsArbitrary( f.list );
-#Z = SolvableSyzygyAbstract().leftZeroRelations( g );
 Zp = ModuleList( r.ring, Z );
 print "seq left syz Output:", Zp;
 print;
@@ -53,7 +50,6 @@ else:
 
 
 Zr = SolvableSyzygyAbstract().rightZeroRelationsArbitrary( f.list );
-#Z = SolvableSyzygyAbstract().rightZeroRelations( g );
 Zpr = ModuleList( r.ring, Zr );
 print "seq right syz Output:", Zpr;
 print;
@@ -68,7 +64,7 @@ else:
 rg = f.leftGB();
 print "seq left Output:", rg;
 print;
-if SolvableGroebnerBaseSeq().isLeftGB( rg.list ):
+if rg.isLeftGB():
    print "is left GB";
 else:
    print "is not left GB";
@@ -78,17 +74,16 @@ g = rg.list;
 rg = f.twosidedGB();
 print "seq twosided Output:", rg;
 print;
-if SolvableGroebnerBaseSeq().isTwosidedGB( rg.list ):
+if rg.isTwosidedGB():
    print "is twosided GB";
 else:
    print "is not twosided GB";
 
 
-rgb = SolvableGroebnerBaseSeq().rightGB( f.list );
-rp = OrderedPolynomialList( r.ring, rgb );
-print "seq right Output:", rp;
+rgb = rg.rightGB();
+print "seq right Output:", rgb;
 print;
-if SolvableGroebnerBaseSeq().isRightGB( rgb ):
+if rgb.isRightGB():
    print "is right GB";
 else:
    print "is not right GB";

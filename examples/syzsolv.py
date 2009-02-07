@@ -33,7 +33,7 @@ f = SolvableIdeal( r, ps );
 print "SolvIdeal: " + str(f);
 print;
 
-from edu.jas.module import SolvableSyzygyAbstract;
+from edu.jas.gbmod import SolvableSyzygyAbstract;
 
 R = SolvableSyzygyAbstract().resolution( f.pset );
 

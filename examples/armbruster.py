@@ -32,14 +32,9 @@ f = SubModule( r, ps );
 print "SubModule: " + str(f);
 print;
 
-#from edu.jas.module import *
-#print "SubModule: " + str(ModuleList.getModuleList(4,f.pset));
-#print;
-
 rg = f.GB();
 print "seq Output:", rg;
 print;
 
-#print "SubModule: " + str(ModuleList.getModuleList(4,rg));
-#print;
+print "isGB:", rg.isGB();
 
