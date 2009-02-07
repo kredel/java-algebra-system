@@ -44,7 +44,7 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
     private static final Logger logger = Logger.getLogger(FactorAbsolute.class);
 
 
-    private final boolean debug = logger.isInfoEnabled();
+    private final boolean debug = true || logger.isDebugEnabled();
 
 
     /** Get the String representation.
@@ -340,6 +340,10 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
         // find field extension K(alpha)
         GenPolynomial<C> up = P;
         RingFactory<C> cf = pfac.coFac;
+        long cr = cf.characteristic().longValue(); // char might be larger
+        if ( cr == 0L ) {
+            cr = Long.MAX_VALUE;
+        }
         long rp = 0L;
         for ( int i = 0; i < (pfac.nvar-1); i++ ) {
             rp = 0L;
@@ -351,6 +355,9 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
             //System.out.println("upr = " + upr);
             GenPolynomial<C> ep;
             do {
+                if ( rp >= cr ) {
+                    throw new RuntimeException("elements of prime field exhausted: " + cr);
+                }
                 C r = cf.fromInteger(rp); //cf.random(rp);
                 //System.out.println("r   = " + r);
                 ep = PolyUtil.<C>evaluateMain(nfac,upr,r);
@@ -365,7 +372,7 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
             logger.info("P("+rp+") = " + up); 
             //System.out.println("up  = " + up);
         }
-        if ( debug && ! isSquarefree(up) ) {
+        if ( debug && !isSquarefree(up) ) {
             throw new RuntimeException("not irreducible up = " + up);
         }
         // find irreducible factor of up

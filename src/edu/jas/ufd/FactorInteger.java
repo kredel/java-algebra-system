@@ -39,6 +39,37 @@ public class FactorInteger extends FactorAbstract<BigInteger> {
 
 
     /**
+     * Factorization engine for modular base coefficients.
+     */
+    protected final FactorModular mengine;
+
+
+    /**
+     * Gcd engine for modular base coefficients.
+     */
+    protected final GreatestCommonDivisorAbstract<ModInteger> engine;
+
+
+    /**
+     * Gcd engine for integer base coefficients.
+     */
+    protected final GreatestCommonDivisorAbstract<BigInteger> iengine;
+
+
+    /**
+     * No argument constructor. 
+     */
+    protected FactorInteger() {
+        mengine = new FactorModular();
+        RingFactory<ModInteger> mcofac = new ModIntegerRing(13, true); // hack
+        engine = GCDFactory.getImplementation(mcofac);
+        RingFactory<BigInteger> icofac = new BigInteger(1); // hack
+        iengine = GCDFactory.getImplementation(icofac);
+    }
+
+
+
+    /**
      * GenPolynomial base factorization of a squarefree polynomial.
      * @param P squarefree and primitive! GenPolynomial<BigInteger>.
      * @return [p_1,...,p_k] with P = prod_{i=1, ..., k} p_i.
@@ -73,9 +104,7 @@ public class FactorInteger extends FactorAbstract<BigInteger> {
         //initialize prime list and degree vector
         PrimeList primes = new PrimeList(PrimeList.Range.small);
         int pn = 30; //primes.size();
-        ModIntegerRing cofac = new ModIntegerRing(13, true);
-        RingFactory<ModInteger> mcofac = new ModIntegerRing(13, true);
-        GreatestCommonDivisorAbstract<ModInteger> engine = GCDFactory.<ModInteger> getImplementation(mcofac);
+        ModIntegerRing cofac = null;
         GenPolynomial<ModInteger> am = null;
         GenPolynomialRing<ModInteger> mfac = null;
         final int TT = 4; // 7
@@ -138,7 +167,6 @@ public class FactorInteger extends FactorAbstract<BigInteger> {
                 }
             }
             // now am is squarefree mod p, make monic and factor mod p
-            FactorModular mengine = new FactorModular();
             if (!nf.isONE()) {
                 //System.out.println("nf = " + nf);
                 am = am.divide(nf); // make monic
@@ -228,9 +256,8 @@ public class FactorInteger extends FactorAbstract<BigInteger> {
      *         p**e.
      * @note does not work.
      */
-    public static
-      List<GenPolynomial<BigInteger>> searchFactorsMonic(GenPolynomial<BigInteger> C, BigInteger M,
-                                                         List<GenPolynomial<ModInteger>> F) {
+    public List<GenPolynomial<BigInteger>> searchFactorsMonic(GenPolynomial<BigInteger> C, BigInteger M,
+                                                              List<GenPolynomial<ModInteger>> F) {
         System.out.println("*** monic factor combination ***");
         if (C == null || C.isZERO() || F == null || F.size() == 0) {
             throw new RuntimeException("C must be nonzero and F must be nonempty");
@@ -264,9 +291,6 @@ public class FactorInteger extends FactorAbstract<BigInteger> {
             logger.info("lifted intlist = " + ilist);
         }
         //System.out.println("intlist  = " + ilist); 
-
-        GreatestCommonDivisorAbstract<BigInteger> iengine 
-          = GCDFactory.<BigInteger> getImplementation(pfac.coFac);
 
         // combine trial factors
         int dl = (ilist.size() + 1) / 2;
@@ -339,9 +363,8 @@ public class FactorInteger extends FactorAbstract<BigInteger> {
      * @return [g_0,...,g_{n-1}] = lift(C,F), with C = prod_{0,...,n-1} g_i mod
      *         p**e.
      */
-    public static
-      List<GenPolynomial<BigInteger>> searchFactorsNonMonic(GenPolynomial<BigInteger> C, BigInteger M,
-                                                            List<GenPolynomial<ModInteger>> F) {
+    public List<GenPolynomial<BigInteger>> searchFactorsNonMonic(GenPolynomial<BigInteger> C, BigInteger M,
+                                                                 List<GenPolynomial<ModInteger>> F) {
         // System.out.println("*** non monic factor combination ***");
         if (C == null || C.isZERO() || F == null || F.size() == 0) {
             throw new RuntimeException("C must be nonzero and F must be nonempty");
@@ -372,8 +395,6 @@ public class FactorInteger extends FactorAbstract<BigInteger> {
         GenPolynomialRing<ModInteger> mfac = ct.ring;
         GenPolynomial<ModInteger> Pm = PolyUtil.<ModInteger> fromIntegerCoefficients(mfac, C);
         GenPolynomial<BigInteger> PP = C, P = C;
-
-        GreatestCommonDivisorAbstract<BigInteger> iengine = GCDFactory.<BigInteger> getImplementation(pfac.coFac);
 
         // combine trial factors
         int dl = (mlist.size() + 1) / 2;

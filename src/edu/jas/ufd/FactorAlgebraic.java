@@ -58,6 +58,15 @@ public class FactorAlgebraic<C extends GcdRingElem<C>> extends FactorAbstract<Al
 
 
     /**
+     * Constructor.
+     * @param fac algebraic number factory.
+     */
+    public FactorAlgebraic(AlgebraicNumberRing<C> fac) {
+        this( FactorFactory.<C>getImplementation(fac.ring.coFac) );
+    }
+
+
+    /**
      * GenPolynomial base factorization of a squarefree polynomial.
      * @param P squarefree GenPolynomial<AlgebraicNumber<C>>.
      * @return [p_1,...,p_k] with P = prod_{i=1, ..., k} p_i.

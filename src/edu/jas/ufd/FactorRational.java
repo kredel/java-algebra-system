@@ -33,6 +33,20 @@ public class FactorRational extends FactorAbsolute<BigRational> {
 
 
     /**
+     * Factorization engine for integer base coefficients.
+     */
+    protected final FactorInteger iengine;
+
+
+    /**
+     * No argument constructor. 
+     */
+    protected FactorRational() {
+        iengine = new FactorInteger();
+    }
+
+
+    /**
      * GenPolynomial base factorization of a squarefree polynomial.
      * @param P squarefree GenPolynomial<BigRational>.
      * @return [p_1,...,p_k] with P = prod_{i=1, ..., k} p_i.
@@ -64,8 +78,7 @@ public class FactorRational extends FactorAbsolute<BigRational> {
         GenPolynomialRing<BigInteger> ifac = new GenPolynomialRing<BigInteger>(bi, pfac);
         GenPolynomial<BigInteger> Pi = PolyUtil.integerFromRationalCoefficients(ifac, Pr);
         //System.out.println("Pi = " + Pi);
-        FactorInteger faci = new FactorInteger();
-        List<GenPolynomial<BigInteger>> ifacts = faci.baseFactorsSquarefree(Pi);
+        List<GenPolynomial<BigInteger>> ifacts = iengine.baseFactorsSquarefree(Pi);
         if (logger.isInfoEnabled()) {
             logger.info("ifacts = " + ifacts);
         }
