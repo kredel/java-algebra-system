@@ -31,7 +31,6 @@ import edu.jas.poly.RelationTable;
 
 
 import edu.jas.vector.ModuleList;
-//import edu.jas.module.SolvableSyzygy;
 
 
 /**

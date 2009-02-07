@@ -5,9 +5,7 @@
 package edu.jas.gbmod;
 
 import java.util.List;
-//import java.util.Iterator;
 import java.util.ArrayList;
-//import java.io.IOException;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -25,9 +23,6 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolynomialList;
 import edu.jas.poly.TermOrder;
-
-//import edu.jas.ring.Reduction;
-//import edu.jas.ring.GroebnerBase;
 
 import edu.jas.vector.ModuleList;
 

@@ -5,7 +5,6 @@
 package edu.jas.gbmod;
 
 import java.util.List;
-//import java.util.Iterator;
 import java.util.ArrayList;
 import java.io.IOException;
 import java.io.Reader;
@@ -30,10 +29,7 @@ import edu.jas.poly.PolynomialList;
 import edu.jas.poly.TermOrder;
 import edu.jas.poly.GenPolynomialTokenizer;
 
-//import edu.jas.ring.Reduction;
-
 import edu.jas.vector.ModuleList;
-//import edu.jas.module.Syzygy;
 
 
 /**

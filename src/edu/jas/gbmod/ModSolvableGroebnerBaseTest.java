@@ -7,9 +7,7 @@ package edu.jas.gbmod;
 //import edu.jas.poly.GroebnerBase;
 
 import java.util.List;
-//import java.util.Iterator;
 import java.util.ArrayList;
-//import java.io.IOException;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -22,16 +20,12 @@ import org.apache.log4j.BasicConfigurator;
 
 import edu.jas.arith.BigRational;
 
-//import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.PolynomialList;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.TermOrder;
 import edu.jas.poly.RelationTable;
 import edu.jas.poly.WeylRelations;
-
-//import edu.jas.ring.Reduction;
-//import edu.jas.ring.GroebnerBase;
 
 import edu.jas.vector.ModuleList;
 

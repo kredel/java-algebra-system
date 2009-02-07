@@ -22,15 +22,12 @@ import edu.jas.gb.SolvableGroebnerBase;
 import edu.jas.gb.SolvableGroebnerBaseSeq;
 import edu.jas.gb.SolvableReduction;
 import edu.jas.gb.SolvableReductionSeq;
+
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.PolynomialList;
 import edu.jas.poly.ExpVector;
-//import edu.jas.poly.TermOrder;
-//import edu.jas.poly.RelationTable;
-
-//import edu.jas.ring.GroebnerBase;
 
 import edu.jas.vector.ModuleList;
 import edu.jas.vector.SolvableBasicLinAlg;

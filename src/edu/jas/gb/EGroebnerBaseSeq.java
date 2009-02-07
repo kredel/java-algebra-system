@@ -4,18 +4,10 @@
 
 package edu.jas.gb;
 
-//import java.util.ArrayList;
-//import java.util.List;
-//import java.util.ListIterator;
-
 import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
 
-//import edu.jas.poly.ExpVector;
-//import edu.jas.poly.GenPolynomial;
-
-//import edu.jas.ring.OrderedDPairlist;
 
 /**
  * E-Groebner Base sequential algorithm.

@@ -4,9 +4,7 @@
 
 package edu.jas.gbmod;
 
-//import java.util.ArrayList;
 import java.util.List;
-//import java.util.ListIterator;
 
 //import org.apache.log4j.Logger;
 
@@ -17,9 +15,6 @@ import edu.jas.gb.GroebnerBaseSeq;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.PolynomialList;
 
-//import edu.jas.poly.GenSolvablePolynomial;
-
-//import edu.jas.ring.Reduction;
 
 import edu.jas.vector.ModuleList;
 

@@ -5,27 +5,18 @@
 package edu.jas.gbmod;
 
 import java.util.ArrayList;
-//import java.util.Arrays;
 import java.util.List;
-//import java.util.ListIterator;
-//import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 
 
 import edu.jas.structure.RingElem;
 
-//import edu.jas.poly.ExpVector;
-//import edu.jas.poly.GenPolynomial;
-//import edu.jas.poly.GenPolynomialRing;
 import edu.jas.gb.SolvableGroebnerBase;
 import edu.jas.gb.SolvableGroebnerBaseSeq;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.PolynomialList;
-
-//import edu.jas.ring.Reduction;
-//import edu.jas.ring.GroebnerBase;
 
 import edu.jas.vector.ModuleList;
 
