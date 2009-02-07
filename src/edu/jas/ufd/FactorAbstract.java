@@ -273,11 +273,11 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
         SortedMap<GenPolynomial<C>, Long> facs = engine.baseSquarefreeFactors(P);
         if ( debug ) {
             logger.info("squarefree facs   = " + facs);
-            //System.out.println("sfacs   = " + facs);
+            System.out.println("sfacs   = " + facs);
         }
         for (GenPolynomial<C> g : facs.keySet()) {
             Long k = facs.get(g);
-            //System.out.println("g       = " + g);
+            System.out.println("g       = " + g);
             List<GenPolynomial<C>> sfacs = baseFactorsSquarefree(g);
             if ( debug ) {
                logger.info("factors of squarefree = " + sfacs);
