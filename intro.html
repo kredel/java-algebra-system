@@ -49,7 +49,7 @@ The library contains at the moment of the following
   contains classes for vectors and lists of polynomials and solvable
   polynomials like <code>GenVector</code> or <code>ModuleList</code>.
 </dd>
-<dt>edu.jas.ring:</dt>
+<dt>edu.jas.gb:</dt>
 <dd>
   contains classes for polynomial and solvable polynomial reduction,
   Groebner bases over fields and ideal arithmetic as well as thread
@@ -64,7 +64,7 @@ The library contains at the moment of the following
   fields or integral domains) in <code>RGroebnerBaseSeq</code> and
   <code>RGroebnerBasePseudoSeq</code>.
 </dd>
-<dt>edu.jas.module:</dt>
+<dt>edu.jas.gbmod:</dt>
 <dd>
   contains classes for module Groebner bases and syzygies over
   polynomials and solvable polynomials like
@@ -77,13 +77,6 @@ The library contains at the moment of the following
   or <code>SolvableIdeal</code>.  Latest additions are comprehensive
   Groebner bases for polynomial rings over parameter rings in class
   <code>ComprehensiveGroebnerBaseSeq</code>.
-</dd>
-<dt>edu.jas.util:</dt>
-<dd>
-  contains further utilities for parallel and distributed computations
-  like <code>ThreadPool</code>, <code>DistThreadPool</code> or
-  <code>DistHashTable</code> (part of this package has become obsolete
-  with JDK 1.5).
 </dd>
 <dt>edu.jas.ufd:</dt>
 <dd>
@@ -102,6 +95,13 @@ The library contains at the moment of the following
 <dd>
   contains univariate power series arithmetic
   in class <code>UnivPowerSeries</code>.
+</dd>
+<dt>edu.jas.util:</dt>
+<dd>
+  contains further utilities for parallel and distributed computations
+  like <code>ThreadPool</code>, <code>DistThreadPool</code> or
+  <code>DistHashTable</code> (part of this package has become obsolete
+  with JDK 1.5).
 </dd>
 </dl>
 
@@ -266,8 +266,8 @@ and <a href="guide.html" target="main">Users guide</a> pages.
 
 <p>
 The following are examples which can be executed with 
-the class edu.jas.ring.RunGB. E.g. <br />
-<code>java -cp .:jas.jar:... edu.jas.ring.RunGB &lt;args&gt;</code>
+the class edu.jas.gb.RunGB. E.g. <br />
+<code>java -cp .:jas.jar:... edu.jas.gb.RunGB &lt;args&gt;</code>
 </p>
 
 <p>Commutative:
@@ -309,7 +309,7 @@ the class edu.jas.ring.RunGB. E.g. <br />
 <p>
 <!-- Created: Sat Mar 19 21:44:14 CET 2005 -->
 <!-- hhmts start -->
-Last modified: Wed Jan 28 21:44:43 CET 2009
+Last modified: Sat Feb  7 14:43:51 CET 2009
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
