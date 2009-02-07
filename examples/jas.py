@@ -358,6 +358,15 @@ class Ideal:
         r = Ring("",rm);
         return Ideal(r,"",pm);
 
+##     def syzygy(self):
+##         '''Syzygy of generating polynomials.
+##         '''
+##         p = self.pset;
+##         l = p.list;
+##         s = SyzygyAbstract().zeroRelations( l );
+##         m = Module("",p.ring);
+##         return SubModule(m,"",s);
+
 
 class ParamIdeal:
     '''Represents a JAS polynomial ideal with polynomial coefficients.
@@ -845,6 +854,18 @@ class SubModule:
         t = System.currentTimeMillis() - t;
         print "module isGB executed in %s ms" % t; 
         return b;
+
+##     def isSyzygy(self,g):
+##         '''Test if this is a syzygy of the polynomials in g.
+##         '''
+##         l = self.list;
+##         print "l = %s" % l; 
+##         print "g = %s" % g; 
+##         t = System.currentTimeMillis();
+##         z = SyzygyAbstract().isZeroRelation( l, g.list );
+##         t = System.currentTimeMillis() - t;
+##         print "executed isSyzygy in %s ms" % t; 
+##         return z;
 
 
 class SolvableModule:
