@@ -625,6 +625,8 @@ public class PolyUfdUtilTest extends TestCase {
             ilist.add(a);
             ilist.add(b);
             ilist.add(d);
+            //GreatestCommonDivisorAbstract<BigInteger> iengine = GCDFactory.getProxy(mi);
+            //ilist = iengine.coPrime(ilist);
 
             List<GenPolynomial<ModInteger>> mlist = new ArrayList<GenPolynomial<ModInteger>>();
             mlist.add(ap);
@@ -633,19 +635,10 @@ public class PolyUfdUtilTest extends TestCase {
             //System.out.println("mlist = " + mlist);
             // ensure coprime
             GreatestCommonDivisorAbstract<ModInteger> mengine = GCDFactory.getProxy(pm);
-
-            FactorModular mfact = new FactorModular();
-            SortedMap<GenPolynomial<ModInteger>, Long> factors = mfact.baseFactors(cp);
-            mlist = new ArrayList<GenPolynomial<ModInteger>>(factors.size());
-            for (GenPolynomial<ModInteger> f : factors.keySet()) {
-                long e = factors.get(f);
-                GenPolynomial<ModInteger> pp = Power.<GenPolynomial<ModInteger>> positivePower(f, e);
-                mlist.add(pp);
-                //System.out.println("f^" + e + " = " + pp);
-            }
+            mlist = mengine.coPrime(mlist);
 
             boolean ih = true;
-            ih = PolyUfdUtil.isHenselLift(c, mip, m, ilist);
+            //ih = PolyUfdUtil.isHenselLift(c, mip, m, ilist);
             //System.out.println("ih = " + ih);
 
             long tq = System.currentTimeMillis();
