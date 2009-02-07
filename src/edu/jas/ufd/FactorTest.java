@@ -388,7 +388,7 @@ public class FactorTest extends TestCase {
         //System.out.println("afac  = " + afac);
         //System.out.println("apfac = " + apfac);
 
-        FactorAlgebraic<BigRational> fac = new FactorAlgebraic<BigRational>(new FactorRational());
+        FactorAlgebraic<BigRational> fac = new FactorAlgebraic<BigRational>(afac);
 
         for (int i = 1; i < 2; i++) {
             int facs = 0;

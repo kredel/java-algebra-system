@@ -41,32 +41,33 @@ public class FactorInteger extends FactorAbstract<BigInteger> {
     /**
      * Factorization engine for modular base coefficients.
      */
-    protected final FactorModular mengine;
-
+    protected final FactorAbstract<ModInteger> mfactor;
 
     /**
      * Gcd engine for modular base coefficients.
      */
-    protected final GreatestCommonDivisorAbstract<ModInteger> engine;
+    protected final GreatestCommonDivisorAbstract<ModInteger> mengine;
 
 
     /**
-     * Gcd engine for integer base coefficients.
+     * No argument constructor.
      */
-    protected final GreatestCommonDivisorAbstract<BigInteger> iengine;
-
-
-    /**
-     * No argument constructor. 
-     */
-    protected FactorInteger() {
-        mengine = new FactorModular();
-        RingFactory<ModInteger> mcofac = new ModIntegerRing(13, true); // hack
-        engine = GCDFactory.getImplementation(mcofac);
-        RingFactory<BigInteger> icofac = new BigInteger(1); // hack
-        iengine = GCDFactory.getImplementation(icofac);
+    public FactorInteger() {
+        this( BigInteger.ONE ); 
     }
 
+
+    /**
+     * Constructor. 
+     * @param cfac coefficient ring factory.
+     */
+    public FactorInteger(RingFactory<BigInteger> cfac) {
+        super(cfac);
+        RingFactory<ModInteger> mcofac = new ModIntegerRing(13, true); // hack
+        mfactor = FactorFactory.getImplementation(mcofac); //new FactorModular(mcofac);
+        mengine = GCDFactory.getImplementation(mcofac);
+        //mengine = GCDFactory.getProxy(mcofac);
+    }
 
 
     /**
@@ -159,7 +160,7 @@ public class FactorInteger extends FactorAbstract<BigInteger> {
                     //System.out.println("unlucky prime (a')= " + p);
                     continue;
                 }
-                GenPolynomial<ModInteger> g = engine.baseGcd(am, ap);
+                GenPolynomial<ModInteger> g = mengine.baseGcd(am, ap);
                 if (g.isONE()) {
                     logger.info("**lucky prime = " + p);
                     //System.out.println("**lucky prime = " + p);
@@ -171,7 +172,7 @@ public class FactorInteger extends FactorAbstract<BigInteger> {
                 //System.out.println("nf = " + nf);
                 am = am.divide(nf); // make monic
             }
-            mlist = mengine.baseFactorsSquarefree(am);
+            mlist = mfactor.baseFactorsSquarefree(am);
             if (logger.isInfoEnabled()) {
                 logger.info("modlist  = " + mlist);
             }
@@ -315,14 +316,14 @@ public class FactorInteger extends FactorAbstract<BigInteger> {
                 }
                 //System.out.println("+trial    = " + trial);
                 //System.out.println("+flist    = " + flist);
-                //trial = iengine.basePrimitivePart( trial.multiply(ldcf) );
-                trial = iengine.basePrimitivePart(trial);
+                //trial = engine.basePrimitivePart( trial.multiply(ldcf) );
+                trial = engine.basePrimitivePart(trial);
                 //System.out.println("pp(trial)= " + trial);
                 if (PolyUtil.<BigInteger> basePseudoRemainder(u, trial).isZERO()) {
                     logger.info("trial    = " + trial);
                     //System.out.println("trial    = " + trial);
                     //System.out.println("flist    = " + flist);
-                    //trial = iengine.basePrimitivePart(trial);
+                    //trial = engine.basePrimitivePart(trial);
                     //System.out.println("pp(trial)= " + trial);
                     factors.add(trial);
                     u = PolyUtil.<BigInteger> basePseudoDivide(u, trial); //u.divide( trial );
@@ -435,14 +436,14 @@ public class FactorInteger extends FactorAbstract<BigInteger> {
                 }
                 //System.out.println("lifted intlist = " + itrial + ", cofactor " + icofactor); 
 
-                itrial = iengine.basePrimitivePart(itrial);
+                itrial = engine.basePrimitivePart(itrial);
                 //System.out.println("pp(trial)= " + itrial);
                 if (PolyUtil.<BigInteger> basePseudoRemainder(u, itrial).isZERO()) {
                     logger.info("trial    = " + itrial);
                     //System.out.println("trial    = " + itrial);
                     //System.out.println("cofactor = " + icofactor);
                     //System.out.println("flist    = " + flist);
-                    //itrial = iengine.basePrimitivePart(itrial);
+                    //itrial = engine.basePrimitivePart(itrial);
                     //System.out.println("pp(itrial)= " + itrial);
                     factors.add(itrial);
                     //u = PolyUtil.<BigInteger> basePseudoDivide(u, itrial); //u.divide( trial );

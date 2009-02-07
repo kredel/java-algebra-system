@@ -20,6 +20,7 @@ import edu.jas.arith.ModIntegerRing;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.structure.Power;
+import edu.jas.structure.RingFactory;
 
 
 /**
@@ -35,6 +36,23 @@ public class FactorModular extends FactorAbsolute<ModInteger> {
 
 
     private final boolean debug = true || logger.isDebugEnabled();
+
+
+    /**
+     * No argument constructor.
+     */
+    public FactorModular() {
+        this( new ModIntegerRing(13,true) ); // hack, 13 unimportant
+    }
+
+
+    /**
+     * Constructor. 
+     * @param cfac coefficient ring factory.
+     */
+    public FactorModular(RingFactory<ModInteger> cfac) {
+        super(cfac);
+    }
 
 
     /**

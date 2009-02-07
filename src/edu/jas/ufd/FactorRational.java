@@ -35,14 +35,15 @@ public class FactorRational extends FactorAbsolute<BigRational> {
     /**
      * Factorization engine for integer base coefficients.
      */
-    protected final FactorInteger iengine;
+    protected final FactorAbstract<BigInteger> iengine;
 
 
     /**
      * No argument constructor. 
      */
     protected FactorRational() {
-        iengine = new FactorInteger();
+        super( BigRational.ONE );
+        iengine = FactorFactory.getImplementation( BigInteger.ONE );
     }
 
 

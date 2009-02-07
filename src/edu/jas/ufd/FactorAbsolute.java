@@ -47,6 +47,25 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
     private final boolean debug = true || logger.isDebugEnabled();
 
 
+    /*
+     * Factorization engine for algebraic number coefficients.
+     */
+    //not possible here: public final FactorAbstract<AlgebraicNumber<C>> aengine;
+
+
+    /**
+     * Constructor.
+     * @param cfac coefficient ring factory.
+     */
+    public FactorAbsolute(RingFactory<C> cfac) {
+        super(cfac);
+        //GenPolynomialRing<C> fac = new GenPolynomialRing<C>(cfac,1);
+        //GenPolynomial<C> p = fac.univariate(0);
+        //AlgebraicNumberRing<C> afac = new AlgebraicNumberRing<C>(p);
+        //aengine = null; //FactorFactory.<C>getImplementation(afac); // hack
+    }
+
+
     /** Get the String representation.
      * @see java.lang.Object#toString()
      */

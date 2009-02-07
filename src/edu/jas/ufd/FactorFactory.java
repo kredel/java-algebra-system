@@ -80,7 +80,7 @@ public class FactorFactory {
     }
 
 
-    /**
+    /** 
      * Determine suitable implementation of factorization algorithms, case BigRational.
      * @param fac BigRational.
      * @return factorization algorithm implementation.
@@ -97,8 +97,7 @@ public class FactorFactory {
      */
     public static <C extends GcdRingElem<C>>
            FactorAbstract<AlgebraicNumber<C>> getImplementation( AlgebraicNumberRing<C> fac ) {
-        FactorAbstract<C> coeffFac = getImplementation( fac.ring.coFac );
-        return new FactorAlgebraic<C>( coeffFac );
+        return new FactorAlgebraic<C>( fac );
     }
 
 
@@ -111,6 +110,7 @@ public class FactorFactory {
     public static <C extends GcdRingElem<C>>
            FactorAbstract<C> getImplementation( RingFactory<C> fac ) {
         //logger.info("fac = " + fac.getClass().getName());
+        //System.out.println("fac = " + fac.getClass().getName());
         int t = 0;
         FactorAbstract/*raw type<C>*/ ufd = null; 
         AlgebraicNumberRing afac = null;
@@ -155,8 +155,7 @@ public class FactorFactory {
             ufd = new FactorModular();
         }
         if ( t == 4 || t == 5) {
-            FactorAbstract/*raw <C>*/ coeffFactor = getImplementation( afac.ring.coFac );
-            ufd = new FactorAlgebraic/*raw <C>*/( coeffFactor );
+            ufd = new FactorAlgebraic/*raw <C>*/( afac );
         }
         logger.debug("ufd = " + ufd);
         return (FactorAbstract<C>) ufd;

@@ -37,7 +37,7 @@ public class FactorAlgebraic<C extends GcdRingElem<C>> extends FactorAbstract<Al
     /**
      * Factorization engine for base coefficients.
      */
-    protected final FactorAbstract<C> factorCoeff;
+    public final FactorAbstract<C> factorCoeff;
 
 
     /**
@@ -50,19 +50,11 @@ public class FactorAlgebraic<C extends GcdRingElem<C>> extends FactorAbstract<Al
 
     /**
      * Constructor.
-     * @param factorCoeff factorization engine for base coefficients.
-     */
-    public FactorAlgebraic(FactorAbstract<C> factorCoeff) {
-        this.factorCoeff = factorCoeff;
-    }
-
-
-    /**
-     * Constructor.
      * @param fac algebraic number factory.
      */
     public FactorAlgebraic(AlgebraicNumberRing<C> fac) {
-        this( FactorFactory.<C>getImplementation(fac.ring.coFac) );
+        super( fac );
+        this.factorCoeff = FactorFactory.<C>getImplementation(fac.ring.coFac);
     }
 
 
@@ -97,8 +89,8 @@ public class FactorAlgebraic<C extends GcdRingElem<C>> extends FactorAbstract<Al
         }
         //System.out.println("\nP = " + P);
 
-        GreatestCommonDivisor<AlgebraicNumber<C>> aengine //= GCDFactory.<AlgebraicNumber<C>> getProxy(afac);
-          = new GreatestCommonDivisorSimple<AlgebraicNumber<C>>( /*cfac.coFac*/ );
+        //GreatestCommonDivisor<AlgebraicNumber<C>> aengine //= GCDFactory.<AlgebraicNumber<C>> getProxy(afac);
+        //  = new GreatestCommonDivisorSimple<AlgebraicNumber<C>>( /*cfac.coFac*/ );
 
         // search squarefree norm
         long k = 0L;
@@ -172,7 +164,7 @@ public class FactorAlgebraic<C extends GcdRingElem<C>> extends FactorAbstract<Al
             //System.out.println("Pp = " + Pp);
             //System.out.println("Ni = " + Ni);
             // compute gcds of factors with polynomial
-            GenPolynomial<AlgebraicNumber<C>> pni = aengine.gcd(Ni, Pp);
+            GenPolynomial<AlgebraicNumber<C>> pni = engine.gcd(Ni, Pp);
             //System.out.println("pni = " + pni);
             if (!pni.leadingBaseCoefficient().isONE()) {
                 System.out.println("gcd(Ni,Pp) not monic " + pni);
