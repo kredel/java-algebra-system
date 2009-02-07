@@ -47,10 +47,11 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
     private final boolean debug = true || logger.isDebugEnabled();
 
 
-    /*
+    /*     
      * Factorization engine for algebraic number coefficients.
      */
-    //not possible here: public final FactorAbstract<AlgebraicNumber<C>> aengine;
+    //not possible here because of recursion AN -> Int|Mod -> AN -> ...
+    //public final FactorAbstract<AlgebraicNumber<C>> aengine;
 
 
     /**
