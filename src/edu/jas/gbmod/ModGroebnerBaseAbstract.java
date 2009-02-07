@@ -2,7 +2,7 @@
  * $Id$
  */
 
-package edu.jas.module;
+package edu.jas.gbmod;
 
 //import java.util.ArrayList;
 import java.util.List;

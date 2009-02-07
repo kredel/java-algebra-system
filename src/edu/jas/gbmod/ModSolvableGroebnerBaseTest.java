@@ -2,7 +2,7 @@
  * $Id$
  */
 
-package edu.jas.module;
+package edu.jas.gbmod;
 
 //import edu.jas.poly.GroebnerBase;
 
