@@ -24,6 +24,7 @@ import edu.jas.structure.Power;
 
 /**
  * Modular coefficients factorization algorithms.
+ * This class implements factorization methods for polynomials over (prime) modular integers.
  * @author Heinz Kredel
  */
 
@@ -33,14 +34,14 @@ public class FactorModular extends FactorAbsolute<ModInteger> {
     private static final Logger logger = Logger.getLogger(FactorModular.class);
 
 
-    private final boolean debug = logger.isInfoEnabled();
+    private final boolean debug = true || logger.isDebugEnabled();
 
 
     /**
      * GenPolynomial base distinct degree factorization.
-     * @param P GenPolynomial<ModInteger>.
+     * @param P squarefree and monic GenPolynomial<ModInteger>.
      * @return [e_1 -> p_1, ..., e_k -> p_k] with P = prod_{i=1,...,k} p_i and
-     *         p_i has only factors of degree e_i.
+     *         p_i has only irreducible factors of degree e_i.
      */
     public SortedMap<Long, GenPolynomial<ModInteger>> baseDistinctDegreeFactors(GenPolynomial<ModInteger> P) {
         if (P == null) {
@@ -85,7 +86,7 @@ public class FactorModular extends FactorAbsolute<ModInteger> {
 
     /**
      * GenPolynomial base equal degree factorization.
-     * @param P GenPolynomial<ModInteger>.
+     * @param P squarefree and monic GenPolynomial<ModInteger>.
      * @param deg such that P has only irreducible factors of degree deg.
      * @return [p_1,...,p_k] with P = prod_{i=1,...,r} p_i.
      */
@@ -170,11 +171,17 @@ public class FactorModular extends FactorAbsolute<ModInteger> {
             throw new RuntimeException("ldcf(P) != 1 " + P.leadingBaseCoefficient().isONE());
         }
         SortedMap<Long, GenPolynomial<ModInteger>> dfacs = baseDistinctDegreeFactors(P);
-        //System.out.println("dfacs    = " + dfacs);
+        if ( debug ) {
+            logger.info("dfacs    = " + dfacs);
+            //System.out.println("dfacs    = " + dfacs);
+        }
         for (Long e : dfacs.keySet()) {
             GenPolynomial<ModInteger> f = dfacs.get(e);
             List<GenPolynomial<ModInteger>> efacs = baseEqualDegreeFactors(f, e);
-            //System.out.println("efacs " + e + "   = " + efacs);
+            if ( debug ) {
+               logger.info("efacs " + e + "   = " + efacs);
+               //System.out.println("efacs " + e + "   = " + efacs);
+            }
             factors.addAll(efacs);
         }
         //System.out.println("factors  = " + factors);

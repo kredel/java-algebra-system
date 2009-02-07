@@ -15,6 +15,8 @@ import edu.jas.structure.GcdRingElem;
 
 /**
  * Factorization algorithms interface.
+ * @usage 
+ * @see edu.jas.ufd.FactorFactory
  * @author Heinz Kredel
  */
 

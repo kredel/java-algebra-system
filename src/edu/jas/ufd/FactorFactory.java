@@ -28,8 +28,9 @@ import edu.jas.poly.AlgebraicNumberRing;
  * <code>FactorFactory</code>. It will select an appropriate 
  * implementation based on the types of polynomial coefficients C.
  * To obtain an implementation use 
- * <code>getImplementation()</code>, it returns an object of a class which implements the
- * <code>FactorAbstract</code> class.
+ * <code>getImplementation()</code>, it returns an object of a class which extends the
+ * <code>FactorAbstract</code> class which implements the
+ * <code>Factorization</code> interface.
  * <pre>
  * Factorization&lt;CT&gt; engine;
  *     engine = FactorFactory.&lt;CT&gt;getImplementation( cofac );
@@ -39,10 +40,11 @@ import edu.jas.poly.AlgebraicNumberRing;
  * <pre>
  * BigInteger cofac = new BigInteger();
  * Factorization&lt;BigInteger&gt; engine; 
- *     engine = GCDFactory.&lt;BigInteger&gt;getImplementation( cofac );
- * c = engine.factors(a);
+ *     engine = GCDFactory.getImplementation( cofac );
+ * c = engine.factors(poly);
  * </pre>
  * @see edu.jas.ufd.Factorization#factors(edu.jas.poly.GenPolynomial P)
+ * @see edu.jas.ufd.FactorAbstract#factors(edu.jas.poly.GenPolynomial P)
  */
 
 public class FactorFactory {

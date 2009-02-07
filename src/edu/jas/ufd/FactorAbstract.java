@@ -27,7 +27,13 @@ import edu.jas.util.KsubSet;
 
 /**
  * Abstract factorization algorithms class.
+ * This class contains implementations of all methods of the <code>Factorization</code>
+ * interface, except the method for factorization of a squarefree polynomial. 
+ * The methods to obtain squarefree polynomials delegate the computation to the 
+ * <code>GreatestCommonDivisor</code> classes and are included for convenience.
  * @author Heinz Kredel
+ * @usage 
+ * @see edu.jas.ufd.FactorFactory
  */
 
 public abstract class FactorAbstract<C extends GcdRingElem<C>> 

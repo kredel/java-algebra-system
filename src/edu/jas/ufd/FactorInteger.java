@@ -25,6 +25,7 @@ import edu.jas.util.KsubSet;
 
 /**
  * Integer coefficients factorization algorithms.
+ * This class implements factorization methods for polynomials over integers.
  * @author Heinz Kredel
  */
 
@@ -34,7 +35,7 @@ public class FactorInteger extends FactorAbstract<BigInteger> {
     private static final Logger logger = Logger.getLogger(FactorInteger.class);
 
 
-    private final boolean debug = true || logger.isInfoEnabled();
+    private final boolean debug = true || logger.isDebugEnabled();
 
 
     /**
@@ -74,8 +75,7 @@ public class FactorInteger extends FactorAbstract<BigInteger> {
         int pn = 30; //primes.size();
         ModIntegerRing cofac = new ModIntegerRing(13, true);
         RingFactory<ModInteger> mcofac = new ModIntegerRing(13, true);
-        GreatestCommonDivisorAbstract<ModInteger> engine = (GreatestCommonDivisorAbstract<ModInteger>) GCDFactory
-                .<ModInteger> getImplementation(mcofac);
+        GreatestCommonDivisorAbstract<ModInteger> engine = GCDFactory.<ModInteger> getImplementation(mcofac);
         GenPolynomial<ModInteger> am = null;
         GenPolynomialRing<ModInteger> mfac = null;
         final int TT = 4; // 7
@@ -185,7 +185,7 @@ public class FactorInteger extends FactorAbstract<BigInteger> {
             for (int k = 0; k < TT; k++) {
                 mlist = modfac[k];
                 if ( false && P.leadingBaseCoefficient().isONE()) {
-                    factors = searchFactorsMonic(P, M, mlist); // dosn't work
+                    factors = searchFactorsMonic(P, M, mlist); // doesn't work
                 } else {
                     factors = searchFactorsNonMonic(P, M, mlist);
                 }
@@ -194,7 +194,7 @@ public class FactorInteger extends FactorAbstract<BigInteger> {
         } else {
             // try only shortest factor list
             if ( false && P.leadingBaseCoefficient().isONE()) {
-                factors = searchFactorsMonic(P, M, mlist); // dosn't work
+                factors = searchFactorsMonic(P, M, mlist); // doesn't work
             } else {
                 factors = searchFactorsNonMonic(P, M, mlist);
             }
@@ -226,10 +226,11 @@ public class FactorInteger extends FactorAbstract<BigInteger> {
      * @param M bound on the coefficients of g_i as factors of C.
      * @return [g_0,...,g_{n-1}] = lift(C,F), with C = prod_{0,...,n-1} g_i mod
      *         p**e.
+     * @note does not work.
      */
-    public static//<C extends RingElem<C>>
-    List<GenPolynomial<BigInteger>> searchFactorsMonic(GenPolynomial<BigInteger> C, BigInteger M,
-                                                       List<GenPolynomial<ModInteger>> F) {
+    public static
+      List<GenPolynomial<BigInteger>> searchFactorsMonic(GenPolynomial<BigInteger> C, BigInteger M,
+                                                         List<GenPolynomial<ModInteger>> F) {
         System.out.println("*** monic factor combination ***");
         if (C == null || C.isZERO() || F == null || F.size() == 0) {
             throw new RuntimeException("C must be nonzero and F must be nonempty");
@@ -338,9 +339,9 @@ public class FactorInteger extends FactorAbstract<BigInteger> {
      * @return [g_0,...,g_{n-1}] = lift(C,F), with C = prod_{0,...,n-1} g_i mod
      *         p**e.
      */
-    public static//<C extends RingElem<C>>
-    List<GenPolynomial<BigInteger>> searchFactorsNonMonic(GenPolynomial<BigInteger> C, BigInteger M,
-                                                          List<GenPolynomial<ModInteger>> F) {
+    public static
+      List<GenPolynomial<BigInteger>> searchFactorsNonMonic(GenPolynomial<BigInteger> C, BigInteger M,
+                                                            List<GenPolynomial<ModInteger>> F) {
         // System.out.println("*** non monic factor combination ***");
         if (C == null || C.isZERO() || F == null || F.size() == 0) {
             throw new RuntimeException("C must be nonzero and F must be nonempty");
@@ -372,8 +373,7 @@ public class FactorInteger extends FactorAbstract<BigInteger> {
         GenPolynomial<ModInteger> Pm = PolyUtil.<ModInteger> fromIntegerCoefficients(mfac, C);
         GenPolynomial<BigInteger> PP = C, P = C;
 
-        GreatestCommonDivisorAbstract<BigInteger> iengine 
-           = GCDFactory.<BigInteger> getImplementation(pfac.coFac);
+        GreatestCommonDivisorAbstract<BigInteger> iengine = GCDFactory.<BigInteger> getImplementation(pfac.coFac);
 
         // combine trial factors
         int dl = (mlist.size() + 1) / 2;

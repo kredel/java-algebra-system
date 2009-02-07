@@ -19,6 +19,7 @@ import edu.jas.poly.PolyUtil;
 
 /**
  * Rational number coefficients factorization algorithms.
+ * This class implements factorization methods for polynomials over rational numbers.
  * @author Heinz Kredel
  */
 
@@ -33,7 +34,7 @@ public class FactorRational extends FactorAbsolute<BigRational> {
 
     /**
      * GenPolynomial base factorization of a squarefree polynomial.
-     * @param P squarefree and primitive! GenPolynomial<BigRational>.
+     * @param P squarefree GenPolynomial<BigRational>.
      * @return [p_1,...,p_k] with P = prod_{i=1, ..., k} p_i.
      */
     @Override
@@ -76,10 +77,12 @@ public class FactorRational extends FactorAbsolute<BigRational> {
         //System.out.println("rfacts = " + rfacts);
         rfacts = PolyUtil.monic(rfacts);
         //System.out.println("rfacts = " + rfacts);
-        GenPolynomial<BigRational> r = rfacts.get(0);
-        rfacts.remove(r);
-        r = r.multiply(ldcf);
-        rfacts.add(0, r);
+        if ( !ldcf.isONE() ) {
+            GenPolynomial<BigRational> r = rfacts.get(0);
+            rfacts.remove(r);
+            r = r.multiply(ldcf);
+            rfacts.add(0, r);
+        }
         if (logger.isInfoEnabled()) {
             logger.info("rfacts = " + rfacts);
         }

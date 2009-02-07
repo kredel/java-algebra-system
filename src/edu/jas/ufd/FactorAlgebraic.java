@@ -20,6 +20,8 @@ import edu.jas.structure.GcdRingElem;
 
 /**
  * Algebraic number coefficients factorization algorithms.
+ * This class implements factorization methods for polynomials over algebraic numbers 
+ * over rational numbers or over (prime) modular integers.
  * @author Heinz Kredel
  */
 
@@ -57,7 +59,7 @@ public class FactorAlgebraic<C extends GcdRingElem<C>> extends FactorAbstract<Al
 
     /**
      * GenPolynomial base factorization of a squarefree polynomial.
-     * @param P squarefree and primitive! GenPolynomial<AlgebraicNumber<C>>.
+     * @param P squarefree GenPolynomial<AlgebraicNumber<C>>.
      * @return [p_1,...,p_k] with P = prod_{i=1, ..., k} p_i.
      */
     @Override
@@ -78,8 +80,6 @@ public class FactorAlgebraic<C extends GcdRingElem<C>> extends FactorAbstract<Al
             throw new RuntimeException("only for univariate polynomials");
         }
         AlgebraicNumberRing<C> afac = (AlgebraicNumberRing<C>) pfac.coFac;
-        //GenPolynomialRing<C> cfac = afac.ring;
-        //GenPolynomialRing<GenPolynomial<C>> rfac = new GenPolynomialRing<GenPolynomial<C>>(cfac, pfac);
 
         AlgebraicNumber<C> ldcf = P.leadingBaseCoefficient();
         if (!ldcf.isONE()) {
