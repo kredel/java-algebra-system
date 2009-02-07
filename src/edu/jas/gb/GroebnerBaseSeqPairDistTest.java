@@ -2,7 +2,7 @@
  * $Id$
  */
 
-package edu.jas.ring;
+package edu.jas.gb;
 
 //import edu.jas.poly.GroebnerBase;
 
@@ -22,14 +22,14 @@ import org.apache.log4j.BasicConfigurator;
 import edu.jas.structure.RingElem;
 
 import edu.jas.arith.BigRational;
+import edu.jas.gb.GroebnerBase;
+import edu.jas.gb.GroebnerBaseSeq;
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenPolynomialTokenizer;
 import edu.jas.poly.PolynomialList;
 
-import edu.jas.ring.GroebnerBase;
-import edu.jas.ring.GroebnerBaseSeq;
 
 /**
  * Groebner base distributed, sequential pair list, tests with JUnit.

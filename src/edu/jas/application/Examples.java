@@ -13,6 +13,10 @@ import java.util.List;
 import edu.jas.structure.Product;
 import edu.jas.structure.ProductRing;
 
+import edu.jas.gb.GroebnerBase;
+import edu.jas.gb.GroebnerBasePseudoSeq;
+import edu.jas.gb.GroebnerBaseSeq;
+import edu.jas.gb.RGroebnerBasePseudoSeq;
 import edu.jas.kern.ComputerThreads;
 
 import edu.jas.arith.BigRational;
@@ -22,10 +26,6 @@ import edu.jas.arith.BigInteger;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 
-import edu.jas.ring.GroebnerBase;
-import edu.jas.ring.GroebnerBaseSeq;
-import edu.jas.ring.GroebnerBasePseudoSeq;
-import edu.jas.ring.RGroebnerBasePseudoSeq;
 
 
 /**

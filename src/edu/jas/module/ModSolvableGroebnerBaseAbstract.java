@@ -18,14 +18,14 @@ import edu.jas.structure.RingElem;
 //import edu.jas.poly.ExpVector;
 //import edu.jas.poly.GenPolynomial;
 //import edu.jas.poly.GenPolynomialRing;
+import edu.jas.gb.SolvableGroebnerBase;
+import edu.jas.gb.SolvableGroebnerBaseSeq;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.PolynomialList;
 
 //import edu.jas.ring.Reduction;
 //import edu.jas.ring.GroebnerBase;
-import edu.jas.ring.SolvableGroebnerBase;
-import edu.jas.ring.SolvableGroebnerBaseSeq;
 
 import edu.jas.vector.ModuleList;
 

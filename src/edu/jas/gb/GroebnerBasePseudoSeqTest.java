@@ -2,7 +2,7 @@
  * $Id$
  */
 
-package edu.jas.ring;
+package edu.jas.gb;
 
 
 import java.util.List;
@@ -20,6 +20,7 @@ import org.apache.log4j.BasicConfigurator;
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
+import edu.jas.gb.GroebnerBase;
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
@@ -27,7 +28,6 @@ import edu.jas.poly.GenPolynomialTokenizer;
 import edu.jas.poly.PolynomialList;
 import edu.jas.poly.PolyUtil;
 
-import edu.jas.ring.GroebnerBase;
 
 
 /**

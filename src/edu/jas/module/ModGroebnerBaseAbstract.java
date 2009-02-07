@@ -12,14 +12,14 @@ import java.util.List;
 
 import edu.jas.structure.RingElem;
 
+import edu.jas.gb.GroebnerBase;
+import edu.jas.gb.GroebnerBaseSeq;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.PolynomialList;
 
 //import edu.jas.poly.GenSolvablePolynomial;
 
 //import edu.jas.ring.Reduction;
-import edu.jas.ring.GroebnerBase;
-import edu.jas.ring.GroebnerBaseSeq;
 
 import edu.jas.vector.ModuleList;
 

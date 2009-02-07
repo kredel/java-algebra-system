@@ -26,6 +26,8 @@ import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
+import edu.jas.gb.GroebnerBase;
+import edu.jas.gb.GroebnerBaseSeq;
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
@@ -34,8 +36,6 @@ import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.PolynomialList;
 
-import edu.jas.ring.GroebnerBase;
-import edu.jas.ring.GroebnerBaseSeq;
 
 
 /**

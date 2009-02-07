@@ -21,6 +21,11 @@ import org.apache.log4j.Logger;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.NotInvertibleException;
 
+import edu.jas.gb.ExtendedGB;
+import edu.jas.gb.GroebnerBase;
+import edu.jas.gb.GroebnerBaseSeqPairSeq;
+import edu.jas.gb.Reduction;
+import edu.jas.gb.ReductionSeq;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
@@ -28,11 +33,6 @@ import edu.jas.poly.PolynomialList;
 import edu.jas.poly.OptimizedPolynomialList;
 import edu.jas.poly.TermOrderOptimization;
 
-import edu.jas.ring.ExtendedGB;
-import edu.jas.ring.GroebnerBase;
-import edu.jas.ring.Reduction;
-import edu.jas.ring.GroebnerBaseSeqPairSeq;
-import edu.jas.ring.ReductionSeq;
 
 import edu.jas.ufd.GreatestCommonDivisor;
 import edu.jas.ufd.GCDFactory;

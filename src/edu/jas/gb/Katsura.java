@@ -3,7 +3,7 @@
  * $Id$
   */
 
-package edu.jas.ring;
+package edu.jas.gb;
 
 /**
  * Class to produce a system of equations as defined by Katsura.

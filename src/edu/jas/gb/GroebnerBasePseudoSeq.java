@@ -2,7 +2,7 @@
  * $Id$
  */
 
-package edu.jas.ring;
+package edu.jas.gb;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,9 +14,9 @@ import edu.jas.structure.RingFactory;
 import edu.jas.structure.GcdRingElem;
 
 //import edu.jas.poly.ExpVector;
+import edu.jas.gb.OrderedPairlist;
 import edu.jas.poly.GenPolynomial;
 
-import edu.jas.ring.OrderedPairlist;
 
 import edu.jas.ufd.GreatestCommonDivisorAbstract;
 import edu.jas.ufd.GCDFactory;

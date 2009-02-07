@@ -18,6 +18,8 @@ import org.apache.log4j.BasicConfigurator;
 //import org.apache.log4j.Logger;
 
 import edu.jas.arith.BigRational;
+import edu.jas.gb.SolvableGroebnerBase;
+import edu.jas.gb.SolvableGroebnerBaseSeq;
 
 import edu.jas.poly.PolynomialList;
 import edu.jas.poly.TermOrder;
@@ -27,8 +29,6 @@ import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.WeylRelations;
 import edu.jas.poly.RelationTable;
 
-import edu.jas.ring.SolvableGroebnerBase;
-import edu.jas.ring.SolvableGroebnerBaseSeq;
 
 import edu.jas.vector.ModuleList;
 //import edu.jas.module.SolvableSyzygy;

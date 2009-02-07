@@ -21,6 +21,8 @@ import org.apache.log4j.BasicConfigurator;
 //import edu.jas.structure.RingElem;
 
 import edu.jas.arith.BigRational;
+import edu.jas.gb.GroebnerBase;
+import edu.jas.gb.GroebnerBaseSeq;
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
@@ -29,8 +31,6 @@ import edu.jas.poly.TermOrder;
 import edu.jas.poly.GenPolynomialTokenizer;
 
 //import edu.jas.ring.Reduction;
-import edu.jas.ring.GroebnerBase;
-import edu.jas.ring.GroebnerBaseSeq;
 
 import edu.jas.vector.ModuleList;
 //import edu.jas.module.Syzygy;

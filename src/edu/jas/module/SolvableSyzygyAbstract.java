@@ -15,6 +15,13 @@ import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
 
+import edu.jas.gb.Reduction;
+import edu.jas.gb.ReductionSeq;
+import edu.jas.gb.SolvableExtendedGB;
+import edu.jas.gb.SolvableGroebnerBase;
+import edu.jas.gb.SolvableGroebnerBaseSeq;
+import edu.jas.gb.SolvableReduction;
+import edu.jas.gb.SolvableReductionSeq;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
@@ -23,14 +30,7 @@ import edu.jas.poly.ExpVector;
 //import edu.jas.poly.TermOrder;
 //import edu.jas.poly.RelationTable;
 
-import edu.jas.ring.Reduction;
-import edu.jas.ring.SolvableReduction;
-import edu.jas.ring.ReductionSeq;
-import edu.jas.ring.SolvableReductionSeq;
 //import edu.jas.ring.GroebnerBase;
-import edu.jas.ring.SolvableGroebnerBase;
-import edu.jas.ring.SolvableGroebnerBaseSeq;
-import edu.jas.ring.SolvableExtendedGB;
 
 import edu.jas.vector.ModuleList;
 import edu.jas.vector.SolvableBasicLinAlg;

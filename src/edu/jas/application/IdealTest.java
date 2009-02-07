@@ -15,14 +15,14 @@ import org.apache.log4j.BasicConfigurator;
 //import org.apache.log4j.Logger;
 
 import edu.jas.arith.BigRational;
+import edu.jas.gb.GroebnerBase;
+import edu.jas.gb.GroebnerBaseSeq;
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolynomialList;
 import edu.jas.poly.TermOrder;
 
-import edu.jas.ring.GroebnerBase;
-import edu.jas.ring.GroebnerBaseSeq;
 
 
 /**

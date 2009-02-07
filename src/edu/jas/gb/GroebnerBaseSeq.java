@@ -2,7 +2,7 @@
  * $Id$
  */
 
-package edu.jas.ring;
+package edu.jas.gb;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,9 +13,9 @@ import org.apache.log4j.Logger;
 import edu.jas.structure.RingElem;
 
 //import edu.jas.poly.ExpVector;
+import edu.jas.gb.OrderedPairlist;
 import edu.jas.poly.GenPolynomial;
 
-import edu.jas.ring.OrderedPairlist;
 
 /**
  * Groebner Base sequential algorithm.

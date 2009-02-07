@@ -2,7 +2,7 @@
  * $Id$
  */
 
-package edu.jas.ring;
+package edu.jas.gb;
 
 
 import java.util.List;
@@ -15,6 +15,7 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import edu.jas.gb.GroebnerBase;
 import edu.jas.kern.ComputerThreads;
 
 import edu.jas.arith.BigRational;
@@ -26,7 +27,6 @@ import edu.jas.poly.GenPolynomialTokenizer;
 import edu.jas.poly.PolynomialList;
 import edu.jas.poly.PolyUtil;
 
-import edu.jas.ring.GroebnerBase;
 
 /**
  * EGroebner base sequential tests with JUnit.

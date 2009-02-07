@@ -2,7 +2,7 @@
  * $Id$
  */
 
-package edu.jas.ring;
+package edu.jas.gb;
 
 
 import java.util.List;
@@ -19,14 +19,14 @@ import org.apache.log4j.BasicConfigurator;
 //import org.apache.log4j.Logger;
 
 import edu.jas.arith.BigRational;
+import edu.jas.gb.ExtendedGB;
+import edu.jas.gb.GroebnerBase;
+import edu.jas.gb.GroebnerBaseSeqPairSeq;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenPolynomialTokenizer;
 import edu.jas.poly.PolynomialList;
 
-import edu.jas.ring.GroebnerBase;
-import edu.jas.ring.GroebnerBaseSeqPairSeq;
-import edu.jas.ring.ExtendedGB;
 
 
 

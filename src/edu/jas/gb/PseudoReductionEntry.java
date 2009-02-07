@@ -2,7 +2,7 @@
  * $Id$
  */
 
-package edu.jas.ring;
+package edu.jas.gb;
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.structure.RingElem;

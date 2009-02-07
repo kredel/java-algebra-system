@@ -2,7 +2,7 @@
  * $Id$
  */
 
-package edu.jas.ring;
+package edu.jas.gb;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
