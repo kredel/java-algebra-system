@@ -102,9 +102,8 @@
   <!--echoproperties /-->
 </target>
 
-<target name="recompile" depends="vorher" >
-  <javac srcdir="." destdir="${build}"
-         includes="*/*.java" 
+<target name="recompile" depends="distclean" >
+  <javac srcdir="${src}" destdir="${build}"
          debug="on" debuglevel="lines,source"
          classpath="${cp}" 
   />
@@ -119,6 +118,7 @@
   <compilerarg value="-Xlint:unchecked" />
   </javac>
 <!--     listfiles="true"
+         includes="**/*.java" 
 -->
 </target>
 
