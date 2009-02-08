@@ -8,7 +8,7 @@ by Heinz Kredel, University of Mannheim, kredel at rz.uni-mannheim.de
 
 Copyright (c) 2005-2009 by Heinz Kredel.
 
-Programms released under GPL or LGPL, see COPYING or COPYING.lgpl.
+Programms released under GPL or LGPL, see COPYING.jas or COPYING.lgpl.jas.
 
 
 Requirements
@@ -63,7 +63,7 @@ If you have a working ant, the last two steps can be replaced by
 > ant compile
 > ant doc
 
-provided you have setup built.xml and the required libraries.
+provided you have setup build.xml and the required libraries.
 
 
 $Id$
