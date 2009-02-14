@@ -388,10 +388,11 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         if (P == null || P.isZERO()) {
             return sfactors;
         }
-        if ( P.isConstant() ) {
-            sfactors.put(P,1L);
-            return sfactors;
-        }
+//      coefficients may be non-constant
+//         if ( P.isConstant() ) {
+//             sfactors.put(P,1L);
+//             return sfactors;
+//         }
         GenPolynomialRing<GenPolynomial<C>> pfac = P.ring;
         if (pfac.nvar > 1) {
             // recursiveContent not possible by return type
@@ -401,6 +402,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
 
         // factors of content
         GenPolynomial<C> Pc = recursiveContent(P);
+        //System.out.println("Pc = " + Pc);
         if ( !Pc.isONE() ) {
             P = PolyUtil.<C> coefficientPseudoDivide(P,Pc);
         }
