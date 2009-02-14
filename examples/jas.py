@@ -1094,7 +1094,7 @@ class SeriesRing:
             b = b.elem;
         return RingElem( a.gcd(b) );
 
-    def from(self,a):
+    def fromPoly(self,a):
         '''Convert a GenPolynomial to a power series.
         '''
         if isinstance(a,RingElem):

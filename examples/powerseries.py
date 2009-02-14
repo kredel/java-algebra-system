@@ -226,8 +226,8 @@ one = pr.one();
 p1 = one;
 p2 = one - yp;
 
-ps1 = psr.from(p1);
-ps2 = psr.from(p2);
+ps1 = psr.fromPoly(p1);
+ps2 = psr.fromPoly(p2);
 
 # rational function as power series:
 ps3 = ps1 / ps2;
@@ -243,8 +243,8 @@ print;
 p1 = one * 2 + yp**3 - yp**5;
 p2 = one - yp**2 + yp**4;
 
-ps1 = psr.from(p1);
-ps2 = psr.from(p2);
+ps1 = psr.fromPoly(p1);
+ps2 = psr.fromPoly(p2);
 
 # rational function as power series:
 ps3 = ps1 / ps2;
