@@ -34,6 +34,7 @@ import edu.jas.util.KsubSet;
  * characteristic zero, that is for <code>BigRational</code>.  It
  * might eventually also be used for prime fields of non-zero characteristic,
  * that is with <code>ModInteger</code>.
+ * The field extension may yet not be minimal. 
  * @author Heinz Kredel
  */
 
@@ -341,6 +342,7 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
      * @return [p_1,...,p_k] with P = prod_{i=1, ..., k} p_i in K(alpha)[x] for suitable alpha
      * and p_i irreducible over L[x], 
      * where K \subset K(alpha) \subset L is an algebraically closed field over K.
+     * <b>Note:</b> alpha not yet minimal.
      */
     public List<GenPolynomial<AlgebraicNumber<C>>> factorsAbsoluteIrreducible(GenPolynomial<C> P) {
         if (P == null) {
@@ -453,6 +455,7 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
                 factors.add(p2);
             }
         }
+        // find minimal field extension K(beta) \subset K(alpha)
         return factors;
     }
 
