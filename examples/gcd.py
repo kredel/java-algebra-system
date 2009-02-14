@@ -31,9 +31,9 @@ c = abs(r.random());
 #a = 0;
 
 #f = x * a + b * y**2 + one * z**7;
-#f = ( x + 1 ) * x**2;
-f = ( y + 1 ) * y**2;
-f = ( z + 1 ) * z**2;
+f = ( x + 1 ) * x**2;
+#f = ( y + 1 ) * y**2;
+#f = ( z + 1 ) * z**2;
 
 ## print "a = ", a;
 ## print "b = ", b;
