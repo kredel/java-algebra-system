@@ -16,15 +16,15 @@ from jas import startLog
 #r = Ring( "Mod 1152921504606846883 (x,y,z) L" );
 #r = Ring( "Rat(x,y,z) L" );
 #r = Ring( "C(x,y,z) L" );
-#r = Ring( "Z(x,y,z) L" );
+r = Ring( "Z(x,y,z) L" );
 #r = Ring( "Z(x) L" );
 #r = Ring( "Mod 3 (x,y,z) L" );
-r = Ring( "Z(y,x) L" );
+#r = Ring( "Z(y,x) L" );
 
 print "Ring: " + str(r);
 print;
 
-[y,x] = r.gens();
+[x,y,z] = r.gens();
 one = r.one();
 
 a = r.random();
@@ -43,10 +43,10 @@ c = abs(r.random());
 ##     + ( ( y + 2 ) * z**2 + ( y**2 + 2 * y + 1 ) * z + 2 * y**2 + y ) * x \
 ##     + ( y + 1 ) * z**3 + ( y + 1 ) * z**2 + ( y**3 + y**2 ) * z + y**3 + y**2;
 
-#f = ( x + y * z + y + z + 1 ) * ( x**2 + ( y + z ) * x + y**2 + z**2 );
+f = ( x + y * z + y + z + 1 ) * ( x**2 + ( y + z ) * x + y**2 + z**2 );
 #f = ( x + y * z + y + z + 1 ) * ( x**2 + ( y + z ) * x + y**2 + 1 );
 
-f = ( x + y ) * ( x - y);
+#f = ( x + y ) * ( x - y);
 
 
 print "a = ", a;
