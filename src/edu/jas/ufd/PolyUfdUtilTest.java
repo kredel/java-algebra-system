@@ -637,12 +637,25 @@ public class PolyUfdUtilTest extends TestCase {
             GreatestCommonDivisorAbstract<ModInteger> mengine = GCDFactory.getProxy(pm);
             mlist = mengine.coPrime(mlist);
 
+            long mdeg = 0;
+            for ( GenPolynomial<ModInteger> f : mlist ) {
+                mdeg += f.degree(0);
+            }
+            if ( mdeg < c.degree(0) ) { // not squarefree
+                continue;
+            }
+
             boolean ih = true;
             //ih = PolyUfdUtil.isHenselLift(c, mip, m, ilist);
             //System.out.println("ih = " + ih);
 
             long tq = System.currentTimeMillis();
-            lift = PolyUfdUtil.liftHenselQuadratic(c, mip, mlist);
+            try {
+                lift = PolyUfdUtil.liftHenselQuadratic(c, mip, mlist);
+            } catch(RuntimeException e) {
+                lift = null;
+                fail("liftHenselQuadratic: " + c + ", mlist = " + mlist);
+            }
             tq = System.currentTimeMillis() - tq;
 
             ih = PolyUfdUtil.isHenselLift(c, mip, m, lift);
