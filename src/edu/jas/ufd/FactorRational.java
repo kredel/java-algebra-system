@@ -49,7 +49,7 @@ public class FactorRational extends FactorAbsolute<BigRational> {
 
     /**
      * GenPolynomial base factorization of a squarefree polynomial.
-     * @param P squarefree GenPolynomial<BigRational>.
+     * @param P squarefree GenPolynomial.
      * @return [p_1,...,p_k] with P = prod_{i=1, ..., k} p_i.
      */
     @Override

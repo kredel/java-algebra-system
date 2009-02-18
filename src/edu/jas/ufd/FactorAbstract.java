@@ -31,6 +31,7 @@ import edu.jas.util.KsubSet;
  * interface, except the method for factorization of a squarefree polynomial. 
  * The methods to obtain squarefree polynomials delegate the computation to the 
  * <code>GreatestCommonDivisor</code> classes and are included for convenience.
+ * @param <C> coefficient type
  * @author Heinz Kredel
  * @usage 
  * @see edu.jas.ufd.FactorFactory
@@ -80,7 +81,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
 
     /**
      * GenPolynomial test if is irreducible.
-     * @param P GenPolynomial<C>.
+     * @param P GenPolynomial.
      * @return true if P is irreducible, else false.
      */
     public boolean isIrreducible(GenPolynomial<C> P) {
@@ -98,7 +99,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
 
     /**
      * GenPolynomial test if a non trivial factorization exsists.
-     * @param P GenPolynomial<C>.
+     * @param P GenPolynomial.
      * @return true if P is reducible, else false.
      */
     public boolean isReducible(GenPolynomial<C> P) {
@@ -108,7 +109,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
 
     /**
      * GenPolynomial test if is squarefree.
-     * @param P GenPolynomial<C>.
+     * @param P GenPolynomial.
      * @return true if P is squarefree, else false.
      */
     public boolean isSquarefree(GenPolynomial<C> P) {
@@ -120,7 +121,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
 
     /**
      * GenPolynomial factorization of a squarefree polynomial.
-     * @param P squarefree and primitive! (respectively monic) GenPolynomial<C>.
+     * @param P squarefree and primitive! (respectively monic) GenPolynomial.
      * @return [p_1,...,p_k] with P = prod_{i=1,...,r} p_i.
      */
     public List<GenPolynomial<C>> factorsSquarefree(GenPolynomial<C> P) {
@@ -236,8 +237,8 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
 
     /**
      * Univariate GenPolynomial factorization.
-     * @param P GenPolynomial<C> in one variable.
-     * @return [p_1 -> e_1, ..., p_k -> e_k] with P = prod_{i=1,...,k} p_i**e_i.
+     * @param P GenPolynomial in one variable.
+     * @return [p_1 -&gt; e_1, ..., p_k -&gt; e_k] with P = prod_{i=1,...,k} p_i**e_i.
      */
     public SortedMap<GenPolynomial<C>, Long> baseFactors(GenPolynomial<C> P) {
         if (P == null) {
@@ -298,7 +299,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
 
     /**
      * Univariate GenPolynomial factorization of a squarefree polynomial.
-     * @param P squarefree and primitive! GenPolynomial<C> in one variable.
+     * @param P squarefree and primitive! GenPolynomial in one variable.
      * @return [p_1, ..., p_k] with P = prod_{i=1,...,k} p_i.
      */
     public abstract List<GenPolynomial<C>> baseFactorsSquarefree(GenPolynomial<C> P);
@@ -306,8 +307,8 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
 
     /**
      * GenPolynomial factorization.
-     * @param P GenPolynomial<C>.
-     * @return [p_1 -> e_1, ..., p_k -> e_k] with P = prod_{i=1,...,k} p_i**e_i.
+     * @param P GenPolynomial.
+     * @return [p_1 -&gt; e_1, ..., p_k -&gt; e_k] with P = prod_{i=1,...,k} p_i**e_i.
      */
     public SortedMap<GenPolynomial<C>, Long> factors(GenPolynomial<C> P) {
         if (P == null) {
@@ -402,7 +403,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
      * GenPolynomial squarefree factorization. Delegates computation to a
      * GreatestCommonDivisor class.
      * @param P GenPolynomial.
-     * @return [p_1 -> e_1, ..., p_k -> e_k] with P = prod_{i=1,...,k} p_i**e_i.
+     * @return [p_1 -&gt; e_1, ..., p_k -&gt; e_k] with P = prod_{i=1,...,k} p_i**e_i.
      */
     public SortedMap<GenPolynomial<C>, Long> squarefreeFactors(GenPolynomial<C> P) {
         return engine.squarefreeFactors(P);
@@ -411,7 +412,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
 
     /**
      * GenPolynomial is factorization.
-     * @param P GenPolynomial<C>.
+     * @param P GenPolynomial.
      * @param F = [p_1,...,p_k].
      * @return true if P = prod_{i=1,...,r} p_i, else false.
      */
@@ -429,8 +430,8 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
 
     /**
      * GenPolynomial is factorization.
-     * @param P GenPolynomial<C>.
-     * @param F = [p_1 -> e_1, ..., p_k -> e_k].
+     * @param P GenPolynomial.
+     * @param F = [p_1 -&gt; e_1, ..., p_k -&gt; e_k].
      * @return true if P = prod_{i=1,...,k} p_i**e_i , else false.
      */
     public boolean isFactorization(GenPolynomial<C> P, SortedMap<GenPolynomial<C>, Long> F) {

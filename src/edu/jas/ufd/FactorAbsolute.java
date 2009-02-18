@@ -36,6 +36,7 @@ import edu.jas.util.KsubSet;
  * that is with <code>ModInteger</code>.
  * The field extension may yet not be minimal. 
  * @author Heinz Kredel
+ * @param <C> coefficient type
  */
 
 public abstract class FactorAbsolute<C extends GcdRingElem<C>> 
@@ -79,7 +80,7 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
 
     /**
      * GenPolynomial test if is absolute irreducible.
-     * @param P GenPolynomial<C>.
+     * @param P GenPolynomial.
      * @return true if P is absolute irreducible, else false.
      */
     public boolean isAbsoluteIrreducible(GenPolynomial<C> P) {
@@ -97,7 +98,7 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
 
     /**
      * GenPolynomial absolute base factorization of a polynomial.
-     * @param P GenPolynomial<C>.
+     * @param P GenPolynomial.
      * @return [p_1,...,p_k] with P = prod_{i=1, ..., k} p_i.
      */
     // @Override
@@ -151,7 +152,7 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
 
     /**
      * GenPolynomial absolute base factorization of a squarefree polynomial.
-     * @param P squarefree and primitive GenPolynomial<C>.
+     * @param P squarefree and primitive GenPolynomial.
      * @return [p_1,...,p_k] with P = prod_{i=1, ..., k} p_i.
      */
     // @Override
@@ -195,7 +196,7 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
 
     /**
      * GenPolynomial base absolute factorization of a irreducible polynomial.
-     * @param P irreducible! GenPolynomial<C>.
+     * @param P irreducible! GenPolynomial.
      * @return [p_1,...,p_k] with P = prod_{i=1, ..., k} p_i in K(alpha)[x] for suitable alpha
      * and p_i irreducible over L[x], 
      * where K \subset K(alpha) \subset L is an algebraically closed field over K.
@@ -243,7 +244,7 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
 
     /**
      * GenPolynomial absolute base factorization of a polynomial.
-     * @param P GenPolynomial<C>.
+     * @param P GenPolynomial.
      * @return [p_1,...,p_k] with P = prod_{i=1, ..., k} p_i.
      */
     public SortedMap<GenPolynomial<AlgebraicNumber<C>>,Long> factorsAbsolute(GenPolynomial<C> P) {
@@ -294,7 +295,7 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
 
     /**
      * GenPolynomial absolute base factorization of a squarefree polynomial.
-     * @param P squarefree and primitive GenPolynomial<C>.
+     * @param P squarefree and primitive GenPolynomial.
      * @return [p_1,...,p_k] with P = prod_{i=1, ..., k} p_i.
      */
     // @Override
@@ -338,7 +339,7 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
 
     /**
      * GenPolynomial base absolute factorization of a irreducible polynomial.
-     * @param P irreducible! GenPolynomial<C>.
+     * @param P irreducible! GenPolynomial.
      * @return [p_1,...,p_k] with P = prod_{i=1, ..., k} p_i in K(alpha)[x] for suitable alpha
      * and p_i irreducible over L[x], 
      * where K \subset K(alpha) \subset L is an algebraically closed field over K.
@@ -462,7 +463,7 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
 
     /**
      * GenPolynomial is factorization.
-     * @param P GenPolynomial<C>.
+     * @param P GenPolynomial.
      * @param F = [p_1,...,p_k].
      * @return true if P = prod_{i=1,...,r} p_i, else false.
      */
@@ -486,8 +487,8 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
 
     /**
      * GenPolynomial is factorization.
-     * @param P GenPolynomial<C>.
-     * @param F = [p_1 -> e_1, ..., p_k -> e_k].
+     * @param P GenPolynomial.
+     * @param F = [p_1 -&gt; e_1, ..., p_k -&gt; e_k].
      * @return true if P = prod_{i=1,...,k} p_i**e_i , else false.
      */
     public boolean nonoAbsoluteFactorization(GenPolynomial<C> P, SortedMap<GenPolynomial<AlgebraicNumber<C>>, Long> F) {

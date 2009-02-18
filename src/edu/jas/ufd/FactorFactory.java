@@ -93,6 +93,7 @@ public class FactorFactory {
     /**
      * Determine suitable implementation of factorization algorithms, case BigRational.
      * @param fac AlgebraicNumber&lt;C&gt;.
+     * @param <C> coefficient type
      * @return factorization algorithm implementation.
      */
     public static <C extends GcdRingElem<C>>
@@ -103,6 +104,7 @@ public class FactorFactory {
 
     /**
      * Determine suitable implementation of factorization algorithms, other cases.
+     * @param <C> coefficient type
      * @param fac RingFactory&lt;C&gt;.
      * @return factorization algorithm implementation.
      */

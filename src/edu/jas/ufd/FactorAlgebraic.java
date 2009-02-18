@@ -23,6 +23,7 @@ import edu.jas.structure.GcdRingElem;
  * This class implements factorization methods for polynomials over algebraic numbers 
  * over rational numbers or over (prime) modular integers.
  * @author Heinz Kredel
+ * @param <C> coefficient type
  */
 
 public class FactorAlgebraic<C extends GcdRingElem<C>> extends FactorAbstract<AlgebraicNumber<C>> {
@@ -60,7 +61,7 @@ public class FactorAlgebraic<C extends GcdRingElem<C>> extends FactorAbstract<Al
 
     /**
      * GenPolynomial base factorization of a squarefree polynomial.
-     * @param P squarefree GenPolynomial<AlgebraicNumber<C>>.
+     * @param P squarefree GenPolynomial&lt;AlgebraicNumber&lt;C&gt;&gt;.
      * @return [p_1,...,p_k] with P = prod_{i=1, ..., k} p_i.
      */
     @Override

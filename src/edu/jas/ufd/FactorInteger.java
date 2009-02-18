@@ -72,7 +72,7 @@ public class FactorInteger extends FactorAbstract<BigInteger> {
 
     /**
      * GenPolynomial base factorization of a squarefree polynomial.
-     * @param P squarefree and primitive! GenPolynomial<BigInteger>.
+     * @param P squarefree and primitive! GenPolynomial.
      * @return [p_1,...,p_k] with P = prod_{i=1, ..., k} p_i.
      */
     @SuppressWarnings("unchecked")
@@ -250,12 +250,12 @@ public class FactorInteger extends FactorAbstract<BigInteger> {
      * Factor search with ModInteger Hensel lifting algorithm. Let p =
      * f_i.ring.coFac.modul() i = 0, ..., n-1 and assume C == prod_{0,...,n-1}
      * f_i mod p with ggt(f_i,f_j) == 1 mod p for i != j
-     * @param C GenPolynomial<BigInteger>.
-     * @param F = [f_0,...,f_{n-1}] List<GenPolynomial<ModInteger>>.
+     * @param C GenPolynomial.
+     * @param F = [f_0,...,f_{n-1}] List&lt;GenPolynomial&gt;.
      * @param M bound on the coefficients of g_i as factors of C.
      * @return [g_0,...,g_{n-1}] = lift(C,F), with C = prod_{0,...,n-1} g_i mod
      *         p**e.
-     * @note does not work.
+     * <b>Note:</b> does not work.
      */
     public List<GenPolynomial<BigInteger>> searchFactorsMonic(GenPolynomial<BigInteger> C, BigInteger M,
                                                               List<GenPolynomial<ModInteger>> F) {
@@ -358,8 +358,8 @@ public class FactorInteger extends FactorAbstract<BigInteger> {
      * Factor search with ModInteger Hensel lifting algorithm. Let p =
      * f_i.ring.coFac.modul() i = 0, ..., n-1 and assume C == prod_{0,...,n-1}
      * f_i mod p with ggt(f_i,f_j) == 1 mod p for i != j
-     * @param C GenPolynomial<BigInteger>.
-     * @param F = [f_0,...,f_{n-1}] List<GenPolynomial<ModInteger>>.
+     * @param C GenPolynomial.
+     * @param F = [f_0,...,f_{n-1}] List&lt;GenPolynomial&gt;.
      * @param M bound on the coefficients of g_i as factors of C.
      * @return [g_0,...,g_{n-1}] = lift(C,F), with C = prod_{0,...,n-1} g_i mod
      *         p**e.

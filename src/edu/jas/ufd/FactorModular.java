@@ -57,8 +57,8 @@ public class FactorModular extends FactorAbsolute<ModInteger> {
 
     /**
      * GenPolynomial base distinct degree factorization.
-     * @param P squarefree and monic GenPolynomial<ModInteger>.
-     * @return [e_1 -> p_1, ..., e_k -> p_k] with P = prod_{i=1,...,k} p_i and
+     * @param P squarefree and monic GenPolynomial.
+     * @return [e_1 -&gt; p_1, ..., e_k -&gt; p_k] with P = prod_{i=1,...,k} p_i and
      *         p_i has only irreducible factors of degree e_i.
      */
     public SortedMap<Long, GenPolynomial<ModInteger>> baseDistinctDegreeFactors(GenPolynomial<ModInteger> P) {
@@ -104,7 +104,7 @@ public class FactorModular extends FactorAbsolute<ModInteger> {
 
     /**
      * GenPolynomial base equal degree factorization.
-     * @param P squarefree and monic GenPolynomial<ModInteger>.
+     * @param P squarefree and monic GenPolynomial.
      * @param deg such that P has only irreducible factors of degree deg.
      * @return [p_1,...,p_k] with P = prod_{i=1,...,r} p_i.
      */
@@ -165,7 +165,7 @@ public class FactorModular extends FactorAbsolute<ModInteger> {
 
     /**
      * GenPolynomial base factorization of a squarefree polynomial.
-     * @param P squarefree and monic! GenPolynomial<ModInteger>.
+     * @param P squarefree and monic! GenPolynomial.
      * @return [p_1,...,p_k] with P = prod_{i=1,...,r} p_i.
      */
     @Override
