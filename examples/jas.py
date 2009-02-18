@@ -1167,6 +1167,15 @@ def makeJasArith(item):
     return item;
 
 
+def ZZ(z=0):
+    '''Create JAS BigInteger as ring element.
+    '''
+    if isinstance(z,RingElem):
+        z = z.elem;
+    r = BigInteger(z);
+    return RingElem(r);
+
+
 def QQ(d=0,n=1):
     '''Create JAS BigRational as ring element.
     '''
