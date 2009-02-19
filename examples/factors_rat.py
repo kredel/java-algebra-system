@@ -11,9 +11,10 @@ from jas import Ideal
 from jas import terminate
 from jas import startLog
 
-# polynomial examples: factorization over Z
+# polynomial examples: factorization over Q
 
-r = Ring( "Z(x) L" );
+#r = Ring( "Rat(x) L" );
+r = Ring( "Q(x) L" );
 
 print "Ring: " + str(r);
 print;

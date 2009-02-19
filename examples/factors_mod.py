@@ -11,9 +11,10 @@ from jas import Ideal
 from jas import terminate
 from jas import startLog
 
-# polynomial examples: factorization over Z
+# polynomial examples: factorization over Z_p
 
-r = Ring( "Z(x) L" );
+#r = Ring( "Mod 1152921504606846883 (x) L" );
+r = Ring( "Mod 19 (x) L" );
 
 print "Ring: " + str(r);
 print;

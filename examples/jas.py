@@ -187,6 +187,25 @@ class Ring:
         except:
             return None
 
+    def factorsAbsolute(self,a):
+        '''Compute absolute irreducible factorization for (modular,)
+        rational number coefficients.
+        '''
+        if isinstance(a,RingElem):
+            a = a.elem;
+        else:
+            a = self.element( str(a) );
+            a = a.elem;
+        try:
+            e = self.factor.factorsAbsolute( a );
+            L = {};
+            for a in e.keySet():
+                i = e.get(a);
+                L[ RingElem( a ) ] = i;
+            return L;
+        except:
+            return None
+
 
 class Ideal:
     '''Represents a JAS polynomial ideal: PolynomialList and Ideal.
@@ -313,7 +332,7 @@ class Ideal:
         print "sequential NF executed in %s ms" % t; 
         return Ideal(self.ring,"",N);
 
-    def intersectring(self,ring):
+    def intersectRing(self,ring):
         '''Compute the intersection of this and the given polynomial ring.
         '''
         s = jas.application.Ideal(self.pset);
