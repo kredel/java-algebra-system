@@ -262,9 +262,21 @@ class Ideal:
         '''Test if this is a Groebner base.
         '''
         s = self.pset;
+        cofac = s.ring.coFac;
         F = s.list;
         t = System.currentTimeMillis();
-        b = GroebnerBaseSeq().isGB(F);
+        if cofac.isField():
+            b = GroebnerBaseSeq().isGB(F);
+        else:
+            v = None;
+            try:
+                v = cofac.vars;
+            except:
+                pass
+            if v == None:
+                b = GroebnerBasePseudoSeq(cofac).isGB(F);
+            else:
+                b = GroebnerBasePseudoRecSeq(cofac).isGB(F);
         t = System.currentTimeMillis() - t;
         print "isGB executed in %s ms" % t; 
         return b;
