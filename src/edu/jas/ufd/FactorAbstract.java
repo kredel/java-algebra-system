@@ -238,6 +238,16 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
     /**
      * Univariate GenPolynomial factorization.
      * @param P GenPolynomial in one variable.
+     * @return [p_1, ..., p_k] with P = prod_{i=1,...,k} p_i**{e_i} for some e_i.
+     */
+    public List<GenPolynomial<C>> baseFactorsRadical(GenPolynomial<C> P) {
+        return new ArrayList<GenPolynomial<C>>( baseFactors(P).keySet() );
+    }
+
+
+    /**
+     * Univariate GenPolynomial factorization.
+     * @param P GenPolynomial in one variable.
      * @return [p_1 -&gt; e_1, ..., p_k -&gt; e_k] with P = prod_{i=1,...,k} p_i**e_i.
      */
     public SortedMap<GenPolynomial<C>, Long> baseFactors(GenPolynomial<C> P) {
@@ -303,6 +313,16 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
      * @return [p_1, ..., p_k] with P = prod_{i=1,...,k} p_i.
      */
     public abstract List<GenPolynomial<C>> baseFactorsSquarefree(GenPolynomial<C> P);
+
+
+    /**
+     * GenPolynomial factorization.
+     * @param P GenPolynomial.
+     * @return [p_1, ..., p_k] with P = prod_{i=1,...,k} p_i**{e_i} for some e_i.
+     */
+    public List<GenPolynomial<C>> factorsRadical(GenPolynomial<C> P) {
+        return new ArrayList<GenPolynomial<C>>( factors(P).keySet() );
+    }
 
 
     /**
