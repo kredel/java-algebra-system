@@ -13,7 +13,9 @@ from jas import startLog
 
 # polynomial examples: factorization over Q(i)
 
-r = Ring( "AN[ (i) (i^2 + 1) ] (x) L" );
+#r = Ring( "AN[ (i) (i^2 + 1) ] (x) L" );
+r = Ring( "AN[ (a) (4 a^2 + 1) ] (x) L" );
+#r = Ring( "AN[ (a) (a^4 + 2 a^2 - 4 a + 2) ] (x) L" );
 
 print "Ring: " + str(r);
 print;
@@ -50,7 +52,10 @@ c = abs(r.random());
 
 #f = x**3 - x**2 + x - 1;
 
-f = x**8 + 4 * x**6 + 8 * x**4 - 8 * x**2 + 4;
+#f = x**8 + 4 * x**6 + 8 * x**4 - 8 * x**2 + 4;
+
+f = x**6 - 5 * x**4 + 5 * x**2 + 4;
+
 
 #f = x**16 + 272 * x**12 - 7072 * x**8 + 3207424 * x**4 + 12960000;
 #f = x**16 + 16 * x**12 + 96 * x**8 + 256 * x**4 + 256;
