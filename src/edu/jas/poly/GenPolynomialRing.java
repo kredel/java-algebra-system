@@ -44,7 +44,7 @@ import edu.jas.application.QuotientRing;
  */
 
 public class GenPolynomialRing<C extends RingElem<C> > 
-             implements RingFactory< GenPolynomial<C> > {
+             implements RingFactory< GenPolynomial<C> >, Cloneable {
 
 
     /** The factory for the coefficients. 
@@ -174,6 +174,15 @@ public class GenPolynomialRing<C extends RingElem<C> >
      */
     public GenPolynomialRing(RingFactory< C > cf, GenPolynomialRing o) {
         this(cf,o.nvar,o.tord,o.getVars());
+    }
+
+
+    /** Clone this factory.
+     * @see java.lang.Object#clone()
+     */
+    @Override
+    public GenPolynomialRing<C> clone() {
+        return new GenPolynomialRing<C>(coFac,this);
     }
 
 
