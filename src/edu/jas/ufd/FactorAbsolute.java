@@ -100,6 +100,7 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
      * GenPolynomial absolute base factorization of a polynomial.
      * @param P GenPolynomial.
      * @return [p_1,...,p_k] with P = prod_{i=1, ..., k} p_i.
+     * <b>Note:</b> Q(alpha) not yet minimal.
      */
     // @Override
     public SortedMap<GenPolynomial<AlgebraicNumber<C>>,Long> baseFactorsAbsolute(GenPolynomial<C> P) {
@@ -125,7 +126,7 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
              System.out.println("facs   = " + facs);
              throw new RuntimeException("isFactorization = false");
         }
-        if ( debug ) {
+        if ( logger.isInfoEnabled() ) {
             logger.info("all K factors = " + facs); // Q[X]
             //System.out.println("\nall K factors = " + facs); // Q[X]
         }
@@ -135,10 +136,10 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
             List<GenPolynomial<AlgebraicNumber<C>>> afacs = baseFactorsAbsoluteIrreducible(p);
             for ( GenPolynomial<AlgebraicNumber<C>> ap : afacs ) {
                 //System.out.println("ap = (" + ap + ")**" + e + " over " + ap.ring.coFac);
-                if ( debug ) {
+                if ( logger.isInfoEnabled() ) {
                     logger.info("K(alpha) factors = " + ap + ", alpha: " + ap.ring.coFac); // Q(alpha)[X]
                 }
-                if ( factors.get(ap) != null ) {
+                if ( factors.get(ap) != null ) { // should not happen
                    System.out.println("ap = (" + ap + ")**" + e); 
                    throw new RuntimeException("multiple factors");
                 }
@@ -154,6 +155,7 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
      * GenPolynomial absolute base factorization of a squarefree polynomial.
      * @param P squarefree and primitive GenPolynomial.
      * @return [p_1,...,p_k] with P = prod_{i=1, ..., k} p_i.
+     * <b>Note:</b> Q(alpha) not yet minimal.
      */
     // @Override
     public List<GenPolynomial<AlgebraicNumber<C>>> baseFactorsAbsoluteSquarefree(GenPolynomial<C> P) {
@@ -177,14 +179,14 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
         if (debug && !isFactorization(P, facs)) {
              throw new RuntimeException("isFactorization = false");
         }
-        if ( debug ) {
+        if ( logger.isInfoEnabled() ) {
             logger.info("all K factors = " + facs); // Q[X]
             //System.out.println("\nall K factors = " + facs); // Q[X]
         }
         // factor over K(alpha)
         for ( GenPolynomial<C> p : facs ) {
             List<GenPolynomial<AlgebraicNumber<C>>> afacs = baseFactorsAbsoluteIrreducible(p);
-            if ( debug ) {
+            if ( logger.isInfoEnabled() ) {
                 logger.info("K(alpha) factors = " + afacs); // Q(alpha)[X]
             }
             factors.addAll( afacs );
@@ -200,6 +202,7 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
      * @return [p_1,...,p_k] with P = prod_{i=1, ..., k} p_i in K(alpha)[x] for suitable alpha
      * and p_i irreducible over L[x], 
      * where K \subset K(alpha) \subset L is an algebraically closed field over K.
+     * <b>Note:</b> Q(alpha) not yet minimal.
      */
     public List<GenPolynomial<AlgebraicNumber<C>>> baseFactorsAbsoluteIrreducible(GenPolynomial<C> P) {
         if (P == null) {
@@ -216,28 +219,36 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
         if (!pfac.coFac.isField()) {
             throw new RuntimeException("only for field coefficients");
         }
-        // setup field extension K(alpha)
-        String[] vars = new String[] { "z_"+pfac.getVars().hashCode() };
+        // setup field extension K(alpha) where alpha = z_xx
+        String[] vars = new String[] { "z_" + (P.hashCode()%100) };
+        pfac = pfac.clone();
+        vars=pfac.setVars(vars);
+        P = pfac.copy(P); // hack to exchange the variables
         AlgebraicNumberRing<C> afac = new AlgebraicNumberRing<C>(P,true); // since irreducible
+        if ( logger.isInfoEnabled() ) {
+            logger.info("Q(alpha) = " + afac); 
+            //System.out.println("Q(alpha) = " + afac);
+        }
         GenPolynomialRing<AlgebraicNumber<C>> pafac 
-            = new GenPolynomialRing<AlgebraicNumber<C>>(afac, P.ring.nvar,P.ring.tord,vars);
+            = new GenPolynomialRing<AlgebraicNumber<C>>(afac, P.ring.nvar, P.ring.tord, /*old*/vars);
         // convert to K(alpha)
         GenPolynomial<AlgebraicNumber<C>> Pa = PolyUtil.<C> convertToAlgebraicCoefficients(pafac, P);
         if ( Pa.degree(0) <= 1 ) {
             factors.add(Pa);
             return factors;
         }
-        if ( debug ) {
-            logger.info("Pa = " + Pa); 
-            //System.out.println("Pa = " + Pa);
+        if ( logger.isInfoEnabled() ) {
+            logger.info("P over Q(alpha) = " + Pa); 
+            //System.out.println("P in Q(alpha) = " + Pa);
         }
         // factor over K(alpha)
         FactorAbstract<AlgebraicNumber<C>> engine = FactorFactory.<C>getImplementation(afac);
         factors = engine.baseFactorsSquarefree( Pa );
         if ( debug ) {
-            logger.info("Q(alpha) factors = " + factors); 
-            //System.out.println("Q(alpha) factors = " + factors);
+            logger.info("factors over Q(alpha) = " + factors); 
+            //System.out.println("factors over Q(alpha) = " + factors);
         }
+        // find minimal field extension K(beta) \subset K(alpha)
         return factors;
     }
 
@@ -246,6 +257,7 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
      * GenPolynomial absolute base factorization of a polynomial.
      * @param P GenPolynomial.
      * @return [p_1,...,p_k] with P = prod_{i=1, ..., k} p_i.
+     * <b>Note:</b> Q(alpha) not yet minimal.
      */
     public SortedMap<GenPolynomial<AlgebraicNumber<C>>,Long> factorsAbsolute(GenPolynomial<C> P) {
         if (P == null) {
@@ -297,6 +309,7 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
      * GenPolynomial absolute base factorization of a squarefree polynomial.
      * @param P squarefree and primitive GenPolynomial.
      * @return [p_1,...,p_k] with P = prod_{i=1, ..., k} p_i.
+     * <b>Note:</b> Q(alpha) not yet minimal.
      */
     // @Override
     public List<GenPolynomial<AlgebraicNumber<C>>> factorsAbsoluteSquarefree(GenPolynomial<C> P) {
@@ -343,7 +356,7 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
      * @return [p_1,...,p_k] with P = prod_{i=1, ..., k} p_i in K(alpha)[x] for suitable alpha
      * and p_i irreducible over L[x], 
      * where K \subset K(alpha) \subset L is an algebraically closed field over K.
-     * <b>Note:</b> alpha not yet minimal.
+     * <b>Note:</b> Q(alpha) not yet minimal.
      */
     public List<GenPolynomial<AlgebraicNumber<C>>> factorsAbsoluteIrreducible(GenPolynomial<C> P) {
         if (P == null) {
