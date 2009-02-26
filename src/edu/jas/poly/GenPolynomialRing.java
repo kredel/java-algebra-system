@@ -661,6 +661,18 @@ public class GenPolynomialRing<C extends RingElem<C> >
     }
 
 
+    /**  Get the generating elements.
+     * @return a list of generating elements for this ring.
+     */
+    public List<GenPolynomial<C>> getGenerators() {
+        List<? extends GenPolynomial<C>> univs = univariateList();
+        List<GenPolynomial<C>> gens = new ArrayList<GenPolynomial<C>>( univs.size()+1 );
+        gens.add( getONE() );
+        gens.addAll( univs );
+        return gens;
+    }
+
+
     /**
      * Generate list of univariate polynomials in all variables.
      * @return List(X_1,...,X_n) a list of univariate polynomials.

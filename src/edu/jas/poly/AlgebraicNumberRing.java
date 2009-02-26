@@ -5,6 +5,8 @@
 package edu.jas.poly;
 
 import java.util.Random;
+import java.util.List;
+import java.util.ArrayList;
 import java.io.Reader;
 
 //import edu.jas.structure.RingElem;
@@ -107,6 +109,17 @@ public class AlgebraicNumberRing<C extends GcdRingElem<C> >
      */
     public AlgebraicNumber<C> getGenerator() {
         return new AlgebraicNumber<C>( this, ring.univariate(0) );
+    }
+
+
+    /**  Get the generating elements.
+     * @return a list of generating elements for this ring.
+     */
+    public List<AlgebraicNumber<C>> getGenerators() {
+        List<AlgebraicNumber<C>> gens = new ArrayList<AlgebraicNumber<C>>( 2 );
+        gens.add( getONE() );
+        gens.add( getGenerator() );
+        return gens;
     }
 
     

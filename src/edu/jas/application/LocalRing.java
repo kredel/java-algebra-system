@@ -5,6 +5,8 @@
 package edu.jas.application;
 
 import java.util.Random;
+import java.util.List;
+import java.util.ArrayList;
 import java.io.Reader;
 
 import org.apache.log4j.Logger;
@@ -81,6 +83,20 @@ public class LocalRing<C extends GcdRingElem<C> >
      */
     public Local<C> getONE() {
         return new Local<C>( this, ring.getONE() );
+    }
+
+
+    /**  Get the generating elements.
+     * @return a list of generating elements for this ring.
+     */
+    public List<Local<C>> getGenerators() {
+        List<GenPolynomial<C>> pgens = ring.getGenerators();
+        List<Local<C>> gens = new ArrayList<Local<C>>( pgens.size() );
+        for ( GenPolynomial<C> p : pgens ) {
+            Local<C> q = new Local<C>( this, p );
+            gens.add(q);
+        }
+        return gens;
     }
 
     

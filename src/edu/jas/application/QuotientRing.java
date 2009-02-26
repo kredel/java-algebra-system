@@ -77,47 +77,6 @@ public class QuotientRing<C extends GcdRingElem<C> >
     }
 
 
-        /*
-        logger.info("coFac = " + ring.coFac.getClass().getName());
-        int t = 0;
-        BigInteger b = new BigInteger(1);
-        C bc = ring.coFac.fromInteger(1);
-        if ( b.equals( bc ) ) {
-           t = 1;
-        } else {
-           if ( ring.coFac.characteristic().signum() > 0 ) {
-              ModInteger m = new ModInteger(new ModIntegerRing(ring.coFac.characteristic()),1);
-              C mc = ring.coFac.fromInteger(1);
-              if ( m.equals( mc ) ) {
-                 t = 2;
-              }
-           }
-        }
-        //System.out.println("t     = " + t);
-        if ( t == 1 ) {
-           //engine = new GreatestCommonDivisorModular<BigInteger>();
-           //engine = new GreatestCommonDivisorSubres<BigInteger>();
-           //engine = new GreatestCommonDivisorModular<BigInteger>(true);
-           engine = new GCDProxy<BigInteger>( 
-                    new GreatestCommonDivisorSubres<BigInteger>(), 
-           //         new GreatestCommonDivisorModular<BigInteger>(true) );
-                    new GreatestCommonDivisorModular<BigInteger>() );
-        } else if ( t == 2 ) {
-           //engine = new GreatestCommonDivisorModEval<ModInteger>();
-           engine = new GCDProxy<ModInteger>( 
-                        new GreatestCommonDivisorSubres<BigInteger>(), 
-                        new GreatestCommonDivisorModEval<ModInteger>() );
-        } else {
-           //engine = new GreatestCommonDivisorSimple<C>();
-           //engine = new GreatestCommonDivisorSubres<C>();
-           engine = new GCDProxy<C>( 
-                        new GreatestCommonDivisorSubres<C>(), 
-                        new GreatestCommonDivisorSimple<C>() );
-        }
-        logger.info("engine = " + engine);
-        */
-
-
     /** Divide.
      * @param n first polynomial.
      * @param d second polynomial.
@@ -212,6 +171,20 @@ public class QuotientRing<C extends GcdRingElem<C> >
      */
     public Quotient<C> getONE() {
         return new Quotient<C>( this, ring.getONE() );
+    }
+
+
+    /**  Get the generating elements.
+     * @return a list of generating elements for this ring.
+     */
+    public List<Quotient<C>> getGenerators() {
+        List<GenPolynomial<C>> pgens = ring.getGenerators();
+        List<Quotient<C>> gens = new ArrayList<Quotient<C>>( pgens.size() );
+        for ( GenPolynomial<C> p : pgens ) {
+            Quotient<C> q = new Quotient<C>( this, p );
+            gens.add(q);
+        }
+        return gens;
     }
 
     

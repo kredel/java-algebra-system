@@ -5,6 +5,8 @@
 package edu.jas.application;
 
 import java.util.Random;
+import java.util.List;
+import java.util.ArrayList;
 import java.io.Reader;
 
 import org.apache.log4j.Logger;
@@ -114,6 +116,20 @@ public class ResidueRing<C extends GcdRingElem<C> >
            logger.warn("ideal is one, so all residues are 0");
         }
         return one;
+    }
+
+
+    /**  Get the generating elements.
+     * @return a list of generating elements for this ring.
+     */
+    public List<Residue<C>> getGenerators() {
+        List<GenPolynomial<C>> pgens = ring.getGenerators();
+        List<Residue<C>> gens = new ArrayList<Residue<C>>( pgens.size() );
+        for ( GenPolynomial<C> p : pgens ) {
+            Residue<C> r = new Residue<C>( this, p );
+            gens.add(r);
+        }
+        return gens;
     }
 
     
