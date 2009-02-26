@@ -1033,9 +1033,11 @@ class SeriesRing:
         return str(self.ring);
 
     def gens(self):
-        '''Get the generator of the power series ring.
+        '''Get the generators of the power series ring.
         '''
-        return RingElem( self.ring.getONE().shift(1) );
+        L = [ self.ring.getONE(), self.ring.getONE().shift(1) ]
+        N = [ RingElem(e) for e in L ];
+        return N;
 
     def one(self):
         '''Get the one of the power series ring.

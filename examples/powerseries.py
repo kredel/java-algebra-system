@@ -68,7 +68,7 @@ r5 = r1 * r2 + e;
 print "r5:", r5;
 print;
 
-y = psr.gens();
+[one,y] = psr.gens();
 print "y:", y;
 print;
 
@@ -220,9 +220,8 @@ pr = Ring("Q(y) L");
 print "pr:", pr;
 print;
 
-[yp] = pr.gens();
+[one,yp] = pr.gens();
 
-one = pr.one();
 p1 = one;
 p2 = one - yp;
 
