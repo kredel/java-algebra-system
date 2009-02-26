@@ -26,7 +26,7 @@ from edu.jas.gb          import DGroebnerBaseSeq, EGroebnerBaseSeq,\
                                 SolvableGroebnerBaseParallel, SolvableGroebnerBaseSeq
 from edu.jas.gbmod       import ModGroebnerBaseAbstract, ModSolvableGroebnerBaseAbstract,\
                                 SolvableSyzygyAbstract, SyzygyAbstract
-from edu.jas.vector      import OrderedModuleList, ModuleList
+from edu.jas.vector      import OrderedModuleList, ModuleList, GenVector, GenVectorModul
 from edu.jas.application import ComprehensiveGroebnerBaseSeq, PolyUtilApp,\
                                 Residue, ResidueRing, Ideal, Quotient, QuotientRing
 from edu.jas.kern        import ComputerThreads;
@@ -102,6 +102,8 @@ class Ring:
             pass
         #print "type(coFac) = ", type(self.ring.coFac);
         #if isinstance(c,GenPolynomial): # does not work
+        # b.getClass().isInstance(a) 
+        # GenPolynomial.isInstance(c) ?? 
         if Lp:
             del L[0]; # skip one, L[1:] does not work 
             i = 0;
@@ -796,15 +798,20 @@ class Module:
     Method to create sub-modules.
     '''
 
-    def __init__(self,modstr="",ring=None):
+    def __init__(self,modstr="",ring=None,cols=0):
         '''Module constructor.
         '''
         if ring == None:
            sr = StringReader( modstr );
            tok = GenPolynomialTokenizer(sr);
            self.mset = tok.nextSubModuleSet();
+           if self.mset.cols >= 0:
+               self.cols = self.mset.cols;
+           else:
+               self.cols = cols;
         else:
            self.mset = ModuleList(ring,None);
+           self.cols = cols;
         self.ring = self.mset.ring;
 
     def __str__(self):
@@ -815,7 +822,7 @@ class Module:
     def submodul(self,modstr="",list=None):
         '''Create a sub-module.
         '''
-        return Submodule(self,modstr,list);
+        return SubModule(self,modstr,list);
 
     def element(self,modstr):
         '''Create an element from a string.
@@ -824,6 +831,19 @@ class Module:
         list = I.mset.list;
         if len(list) > 0:
             return RingElem( list[0] );
+
+    def gens(self):
+        '''Get the generators of this module.
+        '''
+        gm = GenVectorModul(self.ring,self.cols);
+        #print "gm = ", gm;
+        Lm = gm.getGenerators();
+        Lp = self.ring.getGenerators();
+        #print "Lm = ", Lm;
+        #print "Lp = ", Lp;
+        L = [ m.scalarMultiply(p) for p in Lp for m in Lm ]
+        N = [ RingElem(e.val) for e in L ];
+        return N;
 
 
 class SubModule:
@@ -909,7 +929,7 @@ class SolvableModule(Module):
     def solvsubmodul(self,modstr="",list=None):
         '''Create a solvable sub-module.
         '''
-        return Submodule(self,modstr,list);
+        return SolvableSubModule(self,modstr,list);
 
     def element(self,modstr):
         '''Create an element from a string.
