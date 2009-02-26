@@ -12,6 +12,8 @@ import org.apache.log4j.Logger;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.ModulElem;
 
+import edu.jas.kern.PrettyPrint;
+
 
 /**
  * GenVector implements generic vectors with RingElem entries.
@@ -58,9 +60,11 @@ public class GenVector<C extends RingElem<C> >
             }
             s.append( c.toString() );
         }
-        s.append(" ) :: ");
-        s.append(modul.toString());
-        s.append("\n");
+        s.append(" )");
+        if ( !PrettyPrint.isTrue() ) {
+           s.append(" :: " + modul.toString());
+           s.append("\n");
+        }
         return s.toString();
     }
 
