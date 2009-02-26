@@ -94,6 +94,14 @@ public class GenVectorModul<C extends RingElem<C> >
     }
 
 
+    /**  Get the generating elements.
+     * @return a list of generating elements for this module.
+     */
+    public List<GenVector<C>> getGenerators() {
+        return BASIS;
+    }
+
+
     @Override
     public boolean equals( Object other ) { 
         if ( ! (other instanceof GenVectorModul) ) {
