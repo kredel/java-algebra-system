@@ -21,9 +21,8 @@ r = Ring( "Rat(x,y,z) L" );
 print "Ring: " + str(r);
 print;
 
-[x,y,z] = r.gens();
+[one,x,y,z] = r.gens();
 
-one = r.one();
 a = r.random();
 b = r.random();
 c = abs(r.random());

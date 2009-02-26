@@ -20,9 +20,8 @@ print "Ring: " + str(r);
 print;
 
 # sage like: with generators for the polynomial ring
-[x] = r.gens();
+[one,x] = r.gens();
 
-one = r.one();
 x2 = 2 * x;
 
 N = 10;

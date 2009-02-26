@@ -18,8 +18,7 @@ r = Ring( "Z(x) L" );
 print "Ring: " + str(r);
 print;
 
-[x] = r.gens();
-one = r.one();
+[one,x] = r.gens();
 
 a = r.random();
 b = r.random();

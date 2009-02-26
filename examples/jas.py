@@ -93,18 +93,17 @@ class Ring:
     def gens(self):
         '''Get list of generators of the polynomial ring.
         '''
-        L = self.ring.univariateList();
+        L = self.ring.getGenerators();
         c = self.ring.coFac;
-        nv = None;
+        Lp = None;
         try:
-            nv = c.nvar;
+            Lp = c.getGenerators();
         except:
             pass
         #print "type(coFac) = ", type(self.ring.coFac);
         #if isinstance(c,GenPolynomial): # does not work
-        if nv:
-            Lp = c.univariateList();
-            #Ls = [ GenPolynomial(self.ring,l) for l in Lp ];
+        if Lp:
+            del L[0]; # skip one, L[1:] does not work 
             i = 0;
             for l in Lp:
                 L.add( i, GenPolynomial(self.ring,l) );
@@ -612,7 +611,7 @@ class ParamIdeal:
         return b;
 
 
-class SolvableRing:
+class SolvableRing(Ring):
     '''Represents a JAS solvable polynomial ring: GenSolvablePolynomialRing.
 
     Has a method to create solvable ideals.
@@ -640,28 +639,6 @@ class SolvableRing:
         '''Create a solvable ideal.
         '''
         return SolvableIdeal(self,ringstr,list);
-
-    def gens(self):
-        '''Get list of generators of the solvable polynomial ring.
-        '''
-        L = self.ring.univariateList();
-        c = self.ring.coFac;
-        nv = None;
-        try:
-            nv = c.nvar;
-        except:
-            pass
-        #print "type(coFac) = ", type(self.ring.coFac);
-        #if isinstance(c,GenPolynomial): # does not work
-        if nv:
-            Lp = c.univariateList();
-            #Ls = [ GenPolynomial(self.ring,l) for l in Lp ];
-            i = 0;
-            for l in Lp:
-                L.add( i, GenPolynomial(self.ring,l) );
-                i += 1;
-        N = [ RingElem(e) for e in L ];
-        return N;
 
     def one(self):
         '''Get the one of the solvable polynomial ring.
@@ -907,7 +884,7 @@ class SubModule:
 ##         return z;
 
 
-class SolvableModule:
+class SolvableModule(Module):
     '''Represents a JAS module over a solvable polynomial ring.
 
     Method to create solvable sub-modules.

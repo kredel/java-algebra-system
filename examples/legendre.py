@@ -23,9 +23,7 @@ print "Ring: " + str(r);
 print;
 
 # sage like: with generators for the polynomial ring
-[x] = r.gens();
-
-one = r.one();
+[one,x] = r.gens();
 
 N = 10;
 P = [one,x];

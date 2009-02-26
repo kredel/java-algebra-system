@@ -20,14 +20,7 @@ r = Ring( "AN[ (a) (4 a^2 + 1) ] (x) L" );
 print "Ring: " + str(r);
 print;
 
-[x] = r.gens();
-one = r.one();
-
-a = r.random();
-b = r.random();
-c = abs(r.random());
-#c = 1; 
-#a = 0;
+[one,a,x] = r.gens();
 
 #f = x**15 - 1;
 #f = x * ( x + 1 )**2 * ( x**2 + x + 1 )**3;
@@ -61,9 +54,6 @@ f = x**6 - 5 * x**4 + 5 * x**2 + 4;
 #f = x**16 + 16 * x**12 + 96 * x**8 + 256 * x**4 + 256;
 #f = x**24 + 272 * x**20 - 7072 * x**16 + 3207424 * x**12 + 12960000 * x**8;
 
-print "a = ", a;
-print "b = ", b;
-print "c = ", c;
 print "f = ", f;
 print;
 
@@ -88,12 +78,6 @@ if cmp(f,g) == 0:
 else:
     print "factor time =", t, "milliseconds,", "isFactors(f,g): ",  cmp(f,g);
 print;
-
-#d = g / c;
-#m = g % c;
-#print "d = ", d;
-#print "m = ", m;
-#print;
 
 #startLog();
 terminate();

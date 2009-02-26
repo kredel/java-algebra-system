@@ -32,7 +32,7 @@ r = Ring( "IntFunc(a, c, b) (y2, y1, z1, z2, x) G" );
 print "Ring: " + str(r);
 print;
 
-[a,c,b,y2,y1,z1,z2,x] = r.gens();
+[one,a,c,b,y2,y1,z1,z2,x] = r.gens();
 
 p1 = x + 2 * y1 * z1 + 3 * a * y1**2 + 5 * y1**4 + 2 * c * y1;
 p2 = x + 2 * y2 * z2 + 3 * a * y2**2 + 5 * y2**4 + 2 * c * y2;

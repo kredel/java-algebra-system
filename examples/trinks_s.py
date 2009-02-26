@@ -29,8 +29,8 @@ print;
 # sage like: with generators for the polynomial ring
 print "r.gens() = ", [ str(f) for f in r.gens() ];
 print;
-#[e,f,B,S,T,Z,P,W] = r.gens();
-[B,S,T,Z,P,W] = r.gens();
+#[one,e,f,B,S,T,Z,P,W] = r.gens();
+[one,B,S,T,Z,P,W] = r.gens();
 
 f1 = 45 * P + 35 * S - 165 * B - 36;
 f2 = 35 * P + 40 * Z + 25 * T - 27 * S;

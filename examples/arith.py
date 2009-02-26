@@ -6,6 +6,7 @@
 import sys;
 
 from jas import Ring
+from jas import ZZ
 from jas import QQ
 from jas import CC
 from jas import RF
@@ -15,6 +16,11 @@ from jas import terminate
 # example for rational and complex numbers
 #
 #
+
+zn = ZZ(7);
+print "zn:", zn;
+print "zn^2:", zn*zn;
+print;
 
 rn = QQ(1,2);
 print "rn:", rn;
@@ -45,8 +51,7 @@ print "Ring: " + str(r);
 print;
 
 # sage like: with generators for the polynomial ring
-[x,y] = r.gens();
-one = r.one();
+[one,x,y] = r.gens();
 zero = r.zero();
 
 try:

@@ -24,8 +24,7 @@ r = Ring( "Z(x,y,z) L" );
 print "Ring: " + str(r);
 print;
 
-[x,y,z] = r.gens();
-one = r.one();
+[one,x,y,z] = r.gens();
 
 a = r.random();
 b = r.random();
