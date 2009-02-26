@@ -1450,7 +1450,7 @@ class RingElem:
         return RingElem( s.elem.multiply( o.elem ) ); 
 
     def __rmul__(self,other):
-        '''Reversw multiply two ring elements.
+        '''Reverse multiply two ring elements.
         '''
         [s,o] = coercePair(self,other);
         return o.__mul__(self);
@@ -1462,7 +1462,7 @@ class RingElem:
         return RingElem( s.elem.sum( o.elem ) ); 
 
     def __radd__(self,other):
-        '''Add two ring elements.
+        '''Reverse add two ring elements.
         '''
         [s,o] = coercePair(self,other);
         return o.__add__(self);
@@ -1474,7 +1474,7 @@ class RingElem:
         return RingElem( s.elem.subtract( o.elem ) ); 
 
     def __rsub__(self,other):
-        '''Subtract two ring elements.
+        '''Reverse subtract two ring elements.
         '''
         [s,o] = coercePair(self,other);
         return o.__sub__(self);
@@ -1484,6 +1484,12 @@ class RingElem:
         '''
         [s,o] = coercePair(self,other);
         return RingElem( s.elem.divide( o.elem ) ); 
+
+    def __rdiv__(self,other):
+        '''Reverse divide two ring elements.
+        '''
+        [s,o] = coercePair(self,other);
+        return o.__div__(self);
 
     def __mod__(self,other):
         '''Modular remainder of two ring elements.
