@@ -57,6 +57,12 @@ bg = rg.isGB();
 print "isGB:", bg;
 print;
 
+p7 = ( x + 1 ) / ( x**2 - x + 1 );
+print "p7 = ", p7;
+
+p8 = ( x + 1 ) % ( x**2 - x + 1 );
+print "p8 = ", p8;
+
 startLog();
 terminate();
 #sys.exit();
