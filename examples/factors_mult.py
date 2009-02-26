@@ -26,12 +26,6 @@ print;
 
 [one,x,y,z] = r.gens();
 
-a = r.random();
-b = r.random();
-c = abs(r.random());
-#c = 1; 
-#a = 0;
-
 #f = z * ( y + 1 )**2 * ( x**2 + x + 1 )**3;
 #f = z * ( y + 1 ) * ( x**2 + x + 1 );
 #f = ( y + 1 ) * ( x**2 + x + 1 );
@@ -48,9 +42,6 @@ f = ( x + y * z + y + z + 1 ) * ( x**2 + ( y + z ) * x + y**2 + z**2 );
 #f = ( x + y ) * ( x - y);
 
 
-print "a = ", a;
-print "b = ", b;
-print "c = ", c;
 print "f = ", f;
 print;
 
@@ -74,12 +65,6 @@ if cmp(f,g) == 0:
 else:
     print "factor time =", t, "milliseconds,", "isFactors(f,g): ",  cmp(f,g);
 print;
-
-#d = g / c;
-#m = g % c;
-#print "d = ", d;
-#print "m = ", m;
-#print;
 
 #startLog();
 terminate();
