@@ -1384,7 +1384,10 @@ public final class TermOrder implements Serializable {
            }
            return new TermOrder(evord,evord2,r+k,evend1+k);
         }
-        return new TermOrder(/*DEFAULT_EVORD*/evord,evord,r+k,k);
+        //System.out.println("evord         = " + evord);
+        //System.out.println("DEFAULT_EVORD = " + DEFAULT_EVORD);
+        //System.out.println("tord          = " + this);
+        return new TermOrder(DEFAULT_EVORD/*evord*/,evord,r+k,k); // don't change to evord, cause REVITDG
     }
 
 
