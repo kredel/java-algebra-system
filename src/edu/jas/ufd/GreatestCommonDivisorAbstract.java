@@ -172,8 +172,17 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
             throw new RuntimeException(this.getClass().getName()
                     + " only for univariate polynomials");
         }
-        if ( pfac.characteristic().signum() > 0 && !A.leadingBaseCoefficient().isONE() ) {
-            throw new RuntimeException("A mod p not monic");
+        C ldbcf = A.leadingBaseCoefficient();
+        if ( pfac.coFac.isField()/*characteristic().signum() > 0*/ && !ldbcf.isONE() ) {
+            try {
+               throw new RuntimeException("A not monic");
+            } catch(RuntimeException e) {
+               System.out.println("A in " + pfac.coFac + " not monic: " + ldbcf);
+               e.printStackTrace();
+            }
+            A = A.divide(ldbcf);
+            GenPolynomial<C> f1 = pfac.getONE().multiply(ldbcf);
+            sfactors.put(f1,1L);
         }
         GenPolynomial<C> T0 = A;
         long e = 1L;
@@ -228,6 +237,12 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
             if ( z.degree(0) > 0 ) {
                 sfactors.put(z, (e*k));
             }
+        }
+        if ( pfac.characteristic().signum() > 0 && !ldbcf.isONE() ) {
+            GenPolynomial<C> f1 = sfactors.firstKey();
+            long e1 = sfactors.get(f1);
+            f1 = f1.multiply(ldbcf);
+            sfactors.put(f1,e1);
         }
         return sfactors;
     }
