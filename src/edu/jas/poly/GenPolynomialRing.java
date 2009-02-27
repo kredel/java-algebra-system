@@ -584,7 +584,7 @@ public class GenPolynomialRing<C extends RingElem<C> >
      * @return a copy of c.
      */
     public GenPolynomial<C> copy(GenPolynomial<C> c) {
-        System.out.println("GP copy = " + this);
+        //System.out.println("GP copy = " + this);
         return new GenPolynomial<C>( this, c.val );
     }
 
