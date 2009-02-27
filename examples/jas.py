@@ -926,7 +926,7 @@ class SolvableModule(Module):
         '''
         return str(self.mset);
 
-    def solvsubmodul(self,modstr="",list=None):
+    def submodul(self,modstr="",list=None):
         '''Create a solvable sub-module.
         '''
         return SolvableSubModule(self,modstr,list);
@@ -1203,6 +1203,17 @@ def ZZ(z=0):
     if isinstance(z,RingElem):
         z = z.elem;
     r = BigInteger(z);
+    return RingElem(r);
+
+
+def ZM(m,z=0):
+    '''Create JAS ModInteger as ring element.
+    '''
+    if isinstance(m,RingElem):
+        m = m.elem;
+    if isinstance(z,RingElem):
+        z = z.elem;
+    r = ModInteger(m,z);
     return RingElem(r);
 
 
