@@ -99,7 +99,7 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
     /**
      * GenPolynomial absolute base factorization of a polynomial.
      * @param P GenPolynomial.
-     * @return [p_1,...,p_k] with P = prod_{i=1, ..., k} p_i.
+     * @return [p_1 -&gt; e_1, ..., p_k -&gt; e_k] with P = prod_{i=1,...,k} p_i**e_i.
      * <b>Note:</b> Q(alpha) not yet minimal.
      */
     // @Override
@@ -256,7 +256,7 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
     /**
      * GenPolynomial absolute base factorization of a polynomial.
      * @param P GenPolynomial.
-     * @return [p_1,...,p_k] with P = prod_{i=1, ..., k} p_i.
+     * @return [p_1 -&gt; e_1, ..., p_k -&gt; e_k] with P = prod_{i=1,...,k} p_i**e_i.
      * <b>Note:</b> Q(alpha) not yet minimal.
      */
     public SortedMap<GenPolynomial<AlgebraicNumber<C>>,Long> factorsAbsolute(GenPolynomial<C> P) {
