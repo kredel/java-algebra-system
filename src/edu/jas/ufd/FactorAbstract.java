@@ -91,8 +91,16 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
         List<GenPolynomial<C>> F = factorsSquarefree(P);
         if (F.size() == 1) {
             return true;
-        } else {
+        } else if (F.size() > 2) {
             return false;
+        } else { //F.size() == 2
+            boolean cnst = false;
+            for ( GenPolynomial<C> p : F ) {
+                if ( p.isConstant() ) {
+                    cnst = true;
+                }
+            }
+            return cnst;
         }
     }
 

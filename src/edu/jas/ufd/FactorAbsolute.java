@@ -90,8 +90,16 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
         List<GenPolynomial<AlgebraicNumber<C>>> F = factorsAbsoluteIrreducible(P);
         if (F.size() == 1) {
             return true;
-        } else {
+        } else if (F.size() > 2) {
             return false;
+        } else { //F.size() == 2
+            boolean cnst = false;
+            for ( GenPolynomial<AlgebraicNumber<C>> p : F ) {
+                if ( p.isConstant() ) {
+                    cnst = true;
+                }
+            }
+            return cnst;
         }
     }
 
