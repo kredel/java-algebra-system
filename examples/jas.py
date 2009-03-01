@@ -1189,7 +1189,7 @@ def makeJasArith(item):
                 jasArith = BigComplex( re );
         else:
             if len(item) > 1:
-                jasArith = BigRational( item[0], item[1] );
+                jasArith = BigRational( item[0] ).divide( BigRational( item[1] ) );
             else:
                 jasArith = BigRational( item[0] );
         return jasArith;
@@ -1236,7 +1236,9 @@ def QQ(d=0,n=1):
         else:
             r = BigRational(d);
     else:
-        r = BigRational(d,n);
+        d = BigRational(d);
+        n = BigRational(n);
+        r = d.divide(n); # BigRational(d,n); only for short integers
     return RingElem(r);
 
 

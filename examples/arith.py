@@ -22,12 +22,13 @@ print "zn:", zn;
 print "zn^2:", zn*zn;
 print;
 
-rn = QQ(1,2);
+x = 10000000000000000000000000000000000000000000000000;
+rn = QQ(2*x,4*x);
 print "rn:", rn;
 print "rn^2:", rn*rn;
 print;
 
-rn = QQ((3,2));
+rn = QQ((6,4));
 print "rn:", rn;
 print "rn^2:", rn*rn;
 print;
