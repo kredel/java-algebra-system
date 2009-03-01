@@ -91,9 +91,9 @@ public class FactorFactory {
 
 
     /**
-     * Determine suitable implementation of factorization algorithms, case BigRational.
+     * Determine suitable implementation of factorization algorithms, case AlgebraicNumber&lt;C&gt;.
      * @param fac AlgebraicNumber&lt;C&gt;.
-     * @param <C> coefficient type
+     * @param <C> coefficient type, e.g. BigRational, ModInteger.
      * @return factorization algorithm implementation.
      */
     public static <C extends GcdRingElem<C>>
@@ -109,8 +109,7 @@ public class FactorFactory {
      * @return factorization algorithm implementation.
      */
     @SuppressWarnings("unchecked")
-    public static <C extends GcdRingElem<C>>
-           FactorAbstract<C> getImplementation( RingFactory<C> fac ) {
+    public static <C extends GcdRingElem<C>> FactorAbstract<C> getImplementation( RingFactory<C> fac ) {
         //logger.info("fac = " + fac.getClass().getName());
         //System.out.println("fac = " + fac.getClass().getName());
         int t = 0;
