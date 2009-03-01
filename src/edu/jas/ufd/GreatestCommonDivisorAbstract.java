@@ -173,13 +173,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
                     + " only for univariate polynomials");
         }
         C ldbcf = A.leadingBaseCoefficient();
-        if ( pfac.coFac.isField()/*characteristic().signum() > 0*/ && !ldbcf.isONE() ) {
-            try {
-               throw new RuntimeException("A not monic");
-            } catch(RuntimeException e) {
-               System.out.println("A in " + pfac.coFac + " not monic: " + ldbcf);
-               e.printStackTrace();
-            }
+        if ( pfac.coFac.isField() && !ldbcf.isONE() ) {
             A = A.divide(ldbcf);
             GenPolynomial<C> f1 = pfac.getONE().multiply(ldbcf);
             sfactors.put(f1,1L);
@@ -403,11 +397,6 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         if (P == null || P.isZERO()) {
             return sfactors;
         }
-//      coefficients may be non-constant
-//         if ( P.isConstant() ) {
-//             sfactors.put(P,1L);
-//             return sfactors;
-//         }
         GenPolynomialRing<GenPolynomial<C>> pfac = P.ring;
         if (pfac.nvar > 1) {
             // recursiveContent not possible by return type
