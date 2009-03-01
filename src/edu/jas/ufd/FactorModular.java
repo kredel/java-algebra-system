@@ -186,7 +186,7 @@ public class FactorModular extends FactorAbsolute<ModInteger> {
             throw new RuntimeException(this.getClass().getName() + " only for univariate polynomials");
         }
         if (!P.leadingBaseCoefficient().isONE()) {
-            throw new RuntimeException("ldcf(P) != 1 " + P.leadingBaseCoefficient().isONE());
+            throw new RuntimeException("ldcf(P) != 1: " + P);
         }
         SortedMap<Long, GenPolynomial<ModInteger>> dfacs = baseDistinctDegreeFactors(P);
         if ( debug ) {
