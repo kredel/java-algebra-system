@@ -263,23 +263,20 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
             throw new RuntimeException(this.getClass().getName() + " only for univariate polynomials");
         }
         C c;
-        if (pfac.characteristic().signum() > 0) {
+        if ( pfac.coFac.isField() ) { //pfac.characteristic().signum() > 0
             c = P.leadingBaseCoefficient();
         } else {
             c = engine.baseContent(P);
-        }
-        // move sign to the content
-        if (P.signum() < 0 && c.signum() > 0) {
-            c = c.negate();
-            P = P.negate();
-            //System.out.println("c = " + c);
-            //System.out.println("P = " + P);
+            // move sign to the content
+            if (P.signum() < 0 && c.signum() > 0 ) {
+                c = c.negate();
+                //P = P.negate();
+            }
         }
         if (!c.isONE()) {
-            //System.out.println("c = " + c);
             GenPolynomial<C> pc = pfac.getONE().multiply(c);
             factors.put(pc, 1L);
-            P = P.divide(c.abs()); // make primitive or monic
+            P = P.divide(c); // make primitive or monic
         }
         SortedMap<GenPolynomial<C>, Long> facs = engine.baseSquarefreeFactors(P);
         if ( debug ) {
@@ -343,23 +340,20 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
             return factors;
         }
         C c;
-        if (pfac.characteristic().signum() > 0) {
+        if ( pfac.coFac.isField() ) { // pfac.characteristic().signum() > 0
             c = P.leadingBaseCoefficient();
         } else {
             c = engine.baseContent(P);
-        }
-        // move sign to the content
-        if (P.signum() < 0 && c.signum() > 0) {
-            c = c.negate();
-            P = P.negate();
-            //System.out.println("c = " + c);
-            //System.out.println("P = " + P);
+            // move sign to the content
+            if (P.signum() < 0 && c.signum() > 0) {
+                c = c.negate();
+                //P = P.negate();
+            }
         }
         if (!c.isONE()) {
-            //System.out.println("baseContent = " + c);
             GenPolynomial<C> pc = pfac.getONE().multiply(c);
             factors.put(pc, 1L);
-            P = P.divide(c.abs()); // make base primitive or monic
+            P = P.divide(c); // make base primitive or base monic
         }
         SortedMap<GenPolynomial<C>, Long> facs = engine.squarefreeFactors(P);
         if ( debug ) {
@@ -370,13 +364,12 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
             Long d = facs.get(g);
             List<GenPolynomial<C>> sfacs = factorsSquarefree(g);
             if ( debug ) {
-                logger.info("foctors of squarefree = " + sfacs);
+                logger.info("factors of squarefree = " + sfacs);
                //System.out.println("sfacs   = " + sfacs);
             }
             for (GenPolynomial<C> h : sfacs) {
                 if ( factors.get(h) != null ) {
-                   System.out.println("h = (" + h + ")**" + d); 
-                   throw new RuntimeException("multiple factors");
+                   throw new RuntimeException("multiple factors " + "h = (" + h + ")**" + d + "::" + factors.get(h));
                 }
                 factors.put(h, d);
             }
