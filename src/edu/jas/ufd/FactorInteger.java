@@ -208,7 +208,7 @@ public class FactorInteger extends FactorAbstract<BigInteger> {
             return factors;
         }
 
-        boolean allLists = false;
+        boolean allLists = true; //false;
         if (allLists) {
             // try each factor list
             for (int k = 0; k < TT; k++) {
@@ -431,7 +431,7 @@ public class FactorInteger extends FactorAbstract<BigInteger> {
                 }
                 GenPolynomial<BigInteger> itrial = ilist[0];
                 GenPolynomial<BigInteger> icofactor = ilist[1];
-                if (logger.isDebugEnabled()) {
+                if (debug /*logger.isDebugEnabled()*/) {
                     logger.info("lifted intlist = " + itrial + ", cofactor " + icofactor);
                 }
                 //System.out.println("lifted intlist = " + itrial + ", cofactor " + icofactor); 
