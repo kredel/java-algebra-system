@@ -431,7 +431,7 @@ public class FactorInteger extends FactorAbstract<BigInteger> {
                 }
                 GenPolynomial<BigInteger> itrial = ilist[0];
                 GenPolynomial<BigInteger> icofactor = ilist[1];
-                if (debug /*logger.isDebugEnabled()*/) {
+                if (/*debug*/ logger.isDebugEnabled()) {
                     logger.info("lifted intlist = " + itrial + ", cofactor " + icofactor);
                 }
                 //System.out.println("lifted intlist = " + itrial + ", cofactor " + icofactor); 
