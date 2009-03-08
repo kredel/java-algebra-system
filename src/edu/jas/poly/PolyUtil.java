@@ -179,6 +179,62 @@ public class PolyUtil {
 
 
     /**
+     * BigInteger from BigRational coefficients. Represent as polynomial with
+     * BigInteger coefficients by multiplication with the gcd of the numerators
+     * and the lcm of the denominators of the BigRational coefficients.
+     * @param fac result polynomial factory.
+     * @param A polynomial with BigRational coefficients to be converted.
+     * @return  Object[] with 3 entries: [0]->gcd [1]->lcm and [2]->polynomial with BigInteger coefficients.
+     * @author Axel Kramer
+     */
+    public static Object[] 
+        integerFromRationalCoefficientsFactor(GenPolynomialRing<BigInteger> fac, 
+                                              GenPolynomial<BigRational> A) {
+        Object[] result = new Object[3];
+        if (A == null || A.isZERO()) {
+           result[0] = java.math.BigInteger.ONE;
+           result[1] = java.math.BigInteger.ZERO;
+           result[2] = fac.getZERO();
+           return result;
+        }
+        java.math.BigInteger gcd = null;
+        java.math.BigInteger lcm = null;
+        int sLCM = 0;
+        int sGCD = 0;
+        // lcm of denominators
+        for (BigRational y : A.val.values()) {
+            java.math.BigInteger numerator = y.numerator();
+            java.math.BigInteger denominator = y.denominator();
+            // lcm = lcm(lcm,x)
+            if (lcm == null) {
+                lcm = denominator;
+                sLCM = denominator.signum();
+            } else {
+                java.math.BigInteger d = lcm.gcd(denominator);
+                lcm = lcm.multiply(denominator.divide(d));
+            }
+            // gcd = gcd(gcd,x)
+            if (gcd == null) {
+                gcd = numerator;
+                sGCD = numerator.signum();
+            } else {
+                gcd = gcd.gcd(numerator);
+            }
+        }
+        if (sLCM < 0) {
+            lcm = lcm.negate();
+        }
+        if (sGCD < 0) {
+            gcd = gcd.negate();
+        }
+        result[0] = gcd;
+        result[1] = lcm;
+        result[2] = PolyUtil.<BigRational, BigInteger> map(fac, A, new RatToIntFactor(gcd, lcm));
+        return result;
+    }
+
+
+    /**
      * BigInteger from BigRational coefficients. 
      * Represent as list of polynomials with BigInteger coefficients by 
      * multiplication with the lcm of the numerators of the 
@@ -1455,10 +1511,41 @@ class RatToInt implements UnaryFunctor<BigRational,BigInteger> {
 
 
 /**
+ * Conversion of BigRational to BigInteger. 
+ * result = (num/gcd)*(lcm/denom).
+ */
+class RatToIntFactor implements UnaryFunctor<BigRational, BigInteger> {
+    final java.math.BigInteger lcm;
+    final java.math.BigInteger gcd;
+
+    public RatToIntFactor(java.math.BigInteger gcd, java.math.BigInteger lcm) {
+        this.gcd = gcd;
+        this.lcm = lcm; // .getVal();
+    }
+
+    public BigInteger eval(BigRational c) {
+        if (c == null) {
+            return new BigInteger();
+        } else {
+            if (gcd.equals(java.math.BigInteger.ONE)) {
+                // p = num*(lcm/denom)
+                java.math.BigInteger b = lcm.divide(c.denominator());
+                return new BigInteger(c.numerator().multiply(b));
+            } else {
+                // p = (num/gcd)*(lcm/denom)
+                java.math.BigInteger a = c.numerator().divide(gcd);
+                java.math.BigInteger b = lcm.divide(c.denominator());
+                return new BigInteger(a.multiply(b));
+            }
+        }
+    }
+}
+
+
+/**
  * Conversion from BigInteger functor.
  */
-class FromInteger<D extends RingElem<D>> 
-      implements UnaryFunctor<BigInteger,D> {
+class FromInteger<D extends RingElem<D>> implements UnaryFunctor<BigInteger,D> {
     RingFactory<D> ring;
     public FromInteger(RingFactory<D> ring) {
         this.ring = ring;
