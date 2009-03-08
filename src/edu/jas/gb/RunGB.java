@@ -138,7 +138,7 @@ public class RunGB {
          runParallel( S, threads, pairseq );
       }
       if ( kind.startsWith("dist1") ) {
-	 runMasterOnce( S, threads, mfile, port, pairseq );
+         runMasterOnce( S, threads, mfile, port, pairseq );
       } else if ( kind.startsWith("dist") ) {
          runMaster( S, threads, mfile, port, pairseq );
       }
