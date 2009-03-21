@@ -161,7 +161,9 @@ public class RootUtilTest extends TestCase {
      a = dfac.random(kl,ll,el,q);
      //System.out.println("a = " + a);
 
-     List<GenPolynomial<BigRational>> S = RootUtil.<BigRational>sturmSequence(a);
+     RealRootsSturm<BigRational> rrs = new RealRootsSturm<BigRational>();
+
+     List<GenPolynomial<BigRational>> S = rrs.sturmSequence(a);
      //System.out.println("S = " + S);
 
      try {
@@ -183,14 +185,17 @@ public class RootUtilTest extends TestCase {
  public void testRootBound() {
      a = dfac.random(kl,ll,el,q);
      //System.out.println("a = " + a);
-     BigRational M = RootUtil.<BigRational>realRootBound(a);
+
+     RealRoots<BigRational> rr = new RealRootsSturm<BigRational>();
+
+     BigRational M = rr.realRootBound(a);
 
      //System.out.println("M = " + M);
      assertTrue("M >= 1 ", M.compareTo(BigRational.ONE) >= 0 );
 
      a = a.monic();
      //System.out.println("a = " + a);
-     M = RootUtil.<BigRational>realRootBound(a);
+     M = rr.realRootBound(a);
 
      //System.out.println("M = " + M);
      assertTrue("M >= 1 ", M.compareTo(BigRational.ONE) >= 0 );
@@ -206,7 +211,9 @@ public class RootUtilTest extends TestCase {
      //a = a.multiply( dfac.univariate(0) );
      System.out.println("a = " + a);
 
-     List<Interval<BigRational>> R = RootUtil.<BigRational>realRoots(a);
+     RealRoots<BigRational> rr = new RealRootsSturm<BigRational>();
+
+     List<Interval<BigRational>> R = rr.realRoots(a);
      System.out.println("R = " + R);
  }
 
@@ -228,7 +235,9 @@ public class RootUtilTest extends TestCase {
      }
      System.out.println("a = " + a);
 
-     List<Interval<BigRational>> R = RootUtil.<BigRational>realRoots(a);
+     RealRoots<BigRational> rr = new RealRootsSturm<BigRational>();
+
+     List<Interval<BigRational>> R = rr.realRoots(a);
      System.out.println("R = " + R);
 
      assertTrue("#roots = "+N+" ", R.size() == N);
@@ -237,7 +246,7 @@ public class RootUtilTest extends TestCase {
      BigDecimal eps1 = new BigDecimal(eps);
      System.out.println("eps1 = " + eps1);
 
-     R = RootUtil.<BigRational>refineIntervals(R,a,eps);
+     R = rr.refineIntervals(R,a,eps);
      //System.out.println("R = " + R);
      for ( Interval<BigRational> v : R ) {
          System.out.println("v = " + v.toDecimal().sum(eps1));
@@ -265,7 +274,9 @@ public class RootUtilTest extends TestCase {
      }
      System.out.println("a = " + a);
 
-     List<Interval<BigRational>> R = RootUtil.<BigRational>realRoots(a);
+     RealRoots<BigRational> rr = new RealRootsSturm<BigRational>();
+
+     List<Interval<BigRational>> R = rr.realRoots(a);
      System.out.println("R = " + R);
 
      assertTrue("#roots = "+N+" ", R.size() == N);
@@ -274,7 +285,7 @@ public class RootUtilTest extends TestCase {
      BigDecimal eps1 = new BigDecimal(eps);
      System.out.println("eps1 = " + eps1);
 
-     R = RootUtil.<BigRational>refineIntervals(R,a,eps);
+     R = rr.refineIntervals(R,a,eps);
      //System.out.println("R = " + R);
      for ( Interval<BigRational> v : R ) {
          System.out.println("v = " + v.toDecimal().sum(eps1));
@@ -295,11 +306,13 @@ public class RootUtilTest extends TestCase {
      a = a.subtract(d); // x^2 -2
      System.out.println("a = " + a);
 
+     RealRoots<BigRational> rr = new RealRootsSturm<BigRational>();
+
      ai = new BigRational(1);
      bi = new BigRational(2);
      Interval<BigRational> iv = new Interval<BigRational>(ai,bi);
      System.out.println("iv = " + iv);
-     assertTrue("sign change", RootUtil.<BigRational>signChange(iv,a) );
+     assertTrue("sign change", rr.signChange(iv,a) );
 
      b = dfac.random(kl,(int)a.degree()+1,(int)a.degree(),1.0f);
      //b = dfac.getZERO();
@@ -308,26 +321,26 @@ public class RootUtilTest extends TestCase {
      //b = b.abs().negate();
      System.out.println("b = " + b);
      if ( b.isZERO() ) {
-         int s = RootUtil.<BigRational>algebraicSign(iv,a,b);
+         int s = rr.algebraicSign(iv,a,b);
          assertTrue("algebraic sign", s == 0 );
          return;
      }
 
-     int as = RootUtil.<BigRational>algebraicSign(iv,a,b);
+     int as = rr.algebraicSign(iv,a,b);
      System.out.println("as = " + as);
      // how to test?
-     int asn = RootUtil.<BigRational>algebraicSign(iv,a,b.negate());
+     int asn = rr.algebraicSign(iv,a,b.negate());
      System.out.println("asn = " + asn);
      assertTrue("algebraic sign", as != asn );
 
      iv = new Interval<BigRational>(bi.negate(),ai.negate());
      System.out.println("iv = " + iv);
-     assertTrue("sign change", RootUtil.<BigRational>signChange(iv,a) );
+     assertTrue("sign change", rr.signChange(iv,a) );
 
-     int as1 = RootUtil.<BigRational>algebraicSign(iv,a,b);
+     int as1 = rr.algebraicSign(iv,a,b);
      System.out.println("as1 = " + as1);
      // how to test?
-     int asn1 = RootUtil.<BigRational>algebraicSign(iv,a,b.negate());
+     int asn1 = rr.algebraicSign(iv,a,b.negate());
      System.out.println("asn1 = " + asn1);
      assertTrue("algebraic sign", as1 != asn1 );
 

@@ -100,12 +100,10 @@ public class RealRootsSturm<C extends RingElem<C>>
     /**
      * Isolating intervals for the real roots.
      * @param iv interval with f(left) * f(right) != 0.
-     * param f univariate polynomial.
      * @param S sturm sequence for f and I.
      * @return a list of isolating intervalls for the real roots of f in I.
      */
     public List<Interval<C>> realRoots( Interval<C> iv, 
-                                        //GenPolynomial<C> f,
                                         List<GenPolynomial<C>> S ) {
         List<Interval<C>> R = new ArrayList<Interval<C>>();
         // check sign variations at interval bounds
@@ -125,14 +123,14 @@ public class RealRootsSturm<C extends RingElem<C>>
         }
         // now v &gt; 1
         // bi-sect interval, such that f(c) != 0
-        C c = RootUtil.<C>bisectionPoint( iv, f );
+        C c = bisectionPoint( iv, f );
         //System.out.println("c = " + c);
         // recursion on both sub-intervals
         Interval<C> iv1 = new Interval<C>(iv.left,c);
         Interval<C> iv2 = new Interval<C>(c,iv.right);
-        List<Interval<C>> R1 = RootUtil.<C>realRoots( iv1, /*f,*/ S );
+        List<Interval<C>> R1 = realRoots( iv1, /*f,*/ S );
         System.out.println("R1 = " + R1);
-        List<Interval<C>> R2 = RootUtil.<C>realRoots( iv2, /*f,*/ S );
+        List<Interval<C>> R2 = realRoots( iv2, /*f,*/ S );
         System.out.println("R2 = " + R2);
 
         // refine isolating intervals if adjacent 
@@ -157,17 +155,17 @@ public class RealRootsSturm<C extends RingElem<C>>
         R1.remove(iv1);
         R2.remove(iv2);
         while ( iv1.right.equals(iv2.left) ) {
-            C d1 = RootUtil.<C>bisectionPoint( iv1, f );
-            C d2 = RootUtil.<C>bisectionPoint( iv2, f );
+            C d1 = bisectionPoint( iv1, f );
+            C d2 = bisectionPoint( iv2, f );
             Interval<C> iv11 = new Interval<C>(iv1.left,d1);
             Interval<C> iv12 = new Interval<C>(d1,iv1.right);
             Interval<C> iv21 = new Interval<C>(iv2.left,d2);
             Interval<C> iv22 = new Interval<C>(d2,iv2.right);
 
-            boolean b11 = RootUtil.<C>signChange( iv11, f );
-            boolean b12 = RootUtil.<C>signChange( iv12, f );
-            boolean b21 = RootUtil.<C>signChange( iv21, f );
-            boolean b22 = RootUtil.<C>signChange( iv22, f );
+            boolean b11 = signChange( iv11, f );
+            boolean b12 = signChange( iv12, f );
+            boolean b21 = signChange( iv21, f );
+            boolean b22 = signChange( iv22, f );
             if ( !b12 ) {
                 iv1 = iv11;
                 if ( !b21 ) {
@@ -202,12 +200,10 @@ public class RealRootsSturm<C extends RingElem<C>>
     /**
      * Number of real roots in interval.
      * @param iv interval with f(left) * f(right) != 0.
-     * param f univariate polynomial.
      * @param S sturm sequence for f and I.
      * @return number of real roots of f in I.
      */
     public long realRootCount( Interval<C> iv, 
-                               //GenPolynomial<C> f,
                                List<GenPolynomial<C>> S ) {
         // check sign variations at interval bounds
         GenPolynomial<C> f = S.get(0); // squarefree part
@@ -259,7 +255,7 @@ public class RealRootsSturm<C extends RingElem<C>>
         RingFactory<C> cfac = f.ring.coFac;
         C two = cfac.fromInteger(2);
         int sp = g.signum();
-        List<GenPolynomial<C>> Sg = RootUtil.<C>sturmSequence(g);
+        List<GenPolynomial<C>> Sg = sturmSequence(g);
         // System.out.println("g = " + g);
         g = Sg.get(0);
         if ( g.signum() != sp ) {
@@ -273,14 +269,14 @@ public class RealRootsSturm<C extends RingElem<C>>
         while ( true ) {
             C c = v.left.sum(v.right);
             c = c.divide(two);
-            long n = RootUtil.<C> realRootCount(v,Sg);
+            long n = realRootCount(v,Sg);
             if ( n == 0 ) {
                C ev = PolyUtil.<C> evaluateMain(cfac, g, c);
                System.out.println("ev = " + ev);
                return sp * ev.signum();
             }
             Interval<C> im = new Interval<C>(c,v.right);
-            if ( RootUtil.<C>signChange(im,f) ) {
+            if ( signChange(im,f) ) {
                 v = im;
             } else {
                 v = new Interval<C>(v.left,c);
