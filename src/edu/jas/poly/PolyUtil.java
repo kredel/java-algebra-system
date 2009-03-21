@@ -28,7 +28,7 @@ import edu.jas.util.ListUtil;
 
 
 /**
- * Polynomial utilities, e.g. 
+ * Polynomial utilities, for example
  * conversion between different representations, evaluation and interpolation.
  * @author Heinz Kredel
  */
@@ -1120,6 +1120,23 @@ public class PolyUtil {
 
 
     /**
+     * Evaluate at main variable. 
+     * @param <C> coefficient type.
+     * @param cfac coefficent ring factory.
+     * @param L list of univariate polynomial to be evaluated.
+     * @param a value to evaluate at.
+     * @return list( A( a ) ) for A in L.
+     */
+    public static <C extends RingElem<C>> 
+        List<C> 
+        evaluateMain( RingFactory<C> cfac, 
+                      List<GenPolynomial<C>> L,
+                      C a ) {
+        return ListUtil.<GenPolynomial<C>,C>map( L, new EvalMain<C>(cfac,a) );
+    }
+
+
+    /**
      * Evaluate at k-th variable. 
      * @param <C> coefficient type.
      * @param cfac coefficient polynomial ring in k variables 
@@ -1719,6 +1736,28 @@ class CoeffToAlg<C extends GcdRingElem<C>>
             return afac.getZERO();
         } else {
             return new AlgebraicNumber<C>(afac,zero.sum(c));
+        }
+    }
+}
+
+
+/**
+ * Evaluate main variable functor.
+ */
+class EvalMain<C extends RingElem<C>> 
+    implements UnaryFunctor<GenPolynomial<C>,C> {
+    final RingFactory<C> cfac;
+    final C a;
+    public EvalMain(RingFactory<C> cfac, C a) {
+	this.cfac = cfac;
+	this.a = a;
+    }
+
+    public C eval(GenPolynomial<C> c) {
+        if ( c == null ) {
+            return null;
+        } else {
+            return PolyUtil.<C>evaluateMain(cfac,c,a);
         }
     }
 }
