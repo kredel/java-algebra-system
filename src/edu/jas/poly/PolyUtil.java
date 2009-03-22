@@ -182,11 +182,11 @@ public class PolyUtil {
      * BigInteger from BigRational coefficients. Represent as polynomial with
      * BigInteger coefficients by multiplication with the gcd of the numerators
      * and the lcm of the denominators of the BigRational coefficients.
+     * <br /><b>Author:</b> Axel Kramer
      * @param fac result polynomial factory.
      * @param A polynomial with BigRational coefficients to be converted.
      * @return Object[] with 3 entries: [0]->gcd [1]->lcm and 
                [2]->polynomial with BigInteger coefficients.
-     * <b>Author:</b> Axel Kramer
      */
     public static Object[] 
         integerFromRationalCoefficientsFactor(GenPolynomialRing<BigInteger> fac, 
