@@ -87,10 +87,10 @@ public class RealRootsSturm<C extends RingElem<C>>
         GenPolynomial<C> F = f;
         C M = realRootBound(F); // M != 0, since >= 2
         List<GenPolynomial<C>> S = sturmSequence(F);
-        System.out.println("S = " + S);
+        //System.out.println("S = " + S);
         //System.out.println("f_S = " + S.get(0));
         Interval<C> iv = new Interval<C>(M.negate(), M);
-        System.out.println("iv = " + iv);
+        //System.out.println("iv = " + iv);
         List<Interval<C>> Rp = realRoots( iv, /*S.get(0),*/ S );
         R.addAll(Rp);
         return R;
@@ -129,9 +129,15 @@ public class RealRootsSturm<C extends RingElem<C>>
         Interval<C> iv1 = new Interval<C>(iv.left,c);
         Interval<C> iv2 = new Interval<C>(c,iv.right);
         List<Interval<C>> R1 = realRoots( iv1, /*f,*/ S );
-        System.out.println("R1 = " + R1);
+        //System.out.println("R1 = " + R1);
+        if ( debug ) {
+            logger.info("R1 = " + R1);
+        }
         List<Interval<C>> R2 = realRoots( iv2, /*f,*/ S );
-        System.out.println("R2 = " + R2);
+        //System.out.println("R2 = " + R2);
+        if ( debug ) {
+            logger.info("R2 = " + R2);
+        }
 
         // refine isolating intervals if adjacent 
         if ( R1.isEmpty() ) {
@@ -186,8 +192,8 @@ public class RealRootsSturm<C extends RingElem<C>>
             }
             iv1 = iv12;
             iv2 = iv21;
-            System.out.println("iv1 = " + iv1);
-            System.out.println("iv2 = " + iv2);
+            //System.out.println("iv1 = " + iv1);
+            //System.out.println("iv2 = " + iv2);
         }
         R.addAll( R1 );
         R.add(iv1);
@@ -264,7 +270,7 @@ public class RealRootsSturm<C extends RingElem<C>>
             sp = 1;
         }
         //System.out.println("sp = " + sp);
-        System.out.println("g = " + g);
+        //System.out.println("g = " + g);
         Interval<C> v = iv;
         while ( true ) {
             C c = v.left.sum(v.right);
@@ -272,7 +278,7 @@ public class RealRootsSturm<C extends RingElem<C>>
             long n = realRootCount(v,Sg);
             if ( n == 0 ) {
                C ev = PolyUtil.<C> evaluateMain(cfac, g, c);
-               System.out.println("ev = " + ev);
+               //System.out.println("ev = " + ev);
                return sp * ev.signum();
             }
             Interval<C> im = new Interval<C>(c,v.right);

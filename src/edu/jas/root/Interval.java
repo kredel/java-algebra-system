@@ -78,11 +78,15 @@ public class Interval<C extends RingElem<C>> {
      * BigDecimal representation of Interval.
      */
     public BigDecimal toDecimal() {
-	BigDecimal l = new BigDecimal((BigRational)(Object)left);
-	BigDecimal r = new BigDecimal((BigRational)(Object)right);
-	BigDecimal two = new BigDecimal(2);
-	BigDecimal v = l.sum(r).divide(two);
-	return v;
+        if ( (Object)left instanceof BigRational ) {
+            BigDecimal l = new BigDecimal((BigRational)(Object)left);
+            BigDecimal r = new BigDecimal((BigRational)(Object)right);
+            BigDecimal two = new BigDecimal(2);
+            BigDecimal v = l.sum(r).divide(two);
+            return v;
+        } else {
+            throw new RuntimeException("toDecimal of interval types not implemented");
+        }
     }
 
 

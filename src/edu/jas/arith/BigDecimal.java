@@ -36,8 +36,8 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>,
 
 
     // should go to factory:
-    static final int DEFAULT_PRECISION = 50;
-    static final MathContext DEFAULT_CONTEXT = new MathContext(DEFAULT_PRECISION);
+    public static final int DEFAULT_PRECISION = 50;
+    public static final MathContext DEFAULT_CONTEXT = new MathContext(DEFAULT_PRECISION);
     public final MathContext context; 
 
 
