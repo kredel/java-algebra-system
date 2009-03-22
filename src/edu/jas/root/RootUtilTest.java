@@ -7,6 +7,7 @@ package edu.jas.root;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -229,9 +230,11 @@ public class RootUtilTest extends TestCase {
      d = dfac.getONE();
      e = dfac.univariate(0);
 
+     List<Interval<BigRational>> Rn = new ArrayList<Interval<BigRational>>(N);
      a = d;
      for ( int i = 0; i < N; i++ ) {
          c = dfac.fromInteger(i);
+         Rn.add( new Interval<BigRational>(c.leadingBaseCoefficient()) );
          b = e.subtract( c );
          a = a.multiply( b );
      }
@@ -250,8 +253,13 @@ public class RootUtilTest extends TestCase {
 
      R = rr.refineIntervals(R,a,eps);
      //System.out.println("R = " + R);
+     int i = 0;
      for ( Interval<BigRational> v : R ) {
-         System.out.println("v = " + v.toDecimal().sum(eps1));
+         BigDecimal dd = v.toDecimal(); //.sum(eps1);
+         BigDecimal di = Rn.get(i++).toDecimal();
+         //System.out.println("v  = " + dd);
+         //System.out.println("vi = " + di);
+         assertTrue("|dd - di| < eps ", dd.compareTo(di) == 0);
      }
  }
 
@@ -265,23 +273,28 @@ public class RootUtilTest extends TestCase {
      d = dfac.getONE();
      e = dfac.univariate(0);
 
+     List<Interval<BigRational>> Rn = new ArrayList<Interval<BigRational>>(N);
      a = d;
-     for ( int i = 0; i < N; i++ ) {
+     for ( int i = 1; i < N; i++ ) { // use only for i > 0, since reverse
          c = dfac.fromInteger(i);
          if ( i != 0 ) {
              c = d.divide(c);
          }
+         Rn.add( new Interval<BigRational>(c.leadingBaseCoefficient()) );
          b = e.subtract( c );
          a = a.multiply( b );
      }
      //System.out.println("a = " + a);
+     //System.out.println("Rn = " + Rn);
+     Collections.reverse(Rn);
+     //System.out.println("Rn = " + Rn);
 
      RealRoots<BigRational> rr = new RealRootsSturm<BigRational>();
 
      List<Interval<BigRational>> R = rr.realRoots(a);
      //System.out.println("R = " + R);
 
-     assertTrue("#roots = "+N+" ", R.size() == N);
+     assertTrue("#roots = "+(N-1)+" ", R.size() == (N-1));
 
      //System.out.println("eps = " + eps);
      BigDecimal eps1 = new BigDecimal(eps);
@@ -289,8 +302,13 @@ public class RootUtilTest extends TestCase {
 
      R = rr.refineIntervals(R,a,eps);
      //System.out.println("R = " + R);
+     int i = 0;
      for ( Interval<BigRational> v : R ) {
-         System.out.println("v = " + v.toDecimal().sum(eps1));
+         BigDecimal dd = v.toDecimal(); //.sum(eps1);
+         BigDecimal di = Rn.get(i++).toDecimal();
+         //System.out.println("v  = " + dd);
+         //System.out.println("vi = " + di);
+         assertTrue("|dd - di| < eps ", dd.compareTo(di) == 0);
      }
  }
 
