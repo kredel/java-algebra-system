@@ -64,6 +64,33 @@ public class Interval<C extends RingElem<C>> {
     }
 
 
+    /** Comparison with any other object.
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    @SuppressWarnings("unchecked") // not jet working
+    public boolean equals(Object b) {
+        if ( ! ( b instanceof Interval ) ) {
+            return false;
+        }
+        Interval<C> a = null;
+        try {
+            a = (Interval<C>) b;
+        } catch (ClassCastException e) {
+        }
+        return left.equals(a.left) && right.equals(a.right);
+    }
+
+
+    /** Hash code for this Interval.
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        return 37 * left.hashCode() + right.hashCode();
+    }
+
+
     /**
      * Length.
      * @return |left-right|;
