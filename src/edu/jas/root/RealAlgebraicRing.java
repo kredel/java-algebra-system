@@ -71,7 +71,7 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> >
      * @return a copy of c.
      */
     public RealAlgebraicNumber<C> copy(RealAlgebraicNumber<C> c) {
-        return new RealAlgebraicNumber<C>( this, c.val );
+        return new RealAlgebraicNumber<C>( this, c );
     }
 
 
@@ -79,7 +79,7 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> >
      * @return 0 as RealAlgebraicNumber.
      */
     public RealAlgebraicNumber<C> getZERO() {
-        return new RealAlgebraicNumber<C>( this, ring.getZERO() );
+        return new RealAlgebraicNumber<C>( this, super.getZERO() );
     }
 
 
@@ -87,7 +87,7 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> >
      * @return 1 as RealAlgebraicNumber.
      */
     public RealAlgebraicNumber<C> getONE() {
-        return new RealAlgebraicNumber<C>( this, ring.getONE() );
+        return new RealAlgebraicNumber<C>( this, super.getONE() );
     }
 
     
@@ -95,19 +95,19 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> >
      * @return alpha as RealAlgebraicNumber.
      */
     public RealAlgebraicNumber<C> getGenerator() {
-        return new RealAlgebraicNumber<C>( this, ring.univariate(0) );
+        return new RealAlgebraicNumber<C>( this, super.getGenerator() );
     }
 
 
-    /**  Get the generating elements.
+    /* Get the generating elements.
      * @return a list of generating elements for this ring.
-     */
     public List<AlgebraicNumber<C>> getGenerators() {
         List<AlgebraicNumber<C>> gens = new ArrayList<AlgebraicNumber<C>>( 2 );
         gens.add( getONE() );
         gens.add( getGenerator() );
         return gens;
     }
+     */
 
     
     /** Get a RealAlgebraicNumber element from a BigInteger value.
@@ -115,7 +115,7 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> >
      * @return a RealAlgebraicNumber.
      */
     public RealAlgebraicNumber<C> fromInteger(java.math.BigInteger a) {
-        return new RealAlgebraicNumber<C>( this, ring.fromInteger(a) );
+        return new RealAlgebraicNumber<C>( this, super.fromInteger(a) );
     }
 
 
@@ -124,7 +124,7 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> >
      * @return a RealAlgebraicNumber.
      */
     public RealAlgebraicNumber<C> fromInteger(long a) {
-        return new RealAlgebraicNumber<C>( this, ring.fromInteger(a) );
+        return new RealAlgebraicNumber<C>( this, super.fromInteger(a) );
     }
     
 
@@ -168,8 +168,7 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> >
      */
     @Override
     public int hashCode() {
-        int h = 37 * modul.hashCode() + root.hashCode();
-        return 37 * h + ring.hashCode();
+        return 37 * super.hashCode() + root.hashCode();
     }
 
 
@@ -178,8 +177,7 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> >
      * @return a random integer mod modul.
      */
     public RealAlgebraicNumber<C> random(int n) {
-        GenPolynomial<C> x = ring.random( n ).monic();
-        return new RealAlgebraicNumber<C>( this, x);
+        return new RealAlgebraicNumber<C>( this, super.random(n) );
     }
 
 
@@ -189,8 +187,7 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> >
      * @return a random integer mod modul.
      */
     public RealAlgebraicNumber<C> random(int n, Random rnd) {
-        GenPolynomial<C> x = ring.random( n, rnd ).monic();
-        return new RealAlgebraicNumber<C>( this, x);
+        return new RealAlgebraicNumber<C>( this, super.random(n,rnd) );
     }
 
 
@@ -199,8 +196,7 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> >
      * @return RealAlgebraicNumber from s.
      */
     public RealAlgebraicNumber<C> parse(String s) {
-        GenPolynomial<C> x = ring.parse( s );
-        return new RealAlgebraicNumber<C>( this, x );
+        return new RealAlgebraicNumber<C>( this, super.parse(s) );
     }
 
 
@@ -209,8 +205,7 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> >
      * @return next RealAlgebraicNumber from r.
      */
     public RealAlgebraicNumber<C> parse(Reader r) {
-        GenPolynomial<C> x = ring.parse( r );
-        return new RealAlgebraicNumber<C>( this, x );
+        return new RealAlgebraicNumber<C>( this, super.parse(r) );
     }
 
 }
