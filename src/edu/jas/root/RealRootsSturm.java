@@ -86,12 +86,12 @@ public class RealRootsSturm<C extends RingElem<C>>
         }
         GenPolynomial<C> F = f;
         C M = realRootBound(F); // M != 0, since >= 2
+        Interval<C> iv = new Interval<C>(M.negate(), M);
+        //System.out.println("iv = " + iv);
         List<GenPolynomial<C>> S = sturmSequence(F);
         //System.out.println("S = " + S);
         //System.out.println("f_S = " + S.get(0));
-        Interval<C> iv = new Interval<C>(M.negate(), M);
-        //System.out.println("iv = " + iv);
-        List<Interval<C>> Rp = realRoots( iv, /*S.get(0),*/ S );
+        List<Interval<C>> Rp = realRoots( iv, S );
         R.addAll(Rp);
         return R;
     }
@@ -106,13 +106,10 @@ public class RealRootsSturm<C extends RingElem<C>>
     public List<Interval<C>> realRoots( Interval<C> iv, 
                                         List<GenPolynomial<C>> S ) {
         List<Interval<C>> R = new ArrayList<Interval<C>>();
-        // check sign variations at interval bounds
         GenPolynomial<C> f = S.get(0); // squarefree part
         //System.out.println("iv = " + iv);
-        RingFactory<C> cfac = f.ring.coFac;
-        List<C> l = PolyUtil.<C> evaluateMain(cfac, S, iv.left);
-        List<C> r = PolyUtil.<C> evaluateMain(cfac, S, iv.right);
-        long v = RootUtil.<C>signVar(l) - RootUtil.<C>signVar(r);
+        // check sign variations at interval bounds
+        long v = realRootCount(iv,S);
         //System.out.println("v = " + v);
         if ( v == 0 ) {
             return R;
@@ -128,12 +125,12 @@ public class RealRootsSturm<C extends RingElem<C>>
         // recursion on both sub-intervals
         Interval<C> iv1 = new Interval<C>(iv.left,c);
         Interval<C> iv2 = new Interval<C>(c,iv.right);
-        List<Interval<C>> R1 = realRoots( iv1, /*f,*/ S );
+        List<Interval<C>> R1 = realRoots( iv1, S );
         //System.out.println("R1 = " + R1);
         if ( debug ) {
             logger.info("R1 = " + R1);
         }
-        List<Interval<C>> R2 = realRoots( iv2, /*f,*/ S );
+        List<Interval<C>> R2 = realRoots( iv2, S );
         //System.out.println("R2 = " + R2);
         if ( debug ) {
             logger.info("R2 = " + R2);
@@ -172,23 +169,23 @@ public class RealRootsSturm<C extends RingElem<C>>
             boolean b12 = signChange( iv12, f );
             boolean b21 = signChange( iv21, f );
             boolean b22 = signChange( iv22, f );
-            if ( !b12 ) {
+            if ( b11 ) {
                 iv1 = iv11;
-                if ( !b21 ) {
+                if ( b22 ) {
                     iv2 = iv22;
                 } else {
                     iv2 = iv21;
                 }
-                break;
+                break; // done, refine
             }
-            if ( !b21 ) {
+            if ( b22 ) {
                 iv2 = iv22;
-                if ( !b11 ) {
+                if ( b12 ) {
                     iv1 = iv12;
                 } else {
                     iv1 = iv11;
                 }
-                break;
+                break; // done, refine
             }
             iv1 = iv12;
             iv2 = iv21;
