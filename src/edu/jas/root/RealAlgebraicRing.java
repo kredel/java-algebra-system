@@ -49,6 +49,9 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> >
         super(m);
         this.root = root;
         engine = new RealRootsSturm<C>();
+        if ( m.ring.characteristic().signum() > 0 ) {
+            throw new RuntimeException("characteristic not zero");
+        }
     }
 
 
@@ -62,6 +65,9 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> >
         super(m,isField);
         this.root = root;
         engine = new RealRootsSturm<C>();
+        if ( m.ring.characteristic().signum() > 0 ) {
+            throw new RuntimeException("characteristic not zero");
+        }
     }
 
 
