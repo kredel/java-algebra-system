@@ -36,7 +36,6 @@ public class Interval<C extends RingElem<C>> {
      * Constructor.
      * @param left interval border.
      * @param right interval border.
-     * @return interval [left,right].
      */
     public Interval(C left, C right) {
 	this.left = left;
@@ -47,7 +46,6 @@ public class Interval<C extends RingElem<C>> {
     /**
      * Constructor.
      * @param mid left and right interval border.
-     * @return interval [mid,mid].
      */
     public Interval(C mid) {
 	this(mid,mid);
