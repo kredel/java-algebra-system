@@ -283,8 +283,9 @@ clean:
 SVNREV=svnlook youngest $(SVNREPO)/jas
 SVNDATE=svnlook date $(SVNREPO)/jas
 # Jan 2008 #SVNSRT=1584 
-# Jun 2008
-SVNSRT=1882
+# Jun 2008 SVNSRT=1882
+# Sep 2008
+SVNSRT=2118
 
 export:
 	rm -rf ~/jas-versions/$(VERSION)
