@@ -104,8 +104,9 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C>>
         if ( s != 0 ) {
             return s;
         }
-        throw new RuntimeException("real compare to");
         //return val.compareTo(b.val);
+        s = this.subtract(b).signum();
+        return s;
     }
 
 
@@ -130,7 +131,7 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C>>
         if ( !ring.equals( a.ring ) ) {
             return false;
         }
-        return (0 == compareTo(a));
+        return val.equals(a.val);
     }
 
 
@@ -201,7 +202,8 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C>>
      */
     public int signum() {
         //return val.signum();
-        throw new RuntimeException("real compare to");
+        int s = ring.engine.algebraicSign(ring.root,ring.modul,val);
+        return s;
     }
 
 

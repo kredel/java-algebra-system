@@ -35,6 +35,11 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> >
     public final Interval<C> root;
 
 
+    /** Real root computation engine. 
+     */
+    public final RealRoots<C> engine;
+
+
     /** The constructor creates a RealAlgebraicNumber factory object 
      * from a GenPolynomial objects module. 
      * @param m module GenPolynomial<C>.
@@ -43,6 +48,7 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> >
     public RealAlgebraicRing(GenPolynomial<C> m, Interval<C> root) {
         super(m);
         this.root = root;
+        engine = new RealRootsSturm<C>();
     }
 
 
@@ -55,6 +61,7 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> >
     public RealAlgebraicRing(GenPolynomial<C> m, Interval<C> root, boolean isField) {
         super(m,isField);
         this.root = root;
+        engine = new RealRootsSturm<C>();
     }
 
 
