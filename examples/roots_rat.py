@@ -37,6 +37,9 @@ f = f1 * f2 * f3;
 #f = f2 * f3;
 f = f1;
 
+#f = ( x**2 - 2 );
+
+
 print "f = ", f;
 print;
 
