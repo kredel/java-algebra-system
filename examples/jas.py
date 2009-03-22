@@ -32,6 +32,7 @@ from edu.jas.application import ComprehensiveGroebnerBaseSeq, PolyUtilApp,\
 from edu.jas.kern        import ComputerThreads;
 from edu.jas.ufd         import GreatestCommonDivisorSubres, PolyUfdUtil, GCDFactory,\
                                 FactorFactory;
+from edu.jas.root        import RealRootsSturm, Interval;
 from edu.jas.util        import ExecutableServer
 from edu.jas             import structure, arith, poly, ps, gb, gbmod, vector,\
                                 application, util, ufd
@@ -204,6 +205,26 @@ class Ring:
                 i = e.get(a);
                 L[ RingElem( a ) ] = i;
             return L;
+        except:
+            return None
+
+    def realRoots(self,a,eps=None):
+        '''Compute real roots of univariate polynomial.
+        '''
+        if isinstance(a,RingElem):
+            a = a.elem;
+        else:
+            a = self.element( str(a) );
+            a = a.elem;
+        if isinstance(eps,RingElem):
+            eps = eps.elem;
+        try:
+            if eps == None:
+                R = RealRootsSturm().realRoots( a );
+            else:
+                R = RealRootsSturm().realRoots( a, eps );
+                R = [ r.toDecimal() for r in R ];
+            return R;
         except:
             return None
 
