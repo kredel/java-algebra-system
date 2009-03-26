@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Arrays;
+import java.util.Collections;
 
 import java.io.Serializable;
 
@@ -26,13 +27,14 @@ import edu.jas.gb.GroebnerBase;
 import edu.jas.gb.GroebnerBaseSeqPairSeq;
 import edu.jas.gb.Reduction;
 import edu.jas.gb.ReductionSeq;
+
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolynomialList;
 import edu.jas.poly.OptimizedPolynomialList;
+import edu.jas.poly.TermOrder;
 import edu.jas.poly.TermOrderOptimization;
-
 
 import edu.jas.ufd.GreatestCommonDivisor;
 import edu.jas.ufd.GCDFactory;
@@ -601,6 +603,90 @@ public class Ideal<C extends GcdRingElem<C>>
           }
       }
       return new Ideal<C>( R, h, isGB, isTopt );
+  }
+
+
+  /**
+   * Eliminate. Generators for the intersection of a ideal 
+   * with a polynomial ring. 
+   * The polynomial rings must have variable names.
+   * @param R polynomial ring
+   * @return ideal(this \cap R)
+   */
+  public Ideal<C> eliminate( GenPolynomialRing<C> R ) {
+      if ( R == null ) { 
+         throw new IllegalArgumentException("R may not be null");
+      }
+      String[] aname = getRing().getVars();
+      //System.out.println("aname = " + Arrays.toString(aname));
+      if ( aname == null ) { 
+         throw new IllegalArgumentException("aname may not be null");
+      }
+      String[] ename = R.getVars();
+      //System.out.println("ename = " + Arrays.toString(ename));
+      if ( ename == null ) { 
+         throw new IllegalArgumentException("ename may not be null");
+      }
+      List<Integer> perm = new ArrayList<Integer>( aname.length ); 
+      for ( int i = 0; i < ename.length; i++ ) {
+          int j = indexOf(ename[i],aname);
+          if ( j < 0 ) {
+              throw new IllegalArgumentException("ename not contained in aname");
+          }
+          perm.add( j );
+      }
+      //System.out.println("perm_low = " + perm);
+      for ( int i = 0; i < aname.length; i++ ) {
+          if ( ! perm.contains( i ) ) {
+              perm.add( i );
+          }
+      }
+      //System.out.println("perm_all = " + perm);
+      int n1 = aname.length - 1;
+      List<Integer> perm1 = new ArrayList<Integer>( aname.length ); 
+      for ( Integer k : perm ) {
+          perm1.add(n1-k);
+      }
+      perm = perm1;
+      //System.out.println("perm_inv = " + perm1);
+      Collections.reverse(perm);
+      //System.out.println("perm_rev = " + perm);
+
+      GenPolynomialRing<C> E = TermOrderOptimization.<C>permutation( perm, getRing() );
+      //System.out.println("E = " + E);
+
+      int ev = getRing().tord.getEvord();
+      TermOrder tord = new TermOrder(ev,ev,getRing().nvar,R.nvar);
+      E = new GenPolynomialRing<C>(E.coFac,E.nvar,tord,E.getVars());
+      //System.out.println("E = " + E);
+
+      List<GenPolynomial<C>> ppolys;
+      ppolys = TermOrderOptimization.<C>permutation( perm, E, getList() );
+
+      logger.warn("elimnation computing GB");
+      List< GenPolynomial<C> > G = bb.GB( ppolys );
+      if ( debug ) {
+         logger.debug("intersect GB = " + G);
+      }
+      Ideal<C> I = new Ideal<C>( E, G, true );
+      // System.out.println("I = " + I);
+      return I; //.intersect(R);
+  }
+
+
+  /**
+   * Index of s in A.
+   * @param s search string
+   * @param A string array
+   * @return i if s == A[i] for some i, else -1.
+   */
+  public int indexOf(String s, String[] A) {
+      for ( int i = 0; i < A.length; i++ ) {
+          if ( s.equals( A[i] ) ) {
+              return i;
+          }
+      }
+      return -1;
   }
 
 

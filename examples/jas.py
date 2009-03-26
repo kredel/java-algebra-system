@@ -371,7 +371,7 @@ class Ideal:
         '''
         s = jas.application.Ideal(self.pset);
         N = s.intersect(ring.ring);
-        return Ideal(self.ring,"",N.getList());
+        return Ideal(ring,"",N.getList());
 
     def intersect(self,id2):
         '''Compute the intersection of this and the given ideal.
@@ -380,6 +380,14 @@ class Ideal:
         s2 = jas.application.Ideal(id2.pset);
         N = s1.intersect(s2);
         return Ideal(self.ring,"",N.getList());
+
+    def eliminateRing(self,ring):
+        '''Compute the elimination ideal of this and the given polynomial ring.
+        '''
+        s = jas.application.Ideal(self.pset);
+        N = s.eliminate(ring.ring);
+        r = Ring( ring=N.getRing() );
+        return Ideal(r,"",N.getList());
 
     def sum(self,other):
         '''Compute the sum of this and the ideal.
