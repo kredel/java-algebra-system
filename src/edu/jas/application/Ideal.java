@@ -655,6 +655,10 @@ public class Ideal<C extends GcdRingElem<C>>
       GenPolynomialRing<C> E = TermOrderOptimization.<C>permutation( perm, getRing() );
       //System.out.println("E = " + E);
 
+      if ( getRing().tord.getWeight() != null ) {
+          throw new IllegalArgumentException("weight term order not supported");
+      }
+
       int ev = getRing().tord.getEvord();
       TermOrder tord = new TermOrder(ev,ev,getRing().nvar,R.nvar);
       E = new GenPolynomialRing<C>(E.coFac,E.nvar,tord,E.getVars());
