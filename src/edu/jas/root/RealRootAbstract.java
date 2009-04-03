@@ -196,24 +196,24 @@ public abstract class RealRootAbstract<C extends RingElem<C>>
         RingFactory<C> cfac = f.ring.coFac;
         C two = cfac.fromInteger(2);
         Interval<C> v = iv;
-        System.out.println("r_eps = " + eps.getClass());
+        //System.out.println("r_eps = " + eps.getClass());
         while (v.length().compareTo(eps) >= 0) {
-            System.out.println("|v| = " + v.length().getClass());
+            //System.out.println("|v| = " + v.length().getClass());
             C c = v.left.sum(v.right);
             c = c.divide(two);
-            System.out.println("c = " + c);
-            if ( ((Object)c) instanceof AlgebraicNumber ) {
-                //AlgebraicNumber y = (AlgebraicNumber) c;
-                AlgebraicNumber y = (AlgebraicNumber) v.length();
-                RealAlgebraicNumber x = new RealAlgebraicNumber((RealAlgebraicRing)y.ring,y.val);
-                System.out.println("||v|| = " + x.magnitude());
-                AlgebraicNumber ye = (AlgebraicNumber) eps;
-                RealAlgebraicNumber xe = new RealAlgebraicNumber((RealAlgebraicRing)ye.ring,ye.val);
-                if ( x.compareTo(xe) < 0 ) {
-                    System.out.println("break at ||v|| = " + x.magnitude());
-                    break;
-                }
-            }
+            //System.out.println("c = " + c);
+//             if ( ((Object)c) instanceof AlgebraicNumber ) {
+//                 //AlgebraicNumber y = (AlgebraicNumber) c;
+//                 AlgebraicNumber y = (AlgebraicNumber) v.length();
+//                 RealAlgebraicNumber x = new RealAlgebraicNumber((RealAlgebraicRing)y.ring,y.val);
+//                 System.out.println("||v|| = " + x.magnitude());
+//                 AlgebraicNumber ye = (AlgebraicNumber) eps;
+//                 RealAlgebraicNumber xe = new RealAlgebraicNumber((RealAlgebraicRing)ye.ring,ye.val);
+//                 if ( x.compareTo(xe) < 0 ) {
+//                     System.out.println("break at ||v|| = " + x.magnitude());
+//                     break;
+//                 }
+//             }
             //c = RootUtil.<C>bisectionPoint(v,f);
             if ( PolyUtil.<C> evaluateMain(cfac, f, c).isZERO() ) {
                 v = new Interval<C>(c,c);

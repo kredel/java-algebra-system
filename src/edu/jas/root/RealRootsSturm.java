@@ -210,12 +210,12 @@ public class RealRootsSturm<C extends RingElem<C>>
                                List<GenPolynomial<C>> S ) {
         // check sign variations at interval bounds
         GenPolynomial<C> f = S.get(0); // squarefree part
-        System.out.println("iv = " + iv);
+        //System.out.println("iv = " + iv);
         RingFactory<C> cfac = f.ring.coFac;
         List<C> l = PolyUtil.<C> evaluateMain(cfac, S, iv.left);
         List<C> r = PolyUtil.<C> evaluateMain(cfac, S, iv.right);
         long v = RootUtil.<C>signVar(l) - RootUtil.<C>signVar(r);
-        System.out.println("v = " + v);
+        //System.out.println("v = " + v);
         if ( v < 0L ) {
             v = -v;
         }
@@ -439,7 +439,7 @@ public class RealRootsSturm<C extends RingElem<C>>
             } else {
                 v = new Interval<C>(v.left,c);
             }
-            System.out.println("v = " + v.toDecimal());
+            //System.out.println("v = " + v.toDecimal());
         }
         return v;
     }

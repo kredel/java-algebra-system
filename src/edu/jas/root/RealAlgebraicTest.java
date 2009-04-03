@@ -102,14 +102,14 @@ public class RealAlgebraicTest extends TestCase {
      c = fac.getONE();
      //System.out.println("c = " + c);
      //System.out.println("c.getVal() = " + c.getVal());
-     assertTrue("length( c ) = 1", c.getVal().length() == 1);
+     assertTrue("length( c ) = 1", c.number.getVal().length() == 1);
      assertTrue("isZERO( c )", !c.isZERO() );
      assertTrue("isONE( c )", c.isONE() );
 
      d = fac.getZERO();
      //System.out.println("d = " + d);
      //System.out.println("d.getVal() = " + d.getVal());
-     assertTrue("length( d ) = 0", d.getVal().length() == 0);
+     assertTrue("length( d ) = 0", d.number.getVal().length() == 0);
      assertTrue("isZERO( d )", d.isZERO() );
      assertTrue("isONE( d )", !d.isONE() );
  }
@@ -127,7 +127,7 @@ public class RealAlgebraicTest extends TestCase {
              continue;
          }
          // fac.random(rl+i, kl*(i+1), ll+2*i, el+i, q );
-         assertTrue("length( a"+i+" ) <> 0", a.getVal().length() >= 0);
+         assertTrue("length( a"+i+" ) <> 0", a.number.getVal().length() >= 0);
          assertTrue(" not isZERO( a"+i+" )", !a.isZERO() );
          assertTrue(" not isONE( a"+i+" )", !a.isONE() );
      }
@@ -323,37 +323,37 @@ public class RealAlgebraicTest extends TestCase {
  */
  public void testRealRootIsolation() {
      System.out.println();
-     GenPolynomialRing<AlgebraicNumber<BigRational>> dfac;
-     dfac = new GenPolynomialRing<AlgebraicNumber<BigRational>>(fac,1);
+     GenPolynomialRing<RealAlgebraicNumber<BigRational>> dfac;
+     dfac = new GenPolynomialRing<RealAlgebraicNumber<BigRational>>(fac,1);
 
-     GenPolynomial<AlgebraicNumber<BigRational>> ar;
-     AlgebraicNumber<BigRational> epsr;
+     GenPolynomial<RealAlgebraicNumber<BigRational>> ar;
+     RealAlgebraicNumber<BigRational> epsr;
 
      ar = dfac.random(3,5,4,q);
      System.out.println("ar = " + ar);
 
-     RealRoots<AlgebraicNumber<BigRational>> rrr 
-        = new RealRootsSturm<AlgebraicNumber<BigRational>>();
+     RealRoots<RealAlgebraicNumber<BigRational>> rrr 
+        = new RealRootsSturm<RealAlgebraicNumber<BigRational>>();
 
-     List<Interval<AlgebraicNumber<BigRational>>> R = rrr.realRoots(ar);
+     List<Interval<RealAlgebraicNumber<BigRational>>> R = rrr.realRoots(ar);
      System.out.println("R = " + R);
 
 //      if ( true ) {
 //          return;
 //      }
 
-     // BigRational eps = Power.positivePower(new BigRational(1L,10L),BigDecimal.DEFAULT_PRECISION);
-     BigRational eps = Power.positivePower(new BigRational(1L,10L),5);
+     BigRational eps = Power.positivePower(new BigRational(1L,10L),BigDecimal.DEFAULT_PRECISION);
+     //BigRational eps = Power.positivePower(new BigRational(1L,10L),10);
      //BigDecimal eps1 = new BigDecimal(eps);
      //System.out.println("eps1 = " + eps1);
 
      epsr = ar.ring.coFac.getONE().multiply(eps);
-     System.out.println("epsr = " + epsr);
+     //System.out.println("epsr = " + epsr);
 
      R = rrr.refineIntervals(R,ar,epsr);
      System.out.println("R = " + R);
      int i = 0;
-     for ( Interval<AlgebraicNumber<BigRational>> v : R ) {
+     for ( Interval<RealAlgebraicNumber<BigRational>> v : R ) {
          BigDecimal dd = v.toDecimal(); //.sum(eps1);
          System.out.println("v = " + dd);
          // assertTrue("|dd - di| < eps ", dd.compareTo(di) == 0);

@@ -30,7 +30,14 @@ import edu.jas.poly.AlgebraicNumberRing;
  */
 
 public class RealAlgebraicRing<C extends GcdRingElem<C> > 
-              extends AlgebraicNumberRing<C> {
+             /*extends AlgebraicNumberRing<C>*/
+             implements RingFactory<RealAlgebraicNumber<C>> {
+
+
+    /**
+     * Delegate to AlgebraicNumberRing.
+     */
+    public final AlgebraicNumberRing<C> algebraic;
 
 
     /** Isolating interval for a real root. 
@@ -54,7 +61,7 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> >
      * @param root isolating interval for a real root.
      */
     public RealAlgebraicRing(GenPolynomial<C> m, Interval<C> root) {
-        super(m);
+        algebraic = new AlgebraicNumberRing<C>(m);
         this.root = root;
         engine = new RealRootsSturm<C>();
         if ( m.ring.characteristic().signum() > 0 ) {
@@ -75,7 +82,7 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> >
      * @param isField indicator if m is prime.
      */
     public RealAlgebraicRing(GenPolynomial<C> m, Interval<C> root, boolean isField) {
-        super(m,isField);
+        algebraic = new AlgebraicNumberRing<C>(m,isField);
         this.root = root;
         engine = new RealRootsSturm<C>();
         if ( m.ring.characteristic().signum() > 0 ) {
@@ -91,7 +98,7 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> >
     /** Get the module part. 
      * @return modul.
     public GenPolynomial<C> getModul() {
-        return modul;
+        return algebraic.modul;
     }
      */
 
@@ -111,7 +118,7 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> >
      * @return a copy of c.
      */
     public RealAlgebraicNumber<C> copy(RealAlgebraicNumber<C> c) {
-        return new RealAlgebraicNumber<C>( this, c );
+        return new RealAlgebraicNumber<C>( this, c.number );
     }
 
 
@@ -119,7 +126,7 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> >
      * @return 0 as RealAlgebraicNumber.
      */
     public RealAlgebraicNumber<C> getZERO() {
-        return new RealAlgebraicNumber<C>( this, super.getZERO() );
+        return new RealAlgebraicNumber<C>( this, algebraic.getZERO() );
     }
 
 
@@ -127,7 +134,7 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> >
      * @return 1 as RealAlgebraicNumber.
      */
     public RealAlgebraicNumber<C> getONE() {
-        return new RealAlgebraicNumber<C>( this, super.getONE() );
+        return new RealAlgebraicNumber<C>( this, algebraic.getONE() );
     }
 
     
@@ -135,7 +142,7 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> >
      * @return alpha as RealAlgebraicNumber.
      */
     public RealAlgebraicNumber<C> getGenerator() {
-        return new RealAlgebraicNumber<C>( this, super.getGenerator() );
+        return new RealAlgebraicNumber<C>( this, algebraic.getGenerator() );
     }
 
 
@@ -149,13 +156,49 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> >
     }
      */
 
+
+    /**
+     * Query if this ring is commutative.
+     * @return true if this ring is commutative, else false.
+     */
+    public boolean isCommutative() {
+        return algebraic.isCommutative();
+    }
+
+
+    /**
+     * Query if this ring is associative.
+     * @return true if this ring is associative, else false.
+     */
+    public boolean isAssociative() {
+        return algebraic.isAssociative();
+    }
+
+
+    /**
+     * Query if this ring is a field.
+     * @return true if algebraic is prime, else false.
+     */
+    public boolean isField() {
+        return algebraic.isField();
+    }
+
+
+    /**
+     * Characteristic of this ring.
+     * @return characteristic of this ring.
+     */
+    public java.math.BigInteger characteristic() {
+        return algebraic.characteristic();
+    }
+
     
     /** Get a RealAlgebraicNumber element from a BigInteger value.
      * @param a BigInteger.
      * @return a RealAlgebraicNumber.
      */
     public RealAlgebraicNumber<C> fromInteger(java.math.BigInteger a) {
-        return new RealAlgebraicNumber<C>( this, super.fromInteger(a) );
+        return new RealAlgebraicNumber<C>( this, algebraic.fromInteger(a) );
     }
 
 
@@ -164,7 +207,7 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> >
      * @return a RealAlgebraicNumber.
      */
     public RealAlgebraicNumber<C> fromInteger(long a) {
-        return new RealAlgebraicNumber<C>( this, super.fromInteger(a) );
+        return new RealAlgebraicNumber<C>( this, algebraic.fromInteger(a) );
     }
     
 
@@ -174,11 +217,11 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> >
     @Override
     public String toString() {
         return "RealAlgebraicRing[ " 
-              + modul.toString() 
+              + algebraic.modul.toString() 
               + " in " + root
               + " | isField="
-              + isField + " :: "
-              + ring.toString() + " ]";
+              + algebraic.isField() + " :: "
+              + algebraic.ring.toString() + " ]";
     }
 
 
@@ -199,7 +242,7 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> >
         if ( a == null ) {
             return false;
         }
-        return modul.equals( a.modul ) && root.equals( a.root );
+        return algebraic.equals( a.algebraic ) && root.equals( a.root );
     }
 
 
@@ -208,7 +251,7 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> >
      */
     @Override
     public int hashCode() {
-        return 37 * super.hashCode() + root.hashCode();
+        return 37 * algebraic.hashCode() + root.hashCode();
     }
 
 
@@ -217,7 +260,7 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> >
      * @return a random integer mod modul.
      */
     public RealAlgebraicNumber<C> random(int n) {
-        return new RealAlgebraicNumber<C>( this, super.random(n) );
+        return new RealAlgebraicNumber<C>( this, algebraic.random(n) );
     }
 
 
@@ -227,7 +270,7 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> >
      * @return a random integer mod modul.
      */
     public RealAlgebraicNumber<C> random(int n, Random rnd) {
-        return new RealAlgebraicNumber<C>( this, super.random(n,rnd) );
+        return new RealAlgebraicNumber<C>( this, algebraic.random(n,rnd) );
     }
 
 
@@ -236,7 +279,7 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> >
      * @return RealAlgebraicNumber from s.
      */
     public RealAlgebraicNumber<C> parse(String s) {
-        return new RealAlgebraicNumber<C>( this, super.parse(s) );
+        return new RealAlgebraicNumber<C>( this, algebraic.parse(s) );
     }
 
 
@@ -245,7 +288,7 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> >
      * @return next RealAlgebraicNumber from r.
      */
     public RealAlgebraicNumber<C> parse(Reader r) {
-        return new RealAlgebraicNumber<C>( this, super.parse(r) );
+        return new RealAlgebraicNumber<C>( this, algebraic.parse(r) );
     }
 
 }
