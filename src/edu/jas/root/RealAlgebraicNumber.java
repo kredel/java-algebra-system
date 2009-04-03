@@ -7,8 +7,12 @@ package edu.jas.root;
 
 //import edu.jas.structure.RingElem;
 import edu.jas.kern.PrettyPrint;
+
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.NotInvertibleException;
+
+import edu.jas.arith.BigRational;
+import edu.jas.arith.BigDecimal;
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.PolyUtil;
@@ -100,12 +104,36 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C>>
         int s = 0;
         if ( ring.modul != b.ring.modul ) { // avoid compareTo if possible
            s = ring.modul.compareTo( b.ring.modul );
+           System.out.println("s_mod = " + s);
         }
         if ( s != 0 ) {
             return s;
         }
         //return val.compareTo(b.val);
         s = this.subtract(b).signum();
+        System.out.println("s = " + s);
+        return s;
+    }
+
+
+    /**
+     * RealAlgebraicNumber comparison.
+     * @param b RealAlgebraicNumber.
+     * @return sign(this-b).
+     */
+    public int compareTo(AlgebraicNumber<C> b) {
+        int s = 0;
+        if ( ring.modul != b.ring.modul ) { // avoid compareTo if possible
+           s = ring.modul.compareTo( b.ring.modul );
+           System.out.println("s_mod = " + s);
+        }
+        if ( s != 0 ) {
+            return s;
+        }
+        //return val.compareTo(b.val);
+        System.out.println("this = " + this.getClass());
+        s = this.subtract(b).signum();
+        System.out.println("s = " + s);
         return s;
     }
 
@@ -202,8 +230,23 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C>>
      */
     public int signum() {
         //return val.signum();
-        int s = ring.engine.algebraicSign(ring.root,ring.modul,val);
-        return s;
+        Interval<C> v = ring.engine.invariantSignInterval(ring.root,ring.modul,val);
+        ring.setRoot(v);
+        return ring.engine.algebraicIntervalSign(v,ring.modul,val);
+    }
+
+
+    /**
+     * RealAlgebraicNumber magnitude.
+     * @return |this|.
+     */
+    public BigDecimal magnitude() {
+        //return val.signum();
+        Interval<C> v = ring.engine.invariantSizeInterval(ring.root,ring.modul,val,ring.eps);
+        ring.setRoot(v);
+        C ev = PolyUtil.<C> evaluateMain(ring.modul.ring.coFac, val, v.left);
+        BigRational er = (BigRational) (Object) ev;
+        return new BigDecimal( er );
     }
 
 

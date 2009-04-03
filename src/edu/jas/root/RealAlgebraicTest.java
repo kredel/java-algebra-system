@@ -5,17 +5,24 @@
 
 package edu.jas.root;
 
+import java.util.List;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import edu.jas.arith.BigRational;
+import org.apache.log4j.BasicConfigurator;
 
-//import edu.jas.structure.RingElem;
+import edu.jas.arith.BigRational;
+import edu.jas.arith.BigDecimal;
+
+import edu.jas.structure.Power;
 import edu.jas.structure.NotInvertibleException;
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
+import edu.jas.poly.AlgebraicNumber;
+import edu.jas.poly.AlgebraicNumberRing;
 
 import edu.jas.root.RealAlgebraicNumber;
 import edu.jas.root.RealAlgebraicRing;
@@ -32,6 +39,7 @@ public class RealAlgebraicTest extends TestCase {
  * main.
  */
    public static void main (String[] args) {
+          BasicConfigurator.configure();
           junit.textui.TestRunner.run( suite() );
    }
 
@@ -72,10 +80,12 @@ public class RealAlgebraicTest extends TestCase {
        a = b = c = d = e = null;
        BigRational l = new BigRational(1);
        BigRational r = new BigRational(2);
-       mfac = new GenPolynomialRing<BigRational>( new BigRational(1), rl );
+       Interval<BigRational> positiv = new Interval<BigRational>(l,r);
+       String[] vars = new String[] { "alpha" };
+       mfac = new GenPolynomialRing<BigRational>( new BigRational(1), rl, vars );
        GenPolynomial<BigRational> mo = mfac.univariate(0,2);
-       mo = mo.subtract( mfac.fromInteger(2) ); // x^2 -2 
-       fac = new RealAlgebraicRing<BigRational>( mo, new Interval<BigRational>(l,r) );
+       mo = mo.subtract( mfac.fromInteger(2) ); // alpha^2 -2 
+       fac = new RealAlgebraicRing<BigRational>( mo, positiv );
    }
 
    protected void tearDown() {
@@ -113,7 +123,9 @@ public class RealAlgebraicTest extends TestCase {
      for (int i = 0; i < 7; i++) {
          a = fac.random(el);
          //System.out.println("a = " + a);
-
+         if ( a.isZERO() || a.isONE() ) {
+             continue;
+         }
          // fac.random(rl+i, kl*(i+1), ll+2*i, el+i, q );
          assertTrue("length( a"+i+" ) <> 0", a.getVal().length() >= 0);
          assertTrue(" not isZERO( a"+i+" )", !a.isZERO() );
@@ -284,6 +296,73 @@ public class RealAlgebraicTest extends TestCase {
      assertTrue("a < a+1 ", ab < 0);
      assertTrue("a+1 < a+2 ", bc < 0);
      assertTrue("a < a+2 ", ac < 0);
+ }
+
+/**
+ * Test magnitude of real algebraic numbers.
+ * 
+ */
+ public void testMagnitude() {
+     a = fac.random( ll );
+     b = fac.random( ll );
+     c = fac.random( ll );
+
+     BigDecimal ad = a.magnitude();
+     BigDecimal bd = b.magnitude();
+     BigDecimal cd = c.magnitude();
+
+     System.out.println("ad = " + ad);
+     System.out.println("bd = " + bd);
+     System.out.println("cd = " + cd);
+ }
+
+
+/**
+ * Test real root isolation.
+ * 
+ */
+ public void testRealRootIsolation() {
+     System.out.println();
+     GenPolynomialRing<AlgebraicNumber<BigRational>> dfac;
+     dfac = new GenPolynomialRing<AlgebraicNumber<BigRational>>(fac,1);
+
+     GenPolynomial<AlgebraicNumber<BigRational>> ar;
+     AlgebraicNumber<BigRational> epsr;
+
+     ar = dfac.random(3,5,4,q);
+     System.out.println("ar = " + ar);
+
+     RealRoots<AlgebraicNumber<BigRational>> rrr 
+        = new RealRootsSturm<AlgebraicNumber<BigRational>>();
+
+     List<Interval<AlgebraicNumber<BigRational>>> R = rrr.realRoots(ar);
+     System.out.println("R = " + R);
+
+//      if ( true ) {
+//          return;
+//      }
+
+     // BigRational eps = Power.positivePower(new BigRational(1L,10L),BigDecimal.DEFAULT_PRECISION);
+     BigRational eps = Power.positivePower(new BigRational(1L,10L),5);
+     //BigDecimal eps1 = new BigDecimal(eps);
+     //System.out.println("eps1 = " + eps1);
+
+     epsr = ar.ring.coFac.getONE().multiply(eps);
+     System.out.println("epsr = " + epsr);
+
+     R = rrr.refineIntervals(R,ar,epsr);
+     System.out.println("R = " + R);
+     int i = 0;
+     for ( Interval<AlgebraicNumber<BigRational>> v : R ) {
+         BigDecimal dd = v.toDecimal(); //.sum(eps1);
+         System.out.println("v = " + dd);
+         // assertTrue("|dd - di| < eps ", dd.compareTo(di) == 0);
+     }
+
+     /*
+     //a = a.multiply( dfac.univariate(0) );
+     assertTrue("#roots >= 0 ", R.size() >= 0);
+     */
  }
 
 }

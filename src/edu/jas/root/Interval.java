@@ -10,6 +10,8 @@ import edu.jas.structure.RingElem;
 import edu.jas.arith.BigDecimal;
 import edu.jas.arith.BigRational;
 
+import edu.jas.poly.AlgebraicNumber;
+
 
 /**
  * Interval.
@@ -106,6 +108,16 @@ public class Interval<C extends RingElem<C>> {
         if ( (Object)left instanceof BigRational ) {
             BigDecimal l = new BigDecimal((BigRational)(Object)left);
             BigDecimal r = new BigDecimal((BigRational)(Object)right);
+            BigDecimal two = new BigDecimal(2);
+            BigDecimal v = l.sum(r).divide(two);
+            return v;
+        } else if ( (Object)left instanceof AlgebraicNumber ) {
+            AlgebraicNumber a = (AlgebraicNumber) left;
+            AlgebraicNumber b = (AlgebraicNumber) right;
+            RealAlgebraicNumber x = new RealAlgebraicNumber((RealAlgebraicRing)a.ring,a.val);
+            RealAlgebraicNumber y = new RealAlgebraicNumber((RealAlgebraicRing)b.ring,b.val);
+            BigDecimal l = x.magnitude();
+            BigDecimal r = y.magnitude();
             BigDecimal two = new BigDecimal(2);
             BigDecimal v = l.sum(r).divide(two);
             return v;

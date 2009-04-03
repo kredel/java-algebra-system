@@ -12,6 +12,9 @@ import java.io.Reader;
 //import edu.jas.structure.RingElem;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
+import edu.jas.structure.Power;
+
+import edu.jas.arith.BigDecimal;
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.PolyUtil;
@@ -32,12 +35,17 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> >
 
     /** Isolating interval for a real root. 
      */
-    public final Interval<C> root;
+    /*package*/ Interval<C> root;
+
+
+    /** Precision of the isolating interval for a real root. 
+     */
+    public final C eps;
 
 
     /** Real root computation engine. 
      */
-    public final RealRoots<C> engine;
+    public final RealRootsSturm<C> engine;
 
 
     /** The constructor creates a RealAlgebraicNumber factory object 
@@ -52,6 +60,11 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> >
         if ( m.ring.characteristic().signum() > 0 ) {
             throw new RuntimeException("characteristic not zero");
         }
+        C e = m.ring.coFac.fromInteger(10L);
+        e = e.inverse();
+        // e = Power.positivePower(e,BigDecimal.DEFAULT_PRECISION);
+        e = Power.positivePower(e,9); //BigDecimal.DEFAULT_PRECISION);
+        eps = e;
     }
 
 
@@ -68,6 +81,10 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> >
         if ( m.ring.characteristic().signum() > 0 ) {
             throw new RuntimeException("characteristic not zero");
         }
+        C e = m.ring.coFac.fromInteger(10L);
+        e = e.inverse();
+        e = Power.positivePower(e,9); //BigDecimal.DEFAULT_PRECISION);
+        eps = e;
     }
 
 
@@ -77,6 +94,16 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> >
         return modul;
     }
      */
+
+
+
+    /** Set a refined interval for the real root. 
+     * @param v interval.
+     */
+    public void setRoot(Interval<C> v) {
+        // assert v is contained in root
+        this.root = v;
+    }
 
 
     /** Copy RealAlgebraicNumber element c.
