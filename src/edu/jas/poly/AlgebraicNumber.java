@@ -17,7 +17,8 @@ import edu.jas.structure.NotInvertibleException;
  * @author Heinz Kredel
  */
 
-public class AlgebraicNumber<C extends GcdRingElem<C>> implements GcdRingElem<AlgebraicNumber<C>> {
+public class AlgebraicNumber<C extends GcdRingElem<C>> 
+             implements GcdRingElem<AlgebraicNumber<C>> {
 
 
     //, RingFactory< AlgebraicNumber<C> >  {
