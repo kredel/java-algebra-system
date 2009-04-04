@@ -9,6 +9,7 @@ import java.util.Vector;
 //import java.io.Serializable;
 
 import edu.jas.structure.AbelianGroupElem;
+import edu.jas.structure.AbelianGroupFactory;
 
 
 /**
@@ -131,6 +132,17 @@ public abstract class ExpVector implements AbelianGroupElem<ExpVector>
         case BYTE:  return new ExpVectorByte(s);
         default:    return new ExpVectorInteger(s);
         }
+    }
+
+
+    /**
+     * Get the corresponding element factory.
+     * @return factory for this Element.
+     * @see edu.jas.structure.Element#getFactory()
+     */
+    public AbelianGroupFactory<ExpVector> getFactory() {
+        //return null;
+        throw new RuntimeException("no factory implemented for ExpVector");
     }
 
 

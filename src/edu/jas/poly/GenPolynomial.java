@@ -16,6 +16,7 @@ import java.util.Collections;
 import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
+import edu.jas.structure.RingFactory;
 import edu.jas.structure.NotInvertibleException;
 import edu.jas.structure.UnaryFunctor;
 
@@ -121,6 +122,16 @@ public class GenPolynomial<C extends RingElem<C> >
                             SortedMap<ExpVector,C> v) {
         this(r);
         val.putAll( v ); // assume no zero coefficients
+    }
+
+
+    /**
+     * Get the corresponding element factory.
+     * @return factory for this Element.
+     * @see edu.jas.structure.Element#getFactory()
+     */
+    public RingFactory<GenPolynomial<C>> getFactory() {
+        return ring;
     }
 
 

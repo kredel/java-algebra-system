@@ -5,7 +5,7 @@
 package edu.jas.poly;
 
 
-//import edu.jas.structure.RingElem;
+import edu.jas.structure.RingFactory;
 import edu.jas.kern.PrettyPrint;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.NotInvertibleException;
@@ -74,6 +74,16 @@ public class AlgebraicNumber<C extends GcdRingElem<C>>
      */
     public GenPolynomial<C> getVal() {
         return val;
+    }
+
+
+    /**
+     * Get the corresponding element factory.
+     * @return factory for this Element.
+     * @see edu.jas.structure.Element#getFactory()
+     */
+    public RingFactory<AlgebraicNumber<C>> getFactory() {
+        return ring;
     }
 
 
