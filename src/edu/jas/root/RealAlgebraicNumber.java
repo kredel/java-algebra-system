@@ -204,7 +204,11 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C>>
      * @see edu.jas.structure.RingElem#abs()
      */
     public RealAlgebraicNumber<C> abs() {
-        return new RealAlgebraicNumber<C>(ring, number.abs());
+        if ( this.signum() < 0 ) {
+            return new RealAlgebraicNumber<C>(ring, number.negate());
+        } else {
+            return this;
+        }
     }
 
 
