@@ -57,12 +57,17 @@ public abstract class RealRootAbstract<C extends RingElem<C>>
                 M = d;
             }
         }
+        // works also without this case, only for optimization 
+        // to use rational number interval end points
+        // can fail if real root is in interval [r,r+1] 
+        // for too low precision or too big r, since r is approximation
         if ( (Object) M instanceof RealAlgebraicNumber ) {
             RealAlgebraicNumber Mr = (RealAlgebraicNumber) M;
             BigRational r = Mr.magnitude();
             M = cfac.fromInteger( r.numerator() ).divide( cfac.fromInteger( r.denominator() ) );
         }
         M = M.sum(f.ring.coFac.getONE());
+        //System.out.println("M = " + M);
         return M;
     }
 
@@ -97,12 +102,16 @@ public abstract class RealRootAbstract<C extends RingElem<C>>
         //System.out.println("M = " + M);
         RingFactory<C> cfac = f.ring.coFac;
         C B = PolyUtil.<C> evaluateMain(cfac, fa, M);
-        //System.out.println("B = " + B);
+        // works also without this case, only for optimization 
+        // to use rational number interval end points
+        // can fail if real root is in interval [r,r+1] 
+        // for too low precision or too big r, since r is approximation
         if ( (Object) B instanceof RealAlgebraicNumber ) {
             RealAlgebraicNumber Br = (RealAlgebraicNumber) B;
             BigRational r = Br.magnitude();
             B = cfac.fromInteger( r.numerator() ).divide( cfac.fromInteger( r.denominator() ) );
         }
+        //System.out.println("B = " + B);
         return B;
     }
 

@@ -105,4 +105,18 @@ public interface RealRoots<C extends RingElem<C>> {
                               GenPolynomial<C> f,
                               GenPolynomial<C> g );
 
+
+    /**
+     * Algebraic number magnitude.
+     * @param iv root isolating interval for f, with f(left) * f(right) &lt; 0.
+     * @param f univariate polynomial, non-zero.
+     * @param g univariate polynomial, gcd(f,g) == 1.
+     * @param eps length limit for interval length.
+     * @return g(iv) .
+     */
+    public C algebraicMagnitude( Interval<C> iv, 
+                                 GenPolynomial<C> f,
+                                 GenPolynomial<C> g,
+                                 C eps );
+
 }
