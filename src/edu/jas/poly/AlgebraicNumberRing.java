@@ -73,10 +73,10 @@ public class AlgebraicNumberRing<C extends GcdRingElem<C> >
 
     /** Get the module part. 
      * @return modul.
+     */
     public GenPolynomial<C> getModul() {
         return modul;
     }
-     */
 
 
     /** Copy AlgebraicNumber element c.
@@ -236,7 +236,7 @@ public class AlgebraicNumberRing<C extends GcdRingElem<C> >
      */
     public AlgebraicNumber<C> random(int n) {
         GenPolynomial<C> x = ring.random( n ).monic();
-        return new AlgebraicNumber<C>( this, x);
+        return new AlgebraicNumber<C>(this, x);
     }
 
 
@@ -247,7 +247,7 @@ public class AlgebraicNumberRing<C extends GcdRingElem<C> >
      */
     public AlgebraicNumber<C> random(int n, Random rnd) {
         GenPolynomial<C> x = ring.random( n, rnd ).monic();
-        return new AlgebraicNumber<C>( this, x);
+        return new AlgebraicNumber<C>(this, x);
     }
 
 
@@ -334,6 +334,5 @@ public class AlgebraicNumberRing<C extends GcdRingElem<C> >
         s = s.sum( c.val );
         return new AlgebraicNumber<C>( this, s );
     }
-
 
 }

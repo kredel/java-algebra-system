@@ -21,9 +21,6 @@ public class AlgebraicNumber<C extends GcdRingElem<C>>
              implements GcdRingElem<AlgebraicNumber<C>> {
 
 
-    //, RingFactory< AlgebraicNumber<C> >  {
-
-
     /**
      * Ring part of the data structure.
      */
