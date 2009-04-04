@@ -311,9 +311,9 @@ public class RealAlgebraicTest extends TestCase {
      BigDecimal bd = new BigDecimal( b.magnitude() );
      BigDecimal cd = new BigDecimal( c.magnitude() );
 
-     System.out.println("ad = " + ad);
-     System.out.println("bd = " + bd);
-     System.out.println("cd = " + cd);
+     //System.out.println("ad = " + ad);
+     //System.out.println("bd = " + bd);
+     //System.out.println("cd = " + cd);
  }
 
 
@@ -345,7 +345,7 @@ public class RealAlgebraicTest extends TestCase {
      //System.out.println("epsr = " + epsr);
 
      R = rrr.refineIntervals(R,ar,epsr);
-     System.out.println("R = " + R);
+     //System.out.println("R = " + R);
      int i = 0;
      for ( Interval<RealAlgebraicNumber<BigRational>> v : R ) {
          BigDecimal dd = v.toDecimal(); //.sum(eps1);

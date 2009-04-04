@@ -368,7 +368,7 @@ public abstract class RealRootAbstract<C extends RingElem<C>>
             } else {
                 v = new Interval<C>(v.left,c);
             }
-            System.out.println("v = " + v.toDecimal());
+            //System.out.println("v = " + v.toDecimal());
         }
         return v;
     }
