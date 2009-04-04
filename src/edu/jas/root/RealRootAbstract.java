@@ -60,12 +60,12 @@ public abstract class RealRootAbstract<C extends RingElem<C>>
 
 
     /**
-     * Size bound. 
+     * Magnitude bound. 
      * @param iv interval.
      * @param f univariate polynomial.
      * @return B such that |f(c)| &lt; B for c in iv.
      */
-    public C sizeBound(Interval<C> iv, GenPolynomial<C> f) {
+    public C magnitudeBound(Interval<C> iv, GenPolynomial<C> f) {
         if ( f == null ) {
             return null;
         }
@@ -81,15 +81,15 @@ public abstract class RealRootAbstract<C extends RingElem<C>>
                                          }
                                      } 
                                      );
-        System.out.println("fa = " + fa);
+        //System.out.println("fa = " + fa);
         C M = iv.left.abs();
         if ( M.compareTo( iv.right.abs() ) < 0 ) {
             M = iv.right.abs();
         }
-        System.out.println("M = " + M);
+        //System.out.println("M = " + M);
         RingFactory<C> cfac = f.ring.coFac;
         C B = PolyUtil.<C> evaluateMain(cfac, fa, M);
-        System.out.println("B = " + B);
+        //System.out.println("B = " + B);
         return B;
     }
 
@@ -196,24 +196,10 @@ public abstract class RealRootAbstract<C extends RingElem<C>>
         RingFactory<C> cfac = f.ring.coFac;
         C two = cfac.fromInteger(2);
         Interval<C> v = iv;
-        //System.out.println("r_eps = " + eps.getClass());
         while (v.length().compareTo(eps) >= 0) {
-            //System.out.println("|v| = " + v.length().getClass());
             C c = v.left.sum(v.right);
             c = c.divide(two);
             //System.out.println("c = " + c);
-//             if ( ((Object)c) instanceof AlgebraicNumber ) {
-//                 //AlgebraicNumber y = (AlgebraicNumber) c;
-//                 AlgebraicNumber y = (AlgebraicNumber) v.length();
-//                 RealAlgebraicNumber x = new RealAlgebraicNumber((RealAlgebraicRing)y.ring,y.val);
-//                 System.out.println("||v|| = " + x.magnitude());
-//                 AlgebraicNumber ye = (AlgebraicNumber) eps;
-//                 RealAlgebraicNumber xe = new RealAlgebraicNumber((RealAlgebraicRing)ye.ring,ye.val);
-//                 if ( x.compareTo(xe) < 0 ) {
-//                     System.out.println("break at ||v|| = " + x.magnitude());
-//                     break;
-//                 }
-//             }
             //c = RootUtil.<C>bisectionPoint(v,f);
             if ( PolyUtil.<C> evaluateMain(cfac, f, c).isZERO() ) {
                 v = new Interval<C>(c,c);
@@ -253,6 +239,48 @@ public abstract class RealRootAbstract<C extends RingElem<C>>
 
 
     /**
+     * Invariant interval for algebraic number sign.
+     * @param iv root isolating interval for f, with f(left) * f(right) &lt; 0.
+     * @param f univariate polynomial, non-zero.
+     * @param g univariate polynomial, gcd(f,g) == 1.
+     * @return v with v a new interval contained 
+     *         in iv such that g(v) != 0.
+     */
+    public abstract Interval<C> invariantSignInterval( Interval<C> iv, 
+                                                       GenPolynomial<C> f,
+                                                       GenPolynomial<C> g );
+
+
+    /**
+     * Algebraic number sign.
+     * @param iv root isolating interval for f, with f(left) * f(right) &lt; 0, 
+     *           with iv such that g(iv) != 0.
+     * @param f univariate polynomial, non-zero.
+     * @param g univariate polynomial, gcd(f,g) == 1.
+     * @return sign(g(iv)) .
+     */
+    public int algebraicIntervalSign( Interval<C> iv, 
+                                      GenPolynomial<C> f,
+                                      GenPolynomial<C> g ) {
+        if ( g == null || g.isZERO() ) {
+            return 0;
+        }
+        if ( f == null || f.isZERO() || f.isConstant() ) {
+            return g.signum();
+        }
+        if ( g.isConstant() ) {
+            return g.signum();
+        }
+        RingFactory<C> cfac = f.ring.coFac;
+        C c = iv.left.sum(iv.right);
+        c = c.divide(cfac.fromInteger(2));
+        C ev = PolyUtil.<C> evaluateMain(cfac, g, c);
+        //System.out.println("ev = " + ev);
+        return ev.signum();
+    }
+
+
+    /**
      * Algebraic number sign.
      * @param iv root isolating interval for f, with f(left) * f(right) &lt; 0.
      * @param f univariate polynomial, non-zero.
@@ -260,8 +288,112 @@ public abstract class RealRootAbstract<C extends RingElem<C>>
      * @return sign(g(v)), with v a new interval contained 
      *         in iv such that g(v) != 0.
      */
-    public abstract int algebraicSign( Interval<C> iv, 
-                                       GenPolynomial<C> f,
-                                       GenPolynomial<C> g );
+    public int algebraicSign( Interval<C> iv, 
+                              GenPolynomial<C> f,
+                              GenPolynomial<C> g ) {
+        if ( g == null || g.isZERO() ) {
+            return 0;
+        }
+        if ( f == null || f.isZERO() || f.isConstant() ) {
+            return g.signum();
+        }
+        if ( g.isConstant() ) {
+            return g.signum();
+        }
+        Interval<C> v = invariantSignInterval( iv, f, g );
+        return algebraicIntervalSign(v,f,g);
+    }
+
+
+    /**
+     * Invariant interval for algebraic number magnitude.
+     * @param iv root isolating interval for f, with f(left) * f(right) &lt; 0.
+     * @param f univariate polynomial, non-zero.
+     * @param g univariate polynomial, gcd(f,g) == 1.
+     * @param eps length limit for interval length.
+     * @return v with v a new interval contained 
+     *         in iv such that |g(a) - g(b)| &lt; eps for a, b in v in iv.
+     */
+    public Interval<C> invariantMagnitudeInterval( Interval<C> iv, 
+                                                   GenPolynomial<C> f,
+                                                   GenPolynomial<C> g,
+                                                   C eps ) {
+        Interval<C> v = iv;
+        if ( g == null || g.isZERO() ) {
+            return v;
+        }
+        if ( g.isConstant() ) {
+            return v;
+        }
+        if ( f == null || f.isZERO() || f.isConstant() ) { // ?
+            return v;
+        }
+        GenPolynomial<C> gp = PolyUtil.<C> baseDeriviative(g);
+        //System.out.println("g  = " + g);
+        //System.out.println("gp = " + gp);
+        C B = magnitudeBound(iv,gp);
+        //System.out.println("B = " + B);
+
+        RingFactory<C> cfac = f.ring.coFac;
+        C two = cfac.fromInteger(2);
+
+        while ( B.multiply(v.length()).compareTo(eps) >= 0 ) {
+            C c = v.left.sum(v.right);
+            c = c.divide(two);
+            Interval<C> im = new Interval<C>(c,v.right);
+            if ( signChange(im,f) ) {
+                v = im;
+            } else {
+                v = new Interval<C>(v.left,c);
+            }
+            //System.out.println("v = " + v.toDecimal());
+        }
+        return v;
+    }
+
+
+    /**
+     * Algebraic number magnitude.
+     * @param iv root isolating interval for f, with f(left) * f(right) &lt; 0,
+     *         with iv such that |g(a) - g(b)| &lt; eps for a, b in iv.
+     * @param f univariate polynomial, non-zero.
+     * @param g univariate polynomial, gcd(f,g) == 1.
+     * @param eps length limit for interval length.
+     * @return g(iv) .
+     */
+    public C algebraicIntervalMagnitude( Interval<C> iv, 
+                                         GenPolynomial<C> f,
+                                         GenPolynomial<C> g,
+                                         C eps ) {
+        if ( g.isZERO() || g.isConstant() ) {
+            return g.leadingBaseCoefficient();
+        }
+        RingFactory<C> cfac = g.ring.coFac;
+        C c = iv.left.sum(iv.right);
+        c = c.divide(cfac.fromInteger(2));
+        C ev = PolyUtil.<C> evaluateMain(cfac, g, c);
+        //System.out.println("ev = " + ev);
+        return ev;
+    }
+
+
+    /**
+     * Algebraic number magnitude.
+     * @param iv root isolating interval for f, with f(left) * f(right) &lt; 0.
+     * @param f univariate polynomial, non-zero.
+     * @param g univariate polynomial, gcd(f,g) == 1.
+     * @param eps length limit for interval length.
+     * @return g(iv) .
+     */
+    public C algebraicMagnitude( Interval<C> iv, 
+                                 GenPolynomial<C> f,
+                                 GenPolynomial<C> g,
+                                 C eps ) {
+        if ( g.isZERO() || g.isConstant() ) {
+            return g.leadingBaseCoefficient();
+        }
+        Interval<C> v = invariantMagnitudeInterval( iv, f, g, eps );
+        return algebraicIntervalMagnitude(v,f,g,eps);
+    }
 
 }

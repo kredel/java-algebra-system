@@ -35,12 +35,13 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> >
 
 
     /**
-     * Delegate to AlgebraicNumberRing.
+     * Representing AlgebraicNumberRing.
      */
     public final AlgebraicNumberRing<C> algebraic;
 
 
     /** Isolating interval for a real root. 
+     * <b>Note: </b> interval may shrink eventually.
      */
     /*package*/ Interval<C> root;
 
@@ -105,9 +106,10 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> >
 
 
     /** Set a refined interval for the real root. 
+     * <b>Note: </b> interval may shrink eventually.
      * @param v interval.
      */
-    public void setRoot(Interval<C> v) {
+    public synchronized void setRoot(Interval<C> v) {
         // assert v is contained in root
         this.root = v;
     }

@@ -287,66 +287,6 @@ public class RealRootsSturm<C extends RingElem<C>>
 
     /**
      * Algebraic number sign.
-     * @param iv root isolating interval for f, with f(left) * f(right) &lt; 0, 
-     *           with iv such that g(iv) != 0.
-     * @param f univariate polynomial, non-zero.
-     * @param g univariate polynomial, gcd(f,g) == 1.
-     * @return sign(g(iv)) .
-     */
-    public int algebraicIntervalSign( Interval<C> iv, 
-                                      GenPolynomial<C> f,
-                                      GenPolynomial<C> g ) {
-        if ( g == null || g.isZERO() ) {
-            return 0;
-        }
-        if ( f == null || f.isZERO() || f.isConstant() ) {
-            return g.signum();
-        }
-        if ( g.isConstant() ) {
-            return g.signum();
-        }
-        RingFactory<C> cfac = f.ring.coFac;
-        C c = iv.left.sum(iv.right);
-        c = c.divide(cfac.fromInteger(2));
-        C ev = PolyUtil.<C> evaluateMain(cfac, g, c);
-        //System.out.println("ev = " + ev);
-        return ev.signum();
-    }
-
-
-    /**
-     * Algebraic number sign.
-     * @param iv root isolating interval for f, with f(left) * f(right) &lt; 0.
-     * @param f univariate polynomial, non-zero.
-     * @param g univariate polynomial, gcd(f,g) == 1.
-     * @return sign(g(v)), with v a new interval contained 
-     *         in iv such that g(v) != 0.
-     */
-    public int algebraicSign( Interval<C> iv, 
-                              GenPolynomial<C> f,
-                              GenPolynomial<C> g ) {
-        if ( g == null || g.isZERO() ) {
-            return 0;
-        }
-        if ( f == null || f.isZERO() || f.isConstant() ) {
-            return g.signum();
-        }
-        if ( g.isConstant() ) {
-            return g.signum();
-        }
-        Interval<C> v = invariantSignInterval( iv, f, g );
-
-        RingFactory<C> cfac = f.ring.coFac;
-        C c = v.left.sum(v.right);
-        c = c.divide(cfac.fromInteger(2));
-        C ev = PolyUtil.<C> evaluateMain(cfac, g, c);
-        //System.out.println("ev = " + ev);
-        return ev.signum();
-    }
-
-
-    /**
-     * Algebraic number sign.
      * @param iv root isolating interval for f, with f(left) * f(right) &lt; 0.
      * @param f univariate polynomial, non-zero.
      * @param g univariate polynomial, gcd(f,g) == 1.
@@ -396,52 +336,6 @@ public class RealRootsSturm<C extends RingElem<C>>
             }
         }
         //return s;
-    }
-
-
-    /**
-     * Invariant interval for algebraic number size.
-     * @param iv root isolating interval for f, with f(left) * f(right) &lt; 0.
-     * @param f univariate polynomial, non-zero.
-     * @param g univariate polynomial, gcd(f,g) == 1.
-     * @return v with v a new interval contained 
-     *         in iv such that |g(a) - g(b)| &lt; eps for a, b in v in iv.
-     */
-    public Interval<C> invariantSizeInterval( Interval<C> iv, 
-                                              GenPolynomial<C> f,
-                                              GenPolynomial<C> g,
-                                              C eps ) {
-        Interval<C> v = iv;
-        if ( g == null || g.isZERO() ) {
-            return v;
-        }
-        if ( g.isConstant() ) {
-            return v;
-        }
-        if ( f == null || f.isZERO() || f.isConstant() ) { // ?
-            return v;
-        }
-        GenPolynomial<C> gp = PolyUtil.<C> baseDeriviative(g);
-        //System.out.println("g  = " + g);
-        //System.out.println("gp = " + gp);
-        C B = sizeBound(iv,gp);
-        //System.out.println("B = " + B);
-
-        RingFactory<C> cfac = f.ring.coFac;
-        C two = cfac.fromInteger(2);
-
-        while ( B.multiply(v.length()).compareTo(eps) >= 0 ) {
-            C c = v.left.sum(v.right);
-            c = c.divide(two);
-            Interval<C> im = new Interval<C>(c,v.right);
-            if ( signChange(im,f) ) {
-                v = im;
-            } else {
-                v = new Interval<C>(v.left,c);
-            }
-            //System.out.println("v = " + v.toDecimal());
-        }
-        return v;
     }
 
 }
