@@ -37,7 +37,7 @@ public abstract class RealRootAbstract<C extends RingElem<C>>
      * Real root bound. 
      * With f(M) * f(-M) != 0.
      * @param f univariate polynomial.
-     * @return M such that -M &lt; root(f) &gt; M.
+     * @return M such that -M &lt; root(f) &lt; M.
      */
     public C realRootBound(GenPolynomial<C> f) {
         if ( f == null ) {
@@ -346,7 +346,7 @@ public abstract class RealRootAbstract<C extends RingElem<C>>
             } else {
                 v = new Interval<C>(v.left,c);
             }
-            //System.out.println("v = " + v.toDecimal());
+            System.out.println("v = " + v.toDecimal());
         }
         return v;
     }

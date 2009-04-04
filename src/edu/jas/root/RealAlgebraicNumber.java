@@ -268,6 +268,7 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C>>
     public BigDecimal magnitude() {
         Interval<C> v = ring.engine.invariantMagnitudeInterval(ring.root,ring.algebraic.modul,number.val,ring.eps);
         ring.setRoot(v);
+        System.out.println("new v = " + v);
         C ev = ring.engine.algebraicIntervalMagnitude(v,ring.algebraic.modul,number.val,ring.eps);
         BigRational er = (BigRational) (Object) ev;
         return new BigDecimal( er );

@@ -338,14 +338,8 @@ public class RealAlgebraicTest extends TestCase {
      List<Interval<RealAlgebraicNumber<BigRational>>> R = rrr.realRoots(ar);
      System.out.println("R = " + R);
 
-//      if ( true ) {
-//          return;
-//      }
-
      BigRational eps = Power.positivePower(new BigRational(1L,10L),BigDecimal.DEFAULT_PRECISION);
      //BigRational eps = Power.positivePower(new BigRational(1L,10L),10);
-     //BigDecimal eps1 = new BigDecimal(eps);
-     //System.out.println("eps1 = " + eps1);
 
      epsr = ar.ring.coFac.getONE().multiply(eps);
      //System.out.println("epsr = " + epsr);
