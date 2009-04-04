@@ -114,8 +114,8 @@ public class Interval<C extends RingElem<C>> {
         } else if ( (Object)left instanceof RealAlgebraicNumber ) {
             RealAlgebraicNumber x = (RealAlgebraicNumber) left;
             RealAlgebraicNumber y = (RealAlgebraicNumber) right;
-            BigDecimal l = x.magnitude();
-            BigDecimal r = y.magnitude();
+            BigDecimal l = new BigDecimal(x.magnitude());
+            BigDecimal r = new BigDecimal(y.magnitude());
             BigDecimal two = new BigDecimal(2);
             BigDecimal v = l.sum(r).divide(two);
             return v;

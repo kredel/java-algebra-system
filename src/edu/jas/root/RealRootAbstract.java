@@ -13,6 +13,8 @@ import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.structure.UnaryFunctor;
 
+import edu.jas.arith.BigRational;
+
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.PolyUtil;
 import edu.jas.poly.AlgebraicNumber;
@@ -43,7 +45,8 @@ public abstract class RealRootAbstract<C extends RingElem<C>>
         if ( f == null ) {
             return null;
         }
-        C M = f.ring.coFac.getONE();
+        RingFactory<C> cfac = f.ring.coFac;
+        C M = cfac.getONE();
         if ( f.isZERO() || f.isConstant() ) {
             return M;
         }
@@ -55,6 +58,11 @@ public abstract class RealRootAbstract<C extends RingElem<C>>
             }
         }
         M = M.sum(f.ring.coFac.getONE());
+        if ( (Object) M instanceof RealAlgebraicNumber ) {
+            RealAlgebraicNumber Mr = (RealAlgebraicNumber) M;
+            BigRational r = Mr.magnitude();
+            M = cfac.fromInteger( r.numerator() ).divide( cfac.fromInteger( r.denominator() ) );
+        }
         return M;
     }
 
@@ -90,6 +98,11 @@ public abstract class RealRootAbstract<C extends RingElem<C>>
         RingFactory<C> cfac = f.ring.coFac;
         C B = PolyUtil.<C> evaluateMain(cfac, fa, M);
         //System.out.println("B = " + B);
+        if ( (Object) B instanceof RealAlgebraicNumber ) {
+            RealAlgebraicNumber Br = (RealAlgebraicNumber) B;
+            BigRational r = Br.magnitude();
+            B = cfac.fromInteger( r.numerator() ).divide( cfac.fromInteger( r.denominator() ) );
+        }
         return B;
     }
 

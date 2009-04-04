@@ -307,9 +307,9 @@ public class RealAlgebraicTest extends TestCase {
      b = fac.random( ll );
      c = fac.random( ll );
 
-     BigDecimal ad = a.magnitude();
-     BigDecimal bd = b.magnitude();
-     BigDecimal cd = c.magnitude();
+     BigDecimal ad = new BigDecimal( a.magnitude() );
+     BigDecimal bd = new BigDecimal( b.magnitude() );
+     BigDecimal cd = new BigDecimal( c.magnitude() );
 
      System.out.println("ad = " + ad);
      System.out.println("bd = " + bd);
@@ -329,7 +329,7 @@ public class RealAlgebraicTest extends TestCase {
      GenPolynomial<RealAlgebraicNumber<BigRational>> ar;
      RealAlgebraicNumber<BigRational> epsr;
 
-     ar = dfac.random(3,5,4,q);
+     ar = dfac.random(3,5,7,q);
      System.out.println("ar = " + ar);
 
      RealRoots<RealAlgebraicNumber<BigRational>> rrr 
