@@ -57,12 +57,12 @@ public abstract class RealRootAbstract<C extends RingElem<C>>
                 M = d;
             }
         }
-        M = M.sum(f.ring.coFac.getONE());
         if ( (Object) M instanceof RealAlgebraicNumber ) {
             RealAlgebraicNumber Mr = (RealAlgebraicNumber) M;
             BigRational r = Mr.magnitude();
             M = cfac.fromInteger( r.numerator() ).divide( cfac.fromInteger( r.denominator() ) );
         }
+        M = M.sum(f.ring.coFac.getONE());
         return M;
     }
 
