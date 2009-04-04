@@ -20,7 +20,7 @@ public interface Element<C extends Element<C>> extends Cloneable,
 
     /**
      * Clone this Element.
-     * @return Creates and returns a copy of this Elemnt.
+     * @return Creates and returns a copy of this Element.
      */
     public C clone();
 
@@ -49,5 +49,12 @@ public interface Element<C extends Element<C>> extends Cloneable,
                -1 if this is less then b, else +1.
      */
     public int compareTo(C b);
+
+
+    /**
+     * Get the corresponding element factory.
+     * @return factory for this Element.
+     */
+    public ElemFactory<C> getFactory();
 
 }

@@ -181,6 +181,16 @@ public final class BigQuaternion implements StarRingElem<BigQuaternion>,
     }
 
 
+    /**
+     * Get the corresponding element factory.
+     * @return factory for this Element.
+     * @see edu.jas.structure.Element#getFactory()
+     */
+    public RingFactory<BigQuaternion> getFactory() {
+        return this;
+    }
+
+
     /** Clone this.
      * @see java.lang.Object#clone()
      */

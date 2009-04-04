@@ -120,6 +120,16 @@ public final class BigOctonion implements StarRingElem<BigOctonion>,
     }
 
 
+    /**
+     * Get the corresponding element factory.
+     * @return factory for this Element.
+     * @see edu.jas.structure.Element#getFactory()
+     */
+    public RingFactory<BigOctonion> getFactory() {
+        return this;
+    }
+
+
     /** Clone this.
      * @see java.lang.Object#clone()
      */

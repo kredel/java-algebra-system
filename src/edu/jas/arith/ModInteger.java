@@ -5,6 +5,7 @@
 package edu.jas.arith;
 
 import edu.jas.structure.GcdRingElem;
+import edu.jas.structure.RingFactory;
 import edu.jas.structure.NotInvertibleException;
 
 
@@ -82,6 +83,16 @@ public final class ModInteger implements GcdRingElem<ModInteger> {
      */
     public java.math.BigInteger getModul() {
         return ring.modul;
+    }
+
+
+    /**
+     * Get the corresponding element factory.
+     * @return factory for this Element.
+     * @see edu.jas.structure.Element#getFactory()
+     */
+    public RingFactory<ModInteger> getFactory() {
+        return ring;
     }
 
 

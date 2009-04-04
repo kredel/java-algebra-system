@@ -88,11 +88,21 @@ public final class BigInteger implements GcdRingElem<BigInteger>,
     }
 
 
+    /**
+     * Get the corresponding element factory.
+     * @return factory for this Element.
+     * @see edu.jas.structure.Element#getFactory()
+     */
+    public RingFactory<BigInteger> getFactory() {
+        return this;
+    }
+
+
     /** Clone this.
      * @see java.lang.Object#clone()
      */
     @Override
-     public BigInteger clone() {
+    public BigInteger clone() {
         return new BigInteger( val );
     }
 

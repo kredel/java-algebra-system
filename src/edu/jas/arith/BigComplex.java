@@ -113,6 +113,16 @@ public final class BigComplex implements StarRingElem<BigComplex>,
     }
 
 
+    /**
+     * Get the corresponding element factory.
+     * @return factory for this Element.
+     * @see edu.jas.structure.Element#getFactory()
+     */
+    public RingFactory<BigComplex> getFactory() {
+        return this;
+    }
+
+
     /** Clone this.
      * @see java.lang.Object#clone()
      */
