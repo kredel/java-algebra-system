@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
+import edu.jas.structure.RingFactory;
 import edu.jas.structure.AlgebraElem;
 
 import edu.jas.kern.PrettyPrint;
@@ -84,9 +85,21 @@ public class GenMatrix<C extends RingElem<C> >
 
 
     /**
+     * Get the corresponding element factory.
+     * @return factory for this Element.
+     * @see edu.jas.structure.Element#getFactory()
+     */
+    public RingFactory<GenMatrix<C>> getFactory() {
+        return ring;
+    }
+
+
+    /**
      * clone method.
+     * @see java.lang.Object#clone()
      */
     @Override
+    @SuppressWarnings("unchecked")
     public GenMatrix<C> clone() {
         //return ring.copy(this);
         ArrayList<ArrayList<C>> m = new ArrayList<ArrayList<C>>( ring.rows ); 

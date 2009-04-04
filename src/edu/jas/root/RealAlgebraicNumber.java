@@ -9,6 +9,7 @@ package edu.jas.root;
 import edu.jas.kern.PrettyPrint;
 
 import edu.jas.structure.GcdRingElem;
+import edu.jas.structure.RingFactory;
 import edu.jas.structure.NotInvertibleException;
 
 import edu.jas.arith.BigRational;
@@ -74,6 +75,16 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C>>
      */
     public RealAlgebraicNumber(RealAlgebraicRing<C> r) {
         this(r, r.algebraic.getZERO());
+    }
+
+
+    /**
+     * Get the corresponding element factory.
+     * @return factory for this Element.
+     * @see edu.jas.structure.Element#getFactory()
+     */
+    public RingFactory<RealAlgebraicNumber<C>> getFactory() {
+        return ring;
     }
 
 

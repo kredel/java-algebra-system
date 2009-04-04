@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
+import edu.jas.structure.ModulFactory;
 import edu.jas.structure.ModulElem;
 
 import edu.jas.kern.PrettyPrint;
@@ -70,9 +71,21 @@ public class GenVector<C extends RingElem<C> >
 
 
     /**
+     * Get the corresponding element factory.
+     * @return factory for this Element.
+     * @see edu.jas.structure.Element#getFactory()
+     */
+    public ModulFactory<GenVector<C>,C> getFactory() {
+        return modul;
+    }
+
+
+    /**
      * clone method.
+     * @see java.lang.Object#clone()
      */
     @Override
+    @SuppressWarnings("unchecked")
     public GenVector<C> clone() {
         //return modul.copy(this);
         ArrayList<C> av = (ArrayList<C>) val;
