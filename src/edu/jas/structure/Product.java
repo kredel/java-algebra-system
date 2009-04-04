@@ -12,6 +12,7 @@ import java.util.TreeMap;
 import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
+import edu.jas.structure.RingFactory;
 import edu.jas.structure.NotInvertibleException;
 
 
@@ -84,11 +85,21 @@ public class Product<C extends RingElem<C> >
     }
 
 
+    /**
+     * Get the corresponding element factory.
+     * @return factory for this Element.
+     * @see edu.jas.structure.Element#getFactory()
+     */
+    public RingFactory<Product<C>> getFactory() {
+        return ring;
+    }
+
+
     /**  Clone this.
      * @see java.lang.Object#clone()
      */
     @Override
-     public Product<C> clone() {
+    public Product<C> clone() {
         return new Product<C>( ring, val, isunit );
     }
    

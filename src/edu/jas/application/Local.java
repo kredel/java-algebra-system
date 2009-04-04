@@ -14,6 +14,7 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.kern.PrettyPrint;
 
 import edu.jas.structure.RingElem;
+import edu.jas.structure.RingFactory;
 import edu.jas.structure.GcdRingElem;
 
 
@@ -181,6 +182,16 @@ public class Local<C extends GcdRingElem<C> >
         GenPolynomial<C> lcm = lcm(n,d);
         GenPolynomial<C> gcd = p.divide(lcm);
         return gcd;
+    }
+
+
+    /**
+     * Get the corresponding element factory.
+     * @return factory for this Element.
+     * @see edu.jas.structure.Element#getFactory()
+     */
+    public RingFactory<Local<C>> getFactory() {
+        return ring;
     }
 
 

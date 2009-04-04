@@ -10,6 +10,7 @@ import edu.jas.poly.PolyUtil;
 import edu.jas.kern.PrettyPrint;
 
 import edu.jas.structure.GcdRingElem;
+import edu.jas.structure.RingFactory;
 
 
 /**
@@ -80,12 +81,21 @@ public class Residue<C extends GcdRingElem<C> >
         }
     }
 
+    /**
+     * Get the corresponding element factory.
+     * @return factory for this Element.
+     * @see edu.jas.structure.Element#getFactory()
+     */
+    public RingFactory<Residue<C>> getFactory() {
+        return ring;
+    }
+
 
     /**  Clone this.
      * @see java.lang.Object#clone()
      */
     @Override
-     public Residue<C> clone() {
+    public Residue<C> clone() {
         return new Residue<C>( ring, val, isunit );
     }
    

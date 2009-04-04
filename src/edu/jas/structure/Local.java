@@ -7,6 +7,7 @@ package edu.jas.structure;
 import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
+import edu.jas.structure.RingFactory;
 import edu.jas.structure.GcdRingElem;
 
 
@@ -85,7 +86,7 @@ public class Local<C extends RingElem<C> >
      * @param isred true if gcd(n,d) == 1, else false.
      */
     @SuppressWarnings("unchecked")
-     protected Local(LocalRing<C> r, C n, C d, boolean isred) {
+    protected Local(LocalRing<C> r, C n, C d, boolean isred) {
         if ( d == null || d.isZERO() ) {
            throw new RuntimeException("denominator may not be zero");
         }
@@ -130,11 +131,21 @@ public class Local<C extends RingElem<C> >
     }
 
 
+    /**
+     * Get the corresponding element factory.
+     * @return factory for this Element.
+     * @see edu.jas.structure.Element#getFactory()
+     */
+    public RingFactory<Local<C>> getFactory() {
+        return ring;
+    }
+
+
     /**  Clone this.
      * @see java.lang.Object#clone()
      */
     @Override
-     public Local<C> clone() {
+    public Local<C> clone() {
         return new Local<C>( ring, num, den, true );
     }
    

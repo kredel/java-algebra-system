@@ -12,6 +12,7 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.kern.PrettyPrint;
 
 import edu.jas.structure.RingElem;
+import edu.jas.structure.RingFactory;
 import edu.jas.structure.GcdRingElem;
 
 
@@ -116,6 +117,16 @@ public class Quotient<C extends GcdRingElem<C>> implements RingElem<Quotient<C>>
             num = ring.divide(n, gcd);
             den = ring.divide(d, gcd);
         }
+    }
+
+
+    /**
+     * Get the corresponding element factory.
+     * @return factory for this Element.
+     * @see edu.jas.structure.Element#getFactory()
+     */
+    public RingFactory<Quotient<C>> getFactory() {
+        return ring;
     }
 
 

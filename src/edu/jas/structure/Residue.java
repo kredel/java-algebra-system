@@ -7,6 +7,7 @@ package edu.jas.structure;
 import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
+import edu.jas.structure.RingFactory;
 import edu.jas.structure.GcdRingElem;
 
 
@@ -83,11 +84,21 @@ public class Residue<C extends RingElem<C> >
     }
 
 
+    /**
+     * Get the corresponding element factory.
+     * @return factory for this Element.
+     * @see edu.jas.structure.Element#getFactory()
+     */
+    public RingFactory<Residue<C>> getFactory() {
+        return ring;
+    }
+
+
     /**  Clone this.
      * @see java.lang.Object#clone()
      */
     @Override
-     public Residue<C> clone() {
+    public Residue<C> clone() {
         return new Residue<C>( ring, val );
     }
    
