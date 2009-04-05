@@ -307,13 +307,33 @@ public class RealAlgebraicTest extends TestCase {
      b = fac.random( ll );
      c = fac.random( ll );
 
+     d = a.multiply(b);
+     e = a.sum(b);
+
      BigDecimal ad = new BigDecimal( a.magnitude() );
      BigDecimal bd = new BigDecimal( b.magnitude() );
      BigDecimal cd = new BigDecimal( c.magnitude() );
 
-     //System.out.println("ad = " + ad);
-     //System.out.println("bd = " + bd);
-     //System.out.println("cd = " + cd);
+     BigDecimal dd = new BigDecimal( d.magnitude() );
+     BigDecimal ed = new BigDecimal( e.magnitude() );
+
+     BigDecimal dd1 = new BigDecimal( a.magnitude().multiply(b.magnitude()) );
+     BigDecimal ed1 = new BigDecimal( a.magnitude().sum(b.magnitude()) );
+
+     System.out.println("ad  = " + ad);
+     System.out.println("bd  = " + bd);
+     System.out.println("cd  = " + cd);
+     System.out.println("dd  = " + dd);
+     System.out.println("dd1 = " + dd1);
+     System.out.println("ed  = " + ed);
+     System.out.println("ed1 = " + ed1);
+
+     //BigRational eps = Power.positivePower(new BigRational(1L,10L),BigDecimal.DEFAULT_PRECISION);
+     BigRational eps = Power.positivePower(new BigRational(1L,10L),8);
+     BigDecimal epsd = new BigDecimal(eps);
+
+     assertTrue("mag(a*b) = mag(a)*mag(b)",dd.subtract(dd1).abs().compareTo(epsd) <= 0);
+     assertTrue("mag(a+b) = mag(a)+mag(b)",ed.subtract(ed1).abs().compareTo(epsd) <= 0);
  }
 
 
