@@ -190,7 +190,7 @@ public class Local<C extends GcdRingElem<C> >
      * @return factory for this Element.
      * @see edu.jas.structure.Element#getFactory()
      */
-    public RingFactory<Local<C>> getFactory() {
+    public LocalRing<C> getFactory() {
         return ring;
     }
 

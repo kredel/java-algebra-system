@@ -125,7 +125,7 @@ public class Quotient<C extends GcdRingElem<C>> implements RingElem<Quotient<C>>
      * @return factory for this Element.
      * @see edu.jas.structure.Element#getFactory()
      */
-    public RingFactory<Quotient<C>> getFactory() {
+    public QuotientRing<C> getFactory() {
         return ring;
     }
 
