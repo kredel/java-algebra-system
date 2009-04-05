@@ -89,7 +89,7 @@ public class GenMatrix<C extends RingElem<C> >
      * @return factory for this Element.
      * @see edu.jas.structure.Element#getFactory()
      */
-    public RingFactory<GenMatrix<C>> getFactory() {
+    public GenMatrixRing<C> getFactory() {
         return ring;
     }
 
