@@ -320,13 +320,13 @@ public class RealAlgebraicTest extends TestCase {
      BigDecimal dd1 = new BigDecimal( a.magnitude().multiply(b.magnitude()) );
      BigDecimal ed1 = new BigDecimal( a.magnitude().sum(b.magnitude()) );
 
-     System.out.println("ad  = " + ad);
-     System.out.println("bd  = " + bd);
-     System.out.println("cd  = " + cd);
-     System.out.println("dd  = " + dd);
-     System.out.println("dd1 = " + dd1);
-     System.out.println("ed  = " + ed);
-     System.out.println("ed1 = " + ed1);
+     //System.out.println("ad  = " + ad);
+     //System.out.println("bd  = " + bd);
+     //System.out.println("cd  = " + cd);
+     //System.out.println("dd  = " + dd);
+     //System.out.println("dd1 = " + dd1);
+     //System.out.println("ed  = " + ed);
+     //System.out.println("ed1 = " + ed1);
 
      //BigRational eps = Power.positivePower(new BigRational(1L,10L),BigDecimal.DEFAULT_PRECISION);
      BigRational eps = Power.positivePower(new BigRational(1L,10L),8);
