@@ -91,7 +91,7 @@ public final class ModInteger implements GcdRingElem<ModInteger> {
      * @return factory for this Element.
      * @see edu.jas.structure.Element#getFactory()
      */
-    public RingFactory<ModInteger> getFactory() {
+    public ModIntegerRing getFactory() {
         return ring;
     }
 

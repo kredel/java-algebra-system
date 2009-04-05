@@ -82,7 +82,7 @@ public class AlgebraicNumber<C extends GcdRingElem<C>>
      * @return factory for this Element.
      * @see edu.jas.structure.Element#getFactory()
      */
-    public RingFactory<AlgebraicNumber<C>> getFactory() {
+    public AlgebraicNumberRing<C> getFactory() {
         return ring;
     }
 

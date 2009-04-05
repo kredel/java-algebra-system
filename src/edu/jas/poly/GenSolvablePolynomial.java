@@ -85,8 +85,8 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
      * @return factory for this Element.
      * @see edu.jas.structure.Element#getFactory()
      */
-    public RingFactory<GenPolynomial<C>> getFactory() {
-        return ring; // should be GenSolvablePolynomialRing<C> 
+    public GenSolvablePolynomialRing<C> getFactory() {
+        return ring;
     }
 
 

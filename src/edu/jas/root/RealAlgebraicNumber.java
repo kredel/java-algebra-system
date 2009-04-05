@@ -83,7 +83,7 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C>>
      * @return factory for this Element.
      * @see edu.jas.structure.Element#getFactory()
      */
-    public RingFactory<RealAlgebraicNumber<C>> getFactory() {
+    public RealAlgebraicRing<C> getFactory() {
         return ring;
     }
 

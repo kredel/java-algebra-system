@@ -130,7 +130,7 @@ public class GenPolynomial<C extends RingElem<C> >
      * @return factory for this Element.
      * @see edu.jas.structure.Element#getFactory()
      */
-    public RingFactory<GenPolynomial<C>> getFactory() {
+    public GenPolynomialRing<C> getFactory() {
         return ring;
     }
 

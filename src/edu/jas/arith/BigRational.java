@@ -158,7 +158,7 @@ public final class BigRational implements GcdRingElem<BigRational>,
      * @return factory for this Element.
      * @see edu.jas.structure.Element#getFactory()
      */
-    public RingFactory<BigRational> getFactory() {
+    public BigRational getFactory() {
         return this;
     }
 

@@ -189,7 +189,7 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>,
      * @return factory for this Element.
      * @see edu.jas.structure.Element#getFactory()
      */
-    public RingFactory<BigDecimal> getFactory() {
+    public BigDecimal getFactory() {
         return this;
     }
 
