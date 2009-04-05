@@ -257,7 +257,7 @@ of the implemented algebraic algorithms.
 
 <tr>
 <td><code>Real- AlgebraicNumber</code></td>
-<td><code>Real- AlgebraicRing</code></td>
+<td><code>RealAlgebraicRing</code></td>
 <td>ring of real algebraic numbers, represented as 
     algebraic number and an isolating interval for a real root
     over rational numbers as base ring
@@ -622,6 +622,22 @@ implemented algebraic algorithms.
     isIrreducible, isReducible,  isSquarefree, isFactorization,
     isAbsoluteIrreducible, factorsAbsolute
 </td>
+
+<tr>
+<td><code>RealRoots</code>,
+    <code>RealRootsAbstract</code>,
+    <code>RealRootsSturm</code>,
+</td>
+<td>Algorithms to compute isolating intervals for real roots
+    and for refinement of isolating intervals to any prescribed precision. 
+    Algorithms to compute the sign of a real algebraic numer and 
+    the magnitude of a real algebraic number to a given precision.
+    Coefficients of polynomials must be from a real field.
+</td>
+<td>realRoots, refineInterval, algebraicSign, algebraicMagnitude
+</td>
+</tr>
+
 </tr>
 
 
@@ -1112,7 +1128,7 @@ of the Java algebra system.
 <p>
 <!-- Created: Sat Mar 11 10:51:36 CET 2006 -->
 <!-- hhmts start -->
-Last modified: Sun Apr  5 00:22:17 CEST 2009
+Last modified: Sun Apr  5 21:28:11 CEST 2009
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
