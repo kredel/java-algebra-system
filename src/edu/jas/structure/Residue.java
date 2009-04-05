@@ -89,7 +89,7 @@ public class Residue<C extends RingElem<C> >
      * @return factory for this Element.
      * @see edu.jas.structure.Element#getFactory()
      */
-    public RingFactory<Residue<C>> getFactory() {
+    public ResidueRing<C> getFactory() {
         return ring;
     }
 

@@ -136,7 +136,7 @@ public class Local<C extends RingElem<C> >
      * @return factory for this Element.
      * @see edu.jas.structure.Element#getFactory()
      */
-    public RingFactory<Local<C>> getFactory() {
+    public LocalRing<C> getFactory() {
         return ring;
     }
 

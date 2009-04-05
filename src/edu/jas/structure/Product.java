@@ -90,7 +90,7 @@ public class Product<C extends RingElem<C> >
      * @return factory for this Element.
      * @see edu.jas.structure.Element#getFactory()
      */
-    public RingFactory<Product<C>> getFactory() {
+    public ProductRing<C> getFactory() {
         return ring;
     }
 

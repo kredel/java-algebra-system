@@ -127,7 +127,7 @@ public class Quotient<C extends RingElem<C> >
      * @return factory for this Element.
      * @see edu.jas.structure.Element#getFactory()
      */
-    public RingFactory<Quotient<C>> getFactory() {
+    public QuotientRing<C> getFactory() {
         return ring;
     }
 
