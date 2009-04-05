@@ -98,7 +98,7 @@ public class UnivPowerSeries<C extends RingElem<C>>
      * @return factory for this Element.
      * @see edu.jas.structure.Element#getFactory()
      */
-    public RingFactory<UnivPowerSeries<C>> getFactory() {
+    public UnivPowerSeriesRing<C> getFactory() {
         return ring;
     }
 
