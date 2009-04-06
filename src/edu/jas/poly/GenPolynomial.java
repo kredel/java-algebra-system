@@ -246,11 +246,11 @@ public class GenPolynomial<C extends RingElem<C> >
                     }
                     ExpVector e = m.getKey();
                     if ( !c.isONE() || e.isZERO() ) {
-                       if ( c instanceof GenPolynomial ) {
+                       if ( c instanceof GenPolynomial || c instanceof AlgebraicNumber ) {
                           s.append( "{ " );
                        }
                        s.append( c.toString() );
-                       if ( c instanceof GenPolynomial ) {
+                       if ( c instanceof GenPolynomial || c instanceof AlgebraicNumber ) {
                           s.append( " }" );
                        }
                        s.append( " " );

@@ -135,7 +135,7 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C>>
     @Override
     public String toString() {
         if (PrettyPrint.isTrue()) {
-            return number.toString();
+            return "{ " + number.toString() + " }";
         } else {
             return "Real" + number.toString();
         }

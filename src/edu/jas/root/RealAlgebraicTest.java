@@ -6,6 +6,7 @@
 package edu.jas.root;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -69,6 +70,7 @@ public class RealAlgebraicTest extends TestCase {
    RealAlgebraicNumber< BigRational > c;
    RealAlgebraicNumber< BigRational > d;
    RealAlgebraicNumber< BigRational > e;
+   RealAlgebraicNumber< BigRational > alpha;
 
    int rl = 1; 
    int kl = 10;
@@ -86,11 +88,13 @@ public class RealAlgebraicTest extends TestCase {
        GenPolynomial<BigRational> mo = mfac.univariate(0,2);
        mo = mo.subtract( mfac.fromInteger(2) ); // alpha^2 -2 
        fac = new RealAlgebraicRing<BigRational>( mo, positiv );
+       alpha = fac.getGenerator();
    }
 
    protected void tearDown() {
        a = b = c = d = e = null;
        fac = null;
+       alpha = null;
    }
 
 
@@ -298,8 +302,9 @@ public class RealAlgebraicTest extends TestCase {
      assertTrue("a < a+2 ", ac < 0);
  }
 
+
 /**
- * Test magnitude of real algebraic numbers.
+ * Test arithmetic of magnitude of real algebraic numbers.
  * 
  */
  public void testMagnitude() {
@@ -307,12 +312,12 @@ public class RealAlgebraicTest extends TestCase {
      b = fac.random( ll );
      c = fac.random( ll );
 
-     d = a.multiply(b);
-     e = a.sum(b);
-
      BigDecimal ad = new BigDecimal( a.magnitude() );
      BigDecimal bd = new BigDecimal( b.magnitude() );
      BigDecimal cd = new BigDecimal( c.magnitude() );
+
+     d = a.multiply(b);
+     e = a.sum(b);
 
      BigDecimal dd = new BigDecimal( d.magnitude() );
      BigDecimal ed = new BigDecimal( e.magnitude() );
@@ -334,14 +339,32 @@ public class RealAlgebraicTest extends TestCase {
 
      assertTrue("mag(a*b) = mag(a)*mag(b)",dd.subtract(dd1).abs().compareTo(epsd) <= 0);
      assertTrue("mag(a+b) = mag(a)+mag(b)",ed.subtract(ed1).abs().compareTo(epsd) <= 0);
+
+
+     d = a.divide(b);
+     e = a.subtract(b);
+
+     dd = new BigDecimal( d.magnitude() );
+     ed = new BigDecimal( e.magnitude() );
+
+     dd1 = new BigDecimal( a.magnitude().divide(b.magnitude()) );
+     ed1 = new BigDecimal( a.magnitude().subtract(b.magnitude()) );
+
+     //System.out.println("dd  = " + dd);
+     //System.out.println("dd1 = " + dd1);
+     //System.out.println("ed  = " + ed);
+     //System.out.println("ed1 = " + ed1);
+
+     assertTrue("mag(a/b) = mag(a)/mag(b)",dd.subtract(dd1).abs().compareTo(epsd) <= 0);
+     assertTrue("mag(a-b) = mag(a)-mag(b)",ed.subtract(ed1).abs().compareTo(epsd) <= 0);
  }
 
 
 /**
  * Test real root isolation.
- * 
+ * Tests nothing. 
  */
- public void testRealRootIsolation() {
+ public void notestRealRootIsolation() {
      System.out.println();
      GenPolynomialRing<RealAlgebraicNumber<BigRational>> dfac;
      dfac = new GenPolynomialRing<RealAlgebraicNumber<BigRational>>(fac,1);
@@ -358,25 +381,77 @@ public class RealAlgebraicTest extends TestCase {
      List<Interval<RealAlgebraicNumber<BigRational>>> R = rrr.realRoots(ar);
      System.out.println("R = " + R);
 
+     assertTrue("#roots >= 0 ", R.size() >= 0);
+
      BigRational eps = Power.positivePower(new BigRational(1L,10L),BigDecimal.DEFAULT_PRECISION);
      //BigRational eps = Power.positivePower(new BigRational(1L,10L),10);
 
-     epsr = ar.ring.coFac.getONE().multiply(eps);
+     epsr = dfac.coFac.getONE().multiply(eps);
+     //System.out.println("epsr = " + epsr);
+
+     R = rrr.refineIntervals(R,ar,epsr);
+     //System.out.println("R = " + R);
+     for ( Interval<RealAlgebraicNumber<BigRational>> v : R ) {
+         BigDecimal dd = v.toDecimal(); //.sum(eps1);
+         System.out.println("v = " + dd);
+         // assertTrue("|dd - di| < eps ", dd.compareTo(di) == 0);
+     }
+ }
+
+
+/**
+ * Test real root isolation for Wilkinson like polynomials.
+ * product_{i=1..n}( x - i * alpha )
+ * 
+ */
+ public void testRealRootIsolationWilkinson() {
+     //System.out.println();
+     GenPolynomialRing<RealAlgebraicNumber<BigRational>> dfac;
+     dfac = new GenPolynomialRing<RealAlgebraicNumber<BigRational>>(fac,1);
+
+     GenPolynomial<RealAlgebraicNumber<BigRational>> ar, br, cr, dr, er;
+
+     RealRoots<RealAlgebraicNumber<BigRational>> rrr 
+        = new RealRootsSturm<RealAlgebraicNumber<BigRational>>();
+
+     final int N = 3;
+     dr = dfac.getONE();
+     er = dfac.univariate(0);
+
+     List<Interval<RealAlgebraicNumber<BigRational>>> Rn 
+         = new ArrayList<Interval<RealAlgebraicNumber<BigRational>>>(N);
+     ar = dr;
+     for ( int i = 0; i < N; i++ ) {
+         cr = dfac.fromInteger(i).multiply(alpha); // i * alpha
+         Rn.add( new Interval<RealAlgebraicNumber<BigRational>>(cr.leadingBaseCoefficient()) );
+         br = er.subtract( cr ); // ( x - i * alpha )
+         ar = ar.multiply( br );
+     }
+     //System.out.println("ar = " + ar);
+
+     List<Interval<RealAlgebraicNumber<BigRational>>> R = rrr.realRoots(ar);
+     //System.out.println("R = " + R);
+
+     assertTrue("#roots = "+N+" ", R.size() == N);
+ 
+     BigRational eps = Power.positivePower(new BigRational(1L,10L),BigDecimal.DEFAULT_PRECISION);
+     //BigRational eps = Power.positivePower(new BigRational(1L,10L),10);
+     //System.out.println("eps = " + eps);
+     BigDecimal eps1 = new BigDecimal(eps);
+     //System.out.println("eps1 = " + eps1);
+     RealAlgebraicNumber<BigRational> epsr = dfac.coFac.getONE().multiply(eps);
      //System.out.println("epsr = " + epsr);
 
      R = rrr.refineIntervals(R,ar,epsr);
      //System.out.println("R = " + R);
      int i = 0;
      for ( Interval<RealAlgebraicNumber<BigRational>> v : R ) {
-         BigDecimal dd = v.toDecimal(); //.sum(eps1);
-         System.out.println("v = " + dd);
-         // assertTrue("|dd - di| < eps ", dd.compareTo(di) == 0);
+         BigDecimal dd = v.toDecimal();//.sum(eps1);
+         BigDecimal di = Rn.get(i++).toDecimal();
+         //System.out.println("v  = " + dd);
+         //System.out.println("vi = " + di);
+         assertTrue("|dd - di| < eps ", dd.compareTo(di) == 0);
      }
-
-     /*
-     //a = a.multiply( dfac.univariate(0) );
-     assertTrue("#roots >= 0 ", R.size() >= 0);
-     */
  }
 
 }
