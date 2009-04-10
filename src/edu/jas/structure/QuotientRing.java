@@ -5,6 +5,8 @@
 package edu.jas.structure;
 
 import java.util.Random;
+import java.util.List;
+import java.util.ArrayList;
 import java.io.Reader;
 
 import org.apache.log4j.Logger;
@@ -65,6 +67,20 @@ public class QuotientRing<C extends RingElem<C> >
     }
 
     
+    /**  Get a list of the generating elements.
+     * @return list of generators for the algebraic structure.
+     * @see edu.jas.structure.ElemFactory#generators()
+     */
+    public List<Quotient<C>> generators() {
+        List<? extends C> rgens = ring.generators();
+        List<Quotient<C>> gens = new ArrayList<Quotient<C>>( rgens.size() );
+        for ( C c: rgens ) {
+             gens.add( new Quotient<C>(this,c) );
+        }
+        return gens;
+    }
+
+
     /**
      * Query if this ring is commutative.
      * @return true if this ring is commutative, else false.

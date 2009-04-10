@@ -661,7 +661,7 @@ public class GenPolynomialRing<C extends RingElem<C> >
     }
 
 
-    /**  Get the generating elements.
+    /**  Get the generating elements excluding the generators for the coefficient ring.
      * @return a list of generating elements for this ring.
      */
     public List<GenPolynomial<C>> getGenerators() {
@@ -673,8 +673,9 @@ public class GenPolynomialRing<C extends RingElem<C> >
     }
 
 
-    /**  Get the generating elements including generators for the coefficients.
-     * @return a list of generating elements for this ring.
+    /**  Get a list of the generating elements.
+     * @return list of generators for the algebraic structure.
+     * @see edu.jas.structure.ElemFactory#generators()
      */
     public List<GenPolynomial<C>> generators() {
         List<? extends C> cogens = coFac.generators();

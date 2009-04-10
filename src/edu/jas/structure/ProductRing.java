@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.Random;
+import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
@@ -156,6 +157,37 @@ public class ProductRing<C extends RingElem<C> >
            }
         }
         return new Product<C>( this, elem, 1 );
+    }
+
+
+    /**  Get a list of the generating elements.
+     * @return list of generators for the algebraic structure.
+     * @see edu.jas.structure.ElemFactory#generators()
+     */
+    public List<Product<C>> generators() {
+        List<Product<C>> gens = new ArrayList<Product<C>>();
+        if ( nCopies != 0 ) {
+           for ( int i = 0; i < nCopies; i++ ) {
+               SortedMap<Integer,C> elem = new TreeMap<Integer,C>();
+               List<? extends C> rgens = ring.generators();
+               for ( C c: rgens ) {
+                   elem.put( i, ring.getONE().multiply(c) );
+               }
+               gens.add( new Product<C>( this, elem ) );
+           }
+        } else {
+           int i = 0;
+           for ( RingFactory<C> f : ringList ) {
+               SortedMap<Integer,C> elem = new TreeMap<Integer,C>();
+               List<? extends C> rgens = f.generators();
+               for ( C c: rgens ) {
+                   elem.put( i, f.getONE().multiply(c) );
+               }
+               gens.add( new Product<C>( this, elem ) );
+               i++;
+           }
+        }
+        return gens;
     }
 
 

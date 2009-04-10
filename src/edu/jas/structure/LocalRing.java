@@ -6,6 +6,8 @@ package edu.jas.structure;
 
 import java.util.Random;
 import java.io.Reader;
+import java.util.List;
+import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
@@ -78,6 +80,22 @@ public class LocalRing<C extends RingElem<C> >
      */
     public Local<C> getONE() {
         return new Local<C>( this, ring.getONE() );
+    }
+
+
+    /**  Get a list of the generating elements.
+     * @return list of generators for the algebraic structure.
+     * @see edu.jas.structure.ElemFactory#generators()
+     */
+    public List<Local<C>> generators() {
+        List<? extends C> rgens = ring.generators();
+        List<Local<C>> gens = new ArrayList<Local<C>>( rgens.size()-1 );
+        for ( C c: rgens ) {
+            if ( !c.isONE() ) {
+                gens.add( new Local<C>(this,c) );
+            }
+        }
+        return gens;
     }
 
     

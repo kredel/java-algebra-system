@@ -5,6 +5,8 @@
 package edu.jas.structure;
 
 import java.util.Random;
+import java.util.List;
+import java.util.ArrayList;
 import java.io.Reader;
 
 import org.apache.log4j.Logger;
@@ -86,6 +88,20 @@ public class ResidueRing<C extends RingElem<C> >
            logger.warn("one is zero, so all residues are 0");
         }
         return one;
+    }
+
+
+    /**  Get a list of the generating elements.
+     * @return list of generators for the algebraic structure.
+     * @see edu.jas.structure.ElemFactory#generators()
+     */
+    public List<Residue<C>> generators() {
+        List<? extends C> rgens = ring.generators();
+        List<Residue<C>> gens = new ArrayList<Residue<C> >( rgens.size() );
+        for ( C c: rgens ) {
+             gens.add( new Residue<C>(this,c) );
+        }
+        return gens;
     }
 
     
