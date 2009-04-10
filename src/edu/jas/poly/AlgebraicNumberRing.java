@@ -112,10 +112,11 @@ public class AlgebraicNumberRing<C extends GcdRingElem<C> >
     }
 
 
-    /**  Get the generating elements.
-     * @return a list of generating elements for this ring.
+    /**  Get a list of the generating elements.
+     * @return list of generators for the algebraic structure.
+     * @see edu.jas.structure.ElemFactory#generators()
      */
-    public List<AlgebraicNumber<C>> getGenerators() {
+    public List<AlgebraicNumber<C>> generators() {
         List<AlgebraicNumber<C>> gens = new ArrayList<AlgebraicNumber<C>>( 2 );
         gens.add( getONE() );
         gens.add( getGenerator() );

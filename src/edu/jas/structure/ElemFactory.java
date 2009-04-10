@@ -20,7 +20,7 @@ public interface ElemFactory<C extends Element<C>> extends Serializable {
 
 
     /**
-     * Get a list of generators for the elements.
+     * Get a list of the generating elements.
      * @return list of generators for the algebraic structure.
      */
     public List<C> generators();

@@ -126,7 +126,7 @@ public final class BigComplex implements StarRingElem<BigComplex>,
 
 
     /**
-     * Get a list of generators for the elements.
+     * Get a list of the generating elements.
      * @return list of generators for the algebraic structure.
      * @see edu.jas.structure.ElemFactory#generators()
      */
