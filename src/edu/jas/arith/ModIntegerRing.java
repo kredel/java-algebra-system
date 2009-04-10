@@ -6,6 +6,8 @@ package edu.jas.arith;
 
 import java.util.Random;
 import java.io.Reader;
+import java.util.List;
+import java.util.ArrayList;
 
 //import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
@@ -132,6 +134,18 @@ public final class ModIntegerRing implements RingFactory<ModInteger> {
      */
     public ModInteger getONE() {
         return new ModInteger( this, java.math.BigInteger.ONE );
+    }
+
+
+    /**
+     * Get a list of generators for the elements.
+     * @return list of generators for the algebraic structure.
+     * @see edu.jas.structure.ElemFactory#generators()
+     */
+    public List<ModInteger> generators() {
+        List<ModInteger> g = new ArrayList<ModInteger>(1);
+        g.add( getONE() );
+        return g;
     }
 
 

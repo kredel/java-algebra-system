@@ -8,6 +8,7 @@ import java.math.BigInteger;
 import java.io.Reader;
 import java.io.Serializable;
 import java.util.Random;
+import java.util.List;
 
 /**
  * Element factory interface.
@@ -16,6 +17,13 @@ import java.util.Random;
  */
 
 public interface ElemFactory<C extends Element<C>> extends Serializable {
+
+
+    /**
+     * Get a list of generators for the elements.
+     * @return list of generators for the algebraic structure.
+     */
+    public List<C> generators();
 
 
     /**

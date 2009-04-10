@@ -673,6 +673,21 @@ public class GenPolynomialRing<C extends RingElem<C> >
     }
 
 
+    /**  Get the generating elements including generators for the coefficients.
+     * @return a list of generating elements for this ring.
+     */
+    public List<GenPolynomial<C>> generators() {
+        List<? extends C> cogens = coFac.generators();
+        List<? extends GenPolynomial<C>> univs = univariateList();
+        List<GenPolynomial<C>> gens = new ArrayList<GenPolynomial<C>>( univs.size()+cogens.size() );
+        for ( C c : cogens ) {
+            gens.add( getONE().multiply(c) );
+        }
+        gens.addAll( univs );
+        return gens;
+    }
+
+
     /**
      * Generate list of univariate polynomials in all variables.
      * @return List(X_1,...,X_n) a list of univariate polynomials.

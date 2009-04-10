@@ -7,6 +7,8 @@ package edu.jas.arith;
 import java.util.Random;
 import java.math.MathContext;
 import java.io.Reader;
+import java.util.List;
+import java.util.ArrayList;
 
 //import edu.jas.structure.RingElem;
 import edu.jas.structure.GcdRingElem;
@@ -191,6 +193,18 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>,
      */
     public BigDecimal getFactory() {
         return this;
+    }
+
+
+    /**
+     * Get a list of generators for the elements.
+     * @return list of generators for the algebraic structure.
+     * @see edu.jas.structure.ElemFactory#generators()
+     */
+    public List<BigDecimal> generators() {
+        List<BigDecimal> g = new ArrayList<BigDecimal>(1);
+        g.add( getONE() );
+        return g;
     }
 
 

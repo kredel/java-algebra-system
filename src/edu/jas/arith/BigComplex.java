@@ -7,6 +7,8 @@ package edu.jas.arith;
 import java.math.BigInteger;
 import java.util.Random;
 import java.io.Reader;
+import java.util.List;
+import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
@@ -123,6 +125,19 @@ public final class BigComplex implements StarRingElem<BigComplex>,
     }
 
 
+    /**
+     * Get a list of generators for the elements.
+     * @return list of generators for the algebraic structure.
+     * @see edu.jas.structure.ElemFactory#generators()
+     */
+    public List<BigComplex> generators() {
+        List<BigComplex> g = new ArrayList<BigComplex>(2);
+        g.add( getONE() );
+        g.add( getIMAG() );
+        return g;
+    }
+
+
     /** Clone this.
      * @see java.lang.Object#clone()
      */
@@ -154,6 +169,14 @@ public final class BigComplex implements StarRingElem<BigComplex>,
      */
     public BigComplex getONE() {
         return ONE;
+    }
+
+
+    /** Get the i element.
+     * @return i as BigComplex.
+     */
+    public BigComplex getIMAG() {
+        return I;
     }
 
 

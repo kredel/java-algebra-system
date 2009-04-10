@@ -6,6 +6,8 @@ package edu.jas.arith;
 
 import java.util.Random;
 import java.io.Reader;
+import java.util.List;
+import java.util.ArrayList;
 
 //import edu.jas.structure.RingElem;
 import edu.jas.structure.GcdRingElem;
@@ -95,6 +97,18 @@ public final class BigInteger implements GcdRingElem<BigInteger>,
      */
     public BigInteger getFactory() {
         return this;
+    }
+
+
+    /**
+     * Get a list of generators for the elements.
+     * @return list of generators for the algebraic structure.
+     * @see edu.jas.structure.ElemFactory#generators()
+     */
+    public List<BigInteger> generators() {
+        List<BigInteger> g = new ArrayList<BigInteger>(1);
+        g.add( getONE() );
+        return g;
     }
 
 

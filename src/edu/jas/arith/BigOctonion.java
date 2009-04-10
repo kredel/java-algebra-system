@@ -7,6 +7,8 @@ package edu.jas.arith;
 import java.math.BigInteger;
 import java.util.Random;
 import java.io.Reader;
+import java.util.List;
+import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
@@ -127,6 +129,24 @@ public final class BigOctonion implements StarRingElem<BigOctonion>,
      */
     public BigOctonion getFactory() {
         return this;
+    }
+
+
+    /**
+     * Get a list of generators for the elements.
+     * @return list of generators for the algebraic structure.
+     * @see edu.jas.structure.ElemFactory#generators()
+     */
+    public List<BigOctonion> generators() {
+        List<BigQuaternion> qg = or.generators();
+        List<BigOctonion> g = new ArrayList<BigOctonion>( qg.size()*2 );
+        for ( BigQuaternion q : qg ) {
+            g.add( new BigOctonion(q) );
+        }
+        for ( BigQuaternion q : qg ) {
+            g.add( new BigOctonion(BigQuaternion.ZERO,q) );
+        }
+        return g;
     }
 
 

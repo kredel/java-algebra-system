@@ -7,6 +7,8 @@ package edu.jas.arith;
 import java.math.BigInteger;
 import java.util.Random;
 import java.io.Reader;
+import java.util.List;
+import java.util.ArrayList;
 
 //import edu.jas.structure.RingElem;
 import edu.jas.structure.GcdRingElem;
@@ -161,6 +163,19 @@ public final class BigRational implements GcdRingElem<BigRational>,
     public BigRational getFactory() {
         return this;
     }
+
+
+    /**
+     * Get a list of generators for the elements.
+     * @return list of generators for the algebraic structure.
+     * @see edu.jas.structure.ElemFactory#generators()
+     */
+    public List<BigRational> generators() {
+        List<BigRational> g = new ArrayList<BigRational>(1);
+        g.add( getONE() );
+        return g;
+    }
+
 
     /** Clone this.
      * @see java.lang.Object#clone()

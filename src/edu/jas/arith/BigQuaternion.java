@@ -7,6 +7,8 @@ package edu.jas.arith;
 import java.math.BigInteger;
 import java.util.Random;
 import java.io.Reader;
+import java.util.List;
+import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
@@ -190,6 +192,20 @@ public final class BigQuaternion implements StarRingElem<BigQuaternion>,
         return this;
     }
 
+
+    /**
+     * Get a list of generators for the elements.
+     * @return list of generators for the algebraic structure.
+     * @see edu.jas.structure.ElemFactory#generators()
+     */
+    public List<BigQuaternion> generators() {
+        List<BigQuaternion> g = new ArrayList<BigQuaternion>(4);
+        g.add( getONE() );
+        g.add( I );
+        g.add( J );
+        g.add( K );
+        return g;
+    }
 
     /** Clone this.
      * @see java.lang.Object#clone()
