@@ -1564,6 +1564,32 @@ class RingElem:
             p = Power(self.elem.ring).power( self.elem, n );
         return RingElem( p ); 
 
+    def __eq__(self,other):
+        '''Test if two ring elements are equal.
+        '''
+        o = other;
+        if isinstance(other,RingElem):
+            o = other.elem;
+        return self.elem.equals(o)
+
+    def __ne__(self,other):
+        '''Test if two ring elements are not equal.
+        '''
+        o = other;
+        if isinstance(other,RingElem):
+            o = other.elem;
+        return not self.elem.equals(o)
+
+    def factory(self):
+        '''Get the factory of this element.
+        '''
+        fac = self.elem.getFactory();
+        try:
+            nv = fac.nvar;
+        except:
+            return RingElem(fac);
+        return Ring(ring=fac);
+
     def evaluate(self,a):
         '''Evaluate at a for power series.
         '''
