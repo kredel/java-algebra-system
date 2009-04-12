@@ -138,9 +138,9 @@ public abstract class ExpVector implements AbelianGroupElem<ExpVector>
     /**
      * Get the corresponding element factory.
      * @return factory for this Element.
-     * @see edu.jas.structure.Element#getFactory()
+     * @see edu.jas.structure.Element#factory()
      */
-    public AbelianGroupFactory<ExpVector> getFactory() {
+    public AbelianGroupFactory<ExpVector> factory() {
         //return null;
         throw new RuntimeException("no factory implemented for ExpVector");
     }

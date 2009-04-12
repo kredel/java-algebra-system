@@ -78,9 +78,9 @@ public class GenVector<C extends RingElem<C> >
     /**
      * Get the corresponding element factory.
      * @return factory for this Element.
-     * @see edu.jas.structure.Element#getFactory()
+     * @see edu.jas.structure.Element#factory()
      */
-    public GenVectorModul<C> getFactory() {
+    public GenVectorModul<C> factory() {
         return modul;
     }
 

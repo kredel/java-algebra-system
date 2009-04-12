@@ -93,9 +93,9 @@ public final class BigInteger implements GcdRingElem<BigInteger>,
     /**
      * Get the corresponding element factory.
      * @return factory for this Element.
-     * @see edu.jas.structure.Element#getFactory()
+     * @see edu.jas.structure.Element#factory()
      */
-    public BigInteger getFactory() {
+    public BigInteger factory() {
         return this;
     }
 

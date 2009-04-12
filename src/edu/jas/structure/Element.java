@@ -55,6 +55,6 @@ public interface Element<C extends Element<C>> extends Cloneable,
      * Get the corresponding element factory.
      * @return factory for this Element.
      */
-    public ElemFactory<C> getFactory();
+    public ElemFactory<C> factory();
 
 }

@@ -128,9 +128,9 @@ public class GenPolynomial<C extends RingElem<C> >
     /**
      * Get the corresponding element factory.
      * @return factory for this Element.
-     * @see edu.jas.structure.Element#getFactory()
+     * @see edu.jas.structure.Element#factory()
      */
-    public GenPolynomialRing<C> getFactory() {
+    public GenPolynomialRing<C> factory() {
         return ring;
     }
 
