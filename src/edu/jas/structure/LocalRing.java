@@ -16,7 +16,7 @@ import edu.jas.structure.RingFactory;
 
 
 /**
- * Local ring factrory based on RingElem principal ideal.
+ * Local ring factory based on RingElem principal ideal.
  * Objects of this class are immutable.
  * @author Heinz Kredel
  */
