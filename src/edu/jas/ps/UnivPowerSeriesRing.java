@@ -250,7 +250,9 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
                        }
                     }
                                               );
+            gens.add(g);
         }
+        gens.add( ONE.shift(1) ); 
         return gens;
     }
 
