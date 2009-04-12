@@ -94,23 +94,7 @@ class Ring:
     def gens(self):
         '''Get list of generators of the polynomial ring.
         '''
-        L = self.ring.getGenerators();
-        c = self.ring.coFac;
-        Lp = None;
-        try:
-            Lp = c.getGenerators();
-        except:
-            pass
-        #print "type(coFac) = ", type(self.ring.coFac);
-        #if isinstance(c,GenPolynomial): # does not work
-        # b.getClass().isInstance(a) 
-        # GenPolynomial.isInstance(c) ?? 
-        if Lp:
-            del L[0]; # skip one, L[1:] does not work 
-            i = 0;
-            for l in Lp:
-                L.add( i, GenPolynomial(self.ring,l) );
-                i += 1;
+        L = self.ring.generators();
         N = [ RingElem(e) for e in L ];
         return N;
 
@@ -865,12 +849,7 @@ class Module:
         '''Get the generators of this module.
         '''
         gm = GenVectorModul(self.ring,self.cols);
-        #print "gm = ", gm;
-        Lm = gm.getGenerators();
-        Lp = self.ring.getGenerators();
-        #print "Lm = ", Lm;
-        #print "Lp = ", Lp;
-        L = [ m.scalarMultiply(p) for p in Lp for m in Lm ]
+        L = gm.generators();
         N = [ RingElem(e.val) for e in L ];
         return N;
 
@@ -890,7 +869,10 @@ class SubModule:
            tok = GenPolynomialTokenizer(module.ring,sr);
            self.list = tok.nextSubModuleList();
         else:
-           self.list = pylist2arraylist(list);
+            if isinstance(list,PyList) or isinstance(list,PyTuple):
+                self.list = pylist2arraylist(list);
+            else:
+                self.list = list;
         self.mset = OrderedModuleList(module.ring,self.list);
         self.cols = self.mset.cols;
         self.rows = self.mset.rows;
@@ -1084,7 +1066,7 @@ class SeriesRing:
     def gens(self):
         '''Get the generators of the power series ring.
         '''
-        L = [ self.ring.getONE(), self.ring.getONE().shift(1) ]
+        L = self.ring.generators();
         N = [ RingElem(e) for e in L ];
         return N;
 
@@ -1175,7 +1157,7 @@ def pylist2arraylist(list):
     If list is a Python list, it is converted, else list is left unchanged.
     '''
     #print "list type(%s) = %s" % (list,type(list));
-    if isinstance(list,PyList):
+    if isinstance(list,PyList) or isinstance(list,PyTuple):
        L = ArrayList();
        for e in list:
            if isinstance(e,RingElem):
