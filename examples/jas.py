@@ -29,18 +29,18 @@ from edu.jas.gbmod       import ModGroebnerBaseAbstract, ModSolvableGroebnerBase
 from edu.jas.vector      import OrderedModuleList, ModuleList, GenVector, GenVectorModul
 from edu.jas.application import ComprehensiveGroebnerBaseSeq, PolyUtilApp,\
                                 Residue, ResidueRing, Ideal, Quotient, QuotientRing
-from edu.jas.kern        import ComputerThreads;
+from edu.jas.kern        import ComputerThreads
 from edu.jas.ufd         import GreatestCommonDivisorSubres, PolyUfdUtil, GCDFactory,\
-                                FactorFactory;
-from edu.jas.root        import RealRootsSturm, Interval;
-from edu.jas.util        import ExecutableServer
+                                FactorFactory
+from edu.jas.root        import RealRootsSturm, Interval
+from edu.jas.util        import ExecutableServer, StringUtil
 from edu.jas             import structure, arith, poly, ps, gb, gbmod, vector,\
                                 application, util, ufd
 from edu                 import jas
 #PrettyPrint.setInternal();
 
 from org.python.core     import PyInstance, PyList, PyTuple,\
-                                PyInteger, PyLong, PyFloat
+                                PyInteger, PyLong, PyFloat, PyString
 
 
 def startLog():
@@ -1616,3 +1616,56 @@ class RingElem:
         except:
             e = None;            
         return RingElem( e );
+
+
+class PolyRing(Ring):
+    '''Represents a JAS polynomial ring: GenPolynomialRing.
+
+    Provides more convenient constructor. 
+    Then returns a Ring.
+    '''
+
+    def __init__(self,coeff,vars,order):
+        '''Ring constructor.
+
+        coeff = factory for coefficients,
+        vars = string with variable names,
+        order = term order.
+        '''
+        cf = coeff;
+        if isinstance(coeff,RingElem):
+            cf = coeff.elem;
+        if isinstance(coeff,Ring):
+            cf = coeff.ring;
+        names = vars;
+        self.vars = vars;
+        if isinstance(vars,PyString):
+            names = StringUtil.variableList(vars);
+        nv = len(names);
+        to = PolyRing.lex;
+        if isinstance(to,TermOrder):
+            to = order;
+        self.order = order;
+        ring = GenPolynomialRing(cf,nv,to,names);
+        self.ring = ring;
+
+    def __str__(self):
+        '''Create a string representation.
+        '''
+        cf = self.ring.coFac;
+        cfac = cf;
+        if cf.equals( BigInteger() ):
+            cfac = "ZZ()";
+        if cf.equals( BigRational() ):
+            cfac = "QQ()";
+        to = self.order;
+        tord = to;
+        if to.evord == TermOrder.INVLEX:
+            tord = "PolyRing.lex";
+        if to.evord == TermOrder.IGRLEX:
+            tord = "PolyRing.grad";
+        return "PolyRing(%s,%s,%s)" % (cfac, "\""+self.vars+"\"", tord);
+
+    lex = TermOrder(TermOrder.INVLEX)
+
+    grad = TermOrder(TermOrder.IGRLEX)
