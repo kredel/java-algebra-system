@@ -10,7 +10,7 @@ r = Module( "Rat(u,v,l) L", cols=4 );
 print "Module: " + str(r);
 print;
 
-#print "gens() = ", [str(e) for e in r.gens()];
+print "gens() = ", [str(e) for e in r.gens()];
 M = r.submodul( list=r.gens() );
 print "M = ", M;
 
