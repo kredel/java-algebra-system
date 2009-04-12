@@ -341,15 +341,15 @@ public class RootUtilTest extends TestCase {
      //b = b.abs().negate();
      //System.out.println("b = " + b);
      if ( b.isZERO() ) {
-         int s = rr.algebraicSign(iv,a,b);
+         int s = rr.realSign(iv,a,b);
          assertTrue("algebraic sign", s == 0 );
          return;
      }
 
-     int as = rr.algebraicSign(iv,a,b);
+     int as = rr.realSign(iv,a,b);
      //System.out.println("as = " + as);
      // how to test?
-     int asn = rr.algebraicSign(iv,a,b.negate());
+     int asn = rr.realSign(iv,a,b.negate());
      //System.out.println("asn = " + asn);
      assertTrue("algebraic sign", as != asn );
 
@@ -357,10 +357,10 @@ public class RootUtilTest extends TestCase {
      //System.out.println("iv = " + iv);
      assertTrue("sign change", rr.signChange(iv,a) );
 
-     int as1 = rr.algebraicSign(iv,a,b);
+     int as1 = rr.realSign(iv,a,b);
      //System.out.println("as1 = " + as1);
      // how to test?
-     int asn1 = rr.algebraicSign(iv,a,b.negate());
+     int asn1 = rr.realSign(iv,a,b.negate());
      //System.out.println("asn1 = " + asn1);
      assertTrue("algebraic sign", as1 != asn1 );
 

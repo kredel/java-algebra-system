@@ -4,56 +4,52 @@
 
 package edu.jas.root;
 
-import java.util.List;
+
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import edu.jas.arith.BigRational;
+import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.PolyUtil;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.structure.UnaryFunctor;
 
-import edu.jas.arith.BigRational;
-
-import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.PolyUtil;
-import edu.jas.poly.AlgebraicNumber;
-
-import edu.jas.util.ListUtil;
-
 
 /**
- * Real roots abstract class. 
+ * Real roots abstract class.
  * @param <C> coefficient type.
  * @author Heinz Kredel
  */
-public abstract class RealRootAbstract<C extends RingElem<C>> 
-                      implements RealRoots<C> {
+public abstract class RealRootAbstract<C extends RingElem<C>> implements RealRoots<C> {
 
 
     private static final Logger logger = Logger.getLogger(RealRootAbstract.class);
+
+
     private static boolean debug = logger.isDebugEnabled();
 
 
     /**
-     * Real root bound. 
-     * With f(M) * f(-M) != 0.
+     * Real root bound. With f(M) * f(-M) != 0.
      * @param f univariate polynomial.
      * @return M such that -M &lt; root(f) &lt; M.
      */
     public C realRootBound(GenPolynomial<C> f) {
-        if ( f == null ) {
+        if (f == null) {
             return null;
         }
         RingFactory<C> cfac = f.ring.coFac;
         C M = cfac.getONE();
-        if ( f.isZERO() || f.isConstant() ) {
+        if (f.isZERO() || f.isConstant()) {
             return M;
         }
         C a = f.leadingBaseCoefficient().abs();
-        for ( C c : f.getMap().values() ) {
+        for (C c : f.getMap().values()) {
             C d = c.abs().divide(a);
-            if ( M.compareTo(d) < 0 ) {
+            if (M.compareTo(d) < 0) {
                 M = d;
             }
         }
@@ -61,10 +57,10 @@ public abstract class RealRootAbstract<C extends RingElem<C>>
         // to use rational number interval end points
         // can fail if real root is in interval [r,r+1] 
         // for too low precision or too big r, since r is approximation
-        if ( (Object) M instanceof RealAlgebraicNumber ) {
+        if ((Object) M instanceof RealAlgebraicNumber) {
             RealAlgebraicNumber Mr = (RealAlgebraicNumber) M;
             BigRational r = Mr.magnitude();
-            M = cfac.fromInteger( r.numerator() ).divide( cfac.fromInteger( r.denominator() ) );
+            M = cfac.fromInteger(r.numerator()).divide(cfac.fromInteger(r.denominator()));
         }
         M = M.sum(f.ring.coFac.getONE());
         //System.out.println("M = " + M);
@@ -73,30 +69,31 @@ public abstract class RealRootAbstract<C extends RingElem<C>>
 
 
     /**
-     * Magnitude bound. 
+     * Magnitude bound.
      * @param iv interval.
      * @param f univariate polynomial.
      * @return B such that |f(c)| &lt; B for c in iv.
      */
     public C magnitudeBound(Interval<C> iv, GenPolynomial<C> f) {
-        if ( f == null ) {
+        if (f == null) {
             return null;
         }
-        if ( f.isZERO() ) {
+        if (f.isZERO()) {
             return f.ring.coFac.getONE();
         }
-        if ( f.isConstant() ) {
+        if (f.isConstant()) {
             return f.leadingBaseCoefficient().abs();
         }
-        GenPolynomial<C> fa = f.map( new UnaryFunctor<C,C>() { 
-                                         public C eval(C a) {
-                                             return a.abs();
-                                         }
-                                     } 
-                                     );
+        GenPolynomial<C> fa = f.map(new UnaryFunctor<C, C>() {
+
+
+            public C eval(C a) {
+                return a.abs();
+            }
+        });
         //System.out.println("fa = " + fa);
         C M = iv.left.abs();
-        if ( M.compareTo( iv.right.abs() ) < 0 ) {
+        if (M.compareTo(iv.right.abs()) < 0) {
             M = iv.right.abs();
         }
         //System.out.println("M = " + M);
@@ -106,10 +103,10 @@ public abstract class RealRootAbstract<C extends RingElem<C>>
         // to use rational number interval end points
         // can fail if real root is in interval [r,r+1] 
         // for too low precision or too big r, since r is approximation
-        if ( (Object) B instanceof RealAlgebraicNumber ) {
+        if ((Object) B instanceof RealAlgebraicNumber) {
             RealAlgebraicNumber Br = (RealAlgebraicNumber) B;
             BigRational r = Br.magnitude();
-            B = cfac.fromInteger( r.numerator() ).divide( cfac.fromInteger( r.denominator() ) );
+            B = cfac.fromInteger(r.numerator()).divide(cfac.fromInteger(r.denominator()));
         }
         //System.out.println("B = " + B);
         return B;
@@ -122,25 +119,25 @@ public abstract class RealRootAbstract<C extends RingElem<C>>
      * @param f univariate polynomial, non-zero.
      * @return a point c in the interval iv such that f(c) != 0.
      */
-    public C bisectionPoint( Interval<C> iv, GenPolynomial<C> f ) {
-        if ( f == null ) {
+    public C bisectionPoint(Interval<C> iv, GenPolynomial<C> f) {
+        if (f == null) {
             return null;
         }
         RingFactory<C> cfac = f.ring.coFac;
         C two = cfac.fromInteger(2);
         C c = iv.left.sum(iv.right);
         c = c.divide(two);
-        if ( f.isZERO() || f.isConstant() ) {
+        if (f.isZERO() || f.isConstant()) {
             return c;
         }
         C m = PolyUtil.<C> evaluateMain(cfac, f, c);
-        while ( m.isZERO() ) {
+        while (m.isZERO()) {
             C d = iv.left.sum(c);
             d = d.divide(two);
-            if ( d.equals(c) ) {
+            if (d.equals(c)) {
                 d = iv.right.sum(c);
                 d = d.divide(two);
-                if ( d.equals(c) ) {
+                if (d.equals(c)) {
                     throw new RuntimeException("should not happen " + iv);
                 }
             }
@@ -158,7 +155,7 @@ public abstract class RealRootAbstract<C extends RingElem<C>>
      * @param f univariate polynomial.
      * @return a list of isolating intervalls for the real roots of f.
      */
-    public abstract List<Interval<C>> realRoots( GenPolynomial<C> f );
+    public abstract List<Interval<C>> realRoots(GenPolynomial<C> f);
 
 
     /**
@@ -167,9 +164,9 @@ public abstract class RealRootAbstract<C extends RingElem<C>>
      * @param eps requested intervals length.
      * @return a list of isolating intervals v such that |v| &lt; eps.
      */
-    public List<Interval<C>> realRoots( GenPolynomial<C> f, C eps ) {
+    public List<Interval<C>> realRoots(GenPolynomial<C> f, C eps) {
         List<Interval<C>> iv = realRoots(f);
-        return refineIntervals(iv,f,eps);
+        return refineIntervals(iv, f, eps);
     }
 
 
@@ -179,8 +176,8 @@ public abstract class RealRootAbstract<C extends RingElem<C>>
      * @param f univariate polynomial.
      * @return true if f(left) * f(right) &lt; 0, else false
      */
-    public boolean signChange( Interval<C> iv, GenPolynomial<C> f ) {
-        if ( f == null ) {
+    public boolean signChange(Interval<C> iv, GenPolynomial<C> f) {
+        if (f == null) {
             return false;
         }
         RingFactory<C> cfac = f.ring.coFac;
@@ -196,7 +193,7 @@ public abstract class RealRootAbstract<C extends RingElem<C>>
      * @param f univariate polynomial.
      * @return number of real roots of f in I.
      */
-    public abstract long realRootCount( Interval<C> iv, GenPolynomial<C> f);
+    public abstract long realRootCount(Interval<C> iv, GenPolynomial<C> f);
 
 
     /**
@@ -206,13 +203,11 @@ public abstract class RealRootAbstract<C extends RingElem<C>>
      * @param eps requested interval length.
      * @return a new interval v such that |v| &lt; eps.
      */
-    public Interval<C> refineInterval( Interval<C> iv, 
-                                       GenPolynomial<C> f,
-                                       C eps ) {
-        if ( f == null || f.isZERO() || f.isConstant() || eps == null ) {
+    public Interval<C> refineInterval(Interval<C> iv, GenPolynomial<C> f, C eps) {
+        if (f == null || f.isZERO() || f.isConstant() || eps == null) {
             return iv;
         }
-        if ( iv.length().compareTo(eps) < 0 ) {
+        if (iv.length().compareTo(eps) < 0) {
             return iv;
         }
         RingFactory<C> cfac = f.ring.coFac;
@@ -223,15 +218,15 @@ public abstract class RealRootAbstract<C extends RingElem<C>>
             c = c.divide(two);
             //System.out.println("c = " + c);
             //c = RootUtil.<C>bisectionPoint(v,f);
-            if ( PolyUtil.<C> evaluateMain(cfac, f, c).isZERO() ) {
-                v = new Interval<C>(c,c);
+            if (PolyUtil.<C> evaluateMain(cfac, f, c).isZERO()) {
+                v = new Interval<C>(c, c);
                 break;
             }
-            Interval<C> iv1 = new Interval<C>(v.left,c);
-            if ( signChange(iv1,f) ) {
+            Interval<C> iv1 = new Interval<C>(v.left, c);
+            if (signChange(iv1, f)) {
                 v = iv1;
             } else {
-                v = new Interval<C>(c,v.right);
+                v = new Interval<C>(c, v.right);
             }
         }
         return v;
@@ -245,15 +240,13 @@ public abstract class RealRootAbstract<C extends RingElem<C>>
      * @param eps requested intervals length.
      * @return a list of new intervals v such that |v| &lt; eps.
      */
-    public List<Interval<C>> refineIntervals( List<Interval<C>> V, 
-                                              GenPolynomial<C> f,
-                                              C eps ) {
-        if ( f == null || f.isZERO() || f.isConstant() || eps == null ) {
+    public List<Interval<C>> refineIntervals(List<Interval<C>> V, GenPolynomial<C> f, C eps) {
+        if (f == null || f.isZERO() || f.isConstant() || eps == null) {
             return V;
         }
         List<Interval<C>> IV = new ArrayList<Interval<C>>();
-        for ( Interval<C> v : V ) {
-            Interval<C> iv = refineInterval(v,f,eps);
+        for (Interval<C> v : V) {
+            Interval<C> iv = refineInterval(v, f, eps);
             IV.add(iv);
         }
         return IV;
@@ -265,32 +258,27 @@ public abstract class RealRootAbstract<C extends RingElem<C>>
      * @param iv root isolating interval for f, with f(left) * f(right) &lt; 0.
      * @param f univariate polynomial, non-zero.
      * @param g univariate polynomial, gcd(f,g) == 1.
-     * @return v with v a new interval contained 
-     *         in iv such that g(v) != 0.
+     * @return v with v a new interval contained in iv such that g(v) != 0.
      */
-    public abstract Interval<C> invariantSignInterval( Interval<C> iv, 
-                                                       GenPolynomial<C> f,
-                                                       GenPolynomial<C> g );
+    public abstract Interval<C> invariantSignInterval(Interval<C> iv, GenPolynomial<C> f, GenPolynomial<C> g);
 
 
     /**
-     * Algebraic number sign.
-     * @param iv root isolating interval for f, with f(left) * f(right) &lt; 0, 
-     *           with iv such that g(iv) != 0.
+     * Real algebraic number sign.
+     * @param iv root isolating interval for f, with f(left) * f(right) &lt; 0,
+     *            with iv such that g(iv) != 0.
      * @param f univariate polynomial, non-zero.
      * @param g univariate polynomial, gcd(f,g) == 1.
      * @return sign(g(iv)) .
      */
-    public int algebraicIntervalSign( Interval<C> iv, 
-                                      GenPolynomial<C> f,
-                                      GenPolynomial<C> g ) {
-        if ( g == null || g.isZERO() ) {
+    public int realIntervalSign(Interval<C> iv, GenPolynomial<C> f, GenPolynomial<C> g) {
+        if (g == null || g.isZERO()) {
             return 0;
         }
-        if ( f == null || f.isZERO() || f.isConstant() ) {
+        if (f == null || f.isZERO() || f.isConstant()) {
             return g.signum();
         }
-        if ( g.isConstant() ) {
+        if (g.isConstant()) {
             return g.signum();
         }
         RingFactory<C> cfac = f.ring.coFac;
@@ -303,27 +291,25 @@ public abstract class RealRootAbstract<C extends RingElem<C>>
 
 
     /**
-     * Algebraic number sign.
+     * Real algebraic number sign.
      * @param iv root isolating interval for f, with f(left) * f(right) &lt; 0.
      * @param f univariate polynomial, non-zero.
      * @param g univariate polynomial, gcd(f,g) == 1.
-     * @return sign(g(v)), with v a new interval contained 
-     *         in iv such that g(v) != 0.
+     * @return sign(g(v)), with v a new interval contained in iv such that g(v) !=
+     *         0.
      */
-    public int algebraicSign( Interval<C> iv, 
-                              GenPolynomial<C> f,
-                              GenPolynomial<C> g ) {
-        if ( g == null || g.isZERO() ) {
+    public int realSign(Interval<C> iv, GenPolynomial<C> f, GenPolynomial<C> g) {
+        if (g == null || g.isZERO()) {
             return 0;
         }
-        if ( f == null || f.isZERO() || f.isConstant() ) {
+        if (f == null || f.isZERO() || f.isConstant()) {
             return g.signum();
         }
-        if ( g.isConstant() ) {
+        if (g.isConstant()) {
             return g.signum();
         }
-        Interval<C> v = invariantSignInterval( iv, f, g );
-        return algebraicIntervalSign(v,f,g);
+        Interval<C> v = invariantSignInterval(iv, f, g);
+        return realIntervalSign(v, f, g);
     }
 
 
@@ -333,40 +319,38 @@ public abstract class RealRootAbstract<C extends RingElem<C>>
      * @param f univariate polynomial, non-zero.
      * @param g univariate polynomial, gcd(f,g) == 1.
      * @param eps length limit for interval length.
-     * @return v with v a new interval contained 
-     *         in iv such that |g(a) - g(b)| &lt; eps for a, b in v in iv.
+     * @return v with v a new interval contained in iv such that |g(a) - g(b)|
+     *         &lt; eps for a, b in v in iv.
      */
-    public Interval<C> invariantMagnitudeInterval( Interval<C> iv, 
-                                                   GenPolynomial<C> f,
-                                                   GenPolynomial<C> g,
-                                                   C eps ) {
+    public Interval<C> invariantMagnitudeInterval(Interval<C> iv, GenPolynomial<C> f, GenPolynomial<C> g,
+            C eps) {
         Interval<C> v = iv;
-        if ( g == null || g.isZERO() ) {
+        if (g == null || g.isZERO()) {
             return v;
         }
-        if ( g.isConstant() ) {
+        if (g.isConstant()) {
             return v;
         }
-        if ( f == null || f.isZERO() || f.isConstant() ) { // ?
+        if (f == null || f.isZERO() || f.isConstant()) { // ?
             return v;
         }
         GenPolynomial<C> gp = PolyUtil.<C> baseDeriviative(g);
         //System.out.println("g  = " + g);
         //System.out.println("gp = " + gp);
-        C B = magnitudeBound(iv,gp);
+        C B = magnitudeBound(iv, gp);
         //System.out.println("B = " + B);
 
         RingFactory<C> cfac = f.ring.coFac;
         C two = cfac.fromInteger(2);
 
-        while ( B.multiply(v.length()).compareTo(eps) >= 0 ) {
+        while (B.multiply(v.length()).compareTo(eps) >= 0) {
             C c = v.left.sum(v.right);
             c = c.divide(two);
-            Interval<C> im = new Interval<C>(c,v.right);
-            if ( signChange(im,f) ) {
+            Interval<C> im = new Interval<C>(c, v.right);
+            if (signChange(im, f)) {
                 v = im;
             } else {
-                v = new Interval<C>(v.left,c);
+                v = new Interval<C>(v.left, c);
             }
             //System.out.println("v = " + v.toDecimal());
         }
@@ -375,19 +359,16 @@ public abstract class RealRootAbstract<C extends RingElem<C>>
 
 
     /**
-     * Algebraic number magnitude.
+     * Real algebraic number magnitude.
      * @param iv root isolating interval for f, with f(left) * f(right) &lt; 0,
-     *         with iv such that |g(a) - g(b)| &lt; eps for a, b in iv.
+     *            with iv such that |g(a) - g(b)| &lt; eps for a, b in iv.
      * @param f univariate polynomial, non-zero.
      * @param g univariate polynomial, gcd(f,g) == 1.
      * @param eps length limit for interval length.
      * @return g(iv) .
      */
-    public C algebraicIntervalMagnitude( Interval<C> iv, 
-                                         GenPolynomial<C> f,
-                                         GenPolynomial<C> g,
-                                         C eps ) {
-        if ( g.isZERO() || g.isConstant() ) {
+    public C realIntervalMagnitude(Interval<C> iv, GenPolynomial<C> f, GenPolynomial<C> g, C eps) {
+        if (g.isZERO() || g.isConstant()) {
             return g.leadingBaseCoefficient();
         }
         RingFactory<C> cfac = g.ring.coFac;
@@ -400,22 +381,19 @@ public abstract class RealRootAbstract<C extends RingElem<C>>
 
 
     /**
-     * Algebraic number magnitude.
+     * Real algebraic number magnitude.
      * @param iv root isolating interval for f, with f(left) * f(right) &lt; 0.
      * @param f univariate polynomial, non-zero.
      * @param g univariate polynomial, gcd(f,g) == 1.
      * @param eps length limit for interval length.
      * @return g(iv) .
      */
-    public C algebraicMagnitude( Interval<C> iv, 
-                                 GenPolynomial<C> f,
-                                 GenPolynomial<C> g,
-                                 C eps ) {
-        if ( g.isZERO() || g.isConstant() ) {
+    public C realMagnitude(Interval<C> iv, GenPolynomial<C> f, GenPolynomial<C> g, C eps) {
+        if (g.isZERO() || g.isConstant()) {
             return g.leadingBaseCoefficient();
         }
-        Interval<C> v = invariantMagnitudeInterval( iv, f, g, eps );
-        return algebraicIntervalMagnitude(v,f,g,eps);
+        Interval<C> v = invariantMagnitudeInterval(iv, f, g, eps);
+        return realIntervalMagnitude(v, f, g, eps);
     }
 
 }

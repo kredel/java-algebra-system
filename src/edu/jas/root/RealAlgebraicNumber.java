@@ -272,7 +272,7 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C>>
     public int signum() {
         Interval<C> v = ring.engine.invariantSignInterval(ring.root,ring.algebraic.modul,number.val);
         ring.setRoot(v);
-        return ring.engine.algebraicIntervalSign(v,ring.algebraic.modul,number.val);
+        return ring.engine.realIntervalSign(v,ring.algebraic.modul,number.val);
     }
 
 
@@ -284,7 +284,7 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C>>
         Interval<C> v = ring.engine.invariantMagnitudeInterval(ring.root,ring.algebraic.modul,number.val,ring.eps);
         ring.setRoot(v);
         //System.out.println("new v = " + v);
-        C ev = ring.engine.algebraicIntervalMagnitude(v,ring.algebraic.modul,number.val,ring.eps);
+        C ev = ring.engine.realIntervalMagnitude(v,ring.algebraic.modul,number.val,ring.eps);
         if ( (Object) ev instanceof BigRational ) {
            BigRational er = (BigRational) (Object) ev;
            return er;
