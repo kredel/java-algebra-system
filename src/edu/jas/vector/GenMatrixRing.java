@@ -29,7 +29,7 @@ import edu.jas.structure.AlgebraFactory;
  */
 
 public class GenMatrixRing<C extends RingElem<C> > 
-            implements AlgebraFactory< GenMatrix<C>, C > {
+    implements AlgebraFactory< GenMatrix<C>, C > {
 
     private static final Logger logger = Logger.getLogger(GenMatrixRing.class);
 
@@ -55,26 +55,25 @@ public class GenMatrixRing<C extends RingElem<C> >
 
 
 
-/**
- * Constructors for GenMatrixRing.
- * @param b coefficient factory. 
- * @param r number of rows. 
- * @param c number of colums. 
- */
-
+    /**
+     * Constructors for GenMatrixRing.
+     * @param b coefficient factory. 
+     * @param r number of rows. 
+     * @param c number of colums. 
+     */
     public GenMatrixRing(RingFactory< C > b, int r, int c) {
         this(b,r,c,DEFAULT_BSIZE);
     }
 
 
-/**
- * Constructors for GenMatrixRing.
- * @param b coefficient factory. 
- * @param r number of rows. 
- * @param c number of colums. 
- * @param s block size for blocked operations. 
- */
-
+    /**
+     * Constructors for GenMatrixRing.
+     * @param b coefficient factory. 
+     * @param r number of rows. 
+     * @param c number of colums. 
+     * @param s block size for blocked operations. 
+     */
+    @SuppressWarnings("unchecked") 
     public GenMatrixRing(RingFactory< C > b, int r, int c, int s) {
         if ( b == null ) {
             throw new RuntimeException("RingFactory is null");
@@ -103,9 +102,9 @@ public class GenMatrixRing<C extends RingElem<C> >
         ArrayList<C> v; 
         for ( int i = 0; i < rows; i++ ) {
             if ( i < cols ) {
-               v = (ArrayList<C>)z.clone();
-               v.set(i, one );
-               m.add( v );
+                v = (ArrayList<C>)z.clone();
+                v.set(i, one );
+                m.add( v );
             }
         }
         ONE = new GenMatrix<C>( this, m );
@@ -113,7 +112,8 @@ public class GenMatrixRing<C extends RingElem<C> >
 
 
     /**
-     * toString method.
+     * Get the String representation as RingElem.
+     * @see java.lang.Object#toString()
      */
     @Override
     public String toString() {
@@ -142,6 +142,28 @@ public class GenMatrixRing<C extends RingElem<C> >
     }
 
 
+    /**  Get a list of the generating elements.
+     * @return list of generators for the algebraic structure.
+     * @see edu.jas.structure.ElemFactory#generators()
+     */
+    public List<GenMatrix<C>> generators() {
+        List<C> rgens = coFac.generators();
+        List<GenMatrix<C>> gens = new ArrayList<GenMatrix<C>>( rows*cols*rgens.size() );
+        for ( int i = 0; i < rows; i++ ) {
+            for ( int j = 0; j < cols; j++ ) {
+                for ( C el : rgens ) {
+                    GenMatrix<C> g = ZERO.set(i,j,el); // uses clone()
+                    gens.add( g );
+                }
+            }
+        }
+        return gens;
+    }
+
+
+    /** Comparison with any other object.
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
     @Override
     public boolean equals( Object other ) { 
         if ( ! (other instanceof GenMatrixRing) ) {
@@ -166,10 +188,10 @@ public class GenMatrixRing<C extends RingElem<C> >
      */
     @Override
     public int hashCode() { 
-       int h;
-       h = rows * 17 + cols;
-       h = 37 * h + coFac.hashCode();
-       return h;
+        int h;
+        h = rows * 17 + cols;
+        h = 37 * h + coFac.hashCode();
+        return h;
     }
 
 
@@ -179,7 +201,7 @@ public class GenMatrixRing<C extends RingElem<C> >
      * @return true if it is known that this ring is a field, else false.
      */
     public boolean isField() {
-       return false;
+        return false;
     }
 
 
@@ -206,7 +228,7 @@ public class GenMatrixRing<C extends RingElem<C> >
      * @return characteristic of this ring.
      */
     public java.math.BigInteger characteristic() {
-       return coFac.characteristic();
+        return coFac.characteristic();
     }
 
 
@@ -216,7 +238,7 @@ public class GenMatrixRing<C extends RingElem<C> >
      */
     public GenMatrixRing<C> transpose() {
         if ( rows == cols ) {
-           return this;
+            return this;
         }
         return new GenMatrixRing<C>(coFac, cols, rows, blocksize);
     }
@@ -229,13 +251,13 @@ public class GenMatrixRing<C extends RingElem<C> >
      */
     public GenMatrixRing<C> product(GenMatrixRing<C> other) {
         if ( cols != other.rows ) {
-           throw new RuntimeException("invalid dimensions in product");
+            throw new RuntimeException("invalid dimensions in product");
         }
         if ( ! coFac.equals( other.coFac ) ) {
-           throw new RuntimeException("invalid coefficients in product");
+            throw new RuntimeException("invalid coefficients in product");
         }
         if ( rows == other.rows && cols == other.cols ) {
-           return this;
+            return this;
         }
         return new GenMatrixRing<C>(coFac, rows, other.cols, blocksize);
     }
@@ -272,24 +294,24 @@ public class GenMatrixRing<C extends RingElem<C> >
             return ZERO;
         }
         if ( om.size() > rows ) {
-           throw new RuntimeException("size v > rows " + rows + " < " + om);
+            throw new RuntimeException("size v > rows " + rows + " < " + om);
         }
         ArrayList<ArrayList<C>> m = new ArrayList<ArrayList<C>>( rows );
         for ( int i = 0; i < rows; i++ ) {
             List<C> ov = om.get( i++ );
             ArrayList<C> v;
             if ( ov == null ) {
-               v = ZERO.matrix.get(0);
+                v = ZERO.matrix.get(0);
             } else {
-               if ( ov.size() > cols ) {
-                  throw new RuntimeException("size v > cols " + cols + " < " + ov);
-               }
-               v = new ArrayList<C>( cols );
-               v.addAll( ov );
-               // pad with zeros if required:
-               for ( int j = v.size(); j < cols; j++ ) {
-                   v.add( coFac.getZERO() );
-               }
+                if ( ov.size() > cols ) {
+                    throw new RuntimeException("size v > cols " + cols + " < " + ov);
+                }
+                v = new ArrayList<C>( cols );
+                v.addAll( ov );
+                // pad with zeros if required:
+                for ( int j = v.size(); j < cols; j++ ) {
+                    v.add( coFac.getZERO() );
+                }
             }
             m.add( v );
         }
@@ -341,13 +363,13 @@ public class GenMatrixRing<C extends RingElem<C> >
             for ( int j = 0; j < cols; j++ ) {
                 C e; 
                 if ( random.nextFloat() < q ) {
-                   e = coFac.random(k);
+                    e = coFac.random(k);
                 } else {
-                   e = coFac.getZERO();
+                    e = coFac.getZERO();
                 }
                 v.add( e );
-           }
-           m.add( v );
+            }
+            m.add( v );
         }
         return new GenMatrix<C>(this,m);
     }
@@ -377,13 +399,13 @@ public class GenMatrixRing<C extends RingElem<C> >
             for ( int j = 0; j < cols; j++ ) {
                 C e = coFac.getZERO(); 
                 if ( j >= i ) {
-                   if ( random.nextFloat() < q ) {
-                      e = coFac.random(k);
-                   } 
+                    if ( random.nextFloat() < q ) {
+                        e = coFac.random(k);
+                    } 
                 } 
                 v.add( e );
-           }
-           m.add( v );
+            }
+            m.add( v );
         }
         return new GenMatrix<C>(this,m);
     }
@@ -413,13 +435,13 @@ public class GenMatrixRing<C extends RingElem<C> >
             for ( int j = 0; j < cols; j++ ) {
                 C e = coFac.getZERO(); 
                 if ( j <= i ) {
-                   if ( random.nextFloat() < q ) {
-                      e = coFac.random(k);
-                   } 
+                    if ( random.nextFloat() < q ) {
+                        e = coFac.random(k);
+                    } 
                 } 
                 v.add( e );
-           }
-           m.add( v );
+            }
+            m.add( v );
         }
         return new GenMatrix<C>(this,m);
     }
@@ -430,9 +452,9 @@ public class GenMatrixRing<C extends RingElem<C> >
      */
     public GenMatrix<C> copy(GenMatrix<C> c) {
         if ( c == null ) {
-           return c;
+            return c;
         } else {
-           return c.clone();
+            return c.clone();
         }
         //return new GenMatrix<C>( this, c.val );//clone val
     }
@@ -445,7 +467,7 @@ public class GenMatrixRing<C extends RingElem<C> >
     public GenMatrix<C> parse(String s) {
         int i = s.indexOf("[");
         if ( i >= 0 ) {
-           s = s.substring(i+1);
+            s = s.substring(i+1);
         }
         ArrayList<ArrayList<C>> mat = new ArrayList<ArrayList<C>>( rows );
         ArrayList<C> v;
@@ -454,30 +476,30 @@ public class GenMatrixRing<C extends RingElem<C> >
         String e;
         int j;
         do {
-           i = s.indexOf("]");     // delimit vector
-           j = s.lastIndexOf("]"); // delimit matrix
-           if ( i != j ) {
-              if ( i >= 0 ) {
-                 e = s.substring(0,i);
-                 s = s.substring(i);
-                 vec = vmod.parse( e );
-                 v = (ArrayList<C>)vec.val;
-                 mat.add( v );
-                 i = s.indexOf(",");
-                 if ( i >= 0 ) {
+            i = s.indexOf("]");     // delimit vector
+            j = s.lastIndexOf("]"); // delimit matrix
+            if ( i != j ) {
+                if ( i >= 0 ) {
+                    e = s.substring(0,i);
+                    s = s.substring(i);
+                    vec = vmod.parse( e );
+                    v = (ArrayList<C>)vec.val;
+                    mat.add( v );
+                    i = s.indexOf(",");
+                    if ( i >= 0 ) {
+                        s = s.substring(i+1);
+                    }
+                }
+            } else { // matrix delimiter
+                if ( i >= 0 ) {
+                    e = s.substring(0,i);
+                    if ( e.trim().length() > 0 ) {
+                        throw new RuntimeException("Error e not empty " + e);
+                    }
                     s = s.substring(i+1);
-                 }
-              }
-           } else { // matrix delimiter
-              if ( i >= 0 ) {
-                 e = s.substring(0,i);
-                 if ( e.trim().length() > 0 ) {
-                    throw new RuntimeException("Error e not empty " + e);
-                 }
-                 s = s.substring(i+1);
-              }
-              break;
-           }
+                }
+                break;
+            }
         } while ( i >= 0 );
         return new GenMatrix<C>( this, mat );
         //throw new RuntimeException("parse not jet implemented");
@@ -494,6 +516,5 @@ public class GenMatrixRing<C extends RingElem<C> >
         throw new RuntimeException("parse not jet implemented");
         //return ZERO;
     }
-
 
 }

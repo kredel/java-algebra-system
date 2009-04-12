@@ -11,6 +11,8 @@ import java.util.Random;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.ArrayList;
 
 
 import edu.jas.structure.RingElem;
@@ -226,6 +228,30 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
      */
     public UnivPowerSeries<C> getONE() {
         return ONE;
+    }
+
+
+    /**  Get a list of the generating elements.
+     * @return list of generators for the algebraic structure.
+     * @see edu.jas.structure.ElemFactory#generators()
+     */
+    public List<UnivPowerSeries<C>> generators() {
+        List<C> rgens = coFac.generators();
+        List<UnivPowerSeries<C>> gens = new ArrayList<UnivPowerSeries<C>>( rgens.size() );
+        for ( final C cg : rgens ) {
+            UnivPowerSeries<C> g = new UnivPowerSeries<C>(this,
+                   new Coefficients<C>() {
+                       public C generate(int i) {
+                           if ( i == 0 ) { 
+                               return cg;
+                           } else {
+                               return coFac.getZERO();
+                           }
+                       }
+                    }
+                                              );
+        }
+        return gens;
     }
 
 

@@ -148,15 +148,16 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> >
     }
 
 
-    /* Get the generating elements.
-     * @return a list of generating elements for this ring.
-    public List<AlgebraicNumber<C>> getGenerators() {
-        List<AlgebraicNumber<C>> gens = new ArrayList<AlgebraicNumber<C>>( 2 );
+    /**  Get a list of the generating elements.
+     * @return list of generators for the algebraic structure.
+     * @see edu.jas.structure.ElemFactory#generators()
+     */
+    public List<RealAlgebraicNumber<C>> generators() {
+        List<RealAlgebraicNumber<C>> gens = new ArrayList<RealAlgebraicNumber<C>>( 2 );
         gens.add( getONE() );
         gens.add( getGenerator() );
         return gens;
     }
-     */
 
 
     /**

@@ -86,11 +86,12 @@ public class LocalRing<C extends GcdRingElem<C> >
     }
 
 
-    /**  Get the generating elements.
-     * @return a list of generating elements for this ring.
+    /**  Get a list of the generating elements.
+     * @return list of generators for the algebraic structure.
+     * @see edu.jas.structure.ElemFactory#generators()
      */
-    public List<Local<C>> getGenerators() {
-        List<GenPolynomial<C>> pgens = ring.getGenerators();
+    public List<Local<C>> generators() {
+        List<GenPolynomial<C>> pgens = ring.generators();
         List<Local<C>> gens = new ArrayList<Local<C>>( pgens.size() );
         for ( GenPolynomial<C> p : pgens ) {
             Local<C> q = new Local<C>( this, p );

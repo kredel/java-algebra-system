@@ -174,11 +174,12 @@ public class QuotientRing<C extends GcdRingElem<C> >
     }
 
 
-    /**  Get the generating elements.
-     * @return a list of generating elements for this ring.
+    /**  Get a list of the generating elements.
+     * @return list of generators for the algebraic structure.
+     * @see edu.jas.structure.ElemFactory#generators()
      */
-    public List<Quotient<C>> getGenerators() {
-        List<GenPolynomial<C>> pgens = ring.getGenerators();
+    public List<Quotient<C>> generators() {
+        List<GenPolynomial<C>> pgens = ring.generators();
         List<Quotient<C>> gens = new ArrayList<Quotient<C>>( pgens.size() );
         for ( GenPolynomial<C> p : pgens ) {
             Quotient<C> q = new Quotient<C>( this, p );

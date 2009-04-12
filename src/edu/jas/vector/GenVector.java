@@ -28,17 +28,21 @@ public class GenVector<C extends RingElem<C> >
     private static final Logger logger = Logger.getLogger(GenVector.class);
 
     public final GenVectorModul< C > modul;
+
     public final List<C> val;
 
 
     /**
-     * Constructors for GenVector.
+     * Constructor for GenVector.
      */
-
     public GenVector(GenVectorModul< C > m) {
         this( m, m.getZERO().val );
     }
 
+
+    /**
+     * Constructor for GenVector.
+     */
     protected GenVector(GenVectorModul< C > m, List<C> v) {
         modul = m;
         val = v;
@@ -46,7 +50,8 @@ public class GenVector<C extends RingElem<C> >
 
 
     /**
-     * toString method.
+     * Get the String representation as RingElem.
+     * @see java.lang.Object#toString()
      */
     @Override
     public String toString() {

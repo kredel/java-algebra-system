@@ -119,11 +119,12 @@ public class ResidueRing<C extends GcdRingElem<C> >
     }
 
 
-    /**  Get the generating elements.
-     * @return a list of generating elements for this ring.
+    /**  Get a list of the generating elements.
+     * @return list of generators for the algebraic structure.
+     * @see edu.jas.structure.ElemFactory#generators()
      */
-    public List<Residue<C>> getGenerators() {
-        List<GenPolynomial<C>> pgens = ring.getGenerators();
+    public List<Residue<C>> generators() {
+        List<GenPolynomial<C>> pgens = ring.generators();
         List<Residue<C>> gens = new ArrayList<Residue<C>>( pgens.size() );
         for ( GenPolynomial<C> p : pgens ) {
             Residue<C> r = new Residue<C>( this, p );

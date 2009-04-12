@@ -165,28 +165,22 @@ public class ProductRing<C extends RingElem<C> >
      * @see edu.jas.structure.ElemFactory#generators()
      */
     public List<Product<C>> generators() {
-        List<Product<C>> gens = new ArrayList<Product<C>>();
-        if ( nCopies != 0 ) {
-           for ( int i = 0; i < nCopies; i++ ) {
-               SortedMap<Integer,C> elem = new TreeMap<Integer,C>();
-               List<? extends C> rgens = ring.generators();
-               for ( C c: rgens ) {
-                   elem.put( i, ring.getONE().multiply(c) );
-               }
-               gens.add( new Product<C>( this, elem ) );
-           }
-        } else {
-           int i = 0;
-           for ( RingFactory<C> f : ringList ) {
-               SortedMap<Integer,C> elem = new TreeMap<Integer,C>();
-               List<? extends C> rgens = f.generators();
-               for ( C c: rgens ) {
-                   elem.put( i, f.getONE().multiply(c) );
-               }
-               gens.add( new Product<C>( this, elem ) );
-               i++;
-           }
+        List<Product<C>> gens = new ArrayList<Product<C>>(/*nCopies*ring.generators.size()*/);
+        int n = nCopies;
+        if ( n == 0 ) {
+            n = ringList.size();
         }
+        for ( int i = 0; i < n; i++ ) {
+            RingFactory<C> f = getFactory(n);
+            List<? extends C> rgens = f.generators();
+            for ( C c: rgens ) {
+                SortedMap<Integer,C> elem = new TreeMap<Integer,C>();
+                elem.put( i, c );
+                Product<C> g = new Product<C>( this, elem );
+                g = g.fillOne();
+                gens.add( g );
+            }
+        } 
         return gens;
     }
 

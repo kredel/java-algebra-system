@@ -28,29 +28,71 @@ public class GenMatrix<C extends RingElem<C> >
     private static final Logger logger = Logger.getLogger(GenMatrix.class);
 
     public final GenMatrixRing< C > ring;
-    public final List<C> val; //remove 
+
     public final ArrayList<ArrayList<C>> matrix;
+
     private int hashValue = 0;
 
 
     /**
-     * Constructors for GenMatrix.
+     * Constructor for GenMatrix.
      */
-
     public GenMatrix(GenMatrixRing< C > r) {
         this( r, r.getZERO().matrix );
     }
 
 
+    /**
+     * Constructor for GenMatrix.
+     */
     protected GenMatrix(GenMatrixRing< C > r, ArrayList<ArrayList<C>> m) {
         ring = r;
         matrix = m;
-        val = null;
     }
 
 
     /**
-     * toString method.
+     * Get element at row i, column j.
+     * @param i row index.
+     * @param j column index.
+     * @return this(i,j).
+     */
+    public C get(int i, int j) {
+        return matrix.get(i).get(j);
+    }
+
+
+    /**
+     * Set element at row i, column j.
+     * Mutates this matrix.
+     * @param i row index.
+     * @param j column index.
+     * @param el element to set.
+     */
+    public void setMutate(int i, int j, C el) {
+        ArrayList<C> ri = matrix.get(i);
+        ri.set(j,el);
+        hashValue = 0; // invalidate
+    }
+
+
+    /**
+     * Set element at row i, column j.
+     * @param i row index.
+     * @param j column index.
+     * @param el element to set.
+     * @return new matrix m, with m(i,j) == el.
+     */
+    public GenMatrix<C> set(int i, int j, C el) {
+        GenMatrix<C> mat = this.clone();
+        mat.setMutate(i,j,el);
+        return mat;
+    }
+
+
+    /**
+     * Get the String representation as RingElem.
+     * @see java.lang.Object#toString()
      */
     @Override
     public String toString() {
@@ -113,7 +155,7 @@ public class GenMatrix<C extends RingElem<C> >
 
 
     /**
-     * test if this is equal to a zero matrix.
+     * Test if this is equal to a zero matrix.
      */
     public boolean isZERO() {
         return ( 0 == this.compareTo( ring.getZERO() ) );
@@ -130,9 +172,11 @@ public class GenMatrix<C extends RingElem<C> >
 
 
     /**
-     * equals method.
+     * Comparison with any other object.
+     * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
+    @SuppressWarnings("unchecked")
     public boolean equals( Object other ) { 
         if ( ! (other instanceof GenMatrix) ) {
             return false;
@@ -152,7 +196,7 @@ public class GenMatrix<C extends RingElem<C> >
      * @see java.lang.Object#hashCode()
      */
     @Override
-     public int hashCode() {
+    public int hashCode() {
         if ( hashValue == 0 ) {
            hashValue = 37 * matrix.hashCode() + ring.hashCode();
            if ( hashValue == 0 ) {
@@ -191,10 +235,28 @@ public class GenMatrix<C extends RingElem<C> >
     /**
      * Test if this is a unit. 
      * I.e. there exists x with this.multiply(x).isONE() == true.
+     * Tests if all diagonal elements are units and all other elements are zero.
      * @return true if this is a unit, else false.
      */
     public boolean isUnit() {
-        return false;
+        int i = 0;
+        for ( ArrayList<C> val : matrix ) {
+            int j = 0;
+            for ( C el : val ) {
+                if ( i == j ) {
+                    if ( !el.isUnit()  ) {
+                        return false;
+                    }
+                } else {
+                    if ( !el.isZERO()  ) {
+                        return false;
+                    }
+                }
+                j++;
+            }
+            i++;
+        }
+        return true;
     }
 
 

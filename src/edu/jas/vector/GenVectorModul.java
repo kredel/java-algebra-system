@@ -30,7 +30,7 @@ import edu.jas.util.StringUtil;
  */
 
 public class GenVectorModul<C extends RingElem<C> > 
-            implements ModulFactory< GenVector<C>, C > {
+    implements ModulFactory< GenVector<C>, C > {
 
     private static final Logger logger = Logger.getLogger(GenVectorModul.class);
 
@@ -50,10 +50,10 @@ public class GenVectorModul<C extends RingElem<C> >
 
 
 
-/**
- * Constructors for GenVectorModul.
- */
-
+    /**
+     * Constructor for GenVectorModul.
+     */
+    @SuppressWarnings("unchecked")
     public GenVectorModul(RingFactory< C > b, int s) {
         coFac = b;
         cols = s;
@@ -63,18 +63,21 @@ public class GenVectorModul<C extends RingElem<C> >
         }
         ZERO = new GenVector<C>( this, z );
         BASIS = new ArrayList<GenVector<C>>( cols ); 
-        C one = coFac.getONE();
+        List<C> cgens = coFac.generators();
         ArrayList<C> v; 
         for ( int i = 0; i < cols; i++ ) {
-            v = (ArrayList<C>)z.clone();
-            v.set(i, one );
-            BASIS.add( new GenVector<C>( this, v ) );
+            for ( C g : cgens ) {
+                 v = (ArrayList<C>)z.clone();
+                 v.set(i, g );
+                 BASIS.add( new GenVector<C>( this, v ) );
+            }
         }
     }
 
 
     /**
-     * toString method.
+     * Get the String representation as RingElem.
+     * @see java.lang.Object#toString()
      */
     @Override
     public String toString() {
@@ -94,15 +97,21 @@ public class GenVectorModul<C extends RingElem<C> >
     }
 
 
-    /**  Get the generating elements.
-     * @return a list of generating elements for this module.
+    /**  Get a list of the generating elements.
+     * @return list of generators for the algebraic structure.
+     * @see edu.jas.structure.ElemFactory#generators()
      */
-    public List<GenVector<C>> getGenerators() {
+    public List<GenVector<C>> generators() {
         return BASIS;
     }
 
 
+    /**
+     * Comparison with any other object.
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
     @Override
+    @SuppressWarnings("unchecked")
     public boolean equals( Object other ) { 
         if ( ! (other instanceof GenVectorModul) ) {
             return false;
@@ -122,11 +131,11 @@ public class GenVectorModul<C extends RingElem<C> >
      * @see java.lang.Object#hashCode()
      */
     @Override
-    public int hashCode() { 
-       int h;
-       h = cols;
-       h = 37 * h + coFac.hashCode();
-       return h;
+        public int hashCode() { 
+        int h;
+        h = cols;
+        h = 37 * h + coFac.hashCode();
+        return h;
     }
 
 
@@ -161,7 +170,7 @@ public class GenVectorModul<C extends RingElem<C> >
             return ZERO;
         }
         if ( v.size() > cols ) {
-           throw new RuntimeException("size v > cols " + cols + " < " + v);
+            throw new RuntimeException("size v > cols " + cols + " < " + v);
         }
         List<C> r = new ArrayList<C>( cols ); 
         r.addAll( v );
@@ -228,9 +237,9 @@ public class GenVectorModul<C extends RingElem<C> >
      */
     public GenVector<C> copy(GenVector<C> c) {
         if ( c == null ) {
-           return c;
+            return c;
         } else {
-           return c.clone();
+            return c.clone();
         }
         //return new GenVector<C>( this, c.val );//clone val
     }
@@ -243,27 +252,27 @@ public class GenVectorModul<C extends RingElem<C> >
     public GenVector<C> parse(String s) {
         int i = s.indexOf("[");
         if ( i >= 0 ) {
-           s = s.substring(i+1);
+            s = s.substring(i+1);
         }
         i = s.indexOf("]");
         if ( i >= 0 ) {
-           s = s.substring(0,i);
+            s = s.substring(0,i);
         }
         List<C> vec = new ArrayList<C>( cols );
         String e;
         C c;
         do {
-           i = s.indexOf(",");
-           if ( i >= 0 ) {
-              e = s.substring(0,i);
-              s = s.substring(i+1);
-              c = coFac.parse( e );
-              vec.add( c );
-           }
+            i = s.indexOf(",");
+            if ( i >= 0 ) {
+                e = s.substring(0,i);
+                s = s.substring(i+1);
+                c = coFac.parse( e );
+                vec.add( c );
+            }
         } while ( i >= 0 );
         if ( s.trim().length() > 0 ) {
-           c = coFac.parse( s );
-           vec.add( c );
+            c = coFac.parse( s );
+            vec.add( c );
         }
         return new GenVector<C>( this, vec );
         //throw new RuntimeException("parse not jet implemented");
@@ -280,6 +289,5 @@ public class GenVectorModul<C extends RingElem<C> >
         //throw new RuntimeException("parse not jet implemented");
         //return ZERO;
     }
-
 
 }
