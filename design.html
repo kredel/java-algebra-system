@@ -346,12 +346,42 @@ of the implemented algebraic algorithms.
 <td>arithmetic, gcd, evaluation, integration, fixed points</td>
 </tr>
 
+<tr>
+<td><code>Quotient</code></td>
+<td><code>QuotientRing</code></td>
+<td>ring of fractions 
+    over any implemented (unique factorization domain) ring
+</td>
+<td>arithmetic
+</td>
+</tr>
+
+<tr>
+<td><code>Residue</code></td>
+<td><code>ResidueRing</code></td>
+<td>ring of elements modulo a given (main) ideal,
+    over any implemented ring
+</td>
+<td>arithmetic
+</td>
+</tr>
+
+<tr>
+<td><code>Local</code></td>
+<td><code>LocalRing</code></td>
+<td>ring of fractions localized with respect to a given (main) ideal,
+    over any implemented ring
+</td>
+<td>arithmetic
+</td>
+</tr>
+
 </table>
 
 <p>
 "Arithmetic" means implementation of the methods 
 defined in the interface <code>RingElem</code>.
-To be continued.
+As of 2009-04 there are 21 rings implemented. To be continued.
 </p>
 
 
@@ -1129,7 +1159,7 @@ of the Java algebra system.
 <p>
 <!-- Created: Sat Mar 11 10:51:36 CET 2006 -->
 <!-- hhmts start -->
-Last modified: Wed Apr  8 23:02:32 CEST 2009
+Last modified: Sun Apr 12 15:19:36 CEST 2009
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
