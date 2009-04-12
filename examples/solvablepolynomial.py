@@ -28,7 +28,8 @@ print "SolvableRing: " + str(r);
 print;
 
 print "gens =", [ str(f) for f in r.gens() ];
-[one,a,b,e1,e2,e3] = r.gens();
+#[one,a,b,e1,e2,e3] = r.gens();
+[one,I,J,K,a,b,e1,e2,e3] = r.gens();
 
 f1 = e1 * e3**3 + e2**10 - a;
 f2 = e1**3 * e2**2 + e3;
