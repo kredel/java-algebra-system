@@ -68,6 +68,7 @@ r5 = r1 * r2 + e;
 print "r5:", r5;
 print;
 
+#print "psr.gens: ", [ str(i) for i in psr.gens() ];
 [one,y] = psr.gens();
 print "y:", y;
 print;
