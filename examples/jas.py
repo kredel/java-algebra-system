@@ -1632,20 +1632,22 @@ class PolyRing(Ring):
         vars = string with variable names,
         order = term order.
         '''
+        if coeff == None:
+            raise ValueError, "No coefficient given."
         cf = coeff;
         if isinstance(coeff,RingElem):
-            cf = coeff.elem;
+            cf = coeff.elem.factory();
         if isinstance(coeff,Ring):
             cf = coeff.ring;
+        if vars == None:
+            raise ValueError, "No variable names given."
         names = vars;
-        self.vars = vars;
         if isinstance(vars,PyString):
             names = StringUtil.variableList(vars);
         nv = len(names);
         to = PolyRing.lex;
-        if isinstance(to,TermOrder):
+        if isinstance(order,TermOrder):
             to = order;
-        self.order = order;
         ring = GenPolynomialRing(cf,nv,to,names);
         self.ring = ring;
 
@@ -1658,13 +1660,18 @@ class PolyRing(Ring):
             cfac = "ZZ()";
         if cf.equals( BigRational() ):
             cfac = "QQ()";
-        to = self.order;
+        #print "cf.getClasss(): " + str(cf.getClass());
+        #print "poly.getClasss(): " + str( GenPolynomialRing(BigInteger(),1).getClass() );
+        if cf.getClass() == GenPolynomialRing(BigInteger(),1).getClass():
+            cfac = str(PolyRing(cf.coFac,cf.varsToString(),cf.tord));
+        to = self.ring.tord;
         tord = to;
         if to.evord == TermOrder.INVLEX:
             tord = "PolyRing.lex";
         if to.evord == TermOrder.IGRLEX:
             tord = "PolyRing.grad";
-        return "PolyRing(%s,%s,%s)" % (cfac, "\""+self.vars+"\"", tord);
+        nvars = self.ring.varsToString();
+        return "PolyRing(%s,%s,%s)" % (cfac, "\""+nvars+"\"", tord);
 
     lex = TermOrder(TermOrder.INVLEX)
 
