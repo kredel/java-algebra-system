@@ -10,7 +10,8 @@ from java.util           import ArrayList
 from org.apache.log4j    import BasicConfigurator;
 
 from edu.jas.structure   import RingElem, RingFactory, Power
-from edu.jas.arith       import BigInteger, BigRational, BigComplex, BigDecimal
+from edu.jas.arith       import BigInteger, BigRational, BigComplex, BigDecimal,\
+                                ModInteger, ModIntegerRing
 from edu.jas.poly        import GenPolynomial, GenPolynomialRing,\
                                 GenSolvablePolynomial, GenSolvablePolynomialRing,\
                                 GenPolynomialTokenizer, OrderedPolynomialList, PolyUtil,\
@@ -1224,7 +1225,8 @@ def ZM(m,z=0):
         m = m.elem;
     if isinstance(z,RingElem):
         z = z.elem;
-    r = ModInteger(m,z);
+    mf = ModIntegerRing(m);
+    r = ModInteger(mf,z);
     return RingElem(r);
 
 
@@ -1253,7 +1255,7 @@ def QQ(d=0,n=1):
     return RingElem(r);
 
 
-def RF(d,n=1):
+def RF(pr,d=0,n=1):
     '''Create JAS rational function Quotient as ring element.
     '''
     if isinstance(d,PyTuple) or isinstance(d,PyList):
@@ -1266,11 +1268,18 @@ def RF(d,n=1):
         d = d.elem;
     if isinstance(n,RingElem):
         n = n.elem;
-    qr = QuotientRing(d.ring);
-    if n == 1:
-        r = Quotient(qr,d);
+    if isinstance(pr,RingElem):
+        pr = pr.elem;
+    if isinstance(pr,Ring):
+        pr = pr.ring;
+    qr = QuotientRing(pr);
+    if d == 0:
+        r = Quotient(qr);
     else:
-        r = Quotient(qr,d,n);
+        if n == 1:
+            r = Quotient(qr,d);
+        else:
+            r = Quotient(qr,d,n);
     return RingElem(r);
 
 
@@ -1660,6 +1669,15 @@ class PolyRing(Ring):
             cfac = "ZZ()";
         if cf.equals( BigRational() ):
             cfac = "QQ()";
+        if cf.equals( BigComplex() ):
+            cfac = "CC()";
+        if cf.equals( BigDecimal() ):
+            cfac = "DD()";
+        if cf.getClass() == ModIntegerRing(3).getClass():
+            cfac = "ZM(%s)" % cf.modul;
+        if cf.getClass() == QuotientRing(GenPolynomialRing(BigInteger(),1)).getClass():
+            qr = cf.ring;
+            cfac = "RF(%s)" % str(PolyRing(qr.coFac,qr.varsToString(),qr.tord));
         #print "cf.getClasss(): " + str(cf.getClass());
         #print "poly.getClasss(): " + str( GenPolynomialRing(BigInteger(),1).getClass() );
         if cf.getClass() == GenPolynomialRing(BigInteger(),1).getClass():
