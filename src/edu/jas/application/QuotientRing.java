@@ -54,7 +54,7 @@ public class QuotientRing<C extends GcdRingElem<C> >
 
 
     /** The constructor creates a QuotientRing object 
-     * from a GenPolynomialRing and a GenPolynomial list. 
+     * from a GenPolynomialRing. 
      * @param r polynomial ring.
      */
     public QuotientRing(GenPolynomialRing<C> r) {
@@ -63,8 +63,9 @@ public class QuotientRing<C extends GcdRingElem<C> >
 
 
     /** The constructor creates a QuotientRing object 
-     * from a GenPolynomialRing and a GenPolynomial list. 
+     * from a GenPolynomialRing. 
      * @param r polynomial ring.
+     * @param ufdGCD flag, if syzygy or gcd based algorithm used for engine.
      */
     public QuotientRing(GenPolynomialRing<C> r, boolean ufdGCD) {
         ring = r;
