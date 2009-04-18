@@ -64,6 +64,15 @@ public class Interval<C extends RingElem<C>> {
     }
 
 
+    /** Get a scripting compatible string representation.
+     * @return script compatible representation for this Interval.
+     */
+    public String toScript() {
+        // Python case
+        return "( " + left + ", " + right + " ) ";
+    }
+
+
     /** Comparison with any other object.
      * @see java.lang.Object#equals(java.lang.Object)
      */

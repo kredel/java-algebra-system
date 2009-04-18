@@ -171,6 +171,65 @@ public class UnivPowerSeries<C extends RingElem<C>>
     }
 
 
+    /** Get a scripting compatible string representation.
+     * @return script compatible representation for this Element.
+     * @see edu.jas.structure.Element#toScript()
+     */
+    @Override
+    public String toScript() {
+        // Python case
+        StringBuffer sb = new StringBuffer("UnivPS( ");
+        UnivPowerSeries<C> s = this;
+        String var = ring.var;
+        //System.out.println("cache = " + s.coeffCache);
+        for (int i = 0; i < truncate; i++ ) {
+            C c = s.coefficient(i);
+            int si = c.signum();
+            if ( si != 0 ) {
+                if ( si > 0 ) {
+                    if ( sb.length() > 0 ) {
+                       sb.append(" + ");
+                    }
+                } else {
+                    c = c.negate();
+                    sb.append(" - ");
+                }
+                if ( !c.isONE() || i == 0 ) {
+                   sb.append( c.toScript() );
+                   if ( i > 0 ) {
+                      sb.append( " * " );
+                   }
+                }
+                if ( i == 0 ) {
+                    //skip; sb.append(" ");
+                } else if ( i == 1 ) {
+                    sb.append(var);
+                } else {
+                    sb.append(var + "**" + i);
+                }
+            //sb.append(c.toString() + ", ");
+            }
+            //System.out.println("cache = " + s.coeffCache);
+        }
+        if ( sb.length() == 0 ) {
+           sb.append("0");
+        }
+        sb.append(", " + truncate + " )");
+        return sb.toString();
+    }
+
+
+    /** Get a scripting compatible string representation of the factory.
+     * @return script compatible representation for this ElemFactory.
+     * @see edu.jas.structure.Element#toScriptFactory()
+     */
+    @Override
+    public String toScriptFactory() {
+        // Python case
+        return factory().toScript();
+    }
+
+
     /**
      * Get coefficient.
      * @param index number of requested coefficient.

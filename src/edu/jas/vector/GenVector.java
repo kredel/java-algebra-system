@@ -75,6 +75,40 @@ public class GenVector<C extends RingElem<C> >
     }
 
 
+    /** Get a scripting compatible string representation.
+     * @return script compatible representation for this Element.
+     * @see edu.jas.structure.Element#toScript()
+     */
+    @Override
+    public String toScript() {
+        // Python case
+        StringBuffer s = new StringBuffer();
+        s.append("( ");
+        boolean first = true;
+        for ( C c : val ) {
+            if ( first ) {
+                first = false;
+            } else {
+                s.append(", ");
+            }
+            s.append( c.toScript() );
+        }
+        s.append(" )");
+        return s.toString();
+    }
+
+
+    /** Get a scripting compatible string representation of the factory.
+     * @return script compatible representation for this ElemFactory.
+     * @see edu.jas.structure.Element#toScriptFactory()
+     */
+    @Override
+    public String toScriptFactory() {
+        // Python case
+        return factory().toScript();
+    }
+
+
     /**
      * Get the corresponding element factory.
      * @return factory for this Element.

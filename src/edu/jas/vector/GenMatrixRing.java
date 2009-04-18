@@ -124,6 +124,20 @@ public class GenMatrixRing<C extends RingElem<C> >
     }
 
 
+    /** Get a scripting compatible string representation.
+     * @return script compatible representation for this ElemFactory.
+     * @see edu.jas.structure.ElemFactory#toScript()
+     */
+    @Override
+    public String toScript() {
+        // Python case
+        StringBuffer s = new StringBuffer("MatModul(");
+        s.append( coFac.toScript() );
+        s.append(", " + rows + ", " + cols + " )" );
+        return s.toString();
+    }
+
+
     /**
      * Get the constant one for the GenMatrix.
      * @return ZERO.

@@ -228,6 +228,20 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> >
     }
 
 
+    /** Get a scripting compatible string representation.
+     * @return script compatible representation for this ElemFactory.
+     * @see edu.jas.structure.ElemFactory#toScript()
+     */
+    @Override
+    public String toScript() {
+        // Python case
+        return "RealN(" + algebraic.modul.toScript() 
+                 + ", " + root.toScript() 
+                 + ", " + algebraic.isField() 
+                 + ", " + algebraic.ring.toScript() + ")";
+    }
+
+
     /** Comparison with any other object.
      * @see java.lang.Object#equals(java.lang.Object)
      */
