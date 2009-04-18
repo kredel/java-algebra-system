@@ -80,7 +80,7 @@ class Ring:
     def __str__(self):
         '''Create a string representation.
         '''
-        return str(self.ring);
+        return str(self.ring.toScript());
 
     def ideal(self,ringstr="",list=None):
         '''Create an ideal.
@@ -235,7 +235,7 @@ class Ideal:
     def __str__(self):
         '''Create a string representation.
         '''
-        return str(self.pset);
+        return str(self.pset.toScript());
 
     def paramideal(self):
         '''Create an ideal in a polynomial ring with parameter coefficients.
@@ -445,9 +445,9 @@ class ParamIdeal:
         '''Create a string representation.
         '''
         if self.gbsys == None:
-            return str(self.pset);
+            return str(self.pset.toScript());
         else:
-            return str(self.gbsys);
+            return str(self.gbsys.toScript());
 #            return str(self.pset) + "\n" + str(self.gbsys);
 
     def optimizeCoeff(self):
@@ -649,7 +649,7 @@ class SolvableRing(Ring):
     def __str__(self):
         '''Create a string representation.
         '''
-        return str(self.ring);
+        return str(self.ring.toScript());
 
     def ideal(self,ringstr="",list=None):
         '''Create a solvable ideal.
@@ -696,7 +696,7 @@ class SolvableIdeal:
     def __str__(self):
         '''Create a string representation.
         '''
-        return str(self.pset);
+        return str(self.pset.toScript());
 
     def leftGB(self):
         '''Compute a left Groebner base.
@@ -831,7 +831,7 @@ class Module:
     def __str__(self):
         '''Create a string representation.
         '''
-        return str(self.mset);
+        return str(self.mset.toScript());
 
     def submodul(self,modstr="",list=None):
         '''Create a sub-module.
@@ -883,7 +883,7 @@ class SubModule:
     def __str__(self):
         '''Create a string representation.
         '''
-        return str(self.mset); # + "\n\n" + str(self.pset);
+        return str(self.mset.toScript()); # + "\n\n" + str(self.pset);
 
     def GB(self):
         '''Compute a Groebner base.
@@ -936,7 +936,7 @@ class SolvableModule(Module):
     def __str__(self):
         '''Create a string representation.
         '''
-        return str(self.mset);
+        return str(self.mset.toScript());
 
     def submodul(self,modstr="",list=None):
         '''Create a solvable sub-module.
@@ -975,7 +975,7 @@ class SolvableSubModule:
     def __str__(self):
         '''Create a string representation.
         '''
-        return str(self.mset); # + "\n\n" + str(self.pset);
+        return str(self.mset.toScript()); # + "\n\n" + str(self.pset);
 
     def leftGB(self):
         '''Compute a left Groebner base.
@@ -1062,7 +1062,7 @@ class SeriesRing:
     def __str__(self):
         '''Create a string representation.
         '''
-        return str(self.ring);
+        return str(self.ring.toScript());
 
     def gens(self):
         '''Get the generators of the power series ring.
@@ -1662,6 +1662,8 @@ class PolyRing(Ring):
 
     def __str__(self):
         '''Create a string representation.
+
+        todo: add .toScript()
         '''
         cf = self.ring.coFac;
         cfac = cf;
