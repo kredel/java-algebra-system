@@ -17,6 +17,12 @@
   The implementation follows in part 
   section 8.8 "Computation of real zeroes of Polynomial Systems" 
   in <em>Gröbner Bases</em>, A computational Approach to Commutative Algebra, by Becker et al.
+  <br />
+  The class <code>RealAlgebraicNumber</code> is based on <code>AlgebraicNumber</code> 
+  with factory class <code>RealAlgebraicRing</code> based on <code>AlgebraicNumberRing</code>.
+  They implement real algebraic numbers, which are algebraic numbers plus an  
+  isolating interval for a real root of the generator.
+  <code>RealRootsSturm</code> can be applied to polynomials with real algebraic numbers.
 </p>
 
 
@@ -25,7 +31,7 @@
 <p>
 <!-- Created: Sat Mar 21 20:20:15 CET 2009 -->
 <!-- hhmts start -->
-Last modified: Sat Apr 18 12:21:49 CEST 2009
+Last modified: Sat Apr 18 12:28:03 CEST 2009
 <!-- hhmts end -->
 </p>
 <p>$Id$ 
