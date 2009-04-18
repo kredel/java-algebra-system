@@ -11,7 +11,7 @@ from org.apache.log4j    import BasicConfigurator;
 
 from edu.jas.structure   import RingElem, RingFactory, Power
 from edu.jas.arith       import BigInteger, BigRational, BigComplex, BigDecimal,\
-                                ModInteger, ModIntegerRing
+                                ModInteger, ModIntegerRing, BigQuaternion, BigOctonion
 from edu.jas.poly        import GenPolynomial, GenPolynomialRing,\
                                 GenSolvablePolynomial, GenSolvablePolynomialRing,\
                                 GenPolynomialTokenizer, OrderedPolynomialList, PolyUtil,\
@@ -1286,6 +1286,10 @@ def RF(pr,d=0,n=1):
 def CC(re=BigRational(),im=BigRational()):
     '''Create JAS BigComplex as ring element.
     '''
+    if re == 0:
+        re = BigRational();
+    if im == 0:
+        im = BigRational();
     if isinstance(re,PyTuple) or isinstance(re,PyList):
         if isinstance(re[0],PyTuple) or isinstance(re[0],PyList):
             if len(re) > 1:
@@ -1326,16 +1330,58 @@ def DD(d=0):
     return RingElem(r);
 
 
+def Quat(re=BigRational(),im=BigRational(),jm=BigRational(),km=BigRational()):
+    '''Create JAS BigQuaternion as ring element.
+    '''
+    if re == 0:
+        re = BigRational();
+    if im == 0:
+        im = BigRational();
+    if jm == 0:
+        jm = BigRational();
+    if km == 0:
+        km = BigRational();
+    if isinstance(re,PyTuple) or isinstance(re,PyList):
+        if isinstance(re[0],PyTuple) or isinstance(re[0],PyList):
+            if len(re) > 1:
+                im = QQ( re[1] );
+            re = QQ( re[0] );
+        else:
+            re = QQ(re);
+#        re = makeJasArith( re );
+    if isinstance(im,PyTuple) or isinstance(im,PyList):
+        im = QQ( im );
+    if isinstance(jm,PyTuple) or isinstance(jm,PyList):
+        jm = QQ( jm );
+    if isinstance(km,PyTuple) or isinstance(km,PyList):
+       kim = QQ( km );
+#        im = makeJasArith( im );
+    if isinstance(re,RingElem):
+        re = re.elem;
+    if isinstance(im,RingElem):
+        im = im.elem;
+    if isinstance(jm,RingElem):
+        jm = jm.elem;
+    if isinstance(km,RingElem):
+        km = km.elem;
+    c = BigQuaternion(re,im,jm,km);
+    return RingElem(c);
+
+
 def coercePair(a,b):
     '''Coerce type a to type b or type b to type a.
     '''
-    if not a.isPolynomial() and b.isPolynomial():
-        s = b.coerce(a);
-        o = b;
-    else:
+    try:
+        if not a.isPolynomial() and b.isPolynomial():
+            s = b.coerce(a);
+            o = b;
+        else:
+            s = a;
+            o = a.coerce(b);
+    except:
         s = a;
         o = a.coerce(b);
-    return [s,o];
+    return (s,o);
     
 
 class RingElem:
@@ -1574,12 +1620,19 @@ class RingElem:
     def factory(self):
         '''Get the factory of this element.
         '''
-        fac = self.elem.getFactory();
+        fac = self.elem.factory();
         try:
             nv = fac.nvar;
         except:
             return RingElem(fac);
         return Ring(ring=fac);
+
+    def gens(self):
+        '''Get the generators for the factory of this element.
+        '''
+        L = self.elem.factory().generators();
+        N = [ RingElem(e) for e in L ];
+        return N;
 
     def evaluate(self,a):
         '''Evaluate at a for power series.
