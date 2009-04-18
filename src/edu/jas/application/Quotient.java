@@ -192,6 +192,29 @@ public class Quotient<C extends GcdRingElem<C>> implements RingElem<Quotient<C>>
     }
 
 
+    /** Get a scripting compatible string representation.
+     * @return script compatible representation for this Element.
+     * @see edu.jas.structure.Element#toScript()
+     */
+    @Override
+    public String toScript() {
+        // Python case
+        return "PolyQuotient( " + num.toScript() 
+                         + ", " + den.toScript() + " )";
+    }
+
+
+    /** Get a scripting compatible string representation of the factory.
+     * @return script compatible representation for this ElemFactory.
+     * @see edu.jas.structure.Element#toScriptFactory()
+     */
+    @Override
+    public String toScriptFactory() {
+        // Python case
+        return factory().toScript();
+    }
+
+
     /**
      * Quotient comparison.
      * @param b Quotient.

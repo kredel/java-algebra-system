@@ -190,6 +190,40 @@ public class Product<C extends RingElem<C> >
     }
 
 
+    /** Get a scripting compatible string representation.
+     * @return script compatible representation for this Element.
+     * @see edu.jas.structure.Element#toScript()
+     */
+    @Override
+    public String toScript() {
+        // Python case
+        StringBuffer s = new StringBuffer("Product( { ");
+        boolean first = true;
+        for ( Integer i : val.keySet() ) {
+            if ( first ) {
+                first = false;
+            } else {
+                s.append(", ");
+            }
+            C v = val.get(i);
+            s.append( i + ": " + v.toScript() );
+        }
+        s.append(" } )");
+        return s.toString();
+    }
+
+
+    /** Get a scripting compatible string representation of the factory.
+     * @return script compatible representation for this ElemFactory.
+     * @see edu.jas.structure.Element#toScriptFactory()
+     */
+    @Override
+    public String toScriptFactory() {
+        // Python case
+        return factory().toScript();
+    }
+
+
     /** Product comparison.  
      * @param b Product.
      * @return sign(this-b).

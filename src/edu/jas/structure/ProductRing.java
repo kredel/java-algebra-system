@@ -358,6 +358,26 @@ public class ProductRing<C extends RingElem<C> >
     }
 
 
+    /** Get a scripting compatible string representation.
+     * @return script compatible representation for this ElemFactory.
+     * @see edu.jas.structure.ElemFactory#toScript()
+     */
+    @Override
+    public String toScript() {
+        // Python case
+        StringBuffer s = new StringBuffer("ProductRing( { ");
+        for ( int i = 0; i < length(); i++ ) {
+            if ( i > 0 ) {
+                s.append(", ");
+            }
+            RingFactory<C> v = getFactory(i);
+            s.append( i + ": " + v.toScript() );
+        }
+        s.append(" } )");
+        return s.toString();
+    }
+
+
     /** Comparison with any other object.
      * @see java.lang.Object#equals(java.lang.Object)
      */

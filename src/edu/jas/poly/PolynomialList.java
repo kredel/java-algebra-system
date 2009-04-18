@@ -189,6 +189,36 @@ public class PolynomialList<C extends RingElem<C> >
     }
 
 
+    /** Get a scripting compatible string representation.
+     * @return script compatible representation for this polynomial list.
+     * @see edu.jas.structure.Element#toScript()
+     */
+    public String toScript() {
+        // Python case
+        StringBuffer erg = new StringBuffer();
+        if ( ring != null ) {
+           erg.append( ring.toScript() + "\n" );
+        }
+        erg.append("[\n");
+        boolean first = true;
+        String sa = null;
+        for ( GenPolynomial<C> oa: list ) {
+            sa = oa.toScript();
+            if ( first ) {
+               first = false;
+            } else {
+               erg.append( ", " );
+               if ( sa.length() > 10 ) {
+                  erg.append("\n");
+               }
+            }
+            erg.append( "( " + sa + " )" );
+        }
+        erg.append("\n]");
+        return erg.toString();
+    }
+
+
     /**
      * Get ModuleList from PolynomialList.
      * Extract module from polynomial ring. 
