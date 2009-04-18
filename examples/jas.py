@@ -1359,7 +1359,7 @@ class RingElem:
     def __str__(self):
         '''Create a string representation.
         '''
-        return str(self.elem); 
+        return str(self.elem.toScript()); 
 
     def zero(self):
         '''Zero element of this ring.
