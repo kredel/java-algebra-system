@@ -324,6 +324,17 @@ public class GenPolynomialRing<C extends RingElem<C> >
     }
 
 
+    /** Get a scripting compatible string representation.
+     * @return script compatible representation for this Element.
+     * @see edu.jas.structure.Element#toScript()
+     */
+    @Override
+    public String toScript() {
+        // Python case
+        return toString();
+    }
+
+
     /** Comparison with any other object.
      * @see java.lang.Object#equals(java.lang.Object)
      */

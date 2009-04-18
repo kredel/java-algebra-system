@@ -166,6 +166,29 @@ public class Residue<C extends RingElem<C> >
     }
 
 
+    /** Get a scripting compatible string representation.
+     * @return script compatible representation for this Element.
+     * @see edu.jas.structure.Element#toScript()
+     */
+    @Override
+    public String toScript() {
+        // Python case
+        return "Residue( " + val.toScript() 
+                   + " , " + ring.toScript() + " )";
+    }
+
+
+    /** Get a scripting compatible string representation of the factory.
+     * @return script compatible representation for this ElemFactory.
+     * @see edu.jas.structure.Element#toScriptFactory()
+     */
+    @Override
+    public String toScriptFactory() {
+        // Python case
+        return factory().toScript();
+    }
+
+
     /** Residue comparison.  
      * @param b Residue.
      * @return sign(this-b).

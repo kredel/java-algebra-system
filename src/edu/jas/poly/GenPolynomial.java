@@ -295,6 +295,73 @@ public class GenPolynomial<C extends RingElem<C> >
     }
 
 
+    /** Get a scripting compatible string representation.
+     * @return script compatible representation for this Element.
+     * @see edu.jas.structure.Element#toScript()
+     */
+    @Override
+    public String toScript() {
+        // Python case
+        if ( isZERO() ) {
+           return "0";
+        } 
+        StringBuffer s = new StringBuffer();
+        // s.append( "( " );
+        String[] v = ring.vars;
+        if ( v == null ) {
+            v = ring.evzero.stdVars();
+        }
+        boolean parenthesis = false;
+        if (    ring.coFac instanceof GenPolynomialRing
+             || ring.coFac instanceof AlgebraicNumberRing
+                // || ring.coFac instanceof RealAlgebraicRing
+                ) {
+            parenthesis = true;
+        }
+        boolean first = true;
+        for ( Map.Entry<ExpVector,C> m : val.entrySet() ) {
+            C c = m.getValue();
+            if ( first ) {
+                first = false;
+            } else {
+                if ( c.signum() < 0 ) {
+                    s.append( " - " );
+                    c = c.negate();
+                } else {
+                    s.append( " + " );
+                }
+            }
+            ExpVector e = m.getKey();
+            if ( !c.isONE() || e.isZERO() ) {
+                if ( parenthesis ) {
+                    s.append( "( " );
+                }
+                s.append( c.toScript() );
+                if ( parenthesis ) {
+                    s.append( " )" );
+                }
+                if ( ! e.isZERO() ) {
+                   s.append( " * " );
+                }
+            }
+            s.append( e.toScript(v) );
+        }
+        //s.append(" )");
+        return s.toString();
+    }
+
+
+    /** Get a scripting compatible string representation of the factory.
+     * @return script compatible representation for this ElemFactory.
+     * @see edu.jas.structure.Element#toScriptFactory()
+     */
+    @Override
+    public String toScriptFactory() {
+        // Python case
+        return factory().toScript();
+    }
+
+
     /** Is GenPolynomial<C> zero. 
      * @return If this is 0 then true is returned, else false.
      * @see edu.jas.structure.RingElem#isZERO()

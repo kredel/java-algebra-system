@@ -178,7 +178,7 @@ public final class ModInteger implements GcdRingElem<ModInteger> {
     @Override
     public String toScriptFactory() {
         // Python case
-        return ring.toScript();
+        return factory().toScript();
     }
 
 

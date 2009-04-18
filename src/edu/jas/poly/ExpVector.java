@@ -286,6 +286,70 @@ public abstract class ExpVector implements AbelianGroupElem<ExpVector>
     }
 
 
+    /** Get a scripting compatible string representation.
+     * @return script compatible representation for this Element.
+     * @see edu.jas.structure.Element#toScript()
+     */
+    @Override
+    public String toScript() {
+        return toScript( stdVars()  );
+    }
+
+
+    /** Get a scripting compatible string representation.
+     * @return script compatible representation for this Element.
+     * @see edu.jas.structure.Element#toScript()
+     */
+    // @Override
+    public String toScript(String[] vars) {
+        // Python case
+        int r = length();
+        if ( r != vars.length ) {
+            return toString();
+        }
+        StringBuffer s = new StringBuffer();
+        boolean pit;
+        long vi;
+        for ( int i = r-1; i > 0; i-- ) {
+            vi = getVal( i );
+            if ( vi != 0 ) { 
+                s.append( vars[ r-1-i ] );
+                if ( vi != 1 ) {
+                    s.append("**" + vi);
+                }
+                pit = false;
+                for ( int j = i-1; j >= 0; j-- ) {
+                    if ( getVal(j) != 0 ) {
+                       pit = true;
+                    }
+                }
+                if ( pit ) { 
+                    s.append(" * ");
+                }
+            }
+        }
+        vi = getVal( 0 );
+        if ( vi != 0 ) { 
+            s.append( vars[ r-1 ] );
+            if ( vi != 1 ) {
+                s.append("**" + vi);
+            }
+        }
+        return s.toString();
+    }
+
+
+    /** Get a scripting compatible string representation of the factory.
+     * @return script compatible representation for this ElemFactory.
+     * @see edu.jas.structure.Element#toScriptFactory()
+     */
+    @Override
+    public String toScriptFactory() {
+        // Python case
+        return "ExpVector()";
+    }
+
+
     /** Comparison with any other object.
      * @see java.lang.Object#equals(java.lang.Object)
      */
