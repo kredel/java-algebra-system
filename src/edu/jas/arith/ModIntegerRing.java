@@ -218,8 +218,19 @@ public final class ModIntegerRing implements RingFactory<ModInteger> {
      * @see java.lang.Object#toString()
      */
     @Override
-     public String toString() {
+    public String toString() {
         return " mod(" + modul.toString() + ")";
+    }
+
+
+    /** Get a scripting compatible string representation.
+     * @return script compatible representation for this ElemFactory.
+     * @see edu.jas.structure.ElemFactory#toScript()
+     */
+    @Override
+    public String toScript() {
+        // Python case
+        return "ZM(" + modul.toString() + ")";
     }
 
 

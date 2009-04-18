@@ -82,4 +82,10 @@ public interface ElemFactory<C extends Element<C>> extends Serializable {
      */
     public C parse(Reader r);
 
+
+    /** Get a scripting compatible string representation.
+     * @return script compatible representation for this ElemFactory.
+     */
+    public String toScript();
+
 }

@@ -246,8 +246,30 @@ public final class BigInteger implements GcdRingElem<BigInteger>,
      * @see java.lang.Object#toString()
      */
     @Override
-     public String toString() {
+    public String toString() {
         return val.toString();
+    }
+
+
+    /** Get a scripting compatible string representation.
+     * @return script compatible representation for this Element.
+     * @see edu.jas.structure.Element#toScript()
+     */
+    @Override
+    public String toScript() {
+        // Python case
+        return toString();
+    }
+
+
+    /** Get a scripting compatible string representation of the factory.
+     * @return script compatible representation for this ElemFactory.
+     * @see edu.jas.structure.Element#toScriptFactory()
+     */
+    @Override
+    public String toScriptFactory() {
+        // Python case
+        return "ZZ()";
     }
 
 

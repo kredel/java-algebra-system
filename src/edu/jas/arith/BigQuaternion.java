@@ -50,7 +50,11 @@ public final class BigQuaternion implements StarRingElem<BigQuaternion>,
 
     private final static Random random = new Random();
 
+
     private static final Logger logger = Logger.getLogger(BigQuaternion.class);
+
+
+    private final boolean debug = logger.isDebugEnabled();
 
 
 
@@ -359,19 +363,75 @@ public final class BigQuaternion implements StarRingElem<BigQuaternion>,
      * @see java.lang.Object#toString()
      */
     @Override
-     public String toString() {
+    public String toString() {
         String s = "" + re;
         int i = im.compareTo( BigRational.ZERO );
         int j = jm.compareTo( BigRational.ZERO );
         int k = km.compareTo( BigRational.ZERO );
-        logger.debug("compareTo "+im+" ? 0 = "+i);
-        logger.debug("compareTo "+jm+" ? 0 = "+j);
-        logger.debug("compareTo "+km+" ? 0 = "+k);
+        if ( debug ) {
+            logger.debug("compareTo "+im+" ? 0 = "+i);
+            logger.debug("compareTo "+jm+" ? 0 = "+j);
+            logger.debug("compareTo "+km+" ? 0 = "+k);
+        }
         if ( i == 0 && j == 0 && k == 0 ) return s;
         s += "i" + im;
         s += "j" + jm;
         s += "k" + km;
         return s;
+    }
+
+
+    /** Get a scripting compatible string representation.
+     * @return script compatible representation for this Element.
+     * @see edu.jas.structure.Element#toScript()
+     */
+    @Override
+    public String toScript() {
+        // Python case
+        StringBuffer s = new StringBuffer();
+        boolean i = im.isZERO();
+        boolean j = jm.isZERO();
+        boolean k = km.isZERO();
+        if ( i && j && k ) {
+            return re.toScript();
+        }
+        if ( !re.isZERO() ) {
+            s.append(re.toScript());
+            s.append(" ");
+        } 
+        if ( !i ) {
+            if ( s.length() > 0 ) {
+                s.append("+ ");
+            }
+            s.append(im.toScript());
+            s.append("*IQ ");
+        } 
+        if ( !j ) {
+            if ( s.length() > 0 ) {
+                s.append("+ ");
+            }
+            s.append(jm.toScript());
+            s.append("*JQ ");
+        } 
+        if ( !k ) {
+            if ( s.length() > 0 ) {
+                s.append("+ ");
+            }
+            s.append(km.toScript());
+            s.append("*KQ ");
+        } 
+        return s.toString();
+    }
+
+
+    /** Get a scripting compatible string representation of the factory.
+     * @return script compatible representation for this ElemFactory.
+     * @see edu.jas.structure.Element#toScriptFactory()
+     */
+    @Override
+    public String toScriptFactory() {
+        // Python case
+        return "Quat()";
     }
 
 

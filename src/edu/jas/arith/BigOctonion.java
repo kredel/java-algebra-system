@@ -43,7 +43,12 @@ public final class BigOctonion implements StarRingElem<BigOctonion>,
 
     private final static Random random = new Random();
 
+
     private static final Logger logger = Logger.getLogger(BigOctonion.class);
+
+
+    private final boolean debug = logger.isDebugEnabled();
+
 
 
     /** Constructor for a BigOctonion from Quaternions.
@@ -276,13 +281,54 @@ public final class BigOctonion implements StarRingElem<BigOctonion>,
      * @see java.lang.Object#toString()
      */
     @Override
-     public String toString() {
+    public String toString() {
         String s = "" + or;
         int i = oi.compareTo( BigQuaternion.ZERO );
-        logger.debug("compareTo "+i+" ? 0 = "+oi);
+        if ( debug ) {
+            logger.debug("compareTo "+i+" ? 0 = "+oi);
+        }
         if ( i == 0 ) return s;
         s += "o" + oi;
         return s;
+    }
+
+
+    /** Get a scripting compatible string representation.
+     * @return script compatible representation for this Element.
+     * @see edu.jas.structure.Element#toScript()
+     */
+    @Override
+    public String toScript() {
+        // Python case
+        StringBuffer s = new StringBuffer();
+        boolean i = oi.isZERO();
+        if ( i ) {
+            return or.toScript();
+        }
+        if ( !or.isZERO() ) {
+            s.append(or.toScript());
+            s.append(" ");
+        } 
+        if ( !i ) {
+            if ( s.length() > 0 ) {
+                s.append("+ ");
+            }
+            String is = oi.toScript();
+            is = is.replaceAll("Q","O");
+            s.append(is);
+        } 
+        return s.toString();
+    }
+
+
+    /** Get a scripting compatible string representation of the factory.
+     * @return script compatible representation for this ElemFactory.
+     * @see edu.jas.structure.Element#toScriptFactory()
+     */
+    @Override
+    public String toScriptFactory() {
+        // Python case
+        return "Oct()";
     }
 
 

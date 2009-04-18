@@ -215,7 +215,7 @@ public final class BigRational implements GcdRingElem<BigRational>,
      * @see java.lang.Object#toString()
      */
     @Override
-     public String toString() {
+    public String toString() {
         StringBuffer s = new StringBuffer();
         s.append(num);
         if ( ! den.equals(BigInteger.ONE) ) {
@@ -223,6 +223,37 @@ public final class BigRational implements GcdRingElem<BigRational>,
         }
         return s.toString();
     } 
+
+
+    /** Get a scripting compatible string representation.
+     * @return script compatible representation for this Element.
+     * @see edu.jas.structure.Element#toScript()
+     */
+    @Override
+    public String toScript() {
+        // Python case
+        StringBuffer s = new StringBuffer();
+        if ( den.equals(BigInteger.ONE) ) {
+            s.append(num);
+        } else {
+            s.append("(");
+            s.append(num);
+            s.append(",").append(den);
+            s.append(")");
+        }
+        return s.toString();
+    }
+
+
+    /** Get a scripting compatible string representation of the factory.
+     * @return script compatible representation for this ElemFactory.
+     * @see edu.jas.structure.Element#toScriptFactory()
+     */
+    @Override
+    public String toScriptFactory() {
+        // Python case
+        return "QQ()";
+    }
 
 
     /** Get the zero element.

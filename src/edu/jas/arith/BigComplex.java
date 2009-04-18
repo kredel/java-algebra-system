@@ -267,13 +267,44 @@ public final class BigComplex implements StarRingElem<BigComplex>,
     /** Get the String representation.
      */
     @Override
-     public String toString() {
+    public String toString() {
         String s = "" + re;
         int i = im.compareTo( BigRational.ZERO );
         //logger.info("compareTo "+im+" ? 0 = "+i);
         if ( i == 0 ) return s;
         s += "i" + im;
         return s;
+    }
+
+
+    /** Get a scripting compatible string representation.
+     * @return script compatible representation for this Element.
+     * @see edu.jas.structure.Element#toScript()
+     */
+    @Override
+    public String toScript() {
+        // Python case
+        StringBuffer s = new StringBuffer();
+        if ( im.isZERO() ) {
+            s.append(re.toScript());
+        } else {
+            s.append("(");
+            s.append(re.toScript());
+            s.append(",").append(im.toScript());
+            s.append(")");
+        }
+        return s.toString();
+    }
+
+
+    /** Get a scripting compatible string representation of the factory.
+     * @return script compatible representation for this ElemFactory.
+     * @see edu.jas.structure.Element#toScriptFactory()
+     */
+    @Override
+    public String toScriptFactory() {
+        // Python case
+        return "CC()";
     }
 
 

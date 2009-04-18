@@ -57,4 +57,16 @@ public interface Element<C extends Element<C>> extends Cloneable,
      */
     public ElemFactory<C> factory();
 
+
+    /** Get a scripting compatible string representation.
+     * @return script compatible representation for this Element.
+     */
+    public String toScript();
+
+
+    /** Get a scripting compatible string representation of the factory.
+     * @return script compatible representation for this ElemFactory.
+     */
+    public String toScriptFactory();
+
 }
