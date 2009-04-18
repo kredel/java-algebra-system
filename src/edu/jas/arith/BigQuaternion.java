@@ -403,22 +403,28 @@ public final class BigQuaternion implements StarRingElem<BigQuaternion>,
             if ( s.length() > 0 ) {
                 s.append("+ ");
             }
-            s.append(im.toScript());
-            s.append("*IQ ");
+            if ( !im.isONE() ) {
+                s.append(im.toScript()+"*");
+            }
+            s.append("IQ ");
         } 
         if ( !j ) {
             if ( s.length() > 0 ) {
                 s.append("+ ");
             }
-            s.append(jm.toScript());
-            s.append("*JQ ");
+            if ( !jm.isONE() ) {
+               s.append(jm.toScript()+"*");
+            }
+            s.append("JQ ");
         } 
         if ( !k ) {
             if ( s.length() > 0 ) {
                 s.append("+ ");
             }
-            s.append(km.toScript());
-            s.append("*KQ ");
+            if ( !km.isONE() ) {
+                s.append(km.toScript()+"*");
+            }
+            s.append("KQ ");
         } 
         return s.toString();
     }
