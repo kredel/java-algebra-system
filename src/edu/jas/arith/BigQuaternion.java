@@ -393,11 +393,17 @@ public final class BigQuaternion implements StarRingElem<BigQuaternion>,
         boolean j = jm.isZERO();
         boolean k = km.isZERO();
         if ( i && j && k ) {
-            return re.toScript();
+            if ( !re.isONE() ) {
+                s.append(re.toScript()+"*");
+            }
+            s.append("oneQ ");
+            return s.toString();
         }
         if ( !re.isZERO() ) {
-            s.append(re.toScript());
-            s.append(" ");
+            if ( !re.isONE() ) {
+                s.append(re.toScript()+"*");
+            }
+            s.append("oneQ ");
         } 
         if ( !i ) {
             if ( s.length() > 0 ) {

@@ -302,11 +302,13 @@ public final class BigOctonion implements StarRingElem<BigOctonion>,
         // Python case
         StringBuffer s = new StringBuffer();
         boolean i = oi.isZERO();
-        if ( i ) {
-            return or.toScript();
-        }
+        //        if ( i ) {
+        //    return or.toScript();
+        //}
         if ( !or.isZERO() ) {
-            s.append(or.toScript());
+            String rs = or.toScript();
+            rs = rs.replaceAll("Q","OR");
+            s.append(rs);
             s.append(" ");
         } 
         if ( !i ) {
@@ -314,7 +316,7 @@ public final class BigOctonion implements StarRingElem<BigOctonion>,
                 s.append("+ ");
             }
             String is = oi.toScript();
-            is = is.replaceAll("Q","O");
+            is = is.replaceAll("Q","OI");
             s.append(is);
         } 
         return s.toString();
