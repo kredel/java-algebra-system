@@ -335,7 +335,14 @@ public class GenPolynomialRing<C extends RingElem<C> >
         if ( cf.startsWith("0") ) {
             cf = ((RingElem<C>)coFac).toScriptFactory();
         }
-        return "PolyRing(" + cf + "," + varsToString() + "," + tord + ")";
+        String to = tord.toString();
+        if ( tord.getEvord() == TermOrder.INVLEX ) {
+            to = "PolyRing.lex";
+        }
+        if ( tord.getEvord() == TermOrder.IGRLEX ) {
+            to = "PolyRing.grad";
+        }
+        return "PolyRing(" + cf + ",\"" + varsToString() + "\"," + to + ")";
     }
 
 
