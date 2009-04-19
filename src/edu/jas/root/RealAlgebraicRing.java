@@ -235,10 +235,10 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> >
     @Override
     public String toScript() {
         // Python case
-        return "RealN(" + algebraic.modul.toScript() 
+        return "RealN( " + algebraic.modul.toScript() 
                  + ", " + root.toScript() 
-                 + ", " + algebraic.isField() 
-                 + ", " + algebraic.ring.toScript() + ")";
+            //+ ", " + algebraic.isField() 
+                 + ", " + algebraic.ring.toScript() + " )";
     }
 
 
