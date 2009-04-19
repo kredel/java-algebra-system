@@ -253,6 +253,7 @@ a = AN(sqrt2,alpha);
 print "a     = " + str(a);
 b = a**2 -2;
 print "b     = " + str(b);
+print;
 
 print "------- GF(alpha**2 - 2,\"alpha\") ---------";
 r = PolyRing(ZM(17),"alpha",PolyRing.lex);
@@ -266,6 +267,7 @@ a = AN(sqrt2,alpha);
 print "a     = " + str(a);
 b = a**2 -2;
 print "b     = " + str(b);
+print;
 
 print "------- RAN(alpha**2 - 2,\"alpha\",((1),(2)) ---------";
 r = PolyRing(QQ(),"alpha",PolyRing.lex);
@@ -282,7 +284,6 @@ print "b     = " + str(b);
 print "b.factory()  = " + str(b.factory());
 print "sign(b)      = " + str(b.signum());
 print "magnitude(b) = " + str(BigDecimal(b.elem.magnitude()));
-
 print;
 
 
