@@ -234,6 +234,7 @@ public final class BigRational implements GcdRingElem<BigRational>,
         // Python case
         StringBuffer s = new StringBuffer();
         if ( den.equals(BigInteger.ONE) ) {
+            //s.append("("+num+",)");
             s.append(num);
         } else {
             s.append("(");
