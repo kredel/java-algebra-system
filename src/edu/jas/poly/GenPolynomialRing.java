@@ -331,7 +331,11 @@ public class GenPolynomialRing<C extends RingElem<C> >
     @Override
     public String toScript() {
         // Python case
-        return toString();
+        String cf = coFac.toScript().trim();
+        if ( cf.startsWith("0") ) {
+            cf = ((RingElem<C>)coFac).toScriptFactory();
+        }
+        return "PolyRing(" + cf + "," + varsToString() + "," + tord + ")";
     }
 
 
