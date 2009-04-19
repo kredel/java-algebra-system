@@ -17,25 +17,30 @@ z1 = ZZ(12345678901234567890);
 print "z1 = " + str(z1);
 z2 = z1**2 + 12345678901234567890;
 print "z2 = " + str(z2);
+print;
 
 print "------- QQ = BigRational ------------";
 r1 = QQ(1,12345678901234567890);
 print "r1 = " + str(r1**3);
 r2 = r1**2 + (1,12345678901234567890);
 print "r2 = " + str(r2);
+print;
 
 print "------- ZM = ModInteger ------------";
 m1 = ZM(19,12345678901234567890);
 print "m1 = " + str(m1);
 m2 = m1**2 + 12345678901234567890;
 print "m2 = " + str(m2);
+print;
 
 print "------- DD = BigDecimal ------------";
 d1 = DD(12345678901234567890);
 print "d1 = " + str(d1);
 d2 = (1/d1)**2;
 print "d2 = " + str(d2);
+print;
 
+print "------- CC = BigComplex ------------";
 c1 = CC((1,2),(5,));
 print "c1 = " + str(c1);
 c2 = (1/c1)**2;
@@ -48,6 +53,7 @@ print "one = " + str(one);
 print "I   = " + str(I);
 c4 = c3 + 5 * I;
 print "c4 = " + str(c4);
+print;
 
 print "------- Quat = BigQuaternion ------------";
 [oneQ,IQ,JQ,KQ] = Quat().gens();
@@ -63,6 +69,9 @@ q3 = q2 * q1 * q1;
 print "q3 = " + str(q3);
 q4 = (-23,1458) + (-1,243)*IQ + (-4,729)*JQ + (-5,729)*KQ
 print "q4 = " + str(q4);
+q5 = q2 - q4;
+print "q5  = " + str(q5);
+print;
 
 print "------- Oct = BigOctonion ------------";
 #print [ str(g) for g in Oct().gens() ];
@@ -75,16 +84,34 @@ print "oneOI = " + str(oneOI);
 print "IOI   = " + str(IOI);
 print "JOI   = " + str(JOI);
 print "KOI   = " + str(KOI);
-
 o1 = 2 * oneOR + 3 * IOR + 4 * JOR + 5 * KOR + 6 * oneOI + 7 * IOI + 8 * JOI + 9 * KOI;
 print "o1 = " + str(o1);
 o2 = (1/o1)**2;
 print "o2 = " + str(o2);
 o3 = o2 * o1 * o1;
 print "o3 = " + str(o3);
-
 o4 = (-69,20164)*oneOR + (-3,20164)*IOR + (-1,5041)*JOR + (-5,20164)*KOR  + (-3,10082)*oneOI + (-7,20164)*IOI + (-2,5041)*JOI + (-9,20164)*KOI;
 print "o4 = " + str(o4);
+o5 = o2 - o4;
+print "o5  = " + str(o5);
+print;
+
+print "------- PolyRing(ZZ,\"x,y,z\") ---------";
+r = PolyRing(ZZ(),"x,y,z",PolyRing.grad);
+print "r = " + str(r);
+[one,x,y,z] = r.gens();
+print "one = " + str(one);
+print "x   = " + str(x);
+print "y   = " + str(y);
+print "z   = " + str(z);
+p1 = 2 + 3 * x + 4 * y + 5 * z + (x+y+z)**2;
+print "p1  = " + str(p1);
+p2  = z**2 + 2 * y * z + 2 * x * z + y**2 + 2 * x * y + x**2 + 5 * z + 4 * y + 3 * x + 2;
+print "p2  = " + str(p2);
+p3 = p1 - p2;
+print "p3  = " + str(p3);
+
+print;
 
 
 print "------------------------------------";

@@ -300,11 +300,11 @@ public final class BigOctonion implements StarRingElem<BigOctonion>,
     @Override
     public String toScript() {
         // Python case
-        StringBuffer s = new StringBuffer();
         boolean i = oi.isZERO();
-        //        if ( i ) {
-        //    return or.toScript();
-        //}
+        if ( i && or.isZERO() ) {
+            return "0 ";
+        }
+        StringBuffer s = new StringBuffer();
         if ( !or.isZERO() ) {
             String rs = or.toScript();
             rs = rs.replaceAll("Q","OR");
