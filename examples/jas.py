@@ -1345,7 +1345,7 @@ def Oct(ro=BigQuaternion(),io=BigQuaternion()):
     '''Create JAS BigOctonion as ring element.
     '''
     if ro == 0:
-        r0 = BigQuaternion();
+        ro = BigQuaternion();
     if io == 0:
         io = BigQuaternion();
     if isinstance(ro,PyTuple) or isinstance(ro,PyList):
