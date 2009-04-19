@@ -1779,17 +1779,21 @@ class PolyRing(Ring):
         todo: add .toScript()
         '''
         cf = self.ring.coFac;
-        cfac = cf;
-        if cf.equals( BigInteger() ):
-            cfac = "ZZ()";
-        if cf.equals( BigRational() ):
-            cfac = "QQ()";
-        if cf.equals( BigComplex() ):
-            cfac = "CC()";
-        if cf.equals( BigDecimal() ):
-            cfac = "DD()";
-        if cf.getClass() == ModIntegerRing(3).getClass():
-            cfac = "ZM(%s)" % cf.modul;
+        #print "cf.getClasss(): " + str(cf.getClass());
+        try:
+            cfac = cf.toScriptFactory();
+        except:
+            cfac = cf.toScript();
+##         if cf.equals( BigInteger() ):
+##             cfac = "ZZ()";
+##         if cf.equals( BigRational() ):
+##             cfac = "QQ()";
+##         if cf.equals( BigComplex() ):
+##             cfac = "CC()";
+##         if cf.equals( BigDecimal() ):
+##             cfac = "DD()";
+##         if cf.getClass() == ModIntegerRing(3).getClass():
+##             cfac = "ZM(%s)" % cf.modul;
         if cf.getClass() == QuotientRing(GenPolynomialRing(BigInteger(),1)).getClass():
             qr = cf.ring;
             cfac = "RF(%s)" % str(PolyRing(qr.coFac,qr.varsToString(),qr.tord));
@@ -1797,6 +1801,7 @@ class PolyRing(Ring):
         #print "poly.getClasss(): " + str( GenPolynomialRing(BigInteger(),1).getClass() );
         if cf.getClass() == GenPolynomialRing(BigInteger(),1).getClass():
             cfac = str(PolyRing(cf.coFac,cf.varsToString(),cf.tord));
+        #print "cfac: " + str(cfac);
         to = self.ring.tord;
         tord = to;
         if to.evord == TermOrder.INVLEX:
