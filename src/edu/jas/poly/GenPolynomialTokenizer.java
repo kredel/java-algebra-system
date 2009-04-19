@@ -362,6 +362,7 @@ public class GenPolynomialTokenizer  {
                 first = tok.sval.charAt(0);
                 if ( digit(first) ) {
                     r = (RingElem)fac.parse( tok.sval );
+                    //System.out.println("r = " + r.toScriptFactory());
                     // ie = nextExponent();
                     // r = r^ie;
                     // c = new GenPolynomial<BigRational>(r,leer);
