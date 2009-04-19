@@ -191,115 +191,59 @@ print "s4  = " + str(s4);
 print "s4.factory() = " + str(s4.factory());
 print;
 
+print "------- PolyRing(Quat(),\"x,y,z\") ---------";
+r = PolyRing(Quat(),"x,y,z",PolyRing.grad);
+print "r = " + str(r);
+[oneQ,IQ,JQ,KQ,x,y,z] = r.gens();
+print "oneQ = " + str(oneQ);
+print "IQ   = " + str(IQ);
+print "JQ   = " + str(JQ);
+print "KQ   = " + str(KQ);
+print "x    = " + str(x);
+print "y    = " + str(y);
+print "z    = " + str(z);
+s1 = Quat((1,2)) + Quat((2,3)) * x + Quat((2,5)) * y + ( x + y + z )**2;
+print "s1  = " + str(s1);
+s2 = ((1,2),) + ((2,3),) * x + ((2,5),) * y + ( x + y + z )**2;
+print "s2  = " + str(s2);
+s3  = z**2 + 2 * y * z + 2 * x * z + y**2 + 2 * x * y + x**2 + (2,5) * y + (2,3) * x + (1,2);
+print "s3  = " + str(s3);
+s4 = s3 - s1;
+print "s4  = " + str(s4);
+print "s4.factory() = " + str(s4.factory());
+print;
+
+print "------- PolyRing(Oct(),\"x,y,z\") ---------";
+r = PolyRing(Oct(),"x,y,z",PolyRing.grad);
+print "r = " + str(r);
+[oneOR,IOR,JOR,KOR,oneOI,IOI,JOI,KOI,x,y,z] = r.gens();
+print "oneOR = " + str(oneOR);
+print "IOR   = " + str(IOR);
+print "JOR   = " + str(JOR);
+print "KOR   = " + str(KOR);
+print "oneOI = " + str(oneOI);
+print "IOI   = " + str(IOI);
+print "JOI   = " + str(JOI);
+print "KOI   = " + str(KOI);
+print "x     = " + str(x);
+print "y     = " + str(y);
+print "z     = " + str(z);
+s1 = Oct(Quat((1,2))) + Oct(Quat((2,3))) * x + Oct(Quat((2,5))) * y + ( x + y + z )**2;
+print "s1  = " + str(s1);
+s2 = QQ(1,2) + QQ(2,3) * x + QQ(2,5) * y + ( x + y + z )**2;
+print "s2  = " + str(s2);
+s3  = z**2 + 2 * y * z + 2 * x * z + y**2 + 2 * x * y + x**2 + (2,5) * y + (2,3) * x + (1,2);
+print "s3  = " + str(s3);
+s4 = s3 - s1;
+print "s4  = " + str(s4);
+print "s4.factory() = " + str(s4.factory());
+print;
+
 
 print "------------------------------------";
 
-sys.exit();
-
-#r = Ring( "Mod 19 (B,S,T,Z,P,W) L" );
-#r = Ring( "Mod 1152921504606846883 (B,S,T,Z,P,W) L" ); # 2^60-93
-#r = Ring( "Quat(B,S,T,Z,P,W) L" );
-#r = Ring( "Z(B,S,T,Z,P,W) L" );
-#r = Ring( "C(B,S,T,Z,P,W) L" );
-#r = Ring( "Z(B,S,T,Z,P,W) L" );
 #r = Ring( "IntFunc(e,f)(B,S,T,Z,P,W) L" );
-#r = Ring( "Z(B,S,T,Z,P,W) L" );
-#r = Ring( "Q(B,S,T,Z,P,W) L" );
 #print "Ring: " + str(r);
-#print;
-
-r = PolyRing(ZZ(),"B,S,T",PolyRing.lex);
-print "Ring: " + str(r);
-print;
-pr = PolyRing(r,"Z,P,W",PolyRing.lex);
-print "PolyRing: " + str(pr);
-#    PolyRing(ZZ(),"B,S,T,Z,P,W",PolyRing.lex)
-print;
-
-r = pr;
-
-# sage like: with generators for the polynomial ring
-print "r.gens() = ", [ str(f) for f in r.gens() ];
-print;
-#[one,e,f,B,S,T,Z,P,W] = r.gens();
-[one,B,S,T,Z,P,W] = r.gens();
-
-f1 = 45 * P + 35 * S - 165 * B - 36;
-f2 = 35 * P + 40 * Z + 25 * T - 27 * S;
-f3 = 15 * W + 25 * S * P + 30 * Z - 18 * T - 165 * B**2;
-f4 = - 9 * W + 15 * T * P + 20 * S * Z;
-f5 = P * W + 2 * T * Z - 11 * B**3;
-f6 = 99 * W - 11 * B * S + 3 * B**2;
-f7 = 10000.0 * B**2 + 6600 * B + 2673;
-#all ok:
-#f7 = f7 + e * f6**0;
-#f7 = f7 + 5959345574908321469098512640906154241024000000**2 * f6;
-#f7 = f7 + 35555./332 * f1;
-
-F = [ f1, f2, f3, f4, f5, f6, f7 ];
-#F = [ f1, f2, f3, f4, f5, f6 ]; 
-print "F = ", [ str(f) for f in F ];
-
-I = r.ideal( "", list=F );
-print "Ideal: " + str(I);
-print;
-
-print repr(f1);
-
-print str(f1);
-
-L = \
-[\
-( ( 10000 * B**2 + 6600 * B + 2673 ) ),\
-( ( 45 ) * P + ( 35 * S - 165 * B - 36 ) ),\
-( ( 35 ) * P + ( 40 ) * Z + ( 25 * T - 27 * S ) ),\
-( ( 15 ) * W + ( 25 * S ) * P + ( 30 ) * Z - ( 18 * T + 165 * B**2 ) ),\
-( ( -9 ) * W + ( 15 * T ) * P + ( 20 * S ) * Z ),\
-( ( 99 ) * W - ( 11 * B * S - 3 * B**2 ) ),\
-( P * W + ( 2 * T ) * Z - ( 11 * B**3 ) )\
-];
-
-print [ str(p) for p in L ];
-print;
-print [ str(p) for p in F ];
-print;
-
-sys.exit();
-
-rg = I.GB();
-print "seq Output:", rg;
-print;
-
-terminate();
-sys.exit();
-
-ps = """
-( 
- ( 45 P + 35 S - 165 B - 36 ), 
- ( 35 P + 40 Z + 25 T - 27 S ), 
- ( 15 W + 25 S P + 30 Z - 18 T - 165 B**2 ), 
- ( - 9 W + 15 T P + 20 S Z ), 
- ( P W + 2 T Z - 11 B**3 ), 
- ( 99 W - 11 B S + 3 B**2 ),
- ( 10000 B**2 + 6600 B + 2673 )
-) 
-""";
-
-# ( 10000 B**2 + 6600 B + 2673 )
-# ( B**2 + 33/50 B + 2673/10000 )
-
-#f = Ideal( r, ps );
-#print "Ideal: " + str(f);
-#print;
-
-f = r.ideal( ps );
-print "Ideal: " + str(f);
-print;
-
-#startLog();
-
-rg = f.GB();
-#print "seq Output:", rg;
 #print;
 
 terminate();
