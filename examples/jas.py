@@ -1397,6 +1397,8 @@ def Oct(ro=BigQuaternion(),io=BigQuaternion()):
 def coercePair(a,b):
     '''Coerce type a to type b or type b to type a.
     '''
+    #print "a type(%s) = %s" % (a,type(a));
+    #print "b type(%s) = %s" % (b,type(b));
     try:
         if not a.isPolynomial() and b.isPolynomial():
             s = b.coerce(a);
@@ -1423,10 +1425,10 @@ class RingElem:
             self.elem = elem.elem;
         else:
             self.elem = elem;
-        try:
-            self.ring = self.elem.ring;
-        except:
-            self.ring = self.elem;
+        self.ring = self.elem.factory();
+        #try:
+        #except:
+        #    self.ring = self.elem;
 
     def __str__(self):
         '''Create a string representation.
@@ -1479,9 +1481,12 @@ class RingElem:
         '''
         #print "self  type(%s) = %s" % (self,type(self));
         #print "other type(%s) = %s" % (other,type(other));
+        #print "self.elem class(%s) = %s" % (self.elem,self.elem.getClass());
         if isinstance(other,RingElem):
             if self.isPolynomial() and not other.isPolynomial():
-                o = self.ring.parse( str(other) );
+                #print "self.ring = %s" % (self.ring);
+                o = self.ring.parse( other.elem.toString() ); # not toScript()
+                #print "o type(%s) = %s, str = %s" % (o,type(o),str(o));
                 return RingElem( o );
             return other;
         #print "--1";
@@ -1489,6 +1494,15 @@ class RingElem:
             # assume BigRational or BigComplex
             # assume self will be compatible with them. todo: check this
             o = makeJasArith(other);
+            #print "other class(%s) = %s" % (o,o.getClass());
+            if self.isPolynomial():
+                #print "other type(%s) = %s" % (o,type(o));
+                o = self.ring.parse( o.toString() ); # not toScript();
+                #o = o.elem;
+            if self.elem.getClass() == BigComplex().getClass():
+                #print "other type(%s) = %s" % (o,type(o));
+                o = CC( o );
+                o = o.elem;
             if self.elem.getClass() == BigQuaternion().getClass():
                 #print "other type(%s) = %s" % (o,type(o));
                 o = Quat( o );
@@ -1511,12 +1525,16 @@ class RingElem:
                     o = other;
             return RingElem(o);
         #print "--3";
+        #print "other type(%s) = %s" % (other,type(other));
         # self.elem has a ring factory
         if isinstance(other,PyInteger) or isinstance(other,PyLong):
             o = self.elem.ring.fromInteger(other);
         else:
             if isinstance(other,PyFloat): # ?? what to do ??
-                o = self.elem.ring.fromInteger( int(other) );
+                #print "other int(%s) = %s" % (other,int(other));
+                o = BigDecimal(other);
+                #print "other DD(%s) = %s" % (other,o);
+                o = self.elem.factory().getZERO().sum( o );
             else:
                 print "unknown other type(%s) = %s" % (other,type(other));
                 o = other;
@@ -1566,7 +1584,7 @@ class RingElem:
         '''Reverse multiply two ring elements.
         '''
         [s,o] = coercePair(self,other);
-        return o.__mul__(self);
+        return o.__mul__(s);
 
     def __add__(self,other):
         '''Add two ring elements.
@@ -1578,7 +1596,7 @@ class RingElem:
         '''Reverse add two ring elements.
         '''
         [s,o] = coercePair(self,other);
-        return o.__add__(self);
+        return o.__add__(s);
 
     def __sub__(self,other):
         '''Subtract two ring elements.
@@ -1602,7 +1620,7 @@ class RingElem:
         '''Reverse divide two ring elements.
         '''
         [s,o] = coercePair(self,other);
-        return o.__div__(self);
+        return o.__div__(s);
 
     def __mod__(self,other):
         '''Modular remainder of two ring elements.
@@ -1659,7 +1677,7 @@ class RingElem:
             nv = fac.nvar;
         except:
             return RingElem(fac);
-        return Ring(ring=fac);
+        return PolyRing(fac.coFac,fac.getVars(),fac.tord);
 
     def gens(self):
         '''Get the generators for the factory of this element.
@@ -1712,6 +1730,14 @@ class RingElem:
         except:
             e = None;            
         return RingElem( e );
+
+    def coefficients(self):
+        '''Get the coefficients of a polynomial.
+        '''
+        a = self.elem;
+        #L = [ c.toScriptFactory() for c in a.coefficientIterator() ];
+        L = [ RingElem(c) for c in a.coefficientIterator() ];
+        return L
 
 
 class PolyRing(Ring):
