@@ -15,7 +15,8 @@ from edu.jas.arith       import BigInteger, BigRational, BigComplex, BigDecimal,
 from edu.jas.poly        import GenPolynomial, GenPolynomialRing,\
                                 GenSolvablePolynomial, GenSolvablePolynomialRing,\
                                 GenPolynomialTokenizer, OrderedPolynomialList, PolyUtil,\
-                                TermOrderOptimization, TermOrder, PolynomialList
+                                TermOrderOptimization, TermOrder, PolynomialList,\
+                                AlgebraicNumber, AlgebraicNumberRing
 from edu.jas.ps          import UnivPowerSeries, UnivPowerSeriesRing,\
                                 PowerSeriesMap, Coefficients  
 from edu.jas.gb          import DGroebnerBaseSeq, EGroebnerBaseSeq,\
@@ -33,7 +34,7 @@ from edu.jas.application import ComprehensiveGroebnerBaseSeq, PolyUtilApp,\
 from edu.jas.kern        import ComputerThreads
 from edu.jas.ufd         import GreatestCommonDivisorSubres, PolyUfdUtil, GCDFactory,\
                                 FactorFactory
-from edu.jas.root        import RealRootsSturm, Interval
+from edu.jas.root        import RealRootsSturm, Interval, RealAlgebraicNumber, RealAlgebraicRing
 from edu.jas.util        import ExecutableServer, StringUtil
 from edu.jas             import structure, arith, poly, ps, gb, gbmod, vector,\
                                 application, util, ufd
@@ -1255,34 +1256,6 @@ def QQ(d=0,n=1):
     return RingElem(r);
 
 
-def RF(pr,d=0,n=1):
-    '''Create JAS rational function Quotient as ring element.
-    '''
-    if isinstance(d,PyTuple) or isinstance(d,PyList):
-        if n != 1:
-            print "%s ignored" % n;
-        if len(d) > 1:
-            n = d[1];
-        d = d[0];
-    if isinstance(d,RingElem):
-        d = d.elem;
-    if isinstance(n,RingElem):
-        n = n.elem;
-    if isinstance(pr,RingElem):
-        pr = pr.elem;
-    if isinstance(pr,Ring):
-        pr = pr.ring;
-    qr = QuotientRing(pr);
-    if d == 0:
-        r = Quotient(qr);
-    else:
-        if n == 1:
-            r = Quotient(qr,d);
-        else:
-            r = Quotient(qr,d,n);
-    return RingElem(r);
-
-
 def CC(re=BigRational(),im=BigRational()):
     '''Create JAS BigComplex as ring element.
     '''
@@ -1394,6 +1367,62 @@ def Oct(ro=BigQuaternion(),io=BigQuaternion()):
     return RingElem(c);
 
 
+def AN(m,z=0):
+    '''Create JAS AlgebraicNumber as ring element.
+    '''
+    if isinstance(m,RingElem):
+        m = m.elem;
+    if isinstance(z,RingElem):
+        z = z.elem;
+    mf = AlgebraicNumberRing(m);
+    r = AlgebraicNumber(mf,z);
+    return RingElem(r);
+
+
+def RealN(m,i,r=0):
+    '''Create JAS RealAlgebraicNumber as ring element.
+    '''
+    if isinstance(m,RingElem):
+        m = m.elem;
+    if isinstance(r,RingElem):
+        r = r.elem;
+    if isinstance(i,PyTuple) or isinstance(i,PyList):
+        il = BigRational(i[0]);
+        ir = BigRational(i[1]);
+        i = Interval(il,ir);
+    mf = RealAlgebraicRing(m,i);
+    rr = RealAlgebraicNumber(mf,r);
+    return RingElem(rr);
+
+
+def RF(pr,d=0,n=1):
+    '''Create JAS rational function Quotient as ring element.
+    '''
+    if isinstance(d,PyTuple) or isinstance(d,PyList):
+        if n != 1:
+            print "%s ignored" % n;
+        if len(d) > 1:
+            n = d[1];
+        d = d[0];
+    if isinstance(d,RingElem):
+        d = d.elem;
+    if isinstance(n,RingElem):
+        n = n.elem;
+    if isinstance(pr,RingElem):
+        pr = pr.elem;
+    if isinstance(pr,Ring):
+        pr = pr.ring;
+    qr = QuotientRing(pr);
+    if d == 0:
+        r = Quotient(qr);
+    else:
+        if n == 1:
+            r = Quotient(qr,d);
+        else:
+            r = Quotient(qr,d,n);
+    return RingElem(r);
+
+
 def coercePair(a,b):
     '''Coerce type a to type b or type b to type a.
     '''
@@ -1425,10 +1454,10 @@ class RingElem:
             self.elem = elem.elem;
         else:
             self.elem = elem;
-        self.ring = self.elem.factory();
-        #try:
-        #except:
-        #    self.ring = self.elem;
+        try:
+            self.ring = self.elem.factory();
+        except:
+            self.ring = self.elem;
 
     def __str__(self):
         '''Create a string representation.
@@ -1460,6 +1489,11 @@ class RingElem:
         '''Test if this is the one element of the ring.
         '''
         return self.elem.isONE();
+
+    def signum(self):
+        '''Get the sign of this element.
+        '''
+        return self.elem.signum();
 
     def __abs__(self):
         '''Absolute value.

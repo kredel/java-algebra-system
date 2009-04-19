@@ -10,7 +10,9 @@ from jas import PolyRing
 from jas import Ideal
 from jas import startLog
 from jas import terminate
-from jas import ZZ, QQ, ZM, DD, CC, Quat, Oct, RF
+from jas import ZZ, QQ, ZM, DD, CC, Quat, Oct, AN, RealN, RF
+from edu.jas.arith import BigDecimal
+
 
 print "------- ZZ = BigInteger ------------";
 z1 = ZZ(12345678901234567890);
@@ -238,6 +240,51 @@ s4 = s3 - s1;
 print "s4  = " + str(s4);
 print "s4.factory() = " + str(s4.factory());
 print;
+
+print "------- AN(alpha**2 - 2,\"alpha\") ---------";
+r = PolyRing(QQ(),"alpha",PolyRing.lex);
+print "r = " + str(r);
+[one,alpha] = r.gens();
+print "one   = " + str(one);
+print "alpha = " + str(alpha);
+sqrt2 = alpha**2 - 2;
+print "sqrt2 = " + str(sqrt2);
+a = AN(sqrt2,alpha);
+print "a     = " + str(a);
+b = a**2 -2;
+print "b     = " + str(b);
+
+print "------- GF(alpha**2 - 2,\"alpha\") ---------";
+r = PolyRing(ZM(17),"alpha",PolyRing.lex);
+print "r = " + str(r);
+[one,alpha] = r.gens();
+print "one   = " + str(one);
+print "alpha = " + str(alpha);
+sqrt2 = alpha**2 - 2;
+print "sqrt2 = " + str(sqrt2);
+a = AN(sqrt2,alpha);
+print "a     = " + str(a);
+b = a**2 -2;
+print "b     = " + str(b);
+
+print "------- RAN(alpha**2 - 2,\"alpha\",((1),(2)) ---------";
+r = PolyRing(QQ(),"alpha",PolyRing.lex);
+print "r = " + str(r);
+[one,alpha] = r.gens();
+print "one   = " + str(one);
+print "alpha = " + str(alpha);
+sqrt2 = alpha**2 - 2;
+print "sqrt2 = " + str(sqrt2);
+a = RealN(sqrt2,(1,2),alpha);
+print "a     = " + str(a);
+b = 7 * a - 10;
+print "b     = " + str(b);
+print "b.factory()  = " + str(b.factory());
+print "sign(b)      = " + str(b.signum());
+print "magnitude(b) = " + str(BigDecimal(b.elem.magnitude()));
+
+print;
+
 
 
 print "------------------------------------";
