@@ -1368,6 +1368,32 @@ def Quat(re=BigRational(),im=BigRational(),jm=BigRational(),km=BigRational()):
     return RingElem(c);
 
 
+def Oct(ro=BigQuaternion(),io=BigQuaternion()):
+    '''Create JAS BigOctonion as ring element.
+    '''
+    if ro == 0:
+        r0 = BigQuaternion();
+    if io == 0:
+        io = BigQuaternion();
+    if isinstance(ro,PyTuple) or isinstance(ro,PyList):
+        if isinstance(ro[0],PyTuple) or isinstance(ro[0],PyList):
+            if len(ro) > 1:
+                io = QQ( ro[1] );
+            ro = QQ( ro[0] );
+        else:
+            ro = QQ(ro);
+#        re = makeJasArith( re );
+    if isinstance(io,PyTuple) or isinstance(io,PyList):
+        io = QQ( io );
+#        im = makeJasArith( im );
+    if isinstance(ro,RingElem):
+        ro = ro.elem;
+    if isinstance(io,RingElem):
+        io = io.elem;
+    c = BigOctonion(ro,io);
+    return RingElem(c);
+
+
 def coercePair(a,b):
     '''Coerce type a to type b or type b to type a.
     '''
@@ -1463,6 +1489,14 @@ class RingElem:
             # assume BigRational or BigComplex
             # assume self will be compatible with them. todo: check this
             o = makeJasArith(other);
+            if self.elem.getClass() == BigQuaternion().getClass():
+                #print "other type(%s) = %s" % (o,type(o));
+                o = Quat( o );
+                o = o.elem;
+            if self.elem.getClass() == BigOctonion().getClass():
+                #print "other type(%s) = %s" % (o,type(o));
+                o = Oct( Quat(o) );
+                o = o.elem;
             return RingElem(o);
         #print "--2";
         # test if self.elem is a factory itself
