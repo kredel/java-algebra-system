@@ -199,8 +199,11 @@ public class Quotient<C extends GcdRingElem<C>> implements RingElem<Quotient<C>>
     @Override
     public String toScript() {
         // Python case
-        return "PolyQuotient( " + num.toScript() 
-                         + ", " + den.toScript() + " )";
+        if ( den.isONE() ) {
+            return "( " + num.toScript() + " )";
+        } else {
+            return "( " + num.toScript() + " ) / ( " + den.toScript() + " )";
+        }
     }
 
 

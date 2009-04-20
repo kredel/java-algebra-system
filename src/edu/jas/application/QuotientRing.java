@@ -261,7 +261,7 @@ public class QuotientRing<C extends GcdRingElem<C> >
     @Override
     public String toScript() {
         // Python case
-        return "PolyQuotientRing(" + ring.toScript() + ")";
+        return "RF(" + ring.toScript() + ")";
     }
 
 
