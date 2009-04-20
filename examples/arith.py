@@ -56,17 +56,17 @@ print;
 zero = r.zero();
 
 try:
-    f = RF();
+    f = RF(r);
 except:
     f = None;
 print "f: " + str(f);
 
 d = x**2 + 5 * x - 6;
-f = RF(d);
+f = RF(r,d);
 print "f: " + str(f);
 
 n = d*d + y + 1;
-f = RF(d,n);
+f = RF(r,d,n);
 print "f: " + str(f);
 print;
 
@@ -78,13 +78,13 @@ print;
 f = f/f;
 print "f/f: " + str(f);
 
-f = RF(d,one);
+f = RF(r,d,one);
 print "f: " + str(f);
 
-f = RF(zero);
+f = RF(r,zero);
 print "f: " + str(f);
 
-f = RF( (d,y) );
+f = RF(r,d,y);
 print "f: " + str(f);
 
 print "one:  " + str(f.one());
