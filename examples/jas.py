@@ -1375,7 +1375,10 @@ def AN(m,z=0):
     if isinstance(z,RingElem):
         z = z.elem;
     mf = AlgebraicNumberRing(m);
-    r = AlgebraicNumber(mf,z);
+    if z == 0:
+        r = AlgebraicNumber(mf);
+    else:
+        r = AlgebraicNumber(mf,z);
     return RingElem(r);
 
 
@@ -1391,7 +1394,10 @@ def RealN(m,i,r=0):
         ir = BigRational(i[1]);
         i = Interval(il,ir);
     mf = RealAlgebraicRing(m,i);
-    rr = RealAlgebraicNumber(mf,r);
+    if r == 0:
+        rr = RealAlgebraicNumber(mf);
+    else:
+        rr = RealAlgebraicNumber(mf,r);
     return RingElem(rr);
 
 
