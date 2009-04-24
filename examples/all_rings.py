@@ -10,7 +10,7 @@ from jas import PolyRing
 from jas import Ideal
 from jas import startLog
 from jas import terminate
-from jas import ZZ, QQ, ZM, DD, CC, Quat, Oct, AN, RealN, RF
+from jas import ZZ, QQ, ZM, DD, CC, Quat, Oct, AN, RealN, RF, RC
 from edu.jas.arith import BigDecimal
 
 
@@ -256,6 +256,8 @@ print "one   = " + str(one);
 print "alpha = " + str(alpha);
 b = alpha**2 - 2;
 print "b     = " + str(b);
+c = 1 / alpha;
+print "c     = " + str(c);
 print;
 
 print "------- GF_17(alpha**2 - 2) ---------";
@@ -273,6 +275,8 @@ print "one   = " + str(one);
 print "alpha = " + str(alpha);
 b = alpha**2 - 2;
 print "b     = " + str(b);
+c = 1 / alpha;
+print "c     = " + str(c);
 print;
 
 print "------- RealN(alpha**2 - 2,((1),(2)) ---------";
@@ -293,6 +297,10 @@ print "b     = " + str(b);
 print "b.factory()  = " + str(b.factory());
 print "sign(b)      = " + str(b.signum());
 print "magnitude(b) = " + str(BigDecimal(b.elem.magnitude()));
+c = 1 / b;
+print "c     = " + str(c);
+print "sign(c)      = " + str(c.signum());
+print "magnitude(c) = " + str(BigDecimal(c.elem.magnitude()));
 print;
 
 print "------- PolyRing(PolyRing(QQ(),\"a,b,c\"),\"x,y,z\") ---------";
@@ -346,6 +354,46 @@ print "q6 = " + str(q6);
 print "q6.factory() = " + str(q6.factory());
 x = RF(PolyRing(ZZ(),"a, b, c",PolyRing.lex));
 print "x  = " + str(x.factory());
+print;
+
+print "------- RC(PolyRing(QQ(),\"a,b,c\",PolyRing.lex)) ---------";
+r = PolyRing(QQ(),"a,b,c",PolyRing.lex);
+print "r = " + str(r);
+[pone,pa,pb,pc] = r.gens();
+print "pone   = " + str(pone);
+print "pa     = " + str(pa);
+print "pb     = " + str(pb);
+print "pc     = " + str(pc);
+g1 = pa**2 - 2;
+print "g1 = " + str(g1);
+g2 = pb**3 - 2;
+print "g2 = " + str(g2);
+g3 = pc**2 - pa*pb;
+print "g3 = " + str(g3);
+F = Ideal(r,list=[g1,g2,g3]);
+print "F = " + str(F);
+rc = RC(F);
+print "rc.factory() = " + str(rc.factory());
+[one,a,b,c] = rc.gens();
+print "one   = " + str(one);
+print "a     = " + str(a);
+print "b     = " + str(b);
+print "c     = " + str(c);
+r1 = a*b + c;
+print "r1 = " + str(r1);
+r2 = r1*r1*r1 - r1*r1 + one;
+print "r2 = " + str(r2);
+r3 = r2**3 - r1 + one;
+print "r3 = " + str(r3);
+r4 = r3 = ( -120 * a * b**2 * c + 606 * b**2 * c + 1917 * a * b * c + 400 * b * c - 132 * a * c - 673 * c + 432 * a * b**2 + 2130 * b**2 + 1436 * a * b - 72 * b + 100 * a - 1950 );
+print "r4 = " + str(r4);
+r5 = r3 - r4;
+print "r5 = " + str(r5);
+print "r5.factory() = " + str(r5.factory());
+F1 = Ideal(PolyRing(QQ(),"a, b, c",PolyRing.lex),list=[( pa**2 - 2 ), ( pb**3 - 2 ), ( pc**2 - pa * pb )]);
+print "F1 = " + str(F1);
+rc1 = RC(Ideal(PolyRing(QQ(),"a, b, c",PolyRing.lex),list=[( pa**2 - 2 ), ( pb**3 - 2 ), ( pc**2 - pa * pb )]));
+print "rc1.factory() = " + str(rc1.factory());
 print;
 
 print "------------------------------------";

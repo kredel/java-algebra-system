@@ -1429,6 +1429,23 @@ def RF(pr,d=0,n=1):
     return RingElem(r);
 
 
+def RC(ideal,r=0):
+    '''Create JAS ResidueClass as ring element.
+    '''
+    if ideal == None:
+        raise ValueError, "No ideal given."
+    if isinstance(ideal,Ideal):
+        ideal = jas.application.Ideal(ideal.pset);
+    if isinstance(r,RingElem):
+        r = r.elem;
+    rc = ResidueRing(ideal);
+    if r == 0:
+        r = Residue(rc);
+    else:
+        r = Residue(rc,r);
+    return RingElem(r);
+
+
 def coercePair(a,b):
     '''Coerce type a to type b or type b to type a.
     '''
@@ -1587,6 +1604,7 @@ class RingElem:
         try:
             r = self.elem.ring;
         except:
+            #print "self.elem = " + str(self.elem);
             return True;
         return False;
 
