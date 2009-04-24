@@ -196,10 +196,11 @@ public class PolynomialList<C extends RingElem<C> >
     public String toScript() {
         // Python case
         StringBuffer erg = new StringBuffer();
+        erg.append("Ideal(");
         if ( ring != null ) {
-           erg.append( ring.toScript() + "\n" );
+           erg.append( ring.toScript() + "," );
         }
-        erg.append("[\n");
+        erg.append("list=[");
         boolean first = true;
         String sa = null;
         for ( GenPolynomial<C> oa: list ) {
@@ -208,13 +209,13 @@ public class PolynomialList<C extends RingElem<C> >
                first = false;
             } else {
                erg.append( ", " );
-               if ( sa.length() > 10 ) {
-                  erg.append("\n");
-               }
+//                if ( sa.length() > 10 ) {
+//                   erg.append("\n");
+//                }
             }
             erg.append( "( " + sa + " )" );
         }
-        erg.append("\n]");
+        erg.append("])");
         return erg.toString();
     }
 

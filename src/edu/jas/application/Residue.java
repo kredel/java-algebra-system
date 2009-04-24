@@ -24,12 +24,12 @@ public class Residue<C extends GcdRingElem<C> >
 
     /** Residue class factory data structure. 
      */
-    protected final ResidueRing<C> ring;
+    public final ResidueRing<C> ring;
 
 
     /** Value part of the element data structure. 
      */
-    protected final GenPolynomial<C> val;
+    public final GenPolynomial<C> val;
 
 
     /** Flag to remember if this residue element is a unit.
@@ -171,8 +171,9 @@ public class Residue<C extends GcdRingElem<C> >
     @Override
     public String toScript() {
         // Python case
-        return "PolyResidue( " + val.toScript() 
-                        + ", " + ring.toScript() + " )";
+        return "( " + val.toScript() + " )"; 
+//         return "PolyResidue( " + val.toScript() 
+//                         + ", " + ring.toScript() + " )";
     }
 
 

@@ -212,7 +212,8 @@ public class ResidueRing<C extends GcdRingElem<C> >
     @Override
     public String toScript() {
         // Python case
-        return "PolyResidueRing(" + ideal.toScript() + ")";
+        return "RC(" + ideal.list.toScript() + ")";
+        //return "RC(" + ideal.toScript() + "," + ring.toScript()  + ")";
     }
 
 
