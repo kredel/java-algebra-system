@@ -995,8 +995,10 @@ public class Ideal<C extends GcdRingElem<C>>
         List<GenPolynomial<C>> F = new ArrayList<GenPolynomial<C>>( 1 + list.list.size() );
         F.add( h );
         F.addAll( list.list );
+        //System.out.println("F = " + F);
         ExtendedGB<C> x = bb.extGB( F );
         List<GenPolynomial<C>> G = x.G;
+        //System.out.println("G = " + G);
         GenPolynomial<C> one = null;
         int i = -1;
         for ( GenPolynomial<C> p : G ) {
