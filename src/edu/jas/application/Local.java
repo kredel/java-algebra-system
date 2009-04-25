@@ -34,7 +34,7 @@ public class Local<C extends GcdRingElem<C> >
 
     /** Local class factory data structure. 
      */
-    protected final LocalRing<C> ring;
+    public final LocalRing<C> ring;
 
 
     /** Numerator part of the element data structure. 
@@ -113,6 +113,7 @@ public class Local<C extends GcdRingElem<C> >
         if ( p == null || p.isZERO() ) {
            throw new RuntimeException("denominator may not be in ideal");
         }
+        //d = p; cant do this
         // must reduce to lowest terms
         //GenPolynomial<C> gcd = ring.ring.getONE();
         GenPolynomial<C> gcd = gcd( n, d );
@@ -137,24 +138,25 @@ public class Local<C extends GcdRingElem<C> >
 
 
     /** Least common multiple.
-     * Just for fun, is not efficient.
      * @param n first polynomial.
      * @param d second polynomial.
      * @return lcm(n,d)
      */
     protected GenPolynomial<C> lcm(GenPolynomial<C> n, GenPolynomial<C> d) {
-        List<GenPolynomial<C>> list;
-        list = new ArrayList<GenPolynomial<C>>( 1 );
-        list.add( n );
-        Ideal<C> N = new Ideal<C>( ring.ring, list, true );
-        list = new ArrayList<GenPolynomial<C>>( 1 );
-        list.add( d );
-        Ideal<C> D = new Ideal<C>( ring.ring, list, true );
-        Ideal<C> L = N.intersect( D );
-        if ( L.list.list.size() != 1 ) {
-           throw new RuntimeException("lcm not uniqe");
-        }
-        GenPolynomial<C> lcm = L.list.list.get(0);
+        GenPolynomial<C> lcm = ring.engine.lcm(n,d);
+        //* Just for fun, is not efficient.
+        //List<GenPolynomial<C>> list;
+        //list = new ArrayList<GenPolynomial<C>>( 1 );
+        //list.add( n );
+        //Ideal<C> N = new Ideal<C>( ring.ring, list, true );
+        //list = new ArrayList<GenPolynomial<C>>( 1 );
+        //list.add( d );
+        //Ideal<C> D = new Ideal<C>( ring.ring, list, true );
+        //Ideal<C> L = N.intersect( D );
+        //if ( L.list.list.size() != 1 ) {
+        //   throw new RuntimeException("lcm not uniqe");
+        //}
+        //GenPolynomial<C> lcm = L.list.list.get(0);
         return lcm;
     }
 
@@ -178,9 +180,10 @@ public class Local<C extends GcdRingElem<C> >
         if ( d.isONE() ) {
            return d;
         }
-        GenPolynomial<C> p = n.multiply(d);
-        GenPolynomial<C> lcm = lcm(n,d);
-        GenPolynomial<C> gcd = p.divide(lcm);
+        //GenPolynomial<C> p = n.multiply(d);
+        //GenPolynomial<C> lcm = lcm(n,d);
+        //GenPolynomial<C> gcd = p.divide(lcm);
+        GenPolynomial<C> gcd = ring.engine.gcd(n,d);
         return gcd;
     }
 
@@ -271,8 +274,11 @@ public class Local<C extends GcdRingElem<C> >
     @Override
     public String toScript() {
         // Python case
-        return "PolyLocal( " + num.toScript() 
-                      + ", " + den.toScript() + " )";
+        if ( den.isONE() ) {
+            return "( " + num.toScript() + " )";
+        } else {
+            return "( " + num.toScript() + " ) / ( " + den.toScript() + " )";
+        }
     }
 
 
@@ -473,12 +479,15 @@ public class Local<C extends GcdRingElem<C> >
 
     /**
      * Greatest common divisor.
-     * <b>Note: </b>Not implemented, throws RuntimeException.
      * @param b other element.
      * @return gcd(this,b).
      */
     public Local<C> gcd(Local<C> b) {
-        throw new RuntimeException("gcd not implemented " + this.getClass().getName());
+        GenPolynomial<C> x = ring.engine.gcd( num, b.num );
+        GenPolynomial<C> y = ring.engine.gcd( den, b.den );
+        return new Local<C>( ring, x, y, true );
+        // * <b>Note: </b>Not implemented, throws RuntimeException.
+        // throw new RuntimeException("gcd not implemented " + this.getClass().getName());
     }
 
 

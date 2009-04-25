@@ -17,6 +17,8 @@ import edu.jas.structure.RingFactory;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 
+import edu.jas.ufd.GreatestCommonDivisor;
+import edu.jas.ufd.GCDFactory;
 
 /**
  * Local ring class based on GenPolynomial with RingElem interface.
@@ -30,14 +32,20 @@ public class LocalRing<C extends GcdRingElem<C> >
      //private boolean debug = logger.isDebugEnabled();
 
 
+    /**
+     * Greatest common divisor engine for coefficient content and primitive parts.
+     */
+    protected final GreatestCommonDivisor<C> engine;
+
+
     /** Polynomial ideal for localization. 
      */
-    protected final Ideal<C> ideal;
+    public final Ideal<C> ideal;
 
 
     /** Polynomial ring of the factory. 
      */
-    protected final GenPolynomialRing<C> ring;
+    public final GenPolynomialRing<C> ring;
 
 
     /** Indicator if this ring is a field.
@@ -58,6 +66,8 @@ public class LocalRing<C extends GcdRingElem<C> >
            throw new RuntimeException("ideal may not be 1");
         }
         ring = ideal.list.ring;
+        //engine = GCDFactory.<C>getImplementation( ring.coFac );
+        engine = GCDFactory.<C>getProxy( ring.coFac );
     }
 
 
@@ -179,7 +189,7 @@ public class LocalRing<C extends GcdRingElem<C> >
     @Override
     public String toScript() {
         // Python case
-        return "PolyLocalRing(" + ideal.toScript() + ")";
+        return "LC(" + ideal.list.toScript() + ")";
     }
 
 
