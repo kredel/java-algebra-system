@@ -10,7 +10,7 @@ from jas import PolyRing
 from jas import Ideal
 from jas import startLog
 from jas import terminate
-from jas import ZZ, QQ, ZM, DD, CC, Quat, Oct, AN, RealN, RF, RC
+from jas import ZZ, QQ, ZM, DD, CC, Quat, Oct, AN, RealN, RF, RC, LC
 from edu.jas.arith import BigDecimal
 
 
@@ -400,14 +400,62 @@ r6 = 1/r2;
 print "r6 = " + str(r6);
 r7 = r6 * r2;
 print "r7 = " + str(r7);
-F1 = Ideal(PolyRing(QQ(),"a, b, c",PolyRing.lex),list=[( pa**2 - 2 ), ( pb**3 - 2 ), ( pc**2 - pa * pb )]);
-print "F1 = " + str(F1);
+#F1 = Ideal(PolyRing(QQ(),"a, b, c",PolyRing.lex),list=[( pa**2 - 2 ), ( pb**3 - 2 ), ( pc**2 - pa * pb )]);
+#print "F1 = " + str(F1);
 rc1 = RC(Ideal(PolyRing(QQ(),"a, b, c",PolyRing.lex),list=[( a**2 - 2 ), ( b**3 - 2 ), ( c**2 - a * b )]));
 print "rc1.factory() = " + str(rc1.factory());
 print;
 
+print "------- LC(PolyRing(QQ(),\"a,b,c\",PolyRing.lex)) ---------";
+r = PolyRing(QQ(),"a,b,c",PolyRing.lex);
+print "r = " + str(r);
+[pone,pa,pb,pc] = r.gens();
+print "pone   = " + str(pone);
+print "pa     = " + str(pa);
+print "pb     = " + str(pb);
+print "pc     = " + str(pc);
+g1 = pa**2 - 2;
+print "g1 = " + str(g1);
+g2 = pb**3 - 2;
+print "g2 = " + str(g2);
+g3 = pc**2 - pa*pb;
+print "g3 = " + str(g3);
+F = Ideal(r,list=[g1,g2,g3]);
+print "F = " + str(F);
+lc = LC(F);
+print "lc.factory() = " + str(lc.factory());
+[one,a,b,c] = lc.gens();
+print "one   = " + str(one);
+print "a     = " + str(a);
+print "b     = " + str(b);
+print "c     = " + str(c);
+#F1 = Ideal(PolyRing(QQ(),"a, b, c",PolyRing.lex),list=[( pa**2 - 2 ), ( pb**3 - 2 ), ( pc**2 - pa * pb )]);
+#print "F1 = " + str(F1);
+lc1 = LC(Ideal(PolyRing(QQ(),"a, b, c",PolyRing.lex),list=[( a**2 - 2 ), ( b**3 - 2 ), ( c**2 - a * b )]));
+print "lc1.factory() = " + str(lc1.factory());
+l1 = a*b + c;
+print "l1 = " + str(l1);
+l2 = l1*l1*l1 - l1*l1 + one;
+print "l2 = " + str(l2);
+l3 = 1/l2;
+print "l3 = " + str(l3);
+l4 = l3 * l2;
+print "l4 = " + str(l4);
+l5 = a**2 - 2 + 1;
+print "l5 = " + str(l5);
+l6 = 1/l5;
+print "l6 = " + str(l6);
+l7 =  (l1 * l2) / l2;
+print "l7 = " + str(l7);
+
+
+
 print "------------------------------------";
 
 terminate();
-#sys.exit();
+sys.exit();
+
+print "globals()" + str(globals());
+print "locals()" + str(locals());
+print "vars()" + str(vars());
 

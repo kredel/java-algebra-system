@@ -30,7 +30,8 @@ from edu.jas.gbmod       import ModGroebnerBaseAbstract, ModSolvableGroebnerBase
                                 SolvableSyzygyAbstract, SyzygyAbstract
 from edu.jas.vector      import OrderedModuleList, ModuleList, GenVector, GenVectorModul
 from edu.jas.application import ComprehensiveGroebnerBaseSeq, PolyUtilApp,\
-                                Residue, ResidueRing, Ideal, Quotient, QuotientRing
+                                Residue, ResidueRing, Ideal, Quotient, QuotientRing,\
+                                Local, LocalRing
 from edu.jas.kern        import ComputerThreads
 from edu.jas.ufd         import GreatestCommonDivisorSubres, PolyUfdUtil, GCDFactory,\
                                 FactorFactory
@@ -1444,17 +1445,49 @@ def RC(ideal,r=0):
         raise ValueError, "No ideal given."
     if isinstance(ideal,Ideal):
         ideal = jas.application.Ideal(ideal.pset);
-    if isinstance(r,RingElem):
-        r = r.elem;
     #print "ideal.getList().get(0).ring.ideal = %s" % ideal.getList().get(0).ring.ideal;
     if ideal.getList().get(0).ring.getClass().getSimpleName() == "ResidueRing":
         rc = ResidueRing( ideal.getList().get(0).ring.ideal );
     else:
         rc = ResidueRing(ideal);
+    if isinstance(r,RingElem):
+        r = r.elem;
     if r == 0:
         r = Residue(rc);
     else:
         r = Residue(rc,r);
+    return RingElem(r);
+
+
+def LC(ideal,d=0,n=1):
+    '''Create JAS polynomial Local as ring element.
+    '''
+    if ideal == None:
+        raise ValueError, "No ideal given."
+    if isinstance(ideal,Ideal):
+        ideal = jas.application.Ideal(ideal.pset);
+    #print "ideal.getList().get(0).ring.ideal = %s" % ideal.getList().get(0).ring.ideal;
+    if ideal.getList().get(0).ring.getClass().getSimpleName() == "LocalRing":
+        lc = LocalRing( ideal.getList().get(0).ring.ideal );
+    else:
+        lc = LocalRing(ideal);
+    if isinstance(d,PyTuple) or isinstance(d,PyList):
+        if n != 1:
+            print "%s ignored" % n;
+        if len(d) > 1:
+            n = d[1];
+        d = d[0];
+    if isinstance(d,RingElem):
+        d = d.elem;
+    if isinstance(n,RingElem):
+        n = n.elem;
+    if d == 0:
+        r = Local(lc);
+    else:
+        if n == 1:
+            r = Local(lc,d);
+        else:
+            r = Local(lc,d,n);
     return RingElem(r);
 
 
