@@ -41,7 +41,7 @@ public class ResidueRing<C extends GcdRingElem<C> >
 
     /** Polynomial ideal for the reduction. 
      */
-    protected final Ideal<C> ideal;
+    public final Ideal<C> ideal;
 
 
     /** Polynomial ring of the factory. 
