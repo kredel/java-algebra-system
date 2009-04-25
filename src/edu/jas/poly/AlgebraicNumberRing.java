@@ -208,7 +208,8 @@ public class AlgebraicNumberRing<C extends GcdRingElem<C> >
     @Override
     public String toScript() {
         // Python case
-        return "AN(" + modul.toScript() + "," + isField + "," + ring.toScript() + ")";
+        return "AN(" + modul.toScript() + ")";
+        //return "AN(" + modul.toScript() + "," + isField + "," + ring.toScript() + ")";
     }
 
 

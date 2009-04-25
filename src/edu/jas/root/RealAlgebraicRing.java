@@ -237,8 +237,9 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> >
         // Python case
         return "RealN( " + algebraic.modul.toScript() 
                  + ", " + root.toScript() 
-            //+ ", " + algebraic.isField() 
-                 + ", " + algebraic.ring.toScript() + " )";
+                 //+ ", " + algebraic.isField() 
+                 //+ ", " + algebraic.ring.toScript() 
+                 + " )";
     }
 
 
