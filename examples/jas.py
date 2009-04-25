@@ -1446,7 +1446,11 @@ def RC(ideal,r=0):
         ideal = jas.application.Ideal(ideal.pset);
     if isinstance(r,RingElem):
         r = r.elem;
-    rc = ResidueRing(ideal);
+    #print "ideal.getList().get(0).ring.ideal = %s" % ideal.getList().get(0).ring.ideal;
+    if ideal.getList().get(0).ring.getClass().getSimpleName() == "ResidueRing":
+        rc = ResidueRing( ideal.getList().get(0).ring.ideal );
+    else:
+        rc = ResidueRing(ideal);
     if r == 0:
         r = Residue(rc);
     else:
@@ -1564,15 +1568,15 @@ class RingElem:
                 #print "other type(%s) = %s" % (o,type(o));
                 o = self.ring.parse( o.toString() ); # not toScript();
                 #o = o.elem;
-            if self.elem.getClass() == BigComplex().getClass():
+            if self.elem.getClass().getSimpleName() == "BigComplex":
                 #print "other type(%s) = %s" % (o,type(o));
                 o = CC( o );
                 o = o.elem;
-            if self.elem.getClass() == BigQuaternion().getClass():
+            if self.elem.getClass().getSimpleName() == "BigQuaternion":
                 #print "other type(%s) = %s" % (o,type(o));
                 o = Quat( o );
                 o = o.elem;
-            if self.elem.getClass() == BigOctonion().getClass():
+            if self.elem.getClass().getSimpleName() == "BigOctonion":
                 #print "other type(%s) = %s" % (o,type(o));
                 o = Oct( Quat(o) );
                 o = o.elem;
@@ -1860,12 +1864,12 @@ class PolyRing(Ring):
 ##             cfac = "DD()";
 ##         if cf.getClass() == ModIntegerRing(3).getClass():
 ##             cfac = "ZM(%s)" % cf.modul;
-        if cf.getClass() == QuotientRing(GenPolynomialRing(BigInteger(),1)).getClass():
+        if cf.getClass().getSimpleName() == "QuotientRing":
             qr = cf.ring;
             cfac = "RF(%s)" % str(PolyRing(qr.coFac,qr.varsToString(),qr.tord));
         #print "cf.getClasss(): " + str(cf.getClass());
         #print "poly.getClasss(): " + str( GenPolynomialRing(BigInteger(),1).getClass() );
-        if cf.getClass() == GenPolynomialRing(BigInteger(),1).getClass():
+        if cf.getClass().getSimpleName() == "GenPolynomialRing":
             cfac = str(PolyRing(cf.coFac,cf.varsToString(),cf.tord));
         #print "cfac: " + str(cfac);
         to = self.ring.tord;

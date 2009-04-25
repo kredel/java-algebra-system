@@ -402,7 +402,7 @@ r7 = r6 * r2;
 print "r7 = " + str(r7);
 F1 = Ideal(PolyRing(QQ(),"a, b, c",PolyRing.lex),list=[( pa**2 - 2 ), ( pb**3 - 2 ), ( pc**2 - pa * pb )]);
 print "F1 = " + str(F1);
-rc1 = RC(Ideal(PolyRing(QQ(),"a, b, c",PolyRing.lex),list=[( pa**2 - 2 ), ( pb**3 - 2 ), ( pc**2 - pa * pb )]));
+rc1 = RC(Ideal(PolyRing(QQ(),"a, b, c",PolyRing.lex),list=[( a**2 - 2 ), ( b**3 - 2 ), ( c**2 - a * b )]));
 print "rc1.factory() = " + str(rc1.factory());
 print;
 
