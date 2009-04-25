@@ -1374,7 +1374,11 @@ def AN(m,z=0):
         m = m.elem;
     if isinstance(z,RingElem):
         z = z.elem;
-    mf = AlgebraicNumberRing(m);
+    #print "m.getClass() = " + str(m.getClass().getName());
+    if m.getClass().getSimpleName() == "AlgebraicNumber":
+        mf = AlgebraicNumberRing(m.factory().modul);
+    else:
+        mf = AlgebraicNumberRing(m);
     if z == 0:
         r = AlgebraicNumber(mf);
     else:
@@ -1393,7 +1397,11 @@ def RealN(m,i,r=0):
         il = BigRational(i[0]);
         ir = BigRational(i[1]);
         i = Interval(il,ir);
-    mf = RealAlgebraicRing(m,i);
+    #print "m.getClass() = " + str(m.getClass().getName());
+    if m.getClass().getSimpleName() == "RealAlgebraicNumber":
+        mf = RealAlgebraicRing(m.factory().algebraic.modul,i);
+    else:
+        mf = RealAlgebraicRing(m,i);
     if r == 0:
         rr = RealAlgebraicNumber(mf);
     else:
@@ -1430,7 +1438,7 @@ def RF(pr,d=0,n=1):
 
 
 def RC(ideal,r=0):
-    '''Create JAS ResidueClass as ring element.
+    '''Create JAS polynomial ResidueClass as ring element.
     '''
     if ideal == None:
         raise ValueError, "No ideal given."
