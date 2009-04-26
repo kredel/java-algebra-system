@@ -30,12 +30,12 @@ public class Product<C extends RingElem<C> >
 
     /** Product class factory data structure. 
      */
-    protected final ProductRing<C> ring;
+    public final ProductRing<C> ring;
 
 
     /** Value part of the element data structure. 
      */
-    protected final SortedMap<Integer,C> val;
+    public final SortedMap<Integer,C> val;
 
 
     /** Flag to remember if this product element is a unit in each cmponent.
@@ -197,18 +197,26 @@ public class Product<C extends RingElem<C> >
     @Override
     public String toScript() {
         // Python case
-        StringBuffer s = new StringBuffer("Product( { ");
+        StringBuffer s = new StringBuffer("( ");
         boolean first = true;
         for ( Integer i : val.keySet() ) {
+            C v = val.get(i);
             if ( first ) {
                 first = false;
             } else {
-                s.append(", ");
+                if ( v.signum() < 0 ) {
+                    s.append(" - ");
+                    v = v.negate();
+                } else {
+                    s.append(" + ");
+                }
             }
-            C v = val.get(i);
-            s.append( i + ": " + v.toScript() );
+            if ( !v.isONE() ) {
+                s.append( v.toScript() + "*" );
+            } 
+            s.append( "pg"+i );
         }
-        s.append(" } )");
+        s.append(" )");
         return s.toString();
     }
 

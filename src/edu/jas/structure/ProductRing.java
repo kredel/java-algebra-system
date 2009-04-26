@@ -171,13 +171,14 @@ public class ProductRing<C extends RingElem<C> >
             n = ringList.size();
         }
         for ( int i = 0; i < n; i++ ) {
-            RingFactory<C> f = getFactory(n);
+            //System.out.println("i = " + i + ", n = " + n);
+            RingFactory<C> f = getFactory(i);
             List<? extends C> rgens = f.generators();
             for ( C c: rgens ) {
                 SortedMap<Integer,C> elem = new TreeMap<Integer,C>();
                 elem.put( i, c );
                 Product<C> g = new Product<C>( this, elem );
-                g = g.fillOne();
+                //g = g.fillOne();
                 gens.add( g );
             }
         } 
@@ -365,15 +366,21 @@ public class ProductRing<C extends RingElem<C> >
     @Override
     public String toScript() {
         // Python case
-        StringBuffer s = new StringBuffer("ProductRing( { ");
+        StringBuffer s = new StringBuffer("RR( [ ");
         for ( int i = 0; i < length(); i++ ) {
             if ( i > 0 ) {
                 s.append(", ");
             }
             RingFactory<C> v = getFactory(i);
-            s.append( i + ": " + v.toScript() );
+            String f = null;
+            try {
+                f = ((RingElem<C>)v).toScriptFactory(); // sic
+            } catch (Exception e) {
+                f = v.toScript();
+            }
+            s.append( f );
         }
-        s.append(" } )");
+        s.append(" ] )");
         return s.toString();
     }
 
