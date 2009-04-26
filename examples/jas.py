@@ -9,7 +9,7 @@ from java.util           import ArrayList
 
 from org.apache.log4j    import BasicConfigurator;
 
-from edu.jas.structure   import RingElem, RingFactory, Power
+from edu.jas.structure   import RingElem, RingFactory, Power, Product, ProductRing
 from edu.jas.arith       import BigInteger, BigRational, BigComplex, BigDecimal,\
                                 ModInteger, ModIntegerRing, BigQuaternion, BigOctonion
 from edu.jas.poly        import GenPolynomial, GenPolynomialRing,\
@@ -42,7 +42,7 @@ from edu.jas             import structure, arith, poly, ps, gb, gbmod, vector,\
 from edu                 import jas
 #PrettyPrint.setInternal();
 
-from org.python.core     import PyInstance, PyList, PyTuple,\
+from org.python.core     import PyInstance, PyJavaInstance, PyList, PyTuple,\
                                 PyInteger, PyLong, PyFloat, PyString
 
 
@@ -1439,12 +1439,13 @@ def RF(pr,d=0,n=1):
 
 
 def RC(ideal,r=0):
-    '''Create JAS polynomial ResidueClass as ring element.
+    '''Create JAS polynomial Residue as ring element.
     '''
     if ideal == None:
         raise ValueError, "No ideal given."
     if isinstance(ideal,Ideal):
         ideal = jas.application.Ideal(ideal.pset);
+        #ideal.doGB();
     #print "ideal.getList().get(0).ring.ideal = %s" % ideal.getList().get(0).ring.ideal;
     if ideal.getList().get(0).ring.getClass().getSimpleName() == "ResidueRing":
         rc = ResidueRing( ideal.getList().get(0).ring.ideal );
@@ -1466,6 +1467,7 @@ def LC(ideal,d=0,n=1):
         raise ValueError, "No ideal given."
     if isinstance(ideal,Ideal):
         ideal = jas.application.Ideal(ideal.pset);
+        #ideal.doGB();
     #print "ideal.getList().get(0).ring.ideal = %s" % ideal.getList().get(0).ring.ideal;
     if ideal.getList().get(0).ring.getClass().getSimpleName() == "LocalRing":
         lc = LocalRing( ideal.getList().get(0).ring.ideal );
@@ -1488,6 +1490,40 @@ def LC(ideal,d=0,n=1):
             r = Local(lc,d);
         else:
             r = Local(lc,d,n);
+    return RingElem(r);
+
+
+def RR(flist,r=0):
+    '''Create JAS regular ring Product as ring element.
+    '''
+    if flist == None:
+        raise ValueError, "No list given."
+    if isinstance(flist,PyList) or isinstance(flist,PyTuple):
+        flist = pylist2arraylist( [ x.factory() for x in flist ] );
+        ncop = 0;
+    else:
+        ncop = -1;
+    #print "flist = " + str(flist);
+    if ncop == 0:
+        pr = ProductRing(flist);
+    else:
+        pr = ProductRing(flist,ncop);
+    if isinstance(r,RingElem):
+        r = r.elem;
+    #print "r type(%s) = %s" % (r,type(r));
+    #if isinstance(r,PyJavaInstance):
+    try:
+        #print "r.class() = %s" % r.getClass().getSimpleName();
+        if r.getClass().getSimpleName() == "Product":
+            #print "r.val = %s" % r.val;
+            r = r.val;
+    except:
+        pass;
+    #print "r = " + str(r);
+    if r == 0:
+        r = Product(pr);
+    else:
+        r = Product(pr,r);
     return RingElem(r);
 
 
@@ -1613,6 +1649,11 @@ class RingElem:
                 #print "other type(%s) = %s" % (o,type(o));
                 o = Oct( Quat(o) );
                 o = o.elem;
+            if self.elem.getClass().getSimpleName() == "Product":
+                #print "other type(%s) = %s" % (o,type(o));
+                o = RR(self.ring, self.elem.multiply(o) ); # valueOf
+                #print "o = %s" % o;
+                o = o.elem;
             return RingElem(o);
         #print "--2";
         # test if self.elem is a factory itself
@@ -1633,10 +1674,16 @@ class RingElem:
             o = self.elem.ring.fromInteger(other);
         else:
             if isinstance(other,PyFloat): # ?? what to do ??
-                #print "other int(%s) = %s" % (other,int(other));
+                #print "other type(%s) = %s" % (other,type(other));
+                #print "self  type(%s) = %s" % (self.elem,self.elem.getClass().getName());
                 o = BigDecimal(other);
-                #print "other DD(%s) = %s" % (other,o);
-                o = self.elem.factory().getZERO().sum( o );
+                if self.elem.getClass().getName() == "edu.jas.structure.Product":
+                    o = RR(self.ring, self.elem.multiply(o) ); # valueOf
+                    o = o.elem;
+                    #print "o = %s" % o; #self.elem.factory().getONE().multiply( o );
+                else:
+                    #print "other DD(%s) = %s" % (other,o);
+                    o = self.elem.factory().getZERO().sum( o );
             else:
                 print "unknown other type(%s) = %s" % (other,type(other));
                 o = other;
@@ -1786,7 +1833,9 @@ class RingElem:
         '''Get the generators for the factory of this element.
         '''
         L = self.elem.factory().generators();
+        #print "L = %s" % L;
         N = [ RingElem(e) for e in L ];
+        #print "N = %s" % N;
         return N;
 
     def evaluate(self,a):
@@ -1878,8 +1927,6 @@ class PolyRing(Ring):
 
     def __str__(self):
         '''Create a string representation.
-
-        todo: add .toScript()
         '''
         cf = self.ring.coFac;
         #print "cf.getClasss(): " + str(cf.getClass());
@@ -1887,16 +1934,6 @@ class PolyRing(Ring):
             cfac = cf.toScriptFactory();
         except:
             cfac = cf.toScript();
-##         if cf.equals( BigInteger() ):
-##             cfac = "ZZ()";
-##         if cf.equals( BigRational() ):
-##             cfac = "QQ()";
-##         if cf.equals( BigComplex() ):
-##             cfac = "CC()";
-##         if cf.equals( BigDecimal() ):
-##             cfac = "DD()";
-##         if cf.getClass() == ModIntegerRing(3).getClass():
-##             cfac = "ZM(%s)" % cf.modul;
         if cf.getClass().getSimpleName() == "QuotientRing":
             qr = cf.ring;
             cfac = "RF(%s)" % str(PolyRing(qr.coFac,qr.varsToString(),qr.tord));

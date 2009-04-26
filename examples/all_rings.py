@@ -10,7 +10,7 @@ from jas import PolyRing
 from jas import Ideal
 from jas import startLog
 from jas import terminate
-from jas import ZZ, QQ, ZM, DD, CC, Quat, Oct, AN, RealN, RF, RC, LC
+from jas import ZZ, QQ, ZM, DD, CC, Quat, Oct, AN, RealN, RF, RC, LC, RR
 from edu.jas.arith import BigDecimal
 
 
@@ -447,15 +447,41 @@ l6 = 1/l5;
 print "l6 = " + str(l6);
 l7 =  (l1 * l2) / l2;
 print "l7 = " + str(l7);
+print;
 
-
+print "------- RR( [QQ(),ZM(19),DD()] ) ---------";
+r = RR( [QQ(),ZM(19),DD()] );
+print "r = " + str(r);
+print "r.factory() = " + str(r.factory());
+rc1 = RR( [ QQ(), ZM(19), DD() ] );
+print [ str(x) for x in r.gens() ];
+print "rc1.factory() = " + str(rc1.factory());
+[pg0,pg1,pg2] = r.gens();
+print "pg0     = " + str(pg0);
+print "pg1     = " + str(pg1);
+print "pg2     = " + str(pg2);
+r1 = pg1 + pg2 + pg0;
+print "r1 = " + str(r1);
+r2 = r1 * r1 + 7 * r1;
+print "r2 = " + str(r2);
+r3 = r2**3;
+print "r3 = " + str(r3);
+r4 = 1/r3;
+print "r4 = " + str(r4);
+r5 = r4 - r1;
+print "r5 = " + str(r5);
+r6 = ( (-511,512)*pg0 + 17*pg1 - 0.998046875*pg2 );
+print "r6 = " + str(r6);
+print;
 
 print "------------------------------------";
+
+#print "globals() = " + str(globals());
 
 terminate();
 sys.exit();
 
-print "globals()" + str(globals());
-print "locals()" + str(locals());
-print "vars()" + str(vars());
+print "globals() = " + str(globals());
+print "locals()  = " + str(locals());
+print "vars()    = " + str(vars());
 
