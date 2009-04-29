@@ -10,7 +10,7 @@ from jas import PolyRing
 from jas import Ideal
 from jas import startLog
 from jas import terminate
-from jas import ZZ, QQ, ZM, DD, CC, Quat, Oct, AN, RealN, RF, RC, LC, RR
+from jas import ZZ, QQ, ZM, DD, CC, Quat, Oct, AN, RealN, RF, RC, LC, RR, PS
 from edu.jas.arith import BigDecimal
 
 
@@ -473,6 +473,38 @@ print "r5 = " + str(r5);
 r6 = ( (-511,512)*pg0 + 17*pg1 - 0.998046875*pg2 );
 print "r6 = " + str(r6);
 print;
+
+print "------- PS(QQ(),\"x\") ---------";
+r = PS(QQ(),"x");
+print "r = " + str(r);
+print "r.factory() = " + str(r.factory());
+[one,x] = r.gens();
+print "one   = " + str(one);
+print "x     = " + str(x);
+p1 = x**2 - 2;
+print "p1 = " + str(p1);
+p2 = x**3 - 2;
+print "p2 = " + str(p2);
+p3 = x**2 - p1 * p2;
+print "p3 = " + str(p3);
+p4 = - 4 + 3 * x**2 + 2 * x**3 - x**5;
+print "p4 = " + str(p4);
+def g1(i):
+    return r.ring.coFac.fromInteger( 2*i );
+def g2(i):
+    #print "2*QQ(i) = " + str(QQ(2)*QQ(i))
+    return 2*QQ(i);
+r = PS(QQ(),"x",g2);
+print "r = " + str(r);
+print "r.factory() = " + str(r.factory());
+[one,x] = r.gens();
+print "one   = " + str(one);
+print "x     = " + str(x);
+p1 = x**2 - r;
+print "p1 = " + str(p1);
+p2 = x**3 - r/2;
+print "p2 = " + str(p2);
+
 
 print "------------------------------------";
 

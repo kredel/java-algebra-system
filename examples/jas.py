@@ -1527,6 +1527,34 @@ def RR(flist,r=0):
     return RingElem(r);
 
 
+def PS(cofac,name,f=None,truncate=None):
+    '''Create JAS UnivariatePowerSeries as ring element.
+    '''
+    cf = cofac;
+    if isinstance(cofac,RingElem):
+        cf = cf.elem;
+    if isinstance(truncate,RingElem):
+        truncate = truncate.elem;
+    if truncate == None:
+        ps = UnivPowerSeriesRing(cf,name);
+    else:
+        ps = UnivPowerSeriesRing(cf,truncate,name);
+    if f == None:
+        r = ps.getZERO();
+    else:
+        class coeff( Coefficients ):
+            def __init__(self,cofac):
+                self.coFac = cofac;
+            def generate(self,i):
+                a = f(i);
+                if isinstance(a,RingElem):
+                    a = a.elem;
+                #print "a = " + str(a);
+                return a;
+        r = UnivPowerSeries(ps,coeff(cofac));
+    return RingElem(r);
+
+
 def coercePair(a,b):
     '''Coerce type a to type b or type b to type a.
     '''
@@ -1677,12 +1705,10 @@ class RingElem:
                 #print "other type(%s) = %s" % (other,type(other));
                 #print "self  type(%s) = %s" % (self.elem,self.elem.getClass().getName());
                 o = BigDecimal(other);
-                if self.elem.getClass().getName() == "edu.jas.structure.Product":
-                    o = RR(self.ring, self.elem.multiply(o) ); # valueOf
+                if self.elem.getClass().getSimpleName() == "Product":
+                    o = RR(self.ring, self.elem.idempotent().multiply(o) ); # valueOf
                     o = o.elem;
-                    #print "o = %s" % o; #self.elem.factory().getONE().multiply( o );
                 else:
-                    #print "other DD(%s) = %s" % (other,o);
                     o = self.elem.factory().getZERO().sum( o );
             else:
                 print "unknown other type(%s) = %s" % (other,type(other));
@@ -1693,6 +1719,7 @@ class RingElem:
     def isFactory(self):
         '''Test if this is itself a ring factory.
         '''
+        # todo: use factory() method
         try:
             r = self.elem.ring;
         except:
