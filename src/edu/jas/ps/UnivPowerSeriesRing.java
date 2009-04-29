@@ -189,9 +189,14 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
     @Override
     public String toScript() {
         // Python case
-        StringBuffer s = new StringBuffer("UnivPSRing( ");
-        s.append(coFac.toScript());
-        s.append(", " + var + ", " + truncate + " )");
+        StringBuffer s = new StringBuffer("PS(");
+        String f = null;
+        try {
+            f = ((RingElem<C>)coFac).toScriptFactory(); // sic
+        } catch (Exception e) {
+            f = coFac.toScript();
+        }
+        s.append(f + ",\"" + var + "\"," + truncate + ")");
         return s.toString();
     }
 

@@ -178,7 +178,7 @@ public class UnivPowerSeries<C extends RingElem<C>>
     @Override
     public String toScript() {
         // Python case
-        StringBuffer sb = new StringBuffer("UnivPS( ");
+        StringBuffer sb = new StringBuffer("");
         UnivPowerSeries<C> s = this;
         String var = ring.var;
         //System.out.println("cache = " + s.coeffCache);
@@ -214,7 +214,7 @@ public class UnivPowerSeries<C extends RingElem<C>>
         if ( sb.length() == 0 ) {
            sb.append("0");
         }
-        sb.append(", " + truncate + " )");
+        // sb.append("," + truncate + "");
         return sb.toString();
     }
 
