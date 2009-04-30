@@ -28,7 +28,8 @@ from edu.jas.gb          import DGroebnerBaseSeq, EGroebnerBaseSeq,\
                                 SolvableGroebnerBaseParallel, SolvableGroebnerBaseSeq
 from edu.jas.gbmod       import ModGroebnerBaseAbstract, ModSolvableGroebnerBaseAbstract,\
                                 SolvableSyzygyAbstract, SyzygyAbstract
-from edu.jas.vector      import OrderedModuleList, ModuleList, GenVector, GenVectorModul
+from edu.jas.vector      import OrderedModuleList, ModuleList, GenVector, GenVectorModul,\
+                                GenMatrix, GenMatrixRing
 from edu.jas.application import ComprehensiveGroebnerBaseSeq, PolyUtilApp,\
                                 Residue, ResidueRing, Ideal, Quotient, QuotientRing,\
                                 Local, LocalRing
@@ -1555,6 +1556,44 @@ def PS(cofac,name,f=None,truncate=None):
     return RingElem(r);
 
 
+def Vec(cofac,n,v=None):
+    '''Create JAS GenVector ring element.
+    '''
+    cf = cofac;
+    if isinstance(cofac,RingElem):
+        cf = cf.elem;
+    if isinstance(n,RingElem):
+        n = n.elem;
+    if isinstance(v,RingElem):
+        v = v.elem;
+    vr = GenVectorModul(cf,n);
+    if v == None:
+        r = GenVector(vr);
+    else:
+        r = GenVector(vr,v);
+    return RingElem(r);
+
+
+def Mat(cofac,n,m,v=None):
+    '''Create JAS GenMatrix ring element.
+    '''
+    cf = cofac;
+    if isinstance(cofac,RingElem):
+        cf = cf.elem;
+    if isinstance(n,RingElem):
+        n = n.elem;
+    if isinstance(m,RingElem):
+        m = m.elem;
+    if isinstance(v,RingElem):
+        v = v.elem;
+    mr = GenMatrixRing(cf,n,m);
+    if v == None:
+        r = GenMatrix(mr);
+    else:
+        r = GenMatrix(mr,v);
+    return RingElem(r);
+
+
 def coercePair(a,b):
     '''Coerce type a to type b or type b to type a.
     '''
@@ -1599,10 +1638,7 @@ class RingElem:
     def zero(self):
         '''Zero element of this ring.
         '''
-        if self.isFactory():
-            return RingElem( self.elem.getZERO() );
-        else:
-            return RingElem( self.elem.ring.getZERO() );
+        return RingElem( self.elem.factory().getZERO() );
 
     def isZERO(self):
         '''Test if this is the zero element of the ring.
@@ -1612,10 +1648,7 @@ class RingElem:
     def one(self):
         '''One element of this ring.
         '''
-        if self.isFactory():
-            return RingElem( self.elem.getONE() );
-        else:
-            return RingElem( self.elem.ring.getONE() );
+        return RingElem( self.elem.factory().getONE() );
 
     def isONE(self):
         '''Test if this is the one element of the ring.
@@ -1699,7 +1732,7 @@ class RingElem:
         #print "other type(%s) = %s" % (other,type(other));
         # self.elem has a ring factory
         if isinstance(other,PyInteger) or isinstance(other,PyLong):
-            o = self.elem.ring.fromInteger(other);
+            o = self.elem.factory().fromInteger(other);
         else:
             if isinstance(other,PyFloat): # ?? what to do ??
                 #print "other type(%s) = %s" % (other,type(other));
@@ -1720,12 +1753,17 @@ class RingElem:
         '''Test if this is itself a ring factory.
         '''
         # todo: use factory() method
-        try:
-            r = self.elem.ring;
-        except:
-            #print "self.elem = " + str(self.elem);
+        f = self.elem.factory();
+        if self.elem == f:
             return True;
-        return False;
+        else:
+            return False;
+##         try:
+##             r = self.elem.ring;
+##         except:
+##             #print "self.elem = " + str(self.elem);
+##             return True;
+##         return False;
 
     def isPolynomial(self):
         '''Test if this is a polynomial.
@@ -1755,6 +1793,8 @@ class RingElem:
         '''Multiply two ring elements.
         '''
         [s,o] = coercePair(self,other);
+        #print "self  type(%s) = %s" % (s,type(s));
+        #print "other type(%s) = %s" % (o,type(o));
         return RingElem( s.elem.multiply( o.elem ) ); 
 
     def __rmul__(self,other):
@@ -1820,9 +1860,11 @@ class RingElem:
         else:
             if isinstance(other,RingElem): 
                 n = other.elem;
-                if isinstance(n,BigRational): # does not work
-                    n = n.numerator().intValue();
-                if isinstance(n,BigInteger):  # does not work
+                #if isinstance(n,BigRational): # does not work
+                if n.getClass().getSimpleName() == "BigRational": 
+                    n = n.numerator().intValue() / n.denominator().intValue();
+                #if isinstance(n,BigInteger):  # does not work
+                if n.getClass().getSimpleName() == "BigInteger": 
                     n = n.intValue();
         if self.isFactory():
             p = Power(self.elem).power( self.elem, n );
@@ -1880,7 +1922,7 @@ class RingElem:
         try:
             e = self.elem.evaluate(x);
         except:
-            e = None;            
+            e = 0;            
         return RingElem( e );
 
     def integrate(self,a):
@@ -1898,7 +1940,7 @@ class RingElem:
         try:
             e = self.elem.integrate(x);
         except:
-            e = None;            
+            e = 0;
         return RingElem( e );
 
     def differentiate(self):
@@ -1907,7 +1949,7 @@ class RingElem:
         try:
             e = self.elem.differentiate();
         except:
-            e = None;            
+            e = 0;
         return RingElem( e );
 
     def coefficients(self):

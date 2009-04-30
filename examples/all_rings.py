@@ -10,7 +10,7 @@ from jas import PolyRing
 from jas import Ideal
 from jas import startLog
 from jas import terminate
-from jas import ZZ, QQ, ZM, DD, CC, Quat, Oct, AN, RealN, RF, RC, LC, RR, PS
+from jas import ZZ, QQ, ZM, DD, CC, Quat, Oct, AN, RealN, RF, RC, LC, RR, PS, Vec, Mat
 from edu.jas.arith import BigDecimal
 
 
@@ -21,12 +21,14 @@ z2 = z1**2 + 12345678901234567890;
 print "z2 = " + str(z2);
 print;
 
+
 print "------- QQ = BigRational ------------";
 r1 = QQ(1,12345678901234567890);
 print "r1 = " + str(r1**3);
 r2 = r1**2 + (1,12345678901234567890);
 print "r2 = " + str(r2);
 print;
+
 
 print "------- ZM = ModInteger ------------";
 m1 = ZM(19,12345678901234567890);
@@ -35,12 +37,14 @@ m2 = m1**2 + 12345678901234567890;
 print "m2 = " + str(m2);
 print;
 
+
 print "------- DD = BigDecimal ------------";
 d1 = DD(12345678901234567890);
 print "d1 = " + str(d1);
 d2 = (1/d1)**2;
 print "d2 = " + str(d2);
 print;
+
 
 print "------- CC = BigComplex ------------";
 c1 = CC((1,2),(5,));
@@ -56,6 +60,7 @@ print "I   = " + str(I);
 c4 = c3 + 5 * I;
 print "c4 = " + str(c4);
 print;
+
 
 print "------- Quat = BigQuaternion ------------";
 [oneQ,IQ,JQ,KQ] = Quat().gens();
@@ -74,6 +79,7 @@ print "q4 = " + str(q4);
 q5 = q2 - q4;
 print "q5  = " + str(q5);
 print;
+
 
 print "------- Oct = BigOctonion ------------";
 #print [ str(g) for g in Oct().gens() ];
@@ -98,6 +104,7 @@ o5 = o2 - o4;
 print "o5  = " + str(o5);
 print;
 
+
 print "------- PolyRing(ZZ(),\"x,y,z\") ---------";
 r = PolyRing(ZZ(),"x,y,z",PolyRing.grad);
 print "r = " + str(r);
@@ -114,6 +121,7 @@ p3 = p1 - p2;
 print "p3  = " + str(p3);
 print "p3.factory() = " + str(p3.factory());
 print;
+
 
 print "------- PolyRing(QQ(),\"x,y,z\") ---------";
 r = PolyRing(QQ(),"x,y,z",PolyRing.grad);
@@ -134,6 +142,7 @@ print "s4  = " + str(s4);
 print "s4.factory() = " + str(s4.factory());
 print;
 
+
 print "------- PolyRing(ZM(11),\"x,y,z\") ---------";
 r = PolyRing(ZM(11),"x,y,z",PolyRing.grad);
 print "r = " + str(r);
@@ -151,6 +160,7 @@ print "p3  = " + str(p3);
 print "p3.factory() = " + str(p3.factory());
 print;
 
+
 print "------- PolyRing(DD(),\"x,y,z\") ---------";
 r = PolyRing(DD(),"x,y,z",PolyRing.grad);
 print "r = " + str(r);
@@ -167,6 +177,7 @@ p3 = p1 - p2;
 print "p3  = " + str(p3);
 print "p3.factory() = " + str(p3.factory());
 print;
+
 
 print "------- PolyRing(CC(),\"x,y,z\") ---------";
 r = PolyRing(CC(),"x,y,z",PolyRing.grad);
@@ -193,6 +204,7 @@ print "s4  = " + str(s4);
 print "s4.factory() = " + str(s4.factory());
 print;
 
+
 print "------- PolyRing(Quat(),\"x,y,z\") ---------";
 r = PolyRing(Quat(),"x,y,z",PolyRing.grad);
 print "r = " + str(r);
@@ -214,6 +226,7 @@ s4 = s3 - s1;
 print "s4  = " + str(s4);
 print "s4.factory() = " + str(s4.factory());
 print;
+
 
 print "------- PolyRing(Oct(),\"x,y,z\") ---------";
 r = PolyRing(Oct(),"x,y,z",PolyRing.grad);
@@ -241,6 +254,7 @@ print "s4  = " + str(s4);
 print "s4.factory() = " + str(s4.factory());
 print;
 
+
 print "------- AN(alpha**2 - 2) ---------";
 r = PolyRing(QQ(),"alpha",PolyRing.lex);
 print "r = " + str(r);
@@ -262,6 +276,7 @@ Qs2x = AN(alpha**2 - 2);
 print "Qs2x  = " + str(Qs2x.factory());
 print;
 
+
 print "------- GF_17(alpha**2 - 2) ---------";
 r = PolyRing(ZM(17),"alpha",PolyRing.lex);
 print "r = " + str(r);
@@ -282,6 +297,7 @@ print "c     = " + str(c);
 Qs2x = AN(alpha**2 - 2);
 print "Qs2x  = " + str(Qs2x.factory());
 print;
+
 
 print "------- RealN(alpha**2 - 2,((1),(2)) ---------";
 r = PolyRing(QQ(),"alpha",PolyRing.lex);
@@ -309,6 +325,7 @@ Qs2rx = RealN( alpha**2 - 2, ( 1, 2 )  );
 print "Qs2rx  = " + str(Qs2rx.factory());
 print;
 
+
 print "------- PolyRing(PolyRing(QQ(),\"a,b,c\"),\"x,y,z\") ---------";
 r = PolyRing(QQ(),"a,b,c",PolyRing.grad);
 print "r  = " + str(r);
@@ -334,6 +351,7 @@ print "s4.factory() = " + str(s4.factory());
 x = PolyRing(PolyRing(QQ(),"a, b, c",PolyRing.grad),"x, y, z",PolyRing.lex);
 print "x = " + str(x);
 print;
+
 
 print "------- RF(PolyRing(ZZ(),\"a,b,c\",PolyRing.lex)) ---------";
 r = PolyRing(ZZ(),"a,b,c",PolyRing.lex);
@@ -361,6 +379,7 @@ print "q6.factory() = " + str(q6.factory());
 x = RF(PolyRing(ZZ(),"a, b, c",PolyRing.lex));
 print "x  = " + str(x.factory());
 print;
+
 
 print "------- RC(PolyRing(QQ(),\"a,b,c\",PolyRing.lex)) ---------";
 r = PolyRing(QQ(),"a,b,c",PolyRing.lex);
@@ -406,6 +425,7 @@ rc1 = RC(Ideal(PolyRing(QQ(),"a, b, c",PolyRing.lex),list=[( a**2 - 2 ), ( b**3 
 print "rc1.factory() = " + str(rc1.factory());
 print;
 
+
 print "------- LC(PolyRing(QQ(),\"a,b,c\",PolyRing.lex)) ---------";
 r = PolyRing(QQ(),"a,b,c",PolyRing.lex);
 print "r = " + str(r);
@@ -449,6 +469,7 @@ l7 =  (l1 * l2) / l2;
 print "l7 = " + str(l7);
 print;
 
+
 print "------- RR( [QQ(),ZM(19),DD()] ) ---------";
 r = RR( [QQ(),ZM(19),DD()] );
 print "r = " + str(r);
@@ -473,6 +494,7 @@ print "r5 = " + str(r5);
 r6 = ( (-511,512)*pg0 + 17*pg1 - 0.998046875*pg2 );
 print "r6 = " + str(r6);
 print;
+
 
 print "------- PS(QQ(),\"x\") ---------";
 r = PS(QQ(),"x");
@@ -504,6 +526,55 @@ p1 = x**2 - r;
 print "p1 = " + str(p1);
 p2 = x**3 - r/2;
 print "p2 = " + str(p2);
+print;
+
+
+print "------- Vec(QQ(),7) ---------";
+r = Vec(QQ(),7);
+print "r = " + str(r);
+print "r.factory() = " + str(r.factory());
+print [ str(g) for g in r.gens() ];
+[e1,e2,e3,e4,e5,e6,e7] = r.gens();
+print "e1 = " + str(e1);
+print "e2 = " + str(e2);
+print "e3 = " + str(e3);
+print "e4 = " + str(e4);
+print "e5 = " + str(e5);
+print "e6 = " + str(e6);
+print "e7 = " + str(e7);
+v1 = e1 + e3;
+print "v1 = " + str(v1);
+#v2 = v1 + 5 * e7;
+#print "v2 = " + str(v2);
+v3 = v1 - e1 - e3;
+print "v3 = " + str(v3);
+print;
+
+
+print "------- Mat(QQ(),3,2) ---------";
+r = Mat(QQ(),3,3);
+print "r = " + str(r);
+print "r.factory() = " + str(r.factory());
+#print [ str(g) for g in r.gens() ];
+[e11,e12,e13,e21,e22,e23,e31,e32,e33] = r.gens();
+print "e11 = " + str(e11);
+print "e12 = " + str(e12);
+print "e13 = " + str(e13);
+print "e21 = " + str(e21);
+print "e22 = " + str(e22);
+print "e23 = " + str(e23);
+print "e31 = " + str(e31);
+print "e32 = " + str(e32);
+print "e33 = " + str(e33);
+m1 = e11 + e31;
+print "m1 = " + str(m1);
+m2 = m1 * m1 + 5*e22;
+print "m2 = " + str(m2);
+m3 = m2**3 - 125*e21 - 125*e23;
+print "m3 = " + str(m3);
+#m4 = 1/m2;
+#print "m4 = " + str(m4);
+print;
 
 
 print "------------------------------------";
