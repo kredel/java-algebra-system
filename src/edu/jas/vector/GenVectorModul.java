@@ -95,9 +95,14 @@ public class GenVectorModul<C extends RingElem<C> >
     @Override
     public String toScript() {
         // Python case
-        StringBuffer s = new StringBuffer("VecModul(");
-        s.append( coFac.toScript() );
-        s.append(", " + cols + " )" );
+        StringBuffer s = new StringBuffer("Vec(");
+        String f = null;
+        try {
+            f = ((RingElem<C>)coFac).toScriptFactory(); // sic
+        } catch (Exception e) {
+            f = coFac.toScript();
+        }
+        s.append(f + "," + cols + " )" );
         return s.toString();
     }
 

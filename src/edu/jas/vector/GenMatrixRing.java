@@ -131,9 +131,14 @@ public class GenMatrixRing<C extends RingElem<C> >
     @Override
     public String toScript() {
         // Python case
-        StringBuffer s = new StringBuffer("MatModul(");
-        s.append( coFac.toScript() );
-        s.append(", " + rows + ", " + cols + " )" );
+        StringBuffer s = new StringBuffer("Mat(");
+        String f = null;
+        try {
+            f = ((RingElem<C>)coFac).toScriptFactory(); // sic
+        } catch (Exception e) {
+            f = coFac.toScript();
+        }
+        s.append(f + "," + rows + "," + cols + ")" );
         return s.toString();
     }
 
