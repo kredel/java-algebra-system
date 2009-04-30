@@ -7,6 +7,7 @@ import sys;
 
 from jas import Ring
 from jas import PolyRing
+from jas import SolvPolyRing
 from jas import Ideal
 from jas import startLog
 from jas import terminate
@@ -551,7 +552,7 @@ print "v3 = " + str(v3);
 print;
 
 
-print "------- Mat(QQ(),3,2) ---------";
+print "------- Mat(QQ(),3,3) ---------";
 r = Mat(QQ(),3,3);
 print "r = " + str(r);
 print "r.factory() = " + str(r.factory());
@@ -574,6 +575,65 @@ m3 = m2**3 - 125*e21 - 125*e23;
 print "m3 = " + str(m3);
 #m4 = 1/m2;
 #print "m4 = " + str(m4);
+print;
+
+
+print "------- Mat(PolyRing(QQ(),\"x,y,z\",PolyRing.lex),3,3) ---------";
+r = Mat(PolyRing(QQ(),"x,y,z",PolyRing.lex),3,3);
+print "r = " + str(r);
+print "r.factory() = " + str(r.factory());
+print [ str(g) for g in r.gens() ];
+print;
+
+
+print "------- PolyRing(Mat(QQ(),3,3),\"x,y,z\",PolyRing.lex) ---------";
+r = PolyRing(Mat(QQ(),3,3),"x,y,z",PolyRing.lex);
+print "r = " + str(r);
+print [ str(g) for g in r.gens() ];
+print;
+
+
+print "------- SolvPolyRing(QQ(),\"x,y,z\") ---------";
+r = PolyRing(QQ(),"x,y,z",PolyRing.lex);
+print "r = " + str(r);
+[pone,px,py,pz] = r.gens();
+print "pone = " + str(pone);
+print "px   = " + str(px);
+print "py   = " + str(py);
+print "pz   = " + str(pz);
+rel = ( py, px, px * py - 1 , pz, py, py * pz - 1 );
+#print "rel  = " + str(rel);
+sr = SolvPolyRing(QQ(),"x,y,z",PolyRing.lex,rel);
+print "sr = " + str(sr);
+[one,x,y,z] = sr.gens();
+print "one = " + str(one);
+print "x   = " + str(x);
+print "y   = " + str(y);
+print "z   = " + str(z);
+print "one.factory() = " + str(one.factory());
+s1 = QQ(1,2) + QQ(2,3) * x + QQ(2,5) * y + ( x + y + z )**2;
+print "s1  = " + str(s1);
+s2 = (1,2) + (2,3) * x + (2,5) * y + ( x + y + z )**2;
+print "s2  = " + str(s2);
+s3  = z**2 + 2 * y * z + 2 * x * z + y**2 + 2 * x * y + x**2 + (2,5) * y + (2,3) * x + (1,2);
+print "s3  = " + str(s3);
+s4 = s1 - s3;
+print "s4  = " + str(s4);
+print "s4.factory() = " + str(s4.factory());
+sr1 = SolvPolyRing(QQ(),"x, y, z",PolyRing.lex,(( z ), ( y ), ( y * z - 1 ),( y ), ( x ), ( x * y - 1 )));
+print "sr1 = " + str(sr1);
+s5 = z * y;
+print "s5  = " + str(s5);
+s6 = s5**3;
+print "s6  = " + str(s6);
+s7 = ( z * y )**3;
+print "s7  = " + str(s7);
+s8 = s7 - s6;
+print "s8  = " + str(s8);
+s9 = y**3 * z**3 - 3 * y**2 * z**2 + 3 * y * z - 1;
+print "s9  = " + str(s9);
+s10 = s9 - s7;
+print "s10 = " + str(s10);
 print;
 
 

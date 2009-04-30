@@ -1533,7 +1533,9 @@ def PS(cofac,name,f=None,truncate=None):
     '''
     cf = cofac;
     if isinstance(cofac,RingElem):
-        cf = cf.elem;
+        cf = cofac.elem.factory();
+    if isinstance(cofac,Ring):
+        cf = cofac.ring;
     if isinstance(truncate,RingElem):
         truncate = truncate.elem;
     if truncate == None:
@@ -1561,7 +1563,9 @@ def Vec(cofac,n,v=None):
     '''
     cf = cofac;
     if isinstance(cofac,RingElem):
-        cf = cf.elem;
+        cf = cofac.elem.factory();
+    if isinstance(cofac,Ring):
+        cf = cofac.ring;
     if isinstance(n,RingElem):
         n = n.elem;
     if isinstance(v,RingElem):
@@ -1579,13 +1583,16 @@ def Mat(cofac,n,m,v=None):
     '''
     cf = cofac;
     if isinstance(cofac,RingElem):
-        cf = cf.elem;
+        cf = cofac.elem.factory();
+    if isinstance(cofac,Ring):
+        cf = cofac.ring;
     if isinstance(n,RingElem):
         n = n.elem;
     if isinstance(m,RingElem):
         m = m.elem;
     if isinstance(v,RingElem):
         v = v.elem;
+    print "cf type(%s) = %s" % (cf,type(cf));
     mr = GenMatrixRing(cf,n,m);
     if v == None:
         r = GenMatrix(mr);
@@ -1896,7 +1903,8 @@ class RingElem:
             nv = fac.nvar;
         except:
             return RingElem(fac);
-        return PolyRing(fac.coFac,fac.getVars(),fac.tord);
+        #return PolyRing(fac.coFac,fac.getVars(),fac.tord);
+        return RingElem(fac);
 
     def gens(self):
         '''Get the generators for the factory of this element.
@@ -1997,29 +2005,77 @@ class PolyRing(Ring):
     def __str__(self):
         '''Create a string representation.
         '''
-        cf = self.ring.coFac;
-        #print "cf.getClasss(): " + str(cf.getClass());
-        try:
-            cfac = cf.toScriptFactory();
-        except:
-            cfac = cf.toScript();
-        if cf.getClass().getSimpleName() == "QuotientRing":
-            qr = cf.ring;
-            cfac = "RF(%s)" % str(PolyRing(qr.coFac,qr.varsToString(),qr.tord));
-        #print "cf.getClasss(): " + str(cf.getClass());
-        #print "poly.getClasss(): " + str( GenPolynomialRing(BigInteger(),1).getClass() );
-        if cf.getClass().getSimpleName() == "GenPolynomialRing":
-            cfac = str(PolyRing(cf.coFac,cf.varsToString(),cf.tord));
-        #print "cfac: " + str(cfac);
-        to = self.ring.tord;
-        tord = to;
-        if to.evord == TermOrder.INVLEX:
-            tord = "PolyRing.lex";
-        if to.evord == TermOrder.IGRLEX:
-            tord = "PolyRing.grad";
-        nvars = self.ring.varsToString();
-        return "PolyRing(%s,%s,%s)" % (cfac, "\""+nvars+"\"", tord);
+        return self.ring.toScript();
+##         cf = self.ring.coFac;
+##         #print "cf.getClasss(): " + str(cf.getClass());
+##         try:
+##             cfac = cf.toScriptFactory();
+##         except:
+##             cfac = cf.toScript();
+##         if cf.getClass().getSimpleName() == "QuotientRing":
+##             qr = cf.ring;
+##             cfac = "RF(%s)" % str(PolyRing(qr.coFac,qr.varsToString(),qr.tord));
+##         #print "cf.getClasss(): " + str(cf.getClass());
+##         #print "poly.getClasss(): " + str( GenPolynomialRing(BigInteger(),1).getClass() );
+##         if cf.getClass().getSimpleName() == "GenPolynomialRing":
+##             cfac = str(PolyRing(cf.coFac,cf.varsToString(),cf.tord));
+##         #print "cfac: " + str(cfac);
+##         to = self.ring.tord;
+##         tord = to;
+##         if to.evord == TermOrder.INVLEX:
+##             tord = "PolyRing.lex";
+##         if to.evord == TermOrder.IGRLEX:
+##             tord = "PolyRing.grad";
+##         nvars = self.ring.varsToString();
+##         return "PolyRing(%s,%s,%s)" % (cfac, "\""+nvars+"\"", tord);
 
     lex = TermOrder(TermOrder.INVLEX)
 
     grad = TermOrder(TermOrder.IGRLEX)
+
+
+class SolvPolyRing(SolvableRing):
+    '''Represents a JAS solvable polynomial ring: GenSolvablePolynomialRing.
+
+    Provides more convenient constructor. 
+    Then returns a Ring.
+    '''
+
+    def __init__(self,coeff,vars,order,relation=None):
+        '''Ring constructor.
+
+        coeff = factory for coefficients,
+        vars = string with variable names,
+        order = term order,
+        relation = triple list of relations. (e,f,p,...) with e * f = p as relation.
+        '''
+        if coeff == None:
+            raise ValueError, "No coefficient given."
+        cf = coeff;
+        if isinstance(coeff,RingElem):
+            cf = coeff.elem.factory();
+        if isinstance(coeff,Ring):
+            cf = coeff.ring;
+        if vars == None:
+            raise ValueError, "No variable names given."
+        names = vars;
+        if isinstance(vars,PyString):
+            names = StringUtil.variableList(vars);
+        nv = len(names);
+        to = PolyRing.lex;
+        if isinstance(order,TermOrder):
+            to = order;
+        ring = GenSolvablePolynomialRing(cf,nv,to,names);
+        if relation != None:
+            #print "relation = " + str(relation);
+            table = ring.table;
+            L = [ x.elem for x in relation if isinstance(x,RingElem) ];
+            print "relation = " + str(L);
+            for i in range(0,len(L),3):
+                table.update( L[i], L[i+1], L[i+2]);
+        self.ring = ring;
+
+    def __str__(self):
+        '''Create a string representation.
+        '''
+        return self.ring.toScript();
