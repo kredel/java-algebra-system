@@ -217,12 +217,45 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
     }
 
 
+    /** Get a scripting compatible string representation.
+     * @return script compatible representation for this relation table.
+     */
+    public String toScript() {
+        // Python case
+        String[] vars = ring.vars;
+        List v;
+        StringBuffer s = new StringBuffer("(");
+        boolean first = true;
+        for ( List<Integer> k: table.keySet() ) { 
+            if ( first ) {
+                first = false;
+                s.append( "" );
+            } else {
+                s.append( "," );
+            }
+            v = table.get( k );
+            for (Iterator jt = v.iterator(); jt.hasNext(); ) { 
+                ExpVectorPair ep = (ExpVectorPair)jt.next();
+                s.append("( " + ep.getFirst().toScript(vars) + " ), " );
+                s.append("( " + ep.getSecond().toScript(vars) + " ), " );
+                GenPolynomial<C> p = (GenPolynomial<C>)jt.next();
+                s.append("( " + p.toScript() + " )" );
+                if ( jt.hasNext() ) {
+                    s.append(", ");
+                }
+            }
+        }
+        s.append( ")" );
+        return s.toString();
+    }
+
+
     /**
      * Update or initialize RelationTable with new relation.
      * relation is e * f = p.
      * @param e first term.
      * @param f second term.
-     * @param p product polynomial.
+     * @param p solvable product polynomial.
      */
     @SuppressWarnings("unchecked")
     public synchronized void 
@@ -291,6 +324,47 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
         part.add( index, evp );
         part.add( index+1, p );
         // table.put( key, part ); // required??
+    }
+
+
+    /**
+     * Update or initialize RelationTable with new relation.
+     * relation is e * f = p.
+     * @param E first term polynomial.
+     * @param F second term polynomial.
+     * @param p solvable product polynomial.
+     */
+    public void update(GenPolynomial<C> E, GenPolynomial<C> F, GenSolvablePolynomial<C> p) {
+        if ( E.isZERO() || F.isZERO() ) {
+            throw new RuntimeException("polynomials may not be zero: " + E + ", " + F);
+        }
+        C ce = E.leadingBaseCoefficient();
+        C cf = F.leadingBaseCoefficient();
+        if ( ! ce.isONE() || ! cf.isONE() ) {
+            throw new RuntimeException("lbcf of polynomials must be one: " + ce + ", " + cf);
+        }
+        ExpVector e = E.leadingExpVector();
+        ExpVector f = F.leadingExpVector();
+        update(e,f,p);
+    }
+
+
+    /**
+     * Update or initialize RelationTable with new relation.
+     * relation is e * f = p.
+     * @param E first term polynomial.
+     * @param F second term polynomial.
+     * @param p product polynomial.
+     */
+    public void update(GenPolynomial<C> E, GenPolynomial<C> F, GenPolynomial<C> p) {
+        if ( p.isZERO() ) {
+            throw new RuntimeException("polynomial may not be zero: " + p);
+        }
+        if ( p.isONE() ) {
+            throw new RuntimeException("product of polynomials may not be one: " + p);
+        }
+        GenSolvablePolynomial<C> sp = new GenSolvablePolynomial<C>(ring,p.val);
+        update(E,F,sp);
     }
 
 

@@ -179,6 +179,33 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
     }
 
 
+    /** Get a scripting compatible string representation.
+     * @return script compatible representation for this Element.
+     * @see edu.jas.structure.Element#toScript()
+     */
+    @Override
+    public String toScript() {
+        // Python case
+        String cf = coFac.toScript().trim();
+        if ( cf.startsWith("0") ) {
+            cf = ((RingElem<C>)coFac).toScriptFactory();
+        }
+        String to = tord.toString();
+        if ( tord.getEvord() == TermOrder.INVLEX ) {
+            to = "PolyRing.lex";
+        }
+        if ( tord.getEvord() == TermOrder.IGRLEX ) {
+            to = "PolyRing.grad";
+        }
+        if ( table.size() > 0 ) {
+            String rel = table.toScript();
+            return "SolvPolyRing(" + cf + ",\"" + varsToString() + "\"," + to + "," + rel + ")";
+        } else {
+            return "SolvPolyRing(" + cf + ",\"" + varsToString() + "\"," + to + ")";
+        }
+    }
+
+
     /** Comparison with any other object.
      * @see java.lang.Object#equals(java.lang.Object)
      */
