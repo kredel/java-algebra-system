@@ -45,6 +45,20 @@ public class GenMatrix<C extends RingElem<C> >
     /**
      * Constructor for GenMatrix.
      */
+    public GenMatrix(GenMatrixRing< C > r, List<List<C>> m) {
+        ring = r;
+        matrix = new ArrayList<ArrayList<C>>(r.rows);
+        for ( List<C> row : m ) {
+            ArrayList<C> nr = new ArrayList<C>(row);
+            matrix.add(nr);
+        }
+        //System.out.println("using List<List> constructor");
+    }
+
+
+    /**
+     * Constructor for GenMatrix.
+     */
     protected GenMatrix(GenMatrixRing< C > r, ArrayList<ArrayList<C>> m) {
         ring = r;
         matrix = m;
