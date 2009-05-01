@@ -2,7 +2,7 @@
  * $Id$
  */
 
-package edu.jas.arith;
+package edu.jas.structure;
 
 import java.math.BigInteger;
 import java.util.Random;
