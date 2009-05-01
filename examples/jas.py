@@ -1155,7 +1155,7 @@ class SeriesRing:
         return RingElem( self.ring.fromPolynomial(a) );
 
 
-def pylist2arraylist(list):
+def pylist2arraylist(list,fac=None):
     '''Convert a Python list to a Java ArrayList.
 
     If list is a Python list, it is converted, else list is left unchanged.
@@ -1167,7 +1167,15 @@ def pylist2arraylist(list):
            if isinstance(e,RingElem):
                L.add( e.elem );
            else:
-               L.add( e );
+               if isinstance(e,PyList) or isinstance(e,PyTuple):
+                   el = pylist2arraylist(e,fac);
+                   L.add(el);
+               else:
+                   if fac == None:
+                       L.add( e );
+                   else:
+                       ej = fac.parse( str(e) ); #or makJasArith(e) ?
+                       L.add(ej);
        list = L;
     #print "list type(%s) = %s" % (list,type(list));
     return list
@@ -1592,7 +1600,7 @@ def Mat(cofac,n,m,v=None):
         m = m.elem;
     if isinstance(v,RingElem):
         v = v.elem;
-    print "cf type(%s) = %s" % (cf,type(cf));
+    #print "cf type(%s) = %s" % (cf,type(cf));
     mr = GenMatrixRing(cf,n,m);
     if v == None:
         r = GenMatrix(mr);
@@ -1688,6 +1696,19 @@ class RingElem:
         #print "self  type(%s) = %s" % (self,type(self));
         #print "other type(%s) = %s" % (other,type(other));
         #print "self.elem class(%s) = %s" % (self.elem,self.elem.getClass());
+        if self.elem.getClass().getSimpleName() == "GenVector":
+            #print "self, other = %s, %s " % (self,other);
+            if isinstance(other,PyTuple) or isinstance(other,PyList):
+                o = pylist2arraylist(other,self.elem.factory().coFac);
+                o = GenVector(self.elem.factory(),o);
+                return RingElem( o );
+        if self.elem.getClass().getSimpleName() == "GenMatrix":
+            #print "self, other = %s, %s " % (type(self),type(other));
+            #print "o type(%s) = %s, str = %s" % (o,type(o),str(o));
+            if isinstance(other,PyTuple) or isinstance(other,PyList):
+                o = pylist2arraylist(other,self.elem.factory().coFac);
+                o = GenMatrix(self.elem.factory(),o);
+                return RingElem( o );
         if isinstance(other,RingElem):
             if self.isPolynomial() and not other.isPolynomial():
                 #print "self.ring = %s" % (self.ring);
@@ -2072,7 +2093,7 @@ class SolvPolyRing(SolvableRing):
             L = [ x.elem for x in relation if isinstance(x,RingElem) ];
             print "relation = " + str(L);
             for i in range(0,len(L),3):
-                table.update( L[i], L[i+1], L[i+2]);
+                table.update( L[i], L[i+1], L[i+2] );
         self.ring = ring;
 
     def __str__(self):

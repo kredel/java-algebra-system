@@ -534,7 +534,7 @@ print "------- Vec(QQ(),7) ---------";
 r = Vec(QQ(),7);
 print "r = " + str(r);
 print "r.factory() = " + str(r.factory());
-print [ str(g) for g in r.gens() ];
+#print [ str(g) for g in r.gens() ];
 [e1,e2,e3,e4,e5,e6,e7] = r.gens();
 print "e1 = " + str(e1);
 print "e2 = " + str(e2);
@@ -575,6 +575,10 @@ m3 = m2**3 - 125*e21 - 125*e23;
 print "m3 = " + str(m3);
 #m4 = 1/m2;
 #print "m4 = " + str(m4);
+m5 = ( ( 1, 0, 0 ), ( -125, 125, -125 ), ( 1, 0, 0 ) ); # is PyTuple!
+print "m5 = " + str(m5);
+m6 = m3 * m5;
+print "m6 = " + str(m6);
 print;
 
 
@@ -582,14 +586,17 @@ print "------- Mat(PolyRing(QQ(),\"x,y,z\",PolyRing.lex),3,3) ---------";
 r = Mat(PolyRing(QQ(),"x,y,z",PolyRing.lex),3,3);
 print "r = " + str(r);
 print "r.factory() = " + str(r.factory());
-print [ str(g) for g in r.gens() ];
+#print [ str(g) for g in r.gens() ];
+for g in r.gens():
+    print "g = " + str(g);
 print;
 
 
 print "------- PolyRing(Mat(QQ(),3,3),\"x,y,z\",PolyRing.lex) ---------";
 r = PolyRing(Mat(QQ(),3,3),"x,y,z",PolyRing.lex);
 print "r = " + str(r);
-print [ str(g) for g in r.gens() ];
+for g in r.gens():
+    print "g = " + str(g);
 print;
 
 
