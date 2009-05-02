@@ -313,30 +313,30 @@ public class GenSolvablePolynomialTest extends TestCase {
  * 
  */
  public void testRecursion() {
-        // rational numbers
-        BigRational rf = new BigRational();
-        // System.out.println("rf = " + rf);
+     // rational numbers
+     BigRational rf = new BigRational();
+     // System.out.println("rf = " + rf);
 
-        String[] vars = new String[] { "a", "b", "c", "d" };
-        TermOrder to = new TermOrder(TermOrder.INVLEX);
-        // polynomials over rational numbers
-        GenSolvablePolynomialRing<BigRational> pf = new GenSolvablePolynomialRing<BigRational>(rf,4,to,vars);
-        WeylRelations<BigRational> wl = new WeylRelations<BigRational>(pf);
-        wl.generate();
-        System.out.println("pf = " + pf);
+     String[] vars = new String[] { "a", "b", "c", "d" };
+     TermOrder to = new TermOrder(TermOrder.INVLEX);
+     // polynomials over rational numbers
+     GenSolvablePolynomialRing<BigRational> pf = new GenSolvablePolynomialRing<BigRational>(rf,4,to,vars);
+     WeylRelations<BigRational> wl = new WeylRelations<BigRational>(pf);
+     wl.generate();
+     //System.out.println("pf = " + pf);
 
-        GenSolvablePolynomial<BigRational> sp = pf.random(5);
-        System.out.println("sp = " + sp);
+     GenSolvablePolynomial<BigRational> sp = pf.random(5);
+     //System.out.println("sp = " + sp);
   
-        // polynomials over (solvable) polynomials over rational numbers
-        GenSolvablePolynomialRing<GenPolynomial<BigRational>> rpf 
-           = new GenSolvablePolynomialRing<GenPolynomial<BigRational>>(pf,2);
-        WeylRelations<GenPolynomial<BigRational>> rwl = new WeylRelations<GenPolynomial<BigRational>>(rpf);
-        rwl.generate();
-        System.out.println("rpf = " + rpf);
+     // polynomials over (solvable) polynomials over rational numbers
+     GenSolvablePolynomialRing<GenPolynomial<BigRational>> rpf 
+         = new GenSolvablePolynomialRing<GenPolynomial<BigRational>>(pf,2);
+     WeylRelations<GenPolynomial<BigRational>> rwl = new WeylRelations<GenPolynomial<BigRational>>(rpf);
+     rwl.generate();
+     //System.out.println("rpf = " + rpf);
 
-        GenSolvablePolynomial<GenPolynomial<BigRational>> rsp = rpf.random(5);
-        System.out.println("rsp = " + rsp);
+     GenSolvablePolynomial<GenPolynomial<BigRational>> rsp = rpf.random(5);
+     //System.out.println("rsp = " + rsp);
 
  }
 
