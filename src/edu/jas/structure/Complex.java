@@ -4,7 +4,6 @@
 
 package edu.jas.structure;
 
-import java.math.BigInteger;
 import java.util.Random;
 import java.io.Reader;
 import java.util.List;
@@ -17,12 +16,18 @@ import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.StarRingElem;
 import edu.jas.structure.RingFactory;
 
+import edu.jas.arith.BigInteger;
+import edu.jas.arith.BigRational;
+import edu.jas.arith.BigComplex;
+import edu.jas.arith.BigDecimal;
+
 import edu.jas.util.StringUtil;
 
 
 /**
  * Generic Complex class implementing the RingElem interface.
  * Objects of this class are immutable.
+ * @param <C> base type.
  * @author Heinz Kredel
  */
 public class Complex<C extends RingElem<C> >
@@ -43,9 +48,9 @@ public class Complex<C extends RingElem<C> >
       */
     protected final C im;
 
-    private final static Random random = new Random();
 
     private static final Logger logger = Logger.getLogger(Complex.class);
+    private static final boolean debug = logger.isDebugEnabled();
 
 
     /** The constructor creates a Complex object 
@@ -199,7 +204,7 @@ public class Complex<C extends RingElem<C> >
     }
 
 
-   /** Is Complex<C> number zero. 
+   /** Is Complex number zero. 
      * @return If this is 0 then true is returned, else false.
      * @see edu.jas.structure.RingElem#isZERO()
      */
@@ -209,7 +214,7 @@ public class Complex<C extends RingElem<C> >
     }
 
 
-    /** Is Complex<C> number one.  
+    /** Is Complex number one.  
      * @return If this is 1 then true is returned, else false. 
      * @see edu.jas.structure.RingElem#isONE()
      */
@@ -219,7 +224,7 @@ public class Complex<C extends RingElem<C> >
     }
 
 
-    /** Is Complex<C> imaginary one.  
+    /** Is Complex imaginary one.  
      * @return If this is i then true is returned, else false. 
      */
     public boolean isIMAG() {
@@ -228,7 +233,7 @@ public class Complex<C extends RingElem<C> >
     }
 
 
-    /** Is Complex<C> unit element.
+    /** Is Complex unit element.
      * @return If this is a unit then true is returned, else false. 
      * @see edu.jas.structure.RingElem#isUnit()
      */
@@ -268,7 +273,7 @@ public class Complex<C extends RingElem<C> >
     }
 
 
-    /** Hash code for this Complex<C>.
+    /** Hash code for this Complex.
      * @see java.lang.Object#hashCode()
      */
     @Override
@@ -312,7 +317,7 @@ public class Complex<C extends RingElem<C> >
     /* arithmetic operations: +, -, -
      */
 
-    /** Complex<C> number summation.  
+    /** Complex number summation.  
      * @param B a Complex<C> number.
      * @return this+B.
      */
@@ -322,7 +327,7 @@ public class Complex<C extends RingElem<C> >
     }
 
 
-    /** Complex<C> number subtract.  
+    /** Complex number subtract.  
      * @param B a Complex<C> number.
      * @return this-B.
      */
@@ -332,7 +337,7 @@ public class Complex<C extends RingElem<C> >
     }
 
 
-    /** Complex<C> number negative.  
+    /** Complex number negative.  
      * @return -this. 
      * @see edu.jas.structure.RingElem#negate()
      */
@@ -345,7 +350,7 @@ public class Complex<C extends RingElem<C> >
     /* arithmetic operations: conjugate, absolut value 
      */
 
-    /** Complex<C> number conjugate.  
+    /** Complex number conjugate.  
      * @return the complex conjugate of this. 
      */
     public Complex<C> conjugate() {
@@ -353,7 +358,7 @@ public class Complex<C extends RingElem<C> >
     }
 
 
-    /** Complex<C> number norm.  
+    /** Complex number norm.  
      * @see edu.jas.structure.StarRingElem#norm()
      * @return ||this||.
      */
@@ -365,10 +370,10 @@ public class Complex<C extends RingElem<C> >
     }
 
 
-    /** Complex<C> number absolute value.  
+    /** Complex number absolute value.  
      * @see edu.jas.structure.RingElem#abs()
      * @return |this|^2.
-     * Note: The square root is not jet implemented.
+     * <b>Note:</b> The square root is not jet implemented.
      */
     public Complex<C> abs() {
         Complex<C> n = norm();
@@ -382,7 +387,7 @@ public class Complex<C extends RingElem<C> >
      */
 
 
-    /** Complex<C> number product.  
+    /** Complex number product.  
      * @param B is a complex number.  
      * @return this*B.
      */
@@ -393,8 +398,8 @@ public class Complex<C extends RingElem<C> >
     }
 
 
-    /** Complex<C> number inverse.  
-     * @return S with S*this = 1. 
+    /** Complex number inverse.  
+     * @return S with S*this = 1, if it is defined. 
      * @see edu.jas.structure.RingElem#inverse()
      */
     public Complex<C> inverse() {
@@ -404,28 +409,102 @@ public class Complex<C extends RingElem<C> >
     }
 
 
-    /** Complex<C> number remainder.  
+    /** Complex number remainder.  
      * @param S is a complex number.  
      * @return 0. 
      */
     public Complex<C> remainder(Complex<C> S) {
-        if ( S.isZERO() ) {
-           throw new RuntimeException("division by zero");
+        if ( ring.isField() ) {
+            return ring.getZERO();
+        } else {
+            return divideAndRemainder(S)[1];
         }
-        return ring.getZERO();
     }
 
 
-    /** Complex<C> number divide.
+    /** Complex number divide.
      * @param B is a complex number, non-zero.
      * @return this/B. 
      */
     public Complex<C> divide (Complex<C> B) {
-        return this.multiply( B.inverse() );
+        if ( ring.isField() ) {
+            return this.multiply( B.inverse() );
+        } else {
+            return divideAndRemainder(B)[0];
+        }
     }
 
 
-    /** Complex<C> number greatest common divisor.  
+    /** Complex number quotient and remainder.
+     * @param S Complex.
+     * @return Complex[] { q, r } with q = this/S and r = rem(this,S).
+     */
+    @SuppressWarnings("unchecked")
+    public Complex<C>[] divideAndRemainder(Complex<C> S) {
+        Complex<C>[] ret = (Complex<C>[]) new Complex[2];
+        C n = S.norm().re;
+        Complex<C> Sp = this.multiply( S.conjugate() ); // == this*inv(S)*n
+        C qr = Sp.re.divide(n); 
+        C rr = Sp.re.remainder(n); 
+        C qi = Sp.im.divide(n);
+        C ri = Sp.im.remainder(n);
+        C rr1 = rr;
+        C ri1 = ri;
+        if ( rr.signum() < 0 ) {
+            rr = rr.negate();
+        }
+        if ( ri.signum() < 0 ) {
+            ri = ri.negate();
+        }
+        C one = n.factory().fromInteger(1);
+        if ( rr.sum(rr).compareTo(n) > 0 ) { // rr > n/2
+            if ( rr1.signum() < 0 ) {
+                qr = qr.subtract( one );
+            } else {
+                qr = qr.sum( one );
+            }
+        } 
+        if ( ri.sum(ri).compareTo(n) > 0 ) { // ri > n/2
+            if ( ri1.signum() < 0 ) {
+                qi = qi.subtract( one );
+            } else {
+                qi = qi.sum( one );
+            }
+        }
+        Sp = new Complex<C>(ring,qr,qi);
+        Complex<C> Rp = this.subtract( Sp.multiply(S) );
+        if ( debug && n.compareTo( Rp.norm().re ) < 0 ) {
+            System.out.println("n = " + n);
+            System.out.println("qr   = " + qr);
+            System.out.println("qi   = " + qi);
+            System.out.println("rr   = " + rr);
+            System.out.println("ri   = " + ri);
+            System.out.println("rr1  = " + rr1);
+            System.out.println("ri1  = " + ri1);
+            System.out.println("this = " + this);
+            System.out.println("S    = " + S);
+            System.out.println("Sp   = " + Sp);
+            BigInteger tr = (BigInteger) (Object) this.re;
+            BigInteger ti = (BigInteger) (Object) this.im;
+            BigInteger sr = (BigInteger) (Object) S.re;
+            BigInteger si = (BigInteger) (Object) S.im;
+            BigComplex tc = new BigComplex( new BigRational(tr), new BigRational(ti) );
+            BigComplex sc = new BigComplex( new BigRational(sr), new BigRational(si) );
+            BigComplex qc = tc.divide(sc);
+            System.out.println("qc   = " + qc);
+            BigDecimal qrd = new BigDecimal(qc.getRe());
+            BigDecimal qid = new BigDecimal(qc.getIm());
+            System.out.println("qrd  = " + qrd);
+            System.out.println("qid  = " + qid);
+            throw new RuntimeException("QR norm not decreasing " + Rp + ", " + Rp.norm());
+        }
+        ret[0] = Sp;
+        ret[1] = Rp;
+        return ret;
+    }
+
+
+    /** Complex number greatest common divisor.  
      * @param S Complex<C>.
      * @return gcd(this,S).
      */
@@ -439,12 +518,34 @@ public class Complex<C extends RingElem<C> >
         if ( ring.isField() ) {
             return ring.getONE();
         }
-        return new Complex<C>(ring, re.gcd(S.re), im.gcd(S.im) ); 
+        Complex<C> a = this;
+        Complex<C> b = S;
+        if ( a.re.signum() < 0 ) {
+            a = a.negate();
+        }
+        if ( b.re.signum() < 0 ) {
+            b = b.negate();
+        }
+        while ( ! b.isZERO() ) {
+            if ( debug ) {
+                logger.info("norm(b), a, b = " + b.norm() + ", " + a + ", " + b);
+            }
+            Complex<C>[] qr = a.divideAndRemainder(b);
+            if ( qr[0].isZERO() ) {
+                System.out.println("a = " + a);
+            }
+            a = b;
+            b = qr[1];
+        }
+        if ( a.re.signum() < 0 ) {
+            a = a.negate();
+        }
+        return a; 
     }
 
 
     /**
-     * Complex<C> extended greatest common divisor.
+     * Complex extended greatest common divisor.
      * @param S Complex<C>.
      * @return [ gcd(this,S), a, b ] with a*this + b*S = gcd(this,S).
      */
@@ -467,13 +568,38 @@ public class Complex<C extends RingElem<C> >
             ret[0] = ring.getONE();
             ret[1] = this.inverse().multiply(half);
             ret[2] = S.inverse().multiply(half);
-        } else {
-            C[] r = re.egcd(S.re);
-            C[] i = im.egcd(S.im);
-            ret[0] = new Complex<C>(ring,r[0],i[0]);
-            ret[1] = new Complex<C>(ring,r[1],i[1]);
-            ret[2] = new Complex<C>(ring,r[2],i[2]);
+            return ret;
+        } 
+        Complex<C>[] qr;
+        Complex<C> q = this; 
+        Complex<C> r = S;
+        Complex<C> c1 = ring.getONE();
+        Complex<C> d1 = ring.getZERO();
+        Complex<C> c2 = ring.getZERO();
+        Complex<C> d2 = ring.getONE();
+        Complex<C> x1;
+        Complex<C> x2;
+        while ( !r.isZERO() ) {
+            if ( debug ) {
+                logger.info("norm(r), q, r = " + r.norm() + ", " + q + ", " + r);
+            }
+            qr = q.divideAndRemainder(r);
+            q = qr[0];
+            x1 = c1.subtract( q.multiply(d1) );
+            x2 = c2.subtract( q.multiply(d2) );
+            c1 = d1; c2 = d2;
+            d1 = x1; d2 = x2;
+            q = r;
+            r = qr[1];
         }
+        if ( q.re.signum() < 0 ) {
+            q = q.negate();
+            c1 = c1.negate();
+            c2 = c2.negate();
+        }
+        ret[0] = q; 
+        ret[1] = c1;
+        ret[2] = c2;
         return ret;
     }
 

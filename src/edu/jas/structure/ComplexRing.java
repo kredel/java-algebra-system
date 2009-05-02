@@ -23,6 +23,7 @@ import edu.jas.util.StringUtil;
 /**
  * Generic Complex ring factory implementing the RingFactory interface.
  * Objects of this class are immutable.
+ * @param <C> base type.
  * @author Heinz Kredel
  */
 public class ComplexRing<C extends RingElem<C> >
@@ -32,6 +33,9 @@ public class ComplexRing<C extends RingElem<C> >
     /** Complex class elements factory data structure. 
      */
     protected final RingFactory<C> ring;
+
+
+    private final static Random random = new Random();
 
 
     private static final Logger logger = Logger.getLogger(ComplexRing.class);
@@ -58,7 +62,7 @@ public class ComplexRing<C extends RingElem<C> >
     }
 
 
-    /** Copy Complex<C> element c.
+    /** Copy Complex element c.
      * @param c Complex<C>.
      * @return a copy of c.
      */
@@ -127,7 +131,7 @@ public class ComplexRing<C extends RingElem<C> >
     }
 
 
-    /** Get a Complex<C> element from a BigInteger.
+    /** Get a Complex element from a BigInteger.
      * @param a BigInteger.
      * @return a Complex<C>.
      */
@@ -136,7 +140,7 @@ public class ComplexRing<C extends RingElem<C> >
     }
 
 
-    /** Get a Complex<C> element from a long.
+    /** Get a Complex element from a long.
      * @param a long.
      * @return a Complex<C>.
      */
@@ -203,21 +207,22 @@ public class ComplexRing<C extends RingElem<C> >
     }
 
 
-    /** Complex<C> number, random.  
-     * Random rational numbers A and B are generated using random(n). 
+    /** Complex number random.  
+     * Random base numbers A and B are generated using random(n). 
      * Then R is the complex number with real part A and imaginary part B. 
      * @param n such that 0 &le; A, B &le; (2<sup>n</sup>-1).
      * @return R.
      */
     public Complex<C> random(int n) {
-        C r = ring.random( n );
-        C i = ring.random( n );
-        return new Complex<C>(this, r, i ); 
+        return random(n,random);
+//         C r = ring.random( n ).abs();
+//         C i = ring.random( n ).abs();
+//         return new Complex<C>(this, r, i ); 
     }
 
 
-    /** Complex<C> number, random.  
-     * Random rational numbers A and B are generated using random(n). 
+    /** Complex number random.  
+     * Random base numbers A and B are generated using random(n). 
      * Then R is the complex number with real part A and imaginary part B. 
      * @param n such that 0 &le; A, B &le; (2<sup>n</sup>-1).
      * @param rnd is a source for random bits.

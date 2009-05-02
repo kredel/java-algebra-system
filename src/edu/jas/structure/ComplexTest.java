@@ -238,14 +238,13 @@ public class ComplexTest extends TestCase {
      cp = mfac.getZERO().sum( ap );
      dp = mfac.getZERO().subtract( ap.negate() );
      assertEquals("0+a = 0+(-a)",cp,dp);
- }
+}
 
 
 /**
  * Test integer multiplication.
  * 
  */
-
  public void testIntMultiplication() {
 
      a = fac.random(kl);
@@ -359,5 +358,110 @@ public class ComplexTest extends TestCase {
      }
  }
 
+
+/**
+ * Test integer division.
+ * 
+ */
+ public void testIntDivision() {
+
+     a = fac.random(kl*2);
+     if ( a.isZERO() ) {
+        return;
+     }
+     assertTrue("not isZERO( a )", !a.isZERO() );
+
+     b = fac.random(kl);
+     if ( b.isZERO() ) {
+        return;
+     }
+     assertTrue("not isZERO( b )", !b.isZERO() );
+     //System.out.println("a = " + a);
+     //System.out.println("b = " + b);
+
+     c = a.divide(b);
+     //System.out.println("c = " + c);
+     d = a.remainder(b);
+     //System.out.println("d = " + d);
+
+     e = b.multiply(c).sum(d);
+     //System.out.println("e = " + e);
+     assertEquals("a = b (a/b) + a%b ", a, e );
+
+     c = a.gcd(b);
+     d = a.divide(c);
+     e = b.divide(c);
+     //System.out.println("c = " + c);
+     //System.out.println("d = " + d);
+     //System.out.println("e = " + e);
+
+     d = c.multiply(d);
+     e = c.multiply(e);
+     //System.out.println("d = " + d);
+     //System.out.println("e = " + e);
+
+     assertEquals("a/gcd(a,b)*gcd(a,b) = a ", a, d );
+     assertEquals("b/gcd(a,b)*gcd(a,b) = b ", b, e );
+
+     Complex<BigInteger>[] gf = a.egcd(b);
+     c = gf[0];
+     d = gf[1];
+     e = gf[2];
+     //System.out.println("c = " + c);
+     //System.out.println("d = " + d);
+     //System.out.println("e = " + e);
+     d = d.multiply(a);
+     e = e.multiply(b);
+     d = d.sum( e );
+     //System.out.println("d = " + d);
+     assertEquals("d*a + e*b = c = gcd(a,b)", c, d );
+ }
+
+
+/**
+ * Test polynomial division.
+ * 
+ */
+ public void testPolyDivision() {
+
+     ap = mfac.random(kl);
+     if ( ap.isZERO() ) {
+        return;
+     }
+     assertTrue("not isZERO( ap )", !ap.isZERO() );
+
+     bp = mfac.random(kl/2);
+     if ( bp.isZERO() ) {
+        return;
+     }
+     assertTrue("not isZERO( bp )", !bp.isZERO() );
+     //System.out.println("ap = " + ap);
+     //System.out.println("bp = " + bp);
+
+     cp = ap.divide(bp);
+     //System.out.println("cp = " + cp);
+     dp = ap.remainder(bp);
+     //System.out.println("dp = " + dp);
+
+     ep = bp.multiply(cp).sum(dp);
+     //System.out.println("ep = " + ep);
+     assertEquals("ap = bp (ap/bp) + ap%bp ", ap, ep );
+
+     // not applicable:
+//      cp = ap.gcd(bp);
+//      dp = ap.divide(cp);
+//      ep = bp.divide(cp);
+//      System.out.println("cp = " + cp);
+//      System.out.println("dp = " + dp);
+//      System.out.println("ep = " + ep);
+
+//      dp = cp.multiply(dp);
+//      ep = cp.multiply(ep);
+//      System.out.println("dp = " + dp);
+//      System.out.println("ep = " + ep);
+
+//      assertEquals("ap/gcd(ap,bp)*gcd(ap,bp) = ap ", ap, dp );
+//      assertEquals("bp/gcd(ap,bp)*gcd(ap,bp) = bp ", bp, ep );
+ }
 
 }
