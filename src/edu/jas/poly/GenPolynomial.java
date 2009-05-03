@@ -1064,7 +1064,7 @@ public class GenPolynomial<C extends RingElem<C> >
             }
             if ( c.isZERO() ) {
                throw new RuntimeException(this.getClass().getName()
-                                + " no exact division: " + c1 + "/" + s);
+                                + " no exact division: " + c1 + "/" + s + ", in " + this);
             }
             pv.put( e, c ); // or m1.setValue( c )
         }
