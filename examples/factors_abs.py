@@ -41,7 +41,7 @@ print;
 
 #f = x**2 + 1;
 
-f = x**3 - x**2 + x - 1;
+#f = x**3 - x**2 + x - 1;
 
 #f = x**6 - 5 * x**4 + 5 * x**2 + 4;
 
@@ -65,7 +65,7 @@ G = r.factorsAbsolute(f);
 t = System.currentTimeMillis() - t;
 print "G = ", G;
 print
-#print "factor time =", t, "milliseconds";
+print "factor time =", t, "milliseconds";
 
 g = one;
 for h, i in G.iteritems():
