@@ -456,7 +456,17 @@ public class PolyUfdUtil {
                 logger.info("leaving on zero error");
                 break;
             }
-            E = E.divide(Qi);
+            try {
+                E = E.divide(Qi);
+            } catch (RuntimeException e) {
+                // useful in debuging
+                //System.out.println("C  = " + C );
+                //System.out.println("Ai = " + Ai );
+                //System.out.println("Bi = " + Bi );
+                //System.out.println("E  = " + E );
+                //System.out.println("Qi = " + Qi );
+                throw e;
+            }
             // E mod p
             Ep = PolyUtil.<ModInteger> fromIntegerCoefficients(pfac, E);
             //logger.info("Ep = " + Ep);
@@ -498,11 +508,63 @@ public class PolyUfdUtil {
         // remove normalization
         BigInteger ai = ufd.baseContent(Ai);
         Ai = Ai.divide(ai);
-        BigInteger bi = c.divide(ai);
-        Bi = Bi.divide(bi); // divide( c/a )
+        BigInteger bi = null;
+        try {
+            bi = c.divide(ai);
+            Bi = Bi.divide(bi); // divide( c/a )
+        } catch (RuntimeException e) {
+            //System.out.println("C  = " + C );
+            //System.out.println("Ai = " + Ai );
+            //System.out.println("Bi = " + Bi );
+            //System.out.println("c  = " + c );
+            //System.out.println("ai = " + ai );
+            //System.out.println("bi = " + bi );
+            //System.out.println("no exact lifting possible " + e);
+            throw new RuntimeException("no exact lifting possible " +e);
+        }
         AB[0] = Ai;
         AB[1] = Bi;
         return AB;
+    }
+
+
+    /**
+     * ModInteger Hensel lifting algorithm on coefficients. Let p =
+     * A.ring.coFac.modul() = B.ring.coFac.modul() and assume C == A*B mod p
+     * with ggt(A,B) == 1 mod p. See algorithm 6.1. in Geddes et.al. and
+     * algorithms 3.5.{5,6} in Cohen. 
+     * @param C GenPolynomial<BigInteger>.
+     * @param A GenPolynomial<ModInteger>.
+     * @param B other GenPolynomial<ModInteger>.
+     * @param M bound on the coefficients of A1 and B1 as factors of C.
+     * @return [A1,B1] = lift(C,A,B), with C = A1 * B1.
+     */
+    @SuppressWarnings("unchecked")
+    public static //<C extends RingElem<C>>
+    GenPolynomial<BigInteger>[] liftHensel(GenPolynomial<BigInteger> C, BigInteger M,
+            GenPolynomial<ModInteger> A, GenPolynomial<ModInteger> B) {
+        GenPolynomial<BigInteger>[] AB = (GenPolynomial<BigInteger>[]) new GenPolynomial[2];
+        if (C == null || C.isZERO()) {
+            AB[0] = C;
+            AB[1] = C;
+            return AB;
+        }
+        if (A == null || A.isZERO() || B == null || B.isZERO()) {
+            throw new RuntimeException("A and B must be nonzero");
+        }
+        GenPolynomialRing<BigInteger> fac = C.ring;
+        if (fac.nvar != 1) { // todo assert
+            throw new RuntimeException("polynomial ring not univariate");
+        }
+        // one Hensel step on part polynomials
+        GenPolynomial<ModInteger>[] gst = A.egcd(B);
+        if (!gst[0].isONE()) {
+            throw new RuntimeException("A and B not coprime, gcd = " + gst[0] + ", A = " + A + ", B = " + B);
+        }
+        GenPolynomial<ModInteger> s = gst[1];
+        GenPolynomial<ModInteger> t = gst[2];
+        GenPolynomial<BigInteger>[] ab = liftHensel(C, M, A, B, s, t);
+        return ab;
     }
 
 
@@ -621,8 +683,8 @@ public class PolyUfdUtil {
             //logger.info("Ep = " + Ep);
             if (Ep.isZERO()) {
                 //System.out.println("leaving on zero error");
-                logger.info("leaving on zero error Ep");
-                break;
+                //??logger.info("leaving on zero error Ep");
+                //??break;
             }
 
             // construct approximation mod p
@@ -722,8 +784,8 @@ public class PolyUfdUtil {
             //System.out.println("c  = " + c );
             //System.out.println("ai = " + ai );
             //System.out.println("bi = " + bi );
-            //System.out.println("no exact lifting possible");
-            throw new RuntimeException("no exact lifting possible");
+            //System.out.println("no exact lifting possible " + e);
+            throw new RuntimeException("no exact lifting possible " +e);
         }
         AB[0] = Ai;
         AB[1] = Bi;
