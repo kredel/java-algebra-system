@@ -213,6 +213,9 @@ public class FactorInteger extends FactorAbstract<BigInteger> {
             // try each factor list
             for (int k = 0; k < TT; k++) {
                 mlist = modfac[k];
+                if ( debug ) {
+                    logger.info("lifting from "+ mlist);
+                }
                 if ( false && P.leadingBaseCoefficient().isONE()) {
                     factors = searchFactorsMonic(P, M, mlist); // doesn't work
                 } else {
@@ -222,6 +225,9 @@ public class FactorInteger extends FactorAbstract<BigInteger> {
             }
         } else {
             // try only shortest factor list
+            if ( debug ) {
+                logger.info("lifting from "+ mlist);
+            }
             if ( false && P.leadingBaseCoefficient().isONE()) {
                 factors = searchFactorsMonic(P, M, mlist); // doesn't work
             } else {
