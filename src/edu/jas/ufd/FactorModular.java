@@ -139,18 +139,18 @@ public class FactorModular extends FactorAbsolute<ModInteger> {
         GenPolynomial<ModInteger> g = null;
         int degi = (int) deg; //f.degree(0);
         //System.out.println("deg = " + deg);
+        BigInteger di = Power.<BigInteger> positivePower(new BigInteger(m), deg);
+        //System.out.println("di = " + di);
+        java.math.BigInteger d = di.getVal(); //.longValue()-1;
+        //System.out.println("d = " + d);
+        d = d.shiftRight(1); // divide by 2
         do {
             r = pfac.random(17, degi, 2 * degi, 1.0f);
-            if (r.degree(0) > f.degree(0)) {
+            if (r.degree(0) >= f.degree(0)) {
                 r = r.remainder(f);
             }
             r = r.monic();
             //System.out.println("r = " + r);
-            BigInteger di = Power.<BigInteger> positivePower(new BigInteger(m), deg);
-            //System.out.println("di = " + di);
-            java.math.BigInteger d = di.getVal(); //.longValue()-1;
-            //System.out.println("d = " + d);
-            d = d.shiftRight(1); // divide by 2
             h = pow.modPower(r, d, f);
             g = engine.gcd(h.subtract(one), f);
             //System.out.println("g = " + g);
