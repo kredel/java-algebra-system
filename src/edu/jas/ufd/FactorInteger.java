@@ -208,7 +208,7 @@ public class FactorInteger extends FactorAbstract<BigInteger> {
             return factors;
         }
 
-        boolean allLists = true; //false;
+        boolean allLists = false; //true; //false;
         if (allLists) {
             // try each factor list
             for (int k = 0; k < TT; k++) {
@@ -392,6 +392,8 @@ public class FactorInteger extends FactorAbstract<BigInteger> {
         } else {
             nf = ct.ring.coFac.getONE();
         }
+        //System.out.println("------------------" + M.toScript() + "-------------------------"); 
+        //System.out.println("------------------" + nf.factory().toScript() + "-------------------------"); 
         //System.out.println("modlist  = " + mlist); // includes not ldcf
         GenPolynomialRing<ModInteger> mfac = ct.ring;
         GenPolynomial<ModInteger> Pm = PolyUtil.<ModInteger> fromIntegerCoefficients(mfac, C);
@@ -425,13 +427,19 @@ public class FactorInteger extends FactorAbstract<BigInteger> {
                 try {
                     // ilist = PolyUfdUtil.liftHenselQuadraticFac(PP, M, trial, cofactor);
                     ilist = PolyUfdUtil.liftHenselQuadratic(PP, M, trial, cofactor);
+                    //ilist = PolyUfdUtil.liftHensel(PP, M, trial, cofactor);
                 } catch (RuntimeException e) {
                     // no liftable factors
+                    if ( /*debug*/ logger.isDebugEnabled()) {
+                        logger.info("no liftable factors " + e);
+                        e.printStackTrace();
+                    }
                     continue;
                 }
                 GenPolynomial<BigInteger> itrial = ilist[0];
                 GenPolynomial<BigInteger> icofactor = ilist[1];
                 if (/*debug*/ logger.isDebugEnabled()) {
+                    logger.info("       modlist = " + trial + ", cofactor " + cofactor);
                     logger.info("lifted intlist = " + itrial + ", cofactor " + icofactor);
                 }
                 //System.out.println("lifted intlist = " + itrial + ", cofactor " + icofactor); 
@@ -448,6 +456,7 @@ public class FactorInteger extends FactorAbstract<BigInteger> {
                     factors.add(itrial);
                     //u = PolyUtil.<BigInteger> basePseudoDivide(u, itrial); //u.divide( trial );
                     u = icofactor;
+                    PP = u; // fixed finally on 2009-05-03
                     um = cofactor;
                     //System.out.println("u        = " + u);
                     //System.out.println("um       = " + um);
