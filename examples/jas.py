@@ -450,7 +450,7 @@ class ParamIdeal:
         if self.gbsys == None:
             return str(self.pset.toScript());
         else:
-            return str(self.gbsys.toScript());
+            return str(self.gbsys.toString());
 #            return str(self.pset) + "\n" + str(self.gbsys);
 
     def optimizeCoeff(self):
@@ -2020,8 +2020,15 @@ class PolyRing(Ring):
         to = PolyRing.lex;
         if isinstance(order,TermOrder):
             to = order;
-        ring = GenPolynomialRing(cf,nv,to,names);
-        self.ring = ring;
+        tring = GenPolynomialRing(cf,nv,to,names);
+        #want: super(Ring,self).__init__(ring=tring)
+        self.ring = tring;
+        self.engine = GCDFactory.getProxy(self.ring.coFac);
+        try:
+            self.factor = FactorFactory.getImplementation(self.ring.coFac);
+        except:
+            pass
+
 
     def __str__(self):
         '''Create a string representation.
