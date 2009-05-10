@@ -1916,6 +1916,20 @@ class RingElem:
             o = other.elem;
         return not self.elem.equals(o)
 
+    def __float__(self):
+        '''Convert to Python float.
+        '''
+        #print "self  type(%s) = %s" % (self,type(self));
+        e = self.elem;
+        if e.getClass().getSimpleName() == "BigInteger":
+            e = BigRational(e);
+        if e.getClass().getSimpleName() == "BigRational":
+            e = BigDecimal(e);
+        if e.getClass().getSimpleName() == "BigDecimal":
+            e = e.toString();
+        e = float(e);
+        return e;
+
     def factory(self):
         '''Get the factory of this element.
         '''
