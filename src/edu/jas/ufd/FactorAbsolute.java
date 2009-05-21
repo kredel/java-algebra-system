@@ -228,7 +228,7 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
             throw new RuntimeException("only for field coefficients");
         }
         // setup field extension K(alpha) where alpha = z_xx
-        String[] vars = new String[] { "z_" + (P.hashCode()%100) };
+        String[] vars = new String[] { "z_" + (P.hashCode()%1000) };
         pfac = pfac.clone();
         vars=pfac.setVars(vars);
         P = pfac.copy(P); // hack to exchange the variables
@@ -296,19 +296,24 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
         // factor over K(alpha)
         for ( GenPolynomial<C> p : facs.keySet() ) {
             Long e = facs.get(p);
-            List<GenPolynomial<AlgebraicNumber<C>>> afacs = factorsAbsoluteIrreducible(p);
-            for ( GenPolynomial<AlgebraicNumber<C>> ap : afacs ) {
-                if ( debug ) {
-                    logger.info("K(alpha) factors = " + ap + ", alpha: " + ap.ring.coFac); // Q(alpha)[X]
+            if ( p.degree() <= 1 && p.degree(0) <= 1 ) {
+                logger.warn("p already linear, ignored " + p); // cannot be handled in next step
+                //factors.put(p,e);
+            } else {
+                List<GenPolynomial<AlgebraicNumber<C>>> afacs = factorsAbsoluteIrreducible(p);
+                for ( GenPolynomial<AlgebraicNumber<C>> ap : afacs ) {
+                    if ( debug ) {
+                        logger.info("K(alpha) factors = " + ap + ", alpha: " + ap.ring.coFac); // Q(alpha)[X]
+                    }
+                    if ( factors.get(ap) != null ) {
+                        System.out.println("ap = (" + ap + ")**" + e); 
+                        throw new RuntimeException("multiple factors");
+                    }
+                    factors.put(ap,e);
                 }
-                if ( factors.get(ap) != null ) {
-                   System.out.println("ap = (" + ap + ")**" + e); 
-                   throw new RuntimeException("multiple factors");
-                }
-                factors.put(ap,e);
             }
         }
-        //System.out.println("Q(alpha) factors = " + factors);
+        System.out.println("Q(alpha) factors = " + factors);
         return factors;
     }
 
@@ -441,9 +446,10 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
         }
 
         // setup field extension K(alpha)
-        String[] vars = new String[] { "alpha" /*"pfac.getVars().hashCode()*/ };
+        String[] vars = new String[] { "z_" + (up.hashCode()%1000) };
+        pfac = pfac.clone();
         String[] ovars = pfac.setVars(vars); // side effects! 
-        //up = pfac.copy(up); // hack
+        up = pfac.copy(up); // hack to exchange the variables
 
         AlgebraicNumberRing<C> afac = new AlgebraicNumberRing<C>(up,true); // since irreducible
         //System.out.println("afac = " + afac);
