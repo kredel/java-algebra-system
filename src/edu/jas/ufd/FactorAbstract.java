@@ -445,7 +445,13 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
         for (GenPolynomial<C> f : F) {
             t = t.multiply(f);
         }
-        return P.equals(t) || P.equals(t.negate());
+        boolean f = P.equals(t) || P.equals(t.negate());
+        if (!f) {
+            System.out.println("\nfactorization(list): " + f);
+            System.out.println("P = " + P);
+            System.out.println("t = " + t);
+        }
+        return f;
     }
 
 
@@ -471,9 +477,20 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
         }
         boolean f = P.equals(t) || P.equals(t.negate());
         if (!f) {
-            System.out.println("\nfactorization: " + f);
             System.out.println("P = " + P);
             System.out.println("t = " + t);
+            P = P.monic();
+            t = t.monic();
+            f = P.equals(t) || P.equals(t.negate());
+            if ( f ) {
+                return f;
+            }
+            System.out.println("\nfactorization(map): " + f);
+            System.out.println("P = " + P);
+            System.out.println("t = " + t);
+            //RuntimeException e = new RuntimeException("fac-map");
+            //e.printStackTrace();
+            //throw e;
         }
         return f;
     }
