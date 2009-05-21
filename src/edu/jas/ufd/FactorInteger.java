@@ -263,8 +263,8 @@ public class FactorInteger extends FactorAbstract<BigInteger> {
      *         p**e.
      * <b>Note:</b> does not work.
      */
-    public List<GenPolynomial<BigInteger>> searchFactorsMonic(GenPolynomial<BigInteger> C, BigInteger M,
-                                                              List<GenPolynomial<ModInteger>> F) {
+    List<GenPolynomial<BigInteger>> searchFactorsMonic(GenPolynomial<BigInteger> C, BigInteger M,
+                                                       List<GenPolynomial<ModInteger>> F) {
         System.out.println("*** monic factor combination ***");
         if (C == null || C.isZERO() || F == null || F.size() == 0) {
             throw new RuntimeException("C must be nonzero and F must be nonempty");
@@ -293,7 +293,8 @@ public class FactorInteger extends FactorAbstract<BigInteger> {
         GenPolynomial<BigInteger> PP = C, P = C;
         System.out.println("modlist  = " + mlist); // includes not ldcf
         // lift via Hensel
-        ilist = PolyUfdUtil.liftHenselQuadratic(PP, M, mlist);
+        //ilist = PolyUfdUtil.liftHenselQuadratic(PP, M, mlist);
+        ilist = PolyUfdUtil.liftHensel(PP, M, mlist);
         if (logger.isInfoEnabled()) {
             logger.info("lifted intlist = " + ilist);
         }
@@ -370,8 +371,8 @@ public class FactorInteger extends FactorAbstract<BigInteger> {
      * @return [g_0,...,g_{n-1}] = lift(C,F), with C = prod_{0,...,n-1} g_i mod
      *         p**e.
      */
-    public List<GenPolynomial<BigInteger>> searchFactorsNonMonic(GenPolynomial<BigInteger> C, BigInteger M,
-                                                                 List<GenPolynomial<ModInteger>> F) {
+    List<GenPolynomial<BigInteger>> searchFactorsNonMonic(GenPolynomial<BigInteger> C, BigInteger M,
+                                                          List<GenPolynomial<ModInteger>> F) {
         // System.out.println("*** non monic factor combination ***");
         if (C == null || C.isZERO() || F == null || F.size() == 0) {
             throw new RuntimeException("C must be nonzero and F must be nonempty");
