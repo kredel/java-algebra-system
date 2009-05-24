@@ -381,6 +381,12 @@ public class Examples {
         });
         System.out.println("cos1 = " + cos1);
 
+        UnivPowerSeries<BigRational> cos2 = pfac.solveODE( sin1.negate(), fac.getONE() );
+        System.out.println("cos2 = " + cos2);
+
+        UnivPowerSeries<BigRational> sin2 = pfac.solveODE( cos1, fac.getZERO() );
+        System.out.println("sin2 = " + sin2);
+
         UnivPowerSeries<BigRational> sinh = new UnivPowerSeries<BigRational>(pfac,
                 new Coefficients<BigRational>() {
 

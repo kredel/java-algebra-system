@@ -332,6 +332,17 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
     }
 
 
+    /** Solve an ordinary differential equation.
+     * y' = f(y) with y(0) = c.
+     * @param f a UnivPowerSeries<C>.
+     * @param c integration constant.
+     * @return f.integrate(c).
+     */
+    public UnivPowerSeries<C> solveODE(final UnivPowerSeries<C> f, final C c) {
+        return f.integrate( c );
+    }
+
+
     /**
      * Is commuative.
      * @return true, if this ring is commutative, else false.

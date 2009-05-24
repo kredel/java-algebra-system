@@ -722,6 +722,7 @@ public class UnivPowerSeries<C extends RingElem<C>>
 
     /**
      * Integrate with given constant.
+     * @param c integration constant.
      * @return integrate(this).
      */
     public UnivPowerSeries<C> integrate( final C c ) {
