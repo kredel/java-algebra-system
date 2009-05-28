@@ -5,10 +5,9 @@
 
 import sys;
 
-from jas import Ring
-from jas import PolyRing
-from jas import SolvPolyRing
+from jas import Ring, PolyRing, SolvPolyRing
 from jas import Ideal
+from jas import Module, SubModule
 from jas import startLog
 from jas import terminate
 from jas import ZZ, QQ, ZM, DD, CC, Quat, Oct, AN, RealN, RF, RC, LC, RR, PS, Vec, Mat
@@ -642,6 +641,53 @@ print "s9  = " + str(s9);
 s10 = s9 - s7;
 print "s10 = " + str(s10);
 print;
+
+
+
+print "------- SubModule(PolyRing(QQ(),\"u, v, l\",PolyRing.lex) ---------";
+p = PolyRing(QQ(),"u, v, l",PolyRing.lex);
+print "p = " + str(p);
+[one,u,v,l] = p.gens();
+print "one = " + str(one);
+print "u   = " + str(u);
+print "v   = " + str(v);
+print "l   = " + str(l);
+
+m = Module(ring=p,cols=4);
+print "m = " + str(m);
+for g in m.gens():
+    print "g =", str(g);
+
+m1  = ( 0, 1, l + v, 0 )
+m2  = ( 0, v, u * l**2, 0 )
+m3  = ( 0, l + 3 * v, 0, u )
+m4  = ( 0, v * l + v**2, u**2, 0 )
+m5  = ( 0, l**2, u, 0 )
+m6  = ( 1, 0, 0, l**2 )
+m7  = ( 1, 0, l + 3 * v, 0 )
+m8  = ( 1, 2, 0, l**2 )
+m9  = ( u, 0, 0, v * l + v**2 )
+m10 = ( l + v, 0, 0, u )
+m11 = ( l**2, 0, 0, v )
+m12 = ( l**2, 0, 2 * u,v )
+
+ml = [m1,m2,m3,m4,m5,m6,m7,m8,m9,m10,m11,m12];
+#ml=[ ( 0, 1, l + v, 0 ), ( 0, v, u * l**2, 0 ), ( 0, l + 3 * v, 0, u ), ( 0, v * l + v**2, u**2, 0 ), ( 0, l**2, u, 0 ), ( 1, 0, 0, l**2 ), ( 1, 0, l + 3 * v, 0 ), ( 1, 2, 0, l**2 ), ( u, 0, 0, v * l + v**2 ), ( l + v, 0, 0, u ), ( l**2, 0, 0, v ), ( l**2, 0, 2 * u,v ) ];
+print "ml = " + str(ml);
+print;
+
+sm = m.submodul(list=ml);
+#sm = SubModule(m,list=ml);
+print "sm = " + str(sm);
+
+xm = SubModule(PolyRing(QQ(),"u, v, l",PolyRing.lex),list=[ ( 0, 1, l + v, 0 ), ( 0, v, u * l**2, 0 ), ( 0, l + 3 * v, 0, u ), ( 0, v * l + v**2, u**2, 0 ), ( 0, l**2, u, 0 ), ( 1, 0, 0, l**2 ), ( 1, 0, l + 3 * v, 0 ), ( 1, 2, 0, l**2 ), ( u, 0, 0, v * l + v**2 ), ( l + v, 0, 0, u ), ( l**2, 0, 0, v ), ( l**2, 0, 2 * u, v ) ]);
+print "xm = " + str(xm);
+print;
+
+#rg = sm.GB();
+#print "rg:", rg;
+#print "isGB:", rg.isGB();
+#print;
 
 
 print "------------------------------------";
