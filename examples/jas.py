@@ -194,6 +194,7 @@ class Ring:
                 L[ RingElem( a ) ] = i;
             return L;
         except:
+            #print "error in factorsAbsolute"
             return None
 
     def realRoots(self,a,eps=None):
@@ -827,7 +828,7 @@ class Module:
            else:
                self.cols = cols;
         else:
-           self.mset = ModuleList(ring,None);
+           self.mset = ModuleList(ring.ring,None);
            self.cols = cols;
         self.ring = self.mset.ring;
 
@@ -854,7 +855,9 @@ class Module:
         '''
         gm = GenVectorModul(self.ring,self.cols);
         L = gm.generators();
-        N = [ RingElem(e.val) for e in L ];
+        #for g in L:
+        #    print "g = ", str(g);
+        N = [ RingElem(e) for e in L ];
         return N;
 
 
@@ -874,13 +877,15 @@ class SubModule:
            self.list = tok.nextSubModuleList();
         else:
             if isinstance(list,PyList) or isinstance(list,PyTuple):
-                self.list = pylist2arraylist(list);
+                self.list = pylist2arraylist(list,self.module.ring);
             else:
                 self.list = list;
         self.mset = OrderedModuleList(module.ring,self.list);
         self.cols = self.mset.cols;
         self.rows = self.mset.rows;
+        #print "list = %s" % self.list;
         #print "cols = %s" % self.cols;
+        #print "mset = %s" % self.mset.toScript();
         #self.pset = self.mset.getPolynomialList();
 
     def __str__(self):
