@@ -7,7 +7,7 @@ import sys;
 
 from jas import Ring, PolyRing, SolvPolyRing
 from jas import Ideal
-from jas import Module, SubModule
+from jas import Module, SubModule, SolvableModule, SolvableSubModule
 from jas import startLog
 from jas import terminate
 from jas import ZZ, QQ, ZM, DD, CC, Quat, Oct, AN, RealN, RF, RC, LC, RR, PS, Vec, Mat
@@ -643,7 +643,6 @@ print "s10 = " + str(s10);
 print;
 
 
-
 print "------- SubModule(PolyRing(QQ(),\"u, v, l\",PolyRing.lex) ---------";
 p = PolyRing(QQ(),"u, v, l",PolyRing.lex);
 print "p = " + str(p);
@@ -683,11 +682,65 @@ print "sm = " + str(sm);
 xm = SubModule(PolyRing(QQ(),"u, v, l",PolyRing.lex),list=[ ( 0, 1, l + v, 0 ), ( 0, v, u * l**2, 0 ), ( 0, l + 3 * v, 0, u ), ( 0, v * l + v**2, u**2, 0 ), ( 0, l**2, u, 0 ), ( 1, 0, 0, l**2 ), ( 1, 0, l + 3 * v, 0 ), ( 1, 2, 0, l**2 ), ( u, 0, 0, v * l + v**2 ), ( l + v, 0, 0, u ), ( l**2, 0, 0, v ), ( l**2, 0, 2 * u, v ) ]);
 print "xm = " + str(xm);
 print;
-
 #rg = sm.GB();
 #print "rg:", rg;
 #print "isGB:", rg.isGB();
 #print;
+
+
+print "------- SolvableModule(SolvPolyRing(CC(),\"X,Y,x,y\")) ---------";
+r = PolyRing(CC(),"X,Y,x,y",PolyRing.lex);
+print "r = " + str(r);
+[pone,pi,pX,pY,px,py] = r.gens();
+print "pone = " + str(pone);
+print "pi   = " + str(pi);
+print "pX   = " + str(pX);
+print "pY   = " + str(pY);
+print "px   = " + str(px);
+print "py   = " + str(py);
+#rel = ( py, px, px * py - 1 , pz, py, py * pz - 1 );
+rel = ( py, px, pi * px * py, pX, pY, pi * pY * pX );
+print "rel  = " + str(rel);
+
+sr = SolvPolyRing(CC(),"X,Y,x,y",PolyRing.lex,rel);
+print "sr = " + str(sr);
+[one,i,X,Y,x,y,] = sr.gens();
+print "one = " + str(one);
+print "i   = " + str(i);
+print "X   = " + str(X);
+print "Y   = " + str(Y);
+print "x   = " + str(x);
+print "y   = " + str(y);
+
+m1 = ( ( x + 1 ), ( y ) )
+m2 = ( ( x * y ), ( 0 ) )
+m3 = ( ( x - X ), ( x - X ) )
+m4 = ( ( y - Y ), ( y - Y ) )
+
+ml = [m1,m2,m3,m4];
+print "ml = " + str(ml);
+
+ssm = SolvableSubModule( sr, list=ml );
+print "ssm: " + str(ssm);
+print;
+
+xsm = SubModule(SolvPolyRing(CC(),"X, Y, x, y",PolyRing.lex,(( y ), ( x ), ( (0,(1,)) * x * y ),( Y ), ( X ), ( (0,(1,)) * X * Y ))),list=[ ( x - X, x - X ), ( x + 1, y ), ( y - Y, y - Y ), ( x * y, 0 ) ]);
+print "xsm: " + str(xsm);
+print;
+
+
+
+mlg = ssm.leftGB();
+print "mlg:", mlg;
+print;
+
+mtg = ssm.twosidedGB();
+print "mtg:", mtg;
+print;
+
+
+
+print;
 
 
 print "------------------------------------";
