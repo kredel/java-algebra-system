@@ -728,20 +728,13 @@ xsm = SubModule(SolvPolyRing(CC(),"X, Y, x, y",PolyRing.lex,(( y ), ( x ), ( (0,
 print "xsm: " + str(xsm);
 print;
 
+## mlg = ssm.leftGB();
+## print "mlg:", mlg;
+## print;
 
-
-mlg = ssm.leftGB();
-print "mlg:", mlg;
-print;
-
-mtg = ssm.twosidedGB();
-print "mtg:", mtg;
-print;
-
-
-
-print;
-
+## mtg = ssm.twosidedGB();
+## print "mtg:", mtg;
+## print;
 
 print "------------------------------------";
 
