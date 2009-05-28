@@ -160,6 +160,10 @@ public class ModuleList<C extends RingElem<C> > implements Serializable {
            erg.append( ring.toString() );
            vars = ring.getVars();
         }
+        if ( list == null ) {
+            erg.append(")");
+            return erg.toString();
+        }
         boolean first = true;
         erg.append("(\n");
         for ( List< GenPolynomial<C> > row: list ) {
@@ -200,18 +204,22 @@ public class ModuleList<C extends RingElem<C> > implements Serializable {
      * @return script compatible representation for this ModuleList.
      */
     public String toScript() {
+        // Python case
         StringBuffer erg = new StringBuffer();
         erg.append("SubModule(");
         String[] vars = null;
         if ( ring != null ) {
-           erg.append( ring.toScript() + "," );
+           erg.append( ring.toScript() );
            vars = ring.getVars();
         } else {
             // should not happen
         }
-        erg.append("list=[");
+        if ( list == null ) {
+            erg.append(")");
+            return erg.toString();
+        }
+        erg.append(",list=[");
         boolean first = true;
-        erg.append("(");
         for ( List< GenPolynomial<C> > row: list ) {
             if ( first ) {
                first = false;
@@ -236,7 +244,7 @@ public class ModuleList<C extends RingElem<C> > implements Serializable {
             }
             erg.append(" )");
         }
-        erg.append(")");
+        erg.append(" ])");
         return erg.toString();
     }
 
