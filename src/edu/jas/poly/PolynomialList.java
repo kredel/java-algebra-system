@@ -191,16 +191,19 @@ public class PolynomialList<C extends RingElem<C> >
 
     /** Get a scripting compatible string representation.
      * @return script compatible representation for this polynomial list.
-     * @see edu.jas.structure.Element#toScript()
      */
     public String toScript() {
         // Python case
         StringBuffer erg = new StringBuffer();
         erg.append("Ideal(");
         if ( ring != null ) {
-           erg.append( ring.toScript() + "," );
+           erg.append( ring.toScript() );
         }
-        erg.append("list=[");
+        if ( list == null ) {
+            erg.append(")");
+            return erg.toString();
+        }
+        erg.append(",list=[");
         boolean first = true;
         String sa = null;
         for ( GenPolynomial<C> oa: list ) {
@@ -209,9 +212,6 @@ public class PolynomialList<C extends RingElem<C> >
                first = false;
             } else {
                erg.append( ", " );
-//                if ( sa.length() > 10 ) {
-//                   erg.append("\n");
-//                }
             }
             erg.append( "( " + sa + " )" );
         }
