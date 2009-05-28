@@ -148,11 +148,11 @@ public class ModuleList<C extends RingElem<C> > implements Serializable {
 
 
     /**
-     * String representation of the polynomial list.
+     * String representation of the module list.
      * @see java.lang.Object#toString()
      */
     @Override
-    @SuppressWarnings("unchecked") // not jet working
+    //@SuppressWarnings("unchecked") 
     public String toString() {
         StringBuffer erg = new StringBuffer();
         String[] vars = null;
@@ -192,6 +192,51 @@ public class ModuleList<C extends RingElem<C> > implements Serializable {
             erg.append(" )");
         }
         erg.append("\n)");
+        return erg.toString();
+    }
+
+
+    /** Get a scripting compatible string representation.
+     * @return script compatible representation for this ModuleList.
+     */
+    public String toScript() {
+        StringBuffer erg = new StringBuffer();
+        erg.append("SubModule(");
+        String[] vars = null;
+        if ( ring != null ) {
+           erg.append( ring.toScript() + "," );
+           vars = ring.getVars();
+        } else {
+            // should not happen
+        }
+        erg.append("list=[");
+        boolean first = true;
+        erg.append("(");
+        for ( List< GenPolynomial<C> > row: list ) {
+            if ( first ) {
+               first = false;
+            } else {
+               erg.append( "," );
+            }
+            boolean ifirst = true;
+            erg.append(" ( ");
+            String os;
+            for ( GenPolynomial<C> oa: row ) {
+                if ( oa == null ) {
+                   os = "0";
+                } else {
+                   os = oa.toScript();
+                }
+                if ( ifirst ) {
+                   ifirst = false;
+                } else {
+                   erg.append( ", " );
+                }
+                erg.append( os );
+            }
+            erg.append(" )");
+        }
+        erg.append(")");
         return erg.toString();
     }
 
