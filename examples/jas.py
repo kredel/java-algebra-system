@@ -930,15 +930,18 @@ class SolvableModule(Module):
     Method to create solvable sub-modules.
     '''
 
-    def __init__(self,modstr="",ring=None):
+    def __init__(self,modstr="",ring=None,cols=0):
         '''Solvable module constructor.
         '''
         if ring == None:
            sr = StringReader( modstr );
            tok = GenPolynomialTokenizer(sr);
            self.mset = tok.nextSolvableSubModuleSet();
+           if self.mset.cols >= 0:
+               self.cols = self.mset.cols;
         else:
-           self.mset = ModuleList(ring,None);
+           self.mset = ModuleList(ring.ring,None);
+           self.cols = cols;
         self.ring = self.mset.ring;
 
     def __str__(self):
@@ -975,7 +978,10 @@ class SolvableSubModule:
            tok = GenPolynomialTokenizer(module.ring,sr);
            self.list = tok.nextSolvableSubModuleList();
         else:
-           self.list = pylist2arraylist(list);
+            if isinstance(list,PyList) or isinstance(list,PyTuple):
+                self.list = pylist2arraylist(list,self.module.ring);
+            else:
+                self.list = list;
         self.mset = OrderedModuleList(module.ring,self.list);
         self.cols = self.mset.cols;
         self.rows = self.mset.rows;
