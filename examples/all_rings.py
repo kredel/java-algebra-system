@@ -184,18 +184,20 @@ r = PolyRing(CC(),"x,y,z",PolyRing.grad);
 print "r = " + str(r);
 [one,I,x,y,z] = r.gens();
 print "one = " + str(one);
+print "I   = " + str(I);
 print "x   = " + str(x);
 print "y   = " + str(y);
 print "z   = " + str(z);
-s1 = CC((1,2)) + CC((2,3)) * x + CC((2,5)) * y + ( x + y + z )**2;
+s1 = CC((1,2)) + CC((2,3)) * x + 3 * I * y + ( x + y + z )**2;
 print "s1  = " + str(s1);
 #print "s1.factory() = " + str(s1.factory());
 #print "s1.coefficients() = " + str(s1.coefficients());
-s2 = ((1,2),) + ((2,3),) * x + ((2,5),) * y + ( x + y + z )**2;
+s2 = ((1,2),) + ((2,3),) * x + 3 * I * y + ( x + y + z )**2;
 print "s2  = " + str(s2);
 #print "s2.factory() = " + str(s2.factory());
 #print "s2.coefficients() = " + str(s2.coefficients());
-s3  = z**2 + 2 * y * z + 2 * x * z + y**2 + 2 * x * y + x**2 + (2,5) * y + (2,3) * x + (1,2);
+s3  = z**2 + ((2,),) * y * z + ((2,),) * x * z + y**2 + ((2,),) * x * y + x**2 + ((0,),(3,)) * y + ((
+2,3),) * x + ((1,2),);
 print "s3  = " + str(s3);
 #print "s3.factory() = " + str(s3.factory());
 #print "s3.coefficients() = " + str(s3.coefficients());
@@ -672,14 +674,17 @@ m12 = ( l**2, 0, 2 * u,v )
 
 ml = [m1,m2,m3,m4,m5,m6,m7,m8,m9,m10,m11,m12];
 #ml=[ ( 0, 1, l + v, 0 ), ( 0, v, u * l**2, 0 ), ( 0, l + 3 * v, 0, u ), ( 0, v * l + v**2, u**2, 0 ), ( 0, l**2, u, 0 ), ( 1, 0, 0, l**2 ), ( 1, 0, l + 3 * v, 0 ), ( 1, 2, 0, l**2 ), ( u, 0, 0, v * l + v**2 ), ( l + v, 0, 0, u ), ( l**2, 0, 0, v ), ( l**2, 0, 2 * u,v ) ];
-print "ml = " + str(ml);
-print;
+#print "ml = " + str(ml);
+#print;
 
 sm = m.submodul(list=ml);
 #sm = SubModule(m,list=ml);
 print "sm = " + str(sm);
 
-xm = SubModule(PolyRing(QQ(),"u, v, l",PolyRing.lex),list=[ ( 0, 1, l + v, 0 ), ( 0, v, u * l**2, 0 ), ( 0, l + 3 * v, 0, u ), ( 0, v * l + v**2, u**2, 0 ), ( 0, l**2, u, 0 ), ( 1, 0, 0, l**2 ), ( 1, 0, l + 3 * v, 0 ), ( 1, 2, 0, l**2 ), ( u, 0, 0, v * l + v**2 ), ( l + v, 0, 0, u ), ( l**2, 0, 0, v ), ( l**2, 0, 2 * u, v ) ]);
+xm = SubModule(PolyRing(QQ(),"u, v, l",PolyRing.lex),list=[ ( 0, (1,), l + v, 0 ), ( 0, v, u * l**2, 0 ), ( 0, l + (3,) * v, 0, u ), ( 0, v * l + v**2, u**2, 0 ), ( 0, l**2, u, 0 ), ( (1,), 0, 0, l**2 ), ( (1,), 0, l + (3,) * v, 0 ), ( (1,), (2,), 0, l**2 ), ( u, 0, 0, v * l + v**2 ), ( l + v, 0, 0, u ), ( l**2, 0, 0, v ), ( l**2, 0, (2,) * u, v ) ]);
+
+#    SubModule(PolyRing(QQ(),"u, v, l",PolyRing.lex),list=[ ( 0, (1,), l + v, 0 ), ( 0, v, u * l**2, 0 ), ( 0, l + (3,) * v, 0, u ), ( 0, v * l + v**2, u**2, 0 ), ( 0, l**2, u, 0 ), ( (1,), 0, 0, l**2 ), ( (1,), 0, l + (3,) * v, 0 ), ( (1,), (2,), 0, l**2 ), ( u, 0, 0, v * l + v**2 ), ( l + v, 0, 0, u ), ( l**2, 0, 0, v ), ( l**2, 0, (2,) * u, v ) ]);
+
 print "xm = " + str(xm);
 print;
 #rg = sm.GB();
@@ -688,7 +693,7 @@ print;
 #print;
 
 
-print "------- SolvableModule(SolvPolyRing(CC(),\"X,Y,x,y\")) ---------";
+print "------- SolvableSubModule(SolvPolyRing(CC(),\"X,Y,x,y\")) ---------";
 r = PolyRing(CC(),"X,Y,x,y",PolyRing.lex);
 print "r = " + str(r);
 [pone,pi,pX,pY,px,py] = r.gens();
@@ -699,8 +704,8 @@ print "pY   = " + str(pY);
 print "px   = " + str(px);
 print "py   = " + str(py);
 #rel = ( py, px, px * py - 1 , pz, py, py * pz - 1 );
-rel = ( py, px, pi * px * py, pX, pY, pi * pY * pX );
-print "rel  = " + str(rel);
+rel = [ py, px, pi * px * py, pX, pY, pi * pY * pX ];
+print "rel  = " + str([ str(x) for x in rel ]);
 
 sr = SolvPolyRing(CC(),"X,Y,x,y",PolyRing.lex,rel);
 print "sr = " + str(sr);
@@ -718,13 +723,15 @@ m3 = ( ( x - X ), ( x - X ) )
 m4 = ( ( y - Y ), ( y - Y ) )
 
 ml = [m1,m2,m3,m4];
-print "ml = " + str(ml);
+#print "ml = " + str(ml);
 
 ssm = SolvableSubModule( sr, list=ml );
 print "ssm: " + str(ssm);
 print;
 
-xsm = SubModule(SolvPolyRing(CC(),"X, Y, x, y",PolyRing.lex,(( y ), ( x ), ( (0,(1,)) * x * y ),( Y ), ( X ), ( (0,(1,)) * X * Y ))),list=[ ( x - X, x - X ), ( x + 1, y ), ( y - Y, y - Y ), ( x * y, 0 ) ]);
+xsm = SolvableSubModule(SolvPolyRing(CC(),"X, Y, x, y",PolyRing.lex,rel=[y, x, ( ((0,),(1,)) * x * y ), Y, X, ( ((0,),(1,)) * X * Y )]),list=[ ( x - X, x - X ), ( x + ((1,),), y ), ( y - Y, y - Y ), ( x * y, 0 ) ]);
+#     SolvableSubModule(SolvPolyRing(CC(),"X, Y, x, y",PolyRing.lex,rel=[y, x, ( ((0,),(1,)) * x * y ), Y, X, ( ((0,),(1,)) * X * Y )]),list=[ ( x - X, x - X ), ( x + ((1,),), y ), ( y - Y, y - Y ), ( x * y, 0 ) ]);
+#     SolvableSubModule(SolvPolyRing(CC(),"X, Y, x, y",PolyRing.lex,(( y ), ( x ), ( ((0,),(1,)) * x * y ),( Y ), ( X ), ( ((0,),(1,)) * X * Y ))),list=[ ( x - X, x - X ), ( x + ((1,),), y ), ( y - Y, y - Y ), ( x * y, 0 ) ]);
 print "xsm: " + str(xsm);
 print;
 
