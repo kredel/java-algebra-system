@@ -283,16 +283,15 @@ public final class BigComplex implements StarRingElem<BigComplex>,
      */
     @Override
     public String toScript() {
-        // Python case
+        // Python case: (re,im) or (re,) 
         StringBuffer s = new StringBuffer();
-        if ( im.isZERO() ) {
-            s.append(re.toScript());
-        } else {
-            s.append("(");
-            s.append(re.toScript());
-            s.append(",").append(im.toScript());
-            s.append(")");
+        s.append("(");
+        s.append(re.toScript());
+        s.append(",");
+        if ( !im.isZERO() ) {
+            s.append(im.toScript());
         }
+        s.append(")");
         return s.toString();
     }
 

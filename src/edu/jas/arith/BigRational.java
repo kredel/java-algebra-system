@@ -231,17 +231,15 @@ public final class BigRational implements GcdRingElem<BigRational>,
      */
     @Override
     public String toScript() {
-        // Python case
+        // Python case: (num,den) or (num,) 
         StringBuffer s = new StringBuffer();
-        if ( den.equals(BigInteger.ONE) ) {
-            //s.append("("+num+",)");
-            s.append(num);
-        } else {
-            s.append("(");
-            s.append(num);
-            s.append(",").append(den);
-            s.append(")");
+        s.append("(");
+        s.append(num.toString());
+        s.append(",");
+        if ( !den.equals(BigInteger.ONE) ) {
+            s.append(den.toString());
         }
+        s.append(")");
         return s.toString();
     }
 
