@@ -186,9 +186,11 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
     @Override
     public String toScript() {
         // Python case
-        String cf = coFac.toScript().trim();
-        if ( cf.startsWith("0") ) {
+        String cf = null;
+        if ( coFac instanceof RingElem ) {
             cf = ((RingElem<C>)coFac).toScriptFactory();
+        } else {
+            cf =  coFac.toScript().trim();
         }
         String to = tord.toString();
         if ( tord.getEvord() == TermOrder.INVLEX ) {
@@ -199,7 +201,7 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
         }
         if ( table.size() > 0 ) {
             String rel = table.toScript();
-            return "SolvPolyRing(" + cf + ",\"" + varsToString() + "\"," + to + "," + rel + ")";
+            return "SolvPolyRing(" + cf + ",\"" + varsToString() + "\"," + to + ",rel=" + rel + ")";
         } else {
             return "SolvPolyRing(" + cf + ",\"" + varsToString() + "\"," + to + ")";
         }

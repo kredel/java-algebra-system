@@ -331,9 +331,11 @@ public class GenPolynomialRing<C extends RingElem<C> >
     @Override
     public String toScript() {
         // Python case
-        String cf = coFac.toScript().trim();
-        if ( cf.startsWith("0") ) {
+        String cf = "";
+        if ( coFac instanceof RingElem ) {
             cf = ((RingElem<C>)coFac).toScriptFactory();
+        } else {
+            cf =  coFac.toScript().trim();
         }
         String to = tord.toString();
         if ( tord.getEvord() == TermOrder.INVLEX ) {
