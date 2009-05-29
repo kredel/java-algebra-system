@@ -2094,13 +2094,13 @@ class SolvPolyRing(SolvableRing):
     Then returns a Ring.
     '''
 
-    def __init__(self,coeff,vars,order,relation=None):
+    def __init__(self,coeff,vars,order,rel=None):
         '''Ring constructor.
 
         coeff = factory for coefficients,
         vars = string with variable names,
         order = term order,
-        relation = triple list of relations. (e,f,p,...) with e * f = p as relation.
+        rel = triple list of relations. (e,f,p,...) with e * f = p as relation.
         '''
         if coeff == None:
             raise ValueError, "No coefficient given."
@@ -2119,11 +2119,15 @@ class SolvPolyRing(SolvableRing):
         if isinstance(order,TermOrder):
             to = order;
         ring = GenSolvablePolynomialRing(cf,nv,to,names);
-        if relation != None:
-            #print "relation = " + str(relation);
+        if rel != None:
+            #print "rel = " + str(rel);
             table = ring.table;
-            L = [ x.elem for x in relation if isinstance(x,RingElem) ];
-            print "relation = " + str(L);
+            L = [];
+            for x in rel:
+                if isinstance(x,RingElem):
+                    x = x.elem;
+                L.append(x);
+            #print "rel = " + str(L);
             for i in range(0,len(L),3):
                 table.update( L[i], L[i+1], L[i+2] );
         self.ring = ring;
