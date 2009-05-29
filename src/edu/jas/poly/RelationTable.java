@@ -224,20 +224,20 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
         // Python case
         String[] vars = ring.vars;
         List v;
-        StringBuffer s = new StringBuffer("(");
+        StringBuffer s = new StringBuffer("[");
         boolean first = true;
         for ( List<Integer> k: table.keySet() ) { 
             if ( first ) {
                 first = false;
                 s.append( "" );
             } else {
-                s.append( "," );
+                s.append( ", " );
             }
             v = table.get( k );
             for (Iterator jt = v.iterator(); jt.hasNext(); ) { 
                 ExpVectorPair ep = (ExpVectorPair)jt.next();
-                s.append("( " + ep.getFirst().toScript(vars) + " ), " );
-                s.append("( " + ep.getSecond().toScript(vars) + " ), " );
+                s.append("" + ep.getFirst().toScript(vars) + ", " );
+                s.append("" + ep.getSecond().toScript(vars) + ", " );
                 GenPolynomial<C> p = (GenPolynomial<C>)jt.next();
                 s.append("( " + p.toScript() + " )" );
                 if ( jt.hasNext() ) {
@@ -245,7 +245,7 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
                 }
             }
         }
-        s.append( ")" );
+        s.append( "]" );
         return s.toString();
     }
 
