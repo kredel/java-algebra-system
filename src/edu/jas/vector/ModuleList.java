@@ -206,7 +206,11 @@ public class ModuleList<C extends RingElem<C> > implements Serializable {
     public String toScript() {
         // Python case
         StringBuffer erg = new StringBuffer();
-        erg.append("SubModule(");
+        if ( ring instanceof GenSolvablePolynomialRing ) {
+            erg.append("SolvableSubModule(");
+        } else {
+            erg.append("SubModule(");
+        }
         String[] vars = null;
         if ( ring != null ) {
            erg.append( ring.toScript() );
