@@ -117,9 +117,11 @@ public class AlgebraicNumberRing<C extends GcdRingElem<C> >
      * @see edu.jas.structure.ElemFactory#generators()
      */
     public List<AlgebraicNumber<C>> generators() {
-        List<AlgebraicNumber<C>> gens = new ArrayList<AlgebraicNumber<C>>( 2 );
-        gens.add( getONE() );
-        gens.add( getGenerator() );
+        List<GenPolynomial<C>> gc = ring.generators();
+        List<AlgebraicNumber<C>> gens = new ArrayList<AlgebraicNumber<C>>( gc.size() );
+        for ( GenPolynomial<C> g : gc ) {
+            gens.add( new AlgebraicNumber<C>( this, g ) );
+        }
         return gens;
     }
 
