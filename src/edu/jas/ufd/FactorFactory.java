@@ -111,7 +111,7 @@ public class FactorFactory {
     @SuppressWarnings("unchecked")
     public static <C extends GcdRingElem<C>> FactorAbstract<C> getImplementation( RingFactory<C> fac ) {
         //logger.info("fac = " + fac.getClass().getName());
-        //System.out.println("fac = " + fac.getClass().getName());
+        //System.out.println("fac_o = " + fac.getClass().getName());
         int t = 0;
         FactorAbstract/*raw type<C>*/ ufd = null; 
         AlgebraicNumberRing afac = null;
@@ -130,13 +130,17 @@ public class FactorFactory {
                 break;
             }
             if ( ofac instanceof AlgebraicNumberRing ) {
+                //System.out.println("afac_o = " + ofac);
                 afac = (AlgebraicNumberRing) ofac;
                 ofac = afac.ring.coFac;
-                if ( ofac instanceof BigInteger ) {
+                if ( ofac instanceof BigRational ) {
                     t = 4;
                 } 
                 if ( ofac instanceof ModIntegerRing ) {
                     t = 5;
+                }
+                if ( ofac instanceof AlgebraicNumberRing ) {
+                    t = 6;
                 }
                 break;
             }
@@ -155,7 +159,7 @@ public class FactorFactory {
         if ( t == 3 ) {
             ufd = new FactorModular();
         }
-        if ( t == 4 || t == 5) {
+        if ( t == 4 || t == 5 || t == 6 ) {
             ufd = new FactorAlgebraic/*raw <C>*/( afac );
         }
         logger.debug("ufd = " + ufd);
