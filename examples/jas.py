@@ -77,6 +77,7 @@ class Ring:
         self.engine = GCDFactory.getProxy(self.ring.coFac);
         try:
             self.factor = FactorFactory.getImplementation(self.ring.coFac);
+            #print "factor: ", self.factor;
         except:
             pass
 
@@ -194,7 +195,7 @@ class Ring:
                 L[ RingElem( a ) ] = i;
             return L;
         except:
-            #print "error in factorsAbsolute"
+            print "error in factorsAbsolute"
             return None
 
     def realRoots(self,a,eps=None):
@@ -1388,7 +1389,7 @@ def Oct(ro=BigQuaternion(),io=BigQuaternion()):
     return RingElem(c);
 
 
-def AN(m,z=0):
+def AN(m,z=0,field=False):
     '''Create JAS AlgebraicNumber as ring element.
     '''
     if isinstance(m,RingElem):
@@ -1396,10 +1397,12 @@ def AN(m,z=0):
     if isinstance(z,RingElem):
         z = z.elem;
     #print "m.getClass() = " + str(m.getClass().getName());
+    #print "field = " + str(field);
     if m.getClass().getSimpleName() == "AlgebraicNumber":
-        mf = AlgebraicNumberRing(m.factory().modul);
+        mf = AlgebraicNumberRing(m.factory().modul,m.factory().isField());
     else:
-        mf = AlgebraicNumberRing(m);
+        mf = AlgebraicNumberRing(m,field);
+    #print "mf = " + mf.toString();
     if z == 0:
         r = AlgebraicNumber(mf);
     else:
