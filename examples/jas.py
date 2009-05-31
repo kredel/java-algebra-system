@@ -194,8 +194,8 @@ class Ring:
                 i = e.get(a);
                 L[ RingElem( a ) ] = i;
             return L;
-        except:
-            print "error in factorsAbsolute"
+        except Exception, e:
+            print "error in factorsAbsolute " + str(e)
             return None
 
     def realRoots(self,a,eps=None):
@@ -1396,6 +1396,9 @@ def AN(m,z=0,field=False):
         m = m.elem;
     if isinstance(z,RingElem):
         z = z.elem;
+    if z != 0 and ( z == True or z == False ):
+        field = z;
+        z = 0;
     #print "m.getClass() = " + str(m.getClass().getName());
     #print "field = " + str(field);
     if m.getClass().getSimpleName() == "AlgebraicNumber":
