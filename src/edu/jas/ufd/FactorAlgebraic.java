@@ -26,7 +26,8 @@ import edu.jas.structure.GcdRingElem;
  * @param <C> coefficient type
  */
 
-public class FactorAlgebraic<C extends GcdRingElem<C>> extends FactorAbstract<AlgebraicNumber<C>> {
+public class FactorAlgebraic<C extends GcdRingElem<C>> extends FactorAbsolute<AlgebraicNumber<C>> {
+//FactorAbstract<AlgebraicNumber<C>>
 
 
     private static final Logger logger = Logger.getLogger(FactorAlgebraic.class);

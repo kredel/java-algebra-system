@@ -57,6 +57,14 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
 
 
     /**
+     * No argument constructor. <b>Note:</b> can't use this constructor.
+     */
+    protected FactorAbsolute() {
+        throw new IllegalArgumentException("don't use this constructor");
+    }
+
+
+    /**
      * Constructor.
      * @param cfac coefficient ring factory.
      */
@@ -120,12 +128,14 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
         if (P.isZERO()) {
             return factors;
         }
-        //System.out.println("\nP = " + P);
+        //System.out.println("\nP_base = " + P);
         GenPolynomialRing<C> pfac = P.ring; // K[x]
         if (pfac.nvar > 1) {
+            //System.out.println("\nfacs_base: univ");
             throw new RuntimeException("only for univariate polynomials");
         }
         if (!pfac.coFac.isField()) {
+            //System.out.println("\nfacs_base: field");
             throw new RuntimeException("only for field coefficients");
         }
         // factor over K (=C)
@@ -142,6 +152,7 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
         for ( GenPolynomial<C> p : facs.keySet() ) {
             Long e = facs.get(p);
             List<GenPolynomial<AlgebraicNumber<C>>> afacs = baseFactorsAbsoluteIrreducible(p);
+            //System.out.println("afacs   = " + afacs);
             for ( GenPolynomial<AlgebraicNumber<C>> ap : afacs ) {
                 //System.out.println("ap = (" + ap + ")**" + e + " over " + ap.ring.coFac);
                 if ( logger.isInfoEnabled() ) {
@@ -174,16 +185,19 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
         if (P.isZERO()) {
             return factors;
         }
-        //System.out.println("\nP = " + P);
+        //System.out.println("\nP_base_sqf = " + P);
         GenPolynomialRing<C> pfac = P.ring; // K[x]
         if (pfac.nvar > 1) {
+            //System.out.println("facs_base_sqf: univ");
             throw new RuntimeException("only for univariate polynomials");
         }
         if (!pfac.coFac.isField()) {
+            //System.out.println("facs_base_sqf: field");
             throw new RuntimeException("only for field coefficients");
         }
         // factor over K (=C)
         List<GenPolynomial<C>> facs = baseFactorsSquarefree(P);
+        //System.out.println("facs_base_irred = " + facs);
         if (debug && !isFactorization(P, facs)) {
              throw new RuntimeException("isFactorization = false");
         }
@@ -193,7 +207,9 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
         }
         // factor over K(alpha)
         for ( GenPolynomial<C> p : facs ) {
+            //System.out.println("facs_base_sqf_p = " + p);
             List<GenPolynomial<AlgebraicNumber<C>>> afacs = baseFactorsAbsoluteIrreducible(p);
+            //System.out.println("afacs_base_sqf = " + afacs);
             if ( logger.isInfoEnabled() ) {
                 logger.info("K(alpha) factors = " + afacs); // K(alpha)[X]
             }
@@ -220,21 +236,25 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
         if (P.isZERO()) {
             return factors;
         }
+        //System.out.println("\nP_base_irred = " + P);
         GenPolynomialRing<C> pfac = P.ring; // K[x]
         if (pfac.nvar > 1) {
+            //System.out.println("facs_base_irred: univ");
             throw new RuntimeException("only for univariate polynomials");
         }
         if (!pfac.coFac.isField()) {
+            //System.out.println("facs_base_irred: field");
             throw new RuntimeException("only for field coefficients");
         }
         // setup field extension K(alpha) where alpha = z_xx
-        String[] vars = new String[] { "z_" + (P.hashCode()%1000) };
+        String[] vars = new String[] { "z_" + Math.abs(P.hashCode()%1000) };
         pfac = pfac.clone();
         vars=pfac.setVars(vars);
         P = pfac.copy(P); // hack to exchange the variables
         AlgebraicNumberRing<C> afac = new AlgebraicNumberRing<C>(P,true); // since irreducible
         if ( logger.isInfoEnabled() ) {
             logger.info("K(alpha) = " + afac); 
+            logger.info("K(alpha) = " + afac.toScript()); 
             //System.out.println("K(alpha) = " + afac);
         }
         GenPolynomialRing<AlgebraicNumber<C>> pafac 
@@ -247,11 +267,14 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
         }
         if ( logger.isInfoEnabled() ) {
             logger.info("P over K(alpha) = " + Pa); 
+            //logger.info("P over K(alpha) = " + Pa.toScript()); 
             //System.out.println("P in K(alpha) = " + Pa);
         }
         // factor over K(alpha)
         FactorAbstract<AlgebraicNumber<C>> engine = FactorFactory.<C>getImplementation(afac);
+        System.out.println("K(alpha) engine = " + engine);
         factors = engine.baseFactorsSquarefree( Pa );
+        //System.out.println("factors = " + factors);
         if ( debug ) {
             logger.info("factors over K(alpha) = " + factors); 
             //System.out.println("factors over K(alpha) = " + factors);
@@ -276,7 +299,7 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
         if (P.isZERO()) {
             return factors;
         }
-        //System.out.println("\nP = " + P);
+        System.out.println("\nP_mult = " + P);
         GenPolynomialRing<C> pfac = P.ring; // K[x]
         if (pfac.nvar <= 1) {
             return baseFactorsAbsolute(P);
@@ -446,7 +469,7 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
         }
 
         // setup field extension K(alpha)
-        String[] vars = new String[] { "z_" + (up.hashCode()%1000) };
+        String[] vars = new String[] { "z_" + Math.abs(up.hashCode()%1000) };
         pfac = pfac.clone();
         String[] ovars = pfac.setVars(vars); // side effects! 
         up = pfac.copy(up); // hack to exchange the variables
