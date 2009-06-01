@@ -47,7 +47,7 @@ public class FactorsMap<C extends GcdRingElem<C>> implements Serializable {
     /**
      * Constructor.
      * @param p given GenPolynomial over C.
-     * @param list irreducible factors of p with coefficients from C.
+     * @param map irreducible factors of p with coefficients from C.
      */
     public FactorsMap(GenPolynomial<C> p, SortedMap<GenPolynomial<C>,Long> map) {
         this(p,map,null);
@@ -57,8 +57,8 @@ public class FactorsMap<C extends GcdRingElem<C>> implements Serializable {
     /**
      * Constructor.
      * @param p given GenPolynomial over C.
-     * @param list irreducible factors of p with coefficients from C.
-     * @param alist irreducible factors of p with coefficients from an algebraic number field.
+     * @param map irreducible factors of p with coefficients from C.
+     * @param amap irreducible factors of p with coefficients from an algebraic number field.
      */
     public FactorsMap(GenPolynomial<C> p, SortedMap<GenPolynomial<C>,Long> map, 
                       SortedMap<Factors<C>,Long> amap) {

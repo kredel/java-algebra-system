@@ -115,7 +115,7 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
     /**
      * GenPolynomial absolute base factorization of a polynomial.
      * @param P GenPolynomial.
-     * @return a FactorsMap: [p_1 -&gt; e_1, ..., p_k -&gt; e_k] with P = prod_{i=1,...,k} p_i**e_i.
+     * @return factors map container: [p_1 -&gt; e_1, ..., p_k -&gt; e_k] with P = prod_{i=1,...,k} p_i**e_i.
      * <b>Note:</b> K(alpha) not yet minimal.
      */
     // @Override
@@ -171,7 +171,7 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
     /**
      * GenPolynomial absolute base factorization of a squarefree polynomial.
      * @param P squarefree and primitive GenPolynomial.
-     * @return [p_1,...,p_k] with P = prod_{i=1, ..., k} p_i.
+     * @return factors list container: [p_1,...,p_k] with P = prod_{i=1, ..., k} p_i.
      * <b>Note:</b> K(alpha) not yet minimal.
      */
     // @Override
@@ -230,8 +230,8 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
     /**
      * GenPolynomial base absolute factorization of a irreducible polynomial.
      * @param P irreducible! GenPolynomial.
-     * @return [p_1,...,p_k] with P = prod_{i=1, ..., k} p_i in K(alpha)[x] for suitable alpha
-     * and p_i irreducible over L[x], 
+     * @return factors container: [p_1,...,p_k] with P = prod_{i=1, ..., k} p_i in K(alpha)[x] 
+     * for suitable alpha and p_i irreducible over L[x], 
      * where K \subset K(alpha) \subset L is an algebraically closed field over K.
      * <b>Note:</b> K(alpha) not yet minimal.
      */
@@ -292,7 +292,7 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
     /**
      * GenPolynomial absolute base factorization of a polynomial.
      * @param P GenPolynomial.
-     * @return [p_1 -&gt; e_1, ..., p_k -&gt; e_k] with P = prod_{i=1,...,k} p_i**e_i.
+     * @return factors map container: [p_1 -&gt; e_1, ..., p_k -&gt; e_k] with P = prod_{i=1,...,k} p_i**e_i.
      * <b>Note:</b> K(alpha) not yet minimal.
      */
     public FactorsMap<C> factorsAbsolute(GenPolynomial<C> P) {
@@ -347,7 +347,7 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
     /**
      * GenPolynomial absolute base factorization of a squarefree polynomial.
      * @param P squarefree and primitive GenPolynomial.
-     * @return [p_1,...,p_k] with P = prod_{i=1, ..., k} p_i.
+     * @return factors list container: [p_1,...,p_k] with P = prod_{i=1, ..., k} p_i.
      * <b>Note:</b> K(alpha) not yet minimal.
      */
     // @Override
@@ -405,8 +405,8 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
     /**
      * GenPolynomial base absolute factorization of a irreducible polynomial.
      * @param P irreducible! GenPolynomial.
-     * @return [p_1,...,p_k] with P = prod_{i=1, ..., k} p_i in K(alpha)[x] for suitable alpha
-     * and p_i irreducible over L[x], 
+     * @return factors container: [p_1,...,p_k] with P = prod_{i=1, ..., k} p_i in K(alpha)[x] 
+     * for suitable alpha and p_i irreducible over L[x], 
      * where K \subset K(alpha) \subset L is an algebraically closed field over K.
      * <b>Note:</b> K(alpha) not yet minimal.
      */
@@ -534,8 +534,7 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
 
     /**
      * GenPolynomial is factorization.
-     * @param P GenPolynomial.
-     * @param F = [p_1,...,p_k].
+     * @param facs factors container.
      * @return true if P = prod_{i=1,...,r} p_i, else false.
      */
     public boolean isAbsoluteFactorization(Factors<C> facs) {
@@ -558,8 +557,7 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
 
     /**
      * GenPolynomial is factorization.
-     * @param P GenPolynomial.
-     * @param F = [p_1,...,p_k].
+     * @param facs factors list container.
      * @return true if P = prod_{i=1,...,r} p_i, else false.
      */
     public boolean isAbsoluteFactorization(FactorsList<C> facs) {
@@ -589,8 +587,7 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
 
     /**
      * GenPolynomial is factorization.
-     * @param P GenPolynomial.
-     * @param F = [p_1 -&gt; e_1, ..., p_k -&gt; e_k].
+     * @param facs factors map container.
      * @return true if P = prod_{i=1,...,k} p_i**e_i , else false.
      */
     public boolean isAbsoluteFactorization(FactorsMap<C> facs) {

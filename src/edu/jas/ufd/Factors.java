@@ -167,17 +167,20 @@ public class Factors<C extends GcdRingElem<C>> implements Comparable<Factors<C>>
     }
 
 
-    /** comparison.  
-     * @param b .
-     * @return sign(this-b).
+    /** Comparison.  
+     * @param facs factors container.
+     * @return sign(this.poly-facs.poly) lexicographic &gt; sign(afac.modul-facs.afac.modul).
      */
     public int compareTo(Factors<C> facs) { 
         int s = poly.compareTo(facs.poly);        
         if ( s != 0 ) {
             return s; 
         }
-        if ( afac == null || facs.afac == null) {
-            return s;
+        if ( afac == null ) {
+            return -1;
+        }
+        if ( facs.afac == null) {
+            return +1;
         }
         return afac.modul.compareTo(facs.afac.modul);
     }
