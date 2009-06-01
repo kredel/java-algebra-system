@@ -22,8 +22,8 @@ print;
 [one,x] = r.gens();
 
 #f = x**5 - 1;
-#f = x**6 - 1;
-f = x**7 - 1;
+f = x**6 - 1;
+#f = x**7 - 1;
 #f = x**15 - 1;
 #f = x * ( x + 1 )**2 * ( x**2 + x + 1 )**3;
 #f = x**6 - 3 * x**5 + x**4 - 3 * x**3 - x**2 - 3 * x+ 1;
@@ -65,16 +65,10 @@ t = System.currentTimeMillis();
 #G = r.squarefreeFactors(f);
 G = r.factorsAbsolute(f);
 t = System.currentTimeMillis() - t;
-print "G = ", G;
+print "G = ", G.toScript();
 print
 print "factor time =", t, "milliseconds";
-
-g = one;
-for h, i in G.iteritems():
-    print "h**i = (", h, ")**" + str(i);
-    h = h**i;
-    #g = g*h;
-#print "g = ", g;
+print
 
 #startLog();
 terminate();

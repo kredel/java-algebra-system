@@ -83,12 +83,10 @@ startLog();
 t = System.currentTimeMillis();
 G = r.factorsAbsolute(f);
 t = System.currentTimeMillis() - t;
-#print "G = ", G;
+print "G = ", G.toScript();
+print
 print "factor time =", t, "milliseconds";
-
-for h, i in G.iteritems():
-    print "h**i = (", h, ")**" + str(i);
-print;
+print
 
 #sys.exit();
 #startLog();

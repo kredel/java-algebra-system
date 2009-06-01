@@ -36,16 +36,9 @@ t = System.currentTimeMillis();
 #G = r.squarefreeFactors(f);
 G = r.factorsAbsolute(f);
 t = System.currentTimeMillis() - t;
-print "G = ", G;
+print "G = ", G.toScript();
 print
 print "factor time =", t, "milliseconds";
-
-g = one;
-for h, i in G.iteritems():
-    print "h**i = (", h, ")**" + str(i);
-    h = h**i;
-    #g = g*h;
-#print "g = ", g;
 print
 
 #startLog();

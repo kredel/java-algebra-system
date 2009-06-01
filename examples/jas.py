@@ -188,11 +188,11 @@ class Ring:
             a = self.element( str(a) );
             a = a.elem;
         try:
-            e = self.factor.factorsAbsolute( a );
-            L = {};
-            for a in e.keySet():
-                i = e.get(a);
-                L[ RingElem( a ) ] = i;
+            L = self.factor.factorsAbsolute( a );
+##             L = {};
+##             for a in e.keySet():
+##                 i = e.get(a);
+##                 L[ RingElem( a ) ] = i;
             return L;
         except Exception, e:
             print "error in factorsAbsolute " + str(e)
