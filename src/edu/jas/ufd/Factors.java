@@ -23,7 +23,7 @@ import edu.jas.structure.GcdRingElem;
  * @param <C> coefficient type
  */
 
-public class Factors<C extends GcdRingElem<C>> implements Serializable {
+public class Factors<C extends GcdRingElem<C>> implements Comparable<Factors<C>>, Serializable {
 
 
     /**
