@@ -18,7 +18,7 @@ import edu.jas.structure.GcdRingElem;
 
 
 /**
- * Container for the factors of a eventually non-squarefee factorization.
+ * Container for the factors of a eventually non-squarefree factorization.
  * @author Heinz Kredel
  * @param <C> coefficient type
  */
