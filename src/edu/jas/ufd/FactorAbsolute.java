@@ -277,7 +277,7 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
         }
         // factor over K(alpha)
         FactorAbstract<AlgebraicNumber<C>> engine = FactorFactory.<C>getImplementation(afac);
-        System.out.println("K(alpha) engine = " + engine);
+        //System.out.println("K(alpha) engine = " + engine);
         List<GenPolynomial<AlgebraicNumber<C>>> factors = engine.baseFactorsSquarefree( Pa );
         //System.out.println("factors = " + factors);
         if ( debug ) {
@@ -303,7 +303,7 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
         if (P.isZERO()) {
             return new FactorsMap<C>(P,factors);
         }
-        System.out.println("\nP_mult = " + P);
+        //System.out.println("\nP_mult = " + P);
         GenPolynomialRing<C> pfac = P.ring; // K[x]
         if (pfac.nvar <= 1) {
             return baseFactorsAbsolute(P);

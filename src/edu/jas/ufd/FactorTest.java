@@ -454,15 +454,14 @@ public class FactorTest extends TestCase {
 
         FactorRational engine = new FactorRational();
 
-        SortedMap<GenPolynomial<AlgebraicNumber<BigRational>>,Long> F 
+        FactorsMap<BigRational> F 
             //= engine.baseFactorsAbsoluteSquarefree(agen);
             //= engine.baseFactorsAbsoluteIrreducible(agen);
           = engine.baseFactorsAbsolute(agen);
         //System.out.println("agen     = " + agen);
         //System.out.println("F        = " + F);
-        //System.out.println("Q(alpha) = " + F.firstKey().ring.coFac);
 
-        boolean t = true; // not ok: engine.isAbsoluteFactorization(agen,F);
+        boolean t = engine.isAbsoluteFactorization(F);
         //System.out.println("t        = " + t);
         assertTrue("prod(factor(a)) = a", t);
         ComputerThreads.terminate();
@@ -473,7 +472,7 @@ public class FactorTest extends TestCase {
      * Test modular absolute factorization.
      * 
      */
-    public void ytestBaseModularAbsoluteFactorization() {
+    public void testBaseModularAbsoluteFactorization() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         ModIntegerRing cfac = new ModIntegerRing(17);
@@ -481,19 +480,18 @@ public class FactorTest extends TestCase {
         String[] vars = new String[] { "z" };
         GenPolynomialRing<ModInteger> pfac = new GenPolynomialRing<ModInteger>(cfac, 1, to, alpha);
         GenPolynomial<ModInteger> agen = pfac.univariate(0, 4);
-        agen = agen.sum(pfac.fromInteger(1)); // x^5 + 1
+        agen = agen.sum(pfac.fromInteger(1)); // x^4 + 1
 
         FactorModular engine = new FactorModular();
 
-        SortedMap<GenPolynomial<AlgebraicNumber<ModInteger>>,Long> F 
+        FactorsMap<ModInteger> F 
             //= engine.baseFactorsAbsoluteSquarefree(agen);
             //= engine.baseFactorsAbsoluteIrreducible(agen);
           = engine.baseFactorsAbsolute(agen);
         //System.out.println("agen        = " + agen);
         //System.out.println("F           = " + F);
-        //System.out.println("Z_17(alpha) = " + F.firstKey().ring.coFac);
 
-        boolean t = true; // not ok: engine.isAbsoluteFactorization(agen,F);
+        boolean t = engine.isAbsoluteFactorization(F);
         //System.out.println("t        = " + t);
         assertTrue("prod(factor(a)) = a", t);
         ComputerThreads.terminate();
@@ -517,14 +515,14 @@ public class FactorTest extends TestCase {
 
         FactorRational engine = new FactorRational();
 
-        SortedMap<GenPolynomial<AlgebraicNumber<BigRational>>,Long> F 
+        FactorsMap<BigRational> F 
             //= engine.baseFactorsAbsoluteSquarefree(agen);
             //= engine.baseFactorsAbsoluteIrreducible(agen);
           = engine.factorsAbsolute(g);
         //System.out.println("g    = " + g);
         //System.out.println("F    = " + F);
 
-        boolean t = true; // not ok: engine.isAbsoluteFactorization(agen,F);
+        boolean t = engine.isAbsoluteFactorization(F);
         //System.out.println("t        = " + t);
         assertTrue("prod(factor(a)) = a", t);
         ComputerThreads.terminate();
@@ -556,7 +554,14 @@ public class FactorTest extends TestCase {
         AlgebraicNumberRing<ModInteger> am = new AlgebraicNumberRing<ModInteger>(pm);
         Factorization<AlgebraicNumber<ModInteger>> ufdam = FactorFactory.getImplementation(am);
         //System.out.println("ufdam = " + ufdam);
-        assertTrue("ufd != AlgebraicNumber<Modular> " + ufdam, ufdam instanceof FactorAlgebraic );
+        assertTrue("ufd != AlgebraicNumber<ModInteger> " + ufdam, ufdam instanceof FactorAlgebraic );
+
+        GenPolynomialRing<BigRational> prfac = new GenPolynomialRing<BigRational>(br, 1);
+        GenPolynomial<BigRational> pr = prfac.univariate(0);
+        AlgebraicNumberRing<BigRational> ar = new AlgebraicNumberRing<BigRational>(pr);
+        Factorization<AlgebraicNumber<BigRational>> ufdar = FactorFactory.getImplementation(ar);
+        //System.out.println("ufdar = " + ufdar);
+        assertTrue("ufd != AlgebraicNumber<BigRational> " + ufdar, ufdar instanceof FactorAlgebraic );
     }
 
 }
