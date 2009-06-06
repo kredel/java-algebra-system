@@ -123,7 +123,7 @@ public class Factors<C extends GcdRingElem<C>> implements Comparable<Factors<C>>
             } else {
                 sb.append("\n * ");
             }
-            sb.append(ap.toScript());
+            sb.append("( " + ap.toScript() + " )");
         }
         sb.append("\n over "+ afac.toScript());
         return sb.toString();

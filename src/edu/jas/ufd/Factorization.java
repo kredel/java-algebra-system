@@ -65,6 +65,14 @@ public interface Factorization<C extends GcdRingElem<C>> extends Serializable {
 
 
     /**
+     * GenPolynomial factorization ignoring multiplicities.
+     * @param P GenPolynomial.
+     * @return [p_1, ..., p_k] with P = prod_{i=1,...,k} p_i**{e_i} for some e_i.
+     */
+    public List<GenPolynomial<C>> factorsRadical(GenPolynomial<C> P);
+
+
+    /**
      * GenPolynomial greatest squarefree divisor.
      * @param P GenPolynomial.
      * @return squarefree(P).

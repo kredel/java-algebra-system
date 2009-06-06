@@ -244,7 +244,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
 
 
     /**
-     * Univariate GenPolynomial factorization.
+     * Univariate GenPolynomial factorization ignoring multiplicities.
      * @param P GenPolynomial in one variable.
      * @return [p_1, ..., p_k] with P = prod_{i=1,...,k} p_i**{e_i} for some e_i.
      */
@@ -321,7 +321,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
 
 
     /**
-     * GenPolynomial factorization.
+     * GenPolynomial factorization ignoring multiplicities.
      * @param P GenPolynomial.
      * @return [p_1, ..., p_k] with P = prod_{i=1,...,k} p_i**{e_i} for some e_i.
      */

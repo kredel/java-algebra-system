@@ -21,7 +21,7 @@ import edu.jas.structure.GcdRingElem;
  * interface. Objects of this class are immutable.
  * @author Heinz Kredel
  */
-public class Quotient<C extends GcdRingElem<C>> implements RingElem<Quotient<C>> {
+public class Quotient<C extends GcdRingElem<C>> implements GcdRingElem<Quotient<C>> {
 
 
     private static final Logger logger = Logger.getLogger(Quotient.class);
