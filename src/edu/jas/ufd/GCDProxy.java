@@ -12,6 +12,7 @@ import java.util.concurrent.ExecutionException;
 //import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutorService;
 //import java.util.concurrent.Future;
+//import java.util.concurrent.Executors;
 import java.util.concurrent.Callable;
 
 import org.apache.log4j.Logger;
@@ -19,6 +20,7 @@ import org.apache.log4j.Logger;
 import edu.jas.structure.GcdRingElem;
 
 import edu.jas.kern.ComputerThreads;
+import edu.jas.kern.PreemptingException;
 
 import edu.jas.poly.GenPolynomial;
 
@@ -71,8 +73,8 @@ public class GCDProxy<C extends GcdRingElem<C>>
          this.e1 = e1; 
          this.e2 = e2; 
          if ( pool == null ) {
-            //pool = Executors.newFixedThreadPool(anzahl);
             pool = ComputerThreads.getPool();
+            //System.out.println("pool 2 = "+pool);
          }
      }                                              
 
@@ -112,21 +114,37 @@ public class GCDProxy<C extends GcdRingElem<C>>
          List<Callable<GenPolynomial<C>>> cs = new ArrayList<Callable<GenPolynomial<C>>>(2);
          cs.add( new Callable<GenPolynomial<C>>() {
                      public GenPolynomial<C> call() {
-                         GenPolynomial<C> g = e1.baseGcd(P,S);
-                         if ( debug ) {
-                    logger.info("GCDProxy done e1 " + e1.getClass().getName());
+                         try {
+                             //System.out.println("starting e1 " + e1.getClass().getName());
+                             GenPolynomial<C> g = e1.baseGcd(P,S);
+                             if ( debug ) {
+                                logger.info("GCDProxy done e1 " + e1.getClass().getName());
+                             }
+                             return g;
+                         } catch(PreemptingException e) {
+                             return null;
+                         } catch(Exception e) {
+                             e.printStackTrace();
+                             return null;
                          }
-                         return g;
                      }
                  }
                  );
          cs.add( new Callable<GenPolynomial<C>>() {
                      public GenPolynomial<C> call() {
-                         GenPolynomial<C> g = e2.baseGcd(P,S);
-                         if ( debug ) {
-                            logger.info("GCDProxy done e2 " + e2.getClass().getName());
+                         try {
+                             //System.out.println("starting e2 " + e2.getClass().getName());
+                             GenPolynomial<C> g = e2.baseGcd(P,S);
+                             if ( debug ) {
+                                logger.info("GCDProxy done e2 " + e2.getClass().getName());
+                             }
+                             return g;
+                         } catch(PreemptingException e) {
+                             return null;
+                         } catch(Exception e) {
+                             e.printStackTrace();
+                             return null;
                          }
-                         return g;
                      }
                  }
                  );
@@ -168,21 +186,35 @@ public class GCDProxy<C extends GcdRingElem<C>>
          List<Callable<GenPolynomial<GenPolynomial<C>>>> cs = new ArrayList<Callable<GenPolynomial<GenPolynomial<C>>>>(2);
          cs.add( new Callable<GenPolynomial<GenPolynomial<C>>>() {
                      public GenPolynomial<GenPolynomial<C>> call() {
-                         GenPolynomial<GenPolynomial<C>> g = e1.recursiveUnivariateGcd(P,S);
-                         if ( debug ) {
-                    logger.info("GCDProxy done e1 " + e1.getClass().getName());
+                         try {
+                             GenPolynomial<GenPolynomial<C>> g = e1.recursiveUnivariateGcd(P,S);
+                             if ( debug ) {
+                                 logger.info("GCDProxy done e1 " + e1.getClass().getName());
+                             }
+                             return g;
+                         } catch(PreemptingException e) {
+                             return null;
+                         } catch(Exception e) {
+                             e.printStackTrace();
+                             return null;
                          }
-                         return g;
                      }
                  }
                  );
          cs.add( new Callable<GenPolynomial<GenPolynomial<C>>>() {
                      public GenPolynomial<GenPolynomial<C>> call() {
-                         GenPolynomial<GenPolynomial<C>> g = e2.recursiveUnivariateGcd(P,S);
-                         if ( debug ) {
-                            logger.info("GCDProxy done e2 " + e2.getClass().getName());
+                         try {
+                             GenPolynomial<GenPolynomial<C>> g = e2.recursiveUnivariateGcd(P,S);
+                             if ( debug ) {
+                                 logger.info("GCDProxy done e2 " + e2.getClass().getName());
+                             }
+                             return g;
+                         } catch(PreemptingException e) {
+                             return null;
+                         } catch(Exception e) {
+                             e.printStackTrace();
+                             return null;
                          }
-                         return g;
                      }
                  }
                  );
@@ -221,21 +253,37 @@ public class GCDProxy<C extends GcdRingElem<C>>
          List<Callable<GenPolynomial<C>>> cs = new ArrayList<Callable<GenPolynomial<C>>>(2);
          cs.add( new Callable<GenPolynomial<C>>() {
                      public GenPolynomial<C> call() {
-                         GenPolynomial<C> g = e1.gcd(P,S);
-                         if ( debug ) {
-                    logger.info("GCDProxy done e1 " + e1.getClass().getName());
+                         try {
+                             //System.out.println("starting e1 " + e1.getClass().getName());
+                             GenPolynomial<C> g = e1.gcd(P,S);
+                             if ( debug ) {
+                                 logger.info("GCDProxy done e1 " + e1.getClass().getName());
+                             }
+                             return g;
+                         } catch(PreemptingException e) {
+                             return null;
+                         } catch(Exception e) {
+                             e.printStackTrace();
+                             return null;
                          }
-                         return g;
                      }
                  }
                  );
          cs.add( new Callable<GenPolynomial<C>>() {
                      public GenPolynomial<C> call() {
-                         GenPolynomial<C> g = e2.gcd(P,S);
-                         if ( debug ) {
-                            logger.info("GCDProxy done e2 " + e2.getClass().getName());
+                         try {
+                             //System.out.println("starting e2 " + e2.getClass().getName());
+                             GenPolynomial<C> g = e2.gcd(P,S);
+                             if ( debug ) {
+                                 logger.info("GCDProxy done e2 " + e2.getClass().getName());
+                             }
+                             return g;
+                         } catch(PreemptingException e) {
+                             return null;
+                         } catch(Exception e) {
+                             e.printStackTrace();
+                             return null;
                          }
-                         return g;
                      }
                  }
                  );
@@ -250,63 +298,5 @@ public class GCDProxy<C extends GcdRingElem<C>>
          }
          return g;
      }
-
-
-    /*
-     * GenPolynomial greatest comon divisor.
-     * Main entry driver method.
-     * @param P GenPolynomial.
-     * @param S GenPolynomial.
-     * @return gcd(P,S).
-     public GenPolynomial<C> gcdOld( final GenPolynomial<C> P, final GenPolynomial<C> S ) {
-         GenPolynomial<C> g = null;
-
-         Future<GenPolynomial<C>> f0;
-         Future<GenPolynomial<C>> f1;
-         f0 = pool.submit( new Callable<GenPolynomial<C>>() {
-                               public GenPolynomial<C> call() {
-                                     return e1.gcd(P,S);
-                               }
-                           }
-                         );
-         f1 = pool.submit( new Callable<GenPolynomial<C>>() {
-                               public GenPolynomial<C> call() {
-                                   return e2.gcd(P,S);
-                               }
-                           }
-                         );
-         while ( g == null ) {
-             try {
-                 if ( g == null && f0.isDone() && ! f0.isCancelled() ) {
-                    g = f0.get(); 
-                    f1.cancel(true);
-                    if ( debug ) {
-                       logger.info("GCDProxy done e1 " + e1);
-                    }
-                 }
-                 if ( g == null && f1.isDone() && ! f1.isCancelled() ) {
-                    g = f1.get(); 
-                    f0.cancel(true);
-                    if ( debug ) {
-                       logger.info("GCDProxy done e2 " + e2);
-                    }
-                 }
-                 if ( g == null ) {
-                    Thread.sleep(dauer);
-                 }
-             } catch (InterruptedException ignored) { 
-                 Thread.currentThread().interrupt();
-             } catch (CancellationException ignored) { 
-                 Thread.currentThread().interrupt();
-             } catch (ExecutionException ignored) { 
-                 Thread.currentThread().interrupt();
-             }
-         }
-         if ( !f0.isDone() || !f1.isDone() ) {
-            logger.info("GCDProxy not done, f0 = " + f0 + ", f1 = " + f1);
-         }
-         return g;
-     }
-     */
 
 }
