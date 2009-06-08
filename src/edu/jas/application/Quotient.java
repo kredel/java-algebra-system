@@ -517,8 +517,7 @@ public class Quotient<C extends GcdRingElem<C>> implements GcdRingElem<Quotient<
 
 
     /**
-     * Greatest common divisor. <b>Note: </b>Not implemented, throws
-     * RuntimeException.
+     * Greatest common divisor. 
      * @param b other element.
      * @return gcd(this,b).
      */
@@ -534,8 +533,7 @@ public class Quotient<C extends GcdRingElem<C>> implements GcdRingElem<Quotient<
 
 
     /**
-     * Extended greatest common divisor. <b>Note: </b>Not implemented, throws
-     * RuntimeException.
+     * Extended greatest common divisor. 
      * @param b other element.
      * @return [ gcd(this,b), c1, c2 ] with c1*this + c2*b = gcd(this,b).
      */
