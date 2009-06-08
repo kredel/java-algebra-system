@@ -234,7 +234,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         }
         if ( pfac.characteristic().signum() > 0 && !ldbcf.isONE() ) {
             GenPolynomial<C> f1 = sfactors.firstKey();
-            long e1 = sfactors.get(f1);
+            long e1 = sfactors.remove(f1);
             f1 = f1.multiply(ldbcf);
             sfactors.put(f1,e1);
         }
