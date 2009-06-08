@@ -44,35 +44,38 @@ public class ComputerThreads {
     public static final int N_CPUS = Runtime.getRuntime().availableProcessors();
 
 
-    /**
-      * Maximal number of threads.
+    /*
+      * Core number of threads.
       * N_CPUS x 1.5, x 2, x 2.5, min 3, ?.
       */
     public static final int N_THREADS = ( N_CPUS < 3 ? 3 : N_CPUS + N_CPUS/2 );
+    //public static final int N_THREADS = ( N_CPUS < 3 ? 5 : 3*N_CPUS );
 
 
-    /**
+    /*
       * Queue capacity.
       */
-    public static final int Q_CAPACITY = 1000; // 10000
+    //public static final int Q_CAPACITY = 1000; // 10000
 
 
-    /**
+    /*
       * WorkQueue.
       */
-    private static BlockingQueue<Runnable> workpile; 
+    //private static BlockingQueue<Runnable> workpile; 
 
 
-    /**
+    /*
       * Saturation policy.
       */
-    public static final RejectedExecutionHandler REH = new ThreadPoolExecutor.CallerRunsPolicy();
+    //public static final RejectedExecutionHandler REH = new ThreadPoolExecutor.CallerRunsPolicy();
+    //public static final RejectedExecutionHandler REH = new ThreadPoolExecutor.AbortPolicy();
 
 
     /**
-      * Thread pool.
+      * ExecutorService thread pool.
       */
-    static ThreadPoolExecutor pool = null;
+    //static ThreadPoolExecutor pool = null;
+    static ExecutorService pool = null;
 
 
     /**
@@ -90,7 +93,7 @@ public class ComputerThreads {
         if ( pool == null ) {
             return false;
         }
-        if ( pool.isTerminated() || pool.isTerminating() ) {
+        if ( pool.isTerminated() || pool.isShutdown() ) {
             return false;
         }
         return true;
@@ -103,12 +106,18 @@ public class ComputerThreads {
      */
     public static synchronized ExecutorService getPool() {
         if ( pool == null ) {
-            workpile = new ArrayBlockingQueue<Runnable>(Q_CAPACITY);
-            pool = new ThreadPoolExecutor(N_CPUS, N_THREADS,
-                                          100L, TimeUnit.MILLISECONDS,
-                                          workpile, REH);
+            // workpile = new ArrayBlockingQueue<Runnable>(Q_CAPACITY);
+            pool = Executors.newFixedThreadPool(N_THREADS);
+//             pool = new ThreadPoolExecutor(N_CPUS, N_THREADS,
+//                                           100L, TimeUnit.MILLISECONDS,
+//                                           workpile, REH);
+//             pool = new ThreadPoolExecutor(N_CPUS, N_THREADS,
+//                                           1000L, TimeUnit.MILLISECONDS,
+//                                           workpile);
         }
-        return Executors.unconfigurableExecutorService(pool);
+        //System.out.println("pool_init = " + pool);
+        return pool;
+        //return Executors.unconfigurableExecutorService(pool);
 
             /* not useful, is not run from jython
             final GCDProxy<C> proxy = this;
@@ -131,22 +140,27 @@ public class ComputerThreads {
         if ( pool == null ) {
            return;
         }
-        logger.info("number of CPUs            " + N_CPUS);
-        logger.info("maximal number of threads " + N_THREADS);
-        logger.info("task queue size           " + Q_CAPACITY);
-        logger.info("reject execution handler  " + REH.getClass().getName());
-        if ( workpile != null ) {
-           logger.info("there are " + workpile.size() + " queued tasks ");
+        if ( pool instanceof ThreadPoolExecutor ) {
+            ThreadPoolExecutor tpe = (ThreadPoolExecutor)pool;
+            //logger.info("task queue size         " + Q_CAPACITY);
+            //logger.info("reject execution handler" + REH.getClass().getName());
+            logger.info("number of CPUs            " + N_CPUS);
+            logger.info("core number of threads    " + N_THREADS);
+            logger.info("current number of threads " + tpe.getPoolSize());
+            logger.info("maximal number of threads " + tpe.getLargestPoolSize());
+            BlockingQueue<Runnable> workpile = tpe.getQueue();
+            if ( workpile != null ) {
+                logger.info("queued tasks              " + workpile.size() );
+            }
+            List<Runnable> r = tpe.shutdownNow();
+            if ( r.size() != 0 ) {
+                logger.info("unfinished tasks          " + r.size() );
+            }
+            logger.info("number of sheduled tasks  " + tpe.getTaskCount());
+            logger.info("number of completed tasks " + tpe.getCompletedTaskCount());
         }
-        List<Runnable> r = pool.shutdownNow();
-        if ( r.size() != 0 ) {
-           logger.info("there are " + r.size() + " unfinished tasks ");
-        }
-        logger.info("maximal number of active threads " + pool.getLargestPoolSize());
-        logger.info("number of sheduled tasks         " + pool.getTaskCount());
-        logger.info("number of completed tasks        " + pool.getCompletedTaskCount());
         pool = null;
-        workpile = null;
+        //workpile = null;
     }
 
 }
