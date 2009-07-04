@@ -40,8 +40,8 @@ public class Interval<C extends RingElem<C>> {
      * @param right interval border.
      */
     public Interval(C left, C right) {
-	this.left = left;
-	this.right = right;
+        this.left = left;
+        this.right = right;
     }
 
 
@@ -50,7 +50,7 @@ public class Interval<C extends RingElem<C>> {
      * @param mid left and right interval border.
      */
     public Interval(C mid) {
-	this(mid,mid);
+        this(mid,mid);
     }
 
 
@@ -60,7 +60,7 @@ public class Interval<C extends RingElem<C>> {
      */
     @Override
     public String toString() {
-	return "["+left+", "+right+"]";
+        return "["+left+", "+right+"]";
     }
 
 
@@ -105,8 +105,8 @@ public class Interval<C extends RingElem<C>> {
      * @return |left-right|;
      */
      public C length() {
- 	C m = right.subtract(left);
- 	return m.abs();
+         C m = right.subtract(left);
+         return m.abs();
      }
 
 
@@ -139,10 +139,10 @@ public class Interval<C extends RingElem<C>> {
      * @return (left-right)/2;
      */
 //     public C middle() {
-// 	C m = left.sum(right);
-// 	C t = m.getRing().fromInteger(2L);
-// 	m = m.divide(t);
-// 	return m;
+//  C m = left.sum(right);
+//  C t = m.getRing().fromInteger(2L);
+//  m = m.divide(t);
+//  return m;
 //     }
 
 }
