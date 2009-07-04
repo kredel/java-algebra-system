@@ -67,6 +67,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
      */
     public FactorAbstract(RingFactory<C> cfac) {
         engine = GCDFactory.<C> getProxy(cfac);
+        //engine = GCDFactory.<C> getImplementation(cfac);
     }
 
 
@@ -286,14 +287,21 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
             factors.put(pc, 1L);
             P = P.divide(c); // make primitive or monic
         }
+        logger.info("squarefree facs P = " + P);
         SortedMap<GenPolynomial<C>, Long> facs = engine.baseSquarefreeFactors(P);
         if ( debug ) {
             logger.info("squarefree facs   = " + facs);
             //System.out.println("sfacs   = " + facs);
+            boolean tt = isFactorization(P,facs);
+            System.out.println("sfacs tt   = " + tt);
         }
         for (GenPolynomial<C> g : facs.keySet()) {
             Long k = facs.get(g);
             //System.out.println("g       = " + g);
+            if ( pfac.coFac.isField() && !g.leadingBaseCoefficient().isONE() ) {
+                g = g.monic(); // how can this happen?
+                logger.warn("squarefree facs mon = " + g);
+            }
             List<GenPolynomial<C>> sfacs = baseFactorsSquarefree(g);
             if ( debug ) {
                logger.info("factors of squarefree = " + sfacs);
@@ -473,6 +481,48 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
             Long E = F.get(f);
             long e = E.longValue();
             GenPolynomial<C> g = Power.<GenPolynomial<C>> positivePower(f, e);
+            t = t.multiply(g);
+        }
+        boolean f = P.equals(t) || P.equals(t.negate());
+        if (!f) {
+            System.out.println("P = " + P);
+            System.out.println("t = " + t);
+            P = P.monic();
+            t = t.monic();
+            f = P.equals(t) || P.equals(t.negate());
+            if ( f ) {
+                return f;
+            }
+            System.out.println("\nfactorization(map): " + f);
+            System.out.println("P = " + P);
+            System.out.println("t = " + t);
+            //RuntimeException e = new RuntimeException("fac-map");
+            //e.printStackTrace();
+            //throw e;
+        }
+        return f;
+    }
+
+
+    /**
+     * GenPolynomial is factorization.
+     * @param P GenPolynomial.
+     * @param F = [p_1 -&gt; e_1, ..., p_k -&gt; e_k].
+     * @return true if P = prod_{i=1,...,k} p_i**e_i , else false.
+     */
+    public boolean isRecursiveFactorization(GenPolynomial<GenPolynomial<C>> P, 
+                                            SortedMap<GenPolynomial<GenPolynomial<C>>, Long> F) {
+        if (P == null || F == null) {
+            throw new IllegalArgumentException("P and F may not be null");
+        }
+        if (P.isZERO() && F.size() == 0) {
+            return true;
+        }
+        GenPolynomial<GenPolynomial<C>> t = P.ring.getONE();
+        for (GenPolynomial<GenPolynomial<C>> f : F.keySet()) {
+            Long E = F.get(f);
+            long e = E.longValue();
+            GenPolynomial<GenPolynomial<C>> g = Power.<GenPolynomial<GenPolynomial<C>>> positivePower(f, e);
             t = t.multiply(g);
         }
         boolean f = P.equals(t) || P.equals(t.negate());
