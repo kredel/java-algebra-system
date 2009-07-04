@@ -122,10 +122,15 @@ public class GCDProxy<C extends GcdRingElem<C>>
                              }
                              return g;
                          } catch(PreemptingException e) {
-                             return null;
+                             throw new RuntimeException("GCDProxy e1 pre " + e);
+                             //return P.ring.getONE();
                          } catch(Exception e) {
-                             e.printStackTrace();
-                             return null;
+                             //e.printStackTrace();
+                             logger.info("GCDProxy e1 " + e);
+                             logger.info("GCDProxy P = " + P);
+                             logger.info("GCDProxy S = " + S);
+                             throw new RuntimeException("GCDProxy e1 " + e);
+                             //return P.ring.getONE();
                          }
                      }
                  }
@@ -140,10 +145,15 @@ public class GCDProxy<C extends GcdRingElem<C>>
                              }
                              return g;
                          } catch(PreemptingException e) {
-                             return null;
+                             throw new RuntimeException("GCDProxy e2 pre " + e);
+                             //return P.ring.getONE();
                          } catch(Exception e) {
-                             e.printStackTrace();
-                             return null;
+                             //e.printStackTrace();
+                             logger.info("GCDProxy e2 " + e);
+                             logger.info("GCDProxy P = " + P);
+                             logger.info("GCDProxy S = " + S);
+                             throw new RuntimeException("GCDProxy e2 " + e);
+                             //return P.ring.getONE();
                          }
                      }
                  }
@@ -193,10 +203,15 @@ public class GCDProxy<C extends GcdRingElem<C>>
                              }
                              return g;
                          } catch(PreemptingException e) {
-                             return null;
+                             throw new RuntimeException("GCDProxy e1 pre " + e);
+                             //return P.ring.getONE();
                          } catch(Exception e) {
-                             e.printStackTrace();
-                             return null;
+                             //e.printStackTrace();
+                             logger.info("GCDProxy e1 " + e);
+                             logger.info("GCDProxy P = " + P);
+                             logger.info("GCDProxy S = " + S);
+                             throw new RuntimeException("GCDProxy e1 " + e);
+                             //return P.ring.getONE();
                          }
                      }
                  }
@@ -210,10 +225,15 @@ public class GCDProxy<C extends GcdRingElem<C>>
                              }
                              return g;
                          } catch(PreemptingException e) {
-                             return null;
+                             throw new RuntimeException("GCDProxy e2 pre " + e);
+                             //return P.ring.getONE();
                          } catch(Exception e) {
-                             e.printStackTrace();
-                             return null;
+                             //e.printStackTrace();
+                             logger.info("GCDProxy e2 " + e);
+                             logger.info("GCDProxy P = " + P);
+                             logger.info("GCDProxy S = " + S);
+                             throw new RuntimeException("GCDProxy e2 " + e);
+                             //return P.ring.getONE();
                          }
                      }
                  }
@@ -261,10 +281,15 @@ public class GCDProxy<C extends GcdRingElem<C>>
                              }
                              return g;
                          } catch(PreemptingException e) {
-                             return null;
+                             throw new RuntimeException("GCDProxy e1 pre " + e);
+                             //return P.ring.getONE();
                          } catch(Exception e) {
-                             e.printStackTrace();
-                             return null;
+                             //e.printStackTrace();
+                             logger.info("GCDProxy e1 " + e);
+                             logger.info("GCDProxy P = " + P);
+                             logger.info("GCDProxy S = " + S);
+                             throw new RuntimeException("GCDProxy e1 " + e);
+                             //return P.ring.getONE();
                          }
                      }
                  }
@@ -279,10 +304,15 @@ public class GCDProxy<C extends GcdRingElem<C>>
                              }
                              return g;
                          } catch(PreemptingException e) {
-                             return null;
+                             throw new RuntimeException("GCDProxy e2 pre " + e);
+                             //return P.ring.getONE();
                          } catch(Exception e) {
-                             e.printStackTrace();
-                             return null;
+                             //e.printStackTrace();
+                             logger.info("GCDProxy e2 " + e);
+                             logger.info("GCDProxy P = " + P);
+                             logger.info("GCDProxy S = " + S);
+                             throw new RuntimeException("GCDProxy e2 " + e);
+                             //return P.ring.getONE();
                          }
                      }
                  }
@@ -300,3 +330,4 @@ public class GCDProxy<C extends GcdRingElem<C>>
      }
 
 }
+
