@@ -153,10 +153,10 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>>
                 T = engine.baseGcd(T0,Tp);
                 T = T.monic();
                 V = PolyUtil.<C> basePseudoDivide(T0,T);
-                System.out.println("iT0 = " + T0);
-                System.out.println("iTp = " + Tp);
-                System.out.println("iT  = " + T);
-                System.out.println("iV  = " + V);
+                //System.out.println("iT0 = " + T0);
+                //System.out.println("iTp = " + Tp);
+                //System.out.println("iT  = " + T);
+                //System.out.println("iV  = " + V);
                 k = 0L;
                 mp = 0L;
                 init = false;
@@ -167,7 +167,6 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>>
                 T0 = baseRootCharacteristic(T);
                 if ( T0 == null ) {
                     break;
-                    //throw new RuntimeException("can not happen");
                 }
                 System.out.println("char root: T0 = " + T0 + ", T = " + T);
                 e = e * mp;
@@ -264,7 +263,7 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>>
             GenPolynomial<GenPolynomial<C>> pl = pfac.getONE().multiply(lc);
             sfactors.put(pl,1L);
             C li = ldbcf.inverse();
-            System.out.println("li = " + li);
+            //System.out.println("li = " + li);
             P = P.multiply( cfac.getONE().multiply(li) );
             //System.out.println("P,monic = " + P);
             ldbcf = P.leadingBaseCoefficient().leadingBaseCoefficient();
@@ -272,13 +271,7 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>>
         // factors of content
         GenPolynomial<C> Pc = engine.recursiveContent(P);
         System.out.println("Pc = " + Pc);
-        C cldbcf = Pc.leadingBaseCoefficient();
-        if ( ! cldbcf.isONE() ) {
-            C li = cldbcf.inverse();
-            System.out.println("cli = " + li);
-            Pc = Pc.multiply(li);
-            //System.out.println("Pc,monic = " + Pc);
-        }
+        Pc = Pc.monic();
         if ( !Pc.isONE() ) {
             P = PolyUtil.<C> coefficientPseudoDivide(P,Pc);
         }
@@ -309,13 +302,7 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>>
                 }
                 Tp = PolyUtil.<C> recursiveDeriviative(T0);
                 T = engine.recursiveUnivariateGcd(T0,Tp);
-                C tl = T.leadingBaseCoefficient().leadingBaseCoefficient();
-                if ( ! tl.isONE() ) {
-                    C ti = tl.inverse();
-                    System.out.println("ti = " + ti);
-                    GenPolynomial<C> tc = cfac.getONE().multiply(ti);
-                    T = T.multiply(tc);
-                }
+                T = PolyUtil.<C>monic(T);
                 V = PolyUtil.<C> recursivePseudoDivide(T0,T);
                 //System.out.println("iT0 = " + T0);
                 //System.out.println("iTp = " + Tp);
@@ -345,13 +332,7 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>>
                 k++;
             }
             GenPolynomial<GenPolynomial<C>> W = engine.recursiveUnivariateGcd(T,V);
-            C wl = W.leadingBaseCoefficient().leadingBaseCoefficient();
-            if ( ! wl.isONE() ) {
-                C wi = wl.inverse();
-                System.out.println("wi = " + wi);
-                GenPolynomial<C> wc = cfac.getONE().multiply(wi);
-                W = W.multiply(wc);
-            }
+            W = PolyUtil.<C>monic(W);
             GenPolynomial<GenPolynomial<C>> z = PolyUtil.<C> recursivePseudoDivide(V, W);
             //System.out.println("W = " + W);
             //System.out.println("z = " + z);
@@ -361,14 +342,7 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>>
             //System.out.println("T = " + T);
             //was: if ( z.degree(0) > 0 ) {
             if ( !z.isONE() && !z.isZERO() ) {
-                C zl = z.leadingBaseCoefficient().leadingBaseCoefficient();
-                if ( ldbcf.isONE() && !zl.isONE() ) {
-                    C li = zl.inverse();
-                    GenPolynomial<C> lc = cfac.getONE().multiply(li);
-                    //System.out.println("lc = " + lc);
-                    z = z.multiply(lc);
-                    //System.out.println("z,monic = " + z);
-                }
+                z = PolyUtil.<C>monic(z);
                 System.out.println("z,put = " + z);
                 sfactors.put(z, (e*k));
             }
@@ -398,6 +372,9 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>>
         SortedMap<GenPolynomial<C>,Long> factors = squarefreeFactors(P);
         System.out.println("sqfPart,factors = " + factors);
         for ( GenPolynomial<C> sp : factors.keySet() ) {
+            if ( sp.isConstant() ) {
+                continue;
+            }
             s = s.multiply(sp);
         }
         return s.monic();
