@@ -177,9 +177,9 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         if ( pfac.coFac.isField() && !ldbcf.isONE() ) {
             A = A.divide(ldbcf);
             GenPolynomial<C> f1 = pfac.getONE().multiply(ldbcf);
-            System.out.println("gcda sqf f1 = " + f1);
+            //System.out.println("gcda sqf f1 = " + f1);
             sfactors.put(f1,1L);
-            //ldbcf = pfac.coFac.getONE();
+            ldbcf = pfac.coFac.getONE();
         }
         GenPolynomial<C> T0 = A;
         long e = 1L;
@@ -195,22 +195,15 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
                      break;
                 }
                 Tp = PolyUtil.<C> baseDeriviative(T0);
-                if ( pfac.coFac.isField() ) {
-                    Tp = Tp.monic();
-                }
                 T = baseGcd(T0,Tp);
-                if ( pfac.coFac.isField() ) {
-                    T = T.monic();
-                }
-                if ( pfac.coFac.isField() ) {
-                    V = T0.divide(T);
-                } else {
-                    V = PolyUtil.<C> basePseudoDivide(T0,T);
-                }
-                System.out.println("iT0 = " + T0);
-                System.out.println("iTp = " + Tp);
-                System.out.println("iT  = " + T);
-                System.out.println("iV  = " + V);
+//                 if ( pfac.coFac.isField() ) {
+//                     T = T.monic();
+//                 }
+                V = PolyUtil.<C> basePseudoDivide(T0,T);
+                //System.out.println("iT0 = " + T0);
+                //System.out.println("iTp = " + Tp);
+                //System.out.println("iT  = " + T);
+                //System.out.println("iV  = " + V);
                 k = 0L;
                 mp = 0L;
                 init = false;
@@ -219,7 +212,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
                 mp = pfac.characteristic().longValue(); // assert != 0
                 if ( mp > 0 ) {
                    T0 = PolyUtil.<C> baseModRoot(T,mp);
-                   System.out.println("T0 = " + T0 + ", T = " + T);
+                   System.out.println("char root: T0 = " + T0 + ", T = " + T);
                    e = e * mp;
                    init = true;
                    continue;
@@ -229,50 +222,34 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
             }
             k++;
             if ( mp != 0L && k % mp == 0L ) {
-                if ( pfac.coFac.isField() ) {
-                    T = T.divide(V);
-                } else {
-                    T = PolyUtil.<C> basePseudoDivide(T, V);
-                }
+                T = PolyUtil.<C> basePseudoDivide(T, V);
                 System.out.println("k = " + k);
                 //System.out.println("T = " + T);
                 k++;
             }
             GenPolynomial<C> W = baseGcd(T,V);
-            if ( pfac.coFac.isField() ) {
-                W = W.monic();
-            }
-            GenPolynomial<C> z;
-            if ( pfac.coFac.isField() ) {
-                 z = V.divide(W);
-            } else {
-                 z = PolyUtil.<C> basePseudoDivide(V, W);
-            }
-            System.out.println("W = " + W);
-            System.out.println("z = " + z);
+//             if ( pfac.coFac.isField() ) {
+//                 W = W.monic();
+//             }
+            GenPolynomial<C> z = PolyUtil.<C> basePseudoDivide(V, W);
+            //System.out.println("W = " + W);
+            //System.out.println("z = " + z);
             V = W;
-            if ( pfac.coFac.isField() ) {
-                 T = T.divide(V);
-            } else {
-                 T = PolyUtil.<C> basePseudoDivide(T, V);
-            }
-            System.out.println("V = " + V);
-            System.out.println("T = " + T);
+            T = PolyUtil.<C> basePseudoDivide(T, V);
+            //System.out.println("V = " + V);
+            //System.out.println("T = " + T);
             if ( z.degree(0) > 0 ) {
                 if ( ldbcf.isONE() && !z.leadingBaseCoefficient().isONE() ) {
                     z = z.monic();
+                    System.out.println("z,monic = " + z);
                 }
                 sfactors.put(z, (e*k));
             }
         }
+//      look, a stupid error:
 //         if ( pfac.coFac.isField() && !ldbcf.isONE() ) {
 //             GenPolynomial<C> f1 = sfactors.firstKey();
 //             long e1 = sfactors.remove(f1);
-//             // a**p = a
-//             // (c a)**e1 = ldcf
-//             C c = f1.leadingBaseCoefficient();  
-//             c = Power.<C> positivePower(c, e1);
-//             c = ldbcf.divide(c);
 //             System.out.println("gcda sqf c = " + c);
 //             f1 = f1.multiply(c);
 //             //System.out.println("gcda sqf f1e = " + f1);
@@ -433,7 +410,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
     public SortedMap<GenPolynomial<GenPolynomial<C>>,Long> 
       recursiveSquarefreeFactors( GenPolynomial<GenPolynomial<C>> P ) {
         SortedMap<GenPolynomial<GenPolynomial<C>>,Long> sfactors 
-            = new TreeMap<GenPolynomial<GenPolynomial<C>>,Long>();
+                 = new TreeMap<GenPolynomial<GenPolynomial<C>>,Long>();
         if (P == null || P.isZERO()) {
             return sfactors;
         }
@@ -443,7 +420,19 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
             throw new RuntimeException(this.getClass().getName()
                     + " only for univariate polynomials");
         }
-
+        // if base coefficient ring is a field, make monic
+        GenPolynomialRing<C> cfac = (GenPolynomialRing<C>)pfac.coFac;
+        C ldbcf = P.leadingBaseCoefficient().leadingBaseCoefficient();
+        if ( cfac.coFac.isField() && ! ldbcf.isONE() ) {
+            GenPolynomial<C> lc = cfac.getONE().multiply(ldbcf);
+            GenPolynomial<GenPolynomial<C>> pl = pfac.getONE().multiply(lc);
+            sfactors.put(pl,1L);
+            C li = ldbcf.inverse();
+            //System.out.println("li = " + li);
+            P = P.multiply( cfac.getONE().multiply(li) );
+            //System.out.println("P = " + P);
+            ldbcf = P.leadingBaseCoefficient().leadingBaseCoefficient();
+        }
         // factors of content
         GenPolynomial<C> Pc = recursiveContent(P);
         //System.out.println("Pc = " + Pc);
@@ -477,10 +466,18 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
                 }
                 Tp = PolyUtil.<C> recursiveDeriviative(T0);
                 T = recursiveUnivariateGcd(T0,Tp);
+//                 C tl = T.leadingBaseCoefficient().leadingBaseCoefficient();
+//                 if ( cfac.coFac.isField() && ! tl.isONE() ) {
+//                     C ti = tl.inverse();
+//                     System.out.println("ti = " + ti);
+//                     GenPolynomial<C> tc = cfac.getONE().multiply(ti);
+//                     T = T.multiply(tc);
+//                 }
                 V = PolyUtil.<C> recursivePseudoDivide(T0,T);
-                //System.out.println("Tp = " + Tp);
-                //System.out.println("T = " + T);
-                //System.out.println("V = " + V);
+                //System.out.println("iT0 = " + T0);
+                //System.out.println("iTp = " + Tp);
+                //System.out.println("iT = " + T);
+                //System.out.println("iV = " + V);
                 k = 0L;
                 mp = 0L;
                 init = false;
@@ -489,7 +486,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
                 mp = pfac.characteristic().longValue(); // assert != 0
                 if ( mp > 0 ) {
                    T0 = PolyUtil.<C> recursiveModRoot(T,mp);
-                   //System.out.println("T0r = " + T0 + ", Tr = " + T);
+                   System.out.println("char root: T0r = " + T0 + ", Tr = " + T);
                    e = e * mp;
                    init = true;
                    continue;
@@ -505,6 +502,13 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
                 k++;
             }
             GenPolynomial<GenPolynomial<C>> W = recursiveUnivariateGcd(T,V);
+//             C wl = W.leadingBaseCoefficient().leadingBaseCoefficient();
+//             if ( cfac.coFac.isField() && ! wl.isONE() ) {
+//                 C wi = wl.inverse();
+//                 System.out.println("wi = " + wi);
+//                 GenPolynomial<C> wc = cfac.getONE().multiply(wi);
+//                 W = W.multiply(wc);
+//             }
             GenPolynomial<GenPolynomial<C>> z = PolyUtil.<C> recursivePseudoDivide(V, W);
             //System.out.println("W = " + W);
             //System.out.println("z = " + z);
@@ -512,7 +516,16 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
             T = PolyUtil.<C> recursivePseudoDivide(T, V);
             //System.out.println("V = " + V);
             //System.out.println("T = " + T);
-            if ( z.degree(0) > 0 ) {
+            //was: if ( z.degree(0) > 0 ) {
+            if ( !z.isONE() && !z.isZERO() ) {
+                C zl = z.leadingBaseCoefficient().leadingBaseCoefficient();
+                if ( ldbcf.isONE() && !zl.isONE() ) {
+                    C li = zl.inverse();
+                    GenPolynomial<C> lc = cfac.getONE().multiply(li);
+                    //System.out.println("lc = " + lc);
+                    z = z.multiply(lc);
+                    System.out.println("z,monic = " + z);
+                }
                 sfactors.put(z, (e*k));
             }
         }
@@ -701,6 +714,20 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
 
 
     /**
+     * Recursive GenPolynomial test if is squarefree.
+     * @param P recursive GenPolynomial.
+     * @return true if P is squarefree, else false.
+     */
+    public boolean isRecursiveSquarefree(GenPolynomial<GenPolynomial<C>> P) {
+        GenPolynomial<C> Pc = recursiveContent(P);
+        GenPolynomial<GenPolynomial<C>> Pr = PolyUtil.<C> coefficientPseudoDivide(P, Pc);
+        GenPolynomial<GenPolynomial<C>> S = recursiveSquarefreePart(Pr);
+        GenPolynomial<GenPolynomial<C>> Ps = recursivePrimitivePart(P);
+        return Ps.equals(S);
+    }
+
+
+    /**
      * GenPolynomial squarefree factorization.
      * @param P GenPolynomial.
      * @return [p_1 -> e_1, ..., p_k -> e_k] with P = prod_{i=1,...,k} p_i^{e_i} and p_i squarefree.
@@ -751,6 +778,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         boolean f = P.equals(t) || P.equals(t.negate());
         if (!f) {
             System.out.println("\nfactorization(list): " + f);
+            System.out.println("F = " + F);
             System.out.println("P = " + P);
             System.out.println("t = " + t);
         }
@@ -780,6 +808,8 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         }
         boolean f = P.equals(t) || P.equals(t.negate());
         if (!f) {
+            System.out.println("\nfactorization(map): " + f);
+            System.out.println("F = " + F);
             System.out.println("P = " + P);
             System.out.println("t = " + t);
 //             P = P.monic();
@@ -822,6 +852,8 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         }
         boolean f = P.equals(t) || P.equals(t.negate());
         if (!f) {
+            System.out.println("\nfactorization(map): " + f);
+            System.out.println("F = " + F);
             System.out.println("P = " + P);
             System.out.println("t = " + t);
 //             GenPolynomial<GenPolynomial<C>> Pp = recursivePrimitivePart(P);
