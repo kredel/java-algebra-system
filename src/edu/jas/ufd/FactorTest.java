@@ -29,6 +29,9 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.TermOrder;
 
+import edu.jas.application.Quotient;
+import edu.jas.application.QuotientRing;
+
 
 /**
  * Factor tests with JUnit.
@@ -150,6 +153,7 @@ public class FactorTest extends TestCase {
             //System.out.println("t        = " + t);
             assertTrue("prod(factor(a)) = a", t);
         }
+        ComputerThreads.terminate();
     }
 
 
@@ -348,7 +352,6 @@ public class FactorTest extends TestCase {
             SortedMap<GenPolynomial<BigRational>, Long> sm = fac.baseFactors(a);
             //System.out.println("\na   = " + a);
             //System.out.println("sm = " + sm);
-            assertTrue("#facs < " + facs, sm.size() >= facs);
 
             if (sm.size() >= facs) {
                 assertTrue("#facs < " + facs, sm.size() >= facs);
@@ -562,6 +565,12 @@ public class FactorTest extends TestCase {
         Factorization<AlgebraicNumber<BigRational>> ufdar = FactorFactory.getImplementation(ar);
         //System.out.println("ufdar = " + ufdar);
         assertTrue("ufd != AlgebraicNumber<BigRational> " + ufdar, ufdar instanceof FactorAlgebraic );
+
+        prfac = new GenPolynomialRing<BigRational>(br, 2);
+        QuotientRing<BigRational> qrfac = new QuotientRing<BigRational>(prfac);
+        Factorization<Quotient<BigRational>> ufdqr = FactorFactory.getImplementation(qrfac);
+        //System.out.println("ufdqr = " + ufdqr);
+        assertTrue("ufd != Quotient<BigRational> " + ufdqr, ufdqr instanceof FactorQuotient );
     }
 
 }
