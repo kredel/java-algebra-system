@@ -8,6 +8,7 @@ package edu.jas.ufd;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.SortedMap;
+import java.util.Map;
 import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
@@ -17,6 +18,8 @@ import edu.jas.structure.RingFactory;
 import edu.jas.structure.Power;
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
+import edu.jas.poly.ExpVector;
+import edu.jas.poly.Monomial;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
@@ -290,31 +293,97 @@ public class FactorQuotient<C extends GcdRingElem<C>> extends FactorAbstract<Quo
             return root;
         }
         SortedMap<Quotient<C>,Long> sf = quotientSquarefreeFactors(P);
-        java.math.BigInteger k = null;
-        for (Long e : sf.values()) {
+        // better: test if sf.size() == 2 // no, since num and den factors 
+        Long k = null;
+        for (Quotient<C> p: sf.keySet() ) {
+            if ( p.isConstant() ) {
+                continue;
+            }
+            Long e = sf.get(p);
             java.math.BigInteger E = new java.math.BigInteger(e.toString());
             java.math.BigInteger r = E.remainder(c);
             if ( !r.equals(java.math.BigInteger.ZERO) ) {
+                System.out.println("r = " + r);
                 return null;
             }
-            java.math.BigInteger q = E.divide(c);
             if ( k == null ) {
-                k = q;
-            } else if ( k.compareTo(q) >= 0 ) {
-                k = q;
+                k = e;
+            } else if ( k.compareTo(e) >= 0 ) {
+                k = e;
             }
         }
-        k = k.multiply(c);
-        Long kl = k.longValue();
+        // now c divides all exponents
+        Long cl = c.longValue();
         Quotient<C> rp = P.ring.getONE();
         for (Quotient<C> q : sf.keySet()) {
             Long e = sf.get(q);
-            java.math.BigInteger E = new java.math.BigInteger(e.toString());
-            java.math.BigInteger w = E.divide(c);
-            Quotient<C> g = Power.<Quotient<C>> positivePower(q, kl);
+            if ( e > k ) {
+                long ep = e / cl;
+                q = Power.<Quotient<C>> positivePower(q, ep);
+            }
             rp = rp.multiply(q);
         }
-        root.put(rp,kl);
+        k = k / cl;
+        root.put(rp,k);
+        return root;
+    }
+
+
+    /**
+     * Characteristics root of a polynomial.
+     * @param P polynomial.
+     * @return [p -&gt; k] if exists k with e=k*charactristic(P) and P = p**e, else null.
+     */
+    public SortedMap<GenPolynomial<C>,Long> rootCharacteristic(GenPolynomial<C> P) {
+        if (P == null) {
+            throw new RuntimeException(this.getClass().getName() + " P == null");
+        }
+        java.math.BigInteger c = P.ring.characteristic();
+        if ( c.signum() == 0 ) {
+            return null;
+        }
+        SortedMap<GenPolynomial<C>,Long> root = new TreeMap<GenPolynomial<C>,Long>();
+        if (P.isZERO()) {
+            return root;
+        }
+        if (P.isONE()) {
+            root.put(P,1L);
+            return root;
+        }
+        SortedMap<GenPolynomial<C>,Long> sf = nengine.squarefreeFactors(P.monic());
+        System.out.println("sf = " + sf);
+        // better: test if sf.size() == 1 // not ok
+        Long k = null;
+        for (GenPolynomial<C> p: sf.keySet() ) {
+            if ( p.isConstant() ) {
+                continue;
+            }
+            Long e = sf.get(p);
+            java.math.BigInteger E = new java.math.BigInteger(e.toString());
+            java.math.BigInteger r = E.remainder(c);
+            if ( !r.equals(java.math.BigInteger.ZERO) ) {
+                System.out.println("r = " + r);
+                return null;
+            }
+            if ( k == null ) {
+                k = e;
+            } else if ( k.compareTo(e) >= 0 ) {
+                k = e;
+            }
+        }
+        // now c divides all exponents
+        Long cl = c.longValue();
+        GenPolynomial<C> rp = P.ring.getONE();
+        for (GenPolynomial<C> q : sf.keySet()) {
+            Long e = sf.get(q);
+            if ( e > k ) {
+                long ep = e / cl;
+                q = Power.<GenPolynomial<C>> positivePower(q, ep);
+            }
+            rp = rp.multiply(q);
+        }
+        k = k / cl;
+        root.put(rp,k);
         return root;
     }
 
@@ -390,9 +459,152 @@ public class FactorQuotient<C extends GcdRingElem<C>> extends FactorAbstract<Quo
         return f;
     }
 
+
+    /**
+     * GenPolynomial char-th root main variable.
+     * @param P GenPolynomial.
+     * @return char-th_rootOf(P).
+     */
+    // param <C> base coefficient type must be ModInteger.
+    public GenPolynomial<C> baseRootCharacteristic( GenPolynomial<C> P ) {
+        if ( P == null || P.isZERO() ) {
+            return P;
+        }
+        GenPolynomialRing<C> pfac = P.ring;
+        if ( pfac.nvar > 1 ) { 
+           // basePthRoot not possible by return type
+           throw new RuntimeException(P.getClass().getName()
+                     + " only for univariate polynomials");
+        }
+        RingFactory<C> rf = pfac.coFac;
+        if ( rf.characteristic().signum() != 1  ) { 
+           // basePthRoot not possible
+           throw new RuntimeException(P.getClass().getName()
+                     + " only for ModInteger polynomials " + rf);
+        }
+        long mp = rf.characteristic().longValue();
+        GenPolynomial<C> d = pfac.getZERO().clone();
+        for ( Monomial<C> m : P ) {
+            ExpVector f = m.e;  
+            long fl = f.getVal(0);
+            if ( fl % mp != 0 ) {
+                 throw new RuntimeException(P.getClass().getName()
+                       + " exponent not divisible by m " + fl);
+            }
+            fl = fl / mp;
+            ExpVector e = ExpVector.create( 1, 0, fl );  
+            d.doPutToMap(e,m.c);
+        }
+        return d; 
+    }
+
+
+    /**
+     * GenPolynomial char-th root main variable.
+     * @param P recursive univariate GenPolynomial.
+     * @return char-th_rootOf(P), or null if P is no char-th root.
+     */
+    // param <C> base coefficient type must be ModInteger.
+    public GenPolynomial<GenPolynomial<C>> 
+      recursiveRootCharacteristic( GenPolynomial<GenPolynomial<C>> P ) {
+        if ( P == null || P.isZERO() ) {
+            return P;
+        }
+        GenPolynomialRing<GenPolynomial<C>> pfac = P.ring;
+        if ( pfac.nvar > 1 ) { 
+           // basePthRoot not possible by return type
+           throw new RuntimeException(P.getClass().getName()
+                     + " only for univariate polynomials");
+        }
+        RingFactory<GenPolynomial<C>> rf = pfac.coFac;
+        if ( rf.characteristic().signum() != 1  ) { 
+           // basePthRoot not possible
+           throw new RuntimeException(P.getClass().getName()
+                     + " only for ModInteger polynomials " + rf);
+        }
+        long mp = rf.characteristic().longValue();
+        GenPolynomial<GenPolynomial<C>> d = pfac.getZERO().clone();
+        for ( Monomial<GenPolynomial<C>> m : P ) {
+            ExpVector f = m.e;  
+            long fl = f.getVal(0);
+            if ( fl % mp != 0 ) {
+                return null;
+//                  throw new RuntimeException(P.getClass().getName()
+//                        + " exponent not divisible by m " + fl);
+            }
+            fl = fl / mp;
+            SortedMap<GenPolynomial<C>, Long> sm = rootCharacteristic(m.c);
+            if ( sm == null ) {
+                return null;
+//                  throw new RuntimeException(P.getClass().getName()
+//                        + " coefficient not char-th root, sm " + m.c);
+            }
+            GenPolynomial<C> r = sm.firstKey();
+            long gl = sm.get(r);
+            if ( gl > fl ) {
+                r = Power.<GenPolynomial<C>> positivePower(r, gl);
+//                  throw new RuntimeException(P.getClass().getName()
+//                        + " coefficient not char-th root " + m.c + ", gl = " + gl + ", fl = " + fl);
+            }
+            ExpVector e = ExpVector.create( 1, 0, fl );  
+            d.doPutToMap(e,r);
+        }
+        return d; 
+    }
+
+
+    /**
+     * GenPolynomial char-th root main variable.
+     * @param P univariate GenPolynomial with Quotient coefficients.
+     * @return char-th_rootOf(P), or null, if P is no char-th root.
+     */
+    public GenPolynomial<Quotient<C>> 
+      quotientRootCharacteristic( GenPolynomial<Quotient<C>> P ) {
+        if ( P == null || P.isZERO() ) {
+            return P;
+        }
+        GenPolynomialRing<Quotient<C>> pfac = P.ring;
+        if ( pfac.nvar > 1 ) { 
+           // basePthRoot not possible by return type
+           throw new RuntimeException(P.getClass().getName()
+                     + " only for univariate polynomials");
+        }
+        RingFactory<Quotient<C>> rf = pfac.coFac;
+        if ( rf.characteristic().signum() != 1  ) { 
+           // basePthRoot not possible
+           throw new RuntimeException(P.getClass().getName()
+                     + " only for ModInteger polynomials " + rf);
+        }
+        long mp = rf.characteristic().longValue();
+        GenPolynomial<Quotient<C>> d = pfac.getZERO().clone();
+        for ( Monomial<Quotient<C>> m : P ) {
+            ExpVector f = m.e;  
+            long fl = f.getVal(0);
+            if ( fl % mp != 0 ) {
+                return null;
+//                 throw new RuntimeException(P.getClass().getName()
+//                        + " exponent not divisible by m " + fl);
+            }
+            fl = fl / mp;
+            SortedMap<Quotient<C>, Long> sm = quotientRootCharacteristic(m.c);
+            if ( sm == null ) {
+                return null;
+//                  throw new RuntimeException(P.getClass().getName()
+//                        + " coefficient not char-th root, sm " + m.c);
+            }
+            Quotient<C> r = sm.firstKey();
+            long gl = sm.get(r);
+            if ( gl > fl ) {
+                r = Power.<Quotient<C>> positivePower(r, gl);
+
+//                  throw new RuntimeException(P.getClass().getName()
+//                        + " coefficient not char-th root " + m.c + ", gl = " + gl + ", fl = " + fl);
+            }
+            ExpVector e = ExpVector.create( 1, 0, fl );  
+            d.doPutToMap(e,r);
+        }
+        return d; 
+    }
+
 }
-
-
-
-
 
