@@ -38,7 +38,7 @@ public class AlgebraicNumberRing<C extends GcdRingElem<C> >
     public final GenPolynomial<C> modul;
 
 
-    /** Indicator if this ring is a field.
+    /** Indicator if this ring is a field
      */
     protected int isField = -1; // initially unknown
 
@@ -348,6 +348,22 @@ public class AlgebraicNumberRing<C extends GcdRingElem<C> >
         GenPolynomial<C> s = c.ring.modul.multiply( b );
         s = s.sum( c.val );
         return new AlgebraicNumber<C>( this, s );
+    }
+
+
+    /** Depth of extension field tower.
+     * @return number of nested algebraic extension fields
+     */
+    @SuppressWarnings("unchecked")
+    public int depth() {
+        AlgebraicNumberRing<C> arr = this;
+        int depth = 1;
+        RingFactory<C> cf = arr.ring.coFac;
+        if ( cf instanceof AlgebraicNumberRing ) {
+             arr = (AlgebraicNumberRing<C>) (Object) cf;
+             depth += arr.depth();
+        }
+        return depth;
     }
 
 }

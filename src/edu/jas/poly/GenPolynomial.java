@@ -306,7 +306,9 @@ public class GenPolynomial<C extends RingElem<C> >
            return "0";
         } 
         StringBuffer s = new StringBuffer();
-        // s.append( "( " );
+        if ( val.size() > 1 ) {
+            s.append( "( " );
+        }
         String[] v = ring.vars;
         if ( v == null ) {
             v = ring.evzero.stdVars();
@@ -316,7 +318,7 @@ public class GenPolynomial<C extends RingElem<C> >
              || ring.coFac instanceof AlgebraicNumberRing
                 // || ring.coFac instanceof RealAlgebraicRing
                 ) {
-            parenthesis = true;
+            // inactive: parenthesis = true;
         }
         boolean first = true;
         for ( Map.Entry<ExpVector,C> m : val.entrySet() ) {
@@ -346,7 +348,9 @@ public class GenPolynomial<C extends RingElem<C> >
             }
             s.append( e.toScript(v) );
         }
-        //s.append(" )");
+        if ( val.size() > 1 ) {
+            s.append( " )" );
+        }
         return s.toString();
     }
 

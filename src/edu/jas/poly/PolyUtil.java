@@ -113,6 +113,43 @@ public class PolyUtil {
 
 
     /**
+     * Recursive representation. 
+     * Represent as polynomials in i variables with coefficients in n-i variables.
+     * Works for arbitrary term orders.
+     * @param <C> coefficient type.
+     * @param rfac recursive polynomial ring factory.
+     * @param L list of polynomials to be converted.
+     * @return Recursive represenations of the list in the ring rfac.
+     */
+    public static <C extends RingElem<C>> 
+        List<GenPolynomial<GenPolynomial<C>>> 
+        recursive( GenPolynomialRing<GenPolynomial<C>> rfac, 
+                   List<GenPolynomial<C>> L ) {
+        return ListUtil.<GenPolynomial<C>,GenPolynomial<GenPolynomial<C>>>map( 
+                                                    L, 
+                                                    new DistToRec<C>(rfac) );
+    }
+
+
+    /**
+     * Distribute a recursive polynomial list to a generic polynomial list. 
+     * Works for arbitrary term orders.
+     * @param <C> coefficient type.
+     * @param dfac combined polynomial ring factory of coefficients and this.
+     * @param L list of polynomials to be converted.
+     * @return distributed polynomial list.
+     */
+    public static <C extends RingElem<C>>
+        List<GenPolynomial<C>> 
+        distribute( GenPolynomialRing<C> dfac,
+                    List<GenPolynomial<GenPolynomial<C>>> L) {
+        return ListUtil.<GenPolynomial<GenPolynomial<C>>,GenPolynomial<C>>map( 
+                                                    L, 
+                                                    new RecToDist<C>(dfac) );
+    }
+
+
+    /**
      * BigInteger from ModInteger coefficients, symmetric. 
      * Represent as polynomial with BigInteger coefficients by 
      * removing the modules and making coefficients symmetric to 0.
@@ -357,6 +394,25 @@ public class PolyUtil {
                                       GenPolynomial<C> A ) {
         AlgebraicNumberRing<C> afac = (AlgebraicNumberRing<C>) pfac.coFac;
         return PolyUtil.<C,AlgebraicNumber<C>>map(pfac,A, new CoeffToAlg<C>(afac) );
+    }
+
+
+    /**
+     * Convert to recursive AlgebraicNumber coefficients. 
+     * Represent as polynomial with recursive AlgebraicNumber<C> coefficients,
+     * C is e.g. ModInteger or BigRational.
+     * @param depth recursion depth of AlgebraicNumber coefficients.
+     * @param pfac result polynomial factory.
+     * @param A polynomial with C coefficients to be converted.
+     * @return polynomial with AlgebraicNumber&lt;C&gt; coefficients.
+     */
+    public static <C extends GcdRingElem<C>>
+      GenPolynomial<AlgebraicNumber<C>> 
+        convertToRecAlgebraicCoefficients( int depth,
+                                           GenPolynomialRing<AlgebraicNumber<C>> pfac,
+                                           GenPolynomial<C> A ) {
+        AlgebraicNumberRing<C> afac = (AlgebraicNumberRing<C>) pfac.coFac;
+        return PolyUtil.<C,AlgebraicNumber<C>>map(pfac,A, new CoeffToRecAlg<C>(depth,afac) );
     }
 
 
@@ -1465,6 +1521,45 @@ public class PolyUtil {
 }
 
 
+
+/**
+ * Conversion of distributive to recursive representation.
+ */
+class DistToRec<C extends RingElem<C>> 
+               implements UnaryFunctor<GenPolynomial<C>,GenPolynomial<GenPolynomial<C>>> {
+    GenPolynomialRing<GenPolynomial<C>> fac;
+    public DistToRec(GenPolynomialRing<GenPolynomial<C>> fac) {
+        this.fac = fac;
+    }
+    public GenPolynomial<GenPolynomial<C>> eval(GenPolynomial<C> c) {
+        if ( c == null ) {
+            return fac.getZERO();
+        } else {
+            return PolyUtil.<C>recursive( fac, c );
+        }
+    }
+}
+
+
+/**
+ * Conversion of recursive to distributive representation.
+ */
+class RecToDist<C extends RingElem<C>> 
+    implements UnaryFunctor<GenPolynomial<GenPolynomial<C>>,GenPolynomial<C>> {
+    GenPolynomialRing<C> fac;
+    public RecToDist(GenPolynomialRing<C> fac) {
+        this.fac = fac;
+    }
+    public GenPolynomial<C> eval(GenPolynomial<GenPolynomial<C>> c) {
+        if ( c == null ) {
+            return fac.getZERO();
+        } else {
+            return PolyUtil.<C>distribute( fac, c );
+        }
+    }
+}
+
+
 /**
  * BigRational numerator functor.
  */
@@ -1743,6 +1838,54 @@ class CoeffToAlg<C extends GcdRingElem<C>>
 
 
 /**
+ * Coefficient to recursive algebriac functor.
+ */
+class CoeffToRecAlg<C extends GcdRingElem<C>> 
+                implements UnaryFunctor<C,AlgebraicNumber<C>> {
+
+    final protected List<AlgebraicNumberRing<C>> lfac;
+    final int depth;
+
+    @SuppressWarnings("unchecked")
+    public CoeffToRecAlg(int depth, AlgebraicNumberRing<C> fac) {
+        if ( fac == null ) {
+            throw new IllegalArgumentException("fac must not be null");
+        }
+        AlgebraicNumberRing<C> afac = fac;
+        this.depth = depth;
+        lfac = new ArrayList<AlgebraicNumberRing<C>>(depth);
+        lfac.add(fac);
+        for ( int i = 1; i < depth; i++ ) {
+            RingFactory<C> rf = afac.ring.coFac;
+            if ( ! (rf instanceof AlgebraicNumberRing) ) {
+                throw new IllegalArgumentException("fac depth to low");
+            }
+            afac = (AlgebraicNumberRing<C>) (Object)rf;
+            lfac.add(afac);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public AlgebraicNumber<C> eval(C c) {
+        if ( c == null ) {
+            return lfac.get(0).getZERO();
+        } 
+        C ac = c;
+        AlgebraicNumberRing<C> af = lfac.get( lfac.size()-1 );
+        GenPolynomial<C> zero = af.ring.getZERO();
+        AlgebraicNumber<C> an = new AlgebraicNumber<C>(af,zero.sum(ac));
+        for ( int i = lfac.size()-2; i >= 0; i-- ) {
+            af = lfac.get(i);
+            zero = af.ring.getZERO();
+            ac = (C) (Object) an;
+            an = new AlgebraicNumber<C>(af,zero.sum(ac));
+        }
+        return an;
+    }
+}
+
+
+/**
  * Evaluate main variable functor.
  */
 class EvalMain<C extends RingElem<C>> 
@@ -1750,8 +1893,8 @@ class EvalMain<C extends RingElem<C>>
     final RingFactory<C> cfac;
     final C a;
     public EvalMain(RingFactory<C> cfac, C a) {
-	this.cfac = cfac;
-	this.a = a;
+    this.cfac = cfac;
+    this.a = a;
     }
 
     public C eval(GenPolynomial<C> c) {
