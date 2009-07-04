@@ -371,28 +371,28 @@ public class SquarefreeQuotModTest extends TestCase {
      //dfac = new GenPolynomialRing<ModInteger>(fac,1,to,rvars);
      dfac = new GenPolynomialRing<Quotient<ModInteger>>(fac,1,to,rvars);
 
-     a = dfac.random(kl+1,ll+1,el+2,q);
-     b = dfac.random(kl+1,ll+1,el+2,q);
-     c = dfac.random(kl,ll,el,q);
+     a = dfac.random(kl+1,ll+1,el+2,q).monic();
+     b = dfac.random(kl,ll+1,el+2,q).monic();
+     c = dfac.random(kl+1,ll,el,q).monic();
 
      if ( a.isZERO() || b.isZERO() || c.isZERO() || a.isConstant() || b.isConstant() ) {
         // skip for this turn
         return;
      }
-     //System.out.println("a  = " + a);
-     //System.out.println("b  = " + b);
-     //System.out.println("c  = " + c);
+     System.out.println("a  = " + a);
+     System.out.println("b  = " + b);
+     System.out.println("c  = " + c);
          
      // a a b^p c
      d = a.multiply(a).multiply( Power.<GenPolynomial<Quotient<ModInteger>>> positivePower(b, p) ).multiply(c);
      c = a.multiply(b).multiply(c);
-     //System.out.println("d  = " + d);
-     //System.out.println("c  = " + c);
+     System.out.println("c  = " + c);
+     System.out.println("d  = " + d);
 
      c = sqf.baseSquarefreePart(c);
      d = sqf.baseSquarefreePart(d);
-     System.out.println("d  = " + d);
      System.out.println("c  = " + c);
+     System.out.println("d  = " + d);
      assertTrue("isSquarefree(c) " + c, sqf.isSquarefree(c) );
      assertTrue("isSquarefree(d) " + d, sqf.isSquarefree(d) );
 
@@ -413,22 +413,22 @@ public class SquarefreeQuotModTest extends TestCase {
      //dfac = new GenPolynomialRing<ModInteger>(fac,1,to,rvars);
      dfac = new GenPolynomialRing<Quotient<ModInteger>>(fac,1,to,rvars);
 
-     a = dfac.random(kl+1,ll+1,el+3,q);
-     b = dfac.random(kl+1,ll+1,el+3,q);
-     c = dfac.random(kl+1,ll,el+2,q);
+     a = dfac.random(kl+1,ll+1,el+3,q).monic();
+     b = dfac.random(kl+1,ll+1,el+3,q).monic();
+     c = dfac.random(kl+1,ll,el+2,q).monic();
 
      if ( a.isZERO() || b.isZERO() || c.isZERO() || a.isConstant() || b.isConstant() ) {
         // skip for this turn
         return;
      }
-     //System.out.println("a  = " + a);
-     //System.out.println("b  = " + b);
-     //System.out.println("c  = " + c);
+     System.out.println("a  = " + a);
+     System.out.println("b  = " + b);
+     System.out.println("c  = " + c);
      
      // a a b^p c
      d = a.multiply(a).multiply( Power.<GenPolynomial<Quotient<ModInteger>>> positivePower(b, p) ).multiply(c);
-     d = d.monic();
-     //System.out.println("d  = " + d);
+     //d = d.monic();
+     System.out.println("d  = " + d);
 
      SortedMap<GenPolynomial<Quotient<ModInteger>>,Long> sfactors;
      sfactors = sqf.baseSquarefreeFactors(d);
@@ -450,34 +450,37 @@ public class SquarefreeQuotModTest extends TestCase {
      cfac = new GenPolynomialRing<Quotient<ModInteger>>(fac,2-1,to,c1vars);
      rfac = new GenPolynomialRing<GenPolynomial<Quotient<ModInteger>>>(cfac,1,to,rvars);
 
-     ar = rfac.random(kl,3,2,q);
+     ar = rfac.random(kl+1,3,2+1,q);
      br = rfac.random(kl,3,2,q);
      cr = rfac.random(kl,ll,el,q);
 
-     if ( ar.isZERO() || br.isZERO() || cr.isZERO() || ar.isConstant() || br.isConstant() ) {
+     if ( ar.isZERO() || br.isZERO() || cr.isZERO() ) {
         // skip for this turn
         return;
      }
-     //System.out.println("ar = " + ar);
-     //System.out.println("br = " + br);
-     //System.out.println("cr = " + cr);
+     ar = PolyUtil.<Quotient<ModInteger>>monic(ar);
+     br = PolyUtil.<Quotient<ModInteger>>monic(br);
+     cr = PolyUtil.<Quotient<ModInteger>>monic(cr);
+     System.out.println("ar = " + ar);
+     System.out.println("br = " + br);
+     System.out.println("cr = " + cr);
 
      // a b^p c
      dr = ar.multiply( Power.<GenPolynomial<GenPolynomial<Quotient<ModInteger>>>> positivePower(br, p) ).multiply(cr);
-     cr = ar.multiply(br);
-     //System.out.println("dr  = " + dr);
-     //System.out.println("cr  = " + cr);
+     cr = ar.multiply(br).multiply(cr);
+     System.out.println("cr  = " + cr);
+     System.out.println("dr  = " + dr);
 
      cr = sqf.recursiveUnivariateSquarefreePart(cr);
      dr = sqf.recursiveUnivariateSquarefreePart(dr);
-     System.out.println("dr  = " + dr);
      System.out.println("cr  = " + cr);
+     System.out.println("dr  = " + dr);
      assertTrue("isSquarefree(cr) " + cr, sqf.isRecursiveSquarefree(cr) );
      assertTrue("isSquarefree(dr) " + dr, sqf.isRecursiveSquarefree(dr) );
 
-     //er = PolyUtil.<ModInteger>recursivePseudoRemainder(dr,cr);
-     //System.out.println("er  = " + er);
-     //assertTrue("squarefree(abc) | squarefree(aabbc) " + er, er.isZERO() );
+     er = PolyUtil.<Quotient<ModInteger>>recursivePseudoRemainder(dr,cr);
+     System.out.println("er  = " + er);
+     assertTrue("squarefree(abc) | squarefree(aabbc) " + er, er.isZERO() );
  }
 
 
@@ -492,17 +495,20 @@ public class SquarefreeQuotModTest extends TestCase {
      cfac = new GenPolynomialRing<Quotient<ModInteger>>(fac,2-1,to,c1vars);
      rfac = new GenPolynomialRing<GenPolynomial<Quotient<ModInteger>>>(cfac,1,to,rvars);
 
-     ar = rfac.random(kl,3,2,q);
+     ar = rfac.random(kl+1,3,2+1,q);
      br = rfac.random(kl,3,2,q);
      cr = rfac.random(kl,3,2,q);
 
-     if ( ar.isZERO() || br.isZERO() || cr.isZERO() || ar.isConstant() || br.isConstant() ) {
+     if ( ar.isZERO() || br.isZERO() || cr.isZERO() ) {
         // skip for this turn
         return;
      }
-     //System.out.println("ar = " + ar);
-     //System.out.println("br = " + br);
-     //System.out.println("cr = " + cr);
+     ar = PolyUtil.<Quotient<ModInteger>>monic(ar);
+     br = PolyUtil.<Quotient<ModInteger>>monic(br);
+     cr = PolyUtil.<Quotient<ModInteger>>monic(cr);
+     System.out.println("ar = " + ar);
+     System.out.println("br = " + br);
+     System.out.println("cr = " + cr);
 
      // a b^p c
      dr = ar.multiply( Power.<GenPolynomial<GenPolynomial<Quotient<ModInteger>>>> positivePower(br, p) ).multiply(cr);
@@ -528,22 +534,22 @@ public class SquarefreeQuotModTest extends TestCase {
      dfac = new GenPolynomialRing<Quotient<ModInteger>>(fac,rl,to,vars);
 
      a = dfac.random(kl,ll,3,q);
-     b = dfac.random(kl,3,2,q);
+     b = dfac.random(kl,3,2+1,q);
      c = dfac.random(kl,ll,3,q);
 
-     if ( a.isZERO() || b.isZERO() || c.isZERO() || a.isConstant() || b.isConstant() ) {
+     if ( a.isZERO() || b.isZERO() || c.isZERO() || b.isConstant() ) {
         // skip for this turn
         return;
      }
-     //System.out.println("a  = " + a);
-     //System.out.println("b  = " + b);
-     //System.out.println("c  = " + c);
+     System.out.println("a  = " + a);
+     System.out.println("b  = " + b);
+     System.out.println("c  = " + c);
          
      // a a b^p c
      d = a.multiply(a).multiply( Power.<GenPolynomial<Quotient<ModInteger>>> positivePower(b, p) ).multiply(c);
      c = a.multiply(b).multiply(c);
-     //System.out.println("d  = " + d);
-     //System.out.println("c  = " + c);
+     System.out.println("c  = " + c);
+     System.out.println("d  = " + d);
 
      c = sqf.squarefreePart(c); 
      d = sqf.squarefreePart(d);
@@ -552,9 +558,9 @@ public class SquarefreeQuotModTest extends TestCase {
      assertTrue("isSquarefree(d) " + d, sqf.isSquarefree(d) );
      assertTrue("isSquarefree(c) " + c, sqf.isSquarefree(c) );
 
-     //e = PolyUtil.<ModInteger>basePseudoRemainder(d,c);
-     //System.out.println("e  = " + e);
-     //assertTrue("squarefree(abc) | squarefree(aab^pc) " + e, e.isZERO() );
+     e = PolyUtil.<Quotient<ModInteger>>basePseudoRemainder(d,c);
+     System.out.println("e  = " + e);
+     assertTrue("squarefree(abc) | squarefree(aab^pc) " + e, e.isZERO() );
  }
 
 
@@ -569,20 +575,20 @@ public class SquarefreeQuotModTest extends TestCase {
      dfac = new GenPolynomialRing<Quotient<ModInteger>>(fac,rl,to,vars);
 
      a = dfac.random(kl,ll,3,q);
-     b = dfac.random(kl,3,2,q);
+     b = dfac.random(kl,3,2+1,q);
      c = dfac.random(kl,ll,3,q);
 
-     if ( a.isZERO() || b.isZERO() || c.isZERO() || a.isConstant() || b.isConstant() ) {
+     if ( a.isZERO() || b.isZERO() || c.isZERO() || b.isConstant() ) {
         // skip for this turn
         return;
      }
-     //System.out.println("a  = " + a);
-     //System.out.println("b  = " + b);
-     //System.out.println("c  = " + c);
+     System.out.println("a  = " + a);
+     System.out.println("b  = " + b);
+     System.out.println("c  = " + c);
          
      // a a b^p c
      d = a.multiply(a).multiply( Power.<GenPolynomial<Quotient<ModInteger>>> positivePower(b, p) ).multiply(c);
-     //System.out.println("d  = " + d);
+     System.out.println("d  = " + d);
 
      SortedMap<GenPolynomial<Quotient<ModInteger>>,Long> sfactors;
      sfactors = sqf.squarefreeFactors(d);

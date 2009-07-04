@@ -554,14 +554,14 @@ public class FactorTest extends TestCase {
 
         GenPolynomialRing<ModInteger> pmfac = new GenPolynomialRing<ModInteger>(mi, 1);
         GenPolynomial<ModInteger> pm = pmfac.univariate(0);
-        AlgebraicNumberRing<ModInteger> am = new AlgebraicNumberRing<ModInteger>(pm);
+        AlgebraicNumberRing<ModInteger> am = new AlgebraicNumberRing<ModInteger>(pm,true);
         Factorization<AlgebraicNumber<ModInteger>> ufdam = FactorFactory.getImplementation(am);
         //System.out.println("ufdam = " + ufdam);
         assertTrue("ufd != AlgebraicNumber<ModInteger> " + ufdam, ufdam instanceof FactorAlgebraic );
 
         GenPolynomialRing<BigRational> prfac = new GenPolynomialRing<BigRational>(br, 1);
         GenPolynomial<BigRational> pr = prfac.univariate(0);
-        AlgebraicNumberRing<BigRational> ar = new AlgebraicNumberRing<BigRational>(pr);
+        AlgebraicNumberRing<BigRational> ar = new AlgebraicNumberRing<BigRational>(pr,true);
         Factorization<AlgebraicNumber<BigRational>> ufdar = FactorFactory.getImplementation(ar);
         //System.out.println("ufdar = " + ufdar);
         assertTrue("ufd != AlgebraicNumber<BigRational> " + ufdar, ufdar instanceof FactorAlgebraic );

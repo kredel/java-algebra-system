@@ -126,14 +126,14 @@ public class FactorMoreTest extends TestCase {
 
         GenPolynomialRing<ModInteger> pmfac = new GenPolynomialRing<ModInteger>(mi, 1);
         GenPolynomial<ModInteger> pm = pmfac.univariate(0);
-        AlgebraicNumberRing<ModInteger> am = new AlgebraicNumberRing<ModInteger>(pm);
+        AlgebraicNumberRing<ModInteger> am = new AlgebraicNumberRing<ModInteger>(pm,true);
         Factorization<AlgebraicNumber<ModInteger>> ufdam = FactorFactory.getImplementation((RingFactory)am);
         //System.out.println("ufdam = " + ufdam);
         assertTrue("ufd != AlgebraicNumber<ModInteger> " + ufdam, ufdam instanceof FactorAlgebraic );
 
         GenPolynomialRing<BigRational> prfac = new GenPolynomialRing<BigRational>(br, 1);
         GenPolynomial<BigRational> pr = prfac.univariate(0);
-        AlgebraicNumberRing<BigRational> ar = new AlgebraicNumberRing<BigRational>(pr);
+        AlgebraicNumberRing<BigRational> ar = new AlgebraicNumberRing<BigRational>(pr,true);
         Factorization<AlgebraicNumber<BigRational>> ufdar = FactorFactory.getImplementation((RingFactory)ar);
         //System.out.println("ufdar = " + ufdar);
         assertTrue("ufd != AlgebraicNumber<BigRational> " + ufdar, ufdar instanceof FactorAlgebraic );
@@ -174,14 +174,14 @@ public class FactorMoreTest extends TestCase {
 
         GenPolynomialRing<ModInteger> pmfac = new GenPolynomialRing<ModInteger>(mi, 1);
         GenPolynomial<ModInteger> pm = pmfac.univariate(0);
-        AlgebraicNumberRing<ModInteger> am = new AlgebraicNumberRing<ModInteger>(pm);
+        AlgebraicNumberRing<ModInteger> am = new AlgebraicNumberRing<ModInteger>(pm,true);
         Factorization<AlgebraicNumber<ModInteger>> ufdam = FactorFactory.<ModInteger>getImplementation(am);
         //System.out.println("ufdam = " + ufdam);
         assertTrue("ufd != AlgebraicNumber<ModInteger> " + ufdam, ufdam instanceof FactorAlgebraic );
 
         GenPolynomialRing<BigRational> prfac = new GenPolynomialRing<BigRational>(br, 1);
         GenPolynomial<BigRational> pr = prfac.univariate(0);
-        AlgebraicNumberRing<BigRational> ar = new AlgebraicNumberRing<BigRational>(pr);
+        AlgebraicNumberRing<BigRational> ar = new AlgebraicNumberRing<BigRational>(pr,true);
         Factorization<AlgebraicNumber<BigRational>> ufdar = FactorFactory.<BigRational>getImplementation(ar);
         //System.out.println("ufdar = " + ufdar);
         assertTrue("ufd != AlgebraicNumber<BigRational> " + ufdar, ufdar instanceof FactorAlgebraic );
@@ -204,7 +204,7 @@ public class FactorMoreTest extends TestCase {
      * Test integral function factorization.
      * 
      */
-    public void xtestIntegralFunctionFactorization() {
+    public void testIntegralFunctionFactorization() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigRational cfac = new BigRational(1);
@@ -271,7 +271,7 @@ public class FactorMoreTest extends TestCase {
      * Test integer integral function factorization.
      * 
      */
-    public void xtestIntegerIntegralFunctionFactorization() {
+    public void testIntegerIntegralFunctionFactorization() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(1);
@@ -338,7 +338,7 @@ public class FactorMoreTest extends TestCase {
      * Test rational function factorization.
      * 
      */
-    public void xtestRationalFunctionFactorization() {
+    public void testRationalFunctionFactorization() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigRational cfac = new BigRational(1);
@@ -406,7 +406,7 @@ public class FactorMoreTest extends TestCase {
      * Test modular rational function factorization.
      * 
      */
-    public void xtestModularRationalFunctionFactorization() {
+    public void testModularRationalFunctionFactorization() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         ModIntegerRing cfac = new ModIntegerRing(19,true);
@@ -466,251 +466,6 @@ public class FactorMoreTest extends TestCase {
             //System.out.println("t        = " + tt);
             assertTrue("prod(factor(a)) = a", tt);
         }
-        ComputerThreads.terminate();
-    }
-
-
-    /**
-     * Test modular quotient factorization.
-     * 
-     */
-    public void testModularQuotientFactorization() {
-
-        TermOrder to = new TermOrder(TermOrder.INVLEX);
-        ModIntegerRing cfac = new ModIntegerRing(19,true);
-        String[] qvars = new String[]{ "t" };
-        GenPolynomialRing<ModInteger> pfac = new GenPolynomialRing<ModInteger>(cfac, 1, to, qvars);
-        QuotientRing<ModInteger> qfac = new QuotientRing<ModInteger>(pfac);
-        Quotient<ModInteger> t = qfac.generators().get(1);
-
-        FactorQuotient<ModInteger> fac = new FactorQuotient<ModInteger>(qfac);
-
-        for (int i = 1; i < 2; i++) {
-            int facs = 0;
-            Quotient<ModInteger> a;
-            Quotient<ModInteger> b = qfac.random(3, 3, el, q);
-            b = b.multiply(b);
-            Quotient<ModInteger> c = qfac.random(3, 3, el, q);
-            c = c.multiply(c);
-
-            if (c.num.degree() > 0) {
-                facs++;
-            }
-            if (b.num.degree() > 0) {
-                facs++;
-            }
-            a = c.multiply(b);
-            a = a.multiply(qfac.fromInteger(5));
-            if (a.isZERO()) {
-                facs = 0;
-            }
-
-            System.out.println("\na = " + a);
-            System.out.println("b = " + b);
-            System.out.println("c = " + c);
-
-            SortedMap<Quotient<ModInteger>, Long> sm = fac.quotientSquarefreeFactors(a);
-            //SortedMap<Quotient<ModInteger>, Long> sm = fac.quotientFactors(a);
-            //List<Quotient<ModInteger>> sm = fac.quotientFactorsSquarefree(a);
-            System.out.println("\na   = " + a);
-            System.out.println("sm = " + sm);
-
-            if (sm.size() >= facs) {
-                assertTrue("#facs < " + facs, sm.size() >= facs);
-            } else {
-                long sf = 0;
-                for (Long e : sm.values()) {
-                    sf += e;
-                }
-                assertTrue("#facs < " + facs, sf >= facs);
-            }
-
-            boolean tt = fac.isFactorization(a, sm);
-            //System.out.println("t        = " + tt);
-            assertTrue("prod(factor(a)) = a", tt);
-        }
-        ComputerThreads.terminate();
-    }
-
-
-    /**
-     * Test modular quotient characteristic-th root.
-     * 
-     */
-    public void xtestModularQuotientCharRoot() {
-
-        long p = 19L;
-        TermOrder to = new TermOrder(TermOrder.INVLEX);
-        ModIntegerRing cfac = new ModIntegerRing(p,true);
-        String[] qvars = new String[]{ "t" };
-        GenPolynomialRing<ModInteger> pfac = new GenPolynomialRing<ModInteger>(cfac, 1, to, qvars);
-        QuotientRing<ModInteger> qfac = new QuotientRing<ModInteger>(pfac);
-        Quotient<ModInteger> t = qfac.generators().get(1);
-
-        FactorQuotient<ModInteger> fac = new FactorQuotient<ModInteger>(qfac);
-
-        int facs = 0;
-        Quotient<ModInteger> a = qfac.random(3, 3, el, q);
-        //b = b.multiply(b);
-        //System.out.println("\na = " + a);
-
-        SortedMap<Quotient<ModInteger>, Long> sm = fac.quotientRootCharacteristic(a);
-        //System.out.println("\na   = " + a);
-        //System.out.println("sm = " + sm);
-        if ( sm == null ) {
-            assertTrue("rootCharacteristic(a) = null", sm == null);
-        }
-
-        a = Power.<Quotient<ModInteger>> positivePower(t, p*3L);
-        //System.out.println("\na = " + a);
-
-        sm = fac.quotientRootCharacteristic(a);
-        //System.out.println("\na   = " + a);
-        //System.out.println("sm = " + sm);
-        assertTrue("rootCharacteristic(a) = {t,1}", sm.size() == 1);
-
-        Quotient<ModInteger> b = t.multiply(t).sum(qfac.getONE());
-        a = Power.<Quotient<ModInteger>> positivePower(b, p);
-        //System.out.println("\nb = " + b);
-        //System.out.println("a = " + a);
-
-        sm = fac.quotientRootCharacteristic(a);
-        //System.out.println("\na   = " + a);
-        //System.out.println("sm = " + sm);
-        assertTrue("rootCharacteristic(a) = sm", fac.isCharRoot(a,sm));
-
-        Quotient<ModInteger> c = qfac.random(3,3,el,q);
-        if ( c.isONE() || c.isZERO() ) {
-            c = b;
-        }
-        a = Power.<Quotient<ModInteger>> positivePower(c, p);
-        //System.out.println("\nc = " + c);
-        //System.out.println("a = " + a);
-
-        sm = fac.quotientRootCharacteristic(a);
-        //System.out.println("\na   = " + a);
-        System.out.println("sm = " + sm);
-        assertTrue("rootCharacteristic(a) = sm", fac.isCharRoot(a,sm));
-
-        ComputerThreads.terminate();
-    }
-
-
-    /**
-     * Test modular polynomial characteristic-th root.
-     * 
-     */
-    public void xtestModularPolynomialCharRoot() {
-
-        long p = 19L;
-        TermOrder to = new TermOrder(TermOrder.INVLEX);
-        ModIntegerRing cfac = new ModIntegerRing(p,true);
-        String[] qvars = new String[]{ "t" };
-        GenPolynomialRing<ModInteger> pfac = new GenPolynomialRing<ModInteger>(cfac, 1, to, qvars);
-        QuotientRing<ModInteger> qfac = new QuotientRing<ModInteger>(pfac);
-        GenPolynomial<ModInteger> t = pfac.generators().get(1);
-
-        FactorQuotient<ModInteger> fac = new FactorQuotient<ModInteger>(qfac);
-
-        int facs = 0;
-        GenPolynomial<ModInteger> a = pfac.random(3, 3, el, q);
-        //a = a.monic();
-        //System.out.println("\na = " + a);
-
-        SortedMap<GenPolynomial<ModInteger>, Long> sm = fac.rootCharacteristic(a);
-        //System.out.println("\na   = " + a);
-        //System.out.println("sm = " + sm);
-        if ( sm == null ) {
-            assertTrue("rootCharacteristic(a) = null", sm == null);
-        }
-
-        a = Power.<GenPolynomial<ModInteger>> positivePower(t, p*3L);
-        System.out.println("\na = " + a);
-
-        sm = fac.rootCharacteristic(a);
-        //System.out.println("\na   = " + a);
-        //System.out.println("sm = " + sm);
-        assertTrue("rootCharacteristic(a) = sm", fac.isCharRoot(a,sm));
-
-        GenPolynomial<ModInteger> b = t.multiply(t).multiply(pfac.fromInteger(7)).sum(pfac.getONE());
-        //b = b.monic();
-        a = Power.<GenPolynomial<ModInteger>> positivePower(b, p);
-        System.out.println("\nb = " + b);
-        System.out.println("a = " + a);
-
-        sm = fac.rootCharacteristic(a);
-        System.out.println("\na   = " + a);
-        System.out.println("sm = " + sm);
-        assertTrue("rootCharacteristic(a) = sm", fac.isCharRoot(a,sm));
-
-
-        GenPolynomial<ModInteger> c;
-        //c = pfac.random(4,5,el,q);
-        //c = pfac.parse("t^2 + t + 5");
-        c = pfac.parse("5 t + 10");
-        if ( c.isONE() || c.isZERO() || c.isConstant() ) {
-            c = b;
-        }
-        //c = c.monic();
-        a = Power.<GenPolynomial<ModInteger>> positivePower(c, p*1L);
-        //a = a.multiply( Power.<GenPolynomial<ModInteger>> positivePower(b, p*2L) );
-        System.out.println("\nc = " + c);
-        System.out.println("a = " + a);
-        //System.out.println("c*b*b = " + c.multiply(b).multiply(b));
-
-        sm = fac.rootCharacteristic(a);
-        System.out.println("\na   = " + a);
-        System.out.println("sm = " + sm);
-        assertTrue("rootCharacteristic(a) = sm", fac.isCharRoot(a,sm));
-
-        ComputerThreads.terminate();
-    }
-
-
-    /**
-     * Test modular recursive polynomial characteristic-th root.
-     * 
-     */
-    public void xtestModularRecursivePolynomialCharRoot() {
-
-        long p = 19L;
-        TermOrder to = new TermOrder(TermOrder.INVLEX);
-        ModIntegerRing cfac = new ModIntegerRing(p,true);
-        String[] qvars = new String[]{ "t" };
-        GenPolynomialRing<ModInteger> pfac = new GenPolynomialRing<ModInteger>(cfac, 1, to, qvars);
-        QuotientRing<ModInteger> qfac = new QuotientRing<ModInteger>(pfac);
-        GenPolynomial<ModInteger> t = pfac.generators().get(1);
-
-        FactorQuotient<ModInteger> fac = new FactorQuotient<ModInteger>(qfac);
-
-        String[] vars = new String[]{ "x" };
-        GenPolynomialRing<GenPolynomial<ModInteger>> rpfac = new GenPolynomialRing<GenPolynomial<ModInteger>>(pfac, 1, to, vars);
-        GenPolynomial<GenPolynomial<ModInteger>> x = rpfac.generators().get(2);
-
-        GenPolynomial<GenPolynomial<ModInteger>> a = rpfac.random(3, 3, el, q);
-        if ( a.isConstant() ) {
-            a = x.multiply(a).subtract(a);
-        }
-        System.out.println("\na  = " + a);
-        GenPolynomial<GenPolynomial<ModInteger>> b = Power.<GenPolynomial<GenPolynomial<ModInteger>>> positivePower(a, p*1L);
-        System.out.println("b  = " + b);
-
-        GenPolynomial<GenPolynomial<ModInteger>> ap = fac.recursiveRootCharacteristic(a);
-        System.out.println("\na  = " + a);
-        System.out.println("b  = " + b);
-        System.out.println("ap = " + ap);
-        assertTrue("rootCharacteristic(a) = a ", null == ap);
-
-        GenPolynomial<GenPolynomial<ModInteger>> bp = fac.recursiveRootCharacteristic(b);
-        System.out.println("\na  = " + a);
-        System.out.println("b  = " + b);
-        System.out.println("bp = " + bp);
-
-        //GenPolynomial<GenPolynomial<ModInteger>> r = a.remainder(bp);
-        //assertTrue("rootCharacteristic(a**p) = a ", r.isZERO());
-
-        assertTrue("rootCharacteristic(a) = bp", fac.isRecursiveCharRoot(b,bp));
-
         ComputerThreads.terminate();
     }
 
