@@ -153,10 +153,10 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>>
                 T = engine.baseGcd(T0,Tp);
                 T = T.monic();
                 V = PolyUtil.<C> basePseudoDivide(T0,T);
-                //System.out.println("iT0 = " + T0);
-                //System.out.println("iTp = " + Tp);
-                //System.out.println("iT  = " + T);
-                //System.out.println("iV  = " + V);
+                System.out.println("iT0 = " + T0);
+                System.out.println("iTp = " + Tp);
+                System.out.println("iT  = " + T);
+                System.out.println("iV  = " + V);
                 k = 0L;
                 mp = 0L;
                 init = false;
