@@ -705,6 +705,47 @@ public class PolyUtil {
 
 
     /**
+     * GenPolynomial base divide.
+     * For recursive polynomials.
+     * Division by coefficient ring element.
+     * @param <C> coefficient type.
+     * @param P recursive GenPolynomial.
+     * @param s coefficient.
+     * @return this/s.
+     */
+    public static <C extends RingElem<C>>
+           GenPolynomial<GenPolynomial<C>> 
+           baseRecursiveDivide( GenPolynomial<GenPolynomial<C>> P, C s ) {
+        if ( s == null || s.isZERO() ) {
+            throw new RuntimeException(P.getClass().getName()
+                                       + " division by zero " + P + ", " + s);
+        }
+        if ( P.isZERO() ) {
+            return P;
+        }
+        if ( s.isONE() ) {
+            return P;
+        }
+        GenPolynomial<GenPolynomial<C>> p = P.ring.getZERO().clone(); 
+        SortedMap<ExpVector,GenPolynomial<C>> pv = p.val; //getMap();
+        for ( Map.Entry<ExpVector,GenPolynomial<C>> m1 : P.getMap().entrySet() ) {
+            GenPolynomial<C> c1 = m1.getValue();
+            ExpVector e1 = m1.getKey();
+            GenPolynomial<C> c = PolyUtil.<C>coefficientBasePseudoDivide(c1,s);
+            if ( !c.isZERO() ) {
+               pv.put( e1, c ); // or m1.setValue( c )
+            } else {
+               System.out.println("pu, c1 = " + c1);
+               System.out.println("pu, s  = " + s);
+               System.out.println("pu, c  = " + c);
+               throw new RuntimeException("something is wrong");
+            }
+        }
+        return p;
+    }
+
+
+    /**
      * GenPolynomial sparse pseudo remainder.
      * For recursive polynomials.
      * @param <C> coefficient type.

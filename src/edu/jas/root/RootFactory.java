@@ -22,6 +22,7 @@ import edu.jas.structure.RingFactory;
 import edu.jas.structure.UnaryFunctor;
 
 import edu.jas.ufd.GreatestCommonDivisor;
+import edu.jas.ufd.GreatestCommonDivisorAbstract;
 import edu.jas.ufd.GCDFactory;
 import edu.jas.ufd.FactorFactory;
 import edu.jas.ufd.FactorAbstract;
@@ -44,7 +45,7 @@ public class RootFactory {
                   List<RealAlgebraicNumber<C>> 
       realAlgebraicNumbers(GenPolynomial<C> f) {
         RealRoots<C> rr = new RealRootsSturm<C>();
-        GreatestCommonDivisor<C> engine = GCDFactory.<C>getProxy(f.ring.coFac);
+        GreatestCommonDivisorAbstract<C> engine = GCDFactory.<C>getProxy(f.ring.coFac);
         Set<GenPolynomial<C>> S = engine.squarefreeFactors(f).keySet();
         List<RealAlgebraicNumber<C>> list = new ArrayList<RealAlgebraicNumber<C>>();
         for ( GenPolynomial<C> sp : S ) {

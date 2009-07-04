@@ -37,6 +37,7 @@ import edu.jas.poly.TermOrder;
 import edu.jas.poly.TermOrderOptimization;
 
 import edu.jas.ufd.GreatestCommonDivisor;
+import edu.jas.ufd.GreatestCommonDivisorAbstract;
 import edu.jas.ufd.GCDFactory;
 
 
@@ -94,7 +95,7 @@ public class Ideal<C extends GcdRingElem<C>>
     /**
      * Greatest common divisor engine.
      */
-    protected final GreatestCommonDivisor<C> engine;
+    protected final GreatestCommonDivisorAbstract<C> engine;
 
 
     /**
