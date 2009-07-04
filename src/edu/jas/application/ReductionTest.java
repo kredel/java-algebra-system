@@ -129,11 +129,11 @@ public static Test suite() {
 
      GenPolynomial<GenPolynomial<BigRational>> a = fac.random(kl, ll, el, q );
      while ( a.isZERO() ) {
-         a = fac.random(kl, ll, el, q );
+         a = fac.random(kl, ll, el, q ).sum(fac.getONE());
      }
      GenPolynomial<GenPolynomial<BigRational>> b = fac.random(kl, ll, el, q );
      while ( b.isZERO() ) {
-         b = fac.random(kl, ll, el, q );
+         b = fac.random(kl, ll, el, q ).subtract(fac.getONE());
      }
      GenPolynomial<GenPolynomial<BigRational>> g = fac.getZERO();
 
@@ -228,15 +228,18 @@ public static Test suite() {
 
      //System.out.println("\na = " + a);
      //System.out.println("b = " + b + "\n");
+     //System.out.println("L = " + L);
 
      List<Condition<BigRational>> Ccond; 
      Ccond = cred.caseDistinction(L);
      //for ( Condition<BigRational> cnd : Ccond ) {
      //    System.out.println("" + cnd);
      //}
+     //+System.out.println("Ccond = " + Ccond);
 
      // check if polynomials are determined
      CSp = cred.determine(L);
+     //+System.out.println("CSp = " + CSp);
      for ( ColoredSystem<BigRational> x : CSp ) {
          assertTrue("isDetermined ", x.isDetermined()); 
          assertTrue("checkInvariant ", x.checkInvariant()); 

@@ -37,6 +37,7 @@ public class QuotIntPolynomialTest extends TestCase {
    public static void main (String[] args) {
        BasicConfigurator.configure();
        junit.textui.TestRunner.run( suite() );
+       ComputerThreads.terminate();
    }
 
 /**
@@ -134,7 +135,7 @@ public class QuotIntPolynomialTest extends TestCase {
          b = a.monic();
          Quotient<BigInteger> ldbcf = b.leadingBaseCoefficient();
          //System.out.println("b["+i+"] = " + b);
-         assertTrue("ldbcf( b"+i+" ) == 1", ldbcf.isONE());
+         assertTrue("ldbcf( b"+i+" ) == 1 " + b + ", a = " + a, ldbcf.isONE());
      }
  }
 
@@ -187,15 +188,17 @@ public class QuotIntPolynomialTest extends TestCase {
  public void testMultiplication() {
 
      a = qfac.random(kl,ll,el,q);
-     assertTrue("not isZERO( a )", !a.isZERO() );
+     //assertTrue("not isZERO( a )", !a.isZERO() );
 
      b = qfac.random(kl,ll,el,q);
-     assertTrue("not isZERO( b )", !b.isZERO() );
+     //assertTrue("not isZERO( b )", !b.isZERO() );
 
      c = b.multiply(a);
      d = a.multiply(b);
-     assertTrue("not isZERO( c )", !c.isZERO() );
-     assertTrue("not isZERO( d )", !d.isZERO() );
+     if ( !a.isZERO() && !b.isZERO() ) {
+         assertTrue("not isZERO( c )", !c.isZERO() );
+         assertTrue("not isZERO( d )", !d.isZERO() );
+     }
 
      //System.out.println("a = " + a);
      //System.out.println("b = " + b);
@@ -239,7 +242,7 @@ public class QuotIntPolynomialTest extends TestCase {
  */
  public void testParse() {
      a = qfac.random(kl,ll*2,el*2,q*2);
-     assertTrue("not isZERO( a )", !a.isZERO() );
+     //assertTrue("not isZERO( a )", !a.isZERO() );
 
      //PrettyPrint.setInternal();
      //System.out.println("a = " + a);

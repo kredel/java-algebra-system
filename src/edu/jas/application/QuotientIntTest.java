@@ -117,6 +117,9 @@ public class QuotientIntTest extends TestCase {
          //a = efac.random(ll+i);
          a = efac.random(kl*(i+1), ll+2+2*i, el, q );
          //System.out.println("a = " + a);
+         if ( a.isZERO() || a.isONE() ) {
+             continue;
+         }
          assertTrue("length( a"+i+" ) <> 0", a.num.length() >= 0);
          assertTrue(" not isZERO( a"+i+" )", !a.isZERO() );
          assertTrue(" not isONE( a"+i+" )", !a.isONE() );
@@ -170,15 +173,17 @@ public class QuotientIntTest extends TestCase {
  public void testMultiplication() {
 
      a = efac.random(kl,ll,el,q);
-     assertTrue("not isZERO( a )", !a.isZERO() );
+     //assertTrue("not isZERO( a )", !a.isZERO() );
 
      b = efac.random(kl,ll,el,q);
-     assertTrue("not isZERO( b )", !b.isZERO() );
+     //assertTrue("not isZERO( b )", !b.isZERO() );
 
      c = b.multiply(a);
      d = a.multiply(b);
-     assertTrue("not isZERO( c )", !c.isZERO() );
-     assertTrue("not isZERO( d )", !d.isZERO() );
+     if ( !a.isZERO() && !b.isZERO() ) {
+         assertTrue("not isZERO( c )", !c.isZERO() );
+         assertTrue("not isZERO( d )", !d.isZERO() );
+     }
 
      //System.out.println("a = " + a);
      //System.out.println("b = " + b);
@@ -222,7 +227,7 @@ public class QuotientIntTest extends TestCase {
  */
  public void testParse() {
      a = efac.random(kl*2,ll*2,el*2,q*2);
-     assertTrue("not isZERO( a )", !a.isZERO() );
+     //assertTrue("not isZERO( a )", !a.isZERO() );
 
      //PrettyPrint.setInternal();
      //System.out.println("a = " + a);

@@ -14,6 +14,7 @@ import edu.jas.kern.PrettyPrint;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.structure.GcdRingElem;
+import edu.jas.structure.NotInvertibleException;
 
 
 /**
@@ -97,26 +98,27 @@ public class Quotient<C extends GcdRingElem<C>> implements GcdRingElem<Quotient<
             n = n.negate();
             d = d.negate();
         }
-        if (isred) {
-            num = n;
-            den = d;
-            return;
+        if (!isred) {
+            // must reduce to lowest terms
+            GenPolynomial<C> gcd = ring.gcd(n, d);
+            if (false || debug) {
+                logger.info("gcd = " + gcd);
+            }
+            //GenPolynomial<C> gcd = ring.ring.getONE();
+            if (!gcd.isONE()) {
+                //logger.info("gcd = " + gcd);
+                n = ring.divide(n, gcd);
+                d = ring.divide(d, gcd);
+            }
         }
-        // must reduce to lowest terms
-        GenPolynomial<C> gcd = ring.gcd(n, d);
-        if (false || debug) {
-            logger.info("gcd = " + gcd.isONE());
+        C lc = d.leadingBaseCoefficient();
+        if ( !lc.isONE() && lc.isUnit() ) {
+            lc = lc.inverse();
+            n  = n.multiply(lc);
+            d  = d.multiply(lc);
         }
-        //GenPolynomial<C> gcd = ring.ring.getONE();
-        if (gcd.isONE()) {
-            logger.info("gcd = 1");
-            num = n;
-            den = d;
-        } else {
-            logger.info("gcd = " + gcd);
-            num = ring.divide(n, gcd);
-            den = ring.divide(d, gcd);
-        }
+        num = n;
+        den = d;
     }
 
 
