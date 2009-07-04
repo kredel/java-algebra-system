@@ -176,7 +176,9 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         if ( pfac.coFac.isField() && !ldbcf.isONE() ) {
             A = A.divide(ldbcf);
             GenPolynomial<C> f1 = pfac.getONE().multiply(ldbcf);
+            //System.out.println("gcda sqf f1 = " + f1);
             sfactors.put(f1,1L);
+            //ldbcf = pfac.coFac.getONE();
         }
         GenPolynomial<C> T0 = A;
         long e = 1L;
@@ -232,10 +234,12 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
                 sfactors.put(z, (e*k));
             }
         }
-        if ( pfac.characteristic().signum() > 0 && !ldbcf.isONE() ) {
+        //if (  pfac.characteristic().signum() > 0 && !ldbcf.isONE() ) {
+        if ( pfac.coFac.isField() && !ldbcf.isONE() ) {
             GenPolynomial<C> f1 = sfactors.firstKey();
             long e1 = sfactors.remove(f1);
             f1 = f1.multiply(ldbcf);
+            System.out.println("gcda sqf f1e = " + f1);
             sfactors.put(f1,e1);
         }
         return sfactors;
