@@ -19,9 +19,10 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
-import edu.jas.ufd.GCDFactory;
-import edu.jas.ufd.GreatestCommonDivisor;
-import edu.jas.ufd.GreatestCommonDivisorAbstract;
+
+import edu.jas.ufd.SquarefreeFactory;
+import edu.jas.ufd.Squarefree;
+import edu.jas.ufd.SquarefreeAbstract;
 
 
 /**
@@ -43,10 +44,10 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
 
 
     /**
-     * Greatest common divisor engine for coefficient content and primitive
+     * Squarefree for coefficient content and primitive
      * parts.
      */
-    protected final GreatestCommonDivisorAbstract<C> engine;
+    protected final SquarefreeAbstract<C> engine;
 
 
     /**
@@ -87,9 +88,8 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         cred = red;
         cofac = rf;
         // selection for C but used for R:
-        GreatestCommonDivisor<C> e = GCDFactory.<C> getImplementation(cofac);
-        engine = (GreatestCommonDivisorAbstract<C>) e;
-        // not used: engine = GCDFactory.<R>getProxy( rf );
+        //engine e = GCDFactory.<C> getImplementation(cofac);
+        engine = SquarefreeFactory.<C>getImplementation(rf);
     }
 
 
@@ -672,7 +672,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
             } catch (RuntimeException ignored) {
             }
             ExpVector f = a.red.leadingExpVector();
-            // a = engine.basePrimitivePart(a); //a.monic(); was not required
+            // a = ##engine.basePrimitivePart(a); //a.monic(); was not required
             // a = a.abs();
             // a = red.normalform( F, a );
             if (e.equals(f)) {

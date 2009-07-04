@@ -36,9 +36,9 @@ import edu.jas.poly.OptimizedPolynomialList;
 import edu.jas.poly.TermOrder;
 import edu.jas.poly.TermOrderOptimization;
 
-import edu.jas.ufd.GreatestCommonDivisor;
-import edu.jas.ufd.GreatestCommonDivisorAbstract;
-import edu.jas.ufd.GCDFactory;
+import edu.jas.ufd.Squarefree;
+import edu.jas.ufd.SquarefreeAbstract;
+import edu.jas.ufd.SquarefreeFactory;
 
 
 /**
@@ -93,9 +93,9 @@ public class Ideal<C extends GcdRingElem<C>>
 
 
     /**
-     * Greatest common divisor engine.
+     * Squarefree decomposition engine.
      */
-    protected final GreatestCommonDivisorAbstract<C> engine;
+    protected final SquarefreeAbstract<C> engine;
 
 
     /**
@@ -207,7 +207,7 @@ public class Ideal<C extends GcdRingElem<C>>
         this.testGB = ( gb ? true : false ); // ??
         this.bb = bb;
         this.red = red;
-        this.engine = GCDFactory.<C>getProxy( list.ring.coFac );
+        this.engine = SquarefreeFactory.<C>getImplementation( list.ring.coFac );
     }
 
 
