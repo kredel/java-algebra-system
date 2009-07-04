@@ -161,7 +161,7 @@ public class Quotient<C extends GcdRingElem<C>> implements GcdRingElem<Quotient<
 
 
     /**
-     * Is Quotient unit.
+     * Is Quotient a unit.
      * @return If this is a unit then true is returned, else false.
      * @see edu.jas.structure.RingElem#isUnit()
      */
@@ -171,6 +171,14 @@ public class Quotient<C extends GcdRingElem<C>> implements GcdRingElem<Quotient<
         } else {
             return true;
         }
+    }
+
+
+    /** Is Qoutient<C> a constant. 
+     * @return true, if this has constant numerator and denominator, else false.
+     */
+    public boolean isConstant() {
+        return num.isConstant() && den.isConstant();
     }
 
 
