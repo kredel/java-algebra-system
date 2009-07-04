@@ -757,16 +757,33 @@ public class GenPolynomialRing<C extends RingElem<C> >
      */
     public GenPolynomialRing<C> extend(int i) {
         // add module variable names
-        String[] v = null;
-        if ( vars != null ) {
-           v = new String[ vars.length + i ];
-           for ( int k = 0; k < vars.length; k++ ) {
-               v[k] = vars[k];
-           }
-           for ( int k = 0; k < i; k++ ) {
-               v[ vars.length + k ] = "e" + (k+1);
-           }
+        String[] v = new String[ i ];
+        for ( int k = 0; k < i; k++ ) {
+            v[ k ] = "e" + (k+1);
         }
+        return extend(v);
+    }
+
+
+    /**
+     * Extend variables. Used e.g. in module embedding.
+     * Extend number of variables by length(vn).
+     * @param vn names for extended variables.
+     * @return extended polynomial ring factory.
+     */
+    public GenPolynomialRing<C> extend(String[] vn) {
+        if ( vn == null || vars == null ) {
+            throw new RuntimeException("vn and vars may not be null");
+        }
+        int i = vn.length;
+        String[] v = new String[ vars.length + i ];
+        for ( int k = 0; k < vars.length; k++ ) {
+            v[k] = vars[k];
+        }
+        for ( int k = 0; k < vn.length; k++ ) {
+            v[ vars.length + k ] = vn[k];
+        }
+
         TermOrder to = tord.extend(nvar,i);
         GenPolynomialRing<C> pfac 
             = new GenPolynomialRing<C>(coFac,nvar+i,to,v);
