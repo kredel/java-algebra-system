@@ -134,9 +134,9 @@ public class SquarefreeIntTest extends TestCase {
      a = dfac.random(kl,ll,el+2,q);
      b = dfac.random(kl,ll,el+2,q);
      c = dfac.random(kl,ll,el,q);
-     System.out.println("a  = " + a);
-     System.out.println("b  = " + b);
-     System.out.println("c  = " + c);
+     //System.out.println("a  = " + a);
+     //System.out.println("b  = " + b);
+     //System.out.println("c  = " + c);
 
      if ( a.isZERO() || b.isZERO() || c.isZERO() ) {
         // skip for this turn
@@ -146,13 +146,13 @@ public class SquarefreeIntTest extends TestCase {
      // a a b b b c
      d = a.multiply(a).multiply(b).multiply(b).multiply(b).multiply(c);
      c = a.multiply(b).multiply(c);
-     System.out.println("d  = " + d);
-     System.out.println("c  = " + c);
+     //System.out.println("d  = " + d);
+     //System.out.println("c  = " + c);
 
      c = sqf.baseSquarefreePart(c);
      d = sqf.baseSquarefreePart(d);
-     System.out.println("d  = " + d);
-     System.out.println("c  = " + c);
+     //System.out.println("d  = " + d);
+     //System.out.println("c  = " + c);
      assertTrue("isSquarefree(c) " + c, sqf.isSquarefree(c) );
      assertTrue("isSquarefree(d) " + d, sqf.isSquarefree(d) );
 
@@ -173,9 +173,9 @@ public class SquarefreeIntTest extends TestCase {
      a = dfac.random(kl,ll,el+3,q);
      b = dfac.random(kl,ll,el+3,q);
      c = dfac.random(kl,ll,el+2,q);
-     System.out.println("a  = " + a);
-     System.out.println("b  = " + b);
-     System.out.println("c  = " + c);
+     //System.out.println("a  = " + a);
+     //System.out.println("b  = " + b);
+     //System.out.println("c  = " + c);
 
      if ( a.isZERO() || b.isZERO() || c.isZERO() ) {
         // skip for this turn
@@ -184,11 +184,11 @@ public class SquarefreeIntTest extends TestCase {
      
      // a a b b b c
      d = a.multiply(a).multiply(b).multiply(b).multiply(b).multiply(c);
-     System.out.println("d  = " + d);
+     //System.out.println("d  = " + d);
 
      SortedMap<GenPolynomial<BigInteger>,Long> sfactors;
      sfactors = sqf.baseSquarefreeFactors(d);
-     System.out.println("sfactors = " + sfactors);
+     //System.out.println("sfactors = " + sfactors);
 
      assertTrue("isFactorization(d,sfactors) ", sqf.isFactorization(d,sfactors) );
  }
@@ -207,8 +207,8 @@ public class SquarefreeIntTest extends TestCase {
      ar = rfac.random(kl,ll,el,q);
      br = rfac.random(kl,ll,el,q);
      cr = rfac.random(kl,ll,el,q);
-     System.out.println("ar = " + ar);
-     System.out.println("br = " + br);
+     //System.out.println("ar = " + ar);
+     //System.out.println("br = " + br);
      //System.out.println("cr = " + cr);
 
      if ( ar.isZERO() || br.isZERO() || cr.isZERO() ) {
@@ -218,13 +218,13 @@ public class SquarefreeIntTest extends TestCase {
 
      dr = ar.multiply(ar).multiply(br).multiply(br);
      cr = ar.multiply(br);
-     System.out.println("dr  = " + dr);
-     System.out.println("cr  = " + cr);
+     //System.out.println("dr  = " + dr);
+     //System.out.println("cr  = " + cr);
 
-     cr = sqf.recursiveSquarefreePart(cr);
-     dr = sqf.recursiveSquarefreePart(dr);
-     System.out.println("dr  = " + dr);
-     System.out.println("cr  = " + cr);
+     cr = sqf.recursiveUnivariateSquarefreePart(cr);
+     dr = sqf.recursiveUnivariateSquarefreePart(dr);
+     //System.out.println("dr  = " + dr);
+     //System.out.println("cr  = " + cr);
      assertTrue("isSquarefree(cr) " + cr, sqf.isRecursiveSquarefree(cr) );
      assertTrue("isSquarefree(dr) " + dr, sqf.isRecursiveSquarefree(dr) );
 
@@ -246,9 +246,9 @@ public class SquarefreeIntTest extends TestCase {
      ar = rfac.random(kl,3,2,q);
      br = rfac.random(kl,3,2,q);
      cr = rfac.random(kl,3,2,q);
-     System.out.println("ar = " + ar);
-     System.out.println("br = " + br);
-     System.out.println("cr = " + cr);
+     //System.out.println("ar = " + ar);
+     //System.out.println("br = " + br);
+     //System.out.println("cr = " + cr);
 
      if ( ar.isZERO() || br.isZERO() || cr.isZERO() ) {
         // skip for this turn
@@ -256,11 +256,11 @@ public class SquarefreeIntTest extends TestCase {
      }
          
      dr = ar.multiply(cr).multiply(br).multiply(br);
-     System.out.println("dr  = " + dr);
+     //System.out.println("dr  = " + dr);
 
      SortedMap<GenPolynomial<GenPolynomial<BigInteger>>,Long> sfactors;
-     sfactors = sqf.recursiveSquarefreeFactors(dr);
-     System.out.println("sfactors = " + sfactors);
+     sfactors = sqf.recursiveUnivariateSquarefreeFactors(dr);
+     //System.out.println("sfactors = " + sfactors);
 
      assertTrue("isFactorization(d,sfactors) ", sqf.isRecursiveFactorization(dr,sfactors) );
  }
@@ -278,9 +278,9 @@ public class SquarefreeIntTest extends TestCase {
      a = dfac.random(kl,ll,2,q);
      b = dfac.random(kl,ll,2,q);
      c = dfac.random(kl,ll,2,q);
-     System.out.println("a  = " + a);
-     System.out.println("b  = " + b);
-     System.out.println("c  = " + c);
+     //System.out.println("a  = " + a);
+     //System.out.println("b  = " + b);
+     //System.out.println("c  = " + c);
 
      if ( a.isZERO() || b.isZERO() || c.isZERO() ) {
         // skip for this turn
@@ -289,19 +289,18 @@ public class SquarefreeIntTest extends TestCase {
          
      d = a.multiply(a).multiply(b).multiply(b).multiply(c);
      c = a.multiply(b).multiply(c);
-     System.out.println("d  = " + d);
-     System.out.println("c  = " + c);
+     //System.out.println("d  = " + d);
+     //System.out.println("c  = " + c);
 
      c = sqf.squarefreePart(c); 
      d = sqf.squarefreePart(d);
-     System.out.println("c  = " + c);
-     System.out.println("d  = " + d);
+     //System.out.println("c  = " + c);
+     //System.out.println("d  = " + d);
      assertTrue("isSquarefree(d) " + d, sqf.isSquarefree(d) );
      assertTrue("isSquarefree(c) " + c, sqf.isSquarefree(c) );
 
      e = PolyUtil.<BigInteger>basePseudoRemainder(d,c);
      //System.out.println("e  = " + e);
-
      assertTrue("squarefree(abc) | squarefree(aabbc) " + e, e.isZERO() );
  }
 
@@ -317,9 +316,9 @@ public class SquarefreeIntTest extends TestCase {
      a = dfac.random(kl,3,2,q);
      b = dfac.random(kl,3,2,q);
      c = dfac.random(kl,3,2,q);
-     System.out.println("a  = " + a);
-     System.out.println("b  = " + b);
-     System.out.println("c  = " + c);
+     //System.out.println("a  = " + a);
+     //System.out.println("b  = " + b);
+     //System.out.println("c  = " + c);
 
      if ( a.isZERO() || b.isZERO() || c.isZERO() ) {
         // skip for this turn
@@ -327,11 +326,11 @@ public class SquarefreeIntTest extends TestCase {
      }
          
      d = a.multiply(a).multiply(b).multiply(b).multiply(b).multiply(c);
-     System.out.println("d  = " + d);
+     //System.out.println("d  = " + d);
 
      SortedMap<GenPolynomial<BigInteger>,Long> sfactors;
      sfactors = sqf.squarefreeFactors(d);
-     System.out.println("sfactors = " + sfactors);
+     //System.out.println("sfactors = " + sfactors);
 
      assertTrue("isFactorization(d,sfactors) ", sqf.isFactorization(d,sfactors) );
  }

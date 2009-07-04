@@ -54,6 +54,12 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
 
 
     /**
+     * Squarefree decompositon engine for base coefficients.
+     */
+    protected final SquarefreeAbstract<C> sengine;
+
+
+    /**
      * No argument constructor. 
      */
     protected FactorAbstract() {
@@ -67,7 +73,8 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
      */
     public FactorAbstract(RingFactory<C> cfac) {
         engine = GCDFactory.<C> getProxy(cfac);
-        //engine = GCDFactory.<C> getImplementation(cfac);
+          //engine = GCDFactory.<C> getImplementation(cfac);
+        sengine = SquarefreeFactory.<C> getImplementation(cfac);
     }
 
 
@@ -288,7 +295,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
             P = P.divide(c); // make primitive or monic
         }
         logger.info("squarefree facs P = " + P);
-        SortedMap<GenPolynomial<C>, Long> facs = engine.baseSquarefreeFactors(P);
+        SortedMap<GenPolynomial<C>, Long> facs = sengine.baseSquarefreeFactors(P);
         if ( debug ) {
             logger.info("squarefree facs   = " + facs);
             //System.out.println("sfacs   = " + facs);
@@ -371,7 +378,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
             factors.put(pc, 1L);
             P = P.divide(c); // make base primitive or base monic
         }
-        SortedMap<GenPolynomial<C>, Long> facs = engine.squarefreeFactors(P);
+        SortedMap<GenPolynomial<C>, Long> facs = sengine.squarefreeFactors(P);
         if ( debug ) {
             logger.info("squarefree facs   = " + facs);
             //System.out.println("facs   = " + facs);
@@ -403,7 +410,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
      * @return squarefree(P).
      */
     public GenPolynomial<C> squarefreePart(GenPolynomial<C> P) {
-        return engine.squarefreePart(P);
+        return sengine.squarefreePart(P);
     }
 
 
@@ -436,7 +443,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
      * @return [p_1 -&gt; e_1, ..., p_k -&gt; e_k] with P = prod_{i=1,...,k} p_i**e_i.
      */
     public SortedMap<GenPolynomial<C>, Long> squarefreeFactors(GenPolynomial<C> P) {
-        return engine.squarefreeFactors(P);
+        return sengine.squarefreeFactors(P);
     }
 
 

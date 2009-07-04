@@ -51,7 +51,7 @@ public class FactorTest extends TestCase {
 
 
     /**
-     * Constructs a <CODE>PolyUtilTest</CODE> object.
+     * Constructs a <CODE>FactorTest</CODE> object.
      * @param name String.
      */
     public FactorTest(String name) {

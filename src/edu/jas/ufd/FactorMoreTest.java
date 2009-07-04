@@ -15,6 +15,7 @@ import junit.framework.TestSuite;
 import org.apache.log4j.BasicConfigurator;
 
 import edu.jas.structure.Power;
+import edu.jas.structure.RingFactory;
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
@@ -52,7 +53,7 @@ public class FactorMoreTest extends TestCase {
 
 
     /**
-     * Constructs a <CODE>PolyUtilTest</CODE> object.
+     * Constructs a <CODE>FactorTest</CODE> object.
      * @param name String.
      */
     public FactorMoreTest(String name) {
@@ -103,44 +104,99 @@ public class FactorMoreTest extends TestCase {
 
 
     /**
-     * Test factory.
+     * Test factory generic.
      * 
      */
-    public void testFactory() {
+    @SuppressWarnings("unchecked")
+    public void testFactoryGeneric() {
         ModIntegerRing mi = new ModIntegerRing(19,true);
-        Factorization<ModInteger> ufdm = FactorFactory.getImplementation(mi);
+        Factorization<ModInteger> ufdm = FactorFactory.getImplementation((RingFactory)mi);
         //System.out.println("ufdm = " + ufdm);
         assertTrue("ufd != Modular " + ufdm, ufdm instanceof FactorModular );
 
         BigInteger bi = new BigInteger(1);
-        Factorization<BigInteger> ufdi = FactorFactory.getImplementation(bi);
+        Factorization<BigInteger> ufdi = FactorFactory.getImplementation((RingFactory)bi);
         //System.out.println("ufdi = " + ufdi);
         assertTrue("ufd != Integer " + ufdi, ufdi instanceof FactorInteger );
 
         BigRational br = new BigRational(1);
-        Factorization<BigRational> ufdr = FactorFactory.getImplementation(br);
+        Factorization<BigRational> ufdr = FactorFactory.getImplementation((RingFactory)br);
         //System.out.println("ufdr = " + ufdr);
         assertTrue("ufd != Rational " + ufdr, ufdr instanceof FactorRational );
 
         GenPolynomialRing<ModInteger> pmfac = new GenPolynomialRing<ModInteger>(mi, 1);
         GenPolynomial<ModInteger> pm = pmfac.univariate(0);
         AlgebraicNumberRing<ModInteger> am = new AlgebraicNumberRing<ModInteger>(pm);
-        Factorization<AlgebraicNumber<ModInteger>> ufdam = FactorFactory.getImplementation(am);
+        Factorization<AlgebraicNumber<ModInteger>> ufdam = FactorFactory.getImplementation((RingFactory)am);
         //System.out.println("ufdam = " + ufdam);
         assertTrue("ufd != AlgebraicNumber<ModInteger> " + ufdam, ufdam instanceof FactorAlgebraic );
 
         GenPolynomialRing<BigRational> prfac = new GenPolynomialRing<BigRational>(br, 1);
         GenPolynomial<BigRational> pr = prfac.univariate(0);
         AlgebraicNumberRing<BigRational> ar = new AlgebraicNumberRing<BigRational>(pr);
-        Factorization<AlgebraicNumber<BigRational>> ufdar = FactorFactory.getImplementation(ar);
+        Factorization<AlgebraicNumber<BigRational>> ufdar = FactorFactory.getImplementation((RingFactory)ar);
         //System.out.println("ufdar = " + ufdar);
         assertTrue("ufd != AlgebraicNumber<BigRational> " + ufdar, ufdar instanceof FactorAlgebraic );
 
         prfac = new GenPolynomialRing<BigRational>(br, 2);
         QuotientRing<BigRational> qrfac = new QuotientRing<BigRational>(prfac);
-        Factorization<Quotient<BigRational>> ufdqr = FactorFactory.getImplementation(qrfac);
+        Factorization<Quotient<BigRational>> ufdqr = FactorFactory.getImplementation((RingFactory)qrfac);
         //System.out.println("ufdqr = " + ufdqr);
         assertTrue("ufd != Quotient<BigRational> " + ufdqr, ufdqr instanceof FactorQuotient );
+
+        pmfac = new GenPolynomialRing<ModInteger>(mi, 1);
+        QuotientRing<ModInteger> qmfac = new QuotientRing<ModInteger>(pmfac);
+        Factorization<Quotient<ModInteger>> ufdqm = FactorFactory.getImplementation((RingFactory)qmfac);
+        //System.out.println("ufdqm = " + ufdqm);
+        assertTrue("ufd != Quotient<ModInteger> " + ufdqm, ufdqm instanceof FactorQuotient );
+    }
+
+
+    /**
+     * Test factory specific.
+     * 
+     */
+    public void testFactorySpecific() {
+        ModIntegerRing mi = new ModIntegerRing(19,true);
+        Factorization<ModInteger> ufdm = FactorFactory.<ModInteger>getImplementation(mi);
+        //System.out.println("ufdm = " + ufdm);
+        assertTrue("ufd != Modular " + ufdm, ufdm instanceof FactorModular );
+
+        BigInteger bi = new BigInteger(1);
+        Factorization<BigInteger> ufdi = FactorFactory.<BigInteger>getImplementation(bi);
+        //System.out.println("ufdi = " + ufdi);
+        assertTrue("ufd != Integer " + ufdi, ufdi instanceof FactorInteger );
+
+        BigRational br = new BigRational(1);
+        Factorization<BigRational> ufdr = FactorFactory.<BigRational>getImplementation(br);
+        //System.out.println("ufdr = " + ufdr);
+        assertTrue("ufd != Rational " + ufdr, ufdr instanceof FactorRational );
+
+        GenPolynomialRing<ModInteger> pmfac = new GenPolynomialRing<ModInteger>(mi, 1);
+        GenPolynomial<ModInteger> pm = pmfac.univariate(0);
+        AlgebraicNumberRing<ModInteger> am = new AlgebraicNumberRing<ModInteger>(pm);
+        Factorization<AlgebraicNumber<ModInteger>> ufdam = FactorFactory.<ModInteger>getImplementation(am);
+        //System.out.println("ufdam = " + ufdam);
+        assertTrue("ufd != AlgebraicNumber<ModInteger> " + ufdam, ufdam instanceof FactorAlgebraic );
+
+        GenPolynomialRing<BigRational> prfac = new GenPolynomialRing<BigRational>(br, 1);
+        GenPolynomial<BigRational> pr = prfac.univariate(0);
+        AlgebraicNumberRing<BigRational> ar = new AlgebraicNumberRing<BigRational>(pr);
+        Factorization<AlgebraicNumber<BigRational>> ufdar = FactorFactory.<BigRational>getImplementation(ar);
+        //System.out.println("ufdar = " + ufdar);
+        assertTrue("ufd != AlgebraicNumber<BigRational> " + ufdar, ufdar instanceof FactorAlgebraic );
+
+        prfac = new GenPolynomialRing<BigRational>(br, 2);
+        QuotientRing<BigRational> qrfac = new QuotientRing<BigRational>(prfac);
+        Factorization<Quotient<BigRational>> ufdqr = FactorFactory.<BigRational>getImplementation(qrfac);
+        //System.out.println("ufdqr = " + ufdqr);
+        assertTrue("ufd != Quotient<BigRational> " + ufdqr, ufdqr instanceof FactorQuotient );
+
+        pmfac = new GenPolynomialRing<ModInteger>(mi, 1);
+        QuotientRing<ModInteger> qmfac = new QuotientRing<ModInteger>(pmfac);
+        Factorization<Quotient<ModInteger>> ufdqm = FactorFactory.<ModInteger>getImplementation(qmfac);
+        //System.out.println("ufdqm = " + ufdqm);
+        assertTrue("ufd != Quotient<ModInteger> " + ufdqm, ufdqm instanceof FactorQuotient );
     }
 
 

@@ -18,6 +18,8 @@ import edu.jas.structure.RingFactory;
 import edu.jas.structure.UnaryFunctor;
 import edu.jas.structure.Power;
 
+import edu.jas.poly.ExpVector;
+import edu.jas.poly.Monomial;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
@@ -26,28 +28,28 @@ import edu.jas.util.ListUtil;
 
 
 /**
- * Squarefree decomposition for coefficient fields of characteristic 0.
+ * Squarefree decomposition for coefficient fields of characteristic p.
  * @author Heinz Kredel
  */
 
-public class SquarefreeFieldChar0<C extends GcdRingElem<C>> 
-             extends SquarefreeAbstract<C> /*implements Squarefree<C>*/ {
+public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> 
+                      extends SquarefreeAbstract<C> /*implements Squarefree<C>*/ {
+ 
 
-
-    private static final Logger logger = Logger.getLogger(SquarefreeFieldChar0.class);
+    private static final Logger logger = Logger.getLogger(SquarefreeFieldCharP.class);
 
 
     private final boolean debug = logger.isDebugEnabled();
 
 
     /**
-     * Factory for field of characteristic 0 coefficients.
+     * Factory for finite field of characteristic p coefficients.
      */
     protected final RingFactory<C> coFac;
 
 
     /**
-     * GCD engine for field of characteristic 0 base coefficients.
+     * GCD engine for finite field of characteristic p base coefficients.
      */
     protected final GreatestCommonDivisorAbstract<C> engine;
 
@@ -56,12 +58,16 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>>
     /**
      * Constructor. 
      */
-    public SquarefreeFieldChar0(RingFactory<C> fac) {
+    public SquarefreeFieldCharP(RingFactory<C> fac) {
+//         isFinite() predicate not yet present
+//         if ( !fac.isFinite() ) {
+//             throw new IllegalArgumentException("fac must be finite"); 
+//         }
         if ( !fac.isField() ) {
             throw new IllegalArgumentException("fac must be a field"); 
         }
-        if ( fac.characteristic().signum() != 0 ) {
-            throw new IllegalArgumentException("characterisic(fac) must be zero"); 
+        if ( fac.characteristic().signum() == 0 ) {
+            throw new IllegalArgumentException("characterisic(fac) must be non-zero"); 
         }
         coFac = fac;
         //engine = GCDFactory.<C>getImplementation( fac );
@@ -92,18 +98,14 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>>
             throw new RuntimeException(this.getClass().getName()
                     + " only for univariate polynomials");
         }
-        GenPolynomial<C> pp = P.monic();
-        if ( pp.isConstant() ) {
-            return pp;
+        // just for the moment:
+        GenPolynomial<C> s = pfac.getONE();
+        SortedMap<GenPolynomial<C>,Long> factors = baseSquarefreeFactors(P);
+        System.out.println("sqfPart,factors = " + factors);
+        for ( GenPolynomial<C> sp : factors.keySet() ) {
+            s = s.multiply(sp);
         }
-        GenPolynomial<C> d = PolyUtil.<C> baseDeriviative(pp);
-        d = d.monic();
-        //System.out.println("d = " + d);
-        GenPolynomial<C> g = engine.baseGcd(pp, d);
-        g = g.monic();
-        GenPolynomial<C> q = PolyUtil.<C> basePseudoDivide(pp, g);
-        q = q.monic();
-        return q;
+        return s.monic();
     }
 
 
@@ -127,7 +129,7 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>>
                     + " only for univariate polynomials");
         }
         C ldbcf = A.leadingBaseCoefficient();
-        if ( !ldbcf.isONE() ) {
+        if ( ! ldbcf.isONE() ) {
             A = A.divide(ldbcf);
             GenPolynomial<C> f1 = pfac.getONE().multiply(ldbcf);
             //System.out.println("gcda sqf f1 = " + f1);
@@ -135,10 +137,12 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>>
             ldbcf = pfac.coFac.getONE();
         }
         GenPolynomial<C> T0 = A;
+        long e = 1L;
         GenPolynomial<C> Tp;
         GenPolynomial<C> T = null;
         GenPolynomial<C> V = null;
         long k = 0L;
+        long mp = 0L;
         boolean init = true;
         while ( true ) { 
             if ( init ) {
@@ -154,12 +158,29 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>>
                 //System.out.println("iT  = " + T);
                 //System.out.println("iV  = " + V);
                 k = 0L;
+                mp = 0L;
                 init = false;
             }
             if ( V.isConstant() ) { 
-                break;
+                mp = pfac.characteristic().longValue(); // assert != 0
+                   //T0 = PolyUtil.<C> baseModRoot(T,mp);
+                T0 = baseRootCharacteristic(T);
+                if ( T0 == null ) {
+                    break;
+                    //throw new RuntimeException("can not happen");
+                }
+                System.out.println("char root: T0 = " + T0 + ", T = " + T);
+                e = e * mp;
+                init = true;
+                continue;
             }
             k++;
+            if ( mp != 0L && k % mp == 0L ) {
+                T = PolyUtil.<C> basePseudoDivide(T, V);
+                System.out.println("k = " + k);
+                //System.out.println("T = " + T);
+                k++;
+            }
             GenPolynomial<C> W = engine.baseGcd(T,V);
             W = W.monic();
             GenPolynomial<C> z = PolyUtil.<C> basePseudoDivide(V, W);
@@ -174,11 +195,11 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>>
                     z = z.monic();
                     System.out.println("z,monic = " + z);
                 }
-                sfactors.put(z, k);
+                sfactors.put(z, (e*k));
             }
         }
 //      look, a stupid error:
-//         if ( pfac.coFac.isField() && !ldbcf.isONE() ) {
+//         if ( !ldbcf.isONE() ) {
 //             GenPolynomial<C> f1 = sfactors.firstKey();
 //             long e1 = sfactors.remove(f1);
 //             System.out.println("gcda sqf c = " + c);
@@ -205,55 +226,15 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>>
             throw new RuntimeException(this.getClass().getName()
                     + " only for multivariate polynomials");
         }
-        GenPolynomialRing<C> cfac = (GenPolynomialRing<C>)pfac.coFac;
-        // squarefree content
-        GenPolynomial<GenPolynomial<C>> pp = P;
-        GenPolynomial<C> Pc = engine.recursiveContent(P);
-        C cldbcf = Pc.leadingBaseCoefficient();
-        if ( ! cldbcf.isONE() ) {
-            C li = cldbcf.inverse();
-            System.out.println("cli = " + li);
-            Pc = Pc.multiply(li);
-            //System.out.println("Pc,monic = " + Pc);
-        }
-        if ( ! Pc.isONE() ) {
-           pp = PolyUtil.<C> coefficientPseudoDivide(pp, Pc);
-           //System.out.println("pp,sqp = " + pp);
-           GenPolynomial<C> Pr = squarefreePart(Pc);
-           C rldbcf = Pr.leadingBaseCoefficient();
-           if ( ! rldbcf.isONE() ) {
-               C li = rldbcf.inverse();
-               System.out.println("rcli = " + li);
-               Pr = Pr.multiply(li);
-           }
-           //System.out.println("Pr,sqp = " + Pr);
-        }
-        if ( pp.leadingExpVector().getVal(0) < 1 ) {
-            //System.out.println("pp = " + pp);
-            //System.out.println("Pc = " + Pc);
-            return pp.multiply(Pc);
-        }
-        GenPolynomial<GenPolynomial<C>> d = PolyUtil.<C>recursiveDeriviative(pp);
-        //System.out.println("d = " + d);
+        // just for the moment:
+        GenPolynomial<GenPolynomial<C>> s = pfac.getONE();
 
-        GenPolynomial<GenPolynomial<C>> g = engine.recursiveUnivariateGcd(pp, d);
-        //System.out.println("g,rec = " + g);
-        C ldbcf = g.leadingBaseCoefficient().leadingBaseCoefficient();
-        if ( ! ldbcf.isONE() ) {
-            C li = ldbcf.inverse();
-            System.out.println("li,rec = " + li);
-            g = g.multiply( cfac.getONE().multiply(li) );
-            //System.out.println("g,monic = " + g);
+        SortedMap<GenPolynomial<GenPolynomial<C>>,Long> factors = recursiveUnivariateSquarefreeFactors(P);
+        System.out.println("sqfPart,factors = " + factors);
+        for ( GenPolynomial<GenPolynomial<C>> sp : factors.keySet() ) {
+            s = s.multiply(sp);
         }
-        GenPolynomial<GenPolynomial<C>> q = PolyUtil.<C> recursivePseudoDivide(pp, g);
-        C qldbcf = q.leadingBaseCoefficient().leadingBaseCoefficient();
-        if ( ! qldbcf.isONE() ) {
-            C li = qldbcf.inverse();
-            System.out.println("li,rec,q = " + li);
-            q = q.multiply( cfac.getONE().multiply(li) );
-            //System.out.println("q,monic = " + q);
-        }
-        return q.multiply(Pc);
+        return PolyUtil.<C>monic(s);
     }
 
 
@@ -314,10 +295,12 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>>
 
         // factors of recursive polynomial
         GenPolynomial<GenPolynomial<C>> T0 = P;
+        long e = 1L;
         GenPolynomial<GenPolynomial<C>> Tp;
         GenPolynomial<GenPolynomial<C>> T = null;
         GenPolynomial<GenPolynomial<C>> V = null;
         long k = 0L;
+        long mp = 0L;
         boolean init = true;
         while ( true ) { 
             if ( init ) {
@@ -339,12 +322,28 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>>
                 //System.out.println("iT = " + T);
                 //System.out.println("iV = " + V);
                 k = 0L;
+                mp = 0L;
                 init = false;
             }
             if ( V.isConstant() ) { 
-                break;
+                mp = pfac.characteristic().longValue(); // assert != 0
+                    //T0 = PolyUtil.<C> recursiveModRoot(T,mp);
+                T0 = recursiveUnivariateRootCharacteristic(T);
+                System.out.println("char root: T0r = " + T0 + ", Tr = " + T);
+                if ( T0 == null ) {
+                    break;
+                }
+                e = e * mp;
+                init = true;
+                continue;
             }
             k++;
+            if ( mp != 0L && k % mp == 0L ) {
+                T = PolyUtil.<C> recursivePseudoDivide(T, V);
+                System.out.println("k = " + k);
+                //System.out.println("T = " + T);
+                k++;
+            }
             GenPolynomial<GenPolynomial<C>> W = engine.recursiveUnivariateGcd(T,V);
             C wl = W.leadingBaseCoefficient().leadingBaseCoefficient();
             if ( ! wl.isONE() ) {
@@ -368,9 +367,10 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>>
                     GenPolynomial<C> lc = cfac.getONE().multiply(li);
                     //System.out.println("lc = " + lc);
                     z = z.multiply(lc);
-                    System.out.println("z,monic = " + z);
+                    //System.out.println("z,monic = " + z);
                 }
-                sfactors.put(z, k);
+                System.out.println("z,put = " + z);
+                sfactors.put(z, (e*k));
             }
         }
         return sfactors;
@@ -393,18 +393,14 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>>
         if (pfac.nvar <= 1) {
             return baseSquarefreePart(P);
         }
-        GenPolynomialRing<C> cfac = pfac.contract(1);
-        GenPolynomialRing<GenPolynomial<C>> rfac 
-            = new GenPolynomialRing<GenPolynomial<C>>(cfac, 1);
-
-        GenPolynomial<GenPolynomial<C>> Pr = PolyUtil.<C> recursive(rfac, P);
-        GenPolynomial<C> Pc = engine.recursiveContent(Pr);
-        Pr = PolyUtil.<C> coefficientPseudoDivide(Pr, Pc);
-        GenPolynomial<C> Ps = squarefreePart(Pc);
-        GenPolynomial<GenPolynomial<C>> PP = recursiveUnivariateSquarefreePart(Pr);
-        GenPolynomial<GenPolynomial<C>> PS = PP.multiply(Ps);
-        GenPolynomial<C> D = PolyUtil.<C> distribute(pfac, PS);
-        return D;
+        // just for the moment:
+        GenPolynomial<C> s = pfac.getONE();
+        SortedMap<GenPolynomial<C>,Long> factors = squarefreeFactors(P);
+        System.out.println("sqfPart,factors = " + factors);
+        for ( GenPolynomial<C> sp : factors.keySet() ) {
+            s = s.multiply(sp);
+        }
+        return s.monic();
     }
 
 
@@ -463,7 +459,158 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>>
         return B;
     }
 
+
+
+    /* --------- char-th roots --------------------- */
+
+
+    /**
+     * GenPolynomial char-th root main variable.
+     * Base coefficient type must be finite field, 
+     * that is ModInteger or AlgebraicNumber&lt;ModInteger&gt; etc.
+     * @param P GenPolynomial.
+     * @return char-th_rootOf(P), or null if no char-th root.
+     */
+    public abstract GenPolynomial<C> baseRootCharacteristic( GenPolynomial<C> P );
+
+
+    /**
+     * GenPolynomial char-th root main variable.
+     * @param P recursive univariate GenPolynomial.
+     * @return char-th_rootOf(P), or null if P is no char-th root.
+     */
+    // param <C> base coefficient type must be ModInteger.
+    public abstract GenPolynomial<GenPolynomial<C>> 
+        recursiveUnivariateRootCharacteristic( GenPolynomial<GenPolynomial<C>> P );
+
+
+
+    /**
+     * Polynomial is char-th root.
+     * @param P polynomial.
+     * @param F = [p_1 -&gt; e_1, ..., p_k -&gt; e_k].
+     * @return true if P = prod_{i=1,...,k} p_i**(e_i*p), else false.
+     */
+    public boolean isCharRoot(GenPolynomial<C> P, SortedMap<GenPolynomial<C>, Long> F) {
+        if (P == null || F == null) {
+            throw new IllegalArgumentException("P and F may not be null");
+        }
+        if (P.isZERO() && F.size() == 0) {
+            return true;
+        }
+        GenPolynomial<C> t = P.ring.getONE();
+        long p = P.ring.characteristic().longValue();
+        for (GenPolynomial<C> f : F.keySet()) {
+            Long E = F.get(f);
+            long e = E.longValue();
+            GenPolynomial<C> g = Power.<GenPolynomial<C>> positivePower(f, e);
+            if ( !f.isConstant() ) { 
+               g = Power.<GenPolynomial<C>> positivePower(g, p);
+            }
+            t = t.multiply(g);
+        }
+        boolean f = P.equals(t) || P.equals(t.negate());
+        if (!f) {
+            System.out.println("\nfactorization(map): " + f);
+            System.out.println("P = " + P);
+            System.out.println("t = " + t);
+            P = P.monic();
+            t = t.monic();
+            f = P.equals(t) || P.equals(t.negate());
+            if ( f ) {
+                return f;
+            }
+            System.out.println("\nfactorization(map): " + f);
+            System.out.println("P = " + P);
+            System.out.println("t = " + t);
+        }
+        return f;
+    }
+
+
+    /**
+     * Recursive polynomial is char-th root.
+     * @param P recursive polynomial.
+     * @param F = [p_1 -&gt; e_1, ..., p_k -&gt; e_k].
+     * @return true if P = prod_{i=1,...,k} p_i**(e_i*p), else false.
+     */
+    public boolean isRecursiveCharRoot(GenPolynomial<GenPolynomial<C>> P, SortedMap<GenPolynomial<GenPolynomial<C>>, Long> F) {
+        if (P == null || F == null) {
+            throw new IllegalArgumentException("P and F may not be null");
+        }
+        if (P.isZERO() && F.size() == 0) {
+            return true;
+        }
+        GenPolynomial<GenPolynomial<C>> t = P.ring.getONE();
+        long p = P.ring.characteristic().longValue();
+        for (GenPolynomial<GenPolynomial<C>> f : F.keySet()) {
+            Long E = F.get(f);
+            long e = E.longValue();
+            GenPolynomial<GenPolynomial<C>> g = Power.<GenPolynomial<GenPolynomial<C>>> positivePower(f, e);
+            if ( !f.isConstant() ) { 
+               g = Power.<GenPolynomial<GenPolynomial<C>>> positivePower(g, p);
+            }
+            t = t.multiply(g);
+        }
+        boolean f = P.equals(t) || P.equals(t.negate());
+        if (!f) {
+            System.out.println("\nfactorization(map): " + f);
+            System.out.println("P = " + P);
+            System.out.println("t = " + t);
+            P = P.monic();
+            t = t.monic();
+            f = P.equals(t) || P.equals(t.negate());
+            if ( f ) {
+                return f;
+            }
+            System.out.println("\nfactorization(map): " + f);
+            System.out.println("P = " + P);
+            System.out.println("t = " + t);
+        }
+        return f;
+    }
+
+
+    /**
+     * Recursive polynomial is char-th root.
+     * @param P recursive polynomial.
+     * @param r = recursive polynomial.
+     * @return true if P = r**p, else false.
+     */
+    public boolean isRecursiveCharRoot(GenPolynomial<GenPolynomial<C>> P, GenPolynomial<GenPolynomial<C>> r) {
+        if (P == null || r == null) {
+            throw new IllegalArgumentException("P and r may not be null");
+        }
+        if (P.isZERO() && r.isZERO()) {
+            return true;
+        }
+        long p = P.ring.characteristic().longValue();
+        GenPolynomial<GenPolynomial<C>> t = Power.<GenPolynomial<GenPolynomial<C>>> positivePower(r, p);
+
+        boolean f = P.equals(t) || P.equals(t.negate());
+        if (!f) {
+            System.out.println("\nisCharRoot: " + f);
+            System.out.println("P = " + P);
+            System.out.println("t = " + t);
+            P = P.monic();
+            t = t.monic();
+            f = P.equals(t) || P.equals(t.negate());
+            if ( f ) {
+                return f;
+            }
+            System.out.println("\nisCharRoot: " + f);
+            System.out.println("P = " + P);
+            System.out.println("t = " + t);
+        }
+        return f;
+    }
+
 }
+
+
+
+
+
 
 
 

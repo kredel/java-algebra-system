@@ -26,11 +26,12 @@ import edu.jas.util.ListUtil;
 
 
 /**
- * Squarefree decomposition for rings of characteristic 0.
+ * Squarefree decomposition for coefficient rings of characteristic 0.
  * @author Heinz Kredel
  */
 
-public class SquarefreeRingChar0<C extends GcdRingElem<C>> {
+public class SquarefreeRingChar0<C extends GcdRingElem<C>> 
+             extends SquarefreeAbstract<C> /*implements Squarefree<C>*/ {
 
 
     private static final Logger logger = Logger.getLogger(SquarefreeRingChar0.class);
@@ -180,12 +181,12 @@ public class SquarefreeRingChar0<C extends GcdRingElem<C>> {
 
 
     /**
-     * GenPolynomial recursive polynomial greatest squarefree divisor.
-     * @param P recursive GenPolynomial.
+     * GenPolynomial recursive univariate polynomial greatest squarefree divisor.
+     * @param P recursive univariate GenPolynomial.
      * @return squarefree(pp(P)).
      */
     public GenPolynomial<GenPolynomial<C>> 
-      recursiveSquarefreePart( GenPolynomial<GenPolynomial<C>> P ) {
+      recursiveUnivariateSquarefreePart( GenPolynomial<GenPolynomial<C>> P ) {
         if ( P == null || P.isZERO() ) {
             return P;
         }
@@ -227,12 +228,12 @@ public class SquarefreeRingChar0<C extends GcdRingElem<C>> {
 
 
    /**
-     * GenPolynomial recursive polynomial squarefree factorization.
-     * @param P GenPolynomial.
+     * GenPolynomial recursive univariate polynomial squarefree factorization.
+     * @param P recursive univariate GenPolynomial.
      * @return [p_1 -> e_1, ..., p_k -> e_k] with P = prod_{i=1,...,k} p_i^{e_i} and p_i squarefree.
      */
     public SortedMap<GenPolynomial<GenPolynomial<C>>,Long> 
-      recursiveSquarefreeFactors( GenPolynomial<GenPolynomial<C>> P ) {
+      recursiveUnivariateSquarefreeFactors( GenPolynomial<GenPolynomial<C>> P ) {
         SortedMap<GenPolynomial<GenPolynomial<C>>,Long> sfactors 
                  = new TreeMap<GenPolynomial<GenPolynomial<C>>,Long>();
         if (P == null || P.isZERO()) {
@@ -342,44 +343,10 @@ public class SquarefreeRingChar0<C extends GcdRingElem<C>> {
         GenPolynomial<C> Pc = engine.recursiveContent(Pr);
         Pr = PolyUtil.<C> coefficientPseudoDivide(Pr, Pc);
         GenPolynomial<C> Ps = squarefreePart(Pc);
-        GenPolynomial<GenPolynomial<C>> PP = recursiveSquarefreePart(Pr);
+        GenPolynomial<GenPolynomial<C>> PP = recursiveUnivariateSquarefreePart(Pr);
         GenPolynomial<GenPolynomial<C>> PS = PP.multiply(Ps);
         GenPolynomial<C> D = PolyUtil.<C> distribute(pfac, PS);
         return D;
-    }
-
-
-    /**
-     * GenPolynomial test if is squarefree.
-     * @param P GenPolynomial.
-     * @return true if P is squarefree, else false.
-     */
-    public boolean isSquarefree(GenPolynomial<C> P) {
-        GenPolynomial<C> S = squarefreePart(P);
-        boolean f = P.equals(S);
-        if (!f) {
-            System.out.println("\nisSquarefree: " + f);
-            System.out.println("S  = " + S);
-            System.out.println("P  = " + P);
-        }
-        return f;
-    }
-
-
-    /**
-     * Recursive GenPolynomial test if is squarefree.
-     * @param P recursive GenPolynomial.
-     * @return true if P is squarefree, else false.
-     */
-    public boolean isRecursiveSquarefree(GenPolynomial<GenPolynomial<C>> P) {
-        GenPolynomial<GenPolynomial<C>> S = recursiveSquarefreePart(P);
-        boolean f = P.equals(S);
-        if (!f) {
-            System.out.println("\nisSquarefree: " + f);
-            System.out.println("S = " + S);
-            System.out.println("P = " + P);
-        }
-        return f;
     }
 
 
@@ -405,7 +372,7 @@ public class SquarefreeRingChar0<C extends GcdRingElem<C>> {
             = new GenPolynomialRing<GenPolynomial<C>>(cfac, 1);
 
         GenPolynomial<GenPolynomial<C>> Pr = PolyUtil.<C> recursive(rfac, P);
-        SortedMap<GenPolynomial<GenPolynomial<C>>,Long> PP = recursiveSquarefreeFactors(Pr);
+        SortedMap<GenPolynomial<GenPolynomial<C>>,Long> PP = recursiveUnivariateSquarefreeFactors(Pr);
 
         for (Map.Entry<GenPolynomial<GenPolynomial<C>>,Long> m : PP.entrySet()) {
             Long i = m.getValue();
@@ -414,100 +381,6 @@ public class SquarefreeRingChar0<C extends GcdRingElem<C>> {
             sfactors.put(D,i);
         }
         return sfactors;
-    }
-
-
-    /**
-     * GenPolynomial is (squarefree) factorization.
-     * @param P GenPolynomial.
-     * @param F = [p_1,...,p_k].
-     * @return true if P = prod_{i=1,...,r} p_i, else false.
-     */
-    public boolean isFactorization(GenPolynomial<C> P, List<GenPolynomial<C>> F) {
-        if (P == null || F == null) {
-            throw new IllegalArgumentException("P and F may not be null");
-        }
-        GenPolynomial<C> t = P.ring.getONE();
-        for (GenPolynomial<C> f : F) {
-            t = t.multiply(f);
-        }
-        boolean f = P.equals(t) || P.equals(t.negate());
-        if (!f) {
-            System.out.println("\nfactorization(list): " + f);
-            System.out.println("F = " + F);
-            System.out.println("P = " + P);
-            System.out.println("t = " + t);
-        }
-        return f;
-    }
-
-
-    /**
-     * GenPolynomial is (squarefree) factorization.
-     * @param P GenPolynomial.
-     * @param F = [p_1 -&gt; e_1, ..., p_k -&gt; e_k].
-     * @return true if P = prod_{i=1,...,k} p_i**e_i, else false.
-     */
-    public boolean isFactorization(GenPolynomial<C> P, SortedMap<GenPolynomial<C>, Long> F) {
-        if (P == null || F == null) {
-            throw new IllegalArgumentException("P and F may not be null");
-        }
-        if (P.isZERO() && F.size() == 0) {
-            return true;
-        }
-        GenPolynomial<C> t = P.ring.getONE();
-        for (GenPolynomial<C> f : F.keySet()) {
-            Long E = F.get(f);
-            long e = E.longValue();
-            GenPolynomial<C> g = Power.<GenPolynomial<C>> positivePower(f, e);
-            t = t.multiply(g);
-        }
-        boolean f = P.equals(t) || P.equals(t.negate());
-        if (!f) {
-            System.out.println("\nfactorization(map): " + f);
-            System.out.println("F = " + F);
-            System.out.println("P = " + P);
-            System.out.println("t = " + t);
-            //RuntimeException e = new RuntimeException("fac-map");
-            //e.printStackTrace();
-            //throw e;
-        }
-        return f;
-    }
-
-
-    /**
-     * GenPolynomial is (squarefree) factorization.
-     * @param P GenPolynomial.
-     * @param F = [p_1 -&gt; e_1, ..., p_k -&gt; e_k].
-     * @return true if P = prod_{i=1,...,k} p_i**e_i, else false.
-     */
-    public boolean isRecursiveFactorization(GenPolynomial<GenPolynomial<C>> P, 
-                                            SortedMap<GenPolynomial<GenPolynomial<C>>, Long> F) {
-        if (P == null || F == null) {
-            throw new IllegalArgumentException("P and F may not be null");
-        }
-        if (P.isZERO() && F.size() == 0) {
-            return true;
-        }
-        GenPolynomial<GenPolynomial<C>> t = P.ring.getONE();
-        for (GenPolynomial<GenPolynomial<C>> f : F.keySet()) {
-            Long E = F.get(f);
-            long e = E.longValue();
-            GenPolynomial<GenPolynomial<C>> g = Power.<GenPolynomial<GenPolynomial<C>>> positivePower(f, e);
-            t = t.multiply(g);
-        }
-        boolean f = P.equals(t) || P.equals(t.negate());
-        if (!f) {
-            System.out.println("\nfactorization(map): " + f);
-            System.out.println("F = " + F);
-            System.out.println("P = " + P);
-            System.out.println("t = " + t);
-            //RuntimeException e = new RuntimeException("fac-map");
-            //e.printStackTrace();
-            //throw e;
-        }
-        return f;
     }
 
 

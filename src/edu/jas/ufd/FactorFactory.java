@@ -45,8 +45,8 @@ import edu.jas.application.QuotientRing;
  * <pre>
  * BigInteger cofac = new BigInteger();
  * Factorization&lt;BigInteger&gt; engine; 
- *     engine = GCDFactory.getImplementation( cofac );
- * c = engine.factors(poly);
+ *     engine = FactorFactory.getImplementation( cofac );
+ * Sm = engine.factors(poly);
  * </pre>
  * @see edu.jas.ufd.Factorization#factors(edu.jas.poly.GenPolynomial P)
  * @see edu.jas.ufd.FactorAbstract#factors(edu.jas.poly.GenPolynomial P)
