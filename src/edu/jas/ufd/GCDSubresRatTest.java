@@ -13,9 +13,10 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import edu.jas.arith.BigInteger;
+//import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
 //import edu.jas.arith.ModInteger;
+//import edu.jas.arith.ModIntegerRing;
 //import edu.jas.arith.PrimeList;
 
 import edu.jas.poly.ExpVector;
@@ -26,11 +27,11 @@ import edu.jas.poly.PolyUtil;
 
 
 /**
- * GCD Primitive PRS algorithm tests with JUnit.
+ * GCD Subres with rational coefficients algorithm tests with JUnit.
  * @author Heinz Kredel.
  */
 
-public class GCDPrimitiveTest extends TestCase {
+public class GCDSubresRatTest extends TestCase {
 
 /**
  * main.
@@ -40,71 +41,76 @@ public class GCDPrimitiveTest extends TestCase {
    }
 
 /**
- * Constructs a <CODE>GCDPrimitiveTest</CODE> object.
+ * Constructs a <CODE>GCDSubresRatTest</CODE> object.
  * @param name String.
  */
-   public GCDPrimitiveTest(String name) {
+   public GCDSubresRatTest(String name) {
           super(name);
    }
 
 /**
  */ 
  public static Test suite() {
-     TestSuite suite= new TestSuite(GCDPrimitiveTest.class);
+     TestSuite suite= new TestSuite(GCDSubresRatTest.class);
      return suite;
    }
 
    //private final static int bitlen = 100;
 
-   GreatestCommonDivisorAbstract<BigInteger> ufd; 
+   GreatestCommonDivisorAbstract<BigRational> ufd; 
 
    TermOrder to = new TermOrder( TermOrder.INVLEX );
 
-   GenPolynomialRing<BigInteger> dfac;
-   GenPolynomialRing<BigInteger> cfac;
-   GenPolynomialRing<GenPolynomial<BigInteger>> rfac;
+   GenPolynomialRing<BigRational> dfac;
+   GenPolynomialRing<BigRational> cfac;
+   GenPolynomialRing<GenPolynomial<BigRational>> rfac;
 
-   BigInteger ai;
-   BigInteger bi;
-   BigInteger ci;
-   BigInteger di;
-   BigInteger ei;
+   BigRational mi;
 
-   GenPolynomial<BigInteger> a;
-   GenPolynomial<BigInteger> b;
-   GenPolynomial<BigInteger> c;
-   GenPolynomial<BigInteger> d;
-   GenPolynomial<BigInteger> e;
+   BigRational ai;
+   BigRational bi;
+   BigRational ci;
+   BigRational di;
+   BigRational ei;
 
-   GenPolynomial<GenPolynomial<BigInteger>> ar;
-   GenPolynomial<GenPolynomial<BigInteger>> br;
-   GenPolynomial<GenPolynomial<BigInteger>> cr;
-   GenPolynomial<GenPolynomial<BigInteger>> dr;
-   GenPolynomial<GenPolynomial<BigInteger>> er;
+   GenPolynomial<BigRational> a;
+   GenPolynomial<BigRational> b;
+   GenPolynomial<BigRational> c;
+   GenPolynomial<BigRational> d;
+   GenPolynomial<BigRational> e;
 
-   int rl = 5; 
-   int kl = 4;
-   int ll = 5;
+   GenPolynomial<GenPolynomial<BigRational>> ar;
+   GenPolynomial<GenPolynomial<BigRational>> br;
+   GenPolynomial<GenPolynomial<BigRational>> cr;
+   GenPolynomial<GenPolynomial<BigRational>> dr;
+   GenPolynomial<GenPolynomial<BigRational>> er;
+
+   int rl = 3; 
+   int kl = 2;
+   int ll = 3;
    int el = 3;
-   float q = 0.3f;
+   float q = 0.25f;
 
    protected void setUp() {
        a = b = c = d = e = null;
        ai = bi = ci = di = ei = null;
        ar = br = cr = dr = er = null;
-       ufd = new GreatestCommonDivisorPrimitive<BigInteger>();
+       mi = new BigRational(1);
+       ufd = new GreatestCommonDivisorSubres<BigRational>();
        String[] vars = ExpVector.STDVARS(rl);
        String[] cvars = ExpVector.STDVARS(rl-1);
        String[] rvars = new String[] { vars[rl-1] };
-       dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),rl,to,vars);
-       cfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),rl-1,to,cvars);
-       rfac = new GenPolynomialRing<GenPolynomial<BigInteger>>(cfac,1,to,rvars);
+       dfac = new GenPolynomialRing<BigRational>(mi,rl,to,vars);
+       cfac = new GenPolynomialRing<BigRational>(mi,rl-1,to,cvars);
+       rfac = new GenPolynomialRing<GenPolynomial<BigRational>>(cfac,1,to,rvars);
+       //System.out.println("mi = " + mi);
    }
 
    protected void tearDown() {
        a = b = c = d = e = null;
        ai = bi = ci = di = ei = null;
        ar = br = cr = dr = er = null;
+       mi = null;
        ufd = null;
        dfac = null;
        cfac = null;
@@ -113,20 +119,68 @@ public class GCDPrimitiveTest extends TestCase {
 
 
 /**
+ * Test gcd.
+ * 
+ */
+ public void testGcd() {
+
+     for (int i = 0; i < 1; i++) {
+         a = dfac.random(kl*(i+2),ll+2*i,el+0*i,q);
+         b = dfac.random(kl*(i+2),ll+2*i,el+0*i,q);
+         c = dfac.random(kl*(i+2),ll+2*i,el+0*i,q);
+         c = c.multiply( dfac.univariate(0) );
+         //a = ufd.basePrimitivePart(a);
+         //b = ufd.basePrimitivePart(b);
+
+         if ( a.isZERO() || b.isZERO() || c.isZERO() ) {
+            // skip for this turn
+            continue;
+         }
+         assertTrue("length( c"+i+" ) <> 0", c.length() > 0);
+         //assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
+         //assertTrue(" not isONE( c"+i+" )", !c.isONE() );
+         
+         a = a.multiply(c);
+         b = b.multiply(c);
+         //System.out.println("a  = " + a);
+         //System.out.println("b  = " + b);
+
+         d = ufd.gcd(a,b);
+
+         c = ufd.basePrimitivePart(c).abs();
+         e = PolyUtil.<BigRational>basePseudoRemainder(d,c);
+         //System.out.println("c  = " + c);
+         //System.out.println("d  = " + d);
+         assertTrue("c | gcd(ac,bc) " + e, e.isZERO() );
+
+         e = PolyUtil.<BigRational>basePseudoRemainder(a,d);
+         //System.out.println("e = " + e);
+         assertTrue("gcd(a,b) | a" + e, e.isZERO() );
+
+         e = PolyUtil.<BigRational>basePseudoRemainder(b,d);
+         //System.out.println("e = " + e);
+         assertTrue("gcd(a,b) | b" + e, e.isZERO() );
+     }
+ }
+
+
+/**
  * Test base quotioent and remainder.
  * 
  */
  public void testBaseQR() {
-     di = new BigInteger( 1 );
-     dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),1,to);
 
-     for (int i = 0; i < 5; i++) {
+     dfac = new GenPolynomialRing<BigRational>(mi,1,to);
+
+     for (int i = 0; i < 3; i++) {
          a = dfac.random(kl*(i+2),ll+2*i,el+2*i,q);
          c = dfac.random(kl*(i+2),ll+2*i,el+2*i,q);
          //a = ufd.basePrimitivePart(a).abs();
          //c = ufd.basePrimitivePart(c);
-         ci = di.random(kl*(i+2));
-         ci = ci.sum(di.getONE());
+         do {
+            ci = mi.random(kl*(i+2));
+            ci = ci.sum(mi.getONE());
+         } while ( ci.isZERO() );
 
          //System.out.println("a  = " + a);
          //System.out.println("c  = " + c);
@@ -142,7 +196,7 @@ public class GCDPrimitiveTest extends TestCase {
          
          b = a.multiply(c);
          //System.out.println("b  = " + b);
-         d = PolyUtil.<BigInteger>basePseudoRemainder(b,c);
+         d = PolyUtil.<BigRational>basePseudoRemainder(b,c);
          //System.out.println("d  = " + d);
 
          assertTrue("rem(ac,c) == 0", d.isZERO() );
@@ -156,7 +210,7 @@ public class GCDPrimitiveTest extends TestCase {
 
          b = a.multiply(c);
          //System.out.println("b  = " + b);
-         d = PolyUtil.<BigInteger>basePseudoDivide(b,c);
+         d = PolyUtil.<BigRational>basePseudoDivide(b,c);
          //System.out.println("d  = " + d);
 
          assertEquals("a == ac/c", a, d );
@@ -169,11 +223,10 @@ public class GCDPrimitiveTest extends TestCase {
  * 
  */
  public void testBaseContentPP() {
-     di = new BigInteger( 1 );
 
-     for (int i = 0; i < 13; i++) {
+     for (int i = 0; i < 9; i++) {
          c = dfac.random(kl*(i+2),ll+2*i,el+i,q);
-         c = c.multiply( di.random(kl*(i+2)) );
+         c = c.multiply( mi.random(kl*(i+2)) );
 
          if ( c.isZERO() ) {
             // skip for this turn
@@ -201,9 +254,9 @@ public class GCDPrimitiveTest extends TestCase {
  */
  public void testBaseGcd() {
 
-     dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),1,to);
+     dfac = new GenPolynomialRing<BigRational>(mi,1,to);
 
-     for (int i = 0; i < 5; i++) {
+     for (int i = 0; i < 3; i++) {
          a = dfac.random(kl*(i+2),ll+2*i,el+2*i,q);
          b = dfac.random(kl*(i+2),ll+2*i,el+2*i,q);
          c = dfac.random(kl*(i+2),ll+2*i,el+2*i,q);
@@ -227,7 +280,7 @@ public class GCDPrimitiveTest extends TestCase {
          b = b.multiply(c);
 
          d = ufd.baseGcd(a,b);
-         e = PolyUtil.<BigInteger>basePseudoRemainder(d,c);
+         e = PolyUtil.<BigRational>basePseudoRemainder(d,c);
          //System.out.println("d  = " + d);
 
          assertTrue("c | gcd(ac,bc) " + e, e.isZERO() );
@@ -241,7 +294,7 @@ public class GCDPrimitiveTest extends TestCase {
  */
  public void testBaseSquarefree() {
 
-     dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),1,to);
+     dfac = new GenPolynomialRing<BigRational>(mi,1,to);
 
      a = dfac.random(kl,ll,el+2,q);
      b = dfac.random(kl,ll,el+2,q);
@@ -270,8 +323,8 @@ public class GCDPrimitiveTest extends TestCase {
      //System.out.println("c  = " + c);
      //System.out.println("d  = " + d);
 
-     e = PolyUtil.<BigInteger>basePseudoRemainder(d,c);
-     //e = PolyUtil.<BigInteger>basePseudoRemainder(c,d);
+     e = PolyUtil.<BigRational>basePseudoRemainder(d,c);
+     //e = PolyUtil.<BigRational>basePseudoRemainder(c,d);
      //System.out.println("e  = " + e);
 
      assertTrue("abc | squarefree(aabbbc) " + e, e.isZERO() );
@@ -284,7 +337,7 @@ public class GCDPrimitiveTest extends TestCase {
  */
  public void testBaseSquarefreeFactors() {
 
-     dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),1,to);
+     dfac = new GenPolynomialRing<BigRational>(mi,1,to);
 
      a = dfac.random(kl,ll,el+3,q);
      b = dfac.random(kl,ll,el+3,q);
@@ -306,32 +359,32 @@ public class GCDPrimitiveTest extends TestCase {
      c = ufd.basePrimitivePart(c);
      d = ufd.basePrimitivePart(d);
 
-     SortedMap<GenPolynomial<BigInteger>,Long> sfactors;
+     SortedMap<GenPolynomial<BigRational>,Long> sfactors;
      sfactors = ufd.baseSquarefreeFactors(d);
      //System.out.println("sfactors = " + sfactors);
 
      assertTrue("isFactorization(d,sfactors) ", ufd.isFactorization(d,sfactors) );
 
      e = dfac.getONE();
-     for ( Map.Entry<GenPolynomial<BigInteger>,Long> m : sfactors.entrySet() ) {
-         GenPolynomial<BigInteger> p = m.getKey();
+     for ( Map.Entry<GenPolynomial<BigRational>,Long> m : sfactors.entrySet() ) {
+         GenPolynomial<BigRational> p = m.getKey();
          long j = m.getValue();
          for ( int i = 0; i < j; i++ ) {
              e = e.multiply(p);
          }
      }
      //System.out.println("e  = " + e);
-     e = PolyUtil.<BigInteger>basePseudoRemainder(d,e);
+     e = PolyUtil.<BigRational>basePseudoRemainder(d,e);
      assertTrue("PROD squarefreefactors(aabbbc) | aabbbc " + e, e.isZERO() );
 
      e = dfac.getONE();
-     for ( GenPolynomial<BigInteger> p : sfactors.keySet() ) {
+     for ( GenPolynomial<BigRational> p : sfactors.keySet() ) {
          e = e.multiply(p);
      }
      //System.out.println("e  = " + e);
 
-     //e = PolyUtil.<BigInteger>basePseudoRemainder(e,c);
-     e = PolyUtil.<BigInteger>basePseudoRemainder(c,e);
+     //e = PolyUtil.<BigRational>basePseudoRemainder(e,c);
+     e = PolyUtil.<BigRational>basePseudoRemainder(c,e);
      //System.out.println("e  = " + e);
 
      assertTrue("squarefreefactors(aabbbc) | abc" + e, e.isZERO() );
@@ -343,23 +396,22 @@ public class GCDPrimitiveTest extends TestCase {
  * 
  */
  public void testRecursiveQR() {
-     di = new BigInteger( 1 );
-     dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),2,to);
-     cfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),2-1,to);
-     rfac = new GenPolynomialRing<GenPolynomial<BigInteger>>(cfac,1,to);
+     dfac = new GenPolynomialRing<BigRational>(mi,2,to);
+     cfac = new GenPolynomialRing<BigRational>(mi,2-1,to);
+     rfac = new GenPolynomialRing<GenPolynomial<BigRational>>(cfac,1,to);
 
-     for (int i = 0; i < 5; i++) {
+     for (int i = 0; i < 3; i++) {
          a = dfac.random(kl*(i+1),ll+i,el+i,q);
          a = ufd.basePrimitivePart(a).abs();
 
          c = dfac.random(kl*(i+1),ll+i,el+i,q);
          c = ufd.basePrimitivePart(a).abs();
-         cr = PolyUtil.<BigInteger>recursive(rfac,c);
+         cr = PolyUtil.<BigRational>recursive(rfac,c);
 
          c = cfac.random(kl*(i+1),ll+2*i,el+2*i,q);
          c = ufd.basePrimitivePart(c).abs();
 
-         ar = PolyUtil.<BigInteger>recursive(rfac,a);
+         ar = PolyUtil.<BigRational>recursive(rfac,a);
          //System.out.println("ar = " + ar);
          //System.out.println("a  = " + a);
          //System.out.println("c  = " + c);
@@ -376,18 +428,18 @@ public class GCDPrimitiveTest extends TestCase {
 
          br = ar.multiply(cr);
          //System.out.println("br = " + br);
-         dr = PolyUtil.<BigInteger>recursivePseudoRemainder(br,cr);
+         dr = PolyUtil.<BigRational>recursivePseudoRemainder(br,cr);
          //System.out.println("dr = " + dr);
-         d = PolyUtil.<BigInteger>distribute(dfac,dr);
+         d = PolyUtil.<BigRational>distribute(dfac,dr);
          //System.out.println("d  = " + d);
 
          assertTrue("rem(ac,c) == 0", d.isZERO() );
 
          br = ar.multiply(c);
          //System.out.println("br = " + br);
-         dr = PolyUtil.<BigInteger>recursiveDivide(br,c);
+         dr = PolyUtil.<BigRational>recursiveDivide(br,c);
          //System.out.println("dr = " + dr);
-         d = PolyUtil.<BigInteger>distribute(dfac,dr);
+         d = PolyUtil.<BigRational>distribute(dfac,dr);
          //System.out.println("d  = " + d);
 
          assertEquals("a == ac/c", a, d );
@@ -400,10 +452,9 @@ public class GCDPrimitiveTest extends TestCase {
  * 
  */
  public void testRecursiveContentPP() {
-     di = new BigInteger( 1 );
-     dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),2,to);
-     cfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),2-1,to);
-     rfac = new GenPolynomialRing<GenPolynomial<BigInteger>>(cfac,1,to);
+     dfac = new GenPolynomialRing<BigRational>(mi,2,to);
+     cfac = new GenPolynomialRing<BigRational>(mi,2-1,to);
+     rfac = new GenPolynomialRing<GenPolynomial<BigRational>>(cfac,1,to);
 
      for (int i = 0; i < 3; i++) {
          cr = rfac.random(kl*(i+2),ll+2*i,el+i,q);
@@ -429,10 +480,9 @@ public class GCDPrimitiveTest extends TestCase {
  * 
  */
  public void testRecursiveGCD() {
-     di = new BigInteger( 1 );
-     dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),2,to);
-     cfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),2-1,to);
-     rfac = new GenPolynomialRing<GenPolynomial<BigInteger>>(cfac,1,to);
+     dfac = new GenPolynomialRing<BigRational>(mi,2,to);
+     cfac = new GenPolynomialRing<BigRational>(mi,2-1,to);
+     rfac = new GenPolynomialRing<GenPolynomial<BigRational>>(cfac,1,to);
 
      for (int i = 0; i < 2; i++) {
          ar = rfac.random(kl,ll,el+i,q);
@@ -458,7 +508,7 @@ public class GCDPrimitiveTest extends TestCase {
          dr = ufd.recursiveUnivariateGcd(ar,br);
          //System.out.println("dr = " + dr);
 
-         er = PolyUtil.<BigInteger>recursivePseudoRemainder(dr,cr);
+         er = PolyUtil.<BigRational>recursivePseudoRemainder(dr,cr);
          //System.out.println("er = " + er);
 
          assertTrue("c | gcd(ac,bc) " + er, er.isZERO() );
@@ -471,10 +521,9 @@ public class GCDPrimitiveTest extends TestCase {
  * 
  */
  public void testArbitraryRecursiveGCD() {
-     di = new BigInteger( 1 );
-     dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),2,to);
-     cfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),2-1,to);
-     rfac = new GenPolynomialRing<GenPolynomial<BigInteger>>(cfac,1,to);
+     dfac = new GenPolynomialRing<BigRational>(mi,2,to);
+     cfac = new GenPolynomialRing<BigRational>(mi,2-1,to);
+     rfac = new GenPolynomialRing<GenPolynomial<BigRational>>(cfac,1,to);
 
      for (int i = 0; i < 2; i++) {
          ar = rfac.random(kl,ll,el+i,q);
@@ -500,7 +549,7 @@ public class GCDPrimitiveTest extends TestCase {
          dr = ufd.recursiveGcd(ar,br);
          //System.out.println("dr = " + dr);
 
-         er = PolyUtil.<BigInteger>recursivePseudoRemainder(dr,cr);
+         er = PolyUtil.<BigRational>recursivePseudoRemainder(dr,cr);
          //System.out.println("er = " + er);
 
          assertTrue("c | gcd(ac,bc) " + er, er.isZERO() );
@@ -513,8 +562,8 @@ public class GCDPrimitiveTest extends TestCase {
  * 
  */
  public void testRecursiveSquarefree() {
-     cfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),2-1,to);
-     rfac = new GenPolynomialRing<GenPolynomial<BigInteger>>(cfac,1,to);
+     cfac = new GenPolynomialRing<BigRational>(mi,2-1,to);
+     rfac = new GenPolynomialRing<GenPolynomial<BigRational>>(cfac,1,to);
 
      ar = rfac.random(kl,ll,2,q);
      br = rfac.random(kl,ll,2,q);
@@ -540,11 +589,12 @@ public class GCDPrimitiveTest extends TestCase {
      dr = ufd.recursiveSquarefreePart(dr);
      //System.out.println("cr  = " + cr);
      //System.out.println("dr  = " + dr);
+     assertTrue("isSquarefree(dr) " + dr, ufd.isRecursiveSquarefree(dr) );
 
-     er = PolyUtil.<BigInteger>recursivePseudoRemainder(dr,cr);
+     //er = PolyUtil.<BigRational>recursivePseudoRemainder(dr,cr);
      //System.out.println("er  = " + er);
 
-     assertTrue("abc | squarefree(aabbc) " + er, er.isZERO() );
+     //assertTrue("abc | squarefree(aabbc) " + er, er.isZERO() );
  }
 
 
@@ -554,8 +604,8 @@ public class GCDPrimitiveTest extends TestCase {
  */
  public void testRecursiveSquarefreeFactors() {
 
-     cfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),2-1,to);
-     rfac = new GenPolynomialRing<GenPolynomial<BigInteger>>(cfac,1,to);
+     cfac = new GenPolynomialRing<BigRational>(mi,2-1,to);
+     rfac = new GenPolynomialRing<GenPolynomial<BigRational>>(cfac,1,to);
 
      ar = rfac.random(3,3,2,q);
      br = rfac.random(3,3,2,q);
@@ -577,33 +627,34 @@ public class GCDPrimitiveTest extends TestCase {
      cr = ufd.recursivePrimitivePart(cr);
      dr = ufd.recursivePrimitivePart(dr);
 
-     SortedMap<GenPolynomial<GenPolynomial<BigInteger>>,Long> sfactors;
+     SortedMap<GenPolynomial<GenPolynomial<BigRational>>,Long> sfactors;
      sfactors = ufd.recursiveSquarefreeFactors(dr);
      //System.out.println("sfactors = " + sfactors);
 
      assertTrue("isFactorization(d,sfactors) ", ufd.isRecursiveFactorization(dr,sfactors) );
 
      er = rfac.getONE();
-     for ( Map.Entry<GenPolynomial<GenPolynomial<BigInteger>>,Long> m : sfactors.entrySet() ) {
-         GenPolynomial<GenPolynomial<BigInteger>> p = m.getKey();
+     for ( Map.Entry<GenPolynomial<GenPolynomial<BigRational>>,Long> m : sfactors.entrySet() ) {
+         GenPolynomial<GenPolynomial<BigRational>> p = m.getKey();
          long j = m.getValue();
          for ( int i = 0; i < j; i++ ) {
              er = er.multiply(p);
          }
      }
      //System.out.println("er  = " + er);
-     er = PolyUtil.<BigInteger>recursivePseudoRemainder(dr,er);
+     er = PolyUtil.<BigRational>recursivePseudoRemainder(dr,er);
      assertTrue("PROD squarefreefactors(aabbbc) | aabbbc " + er, er.isZERO() );
 
 
      er = rfac.getONE();
-     for ( GenPolynomial<GenPolynomial<BigInteger>> p : sfactors.keySet() ) {
+     for ( GenPolynomial<GenPolynomial<BigRational>> p : sfactors.keySet() ) {
          er = er.multiply(p);
      }
      //System.out.println("er  = " + er);
+     assertTrue("isSquarefree(er) " + er, ufd.isRecursiveSquarefree(er) );
 
-     //er = PolyUtil.<BigInteger>recursivePseudoRemainder(er,cr);
-     er = PolyUtil.<BigInteger>recursivePseudoRemainder(cr,er);
+     //er = PolyUtil.<BigRational>recursivePseudoRemainder(er,cr);
+     er = PolyUtil.<BigRational>recursivePseudoRemainder(cr,er);
      //System.out.println("er  = " + er);
 
      assertTrue("squarefreefactors(aabbc) | abc " + er, er.isZERO() );
@@ -615,7 +666,7 @@ public class GCDPrimitiveTest extends TestCase {
  * 
  */
  public void testContentPP() {
-     dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),3,to);
+     dfac = new GenPolynomialRing<BigRational>(mi,3,to);
 
      for (int i = 0; i < 3; i++) {
          c = dfac.random(kl*(i+2),ll+2*i,el+i,q);
@@ -644,101 +695,10 @@ public class GCDPrimitiveTest extends TestCase {
  * 
  */
  public void testGCD3() {
-     dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),3,to);
+     dfac = new GenPolynomialRing<BigRational>(mi,3,to);
 
-     for (int i = 0; i < 4; i++) {
+     for (int i = 0; i < 3; i++) {
          a = dfac.random(kl,ll,el+i,q);
-         b = dfac.random(kl,ll,el,q);
-         c = dfac.random(kl,ll,el,q);
-         //System.out.println("a = " + a);
-         //System.out.println("b = " + b);
-         //System.out.println("c = " + c);
-
-         if ( a.isZERO() || b.isZERO() || c.isZERO() ) {
-            // skip for this turn
-            continue;
-         }
-         assertTrue("length( c"+i+" ) <> 0", c.length() > 0);
-         //assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
-         //assertTrue(" not isONE( c"+i+" )", !c.isONE() );
-         
-         a = a.multiply(c);
-         b = b.multiply(c);
-         //System.out.println("a = " + a);
-         //System.out.println("b = " + b);
-
-         d = ufd.gcd(a,b);
-         //System.out.println("d = " + d);
-
-         e = PolyUtil.<BigInteger>basePseudoRemainder(d,c);
-         //System.out.println("e = " + e);
-
-         assertTrue("c | gcd(ac,bc) " + e, e.isZERO() );
-     }
- }
-
-
-/**
- * Test gcd.
- * 
- */
- public void testGCD() {
-     // dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),3,to);
-
-     for (int i = 0; i < 1; i++) {
-         a = dfac.random(kl,ll,el,q);
-         b = dfac.random(kl,ll,el,q);
-         c = dfac.random(kl,ll,el,q);
-         //System.out.println("a = " + a);
-         //System.out.println("b = " + b);
-         //System.out.println("c = " + c);
-
-         if ( a.isZERO() || b.isZERO() || c.isZERO() ) {
-            // skip for this turn
-            continue;
-         }
-         assertTrue("length( c"+i+" ) <> 0", c.length() > 0);
-         //assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
-         //assertTrue(" not isONE( c"+i+" )", !c.isONE() );
-         
-         a = a.multiply(c);
-         b = b.multiply(c);
-         //System.out.println("a = " + a);
-         //System.out.println("b = " + b);
-
-         d = ufd.gcd(a,b);
-         //System.out.println("d = " + d);
-
-         e = PolyUtil.<BigInteger>basePseudoRemainder(d,c);
-         //System.out.println("e = " + e);
-         assertTrue("c | gcd(ac,bc) " + e, e.isZERO() );
-
-         e = PolyUtil.<BigInteger>basePseudoRemainder(a,d);
-         //System.out.println("e = " + e);
-         assertTrue("gcd(a,b) | a " + e, e.isZERO() );
-
-         e = PolyUtil.<BigInteger>basePseudoRemainder(b,d);
-         //System.out.println("e = " + e);
-         assertTrue("gcd(a,b) | b " + e, e.isZERO() );
-     }
- }
-
-
-/**
- * Test gcd field coefficients.
- * 
- */
- public void testGCDfield() {
-     GenPolynomialRing<BigRational> dfac;
-     dfac = new GenPolynomialRing<BigRational>(new BigRational(1),3,to);
-
-     GreatestCommonDivisorAbstract<BigRational> ufd 
-          = new GreatestCommonDivisorPrimitive<BigRational>();
-
-     GenPolynomial<BigRational> a, b, c, d, e;
-
-     for (int i = 0; i < 1; i++) {
-         a = dfac.random(kl,ll,el,q);
          b = dfac.random(kl,ll,el,q);
          c = dfac.random(kl,ll,el,q);
          //System.out.println("a = " + a);
@@ -770,11 +730,57 @@ public class GCDPrimitiveTest extends TestCase {
 
 
 /**
+ * Test gcd.
+ * 
+ */
+ public void testGCD() {
+     // dfac = new GenPolynomialRing<BigRational>(mi,3,to);
+
+     for (int i = 0; i < 1; i++) {
+         a = dfac.random(kl,ll,el,q);
+         b = dfac.random(kl,ll,el,q);
+         c = dfac.random(kl,ll,el,q);
+         //System.out.println("a = " + a);
+         //System.out.println("b = " + b);
+         //System.out.println("c = " + c);
+
+         if ( a.isZERO() || b.isZERO() || c.isZERO() ) {
+            // skip for this turn
+            continue;
+         }
+         assertTrue("length( c"+i+" ) <> 0", c.length() > 0);
+         //assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
+         //assertTrue(" not isONE( c"+i+" )", !c.isONE() );
+         
+         a = a.multiply(c);
+         b = b.multiply(c);
+         //System.out.println("a = " + a);
+         //System.out.println("b = " + b);
+
+         d = ufd.gcd(a,b);
+         //System.out.println("d = " + d);
+
+         e = PolyUtil.<BigRational>basePseudoRemainder(d,c);
+         //System.out.println("e = " + e);
+         assertTrue("c | gcd(ac,bc) " + e, e.isZERO() );
+
+         e = PolyUtil.<BigRational>basePseudoRemainder(a,d);
+         //System.out.println("e = " + e);
+         assertTrue("gcd(a,b) | a " + e, e.isZERO() );
+
+         e = PolyUtil.<BigRational>basePseudoRemainder(b,d);
+         //System.out.println("e = " + e);
+         assertTrue("gcd(a,b) | b " + e, e.isZERO() );
+     }
+ }
+
+
+/**
  * Test lcm.
  * 
  */
  public void testLCM() {
-     dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),3,to);
+     dfac = new GenPolynomialRing<BigRational>(mi,3,to);
 
      for (int i = 0; i < 1; i++) {
          a = dfac.random(kl,ll,el,q);
@@ -817,7 +823,7 @@ public class GCDPrimitiveTest extends TestCase {
  */
  public void testSquarefree() {
 
-     dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),3,to);
+     dfac = new GenPolynomialRing<BigRational>(mi,3,to);
 
      a = dfac.random(kl,ll,2,q);
      b = dfac.random(kl,ll,2,q);
@@ -842,12 +848,13 @@ public class GCDPrimitiveTest extends TestCase {
      d = ufd.squarefreePart(d);
      //System.out.println("c  = " + c);
      //System.out.println("d  = " + d);
+     assertTrue("isSquarefree(d) " + d, ufd.isSquarefree(d) );
 
-     e = PolyUtil.<BigInteger>basePseudoRemainder(d,c);
-     //e = PolyUtil.<BigInteger>basePseudoRemainder(c,d);
+     //e = PolyUtil.<BigRational>basePseudoRemainder(d,c);
+     //e = PolyUtil.<BigRational>basePseudoRemainder(c,d);
      //System.out.println("e  = " + e);
 
-     assertTrue("abc | squarefree(aabbc) " + e, e.isZERO() );
+     //assertTrue("abc | squarefree(aabbc) " + e, e.isZERO() );
  }
 
 
@@ -857,7 +864,7 @@ public class GCDPrimitiveTest extends TestCase {
  */
  public void testSquarefreeFactors() {
 
-     dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),3,to);
+     dfac = new GenPolynomialRing<BigRational>(mi,3,to);
 
      a = dfac.random(kl,3,2,q);
      b = dfac.random(kl,3,2,q);
@@ -879,33 +886,33 @@ public class GCDPrimitiveTest extends TestCase {
      c = ufd.primitivePart(c);
      d = ufd.primitivePart(d);
 
-     SortedMap<GenPolynomial<BigInteger>,Long> sfactors;
+     SortedMap<GenPolynomial<BigRational>,Long> sfactors;
      sfactors = ufd.squarefreeFactors(d);
      //System.out.println("sfactors = " + sfactors);
 
      assertTrue("isFactorization(d,sfactors) ", ufd.isFactorization(d,sfactors) );
 
      e = dfac.getONE();
-     for ( Map.Entry<GenPolynomial<BigInteger>,Long> m : sfactors.entrySet() ) {
-         GenPolynomial<BigInteger> p = m.getKey();
+     for ( Map.Entry<GenPolynomial<BigRational>,Long> m : sfactors.entrySet() ) {
+         GenPolynomial<BigRational> p = m.getKey();
          long j = m.getValue();
          for ( int i = 0; i < j; i++ ) {
              e = e.multiply(p);
          }
      }
      //System.out.println("e  = " + e);
-     e = PolyUtil.<BigInteger>basePseudoRemainder(d,e);
+     e = PolyUtil.<BigRational>basePseudoRemainder(d,e);
      assertTrue("PROD squarefreefactors(aabbbc) | aabbbc " + e, e.isZERO() );
 
      e = dfac.getONE();
-     for ( GenPolynomial<BigInteger> p : sfactors.keySet() ) {
+     for ( GenPolynomial<BigRational> p : sfactors.keySet() ) {
          e = e.multiply(p);
      }
      //System.out.println("c  = " + c);
      //System.out.println("e  = " + e);
 
-     //e = PolyUtil.<BigInteger>basePseudoRemainder(e,c);
-     e = PolyUtil.<BigInteger>basePseudoRemainder(c,e);
+     //e = PolyUtil.<BigRational>basePseudoRemainder(e,c);
+     e = PolyUtil.<BigRational>basePseudoRemainder(c,e);
      //System.out.println("e  = " + e);
 
      assertTrue("squarefreefactors(aabbbc) | abc " + e, e.isZERO() );
@@ -918,7 +925,7 @@ public class GCDPrimitiveTest extends TestCase {
  */
  public void testCoPrime() {
 
-     dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),3,to);
+     dfac = new GenPolynomialRing<BigRational>(mi,3,to);
 
      a = dfac.random(kl,3,2,q);
      b = dfac.random(kl,3,2,q);
@@ -938,7 +945,7 @@ public class GCDPrimitiveTest extends TestCase {
      //System.out.println("d  = " + d);
      //System.out.println("c  = " + c);
 
-     List<GenPolynomial<BigInteger>> F = new ArrayList<GenPolynomial<BigInteger>>(5);
+     List<GenPolynomial<BigRational>> F = new ArrayList<GenPolynomial<BigRational>>(5);
      F.add(d);
      F.add(a);
      F.add(b);
@@ -946,7 +953,7 @@ public class GCDPrimitiveTest extends TestCase {
      F.add(e);
 
 
-     List<GenPolynomial<BigInteger>> P = ufd.coPrime(F);
+     List<GenPolynomial<BigRational>> P = ufd.coPrime(F);
      //System.out.println("F = " + F);
      //System.out.println("P = " + P);
 
@@ -971,3 +978,4 @@ public class GCDPrimitiveTest extends TestCase {
  }
 
 }
+

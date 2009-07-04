@@ -15,7 +15,7 @@ import edu.jas.arith.BigInteger;
 //import edu.jas.arith.ModInteger;
 //import edu.jas.arith.PrimeList;
 
-//import edu.jas.poly.ExpVector;
+import edu.jas.poly.ExpVector;
 import edu.jas.poly.TermOrder;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
@@ -90,9 +90,12 @@ public class GCDSubresTest extends TestCase {
        ai = bi = ci = di = ei = null;
        ar = br = cr = dr = er = null;
        ufd = new GreatestCommonDivisorPrimitive<BigInteger>();
-       dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),rl,to);
-       cfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),rl-1,to);
-       rfac = new GenPolynomialRing<GenPolynomial<BigInteger>>(cfac,1,to);
+       String[] vars = ExpVector.STDVARS(rl);
+       String[] cvars = ExpVector.STDVARS(rl-1);
+       String[] rvars = new String[] { vars[rl-1] };
+       dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),rl,to,vars);
+       cfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),rl-1,to,cvars);
+       rfac = new GenPolynomialRing<GenPolynomial<BigInteger>>(cfac,1,to,rvars);
    }
 
    protected void tearDown() {
