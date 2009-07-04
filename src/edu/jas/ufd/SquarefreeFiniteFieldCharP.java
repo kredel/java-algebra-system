@@ -743,7 +743,6 @@ public class SquarefreeFiniteFieldCharP<C extends GcdRingElem<C>> {
      * @param P GenPolynomial.
      * @return char-th_rootOf(P), or null if no char-th root.
      */
-    // param <C> base coefficient type must be ModInteger or AlgebraicNumber<ModInteger>.
     public GenPolynomial<C> baseRootCharacteristic( GenPolynomial<C> P ) {
         if ( P == null || P.isZERO() ) {
             return P;
