@@ -148,4 +148,28 @@ public class FactorsMap<C extends GcdRingElem<C>> implements Serializable {
         return sb.toString();
     }
 
+
+    /** Find largest extension field.
+     * @return largest extension field or null if no extension field 
+     */
+    public AlgebraicNumberRing<C> findExtensionField() {
+        if ( afactors == null ) {
+            return null;
+        }
+        AlgebraicNumberRing<C> ar = null;
+        int depth = 0;
+        for ( Factors<C> f : afactors.keySet() ) {
+            AlgebraicNumberRing<C> aring = f.findExtensionField();
+            if ( aring == null ) {
+                continue;
+            }
+            int d = aring.depth();
+            if ( d > depth ) {
+                depth = d;
+                ar = aring;
+            }
+        }
+        return ar;
+    }
+
 }

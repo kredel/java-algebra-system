@@ -495,4 +495,114 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
         return f;
     }
 
+
+    /**
+     * Recursive GenPolynomial factorization of a squarefree polynomial.
+     * @param P squarefree recursive GenPolynomial.
+     * @return [p_1,...,p_k] with P = prod_{i=1, ..., k} p_i.
+     */
+    public List<GenPolynomial<GenPolynomial<C>>> 
+      recursiveFactorsSquarefree(GenPolynomial<GenPolynomial<C>> P) {
+        if (P == null) {
+            throw new RuntimeException(this.getClass().getName() + " P == null");
+        }
+        List<GenPolynomial<GenPolynomial<C>>> factors = new ArrayList<GenPolynomial<GenPolynomial<C>>>();
+        if (P.isZERO()) {
+            return factors;
+        }
+        if (P.isONE()) {
+            factors.add(P);
+            return factors;
+        }
+        GenPolynomialRing<GenPolynomial<C>> pfac = P.ring;
+        GenPolynomialRing<C> qi = (GenPolynomialRing<C>)pfac.coFac;
+        GenPolynomialRing<C> ifac = qi.extend(pfac.nvar);
+        GenPolynomial<C> Pi = PolyUtil.<C>distribute(ifac, P);
+        //System.out.println("Pi = " + Pi);
+
+        C ldcf = Pi.leadingBaseCoefficient();
+        if ( !ldcf.isONE() && ldcf.isUnit() ) {
+            //System.out.println("ldcf = " + ldcf);
+            Pi = Pi.monic();
+        }
+
+        // factor in C[x_1,...,x_n,y_1,...,y_m]
+        List<GenPolynomial<C>> ifacts = factorsSquarefree(Pi);
+        if (logger.isInfoEnabled()) {
+            logger.info("ifacts = " + ifacts);
+        }
+        if (ifacts.size() <= 1) {
+            factors.add(P);
+            return factors;
+        }
+        if ( !ldcf.isONE() && ldcf.isUnit() ) {
+            GenPolynomial<C> r = ifacts.get(0);
+            ifacts.remove(r);
+            r = r.multiply(ldcf);
+            ifacts.add(0, r);
+        }
+        List<GenPolynomial<GenPolynomial<C>>> rfacts = PolyUtil.<C>recursive(pfac, ifacts);
+        //System.out.println("rfacts = " + rfacts);
+        if (logger.isInfoEnabled()) {
+            logger.info("rfacts = " + rfacts);
+        }
+        factors.addAll(rfacts);
+        return factors;
+    }
+
+
+    /**
+     * Recursive GenPolynomial factorization.
+     * @param P recursive GenPolynomial.
+     * @return [p_1 -&gt; e_1, ..., p_k -&gt; e_k] with P = prod_{i=1,...,k} p_i**e_i.
+     */
+    public SortedMap<GenPolynomial<GenPolynomial<C>>, Long> 
+      recursiveFactors(GenPolynomial<GenPolynomial<C>> P) {
+        if (P == null) {
+            throw new RuntimeException(this.getClass().getName() + " P != null");
+        }
+        GenPolynomialRing<GenPolynomial<C>> pfac = P.ring;
+        SortedMap<GenPolynomial<GenPolynomial<C>>, Long> factors 
+              = new TreeMap<GenPolynomial<GenPolynomial<C>>, Long>(pfac.getComparator());
+        if (P.isZERO()) {
+            return factors;
+        }
+        if (P.isONE()) {
+            factors.put(P,1L);
+            return factors;
+        }
+        GenPolynomialRing<C> qi = (GenPolynomialRing<C>)pfac.coFac;
+        GenPolynomialRing<C> ifac = qi.extend(pfac.nvar);
+        GenPolynomial<C> Pi = PolyUtil.<C>distribute(ifac, P);
+        //System.out.println("Pi = " + Pi);
+
+        C ldcf = Pi.leadingBaseCoefficient();
+        if ( !ldcf.isONE() && ldcf.isUnit() ) {
+            //System.out.println("ldcf = " + ldcf);
+            Pi = Pi.monic();
+        }
+
+        // factor in C[x_1,...,x_n,y_1,...,y_m]
+        SortedMap<GenPolynomial<C>,Long> dfacts = factors(Pi);
+        if (logger.isInfoEnabled()) {
+            logger.info("dfacts = " + dfacts);
+        }
+        if ( !ldcf.isONE() && ldcf.isUnit() ) {
+            GenPolynomial<C> r = dfacts.firstKey();
+            Long E = dfacts.remove(r);
+            r = r.multiply(ldcf);
+            dfacts.put(r,E);
+        }
+        for (GenPolynomial<C> f : dfacts.keySet()) {
+            Long E = dfacts.get(f);
+            GenPolynomial<GenPolynomial<C>> rp = PolyUtil.<C>recursive(pfac, f);
+            factors.put(rp,E);
+        }
+        //System.out.println("rfacts = " + rfacts);
+        if (logger.isInfoEnabled()) {
+            logger.info("factors = " + factors);
+        }
+        return factors;
+    }
+
 }

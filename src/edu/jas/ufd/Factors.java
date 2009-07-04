@@ -15,6 +15,7 @@ import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.GenPolynomial;
 //import edu.jas.poly.GenPolynomialRing;
 import edu.jas.structure.GcdRingElem;
+import edu.jas.structure.RingFactory;
 
 
 /**
@@ -54,11 +55,18 @@ public class Factors<C extends GcdRingElem<C>> implements Comparable<Factors<C>>
 
 
     /**
+     * List of factors with coefficients from AlgebraicNumberRing<AlgebraicNumber<C>>.
+     * Should be null, if p is absolutely irreducible.
+     */
+    public final List<Factors<AlgebraicNumber<C>>> arfactors;
+
+
+    /**
      * Constructor.
      * @param p absolute irreducible GenPolynomial.
      */
     public Factors(GenPolynomial<C> p) {
-        this(p,null,null,null);
+        this(p,null,null,null,null);
     }
 
 
@@ -72,10 +80,26 @@ public class Factors<C extends GcdRingElem<C>> implements Comparable<Factors<C>>
     public Factors(GenPolynomial<C> p, AlgebraicNumberRing<C> af, 
                    GenPolynomial<AlgebraicNumber<C>> ap, 
                    List<GenPolynomial<AlgebraicNumber<C>>> afact) {
+        this(p,af,ap,afact,null);
+    }
+
+
+    /**
+     * Constructor.
+     * @param p irreducible GenPolynomial over C.
+     * @param af algebraic extension field of C where p has factors from afact.
+     * @param ap GenPolynomial p represented with coefficients from af.
+     * @param afact absolute irreducible factors of p with coefficients from af.
+     */
+    public Factors(GenPolynomial<C> p, AlgebraicNumberRing<C> af, 
+                   GenPolynomial<AlgebraicNumber<C>> ap, 
+           List<GenPolynomial<AlgebraicNumber<C>>> afact,
+                   List<Factors<AlgebraicNumber<C>>> arfact) {
         poly = p;
         afac = af;
         apoly = ap;
         afactors = afact;
+        arfactors = arfact;
     }
 
 
@@ -100,6 +124,17 @@ public class Factors<C extends GcdRingElem<C>> implements Comparable<Factors<C>>
             sb.append(ap.toString());
         }
         sb.append(" over "+ afac.toString());
+        if ( arfactors == null ) {
+            return sb.toString();
+        }
+        for ( Factors<AlgebraicNumber<C>> arp : arfactors ) {
+            if ( first ) {
+                first = false;
+            } else {
+                sb.append(", ");
+            }
+            sb.append(arp.toString());
+        }
         return sb.toString();
     }
 
@@ -111,7 +146,7 @@ public class Factors<C extends GcdRingElem<C>> implements Comparable<Factors<C>>
     public String toScript() {
         // Python case
         StringBuffer sb = new StringBuffer();
-        sb.append( poly.toScript() );
+        sb.append(poly.toScript());
         if ( afac == null ) {
             return sb.toString();
         }
@@ -123,9 +158,21 @@ public class Factors<C extends GcdRingElem<C>> implements Comparable<Factors<C>>
             } else {
                 sb.append("\n * ");
             }
-            sb.append("( " + ap.toScript() + " )");
+            //sb.append("( " + ap.toScript() + " )");
+            sb.append(ap.toScript());
         }
         sb.append("\n over "+ afac.toScript());
+        if ( arfactors == null ) {
+            return sb.toString();
+        }
+        for ( Factors<AlgebraicNumber<C>> arp : arfactors ) {
+            if ( first ) {
+                first = false;
+            } else {
+                sb.append("\n * ");
+            }
+            sb.append(arp.toScript());
+        }
         return sb.toString();
     }
 
@@ -183,6 +230,34 @@ public class Factors<C extends GcdRingElem<C>> implements Comparable<Factors<C>>
             return +1;
         }
         return afac.modul.compareTo(facs.afac.modul);
+    }
+
+
+    /** Find largest extension field.
+     * @return largest extension field or null if no extension field 
+     */
+    @SuppressWarnings("unchecked")
+    public AlgebraicNumberRing<C> findExtensionField() {
+        if ( afac == null ) {
+            return null;
+        }
+        if ( arfactors == null ) {
+            return afac;
+        }
+        AlgebraicNumberRing<C> arr = afac;
+        int depth = 1;
+        for ( Factors<AlgebraicNumber<C>> af : arfactors ) {
+            AlgebraicNumberRing<AlgebraicNumber<C>> aring = af.findExtensionField();
+            if ( aring == null ) {
+                continue;
+            }
+            int d = aring.depth();
+            if ( d > depth ) {
+                depth = d;
+                arr = (AlgebraicNumberRing<C>) (Object) aring;
+            }
+        }
+        return arr;
     }
 
 }

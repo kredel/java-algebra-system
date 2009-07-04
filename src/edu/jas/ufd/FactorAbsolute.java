@@ -259,15 +259,15 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
         String[] vars = new String[] { "z_" + Math.abs(P.hashCode()%1000) };
         pfac = pfac.clone();
         vars=pfac.setVars(vars);
-        P = pfac.copy(P); // hack to exchange the variables
-        AlgebraicNumberRing<C> afac = new AlgebraicNumberRing<C>(P,true); // since irreducible
+        GenPolynomial<C> aP = pfac.copy(P); // hack to exchange the variables
+        AlgebraicNumberRing<C> afac = new AlgebraicNumberRing<C>(aP,true); // since irreducible
         if ( logger.isInfoEnabled() ) {
             logger.info("K(alpha) = " + afac); 
             logger.info("K(alpha) = " + afac.toScript()); 
             //System.out.println("K(alpha) = " + afac);
         }
         GenPolynomialRing<AlgebraicNumber<C>> pafac 
-            = new GenPolynomialRing<AlgebraicNumber<C>>(afac, P.ring.nvar, P.ring.tord, /*old*/vars);
+            = new GenPolynomialRing<AlgebraicNumber<C>>(afac, aP.ring.nvar, aP.ring.tord, /*old*/vars);
         // convert to K(alpha)
         GenPolynomial<AlgebraicNumber<C>> Pa = PolyUtil.<C> convertToAlgebraicCoefficients(pafac, P);
         if ( logger.isInfoEnabled() ) {
@@ -284,8 +284,26 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
             logger.info("factors over K(alpha) = " + factors); 
             //System.out.println("factors over K(alpha) = " + factors);
         }
+        List<GenPolynomial<AlgebraicNumber<C>>> faca = new ArrayList<GenPolynomial<AlgebraicNumber<C>>>(factors.size());
+;
+        List<Factors<AlgebraicNumber<C>>> facar = new ArrayList<Factors<AlgebraicNumber<C>>>();
+        for ( GenPolynomial<AlgebraicNumber<C>> fi : factors ) {
+	    if ( fi.degree(0) <= 1 ) {
+		faca.add(fi);
+	    } else {
+                System.out.println("fi.deg > 1 = " + fi);
+                FactorAbsolute<AlgebraicNumber<C>> aengine 
+		    = (FactorAbsolute<AlgebraicNumber<C>>) FactorFactory.<C>getImplementation(afac);
+		Factors<AlgebraicNumber<C>> fif = aengine.baseFactorsAbsoluteIrreducible(fi);
+                System.out.println("fif = " + fif);
+		facar.add(fif);
+	    }
+	}
+	if ( facar.size() == 0 ) {
+	    facar = null;
+	}
         // find minimal field extension K(beta) \subset K(alpha)
-        return new Factors<C>(P,afac,Pa,factors);
+        return new Factors<C>(P,afac,Pa,faca,facar);
     }
 
 
@@ -472,6 +490,11 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
         // find irreducible factor of up
         List<GenPolynomial<C>> UF = baseFactorsSquarefree(up);
         //System.out.println("UF  = " + UF);
+        FactorsList<C> aUF = baseFactorsAbsoluteSquarefree(up);
+        System.out.println("aUF  = " + aUF);
+        AlgebraicNumberRing<C> arfac = aUF.findExtensionField();
+        System.out.println("arfac  = " + arfac);
+
         long e = up.degree(0);
         // search factor polynomial with smallest degree 
         for ( int i = 0; i < UF.size(); i++ ) {
@@ -495,16 +518,18 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
         String[] vars = new String[] { "z_" + Math.abs(up.hashCode()%1000) };
         pfac = pfac.clone();
         String[] ovars = pfac.setVars(vars); // side effects! 
-        up = pfac.copy(up); // hack to exchange the variables
+        GenPolynomial<C> aup = pfac.copy(up); // hack to exchange the variables
 
-        AlgebraicNumberRing<C> afac = new AlgebraicNumberRing<C>(up,true); // since irreducible
+        //AlgebraicNumberRing<C> afac = new AlgebraicNumberRing<C>(aup,true); // since irreducible
+        AlgebraicNumberRing<C> afac = arfac; 
+	int depth = afac.depth();
         //System.out.println("afac = " + afac);
         GenPolynomialRing<AlgebraicNumber<C>> pafac 
             = new GenPolynomialRing<AlgebraicNumber<C>>(afac, P.ring.nvar,P.ring.tord,P.ring.getVars());
-        //System.out.println("pafac = " + pafac);
+        System.out.println("pafac = " + pafac);
         // convert to K(alpha)
-        GenPolynomial<AlgebraicNumber<C>> Pa = PolyUtil.<C> convertToAlgebraicCoefficients(pafac, P);
-        //System.out.println("Pa = " + Pa);
+        GenPolynomial<AlgebraicNumber<C>> Pa = PolyUtil.<C> convertToRecAlgebraicCoefficients(depth,pafac, P);
+        System.out.println("Pa = " + Pa);
         // factor over K(alpha)
         FactorAbstract<AlgebraicNumber<C>> engine = FactorFactory.<C>getImplementation(afac);
         afactors = engine.factorsSquarefree( Pa );
@@ -527,6 +552,7 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
             afactors.add(p1);
             afactors.add(p2);
         }
+	// recursion for splitting field
         // find minimal field extension K(beta) \subset K(alpha)
         return new Factors<C>(P,afac,Pa,afactors);
     }

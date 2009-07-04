@@ -18,6 +18,11 @@ import edu.jas.arith.BigRational;
 
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
+import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.GenPolynomialRing;
+
+import edu.jas.application.Quotient;
+import edu.jas.application.QuotientRing;
 
 
 /**
@@ -103,6 +108,18 @@ public class FactorFactory {
 
 
     /**
+     * Determine suitable implementation of factorization algorithms, case Quotient&lt;C&gt;.
+     * @param fac Quotient&lt;C&gt;.
+     * @param <C> coefficient type, e.g. BigRational, ModInteger.
+     * @return factorization algorithm implementation.
+     */
+    public static <C extends GcdRingElem<C>>
+           FactorAbstract<Quotient<C>> getImplementation( QuotientRing<C> fac ) {
+        return new FactorQuotient<C>( fac );
+    }
+
+
+    /**
      * Determine suitable implementation of factorization algorithms, other cases.
      * @param <C> coefficient type
      * @param fac RingFactory&lt;C&gt;.
@@ -115,6 +132,7 @@ public class FactorFactory {
         int t = 0;
         FactorAbstract/*raw type<C>*/ ufd = null; 
         AlgebraicNumberRing afac = null;
+        QuotientRing qfac = null;
         while ( true ) { // switch
             Object ofac = fac;
             if ( ofac instanceof BigInteger ) {
@@ -144,6 +162,12 @@ public class FactorFactory {
                 }
                 break;
             }
+            if ( ofac instanceof QuotientRing ) {
+                //System.out.println("qfac_o = " + ofac);
+                qfac = (QuotientRing) ofac;
+                t = 7;
+                break;
+            }
             break;
         }
         //System.out.println("ft = " + t);
@@ -161,6 +185,9 @@ public class FactorFactory {
         }
         if ( t == 4 || t == 5 || t == 6 ) {
             ufd = new FactorAlgebraic/*raw <C>*/( afac );
+        }
+        if ( t == 7 ) {
+            ufd = new FactorQuotient/*raw <C>*/( qfac );
         }
         logger.debug("ufd = " + ufd);
         return (FactorAbstract<C>) ufd;
