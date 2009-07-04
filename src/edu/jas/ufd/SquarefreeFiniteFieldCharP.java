@@ -112,14 +112,14 @@ public class SquarefreeFiniteFieldCharP<C extends GcdRingElem<C>>
         Long k = null;
         for (GenPolynomial<C> p: sf.keySet() ) {
             if ( p.isConstant() ) {
-                System.out.println("p,const = " + p);
+                //System.out.println("p,const = " + p);
                 continue;
             }
             Long e = sf.get(p);
             java.math.BigInteger E = new java.math.BigInteger(e.toString());
             java.math.BigInteger r = E.remainder(c);
             if ( !r.equals(java.math.BigInteger.ZERO) ) {
-                System.out.println("r = " + r);
+                //System.out.println("r = " + r);
                 return null;
             }
             if ( k == null ) {
@@ -134,7 +134,7 @@ public class SquarefreeFiniteFieldCharP<C extends GcdRingElem<C>>
         for (GenPolynomial<C> q : sf.keySet()) {
             Long e = sf.get(q);
             if ( q.isConstant() ) {
-                System.out.println("q,const = " + q + ", e = " + e);
+                //System.out.println("q,const = " + q + ", e = " + e);
                 root.put(q,e);
                 continue;
             }
@@ -148,7 +148,7 @@ public class SquarefreeFiniteFieldCharP<C extends GcdRingElem<C>>
             k = k / cl;
             root.put(rp,k);
         }
-        System.out.println("sf,root = " + root);
+        //System.out.println("sf,root = " + root);
         return root;
     }
 
@@ -234,12 +234,6 @@ public class SquarefreeFiniteFieldCharP<C extends GcdRingElem<C>>
             GenPolynomial<C> r = rf.getONE();
             for (GenPolynomial<C> rp : sm.keySet() ) {
                 long gl = sm.get(rp);
-// must collect recursive factors:
-//                 if ( rp.isConstant() && gl == 1 ) {
-//                     System.out.println("rp,const = " + rp);
-//                     r = r.multiply(rp);
-//                     continue;
-//                 }
                 if ( gl > 1 ) {
                     rp = Power.<GenPolynomial<C>> positivePower(rp, gl);
                 }
