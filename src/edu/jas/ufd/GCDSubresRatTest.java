@@ -652,12 +652,11 @@ public class GCDSubresRatTest extends TestCase {
      assertTrue("is co-prime of ", ufd.isCoPrime(P,F) );
 
 
-     P = ufd.coPrimeSquarefree(F);
+     //P = ufd.coPrimeSquarefree(F);
      //System.out.println("F = " + F);
      //System.out.println("P = " + P);
-
-     assertTrue("is co-prime ", ufd.isCoPrime(P) );
-     assertTrue("is co-prime of ", ufd.isCoPrime(P,F) );
+     //assertTrue("is co-prime ", ufd.isCoPrime(P) );
+     //assertTrue("is co-prime of ", ufd.isCoPrime(P,F) );
 
 
      P = ufd.coPrimeRec(F);

@@ -17,6 +17,8 @@ import org.apache.log4j.BasicConfigurator;
 
 import edu.jas.kern.ComputerThreads;
 
+import edu.jas.structure.Power;
+
 //import edu.jas.arith.BigInteger;
 //import edu.jas.arith.BigRational;
 import edu.jas.arith.ModInteger;
@@ -79,14 +81,60 @@ public class SquarefreeAlgModTest extends TestCase {
     String[] c1vars;
     String[] rvars;
 
+    ModIntegerRing mfac;
+    String[] alpha;
+    GenPolynomialRing<ModInteger> mpfac;
+    GenPolynomial<ModInteger> agen;
+    AlgebraicNumberRing<ModInteger> fac;
+
+    GreatestCommonDivisorAbstract<AlgebraicNumber<ModInteger>> ufd; 
+
+    SquarefreeFiniteFieldCharP<AlgebraicNumber<ModInteger>> sqf;
+
+    GenPolynomialRing<AlgebraicNumber<ModInteger>> dfac;
+
+
+    GenPolynomial<AlgebraicNumber<ModInteger>> a;
+    GenPolynomial<AlgebraicNumber<ModInteger>> b;
+    GenPolynomial<AlgebraicNumber<ModInteger>> c;
+    GenPolynomial<AlgebraicNumber<ModInteger>> d;
+    GenPolynomial<AlgebraicNumber<ModInteger>> e;
+
+    GenPolynomialRing<AlgebraicNumber<ModInteger>> cfac;
+    GenPolynomialRing<GenPolynomial<AlgebraicNumber<ModInteger>>> rfac;
+
+    GenPolynomial<GenPolynomial<AlgebraicNumber<ModInteger>>> ar;
+    GenPolynomial<GenPolynomial<AlgebraicNumber<ModInteger>>> br;
+    GenPolynomial<GenPolynomial<AlgebraicNumber<ModInteger>>> cr;
+    GenPolynomial<GenPolynomial<AlgebraicNumber<ModInteger>>> dr;
+    GenPolynomial<GenPolynomial<AlgebraicNumber<ModInteger>>> er;
+
+
     protected void setUp() {
         vars   = ExpVector.STDVARS(rl);
         cvars  = ExpVector.STDVARS(rl-1);
         c1vars = new String[] { cvars[0] };
         rvars  = new String[] { vars[rl-1] };
+
+        mfac = new ModIntegerRing(11);
+        alpha = new String[] { "alpha" };
+        mpfac = new GenPolynomialRing<ModInteger>(mfac, 1, to, alpha);
+        agen = mpfac.univariate(0, 2);
+        agen = agen.sum(mpfac.getONE()); // x^2 + 1
+        fac = new AlgebraicNumberRing<ModInteger>(agen,true);
+
+        //ufd = new GreatestCommonDivisorSubres<AlgebraicNumber<ModInteger>>();
+        //ufd = GCDFactory.<AlgebraicNumber<ModInteger>> getImplementation(fac);
+        ufd = GCDFactory.<AlgebraicNumber<ModInteger>> getProxy(fac);
+
+        sqf = new SquarefreeFiniteFieldCharP<AlgebraicNumber<ModInteger>>(fac);
+        a = b = c = d = e = null;
+        ar = br = cr = dr = er = null;
     }
 
     protected void tearDown() {
+        a = b = c = d = e = null;
+        ar = br = cr = dr = er = null;
         //ComputerThreads.terminate();
     }
 
@@ -98,29 +146,7 @@ public class SquarefreeAlgModTest extends TestCase {
  public void testBaseSquarefree() {
      System.out.println("\nbase:");
 
-     ModIntegerRing mfac = new ModIntegerRing(19);
-     String[] alpha = new String[] { "alpha" };
-     GenPolynomialRing<ModInteger> mpfac = new GenPolynomialRing<ModInteger>(mfac, 1, to, alpha);
-     GenPolynomial<ModInteger> agen = mpfac.univariate(0, 2);
-     agen = agen.sum(mpfac.getONE()); // x^2 + 1
-     AlgebraicNumberRing<ModInteger> fac = new AlgebraicNumberRing<ModInteger>(agen,true);
-
-     GreatestCommonDivisorAbstract<AlgebraicNumber<ModInteger>> ufd; 
-     //ufd = new GreatestCommonDivisorSubres<AlgebraicNumber<ModInteger>>();
-     //ufd = GCDFactory.<AlgebraicNumber<ModInteger>> getImplementation(fac);
-     ufd = GCDFactory.<AlgebraicNumber<ModInteger>> getProxy(fac);
-
-     SquarefreeFiniteFieldCharP<AlgebraicNumber<ModInteger>> sqf 
-        = new SquarefreeFiniteFieldCharP<AlgebraicNumber<ModInteger>>(fac);
-
-     GenPolynomialRing<AlgebraicNumber<ModInteger>> dfac;
      dfac = new GenPolynomialRing<AlgebraicNumber<ModInteger>>(fac,1,to,rvars);
-
-     GenPolynomial<AlgebraicNumber<ModInteger>> a;
-     GenPolynomial<AlgebraicNumber<ModInteger>> b;
-     GenPolynomial<AlgebraicNumber<ModInteger>> c;
-     GenPolynomial<AlgebraicNumber<ModInteger>> d;
-     GenPolynomial<AlgebraicNumber<ModInteger>> e;
 
      a = dfac.random(kl,ll,el+2,q);
      b = dfac.random(kl,ll,el+2,q);
@@ -159,28 +185,7 @@ public class SquarefreeAlgModTest extends TestCase {
  */
  public void testBaseSquarefreeFactors() {
 
-     ModIntegerRing mfac = new ModIntegerRing(19);
-     String[] alpha = new String[] { "alpha" };
-     GenPolynomialRing<ModInteger> mpfac = new GenPolynomialRing<ModInteger>(mfac, 1, to, alpha);
-     GenPolynomial<ModInteger> agen = mpfac.univariate(0, 2);
-     agen = agen.sum(mpfac.getONE()); // x^2 + 1
-     AlgebraicNumberRing<ModInteger> fac = new AlgebraicNumberRing<ModInteger>(agen,true);
-
-     GreatestCommonDivisorAbstract<AlgebraicNumber<ModInteger>> ufd; 
-     //ufd = new GreatestCommonDivisorSubres<AlgebraicNumber<ModInteger>>();
-     ufd = GCDFactory.<AlgebraicNumber<ModInteger>> getProxy(fac);
-
-     SquarefreeFiniteFieldCharP<AlgebraicNumber<ModInteger>> sqf 
-        = new SquarefreeFiniteFieldCharP<AlgebraicNumber<ModInteger>>(fac);
-
-     GenPolynomialRing<AlgebraicNumber<ModInteger>> dfac;
      dfac = new GenPolynomialRing<AlgebraicNumber<ModInteger>>(fac,1,to,rvars);
-
-     GenPolynomial<AlgebraicNumber<ModInteger>> a;
-     GenPolynomial<AlgebraicNumber<ModInteger>> b;
-     GenPolynomial<AlgebraicNumber<ModInteger>> c;
-     GenPolynomial<AlgebraicNumber<ModInteger>> d;
-     GenPolynomial<AlgebraicNumber<ModInteger>> e;
 
      a = dfac.random(kl,ll,el+3,q);
      b = dfac.random(kl,ll,el+3,q);
@@ -213,30 +218,8 @@ public class SquarefreeAlgModTest extends TestCase {
  public void testRecursiveSquarefree() {
      System.out.println("\nrecursive:");
 
-     ModIntegerRing mfac = new ModIntegerRing(19);
-     String[] alpha = new String[] { "alpha" };
-     GenPolynomialRing<ModInteger> mpfac = new GenPolynomialRing<ModInteger>(mfac, 1, to, alpha);
-     GenPolynomial<ModInteger> agen = mpfac.univariate(0, 2);
-     agen = agen.sum(mpfac.getONE()); // x^2 + 1
-     AlgebraicNumberRing<ModInteger> fac = new AlgebraicNumberRing<ModInteger>(agen,true);
-
-     GreatestCommonDivisorAbstract<AlgebraicNumber<ModInteger>> ufd; 
-     //ufd = new GreatestCommonDivisorSubres<AlgebraicNumber<ModInteger>>();
-     ufd = GCDFactory.<AlgebraicNumber<ModInteger>> getProxy(fac);
-
-     SquarefreeFiniteFieldCharP<AlgebraicNumber<ModInteger>> sqf 
-        = new SquarefreeFiniteFieldCharP<AlgebraicNumber<ModInteger>>(fac);
-
-     GenPolynomialRing<AlgebraicNumber<ModInteger>> cfac;
-     GenPolynomialRing<GenPolynomial<AlgebraicNumber<ModInteger>>> rfac;
      cfac = new GenPolynomialRing<AlgebraicNumber<ModInteger>>(fac,2-1,to,c1vars);
      rfac = new GenPolynomialRing<GenPolynomial<AlgebraicNumber<ModInteger>>>(cfac,1,to,rvars);
-
-     GenPolynomial<GenPolynomial<AlgebraicNumber<ModInteger>>> ar;
-     GenPolynomial<GenPolynomial<AlgebraicNumber<ModInteger>>> br;
-     GenPolynomial<GenPolynomial<AlgebraicNumber<ModInteger>>> cr;
-     GenPolynomial<GenPolynomial<AlgebraicNumber<ModInteger>>> dr;
-     GenPolynomial<GenPolynomial<AlgebraicNumber<ModInteger>>> er;
 
      ar = rfac.random(kl,ll,el,q);
      br = rfac.random(kl,ll,el,q);
@@ -274,30 +257,8 @@ public class SquarefreeAlgModTest extends TestCase {
  */
  public void testRecursiveSquarefreeFactors() {
 
-     ModIntegerRing mfac = new ModIntegerRing(19);
-     String[] alpha = new String[] { "alpha" };
-     GenPolynomialRing<ModInteger> mpfac = new GenPolynomialRing<ModInteger>(mfac, 1, to, alpha);
-     GenPolynomial<ModInteger> agen = mpfac.univariate(0, 2);
-     agen = agen.sum(mpfac.getONE()); // x^2 + 1
-     AlgebraicNumberRing<ModInteger> fac = new AlgebraicNumberRing<ModInteger>(agen,true);
-
-     GreatestCommonDivisorAbstract<AlgebraicNumber<ModInteger>> ufd; 
-     //ufd = new GreatestCommonDivisorSubres<AlgebraicNumber<ModInteger>>();
-     ufd = GCDFactory.<AlgebraicNumber<ModInteger>> getProxy(fac);
-
-     SquarefreeFiniteFieldCharP<AlgebraicNumber<ModInteger>> sqf 
-        = new SquarefreeFiniteFieldCharP<AlgebraicNumber<ModInteger>>(fac);
-
-     GenPolynomialRing<AlgebraicNumber<ModInteger>> cfac;
-     GenPolynomialRing<GenPolynomial<AlgebraicNumber<ModInteger>>> rfac;
      cfac = new GenPolynomialRing<AlgebraicNumber<ModInteger>>(fac,2-1,to,c1vars);
      rfac = new GenPolynomialRing<GenPolynomial<AlgebraicNumber<ModInteger>>>(cfac,1,to,rvars);
-
-     GenPolynomial<GenPolynomial<AlgebraicNumber<ModInteger>>> ar;
-     GenPolynomial<GenPolynomial<AlgebraicNumber<ModInteger>>> br;
-     GenPolynomial<GenPolynomial<AlgebraicNumber<ModInteger>>> cr;
-     GenPolynomial<GenPolynomial<AlgebraicNumber<ModInteger>>> dr;
-     GenPolynomial<GenPolynomial<AlgebraicNumber<ModInteger>>> er;
 
      ar = rfac.random(kl,3,2,q);
      br = rfac.random(kl,3,2,q);
@@ -329,28 +290,7 @@ public class SquarefreeAlgModTest extends TestCase {
  public void testSquarefree() {
      System.out.println("\nfull:");
 
-     ModIntegerRing mfac = new ModIntegerRing(19);
-     String[] alpha = new String[] { "alpha" };
-     GenPolynomialRing<ModInteger> mpfac = new GenPolynomialRing<ModInteger>(mfac, 1, to, alpha);
-     GenPolynomial<ModInteger> agen = mpfac.univariate(0, 2);
-     agen = agen.sum(mpfac.getONE()); // x^2 + 1
-     AlgebraicNumberRing<ModInteger> fac = new AlgebraicNumberRing<ModInteger>(agen,true);
-
-     GreatestCommonDivisorAbstract<AlgebraicNumber<ModInteger>> ufd; 
-     //ufd = new GreatestCommonDivisorSubres<AlgebraicNumber<ModInteger>>();
-     ufd = GCDFactory.<AlgebraicNumber<ModInteger>> getProxy(fac);
-
-     SquarefreeFiniteFieldCharP<AlgebraicNumber<ModInteger>> sqf 
-        = new SquarefreeFiniteFieldCharP<AlgebraicNumber<ModInteger>>(fac);
-
-     GenPolynomialRing<AlgebraicNumber<ModInteger>> dfac;
      dfac = new GenPolynomialRing<AlgebraicNumber<ModInteger>>(fac,rl,to,vars);
-
-     GenPolynomial<AlgebraicNumber<ModInteger>> a;
-     GenPolynomial<AlgebraicNumber<ModInteger>> b;
-     GenPolynomial<AlgebraicNumber<ModInteger>> c;
-     GenPolynomial<AlgebraicNumber<ModInteger>> d;
-     GenPolynomial<AlgebraicNumber<ModInteger>> e;
 
      a = dfac.random(kl,ll,2,q);
      b = dfac.random(kl,ll,2,q);
@@ -389,28 +329,7 @@ public class SquarefreeAlgModTest extends TestCase {
  */
  public void testSquarefreeFactors() {
 
-     ModIntegerRing mfac = new ModIntegerRing(19);
-     String[] alpha = new String[] { "alpha" };
-     GenPolynomialRing<ModInteger> mpfac = new GenPolynomialRing<ModInteger>(mfac, 1, to, alpha);
-     GenPolynomial<ModInteger> agen = mpfac.univariate(0, 2);
-     agen = agen.sum(mpfac.getONE()); // x^2 + 1
-     AlgebraicNumberRing<ModInteger> fac = new AlgebraicNumberRing<ModInteger>(agen,true);
-
-     GreatestCommonDivisorAbstract<AlgebraicNumber<ModInteger>> ufd; 
-     //ufd = new GreatestCommonDivisorSubres<AlgebraicNumber<ModInteger>>();
-     ufd = GCDFactory.<AlgebraicNumber<ModInteger>> getProxy(fac);
-
-     SquarefreeFiniteFieldCharP<AlgebraicNumber<ModInteger>> sqf 
-        = new SquarefreeFiniteFieldCharP<AlgebraicNumber<ModInteger>>(fac);
-
-     GenPolynomialRing<AlgebraicNumber<ModInteger>> dfac;
      dfac = new GenPolynomialRing<AlgebraicNumber<ModInteger>>(fac,rl,to,vars);
-
-     GenPolynomial<AlgebraicNumber<ModInteger>> a;
-     GenPolynomial<AlgebraicNumber<ModInteger>> b;
-     GenPolynomial<AlgebraicNumber<ModInteger>> c;
-     GenPolynomial<AlgebraicNumber<ModInteger>> d;
-     GenPolynomial<AlgebraicNumber<ModInteger>> e;
 
      a = dfac.random(kl,3,2,q);
      b = dfac.random(kl,3,2,q);
@@ -434,4 +353,84 @@ public class SquarefreeAlgModTest extends TestCase {
      assertTrue("isFactorization(d,sfactors) ", sqf.isFactorization(d,sfactors) );
  }
 
+    /* ------------char-th root ------------------------- */
+
+/**
+ * Test base squarefree with char-th root.
+ * 
+ */
+ public void testBaseSquarefreeCharRoot() {
+     System.out.println("\nbase CharRoot:");
+
+     long p = 11;
+
+     //dfac = new GenPolynomialRing<ModInteger>(fac,1,to,rvars);
+     dfac = new GenPolynomialRing<AlgebraicNumber<ModInteger>>(fac,1,to,rvars);
+
+     a = dfac.random(kl,ll+2,el+2,q);
+     b = dfac.random(kl,ll+2,el+2,q);
+     c = dfac.random(kl,ll,el,q);
+
+     if ( a.isZERO() || b.isZERO() || c.isZERO() || a.isConstant() || b.isConstant() ) {
+        // skip for this turn
+        return;
+     }
+     System.out.println("a  = " + a);
+     System.out.println("b  = " + b);
+     System.out.println("c  = " + c);
+         
+     // a a b^p c
+     d = a.multiply(a).multiply( Power.<GenPolynomial<AlgebraicNumber<ModInteger>>> positivePower(b, p) ).multiply(c);
+     c = a.multiply(b).multiply(c);
+     System.out.println("d  = " + d);
+     System.out.println("c  = " + c);
+
+     c = sqf.baseSquarefreePart(c);
+     d = sqf.baseSquarefreePart(d);
+     System.out.println("d  = " + d);
+     System.out.println("c  = " + c);
+     assertTrue("isSquarefree(c) " + c, sqf.isSquarefree(c) );
+     assertTrue("isSquarefree(d) " + d, sqf.isSquarefree(d) );
+
+     //e = PolyUtil.<ModInteger>basePseudoRemainder(d,c);
+     //System.out.println("e  = " + e);
+     //assertTrue("squarefree(abc) | squarefree(aab^pc) " + e, e.isZERO() );
+ }
+
+
+/**
+ * Test base squarefree factors with char-th root.
+ * 
+ */
+ public void testBaseSquarefreeFactorsCharRoot() {
+
+     long p = 11;
+
+     //dfac = new GenPolynomialRing<ModInteger>(fac,1,to,rvars);
+     dfac = new GenPolynomialRing<AlgebraicNumber<ModInteger>>(fac,1,to,rvars);
+
+     a = dfac.random(kl,ll+2,el+3,q);
+     b = dfac.random(kl,ll+2,el+3,q);
+     c = dfac.random(kl,ll,el+2,q);
+
+     if ( a.isZERO() || b.isZERO() || c.isZERO() || a.isConstant() || b.isConstant() ) {
+        // skip for this turn
+        return;
+     }
+     System.out.println("a  = " + a);
+     System.out.println("b  = " + b);
+     System.out.println("c  = " + c);
+     
+     // a a b^p c
+     d = a.multiply(a).multiply( Power.<GenPolynomial<AlgebraicNumber<ModInteger>>> positivePower(b, p) ).multiply(c);
+     System.out.println("d  = " + d);
+
+     SortedMap<GenPolynomial<AlgebraicNumber<ModInteger>>,Long> sfactors;
+     sfactors = sqf.baseSquarefreeFactors(d);
+     System.out.println("sfactors = " + sfactors);
+
+     assertTrue("isFactorization(d,sfactors) ", sqf.isFactorization(d,sfactors) );
+ }
+
 }
+

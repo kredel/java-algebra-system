@@ -43,6 +43,7 @@ public class SquarefreeRatTest extends TestCase {
  public static void main (String[] args) {
      //BasicConfigurator.configure();
      junit.textui.TestRunner.run( suite() );
+     ComputerThreads.terminate();
  }
 
 
@@ -76,15 +77,46 @@ public class SquarefreeRatTest extends TestCase {
     String[] c1vars;
     String[] rvars;
 
+    BigRational fac;
+    GreatestCommonDivisorAbstract<BigRational> ufd; 
+    SquarefreeFieldChar0<BigRational> sqf;
+
+    GenPolynomialRing<BigRational> dfac;
+
+    GenPolynomial<BigRational> a;
+    GenPolynomial<BigRational> b;
+    GenPolynomial<BigRational> c;
+    GenPolynomial<BigRational> d;
+    GenPolynomial<BigRational> e;
+
+    GenPolynomialRing<BigRational> cfac;
+    GenPolynomialRing<GenPolynomial<BigRational>> rfac;
+
+    GenPolynomial<GenPolynomial<BigRational>> ar;
+    GenPolynomial<GenPolynomial<BigRational>> br;
+    GenPolynomial<GenPolynomial<BigRational>> cr;
+    GenPolynomial<GenPolynomial<BigRational>> dr;
+    GenPolynomial<GenPolynomial<BigRational>> er;
+
+
     protected void setUp() {
         vars   = ExpVector.STDVARS(rl);
         cvars  = ExpVector.STDVARS(rl-1);
         c1vars = new String[] { cvars[0] };
         rvars  = new String[] { vars[rl-1] };
+        fac = new BigRational(1);
+        //ufd = new GreatestCommonDivisorSubres<BigRational>();
+        //ufd = GCDFactory.<BigRational> getImplementation(fac);
+        ufd = GCDFactory.<BigRational> getProxy(fac);
+        sqf = new SquarefreeFieldChar0<BigRational>(fac);
+        a = b = c = d = e = null;
+        ar = br = cr = dr = er = null;
     }
 
     protected void tearDown() {
-        ComputerThreads.terminate();
+        a = b = c = d = e = null;
+        ar = br = cr = dr = er = null;
+        // ComputerThreads.terminate();
     }
 
 
@@ -95,23 +127,7 @@ public class SquarefreeRatTest extends TestCase {
  public void testBaseSquarefree() {
      System.out.println("\nbase:");
 
-     BigRational fac = new BigRational(1);
-
-     GreatestCommonDivisorAbstract<BigRational> ufd; 
-     //ufd = new GreatestCommonDivisorSubres<BigRational>();
-     //ufd = GCDFactory.<BigRational> getImplementation(fac);
-     ufd = GCDFactory.<BigRational> getProxy(fac);
-
-     SquarefreeFieldChar0<BigRational> sqf = new SquarefreeFieldChar0<BigRational>(fac);
-
-     GenPolynomialRing<BigRational> dfac;
      dfac = new GenPolynomialRing<BigRational>(fac,1,to,rvars);
-
-     GenPolynomial<BigRational> a;
-     GenPolynomial<BigRational> b;
-     GenPolynomial<BigRational> c;
-     GenPolynomial<BigRational> d;
-     GenPolynomial<BigRational> e;
 
      a = dfac.random(kl,ll,el+2,q);
      b = dfac.random(kl,ll,el+2,q);
@@ -150,22 +166,7 @@ public class SquarefreeRatTest extends TestCase {
  */
  public void testBaseSquarefreeFactors() {
 
-     BigRational fac = new BigRational(1);
-
-     GreatestCommonDivisorAbstract<BigRational> ufd; 
-     //ufd = new GreatestCommonDivisorSubres<BigRational>();
-     ufd = GCDFactory.<BigRational> getProxy(fac);
-
-     SquarefreeFieldChar0<BigRational> sqf = new SquarefreeFieldChar0<BigRational>(fac);
-
-     GenPolynomialRing<BigRational> dfac;
      dfac = new GenPolynomialRing<BigRational>(fac,1,to,rvars);
-
-     GenPolynomial<BigRational> a;
-     GenPolynomial<BigRational> b;
-     GenPolynomial<BigRational> c;
-     GenPolynomial<BigRational> d;
-     GenPolynomial<BigRational> e;
 
      a = dfac.random(kl,ll,el+3,q);
      b = dfac.random(kl,ll,el+3,q);
@@ -198,24 +199,8 @@ public class SquarefreeRatTest extends TestCase {
  public void testRecursiveSquarefree() {
      System.out.println("\nrecursive:");
 
-     BigRational fac = new BigRational(1);
-
-     GreatestCommonDivisorAbstract<BigRational> ufd; 
-     //ufd = new GreatestCommonDivisorSubres<BigRational>();
-     ufd = GCDFactory.<BigRational> getProxy(fac);
-
-     SquarefreeFieldChar0<BigRational> sqf = new SquarefreeFieldChar0<BigRational>(fac);
-
-     GenPolynomialRing<BigRational> cfac;
-     GenPolynomialRing<GenPolynomial<BigRational>> rfac;
      cfac = new GenPolynomialRing<BigRational>(fac,2-1,to,c1vars);
      rfac = new GenPolynomialRing<GenPolynomial<BigRational>>(cfac,1,to,rvars);
-
-     GenPolynomial<GenPolynomial<BigRational>> ar;
-     GenPolynomial<GenPolynomial<BigRational>> br;
-     GenPolynomial<GenPolynomial<BigRational>> cr;
-     GenPolynomial<GenPolynomial<BigRational>> dr;
-     GenPolynomial<GenPolynomial<BigRational>> er;
 
      ar = rfac.random(kl,ll,el,q);
      br = rfac.random(kl,ll,el,q);
@@ -253,24 +238,8 @@ public class SquarefreeRatTest extends TestCase {
  */
  public void testRecursiveSquarefreeFactors() {
 
-     BigRational fac = new BigRational(1);
-
-     GreatestCommonDivisorAbstract<BigRational> ufd; 
-     //ufd = new GreatestCommonDivisorSubres<BigRational>();
-     ufd = GCDFactory.<BigRational> getProxy(fac);
-
-     SquarefreeFieldChar0<BigRational> sqf = new SquarefreeFieldChar0<BigRational>(fac);
-
-     GenPolynomialRing<BigRational> cfac;
-     GenPolynomialRing<GenPolynomial<BigRational>> rfac;
      cfac = new GenPolynomialRing<BigRational>(fac,2-1,to,c1vars);
      rfac = new GenPolynomialRing<GenPolynomial<BigRational>>(cfac,1,to,rvars);
-
-     GenPolynomial<GenPolynomial<BigRational>> ar;
-     GenPolynomial<GenPolynomial<BigRational>> br;
-     GenPolynomial<GenPolynomial<BigRational>> cr;
-     GenPolynomial<GenPolynomial<BigRational>> dr;
-     GenPolynomial<GenPolynomial<BigRational>> er;
 
      ar = rfac.random(kl,3,2,q);
      br = rfac.random(kl,3,2,q);
@@ -302,22 +271,7 @@ public class SquarefreeRatTest extends TestCase {
  public void testSquarefree() {
      System.out.println("\nfull:");
 
-     BigRational fac = new BigRational(1);
-
-     GreatestCommonDivisorAbstract<BigRational> ufd; 
-     //ufd = new GreatestCommonDivisorSubres<BigRational>();
-     ufd = GCDFactory.<BigRational> getProxy(fac);
-
-     SquarefreeFieldChar0<BigRational> sqf = new SquarefreeFieldChar0<BigRational>(fac);
-
-     GenPolynomialRing<BigRational> dfac;
      dfac = new GenPolynomialRing<BigRational>(fac,rl,to,vars);
-
-     GenPolynomial<BigRational> a;
-     GenPolynomial<BigRational> b;
-     GenPolynomial<BigRational> c;
-     GenPolynomial<BigRational> d;
-     GenPolynomial<BigRational> e;
 
      a = dfac.random(kl,ll,2,q);
      b = dfac.random(kl,ll,2,q);
@@ -356,22 +310,7 @@ public class SquarefreeRatTest extends TestCase {
  */
  public void testSquarefreeFactors() {
 
-     BigRational fac = new BigRational(1);
-
-     GreatestCommonDivisorAbstract<BigRational> ufd; 
-     //ufd = new GreatestCommonDivisorSubres<BigRational>();
-     ufd = GCDFactory.<BigRational> getProxy(fac);
-
-     SquarefreeFieldChar0<BigRational> sqf = new SquarefreeFieldChar0<BigRational>(fac);
-
-     GenPolynomialRing<BigRational> dfac;
      dfac = new GenPolynomialRing<BigRational>(fac,rl,to,vars);
-
-     GenPolynomial<BigRational> a;
-     GenPolynomial<BigRational> b;
-     GenPolynomial<BigRational> c;
-     GenPolynomial<BigRational> d;
-     GenPolynomial<BigRational> e;
 
      a = dfac.random(kl,3,2,q);
      b = dfac.random(kl,3,2,q);

@@ -43,6 +43,7 @@ public class SquarefreeIntTest extends TestCase {
  public static void main (String[] args) {
      //BasicConfigurator.configure();
      junit.textui.TestRunner.run( suite() );
+     ComputerThreads.terminate();
  }
 
 
@@ -76,15 +77,48 @@ public class SquarefreeIntTest extends TestCase {
     String[] c1vars;
     String[] rvars;
 
+    BigInteger fac;
+    GreatestCommonDivisorAbstract<BigInteger> ufd; 
+    SquarefreeRingChar0<BigInteger> sqf;
+
+    GenPolynomialRing<BigInteger> dfac;
+
+    GenPolynomial<BigInteger> a;
+    GenPolynomial<BigInteger> b;
+    GenPolynomial<BigInteger> c;
+    GenPolynomial<BigInteger> d;
+    GenPolynomial<BigInteger> e;
+
+    GenPolynomialRing<BigInteger> cfac;
+    GenPolynomialRing<GenPolynomial<BigInteger>> rfac;
+
+    GenPolynomial<GenPolynomial<BigInteger>> ar;
+    GenPolynomial<GenPolynomial<BigInteger>> br;
+    GenPolynomial<GenPolynomial<BigInteger>> cr;
+    GenPolynomial<GenPolynomial<BigInteger>> dr;
+    GenPolynomial<GenPolynomial<BigInteger>> er;
+
     protected void setUp() {
         vars   = ExpVector.STDVARS(rl);
         cvars  = ExpVector.STDVARS(rl-1);
         c1vars = new String[] { cvars[0] };
         rvars  = new String[] { vars[rl-1] };
+
+        fac = new BigInteger(1);
+
+        //ufd = new GreatestCommonDivisorSubres<BigInteger>();
+        //ufd = GCDFactory.<BigInteger> getImplementation(fac);
+        ufd = GCDFactory.<BigInteger> getProxy(fac);
+
+        sqf = new SquarefreeRingChar0<BigInteger>(fac);
+        a = b = c = d = e = null;
+        ar = br = cr = dr = er = null;
     }
 
     protected void tearDown() {
-        ComputerThreads.terminate();
+        a = b = c = d = e = null;
+        ar = br = cr = dr = er = null;
+        //ComputerThreads.terminate();
     }
 
 
@@ -95,23 +129,7 @@ public class SquarefreeIntTest extends TestCase {
  public void testBaseSquarefree() {
      System.out.println("\nbase:");
 
-     BigInteger fac = new BigInteger(1);
-
-     GreatestCommonDivisorAbstract<BigInteger> ufd; 
-     //ufd = new GreatestCommonDivisorSubres<BigInteger>();
-     //ufd = GCDFactory.<BigInteger> getImplementation(fac);
-     ufd = GCDFactory.<BigInteger> getProxy(fac);
-
-     SquarefreeRingChar0<BigInteger> sqf = new SquarefreeRingChar0<BigInteger>(fac);
-
-     GenPolynomialRing<BigInteger> dfac;
      dfac = new GenPolynomialRing<BigInteger>(fac,1,to,rvars);
-
-     GenPolynomial<BigInteger> a;
-     GenPolynomial<BigInteger> b;
-     GenPolynomial<BigInteger> c;
-     GenPolynomial<BigInteger> d;
-     GenPolynomial<BigInteger> e;
 
      a = dfac.random(kl,ll,el+2,q);
      b = dfac.random(kl,ll,el+2,q);
@@ -150,22 +168,7 @@ public class SquarefreeIntTest extends TestCase {
  */
  public void testBaseSquarefreeFactors() {
 
-     BigInteger fac = new BigInteger(1);
-
-     GreatestCommonDivisorAbstract<BigInteger> ufd; 
-     //ufd = new GreatestCommonDivisorSubres<BigInteger>();
-     ufd = GCDFactory.<BigInteger> getProxy(fac);
-
-     SquarefreeRingChar0<BigInteger> sqf = new SquarefreeRingChar0<BigInteger>(fac);
-
-     GenPolynomialRing<BigInteger> dfac;
      dfac = new GenPolynomialRing<BigInteger>(fac,1,to,rvars);
-
-     GenPolynomial<BigInteger> a;
-     GenPolynomial<BigInteger> b;
-     GenPolynomial<BigInteger> c;
-     GenPolynomial<BigInteger> d;
-     GenPolynomial<BigInteger> e;
 
      a = dfac.random(kl,ll,el+3,q);
      b = dfac.random(kl,ll,el+3,q);
@@ -198,24 +201,8 @@ public class SquarefreeIntTest extends TestCase {
  public void testRecursiveSquarefree() {
      System.out.println("\nrecursive:");
 
-     BigInteger fac = new BigInteger(1);
-
-     GreatestCommonDivisorAbstract<BigInteger> ufd; 
-     //ufd = new GreatestCommonDivisorSubres<BigInteger>();
-     ufd = GCDFactory.<BigInteger> getProxy(fac);
-
-     SquarefreeRingChar0<BigInteger> sqf = new SquarefreeRingChar0<BigInteger>(fac);
-
-     GenPolynomialRing<BigInteger> cfac;
-     GenPolynomialRing<GenPolynomial<BigInteger>> rfac;
      cfac = new GenPolynomialRing<BigInteger>(fac,2-1,to,c1vars);
      rfac = new GenPolynomialRing<GenPolynomial<BigInteger>>(cfac,1,to,rvars);
-
-     GenPolynomial<GenPolynomial<BigInteger>> ar;
-     GenPolynomial<GenPolynomial<BigInteger>> br;
-     GenPolynomial<GenPolynomial<BigInteger>> cr;
-     GenPolynomial<GenPolynomial<BigInteger>> dr;
-     GenPolynomial<GenPolynomial<BigInteger>> er;
 
      ar = rfac.random(kl,ll,el,q);
      br = rfac.random(kl,ll,el,q);
@@ -253,24 +240,8 @@ public class SquarefreeIntTest extends TestCase {
  */
  public void testRecursiveSquarefreeFactors() {
 
-     BigInteger fac = new BigInteger(1);
-
-     GreatestCommonDivisorAbstract<BigInteger> ufd; 
-     //ufd = new GreatestCommonDivisorSubres<BigInteger>();
-     ufd = GCDFactory.<BigInteger> getProxy(fac);
-
-     SquarefreeRingChar0<BigInteger> sqf = new SquarefreeRingChar0<BigInteger>(fac);
-
-     GenPolynomialRing<BigInteger> cfac;
-     GenPolynomialRing<GenPolynomial<BigInteger>> rfac;
      cfac = new GenPolynomialRing<BigInteger>(fac,2-1,to,c1vars);
      rfac = new GenPolynomialRing<GenPolynomial<BigInteger>>(cfac,1,to,rvars);
-
-     GenPolynomial<GenPolynomial<BigInteger>> ar;
-     GenPolynomial<GenPolynomial<BigInteger>> br;
-     GenPolynomial<GenPolynomial<BigInteger>> cr;
-     GenPolynomial<GenPolynomial<BigInteger>> dr;
-     GenPolynomial<GenPolynomial<BigInteger>> er;
 
      ar = rfac.random(kl,3,2,q);
      br = rfac.random(kl,3,2,q);
@@ -302,22 +273,7 @@ public class SquarefreeIntTest extends TestCase {
  public void testSquarefree() {
      System.out.println("\nfull:");
 
-     BigInteger fac = new BigInteger(1);
-
-     GreatestCommonDivisorAbstract<BigInteger> ufd; 
-     //ufd = new GreatestCommonDivisorSubres<BigInteger>();
-     ufd = GCDFactory.<BigInteger> getProxy(fac);
-
-     SquarefreeRingChar0<BigInteger> sqf = new SquarefreeRingChar0<BigInteger>(fac);
-
-     GenPolynomialRing<BigInteger> dfac;
      dfac = new GenPolynomialRing<BigInteger>(fac,rl,to,vars);
-
-     GenPolynomial<BigInteger> a;
-     GenPolynomial<BigInteger> b;
-     GenPolynomial<BigInteger> c;
-     GenPolynomial<BigInteger> d;
-     GenPolynomial<BigInteger> e;
 
      a = dfac.random(kl,ll,2,q);
      b = dfac.random(kl,ll,2,q);
@@ -356,22 +312,7 @@ public class SquarefreeIntTest extends TestCase {
  */
  public void testSquarefreeFactors() {
 
-     BigInteger fac = new BigInteger(1);
-
-     GreatestCommonDivisorAbstract<BigInteger> ufd; 
-     //ufd = new GreatestCommonDivisorSubres<BigInteger>();
-     ufd = GCDFactory.<BigInteger> getProxy(fac);
-
-     SquarefreeRingChar0<BigInteger> sqf = new SquarefreeRingChar0<BigInteger>(fac);
-
-     GenPolynomialRing<BigInteger> dfac;
      dfac = new GenPolynomialRing<BigInteger>(fac,rl,to,vars);
-
-     GenPolynomial<BigInteger> a;
-     GenPolynomial<BigInteger> b;
-     GenPolynomial<BigInteger> c;
-     GenPolynomial<BigInteger> d;
-     GenPolynomial<BigInteger> e;
 
      a = dfac.random(kl,3,2,q);
      b = dfac.random(kl,3,2,q);
