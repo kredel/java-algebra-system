@@ -291,11 +291,11 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
 	    if ( fi.degree(0) <= 1 ) {
 		faca.add(fi);
 	    } else {
-                System.out.println("fi.deg > 1 = " + fi);
+                //System.out.println("fi.deg > 1 = " + fi);
                 FactorAbsolute<AlgebraicNumber<C>> aengine 
 		    = (FactorAbsolute<AlgebraicNumber<C>>) FactorFactory.<C>getImplementation(afac);
 		Factors<AlgebraicNumber<C>> fif = aengine.baseFactorsAbsoluteIrreducible(fi);
-                System.out.println("fif = " + fif);
+                //System.out.println("fif = " + fif);
 		facar.add(fif);
 	    }
 	}
@@ -491,9 +491,9 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
         List<GenPolynomial<C>> UF = baseFactorsSquarefree(up);
         //System.out.println("UF  = " + UF);
         FactorsList<C> aUF = baseFactorsAbsoluteSquarefree(up);
-        System.out.println("aUF  = " + aUF);
+        //System.out.println("aUF  = " + aUF);
         AlgebraicNumberRing<C> arfac = aUF.findExtensionField();
-        System.out.println("arfac  = " + arfac);
+        //System.out.println("arfac  = " + arfac);
 
         long e = up.degree(0);
         // search factor polynomial with smallest degree 
@@ -526,10 +526,10 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>>
         //System.out.println("afac = " + afac);
         GenPolynomialRing<AlgebraicNumber<C>> pafac 
             = new GenPolynomialRing<AlgebraicNumber<C>>(afac, P.ring.nvar,P.ring.tord,P.ring.getVars());
-        System.out.println("pafac = " + pafac);
+        //System.out.println("pafac = " + pafac);
         // convert to K(alpha)
         GenPolynomial<AlgebraicNumber<C>> Pa = PolyUtil.<C> convertToRecAlgebraicCoefficients(depth,pafac, P);
-        System.out.println("Pa = " + Pa);
+        //System.out.println("Pa = " + Pa);
         // factor over K(alpha)
         FactorAbstract<AlgebraicNumber<C>> engine = FactorFactory.<C>getImplementation(afac);
         afactors = engine.factorsSquarefree( Pa );
