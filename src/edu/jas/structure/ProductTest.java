@@ -184,7 +184,7 @@ public class ProductTest extends TestCase {
  public void testModRandom() {
      for (int i = 0; i < 7; i++) {
          ap = mfac.random(kl,q);
-         if ( ap.isZERO() ) {
+         if ( ap.isZERO() || ap.isONE() ) {
             continue;
          }
          //System.out.println("ap = " + ap);
