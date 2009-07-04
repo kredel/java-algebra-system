@@ -78,7 +78,9 @@ public class FactorRational extends FactorAbsolute<BigRational> {
         BigInteger bi = BigInteger.ONE;
         GenPolynomialRing<BigInteger> ifac = new GenPolynomialRing<BigInteger>(bi, pfac);
         GenPolynomial<BigInteger> Pi = PolyUtil.integerFromRationalCoefficients(ifac, Pr);
-        //System.out.println("Pi = " + Pi);
+        if (debug) {
+            logger.info("Pi = " + Pi);
+        }
         List<GenPolynomial<BigInteger>> ifacts = iengine.baseFactorsSquarefree(Pi);
         if (logger.isInfoEnabled()) {
             logger.info("ifacts = " + ifacts);

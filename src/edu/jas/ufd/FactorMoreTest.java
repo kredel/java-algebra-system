@@ -45,7 +45,7 @@ public class FactorMoreTest extends TestCase {
      * main.
      */
     public static void main(String[] args) {
-        BasicConfigurator.configure();
+        //BasicConfigurator.configure();
         junit.textui.TestRunner.run(suite());
     }
 
@@ -89,6 +89,7 @@ public class FactorMoreTest extends TestCase {
 
     @Override
     protected void tearDown() {
+        ComputerThreads.terminate();
     }
 
 
@@ -146,7 +147,7 @@ public class FactorMoreTest extends TestCase {
      * Test integral function factorization.
      * 
      */
-    public void testIntegralFunctionFactorization() {
+    public void xtestIntegralFunctionFactorization() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigRational cfac = new BigRational(1);
@@ -161,7 +162,7 @@ public class FactorMoreTest extends TestCase {
         GenPolynomial<GenPolynomial<BigRational>> x  = pqfac.univariate(0);
         GenPolynomial<GenPolynomial<BigRational>> x2 = pqfac.univariate(0,2);
 
-        for (int i = 1; i < 2; i++) {
+        for (int i = 1; i < 3; i++) {
             int facs = 0;
             GenPolynomial<GenPolynomial<BigRational>> a;
             GenPolynomial<GenPolynomial<BigRational>> b = pqfac.random(2, 3, el, q);
@@ -169,10 +170,10 @@ public class FactorMoreTest extends TestCase {
             //b = b.multiply(b);
             GenPolynomial<GenPolynomial<BigRational>> c = pqfac.random(2, 3, el, q);
             //c = c.monic();
-            if ( true || c.isONE() ) {
+            if ( c.degree() < 1 ) {
                 c = x2.subtract(pqfac.getONE().multiply(t));
             }
-            if ( true || b.isONE() ) {
+            if ( b.degree() < 1 ) {
                 b = x.sum(pqfac.getONE());
             }
 
@@ -183,20 +184,20 @@ public class FactorMoreTest extends TestCase {
                 facs++;
             }
             a = c.multiply(b);
-            System.out.println("\na = " + a);
-            System.out.println("b = " + b);
-            System.out.println("c = " + c);
+            //System.out.println("\na = " + a);
+            //System.out.println("b = " + b);
+            //System.out.println("c = " + c);
 
             SortedMap<GenPolynomial<GenPolynomial<BigRational>>, Long> sm = fac.recursiveFactors(a);
-            System.out.println("\na   = " + a);
-            System.out.println("sm = " + sm);
+            //System.out.println("\na   = " + a);
+            //System.out.println("sm = " + sm);
 
             if (sm.size() >= facs) {
                 assertTrue("#facs < " + facs, sm.size() >= facs);
             } else {
-                long sf = 1;
+                long sf = 0;
                 for (Long e : sm.values()) {
-                    sf *= e;
+                    sf += e;
                 }
                 assertTrue("#facs < " + facs, sf >= facs);
             }
@@ -213,7 +214,7 @@ public class FactorMoreTest extends TestCase {
      * Test integer integral function factorization.
      * 
      */
-    public void testIntegerIntegralFunctionFactorization() {
+    public void xtestIntegerIntegralFunctionFactorization() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(1);
@@ -228,7 +229,7 @@ public class FactorMoreTest extends TestCase {
         GenPolynomial<GenPolynomial<BigInteger>> x  = pqfac.univariate(0);
         GenPolynomial<GenPolynomial<BigInteger>> x2 = pqfac.univariate(0,2);
 
-        for (int i = 1; i < 2; i++) {
+        for (int i = 1; i < 3; i++) {
             int facs = 0;
             GenPolynomial<GenPolynomial<BigInteger>> a;
             GenPolynomial<GenPolynomial<BigInteger>> b = pqfac.random(2, 3, el, q);
@@ -236,10 +237,10 @@ public class FactorMoreTest extends TestCase {
             //b = b.multiply(b);
             GenPolynomial<GenPolynomial<BigInteger>> c = pqfac.random(2, 3, el, q);
             //c = c.monic();
-            if ( true || c.isONE() ) {
+            if ( c.degree() < 1 ) {
                 c = x2.subtract(pqfac.getONE().multiply(t));
             }
-            if ( true || b.isONE() ) {
+            if ( b.degree() < 1 ) {
                 b = x.sum(pqfac.getONE());
             }
 
@@ -250,27 +251,27 @@ public class FactorMoreTest extends TestCase {
                 facs++;
             }
             a = c.multiply(b);
-            System.out.println("\na = " + a);
-            System.out.println("b = " + b);
-            System.out.println("c = " + c);
+            //System.out.println("\na = " + a);
+            //System.out.println("b = " + b);
+            //System.out.println("c = " + c);
 
             SortedMap<GenPolynomial<GenPolynomial<BigInteger>>, Long> sm = fac.recursiveFactors(a);
-            System.out.println("\na   = " + a);
-            System.out.println("sm = " + sm);
+            //System.out.println("\na   = " + a);
+            //System.out.println("sm = " + sm);
 
             if (sm.size() >= facs) {
                 assertTrue("#facs < " + facs, sm.size() >= facs);
             } else {
-                long sf = 1;
+                long sf = 0;
                 for (Long e : sm.values()) {
-                    sf *= e;
+                    sf += e;
                 }
                 assertTrue("#facs < " + facs, sf >= facs);
             }
 
-            //boolean tt = fac.isFactorization(a, sm);
+            boolean tt = fac.isRecursiveFactorization(a, sm);
             //System.out.println("t        = " + tt);
-            //assertTrue("prod(factor(a)) = a", tt);
+            assertTrue("prod(factor(a)) = a", tt);
         }
         ComputerThreads.terminate();
     }
@@ -280,7 +281,7 @@ public class FactorMoreTest extends TestCase {
      * Test rational function factorization.
      * 
      */
-    public void testRationalFunctionFactorization() {
+    public void xtestRationalFunctionFactorization() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigRational cfac = new BigRational(1);
@@ -296,7 +297,7 @@ public class FactorMoreTest extends TestCase {
         GenPolynomial<Quotient<BigRational>> x  = pqfac.univariate(0);
         GenPolynomial<Quotient<BigRational>> x2 = pqfac.univariate(0,2);
 
-        for (int i = 1; i < 2; i++) {
+        for (int i = 1; i < 3; i++) {
             int facs = 0;
             GenPolynomial<Quotient<BigRational>> a;
             GenPolynomial<Quotient<BigRational>> b = pqfac.random(2, 3, el, q);
@@ -304,10 +305,10 @@ public class FactorMoreTest extends TestCase {
             //b = b.multiply(b);
             GenPolynomial<Quotient<BigRational>> c = pqfac.random(2, 3, el, q);
             c = c.monic();
-            if ( true || c.isONE() ) {
+            if ( c.degree() < 1 ) {
                 c = x2.subtract(pqfac.getONE().multiply(t));
             }
-            if ( true || b.isONE() ) {
+            if ( b.degree() < 1 ) {
                 b = x.sum(pqfac.getONE());
             }
 
@@ -318,20 +319,20 @@ public class FactorMoreTest extends TestCase {
                 facs++;
             }
             a = c.multiply(b);
-            System.out.println("\na = " + a);
-            System.out.println("b = " + b);
-            System.out.println("c = " + c);
+            //System.out.println("\na = " + a);
+            //System.out.println("b = " + b);
+            //System.out.println("c = " + c);
 
             SortedMap<GenPolynomial<Quotient<BigRational>>, Long> sm = fac.factors(a);
-            System.out.println("\na   = " + a);
-            System.out.println("sm = " + sm);
+            //System.out.println("\na   = " + a);
+            //System.out.println("sm = " + sm);
 
             if (sm.size() >= facs) {
                 assertTrue("#facs < " + facs, sm.size() >= facs);
             } else {
-                long sf = 1;
+                long sf = 0;
                 for (Long e : sm.values()) {
-                    sf *= e;
+                    sf += e;
                 }
                 assertTrue("#facs < " + facs, sf >= facs);
             }
@@ -348,7 +349,7 @@ public class FactorMoreTest extends TestCase {
      * Test modular rational function factorization.
      * 
      */
-    public void testModularRationalFunctionFactorization() {
+    public void xtestModularRationalFunctionFactorization() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         ModIntegerRing cfac = new ModIntegerRing(19,true);
@@ -364,7 +365,7 @@ public class FactorMoreTest extends TestCase {
         GenPolynomial<Quotient<ModInteger>> x  = pqfac.univariate(0);
         GenPolynomial<Quotient<ModInteger>> x2 = pqfac.univariate(0,2);
 
-        for (int i = 1; i < 2; i++) {
+        for (int i = 1; i < 3; i++) {
             int facs = 0;
             GenPolynomial<Quotient<ModInteger>> a;
             GenPolynomial<Quotient<ModInteger>> b = pqfac.random(2, 3, el, q);
@@ -372,10 +373,10 @@ public class FactorMoreTest extends TestCase {
             //b = b.multiply(b);
             GenPolynomial<Quotient<ModInteger>> c = pqfac.random(2, 3, el, q);
             c = c.monic();
-            if ( true || c.isONE() ) {
+            if ( c.degree() < 1 ) {
                 c = x2.subtract(pqfac.getONE().multiply(t));
             }
-            if ( true || b.isONE() ) {
+            if ( b.degree() < 1 ) {
                 b = x.sum(pqfac.getONE());
             }
 
@@ -386,20 +387,78 @@ public class FactorMoreTest extends TestCase {
                 facs++;
             }
             a = c.multiply(b);
+            //System.out.println("\na = " + a);
+            //System.out.println("b = " + b);
+            //System.out.println("c = " + c);
+
+            SortedMap<GenPolynomial<Quotient<ModInteger>>, Long> sm = fac.factors(a);
+            //System.out.println("\na   = " + a);
+            //System.out.println("sm = " + sm);
+
+            if (sm.size() >= facs) {
+                assertTrue("#facs < " + facs, sm.size() >= facs);
+            } else {
+                long sf = 0;
+                for (Long e : sm.values()) {
+                    sf += e;
+                }
+                assertTrue("#facs < " + facs, sf >= facs);
+            }
+
+            boolean tt = fac.isFactorization(a, sm);
+            //System.out.println("t        = " + tt);
+            assertTrue("prod(factor(a)) = a", tt);
+        }
+        ComputerThreads.terminate();
+    }
+
+
+    /**
+     * Test modular quotient factorization.
+     * 
+     */
+    public void testModularQuotientFactorization() {
+
+        TermOrder to = new TermOrder(TermOrder.INVLEX);
+        ModIntegerRing cfac = new ModIntegerRing(19,true);
+        String[] qvars = new String[]{ "t" };
+        GenPolynomialRing<ModInteger> pfac = new GenPolynomialRing<ModInteger>(cfac, 1, to, qvars);
+        QuotientRing<ModInteger> qfac = new QuotientRing<ModInteger>(pfac);
+        Quotient<ModInteger> t = qfac.generators().get(1);
+
+        FactorQuotient<ModInteger> fac = new FactorQuotient<ModInteger>(qfac);
+
+        for (int i = 1; i < 2; i++) {
+            int facs = 0;
+            Quotient<ModInteger> a;
+            Quotient<ModInteger> b = qfac.random(3, 3, el, q);
+            b = b.multiply(b);
+            Quotient<ModInteger> c = qfac.random(3, 3, el, q);
+            c = c.multiply(c);
+
+            if (c.num.degree() > 0) {
+                facs++;
+            }
+            if (b.num.degree() > 0) {
+                facs++;
+            }
+            a = c.multiply(b);
             System.out.println("\na = " + a);
             System.out.println("b = " + b);
             System.out.println("c = " + c);
 
-            SortedMap<GenPolynomial<Quotient<ModInteger>>, Long> sm = fac.factors(a);
+            SortedMap<Quotient<ModInteger>, Long> sm = fac.quotientSquarefreeFactors(a);
+            //SortedMap<Quotient<ModInteger>, Long> sm = fac.quotientFactors(a);
+            //List<Quotient<ModInteger>> sm = fac.quotientFactorsSquarefree(a);
             System.out.println("\na   = " + a);
             System.out.println("sm = " + sm);
 
             if (sm.size() >= facs) {
                 assertTrue("#facs < " + facs, sm.size() >= facs);
             } else {
-                long sf = 1;
+                long sf = 0;
                 for (Long e : sm.values()) {
-                    sf *= e;
+                    sf += e;
                 }
                 assertTrue("#facs < " + facs, sf >= facs);
             }
@@ -412,3 +471,4 @@ public class FactorMoreTest extends TestCase {
     }
 
 }
+

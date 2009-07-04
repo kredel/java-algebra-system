@@ -292,8 +292,8 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
         if ( debug ) {
             logger.info("squarefree facs   = " + facs);
             //System.out.println("sfacs   = " + facs);
-            boolean tt = isFactorization(P,facs);
-            System.out.println("sfacs tt   = " + tt);
+            //boolean tt = isFactorization(P,facs);
+            //System.out.println("sfacs tt   = " + tt);
         }
         for (GenPolynomial<C> g : facs.keySet()) {
             Long k = facs.get(g);
@@ -308,9 +308,9 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
                //System.out.println("sfacs   = " + sfacs);
             }
             for (GenPolynomial<C> h : sfacs) {
-                if ( factors.get(h) != null ) {
-                   System.out.println("h = (" + h + ")**" + k); 
-                   throw new RuntimeException("multiple factors");
+                Long j = factors.get(h); // evtl. constants
+                if (  j != null ) {
+                    k += j;
                 }
                 factors.put(h, k);
             }
@@ -384,8 +384,9 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
                //System.out.println("sfacs   = " + sfacs);
             }
             for (GenPolynomial<C> h : sfacs) {
-                if ( factors.get(h) != null ) {
-                   throw new RuntimeException("multiple factors " + "h = (" + h + ")**" + d + "::" + factors.get(h));
+                Long j = factors.get(h); // evtl. constants
+                if (  j != null ) {
+                    d += j;
                 }
                 factors.put(h, d);
             }
@@ -529,15 +530,15 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
         if (!f) {
             System.out.println("P = " + P);
             System.out.println("t = " + t);
-            P = P.monic();
-            t = t.monic();
-            f = P.equals(t) || P.equals(t.negate());
+            GenPolynomial<GenPolynomial<C>> Pp = engine.recursivePrimitivePart(P);
+            GenPolynomial<GenPolynomial<C>> tp = engine.recursivePrimitivePart(t);
+            f = Pp.equals(tp) || Pp.equals(tp.negate());
             if ( f ) {
                 return f;
             }
             System.out.println("\nfactorization(map): " + f);
-            System.out.println("P = " + P);
-            System.out.println("t = " + t);
+            System.out.println("Pp = " + Pp);
+            System.out.println("tp = " + tp);
             //RuntimeException e = new RuntimeException("fac-map");
             //e.printStackTrace();
             //throw e;
@@ -566,7 +567,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
         }
         GenPolynomialRing<GenPolynomial<C>> pfac = P.ring;
         GenPolynomialRing<C> qi = (GenPolynomialRing<C>)pfac.coFac;
-        GenPolynomialRing<C> ifac = qi.extend(pfac.nvar);
+        GenPolynomialRing<C> ifac = qi.extend(pfac.getVars());
         GenPolynomial<C> Pi = PolyUtil.<C>distribute(ifac, P);
         //System.out.println("Pi = " + Pi);
 
@@ -593,7 +594,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
         }
         List<GenPolynomial<GenPolynomial<C>>> rfacts = PolyUtil.<C>recursive(pfac, ifacts);
         //System.out.println("rfacts = " + rfacts);
-        if (logger.isInfoEnabled()) {
+        if (logger.isDebugEnabled()) {
             logger.info("rfacts = " + rfacts);
         }
         factors.addAll(rfacts);
@@ -622,7 +623,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>>
             return factors;
         }
         GenPolynomialRing<C> qi = (GenPolynomialRing<C>)pfac.coFac;
-        GenPolynomialRing<C> ifac = qi.extend(pfac.nvar);
+        GenPolynomialRing<C> ifac = qi.extend(pfac.getVars());
         GenPolynomial<C> Pi = PolyUtil.<C>distribute(ifac, P);
         //System.out.println("Pi = " + Pi);
 

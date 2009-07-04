@@ -142,9 +142,9 @@ public class FactorTest extends TestCase {
             if (sm.size() >= facs) {
                 assertTrue("#facs < " + facs, sm.size() >= facs);
             } else {
-                long sf = 1;
+                long sf = 0;
                 for (Long e : sm.values()) {
-                    sf *= e;
+                    sf += e;
                 }
                 assertTrue("#facs < " + facs, sf >= facs);
             }
@@ -198,9 +198,9 @@ public class FactorTest extends TestCase {
             if (sm.size() >= facs) {
                 assertTrue("#facs < " + facs, sm.size() >= facs);
             } else {
-                long sf = 1;
+                long sf = 0;
                 for (Long e : sm.values()) {
-                    sf *= e;
+                    sf += e;
                 }
                 assertTrue("#facs < " + facs, sf >= facs);
             }
@@ -267,9 +267,9 @@ public class FactorTest extends TestCase {
             if (sm.size() >= facs) {
                 assertTrue("#facs < " + facs, sm.size() >= facs);
             } else {
-                long sf = 1;
+                long sf = 0;
                 for (Long e : sm.values()) {
-                    sf *= e;
+                    sf += e;
                 }
                 assertTrue("#facs < " + facs, sf >= facs);
             }
@@ -356,9 +356,9 @@ public class FactorTest extends TestCase {
             if (sm.size() >= facs) {
                 assertTrue("#facs < " + facs, sm.size() >= facs);
             } else {
-                long sf = 1;
+                long sf = 0;
                 for (Long e : sm.values()) {
-                    sf *= e;
+                    sf += e;
                 }
                 assertTrue("#facs < " + facs, sf >= facs);
             }
