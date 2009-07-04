@@ -331,6 +331,57 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
 
 
     /**
+     * GenPolynomial base recursive content.
+     * @param P recursive GenPolynomial.
+     * @return baseCont(P).
+     */
+    public C baseRecursiveContent(GenPolynomial<GenPolynomial<C>> P) {
+        if (P == null) {
+            throw new RuntimeException(this.getClass().getName() + " P != null");
+        }
+        if (P.isZERO()) {
+            GenPolynomialRing<C> cf = (GenPolynomialRing<C>)P.ring.coFac;
+            return cf.coFac.getZERO();
+        }
+        C d = null;
+        for (GenPolynomial<C> c : P.getMap().values()) {
+            C cc = baseContent(c);
+            if (d == null) {
+                d = cc;
+            } else {
+                d = gcd(d, cc); 
+            }
+            if (d.isONE()) {
+                return d;
+            }
+        }
+        return d.abs();
+    }
+
+
+    /**
+     * GenPolynomial base recursive primitive part.
+     * @param P recursive GenPolynomial.
+     * @return basePP(P).
+     */
+    public GenPolynomial<GenPolynomial<C>> baseRecursivePrimitivePart(
+            GenPolynomial<GenPolynomial<C>> P) {
+        if (P == null) {
+            throw new RuntimeException(this.getClass().getName() + " P != null");
+        }
+        if (P.isZERO()) {
+            return P;
+        }
+        C d = baseRecursiveContent(P);
+        if (d.isONE()) {
+            return P;
+        }
+        GenPolynomial<GenPolynomial<C>> pp = PolyUtil.<C> baseRecursiveDivide(P, d);
+        return pp;
+    }
+
+
+    /**
      * GenPolynomial recursive greatest common divisor. Uses
      * pseudoRemainder for remainder.
      * @param P recursive GenPolynomial.
@@ -967,28 +1018,6 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         GenPolynomial<GenPolynomial<C>> Dr = ufd_sr.recursiveResultant(Pr, Sr);
         GenPolynomial<C> D = PolyUtil.<C> distribute(pfac, Dr);
         return D;
-    }
-
-
-    /**
-     * GenPolynomial squarefree and co-prime list.
-     * @param A list of GenPolynomials.
-     * @return B with gcd(b,c) = 1 for all b != c in B 
-     *         and for all non-constant a in A there exists b in B with b|a
-     *         and each b in B is squarefree. 
-     *         B does not contain zero or constant polynomials.
-     */
-    public List<GenPolynomial<C>> coPrimeSquarefree(List<GenPolynomial<C>> A) {
-        if (A == null || A.isEmpty()) {
-            return A;
-        }
-        List<GenPolynomial<C>> S = new ArrayList<GenPolynomial<C>>();
-        for ( GenPolynomial<C> g : A ) {
-            SortedMap<GenPolynomial<C>,Long> sm = squarefreeFactors(g);
-            S.addAll( sm.keySet() );
-        }
-        List<GenPolynomial<C>> B = coPrime(S);
-        return B;
     }
 
 
