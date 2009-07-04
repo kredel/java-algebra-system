@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.structure.UnaryFunctor;
+import edu.jas.structure.Power;
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
@@ -114,7 +115,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
 
 
     /**
-     * GenPolynomial polynomial greatest squarefee divisor.
+     * GenPolynomial polynomial greatest squarefree divisor.
      * @param P GenPolynomial.
      * @return squarefree(pp(P)).
      */
@@ -176,7 +177,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         if ( pfac.coFac.isField() && !ldbcf.isONE() ) {
             A = A.divide(ldbcf);
             GenPolynomial<C> f1 = pfac.getONE().multiply(ldbcf);
-            //System.out.println("gcda sqf f1 = " + f1);
+            System.out.println("gcda sqf f1 = " + f1);
             sfactors.put(f1,1L);
             //ldbcf = pfac.coFac.getONE();
         }
@@ -194,11 +195,22 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
                      break;
                 }
                 Tp = PolyUtil.<C> baseDeriviative(T0);
+                if ( pfac.coFac.isField() ) {
+                    Tp = Tp.monic();
+                }
                 T = baseGcd(T0,Tp);
-                V = PolyUtil.<C> basePseudoDivide(T0,T);
-                //System.out.println("Tp = " + Tp);
-                //System.out.println("T = " + T);
-                //System.out.println("V = " + V);
+                if ( pfac.coFac.isField() ) {
+                    T = T.monic();
+                }
+                if ( pfac.coFac.isField() ) {
+                    V = T0.divide(T);
+                } else {
+                    V = PolyUtil.<C> basePseudoDivide(T0,T);
+                }
+                System.out.println("iT0 = " + T0);
+                System.out.println("iTp = " + Tp);
+                System.out.println("iT  = " + T);
+                System.out.println("iV  = " + V);
                 k = 0L;
                 mp = 0L;
                 init = false;
@@ -207,7 +219,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
                 mp = pfac.characteristic().longValue(); // assert != 0
                 if ( mp > 0 ) {
                    T0 = PolyUtil.<C> baseModRoot(T,mp);
-                   //System.out.println("T0b = " + T0 + ", Tb = " + T);
+                   System.out.println("T0 = " + T0 + ", T = " + T);
                    e = e * mp;
                    init = true;
                    continue;
@@ -217,31 +229,55 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
             }
             k++;
             if ( mp != 0L && k % mp == 0L ) {
-                T = PolyUtil.<C> basePseudoDivide(T, V);
+                if ( pfac.coFac.isField() ) {
+                    T = T.divide(V);
+                } else {
+                    T = PolyUtil.<C> basePseudoDivide(T, V);
+                }
                 System.out.println("k = " + k);
                 //System.out.println("T = " + T);
                 k++;
             }
             GenPolynomial<C> W = baseGcd(T,V);
-            GenPolynomial<C> z = PolyUtil.<C> basePseudoDivide(V, W);
-            //System.out.println("W = " + W);
-            //System.out.println("z = " + z);
+            if ( pfac.coFac.isField() ) {
+                W = W.monic();
+            }
+            GenPolynomial<C> z;
+            if ( pfac.coFac.isField() ) {
+                 z = V.divide(W);
+            } else {
+                 z = PolyUtil.<C> basePseudoDivide(V, W);
+            }
+            System.out.println("W = " + W);
+            System.out.println("z = " + z);
             V = W;
-            T = PolyUtil.<C> basePseudoDivide(T, V);
-            //System.out.println("V = " + V);
-            //System.out.println("T = " + T);
+            if ( pfac.coFac.isField() ) {
+                 T = T.divide(V);
+            } else {
+                 T = PolyUtil.<C> basePseudoDivide(T, V);
+            }
+            System.out.println("V = " + V);
+            System.out.println("T = " + T);
             if ( z.degree(0) > 0 ) {
+                if ( ldbcf.isONE() && !z.leadingBaseCoefficient().isONE() ) {
+                    z = z.monic();
+                }
                 sfactors.put(z, (e*k));
             }
         }
-        //if (  pfac.characteristic().signum() > 0 && !ldbcf.isONE() ) {
-        if ( pfac.coFac.isField() && !ldbcf.isONE() ) {
-            GenPolynomial<C> f1 = sfactors.firstKey();
-            long e1 = sfactors.remove(f1);
-            f1 = f1.multiply(ldbcf);
-            System.out.println("gcda sqf f1e = " + f1);
-            sfactors.put(f1,e1);
-        }
+//         if ( pfac.coFac.isField() && !ldbcf.isONE() ) {
+//             GenPolynomial<C> f1 = sfactors.firstKey();
+//             long e1 = sfactors.remove(f1);
+//             // a**p = a
+//             // (c a)**e1 = ldcf
+//             C c = f1.leadingBaseCoefficient();  
+//             c = Power.<C> positivePower(c, e1);
+//             c = ldbcf.divide(c);
+//             System.out.println("gcda sqf c = " + c);
+//             f1 = f1.multiply(c);
+//             //System.out.println("gcda sqf f1e = " + f1);
+//             sfactors.put(f1,e1);
+//         }
         return sfactors;
     }
 
@@ -339,7 +375,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
 
 
     /**
-     * GenPolynomial recursive polynomial greatest squarefee divisor.
+     * GenPolynomial recursive polynomial greatest squarefree divisor.
      * @param P recursive GenPolynomial.
      * @return squarefree(pp(P)).
      */
@@ -653,6 +689,18 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
 
 
     /**
+     * GenPolynomial test if is squarefree.
+     * @param P GenPolynomial.
+     * @return true if P is squarefree, else false.
+     */
+    public boolean isSquarefree(GenPolynomial<C> P) {
+        GenPolynomial<C> S = squarefreePart(P);
+        GenPolynomial<C> Ps = basePrimitivePart(P);
+        return Ps.equals(S);
+    }
+
+
+    /**
      * GenPolynomial squarefree factorization.
      * @param P GenPolynomial.
      * @return [p_1 -> e_1, ..., p_k -> e_k] with P = prod_{i=1,...,k} p_i^{e_i} and p_i squarefree.
@@ -684,6 +732,114 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         }
         return sfactors;
     }
+
+
+    /**
+     * GenPolynomial is (squarefree) factorization.
+     * @param P GenPolynomial.
+     * @param F = [p_1,...,p_k].
+     * @return true if P = prod_{i=1,...,r} p_i, else false.
+     */
+    public boolean isFactorization(GenPolynomial<C> P, List<GenPolynomial<C>> F) {
+        if (P == null || F == null) {
+            throw new IllegalArgumentException("P and F may not be null");
+        }
+        GenPolynomial<C> t = P.ring.getONE();
+        for (GenPolynomial<C> f : F) {
+            t = t.multiply(f);
+        }
+        boolean f = P.equals(t) || P.equals(t.negate());
+        if (!f) {
+            System.out.println("\nfactorization(list): " + f);
+            System.out.println("P = " + P);
+            System.out.println("t = " + t);
+        }
+        return f;
+    }
+
+
+    /**
+     * GenPolynomial is (squarefree) factorization.
+     * @param P GenPolynomial.
+     * @param F = [p_1 -&gt; e_1, ..., p_k -&gt; e_k].
+     * @return true if P = prod_{i=1,...,k} p_i**e_i, else false.
+     */
+    public boolean isFactorization(GenPolynomial<C> P, SortedMap<GenPolynomial<C>, Long> F) {
+        if (P == null || F == null) {
+            throw new IllegalArgumentException("P and F may not be null");
+        }
+        if (P.isZERO() && F.size() == 0) {
+            return true;
+        }
+        GenPolynomial<C> t = P.ring.getONE();
+        for (GenPolynomial<C> f : F.keySet()) {
+            Long E = F.get(f);
+            long e = E.longValue();
+            GenPolynomial<C> g = Power.<GenPolynomial<C>> positivePower(f, e);
+            t = t.multiply(g);
+        }
+        boolean f = P.equals(t) || P.equals(t.negate());
+        if (!f) {
+            System.out.println("P = " + P);
+            System.out.println("t = " + t);
+//             P = P.monic();
+//             t = t.monic();
+//             f = P.equals(t) || P.equals(t.negate());
+//             if ( f ) {
+//                 return f;
+//             }
+//             System.out.println("\nfactorization(map): " + f);
+//             System.out.println("P = " + P);
+//             System.out.println("t = " + t);
+            //RuntimeException e = new RuntimeException("fac-map");
+            //e.printStackTrace();
+            //throw e;
+        }
+        return f;
+    }
+
+
+    /**
+     * GenPolynomial is (squarefree) factorization.
+     * @param P GenPolynomial.
+     * @param F = [p_1 -&gt; e_1, ..., p_k -&gt; e_k].
+     * @return true if P = prod_{i=1,...,k} p_i**e_i, else false.
+     */
+    public boolean isRecursiveFactorization(GenPolynomial<GenPolynomial<C>> P, 
+                                            SortedMap<GenPolynomial<GenPolynomial<C>>, Long> F) {
+        if (P == null || F == null) {
+            throw new IllegalArgumentException("P and F may not be null");
+        }
+        if (P.isZERO() && F.size() == 0) {
+            return true;
+        }
+        GenPolynomial<GenPolynomial<C>> t = P.ring.getONE();
+        for (GenPolynomial<GenPolynomial<C>> f : F.keySet()) {
+            Long E = F.get(f);
+            long e = E.longValue();
+            GenPolynomial<GenPolynomial<C>> g = Power.<GenPolynomial<GenPolynomial<C>>> positivePower(f, e);
+            t = t.multiply(g);
+        }
+        boolean f = P.equals(t) || P.equals(t.negate());
+        if (!f) {
+            System.out.println("P = " + P);
+            System.out.println("t = " + t);
+//             GenPolynomial<GenPolynomial<C>> Pp = recursivePrimitivePart(P);
+//             GenPolynomial<GenPolynomial<C>> tp = recursivePrimitivePart(t);
+//             f = Pp.equals(tp) || Pp.equals(tp.negate());
+//             if ( f ) {
+//                 return f;
+//             }
+//             System.out.println("\nfactorization(map): " + f);
+//             System.out.println("Pp = " + Pp);
+//             System.out.println("tp = " + tp);
+            //RuntimeException e = new RuntimeException("fac-map");
+            //e.printStackTrace();
+            //throw e;
+        }
+        return f;
+    }
+
 
 
     /**

@@ -191,7 +191,7 @@ public class FactorMoreTest extends TestCase {
 
             SortedMap<GenPolynomial<GenPolynomial<BigRational>>, Long> sm = fac.recursiveFactors(a);
             //System.out.println("\na   = " + a);
-            //System.out.println("sm = " + sm);
+            System.out.println("sm = " + sm);
 
             if (sm.size() >= facs) {
                 assertTrue("#facs < " + facs, sm.size() >= facs);
@@ -258,7 +258,7 @@ public class FactorMoreTest extends TestCase {
 
             SortedMap<GenPolynomial<GenPolynomial<BigInteger>>, Long> sm = fac.recursiveFactors(a);
             //System.out.println("\na   = " + a);
-            //System.out.println("sm = " + sm);
+            System.out.println("sm = " + sm);
 
             if (sm.size() >= facs) {
                 assertTrue("#facs < " + facs, sm.size() >= facs);
@@ -302,10 +302,10 @@ public class FactorMoreTest extends TestCase {
             int facs = 0;
             GenPolynomial<Quotient<BigRational>> a;
             GenPolynomial<Quotient<BigRational>> b = pqfac.random(2, 3, el, q);
-            b = b.monic();
+            //b = b.monic();
             //b = b.multiply(b);
             GenPolynomial<Quotient<BigRational>> c = pqfac.random(2, 3, el, q);
-            c = c.monic();
+            //c = c.monic();
             if ( c.degree() < 1 ) {
                 c = x2.subtract(pqfac.getONE().multiply(t));
             }
@@ -326,7 +326,7 @@ public class FactorMoreTest extends TestCase {
 
             SortedMap<GenPolynomial<Quotient<BigRational>>, Long> sm = fac.factors(a);
             //System.out.println("\na   = " + a);
-            //System.out.println("sm = " + sm);
+            System.out.println("sm = " + sm);
 
             if (sm.size() >= facs) {
                 assertTrue("#facs < " + facs, sm.size() >= facs);
@@ -370,10 +370,10 @@ public class FactorMoreTest extends TestCase {
             int facs = 0;
             GenPolynomial<Quotient<ModInteger>> a;
             GenPolynomial<Quotient<ModInteger>> b = pqfac.random(2, 3, el, q);
-            b = b.monic();
+            //b = b.monic();
             //b = b.multiply(b);
             GenPolynomial<Quotient<ModInteger>> c = pqfac.random(2, 3, el, q);
-            c = c.monic();
+            //c = c.monic();
             if ( c.degree() < 1 ) {
                 c = x2.subtract(pqfac.getONE().multiply(t));
             }
@@ -394,7 +394,7 @@ public class FactorMoreTest extends TestCase {
 
             SortedMap<GenPolynomial<Quotient<ModInteger>>, Long> sm = fac.factors(a);
             //System.out.println("\na   = " + a);
-            //System.out.println("sm = " + sm);
+            System.out.println("sm = " + sm);
 
             if (sm.size() >= facs) {
                 assertTrue("#facs < " + facs, sm.size() >= facs);
@@ -418,7 +418,7 @@ public class FactorMoreTest extends TestCase {
      * Test modular quotient factorization.
      * 
      */
-    public void xtestModularQuotientFactorization() {
+    public void testModularQuotientFactorization() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         ModIntegerRing cfac = new ModIntegerRing(19,true);
@@ -444,19 +444,20 @@ public class FactorMoreTest extends TestCase {
                 facs++;
             }
             a = c.multiply(b);
+            a = a.multiply(qfac.fromInteger(5));
             if (a.isZERO()) {
                 facs = 0;
             }
 
-            //System.out.println("\na = " + a);
-            //System.out.println("b = " + b);
-            //System.out.println("c = " + c);
+            System.out.println("\na = " + a);
+            System.out.println("b = " + b);
+            System.out.println("c = " + c);
 
             SortedMap<Quotient<ModInteger>, Long> sm = fac.quotientSquarefreeFactors(a);
             //SortedMap<Quotient<ModInteger>, Long> sm = fac.quotientFactors(a);
             //List<Quotient<ModInteger>> sm = fac.quotientFactorsSquarefree(a);
-            //System.out.println("\na   = " + a);
-            //System.out.println("sm = " + sm);
+            System.out.println("\na   = " + a);
+            System.out.println("sm = " + sm);
 
             if (sm.size() >= facs) {
                 assertTrue("#facs < " + facs, sm.size() >= facs);
@@ -520,10 +521,7 @@ public class FactorMoreTest extends TestCase {
         sm = fac.quotientRootCharacteristic(a);
         //System.out.println("\na   = " + a);
         //System.out.println("sm = " + sm);
-        assertTrue("rootCharacteristic(a) = {t,1}", sm.size() >= 1);
-        assertEquals("rootCharacteristic(a) = b", b, sm.firstKey());
-        assertTrue("rootCharacteristic(a) = b, 1", 1L <= sm.get(sm.firstKey()));
-
+        assertTrue("rootCharacteristic(a) = sm", fac.isCharRoot(a,sm));
 
         Quotient<ModInteger> c = qfac.random(3,3,el,q);
         if ( c.isONE() || c.isZERO() ) {
@@ -535,10 +533,8 @@ public class FactorMoreTest extends TestCase {
 
         sm = fac.quotientRootCharacteristic(a);
         //System.out.println("\na   = " + a);
-        //System.out.println("sm = " + sm);
-        assertTrue("rootCharacteristic(a) = {t,1}", sm.size() >= 1);
-        assertTrue("rootCharacteristic(a) | c", c.remainder(sm.firstKey()).isZERO() );
-        assertTrue("rootCharacteristic(a) = c, 1", 1L <= sm.get(sm.firstKey()));
+        System.out.println("sm = " + sm);
+        assertTrue("rootCharacteristic(a) = sm", fac.isCharRoot(a,sm));
 
         ComputerThreads.terminate();
     }
@@ -562,7 +558,7 @@ public class FactorMoreTest extends TestCase {
 
         int facs = 0;
         GenPolynomial<ModInteger> a = pfac.random(3, 3, el, q);
-        a = a.monic();
+        //a = a.monic();
         //System.out.println("\na = " + a);
 
         SortedMap<GenPolynomial<ModInteger>, Long> sm = fac.rootCharacteristic(a);
@@ -573,47 +569,43 @@ public class FactorMoreTest extends TestCase {
         }
 
         a = Power.<GenPolynomial<ModInteger>> positivePower(t, p*3L);
-        //System.out.println("\na = " + a);
+        System.out.println("\na = " + a);
 
         sm = fac.rootCharacteristic(a);
         //System.out.println("\na   = " + a);
         //System.out.println("sm = " + sm);
-        assertTrue("rootCharacteristic(a) = {t,1}", sm.size() == 1);
+        assertTrue("rootCharacteristic(a) = sm", fac.isCharRoot(a,sm));
 
         GenPolynomial<ModInteger> b = t.multiply(t).multiply(pfac.fromInteger(7)).sum(pfac.getONE());
-        b = b.monic();
+        //b = b.monic();
         a = Power.<GenPolynomial<ModInteger>> positivePower(b, p);
-        //System.out.println("\nb = " + b);
-        //System.out.println("a = " + a);
+        System.out.println("\nb = " + b);
+        System.out.println("a = " + a);
 
         sm = fac.rootCharacteristic(a);
-        //System.out.println("\na   = " + a);
-        //System.out.println("sm = " + sm);
-        assertTrue("rootCharacteristic(a) = {t,1}", sm.size() >= 1);
-        assertEquals("rootCharacteristic(a) = b", b, sm.firstKey());
-        assertTrue("rootCharacteristic(a) = b, 1", 1L <= sm.get(sm.firstKey()));
+        System.out.println("\na   = " + a);
+        System.out.println("sm = " + sm);
+        assertTrue("rootCharacteristic(a) = sm", fac.isCharRoot(a,sm));
 
 
         GenPolynomial<ModInteger> c;
-        c = pfac.random(4,5,el,q);
+        //c = pfac.random(4,5,el,q);
         //c = pfac.parse("t^2 + t + 5");
-        //c = pfac.parse("t + 10");
+        c = pfac.parse("5 t + 10");
         if ( c.isONE() || c.isZERO() || c.isConstant() ) {
             c = b;
         }
-        c = c.monic();
+        //c = c.monic();
         a = Power.<GenPolynomial<ModInteger>> positivePower(c, p*1L);
-        a = a.multiply( Power.<GenPolynomial<ModInteger>> positivePower(b, p*2L) );
-        //System.out.println("\nc = " + c);
-        //System.out.println("a = " + a);
+        //a = a.multiply( Power.<GenPolynomial<ModInteger>> positivePower(b, p*2L) );
+        System.out.println("\nc = " + c);
+        System.out.println("a = " + a);
         //System.out.println("c*b*b = " + c.multiply(b).multiply(b));
 
         sm = fac.rootCharacteristic(a);
-        //System.out.println("\na   = " + a);
-        //System.out.println("sm = " + sm);
-        assertTrue("rootCharacteristic(a) = {t,1}", sm.size() >= 1);
-        assertTrue("rootCharacteristic(a) | c ", c.multiply(b).multiply(b).remainder(sm.firstKey()).isZERO() );
-        assertTrue("rootCharacteristic(a) = c, 1", 1L <= sm.get(sm.firstKey()));
+        System.out.println("\na   = " + a);
+        System.out.println("sm = " + sm);
+        assertTrue("rootCharacteristic(a) = sm", fac.isCharRoot(a,sm));
 
         ComputerThreads.terminate();
     }
@@ -623,7 +615,7 @@ public class FactorMoreTest extends TestCase {
      * Test modular recursive polynomial characteristic-th root.
      * 
      */
-    public void testModularRecursivePolynomialCharRoot() {
+    public void xtestModularRecursivePolynomialCharRoot() {
 
         long p = 19L;
         TermOrder to = new TermOrder(TermOrder.INVLEX);
@@ -658,13 +650,10 @@ public class FactorMoreTest extends TestCase {
         System.out.println("b  = " + b);
         System.out.println("bp = " + bp);
 
-        a = a.monic();
-        bp = bp.monic();
-
         //GenPolynomial<GenPolynomial<ModInteger>> r = a.remainder(bp);
         //assertTrue("rootCharacteristic(a**p) = a ", r.isZERO());
 
-        assertEquals("rootCharacteristic(a**p) = a ", a, bp);
+        assertTrue("rootCharacteristic(a) = bp", fac.isRecursiveCharRoot(b,bp));
 
         ComputerThreads.terminate();
     }

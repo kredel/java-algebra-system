@@ -120,7 +120,7 @@ public class FactorQuotient<C extends GcdRingElem<C>> extends FactorAbstract<Quo
         }
         List<GenPolynomial<Quotient<C>>> qfacts = PolyUfdUtil.<C>quotientFromIntegralCoefficients(pfac, irfacts);
         //System.out.println("qfacts = " + qfacts);
-        qfacts = PolyUtil.monic(qfacts);
+        //qfacts = PolyUtil.monic(qfacts);
         //System.out.println("qfacts = " + qfacts);
         if ( !ldcf.isONE() ) {
             GenPolynomial<Quotient<C>> r = qfacts.get(0);
@@ -206,7 +206,7 @@ public class FactorQuotient<C extends GcdRingElem<C>> extends FactorAbstract<Quo
             SortedMap<GenPolynomial<C>,Long> nfac = nengine.factors(num);
             System.out.println("nfac = " + nfac);
             for ( GenPolynomial<C> nfp : nfac.keySet() ) {
-                Quotient<C> nf = new Quotient<C>(pfac,nfp.monic());
+                Quotient<C> nf = new Quotient<C>(pfac,nfp);
                 factors.put(nf,nfac.get(nfp));
             }
         }
@@ -219,7 +219,7 @@ public class FactorQuotient<C extends GcdRingElem<C>> extends FactorAbstract<Quo
         SortedMap<GenPolynomial<C>,Long> dfac = nengine.factors(den);
         System.out.println("dfac = " + dfac);
         for ( GenPolynomial<C> dfp : dfac.keySet() ) {
-            Quotient<C> df = new Quotient<C>(pfac,one,dfp.monic());
+            Quotient<C> df = new Quotient<C>(pfac,one,dfp);
             factors.put(df,dfac.get(dfp));
         }
         return factors;
@@ -251,7 +251,7 @@ public class FactorQuotient<C extends GcdRingElem<C>> extends FactorAbstract<Quo
             SortedMap<GenPolynomial<C>,Long> nfac = nengine.squarefreeFactors(num);
             System.out.println("nfac = " + nfac);
             for ( GenPolynomial<C> nfp : nfac.keySet() ) {
-                Quotient<C> nf = new Quotient<C>(pfac,nfp.monic());
+                Quotient<C> nf = new Quotient<C>(pfac,nfp);
                 factors.put(nf,nfac.get(nfp));
             }
         }
@@ -264,7 +264,7 @@ public class FactorQuotient<C extends GcdRingElem<C>> extends FactorAbstract<Quo
         SortedMap<GenPolynomial<C>,Long> dfac = nengine.squarefreeFactors(den);
         System.out.println("dfac = " + dfac);
         for ( GenPolynomial<C> dfp : dfac.keySet() ) {
-            Quotient<C> df = new Quotient<C>(pfac,one,dfp.monic());
+            Quotient<C> df = new Quotient<C>(pfac,one,dfp);
             factors.put(df,dfac.get(dfp));
         }
         return factors;
@@ -350,7 +350,7 @@ public class FactorQuotient<C extends GcdRingElem<C>> extends FactorAbstract<Quo
             root.put(P,1L);
             return root;
         }
-        SortedMap<GenPolynomial<C>,Long> sf = nengine.squarefreeFactors(P.monic());
+        SortedMap<GenPolynomial<C>,Long> sf = nengine.squarefreeFactors(P);
         System.out.println("sf = " + sf);
         // better: test if sf.size() == 1 // not ok
         Long k = null;
@@ -376,14 +376,20 @@ public class FactorQuotient<C extends GcdRingElem<C>> extends FactorAbstract<Quo
         GenPolynomial<C> rp = P.ring.getONE();
         for (GenPolynomial<C> q : sf.keySet()) {
             Long e = sf.get(q);
+            if ( q.isConstant() ) {
+                root.put(q,e);
+                continue;
+            }
             if ( e > k ) {
                 long ep = e / cl;
                 q = Power.<GenPolynomial<C>> positivePower(q, ep);
             }
             rp = rp.multiply(q);
         }
-        k = k / cl;
-        root.put(rp,k);
+        if ( k != null ) {
+            k = k / cl;
+            root.put(rp,k);
+        }
         return root;
     }
 
@@ -529,22 +535,23 @@ public class FactorQuotient<C extends GcdRingElem<C>> extends FactorAbstract<Quo
             long fl = f.getVal(0);
             if ( fl % mp != 0 ) {
                 return null;
-//                  throw new RuntimeException(P.getClass().getName()
-//                        + " exponent not divisible by m " + fl);
             }
             fl = fl / mp;
             SortedMap<GenPolynomial<C>, Long> sm = rootCharacteristic(m.c);
             if ( sm == null ) {
                 return null;
-//                  throw new RuntimeException(P.getClass().getName()
-//                        + " coefficient not char-th root, sm " + m.c);
             }
-            GenPolynomial<C> r = sm.firstKey();
-            long gl = sm.get(r);
-            if ( gl > fl ) {
-                r = Power.<GenPolynomial<C>> positivePower(r, gl);
-//                  throw new RuntimeException(P.getClass().getName()
-//                        + " coefficient not char-th root " + m.c + ", gl = " + gl + ", fl = " + fl);
+            GenPolynomial<C> r = rf.getONE();
+            for (GenPolynomial<C> rp : sm.keySet() ) {
+                long gl = sm.get(rp);
+                if ( rp.isConstant() ) {
+                    r = r.multiply(rp);
+                    continue;
+                }
+                if ( gl > fl ) {
+                    rp = Power.<GenPolynomial<C>> positivePower(rp, gl);
+                }
+                r = r.multiply(rp);
             }
             ExpVector e = ExpVector.create( 1, 0, fl );  
             d.doPutToMap(e,r);
@@ -582,28 +589,192 @@ public class FactorQuotient<C extends GcdRingElem<C>> extends FactorAbstract<Quo
             long fl = f.getVal(0);
             if ( fl % mp != 0 ) {
                 return null;
-//                 throw new RuntimeException(P.getClass().getName()
-//                        + " exponent not divisible by m " + fl);
             }
             fl = fl / mp;
             SortedMap<Quotient<C>, Long> sm = quotientRootCharacteristic(m.c);
             if ( sm == null ) {
                 return null;
-//                  throw new RuntimeException(P.getClass().getName()
-//                        + " coefficient not char-th root, sm " + m.c);
             }
-            Quotient<C> r = sm.firstKey();
-            long gl = sm.get(r);
-            if ( gl > fl ) {
-                r = Power.<Quotient<C>> positivePower(r, gl);
-
-//                  throw new RuntimeException(P.getClass().getName()
-//                        + " coefficient not char-th root " + m.c + ", gl = " + gl + ", fl = " + fl);
+            Quotient<C> r = rf.getONE();
+            for (Quotient<C> rp : sm.keySet() ) {
+                long gl = sm.get(rp);
+                if ( rp.isConstant() ) {
+                    r = r.multiply(rp);
+                    continue;
+                }
+                if ( gl > fl ) {
+                    rp = Power.<Quotient<C>> positivePower(rp, gl);
+                }
+                r = r.multiply(rp);
             }
             ExpVector e = ExpVector.create( 1, 0, fl );  
             d.doPutToMap(e,r);
         }
         return d; 
+    }
+
+
+    /**
+     * Quotient is char-th root.
+     * @param P Quotient.
+     * @param F = [p_1 -&gt; e_1, ..., p_k -&gt; e_k].
+     * @return true if P = prod_{i=1,...,k} p_i**(e_i*p), else false.
+     */
+    public boolean isCharRoot(Quotient<C> P, SortedMap<Quotient<C>, Long> F) {
+        if (P == null || F == null) {
+            throw new IllegalArgumentException("P and F may not be null");
+        }
+        if (P.isZERO() && F.size() == 0) {
+            return true;
+        }
+        Quotient<C> t = P.ring.getONE();
+        long p = P.ring.characteristic().longValue();
+        for (Quotient<C> f : F.keySet()) {
+            Long E = F.get(f);
+            long e = E.longValue();
+            Quotient<C> g = Power.<Quotient<C>> positivePower(f, e);
+            if ( !f.isConstant() ) { 
+               g = Power.<Quotient<C>> positivePower(g, p);
+            }
+            t = t.multiply(g);
+        }
+        boolean f = P.equals(t) || P.equals(t.negate());
+        if (!f) {
+            System.out.println("\nfactorization(map): " + f);
+            System.out.println("P = " + P);
+            System.out.println("t = " + t);
+            P = P.monic();
+            t = t.monic();
+            f = P.equals(t) || P.equals(t.negate());
+            if ( f ) {
+                return f;
+            }
+            System.out.println("\nfactorization(map): " + f);
+            System.out.println("P = " + P);
+            System.out.println("t = " + t);
+        }
+        return f;
+    }
+
+
+    /**
+     * Polynomial is char-th root.
+     * @param P polynomial.
+     * @param F = [p_1 -&gt; e_1, ..., p_k -&gt; e_k].
+     * @return true if P = prod_{i=1,...,k} p_i**(e_i*p), else false.
+     */
+    public boolean isCharRoot(GenPolynomial<C> P, SortedMap<GenPolynomial<C>, Long> F) {
+        if (P == null || F == null) {
+            throw new IllegalArgumentException("P and F may not be null");
+        }
+        if (P.isZERO() && F.size() == 0) {
+            return true;
+        }
+        GenPolynomial<C> t = P.ring.getONE();
+        long p = P.ring.characteristic().longValue();
+        for (GenPolynomial<C> f : F.keySet()) {
+            Long E = F.get(f);
+            long e = E.longValue();
+            GenPolynomial<C> g = Power.<GenPolynomial<C>> positivePower(f, e);
+            if ( !f.isConstant() ) { 
+               g = Power.<GenPolynomial<C>> positivePower(g, p);
+            }
+            t = t.multiply(g);
+        }
+        boolean f = P.equals(t) || P.equals(t.negate());
+        if (!f) {
+            System.out.println("\nfactorization(map): " + f);
+            System.out.println("P = " + P);
+            System.out.println("t = " + t);
+            P = P.monic();
+            t = t.monic();
+            f = P.equals(t) || P.equals(t.negate());
+            if ( f ) {
+                return f;
+            }
+            System.out.println("\nfactorization(map): " + f);
+            System.out.println("P = " + P);
+            System.out.println("t = " + t);
+        }
+        return f;
+    }
+
+
+    /**
+     * Recursive polynomial is char-th root.
+     * @param P recursive polynomial.
+     * @param F = [p_1 -&gt; e_1, ..., p_k -&gt; e_k].
+     * @return true if P = prod_{i=1,...,k} p_i**(e_i*p), else false.
+     */
+    public boolean isRecursiveCharRoot(GenPolynomial<GenPolynomial<C>> P, SortedMap<GenPolynomial<GenPolynomial<C>>, Long> F) {
+        if (P == null || F == null) {
+            throw new IllegalArgumentException("P and F may not be null");
+        }
+        if (P.isZERO() && F.size() == 0) {
+            return true;
+        }
+        GenPolynomial<GenPolynomial<C>> t = P.ring.getONE();
+        long p = P.ring.characteristic().longValue();
+        for (GenPolynomial<GenPolynomial<C>> f : F.keySet()) {
+            Long E = F.get(f);
+            long e = E.longValue();
+            GenPolynomial<GenPolynomial<C>> g = Power.<GenPolynomial<GenPolynomial<C>>> positivePower(f, e);
+            if ( !f.isConstant() ) { 
+               g = Power.<GenPolynomial<GenPolynomial<C>>> positivePower(g, p);
+            }
+            t = t.multiply(g);
+        }
+        boolean f = P.equals(t) || P.equals(t.negate());
+        if (!f) {
+            System.out.println("\nfactorization(map): " + f);
+            System.out.println("P = " + P);
+            System.out.println("t = " + t);
+            P = P.monic();
+            t = t.monic();
+            f = P.equals(t) || P.equals(t.negate());
+            if ( f ) {
+                return f;
+            }
+            System.out.println("\nfactorization(map): " + f);
+            System.out.println("P = " + P);
+            System.out.println("t = " + t);
+        }
+        return f;
+    }
+
+
+    /**
+     * Recursive polynomial is char-th root.
+     * @param P recursive polynomial.
+     * @param r = recursive polynomial.
+     * @return true if P = r**p, else false.
+     */
+    public boolean isRecursiveCharRoot(GenPolynomial<GenPolynomial<C>> P, GenPolynomial<GenPolynomial<C>> r) {
+        if (P == null || r == null) {
+            throw new IllegalArgumentException("P and r may not be null");
+        }
+        if (P.isZERO() && r.isZERO()) {
+            return true;
+        }
+        long p = P.ring.characteristic().longValue();
+        GenPolynomial<GenPolynomial<C>> t = Power.<GenPolynomial<GenPolynomial<C>>> positivePower(r, p);
+
+        boolean f = P.equals(t) || P.equals(t.negate());
+        if (!f) {
+            System.out.println("\nisCharRoot: " + f);
+            System.out.println("P = " + P);
+            System.out.println("t = " + t);
+            P = P.monic();
+            t = t.monic();
+            f = P.equals(t) || P.equals(t.negate());
+            if ( f ) {
+                return f;
+            }
+            System.out.println("\nisCharRoot: " + f);
+            System.out.println("P = " + P);
+            System.out.println("t = " + t);
+        }
+        return f;
     }
 
 }

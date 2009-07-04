@@ -5,6 +5,7 @@
 package edu.jas.ufd;
 
 import java.util.Map;
+import java.util.SortedMap;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -302,9 +303,11 @@ public class GCDPrimitiveTest extends TestCase {
      c = ufd.basePrimitivePart(c);
      d = ufd.basePrimitivePart(d);
 
-     Map<GenPolynomial<BigInteger>,Long> sfactors;
+     SortedMap<GenPolynomial<BigInteger>,Long> sfactors;
      sfactors = ufd.baseSquarefreeFactors(d);
      //System.out.println("sfactors = " + sfactors);
+
+     assertTrue("isFactorization(d,sfactors) ", ufd.isFactorization(d,sfactors) );
 
      e = dfac.getONE();
      for ( Map.Entry<GenPolynomial<BigInteger>,Long> m : sfactors.entrySet() ) {
@@ -571,9 +574,11 @@ public class GCDPrimitiveTest extends TestCase {
      cr = ufd.recursivePrimitivePart(cr);
      dr = ufd.recursivePrimitivePart(dr);
 
-     Map<GenPolynomial<GenPolynomial<BigInteger>>,Long> sfactors;
+     SortedMap<GenPolynomial<GenPolynomial<BigInteger>>,Long> sfactors;
      sfactors = ufd.recursiveSquarefreeFactors(dr);
      //System.out.println("sfactors = " + sfactors);
+
+     assertTrue("isFactorization(d,sfactors) ", ufd.isRecursiveFactorization(dr,sfactors) );
 
      er = rfac.getONE();
      for ( Map.Entry<GenPolynomial<GenPolynomial<BigInteger>>,Long> m : sfactors.entrySet() ) {
@@ -871,9 +876,11 @@ public class GCDPrimitiveTest extends TestCase {
      c = ufd.primitivePart(c);
      d = ufd.primitivePart(d);
 
-     Map<GenPolynomial<BigInteger>,Long> sfactors;
+     SortedMap<GenPolynomial<BigInteger>,Long> sfactors;
      sfactors = ufd.squarefreeFactors(d);
      //System.out.println("sfactors = " + sfactors);
+
+     assertTrue("isFactorization(d,sfactors) ", ufd.isFactorization(d,sfactors) );
 
      e = dfac.getONE();
      for ( Map.Entry<GenPolynomial<BigInteger>,Long> m : sfactors.entrySet() ) {
