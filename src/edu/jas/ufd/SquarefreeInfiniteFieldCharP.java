@@ -145,30 +145,31 @@ public class SquarefreeInfiniteFieldCharP<C extends GcdRingElem<C>>
         if ( sf == null || sf.size() == 0 ) {
             return null;
         }
+        System.out.println("sf,quot = " + sf);
         // better: test if sf.size() == 2 // no, since num and den factors 
         Long k = null;
+        Long cl = c.longValue();
         for (Quotient<C> p: sf.keySet() ) {
             if ( p.isConstant() ) {
                 continue;
             }
             Long e = sf.get(p);
-            java.math.BigInteger E = new java.math.BigInteger(e.toString());
-            java.math.BigInteger r = E.remainder(c);
-            if ( !r.equals(java.math.BigInteger.ZERO) ) {
-                System.out.println("r = " + r);
+            long E = e.longValue();
+            long r = E % cl;
+            if ( r != 0 ) {
+                //System.out.println("r = " + r);
                 return null;
             }
             if ( k == null ) {
                 k = e;
-            } else if ( k.compareTo(e) >= 0 ) {
+            } else if ( k >= e ) {
                 k = e;
             }
         }
         if ( k == null ) {
-            return null;
+            k = 1L; //return null;
         }
-        // now c divides all exponents
-        Long cl = c.longValue();
+        // now c divides all exponents of non constant elements
         Quotient<C> rp = P.ring.getONE();
         for (Quotient<C> q : sf.keySet()) {
             Long e = sf.get(q);
@@ -178,8 +179,11 @@ public class SquarefreeInfiniteFieldCharP<C extends GcdRingElem<C>>
             }
             rp = rp.multiply(q);
         }
-        k = k / cl;
+        if ( k >= cl ) { 
+            k = k / cl;
+        }
         root.put(rp,k);
+        //System.out.println("root = " + root);
         return root;
     }
 
@@ -226,13 +230,10 @@ public class SquarefreeInfiniteFieldCharP<C extends GcdRingElem<C>>
             if ( sm == null ) {
                 return null;
             }
+            System.out.println("sm,root = " + sm);
             Quotient<C> r = rf.getONE();
             for (Quotient<C> rp : sm.keySet() ) {
                 long gl = sm.get(rp);
-//                 if ( rp.isConstant() ) {
-//                     r = r.multiply(rp);
-//                     continue;
-//                 }
                 if ( gl > 1 ) {
                     rp = Power.<Quotient<C>> positivePower(rp, gl);
                 }
@@ -280,13 +281,10 @@ public class SquarefreeInfiniteFieldCharP<C extends GcdRingElem<C>>
             if ( sm == null ) {
                 return null;
             }
+            System.out.println("sm,base,root = " + sm);
             Quotient<C> r = rf.getONE();
             for (Quotient<C> rp : sm.keySet() ) {
                 long gl = sm.get(rp);
-//                 if ( rp.isConstant() ) {
-//                     r = r.multiply(rp);
-//                     continue;
-//                 }
                 if ( gl > 1 ) {
                     rp = Power.<Quotient<C>> positivePower(rp, gl);
                 }
