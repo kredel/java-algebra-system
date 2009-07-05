@@ -399,8 +399,15 @@ public class Condition<C extends GcdRingElem<C>> implements Serializable {
                 c = q;
             } while (r.isZERO() && !c.isConstant());
         }
+        if ( c.isConstant() ) { // cannot happen
+            if ( c.isUnit() ) {
+                logger.info("skipped unit = " + c);
+                return list;
+            }
+            throw new RuntimeException("cannot happen " + c);
+        }
         if (nonZero.size() == 0) {
-            logger.info("added to empty nonzero = " + cc);
+            logger.info("added to empty nonzero = " + c);
         } else {
             logger.info("added to nonzero = " + c);
         }
