@@ -23,6 +23,11 @@ import edu.jas.poly.Monomial;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
+import edu.jas.poly.AlgebraicNumber;
+import edu.jas.poly.AlgebraicNumberRing;
+
+import edu.jas.application.Quotient;
+import edu.jas.application.QuotientRing;
 
 import edu.jas.util.ListUtil;
 
@@ -49,6 +54,22 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>>
 
 
     /**
+     * Factory for a algebraic extension of a finite field of characteristic p coefficients.
+     * If <code>coFac</code> is an algebraic extension, then <code>aCoFac</code> is 
+     * equal to <code>coFac</code>, else <code>aCoFac</code> is <code>null</code>.
+     */
+    protected final AlgebraicNumberRing<C> aCoFac;
+
+
+    /**
+     * Factory for a transcendental extension of a finite field of characteristic p coefficients.
+     * If <code>coFac</code> is an transcendental extension, then <code>qCoFac</code> is 
+     * equal to <code>coFac</code>, else <code>qCoFac</code> is <code>null</code>.
+     */
+    protected final QuotientRing<C> qCoFac;
+
+
+    /**
      * GCD engine for finite field of characteristic p base coefficients.
      */
     protected final GreatestCommonDivisorAbstract<C> engine;
@@ -72,6 +93,17 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>>
         coFac = fac;
         //engine = GCDFactory.<C>getImplementation( fac );
         engine = GCDFactory.<C>getProxy( fac );
+        Object oFac = (Object)coFac;
+        if ( oFac instanceof AlgebraicNumberRing ) {
+            aCoFac = (AlgebraicNumberRing<C>)oFac; // <C> is not correct
+        } else {
+            aCoFac = null;
+        }
+        if ( oFac instanceof QuotientRing ) {
+            qCoFac = (QuotientRing<C>)oFac; // <C> is not correct
+        } else {
+            qCoFac = null;
+        }
     }
 
 

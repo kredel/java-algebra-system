@@ -366,4 +366,34 @@ public class AlgebraicNumberRing<C extends GcdRingElem<C> >
         return depth;
     }
 
+
+    /** Degree of extension field.
+     * @return degree of this algebraic extension field
+     */
+    public long extensionDegree() {
+        long degree = modul.degree(0);
+        return degree;
+    }
+
+
+    /** Total degree of nested extension fields.
+     * @return degree of tower of algebraic extension fields
+     */
+    @SuppressWarnings("unchecked")
+    public long totalExtensionDegree() {
+        long degree = modul.degree(0);
+        AlgebraicNumberRing<C> arr = this;
+        RingFactory<C> cf = arr.ring.coFac;
+        if ( cf instanceof AlgebraicNumberRing ) {
+             arr = (AlgebraicNumberRing<C>) (Object) cf;
+             if ( degree == 0L ) {
+                 degree = arr.totalExtensionDegree();
+             } else {
+                 degree *= arr.totalExtensionDegree();
+             }
+        }
+        return degree;
+    }
+
+
 }

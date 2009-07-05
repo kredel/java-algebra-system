@@ -68,6 +68,37 @@ public class Power<C extends RingElem<C> > {
     }
 
 
+    /** power of a to the n-th, n positive. 
+     * @param a element. 
+     * @param n java.math.BigInteger exponent > 0.
+     * @return a^n.
+     */
+    public static <C extends RingElem<C>> C positivePower(C a, java.math.BigInteger n) {
+        if ( n.signum() <= 0 ) {
+            throw new IllegalArgumentException("only positive n allowed");
+        }
+        if ( a.isZERO() || a.isONE() ) {
+           return a;
+        }
+        C b = a;
+        if ( n.compareTo(java.math.BigInteger.ONE) == 0 ) {
+           return b;
+        }
+        C p = a;
+        java.math.BigInteger i = n.subtract(java.math.BigInteger.ONE);
+        do {
+            if ( i.testBit(0) ) {
+               p = p.multiply( b );
+            }
+            i = i.shiftRight(1);
+            if ( i.signum() > 0 ) {
+               b = b.multiply( b );
+            }
+        } while ( i.signum() > 0 );
+        return p;
+    }
+
+
     /** power of a to the n-th, n positive, modulo m. 
      * @param a element. 
      * @param n integer exponent > 0.

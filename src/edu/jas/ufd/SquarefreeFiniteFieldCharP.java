@@ -18,6 +18,8 @@ import edu.jas.structure.RingFactory;
 import edu.jas.structure.UnaryFunctor;
 import edu.jas.structure.Power;
 
+import edu.jas.arith.BigInteger;
+
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.Monomial;
 import edu.jas.poly.GenPolynomial;
@@ -85,6 +87,41 @@ public class SquarefreeFiniteFieldCharP<C extends GcdRingElem<C>>
 
 
     /**
+     * Characteristics root of a coefficient.
+     * @param c coefficient.
+     * @return r with r**p == c, if such an r exists, else null.
+     */
+    public C coeffRootCharacteristic(C c) {
+        if (c == null || c.isZERO())  {
+            return c;
+        }
+        C r = c;
+        if ( aCoFac == null && qCoFac == null ) {
+            // case ModInteger: c**p == c
+            return r;
+        }
+        if ( aCoFac != null ) {
+            // case AlgebraicNumber<ModInteger>: r = c**(p**(d-1)), r**p == c
+            long d = aCoFac.totalExtensionDegree();
+            //System.out.println("d = " + d);
+            if ( d <= 1 ) {
+                return r;
+            }
+            BigInteger p = new BigInteger( aCoFac.characteristic() );
+            BigInteger q = Power.<BigInteger> positivePower(p,d-1);
+            //System.out.println("p**(d-1) = " + q);
+            r = Power.<C> positivePower(r,q.getVal());
+            //System.out.println("r**q = " + r);
+            return r;
+        }
+        if ( qCoFac != null ) {
+            throw new RuntimeException("case QuotientRing not yet implemented");
+        }
+        return r;
+    }
+
+
+    /**
      * Characteristics root of a polynomial.
      * <b>Note:</b> call only in recursion.
      * @param P polynomial.
@@ -134,8 +171,21 @@ public class SquarefreeFiniteFieldCharP<C extends GcdRingElem<C>>
         for (GenPolynomial<C> q : sf.keySet()) {
             Long e = sf.get(q);
             if ( q.isConstant() ) {
-                //System.out.println("q,const = " + q + ", e = " + e);
-                root.put(q,e);
+                System.out.println("q,const = " + q);
+                if ( e == 1L ) {
+                    C qc = q.leadingBaseCoefficient();
+                    C qr = coeffRootCharacteristic(qc);
+                    System.out.println("qr,const = " + qr);
+                    rp = rp.multiply(qr);
+                    if ( k == null ) {
+                        k = cl;
+                    }
+                } else { 
+//                  long ep = e / cl;
+//                  q = Power.<GenPolynomial<C>> positivePower(q, ep);
+                    System.out.println("q,const,put = " + q + ", e = " + e);
+                    root.put(q,e);
+                }
                 continue;
             }
             if ( e > k ) {
@@ -187,9 +237,10 @@ public class SquarefreeFiniteFieldCharP<C extends GcdRingElem<C>>
 //                        + " exponent not divisible by m " + fl);
             }
             fl = fl / mp;
-            // m.c is char-th root, since finite field
             ExpVector e = ExpVector.create( 1, 0, fl );  
-            d.doPutToMap(e,m.c);
+            // for m.c exists a char-th root, since finite field
+            C r = coeffRootCharacteristic(m.c);
+            d.doPutToMap(e,r);
         }
         return d; 
     }

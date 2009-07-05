@@ -381,4 +381,16 @@ public class QuotientRing<C extends GcdRingElem<C> >
         return parse( s );
     }
 
+
+    /** Degree of extension field.
+     * @return degree of this extension field, -1 for transcendental extension.
+     */
+    public long extensionDegree() {
+        long degree = -1L;
+        if ( ring.nvar <= 0 ) {
+            degree = 0L;
+        }
+        return degree;
+    }
+
 }
