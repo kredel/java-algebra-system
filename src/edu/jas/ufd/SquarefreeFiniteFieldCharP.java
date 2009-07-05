@@ -170,22 +170,17 @@ public class SquarefreeFiniteFieldCharP<C extends GcdRingElem<C>>
         GenPolynomial<C> rp = P.ring.getONE();
         for (GenPolynomial<C> q : sf.keySet()) {
             Long e = sf.get(q);
-            if ( q.isConstant() ) {
-                System.out.println("q,const = " + q);
-                if ( e == 1L ) {
-                    C qc = q.leadingBaseCoefficient();
-                    C qr = coeffRootCharacteristic(qc);
-                    System.out.println("qr,const = " + qr);
-                    rp = rp.multiply(qr);
-                    if ( k == null ) {
-                        k = cl;
-                    }
-                } else { 
-//                  long ep = e / cl;
-//                  q = Power.<GenPolynomial<C>> positivePower(q, ep);
-                    System.out.println("q,const,put = " + q + ", e = " + e);
-                    root.put(q,e);
+            if ( q.isConstant() ) { // ensure p-th root
+                C qc = q.leadingBaseCoefficient();
+                System.out.println("qc,const = " + qc + ", e = " + e);
+                if ( e > 1L ) {
+                    qc = Power.<C> positivePower(qc, e);
+                    e = 1L;
                 }
+                C qr = coeffRootCharacteristic(qc);
+                System.out.println("qr,const = " + qr);
+                q = P.ring.getONE().multiply(qr);
+                root.put(q,1L);
                 continue;
             }
             if ( e > k ) {
@@ -282,6 +277,7 @@ public class SquarefreeFiniteFieldCharP<C extends GcdRingElem<C>>
             if ( sm == null ) {
                 return null;
             }
+            System.out.println("sm,rec = " + sm);
             GenPolynomial<C> r = rf.getONE();
             for (GenPolynomial<C> rp : sm.keySet() ) {
                 long gl = sm.get(rp);
@@ -291,6 +287,7 @@ public class SquarefreeFiniteFieldCharP<C extends GcdRingElem<C>>
                 r = r.multiply(rp);
             }
             ExpVector e = ExpVector.create( 1, 0, fl );  
+            System.out.println("put-root r = " + r + ", e = " +e);
             d.doPutToMap(e,r);
         }
         return d; 
