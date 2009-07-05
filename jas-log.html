@@ -22,16 +22,30 @@
 
 <dl>
 
-<dt>2009, 6,  </dt>
+<dt>2009, 6+7,  </dt>
+<dd>
+ Improved absolute factorization for splitting fields. Fixes and
+ further improvements.  Implemented factorization over inseparable
+ field extensions.  Fixed squarefree factorization and added unit
+ test.  Refactored squarefree tests to separate classes.  Refactored
+ squarefree algorithms to separate classes.  
+ Interface is <code>Squarefree</code>, abstract class is
+ <code>SquarefreeAbstract</code>.  Other main classes are
+ <code>SquarefreeFieldChar0</code>, <code>SquarefreeFiniteFieldCharP</code> 
+ and <code>SquarefreeInfiniteFieldCharP</code>.
+</dd>
+
+<dt>2009, 6, </dt> 
 <dd> 
  Improved algebraic and absolute factorization. 
- <code>FactorAlgebraic</code> can now also handle factorizations over multiple algebraic extensions 
- like for example Q(i)(sqrt(2)). Class <code>FactorAbsolute</code> is now also extended 
- by <code>FactorAlgebraic</code>, so that absolute factorizations can be computed over 
- algebraic extensions of Q. 
- Added new containers for absolute factorization results and tests for correct absolute factorizations.
- More <code>toScript()</code> methods and improvements in Jython script interface.
- Minor additions and fixes.
+ <code>FactorAlgebraic</code> can now also handle factorizations over 
+ multiple algebraic extensions like for example Q(i)(sqrt(2)). 
+ Class <code>FactorAbsolute</code> is now also extended
+ by <code>FactorAlgebraic</code>, so that absolute factorizations can
+ be computed over algebraic extensions of Q. Added new containers for
+ absolute factorization results and tests for correct absolute
+ factorizations.  More <code>toScript()</code> methods and
+ improvements in Jython script interface.  Minor additions and fixes.
 </dd>
 
 <dt>2009, 5,  </dt>
@@ -1764,7 +1778,7 @@ CPU TIME (ms) END
 <p>
 <!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
 <!-- hhmts start -->
-Last modified: Mon Jun  1 18:02:53 CEST 2009
+Last modified: Sun Jul  5 19:11:26 CEST 2009
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
