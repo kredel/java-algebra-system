@@ -34,8 +34,8 @@ from edu.jas.application import ComprehensiveGroebnerBaseSeq, PolyUtilApp,\
                                 Residue, ResidueRing, Ideal, Quotient, QuotientRing,\
                                 Local, LocalRing
 from edu.jas.kern        import ComputerThreads
-from edu.jas.ufd         import GreatestCommonDivisorSubres, PolyUfdUtil, GCDFactory,\
-                                FactorFactory
+from edu.jas.ufd         import GreatestCommonDivisor, PolyUfdUtil, GCDFactory,\
+                                FactorFactory, SquarefreeFactory
 from edu.jas.root        import RealRootsSturm, Interval, RealAlgebraicNumber, RealAlgebraicRing
 from edu.jas.util        import ExecutableServer, StringUtil
 from edu.jas             import structure, arith, poly, ps, gb, gbmod, vector,\
@@ -76,10 +76,15 @@ class Ring:
            self.ring = ring;
         self.engine = GCDFactory.getProxy(self.ring.coFac);
         try:
+            self.sqf = SquarefreeFactory.getImplementation(self.ring.coFac);
+            #print "sqf: ", self.sqf;
+        except Exception, e:
+            print "error " + str(e)
+        try:
             self.factor = FactorFactory.getImplementation(self.ring.coFac);
             #print "factor: ", self.factor;
-        except:
-            pass
+        except Exception, e:
+            print "error " + str(e)
 
     def __str__(self):
         '''Create a string representation.
@@ -152,7 +157,7 @@ class Ring:
         else:
             a = self.element( str(a) );
             a = a.elem;
-        e = self.engine.squarefreeFactors( a );
+        e = self.sqf.squarefreeFactors( a );
         L = {};
         for a in e.keySet():
             i = e.get(a);
@@ -175,7 +180,8 @@ class Ring:
                 i = e.get(a);
                 L[ RingElem( a ) ] = i;
             return L;
-        except:
+        except Exception, e:
+            print "error " + str(e)
             return None
 
     def factorsAbsolute(self,a):
@@ -215,7 +221,8 @@ class Ring:
                 R = RealRootsSturm().realRoots( a, eps );
                 R = [ r.toDecimal() for r in R ];
             return R;
-        except:
+        except Exception, e:
+            print "error " + str(e)
             return None
 
 
@@ -1241,14 +1248,17 @@ def ZZ(z=0):
     return RingElem(r);
 
 
-def ZM(m,z=0):
+def ZM(m,z=0,field=False):
     '''Create JAS ModInteger as ring element.
     '''
     if isinstance(m,RingElem):
         m = m.elem;
     if isinstance(z,RingElem):
         z = z.elem;
-    mf = ModIntegerRing(m);
+    if z != 0 and ( z == True or z == False ):
+        field = z;
+        z = 0;
+    mf = ModIntegerRing(m,field);
     r = ModInteger(mf,z);
     return RingElem(r);
 
@@ -1967,6 +1977,11 @@ class RingElem:
         #print "N = %s" % N;
         return N;
 
+    def monic(self):
+        '''Monic polynomial.
+        '''
+        return RingElem( self.elem.monic() ); 
+
     def evaluate(self,a):
         '''Evaluate at a for power series.
         '''
@@ -2056,9 +2071,13 @@ class PolyRing(Ring):
         self.ring = tring;
         self.engine = GCDFactory.getProxy(self.ring.coFac);
         try:
+            self.sqf = SquarefreeFactory.getImplementation(self.ring.coFac);
+        except Exception, e:
+            print "error " + str(e)
+        try:
             self.factor = FactorFactory.getImplementation(self.ring.coFac);
-        except:
-            pass
+        except Exception, e:
+            print "error " + str(e)
 
 
     def __str__(self):
