@@ -29,46 +29,36 @@ c = abs(r.random());
 #c = 1; 
 #a = 0;
 
-#f = x * a + b * y**2 + one * z**7;
-f = ( x + 1 ) * x**2;
-#f = ( y + 1 ) * y**2;
-#f = ( z + 1 ) * z**2;
 
-## print "a = ", a;
-## print "b = ", b;
-## print "c = ", c;
-print "f = ", f;
+print "a = ", a;
+print "b = ", b;
+print "c = ", c;
 print;
 
 ac = a * c;
 bc = b * c;
 
-## print "ac = ", ac;
-## print "bc = ", bc;
-## print;
+print "ac = ", ac;
+print "bc = ", bc;
+print;
 
 t = System.currentTimeMillis();
-F = r.squarefreeFactors(f);
+d = r.gcd(ac,bc);
 t = System.currentTimeMillis() - t;
-print "F:";
-for g in F.keys():
-    i = F[g];
-    print "g = (%s)**%s" % (g,i);
-print
-print "factor time =", t, "milliseconds";
 
-## d = r.gcd(g,c);
-## if cmp(c,d) == 0:
-##     print "gcd time =", t, "milliseconds,", "isGcd(c,d): true" ;
-## else:
-##     print "gcd time =", t, "milliseconds,", "isGcd(c,d): ",  cmp(c,d);
+#d = d.monic();
+print "d = ", d;
+
+m = c % d;
+## print "m = ", m;
 ## print;
 
-#d = g / c;
-#m = g % c;
-#print "d = ", d;
-#print "m = ", m;
-#print;
+if m.isZERO():
+    print "gcd time =", t, "milliseconds,", "isGcd(c,d): true" ;
+else:
+    print "gcd time =", t, "milliseconds,", "isGcd(c,d): ",  str(m);
+print;
+
 
 #startLog();
 terminate();
