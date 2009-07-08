@@ -639,8 +639,26 @@ implemented algebraic algorithms.
     and <code>GCDProxy</code> uses multi-threading to compute with 
     several implementations in parallel.
 </td>
-<td>gcd, lcm, content, primitivePart, 
-    squarefreePart, squarefreeFactors, resultant
+<td>gcd, lcm, content, primitivePart, resultant
+</td>
+
+<tr>
+<td><code>Squarefree</code>,
+    <code>SquarefreeFactory</code>,
+    <code>SquarefreeAbstract</code>,
+    <code>SquarefreeFieldChar0</code>,
+    <code>SquarefreeFieldCharP</code>,
+    <code>SquarefreeFiniteFieldCharP</code>,
+    <code>SquarefreeInfiniteFieldCharP</code>,
+    <code>SquarefreeRingChar0</code>
+</td>
+<td>Algorithms to compute squarefree decomposition of polynomials 
+    over fields of characteristic zero, finite and infinite fields of characteristic p
+    and other coefficients from unique factorization domains (UFD).
+    <code>SquarefreeFactory</code> helps with the optimal selection of an algorithm.
+</td>
+<td>squarefreePart, squarefreeFactors,
+    isFactorization, isSquarefree 
 </td>
 
 <tr>
@@ -1168,7 +1186,7 @@ of the Java algebra system.
 <p>
 <!-- Created: Sat Mar 11 10:51:36 CET 2006 -->
 <!-- hhmts start -->
-Last modified: Fri May  1 18:16:35 CEST 2009
+Last modified: Wed Jul  8 21:53:37 CEST 2009
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
