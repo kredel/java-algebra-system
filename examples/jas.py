@@ -1813,12 +1813,6 @@ class RingElem:
             return True;
         else:
             return False;
-##         try:
-##             r = self.elem.ring;
-##         except:
-##             #print "self.elem = " + str(self.elem);
-##             return True;
-##         return False;
 
     def isPolynomial(self):
         '''Test if this is a polynomial.
@@ -1828,10 +1822,6 @@ class RingElem:
         except:
             return False;
         return True;
-##         if isinstance(self.elem,GenPolynomial): # does not work
-##             return True;
-##         else:
-##             return False;
 
     def __cmp__(self,other):
         '''Compare two ring elements.
@@ -2084,28 +2074,6 @@ class PolyRing(Ring):
         '''Create a string representation.
         '''
         return self.ring.toScript();
-##         cf = self.ring.coFac;
-##         #print "cf.getClasss(): " + str(cf.getClass());
-##         try:
-##             cfac = cf.toScriptFactory();
-##         except:
-##             cfac = cf.toScript();
-##         if cf.getClass().getSimpleName() == "QuotientRing":
-##             qr = cf.ring;
-##             cfac = "RF(%s)" % str(PolyRing(qr.coFac,qr.varsToString(),qr.tord));
-##         #print "cf.getClasss(): " + str(cf.getClass());
-##         #print "poly.getClasss(): " + str( GenPolynomialRing(BigInteger(),1).getClass() );
-##         if cf.getClass().getSimpleName() == "GenPolynomialRing":
-##             cfac = str(PolyRing(cf.coFac,cf.varsToString(),cf.tord));
-##         #print "cfac: " + str(cfac);
-##         to = self.ring.tord;
-##         tord = to;
-##         if to.evord == TermOrder.INVLEX:
-##             tord = "PolyRing.lex";
-##         if to.evord == TermOrder.IGRLEX:
-##             tord = "PolyRing.grad";
-##         nvars = self.ring.varsToString();
-##         return "PolyRing(%s,%s,%s)" % (cfac, "\""+nvars+"\"", tord);
 
     lex = TermOrder(TermOrder.INVLEX)
 
