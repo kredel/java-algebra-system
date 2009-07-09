@@ -5,33 +5,22 @@
 package edu.jas.ufd;
 
 
-import java.util.SortedMap;
-import java.util.List;
-
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import org.apache.log4j.BasicConfigurator;
-
-import edu.jas.structure.RingFactory;
-
+import edu.jas.application.Quotient;
+import edu.jas.application.QuotientRing;
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
-import edu.jas.arith.PrimeList;
-
 import edu.jas.kern.ComputerThreads;
-
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
-import edu.jas.poly.TermOrder;
-
-import edu.jas.application.Quotient;
-import edu.jas.application.QuotientRing;
+import edu.jas.structure.RingFactory;
 
 
 /**
@@ -84,46 +73,47 @@ public class SquarefreeTest extends TestCase {
      * 
      */
     public void testFactorySpecific() {
-        ModIntegerRing mi = new ModIntegerRing(19,true);
-        Squarefree<ModInteger> sqfm = SquarefreeFactory.<ModInteger>getImplementation(mi);
+        ModIntegerRing mi = new ModIntegerRing(19, true);
+        Squarefree<ModInteger> sqfm = SquarefreeFactory.getImplementation(mi);
         //System.out.println("sqfm = " + sqfm);
-        assertTrue("sqf != Modular " + sqfm, sqfm instanceof SquarefreeFiniteFieldCharP );
+        assertTrue("sqf != Modular " + sqfm, sqfm instanceof SquarefreeFiniteFieldCharP);
 
         BigInteger bi = new BigInteger(1);
-        Squarefree<BigInteger> sqfi = SquarefreeFactory.<BigInteger>getImplementation(bi);
+        Squarefree<BigInteger> sqfi = SquarefreeFactory.getImplementation(bi);
         //System.out.println("sqfi = " + sqfi);
-        assertTrue("sqf != Integer " + sqfi, sqfi instanceof SquarefreeRingChar0 );
+        assertTrue("sqf != Integer " + sqfi, sqfi instanceof SquarefreeRingChar0);
 
         BigRational br = new BigRational(1);
-        Squarefree<BigRational> sqfr = SquarefreeFactory.<BigRational>getImplementation(br);
+        Squarefree<BigRational> sqfr = SquarefreeFactory.getImplementation(br);
         //System.out.println("sqfr = " + sqfr);
-        assertTrue("sqf != Rational " + sqfr, sqfr instanceof SquarefreeFieldChar0 );
+        assertTrue("sqf != Rational " + sqfr, sqfr instanceof SquarefreeFieldChar0);
 
         GenPolynomialRing<ModInteger> pmfac = new GenPolynomialRing<ModInteger>(mi, 1);
         GenPolynomial<ModInteger> pm = pmfac.univariate(0);
-        AlgebraicNumberRing<ModInteger> am = new AlgebraicNumberRing<ModInteger>(pm,true);
-        Squarefree<AlgebraicNumber<ModInteger>> sqfam = SquarefreeFactory.<ModInteger>getImplementation(am);
+        AlgebraicNumberRing<ModInteger> am = new AlgebraicNumberRing<ModInteger>(pm, true);
+        Squarefree<AlgebraicNumber<ModInteger>> sqfam = SquarefreeFactory.<ModInteger> getImplementation(am);
         //System.out.println("sqfam = " + sqfam);
-        assertTrue("sqf != AlgebraicNumber<ModInteger> " + sqfam, sqfam instanceof SquarefreeFiniteFieldCharP );
+        assertTrue("sqf != AlgebraicNumber<ModInteger> " + sqfam, sqfam instanceof SquarefreeFiniteFieldCharP);
 
         GenPolynomialRing<BigRational> prfac = new GenPolynomialRing<BigRational>(br, 1);
         GenPolynomial<BigRational> pr = prfac.univariate(0);
-        AlgebraicNumberRing<BigRational> ar = new AlgebraicNumberRing<BigRational>(pr,true);
-        Squarefree<AlgebraicNumber<BigRational>> sqfar = SquarefreeFactory.<BigRational>getImplementation(ar);
+        AlgebraicNumberRing<BigRational> ar = new AlgebraicNumberRing<BigRational>(pr, true);
+        Squarefree<AlgebraicNumber<BigRational>> sqfar = SquarefreeFactory
+                .<BigRational> getImplementation(ar);
         //System.out.println("sqfar = " + sqfar);
-        assertTrue("sqf != AlgebraicNumber<BigRational> " + sqfar, sqfar instanceof SquarefreeFieldChar0 );
+        assertTrue("sqf != AlgebraicNumber<BigRational> " + sqfar, sqfar instanceof SquarefreeFieldChar0);
 
         prfac = new GenPolynomialRing<BigRational>(br, 2);
         QuotientRing<BigRational> qrfac = new QuotientRing<BigRational>(prfac);
-        Squarefree<Quotient<BigRational>> sqfqr = SquarefreeFactory.<BigRational>getImplementation(qrfac);
+        Squarefree<Quotient<BigRational>> sqfqr = SquarefreeFactory.<BigRational> getImplementation(qrfac);
         //System.out.println("sqfqr = " + sqfqr);
-        assertTrue("sqf != Quotient<BigRational> " + sqfqr, sqfqr instanceof SquarefreeFieldChar0 );
+        assertTrue("sqf != Quotient<BigRational> " + sqfqr, sqfqr instanceof SquarefreeFieldChar0);
 
         pmfac = new GenPolynomialRing<ModInteger>(mi, 1);
         QuotientRing<ModInteger> qmfac = new QuotientRing<ModInteger>(pmfac);
-        Squarefree<Quotient<ModInteger>> sqfqm = SquarefreeFactory.<ModInteger>getImplementation(qmfac);
+        Squarefree<Quotient<ModInteger>> sqfqm = SquarefreeFactory.<ModInteger> getImplementation(qmfac);
         //System.out.println("sqfqm = " + sqfqm);
-        assertTrue("sqf != Quotient<ModInteger> " + sqfqm, sqfqm instanceof SquarefreeInfiniteFieldCharP );
+        assertTrue("sqf != Quotient<ModInteger> " + sqfqm, sqfqm instanceof SquarefreeInfiniteFieldCharP);
     }
 
 
@@ -133,47 +123,47 @@ public class SquarefreeTest extends TestCase {
      */
     @SuppressWarnings("unchecked")
     public void testFactoryGeneric() {
-        ModIntegerRing mi = new ModIntegerRing(19,true);
-        Squarefree<ModInteger> sqfm = SquarefreeFactory.getImplementation((RingFactory)mi);
+        ModIntegerRing mi = new ModIntegerRing(19, true);
+        Squarefree<ModInteger> sqfm = SquarefreeFactory.getImplementation((RingFactory) mi);
         //System.out.println("sqfm = " + sqfm);
-        assertTrue("sqf != Modular " + sqfm, sqfm instanceof SquarefreeFiniteFieldCharP );
+        assertTrue("sqf != Modular " + sqfm, sqfm instanceof SquarefreeFiniteFieldCharP);
 
         BigInteger bi = new BigInteger(1);
-        Squarefree<BigInteger> sqfi = SquarefreeFactory.getImplementation((RingFactory)bi);
+        Squarefree<BigInteger> sqfi = SquarefreeFactory.getImplementation((RingFactory) bi);
         //System.out.println("sqfi = " + sqfi);
-        assertTrue("sqf != Integer " + sqfi, sqfi instanceof SquarefreeRingChar0 );
+        assertTrue("sqf != Integer " + sqfi, sqfi instanceof SquarefreeRingChar0);
 
         BigRational br = new BigRational(1);
-        Squarefree<BigRational> sqfr = SquarefreeFactory.getImplementation((RingFactory)br);
+        Squarefree<BigRational> sqfr = SquarefreeFactory.getImplementation((RingFactory) br);
         //System.out.println("sqfr = " + sqfr);
-        assertTrue("sqf != Rational " + sqfr, sqfr instanceof SquarefreeFieldChar0 );
+        assertTrue("sqf != Rational " + sqfr, sqfr instanceof SquarefreeFieldChar0);
 
         GenPolynomialRing<ModInteger> pmfac = new GenPolynomialRing<ModInteger>(mi, 1);
         GenPolynomial<ModInteger> pm = pmfac.univariate(0);
-        AlgebraicNumberRing<ModInteger> am = new AlgebraicNumberRing<ModInteger>(pm,true);
-        Squarefree<AlgebraicNumber<ModInteger>> sqfam = SquarefreeFactory.getImplementation((RingFactory)am);
+        AlgebraicNumberRing<ModInteger> am = new AlgebraicNumberRing<ModInteger>(pm, true);
+        Squarefree<AlgebraicNumber<ModInteger>> sqfam = SquarefreeFactory.getImplementation((RingFactory) am);
         //System.out.println("sqfam = " + sqfam);
-        assertTrue("sqf != AlgebraicNumber<ModInteger> " + sqfam, sqfam instanceof SquarefreeFiniteFieldCharP );
+        assertTrue("sqf != AlgebraicNumber<ModInteger> " + sqfam, sqfam instanceof SquarefreeFiniteFieldCharP);
 
         GenPolynomialRing<BigRational> prfac = new GenPolynomialRing<BigRational>(br, 1);
         GenPolynomial<BigRational> pr = prfac.univariate(0);
-        AlgebraicNumberRing<BigRational> ar = new AlgebraicNumberRing<BigRational>(pr,true);
-        Squarefree<AlgebraicNumber<BigRational>> sqfar = SquarefreeFactory.getImplementation((RingFactory)ar);
+        AlgebraicNumberRing<BigRational> ar = new AlgebraicNumberRing<BigRational>(pr, true);
+        Squarefree<AlgebraicNumber<BigRational>> sqfar = SquarefreeFactory
+                .getImplementation((RingFactory) ar);
         //System.out.println("sqfar = " + sqfar);
-        assertTrue("sqf != AlgebraicNumber<BigRational> " + sqfar, sqfar instanceof SquarefreeFieldChar0 );
+        assertTrue("sqf != AlgebraicNumber<BigRational> " + sqfar, sqfar instanceof SquarefreeFieldChar0);
 
         prfac = new GenPolynomialRing<BigRational>(br, 2);
         QuotientRing<BigRational> qrfac = new QuotientRing<BigRational>(prfac);
-        Squarefree<Quotient<BigRational>> sqfqr = SquarefreeFactory.getImplementation((RingFactory)qrfac);
+        Squarefree<Quotient<BigRational>> sqfqr = SquarefreeFactory.getImplementation((RingFactory) qrfac);
         //System.out.println("sqfqr = " + sqfqr);
-        assertTrue("sqf != Quotient<BigRational> " + sqfqr, sqfqr instanceof SquarefreeFieldChar0 );
+        assertTrue("sqf != Quotient<BigRational> " + sqfqr, sqfqr instanceof SquarefreeFieldChar0);
 
         pmfac = new GenPolynomialRing<ModInteger>(mi, 1);
         QuotientRing<ModInteger> qmfac = new QuotientRing<ModInteger>(pmfac);
-        Squarefree<Quotient<ModInteger>> sqfqm = SquarefreeFactory.getImplementation((RingFactory)qmfac);
+        Squarefree<Quotient<ModInteger>> sqfqm = SquarefreeFactory.getImplementation((RingFactory) qmfac);
         //System.out.println("sqfqm = " + sqfqm);
-        assertTrue("sqf != Quotient<ModInteger> " + sqfqm, sqfqm instanceof SquarefreeInfiniteFieldCharP );
+        assertTrue("sqf != Quotient<ModInteger> " + sqfqm, sqfqm instanceof SquarefreeInfiniteFieldCharP);
     }
 
 }
-

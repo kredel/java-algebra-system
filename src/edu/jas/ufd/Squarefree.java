@@ -5,24 +5,11 @@
 package edu.jas.ufd;
 
 
-import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
 import java.util.List;
-import java.util.ArrayList;
-
-import org.apache.log4j.Logger;
-
-import edu.jas.structure.GcdRingElem;
-import edu.jas.structure.RingFactory;
-import edu.jas.structure.UnaryFunctor;
-import edu.jas.structure.Power;
+import java.util.SortedMap;
 
 import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.GenPolynomialRing;
-import edu.jas.poly.PolyUtil;
-
-import edu.jas.util.ListUtil;
+import edu.jas.structure.GcdRingElem;
 
 
 /**
@@ -52,9 +39,10 @@ public interface Squarefree<C extends GcdRingElem<C>> {
     /**
      * GenPolynomial squarefree factorization.
      * @param P GenPolynomial.
-     * @return [p_1 -> e_1, ..., p_k -> e_k] with P = prod_{i=1,...,k} p_i^{e_i} and p_i squarefree.
+     * @return [p_1 -> e_1, ..., p_k -> e_k] with P = prod_{i=1,...,k} p_i^{e_i}
+     *         and p_i squarefree.
      */
-    public SortedMap<GenPolynomial<C>,Long> squarefreeFactors(GenPolynomial<C> P);
+    public SortedMap<GenPolynomial<C>, Long> squarefreeFactors(GenPolynomial<C> P);
 
 
     /**
@@ -78,14 +66,10 @@ public interface Squarefree<C extends GcdRingElem<C>> {
     /**
      * GenPolynomial squarefree and co-prime list.
      * @param A list of GenPolynomials.
-     * @return B with gcd(b,c) = 1 for all b != c in B 
-     *         and for all non-constant a in A there exists b in B with b|a
-     *         and each b in B is squarefree. 
-     *         B does not contain zero or constant polynomials.
+     * @return B with gcd(b,c) = 1 for all b != c in B and for all non-constant
+     *         a in A there exists b in B with b|a and each b in B is
+     *         squarefree. B does not contain zero or constant polynomials.
      */
     public List<GenPolynomial<C>> coPrimeSquarefree(List<GenPolynomial<C>> A);
 
 }
-
-
-
