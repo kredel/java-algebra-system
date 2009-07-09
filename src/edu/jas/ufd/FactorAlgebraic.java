@@ -7,7 +7,6 @@ package edu.jas.ufd;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.SortedMap;
 
 import org.apache.log4j.Logger;
 
@@ -19,15 +18,17 @@ import edu.jas.structure.GcdRingElem;
 
 
 /**
- * Algebraic number coefficients factorization algorithms.
- * This class implements factorization methods for polynomials over algebraic numbers 
- * over rational numbers or over (prime) modular integers.
+ * Algebraic number coefficients factorization algorithms. This class implements
+ * factorization methods for polynomials over algebraic numbers over rational
+ * numbers or over (prime) modular integers.
  * @author Heinz Kredel
  * @param <C> coefficient type
  */
 
 public class FactorAlgebraic<C extends GcdRingElem<C>> extends FactorAbsolute<AlgebraicNumber<C>> {
-//FactorAbstract<AlgebraicNumber<C>>
+
+
+    //FactorAbstract<AlgebraicNumber<C>>
 
 
     private static final Logger logger = Logger.getLogger(FactorAlgebraic.class);
@@ -55,8 +56,8 @@ public class FactorAlgebraic<C extends GcdRingElem<C>> extends FactorAbsolute<Al
      * @param fac algebraic number factory.
      */
     public FactorAlgebraic(AlgebraicNumberRing<C> fac) {
-        super( fac );
-        this.factorCoeff = FactorFactory.<C>getImplementation(fac.ring.coFac);
+        super(fac);
+        this.factorCoeff = FactorFactory.<C> getImplementation(fac.ring.coFac);
     }
 
 
@@ -100,14 +101,15 @@ public class FactorAlgebraic<C extends GcdRingElem<C>> extends FactorAbsolute<Al
         GenPolynomial<C> res = null;
         boolean sqf = false;
         //        int[] klist = new int[]{ 0, 1, 2, 3, -1, -2, -3 , -4};
-        int[] klist = new int[]{ 0, -1, -2, 1, 2 };
+        int[] klist = new int[] { 0, -1, -2, 1, 2 };
         int ki = 0;
         while (!sqf) {
             // k = 0,1,2,-1,-2
-            if ( ki >= klist.length ) {
+            if (ki >= klist.length) {
                 break;
             }
-            k = klist[ki]; ki++;
+            k = klist[ki];
+            ki++;
             // compute norm with x -> ( y - k x )
             ks = k;
             res = PolyUfdUtil.<C> norm(P, ks);
@@ -123,17 +125,17 @@ public class FactorAlgebraic<C extends GcdRingElem<C>> extends FactorAbsolute<Al
         List<GenPolynomial<C>> nfacs;
         if (!sqf) {
             //System.out.println("\nres = " + res); 
-            System.out.println("sqf("+ks+") = " + sqf + "\n");
+            System.out.println("sqf(" + ks + ") = " + sqf + "\n");
             //res = factorCoeff.squarefreePart(res); // better use obtained factors
             //res = factorCoeff.baseFactors(res).lastKey();
-        } 
+        }
         //res = res.monic();
-        if ( logger.isInfoEnabled() ) {
-            logger.info("res = " + res); 
+        if (logger.isInfoEnabled()) {
+            logger.info("res = " + res);
             //System.out.println("\nres = " + res); 
         }
         nfacs = factorCoeff.baseFactorsRadical(res);
-        if ( logger.isInfoEnabled() ) {
+        if (logger.isInfoEnabled()) {
             logger.info("res facs = " + nfacs); // Q[X]
             //System.out.println("\nnfacs = " + nfacs); // Q[X]
         }
@@ -167,13 +169,13 @@ public class FactorAlgebraic<C extends GcdRingElem<C>> extends FactorAbsolute<Al
             if (!pni.isONE()) {
                 factors.add(pni);
                 Pp = Pp.divide(pni);
-//             } else {
-//                 GenPolynomial<AlgebraicNumber<C>> qni = Pp.divide(Ni);
-//                 GenPolynomial<AlgebraicNumber<C>> rni = Pp.remainder(Ni);
-//                 System.out.println("div qni = " + qni);
-//                 System.out.println("div rni = " + rni);
-//                 continue;
-//                 //throw new RuntimeException("gcd(Ni,Pp) == 1");
+                //             } else {
+                //                 GenPolynomial<AlgebraicNumber<C>> qni = Pp.divide(Ni);
+                //                 GenPolynomial<AlgebraicNumber<C>> rni = Pp.remainder(Ni);
+                //                 System.out.println("div qni = " + qni);
+                //                 System.out.println("div rni = " + rni);
+                //                 continue;
+                //                 //throw new RuntimeException("gcd(Ni,Pp) == 1");
             }
         }
         if (!Pp.isZERO() && !Pp.isONE()) { // hack to pretend irreducible

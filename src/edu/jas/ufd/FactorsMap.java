@@ -6,14 +6,10 @@ package edu.jas.ufd;
 
 
 import java.io.Serializable;
-//import java.util.ArrayList;
-import java.util.List;
 import java.util.SortedMap;
 
-import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.GenPolynomial;
-//import edu.jas.poly.GenPolynomialRing;
 import edu.jas.structure.GcdRingElem;
 
 
@@ -35,13 +31,13 @@ public class FactorsMap<C extends GcdRingElem<C>> implements Serializable {
     /**
      * List of factors with coefficients from C.
      */
-    public final SortedMap<GenPolynomial<C>,Long> factors;
+    public final SortedMap<GenPolynomial<C>, Long> factors;
 
 
     /**
-     * List of factors with coefficients from  AlgebraicNumberRings.
+     * List of factors with coefficients from AlgebraicNumberRings.
      */
-    public final SortedMap<Factors<C>,Long> afactors;
+    public final SortedMap<Factors<C>, Long> afactors;
 
 
     /**
@@ -49,8 +45,8 @@ public class FactorsMap<C extends GcdRingElem<C>> implements Serializable {
      * @param p given GenPolynomial over C.
      * @param map irreducible factors of p with coefficients from C.
      */
-    public FactorsMap(GenPolynomial<C> p, SortedMap<GenPolynomial<C>,Long> map) {
-        this(p,map,null);
+    public FactorsMap(GenPolynomial<C> p, SortedMap<GenPolynomial<C>, Long> map) {
+        this(p, map, null);
     }
 
 
@@ -58,113 +54,117 @@ public class FactorsMap<C extends GcdRingElem<C>> implements Serializable {
      * Constructor.
      * @param p given GenPolynomial over C.
      * @param map irreducible factors of p with coefficients from C.
-     * @param amap irreducible factors of p with coefficients from an algebraic number field.
+     * @param amap irreducible factors of p with coefficients from an algebraic
+     *            number field.
      */
-    public FactorsMap(GenPolynomial<C> p, SortedMap<GenPolynomial<C>,Long> map, 
-                      SortedMap<Factors<C>,Long> amap) {
+    public FactorsMap(GenPolynomial<C> p, SortedMap<GenPolynomial<C>, Long> map,
+            SortedMap<Factors<C>, Long> amap) {
         poly = p;
         factors = map;
         afactors = amap;
     }
 
 
-    /** Get the String representation.
+    /**
+     * Get the String representation.
      * @see java.lang.Object#toString()
      */
     @Override
     public String toString() {
         StringBuffer sb = new StringBuffer();
-        sb.append( poly.toString() );
-        sb.append( " =\n" );
+        sb.append(poly.toString());
+        sb.append(" =\n");
         boolean first = true;
-        for ( GenPolynomial<C> p : factors.keySet() ) {
-            if ( first ) {
+        for (GenPolynomial<C> p : factors.keySet()) {
+            if (first) {
                 first = false;
             } else {
                 sb.append(",\n ");
             }
             sb.append(p.toString());
             long e = factors.get(p);
-            if ( e > 1 ) {
-                sb.append("**"+e);
+            if (e > 1) {
+                sb.append("**" + e);
             }
         }
-        if ( afactors == null ) {
+        if (afactors == null) {
             return sb.toString();
         }
-        for ( Factors<C> f : afactors.keySet() ) {
-            if ( first ) {
+        for (Factors<C> f : afactors.keySet()) {
+            if (first) {
                 first = false;
             } else {
                 sb.append(",\n ");
             }
             sb.append(f.toString());
             long e = afactors.get(f);
-            if ( e > 1 ) {
-                sb.append("**"+e);
+            if (e > 1) {
+                sb.append("**" + e);
             }
         }
         return sb.toString();
     }
 
 
-    /** Get a scripting compatible string representation.
+    /**
+     * Get a scripting compatible string representation.
      * @return script compatible representation for this container.
      * @see edu.jas.structure.ElemFactory#toScript()
      */
     public String toScript() {
         // Python case
         StringBuffer sb = new StringBuffer();
-        sb.append( poly.toScript() );
-        sb.append( " =\n" );
+        sb.append(poly.toScript());
+        sb.append(" =\n");
         boolean first = true;
-        for ( GenPolynomial<C> p : factors.keySet() ) {
-            if ( first ) {
+        for (GenPolynomial<C> p : factors.keySet()) {
+            if (first) {
                 first = false;
             } else {
                 sb.append("\n * ");
             }
             sb.append(p.toScript());
             long e = factors.get(p);
-            if ( e > 1 ) {
-                sb.append("**"+e);
+            if (e > 1) {
+                sb.append("**" + e);
             }
         }
-        if ( afactors == null ) {
+        if (afactors == null) {
             return sb.toString();
         }
-        for ( Factors<C> f : afactors.keySet() ) {
-            if ( first ) {
+        for (Factors<C> f : afactors.keySet()) {
+            if (first) {
                 first = false;
             } else {
                 sb.append("\n * ");
             }
             sb.append(f.toScript());
             long e = afactors.get(f);
-            if ( e > 1 ) {
-                sb.append("**"+e);
+            if (e > 1) {
+                sb.append("**" + e);
             }
         }
         return sb.toString();
     }
 
 
-    /** Find largest extension field.
-     * @return largest extension field or null if no extension field 
+    /**
+     * Find largest extension field.
+     * @return largest extension field or null if no extension field
      */
     public AlgebraicNumberRing<C> findExtensionField() {
-        if ( afactors == null ) {
+        if (afactors == null) {
             return null;
         }
         AlgebraicNumberRing<C> ar = null;
         int depth = 0;
-        for ( Factors<C> f : afactors.keySet() ) {
+        for (Factors<C> f : afactors.keySet()) {
             AlgebraicNumberRing<C> aring = f.findExtensionField();
-            if ( aring == null ) {
+            if (aring == null) {
                 continue;
             }
             int d = aring.depth();
-            if ( d > depth ) {
+            if (d > depth) {
                 depth = d;
                 ar = aring;
             }

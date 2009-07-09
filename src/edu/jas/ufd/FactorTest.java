@@ -6,31 +6,24 @@ package edu.jas.ufd;
 
 
 import java.util.SortedMap;
-import java.util.List;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import org.apache.log4j.BasicConfigurator;
-
-
+import edu.jas.application.Quotient;
+import edu.jas.application.QuotientRing;
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
 import edu.jas.arith.PrimeList;
-
 import edu.jas.kern.ComputerThreads;
-
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.TermOrder;
-
-import edu.jas.application.Quotient;
-import edu.jas.application.QuotientRing;
 
 
 /**
@@ -329,9 +322,9 @@ public class FactorTest extends TestCase {
         for (int i = 1; i < 3; i++) {
             int facs = 0;
             GenPolynomial<BigRational> a;
-            GenPolynomial<BigRational> c = pfac.random(kl-2, ll * i, el + i, q);
+            GenPolynomial<BigRational> c = pfac.random(kl - 2, ll * i, el + i, q);
             // a = a.monic();
-            GenPolynomial<BigRational> b = pfac.random(kl-2, ll, el, q);
+            GenPolynomial<BigRational> b = pfac.random(kl - 2, ll, el, q);
             //b = b.monic();
             //         if ( false && ! a.leadingBaseCoefficient().isONE() ) {
             //continue;
@@ -384,8 +377,8 @@ public class FactorTest extends TestCase {
         GenPolynomial<BigRational> agen = pfac.univariate(0, 2);
         agen = agen.sum(pfac.getONE()); // x^2 + 1
         AlgebraicNumberRing<BigRational> afac = new AlgebraicNumberRing<BigRational>(agen, true);
-        GenPolynomialRing<AlgebraicNumber<BigRational>> apfac 
-            = new GenPolynomialRing<AlgebraicNumber<BigRational>>(afac, 1, to, vars); // univariate
+        GenPolynomialRing<AlgebraicNumber<BigRational>> apfac = new GenPolynomialRing<AlgebraicNumber<BigRational>>(
+                afac, 1, to, vars); // univariate
 
         //System.out.println("agen  = " + agen);
         //System.out.println("afac  = " + afac);
@@ -457,10 +450,10 @@ public class FactorTest extends TestCase {
 
         FactorRational engine = new FactorRational();
 
-        FactorsMap<BigRational> F 
-            //= engine.baseFactorsAbsoluteSquarefree(agen);
-            //= engine.baseFactorsAbsoluteIrreducible(agen);
-          = engine.baseFactorsAbsolute(agen);
+        FactorsMap<BigRational> F
+        //= engine.baseFactorsAbsoluteSquarefree(agen);
+        //= engine.baseFactorsAbsoluteIrreducible(agen);
+        = engine.baseFactorsAbsolute(agen);
         //System.out.println("agen     = " + agen);
         //System.out.println("F        = " + F);
 
@@ -487,10 +480,10 @@ public class FactorTest extends TestCase {
 
         FactorModular engine = new FactorModular();
 
-        FactorsMap<ModInteger> F 
-            //= engine.baseFactorsAbsoluteSquarefree(agen);
-            //= engine.baseFactorsAbsoluteIrreducible(agen);
-          = engine.baseFactorsAbsolute(agen);
+        FactorsMap<ModInteger> F
+        //= engine.baseFactorsAbsoluteSquarefree(agen);
+        //= engine.baseFactorsAbsoluteIrreducible(agen);
+        = engine.baseFactorsAbsolute(agen);
         //System.out.println("agen        = " + agen);
         //System.out.println("F           = " + F);
 
@@ -518,10 +511,10 @@ public class FactorTest extends TestCase {
 
         FactorRational engine = new FactorRational();
 
-        FactorsMap<BigRational> F 
-            //= engine.baseFactorsAbsoluteSquarefree(agen);
-            //= engine.baseFactorsAbsoluteIrreducible(agen);
-          = engine.factorsAbsolute(g);
+        FactorsMap<BigRational> F
+        //= engine.baseFactorsAbsoluteSquarefree(agen);
+        //= engine.baseFactorsAbsoluteIrreducible(agen);
+        = engine.factorsAbsolute(g);
         //System.out.println("g    = " + g);
         //System.out.println("F    = " + F);
 
@@ -537,40 +530,40 @@ public class FactorTest extends TestCase {
      * 
      */
     public void testFactory() {
-        ModIntegerRing mi = new ModIntegerRing(19,true);
+        ModIntegerRing mi = new ModIntegerRing(19, true);
         Factorization<ModInteger> ufdm = FactorFactory.getImplementation(mi);
         //System.out.println("ufdm = " + ufdm);
-        assertTrue("ufd != Modular " + ufdm, ufdm instanceof FactorModular );
+        assertTrue("ufd != Modular " + ufdm, ufdm instanceof FactorModular);
 
         BigInteger bi = new BigInteger(1);
         Factorization<BigInteger> ufdi = FactorFactory.getImplementation(bi);
         //System.out.println("ufdi = " + ufdi);
-        assertTrue("ufd != Integer " + ufdi, ufdi instanceof FactorInteger );
+        assertTrue("ufd != Integer " + ufdi, ufdi instanceof FactorInteger);
 
         BigRational br = new BigRational(1);
         Factorization<BigRational> ufdr = FactorFactory.getImplementation(br);
         //System.out.println("ufdr = " + ufdr);
-        assertTrue("ufd != Rational " + ufdr, ufdr instanceof FactorRational );
+        assertTrue("ufd != Rational " + ufdr, ufdr instanceof FactorRational);
 
         GenPolynomialRing<ModInteger> pmfac = new GenPolynomialRing<ModInteger>(mi, 1);
         GenPolynomial<ModInteger> pm = pmfac.univariate(0);
-        AlgebraicNumberRing<ModInteger> am = new AlgebraicNumberRing<ModInteger>(pm,true);
+        AlgebraicNumberRing<ModInteger> am = new AlgebraicNumberRing<ModInteger>(pm, true);
         Factorization<AlgebraicNumber<ModInteger>> ufdam = FactorFactory.getImplementation(am);
         //System.out.println("ufdam = " + ufdam);
-        assertTrue("ufd != AlgebraicNumber<ModInteger> " + ufdam, ufdam instanceof FactorAlgebraic );
+        assertTrue("ufd != AlgebraicNumber<ModInteger> " + ufdam, ufdam instanceof FactorAlgebraic);
 
         GenPolynomialRing<BigRational> prfac = new GenPolynomialRing<BigRational>(br, 1);
         GenPolynomial<BigRational> pr = prfac.univariate(0);
-        AlgebraicNumberRing<BigRational> ar = new AlgebraicNumberRing<BigRational>(pr,true);
+        AlgebraicNumberRing<BigRational> ar = new AlgebraicNumberRing<BigRational>(pr, true);
         Factorization<AlgebraicNumber<BigRational>> ufdar = FactorFactory.getImplementation(ar);
         //System.out.println("ufdar = " + ufdar);
-        assertTrue("ufd != AlgebraicNumber<BigRational> " + ufdar, ufdar instanceof FactorAlgebraic );
+        assertTrue("ufd != AlgebraicNumber<BigRational> " + ufdar, ufdar instanceof FactorAlgebraic);
 
         prfac = new GenPolynomialRing<BigRational>(br, 2);
         QuotientRing<BigRational> qrfac = new QuotientRing<BigRational>(prfac);
         Factorization<Quotient<BigRational>> ufdqr = FactorFactory.getImplementation(qrfac);
         //System.out.println("ufdqr = " + ufdqr);
-        assertTrue("ufd != Quotient<BigRational> " + ufdqr, ufdqr instanceof FactorQuotient );
+        assertTrue("ufd != Quotient<BigRational> " + ufdqr, ufdqr instanceof FactorQuotient);
     }
 
 }

@@ -7,29 +7,19 @@ package edu.jas.ufd;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.SortedMap;
-import java.util.Map;
-import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 
-import edu.jas.structure.GcdRingElem;
-import edu.jas.structure.RingFactory;
-import edu.jas.structure.Power;
-import edu.jas.arith.BigInteger;
-import edu.jas.arith.BigRational;
-import edu.jas.poly.ExpVector;
-import edu.jas.poly.Monomial;
-import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.GenPolynomialRing;
-import edu.jas.poly.PolyUtil;
 import edu.jas.application.Quotient;
 import edu.jas.application.QuotientRing;
+import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.GenPolynomialRing;
+import edu.jas.structure.GcdRingElem;
 
 
 /**
- * Rational function coefficients factorization algorithms.
- * This class implements factorization methods for polynomials over rational functions,
+ * Rational function coefficients factorization algorithms. This class
+ * implements factorization methods for polynomials over rational functions,
  * that is, with coefficients from class <code>application.Quotient</code>.
  * @author Heinz Kredel
  */
@@ -50,7 +40,7 @@ public class FactorQuotient<C extends GcdRingElem<C>> extends FactorAbstract<Quo
 
 
     /**
-     * No argument constructor. 
+     * No argument constructor.
      */
     protected FactorQuotient() {
         throw new IllegalArgumentException("don't use this constructor");
@@ -58,12 +48,12 @@ public class FactorQuotient<C extends GcdRingElem<C>> extends FactorAbstract<Quo
 
 
     /**
-     * Constructor. 
+     * Constructor.
      * @param fac coefficient quotient ring factory.
      */
     public FactorQuotient(QuotientRing<C> fac) {
-        super( fac );
-        nengine = FactorFactory.<C>getImplementation( fac.ring.coFac );
+        super(fac);
+        nengine = FactorFactory.<C> getImplementation(fac.ring.coFac);
     }
 
 
@@ -103,13 +93,13 @@ public class FactorQuotient<C extends GcdRingElem<C>> extends FactorAbstract<Quo
             //System.out.println("ldcf = " + ldcf);
             Pr = Pr.monic();
         }
-        QuotientRing<C> qi = (QuotientRing<C>)pfac.coFac;
+        QuotientRing<C> qi = (QuotientRing<C>) pfac.coFac;
         GenPolynomialRing<C> ci = qi.ring;
         GenPolynomialRing<GenPolynomial<C>> ifac = new GenPolynomialRing<GenPolynomial<C>>(ci, pfac);
-        GenPolynomial<GenPolynomial<C>> Pi = PolyUfdUtil.<C>integralFromQuotientCoefficients(ifac, Pr);
+        GenPolynomial<GenPolynomial<C>> Pi = PolyUfdUtil.<C> integralFromQuotientCoefficients(ifac, Pr);
         //System.out.println("Pi = " + Pi);
 
-	// factor in C[x_1,...,x_n][y_1,...,y_m]
+        // factor in C[x_1,...,x_n][y_1,...,y_m]
         List<GenPolynomial<GenPolynomial<C>>> irfacts = nengine.recursiveFactorsSquarefree(Pi);
         if (logger.isInfoEnabled()) {
             logger.info("irfacts = " + irfacts);
@@ -118,11 +108,12 @@ public class FactorQuotient<C extends GcdRingElem<C>> extends FactorAbstract<Quo
             factors.add(P);
             return factors;
         }
-        List<GenPolynomial<Quotient<C>>> qfacts = PolyUfdUtil.<C>quotientFromIntegralCoefficients(pfac, irfacts);
+        List<GenPolynomial<Quotient<C>>> qfacts = PolyUfdUtil.<C> quotientFromIntegralCoefficients(pfac,
+                irfacts);
         //System.out.println("qfacts = " + qfacts);
         //qfacts = PolyUtil.monic(qfacts);
         //System.out.println("qfacts = " + qfacts);
-        if ( !ldcf.isONE() ) {
+        if (!ldcf.isONE()) {
             GenPolynomial<Quotient<C>> r = qfacts.get(0);
             qfacts.remove(r);
             r = r.multiply(ldcf);
@@ -136,4 +127,3 @@ public class FactorQuotient<C extends GcdRingElem<C>> extends FactorAbstract<Quo
     }
 
 }
-

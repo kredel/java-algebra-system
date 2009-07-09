@@ -6,16 +6,12 @@ package edu.jas.ufd;
 
 
 import java.io.Serializable;
-//import java.util.ArrayList;
 import java.util.List;
-//import java.util.SortedMap;
 
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.GenPolynomial;
-//import edu.jas.poly.GenPolynomialRing;
 import edu.jas.structure.GcdRingElem;
-import edu.jas.structure.RingFactory;
 
 
 /**
@@ -34,22 +30,22 @@ public class Factors<C extends GcdRingElem<C>> implements Comparable<Factors<C>>
 
 
     /**
-     * Algebraic field extension over C.
-     * Should be null, if p is absolutely irreducible.
+     * Algebraic field extension over C. Should be null, if p is absolutely
+     * irreducible.
      */
     public final AlgebraicNumberRing<C> afac;
 
 
     /**
-     * Original polynomial to be factored with coefficients from AlgebraicNumberRing<C>.
-     * Should be null, if p is absolutely irreducible.
+     * Original polynomial to be factored with coefficients from
+     * AlgebraicNumberRing<C>. Should be null, if p is absolutely irreducible.
      */
     public final GenPolynomial<AlgebraicNumber<C>> apoly;
 
 
     /**
-     * List of factors with coefficients from AlgebraicNumberRing<C>.
-     * Should be null, if p is absolutely irreducible.
+     * List of factors with coefficients from AlgebraicNumberRing<C>. Should be
+     * null, if p is absolutely irreducible.
      */
     public final List<GenPolynomial<AlgebraicNumber<C>>> afactors;
 
@@ -66,7 +62,7 @@ public class Factors<C extends GcdRingElem<C>> implements Comparable<Factors<C>>
      * @param p absolute irreducible GenPolynomial.
      */
     public Factors(GenPolynomial<C> p) {
-        this(p,null,null,null,null);
+        this(p, null, null, null, null);
     }
 
 
@@ -77,10 +73,9 @@ public class Factors<C extends GcdRingElem<C>> implements Comparable<Factors<C>>
      * @param ap GenPolynomial p represented with coefficients from af.
      * @param afact absolute irreducible factors of p with coefficients from af.
      */
-    public Factors(GenPolynomial<C> p, AlgebraicNumberRing<C> af, 
-                   GenPolynomial<AlgebraicNumber<C>> ap, 
-                   List<GenPolynomial<AlgebraicNumber<C>>> afact) {
-        this(p,af,ap,afact,null);
+    public Factors(GenPolynomial<C> p, AlgebraicNumberRing<C> af, GenPolynomial<AlgebraicNumber<C>> ap,
+            List<GenPolynomial<AlgebraicNumber<C>>> afact) {
+        this(p, af, ap, afact, null);
     }
 
 
@@ -91,10 +86,8 @@ public class Factors<C extends GcdRingElem<C>> implements Comparable<Factors<C>>
      * @param ap GenPolynomial p represented with coefficients from af.
      * @param afact absolute irreducible factors of p with coefficients from af.
      */
-    public Factors(GenPolynomial<C> p, AlgebraicNumberRing<C> af, 
-                   GenPolynomial<AlgebraicNumber<C>> ap, 
-           List<GenPolynomial<AlgebraicNumber<C>>> afact,
-                   List<Factors<AlgebraicNumber<C>>> arfact) {
+    public Factors(GenPolynomial<C> p, AlgebraicNumberRing<C> af, GenPolynomial<AlgebraicNumber<C>> ap,
+            List<GenPolynomial<AlgebraicNumber<C>>> afact, List<Factors<AlgebraicNumber<C>>> arfact) {
         poly = p;
         afac = af;
         apoly = ap;
@@ -103,32 +96,33 @@ public class Factors<C extends GcdRingElem<C>> implements Comparable<Factors<C>>
     }
 
 
-    /** Get the String representation.
+    /**
+     * Get the String representation.
      * @see java.lang.Object#toString()
      */
     @Override
     public String toString() {
         StringBuffer sb = new StringBuffer();
-        sb.append( poly.toString() );
-        if ( afac == null ) {
+        sb.append(poly.toString());
+        if (afac == null) {
             return sb.toString();
         }
-        sb.append( " = " );
+        sb.append(" = ");
         boolean first = true;
-        for ( GenPolynomial<AlgebraicNumber<C>> ap : afactors ) {
-            if ( first ) {
+        for (GenPolynomial<AlgebraicNumber<C>> ap : afactors) {
+            if (first) {
                 first = false;
             } else {
                 sb.append(", ");
             }
             sb.append(ap.toString());
         }
-        sb.append(" over "+ afac.toString());
-        if ( arfactors == null ) {
+        sb.append(" over " + afac.toString());
+        if (arfactors == null) {
             return sb.toString();
         }
-        for ( Factors<AlgebraicNumber<C>> arp : arfactors ) {
-            if ( first ) {
+        for (Factors<AlgebraicNumber<C>> arp : arfactors) {
+            if (first) {
                 first = false;
             } else {
                 sb.append(", ");
@@ -139,7 +133,8 @@ public class Factors<C extends GcdRingElem<C>> implements Comparable<Factors<C>>
     }
 
 
-    /** Get a scripting compatible string representation.
+    /**
+     * Get a scripting compatible string representation.
      * @return script compatible representation for this container.
      * @see edu.jas.structure.ElemFactory#toScript()
      */
@@ -147,13 +142,13 @@ public class Factors<C extends GcdRingElem<C>> implements Comparable<Factors<C>>
         // Python case
         StringBuffer sb = new StringBuffer();
         sb.append(poly.toScript());
-        if ( afac == null ) {
+        if (afac == null) {
             return sb.toString();
         }
-        sb.append( " =\n" );
+        sb.append(" =\n");
         boolean first = true;
-        for ( GenPolynomial<AlgebraicNumber<C>> ap : afactors ) {
-            if ( first ) {
+        for (GenPolynomial<AlgebraicNumber<C>> ap : afactors) {
+            if (first) {
                 first = false;
             } else {
                 sb.append("\n * ");
@@ -161,12 +156,12 @@ public class Factors<C extends GcdRingElem<C>> implements Comparable<Factors<C>>
             //sb.append("( " + ap.toScript() + " )");
             sb.append(ap.toScript());
         }
-        sb.append("\n over "+ afac.toScript());
-        if ( arfactors == null ) {
+        sb.append("\n over " + afac.toScript());
+        if (arfactors == null) {
             return sb.toString();
         }
-        for ( Factors<AlgebraicNumber<C>> arp : arfactors ) {
-            if ( first ) {
+        for (Factors<AlgebraicNumber<C>> arp : arfactors) {
+            if (first) {
                 first = false;
             } else {
                 sb.append("\n * ");
@@ -177,82 +172,87 @@ public class Factors<C extends GcdRingElem<C>> implements Comparable<Factors<C>>
     }
 
 
-    /** Hash code for this Factors.
+    /**
+     * Hash code for this Factors.
      * @see java.lang.Object#hashCode()
      */
     @Override
-    public int hashCode() { 
-       int h;
-       h = poly.hashCode();
-       if ( afac == null ) {
-           return h;
-       }
-       h = ( h << 27 );
-       h += afac.hashCode();
-       return h;
+    public int hashCode() {
+        int h;
+        h = poly.hashCode();
+        if (afac == null) {
+            return h;
+        }
+        h = (h << 27);
+        h += afac.hashCode();
+        return h;
     }
 
 
-    /** Comparison with any other object.
+    /**
+     * Comparison with any other object.
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
     @SuppressWarnings("unchecked")
-    public boolean equals( Object B ) { 
-       if ( ! ( B instanceof GenPolynomial ) ) {
-          return false;
-       }
-       Factors<C> a = null;
-       try {
-           a = (Factors<C>) B;
-       } catch (ClassCastException ignored) {
-       }
-       if ( a == null ) {
-           return false;
-       }
-       return this.compareTo(a) == 0;
+    public boolean equals(Object B) {
+        if (!(B instanceof GenPolynomial)) {
+            return false;
+        }
+        Factors<C> a = null;
+        try {
+            a = (Factors<C>) B;
+        } catch (ClassCastException ignored) {
+        }
+        if (a == null) {
+            return false;
+        }
+        return this.compareTo(a) == 0;
     }
 
 
-    /** Comparison.  
+    /**
+     * Comparison.
      * @param facs factors container.
-     * @return sign(this.poly-facs.poly) lexicographic &gt; sign(afac.modul-facs.afac.modul).
+     * @return sign(this.poly-facs.poly) lexicographic &gt;
+     *         sign(afac.modul-facs.afac.modul).
      */
-    public int compareTo(Factors<C> facs) { 
-        int s = poly.compareTo(facs.poly);        
-        if ( s != 0 ) {
-            return s; 
+    public int compareTo(Factors<C> facs) {
+        int s = poly.compareTo(facs.poly);
+        if (s != 0) {
+            return s;
         }
-        if ( afac == null ) {
+        if (afac == null) {
             return -1;
         }
-        if ( facs.afac == null) {
+        if (facs.afac == null) {
             return +1;
         }
         return afac.modul.compareTo(facs.afac.modul);
     }
 
 
-    /** Find largest extension field.
-     * @return largest extension field or null if no extension field 
+    /**
+     * Find largest extension field.
+     * @return largest extension field or null if no extension field
      */
     @SuppressWarnings("unchecked")
     public AlgebraicNumberRing<C> findExtensionField() {
-        if ( afac == null ) {
+        if (afac == null) {
             return null;
         }
-        if ( arfactors == null ) {
+        if (arfactors == null) {
             return afac;
         }
         AlgebraicNumberRing<C> arr = afac;
         int depth = 1;
-        for ( Factors<AlgebraicNumber<C>> af : arfactors ) {
+        for (Factors<AlgebraicNumber<C>> af : arfactors) {
             AlgebraicNumberRing<AlgebraicNumber<C>> aring = af.findExtensionField();
-            if ( aring == null ) {
+            if (aring == null) {
                 continue;
             }
             int d = aring.depth();
-            if ( d > depth ) {
+            if (d > depth) {
                 depth = d;
                 arr = (AlgebraicNumberRing<C>) (Object) aring;
             }
