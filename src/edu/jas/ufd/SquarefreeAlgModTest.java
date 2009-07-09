@@ -222,8 +222,8 @@ public class SquarefreeAlgModTest extends TestCase {
 
         c = sqf.baseSquarefreePart(c);
         d = sqf.baseSquarefreePart(d);
-        System.out.println("c  = " + c);
-        System.out.println("d  = " + d);
+        //System.out.println("c  = " + c);
+        //System.out.println("d  = " + d);
         assertTrue("isSquarefree(c) " + c, sqf.isSquarefree(c));
         assertTrue("isSquarefree(d) " + d, sqf.isSquarefree(d));
 
@@ -259,7 +259,7 @@ public class SquarefreeAlgModTest extends TestCase {
 
         SortedMap<GenPolynomial<AlgebraicNumber<ModInteger>>, Long> sfactors;
         sfactors = sqf.baseSquarefreeFactors(d);
-        System.out.println("sfactors = " + sfactors);
+        //System.out.println("sfactors = " + sfactors);
         assertTrue("isFactorization(d,sfactors) ", sqf.isFactorization(d, sfactors));
     }
 
@@ -293,8 +293,8 @@ public class SquarefreeAlgModTest extends TestCase {
 
         cr = sqf.recursiveUnivariateSquarefreePart(cr);
         dr = sqf.recursiveUnivariateSquarefreePart(dr);
-        System.out.println("cr  = " + cr);
-        System.out.println("dr  = " + dr);
+        //System.out.println("cr  = " + cr);
+        //System.out.println("dr  = " + dr);
         assertTrue("isSquarefree(cr) " + cr, sqf.isRecursiveSquarefree(cr));
         assertTrue("isSquarefree(dr) " + dr, sqf.isRecursiveSquarefree(dr));
 
@@ -330,7 +330,7 @@ public class SquarefreeAlgModTest extends TestCase {
 
         SortedMap<GenPolynomial<GenPolynomial<AlgebraicNumber<ModInteger>>>, Long> sfactors;
         sfactors = sqf.recursiveUnivariateSquarefreeFactors(dr);
-        System.out.println("sfactors = " + sfactors);
+        //System.out.println("sfactors = " + sfactors);
 
         assertTrue("isFactorization(d,sfactors) ", sqf.isRecursiveFactorization(dr, sfactors));
     }
@@ -400,7 +400,7 @@ public class SquarefreeAlgModTest extends TestCase {
 
         SortedMap<GenPolynomial<AlgebraicNumber<ModInteger>>, Long> sfactors;
         sfactors = sqf.squarefreeFactors(d);
-        System.out.println("sfactors = " + sfactors);
+        //System.out.println("sfactors = " + sfactors);
         assertTrue("isFactorization(d,sfactors) ", sqf.isFactorization(d, sfactors));
     }
 
@@ -428,12 +428,12 @@ public class SquarefreeAlgModTest extends TestCase {
             // skip for this turn
             return;
         }
-        System.out.println("a  = " + a);
-        System.out.println("b  = " + b);
-        System.out.println("c  = " + c);
+        //System.out.println("a  = " + a);
+        //System.out.println("b  = " + b);
+        //System.out.println("c  = " + c);
 
         e = Power.<GenPolynomial<AlgebraicNumber<ModInteger>>> positivePower(b, p);
-        System.out.println("b^p  = " + e);
+        //System.out.println("b^p  = " + e);
         // a a b^p c
         d = a.multiply(a).multiply(e).multiply(c);
         c = a.multiply(b).multiply(c);
@@ -442,8 +442,8 @@ public class SquarefreeAlgModTest extends TestCase {
 
         c = sqf.baseSquarefreePart(c);
         d = sqf.baseSquarefreePart(d);
-        System.out.println("c  = " + c);
-        System.out.println("d  = " + d);
+        //System.out.println("c  = " + c);
+        //System.out.println("d  = " + d);
         assertTrue("isSquarefree(c) " + c, sqf.isSquarefree(c));
         assertTrue("isSquarefree(d) " + d, sqf.isSquarefree(d));
 
@@ -472,12 +472,12 @@ public class SquarefreeAlgModTest extends TestCase {
             // skip for this turn
             return;
         }
-        System.out.println("a  = " + a);
-        System.out.println("b  = " + b);
-        System.out.println("c  = " + c);
+        //System.out.println("a  = " + a);
+        //System.out.println("b  = " + b);
+        //System.out.println("c  = " + c);
 
         e = Power.<GenPolynomial<AlgebraicNumber<ModInteger>>> positivePower(b, p);
-        System.out.println("b^p  = " + e);
+        //System.out.println("b^p  = " + e);
         // a a b^p 
         d = a.multiply(a).multiply(e);
         //d = d.monic();
@@ -485,7 +485,7 @@ public class SquarefreeAlgModTest extends TestCase {
 
         SortedMap<GenPolynomial<AlgebraicNumber<ModInteger>>, Long> sfactors;
         sfactors = sqf.baseSquarefreeFactors(d);
-        System.out.println("sfactors = " + sfactors);
+        //System.out.println("sfactors = " + sfactors);
         assertTrue("isFactorization(d,sfactors) ", sqf.isFactorization(d, sfactors));
     }
 
@@ -510,12 +510,12 @@ public class SquarefreeAlgModTest extends TestCase {
             // skip for this turn
             return;
         }
-        System.out.println("a  = " + a);
-        System.out.println("b  = " + b);
-        System.out.println("c  = " + c);
+        //System.out.println("a  = " + a);
+        //System.out.println("b  = " + b);
+        //System.out.println("c  = " + c);
 
         e = Power.<GenPolynomial<AlgebraicNumber<ModInteger>>> positivePower(b, qp);
-        System.out.println("b^qp  = " + e);
+        //System.out.println("b^qp  = " + e);
         // a a b^qp c
         d = a.multiply(a).multiply(e).multiply(c);
         c = a.multiply(b).multiply(c);
@@ -524,8 +524,8 @@ public class SquarefreeAlgModTest extends TestCase {
 
         c = sqf.baseSquarefreePart(c);
         d = sqf.baseSquarefreePart(d);
-        System.out.println("c  = " + c);
-        System.out.println("d  = " + d);
+        //System.out.println("c  = " + c);
+        //System.out.println("d  = " + d);
         assertTrue("isSquarefree(c) " + c, sqf.isSquarefree(c));
         assertTrue("isSquarefree(d) " + d, sqf.isSquarefree(d));
 
@@ -554,12 +554,12 @@ public class SquarefreeAlgModTest extends TestCase {
             // skip for this turn
             return;
         }
-        System.out.println("a  = " + a);
-        System.out.println("b  = " + b);
-        System.out.println("c  = " + c);
+        //System.out.println("a  = " + a);
+        //System.out.println("b  = " + b);
+        //System.out.println("c  = " + c);
 
         e = Power.<GenPolynomial<AlgebraicNumber<ModInteger>>> positivePower(b, qp);
-        System.out.println("b^qp  = " + e);
+        //System.out.println("b^qp  = " + e);
         // a a b^qp 
         d = a.multiply(a).multiply(e);
         //d = d.monic();
@@ -567,7 +567,7 @@ public class SquarefreeAlgModTest extends TestCase {
 
         SortedMap<GenPolynomial<AlgebraicNumber<ModInteger>>, Long> sfactors;
         sfactors = sqf.baseSquarefreeFactors(d);
-        System.out.println("sfactors = " + sfactors);
+        //System.out.println("sfactors = " + sfactors);
         assertTrue("isFactorization(d,sfactors) ", sqf.isFactorization(d, sfactors));
     }
 
@@ -596,22 +596,22 @@ public class SquarefreeAlgModTest extends TestCase {
         //ar = PolyUtil.<AlgebraicNumber<ModInteger>>monic(ar);
         //br = PolyUtil.<AlgebraicNumber<ModInteger>>monic(br);
         //cr = PolyUtil.<AlgebraicNumber<ModInteger>>monic(cr);
-        System.out.println("ar = " + ar);
-        System.out.println("br = " + br);
-        System.out.println("cr = " + cr);
+        //System.out.println("ar = " + ar);
+        //System.out.println("br = " + br);
+        //System.out.println("cr = " + cr);
 
         er = Power.<GenPolynomial<GenPolynomial<AlgebraicNumber<ModInteger>>>> positivePower(br, p);
-        System.out.println("b^p  = " + er);
+        //System.out.println("b^p  = " + er);
         // a a b^p c
         dr = ar.multiply(ar).multiply(er).multiply(cr);
         cr = ar.multiply(br).multiply(cr);
-        System.out.println("cr  = " + cr);
-        System.out.println("dr  = " + dr);
+        //System.out.println("cr  = " + cr);
+        //System.out.println("dr  = " + dr);
 
         cr = sqf.recursiveUnivariateSquarefreePart(cr);
         dr = sqf.recursiveUnivariateSquarefreePart(dr);
-        System.out.println("cr  = " + cr);
-        System.out.println("dr  = " + dr);
+        //System.out.println("cr  = " + cr);
+        //System.out.println("dr  = " + dr);
         assertTrue("isSquarefree(cr) " + cr, sqf.isRecursiveSquarefree(cr));
         assertTrue("isSquarefree(dr) " + dr, sqf.isRecursiveSquarefree(dr));
 
@@ -644,19 +644,19 @@ public class SquarefreeAlgModTest extends TestCase {
         //ar = PolyUtil.<AlgebraicNumber<ModInteger>>monic(ar);
         //br = PolyUtil.<AlgebraicNumber<ModInteger>>monic(br);
         //cr = PolyUtil.<AlgebraicNumber<ModInteger>>monic(cr);
-        System.out.println("ar = " + ar);
-        System.out.println("br = " + br);
-        System.out.println("cr = " + cr);
+        //System.out.println("ar = " + ar);
+        //System.out.println("br = " + br);
+        //System.out.println("cr = " + cr);
 
         er = Power.<GenPolynomial<GenPolynomial<AlgebraicNumber<ModInteger>>>> positivePower(br, p);
-        System.out.println("b^p  = " + er);
+        //System.out.println("b^p  = " + er);
         // a a b^p c
         dr = ar.multiply(ar).multiply(er).multiply(cr);
         //System.out.println("dr  = " + dr);
 
         SortedMap<GenPolynomial<GenPolynomial<AlgebraicNumber<ModInteger>>>, Long> sfactors;
         sfactors = sqf.recursiveUnivariateSquarefreeFactors(dr);
-        System.out.println("sfactors = " + sfactors);
+        //System.out.println("sfactors = " + sfactors);
 
         assertTrue("isFactorization(d,sfactors) ", sqf.isRecursiveFactorization(dr, sfactors));
     }
@@ -685,12 +685,12 @@ public class SquarefreeAlgModTest extends TestCase {
         //a = a.monic();
         //b = b.monic();
         //c = c.monic();
-        System.out.println("a  = " + a);
-        System.out.println("b  = " + b);
-        System.out.println("c  = " + c);
+        //System.out.println("a  = " + a);
+        //System.out.println("b  = " + b);
+        //System.out.println("c  = " + c);
 
         e = Power.<GenPolynomial<AlgebraicNumber<ModInteger>>> positivePower(b, p);
-        System.out.println("b^p  = " + e);
+        //System.out.println("b^p  = " + e);
         // a a b^p c
         d = a.multiply(a).multiply(e).multiply(c);
         c = a.multiply(b).multiply(c);
@@ -699,8 +699,8 @@ public class SquarefreeAlgModTest extends TestCase {
 
         c = sqf.squarefreePart(c);
         d = sqf.squarefreePart(d);
-        System.out.println("c  = " + c);
-        System.out.println("d  = " + d);
+        //System.out.println("c  = " + c);
+        //System.out.println("d  = " + d);
         assertTrue("isSquarefree(d) " + d, sqf.isSquarefree(d));
         assertTrue("isSquarefree(c) " + c, sqf.isSquarefree(c));
 
@@ -732,19 +732,19 @@ public class SquarefreeAlgModTest extends TestCase {
         //a = a.monic();
         //b = b.monic();
         //c = c.monic();
-        System.out.println("a  = " + a);
-        System.out.println("b  = " + b);
-        System.out.println("c  = " + c);
+        //System.out.println("a  = " + a);
+        //System.out.println("b  = " + b);
+        //System.out.println("c  = " + c);
 
         e = Power.<GenPolynomial<AlgebraicNumber<ModInteger>>> positivePower(b, p);
-        System.out.println("b^p  = " + e);
+        //System.out.println("b^p  = " + e);
         // a a b^p c
         d = a.multiply(a).multiply(e).multiply(c);
         //System.out.println("d  = " + d);
 
         SortedMap<GenPolynomial<AlgebraicNumber<ModInteger>>, Long> sfactors;
         sfactors = sqf.squarefreeFactors(d);
-        System.out.println("sfactors = " + sfactors);
+        //System.out.println("sfactors = " + sfactors);
 
         assertTrue("isFactorization(d,sfactors) ", sqf.isFactorization(d, sfactors));
     }

@@ -165,7 +165,7 @@ public class SquarefreeIntTest extends TestCase {
      * 
      */
     public void testBaseSquarefree() {
-        System.out.println("\nbase:");
+        //System.out.println("\nbase:");
 
         dfac = new GenPolynomialRing<BigInteger>(fac, 1, to, rvars);
 
@@ -237,7 +237,7 @@ public class SquarefreeIntTest extends TestCase {
      * 
      */
     public void testRecursiveSquarefree() {
-        System.out.println("\nrecursive:");
+        //System.out.println("\nrecursive:");
 
         cfac = new GenPolynomialRing<BigInteger>(fac, 2 - 1, to, c1vars);
         rfac = new GenPolynomialRing<GenPolynomial<BigInteger>>(cfac, 1, to, rvars);
@@ -309,7 +309,7 @@ public class SquarefreeIntTest extends TestCase {
      * 
      */
     public void testSquarefree() {
-        System.out.println("\nfull:");
+        //System.out.println("\nfull:");
 
         dfac = new GenPolynomialRing<BigInteger>(fac, rl, to, vars);
 
