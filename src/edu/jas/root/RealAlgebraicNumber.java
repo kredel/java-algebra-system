@@ -6,30 +6,23 @@ package edu.jas.root;
 
 
 //import edu.jas.structure.RingElem;
-import edu.jas.kern.PrettyPrint;
-
-import edu.jas.structure.GcdRingElem;
-import edu.jas.structure.RingFactory;
-import edu.jas.structure.NotInvertibleException;
-
 import edu.jas.arith.BigRational;
-import edu.jas.arith.BigDecimal;
-
-import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.PolyUtil;
+import edu.jas.kern.PrettyPrint;
 import edu.jas.poly.AlgebraicNumber;
-import edu.jas.poly.AlgebraicNumberRing;
+import edu.jas.poly.GenPolynomial;
+import edu.jas.structure.GcdRingElem;
+import edu.jas.structure.NotInvertibleException;
 
 
 /**
- * Real algebraic number class based on AlgebraicNumber.
- * Objects of this class are immutable.
+ * Real algebraic number class based on AlgebraicNumber. Objects of this class
+ * are immutable.
  * @author Heinz Kredel
  */
 
-public class RealAlgebraicNumber<C extends GcdRingElem<C>> 
-             /*extends AlgebraicNumber<C>*/
-             implements GcdRingElem<RealAlgebraicNumber<C>> {
+public class RealAlgebraicNumber<C extends GcdRingElem<C>>
+/*extends AlgebraicNumber<C>*/
+implements GcdRingElem<RealAlgebraicNumber<C>> {
 
 
     /**
@@ -45,20 +38,20 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C>>
 
 
     /**
-     * The constructor creates a RealAlgebraicNumber object from RealAlgebraicRing
-     * modul and a GenPolynomial value.
+     * The constructor creates a RealAlgebraicNumber object from
+     * RealAlgebraicRing modul and a GenPolynomial value.
      * @param r ring RealAlgebraicRing<C>.
      * @param a value GenPolynomial<C>.
      */
     public RealAlgebraicNumber(RealAlgebraicRing<C> r, GenPolynomial<C> a) {
-        number = new AlgebraicNumber<C>(r.algebraic,a);
+        number = new AlgebraicNumber<C>(r.algebraic, a);
         ring = r;
     }
 
 
     /**
-     * The constructor creates a RealAlgebraicNumber object from RealAlgebraicRing
-     * modul and a AlgebraicNumber value.
+     * The constructor creates a RealAlgebraicNumber object from
+     * RealAlgebraicRing modul and a AlgebraicNumber value.
      * @param r ring RealAlgebraicRing<C>.
      * @param a value AlgebraicNumber<C>.
      */
@@ -142,7 +135,8 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C>>
     }
 
 
-    /** Get a scripting compatible string representation.
+    /**
+     * Get a scripting compatible string representation.
      * @return script compatible representation for this Element.
      * @see edu.jas.structure.Element#toScript()
      */
@@ -153,7 +147,8 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C>>
     }
 
 
-    /** Get a scripting compatible string representation of the factory.
+    /**
+     * Get a scripting compatible string representation of the factory.
      * @return script compatible representation for this ElemFactory.
      * @see edu.jas.structure.Element#toScriptFactory()
      */
@@ -171,11 +166,11 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C>>
      */
     public int compareTo(RealAlgebraicNumber<C> b) {
         int s = 0;
-        if ( number.ring != b.number.ring ) { // avoid compareTo if possible
-           s = number.ring.modul.compareTo( b.number.ring.modul );
-           System.out.println("s_mod = " + s);
+        if (number.ring != b.number.ring) { // avoid compareTo if possible
+            s = number.ring.modul.compareTo(b.number.ring.modul);
+            System.out.println("s_mod = " + s);
         }
-        if ( s != 0 ) {
+        if (s != 0) {
             return s;
         }
         s = this.subtract(b).signum();
@@ -214,7 +209,7 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C>>
         if (a == null) {
             return false;
         }
-        if ( !ring.equals( a.ring ) ) {
+        if (!ring.equals(a.ring)) {
             return false;
         }
         return number.equals(a.number);
@@ -237,7 +232,7 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C>>
      * @see edu.jas.structure.RingElem#abs()
      */
     public RealAlgebraicNumber<C> abs() {
-        if ( this.signum() < 0 ) {
+        if (this.signum() < 0) {
             return new RealAlgebraicNumber<C>(ring, number.negate());
         } else {
             return this;
@@ -286,15 +281,14 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C>>
 
 
     /**
-     * RealAlgebraicNumber signum.
-     * <b>Note: </b> Modifies ring.root eventually.
+     * RealAlgebraicNumber signum. <b>Note: </b> Modifies ring.root eventually.
      * @see edu.jas.structure.RingElem#signum()
      * @return real signum(this).
      */
     public int signum() {
-        Interval<C> v = ring.engine.invariantSignInterval(ring.root,ring.algebraic.modul,number.val);
+        Interval<C> v = ring.engine.invariantSignInterval(ring.root, ring.algebraic.modul, number.val);
         ring.setRoot(v);
-        return ring.engine.realIntervalSign(v,ring.algebraic.modul,number.val);
+        return ring.engine.realIntervalSign(v, ring.algebraic.modul, number.val);
     }
 
 
@@ -303,13 +297,14 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C>>
      * @return |this|.
      */
     public BigRational magnitude() {
-        Interval<C> v = ring.engine.invariantMagnitudeInterval(ring.root,ring.algebraic.modul,number.val,ring.eps);
+        Interval<C> v = ring.engine.invariantMagnitudeInterval(ring.root, ring.algebraic.modul, number.val,
+                ring.eps);
         ring.setRoot(v);
         //System.out.println("new v = " + v);
-        C ev = ring.engine.realIntervalMagnitude(v,ring.algebraic.modul,number.val,ring.eps);
-        if ( (Object) ev instanceof BigRational ) {
-           BigRational er = (BigRational) (Object) ev;
-           return er;
+        C ev = ring.engine.realIntervalMagnitude(v, ring.algebraic.modul, number.val, ring.eps);
+        if ((Object) ev instanceof BigRational) {
+            BigRational er = (BigRational) (Object) ev;
+            return er;
         } else {
             throw new RuntimeException("BigRational expected, but was " + ev.getClass());
         }
