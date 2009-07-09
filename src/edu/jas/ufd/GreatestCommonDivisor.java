@@ -1,39 +1,42 @@
-
 /*
  * $Id$
  */
 
 package edu.jas.ufd;
 
+
 import java.io.Serializable;
 
-import edu.jas.structure.GcdRingElem;
 import edu.jas.poly.GenPolynomial;
+import edu.jas.structure.GcdRingElem;
 
 
 /**
  * Greatest common divisor algorithm interface.
  * @author Heinz Kredel
  * @usage To create classes that implement this interface use the
- * GreatestCommonDivisorFactory. It will select an appropriate 
- * implementation based on the types of polynomial coefficients CT.
+ *        GreatestCommonDivisorFactory. It will select an appropriate
+ *        implementation based on the types of polynomial coefficients CT.
+ * 
  * <pre>
- * GreatestCommonDivisor&lt;CT&gt; engine 
- *   = GCDFactory.&lt;CT&gt;getImplementation( cofac );
- * c = engine.gcd(a,b);
+ * GreatestCommonDivisor&lt;CT&gt; engine = GCDFactory.&lt;CT&gt; getImplementation(cofac);
+ * c = engine.gcd(a, b);
  * </pre>
- * For example, if the coefficient type is BigInteger, the usage looks like
+ * 
+ * For example, if the coefficient type is BigInteger, the usage looks
+ *        like
+ * 
  * <pre>
  * BigInteger cofac = new BigInteger();
- * GreatestCommonDivisor&lt;BigInteger&gt; engine 
- *   = GCDFactory.&lt;BigInteger&gt;getImplementation( cofac );
- * c = engine.gcd(a,b);
+ * GreatestCommonDivisor&lt;BigInteger&gt; engine = GCDFactory.&lt;BigInteger&gt; getImplementation(cofac);
+ * c = engine.gcd(a, b);
  * </pre>
- * @see edu.jas.ufd.GCDFactory#getImplementation( edu.jas.structure.RingFactory f)
+ * 
+ * @see edu.jas.ufd.GCDFactory#getImplementation( edu.jas.structure.RingFactory
+ *      f)
  */
 
-public interface GreatestCommonDivisor<C extends GcdRingElem<C> > 
-                 extends Serializable {
+public interface GreatestCommonDivisor<C extends GcdRingElem<C>> extends Serializable {
 
 
     /**
@@ -41,7 +44,7 @@ public interface GreatestCommonDivisor<C extends GcdRingElem<C> >
      * @param P GenPolynomial.
      * @return cont(P).
      */
-    public GenPolynomial<C> content( GenPolynomial<C> P );
+    public GenPolynomial<C> content(GenPolynomial<C> P);
 
 
     /**
@@ -49,7 +52,7 @@ public interface GreatestCommonDivisor<C extends GcdRingElem<C> >
      * @param P GenPolynomial.
      * @return pp(P).
      */
-    public GenPolynomial<C> primitivePart( GenPolynomial<C> P );
+    public GenPolynomial<C> primitivePart(GenPolynomial<C> P);
 
 
     /**
@@ -58,7 +61,7 @@ public interface GreatestCommonDivisor<C extends GcdRingElem<C> >
      * @param S GenPolynomial.
      * @return gcd(P,S).
      */
-    public GenPolynomial<C> gcd( GenPolynomial<C> P,GenPolynomial<C> S );
+    public GenPolynomial<C> gcd(GenPolynomial<C> P, GenPolynomial<C> S);
 
 
     /**
@@ -67,7 +70,7 @@ public interface GreatestCommonDivisor<C extends GcdRingElem<C> >
      * @param S GenPolynomial.
      * @return lcm(P,S).
      */
-    public GenPolynomial<C> lcm( GenPolynomial<C> P,GenPolynomial<C> S );
+    public GenPolynomial<C> lcm(GenPolynomial<C> P, GenPolynomial<C> S);
 
 
     /**
@@ -76,6 +79,6 @@ public interface GreatestCommonDivisor<C extends GcdRingElem<C> >
      * @param S GenPolynomial.
      * @return res(P,S).
      */
-    public GenPolynomial<C> resultant( GenPolynomial<C> P, GenPolynomial<C> S );
+    public GenPolynomial<C> resultant(GenPolynomial<C> P, GenPolynomial<C> S);
 
 }
