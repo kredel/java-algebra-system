@@ -5,16 +5,14 @@
 package edu.jas.ps;
 
 
-import edu.jas.structure.RingElem;
-import edu.jas.structure.RingFactory;
 import edu.jas.structure.BinaryFunctor;
-import edu.jas.structure.UnaryFunctor;
+import edu.jas.structure.RingElem;
 import edu.jas.structure.Selector;
+import edu.jas.structure.UnaryFunctor;
 
 
 /**
- * Power series interface.
- * Adds methods specific to power series.
+ * Power series interface. Adds methods specific to power series.
  * @param <C> ring element type
  * @author Heinz Kredel
  */
@@ -67,22 +65,18 @@ public interface PowerSeries<C extends RingElem<C>> {
 
     /**
      * Map a unary function to this power series.
-     * @return new power series.
-     * <D extends RingElem<D>> 
+     * @return new power series. <D extends RingElem<D>>
      */
-    public PowerSeries<C> map(UnaryFunctor<? super C,C> f);
+    public PowerSeries<C> map(UnaryFunctor<? super C, C> f);
 
 
     /**
      * Map a binary function to elements of this and another power series.
-     * @return new power series.
-     * , D extends RingElem<D>
+     * @return new power series. , D extends RingElem<D>
      */
-    public <C2 extends RingElem<C2>> 
-     PowerSeries<C> zip(
-         BinaryFunctor<? super C,? super C2,C> f,
-         PowerSeries<C2> ps
-         );
+    public <C2 extends RingElem<C2>> PowerSeries<C> zip(BinaryFunctor<? super C, ? super C2, C> f,
+            PowerSeries<C2> ps);
+
 
     /**
      * Differentiate.
@@ -95,6 +89,6 @@ public interface PowerSeries<C extends RingElem<C>> {
      * Integrate with given constant.
      * @return integrate(this).
      */
-    public PowerSeries<C> integrate( final C c );
+    public PowerSeries<C> integrate(final C c);
 
 }

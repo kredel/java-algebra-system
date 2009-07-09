@@ -6,40 +6,31 @@ package edu.jas.ps;
 
 
 import java.io.Reader;
-
-import java.util.Random;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.ArrayList;
-
-
-import edu.jas.structure.RingElem;
-import edu.jas.structure.RingFactory;
-import edu.jas.structure.BinaryFunctor;
-import edu.jas.structure.UnaryFunctor;
-import edu.jas.structure.Selector;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Random;
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.Monomial;
+import edu.jas.structure.RingElem;
+import edu.jas.structure.RingFactory;
 
 
 /**
- * Univariate power series ring implementation.
- * Uses lazy evaluated generating function for coefficients.
+ * Univariate power series ring implementation. Uses lazy evaluated generating
+ * function for coefficients.
  * @param <C> ring element type
  * @author Heinz Kredel
  */
 
-public class UnivPowerSeriesRing<C extends RingElem<C>> 
-             implements RingFactory< UnivPowerSeries<C> > {
+public class UnivPowerSeriesRing<C extends RingElem<C>> implements RingFactory<UnivPowerSeries<C>> {
 
 
     /**
      * A default random sequence generator.
      */
-    protected final static Random random = new Random(); 
+    protected final static Random random = new Random();
 
 
     /**
@@ -52,7 +43,6 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
      * Truncate.
      */
     int truncate;
-
 
 
     /**
@@ -101,7 +91,7 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
      * @param coFac coefficient ring factory.
      */
     public UnivPowerSeriesRing(RingFactory<C> coFac) {
-        this( coFac, DEFAULT_TRUNCATE, DEFAULT_NAME );
+        this(coFac, DEFAULT_TRUNCATE, DEFAULT_NAME);
     }
 
 
@@ -111,7 +101,7 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
      * @param truncate index of truncation.
      */
     public UnivPowerSeriesRing(RingFactory<C> coFac, int truncate) {
-        this( coFac, truncate, DEFAULT_NAME );
+        this(coFac, truncate, DEFAULT_NAME);
     }
 
 
@@ -121,7 +111,7 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
      * @param name of the variable.
      */
     public UnivPowerSeriesRing(RingFactory<C> coFac, String name) {
-        this( coFac, DEFAULT_TRUNCATE, name );
+        this(coFac, DEFAULT_TRUNCATE, name);
     }
 
 
@@ -135,24 +125,26 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
         this.coFac = cofac;
         this.truncate = truncate;
         this.var = name;
-        this.ONE = new UnivPowerSeries<C>(this,
-                   new Coefficients<C>() {
-                       public C generate(int i) {
-                           if ( i == 0 ) { 
-                               return coFac.getONE();
-                           } else {
-                               return coFac.getZERO();
-                           }
-                       }
-                    }
-                                              );
-        this.ZERO = new UnivPowerSeries<C>(this,
-                    new Coefficients<C>() {
-                        public C generate(int i) {
-                            return coFac.getZERO();
-                        }
-                    }
-                                                    );
+        this.ONE = new UnivPowerSeries<C>(this, new Coefficients<C>() {
+
+
+            @Override
+            public C generate(int i) {
+                if (i == 0) {
+                    return coFac.getONE();
+                } else {
+                    return coFac.getZERO();
+                }
+            }
+        });
+        this.ZERO = new UnivPowerSeries<C>(this, new Coefficients<C>() {
+
+
+            @Override
+            public C generate(int i) {
+                return coFac.getZERO();
+            }
+        });
     }
 
 
@@ -174,6 +166,7 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
      * To String.
      * @return string representation of this.
      */
+    @Override
     public String toString() {
         StringBuffer sb = new StringBuffer();
         String scf = coFac.getClass().getSimpleName();
@@ -182,7 +175,8 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
     }
 
 
-    /** Get a scripting compatible string representation.
+    /**
+     * Get a scripting compatible string representation.
      * @return script compatible representation for this ElemFactory.
      * @see edu.jas.structure.ElemFactory#toScript()
      */
@@ -192,7 +186,7 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
         StringBuffer s = new StringBuffer("PS(");
         String f = null;
         try {
-            f = ((RingElem<C>)coFac).toScriptFactory(); // sic
+            f = ((RingElem<C>) coFac).toScriptFactory(); // sic
         } catch (Exception e) {
             f = coFac.toScript();
         }
@@ -201,40 +195,43 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
     }
 
 
-    /** Comparison with any other object.
+    /**
+     * Comparison with any other object.
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
     @SuppressWarnings("unchecked")
-    public boolean equals( Object B ) { 
-        if ( ! ( B instanceof UnivPowerSeriesRing ) ) {
-           return false;
+    public boolean equals(Object B) {
+        if (!(B instanceof UnivPowerSeriesRing)) {
+            return false;
         }
         UnivPowerSeriesRing<C> a = null;
         try {
             a = (UnivPowerSeriesRing<C>) B;
         } catch (ClassCastException ignored) {
         }
-        if ( var.equals( a.var ) ) {
+        if (var.equals(a.var)) {
             return true;
         }
         return false;
     }
 
 
-    /** Hash code for this .
+    /**
+     * Hash code for this .
      * @see java.lang.Object#hashCode()
      */
     @Override
-    public int hashCode() { 
+    public int hashCode() {
         int h = 0;
-        h = ( var.hashCode() << 27 );
+        h = (var.hashCode() << 27);
         h += truncate;
         return h;
     }
 
 
-    /** Get the zero element.
+    /**
+     * Get the zero element.
      * @return 0 as UnivPowerSeries<C>.
      */
     public UnivPowerSeries<C> getZERO() {
@@ -242,7 +239,8 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
     }
 
 
-    /** Get the one element.
+    /**
+     * Get the one element.
      * @return 1 as UnivPowerSeries<C>.
      */
     public UnivPowerSeries<C> getONE() {
@@ -250,96 +248,102 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
     }
 
 
-    /**  Get a list of the generating elements.
+    /**
+     * Get a list of the generating elements.
      * @return list of generators for the algebraic structure.
      * @see edu.jas.structure.ElemFactory#generators()
      */
     public List<UnivPowerSeries<C>> generators() {
         List<C> rgens = coFac.generators();
-        List<UnivPowerSeries<C>> gens = new ArrayList<UnivPowerSeries<C>>( rgens.size() );
-        for ( final C cg : rgens ) {
-            UnivPowerSeries<C> g = new UnivPowerSeries<C>(this,
-                   new Coefficients<C>() {
-                       public C generate(int i) {
-                           if ( i == 0 ) { 
-                               return cg;
-                           } else {
-                               return coFac.getZERO();
-                           }
-                       }
+        List<UnivPowerSeries<C>> gens = new ArrayList<UnivPowerSeries<C>>(rgens.size());
+        for (final C cg : rgens) {
+            UnivPowerSeries<C> g = new UnivPowerSeries<C>(this, new Coefficients<C>() {
+
+
+                @Override
+                public C generate(int i) {
+                    if (i == 0) {
+                        return cg;
+                    } else {
+                        return coFac.getZERO();
                     }
-                                              );
+                }
+            });
             gens.add(g);
         }
-        gens.add( ONE.shift(1) ); 
+        gens.add(ONE.shift(1));
         return gens;
     }
 
 
-    /** Get the power series of the exponential function.
+    /**
+     * Get the power series of the exponential function.
      * @return exp(x) as UnivPowerSeries<C>.
      */
     public UnivPowerSeries<C> getEXP() {
-        return fixPoint(
-               new PowerSeriesMap<C>() {
-                   public UnivPowerSeries<C> map(UnivPowerSeries<C> e) {
-                      return e.integrate( coFac.getONE() );
-                   }
-               }
-                       );
+        return fixPoint(new PowerSeriesMap<C>() {
+
+
+            public UnivPowerSeries<C> map(UnivPowerSeries<C> e) {
+                return e.integrate(coFac.getONE());
+            }
+        });
     }
 
 
-    /** Get the power series of the sinus function.
+    /**
+     * Get the power series of the sinus function.
      * @return sin(x) as UnivPowerSeries<C>.
      */
     public UnivPowerSeries<C> getSIN() {
-        return fixPoint(
-               new PowerSeriesMap<C>() {
-                   public UnivPowerSeries<C> map(UnivPowerSeries<C> s) {
-                      return s.negate().integrate( coFac.getONE() ).integrate( coFac.getZERO() );
-                   }
-               }
-                       );
+        return fixPoint(new PowerSeriesMap<C>() {
+
+
+            public UnivPowerSeries<C> map(UnivPowerSeries<C> s) {
+                return s.negate().integrate(coFac.getONE()).integrate(coFac.getZERO());
+            }
+        });
     }
 
 
-    /** Get the power series of the cosinus function.
+    /**
+     * Get the power series of the cosinus function.
      * @return cos(x) as UnivPowerSeries<C>.
      */
     public UnivPowerSeries<C> getCOS() {
-        return fixPoint(
-               new PowerSeriesMap<C>() {
-                   public UnivPowerSeries<C> map(UnivPowerSeries<C> c) {
-                      return c.negate().integrate( coFac.getZERO() ).integrate( coFac.getONE() );
-                   }
-               }
-                       );
+        return fixPoint(new PowerSeriesMap<C>() {
+
+
+            public UnivPowerSeries<C> map(UnivPowerSeries<C> c) {
+                return c.negate().integrate(coFac.getZERO()).integrate(coFac.getONE());
+            }
+        });
     }
 
 
-    /** Get the power series of the tangens function.
+    /**
+     * Get the power series of the tangens function.
      * @return tan(x) as UnivPowerSeries<C>.
      */
     public UnivPowerSeries<C> getTAN() {
-        return fixPoint(
-               new PowerSeriesMap<C>() {
-                   public UnivPowerSeries<C> map(UnivPowerSeries<C> t) {
-                      return t.multiply(t).sum( getONE() ).integrate( coFac.getZERO() );
-                   }
-               }
-                       );
+        return fixPoint(new PowerSeriesMap<C>() {
+
+
+            public UnivPowerSeries<C> map(UnivPowerSeries<C> t) {
+                return t.multiply(t).sum(getONE()).integrate(coFac.getZERO());
+            }
+        });
     }
 
 
-    /** Solve an ordinary differential equation.
-     * y' = f(y) with y(0) = c.
+    /**
+     * Solve an ordinary differential equation. y' = f(y) with y(0) = c.
      * @param f a UnivPowerSeries<C>.
      * @param c integration constant.
      * @return f.integrate(c).
      */
     public UnivPowerSeries<C> solveODE(final UnivPowerSeries<C> f, final C c) {
-        return f.integrate( c );
+        return f.integrate(c);
     }
 
 
@@ -379,103 +383,103 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
     }
 
 
-    /** Get a (constant) UnivPowerSeries<C> from a long value.
+    /**
+     * Get a (constant) UnivPowerSeries<C> from a long value.
      * @param a long.
      * @return a UnivPowerSeries<C>.
      */
     public UnivPowerSeries<C> fromInteger(long a) {
-        return ONE.multiply( coFac.fromInteger(a) );
-    }
-
-
-    /** Get a (constant) UnivPowerSeries<C> from a java.math.BigInteger.
-     * @param a BigInteger.
-     * @return a UnivPowerSeries<C>.
-     */
-    public UnivPowerSeries<C> fromInteger(java.math.BigInteger a) {
-        return ONE.multiply( coFac.fromInteger(a) );
-    }
-
-
-    /** Get a UnivPowerSeries<C> from a GenPolynomial<C>.
-     * @param a GenPolynomial<C>.
-     * @return a UnivPowerSeries<C>.
-     */
-    public UnivPowerSeries<C> fromPolynomial(GenPolynomial<C> a) {
-        if ( a == null || a.isZERO() ) {
-           return ZERO;
-        }
-        if ( a.isONE() ) {
-           return ONE;
-        }
-        if ( a.ring.nvar != 1 ) {
-           throw new RuntimeException("only for univariate polynomials");
-        }
-        HashMap<Integer,C> cache = new HashMap<Integer,C>( a.length() );
-        //Iterator<Monomial<C>> it = a.monomialIterator();
-        for ( Monomial<C> m : a ) {
-            //while ( it.hasNext() ) {
-            //Monomial<C> m = it.next();
-            long e = m.exponent().getVal(0);
-            cache.put( (int)e, m.coefficient() );
-        }
-        return new UnivPowerSeries<C>(this,
-                   new Coefficients<C>(cache) {
-                       public C generate(int i) {
-                           // cached coefficients returned by get
-                           return coFac.getZERO();
-                       }
-                   }
-                                           );
+        return ONE.multiply(coFac.fromInteger(a));
     }
 
 
     /**
-     * Generate a random power series with
-     * k = 5, 
-     * d = 0.7.
-     * @return a random power series.
+     * Get a (constant) UnivPowerSeries<C> from a java.math.BigInteger.
+     * @param a BigInteger.
+     * @return a UnivPowerSeries<C>.
      */
-    public UnivPowerSeries<C> random() {
-        return random(5,0.7f,random);
+    public UnivPowerSeries<C> fromInteger(java.math.BigInteger a) {
+        return ONE.multiply(coFac.fromInteger(a));
     }
 
 
-   /**
-     * Generate a random power series with
-     * d = 0.7.
+    /**
+     * Get a UnivPowerSeries<C> from a GenPolynomial<C>.
+     * @param a GenPolynomial<C>.
+     * @return a UnivPowerSeries<C>.
+     */
+    public UnivPowerSeries<C> fromPolynomial(GenPolynomial<C> a) {
+        if (a == null || a.isZERO()) {
+            return ZERO;
+        }
+        if (a.isONE()) {
+            return ONE;
+        }
+        if (a.ring.nvar != 1) {
+            throw new RuntimeException("only for univariate polynomials");
+        }
+        HashMap<Integer, C> cache = new HashMap<Integer, C>(a.length());
+        //Iterator<Monomial<C>> it = a.monomialIterator();
+        for (Monomial<C> m : a) {
+            //while ( it.hasNext() ) {
+            //Monomial<C> m = it.next();
+            long e = m.exponent().getVal(0);
+            cache.put((int) e, m.coefficient());
+        }
+        return new UnivPowerSeries<C>(this, new Coefficients<C>(cache) {
+
+
+            @Override
+            public C generate(int i) {
+                // cached coefficients returned by get
+                return coFac.getZERO();
+            }
+        });
+    }
+
+
+    /**
+     * Generate a random power series with k = 5, d = 0.7.
+     * @return a random power series.
+     */
+    public UnivPowerSeries<C> random() {
+        return random(5, 0.7f, random);
+    }
+
+
+    /**
+     * Generate a random power series with d = 0.7.
      * @param k bitsize of random coefficients.
      * @return a random power series.
      */
     public UnivPowerSeries<C> random(int k) {
-        return random(k,0.7f,random);
+        return random(k, 0.7f, random);
     }
 
 
-   /**
-     * Generate a random power series with
-     * d = 0.7.
+    /**
+     * Generate a random power series with d = 0.7.
      * @param k bitsize of random coefficients.
      * @param rnd is a source for random bits.
      * @return a random power series.
      */
     public UnivPowerSeries<C> random(int k, Random rnd) {
-        return random(k,0.7f,rnd);
+        return random(k, 0.7f, rnd);
     }
 
 
-   /**
+    /**
      * Generate a random power series.
      * @param k bitsize of random coefficients.
      * @param d density of non-zero coefficients.
      * @return a random power series.
      */
     public UnivPowerSeries<C> random(int k, float d) {
-        return random(k,d,random);
+        return random(k, d, random);
     }
 
 
-   /**
+    /**
      * Generate a random power series.
      * @param k bitsize of random coefficients.
      * @param d density of non-zero coefficients.
@@ -483,22 +487,23 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
      * @return a random power series.
      */
     public UnivPowerSeries<C> random(final int k, final float d, final Random rnd) {
-        return new UnivPowerSeries<C>(this,
-                   new Coefficients<C>() {
-                       public C generate(int i) {
-                           // cached coefficients returned by get
-                           C c; 
-                           float f = rnd.nextFloat(); 
-                           if ( f < d ) { 
-                               c = coFac.random(k,rnd);
-                           } else {
-                               c = coFac.getZERO();
-                           }
-                           return c;
-                       }
-                   } 
-                                              );
-     }
+        return new UnivPowerSeries<C>(this, new Coefficients<C>() {
+
+
+            @Override
+            public C generate(int i) {
+                // cached coefficients returned by get
+                C c;
+                float f = rnd.nextFloat();
+                if (f < d) {
+                    c = coFac.random(k, rnd);
+                } else {
+                    c = coFac.getZERO();
+                }
+                return c;
+            }
+        });
+    }
 
 
     /**
@@ -507,13 +512,12 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
      * @return a copy of c.
      */
     public UnivPowerSeries<C> copy(UnivPowerSeries<C> c) {
-        return new UnivPowerSeries<C>( this, c.lazyCoeffs );
+        return new UnivPowerSeries<C>(this, c.lazyCoeffs);
     }
 
 
     /**
-     * Parse a power series.
-     * <b>Note:</b> not implemented.
+     * Parse a power series. <b>Note:</b> not implemented.
      * @param s String.
      * @return power series from s.
      */
@@ -523,8 +527,7 @@ public class UnivPowerSeriesRing<C extends RingElem<C>>
 
 
     /**
-     * Parse a power series.
-     * <b>Note:</b> not implemented.
+     * Parse a power series. <b>Note:</b> not implemented.
      * @param r Reader.
      * @return next power series from r.
      */
