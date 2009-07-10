@@ -78,13 +78,17 @@ class Ring:
         try:
             self.sqf = SquarefreeFactory.getImplementation(self.ring.coFac);
             #print "sqf: ", self.sqf;
-        except Exception, e:
-            print "error " + str(e)
+#        except Exception, e:
+#            print "error " + str(e)
+        except:
+            pass
         try:
             self.factor = FactorFactory.getImplementation(self.ring.coFac);
             #print "factor: ", self.factor;
-        except Exception, e:
-            print "error " + str(e)
+        except:
+            pass
+#         except Exception, e:
+#             print "error " + str(e)
 
     def __str__(self):
         '''Create a string representation.
@@ -157,7 +161,11 @@ class Ring:
         else:
             a = self.element( str(a) );
             a = a.elem;
-        e = self.sqf.squarefreeFactors( a );
+        cf = self.ring.coFac;
+        if cf.getClass().getSimpleName() == "GenPolynomialRing":
+            e = self.sqf.recursiveSquarefreeFactors( a );
+        else:
+            e = self.sqf.squarefreeFactors( a );
         L = {};
         for a in e.keySet():
             i = e.get(a);
@@ -865,7 +873,7 @@ class Module:
         L = gm.generators();
         #for g in L:
         #    print "g = ", str(g);
-        N = [ RingElem(e) for e in L ];
+        N = [ RingElem(e.val) for e in L ];
         return N;
 
 
@@ -888,6 +896,8 @@ class SubModule:
                 self.list = pylist2arraylist(list,self.module.ring);
             else:
                 self.list = list;
+        #e = self.list[0];
+        #print "e = ", e;
         self.mset = OrderedModuleList(module.ring,self.list);
         self.cols = self.mset.cols;
         self.rows = self.mset.rows;
@@ -1258,7 +1268,10 @@ def ZM(m,z=0,field=False):
     if z != 0 and ( z == True or z == False ):
         field = z;
         z = 0;
-    mf = ModIntegerRing(m,field);
+    if field:
+        mf = ModIntegerRing(m,field);
+    else:
+        mf = ModIntegerRing(m);
     r = ModInteger(mf,z);
     return RingElem(r);
 
@@ -1414,7 +1427,10 @@ def AN(m,z=0,field=False):
     if m.getClass().getSimpleName() == "AlgebraicNumber":
         mf = AlgebraicNumberRing(m.factory().modul,m.factory().isField());
     else:
-        mf = AlgebraicNumberRing(m,field);
+        if field:
+            mf = AlgebraicNumberRing(m,field);
+        else:
+            mf = AlgebraicNumberRing(m);
     #print "mf = " + mf.toString();
     if z == 0:
         r = AlgebraicNumber(mf);
@@ -2062,12 +2078,16 @@ class PolyRing(Ring):
         self.engine = GCDFactory.getProxy(self.ring.coFac);
         try:
             self.sqf = SquarefreeFactory.getImplementation(self.ring.coFac);
-        except Exception, e:
-            print "error " + str(e)
+        except:
+            pass
+#        except Exception, e:
+#            print "error " + str(e)
         try:
             self.factor = FactorFactory.getImplementation(self.ring.coFac);
-        except Exception, e:
-            print "error " + str(e)
+#        except Exception, e:
+#            print "error " + str(e)
+        except:
+            pass
 
 
     def __str__(self):
