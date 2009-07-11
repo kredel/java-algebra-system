@@ -178,7 +178,9 @@ public final class ModIntegerRing implements RingFactory<ModInteger> {
         if ( isField == 0 ) { 
            return false;
         }
-        if ( modul.isProbablePrime(certainty) ) {
+        //System.out.println("isProbablePrime " + modul + " = " + modul.isProbablePrime(certainty));
+        // if ( modul.isProbablePrime(certainty) ) {
+        if ( modul.isProbablePrime(modul.bitLength()) ) {
            isField = 1;
            return true;
         }
