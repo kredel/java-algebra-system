@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
+//import edu.jas.poly.PolyUtil;
 
 import edu.jas.structure.RingElem;
 
@@ -110,8 +111,9 @@ public class PseudoReductionSeq<C extends RingElem<C>>
                  e =  e.subtract( htl[i] );
                  //logger.info("red div = " + e);
                  C c = (C) lbc[i];
-                 if ( a.remainder(c).isZERO() ) {   //c.isUnit() ) {
+                 if ( c.isUnit() ) { //a.remainder(c).isZERO() ) {   //c.isUnit() ) {
                     a = a.divide( c );
+                    //System.out.println(" a = " + a);
                  } else {
                     S = S.multiply( c );
                     R = R.multiply( c );
@@ -202,7 +204,7 @@ public class PseudoReductionSeq<C extends RingElem<C>>
                  e =  e.subtract( htl[i] );
                  //logger.info("red div = " + e);
                  C c = (C) lbc[i];
-                 if ( a.remainder(c).isZERO() ) {   //c.isUnit() ) {
+                 if ( c.isUnit() ) { //a.remainder(c).isZERO() ) {   //c.isUnit() ) {
                     a = a.divide( c );
                  } else {
                     S = S.multiply( c );
@@ -292,7 +294,7 @@ public class PseudoReductionSeq<C extends RingElem<C>>
                 e =  e.subtract( htl[i] );
                 //logger.info("red div = " + e);
                 C c = (C) lbc[i];
-                if ( a.remainder(c).isZERO() ) { //c.isUnit() ) {
+                if ( c.isUnit() ) { //a.remainder(c).isZERO() ) { //c.isUnit() ) {
                    a = a.divide( c );
                    //System.out.print("|");
                 } else {
