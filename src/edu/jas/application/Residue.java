@@ -284,9 +284,11 @@ public class Residue<C extends GcdRingElem<C> >
      * @return this/S.
      */
     public Residue<C> divide(Residue<C> S) {
-        return multiply( S.inverse() );
-        //GenPolynomial<C> x = PolyUtil.<C>basePseudoDivide( val, S.val );
-        //return new Residue<C>( ring, x );
+        if ( ring.isField() ) {
+            return multiply( S.inverse() );
+        }
+        GenPolynomial<C> x = PolyUtil.<C>basePseudoDivide( val, S.val );
+        return new Residue<C>( ring, x );
     }
 
 
