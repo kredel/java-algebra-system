@@ -24,7 +24,7 @@ print "e     = " + str(e);
 print "a     = " + str(a);
 imag = a**2 + 1;
 print "imag  = " + str(imag);
-Qi = AN(imag);
+Qi = AN(imag,True);
 print "Qi    = " + str(Qi.factory());
 [one,i] = Qi.gens();
 print "one   = " + str(one);
@@ -58,22 +58,22 @@ startLog();
 t = System.currentTimeMillis();
 G = r.factors(f);
 t = System.currentTimeMillis() - t;
-print "G = ", G;
+print "G = ", str(G);
 #print "factor time =", t, "milliseconds";
 
-f2 = one;
-for h, i in G.iteritems():
-    print "h**i = (", h, ")**" + str(i);
-    h = h**i;
-    f2 = f2*h;
+## f2 = one;
+## for h, i in G.iteritems():
+##     print "h**i = (", h, ")**" + str(i);
+##     h = h**i;
+##     f2 = f2*h;
 #print "f2 = ", f2;
 print;
 
-if cmp(f,f2) == 0:
-    print "factor time =", t, "milliseconds,", "isFactors(f,g): true" ;
-else:
-    print "factor time =", t, "milliseconds,", "isFactors(f,g): ",  cmp(f,f2);
-print;
+## if cmp(f,f2) == 0:
+##     print "factor time =", t, "milliseconds,", "isFactors(f,g): true" ;
+## else:
+##     print "factor time =", t, "milliseconds,", "isFactors(f,g): ",  cmp(f,f2);
+## print;
 
 
 
@@ -103,22 +103,22 @@ print;
 t = System.currentTimeMillis();
 G = r2.factors(g);
 t = System.currentTimeMillis() - t;
-print "G = ", G;
+print "G = ", str(G);
 #print "factor time =", t, "milliseconds";
 
-g2 = one;
-for h, i in G.iteritems():
-    print "h**i = (", h, ")**" + str(i);
-    h = h**i;
-    g2 = g2*h;
+## g2 = one;
+## for h, i in G.iteritems():
+##     print "h**i = (", h, ")**" + str(i);
+##     h = h**i;
+##     g2 = g2*h;
 #print "g2 = ", g2;
 print;
 
-if cmp(g,g2) == 0:
-    print "factor time =", t, "milliseconds,", "isFactors(f,g): true" ;
-else:
-    print "factor time =", t, "milliseconds,", "isFactors(f,g): ",  cmp(g,g2);
-print;
+## if cmp(g,g2) == 0:
+##     print "factor time =", t, "milliseconds,", "isFactors(f,g): true" ;
+## else:
+##     print "factor time =", t, "milliseconds,", "isFactors(f,g): ",  cmp(g,g2);
+## print;
 
 
 #sys.exit();

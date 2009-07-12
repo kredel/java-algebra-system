@@ -6,7 +6,7 @@
 from java.lang import System
 from java.lang import Integer
 
-from jas import Ring
+from jas import PolyRing, AN, QQ
 from jas import Ideal
 from jas import terminate
 from jas import startLog
@@ -14,13 +14,39 @@ from jas import startLog
 # polynomial examples: factorization over Q(i)
 
 #r = Ring( "AN[ (i) (i^2 + 1) ] (x) L" );
-r = Ring( "AN[ (a) (4 a^2 + 1) ] (x) L" );
+#r = Ring( "AN[ (a) (4 a^2 + 1) ] (x) L" );
 #r = Ring( "AN[ (a) (a^4 + 2 a^2 - 4 a + 2) ] (x) L" );
 
-print "Ring: " + str(r);
+#print "Ring: " + str(r);
+#print;
+
+Qr = PolyRing(QQ(),"i",PolyRing.lex);
+print "Qr    = " + str(Qr);
+[e,a] = Qr.gens();
+print "e     = " + str(e);
+print "a     = " + str(a);
+imag = a**2 + 1;
+print "imag  = " + str(imag);
+Qi = AN(imag,True);
+print "Qi    = " + str(Qi.factory());
+[one,i] = Qi.gens();
+print "one   = " + str(one);
+print "i     = " + str(i);
+b = i**2 + 1;
+print "b     = " + str(b);
+c = 1 / i;
+print "c     = " + str(c);
+#Qix = AN(i**2 + 1);
+#print "Qix   = " + str(Qix.factory());
 print;
 
-[one,a,x] = r.gens();
+r = PolyRing(Qi,"x",PolyRing.lex)
+print "r    = " + str(r);
+
+[one,i,x] = r.gens();
+print "one   = " + str(one);
+print "i     = " + str(i);
+print "x     = " + str(x);
 
 #f = x**15 - 1;
 #f = x * ( x + 1 )**2 * ( x**2 + x + 1 )**3;
@@ -49,8 +75,8 @@ print;
 
 f = x**6 - 5 * x**4 + 5 * x**2 + 4;
 # ==
-f = ( x**3 + 2 * a * x**2 - 3 * x - 4 * a ) * ( x**3 - 2 * a * x**2 - 3 * x + 4 * a );
-#f = ( x**3 + ( 2 * a ) * x**2 - ( 3 ) * x - ( 4 * a ) ) * ( x**3 - ( 2 * a ) * x**2 - ( 3 ) * x + ( 4 * a ) );
+f = ( x**3 + 2 * i * x**2 - 3 * x - 4 * i ) * ( x**3 - 2 * i * x**2 - 3 * x + 4 * i );
+#f = ( x**3 + ( 2 * i ) * x**2 - ( 3 ) * x - ( 4 * i ) ) * ( x**3 - ( 2 * i ) * x**2 - ( 3 ) * x + ( 4 * i ) );
 
 #f = x**16 + 272 * x**12 - 7072 * x**8 + 3207424 * x**4 + 12960000;
 #f = x**16 + 16 * x**12 + 96 * x**8 + 256 * x**4 + 256;
