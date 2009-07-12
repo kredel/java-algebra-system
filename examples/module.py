@@ -15,6 +15,6 @@ M = r.submodul( list=r.gens() );
 print "M = ", M;
 
 P = M.mset.getPolynomialList();
-print "P = ", P;
+print "P = ", P.toScript();
 
 print "M.isGB(): ", M.isGB();
