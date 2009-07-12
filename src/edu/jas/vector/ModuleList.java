@@ -88,6 +88,17 @@ public class ModuleList<C extends RingElem<C> > implements Serializable {
     }
 
 
+    /**
+     * Constructor.
+     * @param r polynomial ring factory.
+     * @param l list of vectors of polynomials.
+     */
+    public ModuleList( GenVectorModul<GenPolynomial<C>> r,
+                       List< GenVector<GenPolynomial< C >>> l) {
+        this( (GenPolynomialRing<C>)r.coFac, ModuleList.<C>vecToList(l) );
+    }
+
+
     /** Comparison with any other object.
      * @see java.lang.Object#equals(java.lang.Object)
      */
@@ -261,7 +272,7 @@ public class ModuleList<C extends RingElem<C> > implements Serializable {
      * @return list of list of polynomials with same number of colums.
      */
     public static <C extends RingElem<C> >
-                      List< List<GenPolynomial< C >>> 
+        List< List<GenPolynomial< C >>> 
                       padCols(GenPolynomialRing< C > ring,
                               List< List<GenPolynomial< C >>> l) {
         if ( l == null ) {
@@ -361,7 +372,7 @@ public class ModuleList<C extends RingElem<C> > implements Serializable {
 
 
     /**
-     * Get of solvable polynomials list as List of GenPolynomials.
+     * Get a solvable polynomials list as List of GenPolynomials.
      * Required because no List casts allowed. Equivalent to 
      * cast (List&lt;List&lt;GenPolynomial&lt;C&gt;&gt;&gt;) list.
      * @param slist list of solvable polynomial lists.
@@ -381,6 +392,27 @@ public class ModuleList<C extends RingElem<C> > implements Serializable {
             for ( GenSolvablePolynomial<C> s: srow ) {
                 row.add( s );
             }
+            list.add( row );
+        }
+        return list;
+    }
+
+
+    /**
+     * Get a list of vectors as List of list of GenPolynomials.
+     * @param vlist list of vectors of polynomials.
+     * @return list of polynomial lists from vlist.
+     */
+    public static <C extends RingElem<C> >
+           List< List< GenPolynomial<C> > > 
+           vecToList( List< GenVector<GenPolynomial<C>> > vlist ) {
+        List< List<GenPolynomial<C>> > list = null;
+        if ( vlist == null ) {
+            return list;
+        }
+        list = new ArrayList< List<GenPolynomial<C>> >( vlist.size() ); 
+        for ( GenVector< GenPolynomial<C>> srow: vlist ) {
+            List< GenPolynomial<C> > row = srow.val; 
             list.add( row );
         }
         return list;
