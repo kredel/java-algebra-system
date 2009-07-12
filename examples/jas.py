@@ -873,7 +873,7 @@ class Module:
         L = gm.generators();
         #for g in L:
         #    print "g = ", str(g);
-        N = [ RingElem(e.val) for e in L ];
+        N = [ RingElem(e) for e in L ];
         return N;
 
 
@@ -893,9 +893,16 @@ class SubModule:
            self.list = tok.nextSubModuleList();
         else:
             if isinstance(list,PyList) or isinstance(list,PyTuple):
+                if len(list) != 0:
+                    if isinstance(list[0],RingElem):
+                        list = [ re.elem for re in list ];
+                    #print "vec = ", list[0].getClass().getSimpleName();
+                    if list[0].getClass().getSimpleName() == "GenVector":
+                        list = [ v.val for v in list ];
                 self.list = pylist2arraylist(list,self.module.ring);
             else:
                 self.list = list;
+        #print "list = ", str(list);
         #e = self.list[0];
         #print "e = ", e;
         self.mset = OrderedModuleList(module.ring,self.list);
@@ -1194,17 +1201,14 @@ def pylist2arraylist(list,fac=None):
        L = ArrayList();
        for e in list:
            if isinstance(e,RingElem):
-               L.add( e.elem );
-           else:
-               if isinstance(e,PyList) or isinstance(e,PyTuple):
-                   el = pylist2arraylist(e,fac);
-                   L.add(el);
-               else:
-                   if fac == None:
-                       L.add( e );
-                   else:
-                       ej = fac.parse( str(e) ); #or makJasArith(e) ?
-                       L.add(ej);
+               e = e.elem;
+           if isinstance(e,PyList) or isinstance(e,PyTuple):
+               e = pylist2arraylist(e,fac);
+           if e.getClass().getSimpleName() != "ArrayList":
+               if fac != None:
+                   #print "e.p = %s" % e.getClass().getName();
+                   e = fac.parse( str(e) ); #or makJasArith(e) ?
+           L.add(e);
        list = L;
     #print "list type(%s) = %s" % (list,type(list));
     return list
