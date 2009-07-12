@@ -49,9 +49,13 @@ print;
 
 #sys.exit();
 
+#startLog();
+
 gs = f.CGB();
 print "CGB: " + str(gs);
 print;
+
+#startLog();
 
 bg = gs.isCGB();
 if bg:
