@@ -21,6 +21,11 @@ from jas import terminate
 #r = Ring( "C(U3,U4,A46) L" );
 #r = Ring( "Rat(A46,U3,U4) G" );
 
+rz = Ring( "Int(A46) G" );
+print "Ring: " + str(rz);
+print;
+
+
 r = Ring( "Rat(A46) G" );
 print "Ring: " + str(r);
 print;
@@ -76,8 +81,18 @@ print "integer Output:", ri;
 print;
 
 
-rfi = ri.squarefreeFactors();
-print "squarefree Output:", rfi;
+rip = ri.list.get(0);
+print "integer polynomial:", rip;
+print;
+
+
+rfi = rz.squarefreeFactors(rip);
+print "squarefree Output:", str(rfi);
+print;
+
+for h, i in rfi.iteritems():
+    print "h**i = (", h, ")**" + str(i);
+#print "g = ", g;
 print;
 
 
