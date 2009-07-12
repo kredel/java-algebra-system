@@ -477,12 +477,13 @@ public abstract class ReductionAbstract<C extends RingElem<C>>
            }
         } else {
            r = t.subtract( Ap );
-           if ( !r.isZERO() && debug ) {
+           boolean z = r.isZERO();
+           if ( !z ) {
               logger.info("t = " + t );
               logger.info("a = " + Ap );
               logger.info("t-a = " + r );
            }
-           return r.isZERO();
+           return z;
         }
     }
 }
