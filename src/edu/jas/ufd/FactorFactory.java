@@ -15,6 +15,8 @@ import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
+import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.GenPolynomialRing;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
 
@@ -67,7 +69,7 @@ public class FactorFactory {
     /**
      * Determine suitable implementation of factorization algorithm, case
      * ModInteger.
-     * @param fac ModInteger.
+     * @param fac ModIntegerRing.
      * @return factorization algorithm implementation.
      */
     public static FactorAbstract<ModInteger> getImplementation(ModIntegerRing fac) {
@@ -100,7 +102,7 @@ public class FactorFactory {
     /**
      * Determine suitable implementation of factorization algorithms, case
      * AlgebraicNumber&lt;C&gt;.
-     * @param fac AlgebraicNumber&lt;C&gt;.
+     * @param fac AlgebraicNumberRing&lt;C&gt;.
      * @param <C> coefficient type, e.g. BigRational, ModInteger.
      * @return factorization algorithm implementation.
      */
@@ -113,12 +115,24 @@ public class FactorFactory {
     /**
      * Determine suitable implementation of factorization algorithms, case
      * Quotient&lt;C&gt;.
-     * @param fac Quotient&lt;C&gt;.
+     * @param fac QuotientRing&lt;C&gt;.
      * @param <C> coefficient type, e.g. BigRational, ModInteger.
      * @return factorization algorithm implementation.
      */
     public static <C extends GcdRingElem<C>> FactorAbstract<Quotient<C>> getImplementation(QuotientRing<C> fac) {
         return new FactorQuotient<C>(fac);
+    }
+
+
+    /**
+     * Determine suitable implementation of factorization algorithms, case
+     * recursive GenPolynomial&lt;C&gt;. Use <code>recursiveFactors()</code>.
+     * @param fac GenPolynomialRing&lt;C&gt;.
+     * @param <C> coefficient type, e.g. BigRational, ModInteger.
+     * @return factorization algorithm implementation.
+     */
+    public static <C extends GcdRingElem<C>> FactorAbstract<C> getImplementation(GenPolynomialRing<C> fac) {
+        return getImplementation(fac.coFac);
     }
 
 
@@ -137,6 +151,7 @@ public class FactorFactory {
         FactorAbstract/*raw type<C>*/ufd = null;
         AlgebraicNumberRing afac = null;
         QuotientRing qfac = null;
+        GenPolynomialRing pfac = null;
         while (true) { // switch
             Object ofac = fac;
             if (ofac instanceof BigInteger) {
@@ -172,6 +187,12 @@ public class FactorFactory {
                 t = 7;
                 break;
             }
+            if (ofac instanceof GenPolynomialRing) {
+                //System.out.println("qfac_o = " + ofac);
+                pfac = (GenPolynomialRing) ofac;
+                t = 8;
+                break;
+            }
             break;
         }
         //System.out.println("ft = " + t);
@@ -192,6 +213,9 @@ public class FactorFactory {
         }
         if (t == 7) {
             ufd = new FactorQuotient/*raw <C>*/(qfac);
+        }
+        if (t == 8) {
+            ufd = getImplementation(pfac.coFac);
         }
         logger.debug("ufd = " + ufd);
         return (FactorAbstract<C>) ufd;

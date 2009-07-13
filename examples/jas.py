@@ -182,7 +182,11 @@ class Ring:
             a = self.element( str(a) );
             a = a.elem;
         try:
-            e = self.factor.factors( a );
+            cf = self.ring.coFac;
+            if cf.getClass().getSimpleName() == "GenPolynomialRing":
+                e = self.factor.recursiveFactors( a );
+            else:
+                e = self.factor.factors( a );
             L = {};
             for a in e.keySet():
                 i = e.get(a);
