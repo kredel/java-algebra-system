@@ -52,7 +52,7 @@ public class ResidueTest extends TestCase {
  public static Test suite() {
      TestSuite suite= new TestSuite(ResidueTest.class);
      return suite;
-   }
+ }
 
    //private final static int bitlen = 100;
 
@@ -72,7 +72,7 @@ public class ResidueTest extends TestCase {
    int ll = 7;
    int el = 3;
    float q = 0.4f;
-   int il = 2; 
+   int il = ( rl == 1 ? 1 : 2 ); 
 
    protected void setUp() {
        a = b = c = d = e = null;
@@ -86,7 +86,9 @@ public class ResidueTest extends TestCase {
            F.add( mo );
        }
        id = new Ideal<BigRational>(mfac,F);
+       //System.out.println("id = " + id);
        fac = new ResidueRing<BigRational>( id );
+       //System.out.println("fac = " + fac);
        F = null;
    }
 
@@ -128,9 +130,9 @@ public class ResidueTest extends TestCase {
          //a = fac.random(ll+i);
          a = fac.random(kl*(i+1), ll+2*i, el+i, q );
          //System.out.println("a = " + a);
-      if ( a.isZERO() || a.isONE() ) {
-            continue;
-      }
+         if ( a.isZERO() || a.isONE() ) {
+             continue;
+         }
          assertTrue("length( a"+i+" ) <> 0", a.val.length() >= 0);
          assertTrue(" not isZERO( a"+i+" )", !a.isZERO() );
          assertTrue(" not isONE( a"+i+" )", !a.isONE() );
@@ -180,10 +182,18 @@ public class ResidueTest extends TestCase {
  public void testMultiplication() {
 
      a = fac.random(kl,ll,el,q);
+     if ( a.isZERO() ) {
+         return;
+     }
      assertTrue("not isZERO( a )", !a.isZERO() );
+     a = a.monic();
 
      b = fac.random(kl,ll,el,q);
+     if ( b.isZERO() ) {
+         return;
+     }
      assertTrue("not isZERO( b )", !b.isZERO() );
+     b = b.monic();
 
      c = b.multiply(a);
      d = a.multiply(b);
@@ -197,6 +207,18 @@ public class ResidueTest extends TestCase {
 
      assertTrue("a*b = b*a", c.equals(d) );
      assertEquals("a*b = b*a",c,d);
+
+     d = c.remainder(a);
+     //System.out.println("c = " + c);
+     //System.out.println("d = " + d);
+     if ( d.isZERO() ) {
+         d = c.divide(a);
+         //System.out.println("c = " + c);
+         //System.out.println("d = " + d);
+         e = d.multiply(a);
+         //System.out.println("e = " + e);
+         assertEquals("((b*a)/a)*a = b*a",e,c);
+     }
 
      c = fac.random(kl,ll,el,q);
      //System.out.println("c = " + c);
