@@ -10,8 +10,13 @@ r = Module( "Rat(u,v,l) L", cols=4 );
 print "Module: " + str(r);
 print;
 
-print "gens() = ", [str(e) for e in r.gens()];
-M = r.submodul( list=r.gens() );
+G = r.gens();
+print "gens() = ", [str(e) for e in G];
+
+L = [ e.elem.val for e in G ]
+print "gens() = ", [str(e) for e in L];
+
+M = r.submodul( list=L );
 print "M = ", M;
 
 P = M.mset.getPolynomialList();

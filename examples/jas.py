@@ -873,7 +873,7 @@ class Module:
         L = gm.generators();
         #for g in L:
         #    print "g = ", str(g);
-        N = [ RingElem(e) for e in L ];
+        N = [ RingElem(e) for e in L ]; # want use val here, but can not
         return N;
 
 
@@ -896,9 +896,6 @@ class SubModule:
                 if len(list) != 0:
                     if isinstance(list[0],RingElem):
                         list = [ re.elem for re in list ];
-                    #print "vec = ", list[0].getClass().getSimpleName();
-                    if list[0].getClass().getSimpleName() == "GenVector":
-                        list = [ v.val for v in list ];
                 self.list = pylist2arraylist(list,self.module.ring);
             else:
                 self.list = list;
@@ -1200,14 +1197,22 @@ def pylist2arraylist(list,fac=None):
     if isinstance(list,PyList) or isinstance(list,PyTuple):
        L = ArrayList();
        for e in list:
+           t = True;
            if isinstance(e,RingElem):
+               t = False;
                e = e.elem;
            if isinstance(e,PyList) or isinstance(e,PyTuple):
+               t = False;
                e = pylist2arraylist(e,fac);
-           if e.getClass().getSimpleName() != "ArrayList":
-               if fac != None:
-                   #print "e.p = %s" % e.getClass().getName();
-                   e = fac.parse( str(e) ); #or makJasArith(e) ?
+           try:
+               n = e.getClass().getSimpleName();
+               if n == "ArrayList":
+                   t = False;
+           except:
+               pass;
+           if t and fac != None:
+               #print "e.p(%s) = %s" % (e,e.getClass().getName());
+               e = fac.parse( str(e) ); #or makJasArith(e) ?
            L.add(e);
        list = L;
     #print "list type(%s) = %s" % (list,type(list));
