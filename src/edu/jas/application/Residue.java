@@ -171,7 +171,7 @@ public class Residue<C extends GcdRingElem<C> >
     @Override
     public String toScript() {
         // Python case
-        return "( " + val.toScript() + " )"; 
+        return val.toScript(); 
 //         return "PolyResidue( " + val.toScript() 
 //                         + ", " + ring.toScript() + " )";
     }

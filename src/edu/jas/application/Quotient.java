@@ -210,9 +210,9 @@ public class Quotient<C extends GcdRingElem<C>> implements GcdRingElem<Quotient<
     public String toScript() {
         // Python case
         if ( den.isONE() ) {
-            return "( " + num.toScript() + " )";
+            return num.toScript();
         } else {
-            return "( " + num.toScript() + " ) / ( " + den.toScript() + " )";
+            return num.toScript() + " / " + den.toScript();
         }
     }
 
