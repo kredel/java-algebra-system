@@ -283,15 +283,43 @@ public final class BigComplex implements StarRingElem<BigComplex>,
      */
     @Override
     public String toScript() {
-        // Python case: (re,im) or (re,) 
+        // Python case: re or re+im*i 
+        // was (re,im) or (re,) 
         StringBuffer s = new StringBuffer();
-        s.append("(");
-        s.append(re.toScript());
-        s.append(",");
-        if ( !im.isZERO() ) {
-            s.append(im.toScript());
+        boolean iz = im.isZERO();
+        if ( iz ) {
+            s.append(re.toScript());
+            return s.toString();
         }
-        s.append(")");
+        boolean rz = re.isZERO();
+        if ( rz ) {
+            if ( !im.isONE() ) {
+                if ( im.signum() > 0 ) { 
+                    s.append(im.toScript()+"*");
+                } else {
+                    s.append("-");
+                    BigRational ii = im.negate();
+                    if ( !ii.isONE() ) {
+                        s.append(ii.toScript()+"*");
+                    }
+                }
+            }
+        } else {
+            s.append(re.toScript());
+            if ( im.signum() > 0 ) {
+                s.append("+");
+                if ( !im.isONE() ) {
+                   s.append(im.toScript()+"*");
+                }
+            } else {
+                s.append("-");
+                BigRational ii = im.negate();
+                if ( !ii.isONE() ) {
+                    s.append(ii.toScript()+"*");
+                }
+            }
+        }
+        s.append("I");
         return s.toString();
     }
 
