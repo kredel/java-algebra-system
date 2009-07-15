@@ -143,7 +143,7 @@ implements GcdRingElem<RealAlgebraicNumber<C>> {
     @Override
     public String toScript() {
         // Python case
-        return "( " + number.toScript() + " ) ";
+        return number.toScript();
     }
 
 
