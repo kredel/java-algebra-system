@@ -278,6 +278,14 @@ clean:
 	rm -f application/application arith/arith kern/kern gbmod/gbmod poly/poly ps/ps gb/gb structure/structure ufd/ufd util/util vector/vector
 
 
+tests:
+	ant test 2>&1 | tee t.out
+	find examples -name "*.py"|grep -v jas.py |grep -v plot|sort|xargs -L 1 echo "time jython" > ./all_jython.sh
+	time source all_jython.sh 2>&1 | tee tj.out
+	-grep FAIL t.out
+	-grep File tj.out
+
+
 #svn copy file:///$(SVNREPO)/jas/trunk file:///$(SVNREPO)/jas/tags/$(VERSION)
 
 SVNREV=svnlook youngest $(SVNREPO)/jas
