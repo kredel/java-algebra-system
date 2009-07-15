@@ -130,7 +130,7 @@ public class GreatestCommonDivisorHensel //<C extends GcdRingElem<C> >
         if (debug) {
             logger.debug("c = " + c);
             logger.debug("cc = " + cc);
-            System.out.println("primes = " + primes);
+            logger.debug("primes = " + primes);
         }
 
         int i = 0;

@@ -167,7 +167,7 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>> extends SquarefreeAb
             if (z.degree(0) > 0) {
                 if (ldbcf.isONE() && !z.leadingBaseCoefficient().isONE()) {
                     z = z.monic();
-                    System.out.println("z,monic = " + z);
+                    logger.info("z,monic = " + z);
                 }
                 sfactors.put(z, k);
             }
@@ -255,20 +255,24 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>> extends SquarefreeAb
             GenPolynomial<GenPolynomial<C>> pl = pfac.getONE().multiply(lc);
             sfactors.put(pl, 1L);
             C li = ldbcf.inverse();
-            System.out.println("li = " + li);
+            //System.out.println("li = " + li);
             P = P.multiply(cfac.getONE().multiply(li));
             //System.out.println("P,monic = " + P);
             ldbcf = P.leadingBaseCoefficient().leadingBaseCoefficient();
         }
         // factors of content
         GenPolynomial<C> Pc = engine.recursiveContent(P);
-        System.out.println("Pc = " + Pc);
+        if ( logger.isInfoEnabled() ) {
+            logger.info("Pc = " + Pc);
+        }
         Pc = Pc.monic();
         if (!Pc.isONE()) {
             P = PolyUtil.<C> coefficientPseudoDivide(P, Pc);
         }
         SortedMap<GenPolynomial<C>, Long> rsf = squarefreeFactors(Pc);
-        System.out.println("rsf = " + rsf);
+        if ( logger.isInfoEnabled() ) {
+            logger.info("rsf = " + rsf);
+        }
         // add factors of content
         for (GenPolynomial<C> c : rsf.keySet()) {
             if (!c.isONE()) {
@@ -318,7 +322,7 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>> extends SquarefreeAb
             if (!z.isONE() && !z.isZERO()) {
                 if (ldbcf.isONE()) {
                     z = PolyUtil.<C> monic(z);
-                    System.out.println("z,monic = " + z);
+                    logger.info("z,monic = " + z);
                 }
                 sfactors.put(z, k);
             }

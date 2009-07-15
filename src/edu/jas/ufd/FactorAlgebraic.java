@@ -100,8 +100,8 @@ public class FactorAlgebraic<C extends GcdRingElem<C>> extends FactorAbsolute<Al
         long ks = k;
         GenPolynomial<C> res = null;
         boolean sqf = false;
-        //        int[] klist = new int[]{ 0, 1, 2, 3, -1, -2, -3 , -4};
-        int[] klist = new int[] { 0, -1, -2, 1, 2 };
+        // int[] klist = new int[]{ 0, 1, 2, 3, -1, -2, -3 , -4};
+        int[] klist = new int[] { 0, -1, -2, 1, 2, -3, 3 };
         int ki = 0;
         while (!sqf) {
             // k = 0,1,2,-1,-2
@@ -125,7 +125,7 @@ public class FactorAlgebraic<C extends GcdRingElem<C>> extends FactorAbsolute<Al
         List<GenPolynomial<C>> nfacs;
         if (!sqf) {
             //System.out.println("\nres = " + res); 
-            System.out.println("sqf(" + ks + ") = " + sqf + "\n");
+            System.out.println("sqf(" + ks + ") = " + sqf);
             //res = factorCoeff.squarefreePart(res); // better use obtained factors
             //res = factorCoeff.baseFactors(res).lastKey();
         }

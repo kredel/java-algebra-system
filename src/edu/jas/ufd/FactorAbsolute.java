@@ -40,7 +40,7 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>> extends FactorAbs
     private static final Logger logger = Logger.getLogger(FactorAbsolute.class);
 
 
-    private final boolean debug = true || logger.isDebugEnabled();
+    private final boolean debug = logger.isDebugEnabled();
 
 
     /*     
@@ -275,7 +275,7 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>> extends FactorAbs
         //System.out.println("K(alpha) engine = " + engine);
         List<GenPolynomial<AlgebraicNumber<C>>> factors = engine.baseFactorsSquarefree(Pa);
         //System.out.println("factors = " + factors);
-        if (debug) {
+        if (logger.isInfoEnabled()) {
             logger.info("factors over K(alpha) = " + factors);
             //System.out.println("factors over K(alpha) = " + factors);
         }
@@ -334,7 +334,7 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>> extends FactorAbs
         if (debug && !isFactorization(P, facs)) {
             throw new RuntimeException("isFactorization = false");
         }
-        if (debug) {
+        if (logger.isInfoEnabled()) {
             logger.info("all K factors = " + facs); // Q[X]
             //System.out.println("\nall K factors = " + facs); // Q[X]
         }
@@ -390,7 +390,7 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>> extends FactorAbs
         if (debug && !isFactorization(P, facs)) {
             throw new RuntimeException("isFactorization = false");
         }
-        if (debug) {
+        if (logger.isInfoEnabled()) {
             logger.info("all K factors = " + facs); // Q[X]
             //System.out.println("\nall K factors = " + facs); // Q[X]
         }

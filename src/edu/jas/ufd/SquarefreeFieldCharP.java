@@ -126,7 +126,7 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
         // just for the moment:
         GenPolynomial<C> s = pfac.getONE();
         SortedMap<GenPolynomial<C>, Long> factors = baseSquarefreeFactors(P);
-        System.out.println("sqfPart,factors = " + factors);
+        logger.info("sqfPart,factors = " + factors);
         for (GenPolynomial<C> sp : factors.keySet()) {
             s = s.multiply(sp);
         }
@@ -194,7 +194,7 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
                 if (T0 == null) {
                     break;
                 }
-                System.out.println("char root: T0 = " + T0 + ", T = " + T);
+                logger.info("char root: T0 = " + T0 + ", T = " + T);
                 e = e * mp;
                 init = true;
                 continue;
@@ -218,7 +218,7 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
             if (z.degree(0) > 0) {
                 if (ldbcf.isONE() && !z.leadingBaseCoefficient().isONE()) {
                     z = z.monic();
-                    System.out.println("z,monic = " + z);
+                    logger.info("z,monic = " + z);
                 }
                 sfactors.put(z, (e * k));
             }
@@ -255,7 +255,9 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
         GenPolynomial<GenPolynomial<C>> s = pfac.getONE();
 
         SortedMap<GenPolynomial<GenPolynomial<C>>, Long> factors = recursiveUnivariateSquarefreeFactors(P);
-        System.out.println("sqfPart,factors = " + factors);
+        if (logger.isInfoEnabled()) {
+            logger.info("sqfPart,factors = " + factors);
+        }
         for (GenPolynomial<GenPolynomial<C>> sp : factors.keySet()) {
             s = s.multiply(sp);
         }
@@ -296,13 +298,17 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
         }
         // factors of content
         GenPolynomial<C> Pc = engine.recursiveContent(P);
-        System.out.println("Pc = " + Pc);
+        if (logger.isInfoEnabled()) {
+            logger.info("Pc = " + Pc);
+        }
         Pc = Pc.monic();
         if (!Pc.isONE()) {
             P = PolyUtil.<C> coefficientPseudoDivide(P, Pc);
         }
         SortedMap<GenPolynomial<C>, Long> rsf = squarefreeFactors(Pc);
-        System.out.println("rsf = " + rsf);
+        if (logger.isInfoEnabled()) {
+            logger.info("rsf = " + rsf);
+        }
         // add factors of content
         for (GenPolynomial<C> c : rsf.keySet()) {
             if (!c.isONE()) {
@@ -342,7 +348,7 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
                 mp = pfac.characteristic().longValue(); // assert != 0
                 //T0 = PolyUtil.<C> recursiveModRoot(T,mp);
                 T0 = recursiveUnivariateRootCharacteristic(T);
-                System.out.println("char root: T0r = " + T0 + ", Tr = " + T);
+                logger.info("char root: T0r = " + T0 + ", Tr = " + T);
                 if (T0 == null) {
                     break;
                 }
@@ -369,7 +375,7 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
             //was: if ( z.degree(0) > 0 ) {
             if (!z.isONE() && !z.isZERO()) {
                 z = PolyUtil.<C> monic(z);
-                System.out.println("z,put = " + z);
+                logger.info("z,put = " + z);
                 sfactors.put(z, (e * k));
             }
         }
@@ -397,7 +403,9 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
         // just for the moment:
         GenPolynomial<C> s = pfac.getONE();
         SortedMap<GenPolynomial<C>, Long> factors = squarefreeFactors(P);
-        System.out.println("sqfPart,factors = " + factors);
+        if (logger.isInfoEnabled()) {
+            logger.info("sqfPart,factors = " + factors);
+        }
         for (GenPolynomial<C> sp : factors.keySet()) {
             if (sp.isConstant()) {
                 continue;

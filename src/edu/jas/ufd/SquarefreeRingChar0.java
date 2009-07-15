@@ -166,7 +166,7 @@ public class SquarefreeRingChar0<C extends GcdRingElem<C>> extends SquarefreeAbs
             if (z.degree(0) > 0) {
                 if (ldbcf.isONE() && !z.leadingBaseCoefficient().isONE()) {
                     z = engine.basePrimitivePart(z);
-                    System.out.println("z,pp = " + z);
+                    logger.info("z,pp = " + z);
                 }
                 sfactors.put(z, k);
             }
@@ -251,14 +251,18 @@ public class SquarefreeRingChar0<C extends GcdRingElem<C>> extends SquarefreeAbs
         }
         // factors of content
         GenPolynomial<C> Pc = engine.recursiveContent(P);
-        System.out.println("Pc = " + Pc);
+        if (logger.isInfoEnabled()) {
+            logger.info("Pc = " + Pc);
+        }
         Pc = engine.basePrimitivePart(Pc);
         //System.out.println("Pc,PP = " + Pc);
         if (!Pc.isONE()) {
             P = PolyUtil.<C> coefficientPseudoDivide(P, Pc);
         }
         SortedMap<GenPolynomial<C>, Long> rsf = squarefreeFactors(Pc);
-        System.out.println("rsf = " + rsf);
+        if (logger.isInfoEnabled()) {
+            logger.info("rsf = " + rsf);
+        }
         // add factors of content
         for (GenPolynomial<C> c : rsf.keySet()) {
             if (!c.isONE()) {

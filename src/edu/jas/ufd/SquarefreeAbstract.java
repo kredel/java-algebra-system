@@ -160,6 +160,14 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
         }
         boolean f = P.equals(t) || P.equals(t.negate());
         if (!f) {
+            //System.out.println("P = " + P);
+            //System.out.println("t = " + t);
+            P = P.monic();
+            t = t.monic();
+            f = P.equals(t) || P.equals(t.negate());
+            if (f) {
+                return f;
+            }
             System.out.println("\nfactorization(map): " + f);
             System.out.println("F = " + F);
             System.out.println("P = " + P);
@@ -195,6 +203,16 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
         }
         boolean f = P.equals(t) || P.equals(t.negate());
         if (!f) {
+            //System.out.println("P = " + P);
+            //System.out.println("t = " + t);
+            GenPolynomialRing<C> cf = (GenPolynomialRing<C>)P.ring.coFac;
+            GreatestCommonDivisorAbstract<C> engine = GCDFactory.getProxy(cf.coFac);
+            GenPolynomial<GenPolynomial<C>> Pp = engine.recursivePrimitivePart(P);
+            GenPolynomial<GenPolynomial<C>> tp = engine.recursivePrimitivePart(t);
+            f = Pp.equals(tp) || Pp.equals(tp.negate());
+            if (f) {
+                return f;
+            }
             System.out.println("\nfactorization(map): " + f);
             System.out.println("F = " + F);
             System.out.println("P = " + P);

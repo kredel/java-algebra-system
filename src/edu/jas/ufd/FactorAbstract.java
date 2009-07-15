@@ -40,7 +40,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
     private static final Logger logger = Logger.getLogger(FactorAbstract.class);
 
 
-    private final boolean debug = logger.isInfoEnabled();
+    private final boolean debug = logger.isDebugEnabled();
 
 
     /**
@@ -183,7 +183,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
         }
         //List<GenPolynomial<C>> klist = PolyUfdUtil.<C> backSubstituteKronecker(pfac, ulist, d);
         //System.out.println("back(klist) = " + PolyUfdUtil.<C> backSubstituteKronecker(pfac, ulist, d));
-        if (debug) {
+        if (logger.isInfoEnabled()) {
             logger.info("ulist = " + ulist);
             //System.out.println("ulist = " + ulist);
         }
@@ -456,20 +456,8 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
      * @return true if P = prod_{i=1,...,r} p_i, else false.
      */
     public boolean isFactorization(GenPolynomial<C> P, List<GenPolynomial<C>> F) {
-        if (P == null || F == null) {
-            throw new IllegalArgumentException("P and F may not be null");
-        }
-        GenPolynomial<C> t = P.ring.getONE();
-        for (GenPolynomial<C> f : F) {
-            t = t.multiply(f);
-        }
-        boolean f = P.equals(t) || P.equals(t.negate());
-        if (!f) {
-            System.out.println("\nfactorization(list): " + f);
-            System.out.println("P = " + P);
-            System.out.println("t = " + t);
-        }
-        return f;
+        return sengine.isFactorization(P,F);
+        // test irreducible
     }
 
 
@@ -480,37 +468,8 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
      * @return true if P = prod_{i=1,...,k} p_i**e_i , else false.
      */
     public boolean isFactorization(GenPolynomial<C> P, SortedMap<GenPolynomial<C>, Long> F) {
-        if (P == null || F == null) {
-            throw new IllegalArgumentException("P and F may not be null");
-        }
-        if (P.isZERO() && F.size() == 0) {
-            return true;
-        }
-        GenPolynomial<C> t = P.ring.getONE();
-        for (GenPolynomial<C> f : F.keySet()) {
-            Long E = F.get(f);
-            long e = E.longValue();
-            GenPolynomial<C> g = Power.<GenPolynomial<C>> positivePower(f, e);
-            t = t.multiply(g);
-        }
-        boolean f = P.equals(t) || P.equals(t.negate());
-        if (!f) {
-            System.out.println("P = " + P);
-            System.out.println("t = " + t);
-            P = P.monic();
-            t = t.monic();
-            f = P.equals(t) || P.equals(t.negate());
-            if (f) {
-                return f;
-            }
-            System.out.println("\nfactorization(map): " + f);
-            System.out.println("P = " + P);
-            System.out.println("t = " + t);
-            //RuntimeException e = new RuntimeException("fac-map");
-            //e.printStackTrace();
-            //throw e;
-        }
-        return f;
+        return sengine.isFactorization(P,F);
+        // test irreducible
     }
 
 
@@ -522,37 +481,8 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
      */
     public boolean isRecursiveFactorization(GenPolynomial<GenPolynomial<C>> P,
             SortedMap<GenPolynomial<GenPolynomial<C>>, Long> F) {
-        if (P == null || F == null) {
-            throw new IllegalArgumentException("P and F may not be null");
-        }
-        if (P.isZERO() && F.size() == 0) {
-            return true;
-        }
-        GenPolynomial<GenPolynomial<C>> t = P.ring.getONE();
-        for (GenPolynomial<GenPolynomial<C>> f : F.keySet()) {
-            Long E = F.get(f);
-            long e = E.longValue();
-            GenPolynomial<GenPolynomial<C>> g = Power.<GenPolynomial<GenPolynomial<C>>> positivePower(f, e);
-            t = t.multiply(g);
-        }
-        boolean f = P.equals(t) || P.equals(t.negate());
-        if (!f) {
-            System.out.println("P = " + P);
-            System.out.println("t = " + t);
-            GenPolynomial<GenPolynomial<C>> Pp = engine.recursivePrimitivePart(P);
-            GenPolynomial<GenPolynomial<C>> tp = engine.recursivePrimitivePart(t);
-            f = Pp.equals(tp) || Pp.equals(tp.negate());
-            if (f) {
-                return f;
-            }
-            System.out.println("\nfactorization(map): " + f);
-            System.out.println("Pp = " + Pp);
-            System.out.println("tp = " + tp);
-            //RuntimeException e = new RuntimeException("fac-map");
-            //e.printStackTrace();
-            //throw e;
-        }
-        return f;
+        return sengine.isRecursiveFactorization(P,F);
+        // test irreducible
     }
 
 

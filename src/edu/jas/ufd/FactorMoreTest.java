@@ -239,7 +239,7 @@ public class FactorMoreTest extends TestCase {
 
             SortedMap<GenPolynomial<GenPolynomial<BigRational>>, Long> sm = fac.recursiveFactors(a);
             //System.out.println("\na   = " + a);
-            System.out.println("sm = " + sm);
+            //System.out.println("sm = " + sm);
 
             if (sm.size() >= facs) {
                 assertTrue("#facs < " + facs, sm.size() >= facs);
@@ -307,7 +307,7 @@ public class FactorMoreTest extends TestCase {
 
             SortedMap<GenPolynomial<GenPolynomial<BigInteger>>, Long> sm = fac.recursiveFactors(a);
             //System.out.println("\na   = " + a);
-            System.out.println("sm = " + sm);
+            //System.out.println("sm = " + sm);
 
             if (sm.size() >= facs) {
                 assertTrue("#facs < " + facs, sm.size() >= facs);
@@ -376,7 +376,7 @@ public class FactorMoreTest extends TestCase {
 
             SortedMap<GenPolynomial<Quotient<BigRational>>, Long> sm = fac.factors(a);
             //System.out.println("\na   = " + a);
-            System.out.println("sm = " + sm);
+            //System.out.println("sm = " + sm);
 
             if (sm.size() >= facs) {
                 assertTrue("#facs < " + facs, sm.size() >= facs);
@@ -445,7 +445,7 @@ public class FactorMoreTest extends TestCase {
 
             SortedMap<GenPolynomial<Quotient<ModInteger>>, Long> sm = fac.factors(a);
             //System.out.println("\na   = " + a);
-            System.out.println("sm = " + sm);
+            //System.out.println("sm = " + sm);
 
             if (sm.size() >= facs) {
                 assertTrue("#facs < " + facs, sm.size() >= facs);

@@ -88,7 +88,7 @@ public class SquarefreeInfiniteFieldCharP<C extends GcdRingElem<C>> extends Squa
         GenPolynomial<C> one = pfac.ring.getONE();
         if (!num.isONE()) {
             SortedMap<GenPolynomial<C>, Long> nfac = rengine.squarefreeFactors(num);
-            System.out.println("nfac = " + nfac);
+            //System.out.println("nfac = " + nfac);
             for (GenPolynomial<C> nfp : nfac.keySet()) {
                 Quotient<C> nf = new Quotient<C>(pfac, nfp);
                 factors.put(nf, nfac.get(nfp));
@@ -101,7 +101,7 @@ public class SquarefreeInfiniteFieldCharP<C extends GcdRingElem<C>> extends Squa
             return factors;
         }
         SortedMap<GenPolynomial<C>, Long> dfac = rengine.squarefreeFactors(den);
-        System.out.println("dfac = " + dfac);
+        //System.out.println("dfac = " + dfac);
         for (GenPolynomial<C> dfp : dfac.keySet()) {
             Quotient<C> df = new Quotient<C>(pfac, one, dfp);
             factors.put(df, dfac.get(dfp));
@@ -139,7 +139,7 @@ public class SquarefreeInfiniteFieldCharP<C extends GcdRingElem<C>> extends Squa
         if (sf == null || sf.size() == 0) {
             return null;
         }
-        System.out.println("sf,quot = " + sf);
+        //System.out.println("sf,quot = " + sf);
         // better: test if sf.size() == 2 // no, since num and den factors 
         Long k = null;
         Long cl = c.longValue();
@@ -223,7 +223,9 @@ public class SquarefreeInfiniteFieldCharP<C extends GcdRingElem<C>> extends Squa
             if (sm == null) {
                 return null;
             }
-            System.out.println("sm,root = " + sm);
+            if (logger.isInfoEnabled()) {
+                logger.info("sm,root = " + sm);
+            }
             Quotient<C> r = rf.getONE();
             for (Quotient<C> rp : sm.keySet()) {
                 long gl = sm.get(rp);
@@ -273,7 +275,9 @@ public class SquarefreeInfiniteFieldCharP<C extends GcdRingElem<C>> extends Squa
             if (sm == null) {
                 return null;
             }
-            System.out.println("sm,base,root = " + sm);
+            if (logger.isInfoEnabled()) {
+                logger.info("sm,base,root = " + sm);
+            }
             Quotient<C> r = rf.getONE();
             for (Quotient<C> rp : sm.keySet()) {
                 long gl = sm.get(rp);
