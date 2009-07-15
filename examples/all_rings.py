@@ -59,6 +59,8 @@ print "one = " + str(one);
 print "I   = " + str(I);
 c4 = c3 + 5 * I;
 print "c4 = " + str(c4);
+c5 = (-396,10201)-(80,10201)*I;
+print "c5 = " + str(c5);
 print;
 
 
@@ -301,7 +303,7 @@ print "Qs2x  = " + str(Qs2x.factory());
 print;
 
 
-print "------- RealN(alpha**2 - 2,((1),(2)) ---------";
+print "------- RealN(alpha**2 - 2,(1,2) ---------";
 r = PolyRing(QQ(),"alpha",PolyRing.lex);
 print "r = " + str(r);
 [e,a] = r.gens();
@@ -677,11 +679,16 @@ ml = [m1,m2,m3,m4,m5,m6,m7,m8,m9,m10,m11,m12];
 #print "ml = " + str(ml);
 #print;
 
+
 sm = m.submodul(list=ml);
 #sm = SubModule(m,list=ml);
 print "sm = " + str(sm);
 
-xm = SubModule(PolyRing(QQ(),"u, v, l",PolyRing.lex),list=[ ( 0, (1,), l + v, 0 ), ( 0, v, u * l**2, 0 ), ( 0, l + (3,) * v, 0, u ), ( 0, v * l + v**2, u**2, 0 ), ( 0, l**2, u, 0 ), ( (1,), 0, 0, l**2 ), ( (1,), 0, l + (3,) * v, 0 ), ( (1,), (2,), 0, l**2 ), ( u, 0, 0, v * l + v**2 ), ( l + v, 0, 0, u ), ( l**2, 0, 0, v ), ( l**2, 0, (2,) * u, v ) ]);
+xm = SubModule(PolyRing(QQ(),"u, v, l",PolyRing.lex),list=[ ( 0, 1, ( l + v ), 0 ), ( 0, v, u * l**2, 0 ), ( 0, ( l + 3 * v ), 0, u ), ( 0, ( v * l + v**2 ), u**2, 0 ), ( 0, l**2, u, 0 ), ( 1, 0, 0, l**2 ), ( 1, 0, ( l + 3 * v ), 0 ), ( 1, 2, 0, l**2 ), ( u, 0, 0, ( v * l + v**2 ) ), ( ( l + v ), 0, 0, u ), ( l**2, 0, 0, v ), ( l**2, 0, 2 * u, v ) ])
+
+#    SubModule(PolyRing(QQ(),"u, v, l",PolyRing.lex),list=[ ( 0, 1, ( l + v ), 0 ), ( 0, v, u * l**2, 0 ), ( 0, ( l + 3 * v ), 0, u ), ( 0, ( v * l + v**2 ), u**2, 0 ), ( 0, l**2, u, 0 ), ( 1, 0, 0, l**2 ), ( 1, 0, ( l + 3 * v ), 0 ), ( 1, 2, 0, l**2 ), ( u, 0, 0, ( v * l + v**2 ) ), ( ( l + v ), 0, 0, u ), ( l**2, 0, 0, v ), ( l**2, 0, 2 * u, v ) ])
+
+#    SubModule(PolyRing(QQ(),"u, v, l",PolyRing.lex),list=[ ( 0, (1,), l + v, 0 ), ( 0, v, u * l**2, 0 ), ( 0, l + (3,) * v, 0, u ), ( 0, v * l + v**2, u**2, 0 ), ( 0, l**2, u, 0 ), ( (1,), 0, 0, l**2 ), ( (1,), 0, l + (3,) * v, 0 ), ( (1,), (2,), 0, l**2 ), ( u, 0, 0, v * l + v**2 ), ( l + v, 0, 0, u ), ( l**2, 0, 0, v ), ( l**2, 0, (2,) * u, v ) ]);
 
 #    SubModule(PolyRing(QQ(),"u, v, l",PolyRing.lex),list=[ ( 0, (1,), l + v, 0 ), ( 0, v, u * l**2, 0 ), ( 0, l + (3,) * v, 0, u ), ( 0, v * l + v**2, u**2, 0 ), ( 0, l**2, u, 0 ), ( (1,), 0, 0, l**2 ), ( (1,), 0, l + (3,) * v, 0 ), ( (1,), (2,), 0, l**2 ), ( u, 0, 0, v * l + v**2 ), ( l + v, 0, 0, u ), ( l**2, 0, 0, v ), ( l**2, 0, (2,) * u, v ) ]);
 

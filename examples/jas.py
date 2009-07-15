@@ -253,7 +253,7 @@ class Ideal:
            tok = GenPolynomialTokenizer(ring.pset.ring,sr);
            self.list = tok.nextPolynomialList();
         else:
-           self.list = pylist2arraylist(list);
+           self.list = pylist2arraylist(list,rec=1);
         self.pset = OrderedPolynomialList(ring.ring,self.list);
 
     def __str__(self):
@@ -461,7 +461,7 @@ class ParamIdeal:
            tok = GenPolynomialTokenizer(ring.pset.ring,sr);
            self.list = tok.nextPolynomialList();
         else:
-           self.list = pylist2arraylist(list);
+           self.list = pylist2arraylist(list,rec=1);
         self.gbsys = gbsys;
         self.pset = OrderedPolynomialList(ring.ring,self.list);
 
@@ -714,7 +714,7 @@ class SolvableIdeal:
            tok = GenPolynomialTokenizer(ring.ring,sr);
            self.list = tok.nextSolvablePolynomialList();
         else:
-           self.list = pylist2arraylist(list);
+           self.list = pylist2arraylist(list,rec=1);
         self.pset = OrderedPolynomialList(ring.ring,self.list);
 
     def __str__(self):
@@ -900,7 +900,7 @@ class SubModule:
                 if len(list) != 0:
                     if isinstance(list[0],RingElem):
                         list = [ re.elem for re in list ];
-                self.list = pylist2arraylist(list,self.module.ring);
+                self.list = pylist2arraylist(list,self.module.ring,rec=2);
             else:
                 self.list = list;
         #print "list = ", str(list);
@@ -911,8 +911,9 @@ class SubModule:
         self.rows = self.mset.rows;
         #print "list = %s" % self.list;
         #print "cols = %s" % self.cols;
+        #print "mset = %s" % self.mset.toString();
         #print "mset = %s" % self.mset.toScript();
-        #self.pset = self.mset.getPolynomialList();
+        self.pset = self.mset.getPolynomialList();
 
     def __str__(self):
         '''Create a string representation.
@@ -1005,7 +1006,7 @@ class SolvableSubModule:
            self.list = tok.nextSolvableSubModuleList();
         else:
             if isinstance(list,PyList) or isinstance(list,PyTuple):
-                self.list = pylist2arraylist(list,self.module.ring);
+                self.list = pylist2arraylist(list,self.module.ring,rec=2);
             else:
                 self.list = list;
         self.mset = OrderedModuleList(module.ring,self.list);
@@ -1192,7 +1193,7 @@ class SeriesRing:
         return RingElem( self.ring.fromPolynomial(a) );
 
 
-def pylist2arraylist(list,fac=None):
+def pylist2arraylist(list,fac=None,rec=1):
     '''Convert a Python list to a Java ArrayList.
 
     If list is a Python list, it is converted, else list is left unchanged.
@@ -1206,8 +1207,11 @@ def pylist2arraylist(list,fac=None):
                t = False;
                e = e.elem;
            if isinstance(e,PyList) or isinstance(e,PyTuple):
-               t = False;
-               e = pylist2arraylist(e,fac);
+               if rec <= 1:
+                   e = makeJasArith(e);
+               else:
+                   t = False;
+                   e = pylist2arraylist(e,fac,rec-1);
            try:
                n = e.getClass().getSimpleName();
                if n == "ArrayList":
@@ -1216,7 +1220,7 @@ def pylist2arraylist(list,fac=None):
                pass;
            if t and fac != None:
                #print "e.p(%s) = %s" % (e,e.getClass().getName());
-               e = fac.parse( str(e) ); #or makJasArith(e) ?
+               e = fac.parse( str(e) ); #or makeJasArith(e) ?
            L.add(e);
        list = L;
     #print "list type(%s) = %s" % (list,type(list));
@@ -1564,7 +1568,7 @@ def RR(flist,r=0):
     if flist == None:
         raise ValueError, "No list given."
     if isinstance(flist,PyList) or isinstance(flist,PyTuple):
-        flist = pylist2arraylist( [ x.factory() for x in flist ] );
+        flist = pylist2arraylist( [ x.factory() for x in flist ], rec=1);
         ncop = 0;
     else:
         ncop = -1;
@@ -1755,14 +1759,14 @@ class RingElem:
         if self.elem.getClass().getSimpleName() == "GenVector":
             #print "self, other = %s, %s " % (self,other);
             if isinstance(other,PyTuple) or isinstance(other,PyList):
-                o = pylist2arraylist(other,self.elem.factory().coFac);
+                o = pylist2arraylist(other,self.elem.factory().coFac,rec=1);
                 o = GenVector(self.elem.factory(),o);
                 return RingElem( o );
         if self.elem.getClass().getSimpleName() == "GenMatrix":
             #print "self, other = %s, %s " % (type(self),type(other));
             #print "o type(%s) = %s, str = %s" % (o,type(o),str(o));
             if isinstance(other,PyTuple) or isinstance(other,PyList):
-                o = pylist2arraylist(other,self.elem.factory().coFac);
+                o = pylist2arraylist(other,self.elem.factory().coFac,rec=2);
                 o = GenMatrix(self.elem.factory(),o);
                 return RingElem( o );
         if isinstance(other,RingElem):
