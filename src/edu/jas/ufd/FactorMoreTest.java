@@ -140,6 +140,12 @@ public class FactorMoreTest extends TestCase {
         Factorization<Quotient<ModInteger>> ufdqm = FactorFactory.getImplementation((RingFactory) qmfac);
         //System.out.println("ufdqm = " + ufdqm);
         assertTrue("ufd != Quotient<ModInteger> " + ufdqm, ufdqm instanceof FactorQuotient);
+
+        prfac = new GenPolynomialRing<BigRational>(br, 2);
+        GenPolynomialRing<GenPolynomial<BigRational>> rrfac = new GenPolynomialRing<GenPolynomial<BigRational>>(prfac,1);
+        Factorization<BigRational> ufdrr = FactorFactory.getImplementation((RingFactory) rrfac);
+        //System.out.println("ufdrr = " + ufdrr);
+        assertTrue("ufd != GenPolynomial<GenPolynomialBigRational>> " + ufdrr, ufdrr instanceof FactorRational);
     }
 
 
@@ -188,6 +194,12 @@ public class FactorMoreTest extends TestCase {
         Factorization<Quotient<ModInteger>> ufdqm = FactorFactory.<ModInteger> getImplementation(qmfac);
         //System.out.println("ufdqm = " + ufdqm);
         assertTrue("ufd != Quotient<ModInteger> " + ufdqm, ufdqm instanceof FactorQuotient);
+
+        prfac = new GenPolynomialRing<BigRational>(br, 2);
+        GenPolynomialRing<GenPolynomial<BigRational>> rrfac = new GenPolynomialRing<GenPolynomial<BigRational>>(prfac,1);
+        Factorization<BigRational> ufdrr = FactorFactory.<BigRational>getImplementation(prfac);
+        //System.out.println("ufdrr = " + ufdrr);
+        assertTrue("ufd != GenPolynomial<GenPolynomialBigRational>> " + ufdrr, ufdrr instanceof FactorRational);
     }
 
 
