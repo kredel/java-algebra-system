@@ -71,8 +71,8 @@ public class FactorsList<C extends GcdRingElem<C>> implements Serializable {
     @Override
     public String toString() {
         StringBuffer sb = new StringBuffer();
-        sb.append(poly.toString());
-        sb.append(" =\n");
+        //sb.append(poly.toString());
+        //sb.append(" =\n");
         boolean first = true;
         for (GenPolynomial<C> p : factors) {
             if (first) {

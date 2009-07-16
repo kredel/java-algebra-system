@@ -97,7 +97,10 @@ public class FactorsMap<C extends GcdRingElem<C>> implements Serializable {
                 sb.append(",\n ");
             }
             sb.append(f.toString());
-            long e = afactors.get(f);
+            Long e = afactors.get(f);
+            if ( e == null ) {
+                continue;
+            }
             if (e > 1) {
                 sb.append("**" + e);
             }
@@ -114,8 +117,8 @@ public class FactorsMap<C extends GcdRingElem<C>> implements Serializable {
     public String toScript() {
         // Python case
         StringBuffer sb = new StringBuffer();
-        sb.append(poly.toScript());
-        sb.append(" =\n");
+        //sb.append(poly.toScript());
+        //sb.append(" =\n");
         boolean first = true;
         for (GenPolynomial<C> p : factors.keySet()) {
             if (first) {
@@ -138,10 +141,17 @@ public class FactorsMap<C extends GcdRingElem<C>> implements Serializable {
             } else {
                 sb.append("\n * ");
             }
-            sb.append(f.toScript());
-            long e = afactors.get(f);
-            if (e > 1) {
-                sb.append("**" + e);
+            Long e = afactors.get(f);
+            if ( e == null ) { // should not happen
+                System.out.println("f = " + f);
+                System.out.println("afactors = " + afactors);
+            }
+            if (e == 1) {
+                sb.append(f.toScript());
+            } else {
+                sb.append("(\n");
+                sb.append(f.toScript());
+                sb.append("\n)**" + e);
             }
         }
         return sb.toString();

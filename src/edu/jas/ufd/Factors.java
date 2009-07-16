@@ -1,5 +1,5 @@
 /*
- * $Id: $
+ * $Id$
  */
 
 package edu.jas.ufd;
@@ -11,6 +11,8 @@ import java.util.List;
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.GenPolynomialRing;
+import edu.jas.poly.PolynomialList;
 import edu.jas.structure.GcdRingElem;
 
 
@@ -85,6 +87,7 @@ public class Factors<C extends GcdRingElem<C>> implements Comparable<Factors<C>>
      * @param af algebraic extension field of C where p has factors from afact.
      * @param ap GenPolynomial p represented with coefficients from af.
      * @param afact absolute irreducible factors of p with coefficients from af.
+     * @param arfact further absolute irreducible factors of p with coefficients from extensions of af.
      */
     public Factors(GenPolynomial<C> p, AlgebraicNumberRing<C> af, GenPolynomial<AlgebraicNumber<C>> ap,
             List<GenPolynomial<AlgebraicNumber<C>>> afact, List<Factors<AlgebraicNumber<C>>> arfact) {
@@ -141,11 +144,11 @@ public class Factors<C extends GcdRingElem<C>> implements Comparable<Factors<C>>
     public String toScript() {
         // Python case
         StringBuffer sb = new StringBuffer();
-        sb.append(poly.toScript());
+        //sb.append(poly.toScript());
         if (afac == null) {
             return sb.toString();
         }
-        sb.append(" =\n");
+        //sb.append(" =\n");
         boolean first = true;
         for (GenPolynomial<AlgebraicNumber<C>> ap : afactors) {
             if (first) {
@@ -156,7 +159,7 @@ public class Factors<C extends GcdRingElem<C>> implements Comparable<Factors<C>>
             //sb.append("( " + ap.toScript() + " )");
             sb.append(ap.toScript());
         }
-        sb.append("\n over " + afac.toScript());
+        sb.append("   ## over " + afac.toScript() + "\n");
         if (arfactors == null) {
             return sb.toString();
         }
@@ -185,6 +188,14 @@ public class Factors<C extends GcdRingElem<C>> implements Comparable<Factors<C>>
         }
         h = (h << 27);
         h += afac.hashCode();
+        if ( afactors != null ) {
+            h = (h << 27);
+            h += afactors.hashCode();
+        }
+        if ( arfactors != null ) {
+            h = (h << 27);
+            h += arfactors.hashCode();
+        }
         return h;
     }
 
@@ -196,7 +207,7 @@ public class Factors<C extends GcdRingElem<C>> implements Comparable<Factors<C>>
     @Override
     @SuppressWarnings("unchecked")
     public boolean equals(Object B) {
-        if (!(B instanceof GenPolynomial)) {
+        if (!(B instanceof Factors)) {
             return false;
         }
         Factors<C> a = null;
@@ -215,10 +226,13 @@ public class Factors<C extends GcdRingElem<C>> implements Comparable<Factors<C>>
      * Comparison.
      * @param facs factors container.
      * @return sign(this.poly-facs.poly) lexicographic &gt;
-     *         sign(afac.modul-facs.afac.modul).
+     *         sign(afac.modul-facs.afac.modul) 
+     *         lexicographic &gt; afactors.compareTo(facs.afactors)
+     *         lexicographic &gt; arfactors[i].compareTo(facs.arfactors[i])
      */
     public int compareTo(Factors<C> facs) {
         int s = poly.compareTo(facs.poly);
+        //System.out.println("s1 = " + s); 
         if (s != 0) {
             return s;
         }
@@ -228,7 +242,49 @@ public class Factors<C extends GcdRingElem<C>> implements Comparable<Factors<C>>
         if (facs.afac == null) {
             return +1;
         }
-        return afac.modul.compareTo(facs.afac.modul);
+        s = afac.modul.compareTo(facs.afac.modul);
+        //System.out.println("s2 = " + s); 
+        if ( s != 0 ) {
+            return s;
+        }
+        GenPolynomialRing<AlgebraicNumber<C>> ar = afactors.get(0).ring;
+        GenPolynomialRing<AlgebraicNumber<C>> br = facs.afactors.get(0).ring;
+        PolynomialList<AlgebraicNumber<C>> ap = new PolynomialList<AlgebraicNumber<C>>(ar,afactors);
+        PolynomialList<AlgebraicNumber<C>> bp = new PolynomialList<AlgebraicNumber<C>>(br,facs.afactors);
+        s = ap.compareTo(bp);
+        //System.out.println("s3 = " + s); 
+        if ( s != 0 ) {
+            return s;
+        }
+        if (arfactors == null && arfactors == null) {
+            return 0;
+        }
+        if (arfactors == null) {
+            return -1;
+        }
+        if (facs.arfactors == null) {
+            return +1;
+        }
+        // lexicographic (?)
+        int i = 0;
+        for (Factors<AlgebraicNumber<C>> arp : arfactors) {
+            if ( i >= facs.arfactors.size() ) {
+                return +1;
+            }
+            Factors<AlgebraicNumber<C>> brp = facs.arfactors.get(i);
+            //System.out.println("arp = " + arp); 
+            //System.out.println("brp = " + brp); 
+            s = arp.compareTo(brp);
+            //System.out.println("s4 = " + s); 
+            if ( s != 0 ) {
+                return s;
+            }
+            i++;
+        }
+        if ( i < facs.arfactors.size() ) {
+            return -1;
+        }
+        return 0;
     }
 
 

@@ -198,7 +198,7 @@ public class SquarefreeAlgModTest extends TestCase {
      * 
      */
     public void testBaseSquarefree() {
-        System.out.println("\nbase:");
+        //System.out.println("\nbase:");
 
         dfac = new GenPolynomialRing<AlgebraicNumber<ModInteger>>(fac, 1, to, rvars);
 
@@ -269,7 +269,7 @@ public class SquarefreeAlgModTest extends TestCase {
      * 
      */
     public void testRecursiveSquarefree() {
-        System.out.println("\nrecursive:");
+        //System.out.println("\nrecursive:");
 
         cfac = new GenPolynomialRing<AlgebraicNumber<ModInteger>>(fac, 2 - 1, to, c1vars);
         rfac = new GenPolynomialRing<GenPolynomial<AlgebraicNumber<ModInteger>>>(cfac, 1, to, rvars);
@@ -341,7 +341,7 @@ public class SquarefreeAlgModTest extends TestCase {
      * 
      */
     public void testSquarefree() {
-        System.out.println("\nfull:");
+        //System.out.println("\nfull:");
 
         dfac = new GenPolynomialRing<AlgebraicNumber<ModInteger>>(fac, rl, to, vars);
 
@@ -413,7 +413,7 @@ public class SquarefreeAlgModTest extends TestCase {
      * 
      */
     public void testBaseSquarefreeCharRoot() {
-        System.out.println("\nbase CharRoot:");
+        //System.out.println("\nbase CharRoot:");
 
         long p = fac.characteristic().longValue();
 
@@ -495,7 +495,7 @@ public class SquarefreeAlgModTest extends TestCase {
      * 
      */
     public void testBaseSquarefreeCharRoot2() {
-        System.out.println("\nbase CharRoot 2:");
+        //System.out.println("\nbase CharRoot 2:");
 
         long p = fac.characteristic().longValue();
 
@@ -577,7 +577,7 @@ public class SquarefreeAlgModTest extends TestCase {
      * 
      */
     public void testRecursiveSquarefreeCharRoot() {
-        System.out.println("\nrecursive CharRoot:");
+        //System.out.println("\nrecursive CharRoot:");
 
         long p = fac.characteristic().longValue();
 
@@ -667,7 +667,7 @@ public class SquarefreeAlgModTest extends TestCase {
      * 
      */
     public void testSquarefreeCharRoot() {
-        System.out.println("\nfull CharRoot:");
+        //System.out.println("\nfull CharRoot:");
 
         long p = fac.characteristic().longValue();
 
