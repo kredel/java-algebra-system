@@ -21,6 +21,7 @@
 #JDK=/opt/jdk1.2.2/bin
 #JDK=/usr/lib/java/bin
 JDK=/usr/java/latest/bin
+#JDK=/usr/lib/jvm/java-1.5.0-sun-1.5.0/bin
 
 JASPATH=/home/kredel/jas
 SVNREPO=/home/SUBVERSION
@@ -110,52 +111,52 @@ GETC      = getc.pl
 .PHONY    : clean doc
 
 all:
-	$(JAVAC) */*.java
+	$(JAVAC) src/edu/jas/*/*.java src/edu/mas/*/*.java
 
 %.class: %.java
 	$(JAVAC) $<
 
 
-edu/jas/%.class: %.java
+edu/jas/%.class: src/edu/jas/%.java
 	$(JAVAC) $<
 
-edu/jas/arith/%.class: %.java
+edu/jas/arith/%.class: src/edu/jas/arith/%.java
 	$(JAVAC) $<
 
-edu/jas/poly/%.class: %.java
+edu/jas/poly/%.class: src/edu/jas/poly/%.java
 	$(JAVAC) $<
 
-edu/jas/ps/%.class: %.java
+edu/jas/ps/%.class: src/edu/jas/ps/%.java
 	$(JAVAC) $<
 
-edu/jas/gb/%.class: %.java
+edu/jas/gb/%.class: src/edu/jas/gb/%.java
 	$(JAVAC) $<
 
-edu/jas/ufd/%.class: %.java
+edu/jas/ufd/%.class: src/edu/jas/ufd/%.java
 	$(JAVAC) $<
 
-edu/jas/vector/%.class: %.java
+edu/jas/vector/%.class: src/edu/jas/vector/%.java
 	$(JAVAC) $<
 
-edu/jas/gbmod/%.class: %.java
+edu/jas/gbmod/%.class: src/edu/jas/gbmod/%.java
 	$(JAVAC) $<
 
-edu/jas/structure/%.class: %.java
+edu/jas/structure/%.class: src/edu/jas/structure/%.java
 	$(JAVAC) $<
 
-edu/jas/util/%.class: %.java
+edu/jas/util/%.class: src/edu/jas/util/%.java
 	$(JAVAC) $<
 
-edu/jas/application/%.class: %.java
+edu/jas/application/%.class: src/edu/jas/application/%.java
 	$(JAVAC) $<
 
-edu/jas/root/%.class: %.java
+edu/jas/root/%.class: src/edu/jas/root/%.java
 	$(JAVAC) $<
 
-edu/jas/kern/%.class: %.java
+edu/jas/kern/%.class: src/edu/jas/kern/%.java
 	$(JAVAC) $<
 
-edu/mas/kern/%.class: %.java
+edu/mas/kern/%.class: src/edu/mas/kern/%.java
 	$(JAVAC) $<
 
 

@@ -188,8 +188,8 @@ public class SquarefreeQuotModTest extends TestCase {
 
         dfac = new GenPolynomialRing<Quotient<ModInteger>>(fac, 1, to, rvars);
 
-        a = dfac.random(kl + 1, ll, el + 2, q);
-        b = dfac.random(kl + 1, ll, el + 2, q);
+        a = dfac.random(kl + 1, ll, el + 1, q);
+        b = dfac.random(kl + 1, ll, el + 1, q);
         c = dfac.random(kl, ll, el, q);
         //System.out.println("a  = " + a);
         //System.out.println("b  = " + b);
@@ -227,9 +227,9 @@ public class SquarefreeQuotModTest extends TestCase {
 
         dfac = new GenPolynomialRing<Quotient<ModInteger>>(fac, 1, to, rvars);
 
-        a = dfac.random(kl + 1, ll, el + 3, q);
-        b = dfac.random(kl + 1, ll, el + 3, q);
-        c = dfac.random(kl, ll, el + 2, q);
+        a = dfac.random(kl + 1, ll, el + 2, q);
+        b = dfac.random(kl + 1, ll, el + 2, q);
+        c = dfac.random(kl, ll, el + 1, q);
         //System.out.println("a  = " + a);
         //System.out.println("b  = " + b);
         //System.out.println("c  = " + c);

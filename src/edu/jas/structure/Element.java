@@ -22,7 +22,8 @@ public interface Element<C extends Element<C>> extends Cloneable,
      * Clone this Element.
      * @return Creates and returns a copy of this Element.
      */
-    public C clone();
+    /*@Override*/
+    /*public C clone();*/
 
 
     /**
