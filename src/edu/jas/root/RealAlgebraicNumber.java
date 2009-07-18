@@ -7,6 +7,7 @@ package edu.jas.root;
 
 //import edu.jas.structure.RingElem;
 import edu.jas.arith.BigRational;
+import edu.jas.arith.ToRational;
 import edu.jas.kern.PrettyPrint;
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.GenPolynomial;
@@ -20,9 +21,9 @@ import edu.jas.structure.NotInvertibleException;
  * @author Heinz Kredel
  */
 
-public class RealAlgebraicNumber<C extends GcdRingElem<C>>
-/*extends AlgebraicNumber<C>*/
-implements GcdRingElem<RealAlgebraicNumber<C>> {
+public class RealAlgebraicNumber<C extends GcdRingElem<C> & ToRational>
+       /*extends AlgebraicNumber<C>*/
+    implements GcdRingElem<RealAlgebraicNumber<C>>, ToRational {
 
 
     /**
@@ -88,6 +89,16 @@ implements GcdRingElem<RealAlgebraicNumber<C>> {
     @Override
     public RealAlgebraicNumber<C> clone() {
         return new RealAlgebraicNumber<C>(ring, number);
+    }
+
+
+    /**
+     * Return a BigRational approximation of this Element.
+     * @return a BigRational approximation of this.
+     * @see edu.jas.arith.ToRational#toRational()
+     */
+    public BigRational toRational() {
+        return magnitude();
     }
 
 

@@ -7,6 +7,7 @@ package edu.jas.root;
 
 import edu.jas.arith.BigDecimal;
 import edu.jas.arith.BigRational;
+import edu.jas.arith.ToRational;
 import edu.jas.structure.RingElem;
 
 
@@ -15,7 +16,7 @@ import edu.jas.structure.RingElem;
  * @param <C> coefficient type.
  * @author Heinz Kredel
  */
-public class Interval<C extends RingElem<C>> {
+public class Interval<C extends RingElem<C> & ToRational > {
 
 
     /**
@@ -71,12 +72,21 @@ public class Interval<C extends RingElem<C>> {
 
 
     /**
+     * Clone this.
+     * @see java.lang.Object#clone()
+     */
+    @Override
+    public Interval<C> clone() {
+        return new Interval<C>(left, right);
+    }
+
+
+    /**
      * Comparison with any other object.
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
     @SuppressWarnings("unchecked")
-    // not jet working
     public boolean equals(Object b) {
         if (!(b instanceof Interval)) {
             return false;
@@ -114,34 +124,43 @@ public class Interval<C extends RingElem<C>> {
      * BigDecimal representation of Interval.
      */
     public BigDecimal toDecimal() {
-        if ((Object) left instanceof BigRational) {
-            BigDecimal l = new BigDecimal((BigRational) (Object) left);
-            BigDecimal r = new BigDecimal((BigRational) (Object) right);
-            BigDecimal two = new BigDecimal(2);
-            BigDecimal v = l.sum(r).divide(two);
-            return v;
-        } else if ((Object) left instanceof RealAlgebraicNumber) {
-            RealAlgebraicNumber x = (RealAlgebraicNumber) left;
-            RealAlgebraicNumber y = (RealAlgebraicNumber) right;
-            BigDecimal l = new BigDecimal(x.magnitude());
-            BigDecimal r = new BigDecimal(y.magnitude());
-            BigDecimal two = new BigDecimal(2);
-            BigDecimal v = l.sum(r).divide(two);
-            return v;
-        } else {
-            throw new RuntimeException("toDecimal of interval types not implemented");
-        }
+        BigDecimal l = new BigDecimal(left.toRational());
+        BigDecimal r = new BigDecimal(right.toRational());
+        BigDecimal two = new BigDecimal(2);
+        BigDecimal v = l.sum(r).divide(two);
+        return v;
     }
+//         if ((Object) left instanceof BigRational) {
+//             BigDecimal l = new BigDecimal(left.toRational());
+//             BigDecimal r = new BigDecimal(right.toRational());
+//             //BigDecimal l = new BigDecimal((BigRational)(Object)left);
+//             //BigDecimal r = new BigDecimal((BigRational)(Object)right);
+//             BigDecimal two = new BigDecimal(2);
+//             BigDecimal v = l.sum(r).divide(two);
+//             return v;
+//         } else if ((Object) left instanceof RealAlgebraicNumber) {
+//             //RealAlgebraicNumber x = (RealAlgebraicNumber) left;
+//             //RealAlgebraicNumber y = (RealAlgebraicNumber) right;
+//             //BigDecimal l = new BigDecimal(x.magnitude());
+//             //BigDecimal r = new BigDecimal(y.magnitude());
+//             BigDecimal l = new BigDecimal(left.toRational());
+//             BigDecimal r = new BigDecimal(right.toRational());
+//             BigDecimal two = new BigDecimal(2);
+//             BigDecimal v = l.sum(r).divide(two);
+//             return v;
+//         } else {
+//             throw new RuntimeException("toDecimal of interval types not implemented");
+//         }
 
 
-    /*
-     * Middle point.
+    /**
+     * Rational middle point.
      * @return (left-right)/2;
      */
-    //     public C middle() {
-    //  C m = left.sum(right);
-    //  C t = m.getRing().fromInteger(2L);
-    //  m = m.divide(t);
-    //  return m;
-    //     }
+    public BigRational rationalMiddle() {
+        BigRational m = left.toRational().sum(right.toRational());
+        BigRational t = new BigRational(1L,2L);
+        m = m.multiply(t);
+        return m;
+    }
 }

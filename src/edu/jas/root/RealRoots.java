@@ -7,6 +7,7 @@ package edu.jas.root;
 
 import java.util.List;
 
+import edu.jas.arith.ToRational;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.structure.RingElem;
 
@@ -16,7 +17,7 @@ import edu.jas.structure.RingElem;
  * @param <C> coefficient type.
  * @author Heinz Kredel
  */
-public interface RealRoots<C extends RingElem<C>> {
+public interface RealRoots<C extends RingElem<C> & ToRational> {
 
 
     /**
