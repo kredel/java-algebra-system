@@ -20,7 +20,6 @@ import edu.jas.ufd.SquarefreeFactory;
 
 /**
  * Roots factory.
- * @param <C> coefficient type.
  * @author Heinz Kredel
  */
 public class RootFactory {
