@@ -23,9 +23,9 @@
 JDK=/usr/java/latest/bin
 #JDK=/usr/lib/jvm/java-1.5.0-sun-1.5.0/bin
 
-JASPATH=/home/kredel/jas
+JASPATH=$(HOME)/jas
 SVNREPO=/home/SUBVERSION
-LIBPATH=/home/kredel/java/lib
+LIBPATH=$(HOME)/java/lib
 JUNITPATH=$(LIBPATH)/junit.jar
 LOG4JPATH=$(LIBPATH)/log4j.jar
 #LOG4JPATH=$(LIBPATH)/mylog.jar
