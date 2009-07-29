@@ -4,226 +4,240 @@
 
 package edu.jas.util;
 
+
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.Collection;
-import java.util.Set;
-import java.util.Map;
 import java.util.AbstractMap;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 
-//import edu.unima.ky.parallel.ChannelFactory;
-//import edu.unima.ky.parallel.SocketChannel;
-
 
 /**
- * Distributed version of a HashTable.
- * Implemented with a SortedMap / TreeMap to keep the sequence 
- * order of elements.
+ * Distributed version of a HashTable. Implemented with a SortedMap / TreeMap to
+ * keep the sequence order of elements.
  * @author Heinz Kredel
  */
 
-public class DistHashTable<K,V> extends AbstractMap<K,V> /* implements Map<K,V> not jet */ {
+public class DistHashTable<K, V> extends AbstractMap<K, V> /* implements Map<K,V> */{
+
 
     private static final Logger logger = Logger.getLogger(DistHashTable.class);
 
-    protected final SortedMap<K,V> theList;
+
+    protected final SortedMap<K, V> theList;
+
+
     protected final ChannelFactory cf;
+
+
     protected SocketChannel channel = null;
-    protected DHTListener<K,V> listener = null;
 
 
-/**
- * Constructs a new DistHashTable.
- * @param host name or IP of server host.
- */ 
+    protected DHTListener<K, V> listener = null;
+
+
+    /**
+     * Constructs a new DistHashTable.
+     * @param host name or IP of server host.
+     */
     public DistHashTable(String host) {
-        this(host,DistHashTableServer.DEFAULT_PORT);
+        this(host, DistHashTableServer.DEFAULT_PORT);
     }
 
 
-/**
- * DistHashTable.
- * @param host name or IP of server host.
- * @param port on server.
- */
-    public DistHashTable(String host,int port) {
-        this(new ChannelFactory(port+1),host,port);
+    /**
+     * DistHashTable.
+     * @param host name or IP of server host.
+     * @param port on server.
+     */
+    public DistHashTable(String host, int port) {
+        this(new ChannelFactory(port + 1), host, port);
     }
 
 
-/**
- * DistHashTable.
- * @param cf ChannelFactory to use.
- * @param host name or IP of server host.
- * @param port on server.
- */
-    public DistHashTable(ChannelFactory cf,String host,int port) {
+    /**
+     * DistHashTable.
+     * @param cf ChannelFactory to use.
+     * @param host name or IP of server host.
+     * @param port on server.
+     */
+    public DistHashTable(ChannelFactory cf, String host, int port) {
         this.cf = cf;
         try {
-            channel = cf.getChannel(host,port);
+            channel = cf.getChannel(host, port);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if ( logger.isDebugEnabled() ) {
-           logger.debug("dl channel = " + channel);
+        if (logger.isDebugEnabled()) {
+            logger.debug("dl channel = " + channel);
         }
-        theList = new TreeMap<K,V>();
-        listener = new DHTListener<K,V>(channel,theList);
-        listener.start();
+        theList = new TreeMap<K, V>();
+        listener = new DHTListener<K, V>(channel, theList);
+        synchronized (theList) {
+            listener.start();
+        }
     }
 
 
-/**
- * DistHashTable.
- * @param sc SocketChannel to use.
- */
+    /**
+     * DistHashTable.
+     * @param sc SocketChannel to use.
+     */
     public DistHashTable(SocketChannel sc) {
         cf = null;
         channel = sc;
-        theList = new TreeMap<K,V>();
-        listener = new DHTListener<K,V>(channel,theList);
-        listener.start();
+        theList = new TreeMap<K, V>();
+        listener = new DHTListener<K, V>(channel, theList);
+        synchronized (theList) {
+            listener.start();
+        }
     }
 
 
-/**
- * Hash code.
- */ 
+    /**
+     * Hash code.
+     */
+    @Override
     public int hashCode() {
         return theList.hashCode();
     }
 
 
-/**
- * Equals.
- */ 
+    /**
+     * Equals.
+     */
+    @Override
     public boolean equals(Object o) {
         return theList.equals(o);
     }
 
 
-/**
- * Contains key.
- */ 
+    /**
+     * Contains key.
+     */
+    @Override
     public boolean containsKey(Object o) {
         return theList.containsKey(o);
     }
 
 
-/**
- * Contains value.
- */ 
+    /**
+     * Contains value.
+     */
+    @Override
     public boolean containsValue(Object o) {
         return theList.containsValue(o);
     }
 
 
-/**
- * Get the values as Collection.
- */ 
+    /**
+     * Get the values as Collection.
+     */
+    @Override
     public Collection<V> values() {
         return theList.values();
     }
 
 
-/**
- * Get the keys as set.
- */ 
+    /**
+     * Get the keys as set.
+     */
+    @Override
     public Set<K> keySet() {
         return theList.keySet();
     }
 
 
-
-/**
- * Get the entries as Set.
- */ 
-    public Set<Entry<K,V>> entrySet() {
+    /**
+     * Get the entries as Set.
+     */
+    @Override
+    public Set<Entry<K, V>> entrySet() {
         return theList.entrySet();
     }
 
 
-/**
- * Get the internal list, convert from Collection.
- * @fix but is ok
- */ 
-    public List<V> getArrayList() {
-        synchronized ( theList ) {
-           return new ArrayList<V>( theList.values() );
+    /**
+     * Get the internal list, convert from Collection.
+     * @fix but is ok
+     */
+    public List<V> getValueList() {
+        synchronized (theList) {
+            return new ArrayList<V>(theList.values());
         }
     }
 
 
-/**
- * Get the internal sorted map.
- * For synchronization purpose in normalform.
- */ 
-    public SortedMap<K,V> getList() {
+    /**
+     * Get the internal sorted map. For synchronization purpose in normalform.
+     */
+    public SortedMap<K, V> getList() {
         return theList;
     }
 
 
-/**
- * Size of the (local) list.
- */ 
+    /**
+     * Size of the (local) list.
+     */
+    @Override
     public int size() {
-        synchronized ( theList ) {
-           return theList.size();
+        synchronized (theList) {
+            return theList.size();
         }
     }
 
 
-/**
- * Is the List empty?
- */ 
+    /**
+     * Is the List empty?
+     */
+    @Override
     public boolean isEmpty() {
-        synchronized ( theList ) {
-           return theList.isEmpty();
+        synchronized (theList) {
+            return theList.isEmpty();
         }
     }
 
 
-/**
- * List key iterator.
- */ 
+    /**
+     * List key iterator.
+     */
     public Iterator<K> iterator() {
-        synchronized ( theList ) {
-           return theList.keySet().iterator();
+        synchronized (theList) {
+            return theList.keySet().iterator();
         }
     }
 
 
-/**
- * List value iterator.
- */ 
+    /**
+     * List value iterator.
+     */
     public Iterator<V> valueIterator() {
-        synchronized ( theList ) {
-           return theList.values().iterator();
+        synchronized (theList) {
+            return theList.values().iterator();
         }
     }
 
 
-/**
- * Put object to the distributed hash table.
- * Blocks until the key value pair is send and received 
- * from the server.
- * @param key
- * @param value
- */
+    /**
+     * Put object to the distributed hash table. Blocks until the key value pair
+     * is send and received from the server.
+     * @param key
+     * @param value
+     */
     public void putWait(K key, V value) {
-        put(key,value); // = send
+        put(key, value); // = send
         try {
-            synchronized ( theList ) {
-               while ( ! value.equals( theList.get(key) ) ) {
-                  //System.out.print("#");
-                  theList.wait(100);
-               }
+            synchronized (theList) {
+                while (!value.equals(theList.get(key))) {
+                    //System.out.print("#");
+                    theList.wait(100);
+                }
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
@@ -232,45 +246,46 @@ public class DistHashTable<K,V> extends AbstractMap<K,V> /* implements Map<K,V> 
     }
 
 
-/**
- * Put object to the distributed hash table.
- * Returns immediately after sending does not block.
- * @param key
- * @param value
- */
+    /**
+     * Put object to the distributed hash table. Returns immediately after
+     * sending does not block.
+     * @param key
+     * @param value
+     */
+    @Override
     public V put(K key, V value) {
-        if ( key == null || value == null ) {
-           throw new NullPointerException("null keys or values not allowed");
+        if (key == null || value == null) {
+            throw new NullPointerException("null keys or values not allowed");
         }
         try {
-            DHTTransport<K,V> tc = new DHTTransport<K,V>(key,value);
+            DHTTransport<K, V> tc = new DHTTransport<K, V>(key, value);
             channel.send(tc);
             //System.out.println("send: "+tc+" @ "+listener);
         } catch (IOException e) {
             e.printStackTrace();
         }
-	return null;
+        return null;
     }
 
 
-/**
- * Get value under key from DHT.
- * Blocks until the object is send and received from the server
- * (actually it blocks until some value under key is received).
- * @param key
- * @return the value stored under the key.
- */
+    /**
+     * Get value under key from DHT. Blocks until the object is send and
+     * received from the server (actually it blocks until some value under key
+     * is received).
+     * @param key
+     * @return the value stored under the key.
+     */
     public V getWait(K key) {
         V value = null;
         try {
-            synchronized ( theList ) {
-		//value = theList.get(key);
-               value = get(key);
-               while ( value == null ) {
-                   //System.out.print("^");
-                   theList.wait(100);
-                   value = theList.get(key);
-               }
+            synchronized (theList) {
+                //value = theList.get(key);
+                value = get(key);
+                while (value == null) {
+                    //System.out.print("^");
+                    theList.wait(100);
+                    value = theList.get(key);
+                }
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
@@ -280,56 +295,57 @@ public class DistHashTable<K,V> extends AbstractMap<K,V> /* implements Map<K,V> 
     }
 
 
-/**
- * Get value under key from DHT.
- * If no value is jet available null is returned. 
- * @param key
- * @return the value stored under the key.
- */
+    /**
+     * Get value under key from DHT. If no value is jet available null is
+     * returned.
+     * @param key
+     * @return the value stored under the key.
+     */
+    @Override
     public V get(Object key) {
-        synchronized ( theList ) {
-           return theList.get(key);
+        synchronized (theList) {
+            return theList.get(key);
         }
     }
 
 
-/**
- * Clear the List.
- * Caveat: must be called on all clients.
- */ 
+    /**
+     * Clear the List. Caveat: must be called on all clients.
+     */
+    @Override
     public void clear() {
         // send clear message to others
-        synchronized ( theList) {
-           theList.clear();
+        synchronized (theList) {
+            theList.clear();
         }
     }
 
 
-/**
- * Terminate the list thread.
- */ 
+    /**
+     * Terminate the list thread.
+     */
     public void terminate() {
-        if ( cf != null ) {
-           cf.terminate();
+        if (cf != null) {
+            cf.terminate();
         }
-        if ( channel != null ) {
-           channel.close();
+        if (channel != null) {
+            channel.close();
         }
         //theList.clear();
-        if ( listener == null ) { 
-           return;
+        if (listener == null) {
+            return;
         }
-        if ( logger.isDebugEnabled() ) {
-           logger.debug("terminate " + listener);
+        if (logger.isDebugEnabled()) {
+            logger.debug("terminate " + listener);
         }
-        listener.setDone(); 
-        try { 
-            while ( listener.isAlive() ) {
-                  //System.out.print("+");
-                  listener.interrupt(); 
-                  listener.join(100);
+        listener.setDone();
+        try {
+            while (listener.isAlive()) {
+                //System.out.print("+");
+                listener.interrupt();
+                listener.join(100);
             }
-        } catch (InterruptedException e) { 
+        } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
         listener = null;
@@ -342,59 +358,67 @@ public class DistHashTable<K,V> extends AbstractMap<K,V> /* implements Map<K,V> 
  * Thread to comunicate with the list server.
  */
 
-class DHTListener<K,V> extends Thread {
+class DHTListener<K, V> extends Thread {
+
 
     private static final Logger logger = Logger.getLogger(DHTListener.class);
 
+
     private final SocketChannel channel;
-    private final SortedMap<K,V> theList;
+
+
+    private final SortedMap<K, V> theList;
+
+
     private boolean goon;
 
 
-    DHTListener(SocketChannel s, SortedMap<K,V> list) {
+    DHTListener(SocketChannel s, SortedMap<K, V> list) {
         channel = s;
         theList = list;
-    } 
+    }
 
 
     void setDone() {
         goon = false;
     }
 
-/**
- * run.
- */
+
+    /**
+     * run.
+     */
+    @SuppressWarnings("unchecked")
     @Override
-     public void run() {
+    public void run() {
         Object o;
-        DHTTransport<K,V> tc;
+        DHTTransport<K, V> tc;
         goon = true;
         while (goon) {
             tc = null;
             o = null;
             try {
                 o = channel.receive();
-                if ( logger.isDebugEnabled() ) {
-                   logger.debug("receive("+o+")");
+                if (logger.isDebugEnabled()) {
+                    logger.debug("receive(" + o + ")");
                 }
-                if ( this.isInterrupted() ) {
-                   goon = false;
-                   break;
-                } 
-                if ( o == null ) {
-                   goon = false;
-                   break;
-                } 
-                if ( o instanceof DHTTransport ) {
-                   tc = (DHTTransport<K,V>)o;
-		   K key = tc.key();
-                   if ( key != null ) {
-                      //logger.debug("receive, put(" + tc + ")");
-                      synchronized ( theList ) {
-                         theList.put( key, tc.value() );
-                         theList.notify();
-                      }
-                   }
+                if (this.isInterrupted()) {
+                    goon = false;
+                    break;
+                }
+                if (o == null) {
+                    goon = false;
+                    break;
+                }
+                if (o instanceof DHTTransport) {
+                    tc = (DHTTransport<K, V>) o;
+                    K key = tc.key();
+                    if (key != null) {
+                        //logger.debug("receive, put(" + tc + ")");
+                        synchronized (theList) {
+                            theList.put(key, tc.value());
+                            theList.notify();
+                        }
+                    }
                 }
             } catch (IOException e) {
                 goon = false;
