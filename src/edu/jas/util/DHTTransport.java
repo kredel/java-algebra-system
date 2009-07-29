@@ -5,7 +5,8 @@
 package edu.jas.util;
 
 import java.io.Serializable;
-
+import java.io.IOException;
+import java.rmi.MarshalledObject;
 
 /**
  * Transport container for a distributed version of a HashTable.
@@ -13,10 +14,10 @@ import java.io.Serializable;
  * @author Heinz Kredel
  */
 
-public class DHTTransport implements Serializable {
+public class DHTTransport<K,V> implements Serializable {
 
-  public final Object key;
-  public final Object value;
+  protected final MarshalledObject<K> key;
+  protected final MarshalledObject<V> value;
 
 
 /**
@@ -24,18 +25,34 @@ public class DHTTransport implements Serializable {
  * @param key 
  * @param value
  */
-public DHTTransport(Object key, Object value) {
-      this.key = key;
-      this.value = value;
-  }
+public DHTTransport(K key, V value) throws IOException {
+    this.key = new MarshalledObject<K>(key);
+    this.value = new MarshalledObject<V>(value);
+}
 
 
-  /**
-   * toString.
-   */
-  @Override
+/**
+ * Get the key from this DHTTransport Container.
+ */
+    public K key() throws IOException, ClassNotFoundException {
+    return this.key.get();
+}
+
+
+/**
+ * Get the value from this DHTTransport Container.
+ */
+public V value() throws IOException, ClassNotFoundException {
+    return this.value.get();
+}
+
+
+/**
+ * toString.
+ */
+@Override
 public String toString() {
-      return "" + this.getClass().getName()
+   return "" + this.getClass().getName()
              + "("+key+","+value+")";
 
   }

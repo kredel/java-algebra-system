@@ -8,7 +8,9 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.Collection;
 import java.util.Set;
-//import java.util.Map;
+import java.util.Map;
+import java.util.AbstractMap;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -26,14 +28,14 @@ import org.apache.log4j.Logger;
  * @author Heinz Kredel
  */
 
-public class DistHashTable /* implements Map not jet */ {
+public class DistHashTable<K,V> extends AbstractMap<K,V> /* implements Map<K,V> not jet */ {
 
     private static final Logger logger = Logger.getLogger(DistHashTable.class);
 
-    protected final SortedMap theList;
+    protected final SortedMap<K,V> theList;
     protected final ChannelFactory cf;
     protected SocketChannel channel = null;
-    protected DHTListener listener = null;
+    protected DHTListener<K,V> listener = null;
 
 
 /**
@@ -71,8 +73,8 @@ public class DistHashTable /* implements Map not jet */ {
         if ( logger.isDebugEnabled() ) {
            logger.debug("dl channel = " + channel);
         }
-        theList = new TreeMap();
-        listener = new DHTListener(channel,theList);
+        theList = new TreeMap<K,V>();
+        listener = new DHTListener<K,V>(channel,theList);
         listener.start();
     }
 
@@ -84,16 +86,48 @@ public class DistHashTable /* implements Map not jet */ {
     public DistHashTable(SocketChannel sc) {
         cf = null;
         channel = sc;
-        theList = new TreeMap();
-        listener = new DHTListener(channel,theList);
+        theList = new TreeMap<K,V>();
+        listener = new DHTListener<K,V>(channel,theList);
         listener.start();
+    }
+
+
+/**
+ * Hash code.
+ */ 
+    public int hashCode() {
+        return theList.hashCode();
+    }
+
+
+/**
+ * Equals.
+ */ 
+    public boolean equals(Object o) {
+        return theList.equals(o);
+    }
+
+
+/**
+ * Contains key.
+ */ 
+    public boolean containsKey(Object o) {
+        return theList.containsKey(o);
+    }
+
+
+/**
+ * Contains value.
+ */ 
+    public boolean containsValue(Object o) {
+        return theList.containsValue(o);
     }
 
 
 /**
  * Get the values as Collection.
  */ 
-    public Collection values() {
+    public Collection<V> values() {
         return theList.values();
     }
 
@@ -101,8 +135,17 @@ public class DistHashTable /* implements Map not jet */ {
 /**
  * Get the keys as set.
  */ 
-    public Set keySet() {
+    public Set<K> keySet() {
         return theList.keySet();
+    }
+
+
+
+/**
+ * Get the entries as Set.
+ */ 
+    public Set<Entry<K,V>> entrySet() {
+        return theList.entrySet();
     }
 
 
@@ -110,9 +153,9 @@ public class DistHashTable /* implements Map not jet */ {
  * Get the internal list, convert from Collection.
  * @fix but is ok
  */ 
-    public ArrayList getArrayList() {
+    public List<V> getArrayList() {
         synchronized ( theList ) {
-           return new ArrayList( theList.values() );
+           return new ArrayList<V>( theList.values() );
         }
     }
 
@@ -121,7 +164,7 @@ public class DistHashTable /* implements Map not jet */ {
  * Get the internal sorted map.
  * For synchronization purpose in normalform.
  */ 
-    public SortedMap getList() {
+    public SortedMap<K,V> getList() {
         return theList;
     }
 
@@ -149,7 +192,7 @@ public class DistHashTable /* implements Map not jet */ {
 /**
  * List key iterator.
  */ 
-    public Iterator iterator() {
+    public Iterator<K> iterator() {
         synchronized ( theList ) {
            return theList.keySet().iterator();
         }
@@ -159,7 +202,7 @@ public class DistHashTable /* implements Map not jet */ {
 /**
  * List value iterator.
  */ 
-    public Iterator valueIterator() {
+    public Iterator<V> valueIterator() {
         synchronized ( theList ) {
            return theList.values().iterator();
         }
@@ -173,7 +216,7 @@ public class DistHashTable /* implements Map not jet */ {
  * @param key
  * @param value
  */
-    public void putWait(Object key, Object value) {
+    public void putWait(K key, V value) {
         put(key,value); // = send
         try {
             synchronized ( theList ) {
@@ -195,17 +238,18 @@ public class DistHashTable /* implements Map not jet */ {
  * @param key
  * @param value
  */
-    public void put(Object key, Object value) {
+    public V put(K key, V value) {
         if ( key == null || value == null ) {
            throw new NullPointerException("null keys or values not allowed");
         }
-        DHTTransport tc = new DHTTransport(key,value);
         try {
+            DHTTransport<K,V> tc = new DHTTransport<K,V>(key,value);
             channel.send(tc);
             //System.out.println("send: "+tc+" @ "+listener);
         } catch (IOException e) {
             e.printStackTrace();
         }
+	return null;
     }
 
 
@@ -216,11 +260,12 @@ public class DistHashTable /* implements Map not jet */ {
  * @param key
  * @return the value stored under the key.
  */
-    public Object getWait(Object key) {
-        Object value = null;
+    public V getWait(K key) {
+        V value = null;
         try {
             synchronized ( theList ) {
-               value = theList.get(key);
+		//value = theList.get(key);
+               value = get(key);
                while ( value == null ) {
                    //System.out.print("^");
                    theList.wait(100);
@@ -241,7 +286,7 @@ public class DistHashTable /* implements Map not jet */ {
  * @param key
  * @return the value stored under the key.
  */
-    public Object get(Object key) {
+    public V get(Object key) {
         synchronized ( theList ) {
            return theList.get(key);
         }
@@ -297,16 +342,16 @@ public class DistHashTable /* implements Map not jet */ {
  * Thread to comunicate with the list server.
  */
 
-class DHTListener extends Thread {
+class DHTListener<K,V> extends Thread {
 
     private static final Logger logger = Logger.getLogger(DHTListener.class);
 
     private final SocketChannel channel;
-    private final SortedMap theList;
+    private final SortedMap<K,V> theList;
     private boolean goon;
 
 
-    DHTListener(SocketChannel s, SortedMap list) {
+    DHTListener(SocketChannel s, SortedMap<K,V> list) {
         channel = s;
         theList = list;
     } 
@@ -322,7 +367,7 @@ class DHTListener extends Thread {
     @Override
      public void run() {
         Object o;
-        DHTTransport tc;
+        DHTTransport<K,V> tc;
         goon = true;
         while (goon) {
             tc = null;
@@ -339,13 +384,14 @@ class DHTListener extends Thread {
                 if ( o == null ) {
                    goon = false;
                    break;
-                }
+                } 
                 if ( o instanceof DHTTransport ) {
-                   tc = (DHTTransport)o;
-                   if ( tc.key != null ) {
+                   tc = (DHTTransport<K,V>)o;
+		   K key = tc.key();
+                   if ( key != null ) {
                       //logger.debug("receive, put(" + tc + ")");
                       synchronized ( theList ) {
-                         theList.put( tc.key, tc.value );
+                         theList.put( key, tc.value() );
                          theList.notify();
                       }
                    }
