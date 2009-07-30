@@ -391,7 +391,7 @@ class DHTBroadcaster<K> extends Thread /*implements Runnable*/{
      */
     @Override
     public String toString() {
-        return "DHTBroadcaster(" + channel + "," + bcaster.size() + /*","+listElem+*/")";
+        return "DHTBroadcaster(" + channel + "," + bcaster.size() + ")";
     }
 
 }
