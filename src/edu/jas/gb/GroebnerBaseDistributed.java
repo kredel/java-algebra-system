@@ -59,6 +59,7 @@ public class GroebnerBaseDistributed<C extends RingElem<C>>
 
     /**
      * Pool of threads to use.
+     * <b>Note:</b> No ComputerThreads for one node tests
      */
     protected final ThreadPool pool;
 
@@ -194,9 +195,9 @@ public class GroebnerBaseDistributed<C extends RingElem<C>>
         for ( int i = 0; i < al.size(); i++ ) {
             // no wait required
             GenPolynomial<C> nn = theList.put( new Integer(i), al.get(i) );
-	    if ( nn != null ) {
+         if ( nn != null ) {
                 logger.info("double polynomials " + i + ", nn = " + nn + ", al(i) = " + al.get(i));
-	    }
+         }
         } 
 
         Terminator fin = new Terminator(threads);
@@ -513,18 +514,18 @@ class ReducerServer<C extends RingElem<C>> implements Runnable {
                            // pool.allIdle();
                            polIndex = pairlist.putOne( H );
                            GenPolynomial<C> nn = theList.put( new Integer(polIndex), H );
-                   	    if ( nn != null ) {
+                        if ( nn != null ) {
                                 logger.info("double polynomials nn = " + nn + ", H = " + H);
-	                   }
+                        }
                            goon = false;
                            break;
                         } else {
                            polIndex = pairlist.put( H );
                            // use putWait ? but still not all distributed
                            GenPolynomial<C> nn = theList.put( new Integer(polIndex), H );
-                   	    if ( nn != null ) {
+                        if ( nn != null ) {
                                 logger.info("double polynomials nn = " + nn + ", H = " + H);
-	                   }
+                        }
                         }
                      }
                   }

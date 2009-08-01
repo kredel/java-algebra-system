@@ -178,13 +178,11 @@ public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>>
      * @param F polynomial list.
      * @return GB(F) a Groebner base of F or null, if a IOException occurs.
      */
-    public List<GenPolynomial<C>> 
-             GB( int modv,
-                 List<GenPolynomial<C>> F ) {  
+    public List<GenPolynomial<C>> GB( int modv, List<GenPolynomial<C>> F ) {  
 
         final int DL_PORT = port + 100;
         ChannelFactory cf = new ChannelFactory(port);
-        DistHashTableServer dls = new DistHashTableServer(DL_PORT);
+        DistHashTableServer<Integer> dls = new DistHashTableServer<Integer>(DL_PORT);
         dls.init();
         logger.debug("dist-list server running");
 
@@ -230,11 +228,14 @@ public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>>
         // now in DL, uses resend for late clients
         //while ( dls.size() < threads ) { sleep(); }
 
-        DistHashTable theList = new DistHashTable( "localhost", DL_PORT );
+        DistHashTable<Integer,GenPolynomial<C>> theList = new DistHashTable<Integer,GenPolynomial<C>>( "localhost", DL_PORT );
         ArrayList<GenPolynomial<C>> al = pairlist.getList();
         for ( int i = 0; i < al.size(); i++ ) {
             // no wait required
-            theList.put( new Integer(i), al.get(i) );
+            GenPolynomial<C> nn = theList.put( new Integer(i), al.get(i) );
+         if ( nn != null ) {
+                logger.info("double polynomials " + i + ", nn = " + nn + ", al(i) = " + al.get(i));
+         }
         }
 
         Terminator fin = new Terminator(threads);
@@ -294,10 +295,9 @@ public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>>
         SocketChannel pairChannel = cf.getChannel(host,port);
 
         final int DL_PORT = port + 100;
-        DistHashTable theList = new DistHashTable(host, DL_PORT );
+        DistHashTable<Integer,GenPolynomial<C>> theList = new DistHashTable<Integer,GenPolynomial<C>>(host, DL_PORT );
 
-        ReducerClientSeqPair<C> R;
-        R = new ReducerClientSeqPair<C>(pairChannel,theList);
+        ReducerClientSeqPair<C> R = new ReducerClientSeqPair<C>(pairChannel,theList);
         R.run();
 
         pairChannel.close();
@@ -365,7 +365,7 @@ public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>>
            return G;
         }
 
-        MiReducerServerSeqPair<C>[] mirs = new MiReducerServerSeqPair[ G.size() ];
+        MiReducerServerSeqPair<C>[] mirs = (MiReducerServerSeqPair<C>[]) new MiReducerServerSeqPair[ G.size() ];
         int i = 0;
         F = new ArrayList<GenPolynomial<C>>( G.size() );
         while ( G.size() > 0 ) {
@@ -400,7 +400,7 @@ class ReducerServerSeqPair<C extends RingElem<C>> implements Runnable {
       private Terminator pool;
       private ChannelFactory cf;
       private SocketChannel pairChannel;
-      private DistHashTable theList;
+      private DistHashTable<Integer,GenPolynomial<C>> theList;
       //private List<GenPolynomial<C>> G;
       private CriticalPairList<C> pairlist;
       private static final Logger logger = Logger.getLogger(ReducerServerSeqPair.class);
@@ -408,7 +408,7 @@ class ReducerServerSeqPair<C extends RingElem<C>> implements Runnable {
 
       ReducerServerSeqPair(Terminator fin, 
                     ChannelFactory cf, 
-                    DistHashTable dl, 
+                    DistHashTable<Integer,GenPolynomial<C>> dl, 
                     List<GenPolynomial<C>> G, 
                     CriticalPairList<C> L) {
             pool = fin;
@@ -761,12 +761,12 @@ class GBSPTransportMessPairIndex extends GBSPTransportMess {
 class ReducerClientSeqPair<C extends RingElem<C>> implements Runnable {
 
       private SocketChannel pairChannel;
-      private DistHashTable theList;
+      private DistHashTable<Integer,GenPolynomial<C>> theList;
       private ReductionPar<C> red;
 
       private static final Logger logger = Logger.getLogger(ReducerClientSeqPair.class);
 
-      ReducerClientSeqPair(SocketChannel pc, DistHashTable dl) {
+      ReducerClientSeqPair(SocketChannel pc, DistHashTable<Integer,GenPolynomial<C>> dl) {
              pairChannel = pc;
              theList = dl;
              red = new ReductionPar<C>();

@@ -31,14 +31,14 @@ import edu.jas.structure.RingElem;
 
 
 /**
- * Distributed GroebnerBase tests with JUnit.
+ * Distributed hybrid architecture GroebnerBase tests with JUnit.
  * @author Heinz Kredel
  */
 
-public class GroebnerBaseDistTest extends TestCase {
+public class GroebnerBaseDistHybridTest extends TestCase {
 
 
-    //private static final Logger logger = Logger.getLogger(GroebnerBaseDistTest.class);
+    //private static final Logger logger = Logger.getLogger(GroebnerBaseDistHybridTest.class);
 
     /**
      * main
@@ -51,10 +51,10 @@ public class GroebnerBaseDistTest extends TestCase {
 
 
     /**
-     * Constructs a <CODE>GroebnerBaseDistTest</CODE> object.
+     * Constructs a <CODE>GroebnerBaseDistHybridTest</CODE> object.
      * @param name String.
      */
-    public GroebnerBaseDistTest(String name) {
+    public GroebnerBaseDistHybridTest(String name) {
         super(name);
     }
 
@@ -63,7 +63,7 @@ public class GroebnerBaseDistTest extends TestCase {
      * suite.
      */
     public static Test suite() {
-        TestSuite suite = new TestSuite(GroebnerBaseDistTest.class);
+        TestSuite suite = new TestSuite(GroebnerBaseDistHybridTest.class);
         return suite;
     }
 
@@ -128,14 +128,17 @@ public class GroebnerBaseDistTest extends TestCase {
     int threads = 2;
 
 
+    int threadsPerNode = 1;
+
+
     @Override
     protected void setUp() {
         BigRational coeff = new BigRational(9);
         fac = new GenPolynomialRing<BigRational>(coeff, rl);
         a = b = c = d = e = null;
         bbseq = new GroebnerBaseSeq<BigRational>();
-        bbdist = new GroebnerBaseDistributed<BigRational>(threads, port);
-        bbdisthyb = new GroebnerBaseDistributedHybrid<BigRational>(threads, port);
+        bbdist = null; //new GroebnerBaseDistributed<BigRational>(threads, port);
+        bbdisthyb = new GroebnerBaseDistributedHybrid<BigRational>(threads, threadsPerNode, port);
     }
 
 
@@ -144,11 +147,11 @@ public class GroebnerBaseDistTest extends TestCase {
         a = b = c = d = e = null;
         fac = null;
         bbseq = null;
-        bbdist.terminate();
+        //bbdist.terminate();
         bbdist = null;
         bbdisthyb.terminate();
         bbdisthyb = null;
-     ComputerThreads.terminate();
+        ComputerThreads.terminate();
     }
 
 
@@ -159,7 +162,7 @@ public class GroebnerBaseDistTest extends TestCase {
     Thread[] startThreads() {
         Thread[] clients = new Thread[threads];
         for (int t = 0; t < threads; t++) {
-            clients[t] = new Thread(new JunitClient(host, port));
+            clients[t] = new Thread(new JunitClientHybrid(threadsPerNode, host, port));
             clients[t].start();
         }
         return clients;
@@ -181,10 +184,10 @@ public class GroebnerBaseDistTest extends TestCase {
 
 
     /**
-     * Test distributed GBase.
+     * Test distributed hybrid GBase.
      * 
      */
-    public void testDistributedGBase() {
+    public void testDistributedHybridGBase() {
 
         Thread[] clients;
 
@@ -200,7 +203,7 @@ public class GroebnerBaseDistTest extends TestCase {
         L.add(a);
 
         clients = startThreads();
-        L = bbdist.GB(L);
+        L = bbdisthyb.GB(L);
         stopThreads(clients);
         assertTrue("isGB( { a } )", bbseq.isGB(L));
 
@@ -209,7 +212,7 @@ public class GroebnerBaseDistTest extends TestCase {
         //System.out.println("L = " + L.size() );
 
         clients = startThreads();
-        L = bbdist.GB(L);
+        L = bbdisthyb.GB(L);
         stopThreads(clients);
         assertTrue("isGB( { a, b } )", bbseq.isGB(L));
 
@@ -217,7 +220,7 @@ public class GroebnerBaseDistTest extends TestCase {
         L.add(c);
 
         clients = startThreads();
-        L = bbdist.GB(L);
+        L = bbdisthyb.GB(L);
         stopThreads(clients);
         assertTrue("isGB( { a, b, c } )", bbseq.isGB(L));
 
@@ -225,7 +228,7 @@ public class GroebnerBaseDistTest extends TestCase {
         L.add(d);
 
         clients = startThreads();
-        L = bbdist.GB(L);
+        L = bbdisthyb.GB(L);
         stopThreads(clients);
         assertTrue("isGB( { a, b, c, d } )", bbseq.isGB(L));
 
@@ -233,77 +236,9 @@ public class GroebnerBaseDistTest extends TestCase {
         L.add(e);
 
         clients = startThreads();
-        L = bbdist.GB(L);
+        L = bbdisthyb.GB(L);
         stopThreads(clients);
         assertTrue("isGB( { a, b, c, d, e } )", bbseq.isGB(L));
-    }
-
-
-    /**
-     * Test compare sequential with distributed GBase.
-     * 
-     */
-    public void testSequentialDistributedGBase() {
-
-        Thread[] clients;
-
-        List<GenPolynomial<BigRational>> Gs, Gp = null;
-
-        L = new ArrayList<GenPolynomial<BigRational>>();
-
-        a = fac.random(kl, ll, el, q);
-        b = fac.random(kl, ll, el, q);
-        c = fac.random(kl, ll, el, q);
-        d = fac.random(kl, ll, el, q);
-        e = d; //fac.random(kl, ll, el, q );
-
-        L.add(a);
-        Gs = bbseq.GB(L);
-        clients = startThreads();
-        Gp = bbdist.GB(L);
-        stopThreads(clients);
-
-        assertTrue("Gs.containsAll(Gp)", Gs.containsAll(Gp));
-        assertTrue("Gp.containsAll(Gs)", Gp.containsAll(Gs));
-
-        L = Gs;
-        L.add(b);
-        Gs = bbseq.GB(L);
-        clients = startThreads();
-        Gp = bbdist.GB(L);
-        stopThreads(clients);
-        assertTrue("Gs.containsAll(Gp)", Gs.containsAll(Gp));
-        assertTrue("Gp.containsAll(Gs)", Gp.containsAll(Gs));
-
-        L = Gs;
-        L.add(c);
-        Gs = bbseq.GB(L);
-        clients = startThreads();
-        Gp = bbdist.GB(L);
-        stopThreads(clients);
-
-        assertTrue("Gs.containsAll(Gp)", Gs.containsAll(Gp));
-        assertTrue("Gp.containsAll(Gs)", Gp.containsAll(Gs));
-
-        L = Gs;
-        L.add(d);
-        Gs = bbseq.GB(L);
-        clients = startThreads();
-        Gp = bbdist.GB(L);
-        stopThreads(clients);
-
-        assertTrue("Gs.containsAll(Gp)", Gs.containsAll(Gp));
-        assertTrue("Gp.containsAll(Gs)", Gp.containsAll(Gs));
-
-        L = Gs;
-        L.add(e);
-        Gs = bbseq.GB(L);
-        clients = startThreads();
-        Gp = bbdist.GB(L);
-        stopThreads(clients);
-
-        assertTrue("Gs.containsAll(Gp)", Gs.containsAll(Gp));
-        assertTrue("Gp.containsAll(Gs)", Gp.containsAll(Gs));
     }
 
 
@@ -311,7 +246,7 @@ public class GroebnerBaseDistTest extends TestCase {
      * Test Trinks7 GBase.
      * 
      */
-    public void testTrinks7GBase() {
+    public void xtestTrinks7GBase() {
         Thread[] clients;
         String exam = "(B,S,T,Z,P,W) L " + "( " + "( 45 P + 35 S - 165 B - 36 ), "
                 + "( 35 P + 40 Z + 25 T - 27 S ), " + "( 15 W + 25 S P + 30 Z - 18 T - 165 B**2 ), "
@@ -327,7 +262,7 @@ public class GroebnerBaseDistTest extends TestCase {
         //System.out.println("F = " + F);
 
         clients = startThreads();
-        G = bbdist.GB(F.list);
+        G = bbdisthyb.GB(F.list);
         stopThreads(clients);
 
         assertTrue("isGB( GB(Trinks7) )", bbseq.isGB(G));
@@ -344,7 +279,10 @@ public class GroebnerBaseDistTest extends TestCase {
  * Unit Test client to be executed by test threads.
  */
 
-class JunitClient<C extends RingElem<C>> implements Runnable {
+class JunitClientHybrid<C extends RingElem<C>> implements Runnable {
+
+
+    private final int threadsPerNode;
 
 
     private final String host;
@@ -353,15 +291,16 @@ class JunitClient<C extends RingElem<C>> implements Runnable {
     private final int port;
 
 
-    JunitClient(String host, int port) {
+    JunitClientHybrid(int threadsPerNode, String host, int port) {
+        this.threadsPerNode = threadsPerNode;
         this.host = host;
         this.port = port;
     }
 
 
     public void run() {
-        GroebnerBaseDistributed<C> bbd;
-        bbd = new GroebnerBaseDistributed<C>(1, null, port);
+        GroebnerBaseDistributedHybrid<C> bbd;
+        bbd = new GroebnerBaseDistributedHybrid<C>(1, threadsPerNode, port);
         try {
             bbd.clientPart(host);
         } catch (IOException ignored) {
