@@ -46,7 +46,7 @@ public class GroebnerBaseDistHybridTest extends TestCase {
     public static void main(String[] args) {
         BasicConfigurator.configure();
         junit.textui.TestRunner.run(suite());
-     //ComputerThreads.terminate();
+        //ComputerThreads.terminate();
     }
 
 
@@ -246,6 +246,7 @@ public class GroebnerBaseDistHybridTest extends TestCase {
      * Test Trinks7 GBase.
      * 
      */
+    @SuppressWarnings("unchecked")
     public void xtestTrinks7GBase() {
         Thread[] clients;
         String exam = "(B,S,T,Z,P,W) L " + "( " + "( 45 P + 35 S - 165 B - 36 ), "

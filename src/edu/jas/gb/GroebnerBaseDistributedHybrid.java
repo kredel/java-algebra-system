@@ -6,19 +6,12 @@ package edu.jas.gb;
 
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
-//import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
 
 import org.apache.log4j.Logger;
 
-import edu.jas.kern.ComputerThreads;
-import edu.jas.kern.PreemptingException;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.structure.RingElem;
@@ -34,14 +27,17 @@ import edu.jas.util.ThreadPool;
 /**
  * Groebner Base distributed hybrid algorithm. Implements a distributed memory
  * with multi-core CPUs parallel version of Groebner bases. Using pairlist
- * class, slaves maintain pairlist, distributed slaves do reduction.
+ * class, proxy tasks maintain pairlist, distributed multiple tasks do
+ * reduction.
  * @param <C> coefficient type
  * @author Heinz Kredel
  */
 
 public class GroebnerBaseDistributedHybrid<C extends RingElem<C>> extends GroebnerBaseAbstract<C> {
 
+
     public static final Logger logger = Logger.getLogger(GroebnerBaseDistributedHybrid.class);
+
 
     public static final boolean debug = true || logger.isDebugEnabled();
 
@@ -101,7 +97,6 @@ public class GroebnerBaseDistributedHybrid<C extends RingElem<C>> extends Groebn
     public static final Integer resultTag = new Integer(2);
 
 
-
     /**
      * Constructor.
      */
@@ -147,7 +142,7 @@ public class GroebnerBaseDistributedHybrid<C extends RingElem<C>> extends Groebn
      * @param port server port to use.
      */
     public GroebnerBaseDistributedHybrid(int threads, ThreadPool pool, int port) {
-        this(threads,DEFAULT_THREADS_PER_NODE,pool,port);
+        this(threads, DEFAULT_THREADS_PER_NODE, pool, port);
     }
 
 
@@ -178,7 +173,7 @@ public class GroebnerBaseDistributedHybrid<C extends RingElem<C>> extends Groebn
         if (pool == null) {
             return;
         }
-        pool.terminate(); 
+        pool.terminate();
     }
 
 
@@ -309,7 +304,8 @@ public class GroebnerBaseDistributedHybrid<C extends RingElem<C>> extends Groebn
         }
 
         final int DL_PORT = port + 100;
-        DistHashTable<Integer, GenPolynomial<C>> theList = new DistHashTable<Integer, GenPolynomial<C>>(host, DL_PORT);
+        DistHashTable<Integer, GenPolynomial<C>> theList = new DistHashTable<Integer, GenPolynomial<C>>(host,
+                DL_PORT);
 
         //HybridReducerClient<C> R = new HybridReducerClient<C>(threadsPerNode, pairChannel, theList);
         //R.run();
@@ -317,7 +313,7 @@ public class GroebnerBaseDistributedHybrid<C extends RingElem<C>> extends Groebn
 
         ThreadPool pool = new ThreadPool(threadsPerNode);
         //Future[] fu = new Future[ threadsPerNode ]; 
-        for ( int i = 0; i < threadsPerNode; i++ ) {
+        for (int i = 0; i < threadsPerNode; i++) {
             HybridReducerClient<C> Rr = new HybridReducerClient<C>(threadsPerNode, pairChannel, theList);
             pool.addJob(Rr);
         }
@@ -423,7 +419,9 @@ public class GroebnerBaseDistributedHybrid<C extends RingElem<C>> extends Groebn
 
 class HybridReducerServer<C extends RingElem<C>> implements Runnable {
 
+
     public static final Logger logger = Logger.getLogger(HybridReducerServer.class);
+
 
     public static final boolean debug = true || logger.isDebugEnabled();
 
@@ -457,7 +455,6 @@ class HybridReducerServer<C extends RingElem<C>> implements Runnable {
      * Message tag for results.
      */
     public final Integer resultTag = GroebnerBaseDistributedHybrid.resultTag;
-
 
 
     HybridReducerServer(Terminator fin, ChannelFactory cf, DistHashTable<Integer, GenPolynomial<C>> dl,
@@ -512,7 +509,7 @@ class HybridReducerServer<C extends RingElem<C>> implements Runnable {
             } catch (ClassNotFoundException e) {
                 goon = false;
                 e.printStackTrace();
-            } 
+            }
             logger.info("received request, req = " + req);
             if (req == null) {
                 goon = false;
@@ -567,7 +564,7 @@ class HybridReducerServer<C extends RingElem<C>> implements Runnable {
                 // goon ?= false;
             }
             try {
-                pairChannel.send(pairTag,msg);
+                pairChannel.send(pairTag, msg);
             } catch (IOException e) {
                 e.printStackTrace();
                 goon = false;
@@ -637,7 +634,7 @@ class HybridReducerServer<C extends RingElem<C>> implements Runnable {
          */
         logger.debug("send end");
         try {
-            pairChannel.send(pairTag,new GBTransportMessEnd());
+            pairChannel.send(pairTag, new GBTransportMessEnd());
         } catch (IOException e) {
             if (logger.isDebugEnabled()) {
                 e.printStackTrace();
@@ -655,10 +652,11 @@ class HybridReducerServer<C extends RingElem<C>> implements Runnable {
 
 class HybridReducerClient<C extends RingElem<C>> implements Runnable {
 
+
     private static final Logger logger = Logger.getLogger(HybridReducerClient.class);
 
-    public static final boolean debug = true || logger.isDebugEnabled();
 
+    public static final boolean debug = true || logger.isDebugEnabled();
 
 
     private final TaggedSocketChannel pairChannel;
@@ -685,7 +683,6 @@ class HybridReducerClient<C extends RingElem<C>> implements Runnable {
     public final Integer resultTag = GroebnerBaseDistributedHybrid.resultTag;
 
 
-
     HybridReducerClient(int tpn, TaggedSocketChannel tc, DistHashTable<Integer, GenPolynomial<C>> dl) {
         this.threadsPerNode = tpn;
         pairChannel = tc;
@@ -696,8 +693,8 @@ class HybridReducerClient<C extends RingElem<C>> implements Runnable {
 
     public void run() {
         if (debug) {
-           logger.info("pairChannel   = " + pairChannel + " reducer client running");
-     }
+            logger.info("pairChannel   = " + pairChannel + " reducer client running");
+        }
         Pair<C> pair = null;
         GenPolynomial<C> pi;
         GenPolynomial<C> pj;
@@ -718,7 +715,7 @@ class HybridReducerClient<C extends RingElem<C>> implements Runnable {
             Object req = new GBTransportMessReq();
             logger.info("send request = " + req);
             try {
-                pairChannel.send(pairTag,req);
+                pairChannel.send(pairTag, req);
             } catch (IOException e) {
                 goon = false;
                 e.printStackTrace();
@@ -800,7 +797,7 @@ class HybridReducerClient<C extends RingElem<C>> implements Runnable {
                 logger.debug("send H polynomial = " + H);
             }
             try {
-                pairChannel.send(resultTag,new GBTransportMessPoly<C>(H));
+                pairChannel.send(resultTag, new GBTransportMessPoly<C>(H));
             } catch (IOException e) {
                 goon = false;
                 e.printStackTrace();
