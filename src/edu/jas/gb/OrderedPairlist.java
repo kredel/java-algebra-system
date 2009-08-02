@@ -78,8 +78,8 @@ public class OrderedPairlist<C extends RingElem<C> > {
     @Override
     public String toString() {
         StringBuffer s = new StringBuffer("OrderedPairlist(");
-        s.append("polys="+P.size());
-        s.append(", size="+pairlist.size());
+        //s.append("polys="+P.size());
+        s.append("size="+pairlist.size());
         s.append(", #put="+putCount);
         s.append(", #rem="+remCount);
         s.append(")");

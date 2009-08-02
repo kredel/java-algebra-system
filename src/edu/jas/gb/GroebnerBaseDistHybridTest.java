@@ -128,7 +128,7 @@ public class GroebnerBaseDistHybridTest extends TestCase {
     int threads = 2;
 
 
-    int threadsPerNode = 1;
+    int threadsPerNode = 2;
 
 
     @Override
@@ -206,6 +206,7 @@ public class GroebnerBaseDistHybridTest extends TestCase {
         L = bbdisthyb.GB(L);
         stopThreads(clients);
         assertTrue("isGB( { a } )", bbseq.isGB(L));
+        //System.out.println("L = " + L.size() );
 
         assertTrue("not isZERO( b )", !b.isZERO());
         L.add(b);
@@ -215,6 +216,7 @@ public class GroebnerBaseDistHybridTest extends TestCase {
         L = bbdisthyb.GB(L);
         stopThreads(clients);
         assertTrue("isGB( { a, b } )", bbseq.isGB(L));
+        //System.out.println("L = " + L.size() );
 
         assertTrue("not isZERO( c )", !c.isZERO());
         L.add(c);
@@ -223,6 +225,7 @@ public class GroebnerBaseDistHybridTest extends TestCase {
         L = bbdisthyb.GB(L);
         stopThreads(clients);
         assertTrue("isGB( { a, b, c } )", bbseq.isGB(L));
+        //System.out.println("L = " + L.size() );
 
         assertTrue("not isZERO( d )", !d.isZERO());
         L.add(d);
@@ -231,6 +234,7 @@ public class GroebnerBaseDistHybridTest extends TestCase {
         L = bbdisthyb.GB(L);
         stopThreads(clients);
         assertTrue("isGB( { a, b, c, d } )", bbseq.isGB(L));
+        //System.out.println("L = " + L.size() );
 
         assertTrue("not isZERO( e )", !e.isZERO());
         L.add(e);
@@ -239,6 +243,7 @@ public class GroebnerBaseDistHybridTest extends TestCase {
         L = bbdisthyb.GB(L);
         stopThreads(clients);
         assertTrue("isGB( { a, b, c, d, e } )", bbseq.isGB(L));
+        //System.out.println("L = " + L.size() );
     }
 
 
@@ -247,7 +252,7 @@ public class GroebnerBaseDistHybridTest extends TestCase {
      * 
      */
     @SuppressWarnings("unchecked")
-    public void xtestTrinks7GBase() {
+    public void testTrinks7GBase() {
         Thread[] clients;
         String exam = "(B,S,T,Z,P,W) L " + "( " + "( 45 P + 35 S - 165 B - 36 ), "
                 + "( 35 P + 40 Z + 25 T - 27 S ), " + "( 15 W + 25 S P + 30 Z - 18 T - 165 B**2 ), "
@@ -271,6 +276,80 @@ public class GroebnerBaseDistHybridTest extends TestCase {
         PolynomialList<BigRational> trinks = new PolynomialList<BigRational>(F.ring, G);
         //System.out.println("G = " + trinks);
 
+    }
+
+
+    /**
+     * Test Trinks7 GBase.
+     * 
+     */
+    @SuppressWarnings("unchecked")
+    public void testTrinks7GBase_t1_p4() {
+
+        bbdisthyb.terminate();
+        threads = 1;
+        threadsPerNode = 4;
+        bbdisthyb = new GroebnerBaseDistributedHybrid<BigRational>(threads, threadsPerNode, port);
+
+        Thread[] clients;
+        String exam = "(B,S,T,Z,P,W) L " + "( " + "( 45 P + 35 S - 165 B - 36 ), "
+                + "( 35 P + 40 Z + 25 T - 27 S ), " + "( 15 W + 25 S P + 30 Z - 18 T - 165 B**2 ), "
+                + "( - 9 W + 15 T P + 20 S Z ), " + "( P W + 2 T Z - 11 B**3 ), "
+                + "( 99 W - 11 B S + 3 B**2 ), " + "( B**2 + 33/50 B + 2673/10000 ) " + ") ";
+        Reader source = new StringReader(exam);
+        GenPolynomialTokenizer parser = new GenPolynomialTokenizer(source);
+        try {
+            F = parser.nextPolynomialSet();
+        } catch (IOException e) {
+            fail("" + e);
+        }
+        //System.out.println("F = " + F);
+
+        clients = startThreads();
+        G = bbdisthyb.GB(F.list);
+        stopThreads(clients);
+
+        assertTrue("isGB( GB(Trinks7) )", bbseq.isGB(G));
+        assertEquals("#GB(Trinks7) == 6", 6, G.size());
+        PolynomialList<BigRational> trinks = new PolynomialList<BigRational>(F.ring, G);
+        //System.out.println("G = " + trinks);
+    }
+
+
+    /**
+     * Test Trinks7 GBase.
+     * 
+     */
+    @SuppressWarnings("unchecked")
+    public void testTrinks7GBase_t3_p1() {
+
+        bbdisthyb.terminate();
+        threads = 3;
+        threadsPerNode = 1;
+        bbdisthyb = new GroebnerBaseDistributedHybrid<BigRational>(threads, threadsPerNode, port);
+
+        Thread[] clients;
+        String exam = "(B,S,T,Z,P,W) L " + "( " + "( 45 P + 35 S - 165 B - 36 ), "
+                + "( 35 P + 40 Z + 25 T - 27 S ), " + "( 15 W + 25 S P + 30 Z - 18 T - 165 B**2 ), "
+                + "( - 9 W + 15 T P + 20 S Z ), " + "( P W + 2 T Z - 11 B**3 ), "
+                + "( 99 W - 11 B S + 3 B**2 ), " + "( B**2 + 33/50 B + 2673/10000 ) " + ") ";
+        Reader source = new StringReader(exam);
+        GenPolynomialTokenizer parser = new GenPolynomialTokenizer(source);
+        try {
+            F = parser.nextPolynomialSet();
+        } catch (IOException e) {
+            fail("" + e);
+        }
+        //System.out.println("F = " + F);
+
+        clients = startThreads();
+        G = bbdisthyb.GB(F.list);
+        stopThreads(clients);
+
+        assertTrue("isGB( GB(Trinks7) )", bbseq.isGB(G));
+        assertEquals("#GB(Trinks7) == 6", 6, G.size());
+        PolynomialList<BigRational> trinks = new PolynomialList<BigRational>(F.ring, G);
+        //System.out.println("G = " + trinks);
     }
 
 }
