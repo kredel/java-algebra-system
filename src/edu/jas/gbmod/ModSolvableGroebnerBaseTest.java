@@ -89,7 +89,7 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
 
    ModSolvableGroebnerBase<BigRational> msbb;
 
-   int rl = 4; //4; //3; 
+   int rl = 3; //4; //3; 
    int kl = 4;
    int ll = 3;
    int el = 2;

@@ -43,6 +43,7 @@ public class Terminator {
 
     /**
      * beIdle.
+     * Checks for release().
      */
     public synchronized void beIdle() {
         idler++;
@@ -55,6 +56,7 @@ public class Terminator {
 
     /**
      * initIdle.
+     * No check for release().
      * @param i number of idle threads.
      */
     public synchronized void initIdle(int i) {
@@ -65,6 +67,7 @@ public class Terminator {
 
     /**
      * beIdle.
+     * Checks for release().
      * @param i number of idle threads.
      */
     public synchronized void beIdle(int i) {
@@ -78,6 +81,7 @@ public class Terminator {
 
     /**
      * allIdle.
+     * Checks for release().
      */
     public synchronized void allIdle() {
         idler = workers;
@@ -104,7 +108,7 @@ public class Terminator {
 
 
     /**
-     * Release.
+     * Release if possible.
      */
     public synchronized void release() {
         logger.info("release, workers = " + workers);
@@ -117,7 +121,7 @@ public class Terminator {
 
 
     /**
-     * wait done.
+     * Wait until released.
      */
     public void waitDone() {
         try {
