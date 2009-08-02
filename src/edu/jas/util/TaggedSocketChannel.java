@@ -138,6 +138,29 @@ public class TaggedSocketChannel extends Thread {
     @Override
     public String toString() {
         return "socketChannel(" + sc + ", tags = " + queues.keySet() + ")";
+        //return "socketChannel(" + sc + ", tags = " + queues.keySet() + ", values = " + queues.values() + ")";
+    }
+
+
+    /**
+     * Number of tags.
+     * @return size of key set.
+     */
+    public int tagSize() {
+        return queues.keySet().size();
+    }
+
+
+    /**
+     * Number of messages.
+     * @return sum of all messages in queues.
+     */
+    public int messages() {
+        int m = 0;
+        for ( BlockingQueue tq : queues.values() ) {
+            m += tq.size();
+        }
+        return m;
     }
 
 
@@ -199,7 +222,7 @@ public class TaggedSocketChannel extends Thread {
 
 
     /**
-     * Terminate the Channel Factory.
+     * Terminate the TaggedSocketChannel.
      */
     public void terminate() {
         this.interrupt();
