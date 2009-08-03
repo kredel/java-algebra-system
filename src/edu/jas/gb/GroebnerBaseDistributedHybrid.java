@@ -275,12 +275,12 @@ public class GroebnerBaseDistributedHybrid<C extends RingElem<C>> extends Groebn
         logger.info("sequential gbmi = " + time);
         */
         G = Gp;
-        logger.debug("cf.terminate()");
+        logger.debug("server cf.terminate()");
         cf.terminate();
         // no more required // pool.terminate();
-        logger.info("theList.terminate()");
+        logger.info("server theList.terminate()");
         theList.terminate();
-        logger.info("dls.terminate()");
+        logger.info("server dls.terminate()");
         dls.terminate();
 //         logger.info("pairlist #put = " + pairlist.putCount() + " #rem = " + pairlist.remCount()
 //                     //+ " #total = " + pairlist.pairCount()
@@ -321,15 +321,15 @@ public class GroebnerBaseDistributedHybrid<C extends RingElem<C>> extends Groebn
             logger.info("clients submitted");
         }
         pool.terminate();
-        logger.info("pool.terminate()");
+        logger.info("client pool.terminate()");
 
         pairChannel.close();
         channel.close();
-        logger.info("channel.close()");
+        logger.info("client channel.close()");
 
         theList.terminate();
         cf.terminate();
-        logger.info("cf.terminate()");
+        logger.info("client cf.terminate()");
         return;
     }
 
@@ -737,7 +737,7 @@ class HybridReducerReceiver<C extends RingElem<C>> extends Thread {
                 //finner.initIdle(1);
                 break;
             }
-            logger.info("received H polynomial " + rh);
+            logger.info("received H polynomial");
             if (rh == null) {
                 if (this.isInterrupted()) {
                     goon = false;
@@ -752,10 +752,10 @@ class HybridReducerReceiver<C extends RingElem<C>> extends Thread {
                 // update pair list
                 red++;
                 H = ((GBTransportMessPoly<C>) rh).pol;
-                if (logger.isDebugEnabled()) {
-                    logger.debug("H = " + H);
-                }
                 if (H != null) {
+                    if (debug) {
+                       logger.info("H = " + H.leadingExpVector());
+                    }
                     if (!H.isZERO()) {
                         if (H.isONE()) {
                             // finner.allIdle();
@@ -907,8 +907,8 @@ class HybridReducerClient<C extends RingElem<C>> implements Runnable {
                 goon = false;
                 e.printStackTrace();
             }
-            if (logger.isDebugEnabled()) {
-                logger.debug("received pair = " + pp);
+            if (debug) {
+                logger.info("received pair = " + pp);
             }
             H = null;
             if (pp == null) { // should not happen

@@ -87,7 +87,7 @@ public class GBDistHybrid<C extends RingElem<C>> {
     public List<GenPolynomial<C>> execute(List<GenPolynomial<C>> F) {
         String master = dtp.getEC().getMasterHost();
         int port = dtp.getEC().getMasterPort();
-        GBClientHybrid<C> gbc = new GBClientHybrid<C>(master, port);
+        GBClientHybrid<C> gbc = new GBClientHybrid<C>(threadsPerNode, master, port);
         for (int i = 0; i < threads; i++) {
             // schedule remote clients
             dtp.addJob(gbc);
@@ -120,8 +120,11 @@ class GBClientHybrid<C extends RingElem<C>> implements RemoteExecutable {
 
     String host;
 
-
     int port;
+
+    //int threads;
+
+    int threadsPerNode;
 
 
     /**
@@ -129,7 +132,9 @@ class GBClientHybrid<C extends RingElem<C>> implements RemoteExecutable {
      * @param host
      * @param port
      */
-    public GBClientHybrid(String host, int port) {
+    public GBClientHybrid(int threadsPerNode, String host, int port) {
+	//this.threads = threads;
+	this.threadsPerNode = threadsPerNode;
         this.host = host;
         this.port = port;
     }
@@ -140,7 +145,7 @@ class GBClientHybrid<C extends RingElem<C>> implements RemoteExecutable {
      */
     public void run() {
         GroebnerBaseDistributedHybrid<C> bbd;
-        bbd = new GroebnerBaseDistributedHybrid<C>(1, 1, null, port);
+        bbd = new GroebnerBaseDistributedHybrid<C>(1, threadsPerNode, null, port);
         try {
             bbd.clientPart(host);
         } catch (IOException ignored) {
