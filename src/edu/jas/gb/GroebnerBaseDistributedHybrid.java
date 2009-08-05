@@ -487,7 +487,7 @@ class HybridReducerServer<C extends RingElem<C>> implements Runnable {
      */
     @Override
     public void run() {
-        logger.info("reducer server running " + this);
+        logger.info("reducer server running with " + cf);
         try {
             SocketChannel channel = cf.getChannel();
             pairChannel = new TaggedSocketChannel(channel);
