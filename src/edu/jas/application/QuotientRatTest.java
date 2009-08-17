@@ -185,15 +185,15 @@ public class QuotientRatTest extends TestCase {
  public void testMultiplication() {
 
      a = eFac.random(kl,ll,el,q);
-     assertTrue("not isZERO( a )", !a.isZERO() );
+     //assertTrue("not isZERO( a )", !a.isZERO() );
 
      b = eFac.random(kl,ll,el,q);
-     assertTrue("not isZERO( b )", !b.isZERO() );
+     //assertTrue("not isZERO( b )", !b.isZERO() );
 
      c = b.multiply(a);
      d = a.multiply(b);
-     assertTrue("not isZERO( c )", !c.isZERO() );
-     assertTrue("not isZERO( d )", !d.isZERO() );
+     //assertTrue("not isZERO( c )", !c.isZERO() );
+     //assertTrue("not isZERO( d )", !d.isZERO() );
 
      //System.out.println("a = " + a);
      //System.out.println("b = " + b);
