@@ -682,7 +682,7 @@ public class Ideal<C extends GcdRingElem<C>>
         logger.warn("elimnation computing GB");
         List< GenPolynomial<C> > G = bb.GB( ppolys );
         if ( debug ) {
-            logger.debug("intersect GB = " + G);
+            logger.debug("elimnation GB = " + G);
         }
         Ideal<C> I = new Ideal<C>( E, G, true );
         // System.out.println("I = " + I);
@@ -793,13 +793,13 @@ public class Ideal<C extends GcdRingElem<C>>
             c.add( p );
         }
         GenPolynomial<C> q  = h.extend( tfac, 0, 1L );
-        GenPolynomial<C> r  = h.extend( tfac, 0, 0L );
-        GenPolynomial<C> hs = r.subtract( q ); // (1-t)*h
+        GenPolynomial<C> r  = tfac.getONE();    // h.extend( tfac, 0, 0L );
+        GenPolynomial<C> hs = q.subtract( r );  // 1 - t*h // (1-t)*h
         c.add( hs );
-        logger.warn("intersect computing GB");
+        logger.warn("infiniteQuotientRab computing GB");
         List< GenPolynomial<C> > g = bb.GB( c );
         if ( debug ) {
-            logger.debug("intersect GB = " + g);
+            logger.debug("infiniteQuotientRab GB = " + g);
         }
         Ideal<C> E = new Ideal<C>( tfac, g, true );
         Ideal<C> Is = E.intersect( getRing() );
@@ -840,6 +840,29 @@ public class Ideal<C extends GcdRingElem<C>>
             }
         }
         return Is;
+    }
+
+
+    /**
+     * Radical membership test.
+     * @param h polynomial
+     * @return true if h is contained in the radical of ideal(this), else false.
+     */
+    public boolean isRadicalMember( GenPolynomial<C> h ) {
+        if ( h == null ) { // == (0)
+            return true;
+        }
+        if ( h.isZERO() ) { 
+            return true;
+        }
+        if ( this.isZERO() ) {
+            return true;
+        }
+        Ideal<C> x = infiniteQuotientRab( h );
+        if ( debug ) {
+            logger.debug("infiniteQuotientRab = " + x);
+        }
+	return x.isONE();
     }
 
 

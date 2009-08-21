@@ -625,6 +625,76 @@ public class IdealTest extends TestCase {
 
 
 /**
+ * Test Ideal radical membership.
+ * 
+ */
+ public void testIdealRadicalMember() {
+
+     Ideal<BigRational> I;
+     Ideal<BigRational> J;
+     Ideal<BigRational> K;
+     Ideal<BigRational> JJ;
+
+     a = fac.random(kl-1, ll, el-1, q );
+     b = fac.random(kl-1, ll, el, q );
+     c = fac.random(kl-1, ll-1, el, q/2 );
+     d = fac.random(kl-1, ll-1, el, q/2 );
+     e = a; //fac.random(kl, ll-1, el, q );
+
+     if ( a.isZERO() || b.isZERO() || c.isZERO() || d.isZERO() ) {
+        return;
+     }
+
+     L = new ArrayList<GenPolynomial<BigRational>>();
+     L.add( b );
+     L = bb.GB( L );
+     I = new Ideal<BigRational>(fac,L,true);
+     assertTrue("not isZERO( I )", !I.isZERO() );
+     //assertTrue("not isONE( I )", !I.isONE() );
+     assertTrue("isGB( I )", I.isGB() );
+
+     //System.out.println("a = " + a);
+     //System.out.println("b = " + b);
+     //System.out.println("I = " + I);
+
+     if ( ! I.isONE() ) {
+         assertFalse("a in radical(b)", I.isRadicalMember(a) ); 
+         assertTrue("b in radical(b)", I.isRadicalMember(b) ); 
+     }
+
+     L = new ArrayList<GenPolynomial<BigRational>>();
+     L.add( b.multiply(b) );
+     L = bb.GB( L );
+     I = new Ideal<BigRational>(fac,L,true);
+     assertTrue("not isZERO( I )", !I.isZERO() );
+     //assertTrue("not isONE( I )", !I.isONE() );
+     assertTrue("isGB( I )", I.isGB() );
+
+     //System.out.println("I = " + I);
+
+     if ( ! I.isONE() ) {
+         assertFalse("a in radical(b*b)", I.isRadicalMember(a) ); 
+         assertTrue("b in radical(b*b)", I.isRadicalMember(b) ); 
+     }
+
+     //System.out.println("c = " + c);
+     L.add( c );
+     L = bb.GB( L );
+     I = new Ideal<BigRational>(fac,L,true);
+     assertTrue("not isZERO( I )", !I.isZERO() );
+     //assertTrue("not isONE( I )", !I.isONE() );
+     assertTrue("isGB( I )", I.isGB() );
+
+     //System.out.println("I = " + I);
+
+     if ( ! I.isONE() ) {
+         assertFalse("a in radical(b*b)", I.isRadicalMember(a) ); 
+         assertTrue("b in radical(b*b)", I.isRadicalMember(b) ); 
+     }
+ }
+
+
+/**
  * Test Ideal common zeros.
  * 
  */
