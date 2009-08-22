@@ -6,6 +6,7 @@ package edu.jas.ufd;
 
 
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -24,6 +25,20 @@ import edu.jas.structure.RingFactory;
  */
 
 public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Squarefree<C> {
+
+
+    /**
+     * GCD engine for respective base coefficients.
+     */
+    protected final GreatestCommonDivisorAbstract<C> engine;
+
+
+    /**
+     * Constructor.
+     */
+    public SquarefreeAbstract(GreatestCommonDivisorAbstract<C> engine) {
+        this.engine = engine;
+    }
 
 
     /**
@@ -120,7 +135,18 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
      *         a in A there exists b in B with b|a and each b in B is
      *         squarefree. B does not contain zero or constant polynomials.
      */
-    public abstract List<GenPolynomial<C>> coPrimeSquarefree(List<GenPolynomial<C>> A);
+    public List<GenPolynomial<C>> coPrimeSquarefree(List<GenPolynomial<C>> A) {
+        if (A == null || A.isEmpty()) {
+            return A;
+        }
+        List<GenPolynomial<C>> S = new ArrayList<GenPolynomial<C>>();
+        for (GenPolynomial<C> g : A) {
+            SortedMap<GenPolynomial<C>, Long> sm = squarefreeFactors(g);
+            S.addAll(sm.keySet());
+        }
+        List<GenPolynomial<C>> B = engine.coPrime(S);
+        return B;
+    }
 
 
     /**
@@ -131,8 +157,17 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
      *         there exists b in P with b|a. B does not contain zero or constant
      *         polynomials.
      */
-    public abstract List<GenPolynomial<C>> coPrimeSquarefree(GenPolynomial<C> a, List<GenPolynomial<C>> P);
-
+    public List<GenPolynomial<C>> coPrimeSquarefree(GenPolynomial<C> a, List<GenPolynomial<C>> P) {
+        if (a == null || a.isZERO() || a.isConstant()) {
+            return P;
+        }
+        SortedMap<GenPolynomial<C>, Long> sm = squarefreeFactors(a);
+        List<GenPolynomial<C>> B = P;
+        for ( GenPolynomial<C> f : sm.keySet() ) {
+            B = engine.coPrime(f,B);
+        }
+        return B;
+    }
 
 
     /**

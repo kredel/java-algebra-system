@@ -40,16 +40,17 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>> extends SquarefreeAb
     protected final RingFactory<C> coFac;
 
 
-    /**
+    /*
      * GCD engine for field of characteristic 0 base coefficients.
      */
-    protected final GreatestCommonDivisorAbstract<C> engine;
+    //protected final GreatestCommonDivisorAbstract<C> engine;
 
 
     /**
      * Constructor.
      */
     public SquarefreeFieldChar0(RingFactory<C> fac) {
+        super( GCDFactory.<C> getProxy(fac) );
         if (!fac.isField()) {
             throw new IllegalArgumentException("fac must be a field");
         }
@@ -58,7 +59,7 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>> extends SquarefreeAb
         }
         coFac = fac;
         //engine = GCDFactory.<C>getImplementation( fac );
-        engine = GCDFactory.<C> getProxy(fac);
+        //engine = GCDFactory.<C> getProxy(fac);
     }
 
 
@@ -394,48 +395,6 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>> extends SquarefreeAb
             sfactors.put(D, i);
         }
         return sfactors;
-    }
-
-
-    /**
-     * GenPolynomial squarefree and co-prime list.
-     * @param A list of GenPolynomials.
-     * @return B with gcd(b,c) = 1 for all b != c in B and for all non-constant
-     *         a in A there exists b in B with b|a and each b in B is
-     *         squarefree. B does not contain zero or constant polynomials.
-     */
-    public List<GenPolynomial<C>> coPrimeSquarefree(List<GenPolynomial<C>> A) {
-        if (A == null || A.isEmpty()) {
-            return A;
-        }
-        List<GenPolynomial<C>> S = new ArrayList<GenPolynomial<C>>();
-        for (GenPolynomial<C> g : A) {
-            SortedMap<GenPolynomial<C>, Long> sm = squarefreeFactors(g);
-            S.addAll(sm.keySet());
-        }
-        List<GenPolynomial<C>> B = engine.coPrime(S);
-        return B;
-    }
-
-
-    /**
-     * GenPolynomial squarefree and co-prime list.
-     * @param a polynomial.
-     * @param P squarefree co-prime list of GenPolynomials.
-     * @return B with gcd(b,c) = 1 for all b != c in B and for non-constant a
-     *         there exists b in P with b|a. B does not contain zero or constant
-     *         polynomials.
-     */
-    public List<GenPolynomial<C>> coPrimeSquarefree(GenPolynomial<C> a, List<GenPolynomial<C>> P) {
-        if (a == null || a.isZERO() || a.isConstant()) {
-            return P;
-        }
-        SortedMap<GenPolynomial<C>, Long> sm = squarefreeFactors(a);
-        List<GenPolynomial<C>> B = P;
-        for ( GenPolynomial<C> f : sm.keySet() ) {
-            B = engine.coPrime(f,B);
-        }
-        return B;
     }
 
 }
