@@ -472,6 +472,27 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
     }
 
 
+    /**
+     * GenPolynomial squarefree and co-prime list.
+     * @param a polynomial.
+     * @param P squarefree co-prime list of GenPolynomials.
+     * @return B with gcd(b,c) = 1 for all b != c in B and for non-constant a
+     *         there exists b in P with b|a. B does not contain zero or constant
+     *         polynomials.
+     */
+    public List<GenPolynomial<C>> coPrimeSquarefree(GenPolynomial<C> a, List<GenPolynomial<C>> P) {
+        if (a == null || a.isZERO() || a.isConstant()) {
+            return P;
+        }
+        SortedMap<GenPolynomial<C>, Long> sm = squarefreeFactors(a);
+        List<GenPolynomial<C>> B = P;
+        for ( GenPolynomial<C> f : sm.keySet() ) {
+            B = engine.coPrime(f,B);
+        }
+        return B;
+    }
+
+
     /* --------- char-th roots --------------------- */
 
 

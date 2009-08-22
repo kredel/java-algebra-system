@@ -72,4 +72,15 @@ public interface Squarefree<C extends GcdRingElem<C>> {
      */
     public List<GenPolynomial<C>> coPrimeSquarefree(List<GenPolynomial<C>> A);
 
+
+    /**
+     * GenPolynomial squarefree and co-prime list.
+     * @param a polynomial.
+     * @param P squarefree co-prime list of GenPolynomials.
+     * @return B with gcd(b,c) = 1 for all b != c in B and for non-constant a
+     *         there exists b in P with b|a. B does not contain zero or constant
+     *         polynomials.
+     */
+    public List<GenPolynomial<C>> coPrimeSquarefree(GenPolynomial<C> a, List<GenPolynomial<C>> P);
+
 }

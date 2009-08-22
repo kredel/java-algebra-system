@@ -114,6 +114,28 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
 
 
     /**
+     * GenPolynomial squarefree and co-prime list.
+     * @param A list of GenPolynomials.
+     * @return B with gcd(b,c) = 1 for all b != c in B and for all non-constant
+     *         a in A there exists b in B with b|a and each b in B is
+     *         squarefree. B does not contain zero or constant polynomials.
+     */
+    public abstract List<GenPolynomial<C>> coPrimeSquarefree(List<GenPolynomial<C>> A);
+
+
+    /**
+     * GenPolynomial squarefree and co-prime list.
+     * @param a polynomial.
+     * @param P squarefree co-prime list of GenPolynomials.
+     * @return B with gcd(b,c) = 1 for all b != c in B and for non-constant a
+     *         there exists b in P with b|a. B does not contain zero or constant
+     *         polynomials.
+     */
+    public abstract List<GenPolynomial<C>> coPrimeSquarefree(GenPolynomial<C> a, List<GenPolynomial<C>> P);
+
+
+
+    /**
      * GenPolynomial is (squarefree) factorization.
      * @param P GenPolynomial.
      * @param F = [p_1,...,p_k].
