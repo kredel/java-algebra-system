@@ -19,6 +19,7 @@ import edu.jas.structure.GcdRingElem;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.ExpVector;
+import edu.jas.poly.PolyUtil;
 
 import edu.jas.ufd.GreatestCommonDivisor;
 import edu.jas.ufd.GreatestCommonDivisorAbstract;
@@ -93,7 +94,9 @@ public class MultiplicativeSetCoPrime<C extends GcdRingElem<C>> extends Multipli
         List<GenPolynomial<C>> list;
         if (mset.size() == 0) { 
             list = engine.coPrime(cc,mset);
-            //list.add( cc );
+            if ( ring.coFac.isField() ) {
+                list = PolyUtil.<C> monic(list);
+            }
             return new MultiplicativeSetCoPrime<C>(ring,list,engine);
         }
         GenPolynomial<C> c = removeFactors(cc);
@@ -102,8 +105,29 @@ public class MultiplicativeSetCoPrime<C extends GcdRingElem<C>> extends Multipli
             return this;
         }
         logger.info("added to co-prime mset = " + c);
-        list = engine.coPrime(cc,mset);
+        list = engine.coPrime(c,mset);
+        if ( ring.coFac.isField() ) {
+            list = PolyUtil.<C> monic(list);
+        }
         return new MultiplicativeSetCoPrime<C>(ring,list,engine);
     }
+
+
+    /**
+     * Replace polynomial list of mset. 
+     * @param L polynomial list to replace mset.
+     * @return new multiplicative set.
+     */
+    public MultiplicativeSet<C> replace(List<GenPolynomial<C>> L) {
+        MultiplicativeSetCoPrime<C> ms = new MultiplicativeSetCoPrime<C>(ring);
+        if (L == null || L.size() == 0) { 
+            return ms;
+        }
+        for ( GenPolynomial<C> p : L ) {
+            ms = ms.add(p);
+        }
+        return ms;
+    }
+
 
 }

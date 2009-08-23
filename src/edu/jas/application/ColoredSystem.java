@@ -172,7 +172,7 @@ public class ColoredSystem<C extends GcdRingElem<C>> implements Cloneable {
      * @return condition.nonZero.
      */
     public List<GenPolynomial<C>> getConditionNonZero() {
-        return condition.nonZero;
+        return condition.nonZero.mset;
     }
 
 

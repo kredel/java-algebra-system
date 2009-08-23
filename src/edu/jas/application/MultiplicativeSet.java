@@ -217,6 +217,9 @@ public class MultiplicativeSet<C extends GcdRingElem<C>> implements Serializable
             logger.info("skipped unit or constant = " + c);
             return this;
         }
+        if ( ring.coFac.isField() ) {
+            c = c.monic();
+        }
         if (mset.size() == 0) {
             logger.info("added to empty mset = " + c);
         } else {
@@ -292,12 +295,13 @@ public class MultiplicativeSet<C extends GcdRingElem<C>> implements Serializable
         if (mset.size() == 0) {
             return L;
         }
-        List<GenPolynomial<C>> c = new ArrayList<GenPolynomial<C>>(L.size());
+        List<GenPolynomial<C>> M = new ArrayList<GenPolynomial<C>>(L.size());
         for (GenPolynomial<C> p : L) {
 	    p = removeFactors(p);
-	    c.add(p);
+            // nono: if ( !p.isConstant() ) {
+            M.add(p);
 	}
-	return c;
+	return M;
     }
 
 }

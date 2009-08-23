@@ -522,7 +522,7 @@ public class MultiplicativeSetTest extends TestCase {
 
      a = fac.random(kl-2, ll-2, el, q );
      b = fac.random(kl-2, ll-2, el, q );
-     c = fac.random(kl-2, ll-2, el, q );
+     c = fac.random(kl-2, ll-2, el, q ).monic();
      d = fac.random(kl, ll, el, q );
      e = d; //fac.random(kl, ll, el, q );
 
@@ -563,7 +563,7 @@ public class MultiplicativeSetTest extends TestCase {
      assertTrue("contained ", ms3.contains(a) );
      assertTrue("contained ", ms3.contains(b) );
 
-     if ( !a.equals(c) && !b.equals(c) && !c.isConstant() ) {
+     if ( !a.monic().equals(c) && !b.monic().equals(c) && !c.isConstant() ) {
          assertFalse("not contained ", ms3.contains(c) );
      }
 

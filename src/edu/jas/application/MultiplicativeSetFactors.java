@@ -96,7 +96,7 @@ public class MultiplicativeSetFactors<C extends GcdRingElem<C>> extends Multipli
             logger.info("skipped unit or constant = " + c);
             return this;
         }
-        List<GenPolynomial<C>> list = engine.factorsRadical(cc);
+        List<GenPolynomial<C>> list = engine.factorsRadical(c);
         logger.info("factorsRadical = " + list);
         if ( ring.coFac.isField() ) {
             list = PolyUtil.<C> monic(list);
@@ -111,6 +111,23 @@ public class MultiplicativeSetFactors<C extends GcdRingElem<C>> extends Multipli
             }
         }
         return new MultiplicativeSetFactors<C>(ring,ms,engine);
+    }
+
+
+    /**
+     * Replace polynomial list of mset. 
+     * @param L polynomial list to replace mset.
+     * @return new multiplicative set.
+     */
+    public MultiplicativeSet<C> replace(List<GenPolynomial<C>> L) {
+        MultiplicativeSetFactors<C> ms = new MultiplicativeSetFactors<C>(ring);
+        if (L == null || L.size() == 0) { 
+            return ms;
+        }
+        for ( GenPolynomial<C> p : L ) {
+            ms = ms.add(p);
+        }
+        return ms;
     }
 
 }

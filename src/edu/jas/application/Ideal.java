@@ -101,6 +101,15 @@ public class Ideal<C extends GcdRingElem<C>>
     /**
      * Constructor.
      * @param ring polynomial ring
+     */
+    public Ideal( GenPolynomialRing<C> ring) {
+        this( ring, new ArrayList<GenPolynomial<C>>() );
+    }
+
+
+    /**
+     * Constructor.
+     * @param ring polynomial ring
      * @param F list of polynomials
      */
     public Ideal( GenPolynomialRing<C> ring, List<GenPolynomial<C>> F ) {
@@ -407,26 +416,7 @@ public class Ideal<C extends GcdRingElem<C>>
         if ( B == null || B.isZERO() ) {
             return true;
         }
-        if ( this.isONE() ) {
-            return true;
-        }
-        if ( !isGB ) {
-            doGB();
-        }
-        List< GenPolynomial<C> > z;
-        z = red.normalform( getList(), B.getList() );
-        if ( z == null ) {
-            return true;
-        }
-        for ( GenPolynomial<C> p : z ) {
-            if ( p == null ) {
-                continue;
-            }
-            if ( ! p.isZERO() ) {
-                return false;
-            }
-        }
-        return true;
+        return contains( B.getList() );
     }
 
 
@@ -455,6 +445,35 @@ public class Ideal<C extends GcdRingElem<C>>
             return true;
         }
         return false;
+    }
+
+
+    /**
+     * Ideal containment. Test if each b in B is contained in this ideal.
+     * Note: this is eventually modified to become a Groebner Base.
+     * @param B list of polynomials
+     * @return true, if each b in B is contained in this, else false
+     */
+    public boolean contains( List<GenPolynomial<C>> B ) {
+        if ( B == null || B.size() == 0 ) {
+            return true;
+        }
+        if ( this.isONE() ) {
+            return true;
+        }
+        if ( !isGB ) {
+            doGB();
+        }
+        for ( GenPolynomial<C> b : B ) {
+            if ( b == null ) {
+                continue;
+            }
+            GenPolynomial<C> z = red.normalform( getList(), b );
+            if ( !z.isZERO() ) {
+                return false;
+            }
+        }
+        return true;
     }
 
 

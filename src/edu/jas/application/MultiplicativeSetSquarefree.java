@@ -19,6 +19,7 @@ import edu.jas.structure.GcdRingElem;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.ExpVector;
+import edu.jas.poly.PolyUtil;
 
 import edu.jas.ufd.Squarefree;
 import edu.jas.ufd.SquarefreeAbstract;
@@ -93,6 +94,9 @@ public class MultiplicativeSetSquarefree<C extends GcdRingElem<C>> extends Multi
         List<GenPolynomial<C>> list;
         if (mset.size() == 0) { 
             list = engine.coPrimeSquarefree(cc,mset);
+            if ( ring.coFac.isField() ) {
+                list = PolyUtil.<C> monic(list);
+            }
             return new MultiplicativeSetSquarefree<C>(ring,list,engine);
         }
         GenPolynomial<C> c = removeFactors(cc);
@@ -101,8 +105,28 @@ public class MultiplicativeSetSquarefree<C extends GcdRingElem<C>> extends Multi
             return this;
         }
         logger.info("added to squarefree mset = " + c);
-        list = engine.coPrimeSquarefree(cc,mset);
+        list = engine.coPrimeSquarefree(c,mset);
+        if ( ring.coFac.isField() ) {
+            list = PolyUtil.<C> monic(list);
+        }
         return new MultiplicativeSetSquarefree<C>(ring,list,engine);
+    }
+
+
+    /**
+     * Replace polynomial list of mset. 
+     * @param L polynomial list to replace mset.
+     * @return new multiplicative set.
+     */
+    public MultiplicativeSet<C> replace(List<GenPolynomial<C>> L) {
+        MultiplicativeSetSquarefree<C> ms = new MultiplicativeSetSquarefree<C>(ring);
+        if (L == null || L.size() == 0) { 
+            return ms;
+        }
+        for ( GenPolynomial<C> p : L ) {
+            ms = ms.add(p);
+        }
+        return ms;
     }
 
 }
