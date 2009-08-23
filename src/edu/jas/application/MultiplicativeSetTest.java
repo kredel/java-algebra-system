@@ -14,6 +14,8 @@ import junit.framework.TestSuite;
 import org.apache.log4j.BasicConfigurator;
 //import org.apache.log4j.Logger;
 
+import edu.jas.kern.ComputerThreads;
+
 import edu.jas.arith.BigRational;
 import edu.jas.gb.GroebnerBase;
 import edu.jas.gb.GroebnerBaseSeq;
@@ -87,6 +89,7 @@ public class MultiplicativeSetTest extends TestCase {
    protected void tearDown() {
        a = b = c = d = e = null;
        fac = null;
+       ComputerThreads.terminate();
    }
 
 
@@ -228,7 +231,426 @@ public class MultiplicativeSetTest extends TestCase {
              assertEquals("c == remove(c) ", e, c );
          }
      }
+ }
 
+
+/**
+ * Test co-prime multiplicative set contained.
+ * 
+ */
+ public void testCoPrimeContaines() {
+
+     a = fac.random(kl, ll, el, q );
+     b = fac.random(kl, ll, el, q );
+     c = fac.random(kl, ll, el, q );
+     d = fac.random(kl, ll, el, q );
+     e = d; //fac.random(kl, ll, el, q );
+
+     if ( a.isZERO() || b.isZERO() || c.isZERO() || d.isZERO() ) {
+        return;
+     }
+
+     MultiplicativeSet<BigRational> ms = new MultiplicativeSetCoPrime<BigRational>(fac);
+     System.out.println("ms = " + ms);
+     System.out.println("a  = " + a);
+     System.out.println("b  = " + b);
+     System.out.println("c  = " + c);
+
+     assertTrue("isEmpty ", ms.isEmpty() );
+
+     if ( !a.isConstant() ) {
+         assertFalse("not contained ", ms.contains(a) );
+     }
+
+     MultiplicativeSet<BigRational> ms2 = ms.add(a);
+     System.out.println("ms2 = " + ms2);
+
+     if ( !a.isConstant() ) {
+         assertFalse("not isEmpty ", ms2.isEmpty() );
+         assertTrue("contained ", ms2.contains(a) );
+     }
+
+     if ( !a.equals(b) && !b.isConstant() ) {
+         assertFalse("not contained ", ms2.contains(b) );
+     }
+
+     MultiplicativeSet<BigRational> ms3 = ms2.add(b);
+     System.out.println("ms3 = " + ms3);
+
+     if ( !b.isConstant() ) {
+         assertFalse("not isEmpty ", ms3.isEmpty() );
+     }
+     assertTrue("contained ", ms3.contains(a) );
+     assertTrue("contained ", ms3.contains(b) );
+
+     if ( !a.equals(c) && !b.equals(c) && !c.isConstant() ) {
+         assertFalse("not contained ", ms3.contains(c) );
+     }
+
+     e = a.multiply(b);
+     System.out.println("e  = " + e);
+     if ( !e.isConstant() ) {
+         assertTrue("contained ", ms3.contains(e) );
+     }
+
+     MultiplicativeSet<BigRational> ms4 = ms3.add(e);
+     System.out.println("ms4 = " + ms4);
+
+     assertTrue("m3 == m4 ", ms3.equals(ms4) );
+ }
+
+
+/**
+ * Test co-prime multiplicative set removeFactors.
+ * 
+ */
+ public void testCoPrimeRemoveFactors() {
+
+     a = fac.random(kl, ll, el, q );
+     b = fac.random(kl, ll, el, q );
+     c = fac.random(kl, ll, el, q );
+     d = fac.random(kl, ll, el, q );
+     e = d; //fac.random(kl, ll, el, q );
+
+     if ( a.isZERO() || b.isZERO() || c.isZERO() || d.isZERO() ) {
+        return;
+     }
+
+     MultiplicativeSet<BigRational> ms = new MultiplicativeSetCoPrime<BigRational>(fac);
+     System.out.println("ms = " + ms);
+     System.out.println("a  = " + a);
+     System.out.println("b  = " + b);
+     System.out.println("c  = " + c);
+
+     assertTrue("isEmpty ", ms.isEmpty() );
+
+     e = ms.removeFactors(a);
+     System.out.println("e  = " + e);
+     assertEquals("a == remove(a) ", a, e );
+
+     MultiplicativeSet<BigRational> ms2 = ms.add(a);
+     System.out.println("ms2 = " + ms2);
+
+     if ( !a.isConstant() ) {
+         assertFalse("not isEmpty ", ms2.isEmpty() );
+         assertTrue("contained ", ms2.contains(a) );
+
+         e = ms2.removeFactors(a);
+         System.out.println("e  = " + e);
+         assertTrue("1 == remove(a) ", e.isConstant() );
+
+         if ( !b.isConstant() ) {
+             e = ms2.removeFactors(b);
+             System.out.println("e  = " + e);
+             assertEquals("b == remove(b) ", e, b );
+         }
+     }
+
+     d = a.multiply(b);
+     MultiplicativeSet<BigRational> ms3 = ms2.add(d);
+     System.out.println("ms3 = " + ms3);
+
+     if ( !d.isConstant() ) {
+         assertFalse("not isEmpty ", ms3.isEmpty() );
+
+         e = ms3.removeFactors(a);
+         System.out.println("e  = " + e);
+         assertTrue("1 == remove(a) ", e.isConstant() );
+
+         e = ms3.removeFactors(b);
+         System.out.println("e  = " + e);
+         assertTrue("1 == remove(b) ", e.isConstant() );
+
+         e = ms3.removeFactors(d);
+         System.out.println("e  = " + e);
+         assertTrue("1 == remove(a*b) ", e.isConstant() );
+
+         if ( !c.isConstant() ) {
+             e = ms3.removeFactors(c);
+             System.out.println("e  = " + e);
+             assertEquals("c == remove(c) ", e, c );
+         }
+     }
+ }
+
+
+/**
+ * Test squarefree multiplicative set contained.
+ * 
+ */
+ public void testSquarefreeContaines() {
+
+     a = fac.random(kl, ll, el, q );
+     b = fac.random(kl, ll, el, q );
+     c = fac.random(kl, ll, el, q );
+     d = fac.random(kl, ll, el, q );
+     e = d; //fac.random(kl, ll, el, q );
+
+     if ( a.isZERO() || b.isZERO() || c.isZERO() || d.isZERO() ) {
+        return;
+     }
+
+     MultiplicativeSet<BigRational> ms = new MultiplicativeSetSquarefree<BigRational>(fac);
+     System.out.println("ms = " + ms);
+     System.out.println("a  = " + a);
+     System.out.println("b  = " + b);
+     System.out.println("c  = " + c);
+
+     assertTrue("isEmpty ", ms.isEmpty() );
+
+     if ( !a.isConstant() ) {
+         assertFalse("not contained ", ms.contains(a) );
+     }
+
+     MultiplicativeSet<BigRational> ms2 = ms.add(a);
+     System.out.println("ms2 = " + ms2);
+
+     if ( !a.isConstant() ) {
+         assertFalse("not isEmpty ", ms2.isEmpty() );
+         assertTrue("contained ", ms2.contains(a) );
+     }
+
+     if ( !a.equals(b) && !b.isConstant() ) {
+         assertFalse("not contained ", ms2.contains(b) );
+     }
+
+     MultiplicativeSet<BigRational> ms3 = ms2.add(b);
+     System.out.println("ms3 = " + ms3);
+
+     if ( !b.isConstant() ) {
+         assertFalse("not isEmpty ", ms3.isEmpty() );
+     }
+     assertTrue("contained ", ms3.contains(a) );
+     assertTrue("contained ", ms3.contains(b) );
+
+     if ( !a.equals(c) && !b.equals(c) && !c.isConstant() ) {
+         assertFalse("not contained ", ms3.contains(c) );
+     }
+
+     e = a.multiply(b);
+     System.out.println("e  = " + e);
+     if ( !e.isConstant() ) {
+         assertTrue("contained ", ms3.contains(e) );
+     }
+
+     MultiplicativeSet<BigRational> ms4 = ms3.add(e);
+     System.out.println("ms4 = " + ms4);
+
+     assertTrue("m3 == m4 ", ms3.equals(ms4) );
+ }
+
+
+/**
+ * Test squarefree multiplicative set removeFactors.
+ * 
+ */
+ public void testSquarefreeRemoveFactors() {
+
+     a = fac.random(kl, ll, el, q );
+     b = fac.random(kl, ll, el, q );
+     c = fac.random(kl, ll, el, q );
+     d = fac.random(kl, ll, el, q );
+     e = d; //fac.random(kl, ll, el, q );
+
+     if ( a.isZERO() || b.isZERO() || c.isZERO() || d.isZERO() ) {
+        return;
+     }
+
+     MultiplicativeSet<BigRational> ms = new MultiplicativeSetSquarefree<BigRational>(fac);
+     System.out.println("ms = " + ms);
+     System.out.println("a  = " + a);
+     System.out.println("b  = " + b);
+     System.out.println("c  = " + c);
+
+     assertTrue("isEmpty ", ms.isEmpty() );
+
+     e = ms.removeFactors(a);
+     System.out.println("e  = " + e);
+     assertEquals("a == remove(a) ", a, e );
+
+     MultiplicativeSet<BigRational> ms2 = ms.add(a);
+     System.out.println("ms2 = " + ms2);
+
+     if ( !a.isConstant() ) {
+         assertFalse("not isEmpty ", ms2.isEmpty() );
+         assertTrue("contained ", ms2.contains(a) );
+
+         e = ms2.removeFactors(a);
+         System.out.println("e  = " + e);
+         assertTrue("1 == remove(a) ", e.isConstant() );
+
+         if ( !b.isConstant() ) {
+             e = ms2.removeFactors(b);
+             System.out.println("e  = " + e);
+             assertEquals("b == remove(b) ", e, b );
+         }
+     }
+
+     d = a.multiply(b);
+     MultiplicativeSet<BigRational> ms3 = ms2.add(d);
+     System.out.println("ms3 = " + ms3);
+
+     if ( !d.isConstant() ) {
+         assertFalse("not isEmpty ", ms3.isEmpty() );
+
+         e = ms3.removeFactors(a);
+         System.out.println("e  = " + e);
+         assertTrue("1 == remove(a) ", e.isConstant() );
+
+         e = ms3.removeFactors(b);
+         System.out.println("e  = " + e);
+         assertTrue("1 == remove(b) ", e.isConstant() );
+
+         e = ms3.removeFactors(d);
+         System.out.println("e  = " + e);
+         assertTrue("1 == remove(a*b) ", e.isConstant() );
+
+         if ( !c.isConstant() ) {
+             e = ms3.removeFactors(c);
+             System.out.println("e  = " + e);
+             assertEquals("c == remove(c) ", e, c );
+         }
+     }
+ }
+
+
+/**
+ * Test irreducible multiplicative set contained.
+ * 
+ */
+ public void testFactorsContaines() {
+
+     a = fac.random(kl-2, ll-2, el, q );
+     b = fac.random(kl-2, ll-2, el, q );
+     c = fac.random(kl-2, ll-2, el, q );
+     d = fac.random(kl, ll, el, q );
+     e = d; //fac.random(kl, ll, el, q );
+
+     if ( a.isZERO() || b.isZERO() || c.isZERO() || d.isZERO() ) {
+        return;
+     }
+
+     MultiplicativeSet<BigRational> ms = new MultiplicativeSetFactors<BigRational>(fac);
+     System.out.println("ms = " + ms);
+     System.out.println("a  = " + a);
+     System.out.println("b  = " + b);
+     System.out.println("c  = " + c);
+
+     assertTrue("isEmpty ", ms.isEmpty() );
+
+     if ( !a.isConstant() ) {
+         assertFalse("not contained ", ms.contains(a) );
+     }
+
+     MultiplicativeSet<BigRational> ms2 = ms.add(a);
+     System.out.println("ms2 = " + ms2);
+
+     if ( !a.isConstant() ) {
+         assertFalse("not isEmpty ", ms2.isEmpty() );
+         assertTrue("contained ", ms2.contains(a) );
+     }
+
+     if ( !a.equals(b) && !b.isConstant() ) {
+         assertFalse("not contained ", ms2.contains(b) );
+     }
+
+     MultiplicativeSet<BigRational> ms3 = ms2.add(b);
+     System.out.println("ms3 = " + ms3);
+
+     if ( !b.isConstant() ) {
+         assertFalse("not isEmpty ", ms3.isEmpty() );
+     }
+     assertTrue("contained ", ms3.contains(a) );
+     assertTrue("contained ", ms3.contains(b) );
+
+     if ( !a.equals(c) && !b.equals(c) && !c.isConstant() ) {
+         assertFalse("not contained ", ms3.contains(c) );
+     }
+
+     e = a.multiply(b);
+     System.out.println("e  = " + e);
+     if ( !e.isConstant() ) {
+         assertTrue("contained ", ms3.contains(e) );
+     }
+
+     MultiplicativeSet<BigRational> ms4 = ms3.add(e);
+     System.out.println("ms4 = " + ms4);
+
+     assertTrue("m3 == m4 ", ms3.equals(ms4) );
+ }
+
+
+/**
+ * Test irreducible multiplicative set removeFactors.
+ * 
+ */
+ public void testFactorsRemoveFactors() {
+
+     a = fac.random(kl-2, ll-2, el, q );
+     b = fac.random(kl-2, ll-2, el, q );
+     c = fac.random(kl-2, ll-2, el, q );
+     d = fac.random(kl-2, ll-2, el, q );
+     e = d; //fac.random(kl, ll, el, q );
+
+     if ( a.isZERO() || b.isZERO() || c.isZERO() || d.isZERO() ) {
+        return;
+     }
+
+     MultiplicativeSet<BigRational> ms = new MultiplicativeSetFactors<BigRational>(fac);
+     System.out.println("ms = " + ms);
+     System.out.println("a  = " + a);
+     System.out.println("b  = " + b);
+     System.out.println("c  = " + c);
+
+     assertTrue("isEmpty ", ms.isEmpty() );
+
+     e = ms.removeFactors(a);
+     System.out.println("e  = " + e);
+     assertEquals("a == remove(a) ", a, e );
+
+     MultiplicativeSet<BigRational> ms2 = ms.add(a);
+     System.out.println("ms2 = " + ms2);
+
+     if ( !a.isConstant() ) {
+         assertFalse("not isEmpty ", ms2.isEmpty() );
+         assertTrue("contained ", ms2.contains(a) );
+
+         e = ms2.removeFactors(a);
+         System.out.println("e  = " + e);
+         assertTrue("1 == remove(a) ", e.isConstant() );
+
+         if ( !b.isConstant() ) {
+             e = ms2.removeFactors(b);
+             System.out.println("e  = " + e);
+             assertTrue("remove(b) | b ", b.remainder(e).isZERO() );
+         }
+     }
+
+     d = a.multiply(b);
+     MultiplicativeSet<BigRational> ms3 = ms2.add(d);
+     System.out.println("ms3 = " + ms3);
+
+     if ( !d.isConstant() ) {
+         assertFalse("not isEmpty ", ms3.isEmpty() );
+
+         e = ms3.removeFactors(a);
+         System.out.println("e  = " + e);
+         assertTrue("1 == remove(a) ", e.isConstant() );
+
+         e = ms3.removeFactors(b);
+         System.out.println("e  = " + e);
+         assertTrue("1 == remove(b) ", e.isConstant() );
+
+         e = ms3.removeFactors(d);
+         System.out.println("e  = " + e);
+         assertTrue("1 == remove(a*b) ", e.isConstant() );
+
+         if ( !c.isConstant() ) {
+             e = ms3.removeFactors(c);
+             System.out.println("e  = " + e);
+             assertTrue("remove(c) | c ", c.remainder(e).isZERO() );
+         }
+     }
  }
 
 }

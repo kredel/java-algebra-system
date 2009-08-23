@@ -53,12 +53,6 @@ public class MultiplicativeSet<C extends GcdRingElem<C>> implements Serializable
 
 
     /**
-     * Squarefree decomposition engine.
-     */
-    protected final SquarefreeAbstract<C> engine;
-
-
-    /**
      * MultiplicativeSet constructor. Constructs an empty multiplicative set.
      * @param ring polynomial ring factory for coefficients.
      */
@@ -75,24 +69,12 @@ public class MultiplicativeSet<C extends GcdRingElem<C>> implements Serializable
      * @param ring polynomial ring factory for coefficients.
      * @param ms a list of non-zero polynomials.
      */
-    public MultiplicativeSet(GenPolynomialRing<C> ring, List<GenPolynomial<C>> ms) {
-        this(ring, ms, SquarefreeFactory.getImplementation(ring.coFac));
-    }
-
-
-    /**
-     * MultiplicativeSet constructor. 
-     * @param ring polynomial ring factory for coefficients.
-     * @param ms a list of non-zero polynomials.
-     * @param eng squarefree factorization engine.
-     */
-    public MultiplicativeSet(GenPolynomialRing<C> ring, List<GenPolynomial<C>> ms, SquarefreeAbstract<C> eng) {
-        if (ms == null || ring == null || eng == null) {
+    protected MultiplicativeSet(GenPolynomialRing<C> ring, List<GenPolynomial<C>> ms) {
+        if (ms == null || ring == null) {
             throw new RuntimeException("only for non null parts");
         }
         this.ring = ring;
         mset = ms;
-        engine = eng;
     }
 
 
@@ -221,11 +203,14 @@ public class MultiplicativeSet<C extends GcdRingElem<C>> implements Serializable
         if (cc == null || cc.isZERO() || cc.isConstant()) { 
             return this;
         }
+        if ( ring.coFac.isField() ) {
+            cc = cc.monic();
+        }
         List<GenPolynomial<C>> list;
         if (mset.size() == 0) { 
-            list = new ArrayList<GenPolynomial<C>>(1);
+            list =new ArrayList<GenPolynomial<C>>(1);
             list.add(cc);
-            return new MultiplicativeSet<C>(ring,list,engine);
+            return new MultiplicativeSet<C>(ring,list);
         }
         GenPolynomial<C> c = removeFactors(cc);
         if ( c.isConstant() ) { 
@@ -239,7 +224,24 @@ public class MultiplicativeSet<C extends GcdRingElem<C>> implements Serializable
         }
         list = new ArrayList<GenPolynomial<C>>(mset);
         list.add(c);
-        return new MultiplicativeSet<C>(ring,list,engine);
+        return new MultiplicativeSet<C>(ring,list);
+    }
+
+
+    /**
+     * Replace polynomial list of mset. 
+     * @param L polynomial list to replace mset.
+     * @return new multiplicative set.
+     */
+    public MultiplicativeSet<C> replace(List<GenPolynomial<C>> L) {
+        MultiplicativeSet<C> ms = new MultiplicativeSet<C>(ring);
+        if (L == null || L.size() == 0) { 
+            return ms;
+        }
+        for ( GenPolynomial<C> p : L ) {
+            ms = ms.add(p);
+        }
+        return ms;
     }
 
 
