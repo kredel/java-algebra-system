@@ -32,7 +32,7 @@ public class Condition<C extends GcdRingElem<C>> implements Serializable {
     private static final Logger logger = Logger.getLogger(Condition.class);
 
 
-    private final boolean debug = logger.isDebugEnabled();
+    private final boolean debug = true || logger.isDebugEnabled();
 
 
     /**
@@ -190,6 +190,7 @@ public class Condition<C extends GcdRingElem<C>> implements Serializable {
         List<GenPolynomial<C>> list = idz.normalform(nonZero);
         if (list.size() != nonZero.size()) { // contradiction
             if (debug) {
+                logger.info("contradiction(==0):");
                 logger.info("zero    = " + zero.getList());
                 logger.info("z       = " + z);
                 logger.info("idz     = " + idz.getList());
@@ -218,16 +219,25 @@ public class Condition<C extends GcdRingElem<C>> implements Serializable {
                 System.out.println("zi != 0 in zero: " + zi);
             }
         }
-        if (Z.size() == idz.getList().size()) {
-            return nc;
+        if (Z.size() != idz.getList().size()) {
+            System.out.println("contradiction(==0):");
+            System.out.println("zero = " + zero.getList());
+            System.out.println("ZZZZ = " + Z);
+            System.out.println("list = " + list);
+            //Ideal<C> id = new Ideal<C>(zero.getRing(), Z);
+            // return new Condition<C>( id, L );
+            return null; // contradiction
+            //no-no: idz = new Ideal<C>(zero.getRing(), Z);
         }
-        System.out.println("contradiction(==0):");
-        System.out.println("zero = " + zero.getList());
-        System.out.println("ZZZZ = " + Z);
-        System.out.println("list = " + list);
-        Ideal<C> id = new Ideal<C>(zero.getRing(), Z);
-        // return new Condition<C>( id, L );
-        return null; // contradiction
+        int i = L.size();
+        L = zero.engine.coPrimeSquarefree(L);
+        nc = new Condition<C>(idz, L);
+	if ( L.size() != i ) {
+	    List<GenPolynomial<C>> zz = nc.divideByNonZero( idz.getList() ); 
+            idz = new Ideal<C>(zero.getRing(), zz);
+            nc = new Condition<C>(idz, L);
+	}
+        return nc;
     }
 
 
@@ -241,21 +251,29 @@ public class Condition<C extends GcdRingElem<C>> implements Serializable {
         if (n == null || n.isZERO()) {
             return this;
         }
+	if ( !zero.isZERO() && zero.isRadicalMember(n) ) {
+            return this;
+	}
+        Condition<C> nc;
         GenPolynomial<C> nq = zero.engine.squarefreePart(n);
+        List<GenPolynomial<C>> list;
         if (nq.equals(n)) {
-            List<GenPolynomial<C>> list = addNonZero(n);
-            return new Condition<C>(zero, list);
-        }
+            list = addNonZero(n);
+            nc = new Condition<C>(zero, list);
+        } else {
+            GenPolynomial<C> q = n.divide(nq);
+            list = addNonZero(nq);
+            nc = new Condition<C>(zero, list);
+            list = nc.addNonZero(q);
+            nc = new Condition<C>(nc.zero, list);
+	}
         if (debug) {
             logger.info("squarefree...    " + nz);
             logger.info("squarefree... of " + n);
             logger.info("squarefreePart = " + nq);
         }
-        GenPolynomial<C> q = n.divide(nq);
-        List<GenPolynomial<C>> list = addNonZero(nq);
-        Condition<C> nc = new Condition<C>(zero, list);
-        list = nc.addNonZero(q);
-        nc = new Condition<C>(zero, list);
+
+        // squarefreeFactors
 
         List<GenPolynomial<C>> Z;
         Z = new ArrayList<GenPolynomial<C>>(zero.getList().size());
@@ -266,16 +284,28 @@ public class Condition<C extends GcdRingElem<C>> implements Serializable {
                 System.out.println("zi != 0 in zero: " + zi);
             }
         }
-        if (Z.size() == zero.getList().size()) {
-            return nc;
+        if (Z.size() != zero.getList().size()) {
+            System.out.println("contradiction(!=0):");
+            System.out.println("zero    = " + zero.getList());
+            System.out.println("ZZZZ    = " + Z);
+            System.out.println("list,nz = " + nonZero);
+            Ideal<C> id = new Ideal<C>(zero.getRing(), Z);
+            nc = new Condition<C>( id, nc.nonZero );
+            //return nc; // null not ok
         }
-        System.out.println("contradiction(!=0):");
-        System.out.println("zero = " + zero.getList());
-        System.out.println("ZZZZ = " + Z);
-        System.out.println("list = " + list);
-        Ideal<C> id = new Ideal<C>(zero.getRing(), Z);
-        // return new Condition<C>( id, list );
-        return nc; // null not ok
+
+        //list = zero.engine.coPrimeSquarefree(list);
+        //nc = new Condition<C>(nc.zero, list);
+
+        int i = nc.nonZero.size();
+        list = zero.engine.coPrimeSquarefree(nc.nonZero);
+        nc = new Condition<C>(nc.zero, list);
+	if ( list.size() != i ) {
+	    List<GenPolynomial<C>> zz = nc.divideByNonZero( nc.zero.getList() ); 
+            Ideal<C> id = new Ideal<C>(zero.getRing(), zz);
+            nc = new Condition<C>(id, nc.nonZero);
+	}
+        return nc;
     }
 
 
@@ -413,6 +443,62 @@ public class Condition<C extends GcdRingElem<C>> implements Serializable {
         }
         list.add(c);
         return list;
+    }
+
+
+    /**
+     * Quotient by nonZero factors division. NonZero is treated as multiplicative set.
+     * @param cc polynomial to be removed factors from nonZero.
+     * @return quotient polynomial.
+     */
+    public GenPolynomial<C> divideByNonZero(GenPolynomial<C> cc) {
+        if (cc == null || cc.isZERO()) { // do not look into zero list
+            return cc;
+        }
+        if (nonZero == null) { // cannot happen
+            return cc;
+        }
+        GenPolynomial<C> c = cc;
+        for (GenPolynomial<C> n : nonZero) {
+            if (n.isONE()) { // do not use 1
+                continue;
+            }
+            GenPolynomial<C> q;
+            GenPolynomial<C> r;
+            do {
+                GenPolynomial<C>[] qr = c.divideAndRemainder(n);
+                q = qr[0];
+                r = qr[1];
+                if (r != null && !r.isZERO()) {
+                    continue;
+                }
+                c = q;
+            } while (r.isZERO() && !c.isConstant());
+        }
+        //if (c != null && c.isConstant()) {
+        //    return c.ring.getZERO(); // not c
+        //}
+        return c;
+    }
+
+    /**
+     * Quotient by nonZero factors division. NonZero is treated as multiplicative set.
+     * @param cc list of polynomial to be removed factors from nonZero.
+     * @return quotient polynomial list.
+     */
+    public List<GenPolynomial<C>> divideByNonZero(List<GenPolynomial<C>> cc) {
+        if (cc == null || cc.size() == 0) { 
+            return cc;
+        }
+        if (nonZero == null) { // cannot happen
+            return cc;
+        }
+        List<GenPolynomial<C>> c = new ArrayList<GenPolynomial<C>>(cc.size());
+        for (GenPolynomial<C> p : cc) {
+	    p = divideByNonZero(p);
+	    c.add(p);
+	}
+	return c;
     }
 
 
