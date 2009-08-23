@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 
@@ -342,6 +344,22 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
      */
     public List<GenPolynomial<C>> factorsRadical(GenPolynomial<C> P) {
         return new ArrayList<GenPolynomial<C>>(factors(P).keySet());
+    }
+
+
+    /**
+     * GenPolynomial list factorization ignoring multiplicities.
+     * @param L list of GenPolynomials.
+     * @return [p_1, ..., p_k] with p = prod_{i=1,...,k} p_i**{e_i} for some
+     *         e_i for all p in L.
+     */
+    public List<GenPolynomial<C>> factorsRadical(List<GenPolynomial<C>> P) {
+        SortedSet<GenPolynomial<C>> facs = new TreeSet<GenPolynomial<C>>();
+        for ( GenPolynomial<C> p : P ) {
+            List<GenPolynomial<C>> fs = factorsRadical(p);
+            facs.addAll(fs);
+        }
+        return new ArrayList<GenPolynomial<C>>( facs );
     }
 
 
