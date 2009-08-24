@@ -174,6 +174,9 @@ public class Condition<C extends GcdRingElem<C>> implements Serializable {
      * @return true if this condition is contradictory, else false.
      */
     public boolean isContradictory() {
+        if ( zero.isZERO() ) {
+            return false;
+        }
         boolean t = zero.isONE();
         if ( t ) {
            logger.info("contradiction zero.isONE(): " + this);
@@ -204,7 +207,8 @@ public class Condition<C extends GcdRingElem<C>> implements Serializable {
      */
     public Condition<C> extendZero(GenPolynomial<C> z) {
         // assert color(z) == white 
-        z = zero.engine.squarefreePart(z); 
+        //z = zero.engine.squarefreePart(z); 
+        z = z.monic();
         Ideal<C> idz = zero.sum(z);
         logger.info("added to ideal: " + z);
 
@@ -262,6 +266,7 @@ public class Condition<C extends GcdRingElem<C>> implements Serializable {
         //    return this;
 	//}
         MultiplicativeSet<C> ms = nonZero.add(n);
+        logger.info("added to non zero: " + n);
 
         Condition<C> nc = new Condition<C>(zero, ms);
         if ( true ) {
@@ -288,17 +293,36 @@ public class Condition<C extends GcdRingElem<C>> implements Serializable {
      * @return new simplified condition.
      */
     public Condition<C> simplify() {
-        Ideal<C> idz = zero.squarefree();
-        List<GenPolynomial<C>> ml = idz.normalform( nonZero.mset );
-        MultiplicativeSet<C> ms = nonZero.replace(ml);
-        List<GenPolynomial<C>> Z = ms.removeFactors(idz.getList());
-        idz = new Ideal<C>(zero.getRing(), Z);
-        if ( idz.equals(zero) && ms.equals(nonZero) ) {
+        if ( false ) {
             return this;
+        }
+        Ideal<C> idz = zero.squarefree();
+        if ( !idz.getList().equals( zero.getList() ) ) {
+            logger.info("simplify squarefree: " + zero.getList() + " to " + idz.getList());
+        }
+        List<GenPolynomial<C>> ml = idz.normalform( nonZero.mset );
+        MultiplicativeSet<C> ms = nonZero;
+        if ( !ml.equals( nonZero.mset ) ) {
+            logger.info("simplify normalform: " + nonZero.mset + " to " + ml);
+            if ( ml.size() != nonZero.mset.size() ) {
+                return null;
+            }
+            ms = nonZero.replace(ml);
+        }
+        List<GenPolynomial<C>> Z = ms.removeFactors(idz.getList());
+        if ( !Z.equals( idz.getList() ) ) {
+            logger.info("simplify removeFactors: " + idz.getList() + " to " + Z);
+            if ( Z.size() != idz.getList().size() ) {
+                return null;
+            }
+            idz = new Ideal<C>(zero.getRing(), Z); // changes ideal
         }
         Condition<C> nc = new Condition<C>(idz, ms);
         if ( nc.isContradictory()) {
             return null;
+        }
+        if ( idz.equals(zero) && ms.equals(nonZero) ) {
+            return this;
         }
         logger.info("condition simplified: " + this + " to " + nc);
         return nc.simplify();
@@ -325,7 +349,7 @@ public class Condition<C extends GcdRingElem<C>> implements Serializable {
             // System.out.println("m or c in nonzero " + m);
             return Color.RED;
         }
-        // System.out.println("m white " + m);
+        //System.out.println("m white " + m + ", c = " + c);
         return Color.WHITE;
     }
 
@@ -371,6 +395,7 @@ public class Condition<C extends GcdRingElem<C>> implements Serializable {
                 System.out.println("error cond       = " + this);
                 System.out.println("error poly     A = " + A);
                 System.out.println("error poly green = " + green);
+                System.out.println("error poly   red = " + red);
                 System.out.println("error poly    Ap = " + Ap);
                 throw new RuntimeException("error, c is white = " + c);
                 // is catched in minimalGB
@@ -379,20 +404,6 @@ public class Condition<C extends GcdRingElem<C>> implements Serializable {
         cp = new ColorPolynomial<C>(green, red, white);
         // System.out.println("determined = " + cp);
         return cp;
-    }
-
-
-    /**
-     * Re determine colored polynomial.
-     * @param s colored polynomial.
-     * @return determined colored polynomial wrt. this.conditions.
-     */
-    public ColorPolynomial<C> reDetermine(ColorPolynomial<C> s) {
-        ColorPolynomial<C> p = determine(s.getEssentialPolynomial());
-        // assume green terms stay green wrt. this condition
-        GenPolynomial<GenPolynomial<C>> g = s.green.sum( p.green );
-        p = new ColorPolynomial<C>(g, p.red, p.white);
-        return p;
     }
 
 
@@ -418,5 +429,71 @@ public class Condition<C extends GcdRingElem<C>> implements Serializable {
         return cl;
     }
 
+
+    /**
+     * Re determine colored polynomial.
+     * @param s colored polynomial.
+     * @return determined colored polynomial wrt. this.conditions.
+     */
+    public ColorPolynomial<C> reDetermine(ColorPolynomial<C> s) {
+        ColorPolynomial<C> p = determine(s.getEssentialPolynomial());
+        // assume green terms stay green wrt. this condition
+        GenPolynomial<GenPolynomial<C>> g = s.green.sum( p.green );
+        p = new ColorPolynomial<C>(g, p.red, p.white);
+        return p;
+    }
+
+
+    /**
+     * Re determine list of colored polynomials.
+     * @param S list of colored polynomials.
+     * @return list of determined colored polynomials wrt. this.conditions.
+     */
+    public List<ColorPolynomial<C>> reDetermine(List<ColorPolynomial<C>> S) {
+        if ( S == null || S.isEmpty() ) {
+            return S;
+        }
+        List<ColorPolynomial<C>> P = new ArrayList<ColorPolynomial<C>>();
+        for ( ColorPolynomial<C> s : S ) {
+            ColorPolynomial<C> p = reDetermine(s);
+            P.add(p);
+        }
+        return P;
+    }
+
+
+    /**
+     * Is determined colored polynomial.
+     * @param s colored polynomial.
+     * @return true if the colored polynomial is correctly determined wrt. this.condition.
+     */
+    public boolean isDetermined(ColorPolynomial<C> s) {
+        ColorPolynomial<C> p = determine(s.getPolynomial());
+        boolean t = p.equals(s);
+        if ( !t ) {
+            System.out.println("not determined s    = " + s);
+            System.out.println("not determined p    = " + p);
+            System.out.println("not determined cond = " + this);
+        }
+        return t;
+    }
+
+
+    /**
+     * Is determined list of colored polynomial.
+     * @param S list of colored polynomials.
+     * @return true if the colored polynomials in S are correctly determined wrt. this.condition.
+     */
+    public boolean isDetermined(List<ColorPolynomial<C>> S) {
+        if ( S == null ) {
+            return true;
+        }
+        for ( ColorPolynomial<C> p : S ) {
+            if ( ! isDetermined(p) ) {
+                return false;
+            }
+        }
+        return true;
+    }
 
 }

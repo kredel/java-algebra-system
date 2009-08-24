@@ -239,6 +239,9 @@ public class ColoredSystem<C extends GcdRingElem<C>> implements Cloneable {
         if (!isDetermined()) {
             return false;
         }
+        if (!condition.isDetermined(list)) {
+            return false;
+        }
         // Condition<C> cond = condition;
         for (ColorPolynomial<C> s : list) {
             if (!s.checkInvariant()) {
@@ -286,8 +289,11 @@ public class ColoredSystem<C extends GcdRingElem<C>> implements Cloneable {
                 continue;
             }
             if (!s.isDetermined()) {
-                System.out.println("notDetermined " + s);
-                System.out.println("condition: " + condition);
+                System.out.println("not simple determined " + s);
+                System.out.println("condition:            " + condition);
+                return false;
+            }
+            if (!condition.isDetermined(s)) {
                 return false;
             }
         }
@@ -297,21 +303,20 @@ public class ColoredSystem<C extends GcdRingElem<C>> implements Cloneable {
 
     /**
      * Re determine colorings of polynomials.
-     * @param cond a condition.
-     * @return re determined colored polynomials wrt. condition.
+     * @return colored system with re determined colored polynomials.
      */
-    public ColoredSystem<C> reDetermine(Condition<C> cond) { // unused
-        if (cond == null || cond.zero.isONE()) {
+    public ColoredSystem<C> reDetermine() {
+        if (condition == null || condition.zero.isONE()) {
             return this;
         }
         List<ColorPolynomial<C>> Sn = new ArrayList<ColorPolynomial<C>>(list.size());
         for (ColorPolynomial<C> c : list) {
-            ColorPolynomial<C> a = cond.reDetermine(c);
+            ColorPolynomial<C> a = condition.reDetermine(c);
             // if ( !a.isZERO() ) {
             Sn.add(a); // must also add zeros
             // }
         }
-        return new ColoredSystem<C>(cond, Sn);
+        return new ColoredSystem<C>(condition, Sn, pairlist);
     }
 
 }

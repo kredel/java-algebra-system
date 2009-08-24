@@ -13,6 +13,7 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 
 import edu.jas.poly.PolynomialList;
+import edu.jas.poly.OrderedPolynomialList;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.structure.GcdRingElem;
@@ -91,7 +92,7 @@ public class GroebnerSystem<C extends GcdRingElem<C>> {
         }
         sb.append("\n");
         if ( cgb == null ) {
-           sb.append("Comprehensive Groebner Base not jet determined\n");
+           sb.append("Comprehensive Groebner Base not jet computed\n");
         } else {
            sb.append("Comprehensive Groebner Base:\n");
            first = true;
@@ -222,7 +223,7 @@ public class GroebnerSystem<C extends GcdRingElem<C>> {
         if ( G.size() > 0 ) {
            ring = G.get(0).ring;
         }
-        cgb = new PolynomialList<GenPolynomial<C>>(ring,G);
+        cgb = new OrderedPolynomialList<GenPolynomial<C>>(ring,G);
         return G;
     }
 

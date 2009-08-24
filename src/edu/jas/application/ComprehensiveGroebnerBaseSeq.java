@@ -382,8 +382,11 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
             si++;
             logger.info("poped GBsys number    " + si + " with condition = "
                     + cs.condition);
-            logger.info("poped GBsys remaining " + (CSs.size() - 1)
-                    + " with pairlist  = " + cs.pairlist);
+            logger.info("poped GBsys (remaining " + (CSs.size() - 1)
+                    + ") with pairlist  = " + cs.pairlist);
+            if ( !cs.isDetermined() ) {
+                cs = cs.reDetermine();
+            }
             pairlist = cs.pairlist;
             G = cs.list;
             cond = cs.condition;
@@ -445,6 +448,9 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
                     logger.info("#new systems       = " + ncs.size());
                     int yi = 0;
                     for (ColoredSystem<C> x : ncs) {
+                        if ( !x.isDetermined() ) {
+                            x = x.reDetermine();
+                        }
                         boolean contained = false;
                         CSh = new ArrayList<ColoredSystem<C>>();
                         for (ColoredSystem<C> y : CSs) {
@@ -467,6 +473,9 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
                 }
             }
             // all s-pols reduce to zero in this branch
+            if ( !cs.isDetermined() ) {
+                cs = cs.reDetermine();
+            }
             CSb.add(cs);
             CSs.remove(0);
             logger.info("done with = " + cs.condition);
@@ -475,8 +484,14 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         CSh = new ArrayList<ColoredSystem<C>>();
         for (ColoredSystem<C> x : CSb) {
             // System.out.println("G = " + x.list );
+            if ( !x.isDetermined() ) {
+                x = x.reDetermine();
+            }
             cs = minimalGB(x);
             // System.out.println("min(G) = " + cs.list );
+            if ( !cs.isDetermined() ) {
+                cs = cs.reDetermine();
+            }
             // cs = new ColoredSystem<C>( x.condition, G, x.pairlist );
             CSh.add(cs);
             logger.info("#sequential done = " + x.condition);
@@ -516,12 +531,16 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         List<Condition<C>> cd = cred.caseDistinction(cond, Ap);
         logger.info("# cases = " + cd.size());
         for (Condition<C> cnd : cd) {
-            nz = cnd.determine(Ap);
+            //nz = cnd.determine(Ap);
+            nz = cnd.reDetermine(A);
             if (nz == null || nz.isZERO()) {
                 logger.info("zero determined nz = " + nz);
                 Sp = new ArrayList<ColorPolynomial<C>>(S);
                 OrderedCPairlist<C> PL = pl.clone();
                 NS = new ColoredSystem<C>(cnd, Sp, PL);
+                if ( !NS.isDetermined() ) {
+                    NS = NS.reDetermine();
+                }
                 List<ColoredSystem<C>> NCSp = new ArrayList<ColoredSystem<C>>(NCS.size());
                 boolean contained = false;
                 for (ColoredSystem<C> x : NCS) {
@@ -550,6 +569,9 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
             OrderedCPairlist<C> PL = pl.clone();
             PL.put(nz);
             NS = new ColoredSystem<C>(cnd, Sp, PL);
+            if ( !NS.isDetermined() ) {
+                NS = NS.reDetermine();
+            }
             List<ColoredSystem<C>> NCSp = new ArrayList<ColoredSystem<C>>(NCS.size());
             boolean contained = false;
             for (ColoredSystem<C> x : NCS) {

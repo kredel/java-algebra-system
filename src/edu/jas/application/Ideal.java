@@ -1129,7 +1129,7 @@ public class Ideal<C extends GcdRingElem<C>>
         List<GenPolynomial<C>> li, ri;
         while ( true ) {
             li = R.getList();
-            ri = new ArrayList<GenPolynomial<C>>( li.size() );
+            ri = new ArrayList<GenPolynomial<C>>( li ); //.size() );
             for ( GenPolynomial<C> h : li ) {
                 GenPolynomial<C> r = engine.squarefreePart( h );
                 ri.add( r );

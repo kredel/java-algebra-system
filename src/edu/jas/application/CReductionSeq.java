@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Collections;
 
 import org.apache.log4j.Logger;
 
@@ -415,7 +416,7 @@ public class CReductionSeq<C extends GcdRingElem<C>>
             while (!Ap.isZERO()) {
                 GenPolynomial<C> c = Ap.leadingBaseCoefficient();
                 Bp = Ap.reductum();
-                // System.out.println("to color: " + c);
+                //System.out.println("to color: " + c);
                 switch (cz.color(c)) {
                 case GREEN:
                     // System.out.println("color green: " + c);
@@ -482,7 +483,7 @@ public class CReductionSeq<C extends GcdRingElem<C>>
         cd = caseDistinction(cd, A);
         if (info) {
             StringBuffer s = new StringBuffer("extending condition: " + cond + "\n");
-            s.append("case distinctions: [ ");
+            s.append("case distinctions: [ \n");
             for (Condition<C> c : cd) {
                 s.append(c.toString() + "\n");
             }
@@ -503,8 +504,11 @@ public class CReductionSeq<C extends GcdRingElem<C>>
             List<ColoredSystem<C>> CS = new ArrayList<ColoredSystem<C>>();
             return CS;
         }
+        //System.out.println("of determine     = " + H);
+        Collections.reverse(H);
         List<Condition<C>> cd = caseDistinction(H);
-        // System.out.println("case Distinction = " + cd);
+        //System.out.println("case Distinction = " + cd);
+        //System.out.println("of determine     = " + H);
         return determine(cd, H);
     }
 
@@ -522,7 +526,7 @@ public class CReductionSeq<C extends GcdRingElem<C>>
             return CS;
         }
         for (Condition<C> cond : cd) {
-            logger.info("cond = " + cond);
+            logger.info("determine wrt cond = " + cond);
             if (cond.zero.isONE()) { // should not happen
                 System.out.println("ideal is one = " + cond.zero);
                 // continue; // can treat all coeffs as green
