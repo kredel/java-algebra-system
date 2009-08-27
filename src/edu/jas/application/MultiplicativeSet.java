@@ -254,7 +254,7 @@ public class MultiplicativeSet<C extends GcdRingElem<C>> implements Serializable
      * @return quotient polynomial.
      */
     public GenPolynomial<C> removeFactors(GenPolynomial<C> cc) {
-        if (cc == null || cc.isZERO()) { 
+        if (cc == null || cc.isZERO() || cc.isConstant()) { 
             return cc;
         }
         if (mset.size() == 0) { 
@@ -262,7 +262,7 @@ public class MultiplicativeSet<C extends GcdRingElem<C>> implements Serializable
         }
         GenPolynomial<C> c = cc;
         for (GenPolynomial<C> n : mset) {
-            if (n.isONE()) { // do not use 1
+            if (n.isConstant()) { // do not use 1, should not be in mset
                 continue;
             }
             GenPolynomial<C> q, r;
@@ -298,7 +298,7 @@ public class MultiplicativeSet<C extends GcdRingElem<C>> implements Serializable
         List<GenPolynomial<C>> M = new ArrayList<GenPolynomial<C>>(L.size());
         for (GenPolynomial<C> p : L) {
 	    p = removeFactors(p);
-            // nono: if ( !p.isConstant() ) {
+            // nono, really: if ( !p.isConstant() ) {
             M.add(p);
 	}
 	return M;

@@ -83,6 +83,33 @@ public class ColoredSystem<C extends GcdRingElem<C>> implements Cloneable {
 
 
     /**
+     * Add to list of colored systems.
+     * This is added to the list of colored systems, 
+     * if a system with the same condition is not already contained.
+     * @param L a list of colored systems.
+     * @return L.add(this) if this not in L, else L.
+     */
+    public List<ColoredSystem<C>> addToList(List<ColoredSystem<C>> L) {
+        List<ColoredSystem<C>> S = new ArrayList<ColoredSystem<C>>(L.size()+1);
+        boolean contained = false;
+        for (ColoredSystem<C> x : L) {
+            if (condition.equals(x.condition) && list.equals(x.list)) {
+                logger.info("replaced system = " + x.condition);
+                S.add(this);
+                contained = true;
+            } else { // copy existing
+                // System.out.println("kept system = " + x);
+                S.add(x);
+            }
+        }
+        if (!contained) {
+            S.add(this);
+        }
+        return S;
+    }
+
+
+    /**
      * Get the String representation.
      * @see java.lang.Object#toString()
      */

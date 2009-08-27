@@ -207,7 +207,6 @@ public class Condition<C extends GcdRingElem<C>> implements Serializable {
      */
     public Condition<C> extendZero(GenPolynomial<C> z) {
         // assert color(z) == white 
-        //z = zero.engine.squarefreePart(z); 
         z = z.monic();
         Ideal<C> idz = zero.sum(z);
         logger.info("added to ideal: " + z);
@@ -216,37 +215,6 @@ public class Condition<C extends GcdRingElem<C>> implements Serializable {
         if ( true ) {
             return nc.simplify();
         }
-
-        // reduce non-zero wrt new ideal:
-        List<GenPolynomial<C>> list = idz.normalform( nonZero.mset );
-        if (list.size() != nonZero.mset.size()) { // contradiction
-            if (debug) {
-                logger.info("contradiction(==0):");
-                logger.info("zero    = " + zero.getList());
-                logger.info("z       = " + z);
-                logger.info("idz     = " + idz.getList());
-                logger.info("list    = " + list);
-                logger.info("nonZero = " + nonZero);
-            }
-            return null;
-        }
-        MultiplicativeSet<C> ms = nonZero.replace(list);
-        nc = new Condition<C>(idz, ms);
-
-        // remove factors from new ideal wrt new multiplicative set:
-        List<GenPolynomial<C>> Z = ms.removeFactors(idz.getList());
-        if (Z.size() != idz.getList().size()) {
-            System.out.println("contradiction(==0):");
-            System.out.println("zero = " + zero.getList());
-            System.out.println("ZZZZ = " + Z);
-            System.out.println("list = " + list);
-            //Ideal<C> id = new Ideal<C>(zero.getRing(), Z);
-            // return new Condition<C>( id, L );
-            return null; // contradiction
-            //no-no: idz = new Ideal<C>(zero.getRing(), Z);
-        }
-        idz = new Ideal<C>(zero.getRing(),Z);
-        nc = new Condition<C>(idz, ms);
         return nc;
     }
 
@@ -262,27 +230,12 @@ public class Condition<C extends GcdRingElem<C>> implements Serializable {
         if (n == null || n.isZERO()) {
             return this;
         }
-	//if ( !zero.isZERO() && zero.isRadicalMember(n) ) { // ideal is approx. radical
-        //    return this;
-	//}
         MultiplicativeSet<C> ms = nonZero.add(n);
         logger.info("added to non zero: " + n);
 
         Condition<C> nc = new Condition<C>(zero, ms);
         if ( true ) {
             return nc.simplify();
-        }
-
-        // remove factors from new ideal wrt new multiplicative set:
-        List<GenPolynomial<C>> Z = ms.removeFactors(nc.zero.getList());
-        if (Z.size() != nc.zero.getList().size()) {
-            System.out.println("contradiction(!=0):");
-            System.out.println("zero    = " + zero.getList());
-            System.out.println("ZZZZ    = " + Z);
-            System.out.println("list,nz = " + nonZero);
-            Ideal<C> id = new Ideal<C>(zero.getRing(), Z);
-            nc = new Condition<C>( id, nc.nonZero );
-            //return nc; // null not ok
         }
         return nc;
     }
@@ -293,7 +246,7 @@ public class Condition<C extends GcdRingElem<C>> implements Serializable {
      * @return new simplified condition.
      */
     public Condition<C> simplify() {
-        if ( false ) {
+        if ( false ) { // no simplification
             return this;
         }
         Ideal<C> idz = zero.squarefree();
@@ -303,22 +256,27 @@ public class Condition<C extends GcdRingElem<C>> implements Serializable {
         List<GenPolynomial<C>> ml = idz.normalform( nonZero.mset );
         MultiplicativeSet<C> ms = nonZero;
         if ( !ml.equals( nonZero.mset ) ) {
-            logger.info("simplify normalform: " + nonZero.mset + " to " + ml);
             if ( ml.size() != nonZero.mset.size() ) {
+                logger.info("contradiction(==0):");
+                logger.info("simplify normalform contradiction: " + nonZero.mset + " to " + ml);
                 return null;
             }
+            logger.info("simplify normalform: " + nonZero.mset + " to " + ml);
             ms = nonZero.replace(ml);
         }
         List<GenPolynomial<C>> Z = ms.removeFactors(idz.getList());
         if ( !Z.equals( idz.getList() ) ) {
-            logger.info("simplify removeFactors: " + idz.getList() + " to " + Z);
-            if ( Z.size() != idz.getList().size() ) {
+            if ( Z.size() != idz.getList().size() ) { // never true
+                logger.info("contradiction(!=0):");
+                logger.info("simplify removeFactors contradiction: " + idz.getList() + " to " + Z);
                 return null;
             }
+            logger.info("simplify removeFactors: " + idz.getList() + " to " + Z);
             idz = new Ideal<C>(zero.getRing(), Z); // changes ideal
         }
         Condition<C> nc = new Condition<C>(idz, ms);
-        if ( nc.isContradictory()) {
+        if ( nc.isContradictory()) { // evenatually a factor became 1
+            //logger.info("simplify contradiction: " + nc);
             return null;
         }
         if ( idz.equals(zero) && ms.equals(nonZero) ) {

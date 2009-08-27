@@ -446,30 +446,14 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
                     cond = cs.condition;
                     logger.info("replaced main branch = " + cond);
                     logger.info("#new systems       = " + ncs.size());
-                    int yi = 0;
+                    int yi = CSs.size();
                     for (ColoredSystem<C> x : ncs) {
                         if ( !x.isDetermined() ) {
                             x = x.reDetermine();
                         }
-                        boolean contained = false;
-                        CSh = new ArrayList<ColoredSystem<C>>();
-                        for (ColoredSystem<C> y : CSs) {
-                            if (x.condition.equals(y.condition) && x.list.equals(y.list)) {
-                                // if ( x.equals( NS ) ) {
-                                logger.info("replaced other branch = " + y.condition);
-                                CSh.add(x);
-                                contained = true;
-                            } else {
-                                CSh.add(y);
-                            }
-                        }
-                        if (!contained) {
-                            yi++;
-                            CSh.add(x);
-                        }
-                        CSs = CSh;
+                        CSs = x.addToList(CSs);
                     }
-                    logger.info("#new systems added = " + yi);
+                    logger.info("#new systems added = " + (CSs.size()-yi));
                 }
             }
             // all s-pols reduce to zero in this branch
@@ -541,22 +525,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
                 if ( !NS.isDetermined() ) {
                     NS = NS.reDetermine();
                 }
-                List<ColoredSystem<C>> NCSp = new ArrayList<ColoredSystem<C>>(NCS.size());
-                boolean contained = false;
-                for (ColoredSystem<C> x : NCS) {
-                    if (x.condition.equals(NS.condition) && x.list.equals(NS.list)) {
-                        // if ( x.equals( NS ) ) {
-                        logger.info("replaced system z = " + x);
-                        NCSp.add(NS);
-                        contained = true;
-                    } else {
-                        NCSp.add(x);
-                    }
-                }
-                if (!contained) {
-                    NCSp.add(NS);
-                }
-                NCS = NCSp;
+                NCS = NS.addToList(NCS);
                 continue;
             }
             if (S.contains(nz)) {
@@ -572,23 +541,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
             if ( !NS.isDetermined() ) {
                 NS = NS.reDetermine();
             }
-            List<ColoredSystem<C>> NCSp = new ArrayList<ColoredSystem<C>>(NCS.size());
-            boolean contained = false;
-            for (ColoredSystem<C> x : NCS) {
-                if (x.condition.equals(NS.condition) && x.list.equals(NS.list)) {
-                    // if ( x.equals( NS ) ) {
-                    logger.info("replaced system = " + x.condition);
-                    NCSp.add(NS);
-                    contained = true;
-                } else {
-                    // System.out.println("keped system = " + x);
-                    NCSp.add(x);
-                }
-            }
-            if (!contained) {
-                NCSp.add(NS);
-            }
-            NCS = NCSp;
+            NCS = NS.addToList(NCS);
         }
         // System.out.println("new determination = " + NCS);
         return NCS;
