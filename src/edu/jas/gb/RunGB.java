@@ -288,7 +288,7 @@ public class RunGB {
         } else {
             System.out.print("d ");
         }
-        System.out.println("= " + threads + ", ppn= " + threadsPerNode + ", time = " + t + " milliseconds, " + (t - t1) + " start-up");
+        System.out.println("= " + threads + ", ppn = " + threadsPerNode + ", time = " + t + " milliseconds, " + (t - t1) + " start-up");
         System.out.println("");
     }
 

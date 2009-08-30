@@ -263,6 +263,12 @@ public class GroebnerBaseDistributedHybrid<C extends RingElem<C>> extends Groebn
         if (ps != G.size()) {
             logger.error("#distributed list = " + theList.size() + " #pairlist list = " + G.size());
         }
+	for (GenPolynomial<C> q: theList.getValueList()) {
+	    if ( q != null & !q.isZERO() ) {
+		logger.info("final q = " + q.leadingExpVector());
+	    }
+	}
+        logger.info("distributed list end");
         long time = System.currentTimeMillis();
         List<GenPolynomial<C>> Gp;
         Gp = minimalGB(G); // not jet distributed but threaded
@@ -971,6 +977,7 @@ class HybridReducerClient<C extends RingElem<C>> implements Runnable {
                 goon = false;
                 e.printStackTrace();
             }
+            logger.info("done send poly message of " + pair);
         }
         logger.info("terminated, done " + reduction + " reductions");
         try {

@@ -60,6 +60,12 @@ public class ChannelFactory extends Thread {
 
 
     /**
+     * is local server running.
+     */
+    private volatile boolean srvrun = false;
+
+
+    /**
      * Constructs a ChannelFactory.
      * @param p port.
      */
@@ -110,7 +116,9 @@ public class ChannelFactory extends Thread {
     public SocketChannel getChannel() throws InterruptedException {
         // return (SocketChannel)buf.get();
         if (srv == null) {
-            throw new IllegalArgumentException("dont call when no server listens");
+	    if (srvrun) {
+                throw new IllegalArgumentException("dont call when no server listens");
+	    }
         }
         return buf.take();
     }
@@ -162,12 +170,14 @@ public class ChannelFactory extends Thread {
         if (srv == null) {
             return; // nothing to do
         }
+	srvrun = true;
         while (true) {
             try {
                 logger.info("waiting for connection");
                 Socket s = srv.accept();
                 if (this.isInterrupted()) {
                     //System.out.println("ChannelFactory interrupted");
+                    srvrun = false;
                     return;
                 }
                 //logger.debug("Socket = " +s);
@@ -176,10 +186,12 @@ public class ChannelFactory extends Thread {
                 buf.put(c);
             } catch (IOException e) {
                 //logger.debug("ChannelFactory IO terminating");
+         	srvrun = false;
                 return;
             } catch (InterruptedException e) {
                 // unfug Thread.currentThread().interrupt();
                 //logger.debug("ChannelFactory IE terminating");
+         	srvrun = false;
                 return;
             }
         }
@@ -194,6 +206,7 @@ public class ChannelFactory extends Thread {
         try {
             if (srv != null) {
                 srv.close();
+         	srvrun = false;
             }
             this.interrupt();
             while (!buf.isEmpty()) {
