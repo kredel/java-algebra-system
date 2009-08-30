@@ -245,16 +245,16 @@ public class GroebnerBaseDistributedHybrid<C extends RingElem<C>> extends Groebn
             }
         }
 
-        Terminator fin = new Terminator(threads*threadsPerNode);
+        Terminator finner = new Terminator(threads*threadsPerNode);
         HybridReducerServer<C> R;
         logger.info("using pool[" + threads + "] = " + pool);
         for (int i = 0; i < threads; i++) {
-            R = new HybridReducerServer<C>(threadsPerNode, fin, cf, theList, pairlist);
+            R = new HybridReducerServer<C>(threadsPerNode, finner, cf, theList, pairlist);
             pool.addJob(R);
             //logger.info("server submitted " + R);
         }
         logger.debug("main loop waiting");
-        fin.waitDone();
+        finner.waitDone();
         int ps = theList.size();
         logger.info("#distributed list = " + ps);
         // make sure all polynomials arrived
@@ -515,7 +515,7 @@ class HybridReducerServer<C extends RingElem<C>> implements Runnable {
         receiver.start();
 
         Pair<C> pair;
-        //boolean set = false;
+        boolean set = false;
         boolean goon = true;
         int polIndex = -1;
         int red = 0;
@@ -523,7 +523,23 @@ class HybridReducerServer<C extends RingElem<C>> implements Runnable {
 
         // while more requests
         while (goon) {
-            // receive request
+            // receive request if thread is reported incactive
+            while ( active.get() >= threadsPerNode ) {
+                logger.info("waiting active to settle");
+                try {
+                    sleeps++;
+                    if (sleeps % 10 == 0) {
+                        logger.info("waiting active to settle");
+                    }
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    goon = false;
+                    break;
+                }
+            }
+            if ( !goon ) {
+                break;
+            }
             logger.debug("receive request");
             Object req = null;
             try {
@@ -551,11 +567,11 @@ class HybridReducerServer<C extends RingElem<C>> implements Runnable {
             // find pair and manage termination status
             logger.info("find pair");
             while (!pairlist.hasNext()) { // wait
-//                 if (!set) {
-//                     // done in receiver ? 
-//                     //finner.beIdle();
-//                     set = true;
-//                 }
+                if (!set) {
+                    // done in receiver ? 
+                    //finner.notIdle();
+                    set = true;
+                }
                 if (!finner.hasJobs() && !pairlist.hasNext()) {
                     goon = false;
                     break;
@@ -575,12 +591,10 @@ class HybridReducerServer<C extends RingElem<C>> implements Runnable {
                 goon = false;
                 break; //continue; //break?
             }
-//             if (set) {
-//                 set = false;
-//             }
-
-            finner.notIdle();
-            int a = active.getAndIncrement();
+            if (set) {
+                 set = false;
+            }
+            finner.notIdle(); // before pairlist get!!
             pair = pairlist.removeNext();
             // send pair to client, even if null
             logger.info("active count = " + active.get());
@@ -588,8 +602,9 @@ class HybridReducerServer<C extends RingElem<C>> implements Runnable {
             GBTransportMess msg = null;
             if (pair != null) {
                 msg = new GBTransportMessPairIndex(pair);
+                int a = active.getAndIncrement();
             } else {
-                msg = new GBTransportMess(); //End();
+                msg = new GBTransportMess(); //not End(); at this time
                 // goon ?= false;
             }
             try {
@@ -730,17 +745,17 @@ class HybridReducerReceiver<C extends RingElem<C>> extends Thread {
             } catch (InterruptedException e) {
                 goon = false;
                 //e.printStackTrace();
-                //finner.initIdle(1);
+                //?? finner.initIdle(1);
                 break;
             } catch (IOException e) {
                 e.printStackTrace();
                 goon = false;
-                //finner.initIdle(1);
+                finner.initIdle(1);
                 break;
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
                 goon = false;
-                //finner.initIdle(1);
+                finner.initIdle(1);
                 break;
             }
             logger.info("received H polynomial");
@@ -750,9 +765,11 @@ class HybridReducerReceiver<C extends RingElem<C>> extends Thread {
                     finner.initIdle(1);
                     break;
                 }
-            } else if (rh instanceof GBTransportMessEnd) {
-                goon = false;
                 //finner.initIdle(1);
+            } else if (rh instanceof GBTransportMessEnd) { // should not happen
+                logger.info("received GBTransportMessEnd");
+                goon = false;
+                finner.initIdle(1);
                 break;
             } else if (rh instanceof GBTransportMessPoly) {
                 // update pair list
@@ -784,7 +801,7 @@ class HybridReducerReceiver<C extends RingElem<C>> extends Thread {
                     }
                 }
             }
-            // only after recording:
+            // only after recording in pairlist !
             finner.initIdle(1);
             int i = active.getAndDecrement();
         }
@@ -877,6 +894,7 @@ class HybridReducerClient<C extends RingElem<C>> implements Runnable {
         GenPolynomial<C> H = null;
         //boolean set = false;
         boolean goon = true;
+        boolean doEnd = false;
         int reduction = 0;
         //int sleeps = 0;
         Integer pix;
@@ -897,6 +915,7 @@ class HybridReducerClient<C extends RingElem<C>> implements Runnable {
                 break;
             }
             logger.debug("receive pair, goon = " + goon);
+            doEnd = false;
             Object pp = null;
             try {
                 pp = pairChannel.receive(pairTag);
@@ -922,6 +941,7 @@ class HybridReducerClient<C extends RingElem<C>> implements Runnable {
             }
             if (pp instanceof GBTransportMessEnd) {
                 goon = false;
+                doEnd = true;
                 continue;
             }
             if (pp instanceof GBTransportMessPair || pp instanceof GBTransportMessPairIndex) {
@@ -965,14 +985,18 @@ class HybridReducerClient<C extends RingElem<C>> implements Runnable {
                     }
                 }
             }
+            if (pp instanceof GBTransportMess) {
+                logger.info("null pair results in null H poly");
+            }
 
-            // send H or must send null
+            // send H or must send null, if not at end
             if (logger.isDebugEnabled()) {
                 logger.debug("#distributed list = " + theList.size());
                 logger.debug("send H polynomial = " + H);
             }
             try {
                 pairChannel.send(resultTag, new GBTransportMessPoly<C>(H));
+                doEnd = true;
             } catch (IOException e) {
                 goon = false;
                 e.printStackTrace();
@@ -980,11 +1004,13 @@ class HybridReducerClient<C extends RingElem<C>> implements Runnable {
             logger.info("done send poly message of " + pair);
         }
         logger.info("terminated, done " + reduction + " reductions");
-        try {
-            pairChannel.send(resultTag, new GBTransportMessEnd());
-        } catch (IOException e) {
-            //e.printStackTrace();
+        if ( !doEnd ) {
+            try {
+                pairChannel.send(resultTag, new GBTransportMessEnd());
+            } catch (IOException e) {
+                //e.printStackTrace();
+            }
+            logger.info("terminated, send done");
         }
-        logger.info("terminated, send done");
     }
 }
