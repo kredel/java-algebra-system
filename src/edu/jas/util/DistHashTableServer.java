@@ -199,6 +199,7 @@ public class DistHashTableServer<K> extends Thread {
                 }
                 servers.clear();
             }
+            logger.info("broadcasters terminated");
             //? servers = null;
         }
         logger.debug("DHTBroadcasters terminated");

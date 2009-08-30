@@ -38,6 +38,7 @@ public class Terminator {
      */
     public Terminator(int workers) {
         this.workers = workers;
+        logger.info("constructor, workers = " + workers);
     }
 
 
@@ -62,6 +63,9 @@ public class Terminator {
     public synchronized void initIdle(int i) {
         idler += i;
         logger.info("initIdle, idler = " + idler);
+        if ( idler > workers ) {
+            throw new RuntimeException("idler > workers");
+        }
     }
 
 
@@ -94,7 +98,10 @@ public class Terminator {
      */
     public synchronized void notIdle() {
         idler--;
-        logger.debug("notIdle, idler = " + idler);
+        logger.info("notIdle, idler = " + idler);
+        if ( idler < 0 ) {
+            throw new RuntimeException("idler < 0");
+        }
     }
 
 
@@ -114,7 +121,7 @@ public class Terminator {
         logger.info("release, workers = " + workers);
         if ( idler >= workers ) {
             fin.release(); //fin.V();
-            idler++;
+            //idler++; ??
         }
         logger.info("release, idler = " + idler);
     }
