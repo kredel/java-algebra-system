@@ -795,6 +795,7 @@ class HybridReducerReceiver<C extends RingElem<C>> extends Thread {
             if ( senderId != null ) { // send acknowledgement after recording
                 try {
                     pairChannel.send(senderId, new GBTransportMess());
+                    logger.debug("send acknowledgement");
                 } catch (IOException e) {
                     e.printStackTrace();
                     goon = false;
@@ -1026,7 +1027,7 @@ class HybridReducerClient<C extends RingElem<C>> implements Runnable {
                 }
             }
             if (pp instanceof GBTransportMess) {
-                logger.info("null pair results in null H poly");
+                logger.debug("null pair results in null H poly");
             }
 
             // send H or must send null, if not at end
@@ -1041,7 +1042,7 @@ class HybridReducerClient<C extends RingElem<C>> implements Runnable {
                 goon = false;
                 e.printStackTrace();
             }
-            logger.info("done send poly message of " + pair);
+            logger.info("done send poly message with tag " + threadId + " of " + pair);
             try {
                 pp = pairChannel.receive(threadId);
             } catch (InterruptedException e) {
@@ -1060,7 +1061,7 @@ class HybridReducerClient<C extends RingElem<C>> implements Runnable {
             if ( ! (pp instanceof GBTransportMess) ) {
                 logger.error("invalid acknowledgement " + pp);
             }
-            logger.info("recieved acknowledgement " + pp);
+            logger.debug("recieved acknowledgement " + pp);
         }
         logger.info("terminated, done " + reduction + " reductions");
         if ( !doEnd ) {
