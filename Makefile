@@ -87,7 +87,7 @@ JAVAC=$(JDK)/javac -classpath $(MYCLASSPATH) -d . -Xlint:unchecked
 #-Xlint:unchecked
 #-Djava.util.logging.config.file=logging.properties 
 #JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -verbose:gc 
-JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -server -Xms300M -Xmx600M -XX:+AggressiveHeap -XX:+UseParallelGC -XX:ParallelGCThreads=2 -verbose:gc 
+JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -server -Xms700M -Xmx1000M -XX:+AggressiveHeap -XX:+UseParallelGC -XX:ParallelGCThreads=2 -verbose:gc 
 #-Xbatch
 #old#JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -Xms300M -Xmx600M -XX:+AggressiveHeap -XX:+UseParallelGC -verbose:gc 
 #JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -verbose:gc -Xrunhprof:cpu=times,format=a
