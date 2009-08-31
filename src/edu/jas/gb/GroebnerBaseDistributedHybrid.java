@@ -312,15 +312,15 @@ public class GroebnerBaseDistributedHybrid<C extends RingElem<C>> extends Groebn
         }
 
         final int DL_PORT = port + 100;
-        DistHashTable<Integer, GenPolynomial<C>> theList = new DistHashTable<Integer, GenPolynomial<C>>(host,
-                DL_PORT);
+        DistHashTable<Integer, GenPolynomial<C>> theList 
+             = new DistHashTable<Integer, GenPolynomial<C>>(host, DL_PORT);
 
         //HybridReducerClient<C> R = new HybridReducerClient<C>(threadsPerNode, pairChannel, theList);
         //R.run();
 
         ThreadPool pool = new ThreadPool(threadsPerNode);
         for (int i = 0; i < threadsPerNode; i++) {
-            HybridReducerClient<C> Rr = new HybridReducerClient<C>(threadsPerNode, pairChannel, theList);
+            HybridReducerClient<C> Rr = new HybridReducerClient<C>(threadsPerNode, pairChannel, i, theList);
             pool.addJob(Rr);
         }
         if (debug) {
@@ -524,22 +524,6 @@ class HybridReducerServer<C extends RingElem<C>> implements Runnable {
         // while more requests
         while (goon) {
             // receive request if thread is reported incactive
-            while ( active.get() >= threadsPerNode ) {
-                logger.info("waiting active to settle");
-                try {
-                    sleeps++;
-                    if (sleeps % 10 == 0) {
-                        logger.info("waiting active to settle");
-                    }
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    goon = false;
-                    break;
-                }
-            }
-            if ( !goon ) {
-                break;
-            }
             logger.debug("receive request");
             Object req = null;
             try {
@@ -734,11 +718,13 @@ class HybridReducerReceiver<C extends RingElem<C>> extends Thread {
         GenPolynomial<C> H = null;
         int red = 0;
         int polIndex = -1;
+        Integer senderId;
 
         // while more requests
         while (goon) {
             // receive request
             logger.debug("receive result");
+            senderId = null;
             Object rh = null;
             try {
                 rh = pairChannel.receive(resultTag);
@@ -771,10 +757,12 @@ class HybridReducerReceiver<C extends RingElem<C>> extends Thread {
                 goon = false;
                 finner.initIdle(1);
                 break;
-            } else if (rh instanceof GBTransportMessPoly) {
+            } else if (rh instanceof GBTransportMessPolyId) {
                 // update pair list
                 red++;
-                H = ((GBTransportMessPoly<C>) rh).pol;
+                GBTransportMessPolyId<C> mpi = (GBTransportMessPolyId<C>) rh;
+                H = mpi.pol;
+                senderId = mpi.threadId;
                 if (H != null) {
                     if (debug) {
                        logger.info("H = " + H.leadingExpVector());
@@ -804,6 +792,15 @@ class HybridReducerReceiver<C extends RingElem<C>> extends Thread {
             // only after recording in pairlist !
             finner.initIdle(1);
             int i = active.getAndDecrement();
+            if ( senderId != null ) { // send acknowledgement after recording
+                try {
+                    pairChannel.send(senderId, new GBTransportMess());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    goon = false;
+                    break;
+                }
+            }
         }
         goon = false;
         logger.info("terminated, recieved " + red + " reductions");
@@ -822,6 +819,41 @@ class HybridReducerReceiver<C extends RingElem<C>> extends Thread {
             // unfug Thread.currentThread().interrupt();
         }
         logger.debug("HybridReducerReceiver terminated");
+    }
+
+}
+
+
+/**
+ * Distributed GB transport message for polynomial with threadId.
+ */
+
+class GBTransportMessPolyId<C extends RingElem<C>> extends GBTransportMessPoly<C> {
+
+
+    /**
+     * The sender thread id.
+     */
+    public final Integer threadId;
+
+
+    /**
+     * GBTransportMessPolyId.
+     * @param p polynomial to be transfered.
+     * @param tid identificator for sending thread.
+     */
+    public GBTransportMessPolyId(GenPolynomial<C> p, Integer tid) {
+        super(p);
+        threadId = tid;
+    }
+
+
+    /**
+     * toString.
+     */
+    @Override
+    public String toString() {
+        return super.toString() + "[" + threadId + "]";
     }
 
 }
@@ -853,6 +885,12 @@ class HybridReducerClient<C extends RingElem<C>> implements Runnable {
 
 
     /**
+     * Identification number for this thread.
+     */
+    public final Integer threadId;
+
+
+    /**
      * Message tag for pairs.
      */
     public final Integer pairTag = GroebnerBaseDistributedHybrid.pairTag;
@@ -868,11 +906,13 @@ class HybridReducerClient<C extends RingElem<C>> implements Runnable {
      * Constructor.
      * @param tpn number of threads per node
      * @param tc tagged socket channel
+     * @param tid thread identification
      * @param dl distributed hash table
      */
-    HybridReducerClient(int tpn, TaggedSocketChannel tc, DistHashTable<Integer, GenPolynomial<C>> dl) {
+    HybridReducerClient(int tpn, TaggedSocketChannel tc, Integer tid, DistHashTable<Integer, GenPolynomial<C>> dl) {
         this.threadsPerNode = tpn;
         pairChannel = tc;
+        threadId = 100 + tid; // keep distinct from other tags
         theList = dl;
         red = new ReductionPar<C>();
     }
@@ -995,13 +1035,32 @@ class HybridReducerClient<C extends RingElem<C>> implements Runnable {
                 logger.debug("send H polynomial = " + H);
             }
             try {
-                pairChannel.send(resultTag, new GBTransportMessPoly<C>(H));
+                pairChannel.send(resultTag, new GBTransportMessPolyId<C>(H,threadId));
                 doEnd = true;
             } catch (IOException e) {
                 goon = false;
                 e.printStackTrace();
             }
             logger.info("done send poly message of " + pair);
+            try {
+                pp = pairChannel.receive(threadId);
+            } catch (InterruptedException e) {
+                goon = false;
+                e.printStackTrace();
+            } catch (IOException e) {
+                goon = false;
+                if (logger.isDebugEnabled()) {
+                    e.printStackTrace();
+                }
+                break;
+            } catch (ClassNotFoundException e) {
+                goon = false;
+                e.printStackTrace();
+            }
+            if ( ! (pp instanceof GBTransportMess) ) {
+                logger.error("invalid acknowledgement " + pp);
+            }
+            logger.info("recieved acknowledgement " + pp);
         }
         logger.info("terminated, done " + reduction + " reductions");
         if ( !doEnd ) {
