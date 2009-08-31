@@ -2,7 +2,6 @@
  * $Id$
  */
 
-//package edu.unima.ky.parallel;
 package edu.jas.util;
 
 import java.util.Iterator;
@@ -49,11 +48,11 @@ public class DistHashTableTest extends TestCase {
 
     private static final String host = "localhost";
 
-    private DistHashTable l1;
-    private DistHashTable l2;
-    private DistHashTable l3;
+    private DistHashTable<Integer,Integer> l1;
+    private DistHashTable<Integer,Integer> l2;
+    private DistHashTable<Integer,Integer> l3;
 
-    private DistHashTableServer dls;
+    private DistHashTableServer<Integer> dls;
 
     int rl = 7; 
     int kl = 10;
@@ -62,7 +61,7 @@ public class DistHashTableTest extends TestCase {
     float q = 0.5f;
 
     protected void setUp() {
-        dls = new DistHashTableServer();
+        dls = new DistHashTableServer<Integer>();
         dls.init();
     }
 
@@ -87,7 +86,7 @@ public class DistHashTableTest extends TestCase {
      * Tests create and terminate DistHashTable.
      */
     public void testDistHashTable1() {
-        l1 = new DistHashTable(host);
+        l1 = new DistHashTable<Integer,Integer>(host);
         assertTrue("l1==empty",l1.isEmpty());
     }
 
@@ -96,7 +95,7 @@ public class DistHashTableTest extends TestCase {
      * Tests if the created DistHashTable has #n objects as content.
      */
     public void testDistHashTable2() {
-        l1 = new DistHashTable(host);
+        l1 = new DistHashTable<Integer,Integer>(host);
         assertTrue("l1==empty",l1.isEmpty());
 
         l1.putWait( new Integer(1), new Integer(1) );
@@ -127,9 +126,9 @@ public class DistHashTableTest extends TestCase {
      * Tests if the two created DistHashTables have #n objects as content.
      */
     public void testDistHashTable3() {
-        l2 = new DistHashTable(host);
+        l2 = new DistHashTable<Integer,Integer>(host);
         assertTrue("l2==empty",l2.isEmpty());
-        l1 = new DistHashTable(host);
+        l1 = new DistHashTable<Integer,Integer>(host);
         assertTrue("l1==empty",l1.isEmpty());
 
         int i = 0, loops = 10;
@@ -166,11 +165,11 @@ public class DistHashTableTest extends TestCase {
      * Tests if the three created DistHashTables have #n objects as content.
      */
     public void testDistHashTable4() {
-        l1 = new DistHashTable(host);
+        l1 = new DistHashTable<Integer,Integer>(host);
         assertTrue("l1==empty",l1.isEmpty());
-        l2 = new DistHashTable(host);
+        l2 = new DistHashTable<Integer,Integer>(host);
         assertTrue("l2==empty",l2.isEmpty());
-        l3 = new DistHashTable(host);
+        l3 = new DistHashTable<Integer,Integer>(host);
         assertTrue("l3==empty",l3.isEmpty());
 
         int i = 0, loops = 10;
@@ -215,7 +214,7 @@ public class DistHashTableTest extends TestCase {
      * when one is created later.
      */
     public void testDistHashTable5() {
-        l1 = new DistHashTable(host);
+        l1 = new DistHashTable<Integer,Integer>(host);
         assertTrue("l1==empty",l1.isEmpty());
 
         int i = 0, loops = 10;
@@ -226,7 +225,7 @@ public class DistHashTableTest extends TestCase {
         }
         assertTrue("#l1=="+loops, l1.size() == loops );
 
-        l2 = new DistHashTable(host);
+        l2 = new DistHashTable<Integer,Integer>(host);
         // assertTrue("l2==empty",l2.isEmpty());
         while ( l2.size() < loops ) {
             try {
@@ -255,7 +254,7 @@ public class DistHashTableTest extends TestCase {
      * using getWait() when one is created later.
      */
     public void testDistHashTable6() {
-        l1 = new DistHashTable(host);
+        l1 = new DistHashTable<Integer,Integer>(host);
         assertTrue("l1==empty",l1.isEmpty());
 
         int i = 0, loops = 10;
@@ -266,14 +265,14 @@ public class DistHashTableTest extends TestCase {
         }
         assertTrue("#l1=="+loops, l1.size() == loops );
 
-        l2 = new DistHashTable(host);
+        l2 = new DistHashTable<Integer,Integer>(host);
 
-        Iterator it = null;
+        Iterator<Integer> it = null;
         it = l1.iterator();
         i = 0;
         while ( it.hasNext() ) {
-            Object k = it.next();
-            Object v = l2.getWait(k);
+            Integer k = it.next();
+            Integer v = l2.getWait(k);
             Integer x = new Integer( ++i );
             //System.out.println("o = " + o + " x = "+ x);
             assertEquals("l1(i)==k(i)", x, k );
