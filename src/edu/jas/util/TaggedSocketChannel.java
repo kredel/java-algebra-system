@@ -207,8 +207,8 @@ public class TaggedSocketChannel extends Thread {
                     synchronized (queues) {
                         BlockingQueue eq = queues.get(errorTag);
                         eq.put(r);
-                        if (r instanceof Exception) {
-                            return;
+                        if (r instanceof Exception && eq.size() > 16) {
+			    return; // give up
                         }
                     }
                 }

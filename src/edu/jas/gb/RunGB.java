@@ -277,7 +277,8 @@ public class RunGB {
         if (pairseq) {
             //gbds.terminate(true);
         } else {
-            gbd.terminate(true);
+            //gbd.terminate(true);
+            gbd.terminate(false); // plus eventually killed by script
         }
         S = new PolynomialList(S.ring, G);
         System.out.println("G =\n" + S);

@@ -551,11 +551,6 @@ class HybridReducerServer<C extends RingElem<C>> implements Runnable {
             // find pair and manage termination status
             logger.info("find pair");
             while (!pairlist.hasNext()) { // wait
-                if (!set) {
-                    // done in receiver ? 
-                    //finner.notIdle();
-                    set = true;
-                }
                 if (!finner.hasJobs() && !pairlist.hasNext()) {
                     goon = false;
                     break;
@@ -574,9 +569,6 @@ class HybridReducerServer<C extends RingElem<C>> implements Runnable {
             if (!pairlist.hasNext() && !finner.hasJobs()) {
                 goon = false;
                 break; //continue; //break?
-            }
-            if (set) {
-                 set = false;
             }
             finner.notIdle(); // before pairlist get!!
             pair = pairlist.removeNext();
@@ -609,20 +601,23 @@ class HybridReducerServer<C extends RingElem<C>> implements Runnable {
         logger.debug("send end");
         try {
             pairChannel.send(pairTag, new GBTransportMessEnd());
-            for ( int i = 0; i < threadsPerNode-1; i++ ) {
-                 Object rq = pairChannel.receive(pairTag);
-                 pairChannel.send(pairTag, new GBTransportMessEnd());
+            for ( int i = 0; i < threadsPerNode; i++ ) { // -1
+		//do not wait: Object rq = pairChannel.receive(pairTag);
+                pairChannel.send(pairTag, new GBTransportMessEnd());
+            }
+            for ( int i = 0; i < threadsPerNode; i++ ) { // send also end to receivers
+                pairChannel.send(resultTag, new GBTransportMessEnd());
             }
             //beware of race condition: 
             //pairChannel.send(resultTag, new GBTransportMessEnd());
-        } catch (InterruptedException e) {
-            if (logger.isDebugEnabled()) {
-                e.printStackTrace();
-            }
-        } catch (ClassNotFoundException e) {
-            if (logger.isDebugEnabled()) {
-                e.printStackTrace();
-            }
+	      //} catch (InterruptedException e) {
+              //if (logger.isDebugEnabled()) {
+              //    e.printStackTrace();
+              //}
+              //} catch (ClassNotFoundException e) {
+              //if (logger.isDebugEnabled()) {
+              //    e.printStackTrace();
+              //}
         } catch (IOException e) {
             if (logger.isDebugEnabled()) {
                 e.printStackTrace();
@@ -1042,7 +1037,7 @@ class HybridReducerClient<C extends RingElem<C>> implements Runnable {
                 goon = false;
                 e.printStackTrace();
             }
-            logger.info("done send poly message with tag " + threadId + " of " + pair);
+            logger.info("done send poly message with tag " + threadId + " of " + pp);
             try {
                 pp = pairChannel.receive(threadId);
             } catch (InterruptedException e) {

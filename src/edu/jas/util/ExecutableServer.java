@@ -253,6 +253,7 @@ class Executor extends Thread /*implements Runnable*/{
         while (goon) {
             try {
                 o = channel.receive();
+                logger.info("receive: " + o + " from " + channel);
                 if (this.isInterrupted()) {
                     goon = false;
                 } else {
