@@ -100,6 +100,16 @@ public class ThreadPool {
     }
 
 
+    /**
+     * toString.
+     */
+    @Override
+    public String toString() {
+        return "ThreadPool( size=" + getNumber() + ", idle=" + idleworkers 
+               + ", " + getStrategy() + ", jobs=" + jobstack.size() + ")";
+    }
+
+
    /**
     * number of worker threads.
     */

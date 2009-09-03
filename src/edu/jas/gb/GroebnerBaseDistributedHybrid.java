@@ -247,7 +247,7 @@ public class GroebnerBaseDistributedHybrid<C extends RingElem<C>> extends Groebn
 
         Terminator finner = new Terminator(threads*threadsPerNode);
         HybridReducerServer<C> R;
-        logger.info("using pool[" + threads + "] = " + pool);
+        logger.info("using pool = " + pool);
         for (int i = 0; i < threads; i++) {
             R = new HybridReducerServer<C>(threadsPerNode, finner, cf, theList, pairlist);
             pool.addJob(R);
@@ -283,15 +283,17 @@ public class GroebnerBaseDistributedHybrid<C extends RingElem<C>> extends Groebn
         G = Gp;
         logger.debug("server cf.terminate()");
         cf.terminate();
-        // no more required // pool.terminate();
-        logger.info("server theList.terminate()");
+        // no more required // 
+        logger.info("server not pool.terminate() " + pool);
+        //pool.terminate();
+        logger.info("server theList.terminate() " + theList);
         theList.terminate();
-        logger.info("server dls.terminate()");
+        logger.info("server dls.terminate() " + dls);
         dls.terminate();
 //         logger.info("pairlist #put = " + pairlist.putCount() + " #rem = " + pairlist.remCount()
 //                     //+ " #total = " + pairlist.pairCount()
 //                    );
-        logger.info(pairlist.toString());
+        logger.info("server GB end " + pairlist.toString());
         return G;
     }
 
@@ -573,19 +575,21 @@ class HybridReducerServer<C extends RingElem<C>> implements Runnable {
             finner.notIdle(); // before pairlist get!!
             pair = pairlist.removeNext();
             // send pair to client, even if null
-            logger.info("active count = " + active.get());
-            logger.info("send pair = " + pair);
+            if ( debug ) {
+                logger.info("active count = " + active.get());
+                logger.info("send pair = " + pair);
+            }
             GBTransportMess msg = null;
             if (pair != null) {
                 msg = new GBTransportMessPairIndex(pair);
-                int a = active.getAndIncrement();
             } else {
                 msg = new GBTransportMess(); //not End(); at this time
                 // goon ?= false;
             }
             try {
-                pairChannel.send(pairTag, msg);
                 red++;
+                pairChannel.send(pairTag, msg);
+                int a = active.getAndIncrement();
             } catch (IOException e) {
                 e.printStackTrace();
                 goon = false;
@@ -601,13 +605,12 @@ class HybridReducerServer<C extends RingElem<C>> implements Runnable {
         logger.debug("send end");
         try {
             pairChannel.send(pairTag, new GBTransportMessEnd());
-            for ( int i = 0; i < threadsPerNode; i++ ) { // -1
+            for ( int i = 0; i < threadsPerNode-1; i++ ) { // -1
 		//do not wait: Object rq = pairChannel.receive(pairTag);
                 pairChannel.send(pairTag, new GBTransportMessEnd());
             }
-            for ( int i = 0; i < threadsPerNode; i++ ) { // send also end to receivers
-                pairChannel.send(resultTag, new GBTransportMessEnd());
-            }
+            // send also end to receiver
+            pairChannel.send(resultTag, new GBTransportMessEnd());
             //beware of race condition: 
             //pairChannel.send(resultTag, new GBTransportMessEnd());
 	      //} catch (InterruptedException e) {
@@ -723,6 +726,7 @@ class HybridReducerReceiver<C extends RingElem<C>> extends Thread {
             Object rh = null;
             try {
                 rh = pairChannel.receive(resultTag);
+                int i = active.getAndDecrement();
             } catch (InterruptedException e) {
                 goon = false;
                 //e.printStackTrace();
@@ -747,9 +751,10 @@ class HybridReducerReceiver<C extends RingElem<C>> extends Thread {
                     break;
                 }
                 //finner.initIdle(1);
-            } else if (rh instanceof GBTransportMessEnd) { // should not happen
+            } else if (rh instanceof GBTransportMessEnd) { // should only happen from server
                 logger.info("received GBTransportMessEnd");
                 goon = false;
+                //?? 
                 finner.initIdle(1);
                 break;
             } else if (rh instanceof GBTransportMessPolyId) {
@@ -786,7 +791,6 @@ class HybridReducerReceiver<C extends RingElem<C>> extends Thread {
             }
             // only after recording in pairlist !
             finner.initIdle(1);
-            int i = active.getAndDecrement();
             if ( senderId != null ) { // send acknowledgement after recording
                 try {
                     pairChannel.send(senderId, new GBTransportMess());
