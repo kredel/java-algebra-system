@@ -163,7 +163,7 @@ public class RunGB {
         } else if (kind.startsWith("dist")) {
             runMaster(S, threads, mfile, port, pairseq);
         }
-
+	System.exit(0);
     }
 
 

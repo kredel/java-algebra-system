@@ -286,7 +286,7 @@ public class GroebnerBaseDistributedHybrid<C extends RingElem<C>> extends Groebn
         // no more required // 
         logger.info("server not pool.terminate() " + pool);
         //pool.terminate();
-        logger.info("server theList.terminate() " + theList);
+        logger.info("server theList.terminate() " + theList.size());
         theList.terminate();
         logger.info("server dls.terminate() " + dls);
         dls.terminate();
@@ -559,9 +559,9 @@ class HybridReducerServer<C extends RingElem<C>> implements Runnable {
                 }
                 try {
                     sleeps++;
-                    if (sleeps % 10 == 0) {
-                        logger.info(" reducer is sleeping");
-                    }
+                    //if (sleeps % 10 == 0) {
+                    logger.info("reducer is sleeping, remaining = " + finner.getJobs());
+                    //}
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
                     goon = false;
@@ -604,23 +604,13 @@ class HybridReducerServer<C extends RingElem<C>> implements Runnable {
          */
         logger.debug("send end");
         try {
-            pairChannel.send(pairTag, new GBTransportMessEnd());
-            for ( int i = 0; i < threadsPerNode-1; i++ ) { // -1
+            for ( int i = 0; i < threadsPerNode; i++ ) { // -1
 		//do not wait: Object rq = pairChannel.receive(pairTag);
                 pairChannel.send(pairTag, new GBTransportMessEnd());
             }
             // send also end to receiver
             pairChannel.send(resultTag, new GBTransportMessEnd());
-            //beware of race condition: 
-            //pairChannel.send(resultTag, new GBTransportMessEnd());
-	      //} catch (InterruptedException e) {
-              //if (logger.isDebugEnabled()) {
-              //    e.printStackTrace();
-              //}
-              //} catch (ClassNotFoundException e) {
-              //if (logger.isDebugEnabled()) {
-              //    e.printStackTrace();
-              //}
+            //beware of race condition 
         } catch (IOException e) {
             if (logger.isDebugEnabled()) {
                 e.printStackTrace();
@@ -801,7 +791,7 @@ class HybridReducerReceiver<C extends RingElem<C>> extends Thread {
                     break;
                 }
             }
-        }
+        } // end while
         goon = false;
         logger.info("terminated, recieved " + red + " reductions");
     }

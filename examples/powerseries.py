@@ -173,9 +173,9 @@ def k(a):
     else:
         return psr.ring.coFac.fromInteger( 2*a );
 
-ps5 = psr.create(jfunc=k);
-print "ps5:", ps5;
-print;
+#no#ps5 = psr.create(jfunc=k);
+#no#print "ps5:", ps5;
+#no#print;
 
 
 class coeff( Coefficients ):

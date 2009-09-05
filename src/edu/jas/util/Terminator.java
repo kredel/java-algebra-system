@@ -106,6 +106,15 @@ public class Terminator {
 
 
     /**
+     * getJobs.
+     * @return number of possible jobs.
+     */
+    public synchronized int getJobs() {
+        return (workers - idler);
+    }
+
+
+    /**
      * hasJobs.
      * @return true, if there are possibly jobs, else false.
      */

@@ -202,8 +202,25 @@ public class DistThreadPool /*extends ThreadPool*/ {
            for (int i = 0; i < workers.length; i++) {
                addJob( sdr );
            }
+           try {
+               Thread.sleep(20);
+           } catch (InterruptedException e) {
+               Thread.currentThread().interrupt();
+           }
+           logger.info("remaining jobs = " + jobstack.size());
+           try { 
+               for (int i = 0; i < workers.length; i++) {
+                   while ( workers[i].isAlive() ) {
+                          workers[i].interrupt(); 
+                          workers[i].join(100);
+                   }
+               }
+           } catch (InterruptedException e) { 
+               Thread.currentThread().interrupt();
+           }
+        } else {
+           terminate();
         }
-        terminate();
     }
 
 
