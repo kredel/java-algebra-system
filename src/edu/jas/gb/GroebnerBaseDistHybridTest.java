@@ -380,7 +380,7 @@ class JunitClientHybrid<C extends RingElem<C>> implements Runnable {
 
     public void run() {
         GroebnerBaseDistributedHybrid<C> bbd;
-        bbd = new GroebnerBaseDistributedHybrid<C>(1, threadsPerNode, port);
+        bbd = new GroebnerBaseDistributedHybrid<C>(1, threadsPerNode, null, port);
         try {
             bbd.clientPart(host);
         } catch (IOException ignored) {

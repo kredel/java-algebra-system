@@ -96,7 +96,10 @@ public class ThreadPool {
             workers[i] = new PoolThread(this);
             workers[i].start();
         }
-        logger.info("strategy = " + strategy);
+        logger.info("size = " + size + ", strategy = " + strategy);
+//         if ( size == 1 ) {
+//             throw new RuntimeException("pool with one thread?");
+//         }
     }
 
 
