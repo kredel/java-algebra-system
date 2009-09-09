@@ -67,7 +67,7 @@ public class DistThreadPool /*extends ThreadPool*/ {
      */
     // should be expressed using strategy pattern
     // List or Collection is not appropriate
-                                             // LIFO strategy for recursion
+    // LIFO strategy for recursion
     protected LinkedList<Runnable> jobstack; // FIFO strategy for GB
 
 
@@ -88,55 +88,55 @@ public class DistThreadPool /*extends ThreadPool*/ {
     }
 
 
-   /**
-    * Constructs a new DistThreadPool
-    * with size DEFAULT_SIZE.
-    * @param strategy for job processing.
-    */ 
+    /**
+     * Constructs a new DistThreadPool
+     * with size DEFAULT_SIZE.
+     * @param strategy for job processing.
+     */ 
     public DistThreadPool(StrategyEnumeration strategy) {
         this(strategy,DEFAULT_SIZE,null);
     }
 
 
-   /**
-    * Constructs a new DistThreadPool
-    * with strategy StrategyEnumeration.FIFO.
-    * @param size of the pool.
-    */ 
+    /**
+     * Constructs a new DistThreadPool
+     * with strategy StrategyEnumeration.FIFO.
+     * @param size of the pool.
+     */ 
     public DistThreadPool(int size) {
         this(StrategyEnumeration.FIFO,size,null);
     }
 
 
-   /**
-    * Constructs a new DistThreadPool
-    * with strategy StrategyEnumeration.FIFO.
-    * @param size of the pool.
-    * @param mfile machine file.
-    */ 
+    /**
+     * Constructs a new DistThreadPool
+     * with strategy StrategyEnumeration.FIFO.
+     * @param size of the pool.
+     * @param mfile machine file.
+     */ 
     public DistThreadPool(int size, String mfile) {
         this(StrategyEnumeration.FIFO,size,mfile);
     }
 
 
-   /**
-    * Constructs a new DistThreadPool.
-    * @param strategy for job processing.
-    * @param size of the pool.
-    * @param mfile machine file.
-    */ 
+    /**
+     * Constructs a new DistThreadPool.
+     * @param strategy for job processing.
+     * @param size of the pool.
+     * @param mfile machine file.
+     */ 
     public DistThreadPool(StrategyEnumeration strategy, int size, String mfile) {
         this.strategy = strategy;
         if ( size < 0 ) {
-           this.threads = 0;
-         } else {
-           this.threads = size;
-         }
+            this.threads = 0;
+        } else {
+            this.threads = size;
+        }
         if ( mfile == null || mfile.length() == 0 ) {
-           this.mfile = DEFAULT_MFILE;
-         } else {
-           this.mfile = mfile;
-         }
+            this.mfile = DEFAULT_MFILE;
+        } else {
+            this.mfile = mfile;
+        }
         jobstack = new LinkedList<Runnable>(); // ok for all strategies ?
         try {
             ec = new ExecutableChannels( this.mfile );
@@ -146,7 +146,7 @@ public class DistThreadPool /*extends ThreadPool*/ {
             throw new RuntimeException("DistThreadPool " +e);
         }
         if ( debug ) {
-           logger.debug("ExecutableChannels = " + ec);
+            logger.debug("ExecutableChannels = " + ec);
         }
         try {
             ec.open(threads);
@@ -155,7 +155,7 @@ public class DistThreadPool /*extends ThreadPool*/ {
             throw new RuntimeException("DistThreadPool " +e);
         }
         if ( debug ) {
-           logger.debug("ExecutableChannels = " + ec);
+            logger.debug("ExecutableChannels = " + ec);
         }
         workers = new DistPoolThread[threads];
         for (int i = 0; i < workers.length; i++) {
@@ -166,67 +166,67 @@ public class DistThreadPool /*extends ThreadPool*/ {
     }
 
 
-   /**
-    * number of worker threads.
-    */
+    /**
+     * number of worker threads.
+     */
     public int getNumber() {
-       return workers.length; // not null
+        return workers.length; // not null
     }
 
 
-   /**
-    * get used strategy.
-    */
+    /**
+     * get used strategy.
+     */
     public StrategyEnumeration getStrategy() {
-       return strategy; 
+        return strategy; 
     }
 
 
-   /**
-    * the used executable channel.
-    */
+    /**
+     * the used executable channel.
+     */
     public ExecutableChannels getEC() {
-       return ec; // not null
+        return ec; // not null
     }
 
 
-   /**
-    * Terminates the threads.
-    * @param shutDown true, if shut-down of the 
-    * remote executable servers is requested, 
-    * false, if remote executable servers stay alive.
-    */
+    /**
+     * Terminates the threads.
+     * @param shutDown true, if shut-down of the 
+     * remote executable servers is requested, 
+     * false, if remote executable servers stay alive.
+     */
     public void terminate(boolean shutDown) {
         if ( shutDown ) {
-           ShutdownRequest sdr = new ShutdownRequest();
-           for (int i = 0; i < workers.length; i++) {
-               addJob( sdr );
-           }
-           try {
-               Thread.sleep(20);
-           } catch (InterruptedException e) {
-               Thread.currentThread().interrupt();
-           }
-           logger.info("remaining jobs = " + jobstack.size());
-           try { 
-               for (int i = 0; i < workers.length; i++) {
-                   while ( workers[i].isAlive() ) {
-                          workers[i].interrupt(); 
-                          workers[i].join(100);
-                   }
-               }
-           } catch (InterruptedException e) { 
-               Thread.currentThread().interrupt();
-           }
+            ShutdownRequest sdr = new ShutdownRequest();
+            for (int i = 0; i < workers.length; i++) {
+                addJob( sdr );
+            }
+            try {
+                Thread.sleep(20);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+            logger.info("remaining jobs = " + jobstack.size());
+            try { 
+                for (int i = 0; i < workers.length; i++) {
+                    while ( workers[i].isAlive() ) {
+                        workers[i].interrupt(); 
+                        workers[i].join(100);
+                    }
+                }
+            } catch (InterruptedException e) { 
+                Thread.currentThread().interrupt();
+            }
         } else {
-           terminate();
+            terminate();
         }
     }
 
 
-   /**
-    * Terminates the threads.
-    */
+    /**
+     * Terminates the threads.
+     */
     public void terminate() {
         while ( hasJobs() ) {
             try {
@@ -238,8 +238,8 @@ public class DistThreadPool /*extends ThreadPool*/ {
         for (int i = 0; i < workers.length; i++) {
             try { 
                 while ( workers[i].isAlive() ) {
-                        workers[i].interrupt(); 
-                        workers[i].join(100);
+                    workers[i].interrupt(); 
+                    workers[i].join(100);
                 }
             } catch (InterruptedException e) { 
                 Thread.currentThread().interrupt();
@@ -249,10 +249,10 @@ public class DistThreadPool /*extends ThreadPool*/ {
     }
 
 
-   /**
-    * adds a job to the workpile.
-    * @param job
-    */
+    /**
+     * adds a job to the workpile.
+     * @param job
+     */
     public synchronized void addJob(Runnable job) {
         jobstack.addLast(job);
         logger.debug("adding job" );
@@ -263,9 +263,9 @@ public class DistThreadPool /*extends ThreadPool*/ {
     }
 
 
-   /**
-    * get a job for processing.
-    */
+    /**
+     * get a job for processing.
+     */
     protected synchronized Runnable getJob() throws InterruptedException {
         while (jobstack.isEmpty()) {
             idleworkers++;
@@ -275,49 +275,49 @@ public class DistThreadPool /*extends ThreadPool*/ {
         }
         // is expressed using strategy enumeration
         if (strategy == StrategyEnumeration.LIFO) { 
-             return jobstack.removeLast(); // LIFO
+            return jobstack.removeLast(); // LIFO
         } else {
-             return jobstack.removeFirst(); // FIFO
+            return jobstack.removeFirst(); // FIFO
         }
     }
 
 
-   /**
-    * check if there are jobs for processing.
-    */
+    /**
+     * check if there are jobs for processing.
+     */
     public boolean hasJobs() {
         if ( jobstack.size() > 0 ) {
             return true;
         }
         for (int i = 0; i < workers.length; i++) {
             if ( workers[i].working ) {
-               return true;
+                return true;
             }
         }
         return false;
     }
 
 
-   /**
-    * check if there are more than n jobs for processing.
-    * @param n Integer
-    * @return true, if there are possibly more than n jobs. 
-    */
+    /**
+     * check if there are more than n jobs for processing.
+     * @param n Integer
+     * @return true, if there are possibly more than n jobs. 
+     */
     public boolean hasJobs(int n) {
         int j = jobstack.size();
         if ( j > 0 && ( j + workers.length > n ) ) {
-           return true;
-           // if j > 0 no worker should be idle
-           // ( ( j > 0 && ( j+workers.length > n ) ) || ( j > n )
+            return true;
+            // if j > 0 no worker should be idle
+            // ( ( j > 0 && ( j+workers.length > n ) ) || ( j > n )
         }
         int x = 0;
         for (int i=0; i < workers.length; i++) {
             if ( workers[i].working ) {
-               x++;
+                x++;
             }
         }
         if ( (j + x) > n ) {
-           return true;
+            return true;
         }
         return false;
     }
@@ -329,12 +329,12 @@ public class DistThreadPool /*extends ThreadPool*/ {
  * Implements a shutdown task.
  */
 class ShutdownRequest implements Runnable {
-  /**
-   * Run the thread.
-   */
-   public void run() {
-       System.out.println("ShutdownRequest");
-   }
+    /**
+     * Run the thread.
+     */
+    public void run() {
+        System.out.println("ShutdownRequest");
+    }
 }
 
 
@@ -350,26 +350,26 @@ class DistPoolThread extends Thread {
     final int myId;
 
     private static final Logger logger = Logger.getLogger(DistPoolThread.class);
-    private static boolean debug = logger.isDebugEnabled();
+    private static boolean debug = true || logger.isDebugEnabled();
 
     boolean working = false;
 
 
-  /**
-   * @param pool DistThreadPool.
-   */
-   public DistPoolThread(DistThreadPool pool,ExecutableChannels ec,int i) {
-       this.pool = pool;
-       this.ec = ec;
-       myId = i;
-   }
+    /**
+     * @param pool DistThreadPool.
+     */
+    public DistPoolThread(DistThreadPool pool,ExecutableChannels ec,int i) {
+        this.pool = pool;
+        this.ec = ec;
+        myId = i;
+    }
 
 
-  /**
-   * Run the thread.
-   */
-   @Override
-public void run() {
+    /**
+     * Run the thread.
+     */
+    @Override
+        public void run() {
         logger.info( "ready" );
         Runnable job;
         int done = 0;
@@ -382,16 +382,16 @@ public void run() {
                 job = pool.getJob();
                 working = true;
                 if ( debug ) {
-                   logger.info( "working on " + job);
+                    logger.info( "working on " + job);
                 }
                 t = System.currentTimeMillis();
                 // send and wait, like rmi
                 try {
-              if ( job instanceof ShutdownRequest ) {
-                       ec.send( myId, ExecutableServer.STOP );
-              } else {
-                       ec.send( myId, job );
-              }
+                    if ( job instanceof ShutdownRequest ) {
+                        ec.send( myId, ExecutableServer.STOP );
+                    } else {
+                        ec.send( myId, job );
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                     working = false;
@@ -400,7 +400,7 @@ public void run() {
                 Object o = null;
                 try {
                     if ( working ) {
-                       o = ec.receive( myId );
+                        o = ec.receive( myId );
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -413,7 +413,7 @@ public void run() {
                 time += System.currentTimeMillis() - t;
                 done++;
                 if ( debug ) {
-                   logger.info( "done with " + o);
+                    logger.info( "done with " + o);
                 }
             } catch (InterruptedException e) { 
                 running = false; 
@@ -421,7 +421,7 @@ public void run() {
             }
         }
         logger.info( "terminated, done " + done + " jobs in " 
-                        + time + " milliseconds");
-   }
+                     + time + " milliseconds");
+    }
 
 }
