@@ -30,10 +30,10 @@ public class TaggedSocketChannel extends Thread {
     private static final boolean debug = true || logger.isDebugEnabled();
 
 
-    /**
+    /*
      * Message tag for errors.
-     */
     public static final Integer errorTag = new Integer(-1);
+     */
 
 
     /**
@@ -55,9 +55,7 @@ public class TaggedSocketChannel extends Thread {
     public TaggedSocketChannel(SocketChannel s) {
         sc = s;
         queues = new HashMap<Integer, BlockingQueue>();
-        BlockingQueue tq = new LinkedBlockingQueue();
         synchronized (queues) {
-            queues.put(errorTag, tq);
             this.start();
         }
     }
@@ -78,8 +76,11 @@ public class TaggedSocketChannel extends Thread {
      * @throws IOException
      */
     public void send(Integer tag, Object v) throws IOException {
-        if (tag == null || errorTag.equals(tag)) {
+        if (tag == null) {
             throw new IllegalArgumentException("tag " + tag + " not allowed");
+        }
+        if (v instanceof Exception) {
+            throw new IllegalArgumentException("message " + v + " not allowed");
         }
         TaggedMessage tm = new TaggedMessage(tag, v);
         sc.send(tm);
@@ -95,22 +96,6 @@ public class TaggedSocketChannel extends Thread {
      * @throws ClassNotFoundException
      */
     public Object receive(Integer tag) throws InterruptedException, IOException, ClassNotFoundException {
-        synchronized (queues) { // not really required
-            BlockingQueue eq = queues.get(errorTag);
-            if (eq != null && eq.size() > 0) {
-                Object e = eq.take();
-                if (e instanceof InterruptedException) {
-                    throw (InterruptedException) e;
-                }
-                if (e instanceof IOException) {
-                    throw (IOException) e;
-                }
-                if (e instanceof ClassNotFoundException) {
-                    throw (ClassNotFoundException) e;
-                }
-                throw new RuntimeException(e.toString());
-            }
-        }
         BlockingQueue tq = null;
         synchronized (queues) {
             tq = queues.get(tag);
@@ -119,7 +104,17 @@ public class TaggedSocketChannel extends Thread {
                 queues.put(tag, tq);
             }
         }
-        return tq.take();
+        Object v = tq.take();
+        if ( v instanceof IOException ) {
+            throw (IOException) v;
+        }
+        if ( v instanceof ClassNotFoundException ) {
+            throw (ClassNotFoundException) v;
+        }
+        if ( v instanceof Exception ) {
+            throw new RuntimeException(v.toString());
+        }
+        return v;
     }
 
 
@@ -200,17 +195,18 @@ public class TaggedSocketChannel extends Thread {
                         }
                     }
                     tq.put(tm.msg);
-                } else {
-                    if (debug) {
-                        logger.info("no tagged message " + r);
-                    }
-                    synchronized (queues) {
-                        BlockingQueue eq = queues.get(errorTag);
-                        eq.put(r);
-                        if (r instanceof Exception && eq.size() > 16) {
-			    return; // give up
+                } else if ( r instanceof Exception ){
+                    synchronized (queues) { // deliver to all queues
+                        for ( BlockingQueue q : queues.values() ) {
+                              q.put(r);
                         }
                     }
+                    return;
+                } else {
+                    if (debug) {
+                        logger.info("no tagged message and no exception " + r);
+                    }
+                    return;
                 }
             } catch (InterruptedException e) {
                 // unfug Thread.currentThread().interrupt();

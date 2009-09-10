@@ -231,6 +231,8 @@ class Executor extends Thread /*implements Runnable*/{
 
     private static final Logger logger = Logger.getLogger(Executor.class);
 
+    private static boolean debug = true || logger.isDebugEnabled();
+
 
     protected final SocketChannel channel;
 
@@ -273,11 +275,18 @@ class Executor extends Thread /*implements Runnable*/{
                     // check permission
                     if (o instanceof RemoteExecutable) {
                         re = (RemoteExecutable) o;
+                        if ( debug ) {
+                            logger.info("running " + re);
+                        }
                         re.run();
+                        if ( debug ) {
+                            logger.info("finished " + re);
+                        }
                         if (this.isInterrupted()) {
                             goon = false;
                         } else {
                             channel.send(ExecutableServer.DONE);
+                            logger.info("finished send " + ExecutableServer.DONE);
                             //goon = false; // stop this thread
                         }
                     }
@@ -285,14 +294,14 @@ class Executor extends Thread /*implements Runnable*/{
             } catch (IOException e) {
                 goon = false;
                 //e.printStackTrace();
-                logger.debug("IOException ", e);
+                logger.info("IOException ", e);
             } catch (ClassNotFoundException e) {
                 goon = false;
                 e.printStackTrace();
-                logger.debug("ClassNotFoundException ", e);
+                logger.info("ClassNotFoundException ", e);
             }
         }
-        logger.debug("executor terminated " + this);
+        logger.info("executor terminated " + this);
         channel.close();
     }
 

@@ -370,7 +370,7 @@ class DistPoolThread extends Thread {
      */
     @Override
         public void run() {
-        logger.info( "ready" );
+        logger.info( "ready, myId = " + myId );
         Runnable job;
         int done = 0;
         long time = 0;
