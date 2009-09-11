@@ -261,7 +261,7 @@ public class GroebnerBaseDistributedHybrid<C extends RingElem<C>> extends Groebn
         // G = (ArrayList)theList.values();
         G = pairlist.getList();
         if (ps != G.size()) {
-            logger.error("#distributed list = " + theList.size() + " #pairlist list = " + G.size());
+            logger.warn("#distributed list = " + theList.size() + " #pairlist list = " + G.size());
         }
 	for (GenPolynomial<C> q: theList.getValueList()) {
 	    if ( q != null & !q.isZERO() ) {

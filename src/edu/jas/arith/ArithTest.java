@@ -337,7 +337,16 @@ public class ArithTest extends TestCase {
      a = new BigRational( s );
      String t = a.toString();
      assertEquals("stringConstr = toString",s,t);
+
+     s = "2/4";
+     a = new BigRational( s );
+     t = a.toString(5);
+     //System.out.println("a = " + a);
+     //System.out.println("t = " + t);
+     String r = "0.5";
+     assertEquals("stringConstr = toString",r,t);
    }
+
 
 /**
  * Test string constructor and toString for BigComplex.
