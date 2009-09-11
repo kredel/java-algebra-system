@@ -80,7 +80,7 @@ public class TaggedSocketChannelTest extends TestCase {
 
 
    public void testTaggedSocketChannel1() {
-       Object o = new Integer(0);
+       Object o = new IllegalArgumentException("leer");
        Integer err = new Integer(-1);
        try {
            tsc1.send(err,o);
@@ -142,12 +142,12 @@ public class TaggedSocketChannelTest extends TestCase {
                o = new Integer(i);
                tsc1.send(tag1,o);
            }
-           assertTrue("#tags == 1 ", tsc1.tagSize() == 1);
+           assertEquals("#tags == 0 ", 0, tsc1.tagSize());
            for (int i = 0; i < n; i++) {
                o = new Integer(i);
                assertEquals(o,tsc2.receive(tag1));
            }
-           assertTrue("#tags == 1 ", tsc2.tagSize() == 2);
+           assertTrue("#tags == 1 ", tsc2.tagSize() == 1);
            assertTrue("#messages == 0 ", tsc1.messages() == 0);
            assertTrue("#messages == 0 ", tsc2.messages() == 0);
        } catch(IOException e) {
@@ -169,7 +169,7 @@ public class TaggedSocketChannelTest extends TestCase {
                o = new Integer(i);
                tsc1.send(o,msg+i);
            }
-           assertTrue("#tags == 1 ", tsc1.tagSize() == 1);
+           assertTrue("#tags == 0 ", tsc1.tagSize() == 0);
            assertTrue("#messages == 0 ", tsc1.messages() == 0);
            assertTrue("#messages >= 0 ", tsc2.messages() >= 0); // not all 10 arrive in time
            for (int i = 0; i < n; i++) {
@@ -177,7 +177,7 @@ public class TaggedSocketChannelTest extends TestCase {
                assertEquals(msg+i,tsc2.receive(o));
            }
            //System.out.println("tsc2 = " + tsc2);
-           assertTrue("#tags == 10+1 ", tsc2.tagSize() == 11);
+           assertTrue("#tags == 10 ", tsc2.tagSize() == 10);
            assertTrue("#messages == 0 ", tsc2.messages() <= 1);
        } catch(IOException e) {
            fail("Exception"+e);
