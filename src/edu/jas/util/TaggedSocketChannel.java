@@ -30,10 +30,10 @@ public class TaggedSocketChannel extends Thread {
     private static final boolean debug = true || logger.isDebugEnabled();
 
 
-    /*
-     * Message tag for errors.
-    public static final Integer errorTag = new Integer(-1);
+    /**
+     * Flag if receiver is running.
      */
+    private /*volatile*/ boolean isRunning = false;
 
 
     /**
@@ -57,6 +57,7 @@ public class TaggedSocketChannel extends Thread {
         queues = new HashMap<Integer, BlockingQueue>();
         synchronized (queues) {
             this.start();
+            isRunning = true;
         }
     }
 
@@ -100,6 +101,9 @@ public class TaggedSocketChannel extends Thread {
         synchronized (queues) {
             tq = queues.get(tag);
             if (tq == null) {
+                if ( ! isRunning ) { // avoid dead-lock
+                    throw new IOException("receiver not running");
+                }
                 tq = new LinkedBlockingQueue();
                 queues.put(tag, tq);
             }
@@ -166,6 +170,7 @@ public class TaggedSocketChannel extends Thread {
     @Override
     public void run() {
         if (sc == null) {
+            isRunning = false;
             return; // nothing to do
         }
         while (true) {
@@ -200,17 +205,20 @@ public class TaggedSocketChannel extends Thread {
                         for ( BlockingQueue q : queues.values() ) {
                               q.put(r);
                         }
+                        isRunning = false;
                     }
                     return;
                 } else {
                     if (debug) {
                         logger.info("no tagged message and no exception " + r);
                     }
+                    isRunning = false;
                     return;
                 }
             } catch (InterruptedException e) {
                 // unfug Thread.currentThread().interrupt();
                 //logger.debug("ChannelFactory IE terminating");
+                isRunning = false;
                 return;
             }
         }
@@ -222,6 +230,7 @@ public class TaggedSocketChannel extends Thread {
      */
     public void terminate() {
         this.interrupt();
+        isRunning = false;
         if (sc != null) {
             sc.close();
         }
