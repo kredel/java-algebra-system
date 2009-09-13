@@ -283,6 +283,9 @@ public class Condition<C extends GcdRingElem<C>> implements Serializable {
             return this;
         }
         logger.info("condition simplified: " + this + " to " + nc);
+        if ( false ) { // no further simplification
+            return nc;
+        }
         return nc.simplify();
     }
 

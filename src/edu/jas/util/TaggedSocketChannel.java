@@ -202,23 +202,37 @@ public class TaggedSocketChannel extends Thread {
                     tq.put(tm.msg);
                 } else if ( r instanceof Exception ){
                     synchronized (queues) { // deliver to all queues
+                        isRunning = false;
                         for ( BlockingQueue q : queues.values() ) {
                               q.put(r);
                         }
-                        isRunning = false;
                     }
                     return;
                 } else {
                     if (debug) {
                         logger.info("no tagged message and no exception " + r);
                     }
-                    isRunning = false;
+                    synchronized (queues) { // deliver to all queues
+                        isRunning = false;
+                        r = new IllegalArgumentException("no tagged message and no exception " +r);
+                        for ( BlockingQueue q : queues.values() ) {
+                              q.put(r);
+                        }
+                    }
                     return;
                 }
             } catch (InterruptedException e) {
                 // unfug Thread.currentThread().interrupt();
                 //logger.debug("ChannelFactory IE terminating");
-                isRunning = false;
+                synchronized (queues) { // deliver to all queues
+                    isRunning = false;
+                    for ( BlockingQueue q : queues.values() ) {
+                        try {
+                            q.put(e);
+                        } catch (InterruptedException ignored) {
+                        }
+                    }
+                }
                 return;
             }
         }
