@@ -9,40 +9,22 @@ import re;
 import os
 from os import system
 
+hpat = re.compile(r'd = (\d+), ppn = (\d+), time = (\d+) milliseconds, (\d+) start-up');
 dpat = re.compile(r'd = (\d+), time = (\d+) milliseconds, (\d+) start-up');
 ppat = re.compile(r'time = (\d+) milliseconds');
 fpat = re.compile(r'_p(\d+)\.');
-rpat = re.compile(r'pairlist #put = (\d+) #rem = (\d+)');
+spat = re.compile(r'_s\.');
+rpat = re.compile(r'OrderedPairlist\(size=0, #put=(\d+), #rem=(\d+)\)');
 res = {};
 pairs = None;
+xy = False;
 
 for fname in argv[1:]:
     dn = -1;
     print "file =", fname
     f = open(fname,"r");
     for line in f:
-        ma = dpat.search(line);
-        if ma:
-            print "1: ", line,
-            dn = ma.group(1);
-            tm = ma.group(2);
-            su = ma.group(3);
-            res[ int(dn) ] = { 't': tm, 's': su };
-        else:
-            ma = ppat.search(line);
-            if ma:
-                print "2: ", line,
-                tm = ma.group(1);
-                fm = fpat.search(fname);
-                if fm:
-                    print fname
-                    dn = fm.group(1);
-                    res[ int(dn) ] = { 't': tm, 's': "0" };
-        if int(dn) >= 0 and pairs != None:
-            res[ int(dn) ]['p'] = pairs[0];
-            res[ int(dn) ]['r'] = pairs[1];
-            pairs = None;
-        pm = rpat.search(line);
+        pm = rpat.search(line); # pairlist results
         if pm:
             print "3: ", line,
             np = pm.group(1);
@@ -50,54 +32,134 @@ for fname in argv[1:]:
             if pairs == None:
                 pairs = ( np, nr );
                 #print "put = " + np + ", rem = " + nr;
+            continue;
+        ma = hpat.search(line); # hybrid results
+        if ma:
+            print "d: ", line,
+            dn = int( ma.group(1) );
+            pp = int( ma.group(2) );
+            tm = ma.group(3);
+            su = ma.group(4);
+            xy = True;
+            if not dn in res:
+                res[ dn ] = {};
+            if pp in res[ dn ]:
+                if 't' in res[ dn ][ pp ]:
+                    tx = res[ dn ][ pp ][ 't' ];
+                    if tx < tm: # minimum or maximum
+                        tm = tx;
+                        su = res[ dn ][ pp ][ 's' ]
+            res[ dn ][ pp ] = { 't': tm, 's': su };
+            if pairs != None:
+                res[ dn ][ pp ]['p'] = pairs[0];
+                res[ dn ][ pp ]['r'] = pairs[1];
+                pairs = None;
+            continue;
+        ma = dpat.search(line); # distributed results
+        if ma:
+            print "d: ", line,
+            dn = int( ma.group(1) );
+            pp = 1;
+            tm = ma.group(2);
+            su = ma.group(3);
+            if not dn in res:
+                res[ dn ] = {};
+            if pp in res[ dn ]:
+                if 't' in res[ dn ][ pp ]:
+                    tx = res[ dn ][ pp ][ 't' ];
+                    if tx < tm: # minimum or maximum
+                        tm = tx;
+                        su = res[ dn ][ pp ][ 's' ]
+            res[ dn ][ pp ] = { 't': tm, 's': su };
+            if pairs != None:
+                res[ dn ][ pp ]['p'] = pairs[0];
+                res[ dn ][ pp ]['r'] = pairs[1];
+                pairs = None;
+            continue;
+        ma = ppat.search(line); # parallel and sequential results
+        if ma:
+            print "p: ", line,
+            tm = ma.group(1);
+            fm = fpat.search(fname);
+            if fm:
+                print fname
+                dn = 1;
+                pp = int( fm.group(1) );
+            else:
+                if spat.search(fname):
+                    dn = 1;
+                    pp = 1;
+                else:
+                    dn = 0;
+                    pp = 0;
+            if not dn in res:
+                res[ dn ] = {};
+            if pp in res[ dn ]:
+                if 't' in res[ dn ][ pp ]:
+                    tx = res[ dn ][ pp ][ 't' ];
+                    if tx < tm: # minimum or maximum
+                        tm = tx;
+            res[ dn ][ pp ] = { 't': tm, 's': '0' };
+            if pairs != None:
+                res[ dn ][ pp ]['p'] = pairs[0];
+                res[ dn ][ pp ]['r'] = pairs[1];
+                pairs = None;
             
-
-
 print "\nres = ", res;
 
 ks = res.keys();
-print "ks = ", ks;
-
+#print "ks = ", ks;
 ks.sort();
 print "ks = ", ks;
 
-#for d in ks:
-#    print " " + str(d) + " & " + res[d]['t'] + " & " + res[d]['s'] 
+for d in ks:
+    for p in res[d]:
+        print " " + str(d) + "," + str(p) + " & " + res[d][p]['t'] + " & " + res[d][p]['s'] 
 
 s1 = ks[0];
-st = int( res[ s1 ]['t'] );
-
+p1 = res[s1].keys()[0];
+st = int( res[ s1 ][ p1 ]['t'] );
 print "s1 = ", s1;
+print "p1 = ", p1;
 print "st = ", st;
 
 speed = {};
 
 for k in ks:
-    speed[ k ] = st / float(res[ k ]['t']); 
-
+    speed[k] = {};
+    for p in res[k]:
+        speed[k][p] = st / float(res[k][p]['t']); 
 print "speed = ", speed;
 
-bname = "kat6_";
+bname = "kat_";
 tag = argv[1];
+bname = tag;
 i = tag.find("/");
+if i >= 0:
+    bname = tag[:i];
+i = bname.find(".out");
 if i >= 0:
     bname = tag[:i];
 print "bname = " + bname;
 
+
+# LaTex output:
+
 summary =   "\n% run = " + tag + "\n";
-summary += r"\begin{tabular}{|r|r|r|r|r|r|}" + "\n";
+summary += r"\begin{tabular}{|r|r|r|r|r|r|r|}" + "\n";
 summary += r"\hline" + "\n";
-summary += r"\#" + " threads / nodes & time & startup & speedup & put & rem \n";
+summary += r"\#" + " threads / nodes & ppn & time & startup & speedup & put & rem \n";
 summary += r"\\ \hline" + "\n";
 
 for d in ks:
-    if res[d]['s'] != "0":
-        summary += " " + str(d) + " & " + res[d]['t'] + " & " + res[d]['s'] + " & " + str(speed[d])[:4];
-    else: 
-        summary += " " + str(d) + " & " + res[d]['t'] + " & " + " & " + str(speed[d])[:4];
-    if res[d]['p'] != "":
-        summary += " & " + res[d]['p'] + " & " + res[d]['r'] + "\n" 
-    summary += r"\\ \hline" + "\n";
+    for p in res[d]:
+        if res[d][p]['s'] != "0":
+            summary += " " + str(d) + " & " + str(p) + " & " + res[d][p]['t'] + " & " + res[d][p]['s'] + " & " + str(speed[d][p])[:4];
+        else:
+            summary += " " + str(d) + " & " + str(p) + " & " + res[d][p]['t'] + " & " + " & " + str(speed[d][p])[:4];
+        if 'p' in res[d][p] and 'r' in res[d][p]:
+            summary += " & " + res[d][p]['p'] + " & " + res[d][p]['r'] + "\n" 
+        summary += r"\\ \hline" + "\n";
 
 summary += r"\end{tabular}" + "\n";
 print summary;
@@ -108,11 +170,14 @@ tt.write(summary);
 tt.close();
 
 
+# output for gnuplot:
+
 oname = bname+".po";
 o=open(oname,"w");
-ploting = "\n#threads time speedup\n";
+ploting = "\n#nodes #ppn time speedup\n";
 for k in ks:
-    ploting += str(k) + " " + str(res[k]['t']) + " " + str(speed[k]) + "\n";
+    for p in res[k]:
+        ploting += str(k) + " " + str(p) + " " + str(res[k][p]['t']) + " " + str(speed[k][p]) + "\n";
 
 ploting += "\n";
 
@@ -123,32 +188,106 @@ o.close();
 #exit();
 
 #---------------------------------------
+pscript_2d = """
+set grid 
+set term %s
+set output "%s.ps"
+set title "GBs of Katsuras example on a grid cluster" 
+set time
+set xlabel "number of nodes" 
+set ylabel "processors/threads per node" 
+
+set xrange [1:8] 
+set yrange [1:8]
+
+#reverse
+
+#set clip two
+
+set xtics 1.0
+set ytics 1.0
+
+set data style lines
+#set contour base
+#set surface
+
+#set pm3d
+set dgrid3d 
+set hidden3d
+
+set multiplot
+
+set size 0.95,0.95
+#set origin 0,0.5
+set origin 0,0
+
+##set zlabel "milliseconds" 
+set zlabel "seconds" 
+# smooth acsplines
+splot "%s.po" using 1:2:($3/1000) title '%s computing time', "%s.po" using 1:2:( (%s/1000)/($1*$2) ) title '%s ideal'
+
+#with linespoints
+#with linespoints 
+
+#set size 0.95,0.45
+#set origin 0,0
+#set zlabel "speedup" 
+# smooth bezier
+#splot "%s.po" using 1:2:4 title '%s speedup', "%s.po" using 1:2:(($1*$2)/10) title '%s ideal'
+
+#with linespoints 
+#with linespoints
+
+unset multiplot
+pause mouse
+
+set terminal postscript
+replot
+
+"""
+#---------------------------------------
+
+#---------------------------------------
 pscript = """
 set grid 
 set term %s
 set output "%s.ps"
 set title "GBs of Katsuras example on a grid cluster" 
 set time
-set xlabel "#nodes" 
+set xlabel "number of nodes/threads" 
+
+#set xrange [1:8] 
+
+set xtics 1.0
+
+set data style lines
 
 set multiplot
 
-set size 0.75,0.5
+set size 0.95,0.5
 set origin 0,0.5
-set ylabel "milliseconds" 
-# smooth acsplines
-plot "%s.po" title '%s computing time' with linespoints, \
-     "%s.po" using 1:( %s/$1 ) title '%s ideal' with linespoints 
+#set origin 0,0
 
-set size 0.75,0.5
+##set ylabel "milliseconds" 
+set ylabel "seconds" 
+# smooth acsplines
+plot "%s.po" using 1:($3/1000) title '%s computing time', "%s.po" using 1:( (%s/1000)/($1) ) title '%s ideal'
+
+#set size 0.95,0.45
 set origin 0,0
 set ylabel "speedup" 
 # smooth bezier
-plot  "%s.po" using 1:3 title '%s speedup' with linespoints, \
-      "%s.po" using 1:1 title '%s ideal' with linespoints 
+plot "%s.po" using 1:4 title '%s speedup', "%s.po" using 1:(($1)/10) title '%s ideal'
+
+#with linespoints 
+#with linespoints
 
 unset multiplot
 pause mouse
+
+set terminal postscript
+replot
+
 """
 #---------------------------------------
 
@@ -158,19 +297,22 @@ pname = "plotin.gp"
 p=open(pname,"w");
 print p;
 
-mkpdf = 0; 
+print "seq time = ", res[s1][p1]['t'];
 
-if mkpdf:
-    pscript = pscript % ("postscript",bname,bname,exam,bname,str(res[ks[0]]['t']),exam,bname,exam,bname,exam);
+if xy:
+    pscript = pscript_2d % ("x11",bname,bname,exam,bname,str(res[s1][p1]['t']),exam,bname,exam,bname,exam);
 else:
-    pscript = pscript %       ("x11",bname,bname,exam,bname,str(res[ks[0]]['t']),exam,bname,exam,bname,exam);
+    pscript = pscript % ("x11",bname,bname,exam,bname,str(res[s1][p1]['t']),exam,bname,exam,bname,exam);
 
 p.write(pscript);
 p.close();
 
-os.system("gnuplot plotin.gp");
+cmd = "gnuplot " + pname;
+print "cmd: " + cmd;
+os.system(cmd);
 
-if mkpdf:
-    cmd = "ps2pdf " + psname;
-    print "cmd: " + cmd;
-    os.system(cmd);
+# convert to pdf, better use pstopdf
+#cmd = "ps2pdf " + psname;
+cmd = "epstopdf " + psname;
+print "cmd: " + cmd;
+os.system(cmd);

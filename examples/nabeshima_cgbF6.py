@@ -14,7 +14,7 @@ from jas import terminate
 # Nabashima, ISSAC 2007, example F6
 # integral function coefficients
 
-r = Ring( "IntFunc(a, b,c, d) (x) L" );
+r = Ring( "IntFunc(a, b,c, d) (x) G" );
 print "Ring: " + str(r);
 print;
 
@@ -31,6 +31,9 @@ f = r.paramideal( ps );
 print "ParamIdeal: " + str(f);
 print;
 
+gs = f.CGBsystem();
+gs = f.CGBsystem();
+gs = f.CGBsystem();
 gs = f.CGBsystem();
 print "CGBsystem: " + str(gs);
 print;

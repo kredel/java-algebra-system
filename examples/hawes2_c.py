@@ -29,7 +29,7 @@ from jas import terminate
 # rational function coefficients
 
 #r = Ring( "IntFunc(a, c, b) (y2, y1, z1, z2, x) L" );
-r = Ring( "IntFunc(a, c, b) (y2, y1, z1, z2, x) G" );
+r = Ring( "IntFunc(a, c, b) (y2, y1, z1, z2, x) L" );
 print "Ring: " + str(r);
 print;
 
@@ -43,7 +43,7 @@ ps = """
 ) 
 """;
 
-#startLog();
+startLog();
 
 f = r.paramideal( ps );
 print "ParamIdeal: " + str(f);
@@ -60,7 +60,14 @@ else:
     print "isCGBsystem: false";
 print;
 
-#sys.exit();
+sys.exit();
+
+gs = f.CGBsystem();
+gs = f.CGBsystem();
+gs = f.CGBsystem();
+print "CGBsystem: " + str(gs);
+print;
+
 
 gs = f.CGB();
 print "CGB: " + str(gs);

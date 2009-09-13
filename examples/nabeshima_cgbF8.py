@@ -16,24 +16,29 @@ from jas import terminate
 # integral function coefficients
 
 
+r = Ring( "IntFunc(d, b, a, c) (y,x,w,z) L" );
+
 #r = Ring( "IntFunc(d, b, c, a) (w,z,y,x) G" );
 #r = Ring( "IntFunc(b, c, a) (w,x,z,y) L" );
 #r = Ring( "IntFunc(b, c) (z,y,w,x) L" );
 #r = Ring( "IntFunc(b) (z,y,w,x) L" );
 #r = Ring( "IntFunc(c) (z,y,w,x) L" );
-r = Ring( "IntFunc(c) (z,y,w,x) L" );
+#r = Ring( "IntFunc(c) (z,y,w,x) G" );
 print "Ring: " + str(r);
 print;
 
 ps = """
 (
- ( { 1 } x^2 + { 1 } y ),
- ( { 1 } w^2 + z ),
+ ( { c } w^2 + z ),
+ ( { a } x^2 + { b } y ),
  ( ( x - z )^2 + ( y - w)^2 ),
- ( { 2 } x w - { 2 1 } y )
+ ( { 2 d } x w - { 2 b } y )
 ) 
 """;
 
+## ( { 1 } x^2 + { 1 } y ),
+## ( { 1 } w^2 + z ),
+## ( { 2 } x w - { 2 1 } y )
 # ( { 1 } x^2 + { b } y ),
 # ( { c } w^2 + z ),
 # ( { a } x^2 + { b } y ),
@@ -48,6 +53,9 @@ print;
 
 #startLog();
 
+gs = f.CGBsystem();
+gs = f.CGBsystem();
+gs = f.CGBsystem();
 gs = f.CGBsystem();
 print "CGBsystem: " + str(gs);
 print;

@@ -14,8 +14,9 @@ from jas import terminate
 # Raksanyi & Walter example
 # integral/rational function coefficients
 
-#r = Ring( "RatFunc(a1, a2, a3, a4) (x1, x2, x3, x4) L" );
-r = Ring( "IntFunc(a1, a2, a3, a4) (x1, x2, x3, x4) L" );
+#nono: r = Ring( "RatFunc(a1, a2, a3, a4) (x1, x2, x3, x4) L" );
+r = Ring( "IntFunc(a1, a2, a3, a4) (x1, x2, x3, x4) G" );
+#r = Ring( "IntFunc(a1, a2, a3, a4) (x4, x3, x2, x1) L" );
 print "Ring: " + str(r);
 print;
 
@@ -50,6 +51,13 @@ else:
 print;
 
 #sys.exit();
+
+gs = f.CGBsystem();
+gs = f.CGBsystem();
+gs = f.CGBsystem();
+
+print "2-CGBsystem: " + str(gs);
+print;
 
 gs = f.CGB();
 print "CGB: " + str(gs);

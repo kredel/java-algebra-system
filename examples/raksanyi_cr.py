@@ -54,7 +54,14 @@ rs = gs.regularRepresentation();
 print "regular representation: " + str(rs);
 print;
 
-#startLog();
+startLog();
+
+bg = rs.isRegularGB();
+if bg:
+    print "pre isRegularGB: true";
+else:
+    print "pre isRegularGB: false";
+print;
 
 rsg = rs.regularGB();
 print "regular GB: " + str(rsg);
@@ -62,9 +69,9 @@ print;
 
 bg = rsg.isRegularGB();
 if bg:
-    print "isRegularGB: true";
+    print "post isRegularGB: true";
 else:
-    print "isRegularGB: false";
+    print "post isRegularGB: false";
 print;
 
 

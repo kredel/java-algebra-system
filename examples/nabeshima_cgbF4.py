@@ -35,6 +35,9 @@ print "ParamIdeal: " + str(f);
 print;
 
 gs = f.CGBsystem();
+gs = f.CGBsystem();
+gs = f.CGBsystem();
+gs = f.CGBsystem();
 print "CGBsystem: " + str(gs);
 print;
 
