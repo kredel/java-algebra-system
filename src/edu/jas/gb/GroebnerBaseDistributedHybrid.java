@@ -942,7 +942,9 @@ class HybridReducerClient<C extends RingElem<C>> implements Runnable {
                 pairChannel.send(pairTag, req);
             } catch (IOException e) {
                 goon = false;
-                e.printStackTrace();
+                if ( logger.isDebugEnabled() ) {
+                    e.printStackTrace();
+                }
                 break;
             }
             logger.debug("receive pair, goon = " + goon);
