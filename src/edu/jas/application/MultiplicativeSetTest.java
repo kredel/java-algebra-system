@@ -110,10 +110,10 @@ public class MultiplicativeSetTest extends TestCase {
      }
 
      MultiplicativeSet<BigRational> ms = new MultiplicativeSet<BigRational>(fac);
-     System.out.println("ms = " + ms);
-     System.out.println("a  = " + a);
-     System.out.println("b  = " + b);
-     System.out.println("c  = " + c);
+     //System.out.println("ms = " + ms);
+     //System.out.println("a  = " + a);
+     //System.out.println("b  = " + b);
+     //System.out.println("c  = " + c);
 
      assertTrue("isEmpty ", ms.isEmpty() );
 
@@ -122,7 +122,7 @@ public class MultiplicativeSetTest extends TestCase {
      }
 
      MultiplicativeSet<BigRational> ms2 = ms.add(a);
-     System.out.println("ms2 = " + ms2);
+     //System.out.println("ms2 = " + ms2);
 
      if ( !a.isConstant() ) {
          assertFalse("not isEmpty ", ms2.isEmpty() );
@@ -134,7 +134,7 @@ public class MultiplicativeSetTest extends TestCase {
      }
 
      MultiplicativeSet<BigRational> ms3 = ms2.add(b);
-     System.out.println("ms3 = " + ms3);
+     //System.out.println("ms3 = " + ms3);
 
      if ( !b.isConstant() ) {
          assertFalse("not isEmpty ", ms3.isEmpty() );
@@ -147,13 +147,13 @@ public class MultiplicativeSetTest extends TestCase {
      }
 
      e = a.multiply(b);
-     System.out.println("e  = " + e);
+     //System.out.println("e  = " + e);
      if ( !e.isConstant() ) {
          assertTrue("contained ", ms3.contains(e) );
      }
 
      MultiplicativeSet<BigRational> ms4 = ms3.add(e);
-     System.out.println("ms4 = " + ms4);
+     //System.out.println("ms4 = " + ms4);
 
      assertTrue("m3 == m4 ", ms3.equals(ms4) );
 
@@ -177,57 +177,57 @@ public class MultiplicativeSetTest extends TestCase {
      }
 
      MultiplicativeSet<BigRational> ms = new MultiplicativeSet<BigRational>(fac);
-     System.out.println("ms = " + ms);
-     System.out.println("a  = " + a);
-     System.out.println("b  = " + b);
-     System.out.println("c  = " + c);
+     //System.out.println("ms = " + ms);
+     //System.out.println("a  = " + a);
+     //System.out.println("b  = " + b);
+     //System.out.println("c  = " + c);
 
      assertTrue("isEmpty ", ms.isEmpty() );
 
      e = ms.removeFactors(a);
-     System.out.println("e  = " + e);
+     //System.out.println("e  = " + e);
      assertEquals("a == remove(a) ", a, e );
 
      MultiplicativeSet<BigRational> ms2 = ms.add(a);
-     System.out.println("ms2 = " + ms2);
+     //System.out.println("ms2 = " + ms2);
 
      if ( !a.isConstant() ) {
          assertFalse("not isEmpty ", ms2.isEmpty() );
          assertTrue("contained ", ms2.contains(a) );
 
          e = ms2.removeFactors(a);
-         System.out.println("e  = " + e);
+         //System.out.println("e  = " + e);
          assertTrue("1 == remove(a) ", e.isConstant() );
 
          if ( !b.isConstant() ) {
              e = ms2.removeFactors(b);
-             System.out.println("e  = " + e);
+             //System.out.println("e  = " + e);
              assertEquals("b == remove(b) ", e, b );
          }
      }
 
      d = a.multiply(b);
      MultiplicativeSet<BigRational> ms3 = ms2.add(d);
-     System.out.println("ms3 = " + ms3);
+     //System.out.println("ms3 = " + ms3);
 
      if ( !d.isConstant() ) {
          assertFalse("not isEmpty ", ms3.isEmpty() );
 
          e = ms3.removeFactors(a);
-         System.out.println("e  = " + e);
+         //System.out.println("e  = " + e);
          assertTrue("1 == remove(a) ", e.isConstant() );
 
          e = ms3.removeFactors(b);
-         System.out.println("e  = " + e);
+         //System.out.println("e  = " + e);
          assertTrue("1 == remove(b) ", e.isConstant() );
 
          e = ms3.removeFactors(d);
-         System.out.println("e  = " + e);
+         //System.out.println("e  = " + e);
          assertTrue("1 == remove(a*b) ", e.isConstant() );
 
          if ( !c.isConstant() ) {
              e = ms3.removeFactors(c);
-             System.out.println("e  = " + e);
+             //System.out.println("e  = " + e);
              assertEquals("c == remove(c) ", e, c );
          }
      }
@@ -251,10 +251,10 @@ public class MultiplicativeSetTest extends TestCase {
      }
 
      MultiplicativeSet<BigRational> ms = new MultiplicativeSetCoPrime<BigRational>(fac);
-     System.out.println("ms = " + ms);
-     System.out.println("a  = " + a);
-     System.out.println("b  = " + b);
-     System.out.println("c  = " + c);
+     //System.out.println("ms = " + ms);
+     //System.out.println("a  = " + a);
+     //System.out.println("b  = " + b);
+     //System.out.println("c  = " + c);
 
      assertTrue("isEmpty ", ms.isEmpty() );
 
@@ -263,7 +263,7 @@ public class MultiplicativeSetTest extends TestCase {
      }
 
      MultiplicativeSet<BigRational> ms2 = ms.add(a);
-     System.out.println("ms2 = " + ms2);
+     //System.out.println("ms2 = " + ms2);
 
      if ( !a.isConstant() ) {
          assertFalse("not isEmpty ", ms2.isEmpty() );
@@ -271,11 +271,11 @@ public class MultiplicativeSetTest extends TestCase {
      }
 
      if ( !a.equals(b) && !b.isConstant() ) {
-         assertFalse("not contained ", ms2.contains(b) );
+         assertFalse("not contained " + ms2, ms2.contains(b) );
      }
 
      MultiplicativeSet<BigRational> ms3 = ms2.add(b);
-     System.out.println("ms3 = " + ms3);
+     //System.out.println("ms3 = " + ms3);
 
      if ( !b.isConstant() ) {
          assertFalse("not isEmpty ", ms3.isEmpty() );
@@ -284,17 +284,17 @@ public class MultiplicativeSetTest extends TestCase {
      assertTrue("contained ", ms3.contains(b) );
 
      if ( !a.equals(c) && !b.equals(c) && !c.isConstant() ) {
-         assertFalse("not contained ", ms3.contains(c) );
+         assertFalse("not contained " + ms3, ms3.contains(c) );
      }
 
      e = a.multiply(b);
-     System.out.println("e  = " + e);
+     //System.out.println("e  = " + e);
      if ( !e.isConstant() ) {
          assertTrue("contained ", ms3.contains(e) );
      }
 
      MultiplicativeSet<BigRational> ms4 = ms3.add(e);
-     System.out.println("ms4 = " + ms4);
+     //System.out.println("ms4 = " + ms4);
 
      assertTrue("m3 == m4 ", ms3.equals(ms4) );
  }
@@ -317,57 +317,57 @@ public class MultiplicativeSetTest extends TestCase {
      }
 
      MultiplicativeSet<BigRational> ms = new MultiplicativeSetCoPrime<BigRational>(fac);
-     System.out.println("ms = " + ms);
-     System.out.println("a  = " + a);
-     System.out.println("b  = " + b);
-     System.out.println("c  = " + c);
+     //System.out.println("ms = " + ms);
+     //System.out.println("a  = " + a);
+     //System.out.println("b  = " + b);
+     //System.out.println("c  = " + c);
 
      assertTrue("isEmpty ", ms.isEmpty() );
 
      e = ms.removeFactors(a);
-     System.out.println("e  = " + e);
+     //System.out.println("e  = " + e);
      assertEquals("a == remove(a) ", a, e );
 
      MultiplicativeSet<BigRational> ms2 = ms.add(a);
-     System.out.println("ms2 = " + ms2);
+     //System.out.println("ms2 = " + ms2);
 
      if ( !a.isConstant() ) {
          assertFalse("not isEmpty ", ms2.isEmpty() );
          assertTrue("contained ", ms2.contains(a) );
 
          e = ms2.removeFactors(a);
-         System.out.println("e  = " + e);
+         //System.out.println("e  = " + e);
          assertTrue("1 == remove(a) ", e.isConstant() );
 
          if ( !b.isConstant() ) {
              e = ms2.removeFactors(b);
-             System.out.println("e  = " + e);
+             //System.out.println("e  = " + e);
              assertEquals("b == remove(b) ", e, b );
          }
      }
 
      d = a.multiply(b);
      MultiplicativeSet<BigRational> ms3 = ms2.add(d);
-     System.out.println("ms3 = " + ms3);
+     //System.out.println("ms3 = " + ms3);
 
      if ( !d.isConstant() ) {
          assertFalse("not isEmpty ", ms3.isEmpty() );
 
          e = ms3.removeFactors(a);
-         System.out.println("e  = " + e);
+         //System.out.println("e  = " + e);
          assertTrue("1 == remove(a) ", e.isConstant() );
 
          e = ms3.removeFactors(b);
-         System.out.println("e  = " + e);
+         //System.out.println("e  = " + e);
          assertTrue("1 == remove(b) ", e.isConstant() );
 
          e = ms3.removeFactors(d);
-         System.out.println("e  = " + e);
+         //System.out.println("e  = " + e);
          assertTrue("1 == remove(a*b) ", e.isConstant() );
 
          if ( !c.isConstant() ) {
              e = ms3.removeFactors(c);
-             System.out.println("e  = " + e);
+             //System.out.println("e  = " + e);
              assertEquals("c == remove(c) ", e, c );
          }
      }
@@ -391,10 +391,10 @@ public class MultiplicativeSetTest extends TestCase {
      }
 
      MultiplicativeSet<BigRational> ms = new MultiplicativeSetSquarefree<BigRational>(fac);
-     System.out.println("ms = " + ms);
-     System.out.println("a  = " + a);
-     System.out.println("b  = " + b);
-     System.out.println("c  = " + c);
+     //System.out.println("ms = " + ms);
+     //System.out.println("a  = " + a);
+     //System.out.println("b  = " + b);
+     //System.out.println("c  = " + c);
 
      assertTrue("isEmpty ", ms.isEmpty() );
 
@@ -403,7 +403,7 @@ public class MultiplicativeSetTest extends TestCase {
      }
 
      MultiplicativeSet<BigRational> ms2 = ms.add(a);
-     System.out.println("ms2 = " + ms2);
+     //System.out.println("ms2 = " + ms2);
 
      if ( !a.isConstant() ) {
          assertFalse("not isEmpty ", ms2.isEmpty() );
@@ -411,11 +411,11 @@ public class MultiplicativeSetTest extends TestCase {
      }
 
      if ( !a.equals(b) && !b.isConstant() ) {
-         assertFalse("not contained ", ms2.contains(b) );
+         assertFalse("not contained " + ms2, ms2.contains(b) );
      }
 
      MultiplicativeSet<BigRational> ms3 = ms2.add(b);
-     System.out.println("ms3 = " + ms3);
+     //System.out.println("ms3 = " + ms3);
 
      if ( !b.isConstant() ) {
          assertFalse("not isEmpty ", ms3.isEmpty() );
@@ -424,17 +424,17 @@ public class MultiplicativeSetTest extends TestCase {
      assertTrue("contained ", ms3.contains(b) );
 
      if ( !a.equals(c) && !b.equals(c) && !c.isConstant() ) {
-         assertFalse("not contained ", ms3.contains(c) );
+         assertFalse("not contained " + ms3, ms3.contains(c) );
      }
 
      e = a.multiply(b);
-     System.out.println("e  = " + e);
+     //System.out.println("e  = " + e);
      if ( !e.isConstant() ) {
          assertTrue("contained ", ms3.contains(e) );
      }
 
      MultiplicativeSet<BigRational> ms4 = ms3.add(e);
-     System.out.println("ms4 = " + ms4);
+     //System.out.println("ms4 = " + ms4);
 
      assertTrue("m3 == m4 ", ms3.equals(ms4) );
  }
@@ -457,57 +457,57 @@ public class MultiplicativeSetTest extends TestCase {
      }
 
      MultiplicativeSet<BigRational> ms = new MultiplicativeSetSquarefree<BigRational>(fac);
-     System.out.println("ms = " + ms);
-     System.out.println("a  = " + a);
-     System.out.println("b  = " + b);
-     System.out.println("c  = " + c);
+     //System.out.println("ms = " + ms);
+     //System.out.println("a  = " + a);
+     //System.out.println("b  = " + b);
+     //System.out.println("c  = " + c);
 
      assertTrue("isEmpty ", ms.isEmpty() );
 
      e = ms.removeFactors(a);
-     System.out.println("e  = " + e);
+     //System.out.println("e  = " + e);
      assertEquals("a == remove(a) ", a, e );
 
      MultiplicativeSet<BigRational> ms2 = ms.add(a);
-     System.out.println("ms2 = " + ms2);
+     //System.out.println("ms2 = " + ms2);
 
      if ( !a.isConstant() ) {
          assertFalse("not isEmpty ", ms2.isEmpty() );
          assertTrue("contained ", ms2.contains(a) );
 
          e = ms2.removeFactors(a);
-         System.out.println("e  = " + e);
+         //System.out.println("e  = " + e);
          assertTrue("1 == remove(a) ", e.isConstant() );
 
          if ( !b.isConstant() ) {
              e = ms2.removeFactors(b);
-             System.out.println("e  = " + e);
+             //System.out.println("e  = " + e);
              assertEquals("b == remove(b) ", e, b );
          }
      }
 
      d = a.multiply(b);
      MultiplicativeSet<BigRational> ms3 = ms2.add(d);
-     System.out.println("ms3 = " + ms3);
+     //System.out.println("ms3 = " + ms3);
 
      if ( !d.isConstant() ) {
          assertFalse("not isEmpty ", ms3.isEmpty() );
 
          e = ms3.removeFactors(a);
-         System.out.println("e  = " + e);
+         //System.out.println("e  = " + e);
          assertTrue("1 == remove(a) ", e.isConstant() );
 
          e = ms3.removeFactors(b);
-         System.out.println("e  = " + e);
+         //System.out.println("e  = " + e);
          assertTrue("1 == remove(b) ", e.isConstant() );
 
          e = ms3.removeFactors(d);
-         System.out.println("e  = " + e);
+         //System.out.println("e  = " + e);
          assertTrue("1 == remove(a*b) ", e.isConstant() );
 
          if ( !c.isConstant() ) {
              e = ms3.removeFactors(c);
-             System.out.println("e  = " + e);
+             //System.out.println("e  = " + e);
              assertEquals("c == remove(c) ", e, c );
          }
      }
@@ -531,10 +531,10 @@ public class MultiplicativeSetTest extends TestCase {
      }
 
      MultiplicativeSet<BigRational> ms = new MultiplicativeSetFactors<BigRational>(fac);
-     System.out.println("ms = " + ms);
-     System.out.println("a  = " + a);
-     System.out.println("b  = " + b);
-     System.out.println("c  = " + c);
+     //System.out.println("ms = " + ms);
+     //System.out.println("a  = " + a);
+     //System.out.println("b  = " + b);
+     //System.out.println("c  = " + c);
 
      assertTrue("isEmpty ", ms.isEmpty() );
 
@@ -543,38 +543,39 @@ public class MultiplicativeSetTest extends TestCase {
      }
 
      MultiplicativeSet<BigRational> ms2 = ms.add(a);
-     System.out.println("ms2 = " + ms2);
+     //System.out.println("ms2 = " + ms2);
 
      if ( !a.isConstant() ) {
          assertFalse("not isEmpty ", ms2.isEmpty() );
          assertTrue("contained ", ms2.contains(a) );
-     }
 
-     if ( !a.equals(b) && !b.isConstant() ) {
-         assertFalse("not contained ", ms2.contains(b) );
+         if ( !a.equals(b) && !b.isConstant() ) {
+             assertFalse("not contained " + ms2, ms2.contains(b) );
+         }
      }
 
      MultiplicativeSet<BigRational> ms3 = ms2.add(b);
-     System.out.println("ms3 = " + ms3);
+     //System.out.println("ms3 = " + ms3);
 
-     if ( !b.isConstant() ) {
-         assertFalse("not isEmpty ", ms3.isEmpty() );
-     }
      assertTrue("contained ", ms3.contains(a) );
      assertTrue("contained ", ms3.contains(b) );
 
-     if ( !a.monic().equals(c) && !b.monic().equals(c) && !c.isConstant() ) {
-         assertFalse("not contained ", ms3.contains(c) );
+     if ( !b.isConstant() ) {
+         assertFalse("not isEmpty ", ms3.isEmpty() );
+
+         if ( !a.monic().equals(c) && !b.monic().equals(c) && !c.isConstant() ) {
+             assertFalse("not contained " + ms3, ms3.contains(c) );
+         }
      }
 
      e = a.multiply(b);
-     System.out.println("e  = " + e);
+     //System.out.println("e  = " + e);
      if ( !e.isConstant() ) {
          assertTrue("contained ", ms3.contains(e) );
      }
 
      MultiplicativeSet<BigRational> ms4 = ms3.add(e);
-     System.out.println("ms4 = " + ms4);
+     //System.out.println("ms4 = " + ms4);
 
      assertTrue("m3 == m4 ", ms3.equals(ms4) );
  }
@@ -597,57 +598,57 @@ public class MultiplicativeSetTest extends TestCase {
      }
 
      MultiplicativeSet<BigRational> ms = new MultiplicativeSetFactors<BigRational>(fac);
-     System.out.println("ms = " + ms);
-     System.out.println("a  = " + a);
-     System.out.println("b  = " + b);
-     System.out.println("c  = " + c);
+     //System.out.println("ms = " + ms);
+     //System.out.println("a  = " + a);
+     //System.out.println("b  = " + b);
+     //System.out.println("c  = " + c);
 
      assertTrue("isEmpty ", ms.isEmpty() );
 
      e = ms.removeFactors(a);
-     System.out.println("e  = " + e);
+     //System.out.println("e  = " + e);
      assertEquals("a == remove(a) ", a, e );
 
      MultiplicativeSet<BigRational> ms2 = ms.add(a);
-     System.out.println("ms2 = " + ms2);
+     //System.out.println("ms2 = " + ms2);
 
      if ( !a.isConstant() ) {
          assertFalse("not isEmpty ", ms2.isEmpty() );
          assertTrue("contained ", ms2.contains(a) );
 
          e = ms2.removeFactors(a);
-         System.out.println("e  = " + e);
+         //System.out.println("e  = " + e);
          assertTrue("1 == remove(a) ", e.isConstant() );
 
          if ( !b.isConstant() ) {
              e = ms2.removeFactors(b);
-             System.out.println("e  = " + e);
+             //System.out.println("e  = " + e);
              assertTrue("remove(b) | b ", b.remainder(e).isZERO() );
          }
      }
 
      d = a.multiply(b);
      MultiplicativeSet<BigRational> ms3 = ms2.add(d);
-     System.out.println("ms3 = " + ms3);
+     //System.out.println("ms3 = " + ms3);
 
      if ( !d.isConstant() ) {
          assertFalse("not isEmpty ", ms3.isEmpty() );
 
          e = ms3.removeFactors(a);
-         System.out.println("e  = " + e);
+         //System.out.println("e  = " + e);
          assertTrue("1 == remove(a) ", e.isConstant() );
 
          e = ms3.removeFactors(b);
-         System.out.println("e  = " + e);
+         //System.out.println("e  = " + e);
          assertTrue("1 == remove(b) ", e.isConstant() );
 
          e = ms3.removeFactors(d);
-         System.out.println("e  = " + e);
+         //System.out.println("e  = " + e);
          assertTrue("1 == remove(a*b) ", e.isConstant() );
 
          if ( !c.isConstant() ) {
              e = ms3.removeFactors(c);
-             System.out.println("e  = " + e);
+             //System.out.println("e  = " + e);
              assertTrue("remove(c) | c ", c.remainder(e).isZERO() );
          }
      }
