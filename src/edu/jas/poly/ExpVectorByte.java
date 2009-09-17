@@ -92,11 +92,11 @@ public class ExpVectorByte extends ExpVector
 
 
     /**
-     * Internal constructor for ExpVector.
+     * Constructor for ExpVector.
      * Sets val, converts from long array.
      * @param v long representation array.
      */
-    protected ExpVectorByte(long[] v) {
+    public ExpVectorByte(long[] v) {
      this( v.length );
      for ( int i = 0; i < v.length; i++ ) {
             if ( v[i] >= maxByte || v[i] <= minByte ) {

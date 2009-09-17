@@ -92,11 +92,11 @@ public class ExpVectorInteger extends ExpVector
 
 
     /**
-     * Internal constructor for ExpVector.
+     * Constructor for ExpVector.
      * Sets val, converts from long array.
      * @param v long representation array.
      */
-    protected ExpVectorInteger(long[] v) {
+    public ExpVectorInteger(long[] v) {
      this( v.length );
      for ( int i = 0; i < v.length; i++ ) {
             if ( v[i] >= maxInt || v[i] <= minInt ) {

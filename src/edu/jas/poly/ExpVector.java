@@ -107,7 +107,7 @@ public abstract class ExpVector implements AbelianGroupElem<ExpVector>
      * Sets val.
      * @param v internal representation array.
      */
-    protected static ExpVector create(long[] v) {
+    public static ExpVector create(long[] v) {
         switch ( storunit ) {
         case INT:   return new ExpVectorInteger(v);
         case LONG:  return new ExpVectorLong(v);

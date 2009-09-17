@@ -52,13 +52,16 @@ public class ExpVectorLong extends ExpVector
 
 
     /**
-     * Internal constructor for ExpVector.
+     * Constructor for ExpVector.
      * Sets val.
      * @param v internal representation array.
      */
-    protected ExpVectorLong(long[] v) {
-     super();
-     val = v;
+    public ExpVectorLong(long[] v) {
+        super();
+        if ( v == null ) {
+            throw new IllegalArgumentException("null val not allowed");
+        }
+        val = v;
     }
 
 
@@ -69,7 +72,7 @@ public class ExpVectorLong extends ExpVector
      * @param s String representation.
      */
     public ExpVectorLong(String s) throws NumberFormatException {
-     super();
+        super();
         // first format = (1,2,3,4,5,6,7)
         Vector<Long> exps = new Vector<Long>();
         s = s.trim();

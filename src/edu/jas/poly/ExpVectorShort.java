@@ -73,9 +73,9 @@ public class ExpVectorShort extends ExpVector
      */
     public ExpVectorShort(int n, int i, long e) {
         this( n );
-     if ( e >= maxShort || e <= minShort ) {
-        throw new IllegalArgumentException("exponent to large: "+e);
-     }
+        if ( e >= maxShort || e <= minShort ) {
+            throw new IllegalArgumentException("exponent to large: "+e);
+        }
         val[i] = (short)e;
     }
 
@@ -86,24 +86,24 @@ public class ExpVectorShort extends ExpVector
      * @param v internal representation array.
      */
     protected ExpVectorShort(short[] v) {
-     super();
-     val = v;
+        super();
+        val = v;
     }
 
 
     /**
-     * Internal constructor for ExpVector.
+     * Constructor for ExpVector.
      * Sets val, converts from long array.
      * @param v long representation array.
      */
-    protected ExpVectorShort(long[] v) {
-     this( v.length );
-     for ( int i = 0; i < v.length; i++ ) {
+    public ExpVectorShort(long[] v) {
+        this( v.length );
+        for ( int i = 0; i < v.length; i++ ) {
             if ( v[i] >= maxShort || v[i] <= minShort ) {
-            throw new IllegalArgumentException("exponent to large: "+v[i]);
-         }
-        val[i] = (short)v[i];
-     }
+                throw new IllegalArgumentException("exponent to large: "+v[i]);
+            }
+            val[i] = (short)v[i];
+        }
     }
 
 
@@ -114,7 +114,7 @@ public class ExpVectorShort extends ExpVector
      * @param s String representation.
      */
     public ExpVectorShort(String s) throws NumberFormatException {
-     super();
+        super();
         // first format = (1,2,3,4,5,6,7)
         Vector<Short> exps = new Vector<Short>();
         s = s.trim();
