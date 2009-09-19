@@ -382,7 +382,7 @@ class DistPoolThread extends Thread {
                 job = pool.getJob();
                 working = true;
                 if ( debug ) {
-                    logger.info( "working on " + job);
+                    logger.info( "working " + myId + " on " + job);
                 }
                 t = System.currentTimeMillis();
                 // send and wait, like rmi
@@ -392,15 +392,19 @@ class DistPoolThread extends Thread {
                     } else {
                         ec.send( myId, job );
                     }
+                    logger.info( "send " + myId + " at " + ec + " send job " + job );
                 } catch (IOException e) {
                     e.printStackTrace();
+                    logger.info( "error send " + myId + " at " + ec + " e = " + e );
                     working = false;
                 }
                 //job.run(); 
                 Object o = null;
                 try {
                     if ( working ) {
+                        logger.info( "waiting " + myId + " on " + job);
                         o = ec.receive( myId );
+                        logger.info( "receive " + myId + " at " + ec + " send job " + job + " received " + o);
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -408,19 +412,21 @@ class DistPoolThread extends Thread {
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                     running = false; 
-                }
+                } finally {
+                    logger.info( "receive finally " + myId + " at " + ec + " send job " + job + " received " + o + " running " + running);
+          }
                 working = false;
                 time += System.currentTimeMillis() - t;
                 done++;
                 if ( debug ) {
-                    logger.info( "done with " + o);
+                    logger.info( "done " + myId + " with " + o);
                 }
             } catch (InterruptedException e) { 
                 running = false; 
                 Thread.currentThread().interrupt();
             }
         }
-        logger.info( "terminated, done " + done + " jobs in " 
+        logger.info( "terminated " + myId + " , done " + done + " jobs in " 
                      + time + " milliseconds");
     }
 

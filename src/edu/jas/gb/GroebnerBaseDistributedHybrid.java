@@ -234,8 +234,8 @@ public class GroebnerBaseDistributedHybrid<C extends RingElem<C>> extends Groebn
         // now in DL, uses resend for late clients
         //while ( dls.size() < threads ) { sleep(); }
 
-        DistHashTable<Integer, GenPolynomial<C>> theList = new DistHashTable<Integer, GenPolynomial<C>>(
-                "localhost", DL_PORT);
+        DistHashTable<Integer, GenPolynomial<C>> theList 
+            = new DistHashTable<Integer, GenPolynomial<C>>("localhost", DL_PORT);
         ArrayList<GenPolynomial<C>> al = pairlist.getList();
         for (int i = 0; i < al.size(); i++) {
             // no wait required
@@ -263,11 +263,11 @@ public class GroebnerBaseDistributedHybrid<C extends RingElem<C>> extends Groebn
         if (ps != G.size()) {
             logger.warn("#distributed list = " + theList.size() + " #pairlist list = " + G.size());
         }
-	for (GenPolynomial<C> q: theList.getValueList()) {
-	    if ( q != null & !q.isZERO() ) {
-		logger.info("final q = " + q.leadingExpVector());
-	    }
-	}
+        for (GenPolynomial<C> q: theList.getValueList()) {
+            if ( q != null & !q.isZERO() ) {
+               logger.info("final q = " + q.leadingExpVector());
+            }
+        }
         logger.info("distributed list end");
         long time = System.currentTimeMillis();
         List<GenPolynomial<C>> Gp;
@@ -606,7 +606,7 @@ class HybridReducerServer<C extends RingElem<C>> implements Runnable {
         logger.debug("send end");
         try {
             for ( int i = 0; i < threadsPerNode; i++ ) { // -1
-		//do not wait: Object rq = pairChannel.receive(pairTag);
+                //do not wait: Object rq = pairChannel.receive(pairTag);
                 pairChannel.send(pairTag, new GBTransportMessEnd());
             }
             // send also end to receiver

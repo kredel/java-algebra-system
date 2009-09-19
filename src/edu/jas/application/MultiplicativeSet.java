@@ -297,11 +297,11 @@ public class MultiplicativeSet<C extends GcdRingElem<C>> implements Serializable
         }
         List<GenPolynomial<C>> M = new ArrayList<GenPolynomial<C>>(L.size());
         for (GenPolynomial<C> p : L) {
-	    p = removeFactors(p);
+            p = removeFactors(p);
             // nono, really: if ( !p.isConstant() ) {
             M.add(p);
-	}
-	return M;
+        }
+        return M;
     }
 
 }

@@ -116,9 +116,9 @@ public class ChannelFactory extends Thread {
     public SocketChannel getChannel() throws InterruptedException {
         // return (SocketChannel)buf.get();
         if (srv == null) {
-	    if (srvrun) {
+            if (srvrun) {
                 throw new IllegalArgumentException("dont call when no server listens");
-	    }
+            }
         }
         return buf.take();
     }
@@ -170,7 +170,7 @@ public class ChannelFactory extends Thread {
         if (srv == null) {
             return; // nothing to do
         }
-	srvrun = true;
+        srvrun = true;
         while (true) {
             try {
                 logger.info("waiting for connection");
@@ -186,12 +186,12 @@ public class ChannelFactory extends Thread {
                 buf.put(c);
             } catch (IOException e) {
                 //logger.debug("ChannelFactory IO terminating");
-         	srvrun = false;
+          srvrun = false;
                 return;
             } catch (InterruptedException e) {
                 // unfug Thread.currentThread().interrupt();
                 //logger.debug("ChannelFactory IE terminating");
-         	srvrun = false;
+                srvrun = false;
                 return;
             }
         }
@@ -206,7 +206,7 @@ public class ChannelFactory extends Thread {
         try {
             if (srv != null) {
                 srv.close();
-         	srvrun = false;
+          srvrun = false;
             }
             this.interrupt();
             while (!buf.isEmpty()) {

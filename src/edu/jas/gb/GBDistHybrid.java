@@ -128,15 +128,25 @@ class GBClientHybrid<C extends RingElem<C>> implements RemoteExecutable {
 
 
     /**
-     * GBClient.
-     * @param host
+     * GBClientHybrid.
+     * @param threadsPerNode
+     * @param host master
      * @param port
      */
     public GBClientHybrid(int threadsPerNode, String host, int port) {
-	//this.threads = threads;
-	this.threadsPerNode = threadsPerNode;
+        //this.threads = threads;
+        this.threadsPerNode = threadsPerNode;
         this.host = host;
         this.port = port;
+    }
+
+
+    /** Get the String representation.
+      * @see java.lang.Object#toString()
+      */
+    @Override
+    public String toString() {
+        return "GBClientHybrid(" + threadsPerNode + ", " + host + ":" + port + " )";
     }
 
 

@@ -881,7 +881,7 @@ public class Ideal<C extends GcdRingElem<C>>
         if ( debug ) {
             logger.debug("infiniteQuotientRab = " + x);
         }
-	return x.isONE();
+        return x.isONE();
     }
 
 

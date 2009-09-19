@@ -278,7 +278,12 @@ class Executor extends Thread /*implements Runnable*/{
                         if ( debug ) {
                             logger.info("running " + re);
                         }
-                        re.run();
+                        try {
+                            re.run();
+                        } catch(Exception e) {
+                            e.printStackTrace();
+                            logger.info("Exception on re.run()", e);
+                        }
                         if ( debug ) {
                             logger.info("finished " + re);
                         }
