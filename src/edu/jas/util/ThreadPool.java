@@ -136,6 +136,7 @@ public class ThreadPool {
         while ( hasJobs() ) {
             try {
                 Thread.sleep(100);
+                //logger.info("waiting for termination in " + this);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
@@ -194,7 +195,9 @@ public class ThreadPool {
             return true;
         }
         for (int i = 0; i < workers.length; i++) {
-            if ( workers[i].working ) return true;
+            if ( workers[i].working ) {
+                return true;
+            }
         }
         return false;
     }
@@ -231,7 +234,7 @@ class PoolThread extends Thread {
     private static final Logger logger = Logger.getLogger(ThreadPool.class);
     private static boolean debug = logger.isDebugEnabled();
 
-    boolean working = false;
+    volatile boolean working = false;
 
 
    /**
@@ -260,11 +263,11 @@ class PoolThread extends Thread {
                 if ( job == null ) {
                    break;
                 }
-                working = true;
                 if ( debug ) {
                    logger.info( "working" );
                 }
                 t = System.currentTimeMillis();
+                working = true;
                 job.run(); 
                 working = false;
                 time += System.currentTimeMillis() - t;
@@ -275,8 +278,10 @@ class PoolThread extends Thread {
             } catch (InterruptedException e) { 
                 Thread.currentThread().interrupt();
                 running = false; 
+                working = false;
             }
         }
+        working = false;
         logger.info( "terminated, done " + done + " jobs in " 
                         + time + " milliseconds");
     }

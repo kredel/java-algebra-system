@@ -283,7 +283,9 @@ class Executor extends Thread /*implements Runnable*/{
                         } catch(Exception e) {
                             e.printStackTrace();
                             logger.info("Exception on re.run()", e);
-                        }
+                        } finally {
+                            logger.info("finally re.run() " + re);
+			}
                         if ( debug ) {
                             logger.info("finished " + re);
                         }
@@ -304,6 +306,8 @@ class Executor extends Thread /*implements Runnable*/{
                 goon = false;
                 e.printStackTrace();
                 logger.info("ClassNotFoundException ", e);
+            } finally {
+                logger.info("finally " + this);
             }
         }
         logger.info("executor terminated " + this);

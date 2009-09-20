@@ -320,7 +320,7 @@ public class GroebnerBaseDistributedHybrid<C extends RingElem<C>> extends Groebn
         //HybridReducerClient<C> R = new HybridReducerClient<C>(threadsPerNode, pairChannel, theList);
         //R.run();
 
-        ThreadPool pool = new ThreadPool(threadsPerNode);
+        ThreadPool pool = new ThreadPool(threadsPerNode+1);
         logger.info("client using pool = " +pool);
         for (int i = 0; i < threadsPerNode; i++) {
             HybridReducerClient<C> Rr = new HybridReducerClient<C>(threadsPerNode, pairChannel, i, theList);

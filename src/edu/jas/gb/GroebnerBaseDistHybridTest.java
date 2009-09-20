@@ -176,7 +176,10 @@ public class GroebnerBaseDistHybridTest extends TestCase {
     void stopThreads(Thread[] clients) {
         for (int t = 0; t < threads; t++) {
             try {
-                clients[t].join();
+                while ( clients[t].isAlive() ) {
+                        clients[t].interrupt(); 
+                        clients[t].join(100);
+                }
             } catch (InterruptedException e) {
             }
         }

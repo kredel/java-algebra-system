@@ -252,6 +252,13 @@ public class TaggedSocketChannel extends Thread {
         for (Entry<Integer, BlockingQueue> tq : queues.entrySet()) {
             if (tq.getValue().size() != 0) {
                 logger.warn("queue for tag " + tq.getKey() + " not empty " + tq.getValue());
+            } else {
+                BlockingQueue q = tq.getValue();
+                try {
+                    q.put(new Exception("terminate"));
+                } catch (InterruptedException ignored) {
+                }
+                logger.info("put end to queue for tag " + tq.getKey());
             }
         }
         try {
