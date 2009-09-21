@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.log4j.Logger;
 
@@ -37,6 +38,12 @@ public class TaggedSocketChannel extends Thread {
 
 
     /**
+     * Blocked threads count.
+     */
+    private final AtomicInteger blockedCount;
+
+
+    /**
      * Underlying socket channel.
      */
     protected final SocketChannel sc;
@@ -54,6 +61,7 @@ public class TaggedSocketChannel extends Thread {
      */
     public TaggedSocketChannel(SocketChannel s) {
         sc = s;
+        blockedCount = new AtomicInteger(0);
         queues = new HashMap<Integer, BlockingQueue>();
         synchronized (queues) {
             this.start();
@@ -98,6 +106,7 @@ public class TaggedSocketChannel extends Thread {
      */
     public Object receive(Integer tag) throws InterruptedException, IOException, ClassNotFoundException {
         BlockingQueue tq = null;
+        int i = 0;
         do {
             synchronized (queues) {
                 tq = queues.get(tag);
@@ -108,16 +117,25 @@ public class TaggedSocketChannel extends Thread {
                     //tq = new LinkedBlockingQueue();
                     //queues.put(tag, tq);
                     try {
-                        logger.info("receive wait, tag = " + tag + ", thread = " + Thread.currentThread());
-                        //Thread.currentThread().sleep(500);
+                        logger.info("receive wait, tag = " + tag);
+                        i = blockedCount.incrementAndGet();
                         queues.wait();
                     } catch (InterruptedException e) {
-                        throw new InterruptedException("receive wait, tag = " + tag + ", thread = " + Thread.currentThread());
+                        logger.info("receive wait exception, tag = " + tag + ", blockedCount = " + i);
+                        throw e;
+                    } finally {
+                        i = blockedCount.decrementAndGet();
                     }
                 }
             }
         } while ( tq == null );
-        Object v = tq.take();
+        Object v = null;
+        try {
+            i = blockedCount.incrementAndGet();
+            v = tq.take();
+        } finally {
+            i = blockedCount.decrementAndGet();
+        }
         if ( v instanceof IOException ) {
             throw (IOException) v;
         }
@@ -218,7 +236,13 @@ public class TaggedSocketChannel extends Thread {
                     synchronized (queues) { // deliver to all queues
                         isRunning = false;
                         for ( BlockingQueue q : queues.values() ) {
-                              q.put(r);
+                            final int bc = blockedCount.get();
+                            for ( int i = 0; i <= bc; i++ ) { // one more
+                                q.put(r);
+                            }
+                            if (bc > 0) {
+                                logger.info("put exception to queue, blockCount = " + bc);
+                            }
                         }
                         queues.notifyAll();
                     }
@@ -231,7 +255,13 @@ public class TaggedSocketChannel extends Thread {
                         isRunning = false;
                         r = new IllegalArgumentException("no tagged message and no exception " +r);
                         for ( BlockingQueue q : queues.values() ) {
-                              q.put(r);
+                            final int bc = blockedCount.get();
+                            for ( int i = 0; i <= bc; i++ ) { // one more
+                                q.put(r);
+                            }
+                            if (bc > 0) {
+                                logger.info("put unknown to queue, blockCount = " + bc);
+                            }
                         }
                         queues.notifyAll();
                     }
@@ -247,7 +277,13 @@ public class TaggedSocketChannel extends Thread {
                     isRunning = false;
                     for ( BlockingQueue q : queues.values() ) {
                         try {
-                            q.put(e);
+                            final int bc = blockedCount.get();
+                            for ( int i = 0; i <= bc; i++ ) { // one more
+                                q.put(e);
+                            }
+                            if (bc > 0) {
+                                logger.info("put interrupted to queue, blockCount = " + bc);
+                            }
                         } catch (InterruptedException ignored) {
                         }
                     }
@@ -274,15 +310,18 @@ public class TaggedSocketChannel extends Thread {
             isRunning = false;
             for (Entry<Integer, BlockingQueue> tq : queues.entrySet()) {
                 if (tq.getValue().size() != 0) {
-                    logger.warn("queue for tag " + tq.getKey() + " not empty " + tq.getValue());
-                } else {
-                    BlockingQueue q = tq.getValue();
-                    try {
+                    logger.info("queue for tag " + tq.getKey() + " not empty " + tq.getValue());
+                } 
+                BlockingQueue q = tq.getValue();
+                int bc = 0;
+                try {
+                    bc = blockedCount.get();
+                    for ( int i = 0; i <= bc; i++ ) { // one more
                         q.put(new IOException("terminate"));
-                    } catch (InterruptedException ignored) {
                     }
-                    logger.info("put end to queue for tag " + tq.getKey());
+                } catch (InterruptedException ignored) {
                 }
+                logger.info("put IO end to queue for tag " + tq.getKey() + ", blockCount = " + bc);
             }
             queues.notifyAll();
         }

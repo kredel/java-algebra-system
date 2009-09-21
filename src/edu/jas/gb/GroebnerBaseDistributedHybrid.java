@@ -945,6 +945,7 @@ class HybridReducerClient<C extends RingElem<C>> implements Runnable {
                 if ( logger.isDebugEnabled() ) {
                     e.printStackTrace();
                 }
+                logger.info("receive pair, exception ");
                 break;
             }
             logger.debug("receive pair, goon = " + goon);
@@ -1053,7 +1054,7 @@ class HybridReducerClient<C extends RingElem<C>> implements Runnable {
             if ( ! (pp instanceof GBTransportMess) ) {
                 logger.error("invalid acknowledgement " + pp);
             }
-            logger.debug("recieved acknowledgement " + pp);
+            logger.info("recieved acknowledgement " + pp);
         }
         logger.info("terminated, done " + reduction + " reductions");
         if ( !doEnd ) {
