@@ -24,7 +24,7 @@ from edu.jas.gb          import DGroebnerBaseSeq, EGroebnerBaseSeq,\
                                 GroebnerBaseSeq, GroebnerBaseSeqPairSeq,\
                                 GroebnerBasePseudoRecSeq, GroebnerBasePseudoSeq,\
                                 ReductionSeq, GroebnerBaseSeqPairParallel,\
-                                RGroebnerBasePseudoSeq, RGroebnerBaseSeq,\
+                                RGroebnerBasePseudoSeq, RGroebnerBaseSeq, RReductionSeq,\
                                 SolvableGroebnerBaseParallel, SolvableGroebnerBaseSeq
 from edu.jas.gbmod       import ModGroebnerBaseAbstract, ModSolvableGroebnerBaseAbstract,\
                                 SolvableSyzygyAbstract, SyzygyAbstract
@@ -32,7 +32,7 @@ from edu.jas.vector      import OrderedModuleList, ModuleList, GenVector, GenVec
                                 GenMatrix, GenMatrixRing
 from edu.jas.application import ComprehensiveGroebnerBaseSeq, PolyUtilApp,\
                                 Residue, ResidueRing, Ideal, Quotient, QuotientRing,\
-                                Local, LocalRing
+                                Local, LocalRing 
 from edu.jas.kern        import ComputerThreads
 from edu.jas.ufd         import GreatestCommonDivisor, PolyUfdUtil, GCDFactory,\
                                 FactorFactory, SquarefreeFactory
@@ -619,6 +619,17 @@ class ParamIdeal:
             return None;
         G = PolyUtilApp.toProductRes(self.gbsys.list);
         ring = Ring(None,G[0].ring);
+        return ParamIdeal(ring,None,G);
+
+    def regularRepresentationBC(self):
+        '''Convert Groebner system to a boolean closed representation with regular ring coefficents.
+        '''
+        if self.gbsys == None:
+            return None;
+        G = PolyUtilApp.toProductRes(self.gbsys.list);
+        ring = Ring(None,G[0].ring);
+        res = RReductionSeq();
+        G = res.booleanClosure(G);
         return ParamIdeal(ring,None,G);
 
     def regularGB(self):

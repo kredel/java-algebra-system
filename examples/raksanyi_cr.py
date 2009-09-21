@@ -54,6 +54,10 @@ rs = gs.regularRepresentation();
 print "regular representation: " + str(rs);
 print;
 
+rs = gs.regularRepresentationBC();
+print "boolean closed regular representation: " + str(rs);
+print;
+
 startLog();
 
 bg = rs.isRegularGB();
