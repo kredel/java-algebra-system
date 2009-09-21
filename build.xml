@@ -325,10 +325,10 @@
   </delete>
 </target>
 
-<target name="untabify-isdone" depends="vorher" >
+<target name="untabify" depends="vorher" >
   <fixcrlf srcdir="${src}"
        tab="remove"
-       tablength="5"
+       tablength="8"
        javafiles="yes"
        includes="**/*.java" 
   />
