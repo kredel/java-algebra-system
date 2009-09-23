@@ -17,6 +17,7 @@ import edu.jas.gb.GroebnerBase;
 import edu.jas.gb.GroebnerBasePseudoSeq;
 import edu.jas.gb.GroebnerBaseSeq;
 import edu.jas.gb.RGroebnerBasePseudoSeq;
+import edu.jas.gb.RReductionSeq;
 import edu.jas.kern.ComputerThreads;
 
 import edu.jas.arith.BigRational;
@@ -43,7 +44,8 @@ public class Examples {
         //example1();
         //example2();
         //example3();
-        example4();
+        //example4();
+        example5();
     }
 
 
@@ -145,7 +147,6 @@ public class Examples {
                 L.add(pp);
             }
         }
-
         System.out.println("L = " + L);
 
         //PolynomialList<Product<Residue<BigRational>>> Lp = null;
@@ -286,6 +287,71 @@ public class Examples {
         L = bb.GB( L );
         System.out.println("CGB( L )   = " + L );
         System.out.println("isCGB( L ) = " + bb.isGB(L) );
+
+        ComputerThreads.terminate();
+    }
+
+
+    /**
+     * example5.
+     * comprehensive GB of List<GenPolynomial<GenPolynomial<BigRational>>>
+     * and GB for regular ring.
+     */
+    public static void example5() {
+        int kl = 2;
+        int ll = 4;
+        int el = 3;
+        float q = 0.3f; //0.4f
+        GenPolynomialRing<BigRational> cfac;
+        GenPolynomialRing<GenPolynomial<BigRational>> fac;
+
+        List<GenPolynomial<GenPolynomial<BigRational>>> L;
+
+        ComprehensiveGroebnerBaseSeq<BigRational> bb;
+
+        GenPolynomial<GenPolynomial<BigRational>> a;
+        GenPolynomial<GenPolynomial<BigRational>> b;
+        GenPolynomial<GenPolynomial<BigRational>> c;
+
+        BigRational coeff = new BigRational(kl);
+        String[] cv = { "a", "b" }; 
+        cfac = new GenPolynomialRing<BigRational>(coeff,2,cv);
+        String[] v = { "x", "y" }; 
+        fac = new GenPolynomialRing<GenPolynomial<BigRational>>(cfac,2,v);
+        bb = new ComprehensiveGroebnerBaseSeq<BigRational>(coeff);
+
+        L = new ArrayList<GenPolynomial<GenPolynomial<BigRational>>>();
+
+        a = fac.random(kl, ll, el, q );
+        b = fac.random(kl, ll, el, q );
+        c = a; //c = fac.random(kl, ll, el, q );
+
+        if ( a.isZERO() || b.isZERO() || c.isZERO() ) {
+            return;
+        }
+
+        L.add(a);
+        L.add(b);
+        L.add(c);
+        System.out.println("CGB exam L = " + L );
+        GroebnerSystem<BigRational> sys = bb.GBsys( L );
+        boolean ig = bb.isGB(sys.getCGB());
+        System.out.println("CGB( L )   = " + sys.getCGB() );
+        System.out.println("isCGB( L ) = " + ig );
+
+        List<GenPolynomial<Product<Residue<BigRational>>>> Lr, bLr;
+        RReductionSeq<Product<Residue<BigRational>>> res = new RReductionSeq<Product<Residue<BigRational>>>();
+
+        Lr = PolyUtilApp.<BigRational> toProductRes(sys.list);
+        bLr = res.booleanClosure(Lr);
+
+        System.out.println("booleanClosed(Lr)   = " + bLr );
+
+        if ( bLr.size() > 0 ) { 
+            GroebnerBase<Product<Residue<BigRational>>> rbb 
+               = new RGroebnerBasePseudoSeq<Product<Residue<BigRational>>>(bLr.get(0).ring.coFac);
+            System.out.println("isRegularGB(Lr) = " + rbb.isGB(bLr));
+        }
 
         ComputerThreads.terminate();
     }
