@@ -198,6 +198,7 @@ public class MultiplicativeSet<C extends GcdRingElem<C>> implements Serializable
      * Add polynomial to mset. 
      * @param cc polynomial to be added to mset.
      * @return new multiplicative set.
+     * <b>Note:</b> must be overridden in sub-classes.
      */
     public MultiplicativeSet<C> add(GenPolynomial<C> cc) {
         if (cc == null || cc.isZERO() || cc.isConstant()) { 
@@ -235,6 +236,7 @@ public class MultiplicativeSet<C extends GcdRingElem<C>> implements Serializable
      * Replace polynomial list of mset. 
      * @param L polynomial list to replace mset.
      * @return new multiplicative set.
+     * <b>Note:</b> must be overridden in sub-classes.
      */
     public MultiplicativeSet<C> replace(List<GenPolynomial<C>> L) {
         MultiplicativeSet<C> ms = new MultiplicativeSet<C>(ring);

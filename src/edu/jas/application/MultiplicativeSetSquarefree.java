@@ -27,7 +27,7 @@ import edu.jas.ufd.SquarefreeFactory;
 
 
 /**
- * Multiplicative set of squarefree polynomials.
+ * Multiplicative set of squarefree and co-prime polynomials.
  * a, b in M implies a*b in M, 1 in M.
  * @param <C> coefficient type
  * @author Heinz Kredel.

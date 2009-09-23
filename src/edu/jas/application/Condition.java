@@ -56,7 +56,8 @@ public class Condition<C extends GcdRingElem<C>> implements Serializable {
 
 
     /**
-     * Condition constructor. Constructs an empty condition.
+     * Condition constructor. Constructs an empty condition with
+     * squarefree multiplicative set.
      * @param ring polynomial ring factory for coefficients.
      */
     public Condition(GenPolynomialRing<C> ring) {
@@ -68,7 +69,8 @@ public class Condition<C extends GcdRingElem<C>> implements Serializable {
 
 
     /**
-     * Condition constructor.
+     * Condition constructor. Constructs a condition with
+     * squarefree multiplicative set.
      * @param z an ideal of zero polynomials.
      */
     public Condition(Ideal<C> z) {
@@ -77,7 +79,7 @@ public class Condition<C extends GcdRingElem<C>> implements Serializable {
 
 
     /**
-     * Condition constructor.
+     * Condition constructor. 
      * @param nz a list of non-zero polynomials.
      */
     public Condition(MultiplicativeSet<C> nz) {

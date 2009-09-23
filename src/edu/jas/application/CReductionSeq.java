@@ -24,7 +24,7 @@ import edu.jas.ufd.GreatestCommonDivisor;
 
 /**
  * Polynomial parametric ring reduction sequential use algorithm. Implements
- * normalform and condition stuff.
+ * normalform, condition construction and polynomial determination.
  * @param <C> coefficient type
  * @author Heinz Kredel
  */
@@ -62,6 +62,7 @@ public class CReductionSeq<C extends GcdRingElem<C>>
 
     /**
      * Constructor.
+     * @param rf coefficient factory.
      */
     public CReductionSeq(RingFactory<C> rf) {
         cofac = rf;

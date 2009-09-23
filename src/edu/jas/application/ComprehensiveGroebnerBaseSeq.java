@@ -240,7 +240,9 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         GenPolynomialRing<GenPolynomial<C>> cf = f.ring;
 
         List<ColoredSystem<C>> CS = cred.determine(F);
-        // System.out.println("determined F = " + CS);
+        if (logger.isDebugEnabled()) {
+            logger.info("determined polynomials =\n" + CS);
+        }
         // substitute zero conditions into parameter coefficients and test
         for (ColoredSystem<C> cs : CS) {
             Ideal<C> id = cs.condition.zero;
