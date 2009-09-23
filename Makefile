@@ -88,6 +88,7 @@ JAVAC=$(JDK)/javac -classpath $(MYCLASSPATH) -d . -Xlint:unchecked
 #-Djava.util.logging.config.file=logging.properties 
 #JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -verbose:gc 
 JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -server -Xms700M -Xmx1000M -XX:+AggressiveHeap -XX:+UseParallelGC -XX:ParallelGCThreads=2 -verbose:gc 
+#-Xrunhprof:cpu=samples,heap=sites,force=n
 #-Xbatch
 #old#JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -Xms300M -Xmx600M -XX:+AggressiveHeap -XX:+UseParallelGC -verbose:gc 
 #JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -verbose:gc -Xrunhprof:cpu=times,format=a
@@ -291,10 +292,11 @@ tests:
 
 SVNREV=svnlook youngest $(SVNREPO)/jas
 SVNDATE=svnlook date $(SVNREPO)/jas
-# Jan 2008 #SVNSRT=1584 
+# Jan 2008 SVNSRT=1584 
 # Jun 2008 SVNSRT=1882
-# Sep 2008
-SVNSRT=2118
+# Sep 2008 SVNSRT=2118
+# jan 2009 
+SVNSRT=2288
 
 export:
 	rm -rf ~/jas-versions/$(VERSION)
