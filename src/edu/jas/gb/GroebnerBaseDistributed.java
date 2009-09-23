@@ -29,8 +29,8 @@ import edu.jas.util.SocketChannel;
 
 /**
  * Groebner Base distributed algorithm. Implements a distributed memory parallel
- * version of Groebner bases. Using pairlist class, slaves maintain pairlist,
- * distributed slaves do reduction.
+ * version of Groebner bases. Using pairlist class,
+ * distributed tasks do reduction, one communication channel per task.
  * @param <C> coefficient type
  * @author Heinz Kredel
  */
@@ -128,7 +128,7 @@ public class GroebnerBaseDistributed<C extends RingElem<C>> extends GroebnerBase
 
 
     /**
-     * Distributed Groebner base. Slaves maintain pairlist.
+     * Distributed Groebner base. 
      * @param modv number of module variables.
      * @param F polynomial list.
      * @return GB(F) a Groebner base of F or null, if a IOException occurs.

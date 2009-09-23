@@ -33,8 +33,7 @@ import edu.jas.util.SocketChannel;
 /**
  * Groebner Base distributed algorithm.
  * Implements a distributed memory parallel version of Groebner bases.
- * Using pairlist class, slave threads maintain pairlist,
- * distributed slaves do reduction.
+ * Using pairlist class, distributed tasks do reduction.
  * Makes some effort to produce the same sequence of critical pairs 
  * as in the sequential version.
  * However already reduced pairs are not rereduced if new

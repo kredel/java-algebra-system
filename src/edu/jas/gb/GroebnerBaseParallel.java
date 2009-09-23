@@ -25,7 +25,6 @@ import edu.jas.util.ThreadPool;
 /**
  * Groebner Base parallel algortihm.
  * Implements a shared memory parallel version of Groebner bases.
- * Slaves maintain pairlist.
  * @param <C> coefficient type
  * @author Heinz Kredel
  */
@@ -117,7 +116,6 @@ public class GroebnerBaseParallel<C extends RingElem<C>>
 
     /**
      * Parallel Groebner base using pairlist class.
-     * Slaves maintain pairlist.
      * @param modv number of module variables.
      * @param F polynomial list.
      * @return GB(F) a Groebner base of F.
@@ -176,8 +174,7 @@ public class GroebnerBaseParallel<C extends RingElem<C>>
      * @return minimalGB(F) a minimal Groebner base of Fp.
      */
     @Override
-     public List<GenPolynomial<C>> 
-        minimalGB(List<GenPolynomial<C>> Fp) {  
+    public List<GenPolynomial<C>> minimalGB(List<GenPolynomial<C>> Fp) {  
         GenPolynomial<C> a;
         ArrayList<GenPolynomial<C>> G;
         G = new ArrayList<GenPolynomial<C>>( Fp.size() );
@@ -227,7 +224,7 @@ public class GroebnerBaseParallel<C extends RingElem<C>>
             return G;
         }
 
-        MiReducer<C>[] mirs = new MiReducer[ G.size() ];
+        MiReducer<C>[] mirs = (MiReducer<C>[]) new MiReducer[ G.size() ];
         int i = 0;
         F = new ArrayList<GenPolynomial<C>>( G.size() );
         while ( G.size() > 0 ) {

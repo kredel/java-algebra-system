@@ -26,10 +26,10 @@ import edu.jas.util.ThreadPool;
 
 
 /**
- * Groebner Base distributed hybrid algorithm. Implements a distributed memory
- * with multi-core CPUs parallel version of Groebner bases. Using pairlist
- * class, proxy tasks maintain pairlist, distributed multiple tasks do
- * reduction.
+ * Groebner Base distributed hybrid algorithm. Implements a
+ * distributed memory with multi-core CPUs parallel version of
+ * Groebner bases. Using pairlist class, distributed multi-threaded
+ * tasks do reduction, one communication channel per remote node.
  * @param <C> coefficient type
  * @author Heinz Kredel
  */
@@ -179,7 +179,7 @@ public class GroebnerBaseDistributedHybrid<C extends RingElem<C>> extends Groebn
 
 
     /**
-     * Distributed Groebner base. Slaves maintain pairlist.
+     * Distributed hybrid Groebner base. 
      * @param modv number of module variables.
      * @param F polynomial list.
      * @return GB(F) a Groebner base of F or null, if a IOException occurs.
