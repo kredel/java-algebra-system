@@ -258,7 +258,7 @@ public class DistHashTable<K, V> extends AbstractMap<K, V> /* implements Map<K,V
             throw new NullPointerException("null keys or values not allowed");
         }
         try {
-            DHTTransport<K, V> tc = new DHTTransport<K, V>(key, value);
+            DHTTransport<K,V> tc = DHTTransport.<K,V> create(key, value);
             channel.send(tc);
             //System.out.println("send: "+tc+" @ "+listener);
         } catch (IOException e) {
@@ -416,7 +416,7 @@ class DHTListener<K, V> extends Thread {
                         //logger.debug("receive, put(" + tc + ")");
                         synchronized (theList) {
                             theList.put(key, tc.value());
-                            theList.notify();
+                            theList.notifyAll();
                         }
                     }
                 }

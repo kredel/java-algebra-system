@@ -46,6 +46,12 @@ public class DistHashTableServer<K> extends Thread {
     protected final SortedMap<K, DHTTransport> theList;
 
 
+    private long etime;
+    private long dtime;
+    private long ertime;
+    private long drtime;
+
+
     /**
      * Constructs a new DistHashTableServer.
      */
@@ -71,6 +77,10 @@ public class DistHashTableServer<K> extends Thread {
         this.cf = cf;
         servers = new ArrayList<DHTBroadcaster<K>>();
         theList = new TreeMap<K, DHTTransport>();
+        etime = DHTTransport.etime;
+        dtime = DHTTransport.dtime;
+        ertime = DHTTransport.ertime;
+        drtime = DHTTransport.drtime;
     }
 
 
@@ -172,8 +182,10 @@ public class DistHashTableServer<K> extends Thread {
         if (cf != null) {
             cf.terminate();
         }
+        int svs = 0;
         if (servers != null) {
             synchronized (servers) {
+                svs = servers.size();
                 Iterator<DHTBroadcaster<K>> it = servers.iterator();
                 while (it.hasNext()) {
                     DHTBroadcaster<K> br = it.next();
@@ -199,10 +211,15 @@ public class DistHashTableServer<K> extends Thread {
                 }
                 servers.clear();
             }
-            logger.info("broadcasters terminated");
+            logger.info(svs + " broadcasters terminated");
             //? servers = null;
         }
         logger.debug("DHTBroadcasters terminated");
+        long enc = DHTTransport.etime - etime;
+        long dec = DHTTransport.dtime - dtime;
+        long encr = DHTTransport.ertime - ertime;
+        long decr = DHTTransport.drtime - drtime;
+        logger.info("DHT time: encode = " + enc + ", decode = " + dec + ", enc raw = " + encr + ", dec raw = " + decr + ", total = " + (enc+dec+encr+decr));
         if (mythread == null) {
             return;
         }
