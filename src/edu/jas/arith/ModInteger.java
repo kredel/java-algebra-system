@@ -31,7 +31,7 @@ public final class ModInteger implements GcdRingElem<ModInteger> {
 
 
     /** The constructor creates a ModInteger object 
-     * from two BigInteger objects module and value part. 
+     * from a ModIntegerRing and a value part. 
      * @param m ModIntegerRing.
      * @param a math.BigInteger.
      */
@@ -42,7 +42,7 @@ public final class ModInteger implements GcdRingElem<ModInteger> {
 
 
     /** The constructor creates a ModInteger object 
-     * from two longs objects module and value part. 
+     * from a ModIntegerRing and a long value part. 
      * @param m ModIntegerRing.
      * @param a long.
      */
@@ -52,7 +52,7 @@ public final class ModInteger implements GcdRingElem<ModInteger> {
 
 
     /** The constructor creates a ModInteger object 
-     * from two String objects module and value part. 
+     * from a ModIntegerRing and a String value part. 
      * @param m ModIntegerRing.
      * @param s String.
      */
@@ -62,7 +62,7 @@ public final class ModInteger implements GcdRingElem<ModInteger> {
 
 
     /** The constructor creates a 0 ModInteger object 
-     * from a BigInteger object module. 
+     * from a given ModIntegerRing. 
      * @param m ModIntegerRing.
      */
     public ModInteger(ModIntegerRing m) {
@@ -223,7 +223,8 @@ public final class ModInteger implements GcdRingElem<ModInteger> {
      */
     @Override
     public int hashCode() {
-        return 37 * val.hashCode();
+        //return 37 * val.hashCode();
+        return val.hashCode();
     }
 
 

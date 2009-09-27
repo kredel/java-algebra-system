@@ -244,7 +244,7 @@ public final class ModIntegerRing implements RingFactory<ModInteger> {
         if ( ! ( b instanceof ModIntegerRing ) ) {
             return false;
         }
-     ModIntegerRing m = (ModIntegerRing)b;
+        ModIntegerRing m = (ModIntegerRing)b;
         return ( 0 == modul.compareTo( m.modul ) );
     }
 

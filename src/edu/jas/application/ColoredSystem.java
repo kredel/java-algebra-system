@@ -17,7 +17,7 @@ import edu.jas.structure.GcdRingElem;
 
 
 /**
- * Container for a condition, a corresponding colored polynomial system and a
+ * Container for a condition, a corresponding colored polynomial list and a
  * Groebner base pair list.
  * @param <C> coefficient type
  */

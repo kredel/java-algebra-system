@@ -21,7 +21,7 @@ import edu.jas.poly.ExpVector;
 
 
 /**
- * Condition. An ideal of polynomials considered to be zero and a list of
+ * Condition. An ideal of polynomials considered to be zero and a multiplicative set of
  * polynomials considered to be non-zero.
  * @param <C> coefficient type
  * @author Heinz Kredel.

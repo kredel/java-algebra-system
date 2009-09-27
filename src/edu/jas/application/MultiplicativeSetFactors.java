@@ -119,7 +119,7 @@ public class MultiplicativeSetFactors<C extends GcdRingElem<C>> extends Multipli
      * @param L polynomial list to replace mset.
      * @return new multiplicative set.
      */
-    public MultiplicativeSet<C> replace(List<GenPolynomial<C>> L) {
+    public MultiplicativeSetFactors<C> replace(List<GenPolynomial<C>> L) {
         MultiplicativeSetFactors<C> ms = new MultiplicativeSetFactors<C>(ring);
         if (L == null || L.size() == 0) { 
             return ms;

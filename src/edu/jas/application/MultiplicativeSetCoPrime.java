@@ -118,7 +118,7 @@ public class MultiplicativeSetCoPrime<C extends GcdRingElem<C>> extends Multipli
      * @param L polynomial list to replace mset.
      * @return new multiplicative set.
      */
-    public MultiplicativeSet<C> replace(List<GenPolynomial<C>> L) {
+    public MultiplicativeSetCoPrime<C> replace(List<GenPolynomial<C>> L) {
         MultiplicativeSetCoPrime<C> ms = new MultiplicativeSetCoPrime<C>(ring);
         if (L == null || L.size() == 0) { 
             return ms;

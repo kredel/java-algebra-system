@@ -26,7 +26,7 @@ import edu.jas.ufd.SquarefreeAbstract;
 
 
 /**
- * Comprehensive Groebner Base sequential algorithm. Implements comprehensive
+ * Comprehensive Groebner Base sequential algorithm. Implements faithful comprehensive
  * Groebner bases via Groebner systems and CGB test.
  * @param <C> coefficient type
  * @author Heinz Kredel

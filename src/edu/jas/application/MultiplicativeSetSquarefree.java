@@ -118,7 +118,7 @@ public class MultiplicativeSetSquarefree<C extends GcdRingElem<C>> extends Multi
      * @param L polynomial list to replace mset.
      * @return new multiplicative set.
      */
-    public MultiplicativeSet<C> replace(List<GenPolynomial<C>> L) {
+    public MultiplicativeSetSquarefree<C> replace(List<GenPolynomial<C>> L) {
         MultiplicativeSetSquarefree<C> ms = new MultiplicativeSetSquarefree<C>(ring);
         if (L == null || L.size() == 0) { 
             return ms;

@@ -21,7 +21,7 @@ import edu.jas.structure.GcdRingElem;
 
 /**
  * Container for a Groebner system. 
- * It contains a list of colored polynomial systems and a
+ * It contains a list of colored systems and a
  * list of parametric polynomials representing the 
  * corresponding comprehensive Groebner base.
  * @param <C> coefficient type
