@@ -282,7 +282,7 @@ clean:
 
 tests:
 	ant test 2>&1 | tee t.out
-	find examples -name "*.py"|grep -v jas.py |grep -v plot|grep -v versuch|sort|xargs -L 1 echo "time jython" > ./all_jython.sh
+	find examples -name "*.py"|grep -v jas.py |grep -v plot|grep -v versuch|sort|xargs -L 1 echo "time jython" | awk '{ printf "echo %s\n", $$0; printf "%s\n", $$0 }' > ./all_jython.sh
 	time source all_jython.sh 2>&1 | tee tj.out
 	-grep FAIL t.out
 	-grep File tj.out
