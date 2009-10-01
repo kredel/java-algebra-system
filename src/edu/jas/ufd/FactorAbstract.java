@@ -353,9 +353,9 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
      * @return [p_1, ..., p_k] with p = prod_{i=1,...,k} p_i**{e_i} for some
      *         e_i for all p in L.
      */
-    public List<GenPolynomial<C>> factorsRadical(List<GenPolynomial<C>> P) {
+    public List<GenPolynomial<C>> factorsRadical(List<GenPolynomial<C>> L) {
         SortedSet<GenPolynomial<C>> facs = new TreeSet<GenPolynomial<C>>();
-        for ( GenPolynomial<C> p : P ) {
+        for ( GenPolynomial<C> p : L ) {
             List<GenPolynomial<C>> fs = factorsRadical(p);
             facs.addAll(fs);
         }
