@@ -1220,10 +1220,14 @@ public class GenPolynomial<C extends RingElem<C> >
         ret[2] = null;
         if ( S == null || S.isZERO() ) {
             ret[0] = this;
+            ret[1] = this.ring.getONE();
+            ret[2] = this.ring.getZERO();
             return ret;
         }
         if ( this.isZERO() ) {
             ret[0] = S;
+            ret[1] = this.ring.getZERO();
+            ret[2] = this.ring.getONE();
             return ret;
         }
         if ( ring.nvar != 1 ) {
@@ -1266,6 +1270,60 @@ public class GenPolynomial<C extends RingElem<C> >
 
 
     /**
+     * GenPolynomial half extended greatest comon divisor.
+     * Only for univariate polynomials over fields.
+     * @param S GenPolynomial.
+     * @return [ gcd(this,S), a ] with a*this + b*S = gcd(this,S).
+     */
+    @SuppressWarnings("unchecked")
+    public GenPolynomial<C>[] hegcd(GenPolynomial<C> S) {
+        GenPolynomial<C>[] ret = new GenPolynomial[2];
+        ret[0] = null;
+        ret[1] = null;
+        if ( S == null || S.isZERO() ) {
+            ret[0] = this;
+            ret[1] = this.ring.getONE();
+            return ret;
+        }
+        if ( this.isZERO() ) {
+            ret[0] = S;
+            return ret;
+        }
+        if ( ring.nvar != 1 ) {
+           throw new RuntimeException(this.getClass().getName()
+                                      + " not univariate polynomials" + ring);
+        }
+        GenPolynomial<C>[] qr;
+        GenPolynomial<C> q = this; 
+        GenPolynomial<C> r = S;
+        GenPolynomial<C> c1 = ring.getONE().clone();
+        GenPolynomial<C> d1 = ring.getZERO().clone();
+        GenPolynomial<C> x1;
+        GenPolynomial<C> x2;
+        while ( !r.isZERO() ) {
+            qr = q.divideAndRemainder(r);
+            q = qr[0];
+            x1 = c1.subtract( q.multiply(d1) );
+            c1 = d1; 
+            d1 = x1; 
+            q = r;
+            r = qr[1];
+        }
+        // normalize ldcf(q) to 1, i.e. make monic
+        C g = q.leadingBaseCoefficient();
+        if ( g.isUnit() ) {
+            C h = g.inverse();
+            q = q.multiply( h );
+            c1 = c1.multiply( h );
+        }
+        //assert ( ((c1.multiply(this)).remainder(S).equals(q) )); 
+        ret[0] = q;
+        ret[1] = c1;
+        return ret;
+    }
+
+
+    /**
      * GenPolynomial inverse.
      * Required by RingElem.
      * Throws not implemented exception.
@@ -1289,12 +1347,12 @@ public class GenPolynomial<C extends RingElem<C> >
         if ( this.isZERO() ) { 
            throw new NotInvertibleException("zero is not invertible");
         }
-        GenPolynomial<C>[] xegcd = this.egcd(m);
-        GenPolynomial<C> a = xegcd[0];
+        GenPolynomial<C>[] hegcd = this.hegcd(m);
+        GenPolynomial<C> a = hegcd[0];
         if ( !a.isUnit() ) { // gcd != 1
            throw new NotInvertibleException("element not invertible, gcd != 1");
         }
-        GenPolynomial<C> b = xegcd[1];
+        GenPolynomial<C> b = hegcd[1];
         if ( b.isZERO() ) { // when m divides this, e.g. m.isUnit()
            throw new NotInvertibleException("element not invertible, divisible by modul");
         }

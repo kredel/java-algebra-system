@@ -276,6 +276,17 @@ public class RatGenPolynomialTest extends TestCase {
      assertEquals("gcd(a,b) = a s + b t", c, x );
 
 
+     gst = a.hegcd(b);
+     //System.out.println("hegcd = " + gst[0]);
+     //System.out.println("s = " + gst[1]);
+     c = gst[0];
+     d = gst[1];
+     assertEquals("g = gcd(a,b)", c, g );
+
+     x = a.multiply(d).remainder(b).monic(); 
+     //System.out.println("x = " + x);
+     assertEquals("gcd(a,b) = a s mod b", c, x );
+
      //System.out.println("g = " + g);
      //System.out.println("h = " + h);
      c = h.modInverse(g);
