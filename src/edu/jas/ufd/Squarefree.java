@@ -37,6 +37,14 @@ public interface Squarefree<C extends GcdRingElem<C>> {
 
 
     /**
+     * GenPolynomial list test if squarefree.
+     * @param L list of GenPolynomial.
+     * @return true if each P in L is squarefree, else false.
+     */
+    public boolean isSquarefree(List<GenPolynomial<C>> L);
+
+
+    /**
      * GenPolynomial squarefree factorization.
      * @param P GenPolynomial.
      * @return [p_1 -> e_1, ..., p_k -> e_k] with P = prod_{i=1,...,k} p_i^{e_i}
@@ -82,5 +90,14 @@ public interface Squarefree<C extends GcdRingElem<C>> {
      *         polynomials.
      */
     public List<GenPolynomial<C>> coPrimeSquarefree(GenPolynomial<C> a, List<GenPolynomial<C>> P);
+
+
+    /**
+     * Test if list of GenPolynomials is squarefree and co-prime.
+     * @param B list of GenPolynomials.
+     * @return true, if for all b != c in B gcd(b,c) = 1 and 
+     *          each b in B is squarefree, else false. 
+     */
+    public boolean isCoPrimeSquarefree(List<GenPolynomial<C>> B);
 
 }

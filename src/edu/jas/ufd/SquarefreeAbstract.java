@@ -103,6 +103,24 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
 
 
     /**
+     * GenPolynomial list test if squarefree.
+     * @param L list of GenPolynomial.
+     * @return true if each P in L is squarefree, else false.
+     */
+    public boolean isSquarefree(List<GenPolynomial<C>> L) {
+        if ( L == null || L.isEmpty() ) {
+            return true;
+        }
+        for ( GenPolynomial<C> P : L ) {
+            if (! isSquarefree(P) ) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    /**
      * Recursive GenPolynomial test if is squarefree.
      * @param P recursive univariate GenPolynomial.
      * @return true if P is squarefree, else false.
@@ -167,6 +185,23 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
             B = engine.coPrime(f,B);
         }
         return B;
+    }
+
+
+    /**
+     * Test if list of GenPolynomials is squarefree and co-prime.
+     * @param B list of GenPolynomials.
+     * @return true, if for all b != c in B gcd(b,c) = 1 and 
+     *          each b in B is squarefree, else false. 
+     */
+    public boolean isCoPrimeSquarefree(List<GenPolynomial<C>> B) {
+        if (B == null || B.isEmpty()) {
+            return true;
+        }
+        if ( !engine.isCoPrime(B) ) {
+            return false;
+        }
+        return isSquarefree(B);
     }
 
 

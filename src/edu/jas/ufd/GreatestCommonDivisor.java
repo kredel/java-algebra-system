@@ -5,6 +5,7 @@
 package edu.jas.ufd;
 
 
+import java.util.List;
 import java.io.Serializable;
 
 import edu.jas.poly.GenPolynomial;
@@ -80,5 +81,44 @@ public interface GreatestCommonDivisor<C extends GcdRingElem<C>> extends Seriali
      * @return res(P,S).
      */
     public GenPolynomial<C> resultant(GenPolynomial<C> P, GenPolynomial<C> S);
+
+
+    /**
+     * GenPolynomial co-prime list.
+     * @param A list of GenPolynomials.
+     * @return B with gcd(b,c) = 1 for all b != c in B and for all non-constant
+     *         a in A there exists b in B with b|a. B does not contain zero or
+     *         constant polynomials.
+     */
+    public List<GenPolynomial<C>> coPrime(List<GenPolynomial<C>> A);
+
+
+    /**
+     * GenPolynomial co-prime list.
+     * @param a GenPolynomial.
+     * @param P co-prime list of GenPolynomials.
+     * @return B with gcd(b,c) = 1 for all b != c in B and for non-constant a
+     *         there exists b in P with b|a. B does not contain zero or constant
+     *         polynomials.
+     */
+    public List<GenPolynomial<C>> coPrime(GenPolynomial<C> a, List<GenPolynomial<C>> P);
+
+
+    /**
+     * GenPolynomial test for co-prime list.
+     * @param A list of GenPolynomials.
+     * @return true if gcd(b,c) = 1 for all b != c in B, else false.
+     */
+    public boolean isCoPrime(List<GenPolynomial<C>> A);
+
+
+    /**
+     * GenPolynomial test for co-prime list of given list.
+     * @param A list of GenPolynomials.
+     * @param P list of co-prime GenPolynomials.
+     * @return true if isCoPrime(P) and for all a in A exists p in P with p | a,
+     *         else false.
+     */
+    public boolean isCoPrime(List<GenPolynomial<C>> P, List<GenPolynomial<C>> A);
 
 }
