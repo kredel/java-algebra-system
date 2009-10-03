@@ -15,7 +15,6 @@ import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
-import edu.jas.structure.Power;
 
 
 /**
@@ -917,17 +916,39 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         if ( A == null || P == null || F == null || e == 0 ) {
             throw new IllegalArgumentException("null A, P, F or e = 0 not allowed");
         }
-        GenPolynomial<C> A0 = A.ring.getZERO();
-        for ( GenPolynomial<C> Fi : F ) {
-            A0 = A0.multiply(P);
-            A0 = A0.sum(Fi);
-            //System.out.println("A0 = " + A0);
-        }
+        GenPolynomial<C> A0 = basePartialFractionValue(P,e,F);
+//         A.ring.getZERO();
+//         for ( GenPolynomial<C> Fi : F ) {
+//             A0 = A0.multiply(P);
+//             A0 = A0.sum(Fi);
+//             //System.out.println("A0 = " + A0);
+//         }
         boolean t = A.equals(A0);
         if ( ! t ) {
             System.out.println("not isPartFrac = " + A0);
         }
         return t;
+    }
+
+
+    /**
+     * Test for Univariate GenPolynomial partial fraction decomposition. 
+     * @param P univariate GenPolynomial.
+     * @param e exponent for P.
+     * @param F list of univariate GenPolynomials from a partial fraction computation.
+     * @return (F0 + sum( Fi / P^i )) * P^e.
+     */
+    public GenPolynomial<C> basePartialFractionValue(GenPolynomial<C> P, int e, List<GenPolynomial<C>> F) {
+        if ( P == null || F == null || e == 0 ) {
+            throw new IllegalArgumentException("null P, F or e = 0 not allowed");
+        }
+        GenPolynomial<C> A0 = P.ring.getZERO();
+        for ( GenPolynomial<C> Fi : F ) {
+            A0 = A0.multiply(P);
+            A0 = A0.sum(Fi);
+            //System.out.println("A0 = " + A0);
+        }
+        return A0;
     }
 
 }

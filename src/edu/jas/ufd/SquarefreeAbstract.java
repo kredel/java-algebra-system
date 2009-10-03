@@ -375,4 +375,141 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
         return factors;
     }
 
+
+    /**
+     * Univariate GenPolynomial partial fraction decomposition. 
+     * @param A univariate GenPolynomial.
+     * @param D sorted map [d_1 -> e_1, ..., d_k -> e_k] with d_i squarefree.
+     * @return [ [Ai0, Ai1,..., Aie_i], i=0,...,k ] with A/prod(D) = A0 + sum( sum ( Aij/di^j ) ) with deg(Aij) < deg(di).
+     */
+    public List<List<GenPolynomial<C>>> basePartialFraction(GenPolynomial<C> A, SortedMap<GenPolynomial<C>,Long> D) {
+        if ( D == null || A == null ) {
+            throw new IllegalArgumentException("null A or D not allowed");
+        }
+        List<List<GenPolynomial<C>>> pf = new ArrayList<List<GenPolynomial<C>>>( D.size()+1 );
+        if ( D.size() == 0 ) {
+            return pf;
+        }
+        //List<GenPolynomial<C>> fi;
+        if ( A.isZERO() ) {
+            for ( GenPolynomial<C> d : D.keySet() ) {
+                long e = D.get(d);
+                int e1 = (int)e + 1;
+                List<GenPolynomial<C>> fi = new ArrayList<GenPolynomial<C>>(e1);
+                for ( int i = 0; i < e1; i++ ) {
+                    fi.add(A);
+                }
+                pf.add(fi);
+            }
+            List<GenPolynomial<C>> fi = new ArrayList<GenPolynomial<C>>(1);
+            fi.add(A);
+            pf.add(0,fi);
+            return pf;
+        }
+        // A != 0, D != empty
+        List<GenPolynomial<C>> Dp = new ArrayList<GenPolynomial<C>>( D.size() );
+        for ( GenPolynomial<C> d : D.keySet() ) {
+            long e = D.get(d);
+            GenPolynomial<C> f = Power.<GenPolynomial<C>> positivePower(d, e);
+            Dp.add(f);
+        }
+        List<GenPolynomial<C>> F = engine.basePartialFraction(A,Dp);
+        System.out.println("fraction list = " + F.size());
+        GenPolynomial<C> A0 = F.remove(0);
+        List<GenPolynomial<C>> fi = new ArrayList<GenPolynomial<C>>(1);
+        fi.add(A0);
+        pf.add(fi);
+        int i = 0;
+        for ( GenPolynomial<C> d : D.keySet() ) { // assume fixed sequence order
+            long e = D.get(d);
+            int ei = (int)e;
+            GenPolynomial<C> gi = F.get(i); // assume fixed sequence order
+            List<GenPolynomial<C>> Fi = engine.basePartialFraction(gi,d,ei);
+            pf.add(Fi);
+            i++;
+        }
+        return pf;
+    }
+
+
+    /**
+     * Test for Univariate GenPolynomial partial fraction decomposition. 
+     * @param A univariate GenPolynomial.
+     * @param D sorted map [d_1 -> e_1, ..., d_k -> e_k] with d_i squarefree.
+     * @param F a list of lists [ [Ai0, Ai1,..., Aie_i], i=0,...,k ] 
+     * @return true, if A/prod(D) = A0 + sum( sum ( Aij/di^j ) ),
+               else false.
+     */
+    public boolean isBasePartialFraction(GenPolynomial<C> A, SortedMap<GenPolynomial<C>,Long> D, List<List<GenPolynomial<C>>> F) {
+        if ( D == null || A == null || F == null ) {
+            throw new IllegalArgumentException("null A, D or F not allowed");
+        }
+        if ( D.isEmpty() && F.isEmpty() ) {
+            return true;
+        }
+        if ( D.isEmpty() || F.isEmpty() ) {
+            return false;
+        }
+        List<GenPolynomial<C>> Dp = new ArrayList<GenPolynomial<C>>( D.size() );
+        for ( GenPolynomial<C> d : D.keySet() ) {
+            long e = D.get(d);
+            GenPolynomial<C> f = Power.<GenPolynomial<C>> positivePower(d, e);
+            Dp.add(f);
+        }
+        List<GenPolynomial<C>> fi = F.get(0);
+        if ( fi.size() != 1 ) {
+            System.out.println("size(fi) != 1 " + fi);
+            return false;
+        }
+        boolean t;
+        GenPolynomial<C> A0 = fi.get(0);
+        //System.out.println("A0 = " + A0);
+
+//         List<GenPolynomial<C>> Fp = engine.basePartialFraction(A,Dp);
+//         System.out.println("fraction list = " + F.size());
+//         t = engine.isBasePartialFraction(A,Dp,Fp);
+//         if ( ! t ) {
+//             System.out.println("not recursion isPartFrac = " + Fp);
+//             return false;
+//         }
+//         GenPolynomial<C> A0p = Fp.remove(0);
+//         if ( ! A0.equals(A0p) ) {
+//             System.out.println("A0 != A0p " + A0p);
+//             return false;
+//         }
+
+        List<GenPolynomial<C>> Qp = new ArrayList<GenPolynomial<C>>(D.size()+1);
+        int i = 0;
+        for ( GenPolynomial<C> d : D.keySet() ) { // assume fixed sequence order
+            long e = D.get(d);
+            int ei = (int)e;
+            List<GenPolynomial<C>> Fi = F.get(i+1); // assume fixed sequence order
+
+//            GenPolynomial<C> pi = Fp.get(i);        // assume fixed sequence order
+//             t = engine.isBasePartialFraction(pi,d,ei,Fi);
+//             if ( ! t ) {
+//                 System.out.println("not isPartFrac exp = " + pi + ", d = " + d + ", e = " + ei);
+//                 System.out.println("not isPartFrac exp = " + Fi);
+//                 return false;
+//             }
+
+            GenPolynomial<C> qi = engine.basePartialFractionValue(d,ei,Fi);
+            Qp.add(qi);
+
+//             t = qi.equals(pi);
+//             if ( ! t ) {
+//                 System.out.println("not isPartFrac exp = " + pi + ", d = " + d + ", e = " + ei + ", qi = " + qi);
+//             }
+
+            i++;
+        }
+
+        Qp.add(0,A0);
+        t = engine.isBasePartialFraction(A,Dp,Qp);
+        if ( ! t ) {
+            System.out.println("not final isPartFrac " + Qp);
+        }
+        return t;
+    }
+
 }

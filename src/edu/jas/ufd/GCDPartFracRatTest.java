@@ -7,6 +7,8 @@ package edu.jas.ufd;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -309,7 +311,7 @@ public class GCDPartFracRatTest extends TestCase {
                 // skip for this turn
                 continue;
             }
-            System.out.println("a  = " + a);
+            //System.out.println("a  = " + a);
             //System.out.println("b  = " + b);
             //System.out.println("c  = " + c);
 
@@ -342,7 +344,7 @@ public class GCDPartFracRatTest extends TestCase {
             List<GenPolynomial<BigRational>> D = new ArrayList<GenPolynomial<BigRational>>(2);
             D.add(b);
             D.add(c);
-            System.out.println("D  = " + D);
+            //System.out.println("D  = " + D);
             List<GenPolynomial<BigRational>> F = ufd.basePartialFraction(a, D);
             //System.out.println("F  = " + F.size());
 
@@ -362,9 +364,9 @@ public class GCDPartFracRatTest extends TestCase {
 
         for (int i = 0; i < 3; i++) {
             a = dfac.random(kl * (i + 2), ll + 2 * i, el + 2 * i, q);
-            System.out.println("a  = " + a);
+            //System.out.println("a  = " + a);
 
-            List<GenPolynomial<BigRational>> D = new ArrayList<GenPolynomial<BigRational>>(i);
+            List<GenPolynomial<BigRational>> D = new ArrayList<GenPolynomial<BigRational>>();
             for ( int j = 0; j < i*3; j++ ) {
                 b = dfac.random(kl * (i + 1), ll + i, el + i, q);
                 if ( b.isZERO() || b.isConstant() ) {
@@ -375,7 +377,7 @@ public class GCDPartFracRatTest extends TestCase {
             }
             //System.out.println("D  = " + D);
             D = ufd.coPrime(D);
-            System.out.println("D  = " + D);
+            //System.out.println("D  = " + D);
 
             List<GenPolynomial<BigRational>> F = ufd.basePartialFraction(a, D);
             //System.out.println("F  = " + F.size());
@@ -396,20 +398,64 @@ public class GCDPartFracRatTest extends TestCase {
 
         for (int i = 0; i < 3; i++) {
             a = dfac.random(kl * (i + 2), ll + 2 * i, el + 2 * i, q);
-            System.out.println("a  = " + a);
+            //System.out.println("a  = " + a);
 
             b = dfac.random(kl * (i + 1), ll + i, el + i, q);
             if ( b.isZERO() || b.isConstant() ) {
                 // skip for this turn
                 continue;
             }
-            System.out.println("b  = " + b);
+            //System.out.println("b  = " + b);
 
             List<GenPolynomial<BigRational>> F = ufd.basePartialFraction(a, b, 3);
-            System.out.println("F  = " + F);
+            //System.out.println("F  = " + F);
 
             boolean t = ufd.isBasePartialFraction(a, b, 3, F);
             assertTrue("a/b^e = a0 + sum(ai/p^i) ", t);
+        }
+    }
+
+
+    /**
+     * Test base partial fraction list exponent.
+     * 
+     */
+    public void testBasePartFracListExponent() {
+
+        SquarefreeAbstract<BigRational> sqf = SquarefreeFactory.<BigRational>getImplementation(mi);
+
+        dfac = new GenPolynomialRing<BigRational>(mi, 1, to);
+
+        for (int i = 0; i < 3; i++) {
+            a = dfac.random(kl * (i + 2), ll + 2 * i, el + 2 * i, q);
+            System.out.println("a  = " + a);
+
+            List<GenPolynomial<BigRational>> D = new ArrayList<GenPolynomial<BigRational>>();
+            for ( int j = 0; j < i*3; j++ ) {
+                b = dfac.random(kl, ll + 1 + i, el + i, q);
+                if ( b.isZERO() || b.isConstant() ) {
+                    // skip for this turn
+                    continue;
+                }
+                D.add(b);
+            }
+            //System.out.println("D  = " + D);
+            D = ufd.coPrime(D);
+            //System.out.println("D  = " + D);
+
+            SortedMap<GenPolynomial<BigRational>,Long> Ds = new TreeMap<GenPolynomial<BigRational>,Long>();
+            long j = 1L;
+            for ( GenPolynomial<BigRational> p : D ) {
+                Ds.put(p,j);
+                j++;
+            }
+            System.out.println("Ds = " + Ds);
+
+            List<List<GenPolynomial<BigRational>>> F = sqf.basePartialFraction(a, Ds);
+            System.out.println("F  = " + F);
+
+            boolean t = sqf.isBasePartialFraction(a, Ds, F);
+            //assertTrue("a = a0*b*c + s * c + t * b ", t);
         }
     }
 
