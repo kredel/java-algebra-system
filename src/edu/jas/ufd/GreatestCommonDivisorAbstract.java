@@ -609,4 +609,166 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         return true;
     }
 
+
+    /**
+     * Univariate GenPolynomial extended greatest common divisor. Uses sparse
+     * pseudoRemainder for remainder.
+     * @param P univariate GenPolynomial.
+     * @param S univariate GenPolynomial.
+     * @return [ gcd(P,S), a, b ] with a*P + b*S = gcd(P,S).
+     */
+    public GenPolynomial<C>[] baseExtendedGcd(GenPolynomial<C> P, GenPolynomial<C> S) {
+        //return P.egcd(S);
+        GenPolynomial<C>[] hegcd = baseHalfExtendedGcd(P,S);
+        GenPolynomial<C>[] ret = new GenPolynomial[3];
+        ret[0] = hegcd[0];
+        ret[1] = hegcd[1];
+        GenPolynomial<C> x = hegcd[0].subtract( hegcd[1].multiply(P) );
+        GenPolynomial<C>[] qr = PolyUtil.<C> basePseudoQuotientRemainder(x, S);
+        // assert qr[1].isZERO() 
+        ret[2] = qr[0];
+        return ret;
+    }
+
+
+    /**
+     * Univariate GenPolynomial half extended greatest comon divisor.
+     * Uses sparse pseudoRemainder for remainder.  
+     * @param S GenPolynomial.
+     * @return [ gcd(P,S), a ] with a*P + b*S = gcd(P,S).
+     */
+    public GenPolynomial<C>[] baseHalfExtendedGcd(GenPolynomial<C> P, GenPolynomial<C> S) {
+        //if ( P == null ) {
+        //    throw new IllegalArgumentException("null P not allowed");
+        //}
+        GenPolynomial<C>[] ret = new GenPolynomial[2];
+        ret[0] = null;
+        ret[1] = null;
+        if ( S == null || S.isZERO() ) {
+            ret[0] = P;
+            ret[1] = P.ring.getONE();
+            return ret;
+        }
+        if ( P == null || P.isZERO() ) {
+            ret[0] = S;
+            ret[1] = S.ring.getZERO();
+            return ret;
+        }
+        if ( P.ring.nvar != 1 ) {
+             throw new RuntimeException(this.getClass().getName()
+                                      + " not univariate polynomials " + P.ring);
+        }
+        GenPolynomial<C> q = P; 
+        GenPolynomial<C> r = S;
+        GenPolynomial<C> c1 = P.ring.getONE().clone();
+        GenPolynomial<C> d1 = P.ring.getZERO().clone();
+        while ( !r.isZERO() ) {
+            GenPolynomial<C>[] qr = PolyUtil.<C> basePseudoQuotientRemainder(q, r); 
+                                    //q.divideAndRemainder(r);
+            q = qr[0];
+            GenPolynomial<C> x = c1.subtract( q.multiply(d1) );
+            c1 = d1; 
+            d1 = x; 
+            q = r;
+            r = qr[1];
+        }
+        // normalize ldcf(q) to 1, i.e. make monic
+        C g = q.leadingBaseCoefficient();
+        if ( g.isUnit() ) {
+            C h = g.inverse();
+            q = q.multiply( h );
+            c1 = c1.multiply( h );
+        }
+        //assert ( ((c1.multiply(P)).remainder(S).equals(q) )); 
+        ret[0] = q;
+        ret[1] = c1;
+        return ret;
+    }
+
+
+    /**
+     * Univariate GenPolynomial greatest common divisor diophantine version. 
+     * @param P univariate GenPolynomial.
+     * @param S univariate GenPolynomial.
+     * @param c univariate GenPolynomial.
+     * @return [ a, b ] with a*P + b*S = c and deg(a) < deg(S).
+     */
+    public GenPolynomial<C>[] baseGcdDiophant(GenPolynomial<C> P, GenPolynomial<C> S, GenPolynomial<C> c) {
+        GenPolynomial<C>[] egcd = baseExtendedGcd(P,S);
+        GenPolynomial<C> g = egcd[0];
+        GenPolynomial<C>[] qr = PolyUtil.<C> basePseudoQuotientRemainder(c, g);
+        if ( !qr[1].isZERO() ) {
+            throw new RuntimeException("not solvable, r = " + qr[1] + ", c = " + c + ", g = " + g);
+        }
+        GenPolynomial<C> q = qr[0];
+        GenPolynomial<C> a = egcd[1].multiply(q);
+        GenPolynomial<C> b = egcd[2].multiply(q);
+        if ( !a.isZERO() && a.degree(0) >= S.degree(0) ) {
+            qr = PolyUtil.<C> basePseudoQuotientRemainder(a, S);
+            a = qr[1];
+            b = b.sum( P.multiply( qr[0] ) );
+        }
+        GenPolynomial<C>[] ret = new GenPolynomial[2];
+        ret[0] = a;
+        ret[1] = b;
+
+        if ( true ) {
+            return ret;
+        }
+
+        GenPolynomial<C> y = ret[0].multiply(P).sum( ret[1].multiply(S) );
+        if ( !y.equals(c) ) {
+            System.out.println("P  = " + P);
+            System.out.println("S  = " + S);
+            System.out.println("c  = " + c);
+            System.out.println("a  = " + a);
+            System.out.println("b  = " + b);
+            System.out.println("y  = " + y);
+            throw new RuntimeException("not diophant, x = " + y.subtract(c));
+        }
+
+        return ret;
+    }
+
+
+    /**
+     * Univariate GenPolynomial partial fraction decomposition. 
+     * @param A univariate GenPolynomial.
+     * @param P univariate GenPolynomial.
+     * @param S univariate GenPolynomial.
+     * @return [ A0, Ap, As ] with A/(P*S) = A0 + Ap/P + As/S with deg(Ap) < deg(P) and deg(As) < deg(S).
+     */
+    public GenPolynomial<C>[] basePartialFraction(GenPolynomial<C> A, GenPolynomial<C> P, GenPolynomial<C> S) {
+        GenPolynomial<C>[] ret = new GenPolynomial[3];
+        ret[0] = null;
+        ret[1] = null;
+        ret[2] = null;
+        GenPolynomial<C> ps = P.multiply(S);
+        GenPolynomial<C>[] qr = PolyUtil.<C> basePseudoQuotientRemainder(A, ps);
+        ret[0] = qr[0];
+        GenPolynomial<C> r = qr[1];
+        GenPolynomial<C>[] diop = baseGcdDiophant(S,P,r); // switch arguments
+
+//         GenPolynomial<C> x = diop[0].multiply(S).sum( diop[1].multiply(P) );
+//         if ( !x.equals(r) ) {
+//             System.out.println("r  = " + r);
+//             System.out.println("x  = " + x);
+//             throw new RuntimeException("not partial fraction, x = " + x);
+//         }
+
+        ret[1] = diop[0];
+        ret[2] = diop[1];
+        if ( ret[1].degree(0) >= P.degree(0) ) {
+            qr = PolyUtil.<C> basePseudoQuotientRemainder(ret[1], P);
+            ret[0] = ret[0].sum( qr[0] );
+            ret[1] = qr[1];
+        }
+        if ( ret[2].degree(0) >= S.degree(0) ) {
+            qr = PolyUtil.<C> basePseudoQuotientRemainder(ret[2], S);
+            ret[0] = ret[0].sum( qr[0] );
+            ret[2] = qr[1];
+        }
+        return ret;
+    }
+
 }

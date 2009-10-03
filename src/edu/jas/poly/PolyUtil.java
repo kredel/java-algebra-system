@@ -663,6 +663,69 @@ public class PolyUtil {
 
 
     /**
+     * GenPolynomial pseudo quotient and remainder.
+     * For univariate polynomials or exact division.
+     * @param <C> coefficient type.
+     * @param P GenPolynomial.
+     * @param S nonzero GenPolynomial.
+     * @return [ quotient, remainder ] with ldcf(S)<sup>m'</sup> P = quotient * S + remainder.
+     * @see edu.jas.poly.GenPolynomial#divide(edu.jas.poly.GenPolynomial).
+     */
+    //SuppressWarnings("unchecked")
+    public static <C extends RingElem<C>>
+        GenPolynomial<C>[] basePseudoQuotientRemainder( GenPolynomial<C> P, 
+                                                        GenPolynomial<C> S ) {
+        if ( S == null || S.isZERO() ) {
+            throw new RuntimeException(P.getClass().getName()
+                                       + " division by zero");
+        }
+        if ( S.ring.nvar != 1 ) {
+           // ok if exact division
+           // throw new RuntimeException(this.getClass().getName()
+           //                            + " univariate polynomials only");
+        }
+        GenPolynomial<C>[] ret = new GenPolynomial[2];
+        ret[0] = null;
+        ret[1] = null;
+        if ( P.isZERO() || S.isONE() ) {
+            ret[0] = P;
+            ret[1] = S.ring.getZERO();
+            return ret;
+        }
+        C c = S.leadingBaseCoefficient();
+        ExpVector e = S.leadingExpVector();
+        GenPolynomial<C> h;
+        GenPolynomial<C> r = P;
+        GenPolynomial<C> q = S.ring.getZERO().clone();
+
+        while ( ! r.isZERO() ) {
+            ExpVector f = r.leadingExpVector();
+            if ( f.multipleOf(e) ) {
+                C a = r.leadingBaseCoefficient();
+                f =  f.subtract( e );
+                C x = a.remainder(c);
+                if ( x.isZERO() ) {
+                   C y = a.divide(c);
+                   q = q.sum( y, f );
+                   h = S.multiply( y, f ); // coeff a
+                } else {
+                   q = q.sum( a, f );
+                   q = q.multiply( c );
+                   r = r.multiply( c );    // coeff ac
+                   h = S.multiply( a, f ); // coeff ac
+                }
+                r = r.subtract( h );
+            } else {
+                break;
+            }
+        }
+        ret[0] = q;
+        ret[1] = r;
+        return ret;
+    }
+
+
+    /**
      * GenPolynomial pseudo divide.
      * For recursive polynomials.
      * Division by coefficient ring element.
