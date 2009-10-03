@@ -771,4 +771,97 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         return ret;
     }
 
+
+    /**
+     * Univariate GenPolynomial partial fraction decomposition. 
+     * @param A univariate GenPolynomial.
+     * @param D list of co-prime univariate GenPolynomials.
+     * @return [ A0, A1,..., An ] with A/prod(D) = A0 + sum( Ai/Di ) with deg(Ai) < deg(Di).
+     */
+    public List<GenPolynomial<C>> basePartialFraction(GenPolynomial<C> A, List<GenPolynomial<C>> D) {
+        if ( D == null || A == null ) {
+            throw new IllegalArgumentException("null A or D not allowed");
+        }
+        List<GenPolynomial<C>> pf = new ArrayList<GenPolynomial<C>>( D.size()+1 );
+        if ( A.isZERO() || D.size() == 0 ) {
+            pf.add(A);
+            for ( int i = 0; i < D.size(); i++ ) {
+                 pf.add(A);
+            }
+            return pf;
+        }
+        List<GenPolynomial<C>> Dp = new ArrayList<GenPolynomial<C>>( D.size()-1 );
+        GenPolynomial<C> P = A.ring.getONE();
+        GenPolynomial<C> d1 = null;
+        for ( GenPolynomial<C> d : D ) {
+            if ( d1 == null ) {
+                d1 = d;
+            } else {
+                P = P.multiply(d);
+                Dp.add(d);
+            }
+        }
+        GenPolynomial<C>[] qr = PolyUtil.<C> basePseudoQuotientRemainder(A, P.multiply(d1));
+        GenPolynomial<C> A0 = qr[0];
+        GenPolynomial<C> r = qr[1];
+        if ( D.size() == 1 ) {
+            pf.add(A0);
+            pf.add(r);
+            return pf;
+        }
+        GenPolynomial<C>[] diop = baseGcdDiophant(P,d1,r); // switch arguments
+        GenPolynomial<C> A1 = diop[0];
+        GenPolynomial<C> S = diop[1];
+        List<GenPolynomial<C>> Fr = basePartialFraction(S,Dp);
+        A0 = A0.sum( Fr.remove(0) ); 
+        pf.add(A0);
+        pf.add(A1);
+        pf.addAll(Fr);
+        return pf;
+    }
+
+
+    /**
+     * Test for Univariate GenPolynomial partial fraction decomposition. 
+     * @param A univariate GenPolynomial.
+     * @param D list of (co-prime) univariate GenPolynomials.
+     * @param F list of univariate GenPolynomials from a partial fraction computation.
+     * @return true if A/prod(D) = F0 + sum( Fi/Di ) with deg(Fi) < deg(Di), Fi in F, 
+               else false.
+     */
+    public boolean isBasePartialFraction(GenPolynomial<C> A, List<GenPolynomial<C>> D, List<GenPolynomial<C>> F) {
+        if ( D == null || A == null || F == null ) {
+            throw new IllegalArgumentException("null A, F or D not allowed");
+        }
+        if ( D.size() != F.size()-1 ) {
+            return false;
+        }
+        // A0*prod(D) + sum( Ai * Dip ), Dip = prod(D,j!=i)
+        GenPolynomial<C> P = A.ring.getONE();
+        for ( GenPolynomial<C> d : D ) {
+                P = P.multiply(d);
+        }
+        List<GenPolynomial<C>> Fp = new ArrayList<GenPolynomial<C>>( F );
+        GenPolynomial<C> A0 = Fp.remove(0).multiply(P);
+        //System.out.println("A0 = " + A0);
+        int j = 0;
+        for ( GenPolynomial<C> Fi : Fp ) {
+            P = A.ring.getONE();
+            int i = 0;
+            for ( GenPolynomial<C> d : D ) {
+                if ( i != j ) {
+                    P = P.multiply(d);
+                }
+                i++;
+            }
+            //System.out.println("Fi = " + Fi);
+            //System.out.println("P  = " + P);
+            A0 = A0.sum( Fi.multiply(P) );
+            //System.out.println("A0 = " + A0);
+            j++;
+        }
+        System.out.println("isPartFrac A0 = " + A0);
+        return A.equals(A0);
+    }
+
 }
