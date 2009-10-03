@@ -15,6 +15,7 @@ import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
+import edu.jas.structure.Power;
 
 
 /**
@@ -775,6 +776,41 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
     /**
      * Univariate GenPolynomial partial fraction decomposition. 
      * @param A univariate GenPolynomial.
+     * @param P univariate GenPolynomial.
+     * @param e exponent for P.
+     * @return [ F0, F1, ..., Fe ] with A/(P^e) = sum( Fi / P^i ) with deg(Fi) < deg(P).
+     */
+    public List<GenPolynomial<C>> basePartialFraction(GenPolynomial<C> A, GenPolynomial<C> P, int e) {
+        if ( A == null || P == null || e == 0 ) {
+            throw new IllegalArgumentException("null A, P or e = 0 not allowed");
+        }
+        List<GenPolynomial<C>> pf = new ArrayList<GenPolynomial<C>>( e );
+        if ( A.isZERO() ) {
+            for ( int i = 0; i < e; i++ ) {
+                 pf.add(A);
+            }
+            return pf;
+        }
+        if ( e == 1 ) {
+            GenPolynomial<C>[] qr = PolyUtil.<C> basePseudoQuotientRemainder(A, P);
+            pf.add(qr[0]);
+            pf.add(qr[1]);
+            return pf;
+        }
+        GenPolynomial<C> a = A;
+        for ( int j = e; j > 0; j-- ) {
+            GenPolynomial<C>[] qr = PolyUtil.<C> basePseudoQuotientRemainder(a, P);
+            a = qr[0];
+            pf.add(0,qr[1]);
+        }
+        pf.add(0,a);
+        return pf;
+    }
+
+
+    /**
+     * Univariate GenPolynomial partial fraction decomposition. 
+     * @param A univariate GenPolynomial.
      * @param D list of co-prime univariate GenPolynomials.
      * @return [ A0, A1,..., An ] with A/prod(D) = A0 + sum( Ai/Di ) with deg(Ai) < deg(Di).
      */
@@ -860,8 +896,38 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
             //System.out.println("A0 = " + A0);
             j++;
         }
-        System.out.println("isPartFrac A0 = " + A0);
-        return A.equals(A0);
+        boolean t = A.equals(A0);
+        if ( ! t ) {
+            System.out.println("not isPartFrac = " + A0);
+        }
+        return t;
+    }
+
+
+    /**
+     * Test for Univariate GenPolynomial partial fraction decomposition. 
+     * @param A univariate GenPolynomial.
+     * @param P univariate GenPolynomial.
+     * @param e exponent for P.
+     * @param F list of univariate GenPolynomials from a partial fraction computation.
+     * @return true if A/(P^e) = F0 + sum( Fi / P^i ) with deg(Fi) < deg(P), Fi in F, 
+               else false.
+     */
+    public boolean isBasePartialFraction(GenPolynomial<C> A, GenPolynomial<C> P, int e, List<GenPolynomial<C>> F) {
+        if ( A == null || P == null || F == null || e == 0 ) {
+            throw new IllegalArgumentException("null A, P, F or e = 0 not allowed");
+        }
+        GenPolynomial<C> A0 = A.ring.getZERO();
+        for ( GenPolynomial<C> Fi : F ) {
+            A0 = A0.multiply(P);
+            A0 = A0.sum(Fi);
+            //System.out.println("A0 = " + A0);
+        }
+        boolean t = A.equals(A0);
+        if ( ! t ) {
+            System.out.println("not isPartFrac = " + A0);
+        }
+        return t;
     }
 
 }
