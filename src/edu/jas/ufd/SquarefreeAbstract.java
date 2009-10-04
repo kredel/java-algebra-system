@@ -414,7 +414,7 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
             Dp.add(f);
         }
         List<GenPolynomial<C>> F = engine.basePartialFraction(A,Dp);
-        System.out.println("fraction list = " + F.size());
+        //System.out.println("fraction list = " + F.size());
         GenPolynomial<C> A0 = F.remove(0);
         List<GenPolynomial<C>> fi = new ArrayList<GenPolynomial<C>>(1);
         fi.add(A0);
@@ -464,6 +464,8 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
         boolean t;
         GenPolynomial<C> A0 = fi.get(0);
         //System.out.println("A0 = " + A0);
+        List<GenPolynomial<C>> Qp = new ArrayList<GenPolynomial<C>>(D.size()+1);
+        Qp.add(A0);
 
 //         List<GenPolynomial<C>> Fp = engine.basePartialFraction(A,Dp);
 //         System.out.println("fraction list = " + F.size());
@@ -478,7 +480,6 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
 //             return false;
 //         }
 
-        List<GenPolynomial<C>> Qp = new ArrayList<GenPolynomial<C>>(D.size()+1);
         int i = 0;
         for ( GenPolynomial<C> d : D.keySet() ) { // assume fixed sequence order
             long e = D.get(d);
@@ -504,7 +505,6 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
             i++;
         }
 
-        Qp.add(0,A0);
         t = engine.isBasePartialFraction(A,Dp,Qp);
         if ( ! t ) {
             System.out.println("not final isPartFrac " + Qp);

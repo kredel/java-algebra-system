@@ -452,10 +452,10 @@ public class GCDPartFracRatTest extends TestCase {
             System.out.println("Ds = " + Ds);
 
             List<List<GenPolynomial<BigRational>>> F = sqf.basePartialFraction(a, Ds);
-            System.out.println("F  = " + F);
+            System.out.println("F  = " + F.size());
 
             boolean t = sqf.isBasePartialFraction(a, Ds, F);
-            //assertTrue("a = a0*b*c + s * c + t * b ", t);
+            assertTrue("a = a0*b*c + s * c + t * b ", t);
         }
     }
 
