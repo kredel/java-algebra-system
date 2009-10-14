@@ -112,6 +112,41 @@ public final class ModIntegerRing implements RingFactory<ModInteger> {
     }
 
 
+    /** Create ModInteger element c.
+     * @param c
+     * @return a ModInteger of c.
+     */
+    public ModInteger create(java.math.BigInteger c) {
+        if ( lmodul >= 0L ) {
+            return new ModLong( this, c );
+        } else {
+            return new ModBigInteger( this, c );
+        }
+    }
+
+
+    /** Create ModInteger element c.
+     * @param c
+     * @return a ModInteger of c.
+     */
+    public ModInteger create(long c) {
+        if ( lmodul >= 0L ) {
+            return new ModLong( this, c );
+        } else {
+            return new ModBigInteger( this, c );
+        }
+    }
+
+
+    /** Create ModInteger element c.
+     * @param c
+     * @return a ModInteger of c.
+     */
+    public ModInteger create(String c) {
+        return parse(c);
+    }
+
+
     /** Copy ModInteger element c.
      * @param c
      * @return a copy of c.

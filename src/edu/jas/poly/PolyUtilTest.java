@@ -263,7 +263,7 @@ public class PolyUtilTest extends TestCase {
      GenPolynomialRing<ModInteger> mfac
          = new GenPolynomialRing<ModInteger>(pm12,rl,to);
 
-     ModInteger di = new ModInteger(pm2,p1);
+     ModInteger di = pm2.create(p1);
      di = di.inverse();
      //System.out.println("di = " + di);
 
