@@ -417,7 +417,7 @@ public class GCDPartFracRatTest extends TestCase {
 
 
     /**
-     * Test base partial fraction list exponent.
+     * Test base partial fraction list exponent (squarefree).
      * 
      */
     public void testBasePartFracListExponent() {
@@ -428,7 +428,7 @@ public class GCDPartFracRatTest extends TestCase {
 
         for (int i = 0; i < 3; i++) {
             a = dfac.random(kl * (i + 2), ll + 2 * i, el + 2 * i, q);
-            System.out.println("a  = " + a);
+            //System.out.println("a  = " + a);
 
             List<GenPolynomial<BigRational>> D = new ArrayList<GenPolynomial<BigRational>>();
             for ( int j = 0; j < i*3; j++ ) {
@@ -449,13 +449,13 @@ public class GCDPartFracRatTest extends TestCase {
                 Ds.put(p,j);
                 j++;
             }
-            System.out.println("Ds = " + Ds);
+            //System.out.println("Ds = " + Ds);
 
             List<List<GenPolynomial<BigRational>>> F = sqf.basePartialFraction(a, Ds);
-            System.out.println("F  = " + F.size());
+            //System.out.println("F  = " + F.size());
 
             boolean t = sqf.isBasePartialFraction(a, Ds, F);
-            assertTrue("a = a0*b*c + s * c + t * b ", t);
+            assertTrue("a/b^e = a0 + sum(ai/p^i) ", t);
         }
     }
 

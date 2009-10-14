@@ -370,7 +370,7 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>> extends FactorAbs
         GreatestCommonDivisorAbstract<AlgebraicNumber<C>> aengine = null;
 
         GenPolynomial<GenPolynomial<C>> Rc = engine.recursiveResultant(Pc, At);
-        System.out.println("Rc = " + Rc);
+        //System.out.println("Rc = " + Rc);
         GenPolynomial<C> res = Rc.leadingBaseCoefficient();
         //no: res = res.monic();
         System.out.println("\nres = " + res);
@@ -381,7 +381,7 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>> extends FactorAbs
         List<Factors<C>> factors = new ArrayList<Factors<C>>();
 
         for ( GenPolynomial<C> r : resfac.keySet() ) {
-            System.out.println("r(t) = " + r);
+            System.out.println("\nr(t) = " + r);
             if ( r.isConstant() ) {
                 continue;
             }
