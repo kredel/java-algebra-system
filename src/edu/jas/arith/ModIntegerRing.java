@@ -117,11 +117,7 @@ public final class ModIntegerRing implements RingFactory<ModInteger> {
      * @return a ModInteger of c.
      */
     public ModInteger create(java.math.BigInteger c) {
-        if ( lmodul >= 0L ) {
-            return new ModLong( this, c );
-        } else {
-            return new ModBigInteger( this, c );
-        }
+        return new ModInteger( this, c );
     }
 
 
@@ -130,11 +126,7 @@ public final class ModIntegerRing implements RingFactory<ModInteger> {
      * @return a ModInteger of c.
      */
     public ModInteger create(long c) {
-        if ( lmodul >= 0L ) {
-            return new ModLong( this, c );
-        } else {
-            return new ModBigInteger( this, c );
-        }
+        return new ModInteger( this, c );
     }
 
 
