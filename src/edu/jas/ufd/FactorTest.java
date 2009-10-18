@@ -6,7 +6,7 @@ package edu.jas.ufd;
 
 
 import java.util.SortedMap;
-//import java.util.List;
+import java.util.List;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -597,13 +597,13 @@ public class FactorTest extends TestCase {
 
         FactorRational engine = new FactorRational();
 
-        FactorsList<BigRational> F = engine.baseAlgebraicPartialFraction(N,agen);
+        List<FactorsList<BigRational>> F = engine.baseAlgebraicPartialFraction(N,agen);
         System.out.println("agen     = " + agen);
         System.out.println("F        = " + F);
 
-        boolean t = engine.isAbsoluteFactorization(F);
-        System.out.println("t        = " + t);
-//         assertTrue("prod(factor(a)) = a", t);
+        //boolean t = engine.isAbsoluteFactorization(F);
+        //System.out.println("t        = " + t);
+        // assertTrue("prod(factor(a)) = a", t);
     }
 
 }
