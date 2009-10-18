@@ -60,7 +60,7 @@ public class Examples {
 
         FactorRational engine = new FactorRational();
 
-        FactorsList<BigRational> F = engine.baseAlgebraicPartialFraction(N,D);
+        FactorsList<BigRational> F = engine.baseAlgebraicPartialFractionIrreducible(N,D);
         System.out.println("\nN     = " + N);
         System.out.println("D     = " + D);
         System.out.println("F     = " + F);
@@ -93,7 +93,7 @@ public class Examples {
 
         FactorRational engine = new FactorRational();
 
-        FactorsList<BigRational> F = engine.baseAlgebraicPartialFraction(N,D);
+        List<FactorsList<BigRational>> F = engine.baseAlgebraicPartialFraction(N,D);
         System.out.println("\nN     = " + N);
         System.out.println("D     = " + D);
         System.out.println("F     = " + F);
@@ -129,7 +129,7 @@ public class Examples {
 
         FactorRational engine = new FactorRational();
 
-        FactorsList<BigRational> F = engine.baseAlgebraicPartialFraction(N,D);
+        List<FactorsList<BigRational>> F = engine.baseAlgebraicPartialFraction(N,D);
         System.out.println("\nN     = " + N);
         System.out.println("D     = " + D);
         System.out.println("F     = " + F);
@@ -157,7 +157,7 @@ public class Examples {
 
         FactorRational engine = new FactorRational();
 
-        FactorsList<BigRational> F = engine.baseAlgebraicPartialFraction(N,D);
+        List<FactorsList<BigRational>> F = engine.baseAlgebraicPartialFraction(N,D);
         System.out.println("\nN     = " + N);
         System.out.println("D     = " + D);
         System.out.println("F     = " + F);

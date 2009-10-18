@@ -6,6 +6,7 @@ package edu.jas.ufd;
 
 
 import java.util.SortedMap;
+//import java.util.List;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -82,6 +83,7 @@ public class FactorTest extends TestCase {
 
     @Override
     protected void tearDown() {
+        ComputerThreads.terminate();
     }
 
 
@@ -97,7 +99,7 @@ public class FactorTest extends TestCase {
      * Test modular factorization.
      * 
      */
-    public void testModularFactorization() {
+    public void xtestModularFactorization() {
 
         PrimeList pl = new PrimeList(PrimeList.Range.medium);
         TermOrder to = new TermOrder(TermOrder.INVLEX);
@@ -106,7 +108,7 @@ public class FactorTest extends TestCase {
         GenPolynomialRing<ModInteger> pfac = new GenPolynomialRing<ModInteger>(cfac, 1, to);
         FactorModular fac = new FactorModular();
 
-        for (int i = 1; i < 5; i++) {
+        for (int i = 1; i < 4; i++) {
             int facs = 0;
             GenPolynomial<ModInteger> a = null; //pfac.random(kl,ll*(i+1),el*(i+1),q);
             GenPolynomial<ModInteger> b = pfac.random(kl, ll * (i + 1), el * (i + 1), q);
@@ -146,7 +148,6 @@ public class FactorTest extends TestCase {
             //System.out.println("t        = " + t);
             assertTrue("prod(factor(a)) = a", t);
         }
-        ComputerThreads.terminate();
     }
 
 
@@ -154,7 +155,7 @@ public class FactorTest extends TestCase {
      * Test multivariate modular factorization.
      * 
      */
-    public void testMultivariateModularFactorization() {
+    public void xtestMultivariateModularFactorization() {
 
         PrimeList pl = new PrimeList(PrimeList.Range.small);
         TermOrder to = new TermOrder(TermOrder.INVLEX);
@@ -202,7 +203,6 @@ public class FactorTest extends TestCase {
             //System.out.println("t        = " + t);
             assertTrue("prod(factor(a)) = a", t);
         }
-        ComputerThreads.terminate();
     }
 
 
@@ -210,7 +210,7 @@ public class FactorTest extends TestCase {
      * Test integer factorization.
      * 
      */
-    public void testIntegerFactorization() {
+    public void xtestIntegerFactorization() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(4);
@@ -304,7 +304,6 @@ public class FactorTest extends TestCase {
             //System.out.println("t        = " + t);
             assertTrue("prod(factor(a)) = a", t);
         }
-        ComputerThreads.terminate();
     }
 
 
@@ -312,7 +311,7 @@ public class FactorTest extends TestCase {
      * Test rational factorization.
      * 
      */
-    public void testRationalFactorization() {
+    public void xtestRationalFactorization() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigRational cfac = new BigRational(1);
@@ -367,7 +366,7 @@ public class FactorTest extends TestCase {
      * Test algebraic factorization.
      * 
      */
-    public void testAlgebraicFactorization() {
+    public void xtestAlgebraicFactorization() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigRational cfac = new BigRational(1);
@@ -429,7 +428,6 @@ public class FactorTest extends TestCase {
             boolean t = fac.isFactorization(a, sm);
             //System.out.println("t        = " + t);
             assertTrue("prod(factor(a)) = a", t);
-            ComputerThreads.terminate();
         }
     }
 
@@ -438,7 +436,7 @@ public class FactorTest extends TestCase {
      * Test rational absolute factorization.
      * 
      */
-    public void testBaseRationalAbsoluteFactorization() {
+    public void xtestBaseRationalAbsoluteFactorization() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigRational cfac = new BigRational(1);
@@ -460,7 +458,6 @@ public class FactorTest extends TestCase {
         boolean t = engine.isAbsoluteFactorization(F);
         //System.out.println("t        = " + t);
         assertTrue("prod(factor(a)) = a", t);
-        ComputerThreads.terminate();
     }
 
 
@@ -468,7 +465,7 @@ public class FactorTest extends TestCase {
      * Test modular absolute factorization.
      * 
      */
-    public void testBaseModularAbsoluteFactorization() {
+    public void ztestBaseModularAbsoluteFactorization() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         ModIntegerRing cfac = new ModIntegerRing(17);
@@ -490,7 +487,6 @@ public class FactorTest extends TestCase {
         boolean t = engine.isAbsoluteFactorization(F);
         //System.out.println("t        = " + t);
         assertTrue("prod(factor(a)) = a", t);
-        ComputerThreads.terminate();
     }
 
 
@@ -498,7 +494,7 @@ public class FactorTest extends TestCase {
      * Test rational absolute factorization.
      * 
      */
-    public void testRationalAbsoluteFactorization() {
+    public void ztestRationalAbsoluteFactorization() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigRational cfac = new BigRational(1);
@@ -521,7 +517,6 @@ public class FactorTest extends TestCase {
         boolean t = engine.isAbsoluteFactorization(F);
         //System.out.println("t        = " + t);
         assertTrue("prod(factor(a)) = a", t);
-        ComputerThreads.terminate();
     }
 
 
@@ -529,7 +524,7 @@ public class FactorTest extends TestCase {
      * Test factory.
      * 
      */
-    public void testFactory() {
+    public void xtestFactory() {
         ModIntegerRing mi = new ModIntegerRing(19, true);
         Factorization<ModInteger> ufdm = FactorFactory.getImplementation(mi);
         //System.out.println("ufdm = " + ufdm);
@@ -564,6 +559,51 @@ public class FactorTest extends TestCase {
         Factorization<Quotient<BigRational>> ufdqr = FactorFactory.getImplementation(qrfac);
         //System.out.println("ufdqr = " + ufdqr);
         assertTrue("ufd != Quotient<BigRational> " + ufdqr, ufdqr instanceof FactorQuotient);
+    }
+
+
+    /**
+     * Test rational absolute factorization, Rothstein-Trager step.
+     * 
+     */
+    public void testBaseRationalAbsoluteFactorizationRoT() {
+
+        TermOrder to = new TermOrder(TermOrder.INVLEX);
+        BigRational cfac = new BigRational(1);
+        String[] alpha = new String[] { "alpha" };
+        String[] vars = new String[] { "x" };
+        GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(cfac, 1, to, vars);
+        GenPolynomial<BigRational> agen = pfac.univariate(0, 4);
+        agen = agen.sum(pfac.fromInteger(4)); // x^4 + 4
+
+//         GenPolynomial<BigRational> x6 = pfac.univariate(0, 6);
+//         GenPolynomial<BigRational> x4 = pfac.univariate(0, 4);
+//         GenPolynomial<BigRational> x2 = pfac.univariate(0, 2);
+//         // x^6 - 5 x^4 + 5 x^2 + 4
+//         agen = x6.subtract(x4.multiply(pfac.fromInteger(5))); 
+//         agen = agen.sum(x2.multiply(pfac.fromInteger(5))); 
+//         agen = agen.sum(pfac.fromInteger(4)); 
+
+//         GenPolynomial<BigRational> x3 = pfac.univariate(0, 3);
+//         GenPolynomial<BigRational> x = pfac.univariate(0);
+//         // x^3 + x
+//         agen = x3.sum(x); 
+
+        GenPolynomial<BigRational> x2 = pfac.univariate(0, 2);
+        // x^2 - 2
+        agen = x2.subtract(pfac.fromInteger(2)); 
+
+        GenPolynomial<BigRational> N = pfac.getONE();
+
+        FactorRational engine = new FactorRational();
+
+        FactorsList<BigRational> F = engine.baseAlgebraicPartialFraction(N,agen);
+        System.out.println("agen     = " + agen);
+        System.out.println("F        = " + F);
+
+        boolean t = engine.isAbsoluteFactorization(F);
+        System.out.println("t        = " + t);
+//         assertTrue("prod(factor(a)) = a", t);
     }
 
 }
