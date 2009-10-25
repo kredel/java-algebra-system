@@ -333,12 +333,14 @@ public class GroebnerBaseDistributedHybrid<C extends RingElem<C>> extends Groebn
         logger.info("client pool.terminate()");
 
         pairChannel.close();
-        channel.close();
-        logger.info("client channel.close()");
+        logger.info("client pairChannel.close()");
 
         theList.terminate();
         cf.terminate();
         logger.info("client cf.terminate()");
+
+        channel.close();
+        logger.info("client channel.close()");
         return;
     }
 
@@ -497,8 +499,9 @@ class HybridReducerServer<C extends RingElem<C>> implements Runnable {
     @Override
     public void run() {
         logger.info("reducer server running with " + cf);
+        SocketChannel channel = null;
         try {
-            SocketChannel channel = cf.getChannel();
+            channel = cf.getChannel();
             pairChannel = new TaggedSocketChannel(channel);
         } catch (InterruptedException e) {
             logger.debug("get pair channel interrupted");
@@ -623,7 +626,11 @@ class HybridReducerServer<C extends RingElem<C>> implements Runnable {
         logger.info("remaining active tasks = " + d);
         //logger.info("terminated, send " + red + " reduction pairs");
         pairChannel.close();
+        logger.info("redServ pairChannel.close()");
         finner.release();
+
+        channel.close();
+        logger.info("redServ channel.close()");
     }
 }
 

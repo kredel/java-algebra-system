@@ -407,14 +407,16 @@ class DistPoolThread extends Thread {
                         logger.info( "receive " + myId + " at " + ec + " send job " + job + " received " + o);
                     }
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    logger.info( "receive exception " + myId + " send job " + job + ", " + e);
+                    //e.printStackTrace();
                     running = false; 
                 } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
+                    logger.info( "receive exception " + myId + " send job " + job + ", " + e);
+                    //e.printStackTrace();
                     running = false; 
                 } finally {
                     logger.info( "receive finally " + myId + " at " + ec + " send job " + job + " received " + o + " running " + running);
-          }
+                }
                 working = false;
                 time += System.currentTimeMillis() - t;
                 done++;
