@@ -13,6 +13,7 @@ import edu.jas.arith.BigRational;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.TermOrder;
+import edu.jas.poly.PolyUtil;
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
 
@@ -32,6 +33,8 @@ public class Examples {
         example2();
         example3();
         example4();
+        example5();
+        example6();
         ComputerThreads.terminate();
     }
 
@@ -48,23 +51,16 @@ public class Examples {
         String[] alpha = new String[] { "alpha" };
         String[] vars = new String[] { "x" };
         GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(cfac, 1, to, vars);
-        GenPolynomial<BigRational> D;
 
-        GenPolynomial<BigRational> x2 = pfac.univariate(0, 2);
-        // x^2 - 2
-        D = x2.subtract(pfac.fromInteger(2)); 
+        // 1 / ( x^2 - 2 )
+        GenPolynomial<BigRational> D = pfac.parse("x^2 - 2"); 
 
         GenPolynomial<BigRational> N = pfac.getONE();
-        //GenPolynomial<BigRational> N = pfac.univariate(0);
-        //GenPolynomial<BigRational> N = pfac.fromInteger(5);
 
         FactorRational engine = new FactorRational();
 
-        FactorsList<BigRational> F = engine.baseAlgebraicPartialFractionIrreducible(N,D);
-        System.out.println("\nN     = " + N);
-        System.out.println("D     = " + D);
-        System.out.println("F     = " + F);
-
+        PartialFraction<BigRational> F = engine.baseAlgebraicPartialFractionIrreducible(N,D);
+        System.out.println("\npartial fraction = " + F);
     }
 
 
@@ -80,24 +76,16 @@ public class Examples {
         String[] alpha = new String[] { "alpha" };
         String[] vars = new String[] { "x" };
         GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(cfac, 1, to, vars);
-        GenPolynomial<BigRational> D;
 
-        GenPolynomial<BigRational> x3 = pfac.univariate(0, 3);
-        GenPolynomial<BigRational> x = pfac.univariate(0);
-        // x^3 + x
-        D = x3.sum(x); 
+        // 1 / ( x^3 + x )
+        GenPolynomial<BigRational> D = pfac.parse("x^3 + x"); 
 
         GenPolynomial<BigRational> N = pfac.getONE();
-        //GenPolynomial<BigRational> N = pfac.univariate(0);
-        //GenPolynomial<BigRational> N = pfac.fromInteger(5);
 
         FactorRational engine = new FactorRational();
 
-        List<FactorsList<BigRational>> F = engine.baseAlgebraicPartialFraction(N,D);
-        System.out.println("\nN     = " + N);
-        System.out.println("D     = " + D);
-        System.out.println("F     = " + F);
-
+        PartialFraction<BigRational> F = engine.baseAlgebraicPartialFraction(N,D);
+        System.out.println("\npartial fraction = " + F);
     }
 
 
@@ -113,26 +101,16 @@ public class Examples {
         String[] alpha = new String[] { "alpha" };
         String[] vars = new String[] { "x" };
         GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(cfac, 1, to, vars);
-        GenPolynomial<BigRational> D;
 
-        GenPolynomial<BigRational> x6 = pfac.univariate(0, 6);
-        GenPolynomial<BigRational> x4 = pfac.univariate(0, 4);
-        GenPolynomial<BigRational> x2 = pfac.univariate(0, 2);
-        // x^6 - 5 x^4 + 5 x^2 + 4
-        D = x6.subtract(x4.multiply(pfac.fromInteger(5))); 
-        D = D.sum(x2.multiply(pfac.fromInteger(5))); 
-        D = D.sum(pfac.fromInteger(4)); 
+        // 1 / ( x^6 - 5 x^4 + 5 x^2 + 4 )
+        GenPolynomial<BigRational> D = pfac.parse("x^6 - 5 x^4 + 5 x^2 + 4"); 
 
         GenPolynomial<BigRational> N = pfac.getONE();
-        //GenPolynomial<BigRational> N = pfac.univariate(0);
-        //GenPolynomial<BigRational> N = pfac.fromInteger(5);
 
         FactorRational engine = new FactorRational();
 
-        List<FactorsList<BigRational>> F = engine.baseAlgebraicPartialFraction(N,D);
-        System.out.println("\nN     = " + N);
-        System.out.println("D     = " + D);
-        System.out.println("F     = " + F);
+        PartialFraction<BigRational> F = engine.baseAlgebraicPartialFraction(N,D);
+        System.out.println("\npartial fraction = " + F);
     }
 
 
@@ -148,28 +126,67 @@ public class Examples {
         String[] alpha = new String[] { "alpha" };
         String[] vars = new String[] { "x" };
         GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(cfac, 1, to, vars);
-        GenPolynomial<BigRational> D = pfac.univariate(0, 4);
-        D = D.sum(pfac.fromInteger(4)); // x^4 + 4
+
+        // 1 / ( x^4 + 4 )
+        GenPolynomial<BigRational> D = pfac.parse("x^4 + 4"); 
 
         GenPolynomial<BigRational> N = pfac.getONE();
-        //GenPolynomial<BigRational> N = pfac.univariate(0);
-        //GenPolynomial<BigRational> N = pfac.fromInteger(5);
-
+ 
         FactorRational engine = new FactorRational();
 
-        List<FactorsList<BigRational>> F = engine.baseAlgebraicPartialFraction(N,D);
-        System.out.println("\nN     = " + N);
-        System.out.println("D     = " + D);
-        System.out.println("F     = " + F);
+        PartialFraction<BigRational> F = engine.baseAlgebraicPartialFraction(N,D);
+        System.out.println("\npartial fraction = " + F);
     }
 
 
     /**
      * example5.
-     * Partial fraction decomposition.
+     * Rothstein-Trager algorithm.
      */
     public static void example5() {
         System.out.println("\n\nexample 5");
+
+        TermOrder to = new TermOrder(TermOrder.INVLEX);
+        BigRational cfac = new BigRational(1);
+        String[] alpha = new String[] { "alpha" };
+        String[] vars = new String[] { "x" };
+        GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(cfac, 1, to, vars);
+
+        // 1 / ( x^3 - 2 )
+        GenPolynomial<BigRational> D = pfac.parse("x^3 - 2"); 
+
+        GenPolynomial<BigRational> N = pfac.getONE();
+
+        FactorRational engine = new FactorRational();
+
+        PartialFraction<BigRational> F = engine.baseAlgebraicPartialFraction(N,D);
+        System.out.println("\npartial fraction = " + F);
+    }
+
+
+    /**
+     * example6.
+     * Partial fraction decomposition.
+     */
+    public static void example6() {
+        System.out.println("\n\nexample 6");
+        // http://www.apmaths.uwo.ca/~rcorless/AM563/NOTES/Nov_16_95/node13.html
+
+        TermOrder to = new TermOrder(TermOrder.INVLEX);
+        BigRational cfac = new BigRational(1);
+        String[] alpha = new String[] { "alpha" };
+        String[] vars = new String[] { "x" };
+        GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(cfac, 1, to, vars);
+
+        // ( 7 x^6 + 1 ) /  ( x^7 + x + 1 )
+        GenPolynomial<BigRational> D = pfac.parse("x^7 + x + 1"); 
+
+        GenPolynomial<BigRational> N = PolyUtil.<BigRational> baseDeriviative(D);
+
+        FactorRational engine = new FactorRational();
+
+        PartialFraction<BigRational> F = engine.baseAlgebraicPartialFraction(N,D);
+        System.out.println("\npartial fraction = " + F);
     }
 
 }

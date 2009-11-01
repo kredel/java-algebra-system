@@ -26,7 +26,7 @@ public class Factors<C extends GcdRingElem<C>> implements Comparable<Factors<C>>
 
 
     /**
-     * Original polynomial to be factored with coefficients from C.
+     * Original (irreducible) polynomial to be factored with coefficients from C.
      */
     public final GenPolynomial<C> poly;
 
@@ -163,6 +163,7 @@ public class Factors<C extends GcdRingElem<C>> implements Comparable<Factors<C>>
         if (arfactors == null) {
             return sb.toString();
         }
+        first = true;
         for (Factors<AlgebraicNumber<C>> arp : arfactors) {
             if (first) {
                 first = false;
