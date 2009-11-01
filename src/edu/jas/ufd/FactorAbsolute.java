@@ -431,11 +431,11 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>> extends FactorAbs
             if ( r.isConstant() ) {
                 continue;
             }
-            if ( r.degree(0) <= 1L ) {
-                System.out.println("warning linear factor in resultant ignored");
-                continue;
-                //throw new RuntimeException("input not irreducible");
-            }
+//             if ( r.degree(0) <= 1L ) {
+//                 System.out.println("warning linear factor in resultant ignored");
+//                 continue;
+//                 //throw new RuntimeException("input not irreducible");
+//             }
             vars = new String[] { "z_" + Math.abs(r.hashCode() % 1000) };
             pfac = pfac.clone();
             vars = pfac.setVars(vars);
@@ -444,6 +444,7 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>> extends FactorAbs
             AlgebraicNumberRing<C> afac = new AlgebraicNumberRing<C>(r, true); // since irreducible
             System.out.println("afac = " + afac.toScript());
             AlgebraicNumber<C> a = afac.getGenerator();
+            //no: a = a.negate();
             System.out.println("a = " + a);
 
             // K(alpha)[x]
@@ -476,12 +477,12 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>> extends FactorAbs
             }
 
             long d = r.degree(0) - Ga.degree(0);
-            System.out.println("d = " + d);
+            //System.out.println("d  = " + d);
             GenPolynomial<AlgebraicNumber<C>> Ra = Ga;
-            for ( int i = 0; i < d; i ++ ) {
-                Ra = Ra.multiply(Ga);
-            }
-            System.out.println("Ra = " + Ra);
+//             for ( int i = 0; i < d; i ++ ) {
+//                 Ra = Ra.multiply(Ga);
+//             }
+//             System.out.println("Ra = " + Ra);
 
             GenPolynomial<AlgebraicNumber<C>>[] qra = PolyUtil.<AlgebraicNumber<C>> basePseudoQuotientRemainder(Pa,Ga);
             GenPolynomial<AlgebraicNumber<C>> Qa = qra[0];
