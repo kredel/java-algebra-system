@@ -422,7 +422,7 @@ public class GCDPartFracRatTest extends TestCase {
      */
     public void testBasePartFracListExponent() {
 
-        SquarefreeAbstract<BigRational> sqf = SquarefreeFactory.<BigRational>getImplementation(mi);
+        SquarefreeAbstract<BigRational> sqf = SquarefreeFactory.getImplementation(mi);
 
         dfac = new GenPolynomialRing<BigRational>(mi, 1, to);
 
@@ -455,7 +455,7 @@ public class GCDPartFracRatTest extends TestCase {
             //System.out.println("F  = " + F.size());
 
             boolean t = sqf.isBasePartialFraction(a, Ds, F);
-            assertTrue("a/b^e = a0 + sum(ai/p^i) ", t);
+            assertTrue("a/prod(b_i^i) = a0 + sum(aij/b_i^j) ", t);
         }
     }
 
