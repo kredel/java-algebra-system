@@ -7,6 +7,7 @@ package edu.jas.ufd;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.ArrayList;
 
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
@@ -120,15 +121,16 @@ public class Factors<C extends GcdRingElem<C>> implements Comparable<Factors<C>>
             }
             sb.append(ap.toString());
         }
-        sb.append(" over " + afac.toString());
+        sb.append("\n  ## over " + afac.toString() + "\n");
         if (arfactors == null) {
             return sb.toString();
         }
+        first = true;
         for (Factors<AlgebraicNumber<C>> arp : arfactors) {
             if (first) {
                 first = false;
             } else {
-                sb.append(", ");
+                sb.append(",\n");
             }
             sb.append(arp.toString());
         }
@@ -315,6 +317,43 @@ public class Factors<C extends GcdRingElem<C>> implements Comparable<Factors<C>>
             }
         }
         return arr;
+    }
+
+
+    /**
+     * Get the list of factors at one level.
+     * @return list of algebraic factors 
+     */
+    public List<GenPolynomial<AlgebraicNumber<C>>> getFactors() {
+        List<GenPolynomial<AlgebraicNumber<C>>> af = new ArrayList<GenPolynomial<AlgebraicNumber<C>>>();
+        if ( afac == null ) {
+            return af;
+        }
+        af.addAll(afactors);
+        if ( arfactors == null ) {
+            return af;
+        }
+        for (Factors<AlgebraicNumber<C>> arp : arfactors) {
+            af.add( arp.poly );
+        }
+        return af;
+    }
+
+
+    /**
+     * Get the factor for polynomial.
+     * @return algebraic factor 
+     */
+    public Factors<AlgebraicNumber<C>> getFactor(GenPolynomial<AlgebraicNumber<C>> p) {
+        if ( afac == null ) {
+            return null;
+        }
+        for (Factors<AlgebraicNumber<C>> arp : arfactors) {
+            if ( p.equals( arp.poly ) ) {
+                return arp;
+            }
+        }
+        return null;
     }
 
 }

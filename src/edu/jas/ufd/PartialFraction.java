@@ -108,7 +108,7 @@ public class PartialFraction<C extends GcdRingElem<C>> implements Serializable {
             sb.append(cp.toString());
         }
         if ( !first) {
-            sb.append(" linear denonimators: ");
+            sb.append(" linear denominators: ");
         }
         first = true;
         for (GenPolynomial<C> cp : cdenom) {
@@ -133,7 +133,7 @@ public class PartialFraction<C extends GcdRingElem<C>> implements Serializable {
             sb.append(" ## over " + ap.factory() + "\n");
         }
         if ( !first) {
-            sb.append(" denonimators: ");
+            sb.append(" denominators: ");
         }
         first = true;
         for (GenPolynomial<AlgebraicNumber<C>> ap : adenom) {
@@ -171,7 +171,7 @@ public class PartialFraction<C extends GcdRingElem<C>> implements Serializable {
             sb.append(cp.toScript());
         }
         if ( !first) {
-            sb.append(" linear denonimators: ");
+            sb.append(" linear denominators: ");
         }
         first = true;
         for (GenPolynomial<C> cp : cdenom) {
@@ -195,7 +195,7 @@ public class PartialFraction<C extends GcdRingElem<C>> implements Serializable {
             sb.append(ap.toScript());
             sb.append(" ## over " + ap.toScriptFactory() + "\n");
         }
-        sb.append(" denonimators: ");
+        sb.append(" denominators: ");
         first = true;
         for (GenPolynomial<AlgebraicNumber<C>> ap : adenom) {
             if (first) {
