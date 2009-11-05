@@ -597,9 +597,8 @@ public class FactorTest extends TestCase {
 
         FactorRational engine = new FactorRational();
 
-        List<FactorsList<BigRational>> F = engine.baseAlgebraicPartialFraction(N,agen);
-        System.out.println("agen     = " + agen);
-        System.out.println("F        = " + F);
+        PartialFraction<BigRational> F = engine.baseAlgebraicPartialFraction(N,agen);
+        System.out.println("\npartial fraction = " + F);
 
         //boolean t = engine.isAbsoluteFactorization(F);
         //System.out.println("t        = " + t);
