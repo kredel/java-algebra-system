@@ -59,7 +59,10 @@ public class GenMatrix<C extends RingElem<C> >
     /**
      * Constructor for GenMatrix.
      */
-    protected GenMatrix(GenMatrixRing< C > r, ArrayList<ArrayList<C>> m) {
+    public GenMatrix(GenMatrixRing< C > r, ArrayList<ArrayList<C>> m) {
+        if ( r == null || m == null ) {
+            throw new RuntimeException("Empty r or m not allowed, r = " + r + ", m = " +m);
+        }
         ring = r;
         matrix = m;
     }
