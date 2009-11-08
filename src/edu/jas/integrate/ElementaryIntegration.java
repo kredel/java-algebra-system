@@ -47,8 +47,6 @@ public class ElementaryIntegration {
   }
 
 
-
-
   public GenPolynomial<BigRational>[] evaluate(GenPolynomial<BigRational> a,
       GenPolynomial<BigRational> d) {
     SortedMap<GenPolynomial<BigRational>, Long> sfactors;
