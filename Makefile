@@ -157,6 +157,9 @@ edu/jas/root/%.class: src/edu/jas/root/%.java
 edu/jas/kern/%.class: src/edu/jas/kern/%.java
 	$(JAVAC) $<
 
+edu/jas/integrate/%.class: src/edu/jas/integrate/%.java
+	$(JAVAC) $<
+
 edu/mas/kern/%.class: src/edu/mas/kern/%.java
 	$(JAVAC) $<
 
@@ -200,21 +203,18 @@ edu.jas.root.%: edu/jas/root/%.class
 edu.jas.kern.%: edu/jas/kern/%.class
 	$(JAVA) $@ $(cl)
 
+edu.jas.integrate.%: edu/jas/integrate/%.class
+	$(JAVA) $@ $(cl)
+
 edu.mas.kern.%: edu/mas/kern/%.class
 	$(JAVA) $@ $(cl)
 
 
-#FILES=$(wildcard src/edu/jas/structure/*.java src/edu/jas/arith/*.java src/edu/jas/poly/*.java src/edu/jas/ps/*.java src/edu/jas/gb/*.java src/edu/jas/ufd/*.java src/edu/jas/application/*.java src/edu/jas/vector/*.java src/edu/jas/gbmod/*.java src/edu/jas/util/*.java src/edu/jas/kern/*.java src/edu/jas/root/*.java)
-FILES=$(wildcard src/edu/jas/structure/*.java src/edu/jas/arith/*.java src/edu/jas/poly/*.java src/edu/jas/ps/*.java src/edu/jas/gb/*.java src/edu/jas/application/*.java src/edu/jas/vector/*.java src/edu/jas/gbmod/*.java src/edu/jas/util/*.java src/edu/jas/ufd/*.java src/edu/jas/kern/*.java src/edu/jas/root/*.java)
+FILES=$(wildcard src/edu/jas/structure/*.java src/edu/jas/arith/*.java src/edu/jas/poly/*.java src/edu/jas/ps/*.java src/edu/jas/gb/*.java src/edu/jas/application/*.java src/edu/jas/vector/*.java src/edu/jas/gbmod/*.java src/edu/jas/util/*.java src/edu/jas/ufd/*.java src/edu/jas/kern/*.java src/edu/jas/root/*.java src/edu/jas/integrate/*.java)
 
 LIBS=$(JUNITPATH) $(LOG4JPATH) $(JOMPPATH) $(TNJPATH)
 
-#CLASSES=$(wildcard edu/jas/structure/*.java edu/jas/arith/*.class edu/jas/poly/*.class edu/jas/ps/*.class edu/jas/gb/*.class edu/jas/ufd/*.class edu/jas/application/*.class edu/jas/vector/*.class edu/jas/gbmod/*.class edu/jas/util/*.class edu/jas/kern/*.class edu/jas/root/*.class)
-#CLASSES=edu/jas
-
-#CLASSES=edu/jas/structure/ edu/jas/arith/ edu/jas/poly/ edu/jas/ps/ edu/jas/gb/ edu/jas/ufd/ edu/jas/application/ edu/jas/vector/ edu/jas/gbmod/ edu/jas/util/ edu/jas/kern/ edu/jas/root/
-
-CLASSES=edu/jas/structure/ edu/jas/arith/ edu/jas/poly/ edu/jas/ps/ edu/jas/gb/ edu/jas/application/ edu/jas/vector/ edu/jas/gbmod/ edu/jas/util/ edu/jas/ufd/ edu/jas/kern/ edu/jas/root/
+CLASSES=edu/jas/structure/ edu/jas/arith/ edu/jas/poly/ edu/jas/ps/ edu/jas/gb/ edu/jas/application/ edu/jas/vector/ edu/jas/gbmod/ edu/jas/util/ edu/jas/ufd/ edu/jas/kern/ edu/jas/root/ edu/jas/integrate/
 
 PYS=$(wildcard *.py)
 EXAMPY=$(wildcard examples/*.py)
@@ -277,7 +277,7 @@ lint:
 
 clean:
 	find . -name "*~" -follow -print -exec rm {} \;
-	rm -f application/application arith/arith kern/kern gbmod/gbmod poly/poly ps/ps gb/gb structure/structure ufd/ufd util/util vector/vector
+	#rm -f application/application arith/arith kern/kern gbmod/gbmod poly/poly ps/ps gb/gb structure/structure ufd/ufd util/util vector/vector
 
 
 tests:
@@ -321,6 +321,8 @@ export:
 	cp ~/java/lib/mylog.jar ~/jas-versions/$(VERSION)/
 	cd ~/jas-versions/jlinalg_adapter; make > ~/jas-versions/$(VERSION)/make_jlinalg.out
 	cp ~/java/lib/jlinalg_adapter.jar ~/jas-versions/$(VERSION)/
+	cd ~/jas-versions/commons-math_adapter; make > ~/jas-versions/$(VERSION)/make_commons-math.out
+	cp ~/java/lib/commons-math_adapter.jar ~/jas-versions/$(VERSION)/
 
 deploy:
 	$(RSYNC) -e 'ssh -p 2222' --delete-after --exclude=DTD --exclude=*xml ~/jas-versions/$(VERSION)/ krum:htdocs/$(VERSION)
@@ -341,6 +343,7 @@ loc: young
 	find src -name "*.java" | xargs cat | wc
 	find src -name "*.java" | grep -v Test | xargs cat | wc
 	find src -name "*.java" | grep    Test | xargs cat | wc
+	find src -name "*.java" | grep    Test | xargs cat | grep "void test" | wc -l 
 	cat examples/jas.py | wc
 	find examples -name "*.py" | grep -v jas.py | xargs cat | wc
 
