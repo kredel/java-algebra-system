@@ -21,6 +21,9 @@ import edu.jas.ufd.GCDFactory;
 import edu.jas.ufd.GreatestCommonDivisorAbstract;
 import edu.jas.ufd.SquarefreeAbstract;
 import edu.jas.ufd.SquarefreeFactory;
+import edu.jas.ufd.FactorFactory;
+import edu.jas.ufd.FactorAbsolute;
+import edu.jas.ufd.PartialFraction;
 
 /**
  * Methods related to elementary integration. For example Hermite reduction.
@@ -31,6 +34,11 @@ import edu.jas.ufd.SquarefreeFactory;
  */
 
 public class ElementaryIntegration<C extends GcdRingElem<C>> {
+
+  /**
+   * Engine for factorization.
+   */
+  public final FactorAbsolute<C> irr;
 
   /**
    * Engine for squarefree decomposition.
@@ -48,7 +56,56 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
   public ElementaryIntegration(RingFactory<C> br) {
     ufd = GCDFactory.<C> getProxy(br);
     sqf = SquarefreeFactory.<C> getImplementation(br);
+    irr = (FactorAbsolute<C>) FactorFactory.<C> getImplementation(br);
   }
+
+  /**
+   * Integration of a rational function.
+   * 
+   * @param a
+   *          numerator
+   * @param d
+   *          denominator
+   * @return [ ... ] such that integrate(a/d) =
+   *         sum_i(gn_i/gd_i) + integrate(h0) + sum_j( an_j log(hd_j) ) 
+   */
+  public Integral<C> integrate(GenPolynomial<C> a, GenPolynomial<C> d) {
+      if ( d.isZERO() ) {
+          throw new RuntimeException("zero denominator not allowed");
+      }
+      if ( a.isZERO() ) {
+          return new Integral<C>(a,d,a);
+      }
+      if ( d.isONE() ) {
+          GenPolynomial<C> pi = PolyUtil.<C> baseIntegral(a); 
+          return new Integral<C>(a,d,pi);
+      }
+      GenPolynomial<C>[] qr = PolyUtil.<C> basePseudoQuotientRemainder(a, d); 
+      GenPolynomial<C> p = qr[0];
+      GenPolynomial<C> r = qr[1];
+      List<GenPolynomial<C>>[] ih = integrateHermite(r,d);
+      List<GenPolynomial<C>> rat = ih[0];
+      List<GenPolynomial<C>> log = ih[1];
+
+      GenPolynomial<C> pp = log.remove(0);
+      p = p.sum(pp);
+      GenPolynomial<C> pi = PolyUtil.<C> baseIntegral(p); 
+
+      if ( log.size() == 0 ) {
+          return new Integral<C>(a,d,pi,rat);
+      }
+
+      List<PartialFraction<C>> logi = new ArrayList<PartialFraction<C>>( log.size()/2 );
+      for ( int i = 0; i < log.size(); i++ ) {
+          GenPolynomial<C> ln = log.get(i++);
+          GenPolynomial<C> ld = log.get(i);
+          PartialFraction<C> pf = irr.baseAlgebraicPartialFraction(ln,ld);
+          logi.add(pf);
+      }
+      return new Integral<C>(a,d,pi,rat,logi);
+  }
+
+
 
   /**
    * Hermite reduction step.
@@ -139,6 +196,14 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
    * @param args
    */
   public static void main(String[] args) {
+      example1();
+      example2();
+  }
+
+  /**
+   * Example rationals.
+   */
+  public static void example1() {
 
     BigRational br = new BigRational(0);
     String[] vars = new String[] { "x" };
@@ -191,7 +256,69 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
     ret = eIntegrator.integrateHermite(a, d);
     System.out.println("Result: " + ret[0] + " , " + ret[1]);
 
+    System.out.println("------------------------------------------------------\n");
+    ComputerThreads.terminate();
+  }
+
+
+  /**
+   * Example rational plus logarithm.
+   */
+  public static void example2() {
+
+    BigRational br = new BigRational(0);
+    String[] vars = new String[] { "x" };
+    GenPolynomialRing<BigRational> fac;
+    fac = new GenPolynomialRing<BigRational>(br, vars.length, new TermOrder(
+        TermOrder.INVLEX), vars);
+
+    ElementaryIntegration<BigRational> eIntegrator = new ElementaryIntegration<BigRational>(
+        br);
+
+    GenPolynomial<BigRational> a = fac.parse("x^7 - 24 x^4 - 4 x^2 + 8 x - 8");
+    System.out.println("A: " + a.toString());
+    GenPolynomial<BigRational> d = fac.parse("x^8 + 6 x^6 + 12 x^4 + 8 x^2");
+    System.out.println("D: " + d.toString());
+    GenPolynomial<BigRational> gcd = a.gcd(d);
+    System.out.println("GCD: " + gcd.toString());
+    Integral<BigRational> ret = eIntegrator.integrate(a, d);
+    System.out.println("Result: " + ret);
+
+    System.out.println("-----");
+
+    a = fac.parse("10 x^2 - 63 x + 29");
+    System.out.println("A: " + a.toString());
+    d = fac.parse("x^3 - 11 x^2 + 40 x -48");
+    System.out.println("D: " + d.toString());
+    gcd = a.gcd(d);
+    System.out.println("GCD: " + gcd.toString());
+    ret = eIntegrator.integrate(a, d);
+    System.out.println("Result: " + ret);
+
+    System.out.println("-----");
+
+    a = fac.parse("x+3");
+    System.out.println("A: " + a.toString());
+    d = fac.parse("x^2 - 3 x - 40");
+    System.out.println("D: " + d.toString());
+    gcd = a.gcd(d);
+    System.out.println("GCD: " + gcd.toString());
+    ret = eIntegrator.integrate(a, d);
+    System.out.println("Result: " + ret);
+
+    System.out.println("-----");
+
+    a = fac.parse("10 x^2+12 x + 20");
+    System.out.println("A: " + a.toString());
+    d = fac.parse("x^3 - 8");
+    System.out.println("D: " + d.toString());
+    gcd = a.gcd(d);
+    System.out.println("GCD: " + gcd.toString());
+    ret = eIntegrator.integrate(a, d);
+    System.out.println("Result: " + ret);
+
     System.out.println("-----");
     ComputerThreads.terminate();
   }
+
 }

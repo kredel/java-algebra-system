@@ -94,6 +94,49 @@ public class PartialFraction<C extends GcdRingElem<C>> implements Serializable {
     @Override
     public String toString() {
         StringBuffer sb = new StringBuffer();
+//         sb.append("(" + num.toString() + ")");
+//         sb.append(" / ");
+//         sb.append("(" + den.toString() + ")");
+//         sb.append(" =\n");
+        boolean first = true;
+        for (int i = 0; i < cfactors.size(); i++ ) {
+            C cp = cfactors.get(i);
+            if (first) {
+                first = false;
+            } else {
+                sb.append(" + ");
+            }
+            sb.append("("+cp.toString()+")");
+            GenPolynomial<C> p = cdenom.get(i);
+            sb.append(" log( "+p.toString()+")");
+        }
+        if ( afactors.size() > 0 ) {
+            sb.append(" + ");
+        }
+        first = true;
+        for (int i = 0; i < afactors.size(); i++ ) {
+            if (first) {
+                first = false;
+            } else {
+                sb.append(" + ");
+            }
+            AlgebraicNumber<C> ap =  afactors.get(i);
+            sb.append("("+ap.toString()+")");
+            //sb.append(" ## over " + ap.factory() + "\n");
+            GenPolynomial<AlgebraicNumber<C>> p = adenom.get(i);
+            sb.append(" log( " + p.toString() + ")");
+        }
+        return sb.toString();
+    }
+
+
+    /**
+     * Get the String representation.
+     * @see java.lang.Object#toString()
+     */
+    //@Override
+    public String toStringX() {
+        StringBuffer sb = new StringBuffer();
         sb.append("(" + num.toString() + ")");
         sb.append(" / ");
         sb.append("(" + den.toString() + ")");
