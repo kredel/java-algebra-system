@@ -55,7 +55,7 @@ public class Integral<C extends GcdRingElem<C>> implements Serializable {
     /**
      * Integral of the logarithmic part.
      */
-    public final List<PartialFraction<C>> logarithm;
+    public final List<LogIntegral<C>> logarithm;
 
 
     /**
@@ -82,7 +82,7 @@ public class Integral<C extends GcdRingElem<C>> implements Serializable {
     public Integral(GenPolynomial<C> n, GenPolynomial<C> d,
             GenPolynomial<C> p, 
             List<GenPolynomial<C>> rat) {
-        this(n,d,p,rat, new ArrayList<PartialFraction<C>>() );
+        this(n,d,p,rat, new ArrayList<LogIntegral<C>>() );
     }
 
 
@@ -98,7 +98,7 @@ public class Integral<C extends GcdRingElem<C>> implements Serializable {
     public Integral(GenPolynomial<C> n, GenPolynomial<C> d,
             GenPolynomial<C> p, 
             List<GenPolynomial<C>> rat,
-            List<PartialFraction<C>> log) {
+            List<LogIntegral<C>> log) {
         num = n;
         den = d;
         pol = p;
@@ -141,7 +141,7 @@ public class Integral<C extends GcdRingElem<C>> implements Serializable {
               sb.append(" + ");
            }
            first = true;
-           for ( PartialFraction<C> pf : logarithm ) {
+           for ( LogIntegral<C> pf : logarithm ) {
                if ( first ) {
                    first = false;
                } else {

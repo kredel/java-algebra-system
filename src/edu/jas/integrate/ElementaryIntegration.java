@@ -117,11 +117,11 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
             return new Integral<C>(a,d,pi,rat);
         }
 
-        List<PartialFraction<C>> logi = new ArrayList<PartialFraction<C>>( log.size()/2 );
+        List<LogIntegral<C>> logi = new ArrayList<LogIntegral<C>>( log.size()/2 );
         for ( int i = 0; i < log.size(); i++ ) {
             GenPolynomial<C> ln = log.get(i++);
             GenPolynomial<C> ld = log.get(i);
-            PartialFraction<C> pf = integrateLogPart(ln,ld);
+            LogIntegral<C> pf = integrateLogPart(ln,ld);
             logi.add(pf);
         }
         System.out.println("logi = " + logi);
@@ -217,15 +217,14 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
      * Rothstein-Trager algorithm.
      * @param A univariate GenPolynomial, deg(A) < deg(P).
      * @param P univariate squarefree GenPolynomial, gcd(A,P) == 1.
-     * @return partial fraction container.
+     * @return logarithmic part container.
      */
-    public PartialFraction<C> integrateLogPart(GenPolynomial<C> A, GenPolynomial<C> P) {
+    public LogIntegral<C> integrateLogPart(GenPolynomial<C> A, GenPolynomial<C> P) {
         if (P == null || P.isZERO() ) {
             throw new RuntimeException(" P == null or P == 0");
         }
         if (A == null || A.isZERO() ) {
             throw new RuntimeException(" A == null or A == 0");
-            // PartialFraction(A,P,al,pl,empty,empty)
         }
         //System.out.println("\nP_base_algeb_part = " + P);
         GenPolynomialRing<C> pfac = P.ring; // K[x]
@@ -246,7 +245,7 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
         if (P.degree(0) <= 1) {
             cfactors.add(A.leadingBaseCoefficient());
             cdenom.add(P); 
-            return new PartialFraction<C>(A,P,cfactors,cdenom,afactors,adenom);
+            return new LogIntegral<C>(A,P,cfactors,cdenom,afactors,adenom);
         }
         List<GenPolynomial<C>> Pfac = irr.baseFactorsSquarefree(P);
         System.out.println("\nPfac = " + Pfac);
@@ -267,13 +266,13 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
                 cdenom.add(pi); 
                 continue;
             }
-            PartialFraction<C> pf = integrateLogPartIrreducible(ai,pi);
+            LogIntegral<C> pf = integrateLogPartIrreducible(ai,pi);
             cfactors.addAll( pf.cfactors ); 
             cdenom.addAll( pf.cdenom ); 
             afactors.addAll( pf.afactors ); 
             adenom.addAll( pf.adenom );
         }
-        return new PartialFraction<C>(A,P,cfactors,cdenom,afactors,adenom);
+        return new LogIntegral<C>(A,P,cfactors,cdenom,afactors,adenom);
     }
 
 
@@ -282,9 +281,9 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
      * Rothstein-Trager algorithm.
      * @param A univariate GenPolynomial, deg(A) < deg(P).
      * @param P univariate irreducible GenPolynomial. // gcd(A,P) == 1 automatic
-     * @return partial fraction container.
+     * @return logarithmic part container.
      */
-    public PartialFraction<C> integrateLogPartIrreducible(GenPolynomial<C> A, GenPolynomial<C> P) {
+    public LogIntegral<C> integrateLogPartIrreducible(GenPolynomial<C> A, GenPolynomial<C> P) {
         if (P == null || P.isZERO() ) {
             throw new RuntimeException(" P == null or P == 0");
         }
@@ -307,7 +306,7 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
         if (P.degree(0) <= 1) {
             cfactors.add(A.leadingBaseCoefficient());
             cdenom.add(P); 
-            return new PartialFraction<C>(A,P,cfactors,cdenom,afactors,adenom);
+            return new LogIntegral<C>(A,P,cfactors,cdenom,afactors,adenom);
         }
 
         // deriviative
@@ -429,7 +428,7 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
                 //adenom.add( Qa );
             }
         }
-        return new PartialFraction<C>(A,P,cfactors,cdenom,afactors,adenom);
+        return new LogIntegral<C>(A,P,cfactors,cdenom,afactors,adenom);
     }
 
 }
