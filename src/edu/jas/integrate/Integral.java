@@ -7,7 +7,7 @@ package edu.jas.integrate;
 
 import java.io.Serializable;
 import java.util.List;
-//import java.util.Arrays;
+import java.util.ArrayList;
 
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
@@ -67,7 +67,7 @@ public class Integral<C extends GcdRingElem<C>> implements Serializable {
      */
     public Integral(GenPolynomial<C> n, GenPolynomial<C> d,
             GenPolynomial<C> p) {
-        this(n,d,p,null);
+        this(n,d,p, new ArrayList<GenPolynomial<C>>() );
     }
 
 
@@ -82,7 +82,7 @@ public class Integral<C extends GcdRingElem<C>> implements Serializable {
     public Integral(GenPolynomial<C> n, GenPolynomial<C> d,
             GenPolynomial<C> p, 
             List<GenPolynomial<C>> rat) {
-        this(n,d,p,rat,null);
+        this(n,d,p,rat, new ArrayList<PartialFraction<C>>() );
     }
 
 
@@ -114,15 +114,15 @@ public class Integral<C extends GcdRingElem<C>> implements Serializable {
     @Override
     public String toString() {
         StringBuffer sb = new StringBuffer();
-        sb.append("integral(" + num.toString() );
-        sb.append(" / ");
-        sb.append(den.toString() + ")");
+        sb.append("integral( (" + num.toString() );
+        sb.append(") / (");
+        sb.append(den.toString() + ") )");
         sb.append(" =\n");
         if ( ! pol.isZERO() ) {
             sb.append(pol.toString());
         }
         boolean first = true;
-        if ( rational != null && rational.size() != 0 ) {
+        if ( rational.size() != 0 ) {
             if ( ! pol.isZERO() ) {
                sb.append(" + ");
             }
@@ -136,8 +136,8 @@ public class Integral<C extends GcdRingElem<C>> implements Serializable {
                sb.append(rational.get(i)+")");
             }
         }
-        if ( logarithm != null ) {
-            if ( !pol.isZERO() || ( rational != null && rational.size() != 0 ) ) {
+        if ( logarithm.size() != 0 ) {
+            if ( !pol.isZERO() || rational.size() != 0 ) {
               sb.append(" + ");
            }
            first = true;

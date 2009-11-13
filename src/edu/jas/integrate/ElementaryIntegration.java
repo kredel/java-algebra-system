@@ -35,20 +35,24 @@ import edu.jas.ufd.PartialFraction;
 
 public class ElementaryIntegration<C extends GcdRingElem<C>> {
 
+
   /**
    * Engine for factorization.
    */
   public final FactorAbsolute<C> irr;
+
 
   /**
    * Engine for squarefree decomposition.
    */
   public final SquarefreeAbstract<C> sqf;
 
+
   /**
    * Engine for greatest common divisors.
    */
   public final GreatestCommonDivisorAbstract<C> ufd;
+
 
   /**
    * Constructor.
@@ -58,6 +62,7 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
     sqf = SquarefreeFactory.<C> getImplementation(br);
     irr = (FactorAbsolute<C>) FactorFactory.<C> getImplementation(br);
   }
+
 
   /**
    * Integration of a rational function.
@@ -83,6 +88,12 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
       GenPolynomial<C>[] qr = PolyUtil.<C> basePseudoQuotientRemainder(a, d); 
       GenPolynomial<C> p = qr[0];
       GenPolynomial<C> r = qr[1];
+
+      GenPolynomial<C> c = ufd.gcd(r,d);
+      if ( ! c.isONE() ) {
+          r = PolyUtil.<C> basePseudoQuotientRemainder(r, c)[0];
+          d = PolyUtil.<C> basePseudoQuotientRemainder(d, c)[0];
+      }
       List<GenPolynomial<C>>[] ih = integrateHermite(r,d);
       List<GenPolynomial<C>> rat = ih[0];
       List<GenPolynomial<C>> log = ih[1];
@@ -125,6 +136,7 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
     sfactors = sqf.squarefreeFactors(d);
     List<GenPolynomial<C>> Di = new ArrayList<GenPolynomial<C>>();
     List<GenPolynomial<C>> DPower = new ArrayList<GenPolynomial<C>>();
+
     long maxE = 0;
     for (GenPolynomial<C> f : sfactors.keySet()) {
       long e = sfactors.get(f).longValue();
@@ -188,137 +200,6 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
     ret[0] = G;
     ret[1] = H;
     return ret;
-  }
-
-  /**
-   * Test program.
-   * 
-   * @param args
-   */
-  public static void main(String[] args) {
-      example1();
-      example2();
-  }
-
-  /**
-   * Example rationals.
-   */
-  public static void example1() {
-
-    BigRational br = new BigRational(0);
-    String[] vars = new String[] { "x" };
-    GenPolynomialRing<BigRational> fac;
-    fac = new GenPolynomialRing<BigRational>(br, vars.length, new TermOrder(
-        TermOrder.INVLEX), vars);
-
-    ElementaryIntegration<BigRational> eIntegrator = new ElementaryIntegration<BigRational>(
-        br);
-
-    GenPolynomial<BigRational> a = fac.parse("x^7 - 24 x^4 - 4 x^2 + 8 x - 8");
-    System.out.println("A: " + a.toString());
-    GenPolynomial<BigRational> d = fac.parse("x^8 + 6 x^6 + 12 x^4 + 8 x^2");
-    System.out.println("D: " + d.toString());
-    GenPolynomial<BigRational> gcd = a.gcd(d);
-    System.out.println("GCD: " + gcd.toString());
-    List<GenPolynomial<BigRational>>[] ret = eIntegrator.integrateHermite(a, d);
-    System.out.println("Result: " + ret[0] + " , " + ret[1]);
-
-    System.out.println("-----");
-
-    a = fac.parse("10 x^2 - 63 x + 29");
-    System.out.println("A: " + a.toString());
-    d = fac.parse("x^3 - 11 x^2 + 40 x -48");
-    System.out.println("D: " + d.toString());
-    gcd = a.gcd(d);
-    System.out.println("GCD: " + gcd.toString());
-    ret = eIntegrator.integrateHermite(a, d);
-    System.out.println("Result: " + ret[0] + " , " + ret[1]);
-
-    System.out.println("-----");
-
-    a = fac.parse("x+3");
-    System.out.println("A: " + a.toString());
-    d = fac.parse("x^2 - 3 x - 40");
-    System.out.println("D: " + d.toString());
-    gcd = a.gcd(d);
-    System.out.println("GCD: " + gcd.toString());
-    ret = eIntegrator.integrateHermite(a, d);
-    System.out.println("Result: " + ret[0] + " , " + ret[1]);
-
-    System.out.println("-----");
-
-    a = fac.parse("10 x^2+12 x + 20");
-    System.out.println("A: " + a.toString());
-    d = fac.parse("x^3 - 8");
-    System.out.println("D: " + d.toString());
-    gcd = a.gcd(d);
-    System.out.println("GCD: " + gcd.toString());
-    ret = eIntegrator.integrateHermite(a, d);
-    System.out.println("Result: " + ret[0] + " , " + ret[1]);
-
-    System.out.println("------------------------------------------------------\n");
-    ComputerThreads.terminate();
-  }
-
-
-  /**
-   * Example rational plus logarithm.
-   */
-  public static void example2() {
-
-    BigRational br = new BigRational(0);
-    String[] vars = new String[] { "x" };
-    GenPolynomialRing<BigRational> fac;
-    fac = new GenPolynomialRing<BigRational>(br, vars.length, new TermOrder(
-        TermOrder.INVLEX), vars);
-
-    ElementaryIntegration<BigRational> eIntegrator = new ElementaryIntegration<BigRational>(
-        br);
-
-    GenPolynomial<BigRational> a = fac.parse("x^7 - 24 x^4 - 4 x^2 + 8 x - 8");
-    System.out.println("A: " + a.toString());
-    GenPolynomial<BigRational> d = fac.parse("x^8 + 6 x^6 + 12 x^4 + 8 x^2");
-    System.out.println("D: " + d.toString());
-    GenPolynomial<BigRational> gcd = a.gcd(d);
-    System.out.println("GCD: " + gcd.toString());
-    Integral<BigRational> ret = eIntegrator.integrate(a, d);
-    System.out.println("Result: " + ret);
-
-    System.out.println("-----");
-
-    a = fac.parse("10 x^2 - 63 x + 29");
-    System.out.println("A: " + a.toString());
-    d = fac.parse("x^3 - 11 x^2 + 40 x -48");
-    System.out.println("D: " + d.toString());
-    gcd = a.gcd(d);
-    System.out.println("GCD: " + gcd.toString());
-    ret = eIntegrator.integrate(a, d);
-    System.out.println("Result: " + ret);
-
-    System.out.println("-----");
-
-    a = fac.parse("x+3");
-    System.out.println("A: " + a.toString());
-    d = fac.parse("x^2 - 3 x - 40");
-    System.out.println("D: " + d.toString());
-    gcd = a.gcd(d);
-    System.out.println("GCD: " + gcd.toString());
-    ret = eIntegrator.integrate(a, d);
-    System.out.println("Result: " + ret);
-
-    System.out.println("-----");
-
-    a = fac.parse("10 x^2+12 x + 20");
-    System.out.println("A: " + a.toString());
-    d = fac.parse("x^3 - 8");
-    System.out.println("D: " + d.toString());
-    gcd = a.gcd(d);
-    System.out.println("GCD: " + gcd.toString());
-    ret = eIntegrator.integrate(a, d);
-    System.out.println("Result: " + ret);
-
-    System.out.println("-----");
-    ComputerThreads.terminate();
   }
 
 }

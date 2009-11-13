@@ -110,7 +110,7 @@ public class PartialFraction<C extends GcdRingElem<C>> implements Serializable {
             GenPolynomial<C> p = cdenom.get(i);
             sb.append(" log( "+p.toString()+")");
         }
-        if ( afactors.size() > 0 ) {
+        if ( !first && afactors.size() > 0 ) {
             sb.append(" + ");
         }
         first = true;
@@ -121,9 +121,16 @@ public class PartialFraction<C extends GcdRingElem<C>> implements Serializable {
                 sb.append(" + ");
             }
             AlgebraicNumber<C> ap =  afactors.get(i);
-            sb.append("("+ap.toString()+")");
+            AlgebraicNumberRing<C> ar = ap.factory();
             //sb.append(" ## over " + ap.factory() + "\n");
             GenPolynomial<AlgebraicNumber<C>> p = adenom.get(i);
+            if ( p.degree(0) < ar.modul.degree(0) && ar.modul.degree(0) > 2 ) {
+                sb.append("sum_("+ar.getGenerator()+ " in ");
+                sb.append("rootOf(" + ar.modul  +") ) ");
+            } else {
+                //sb.append("sum_("+ar+") ");
+            }
+            sb.append("(" + ap.toString() + ")");
             sb.append(" log( " + p.toString() + ")");
         }
         return sb.toString();
