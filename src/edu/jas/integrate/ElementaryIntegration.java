@@ -78,12 +78,12 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
      *          numerator
      * @param d
      *          denominator
-     * @return [ ... ] such that integrate(a/d) =
+     * @return Integral container, such that integrate(a/d) =
      *         sum_i(gn_i/gd_i) + integrate(h0) + sum_j( an_j log(hd_j) ) 
      */
     public Integral<C> integrate(GenPolynomial<C> a, GenPolynomial<C> d) {
-        if ( d.isZERO() ) {
-            throw new RuntimeException("zero denominator not allowed");
+        if ( d == null || a == null || d.isZERO() ) {
+            throw new RuntimeException("zero or null not allowed");
         }
         if ( a.isZERO() ) {
             return new Integral<C>(a,d,a);
@@ -92,6 +92,14 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
             GenPolynomial<C> pi = PolyUtil.<C> baseIntegral(a); 
             return new Integral<C>(a,d,pi);
         }
+        GenPolynomialRing<C> pfac = d.ring; 
+        if (pfac.nvar > 1) {
+            throw new RuntimeException("only for univariate polynomials " + pfac);
+        }
+        if (!pfac.coFac.isField()) {
+            throw new RuntimeException("only for field coefficients " + pfac);
+        }
+
         GenPolynomial<C>[] qr = PolyUtil.<C> basePseudoQuotientRemainder(a, d); 
         GenPolynomial<C> p = qr[0];
         GenPolynomial<C> r = qr[1];
@@ -142,6 +150,12 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
      *         sum_i(gn_i/gd_i) + integrate(h0) + sum_j( integrate(hn_j/hd_j) )
      */
     public List<GenPolynomial<C>>[] integrateHermite(GenPolynomial<C> a, GenPolynomial<C> d) {
+        if (d == null || d.isZERO() ) {
+            throw new RuntimeException("d == null or d == 0");
+        }
+        if (a == null || a.isZERO() ) {
+            throw new RuntimeException("a == null or a == 0");
+        }
 
         // get squarefree decomposition
         SortedMap<GenPolynomial<C>, Long> sfactors = sqf.squarefreeFactors(d);
@@ -229,12 +243,10 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
         //System.out.println("\nP_base_algeb_part = " + P);
         GenPolynomialRing<C> pfac = P.ring; // K[x]
         if (pfac.nvar > 1) {
-            //System.out.println("facs_base_irred: univ");
-            throw new RuntimeException("only for univariate polynomials");
+            throw new RuntimeException("only for univariate polynomials " + pfac);
         }
         if (!pfac.coFac.isField()) {
-            //System.out.println("facs_base_irred: field");
-            throw new RuntimeException("only for field coefficients");
+            throw new RuntimeException("only for field coefficients " + pfac);
         }
         List<C> cfactors = new ArrayList<C>();
         List<GenPolynomial<C>> cdenom = new ArrayList<GenPolynomial<C>>();
@@ -285,17 +297,15 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
      */
     public LogIntegral<C> integrateLogPartIrreducible(GenPolynomial<C> A, GenPolynomial<C> P) {
         if (P == null || P.isZERO() ) {
-            throw new RuntimeException(" P == null or P == 0");
+            throw new RuntimeException("P == null or P == 0");
         }
         //System.out.println("\nP_base_algeb_part = " + P);
         GenPolynomialRing<C> pfac = P.ring; // K[x]
         if (pfac.nvar > 1) {
-            //System.out.println("facs_base_irred: univ");
-            throw new RuntimeException("only for univariate polynomials");
+            throw new RuntimeException("only for univariate polynomials " + pfac);
         }
         if (!pfac.coFac.isField()) {
-            //System.out.println("facs_base_irred: field");
-            throw new RuntimeException("only for field coefficients");
+            throw new RuntimeException("only for field coefficients " + pfac);
         }
         List<C> cfactors = new ArrayList<C>();
         List<GenPolynomial<C>> cdenom = new ArrayList<GenPolynomial<C>>();
@@ -361,11 +371,6 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
             if ( r.isConstant() ) {
                 continue;
             }
-            //             if ( r.degree(0) <= 1L ) {
-            //                 System.out.println("warning linear factor in resultant ignored");
-            //                 continue;
-            //                 //throw new RuntimeException("input not irreducible");
-            //             }
             vars = new String[] { "z_" + Math.abs(r.hashCode() % 1000) };
             pfac = pfac.clone();
             vars = pfac.setVars(vars);
@@ -406,7 +411,7 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
             }
             afactors.add( a );
             adenom.add( Ga );
-            // quadratic case
+            // special quadratic case
             if ( P.degree(0) == 2 && Ga.degree(0) == 1 ) {
                 GenPolynomial<AlgebraicNumber<C>>[] qra = PolyUtil.<AlgebraicNumber<C>> basePseudoQuotientRemainder(Pa,Ga);
                 GenPolynomial<AlgebraicNumber<C>> Qa = qra[0];
@@ -417,16 +422,7 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
                 afactors.add( a.negate() );
                 adenom.add( Qa );
             }
-            if ( P.degree(0) == 3 && Ga.degree(0) == 1 ) {
-                GenPolynomial<AlgebraicNumber<C>>[] qra = PolyUtil.<AlgebraicNumber<C>> basePseudoQuotientRemainder(Pa,Ga);
-                GenPolynomial<AlgebraicNumber<C>> Qa = qra[0];
-                if ( !qra[1].isZERO() ) {
-                    throw new RuntimeException("remainder not zero");
-                }
-                System.out.println("Qa3 = " + Qa);
-                //afactors.add( a.negate() );
-                //adenom.add( Qa );
-            }
+            // todo: eventually implement special cases deg = 3, 4
         }
         return new LogIntegral<C>(A,P,cfactors,cdenom,afactors,adenom);
     }
