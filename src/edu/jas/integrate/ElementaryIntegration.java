@@ -29,10 +29,14 @@ import edu.jas.ufd.FactorAbsolute;
 import edu.jas.ufd.FactorAbstract;
 import edu.jas.ufd.PartialFraction;
 import edu.jas.ufd.PolyUfdUtil;
+import edu.jas.application.Quotient;
+import edu.jas.application.QuotientRing;
 
 
 /**
- * Methods related to elementary integration. For example Hermite reduction.
+ * Methods related to elementary integration.
+ * In particular there are methods for Hermite reduction 
+ * and Rothstein-Trager integration of the logarithmic part.
  * 
  * @author Axel Kramer
  * @author Heinz Kredel
@@ -68,6 +72,20 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
         ufd = GCDFactory.<C> getProxy(br);
         sqf = SquarefreeFactory.<C> getImplementation(br);
         irr = /*(FactorAbsolute<C>)*/ FactorFactory.<C> getImplementation(br);
+    }
+
+
+    /**
+     * Integration of a rational function.
+     * 
+     * @param r
+     *          rational function
+     * @return Integral container, such that integrate(a/d) =
+     *         sum_i(gn_i/gd_i) + integrate(h0) + sum_j( an_j log(hd_j) ) 
+     */
+    public Integral<C> integrate(Quotient<C> r) {
+        Integral<C> integral = integrate(r.num,r.den);
+        return integral;
     }
 
 
@@ -425,6 +443,30 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
             // todo: eventually implement special cases deg = 3, 4
         }
         return new LogIntegral<C>(A,P,cfactors,cdenom,afactors,adenom);
+    }
+
+
+    /**
+     * Derivation of a univariate rational function.
+     * 
+     * @param r
+     *          rational function
+     * @return dr/dx
+     */
+    public Quotient<C> derivative(Quotient<C> r) {
+        GenPolynomial<C> num = r.num;
+        GenPolynomial<C> den = r.den;
+        GenPolynomial<C> nump = PolyUtil.<C> baseDeriviative(num);
+        if ( den.isONE() ) {
+            return new Quotient<C>(r.ring,nump,den);
+        }
+        GenPolynomial<C> denp = PolyUtil.<C> baseDeriviative(den);
+
+        GenPolynomial<C> n = den.multiply(nump).subtract( num.multiply(denp) );
+        GenPolynomial<C> d = den.multiply(den);
+
+        Quotient<C> der = new Quotient<C>(r.ring,n,d);
+        return der;
     }
 
 }
