@@ -102,6 +102,10 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
       p = p.sum(pp);
       GenPolynomial<C> pi = PolyUtil.<C> baseIntegral(p); 
 
+      System.out.println("pi  = " + pi);
+      System.out.println("rat = " + rat);
+      System.out.println("log = " + log);
+
       if ( log.size() == 0 ) {
           return new Integral<C>(a,d,pi,rat);
       }
@@ -113,6 +117,7 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
           PartialFraction<C> pf = irr.baseAlgebraicPartialFraction(ln,ld);
           logi.add(pf);
       }
+      System.out.println("logi = " + logi);
       return new Integral<C>(a,d,pi,rat,logi);
   }
 
@@ -128,73 +133,69 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
    * @return [ [ gn_i, gd_i ], [ h0, hn_j, hd_j ] ] such that integrate(a/d) =
    *         sum_i(gn_i/gd_i) + integrate(h0) + sum_j( integrate(hn_j/hd_j) )
    */
-  public List<GenPolynomial<C>>[] integrateHermite(GenPolynomial<C> a,
-      GenPolynomial<C> d) {
-    GenPolynomialRing<C> fac = d.ring;
+  public List<GenPolynomial<C>>[] integrateHermite(GenPolynomial<C> a, GenPolynomial<C> d) {
 
-    SortedMap<GenPolynomial<C>, Long> sfactors;
-    sfactors = sqf.squarefreeFactors(d);
-    List<GenPolynomial<C>> Di = new ArrayList<GenPolynomial<C>>();
-    List<GenPolynomial<C>> DPower = new ArrayList<GenPolynomial<C>>();
+    // get squarefree decomposition
+    SortedMap<GenPolynomial<C>, Long> sfactors = sqf.squarefreeFactors(d);
 
-    long maxE = 0;
-    for (GenPolynomial<C> f : sfactors.keySet()) {
-      long e = sfactors.get(f).longValue();
-      if (e>maxE){
-        maxE = e;
-      }
+    List<GenPolynomial<C>> D = new ArrayList<GenPolynomial<C>>( sfactors.keySet() );
+    List<GenPolynomial<C>> DP = new ArrayList<GenPolynomial<C>>();
+    for (GenPolynomial<C> f : D) {
+      long e = sfactors.get(f);
+      GenPolynomial<C> dp = Power.<GenPolynomial<C>> positivePower(f, e);
+      DP.add(dp);
     }
-    for (int i = 0; i < maxE; i++) {
-      Di.add(fac.getONE());
-      DPower.add(fac.getONE());
-    }
-    for (GenPolynomial<C> f : sfactors.keySet()) {
-      long e = sfactors.get(f).longValue();
-      Di.set((int) e-1, f);
-      DPower.set((int) e-1, Power.<GenPolynomial<C>> positivePower(f, e));
-    }
+    System.out.println("D:      " + D);
+    System.out.println("DP:     " + DP);
 
-    System.out.println("D_i: " + Di.toString());
-    System.out.println(DPower);
-    List<GenPolynomial<C>> Ai = ufd.basePartialFraction(a, DPower);
-    System.out.println("A_i: " + Ai.toString());
+    // get partial fraction decompostion 
+    List<GenPolynomial<C>> Ai = ufd.basePartialFraction(a, DP);
+    System.out.println("Ai:     " + Ai);
+
     List<GenPolynomial<C>> G = new ArrayList<GenPolynomial<C>>();
     List<GenPolynomial<C>> H = new ArrayList<GenPolynomial<C>>();
-    H.add(Ai.get(0)); // P
-    if (!Ai.get(1).isZERO()) {
-      H.add(Ai.get(1)); // A_1
-      H.add(Di.get(0)); // D_1
-    }
-    GenPolynomial<C> v;
+    H.add(Ai.remove(0)); // P
+
     GenPolynomial<C> vj;
     GenPolynomial<C> DV_dx;
     GenPolynomial<C> b;
     GenPolynomial<C> c;
-    int n = Di.size();
-    for (int k = 2; k <= n; k++) {
-      if (Di.get(k - 1).degree(0) > 0) {
-        v = Di.get(k - 1);
+    GenPolynomial<C> Aik;
+    GenPolynomial<C> Ak;
+    GenPolynomialRing<C> fac = d.ring;
+    int i = 0;
+    for (GenPolynomial<C> v : D) { 
+        System.out.println("V:" + v.toString());
+        int k = sfactors.get(v).intValue(); // assert low power
+        Ak = Ai.get(i);
+        if ( k == 1 ) {
+            if (!Ak.isZERO()) {
+                H.add(Ak); // A_1
+                H.add(v); // D_1
+            }
+            continue;
+        }
+        System.out.println("Ak:  " + Ak.toString());
         for (int j = k - 1; j >= 1; j--) {
-          System.out.println("Step(" + k + "," + j + ")");
-          System.out.println("V:" + v.toString());
-          DV_dx = PolyUtil.<C> baseDeriviative(v);
-          GenPolynomial<C>[] BC = ufd.baseGcdDiophant(DV_dx, v, Ai.get(k)
-              .negate().divide(fac.fromInteger(j)));
-          b = BC[0];
-          c = BC[1];
-          vj = Power.<GenPolynomial<C>> positivePower(v, j);
-          G.add(b); // B
-          G.add(vj); // v^j
-          Ai.set(k, fac.fromInteger(j).negate().multiply(c).subtract(
-              PolyUtil.<C> baseDeriviative(b)));
-          System.out.println("B:" + b.toString());
-          System.out.println("C:" + c.toString());
+            System.out.println("Step(" + k + "," + j + ")");
+            DV_dx = PolyUtil.<C> baseDeriviative(v);
+            Aik = Ak.divide(fac.fromInteger(-j));
+            GenPolynomial<C>[] BC = ufd.baseGcdDiophant(DV_dx, v, Aik);
+            b = BC[0];
+            c = BC[1];
+            vj = Power.<GenPolynomial<C>> positivePower(v, j);
+            G.add(b);  // B
+            G.add(vj); // v^j
+            Ak = fac.fromInteger(-j).multiply(c).subtract(PolyUtil.<C> baseDeriviative(b));
+            System.out.println("B:   " + b.toString());
+            System.out.println("C:   " + c.toString());
+            System.out.println("Ak:  " + Ak.toString());
         }
-        if (!Ai.get(k).isZERO()) {
-          H.add(Ai.get(k)); // A_k
-          H.add(v); // v
+        if (!Ak.isZERO()) {
+            H.add(Ak); // A_k
+            H.add(v); // v
         }
-      }
+        i++;
     }
     List<GenPolynomial<C>>[] ret = new List[2];
     ret[0] = G;
