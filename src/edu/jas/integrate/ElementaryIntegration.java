@@ -80,12 +80,12 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
      * 
      * @param r
      *          rational function
-     * @return Integral container, such that integrate(a/d) =
-     *         sum_i(gn_i/gd_i) + integrate(h0) + sum_j( an_j log(hd_j) ) 
+     * @return Integral container, such that integrate(r) =
+     *         sum_i(g_i) + sum_j( an_j log(hd_j) ) 
      */
-    public Integral<C> integrate(Quotient<C> r) {
+    public QuotIntegral<C> integrate(Quotient<C> r) {
         Integral<C> integral = integrate(r.num,r.den);
-        return integral;
+        return new QuotIntegral<C>(r.ring,integral);
     }
 
 

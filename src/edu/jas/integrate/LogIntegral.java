@@ -7,7 +7,6 @@ package edu.jas.integrate;
 
 import java.io.Serializable;
 import java.util.List;
-//import java.util.Arrays;
 
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
@@ -18,8 +17,9 @@ import edu.jas.structure.GcdRingElem;
 
 
 /**
- * Container for the partial fraction decomposition of a squarefree denominator.
+ * Container for the logarithmic part of a rational function integral.
  * num/den = sum( a_i ( der(d_i) / d_i ) )
+ * integrate(num/den) = sum( a_i log ( d_i ) )
  * @author Heinz Kredel
  * @param <C> coefficient type
  */
@@ -28,13 +28,13 @@ public class LogIntegral<C extends GcdRingElem<C>> implements Serializable {
 
 
     /**
-     * Original numerator polynomial coefficients from C and deg(num) < deg(den).
+     * Original numerator polynomial with coefficients from C and deg(num) < deg(den).
      */
     public final GenPolynomial<C> num;
 
 
     /**
-     * Original (irreducible) denominator polynomial coefficients from C.
+     * Original (irreducible) denominator polynomial with coefficients from C.
      */
     public final GenPolynomial<C> den;
 

@@ -16,6 +16,8 @@ import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolynomialList;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.ufd.PartialFraction;
+import edu.jas.application.Quotient;
+import edu.jas.application.QuotientRing;
 
 
 /**
@@ -25,31 +27,19 @@ import edu.jas.ufd.PartialFraction;
  * @param <C> coefficient type
  */
 
-public class Integral<C extends GcdRingElem<C>> implements Serializable {
+public class QuotIntegral<C extends GcdRingElem<C>> implements Serializable {
 
 
     /**
-     * Original numerator polynomial coefficients from C.
+     * Original rational function with coefficients from C.
      */
-    public final GenPolynomial<C> num;
+    public final Quotient<C> quot;
 
 
     /**
-     * Original denominator polynomial coefficients from C.
+     * Integral of the polynomial and rational part.
      */
-    public final GenPolynomial<C> den;
-
-
-    /**
-     * Integral of the polynomial part. 
-     */
-    public final GenPolynomial<C> pol;
-
-
-    /**
-     * Integral of the rational part.
-     */
-    public final List<GenPolynomial<C>> rational;
+    public final List<Quotient<C>> rational;
 
 
     /**
@@ -60,49 +50,45 @@ public class Integral<C extends GcdRingElem<C>> implements Serializable {
 
     /**
      * Constructor.
-     * @param n numerator GenPolynomial over C.
-     * @param d denominator GenPolynomial over C.
-     * @param p integral of polynomial part.
-     * n/d = 
+     * @param qr rational function QuotientRing over C.
+     * @param ri integral.
      */
-    public Integral(GenPolynomial<C> n, GenPolynomial<C> d,
-            GenPolynomial<C> p) {
-        this(n,d,p, new ArrayList<GenPolynomial<C>>() );
+    public QuotIntegral(QuotientRing<C> r, Integral<C> ri) {
+        this(new Quotient<C>(r,ri.num,ri.den), ri.pol, ri.rational, ri.logarithm);
     }
 
 
     /**
      * Constructor.
-     * @param n numerator GenPolynomial over C.
-     * @param d denominator GenPolynomial over C.
+     * @param r rational function Quotient over C.
      * @param p integral of polynomial part.
      * @param rat list of rational integrals.
-     * n/d = 
      */
-    public Integral(GenPolynomial<C> n, GenPolynomial<C> d,
-            GenPolynomial<C> p, 
-            List<GenPolynomial<C>> rat) {
-        this(n,d,p,rat, new ArrayList<LogIntegral<C>>() );
+    public QuotIntegral(Quotient<C> r, GenPolynomial<C> p, List<GenPolynomial<C>> rat) {
+        this(r,p,rat, new ArrayList<LogIntegral<C>>() );
     }
 
 
     /**
      * Constructor.
-     * @param n numerator GenPolynomial over C.
-     * @param d denominator GenPolynomial over C.
+     * @param r rational function Quotient over C.
      * @param p integral of polynomial part.
      * @param rat list of rational integrals.
      * @param log list of logarithmic part.
-     * n/d = 
      */
-    public Integral(GenPolynomial<C> n, GenPolynomial<C> d,
-            GenPolynomial<C> p, 
-            List<GenPolynomial<C>> rat,
-            List<LogIntegral<C>> log) {
-        num = n;
-        den = d;
-        pol = p;
-        rational = rat;
+    public QuotIntegral(Quotient<C> r, GenPolynomial<C> p, List<GenPolynomial<C>> rat,
+                        List<LogIntegral<C>> log) {
+        quot = r;
+        QuotientRing<C> qr = r.ring;
+        rational = new ArrayList<Quotient<C>>(); 
+        if ( !p.isZERO() ) {
+            rational.add( new Quotient<C>(qr,p) );
+        }
+        for ( int i = 0; i < rat.size(); i++ ) {
+            GenPolynomial<C> rn = rat.get(i++);
+            GenPolynomial<C> rd = rat.get(i);
+            rational.add( new Quotient<C>(qr,rn,rd) );
+        }
         logarithm = log;
     }
 
@@ -114,30 +100,21 @@ public class Integral<C extends GcdRingElem<C>> implements Serializable {
     @Override
     public String toString() {
         StringBuffer sb = new StringBuffer();
-        sb.append("integral( (" + num.toString() );
-        sb.append(") / (");
-        sb.append(den.toString() + ") )");
+        sb.append("integral( " + quot.toString() + " )" );
         sb.append(" =\n");
-        if ( ! pol.isZERO() ) {
-            sb.append(pol.toString());
-        }
         boolean first = true;
         if ( rational.size() != 0 ) {
-            if ( ! pol.isZERO() ) {
-               sb.append(" + ");
-            }
             for ( int i = 0; i < rational.size(); i++ ) {
                if ( first ) {
                    first = false;
                } else {
                    sb.append(" + ");
                }
-               sb.append("("+ rational.get(i++)+")/(");
-               sb.append(rational.get(i)+")");
+               sb.append("("+ rational.get(i)+")");
             }
         }
         if ( logarithm.size() != 0 ) {
-            if ( !pol.isZERO() || rational.size() != 0 ) {
+            if ( rational.size() != 0 ) {
               sb.append(" + ");
            }
            first = true;
@@ -161,9 +138,7 @@ public class Integral<C extends GcdRingElem<C>> implements Serializable {
      */
     @Override
     public int hashCode() {
-        int h = num.hashCode();
-        h = h * 37 + den.hashCode();
-        h = h * 37 + pol.hashCode();
+        int h = quot.hashCode();
         h = h * 37 + rational.hashCode();
         h = h * 37 + logarithm.hashCode();
         return h;

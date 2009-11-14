@@ -24,6 +24,8 @@ import edu.jas.ufd.SquarefreeFactory;
 import edu.jas.ufd.FactorFactory;
 import edu.jas.ufd.FactorAbsolute;
 import edu.jas.ufd.PartialFraction;
+import edu.jas.application.Quotient;
+import edu.jas.application.QuotientRing;
 
 /**
  * Examples related to elementary integration. 
@@ -44,6 +46,7 @@ public class Examples {
   public static void main(String[] args) {
       example1();
       example2();
+      example3();
   }
 
 
@@ -190,5 +193,80 @@ public class Examples {
     System.out.println("-----");
     ComputerThreads.terminate();
   }
+
+
+  /**
+   * Example quotients with rational plus logarithm.
+   */
+  public static void example3() {
+
+    BigRational br = new BigRational(0);
+    String[] vars = new String[] { "x" };
+    GenPolynomialRing<BigRational> fac;
+    fac = new GenPolynomialRing<BigRational>(br, vars.length, new TermOrder(
+        TermOrder.INVLEX), vars);
+
+    QuotientRing<BigRational> qfac = new QuotientRing<BigRational>(fac);
+
+    ElementaryIntegration<BigRational> eIntegrator = new ElementaryIntegration<BigRational>(
+        br);
+
+    GenPolynomial<BigRational> a = fac.parse("x^7 - 24 x^4 - 4 x^2 + 8 x - 8");
+    GenPolynomial<BigRational> d = fac.parse("x^8 + 6 x^6 + 12 x^4 + 8 x^2");
+    Quotient<BigRational> q = new Quotient<BigRational>(qfac,a,d);
+    System.out.println("q =  " + q);
+    QuotIntegral<BigRational> ret = eIntegrator.integrate(q);
+    System.out.println("Result: " + ret);
+
+    System.out.println("-----");
+
+    a = fac.parse("10 x^2 - 63 x + 29");
+    d = fac.parse("x^3 - 11 x^2 + 40 x -48");
+    q = new Quotient<BigRational>(qfac,a,d);
+    System.out.println("q =  " + q);
+    ret = eIntegrator.integrate(q);
+    System.out.println("Result: " + ret);
+
+    System.out.println("-----");
+
+    a = fac.parse("x+3");
+    d = fac.parse("x^2 - 3 x - 40");
+    q = new Quotient<BigRational>(qfac,a,d);
+    System.out.println("q =  " + q);
+    ret = eIntegrator.integrate(q);
+    System.out.println("Result: " + ret);
+
+    System.out.println("-----");
+
+    a = fac.parse("10 x^2+12 x + 20");
+    d = fac.parse("x^3 - 8");
+    q = new Quotient<BigRational>(qfac,a,d);
+    System.out.println("q =  " + q);
+    ret = eIntegrator.integrate(q);
+    System.out.println("Result: " + ret);
+
+    System.out.println("-----");
+
+    a = fac.parse("1");
+    d = fac.parse("(x**5 + x - 7)");
+    q = new Quotient<BigRational>(qfac,a,d);
+    System.out.println("q =  " + q);
+    ret = eIntegrator.integrate(q);
+    System.out.println("Result: " + ret);
+
+    System.out.println("-----");
+
+    a = fac.parse("1");
+    d = fac.parse("(x**5 + x - 7)");
+    a = a.sum(d);
+    q = new Quotient<BigRational>(qfac,a,d);
+    System.out.println("q =  " + q);
+    ret = eIntegrator.integrate(q);
+    System.out.println("Result: " + ret);
+
+    System.out.println("-----");
+    ComputerThreads.terminate();
+  }
+
 
 }
