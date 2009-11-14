@@ -466,6 +466,7 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
      */
     public boolean isIntegral(QuotIntegral<C> ri) {
         Quotient<C> r = ri.quot;
+        QuotientRing<C> qr = r.ring;
         Quotient<C> i = r.ring.getZERO();
         for ( Quotient<C> q : ri.rational ) {
             Quotient<C> qd = deriviative(q);
@@ -474,7 +475,12 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
         if ( ri.logarithm.size() == 0 ) {
             return r.equals(i);
         }
-        return false;
+        for ( LogIntegral<C> li : ri.logarithm ) {
+            Quotient<C> q = new Quotient<C>(qr,li.num,li.den);
+            i = i.sum(q);
+        }
+        boolean t = r.equals(i);
+        return t;
     }
 
 }

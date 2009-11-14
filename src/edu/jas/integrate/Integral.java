@@ -29,13 +29,13 @@ public class Integral<C extends GcdRingElem<C>> implements Serializable {
 
 
     /**
-     * Original numerator polynomial coefficients from C.
+     * Original numerator polynomial with coefficients from C.
      */
     public final GenPolynomial<C> num;
 
 
     /**
-     * Original denominator polynomial coefficients from C.
+     * Original denominator polynomial with coefficients from C.
      */
     public final GenPolynomial<C> den;
 
