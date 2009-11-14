@@ -439,8 +439,8 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
      * @param r
      *          rational function
      * @return dr/dx
-     */
-    public Quotient<C> derivative(Quotient<C> r) {
+     */ 
+    public Quotient<C> deriviative(Quotient<C> r) {
         GenPolynomial<C> num = r.num;
         GenPolynomial<C> den = r.den;
         GenPolynomial<C> nump = PolyUtil.<C> baseDeriviative(num);
@@ -454,6 +454,27 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
 
         Quotient<C> der = new Quotient<C>(r.ring,n,d);
         return der;
+    }
+
+
+    /**
+     * Test of integration of a rational function.
+     * 
+     * @param ri
+     *          integral 
+     * @return true, if ri is an integral, else false.
+     */
+    public boolean isIntegral(QuotIntegral<C> ri) {
+        Quotient<C> r = ri.quot;
+        Quotient<C> i = r.ring.getZERO();
+        for ( Quotient<C> q : ri.rational ) {
+            Quotient<C> qd = deriviative(q);
+            i = i.sum(qd);
+        }
+        if ( ri.logarithm.size() == 0 ) {
+            return r.equals(i);
+        }
+        return false;
     }
 
 }

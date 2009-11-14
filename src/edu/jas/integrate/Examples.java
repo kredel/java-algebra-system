@@ -208,8 +208,7 @@ public class Examples {
 
     QuotientRing<BigRational> qfac = new QuotientRing<BigRational>(fac);
 
-    ElementaryIntegration<BigRational> eIntegrator = new ElementaryIntegration<BigRational>(
-        br);
+    ElementaryIntegration<BigRational> eIntegrator = new ElementaryIntegration<BigRational>(br);
 
     GenPolynomial<BigRational> a = fac.parse("x^7 - 24 x^4 - 4 x^2 + 8 x - 8");
     GenPolynomial<BigRational> d = fac.parse("x^8 + 6 x^6 + 12 x^4 + 8 x^2");
@@ -263,6 +262,18 @@ public class Examples {
     System.out.println("q =  " + q);
     ret = eIntegrator.integrate(q);
     System.out.println("Result: " + ret);
+
+    System.out.println("-----");
+
+    Quotient<BigRational> qi = qfac.random(7);
+    //qi = qi.sum( qfac.random(5) );
+    q = eIntegrator.deriviative(qi);
+    System.out.println("qi =  " + qi);
+    System.out.println("q  =  " + q);
+    ret = eIntegrator.integrate(q);
+    System.out.println("Result: " + ret);
+    boolean t = eIntegrator.isIntegral(ret);
+    System.out.println("isIntegral = " + t);
 
     System.out.println("-----");
     ComputerThreads.terminate();
