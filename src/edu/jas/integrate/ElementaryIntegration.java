@@ -196,46 +196,33 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
         List<GenPolynomial<C>> H = new ArrayList<GenPolynomial<C>>();
         H.add(Ai.remove(0)); // P
 
-        GenPolynomial<C> vj;
-        GenPolynomial<C> DV_dx;
-        GenPolynomial<C> b;
-        GenPolynomial<C> c;
-        GenPolynomial<C> Aik;
-        GenPolynomial<C> Ak;
         GenPolynomialRing<C> fac = d.ring;
         int i = 0;
         for (GenPolynomial<C> v : D) { 
             System.out.println("V:" + v.toString());
-            int k = sfactors.get(v).intValue(); // assert low power
-            Ak = Ai.get(i);
-            if ( k == 1 ) {
-                if (!Ak.isZERO()) {
-                    H.add(Ak); // A_1
-                    H.add(v); // D_1
-                }
-                continue;
-            }
+            GenPolynomial<C> Ak = Ai.get(i++);
             System.out.println("Ak:  " + Ak.toString());
+            int k = sfactors.get(v).intValue(); // assert low power
             for (int j = k - 1; j >= 1; j--) {
                 System.out.println("Step(" + k + "," + j + ")");
-                DV_dx = PolyUtil.<C> baseDeriviative(v);
-                Aik = Ak.divide(fac.fromInteger(-j));
+                GenPolynomial<C> DV_dx = PolyUtil.<C> baseDeriviative(v);
+                GenPolynomial<C> Aik = Ak.divide(fac.fromInteger(-j));
                 GenPolynomial<C>[] BC = ufd.baseGcdDiophant(DV_dx, v, Aik);
-                b = BC[0];
-                c = BC[1];
-                vj = Power.<GenPolynomial<C>> positivePower(v, j);
+                GenPolynomial<C> b = BC[0];
+                GenPolynomial<C> c = BC[1];
+                GenPolynomial<C> vj = Power.<GenPolynomial<C>> positivePower(v, j);
                 G.add(b);  // B
                 G.add(vj); // v^j
                 Ak = fac.fromInteger(-j).multiply(c).subtract(PolyUtil.<C> baseDeriviative(b));
                 System.out.println("B:   " + b.toString());
                 System.out.println("C:   " + c.toString());
-                System.out.println("Ak:  " + Ak.toString());
             }
+            System.out.println("V:" + v.toString());
+            System.out.println("Ak:  " + Ak.toString());
             if (!Ak.isZERO()) {
                 H.add(Ak); // A_k
                 H.add(v); // v
             }
-            i++;
         }
         List<GenPolynomial<C>>[] ret = new List[2];
         ret[0] = G;
