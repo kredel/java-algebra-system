@@ -94,10 +94,10 @@ public class PartialFraction<C extends GcdRingElem<C>> implements Serializable {
     @Override
     public String toString() {
         StringBuffer sb = new StringBuffer();
-//         sb.append("(" + num.toString() + ")");
-//         sb.append(" / ");
-//         sb.append("(" + den.toString() + ")");
-//         sb.append(" =\n");
+        sb.append("(" + num.toString() + ")");
+        sb.append(" / ");
+        sb.append("(" + den.toString() + ")");
+        sb.append(" =\n");
         boolean first = true;
         for (int i = 0; i < cfactors.size(); i++ ) {
             C cp = cfactors.get(i);

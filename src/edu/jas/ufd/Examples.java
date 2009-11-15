@@ -8,6 +8,8 @@ import java.util.ArrayList;
 //import java.util.Arrays;
 import java.util.List;
 
+import org.apache.log4j.BasicConfigurator;
+
 import edu.jas.kern.ComputerThreads;
 import edu.jas.arith.BigRational;
 import edu.jas.poly.GenPolynomial;
@@ -29,14 +31,17 @@ public class Examples {
      * main.
      */
     public static void main (String[] args) {
+        //BasicConfigurator.configure();
         example1();
         example2();
         example3();
         example4();
-        example5();
-        example6();
+        // same as 8: example5();
+        // no go: example6();
         example7();
         example8();
+        BasicConfigurator.configure();
+        example9();
         ComputerThreads.terminate();
     }
 
@@ -61,7 +66,7 @@ public class Examples {
         FactorRational engine = new FactorRational();
 
         PartialFraction<BigRational> F = engine.baseAlgebraicPartialFractionIrreducible(N,D);
-        System.out.println("\npartial fraction = " + F);
+        System.out.println("\nintegral " + F);
     }
 
 
@@ -85,7 +90,7 @@ public class Examples {
         FactorRational engine = new FactorRational();
 
         PartialFraction<BigRational> F = engine.baseAlgebraicPartialFraction(N,D);
-        System.out.println("\npartial fraction = " + F);
+        System.out.println("\nintegral " + F);
     }
 
 
@@ -109,7 +114,7 @@ public class Examples {
         FactorRational engine = new FactorRational();
 
         PartialFraction<BigRational> F = engine.baseAlgebraicPartialFraction(N,D);
-        System.out.println("\npartial fraction = " + F);
+        System.out.println("\nintegral " + F);
     }
 
 
@@ -133,7 +138,7 @@ public class Examples {
         FactorRational engine = new FactorRational();
 
         PartialFraction<BigRational> F = engine.baseAlgebraicPartialFraction(N,D);
-        System.out.println("\npartial fraction = " + F);
+        System.out.println("\nintegral " + F);
     }
 
 
@@ -157,7 +162,7 @@ public class Examples {
         FactorRational engine = new FactorRational();
 
         PartialFraction<BigRational> F = engine.baseAlgebraicPartialFraction(N,D);
-        System.out.println("\npartial fraction = " + F);
+        System.out.println("\nintegral " + F);
     }
 
 
@@ -182,7 +187,7 @@ public class Examples {
         FactorRational engine = new FactorRational();
 
         PartialFraction<BigRational> F = engine.baseAlgebraicPartialFraction(N,D);
-        System.out.println("\npartial fraction = " + F);
+        System.out.println("\nintegral " + F);
     }
 
 
@@ -206,13 +211,13 @@ public class Examples {
         FactorRational engine = new FactorRational();
 
         PartialFraction<BigRational> F = engine.baseAlgebraicPartialFraction(N,D);
-        System.out.println("\npartial fraction = " + F);
+        System.out.println("\nintegral " + F);
     }
 
 
     /**
      * example8.
-     * Rothstein-Trager algorithm.
+     * Absolute factorization algorithm.
      */
     public static void example8() {
         System.out.println("\n\nexample 8");
@@ -230,7 +235,35 @@ public class Examples {
         FactorRational engine = new FactorRational();
 
         PartialFraction<BigRational> F = engine.baseAlgebraicPartialFractionIrreducibleAbsolute(N,D);
-        System.out.println("\npartial fraction = " + F);
+        System.out.println("\nintegral " + F);
+    }
+
+
+    /**
+     * example9.
+     * Rothstein-Trager and absolute factorization algorithm.
+     */
+    public static void example9() {
+        System.out.println("\n\nexample 9");
+
+        TermOrder to = new TermOrder(TermOrder.INVLEX);
+        BigRational cfac = new BigRational(1);
+        String[] alpha = new String[] { "alpha" };
+        String[] vars = new String[] { "x" };
+        GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(cfac, 1, to, vars);
+
+        // 1 / ( x^5 + x - 7 ) 
+        GenPolynomial<BigRational> D = pfac.parse("( x^5 + x - 7 )"); 
+        GenPolynomial<BigRational> N = pfac.getONE();
+
+        FactorRational engine = new FactorRational();
+
+        //PartialFraction<BigRational> F = engine.baseAlgebraicPartialFraction(N,D);
+        //System.out.println("\nintegral " + F);
+
+        //PartialFraction<BigRational> Fa = engine.baseAlgebraicPartialFractionIrreducibleAbsolute(N,D);
+        //System.out.println("\nintegral_a " + Fa);
+
     }
 
 }
