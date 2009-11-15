@@ -59,7 +59,7 @@ public class QuotIntegral<C extends GcdRingElem<C>> implements Serializable {
 
     /**
      * Constructor.
-     * @param qr rational function QuotientRing over C.
+     * @param r rational function QuotientRing over C.
      * @param ri integral.
      */
     public QuotIntegral(QuotientRing<C> r, Integral<C> ri) {

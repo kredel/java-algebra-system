@@ -31,8 +31,7 @@ import edu.jas.application.QuotientRing;
  * Examples related to elementary integration. 
  * 
  * @author Axel Kramer
- * @param <C>
- *          coefficient type
+ * @author Heinz Kredel
  */
 
 public class Examples {
