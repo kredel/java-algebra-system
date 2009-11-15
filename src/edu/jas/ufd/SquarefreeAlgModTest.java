@@ -345,9 +345,9 @@ public class SquarefreeAlgModTest extends TestCase {
 
         dfac = new GenPolynomialRing<AlgebraicNumber<ModInteger>>(fac, rl, to, vars);
 
-        a = dfac.random(kl, ll, 2, q);
-        b = dfac.random(kl, ll, 2, q);
-        c = dfac.random(kl, ll, 2, q);
+        a = dfac.random(kl, 3, 2, q);
+        b = dfac.random(kl, 3, 2, q);
+        c = dfac.random(kl, 3, 2, q);
         //System.out.println("a  = " + a);
         //System.out.println("b  = " + b);
         //System.out.println("c  = " + c);
@@ -420,8 +420,8 @@ public class SquarefreeAlgModTest extends TestCase {
         //dfac = new GenPolynomialRing<ModInteger>(fac,1,to,rvars);
         dfac = new GenPolynomialRing<AlgebraicNumber<ModInteger>>(fac, 1, to, rvars);
 
-        a = dfac.random(kl, ll + 2, el + 2, q).monic();
-        b = dfac.random(kl, ll + 2, el + 2, q).monic();
+        a = dfac.random(kl, ll + 1, el + 1, q).monic();
+        b = dfac.random(kl, ll + 1, el + 1, q).monic();
         c = dfac.random(kl, ll, el, q).monic();
 
         if (a.isZERO() || b.isZERO() || c.isZERO() || a.isConstant() || b.isConstant()) {
@@ -464,9 +464,9 @@ public class SquarefreeAlgModTest extends TestCase {
         //dfac = new GenPolynomialRing<ModInteger>(fac,1,to,rvars);
         dfac = new GenPolynomialRing<AlgebraicNumber<ModInteger>>(fac, 1, to, rvars);
 
-        a = dfac.random(kl, ll + 2, el + 3, q).monic();
-        b = dfac.random(kl, ll + 2, el + 3, q).monic();
-        c = dfac.random(kl, ll, el + 2, q).monic();
+        a = dfac.random(kl, ll + 1, el + 2, q).monic();
+        b = dfac.random(kl, ll + 1, el + 2, q).monic();
+        c = dfac.random(kl, ll, el + 1, q).monic();
 
         if (a.isZERO() || b.isZERO() || c.isZERO() || a.isConstant() || b.isConstant()) {
             // skip for this turn
@@ -502,8 +502,8 @@ public class SquarefreeAlgModTest extends TestCase {
         //dfac = new GenPolynomialRing<ModInteger>(fac,1,to,rvars);
         dfac = new GenPolynomialRing<AlgebraicNumber<ModInteger>>(fac, 1, to, rvars);
 
-        a = dfac.random(kl, ll + 2, el + 2, q).monic();
-        b = dfac.random(kl, ll + 2, el + 2, q).monic();
+        a = dfac.random(kl, ll + 1, el + 1, q).monic();
+        b = dfac.random(kl, ll + 1, el + 1, q).monic();
         c = dfac.random(kl, ll, el, q).monic();
 
         if (a.isZERO() || b.isZERO() || c.isZERO() || a.isConstant() || b.isConstant()) {
@@ -546,8 +546,8 @@ public class SquarefreeAlgModTest extends TestCase {
         //dfac = new GenPolynomialRing<ModInteger>(fac,1,to,rvars);
         dfac = new GenPolynomialRing<AlgebraicNumber<ModInteger>>(fac, 1, to, rvars);
 
-        a = dfac.random(kl, ll + 2, el + 3, q).monic();
-        b = dfac.random(kl, ll + 2, el + 3, q).monic();
+        a = dfac.random(kl, ll + 1, el + 2, q).monic();
+        b = dfac.random(kl, ll + 1, el + 2, q).monic();
         c = dfac.random(kl, ll, el + 2, q).monic();
 
         if (a.isZERO() || b.isZERO() || c.isZERO() || a.isConstant() || b.isConstant()) {
@@ -584,9 +584,9 @@ public class SquarefreeAlgModTest extends TestCase {
         cfac = new GenPolynomialRing<AlgebraicNumber<ModInteger>>(fac, 2 - 1, to, c1vars);
         rfac = new GenPolynomialRing<GenPolynomial<AlgebraicNumber<ModInteger>>>(cfac, 1, to, rvars);
 
-        ar = rfac.random(kl, ll, el, q);
-        br = rfac.random(kl, ll, el, q);
-        cr = rfac.random(kl, ll, el, q);
+        ar = rfac.random(kl, 3, el, q);
+        br = rfac.random(kl, 3, el, q);
+        cr = rfac.random(kl, 3, el, q);
         //cr = rfac.getONE();
 
         if (ar.isZERO() || br.isZERO() || cr.isZERO()) {
@@ -673,9 +673,9 @@ public class SquarefreeAlgModTest extends TestCase {
 
         dfac = new GenPolynomialRing<AlgebraicNumber<ModInteger>>(fac, rl, to, vars);
 
-        a = dfac.random(kl, ll, 3, q);
-        b = dfac.random(kl, ll, 3, q);
-        c = dfac.random(kl, ll, 3, q);
+        a = dfac.random(kl, 3, 3, q);
+        b = dfac.random(kl, 3, 3, q);
+        c = dfac.random(kl, 3, 3, q);
         //c = dfac.getONE();
 
         if (a.isZERO() || b.isZERO() || c.isZERO() || a.isConstant() || b.isConstant()) {
@@ -720,9 +720,9 @@ public class SquarefreeAlgModTest extends TestCase {
 
         dfac = new GenPolynomialRing<AlgebraicNumber<ModInteger>>(fac, rl, to, vars);
 
-        a = dfac.random(kl, ll, 3, q);
-        b = dfac.random(kl, ll, 3, q);
-        c = dfac.random(kl, ll, 3, q);
+        a = dfac.random(kl, 3, 3, q);
+        b = dfac.random(kl, 3, 3, q);
+        c = dfac.random(kl, 3, 3, q);
         //c = dfac.getONE();
 
         if (a.isZERO() || b.isZERO() || c.isZERO() || a.isConstant() || b.isConstant()) {

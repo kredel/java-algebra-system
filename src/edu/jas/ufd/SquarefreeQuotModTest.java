@@ -68,7 +68,7 @@ public class SquarefreeQuotModTest extends TestCase {
     int kl = 1;
 
 
-    int ll = 4;
+    int ll = 3;
 
 
     int el = 3;
@@ -452,9 +452,9 @@ public class SquarefreeQuotModTest extends TestCase {
         //dfac = new GenPolynomialRing<ModInteger>(fac,1,to,rvars);
         dfac = new GenPolynomialRing<Quotient<ModInteger>>(fac, 1, to, rvars);
 
-        a = dfac.random(kl + 1, ll + 1, el + 3, q).monic();
-        b = dfac.random(kl + 1, ll + 1, el + 3, q).monic();
-        c = dfac.random(kl + 1, ll, el + 2, q).monic();
+        a = dfac.random(kl, ll + 1, el + 3, q).monic();
+        b = dfac.random(kl, ll + 1, el + 3, q).monic();
+        c = dfac.random(kl, ll, el + 2, q).monic();
 
         if (a.isZERO() || b.isZERO() || c.isZERO() || a.isConstant() || b.isConstant()) {
             // skip for this turn
@@ -490,7 +490,7 @@ public class SquarefreeQuotModTest extends TestCase {
         cfac = new GenPolynomialRing<Quotient<ModInteger>>(fac, 2 - 1, to, c1vars);
         rfac = new GenPolynomialRing<GenPolynomial<Quotient<ModInteger>>>(cfac, 1, to, rvars);
 
-        ar = rfac.random(kl + 1, 3, 2 + 1, q);
+        ar = rfac.random(kl, 3, 2 + 1, q);
         br = rfac.random(kl, 3, 2, q);
         cr = rfac.random(kl, ll, el, q);
 
@@ -535,7 +535,7 @@ public class SquarefreeQuotModTest extends TestCase {
         cfac = new GenPolynomialRing<Quotient<ModInteger>>(fac, 2 - 1, to, c1vars);
         rfac = new GenPolynomialRing<GenPolynomial<Quotient<ModInteger>>>(cfac, 1, to, rvars);
 
-        ar = rfac.random(kl + 1, 3, 2 + 1, q);
+        ar = rfac.random(kl, 3, 2 + 1, q);
         br = rfac.random(kl, 3, 2, q);
         cr = rfac.random(kl, 3, 2, q);
 
@@ -574,7 +574,7 @@ public class SquarefreeQuotModTest extends TestCase {
         dfac = new GenPolynomialRing<Quotient<ModInteger>>(fac, rl, to, vars);
 
         a = dfac.random(kl, ll, 3, q);
-        b = dfac.random(kl, 3, 2 + 1, q);
+        b = dfac.random(kl, 3, 2, q);
         c = dfac.random(kl, ll, 3, q);
 
         if (a.isZERO() || b.isZERO() || c.isZERO() || b.isConstant()) {
@@ -615,7 +615,7 @@ public class SquarefreeQuotModTest extends TestCase {
         dfac = new GenPolynomialRing<Quotient<ModInteger>>(fac, rl, to, vars);
 
         a = dfac.random(kl, ll, 3, q);
-        b = dfac.random(kl, 3, 2 + 1, q);
+        b = dfac.random(kl, 3, 2, q);
         c = dfac.random(kl, ll, 3, q);
 
         if (a.isZERO() || b.isZERO() || c.isZERO() || b.isConstant()) {
