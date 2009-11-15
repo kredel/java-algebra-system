@@ -21,7 +21,7 @@ import edu.jas.application.QuotientRing;
 
 
 /**
- * Container for a rational function integral.
+ * Container for a rational function integral, quotient version .
  * integral(num/den) = pol + sum_rat( rat_i/rat_{i+1} ) + sum_log( a_i log ( d_i ) )
  * @author Heinz Kredel
  * @param <C> coefficient type
