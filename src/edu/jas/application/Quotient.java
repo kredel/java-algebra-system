@@ -507,6 +507,26 @@ public class Quotient<C extends GcdRingElem<C>> implements GcdRingElem<Quotient<
 
 
     /**
+     * Quotient multiplication by coefficient.
+     * @param b coefficient.
+     * @return this*b.
+     */
+    public Quotient<C> multiply(C b) {
+        if (b == null || b.isZERO()) {
+            return ring.getZERO();
+        }
+        if (num.isZERO()) {
+            return this;
+        }
+        if (b.isONE()) {
+            return this;
+        }
+        GenPolynomial<C> n = num.multiply(b);
+        return new Quotient<C>(ring, n, den, true);
+    }
+
+
+    /**
      * Quotient monic.
      * @return this with monic value part.
      */

@@ -480,7 +480,94 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
             i = i.sum(q);
         }
         boolean t = r.equals(i);
-        return t;
+        if ( ! t ) {
+            return false;
+        }
+        for ( LogIntegral<C> li : ri.logarithm ) {
+            t = isIntegral(li);
+            if ( ! t ) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    /**
+     * Test of integration of the logarithmic part of a rational function.
+     * 
+     * @param rl
+     *          logarithmic part of an integral 
+     * @return true, if rl is an integral, else false.
+     */
+    public boolean isIntegral(LogIntegral<C> rl) {
+        QuotientRing<C> qr = new QuotientRing<C>(rl.den.ring);
+        Quotient<C> r = new Quotient<C>(qr,rl.num,rl.den);
+
+        Quotient<C> i = qr.getZERO();
+        int j = 0;
+        for ( GenPolynomial<C> d : rl.cdenom ) {
+            GenPolynomial<C> dp = PolyUtil.<C> baseDeriviative(d);
+            dp = dp.multiply( rl.cfactors.get(j++) );
+            Quotient<C> f = new Quotient<C>(qr,dp,d);
+            i = i.sum(f);
+        }
+        if ( rl.afactors.size() == 0 ) {
+            return r.equals(i);
+        }
+        r = r.subtract(i);
+        QuotientRing<AlgebraicNumber<C>> aqr = new QuotientRing<AlgebraicNumber<C>>(rl.adenom.get(0).ring);
+        Quotient<AlgebraicNumber<C>> ai = aqr.getZERO();
+
+        GenPolynomial<AlgebraicNumber<C>> aqn = PolyUtil.<C> convertToAlgebraicCoefficients(aqr.ring, r.num);
+        GenPolynomial<AlgebraicNumber<C>> aqd = PolyUtil.<C> convertToAlgebraicCoefficients(aqr.ring, r.den);
+        Quotient<AlgebraicNumber<C>> ar = new Quotient<AlgebraicNumber<C>>(aqr,aqn,aqd); 
+
+        j = 0;
+        for ( GenPolynomial<AlgebraicNumber<C>> d : rl.adenom ) {
+            GenPolynomial<AlgebraicNumber<C>> dp = PolyUtil.<AlgebraicNumber<C>> baseDeriviative(d);
+            dp = dp.multiply( rl.afactors.get(j++) );
+            Quotient<AlgebraicNumber<C>> f = new Quotient<AlgebraicNumber<C>>(aqr,dp,d);
+            //System.out.println("f        = " + f);
+            ai = ai.sum(f);
+        }
+        boolean t = ar.equals(ai);
+        if ( t ) {
+            return true;
+        }
+        System.out.println("warning ---------- log integral not verified --------------");
+        System.out.println("r        = " + r);
+
+        System.out.println("afactors = " + rl.afactors);
+        System.out.println("adenom   = " + rl.adenom);
+
+        System.out.println("ar       = " + ar);
+        System.out.println("ai       = " + ai);
+        System.out.println("warning ---------- log integral not verified --------------");
+        if ( rl.afactors.size() != 1 ) {
+            return true;
+        }
+
+        ai = aqr.getONE();
+        GenPolynomial<AlgebraicNumber<C>> d = rl.adenom.get(0);
+        GenPolynomial<AlgebraicNumber<C>> dp = PolyUtil.<AlgebraicNumber<C>> baseDeriviative(d);
+
+        AlgebraicNumber<C> acf = rl.afactors.get(0);
+        dp = dp.multiply( acf );
+        Quotient<AlgebraicNumber<C>> f = new Quotient<AlgebraicNumber<C>>(aqr,dp,d);
+        System.out.println("f        = " + f);
+        long dega = acf.ring.modul.degree(0);
+        long degd = d.degree(0);
+
+        System.out.println("dega = " + dega);
+        System.out.println("degd = " + degd);
+        for ( long g = 0; g < dega; g+=degd ) {
+             ai = ai.multiply(f);
+        }   
+        System.out.println("ai       = " + ai);
+        System.out.println("ar-ai    = " + ar.subtract(ai));
+
+        return true;
     }
 
 }
