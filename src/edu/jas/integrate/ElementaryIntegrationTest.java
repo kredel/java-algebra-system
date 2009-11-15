@@ -97,14 +97,14 @@ public class ElementaryIntegrationTest extends TestCase {
     public void testRational() {
         for (int i = 0; i < 3; i++) {
             a = qfac.random(kl, ll+2*i, el+i, q );
-            System.out.println("a = " + a);
+            //System.out.println("a = " + a);
 //             if ( a.isZERO() || a.isONE() ) {
 //                 continue;
 //             }
             b = integrator.deriviative(a);
-            System.out.println("b =  " + b);
+            //System.out.println("b =  " + b);
             rint = integrator.integrate(b);
-            System.out.println("QuotIntegral: " + rint);
+            //System.out.println("QuotIntegral: " + rint);
 
             assertTrue("isIntegral ", integrator.isIntegral(rint));
         }
@@ -118,14 +118,14 @@ public class ElementaryIntegrationTest extends TestCase {
     public void testPureLogarithm1() {
         for (int i = 0; i < 3; i++) {
             a = qfac.random(kl, ll+i, el+i, q );
-            System.out.println("a = " + a);
+            //System.out.println("a = " + a);
 //             if ( a.isZERO() || a.isONE() ) {
 //                 continue;
 //             }
             b = new Quotient<BigRational>(qfac,qfac.getONE().num,a.den);
-            System.out.println("b =  " + b);
+            //System.out.println("b =  " + b);
             rint = integrator.integrate(b);
-            System.out.println("QuotIntegral: " + rint);
+            //System.out.println("QuotIntegral: " + rint);
 
             assertTrue("isIntegral ", integrator.isIntegral(rint));
         }
@@ -139,15 +139,15 @@ public class ElementaryIntegrationTest extends TestCase {
     public void testPureLogarithmD() {
         for (int i = 0; i < 3; i++) {
             a = qfac.random(kl, ll+i, el+i, q );
-            System.out.println("a = " + a);
+            //System.out.println("a = " + a);
 //             if ( a.isZERO() || a.isONE() ) {
 //                 continue;
 //             }
             GenPolynomial<BigRational> pp = PolyUtil.<BigRational> baseDeriviative(a.den);
             b = new Quotient<BigRational>(qfac, pp ,a.den);
-            System.out.println("b =  " + b);
+            //System.out.println("b =  " + b);
             rint = integrator.integrate(b);
-            System.out.println("QuotIntegral: " + rint);
+            //System.out.println("QuotIntegral: " + rint);
 
             assertTrue("isIntegral ", integrator.isIntegral(rint));
         }
@@ -161,23 +161,23 @@ public class ElementaryIntegrationTest extends TestCase {
     public void testRationalWithLogarithmD() {
         for (int i = 0; i < 3; i++) {
             a = qfac.random(kl, ll+i, el+i, q );
-            System.out.println("a = " + a);
+            //System.out.println("a = " + a);
 //             if ( a.isZERO() || a.isONE() ) {
 //                 continue;
 //             }
 
             b = integrator.deriviative(a);
-            System.out.println("b =  " + b);
+            //System.out.println("b =  " + b);
 
             GenPolynomial<BigRational> pp = PolyUtil.<BigRational> baseDeriviative(a.den);
             c = new Quotient<BigRational>(qfac, pp ,a.den);
-            System.out.println("c =  " + c);
+            //System.out.println("c =  " + c);
 
             e = b.sum(c); 
-            System.out.println("e =  " + e);
+            //System.out.println("e =  " + e);
 
             rint = integrator.integrate(e);
-            System.out.println("QuotIntegral: " + rint);
+            //System.out.println("QuotIntegral: " + rint);
 
             assertTrue("isIntegral ", integrator.isIntegral(rint));
         }
@@ -191,22 +191,22 @@ public class ElementaryIntegrationTest extends TestCase {
     public void xtestRationalWithLogarithm1() {
         for (int i = 0; i < 3; i++) {
             a = qfac.random(kl, ll+i, el+i, q );
-            System.out.println("a = " + a);
+            //System.out.println("a = " + a);
 //             if ( a.isZERO() || a.isONE() ) {
 //                 continue;
 //             }
 
             b = integrator.deriviative(a);
-            System.out.println("b =  " + b);
+            //System.out.println("b =  " + b);
 
             d = new Quotient<BigRational>(qfac,qfac.getONE().num,a.den);
-            System.out.println("d =  " + d);
+            //System.out.println("d =  " + d);
 
             e = b.sum(d);
-            System.out.println("e =  " + e);
+            //System.out.println("e =  " + e);
 
             rint = integrator.integrate(e);
-            System.out.println("QuotIntegral: " + rint);
+            //System.out.println("QuotIntegral: " + rint);
 
             assertTrue("isIntegral ", integrator.isIntegral(rint));
         }
@@ -220,26 +220,26 @@ public class ElementaryIntegrationTest extends TestCase {
     public void testRationalWithLogarithm() {
         for (int i = 0; i < 3; i++) {
             a = qfac.random(kl, ll+i, el+i, q );
-            System.out.println("a = " + a);
+            //System.out.println("a = " + a);
 //             if ( a.isZERO() || a.isONE() ) {
 //                 continue;
 //             }
 
             b = integrator.deriviative(a);
-            System.out.println("b =  " + b);
+            //System.out.println("b =  " + b);
 
             GenPolynomial<BigRational> pp = PolyUtil.<BigRational> baseDeriviative(a.den);
             c = new Quotient<BigRational>(qfac, pp ,a.den);
-            System.out.println("c =  " + c);
+            //System.out.println("c =  " + c);
 
             d = new Quotient<BigRational>(qfac,qfac.getONE().num,a.num);
-            System.out.println("d =  " + d);
+            //System.out.println("d =  " + d);
 
             e = b.sum(c).sum(d);
-            System.out.println("e =  " + e);
+            //System.out.println("e =  " + e);
 
             rint = integrator.integrate(e);
-            System.out.println("QuotIntegral: " + rint);
+            //System.out.println("QuotIntegral: " + rint);
 
             assertTrue("isIntegral ", integrator.isIntegral(rint));
         }
