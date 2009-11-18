@@ -56,6 +56,7 @@ public class ElementaryIntegrationTest extends TestCase {
 
     //private final static int bitlen = 100;
 
+    TermOrder tord;
     QuotientRing<BigRational> qfac;
     GenPolynomialRing<BigRational> mfac;
     ElementaryIntegration<BigRational> integrator;
@@ -75,9 +76,10 @@ public class ElementaryIntegrationTest extends TestCase {
 
     protected void setUp() {
         a = b = c = d = e = null;
-        TermOrder to = new TermOrder( TermOrder.INVLEX );
+        tord = new TermOrder( TermOrder.INVLEX );
         BigRational br = new BigRational(1);
-        mfac = new GenPolynomialRing<BigRational>( br, rl, to );
+        String[] vars = new String[]{ "x" };
+        mfac = new GenPolynomialRing<BigRational>( br, rl, tord, vars );
         qfac = new QuotientRing<BigRational>( mfac );
         integrator = new ElementaryIntegration<BigRational>(br);
     }
@@ -232,7 +234,7 @@ public class ElementaryIntegrationTest extends TestCase {
             c = new Quotient<BigRational>(qfac, pp ,a.den);
             //System.out.println("c =  " + c);
 
-            d = new Quotient<BigRational>(qfac,qfac.getONE().num,a.num);
+            d = new Quotient<BigRational>(qfac,qfac.getONE().num,a.den);
             //System.out.println("d =  " + d);
 
             e = b.sum(c).sum(d);
@@ -242,6 +244,41 @@ public class ElementaryIntegrationTest extends TestCase {
             //System.out.println("QuotIntegral: " + rint);
 
             assertTrue("isIntegral ", integrator.isIntegral(rint));
+        }
+    }
+
+
+    /**
+     * Test rational integral with quotient coefficients.
+     * 
+     */
+    public void testRationalRecursive() {
+
+        QuotientRing<Quotient<BigRational>> qqfac;
+        GenPolynomialRing<Quotient<BigRational>> qmfac;
+        ElementaryIntegration<Quotient<BigRational>> qintegrator;
+        QuotIntegral<Quotient<BigRational>> qrint;
+        String[] vars = new String[]{ "y" };
+
+        qmfac = new GenPolynomialRing<Quotient<BigRational>>(qfac,1,tord,vars);
+        qqfac = new QuotientRing<Quotient<BigRational>>(qmfac);
+
+        qintegrator = new ElementaryIntegration<Quotient<BigRational>>(qfac);
+
+        Quotient< Quotient< BigRational > > qa, qb;
+
+        for (int i = 0; i < 2; i++) {
+            qa = qqfac.random(2, ll, el, q );
+            System.out.println("qa = " + qa);
+            //             if ( a.isZERO() || a.isONE() ) {
+            //                 continue;
+            //             }
+            qb = qintegrator.deriviative(qa);
+            System.out.println("qb =  " + qb);
+            qrint = qintegrator.integrate(qb);
+            System.out.println("QuotIntegral: " + qrint);
+
+            assertTrue("isIntegral ", qintegrator.isIntegral(qrint));
         }
     }
 
