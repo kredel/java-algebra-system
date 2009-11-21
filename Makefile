@@ -87,7 +87,7 @@ JAVAC=$(JDK)/javac -classpath $(MYCLASSPATH) -d . -Xlint:unchecked
 #-Xlint:unchecked
 #-Djava.util.logging.config.file=logging.properties 
 #JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -verbose:gc 
-JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -server -Xms700M -Xmx1000M -XX:+AggressiveHeap -XX:+UseParallelGC -XX:ParallelGCThreads=2 -verbose:gc 
+JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -server -Xms1100M -Xmx1900M -XX:+AggressiveHeap -XX:+UseParallelGC -XX:ParallelGCThreads=2 -verbose:gc 
 #-Xrunhprof:cpu=samples,heap=sites,force=n
 #-Xbatch
 #old#JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -Xms300M -Xmx600M -XX:+AggressiveHeap -XX:+UseParallelGC -verbose:gc 
@@ -283,7 +283,7 @@ clean:
 tests:
 	ant test 2>&1 | tee t.out
 	find examples -name "*.py"|grep -v jas.py |grep -v plot|grep -v versuch|sort|xargs -L 1 echo "time jython" | awk '{ printf "echo %s\n", $$0; printf "%s\n", $$0 }' > ./all_jython.sh
-	time source all_jython.sh 2>&1 | tee tj.out
+	time bash all_jython.sh 2>&1 | tee tj.out
 	-grep FAIL t.out
 	-grep File tj.out
 
