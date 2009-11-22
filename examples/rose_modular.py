@@ -68,9 +68,11 @@ rm = fm.GB();
 #e = rm == rgm;
 #print "e = " + str(e);
 
-#sys.exit();
+sys.exit();
 
-for i in range(1,9):
+#for i in range(1,9):
+
+for i in range(1,3):
     rg = f.parGB(i);
     #print "par Output:", rg;
     #print;
