@@ -15,7 +15,7 @@ from jas import terminate
 # integral/rational function coefficients
 
 #r = Ring( "RatFunc(u,v) (x,y) L" );
-r = Ring( "IntFunc(a3, a2, a1, a0, b3, b2, b1, b0) (x) L" );
+r = Ring( "IntFunc(a3, b3, a2, b2, a1, b1, a0, b0) (x) L" );
 print "Ring: " + str(r);
 print;
 
@@ -30,9 +30,9 @@ f = r.paramideal( ps );
 print "ParamIdeal: " + str(f);
 print;
 
-sys.exit(); # long run time
+#sys.exit(); # long run time
 
-#startLog();
+startLog();
 
 gs = f.CGBsystem();
 print "CGBsystem: " + str(gs);
@@ -53,7 +53,7 @@ gs = f.CGB();
 print "CGB: " + str(gs);
 print;
 
-#sys.exit();
+sys.exit();
 
 bg = gs.isCGB();
 if bg:

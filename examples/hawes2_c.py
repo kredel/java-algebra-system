@@ -29,7 +29,7 @@ from jas import terminate
 # rational function coefficients
 
 #r = Ring( "IntFunc(a, c, b) (y2, y1, z1, z2, x) L" );
-r = Ring( "IntFunc(a, c, b) (y2, y1, z1, z2, x) L" );
+r = Ring( "IntFunc(b, c, a) (y2, y1, z2, z1, x) G" );
 print "Ring: " + str(r);
 print;
 

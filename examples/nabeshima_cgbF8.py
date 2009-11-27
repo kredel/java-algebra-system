@@ -16,7 +16,8 @@ from jas import terminate
 # integral function coefficients
 
 
-r = Ring( "IntFunc(d, b, a, c) (y,x,w,z) L" );
+#r = Ring( "IntFunc(d, b, a, c) (y,x,w,z) L" );
+r = Ring( "IntFunc(d, b, a, c) (y,x,w,z) G" );
 
 #r = Ring( "IntFunc(d, b, c, a) (w,z,y,x) G" );
 #r = Ring( "IntFunc(b, c, a) (w,x,z,y) L" );
@@ -60,7 +61,8 @@ gs = f.CGBsystem();
 print "CGBsystem: " + str(gs);
 print;
 
-#sys.exit();
+terminate();
+sys.exit();
 
 bg = gs.isCGBsystem();
 if bg:
@@ -68,8 +70,6 @@ if bg:
 else:
     print "isCGBsystem: false";
 print;
-
-#sys.exit();
 
 gs = f.CGB();
 print "CGB: " + str(gs);

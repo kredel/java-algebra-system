@@ -56,8 +56,8 @@ else:
     print "isCGBsystem: false";
 print;
 
-terminate();
-sys.exit();
+#terminate();
+#sys.exit();
 
 CG = If.CGB();
 print "CGB: " + str(CG);

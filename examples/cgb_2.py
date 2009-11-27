@@ -53,7 +53,8 @@ gs = f.CGB();
 print "CGB: " + str(gs);
 print;
 
-#sys.exit();
+terminate();
+sys.exit();
 
 bg = gs.isCGB();
 if bg:
