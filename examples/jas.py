@@ -37,6 +37,7 @@ from edu.jas.kern        import ComputerThreads
 from edu.jas.ufd         import GreatestCommonDivisor, PolyUfdUtil, GCDFactory,\
                                 FactorFactory, SquarefreeFactory
 from edu.jas.root        import RealRootsSturm, Interval, RealAlgebraicNumber, RealAlgebraicRing
+from edu.jas.integrate   import ElementaryIntegration
 from edu.jas.util        import ExecutableServer, StringUtil
 from edu.jas             import structure, arith, poly, ps, gb, gbmod, vector,\
                                 application, util, ufd
@@ -236,6 +237,23 @@ class Ring:
         except Exception, e:
             print "error " + str(e)
             return None
+
+    def integrate(self,a):
+        '''Integrate (univariate) rational function.
+        '''
+        if isinstance(a,RingElem):
+            a = a.elem;
+        else:
+            a = self.element( str(a) );
+            a = a.elem;
+        cf = self.ring;
+        try:
+            cf = cf.ring;
+        except:
+            pass;
+        integrator = ElementaryIntegration(cf.coFac);
+        ei = integrator.integrate(a); 
+        return ei;
 
 
 class Ideal:
@@ -2034,8 +2052,8 @@ class RingElem:
             e = 0;            
         return RingElem( e );
 
-    def integrate(self,a):
-        '''Integrate a power series with constant a.
+    def integrate(self,a=0):
+        '''Integrate a power series with constant a or as rational function.
         '''
         #print "self  type(%s) = %s" % (self,type(self));
         #print "a     type(%s) = %s" % (a,type(a));
@@ -2048,9 +2066,17 @@ class RingElem:
             x = makeJasArith(a);
         try:
             e = self.elem.integrate(x);
+            return RingElem( e );
         except:
-            e = 0;
-        return RingElem( e );
+            pass;
+        cf = self.elem.ring;
+        try:
+            cf = cf.ring;
+        except:
+            pass;
+        integrator = ElementaryIntegration(cf.coFac);
+        ei = integrator.integrate(self.elem); 
+        return ei;
 
     def differentiate(self):
         '''Differentiate a power series.
