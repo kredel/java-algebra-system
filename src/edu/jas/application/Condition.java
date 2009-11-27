@@ -360,6 +360,7 @@ public class Condition<C extends GcdRingElem<C>> implements Serializable {
                 System.out.println("error poly green = " + green);
                 System.out.println("error poly   red = " + red);
                 System.out.println("error poly    Ap = " + Ap);
+                System.out.println("error coeff    c = " + c);
                 throw new RuntimeException("error, c is white = " + c);
                 // is catched in minimalGB
             }

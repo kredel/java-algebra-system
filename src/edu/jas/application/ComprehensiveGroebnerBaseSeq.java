@@ -524,8 +524,14 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
                 Sp = new ArrayList<ColorPolynomial<C>>(S);
                 OrderedCPairlist<C> PL = pl.clone();
                 NS = new ColoredSystem<C>(cnd, Sp, PL);
-                if ( !NS.isDetermined() ) {
-                    NS = NS.reDetermine();
+                try {
+                    if ( !NS.isDetermined() ) {
+                        NS = NS.reDetermine();
+                    }
+                } catch(RuntimeException e) {
+                    System.out.println("Contradiction in NS_0 = " + NS);
+                    //e.printStackTrace();
+                    continue;
                 }
                 NCS = NS.addToList(NCS);
                 continue;
@@ -540,8 +546,14 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
             OrderedCPairlist<C> PL = pl.clone();
             PL.put(nz);
             NS = new ColoredSystem<C>(cnd, Sp, PL);
-            if ( !NS.isDetermined() ) {
-                NS = NS.reDetermine();
+            try {
+                if ( !NS.isDetermined() ) {
+                    NS = NS.reDetermine();
+                }
+            } catch(RuntimeException e) {
+                System.out.println("Contradiction in NS = " + NS);
+                //e.printStackTrace();
+                continue;
             }
             NCS = NS.addToList(NCS);
         }

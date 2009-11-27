@@ -258,8 +258,8 @@ public class Examples {
 
         FactorRational engine = new FactorRational();
 
-        //PartialFraction<BigRational> F = engine.baseAlgebraicPartialFraction(N,D);
-        //System.out.println("\nintegral " + F);
+        PartialFraction<BigRational> F = engine.baseAlgebraicPartialFraction(N,D);
+        System.out.println("\nintegral " + F);
 
         //PartialFraction<BigRational> Fa = engine.baseAlgebraicPartialFractionIrreducibleAbsolute(N,D);
         //System.out.println("\nintegral_a " + Fa);
