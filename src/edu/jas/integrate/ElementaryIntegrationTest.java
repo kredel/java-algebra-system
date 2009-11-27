@@ -269,14 +269,14 @@ public class ElementaryIntegrationTest extends TestCase {
 
         for (int i = 0; i < 2; i++) {
             qa = qqfac.random(2, ll, el, q );
-            System.out.println("qa = " + qa);
+            //System.out.println("qa = " + qa);
             //             if ( a.isZERO() || a.isONE() ) {
             //                 continue;
             //             }
             qb = qintegrator.deriviative(qa);
-            System.out.println("qb =  " + qb);
+            //System.out.println("qb =  " + qb);
             qrint = qintegrator.integrate(qb);
-            System.out.println("QuotIntegral: " + qrint);
+            //System.out.println("QuotIntegral: " + qrint);
 
             assertTrue("isIntegral ", qintegrator.isIntegral(qrint));
         }

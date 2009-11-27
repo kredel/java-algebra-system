@@ -560,7 +560,7 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>> extends FactorAbs
 
         // non linear case
         Factors<C> afacs = factorsAbsoluteIrreducible(P);
-        System.out.println("linear algebraic factors = " + afacs);
+        //System.out.println("linear algebraic factors = " + afacs);
 
         //System.out.println("afactors      = " + afacs.afactors);
         //System.out.println("arfactors     = " + afacs.arfactors);
