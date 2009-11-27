@@ -32,6 +32,7 @@ LOG4JPATH=$(LIBPATH)/log4j.jar
 JOMPPATH=$(LIBPATH)/jomp1.0b.jar
 TNJPATH=$(LIBPATH)/tnj.jar
 LINTPATH=$(LIBPATH)/lint4j.jar
+PYPATH=$(LIBPATH)/jython.jar
 
 # --- syncing ----------
 DRY=--dry-run
@@ -80,7 +81,7 @@ DOCOPTS=-package
 #DOCOPTS=-public -protected -package -author -version
 
 #MYCLASSPATH = .:$(DEFS):$(JUNITPATH):$(JOMPPATH)
-MYCLASSPATH = $(LOG4JPATH):.:$(DEFS):$(JUNITPATH):$(JOMPPATH)
+MYCLASSPATH = $(LOG4JPATH):.:$(DEFS):$(JUNITPATH):$(JOMPPATH):$(PYPATH)
 #:$(TNJPATH)
 
 JAVAC=$(JDK)/javac -classpath $(MYCLASSPATH) -d . -Xlint:unchecked
