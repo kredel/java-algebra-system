@@ -337,7 +337,6 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
      */
     // @Override
     // @SuppressWarnings("unchecked")
-    //public List<ColoredSystem<C>> GBsys(List<GenPolynomial<GenPolynomial<C>>> F) {
     public GroebnerSystem<C> GBsys(List<GenPolynomial<GenPolynomial<C>>> F) {
         if (F == null) {
             return null;
