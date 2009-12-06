@@ -324,6 +324,7 @@ export:
 	cp ~/java/lib/jlinalg_adapter.jar ~/jas-versions/$(VERSION)/
 	cd ~/jas-versions/commons-math_adapter; make > ~/jas-versions/$(VERSION)/make_commons-math.out
 	cp ~/java/lib/commons-math_adapter.jar ~/jas-versions/$(VERSION)/
+	cd ~/jas-versions/$(VERSION)/jython; make > ~/jas-versions/$(VERSION)/make_jython.out
 
 deploy:
 	$(RSYNC) -e 'ssh -p 2222' --delete-after --exclude=DTD --exclude=*xml ~/jas-versions/$(VERSION)/ krum:htdocs/$(VERSION)
