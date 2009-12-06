@@ -1,5 +1,5 @@
 #
-# $Id: $
+# $Id$
 #
 # Makefile for the interface of JAS to jython
 # by Raphael Jolly, Heinz kredel
@@ -28,7 +28,7 @@ $(CLASSES): $(FILES)
 jas-jython.jar: $(CLASSES) $(JASPATH)/examples/jas.py services/javax.script.ScriptEngineFactory
 	mkdir classes/META-INF
 	mkdir classes/META-INF/services
-	#cp -a manifest.mf classes/META-INF/MANIFEST.MF
+	cp -a manifest.mf classes/META-INF/MANIFEST.MF
 	cp -a services/javax.script.ScriptEngineFactory classes/META-INF/services/
 	jar cfM jas-jython.jar -C classes .
 	jar uf jas-jython.jar -C $(JASPATH)/examples jas.py
