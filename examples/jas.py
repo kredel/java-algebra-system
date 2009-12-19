@@ -1591,7 +1591,7 @@ def LC(ideal,d=0,n=1):
     return RingElem(r);
 
 
-def RR(flist,r=0):
+def RR(flist,n=1,r=0):
     '''Create JAS regular ring Product as ring element.
     '''
     if flist == None:
@@ -1600,15 +1600,19 @@ def RR(flist,r=0):
         flist = pylist2arraylist( [ x.factory() for x in flist ], rec=1);
         ncop = 0;
     else:
-        ncop = -1;
+        ncop = n;
+    if isinstance(flist,RingElem):
+        flist = flist.elem;
+        flist = flist.factory();
+        ncop = n;
     #print "flist = " + str(flist);
     if ncop == 0:
         pr = ProductRing(flist);
     else:
         pr = ProductRing(flist,ncop);
+    #print "r type(%s) = %s" % (r,type(r));
     if isinstance(r,RingElem):
         r = r.elem;
-    #print "r type(%s) = %s" % (r,type(r));
     #if isinstance(r,PyJavaInstance):
     try:
         #print "r.class() = %s" % r.getClass().getSimpleName();
