@@ -243,8 +243,8 @@ jas-all.jar: $(ALLJAR)
 	$(JDK)/jar -cvf jas.jar $(ALLJAR) edu/ 
 	mv jas.jar /tmp/jas-`date +%Y%j`.jar
 
-jas.tgz: $(FILES) *.html */package.html TODO
-	tar -cvzf jas.tgz $(FILES) *.html */package.html TODO
+jas.tgz: $(FILES) *.html TODO
+	tar -cvzf jas.tgz $(FILES) *.html TODO
 	mv jas.tgz /tmp/jas-`date +%Y%j`.tgz
 
 #	cp jas.jar ...../jas-`date +%Y%j`.jar
