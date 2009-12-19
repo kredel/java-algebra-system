@@ -10,7 +10,7 @@ import java.io.Reader;
 import java.util.List;
 import java.util.ArrayList;
 
-//import edu.jas.structure.RingElem;
+import edu.jas.structure.Power;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
 
@@ -134,11 +134,30 @@ public final class BigRational implements GcdRingElem<BigRational>,
         }
         BigInteger n;
         BigInteger d;
+        s = s.trim();
         int i = s.indexOf('/');
         if ( i < 0 ) {
-            num = new BigInteger( s );
-            den = BigInteger.ONE;
-            return;
+            i = s.indexOf('.');
+            if ( i < 0 ) {
+                num = new BigInteger( s );
+                den = BigInteger.ONE;
+                return;
+            } else {
+                n = new BigInteger( s.substring(0,i) );
+                BigRational r = new BigRational(n);
+                d = new BigInteger( s.substring( i+1, s.length() ) );
+                int j = s.length() - i - 1;
+                //System.out.println("j = " + j);
+                //System.out.println("n = " + n);
+                //System.out.println("d = " + d);
+                BigRational z = new BigRational(1,10);
+                z = Power.<BigRational>positivePower(z,j);
+                BigRational f = new BigRational(d);
+                f = f.multiply(z);
+                r = r.sum(f);
+                num = r.num;
+                den = r.den;
+            }
         } else {
             n = new BigInteger( s.substring(0,i) );
             d = new BigInteger( s.substring( i+1, s.length() ) );
