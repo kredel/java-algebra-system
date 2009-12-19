@@ -30,15 +30,15 @@ public class ComplexRing<C extends RingElem<C> >
              implements RingFactory<Complex<C>> {
 
 
-    /** Complex class elements factory data structure. 
-     */
-    protected final RingFactory<C> ring;
-
-
     private final static Random random = new Random();
 
 
     private static final Logger logger = Logger.getLogger(ComplexRing.class);
+
+
+    /** Complex class elements factory data structure. 
+     */
+    public final RingFactory<C> ring;
 
 
     /** The constructor creates a ComplexRing object.

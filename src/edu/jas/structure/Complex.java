@@ -34,9 +34,13 @@ public class Complex<C extends RingElem<C> >
              implements StarRingElem<Complex<C>>,
                         GcdRingElem<Complex<C>> {
 
+    private static final Logger logger = Logger.getLogger(Complex.class);
+    private static final boolean debug = logger.isDebugEnabled();
+
+
     /** Complex class factory data structure. 
      */
-    protected final ComplexRing<C> ring;
+    public final ComplexRing<C> ring;
 
 
     /** Real part of the data structure. 
@@ -47,10 +51,6 @@ public class Complex<C extends RingElem<C> >
     /** Imaginary part of the data structure. 
       */
     protected final C im;
-
-
-    private static final Logger logger = Logger.getLogger(Complex.class);
-    private static final boolean debug = logger.isDebugEnabled();
 
 
     /** The constructor creates a Complex object 
