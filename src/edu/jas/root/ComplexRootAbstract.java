@@ -88,7 +88,9 @@ public class ComplexRootAbstract<C extends RingElem<C>>
     public long indexOfCauchy(C a, C b, GenPolynomial<C> f, GenPolynomial<C> g) {
         List<GenPolynomial<C>> S = sturmSequence(g,f);
         //System.out.println("S = " + S);
-        logger.info("sturmSeq = " + S);
+        if ( debug ) {
+            logger.info("sturmSeq = " + S);
+        }
         RingFactory<C> cfac = f.ring.coFac;
         List<C> l = PolyUtil.<C> evaluateMain(cfac, S, a);
         List<C> r = PolyUtil.<C> evaluateMain(cfac, S, b);
@@ -366,29 +368,30 @@ public class ComplexRootAbstract<C extends RingElem<C>>
         eps = eps.divide( cr.fromInteger(1000) ); // 1/1000
         //System.out.println("eps = " + eps);
 
-        System.out.println("rect = " + rect); 
+        //System.out.println("rect = " + rect); 
         Complex<C> delta = rect.corners[3].subtract(rect.corners[1]);
         delta = delta.divide( cr.fromInteger(2) );
         //System.out.println("delta = " + delta); 
         Complex<C> center = rect.corners[1].sum( delta );
         while ( center.isZERO() || center.getRe().isZERO() || center.getIm().isZERO() ) { 
             delta = delta.sum( delta.multiply(eps) ); // distort
-            System.out.println("delta = " + delta); 
+            //System.out.println("delta = " + delta); 
             center = rect.corners[1].sum( delta );
             eps = eps.sum( eps.multiply(cr.getIMAG()) );
         }
-        System.out.println("center = " + center); 
-        logger.info("new center = " + center); 
-
+        //System.out.println("center = " + center); 
+        if ( debug ) {
+            logger.info("new center = " + center); 
+        }
         Complex<C>[] cp = Arrays.<Complex<C>>copyOf(rect.corners,4);
         // cp[0] fix
         cp[1] = new Complex<C>(cr,cp[1].getRe(),center.getIm());
         cp[2] = center;
         cp[3] = new Complex<C>(cr,center.getRe(),cp[3].getIm());
         Rectangle<C> nw = new Rectangle<C>(cp);
-        System.out.println("nw = " + nw); 
+        //System.out.println("nw = " + nw); 
         List<Rectangle<C>> nwr = complexRoots(nw,a);
-        System.out.println("#nwr = " + nwr.size()); 
+        //System.out.println("#nwr = " + nwr.size()); 
         roots.addAll(nwr);
 
         cp = Arrays.<Complex<C>>copyOf(rect.corners,4);
@@ -397,9 +400,9 @@ public class ComplexRootAbstract<C extends RingElem<C>>
         cp[2] = new Complex<C>(cr,center.getRe(),cp[2].getIm());
         cp[3] = center;
         Rectangle<C> sw = new Rectangle<C>(cp);
-        System.out.println("sw = " + sw); 
+        //System.out.println("sw = " + sw); 
         List<Rectangle<C>> swr = complexRoots(sw,a);
-        System.out.println("#swr = " + swr.size()); 
+        //System.out.println("#swr = " + swr.size()); 
         roots.addAll(swr);
 
         cp = Arrays.<Complex<C>>copyOf(rect.corners,4);
@@ -408,9 +411,9 @@ public class ComplexRootAbstract<C extends RingElem<C>>
         // cp[2] fix
         cp[3] = new Complex<C>(cr,cp[3].getRe(),center.getIm());
         Rectangle<C> se = new Rectangle<C>(cp);
-        System.out.println("se = " + se); 
+        //System.out.println("se = " + se); 
         List<Rectangle<C>> ser = complexRoots(se,a);
-        System.out.println("#ser = " + ser.size()); 
+        //System.out.println("#ser = " + ser.size()); 
         roots.addAll(ser);
 
         cp = Arrays.<Complex<C>>copyOf(rect.corners,4);
@@ -419,9 +422,9 @@ public class ComplexRootAbstract<C extends RingElem<C>>
         cp[2] = new Complex<C>(cr,cp[2].getRe(),center.getIm());
         // cp[3] fix
         Rectangle<C> ne = new Rectangle<C>(cp);
-        System.out.println("ne = " + ne); 
+        //System.out.println("ne = " + ne); 
         List<Rectangle<C>> ner = complexRoots(ne,a);
-        System.out.println("#ner = " + ner.size()); 
+        //System.out.println("#ner = " + ner.size()); 
         roots.addAll(ner);
 
         return roots;
@@ -444,8 +447,9 @@ public class ComplexRootAbstract<C extends RingElem<C>>
             C M = Mb.getRe();
             C M1 = M.sum(M.factory().fromInteger(1));
             //System.out.println("M = " + M);
-            logger.info("rootBound = " + M);
-
+            if ( debug ) {
+                logger.info("rootBound = " + M);
+            }
             Complex<C>[] corner = (Complex<C>[]) new Complex[4];
             corner[0] = new Complex<C>(cr,M1.negate(),M);            // nw
             corner[1] = new Complex<C>(cr,M1.negate(),M1.negate());  // sw
@@ -501,8 +505,9 @@ public class ComplexRootAbstract<C extends RingElem<C>>
                 eps = eps.sum( eps.multiply(cr.getIMAG()) );
             }
             //System.out.println("center = " + center); 
-            logger.info("new center = " + center); 
-
+            if ( debug ) {
+                logger.info("new center = " + center); 
+            }
             Complex<C>[] cp = Arrays.<Complex<C>>copyOf(root.corners,4);
             // cp[0] fix
             cp[1] = new Complex<C>(cr,cp[1].getRe(),center.getIm());

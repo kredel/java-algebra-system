@@ -472,11 +472,11 @@ public class ComplexRootTest extends TestCase {
         ComplexRootAbstract<BigRational> cr = new ComplexRootAbstract<BigRational>();
 
         a = dfac.random(kl, ll, el+1, q);
-        System.out.println("a = " + a);
+        //System.out.println("a = " + a);
 
         List<Rectangle<BigRational>> roots = cr.complexRoots(a);
-        System.out.println("a = " + a);
-        System.out.println("roots = " + roots);
+        //System.out.println("a = " + a);
+        //System.out.println("roots = " + roots);
         assertTrue("#roots == deg(a) ", roots.size() ==  a.degree(0));
     }
 
@@ -492,19 +492,19 @@ public class ComplexRootTest extends TestCase {
         Squarefree<Complex<BigRational>> engine 
           = SquarefreeFactory.<Complex<BigRational>> getImplementation(cfac);
         a = engine.squarefreePart(a);
-        System.out.println("a = " + a);
+        //System.out.println("a = " + a);
 
         List<Rectangle<BigRational>> roots = cr.complexRoots(a);
-        System.out.println("a = " + a);
-        System.out.println("roots = " + roots);
+        //System.out.println("a = " + a);
+        //System.out.println("roots = " + roots);
         assertTrue("#roots == deg(a) ", roots.size() ==  a.degree(0));
 
         BigRational len = new BigRational(1,1000000);
-        System.out.println("len = " + len);
+        //System.out.println("len = " + len);
 
         for ( Rectangle<BigRational> root : roots ) {
             Rectangle<BigRational> refine = cr.complexRootRefinement(root,a,len);
-            System.out.println("refine = " + refine);
+            //System.out.println("refine = " + refine);
         }
     }
 }
