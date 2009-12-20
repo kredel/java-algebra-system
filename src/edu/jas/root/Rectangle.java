@@ -15,11 +15,11 @@ import edu.jas.structure.Complex;
 
 
 /**
- * Rectangle. For example isolating interval for real roots.
+ * Rectangle. For example isolating intervals for complex roots.
  * @param <C> coefficient type.
  * @author Heinz Kredel
  */
-public class Rectangle<C extends RingElem<C> /*& ToRational*/ > {
+public class Rectangle<C extends RingElem<C>> {
 
 
     /**
@@ -55,7 +55,8 @@ public class Rectangle<C extends RingElem<C> /*& ToRational*/ > {
      */
     @Override
     public String toString() {
-        return centerApprox() + " = [" + corners[0] + ", " + corners[1] + ", " + corners[2] + ", " + corners[3] + "]";
+        return "[" + corners[0] + ", " + corners[1] + ", " + corners[2] + ", " + corners[3] + "]";
+        //return centerApprox() + " = [" + corners[0] + ", " + corners[1] + ", " + corners[2] + ", " + corners[3] + "]";
     }
 
 
@@ -66,6 +67,42 @@ public class Rectangle<C extends RingElem<C> /*& ToRational*/ > {
     public String toScript() {
         // Python case
         return "(" + corners[0] + ", " + corners[1] + ", " + corners[2] + ", " + corners[3] + ")";
+    }
+
+
+    /**
+     * Get north west corner.
+     * @return north west corner of this rectangle.
+     */
+    public Complex<C> getNW() {
+        return corners[0];
+    }
+
+
+    /**
+     * Get south west corner.
+     * @return south west corner of this rectangle.
+     */
+    public Complex<C> getSW() {
+        return corners[1];
+    }
+
+
+    /**
+     * Get south east corner.
+     * @return south east corner of this rectangle.
+     */
+    public Complex<C> getSE() {
+        return corners[2];
+    }
+
+
+    /**
+     * Get north east corner.
+     * @return north east corner of this rectangle.
+     */
+    public Complex<C> getNE() {
+        return corners[3];
     }
 
 
@@ -119,7 +156,7 @@ public class Rectangle<C extends RingElem<C> /*& ToRational*/ > {
 
     /**
      * Approximation of center.
-     * @return r + i m as decimal approximation.
+     * @return r + i m as decimal approximation of the center.
      */
     public String centerApprox() {
         C r = corners[2].getRe().subtract( corners[1].getRe() );
