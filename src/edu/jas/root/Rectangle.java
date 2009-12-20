@@ -148,36 +148,24 @@ public class Rectangle<C extends RingElem<C> /*& ToRational*/ > {
         return s.toString();
     }
 
+
     /**
      * Length.
-     * @return |left-right|;
+     * @return |ne-sw|**2;
+     */
     public C length() {
-        C m = right.subtract(left);
-        return m.abs();
+        Complex<C> m = corners[3].subtract(corners[1]);
+        return m.norm().getRe();
     }
-     */
 
 
     /**
-     * BigDecimal representation of Rectangle.
-    public BigDecimal toDecimal() {
-        BigDecimal l = new BigDecimal(left.toRational());
-        BigDecimal r = new BigDecimal(right.toRational());
-        BigDecimal two = new BigDecimal(2);
-        BigDecimal v = l.sum(r).divide(two);
-        return v;
-    }
+     * Rational Length.
+     * @return rational(|ne-sw|**2);
      */
-
-
-    /**
-     * Rational middle point.
-     * @return (left-right)/2;
-    public BigRational rationalMiddle() {
-        BigRational m = left.toRational().sum(right.toRational());
-        BigRational t = new BigRational(1L,2L);
-        m = m.multiply(t);
-        return m;
+    public BigRational rationalLength() {
+        BigRational r = new BigRational( length().toString() );
+        return r;
     }
-     */
+
 }
