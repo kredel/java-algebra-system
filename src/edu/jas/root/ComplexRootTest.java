@@ -23,6 +23,8 @@ import edu.jas.poly.PolyUtil;
 import edu.jas.structure.Power;
 import edu.jas.structure.Complex;
 import edu.jas.structure.ComplexRing;
+import edu.jas.ufd.Squarefree;
+import edu.jas.ufd.SquarefreeFactory;
 
 
 /**
@@ -144,7 +146,7 @@ public class ComplexRootTest extends TestCase {
      * Test root bound.
      * 
      */
-    public void xtestRootBound() {
+    public void testRootBound() {
         //a = dfac.random(kl, ll, el, q);
         a = dfac.univariate(0,2L).sum(dfac.getONE());  // x^2 + 1
         //System.out.println("a = " + a);
@@ -171,7 +173,7 @@ public class ComplexRootTest extends TestCase {
      * Test Cauchy index.
      * 
      */
-    public void xtestCauchyIndex() {
+    public void testCauchyIndex() {
         a = dfac.random(kl, ll, el, q);
         b = dfac.random(kl, ll, el, q);
         //a = dfac.univariate(0,2L).sum(dfac.getONE());  // x^2 + 1
@@ -200,7 +202,7 @@ public class ComplexRootTest extends TestCase {
      * Test Routh.
      * 
      */
-    public void xtestRouth() {
+    public void testRouth() {
         ComplexRootAbstract<BigRational> cr = new ComplexRootAbstract<BigRational>();
 
         //a = dfac.random(kl, ll, el, q);
@@ -246,7 +248,7 @@ public class ComplexRootTest extends TestCase {
      * Test Taylor series.
      * 
      */
-    public void xtestTaylorSeries() {
+    public void testTaylorSeries() {
         a = dfac.random(kl, ll, el, q);
         //System.out.println("a = " + a);
 
@@ -273,7 +275,7 @@ public class ComplexRootTest extends TestCase {
      * Test linear substitution.
      * 
      */
-    public void xtestSubstitutionLinear() {
+    public void testSubstitutionLinear() {
         a = dfac.random(kl, ll, el, q);
         //System.out.println("a = " + a);
 
@@ -338,7 +340,7 @@ public class ComplexRootTest extends TestCase {
      * 
      */
     @SuppressWarnings("unchecked")
-    public void xtestWindingNumber() {
+    public void testWindingNumber() {
         ComplexRootAbstract<BigRational> cr = new ComplexRootAbstract<BigRational>();
         Complex<BigRational> I = cfac.getIMAG();
 
@@ -393,7 +395,7 @@ public class ComplexRootTest extends TestCase {
      * 
      */
     @SuppressWarnings("unchecked")
-    public void xtestComplexRootsImag() {
+    public void testComplexRootsImag() {
         ComplexRootAbstract<BigRational> cr = new ComplexRootAbstract<BigRational>();
         Complex<BigRational> I = cfac.getIMAG();
 
@@ -402,7 +404,7 @@ public class ComplexRootTest extends TestCase {
         //a = dfac.univariate(0,2L).subtract(cfac.getONE());  // x^2 - 1
         //a = dfac.univariate(0,2L).subtract(I);  // x^2 - I
         //a = dfac.univariate(0,1L);  // x
-        System.out.println("a = " + a);
+        //System.out.println("a = " + a);
 
         Complex<BigRational> Mb = cr.rootBound(a);
         BigRational M = Mb.getRe();
@@ -418,7 +420,7 @@ public class ComplexRootTest extends TestCase {
 	Rectangle<BigRational> rect = new Rectangle<BigRational>(corner);
 
         List<Rectangle<BigRational>> roots = cr.complexRoots(rect,a);
-        System.out.println("roots = " + roots);
+        //System.out.println("roots = " + roots);
         assertTrue("#roots == deg(a) ", roots.size() ==  a.degree(0));
     }
 
@@ -428,11 +430,15 @@ public class ComplexRootTest extends TestCase {
      * 
      */
     @SuppressWarnings("unchecked")
-    public void xtestComplexRootsRand() {
+    public void testComplexRootsRand() {
         ComplexRootAbstract<BigRational> cr = new ComplexRootAbstract<BigRational>();
         Complex<BigRational> I = cfac.getIMAG();
 
         a = dfac.random(kl, ll, el, q);
+        Squarefree<Complex<BigRational>> engine 
+          = SquarefreeFactory.<Complex<BigRational>> getImplementation(cfac);
+        a = engine.squarefreePart(a);
+
         //a = dfac.univariate(0,2L).subtract(cfac.getONE());  // x^2 - 1
         //a = dfac.univariate(0,2L).sum(cfac.fromInteger(1));  // x^2 + 1
         //a = dfac.univariate(0,2L).subtract(I);  // x^2 - I

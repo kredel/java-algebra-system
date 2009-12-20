@@ -214,8 +214,7 @@ public class SquarefreeFactory {
                 break;
             }
             if (fac.isField()) {
-                System.out.println("fac_field = " + fac);
-                //pfac = (GenPolynomialRing) ofac;
+                //System.out.println("fac_field = " + fac);
                 t = 9;
                 break;
             }
