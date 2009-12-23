@@ -5,35 +5,12 @@
 package edu.jas.root;
 
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.SortedMap;
-import java.util.Arrays;
-
-import org.apache.log4j.Logger;
 
 import edu.jas.arith.BigRational;
-import edu.jas.arith.BigDecimal;
-import edu.jas.arith.ToRational;
-import edu.jas.arith.Roots;
-
-import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.GenPolynomialRing;
-import edu.jas.poly.PolyUtil;
-import edu.jas.poly.Monomial;
-
-import edu.jas.structure.RingElem;
-import edu.jas.structure.StarRingElem;
-import edu.jas.structure.RingFactory;
-import edu.jas.structure.UnaryFunctor;
 import edu.jas.structure.Complex;
-import edu.jas.structure.ComplexRing;
-import edu.jas.structure.Power;
-
-import edu.jas.ufd.Squarefree;
-import edu.jas.ufd.SquarefreeFactory;
+import edu.jas.structure.RingElem;
 
 
 /**

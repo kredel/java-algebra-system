@@ -5,8 +5,6 @@
 package edu.jas.root;
 
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import junit.framework.Test;
@@ -18,11 +16,11 @@ import edu.jas.arith.BigRational;
 import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
-import edu.jas.poly.TermOrder;
 import edu.jas.poly.PolyUtil;
-import edu.jas.structure.Power;
+import edu.jas.poly.TermOrder;
 import edu.jas.structure.Complex;
 import edu.jas.structure.ComplexRing;
+import edu.jas.structure.Power;
 import edu.jas.ufd.Squarefree;
 import edu.jas.ufd.SquarefreeFactory;
 
@@ -125,9 +123,9 @@ public class ComplexRootTest extends TestCase {
     protected void setUp() {
         a = b = c = d = e = null;
         ai = bi = ci = di = ei = null;
-        cfac = new ComplexRing<BigRational>( new BigRational(1) );
+        cfac = new ComplexRing<BigRational>(new BigRational(1));
         String[] vars = new String[] { "x" };
-        dfac = new GenPolynomialRing<Complex<BigRational>>(cfac, rl, to,vars);
+        dfac = new GenPolynomialRing<Complex<BigRational>>(cfac, rl, to, vars);
         eps = Power.positivePower(new BigRational(1L, 10L), BigDecimal.DEFAULT_PRECISION);
     }
 
@@ -148,7 +146,7 @@ public class ComplexRootTest extends TestCase {
      */
     public void testRootBound() {
         //a = dfac.random(kl, ll, el, q);
-        a = dfac.univariate(0,2L).sum(dfac.getONE());  // x^2 + 1
+        a = dfac.univariate(0, 2L).sum(dfac.getONE()); // x^2 + 1
         //System.out.println("a = " + a);
 
         ComplexRootAbstract<BigRational> cr = new ComplexRootsSturm<BigRational>();
@@ -160,7 +158,7 @@ public class ComplexRootTest extends TestCase {
         assertTrue("M >= 1 ", M.compareTo(BigRational.ONE) >= 0);
 
         //a = a.monic();
-        a = a.multiply( dfac.fromInteger(5) );
+        a = a.multiply(dfac.fromInteger(5));
         //System.out.println("a = " + a);
         M = cr.rootBound(a).getRe();
 
@@ -182,19 +180,19 @@ public class ComplexRootTest extends TestCase {
 
         BigRational l = new BigRational(0);
         BigRational r = new BigRational(1);
-        GenPolynomialRing<BigRational> fac = new GenPolynomialRing<BigRational>(l,dfac);
+        GenPolynomialRing<BigRational> fac = new GenPolynomialRing<BigRational>(l, dfac);
 
         ComplexRootsSturm<BigRational> cr = new ComplexRootsSturm<BigRational>();
 
-        GenPolynomial<BigRational> f = cr.realPart(fac,a);
-        GenPolynomial<BigRational> g = cr.imaginaryPart(fac,b);
+        GenPolynomial<BigRational> f = cr.realPart(fac, a);
+        GenPolynomial<BigRational> g = cr.imaginaryPart(fac, b);
         //System.out.println("re(a) = " + f);
         //System.out.println("im(b) = " + g);
 
-        long ci = cr.indexOfCauchy(l,r,g,f);
+        long ci = cr.indexOfCauchy(l, r, g, f);
         //System.out.println("ci = " + ci);
 
-        assertTrue("ci >= 0 ", ci >= - a.degree(0));
+        assertTrue("ci >= 0 ", ci >= -a.degree(0));
     }
 
 
@@ -215,10 +213,10 @@ public class ComplexRootTest extends TestCase {
         //a = dfac.univariate(0,2L).sum( dfac.getONE().multiply(I) );  // x^2 + i
 
         //b = X.subtract( dfac.getONE().multiply( I ) ); // x - i
-        b = X.subtract( dfac.getONE().multiply( I.negate() ) ); // x + i
-        c = X.subtract( dfac.getONE().multiply( I.multiply(cfac.fromInteger(3)))); // x - 3i
-        d = X.subtract( dfac.getONE().multiply( I.multiply(cfac.fromInteger(4)))); // x - 4i
-        e = X.subtract( dfac.getONE().multiply( I.multiply(cfac.fromInteger(5)))); // x - 5i
+        b = X.subtract(dfac.getONE().multiply(I.negate())); // x + i
+        c = X.subtract(dfac.getONE().multiply(I.multiply(cfac.fromInteger(3)))); // x - 3i
+        d = X.subtract(dfac.getONE().multiply(I.multiply(cfac.fromInteger(4)))); // x - 4i
+        e = X.subtract(dfac.getONE().multiply(I.multiply(cfac.fromInteger(5)))); // x - 5i
 
         a = b.multiply(c).multiply(d).multiply(e);
         //System.out.println("a = " + a.toScript());
@@ -229,22 +227,22 @@ public class ComplexRootTest extends TestCase {
         //System.out.println("M = " + M);
 
         BigRational minf = M.negate(); // - infinity
-        BigRational pinf = M;          // + infinity
-        GenPolynomialRing<BigRational> fac = new GenPolynomialRing<BigRational>(pinf,dfac);
+        BigRational pinf = M; // + infinity
+        GenPolynomialRing<BigRational> fac = new GenPolynomialRing<BigRational>(pinf, dfac);
 
-        GenPolynomial<BigRational> f = cr.realPart(fac,a);
-        GenPolynomial<BigRational> g = cr.imaginaryPart(fac,a);
+        GenPolynomial<BigRational> f = cr.realPart(fac, a);
+        GenPolynomial<BigRational> g = cr.imaginaryPart(fac, a);
         //System.out.println("re(a) = " + f.toScript());
         //System.out.println("im(a) = " + g.toScript());
 
-        long[] ri = cr.indexOfRouth(minf,pinf,f,g);
+        long[] ri = cr.indexOfRouth(minf, pinf, f, g);
         //System.out.println("ri = [" + ri[0] + ", " + ri[1] + " ]");
-	long deg = ri[0] + ri[1];
+        long deg = ri[0] + ri[1];
         assertTrue("sum(ri) == deg(a) ", deg >= a.degree(0));
     }
 
 
-   /**
+    /**
      * Test Taylor series.
      * 
      */
@@ -255,23 +253,23 @@ public class ComplexRootTest extends TestCase {
         Complex<BigRational> v = cfac.getZERO(); //cfac.random(kl);
         //System.out.println("v = " + v);
 
-        b = ComplexRootAbstract.<Complex<BigRational>> seriesOfTaylor(a,v);
+        b = ComplexRootAbstract.<Complex<BigRational>> seriesOfTaylor(a, v);
         //System.out.println("taylor(a,0) = " + b);
         assertTrue("taylor(a,0) == a ", a.equals(b));
 
         v = cfac.random(kl);
         //System.out.println("v = " + v);
 
-        b = ComplexRootAbstract.<Complex<BigRational>> seriesOfTaylor(a,v);
+        b = ComplexRootAbstract.<Complex<BigRational>> seriesOfTaylor(a, v);
         //System.out.println("taylor(a,v) = " + b);
 
-        c = ComplexRootAbstract.<Complex<BigRational>> seriesOfTaylor(b,v.negate());
+        c = ComplexRootAbstract.<Complex<BigRational>> seriesOfTaylor(b, v.negate());
         //System.out.println("tailor(taylor(a,v),-v) = " + c);
         assertTrue("tailor(taylor(a,v),-v) == a ", a.equals(c));
     }
 
 
-   /**
+    /**
      * Test linear substitution.
      * 
      */
@@ -279,48 +277,48 @@ public class ComplexRootTest extends TestCase {
         a = dfac.random(kl, ll, el, q);
         //System.out.println("a = " + a);
 
-	// subst(0,1)
-        Complex<BigRational> va = cfac.getZERO(); 
+        // subst(0,1)
+        Complex<BigRational> va = cfac.getZERO();
         //System.out.println("va = " + va);
-        Complex<BigRational> vb = cfac.getONE(); 
+        Complex<BigRational> vb = cfac.getONE();
         //System.out.println("vb = " + vb);
 
-        b = ComplexRootAbstract.<Complex<BigRational>> substituteLinear(a,va,vb);
+        b = ComplexRootAbstract.<Complex<BigRational>> substituteLinear(a, va, vb);
         //System.out.println("substitute(a,0,1) = " + b);
         assertTrue("substitute(a,0,1) == a ", a.equals(b));
 
-	// subst(va,vb)
+        // subst(va,vb)
         va = cfac.random(kl);
         //System.out.println("va = " + va);
         vb = cfac.random(kl);
-	if ( vb.isZERO() ) {
+        if (vb.isZERO()) {
             vb = cfac.getONE();
-	}
+        }
         //System.out.println("vb = " + vb);
-        b = ComplexRootAbstract.<Complex<BigRational>> substituteLinear(a,va,vb);
+        b = ComplexRootAbstract.<Complex<BigRational>> substituteLinear(a, va, vb);
         //System.out.println("substitute(a,va,vb) = " + b);
 
-	// subst(-va,vb^-1)
+        // subst(-va,vb^-1)
         va = va.negate();
         //System.out.println("va = " + va);
         vb = vb.inverse();
         //System.out.println("vb = " + vb);
-        c = ComplexRootAbstract.<Complex<BigRational>> substituteLinear(b,va,vb);
+        c = ComplexRootAbstract.<Complex<BigRational>> substituteLinear(b, va, vb);
         //System.out.println("substitute(b,va,vb) = " + c);
         assertTrue("substitute(substitute(a,va,vb),-va,vb^-1) == a ", a.equals(c));
 
-	// subst(va,vb-va)
+        // subst(va,vb-va)
         va = cfac.random(kl);
         //System.out.println("va = " + va);
         vb = cfac.random(kl);
-	if ( vb.isZERO() ) {
+        if (vb.isZERO()) {
             vb = cfac.getONE();
-	}
+        }
         //System.out.println("vb = " + vb);
-        b = ComplexRootAbstract.<Complex<BigRational>> seriesOfTaylor(a,va);
-	Complex<BigRational> vc = vb.subtract(va);
+        b = ComplexRootAbstract.<Complex<BigRational>> seriesOfTaylor(a, va);
+        Complex<BigRational> vc = vb.subtract(va);
         //System.out.println("vc = " + vc);
-        b = ComplexRootAbstract.<Complex<BigRational>> substituteLinear(b,va,vc);
+        b = ComplexRootAbstract.<Complex<BigRational>> substituteLinear(b, va, vc);
         //System.out.println("substitute(a,va,vb-va) = " + b);
 
         Complex<BigRational> fa = PolyUtil.<Complex<BigRational>> evaluateMain(cfac, a, va);
@@ -344,7 +342,7 @@ public class ComplexRootTest extends TestCase {
         ComplexRootsSturm<BigRational> cr = new ComplexRootsSturm<BigRational>();
         Complex<BigRational> I = cfac.getIMAG();
 
-        a = dfac.univariate(0,2L).sum(cfac.fromInteger(1));  // x^2 + 1
+        a = dfac.univariate(0, 2L).sum(cfac.fromInteger(1)); // x^2 + 1
         //a = dfac.random(kl, ll, el, q);
         //a = dfac.univariate(0,2L).subtract(cfac.getONE());  // x^2 - 1
         //a = dfac.univariate(0,2L).subtract(I);  // x^2 - I
@@ -354,37 +352,37 @@ public class ComplexRootTest extends TestCase {
         Complex<BigRational> Mb = cr.rootBound(a);
         BigRational M = Mb.getRe();
         //System.out.println("M = " + M);
-        BigRational eps = new BigRational(1,1000);
+        BigRational eps = new BigRational(1, 1000);
         //System.out.println("eps = " + eps);
 
         Complex<BigRational>[] corner = (Complex<BigRational>[]) new Complex[4];
 
-        corner[0] = new Complex<BigRational>(cfac,M.negate(),M);           // nw
-        corner[1] = new Complex<BigRational>(cfac,M.negate(),M.negate());  // sw
-        corner[2] = new Complex<BigRational>(cfac,M,M.negate());           // se
-        corner[3] = new Complex<BigRational>(cfac,M,M);                    // ne
+        corner[0] = new Complex<BigRational>(cfac, M.negate(), M); // nw
+        corner[1] = new Complex<BigRational>(cfac, M.negate(), M.negate()); // sw
+        corner[2] = new Complex<BigRational>(cfac, M, M.negate()); // se
+        corner[3] = new Complex<BigRational>(cfac, M, M); // ne
 
-        long v = cr.windingNumber(new Rectangle<BigRational>(corner),a);
+        long v = cr.windingNumber(new Rectangle<BigRational>(corner), a);
         //System.out.println("winding number = " + v);
         assertTrue("wind(rect,a) == 2 ", v == 2);
 
-	//if ( true ) return;
+        //if ( true ) return;
 
-        corner[0] = new Complex<BigRational>(cfac,M.negate(),M);    // nw
-        corner[1] = new Complex<BigRational>(cfac,M.negate(),eps);  // sw
-        corner[2] = new Complex<BigRational>(cfac,M,eps);           // se
-        corner[3] = new Complex<BigRational>(cfac,M,M);             // ne
+        corner[0] = new Complex<BigRational>(cfac, M.negate(), M); // nw
+        corner[1] = new Complex<BigRational>(cfac, M.negate(), eps); // sw
+        corner[2] = new Complex<BigRational>(cfac, M, eps); // se
+        corner[3] = new Complex<BigRational>(cfac, M, M); // ne
 
-        v = cr.windingNumber(new Rectangle<BigRational>(corner),a);
+        v = cr.windingNumber(new Rectangle<BigRational>(corner), a);
         //System.out.println("winding number = " + v);
         assertTrue("wind(rect,a) == 1 ", v == 1);
 
-        corner[0] = new Complex<BigRational>(cfac,eps.negate(),eps);           // nw
-        corner[1] = new Complex<BigRational>(cfac,eps.negate(),eps.negate());  // sw
-        corner[2] = new Complex<BigRational>(cfac,eps,eps.negate());           // se
-        corner[3] = new Complex<BigRational>(cfac,eps,eps);                    // ne
+        corner[0] = new Complex<BigRational>(cfac, eps.negate(), eps); // nw
+        corner[1] = new Complex<BigRational>(cfac, eps.negate(), eps.negate()); // sw
+        corner[2] = new Complex<BigRational>(cfac, eps, eps.negate()); // se
+        corner[3] = new Complex<BigRational>(cfac, eps, eps); // ne
 
-        v = cr.windingNumber(new Rectangle<BigRational>(corner),a);
+        v = cr.windingNumber(new Rectangle<BigRational>(corner), a);
         //System.out.println("winding number = " + v);
         assertTrue("wind(rect,a) == 0 ", v == 0);
     }
@@ -399,7 +397,7 @@ public class ComplexRootTest extends TestCase {
         ComplexRootAbstract<BigRational> cr = new ComplexRootsSturm<BigRational>();
         Complex<BigRational> I = cfac.getIMAG();
 
-        a = dfac.univariate(0,2L).sum(cfac.fromInteger(1));  // x^2 + 1
+        a = dfac.univariate(0, 2L).sum(cfac.fromInteger(1)); // x^2 + 1
         //a = dfac.univariate(0,2L).subtract(cfac.getONE());  // x^2 - 1
         //a = dfac.univariate(0,2L).subtract(I);  // x^2 - I
         //a = dfac.univariate(0,1L);  // x
@@ -411,16 +409,16 @@ public class ComplexRootTest extends TestCase {
 
         Complex<BigRational>[] corner = (Complex<BigRational>[]) new Complex[4];
 
-        corner[0] = new Complex<BigRational>(cfac,M.negate(),M);           // nw
-        corner[1] = new Complex<BigRational>(cfac,M.negate(),M.negate());  // sw
-        corner[2] = new Complex<BigRational>(cfac,M,M.negate());           // se
-        corner[3] = new Complex<BigRational>(cfac,M,M);                    // ne
+        corner[0] = new Complex<BigRational>(cfac, M.negate(), M); // nw
+        corner[1] = new Complex<BigRational>(cfac, M.negate(), M.negate()); // sw
+        corner[2] = new Complex<BigRational>(cfac, M, M.negate()); // se
+        corner[3] = new Complex<BigRational>(cfac, M, M); // ne
 
-	Rectangle<BigRational> rect = new Rectangle<BigRational>(corner);
+        Rectangle<BigRational> rect = new Rectangle<BigRational>(corner);
 
-        List<Rectangle<BigRational>> roots = cr.complexRoots(rect,a);
+        List<Rectangle<BigRational>> roots = cr.complexRoots(rect, a);
         //System.out.println("roots = " + roots);
-        assertTrue("#roots == deg(a) ", roots.size() ==  a.degree(0));
+        assertTrue("#roots == deg(a) ", roots.size() == a.degree(0));
     }
 
 
@@ -434,8 +432,8 @@ public class ComplexRootTest extends TestCase {
         Complex<BigRational> I = cfac.getIMAG();
 
         a = dfac.random(kl, ll, el, q);
-        Squarefree<Complex<BigRational>> engine 
-          = SquarefreeFactory.<Complex<BigRational>> getImplementation(cfac);
+        Squarefree<Complex<BigRational>> engine = SquarefreeFactory
+                .<Complex<BigRational>> getImplementation(cfac);
         a = engine.squarefreePart(a);
 
         //a = dfac.univariate(0,2L).subtract(cfac.getONE());  // x^2 - 1
@@ -450,17 +448,17 @@ public class ComplexRootTest extends TestCase {
 
         Complex<BigRational>[] corner = (Complex<BigRational>[]) new Complex[4];
 
-        corner[0] = new Complex<BigRational>(cfac,M.negate(),M);           // nw
-        corner[1] = new Complex<BigRational>(cfac,M.negate(),M.negate());  // sw
-        corner[2] = new Complex<BigRational>(cfac,M,M.negate());           // se
-        corner[3] = new Complex<BigRational>(cfac,M,M);                    // ne
+        corner[0] = new Complex<BigRational>(cfac, M.negate(), M); // nw
+        corner[1] = new Complex<BigRational>(cfac, M.negate(), M.negate()); // sw
+        corner[2] = new Complex<BigRational>(cfac, M, M.negate()); // se
+        corner[3] = new Complex<BigRational>(cfac, M, M); // ne
 
-	Rectangle<BigRational> rect = new Rectangle<BigRational>(corner);
+        Rectangle<BigRational> rect = new Rectangle<BigRational>(corner);
 
-        List<Rectangle<BigRational>> roots = cr.complexRoots(rect,a);
+        List<Rectangle<BigRational>> roots = cr.complexRoots(rect, a);
         //System.out.println("a = " + a);
         //System.out.println("roots = " + roots);
-        assertTrue("#roots == deg(a) ", roots.size() ==  a.degree(0));
+        assertTrue("#roots == deg(a) ", roots.size() == a.degree(0));
     }
 
 
@@ -471,13 +469,13 @@ public class ComplexRootTest extends TestCase {
     public void testComplexRoots() {
         ComplexRootAbstract<BigRational> cr = new ComplexRootsSturm<BigRational>();
 
-        a = dfac.random(kl, ll, el+1, q);
+        a = dfac.random(kl, ll, el + 1, q);
         //System.out.println("a = " + a);
 
         List<Rectangle<BigRational>> roots = cr.complexRoots(a);
         //System.out.println("a = " + a);
         //System.out.println("roots = " + roots);
-        assertTrue("#roots == deg(a) ", roots.size() ==  a.degree(0));
+        assertTrue("#roots == deg(a) ", roots.size() == a.degree(0));
     }
 
 
@@ -488,24 +486,23 @@ public class ComplexRootTest extends TestCase {
     public void testComplexRootRefinement() {
         ComplexRootAbstract<BigRational> cr = new ComplexRootsSturm<BigRational>();
 
-        a = dfac.random(kl, ll, el+1, q);
-        Squarefree<Complex<BigRational>> engine 
-          = SquarefreeFactory.<Complex<BigRational>> getImplementation(cfac);
+        a = dfac.random(kl, ll, el + 1, q);
+        Squarefree<Complex<BigRational>> engine = SquarefreeFactory
+                .<Complex<BigRational>> getImplementation(cfac);
         a = engine.squarefreePart(a);
         //System.out.println("a = " + a);
 
         List<Rectangle<BigRational>> roots = cr.complexRoots(a);
         //System.out.println("a = " + a);
         //System.out.println("roots = " + roots);
-        assertTrue("#roots == deg(a) ", roots.size() ==  a.degree(0));
+        assertTrue("#roots == deg(a) ", roots.size() == a.degree(0));
 
-        BigRational len = new BigRational(1,1000000);
+        BigRational len = new BigRational(1, 1000000);
         //System.out.println("len = " + len);
 
-        for ( Rectangle<BigRational> root : roots ) {
-            Rectangle<BigRational> refine = cr.complexRootRefinement(root,a,len);
+        for (Rectangle<BigRational> root : roots) {
+            Rectangle<BigRational> refine = cr.complexRootRefinement(root, a, len);
             //System.out.println("refine = " + refine);
         }
     }
 }
-

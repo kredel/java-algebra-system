@@ -7,11 +7,9 @@ package edu.jas.root;
 
 import edu.jas.arith.BigDecimal;
 import edu.jas.arith.BigRational;
-import edu.jas.arith.ToRational;
-import edu.jas.structure.RingElem;
-import edu.jas.structure.RingFactory;
-import edu.jas.structure.ElemFactory;
 import edu.jas.structure.Complex;
+import edu.jas.structure.ElemFactory;
+import edu.jas.structure.RingElem;
 
 
 /**
@@ -35,15 +33,15 @@ public class Rectangle<C extends RingElem<C>> {
      */
     @SuppressWarnings("unchecked")
     public Rectangle(Complex<C>[] c) {
-        if ( c.length < 5 ) {
+        if (c.length < 5) {
             corners = (Complex<C>[]) new Complex[5];
-            for ( int i = 0; i < 4; i++ ) {
+            for (int i = 0; i < 4; i++) {
                 corners[i] = c[i];
             }
         } else {
             corners = c;
         }
-        if ( corners[4] == null ) {
+        if (corners[4] == null) {
             corners[4] = corners[0];
         }
     }
@@ -131,8 +129,8 @@ public class Rectangle<C extends RingElem<C>> {
             a = (Rectangle<C>) b;
         } catch (ClassCastException e) {
         }
-        for ( int i = 0; i < 4; i++ ) {
-            if ( ! corners[i].equals(a.corners[i]) ) {
+        for (int i = 0; i < 4; i++) {
+            if (!corners[i].equals(a.corners[i])) {
                 return false;
             }
         }
@@ -147,7 +145,7 @@ public class Rectangle<C extends RingElem<C>> {
     @Override
     public int hashCode() {
         int hc = 0;
-        for ( int i = 0; i < 3; i++ ) {
+        for (int i = 0; i < 3; i++) {
             hc += 37 * corners[i].hashCode();
         }
         return 37 * hc + corners[3].hashCode();
@@ -159,14 +157,14 @@ public class Rectangle<C extends RingElem<C>> {
      * @return r + i m as decimal approximation of the center.
      */
     public String centerApprox() {
-        C r = corners[2].getRe().subtract( corners[1].getRe() );
-        C m = corners[0].getIm().subtract( corners[1].getIm() );
+        C r = corners[2].getRe().subtract(corners[1].getRe());
+        C m = corners[0].getIm().subtract(corners[1].getIm());
         ElemFactory<C> rf = r.factory();
         C two = rf.fromInteger(2);
         r = r.divide(two);
         m = m.divide(two);
-        r = corners[1].getRe().sum( r );
-        m = corners[1].getIm().sum( m );
+        r = corners[1].getRe().sum(r);
+        m = corners[1].getIm().sum(m);
 
         BigRational rs = new BigRational(r.toString());
         //System.out.println("s  = " + s);
@@ -201,7 +199,7 @@ public class Rectangle<C extends RingElem<C>> {
      * @return rational(|ne-sw|**2);
      */
     public BigRational rationalLength() {
-        BigRational r = new BigRational( length().toString() );
+        BigRational r = new BigRational(length().toString());
         return r;
     }
 
