@@ -164,12 +164,12 @@ public class ComplexRootsSturm<C extends RingElem<C>> extends ComplexRootAbstrac
             Complex<C> t = corner[i + 1].subtract(corner[i]);
             //Complex<C> t = Power.<Complex<C>> power(cr,im,i);
             //System.out.println("t = " + t);
-            GenPolynomial<Complex<C>> pc = seriesOfTaylor(a, corner[i]);
-            pc = substituteLinear(pc, corner[i], t);
+            GenPolynomial<Complex<C>> pc = PolyUtil.<Complex<C>> seriesOfTaylor(a, corner[i]);
+            pc = PolyUtil.<Complex<C>> substituteLinear(pc, corner[i], t);
             PC[i] = pc;
             //System.out.println("PC["+i+"] = " + pc);
-            GenPolynomial<C> f = realPart(fac, pc);
-            GenPolynomial<C> g = imaginaryPart(fac, pc);
+            GenPolynomial<C> f = PolyUtil.<C> realPartFromComplex(fac, pc);
+            GenPolynomial<C> g = PolyUtil.<C> imaginaryPartFromComplex(fac, pc);
             //System.out.println("re() = " + f.toScript());
             //System.out.println("im() = " + g.toScript());
             PCre[i] = f;

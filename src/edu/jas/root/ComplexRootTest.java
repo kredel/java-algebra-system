@@ -184,8 +184,8 @@ public class ComplexRootTest extends TestCase {
 
         ComplexRootsSturm<BigRational> cr = new ComplexRootsSturm<BigRational>();
 
-        GenPolynomial<BigRational> f = cr.realPart(fac, a);
-        GenPolynomial<BigRational> g = cr.imaginaryPart(fac, b);
+        GenPolynomial<BigRational> f = PolyUtil.<BigRational> realPartFromComplex(fac, a);
+        GenPolynomial<BigRational> g = PolyUtil.<BigRational> imaginaryPartFromComplex(fac, b);
         //System.out.println("re(a) = " + f);
         //System.out.println("im(b) = " + g);
 
@@ -230,8 +230,8 @@ public class ComplexRootTest extends TestCase {
         BigRational pinf = M; // + infinity
         GenPolynomialRing<BigRational> fac = new GenPolynomialRing<BigRational>(pinf, dfac);
 
-        GenPolynomial<BigRational> f = cr.realPart(fac, a);
-        GenPolynomial<BigRational> g = cr.imaginaryPart(fac, a);
+        GenPolynomial<BigRational> f = PolyUtil.<BigRational> realPartFromComplex(fac, a);
+        GenPolynomial<BigRational> g = PolyUtil.<BigRational> imaginaryPartFromComplex(fac, a);
         //System.out.println("re(a) = " + f.toScript());
         //System.out.println("im(a) = " + g.toScript());
 
@@ -239,97 +239,6 @@ public class ComplexRootTest extends TestCase {
         //System.out.println("ri = [" + ri[0] + ", " + ri[1] + " ]");
         long deg = ri[0] + ri[1];
         assertTrue("sum(ri) == deg(a) ", deg >= a.degree(0));
-    }
-
-
-    /**
-     * Test Taylor series.
-     * 
-     */
-    public void testTaylorSeries() {
-        a = dfac.random(kl, ll, el, q);
-        //System.out.println("a = " + a);
-
-        Complex<BigRational> v = cfac.getZERO(); //cfac.random(kl);
-        //System.out.println("v = " + v);
-
-        b = ComplexRootAbstract.<Complex<BigRational>> seriesOfTaylor(a, v);
-        //System.out.println("taylor(a,0) = " + b);
-        assertTrue("taylor(a,0) == a ", a.equals(b));
-
-        v = cfac.random(kl);
-        //System.out.println("v = " + v);
-
-        b = ComplexRootAbstract.<Complex<BigRational>> seriesOfTaylor(a, v);
-        //System.out.println("taylor(a,v) = " + b);
-
-        c = ComplexRootAbstract.<Complex<BigRational>> seriesOfTaylor(b, v.negate());
-        //System.out.println("tailor(taylor(a,v),-v) = " + c);
-        assertTrue("tailor(taylor(a,v),-v) == a ", a.equals(c));
-    }
-
-
-    /**
-     * Test linear substitution.
-     * 
-     */
-    public void testSubstitutionLinear() {
-        a = dfac.random(kl, ll, el, q);
-        //System.out.println("a = " + a);
-
-        // subst(0,1)
-        Complex<BigRational> va = cfac.getZERO();
-        //System.out.println("va = " + va);
-        Complex<BigRational> vb = cfac.getONE();
-        //System.out.println("vb = " + vb);
-
-        b = ComplexRootAbstract.<Complex<BigRational>> substituteLinear(a, va, vb);
-        //System.out.println("substitute(a,0,1) = " + b);
-        assertTrue("substitute(a,0,1) == a ", a.equals(b));
-
-        // subst(va,vb)
-        va = cfac.random(kl);
-        //System.out.println("va = " + va);
-        vb = cfac.random(kl);
-        if (vb.isZERO()) {
-            vb = cfac.getONE();
-        }
-        //System.out.println("vb = " + vb);
-        b = ComplexRootAbstract.<Complex<BigRational>> substituteLinear(a, va, vb);
-        //System.out.println("substitute(a,va,vb) = " + b);
-
-        // subst(-va,vb^-1)
-        va = va.negate();
-        //System.out.println("va = " + va);
-        vb = vb.inverse();
-        //System.out.println("vb = " + vb);
-        c = ComplexRootAbstract.<Complex<BigRational>> substituteLinear(b, va, vb);
-        //System.out.println("substitute(b,va,vb) = " + c);
-        assertTrue("substitute(substitute(a,va,vb),-va,vb^-1) == a ", a.equals(c));
-
-        // subst(va,vb-va)
-        va = cfac.random(kl);
-        //System.out.println("va = " + va);
-        vb = cfac.random(kl);
-        if (vb.isZERO()) {
-            vb = cfac.getONE();
-        }
-        //System.out.println("vb = " + vb);
-        b = ComplexRootAbstract.<Complex<BigRational>> seriesOfTaylor(a, va);
-        Complex<BigRational> vc = vb.subtract(va);
-        //System.out.println("vc = " + vc);
-        b = ComplexRootAbstract.<Complex<BigRational>> substituteLinear(b, va, vc);
-        //System.out.println("substitute(a,va,vb-va) = " + b);
-
-        Complex<BigRational> fa = PolyUtil.<Complex<BigRational>> evaluateMain(cfac, a, va);
-        Complex<BigRational> fb = PolyUtil.<Complex<BigRational>> evaluateMain(cfac, a, vb);
-        //System.out.println("fa = " + fa + ", fb = " + fb);
-
-        Complex<BigRational> g0 = PolyUtil.<Complex<BigRational>> evaluateMain(cfac, b, cfac.getZERO());
-        Complex<BigRational> g1 = PolyUtil.<Complex<BigRational>> evaluateMain(cfac, b, cfac.getONE());
-        //System.out.println("g0 = " + g0 + ", g1 = " + g1);
-        assertTrue("substitute(a,va) == substitute(b,0) ", fa.equals(g0));
-        assertTrue("substitute(a,vb) == substitute(b,1) ", fb.equals(g1));
     }
 
 
@@ -468,7 +377,7 @@ public class ComplexRootTest extends TestCase {
      */
     public void testComplexRoots() {
         ComplexRootAbstract<BigRational> cr = new ComplexRootsSturm<BigRational>();
-
+ 
         a = dfac.random(kl, ll, el + 1, q);
         //System.out.println("a = " + a);
 

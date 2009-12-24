@@ -17,6 +17,8 @@ import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.structure.UnaryFunctor;
 import edu.jas.structure.Power;
+import edu.jas.structure.Complex;
+import edu.jas.structure.ComplexRing;
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
@@ -352,6 +354,44 @@ public class PolyUtil {
 
 
     /**
+     * Real part.
+     * @param fac result polynomial factory.
+     * @param A polynomial with BigComplex coefficients to be converted.
+     * @return polynomial with real part of the coefficients.
+     */
+    public static <C extends RingElem<C>>
+    GenPolynomial<C> realPartFromComplex(GenPolynomialRing<C> fac, GenPolynomial<Complex<C>> A) {
+        return PolyUtil.<Complex<C>, C> map(fac, A, new RealPartComplex<C>());
+    }
+
+
+    /**
+     * Imaginary part.
+     * @param fac result polynomial factory.
+     * @param A polynomial with BigComplex coefficients to be converted.
+     * @return polynomial with imaginary part of coefficients.
+     */
+    public static <C extends RingElem<C>>
+    GenPolynomial<C> imaginaryPartFromComplex(GenPolynomialRing<C> fac, GenPolynomial<Complex<C>> A) {
+        return PolyUtil.<Complex<C>, C> map(fac, A, new ImagPartComplex<C>());
+    }
+
+
+    /**
+     * Complex from real polynomial. 
+     * @param fac result polynomial factory.
+     * @param A polynomial with C coefficients to be converted.
+     * @return polynomial with Complex<C> coefficients.
+     */
+    public static <C extends RingElem<C>> 
+        GenPolynomial<Complex<C>>
+        toComplex( GenPolynomialRing<Complex<C>> fac,
+                    GenPolynomial<C> A ) {
+        return PolyUtil.<C,Complex<C>>map(fac,A, new ToComplex<C>(fac.coFac) );
+    }
+
+
+    /**
      * Complex from rational real part. 
      * @param fac result polynomial factory.
      * @param A polynomial with BigRational coefficients to be converted.
@@ -671,7 +711,7 @@ public class PolyUtil {
      * @return [ quotient, remainder ] with ldcf(S)<sup>m'</sup> P = quotient * S + remainder.
      * @see edu.jas.poly.GenPolynomial#divide(edu.jas.poly.GenPolynomial).
      */
-    //SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
     public static <C extends RingElem<C>>
         GenPolynomial<C>[] basePseudoQuotientRemainder( GenPolynomial<C> P, 
                                                         GenPolynomial<C> S ) {
@@ -1412,6 +1452,137 @@ public class PolyUtil {
     }
 
 
+    /**
+     * Substitute linear polynomial to polynomial.
+     * @param f univariate polynomial.
+     * @param a constant coefficient of substituent.
+     * @param b linear coefficient of substituent.
+     * @return f(a+b*z).
+     */
+    public static <C extends RingElem<C>> GenPolynomial<C> substituteLinear(GenPolynomial<C> f, C a, C b) {
+        if (f == null) {
+            return null;
+        }
+        GenPolynomialRing<C> fac = f.ring;
+        if (fac.nvar > 1) {
+            throw new RuntimeException("only for univariate polynomials");
+        }
+        if (f.isZERO() || f.isConstant()) {
+            return f;
+        }
+        GenPolynomial<C> z = fac.univariate(0, 1L).multiply(b);
+        // assert decending exponents, i.e. compatible term order
+        Map<ExpVector, C> val = f.getMap();
+        GenPolynomial<C> s = null;
+        long el1 = -1; // undefined
+        long el2 = -1;
+        for (ExpVector e : val.keySet()) {
+            el2 = e.getVal(0);
+            if (s == null /*el1 < 0*/) { // first turn
+                s = fac.getZERO().sum(val.get(e));
+            } else {
+                for (long i = el2; i < el1; i++) {
+                    s = s.multiply(z);
+                }
+                s = s.sum(val.get(e));
+            }
+            el1 = el2;
+        }
+        for (long i = 0; i < el2; i++) {
+            s = s.multiply(z);
+        }
+        //System.out.println("s = " + s);
+        return s;
+    }
+
+
+    /**
+     * Substitute univariate polynomial. 
+     * @param f univariate polynomial.
+     * @param t polynomial for substitution.
+     * @return polynomial A(x <- t).
+     */
+    public static <C extends RingElem<C>>
+      GenPolynomial<C> substituteUnivariate( GenPolynomial<C> f, GenPolynomial<C> t ) {
+        if (f == null||t == null) {
+            return null;
+        }
+        GenPolynomialRing<C> fac = f.ring;
+        if (fac.nvar > 1 || t.ring.nvar > 1) {
+            throw new RuntimeException("only for univariate polynomials");
+        }
+        if (f.isZERO() || f.isConstant()) {
+            return f;
+        }
+        // assert decending exponents, i.e. compatible term order
+        Map<ExpVector, C> val = f.getMap();
+        GenPolynomial<C> s = null;
+        long el1 = -1; // undefined
+        long el2 = -1;
+        for (ExpVector e : val.keySet()) {
+            el2 = e.getVal(0);
+            if (s == null /*el1 < 0*/) { // first turn
+                s = fac.getZERO().sum(val.get(e));
+            } else {
+                for (long i = el2; i < el1; i++) {
+                    s = s.multiply(t);
+                }
+                s = s.sum(val.get(e));
+            }
+            el1 = el2;
+        }
+        for (long i = 0; i < el2; i++) {
+            s = s.multiply(t);
+        }
+        //System.out.println("s = " + s);
+        return s;
+    }
+
+    /**
+     * Taylor series for polynomial.
+     * @param f univariate polynomial.
+     * @param a expansion point.
+     * @return Taylor series (a polynomial) of f at a.
+     */
+    public static <C extends RingElem<C>> GenPolynomial<C> seriesOfTaylor(GenPolynomial<C> f, C a) {
+        if (f == null) {
+            return null;
+        }
+        GenPolynomialRing<C> fac = f.ring;
+        if (fac.nvar > 1) {
+            throw new RuntimeException("only for univariate polynomials");
+        }
+        if (f.isZERO() || f.isConstant()) {
+            return f;
+        }
+        GenPolynomial<C> s = fac.getZERO();
+        C fa = PolyUtil.<C> evaluateMain(fac.coFac, f, a);
+        s = s.sum(fa);
+        //System.out.println("s = " + s);
+        long n = 1;
+        long i = 0;
+        GenPolynomial<C> g = PolyUtil.<C> baseDeriviative(f);
+        GenPolynomial<C> p = fac.getONE();
+        //GenPolynomial<C> xa = fac.univariate(0,1).subtract(a);
+        //System.out.println("xa = " + xa);
+        while (!g.isZERO()) {
+            i++;
+            n *= i;
+            //p = p.multiply(xa);
+            //System.out.println("p = " + p);
+            fa = PolyUtil.<C> evaluateMain(fac.coFac, g, a);
+            GenPolynomial<C> q = fac.univariate(0, i); //p;
+            q = q.multiply(fa);
+            q = q.divide(fac.fromInteger(n));
+            //System.out.println("q = " + q);
+            s = s.sum(q);
+            g = PolyUtil.<C> baseDeriviative(g);
+        }
+        //System.out.println("s = " + s);
+        return s;
+    }
+
+
     /** ModInteger interpolate on first variable.
      * @param <C> coefficient type.
      * @param fac GenPolynomial<C> result factory.
@@ -1809,6 +1980,58 @@ class ImagPart implements UnaryFunctor<BigComplex,BigRational> {
             return new BigRational();
         } else {
             return c.getIm();
+        }
+    }
+}
+
+
+/**
+ * Real part functor.
+ */
+class RealPartComplex<C extends RingElem<C>> implements UnaryFunctor<Complex<C>, C> {
+    public C eval(Complex<C> c) {
+        if (c == null) {
+            return null;
+        } else {
+            return c.getRe();
+        }
+    }
+}
+
+
+/**
+ * Imaginary part functor.
+ */
+class ImagPartComplex<C extends RingElem<C>> implements UnaryFunctor<Complex<C>, C> {
+    public C eval(Complex<C> c) {
+        if (c == null) {
+            return null;
+        } else {
+            return c.getIm();
+        }
+    }
+}
+
+
+/**
+ * Rational to complex functor.
+ */
+class ToComplex<C extends RingElem<C>> implements UnaryFunctor<C,Complex<C>> {
+    final protected ComplexRing<C> cfac;
+
+    @SuppressWarnings("unchecked")
+    public ToComplex(RingFactory<Complex<C>> fac) {
+        if ( fac == null ) {
+            throw new IllegalArgumentException("fac must not be null");
+        }
+        cfac = (ComplexRing<C>)fac;
+    }
+
+    public Complex<C> eval(C c) {
+        if ( c == null ) {
+            return cfac.getZERO();
+        } else {
+            return new Complex<C>(cfac, c );
         }
     }
 }

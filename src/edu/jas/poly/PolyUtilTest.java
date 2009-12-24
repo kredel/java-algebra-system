@@ -15,6 +15,8 @@ import junit.framework.TestSuite;
 
 import edu.jas.structure.RingElem;
 import edu.jas.structure.UnaryFunctor;
+import edu.jas.structure.Complex;
+import edu.jas.structure.ComplexRing;
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.ModInteger;
@@ -1137,7 +1139,166 @@ public class PolyUtilTest extends TestCase {
          //System.out.println("a == c " + a.equals(c));
          assertEquals("a == c ",a,c); 
      }
+ }
 
+
+    /**
+     * Test Taylor series.
+     * 
+     */
+    public void testTaylorSeries() {
+        GenPolynomial<BigRational> a;
+        GenPolynomial<BigRational> b;
+        GenPolynomial<BigRational> c;
+        GenPolynomialRing<BigRational> dfac;
+        BigRational cfac;
+
+        cfac = new BigRational(1);
+        String[] vars = new String[] { "x" };
+        dfac = new GenPolynomialRing<BigRational>(cfac, 1, to, vars);
+
+        a = dfac.random(kl, ll, el, q);
+        //System.out.println("a = " + a);
+
+        BigRational v = cfac.getZERO();
+        //System.out.println("v = " + v);
+
+        b = PolyUtil.<BigRational> seriesOfTaylor(a, v);
+        //System.out.println("taylor(a,0) = " + b);
+        assertTrue("taylor(a,0) == a ", a.equals(b));
+
+        v = cfac.random(kl);
+        //System.out.println("v = " + v);
+
+        b = PolyUtil.<BigRational> seriesOfTaylor(a, v);
+        //System.out.println("taylor(a,v) = " + b);
+
+        c = PolyUtil.<BigRational> seriesOfTaylor(b, v.negate());
+        //System.out.println("tailor(taylor(a,v),-v) = " + c);
+        assertTrue("tailor(taylor(a,v),-v) == a ", a.equals(c));
+    }
+
+
+    /**
+     * Test linear substitution.
+     * 
+     */
+    public void testSubstitutionLinear() {
+        GenPolynomial<BigRational> a;
+        GenPolynomial<BigRational> b;
+        GenPolynomial<BigRational> c;
+        GenPolynomialRing<BigRational> dfac;
+        BigRational cfac;
+
+        cfac = new BigRational(1);
+        String[] vars = new String[] { "x" };
+        dfac = new GenPolynomialRing<BigRational>(cfac, 1, to, vars);
+
+        a = dfac.random(kl, ll, el, q);
+        //System.out.println("a = " + a);
+
+        // subst(0,1)
+        BigRational va = cfac.getZERO();
+        //System.out.println("va = " + va);
+        BigRational vb = cfac.getONE();
+        //System.out.println("vb = " + vb);
+
+        b = PolyUtil.<BigRational> substituteLinear(a, va, vb);
+        //System.out.println("substitute(a,0,1) = " + b);
+        assertTrue("substitute(a,0,1) == a ", a.equals(b));
+
+        // subst(va,vb)
+        va = cfac.random(kl);
+        //System.out.println("va = " + va);
+        vb = cfac.random(kl);
+        if (vb.isZERO()) {
+            vb = cfac.getONE();
+        }
+        //System.out.println("vb = " + vb);
+        b = PolyUtil.<BigRational> substituteLinear(a, va, vb);
+        //System.out.println("substitute(a,va,vb) = " + b);
+
+        // subst(-va,vb^-1)
+        va = va.negate();
+        //System.out.println("va = " + va);
+        vb = vb.inverse();
+        //System.out.println("vb = " + vb);
+        c = PolyUtil.<BigRational> substituteLinear(b, va, vb);
+        //System.out.println("substitute(b,va,vb) = " + c);
+        assertTrue("substitute(substitute(a,va,vb),-va,vb^-1) == a ", a.equals(c));
+
+        // subst(va,vb-va)
+        va = cfac.random(kl);
+        //System.out.println("va = " + va);
+        vb = cfac.random(kl);
+        if (vb.isZERO()) {
+            vb = cfac.getONE();
+        }
+        //System.out.println("vb = " + vb);
+        b = PolyUtil.<BigRational> seriesOfTaylor(a, va);
+        BigRational vc = vb.subtract(va);
+        //System.out.println("vc = " + vc);
+        b = PolyUtil.<BigRational> substituteLinear(b, va, vc);
+        //System.out.println("substitute(a,va,vb-va) = " + b);
+
+        BigRational fa = PolyUtil.<BigRational> evaluateMain(cfac, a, va);
+        BigRational fb = PolyUtil.<BigRational> evaluateMain(cfac, a, vb);
+        //System.out.println("fa = " + fa + ", fb = " + fb);
+
+        BigRational g0 = PolyUtil.<BigRational> evaluateMain(cfac, b, cfac.getZERO());
+        BigRational g1 = PolyUtil.<BigRational> evaluateMain(cfac, b, cfac.getONE());
+        //System.out.println("g0 = " + g0 + ", g1 = " + g1);
+        assertTrue("substitute(a,va) == substitute(b,0) ", fa.equals(g0));
+        assertTrue("substitute(a,vb) == substitute(b,1) ", fb.equals(g1));
+    }
+
+
+/**
+ * Test Complex real and imaginary part.
+ * 
+ */
+ public void testComplexParts() {
+     BigRational rf = new BigRational(1);
+     GenPolynomialRing<BigRational> rfac
+         = new GenPolynomialRing<BigRational>(rf,rl,to);
+
+     ComplexRing<BigRational> cf = new ComplexRing<BigRational>( new BigRational(1) );
+     GenPolynomialRing<Complex<BigRational>> cfac
+         = new GenPolynomialRing<Complex<BigRational>>(cf,rl,to);
+
+     Complex<BigRational> imag = cf.getIMAG();
+
+     GenPolynomial<BigRational> rp;
+     GenPolynomial<BigRational> ip;
+     GenPolynomial<Complex<BigRational>> crp;
+     GenPolynomial<Complex<BigRational>> cip;
+     GenPolynomial<Complex<BigRational>> cp;
+     GenPolynomial<Complex<BigRational>> ap;
+
+     for (int i = 0; i < 3; i++) {
+         cp = cfac.random( kl+2*i, ll*(i+1), el+i, q);
+ 
+         assertTrue("length( c"+i+" ) <> 0", cp.length() >= 0);
+         assertTrue(" not isZERO( c"+i+" )", !cp.isZERO() );
+         assertTrue(" not isONE( c"+i+" )", !cp.isONE() );
+
+         rp = PolyUtil.<BigRational> realPartFromComplex(rfac,cp);
+         ip = PolyUtil.<BigRational> imaginaryPartFromComplex(rfac,cp);
+
+         crp = PolyUtil.<BigRational> toComplex(cfac,rp);
+         cip = PolyUtil.<BigRational> toComplex(cfac,ip);
+
+         ap = crp.sum( cip.multiply( imag ) );
+
+         //System.out.println("cp = " + cp);
+         //System.out.println("rp = " + rp);
+         //System.out.println("ip = " + ip);
+         //System.out.println("crp = " + crp);
+         //System.out.println("cip = " + cip);
+         //System.out.println("ap  = " + ap);
+
+         assertEquals("re(c)+i*im(c) = c",cp,ap);
+     }
  }
 
 }
