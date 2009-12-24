@@ -36,6 +36,15 @@ public class ComplexRootsSturm<C extends RingElem<C>> extends ComplexRootAbstrac
 
 
     /**
+     * Constructor.
+     * @param cf coefficient factory.
+     */
+    public ComplexRootsSturm(RingFactory<Complex<C>> cf) {
+        super(cf);
+    }
+
+
+    /**
      * Cauchy index of rational function f/g on interval.
      * @param [a,b] interval I.
      * @param f univariate polynomial.

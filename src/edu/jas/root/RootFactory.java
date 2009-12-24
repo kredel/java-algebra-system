@@ -12,6 +12,8 @@ import java.util.Set;
 import edu.jas.arith.ToRational;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.structure.GcdRingElem;
+import edu.jas.structure.Complex;
+import edu.jas.structure.ComplexRing;
 import edu.jas.ufd.FactorAbstract;
 import edu.jas.ufd.FactorFactory;
 import edu.jas.ufd.SquarefreeAbstract;
@@ -65,6 +67,29 @@ public class RootFactory {
                 RealAlgebraicRing<C> rar = new RealAlgebraicRing<C>(sp, I, true);//field
                 RealAlgebraicNumber<C> rn = rar.getGenerator();
                 list.add(rn);
+            }
+        }
+        return list;
+    }
+
+
+    /**
+     * Complex algebraic numbers.
+     * @param f univariate polynomial.
+     * @return a list of different complex algebraic numbers.
+     */
+    public static <C extends GcdRingElem<C>> 
+      List<ComplexAlgebraicNumber<C>> complexAlgebraicNumbers(GenPolynomial<Complex<C>> f) {
+        ComplexRoots<C> cr = new ComplexRootsSturm<C>( f.ring.coFac );
+        SquarefreeAbstract<Complex<C>> engine = SquarefreeFactory.<Complex<C>> getImplementation(f.ring.coFac);
+        Set<GenPolynomial<Complex<C>>> S = engine.squarefreeFactors(f).keySet();
+        List<ComplexAlgebraicNumber<C>> list = new ArrayList<ComplexAlgebraicNumber<C>>();
+        for (GenPolynomial<Complex<C>> sp : S) {
+            List<Rectangle<C>> iv = cr.complexRoots(sp);
+            for (Rectangle<C> I : iv) {
+                ComplexAlgebraicRing<C> car = new ComplexAlgebraicRing<C>(sp, I);
+                ComplexAlgebraicNumber<C> cn = car.getGenerator();
+                list.add(cn);
             }
         }
         return list;

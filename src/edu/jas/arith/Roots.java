@@ -171,7 +171,7 @@ public class Roots {
            return A;
         }
         // for small A use root of inverse
-        if ( A.compareTo( BigDecimal.ONE ) <= 0 ) {
+        if ( A.compareTo( BigDecimal.ONE ) < 0 ) {
             BigDecimal Ap = A.inverse();
             Ap = sqrt(Ap);
             return Ap.inverse();

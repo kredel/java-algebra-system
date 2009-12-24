@@ -44,6 +44,21 @@ public abstract class ComplexRootAbstract<C extends RingElem<C>> implements Comp
 
 
     /**
+     * Engine for square free decomposition.
+     */
+    public final Squarefree<Complex<C>> engine;
+
+
+    /**
+     * Constructor.
+     * @param cf coefficient factory.
+     */
+    public ComplexRootAbstract(RingFactory<Complex<C>> cf) {
+        engine = SquarefreeFactory.<Complex<C>> getImplementation(cf);
+    }
+
+
+    /**
      * Root bound. With f(M) * f(-M) != 0.
      * @param f univariate polynomial.
      * @return M such that -M &lt; root(f) &lt; M.
@@ -96,7 +111,6 @@ public abstract class ComplexRootAbstract<C extends RingElem<C>> implements Comp
     @SuppressWarnings("unchecked")
     public List<Rectangle<C>> complexRoots(GenPolynomial<Complex<C>> a) {
         ComplexRing<C> cr = (ComplexRing<C>) a.ring.coFac;
-        Squarefree<Complex<C>> engine = SquarefreeFactory.<Complex<C>> getImplementation(cr);
         SortedMap<GenPolynomial<Complex<C>>, Long> sa = engine.squarefreeFactors(a);
         List<Rectangle<C>> roots = new ArrayList<Rectangle<C>>();
         for (GenPolynomial<Complex<C>> p : sa.keySet()) {

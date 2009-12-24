@@ -15,10 +15,15 @@ import junit.framework.TestSuite;
 
 import edu.jas.arith.BigDecimal;
 import edu.jas.arith.BigRational;
+import edu.jas.arith.Roots;
+import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.TermOrder;
+import edu.jas.poly.PolyUtil;
 import edu.jas.structure.Power;
+import edu.jas.structure.Complex;
+import edu.jas.structure.ComplexRing;
 
 
 /**
@@ -114,7 +119,8 @@ public class RootUtilTest extends TestCase {
     protected void setUp() {
         a = b = c = d = e = null;
         ai = bi = ci = di = ei = null;
-        dfac = new GenPolynomialRing<BigRational>(new BigRational(1), rl, to);
+        String[] vars = new String[] { "x" };
+        dfac = new GenPolynomialRing<BigRational>(new BigRational(1), rl, to, vars);
         // eps = new BigRational(1L,1000000L*1000000L*1000000L);
         eps = Power.positivePower(new BigRational(1L, 10L), BigDecimal.DEFAULT_PRECISION);
     }
@@ -126,6 +132,7 @@ public class RootUtilTest extends TestCase {
         ai = bi = ci = di = ei = null;
         dfac = null;
         eps = null;
+        ComputerThreads.terminate();
     }
 
 
@@ -185,214 +192,58 @@ public class RootUtilTest extends TestCase {
 
 
     /**
-     * Test Sturm sequence.
+     * Test real algebraic factory.
      * 
      */
-    public void testSturmSequence() {
-        a = dfac.random(kl, ll, el, q);
-        //System.out.println("a = " + a);
-
-        RealRootsSturm<BigRational> rrs = new RealRootsSturm<BigRational>();
-
-        List<GenPolynomial<BigRational>> S = rrs.sturmSequence(a);
-        //System.out.println("S = " + S);
-
-        try {
-            b = a.remainder(S.get(0));
-        } catch (Exception e) {
-            fail("not S(0)|f " + e);
-        }
-        assertTrue("a mod S(0) == 0 ", b.isZERO());
-
-        assertTrue("S(-1) == 1 ", S.get(S.size() - 1).isConstant());
-    }
-
-
-    /**
-     * Test root bound.
-     * 
-     */
-    public void testRootBound() {
-        a = dfac.random(kl, ll, el, q);
-        //System.out.println("a = " + a);
-
-        RealRoots<BigRational> rr = new RealRootsSturm<BigRational>();
-
-        BigRational M = rr.realRootBound(a);
-
-        //System.out.println("M = " + M);
-        assertTrue("M >= 1 ", M.compareTo(BigRational.ONE) >= 0);
-
-        a = a.monic();
-        //System.out.println("a = " + a);
-        M = rr.realRootBound(a);
-
-        //System.out.println("M = " + M);
-        assertTrue("M >= 1 ", M.compareTo(BigRational.ONE) >= 0);
-    }
-
-
-    /**
-     * Test real root isolation.
-     * 
-     */
-    public void testRealRootIsolation() {
+    public void testRealAlgebraicFactory() {
         a = dfac.random(kl, ll * 2, el * 2, q);
         //a = a.multiply( dfac.univariate(0) );
         //System.out.println("a = " + a);
 
-        RealRoots<BigRational> rr = new RealRootsSturm<BigRational>();
+        List<RealAlgebraicNumber<BigRational>> lrn = RootFactory.<BigRational> realAlgebraicNumbers(a); 
+        //System.out.println("lrn = " + lrn);
+        assertTrue("#roots >= 0 ", lrn.size() >= 0);
 
-        List<Interval<BigRational>> R = rr.realRoots(a);
-        //System.out.println("R = " + R);
-        assertTrue("#roots >= 0 ", R.size() >= 0);
-    }
+        if ( true ) return;
 
-
-    /**
-     * Test real root isolation Wilkinson polynomials.
-     * 
-     */
-    public void testRealRootIsolationWilkinson() {
-        final int N = 10;
-        d = dfac.getONE();
-        e = dfac.univariate(0);
-
-        List<Interval<BigRational>> Rn = new ArrayList<Interval<BigRational>>(N);
-        a = d;
-        for (int i = 0; i < N; i++) {
-            c = dfac.fromInteger(i);
-            Rn.add(new Interval<BigRational>(c.leadingBaseCoefficient()));
-            b = e.subtract(c);
-            a = a.multiply(b);
+        for ( RealAlgebraicNumber<BigRational> ra : lrn ) {
+            //System.out.println("ra = " + ra.toScript() + " in " + ra.toScriptFactory());
         }
-        //System.out.println("a = " + a);
 
-        RealRoots<BigRational> rr = new RealRootsSturm<BigRational>();
+        lrn = RootFactory.<BigRational> realAlgebraicNumbersField(a); 
+        //System.out.println("lrn = " + lrn);
 
-        List<Interval<BigRational>> R = rr.realRoots(a);
-        //System.out.println("R = " + R);
-
-        assertTrue("#roots = " + N + " ", R.size() == N);
-
-        //System.out.println("eps = " + eps);
-        BigDecimal eps1 = new BigDecimal(eps);
-        //System.out.println("eps1 = " + eps1);
-
-        R = rr.refineIntervals(R, a, eps);
-        //System.out.println("R = " + R);
-        int i = 0;
-        for (Interval<BigRational> v : R) {
-            BigDecimal dd = v.toDecimal(); //.sum(eps1);
-            BigDecimal di = Rn.get(i++).toDecimal();
-            //System.out.println("v  = " + dd);
-            //System.out.println("vi = " + di);
-            assertTrue("|dd - di| < eps ", dd.compareTo(di) == 0);
+        for ( RealAlgebraicNumber<BigRational> ra : lrn ) {
+            //System.out.println("ra = " + ra.toScript() + " in " + ra.toScriptFactory());
         }
     }
 
 
     /**
-     * Test real root isolation Wilkinson polynomials inverse.
+     * Test complex algebraic factory.
      * 
      */
-    public void testRealRootIsolationWilkinsonInverse() {
-        final int N = 9;
-        d = dfac.getONE();
-        e = dfac.univariate(0);
-
-        List<Interval<BigRational>> Rn = new ArrayList<Interval<BigRational>>(N);
-        a = d;
-        for (int i = 1; i < N; i++) { // use only for i > 0, since reverse
-            c = dfac.fromInteger(i);
-            if (i != 0) {
-                c = d.divide(c);
-            }
-            Rn.add(new Interval<BigRational>(c.leadingBaseCoefficient()));
-            b = e.subtract(c);
-            a = a.multiply(b);
-        }
-        //System.out.println("a = " + a);
-        //System.out.println("Rn = " + Rn);
-        Collections.reverse(Rn);
-        //System.out.println("Rn = " + Rn);
-
-        RealRoots<BigRational> rr = new RealRootsSturm<BigRational>();
-
-        List<Interval<BigRational>> R = rr.realRoots(a);
-        //System.out.println("R = " + R);
-
-        assertTrue("#roots = " + (N - 1) + " ", R.size() == (N - 1));
-
-        //System.out.println("eps = " + eps);
-        BigDecimal eps1 = new BigDecimal(eps);
-        //System.out.println("eps1 = " + eps1);
-
-        R = rr.refineIntervals(R, a, eps);
-        //System.out.println("R = " + R);
-        int i = 0;
-        for (Interval<BigRational> v : R) {
-            BigDecimal dd = v.toDecimal(); //.sum(eps1);
-            BigDecimal di = Rn.get(i++).toDecimal();
-            //System.out.println("v  = " + dd);
-            //System.out.println("vi = " + di);
-            assertTrue("|dd - di| < eps ", dd.compareTo(di) == 0);
-        }
-    }
-
-
-    /**
-     * Test real algebraic number sign.
-     * 
-     */
-    public void testRealAlgebraicNumberSign() {
-        d = dfac.fromInteger(2);
-        e = dfac.univariate(0);
-
-        a = e.multiply(e);
-        // a = a.multiply(e).multiply(e).multiply(e);
-        a = a.subtract(d); // x^2 -2
+    public void testComplexAlgebraicFactory() {
+        a = dfac.random(kl, ll, el, q);
+        //a = a.multiply( dfac.univariate(0) );
         //System.out.println("a = " + a);
 
-        RealRoots<BigRational> rr = new RealRootsSturm<BigRational>();
+        ComplexRing<BigRational> cf = new ComplexRing<BigRational>( new BigRational() );
+        GenPolynomialRing<Complex<BigRational>> cfac = new GenPolynomialRing<Complex<BigRational>>(cf,dfac);
 
-        ai = new BigRational(1);
-        bi = new BigRational(2);
-        Interval<BigRational> iv = new Interval<BigRational>(ai, bi);
-        //System.out.println("iv = " + iv);
-        assertTrue("sign change", rr.signChange(iv, a));
+        GenPolynomial<Complex<BigRational>> ca = PolyUtil.<BigRational> toComplex(cfac,a);
+        //System.out.println("ca = " + ca);
 
-        b = dfac.random(kl, (int) a.degree() + 1, (int) a.degree(), 1.0f);
-        //b = dfac.getZERO();
-        //b = dfac.random(kl,ll,el,q);
-        //b = b.multiply(b);
-        //b = b.abs().negate();
-        //System.out.println("b = " + b);
-        if (b.isZERO()) {
-            int s = rr.realSign(iv, a, b);
-            assertTrue("algebraic sign", s == 0);
-            return;
+        List<ComplexAlgebraicNumber<BigRational>> lcn = RootFactory.<BigRational> complexAlgebraicNumbers(ca); 
+        //System.out.println("lcn = " + lcn);
+        assertTrue("#roots == deg(a) ", lcn.size() == a.degree(0));
+
+        if ( true ) return;
+
+        for ( ComplexAlgebraicNumber<BigRational> car : lcn ) {
+            //System.out.println("car = " + car.toScript() + " in " + car.toScriptFactory());
+            //System.out.println("car = " + car.ring.root);
+            System.out.println("car = " + car.ring.root.centerApprox() + ", " + (Roots.sqrt(new BigDecimal(car.ring.root.rationalLength()))) + ", " + car.ring.root);
         }
-
-        int as = rr.realSign(iv, a, b);
-        //System.out.println("as = " + as);
-        // how to test?
-        int asn = rr.realSign(iv, a, b.negate());
-        //System.out.println("asn = " + asn);
-        assertTrue("algebraic sign", as != asn);
-
-        iv = new Interval<BigRational>(bi.negate(), ai.negate());
-        //System.out.println("iv = " + iv);
-        assertTrue("sign change", rr.signChange(iv, a));
-
-        int as1 = rr.realSign(iv, a, b);
-        //System.out.println("as1 = " + as1);
-        // how to test?
-        int asn1 = rr.realSign(iv, a, b.negate());
-        //System.out.println("asn1 = " + asn1);
-        assertTrue("algebraic sign", as1 != asn1);
-
-        assertTrue("algebraic sign", as * as1 == asn * asn1);
     }
-
 }
