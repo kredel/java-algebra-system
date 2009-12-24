@@ -93,7 +93,7 @@ public class ComplexRootsSturm<C extends RingElem<C>> extends ComplexRootAbstrac
      * Sturm sequence.
      * @param f univariate polynomial.
      * @param g univariate polynomial.
-     * @return a Sturm sequence for f.
+     * @return a Sturm sequence for f and g.
      */
     public List<GenPolynomial<C>> sturmSequence(GenPolynomial<C> f, GenPolynomial<C> g) {
         List<GenPolynomial<C>> S = new ArrayList<GenPolynomial<C>>();
@@ -165,7 +165,7 @@ public class ComplexRootsSturm<C extends RingElem<C>> extends ComplexRootAbstrac
             //Complex<C> t = Power.<Complex<C>> power(cr,im,i);
             //System.out.println("t = " + t);
             GenPolynomial<Complex<C>> pc = PolyUtil.<Complex<C>> seriesOfTaylor(a, corner[i]);
-            pc = PolyUtil.<Complex<C>> substituteLinear(pc, corner[i], t);
+            pc = PolyUtil.<Complex<C>> substituteLinear(pc, corner[i], t); // corner[i] unused
             PC[i] = pc;
             //System.out.println("PC["+i+"] = " + pc);
             GenPolynomial<C> f = PolyUtil.<C> realPartFromComplex(fac, pc);
@@ -184,6 +184,9 @@ public class ComplexRootsSturm<C extends RingElem<C>> extends ComplexRootAbstrac
             long ci = indexOfCauchy(zero, one, PCre[i], PCim[i]);
             //System.out.println("ci["+i+","+(i+1)+"] = " + ci);
             ix += ci;
+        }
+        if ( ix % 2L != 0 ) {
+            throw new RuntimeException("odd winding number " + ix);
         }
         return ix / 2L;
     }

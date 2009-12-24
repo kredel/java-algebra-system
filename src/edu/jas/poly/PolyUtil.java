@@ -1426,36 +1426,37 @@ public class PolyUtil {
      */
     public static <C extends RingElem<C>>
       GenPolynomial<C> substituteMain( GenPolynomial<C> A, GenPolynomial<C> s ) {
-        if ( A == null || s == null ) {
-            return null;
-        }
-        GenPolynomialRing<C> pfac = A.ring;
-        if ( A.isZERO() ) {
-            return pfac.getZERO();
-        }
-        if ( pfac.nvar > 1 ) {
-            throw new RuntimeException("only for univariate polynomials");
-        }
-        GenPolynomial<C> B = pfac.getZERO().clone();
-        for ( Monomial<C> m : A ) {
-            ExpVector em = m.e;
-            long e = em.getVal(0);
-            if ( e == 0 ) {
-                B = B.sum(m.c,em);
-                continue;
-            }
-            GenPolynomial<C> x = Power.<GenPolynomial<C>>positivePower( s, e );
-            x = x.multiply( m.c );
-            B = B.sum( x );
-        }
-        return B;
+        return substituteUnivariate(A,s);
+//         if ( A == null || s == null ) {
+//             return null;
+//         }
+//         GenPolynomialRing<C> pfac = A.ring;
+//         if ( A.isZERO() ) {
+//             return pfac.getZERO();
+//         }
+//         if ( pfac.nvar > 1 ) {
+//             throw new RuntimeException("only for univariate polynomials");
+//         }
+//         GenPolynomial<C> B = pfac.getZERO().clone();
+//         for ( Monomial<C> m : A ) {
+//             ExpVector em = m.e;
+//             long e = em.getVal(0);
+//             if ( e == 0 ) {
+//                 B = B.sum(m.c,em);
+//                 continue;
+//             }
+//             GenPolynomial<C> x = Power.<GenPolynomial<C>>positivePower( s, e );
+//             x = x.multiply( m.c );
+//             B = B.sum( x );
+//         }
+//         return B;
     }
 
 
     /**
      * Substitute linear polynomial to polynomial.
      * @param f univariate polynomial.
-     * @param a constant coefficient of substituent.
+     * @param a constant coefficient of substituent, ignored.
      * @param b linear coefficient of substituent.
      * @return f(a+b*z).
      */
@@ -1471,28 +1472,29 @@ public class PolyUtil {
             return f;
         }
         GenPolynomial<C> z = fac.univariate(0, 1L).multiply(b);
-        // assert decending exponents, i.e. compatible term order
-        Map<ExpVector, C> val = f.getMap();
-        GenPolynomial<C> s = null;
-        long el1 = -1; // undefined
-        long el2 = -1;
-        for (ExpVector e : val.keySet()) {
-            el2 = e.getVal(0);
-            if (s == null /*el1 < 0*/) { // first turn
-                s = fac.getZERO().sum(val.get(e));
-            } else {
-                for (long i = el2; i < el1; i++) {
-                    s = s.multiply(z);
-                }
-                s = s.sum(val.get(e));
-            }
-            el1 = el2;
-        }
-        for (long i = 0; i < el2; i++) {
-            s = s.multiply(z);
-        }
-        //System.out.println("s = " + s);
-        return s;
+        return substituteUnivariate(f,z);
+//         // assert decending exponents, i.e. compatible term order
+//         Map<ExpVector, C> val = f.getMap();
+//         GenPolynomial<C> s = null;
+//         long el1 = -1; // undefined
+//         long el2 = -1;
+//         for (ExpVector e : val.keySet()) {
+//             el2 = e.getVal(0);
+//             if (s == null /*el1 < 0*/) { // first turn
+//                 s = fac.getZERO().sum(val.get(e));
+//             } else {
+//                 for (long i = el2; i < el1; i++) {
+//                     s = s.multiply(z);
+//                 }
+//                 s = s.sum(val.get(e));
+//             }
+//             el1 = el2;
+//         }
+//         for (long i = 0; i < el2; i++) {
+//             s = s.multiply(z);
+//         }
+//         //System.out.println("s = " + s);
+//         return s;
     }
 
 

@@ -116,7 +116,7 @@ public abstract class ComplexRootAbstract<C extends RingElem<C>> implements Comp
 
             List<Rectangle<C>> rs = complexRoots(rect, p);
             long e = sa.get(p);
-            for (int i = 0; i < e; i++) {
+            for (int i = 0; i < e; i++) { // add with multiplicity
                 roots.addAll(rs);
             }
         }
@@ -236,7 +236,6 @@ public abstract class ComplexRootAbstract<C extends RingElem<C>> implements Comp
      * @param a complex number.
      * @param b complex number.
      * @return |a-b|.
-     */
     public C distance(Complex<C> a, Complex<C> b) {
         Complex<C> d = a.subtract(b);
         C r = d.norm().getRe();
@@ -250,5 +249,6 @@ public abstract class ComplexRootAbstract<C extends RingElem<C>> implements Comp
         //System.out.println("rd = " + rd + ", r  = " + r);
         return r;
     }
+     */
 
 }
