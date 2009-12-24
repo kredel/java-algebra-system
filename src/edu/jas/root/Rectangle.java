@@ -28,8 +28,7 @@ public class Rectangle<C extends RingElem<C>> {
 
     /**
      * Constructor.
-     * @param left interval border.
-     * @param right interval border.
+     * @param c array of corners.
      */
     @SuppressWarnings("unchecked")
     public Rectangle(Complex<C>[] c) {
@@ -44,6 +43,19 @@ public class Rectangle<C extends RingElem<C>> {
         if (corners[4] == null) {
             corners[4] = corners[0];
         }
+    }
+
+
+    /**
+     * Constructor.
+     * @param nw corner.
+     * @param sw corner.
+     * @param se corner.
+     * @param ne corner.
+     */
+    @SuppressWarnings("unchecked")
+    public Rectangle(Complex<C> nw, Complex<C> sw, Complex<C> se, Complex<C> ne) {
+        this( (Complex<C>[]) new Complex[] { nw, sw, se, ne } );
     }
 
 
