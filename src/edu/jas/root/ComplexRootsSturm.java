@@ -11,6 +11,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+//import edu.jas.arith.ToRational;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
@@ -18,6 +19,8 @@ import edu.jas.structure.Complex;
 import edu.jas.structure.ComplexRing;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
+import edu.jas.ufd.GreatestCommonDivisorAbstract;
+import edu.jas.ufd.GCDFactory;
 
 
 /**
@@ -36,11 +39,18 @@ public class ComplexRootsSturm<C extends RingElem<C>> extends ComplexRootAbstrac
 
 
     /**
+     * Engine for greatest common divisors.
+     */
+    public final GreatestCommonDivisorAbstract<Complex<C>> ufd;
+
+
+    /**
      * Constructor.
      * @param cf coefficient factory.
      */
     public ComplexRootsSturm(RingFactory<Complex<C>> cf) {
         super(cf);
+        ufd = GCDFactory.<Complex<C>> getImplementation(cf);
     }
 
 
@@ -171,12 +181,18 @@ public class ComplexRootsSturm<C extends RingElem<C>> extends ComplexRootAbstrac
 
         for (int i = 0; i < 4; i++) {
             Complex<C> t = corner[i + 1].subtract(corner[i]);
+            GenPolynomial<Complex<C>> tp = a.ring.univariate(0, 1L).multiply(t);
             //Complex<C> t = Power.<Complex<C>> power(cr,im,i);
             //System.out.println("t = " + t);
             GenPolynomial<Complex<C>> pc = PolyUtil.<Complex<C>> seriesOfTaylor(a, corner[i]);
-            pc = PolyUtil.<Complex<C>> substituteLinear(pc, corner[i], t); // corner[i] unused
+            pc = PolyUtil.<Complex<C>> substituteUnivariate(pc, tp); // corner[i] unused
             PC[i] = pc;
-            //System.out.println("PC["+i+"] = " + pc);
+            GenPolynomial<Complex<C>> gcd = ufd.gcd(a,pc);
+            if ( !gcd.isONE() ) {
+                System.out.println("PC["+i+"] = " + pc);
+                System.out.println("gcd = " + gcd);
+                throw new RuntimeException("zero on rectangle " + rect);
+            }
             GenPolynomial<C> f = PolyUtil.<C> realPartFromComplex(fac, pc);
             GenPolynomial<C> g = PolyUtil.<C> imaginaryPartFromComplex(fac, pc);
             //System.out.println("re() = " + f.toScript());

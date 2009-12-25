@@ -414,4 +414,47 @@ public class ComplexRootTest extends TestCase {
             //System.out.println("refine = " + refine);
         }
     }
+
+
+    /**
+     * Test winding number with wrong precondition.
+     * 
+     */
+    @SuppressWarnings("unchecked")
+    public void testWindingNumberWrong() {
+        ComplexRootsSturm<BigRational> cr = new ComplexRootsSturm<BigRational>(cfac);
+        Complex<BigRational> I = cfac.getIMAG();
+
+        a = dfac.univariate(0, 2L).sum(cfac.fromInteger(1)); // x^2 + 1
+        //a = dfac.random(kl, ll, el, q);
+        //a = dfac.univariate(0,2L).subtract(cfac.getONE());  // x^2 - 1
+        //a = dfac.univariate(0,2L).subtract(I);  // x^2 - I
+        //a = dfac.univariate(0,1L);  // x
+        //System.out.println("a = " + a);
+
+        Complex<BigRational> Mb = cfac.fromInteger(1); //.divide(cfac.fromInteger(2)); //cr.rootBound(a);
+        BigRational M = Mb.getRe();
+        System.out.println("M = " + M);
+        BigRational eps = new BigRational(1, 1000);
+        //System.out.println("eps = " + eps);
+        BigRational zero = new BigRational();
+        BigRational one  = new BigRational(1);
+
+        Complex<BigRational>[] corner = (Complex<BigRational>[]) new Complex[4];
+
+        corner[0] = new Complex<BigRational>(cfac, M.negate(), M); // nw
+        corner[1] = new Complex<BigRational>(cfac, M.negate(), zero); // sw
+        corner[2] = new Complex<BigRational>(cfac, M, zero); // se
+        corner[3] = new Complex<BigRational>(cfac, M, M); // ne
+
+        Rectangle<BigRational> rect = new Rectangle<BigRational>(corner);
+        System.out.println("rect = " + rect);
+
+        try {
+            long v = cr.windingNumber(rect, a);
+            System.out.println("winding number = " + v);
+            fail("wind(rect,a) must throw an exception");
+        } catch ( RuntimeException e ) {
+        }
+    }
 }
