@@ -55,7 +55,7 @@ public class ReductionPar<C extends RingElem<C>>
         GenPolynomial<C>[] P;
         synchronized (Pp) { // required, ok in dist
            l = Pp.size();
-           P = new GenPolynomial[l];
+           P = (GenPolynomial<C>[]) new GenPolynomial[l];
            //P = Pp.values().toArray();
            for ( int i = 0; i < Pp.size(); i++ ) {
                P[i] = Pp.get(i);
@@ -78,7 +78,7 @@ public class ReductionPar<C extends RingElem<C>>
                  //long t = System.currentTimeMillis();
                  synchronized (Pp) { // required, bad in parallel
                     l = Pp.size();
-                    P = new GenPolynomial[ l ];
+                    P = (GenPolynomial<C>[]) new GenPolynomial[ l ];
                     //P = Pp.toArray();
                     for ( int i = 0; i < Pp.size(); i++ ) {
                         P[i] = Pp.get(i);
@@ -153,7 +153,7 @@ public class ReductionPar<C extends RingElem<C>>
         GenPolynomial<C>[] P;
         synchronized ( Pp.getList() ) { // required, ok in dist
            l = Pp.size();
-           P = new GenPolynomial[l];
+           P = (GenPolynomial<C>[]) new GenPolynomial[l];
            //P = Pp.values().toArray();
            Collection<GenPolynomial<C>> Pv 
                = (Collection<GenPolynomial<C>>)Pp.values();
@@ -179,7 +179,7 @@ public class ReductionPar<C extends RingElem<C>>
                  //long t = System.currentTimeMillis();
                  synchronized ( Pp.getList() ) { // required, ok in distributed
                     l = Pp.size();
-                    P = new GenPolynomial[ l ];
+                    P = (GenPolynomial<C>[]) new GenPolynomial[ l ];
                     //P = Pp.values().toArray();
                     Collection<GenPolynomial<C>> Pv 
                         = (Collection<GenPolynomial<C>>)Pp.values();

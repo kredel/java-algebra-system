@@ -230,7 +230,7 @@ public class GroebnerBaseParTest extends TestCase {
      GenPolynomialTokenizer parser
                   = new GenPolynomialTokenizer( source );
      try {
-         F = parser.nextPolynomialSet();
+         F = (PolynomialList<BigRational>) parser.nextPolynomialSet();
      } catch(ClassCastException e) {
          fail(""+e);
      } catch(IOException e) {

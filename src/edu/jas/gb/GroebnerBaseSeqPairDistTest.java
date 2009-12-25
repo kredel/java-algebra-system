@@ -291,7 +291,7 @@ public GroebnerBaseSeqPairDistTest(String name) {
      GenPolynomialTokenizer parser
                   = new GenPolynomialTokenizer( source );
      try {
-         F = parser.nextPolynomialSet();
+         F = (PolynomialList<BigRational>) parser.nextPolynomialSet();
      } catch(IOException e) {
          fail(""+e);
      }

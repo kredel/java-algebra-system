@@ -110,7 +110,7 @@ public class OrderedPolynomialList<C extends RingElem<C> >
             };
         GenPolynomial<C>[] s = null;
         try {
-            s = new GenPolynomial[ l.size() ]; //<C>
+            s = (GenPolynomial<C>[]) new GenPolynomial[ l.size() ]; 
             //System.out.println("s.length = " + s.length );
             //s = l.toArray(s); does not work
             //for ( int i = 0; i < l.size(); i++ ) {

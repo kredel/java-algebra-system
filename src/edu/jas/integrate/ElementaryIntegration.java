@@ -235,7 +235,7 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
                 H.add(v); // v
             }
         }
-        List<GenPolynomial<C>>[] ret = new List[2];
+        List<GenPolynomial<C>>[] ret = (List<GenPolynomial<C>>[]) new List[2];
         ret[0] = G;
         ret[1] = H;
         return ret;

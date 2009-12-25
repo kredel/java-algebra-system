@@ -620,7 +620,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
     public GenPolynomial<C>[] baseExtendedGcd(GenPolynomial<C> P, GenPolynomial<C> S) {
         //return P.egcd(S);
         GenPolynomial<C>[] hegcd = baseHalfExtendedGcd(P,S);
-        GenPolynomial<C>[] ret = new GenPolynomial[3];
+        GenPolynomial<C>[] ret = (GenPolynomial<C>[]) new GenPolynomial[3];
         ret[0] = hegcd[0];
         ret[1] = hegcd[1];
         GenPolynomial<C> x = hegcd[0].subtract( hegcd[1].multiply(P) );
@@ -641,7 +641,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         //if ( P == null ) {
         //    throw new IllegalArgumentException("null P not allowed");
         //}
-        GenPolynomial<C>[] ret = new GenPolynomial[2];
+        GenPolynomial<C>[] ret = (GenPolynomial<C>[]) new GenPolynomial[2];
         ret[0] = null;
         ret[1] = null;
         if ( S == null || S.isZERO() ) {
@@ -708,7 +708,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
             a = qr[1];
             b = b.sum( P.multiply( qr[0] ) );
         }
-        GenPolynomial<C>[] ret = new GenPolynomial[2];
+        GenPolynomial<C>[] ret = (GenPolynomial<C>[]) new GenPolynomial[2];
         ret[0] = a;
         ret[1] = b;
 
@@ -739,7 +739,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
      * @return [ A0, Ap, As ] with A/(P*S) = A0 + Ap/P + As/S with deg(Ap) < deg(P) and deg(As) < deg(S).
      */
     public GenPolynomial<C>[] basePartialFraction(GenPolynomial<C> A, GenPolynomial<C> P, GenPolynomial<C> S) {
-        GenPolynomial<C>[] ret = new GenPolynomial[3];
+        GenPolynomial<C>[] ret = (GenPolynomial<C>[]) new GenPolynomial[3];
         ret[0] = null;
         ret[1] = null;
         ret[2] = null;

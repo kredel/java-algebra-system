@@ -320,7 +320,7 @@ public class GroebnerBaseDistTest extends TestCase {
         Reader source = new StringReader(exam);
         GenPolynomialTokenizer parser = new GenPolynomialTokenizer(source);
         try {
-            F = parser.nextPolynomialSet();
+            F = (PolynomialList<BigRational>) parser.nextPolynomialSet();
         } catch (IOException e) {
             fail("" + e);
         }

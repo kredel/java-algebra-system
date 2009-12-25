@@ -54,7 +54,7 @@ public class SolvableReductionPar<C extends RingElem<C>>
         GenSolvablePolynomial<C>[] P;
         synchronized (Pp) {
             l = Pp.size();
-            P = new GenSolvablePolynomial[l];
+            P = (GenSolvablePolynomial<C>[]) new GenSolvablePolynomial[l];
             //P = Pp.toArray();
             for ( int j = 0; j < Pp.size(); j++ ) {
                 P[j] = Pp.get(j);
@@ -75,7 +75,7 @@ public class SolvableReductionPar<C extends RingElem<C>>
                  //long t = System.currentTimeMillis();
                  synchronized (Pp) { // required, bad in parallel
                     l = Pp.size();
-                    P = new GenSolvablePolynomial[ l ];
+                    P = (GenSolvablePolynomial<C>[]) new GenSolvablePolynomial[ l ];
                     //P = Pp.toArray();
                     for ( int i = 0; i < Pp.size(); i++ ) {
                         P[i] = Pp.get(i);
@@ -150,7 +150,7 @@ public class SolvableReductionPar<C extends RingElem<C>>
         GenSolvablePolynomial<C>[] P;
         synchronized (Pp) {
             l = Pp.size();
-            P = new GenSolvablePolynomial[l];
+            P = (GenSolvablePolynomial<C>[]) new GenSolvablePolynomial[l];
             //P = Pp.toArray();
             for ( int j = 0; j < Pp.size(); j++ ) {
                 P[j] = Pp.get(j);
@@ -171,7 +171,7 @@ public class SolvableReductionPar<C extends RingElem<C>>
                  //long t = System.currentTimeMillis();
                  synchronized (Pp) { // required, bad in parallel
                     l = Pp.size();
-                    P = new GenSolvablePolynomial[ l ];
+                    P = (GenSolvablePolynomial<C>[]) new GenSolvablePolynomial[ l ];
                     //P = Pp.toArray();
                     for ( int i = 0; i < Pp.size(); i++ ) {
                         P[i] = Pp.get(i);
