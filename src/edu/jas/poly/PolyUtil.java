@@ -1427,74 +1427,6 @@ public class PolyUtil {
     public static <C extends RingElem<C>>
       GenPolynomial<C> substituteMain( GenPolynomial<C> A, GenPolynomial<C> s ) {
         return substituteUnivariate(A,s);
-//         if ( A == null || s == null ) {
-//             return null;
-//         }
-//         GenPolynomialRing<C> pfac = A.ring;
-//         if ( A.isZERO() ) {
-//             return pfac.getZERO();
-//         }
-//         if ( pfac.nvar > 1 ) {
-//             throw new RuntimeException("only for univariate polynomials");
-//         }
-//         GenPolynomial<C> B = pfac.getZERO().clone();
-//         for ( Monomial<C> m : A ) {
-//             ExpVector em = m.e;
-//             long e = em.getVal(0);
-//             if ( e == 0 ) {
-//                 B = B.sum(m.c,em);
-//                 continue;
-//             }
-//             GenPolynomial<C> x = Power.<GenPolynomial<C>>positivePower( s, e );
-//             x = x.multiply( m.c );
-//             B = B.sum( x );
-//         }
-//         return B;
-    }
-
-
-    /**
-     * Substitute linear polynomial to polynomial.
-     * @param f univariate polynomial.
-     * @param a constant coefficient of substituent, ignored.
-     * @param b linear coefficient of substituent.
-     * @return f(a+b*z).
-     */
-    public static <C extends RingElem<C>> GenPolynomial<C> substituteLinear(GenPolynomial<C> f, C a, C b) {
-        if (f == null) {
-            return null;
-        }
-        GenPolynomialRing<C> fac = f.ring;
-        if (fac.nvar > 1) {
-            throw new RuntimeException("only for univariate polynomials");
-        }
-        if (f.isZERO() || f.isConstant()) {
-            return f;
-        }
-        GenPolynomial<C> z = fac.univariate(0, 1L).multiply(b);
-        return substituteUnivariate(f,z);
-//         // assert decending exponents, i.e. compatible term order
-//         Map<ExpVector, C> val = f.getMap();
-//         GenPolynomial<C> s = null;
-//         long el1 = -1; // undefined
-//         long el2 = -1;
-//         for (ExpVector e : val.keySet()) {
-//             el2 = e.getVal(0);
-//             if (s == null /*el1 < 0*/) { // first turn
-//                 s = fac.getZERO().sum(val.get(e));
-//             } else {
-//                 for (long i = el2; i < el1; i++) {
-//                     s = s.multiply(z);
-//                 }
-//                 s = s.sum(val.get(e));
-//             }
-//             el1 = el2;
-//         }
-//         for (long i = 0; i < el2; i++) {
-//             s = s.multiply(z);
-//         }
-//         //System.out.println("s = " + s);
-//         return s;
     }
 
 
@@ -1540,6 +1472,7 @@ public class PolyUtil {
         return s;
     }
 
+
     /**
      * Taylor series for polynomial.
      * @param f univariate polynomial.
@@ -1560,23 +1493,17 @@ public class PolyUtil {
         GenPolynomial<C> s = fac.getZERO();
         C fa = PolyUtil.<C> evaluateMain(fac.coFac, f, a);
         s = s.sum(fa);
-        //System.out.println("s = " + s);
         long n = 1;
         long i = 0;
         GenPolynomial<C> g = PolyUtil.<C> baseDeriviative(f);
         GenPolynomial<C> p = fac.getONE();
-        //GenPolynomial<C> xa = fac.univariate(0,1).subtract(a);
-        //System.out.println("xa = " + xa);
         while (!g.isZERO()) {
             i++;
             n *= i;
-            //p = p.multiply(xa);
-            //System.out.println("p = " + p);
             fa = PolyUtil.<C> evaluateMain(fac.coFac, g, a);
             GenPolynomial<C> q = fac.univariate(0, i); //p;
             q = q.multiply(fa);
             q = q.divide(fac.fromInteger(n));
-            //System.out.println("q = " + q);
             s = s.sum(q);
             g = PolyUtil.<C> baseDeriviative(g);
         }

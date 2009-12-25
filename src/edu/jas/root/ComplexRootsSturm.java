@@ -19,8 +19,6 @@ import edu.jas.structure.Complex;
 import edu.jas.structure.ComplexRing;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
-import edu.jas.ufd.GreatestCommonDivisorAbstract;
-import edu.jas.ufd.GCDFactory;
 
 
 /**
@@ -39,24 +37,19 @@ public class ComplexRootsSturm<C extends RingElem<C>> extends ComplexRootAbstrac
 
 
     /**
-     * Engine for greatest common divisors.
-     */
-    public final GreatestCommonDivisorAbstract<Complex<C>> ufd;
-
-
-    /**
      * Constructor.
      * @param cf coefficient factory.
      */
     public ComplexRootsSturm(RingFactory<Complex<C>> cf) {
         super(cf);
-        ufd = GCDFactory.<Complex<C>> getImplementation(cf);
+        //ufd = GCDFactory.<Complex<C>> getImplementation(cf);
     }
 
 
     /**
      * Cauchy index of rational function f/g on interval.
-     * @param [a,b] interval I.
+     * @param a interval bound for I = [a,b].
+     * @param b interval bound for I = [a,b].
      * @param f univariate polynomial.
      * @param g univariate polynomial.
      * @return winding number of f/g in I.
@@ -81,7 +74,8 @@ public class ComplexRootsSturm<C extends RingElem<C>> extends ComplexRootAbstrac
 
     /**
      * Routh index of complex function f + i g on interval.
-     * @param [a,b] interval I.
+     * @param a interval bound for I = [a,b].
+     * @param b interval bound for I = [a,b].
      * @param f univariate polynomial.
      * @param g univariate polynomial != 0.
      * @return index number of f + i g.
