@@ -10,14 +10,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-//import edu.jas.arith.ToRational;
 import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.GenPolynomial;
+import edu.jas.structure.Complex;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.Power;
 import edu.jas.structure.RingFactory;
-import edu.jas.structure.Complex;
-import edu.jas.structure.ComplexRing;
 
 
 /**
@@ -28,8 +26,8 @@ import edu.jas.structure.ComplexRing;
  */
 
 public class ComplexAlgebraicRing<C extends GcdRingElem<C>>
-       /*extends AlgebraicNumberRing<C>*/
-    implements RingFactory<ComplexAlgebraicNumber<C>> {
+/*extends AlgebraicNumberRing<C>*/
+implements RingFactory<ComplexAlgebraicNumber<C>> {
 
 
     /**
@@ -66,7 +64,7 @@ public class ComplexAlgebraicRing<C extends GcdRingElem<C>>
     public ComplexAlgebraicRing(GenPolynomial<Complex<C>> m, Rectangle<C> root) {
         algebraic = new AlgebraicNumberRing<Complex<C>>(m);
         this.root = root;
-        engine = new ComplexRootsSturm<C>( m.ring.coFac );
+        engine = new ComplexRootsSturm<C>(m.ring.coFac);
         if (m.ring.characteristic().signum() > 0) {
             throw new RuntimeException("characteristic not zero");
         }
@@ -88,7 +86,7 @@ public class ComplexAlgebraicRing<C extends GcdRingElem<C>>
     public ComplexAlgebraicRing(GenPolynomial<Complex<C>> m, Rectangle<C> root, boolean isField) {
         algebraic = new AlgebraicNumberRing<Complex<C>>(m, isField);
         this.root = root;
-        engine = new ComplexRootsSturm<C>( m.ring.coFac );
+        engine = new ComplexRootsSturm<C>(m.ring.coFac);
         if (m.ring.characteristic().signum() > 0) {
             throw new RuntimeException("characteristic not zero");
         }

@@ -6,26 +6,23 @@ package edu.jas.root;
 
 
 //import edu.jas.structure.RingElem;
-import edu.jas.arith.BigRational;
-import edu.jas.arith.ToRational;
 import edu.jas.kern.PrettyPrint;
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.GenPolynomial;
+import edu.jas.structure.Complex;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.NotInvertibleException;
-import edu.jas.structure.Complex;
-import edu.jas.structure.ComplexRing;
 
 
 /**
- * Complex algebraic number class based on AlgebraicNumber. Objects of this class
- * are immutable.
+ * Complex algebraic number class based on AlgebraicNumber. Objects of this
+ * class are immutable.
  * @author Heinz Kredel
  */
 
 public class ComplexAlgebraicNumber<C extends GcdRingElem<C>>
-       /*extends AlgebraicNumber<C>*/
-    implements GcdRingElem<ComplexAlgebraicNumber<C>> {
+/*extends AlgebraicNumber<C>*/
+implements GcdRingElem<ComplexAlgebraicNumber<C>> {
 
 
     /**
@@ -65,8 +62,8 @@ public class ComplexAlgebraicNumber<C extends GcdRingElem<C>>
 
 
     /**
-     * The constructor creates a ComplexAlgebraicNumber object from a GenPolynomial
-     * object module.
+     * The constructor creates a ComplexAlgebraicNumber object from a
+     * GenPolynomial object module.
      * @param r ring ComplexAlgebraicRing<C>.
      */
     public ComplexAlgebraicNumber(ComplexAlgebraicRing<C> r) {
@@ -284,7 +281,7 @@ public class ComplexAlgebraicNumber<C extends GcdRingElem<C>>
 
 
     /**
-     * ComplexAlgebraicNumber signum. 
+     * ComplexAlgebraicNumber signum.
      * @see edu.jas.structure.RingElem#signum()
      * @return signum(this).
      */

@@ -11,9 +11,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-//import edu.jas.arith.ToRational;
 import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.structure.Complex;
 import edu.jas.structure.ComplexRing;
@@ -147,7 +145,8 @@ public class ComplexRootsSturm<C extends RingElem<C>> extends ComplexRootsAbstra
      * @return root count of a in rectangle.
      */
     @Override
-    public long complexRootCount(Rectangle<C> rect, GenPolynomial<Complex<C>> a) throws InvalidBoundaryException {
+    public long complexRootCount(Rectangle<C> rect, GenPolynomial<Complex<C>> a)
+            throws InvalidBoundaryException {
         return windingNumber(rect, a);
     }
 
@@ -160,7 +159,7 @@ public class ComplexRootsSturm<C extends RingElem<C>> extends ComplexRootsAbstra
      */
     @SuppressWarnings("unchecked")
     public long windingNumber(Rectangle<C> rect, GenPolynomial<Complex<C>> A) throws InvalidBoundaryException {
-        Boundary<C> bound = new Boundary<C>(rect,A);
+        Boundary<C> bound = new Boundary<C>(rect, A);
         ComplexRing<C> cr = (ComplexRing<C>) A.ring.coFac;
         RingFactory<C> cf = cr.ring;
         C zero = cf.getZERO();
@@ -171,7 +170,7 @@ public class ComplexRootsSturm<C extends RingElem<C>> extends ComplexRootsAbstra
             //System.out.println("ci["+i+","+(i+1)+"] = " + ci);
             ix += ci;
         }
-        if ( ix % 2L != 0 ) {
+        if (ix % 2L != 0) {
             throw new InvalidBoundaryException("odd winding number " + ix);
         }
         return ix / 2L;
@@ -185,7 +184,8 @@ public class ComplexRootsSturm<C extends RingElem<C>> extends ComplexRootsAbstra
      * @return list of complex roots.
      */
     @Override
-    public List<Rectangle<C>> complexRoots(Rectangle<C> rect, GenPolynomial<Complex<C>> a) throws InvalidBoundaryException {
+    public List<Rectangle<C>> complexRoots(Rectangle<C> rect, GenPolynomial<Complex<C>> a)
+            throws InvalidBoundaryException {
         ComplexRing<C> cr = (ComplexRing<C>) a.ring.coFac;
 
         List<Rectangle<C>> roots = new ArrayList<Rectangle<C>>();
@@ -210,7 +210,7 @@ public class ComplexRootsSturm<C extends RingElem<C>> extends ComplexRootsAbstra
         delta = delta.divide(cr.fromInteger(2));
         //System.out.println("delta = " + delta); 
         boolean work = true;
-        while ( work ) {
+        while (work) {
             Complex<C> center = rect.corners[1].sum(delta);
             //System.out.println("center = " + toDecimal(center)); 
             if (debug) {
@@ -261,7 +261,7 @@ public class ComplexRootsSturm<C extends RingElem<C>> extends ComplexRootsAbstra
                 //System.out.println("#ner = " + ner.size()); 
                 roots.addAll(ner);
                 work = false;
-            } catch(InvalidBoundaryException e) {
+            } catch (InvalidBoundaryException e) {
                 // repeat
                 delta = delta.sum(delta.multiply(eps)); // distort
                 //System.out.println("new delta = " + toDecimal(delta)); 

@@ -35,7 +35,8 @@ public interface ComplexRoots<C extends RingElem<C>> {
      * @param a univariate complex polynomial.
      * @return root count of a in rectangle.
      */
-    public long complexRootCount(Rectangle<C> rect, GenPolynomial<Complex<C>> a)  throws InvalidBoundaryException;
+    public long complexRootCount(Rectangle<C> rect, GenPolynomial<Complex<C>> a)
+            throws InvalidBoundaryException;
 
 
     /**
@@ -44,7 +45,8 @@ public interface ComplexRoots<C extends RingElem<C>> {
      * @param a univariate squarefree complex polynomial.
      * @return list of complex roots.
      */
-    public List<Rectangle<C>> complexRoots(Rectangle<C> rect, GenPolynomial<Complex<C>> a)  throws InvalidBoundaryException;
+    public List<Rectangle<C>> complexRoots(Rectangle<C> rect, GenPolynomial<Complex<C>> a)
+            throws InvalidBoundaryException;
 
 
     /**
@@ -62,6 +64,7 @@ public interface ComplexRoots<C extends RingElem<C>> {
      * @param len rational length for refinement.
      * @return refined complex root.
      */
-    public Rectangle<C> complexRootRefinement(Rectangle<C> rect, GenPolynomial<Complex<C>> a, BigRational len) throws InvalidBoundaryException;
+    public Rectangle<C> complexRootRefinement(Rectangle<C> rect, GenPolynomial<Complex<C>> a, BigRational len)
+            throws InvalidBoundaryException;
 
 }

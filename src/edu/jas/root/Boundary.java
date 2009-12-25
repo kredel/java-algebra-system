@@ -5,22 +5,19 @@
 package edu.jas.root;
 
 
-import edu.jas.arith.BigDecimal;
-import edu.jas.arith.BigRational;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.structure.Complex;
 import edu.jas.structure.ComplexRing;
-import edu.jas.structure.ElemFactory;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
-import edu.jas.ufd.GreatestCommonDivisorAbstract;
 import edu.jas.ufd.GCDFactory;
+import edu.jas.ufd.GreatestCommonDivisorAbstract;
 
 
 /**
- * Boundary determined by a rectangle. 
+ * Boundary determined by a rectangle.
  * @param <C> coefficient type.
  * @author Heinz Kredel
  */
@@ -67,7 +64,7 @@ public class Boundary<C extends RingElem<C>> {
         rect = r;
         A = p;
         ufd = GCDFactory.<Complex<C>> getImplementation(A.ring.coFac);
-        polys = (GenPolynomial<Complex<C>>[]) new GenPolynomial[5]; 
+        polys = (GenPolynomial<Complex<C>>[]) new GenPolynomial[5];
 
         Complex<C>[] corner = rect.corners;
         for (int i = 0; i < 4; i++) {
@@ -75,9 +72,9 @@ public class Boundary<C extends RingElem<C>> {
             GenPolynomial<Complex<C>> tp = A.ring.univariate(0, 1L).multiply(t);
             //System.out.println("t = " + t);
             GenPolynomial<Complex<C>> pc = PolyUtil.<Complex<C>> seriesOfTaylor(A, corner[i]);
-            pc = PolyUtil.<Complex<C>> substituteUnivariate(pc, tp); 
-            GenPolynomial<Complex<C>> gcd = ufd.gcd(A,pc);
-            if ( !gcd.isONE() ) {
+            pc = PolyUtil.<Complex<C>> substituteUnivariate(pc, tp);
+            GenPolynomial<Complex<C>> gcd = ufd.gcd(A, pc);
+            if (!gcd.isONE()) {
                 //System.out.println("A = " + A);
                 //System.out.println("PC["+i+"] = " + pc);
                 //System.out.println("gcd = " + gcd);
@@ -157,7 +154,7 @@ public class Boundary<C extends RingElem<C>> {
      */
     @Override
     public Boundary<C> clone() {
-        return new Boundary<C>(rect,A,polys);
+        return new Boundary<C>(rect, A, polys);
     }
 
 

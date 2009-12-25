@@ -5,23 +5,18 @@
 package edu.jas.root;
 
 
-import java.util.ArrayList;
-import java.util.List;
-
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.apache.log4j.BasicConfigurator;
 
-import edu.jas.arith.BigDecimal;
 import edu.jas.arith.BigRational;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
-import edu.jas.structure.NotInvertibleException;
-import edu.jas.structure.Power;
 import edu.jas.structure.Complex;
 import edu.jas.structure.ComplexRing;
+import edu.jas.structure.NotInvertibleException;
 
 
 /**
@@ -103,12 +98,12 @@ public class ComplexAlgebraicTest extends TestCase {
     @Override
     protected void setUp() {
         a = b = c = d = e = null;
-        ComplexRing<BigRational> cfac = new ComplexRing<BigRational>( new BigRational(1) );
+        ComplexRing<BigRational> cfac = new ComplexRing<BigRational>(new BigRational(1));
         Complex<BigRational> im = cfac.getIMAG();
         BigRational rfac = new BigRational();
         BigRational two = new BigRational(2);
         Complex<BigRational> nw = new Complex<BigRational>(cfac, rfac.getZERO(), two);
-        Complex<BigRational> sw = new Complex<BigRational>(cfac, rfac.getZERO(), rfac.getZERO() );
+        Complex<BigRational> sw = new Complex<BigRational>(cfac, rfac.getZERO(), rfac.getZERO());
         Complex<BigRational> se = new Complex<BigRational>(cfac, two, rfac.getZERO());
         Complex<BigRational> ne = new Complex<BigRational>(cfac, two, two);
         Rectangle<BigRational> positiv = new Rectangle<BigRational>(nw, sw, se, ne);
@@ -132,7 +127,7 @@ public class ComplexAlgebraicTest extends TestCase {
         alpha = null;
     }
 
- 
+
     /**
      * Test constructor and toString.
      * 

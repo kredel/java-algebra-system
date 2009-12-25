@@ -110,7 +110,7 @@ public class ComplexRootTest extends TestCase {
         dfac = new GenPolynomialRing<Complex<BigRational>>(cfac, rl, to, vars);
         eps = Power.positivePower(new BigRational(1L, 10L), BigDecimal.DEFAULT_PRECISION);
     }
- 
+
 
     @Override
     protected void tearDown() {
@@ -366,7 +366,7 @@ public class ComplexRootTest extends TestCase {
 
         List<Rectangle<BigRational>> roots = null;
         try {
-             roots = cr.complexRoots(rect, a);
+            roots = cr.complexRoots(rect, a);
         } catch (InvalidBoundaryException e) {
             fail("" + e);
         }
@@ -382,8 +382,8 @@ public class ComplexRootTest extends TestCase {
      */
     public void testComplexRoots() {
         ComplexRootsAbstract<BigRational> cr = new ComplexRootsSturm<BigRational>(cfac);
- 
-        a = dfac.random(kl, ll, el + 1 , q);
+
+        a = dfac.random(kl, ll, el + 1, q);
         //System.out.println("a = " + a);
 
         List<Rectangle<BigRational>> roots = cr.complexRoots(a);
@@ -416,10 +416,10 @@ public class ComplexRootTest extends TestCase {
 
         for (Rectangle<BigRational> root : roots) {
             try {
-                 Rectangle<BigRational> refine = cr.complexRootRefinement(root, a, len);
-                 //System.out.println("refine = " + refine);
+                Rectangle<BigRational> refine = cr.complexRootRefinement(root, a, len);
+                //System.out.println("refine = " + refine);
             } catch (InvalidBoundaryException e) {
-                 fail("" + e);
+                fail("" + e);
             }
         }
     }
@@ -447,7 +447,7 @@ public class ComplexRootTest extends TestCase {
         BigRational eps = new BigRational(1, 1000);
         //System.out.println("eps = " + eps);
         BigRational zero = new BigRational();
-        BigRational one  = new BigRational(1);
+        BigRational one = new BigRational(1);
 
         Complex<BigRational>[] corner = (Complex<BigRational>[]) new Complex[4];
 
@@ -463,7 +463,7 @@ public class ComplexRootTest extends TestCase {
             long v = cr.windingNumber(rect, a);
             System.out.println("winding number = " + v);
             fail("wind(rect,a) must throw an exception");
-        } catch ( InvalidBoundaryException  e ) {
+        } catch (InvalidBoundaryException e) {
         }
     }
 }

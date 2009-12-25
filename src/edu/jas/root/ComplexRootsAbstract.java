@@ -8,23 +8,17 @@ package edu.jas.root;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.SortedMap;
 
 import org.apache.log4j.Logger;
 
 import edu.jas.arith.BigDecimal;
 import edu.jas.arith.BigRational;
-import edu.jas.arith.Roots;
-import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.GenPolynomialRing;
-import edu.jas.poly.PolyUtil;
 import edu.jas.structure.Complex;
 import edu.jas.structure.ComplexRing;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
-import edu.jas.structure.UnaryFunctor;
 import edu.jas.ufd.Squarefree;
 import edu.jas.ufd.SquarefreeFactory;
 
@@ -37,7 +31,7 @@ import edu.jas.ufd.SquarefreeFactory;
 public abstract class ComplexRootsAbstract<C extends RingElem<C>> implements ComplexRoots<C> {
 
 
-    private static final Logger logger = Logger.getLogger(ComplexRootAbstract.class);
+    private static final Logger logger = Logger.getLogger(ComplexRootsAbstract.class);
 
 
     private static boolean debug = true || logger.isDebugEnabled();
@@ -91,7 +85,8 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C>> implements Com
      * @param a univariate complex polynomial.
      * @return root count of a in rectangle.
      */
-    public abstract long complexRootCount(Rectangle<C> rect, GenPolynomial<Complex<C>> a) throws InvalidBoundaryException;
+    public abstract long complexRootCount(Rectangle<C> rect, GenPolynomial<Complex<C>> a)
+            throws InvalidBoundaryException;
 
 
     /**
@@ -100,7 +95,8 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C>> implements Com
      * @param a univariate squarefree complex polynomial.
      * @return list of complex roots.
      */
-    public abstract List<Rectangle<C>> complexRoots(Rectangle<C> rect, GenPolynomial<Complex<C>> a) throws InvalidBoundaryException;
+    public abstract List<Rectangle<C>> complexRoots(Rectangle<C> rect, GenPolynomial<Complex<C>> a)
+            throws InvalidBoundaryException;
 
 
     /**
@@ -148,8 +144,8 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C>> implements Com
      * @param len rational length for refinement.
      * @return refined complex root.
      */
-    public Rectangle<C> complexRootRefinement(Rectangle<C> rect, GenPolynomial<Complex<C>> a, BigRational len) 
-                        throws InvalidBoundaryException {
+    public Rectangle<C> complexRootRefinement(Rectangle<C> rect, GenPolynomial<Complex<C>> a, BigRational len)
+            throws InvalidBoundaryException {
         ComplexRing<C> cr = (ComplexRing<C>) a.ring.coFac;
         Rectangle<C> root = rect;
         long w;
@@ -169,11 +165,11 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C>> implements Com
 
         Complex<C> delta = null;
         boolean work = true;
-        while ( work ) {
+        while (work) {
             try {
                 while (root.rationalLength().compareTo(length) > 0) {
                     //System.out.println("root = " + root + ", len = " + new BigDecimal(root.rationalLength())); 
-                    if ( delta == null ) {
+                    if (delta == null) {
                         delta = root.corners[3].subtract(root.corners[1]);
                         delta = delta.divide(cr.fromInteger(2));
                         //System.out.println("delta = " + toDecimal(delta)); 
@@ -251,10 +247,10 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C>> implements Com
                     throw new RuntimeException("no isolating rectangle " + rect);
                 }
                 work = false;
-            } catch(InvalidBoundaryException e) {
+            } catch (InvalidBoundaryException e) {
                 // repeat
                 delta = delta.sum(delta.multiply(eps)); // distort
-                System.out.println("new refine delta = " + toDecimal(delta)); 
+                System.out.println("new refine delta = " + toDecimal(delta));
                 eps = eps.sum(eps.multiply(cr.getIMAG()));
             }
         }
@@ -287,20 +283,13 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C>> implements Com
      * Distance.
      * @param a complex number.
      * @param b complex number.
-     * @return |a-b|.
-    public C distance(Complex<C> a, Complex<C> b) {
-        Complex<C> d = a.subtract(b);
-        C r = d.norm().getRe();
-        String s = r.toString();
-        BigRational rs = new BigRational(s);
-        //System.out.println("s  = " + s);
-        BigDecimal rd = new BigDecimal(rs);
-        rd = Roots.sqrt(rd);
-        //System.out.println("rd = " + rd);
-        r = a.ring.ring.parse(rd.toString());
-        //System.out.println("rd = " + rd + ", r  = " + r);
-        return r;
-    }
+     * @return |a-b|. public C distance(Complex<C> a, Complex<C> b) { Complex<C>
+     *         d = a.subtract(b); C r = d.norm().getRe(); String s =
+     *         r.toString(); BigRational rs = new BigRational(s);
+     *         //System.out.println("s = " + s); BigDecimal rd = new
+     *         BigDecimal(rs); rd = Roots.sqrt(rd); //System.out.println("rd = " +
+     *         rd); r = a.ring.ring.parse(rd.toString());
+     *         //System.out.println("rd = " + rd + ", r = " + r); return r; }
      */
 
 }
