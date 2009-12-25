@@ -38,7 +38,7 @@ public class DistributedListServer extends Thread {
     private Thread mythread = null;
 
     private Counter listElem = null;
-    protected final SortedMap theList;
+    protected final SortedMap<Counter,Object> theList;
 
 
     /**
@@ -65,7 +65,7 @@ public class DistributedListServer extends Thread {
         listElem = new Counter(0);
         this.cf = cf;
         servers = new ArrayList<Broadcaster>();
-        theList = new TreeMap();
+        theList = new TreeMap<Counter,Object>();
     }
 
 
@@ -300,7 +300,7 @@ class Broadcaster extends Thread /*implements Runnable*/ {
     private final SocketChannel channel;
     private final List bcaster;
     private Counter listElem;
-    private final SortedMap theList;
+    private final SortedMap<Counter,Object> theList;
 
 
     /**
@@ -310,7 +310,7 @@ class Broadcaster extends Thread /*implements Runnable*/ {
      * @param le counter
      * @param sm SortedMap with counter value pairs.
      */
-    public Broadcaster(SocketChannel s, List p, Counter le, SortedMap sm) {
+    public Broadcaster(SocketChannel s, List p, Counter le, SortedMap<Counter,Object> sm) {
         channel = s;
         bcaster = p;
         listElem = le;

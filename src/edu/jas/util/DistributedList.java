@@ -28,7 +28,7 @@ public class DistributedList /* implements List not jet */ {
 
     private static final Logger logger = Logger.getLogger(DistributedList.class);
 
-    protected final SortedMap theList;
+    protected final SortedMap<Counter,Object> theList;
     protected final ChannelFactory cf;
     protected SocketChannel channel = null;
     protected Listener listener = null;
@@ -67,7 +67,7 @@ public class DistributedList /* implements List not jet */ {
             e.printStackTrace();
         }
         logger.debug("dl channel = " + channel);
-        theList = new TreeMap();
+        theList = new TreeMap<Counter,Object>();
         listener = new Listener(channel,theList);
         listener.start();
     }
@@ -80,7 +80,7 @@ public class DistributedList /* implements List not jet */ {
     public DistributedList(SocketChannel sc) {
         cf = null;
         channel = sc;
-        theList = new TreeMap();
+        theList = new TreeMap<Counter,Object>();
         listener = new Listener(channel,theList);
         listener.start();
     }
@@ -89,8 +89,8 @@ public class DistributedList /* implements List not jet */ {
 /**
  * Get the internal list, convert from Collection.
  */ 
-    public List getList() {
-        return new ArrayList( theList.values() );
+    public List<Object> getList() {
+        return new ArrayList<Object>( theList.values() );
     }
 
 
@@ -189,11 +189,11 @@ public class DistributedList /* implements List not jet */ {
 class Listener extends Thread {
 
     private SocketChannel channel;
-    private SortedMap theList;
+    private SortedMap<Counter,Object> theList;
     private boolean goon;
 
 
-    Listener(SocketChannel s, SortedMap list) {
+    Listener(SocketChannel s, SortedMap<Counter,Object> list) {
         channel = s;
         theList = list;
     } 
@@ -205,14 +205,14 @@ class Listener extends Thread {
 
     @Override
      public void run() {
-        Object n;
+        Counter n;
         Object o;
         goon = true;
         while (goon) {
             n = null;
             o = null;
             try {
-                n = channel.receive();
+                n = (Counter) channel.receive();
                 if ( this.isInterrupted() ) {
                    goon = false;
                 } else {
