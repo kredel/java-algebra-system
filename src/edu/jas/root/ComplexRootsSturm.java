@@ -27,7 +27,7 @@ import edu.jas.structure.RingFactory;
  * @param <C> coefficient type.
  * @author Heinz Kredel
  */
-public class ComplexRootsSturm<C extends RingElem<C>> extends ComplexRootAbstract<C> {
+public class ComplexRootsSturm<C extends RingElem<C>> extends ComplexRootsAbstract<C> {
 
 
     private static final Logger logger = Logger.getLogger(ComplexRootsSturm.class);

@@ -130,7 +130,7 @@ public class ComplexRootTest extends TestCase {
         a = dfac.univariate(0, 2L).sum(dfac.getONE()); // x^2 + 1
         //System.out.println("a = " + a);
 
-        ComplexRootAbstract<BigRational> cr = new ComplexRootsSturm<BigRational>(cfac);
+        ComplexRootsAbstract<BigRational> cr = new ComplexRootsSturm<BigRational>(cfac);
 
         Complex<BigRational> Mb = cr.rootBound(a);
         BigRational M = Mb.getRe();
@@ -297,7 +297,7 @@ public class ComplexRootTest extends TestCase {
      */
     @SuppressWarnings("unchecked")
     public void testComplexRootsImag() {
-        ComplexRootAbstract<BigRational> cr = new ComplexRootsSturm<BigRational>(cfac);
+        ComplexRootsAbstract<BigRational> cr = new ComplexRootsSturm<BigRational>(cfac);
         Complex<BigRational> I = cfac.getIMAG();
 
         a = dfac.univariate(0, 2L).sum(cfac.fromInteger(1)); // x^2 + 1
@@ -336,7 +336,7 @@ public class ComplexRootTest extends TestCase {
      */
     @SuppressWarnings("unchecked")
     public void testComplexRootsRand() {
-        ComplexRootAbstract<BigRational> cr = new ComplexRootsSturm<BigRational>(cfac);
+        ComplexRootsAbstract<BigRational> cr = new ComplexRootsSturm<BigRational>(cfac);
         Complex<BigRational> I = cfac.getIMAG();
 
         a = dfac.random(kl, ll, el, q);
@@ -381,7 +381,7 @@ public class ComplexRootTest extends TestCase {
      * 
      */
     public void testComplexRoots() {
-        ComplexRootAbstract<BigRational> cr = new ComplexRootsSturm<BigRational>(cfac);
+        ComplexRootsAbstract<BigRational> cr = new ComplexRootsSturm<BigRational>(cfac);
  
         a = dfac.random(kl, ll, el + 1 , q);
         //System.out.println("a = " + a);
@@ -398,7 +398,7 @@ public class ComplexRootTest extends TestCase {
      * 
      */
     public void testComplexRootRefinement() {
-        ComplexRootAbstract<BigRational> cr = new ComplexRootsSturm<BigRational>(cfac);
+        ComplexRootsAbstract<BigRational> cr = new ComplexRootsSturm<BigRational>(cfac);
 
         a = dfac.random(kl, ll, el, q);
         Squarefree<Complex<BigRational>> engine = SquarefreeFactory

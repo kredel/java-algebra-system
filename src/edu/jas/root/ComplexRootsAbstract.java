@@ -34,7 +34,7 @@ import edu.jas.ufd.SquarefreeFactory;
  * @param <C> coefficient type.
  * @author Heinz Kredel
  */
-public abstract class ComplexRootAbstract<C extends RingElem<C>> implements ComplexRoots<C> {
+public abstract class ComplexRootsAbstract<C extends RingElem<C>> implements ComplexRoots<C> {
 
 
     private static final Logger logger = Logger.getLogger(ComplexRootAbstract.class);
@@ -53,7 +53,7 @@ public abstract class ComplexRootAbstract<C extends RingElem<C>> implements Comp
      * Constructor.
      * @param cf coefficient factory.
      */
-    public ComplexRootAbstract(RingFactory<Complex<C>> cf) {
+    public ComplexRootsAbstract(RingFactory<Complex<C>> cf) {
         engine = SquarefreeFactory.<Complex<C>> getImplementation(cf);
     }
 
