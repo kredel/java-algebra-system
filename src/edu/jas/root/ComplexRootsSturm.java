@@ -153,65 +153,32 @@ public class ComplexRootsSturm<C extends RingElem<C>> extends ComplexRootAbstrac
      * @return root count of a in rectangle.
      */
     @Override
-    public long complexRootCount(Rectangle<C> rect, GenPolynomial<Complex<C>> a) {
+    public long complexRootCount(Rectangle<C> rect, GenPolynomial<Complex<C>> a) throws InvalidBoundaryException {
         return windingNumber(rect, a);
     }
 
 
     /**
-     * Winding number of complex function p on rectangle.
+     * Winding number of complex function A on rectangle.
      * @param rect rectangle.
-     * @param a univariate complex polynomial.
-     * @return winding number of a arround rect.
+     * @param A univariate complex polynomial.
+     * @return winding number of A arround rect.
      */
     @SuppressWarnings("unchecked")
-    public long windingNumber(Rectangle<C> rect, GenPolynomial<Complex<C>> a) {
-        ComplexRing<C> cr = (ComplexRing<C>) a.ring.coFac;
+    public long windingNumber(Rectangle<C> rect, GenPolynomial<Complex<C>> A) throws InvalidBoundaryException {
+        Boundary<C> bound = new Boundary<C>(rect,A);
+        ComplexRing<C> cr = (ComplexRing<C>) A.ring.coFac;
         RingFactory<C> cf = cr.ring;
-        GenPolynomialRing<C> fac = new GenPolynomialRing<C>(cf, a.ring);
         C zero = cf.getZERO();
         C one = cf.getONE();
-        Complex<C> im = cr.getIMAG();
-
-        Complex<C>[] corner = rect.corners;
-
-        GenPolynomial<Complex<C>>[] PC = (GenPolynomial<Complex<C>>[]) new GenPolynomial[5];
-        GenPolynomial<C>[] PCre = (GenPolynomial<C>[]) new GenPolynomial[5];
-        GenPolynomial<C>[] PCim = (GenPolynomial<C>[]) new GenPolynomial[5];
-
-        for (int i = 0; i < 4; i++) {
-            Complex<C> t = corner[i + 1].subtract(corner[i]);
-            GenPolynomial<Complex<C>> tp = a.ring.univariate(0, 1L).multiply(t);
-            //Complex<C> t = Power.<Complex<C>> power(cr,im,i);
-            //System.out.println("t = " + t);
-            GenPolynomial<Complex<C>> pc = PolyUtil.<Complex<C>> seriesOfTaylor(a, corner[i]);
-            pc = PolyUtil.<Complex<C>> substituteUnivariate(pc, tp); // corner[i] unused
-            PC[i] = pc;
-            GenPolynomial<Complex<C>> gcd = ufd.gcd(a,pc);
-            if ( !gcd.isONE() ) {
-                System.out.println("PC["+i+"] = " + pc);
-                System.out.println("gcd = " + gcd);
-                throw new RuntimeException("zero on rectangle " + rect);
-            }
-            GenPolynomial<C> f = PolyUtil.<C> realPartFromComplex(fac, pc);
-            GenPolynomial<C> g = PolyUtil.<C> imaginaryPartFromComplex(fac, pc);
-            //System.out.println("re() = " + f.toScript());
-            //System.out.println("im() = " + g.toScript());
-            PCre[i] = f;
-            PCim[i] = g;
-        }
-        PC[4] = PC[0];
-        PCre[4] = PCre[0];
-        PCim[4] = PCim[0];
-
         long ix = 0L;
         for (int i = 0; i < 4; i++) {
-            long ci = indexOfCauchy(zero, one, PCre[i], PCim[i]);
+            long ci = indexOfCauchy(zero, one, bound.getRealPart(i), bound.getImagPart(i));
             //System.out.println("ci["+i+","+(i+1)+"] = " + ci);
             ix += ci;
         }
         if ( ix % 2L != 0 ) {
-            throw new RuntimeException("odd winding number " + ix);
+            throw new InvalidBoundaryException("odd winding number " + ix);
         }
         return ix / 2L;
     }
@@ -224,13 +191,13 @@ public class ComplexRootsSturm<C extends RingElem<C>> extends ComplexRootAbstrac
      * @return list of complex roots.
      */
     @Override
-    public List<Rectangle<C>> complexRoots(Rectangle<C> rect, GenPolynomial<Complex<C>> a) {
+    public List<Rectangle<C>> complexRoots(Rectangle<C> rect, GenPolynomial<Complex<C>> a) throws InvalidBoundaryException {
         ComplexRing<C> cr = (ComplexRing<C>) a.ring.coFac;
 
         List<Rectangle<C>> roots = new ArrayList<Rectangle<C>>();
         //System.out.println("rect = " + rect); 
         long n = windingNumber(rect, a);
-        if (n < 0) {
+        if (n < 0) { // can this happen?
             throw new RuntimeException("negative winding number " + n);
         }
         if (n == 0) {
@@ -243,66 +210,70 @@ public class ComplexRootsSturm<C extends RingElem<C>> extends ComplexRootAbstrac
         Complex<C> eps = cr.fromInteger(1);
         eps = eps.divide(cr.fromInteger(1000)); // 1/1000
         //System.out.println("eps = " + eps);
-
         //System.out.println("rect = " + rect); 
+        // construct new center
         Complex<C> delta = rect.corners[3].subtract(rect.corners[1]);
         delta = delta.divide(cr.fromInteger(2));
         //System.out.println("delta = " + delta); 
-        Complex<C> center = rect.corners[1].sum(delta);
-        while (center.isZERO() || center.getRe().isZERO() || center.getIm().isZERO()) {
-            delta = delta.sum(delta.multiply(eps)); // distort
-            //System.out.println("delta = " + delta); 
-            center = rect.corners[1].sum(delta);
-            eps = eps.sum(eps.multiply(cr.getIMAG()));
+        boolean work = true;
+        while ( work ) {
+            Complex<C> center = rect.corners[1].sum(delta);
+            //System.out.println("center = " + toDecimal(center)); 
+            if (debug) {
+                logger.info("new center = " + center);
+            }
+            try {
+                Complex<C>[] cp = Arrays.<Complex<C>> copyOf(rect.corners, 4);
+                // cp[0] fix
+                cp[1] = new Complex<C>(cr, cp[1].getRe(), center.getIm());
+                cp[2] = center;
+                cp[3] = new Complex<C>(cr, center.getRe(), cp[3].getIm());
+                Rectangle<C> nw = new Rectangle<C>(cp);
+                //System.out.println("nw = " + nw); 
+                List<Rectangle<C>> nwr = complexRoots(nw, a);
+                //System.out.println("#nwr = " + nwr.size()); 
+                roots.addAll(nwr);
+
+                cp = Arrays.<Complex<C>> copyOf(rect.corners, 4);
+                cp[0] = new Complex<C>(cr, cp[0].getRe(), center.getIm());
+                // cp[1] fix
+                cp[2] = new Complex<C>(cr, center.getRe(), cp[2].getIm());
+                cp[3] = center;
+                Rectangle<C> sw = new Rectangle<C>(cp);
+                //System.out.println("sw = " + sw); 
+                List<Rectangle<C>> swr = complexRoots(sw, a);
+                //System.out.println("#swr = " + swr.size()); 
+                roots.addAll(swr);
+
+                cp = Arrays.<Complex<C>> copyOf(rect.corners, 4);
+                cp[0] = center;
+                cp[1] = new Complex<C>(cr, center.getRe(), cp[1].getIm());
+                // cp[2] fix
+                cp[3] = new Complex<C>(cr, cp[3].getRe(), center.getIm());
+                Rectangle<C> se = new Rectangle<C>(cp);
+                //System.out.println("se = " + se); 
+                List<Rectangle<C>> ser = complexRoots(se, a);
+                //System.out.println("#ser = " + ser.size()); 
+                roots.addAll(ser);
+
+                cp = Arrays.<Complex<C>> copyOf(rect.corners, 4);
+                cp[0] = new Complex<C>(cr, center.getRe(), cp[0].getIm());
+                cp[1] = center;
+                cp[2] = new Complex<C>(cr, cp[2].getRe(), center.getIm());
+                // cp[3] fix
+                Rectangle<C> ne = new Rectangle<C>(cp);
+                //System.out.println("ne = " + ne); 
+                List<Rectangle<C>> ner = complexRoots(ne, a);
+                //System.out.println("#ner = " + ner.size()); 
+                roots.addAll(ner);
+                work = false;
+            } catch(InvalidBoundaryException e) {
+                // repeat
+                delta = delta.sum(delta.multiply(eps)); // distort
+                //System.out.println("new delta = " + toDecimal(delta)); 
+                eps = eps.sum(eps.multiply(cr.getIMAG()));
+            }
         }
-        //System.out.println("center = " + center); 
-        if (debug) {
-            logger.info("new center = " + center);
-        }
-        Complex<C>[] cp = Arrays.<Complex<C>> copyOf(rect.corners, 4);
-        // cp[0] fix
-        cp[1] = new Complex<C>(cr, cp[1].getRe(), center.getIm());
-        cp[2] = center;
-        cp[3] = new Complex<C>(cr, center.getRe(), cp[3].getIm());
-        Rectangle<C> nw = new Rectangle<C>(cp);
-        //System.out.println("nw = " + nw); 
-        List<Rectangle<C>> nwr = complexRoots(nw, a);
-        //System.out.println("#nwr = " + nwr.size()); 
-        roots.addAll(nwr);
-
-        cp = Arrays.<Complex<C>> copyOf(rect.corners, 4);
-        cp[0] = new Complex<C>(cr, cp[0].getRe(), center.getIm());
-        // cp[1] fix
-        cp[2] = new Complex<C>(cr, center.getRe(), cp[2].getIm());
-        cp[3] = center;
-        Rectangle<C> sw = new Rectangle<C>(cp);
-        //System.out.println("sw = " + sw); 
-        List<Rectangle<C>> swr = complexRoots(sw, a);
-        //System.out.println("#swr = " + swr.size()); 
-        roots.addAll(swr);
-
-        cp = Arrays.<Complex<C>> copyOf(rect.corners, 4);
-        cp[0] = center;
-        cp[1] = new Complex<C>(cr, center.getRe(), cp[1].getIm());
-        // cp[2] fix
-        cp[3] = new Complex<C>(cr, cp[3].getRe(), center.getIm());
-        Rectangle<C> se = new Rectangle<C>(cp);
-        //System.out.println("se = " + se); 
-        List<Rectangle<C>> ser = complexRoots(se, a);
-        //System.out.println("#ser = " + ser.size()); 
-        roots.addAll(ser);
-
-        cp = Arrays.<Complex<C>> copyOf(rect.corners, 4);
-        cp[0] = new Complex<C>(cr, center.getRe(), cp[0].getIm());
-        cp[1] = center;
-        cp[2] = new Complex<C>(cr, cp[2].getRe(), center.getIm());
-        // cp[3] fix
-        Rectangle<C> ne = new Rectangle<C>(cp);
-        //System.out.println("ne = " + ne); 
-        List<Rectangle<C>> ner = complexRoots(ne, a);
-        //System.out.println("#ner = " + ner.size()); 
-        roots.addAll(ner);
-
         return roots;
     }
 
