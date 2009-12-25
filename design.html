@@ -563,6 +563,7 @@ implemented algebraic algorithms.
 
 <tr>
 <td><code>ComprehensiveGroebnerBaseSeq</code>,
+    <code>GroebnerSystem</code>,
     <code>ColoredSystem</code>
 </td>
 <td>Algorithm to compute comprehensive Groebner bases in polynomial rings over 
@@ -693,9 +694,22 @@ implemented algebraic algorithms.
     Algorithms to compute the sign of a real algebraic numer and 
     the magnitude of a real algebraic number to a given precision.
     Coefficients of polynomials must be from a real field, 
-    for example from BigInteger or RealAlgebricNumber.
+    for example from <code>BigRational</code> or <code>RealAlgebricNumber</code>.
 </td>
 <td>realRoots, refineInterval, algebraicSign, algebraicMagnitude
+</td>
+</tr>
+
+<tr>
+<td><code>ComplexRoots</code>,
+    <code>ComplexRootsAbstract</code>,
+    <code>ComplexRootsSturm</code>
+</td>
+<td>Algorithms to compute isolating rectangles for complex roots 
+    and for refinement of isolating rectangles to any prescribed precision. 
+    Coefficients of polynomials must be of type <code>Complex</code> field. 
+</td>
+<td>complexRoots, complexRootCount, complexRootRefinement
 </td>
 </tr>
 
@@ -1195,7 +1209,7 @@ of the Java algebra system.
 <p>
 <!-- Created: Sat Mar 11 10:51:36 CET 2006 -->
 <!-- hhmts start -->
-Last modified: Sun Nov 15 18:45:27 CET 2009
+Last modified: Fri Dec 25 18:42:40 CET 2009
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
