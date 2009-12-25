@@ -230,7 +230,7 @@ public class GroebnerBaseSeqPairParallel<C extends RingElem<C>>
             return G;
         }
 
-        MiReducerSeqPair<C>[] mirs = new MiReducerSeqPair[ G.size() ];
+        MiReducerSeqPair<C>[] mirs = (MiReducerSeqPair<C>[]) new MiReducerSeqPair[ G.size() ];
         int i = 0;
         F = new ArrayList<GenPolynomial<C>>( G.size() );
         while ( G.size() > 0 ) {

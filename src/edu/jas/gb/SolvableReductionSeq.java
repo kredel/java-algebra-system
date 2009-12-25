@@ -54,7 +54,7 @@ public class SolvableReductionSeq<C extends RingElem<C>>
         GenSolvablePolynomial<C>[] P;
         synchronized (Pp) {
             l = Pp.size();
-            P = new GenSolvablePolynomial[l];
+            P = (GenSolvablePolynomial<C>[]) new GenSolvablePolynomial[l];
             //P = Pp.toArray();
             for ( int j = 0; j < Pp.size(); j++ ) {
                 P[j] = Pp.get(j);
@@ -63,7 +63,7 @@ public class SolvableReductionSeq<C extends RingElem<C>>
         int i;
         ExpVector[] htl = new ExpVector[ l ];
         Object[] lbc = new Object[ l ]; // want <C>
-        GenSolvablePolynomial<C>[] p = new GenSolvablePolynomial[ l ];
+        GenSolvablePolynomial<C>[] p = (GenSolvablePolynomial<C>[]) new GenSolvablePolynomial[ l ];
         int j = 0;
         for ( i = 0; i < l; i++ ) { 
             p[i] = P[i];
@@ -131,7 +131,7 @@ public class SolvableReductionSeq<C extends RingElem<C>>
             return Ap;
         }
         int l = Pp.size();
-        GenSolvablePolynomial<C>[] P = new GenSolvablePolynomial[ l ];
+        GenSolvablePolynomial<C>[] P = (GenSolvablePolynomial<C>[]) new GenSolvablePolynomial[ l ];
         synchronized (Pp) {
             //P = Pp.toArray();
             for ( int i = 0; i < Pp.size(); i++ ) {
@@ -140,7 +140,7 @@ public class SolvableReductionSeq<C extends RingElem<C>>
         }
         ExpVector[] htl = new ExpVector[ l ];
         Object[] lbc = new Object[ l ]; // want <C>
-        GenSolvablePolynomial<C>[] p = new GenSolvablePolynomial[ l ];
+        GenSolvablePolynomial<C>[] p = (GenSolvablePolynomial<C>[]) new GenSolvablePolynomial[ l ];
         Map.Entry<ExpVector,C> m;
         int j = 0;
         int i;
@@ -221,7 +221,7 @@ public class SolvableReductionSeq<C extends RingElem<C>>
         GenSolvablePolynomial<C>[] P;
         synchronized (Pp) {
             l = Pp.size();
-            P = new GenSolvablePolynomial[l];
+            P = (GenSolvablePolynomial<C>[]) new GenSolvablePolynomial[l];
             //P = Pp.toArray();
             for ( int j = 0; j < Pp.size(); j++ ) {
                 P[j] = Pp.get(j);
@@ -230,7 +230,7 @@ public class SolvableReductionSeq<C extends RingElem<C>>
         int i;
         ExpVector[] htl = new ExpVector[ l ];
         Object[] lbc = new Object[ l ]; // want <C>
-        GenSolvablePolynomial<C>[] p = new GenSolvablePolynomial[ l ];
+        GenSolvablePolynomial<C>[] p = (GenSolvablePolynomial<C>[]) new GenSolvablePolynomial[ l ];
         int j = 0;
         for ( i = 0; i < l; i++ ) { 
             p[i] = P[i];

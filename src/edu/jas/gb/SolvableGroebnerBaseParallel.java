@@ -233,7 +233,7 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>>
            return G;
         }
 
-        SolvableMiReducer<C>[] mirs = new SolvableMiReducer[ G.size() ];
+        SolvableMiReducer<C>[] mirs = (SolvableMiReducer<C>[]) new SolvableMiReducer[ G.size() ];
         int i = 0;
         F = new ArrayList<GenSolvablePolynomial<C>>( G.size() );
         while ( G.size() > 0 ) {
