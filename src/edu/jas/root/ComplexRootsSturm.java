@@ -157,9 +157,8 @@ public class ComplexRootsSturm<C extends RingElem<C>> extends ComplexRootsAbstra
      * @param A univariate complex polynomial.
      * @return winding number of A arround rect.
      */
-    @SuppressWarnings("unchecked")
     public long windingNumber(Rectangle<C> rect, GenPolynomial<Complex<C>> A) throws InvalidBoundaryException {
-        Boundary<C> bound = new Boundary<C>(rect, A);
+        Boundary<C> bound = new Boundary<C>(rect, A); // throws InvalidBoundaryException
         ComplexRing<C> cr = (ComplexRing<C>) A.ring.coFac;
         RingFactory<C> cf = cr.ring;
         C zero = cf.getZERO();
@@ -262,7 +261,7 @@ public class ComplexRootsSturm<C extends RingElem<C>> extends ComplexRootsAbstra
                 roots.addAll(ner);
                 work = false;
             } catch (InvalidBoundaryException e) {
-                // repeat
+                // repeat with new center
                 delta = delta.sum(delta.multiply(eps)); // distort
                 //System.out.println("new delta = " + toDecimal(delta)); 
                 eps = eps.sum(eps.multiply(cr.getIMAG()));

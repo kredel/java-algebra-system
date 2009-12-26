@@ -17,7 +17,16 @@ import edu.jas.ufd.GreatestCommonDivisorAbstract;
 
 
 /**
- * Boundary determined by a rectangle.
+ * Boundary determined by a rectangle and a polynomial.  
+ *
+ * For a given complex polynomial A a closed path throught the corners
+ * of the given rectangle is constructed. The path is represented by
+ * four polynomials, one for each side of the rectangle. For a real t
+ * in [0,1] the i-th polynomial describes the path of A from corner[i]
+ * to corner[i+1]. In particular polys[i](0) = A(corner[i]) and
+ * polys[i](1) = A(corner[i+1]), with corner[4] = corner[0]. If A
+ * would be zero on a point of the path, an InvalidBoundaryException 
+ * is thrown.
  * @param <C> coefficient type.
  * @author Heinz Kredel
  */

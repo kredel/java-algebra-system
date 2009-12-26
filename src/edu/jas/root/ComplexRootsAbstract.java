@@ -53,9 +53,9 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C>> implements Com
 
 
     /**
-     * Root bound. With f(M) * f(-M) != 0.
+     * Root bound. With f(-M + i M) * f(-M - i M) * f(M - i M) * f(M + i M) != 0.
      * @param f univariate polynomial.
-     * @return M such that -M &lt; root(f) &lt; M.
+     * @return M such that root(f) is contained in the rectangle spanned by M.
      */
     public Complex<C> rootBound(GenPolynomial<Complex<C>> f) {
         if (f == null) {
@@ -73,7 +73,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C>> implements Com
                 M = d;
             }
         }
-        M = M.sum(f.ring.coFac.getONE());
+        M = M.sum(cfac.getONE());
         //System.out.println("M = " + M);
         return M;
     }
@@ -112,16 +112,16 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C>> implements Com
         for (GenPolynomial<Complex<C>> p : sa.keySet()) {
             Complex<C> Mb = rootBound(p);
             C M = Mb.getRe();
-            C M1 = M.sum(M.factory().fromInteger(1));
+            C M1 = M.sum(M.factory().fromInteger(1)); // asymmetric to origin
             //System.out.println("M = " + M);
             if (debug) {
                 logger.info("rootBound = " + M);
             }
             Complex<C>[] corner = (Complex<C>[]) new Complex[4];
-            corner[0] = new Complex<C>(cr, M1.negate(), M); // nw
+            corner[0] = new Complex<C>(cr, M1.negate(), M);           // nw
             corner[1] = new Complex<C>(cr, M1.negate(), M1.negate()); // sw
-            corner[2] = new Complex<C>(cr, M, M1.negate()); // se
-            corner[3] = new Complex<C>(cr, M, M); // ne
+            corner[2] = new Complex<C>(cr, M, M1.negate());           // se
+            corner[3] = new Complex<C>(cr, M, M);                     // ne
             Rectangle<C> rect = new Rectangle<C>(corner);
             try {
                 List<Rectangle<C>> rs = complexRoots(rect, p);
@@ -130,7 +130,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C>> implements Com
                     roots.addAll(rs);
                 }
             } catch (InvalidBoundaryException e) {
-                throw new RuntimeException("this should not happen " + e);
+                throw new RuntimeException("this should never happen " + e);
             }
         }
         return roots;
@@ -248,7 +248,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C>> implements Com
                 }
                 work = false;
             } catch (InvalidBoundaryException e) {
-                // repeat
+                // repeat with new center
                 delta = delta.sum(delta.multiply(eps)); // distort
                 System.out.println("new refine delta = " + toDecimal(delta));
                 eps = eps.sum(eps.multiply(cr.getIMAG()));
@@ -279,17 +279,25 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C>> implements Com
         return rd.toString() + " i " + id.toString();
     }
 
-    /**
-     * Distance.
-     * @param a complex number.
-     * @param b complex number.
-     * @return |a-b|. public C distance(Complex<C> a, Complex<C> b) { Complex<C>
-     *         d = a.subtract(b); C r = d.norm().getRe(); String s =
-     *         r.toString(); BigRational rs = new BigRational(s);
-     *         //System.out.println("s = " + s); BigDecimal rd = new
-     *         BigDecimal(rs); rd = Roots.sqrt(rd); //System.out.println("rd = " +
-     *         rd); r = a.ring.ring.parse(rd.toString());
-     *         //System.out.println("rd = " + rd + ", r = " + r); return r; }
-     */
+
+//     /*
+//      * Distance.
+//      * @param a complex number.
+//      * @param b complex number.
+//      * @return |a-b|. 
+//      */
+//     public C distance(Complex<C> a, Complex<C> b) { 
+//          Complex<C> d = a.subtract(b); 
+//          C r = d.norm().getRe(); 
+//          String s = r.toString(); 
+//          BigRational rs = new BigRational(s);
+//          //System.out.println("s = " + s); 
+//          BigDecimal rd = new BigDecimal(rs); 
+//          rd = Roots.sqrt(rd); 
+//          //System.out.println("rd = " + rd); 
+//          r = a.ring.ring.parse(rd.toString());
+//          //System.out.println("rd = " + rd + ", r = " + r); 
+//          return r; 
+//     }
 
 }

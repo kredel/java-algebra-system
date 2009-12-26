@@ -13,7 +13,7 @@ import edu.jas.structure.RingElem;
 
 
 /**
- * Rectangle. For example isolating intervals for complex roots.
+ * Rectangle. For example isolating rectangle for complex roots.
  * @param <C> coefficient type.
  * @author Heinz Kredel
  */
