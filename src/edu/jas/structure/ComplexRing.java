@@ -166,8 +166,13 @@ public class ComplexRing<C extends RingElem<C> >
     public String toScript() {
         // Python case
         StringBuffer s = new StringBuffer();
-        s.append("ComplexRing(");
-        s.append(ring.toScript());
+        s.append("CR(");
+        if ( ring instanceof RingElem ) {
+            RingElem ri = (RingElem) ring;
+            s.append(ri.toScriptFactory());
+        } else {
+            s.append(ring.toScript());
+        }
         s.append(")");
         return s.toString();
     }

@@ -184,10 +184,13 @@ public class Complex<C extends RingElem<C> >
         if ( im.isZERO() ) {
             s.append(re.toScript());
         } else {
-            s.append("(");
-            s.append(re.toScript());
-            s.append(",").append(im.toScript());
-            s.append(")");
+            s.append("");
+            if ( ! re.isZERO() ) {
+                s.append(re.toScript());
+                s.append(" + ");
+            }
+            s.append(im.toScript()).append(" * I");
+            s.append("");
         }
         return s.toString();
     }

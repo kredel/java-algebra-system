@@ -259,6 +259,50 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C>> implements Com
 
 
     /**
+     * List of complex roots of complex polynomial.
+     * @param a univariate complex polynomial.
+     * @param len rational length for refinement.
+     * @return list of complex roots to desired precision.
+     */
+    @SuppressWarnings("unchecked")
+    public List<Rectangle<C>> complexRoots(GenPolynomial<Complex<C>> a, BigRational len) {
+        ComplexRing<C> cr = (ComplexRing<C>) a.ring.coFac;
+        SortedMap<GenPolynomial<Complex<C>>, Long> sa = engine.squarefreeFactors(a);
+        List<Rectangle<C>> roots = new ArrayList<Rectangle<C>>();
+        for (GenPolynomial<Complex<C>> p : sa.keySet()) {
+            Complex<C> Mb = rootBound(p);
+            C M = Mb.getRe();
+            C M1 = M.sum(M.factory().fromInteger(1)); // asymmetric to origin
+            //System.out.println("M = " + M);
+            if (debug) {
+                logger.info("rootBound = " + M);
+            }
+            Complex<C>[] corner = (Complex<C>[]) new Complex[4];
+            corner[0] = new Complex<C>(cr, M1.negate(), M);           // nw
+            corner[1] = new Complex<C>(cr, M1.negate(), M1.negate()); // sw
+            corner[2] = new Complex<C>(cr, M, M1.negate());           // se
+            corner[3] = new Complex<C>(cr, M, M);                     // ne
+            Rectangle<C> rect = new Rectangle<C>(corner);
+            try {
+                List<Rectangle<C>> rs = complexRoots(rect, p);
+                List<Rectangle<C>> rf = new ArrayList<Rectangle<C>>(rs.size());
+                for ( Rectangle<C> r : rs ) {
+                    Rectangle<C> rr = complexRootRefinement(r,p,len);
+                    rf.add(rr);
+                }
+                long e = sa.get(p);
+                for (int i = 0; i < e; i++) { // add with multiplicity
+                    roots.addAll(rf);
+                }
+            } catch (InvalidBoundaryException e) {
+                throw new RuntimeException("this should never happen " + e);
+            }
+        }
+        return roots;
+    }
+
+
+    /**
      * Get decimal approximation.
      * @param a complex number.
      * @return decimal(a).

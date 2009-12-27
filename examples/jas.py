@@ -9,7 +9,8 @@ from java.util           import ArrayList
 
 from org.apache.log4j    import BasicConfigurator;
 
-from edu.jas.structure   import RingElem, RingFactory, Power, Product, ProductRing
+from edu.jas.structure   import RingElem, RingFactory, Power, Product, ProductRing,\
+                                Complex, ComplexRing
 from edu.jas.arith       import BigInteger, BigRational, BigComplex, BigDecimal,\
                                 ModInteger, ModIntegerRing, BigQuaternion, BigOctonion
 from edu.jas.poly        import GenPolynomial, GenPolynomialRing,\
@@ -36,7 +37,8 @@ from edu.jas.application import ComprehensiveGroebnerBaseSeq, PolyUtilApp,\
 from edu.jas.kern        import ComputerThreads
 from edu.jas.ufd         import GreatestCommonDivisor, PolyUfdUtil, GCDFactory,\
                                 FactorFactory, SquarefreeFactory
-from edu.jas.root        import RealRootsSturm, Interval, RealAlgebraicNumber, RealAlgebraicRing
+from edu.jas.root        import RealRootsSturm, Interval, RealAlgebraicNumber, RealAlgebraicRing,\
+                                ComplexRootsSturm, Rectangle
 from edu.jas.integrate   import ElementaryIntegration
 from edu.jas.util        import ExecutableServer, StringUtil
 from edu.jas             import structure, arith, poly, ps, gb, gbmod, vector,\
@@ -233,6 +235,28 @@ class Ring:
             else:
                 R = RealRootsSturm().realRoots( a, eps );
                 R = [ r.toDecimal() for r in R ];
+            return R;
+        except Exception, e:
+            print "error " + str(e)
+            return None
+
+    def complexRoots(self,a,eps=None):
+        '''Compute complex roots of univariate polynomial.
+        '''
+        if isinstance(a,RingElem):
+            a = a.elem;
+        else:
+            a = self.element( str(a) );
+            a = a.elem;
+        if isinstance(eps,RingElem):
+            eps = eps.elem;
+        try:
+            if eps == None:
+                R = ComplexRootsSturm(a.ring.coFac).complexRoots( a );
+                #R = [ r.centerApprox() for r in R ];
+            else:
+                R = ComplexRootsSturm(a.ring.coFac).complexRoots( a, eps );
+                R = [ r.centerApprox() for r in R ];
             return R;
         except Exception, e:
             print "error " + str(e)
@@ -1378,6 +1402,39 @@ def CC(re=BigRational(),im=BigRational()):
         c = BigComplex(re,im);
     return RingElem(c);
 
+def CR(re=BigRational(),im=BigRational(),ring=None):
+    '''Create JAS generic Complex as ring element.
+    '''
+    if re == 0:
+        re = BigRational();
+    if im == 0:
+        im = BigRational();
+    if isinstance(re,PyTuple) or isinstance(re,PyList):
+        if isinstance(re[0],PyTuple) or isinstance(re[0],PyList):
+            if len(re) > 1:
+                im = QQ( re[1] );
+            re = QQ( re[0] );
+        else:
+            re = QQ(re);
+#        re = makeJasArith( re );
+    if isinstance(im,PyTuple) or isinstance(im,PyList):
+        im = QQ( im );
+#        im = makeJasArith( im );
+    if isinstance(re,RingElem):
+        re = re.elem;
+    if isinstance(im,RingElem):
+        im = im.elem;
+    if ring == None:
+        ring = re.factory();
+    r = ComplexRing(ring);
+    if im.isZERO():
+        if re.isZERO():
+            c = Complex(r);
+        else:
+            c = Complex(r,re);
+    else:
+        c = BigComplex(r,re,im);
+    return RingElem(c);
 
 def DD(d=0):
     '''Create JAS BigDecimal as ring element.
