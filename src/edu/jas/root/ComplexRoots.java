@@ -22,9 +22,9 @@ public interface ComplexRoots<C extends RingElem<C>> {
 
 
     /**
-     * Root bound. With f(M) * f(-M) != 0.
+     * Root bound. With f(-M + i M) * f(-M - i M) * f(M - i M) * f(M + i M) != 0.
      * @param f univariate polynomial.
-     * @return M such that -M &lt; root(f) &lt; M.
+     * @return M such that root(f) is contained in the rectangle spanned by M.
      */
     public Complex<C> rootBound(GenPolynomial<Complex<C>> f);
 

@@ -249,6 +249,16 @@ public class DistHashTableServer<K> extends Thread {
         }
     }
 
+
+    /**
+     * toString.
+     * @return a string representation of this.
+     */
+    @Override
+    public String toString() {
+        return "DHTServer(" + servers.size() + ", " + cf + ", " + super.toString() + ")";
+    }
+
 }
 
 

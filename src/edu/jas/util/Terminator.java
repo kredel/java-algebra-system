@@ -43,6 +43,15 @@ public class Terminator {
 
 
     /**
+     * to string
+     */
+    @Override
+    public String toString() {
+        return "Terminator(workers=" + workers + ",idler=" + idler + ")";
+    }
+
+
+    /**
      * beIdle.
      * Checks for release().
      */
@@ -127,12 +136,12 @@ public class Terminator {
      * Release if possible.
      */
     public synchronized void release() {
-        logger.info("release, workers = " + workers);
+        logger.info("release = " + this);
         if ( idler >= workers ) {
             fin.release(); //fin.V();
             //idler++; ??
         }
-        logger.info("release, idler = " + idler);
+        //logger.info("release, idler = " + idler);
     }
 
 
@@ -145,7 +154,7 @@ public class Terminator {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
-        logger.debug("done, idler = " + idler);
+        logger.info("waitDone " + this);
     }
 
 }

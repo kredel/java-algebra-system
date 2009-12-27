@@ -260,14 +260,19 @@ public class TaggedSocketChannel extends Thread {
                     }
                     synchronized (queues) { // deliver to all queues
                         isRunning = false;
-                        Exception e = new IllegalArgumentException("no tagged message and no exception " +r);
+                        Exception e;
+                           if ( r.equals(DONE) ) {
+                               e = new Exception("DONE message");
+                           } else {
+                               e = new IllegalArgumentException("no tagged message and no exception '" + r + "'");
+                           }
                         for ( BlockingQueue q : queues.values() ) {
                             final int bc = blockedCount.get();
                             for ( int i = 0; i <= bc; i++ ) { // one more
                                 q.put(e);
                             }
                             if (bc > 0) {
-                                logger.info("put unknown to queue, blockedCount = " + bc);
+                                logger.info("put '" + e.toString() + "' to queue, blockedCount = " + bc);
                             }
                         }
                         queues.notifyAll();
@@ -317,7 +322,7 @@ public class TaggedSocketChannel extends Thread {
                             q.put(e);
                         }
                         if (bc > 0) {
-                            logger.info("put interrupted to queue, blockCount = " + bc);
+                            logger.info("put terminating via interrupt to queue, blockCount = " + bc);
                         }
                     } catch (InterruptedException ignored) {
                     }

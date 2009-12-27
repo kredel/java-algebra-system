@@ -50,7 +50,7 @@ public class ThreadPool {
 
 
     private static final Logger logger = Logger.getLogger(ThreadPool.class);
-    //private static boolean debug = logger.isDebugEnabled();
+    private static boolean debug = logger.isDebugEnabled();
 
 
    /**
@@ -97,6 +97,9 @@ public class ThreadPool {
             workers[i].start();
         }
         logger.info("size = " + size + ", strategy = " + strategy);
+        if ( debug ) {
+            Thread.currentThread().dumpStack();
+        }
 //         if ( size == 1 ) {
 //             throw new RuntimeException("pool with one thread?");
 //         }
