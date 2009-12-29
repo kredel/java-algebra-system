@@ -286,8 +286,8 @@ public class ModLongTest extends TestCase {
         assertEquals("cra(a mod 19,a mod 13) = a", a, e);
 
 
-        java.math.BigInteger p1 = getPrime1();
-        java.math.BigInteger p2 = getPrime2();
+        java.math.BigInteger p1 = getPrime2();
+        java.math.BigInteger p2 = new java.math.BigInteger("19"); //getPrime1();
         java.math.BigInteger p1p2 = p1.multiply(p2);
         //System.out.println("p1p2 = " + p1p2);
         //System.out.println("prime p1 ? = " + p1.isProbablePrime(66));

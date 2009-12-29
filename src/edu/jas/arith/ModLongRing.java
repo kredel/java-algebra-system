@@ -411,7 +411,7 @@ public final class ModLongRing implements ModularRingFactory<ModLong> {
     public ModLong chineseRemainder(ModLong c, ModLong ci, ModLong a) {
         if (true) { // debug
             if (c.ring.modul < a.ring.modul) {
-                System.out.println("ModLong error " + c + ", " + a);
+                System.out.println("ModLong error " + c.ring + ", " + a.ring);
             }
         }
         ModLong b = a.ring.fromInteger(c.val); // c mod a.modul

@@ -15,6 +15,7 @@ import edu.jas.application.Quotient;
 import edu.jas.application.QuotientRing;
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
+import edu.jas.arith.Modular;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
 import edu.jas.kern.ComputerThreads;
@@ -23,6 +24,7 @@ import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.TermOrder;
+import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
 
 
@@ -166,7 +168,7 @@ public class FactorMoreTest extends TestCase {
      * Test integer integral function factorization.
      * 
      */
-    public void testIntegerIntegralFunctionFactorization() {
+    public <MOD extends GcdRingElem<MOD> & Modular> void testIntegerIntegralFunctionFactorization() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(1);
@@ -174,7 +176,7 @@ public class FactorMoreTest extends TestCase {
         GenPolynomialRing<BigInteger> pfac = new GenPolynomialRing<BigInteger>(cfac, 1, to, qvars);
         GenPolynomial<BigInteger> t = pfac.univariate(0);
 
-        FactorAbstract<BigInteger> fac = new FactorInteger();
+        FactorAbstract<BigInteger> fac = new FactorInteger<MOD>();
 
         String[] vars = new String[] { "x" };
         GenPolynomialRing<GenPolynomial<BigInteger>> pqfac = new GenPolynomialRing<GenPolynomial<BigInteger>>(
