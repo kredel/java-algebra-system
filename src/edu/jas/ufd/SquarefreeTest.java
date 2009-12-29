@@ -26,7 +26,7 @@ import edu.jas.structure.RingFactory;
 
 
 /**
- * Squarefree Factor tests with JUnit.
+ * Squarefree Factory tests with JUnit.
  * @author Heinz Kredel.
  */
 
@@ -136,7 +136,7 @@ public class SquarefreeTest extends TestCase {
         assertTrue("sqf != Modular " + sqfm, sqfm instanceof SquarefreeFiniteFieldCharP);
 
         ModLongRing ml = new ModLongRing(19, true);
-        Squarefree<ModLong> sqfml = SquarefreeFactory.getImplementation((RingFactory)ml);
+        Squarefree<ModLong> sqfml = SquarefreeFactory.getImplementation((RingFactory) ml);
         //System.out.println("sqfml = " + sqfml);
         assertTrue("sqf != Modular " + sqfml, sqfml instanceof SquarefreeFiniteFieldCharP);
 

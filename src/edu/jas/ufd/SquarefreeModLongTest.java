@@ -521,7 +521,8 @@ public class SquarefreeModLongTest extends TestCase {
         //System.out.println("cr = " + cr);
 
         // a a b^p c
-        dr = ar.multiply(ar).multiply(Power.<GenPolynomial<GenPolynomial<ModLong>>> positivePower(br, p)).multiply(cr);
+        dr = ar.multiply(ar).multiply(Power.<GenPolynomial<GenPolynomial<ModLong>>> positivePower(br, p))
+                .multiply(cr);
         //System.out.println("dr  = " + dr);
 
         SortedMap<GenPolynomial<GenPolynomial<ModLong>>, Long> sfactors;

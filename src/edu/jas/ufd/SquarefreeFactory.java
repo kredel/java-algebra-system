@@ -17,7 +17,6 @@ import edu.jas.arith.ModLong;
 import edu.jas.arith.ModLongRing;
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
-import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
@@ -41,8 +40,7 @@ import edu.jas.structure.RingFactory;
  * c = engine.squarefreeFactors(a);
  * </pre>
  * 
- * For example, if the coefficient type is BigInteger, the usage looks
- *        like
+ * For example, if the coefficient type is BigInteger, the usage looks like
  * 
  * <pre>
  * BigInteger cofac = new BigInteger();
@@ -154,10 +152,9 @@ public class SquarefreeFactory {
      * @param <C> coefficient type, e.g. BigRational, ModInteger.
      * @return squarefree factorization algorithm implementation.
      */
-    public static <C extends GcdRingElem<C>> 
-           SquarefreeAbstract<C> getImplementation( GenPolynomialRing<C> fac) {
+    public static <C extends GcdRingElem<C>> SquarefreeAbstract<C> getImplementation(GenPolynomialRing<C> fac) {
         if (fac.characteristic().signum() == 0) {
-            if ( fac.coFac.isField() ) {
+            if (fac.coFac.isField()) {
                 return new SquarefreeFieldChar0<C>(fac.coFac);
             } else {
                 return new SquarefreeRingChar0<C>(fac.coFac);
@@ -269,7 +266,7 @@ public class SquarefreeFactory {
         }
         if (t == 8) { // GenPolynomial
             if (pfac.characteristic().signum() == 0) {
-                if ( pfac.coFac.isField() ) {
+                if (pfac.coFac.isField()) {
                     ufd = new SquarefreeFieldChar0/*raw <C>*/(pfac.coFac);
                 } else {
                     ufd = new SquarefreeRingChar0/*raw <C>*/(pfac.coFac);
@@ -280,7 +277,7 @@ public class SquarefreeFactory {
             }
         }
         if (t == 9) { // other fields of char 0
-            if ( fac.characteristic().signum() == 0 ) {
+            if (fac.characteristic().signum() == 0) {
                 ufd = new SquarefreeFieldChar0/*raw*/(fac);
             }
         }

@@ -12,6 +12,7 @@ package edu.jas.arith;
 
 public interface Modular {
 
+
     /**
      * Return a BigInteger from this Element.
      * @return a BigInteger of this.
