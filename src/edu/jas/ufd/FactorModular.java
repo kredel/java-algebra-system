@@ -17,10 +17,15 @@ import org.apache.log4j.Logger;
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
+import edu.jas.arith.ModLong;
+import edu.jas.arith.ModLongRing;
+import edu.jas.arith.Modular;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.structure.Power;
+import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
+import edu.jas.structure.ModularRingFactory;
 
 
 /**
@@ -29,7 +34,7 @@ import edu.jas.structure.RingFactory;
  * @author Heinz Kredel
  */
 
-public class FactorModular extends FactorAbsolute<ModInteger> {
+public class FactorModular<MOD extends GcdRingElem<MOD> & Modular> extends FactorAbsolute<MOD> {
 
 
     private static final Logger logger = Logger.getLogger(FactorModular.class);
@@ -39,10 +44,10 @@ public class FactorModular extends FactorAbsolute<ModInteger> {
 
 
     /**
-     * No argument constructor.
+     * No argument constructor, do not use. 
      */
-    public FactorModular() {
-        this( new ModIntegerRing(13,true) ); // hack, 13 unimportant
+    private FactorModular() {
+        this( (RingFactory<MOD>) (Object) new ModLongRing(13,true) ); // hack, 13 unimportant
     }
 
 
@@ -50,7 +55,7 @@ public class FactorModular extends FactorAbsolute<ModInteger> {
      * Constructor. 
      * @param cfac coefficient ring factory.
      */
-    public FactorModular(RingFactory<ModInteger> cfac) {
+    public FactorModular(RingFactory<MOD> cfac) {
         super(cfac);
     }
 
@@ -61,29 +66,30 @@ public class FactorModular extends FactorAbsolute<ModInteger> {
      * @return [e_1 -&gt; p_1, ..., e_k -&gt; p_k] with P = prod_{i=1,...,k} p_i and
      *         p_i has only irreducible factors of degree e_i.
      */
-    public SortedMap<Long, GenPolynomial<ModInteger>> baseDistinctDegreeFactors(GenPolynomial<ModInteger> P) {
+    public SortedMap<Long, GenPolynomial<MOD>> baseDistinctDegreeFactors(GenPolynomial<MOD> P) {
         if (P == null) {
             throw new RuntimeException(this.getClass().getName() + " P != null");
         }
-        SortedMap<Long, GenPolynomial<ModInteger>> facs = new TreeMap<Long, GenPolynomial<ModInteger>>();
+        SortedMap<Long, GenPolynomial<MOD>> facs = new TreeMap<Long, GenPolynomial<MOD>>();
         if (P.isZERO()) {
             return facs;
         }
-        GenPolynomialRing<ModInteger> pfac = P.ring;
+        GenPolynomialRing<MOD> pfac = P.ring;
         if (pfac.nvar > 1) {
             throw new RuntimeException(this.getClass().getName() + " only for univariate polynomials");
         }
-        ModIntegerRing mr = (ModIntegerRing) pfac.coFac;
-        java.math.BigInteger m = mr.modul;
+        ModularRingFactory<MOD> mr = (ModularRingFactory<MOD>) pfac.coFac;
+        java.math.BigInteger m = mr.getIntegerModul().getVal();
         if (m.longValue() == 2L) {
-            throw new RuntimeException(this.getClass().getName() + " case p = 2 not implemented");
+            //throw new RuntimeException(this.getClass().getName() + " case p = 2 not implemented");
+            logger.warn(this.getClass().getName() + " case p = 2 not implemented");
         }
-        GenPolynomial<ModInteger> x = pfac.univariate(0);
-        GenPolynomial<ModInteger> h = x;
-        GenPolynomial<ModInteger> f = P;
-        GenPolynomial<ModInteger> g;
-        GreatestCommonDivisor<ModInteger> engine = GCDFactory.<ModInteger> getImplementation(pfac.coFac);
-        Power<GenPolynomial<ModInteger>> pow = new Power<GenPolynomial<ModInteger>>(pfac);
+        GenPolynomial<MOD> x = pfac.univariate(0);
+        GenPolynomial<MOD> h = x;
+        GenPolynomial<MOD> f = P;
+        GenPolynomial<MOD> g;
+        //GreatestCommonDivisor<MOD> engine = GCDFactory.<MOD> getImplementation(pfac.coFac);
+        Power<GenPolynomial<MOD>> pow = new Power<GenPolynomial<MOD>>(pfac);
         long d = 0;
         while (d + 1 <= f.degree(0) / 2) {
             d++;
@@ -108,35 +114,36 @@ public class FactorModular extends FactorAbsolute<ModInteger> {
      * @param deg such that P has only irreducible factors of degree deg.
      * @return [p_1,...,p_k] with P = prod_{i=1,...,r} p_i.
      */
-    public List<GenPolynomial<ModInteger>> baseEqualDegreeFactors(GenPolynomial<ModInteger> P, long deg) {
+    public List<GenPolynomial<MOD>> baseEqualDegreeFactors(GenPolynomial<MOD> P, long deg) {
         if (P == null) {
             throw new RuntimeException(this.getClass().getName() + " P != null");
         }
-        List<GenPolynomial<ModInteger>> facs = new ArrayList<GenPolynomial<ModInteger>>();
+        List<GenPolynomial<MOD>> facs = new ArrayList<GenPolynomial<MOD>>();
         if (P.isZERO()) {
             return facs;
         }
-        GenPolynomialRing<ModInteger> pfac = P.ring;
+        GenPolynomialRing<MOD> pfac = P.ring;
         if (pfac.nvar > 1) {
-            throw new RuntimeException(this.getClass().getName() + " only for univariate polynomials");
+            //throw new RuntimeException(this.getClass().getName() + " only for univariate polynomials");
+            logger.warn(this.getClass().getName() + " case p = 2 not implemented");
         }
         if (P.degree(0) == deg) {
             facs.add(P);
             return facs;
         }
-        ModIntegerRing mr = (ModIntegerRing) pfac.coFac;
-        java.math.BigInteger m = mr.modul;
+        ModularRingFactory<MOD> mr = (ModularRingFactory<MOD>) pfac.coFac;
+        java.math.BigInteger m = mr.getIntegerModul().getVal();
         //System.out.println("m = " + m);
         if (m.equals(java.math.BigInteger.valueOf(2L))) {
             throw new RuntimeException(this.getClass().getName() + " case p = 2 not implemented");
         }
-        GenPolynomial<ModInteger> one = pfac.getONE();
-        GenPolynomial<ModInteger> r;
-        GenPolynomial<ModInteger> h;
-        GenPolynomial<ModInteger> f = P;
-        GreatestCommonDivisor<ModInteger> engine = GCDFactory.<ModInteger> getImplementation(pfac.coFac);
-        Power<GenPolynomial<ModInteger>> pow = new Power<GenPolynomial<ModInteger>>(pfac);
-        GenPolynomial<ModInteger> g = null;
+        GenPolynomial<MOD> one = pfac.getONE();
+        GenPolynomial<MOD> r;
+        GenPolynomial<MOD> h;
+        GenPolynomial<MOD> f = P;
+        //GreatestCommonDivisor<MOD> engine = GCDFactory.<MOD> getImplementation(pfac.coFac);
+        Power<GenPolynomial<MOD>> pow = new Power<GenPolynomial<MOD>>(pfac);
+        GenPolynomial<MOD> g = null;
         int degi = (int) deg; //f.degree(0);
         //System.out.println("deg = " + deg);
         BigInteger di = Power.<BigInteger> positivePower(new BigInteger(m), deg);
@@ -169,11 +176,11 @@ public class FactorModular extends FactorAbsolute<ModInteger> {
      * @return [p_1,...,p_k] with P = prod_{i=1,...,r} p_i.
      */
     @Override
-    public List<GenPolynomial<ModInteger>> baseFactorsSquarefree(GenPolynomial<ModInteger> P) {
+    public List<GenPolynomial<MOD>> baseFactorsSquarefree(GenPolynomial<MOD> P) {
         if (P == null) {
             throw new RuntimeException(this.getClass().getName() + " P == null");
         }
-        List<GenPolynomial<ModInteger>> factors = new ArrayList<GenPolynomial<ModInteger>>();
+        List<GenPolynomial<MOD>> factors = new ArrayList<GenPolynomial<MOD>>();
         if (P.isZERO()) {
             return factors;
         }
@@ -181,21 +188,21 @@ public class FactorModular extends FactorAbsolute<ModInteger> {
             factors.add(P);
             return factors;
         }
-        GenPolynomialRing<ModInteger> pfac = P.ring;
+        GenPolynomialRing<MOD> pfac = P.ring;
         if (pfac.nvar > 1) {
             throw new RuntimeException(this.getClass().getName() + " only for univariate polynomials");
         }
         if (!P.leadingBaseCoefficient().isONE()) {
             throw new RuntimeException("ldcf(P) != 1: " + P);
         }
-        SortedMap<Long, GenPolynomial<ModInteger>> dfacs = baseDistinctDegreeFactors(P);
+        SortedMap<Long, GenPolynomial<MOD>> dfacs = baseDistinctDegreeFactors(P);
         if ( debug ) {
             logger.info("dfacs    = " + dfacs);
             //System.out.println("dfacs    = " + dfacs);
         }
         for (Long e : dfacs.keySet()) {
-            GenPolynomial<ModInteger> f = dfacs.get(e);
-            List<GenPolynomial<ModInteger>> efacs = baseEqualDegreeFactors(f, e);
+            GenPolynomial<MOD> f = dfacs.get(e);
+            List<GenPolynomial<MOD>> efacs = baseEqualDegreeFactors(f, e);
             if ( debug ) {
                logger.info("efacs " + e + "   = " + efacs);
                //System.out.println("efacs " + e + "   = " + efacs);
@@ -203,7 +210,7 @@ public class FactorModular extends FactorAbsolute<ModInteger> {
             factors.addAll(efacs);
         }
         //System.out.println("factors  = " + factors);
-        SortedSet<GenPolynomial<ModInteger>> ss = new TreeSet<GenPolynomial<ModInteger>>(factors);
+        SortedSet<GenPolynomial<MOD>> ss = new TreeSet<GenPolynomial<MOD>>(factors);
         //System.out.println("sorted   = " + ss);
         factors.clear();
         factors.addAll(ss);

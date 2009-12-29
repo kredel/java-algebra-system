@@ -8,6 +8,8 @@ package edu.jas.ufd;
 import java.util.SortedMap;
 import java.util.List;
 
+import org.apache.log4j.BasicConfigurator;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -16,6 +18,9 @@ import edu.jas.application.Quotient;
 import edu.jas.application.QuotientRing;
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
+import edu.jas.arith.Modular;
+import edu.jas.arith.ModLong;
+import edu.jas.arith.ModLongRing;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
 import edu.jas.arith.PrimeList;
@@ -25,6 +30,7 @@ import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.TermOrder;
+import edu.jas.structure.GcdRingElem;
 
 
 /**
@@ -92,218 +98,6 @@ public class FactorTest extends TestCase {
      * 
      */
     public void testDummy() {
-    }
-
-
-    /**
-     * Test modular factorization.
-     * 
-     */
-    public void xtestModularFactorization() {
-
-        PrimeList pl = new PrimeList(PrimeList.Range.medium);
-        TermOrder to = new TermOrder(TermOrder.INVLEX);
-        ModIntegerRing cfac = new ModIntegerRing(pl.get(3));
-        //System.out.println("cfac = " + cfac);
-        GenPolynomialRing<ModInteger> pfac = new GenPolynomialRing<ModInteger>(cfac, 1, to);
-        FactorModular fac = new FactorModular();
-
-        for (int i = 1; i < 4; i++) {
-            int facs = 0;
-            GenPolynomial<ModInteger> a = null; //pfac.random(kl,ll*(i+1),el*(i+1),q);
-            GenPolynomial<ModInteger> b = pfac.random(kl, ll * (i + 1), el * (i + 1), q);
-            GenPolynomial<ModInteger> c = pfac.random(kl, ll * (i + 1), el * (i + 1), q);
-            if (b.isZERO() || c.isZERO()) {
-                continue;
-            }
-            if (c.degree() > 0) {
-                facs++;
-            }
-            if (b.degree() > 0) {
-                facs++;
-            }
-            a = c.multiply(b);
-            if (a.isConstant()) {
-                continue;
-            }
-            a = a.monic();
-            //System.out.println("\na = " + a);
-            //System.out.println("b = " + b);
-            //System.out.println("c = " + c);
-
-            SortedMap<GenPolynomial<ModInteger>, Long> sm = fac.baseFactors(a);
-            //System.out.println("sm = " + sm);
-
-            if (sm.size() >= facs) {
-                assertTrue("#facs < " + facs, sm.size() >= facs);
-            } else {
-                long sf = 0;
-                for (Long e : sm.values()) {
-                    sf += e;
-                }
-                assertTrue("#facs < " + facs, sf >= facs);
-            }
-
-            boolean t = fac.isFactorization(a, sm);
-            //System.out.println("t        = " + t);
-            assertTrue("prod(factor(a)) = a", t);
-        }
-    }
-
-
-    /**
-     * Test multivariate modular factorization.
-     * 
-     */
-    public void xtestMultivariateModularFactorization() {
-
-        PrimeList pl = new PrimeList(PrimeList.Range.small);
-        TermOrder to = new TermOrder(TermOrder.INVLEX);
-        ModIntegerRing cfac = new ModIntegerRing(13); // pl.get(3), 7, 11, 13
-        GenPolynomialRing<ModInteger> pfac = new GenPolynomialRing<ModInteger>(cfac, rl, to);
-        FactorModular fac = new FactorModular();
-
-        for (int i = 1; i < 2; i++) {
-            int facs = 0;
-            GenPolynomial<ModInteger> a = null; //pfac.random(kl,ll*(i+1),el,q);
-            GenPolynomial<ModInteger> b = pfac.random(kl, 2, el, q);
-            GenPolynomial<ModInteger> c = pfac.random(kl, 2, el, q);
-            if (b.isZERO() || c.isZERO()) {
-                continue;
-            }
-            if (c.degree() > 0) {
-                facs++;
-            }
-            if (b.degree() > 0) {
-                facs++;
-            }
-            a = c.multiply(b);
-            if (a.isConstant()) {
-                continue;
-            }
-            //a = a.monic();
-            //System.out.println("\na = " + a);
-            //System.out.println("b = " + b);
-            //System.out.println("c = " + c);
-
-            SortedMap<GenPolynomial<ModInteger>, Long> sm = fac.factors(a);
-            //System.out.println("sm = " + sm);
-
-            if (sm.size() >= facs) {
-                assertTrue("#facs < " + facs, sm.size() >= facs);
-            } else {
-                long sf = 0;
-                for (Long e : sm.values()) {
-                    sf += e;
-                }
-                assertTrue("#facs < " + facs, sf >= facs);
-            }
-
-            boolean t = fac.isFactorization(a, sm);
-            //System.out.println("t        = " + t);
-            assertTrue("prod(factor(a)) = a", t);
-        }
-    }
-
-
-    /**
-     * Test integer factorization.
-     * 
-     */
-    public void xtestIntegerFactorization() {
-
-        TermOrder to = new TermOrder(TermOrder.INVLEX);
-        BigInteger cfac = new BigInteger(4);
-        BigInteger one = cfac.getONE();
-        GenPolynomialRing<BigInteger> pfac = new GenPolynomialRing<BigInteger>(cfac, 1, to);
-        FactorInteger fac = new FactorInteger();
-
-        for (int i = 1; i < 3; i++) {
-            int facs = 0;
-            GenPolynomial<BigInteger> a = null; //pfac.random(kl,ll*(i+1),el*(i+1),q);
-            GenPolynomial<BigInteger> b = pfac.random(kl * 2, ll * (i), el * (i + 1), q);
-            GenPolynomial<BigInteger> c = pfac.random(kl, ll * (i), el * (i + 2), q);
-            if (b.isZERO() || c.isZERO()) {
-                continue;
-            }
-            if (c.degree() > 0) {
-                facs++;
-            }
-            if (b.degree() > 0) {
-                facs++;
-            }
-            //             if (!c.leadingBaseCoefficient().isUnit()) {
-            //                 ExpVector e = c.leadingExpVector();
-            //                 c.doPutToMap(e, one);
-            //             }
-            //             if (!b.leadingBaseCoefficient().isUnit()) {
-            //                 ExpVector e = b.leadingExpVector();
-            //                 b.doPutToMap(e, one);
-            //             }
-            a = c.multiply(b);
-            if (a.isConstant()) {
-                continue;
-            }
-            GreatestCommonDivisorAbstract<BigInteger> engine = GCDFactory.getProxy(cfac);
-            //a = engine.basePrimitivePart(a);
-            // a = a.abs();
-            //System.out.println("\na = " + a);
-            //System.out.println("b = " + b);
-            //System.out.println("c = " + c);
-
-            SortedMap<GenPolynomial<BigInteger>, Long> sm = fac.baseFactors(a);
-            //             System.out.println("\na   = " + a);
-            //             System.out.println("b   = " + b);
-            //             System.out.println("c   = " + c);
-            //             System.out.println("sm = " + sm);
-
-            if (sm.size() >= facs) {
-                assertTrue("#facs < " + facs, sm.size() >= facs);
-            } else {
-                long sf = 0;
-                for (Long e : sm.values()) {
-                    sf += e;
-                }
-                assertTrue("#facs < " + facs, sf >= facs);
-            }
-
-            boolean t = fac.isFactorization(a, sm);
-            //System.out.println("t        = " + t);
-            assertTrue("prod(factor(a)) = a", t);
-        }
-    }
-
-
-    /**
-     * Test multivariate integer factorization.
-     * 
-     */
-    public void ytestMultivariateIntegerFactorization() {
-
-        TermOrder to = new TermOrder(TermOrder.INVLEX);
-        BigInteger cfac = new BigInteger(1);
-        GenPolynomialRing<BigInteger> pfac = new GenPolynomialRing<BigInteger>(cfac, 2, to);
-        FactorInteger fac = new FactorInteger();
-
-        for (int i = 1; i < 2; i++) {
-            GenPolynomial<BigInteger> b = pfac.random(kl, 3, el, q / 2.0f);
-            GenPolynomial<BigInteger> c = pfac.random(kl, 2, el, q);
-            GenPolynomial<BigInteger> a;
-            //             if ( !a.leadingBaseCoefficient().isUnit()) {
-            //                 //continue;
-            //                 //ExpVector e = a.leadingExpVector();
-            //                 //a.doPutToMap(e,cfac.getONE());
-            //             }
-            a = b.multiply(c);
-            //System.out.println("\na = " + a);
-
-            SortedMap<GenPolynomial<BigInteger>, Long> sm = fac.factors(a);
-            //System.out.println("sm = " + sm);
-
-            boolean t = fac.isFactorization(a, sm);
-            //System.out.println("t        = " + t);
-            assertTrue("prod(factor(a)) = a", t);
-        }
     }
 
 
@@ -475,7 +269,7 @@ public class FactorTest extends TestCase {
         GenPolynomial<ModInteger> agen = pfac.univariate(0, 4);
         agen = agen.sum(pfac.fromInteger(1)); // x^4 + 1
 
-        FactorModular engine = new FactorModular();
+        FactorModular<ModInteger> engine = new FactorModular<ModInteger>(cfac);
 
         FactorsMap<ModInteger> F
         //= engine.baseFactorsAbsoluteSquarefree(agen);
@@ -524,11 +318,16 @@ public class FactorTest extends TestCase {
      * Test factory.
      * 
      */
-    public void xtestFactory() {
+    public void testFactory() {
         ModIntegerRing mi = new ModIntegerRing(19, true);
         Factorization<ModInteger> ufdm = FactorFactory.getImplementation(mi);
         //System.out.println("ufdm = " + ufdm);
         assertTrue("ufd != Modular " + ufdm, ufdm instanceof FactorModular);
+
+        ModLongRing ml = new ModLongRing(19, true);
+        Factorization<ModLong> ufdml = FactorFactory.getImplementation(ml);
+        //System.out.println("ufdml = " + ufdml);
+        assertTrue("ufd != Modular " + ufdml, ufdml instanceof FactorModular);
 
         BigInteger bi = new BigInteger(1);
         Factorization<BigInteger> ufdi = FactorFactory.getImplementation(bi);
@@ -566,7 +365,7 @@ public class FactorTest extends TestCase {
      * Test rational absolute factorization, Rothstein-Trager step.
      * 
      */
-    public void testBaseRationalAbsoluteFactorizationRoT() {
+    public void xtestBaseRationalAbsoluteFactorizationRoT() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigRational cfac = new BigRational(1);

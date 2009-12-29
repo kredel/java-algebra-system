@@ -13,6 +13,8 @@ import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
+import edu.jas.arith.ModLong;
+import edu.jas.arith.ModLongRing;
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.GenPolynomial;
@@ -73,7 +75,18 @@ public class FactorFactory {
      * @return factorization algorithm implementation.
      */
     public static FactorAbstract<ModInteger> getImplementation(ModIntegerRing fac) {
-        return new FactorModular();
+        return new FactorModular<ModInteger>(fac);
+    }
+
+
+    /**
+     * Determine suitable implementation of factorization algorithm, case
+     * ModInteger.
+     * @param fac ModIntegerRing.
+     * @return factorization algorithm implementation.
+     */
+    public static FactorAbstract<ModLong> getImplementation(ModLongRing fac) {
+        return new FactorModular<ModLong>(fac);
     }
 
 
@@ -106,8 +119,8 @@ public class FactorFactory {
      * @param <C> coefficient type, e.g. BigRational, ModInteger.
      * @return factorization algorithm implementation.
      */
-    public static <C extends GcdRingElem<C>> FactorAbstract<AlgebraicNumber<C>> getImplementation(
-            AlgebraicNumberRing<C> fac) {
+    public static <C extends GcdRingElem<C>> 
+        FactorAbstract<AlgebraicNumber<C>> getImplementation(AlgebraicNumberRing<C> fac) {
         return new FactorAlgebraic<C>(fac);
     }
 
@@ -166,6 +179,10 @@ public class FactorFactory {
                 t = 3;
                 break;
             }
+            if (ofac instanceof ModLongRing) {
+                t = 9;
+                break;
+            }
             if (ofac instanceof AlgebraicNumberRing) {
                 //System.out.println("afac_o = " + ofac);
                 afac = (AlgebraicNumberRing) ofac;
@@ -178,6 +195,9 @@ public class FactorFactory {
                 }
                 if (ofac instanceof AlgebraicNumberRing) {
                     t = 6;
+                }
+                if (ofac instanceof ModLongRing) {
+                    t = 10;
                 }
                 break;
             }
@@ -206,9 +226,12 @@ public class FactorFactory {
             ufd = new FactorRational();
         }
         if (t == 3) {
-            ufd = new FactorModular();
+            ufd = new FactorModular(fac);
         }
-        if (t == 4 || t == 5 || t == 6) {
+        if (t == 9) {
+            ufd = new FactorModular(fac);
+        }
+        if (t == 4 || t == 5 || t == 6 || t == 10) {
             ufd = new FactorAlgebraic/*raw <C>*/(afac);
         }
         if (t == 7) {

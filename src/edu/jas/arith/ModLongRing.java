@@ -49,8 +49,8 @@ public final class ModLongRing implements ModularRingFactory<ModLong> {
     /**
      * maximal representable integer.
      */
-    public final static java.math.BigInteger MAX_LONG = new java.math.BigInteger(String
-            .valueOf(Long.MAX_VALUE));
+    public final static java.math.BigInteger MAX_LONG 
+        = new java.math.BigInteger(String.valueOf(Integer.MAX_VALUE)); // not larger!
 
 
     /**
@@ -104,6 +104,7 @@ public final class ModLongRing implements ModularRingFactory<ModLong> {
     public ModLongRing(java.math.BigInteger m) {
         this(m.longValue());
         if (MAX_LONG.compareTo(m) <= 0) { // m >= max
+            System.out.println("modul to large for long " + m + ",max=" + MAX_LONG);
             throw new RuntimeException("modul to large for long " + m);
         }
     }
@@ -118,6 +119,7 @@ public final class ModLongRing implements ModularRingFactory<ModLong> {
     public ModLongRing(java.math.BigInteger m, boolean isField) {
         this(m.longValue(), isField);
         if (MAX_LONG.compareTo(m) <= 0) { // m >= max
+            System.out.println("modul to large for long " + m + ",max=" + MAX_LONG);
             throw new RuntimeException("modul to large for long " + m);
         }
     }
@@ -316,7 +318,7 @@ public final class ModLongRing implements ModularRingFactory<ModLong> {
      */
     @Override
     public String toString() {
-        return " mod(" + modul + ")";
+        return " mod(" + modul + ",max="  + MAX_LONG + ")";
     }
 
 

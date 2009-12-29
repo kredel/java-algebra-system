@@ -257,7 +257,7 @@ public final class ModIntegerRing implements ModularRingFactory<ModInteger> {
      */
     @Override
     public String toString() {
-        return " mod(" + modul.toString() + ")";
+        return " bigMod(" + modul.toString() + ")";
     }
 
 

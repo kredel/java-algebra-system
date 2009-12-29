@@ -14,12 +14,17 @@ import org.apache.log4j.Logger;
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
+import edu.jas.arith.Modular;
+import edu.jas.arith.ModLong;
+import edu.jas.arith.ModLongRing;
 import edu.jas.arith.PrimeList;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.structure.RingFactory;
+import edu.jas.structure.ModularRingFactory;
+import edu.jas.structure.GcdRingElem;
 import edu.jas.util.KsubSet;
 
 
@@ -29,7 +34,7 @@ import edu.jas.util.KsubSet;
  * @author Heinz Kredel
  */
 
-public class FactorInteger extends FactorAbstract<BigInteger> {
+public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends FactorAbstract<BigInteger> {
 
 
     private static final Logger logger = Logger.getLogger(FactorInteger.class);
@@ -41,12 +46,12 @@ public class FactorInteger extends FactorAbstract<BigInteger> {
     /**
      * Factorization engine for modular base coefficients.
      */
-    protected final FactorAbstract<ModInteger> mfactor;
+    protected final FactorAbstract<MOD> mfactor;
 
     /**
      * Gcd engine for modular base coefficients.
      */
-    protected final GreatestCommonDivisorAbstract<ModInteger> mengine;
+    protected final GreatestCommonDivisorAbstract<MOD> mengine;
 
 
     /**
@@ -63,7 +68,7 @@ public class FactorInteger extends FactorAbstract<BigInteger> {
      */
     public FactorInteger(RingFactory<BigInteger> cfac) {
         super(cfac);
-        RingFactory<ModInteger> mcofac = new ModIntegerRing(13, true); // hack
+        ModularRingFactory<MOD> mcofac = (ModularRingFactory<MOD>) (Object) new ModLongRing(13, true); // hack
         mfactor = FactorFactory.getImplementation(mcofac); //new FactorModular(mcofac);
         mengine = GCDFactory.getImplementation(mcofac);
         //mengine = GCDFactory.getProxy(mcofac);
@@ -105,13 +110,13 @@ public class FactorInteger extends FactorAbstract<BigInteger> {
         //initialize prime list and degree vector
         PrimeList primes = new PrimeList(PrimeList.Range.small);
         int pn = 30; //primes.size();
-        ModIntegerRing cofac = null;
-        GenPolynomial<ModInteger> am = null;
-        GenPolynomialRing<ModInteger> mfac = null;
+        ModularRingFactory<MOD> cofac = null;
+        GenPolynomial<MOD> am = null;
+        GenPolynomialRing<MOD> mfac = null;
         final int TT = 4; // 7
-        List<GenPolynomial<ModInteger>>[] modfac = (List<GenPolynomial<ModInteger>>[]) new List[TT];
+        List<GenPolynomial<MOD>>[] modfac = (List<GenPolynomial<MOD>>[]) new List[TT];
         List<GenPolynomial<BigInteger>>[] intfac = (List<GenPolynomial<BigInteger>>[]) new List[TT];
-        List<GenPolynomial<ModInteger>> mlist = null;
+        List<GenPolynomial<MOD>> mlist = null;
         List<GenPolynomial<BigInteger>> ilist = null;
         int i = 0;
         if (debug) {
@@ -122,7 +127,7 @@ public class FactorInteger extends FactorAbstract<BigInteger> {
         }
         Iterator<java.math.BigInteger> pit = primes.iterator();
         pit.next();
-        ModInteger nf = null;
+        MOD nf = null;
         for (int k = 0; k < TT; k++) {
             if (k == TT - 1) { // -2
                 primes = new PrimeList(PrimeList.Range.medium);
@@ -139,7 +144,12 @@ public class FactorInteger extends FactorAbstract<BigInteger> {
                     logger.error("prime list exhausted, pn = " + pn);
                     throw new RuntimeException("prime list exhausted");
                 }
-                cofac = new ModIntegerRing(p, true);
+                if ( ModLongRing.MAX_LONG.compareTo( p ) > 0 ) {
+                    cofac = (ModularRingFactory) new ModLongRing(p, true);
+                } else {
+                    cofac = (ModularRingFactory) new ModIntegerRing(p, true);
+                }
+                logger.info("prime = " + cofac);
                 nf = cofac.fromInteger(ac.getVal());
                 if (nf.isZERO()) {
                     logger.info("unlucky prime (nf) = " + p);
@@ -147,20 +157,20 @@ public class FactorInteger extends FactorAbstract<BigInteger> {
                     continue;
                 }
                 // initialize polynomial factory and map polynomial
-                mfac = new GenPolynomialRing<ModInteger>(cofac, pfac);
-                am = PolyUtil.<ModInteger> fromIntegerCoefficients(mfac, P);
+                mfac = new GenPolynomialRing<MOD>(cofac, pfac);
+                am = PolyUtil.<MOD> fromIntegerCoefficients(mfac, P);
                 if (!am.degreeVector().equals(degv)) { // allways true
                     logger.info("unlucky prime (deg) = " + p);
                     //System.out.println("unlucky prime (deg) = " + p);
                     continue;
                 }
-                GenPolynomial<ModInteger> ap = PolyUtil.<ModInteger> baseDeriviative(am);
+                GenPolynomial<MOD> ap = PolyUtil.<MOD> baseDeriviative(am);
                 if (ap.isZERO()) {
                     logger.info("unlucky prime (a')= " + p);
                     //System.out.println("unlucky prime (a')= " + p);
                     continue;
                 }
-                GenPolynomial<ModInteger> g = mengine.baseGcd(am, ap);
+                GenPolynomial<MOD> g = mengine.baseGcd(am, ap);
                 if (g.isONE()) {
                     logger.info("**lucky prime = " + p);
                     //System.out.println("**lucky prime = " + p);
@@ -181,7 +191,7 @@ public class FactorInteger extends FactorAbstract<BigInteger> {
                 return factors;
             }
             if (!nf.isONE()) {
-                GenPolynomial<ModInteger> mp = mfac.getONE(); //mlist.get(0);
+                GenPolynomial<MOD> mp = mfac.getONE(); //mlist.get(0);
                 //System.out.println("mp = " + mp);
                 mp = mp.multiply(nf);
                 //System.out.println("mp = " + mp);
@@ -226,7 +236,7 @@ public class FactorInteger extends FactorAbstract<BigInteger> {
         } else {
             // try only shortest factor list
             if ( debug ) {
-                logger.info("lifting from "+ mlist);
+                logger.info("lifting shortest from "+ mlist);
             }
             if ( false && P.leadingBaseCoefficient().isONE()) {
                 factors = searchFactorsMonic(P, M, mlist); // doesn't work
@@ -253,7 +263,7 @@ public class FactorInteger extends FactorAbstract<BigInteger> {
 
 
     /**
-     * Factor search with ModInteger Hensel lifting algorithm. Let p =
+     * Factor search with modular Hensel lifting algorithm. Let p =
      * f_i.ring.coFac.modul() i = 0, ..., n-1 and assume C == prod_{0,...,n-1}
      * f_i mod p with ggt(f_i,f_j) == 1 mod p for i != j
      * @param C GenPolynomial.
@@ -264,7 +274,7 @@ public class FactorInteger extends FactorAbstract<BigInteger> {
      * <b>Note:</b> does not work.
      */
     List<GenPolynomial<BigInteger>> searchFactorsMonic(GenPolynomial<BigInteger> C, BigInteger M,
-                                                       List<GenPolynomial<ModInteger>> F) {
+                                                       List<GenPolynomial<MOD>> F) {
         System.out.println("*** monic factor combination ***");
         if (C == null || C.isZERO() || F == null || F.size() == 0) {
             throw new RuntimeException("C must be nonzero and F must be nonempty");
@@ -274,11 +284,11 @@ public class FactorInteger extends FactorAbstract<BigInteger> {
             throw new RuntimeException("polynomial ring not univariate");
         }
         List<GenPolynomial<BigInteger>> factors = new ArrayList<GenPolynomial<BigInteger>>(F.size());
-        List<GenPolynomial<ModInteger>> mlist = F;
+        List<GenPolynomial<MOD>> mlist = F;
         List<GenPolynomial<BigInteger>> ilist = null;
 
-        //ModInteger nf = null;
-        GenPolynomial<ModInteger> ct = mlist.get(0);
+        //MOD nf = null;
+        GenPolynomial<MOD> ct = mlist.get(0);
         if (ct.isConstant()) {
             //nf = ct.leadingBaseCoefficient();
             mlist.remove(ct);
@@ -293,8 +303,8 @@ public class FactorInteger extends FactorAbstract<BigInteger> {
         GenPolynomial<BigInteger> PP = C, P = C;
         System.out.println("modlist  = " + mlist); // includes not ldcf
         // lift via Hensel
-        //ilist = PolyUfdUtil.liftHenselQuadratic(PP, M, mlist);
-        ilist = PolyUfdUtil.liftHensel(PP, M, mlist);
+        //ilist = PolyUfdUtil.<MOD> liftHenselQuadratic(PP, M, mlist);
+        ilist = PolyUfdUtil.<MOD> liftHensel(PP, M, mlist);
         if (logger.isInfoEnabled()) {
             logger.info("lifted intlist = " + ilist);
         }
@@ -362,7 +372,7 @@ public class FactorInteger extends FactorAbstract<BigInteger> {
 
 
     /**
-     * Factor search with ModInteger Hensel lifting algorithm. Let p =
+     * Factor search with modular Hensel lifting algorithm. Let p =
      * f_i.ring.coFac.modul() i = 0, ..., n-1 and assume C == prod_{0,...,n-1}
      * f_i mod p with ggt(f_i,f_j) == 1 mod p for i != j
      * @param C GenPolynomial.
@@ -372,7 +382,7 @@ public class FactorInteger extends FactorAbstract<BigInteger> {
      *         p**e.
      */
     List<GenPolynomial<BigInteger>> searchFactorsNonMonic(GenPolynomial<BigInteger> C, BigInteger M,
-                                                          List<GenPolynomial<ModInteger>> F) {
+                                                          List<GenPolynomial<MOD>> F) {
         // System.out.println("*** non monic factor combination ***");
         if (C == null || C.isZERO() || F == null || F.size() == 0) {
             throw new RuntimeException("C must be nonzero and F must be nonempty");
@@ -382,11 +392,11 @@ public class FactorInteger extends FactorAbstract<BigInteger> {
             throw new RuntimeException("polynomial ring not univariate");
         }
         List<GenPolynomial<BigInteger>> factors = new ArrayList<GenPolynomial<BigInteger>>(F.size());
-        List<GenPolynomial<ModInteger>> mlist = F;
+        List<GenPolynomial<MOD>> mlist = F;
         GenPolynomial<BigInteger>[] ilist = null;
 
-        ModInteger nf = null;
-        GenPolynomial<ModInteger> ct = mlist.get(0);
+        MOD nf = null;
+        GenPolynomial<MOD> ct = mlist.get(0);
         if (ct.isConstant()) {
             nf = ct.leadingBaseCoefficient();
             mlist.remove(ct);
@@ -402,39 +412,39 @@ public class FactorInteger extends FactorAbstract<BigInteger> {
         //System.out.println("------------------" + M.toScript() + "-------------------------"); 
         //System.out.println("------------------" + nf.factory().toScript() + "-------------------------"); 
         //System.out.println("modlist  = " + mlist); // includes not ldcf
-        GenPolynomialRing<ModInteger> mfac = ct.ring;
-        GenPolynomial<ModInteger> Pm = PolyUtil.<ModInteger> fromIntegerCoefficients(mfac, C);
+        GenPolynomialRing<MOD> mfac = ct.ring;
+        GenPolynomial<MOD> Pm = PolyUtil.<MOD> fromIntegerCoefficients(mfac, C);
         GenPolynomial<BigInteger> PP = C, P = C;
 
         // combine trial factors
         int dl = (mlist.size() + 1) / 2;
         GenPolynomial<BigInteger> u = PP;
         long deg = (u.degree(0) + 1L) / 2L;
-        GenPolynomial<ModInteger> um = Pm;
+        GenPolynomial<MOD> um = Pm;
         BigInteger ldcf = u.leadingBaseCoefficient();
         //System.out.println("ldcf = " + ldcf); 
         for (int j = 1; j <= dl; j++) {
             //System.out.println("j = " + j + ", dl = " + dl + ", ilist = " + ilist); 
-            KsubSet<GenPolynomial<ModInteger>> ps = new KsubSet<GenPolynomial<ModInteger>>(mlist, j);
-            for (List<GenPolynomial<ModInteger>> flist : ps) {
+            KsubSet<GenPolynomial<MOD>> ps = new KsubSet<GenPolynomial<MOD>>(mlist, j);
+            for (List<GenPolynomial<MOD>> flist : ps) {
                 //System.out.println("flist = " + flist);
-                GenPolynomial<ModInteger> trial = mfac.getONE().multiply(nf);
+                GenPolynomial<MOD> trial = mfac.getONE().multiply(nf);
                 for (int kk = 0; kk < flist.size(); kk++) {
-                    GenPolynomial<ModInteger> fk = flist.get(kk);
+                    GenPolynomial<MOD> fk = flist.get(kk);
                     trial = trial.multiply(fk);
                 }
                 if (trial.degree(0) > deg) {
                     continue;
                 }
-                GenPolynomial<ModInteger> cofactor = um.divide(trial);
+                GenPolynomial<MOD> cofactor = um.divide(trial);
                 //System.out.println("trial    = " + trial);
                 //System.out.println("cofactor = " + cofactor);
 
                 // lift via Hensel
                 try {
                     // ilist = PolyUfdUtil.liftHenselQuadraticFac(PP, M, trial, cofactor);
-                    ilist = PolyUfdUtil.liftHenselQuadratic(PP, M, trial, cofactor);
-                    //ilist = PolyUfdUtil.liftHensel(PP, M, trial, cofactor);
+                    ilist = PolyUfdUtil.<MOD> liftHenselQuadratic(PP, M, trial, cofactor);
+                    //ilist = PolyUfdUtil.<MOD> liftHensel(PP, M, trial, cofactor);
                 } catch (RuntimeException e) {
                     // no liftable factors
                     if ( /*debug*/ logger.isDebugEnabled()) {
@@ -445,7 +455,7 @@ public class FactorInteger extends FactorAbstract<BigInteger> {
                 }
                 GenPolynomial<BigInteger> itrial = ilist[0];
                 GenPolynomial<BigInteger> icofactor = ilist[1];
-                if (/*debug*/ logger.isDebugEnabled()) {
+                if (debug /* logger.isDebugEnabled()*/) {
                     logger.info("       modlist = " + trial + ", cofactor " + cofactor);
                     logger.info("lifted intlist = " + itrial + ", cofactor " + icofactor);
                 }
