@@ -182,7 +182,7 @@ public class GCDModLongTest extends TestCase {
      */
     public void testModularEvaluationGcd() {
 
-        GreatestCommonDivisorAbstract<BigInteger> ufd_m = new GreatestCommonDivisorModular(/*false*/);
+        GreatestCommonDivisorAbstract<BigInteger> ufd_m = new GreatestCommonDivisorModular<ModLong>(); // dummy type
 
         GreatestCommonDivisorAbstract<BigInteger> ufd = new GreatestCommonDivisorPrimitive<BigInteger>();
 
@@ -242,7 +242,7 @@ public class GCDModLongTest extends TestCase {
      */
     public void testModularSimpleGcd() {
 
-        GreatestCommonDivisorAbstract<BigInteger> ufd_m = new GreatestCommonDivisorModular(true);
+        GreatestCommonDivisorAbstract<BigInteger> ufd_m = new GreatestCommonDivisorModular<ModLong>(true); // dummy type
 
         GreatestCommonDivisorAbstract<BigInteger> ufd = new GreatestCommonDivisorPrimitive<BigInteger>();
 

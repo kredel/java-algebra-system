@@ -147,6 +147,12 @@ public class SquarefreeIntTest extends TestCase {
         ufd = GCDFactory.getProxy(fac);
 
         sqf = new SquarefreeRingChar0<BigInteger>(fac);
+
+        SquarefreeAbstract<BigInteger> sqff = SquarefreeFactory.getImplementation(fac);
+        //System.out.println("sqf  = " + sqf);
+        //System.out.println("sqff = " + sqff);
+        assertEquals("sqf == sqff ", sqf.getClass(), sqff.getClass());
+
         a = b = c = d = e = null;
         ar = br = cr = dr = er = null;
     }

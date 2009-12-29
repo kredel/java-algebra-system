@@ -13,6 +13,8 @@ import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
+import edu.jas.arith.ModLong;
+import edu.jas.arith.ModLongRing;
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.GenPolynomial;
@@ -75,6 +77,17 @@ public class SquarefreeFactory {
      */
     public static SquarefreeAbstract<ModInteger> getImplementation(ModIntegerRing fac) {
         return new SquarefreeFiniteFieldCharP<ModInteger>(fac);
+    }
+
+
+    /**
+     * Determine suitable implementation of factorization algorithm, case
+     * ModLong.
+     * @param fac ModLongRing.
+     * @return squarefree factorization algorithm implementation.
+     */
+    public static SquarefreeAbstract<ModLong> getImplementation(ModLongRing fac) {
+        return new SquarefreeFiniteFieldCharP<ModLong>(fac);
     }
 
 
@@ -186,6 +199,10 @@ public class SquarefreeFactory {
                 t = 3;
                 break;
             }
+            if (ofac instanceof ModLongRing) {
+                t = 10;
+                break;
+            }
             if (ofac instanceof AlgebraicNumberRing) {
                 //System.out.println("afac_o = " + ofac);
                 afac = (AlgebraicNumberRing) ofac;
@@ -198,6 +215,9 @@ public class SquarefreeFactory {
                 }
                 if (ofac instanceof AlgebraicNumberRing) {
                     t = 6;
+                }
+                if (ofac instanceof ModLongRing) {
+                    t = 11;
                 }
                 break;
             }
@@ -230,7 +250,10 @@ public class SquarefreeFactory {
         if (t == 3) { // ModInteger
             ufd = new SquarefreeFiniteFieldCharP/*raw*/(fac);
         }
-        if (t == 4 || t == 5 || t == 6) { // AlgebraicNumber
+        if (t == 10) { // ModLong
+            ufd = new SquarefreeFiniteFieldCharP/*raw*/(fac);
+        }
+        if (t == 4 || t == 5 || t == 6 || t == 11) { // AlgebraicNumber
             if (afac.characteristic().signum() == 0) {
                 ufd = new SquarefreeFieldChar0/*raw <C>*/(afac);
             } else {
