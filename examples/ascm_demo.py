@@ -1,3 +1,8 @@
+#
+# jython examples for jas.
+# $Id$
+#
+
 import sys;
 
 from jas import Ring, PolyRing, ParamIdeal, QQ
