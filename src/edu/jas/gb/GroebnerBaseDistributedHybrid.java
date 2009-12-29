@@ -185,6 +185,7 @@ public class GroebnerBaseDistributedHybrid<C extends RingElem<C>> extends Groebn
      * @return GB(F) a Groebner base of F or null, if a IOException occurs.
      */
     public List<GenPolynomial<C>> GB(int modv, List<GenPolynomial<C>> F) {
+        long t = System.currentTimeMillis();
         final int DL_PORT = port + 100;
         ChannelFactory cf = new ChannelFactory(port);
         DistHashTableServer<Integer> dls = new DistHashTableServer<Integer>(DL_PORT);
@@ -253,7 +254,7 @@ public class GroebnerBaseDistributedHybrid<C extends RingElem<C>> extends Groebn
             pool.addJob(R);
             //logger.info("server submitted " + R);
         }
-        logger.debug("main loop waiting");
+        logger.info("main loop waiting " + finner);
         finner.waitDone();
         int ps = theList.size();
         logger.info("#distributed list = " + ps);
@@ -264,22 +265,16 @@ public class GroebnerBaseDistributedHybrid<C extends RingElem<C>> extends Groebn
             logger.warn("#distributed list = " + theList.size() + " #pairlist list = " + G.size());
         }
         for (GenPolynomial<C> q: theList.getValueList()) {
-            if ( q != null & !q.isZERO() ) {
-               logger.info("final q = " + q.leadingExpVector());
+            if ( q != null && !q.isZERO() ) {
+               logger.debug("final q = " + q.leadingExpVector());
             }
         }
-        logger.info("distributed list end");
+        logger.debug("distributed list end");
         long time = System.currentTimeMillis();
         List<GenPolynomial<C>> Gp;
         Gp = minimalGB(G); // not jet distributed but threaded
         time = System.currentTimeMillis() - time;
         logger.info("parallel gbmi time = " + time);
-        /*
-        time = System.currentTimeMillis();
-        G = GroebnerBase.<C>GBmi(G); // sequential
-        time = System.currentTimeMillis() - time;
-        logger.info("sequential gbmi = " + time);
-        */
         G = Gp;
         logger.debug("server cf.terminate()");
         cf.terminate();
@@ -290,10 +285,8 @@ public class GroebnerBaseDistributedHybrid<C extends RingElem<C>> extends Groebn
         theList.terminate();
         logger.info("server dls.terminate() " + dls);
         dls.terminate();
-//         logger.info("pairlist #put = " + pairlist.putCount() + " #rem = " + pairlist.remCount()
-//                     //+ " #total = " + pairlist.pairCount()
-//                    );
-        logger.info("server GB end " + pairlist.toString());
+        t = System.currentTimeMillis() - t;
+        logger.info("server GB end, time = " + t + ", " + pairlist.toString());
         return G;
     }
 
@@ -446,9 +439,6 @@ class HybridReducerServer<C extends RingElem<C>> implements Runnable {
     private final ChannelFactory cf;
 
 
-    //private SocketChannel pairChannel;
-
-
     private TaggedSocketChannel pairChannel;
 
 
@@ -564,7 +554,7 @@ class HybridReducerServer<C extends RingElem<C>> implements Runnable {
                 try {
                     sleeps++;
                     //if (sleeps % 10 == 0) {
-                    logger.info("reducer is sleeping, remaining = " + finner.getJobs());
+                    logger.info("waiting for reducers, remaining = " + finner.getJobs());
                     //}
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
@@ -573,6 +563,7 @@ class HybridReducerServer<C extends RingElem<C>> implements Runnable {
                 }
             }
             if (!pairlist.hasNext() && !finner.hasJobs()) {
+                logger.info("termination detection: no pairs and no jobs left");
                 goon = false;
                 break; //continue; //break?
             }
@@ -752,8 +743,7 @@ class HybridReducerReceiver<C extends RingElem<C>> extends Thread {
             } else if (rh instanceof GBTransportMessEnd) { // should only happen from server
                 logger.info("received GBTransportMessEnd");
                 goon = false;
-                //?? 
-                finner.initIdle(1);
+                //?? finner.initIdle(1);
                 break;
             } else if (rh instanceof GBTransportMessPolyId) {
                 // update pair list
@@ -940,7 +930,7 @@ class HybridReducerClient<C extends RingElem<C>> implements Runnable {
 
         while (goon) {
             /* protocol:
-             * request pair, process pair, send result
+             * request pair, process pair, send result, receive acknowledgment
              */
             // pair = (Pair) pairlist.removeNext();
             Object req = new GBTransportMessReq();
@@ -1061,7 +1051,7 @@ class HybridReducerClient<C extends RingElem<C>> implements Runnable {
             if ( ! (pp instanceof GBTransportMess) ) {
                 logger.error("invalid acknowledgement " + pp);
             }
-            logger.info("recieved acknowledgement " + pp);
+            logger.info("recieved acknowledgment " + pp);
         }
         logger.info("terminated, done " + reduction + " reductions");
         if ( !doEnd ) {

@@ -138,7 +138,7 @@ public class GroebnerBaseDistHybridTest extends TestCase {
         a = b = c = d = e = null;
         bbseq = new GroebnerBaseSeq<BigRational>();
         bbdist = null; //new GroebnerBaseDistributed<BigRational>(threads, port);
-        bbdisthyb = new GroebnerBaseDistributedHybrid<BigRational>(threads, threadsPerNode, port);
+        bbdisthyb = null; //new GroebnerBaseDistributedHybrid<BigRational>(threads, threadsPerNode, port);
     }
 
 
@@ -191,6 +191,8 @@ public class GroebnerBaseDistHybridTest extends TestCase {
      * 
      */
     public void testDistributedHybridGBase() {
+
+        bbdisthyb = new GroebnerBaseDistributedHybrid<BigRational>(threads, threadsPerNode, port);
 
         Thread[] clients;
 
@@ -256,6 +258,7 @@ public class GroebnerBaseDistHybridTest extends TestCase {
      */
     @SuppressWarnings("unchecked")
     public void testTrinks7GBase() {
+        bbdisthyb = new GroebnerBaseDistributedHybrid<BigRational>(threads, threadsPerNode, port);
         Thread[] clients;
         String exam = "(B,S,T,Z,P,W) L " + "( " + "( 45 P + 35 S - 165 B - 36 ), "
                 + "( 35 P + 40 Z + 25 T - 27 S ), " + "( 15 W + 25 S P + 30 Z - 18 T - 165 B**2 ), "
@@ -264,7 +267,7 @@ public class GroebnerBaseDistHybridTest extends TestCase {
         Reader source = new StringReader(exam);
         GenPolynomialTokenizer parser = new GenPolynomialTokenizer(source);
         try {
-            F = parser.nextPolynomialSet();
+            F = (PolynomialList<BigRational>) parser.nextPolynomialSet();
         } catch (IOException e) {
             fail("" + e);
         }
@@ -289,7 +292,7 @@ public class GroebnerBaseDistHybridTest extends TestCase {
     @SuppressWarnings("unchecked")
     public void testTrinks7GBase_t1_p4() {
 
-        bbdisthyb.terminate();
+        //bbdisthyb.terminate();
         threads = 1;
         threadsPerNode = 4;
         bbdisthyb = new GroebnerBaseDistributedHybrid<BigRational>(threads, threadsPerNode, port);
@@ -302,7 +305,7 @@ public class GroebnerBaseDistHybridTest extends TestCase {
         Reader source = new StringReader(exam);
         GenPolynomialTokenizer parser = new GenPolynomialTokenizer(source);
         try {
-            F = parser.nextPolynomialSet();
+            F = (PolynomialList<BigRational>) parser.nextPolynomialSet();
         } catch (IOException e) {
             fail("" + e);
         }
@@ -324,10 +327,10 @@ public class GroebnerBaseDistHybridTest extends TestCase {
      * 
      */
     @SuppressWarnings("unchecked")
-    public void testTrinks7GBase_t3_p1() {
+    public void testTrinks7GBase_t4_p1() {
 
-        bbdisthyb.terminate();
-        threads = 3;
+        //bbdisthyb.terminate();
+        threads = 4;
         threadsPerNode = 1;
         bbdisthyb = new GroebnerBaseDistributedHybrid<BigRational>(threads, threadsPerNode, port);
 
@@ -339,7 +342,45 @@ public class GroebnerBaseDistHybridTest extends TestCase {
         Reader source = new StringReader(exam);
         GenPolynomialTokenizer parser = new GenPolynomialTokenizer(source);
         try {
-            F = parser.nextPolynomialSet();
+            F = (PolynomialList<BigRational>) parser.nextPolynomialSet();
+        } catch (IOException e) {
+            fail("" + e);
+        }
+        //System.out.println("F = " + F);
+
+        clients = startThreads();
+        G = bbdisthyb.GB(F.list);
+        stopThreads(clients);
+
+        assertTrue("isGB( GB(Trinks7) )", bbseq.isGB(G));
+        assertEquals("#GB(Trinks7) == 6", 6, G.size());
+        PolynomialList<BigRational> trinks = new PolynomialList<BigRational>(F.ring, G);
+        //System.out.println("G = " + trinks);
+    }
+
+
+    /**
+     * Test Trinks7 GBase.
+     * 
+     */
+    @SuppressWarnings("unchecked")
+    public void testTrinks7GBase_t2_p2() {
+
+        //bbdisthyb.terminate();
+        threads = 2;
+        threadsPerNode = 4;
+        bbdisthyb = new GroebnerBaseDistributedHybrid<BigRational>(threads, threadsPerNode, port);
+
+        Thread[] clients;
+        String exam = "(B,S,T,Z,P,W) L " + "( " + "( 45 P + 35 S - 165 B - 36 ), "
+                + "( 35 P + 40 Z + 25 T - 27 S ), " + "( 15 W + 25 S P + 30 Z - 18 T - 165 B**2 ), "
+                + "( - 9 W + 15 T P + 20 S Z ), " + "( P W + 2 T Z - 11 B**3 ), "
+                + "( 99 W - 11 B S + 3 B**2 ), " + ") ";
+        //      + "( 99 W - 11 B S + 3 B**2 ), " + "( B**2 + 33/50 B + 2673/10000 ) " + ") ";
+        Reader source = new StringReader(exam);
+        GenPolynomialTokenizer parser = new GenPolynomialTokenizer(source);
+        try {
+            F = (PolynomialList<BigRational>) parser.nextPolynomialSet();
         } catch (IOException e) {
             fail("" + e);
         }

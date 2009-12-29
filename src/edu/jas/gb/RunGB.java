@@ -257,7 +257,7 @@ public class RunGB {
         long t, t1;
 
         t = System.currentTimeMillis();
-        System.out.println("\nGroebner base distributed[once] (" + threads + "/" + threadsPerNode + ", " + mfile + ", " + port +  ") ...");
+        System.out.println("\nGroebner base distributed hybrid[once] (" + threads + "/" + threadsPerNode + ", " + mfile + ", " + port +  ") ...");
         GBDistHybrid gbd = null;
         //GBDistSP gbds = null; 
         if (pairseq) {
