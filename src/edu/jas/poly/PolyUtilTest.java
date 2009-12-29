@@ -974,24 +974,24 @@ public class PolyUtilTest extends TestCase {
         //System.out.println("qr = " + qr);
         //System.out.println("qi = " + qi);
         assertEquals("pi == qi ",pi,qi); 
-
+ 
         // test symmetric modular integer to integer and back
         GenPolynomial<ModInteger> qm;
-        qi = PolyUtil.<ModInteger,BigInteger>map(pfi,pm, new ModSymToInt() );
+        qi = PolyUtil.<ModInteger,BigInteger>map(pfi,pm, new ModSymToInt<ModInteger>() );
         qm = PolyUtil.<BigInteger,ModInteger>map(pfm,qi, new FromInteger<ModInteger>(fm) );
         //System.out.println("qi = " + qi);
         //System.out.println("qm = " + qm);
         assertEquals("pm == qm ",pm,qm); 
 
         // test modular integer to integer and back
-        qi = PolyUtil.<ModInteger,BigInteger>map(pfi,pm, new ModToInt() );
+        qi = PolyUtil.<ModInteger,BigInteger>map(pfi,pm, new ModToInt<ModInteger>() );
         qm = PolyUtil.<BigInteger,ModInteger>map(pfm,qi, new FromInteger<ModInteger>(fm) );
         //System.out.println("qi = " + qi);
         //System.out.println("qm = " + qm);
         assertEquals("pm == qm ",pm,qm); 
 
         // test symmetric modular integer to integer to rational and back
-        qi = PolyUtil.<ModInteger,BigInteger>map(pfi,pm, new ModSymToInt() );
+        qi = PolyUtil.<ModInteger,BigInteger>map(pfi,pm, new ModSymToInt<ModInteger>() );
         qr = PolyUtil.<BigInteger,BigRational>map(pfr,qi, new FromInteger<BigRational>(fr) );
         qi = PolyUtil.<BigRational,BigInteger>map(pfi,qr, new RatNumer() );
         qm = PolyUtil.<BigInteger,ModInteger>map(pfm,qi, new FromInteger<ModInteger>(fm) );
