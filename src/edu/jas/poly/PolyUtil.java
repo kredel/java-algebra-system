@@ -15,6 +15,7 @@ import org.apache.log4j.Logger;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
+import edu.jas.structure.ModularRingFactory;
 import edu.jas.structure.UnaryFunctor;
 import edu.jas.structure.Power;
 import edu.jas.structure.Complex;
@@ -25,6 +26,7 @@ import edu.jas.arith.BigRational;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
 import edu.jas.arith.BigComplex;
+import edu.jas.arith.Modular;
 
 import edu.jas.util.ListUtil;
 
@@ -159,10 +161,11 @@ public class PolyUtil {
      * @param A polynomial with ModInteger coefficients to be converted.
      * @return polynomial with BigInteger coefficients.
      */
-    public static GenPolynomial<BigInteger> 
+    public static <C extends RingElem<C> & Modular> 
+        GenPolynomial<BigInteger> 
         integerFromModularCoefficients( GenPolynomialRing<BigInteger> fac,
-                                        GenPolynomial<ModInteger> A ) {
-        return PolyUtil.<ModInteger,BigInteger>map(fac,A, new ModSymToInt() );
+                                        GenPolynomial<C> A ) {
+        return PolyUtil.<C,BigInteger>map(fac,A, new ModSymToInt<C>() );
     }
 
 
@@ -174,10 +177,11 @@ public class PolyUtil {
      * @param A polynomial with ModInteger coefficients to be converted.
      * @return polynomial with BigInteger coefficients.
      */
-    public static GenPolynomial<BigInteger> 
+    public static <C extends RingElem<C> & Modular>
+        GenPolynomial<BigInteger> 
         integerFromModularCoefficientsPositive( GenPolynomialRing<BigInteger> fac,
-                                                GenPolynomial<ModInteger> A ) {
-        return PolyUtil.<ModInteger,BigInteger>map(fac,A, new ModToInt() );
+                                                GenPolynomial<C> A ) {
+        return PolyUtil.<C,BigInteger>map(fac,A, new ModToInt<C>() );
     }
 
 
@@ -483,22 +487,22 @@ public class PolyUtil {
      * @return S = cra(A,B), with S mod A.coFac.modul == A 
      *                       and S mod B.coFac.modul == B. 
      */
-    public static //<C extends RingElem<C>>
-        GenPolynomial<ModInteger> 
-        chineseRemainder( GenPolynomialRing<ModInteger> fac,
-                          GenPolynomial<ModInteger> A,
-                          ModInteger mi,
-                          GenPolynomial<ModInteger> B ) {
-        ModIntegerRing cfac = (ModIntegerRing)(Object)fac.coFac; // get RingFactory
-        GenPolynomial<ModInteger> S = fac.getZERO().clone(); 
-        GenPolynomial<ModInteger> Ap = A.clone(); 
-        SortedMap<ExpVector,ModInteger> av = Ap.val; //getMap();
-        SortedMap<ExpVector,ModInteger> bv = B.getMap();
-        SortedMap<ExpVector,ModInteger> sv = S.val; //getMap();
-        ModInteger c = null;
+    public static <C extends RingElem<C> & Modular>
+        GenPolynomial<C> 
+        chineseRemainder( GenPolynomialRing<C> fac,
+                          GenPolynomial<C> A,
+                          C mi,
+                          GenPolynomial<C> B ) {
+        ModularRingFactory<C> cfac = (ModularRingFactory<C>) fac.coFac; // get RingFactory
+        GenPolynomial<C> S = fac.getZERO().clone(); 
+        GenPolynomial<C> Ap = A.clone(); 
+        SortedMap<ExpVector,C> av = Ap.val; //getMap();
+        SortedMap<ExpVector,C> bv = B.getMap();
+        SortedMap<ExpVector,C> sv = S.val; //getMap();
+        C c = null;
         for ( ExpVector e : bv.keySet() ) {
-            ModInteger x = av.get( e );
-            ModInteger y = bv.get( e ); // assert y != null
+            C x = av.get( e );
+            C y = bv.get( e ); // assert y != null
             if ( x != null ) {
                av.remove( e );
                c = cfac.chineseRemainder(x,mi,y);
@@ -515,7 +519,7 @@ public class PolyUtil {
         }
         // assert bv is empty = done
         for ( ExpVector e : av.keySet() ) { // rest of av
-            ModInteger x = av.get( e ); // assert x != null
+            C x = av.get( e ); // assert x != null
             //c = cfac.fromInteger( x.getVal() );
             c = cfac.chineseRemainder(x,mi,B.ring.coFac.getZERO());
             if ( ! c.isZERO() ) { // 0 cannot happen
@@ -1736,13 +1740,13 @@ class RatNumer implements UnaryFunctor<BigRational,BigInteger> {
 /**
  * Conversion of symmetric ModInteger to BigInteger functor.
  */
-class ModSymToInt implements UnaryFunctor<ModInteger,BigInteger> {
-    public BigInteger eval(ModInteger c) {
+class ModSymToInt<C extends RingElem<C> & Modular> implements UnaryFunctor<C,BigInteger> {
+    public BigInteger eval(C c) {
         if ( c == null ) {
             return new BigInteger();
         } else {
-            return new BigInteger( c.getSymmetricVal() );
-        }
+            return c.getSymmetricInteger();
+        } 
     }
 }
 
@@ -1750,12 +1754,12 @@ class ModSymToInt implements UnaryFunctor<ModInteger,BigInteger> {
 /**
  * Conversion of ModInteger to BigInteger functor.
  */
-class ModToInt implements UnaryFunctor<ModInteger,BigInteger> {
-    public BigInteger eval(ModInteger c) {
+class ModToInt<C extends RingElem<C> & Modular> implements UnaryFunctor<C,BigInteger> {
+    public BigInteger eval(C c) {
         if ( c == null ) {
             return new BigInteger();
         } else {
-            return new BigInteger( c.getVal() );
+            return c.getInteger();
         }
     }
 }

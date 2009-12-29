@@ -233,15 +233,15 @@ public class GCDProxyTest extends TestCase {
      */
     public void testModInteger() {
         long t;
-        // ModIntegerRing mi = new ModIntegerRing(19,true);
-        ModIntegerRing mi = new ModIntegerRing(536870909, true);
+        ModIntegerRing mi = new ModIntegerRing(19,true);
+        //ModIntegerRing mi = new ModIntegerRing(536870909, true);
 
         GenPolynomial<ModInteger> a, b, c, d, e;
 
         GreatestCommonDivisor<ModInteger> ufd_par;
         GreatestCommonDivisorAbstract<ModInteger> ufd;
 
-        ufd_par = GCDFactory./*<ModInteger>*/getProxy(mi);
+        ufd_par = GCDFactory.getProxy(mi);
         //System.out.println("ufd_par = " + ufd_par);
         assertTrue("ufd_par != null " + ufd_par, ufd_par != null);
 

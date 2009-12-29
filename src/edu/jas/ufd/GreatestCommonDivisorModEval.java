@@ -8,11 +8,15 @@ package edu.jas.ufd;
 import org.apache.log4j.Logger;
 
 import edu.jas.arith.ModInteger;
+import edu.jas.arith.Modular;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
-import edu.jas.structure.RingFactory;
+//import edu.jas.structure.RingElem;
+import edu.jas.structure.GcdRingElem;
+import edu.jas.structure.ModularRingFactory;
+//import edu.jas.structure.RingFactory;
 
 
 /**
@@ -21,8 +25,8 @@ import edu.jas.structure.RingFactory;
  * @author Heinz Kredel
  */
 
-public class GreatestCommonDivisorModEval //<C extends GcdRingElem<C> > 
-        extends GreatestCommonDivisorAbstract<ModInteger> {
+public class GreatestCommonDivisorModEval <MOD extends GcdRingElem<MOD> & Modular> 
+        extends GreatestCommonDivisorAbstract<MOD> {
 
 
     private static final Logger logger = Logger.getLogger(GreatestCommonDivisorModEval.class);
@@ -34,23 +38,11 @@ public class GreatestCommonDivisorModEval //<C extends GcdRingElem<C> >
     /**
      * Modular gcd algorithm to use.
      */
-    protected final GreatestCommonDivisorAbstract<ModInteger> mufd
-    // = new GreatestCommonDivisorModular();
-    = new GreatestCommonDivisorSimple<ModInteger>();
-
-
-    // = new GreatestCommonDivisorPrimitive<ModInteger>();
-    // = new GreatestCommonDivisorSubres<ModInteger>();
-
-
-    /*
-     * Integer gcd algorithm for fall back.
-    protected final 
-        GreatestCommonDivisorAbstract<BigInteger> iufd   
-             = new GreatestCommonDivisorSubres<BigInteger>();
-              //new GreatestCommonDivisorSimple<ModInteger>();
-              //new GreatestCommonDivisorPrimitive<ModInteger>();
-     */
+    protected final GreatestCommonDivisorAbstract<MOD> mufd 
+    // == new GreatestCommonDivisorModular();
+    = new GreatestCommonDivisorSimple<MOD>();
+    // = new GreatestCommonDivisorPrimitive<MOD>();
+    // = new GreatestCommonDivisorSubres<MOD>();
 
 
     /**
@@ -61,7 +53,7 @@ public class GreatestCommonDivisorModEval //<C extends GcdRingElem<C> >
      * @return gcd(P,S).
      */
     @Override
-    public GenPolynomial<ModInteger> baseGcd(GenPolynomial<ModInteger> P, GenPolynomial<ModInteger> S) {
+    public GenPolynomial<MOD> baseGcd(GenPolynomial<MOD> P, GenPolynomial<MOD> S) {
         return mufd.baseGcd(P, S);
     }
 
@@ -74,8 +66,8 @@ public class GreatestCommonDivisorModEval //<C extends GcdRingElem<C> >
      * @return gcd(P,S).
      */
     @Override
-    public GenPolynomial<GenPolynomial<ModInteger>> recursiveUnivariateGcd(
-            GenPolynomial<GenPolynomial<ModInteger>> P, GenPolynomial<GenPolynomial<ModInteger>> S) {
+    public GenPolynomial<GenPolynomial<MOD>> recursiveUnivariateGcd(
+            GenPolynomial<GenPolynomial<MOD>> P, GenPolynomial<GenPolynomial<MOD>> S) {
         return mufd.recursiveUnivariateGcd(P, S);
     }
 
@@ -88,23 +80,23 @@ public class GreatestCommonDivisorModEval //<C extends GcdRingElem<C> >
      * @return gcd(P,S).
      */
     @Override
-    public GenPolynomial<ModInteger> gcd(GenPolynomial<ModInteger> P, GenPolynomial<ModInteger> S) {
+    public GenPolynomial<MOD> gcd(GenPolynomial<MOD> P, GenPolynomial<MOD> S) {
         if (S == null || S.isZERO()) {
             return P;
         }
         if (P == null || P.isZERO()) {
             return S;
         }
-        GenPolynomialRing<ModInteger> fac = P.ring;
+        GenPolynomialRing<MOD> fac = P.ring;
         // special case for univariate polynomials
         if (fac.nvar <= 1) {
-            GenPolynomial<ModInteger> T = baseGcd(P, S);
+            GenPolynomial<MOD> T = baseGcd(P, S);
             return T;
         }
         long e = P.degree(0);
         long f = S.degree(0);
-        GenPolynomial<ModInteger> q;
-        GenPolynomial<ModInteger> r;
+        GenPolynomial<MOD> q;
+        GenPolynomial<MOD> r;
         if (f > e) {
             r = P;
             q = S;
@@ -118,86 +110,86 @@ public class GreatestCommonDivisorModEval //<C extends GcdRingElem<C> >
         r = r.abs();
         q = q.abs();
         // setup factories
-        RingFactory<ModInteger> cofac = P.ring.coFac;
+        ModularRingFactory<MOD> cofac = (ModularRingFactory<MOD>) P.ring.coFac;
         if (!cofac.isField()) {
             logger.warn("cofac is not a field: " + cofac);
         }
-        GenPolynomialRing<ModInteger> mfac = new GenPolynomialRing<ModInteger>(cofac, fac.nvar - 1, fac.tord);
-        GenPolynomialRing<ModInteger> ufac = new GenPolynomialRing<ModInteger>(cofac, 1, fac.tord);
-        GenPolynomialRing<GenPolynomial<ModInteger>> rfac = new GenPolynomialRing<GenPolynomial<ModInteger>>(
+        GenPolynomialRing<MOD> mfac = new GenPolynomialRing<MOD>(cofac, fac.nvar - 1, fac.tord);
+        GenPolynomialRing<MOD> ufac = new GenPolynomialRing<MOD>(cofac, 1, fac.tord);
+        GenPolynomialRing<GenPolynomial<MOD>> rfac = new GenPolynomialRing<GenPolynomial<MOD>>(
                 ufac, fac.nvar - 1, fac.tord);
         // convert polynomials
-        GenPolynomial<GenPolynomial<ModInteger>> qr;
-        GenPolynomial<GenPolynomial<ModInteger>> rr;
-        qr = PolyUtil.<ModInteger> recursive(rfac, q);
-        rr = PolyUtil.<ModInteger> recursive(rfac, r);
+        GenPolynomial<GenPolynomial<MOD>> qr;
+        GenPolynomial<GenPolynomial<MOD>> rr;
+        qr = PolyUtil.<MOD> recursive(rfac, q);
+        rr = PolyUtil.<MOD> recursive(rfac, r);
 
         // compute univariate contents and primitive parts
-        GenPolynomial<ModInteger> a = recursiveContent(rr);
-        GenPolynomial<ModInteger> b = recursiveContent(qr);
+        GenPolynomial<MOD> a = recursiveContent(rr);
+        GenPolynomial<MOD> b = recursiveContent(qr);
         // gcd of univariate coefficient contents
-        GenPolynomial<ModInteger> c = gcd(a, b);
-        rr = PolyUtil.<ModInteger> recursiveDivide(rr, a);
-        qr = PolyUtil.<ModInteger> recursiveDivide(qr, b);
+        GenPolynomial<MOD> c = gcd(a, b);
+        rr = PolyUtil.<MOD> recursiveDivide(rr, a);
+        qr = PolyUtil.<MOD> recursiveDivide(qr, b);
         if (rr.isONE()) {
             rr = rr.multiply(c);
-            r = PolyUtil.<ModInteger> distribute(fac, rr);
+            r = PolyUtil.<MOD> distribute(fac, rr);
             return r;
         }
         if (qr.isONE()) {
             qr = qr.multiply(c);
-            q = PolyUtil.<ModInteger> distribute(fac, qr);
+            q = PolyUtil.<MOD> distribute(fac, qr);
             return q;
         }
         // compute normalization factor
-        GenPolynomial<ModInteger> ac = rr.leadingBaseCoefficient();
-        GenPolynomial<ModInteger> bc = qr.leadingBaseCoefficient();
-        GenPolynomial<ModInteger> cc = gcd(ac, bc);
+        GenPolynomial<MOD> ac = rr.leadingBaseCoefficient();
+        GenPolynomial<MOD> bc = qr.leadingBaseCoefficient();
+        GenPolynomial<MOD> cc = gcd(ac, bc);
         // compute degrees and degree vectors
         ExpVector rdegv = rr.degreeVector();
         ExpVector qdegv = qr.degreeVector();
-        long rd0 = PolyUtil.<ModInteger> coeffMaxDegree(rr);
-        long qd0 = PolyUtil.<ModInteger> coeffMaxDegree(qr);
+        long rd0 = PolyUtil.<MOD> coeffMaxDegree(rr);
+        long qd0 = PolyUtil.<MOD> coeffMaxDegree(qr);
         long cd0 = cc.degree(0);
         long G = (rd0 >= qd0 ? rd0 : qd0) + cd0;
 
         // initialize element and degree vector
         ExpVector wdegv = rdegv.subst(0, rdegv.getVal(0) + 1);
         // +1 seems to be a hack for the unlucky prime test
-        ModInteger inc = cofac.getONE();
+        MOD inc = cofac.getONE();
         long i = 0;
-        long en = inc.getModul().longValue() - 1;
-        ModInteger end = cofac.fromInteger(en);
-        ModInteger mi;
-        GenPolynomial<ModInteger> M = null;
-        GenPolynomial<ModInteger> mn;
-        GenPolynomial<ModInteger> qm;
-        GenPolynomial<ModInteger> rm;
-        GenPolynomial<ModInteger> cm;
-        GenPolynomial<GenPolynomial<ModInteger>> cp = null;
+        long en = cofac.getIntegerModul().longValue() - 1; // just a stopper
+        MOD end = cofac.fromInteger(en);
+        MOD mi;
+        GenPolynomial<MOD> M = null;
+        GenPolynomial<MOD> mn;
+        GenPolynomial<MOD> qm;
+        GenPolynomial<MOD> rm;
+        GenPolynomial<MOD> cm;
+        GenPolynomial<GenPolynomial<MOD>> cp = null;
         if (debug) {
             logger.debug("c = " + c);
             logger.debug("cc = " + cc);
             logger.debug("G = " + G);
             logger.info("wdegv = " + wdegv);
         }
-        for (ModInteger d = cofac.getZERO(); d.compareTo(end) <= 0; d = d.sum(inc)) {
+        for (MOD d = cofac.getZERO(); d.compareTo(end) <= 0; d = d.sum(inc)) {
             if (++i >= en) {
                 logger.error("elements of Z_p exhausted, en = " + en);
                 return mufd.gcd(P, S);
                 //throw new RuntimeException("prime list exhausted");
             }
             // map normalization factor
-            ModInteger nf = PolyUtil.<ModInteger> evaluateMain(cofac, cc, d);
+            MOD nf = PolyUtil.<MOD> evaluateMain(cofac, cc, d);
             if (nf.isZERO()) {
                 continue;
             }
             // map polynomials
-            qm = PolyUtil.<ModInteger> evaluateFirstRec(ufac, mfac, qr, d);
+            qm = PolyUtil.<MOD> evaluateFirstRec(ufac, mfac, qr, d);
             if (!qm.degreeVector().equals(qdegv)) {
                 continue;
             }
-            rm = PolyUtil.<ModInteger> evaluateFirstRec(ufac, mfac, rr, d);
+            rm = PolyUtil.<MOD> evaluateFirstRec(ufac, mfac, rr, d);
             if (!rm.degreeVector().equals(rdegv)) {
                 continue;
             }
@@ -253,7 +245,7 @@ public class GreatestCommonDivisorModEval //<C extends GcdRingElem<C> >
                 wdegv = wdegv.gcd(mdegv); //EVGCD(wdegv,mdegv);
             }
             // interpolate
-            mi = PolyUtil.<ModInteger> evaluateMain(cofac, M, d);
+            mi = PolyUtil.<MOD> evaluateMain(cofac, M, d);
             mi = mi.inverse(); // mod p
             cp = PolyUtil.interpolate(rfac, cp, M, mi, cm, d);
             mn = ufac.getONE().multiply(d);
@@ -263,7 +255,7 @@ public class GreatestCommonDivisorModEval //<C extends GcdRingElem<C> >
             if (M.degree(0) > G) {
                 break;
             }
-            //long cmn = PolyUtil.<ModInteger>coeffMaxDegree(cp);
+            //long cmn = PolyUtil.<MOD>coeffMaxDegree(cp);
             //if ( M.degree(0) > cmn ) {
             // does not work: only if cofactors are also considered?
             // break;
@@ -272,7 +264,7 @@ public class GreatestCommonDivisorModEval //<C extends GcdRingElem<C> >
         // remove normalization
         cp = recursivePrimitivePart(cp).abs();
         cp = cp.multiply(c);
-        q = PolyUtil.<ModInteger> distribute(fac, cp);
+        q = PolyUtil.<MOD> distribute(fac, cp);
         return q;
     }
 

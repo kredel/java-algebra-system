@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 //import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
+import edu.jas.structure.ModularRingFactory;
 //import edu.jas.kern.PrettyPrint;
 
 import edu.jas.util.StringUtil;
@@ -22,7 +23,7 @@ import edu.jas.util.StringUtil;
  * @author Heinz Kredel
  */
 
-public final class ModIntegerRing implements RingFactory<ModInteger> {
+public final class ModIntegerRing implements ModularRingFactory<ModInteger> {
 
 
     /** Module part of the factory data structure. 
@@ -109,6 +110,14 @@ public final class ModIntegerRing implements RingFactory<ModInteger> {
      */
     public java.math.BigInteger getModul() {
         return modul;
+    }
+
+
+    /** Get the module part as BigInteger.  
+     * @return modul.
+     */
+    public BigInteger getIntegerModul() {
+        return new BigInteger(modul);
     }
 
 
