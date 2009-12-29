@@ -1651,6 +1651,9 @@ def LC(ideal,d=0,n=1):
 def RR(flist,n=1,r=0):
     '''Create JAS regular ring Product as ring element.
     '''
+    if not isinstance(n,PyInteger):
+        r = n;
+        n = 1;
     if flist == None:
         raise ValueError, "No list given."
     if isinstance(flist,PyList) or isinstance(flist,PyTuple):
@@ -1663,6 +1666,7 @@ def RR(flist,n=1,r=0):
         flist = flist.factory();
         ncop = n;
     #print "flist = " + str(flist);
+    #print "ncop  = " + str(ncop);
     if ncop == 0:
         pr = ProductRing(flist);
     else:
