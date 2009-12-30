@@ -900,7 +900,24 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>> extends FactorAbs
         for (GenPolynomial<AlgebraicNumber<C>> f : facs.afactors) {
             t = t.multiply(f);
         }
-        return fa.equals(t) || fa.equals(t.negate());
+        //return fa.equals(t) || fa.equals(t.negate());
+        boolean b = fa.equals(t) || fa.equals(t.negate());
+        if ( b ) {
+            return b;
+        }
+        if ( facs.arfactors == null ) {
+            return false;
+        }
+        for (Factors<AlgebraicNumber<C>> arp : facs.arfactors) {
+            t = t.multiply(arp.poly);
+        }
+        b = fa.equals(t) || fa.equals(t.negate());
+        if (!b) {
+            System.out.println("\nFactors: " + facs);
+            System.out.println("fa = " + fa);
+            System.out.println("t = " + t);
+        }
+        return b;
     }
 
 
@@ -930,7 +947,14 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>> extends FactorAbs
             }
             t = t.multiply(facs.poly);
         }
-        return P.equals(t) || P.equals(t.negate());
+        //return P.equals(t) || P.equals(t.negate());
+        boolean b = P.equals(t) || P.equals(t.negate());
+        if (!b) {
+            System.out.println("\nFactorsList: " + facs);
+            System.out.println("P = " + P);
+            System.out.println("t = " + t);
+        }
+        return b;
     }
 
 
@@ -966,7 +990,7 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>> extends FactorAbs
         }
         boolean b = P.equals(t) || P.equals(t.negate());
         if (!b) {
-            System.out.println("\nfactorization: " + b);
+            System.out.println("\nFactorsMap: " + facs);
             System.out.println("P = " + P);
             System.out.println("t = " + t);
         }
