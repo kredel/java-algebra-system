@@ -124,7 +124,9 @@ public class AlgebraicNumberModTest extends TestCase {
      for (int i = 0; i < 7; i++) {
          a = fac.random(el);
          //System.out.println("a = " + a);
-
+         if ( a.isZERO() || a.isONE() ) {
+             continue;
+         }
          // fac.random(rl+i, kl*(i+1), ll+2*i, el+i, q );
          assertTrue("length( a"+i+" ) <> 0", a.getVal().length() >= 0);
          assertTrue(" not isZERO( a"+i+" )", !a.isZERO() );
