@@ -20,6 +20,7 @@ import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
+import edu.jas.structure.ComplexRing;
 
 
 /**
@@ -204,6 +205,7 @@ public class SquarefreeFactory {
                 //System.out.println("afac_o = " + ofac);
                 afac = (AlgebraicNumberRing) ofac;
                 ofac = afac.ring.coFac;
+                //System.out.println("o_afac = " + ofac);
                 if (ofac instanceof BigRational) {
                     t = 4;
                 }
@@ -215,6 +217,9 @@ public class SquarefreeFactory {
                 }
                 if (ofac instanceof ModLongRing) {
                     t = 11;
+                }
+                if (ofac instanceof ComplexRing) {
+                    t = 12;
                 }
                 break;
             }
@@ -250,7 +255,7 @@ public class SquarefreeFactory {
         if (t == 10) { // ModLong
             ufd = new SquarefreeFiniteFieldCharP/*raw*/(fac);
         }
-        if (t == 4 || t == 5 || t == 6 || t == 11) { // AlgebraicNumber
+        if (t == 4 || t == 5 || t == 6 || t == 11 || t == 12) { // AlgebraicNumber
             if (afac.characteristic().signum() == 0) {
                 ufd = new SquarefreeFieldChar0/*raw <C>*/(afac);
             } else {

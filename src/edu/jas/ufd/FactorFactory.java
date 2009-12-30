@@ -21,6 +21,8 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
+import edu.jas.structure.Complex;
+import edu.jas.structure.ComplexRing;
 
 
 /**
@@ -97,7 +99,7 @@ public class FactorFactory {
      * @return factorization algorithm implementation.
      */
     public static FactorAbstract<BigInteger> getImplementation(BigInteger fac) {
-        return new FactorInteger();
+        return new FactorInteger<ModLong>();
     }
 
 
@@ -122,6 +124,19 @@ public class FactorFactory {
     public static <C extends GcdRingElem<C>> 
         FactorAbstract<AlgebraicNumber<C>> getImplementation(AlgebraicNumberRing<C> fac) {
         return new FactorAlgebraic<C>(fac);
+    }
+
+
+    /**
+     * Determine suitable implementation of factorization algorithms, case
+     * Complex&lt;C&gt;.
+     * @param fac ComplexRing&lt;C&gt;.
+     * @param <C> coefficient type, e.g. BigRational, ModInteger.
+     * @return factorization algorithm implementation.
+     */
+    public static <C extends GcdRingElem<C>> 
+        FactorAbstract<Complex<C>> getImplementation(ComplexRing<C> fac) {
+        return new FactorComplex<C>(fac);
     }
 
 
@@ -183,6 +198,10 @@ public class FactorFactory {
                 t = 9;
                 break;
             }
+            if (ofac instanceof ComplexRing) {
+                t = 11;
+                break;
+            }
             if (ofac instanceof AlgebraicNumberRing) {
                 //System.out.println("afac_o = " + ofac);
                 afac = (AlgebraicNumberRing) ofac;
@@ -198,6 +217,9 @@ public class FactorFactory {
                 }
                 if (ofac instanceof ModLongRing) {
                     t = 10;
+                }
+                if (ofac instanceof ComplexRing) {
+                    t = 12;
                 }
                 break;
             }
@@ -231,7 +253,10 @@ public class FactorFactory {
         if (t == 9) {
             ufd = new FactorModular(fac);
         }
-        if (t == 4 || t == 5 || t == 6 || t == 10) {
+        if (t == 11) {
+            ufd = new FactorComplex(fac);
+        }
+        if (t == 4 || t == 5 || t == 6 || t == 10 || t == 12) {
             ufd = new FactorAlgebraic/*raw <C>*/(afac);
         }
         if (t == 7) {
