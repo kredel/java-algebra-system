@@ -141,8 +141,8 @@ public class FactorComplexTest extends TestCase {
             //System.out.println("c = " + c.monic());
 
             SortedMap<GenPolynomial<Complex<BigRational>>, Long> sm = fac.baseFactors(a);
-            System.out.println("\na   =  " + a);
-            System.out.println("sm = " + sm);
+            //System.out.println("\na   =  " + a);
+            //System.out.println("sm = " + sm);
             if (sm.size() >= facs) {
                 assertTrue("#facs < " + facs, sm.size() >= facs);
             } else {
@@ -193,8 +193,8 @@ public class FactorComplexTest extends TestCase {
             //System.out.println("c = " + c.monic());
 
             FactorsMap<Complex<BigRational>> sm = fac.baseFactorsAbsolute(a);
-            System.out.println("\na   =  " + a);
-            System.out.println("sm = " + sm);
+            //System.out.println("\na   =  " + a);
+            //System.out.println("sm = " + sm);
             boolean t = fac.isAbsoluteFactorization(sm);
             //System.out.println("t        = " + t);
             assertTrue("prod(factor(a)) = a", t);
@@ -239,8 +239,8 @@ public class FactorComplexTest extends TestCase {
             //System.out.println("c = " + c.monic());
 
             SortedMap<GenPolynomial<Complex<BigRational>>, Long> sm = fac.factors(a);
-            System.out.println("\na   =  " + a);
-            System.out.println("sm = " + sm);
+            //System.out.println("\na   =  " + a);
+            //System.out.println("sm = " + sm);
             if (sm.size() >= facs) {
                 assertTrue("#facs < " + facs, sm.size() >= facs);
             } else {
