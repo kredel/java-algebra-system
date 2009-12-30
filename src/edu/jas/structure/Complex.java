@@ -189,7 +189,11 @@ public class Complex<C extends RingElem<C> >
                 s.append(re.toScript());
                 s.append(" + ");
             }
-            s.append(im.toScript()).append(" * I");
+            if ( im.isONE() ) {
+                s.append("I");
+            } else {
+                s.append(im.toScript()).append(" * I");
+            }
             s.append("");
         }
         return s.toString();
