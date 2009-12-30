@@ -12,6 +12,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import edu.jas.arith.BigInteger;
+import edu.jas.arith.ModInteger;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
@@ -155,7 +156,7 @@ public class GCDHenselTest extends TestCase {
         ai = bi = ci = di = ei = null;
         ar = br = cr = dr = er = null;
         cofac = new BigInteger();
-        ufd = new GreatestCommonDivisorHensel/*<BigInteger>*/();
+        ufd = new GreatestCommonDivisorHensel<ModInteger>();
         dfac = new GenPolynomialRing<BigInteger>(cofac, rl, to);
         cfac = new GenPolynomialRing<BigInteger>(cofac, rl - 1, to);
         rfac = new GenPolynomialRing<GenPolynomial<BigInteger>>(cfac, 1, to);
@@ -243,7 +244,7 @@ public class GCDHenselTest extends TestCase {
      */
     public void testHenselLinearSubresGcd() {
 
-        ufd1 = new GreatestCommonDivisorHensel/*<BigInteger>*/(false);
+        ufd1 = new GreatestCommonDivisorHensel<ModInteger>(false);
 
         GenPolynomial<BigInteger> a;
         GenPolynomial<BigInteger> b;

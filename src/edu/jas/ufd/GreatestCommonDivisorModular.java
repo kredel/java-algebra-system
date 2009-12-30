@@ -11,7 +11,6 @@ import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.ModularRingFactory;
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.Modular;
-//import edu.jas.arith.ModLong;
 import edu.jas.arith.ModLongRing;
 import edu.jas.arith.ModIntegerRing;
 import edu.jas.arith.PrimeList;

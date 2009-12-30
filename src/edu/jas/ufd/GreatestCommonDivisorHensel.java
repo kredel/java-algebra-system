@@ -8,6 +8,9 @@ package edu.jas.ufd;
 import org.apache.log4j.Logger;
 
 import edu.jas.arith.BigInteger;
+import edu.jas.arith.Modular;
+import edu.jas.arith.ModLong;
+import edu.jas.arith.ModLongRing;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
 import edu.jas.arith.PrimeList;
@@ -15,6 +18,8 @@ import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
+import edu.jas.structure.GcdRingElem;
+import edu.jas.structure.ModularRingFactory;
 
 
 /**
@@ -23,7 +28,7 @@ import edu.jas.poly.PolyUtil;
  * @author Heinz Kredel
  */
 
-public class GreatestCommonDivisorHensel //<C extends GcdRingElem<C> > 
+public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
         extends GreatestCommonDivisorSubres<BigInteger> {
 
 
@@ -115,17 +120,17 @@ public class GreatestCommonDivisorHensel //<C extends GcdRingElem<C> >
         PrimeList primes = new PrimeList(PrimeList.Range.medium);
         int pn = 50; //primes.size();
 
-        ModIntegerRing cofac;
-        GenPolynomial<ModInteger> qm;
-        GenPolynomial<ModInteger> qmf;
-        GenPolynomial<ModInteger> rm;
-        GenPolynomial<ModInteger> rmf;
-        GenPolynomial<ModInteger> cmf;
-        GenPolynomialRing<ModInteger> mfac;
-        GenPolynomial<ModInteger> cm = null;
-        GenPolynomial<ModInteger>[] ecm = null;
-        GenPolynomial<ModInteger> sm = null;
-        GenPolynomial<ModInteger> tm = null;
+        ModularRingFactory<MOD> cofac;
+        GenPolynomial<MOD> qm;
+        GenPolynomial<MOD> qmf;
+        GenPolynomial<MOD> rm;
+        GenPolynomial<MOD> rmf;
+        GenPolynomial<MOD> cmf;
+        GenPolynomialRing<MOD> mfac;
+        GenPolynomial<MOD> cm = null;
+        GenPolynomial<MOD>[] ecm = null;
+        GenPolynomial<MOD> sm = null;
+        GenPolynomial<MOD> tm = null;
         GenPolynomial<BigInteger>[] lift = null;
         if (debug) {
             logger.debug("c = " + c);
@@ -143,8 +148,13 @@ public class GreatestCommonDivisorHensel //<C extends GcdRingElem<C> >
                 //throw new RuntimeException("prime list exhausted");
             }
             // initialize coefficient factory and map normalization factor
-            cofac = new ModIntegerRing(p, true);
-            ModInteger nf = cofac.fromInteger(cc.getVal());
+            //cofac = new ModIntegerRing(p, true);
+            if ( ModLongRing.MAX_LONG.compareTo( p ) > 0 ) {
+                cofac = (ModularRingFactory) new ModLongRing(p, true);
+            } else {
+                cofac = (ModularRingFactory) new ModIntegerRing(p, true);
+            }
+            MOD nf = cofac.fromInteger(cc.getVal());
             if (nf.isZERO()) {
                 continue;
             }
@@ -157,17 +167,17 @@ public class GreatestCommonDivisorHensel //<C extends GcdRingElem<C> >
                 continue;
             }
             // initialize polynomial factory and map polynomials
-            mfac = new GenPolynomialRing<ModInteger>(cofac, fac.nvar, fac.tord, fac.getVars());
-            qm = PolyUtil.<ModInteger> fromIntegerCoefficients(mfac, q);
+            mfac = new GenPolynomialRing<MOD>(cofac, fac.nvar, fac.tord, fac.getVars());
+            qm = PolyUtil.<MOD> fromIntegerCoefficients(mfac, q);
             if (!qm.degreeVector().equals(qdegv)) {
                 continue;
             }
-            rm = PolyUtil.<ModInteger> fromIntegerCoefficients(mfac, r);
+            rm = PolyUtil.<MOD> fromIntegerCoefficients(mfac, r);
             if (!rm.degreeVector().equals(rdegv)) {
                 continue;
             }
             if (debug) {
-                logger.info("cofac = " + cofac.getModul());
+                logger.info("cofac = " + cofac.getIntegerModul());
             }
 
             // compute univariate modular gcd
