@@ -393,7 +393,6 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         }
         List<GenPolynomial<BigInteger>> factors = new ArrayList<GenPolynomial<BigInteger>>(F.size());
         List<GenPolynomial<MOD>> mlist = F;
-        GenPolynomial<BigInteger>[] ilist = null;
 
         MOD nf = null;
         GenPolynomial<MOD> ct = mlist.get(0);
@@ -423,6 +422,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         GenPolynomial<MOD> um = Pm;
         BigInteger ldcf = u.leadingBaseCoefficient();
         //System.out.println("ldcf = " + ldcf); 
+        HenselApprox<MOD> ilist = null;
         for (int j = 1; j <= dl; j++) {
             //System.out.println("j = " + j + ", dl = " + dl + ", ilist = " + ilist); 
             KsubSet<GenPolynomial<MOD>> ps = new KsubSet<GenPolynomial<MOD>>(mlist, j);
@@ -453,8 +453,8 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                     }
                     continue;
                 }
-                GenPolynomial<BigInteger> itrial = ilist[0];
-                GenPolynomial<BigInteger> icofactor = ilist[1];
+                GenPolynomial<BigInteger> itrial = ilist.A;
+                GenPolynomial<BigInteger> icofactor = ilist.B;
                 if (debug /* logger.isDebugEnabled()*/) {
                     logger.info("       modlist = " + trial + ", cofactor " + cofactor);
                     logger.info("lifted intlist = " + itrial + ", cofactor " + icofactor);

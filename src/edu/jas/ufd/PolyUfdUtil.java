@@ -380,18 +380,15 @@ public class PolyUfdUtil {
      * @param S GenPolynomial<MOD>.
      * @param T GenPolynomial<MOD>.
      * @param M bound on the coefficients of A1 and B1 as factors of C.
-     * @return [A1,B1] = lift(C,A,B), with C = A1 * B1.
+     * @return [A1,B1,Am,Bm] = lift(C,A,B), with C = A1 * B1 mod p^e, Am = A1 mod p^e, Bm = B1 mod p^e .
      */
     @SuppressWarnings("unchecked")
     public static <MOD extends GcdRingElem<MOD> & Modular>
-    GenPolynomial<BigInteger>[] liftHensel(GenPolynomial<BigInteger> C, BigInteger M,
+        HenselApprox<MOD> liftHensel(GenPolynomial<BigInteger> C, BigInteger M,
             GenPolynomial<MOD> A, GenPolynomial<MOD> B, GenPolynomial<MOD> S,
             GenPolynomial<MOD> T) {
-        GenPolynomial<BigInteger>[] AB = (GenPolynomial<BigInteger>[]) new GenPolynomial[2];
         if (C == null || C.isZERO()) {
-            AB[0] = C;
-            AB[1] = C;
-            return AB;
+            return new HenselApprox<MOD>(C,C,A,B);
         }
         if (A == null || A.isZERO() || B == null || B.isZERO()) {
             throw new RuntimeException("A and B must be nonzero");
@@ -441,8 +438,8 @@ public class PolyUfdUtil {
         // polynomials mod p
         GenPolynomial<MOD> Ap;
         GenPolynomial<MOD> Bp;
-        GenPolynomial<MOD> A1p;
-        GenPolynomial<MOD> B1p;
+        GenPolynomial<MOD> A1p = A;
+        GenPolynomial<MOD> B1p = B;
         GenPolynomial<MOD> Ep;
 
         // polynomials over the integers
@@ -503,12 +500,12 @@ public class PolyUfdUtil {
             // prepare for next iteration
             Mq = Qi;
             Qi = Q.getIntegerModul().multiply(P.getIntegerModul());
+            // Q = new ModIntegerRing(Qi.getVal());
             if ( ModLongRing.MAX_LONG.compareTo( Qi.getVal() ) > 0 ) {
                 Q = (ModularRingFactory) new ModLongRing(Qi.getVal());
             } else {
                 Q = (ModularRingFactory) new ModIntegerRing(Qi.getVal());
             }
-            // Q = new ModIntegerRing(Qi.getVal());
             Ai = Ea;
             Bi = Eb;
         }
@@ -531,9 +528,7 @@ public class PolyUfdUtil {
             //System.out.println("no exact lifting possible " + e);
             throw new RuntimeException("no exact lifting possible " +e);
         }
-        AB[0] = Ai;
-        AB[1] = Bi;
-        return AB;
+        return new HenselApprox<MOD>(Ai,Bi,A1p,B1p);
     }
 
 
@@ -550,13 +545,10 @@ public class PolyUfdUtil {
      */
     @SuppressWarnings("unchecked")
     public static <MOD extends GcdRingElem<MOD> & Modular>
-    GenPolynomial<BigInteger>[] liftHensel(GenPolynomial<BigInteger> C, BigInteger M,
+       HenselApprox<MOD> liftHensel(GenPolynomial<BigInteger> C, BigInteger M,
             GenPolynomial<MOD> A, GenPolynomial<MOD> B) {
-        GenPolynomial<BigInteger>[] AB = (GenPolynomial<BigInteger>[]) new GenPolynomial[2];
         if (C == null || C.isZERO()) {
-            AB[0] = C;
-            AB[1] = C;
-            return AB;
+            return new HenselApprox<MOD>(C,C,A,B);
         }
         if (A == null || A.isZERO() || B == null || B.isZERO()) {
             throw new RuntimeException("A and B must be nonzero");
@@ -572,7 +564,7 @@ public class PolyUfdUtil {
         }
         GenPolynomial<MOD> s = gst[1];
         GenPolynomial<MOD> t = gst[2];
-        GenPolynomial<BigInteger>[] ab = PolyUfdUtil.<MOD> liftHensel(C, M, A, B, s, t);
+        HenselApprox<MOD> ab = PolyUfdUtil.<MOD> liftHensel(C, M, A, B, s, t);
         return ab;
     }
 
@@ -625,9 +617,9 @@ public class PolyUfdUtil {
             if (icnst != null) {
                 lift.add(icnst);
             }
-            GenPolynomial<BigInteger>[] ab = PolyUfdUtil.<MOD> liftHensel(C, M, F.get(0), F.get(1));
-            lift.add(ab[0]);
-            lift.add(ab[1]);
+            HenselApprox<MOD> ab = PolyUfdUtil.<MOD> liftHensel(C, M, F.get(0), F.get(1));
+            lift.add(ab.A);
+            lift.add(ab.B);
             return lift;
         }
         BigInteger lc = C.leadingBaseCoefficient();
@@ -662,9 +654,9 @@ public class PolyUfdUtil {
             }
         }
         // one Hensel step on part polynomials
-        GenPolynomial<BigInteger>[] ab = PolyUfdUtil.<MOD> liftHensel(C, M, A, B);
-        GenPolynomial<BigInteger> A1 = ab[0];
-        GenPolynomial<BigInteger> B1 = ab[1];
+        HenselApprox<MOD> ab = PolyUfdUtil.<MOD> liftHensel(C, M, A, B);
+        GenPolynomial<BigInteger> A1 = ab.A;
+        GenPolynomial<BigInteger> B1 = ab.B;
         if (!isHenselLift(C, M, P, A1, B1)) {
             throw new RuntimeException("no lifting A1, B1");
         }
@@ -712,14 +704,11 @@ public class PolyUfdUtil {
      */
     @SuppressWarnings("unchecked")
     public static <MOD extends GcdRingElem<MOD> & Modular>
-    GenPolynomial<BigInteger>[] liftHenselQuadratic(GenPolynomial<BigInteger> C, BigInteger M,
+        HenselApprox<MOD> liftHenselQuadratic(GenPolynomial<BigInteger> C, BigInteger M,
             GenPolynomial<MOD> A, GenPolynomial<MOD> B, GenPolynomial<MOD> S,
             GenPolynomial<MOD> T) {
-        GenPolynomial<BigInteger>[] AB = (GenPolynomial<BigInteger>[]) new GenPolynomial[2];
         if (C == null || C.isZERO()) {
-            AB[0] = C;
-            AB[1] = C;
-            return AB;
+            return new HenselApprox<MOD>(C,C,A,B);
         }
         if (A == null || A.isZERO() || B == null || B.isZERO()) {
             throw new RuntimeException("A and B must be nonzero");
@@ -771,8 +760,8 @@ public class PolyUfdUtil {
         // polynomials mod p
         GenPolynomial<MOD> Ap;
         GenPolynomial<MOD> Bp;
-        GenPolynomial<MOD> A1p;
-        GenPolynomial<MOD> B1p;
+        GenPolynomial<MOD> A1p = A;
+        GenPolynomial<MOD> B1p = B;
         GenPolynomial<MOD> Ep;
         GenPolynomial<MOD> Sp = S;
         GenPolynomial<MOD> Tp = T;
@@ -924,9 +913,7 @@ public class PolyUfdUtil {
             //System.out.println("no exact lifting possible " + e);
             throw new RuntimeException("no exact lifting possible " +e);
         }
-        AB[0] = Ai;
-        AB[1] = Bi;
-        return AB;
+        return new HenselApprox<MOD>(Ai,Bi,A1p,B1p);
     }
 
 
@@ -943,13 +930,10 @@ public class PolyUfdUtil {
      */
     @SuppressWarnings("unchecked")
     public static <MOD extends GcdRingElem<MOD> & Modular>
-    GenPolynomial<BigInteger>[] liftHenselQuadratic(GenPolynomial<BigInteger> C, BigInteger M,
+        HenselApprox<MOD> liftHenselQuadratic(GenPolynomial<BigInteger> C, BigInteger M,
             GenPolynomial<MOD> A, GenPolynomial<MOD> B) {
-        GenPolynomial<BigInteger>[] AB = (GenPolynomial<BigInteger>[]) new GenPolynomial[2];
         if (C == null || C.isZERO()) {
-            AB[0] = C;
-            AB[1] = C;
-            return AB;
+            return new HenselApprox<MOD>(C,C,A,B);
         }
         if (A == null || A.isZERO() || B == null || B.isZERO()) {
             throw new RuntimeException("A and B must be nonzero");
@@ -965,7 +949,7 @@ public class PolyUfdUtil {
         }
         GenPolynomial<MOD> s = gst[1];
         GenPolynomial<MOD> t = gst[2];
-        GenPolynomial<BigInteger>[] ab = PolyUfdUtil.<MOD> liftHenselQuadratic(C, M, A, B, s, t);
+        HenselApprox<MOD> ab = PolyUfdUtil.<MOD> liftHenselQuadratic(C, M, A, B, s, t);
         return ab;
     }
 
@@ -983,7 +967,7 @@ public class PolyUfdUtil {
      */
     @SuppressWarnings("unchecked")
     public static <MOD extends GcdRingElem<MOD> & Modular>
-    GenPolynomial<BigInteger>[] liftHenselQuadraticFac(GenPolynomial<BigInteger> C, BigInteger M,
+        HenselApprox<MOD> liftHenselQuadraticFac(GenPolynomial<BigInteger> C, BigInteger M,
             GenPolynomial<MOD> A, GenPolynomial<MOD> B) {
         if (C == null || C.isZERO()) {
             throw new RuntimeException("C must be nonzero");
@@ -1002,7 +986,7 @@ public class PolyUfdUtil {
         }
         GenPolynomial<MOD> s = gst[1];
         GenPolynomial<MOD> t = gst[2];
-        GenPolynomial<BigInteger>[] ab = PolyUfdUtil.<MOD> liftHenselQuadraticFac(C, M, A, B, s, t);
+        HenselApprox<MOD> ab = PolyUfdUtil.<MOD> liftHenselQuadraticFac(C, M, A, B, s, t);
         return ab;
     }
 
@@ -1055,9 +1039,9 @@ public class PolyUfdUtil {
             if (icnst != null) {
                 lift.add(icnst);
             }
-            GenPolynomial<BigInteger>[] ab = PolyUfdUtil.<MOD> liftHenselQuadraticFac(C, M, F.get(0), F.get(1));
-            lift.add(ab[0]);
-            lift.add(ab[1]);
+            HenselApprox<MOD> ab = PolyUfdUtil.<MOD> liftHenselQuadraticFac(C, M, F.get(0), F.get(1));
+            lift.add(ab.A);
+            lift.add(ab.B);
             return lift;
         }
         BigInteger lc = C.leadingBaseCoefficient();
@@ -1092,9 +1076,9 @@ public class PolyUfdUtil {
             }
         }
         // one Hensel step on part polynomials
-        GenPolynomial<BigInteger>[] ab = PolyUfdUtil.<MOD> liftHenselQuadraticFac(C, M, A, B);
-        GenPolynomial<BigInteger> A1 = ab[0];
-        GenPolynomial<BigInteger> B1 = ab[1];
+        HenselApprox<MOD> ab = PolyUfdUtil.<MOD> liftHenselQuadraticFac(C, M, A, B);
+        GenPolynomial<BigInteger> A1 = ab.A;
+        GenPolynomial<BigInteger> B1 = ab.B;
         if (!isHenselLift(C, M, P, A1, B1)) {
             System.out.println("A = " + A + ", F1 = " + F1);
             System.out.println("B = " + B + ", F2 = " + F2);
@@ -1142,7 +1126,7 @@ public class PolyUfdUtil {
      */
     @SuppressWarnings("unchecked")
     public static <MOD extends GcdRingElem<MOD> & Modular>
-    GenPolynomial<BigInteger>[] liftHenselQuadraticFac(GenPolynomial<BigInteger> C, BigInteger M,
+        HenselApprox<MOD> liftHenselQuadraticFac(GenPolynomial<BigInteger> C, BigInteger M,
             GenPolynomial<MOD> A, GenPolynomial<MOD> B, GenPolynomial<MOD> S,
             GenPolynomial<MOD> T) {
         //System.out.println("*** version for factorization *** ");
@@ -1222,8 +1206,8 @@ public class PolyUfdUtil {
         // polynomials mod p
         GenPolynomial<MOD> Ap;
         GenPolynomial<MOD> Bp;
-        GenPolynomial<MOD> A1p;
-        GenPolynomial<MOD> B1p;
+        GenPolynomial<MOD> A1p = A;
+        GenPolynomial<MOD> B1p = B;
         GenPolynomial<MOD> Sp = S;
         GenPolynomial<MOD> Tp = T;
 
@@ -1455,9 +1439,7 @@ public class PolyUfdUtil {
             System.out.println("*c  =  " + c);
             throw new RuntimeException("no exact lifting possible");
         }
-        AB[0] = Ai;
-        AB[1] = Bi;
-        return AB;
+        return new HenselApprox<MOD>(Ai,Bi,A1p,B1p);
     }
 
 
@@ -1544,6 +1526,25 @@ public class PolyUfdUtil {
         List<GenPolynomial<BigInteger>> G = new ArrayList<GenPolynomial<BigInteger>>(2);
         G.add(A);
         G.add(B);
+        return isHenselLift(C, M, p, G);
+    }
+
+
+    /**
+     * Modular Hensel lifting test. Let p be a prime number and assume C == A *
+     * B mod p with ggt(A,B) == 1 mod p.
+     * @param C GenPolynomial<BigInteger>.
+     * @param Ha Hensel approximation.
+     * @param M bound on the coefficients of A and B as factors of C.
+     * @param p prime number.
+     * @return true if C = A * B mod p^e, else false.
+     */
+    public static <MOD extends GcdRingElem<MOD> & Modular>
+    boolean isHenselLift(GenPolynomial<BigInteger> C, BigInteger M, BigInteger p,
+            HenselApprox<MOD> Ha) {
+        List<GenPolynomial<BigInteger>> G = new ArrayList<GenPolynomial<BigInteger>>(2);
+        G.add(Ha.A);
+        G.add(Ha.B);
         return isHenselLift(C, M, p, G);
     }
 

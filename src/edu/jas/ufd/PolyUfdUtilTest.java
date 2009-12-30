@@ -16,6 +16,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import edu.jas.arith.BigInteger;
+import edu.jas.arith.Modular;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
 import edu.jas.kern.ComputerThreads;
@@ -25,6 +26,7 @@ import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.poly.TermOrder;
 import edu.jas.structure.Power;
+import edu.jas.structure.GcdRingElem;
 import edu.jas.util.KsubSet;
 
 
@@ -194,7 +196,7 @@ public class PolyUfdUtilTest extends TestCase {
         GenPolynomial<ModInteger> ap1;
         GenPolynomial<ModInteger> bp1;
 
-        GenPolynomial<BigInteger>[] lift;
+        HenselApprox<ModInteger> lift;
         GenPolynomial<BigInteger> a1;
         GenPolynomial<BigInteger> b1;
         GenPolynomial<BigInteger> c1;
@@ -257,9 +259,9 @@ public class PolyUfdUtilTest extends TestCase {
             //System.out.println("sp    = " + sp);
             //System.out.println("tp    = " + tp);
 
-            lift = PolyUfdUtil.liftHensel(c, mi, ap, bp, sp, tp);
-            a1 = lift[0];
-            b1 = lift[1];
+            lift = PolyUfdUtil.<ModInteger> liftHensel(c, mi, ap, bp, sp, tp);
+            a1 = lift.A;
+            b1 = lift.B;
             c1 = a1.multiply(b1);
 
             //System.out.println("\na     = " + a);
@@ -305,7 +307,7 @@ public class PolyUfdUtilTest extends TestCase {
         GenPolynomial<ModInteger> ap1;
         GenPolynomial<ModInteger> bp1;
 
-        GenPolynomial<BigInteger>[] lift;
+        HenselApprox<ModInteger> lift;
         GenPolynomial<BigInteger> a1;
         GenPolynomial<BigInteger> b1;
         GenPolynomial<BigInteger> c1;
@@ -369,10 +371,10 @@ public class PolyUfdUtilTest extends TestCase {
             //System.out.println("tp    = " + tp);
 
             long tq = System.currentTimeMillis();
-            lift = PolyUfdUtil.liftHenselQuadratic(c, mi, ap, bp, sp, tp);
+            lift = PolyUfdUtil.<ModInteger>liftHenselQuadratic(c, mi, ap, bp, sp, tp);
             tq = System.currentTimeMillis() - tq;
-            a1 = lift[0];
-            b1 = lift[1];
+            a1 = lift.A;
+            b1 = lift.B;
             c1 = a1.multiply(b1);
 
             //System.out.println("\na     = " + a);
@@ -388,10 +390,10 @@ public class PolyUfdUtilTest extends TestCase {
 
             if (false) {
                 long t = System.currentTimeMillis();
-                lift = PolyUfdUtil.liftHensel(c, mi, ap, bp, sp, tp);
+                lift = PolyUfdUtil.<ModInteger>liftHensel(c, mi, ap, bp, sp, tp);
                 t = System.currentTimeMillis() - t;
-                a1 = lift[0];
-                b1 = lift[1];
+                a1 = lift.A;
+                b1 = lift.B;
                 c1 = a1.multiply(b1);
 
                 //System.out.println("\na     = " + a);
@@ -436,7 +438,7 @@ public class PolyUfdUtilTest extends TestCase {
         GenPolynomial<ModInteger> bp;
         GenPolynomial<ModInteger> cp;
 
-        GenPolynomial<BigInteger>[] lift;
+        HenselApprox<ModInteger> lift;
         GenPolynomial<BigInteger> a1;
         GenPolynomial<BigInteger> b1;
         GenPolynomial<BigInteger> c1;
@@ -492,10 +494,10 @@ public class PolyUfdUtilTest extends TestCase {
 
             long tq = System.currentTimeMillis();
             try {
-                lift = PolyUfdUtil.liftHenselQuadratic(c, mi, ap, bp);
+                lift = PolyUfdUtil.<ModInteger>liftHenselQuadratic(c, mi, ap, bp);
                 tq = System.currentTimeMillis() - tq;
-                a1 = lift[0];
-                b1 = lift[1];
+                a1 = lift.A;
+                b1 = lift.B;
                 c1 = a1.multiply(b1);
                 assertEquals("lift(a b mod p) = a b", c, c1);
             } catch (RuntimeException e) {
@@ -651,7 +653,7 @@ public class PolyUfdUtilTest extends TestCase {
 
             long tq = System.currentTimeMillis();
             try {
-                lift = PolyUfdUtil.liftHenselQuadratic(c, mip, mlist);
+                lift = PolyUfdUtil.<ModInteger>liftHenselQuadratic(c, mip, mlist);
             } catch(RuntimeException e) {
                 lift = null;
                 fail("liftHenselQuadratic: " + c + ", mlist = " + mlist);

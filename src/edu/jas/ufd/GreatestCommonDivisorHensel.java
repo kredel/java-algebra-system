@@ -131,7 +131,7 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
         GenPolynomial<MOD>[] ecm = null;
         GenPolynomial<MOD> sm = null;
         GenPolynomial<MOD> tm = null;
-        GenPolynomial<BigInteger>[] lift = null;
+        HenselApprox<MOD> lift = null;
         if (debug) {
             logger.debug("c = " + c);
             logger.debug("cc = " + cc);
@@ -224,15 +224,15 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
                 System.out.println("tm  = " + tm);
                 System.out.println("cn  = " + cn);
             }
-            if (quadratic) {
+            if (quadratic) { 
                 lift = PolyUfdUtil.liftHenselQuadratic(crq, cn, cm, cmf, sm, tm);
             } else {
                 lift = PolyUfdUtil.liftHensel(crq, cn, cm, cmf, sm, tm);
             }
-            q = lift[0];
+            q = lift.A;
             if (debug) {
                 System.out.println("q   = " + q);
-                System.out.println("qf  = " + lift[1]);
+                System.out.println("qf  = " + lift.B);
             }
             q = basePrimitivePart(q);
             q = q.multiply(c).abs();
