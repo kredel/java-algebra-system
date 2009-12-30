@@ -23,12 +23,11 @@ import edu.jas.structure.RingFactory;
 
 
 /**
- * Complex coefficients factorization algorithms. This class
- * implements factorization methods for polynomials over Complex
- * numbers via the algebraic number Q(i) over rational numbers or over (prime)
- * modular integers.
- * <b>Note:</b> Decomposition to linear factors is only via absolute factorization
- * since Complex are not the analytic complex numbers.
+ * Complex coefficients factorization algorithms. This class implements
+ * factorization methods for polynomials over Complex numbers via the algebraic
+ * number C(i) over rational numbers or over (prime) modular integers. <b>Note:</b>
+ * Decomposition to linear factors is only via absolute factorization since
+ * Complex are not the analytic complex numbers.
  * @author Heinz Kredel
  * @param <C> coefficient type
  */
@@ -66,8 +65,8 @@ public class FactorComplex<C extends GcdRingElem<C>> extends FactorAbsolute<Comp
      * Constructor.
      * @param fac complex number factory.
      */
-    public FactorComplex(RingFactory<Complex<C>> fac) { // why is this contructor required?
-        this( (ComplexRing<C>) fac );
+    public FactorComplex(RingFactory<Complex<C>> fac) { // why is this constructor required?
+        this((ComplexRing<C>) fac);
     }
 
 
@@ -77,9 +76,10 @@ public class FactorComplex<C extends GcdRingElem<C>> extends FactorAbsolute<Comp
      */
     public FactorComplex(ComplexRing<C> fac) {
         super(fac);
-        GenPolynomialRing<C> pfac = new GenPolynomialRing<C>(fac.ring,1, new TermOrder(TermOrder.INVLEX),new String[] { "I" } );
-        GenPolynomial<C> I = pfac.univariate(0,2L).sum(pfac.getONE());
-        afac = new AlgebraicNumberRing<C>(I,true); // must indicate field
+        GenPolynomialRing<C> pfac = new GenPolynomialRing<C>(fac.ring, 1, new TermOrder(TermOrder.INVLEX),
+                new String[] { "I" });
+        GenPolynomial<C> I = pfac.univariate(0, 2L).sum(pfac.getONE());
+        afac = new AlgebraicNumberRing<C>(I, true); // must indicate field
         this.factorAlgeb = FactorFactory.<C> getImplementation(afac);
     }
 
@@ -107,7 +107,7 @@ public class FactorComplex<C extends GcdRingElem<C>> extends FactorAbsolute<Comp
             throw new RuntimeException("only for univariate polynomials");
         }
         ComplexRing<C> cfac = (ComplexRing<C>) pfac.coFac;
-        if ( ! afac.ring.coFac.equals( cfac.ring) ) {
+        if (!afac.ring.coFac.equals(cfac.ring)) {
             throw new RuntimeException("coefficient rings do not match");
         }
         Complex<C> ldcf = P.leadingBaseCoefficient();
@@ -116,21 +116,16 @@ public class FactorComplex<C extends GcdRingElem<C>> extends FactorAbsolute<Comp
             factors.add(pfac.getONE().multiply(ldcf));
         }
         //System.out.println("\nP = " + P);
-
-        GenPolynomialRing<AlgebraicNumber<C>> pafac = new GenPolynomialRing<AlgebraicNumber<C>>(afac,pfac);
-        GenPolynomial<AlgebraicNumber<C>> A = PolyUtil.<C> algebraicFromComplex(pafac,P);
+        GenPolynomialRing<AlgebraicNumber<C>> pafac = new GenPolynomialRing<AlgebraicNumber<C>>(afac, pfac);
+        GenPolynomial<AlgebraicNumber<C>> A = PolyUtil.<C> algebraicFromComplex(pafac, P);
         //System.out.println("A = " + A);
-
-        List<GenPolynomial<AlgebraicNumber<C>>> afactors;
-        afactors = factorAlgeb.baseFactorsSquarefree(A);
-        if ( debug ) {
+        List<GenPolynomial<AlgebraicNumber<C>>> afactors = factorAlgeb.baseFactorsSquarefree(A);
+        if (debug) {
             // System.out.println("complex afactors = " + afactors);
             logger.info("complex afactors = " + afactors);
         }
-        for ( GenPolynomial<AlgebraicNumber<C>> pa : afactors ) {
-            //System.out.println("pa = " + pa);
-            GenPolynomial<Complex<C>> pc = PolyUtil.<C> complexFromAlgebraic(pfac,pa);
-            //System.out.println("pc = " + pc);
+        for (GenPolynomial<AlgebraicNumber<C>> pa : afactors) {
+            GenPolynomial<Complex<C>> pc = PolyUtil.<C> complexFromAlgebraic(pfac, pa);
             factors.add(pc);
         }
         //System.out.println("cfactors = " + factors);
