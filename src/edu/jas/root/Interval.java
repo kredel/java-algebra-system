@@ -7,7 +7,7 @@ package edu.jas.root;
 
 import edu.jas.arith.BigDecimal;
 import edu.jas.arith.BigRational;
-import edu.jas.arith.ToRational;
+import edu.jas.arith.Rational;
 import edu.jas.structure.RingElem;
 
 
@@ -16,7 +16,7 @@ import edu.jas.structure.RingElem;
  * @param <C> coefficient type.
  * @author Heinz Kredel
  */
-public class Interval<C extends RingElem<C> & ToRational > {
+public class Interval<C extends RingElem<C> & Rational > {
 
 
     /**
@@ -124,8 +124,8 @@ public class Interval<C extends RingElem<C> & ToRational > {
      * BigDecimal representation of Interval.
      */
     public BigDecimal toDecimal() {
-        BigDecimal l = new BigDecimal(left.toRational());
-        BigDecimal r = new BigDecimal(right.toRational());
+        BigDecimal l = new BigDecimal(left.getRational());
+        BigDecimal r = new BigDecimal(right.getRational());
         BigDecimal two = new BigDecimal(2);
         BigDecimal v = l.sum(r).divide(two);
         return v;
@@ -158,7 +158,7 @@ public class Interval<C extends RingElem<C> & ToRational > {
      * @return (left-right)/2;
      */
     public BigRational rationalMiddle() {
-        BigRational m = left.toRational().sum(right.toRational());
+        BigRational m = left.getRational().sum(right.getRational());
         BigRational t = new BigRational(1L,2L);
         m = m.multiply(t);
         return m;

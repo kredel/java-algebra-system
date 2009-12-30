@@ -6,16 +6,17 @@ package edu.jas.arith;
 
 
 /**
- * Interface with toRational method.
+ * Interface with method to get a BigRational (approximation).
  * @author Heinz Kredel
  */
 
-public interface ToRational /*extends Cloneable*/ {
+public interface Rational {
+
 
     /**
      * Return a BigRational approximation of this Element.
      * @return a BigRational approximation of this.
      */
-    public BigRational toRational();
+    public BigRational getRational();
 
 }

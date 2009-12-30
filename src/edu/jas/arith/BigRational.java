@@ -26,7 +26,7 @@ import edu.jas.util.StringUtil;
  */
 
 public final class BigRational implements GcdRingElem<BigRational>, 
-                                          RingFactory<BigRational>, ToRational {
+                                          RingFactory<BigRational>, Rational {
 
     /**
      * Numerator part of the data structure.
@@ -212,9 +212,9 @@ public final class BigRational implements GcdRingElem<BigRational>,
     /**
      * Return a BigRational approximation of this Element.
      * @return a BigRational approximation of this.
-     * @see edu.jas.arith.ToRational#toRational()
+     * @see edu.jas.arith.Rational#getRational()
      */
-    public BigRational toRational() {
+    public BigRational getRational() {
         return this;
     }
 
