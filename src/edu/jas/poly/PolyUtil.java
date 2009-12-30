@@ -12,6 +12,13 @@ import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
+import edu.jas.arith.BigInteger;
+import edu.jas.arith.BigRational;
+import edu.jas.arith.ModInteger;
+import edu.jas.arith.ModIntegerRing;
+import edu.jas.arith.BigComplex;
+import edu.jas.arith.Modular;
+
 import edu.jas.structure.RingElem;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
@@ -20,13 +27,6 @@ import edu.jas.structure.UnaryFunctor;
 import edu.jas.structure.Power;
 import edu.jas.structure.Complex;
 import edu.jas.structure.ComplexRing;
-
-import edu.jas.arith.BigInteger;
-import edu.jas.arith.BigRational;
-import edu.jas.arith.ModInteger;
-import edu.jas.arith.ModIntegerRing;
-import edu.jas.arith.BigComplex;
-import edu.jas.arith.Modular;
 
 import edu.jas.util.ListUtil;
 
@@ -475,6 +475,36 @@ public class PolyUtil {
                                                GenPolynomial<GenPolynomial<C>> A ) {
         AlgebraicNumberRing<C> afac = (AlgebraicNumberRing<C>) pfac.coFac;
         return PolyUtil.<GenPolynomial<C>,AlgebraicNumber<C>>map(pfac,A, new PolyToAlg<C>(afac) );
+    }
+
+
+    /**
+     * Complex from algebraic coefficients. 
+     * @param fac result polynomial factory.
+     * @param A polynomial with AlgebraicNumber coefficients Q(i) to be converted.
+     * @return polynomial with Complex coefficients.
+     */
+    public static <C extends GcdRingElem<C>>
+        GenPolynomial<Complex<C>> 
+        complexFromAlgebraic( GenPolynomialRing<Complex<C>> fac,
+                              GenPolynomial<AlgebraicNumber<C>> A ) {
+        ComplexRing<C> cfac = (ComplexRing<C>) fac.coFac;
+        return PolyUtil.<AlgebraicNumber<C>,Complex<C>>map(fac,A, new AlgebToCompl<C>(cfac) );
+    }
+
+
+    /**
+     * AlgebraicNumber from complex coefficients. 
+     * @param fac result polynomial factory over Q(i).
+     * @param A polynomial with Complex coefficients to be converted.
+     * @return polynomial with AlgebraicNumber coefficients.
+     */
+    public static <C extends GcdRingElem<C>>
+        GenPolynomial<AlgebraicNumber<C>> 
+        algebraicFromComplex( GenPolynomialRing<AlgebraicNumber<C>> fac,
+                              GenPolynomial<Complex<C>> A ) {
+        AlgebraicNumberRing<C> afac = (AlgebraicNumberRing<C>) fac.coFac;
+        return PolyUtil.<Complex<C>,AlgebraicNumber<C>>map(fac,A, new ComplToAlgeb<C>(afac) );
     }
 
 
@@ -1979,6 +2009,69 @@ class RatToCompl implements UnaryFunctor<BigRational,BigComplex> {
             return new BigComplex();
         } else {
             return new BigComplex( c );
+        }
+    }
+}
+
+
+/**
+ * Algebraic to generic complex functor.
+ */
+class AlgebToCompl<C extends GcdRingElem<C>> implements UnaryFunctor<AlgebraicNumber<C>,Complex<C>> {
+    final protected ComplexRing<C> cfac;
+    public AlgebToCompl(ComplexRing<C> fac) {
+        if ( fac == null ) {
+            throw new IllegalArgumentException("fac must not be null");
+        }
+        cfac = fac;
+    }
+    public Complex<C> eval(AlgebraicNumber<C> a) {
+        if ( a == null || a.isZERO() ) { // should not happen
+            return cfac.getZERO();
+        } else if ( a.isONE() ) {
+            return cfac.getONE();
+        } else {
+            GenPolynomial<C> p = a.getVal();
+            C real = cfac.ring.getZERO();
+            C imag = cfac.ring.getZERO();
+            for ( Monomial<C> m : p ) {
+                if ( m.exponent().getVal(0) == 1L ) {
+                    imag = m.coefficient();
+                } else if ( m.exponent().getVal(0) == 0L ) {
+                    real = m.coefficient();
+                } else {
+                    throw new IllegalArgumentException("unexpected monomial " + m);
+                }
+            }
+            //Complex<C> c = new Complex<C>(cfac,real,imag);
+            return new Complex<C>(cfac,real,imag);
+        }
+    }
+}
+
+
+/**
+ * Ceneric complex to algebraic number functor.
+ */
+class ComplToAlgeb<C extends GcdRingElem<C>> implements UnaryFunctor<Complex<C>,AlgebraicNumber<C>> {
+    final protected AlgebraicNumberRing<C> afac;
+    final protected AlgebraicNumber<C> I;
+    public ComplToAlgeb(AlgebraicNumberRing<C> fac) {
+        if ( fac == null ) {
+            throw new IllegalArgumentException("fac must not be null");
+        }
+        afac = fac;
+        I = afac.getGenerator();
+    }
+    public AlgebraicNumber<C> eval(Complex<C> c) {
+        if ( c == null || c.isZERO() ) { // should not happen
+            return afac.getZERO();
+        } else if ( c.isONE() ) {
+            return afac.getONE();
+        } else if ( c.isIMAG() ) {
+            return I;
+        } else {
+            return I.multiply(c.getIm()).sum(c.getRe());
         }
     }
 }
