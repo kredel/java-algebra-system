@@ -168,7 +168,7 @@ public class FactorMoreTest extends TestCase {
      * Test integer integral function factorization.
      * 
      */
-    public <MOD extends GcdRingElem<MOD> & Modular> void testIntegerIntegralFunctionFactorization() {
+    public void testIntegerIntegralFunctionFactorization() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(1);
@@ -176,7 +176,7 @@ public class FactorMoreTest extends TestCase {
         GenPolynomialRing<BigInteger> pfac = new GenPolynomialRing<BigInteger>(cfac, 1, to, qvars);
         GenPolynomial<BigInteger> t = pfac.univariate(0);
 
-        FactorAbstract<BigInteger> fac = new FactorInteger<MOD>();
+        FactorAbstract<BigInteger> fac = new FactorInteger<ModInteger>();
 
         String[] vars = new String[] { "x" };
         GenPolynomialRing<GenPolynomial<BigInteger>> pqfac = new GenPolynomialRing<GenPolynomial<BigInteger>>(

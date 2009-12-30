@@ -240,40 +240,40 @@ public class GroebnerBaseSeqPairParTest extends TestCase {
      Gs = bbpar.GB( L );
      Gp = bbspar.GB( L );
 
-     assertTrue("Gs.containsAll(Gp)", Gs.containsAll(Gp) );
-     assertTrue("Gp.containsAll(Gs)", Gp.containsAll(Gs) );
+     assertTrue("Gs.containsAll(Gp) " + Gs + ", " + Gp, Gs.containsAll(Gp) );
+     assertTrue("Gp.containsAll(Gs) " + Gs + ", " + Gp, Gp.containsAll(Gs) );
 
      L = Gs;
      L.add(b);
      Gs = bbpar.GB( L );
      Gp = bbspar.GB( L );
 
-     assertTrue("Gs.containsAll(Gp)", Gs.containsAll(Gp) );
-     assertTrue("Gp.containsAll(Gs)", Gp.containsAll(Gs) );
+     assertTrue("Gs.containsAll(Gp) " + Gs + ", " + Gp, Gs.containsAll(Gp) );
+     assertTrue("Gp.containsAll(Gs) " + Gs + ", " + Gp, Gp.containsAll(Gs) );
 
      L = Gs;
      L.add(c);
      Gs = bbpar.GB( L );
      Gp = bbspar.GB( L );
 
-     assertTrue("Gs.containsAll(Gp)", Gs.containsAll(Gp) );
-     assertTrue("Gp.containsAll(Gs)", Gp.containsAll(Gs) );
+     assertTrue("Gs.containsAll(Gp) " + Gs + ", " + Gp, Gs.containsAll(Gp) );
+     assertTrue("Gp.containsAll(Gs) " + Gs + ", " + Gp, Gp.containsAll(Gs) );
 
      L = Gs;
      L.add(d);
      Gs = bbpar.GB( L );
      Gp = bbspar.GB( L );
 
-     assertTrue("Gs.containsAll(Gp)", Gs.containsAll(Gp) );
-     assertTrue("Gp.containsAll(Gs)", Gp.containsAll(Gs) );
+     assertTrue("Gs.containsAll(Gp) " + Gs + ", " + Gp, Gs.containsAll(Gp) );
+     assertTrue("Gp.containsAll(Gs) " + Gs + ", " + Gp, Gp.containsAll(Gs) );
 
      L = Gs;
      L.add(e);
      Gs = bbpar.GB( L );
      Gp = bbspar.GB( L );
 
-     assertTrue("Gs.containsAll(Gp)", Gs.containsAll(Gp) );
-     assertTrue("Gp.containsAll(Gs)", Gp.containsAll(Gs) );
+     assertTrue("Gs.containsAll(Gp) " + Gs + ", " + Gp, Gs.containsAll(Gp) );
+     assertTrue("Gp.containsAll(Gs) " + Gs + ", " + Gp, Gp.containsAll(Gs) );
  }
 
 

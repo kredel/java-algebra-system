@@ -105,13 +105,13 @@ public class FactorIntegerTest extends TestCase {
      * Test integer factorization.
      * 
      */
-    public <MOD extends GcdRingElem<MOD> & Modular> void testIntegerFactorization() {
+    public void testIntegerFactorization() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(4);
         BigInteger one = cfac.getONE();
         GenPolynomialRing<BigInteger> pfac = new GenPolynomialRing<BigInteger>(cfac, 1, to);
-        FactorInteger<MOD> fac = new FactorInteger<MOD>();
+        FactorAbstract<BigInteger> fac = new FactorInteger<ModInteger>();
 
         for (int i = 1; i < 3; i++) {
             int facs = 0;
@@ -173,12 +173,12 @@ public class FactorIntegerTest extends TestCase {
      * Test multivariate integer factorization.
      * 
      */
-    public <MOD extends GcdRingElem<MOD> & Modular> void testMultivariate2IntegerFactorization() {
+    public void testMultivariate2IntegerFactorization() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(1);
         GenPolynomialRing<BigInteger> pfac = new GenPolynomialRing<BigInteger>(cfac, 2, to);
-        FactorInteger<MOD> fac = new FactorInteger<MOD>();
+        FactorAbstract<BigInteger> fac = new FactorInteger<ModInteger>();
 
         for (int i = 1; i < 2; i++) {
             GenPolynomial<BigInteger> b = pfac.random(kl, 3, el, q / 2.0f);
