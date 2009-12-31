@@ -225,9 +225,9 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
                 System.out.println("cn  = " + cn);
             }
             if (quadratic) { 
-                lift = PolyUfdUtil.liftHenselQuadratic(crq, cn, cm, cmf, sm, tm);
+                lift = HenselUtil.liftHenselQuadratic(crq, cn, cm, cmf, sm, tm);
             } else {
-                lift = PolyUfdUtil.liftHensel(crq, cn, cm, cmf, sm, tm);
+                lift = HenselUtil.liftHensel(crq, cn, cm, cmf, sm, tm);
             }
             q = lift.A;
             if (debug) {

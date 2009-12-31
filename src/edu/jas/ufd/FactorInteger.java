@@ -303,8 +303,8 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         GenPolynomial<BigInteger> PP = C, P = C;
         System.out.println("modlist  = " + mlist); // includes not ldcf
         // lift via Hensel
-        //ilist = PolyUfdUtil.<MOD> liftHenselQuadratic(PP, M, mlist);
-        ilist = PolyUfdUtil.<MOD> liftHensel(PP, M, mlist);
+        //ilist = HenselUtil.<MOD> liftHenselQuadratic(PP, M, mlist);
+        ilist = HenselUtil.<MOD> liftHensel(PP, M, mlist);
         if (logger.isInfoEnabled()) {
             logger.info("lifted intlist = " + ilist);
         }
@@ -442,9 +442,9 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
 
                 // lift via Hensel
                 try {
-                    // ilist = PolyUfdUtil.liftHenselQuadraticFac(PP, M, trial, cofactor);
-                    ilist = PolyUfdUtil.<MOD> liftHenselQuadratic(PP, M, trial, cofactor);
-                    //ilist = PolyUfdUtil.<MOD> liftHensel(PP, M, trial, cofactor);
+                    // ilist = HenselUtil.liftHenselQuadraticFac(PP, M, trial, cofactor);
+                    ilist = HenselUtil.<MOD> liftHenselQuadratic(PP, M, trial, cofactor);
+                    //ilist = HenselUtil.<MOD> liftHensel(PP, M, trial, cofactor);
                 } catch (RuntimeException e) {
                     // no liftable factors
                     if ( /*debug*/ logger.isDebugEnabled()) {
