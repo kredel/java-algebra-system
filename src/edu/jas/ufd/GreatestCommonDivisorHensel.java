@@ -224,10 +224,15 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
                 System.out.println("tm  = " + tm);
                 System.out.println("cn  = " + cn);
             }
-            if (quadratic) { 
-                lift = HenselUtil.liftHenselQuadratic(crq, cn, cm, cmf, sm, tm);
-            } else {
-                lift = HenselUtil.liftHensel(crq, cn, cm, cmf, sm, tm);
+            try {
+                if (quadratic) { 
+                    lift = HenselUtil.liftHenselQuadratic(crq, cn, cm, cmf, sm, tm);
+                } else {
+                    lift = HenselUtil.liftHensel(crq, cn, cm, cmf, sm, tm);
+                }
+            } catch(NoLiftingException nle) {
+                logger.info("giving up on Hensel gcd reverting to Subres gcd " + nle);
+                return super.baseGcd(P, S);
             }
             q = lift.A;
             if (debug) {

@@ -259,22 +259,24 @@ public class HenselUtilTest extends TestCase {
             //System.out.println("sp    = " + sp);
             //System.out.println("tp    = " + tp);
 
-            lift = HenselUtil.<ModInteger> liftHensel(c, mi, ap, bp, sp, tp);
-            a1 = lift.A;
-            b1 = lift.B;
-            c1 = a1.multiply(b1);
+            try {
+                lift = HenselUtil.<ModInteger> liftHensel(c, mi, ap, bp, sp, tp);
+                a1 = lift.A;
+                b1 = lift.B;
+                c1 = a1.multiply(b1);
+                //System.out.println("\na     = " + a);
+                //System.out.println("b     = " + b);
+                //System.out.println("c     = " + c);
+                //System.out.println("a1    = " + a1);
+                //System.out.println("b1    = " + b1);
+                //System.out.println("a1*b1 = " + c1);
+                //assertEquals("lift(a mod p) = a",a,a1);
+                //assertEquals("lift(b mod p) = b",b,b1);
 
-            //System.out.println("\na     = " + a);
-            //System.out.println("b     = " + b);
-            //System.out.println("c     = " + c);
-            //System.out.println("a1    = " + a1);
-            //System.out.println("b1    = " + b1);
-            //System.out.println("a1*b1 = " + c1);
-
-            //assertEquals("lift(a mod p) = a",a,a1);
-            //assertEquals("lift(b mod p) = b",b,b1);
-            assertEquals("lift(a b mod p) = a b", c, c1);
-            //break;
+                assertEquals("lift(a b mod p) = a b", c, c1);
+            } catch ( NoLiftingException e ) {
+                fail(""+e);
+            }
         }
     }
 
@@ -371,42 +373,48 @@ public class HenselUtilTest extends TestCase {
             //System.out.println("tp    = " + tp);
 
             long tq = System.currentTimeMillis();
-            lift = HenselUtil.<ModInteger>liftHenselQuadratic(c, mi, ap, bp, sp, tp);
-            tq = System.currentTimeMillis() - tq;
-            a1 = lift.A;
-            b1 = lift.B;
-            c1 = a1.multiply(b1);
-
-            //System.out.println("\na     = " + a);
-            //System.out.println("b     = " + b);
-            //System.out.println("c     = " + c);
-            //System.out.println("a1    = " + a1);
-            //System.out.println("b1    = " + b1);
-            //System.out.println("a1*b1 = " + c1);
-
-            //assertEquals("lift(a mod p) = a",a,a1);
-            //assertEquals("lift(b mod p) = b",b,b1);
-            assertEquals("lift(a b mod p) = a b", c, c1);
-
-            if (false) {
-                long t = System.currentTimeMillis();
-                lift = HenselUtil.<ModInteger>liftHensel(c, mi, ap, bp, sp, tp);
-                t = System.currentTimeMillis() - t;
+            try {
+                lift = HenselUtil.<ModInteger>liftHenselQuadratic(c, mi, ap, bp, sp, tp);
+                tq = System.currentTimeMillis() - tq;
                 a1 = lift.A;
                 b1 = lift.B;
                 c1 = a1.multiply(b1);
-
                 //System.out.println("\na     = " + a);
                 //System.out.println("b     = " + b);
                 //System.out.println("c     = " + c);
                 //System.out.println("a1    = " + a1);
                 //System.out.println("b1    = " + b1);
                 //System.out.println("a1*b1 = " + c1);
-
                 //assertEquals("lift(a mod p) = a",a,a1);
                 //assertEquals("lift(b mod p) = b",b,b1);
-                assertEquals("lift(a b mod p) = a b", c, c1);
 
+                assertEquals("lift(a b mod p) = a b", c, c1);
+            } catch ( NoLiftingException e ) {
+                fail(""+e);
+            }
+
+            if (false) {
+                long t = System.currentTimeMillis();
+                try {
+                    lift = HenselUtil.<ModInteger>liftHensel(c, mi, ap, bp, sp, tp);
+                    t = System.currentTimeMillis() - t;
+                    a1 = lift.A;
+                    b1 = lift.B;
+                    c1 = a1.multiply(b1);
+
+                    //System.out.println("\na     = " + a);
+                    //System.out.println("b     = " + b);
+                    //System.out.println("c     = " + c);
+                    //System.out.println("a1    = " + a1);
+                    //System.out.println("b1    = " + b1);
+                    //System.out.println("a1*b1 = " + c1);
+
+                    //assertEquals("lift(a mod p) = a",a,a1);
+                    //assertEquals("lift(b mod p) = b",b,b1);
+                    assertEquals("lift(a b mod p) = a b", c, c1);
+                } catch ( NoLiftingException e ) {
+                    fail(""+e);
+                }
                 System.out.println("\nquadratic Hensel time = " + tq);
                 System.out.println("linear    Hensel time = " + t);
             }
@@ -493,16 +501,15 @@ public class HenselUtilTest extends TestCase {
             //System.out.println("tp    = " + tp);
 
             long tq = System.currentTimeMillis();
-            try {
+            try { 
                 lift = HenselUtil.<ModInteger>liftHenselQuadratic(c, mi, ap, bp);
                 tq = System.currentTimeMillis() - tq;
                 a1 = lift.A;
                 b1 = lift.B;
                 c1 = a1.multiply(b1);
                 assertEquals("lift(a b mod p) = a b", c, c1);
-            } catch (RuntimeException e) {
-                // a and b not coprime
-                System.out.println("e = " + e);
+            } catch ( NoLiftingException e ) {
+                fail(""+e);
             }
 
             //System.out.println("\na     = " + a);
@@ -570,9 +577,6 @@ public class HenselUtilTest extends TestCase {
                 d.doPutToMap(e, one);
             }
             GreatestCommonDivisorAbstract<BigInteger> engine = GCDFactory.getProxy(mi);
-            //          a = engine.basePrimitivePart(a);
-            //          b = engine.basePrimitivePart(b);
-            //          d = engine.basePrimitivePart(d);
 
             GenPolynomial<BigInteger> g;
             g = engine.baseGcd(a, b);
@@ -654,7 +658,7 @@ public class HenselUtilTest extends TestCase {
             long tq = System.currentTimeMillis();
             try {
                 lift = HenselUtil.<ModInteger>liftHenselQuadratic(c, mip, mlist);
-            } catch(RuntimeException e) {
+            } catch(NoLiftingException e) {
                 lift = null;
                 fail("liftHenselQuadratic: " + c + ", mlist = " + mlist);
             }

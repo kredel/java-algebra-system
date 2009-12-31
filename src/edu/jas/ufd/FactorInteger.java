@@ -273,8 +273,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
      *         p**e.
      * <b>Note:</b> does not work.
      */
-    List<GenPolynomial<BigInteger>> searchFactorsMonic(GenPolynomial<BigInteger> C, BigInteger M,
-                                                       List<GenPolynomial<MOD>> F) {
+    List<GenPolynomial<BigInteger>> searchFactorsMonic(GenPolynomial<BigInteger> C, BigInteger M,List<GenPolynomial<MOD>> F) {
         System.out.println("*** monic factor combination ***");
         if (C == null || C.isZERO() || F == null || F.size() == 0) {
             throw new RuntimeException("C must be nonzero and F must be nonempty");
@@ -303,8 +302,12 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         GenPolynomial<BigInteger> PP = C, P = C;
         System.out.println("modlist  = " + mlist); // includes not ldcf
         // lift via Hensel
-        //ilist = HenselUtil.<MOD> liftHenselQuadratic(PP, M, mlist);
-        ilist = HenselUtil.<MOD> liftHensel(PP, M, mlist);
+        try {
+            //ilist = HenselUtil.<MOD> liftHenselQuadratic(PP, M, mlist);
+            ilist = HenselUtil.<MOD> liftHensel(PP, M, mlist);
+        } catch(NoLiftingException e) {
+            throw new RuntimeException(e);
+        }
         if (logger.isInfoEnabled()) {
             logger.info("lifted intlist = " + ilist);
         }
@@ -445,7 +448,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                     // ilist = HenselUtil.liftHenselQuadraticFac(PP, M, trial, cofactor);
                     ilist = HenselUtil.<MOD> liftHenselQuadratic(PP, M, trial, cofactor);
                     //ilist = HenselUtil.<MOD> liftHensel(PP, M, trial, cofactor);
-                } catch (RuntimeException e) {
+                } catch (NoLiftingException e) {
                     // no liftable factors
                     if ( /*debug*/ logger.isDebugEnabled()) {
                         logger.info("no liftable factors " + e);
