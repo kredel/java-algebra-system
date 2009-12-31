@@ -238,8 +238,26 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
             if ( debug ) {
                 logger.info("lifting shortest from "+ mlist);
             }
-            if ( false && P.leadingBaseCoefficient().isONE()) {
-                factors = searchFactorsMonic(P, M, mlist); // doesn't work
+            if ( true && P.leadingBaseCoefficient().isONE()) {
+                long t = System.currentTimeMillis();
+                try {
+                    factors = searchFactorsMonic(P, M, PolyUtil.<MOD> monic(mlist)); // doesn't work
+                    t = System.currentTimeMillis() - t;
+                    System.out.println("monic time = " + t);
+                    t = System.currentTimeMillis();
+                    List<GenPolynomial<BigInteger>> factors2 = searchFactorsNonMonic(P, M, mlist);
+                    t = System.currentTimeMillis() - t;
+                    System.out.println("non monic time = " + t);
+                    if ( !factors.equals(factors2) ) {
+                        System.out.println("factors  = " + factors);
+                        System.out.println("factors2 = " + factors2);
+                    }
+                } catch ( RuntimeException e ) {
+                    t = System.currentTimeMillis();
+                    factors = searchFactorsNonMonic(P, M, mlist);
+                    t = System.currentTimeMillis() - t;
+                    System.out.println("non monic time = " + t);
+                }
             } else {
                 factors = searchFactorsNonMonic(P, M, mlist);
             }
@@ -304,7 +322,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         // lift via Hensel
         try {
             //ilist = HenselUtil.<MOD> liftHenselQuadratic(PP, M, mlist);
-            ilist = HenselUtil.<MOD> liftHensel(PP, M, mlist);
+            ilist = HenselUtil.<MOD> liftHenselQuadraticFac(PP, M, mlist);
         } catch(NoLiftingException e) {
             throw new RuntimeException(e);
         }
@@ -331,9 +349,9 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                     GenPolynomial<BigInteger> fk = flist.get(kk);
                     trial = trial.multiply(fk);
                 }
-                if (trial.degree(0) > deg) {
-                    continue;
-                }
+                //if (trial.degree(0) > deg) {
+                //    continue;
+                //}
                 //System.out.println("+trial    = " + trial);
                 //System.out.println("+flist    = " + flist);
                 //trial = engine.basePrimitivePart( trial.multiply(ldcf) );

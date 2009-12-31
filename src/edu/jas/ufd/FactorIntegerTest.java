@@ -30,6 +30,7 @@ import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.TermOrder;
+import edu.jas.poly.ExpVector;
 import edu.jas.structure.GcdRingElem;
 
 
@@ -45,7 +46,7 @@ public class FactorIntegerTest extends TestCase {
      * main.
      */
     public static void main(String[] args) {
-        //BasicConfigurator.configure();
+        BasicConfigurator.configure();
         junit.textui.TestRunner.run(suite());
     }
 
@@ -113,7 +114,7 @@ public class FactorIntegerTest extends TestCase {
         GenPolynomialRing<BigInteger> pfac = new GenPolynomialRing<BigInteger>(cfac, 1, to);
         FactorAbstract<BigInteger> fac = new FactorInteger<ModInteger>();
 
-        for (int i = 1; i < 3; i++) {
+        for (int i = 1; i < 2; i++) {
             int facs = 0;
             GenPolynomial<BigInteger> a = null; //pfac.random(kl,ll*(i+1),el*(i+1),q);
             GenPolynomial<BigInteger> b = pfac.random(kl * 2, ll * (i), el * (i + 1), q);
@@ -127,14 +128,14 @@ public class FactorIntegerTest extends TestCase {
             if (b.degree() > 0) {
                 facs++;
             }
-            //             if (!c.leadingBaseCoefficient().isUnit()) {
-            //                 ExpVector e = c.leadingExpVector();
-            //                 c.doPutToMap(e, one);
-            //             }
-            //             if (!b.leadingBaseCoefficient().isUnit()) {
-            //                 ExpVector e = b.leadingExpVector();
-            //                 b.doPutToMap(e, one);
-            //             }
+            if (!c.leadingBaseCoefficient().isUnit()) {
+                ExpVector e = c.leadingExpVector();
+                c.doPutToMap(e, one);
+            }
+            if (!b.leadingBaseCoefficient().isUnit()) {
+                ExpVector e = b.leadingExpVector();
+                b.doPutToMap(e, one);
+            }
             a = c.multiply(b);
             if (a.isConstant()) {
                 continue;
@@ -147,10 +148,10 @@ public class FactorIntegerTest extends TestCase {
             //System.out.println("c = " + c);
 
             SortedMap<GenPolynomial<BigInteger>, Long> sm = fac.baseFactors(a);
-            //             System.out.println("\na   = " + a);
-            //             System.out.println("b   = " + b);
-            //             System.out.println("c   = " + c);
-            //             System.out.println("sm = " + sm);
+            System.out.println("\na   = " + a);
+            System.out.println("b   = " + b);
+            System.out.println("c   = " + c);
+            System.out.println("sm = " + sm);
 
             if (sm.size() >= facs) {
                 assertTrue("#facs < " + facs, sm.size() >= facs);
@@ -173,7 +174,7 @@ public class FactorIntegerTest extends TestCase {
      * Test multivariate integer factorization.
      * 
      */
-    public void testMultivariate2IntegerFactorization() {
+    public void xtestMultivariate2IntegerFactorization() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(1);

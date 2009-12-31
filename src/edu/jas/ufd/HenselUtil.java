@@ -58,11 +58,11 @@ public class HenselUtil {
      * with ggt(A,B) == 1 mod p and S A + T B == 1 mod p. See Algorithm 6.1. in
      * Geddes et.al.. Linear version, as it does not lift S A + T B == 1 mod
      * p^{e+1}.
-     * @param C GenPolynomial<BigInteger>.
-     * @param A GenPolynomial<MOD>.
-     * @param B other GenPolynomial<MOD>.
-     * @param S GenPolynomial<MOD>.
-     * @param T GenPolynomial<MOD>.
+     * @param C GenPolynomial
+     * @param A GenPolynomial
+     * @param B other GenPolynomial
+     * @param S GenPolynomial
+     * @param T GenPolynomial
      * @param M bound on the coefficients of A1 and B1 as factors of C.
      * @return [A1,B1,Am,Bm] = lift(C,A,B), with C = A1 * B1 mod p^e, Am = A1 mod p^e, Bm = B1 mod p^e .
      */
@@ -221,9 +221,9 @@ public class HenselUtil {
      * A.ring.coFac.modul() = B.ring.coFac.modul() and assume C == A*B mod p
      * with ggt(A,B) == 1 mod p. See algorithm 6.1. in Geddes et.al. and
      * algorithms 3.5.{5,6} in Cohen. 
-     * @param C GenPolynomial<BigInteger>.
-     * @param A GenPolynomial<ModInteger>.
-     * @param B other GenPolynomial<ModInteger>.
+     * @param C GenPolynomial
+     * @param A GenPolynomial
+     * @param B other GenPolynomial
      * @param M bound on the coefficients of A1 and B1 as factors of C.
      * @return [A1,B1] = lift(C,A,B), with C = A1 * B1.
      */
@@ -256,8 +256,8 @@ public class HenselUtil {
      * Modular Hensel lifting algorithm on coefficients. Let p =
      * f_i.ring.coFac.modul() i = 0, ..., n-1 and assume C == prod_{0,...,n-1}
      * f_i mod p with ggt(f_i,f_j) == 1 mod p for i != j
-     * @param C GenPolynomial<BigInteger>.
-     * @param F = [f_0,...,f_{n-1}] List<GenPolynomial<ModInteger>>.
+     * @param C GenPolynomial
+     * @param F = [f_0,...,f_{n-1}] list of GenPolynomial
      * @param M bound on the coefficients of g_i as factors of C.
      * @return [g_0,...,g_{n-1}] = lift(C,F), with C = prod_{0,...,n-1} g_i mod
      *         p^e.
@@ -321,9 +321,10 @@ public class HenselUtil {
                 A = A.multiply(fi);
                 F1.add(fi);
                 //} else {
-                System.out.println("A = " + A + ", fi = " + fi);
+                //System.out.println("A = " + A + ", fi = " + fi);
             }
         }
+        //System.out.println("A = " + A);
         List<GenPolynomial<MOD>> F2 = new ArrayList<GenPolynomial<MOD>>(k);
         GenPolynomial<MOD> B = mfac.getONE();
         for (int i = k; i < n; i++) {
@@ -332,9 +333,12 @@ public class HenselUtil {
                 B = B.multiply(fi);
                 F2.add(fi);
                 //} else {
-                System.out.println("B = " + B + ", fi = " + fi);
+                //System.out.println("B = " + B + ", fi = " + fi);
             }
         }
+        //System.out.println("B = " + B);
+        //System.out.println("A = " + A + ", F1 = " + F1);
+        //System.out.println("B = " + B + ", F2 = " + F2);
         // one Hensel step on part polynomials
         HenselApprox<MOD> ab = HenselUtil.<MOD> liftHensel(C, M, A, B);
         GenPolynomial<BigInteger> A1 = ab.A;
@@ -342,25 +346,22 @@ public class HenselUtil {
         if (!isHenselLift(C, M, P, A1, B1)) {
             throw new NoLiftingException("no lifting A1, B1");
         }
-            System.out.println("A = " + A + ", F1 = " + F1);
-            System.out.println("B = " + B + ", F2 = " + F2);
-            System.out.println("A1 = " + A1 + ", B1 = " + B1);
+        //System.out.println("Am = " + ab.Am + ", Bm = " + ab.Bm);
+        //System.out.println("A1 = " + A1 + ", B1 = " + B1);
         BigInteger Mh = M.divide(new BigInteger(2));
         // recursion on list parts
         List<GenPolynomial<BigInteger>> G1 = HenselUtil.<MOD> liftHensel(A1, Mh, F1);
         if (!isHenselLift(A1, Mh, P, G1)) {
             throw new NoLiftingException("no lifting G1");
         }
-            System.out.println("A = " + A + ", F1 = " + F1);
-            System.out.println("B = " + B + ", F2 = " + F2);
-            System.out.println("G1 = " + G1);
+        //System.out.println("A1 = " + A1 + ", F1 = " + F1);
+        //System.out.println("G1 = " + G1);
         List<GenPolynomial<BigInteger>> G2 = HenselUtil.<MOD> liftHensel(B1, Mh, F2);
         if (!isHenselLift(B1, Mh, P, G2)) {
             throw new NoLiftingException("no lifting G2");
         }
-            System.out.println("A = " + A + ", F1 = " + F1);
-            System.out.println("B = " + B + ", F2 = " + F2);
-            System.out.println("G2 = " + G2);
+        //System.out.println("B1 = " + B1 + ", F2 = " + F2);
+        //System.out.println("G2 = " + G2);
         if (icnst != null) {
             lift.add(icnst);
         }
@@ -371,16 +372,16 @@ public class HenselUtil {
 
 
     /**
-     * Modular Hensel lifting algorithm on coefficients. Let p =
+     * Modular quadratic Hensel lifting algorithm on coefficients. Let p =
      * A.ring.coFac.modul() = B.ring.coFac.modul() and assume C == A*B mod p
      * with ggt(A,B) == 1 mod p and S A + T B == 1 mod p. See algorithm 6.1. in
      * Geddes et.al. and algorithms 3.5.{5,6} in Cohen. Quadratic version, as it
      * also lifts S A + T B == 1 mod p^{e+1}.
-     * @param C GenPolynomial<BigInteger>.
-     * @param A GenPolynomial<ModInteger>.
-     * @param B other GenPolynomial<ModInteger>.
-     * @param S GenPolynomial<ModInteger>.
-     * @param T GenPolynomial<ModInteger>.
+     * @param C GenPolynomial
+     * @param A GenPolynomial
+     * @param B other GenPolynomial
+     * @param S GenPolynomial
+     * @param T GenPolynomial
      * @param M bound on the coefficients of A1 and B1 as factors of C.
      * @return [A1,B1] = lift(C,A,B), with C = A1 * B1.
      */
@@ -600,13 +601,13 @@ public class HenselUtil {
 
 
     /**
-     * Modular Hensel lifting algorithm on coefficients. Let p =
+     * Modular quadratic Hensel lifting algorithm on coefficients. Let p =
      * A.ring.coFac.modul() = B.ring.coFac.modul() and assume C == A*B mod p
      * with ggt(A,B) == 1 mod p. See algorithm 6.1. in Geddes et.al. and
      * algorithms 3.5.{5,6} in Cohen. Quadratic version.
-     * @param C GenPolynomial<BigInteger>.
-     * @param A GenPolynomial<ModInteger>.
-     * @param B other GenPolynomial<ModInteger>.
+     * @param C GenPolynomial
+     * @param A GenPolynomial
+     * @param B other GenPolynomial
      * @param M bound on the coefficients of A1 and B1 as factors of C.
      * @return [A1,B1] = lift(C,A,B), with C = A1 * B1.
      */
@@ -637,48 +638,11 @@ public class HenselUtil {
 
 
     /**
-     * Modular Hensel lifting algorithm on coefficients. Let p =
-     * A.ring.coFac.modul() = B.ring.coFac.modul() and assume C == A*B mod p
-     * with ggt(A,B) == 1 mod p. See algorithm 6.1. in Geddes et.al. and
-     * algorithms 3.5.{5,6} in Cohen. Quadratic version.
-     * @param C GenPolynomial<BigInteger>.
-     * @param A GenPolynomial<ModInteger>.
-     * @param B other GenPolynomial<ModInteger>.
-     * @param M bound on the coefficients of A1 and B1 as factors of C.
-     * @return [A1,B1] = lift(C,A,B), with C = A1 * B1.
-     */
-    @SuppressWarnings("unchecked")
-    public static <MOD extends GcdRingElem<MOD> & Modular>
-      HenselApprox<MOD> liftHenselQuadraticFac(GenPolynomial<BigInteger> C, BigInteger M,
-                                               GenPolynomial<MOD> A, GenPolynomial<MOD> B) throws NoLiftingException {
-        if (C == null || C.isZERO()) {
-            throw new RuntimeException("C must be nonzero");
-        }
-        if (A == null || A.isZERO() || B == null || B.isZERO()) {
-            throw new RuntimeException("A and B must be nonzero");
-        }
-        GenPolynomialRing<BigInteger> fac = C.ring;
-        if (fac.nvar != 1) { // todo assert
-            throw new RuntimeException("polynomial ring not univariate");
-        }
-        // one Hensel step on part polynomials
-        GenPolynomial<MOD>[] gst = A.egcd(B);
-        if (!gst[0].isONE()) {
-            throw new NoLiftingException("A and B not coprime, gcd = " + gst[0] + ", A = " + A + ", B = " + B);
-        }
-        GenPolynomial<MOD> s = gst[1];
-        GenPolynomial<MOD> t = gst[2];
-        HenselApprox<MOD> ab = HenselUtil.<MOD> liftHenselQuadraticFac(C, M, A, B, s, t);
-        return ab;
-    }
-
-
-    /**
-     * Modular Hensel lifting algorithm on coefficients. Let p =
+     * Modular quadratic Hensel lifting algorithm on coefficients. Let p =
      * f_i.ring.coFac.modul() i = 0, ..., n-1 and assume C == prod_{0,...,n-1}
      * f_i mod p with ggt(f_i,f_j) == 1 mod p for i != j
-     * @param C GenPolynomial<BigInteger>.
-     * @param F = [f_0,...,f_{n-1}] List<GenPolynomial<ModInteger>>.
+     * @param C GenPolynomial
+     * @param F = [f_0,...,f_{n-1}] list of GenPolynomial
      * @param M bound on the coefficients of g_i as factors of C.
      * @return [g_0,...,g_{n-1}] = lift(C,F), with C = prod_{0,...,n-1} g_i mod
      *         p**e.
@@ -794,14 +758,51 @@ public class HenselUtil {
     /**
      * Modular Hensel lifting algorithm on coefficients. Let p =
      * A.ring.coFac.modul() = B.ring.coFac.modul() and assume C == A*B mod p
+     * with ggt(A,B) == 1 mod p. See algorithm 6.1. in Geddes et.al. and
+     * algorithms 3.5.{5,6} in Cohen. Quadratic version.
+     * @param C GenPolynomial
+     * @param A GenPolynomial
+     * @param B other GenPolynomial
+     * @param M bound on the coefficients of A1 and B1 as factors of C.
+     * @return [A1,B1] = lift(C,A,B), with C = A1 * B1.
+     */
+    @SuppressWarnings("unchecked")
+    public static <MOD extends GcdRingElem<MOD> & Modular>
+      HenselApprox<MOD> liftHenselQuadraticFac(GenPolynomial<BigInteger> C, BigInteger M,
+                                               GenPolynomial<MOD> A, GenPolynomial<MOD> B) throws NoLiftingException {
+        if (C == null || C.isZERO()) {
+            throw new RuntimeException("C must be nonzero");
+        }
+        if (A == null || A.isZERO() || B == null || B.isZERO()) {
+            throw new RuntimeException("A and B must be nonzero");
+        }
+        GenPolynomialRing<BigInteger> fac = C.ring;
+        if (fac.nvar != 1) { // todo assert
+            throw new RuntimeException("polynomial ring not univariate");
+        }
+        // one Hensel step on part polynomials
+        GenPolynomial<MOD>[] gst = A.egcd(B);
+        if (!gst[0].isONE()) {
+            throw new NoLiftingException("A and B not coprime, gcd = " + gst[0] + ", A = " + A + ", B = " + B);
+        }
+        GenPolynomial<MOD> s = gst[1];
+        GenPolynomial<MOD> t = gst[2];
+        HenselApprox<MOD> ab = HenselUtil.<MOD> liftHenselQuadraticFac(C, M, A, B, s, t);
+        return ab;
+    }
+
+
+    /**
+     * Modular Hensel lifting algorithm on coefficients. Let p =
+     * A.ring.coFac.modul() = B.ring.coFac.modul() and assume C == A*B mod p
      * with ggt(A,B) == 1 mod p and S A + T B == 1 mod p. See algorithm 6.1. in
      * Geddes et.al. and algorithms 3.5.{5,6} in Cohen. Quadratic version, as it
      * also lifts S A + T B == 1 mod p^{e+1}.
-     * @param C primitive GenPolynomial<BigInteger>.
-     * @param A GenPolynomial<ModInteger>.
-     * @param B other GenPolynomial<ModInteger>.
-     * @param S GenPolynomial<ModInteger>.
-     * @param T GenPolynomial<ModInteger>.
+     * @param C primitive GenPolynomial
+     * @param A GenPolynomial
+     * @param B other GenPolynomial
+     * @param S GenPolynomial
+     * @param T GenPolynomial
      * @param M bound on the coefficients of A1 and B1 as factors of C.
      * @return [A1,B1] = lift(C,A,B), with C = A1 * B1.
      */
@@ -1121,10 +1122,129 @@ public class HenselUtil {
 
 
     /**
+     * Modular Hensel lifting algorithm on coefficients. Let p =
+     * f_i.ring.coFac.modul() i = 0, ..., n-1 and assume C == prod_{0,...,n-1}
+     * f_i mod p with ggt(f_i,f_j) == 1 mod p for i != j
+     * @param C GenPolynomial
+     * @param F = [f_0,...,f_{n-1}] list of GenPolynomial
+     * @param M bound on the coefficients of g_i as factors of C.
+     * @return [g_0,...,g_{n-1}] = lift(C,F), with C = prod_{0,...,n-1} g_i mod
+     *         p^e.
+     */
+    public static <MOD extends GcdRingElem<MOD> & Modular>
+      List<GenPolynomial<BigInteger>> liftHenselQuadraticFac(GenPolynomial<BigInteger> C, BigInteger M, List<GenPolynomial<MOD>> F) throws NoLiftingException {
+        if (C == null || C.isZERO() || F == null || F.size() == 0) {
+            throw new RuntimeException("C must be nonzero and F must be nonempty");
+        }
+        GenPolynomialRing<BigInteger> fac = C.ring;
+        if (fac.nvar != 1) { // todo assert
+            throw new RuntimeException("polynomial ring not univariate");
+        }
+        List<GenPolynomial<BigInteger>> lift = new ArrayList<GenPolynomial<BigInteger>>(F.size());
+        GenPolynomial<MOD> cnst = null;
+        GenPolynomial<BigInteger> icnst = null;
+        for (GenPolynomial<MOD> ct : F) {
+            if (ct.isConstant()) {
+                if (cnst == null) {
+                    cnst = ct;
+                } else {
+                    throw new RuntimeException("more than one constant " + cnst + ", " + ct);
+                }
+            }
+        }
+        if (cnst != null) {
+            F.remove(cnst);
+            BigInteger ilc = cnst.leadingBaseCoefficient().getSymmetricInteger();
+            icnst = fac.getONE().multiply(ilc);
+        } else {
+            // cnst = F.get(0).ring.getONE();
+        }
+        int n = F.size();
+        if (n == 1) { // use C itself
+            lift.add(C);
+            return lift;
+        }
+        if (n == 2) { // only one step
+            if (icnst != null) {
+                lift.add(icnst);
+            }
+            HenselApprox<MOD> ab = HenselUtil.<MOD> liftHenselQuadraticFac(C, M, F.get(0), F.get(1));
+            lift.add(ab.A);
+            lift.add(ab.B);
+            return lift;
+        }
+        BigInteger lc = C.leadingBaseCoefficient();
+        GenPolynomial<MOD> f = F.get(0);
+        GenPolynomialRing<MOD> mfac = f.ring;
+        ModularRingFactory<MOD> mr = (ModularRingFactory<MOD>) mfac.coFac;
+        BigInteger P = mr.getIntegerModul();
+        // split list in two parts and prepare polynomials
+        int k = n / 2;
+        List<GenPolynomial<MOD>> F1 = new ArrayList<GenPolynomial<MOD>>(k);
+        GenPolynomial<MOD> A = mfac.getONE();
+        MOD mlc = mr.fromInteger(lc.getVal());
+        A = A.multiply(mlc);
+        for (int i = 0; i < k; i++) {
+            GenPolynomial<MOD> fi = F.get(i);
+            if (fi != null && !fi.isZERO()) {
+                A = A.multiply(fi);
+                F1.add(fi);
+                //} else {
+                //System.out.println("A = " + A + ", fi = " + fi);
+            }
+        }
+        //System.out.println("A = " + A);
+        List<GenPolynomial<MOD>> F2 = new ArrayList<GenPolynomial<MOD>>(k);
+        GenPolynomial<MOD> B = mfac.getONE();
+        for (int i = k; i < n; i++) {
+            GenPolynomial<MOD> fi = F.get(i);
+            if (fi != null && !fi.isZERO()) {
+                B = B.multiply(fi);
+                F2.add(fi);
+                //} else {
+                //System.out.println("B = " + B + ", fi = " + fi);
+            }
+        }
+        //System.out.println("B = " + B);
+        System.out.println("A = " + A + ", F1 = " + F1);
+        System.out.println("B = " + B + ", F2 = " + F2);
+        // one Hensel step on part polynomials
+        HenselApprox<MOD> ab = HenselUtil.<MOD> liftHenselQuadraticFac(C, M, A, B);
+        GenPolynomial<BigInteger> A1 = ab.A;
+        GenPolynomial<BigInteger> B1 = ab.B;
+//         if (!isHenselLift(C, M, P, A1, B1)) {
+//             throw new NoLiftingException("no lifting A1, B1");
+//         }
+//            System.out.println("Am = " + ab.Am + ", Bm = " + ab.Bm);
+            System.out.println("A1 = " + A1 + ", B1 = " + B1);
+        BigInteger Mh = M.divide(new BigInteger(2));
+        // recursion on list parts
+        List<GenPolynomial<BigInteger>> G1 = HenselUtil.<MOD> liftHenselQuadraticFac(A1, Mh, F1);
+//         if (!isHenselLift(A1, Mh, P, G1)) {
+//             throw new NoLiftingException("no lifting G1");
+//         }
+            System.out.println("A1 = " + A1 + ", F1 = " + F1);
+            System.out.println("G1 = " + G1);
+        List<GenPolynomial<BigInteger>> G2 = HenselUtil.<MOD> liftHenselQuadraticFac(B1, Mh, F2);
+//         if (!isHenselLift(B1, Mh, P, G2)) {
+//             throw new NoLiftingException("no lifting G2");
+//         }
+            System.out.println("B1 = " + B1 + ", F2 = " + F2);
+            System.out.println("G2 = " + G2);
+        if (icnst != null) {
+            lift.add(icnst);
+        }
+        lift.addAll(G1);
+        lift.addAll(G2);
+        return lift;
+    }
+
+
+    /**
      * Modular Hensel lifting test. Let p be a prime number and assume C ==
      * prod_{0,...,n-1} g_i mod p with ggt(g_i,g_j) == 1 mod p for i != j.
-     * @param C GenPolynomial<BigInteger>.
-     * @param G = [g_0,...,g_{n-1}] List<GenPolynomial<ModInteger>>.
+     * @param C GenPolynomial
+     * @param G = [g_0,...,g_{n-1}] list of GenPolynomial
      * @param M bound on the coefficients of g_i as factors of C.
      * @param p prime number.
      * @return true if C = prod_{0,...,n-1} g_i mod p^e, else false.
@@ -1188,9 +1308,9 @@ public class HenselUtil {
     /**
      * Modular Hensel lifting test. Let p be a prime number and assume C == A *
      * B mod p with ggt(A,B) == 1 mod p.
-     * @param C GenPolynomial<BigInteger>.
-     * @param A GenPolynomial<BigInteger>.
-     * @param B GenPolynomial<BigInteger>.
+     * @param C GenPolynomial
+     * @param A GenPolynomial
+     * @param B GenPolynomial
      * @param M bound on the coefficients of A and B as factors of C.
      * @param p prime number.
      * @return true if C = A * B mod p**e, else false.
@@ -1208,7 +1328,7 @@ public class HenselUtil {
     /**
      * Modular Hensel lifting test. Let p be a prime number and assume C == A *
      * B mod p with ggt(A,B) == 1 mod p.
-     * @param C GenPolynomial<BigInteger>.
+     * @param C GenPolynomial
      * @param Ha Hensel approximation.
      * @param M bound on the coefficients of A and B as factors of C.
      * @param p prime number.
