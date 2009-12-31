@@ -269,13 +269,22 @@ public class ANumGenPolynomialTest extends TestCase {
      fac = new GenPolynomialRing<AlgebraicNumber<BigRational>>(cfac,1);
 
      a = fac.random(2); //.monic();
+     if ( a.isZERO() ) {
+         return;
+     }
      assertTrue("not isZERO( a )", !a.isZERO() );
 
      b = fac.random(2); //.monic();
+     if ( b.isZERO() ) {
+         return;
+     }
      assertTrue("not isZERO( b )", !b.isZERO() );
 
      GenPolynomial<AlgebraicNumber<BigRational>> h = a;
      GenPolynomial<AlgebraicNumber<BigRational>> g = fac.random(1).monic();
+     if ( g.isZERO() ) {
+         return;
+     }
      assertTrue("not isZERO( g )", !g.isZERO() );
      //g = fac.getONE();
      a = a.multiply(g);
@@ -338,7 +347,7 @@ public class ANumGenPolynomialTest extends TestCase {
          assertTrue("a invertible mod b "+x, x.isUnit() );
      } catch (RuntimeException e) {
          // dann halt nicht
-      // not invertible
+         // not invertible
      }
  }
 
