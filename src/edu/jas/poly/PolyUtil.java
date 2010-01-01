@@ -607,6 +607,28 @@ public class PolyUtil {
 
 
     /**
+     * Polynomial list leading exponent vectors. 
+     * @param <C> coefficient type.
+     * @param L list of polynomials.
+     * @return list of leading exponent vectors.
+     */
+    public static <C extends RingElem<C>>
+        List<ExpVector> leadingExpVector( List<GenPolynomial<C>> L ) {
+        return ListUtil.<GenPolynomial<C>,ExpVector>map( L, 
+                        new UnaryFunctor<GenPolynomial<C>,ExpVector>() {
+                            public ExpVector eval(GenPolynomial<C> c) {
+                                if ( c == null ) {
+                                     return null;
+                                } else {
+                                     return c.leadingExpVector();
+                                }
+                            }
+                        }
+                                                              );
+    }
+
+
+    /**
      * GenPolynomial coefficient wise remainder.
      * @param <C> coefficient type.
      * @param P GenPolynomial.

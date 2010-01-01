@@ -7,12 +7,12 @@ package edu.jas.structure;
 
 /**
  * Unary functor interface.
- * @param <C> ring element type
- * @param <D> ring element type
+ * @param <C> element type
+ * @param <D> element type
  * @author Heinz Kredel
  */
 
-public interface UnaryFunctor< C extends RingElem<C>, D extends RingElem<D> > {
+public interface UnaryFunctor< C extends Element<C>, D extends Element<D> > {
 
 
     /**
