@@ -189,6 +189,9 @@ public class GreatestCommonDivisorModular<MOD extends GcdRingElem<MOD> & Modular
         }
         for (java.math.BigInteger p : primes) {
             //System.out.println("next run ++++++++++++++++++++++++++++++++++");
+            if ( p.longValue() == 2L ) { // skip 2
+                continue;
+            }
             if (++i >= pn) {
                 logger.error("prime list exhausted, pn = " + pn);
                 return iufd.gcd(P, S);

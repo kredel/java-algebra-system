@@ -155,7 +155,8 @@ public class GCDModLongTest extends TestCase {
         a = b = c = d = e = null;
         ai = bi = ci = di = ei = null;
         ar = br = cr = dr = er = null;
-        mi = new ModLongRing(primes.get(0), true);
+        //mi = new ModLongRing(primes.get(0), true);
+        mi = new ModLongRing(5L, true);
         ufd = new GreatestCommonDivisorPrimitive<ModLong>();
         dfac = new GenPolynomialRing<ModLong>(mi, rl, to);
         cfac = new GenPolynomialRing<ModLong>(mi, rl - 1, to);

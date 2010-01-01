@@ -75,7 +75,7 @@ public final class PrimeList implements Iterable<java.math.BigInteger> {
      */
     private void addSmall() {
         // really small
-        //val.add( new java.math.BigInteger(""+2) );
+        val.add( new java.math.BigInteger(""+2) );
         val.add( new java.math.BigInteger(""+3) );
         val.add( new java.math.BigInteger(""+5) );
         val.add( new java.math.BigInteger(""+7) );
@@ -162,7 +162,7 @@ public final class PrimeList implements Iterable<java.math.BigInteger> {
      * @param m for 2**n - m.
      */
     protected static java.math.BigInteger getLongPrime(int n, int m) {
-       long prime = 2; //2^60-93; // 2^30-35; //19; knuth (2,390)
+       long prime = 2; // knuth (2,390)
        for ( int i = 1; i < n; i++ ) {
            prime *= 2;
        }

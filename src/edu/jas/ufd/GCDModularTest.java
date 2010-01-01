@@ -156,7 +156,8 @@ public class GCDModularTest extends TestCase {
         a = b = c = d = e = null;
         ai = bi = ci = di = ei = null;
         ar = br = cr = dr = er = null;
-        mi = new ModIntegerRing(primes.get(0), true);
+        //mi = new ModIntegerRing(primes.get(0), true);
+        mi = new ModIntegerRing(5L, true);
         ufd = new GreatestCommonDivisorPrimitive<ModInteger>();
         dfac = new GenPolynomialRing<ModInteger>(mi, rl, to);
         cfac = new GenPolynomialRing<ModInteger>(mi, rl - 1, to);
