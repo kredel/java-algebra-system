@@ -103,10 +103,10 @@ public class FactorIntegerTest extends TestCase {
 
 
     /**
-     * Test integer factorization.
+     * Test integer monic factorization.
      * 
      */
-    public void testIntegerFactorization() {
+    public void testIntegerMonicFactorization() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(4);
@@ -148,10 +148,70 @@ public class FactorIntegerTest extends TestCase {
             //System.out.println("c = " + c);
 
             SortedMap<GenPolynomial<BigInteger>, Long> sm = fac.baseFactors(a);
-            System.out.println("\na   = " + a);
-            System.out.println("b   = " + b);
-            System.out.println("c   = " + c);
-            System.out.println("sm = " + sm);
+            //System.out.println("\na   = " + a);
+            //System.out.println("b   = " + b);
+            //System.out.println("c   = " + c);
+            //System.out.println("sm = " + sm);
+
+            if (sm.size() >= facs) {
+                assertTrue("#facs < " + facs, sm.size() >= facs);
+            } else {
+                long sf = 0;
+                for (Long e : sm.values()) {
+                    sf += e;
+                }
+                assertTrue("#facs < " + facs, sf >= facs);
+            }
+
+            boolean t = fac.isFactorization(a, sm);
+            //System.out.println("t        = " + t);
+            assertTrue("prod(factor(a)) = a", t);
+        }
+    }
+
+
+    /**
+     * Test integer factorization.
+     * 
+     */
+    public void testIntegerFactorization() {
+
+        TermOrder to = new TermOrder(TermOrder.INVLEX);
+        BigInteger cfac = new BigInteger(4);
+        BigInteger one = cfac.getONE();
+        GenPolynomialRing<BigInteger> pfac = new GenPolynomialRing<BigInteger>(cfac, 1, to);
+        FactorAbstract<BigInteger> fac = new FactorInteger<ModInteger>();
+
+        for (int i = 1; i < 2; i++) {
+            int facs = 0;
+            GenPolynomial<BigInteger> a = null; //pfac.random(kl,ll*(i+1),el*(i+1),q);
+            GenPolynomial<BigInteger> b = pfac.random(kl * 2, ll * (i), el * (i + 1), q);
+            GenPolynomial<BigInteger> c = pfac.random(kl, ll * (i), el * (i + 2), q);
+            if (b.isZERO() || c.isZERO()) {
+                continue;
+            }
+            if (c.degree() > 0) {
+                facs++;
+            }
+            if (b.degree() > 0) {
+                facs++;
+            }
+            a = c.multiply(b);
+            if (a.isConstant()) {
+                continue;
+            }
+            GreatestCommonDivisorAbstract<BigInteger> engine = GCDFactory.getProxy(cfac);
+            //a = engine.basePrimitivePart(a);
+            // a = a.abs();
+            //System.out.println("\na = " + a);
+            //System.out.println("b = " + b);
+            //System.out.println("c = " + c);
+
+            SortedMap<GenPolynomial<BigInteger>, Long> sm = fac.baseFactors(a);
+            //System.out.println("\na   = " + a);
+            //System.out.println("b   = " + b);
+            //System.out.println("c   = " + c);
+            //System.out.println("sm = " + sm);
 
             if (sm.size() >= facs) {
                 assertTrue("#facs < " + facs, sm.size() >= facs);

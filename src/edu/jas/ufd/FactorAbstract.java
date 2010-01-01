@@ -320,7 +320,9 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
                 if (j != null) {
                     k += j;
                 }
-                factors.put(h, k);
+                if ( ! h.isONE() ) {
+                    factors.put(h, k);
+                }
             }
         }
         //System.out.println("factors = " + factors);

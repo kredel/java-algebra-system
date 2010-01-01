@@ -77,28 +77,6 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
 
 
     /**
-     * BitSet for factor degree list.
-     * @param E exponent vector list.
-     * @return [b_0,...,b_k] a BitSet.
-     */
-    public BitSet factorDegrees(List<ExpVector> E, int deg) {
-        BitSet D = new BitSet(deg+1);
-        D.set(0);
-        for ( ExpVector e : E ) {
-            int i = (int) e.getVal(0);
-            BitSet s = new BitSet(deg+1);
-            for ( int k = 0; k < deg+1-i; k++ ) { // shift by i places
-                s.set(i+k, D.get(k) );
-            }
-            //System.out.println("s = " + s);
-            D.or(s);
-            //System.out.println("D = " + D);
-        }
-        return D;
-    }
-
-
-    /**
      * GenPolynomial base factorization of a squarefree polynomial.
      * @param P squarefree and primitive! GenPolynomial.
      * @return [p_1,...,p_k] with P = prod_{i=1, ..., k} p_i.
@@ -141,9 +119,10 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         ModularRingFactory<MOD> cofac = null;
         GenPolynomial<MOD> am = null;
         GenPolynomialRing<MOD> mfac = null;
-        final int TT = 4; // 7
+        final int TT = 5; // 7
         List<GenPolynomial<MOD>>[] modfac = (List<GenPolynomial<MOD>>[]) new List[TT];
         List<GenPolynomial<BigInteger>>[] intfac = (List<GenPolynomial<BigInteger>>[]) new List[TT];
+        BigInteger[] plist = new BigInteger[TT];
         List<GenPolynomial<MOD>> mlist = null;
         List<GenPolynomial<BigInteger>> ilist = null;
         int i = 0;
@@ -227,6 +206,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 mlist.add(0, mp); // set(0,mp);
             }
             modfac[k] = mlist;
+            plist[k] = cofac.getIntegerModul(); // p
         }
 
         // search shortest factor list
@@ -241,7 +221,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 AD.and(D);
             }
             int s = modfac[k].size();
-            logger.info("mod s = " + s + ", D = " + D /*+ ", lt = " + ev*/);
+            logger.info("mod(" + plist[k] + ") #s = " + s + ", D = " + D /*+ ", lt = " + ev*/);
             //System.out.println("mod s = " + s);
             if (s < min) {
                 min = s;
@@ -268,7 +248,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 if ( debug ) {
                     logger.info("lifting from "+ mlist);
                 }
-                if ( P.leadingBaseCoefficient().isONE()) {
+                if ( false && P.leadingBaseCoefficient().isONE()) {
                     factors = searchFactorsMonic(P, M, mlist, AD); // doesn't work in all cases
                     if ( factors.size() == 1 ) {
                         factors = searchFactorsNonMonic(P, M, mlist, AD);
@@ -283,7 +263,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
             if ( debug ) {
                 logger.info("lifting shortest from "+ mlist);
             }
-            if ( true && P.leadingBaseCoefficient().isONE()) {
+            if ( false && P.leadingBaseCoefficient().isONE()) {
                 long t = System.currentTimeMillis();
                 try {
                     mlist = PolyUtil.<MOD> monic(mlist);
@@ -321,6 +301,28 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         }
         factors = ilist;
         return factors;
+    }
+
+
+    /**
+     * BitSet for factor degree list.
+     * @param E exponent vector list.
+     * @return {b_0,...,b_k} a BitSet of possible factor degrees.
+     */
+    public BitSet factorDegrees(List<ExpVector> E, int deg) {
+        BitSet D = new BitSet(deg+1);
+        D.set(0); // constant factor
+        for ( ExpVector e : E ) {
+            int i = (int) e.getVal(0);
+            BitSet s = new BitSet(deg+1);
+            for ( int k = 0; k < deg+1-i; k++ ) { // shift by i places
+                s.set(i+k, D.get(k) );
+            }
+            //System.out.println("s = " + s);
+            D.or(s);
+            //System.out.println("D = " + D);
+        }
+        return D;
     }
 
 
