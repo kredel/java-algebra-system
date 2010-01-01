@@ -154,6 +154,61 @@ public class FactorModularTest extends TestCase {
 
 
     /**
+     * Test modular factorization, case p = 2.
+     * 
+     */
+    public void testModular2Factorization() {
+
+        TermOrder to = new TermOrder(TermOrder.INVLEX);
+        ModIntegerRing cfac = new ModIntegerRing(2L);
+        //System.out.println("cfac = " + cfac);
+        GenPolynomialRing<ModInteger> pfac = new GenPolynomialRing<ModInteger>(cfac, 1, to);
+        FactorModular<ModInteger> fac = new FactorModular<ModInteger>(cfac);
+
+        for (int i = 1; i < 4; i++) {
+            int facs = 0;
+            GenPolynomial<ModInteger> a = null; //pfac.random(kl,ll*(i+1),el*(i+1),q);
+            GenPolynomial<ModInteger> b = pfac.random(kl, ll * (i + 1), el * (i + 1), q);
+            GenPolynomial<ModInteger> c = pfac.random(kl, ll * (i + 1), el * (i + 1), q);
+            if (b.isZERO() || c.isZERO()) {
+                continue;
+            }
+            if (c.degree() > 0) {
+                facs++;
+            }
+            if (b.degree() > 0) {
+                facs++;
+            }
+            a = c.multiply(b);
+            if (a.isConstant()) {
+                continue;
+            }
+            a = a.monic();
+            //System.out.println("\na = " + a);
+            //System.out.println("b = " + b);
+            //System.out.println("c = " + c);
+
+            SortedMap<GenPolynomial<ModInteger>, Long> sm = fac.baseFactors(a);
+            //System.out.println("sm = " + sm);
+
+            if (sm.size() >= facs) {
+                assertTrue("#facs < " + facs, sm.size() >= facs);
+            } else {
+                long sf = 0;
+                for (Long e : sm.values()) {
+                    sf += e;
+                }
+                assertTrue("#facs < " + facs, sf >= facs);
+            }
+
+            boolean t = fac.isFactorization(a, sm);
+            //System.out.println("t        = " + t);
+            assertTrue("prod(factor(a)) = a", t);
+        }
+    }
+
+
+    /**
      * Test multivariate modular factorization.
      * 
      */

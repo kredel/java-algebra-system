@@ -80,15 +80,13 @@ public class FactorModular<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         }
         ModularRingFactory<MOD> mr = (ModularRingFactory<MOD>) pfac.coFac;
         java.math.BigInteger m = mr.getIntegerModul().getVal();
-        if (m.longValue() == 2L) {
-            //throw new RuntimeException(this.getClass().getName() + " case p = 2 not implemented");
-            logger.warn(this.getClass().getName() + " case p = 2 not implemented");
-        }
+        //if (m.longValue() == 2L) {
+        //    logger.warn(this.getClass().getName() + " case p = 2 not implemented");
+        //}
         GenPolynomial<MOD> x = pfac.univariate(0);
         GenPolynomial<MOD> h = x;
         GenPolynomial<MOD> f = P;
         GenPolynomial<MOD> g;
-        //GreatestCommonDivisor<MOD> engine = GCDFactory.<MOD> getImplementation(pfac.coFac);
         Power<GenPolynomial<MOD>> pow = new Power<GenPolynomial<MOD>>(pfac);
         long d = 0;
         while (d + 1 <= f.degree(0) / 2) {
@@ -134,10 +132,13 @@ public class FactorModular<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         ModularRingFactory<MOD> mr = (ModularRingFactory<MOD>) pfac.coFac;
         java.math.BigInteger m = mr.getIntegerModul().getVal();
         //System.out.println("m = " + m);
+        boolean p2 = false;
         if (m.equals(java.math.BigInteger.valueOf(2L))) {
-            throw new RuntimeException(this.getClass().getName() + " case p = 2 not implemented");
+            p2 = true;
+            //throw new RuntimeException(this.getClass().getName() + " case p = 2 not implemented");
         }
         GenPolynomial<MOD> one = pfac.getONE();
+        GenPolynomial<MOD> t = pfac.univariate(0,1L);
         GenPolynomial<MOD> r;
         GenPolynomial<MOD> h;
         GenPolynomial<MOD> f = P;
@@ -152,16 +153,26 @@ public class FactorModular<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         //System.out.println("d = " + d);
         d = d.shiftRight(1); // divide by 2
         do {
-            r = pfac.random(17, degi, 2 * degi, 1.0f);
-            if (r.degree(0) >= f.degree(0)) {
-                r = r.remainder(f);
+            if ( p2 ) {
+                h = t;
+                for ( int i = 1; i < degi; i++ ) {
+                    h = t.sum( h.multiply(h) );
+                    h = h.remainder(f);
+                }
+                t = t.multiply( pfac.univariate(0,2L) );
+                //System.out.println("h = " + h);
+            } else {
+                r = pfac.random(17, degi, 2 * degi, 1.0f);
+                if (r.degree(0) >= f.degree(0)) {
+                    r = r.remainder(f);
+                }
+                r = r.monic();
+                //System.out.println("r = " + r);
+                h = pow.modPower(r, d, f).subtract(one);
+                degi++;
             }
-            r = r.monic();
-            //System.out.println("r = " + r);
-            h = pow.modPower(r, d, f);
-            g = engine.gcd(h.subtract(one), f);
+            g = engine.gcd(h, f);
             //System.out.println("g = " + g);
-            degi++;
         } while (g.degree(0) == 0 || g.degree(0) == f.degree(0));
         f = f.divide(g);
         facs.addAll(baseEqualDegreeFactors(f, deg));
