@@ -8,6 +8,7 @@ package edu.jas.ufd;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.BitSet;
 
 import org.apache.log4j.Logger;
 
@@ -76,6 +77,28 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
 
 
     /**
+     * BitSet for factor degree list.
+     * @param E exponent vector list.
+     * @return [b_0,...,b_k] a BitSet.
+     */
+    public BitSet factorDegrees(List<ExpVector> E, int deg) {
+        BitSet D = new BitSet(deg+1);
+        D.set(0);
+        for ( ExpVector e : E ) {
+            int i = (int) e.getVal(0);
+            BitSet s = new BitSet(deg+1);
+            for ( int k = 0; k < deg+1-i; k++ ) { // shift by i places
+                s.set(i+k, D.get(k) );
+            }
+            //System.out.println("s = " + s);
+            D.or(s);
+            //System.out.println("D = " + D);
+        }
+        return D;
+    }
+
+
+    /**
      * GenPolynomial base factorization of a squarefree polynomial.
      * @param P squarefree and primitive! GenPolynomial.
      * @return [p_1,...,p_k] with P = prod_{i=1, ..., k} p_i.
@@ -98,11 +121,16 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         if (pfac.nvar > 1) {
             throw new RuntimeException(this.getClass().getName() + " only for univariate polynomials");
         }
+        if (P.degree(0) <= 1L) {
+            factors.add(P);
+            return factors;
+        }
         // compute norm
         BigInteger an = P.maxNorm();
         BigInteger ac = P.leadingBaseCoefficient();
         //compute factor coefficient bounds
         ExpVector degv = P.degreeVector();
+        int degi = (int) P.degree(0);
         BigInteger M = an.multiply(PolyUtil.factorBound(degv));
         M = M.multiply(ac.multiply(ac.fromInteger(8)));
         //System.out.println("M = " + M);
@@ -126,7 +154,8 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
             logger.info("degv = " + degv);
         }
         Iterator<java.math.BigInteger> pit = primes.iterator();
-        pit.next();
+        pit.next(); // skip p = 2
+        pit.next(); // skip p = 3
         MOD nf = null;
         for (int k = 0; k < TT; k++) {
             if (k == TT - 1) { // -2
@@ -202,18 +231,31 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
 
         // search shortest factor list
         int min = Integer.MAX_VALUE;
+        BitSet AD = null;
         for (int k = 0; k < TT; k++) {
+            List<ExpVector> ev = PolyUtil.<MOD> leadingExpVector(modfac[k]);
+            BitSet D = factorDegrees(ev,degi);
+            if ( AD == null ) {
+                AD = D;
+            } else {
+                AD.and(D);
+            }
             int s = modfac[k].size();
-            logger.info("mod s = " + s + ", lt = " + PolyUtil.<MOD> leadingExpVector(modfac[k]));
+            logger.info("mod s = " + s + ", D = " + D /*+ ", lt = " + ev*/);
             //System.out.println("mod s = " + s);
             if (s < min) {
                 min = s;
                 mlist = modfac[k];
             }
         }
+        logger.info("min = " + min + ", AD = " + AD);
         if (mlist.size() <= 1) {
-            logger.info("mod s = 1");
-            //System.out.println("int s = 1");
+            logger.info("mlist.size() = 1");
+            factors.add(P);
+            return factors;
+        }
+        if (AD.cardinality() <= 2) { // only one possible factor
+            logger.info("degree set cardinality = " + AD.cardinality());
             factors.add(P);
             return factors;
         }
@@ -226,10 +268,13 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 if ( debug ) {
                     logger.info("lifting from "+ mlist);
                 }
-                if ( false && P.leadingBaseCoefficient().isONE()) {
-                    factors = searchFactorsMonic(P, M, mlist); // doesn't work
+                if ( P.leadingBaseCoefficient().isONE()) {
+                    factors = searchFactorsMonic(P, M, mlist, AD); // doesn't work in all cases
+                    if ( factors.size() == 1 ) {
+                        factors = searchFactorsNonMonic(P, M, mlist, AD);
+                    }
                 } else {
-                    factors = searchFactorsNonMonic(P, M, mlist);
+                    factors = searchFactorsNonMonic(P, M, mlist, AD);
                 }
                 intfac[k] = factors;
             }
@@ -241,25 +286,24 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
             if ( true && P.leadingBaseCoefficient().isONE()) {
                 long t = System.currentTimeMillis();
                 try {
-                    factors = searchFactorsMonic(P, M, PolyUtil.<MOD> monic(mlist)); // doesn't work
+                    mlist = PolyUtil.<MOD> monic(mlist);
+                    factors = searchFactorsMonic(P, M, mlist, AD); // doesn't work in all cases
                     t = System.currentTimeMillis() - t;
                     System.out.println("monic time = " + t);
-                    t = System.currentTimeMillis();
-                    List<GenPolynomial<BigInteger>> factors2 = searchFactorsNonMonic(P, M, mlist);
-                    t = System.currentTimeMillis() - t;
-                    System.out.println("non monic time = " + t);
-                    if ( !factors.equals(factors2) ) {
-                        System.out.println("factors  = " + factors);
-                        System.out.println("factors2 = " + factors2);
+                    if ( factors.size() == 1 ) {
+                        t = System.currentTimeMillis();
+                        factors = searchFactorsNonMonic(P, M, mlist, AD);
+                        t = System.currentTimeMillis() - t;
+                        System.out.println("non monic time = " + t);
                     }
                 } catch ( RuntimeException e ) {
                     t = System.currentTimeMillis();
-                    factors = searchFactorsNonMonic(P, M, mlist);
+                    factors = searchFactorsNonMonic(P, M, mlist, AD);
                     t = System.currentTimeMillis() - t;
                     System.out.println("only non monic time = " + t);
                 }
             } else {
-                factors = searchFactorsNonMonic(P, M, mlist);
+                factors = searchFactorsNonMonic(P, M, mlist, AD);
             }
             return factors;
         }
@@ -287,11 +331,12 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
      * @param C GenPolynomial.
      * @param F = [f_0,...,f_{n-1}] List&lt;GenPolynomial&gt;.
      * @param M bound on the coefficients of g_i as factors of C.
+     * @param D bit set of possible factor degrees.
      * @return [g_0,...,g_{n-1}] = lift(C,F), with C = prod_{0,...,n-1} g_i mod
      *         p**e.
-     * <b>Note:</b> does not work.
+     * <b>Note:</b> does not work in all cases.
      */
-    List<GenPolynomial<BigInteger>> searchFactorsMonic(GenPolynomial<BigInteger> C, BigInteger M,List<GenPolynomial<MOD>> F) {
+    List<GenPolynomial<BigInteger>> searchFactorsMonic(GenPolynomial<BigInteger> C, BigInteger M, List<GenPolynomial<MOD>> F, BitSet D) {
         System.out.println("*** monic factor combination ***");
         if (C == null || C.isZERO() || F == null || F.size() == 0) {
             throw new RuntimeException("C must be nonzero and F must be nonempty");
@@ -322,7 +367,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         // lift via Hensel
         try {
             //ilist = HenselUtil.<MOD> liftHenselQuadratic(PP, M, mlist);
-            ilist = HenselUtil.<MOD> liftHenselQuadraticFac(PP, M, mlist);
+            ilist = HenselUtil.<MOD> liftHenselQuadraticFac(PP, M, mlist, D);
         } catch(NoLiftingException e) {
             throw new RuntimeException(e);
         }
@@ -352,6 +397,10 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 //if (trial.degree(0) > deg) { // this test is wrong
                 //    continue;
                 //}
+                if ( ! D.get( (int)trial.degree(0) ) ) {
+                    logger.info("skiped by degree set " + D + ", deg = " + trial.degree(0));
+                    continue;
+                }
                 //System.out.println("+trial    = " + trial);
                 //System.out.println("+flist    = " + flist);
                 //trial = engine.basePrimitivePart( trial.multiply(ldcf) );
@@ -399,11 +448,12 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
      * @param C GenPolynomial.
      * @param F = [f_0,...,f_{n-1}] List&lt;GenPolynomial&gt;.
      * @param M bound on the coefficients of g_i as factors of C.
+     * @param D bit set of possible factor degrees.
      * @return [g_0,...,g_{n-1}] = lift(C,F), with C = prod_{0,...,n-1} g_i mod
      *         p**e.
      */
     List<GenPolynomial<BigInteger>> searchFactorsNonMonic(GenPolynomial<BigInteger> C, BigInteger M,
-                                                          List<GenPolynomial<MOD>> F) {
+                                                          List<GenPolynomial<MOD>> F, BitSet D) {
         // System.out.println("*** non monic factor combination ***");
         if (C == null || C.isZERO() || F == null || F.size() == 0) {
             throw new RuntimeException("C must be nonzero and F must be nonempty");
@@ -457,6 +507,10 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 //if (trial.degree(0) > deg) { // this test is wrong
                 //    continue;
                 //}
+                if ( ! D.get( (int)trial.degree(0) ) ) {
+                    logger.info("skiped by degree set " + D + ", deg = " + trial.degree(0));
+                    continue;
+                }
                 GenPolynomial<MOD> cofactor = um.divide(trial);
                 //System.out.println("trial    = " + trial);
                 //System.out.println("cofactor = " + cofactor);

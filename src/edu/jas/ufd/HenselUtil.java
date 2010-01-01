@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.BitSet;
 
 import org.apache.log4j.Logger;
 
@@ -1134,11 +1135,12 @@ public class HenselUtil {
      * @param C GenPolynomial
      * @param F = [f_0,...,f_{n-1}] list of GenPolynomial
      * @param M bound on the coefficients of g_i as factors of C.
+     * @param D bit set of possible factor degrees.
      * @return [g_0,...,g_{n-1}] = lift(C,F), with C = prod_{0,...,n-1} g_i mod
      *         p^e.
      */
     public static <MOD extends GcdRingElem<MOD> & Modular>
-      List<GenPolynomial<BigInteger>> liftHenselQuadraticFac(GenPolynomial<BigInteger> C, BigInteger M, List<GenPolynomial<MOD>> F) throws NoLiftingException {
+      List<GenPolynomial<BigInteger>> liftHenselQuadraticFac(GenPolynomial<BigInteger> C, BigInteger M, List<GenPolynomial<MOD>> F, BitSet D) throws NoLiftingException {
         if (C == null || C.isZERO() || F == null || F.size() == 0) {
             throw new RuntimeException("C must be nonzero and F must be nonempty");
         }
@@ -1186,24 +1188,40 @@ public class HenselUtil {
         BigInteger P = mr.getIntegerModul();
         // split list in two parts and prepare polynomials
         int k = n / 2;
+        int k0 = 0;
         List<GenPolynomial<MOD>> F1 = new ArrayList<GenPolynomial<MOD>>(k);
-        GenPolynomial<MOD> A = mfac.getONE();
-        MOD mlc = mr.fromInteger(lc.getVal());
-        A = A.multiply(mlc);
-        for (int i = 0; i < k; i++) {
-            GenPolynomial<MOD> fi = F.get(i);
-            if (fi != null && !fi.isZERO()) {
-                A = A.multiply(fi);
-                F1.add(fi);
-                //} else {
-                //System.out.println("A = " + A + ", fi = " + fi);
+        GenPolynomial<MOD> A;
+        while (true) {
+            A = mfac.getONE();
+            MOD mlc = mr.fromInteger(lc.getVal());
+            A = A.multiply(mlc);
+            for (int i = k0; i < k; i++) {
+                GenPolynomial<MOD> fi = F.get( i % k ); // take care
+                if (fi != null && !fi.isZERO()) {
+                    A = A.multiply(fi);
+                    F1.add(fi);
+                    //} else {
+                    //System.out.println("A = " + A + ", fi = " + fi);
+                }
             }
-        }
+            if ( D.get( (int)A.degree(0) ) ) {
+                break;
+            } else {
+                logger.info("skipped by degree set = " + D + ", deg = " + A.degree(0));
+                F1.clear();
+                k0++;
+                k++;
+                if ( k0 >= n ) {
+                    throw new NoLiftingException("no degree compatible lifting");
+                }
+            }
+        } 
         //System.out.println("A = " + A);
+        List<GenPolynomial<MOD>> F0 = new ArrayList<GenPolynomial<MOD>>(F);
+        F0.removeAll(F1);
         List<GenPolynomial<MOD>> F2 = new ArrayList<GenPolynomial<MOD>>(k);
         GenPolynomial<MOD> B = mfac.getONE();
-        for (int i = k; i < n; i++) {
-            GenPolynomial<MOD> fi = F.get(i);
+        for (GenPolynomial<MOD> fi : F0) {
             if (fi != null && !fi.isZERO()) {
                 B = B.multiply(fi);
                 F2.add(fi);
@@ -1218,21 +1236,27 @@ public class HenselUtil {
         HenselApprox<MOD> ab = HenselUtil.<MOD> liftHenselQuadraticFac(C, M, A, B);
         GenPolynomial<BigInteger> A1 = ab.A;
         GenPolynomial<BigInteger> B1 = ab.B;
-//         if (!isHenselLift(C, M, P, A1, B1)) {
-//             throw new NoLiftingException("no lifting A1, B1");
-//         }
-//            System.out.println("Am = " + ab.Am + ", Bm = " + ab.Bm);
+        if ( P.equals(A1.multiply(B1)) ) {
+            lift.add(A1);
+            lift.add(B1);
+            logger.info("added exact factors = " + A1 + ", B1 = " + B1);
+            //return;
+        }
+//      if (!isHenselLift(C, M, P, A1, B1)) {
+//          throw new NoLiftingException("no lifting A1, B1");
+//      }
+//      System.out.println("Am = " + ab.Am + ", Bm = " + ab.Bm);
             System.out.println("A1  = " + A1 + ", B1  = " + B1);
             System.out.println("A1m = " + ab.Am + ", B1m = " + ab.Bm);
         BigInteger Mh = M.divide(new BigInteger(2));
         // recursion on list parts
-        List<GenPolynomial<BigInteger>> G1 = HenselUtil.<MOD> liftHenselQuadraticFac(A1, Mh, F1);
+        List<GenPolynomial<BigInteger>> G1 = HenselUtil.<MOD> liftHenselQuadraticFac(A1, Mh, F1, D);
 //         if (!isHenselLift(A1, Mh, P, G1)) {
 //             throw new NoLiftingException("no lifting G1");
 //         }
             System.out.println("A1 = " + A1 + ", F1 = " + F1);
             System.out.println("G1 = " + G1);
-        List<GenPolynomial<BigInteger>> G2 = HenselUtil.<MOD> liftHenselQuadraticFac(B1, Mh, F2);
+            List<GenPolynomial<BigInteger>> G2 = HenselUtil.<MOD> liftHenselQuadraticFac(B1, Mh, F2, D);
 //         if (!isHenselLift(B1, Mh, P, G2)) {
 //             throw new NoLiftingException("no lifting G2");
 //         }
