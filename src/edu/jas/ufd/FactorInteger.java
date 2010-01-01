@@ -204,7 +204,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         int min = Integer.MAX_VALUE;
         for (int k = 0; k < TT; k++) {
             int s = modfac[k].size();
-            logger.info("mod s = " + s);
+            logger.info("mod s = " + s + ", lt = " + PolyUtil.<MOD> leadingExpVector(modfac[k]));
             //System.out.println("mod s = " + s);
             if (s < min) {
                 min = s;
@@ -256,7 +256,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                     t = System.currentTimeMillis();
                     factors = searchFactorsNonMonic(P, M, mlist);
                     t = System.currentTimeMillis() - t;
-                    System.out.println("non monic time = " + t);
+                    System.out.println("only non monic time = " + t);
                 }
             } else {
                 factors = searchFactorsNonMonic(P, M, mlist);
@@ -349,7 +349,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                     GenPolynomial<BigInteger> fk = flist.get(kk);
                     trial = trial.multiply(fk);
                 }
-                //if (trial.degree(0) > deg) {
+                //if (trial.degree(0) > deg) { // this test is wrong
                 //    continue;
                 //}
                 //System.out.println("+trial    = " + trial);
@@ -367,7 +367,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                     u = PolyUtil.<BigInteger> basePseudoDivide(u, trial); //u.divide( trial );
                     //System.out.println("u        = " + u);
                     if (ilist.removeAll(flist)) {
-                        System.out.println("new ilist= " + ilist);
+                        logger.info("new ilist= " + ilist);
                         dl = (ilist.size() + 1) / 2;
                         System.out.println("dl = " + dl); 
                         j = 0; // since j++
@@ -454,9 +454,9 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                     GenPolynomial<MOD> fk = flist.get(kk);
                     trial = trial.multiply(fk);
                 }
-                if (trial.degree(0) > deg) {
-                    continue;
-                }
+                //if (trial.degree(0) > deg) { // this test is wrong
+                //    continue;
+                //}
                 GenPolynomial<MOD> cofactor = um.divide(trial);
                 //System.out.println("trial    = " + trial);
                 //System.out.println("cofactor = " + cofactor);
@@ -499,7 +499,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                     //System.out.println("u        = " + u);
                     //System.out.println("um       = " + um);
                     if (mlist.removeAll(flist)) {
-                        //System.out.println("new mlist= " + mlist);
+                        logger.info("new mlist= " + mlist);
                         dl = (mlist.size() + 1) / 2;
                         j = 0; // since j++
                         break;

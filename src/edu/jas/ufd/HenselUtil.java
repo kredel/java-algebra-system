@@ -921,6 +921,7 @@ public class HenselUtil {
         Aq = PolyUtil.<MOD> fromIntegerCoefficients(qfac, Ai);
         Bq = PolyUtil.<MOD> fromIntegerCoefficients(qfac, Bi);
 
+        // polynomials mod p^e
         Cm = PolyUtil.<MOD> fromIntegerCoefficients(mfac, C);
         Am = PolyUtil.<MOD> fromIntegerCoefficients(mfac, Ai);
         Bm = PolyUtil.<MOD> fromIntegerCoefficients(mfac, Bi);
@@ -1089,6 +1090,11 @@ public class HenselUtil {
         //System.out.println("*Ai =  " + Ai);
         //System.out.println("*Bi =  " + Bi);
 
+        Em = Cm.subtract(Am.multiply(Bm));
+        if (!Em.isZERO()) {
+            System.out.println("Em =  " + Em);
+            //throw new NoLiftingException("no exact lifting possible");
+        }
         // remove normalization not possible when not exact factorization
         GreatestCommonDivisorAbstract<BigInteger> ufd = new GreatestCommonDivisorPrimitive<BigInteger>();
         // remove normalization if possible
@@ -1117,7 +1123,7 @@ public class HenselUtil {
             System.out.println("*c  =  " + c);
             throw new NoLiftingException("no exact lifting possible");
         }
-        return new HenselApprox<MOD>(Ai,Bi,A1p,B1p);
+        return new HenselApprox<MOD>(Ai,Bi,Aq,Bq);
     }
 
 
@@ -1216,7 +1222,8 @@ public class HenselUtil {
 //             throw new NoLiftingException("no lifting A1, B1");
 //         }
 //            System.out.println("Am = " + ab.Am + ", Bm = " + ab.Bm);
-            System.out.println("A1 = " + A1 + ", B1 = " + B1);
+            System.out.println("A1  = " + A1 + ", B1  = " + B1);
+            System.out.println("A1m = " + ab.Am + ", B1m = " + ab.Bm);
         BigInteger Mh = M.divide(new BigInteger(2));
         // recursion on list parts
         List<GenPolynomial<BigInteger>> G1 = HenselUtil.<MOD> liftHenselQuadraticFac(A1, Mh, F1);
