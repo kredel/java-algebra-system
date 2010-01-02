@@ -29,6 +29,7 @@ import edu.jas.poly.PolyUtil;
 import edu.jas.poly.TermOrder;
 import edu.jas.structure.Power;
 import edu.jas.structure.GcdRingElem;
+import edu.jas.structure.ModularRingFactory;
 import edu.jas.util.KsubSet;
 
 
@@ -175,7 +176,7 @@ public class HenselUtilTest extends TestCase {
      * Test Hensel lifting.
      * 
      */
-    public void testHenselLifting() {
+    public void xtestHenselLifting() {
         java.math.BigInteger p;
         p = getPrime1();
         //p = new java.math.BigInteger("19");
@@ -288,7 +289,7 @@ public class HenselUtilTest extends TestCase {
      * Test Hensel lifting with gcd.
      * 
      */
-    public void testHenselLiftingGcd() {
+    public void xtestHenselLiftingGcd() {
         java.math.BigInteger p;
         //p = getPrime1();
         p = new java.math.BigInteger("19");
@@ -390,7 +391,7 @@ public class HenselUtilTest extends TestCase {
      * Test Hensel lifting of list.
      * 
      */
-    public void testHenselLiftingList() {
+    public void xtestHenselLiftingList() {
         java.math.BigInteger p;
         //p = getPrime1();
         //p = new java.math.BigInteger("19");
@@ -537,7 +538,7 @@ public class HenselUtilTest extends TestCase {
      * Test Hensel quadratic lifting.
      * 
      */
-    public void testHenselQuadraticLifting() {
+    public void xtestHenselQuadraticLifting() {
         java.math.BigInteger p;
         //p = getPrime1();
         p = new java.math.BigInteger("19");
@@ -679,7 +680,7 @@ public class HenselUtilTest extends TestCase {
      * Test Hensel quadratic lifting with gcd.
      * 
      */
-    public void testHenselQuadraticLiftingGcd() {
+    public void xtestHenselQuadraticLiftingGcd() {
         java.math.BigInteger p;
         //p = getPrime1();
         p = new java.math.BigInteger("19");
@@ -781,7 +782,7 @@ public class HenselUtilTest extends TestCase {
      * Test Hensel quadratic lifting of list.
      * 
      */
-    public void testHenselQuadraticLiftingList() {
+    public void xtestHenselQuadraticLiftingList() {
         java.math.BigInteger p;
         //p = getPrime1();
         //p = new java.math.BigInteger("19");
@@ -919,6 +920,137 @@ public class HenselUtilTest extends TestCase {
             ih = HenselUtil.isHenselLift(c, mip, m, lift);
             //System.out.println("ih = " + ih);
             assertTrue("isHenselLift ", ih);
+        }
+    }
+
+
+    /**
+     * Test Hensel lifting od extended Euclidean relation.
+     * 
+     */
+    public void testHenselLiftingEgcd() {
+        java.math.BigInteger p;
+        //p = getPrime1();
+        //p = new java.math.BigInteger("19");
+        p = new java.math.BigInteger("5");
+        BigInteger m = new BigInteger(p);
+        //.multiply(p).multiply(p).multiply(p);
+
+        ModIntegerRing pm = new ModIntegerRing(p, true);
+        GenPolynomialRing<ModInteger> mfac = new GenPolynomialRing<ModInteger>(pm, 1, to);
+
+        dfac = new GenPolynomialRing<BigInteger>(m, 1, to);
+        GreatestCommonDivisorAbstract<BigInteger> ufd = GCDFactory.getProxy(m);
+
+        GenPolynomial<ModInteger> ap;
+        GenPolynomial<ModInteger> bp;
+        GenPolynomial<ModInteger> cp;
+        GenPolynomial<ModInteger> dp;
+        GenPolynomial<ModInteger>[] lift;
+        GenPolynomial<ModInteger> s;
+        GenPolynomial<ModInteger> t;
+
+        for (int i = 1; i < 2; i++) { // 70 better for quadratic
+            a = dfac.random(kl + 3 * i, ll + 1, el + 1, q).abs();
+            b = dfac.random(kl + 3 * i, ll + 1, el + 5, q).abs();
+            d = ufd.baseGcd(a,b);
+            System.out.println("d   = " + d);
+            if ( !d.isONE() ) {
+                a = PolyUtil.<BigInteger>basePseudoDivide(a,d);
+                b = PolyUtil.<BigInteger>basePseudoDivide(b,d);
+            }
+            if (a.degree(0) < 1 || b.degree(0) < 2) {
+                continue;
+            }
+            ap = PolyUtil.fromIntegerCoefficients(mfac, a);
+            if (!a.degreeVector().equals(ap.degreeVector())) {
+                continue;
+            }
+            bp = PolyUtil.fromIntegerCoefficients(mfac, b);
+            if (!b.degreeVector().equals(bp.degreeVector())) {
+                continue;
+            }
+            dp = ap.gcd(bp);
+            System.out.println("dp  = " + dp);
+            if ( !dp.isONE() ) {
+                continue;
+            }
+            c = a.multiply(b);
+            cp = PolyUtil.fromIntegerCoefficients(mfac, c);
+            if (!c.degreeVector().equals(cp.degreeVector())) {
+                continue;
+            }
+
+            BigInteger mi;
+            BigInteger an = a.maxNorm();
+            BigInteger bn = b.maxNorm();
+            if (an.compareTo(bn) > 0) {
+                mi = an;
+            } else {
+                mi = bn;
+            }
+            BigInteger cn = c.maxNorm();
+            if (cn.compareTo(mi) > 0) {
+                mi = cn;
+            }
+            long k = 1;
+            BigInteger pi = m;
+            while (pi.compareTo(mi) < 0) {
+                k++;
+                pi = pi.multiply(m);
+            }
+            System.out.println("mi  = " + mi);
+            System.out.println("pi  = " + pi);
+            System.out.println("k   = " + k);
+
+            System.out.println("a   = " + a);
+            System.out.println("b   = " + b);
+            System.out.println("c   = " + c);
+            System.out.println("ap  = " + ap);
+            System.out.println("bp  = " + bp);
+            System.out.println("cp  = " + cp);
+
+            long tq = System.currentTimeMillis();
+            try { 
+                lift = HenselUtil.<ModInteger>liftExtendedEuclidean(ap,bp,k);
+                tq = System.currentTimeMillis() - tq;
+                s = lift[0];
+                t = lift[1];
+                ModularRingFactory<ModInteger> mcfac = (ModularRingFactory<ModInteger>) s.ring.coFac;
+                GenPolynomialRing<ModInteger> mfac1 = new GenPolynomialRing<ModInteger>(mcfac, mfac);
+                System.out.println("\nmcfac  = " + mcfac);
+                ap = PolyUtil.fromIntegerCoefficients(mfac1, PolyUtil.integerFromModularCoefficients(dfac, ap));
+                bp = PolyUtil.fromIntegerCoefficients(mfac1, PolyUtil.integerFromModularCoefficients(dfac, bp));
+                cp = s.multiply(ap).sum(t.multiply(bp));
+                System.out.println("s   = " + s);
+                System.out.println("t   = " + t);
+                System.out.println("ap  = " + ap);
+                System.out.println("bp  = " + bp);
+                System.out.println("cp  = " + cp);
+
+//                 ap = PolyUtil.fromIntegerCoefficients(mfac1,a);
+//                 bp = PolyUtil.fromIntegerCoefficients(mfac1,b);
+//                 cp = s.multiply(ap).sum(t.multiply(bp));
+//                 System.out.println("\ns   = " + s);
+//                 System.out.println("t   = " + t);
+//                 System.out.println("ap  = " + ap);
+//                 System.out.println("bp  = " + bp);
+//                 System.out.println("cp  = " + cp);
+
+//                 ap = lift[2];
+//                 bp = lift[3];
+//                 cp = s.multiply(ap).sum(t.multiply(bp));
+//                 System.out.println("\ns   = " + s);
+//                 System.out.println("t   = " + t);
+//                 System.out.println("ap  = " + ap);
+//                 System.out.println("bp  = " + bp);
+//                 System.out.println("cp  = " + cp);
+
+                assertTrue("lift(s a + t b mod p^k) = 1: " + cp, cp.isONE());
+            } catch ( NoLiftingException e ) {
+                fail(""+e);
+            }
+            System.out.println("time = " + tq);
         }
     }
 

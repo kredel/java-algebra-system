@@ -318,7 +318,7 @@ public final class ModLongRing implements ModularRingFactory<ModLong> {
      */
     @Override
     public String toString() {
-        return " mod(" + modul + ",max="  + MAX_LONG + ")";
+        return " mod(" + modul + ")"; //",max="  + MAX_LONG + ")";
     }
 
 

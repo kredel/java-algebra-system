@@ -1373,4 +1373,209 @@ public class HenselUtil {
         return isHenselLift(C, M, p, G);
     }
 
+
+    /**
+     * Modular Hensel lifting algorithm for extended Euclidean relation. Let p =
+     * f_i.ring.coFac.modul() i = 0, ..., n-1 and assume C == prod_{0,...,n-1}
+     * f_i mod p with ggt(f_i,f_j) == 1 mod p for i != j
+     * @param A modular GenPolynomial
+     * @param B modular GenPolynomial
+     * @param k desired approximation p^k.
+     * @return [s,t] with s A + t B = 1 mod p^k.
+     */
+    public static <MOD extends GcdRingElem<MOD> & Modular>
+      GenPolynomial<MOD>[] liftExtendedEuclideanOld(GenPolynomial<MOD> A, GenPolynomial<MOD> B, long k) throws NoLiftingException {
+        if (A == null || A.isZERO() || B == null || B.isZERO()) {
+            throw new RuntimeException("A and B must be nonzero");
+        }
+        GenPolynomialRing<MOD> fac = A.ring;
+        if (fac.nvar != 1) { // todo assert
+            throw new RuntimeException("polynomial ring not univariate");
+        }
+        // start with extended Euclid mod p
+        GenPolynomial<MOD>[] gst = A.egcd(B);
+        if (!gst[0].isONE()) {
+            throw new NoLiftingException("A and B not coprime, gcd = " + gst[0] + ", A = " + A + ", B = " + B);
+        }
+        GenPolynomial<MOD> S = gst[1];
+        GenPolynomial<MOD> T = gst[2];
+        System.out.println("\nS = " + S);
+        System.out.println("T = " + T);
+
+        // setup integer polynomial ring
+        GenPolynomialRing<BigInteger> ifac = new GenPolynomialRing<BigInteger>(new BigInteger(),fac); 
+        GenPolynomial<BigInteger> one = ifac.getONE();
+        GenPolynomial<BigInteger> Ai = PolyUtil.integerFromModularCoefficients(ifac, A);
+        GenPolynomial<BigInteger> Bi = PolyUtil.integerFromModularCoefficients(ifac, B);
+        GenPolynomial<BigInteger> Si = PolyUtil.integerFromModularCoefficients(ifac, S);
+        GenPolynomial<BigInteger> Ti = PolyUtil.integerFromModularCoefficients(ifac, T);
+        //System.out.println("Ai = " + Ai);
+        //System.out.println("Bi = " + Bi);
+        //System.out.println("Si = " + Si);
+        //System.out.println("Ti = " + Ti);
+
+        // approximate mod p^i
+        ModularRingFactory<MOD> mcfac = (ModularRingFactory<MOD>) fac.coFac;
+        BigInteger p = mcfac.getIntegerModul();
+        BigInteger modul = p;
+        GenPolynomialRing<MOD> mfac = new GenPolynomialRing<MOD>(mcfac,fac);
+        for ( int i = 0; i < k; i++ ) {
+            // e = 1 - s a - t b in Z[x]
+            GenPolynomial<BigInteger> e = one.subtract(Si.multiply(Ai)).subtract(Ti.multiply(Bi));
+            System.out.println("\ne = " + e);
+            e = e.divide(modul);
+            // move to in Z_{p^i}[x]
+            GenPolynomial<MOD> c = PolyUtil.<MOD> fromIntegerCoefficients(mfac, e);
+            System.out.println("c = " + c + ": " + c.ring.coFac);
+            GenPolynomial<MOD> s = S.multiply(c);
+            GenPolynomial<MOD> t = T.multiply(c);
+            //System.out.println("s = " + s + ": " + s.ring.coFac);
+            //System.out.println("t = " + t + ": " + t.ring.coFac);
+
+            GenPolynomial<MOD>[] QR = s.divideAndRemainder(B);
+            GenPolynomial<MOD> q = QR[0];
+            s = QR[1];
+            t = t.sum(q.multiply(A));
+            //System.out.println("s = " + s + ": " + s.ring.coFac);
+            //System.out.println("t = " + t + ": " + t.ring.coFac);
+
+            BigInteger m = modul;
+            // setup ring mod p^i
+            modul = modul.multiply(p);
+            if ( ModLongRing.MAX_LONG.compareTo( modul.getVal() ) > 0 ) {
+                mcfac = (ModularRingFactory) new ModLongRing(modul.getVal());
+            } else {
+                mcfac = (ModularRingFactory) new ModIntegerRing(modul.getVal());
+            }
+            System.out.println("mcfac = " + mcfac);
+            mfac = new GenPolynomialRing<MOD>(mcfac,fac);
+            //System.out.println("mfac  = " + mfac);
+
+            MOD mo = mcfac.fromInteger(m.getVal());
+            //System.out.println("mo    = " + mo);
+
+            S = PolyUtil.<MOD> fromIntegerCoefficients(mfac, PolyUtil.integerFromModularCoefficients(ifac, S));
+            T = PolyUtil.<MOD> fromIntegerCoefficients(mfac, PolyUtil.integerFromModularCoefficients(ifac, T));
+            s = PolyUtil.<MOD> fromIntegerCoefficients(mfac, PolyUtil.integerFromModularCoefficients(ifac, s));
+            t = PolyUtil.<MOD> fromIntegerCoefficients(mfac, PolyUtil.integerFromModularCoefficients(ifac, t));
+            //System.out.println("S = " + S + ": " + S.ring.coFac);
+            //System.out.println("T = " + T + ": " + T.ring.coFac);
+            //System.out.println("s = " + s + ": " + s.ring.coFac);
+            //System.out.println("t = " + t + ": " + t.ring.coFac);
+            S = S.sum(s.multiply(mo));
+            T = T.sum(t.multiply(mo));
+            //System.out.println("S = " + S + ": " + S.ring.coFac);
+            //System.out.println("T = " + T + ": " + T.ring.coFac);
+            Si = PolyUtil.integerFromModularCoefficients(ifac, S);
+            Ti = PolyUtil.integerFromModularCoefficients(ifac, T);
+            A = PolyUtil.<MOD> fromIntegerCoefficients(mfac, Ai);
+            B = PolyUtil.<MOD> fromIntegerCoefficients(mfac, Bi);
+            //System.out.println("Si = " + Si);
+            //System.out.println("Ti = " + Ti);
+            //System.out.println("A  = " + A + ": " + A.ring.coFac);
+            //System.out.println("B  = " + B + ": " + B.ring.coFac);
+        }
+        GenPolynomial<MOD>[] rel = (GenPolynomial<MOD>[]) new GenPolynomial[2];
+        rel[0] = S;
+        rel[1] = T;
+//         rel[2] = A;
+//         rel[3] = B;
+        return rel;
+    }
+
+
+    /**
+     * Modular Hensel lifting algorithm for extended Euclidean relation. 
+     * Let p = * A.ring.coFac.modul() and assume ggt(A,B) == 1 mod p
+     * @param A modular GenPolynomial
+     * @param B modular GenPolynomial
+     * @param k desired approximation p^k.
+     * @return [s,t] with s A + t B = 1 mod p^k.
+     */
+    public static <MOD extends GcdRingElem<MOD> & Modular>
+      GenPolynomial<MOD>[] liftExtendedEuclidean(GenPolynomial<MOD> A, GenPolynomial<MOD> B, long k) throws NoLiftingException {
+        if (A == null || A.isZERO() || B == null || B.isZERO()) {
+            throw new RuntimeException("A and B must be nonzero");
+        }
+        GenPolynomialRing<MOD> fac = A.ring;
+        if (fac.nvar != 1) { // todo assert
+            throw new RuntimeException("polynomial ring not univariate");
+        }
+        // start with extended Euclid mod p
+        GenPolynomial<MOD>[] gst = A.egcd(B);
+        if (!gst[0].isONE()) {
+            throw new NoLiftingException("A and B not coprime, gcd = " + gst[0] + ", A = " + A + ", B = " + B);
+        }
+        GenPolynomial<MOD> S = gst[1];
+        GenPolynomial<MOD> T = gst[2];
+        System.out.println("\nS = " + S + ": " + S.ring.coFac);
+        System.out.println("T = " + T + ": " + S.ring.coFac);
+
+        // setup integer polynomial ring
+        GenPolynomialRing<BigInteger> ifac = new GenPolynomialRing<BigInteger>(new BigInteger(),fac); 
+        GenPolynomial<BigInteger> one = ifac.getONE();
+        GenPolynomial<BigInteger> Ai = PolyUtil.integerFromModularCoefficients(ifac, A);
+        GenPolynomial<BigInteger> Bi = PolyUtil.integerFromModularCoefficients(ifac, B);
+        GenPolynomial<BigInteger> Si = PolyUtil.integerFromModularCoefficients(ifac, S);
+        GenPolynomial<BigInteger> Ti = PolyUtil.integerFromModularCoefficients(ifac, T);
+        //System.out.println("Ai = " + Ai);
+        //System.out.println("Bi = " + Bi);
+        //System.out.println("Si = " + Si);
+        //System.out.println("Ti = " + Ti);
+
+        // approximate mod p^i
+        ModularRingFactory<MOD> mcfac = (ModularRingFactory<MOD>) fac.coFac;
+        BigInteger p = mcfac.getIntegerModul();
+        BigInteger modul = p;
+        GenPolynomialRing<MOD> mfac = new GenPolynomialRing<MOD>(mcfac,fac);
+        for ( int i = 0; i < k; i++ ) {
+            // e = 1 - s a - t b in Z[x]
+            GenPolynomial<BigInteger> e = one.subtract(Si.multiply(Ai)).subtract(Ti.multiply(Bi));
+            System.out.println("\ne = " + e);
+            e = e.divide(modul);
+            // move to in Z_p[x]
+            GenPolynomial<MOD> c = PolyUtil.<MOD> fromIntegerCoefficients(fac, e);
+            System.out.println("c = " + c + ": " + c.ring.coFac);
+            GenPolynomial<MOD> s = S.multiply(c);
+            GenPolynomial<MOD> t = T.multiply(c);
+            //System.out.println("s = " + s + ": " + s.ring.coFac);
+            //System.out.println("t = " + t + ": " + t.ring.coFac);
+
+            GenPolynomial<MOD>[] QR = s.divideAndRemainder(B);
+            GenPolynomial<MOD> q = QR[0];
+            s = QR[1];
+            t = t.sum(q.multiply(A));
+            System.out.println("s = " + s + ": " + s.ring.coFac);
+            System.out.println("t = " + t + ": " + t.ring.coFac);
+
+            GenPolynomial<BigInteger> si = PolyUtil.integerFromModularCoefficients(ifac, s);
+            GenPolynomial<BigInteger> ti = PolyUtil.integerFromModularCoefficients(ifac, t);
+            //System.out.println("si = " + si);
+            //System.out.println("ti = " + si);
+            Si = Si.sum(si.multiply(modul));
+            Ti = Ti.sum(ti.multiply(modul));
+            //System.out.println("Si = " + Si);
+            //System.out.println("Ti = " + Ti);
+
+            modul = modul.multiply(p);
+            System.out.println("modul = " + modul);
+        }
+        // setup ring mod p^i
+        if ( ModLongRing.MAX_LONG.compareTo( modul.getVal() ) > 0 ) {
+            mcfac = (ModularRingFactory) new ModLongRing(modul.getVal());
+        } else {
+            mcfac = (ModularRingFactory) new ModIntegerRing(modul.getVal());
+        }
+        System.out.println("mcfac = " + mcfac);
+        mfac = new GenPolynomialRing<MOD>(mcfac,fac);
+        S = PolyUtil.<MOD> fromIntegerCoefficients(mfac, Si);
+        T = PolyUtil.<MOD> fromIntegerCoefficients(mfac, Ti);
+        //System.out.println("S = " + S + ": " + S.ring.coFac);
+        //System.out.println("T = " + T + ": " + T.ring.coFac);
+        GenPolynomial<MOD>[] rel = (GenPolynomial<MOD>[]) new GenPolynomial[2];
+        rel[0] = S;
+        rel[1] = T;
+        return rel;
+    }
+
 }
