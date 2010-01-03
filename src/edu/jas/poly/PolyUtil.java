@@ -169,6 +169,29 @@ public class PolyUtil {
     }
 
 
+
+    /**
+     * BigInteger from ModInteger coefficients, symmetric. 
+     * Represent as polynomial with BigInteger coefficients by 
+     * removing the modules and making coefficients symmetric to 0.
+     * @param fac result polynomial factory.
+     * @param L list of polynomials with ModInteger coefficients to be converted.
+     * @return list of polynomials with BigInteger coefficients.
+     */
+    public static <C extends RingElem<C> & Modular> 
+        List<GenPolynomial<BigInteger>> 
+        integerFromModularCoefficients( final GenPolynomialRing<BigInteger> fac,
+                                        List<GenPolynomial<C>> L ) {
+        return ListUtil.<GenPolynomial<C>,GenPolynomial<BigInteger>>map( L, 
+                        new UnaryFunctor<GenPolynomial<C>,GenPolynomial<BigInteger>>() {
+                            public GenPolynomial<BigInteger> eval(GenPolynomial<C> c) {
+                                return PolyUtil.<C>integerFromModularCoefficients(fac,c);
+                            }
+                        }
+                                                              );
+    }
+
+
     /**
      * BigInteger from ModInteger coefficients, positive. 
      * Represent as polynomial with BigInteger coefficients by 
