@@ -1180,16 +1180,18 @@ public class HenselUtilTest extends TestCase {
             A.add(ap);
             A.add(bp);
             A.add(dp);
+            A.add(mfac.parse("(x - 4)"));
             System.out.println("A  = " + A);
             List<GenPolynomial<ModInteger>> A2 = new ArrayList<GenPolynomial<ModInteger>>();
             List<GenPolynomial<ModInteger>> As2 = new ArrayList<GenPolynomial<ModInteger>>();
             A2.add(ap);
             A2.add(bp);
-            System.out.println("A  = " + A);
+            System.out.println("A2 = " + A2);
 
             long tq = System.currentTimeMillis();
             try { 
                 GenPolynomial<ModInteger>[] L = HenselUtil.<ModInteger>liftExtendedEuclidean(ap,bp,k);
+                System.out.println("lift(a,b) = " + L[0] + ", " + L[1] + "\n");
 
                 lift = HenselUtil.<ModInteger>liftExtendedEuclidean(A,k);
                 tq = System.currentTimeMillis() - tq;
@@ -1210,7 +1212,7 @@ public class HenselUtilTest extends TestCase {
                 }
                 System.out.println("As   = " + As);
 
-                boolean il = HenselUtil.<ModInteger>isExtendedEuclideanLift(As,lift);
+                boolean il = HenselUtil.<ModInteger>isExtendedEuclideanLift2(A,lift);
                 System.out.println("islift = " + il);
 
                 mcfac = (ModularRingFactory<ModInteger>) L[0].ring.coFac;

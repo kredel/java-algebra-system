@@ -1616,20 +1616,26 @@ public class HenselUtil {
             lift.add(zero);
         }
         GenPolynomial<MOD> one = fac.getONE();
+        GenPolynomialRing<BigInteger> ifac = new GenPolynomialRing<BigInteger>(new BigInteger(),fac);
         B.set(0,one);
-        System.out.println("B(0) = " + B.get(0));
+        //System.out.println("B(0) = " + B.get(0));
+        GenPolynomial<MOD> b = one;
         for ( int j = 0; j < r-1; j++ ) {
             System.out.println("Q("+(j)+") = " + Q.get(j));
             System.out.println("A("+(j)+") = " + A.get(j));
             System.out.println("B("+(j)+") = " + B.get(j));
             List<GenPolynomial<MOD>> S = diophant(Q.get(j),A.get(j),B.get(j),k); 
-            System.out.println("Sb = " + S);
-            B.set(j+1,S.get(0));
+            System.out.println("\nSb = " + S);
+            b = S.get(0);
+            GenPolynomial<MOD> bb = PolyUtil.<MOD> fromIntegerCoefficients(fac, PolyUtil.integerFromModularCoefficients(ifac, b));
+            B.set(j+1,bb);
             lift.set(j,S.get(1));
-            System.out.println("B("+(j+1)+") = " + B.get(j+1));
+            //System.out.println("B("+(j+1)+") = " + B.get(j+1));
         }
-        lift.set(r-1,B.get(r-1));
-        System.out.println("B(r-1) = " + B.get(r-1));
+        System.out.println("liftb = " + lift);
+
+        lift.set(r-1,b);
+        System.out.println("B("+(r-1)+") = " + B.get(r-1) + " : " +  B.get(r-1).ring.coFac + ", b = " +  b + " : " +  b.ring.coFac);
         System.out.println("B = " + B);
         System.out.println("liftb = " + lift);
         return lift;
@@ -1651,6 +1657,7 @@ public class HenselUtil {
         if (fac.nvar != 1) { // todo assert
             throw new RuntimeException("polynomial ring not univariate");
         }
+        System.out.println("C = " + C);
         GenPolynomial<MOD> zero = fac.getZERO();
         for ( int i = 0; i < 2; i++ ) {
             sol.add(zero);
@@ -1665,10 +1672,23 @@ public class HenselUtil {
             a = fac.coFac.fromInteger( a.getSymmetricInteger().getVal() );
             int i = 0;
             for ( GenPolynomial<MOD> d : S ) {
+                //System.out.println("d = " + d);
                 d = d.multiply(a);
                 d = sol.get(i).sum(d);
+                //System.out.println("d = " + d);
                 sol.set(i++,d);
             }
+        }
+        GenPolynomialRing<BigInteger> ifac = new GenPolynomialRing<BigInteger>(new BigInteger(),fac);
+        A = PolyUtil.<MOD> fromIntegerCoefficients(fac, PolyUtil.integerFromModularCoefficients(ifac, A));
+        B = PolyUtil.<MOD> fromIntegerCoefficients(fac, PolyUtil.integerFromModularCoefficients(ifac, B));
+        C = PolyUtil.<MOD> fromIntegerCoefficients(fac, PolyUtil.integerFromModularCoefficients(ifac, C));
+        GenPolynomial<MOD> y = A.multiply(sol.get(0)).sum(B.multiply(sol.get(1)) );
+        System.out.println("y = " + y + " : " + fac.coFac);
+        if ( !y.equals(C) ) {
+            System.out.println("A = " + A + ", B = " + B);
+            System.out.println("s1 = " + sol.get(0) + ", s2 = " + sol.get(1));
+            System.out.println("A*r1 + B*r2 = " + y);
         }
         return sol;
     }
@@ -1694,9 +1714,15 @@ public class HenselUtil {
         GenPolynomial<MOD> s1 = lee[0];
         GenPolynomial<MOD> s2 = lee[1];
         fac = s1.ring;
-
         A = PolyUtil.<MOD> fromIntegerCoefficients(fac, PolyUtil.integerFromModularCoefficients(ifac, A));
         B = PolyUtil.<MOD> fromIntegerCoefficients(fac, PolyUtil.integerFromModularCoefficients(ifac, B));
+
+//         GenPolynomial<MOD> xe = fac.univariate(0,e);
+//         GenPolynomial<MOD> q = s1.multiply(xe);
+//         GenPolynomial<MOD>[] QR = q.divideAndRemainder(B);
+//         q = QR[0];
+//         GenPolynomial<MOD> r1 = QR[1];
+//         GenPolynomial<MOD> r2 = s2.multiply(xe).sum( q.multiply(A) );
 
         GenPolynomial<MOD> xe = fac.univariate(0,e);
         GenPolynomial<MOD> q = s1.multiply(xe);
@@ -1704,8 +1730,18 @@ public class HenselUtil {
         q = QR[0];
         GenPolynomial<MOD> r1 = QR[1];
         GenPolynomial<MOD> r2 = s2.multiply(xe).sum( q.multiply(B) );
+
+
+        //System.out.println("r1 = " + r1 + ", r2 = " + r2);
         sol.add(r1);
         sol.add(r2);
+
+        GenPolynomial<MOD> y = A.multiply(r1).sum(B.multiply(r2));
+        if ( !y.equals(xe) ) {
+            System.out.println("A = " + A + ", B = " + B);
+            System.out.println("r1 = " + r1 + ", r2 = " + r2);
+            System.out.println("A*r1 + B*r2 = " + y);
+        }
         return sol;
     }
 
@@ -1725,6 +1761,48 @@ public class HenselUtil {
         GenPolynomial<MOD> t = A.get(0).ring.getZERO();
         int i = 0;
         for ( GenPolynomial<MOD> a : A ) {
+            GenPolynomial<MOD> s = a.multiply( S.get(i++) );
+            t = t.sum(s);
+        }
+        if (!t.isONE()) {
+            System.out.println("no ee lift!");
+            System.out.println("A = " + A);
+            System.out.println("S = " + S);
+            System.out.println("t = " + t);
+            return false;
+        }
+        return true;
+    }
+
+
+    /**
+     * Modular Hensel lifting test. Let p be a prime number and assume C ==
+     * prod_{0,...,n-1} g_i mod p with ggt(g_i,g_j) == 1 mod p for i != j.
+     * @param C GenPolynomial
+     * @param G = [g_0,...,g_{n-1}] list of GenPolynomial
+     * @param M bound on the coefficients of g_i as factors of C.
+     * @param p prime number.
+     * @return true if C = prod_{0,...,n-1} g_i mod p^e, else false.
+     */
+    public static <MOD extends GcdRingElem<MOD> & Modular> 
+      boolean isExtendedEuclideanLift2(List<GenPolynomial<MOD>> A, List<GenPolynomial<MOD>> S) {
+        GenPolynomialRing<MOD> fac = A.get(0).ring;
+        List<GenPolynomial<MOD>> B = new ArrayList<GenPolynomial<MOD>>(A.size());
+        for ( GenPolynomial<MOD> ai : A ) {
+             GenPolynomial<MOD> b = fac.getONE();
+             for ( GenPolynomial<MOD> aj : A ) {
+                 if ( !ai.equals(aj) ) {
+                     b = b.multiply(aj);
+                 }
+             }
+             System.out.println("b = " + b);
+             B.add(b);
+        }
+        System.out.println("B = " + B);
+        // check mod p^e 
+        GenPolynomial<MOD> t = fac.getZERO();
+        int i = 0;
+        for ( GenPolynomial<MOD> a : B ) {
             GenPolynomial<MOD> s = a.multiply( S.get(i++) );
             t = t.sum(s);
         }
