@@ -46,7 +46,7 @@ public class FactorIntegerTest extends TestCase {
      * main.
      */
     public static void main(String[] args) {
-        BasicConfigurator.configure();
+        //BasicConfigurator.configure();
         junit.textui.TestRunner.run(suite());
     }
 
@@ -223,6 +223,40 @@ public class FactorIntegerTest extends TestCase {
                     sf += e;
                 }
                 assertTrue("#facs < " + facs, sf >= facs);
+            }
+
+            boolean t = fac.isFactorization(a, sm);
+            //System.out.println("t        = " + t);
+            assertTrue("prod(factor(a)) = a", t);
+        }
+    }
+
+
+    /**
+     * Test integer factorization irreducible polynomial.
+     * 
+     */
+    public void testIntegerFactorizationIrred() {
+        //BasicConfigurator.configure();
+        TermOrder to = new TermOrder(TermOrder.INVLEX);
+        BigInteger cfac = new BigInteger(4);
+        BigInteger one = cfac.getONE();
+        GenPolynomialRing<BigInteger> pfac = new GenPolynomialRing<BigInteger>(cfac, 1, to, new String[] { "x" });
+        FactorAbstract<BigInteger> fac = new FactorInteger<ModInteger>();
+
+        for (int i = 1; i < 2; i++) {
+            int facs = 0;
+            GenPolynomial<BigInteger> a = pfac.random(kl,ll*(i+1),el*(i+1),q);
+            a = pfac.parse("( x^8 - 40 x^6 + 352 x^4 - 960 x^2 + 576 )"); // Swinnerton-Dyer example
+            if (a.isConstant()) {
+                continue;
+            }
+            SortedMap<GenPolynomial<BigInteger>, Long> sm = fac.baseFactors(a);
+            //System.out.println("\na   = " + a);
+            //System.out.println("sm = " + sm);
+
+            if (sm.size() >= 1) {
+                assertTrue("#facs < " + facs, sm.size() >= 1);
             }
 
             boolean t = fac.isFactorization(a, sm);
