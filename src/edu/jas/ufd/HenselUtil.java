@@ -1226,13 +1226,13 @@ public class HenselUtil {
         for ( int i = 0; i < r; i++ ) {
             Q.add(zero);
         }
-        System.out.println("A = " + A);
+        //System.out.println("A = " + A);
         Q.set(r-2,A.get(r-1));
         for ( int j = r-3; j >= 0; j-- ) {
             GenPolynomial<MOD> q = A.get(j+1).multiply(Q.get(j+1));
             Q.set(j,q);
         }
-        System.out.println("Q = " + Q);
+        //System.out.println("Q = " + Q);
         List<GenPolynomial<MOD>> B = new ArrayList<GenPolynomial<MOD>>(r+1);
         List<GenPolynomial<MOD>> lift = new ArrayList<GenPolynomial<MOD>>(r);
         for ( int i = 0; i < r; i++ ) {
@@ -1245,11 +1245,11 @@ public class HenselUtil {
         //System.out.println("B(0) = " + B.get(0));
         GenPolynomial<MOD> b = one;
         for ( int j = 0; j < r-1; j++ ) {
-            System.out.println("Q("+(j)+") = " + Q.get(j));
-            System.out.println("A("+(j)+") = " + A.get(j));
-            System.out.println("B("+(j)+") = " + B.get(j));
+            //System.out.println("Q("+(j)+") = " + Q.get(j));
+            //System.out.println("A("+(j)+") = " + A.get(j));
+            //System.out.println("B("+(j)+") = " + B.get(j));
             List<GenPolynomial<MOD>> S = liftDiophant(Q.get(j),A.get(j),B.get(j),k); 
-            System.out.println("\nSb = " + S);
+            //System.out.println("\nSb = " + S);
             b = S.get(0);
             GenPolynomial<MOD> bb = PolyUtil.<MOD> fromIntegerCoefficients(fac, PolyUtil.integerFromModularCoefficients(ifac, b));
             B.set(j+1,bb);
@@ -1259,8 +1259,8 @@ public class HenselUtil {
         //System.out.println("liftb = " + lift);
         lift.set(r-1,b);
         //System.out.println("B("+(r-1)+") = " + B.get(r-1) + " : " +  B.get(r-1).ring.coFac + ", b = " +  b + " : " +  b.ring.coFac);
-        System.out.println("B = " + B);
-        System.out.println("liftb = " + lift);
+        //System.out.println("B = " + B);
+        //System.out.println("liftb = " + lift);
         return lift;
     }
 
@@ -1282,7 +1282,7 @@ public class HenselUtil {
         if (fac.nvar != 1) { // todo assert
             throw new RuntimeException("polynomial ring not univariate");
         }
-        System.out.println("C = " + C);
+        //System.out.println("C = " + C);
         GenPolynomial<MOD> zero = fac.getZERO();
         for ( int i = 0; i < 2; i++ ) {
             sol.add(zero);
@@ -1291,7 +1291,7 @@ public class HenselUtil {
             //System.out.println("monomial = " + m);
             long e = m.e.getVal(0);
             List<GenPolynomial<MOD>> S = liftDiophant(A,B,e,k);
-            System.out.println("Se = " + S);
+            //System.out.println("Se = " + S);
             MOD a = m.c;
             fac = S.get(0).ring;
             a = fac.coFac.fromInteger( a.getSymmetricInteger().getVal() );
@@ -1466,23 +1466,24 @@ public class HenselUtil {
         GenPolynomialRing<BigInteger> ifac = new GenPolynomialRing<BigInteger>(new BigInteger(),fac); 
         GenPolynomial<BigInteger> one = ifac.getONE();
         List<GenPolynomial<BigInteger>> Fi = PolyUtil.integerFromModularCoefficients(ifac, F);
-        System.out.println("Fi = " + Fi);
+        //System.out.println("Fi = " + Fi);
 
         List<GenPolynomial<MOD>> S = liftExtendedEuclidean(F, k+1); // lift works for any k, TODO: use this
-        System.out.println("Sext = " + S);
+        //System.out.println("Sext = " + S);
         if ( debug ) {
+            logger.info("EE lift = " + S);
             // adjust coefficients
             List<GenPolynomial<MOD>> Sx = PolyUtil.fromIntegerCoefficients(pfac, PolyUtil.integerFromModularCoefficients(ifac, S) );
             try {
                 boolean il = HenselUtil.<MOD>isExtendedEuclideanLift(F,Sx);
-                System.out.println("islift = " + il);
+                //System.out.println("islift = " + il);
             } catch (RuntimeException e) {
                 e.printStackTrace();
             }
         }
         List<GenPolynomial<BigInteger>> Si = PolyUtil.integerFromModularCoefficients(ifac, S);
-        System.out.println("Si = " + Si);
-        System.out.println("C = " + C);
+        //System.out.println("Si = " + Si);
+        //System.out.println("C = " + C);
 
         // approximate mod p^i
         ModularRingFactory<MOD> mcfac = PF;
@@ -1490,14 +1491,14 @@ public class HenselUtil {
         BigInteger modul = p;
         GenPolynomialRing<MOD> mfac = new GenPolynomialRing<MOD>(mcfac,fac);
         List<GenPolynomial<MOD>> Sp = PolyUtil.fromIntegerCoefficients(mfac, Si);
-        System.out.println("Sp = " + Sp);
+        //System.out.println("Sp = " + Sp);
         for ( int i = 0; i < k; i++ ) {
             GenPolynomial<BigInteger> e = fac.getONE();
             for ( GenPolynomial<BigInteger> fi : Fi ) {
                 e = e.multiply( fi );
             }
             e = C.subtract(e);
-            System.out.println("\ne = " + e);
+            //System.out.println("\ne = " + e);
             if ( e.isZERO() ) {
                 logger.info("leaving on zero error");
                 break;
@@ -1511,7 +1512,7 @@ public class HenselUtil {
             //System.out.println("e = " + e);
             // move to in Z_p[x]
             GenPolynomial<MOD> c = PolyUtil.<MOD> fromIntegerCoefficients(mfac, e);
-            System.out.println("c = " + c + ": " + c.ring.coFac);
+            //System.out.println("c = " + c + ": " + c.ring.coFac);
 
             List<GenPolynomial<MOD>> s = new ArrayList<GenPolynomial<MOD>>(S.size());
             int j = 0;
@@ -1523,9 +1524,9 @@ public class HenselUtil {
                 //System.out.println("f = " + f + " : " + f.ring.coFac);
                 s.add(f);
             }
-            System.out.println("s = " + s);
+            //System.out.println("s = " + s);
             List<GenPolynomial<BigInteger>> si = PolyUtil.integerFromModularCoefficients(ifac, s);
-            System.out.println("si = " + si);
+            //System.out.println("si = " + si);
 
             List<GenPolynomial<BigInteger>> Fii = new ArrayList<GenPolynomial<BigInteger>>(F.size());
             j = 0;
@@ -1533,11 +1534,11 @@ public class HenselUtil {
                 f = f.sum( si.get(j++).multiply(modul) );
                 Fii.add(f);
             }
-            System.out.println("Fii = " + Fii);
+            //System.out.println("Fii = " + Fii);
             Fi = Fii;
             modul = modul.multiply(p);
             if ( i >= k-1 ) {
-                System.out.println("e != 0 for k = " + k);
+                logger.info("e != 0 for k = " + k);
             }
         }
         // setup ring mod p^i
@@ -1546,11 +1547,10 @@ public class HenselUtil {
         } else {
             mcfac = (ModularRingFactory) new ModIntegerRing(modul.getVal());
         }
-        System.out.println("mcfac = " + mcfac);
+        //System.out.println("mcfac = " + mcfac);
         mfac = new GenPolynomialRing<MOD>(mcfac,fac);
-        F = PolyUtil.<MOD> fromIntegerCoefficients(mfac, Fi);
-        //System.out.println("F = " + F + ": " + F.ring.coFac);
-        lift = F;
+        lift = PolyUtil.<MOD> fromIntegerCoefficients(mfac, Fi);
+        //System.out.println("lift = " + lift + ": " + lift.get(0).ring.coFac);
         return lift;
     }
 

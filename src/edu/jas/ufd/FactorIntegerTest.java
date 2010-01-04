@@ -114,7 +114,7 @@ public class FactorIntegerTest extends TestCase {
         GenPolynomialRing<BigInteger> pfac = new GenPolynomialRing<BigInteger>(cfac, 1, to, new String[] { "x" });
         FactorAbstract<BigInteger> fac = new FactorInteger<ModInteger>();
 
-        for (int i = 1; i < 2; i++) {
+        for (int i = 1; i < 3; i++) {
             int facs = 0;
             GenPolynomial<BigInteger> a = null; //pfac.random(kl,ll*(i+1),el*(i+1),q);
             GenPolynomial<BigInteger> b = pfac.random(kl * 2, ll * (i), el * (i + 1), q);
@@ -176,7 +176,7 @@ public class FactorIntegerTest extends TestCase {
      * Test integer factorization.
      * 
      */
-    public void xtestIntegerFactorization() {
+    public void testIntegerFactorization() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(4);
@@ -236,7 +236,7 @@ public class FactorIntegerTest extends TestCase {
      * Test multivariate integer factorization.
      * 
      */
-    public void xtestMultivariate2IntegerFactorization() {
+    public void testMultivariate2IntegerFactorization() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(1);

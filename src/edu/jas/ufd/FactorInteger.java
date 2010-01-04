@@ -271,11 +271,17 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                     factors = searchFactorsMonic(P, M, mlist, AD); // doesn't work in all cases
                     t = System.currentTimeMillis() - t;
                     System.out.println("monic time = " + t);
-                    if ( false ) {
+                    if ( true ) {
                         t = System.currentTimeMillis();
-                        factors = searchFactorsNonMonic(P, M, mlist, AD);
+                        List<GenPolynomial<BigInteger>> fnm = searchFactorsNonMonic(P, M, mlist, AD);
                         t = System.currentTimeMillis() - t;
                         System.out.println("non monic time = " + t);
+                        if ( debug ) {
+                            if ( ! factors.equals(fnm) ) {
+                                System.out.println("monic factors     = " + factors);
+                                System.out.println("non monic factors = " + fnm);
+                            }
+                        }
                     }
                 } catch ( RuntimeException e ) {
                     t = System.currentTimeMillis();
@@ -340,7 +346,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
      * <b>Note:</b> does not work in all cases.
      */
     List<GenPolynomial<BigInteger>> searchFactorsMonic(GenPolynomial<BigInteger> C, BigInteger M, List<GenPolynomial<MOD>> F, BitSet D) {
-        System.out.println("*** monic factor combination ***");
+        //System.out.println("*** monic factor combination ***");
         if (C == null || C.isZERO() || F == null || F.size() == 0) {
             throw new RuntimeException("C must be nonzero and F must be nonempty");
         }
@@ -365,7 +371,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         } else {
             //nf = ct.ring.coFac.getONE();
         }
-        System.out.println("modlist  = " + mlist); // includes not ldcf
+        //System.out.println("modlist  = " + mlist); // includes not ldcf
         ModularRingFactory<MOD> mcfac = (ModularRingFactory<MOD>) ct.ring.coFac;
         BigInteger m = mcfac.getIntegerModul();
         long k = 1;
@@ -373,8 +379,8 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         while (pi.compareTo(M) < 0) {
               k++;
               pi = pi.multiply(m);
-         }
-        System.out.println("k = " + k);
+        }
+        logger.info("p^k = " + m + "^" + k);
         GenPolynomial<BigInteger> PP = C, P = C;
         // lift via Hensel
         try {
@@ -390,10 +396,10 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
 
         // combine trial factors
         int dl = (lift.size() + 1) / 2;
-        System.out.println("dl = " + dl); 
+        //System.out.println("dl = " + dl); 
         GenPolynomial<BigInteger> u = PP;
         long deg = (u.degree(0) + 1L) / 2L;
-        System.out.println("deg = " + deg); 
+        //System.out.println("deg = " + deg); 
         //BigInteger ldcf = u.leadingBaseCoefficient();
         //System.out.println("ldcf = " + ldcf); 
         for (int j = 1; j <= dl; j++) {
@@ -467,7 +473,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
      */
     List<GenPolynomial<BigInteger>> searchFactorsNonMonic(GenPolynomial<BigInteger> C, BigInteger M,
                                                           List<GenPolynomial<MOD>> F, BitSet D) {
-        System.out.println("*** non monic factor combination ***");
+        //System.out.println("*** non monic factor combination ***");
         if (C == null || C.isZERO() || F == null || F.size() == 0) {
             throw new RuntimeException("C must be nonzero and F must be nonempty");
         }
@@ -492,8 +498,6 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         } else {
             nf = ct.ring.coFac.getONE();
         }
-        //System.out.println("------------------" + M.toScript() + "-------------------------"); 
-        //System.out.println("------------------" + nf.factory().toScript() + "-------------------------"); 
         //System.out.println("modlist  = " + mlist); // includes not ldcf
         GenPolynomialRing<MOD> mfac = ct.ring;
         GenPolynomial<MOD> Pm = PolyUtil.<MOD> fromIntegerCoefficients(mfac, C);
@@ -543,7 +547,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 }
                 GenPolynomial<BigInteger> itrial = ilist.A;
                 GenPolynomial<BigInteger> icofactor = ilist.B;
-                if (debug /* logger.isDebugEnabled()*/) {
+                if ( logger.isDebugEnabled() ) {
                     logger.info("       modlist = " + trial + ", cofactor " + cofactor);
                     logger.info("lifted intlist = " + itrial + ", cofactor " + icofactor);
                 }
@@ -552,7 +556,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 itrial = engine.basePrimitivePart(itrial);
                 //System.out.println("pp(trial)= " + itrial);
                 if (PolyUtil.<BigInteger> basePseudoRemainder(u, itrial).isZERO()) {
-                    logger.info("trial    = " + itrial);
+                    logger.info("successful trial = " + itrial);
                     //System.out.println("trial    = " + itrial);
                     //System.out.println("cofactor = " + icofactor);
                     //System.out.println("flist    = " + flist);
