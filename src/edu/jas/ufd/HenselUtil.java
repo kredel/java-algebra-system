@@ -1376,12 +1376,12 @@ public class HenselUtil {
 
 
     /**
-     * Modular Hensel lifting algorithm for extended Euclidean relation. Let p =
-     * f_i.ring.coFac.modul() i = 0, ..., n-1 and assume C == prod_{0,...,n-1}
-     * f_i mod p with ggt(f_i,f_j) == 1 mod p for i != j
+     * Constructing and lifting algorithm for extended Euclidean relation. 
+     * Computation modulo p^k, unused and unnecessary.
+     * Let p = A.ring.coFac.modul() and assume ggt(A,B) == 1 mod p
      * @param A modular GenPolynomial
      * @param B modular GenPolynomial
-     * @param k desired approximation p^k.
+     * @param k desired approximation exponent p^k.
      * @return [s,t] with s A + t B = 1 mod p^k.
      */
     public static <MOD extends GcdRingElem<MOD> & Modular>
@@ -1486,11 +1486,11 @@ public class HenselUtil {
 
 
     /**
-     * Modular Hensel lifting algorithm for extended Euclidean relation. 
-     * Let p = * A.ring.coFac.modul() and assume ggt(A,B) == 1 mod p
+     * Constructing and lifting algorithm for extended Euclidean relation. 
+     * Let p = A.ring.coFac.modul() and assume ggt(A,B) == 1 mod p
      * @param A modular GenPolynomial
      * @param B modular GenPolynomial
-     * @param k desired approximation p^k.
+     * @param k desired approximation exponent p^k.
      * @return [s,t] with s A + t B = 1 mod p^k.
      */
     public static <MOD extends GcdRingElem<MOD> & Modular>
@@ -1502,7 +1502,7 @@ public class HenselUtil {
         if (fac.nvar != 1) { // todo assert
             throw new RuntimeException("polynomial ring not univariate");
         }
-        // start with extended Euclid mod p
+        // start with extended Euclidean relation mod p
         GenPolynomial<MOD>[] gst = A.egcd(B);
         if (!gst[0].isONE()) {
             throw new NoLiftingException("A and B not coprime, gcd = " + gst[0] + ", A = " + A + ", B = " + B);
@@ -1538,7 +1538,7 @@ public class HenselUtil {
                 break;
             }
             e = e.divide(modul);
-            // move to in Z_p[x] and compute next approximation 
+            // move to Z_p[x] and compute next approximation 
             GenPolynomial<MOD> c = PolyUtil.<MOD> fromIntegerCoefficients(fac, e);
             //System.out.println("c = " + c + ": " + c.ring.coFac);
             GenPolynomial<MOD> s = S.multiply(c);
@@ -1546,7 +1546,7 @@ public class HenselUtil {
             //System.out.println("s = " + s + ": " + s.ring.coFac);
             //System.out.println("t = " + t + ": " + t.ring.coFac);
 
-            GenPolynomial<MOD>[] QR = s.divideAndRemainder(B);
+            GenPolynomial<MOD>[] QR = s.divideAndRemainder(B); // watch for ordering 
             GenPolynomial<MOD> q = QR[0];
             s = QR[1];
             t = t.sum(q.multiply(A));
@@ -1585,11 +1585,11 @@ public class HenselUtil {
 
 
     /**
-     * Modular Hensel lifting algorithm for extended Euclidean relation. 
-     * Let p = * A_i.ring.coFac.modul() and assume ggt(A_i,A_j) == 1 mod p, i != j 
+     * Constructing and lifting algorithm for extended Euclidean relation. 
+     * Let p = A_i.ring.coFac.modul() and assume ggt(A_i,A_j) == 1 mod p, i != j 
      * @param A list of modular GenPolynomials
-     * @param k desired approximation p^k.
-     * @return [s_0,...,s_n-1] with sum_i s_i * A_i = 1 mod p^k.
+     * @param k desired approximation exponent p^k.
+     * @return [s_0,...,s_n-1] with sum_i s_i * B_i = 1 mod p^k, with B_i = prod_{i!=j} A_j.
      */
     public static <MOD extends GcdRingElem<MOD> & Modular>
       List<GenPolynomial<MOD>> liftExtendedEuclidean(List<GenPolynomial<MOD>> A, long k) throws NoLiftingException {
@@ -1600,9 +1600,9 @@ public class HenselUtil {
         if (fac.nvar != 1) { // todo assert
             throw new RuntimeException("polynomial ring not univariate");
         }
+        GenPolynomial<MOD> zero = fac.getZERO();
         int r = A.size();
         List<GenPolynomial<MOD>> Q = new ArrayList<GenPolynomial<MOD>>(r);
-        GenPolynomial<MOD> zero = fac.getZERO();
         for ( int i = 0; i < r; i++ ) {
             Q.add(zero);
         }
@@ -1614,14 +1614,14 @@ public class HenselUtil {
         }
         System.out.println("Q = " + Q);
         List<GenPolynomial<MOD>> B = new ArrayList<GenPolynomial<MOD>>(r+1);
-        List<GenPolynomial<MOD>> lift = new ArrayList<GenPolynomial<MOD>>();
+        List<GenPolynomial<MOD>> lift = new ArrayList<GenPolynomial<MOD>>(r);
         for ( int i = 0; i < r; i++ ) {
             B.add(zero);
             lift.add(zero);
         }
         GenPolynomial<MOD> one = fac.getONE();
         GenPolynomialRing<BigInteger> ifac = new GenPolynomialRing<BigInteger>(new BigInteger(),fac);
-        B.set(0,one);
+        B.add(0,one);
         //System.out.println("B(0) = " + B.get(0));
         GenPolynomial<MOD> b = one;
         for ( int j = 0; j < r-1; j++ ) {
