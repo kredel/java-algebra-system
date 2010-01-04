@@ -335,9 +335,9 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
 
 
     /**
-     * BitSet for factor degree list.
-     * @param E exponent vector list.
-     * @return {b_0,...,b_k} a BitSet of possible factor degrees.
+     * Sum of all degrees.
+     * @param L univariate polynomial list.
+     * @return sum deg(p) for p in L.
      */
     public static <C extends RingElem<C>>
       long degreeSum(List<GenPolynomial<C>> L) {

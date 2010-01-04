@@ -17,7 +17,7 @@ import edu.jas.structure.ModularRingFactory;
 /**
  * Container for the approximation result from a Hensel algorithm.
  * @author Heinz Kredel
- * @param <C> coefficient type
+ * @param <MOD> coefficient type
  */
 
 public class HenselApprox<MOD extends GcdRingElem<MOD> & Modular> implements Serializable {
