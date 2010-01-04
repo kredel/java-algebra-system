@@ -26,6 +26,7 @@ import edu.jas.poly.PolyUtil;
 import edu.jas.structure.RingFactory;
 import edu.jas.structure.ModularRingFactory;
 import edu.jas.structure.GcdRingElem;
+import edu.jas.structure.RingElem;
 import edu.jas.util.KsubSet;
 
 
@@ -334,6 +335,23 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
 
 
     /**
+     * BitSet for factor degree list.
+     * @param E exponent vector list.
+     * @return {b_0,...,b_k} a BitSet of possible factor degrees.
+     */
+    public static <C extends RingElem<C>>
+      long degreeSum(List<GenPolynomial<C>> L) {
+        long s = 0L;
+        for ( GenPolynomial<C> p : L ) {
+            ExpVector e = p.leadingExpVector();
+            long d = e.getVal(0);
+            s += d;
+        }
+        return s;
+    }
+
+
+    /**
      * Factor search with modular Hensel lifting algorithm. Let p =
      * f_i.ring.coFac.modul() i = 0, ..., n-1 and assume C == prod_{0,...,n-1}
      * f_i mod p with ggt(f_i,f_j) == 1 mod p for i != j
@@ -406,18 +424,20 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
             //System.out.println("j = " + j + ", dl = " + dl + ", lift = " + lift); 
             KsubSet<GenPolynomial<MOD>> ps = new KsubSet<GenPolynomial<MOD>>(lift, j);
             for (List<GenPolynomial<MOD>> flist : ps) {
+                //System.out.println("degreeSum = " + degreeSum(flist));
+                if ( ! D.get( (int) FactorInteger.<MOD>degreeSum(flist) ) ) {
+                    logger.info("skipped by degree set " + D + ", deg = " + degreeSum(flist));
+                    continue;
+                }
                 GenPolynomial<MOD> mtrial = mpfac.getONE();
                 for (int kk = 0; kk < flist.size(); kk++) {
                     GenPolynomial<MOD> fk = flist.get(kk);
                     mtrial = mtrial.multiply(fk);
                 }
                 //System.out.println("+flist = " + flist + ", mtrial = " + mtrial);
-                //if (mtrial.degree(0) > deg) { // this test is wrong
-                //    continue;
-                //}
-                if ( ! D.get( (int)mtrial.degree(0) ) ) {
-                    logger.info("skiped by degree set " + D + ", deg = " + mtrial.degree(0));
-                    continue;
+                if (mtrial.degree(0) > deg) { // this test is sometimes wrong
+                    logger.info("degree > deg " + deg + ", degree = " + mtrial.degree(0));
+                    //continue;
                 }
                 //System.out.println("+flist    = " + flist);
                 GenPolynomial<BigInteger> trial = PolyUtil.integerFromModularCoefficients(pfac, mtrial);
@@ -426,7 +446,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 trial = engine.basePrimitivePart(trial);
                 //System.out.println("pp(trial)= " + trial);
                 if (PolyUtil.<BigInteger> basePseudoRemainder(u, trial).isZERO()) {
-                    logger.info("trial successful = " + trial);
+                    logger.info("successful trial = " + trial);
                     //System.out.println("trial    = " + trial);
                     //System.out.println("flist    = " + flist);
                     //trial = engine.basePrimitivePart(trial);
@@ -515,18 +535,19 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
             //System.out.println("j = " + j + ", dl = " + dl + ", ilist = " + ilist); 
             KsubSet<GenPolynomial<MOD>> ps = new KsubSet<GenPolynomial<MOD>>(mlist, j);
             for (List<GenPolynomial<MOD>> flist : ps) {
-                //System.out.println("flist = " + flist);
+                //System.out.println("degreeSum = " + degreeSum(flist));
+                if ( ! D.get( (int) FactorInteger.<MOD>degreeSum(flist) ) ) {
+                    logger.info("skipped by degree set " + D + ", deg = " + degreeSum(flist));
+                    continue; 
+                }
                 GenPolynomial<MOD> trial = mfac.getONE().multiply(nf);
                 for (int kk = 0; kk < flist.size(); kk++) {
                     GenPolynomial<MOD> fk = flist.get(kk);
                     trial = trial.multiply(fk);
                 }
-                //if (trial.degree(0) > deg) { // this test is wrong
-                //    continue;
-                //}
-                if ( ! D.get( (int)trial.degree(0) ) ) {
-                    logger.info("skiped by degree set " + D + ", deg = " + trial.degree(0));
-                    continue;
+                if (trial.degree(0) > deg) { // this test is sometimes wrong
+                    logger.info("degree > deg " + deg + ", degree = " + trial.degree(0));
+                    //continue;
                 }
                 GenPolynomial<MOD> cofactor = um.divide(trial);
                 //System.out.println("trial    = " + trial);
