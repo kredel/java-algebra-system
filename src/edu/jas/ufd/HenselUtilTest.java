@@ -851,18 +851,18 @@ public class HenselUtilTest extends TestCase {
                 k++;
                 pi = pi.multiply(m);
             }
-            System.out.println("mi  = " + mi);
-            System.out.println("pi  = " + pi);
-            System.out.println("k   = " + k);
+            //System.out.println("mi  = " + mi);
+            //System.out.println("pi  = " + pi);
+            //System.out.println("k   = " + k);
 
-            System.out.println("a   = " + a);
-            System.out.println("b   = " + b);
-            System.out.println("d   = " + d);
-            System.out.println("c   = " + c);
-            System.out.println("ap  = " + ap);
-            System.out.println("bp  = " + bp);
-            System.out.println("dp  = " + dp);
-            System.out.println("cp  = " + cp);
+            //System.out.println("a   = " + a);
+            //System.out.println("b   = " + b);
+            //System.out.println("d   = " + d);
+            //System.out.println("c   = " + c);
+            //System.out.println("ap  = " + ap);
+            //System.out.println("bp  = " + bp);
+            //System.out.println("dp  = " + dp);
+            //System.out.println("cp  = " + cp);
 
             List<GenPolynomial<ModInteger>> A = new ArrayList<GenPolynomial<ModInteger>>();
             List<GenPolynomial<ModInteger>> As = new ArrayList<GenPolynomial<ModInteger>>();
@@ -871,16 +871,16 @@ public class HenselUtilTest extends TestCase {
             A.add(dp);
             //A.add(mfac.parse("(x - 4)"));
             //A.add(mfac.parse("(x - 5)"));
-            System.out.println("A  = " + A);
+            //System.out.println("A  = " + A);
             List<GenPolynomial<ModInteger>> A2 = new ArrayList<GenPolynomial<ModInteger>>();
             List<GenPolynomial<ModInteger>> As2 = new ArrayList<GenPolynomial<ModInteger>>();
-            A2.add(ap);
-            A2.add(bp);
             //System.out.println("A2 = " + A2);
 
             long tq = System.currentTimeMillis();
             try { 
-                //GenPolynomial<ModInteger>[] L = HenselUtil.<ModInteger>liftExtendedEuclidean(ap,bp,k);
+                A2.add(ap);
+                A2.add(bp);
+                GenPolynomial<ModInteger>[] L = HenselUtil.<ModInteger>liftExtendedEuclidean(ap,bp,k);
                 //System.out.println("lift(a,b) = " + L[0] + ", " + L[1] + "\n");
 
                 lift = HenselUtil.<ModInteger>liftExtendedEuclidean(A,k);
@@ -888,19 +888,23 @@ public class HenselUtilTest extends TestCase {
 
                 //System.out.println("");
                 //System.out.println("lift(a,b) = " + L[0] + ", " + L[1] );
-                System.out.println("lift = " + lift);
+                //System.out.println("lift = " + lift);
 
-                ModularRingFactory<ModInteger> mcfac = (ModularRingFactory<ModInteger>) lift.get(0).ring.coFac;
-                GenPolynomialRing<ModInteger> mfac1 = new GenPolynomialRing<ModInteger>(mcfac, mfac);
-                System.out.println("\nmcfac  = " + mcfac);
+                As = PolyUtil.fromIntegerCoefficients(mfac, PolyUtil.integerFromModularCoefficients(dfac, lift));
+                //System.out.println("As   = " + As);
 
-                As = PolyUtil.fromIntegerCoefficients(mfac1, PolyUtil.integerFromModularCoefficients(dfac, A));
-                System.out.println("As   = " + As);
+                boolean il = HenselUtil.<ModInteger>isExtendedEuclideanLift(A,As);
+                //System.out.println("islift = " + il);
+                assertTrue("lift(s0,s1,s2) mod p^k) = 1: ", il);
 
-                boolean il = HenselUtil.<ModInteger>isExtendedEuclideanLift(As,lift);
-                System.out.println("islift = " + il);
+                As2.add( L[1] );
+                As2.add( L[0] );
+                As2 = PolyUtil.fromIntegerCoefficients(mfac, PolyUtil.integerFromModularCoefficients(dfac, As2));
+                //System.out.println("As2   = " + As2);
 
-                //assertTrue("lift(s a + t b mod p^k) = 1: ", il);
+                il = HenselUtil.<ModInteger>isExtendedEuclideanLift(A2,As2);
+                //System.out.println("islift = " + il);
+                assertTrue("lift(s a + t b mod p^k) = 1: ", il);
             } catch ( NoLiftingException e ) {
                 // ok fail(""+e);
             }
