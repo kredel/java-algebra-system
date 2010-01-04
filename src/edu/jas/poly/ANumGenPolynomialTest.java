@@ -74,6 +74,7 @@ public class ANumGenPolynomialTest extends TestCase {
        while ( modul.isZERO() || modul.isUnit() || modul.isConstant() ) {
              modul = mfac.random(3); 
        }
+       modul = modul.sum( mfac.fromInteger(3L) );
 
        cfac = new AlgebraicNumberRing<BigRational>( modul.monic() );
        fac = new GenPolynomialRing<AlgebraicNumber<BigRational>>(cfac,rl);

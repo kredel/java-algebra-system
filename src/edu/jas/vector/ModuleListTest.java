@@ -111,6 +111,9 @@ public static Test suite() {
          = new ArrayList<GenPolynomial<BigRational>>();
      for (int i = 0; i < 7; i++) {
          a = pfac.random(kl, ll+i, el, q );
+         if ( a.isZERO() || a.isONE() ) {
+             continue;
+         }
          assertTrue("length( a"+i+" ) <> 0", a.length() >= 0);
          assertTrue(" not isZERO( a"+i+" )", !a.isZERO() );
          assertTrue(" not isONE( a"+i+" )", !a.isONE() );
@@ -136,6 +139,9 @@ public static Test suite() {
              = new ArrayList<GenPolynomial<BigRational>>();
          for ( int j = 0; j < 3; j++ ) {
              a = pfac.random(kl, ll, el, q );
+             if ( a.isZERO() || a.isONE() ) {
+                 continue;
+             }
              assertTrue("length( a"+i+" ) <> 0", a.length() >= 0);
              assertTrue(" not isZERO( a"+i+" )", !a.isZERO() );
              assertTrue(" not isONE( a"+i+" )", !a.isONE() );
@@ -162,6 +168,9 @@ public static Test suite() {
              = new ArrayList<GenPolynomial<BigRational>>();
          for ( int j = 0; j < 3; j++ ) {
              a = pfac.random(kl, ll, el, q );
+             if ( a.isZERO() || a.isONE() ) {
+                 continue;
+             }
              assertTrue("length( a"+i+" ) <> 0", a.length() >= 0);
              assertTrue(" not isZERO( a"+i+" )", !a.isZERO() );
              assertTrue(" not isONE( a"+i+" )", !a.isONE() );
@@ -193,6 +202,9 @@ public static Test suite() {
              = new ArrayList<GenPolynomial<BigRational>>();
          for ( int j = 0; j < 3; j++ ) {
              a = pfac.random(kl, ll, el, q );
+             if ( a.isZERO() || a.isONE() ) {
+                 continue;
+             }
              assertTrue("length( a"+i+" ) <> 0", a.length() >= 0);
              assertTrue(" not isZERO( a"+i+" )", !a.isZERO() );
              assertTrue(" not isONE( a"+i+" )", !a.isONE() );
@@ -232,6 +244,9 @@ public static Test suite() {
              = new ArrayList<GenPolynomial<BigRational>>();
          for ( int j = 0; j < 3; j++ ) {
              a = pfac.random(kl, ll, el, q );
+             if ( a.isZERO() || a.isONE() ) {
+                 continue;
+             }
              assertTrue("length( a"+i+" ) <> 0", a.length() >= 0);
              assertTrue(" not isZERO( a"+i+" )", !a.isZERO() );
              assertTrue(" not isONE( a"+i+" )", !a.isONE() );
