@@ -78,7 +78,7 @@ public class RootFactory {
      * @param f univariate polynomial.
      * @return a list of different complex algebraic numbers.
      */
-    public static <C extends GcdRingElem<C>> 
+    public static <C extends GcdRingElem<C> & Rational> 
       List<ComplexAlgebraicNumber<C>> complexAlgebraicNumbers(GenPolynomial<Complex<C>> f) {
         ComplexRoots<C> cr = new ComplexRootsSturm<C>( f.ring.coFac );
         SquarefreeAbstract<Complex<C>> engine = SquarefreeFactory.<Complex<C>> getImplementation(f.ring.coFac);
