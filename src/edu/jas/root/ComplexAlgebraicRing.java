@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import edu.jas.arith.Rational;
 import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.structure.Complex;
@@ -25,7 +26,7 @@ import edu.jas.structure.RingFactory;
  * @author Heinz Kredel
  */
 
-public class ComplexAlgebraicRing<C extends GcdRingElem<C>>
+public class ComplexAlgebraicRing<C extends GcdRingElem<C> & Rational>
 /*extends AlgebraicNumberRing<C>*/
 implements RingFactory<ComplexAlgebraicNumber<C>> {
 

@@ -7,7 +7,9 @@ package edu.jas.root;
 
 import edu.jas.arith.BigDecimal;
 import edu.jas.arith.BigRational;
+import edu.jas.arith.Rational;
 import edu.jas.structure.Complex;
+import edu.jas.structure.ComplexRing;
 import edu.jas.structure.ElemFactory;
 import edu.jas.structure.RingElem;
 
@@ -17,7 +19,7 @@ import edu.jas.structure.RingElem;
  * @param <C> coefficient type.
  * @author Heinz Kredel
  */
-public class Rectangle<C extends RingElem<C>> {
+public class Rectangle<C extends RingElem<C> & Rational > {
 
 
     /**
@@ -165,10 +167,10 @@ public class Rectangle<C extends RingElem<C>> {
 
 
     /**
-     * Approximation of center.
-     * @return r + i m as decimal approximation of the center.
+     * Complex of BigRational approximation of center.
+     * @return r + i m as rational approximation of the center.
      */
-    public String centerApprox() {
+    public Complex<BigRational> getRationalCenter() {
         C r = corners[2].getRe().subtract(corners[1].getRe());
         C m = corners[0].getIm().subtract(corners[1].getIm());
         ElemFactory<C> rf = r.factory();
@@ -177,20 +179,39 @@ public class Rectangle<C extends RingElem<C>> {
         m = m.divide(two);
         r = corners[1].getRe().sum(r);
         m = corners[1].getIm().sum(m);
+        BigRational rs = r.getRational(); //new BigRational(r.toString()); // hack
+        BigRational ms = m.getRational(); //new BigRational(m.toString()); // hack
+        ComplexRing<BigRational> cf = new ComplexRing<BigRational>(rs.factory());
+        Complex<BigRational> c = new Complex<BigRational>(cf,rs,ms);
+        return c;
+    }
 
-        BigRational rs = new BigRational(r.toString());
-        //System.out.println("s  = " + s);
-        BigDecimal rd = new BigDecimal(rs);
 
-        BigRational ms = new BigRational(m.toString());
-        //System.out.println("m  = " + m);
-        BigDecimal md = new BigDecimal(ms);
+    /**
+     * Complex of BigDecimal approximation of center.
+     * @return r + i m as decimal approximation of the center.
+     */
+    public Complex<BigDecimal> getDecimalCenter() {
+        Complex<BigRational> rc = getRationalCenter();
+        BigDecimal rd = new BigDecimal(rc.getRe());
+        BigDecimal md = new BigDecimal(rc.getIm());
+        ComplexRing<BigDecimal> cf = new ComplexRing<BigDecimal>(rd.factory());
+        Complex<BigDecimal> c = new Complex<BigDecimal>(cf,rd,md);
+        return c;
+    }
 
+
+    /**
+     * Approximation of center.
+     * @return r + i m as decimal approximation of the center.
+     */
+    public String centerApprox() {
+        Complex<BigDecimal> c = getDecimalCenter();
         StringBuffer s = new StringBuffer();
         s.append("[ ");
-        s.append(rd.toString());
+        s.append(c.getRe().toString());
         s.append(" i ");
-        s.append(md.toString());
+        s.append(c.getIm().toString());
         s.append(" ]");
         return s.toString();
     }

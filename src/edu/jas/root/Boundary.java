@@ -5,6 +5,7 @@
 package edu.jas.root;
 
 
+import edu.jas.arith.Rational;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
@@ -30,7 +31,7 @@ import edu.jas.ufd.GreatestCommonDivisorAbstract;
  * @param <C> coefficient type.
  * @author Heinz Kredel
  */
-public class Boundary<C extends RingElem<C>> {
+public class Boundary<C extends RingElem<C> & Rational> {
 
 
     /**
