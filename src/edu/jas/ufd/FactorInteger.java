@@ -271,8 +271,8 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                     mlist = PolyUtil.<MOD> monic(mlist);
                     factors = searchFactorsMonic(P, M, mlist, AD); // does now work in all cases
                     t = System.currentTimeMillis() - t;
-                    System.out.println("monic time = " + t);
-                    if ( debug ) {
+                    //System.out.println("monic time = " + t);
+                    if ( false && debug ) {
                         t = System.currentTimeMillis();
                         List<GenPolynomial<BigInteger>> fnm = searchFactorsNonMonic(P, M, mlist, AD);
                         t = System.currentTimeMillis() - t;
@@ -288,7 +288,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                     t = System.currentTimeMillis();
                     factors = searchFactorsNonMonic(P, M, mlist, AD);
                     t = System.currentTimeMillis() - t;
-                    System.out.println("only non monic time = " + t);
+                    //System.out.println("only non monic time = " + t);
                 }
             } else {
                 factors = searchFactorsNonMonic(P, M, mlist, AD);

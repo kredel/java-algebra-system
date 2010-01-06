@@ -436,6 +436,7 @@ public class ComplexRootTest extends TestCase {
 
         a = dfac.random(kl, ll, el-1, q);
         //a = dfac.parse("( (x-1)^3 )");
+        //a = dfac.parse("( x^4-2 )");
         //System.out.println("a = " + a);
 
         BigRational len = new BigRational(1, 1000);

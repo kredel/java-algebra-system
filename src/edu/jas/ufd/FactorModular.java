@@ -122,8 +122,7 @@ public class FactorModular<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         }
         GenPolynomialRing<MOD> pfac = P.ring;
         if (pfac.nvar > 1) {
-            //throw new RuntimeException(this.getClass().getName() + " only for univariate polynomials");
-            logger.warn(this.getClass().getName() + " case p = 2 not implemented");
+            throw new RuntimeException(this.getClass().getName() + " only for univariate polynomials");
         }
         if (P.degree(0) == deg) {
             facs.add(P);

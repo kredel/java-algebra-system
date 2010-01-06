@@ -65,7 +65,10 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
                 return d;
             }
         }
-        return d.abs();
+        if ( d.signum() < 0 ) {
+            d = d.negate();
+        }
+        return d;
     }
 
 
@@ -179,7 +182,10 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
                 return d;
             }
         }
-        return d.abs();
+        if ( d.signum() < 0 ) {
+            d = d.negate();
+        }
+        return d;
     }
 
 
