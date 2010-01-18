@@ -124,6 +124,9 @@ public class FactorRationalTest extends TestCase {
             //ExpVector e = a.leadingExpVector();
             //a.doPutToMap(e,cfac.getONE());
             //}
+            if ( b.isZERO() || c.isZERO() ) {
+                continue;
+            }
             if (c.degree() > 0) {
                 facs++;
             }
@@ -146,7 +149,7 @@ public class FactorRationalTest extends TestCase {
                 for (Long e : sm.values()) {
                     sf += e;
                 }
-                assertTrue("#facs < " + facs, sf >= facs);
+                assertTrue("#facs < " + facs + ", b = " + b + ", c = " + c + ", sm = " + sm, sf >= facs);
             }
 
             boolean t = fac.isFactorization(a, sm);
