@@ -80,7 +80,7 @@ class Ring:
         self.engine = GCDFactory.getProxy(self.ring.coFac);
         try:
             self.sqf = SquarefreeFactory.getImplementation(self.ring.coFac);
-            #print "sqf: ", self.sqf;
+#            print "sqf: ", self.sqf;
 #        except Exception, e:
 #            print "error " + str(e)
         except:
@@ -90,8 +90,8 @@ class Ring:
             #print "factor: ", self.factor;
         except:
             pass
-#         except Exception, e:
-#             print "error " + str(e)
+#        except Exception, e:
+#            print "error " + str(e)
 
     def __str__(self):
         '''Create a string representation.

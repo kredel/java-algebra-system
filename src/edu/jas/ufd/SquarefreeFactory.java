@@ -221,6 +221,9 @@ public class SquarefreeFactory {
                 if (ofac instanceof ComplexRing) {
                     t = 12;
                 }
+                if (ofac instanceof QuotientRing) {
+		    t = 13;
+		}
                 break;
             }
             if (ofac instanceof QuotientRing) {
@@ -255,7 +258,7 @@ public class SquarefreeFactory {
         if (t == 10) { // ModLong
             ufd = new SquarefreeFiniteFieldCharP/*raw*/(fac);
         }
-        if (t == 4 || t == 5 || t == 6 || t == 11 || t == 12) { // AlgebraicNumber
+        if (t == 4 || t == 5 || t == 6 || t == 11 || t == 12|| t == 13) { // AlgebraicNumber
             if (afac.characteristic().signum() == 0) {
                 ufd = new SquarefreeFieldChar0/*raw <C>*/(afac);
             } else {
