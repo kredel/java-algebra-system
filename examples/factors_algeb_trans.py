@@ -15,7 +15,7 @@ from jas import QQ, AN, RF
 from jas import terminate
 from jas import startLog
 
-# polynomial examples: factorization over Q(sqrt2)(x)
+# polynomial examples: factorization over Q(sqrt(2))(x)(sqrt(x))[y]
 
 Q = PolyRing(QQ(),"w2",PolyRing.lex);
 print "Q     = " + str(Q);
@@ -81,6 +81,8 @@ print "y     = " + str(y);
 print;
 
 f = ( y**2 - x ) * ( y**2 - 2 );
+#f = ( y**4 - x * 2 );
+#f = ( y**7 - x * 2 );
 #f = ( y**2 - 2 );
 #f = ( y**2 - x );
 
@@ -94,8 +96,8 @@ startLog();
 t = System.currentTimeMillis();
 G = Yr.factors(f);
 t = System.currentTimeMillis() - t;
-print "G = ", G;
-print "factor time =", t, "milliseconds";
+#print "G = ", G;
+#print "factor time =", t, "milliseconds";
 
 #sys.exit();
 
