@@ -81,10 +81,15 @@ print "y     = " + str(y);
 print;
 
 f = ( y**2 - x ) * ( y**2 - 2 );
+#f = ( y**2 - x )**2 * ( y**2 - 2 )**3;
 #f = ( y**4 - x * 2 );
 #f = ( y**7 - x * 2 );
 #f = ( y**2 - 2 );
 #f = ( y**2 - x );
+#f = ( w2 * y**2 - 1 );
+#f = ( y**2 - 1/x );
+#f = ( y**2 - (1,2) );
+#f = ( y**2 - 1/x ) * ( y**2 - (1,2) );
 
 print "f = ", f;
 print;
@@ -101,9 +106,13 @@ t = System.currentTimeMillis() - t;
 
 #sys.exit();
 
+print "f    = ", f;
 g = one;
 for h, i in G.iteritems():
-    print "h**i = (", h, ")**" + str(i);
+    if i > 1:
+        print "h**i = ", h, "**" + str(i);
+    else:
+        print "h    = ", h;
     h = h**i;
     g = g*h;
 #print "g = ", g;
