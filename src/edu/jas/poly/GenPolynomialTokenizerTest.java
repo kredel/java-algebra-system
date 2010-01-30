@@ -765,4 +765,57 @@ public void testGaloisField() {
      assertEquals("f.get(3).length() == 2", 2, e.length() );
  }
 
+
+/**
+ * Test rational polynomial with generic coefficients.
+ * 
+ */
+ @SuppressWarnings("unchecked")
+public void testBigRationalGeneric() {
+     String exam = "Rat(x,y,z) L "  
+                 + "( "
+                 + "( 1^3 ), "
+                 + "( 0^3 ), "
+                 + "( { 3/4 }^2 - 6/8^2 ), "
+                 + "( { 1 }^2 x + x^3 + 1/3 y z - x^3 ) "
+                 + " )";
+     source = new StringReader( exam );
+     parser = new GenPolynomialTokenizer( source );
+     PolynomialList<BigRational> f = null;
+     try {
+         f = (PolynomialList<BigRational>)parser.nextPolynomialSet();
+     } catch(IOException e) {
+         fail(""+e);
+     } catch (ClassCastException e) {
+         fail(""+e);
+     }
+     //System.out.println("f = " + f);
+     assertTrue("f != null", f.list != null);
+     assertTrue("length( f ) = 4", f.list.size() == 4);
+
+     BigRational fac = new BigRational(0);
+     TermOrder tord = new TermOrder(TermOrder.INVLEX);
+     String[] vars = new String[]{ "x", "y", "z" };
+     int nvar = vars.length;
+     pfac = new GenPolynomialRing<BigRational>(fac,nvar,tord,vars);
+     assertEquals("pfac == f.ring", pfac, f.ring );
+
+
+     GenPolynomial<BigRational> a = f.list.get(0);
+     //System.out.println("a = " + a);
+     assertTrue("isONE( f.get(0) )", a.isONE() );
+
+     GenPolynomial<BigRational> b = f.list.get(1);
+     //System.out.println("b = " + b);
+     assertTrue("isZERO( f.get(1) )", b.isZERO() );
+
+     GenPolynomial<BigRational> c = f.list.get(2);
+     //System.out.println("c = " + c);
+     assertTrue("isZERO( f.get(2) )", c.isZERO() );
+
+     GenPolynomial<BigRational> d = f.list.get(3);
+     //System.out.println("d = " + d);
+     assertEquals("f.get(3).length() == 2", 2, d.length() );
+ }
+
 }
