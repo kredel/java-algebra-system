@@ -336,16 +336,26 @@ public class GenPolynomialTokenizer  {
 
             case '{': 
                 StringBuffer rf = new StringBuffer();
-                tt = tok.nextToken();
-                while ( tt != '}' ) {
+                int level = 0;
+                do {
+                    tt = tok.nextToken();
+                    //System.out.println("token { = " + ((char)tt) + ", " + tt + ", level = " + level);
                     //cf.append( " " );
+                    if ( tt == '{' ) {
+                        level++;
+                    }
+                    if ( tt == '}' ) {
+                        level--;
+                        if ( level < 0 ) {
+                            continue; // skip last closing brace 
+                        }
+                    }
                     if ( tok.sval != null ) {
                         rf.append( " " + tok.sval );
                     } else {
                         rf.append( (char)tt );
                     }
-                    tt = tok.nextToken();
-                }
+                } while ( level >= 0 ); // || tt != '}' 
                 //System.out.println("coeff = " + rf.toString() );
                 r = (RingElem)fac.parse( rf.toString() );
                 if (debug) logger.debug("coeff " + r);
