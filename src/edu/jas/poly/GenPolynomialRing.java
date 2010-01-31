@@ -178,12 +178,10 @@ public class GenPolynomialRing<C extends RingElem<C> >
         if ( vars == null && PrettyPrint.isTrue() ) {
             vars = newVars("x",nvar);
         } else {
-	    if ( vars.length != nvar ) {
-		throw new IllegalArgumentException("incompatible variable size " + vars.length + ", " + nvar);
-	    }
-            for ( int i = 0; i < vars.length; i++ ) {
-                knownVars.add( vars[i] ); // eventualy names overwritten
+            if ( vars.length != nvar ) {
+                throw new IllegalArgumentException("incompatible variable size " + vars.length + ", " + nvar);
             }
+            addVars(vars);
         }
     }
 
@@ -903,16 +901,20 @@ public class GenPolynomialRing<C extends RingElem<C> >
      */
     public static String[] newVars(String prefix, int n) {
         String[] vars = new String[n];
-        int m = knownVars.size();
-        for ( int i = 0; i < n; i++ ) {
+        synchronized (knownVars) {
+            int m = knownVars.size();
             String name = prefix + m;
-            while ( knownVars.contains(name) ) {
+            for ( int i = 0; i < n; i++ ) {
+                while ( knownVars.contains(name) ) {
+                    m++;
+                    name = prefix + m;
+                }
+                vars[i] = name;
+                //System.out.println("new variable: " + name);
+                knownVars.add(name);
                 m++;
                 name = prefix + m;
             }
-            vars[i] = name;
-	    //System.out.println("new variable: " + name);
-            knownVars.add(name);
         }
         return vars;
     }
@@ -947,6 +949,22 @@ public class GenPolynomialRing<C extends RingElem<C> >
      */
     public String[] newVars() {
         return newVars(nvar);
+    }
+
+
+    /**
+     * Add variable names.
+     * @param vars variable names to be recorded.
+     */
+    public static void addVars(String[] vars) {
+        if ( vars == null ) {
+            return;
+        }
+        synchronized (knownVars) {
+            for ( int i = 0; i < vars.length; i++ ) {
+                knownVars.add( vars[i] ); // eventualy names 'overwritten'
+            }
+        }
     }
 
 }
