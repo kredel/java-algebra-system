@@ -18,6 +18,7 @@ import edu.jas.arith.BigRational;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.TermOrder;
 
+import edu.jas.kern.PrettyPrint;
 import edu.jas.kern.ComputerThreads;
 
 
@@ -55,7 +56,7 @@ public class QuotientRatTest extends TestCase {
    //private final static int bitlen = 100;
 
    QuotientRing<BigRational> zFac;
-   QuotientRing<BigRational> eFac;
+   QuotientRing<BigRational> efac;
    GenPolynomialRing<BigRational> mfac;
 
    Quotient< BigRational > a;
@@ -79,14 +80,14 @@ public class QuotientRatTest extends TestCase {
        a = b = c = d = e = null;
        TermOrder to = new TermOrder( TermOrder.INVLEX );
        mfac = new GenPolynomialRing<BigRational>( new BigRational(1), rl, to );
-       eFac = new QuotientRing<BigRational>( mfac );
+       efac = new QuotientRing<BigRational>( mfac );
        zFac = new QuotientRing<BigRational>( mfac, false );
    }
 
    protected void tearDown() {
        a = b = c = d = e = null;
-       //eFac.terminate();
-       eFac = null;
+       //efac.terminate();
+       efac = null;
        zFac = null;
        ComputerThreads.terminate();
    }
@@ -97,14 +98,14 @@ public class QuotientRatTest extends TestCase {
  * 
  */
  public void testConstruction() {
-     c = eFac.getONE();
+     c = efac.getONE();
      //System.out.println("c = " + c);
      //System.out.println("c.val = " + c.val);
      assertTrue("length( c ) = 1", c.num.length() == 1);
      assertTrue("isZERO( c )", !c.isZERO() );
      assertTrue("isONE( c )", c.isONE() );
 
-     d = eFac.getZERO();
+     d = efac.getZERO();
      //System.out.println("d = " + d);
      //System.out.println("d.val = " + d.val);
      assertTrue("length( d ) = 0", d.num.length() == 0);
@@ -119,8 +120,8 @@ public class QuotientRatTest extends TestCase {
  */
  public void testRandom() {
      for (int i = 0; i < 7; i++) {
-         //a = eFac.random(ll+i);
-         a = eFac.random(kl*(i+1), ll+2+2*i, el, q );
+         //a = efac.random(ll+i);
+         a = efac.random(kl*(i+1), ll+2+2*i, el, q );
          //System.out.println("a = " + a);
          if ( a.isZERO() || a.isONE() ) {
             continue;
@@ -138,8 +139,8 @@ public class QuotientRatTest extends TestCase {
  */
  public void testAddition() {
 
-     a = eFac.random(kl,ll,el,q);
-     b = eFac.random(kl,ll,el,q);
+     a = efac.random(kl,ll,el,q);
+     b = efac.random(kl,ll,el,q);
      //System.out.println("a = " + a);
      //System.out.println("b = " + b);
 
@@ -159,7 +160,7 @@ public class QuotientRatTest extends TestCase {
 
      //System.out.println("monic(d) = " + d.monic());
 
-     c = eFac.random(kl,ll,el,q);
+     c = efac.random(kl,ll,el,q);
      //System.out.println("c = " + c);
      d = c.sum( a.sum(b) );
      e = c.sum( a ).sum(b);
@@ -168,12 +169,12 @@ public class QuotientRatTest extends TestCase {
      assertEquals("c+(a+b) = (c+a)+b",d,e);
 
 
-     c = a.sum( eFac.getZERO() );
-     d = a.subtract( eFac.getZERO() );
+     c = a.sum( efac.getZERO() );
+     d = a.subtract( efac.getZERO() );
      assertEquals("a+0 = a-0",c,d);
 
-     c = eFac.getZERO().sum( a );
-     d = eFac.getZERO().subtract( a.negate() );
+     c = efac.getZERO().sum( a );
+     d = efac.getZERO().subtract( a.negate() );
      assertEquals("0+a = 0+(-a)",c,d);
  }
 
@@ -184,10 +185,10 @@ public class QuotientRatTest extends TestCase {
  */
  public void testMultiplication() {
 
-     a = eFac.random(kl,ll,el,q);
+     a = efac.random(kl,ll,el,q);
      //assertTrue("not isZERO( a )", !a.isZERO() );
 
-     b = eFac.random(kl,ll,el,q);
+     b = efac.random(kl,ll,el,q);
      //assertTrue("not isZERO( b )", !b.isZERO() );
 
      c = b.multiply(a);
@@ -203,7 +204,7 @@ public class QuotientRatTest extends TestCase {
      assertTrue("a*b = b*a", c.equals(d) );
      assertEquals("a*b = b*a",c,d);
 
-     c = eFac.random(kl,ll,el,q);
+     c = efac.random(kl,ll,el,q);
      //System.out.println("c = " + c);
      d = a.multiply( b.multiply(c) );
      e = (a.multiply(b)).multiply(c);
@@ -216,8 +217,8 @@ public class QuotientRatTest extends TestCase {
      assertEquals("a(bc) = (ab)c",d,e);
      assertTrue("a(bc) = (ab)c", d.equals(e) );
 
-     c = a.multiply( eFac.getONE() );
-     d = eFac.getONE().multiply( a );
+     c = a.multiply( efac.getONE() );
+     d = efac.getONE().multiply( a );
      assertEquals("a*1 = 1*a",c,d);
 
      if ( a.isUnit() ) {
@@ -239,8 +240,8 @@ public class QuotientRatTest extends TestCase {
 
      long te, tz;
 
-     a = eFac.random(kl,ll,el,q);
-     b = eFac.random(kl,ll,el,q);
+     a = efac.random(kl,ll,el,q);
+     b = efac.random(kl,ll,el,q);
      //System.out.println("a = " + a);
      //System.out.println("b = " + b);
 
@@ -270,7 +271,7 @@ public class QuotientRatTest extends TestCase {
      //System.out.println("d = " + d);
      assertEquals("a+b = b+a",c,d);
 
-     c = eFac.random(kl,ll,el,q);
+     c = efac.random(kl,ll,el,q);
      cz = new Quotient<BigRational>(zFac,c.num,c.den,true);
 
 
@@ -289,13 +290,36 @@ public class QuotientRatTest extends TestCase {
      System.out.println("te = " + te);
      System.out.println("tz = " + tz);
 
-     c = a.sum( eFac.getZERO() );
-     d = a.subtract( eFac.getZERO() );
+     c = a.sum( efac.getZERO() );
+     d = a.subtract( efac.getZERO() );
      assertEquals("a+0 = a-0",c,d);
 
-     c = eFac.getZERO().sum( a );
-     d = eFac.getZERO().subtract( a.negate() );
+     c = efac.getZERO().sum( a );
+     d = efac.getZERO().subtract( a.negate() );
      assertEquals("0+a = 0+(-a)",c,d);
+ }
+
+
+/**
+ * Test parse().
+ * 
+ */
+ public void testParse() {
+     a = efac.random(kl*2,ll*2,el*2,q*2);
+     //assertTrue("not isZERO( a )", !a.isZERO() );
+
+     //PrettyPrint.setInternal();
+     //System.out.println("a = " + a);
+     PrettyPrint.setPretty();
+     //System.out.println("a = " + a);
+     String p = a.toString();
+     //System.out.println("p = " + p);
+     b = efac.parse(p);
+     //System.out.println("b = " + b);
+
+     //c = a.subtract(b);
+     //System.out.println("c = " + c);
+     assertEquals("parse(a.toSting()) = a",a,b);
  }
 
 }

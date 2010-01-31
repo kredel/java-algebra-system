@@ -311,7 +311,7 @@ public class GenPolynomial<C extends RingElem<C> >
         }
         String[] v = ring.vars;
         if ( v == null ) {
-            v = ring.evzero.stdVars();
+            v = ring.newVars("x",ring.nvar);
         }
         boolean parenthesis = false;
         if (    ring.coFac instanceof GenPolynomialRing

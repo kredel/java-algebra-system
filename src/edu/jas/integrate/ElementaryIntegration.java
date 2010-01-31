@@ -387,7 +387,8 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
             if ( r.isConstant() ) {
                 continue;
             }
-            vars = new String[] { "z_" + Math.abs(r.hashCode() % 1000) };
+            //vars = new String[] { "z_" + Math.abs(r.hashCode() % 1000) };
+            vars = pfac.newVars( "z_" );
             pfac = pfac.clone();
             vars = pfac.setVars(vars);
             r = pfac.copy(r); // hack to exchange the variables

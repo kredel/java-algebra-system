@@ -50,7 +50,7 @@ public class ExtendedGB<C extends RingElem<C>> {
                    }
                }
                if ( r != null && r.getVars() == null ) {
-                  r.setVars( r.evzero.stdVars("y") );
+                  r.setVars( r.newVars("y") );
                }
          }
             this.ring = r;

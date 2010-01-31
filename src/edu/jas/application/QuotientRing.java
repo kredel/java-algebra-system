@@ -377,7 +377,7 @@ public class QuotientRing<C extends GcdRingElem<C> >
      * @return next Quotient from r.
      */
     public Quotient<C> parse(Reader r) {
-        String s = StringUtil.nextString(r,'}');
+        String s = StringUtil.nextPairedString(r,'{','}');
         return parse( s );
     }
 

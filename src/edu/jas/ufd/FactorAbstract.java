@@ -154,7 +154,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
         long d = P.degree() + 1L;
         GenPolynomial<C> kr = PolyUfdUtil.<C> substituteKronecker(P, d);
         GenPolynomialRing<C> ufac = kr.ring;
-        ufac.setVars(new String[] { "zz" }); // side effects 
+        ufac.setVars( ufac.newVars( "zz" ) ); // side effects 
         if (debug) {
             logger.info("subs(P,d=" + d + ") = " + kr);
             //System.out.println("subs(P,d=" + d + ") = " + kr);

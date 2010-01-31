@@ -251,7 +251,8 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>> extends FactorAbs
             return new Factors<C>(P);
         }
         // setup field extension K(alpha) where alpha = z_xx
-        String[] vars = new String[] { "z_" + Math.abs(P.hashCode() % 1000) };
+        //String[] vars = new String[] { "z_" + Math.abs(P.hashCode() % 1000) };
+        String[] vars = pfac.newVars( "z_" );
         pfac = pfac.clone();
         vars = pfac.setVars(vars);
         GenPolynomial<C> aP = pfac.copy(P); // hack to exchange the variables
@@ -459,7 +460,8 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>> extends FactorAbs
 //                 continue;
 //                 //throw new RuntimeException("input not irreducible");
 //             }
-            vars = new String[] { "z_" + Math.abs(r.hashCode() % 1000) };
+            //vars = new String[] { "z_" + Math.abs(r.hashCode() % 1000) };
+            vars = pfac.newVars( "z_" );
             pfac = pfac.clone();
             vars = pfac.setVars(vars);
             r = pfac.copy(r); // hack to exchange the variables
@@ -838,7 +840,8 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>> extends FactorAbs
         List<GenPolynomial<AlgebraicNumber<C>>> afactors = new ArrayList<GenPolynomial<AlgebraicNumber<C>>>();
 
         // setup field extension K(alpha)
-        String[] vars = new String[] { "z_" + Math.abs(up.hashCode() % 1000) };
+        //String[] vars = new String[] { "z_" + Math.abs(up.hashCode() % 1000) };
+        String[] vars = pfac.newVars( "z_" );
         pfac = pfac.clone();
         String[] ovars = pfac.setVars(vars); // side effects! 
         GenPolynomial<C> aup = pfac.copy(up); // hack to exchange the variables
