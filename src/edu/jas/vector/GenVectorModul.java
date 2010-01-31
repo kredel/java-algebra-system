@@ -303,7 +303,7 @@ public class GenVectorModul<C extends RingElem<C> >
      * parse a vector from a Reader.
      */
     public GenVector<C> parse(Reader r) {
-        String s = StringUtil.nextString(r,']');
+        String s = StringUtil.nextPairedString(r,'[',']');
         return parse( s );
         //throw new RuntimeException("parse not jet implemented");
         //return ZERO;

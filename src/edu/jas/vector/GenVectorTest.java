@@ -168,6 +168,9 @@ public class GenVectorTest extends TestCase {
      GenVector<BigRational> a, b, c, d, e; 
 
      r = cfac.random(kl);
+     if ( r.isZERO() ) {
+	 r = cfac.getONE();
+     }
      //System.out.println("r = " + r);
      s = r.inverse();
      //System.out.println("s = " + s);
@@ -179,7 +182,7 @@ public class GenVectorTest extends TestCase {
      d = c.scalarMultiply(s);
      //System.out.println("c = " + c);
      //System.out.println("d = " + d);
-     assertEquals("a*b*(1/b) = a",a,d);
+     assertEquals("a*b*(1/b) = a " + r,a,d);
 
 
      b = mfac.random(kl,q);
@@ -414,6 +417,31 @@ public class GenVectorTest extends TestCase {
      //System.out.println("r = " + r);
      //System.out.println("s = " + s);
      assertEquals("a.b = b.a",r,s);
+ }
+
+
+/**
+ * Test parse vector.
+ * 
+ */
+ public void testParse() {
+     BigRational cfac = new BigRational(1);
+     GenVectorModul<BigRational> mfac 
+        = new GenVectorModul<BigRational>(cfac,ll);
+
+     GenVector<BigRational> a, b, c; 
+
+     a = mfac.random(kl,q);
+     //System.out.println("a = " + a);
+     if ( !a.isZERO() ) {
+         //return;
+         assertTrue(" not isZERO( a )", !a.isZERO() );
+     }
+     String s = a.toString();
+     //System.out.println("s = " + s);
+     c = mfac.parse(s);
+     //System.out.println("c = " + c);
+     assertEquals("parse(toStirng(a) == a ", a, c );
  }
 
 }

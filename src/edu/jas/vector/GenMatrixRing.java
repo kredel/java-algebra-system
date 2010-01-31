@@ -20,7 +20,7 @@ import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.structure.AlgebraFactory;
 
-//import edu.jas.util.StringUtil;
+import edu.jas.util.StringUtil;
 
 /**
  * GenMatrixRing implements a generic matrix algebra factory with RingFactory.
@@ -530,9 +530,9 @@ public class GenMatrixRing<C extends RingElem<C> >
      * parse a matrix from a Reader.
      */
     public GenMatrix<C> parse(Reader r) {
-        //String s = StringUtil.nextString(r,']');
-        //return parse( s );
-        throw new RuntimeException("parse not jet implemented");
+        String s = StringUtil.nextPairedString(r,'[',']');
+        return parse( s );
+        //throw new RuntimeException("parse not jet implemented");
         //return ZERO;
     }
 

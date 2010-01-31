@@ -59,7 +59,7 @@ public class GenVector<C extends RingElem<C> >
     @Override
     public String toString() {
         StringBuffer s = new StringBuffer();
-        s.append("( ");
+        s.append("[ ");
         boolean first = true;
         for ( C c : val ) {
             if ( first ) {
@@ -69,7 +69,7 @@ public class GenVector<C extends RingElem<C> >
             }
             s.append( c.toString() );
         }
-        s.append(" )");
+        s.append(" ]");
         if ( !PrettyPrint.isTrue() ) {
            s.append(" :: " + modul.toString());
            s.append("\n");

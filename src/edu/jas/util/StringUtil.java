@@ -118,4 +118,38 @@ public class StringUtil {
         return sw.toString();
     }
 
+
+    /**
+     * Parse paired String with given delimiters from Reader.
+     * @param b opposite delimiter.
+     * @param c delimiter.
+     * @param r Reader.
+     * @return next nested matching String up to c from r.
+     */
+    public static String nextPairedString(Reader r, char b, char c) {
+        StringWriter sw = new StringWriter();
+        try {
+	    int level = 0;
+            char buffer;
+            int i;
+            // read chars != c, ignore new lines ?
+            while ((i = r.read()) > -1) {
+                buffer = (char) i;
+                if ( buffer == b ) {
+                    level++;
+                }
+                if ( buffer == c ) {
+                    level--;
+                    if ( level < 0 ) {
+                        break; // skip last closing 'brace' 
+                    }
+                }
+                sw.write(buffer);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return sw.toString();
+    }
+
 }

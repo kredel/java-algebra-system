@@ -31,7 +31,7 @@ public class GenMatrixTest extends TestCase {
    }
 
 /**
- * Constructs a <CODE>RatGenMatrixTest</CODE> object.
+ * Constructs a <CODE>GenMatrixTest</CODE> object.
  * @param name String.
  */
    public GenMatrixTest(String name) {
@@ -506,6 +506,31 @@ public class GenMatrixTest extends TestCase {
      d = a.linearCombination(t,b,t);
      //System.out.println("d = " + d);
      assertEquals("0*a+0*b = 0",mfac.getZERO(),d);
+ }
+
+
+/**
+ * Test parse matrix.
+ * 
+ */
+ public void testParse() {
+     BigRational cfac = new BigRational(1);
+     GenMatrixRing<BigRational> mfac 
+        = new GenMatrixRing<BigRational>(cfac,rows,cols);
+
+     GenMatrix<BigRational> a, b, c; 
+
+     a = mfac.random(kl,q);
+     //System.out.println("a = " + a);
+     if ( !a.isZERO() ) {
+         //return;
+         assertTrue(" not isZERO( a )", !a.isZERO() );
+     }
+     String s = a.toString();
+     //System.out.println("s = " + s);
+     c = mfac.parse(s);
+     //System.out.println("c = " + c);
+     assertEquals("parse(toStirng(a) == a ", a, c );
  }
 
 }
