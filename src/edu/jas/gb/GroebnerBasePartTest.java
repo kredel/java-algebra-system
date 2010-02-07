@@ -130,63 +130,11 @@ public class GroebnerBasePartTest extends TestCase {
 
 
     /**
-     * Test partial GBase.
-     * 
-     */
-    public void xtestPartialGBase() {
-
-        L = new ArrayList<GenPolynomial<BigRational>>();
-
-        a = fac.random(kl, ll, el, q);
-        b = fac.random(kl, ll, el, q);
-        c = fac.random(kl, ll, el, q);
-        d = fac.random(kl, ll, el, q);
-        e = d; //fac.random(kl, ll, el, q );
-
-        if (a.isZERO() || b.isZERO() || c.isZERO() || d.isZERO()) {
-            return;
-        }
-
-        assertTrue("not isZERO( a )", !a.isZERO());
-        L.add(a);
-
-        L = bb.GB(L);
-        assertTrue("isGB( { a } )", bb.isGB(L));
-
-        assertTrue("not isZERO( b )", !b.isZERO());
-        L.add(b);
-        //System.out.println("L = " + L.size() );
-
-        L = bb.GB(L);
-        assertTrue("isGB( { a, b } )", bb.isGB(L));
-
-        assertTrue("not isZERO( c )", !c.isZERO());
-        L.add(c);
-
-        L = bb.GB(L);
-        assertTrue("isGB( { a, b, c } )", bb.isGB(L));
-
-        assertTrue("not isZERO( d )", !d.isZERO());
-        L.add(d);
-
-        L = bb.GB(L);
-        assertTrue("isGB( { a, b, c, d } )", bb.isGB(L));
-
-        assertTrue("not isZERO( e )", !e.isZERO());
-        L.add(e);
-
-        L = bb.GB(L);
-        assertTrue("isGB( { a, b, c, d, e } )", bb.isGB(L));
-    }
-
-
-    /**
-     * Test Trinks7 GBase.
+     * Test partial recursive Trinks7 GBase.
      * 
      */
     @SuppressWarnings("unchecked")
-    // not jet working
-    public void testTrinks7GBasePart() {
+    public void testTrinks7GBasePartRec() {
         String exam = "(B,S,T,Z,P,W) L "
                 + "( "
                 // + "( 45 P + 35 S - 165 B - 36 ), " 
@@ -206,21 +154,63 @@ public class GroebnerBasePartTest extends TestCase {
         } catch (IOException e) {
             fail("" + e);
         }
-        System.out.println("F = " + F);
+        //System.out.println("F = " + F);
 
         //PolynomialList<BigRational> Fo = TermOrderOptimization.optimizeTermOrder(F);
         //System.out.println("\nFo = " + Fo);
 
-        PolynomialList<GenPolynomial<BigRational>> rtrinks = bbp.partialGBrec(F.list, new String[] { "P",
-                "Z", "T", "W" });
-        //assertTrue("isGB( GB(Trinks7) )", bbp.isGB(G) );
-        //assertEquals("#GB(Trinks7) == 6", 6, G.size() );
-        System.out.println("\nGr = " + rtrinks);
+        PolynomialList<GenPolynomial<BigRational>> rtrinks 
+            = bbp.partialGBrec(F.list, new String[] { "P", "Z", "T", "W" });
+        assertTrue("isGB( GB(Trinks7) )", bbp.isGBrec(rtrinks.list) );
+        //System.out.println("\nGr = " + rtrinks);
 
         PolynomialList<BigRational> trinks = bbp.partialGB(F.list, new String[] { "P", "Z", "T", "W" });
-        //assertTrue("isGB( GB(Trinks7) )", bbp.isGB(G) );
-        //assertEquals("#GB(Trinks7) == 6", 6, G.size() );
-        System.out.println("\nG = " + trinks);
+        assertTrue("isGB( GB(Trinks7) )", bbp.isGB(G) );
+        //System.out.println("\nG = " + trinks);
+    }
+
+
+    /**
+     * Test partial Trinks7 GBase.
+     * 
+     */
+    @SuppressWarnings("unchecked")
+    public void testTrinks7GBasePart() {
+        String exam = "(B,S,T,Z,P,W) L "
+                + "( "
+                + "( 45 P + 35 S - 165 B - 36 ), " 
+                + "( 35 P + 40 Z + 25 T - 27 S ), "
+                + "( 15 W + 25 S P + 30 Z - 18 T - 165 B**2 ), " + "( - 9 W + 15 T P + 20 S Z ), "
+                + "( P W + 2 T Z - 11 B**3 ), " + "( 99 W - 11 B S + 3 B**2 ) "
+                + "( B**2 + 33/50 B + 2673/10000 ) "
+                + ") ";
+
+
+        Reader source = new StringReader(exam);
+        GenPolynomialTokenizer parser = new GenPolynomialTokenizer(source);
+        try {
+            F = (PolynomialList<BigRational>) parser.nextPolynomialSet();
+        } catch (ClassCastException e) {
+            fail("" + e);
+        } catch (IOException e) {
+            fail("" + e);
+        }
+        //System.out.println("F = " + F);
+
+        //PolynomialList<BigRational> Fo = TermOrderOptimization.optimizeTermOrder(F);
+        //System.out.println("\nFo = " + Fo);
+
+        PolynomialList<BigRational> trinks = bbp.partialGB(F.list, new String[] { "B", "S", "P", "Z", "T", "W" });
+        assertTrue("isGB( GB(Trinks7) )", bbp.isGB(G) );
+        //System.out.println("\nG = " + trinks);
+
+        try {
+            PolynomialList<GenPolynomial<BigRational>> tr 
+               = bbp.partialGBrec(F.list, new String[] { "B", "S", "P", "Z", "T", "W" });
+            fail("must throw exception");
+        } catch ( IllegalArgumentException e ) {
+            //pass
+        }
     }
 
 }
