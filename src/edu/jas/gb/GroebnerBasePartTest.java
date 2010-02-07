@@ -41,8 +41,8 @@ public class GroebnerBasePartTest extends TestCase {
      * main
      */
     public static void main (String[] args) {
-	//BasicConfigurator.configure();
-	junit.textui.TestRunner.run( suite() );
+        //BasicConfigurator.configure();
+        junit.textui.TestRunner.run( suite() );
     }
 
     /**
@@ -50,15 +50,15 @@ public class GroebnerBasePartTest extends TestCase {
      * @param name String.
      */
     public GroebnerBasePartTest(String name) {
-	super(name);
+        super(name);
     }
 
     /**
      * suite.
      */ 
     public static Test suite() {
-	TestSuite suite= new TestSuite(GroebnerBasePartTest.class);
-	return suite;
+        TestSuite suite= new TestSuite(GroebnerBasePartTest.class);
+        return suite;
     }
 
     GenPolynomialRing<BigRational> fac;
@@ -83,18 +83,18 @@ public class GroebnerBasePartTest extends TestCase {
     float q = 0.2f; //0.4f
 
     protected void setUp() {
-	BigRational coeff = new BigRational(9);
-	fac = new GenPolynomialRing<BigRational>(coeff,rl);
-	a = b = c = d = e = null;
-	bb = new GroebnerBaseSeq<BigRational>();
-	bbp = new GroebnerBasePartial<BigRational>();
+        BigRational coeff = new BigRational(9);
+        fac = new GenPolynomialRing<BigRational>(coeff,rl);
+        a = b = c = d = e = null;
+        bb = new GroebnerBaseSeq<BigRational>();
+        bbp = new GroebnerBasePartial<BigRational>();
     }
 
     protected void tearDown() {
-	a = b = c = d = e = null;
-	fac = null;
-	bb = null;
-	ComputerThreads.terminate();
+        a = b = c = d = e = null;
+        fac = null;
+        bb = null;
+        ComputerThreads.terminate();
     }
 
 
@@ -104,48 +104,48 @@ public class GroebnerBasePartTest extends TestCase {
      */
     public void xtestPartialGBase() {
 
-	L = new ArrayList<GenPolynomial<BigRational>>();
+        L = new ArrayList<GenPolynomial<BigRational>>();
 
-	a = fac.random(kl, ll, el, q );
-	b = fac.random(kl, ll, el, q );
-	c = fac.random(kl, ll, el, q );
-	d = fac.random(kl, ll, el, q );
-	e = d; //fac.random(kl, ll, el, q );
+        a = fac.random(kl, ll, el, q );
+        b = fac.random(kl, ll, el, q );
+        c = fac.random(kl, ll, el, q );
+        d = fac.random(kl, ll, el, q );
+        e = d; //fac.random(kl, ll, el, q );
 
-	if ( a.isZERO() || b.isZERO() || c.isZERO() || d.isZERO() ) {
-	    return;
-	}
+        if ( a.isZERO() || b.isZERO() || c.isZERO() || d.isZERO() ) {
+            return;
+        }
 
-	assertTrue("not isZERO( a )", !a.isZERO() );
-	L.add(a);
+        assertTrue("not isZERO( a )", !a.isZERO() );
+        L.add(a);
 
-	L = bb.GB( L );
-	assertTrue("isGB( { a } )", bb.isGB(L) );
+        L = bb.GB( L );
+        assertTrue("isGB( { a } )", bb.isGB(L) );
 
-	assertTrue("not isZERO( b )", !b.isZERO() );
-	L.add(b);
-	//System.out.println("L = " + L.size() );
+        assertTrue("not isZERO( b )", !b.isZERO() );
+        L.add(b);
+        //System.out.println("L = " + L.size() );
 
-	L = bb.GB( L );
-	assertTrue("isGB( { a, b } )", bb.isGB(L) );
+        L = bb.GB( L );
+        assertTrue("isGB( { a, b } )", bb.isGB(L) );
 
-	assertTrue("not isZERO( c )", !c.isZERO() );
-	L.add(c);
+        assertTrue("not isZERO( c )", !c.isZERO() );
+        L.add(c);
 
-	L = bb.GB( L );
-	assertTrue("isGB( { a, b, c } )", bb.isGB(L) );
+        L = bb.GB( L );
+        assertTrue("isGB( { a, b, c } )", bb.isGB(L) );
 
-	assertTrue("not isZERO( d )", !d.isZERO() );
-	L.add(d);
+        assertTrue("not isZERO( d )", !d.isZERO() );
+        L.add(d);
 
-	L = bb.GB( L );
-	assertTrue("isGB( { a, b, c, d } )", bb.isGB(L) );
+        L = bb.GB( L );
+        assertTrue("isGB( { a, b, c, d } )", bb.isGB(L) );
 
-	assertTrue("not isZERO( e )", !e.isZERO() );
-	L.add(e);
+        assertTrue("not isZERO( e )", !e.isZERO() );
+        L.add(e);
 
-	L = bb.GB( L );
-	assertTrue("isGB( { a, b, c, d, e } )", bb.isGB(L) );
+        L = bb.GB( L );
+        assertTrue("isGB( { a, b, c, d, e } )", bb.isGB(L) );
     }
 
 
@@ -154,38 +154,38 @@ public class GroebnerBasePartTest extends TestCase {
      * 
      */
     @SuppressWarnings("unchecked") // not jet working
-	public void testTrinks7GBasePart() {
-	String exam = "(B,S,T,Z,P,W) L "
-	    + "( "  
-	    // + "( 45 P + 35 S - 165 B - 36 ), " 
-	    // + "( 35 P + 40 Z + 25 T - 27 S ), "
-	    + "( 15 W + 25 S P + 30 Z - 18 T - 165 B**2 ), "
-	    + "( - 9 W + 15 T P + 20 S Z ), "
-	    + "( P W + 2 T Z - 11 B**3 ), "
-	    + "( 99 W - 11 B S + 3 B**2 ) "
-	    //	    + "( B**2 + 33/50 B + 2673/10000 ) "
-	    + ") ";
+        public void testTrinks7GBasePart() {
+        String exam = "(B,S,T,Z,P,W) L "
+            + "( "  
+            // + "( 45 P + 35 S - 165 B - 36 ), " 
+            // + "( 35 P + 40 Z + 25 T - 27 S ), "
+            + "( 15 W + 25 S P + 30 Z - 18 T - 165 B**2 ), "
+            + "( - 9 W + 15 T P + 20 S Z ), "
+            + "( P W + 2 T Z - 11 B**3 ), "
+            + "( 99 W - 11 B S + 3 B**2 ) "
+            //      + "( B**2 + 33/50 B + 2673/10000 ) "
+            + ") ";
 
 
-	Reader source = new StringReader( exam );
-	GenPolynomialTokenizer parser
-	    = new GenPolynomialTokenizer( source );
-	try {
-	    F = (PolynomialList<BigRational>) parser.nextPolynomialSet();
-	} catch(ClassCastException e) {
-	    fail(""+e);
-	} catch(IOException e) {
-	    fail(""+e);
-	}
-	System.out.println("F = " + F);
+        Reader source = new StringReader( exam );
+        GenPolynomialTokenizer parser
+            = new GenPolynomialTokenizer( source );
+        try {
+            F = (PolynomialList<BigRational>) parser.nextPolynomialSet();
+        } catch(ClassCastException e) {
+            fail(""+e);
+        } catch(IOException e) {
+            fail(""+e);
+        }
+        System.out.println("F = " + F);
  
-	PolynomialList<BigRational> Fo = TermOrderOptimization.optimizeTermOrder(F);
-	System.out.println("\nFo = " + Fo);
+        PolynomialList<BigRational> Fo = TermOrderOptimization.optimizeTermOrder(F);
+        System.out.println("\nFo = " + Fo);
 
-	PolynomialList<GenPolynomial<BigRational>> trinks = bbp.partialGB(F.list,new String[] { "P", "Z", "T", "W" });
-	//assertTrue("isGB( GB(Trinks7) )", bb.isGB(G) );
-	//assertEquals("#GB(Trinks7) == 6", 6, G.size() );
-	System.out.println("\nG = " + trinks);
+        PolynomialList<GenPolynomial<BigRational>> trinks = bbp.partialGB(F.list,new String[] { "P", "Z", "T", "W" });
+        //assertTrue("isGB( GB(Trinks7) )", bb.isGB(G) );
+        //assertEquals("#GB(Trinks7) == 6", 6, G.size() );
+        System.out.println("\nG = " + trinks);
     }
 
 }
