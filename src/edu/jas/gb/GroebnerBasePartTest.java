@@ -183,7 +183,7 @@ public class GroebnerBasePartTest extends TestCase {
         System.out.println("\nFo = " + Fo);
 
         PolynomialList<GenPolynomial<BigRational>> trinks = bbp.partialGB(F.list,new String[] { "P", "Z", "T", "W" });
-        //assertTrue("isGB( GB(Trinks7) )", bb.isGB(G) );
+        //assertTrue("isGB( GB(Trinks7) )", bbp.isGB(G) );
         //assertEquals("#GB(Trinks7) == 6", 6, G.size() );
         System.out.println("\nG = " + trinks);
     }
