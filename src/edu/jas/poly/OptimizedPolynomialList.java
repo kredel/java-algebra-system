@@ -16,33 +16,33 @@ import edu.jas.structure.RingElem;
  */
 
 public class OptimizedPolynomialList<C extends RingElem<C>> 
-                 extends PolynomialList<C> {
+    extends PolynomialList<C> {
 
-/**
- * Permutation vector used to optimize term order.
- */
-      public final List<Integer> perm;
+    /**
+     * Permutation vector used to optimize term order.
+     */
+    public final List<Integer> perm;
  
 
-/**
- * Constructor.
- */
-      public OptimizedPolynomialList( List<Integer> P, 
-                                      GenPolynomialRing<C> R, 
-                                      List<GenPolynomial<C>> L ) {
-            super(R,L);
-            perm = P;
-      }
+    /**
+     * Constructor.
+     */
+    public OptimizedPolynomialList( List<Integer> P, 
+				    GenPolynomialRing<C> R, 
+				    List<GenPolynomial<C>> L ) {
+	super(R,L);
+	perm = P;
+    }
 
 
 
-/**
- * String representation.
- */
-      @Override
-     public String toString() {
-             return "permutation = " + perm 
-                 + "\n" + super.toString();
-      }
+    /**
+     * String representation.
+     */
+    @Override
+    public String toString() {
+	return "permutation = " + perm 
+	    + "\n" + super.toString();
+    }
 
 }
