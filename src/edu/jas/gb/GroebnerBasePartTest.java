@@ -213,4 +213,26 @@ public class GroebnerBasePartTest extends TestCase {
         }
     }
 
+
+    /**
+     * Test partial permutation.
+     * 
+     */
+    public void testPartialPermutation() {
+        String[] vars = new String[] { "B", "S", "T", "Z", "P", "W" };
+        String[] pvars = new String[] { "P", "Z", "T", "W" };
+        String[] rvars = new String[] { "S", "B" };
+        List<Integer> perm1 = bbp.partialPermutation(vars,pvars);
+        //System.out.println("perm1 = " + perm1);
+
+        List<Integer> perm2 = bbp.partialPermutation(vars,pvars,null);
+        //System.out.println("perm2 = " + perm2);
+
+        assertEquals("perm1 == perm2 ", perm1, perm2);
+
+        List<Integer> perm3 = bbp.partialPermutation(vars,pvars,rvars);
+        //System.out.println("perm3 = " + perm3);
+        assertFalse("perm1 != perm3 ", perm1.equals(perm3));
+    }
+
 }
