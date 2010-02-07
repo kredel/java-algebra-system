@@ -4,31 +4,16 @@
 
 package edu.jas.ufd;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.SortedMap;
 
 import edu.jas.arith.BigRational;
 import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
-import edu.jas.poly.PolyUtil;
 import edu.jas.poly.TermOrder;
-import edu.jas.structure.GcdRingElem;
-import edu.jas.structure.Power;
-import edu.jas.structure.RingFactory;
-import edu.jas.ufd.GCDFactory;
-import edu.jas.ufd.GreatestCommonDivisorAbstract;
-import edu.jas.ufd.SquarefreeAbstract;
-import edu.jas.ufd.SquarefreeFactory;
-import edu.jas.ufd.FactorFactory;
-import edu.jas.ufd.FactorAbsolute;
-import edu.jas.ufd.FactorAbstract;
-import edu.jas.ufd.PartialFraction;
-import edu.jas.ufd.FactorRational;
+
 
 /**
- * Examples related to partial fraction decomposition. 
+ * Examples related to partial fraction decomposition.
  * 
  * @author Heinz Kredel
  */
@@ -42,21 +27,20 @@ public class ExamplesPartialFraction {
      * @param args
      */
     public static void main(String[] args) {
-	example11();
-	example12();
-	example13();
-	example14();
-	// BasicConfigurator.configure();
-	example15();
-	example16();
-	example17();
-	ComputerThreads.terminate();
+        example11();
+        example12();
+        example13();
+        example14();
+        // BasicConfigurator.configure();
+        example15();
+        example16();
+        example17();
+        ComputerThreads.terminate();
     }
 
 
     /**
-     * example11.
-     * Rothstein-Trager algorithm.
+     * example11. Rothstein-Trager algorithm.
      */
     public static void example11() {
         System.out.println("\n\nexample 11");
@@ -67,19 +51,18 @@ public class ExamplesPartialFraction {
         GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(cfac, 1, to, vars);
 
         // 1 / ( x^2 - 2 )
-        GenPolynomial<BigRational> D = pfac.parse("x^2 - 2"); 
+        GenPolynomial<BigRational> D = pfac.parse("x^2 - 2");
         GenPolynomial<BigRational> N = pfac.getONE();
 
-        FactorRational engine = (FactorRational)FactorFactory.getImplementation(cfac);
+        FactorRational engine = (FactorRational) FactorFactory.getImplementation(cfac);
 
-        PartialFraction<BigRational> F = engine.baseAlgebraicPartialFractionIrreducible(N,D);
+        PartialFraction<BigRational> F = engine.baseAlgebraicPartialFractionIrreducible(N, D);
         System.out.println("\nintegral " + F);
     }
 
 
     /**
-     * example12.
-     * Rothstein-Trager algorithm.
+     * example12. Rothstein-Trager algorithm.
      */
     public static void example12() {
         System.out.println("\n\nexample 12");
@@ -90,19 +73,18 @@ public class ExamplesPartialFraction {
         GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(cfac, 1, to, vars);
 
         // 1 / ( x^3 + x )
-        GenPolynomial<BigRational> D = pfac.parse("x^3 + x"); 
+        GenPolynomial<BigRational> D = pfac.parse("x^3 + x");
         GenPolynomial<BigRational> N = pfac.getONE();
 
-        FactorRational engine = (FactorRational)FactorFactory.getImplementation(cfac);
+        FactorRational engine = (FactorRational) FactorFactory.getImplementation(cfac);
 
-        PartialFraction<BigRational> F = engine.baseAlgebraicPartialFraction(N,D);
+        PartialFraction<BigRational> F = engine.baseAlgebraicPartialFraction(N, D);
         System.out.println("\nintegral " + F);
     }
 
 
     /**
-     * example13.
-     * Rothstein-Trager algorithm.
+     * example13. Rothstein-Trager algorithm.
      */
     public static void example13() {
         System.out.println("\n\nexample 13");
@@ -113,19 +95,18 @@ public class ExamplesPartialFraction {
         GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(cfac, 1, to, vars);
 
         // 1 / ( x^6 - 5 x^4 + 5 x^2 + 4 )
-        GenPolynomial<BigRational> D = pfac.parse("x^6 - 5 x^4 + 5 x^2 + 4"); 
+        GenPolynomial<BigRational> D = pfac.parse("x^6 - 5 x^4 + 5 x^2 + 4");
         GenPolynomial<BigRational> N = pfac.getONE();
 
-        FactorRational engine = (FactorRational)FactorFactory.getImplementation(cfac);
+        FactorRational engine = (FactorRational) FactorFactory.getImplementation(cfac);
 
-        PartialFraction<BigRational> F = engine.baseAlgebraicPartialFraction(N,D);
+        PartialFraction<BigRational> F = engine.baseAlgebraicPartialFraction(N, D);
         System.out.println("\nintegral " + F);
     }
 
 
     /**
-     * example14.
-     * Rothstein-Trager algorithm.
+     * example14. Rothstein-Trager algorithm.
      */
     public static void example14() {
         System.out.println("\n\nexample 14");
@@ -136,19 +117,18 @@ public class ExamplesPartialFraction {
         GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(cfac, 1, to, vars);
 
         // 1 / ( x^4 + 4 )
-        GenPolynomial<BigRational> D = pfac.parse("x^4 + 4"); 
+        GenPolynomial<BigRational> D = pfac.parse("x^4 + 4");
         GenPolynomial<BigRational> N = pfac.getONE();
- 
-        FactorRational engine = (FactorRational)FactorFactory.getImplementation(cfac);
 
-        PartialFraction<BigRational> F = engine.baseAlgebraicPartialFraction(N,D);
+        FactorRational engine = (FactorRational) FactorFactory.getImplementation(cfac);
+
+        PartialFraction<BigRational> F = engine.baseAlgebraicPartialFraction(N, D);
         System.out.println("\nintegral " + F);
     }
 
 
     /**
-     * example15.
-     * Rothstein-Trager algorithm.
+     * example15. Rothstein-Trager algorithm.
      */
     public static void example15() {
         System.out.println("\n\nexample 15");
@@ -159,19 +139,18 @@ public class ExamplesPartialFraction {
         GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(cfac, 1, to, vars);
 
         // 1 / ( x^3 - 2 )
-        GenPolynomial<BigRational> D = pfac.parse("x^3 - 2"); 
+        GenPolynomial<BigRational> D = pfac.parse("x^3 - 2");
         GenPolynomial<BigRational> N = pfac.getONE();
 
-        FactorRational engine = (FactorRational)FactorFactory.getImplementation(cfac);
+        FactorRational engine = (FactorRational) FactorFactory.getImplementation(cfac);
 
-        PartialFraction<BigRational> F = engine.baseAlgebraicPartialFraction(N,D);
+        PartialFraction<BigRational> F = engine.baseAlgebraicPartialFraction(N, D);
         System.out.println("\nintegral " + F);
     }
 
 
     /**
-     * example16.
-     * Rothstein-Trager algorithm.
+     * example16. Rothstein-Trager algorithm.
      */
     public static void example16() {
         System.out.println("\n\nexample 16");
@@ -182,19 +161,18 @@ public class ExamplesPartialFraction {
         GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(cfac, 1, to, vars);
 
         // 1 / ( x - 1 ) ( x - 2 ) ( x - 3 ) 
-        GenPolynomial<BigRational> D = pfac.parse("( x - 1 ) * ( x - 2 ) * ( x - 3 )"); 
+        GenPolynomial<BigRational> D = pfac.parse("( x - 1 ) * ( x - 2 ) * ( x - 3 )");
         GenPolynomial<BigRational> N = pfac.getONE();
 
-        FactorRational engine = (FactorRational)FactorFactory.getImplementation(cfac);
+        FactorRational engine = (FactorRational) FactorFactory.getImplementation(cfac);
 
-        PartialFraction<BigRational> F = engine.baseAlgebraicPartialFraction(N,D);
+        PartialFraction<BigRational> F = engine.baseAlgebraicPartialFraction(N, D);
         System.out.println("\nintegral " + F);
     }
 
 
     /**
-     * example17.
-     * Absolute factorization of example15.
+     * example17. Absolute factorization of example15.
      */
     public static void example17() {
         System.out.println("\n\nexample 17");
@@ -205,12 +183,12 @@ public class ExamplesPartialFraction {
         GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(cfac, 1, to, vars);
 
         // 1 / ( x^3 - 2 )
-        GenPolynomial<BigRational> D = pfac.parse("x^3 - 2"); 
+        GenPolynomial<BigRational> D = pfac.parse("x^3 - 2");
         GenPolynomial<BigRational> N = pfac.getONE();
 
-        FactorRational engine = (FactorRational)FactorFactory.getImplementation(cfac);
+        FactorRational engine = (FactorRational) FactorFactory.getImplementation(cfac);
 
-        PartialFraction<BigRational> F = engine.baseAlgebraicPartialFractionIrreducibleAbsolute(N,D);
+        PartialFraction<BigRational> F = engine.baseAlgebraicPartialFractionIrreducibleAbsolute(N, D);
         System.out.println("\nintegral " + F);
     }
 

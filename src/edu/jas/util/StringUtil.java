@@ -129,18 +129,18 @@ public class StringUtil {
     public static String nextPairedString(Reader r, char b, char c) {
         StringWriter sw = new StringWriter();
         try {
-	    int level = 0;
+            int level = 0;
             char buffer;
             int i;
             // read chars != c, ignore new lines ?
             while ((i = r.read()) > -1) {
                 buffer = (char) i;
-                if ( buffer == b ) {
+                if (buffer == b) {
                     level++;
                 }
-                if ( buffer == c ) {
+                if (buffer == c) {
                     level--;
-                    if ( level < 0 ) {
+                    if (level < 0) {
                         break; // skip last closing 'brace' 
                     }
                 }

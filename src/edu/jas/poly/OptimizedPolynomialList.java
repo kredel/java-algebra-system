@@ -4,10 +4,10 @@
 
 package edu.jas.poly;
 
+
 import java.util.List;
 
 import edu.jas.structure.RingElem;
-
 
 
 /**
@@ -15,25 +15,22 @@ import edu.jas.structure.RingElem;
  * @author Heinz Kredel
  */
 
-public class OptimizedPolynomialList<C extends RingElem<C>> 
-    extends PolynomialList<C> {
+public class OptimizedPolynomialList<C extends RingElem<C>> extends PolynomialList<C> {
+
 
     /**
      * Permutation vector used to optimize term order.
      */
     public final List<Integer> perm;
- 
+
 
     /**
      * Constructor.
      */
-    public OptimizedPolynomialList( List<Integer> P, 
-				    GenPolynomialRing<C> R, 
-				    List<GenPolynomial<C>> L ) {
-	super(R,L);
-	perm = P;
+    public OptimizedPolynomialList(List<Integer> P, GenPolynomialRing<C> R, List<GenPolynomial<C>> L) {
+        super(R, L);
+        perm = P;
     }
-
 
 
     /**
@@ -41,8 +38,7 @@ public class OptimizedPolynomialList<C extends RingElem<C>>
      */
     @Override
     public String toString() {
-	return "permutation = " + perm 
-	    + "\n" + super.toString();
+        return "permutation = " + perm + "\n" + super.toString();
     }
 
 }
