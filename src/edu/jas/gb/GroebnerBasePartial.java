@@ -103,8 +103,8 @@ public class GroebnerBasePartial<C extends GcdRingElem<C>>
             }
             i++;
         }
-        System.out.println("\nperm = " + perm);
-        System.out.println("pv   = " + pv);
+        System.out.println("perm = " + perm);
+        //System.out.println("pv   = " + pv);
         // sort perm according to pvars
         int ps = perm.size(); // == pvars.length
         for ( int k = 0; k < ps; k++ ) {
@@ -113,13 +113,13 @@ public class GroebnerBasePartial<C extends GcdRingElem<C>>
                 int jj = variables.indexOf( pvariables.get(j) );
                 if ( kk > jj ) { // swap
                     int t = perm.get(k);
-                    System.out.println("swap " + t + " with " + perm.get(j));
+                    //System.out.println("swap " + t + " with " + perm.get(j));
                     perm.set(k,perm.get(j));
                     perm.set(j,t);
                 }
             }
         }
-        System.out.println("perm = " + perm);
+        //System.out.println("perm = " + perm);
         perm.addAll(pv);
         System.out.println("perm = " + perm);
 	return perm;
@@ -170,7 +170,7 @@ public class GroebnerBasePartial<C extends GcdRingElem<C>>
      * @param pvars names for main variables of partial Groebner base computation.
      * @return a container for a partial Groebner base of F wrt vars.
      */
-    public OptimizedPolynomialList<GenPolynomial<C>> partialGB( List<GenPolynomial<C>> F, String[] pvars ) {
+    public OptimizedPolynomialList<GenPolynomial<C>> partialGBrec( List<GenPolynomial<C>> F, String[] pvars ) {
         if ( F == null && F.isEmpty() ) {
             throw new IllegalArgumentException("empty F not allowed");
         }
@@ -179,34 +179,92 @@ public class GroebnerBasePartial<C extends GcdRingElem<C>>
 	// compute permutation (in reverse sorting)
         List<Integer> perm = partialPermutation(vars,pvars);
 
-        GenPolynomialRing<C> pfac;
-        pfac = TermOrderOptimization.<C>permutation( perm, fac );
-        System.out.println("pfac = " + pfac);
+        GenPolynomialRing<C> pfac = TermOrderOptimization.<C>permutation( perm, fac );
+	if ( logger.isInfoEnabled() ) {
+	    logger.info("pfac = " + pfac);
+	}
+        //System.out.println("pfac = " + pfac);
 
-        List<GenPolynomial<C>> ppolys;
-        ppolys = TermOrderOptimization.<C>permutation( perm, pfac, F );
-        System.out.println("ppolys = " + ppolys);
+        List<GenPolynomial<C>> ppolys = TermOrderOptimization.<C>permutation( perm, pfac, F );
+        //System.out.println("ppolys = " + ppolys);
 
         int cl = fac.nvar - pvars.length;
         int pl = pvars.length;
         String[] rvars = remainingVars(vars,pvars);
 
         GenPolynomialRing<C> cfac = new GenPolynomialRing<C>(fac.coFac,cl,fac.tord,rvars);
-        System.out.println("cfac = " + cfac);
+        //System.out.println("cfac = " + cfac);
 
         GenPolynomialRing<GenPolynomial<C>> rfac = new GenPolynomialRing<GenPolynomial<C>>(cfac,pl,fac.tord,pvars);
-        System.out.println("rfac = " + rfac);
+	if ( logger.isInfoEnabled() ) {
+	    logger.info("rfac = " + rfac);
+	}
+        //System.out.println("rfac = " + rfac);
 
         List<GenPolynomial<GenPolynomial<C>>> Fr = PolyUtil.<C>recursive(rfac,ppolys);
-        System.out.println("\nFr = " + Fr);
+        //System.out.println("\nFr = " + Fr);
 
         GroebnerBasePseudoRecSeq<C> bb = new GroebnerBasePseudoRecSeq<C>(cfac);
 
         List<GenPolynomial<GenPolynomial<C>>> Gr = bb.GB(Fr);
-        System.out.println("\nGr = " + Gr);
+        //System.out.println("\nGr = " + Gr);
 
-        OptimizedPolynomialList<GenPolynomial<C>> pgb = null;
-        pgb = new OptimizedPolynomialList<GenPolynomial<C>>(perm,rfac,Gr);
+	//perm = perm.subList(0,pl);
+        OptimizedPolynomialList<GenPolynomial<C>> pgb = new OptimizedPolynomialList<GenPolynomial<C>>(perm,rfac,Gr);
+        return pgb; 
+    }
+
+
+    /** 
+     * Partial Groebner base for specific variables.
+     * Computes Groebner base in K[pvars] with coefficients from K[vars \ pvars].
+     * @param F polynomial list.
+     * @param pvars names for main variables of partial Groebner base computation.
+     * @return a container for a partial Groebner base of F wrt vars.
+     */
+    public OptimizedPolynomialList<C> partialGB( List<GenPolynomial<C>> F, String[] pvars ) {
+        if ( F == null && F.isEmpty() ) {
+            throw new IllegalArgumentException("empty F not allowed");
+        }
+        GenPolynomialRing<C> fac = F.get(0).ring;
+        String[] vars = fac.getVars();
+	// compute permutation (in reverse sorting)
+        List<Integer> perm = partialPermutation(vars,pvars);
+
+        GenPolynomialRing<C> pfac = TermOrderOptimization.<C>permutation( perm, fac );
+	if ( logger.isInfoEnabled() ) {
+	    logger.info("pfac = " + pfac);
+	}
+	// System.out.println("pfac = " + pfac);
+
+        List<GenPolynomial<C>> ppolys = TermOrderOptimization.<C>permutation( perm, pfac, F );
+        //System.out.println("ppolys = " + ppolys);
+
+        int cl = fac.nvar - pvars.length;
+        int pl = pvars.length;
+        String[] rvars = remainingVars(vars,pvars);
+
+        GenPolynomialRing<C> cfac = new GenPolynomialRing<C>(fac.coFac,cl,fac.tord,rvars);
+        //System.out.println("cfac = " + cfac);
+
+        GenPolynomialRing<GenPolynomial<C>> rfac = new GenPolynomialRing<GenPolynomial<C>>(cfac,pl,fac.tord,pvars);
+	if ( logger.isInfoEnabled() ) {
+	    logger.info("rfac = " + rfac);
+	}
+        //System.out.println("rfac = " + rfac);
+
+        List<GenPolynomial<GenPolynomial<C>>> Fr = PolyUtil.<C>recursive(rfac,ppolys);
+        //System.out.println("\nFr = " + Fr);
+
+        GroebnerBasePseudoRecSeq<C> bb = new GroebnerBasePseudoRecSeq<C>(cfac);
+
+        List<GenPolynomial<GenPolynomial<C>>> Gr = bb.GB(Fr);
+        //System.out.println("\nGr = " + Gr);
+
+        List<GenPolynomial<C>> G = PolyUtil.<C>distribute(pfac,Gr);
+        //System.out.println("\nG = " + G);
+
+        OptimizedPolynomialList<C> pgb = new OptimizedPolynomialList<C>(perm,pfac,G);
         return pgb; 
     }
 

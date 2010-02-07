@@ -41,7 +41,7 @@ public class GroebnerBasePartTest extends TestCase {
      * main
      */
     public static void main (String[] args) {
-        //BasicConfigurator.configure();
+        BasicConfigurator.configure();
         junit.textui.TestRunner.run( suite() );
     }
 
@@ -179,10 +179,15 @@ public class GroebnerBasePartTest extends TestCase {
         }
         System.out.println("F = " + F);
  
-        PolynomialList<BigRational> Fo = TermOrderOptimization.optimizeTermOrder(F);
-        System.out.println("\nFo = " + Fo);
+        //PolynomialList<BigRational> Fo = TermOrderOptimization.optimizeTermOrder(F);
+        //System.out.println("\nFo = " + Fo);
 
-        PolynomialList<GenPolynomial<BigRational>> trinks = bbp.partialGB(F.list,new String[] { "P", "Z", "T", "W" });
+        PolynomialList<GenPolynomial<BigRational>> rtrinks = bbp.partialGBrec(F.list,new String[] { "P", "Z", "T", "W" });
+        //assertTrue("isGB( GB(Trinks7) )", bbp.isGB(G) );
+        //assertEquals("#GB(Trinks7) == 6", 6, G.size() );
+        System.out.println("\nGr = " + rtrinks);
+
+        PolynomialList<BigRational> trinks = bbp.partialGB(F.list,new String[] { "P", "Z", "T", "W" });
         //assertTrue("isGB( GB(Trinks7) )", bbp.isGB(G) );
         //assertEquals("#GB(Trinks7) == 6", 6, G.size() );
         System.out.println("\nG = " + trinks);
