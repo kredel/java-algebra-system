@@ -24,6 +24,8 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenPolynomialTokenizer;
 import edu.jas.poly.PolynomialList;
+import edu.jas.poly.TermOrderOptimization;
+import edu.jas.util.KsubSet;
 
 
 /**
@@ -135,7 +137,7 @@ public class GroebnerBasePartTest extends TestCase {
      * 
      */
     @SuppressWarnings("unchecked")
-    public void testTrinks7GBasePartRec() {
+    public void xtestTrinks7GBasePartRec() {
         String exam = "(B,S,T,Z,P,W) L "
                 + "( "
                 // + "( 45 P + 35 S - 165 B - 36 ), " 
@@ -166,7 +168,7 @@ public class GroebnerBasePartTest extends TestCase {
         //System.out.println("\nGr = " + rtrinks);
 
         PolynomialList<BigRational> trinks = bbp.partialGB(F.list, new String[] { "P", "Z", "T", "W" });
-        assertTrue("isGB( GB(Trinks7) )", bbp.isGB(G) );
+        assertTrue("isGB( GB(Trinks7) )", bbp.isGB(trinks.list) );
         //System.out.println("\nG = " + trinks);
     }
 
@@ -176,7 +178,7 @@ public class GroebnerBasePartTest extends TestCase {
      * 
      */
     @SuppressWarnings("unchecked")
-    public void testTrinks7GBasePart() {
+    public void xtestTrinks7GBasePart() {
         String exam = "(B,S,T,Z,P,W) L "
                 + "( "
                 + "( 45 P + 35 S - 165 B - 36 ), " 
@@ -201,9 +203,10 @@ public class GroebnerBasePartTest extends TestCase {
         //PolynomialList<BigRational> Fo = TermOrderOptimization.optimizeTermOrder(F);
         //System.out.println("\nFo = " + Fo);
 
-        PolynomialList<BigRational> trinks = bbp.partialGB(F.list, new String[] { "B", "S", "P", "Z", "T", "W" });
-        assertTrue("isGB( GB(Trinks7) )", bbp.isGB(G) );
-        //System.out.println("\nG = " + trinks);
+        //PolynomialList<BigRational> trinks = bbp.partialGB(F.list, new String[] { "B", "S", "P", "Z", "T", "W" });
+        PolynomialList<BigRational> trinks = bbp.partialGB(F.list, new String[] { "T", "Z", "P", "W", "B", "S" });
+        assertTrue("isGB( GB(Trinks7) )", bbp.isGB(trinks.list) );
+        System.out.println("\nG = " + trinks);
 
         try {
             PolynomialList<GenPolynomial<BigRational>> tr 
@@ -219,7 +222,7 @@ public class GroebnerBasePartTest extends TestCase {
      * Test partial permutation.
      * 
      */
-    public void testPartialPermutation() {
+    public void xtestPartialPermutation() {
         String[] vars = new String[] { "B", "S", "T", "Z", "P", "W" };
         String[] pvars = new String[] { "P", "Z", "T", "W" };
         String[] rvars = new String[] { "S", "B" };
@@ -241,7 +244,7 @@ public class GroebnerBasePartTest extends TestCase {
      * Test elimination partial permutation.
      * 
      */
-    public void testElimPartialPermutation() {
+    public void xtestElimPartialPermutation() {
         String[] vars = new String[] { "B", "S", "T", "Z", "P", "W" };
         String[] evars = new String[] { "P", "Z" };
         String[] pvars = new String[] { "T", "W" };
@@ -267,7 +270,7 @@ public class GroebnerBasePartTest extends TestCase {
      * 
      */
     @SuppressWarnings("unchecked")
-    public void testTrinks7GBaseElimPartRec() {
+    public void xtestTrinks7GBaseElimPartRec() {
         String exam = "(B,S,T,Z,P,W) G "
                 + "( "
                 // + "( 45 P + 35 S - 165 B - 36 ), " 
@@ -309,7 +312,7 @@ public class GroebnerBasePartTest extends TestCase {
      * 
      */
     @SuppressWarnings("unchecked")
-    public void testTrinks7GBaseElimPart() {
+    public void xtestTrinks7GBaseElimPart() {
         String exam = "(B,S,T,Z,P,W) G "
                 + "( "
                 + "( 45 P + 35 S - 165 B - 36 ), " 
@@ -337,8 +340,122 @@ public class GroebnerBasePartTest extends TestCase {
         System.out.println("pvars = " + Arrays.toString(pvars));
 
         PolynomialList<BigRational> trinks = bbp.elimPartialGB(F.list, evars, pvars);
-        assertTrue("isGB( GB(Trinks7) )", bbp.isGB(G) );
+        assertTrue("isGB( GB(Trinks7) )", bbp.isGB(trinks.list) );
         System.out.println("\nG = " + trinks);
+    }
+
+
+
+    /**
+     * Test partial GBase.
+     * 
+     */
+    @SuppressWarnings("unchecked")
+    public void testGBasePart() {
+        String exam = "(a,b,c,d,e,f) G "
+                + "( "
+                + "( a ), " 
+                + "( b^2 ), "
+                + "( c^3 ), " 
+                + "( d^4 ), "
+                + "( e^5 ), " 
+                + "( f^6 ) "
+                + ") ";
+
+
+        Reader source = new StringReader(exam);
+        GenPolynomialTokenizer parser = new GenPolynomialTokenizer(source);
+        try {
+            F = (PolynomialList<BigRational>) parser.nextPolynomialSet();
+        } catch (ClassCastException e) {
+            fail("" + e);
+        } catch (IOException e) {
+            fail("" + e);
+        }
+        System.out.println("F = " + F);
+
+	// String[] evars = new String[] { "c", "d", "e", "f", "a", "b"};
+        String[] evars = new String[] { "a", "b"};
+        System.out.println("evars = " + Arrays.toString(evars));
+
+        PolynomialList<BigRational> G = bbp.partialGB(F.list, evars);
+        assertTrue("isGB( GB(G) )", bbp.isGB(G.list) );
+        System.out.println("evars = " + Arrays.toString(evars));
+        System.out.println("G = " + G);
+    }
+
+
+    /**
+     * Test permutation generation.
+     * 
+     */
+    @SuppressWarnings("unchecked")
+    public void testPermGen() {
+        String[] vars = new String[] { "a", "b", "c", "d", "e", "f"};
+        //System.out.println("vars  = " + Arrays.toString(vars));
+
+        List<String> sv = new ArrayList<String>(vars.length);
+        for ( int i = 0; i < vars.length; i++ ) {
+            sv.add(vars[i]);
+        }
+        System.out.println("sv    = " + sv);
+
+        String exam = "(a,b,c,d,e,f) G "
+	    + "( "
+	    + "( a ), " 
+	    + "( b^2 ), "
+	    + "( c^3 ), " 
+	    + "( d^4 ), "
+	    + "( e^5 ), " 
+	    + "( f^6 ) "
+	    + ") ";
+
+        Reader source = new StringReader(exam);
+        GenPolynomialTokenizer parser = new GenPolynomialTokenizer(source);
+        PolynomialList<BigRational> F = null;
+        try {
+            F = (PolynomialList<BigRational>) parser.nextPolynomialSet();
+        } catch (ClassCastException e) {
+            fail("" + e);
+        } catch (IOException e) {
+            fail("" + e);
+        }
+        System.out.println("F = " + F);
+
+        for ( int i = 0; i <= vars.length; i++ ) {
+            KsubSet<String> ps = new KsubSet<String>(sv, i);
+            //System.out.println("========================== ps : " + i);
+            for ( List<String> ev : ps ) {
+                //System.out.println("ev = " + ev);
+
+                String[] evars = new String[ev.size()];
+                for ( int j = 0; j < ev.size(); j++ ) {
+                    evars[j] = ev.get(j);
+                }
+                //System.out.println("evars = " + Arrays.toString(evars));
+                String[] rvars = bbp.remainingVars(vars,evars);
+                //System.out.println("rvars = " + Arrays.toString(rvars));
+
+                List<Integer> perm1 = bbp.partialPermutation(vars,evars);
+                //System.out.println("perm1 = " + perm1);
+                List<Integer> perm2 = bbp.getPermutation(vars,rvars);
+                //System.out.println("perm2 = " + perm2);
+                assertEquals("perm1 == perm2 ", perm1, perm2);
+
+                GenPolynomialRing<BigRational> r = new GenPolynomialRing<BigRational>(fac.coFac,vars);
+                GenPolynomialRing<BigRational> pr1 = TermOrderOptimization.<BigRational> permutation(perm1, r);
+                //System.out.println("pr1 = " + pr1);
+                GenPolynomialRing<BigRational> pr2 = TermOrderOptimization.<BigRational> permutation(perm2, r);
+                //System.out.println("pr2 = " + pr2);
+                assertEquals("pr1 == pr2 ", pr1, pr2);
+
+                List<GenPolynomial<BigRational>> pF1 = TermOrderOptimization.<BigRational> permutation(perm1, pr1, F.list);
+                //System.out.println("pF1 = " + pF1);
+                List<GenPolynomial<BigRational>> pF2 = TermOrderOptimization.<BigRational> permutation(perm2, pr2, F.list);
+                //System.out.println("pF2 = " + pF2);
+                assertEquals("pF1 == pF2 ", pF1, pF2);
+            }
+        }
     }
 
 }
