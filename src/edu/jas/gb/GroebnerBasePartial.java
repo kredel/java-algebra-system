@@ -355,15 +355,20 @@ public class GroebnerBasePartial<C extends GcdRingElem<C>>
         if (vars == null || evars == null || pvars == null) {
             throw new IllegalArgumentException("no variable names found");
         }
-        String[] uvars = new String[evars.length+pvars.length];
-        for (int i = 0; i < pvars.length; i++) {
-            uvars[i] = pvars[i];
-        }
-        for (int i = 0; i < evars.length; i++) {
-            uvars[pvars.length+i] = evars[i];
-        }
+        String[] uvars;
+	if ( rvars != null ) {
+            uvars = new String[pvars.length+rvars.length];
+            for (int i = 0; i < pvars.length; i++) {
+                uvars[i] = pvars[i];
+            }
+	    for (int i = 0; i < rvars.length; i++) {
+		uvars[pvars.length+i] = rvars[i];
+	    }
+	} else {
+	    uvars = pvars;
+	}
         System.out.println("uvars = " + Arrays.toString(uvars));
-        List<Integer> perm = partialPermutation(vars, uvars, rvars);
+        List<Integer> perm = partialPermutation(vars, evars, uvars);
         return perm;
     }
 
