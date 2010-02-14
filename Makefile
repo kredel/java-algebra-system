@@ -296,8 +296,9 @@ SVNDATE=svnlook date $(SVNREPO)/jas
 # Jan 2008 SVNSRT=1584 
 # Jun 2008 SVNSRT=1882
 # Sep 2008 SVNSRT=2118
-# jan 2009 
-SVNSRT=2288
+# jan 2009 SVNSRT=2288
+# jun 2009 
+SVNSRT=2668
 
 export:
 	rm -rf ~/jas-versions/$(VERSION)

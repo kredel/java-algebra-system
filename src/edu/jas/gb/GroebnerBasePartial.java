@@ -133,65 +133,73 @@ public class GroebnerBasePartial<C extends GcdRingElem<C>>
      *         pvars).
      */
     public List<Integer> partialPermutation(String[] vars, String[] pvars) {
-        // can use:  return partialPermutation(vars,pvars,null);
-        if (vars == null || pvars == null) {
-            throw new IllegalArgumentException("no variable names found");
-        }
-        List<String> variables = new ArrayList<String>(vars.length);
-        List<String> pvariables = new ArrayList<String>(pvars.length);
-        for (int i = 0; i < vars.length; i++) {
-            variables.add(vars[i]);
-        }
-        for (int i = 0; i < pvars.length; i++) {
-            pvariables.add(pvars[i]);
-        }
-        if (!variables.containsAll(pvariables)) {
-            throw new IllegalArgumentException("partial variables not contained in all variables ");
-        }
-        Collections.reverse(variables);
-        Collections.reverse(pvariables);
-        //System.out.println("\nvariables  = " + variables);
-        //System.out.println("pvariables = " + pvariables);
+        // can use:  
+        return partialPermutation(vars,pvars,null);
+//         if (vars == null || pvars == null) {
+//             throw new IllegalArgumentException("no variable names found");
+//         }
+//         List<String> variables = new ArrayList<String>(vars.length);
+//         List<String> pvariables = new ArrayList<String>(pvars.length);
+//         for (int i = 0; i < vars.length; i++) {
+//             variables.add(vars[i]);
+//         }
+//         for (int i = 0; i < pvars.length; i++) {
+//             pvariables.add(pvars[i]);
+//         }
+//         if (!variables.containsAll(pvariables)) {
+//             throw new IllegalArgumentException("partial variables not contained in all variables ");
+//         }
+//         Collections.reverse(variables);
+//         Collections.reverse(pvariables);
+//         //System.out.println("\nvariables  = " + variables);
+//         //System.out.println("pvariables = " + pvariables);
 
-        List<Integer> perm = new ArrayList<Integer>();
-        List<Integer> pv = new ArrayList<Integer>();
-        int i = 0;
-        for (String s : variables) {
-            if (pvariables.contains(s)) {
-                perm.add(i);
-            } else {
-                pv.add(i);
-            }
-            i++;
-        }
-        //System.out.println("perm = " + perm);
-        //System.out.println("pv   = " + pv);
-        // sort perm according to pvars
-        int ps = perm.size(); // == pvars.length
-        for (int k = 0; k < ps; k++) {
-            for (int j = k + 1; j < ps; j++) {
-                int kk = variables.indexOf(pvariables.get(k));
-                int jj = variables.indexOf(pvariables.get(j));
-                if (kk > jj) { // swap
-                    int t = perm.get(k);
-                    //System.out.println("swap " + t + " with " + perm.get(j));
-                    perm.set(k, perm.get(j));
-                    perm.set(j, t);
-                }
-            }
-        }
-        //System.out.println("perm = " + perm);
-        perm.addAll(pv);
-        //System.out.println("perm = " + perm);
-        return perm;
+//         List<Integer> perm = new ArrayList<Integer>();
+//         List<Integer> pv = new ArrayList<Integer>();
+//         int i = 0;
+//         for (String s : variables) {
+//             if (pvariables.contains(s)) {
+//                 perm.add(i);
+//             } else {
+//                 pv.add(i);
+//             }
+//             i++;
+//         }
+//         //System.out.println("perm = " + perm);
+//         //System.out.println("pv   = " + pv);
+//         // sort perm according to pvars
+//         int ps = perm.size(); // == pvars.length
+//         for (int k = 0; k < ps; k++) {
+//             for (int j = k + 1; j < ps; j++) {
+//                 int kk = variables.indexOf(pvariables.get(k));
+//                 int jj = variables.indexOf(pvariables.get(j));
+//                 if (kk > jj) { // swap
+//                     int t = perm.get(k);
+//                     //System.out.println("swap " + t + " with " + perm.get(j));
+//                     perm.set(k, perm.get(j));
+//                     perm.set(j, t);
+//                 }
+//             }
+//         }
+//         //System.out.println("perm = " + perm);
+//         perm.addAll(pv);
+//         //System.out.println("perm = " + perm);
+//         return perm;
     }
 
 
+    /**
+     * Permutation of variables for elimination. 
+     * @param aname variables for the full polynomial ring.
+     * @param ename variables for the elimination ring, subseteq aname.
+     * @return perm({vars \ ename},ename)
+     */
     public List<Integer> getPermutation(String[] aname, String[] ename) {
         if ( aname == null || ename == null ) { 
             throw new IllegalArgumentException("aname or ename may not be null");
         }
         List<Integer> perm = new ArrayList<Integer>( aname.length ); 
+	// add ename permutation
         for ( int i = 0; i < ename.length; i++ ) {
             int j = indexOf(ename[i],aname);
             if ( j < 0 ) {
@@ -200,12 +208,14 @@ public class GroebnerBasePartial<C extends GcdRingElem<C>>
             perm.add( j );
         }
         //System.out.println("perm_low = " + perm);
+	// add aname \ ename permutation
         for ( int i = 0; i < aname.length; i++ ) {
             if ( ! perm.contains( i ) ) {
                 perm.add( i );
             }
         }
-        //System.out.println("perm_all = " + perm);
+        System.out.println("perm_all = " + perm);
+	// reverse permutation indices
         int n1 = aname.length - 1;
         List<Integer> perm1 = new ArrayList<Integer>( aname.length ); 
         for ( Integer k : perm ) {
@@ -213,21 +223,6 @@ public class GroebnerBasePartial<C extends GcdRingElem<C>>
         }
         perm = perm1;
         //System.out.println("perm_inv = " + perm1);
-        Collections.reverse(perm);
-        //System.out.println("perm_rev = " + perm);
-	return perm;
-    }
-
-
-    public List<Integer> adjustPermutation(List<Integer> perm) {
-        System.out.println("perm_all = " + perm);
-        int n1 = perm.size() - 1;
-        List<Integer> perm1 = new ArrayList<Integer>( perm.size() ); 
-        for ( Integer k : perm ) {
-            perm1.add(n1-k);
-        }
-        perm = perm1;
-        System.out.println("perm_inv = " + perm1);
         Collections.reverse(perm);
         System.out.println("perm_rev = " + perm);
 	return perm;
@@ -274,6 +269,10 @@ public class GroebnerBasePartial<C extends GcdRingElem<C>>
         if ( rvars == null ) {
             rvars = remainingVars(vars,pvars);
         }
+	if ( rvars.length+pvars.length == vars.length ) {
+            //System.out.println("pvariables  = " + pvariables);
+	    return getPermutation(vars,rvars);
+	}
         List<String> rvariables = new ArrayList<String>(rvars.length);
         for (int i = 0; i < rvars.length; i++) {
             rvariables.add(rvars[i]);
@@ -284,22 +283,27 @@ public class GroebnerBasePartial<C extends GcdRingElem<C>>
         Collections.reverse(variables);
         Collections.reverse(pvariables);
         Collections.reverse(rvariables);
-        //System.out.println("\nvariables  = " + variables);
-        //System.out.println("pvariables = " + pvariables);
-        //System.out.println("rvariables = " + rvariables);
+        System.out.println("variables  = " + variables);
+        System.out.println("pvariables = " + pvariables);
+        System.out.println("rvariables = " + rvariables);
 
         List<Integer> perm = new ArrayList<Integer>();
         List<Integer> pv = new ArrayList<Integer>();
-        int i = 0;
         for (String s : variables) {
-            if (pvariables.contains(s)) {
-                perm.add(i);
-            } else {
+	    int j = pvariables.indexOf(s);
+            if ( j >= 0 ) {
+                perm.add(j);
+            }
+        }
+	int i = pvariables.size();
+        for (String s : variables) {
+            if (!pvariables.contains(s)) {
                 pv.add(i);
             }
             i++;
         }
-        //System.out.println("perm = " + perm);
+
+        System.out.println("perm, 1 = " + perm);
         //System.out.println("pv   = " + pv);
         // sort perm according to pvars
         int ps = perm.size(); // == pvars.length
@@ -309,7 +313,7 @@ public class GroebnerBasePartial<C extends GcdRingElem<C>>
                 int jj = variables.indexOf(pvariables.get(j));
                 if (kk > jj) { // swap
                     int t = perm.get(k);
-                    //System.out.println("swap " + t + " with " + perm.get(j));
+                    System.out.println("swap " + t + " with " + perm.get(j));
                     perm.set(k, perm.get(j));
                     perm.set(j, t);
                 }
@@ -332,7 +336,7 @@ public class GroebnerBasePartial<C extends GcdRingElem<C>>
         }
         //System.out.println("pv   = " + pv);
         perm.addAll(pv);
-        //System.out.println("perm = " + perm);
+        System.out.println("perm, 2 = " + perm);
         return perm;
     }
 
@@ -358,6 +362,7 @@ public class GroebnerBasePartial<C extends GcdRingElem<C>>
         for (int i = 0; i < evars.length; i++) {
             uvars[pvars.length+i] = evars[i];
         }
+        System.out.println("uvars = " + Arrays.toString(uvars));
         List<Integer> perm = partialPermutation(vars, uvars, rvars);
         return perm;
     }

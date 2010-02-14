@@ -439,8 +439,8 @@ public class GroebnerBasePartTest extends TestCase {
                 List<Integer> perm1 = bbp.partialPermutation(vars,evars);
                 //System.out.println("perm1 = " + perm1);
                 List<Integer> perm2 = bbp.getPermutation(vars,rvars);
-                //System.out.println("perm2 = " + perm2);
-                assertEquals("perm1 == perm2 ", perm1, perm2);
+                //System.out.println("perm2 = " + perm2); 
+                assertEquals("perm1 == perm2 " + Arrays.toString(evars), perm1, perm2);
 
                 GenPolynomialRing<BigRational> r = new GenPolynomialRing<BigRational>(fac.coFac,vars);
                 GenPolynomialRing<BigRational> pr1 = TermOrderOptimization.<BigRational> permutation(perm1, r);
