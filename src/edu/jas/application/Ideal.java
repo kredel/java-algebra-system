@@ -4,86 +4,76 @@
 
 package edu.jas.application;
 
-import java.lang.Comparable;
-import java.lang.Cloneable;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.HashSet;
-import java.util.Arrays;
-import java.util.Collections;
-
-import java.io.Serializable;
 
 import org.apache.log4j.Logger;
 
-import edu.jas.structure.GcdRingElem;
-import edu.jas.structure.NotInvertibleException;
-
 import edu.jas.gb.ExtendedGB;
-import edu.jas.gb.GroebnerBase;
-import edu.jas.gb.GroebnerBaseSeqPairSeq;
-import edu.jas.gb.GroebnerBasePartial;
 import edu.jas.gb.GroebnerBaseAbstract;
+import edu.jas.gb.GroebnerBasePartial;
+import edu.jas.gb.GroebnerBaseSeqPairSeq;
 import edu.jas.gb.Reduction;
 import edu.jas.gb.ReductionSeq;
-
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
-import edu.jas.poly.PolynomialList;
 import edu.jas.poly.OptimizedPolynomialList;
-import edu.jas.poly.TermOrder;
+import edu.jas.poly.PolynomialList;
 import edu.jas.poly.TermOrderOptimization;
-
-import edu.jas.ufd.Squarefree;
+import edu.jas.structure.GcdRingElem;
+import edu.jas.structure.NotInvertibleException;
 import edu.jas.ufd.SquarefreeAbstract;
 import edu.jas.ufd.SquarefreeFactory;
 
 
 /**
- * Ideal implements some methods for ideal arithmetic, 
- * for example intersection and quotient.
+ * Ideal implements some methods for ideal arithmetic, for example intersection
+ * and quotient.
  * @author Heinz Kredel
  */
-public class Ideal<C extends GcdRingElem<C>> 
-    implements Comparable<Ideal<C>>, Serializable, Cloneable {
+public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Serializable, Cloneable {
 
 
     private static final Logger logger = Logger.getLogger(Ideal.class);
 
 
-    private boolean debug = true || logger.isDebugEnabled();
+    private final boolean debug = true || logger.isDebugEnabled();
 
 
-    /** 
-     * The data structure is a PolynomialList. 
+    /**
+     * The data structure is a PolynomialList.
      */
     protected PolynomialList<C> list;
 
 
-    /** 
-     * Indicator if list is a Groebner Base. 
+    /**
+     * Indicator if list is a Groebner Base.
      */
     protected boolean isGB;
 
 
-    /** 
-     * Indicator if test has been performed if this is a Groebner Base. 
+    /**
+     * Indicator if test has been performed if this is a Groebner Base.
      */
     protected boolean testGB;
 
 
-    /** 
-     * Indicator if list has optimized term order. 
+    /**
+     * Indicator if list has optimized term order.
      */
     protected boolean isTopt;
 
 
-    /** 
-     * Groebner base engine. 
+    /**
+     * Groebner base engine.
      */
     protected final GroebnerBaseAbstract<C> bb;
 
@@ -104,8 +94,8 @@ public class Ideal<C extends GcdRingElem<C>>
      * Constructor.
      * @param ring polynomial ring
      */
-    public Ideal( GenPolynomialRing<C> ring) {
-        this( ring, new ArrayList<GenPolynomial<C>>() );
+    public Ideal(GenPolynomialRing<C> ring) {
+        this(ring, new ArrayList<GenPolynomial<C>>());
     }
 
 
@@ -114,20 +104,8 @@ public class Ideal<C extends GcdRingElem<C>>
      * @param ring polynomial ring
      * @param F list of polynomials
      */
-    public Ideal( GenPolynomialRing<C> ring, List<GenPolynomial<C>> F ) {
-        this( new PolynomialList<C>( ring, F ) );
-    }
-
-
-    /**
-     * Constructor.
-     * @param ring polynomial ring
-     * @param F list of polynomials
-     * @param gb true if F is known to be a Groebner Base, else false
-     */
-    public Ideal( GenPolynomialRing<C> ring, 
-                  List<GenPolynomial<C>> F, boolean gb ) {
-        this( new PolynomialList<C>( ring, F ), gb );
+    public Ideal(GenPolynomialRing<C> ring, List<GenPolynomial<C>> F) {
+        this(new PolynomialList<C>(ring, F));
     }
 
 
@@ -136,11 +114,21 @@ public class Ideal<C extends GcdRingElem<C>>
      * @param ring polynomial ring
      * @param F list of polynomials
      * @param gb true if F is known to be a Groebner Base, else false
+     */
+    public Ideal(GenPolynomialRing<C> ring, List<GenPolynomial<C>> F, boolean gb) {
+        this(new PolynomialList<C>(ring, F), gb);
+    }
+
+
+    /**
+     * Constructor.
+     * @param ring polynomial ring
+     * @param F list of polynomials
+     * @param gb true if F is known to be a Groebner Base, else false
      * @param topt true if term order is optimized, else false
      */
-    public Ideal( GenPolynomialRing<C> ring, 
-                  List<GenPolynomial<C>> F, boolean gb, boolean topt ) {
-        this( new PolynomialList<C>( ring, F ), gb, topt );
+    public Ideal(GenPolynomialRing<C> ring, List<GenPolynomial<C>> F, boolean gb, boolean topt) {
+        this(new PolynomialList<C>(ring, F), gb, topt);
     }
 
 
@@ -148,8 +136,8 @@ public class Ideal<C extends GcdRingElem<C>>
      * Constructor.
      * @param list polynomial list
      */
-    public Ideal( PolynomialList<C> list) {
-        this( list, false );
+    public Ideal(PolynomialList<C> list) {
+        this(list, false);
     }
 
 
@@ -159,9 +147,8 @@ public class Ideal<C extends GcdRingElem<C>>
      * @param bb Groebner Base engine
      * @param red Reduction engine
      */
-    public Ideal( PolynomialList<C> list,
-                  GroebnerBaseAbstract<C> bb, Reduction<C> red) {
-        this( list, false, bb, red );
+    public Ideal(PolynomialList<C> list, GroebnerBaseAbstract<C> bb, Reduction<C> red) {
+        this(list, false, bb, red);
     }
 
 
@@ -170,8 +157,8 @@ public class Ideal<C extends GcdRingElem<C>>
      * @param list polynomial list
      * @param gb true if list is known to be a Groebner Base, else false
      */
-    public Ideal( PolynomialList<C> list, boolean gb) {
-        this(list, gb, new GroebnerBaseSeqPairSeq<C>(), new ReductionSeq<C>() );
+    public Ideal(PolynomialList<C> list, boolean gb) {
+        this(list, gb, new GroebnerBaseSeqPairSeq<C>(), new ReductionSeq<C>());
     }
 
 
@@ -181,8 +168,8 @@ public class Ideal<C extends GcdRingElem<C>>
      * @param gb true if list is known to be a Groebner Base, else false
      * @param topt true if term order is optimized, else false
      */
-    public Ideal( PolynomialList<C> list, boolean gb, boolean topt) {
-        this(list, gb, topt, new GroebnerBaseSeqPairSeq<C>(), new ReductionSeq<C>() );
+    public Ideal(PolynomialList<C> list, boolean gb, boolean topt) {
+        this(list, gb, topt, new GroebnerBaseSeqPairSeq<C>(), new ReductionSeq<C>());
     }
 
 
@@ -193,9 +180,8 @@ public class Ideal<C extends GcdRingElem<C>>
      * @param bb Groebner Base engine
      * @param red Reduction engine
      */
-    public Ideal( PolynomialList<C> list, boolean gb,
-                  GroebnerBaseAbstract<C> bb, Reduction<C> red) {
-        this(list, gb, false, bb, red );
+    public Ideal(PolynomialList<C> list, boolean gb, GroebnerBaseAbstract<C> bb, Reduction<C> red) {
+        this(list, gb, false, bb, red);
     }
 
 
@@ -207,18 +193,18 @@ public class Ideal<C extends GcdRingElem<C>>
      * @param bb Groebner Base engine
      * @param red Reduction engine
      */
-    public Ideal( PolynomialList<C> list, boolean gb, boolean topt,
-                  GroebnerBaseAbstract<C> bb, Reduction<C> red) {
-        if ( list == null || list.list == null ) {
+    public Ideal(PolynomialList<C> list, boolean gb, boolean topt, GroebnerBaseAbstract<C> bb,
+            Reduction<C> red) {
+        if (list == null || list.list == null) {
             throw new IllegalArgumentException("list and list.list may not be null");
         }
         this.list = list;
         this.isGB = gb;
         this.isTopt = topt;
-        this.testGB = ( gb ? true : false ); // ??
+        this.testGB = (gb ? true : false); // ??
         this.bb = bb;
         this.red = red;
-        this.engine = SquarefreeFactory.<C>getImplementation( list.ring.coFac );
+        this.engine = SquarefreeFactory.<C> getImplementation(list.ring.coFac);
     }
 
 
@@ -228,7 +214,7 @@ public class Ideal<C extends GcdRingElem<C>>
      */
     @Override
     public Ideal<C> clone() {
-        return new Ideal<C>( list.clone(), isGB, isTopt, bb, red);
+        return new Ideal<C>(list.clone(), isGB, isTopt, bb, red);
     }
 
 
@@ -236,7 +222,7 @@ public class Ideal<C extends GcdRingElem<C>>
      * Get the List of GenPolynomials.
      * @return list.list
      */
-    public List< GenPolynomial<C> > getList() {
+    public List<GenPolynomial<C>> getList() {
         return list.list;
     }
 
@@ -260,7 +246,8 @@ public class Ideal<C extends GcdRingElem<C>>
     }
 
 
-    /** Get a scripting compatible string representation.
+    /**
+     * Get a scripting compatible string representation.
      * @return script compatible representation for this Element.
      * @see edu.jas.structure.Element#toScript()
      */
@@ -270,52 +257,54 @@ public class Ideal<C extends GcdRingElem<C>>
     }
 
 
-    /** Comparison with any other object.
-     * Note: If both ideals are not Groebner Bases, then
-     *       false may be returned even the ideals are equal.
+    /**
+     * Comparison with any other object. Note: If both ideals are not Groebner
+     * Bases, then false may be returned even the ideals are equal.
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
-    @SuppressWarnings("unchecked") 
-        public boolean equals(Object b) {
-        if ( ! (b instanceof Ideal) ) {
+    @SuppressWarnings("unchecked")
+    public boolean equals(Object b) {
+        if (!(b instanceof Ideal)) {
             logger.warn("equals no Ideal");
             return false;
         }
         Ideal<C> B = null;
         try {
-            B = (Ideal<C>)b;
+            B = (Ideal<C>) b;
         } catch (ClassCastException ignored) {
             return false;
         }
         //if ( isGB && B.isGB ) {
         //   return list.equals( B.list ); requires also monic polys
         //} else { // compute GBs ?
-        return this.contains( B ) && B.contains( this );
+        return this.contains(B) && B.contains(this);
         //}
     }
 
 
-    /** Ideal list comparison.  
+    /**
+     * Ideal list comparison.
      * @param L other Ideal.
      * @return compareTo() of polynomial lists.
      */
     public int compareTo(Ideal<C> L) {
-        return list.compareTo( L.list );
+        return list.compareTo(L.list);
     }
 
 
-    /** Hash code for this ideal.
+    /**
+     * Hash code for this ideal.
      * @see java.lang.Object#hashCode()
      */
     @Override
-    public int hashCode() { 
+    public int hashCode() {
         int h;
         h = list.hashCode();
-        if ( isGB ) {
+        if (isGB) {
             h = h << 1;
         }
-        if ( testGB ) {
+        if (testGB) {
             h += 1;
         }
         return h;
@@ -344,12 +333,12 @@ public class Ideal<C extends GcdRingElem<C>>
      * Optimize the term order.
      */
     public void doToptimize() {
-        if ( isTopt ) {
+        if (isTopt) {
             return;
         }
-        list = TermOrderOptimization.<C>optimizeTermOrder( list );
+        list = TermOrderOptimization.<C> optimizeTermOrder(list);
         isTopt = true;
-        if ( isGB ) {
+        if (isGB) {
             isGB = false;
             doGB();
         }
@@ -362,11 +351,11 @@ public class Ideal<C extends GcdRingElem<C>>
      * @return true, if this is a Groebner base, else false
      */
     public boolean isGB() {
-        if ( testGB ) {
+        if (testGB) {
             return isGB;
         }
         logger.warn("isGB computing");
-        isGB = bb.isGB( getList() );
+        isGB = bb.isGB(getList());
         testGB = true;
         return isGB;
     }
@@ -376,18 +365,18 @@ public class Ideal<C extends GcdRingElem<C>>
      * Do Groebner Base. compute the Groebner Base for this ideal.
      */
     public void doGB() {
-        if ( isGB && testGB ) {
+        if (isGB && testGB) {
             return;
         }
         //logger.warn("GB computing");
-        List< GenPolynomial<C> > G = getList();
+        List<GenPolynomial<C>> G = getList();
         logger.info("GB computing = " + G);
-        G = bb.GB( G );
-        if ( isTopt ) { 
+        G = bb.GB(G);
+        if (isTopt) {
             List<Integer> perm = ((OptimizedPolynomialList<C>) list).perm;
-            list = new OptimizedPolynomialList<C>( perm, getRing(), G );
+            list = new OptimizedPolynomialList<C>(perm, getRing(), G);
         } else {
-            list = new PolynomialList<C>( getRing(), G );
+            list = new PolynomialList<C>(getRing(), G);
         }
         isGB = true;
         testGB = true;
@@ -400,7 +389,7 @@ public class Ideal<C extends GcdRingElem<C>>
      * @return GB(this)
      */
     public Ideal<C> GB() {
-        if ( isGB ) {
+        if (isGB) {
             return this;
         }
         doGB();
@@ -409,41 +398,41 @@ public class Ideal<C extends GcdRingElem<C>>
 
 
     /**
-     * Ideal containment. Test if B is contained in this ideal.
-     * Note: this is eventually modified to become a Groebner Base.
+     * Ideal containment. Test if B is contained in this ideal. Note: this is
+     * eventually modified to become a Groebner Base.
      * @param B ideal
      * @return true, if B is contained in this, else false
      */
-    public boolean contains( Ideal<C> B ) {
-        if ( B == null || B.isZERO() ) {
+    public boolean contains(Ideal<C> B) {
+        if (B == null || B.isZERO()) {
             return true;
         }
-        return contains( B.getList() );
+        return contains(B.getList());
     }
 
 
     /**
-     * Ideal containment. Test if b is contained in this ideal.
-     * Note: this is eventually modified to become a Groebner Base.
+     * Ideal containment. Test if b is contained in this ideal. Note: this is
+     * eventually modified to become a Groebner Base.
      * @param b polynomial
      * @return true, if b is contained in this, else false
      */
-    public boolean contains( GenPolynomial<C> b ) {
-        if ( b == null || b.isZERO() ) {
+    public boolean contains(GenPolynomial<C> b) {
+        if (b == null || b.isZERO()) {
             return true;
         }
-        if ( this.isONE() ) {
+        if (this.isONE()) {
             return true;
         }
-        if ( this.isZERO() ) {
+        if (this.isZERO()) {
             return false;
         }
-        if ( !isGB ) {
+        if (!isGB) {
             doGB();
         }
         GenPolynomial<C> z;
-        z = red.normalform( getList(), b );
-        if ( z == null || z.isZERO() ) {
+        z = red.normalform(getList(), b);
+        if (z == null || z.isZERO()) {
             return true;
         }
         return false;
@@ -451,27 +440,27 @@ public class Ideal<C extends GcdRingElem<C>>
 
 
     /**
-     * Ideal containment. Test if each b in B is contained in this ideal.
-     * Note: this is eventually modified to become a Groebner Base.
+     * Ideal containment. Test if each b in B is contained in this ideal. Note:
+     * this is eventually modified to become a Groebner Base.
      * @param B list of polynomials
      * @return true, if each b in B is contained in this, else false
      */
-    public boolean contains( List<GenPolynomial<C>> B ) {
-        if ( B == null || B.size() == 0 ) {
+    public boolean contains(List<GenPolynomial<C>> B) {
+        if (B == null || B.size() == 0) {
             return true;
         }
-        if ( this.isONE() ) {
+        if (this.isONE()) {
             return true;
         }
-        if ( !isGB ) {
+        if (!isGB) {
             doGB();
         }
-        for ( GenPolynomial<C> b : B ) {
-            if ( b == null ) {
+        for (GenPolynomial<C> b : B) {
+            if (b == null) {
                 continue;
             }
-            GenPolynomial<C> z = red.normalform( getList(), b );
-            if ( !z.isZERO() ) {
+            GenPolynomial<C> z = red.normalform(getList(), b);
+            if (!z.isZERO()) {
                 return false;
             }
         }
@@ -480,25 +469,25 @@ public class Ideal<C extends GcdRingElem<C>>
 
 
     /**
-     * Summation. Generators for the sum of ideals.
-     * Note: if both ideals are Groebner bases, a Groebner base is returned.
+     * Summation. Generators for the sum of ideals. Note: if both ideals are
+     * Groebner bases, a Groebner base is returned.
      * @param B ideal
      * @return ideal(this+B)
      */
-    public Ideal<C> sum( Ideal<C> B ) {
-        if ( B == null || B.isZERO() ) {
+    public Ideal<C> sum(Ideal<C> B) {
+        if (B == null || B.isZERO()) {
             return this;
         }
-        if ( this.isZERO() ) {
+        if (this.isZERO()) {
             return B;
         }
         int s = getList().size() + B.getList().size();
-        List< GenPolynomial<C> > c;
-        c = new ArrayList<GenPolynomial<C>>( s );
-        c.addAll( getList() );
-        c.addAll( B.getList() );
-        Ideal<C> I = new Ideal<C>( getRing(), c, false );
-        if ( isGB && B.isGB ) {
+        List<GenPolynomial<C>> c;
+        c = new ArrayList<GenPolynomial<C>>(s);
+        c.addAll(getList());
+        c.addAll(B.getList());
+        Ideal<C> I = new Ideal<C>(getRing(), c, false);
+        if (isGB && B.isGB) {
             I.doGB();
         }
         return I;
@@ -506,22 +495,22 @@ public class Ideal<C extends GcdRingElem<C>>
 
 
     /**
-     * Summation. Generators for the sum of ideal and a polynomial.
-     * Note: if this ideal is a Groebner base, a Groebner base is returned.
+     * Summation. Generators for the sum of ideal and a polynomial. Note: if
+     * this ideal is a Groebner base, a Groebner base is returned.
      * @param b polynomial
      * @return ideal(this+{b})
      */
-    public Ideal<C> sum( GenPolynomial<C> b ) {
-        if ( b == null || b.isZERO() ) {
+    public Ideal<C> sum(GenPolynomial<C> b) {
+        if (b == null || b.isZERO()) {
             return this;
         }
         int s = getList().size() + 1;
-        List< GenPolynomial<C> > c;
-        c = new ArrayList<GenPolynomial<C>>( s );
-        c.addAll( getList() );
-        c.add( b );
-        Ideal<C> I = new Ideal<C>( getRing(), c, false );
-        if ( isGB ) {
+        List<GenPolynomial<C>> c;
+        c = new ArrayList<GenPolynomial<C>>(s);
+        c.addAll(getList());
+        c.add(b);
+        Ideal<C> I = new Ideal<C>(getRing(), c, false);
+        if (isGB) {
             I.doGB();
         }
         return I;
@@ -529,29 +518,29 @@ public class Ideal<C extends GcdRingElem<C>>
 
 
     /**
-     * Product. Generators for the product of ideals.
-     * Note: if both ideals are Groebner bases, a Groebner base is returned.
+     * Product. Generators for the product of ideals. Note: if both ideals are
+     * Groebner bases, a Groebner base is returned.
      * @param B ideal
      * @return ideal(this*B)
      */
-    public Ideal<C> product( Ideal<C> B ) {
-        if ( B == null || B.isZERO() ) {
+    public Ideal<C> product(Ideal<C> B) {
+        if (B == null || B.isZERO()) {
             return B;
         }
-        if ( this.isZERO() ) {
+        if (this.isZERO()) {
             return this;
         }
         int s = getList().size() * B.getList().size();
-        List< GenPolynomial<C> > c;
-        c = new ArrayList<GenPolynomial<C>>( s );
-        for ( GenPolynomial<C> p : getList() ) {
-            for ( GenPolynomial<C> q : B.getList() ) {
+        List<GenPolynomial<C>> c;
+        c = new ArrayList<GenPolynomial<C>>(s);
+        for (GenPolynomial<C> p : getList()) {
+            for (GenPolynomial<C> q : B.getList()) {
                 q = p.multiply(q);
                 c.add(q);
             }
         }
-        Ideal<C> I = new Ideal<C>( getRing(), c, false );
-        if ( isGB && B.isGB ) {
+        Ideal<C> I = new Ideal<C>(getRing(), c, false);
+        if (isGB && B.isGB) {
             I.doGB();
         }
         return I;
@@ -563,91 +552,89 @@ public class Ideal<C extends GcdRingElem<C>>
      * @param B ideal
      * @return ideal(this \cap B), a Groebner base
      */
-    public Ideal<C> intersect( Ideal<C> B ) {
-        if ( B == null || B.isZERO() ) { // (0)
+    public Ideal<C> intersect(Ideal<C> B) {
+        if (B == null || B.isZERO()) { // (0)
             return B;
         }
-        if ( this.isZERO() ) { 
+        if (this.isZERO()) {
             return this;
         }
         int s = getList().size() + B.getList().size();
-        List< GenPolynomial<C> > c;
-        c = new ArrayList<GenPolynomial<C>>( s );
-        List< GenPolynomial<C> > a = getList();
-        List< GenPolynomial<C> > b = B.getList();
+        List<GenPolynomial<C>> c;
+        c = new ArrayList<GenPolynomial<C>>(s);
+        List<GenPolynomial<C>> a = getList();
+        List<GenPolynomial<C>> b = B.getList();
 
         GenPolynomialRing<C> tfac = getRing().extend(1);
         // term order is also adjusted
-        for ( GenPolynomial<C> p : a ) {
-            p = p.extend( tfac, 0, 1L ); // t*p
-            c.add( p );
+        for (GenPolynomial<C> p : a) {
+            p = p.extend(tfac, 0, 1L); // t*p
+            c.add(p);
         }
-        for ( GenPolynomial<C> p : b ) {
-            GenPolynomial<C> q = p.extend( tfac, 0, 1L );
-            GenPolynomial<C> r = p.extend( tfac, 0, 0L );
-            p = r.subtract( q ); // (1-t)*p
-            c.add( p );
+        for (GenPolynomial<C> p : b) {
+            GenPolynomial<C> q = p.extend(tfac, 0, 1L);
+            GenPolynomial<C> r = p.extend(tfac, 0, 0L);
+            p = r.subtract(q); // (1-t)*p
+            c.add(p);
         }
         logger.warn("intersect computing GB");
-        List< GenPolynomial<C> > g = bb.GB( c );
-        if ( debug ) {
+        List<GenPolynomial<C>> g = bb.GB(c);
+        if (debug) {
             logger.debug("intersect GB = " + g);
         }
-        Ideal<C> E = new Ideal<C>( tfac, g, true );
-        Ideal<C> I = E.intersect( getRing() );
+        Ideal<C> E = new Ideal<C>(tfac, g, true);
+        Ideal<C> I = E.intersect(getRing());
         return I;
     }
 
 
     /**
-     * Intersection. Generators for the intersection of a ideal 
-     * with a polynomial ring. The polynomial ring of this ideal
-     * must be a contraction of R and the TermOrder must be 
-     * an elimination order.
+     * Intersection. Generators for the intersection of a ideal with a
+     * polynomial ring. The polynomial ring of this ideal must be a contraction
+     * of R and the TermOrder must be an elimination order.
      * @param R polynomial ring
      * @return ideal(this \cap R)
      */
-    public Ideal<C> intersect( GenPolynomialRing<C> R ) {
-        if ( R == null ) { 
+    public Ideal<C> intersect(GenPolynomialRing<C> R) {
+        if (R == null) {
             throw new IllegalArgumentException("R may not be null");
         }
         int d = getRing().nvar - R.nvar;
-        if ( d <= 0 ) {
+        if (d <= 0) {
             return this;
         }
         //GenPolynomialRing<C> tfac = getRing().contract(d);
         //if ( ! tfac.equals( R ) ) { // check ?
         //   throw new RuntimeException("contract(this) != R");
         //}
-        List< GenPolynomial<C> > h;
-        h = new ArrayList<GenPolynomial<C>>( getList().size() );
-        for ( GenPolynomial<C> p : getList() ) {
-            Map<ExpVector,GenPolynomial<C>> m = null;
-            m = p.contract( R );
-            if ( debug ) {
+        List<GenPolynomial<C>> h;
+        h = new ArrayList<GenPolynomial<C>>(getList().size());
+        for (GenPolynomial<C> p : getList()) {
+            Map<ExpVector, GenPolynomial<C>> m = null;
+            m = p.contract(R);
+            if (debug) {
                 logger.debug("intersect contract m = " + m);
             }
-            if ( m.size() == 1 ) { // contains one power of variables
-                for ( ExpVector e : m.keySet() ) {
-                    if ( e.isZERO() ) {
-                        h.add( m.get( e ) );
+            if (m.size() == 1) { // contains one power of variables
+                for (ExpVector e : m.keySet()) {
+                    if (e.isZERO()) {
+                        h.add(m.get(e));
                     }
                 }
             }
         }
-        return new Ideal<C>( R, h, isGB, isTopt );
+        return new Ideal<C>(R, h, isGB, isTopt);
     }
 
 
     /**
-     * Eliminate. Generators for the intersection of a ideal 
-     * with a polynomial ring. 
-     * The polynomial rings must have variable names.
+     * Eliminate. Generators for the intersection of a ideal with a polynomial
+     * ring. The polynomial rings must have variable names.
      * @param R polynomial ring
      * @return ideal(this \cap R)
      */
-    public Ideal<C> eliminate( GenPolynomialRing<C> R ) {
-        if ( R == null ) { 
+    public Ideal<C> eliminate(GenPolynomialRing<C> R) {
+        if (R == null) {
             throw new IllegalArgumentException("R may not be null");
         }
         String[] ename = R.getVars();
@@ -657,71 +644,72 @@ public class Ideal<C extends GcdRingElem<C>>
 
 
     /**
-     * Eliminate. Preparation of generators for the intersection of a ideal 
-     * with a polynomial ring. 
+     * Eliminate. Preparation of generators for the intersection of a ideal with
+     * a polynomial ring.
      * @param ename variables for the elimination ring.
      * @return ideal(this) in K[ename,{vars \ ename}])
      */
-    public Ideal<C> eliminate( String[] ename ) {
+    public Ideal<C> eliminate(String[] ename) {
         //System.out.println("ename = " + Arrays.toString(ename));
-        if ( ename == null ) { 
+        if (ename == null) {
             throw new IllegalArgumentException("ename may not be null");
         }
         String[] aname = getRing().getVars();
         //System.out.println("aname = " + Arrays.toString(aname));
-        if ( aname == null ) { 
+        if (aname == null) {
             throw new IllegalArgumentException("aname may not be null");
         }
 
         GroebnerBasePartial<C> bbp = new GroebnerBasePartial<C>(bb, null);
-        String[] rname = bbp.remainingVars(aname,ename);
+        String[] rname = bbp.remainingVars(aname, ename);
         //System.out.println("rname = " + Arrays.toString(rname));
 
-        PolynomialList<C> Pl = bbp.elimPartialGB(getList(),rname,ename); // reversed!
+        PolynomialList<C> Pl = bbp.elimPartialGB(getList(), rname, ename); // reversed!
         //System.out.println("Pl = " + Pl);
-        if ( debug ) {
+        if (debug) {
             logger.debug("elimnation GB = " + Pl);
         }
         //Ideal<C> I = new Ideal<C>( E, G, true );
-        Ideal<C> I = new Ideal<C>( Pl, true );
+        Ideal<C> I = new Ideal<C>(Pl, true);
         //System.out.println("elim, I = " + I);
         return I; //.intersect(R);
     }
 
 
     /**
-     * Permutation of variables for elimination. 
+     * Permutation of variables for elimination.
      * @param aname variables for the full polynomial ring.
      * @param ename variables for the elimination ring, subseteq aname.
      * @return perm({vars \ ename},ename)
      * @deprecated use the one in GroebnerBasePartial
      */
+    @Deprecated
     public List<Integer> getPermutation(String[] aname, String[] ename) {
-        if ( aname == null || ename == null ) { 
+        if (aname == null || ename == null) {
             throw new IllegalArgumentException("aname or ename may not be null");
         }
-        List<Integer> perm = new ArrayList<Integer>( aname.length ); 
+        List<Integer> perm = new ArrayList<Integer>(aname.length);
         // add ename permutation
-        for ( int i = 0; i < ename.length; i++ ) {
-            int j = indexOf(ename[i],aname);
-            if ( j < 0 ) {
+        for (int i = 0; i < ename.length; i++) {
+            int j = indexOf(ename[i], aname);
+            if (j < 0) {
                 throw new IllegalArgumentException("ename not contained in aname");
             }
-            perm.add( j );
+            perm.add(j);
         }
         //System.out.println("perm_low = " + perm);
         // add aname \ ename permutation
-        for ( int i = 0; i < aname.length; i++ ) {
-            if ( ! perm.contains( i ) ) {
-                perm.add( i );
+        for (int i = 0; i < aname.length; i++) {
+            if (!perm.contains(i)) {
+                perm.add(i);
             }
         }
         //System.out.println("perm_all = " + perm);
         // reverse permutation indices
         int n1 = aname.length - 1;
-        List<Integer> perm1 = new ArrayList<Integer>( aname.length ); 
-        for ( Integer k : perm ) {
-            perm1.add(n1-k);
+        List<Integer> perm1 = new ArrayList<Integer>(aname.length);
+        for (Integer k : perm) {
+            perm1.add(n1 - k);
         }
         perm = perm1;
         //System.out.println("perm_inv = " + perm1);
@@ -738,9 +726,10 @@ public class Ideal<C extends GcdRingElem<C>>
      * @return i if s == A[i] for some i, else -1.
      * @deprecated use the one in GroebnerBasePartial
      */
+    @Deprecated
     public int indexOf(String s, String[] A) {
-        for ( int i = 0; i < A.length; i++ ) {
-            if ( s.equals( A[i] ) ) {
+        for (int i = 0; i < A.length; i++) {
+            if (s.equals(A[i])) {
                 return i;
             }
         }
@@ -753,30 +742,30 @@ public class Ideal<C extends GcdRingElem<C>>
      * @param h polynomial
      * @return ideal(this : h), a Groebner base
      */
-    public Ideal<C> quotient( GenPolynomial<C> h ) {
-        if ( h == null ) { // == (0)
+    public Ideal<C> quotient(GenPolynomial<C> h) {
+        if (h == null) { // == (0)
             return this;
         }
-        if ( h.isZERO() ) { 
+        if (h.isZERO()) {
             return this;
         }
-        if ( this.isZERO() ) { 
+        if (this.isZERO()) {
             return this;
         }
-        List< GenPolynomial<C> > H;
-        H = new ArrayList<GenPolynomial<C>>( 1 );
-        H.add( h );
-        Ideal<C> Hi = new Ideal<C>( getRing(), H, true );
+        List<GenPolynomial<C>> H;
+        H = new ArrayList<GenPolynomial<C>>(1);
+        H.add(h);
+        Ideal<C> Hi = new Ideal<C>(getRing(), H, true);
 
-        Ideal<C> I = this.intersect( Hi );
+        Ideal<C> I = this.intersect(Hi);
 
-        List< GenPolynomial<C> > Q;
-        Q = new ArrayList<GenPolynomial<C>>( I.getList().size() );
-        for ( GenPolynomial<C> q : I.getList() ) {
+        List<GenPolynomial<C>> Q;
+        Q = new ArrayList<GenPolynomial<C>>(I.getList().size());
+        for (GenPolynomial<C> q : I.getList()) {
             q = q.divide(h); // remainder == 0
-            Q.add( q );
+            Q.add(q);
         }
-        return new Ideal<C>( getRing(), Q, true /*false?*/ );
+        return new Ideal<C>(getRing(), Q, true /*false?*/);
     }
 
 
@@ -785,23 +774,23 @@ public class Ideal<C extends GcdRingElem<C>>
      * @param H ideal
      * @return ideal(this : H), a Groebner base
      */
-    public Ideal<C> quotient( Ideal<C> H ) {
-        if ( H == null ) { // == (0)
+    public Ideal<C> quotient(Ideal<C> H) {
+        if (H == null) { // == (0)
             return this;
         }
-        if ( H.isZERO() ) { 
+        if (H.isZERO()) {
             return this;
         }
-        if ( this.isZERO() ) { 
+        if (this.isZERO()) {
             return this;
         }
         Ideal<C> Q = null;
-        for ( GenPolynomial<C> h : H.getList() ) {
+        for (GenPolynomial<C> h : H.getList()) {
             Ideal<C> Hi = this.quotient(h);
-            if ( Q == null ) {
+            if (Q == null) {
                 Q = Hi;
             } else {
-                Q = Q.intersect( Hi );
+                Q = Q.intersect(Hi);
             }
         }
         return Q;
@@ -813,38 +802,38 @@ public class Ideal<C extends GcdRingElem<C>>
      * @param h polynomial
      * @return ideal(this : h<sup>s</sup>), a Groebner base
      */
-    public Ideal<C> infiniteQuotientRab( GenPolynomial<C> h ) {
-        if ( h == null ) { // == (0)
+    public Ideal<C> infiniteQuotientRab(GenPolynomial<C> h) {
+        if (h == null) { // == (0)
             return this;
         }
-        if ( h.isZERO() ) { 
+        if (h.isZERO()) {
             return this;
         }
-        if ( this.isZERO() ) {
+        if (this.isZERO()) {
             return this;
         }
         Ideal<C> I = this.GB(); // should be already
-        List< GenPolynomial<C> > a = I.getList();
-        List< GenPolynomial<C> > c;
-        c = new ArrayList<GenPolynomial<C>>( a.size()+1 );
+        List<GenPolynomial<C>> a = I.getList();
+        List<GenPolynomial<C>> c;
+        c = new ArrayList<GenPolynomial<C>>(a.size() + 1);
 
         GenPolynomialRing<C> tfac = getRing().extend(1);
         // term order is also adjusted
-        for ( GenPolynomial<C> p : a ) {
-            p = p.extend( tfac, 0, 0L ); // p
-            c.add( p );
+        for (GenPolynomial<C> p : a) {
+            p = p.extend(tfac, 0, 0L); // p
+            c.add(p);
         }
-        GenPolynomial<C> q  = h.extend( tfac, 0, 1L );
-        GenPolynomial<C> r  = tfac.getONE();    // h.extend( tfac, 0, 0L );
-        GenPolynomial<C> hs = q.subtract( r );  // 1 - t*h // (1-t)*h
-        c.add( hs );
+        GenPolynomial<C> q = h.extend(tfac, 0, 1L);
+        GenPolynomial<C> r = tfac.getONE(); // h.extend( tfac, 0, 0L );
+        GenPolynomial<C> hs = q.subtract(r); // 1 - t*h // (1-t)*h
+        c.add(hs);
         logger.warn("infiniteQuotientRab computing GB");
-        List< GenPolynomial<C> > g = bb.GB( c );
-        if ( debug ) {
+        List<GenPolynomial<C>> g = bb.GB(c);
+        if (debug) {
             logger.debug("infiniteQuotientRab GB = " + g);
         }
-        Ideal<C> E = new Ideal<C>( tfac, g, true );
-        Ideal<C> Is = E.intersect( getRing() );
+        Ideal<C> E = new Ideal<C>(tfac, g, true);
+        Ideal<C> Is = E.intersect(getRing());
         return Is;
     }
 
@@ -854,14 +843,14 @@ public class Ideal<C extends GcdRingElem<C>>
      * @param h polynomial
      * @return ideal(this : h<sup>s</sup>), a Groebner base
      */
-    public Ideal<C> infiniteQuotient( GenPolynomial<C> h ) {
-        if ( h == null ) { // == (0)
+    public Ideal<C> infiniteQuotient(GenPolynomial<C> h) {
+        if (h == null) { // == (0)
             return this;
         }
-        if ( h.isZERO() ) { 
+        if (h.isZERO()) {
             return this;
         }
-        if ( this.isZERO() ) {
+        if (this.isZERO()) {
             return this;
         }
         int s = 0;
@@ -870,12 +859,12 @@ public class Ideal<C extends GcdRingElem<C>>
         Ideal<C> Is = I;
 
         boolean eq = false;
-        while ( !eq ) {
-            Is = I.quotient( hs );
+        while (!eq) {
+            Is = I.quotient(hs);
             Is = Is.GB(); // should be already
             logger.info("infiniteQuotient s = " + s);
-            eq = Is.contains(I);  // I.contains(Is) always
-            if ( !eq ) {
+            eq = Is.contains(I); // I.contains(Is) always
+            if (!eq) {
                 I = Is;
                 s++;
                 // hs = hs.multiply( h );
@@ -890,18 +879,18 @@ public class Ideal<C extends GcdRingElem<C>>
      * @param h polynomial
      * @return true if h is contained in the radical of ideal(this), else false.
      */
-    public boolean isRadicalMember( GenPolynomial<C> h ) {
-        if ( h == null ) { // == (0)
+    public boolean isRadicalMember(GenPolynomial<C> h) {
+        if (h == null) { // == (0)
             return true;
         }
-        if ( h.isZERO() ) { 
+        if (h.isZERO()) {
             return true;
         }
-        if ( this.isZERO() ) {
+        if (this.isZERO()) {
             return true;
         }
-        Ideal<C> x = infiniteQuotientRab( h );
-        if ( debug ) {
+        Ideal<C> x = infiniteQuotientRab(h);
+        if (debug) {
             logger.debug("infiniteQuotientRab = " + x);
         }
         return x.isONE();
@@ -913,14 +902,14 @@ public class Ideal<C extends GcdRingElem<C>>
      * @param h polynomial
      * @return ideal(this : h<sup>s</sup>), a Groebner base
      */
-    public Ideal<C> infiniteQuotientOld( GenPolynomial<C> h ) {
-        if ( h == null ) { // == (0)
+    public Ideal<C> infiniteQuotientOld(GenPolynomial<C> h) {
+        if (h == null) { // == (0)
             return this;
         }
-        if ( h.isZERO() ) { 
+        if (h.isZERO()) {
             return this;
         }
-        if ( this.isZERO() ) {
+        if (this.isZERO()) {
             return this;
         }
         int s = 0;
@@ -928,15 +917,15 @@ public class Ideal<C extends GcdRingElem<C>>
         GenPolynomial<C> hs = h;
 
         boolean eq = false;
-        while ( !eq ) {
-            Ideal<C> Is = I.quotient( hs );
+        while (!eq) {
+            Ideal<C> Is = I.quotient(hs);
             Is = Is.GB(); // should be already
             logger.debug("infiniteQuotient s = " + s);
-            eq = Is.contains(I);  // I.contains(Is) always
-            if ( !eq ) {
+            eq = Is.contains(I); // I.contains(Is) always
+            if (!eq) {
                 I = Is;
                 s++;
-                hs = hs.multiply( h );
+                hs = hs.multiply(h);
             }
         }
         return I;
@@ -944,27 +933,27 @@ public class Ideal<C extends GcdRingElem<C>>
 
 
     /**
-     * Infinite Quotient. Generators for the ideal infinite  quotient.
+     * Infinite Quotient. Generators for the ideal infinite quotient.
      * @param H ideal
      * @return ideal(this : H<sup>s</sup>), a Groebner base
      */
-    public Ideal<C> infiniteQuotient( Ideal<C> H ) {
-        if ( H == null ) { // == (0)
+    public Ideal<C> infiniteQuotient(Ideal<C> H) {
+        if (H == null) { // == (0)
             return this;
         }
-        if ( H.isZERO() ) { 
+        if (H.isZERO()) {
             return this;
         }
-        if ( this.isZERO() ) { 
+        if (this.isZERO()) {
             return this;
         }
         Ideal<C> Q = null;
-        for ( GenPolynomial<C> h : H.getList() ) {
+        for (GenPolynomial<C> h : H.getList()) {
             Ideal<C> Hi = this.infiniteQuotient(h);
-            if ( Q == null ) {
+            if (Q == null) {
                 Q = Hi;
             } else {
-                Q = Q.intersect( Hi );
+                Q = Q.intersect(Hi);
             }
         }
         return Q;
@@ -972,27 +961,27 @@ public class Ideal<C extends GcdRingElem<C>>
 
 
     /**
-     * Infinite Quotient. Generators for the ideal infinite  quotient.
+     * Infinite Quotient. Generators for the ideal infinite quotient.
      * @param H ideal
      * @return ideal(this : H<sup>s</sup>), a Groebner base
      */
-    public Ideal<C> infiniteQuotientRab( Ideal<C> H ) {
-        if ( H == null ) { // == (0)
+    public Ideal<C> infiniteQuotientRab(Ideal<C> H) {
+        if (H == null) { // == (0)
             return this;
         }
-        if ( H.isZERO() ) { 
+        if (H.isZERO()) {
             return this;
         }
-        if ( this.isZERO() ) { 
+        if (this.isZERO()) {
             return this;
         }
         Ideal<C> Q = null;
-        for ( GenPolynomial<C> h : H.getList() ) {
+        for (GenPolynomial<C> h : H.getList()) {
             Ideal<C> Hi = this.infiniteQuotientRab(h);
-            if ( Q == null ) {
+            if (Q == null) {
                 Q = Hi;
             } else {
-                Q = Q.intersect( Hi );
+                Q = Q.intersect(Hi);
             }
         }
         return Q;
@@ -1004,18 +993,18 @@ public class Ideal<C extends GcdRingElem<C>>
      * @param h polynomial
      * @return normalform of h with respect to this
      */
-    public GenPolynomial<C> normalform( GenPolynomial<C> h ) {
-        if ( h == null ) { 
+    public GenPolynomial<C> normalform(GenPolynomial<C> h) {
+        if (h == null) {
             return h;
         }
-        if ( h.isZERO() ) { 
+        if (h.isZERO()) {
             return h;
         }
-        if ( this.isZERO() ) { 
+        if (this.isZERO()) {
             return h;
         }
         GenPolynomial<C> r;
-        r = red.normalform( list.list, h );
+        r = red.normalform(list.list, h);
         return r;
     }
 
@@ -1025,21 +1014,21 @@ public class Ideal<C extends GcdRingElem<C>>
      * @param L polynomial list
      * @return list of normalforms of the elements of L with respect to this
      */
-    public List<GenPolynomial<C>> normalform( List<GenPolynomial<C>> L ) {
-        if ( L == null ) { 
+    public List<GenPolynomial<C>> normalform(List<GenPolynomial<C>> L) {
+        if (L == null) {
             return L;
         }
-        if ( L.size() == 0 ) { 
+        if (L.size() == 0) {
             return L;
         }
-        if ( this.isZERO() ) { 
+        if (this.isZERO()) {
             return L;
         }
-        List<GenPolynomial<C>> M = new ArrayList<GenPolynomial<C>>( L.size() );
-        for ( GenPolynomial<C> h : L ) {
-            GenPolynomial<C> r = normalform( h );
-            if ( r != null && !r.isZERO() ) {
-                M.add( r );
+        List<GenPolynomial<C>> M = new ArrayList<GenPolynomial<C>>(L.size());
+        for (GenPolynomial<C> h : L) {
+            GenPolynomial<C> r = normalform(h);
+            if (r != null && !r.isZERO()) {
+                M.add(r);
             }
         }
         return M;
@@ -1051,49 +1040,49 @@ public class Ideal<C extends GcdRingElem<C>>
      * @param h polynomial
      * @return inverse of h with respect to this, if defined
      */
-    public GenPolynomial<C> inverse( GenPolynomial<C> h ) {
-        if ( h == null || h.isZERO() ) { 
+    public GenPolynomial<C> inverse(GenPolynomial<C> h) {
+        if (h == null || h.isZERO()) {
             throw new RuntimeException(" zero not invertible");
         }
-        if ( this.isZERO() ) { 
+        if (this.isZERO()) {
             throw new NotInvertibleException(" zero ideal");
         }
-        List<GenPolynomial<C>> F = new ArrayList<GenPolynomial<C>>( 1 + list.list.size() );
-        F.add( h );
-        F.addAll( list.list );
+        List<GenPolynomial<C>> F = new ArrayList<GenPolynomial<C>>(1 + list.list.size());
+        F.add(h);
+        F.addAll(list.list);
         //System.out.println("F = " + F);
-        ExtendedGB<C> x = bb.extGB( F );
+        ExtendedGB<C> x = bb.extGB(F);
         List<GenPolynomial<C>> G = x.G;
         //System.out.println("G = " + G);
         GenPolynomial<C> one = null;
         int i = -1;
-        for ( GenPolynomial<C> p : G ) {
+        for (GenPolynomial<C> p : G) {
             i++;
-            if ( p == null ) {
+            if (p == null) {
                 continue;
             }
-            if ( p.isUnit() ) {
+            if (p.isUnit()) {
                 one = p;
                 break;
             }
         }
-        if ( one == null ) { 
+        if (one == null) {
             throw new NotInvertibleException(" h = " + h);
         }
-        List<GenPolynomial<C>> row = x.G2F.get( i ); // != -1
+        List<GenPolynomial<C>> row = x.G2F.get(i); // != -1
         GenPolynomial<C> g = row.get(0);
-        if ( g == null || g.isZERO() ) { 
+        if (g == null || g.isZERO()) {
             throw new NotInvertibleException(" h = " + h);
         }
         // adjust g to get g*h == 1
         GenPolynomial<C> f = g.multiply(h);
-        GenPolynomial<C> k = red.normalform(list.list,f);
-        if ( ! k.isONE() ) {
+        GenPolynomial<C> k = red.normalform(list.list, f);
+        if (!k.isONE()) {
             C lbc = k.leadingBaseCoefficient();
             lbc = lbc.inverse();
-            g = g.multiply( lbc );
+            g = g.multiply(lbc);
         }
-        if ( debug ) {
+        if (debug) {
             //logger.info("inv G = " + G);
             //logger.info("inv G2F = " + x.G2F);
             //logger.info("inv row "+i+" = " + row);
@@ -1101,9 +1090,9 @@ public class Ideal<C extends GcdRingElem<C>>
             //logger.info("inv g = " + g);
             //logger.info("inv f = " + f);
             f = g.multiply(h);
-            k = red.normalform(list.list,f);
+            k = red.normalform(list.list, f);
             logger.info("inv k = " + k);
-            if ( ! k.isUnit() ) {
+            if (!k.isUnit()) {
                 throw new NotInvertibleException(" k = " + k);
             }
         }
@@ -1116,22 +1105,22 @@ public class Ideal<C extends GcdRingElem<C>>
      * @param h polynomial
      * @return true if h is a unit with respect to this, else false
      */
-    public boolean isUnit( GenPolynomial<C> h ) {
-        if ( h == null || h.isZERO() ) { 
+    public boolean isUnit(GenPolynomial<C> h) {
+        if (h == null || h.isZERO()) {
             return false;
         }
-        if ( this.isZERO() ) { 
+        if (this.isZERO()) {
             return false;
         }
-        List<GenPolynomial<C>> F = new ArrayList<GenPolynomial<C>>( 1 + list.list.size() );
-        F.add( h );
-        F.addAll( list.list );
-        List<GenPolynomial<C>> G = bb.GB( F );
-        for ( GenPolynomial<C> p : G ) {
-            if ( p == null ) {
+        List<GenPolynomial<C>> F = new ArrayList<GenPolynomial<C>>(1 + list.list.size());
+        F.add(h);
+        F.addAll(list.list);
+        List<GenPolynomial<C>> G = bb.GB(F);
+        for (GenPolynomial<C> p : G) {
+            if (p == null) {
                 continue;
             }
-            if ( p.isUnit() ) {
+            if (p.isUnit()) {
                 return true;
             }
         }
@@ -1144,22 +1133,22 @@ public class Ideal<C extends GcdRingElem<C>>
      * @return squarefree(this), a Groebner base
      */
     public Ideal<C> squarefree() {
-        if ( this.isZERO() ) { 
+        if (this.isZERO()) {
             return this;
         }
         Ideal<C> R = this;
         Ideal<C> Rp = null;
         List<GenPolynomial<C>> li, ri;
-        while ( true ) {
+        while (true) {
             li = R.getList();
-            ri = new ArrayList<GenPolynomial<C>>( li ); //.size() );
-            for ( GenPolynomial<C> h : li ) {
-                GenPolynomial<C> r = engine.squarefreePart( h );
-                ri.add( r );
+            ri = new ArrayList<GenPolynomial<C>>(li); //.size() );
+            for (GenPolynomial<C> h : li) {
+                GenPolynomial<C> r = engine.squarefreePart(h);
+                ri.add(r);
             }
-            Rp = new Ideal<C>( R.getRing(), ri, false ); 
+            Rp = new Ideal<C>(R.getRing(), ri, false);
             Rp.doGB();
-            if ( R.equals( Rp ) ) {
+            if (R.equals(Rp)) {
                 break;
             }
             R = Rp;
@@ -1173,36 +1162,36 @@ public class Ideal<C extends GcdRingElem<C>>
      * @return -1, 0 or 1 if dimension(this) &eq; -1, 0 or &ge; 1.
      */
     public int commonZeroTest() {
-        if ( this.isZERO() ) {
+        if (this.isZERO()) {
             return 1;
         }
-        if ( !isGB ) {
+        if (!isGB) {
             doGB();
         }
-        if ( this.isONE() ) {
+        if (this.isONE()) {
             return -1;
         }
-        if ( this.list.ring.nvar <= 0 ) {
+        if (this.list.ring.nvar <= 0) {
             return -1;
         }
         //int uht = 0;
         Set<Integer> v = new HashSet<Integer>(); // for non reduced GBs
         // List<GenPolynomial<C>> Z = this.list.list;
-        for ( GenPolynomial<C> p : getList() ) {
+        for (GenPolynomial<C> p : getList()) {
             ExpVector e = p.leadingExpVector();
-            if ( e == null ) {
+            if (e == null) {
                 continue;
             }
             int[] u = e.dependencyOnVariables();
-            if ( u == null ) {
+            if (u == null) {
                 continue;
             }
-            if ( u.length == 1 ) {
+            if (u.length == 1) {
                 //uht++;
-                v.add( u[0] );
+                v.add(u[0]);
             }
         }
-        if ( this.list.ring.nvar == v.size() ) {
+        if (this.list.ring.nvar == v.size()) {
             return 0;
         }
         return 1;
@@ -1217,23 +1206,23 @@ public class Ideal<C extends GcdRingElem<C>>
         int t = commonZeroTest();
         Set<Integer> S = new HashSet<Integer>();
         Set<Set<Integer>> M = new HashSet<Set<Integer>>();
-        if ( t <= 0 ) {
-            return new Dim(t,S,M,null);
+        if (t <= 0) {
+            return new Dim(t, S, M, null);
         }
         int d = 0;
         Set<Integer> U = new HashSet<Integer>();
-        for ( int i = 0; i < this.list.ring.nvar; i++ ) {
-            U.add( i );
+        for (int i = 0; i < this.list.ring.nvar; i++) {
+            U.add(i);
         }
-        M = dimension(S,U,M);
-        for ( Set<Integer> m : M ) {
+        M = dimension(S, U, M);
+        for (Set<Integer> m : M) {
             int dp = m.size();
-            if ( dp > d ) {
+            if (dp > d) {
                 d = dp;
                 S = m;
             }
         }
-        return new Dim(d,S,M,this.list.ring.getVars());
+        return new Dim(d, S, M, this.list.ring.getVars());
     }
 
 
@@ -1242,28 +1231,29 @@ public class Ideal<C extends GcdRingElem<C>>
      * @param S is a set of independent variables.
      * @param U is a set of variables of unknown status.
      * @param M is a list of maximal sets of independent variables.
-     * @return a list of maximal sets of independent variables, eventually containing S.
+     * @return a list of maximal sets of independent variables, eventually
+     *         containing S.
      */
     protected Set<Set<Integer>> dimension(Set<Integer> S, Set<Integer> U, Set<Set<Integer>> M) {
         Set<Set<Integer>> MP = M;
-        Set<Integer> UP = new HashSet<Integer>( U );
-        for ( Integer j : U ) {
-            UP.remove( j );
-            Set<Integer> SP = new HashSet<Integer>( S );
-            SP.add( j );
-            if ( ! containsHT( SP, getList() ) ) {
-                MP = dimension( SP, UP, MP );
+        Set<Integer> UP = new HashSet<Integer>(U);
+        for (Integer j : U) {
+            UP.remove(j);
+            Set<Integer> SP = new HashSet<Integer>(S);
+            SP.add(j);
+            if (!containsHT(SP, getList())) {
+                MP = dimension(SP, UP, MP);
             }
         }
         boolean contained = false;
-        for ( Set<Integer> m : MP ) {
-            if ( m.containsAll( S ) ) {
+        for (Set<Integer> m : MP) {
+            if (m.containsAll(S)) {
                 contained = true;
                 break;
             }
         }
-        if ( ! contained ) {
-            MP.add( S );
+        if (!contained) {
+            MP.add(S);
         }
         return MP;
     }
@@ -1273,32 +1263,32 @@ public class Ideal<C extends GcdRingElem<C>>
      * Ideal head term containment test.
      * @param G list of polynomials.
      * @param H index set.
-     * @return true, if the vaiables of the head terms of each polynomial in G are contained in H, 
-     * else false.
+     * @return true, if the vaiables of the head terms of each polynomial in G
+     *         are contained in H, else false.
      */
     protected boolean containsHT(Set<Integer> H, List<GenPolynomial<C>> G) {
         Set<Integer> S = null;
-        for ( GenPolynomial<C> p : G ) {
-            if ( p == null ) {
+        for (GenPolynomial<C> p : G) {
+            if (p == null) {
                 continue;
             }
             ExpVector e = p.leadingExpVector();
-            if ( e == null ) {
+            if (e == null) {
                 continue;
             }
             int[] v = e.dependencyOnVariables();
-            if ( v == null ) {
+            if (v == null) {
                 continue;
             }
             // System.out.println("v = " + Arrays.toString(v));
-            if ( S == null ) { // revert indices
-                S = new HashSet<Integer>( H.size() );
-                int r = e.length()-1;
-                for ( Integer i : H ) {
-                    S.add( r-i );
+            if (S == null) { // revert indices
+                S = new HashSet<Integer>(H.size());
+                int r = e.length() - 1;
+                for (Integer i : H) {
+                    S.add(r - i);
                 }
             }
-            if ( contains( v, S ) ) { // v \subset S
+            if (contains(v, S)) { // v \subset S
                 return true;
             }
         }
@@ -1307,15 +1297,14 @@ public class Ideal<C extends GcdRingElem<C>>
 
 
     /**
-     * Set containment.
-     * is v \subset H.
+     * Set containment. is v \subset H.
      * @param v index array.
      * @param H index set.
      * @return true, if each element of v is contained in H, else false .
      */
     protected boolean contains(int[] v, Set<Integer> H) {
-        for ( int i = 0; i < v.length; i++ ) {
-            if ( ! H.contains( v[i] ) ) {
+        for (int i = 0; i < v.length; i++) {
+            if (!H.contains(v[i])) {
                 return false;
             }
         }
@@ -1327,9 +1316,17 @@ public class Ideal<C extends GcdRingElem<C>>
      * Container for dimension parameters.
      */
     public static class Dim implements Serializable {
+
+
         public final int d;
+
+
         public final Set<Integer> S;
+
+
         public final Set<Set<Integer>> M;
+
+
         public final String[] v;
 
 
@@ -1348,30 +1345,32 @@ public class Ideal<C extends GcdRingElem<C>>
         @Override
         public String toString() {
             StringBuffer sb = new StringBuffer("Dimension( " + d + ", ");
-            if ( v == null ) {
-                sb.append( "" + S + ", " + M + " )" );
+            if (v == null) {
+                sb.append("" + S + ", " + M + " )");
                 return sb.toString();
             }
-            String[] s = new String[ S.size() ];
+            String[] s = new String[S.size()];
             int j = 0;
-            for ( Integer i : S ) {
-                s[j] = v[i]; j++;
+            for (Integer i : S) {
+                s[j] = v[i];
+                j++;
             }
-            sb.append( Arrays.toString( s ) + ", " );
+            sb.append(Arrays.toString(s) + ", ");
             sb.append("[ ");
             boolean first = true;
-            for ( Set<Integer> m : M ) {
-                if ( first ) {
+            for (Set<Integer> m : M) {
+                if (first) {
                     first = false;
                 } else {
-                    sb.append( ", " );
+                    sb.append(", ");
                 }
-                s = new String[ m.size() ];
+                s = new String[m.size()];
                 j = 0;
-                for ( Integer i : m ) {
-                    s[j] = v[i]; j++;
+                for (Integer i : m) {
+                    s[j] = v[i];
+                    j++;
                 }
-                sb.append( Arrays.toString( s ) );
+                sb.append(Arrays.toString(s));
             }
             sb.append(" ] )");
             return sb.toString();
