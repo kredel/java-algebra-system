@@ -99,6 +99,12 @@ public class GroebnerBaseDistributedHybrid<C extends RingElem<C>> extends Groebn
 
 
     /**
+     * Message tag for acknowledgments.
+     */
+    public static final Integer ackTag = new Integer(3);
+
+
+    /**
      * Constructor.
      */
     public GroebnerBaseDistributedHybrid() {
@@ -464,6 +470,12 @@ class HybridReducerServer<C extends RingElem<C>> implements Runnable {
 
 
     /**
+     * Message tag for acknowledgments.
+     */
+    public final Integer ackTag = GroebnerBaseDistributedHybrid.ackTag;
+
+
+    /**
      * Constructor.
      * @param tpn number of threads per node
      * @param fin terminator
@@ -674,6 +686,12 @@ class HybridReducerReceiver<C extends RingElem<C>> extends Thread {
 
 
     /**
+     * Message tag for acknowledgments.
+     */
+    public final Integer ackTag = GroebnerBaseDistributedHybrid.ackTag;
+
+
+    /**
      * Constructor.
      * @param tpn number of threads per node
      * @param fin terminator
@@ -705,7 +723,7 @@ class HybridReducerReceiver<C extends RingElem<C>> extends Thread {
         GenPolynomial<C> H = null;
         int red = 0;
         int polIndex = -1;
-        Integer senderId;
+        Integer senderId; // obsolete
 
         // while more requests
         while (goon) {
@@ -781,7 +799,8 @@ class HybridReducerReceiver<C extends RingElem<C>> extends Thread {
             finner.initIdle(1);
             if ( senderId != null ) { // send acknowledgement after recording
                 try {
-                    pairChannel.send(senderId, new GBTransportMess());
+                    //pairChannel.send(senderId, new GBTransportMess());
+                    pairChannel.send(ackTag, new GBTransportMess());
                     logger.debug("send acknowledgement");
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -791,7 +810,7 @@ class HybridReducerReceiver<C extends RingElem<C>> extends Thread {
             }
         } // end while
         goon = false;
-        logger.info("terminated, recieved " + red + " reductions");
+        logger.info("terminated, received " + red + " reductions");
     }
 
 
@@ -875,7 +894,7 @@ class HybridReducerClient<C extends RingElem<C>> implements Runnable {
     /**
      * Identification number for this thread.
      */
-    public final Integer threadId;
+    public final Integer threadId; // obsolete
 
 
     /**
@@ -888,6 +907,12 @@ class HybridReducerClient<C extends RingElem<C>> implements Runnable {
      * Message tag for results.
      */
     public final Integer resultTag = GroebnerBaseDistributedHybrid.resultTag;
+
+
+    /**
+     * Message tag for acknowledgments.
+     */
+    public final Integer ackTag = GroebnerBaseDistributedHybrid.ackTag;
 
 
     /**
@@ -1034,7 +1059,8 @@ class HybridReducerClient<C extends RingElem<C>> implements Runnable {
             }
             logger.info("done send poly message with tag " + threadId + " of " + pp);
             try {
-                pp = pairChannel.receive(threadId);
+                //pp = pairChannel.receive(threadId);
+                pp = pairChannel.receive(ackTag);
             } catch (InterruptedException e) {
                 goon = false;
                 e.printStackTrace();
@@ -1051,7 +1077,7 @@ class HybridReducerClient<C extends RingElem<C>> implements Runnable {
             if ( ! (pp instanceof GBTransportMess) ) {
                 logger.error("invalid acknowledgement " + pp);
             }
-            logger.info("recieved acknowledgment " + pp);
+            logger.info("received acknowledgment " + pp);
         }
         logger.info("terminated, done " + reduction + " reductions");
         if ( !doEnd ) {
