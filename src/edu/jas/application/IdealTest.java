@@ -24,6 +24,7 @@ import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolynomialList;
 import edu.jas.poly.TermOrder;
 
+import edu.jas.util.KsubSet;
 
 
 /**
@@ -38,7 +39,7 @@ public class IdealTest extends TestCase {
      * main
      */
     public static void main (String[] args) {
-        BasicConfigurator.configure();
+        //BasicConfigurator.configure();
         junit.textui.TestRunner.run( suite() );
     }
 
@@ -98,7 +99,7 @@ public class IdealTest extends TestCase {
     /**
      * Test Ideal sum.
      */
-    public void xtestIdealSum() {
+    public void testIdealSum() {
 
         Ideal<BigRational> I;
         Ideal<BigRational> J;
@@ -215,7 +216,7 @@ public class IdealTest extends TestCase {
     /**
      * Test Ideal product.
      */
-    public void xtestIdealProduct() {
+    public void testIdealProduct() {
 
         Ideal<BigRational> I;
         Ideal<BigRational> J;
@@ -338,7 +339,7 @@ public class IdealTest extends TestCase {
     /**
      * Test Ideal quotient.
      */
-    public void xtestIdealQuotient() {
+    public void testIdealQuotient() {
 
         Ideal<BigRational> I;
         Ideal<BigRational> J;
@@ -452,7 +453,7 @@ public class IdealTest extends TestCase {
     /**
      * Test Ideal infinite quotient.
      */
-    public void xtestIdealInfiniteQuotient() {
+    public void testIdealInfiniteQuotient() {
 
         Ideal<BigRational> I;
         Ideal<BigRational> J;
@@ -532,7 +533,7 @@ public class IdealTest extends TestCase {
     /**
      * Test Ideal infinite quotient with Rabinowich trick.
      */
-    public void xtestIdealInfiniteQuotientRabi() {
+    public void testIdealInfiniteQuotientRabi() {
 
         Ideal<BigRational> I;
         Ideal<BigRational> J;
@@ -623,7 +624,7 @@ public class IdealTest extends TestCase {
     /**
      * Test Ideal radical membership.
      */
-    public void xtestIdealRadicalMember() {
+    public void testIdealRadicalMember() {
 
         Ideal<BigRational> I;
         Ideal<BigRational> J;
@@ -692,7 +693,7 @@ public class IdealTest extends TestCase {
     /**
      * Test Ideal common zeros.
      */
-    public void xtestIdealCommonZeros() {
+    public void testIdealCommonZeros() {
 
         Ideal<BigRational> I;
         L = new ArrayList<GenPolynomial<BigRational>>();
@@ -731,7 +732,7 @@ public class IdealTest extends TestCase {
     /**
      * Test Ideal dimension.
      */
-    public void xtestIdealDimension() {
+    public void testIdealDimension() {
 
         Ideal<BigRational> I;
         L = new ArrayList<GenPolynomial<BigRational>>();
@@ -798,7 +799,7 @@ public class IdealTest extends TestCase {
     /**
      * Test Ideal term order optimization.
      */
-    public void xtestIdealTopt() {
+    public void testIdealTopt() {
 
         Ideal<BigRational> I;
         Ideal<BigRational> J;
@@ -885,81 +886,64 @@ public class IdealTest extends TestCase {
     }
 
 
-
     /**
      * Test elimination Ideals.
      */
     public void testElimIdeal() {
 
         String[] vars = fac.getVars();
-        System.out.println("vars = " + Arrays.toString(vars));
-        System.out.println("fac = " + fac);
+        //System.out.println("vars = " + Arrays.toString(vars));
+        //System.out.println("fac = " + fac);
 
-	Ideal<BigRational> I;
-	Ideal<BigRational> J;
+        Ideal<BigRational> I;
+        Ideal<BigRational> J;
 
-	L = new ArrayList<GenPolynomial<BigRational>>();
+        L = new ArrayList<GenPolynomial<BigRational>>();
 
-	a = fac.univariate(2,3L); //fac.random(kl, ll, el, q );
-	b = fac.univariate(1,2L); //fac.random(kl, ll, el, q );
-	c = fac.univariate(0,1L); //fac.random(kl, ll, el, q );
+        a = fac.univariate(2,3L); //fac.random(kl, ll, el, q );
+        b = fac.univariate(1,2L); //fac.random(kl, ll, el, q );
+        c = fac.univariate(0,1L); //fac.random(kl, ll, el, q );
 
-	if ( a.isZERO() || b.isZERO() || c.isZERO() ) {
-	    return;
-	}
+        if ( a.isZERO() || b.isZERO() || c.isZERO() ) {
+            return;
+        }
 
-	L.add(a);
-	L.add(b);
-	L.add(c);
+        L.add(a);
+        L.add(b);
+        L.add(c);
 
-	I = new Ideal<BigRational>(fac,L);
-	//I.doGB();
-	assertTrue("not isZERO( I )", !I.isZERO() );
-	assertTrue("isGB( I )", I.isGB() );
-	System.out.println("I = " + I);
+        I = new Ideal<BigRational>(fac,L);
+        //I.doGB();
+        assertTrue("not isZERO( I )", !I.isZERO() );
+        assertTrue("isGB( I )", I.isGB() );
+        //System.out.println("I = " + I);
 
-	String[] evars;
-	GenPolynomialRing<BigRational> efac;
+        List<String> sv = new ArrayList<String>(vars.length);
+        for ( int i = 0; i < vars.length; i++ ) {
+            sv.add(vars[i]);
+        }
+        //System.out.println("sv    = " + sv);
 
-	evars = new String[] { };
-	efac = new GenPolynomialRing<BigRational>(fac.coFac,evars.length,fac.tord,evars);
-	System.out.println("efac = " + efac);
+        for ( int i = 0; i <= vars.length; i++ ) {
+            KsubSet<String> ps = new KsubSet<String>(sv, i);
+            //System.out.println("========================== ps : " + i);
+            for ( List<String> ev : ps ) {
+                //System.out.println("ev = " + ev);
 
-	J = I.eliminate(efac); 
-	assertTrue("isGB( J )", J.isGB() );
-	assertTrue("size( J ) == 0 ", J.getList().size() == 0 );
-	System.out.println("J = " + J);
+                String[] evars = new String[ev.size()];
+                for ( int j = 0; j < ev.size(); j++ ) {
+                    evars[j] = ev.get(j);
+                }
+                GenPolynomialRing<BigRational> efac;
+                efac = new GenPolynomialRing<BigRational>(fac.coFac,evars.length,fac.tord,evars);
+                //System.out.println("efac = " + efac);
 
-	for ( int k = 0; k < vars.length; k++ ) {
-	    evars = new String[] { vars[k] };
-	    efac = new GenPolynomialRing<BigRational>(fac.coFac,evars.length,fac.tord,evars);
-	    System.out.println("efac = " + efac);
-
-            J = I.eliminate(efac); 
-	    assertTrue("isGB( J )", J.isGB() );
-	    assertTrue("size( J ) == 1 ", J.getList().size() == 1 );
-	    System.out.println("J = " + J);
-	}
-
-	for ( int k = 0; k < vars.length; k++ ) {
-	    evars = new String[] { vars[k], vars[(k+1) % vars.length] };
-	    efac = new GenPolynomialRing<BigRational>(fac.coFac,evars.length,fac.tord,evars);
-	    System.out.println("efac = " + efac);
-
-            J = I.eliminate(efac); 
-	    assertTrue("isGB( J )", J.isGB() );
-	    assertTrue("size( J ) == 2 ", J.getList().size() == 2 );
-	    System.out.println("J = " + J);
-	}
-
-	evars = vars;
-	efac = new GenPolynomialRing<BigRational>(fac.coFac,evars.length,fac.tord,evars);
-	System.out.println("efac = " + efac);
-
-	J = I.eliminate(efac); 
-	assertTrue("isGB( J )", J.isGB() );
-	assertTrue("size( J ) == rl ", J.getList().size() == rl );
-	System.out.println("J = " + J);
+                J = I.eliminate(efac); 
+                assertTrue("isGB( J )", J.isGB() );
+                assertTrue("size( J ) <=  |ev|", J.getList().size() <= ev.size() );
+                //System.out.println("J = " + J);
+            }
+        }
     }
 
 }

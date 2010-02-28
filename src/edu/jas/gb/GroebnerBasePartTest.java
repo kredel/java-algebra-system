@@ -42,7 +42,7 @@ public class GroebnerBasePartTest extends TestCase {
      * main
      */
     public static void main(String[] args) {
-        BasicConfigurator.configure();
+        //BasicConfigurator.configure();
         junit.textui.TestRunner.run(suite());
     }
 
@@ -137,7 +137,7 @@ public class GroebnerBasePartTest extends TestCase {
      * 
      */
     @SuppressWarnings("unchecked")
-    public void xtestTrinks7GBasePartRec() {
+    public void testTrinks7GBasePartRec() {
         String exam = "(B,S,T,Z,P,W) L "
                 + "( "
                 // + "( 45 P + 35 S - 165 B - 36 ), " 
@@ -165,11 +165,12 @@ public class GroebnerBasePartTest extends TestCase {
         PolynomialList<GenPolynomial<BigRational>> rtrinks 
             = bbp.partialGBrec(F.list, new String[] { "P", "Z", "T", "W" });
         assertTrue("isGB( GB(Trinks7) )", bbp.isGBrec(rtrinks.list) );
-        //System.out.println("\nGr = " + rtrinks);
+        //System.out.println("\nTrinksR = " + rtrinks);
 
-        PolynomialList<BigRational> trinks = bbp.partialGB(F.list, new String[] { "P", "Z", "T", "W" });
+	// not meaning-full
+        PolynomialList<BigRational> trinks = bbp.partialGB(F.list, new String[] { "B", "S", "P", "Z", "T", "W" });
+        //System.out.println("\ntrinks = " + trinks);
         assertTrue("isGB( GB(Trinks7) )", bbp.isGB(trinks.list) );
-        //System.out.println("\nG = " + trinks);
     }
 
 
@@ -178,7 +179,7 @@ public class GroebnerBasePartTest extends TestCase {
      * 
      */
     @SuppressWarnings("unchecked")
-    public void xtestTrinks7GBasePart() {
+    public void testTrinks7GBasePart() {
         String exam = "(B,S,T,Z,P,W) L "
                 + "( "
                 + "( 45 P + 35 S - 165 B - 36 ), " 
@@ -206,7 +207,7 @@ public class GroebnerBasePartTest extends TestCase {
         //PolynomialList<BigRational> trinks = bbp.partialGB(F.list, new String[] { "B", "S", "P", "Z", "T", "W" });
         PolynomialList<BigRational> trinks = bbp.partialGB(F.list, new String[] { "T", "Z", "P", "W", "B", "S" });
         assertTrue("isGB( GB(Trinks7) )", bbp.isGB(trinks.list) );
-        System.out.println("\nG = " + trinks);
+        //System.out.println("\nG = " + trinks);
 
         try {
             PolynomialList<GenPolynomial<BigRational>> tr 
@@ -222,7 +223,7 @@ public class GroebnerBasePartTest extends TestCase {
      * Test partial permutation.
      * 
      */
-    public void xtestPartialPermutation() {
+    public void testPartialPermutation() {
         String[] vars = new String[] { "B", "S", "T", "Z", "P", "W" };
         String[] pvars = new String[] { "P", "Z", "T", "W" };
         String[] rvars = new String[] { "S", "B" };
@@ -298,12 +299,12 @@ public class GroebnerBasePartTest extends TestCase {
         System.out.println("pvars = " + Arrays.toString(pvars));
 
         PolynomialList<GenPolynomial<BigRational>> rtrinks = bbp.elimPartialGBrec(F.list, evars, pvars);
-        assertTrue("isGB( GB(Trinks7) )", bbp.isGBrec(rtrinks.list) );
         System.out.println("\nGr = " + rtrinks);
+        assertTrue("isGB( GB(Trinks7) )", bbp.isGBrec(rtrinks.list) );
 
         PolynomialList<BigRational> trinks = bbp.elimPartialGB(F.list, evars, pvars);
-        //assertTrue("isGB( GB(Trinks7) )", bbp.isGB(G) );
-        System.out.println("\nG = " + trinks);
+        assertTrue("isGB( GB(Trinks7) )", bbp.isGB(G) );
+        //System.out.println("\nG = " + trinks);
     }
 
 
@@ -312,7 +313,7 @@ public class GroebnerBasePartTest extends TestCase {
      * 
      */
     @SuppressWarnings("unchecked")
-    public void xtestTrinks7GBaseElimPart() {
+    public void testTrinks7GBaseElimPart() {
         String exam = "(B,S,T,Z,P,W) G "
                 + "( "
                 + "( 45 P + 35 S - 165 B - 36 ), " 
@@ -336,12 +337,12 @@ public class GroebnerBasePartTest extends TestCase {
 
         String[] evars = new String[] { "P", "Z" };
         String[] pvars = new String[] { "B", "S", "T", "W" };
-        System.out.println("evars = " + Arrays.toString(evars));
-        System.out.println("pvars = " + Arrays.toString(pvars));
+        //System.out.println("evars = " + Arrays.toString(evars));
+        //System.out.println("pvars = " + Arrays.toString(pvars));
 
         PolynomialList<BigRational> trinks = bbp.elimPartialGB(F.list, evars, pvars);
         assertTrue("isGB( GB(Trinks7) )", bbp.isGB(trinks.list) );
-        System.out.println("\nG = " + trinks);
+        //System.out.println("\nG = " + trinks);
     }
 
 
@@ -372,16 +373,16 @@ public class GroebnerBasePartTest extends TestCase {
         } catch (IOException e) {
             fail("" + e);
         }
-        System.out.println("F = " + F);
+        //System.out.println("F = " + F);
 
 	// String[] evars = new String[] { "c", "d", "e", "f", "a", "b"};
         String[] evars = new String[] { "a", "b"};
-        System.out.println("evars = " + Arrays.toString(evars));
+        //System.out.println("evars = " + Arrays.toString(evars));
 
         PolynomialList<BigRational> G = bbp.partialGB(F.list, evars);
         assertTrue("isGB( GB(G) )", bbp.isGB(G.list) );
-        System.out.println("evars = " + Arrays.toString(evars));
-        System.out.println("G = " + G);
+        //System.out.println("evars = " + Arrays.toString(evars));
+        //System.out.println("G = " + G);
     }
 
 
@@ -398,7 +399,7 @@ public class GroebnerBasePartTest extends TestCase {
         for ( int i = 0; i < vars.length; i++ ) {
             sv.add(vars[i]);
         }
-        System.out.println("sv    = " + sv);
+        //System.out.println("sv    = " + sv);
 
         String exam = "(a,b,c,d,e,f) G "
 	    + "( "
@@ -420,7 +421,7 @@ public class GroebnerBasePartTest extends TestCase {
         } catch (IOException e) {
             fail("" + e);
         }
-        System.out.println("F = " + F);
+        //System.out.println("F = " + F);
 
         for ( int i = 0; i <= vars.length; i++ ) {
             KsubSet<String> ps = new KsubSet<String>(sv, i);

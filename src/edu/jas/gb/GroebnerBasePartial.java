@@ -214,7 +214,7 @@ public class GroebnerBasePartial<C extends GcdRingElem<C>>
                 perm.add( i );
             }
         }
-        System.out.println("perm_all = " + perm);
+        //System.out.println("perm_all = " + perm);
 	// reverse permutation indices
         int n1 = aname.length - 1;
         List<Integer> perm1 = new ArrayList<Integer>( aname.length ); 
@@ -224,7 +224,7 @@ public class GroebnerBasePartial<C extends GcdRingElem<C>>
         perm = perm1;
         //System.out.println("perm_inv = " + perm1);
         Collections.reverse(perm);
-        System.out.println("perm_rev = " + perm);
+        //System.out.println("perm_rev = " + perm);
 	return perm;
     }
 
@@ -367,7 +367,7 @@ public class GroebnerBasePartial<C extends GcdRingElem<C>>
 	} else {
 	    uvars = pvars;
 	}
-        System.out.println("uvars = " + Arrays.toString(uvars));
+        //System.out.println("uvars = " + Arrays.toString(uvars));
         List<Integer> perm = partialPermutation(vars, evars, uvars);
         return perm;
     }
@@ -450,8 +450,8 @@ public class GroebnerBasePartial<C extends GcdRingElem<C>>
         GenPolynomialRing<C> cfac = new GenPolynomialRing<C>(fac.coFac, cl, fac.tord, rvars);
         //System.out.println("cfac = " + cfac);
 
-        GenPolynomialRing<GenPolynomial<C>> rfac = new GenPolynomialRing<GenPolynomial<C>>(cfac, pl,
-                fac.tord, pvars);
+        GenPolynomialRing<GenPolynomial<C>> rfac 
+            = new GenPolynomialRing<GenPolynomial<C>>(cfac, pl,fac.tord, pvars);
         if (logger.isInfoEnabled()) {
             logger.info("rfac = " + rfac);
         }
@@ -489,11 +489,11 @@ public class GroebnerBasePartial<C extends GcdRingElem<C>>
         String[] vars = fac.getVars();
         // compute permutation (in reverse sorting)
         String[] xvars = remainingVars(vars,pvars);
-        System.out.println("xvars = " + Arrays.toString(xvars));
+        //System.out.println("xvars = " + Arrays.toString(xvars));
 
         List<Integer> perm = partialPermutation(vars, pvars);
-        System.out.println("pGB, perm   = " + perm);
-        System.out.println("pGB, perm,1 = " + getPermutation(vars, xvars));
+        //System.out.println("pGB, perm   = " + perm);
+        //System.out.println("pGB, perm,1 = " + getPermutation(vars, xvars));
 
         GenPolynomialRing<C> pfac = TermOrderOptimization.<C> permutation(perm, fac);
         if (logger.isInfoEnabled()) {
@@ -567,7 +567,7 @@ public class GroebnerBasePartial<C extends GcdRingElem<C>>
         System.out.println("pfac = " + pfac);
 
         List<GenPolynomial<C>> ppolys = TermOrderOptimization.<C> permutation(perm, pfac, F);
-        System.out.println("ppolys = " + ppolys);
+        //System.out.println("ppolys = " + ppolys);
 
         int cl = fac.nvar - evars.length - pvars.length;
         int pl = pvars.length + pvars.length;
@@ -628,11 +628,11 @@ public class GroebnerBasePartial<C extends GcdRingElem<C>>
         GenPolynomialRing<C> fac = F.get(0).ring;
         String[] vars = fac.getVars();
         // compute permutation (in reverse sorting)
-        System.out.println("vars  = " + Arrays.toString(vars));
-        System.out.println("evars = " + Arrays.toString(evars));
-        System.out.println("pvars = " + Arrays.toString(pvars));
+        //System.out.println("vars  = " + Arrays.toString(vars));
+        //System.out.println("evars = " + Arrays.toString(evars));
+        //System.out.println("pvars = " + Arrays.toString(pvars));
         List<Integer> perm = partialPermutation(vars, evars, pvars, null);
-        System.out.println("perm = " + perm);
+        //System.out.println("perm = " + perm);
 
         GenPolynomialRing<C> pfac = TermOrderOptimization.<C> permutation(perm, fac);
         if (logger.isInfoEnabled()) {
@@ -641,14 +641,14 @@ public class GroebnerBasePartial<C extends GcdRingElem<C>>
         //System.out.println("pfac = " + pfac);
 
         List<GenPolynomial<C>> ppolys = TermOrderOptimization.<C> permutation(perm, pfac, F);
-        System.out.println("ppolys = " + ppolys);
+        //System.out.println("ppolys = " + ppolys);
 
         int cl = fac.nvar - evars.length - pvars.length;
         if ( cl == 0 ) { // non recursive case
             TermOrder to = pfac.tord;
             int ev = to.getEvord();
             TermOrder split = new TermOrder(ev,ev,pfac.nvar,evars.length);
-            System.out.println("split = " + split);
+            //System.out.println("split = " + split);
             pfac = new GenPolynomialRing<C>(pfac.coFac,pfac.nvar,split,pfac.getVars());
             List<GenPolynomial<C>> Fs = new ArrayList<GenPolynomial<C>>(ppolys.size());
             for ( GenPolynomial<C> p : ppolys ) {

@@ -663,21 +663,21 @@ public class Ideal<C extends GcdRingElem<C>>
      * @return ideal(this) in K[{vars \ ename},ename])
      */
     public Ideal<C> eliminate( String[] ename ) {
-        System.out.println("ename = " + Arrays.toString(ename));
+        //System.out.println("ename = " + Arrays.toString(ename));
         if ( ename == null ) { 
             throw new IllegalArgumentException("ename may not be null");
         }
         String[] aname = getRing().getVars();
-        System.out.println("aname = " + Arrays.toString(aname));
+        //System.out.println("aname = " + Arrays.toString(aname));
         if ( aname == null ) { 
             throw new IllegalArgumentException("aname may not be null");
         }
 
         GroebnerBasePartial<C> bbp = new GroebnerBasePartial<C>(bb, null);
         String[] rname = bbp.remainingVars(aname,ename);
-        System.out.println("rname = " + Arrays.toString(rname));
+        //System.out.println("rname = " + Arrays.toString(rname));
 
-        List<Integer> perm = getPermutation(aname,ename);
+//         List<Integer> perm = getPermutation(aname,ename);
 //         perm =new ArrayList<Integer>( aname.length ); 
 //         for ( int i = 0; i < ename.length; i++ ) {
 //             int j = indexOf(ename[i],aname);
@@ -703,41 +703,42 @@ public class Ideal<C extends GcdRingElem<C>>
 //         Collections.reverse(perm);
 //         System.out.println("perm_rev = " + perm);
 
-        GenPolynomialRing<C> E = TermOrderOptimization.<C>permutation( perm, getRing() );
-        System.out.println("E = " + E);
+//         GenPolynomialRing<C> E = TermOrderOptimization.<C>permutation( perm, getRing() );
+//         System.out.println("E = " + E);
 
-        if ( getRing().tord.getWeight() != null ) {
-            throw new IllegalArgumentException("weight term order not supported");
-        }
+//         if ( getRing().tord.getWeight() != null ) {
+//             throw new IllegalArgumentException("weight term order not supported");
+//         }
 
-        int ev = getRing().tord.getEvord();
-        TermOrder tord = new TermOrder(ev,ev,getRing().nvar,ename.length);
-        E = new GenPolynomialRing<C>(E.coFac,E.nvar,tord,E.getVars());
-        System.out.println("E = " + E);
+//         int ev = getRing().tord.getEvord();
+//         TermOrder tord = new TermOrder(ev,ev,getRing().nvar,ename.length);
+//         E = new GenPolynomialRing<C>(E.coFac,E.nvar,tord,E.getVars());
+//         System.out.println("E = " + E);
 
-        List<GenPolynomial<C>> ppolys = TermOrderOptimization.<C>permutation( perm, E, getList() );
-        System.out.println("ppolys = " + ppolys);
+//         List<GenPolynomial<C>> ppolys = TermOrderOptimization.<C>permutation( perm, E, getList() );
+//         System.out.println("ppolys = " + ppolys);
 
-        logger.warn("elimination computing GB");
+//         logger.warn("elimination computing GB");
 
-        List< GenPolynomial<C> > G = bb.GB( ppolys );
-        System.out.println("G = " + G);
+//         List< GenPolynomial<C> > G = bb.GB( ppolys );
+//         System.out.println("G = " + G);
 
         PolynomialList<C> Pl = bbp.elimPartialGB(getList(),rname,ename); // reversed!
-        System.out.println("Pl = " + Pl);
+        //System.out.println("Pl = " + Pl);
 
-	if ( ! G.equals(Pl.list) ) {
-             System.out.println("===========================================");
-             System.out.println("G = " + G);
-             System.out.println("Pl = " + Pl);
-             System.out.println("===========================================");
-	}
+// 	if ( ! G.equals(Pl.list) ) {
+//              System.out.println("===========================================");
+//              System.out.println("G = " + G);
+//              System.out.println("Pl = " + Pl);
+//              System.out.println("===========================================");
+// 	}
 
         if ( false && debug ) {
-            logger.debug("elimnation GB = " + G);
+            logger.debug("elimnation GB = " + Pl);
         }
         //Ideal<C> I = new Ideal<C>( G, true );
-        Ideal<C> I = new Ideal<C>( E, G, true );
+        //Ideal<C> I = new Ideal<C>( E, G, true );
+        Ideal<C> I = new Ideal<C>( Pl, true );
         //System.out.println("elim, I = " + I);
         return I; //.intersect(R);
     }
@@ -748,6 +749,7 @@ public class Ideal<C extends GcdRingElem<C>>
      * @param aname variables for the full polynomial ring.
      * @param ename variables for the elimination ring, subseteq aname.
      * @return perm({vars \ ename},ename)
+     * @deprecated
      */
     public List<Integer> getPermutation(String[] aname, String[] ename) {
         if ( aname == null || ename == null ) { 
@@ -769,7 +771,7 @@ public class Ideal<C extends GcdRingElem<C>>
                 perm.add( i );
             }
         }
-        System.out.println("perm_all = " + perm);
+        //System.out.println("perm_all = " + perm);
 	// reverse permutation indices
         int n1 = aname.length - 1;
         List<Integer> perm1 = new ArrayList<Integer>( aname.length ); 
@@ -779,7 +781,7 @@ public class Ideal<C extends GcdRingElem<C>>
         perm = perm1;
         //System.out.println("perm_inv = " + perm1);
         Collections.reverse(perm);
-        System.out.println("perm_rev = " + perm);
+        //System.out.println("perm_rev = " + perm);
 	return perm;
     }
 
@@ -789,6 +791,7 @@ public class Ideal<C extends GcdRingElem<C>>
      * @param s search string
      * @param A string array
      * @return i if s == A[i] for some i, else -1.
+     * @deprecated
      */
     public int indexOf(String s, String[] A) {
         for ( int i = 0; i < A.length; i++ ) {
