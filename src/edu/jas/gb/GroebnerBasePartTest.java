@@ -147,7 +147,6 @@ public class GroebnerBasePartTest extends TestCase {
                 + "( B**2 + 33/50 B + 2673/10000 ) "
                 + ") ";
 
-
         Reader source = new StringReader(exam);
         GenPolynomialTokenizer parser = new GenPolynomialTokenizer(source);
         try {
@@ -188,7 +187,6 @@ public class GroebnerBasePartTest extends TestCase {
                 + "( P W + 2 T Z - 11 B**3 ), " + "( 99 W - 11 B S + 3 B**2 ) "
                 + "( B**2 + 33/50 B + 2673/10000 ) "
                 + ") ";
-
 
         Reader source = new StringReader(exam);
         GenPolynomialTokenizer parser = new GenPolynomialTokenizer(source);
@@ -281,7 +279,6 @@ public class GroebnerBasePartTest extends TestCase {
                 + "( B**2 + 33/50 B + 2673/10000 ) "
                 + ") ";
 
-
         Reader source = new StringReader(exam);
         GenPolynomialTokenizer parser = new GenPolynomialTokenizer(source);
         try {
@@ -320,7 +317,6 @@ public class GroebnerBasePartTest extends TestCase {
                 + "( e^5 ), " 
                 + "( f^6 ) "
                 + ") ";
-
 
         Reader source = new StringReader(exam);
         GenPolynomialTokenizer parser = new GenPolynomialTokenizer(source);
