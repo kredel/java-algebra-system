@@ -39,7 +39,7 @@ public class IdealTest extends TestCase {
      * main
      */
     public static void main (String[] args) {
-        //BasicConfigurator.configure();
+        BasicConfigurator.configure();
         junit.textui.TestRunner.run( suite() );
     }
 
@@ -84,7 +84,8 @@ public class IdealTest extends TestCase {
     protected void setUp() {
         BigRational coeff = new BigRational(17,1);
         to = new TermOrder( /*TermOrder.INVLEX*/ );
-        fac = new GenPolynomialRing<BigRational>(coeff,rl,to);
+        String[] vars = new String[] { "x", "y", "z" };
+        fac = new GenPolynomialRing<BigRational>(coeff,rl,to,vars);
         bb = new GroebnerBaseSeq<BigRational>();
         a = b = c = d = e = null;
     }
