@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.ArrayList;
 
 //import edu.jas.util.StringUtil;
+import edu.jas.structure.Power;
 
 
 /**
@@ -25,18 +26,18 @@ public final class PrimeList implements Iterable<java.math.BigInteger> {
 
 
     /** Range of probable primes. 
-      */
-    public static enum Range { small, medium, large };
+     */
+    public static enum Range { small, medium, large, mersenne };
 
 
     /** The list of probable primes in requested range. 
-      */
+     */
     protected final List<java.math.BigInteger> val
-              = new ArrayList<java.math.BigInteger>(50);
+	= new ArrayList<java.math.BigInteger>(50);
 
 
     /** The last prime in the list.
-      */
+     */
     protected java.math.BigInteger last;
 
 
@@ -64,6 +65,8 @@ public final class PrimeList implements Iterable<java.math.BigInteger> {
         case medium: addMedium();
             break;
         case large: addLarge();
+            break;
+        case mersenne: addMersenne();
             break;
         }
         last = get( size()-1 );
@@ -120,17 +123,6 @@ public final class PrimeList implements Iterable<java.math.BigInteger> {
      * Add large sized primes.
      */
     private void addLarge() {
-        // 2^60-x
-        val.add( getLongPrime(60,93) );
-        val.add( getLongPrime(60,107) );
-        val.add( getLongPrime(60,173) );
-        val.add( getLongPrime(60,179) );
-        val.add( getLongPrime(60,257) );
-        val.add( getLongPrime(60,279) );
-        val.add( getLongPrime(60,369) );
-        val.add( getLongPrime(60,395) );
-        val.add( getLongPrime(60,399) );
-        val.add( getLongPrime(60,453) );
         // 2^59-x
         val.add( getLongPrime(59,55) );
         val.add( getLongPrime(59,99) );
@@ -142,6 +134,17 @@ public final class PrimeList implements Iterable<java.math.BigInteger> {
         val.add( getLongPrime(59,687) );
         val.add( getLongPrime(59,861) );
         val.add( getLongPrime(59,871) );
+        // 2^60-x
+        val.add( getLongPrime(60,93) );
+        val.add( getLongPrime(60,107) );
+        val.add( getLongPrime(60,173) );
+        val.add( getLongPrime(60,179) );
+        val.add( getLongPrime(60,257) );
+        val.add( getLongPrime(60,279) );
+        val.add( getLongPrime(60,369) );
+        val.add( getLongPrime(60,395) );
+        val.add( getLongPrime(60,399) );
+        val.add( getLongPrime(60,453) );
         // 2^63-x
         val.add( getLongPrime(63,25) );
         val.add( getLongPrime(63,165) );
@@ -157,18 +160,66 @@ public final class PrimeList implements Iterable<java.math.BigInteger> {
 
 
     /**
+     * Add Mersenne sized primes.
+     */
+    private void addMersenne() {
+        // 2^n-1
+        val.add( getMersennePrime(2) );
+        val.add( getMersennePrime(3) );
+        val.add( getMersennePrime(5) );
+        val.add( getMersennePrime(7) );
+        val.add( getMersennePrime(13) );
+        val.add( getMersennePrime(17) );
+        val.add( getMersennePrime(19) );
+        val.add( getMersennePrime(31) );
+        val.add( getMersennePrime(61) );
+        val.add( getMersennePrime(89) );
+        val.add( getMersennePrime(107) );
+        val.add( getMersennePrime(127) );
+        val.add( getMersennePrime(521) );
+        val.add( getMersennePrime(607) );
+        val.add( getMersennePrime(1279) );
+        val.add( getMersennePrime(2203) );
+        val.add( getMersennePrime(2281) );
+        val.add( getMersennePrime(3217) );
+        val.add( getMersennePrime(4253) );
+        val.add( getMersennePrime(4423) );
+        val.add( getMersennePrime(9689) );
+        val.add( getMersennePrime(9941) );
+        val.add( getMersennePrime(11213) );
+        val.add( getMersennePrime(19937) );
+    }
+
+
+    /**
      * Method to compute a prime as 2**n - m.
      * @param n power for 2.
      * @param m for 2**n - m.
+     * @return 2**n - m
      */
     protected static java.math.BigInteger getLongPrime(int n, int m) {
-       long prime = 2; // knuth (2,390)
-       for ( int i = 1; i < n; i++ ) {
-           prime *= 2;
-       }
-       prime -= m;
-       //System.out.println("p1 = " + prime);
-       return new java.math.BigInteger(""+prime);
+	long prime = 2; // knuth (2,390)
+	for ( int i = 1; i < n; i++ ) {
+	    prime *= 2;
+	}
+	prime -= m;
+	//System.out.println("p1 = " + prime);
+	return new java.math.BigInteger(""+prime);
+    }
+
+
+    /**
+     * Method to compute a Mersenne prime as 2**n - 1.
+     * @param n power for 2.
+     * @return 2**n - 1
+     */
+    protected static java.math.BigInteger getMersennePrime(int n) {
+	BigInteger t = new BigInteger(2);
+	BigInteger p = Power.positivePower(t,n);
+	p = p.subtract(new BigInteger(1));
+	java.math.BigInteger prime = p.getVal();
+	//System.out.println("p1 = " + prime);
+	return prime;
     }
 
 
@@ -176,12 +227,24 @@ public final class PrimeList implements Iterable<java.math.BigInteger> {
      * Check if the list contains really prime numbers.
      */
     protected boolean checkPrimes() {
+        return checkPrimes( size() );
+    }
+
+
+    /**
+     * Check if the list contains really prime numbers.
+     */
+    protected boolean checkPrimes(int n) {
         boolean isPrime;
+        int i = 0;
         for ( java.math.BigInteger p : val ) {
+            if ( i++ >= n ) {
+                break;
+            }
             isPrime = p.isProbablePrime(63);
             if ( !isPrime ) {
-               System.out.println("not prime = " + p);
-               return false;
+                System.out.println("not prime = " + p);
+                return false;
             }
         }
         return true;
@@ -192,7 +255,7 @@ public final class PrimeList implements Iterable<java.math.BigInteger> {
      * toString.
      */
     @Override
-     public String toString() {
+    public String toString() {
         return val.toString();
     }
 

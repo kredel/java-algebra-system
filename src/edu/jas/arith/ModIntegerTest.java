@@ -322,4 +322,31 @@ public class ModIntegerTest extends TestCase {
      assertTrue("all primes ", primes.checkPrimes() );
    }
 
+
+/**
+ * Test Mersenne prime list.
+ * 
+ */
+ public void testMersennePrime() {
+     PrimeList primes = new PrimeList(PrimeList.Range.mersenne);
+     //System.out.println("primes = " + primes);
+
+     //assertTrue("all primes ", primes.checkPrimes() );
+
+     int i = 1;
+     //System.out.println("primes = ");
+     for ( java.math.BigInteger p : primes ) {
+         //System.out.println(i + " = " + p);
+         if ( i++ > 23 ) {
+            break;
+         }
+         //System.out.print(", ");
+     }
+     //System.out.println();
+
+     //System.out.println("primes = " + primes);
+
+     assertTrue("all primes ", primes.checkPrimes(15) );
+   }
+
 }
