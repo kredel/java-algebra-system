@@ -14,11 +14,14 @@ import org.apache.log4j.Logger;
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
+import edu.jas.arith.Rational;
+import edu.jas.arith.BigDecimal;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
 import edu.jas.arith.BigComplex;
 import edu.jas.arith.Modular;
 
+import edu.jas.structure.Element;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
@@ -351,6 +354,20 @@ public class PolyUtil {
                                  List<GenPolynomial<BigInteger>> L ) {
         return ListUtil.<GenPolynomial<BigInteger>,GenPolynomial<C>>map( L, 
                                                    new FromIntegerPoly<C>(fac) );
+    }
+
+
+    /**
+     * Convert to decimal coefficients.
+     * @param fac result polynomial factory.
+     * @param A polynomial with Rational coefficients to be converted.
+     * @return polynomial with BigDecimal coefficients.
+     */
+    public static <C extends RingElem<C> & Rational> 
+        GenPolynomial<BigDecimal> 
+        decimalFromRational( GenPolynomialRing<BigDecimal> fac,
+                             GenPolynomial<C> A ) {
+        return PolyUtil.<C,BigDecimal>map(fac,A, new RatToDec<C>() );
     }
 
 
@@ -1888,6 +1905,21 @@ class RatToIntFactor implements UnaryFunctor<BigRational, BigInteger> {
                 java.math.BigInteger b = lcm.divide(c.denominator());
                 return new BigInteger(a.multiply(b));
             }
+        }
+    }
+}
+
+
+/**
+ * Conversion of Rational to BigDecimal.
+ * result = decimal(r).
+ */
+class RatToDec<C extends Element<C> & Rational> implements UnaryFunctor<C,BigDecimal> {
+    public BigDecimal eval(C c) {
+        if ( c == null ) {
+            return new BigDecimal();
+        } else {
+            return new BigDecimal(c.getRational());
         }
     }
 }
