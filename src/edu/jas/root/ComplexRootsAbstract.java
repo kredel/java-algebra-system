@@ -359,8 +359,8 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
 
         BigDecimal e = new BigDecimal(eps.getRational());
         Complex<BigDecimal> q = new Complex<BigDecimal>(cr, new BigDecimal("0.25") );
-        System.out.println("sw = " + sw);
-        System.out.println("ne = " + ne);
+        System.out.println("ll = " + ll);
+        System.out.println("ur = " + ur);
         e = e.multiply(d.norm().getRe()); // relative error
         System.out.println("e  = " + e);
         System.out.println("q  = " + q);
@@ -373,7 +373,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
 
         // Newton Raphson iteration: x_{n+1} = x_n - f(x_n)/f'(x_n)
         int i = 0;
-        while ( i++ <100 ) {
+        while ( i++ < 50 ) {
             Complex<BigDecimal> fx  = PolyUtil.<Complex<BigDecimal>> evaluateMain(cr, df, d); // f(d)
             if ( fx.isZERO() ) {
                 return d;
@@ -388,17 +388,20 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
             if ( d.subtract(dx).norm().getRe().compareTo(e) <= 0 ) {
                 return dx;
             }
-//             while ( dx.compareTo(left) < 0 || dx.compareTo(right) > 0 ) { // dx < left: dx - left < 0
-//                                                                           // dx > right: dx - right > 0
-//                 //System.out.println("trying to leave interval");
-//                 if ( i++ > 50 ) { // dx > right: dx - right > 0
-//                     throw new NoConvergenceException("no convergence after " + i + " steps");
-//                 }
-//                 x = x.multiply(q); // x * 1/4
-//                 dx = d.subtract(x);
-//                 //System.out.println(" x = " + x);
-//                 //System.out.println("dx = " + dx);
-//             }
+            while ( dx.getRe().compareTo(ll.getRe()) < 0 ||
+                    dx.getIm().compareTo(ll.getIm()) < 0 || 
+                    dx.getRe().compareTo(ur.getRe()) > 0 || 
+                    dx.getIm().compareTo(ur.getIm()) > 0 ) { // dx < ll: dx - ll < 0
+                                                             // dx > ur: dx - ur > 0
+                System.out.println("trying to leave interval");
+                if ( i++ > 50 ) { // dx > right: dx - right > 0
+                    throw new NoConvergenceException("no convergence after " + i + " steps");
+                }
+                x = x.multiply(q); // x * 1/4
+                dx = d.subtract(x);
+                //System.out.println(" x = " + x);
+                System.out.println("dx = " + dx);
+            }
             d = dx;
         }
         throw new NoConvergenceException("no convergence after " + i + " steps");
