@@ -401,7 +401,7 @@ public abstract class RealRootAbstract<C extends RingElem<C>& Rational> implemen
 
 
     /**
-     * Approximate root.
+     * Approximate real root.
      * @param iv root isolating interval with f(left) * f(right) &lt; 0.
      * @param f univariate polynomial, non-zero.
      * @param eps requested interval length.

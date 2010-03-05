@@ -489,4 +489,40 @@ public class ComplexRootTest extends TestCase {
         } catch (InvalidBoundaryException e) {
         }
     }
+
+
+    /**
+     * Test complex root approximation.
+     * 
+     */
+    public void testComplexRootApproximation() {
+        ComplexRootsAbstract<BigRational> cr = new ComplexRootsSturm<BigRational>(cfac);
+
+        //a = dfac.random(kl, ll, el-1, q);
+        //a = dfac.parse("( (x-1)*(x-2)*(x-3) )");
+        //a = dfac.parse("( x^4-2 )");
+        a = dfac.parse("( (x - { 0i1 })*(x-1) )");
+        //System.out.println("a = " + a);
+
+        eps = eps.multiply(new BigRational(1000000));
+        System.out.println("eps = " + eps);
+        BigDecimal eps1 = new BigDecimal(eps);
+        BigDecimal eps2 = eps1.multiply(new BigDecimal("10"));
+        System.out.println("eps1 = " + eps1);
+        System.out.println("eps2 = " + eps2);
+
+        List<Rectangle<BigRational>> roots = cr.complexRoots(a);
+        System.out.println("a = " + a);
+        System.out.println("roots = " + roots);
+        assertTrue("#roots == deg(a) ", roots.size() == a.degree(0));
+
+        for (Rectangle<BigRational> root : roots) {
+            try {
+                Complex<BigDecimal> cd = cr.approximateRoot(root, a, eps);
+                System.out.println("cd = " + cd);
+            } catch (NoConvergenceException e) {
+                fail("" + e);
+            }
+        }
+    }
 }

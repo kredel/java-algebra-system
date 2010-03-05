@@ -372,6 +372,20 @@ public class PolyUtil {
 
 
     /**
+     * Convert to complex decimal coefficients.
+     * @param fac result polynomial factory.
+     * @param A polynomial with complex Rational coefficients to be converted.
+     * @return polynomial with Complex BigDecimal coefficients.
+     */
+    public static <C extends RingElem<C> & Rational> 
+        GenPolynomial<Complex<BigDecimal>> 
+        complexDecimalFromRational( GenPolynomialRing<Complex<BigDecimal>> fac,
+                                    GenPolynomial<Complex<C>> A ) {
+        return PolyUtil.<Complex<C>,Complex<BigDecimal>>map(fac,A, new CompRatToDec<C>(fac.coFac) );
+    }
+
+
+    /**
      * Real part. 
      * @param fac result polynomial factory.
      * @param A polynomial with BigComplex coefficients to be converted.
@@ -1920,6 +1934,27 @@ class RatToDec<C extends Element<C> & Rational> implements UnaryFunctor<C,BigDec
             return new BigDecimal();
         } else {
             return new BigDecimal(c.getRational());
+        }
+    }
+}
+
+
+/**
+ * Conversion of Complex Rational to Complex BigDecimal.
+ * result = decimal(r).
+ */
+class CompRatToDec<C extends RingElem<C> & Rational> implements UnaryFunctor<Complex<C>,Complex<BigDecimal>> {
+    ComplexRing<BigDecimal> ring;
+    public CompRatToDec(RingFactory<Complex<BigDecimal>> ring) {
+        this.ring = (ComplexRing<BigDecimal>) ring;
+    }
+    public Complex<BigDecimal> eval(Complex<C> c) {
+        if ( c == null ) {
+            return ring.getZERO();
+        } else {
+            BigDecimal r = new BigDecimal( c.getRe().getRational() );
+            BigDecimal i = new BigDecimal( c.getIm().getRational() );
+            return new Complex<BigDecimal>(ring,r,i);
         }
     }
 }

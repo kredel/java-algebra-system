@@ -16,6 +16,8 @@ import edu.jas.arith.BigDecimal;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.Rational;
 import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.GenPolynomialRing;
+import edu.jas.poly.PolyUtil;
 import edu.jas.structure.Complex;
 import edu.jas.structure.ComplexRing;
 import edu.jas.structure.RingElem;
@@ -324,6 +326,83 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
         return rd.toString() + " i " + id.toString();
     }
 
+
+    /**
+     * Approximate complex root.
+     * @param rt root isolating rectangle with f(left) * f(right) &lt; 0.
+     * @param f univariate polynomial, non-zero.
+     * @param eps requested interval length.
+     * @return a decimal approximation d such that |d-v| &lt; eps.
+     */
+    public Complex<BigDecimal> approximateRoot(Rectangle<C> rt, GenPolynomial<Complex<C>> f, C eps) 
+                               throws NoConvergenceException {
+        if (rt == null ) {
+            throw new IllegalArgumentException("null interval not allowed");
+	}
+        Complex<BigDecimal> d = rt.getDecimalCenter();
+        System.out.println("d  = " + d);
+        if (f == null || f.isZERO() || f.isConstant() || eps == null) {
+            return d;
+        }
+        if (rt.length().compareTo(eps) < 0) {
+            return d;
+        }
+        ComplexRing<BigDecimal> cr = d.ring;
+        Complex<C> sw = rt.getSW();
+        BigDecimal swr = new BigDecimal(sw.getRe().getRational());
+	BigDecimal swi = new BigDecimal(sw.getIm().getRational());
+        Complex<BigDecimal> ll = new Complex<BigDecimal>(cr, swr, swi );
+        Complex<C> ne = rt.getNE();
+        BigDecimal ner = new BigDecimal(ne.getRe().getRational());
+	BigDecimal nei = new BigDecimal(ne.getIm().getRational());
+	Complex<BigDecimal> ur = new Complex<BigDecimal>(cr, ner, nei );
+
+        BigDecimal e = new BigDecimal(eps.getRational());
+        Complex<BigDecimal> q = new Complex<BigDecimal>(cr, new BigDecimal("0.25") );
+        System.out.println("sw = " + sw);
+        System.out.println("ne = " + ne);
+        e = e.multiply(d.norm().getRe()); // relative error
+        System.out.println("e  = " + e);
+        System.out.println("q  = " + q);
+
+ 	// polynomials with decimal coefficients
+        GenPolynomialRing<Complex<BigDecimal>> dfac = new GenPolynomialRing<Complex<BigDecimal>>(cr,f.ring);
+        GenPolynomial<Complex<BigDecimal>> df = PolyUtil.<C> complexDecimalFromRational(dfac,f);
+        GenPolynomial<Complex<C>> fp = PolyUtil.<Complex<C>> baseDeriviative(f);
+        GenPolynomial<Complex<BigDecimal>> dfp = PolyUtil.<C> complexDecimalFromRational(dfac,fp);
+
+        // Newton Raphson iteration: x_{n+1} = x_n - f(x_n)/f'(x_n)
+        int i = 0;
+        while ( i++ <100 ) {
+            Complex<BigDecimal> fx  = PolyUtil.<Complex<BigDecimal>> evaluateMain(cr, df, d); // f(d)
+            if ( fx.isZERO() ) {
+                return d;
+            }
+            Complex<BigDecimal> fpx = PolyUtil.<Complex<BigDecimal>> evaluateMain(cr, dfp, d); // f'(d)
+            if ( fpx.isZERO() ) {
+                throw new NoConvergenceException("zero deriviative should not happen");
+            }
+            Complex<BigDecimal> x = fx.divide(fpx);
+            Complex<BigDecimal> dx = d.subtract( x );
+            System.out.println("dx = " + dx);
+            if ( d.subtract(dx).norm().getRe().compareTo(e) <= 0 ) {
+                return dx;
+            }
+//             while ( dx.compareTo(left) < 0 || dx.compareTo(right) > 0 ) { // dx < left: dx - left < 0
+//                                                                           // dx > right: dx - right > 0
+//                 //System.out.println("trying to leave interval");
+//                 if ( i++ > 50 ) { // dx > right: dx - right > 0
+//                     throw new NoConvergenceException("no convergence after " + i + " steps");
+//                 }
+//                 x = x.multiply(q); // x * 1/4
+//                 dx = d.subtract(x);
+//                 //System.out.println(" x = " + x);
+//                 //System.out.println("dx = " + dx);
+//             }
+            d = dx;
+        }
+        throw new NoConvergenceException("no convergence after " + i + " steps");
+    }
 
 //     /*
 //      * Distance.
