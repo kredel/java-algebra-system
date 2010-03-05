@@ -359,26 +359,34 @@ public class RealRootTest extends TestCase {
             b = e.subtract(c);
             a = a.multiply(b);
         }
-        System.out.println("a = " + a);
+        //System.out.println("a = " + a);
 
         RealRootAbstract<BigRational> rr = new RealRootsSturm<BigRational>();
 
         List<Interval<BigRational>> R = rr.realRoots(a);
-        System.out.println("R = " + R);
+        //System.out.println("R = " + R);
 
         assertTrue("#roots = " + N + " ", R.size() == N);
 
-	eps = eps.multiply(new BigRational(10000));
-        System.out.println("eps = " + eps);
+        eps = eps.multiply(new BigRational(10000));
+        //System.out.println("eps = " + eps);
         BigDecimal eps1 = new BigDecimal(eps);
-        System.out.println("eps1 = " + eps1);
+        BigDecimal eps2 = eps1.multiply(new BigDecimal("100"));
+        //System.out.println("eps1 = " + eps1);
+        //System.out.println("eps2 = " + eps2);
 
-        int i = 0;
-        for (Interval<BigRational> v : R) {
-            System.out.println("v = " + v);
-            BigDecimal dd = rr.approximateRoot(v,a,eps);
-            System.out.println("dd = " + dd);
-            //assertTrue("|dd - di| < eps ", dd.compareTo(di) == 0);
+        try {
+            int i = 0;
+            for (Interval<BigRational> v : R) {
+                //System.out.println("v = " + v);
+                BigDecimal dd = rr.approximateRoot(v,a,eps);
+                BigDecimal di = Rn.get(i++).toDecimal();
+                //System.out.println("di = " + di);
+                //System.out.println("dd = " + dd);
+                assertTrue("|dd - di| < eps ", dd.subtract(di).abs().compareTo(eps2) <= 0);
+            }
+        } catch (NoConvergenceException e) {
+            fail(e.toString());
         }
     }
 
@@ -411,21 +419,29 @@ public class RealRootTest extends TestCase {
         RealRootAbstract<BigRational> rr = new RealRootsSturm<BigRational>();
 
         List<Interval<BigRational>> R = rr.realRoots(a);
-        System.out.println("R = " + R);
+        //System.out.println("R = " + R);
 
         assertTrue("#roots = " + (N - 1) + " ", R.size() == (N - 1));
 
-	eps = eps.multiply(new BigRational(1000000));
-        System.out.println("eps = " + eps);
+        eps = eps.multiply(new BigRational(1000000));
+        //System.out.println("eps = " + eps);
         BigDecimal eps1 = new BigDecimal(eps);
-        System.out.println("eps1 = " + eps1);
+        BigDecimal eps2 = eps1.multiply(new BigDecimal("10"));
+        //System.out.println("eps1 = " + eps1);
+        //System.out.println("eps2 = " + eps2);
 
-        int i = 0;
-        for (Interval<BigRational> v : R) {
-            System.out.println("v = " + v);
-            BigDecimal dd = rr.approximateRoot(v,a,eps);
-            System.out.println("dd = " + dd);
-            //assertTrue("|dd - di| < eps ", dd.compareTo(di) == 0);
+        try {
+            int i = 0;
+            for (Interval<BigRational> v : R) {
+                //System.out.println("v = " + v);
+                BigDecimal dd = rr.approximateRoot(v,a,eps);
+                BigDecimal di = Rn.get(i++).toDecimal();
+                //System.out.println("di = " + di);
+                //System.out.println("dd = " + dd);
+                assertTrue("|dd - di| < eps ", dd.subtract(di).abs().compareTo(eps2) <= 0);
+            }
+        } catch (NoConvergenceException e) {
+            fail(e.toString());
         }
     }
 

@@ -407,58 +407,66 @@ public abstract class RealRootAbstract<C extends RingElem<C>& Rational> implemen
      * @param eps requested interval length.
      * @return a decimal approximation d such that |d-v| &lt; eps.
      */
-    public BigDecimal approximateRoot(Interval<C> iv, GenPolynomial<C> f, C eps) {
-	BigDecimal d = iv.toDecimal();
+    public BigDecimal approximateRoot(Interval<C> iv, GenPolynomial<C> f, C eps) 
+                      throws NoConvergenceException {
+        if (iv == null ) {
+            throw new IllegalArgumentException("null interval not allowed");
+	}
+        BigDecimal d = iv.toDecimal();
+        //System.out.println("d = " + d);
         if (f == null || f.isZERO() || f.isConstant() || eps == null) {
             return d;
         }
         if (iv.length().compareTo(eps) < 0) {
             return d;
         }
-	BigRational l = iv.left.getRational();
-	BigRational r = iv.right.getRational();
-	BigRational e = eps.getRational();
-	BigDecimal left = new BigDecimal(l);
-	BigDecimal right = new BigDecimal(r);
-	BigDecimal ee = new BigDecimal(e);
-        System.out.println("left  = " + left);
-        System.out.println("right = " + right);
-        ee = ee.multiply(d); // relative error
-        System.out.println("ee    = " + ee);
+        BigDecimal left = new BigDecimal(iv.left.getRational());
+        BigDecimal right = new BigDecimal(iv.right.getRational());
+        BigDecimal e = new BigDecimal(eps.getRational());
+        BigDecimal q = new BigDecimal("0.25");
+        //System.out.println("left  = " + left);
+        //System.out.println("right = " + right);
+        e = e.multiply(d); // relative error
+        //System.out.println("e     = " + e);
+        //System.out.println("q     = " + q);
+        BigDecimal dc = BigDecimal.ONE;
+	// polynomials with decimal coefficients
+        GenPolynomialRing<BigDecimal> dfac = new GenPolynomialRing<BigDecimal>(dc,f.ring);
+        GenPolynomial<BigDecimal> df = PolyUtil.<C> decimalFromRational(dfac,f);
+        GenPolynomial<C> fp = PolyUtil.<C> baseDeriviative(f);
+        GenPolynomial<BigDecimal> dfp = PolyUtil.<C> decimalFromRational(dfac,fp);
 
-	GenPolynomialRing<C> rfac = f.ring;
-	BigDecimal dc = BigDecimal.ONE;
-	GenPolynomialRing<BigDecimal> dfac = new GenPolynomialRing<BigDecimal>(dc,rfac);
-	GenPolynomial<BigDecimal> df = PolyUtil.<C> decimalFromRational(dfac,f);
-
-	GenPolynomial<C> fp = PolyUtil.<C> baseDeriviative(f);
-	GenPolynomial<BigDecimal> dfp = PolyUtil.<C> decimalFromRational(dfac,fp);
-
-	// Newton Raphson iteration: x_{n+1} = x_n - f(x_n)/f'(x_n)
-	int i = 0;
-        System.out.println("d = " + d);
-        while ( i++ <100 ) {
-	    BigDecimal fx  = PolyUtil.<BigDecimal> evaluateMain(dc, df, d); 
-	    BigDecimal fpx = PolyUtil.<BigDecimal> evaluateMain(dc, dfp, d); 
-	    if ( fpx.isZERO() ) {
-		throw new RuntimeException("zero deriviative should not happen");
-	    }
-	    BigDecimal dx = d.subtract( fx.divide(fpx) );
-            System.out.println("dx = " + dx);
-	    if ( d.subtract(dx).abs().compareTo(ee) <= 0 ) {
-		return dx;
-	    }
-	    if ( dx.compareTo(left) < 0 ) { // dx < left: dx - left < 0
-		//throw new RuntimeException("leaving interval to left " + dx + " < " +left);
-		System.out.println("leaving interval to left " + dx + " < " +left);
-	    }
-	    if ( dx.compareTo(right) > 0 ) { // dx > right: dx - right > 0
-		//throw new RuntimeException("leaving interval to right " + dx + " > " + right);
-		System.out.println("leaving interval to right " + dx + " > " + right);
-	    }
-	    d = dx;
+        // Newton Raphson iteration: x_{n+1} = x_n - f(x_n)/f'(x_n)
+        int i = 0;
+        while ( i++ <50 ) {
+            BigDecimal fx  = PolyUtil.<BigDecimal> evaluateMain(dc, df, d); // f(d)
+            if ( fx.isZERO() ) {
+                return d;
+            }
+            BigDecimal fpx = PolyUtil.<BigDecimal> evaluateMain(dc, dfp, d); // f'(d)
+            if ( fpx.isZERO() ) {
+                throw new NoConvergenceException("zero deriviative should not happen");
+            }
+            BigDecimal x = fx.divide(fpx);
+            BigDecimal dx = d.subtract( x );
+            //System.out.println("dx = " + dx);
+            if ( d.subtract(dx).abs().compareTo(e) <= 0 ) {
+                return dx;
+            }
+            while ( dx.compareTo(left) < 0 || dx.compareTo(right) > 0 ) { // dx < left: dx - left < 0
+                                                                          // dx > right: dx - right > 0
+                //System.out.println("trying to leave interval");
+                if ( i++ > 50 ) { // dx > right: dx - right > 0
+                    throw new NoConvergenceException("no convergence after " + i + " steps");
+                }
+                x = x.multiply(q); // x * 1/4
+                dx = d.subtract(x);
+                //System.out.println(" x = " + x);
+                //System.out.println("dx = " + dx);
+            }
+            d = dx;
         }
-	throw new RuntimeException("no convergence");
+        throw new NoConvergenceException("no convergence after " + i + " steps");
     }
 
 }
