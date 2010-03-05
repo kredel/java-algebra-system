@@ -118,7 +118,7 @@ public class TaggedSocketChannel extends Thread {
                 tq = queues.get(tag);
                 if (tq == null) {
                     if ( ! isRunning ) { // avoid dead-lock
-                        throw new IOException("receiver not running");
+                        throw new IOException("receiver not running for " + this);
                     }
                     //tq = new LinkedBlockingQueue();
                     //queues.put(tag, tq);
