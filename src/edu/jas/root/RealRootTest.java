@@ -477,7 +477,7 @@ public class RealRootTest extends TestCase {
         List<BigDecimal> R = null;
         try {
             R = rr.approximateRoots(a,eps);
-            System.out.println("R = " + R);
+            //System.out.println("R = " + R);
             assertTrue("#roots = " + N + " ", R.size() == N);
         } catch (NoConvergenceException e) {
             fail(e.toString());
@@ -485,7 +485,7 @@ public class RealRootTest extends TestCase {
 
         int i = 0;
         for (BigDecimal dd : R) {
-            System.out.println("dd = " + dd);
+            //System.out.println("dd = " + dd);
             BigDecimal di = Rn.get(i++).toDecimal();
             //System.out.println("di = " + di);
             assertTrue("|dd - di| < eps ", dd.subtract(di).abs().compareTo(eps2) <= 0);
@@ -531,7 +531,7 @@ public class RealRootTest extends TestCase {
         List<BigDecimal> R = null;
         try {
              R = rr.approximateRoots(a,eps);
-             System.out.println("R = " + R);
+             //System.out.println("R = " + R);
              assertTrue("#roots = " + (N - 1) + " ", R.size() == (N - 1));
         } catch (NoConvergenceException e) {
             fail(e.toString());
@@ -539,7 +539,7 @@ public class RealRootTest extends TestCase {
 
         int i = 0;
         for (BigDecimal dd : R) {
-            System.out.println("dd = " + dd);
+            //System.out.println("dd = " + dd);
             BigDecimal di = Rn.get(i++).toDecimal();
             //System.out.println("di = " + di);
             assertTrue("|dd - di| < eps ", dd.subtract(di).abs().compareTo(eps2) <= 0);

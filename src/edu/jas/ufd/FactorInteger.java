@@ -271,7 +271,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                     mlist = PolyUtil.<MOD> monic(mlist);
                     factors = searchFactorsMonic(P, M, mlist, AD); // does now work in all cases
                     t = System.currentTimeMillis() - t;
-                    System.out.println("monic time = " + t);
+                    //System.out.println("monic time = " + t);
                     if ( false && debug ) {
                         t = System.currentTimeMillis();
                         List<GenPolynomial<BigInteger>> fnm = searchFactorsNonMonic(P, M, mlist, AD);
@@ -288,13 +288,13 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                     t = System.currentTimeMillis();
                     factors = searchFactorsNonMonic(P, M, mlist, AD);
                     t = System.currentTimeMillis() - t;
-                    System.out.println("only non monic time = " + t);
+                    //System.out.println("only non monic time = " + t);
                 }
             } else {
                 long t = System.currentTimeMillis();
                 factors = searchFactorsNonMonic(P, M, mlist, AD);
                 t = System.currentTimeMillis() - t;
-                System.out.println("non monic time = " + t);
+                //System.out.println("non monic time = " + t);
               }
             return factors;
         }
@@ -366,7 +366,8 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
      *         p**e.
      * <b>Note:</b> does not work in all cases.
      */
-    List<GenPolynomial<BigInteger>> searchFactorsMonic(GenPolynomial<BigInteger> C, BigInteger M, List<GenPolynomial<MOD>> F, BitSet D) {
+    List<GenPolynomial<BigInteger>> searchFactorsMonic(GenPolynomial<BigInteger> C, BigInteger M, 
+                                                       List<GenPolynomial<MOD>> F, BitSet D) {
         //System.out.println("*** monic factor combination ***");
         if (C == null || C.isZERO() || F == null || F.size() == 0) {
             throw new RuntimeException("C must be nonzero and F must be nonempty");

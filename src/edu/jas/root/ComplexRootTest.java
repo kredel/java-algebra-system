@@ -39,7 +39,7 @@ public class ComplexRootTest extends TestCase {
      * main.
      */
     public static void main(String[] args) {
-        BasicConfigurator.configure();
+        //BasicConfigurator.configure();
         junit.textui.TestRunner.run(suite());
         ComputerThreads.terminate();
     }
@@ -552,8 +552,8 @@ public class ComplexRootTest extends TestCase {
 
         a = dfac.random(kl, ll, el-1, q);
         //a = dfac.parse("( (x-1)*(x-2)*(x-3)*(x - { 0i1 })*(x-5) )*( x^4-2 )");
-        a = dfac.parse("( (x-1)*(x-2)*(x-3)*( x^4-2 ) )");
-        //a = dfac.parse("( (x-2)*( x^4-2 ) )");
+        //a = dfac.parse("( (x-1)*(x-2)*(x-3)*( x^4-2 ) )");
+        a = dfac.parse("( (x-2)*( x^4-2 ) )");
         //a = dfac.parse("( ( x^4-2 ) )");
         b = dfac.parse("( (x-1)*(x-2)*(x-3) )");
         c = dfac.parse("( x^4-2 )");
