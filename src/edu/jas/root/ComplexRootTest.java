@@ -504,16 +504,16 @@ public class ComplexRootTest extends TestCase {
         //a = dfac.parse("( (x-1)*(x-2)*(x-3)*(x - { 0i1 })*(x-5) )*( x^4-2 )");
         //a = dfac.parse("( (x-1)*(x-2)*(x-3)*( x^4-2 ) )");
         //a = dfac.parse("( (x-2)*( x^4-2 ) )");
-        a = dfac.parse("( ( x^4-2 ) )");
+        //a = dfac.parse("( ( x^4-2 ) )");
         b = dfac.parse("( (x-1)*(x-2)*(x-3) )");
         c = dfac.parse("( x^4-2 )");
         d = dfac.parse("( (x - { 0i1 })*(x-5) )");
-	//a = c; // b; //.multiply(c); //.multiply(d);
+        //a = c; // b; //.multiply(c); //.multiply(d);
         //System.out.println("a = " + a);
         //System.out.println("b = " + b);
         //System.out.println("c = " + c);
         //System.out.println("d = " + d);
-	//a = b.multiply(c).multiply(d);
+        //a = b.multiply(c).multiply(d);
         //System.out.println("a = " + a);
         Squarefree<Complex<BigRational>> engine = SquarefreeFactory
                 .<Complex<BigRational>> getImplementation(cfac);
@@ -558,12 +558,12 @@ public class ComplexRootTest extends TestCase {
         b = dfac.parse("( (x-1)*(x-2)*(x-3) )");
         c = dfac.parse("( x^4-2 )");
         d = dfac.parse("( (x - { 0i1 })*(x-5) )");
-	//a = c; // b; //.multiply(c); //.multiply(d);
+        //a = c; // b; //.multiply(c); //.multiply(d);
         //System.out.println("a = " + a);
         //System.out.println("b = " + b);
         //System.out.println("c = " + c);
         //System.out.println("d = " + d);
-	//a = b.multiply(c).multiply(d);
+        //a = b.multiply(c).multiply(d);
         //System.out.println("a = " + a);
 
         eps = eps.multiply(new BigRational(1000000));
@@ -574,9 +574,9 @@ public class ComplexRootTest extends TestCase {
         //System.out.println("eps2 = " + eps2);
 
         List<Complex<BigDecimal>> roots = cr.approximateRoots(a,eps);
-        System.out.println("a = " + a);
-        System.out.println("roots = " + roots);
-        //not always true: 
+        //System.out.println("a = " + a);
+        //System.out.println("roots = " + roots);
+        //now always true: 
         assertTrue("#roots == deg(a) ", roots.size() == a.degree(0));
     }
 }

@@ -445,4 +445,105 @@ public class RealRootTest extends TestCase {
         }
     }
 
+
+    /**
+     * Test real root isolation and decimal refinement of Wilkinson polynomials, all roots.
+     * 
+     */
+    public void testRealRootIsolationDecimalWilkinsonAll() {
+        final int N = 10;
+        d = dfac.getONE();
+        e = dfac.univariate(0);
+
+        List<Interval<BigRational>> Rn = new ArrayList<Interval<BigRational>>(N);
+        a = d;
+        for (int i = 0; i < N; i++) {
+            c = dfac.fromInteger(i);
+            Rn.add(new Interval<BigRational>(c.leadingBaseCoefficient()));
+            b = e.subtract(c);
+            a = a.multiply(b);
+        }
+        //System.out.println("a = " + a);
+
+        RealRootAbstract<BigRational> rr = new RealRootsSturm<BigRational>();
+
+        eps = eps.multiply(new BigRational(10000));
+        //System.out.println("eps = " + eps);
+        BigDecimal eps1 = new BigDecimal(eps);
+        BigDecimal eps2 = eps1.multiply(new BigDecimal("100"));
+        //System.out.println("eps1 = " + eps1);
+        //System.out.println("eps2 = " + eps2);
+
+        List<BigDecimal> R = null;
+        try {
+            R = rr.approximateRoots(a,eps);
+            System.out.println("R = " + R);
+            assertTrue("#roots = " + N + " ", R.size() == N);
+        } catch (NoConvergenceException e) {
+            fail(e.toString());
+        }
+
+        int i = 0;
+        for (BigDecimal dd : R) {
+            System.out.println("dd = " + dd);
+            BigDecimal di = Rn.get(i++).toDecimal();
+            //System.out.println("di = " + di);
+            assertTrue("|dd - di| < eps ", dd.subtract(di).abs().compareTo(eps2) <= 0);
+        }
+
+    }
+
+
+    /**
+     * Test real root isolation and decimal refinement of Wilkinson polynomials, inverse roots, all roots.
+     * 
+     */
+    public void testRealRootIsolationDecimalWilkinsonInverseAll() {
+        final int N = 10;
+        d = dfac.getONE();
+        e = dfac.univariate(0);
+
+        List<Interval<BigRational>> Rn = new ArrayList<Interval<BigRational>>(N);
+        a = d;
+        for (int i = 1; i < N; i++) { // use only for i > 0, since reverse
+            c = dfac.fromInteger(i);
+            if (i != 0) {
+                c = d.divide(c);
+            }
+            Rn.add(new Interval<BigRational>(c.leadingBaseCoefficient()));
+            b = e.subtract(c);
+            a = a.multiply(b);
+        }
+        //System.out.println("a = " + a);
+        //System.out.println("Rn = " + Rn);
+        Collections.reverse(Rn);
+        //System.out.println("Rn = " + Rn);
+
+        RealRootAbstract<BigRational> rr = new RealRootsSturm<BigRational>();
+
+        eps = eps.multiply(new BigRational(1000000));
+        //System.out.println("eps = " + eps);
+        BigDecimal eps1 = new BigDecimal(eps);
+        BigDecimal eps2 = eps1.multiply(new BigDecimal("10"));
+        //System.out.println("eps1 = " + eps1);
+        //System.out.println("eps2 = " + eps2);
+
+        List<BigDecimal> R = null;
+        try {
+             R = rr.approximateRoots(a,eps);
+             System.out.println("R = " + R);
+             assertTrue("#roots = " + (N - 1) + " ", R.size() == (N - 1));
+        } catch (NoConvergenceException e) {
+            fail(e.toString());
+        }
+
+        int i = 0;
+        for (BigDecimal dd : R) {
+            System.out.println("dd = " + dd);
+            BigDecimal di = Rn.get(i++).toDecimal();
+            //System.out.println("di = " + di);
+            assertTrue("|dd - di| < eps ", dd.subtract(di).abs().compareTo(eps2) <= 0);
+        }
+    }
+
 }

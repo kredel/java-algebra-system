@@ -125,7 +125,7 @@ public class Rectangle<C extends RingElem<C> & Rational > {
      * @return rectangle with north west corner c of this rectangle.
      */
     public Rectangle<C> exchangeNW(Complex<C> c) {
-	Complex<C> d = getSE();
+        Complex<C> d = getSE();
         Complex<C> sw = new Complex<C>(c.factory(),c.getRe(),d.getIm());
         Complex<C> ne = new Complex<C>(c.factory(),d.getRe(),c.getIm());
         return new Rectangle<C>(c,sw,d,ne);
@@ -138,7 +138,7 @@ public class Rectangle<C extends RingElem<C> & Rational > {
      * @return rectangle with south west corner c of this rectangle.
      */
     public Rectangle<C> exchangeSW(Complex<C> c) {
-	Complex<C> d = getNE();
+        Complex<C> d = getNE();
         Complex<C> nw = new Complex<C>(c.factory(),c.getRe(),d.getIm());
         Complex<C> se = new Complex<C>(c.factory(),d.getRe(),c.getIm());
         return new Rectangle<C>(nw,c,se,d);
@@ -151,7 +151,7 @@ public class Rectangle<C extends RingElem<C> & Rational > {
      * @return rectangle with south east corner c of this rectangle.
      */
     public Rectangle<C> exchangeSE(Complex<C> c) {
-	Complex<C> d = getNW();
+        Complex<C> d = getNW();
         Complex<C> sw = new Complex<C>(c.factory(),d.getRe(),c.getIm());
         Complex<C> ne = new Complex<C>(c.factory(),c.getRe(),d.getIm());
         return new Rectangle<C>(d,sw,c,ne);
@@ -164,7 +164,7 @@ public class Rectangle<C extends RingElem<C> & Rational > {
      * @return rectangle with north east corner c of this rectangle.
      */
     public Rectangle<C> exchangeNE(Complex<C> c) {
-	Complex<C> d = getSW();
+        Complex<C> d = getSW();
         Complex<C> nw = new Complex<C>(c.factory(),d.getRe(),c.getIm());
         Complex<C> se = new Complex<C>(c.factory(),c.getRe(),d.getIm());
         return new Rectangle<C>(nw,d,se,c);
@@ -177,8 +177,8 @@ public class Rectangle<C extends RingElem<C> & Rational > {
      * @return true if c is contained in this rectangle, else false.
      */
     public boolean contains(Complex<C> c) {
-	Complex<C> ll = getSW();
-	Complex<C> ur = getSW();
+        Complex<C> ll = getSW();
+        Complex<C> ur = getSW();
         return c.getRe().compareTo(ll.getRe()) < 0 ||
                c.getIm().compareTo(ll.getIm()) < 0 || 
                c.getRe().compareTo(ur.getRe()) > 0 || 
@@ -191,35 +191,31 @@ public class Rectangle<C extends RingElem<C> & Rational > {
      * @return a random point contained in this rectangle.
      */
     public Complex<C> randomPoint() {
-	Complex<C> sw = getSW();
-	//System.out.println("sw = " + sw);
-	Complex<C> se = getSE();
-	Complex<C> nw = getNW();
-	Complex<C> r = sw.factory().random(13);
-	//System.out.println("r  = " + r);
-	C dr = se.getRe().subtract(sw.getRe()); // >= 0
-	C di = nw.getIm().subtract(sw.getIm()); // >= 0
-	C rr = r.getRe().abs();
-	C ri = r.getIm().abs();
-	C one = ((RingFactory<C>)dr.factory()).getONE();
-	if ( !rr.isZERO() ) {
+        Complex<C> sw = getSW();
+        Complex<C> se = getSE();
+        Complex<C> nw = getNW();
+        Complex<C> r = sw.factory().random(13);
+        C dr = se.getRe().subtract(sw.getRe()); // >= 0
+        C di = nw.getIm().subtract(sw.getIm()); // >= 0
+        C rr = r.getRe().abs();
+        C ri = r.getIm().abs();
+        C one = ((RingFactory<C>)dr.factory()).getONE();
+        if ( !rr.isZERO() ) {
             if ( rr.compareTo(one) > 0 ) {
-	        rr = rr.inverse();
-	    }
-	}
-	if ( !ri.isZERO() ) {
+                rr = rr.inverse();
+            }
+        }
+        if ( !ri.isZERO() ) {
             if ( ri.compareTo(one) > 0 ) {
-	        ri = ri.inverse();
-	    }
-	}
-	//System.out.println("rr = " + rr);
-	//System.out.println("ri = " + ri);
-	// 0 <= rr, ri <= 1
-	rr = rr.multiply(dr);
-	ri = ri.multiply(di);
-	Complex<C> rp = new Complex<C>(sw.factory(),rr,ri);
-	//System.out.println("rp = " + rp);
-	rp = sw.sum(rp);
+                ri = ri.inverse();
+            }
+        }
+        // 0 <= rr, ri <= 1
+        rr = rr.multiply(dr);
+        ri = ri.multiply(di);
+        Complex<C> rp = new Complex<C>(sw.factory(),rr,ri);
+        //System.out.println("rp = " + rp);
+        rp = sw.sum(rp);
         return rp;
     }
 

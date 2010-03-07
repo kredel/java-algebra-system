@@ -405,7 +405,7 @@ public abstract class RealRootAbstract<C extends RingElem<C>& Rational> implemen
      * @param iv root isolating interval with f(left) * f(right) &lt; 0.
      * @param f univariate polynomial, non-zero.
      * @param eps requested interval length.
-     * @return a decimal approximation d such that |d-v| &lt; eps.
+     * @return a decimal approximation d such that |d-v| &lt; eps, for f(v) = 0.
      */
     public BigDecimal approximateRoot(Interval<C> iv, GenPolynomial<C> f, C eps) 
                       throws NoConvergenceException {
@@ -477,7 +477,7 @@ public abstract class RealRootAbstract<C extends RingElem<C>& Rational> implemen
      * @return a list of decimal approximations d such that |d-v| &lt; eps for f(v) = 0.
      */
     public List<BigDecimal> approximateRoots(GenPolynomial<C> f, C eps) 
-                      throws NoConvergenceException {
+                            throws NoConvergenceException {
         List<Interval<C>> iv = realRoots(f);
         List<BigDecimal> roots = new ArrayList<BigDecimal>(iv.size());
         for ( Interval<C> i : iv ) {

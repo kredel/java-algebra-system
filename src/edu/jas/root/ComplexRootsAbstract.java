@@ -329,10 +329,10 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
 
     /**
      * Approximate complex root.
-     * @param rt root isolating rectangle with f(left) * f(right) &lt; 0.
+     * @param rt root isolating rectangle.
      * @param f univariate polynomial, non-zero.
      * @param eps requested interval length.
-     * @return a decimal approximation d such that |d-v| &lt; eps.
+     * @return a decimal approximation d such that |d-v| &lt; eps, for f(v) = 0.
      */
     public Complex<BigDecimal> approximateRoot(Rectangle<C> rt, GenPolynomial<Complex<C>> f, C eps) 
                                throws NoConvergenceException {
@@ -464,23 +464,23 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
                     dir = 4; 
                 }
                 if ( i > MITER/2 && ( dir == -1 || dir == 4 || dir == 5 ) ) { 
-		    Complex<C> sr = rt.randomPoint();
-		    BigDecimal srr = new BigDecimal(sr.getRe().getRational());
-		    BigDecimal sri = new BigDecimal(sr.getIm().getRational());
-		    Complex<BigDecimal> sd = new Complex<BigDecimal>(cr, srr, sri );
+                    Complex<C> sr = rt.randomPoint();
+                    BigDecimal srr = new BigDecimal(sr.getRe().getRational());
+                    BigDecimal sri = new BigDecimal(sr.getIm().getRational());
+                    Complex<BigDecimal> sd = new Complex<BigDecimal>(cr, srr, sri );
                     d = sd;
                     x = cr.getZERO();
                     logger.info("trying new random starting point " + d);
-		    if ( dir == -1 ) {
+                    if ( dir == -1 ) {
                         i = 0; 
-			dir = 0;
-		    } else if ( dir == 4 ) {
+                        dir = 0;
+                    } else if ( dir == 4 ) {
                         i = 0; 
                         dir = 5; 
-		    } else {
+                    } else {
                         //i = 0; 
                         dir = 6; // end
-		    }
+                    }
                 }
                 x = x.multiply(q); // x * 1/4
                 dx = d.subtract(x);
@@ -496,7 +496,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
     /**
      * List of decimal approximations of complex roots of complex polynomial.
      * @param a univariate complex polynomial.
-     * @param len length for refinement.
+     * @param eps length for refinement.
      * @return list of complex decimal roots to desired precision.
      */
     @SuppressWarnings("unchecked")
@@ -532,7 +532,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
                         rr = approximateRoot(r,p,eps);
                         rf.add(rr);
                     } catch (NoConvergenceException e) {
-			// fall back to exact algorithm
+                        // fall back to exact algorithm
                         //System.out.println("" + e);
                         BigRational len = r.rationalLength();
                         len = len.multiply( new BigRational(1,1000));
