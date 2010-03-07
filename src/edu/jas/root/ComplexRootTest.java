@@ -502,43 +502,80 @@ public class ComplexRootTest extends TestCase {
 
         a = dfac.random(kl, ll, el-1, q);
         //a = dfac.parse("( (x-1)*(x-2)*(x-3)*(x - { 0i1 })*(x-5) )*( x^4-2 )");
-        a = dfac.parse("( (x-1)*(x-2)*(x-3)*( x^4-2 ) )");
+        //a = dfac.parse("( (x-1)*(x-2)*(x-3)*( x^4-2 ) )");
         //a = dfac.parse("( (x-2)*( x^4-2 ) )");
-        //a = dfac.parse("( ( x^4-2 ) )");
+        a = dfac.parse("( ( x^4-2 ) )");
         b = dfac.parse("( (x-1)*(x-2)*(x-3) )");
         c = dfac.parse("( x^4-2 )");
         d = dfac.parse("( (x - { 0i1 })*(x-5) )");
 	//a = c; // b; //.multiply(c); //.multiply(d);
-        System.out.println("a = " + a);
-        System.out.println("b = " + b);
-        System.out.println("c = " + c);
-        System.out.println("d = " + d);
+        //System.out.println("a = " + a);
+        //System.out.println("b = " + b);
+        //System.out.println("c = " + c);
+        //System.out.println("d = " + d);
 	//a = b.multiply(c).multiply(d);
-        System.out.println("a = " + a);
+        //System.out.println("a = " + a);
         Squarefree<Complex<BigRational>> engine = SquarefreeFactory
                 .<Complex<BigRational>> getImplementation(cfac);
         a = engine.squarefreePart(a);
         System.out.println("a = " + a);
 
         eps = eps.multiply(new BigRational(1000000));
-        System.out.println("eps = " + eps);
+        //System.out.println("eps = " + eps);
         BigDecimal eps1 = new BigDecimal(eps);
         BigDecimal eps2 = eps1.multiply(new BigDecimal("10"));
-        System.out.println("eps1 = " + eps1);
-        System.out.println("eps2 = " + eps2);
+        //System.out.println("eps1 = " + eps1);
+        //System.out.println("eps2 = " + eps2);
 
         List<Rectangle<BigRational>> roots = cr.complexRoots(a);
-        System.out.println("a = " + a);
-        System.out.println("roots = " + roots);
+        //System.out.println("a = " + a);
+        //System.out.println("roots = " + roots);
         assertTrue("#roots == deg(a) ", roots.size() == a.degree(0));
 
         for (Rectangle<BigRational> root : roots) {
             try {
                 Complex<BigDecimal> cd = cr.approximateRoot(root, a, eps);
-                System.out.println("cd = " + cd);
+                //System.out.println("cd = " + cd);
             } catch (NoConvergenceException e) {
                 //fail("" + e);
             }
         }
+    }
+
+
+    /**
+     * Test complex root approximation full algorithm.
+     * 
+     */
+    public void xtestComplexRootApproximationFull() {
+        ComplexRootsAbstract<BigRational> cr = new ComplexRootsSturm<BigRational>(cfac);
+
+        a = dfac.random(kl, ll, el-1, q);
+        //a = dfac.parse("( (x-1)*(x-2)*(x-3)*(x - { 0i1 })*(x-5) )*( x^4-2 )");
+        //a = dfac.parse("( (x-1)*(x-2)*(x-3)*( x^4-2 ) )");
+        a = dfac.parse("( (x-2)*( x^4-2 ) )");
+        //a = dfac.parse("( ( x^4-2 ) )");
+        b = dfac.parse("( (x-1)*(x-2)*(x-3) )");
+        c = dfac.parse("( x^4-2 )");
+        d = dfac.parse("( (x - { 0i1 })*(x-5) )");
+	//a = c; // b; //.multiply(c); //.multiply(d);
+        //System.out.println("a = " + a);
+        //System.out.println("b = " + b);
+        //System.out.println("c = " + c);
+        //System.out.println("d = " + d);
+	//a = b.multiply(c).multiply(d);
+        System.out.println("a = " + a);
+
+        eps = eps.multiply(new BigRational(1000000));
+        //System.out.println("eps = " + eps);
+        BigDecimal eps1 = new BigDecimal(eps);
+        BigDecimal eps2 = eps1.multiply(new BigDecimal("10"));
+        //System.out.println("eps1 = " + eps1);
+        //System.out.println("eps2 = " + eps2);
+
+        List<Complex<BigDecimal>> roots = cr.approximateRoots(a,eps);
+        System.out.println("a = " + a);
+        System.out.println("roots = " + roots);
+        //not always true: assertTrue("#roots == deg(a) ", roots.size() == a.degree(0));
     }
 }

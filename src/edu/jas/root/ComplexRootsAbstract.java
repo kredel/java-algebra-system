@@ -340,7 +340,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
             throw new IllegalArgumentException("null interval not allowed");
         }
         Complex<BigDecimal> d = rt.getDecimalCenter();
-        System.out.println("d  = " + d);
+        //System.out.println("d  = " + d);
         if (f == null || f.isZERO() || f.isConstant() || eps == null) {
             return d;
         }
@@ -359,8 +359,8 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
 
         BigDecimal e = new BigDecimal(eps.getRational());
         Complex<BigDecimal> q = new Complex<BigDecimal>(cr, new BigDecimal("0.25") );
-        System.out.println("ll = " + ll);
-        System.out.println("ur = " + ur);
+        //System.out.println("ll = " + ll);
+        //System.out.println("ur = " + ur);
         e = e.multiply(d.norm().getRe()); // relative error
         //System.out.println("e  = " + e);
         //System.out.println("q  = " + q);
@@ -429,7 +429,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
                     Complex<BigDecimal> sd = nrt.getDecimalCenter();
                     d = sd;
                     x = cr.getZERO();
-                    System.out.println("trying new SE starting point " + d);
+                    logger.info("trying new SE starting point " + d);
                     i = 0;
                     dir = 1;
                 }
@@ -439,7 +439,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
                     Complex<BigDecimal> sd = nrt.getDecimalCenter();
                     d = sd;
                     x = cr.getZERO();
-                    System.out.println("trying new NW starting point " + d);
+                    logger.info("trying new NW starting point " + d);
                     i = 0;
                     dir = 2;
                 }
@@ -449,7 +449,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
                     Complex<BigDecimal> sd = nrt.getDecimalCenter();
                     d = sd;
                     x = cr.getZERO();
-                    System.out.println("trying new SW starting point " + d);
+                    logger.info("trying new SW starting point " + d);
                     i = 0;
                     dir = 3;
                 }
@@ -459,7 +459,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
                     Complex<BigDecimal> sd = nrt.getDecimalCenter();
                     d = sd;
                     x = cr.getZERO();
-                    System.out.println("trying new NE starting point " + d);
+                    logger.info("trying new NE starting point " + d);
                     i = 0;
                     dir = 4; 
                 }
@@ -470,7 +470,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
 		    Complex<BigDecimal> sd = new Complex<BigDecimal>(cr, srr, sri );
                     d = sd;
                     x = cr.getZERO();
-                    System.out.println("trying new random starting point " + d);
+                    logger.info("trying new random starting point " + d);
 		    if ( dir == -1 ) {
                         i = 0; 
 			dir = 0;
@@ -490,6 +490,55 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
             d = dx;
         }
         throw new NoConvergenceException("no convergence after " + i + " steps");
+    }
+
+
+    /**
+     * List of decimal approximations of complex roots of complex polynomial.
+     * @param a univariate complex polynomial.
+     * @param len length for refinement.
+     * @return list of complex decimal roots to desired precision.
+     */
+    @SuppressWarnings("unchecked")
+    public List<Complex<BigDecimal>> approximateRoots(GenPolynomial<Complex<C>> a, C eps) {
+        ComplexRing<C> cr = (ComplexRing<C>) a.ring.coFac;
+        SortedMap<GenPolynomial<Complex<C>>, Long> sa = engine.squarefreeFactors(a);
+        List<Complex<BigDecimal>> roots = new ArrayList<Complex<BigDecimal>>();
+        for (GenPolynomial<Complex<C>> p : sa.keySet()) {
+            Complex<C> Mb = rootBound(p);
+            C M = Mb.getRe();
+            C M1 = M.sum(M.factory().fromInteger(1)); // asymmetric to origin
+            //System.out.println("M = " + M);
+            if (debug) {
+                logger.info("rootBound = " + M);
+            }
+            Complex<C>[] corner = (Complex<C>[]) new Complex[4];
+            corner[0] = new Complex<C>(cr, M1.negate(), M);           // nw
+            corner[1] = new Complex<C>(cr, M1.negate(), M1.negate()); // sw
+            corner[2] = new Complex<C>(cr, M, M1.negate());           // se
+            corner[3] = new Complex<C>(cr, M, M);                     // ne
+            Rectangle<C> rect = new Rectangle<C>(corner);
+	    List<Rectangle<C>> rs = null;
+            try {
+                rs = complexRoots(rect, p);
+            } catch (InvalidBoundaryException e) {
+                throw new RuntimeException("this should never happen " + e);
+	    }
+            List<Complex<BigDecimal>> rf = new ArrayList<Complex<BigDecimal>>(rs.size());
+            for ( Rectangle<C> r : rs ) {
+		try {
+                    Complex<BigDecimal> rr = approximateRoot(r,p,eps);
+                    rf.add(rr);
+                } catch (NoConvergenceException e) {
+                    // ignored
+                }
+	    }
+	    long e = sa.get(p);
+	    for (int i = 0; i < e; i++) { // add with multiplicity
+		roots.addAll(rf);
+	    }
+        }
+        return roots;
     }
 
 //     /*

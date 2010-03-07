@@ -12,6 +12,7 @@ import edu.jas.structure.Complex;
 import edu.jas.structure.ComplexRing;
 import edu.jas.structure.ElemFactory;
 import edu.jas.structure.RingElem;
+import edu.jas.structure.RingFactory;
 
 
 /**
@@ -195,25 +196,29 @@ public class Rectangle<C extends RingElem<C> & Rational > {
 	Complex<C> se = getSE();
 	Complex<C> nw = getNW();
 	Complex<C> r = sw.factory().random(13);
-	System.out.println("r  = " + r);
+	//System.out.println("r  = " + r);
 	C dr = se.getRe().subtract(sw.getRe()); // >= 0
 	C di = nw.getIm().subtract(sw.getIm()); // >= 0
 	C rr = r.getRe().abs();
 	C ri = r.getIm().abs();
-// 	while ( rr.compareTo(dr) < 0 ) {
-// 	    rr.sum(dr);
-// 	}
-	while ( rr.compareTo(dr) >= 0 ) {
-	    rr.subtract(dr);
+	C one = ((RingFactory<C>)dr.factory()).getONE();
+	if ( !rr.isZERO() ) {
+            if ( rr.compareTo(one) > 0 ) {
+	        rr = rr.inverse();
+	    }
 	}
-// 	while ( ri.compareTo(di) < 0 ) {
-// 	    ri.sum(di);
-// 	}
-	while ( ri.compareTo(di) >= 0 ) {
-	    ri.subtract(di);
+	if ( !ri.isZERO() ) {
+            if ( ri.compareTo(one) > 0 ) {
+	        ri = ri.inverse();
+	    }
 	}
+	//System.out.println("rr = " + rr);
+	//System.out.println("ri = " + ri);
+	// 0 <= rr, ri <= 1
+	rr = rr.multiply(dr);
+	ri = ri.multiply(di);
 	Complex<C> rp = new Complex<C>(sw.factory(),rr,ri);
-	System.out.println("rp = " + rp);
+	//System.out.println("rp = " + rp);
 	rp = sw.sum(rp);
         return rp;
     }
