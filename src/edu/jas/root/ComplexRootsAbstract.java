@@ -393,26 +393,26 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
             if ( d.subtract(dx).norm().getRe().compareTo(e) <= 0 ) {
                 return dx;
             }
-            if ( false ) { // not useful:
-                Complex<BigDecimal> fxx  = PolyUtil.<Complex<BigDecimal>> evaluateMain(cr, df, dx); // f(dx)
-                //System.out.println("fxx = " + fxx);
-                BigDecimal fsx = fxx.norm().getRe();
-                System.out.println("fsx = " + fsx);
-                while ( fsx.compareTo( fs ) >= 0 ) {
-                    System.out.println("trying to increase f(d) ");
-                    if ( i++ > MITER ) { // dx > right: dx - right > 0
-                        throw new NoConvergenceException("no convergence after " + i + " steps");
-                    }
-                    x = x.multiply(q); // x * 1/4
-                    dx = d.subtract(x);
-                    //System.out.println(" x = " + x);
-                    System.out.println("dx = " + dx);
-                    fxx  = PolyUtil.<Complex<BigDecimal>> evaluateMain(cr, df, dx); // f(dx)
-                    //System.out.println("fxx = " + fxx);
-                    fsx = fxx.norm().getRe();
-                    System.out.println("fsx = " + fsx);
-                }
-            }
+//             if ( false ) { // not useful:
+//                 Complex<BigDecimal> fxx  = PolyUtil.<Complex<BigDecimal>> evaluateMain(cr, df, dx); // f(dx)
+//                 //System.out.println("fxx = " + fxx);
+//                 BigDecimal fsx = fxx.norm().getRe();
+//                 System.out.println("fsx = " + fsx);
+//                 while ( fsx.compareTo( fs ) >= 0 ) {
+//                     System.out.println("trying to increase f(d) ");
+//                     if ( i++ > MITER ) { // dx > right: dx - right > 0
+//                         throw new NoConvergenceException("no convergence after " + i + " steps");
+//                     }
+//                     x = x.multiply(q); // x * 1/4
+//                     dx = d.subtract(x);
+//                     //System.out.println(" x = " + x);
+//                     System.out.println("dx = " + dx);
+//                     fxx  = PolyUtil.<Complex<BigDecimal>> evaluateMain(cr, df, dx); // f(dx)
+//                     //System.out.println("fxx = " + fxx);
+//                     fsx = fxx.norm().getRe();
+//                     System.out.println("fsx = " + fsx);
+//                 }
+//             }
             // check interval bounds
             while ( dx.getRe().compareTo(ll.getRe()) < 0 ||
                     dx.getIm().compareTo(ll.getIm()) < 0 || 
