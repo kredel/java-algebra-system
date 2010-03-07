@@ -119,6 +119,107 @@ public class Rectangle<C extends RingElem<C> & Rational > {
 
 
     /**
+     * Exchange NW corner.
+     * @param c new NW corner.
+     * @return rectangle with north west corner c of this rectangle.
+     */
+    public Rectangle<C> exchangeNW(Complex<C> c) {
+	Complex<C> d = getSE();
+        Complex<C> sw = new Complex<C>(c.factory(),c.getRe(),d.getIm());
+        Complex<C> ne = new Complex<C>(c.factory(),d.getRe(),c.getIm());
+        return new Rectangle<C>(c,sw,d,ne);
+    }
+
+
+    /**
+     * Exchange SW corner.
+     * @param c new SW corner.
+     * @return rectangle with south west corner c of this rectangle.
+     */
+    public Rectangle<C> exchangeSW(Complex<C> c) {
+	Complex<C> d = getNE();
+        Complex<C> nw = new Complex<C>(c.factory(),c.getRe(),d.getIm());
+        Complex<C> se = new Complex<C>(c.factory(),d.getRe(),c.getIm());
+        return new Rectangle<C>(nw,c,se,d);
+    }
+
+
+    /**
+     * Exchange SE corner.
+     * @param c new SE corner.
+     * @return rectangle with south east corner c of this rectangle.
+     */
+    public Rectangle<C> exchangeSE(Complex<C> c) {
+	Complex<C> d = getNW();
+        Complex<C> sw = new Complex<C>(c.factory(),d.getRe(),c.getIm());
+        Complex<C> ne = new Complex<C>(c.factory(),c.getRe(),d.getIm());
+        return new Rectangle<C>(d,sw,c,ne);
+    }
+
+
+    /**
+     * Exchange NE corner.
+     * @param c new NE corner.
+     * @return rectangle with north east corner c of this rectangle.
+     */
+    public Rectangle<C> exchangeNE(Complex<C> c) {
+	Complex<C> d = getSW();
+        Complex<C> nw = new Complex<C>(c.factory(),d.getRe(),c.getIm());
+        Complex<C> se = new Complex<C>(c.factory(),c.getRe(),d.getIm());
+        return new Rectangle<C>(nw,d,se,c);
+    }
+
+
+    /**
+     * Contains a point.
+     * @param c point.
+     * @return true if c is contained in this rectangle, else false.
+     */
+    public boolean contains(Complex<C> c) {
+	Complex<C> ll = getSW();
+	Complex<C> ur = getSW();
+        return c.getRe().compareTo(ll.getRe()) < 0 ||
+               c.getIm().compareTo(ll.getIm()) < 0 || 
+               c.getRe().compareTo(ur.getRe()) > 0 || 
+               c.getIm().compareTo(ur.getIm()) > 0;
+    }
+
+
+    /**
+     * Random point of recatangle.
+     * @return a random point contained in this rectangle.
+     */
+    public Complex<C> randomPoint() {
+	Complex<C> sw = getSW();
+	//System.out.println("sw = " + sw);
+	Complex<C> se = getSE();
+	Complex<C> nw = getNW();
+	Complex<C> r = sw.factory().random(13);
+	System.out.println("r  = " + r);
+	C dr = se.getRe().subtract(sw.getRe()); // >= 0
+	C di = nw.getIm().subtract(sw.getIm()); // >= 0
+	C rr = r.getRe().abs();
+	C ri = r.getIm().abs();
+// 	while ( rr.compareTo(dr) < 0 ) {
+// 	    rr.sum(dr);
+// 	}
+	while ( rr.compareTo(dr) >= 0 ) {
+	    rr.subtract(dr);
+	}
+// 	while ( ri.compareTo(di) < 0 ) {
+// 	    ri.sum(di);
+// 	}
+	while ( ri.compareTo(di) >= 0 ) {
+	    ri.subtract(di);
+	}
+	Complex<C> rp = new Complex<C>(sw.factory(),rr,ri);
+	System.out.println("rp = " + rp);
+	rp = sw.sum(rp);
+        return rp;
+    }
+
+
+    /**
      * Clone this.
      * @see java.lang.Object#clone()
      */
@@ -167,10 +268,10 @@ public class Rectangle<C extends RingElem<C> & Rational > {
 
 
     /**
-     * Complex of BigRational approximation of center.
-     * @return r + i m as rational approximation of the center.
+     * Complex center.
+     * @return r + i m of the center.
      */
-    public Complex<BigRational> getRationalCenter() {
+    public Complex<C> getCenter() {
         C r = corners[2].getRe().subtract(corners[1].getRe());
         C m = corners[0].getIm().subtract(corners[1].getIm());
         ElemFactory<C> rf = r.factory();
@@ -179,8 +280,18 @@ public class Rectangle<C extends RingElem<C> & Rational > {
         m = m.divide(two);
         r = corners[1].getRe().sum(r);
         m = corners[1].getIm().sum(m);
-        BigRational rs = r.getRational(); //new BigRational(r.toString()); // hack
-        BigRational ms = m.getRational(); //new BigRational(m.toString()); // hack
+        return new Complex<C>(corners[0].factory(),r,m);
+    }
+
+
+    /**
+     * Complex of BigRational approximation of center.
+     * @return r + i m as rational approximation of the center.
+     */
+    public Complex<BigRational> getRationalCenter() {
+        Complex<C> cm = getCenter();
+        BigRational rs = cm.getRe().getRational(); 
+        BigRational ms = cm.getIm().getRational(); 
         ComplexRing<BigRational> cf = new ComplexRing<BigRational>(rs.factory());
         Complex<BigRational> c = new Complex<BigRational>(cf,rs,ms);
         return c;
@@ -203,7 +314,7 @@ public class Rectangle<C extends RingElem<C> & Rational > {
 
     /**
      * Approximation of center.
-     * @return r + i m as decimal approximation of the center.
+     * @return r + i m as string of decimal approximation of the center.
      */
     public String centerApprox() {
         Complex<BigDecimal> c = getDecimalCenter();

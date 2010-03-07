@@ -338,7 +338,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
                                throws NoConvergenceException {
         if (rt == null ) {
             throw new IllegalArgumentException("null interval not allowed");
-	}
+        }
         Complex<BigDecimal> d = rt.getDecimalCenter();
         System.out.println("d  = " + d);
         if (f == null || f.isZERO() || f.isConstant() || eps == null) {
@@ -350,22 +350,22 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
         ComplexRing<BigDecimal> cr = d.ring;
         Complex<C> sw = rt.getSW();
         BigDecimal swr = new BigDecimal(sw.getRe().getRational());
-	BigDecimal swi = new BigDecimal(sw.getIm().getRational());
+        BigDecimal swi = new BigDecimal(sw.getIm().getRational());
         Complex<BigDecimal> ll = new Complex<BigDecimal>(cr, swr, swi );
         Complex<C> ne = rt.getNE();
         BigDecimal ner = new BigDecimal(ne.getRe().getRational());
-	BigDecimal nei = new BigDecimal(ne.getIm().getRational());
-	Complex<BigDecimal> ur = new Complex<BigDecimal>(cr, ner, nei );
+        BigDecimal nei = new BigDecimal(ne.getIm().getRational());
+        Complex<BigDecimal> ur = new Complex<BigDecimal>(cr, ner, nei );
 
         BigDecimal e = new BigDecimal(eps.getRational());
         Complex<BigDecimal> q = new Complex<BigDecimal>(cr, new BigDecimal("0.25") );
         System.out.println("ll = " + ll);
         System.out.println("ur = " + ur);
         e = e.multiply(d.norm().getRe()); // relative error
-        System.out.println("e  = " + e);
-        System.out.println("q  = " + q);
+        //System.out.println("e  = " + e);
+        //System.out.println("q  = " + q);
 
- 	// polynomials with decimal coefficients
+        // polynomials with decimal coefficients
         GenPolynomialRing<Complex<BigDecimal>> dfac = new GenPolynomialRing<Complex<BigDecimal>>(cr,f.ring);
         GenPolynomial<Complex<BigDecimal>> df = PolyUtil.<C> complexDecimalFromRational(dfac,f);
         GenPolynomial<Complex<C>> fp = PolyUtil.<Complex<C>> baseDeriviative(f);
@@ -373,8 +373,13 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
 
         // Newton Raphson iteration: x_{n+1} = x_n - f(x_n)/f'(x_n)
         int i = 0;
-        while ( i++ < 50 ) {
+        final int MITER = 50; 
+        int dir = -1;
+        while ( i++ < MITER ) {
             Complex<BigDecimal> fx  = PolyUtil.<Complex<BigDecimal>> evaluateMain(cr, df, d); // f(d)
+            //System.out.println("fx = " + fx);
+            BigDecimal fs = fx.norm().getRe();
+            //System.out.println("fs = " + fs);
             if ( fx.isZERO() ) {
                 return d;
             }
@@ -384,23 +389,103 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
             }
             Complex<BigDecimal> x = fx.divide(fpx);
             Complex<BigDecimal> dx = d.subtract( x );
-            System.out.println("dx = " + dx);
+            //System.out.println("dx = " + dx);
             if ( d.subtract(dx).norm().getRe().compareTo(e) <= 0 ) {
                 return dx;
             }
+            if ( false ) { // not useful:
+                Complex<BigDecimal> fxx  = PolyUtil.<Complex<BigDecimal>> evaluateMain(cr, df, dx); // f(dx)
+                //System.out.println("fxx = " + fxx);
+                BigDecimal fsx = fxx.norm().getRe();
+                System.out.println("fsx = " + fsx);
+                while ( fsx.compareTo( fs ) >= 0 ) {
+                    System.out.println("trying to increase f(d) ");
+                    if ( i++ > MITER ) { // dx > right: dx - right > 0
+                        throw new NoConvergenceException("no convergence after " + i + " steps");
+                    }
+                    x = x.multiply(q); // x * 1/4
+                    dx = d.subtract(x);
+                    //System.out.println(" x = " + x);
+                    System.out.println("dx = " + dx);
+                    fxx  = PolyUtil.<Complex<BigDecimal>> evaluateMain(cr, df, dx); // f(dx)
+                    //System.out.println("fxx = " + fxx);
+                    fsx = fxx.norm().getRe();
+                    System.out.println("fsx = " + fsx);
+                }
+            }
+            // check interval bounds
             while ( dx.getRe().compareTo(ll.getRe()) < 0 ||
                     dx.getIm().compareTo(ll.getIm()) < 0 || 
                     dx.getRe().compareTo(ur.getRe()) > 0 || 
                     dx.getIm().compareTo(ur.getIm()) > 0 ) { // dx < ll: dx - ll < 0
                                                              // dx > ur: dx - ur > 0
-                System.out.println("trying to leave interval");
-                if ( i++ > 50 ) { // dx > right: dx - right > 0
+                //System.out.println("trying to leave interval ");
+                if ( i++ > MITER ) { // dx > right: dx - right > 0
                     throw new NoConvergenceException("no convergence after " + i + " steps");
+                }
+                if ( i > MITER/2 && dir == 0 ) { 
+                    Complex<C> cc = rt.getCenter();
+                    Rectangle<C> nrt = rt.exchangeSE(cc);
+                    Complex<BigDecimal> sd = nrt.getDecimalCenter();
+                    d = sd;
+                    x = cr.getZERO();
+                    System.out.println("trying new SE starting point " + d);
+                    i = 0;
+                    dir = 1;
+                }
+                if ( i > MITER/2 && dir == 1 ) { 
+                    Complex<C> cc = rt.getCenter();
+                    Rectangle<C> nrt = rt.exchangeNW(cc);
+                    Complex<BigDecimal> sd = nrt.getDecimalCenter();
+                    d = sd;
+                    x = cr.getZERO();
+                    System.out.println("trying new NW starting point " + d);
+                    i = 0;
+                    dir = 2;
+                }
+                if ( i > MITER/2 && dir == 2 ) { 
+                    Complex<C> cc = rt.getCenter();
+                    Rectangle<C> nrt = rt.exchangeSW(cc);
+                    Complex<BigDecimal> sd = nrt.getDecimalCenter();
+                    d = sd;
+                    x = cr.getZERO();
+                    System.out.println("trying new SW starting point " + d);
+                    i = 0;
+                    dir = 3;
+                }
+                if ( i > MITER/2 && dir == 3 ) { 
+                    Complex<C> cc = rt.getCenter();
+                    Rectangle<C> nrt = rt.exchangeNE(cc);
+                    Complex<BigDecimal> sd = nrt.getDecimalCenter();
+                    d = sd;
+                    x = cr.getZERO();
+                    System.out.println("trying new NE starting point " + d);
+                    i = 0;
+                    dir = 4; 
+                }
+                if ( i > MITER/2 && ( dir == -1 || dir == 4 || dir == 5 ) ) { 
+		    Complex<C> sr = rt.randomPoint();
+		    BigDecimal srr = new BigDecimal(sr.getRe().getRational());
+		    BigDecimal sri = new BigDecimal(sr.getIm().getRational());
+		    Complex<BigDecimal> sd = new Complex<BigDecimal>(cr, srr, sri );
+                    d = sd;
+                    x = cr.getZERO();
+                    System.out.println("trying new random starting point " + d);
+		    if ( dir == -1 ) {
+                        i = 0; 
+			dir = 0;
+		    } else if ( dir == 4 ) {
+                        i = 0; 
+                        dir = 5; 
+		    } else {
+                        //i = 0; 
+                        dir = 6; // end
+		    }
                 }
                 x = x.multiply(q); // x * 1/4
                 dx = d.subtract(x);
                 //System.out.println(" x = " + x);
-                System.out.println("dx = " + dx);
+                //System.out.println("dx = " + dx);
             }
             d = dx;
         }
