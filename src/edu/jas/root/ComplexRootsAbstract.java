@@ -518,25 +518,38 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
             corner[2] = new Complex<C>(cr, M, M1.negate());           // se
             corner[3] = new Complex<C>(cr, M, M);                     // ne
             Rectangle<C> rect = new Rectangle<C>(corner);
-	    List<Rectangle<C>> rs = null;
+            List<Rectangle<C>> rs = null;
             try {
                 rs = complexRoots(rect, p);
             } catch (InvalidBoundaryException e) {
                 throw new RuntimeException("this should never happen " + e);
-	    }
+            }
             List<Complex<BigDecimal>> rf = new ArrayList<Complex<BigDecimal>>(rs.size());
             for ( Rectangle<C> r : rs ) {
-		try {
-                    Complex<BigDecimal> rr = approximateRoot(r,p,eps);
-                    rf.add(rr);
-                } catch (NoConvergenceException e) {
-                    // ignored
+                Complex<BigDecimal> rr = null;
+                while ( rr == null ) {
+                    try {
+                        rr = approximateRoot(r,p,eps);
+                        rf.add(rr);
+                    } catch (NoConvergenceException e) {
+			// fall back to exact algorithm
+                        //System.out.println("" + e);
+                        BigRational len = r.rationalLength();
+                        len = len.multiply( new BigRational(1,1000));
+                        try {
+                            r = complexRootRefinement(r,p,len);
+                            logger.info("fall back rootRefinement = " + r);
+                            //System.out.println("len = " + len);
+                        } catch( InvalidBoundaryException ee ) {
+                            throw new RuntimeException("this should never happen " + ee);
+                        }
+                    }
                 }
-	    }
-	    long e = sa.get(p);
-	    for (int i = 0; i < e; i++) { // add with multiplicity
-		roots.addAll(rf);
-	    }
+            }
+            long e = sa.get(p);
+            for (int i = 0; i < e; i++) { // add with multiplicity
+                roots.addAll(rf);
+            }
         }
         return roots;
     }

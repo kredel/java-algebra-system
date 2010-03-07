@@ -469,4 +469,22 @@ public abstract class RealRootAbstract<C extends RingElem<C>& Rational> implemen
         throw new NoConvergenceException("no convergence after " + i + " steps");
     }
 
+
+    /**
+     * Approximate real roots.
+     * @param f univariate polynomial, non-zero.
+     * @param eps requested interval length.
+     * @return a list of decimal approximations d such that |d-v| &lt; eps for f(v) = 0.
+     */
+    public List<BigDecimal> approximateRoots(GenPolynomial<C> f, C eps) 
+                      throws NoConvergenceException {
+        List<Interval<C>> iv = realRoots(f);
+        List<BigDecimal> roots = new ArrayList<BigDecimal>(iv.size());
+        for ( Interval<C> i : iv ) {
+            BigDecimal r = approximateRoot(i, f, eps);
+            roots.add(r);
+        }
+        return roots;
+    }
+
 }

@@ -518,7 +518,7 @@ public class ComplexRootTest extends TestCase {
         Squarefree<Complex<BigRational>> engine = SquarefreeFactory
                 .<Complex<BigRational>> getImplementation(cfac);
         a = engine.squarefreePart(a);
-        System.out.println("a = " + a);
+        //System.out.println("a = " + a);
 
         eps = eps.multiply(new BigRational(1000000));
         //System.out.println("eps = " + eps);
@@ -547,13 +547,13 @@ public class ComplexRootTest extends TestCase {
      * Test complex root approximation full algorithm.
      * 
      */
-    public void xtestComplexRootApproximationFull() {
+    public void testComplexRootApproximationFull() {
         ComplexRootsAbstract<BigRational> cr = new ComplexRootsSturm<BigRational>(cfac);
 
         a = dfac.random(kl, ll, el-1, q);
         //a = dfac.parse("( (x-1)*(x-2)*(x-3)*(x - { 0i1 })*(x-5) )*( x^4-2 )");
-        //a = dfac.parse("( (x-1)*(x-2)*(x-3)*( x^4-2 ) )");
-        a = dfac.parse("( (x-2)*( x^4-2 ) )");
+        a = dfac.parse("( (x-1)*(x-2)*(x-3)*( x^4-2 ) )");
+        //a = dfac.parse("( (x-2)*( x^4-2 ) )");
         //a = dfac.parse("( ( x^4-2 ) )");
         b = dfac.parse("( (x-1)*(x-2)*(x-3) )");
         c = dfac.parse("( x^4-2 )");
@@ -564,7 +564,7 @@ public class ComplexRootTest extends TestCase {
         //System.out.println("c = " + c);
         //System.out.println("d = " + d);
 	//a = b.multiply(c).multiply(d);
-        System.out.println("a = " + a);
+        //System.out.println("a = " + a);
 
         eps = eps.multiply(new BigRational(1000000));
         //System.out.println("eps = " + eps);
@@ -576,6 +576,7 @@ public class ComplexRootTest extends TestCase {
         List<Complex<BigDecimal>> roots = cr.approximateRoots(a,eps);
         System.out.println("a = " + a);
         System.out.println("roots = " + roots);
-        //not always true: assertTrue("#roots == deg(a) ", roots.size() == a.degree(0));
+        //not always true: 
+        assertTrue("#roots == deg(a) ", roots.size() == a.degree(0));
     }
 }
