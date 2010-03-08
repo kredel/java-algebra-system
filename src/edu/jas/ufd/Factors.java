@@ -47,14 +47,14 @@ public class Factors<C extends GcdRingElem<C>> implements Comparable<Factors<C>>
 
 
     /**
-     * List of factors with coefficients from AlgebraicNumberRing<C>. Should be
+     * List of factors with coefficients from AlgebraicNumberRing&lt;C&gt;. Should be
      * null, if p is absolutely irreducible.
      */
     public final List<GenPolynomial<AlgebraicNumber<C>>> afactors;
 
 
     /**
-     * List of factors with coefficients from AlgebraicNumberRing<AlgebraicNumber<C>>.
+     * List of factors with coefficients from AlgebraicNumberRing&lt;AlgebraicNumber&lt;C&gt;&gt;.
      * Should be null, if p is absolutely irreducible.
      */
     public final List<Factors<AlgebraicNumber<C>>> arfactors;
