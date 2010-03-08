@@ -176,7 +176,7 @@ public class Quotient<C extends GcdRingElem<C>> implements GcdRingElem<Quotient<
     }
 
 
-    /** Is Qoutient<C> a constant. 
+    /** Is Qoutient a constant. 
      * @return true, if this has constant numerator and denominator, else false.
      */
     public boolean isConstant() {

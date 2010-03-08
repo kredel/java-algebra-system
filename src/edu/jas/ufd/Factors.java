@@ -41,7 +41,7 @@ public class Factors<C extends GcdRingElem<C>> implements Comparable<Factors<C>>
 
     /**
      * Original polynomial to be factored with coefficients from
-     * AlgebraicNumberRing<C>. Should be null, if p is absolutely irreducible.
+     * AlgebraicNumberRing&lt;C&gt;. Should be null, if p is absolutely irreducible.
      */
     public final GenPolynomial<AlgebraicNumber<C>> apoly;
 

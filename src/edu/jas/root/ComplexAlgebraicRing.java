@@ -59,7 +59,7 @@ implements RingFactory<ComplexAlgebraicNumber<C>> {
     /**
      * The constructor creates a ComplexAlgebraicNumber factory object from a
      * GenPolynomial objects module.
-     * @param m module GenPolynomial<C>.
+     * @param m module GenPolynomial&lt;C&gt;.
      * @param root isolating rectangle for a complex root.
      */
     public ComplexAlgebraicRing(GenPolynomial<Complex<C>> m, Rectangle<C> root) {
@@ -80,7 +80,7 @@ implements RingFactory<ComplexAlgebraicNumber<C>> {
     /**
      * The constructor creates a ComplexAlgebraicNumber factory object from a
      * GenPolynomial objects module.
-     * @param m module GenPolynomial<C>.
+     * @param m module GenPolynomial&lt;C&gt;.
      * @param root isolating rectangle for a complex root.
      * @param isField indicator if m is prime.
      */

@@ -384,9 +384,9 @@ public class UnivPowerSeriesRing<C extends RingElem<C>> implements RingFactory<U
 
 
     /**
-     * Get a (constant) UnivPowerSeries<C> from a long value.
+     * Get a (constant) UnivPowerSeries&lt;C&gt; from a long value.
      * @param a long.
-     * @return a UnivPowerSeries<C>.
+     * @return a UnivPowerSeries&lt;C&gt;.
      */
     public UnivPowerSeries<C> fromInteger(long a) {
         return ONE.multiply(coFac.fromInteger(a));
@@ -394,9 +394,9 @@ public class UnivPowerSeriesRing<C extends RingElem<C>> implements RingFactory<U
 
 
     /**
-     * Get a (constant) UnivPowerSeries<C> from a java.math.BigInteger.
+     * Get a (constant) UnivPowerSeries&lt;C&gt; from a java.math.BigInteger.
      * @param a BigInteger.
-     * @return a UnivPowerSeries<C>.
+     * @return a UnivPowerSeries&lt;C&gt;.
      */
     public UnivPowerSeries<C> fromInteger(java.math.BigInteger a) {
         return ONE.multiply(coFac.fromInteger(a));
@@ -404,9 +404,9 @@ public class UnivPowerSeriesRing<C extends RingElem<C>> implements RingFactory<U
 
 
     /**
-     * Get a UnivPowerSeries<C> from a GenPolynomial<C>.
-     * @param a GenPolynomial<C>.
-     * @return a UnivPowerSeries<C>.
+     * Get a UnivPowerSeries&lt;C&gt; from a GenPolynomial&lt;C&gt;.
+     * @param a GenPolynomial&lt;C&gt;.
+     * @return a UnivPowerSeries&lt;C&gt;.
      */
     public UnivPowerSeries<C> fromPolynomial(GenPolynomial<C> a) {
         if (a == null || a.isZERO()) {
@@ -427,8 +427,6 @@ public class UnivPowerSeriesRing<C extends RingElem<C>> implements RingFactory<U
             cache.put((int) e, m.coefficient());
         }
         return new UnivPowerSeries<C>(this, new Coefficients<C>(cache) {
-
-
             @Override
             public C generate(int i) {
                 // cached coefficients returned by get

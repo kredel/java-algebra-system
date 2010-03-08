@@ -330,7 +330,7 @@ public class GCDProxyTest extends TestCase {
 
 
     /**
-     * Test get AlgebraicNumber<BigRational> implementation.
+     * Test get AlgebraicNumber&lt;BigRational&gt; implementation.
      * 
      */
     public void xtestAlgebraicNumberBigRational() {
@@ -361,7 +361,7 @@ public class GCDProxyTest extends TestCase {
 
 
     /**
-     * Test get AlgebraicNumber<ModInteger> implementation.
+     * Test get AlgebraicNumber&lt;ModInteger&glt; implementation.
      * 
      */
     public void testAlgebraicNumberModInteger() {

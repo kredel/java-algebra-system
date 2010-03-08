@@ -63,7 +63,7 @@ public class ComplexRing<C extends RingElem<C> >
 
 
     /** Copy Complex element c.
-     * @param c Complex<C>.
+     * @param c Complex&lt;C&gt;.
      * @return a copy of c.
      */
     public Complex<C> copy(Complex<C> c) {
@@ -72,7 +72,7 @@ public class ComplexRing<C extends RingElem<C> >
 
 
     /** Get the zero element.
-     * @return 0 as Complex<C>.
+     * @return 0 as Complex&lt;C&gt;.
      */
     public Complex<C> getZERO() {
         return new Complex<C>(this);
@@ -80,7 +80,7 @@ public class ComplexRing<C extends RingElem<C> >
 
 
     /** Get the one element.
-     * @return 1 as Complex<C>.
+     * @return 1 as Complex&lt;C&gt;.
      */
     public Complex<C> getONE() {
         return new Complex<C>(this,ring.getONE());
@@ -88,7 +88,7 @@ public class ComplexRing<C extends RingElem<C> >
 
 
     /** Get the i element.
-     * @return i as Complex<C>.
+     * @return i as Complex&lt;C&gt;.
      */
     public Complex<C> getIMAG() {
         return new Complex<C>(this,ring.getZERO(),ring.getONE());
@@ -133,7 +133,7 @@ public class ComplexRing<C extends RingElem<C> >
 
     /** Get a Complex element from a BigInteger.
      * @param a BigInteger.
-     * @return a Complex<C>.
+     * @return a Complex&lt;C&gt;.
      */
     public Complex<C> fromInteger(BigInteger a) {
         return new Complex<C>( this, ring.fromInteger(a) );
@@ -142,7 +142,7 @@ public class ComplexRing<C extends RingElem<C> >
 
     /** Get a Complex element from a long.
      * @param a long.
-     * @return a Complex<C>.
+     * @return a Complex&lt;C&gt;.
      */
     public Complex<C> fromInteger(long a) {
         return new Complex<C>( this, ring.fromInteger(a) );
@@ -203,7 +203,7 @@ public class ComplexRing<C extends RingElem<C> >
     }
 
 
-    /** Hash code for this ComplexRing<C>.
+    /** Hash code for this ComplexRing&lt;C&gt;.
      * @see java.lang.Object#hashCode()
      */
     @Override

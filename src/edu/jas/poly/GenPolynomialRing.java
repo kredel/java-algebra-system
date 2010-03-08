@@ -531,18 +531,18 @@ public class GenPolynomialRing<C extends RingElem<C> >
     }
 
 
-    /** Get a (constant) GenPolynomial<C> element from a long value.
+    /** Get a (constant) GenPolynomial&lt;C&gt; element from a long value.
      * @param a long.
-     * @return a GenPolynomial<C>.
+     * @return a GenPolynomial&lt;C&gt;.
      */
     public GenPolynomial<C> fromInteger(long a) {
         return new GenPolynomial<C>( this, coFac.fromInteger(a), evzero );
     }
 
 
-    /** Get a (constant) GenPolynomial<C> element from a BigInteger value.
+    /** Get a (constant) GenPolynomial&lt;C&gt; element from a BigInteger value.
      * @param a BigInteger.
-     * @return a GenPolynomial<C>.
+     * @return a GenPolynomial&lt;C&gt;.
      */
     public GenPolynomial<C> fromInteger(BigInteger a) {
         return new GenPolynomial<C>( this, coFac.fromInteger(a), evzero );

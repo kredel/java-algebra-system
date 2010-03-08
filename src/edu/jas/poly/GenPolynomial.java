@@ -366,7 +366,7 @@ public class GenPolynomial<C extends RingElem<C> >
     }
 
 
-    /** Is GenPolynomial<C> zero. 
+    /** Is GenPolynomial&lt;C&gt; zero. 
      * @return If this is 0 then true is returned, else false.
      * @see edu.jas.structure.RingElem#isZERO()
      */
@@ -375,7 +375,7 @@ public class GenPolynomial<C extends RingElem<C> >
     }
 
 
-    /** Is GenPolynomial<C> one. 
+    /** Is GenPolynomial&lt;C&gt; one. 
      * @return If this is 1 then true is returned, else false.
      * @see edu.jas.structure.RingElem#isONE()
      */
@@ -394,7 +394,7 @@ public class GenPolynomial<C extends RingElem<C> >
     }
 
 
-    /** Is GenPolynomial<C> a unit. 
+    /** Is GenPolynomial&lt;C&gt; a unit. 
      * @return If this is a unit then true is returned, else false.
      * @see edu.jas.structure.RingElem#isUnit()
      */
@@ -413,7 +413,7 @@ public class GenPolynomial<C extends RingElem<C> >
     }
 
 
-    /** Is GenPolynomial<C> a constant. 
+    /** Is GenPolynomial&lt;C&gt; a constant. 
      * @return If this is a constant polynomial then true is returned, else false.
      */
     public boolean isConstant() {

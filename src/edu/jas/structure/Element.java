@@ -18,7 +18,7 @@ public interface Element<C extends Element<C>> extends Cloneable,
                                                        Comparable<C>, 
                                                        Serializable {
 
-    /**
+    /*
      * Clone this Element.
      * @return Creates and returns a copy of this Element.
      */
