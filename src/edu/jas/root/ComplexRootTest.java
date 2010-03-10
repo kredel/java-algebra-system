@@ -6,6 +6,8 @@ package edu.jas.root;
 
 
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -343,7 +345,7 @@ public class ComplexRootTest extends TestCase {
 
         a = dfac.random(kl, ll, el, q);
         Squarefree<Complex<BigRational>> engine = SquarefreeFactory
-                .<Complex<BigRational>> getImplementation(cfac);
+	    .<Complex<BigRational>> getImplementation(cfac);
         a = engine.squarefreePart(a);
 
         //a = dfac.univariate(0,2L).subtract(cfac.getONE());  // x^2 - 1
@@ -405,7 +407,7 @@ public class ComplexRootTest extends TestCase {
         a = dfac.random(kl, ll, el-1, q);
         //a = dfac.parse("( (x-1)^3 )");
         Squarefree<Complex<BigRational>> engine = SquarefreeFactory
-                .<Complex<BigRational>> getImplementation(cfac);
+	    .<Complex<BigRational>> getImplementation(cfac);
         //System.out.println("a = " + a);
         a = engine.squarefreePart(a);
         //System.out.println("a = " + a);
@@ -500,11 +502,11 @@ public class ComplexRootTest extends TestCase {
     public void testComplexRootApproximation() {
         ComplexRootsAbstract<BigRational> cr = new ComplexRootsSturm<BigRational>(cfac);
 
-        a = dfac.random(kl, ll, el-1, q);
+        //a = dfac.random(kl, ll, el-1, q);
         //a = dfac.parse("( (x-1)*(x-2)*(x-3)*(x - { 0i1 })*(x-5) )*( x^4-2 )");
         //a = dfac.parse("( (x-1)*(x-2)*(x-3)*( x^4-2 ) )");
         //a = dfac.parse("( (x-2)*( x^4-2 ) )");
-        //a = dfac.parse("( ( x^4-2 ) )");
+        a = dfac.parse("( ( x^4-2 ) )");
         b = dfac.parse("( (x-1)*(x-2)*(x-3) )");
         c = dfac.parse("( x^4-2 )");
         d = dfac.parse("( (x - { 0i1 })*(x-5) )");
@@ -516,7 +518,7 @@ public class ComplexRootTest extends TestCase {
         //a = b.multiply(c).multiply(d);
         //System.out.println("a = " + a);
         Squarefree<Complex<BigRational>> engine = SquarefreeFactory
-                .<Complex<BigRational>> getImplementation(cfac);
+	    .<Complex<BigRational>> getImplementation(cfac);
         a = engine.squarefreePart(a);
         //System.out.println("a = " + a);
 
@@ -550,7 +552,7 @@ public class ComplexRootTest extends TestCase {
     public void testComplexRootApproximationFull() {
         ComplexRootsAbstract<BigRational> cr = new ComplexRootsSturm<BigRational>(cfac);
 
-        a = dfac.random(kl, ll, el-1, q);
+        //a = dfac.random(kl, ll, el-1, q);
         //a = dfac.parse("( (x-1)*(x-2)*(x-3)*(x - { 0i1 })*(x-5) )*( x^4-2 )");
         //a = dfac.parse("( (x-1)*(x-2)*(x-3)*( x^4-2 ) )");
         a = dfac.parse("( (x-2)*( x^4-2 ) )");
@@ -579,4 +581,124 @@ public class ComplexRootTest extends TestCase {
         //now always true: 
         assertTrue("#roots == deg(a) ", roots.size() == a.degree(0));
     }
+
+
+    /**
+     * Test complex root approximation full algorithm with Wilkinson polynomials.
+     * p = (x-i0)*(x-i1)*(x-i2)*(x-i3*...*(x-in)
+     */
+    public void testComplexRootApproximationWilkinsonFull() {
+        final int N = 4;
+        d = dfac.getONE();
+        e = dfac.univariate(0);
+
+        BigDecimal br = new BigDecimal();
+        ComplexRing<BigDecimal> cf = new ComplexRing<BigDecimal>(br);
+        Complex<BigDecimal> I = cf.getIMAG();
+        Complex<BigDecimal> cc = null;
+        Complex<BigRational> Ir = cfac.getIMAG();
+
+        List<Complex<BigDecimal>> Rn = new ArrayList<Complex<BigDecimal>>(N);
+        a = d;
+        for (int i = 0; i < N; i++) {
+            cc = cf.fromInteger(i).multiply(I);
+            Rn.add( cc );
+            c = dfac.fromInteger(i).multiply(Ir);
+            b = e.subtract(c);
+            a = a.multiply(b);
+        }
+        //System.out.println("a = " + a);
+        Collections.reverse(Rn);
+        //System.out.println("Rn = " + Rn);
+
+        ComplexRootsAbstract<BigRational> cr = new ComplexRootsSturm<BigRational>(cfac);
+
+        eps = eps.multiply(new BigRational(100000));
+        //System.out.println("eps = " + eps);
+        BigDecimal eps1 = new BigDecimal(eps);
+        BigDecimal eps2 = eps1.multiply(new BigDecimal("10"));
+        //System.out.println("eps1 = " + eps1);
+        //System.out.println("eps2 = " + eps2);
+
+        List<Complex<BigDecimal>> roots = cr.approximateRoots(a,eps);
+        //System.out.println("a = " + a);
+        //System.out.println("roots = " + roots);
+        //now always true: 
+        assertTrue("#roots == deg(a) ", roots.size() == a.degree(0));
+
+        int i = 0;
+        for (Complex<BigDecimal> dd : roots) {
+            Complex<BigDecimal> di = Rn.get(i++);
+            //System.out.print("di = " + di + ", ");
+            //System.out.println("dd = " + dd);
+            assertTrue("|dd - di| < eps ", dd.subtract(di).norm().getRe().compareTo(eps2) <= 0);
+        }
+    }
+
+
+    /**
+     * Test complex root approximation full algorithm with Wilkinson polynomials, inverse roots.
+     * p = (x-1/i1)*(x-1/i2)*(x-1/i3*...*(x-1/in)
+     * 
+     */
+    public void testComplexRootApproximationWilkinsonInverseFull() {
+        final int N = 5;
+        d = dfac.getONE();
+        e = dfac.univariate(0);
+
+        BigDecimal br = new BigDecimal();
+        ComplexRing<BigDecimal> cf = new ComplexRing<BigDecimal>(br);
+        Complex<BigDecimal> I = cf.getIMAG();
+        Complex<BigDecimal> cc = null;
+        Complex<BigRational> Ir = cfac.getIMAG();
+
+        List<Complex<BigDecimal>> Rn = new ArrayList<Complex<BigDecimal>>(N);
+        a = d;
+        for (int i = 1; i < N; i++) {
+            cc = cf.fromInteger(i).multiply(I);
+            cc = cc.inverse();
+            Rn.add( cc );
+            c = dfac.fromInteger(i).multiply(Ir);
+            c = d.divide(c);
+            b = e.subtract(c);
+            a = a.multiply(b);
+        }
+        //System.out.println("a = " + a);
+        //Collections.sort(Rn);
+        //System.out.println("Rn = " + Rn);
+
+        ComplexRootsAbstract<BigRational> cr = new ComplexRootsSturm<BigRational>(cfac);
+
+        eps = eps.multiply(new BigRational(100000));
+        //System.out.println("eps = " + eps);
+        BigDecimal eps1 = new BigDecimal(eps);
+        BigDecimal eps2 = eps1.multiply(new BigDecimal("10"));
+        //System.out.println("eps1 = " + eps1);
+        //System.out.println("eps2 = " + eps2);
+
+        List<Complex<BigDecimal>> roots = cr.approximateRoots(a,eps);
+        //System.out.println("a = " + a);
+        //System.out.println("roots = " + roots);
+        //now always true: 
+        assertTrue("#roots == deg(a) ", roots.size() == a.degree(0));
+        //Collections.sort(roots);
+        //System.out.println("roots = " + roots);
+
+        for (Complex<BigDecimal> dd : roots) {
+            //System.out.println("dd = " + dd);
+            boolean t = false;
+            for (Complex<BigDecimal> di : Rn) {
+                //System.out.println("di = " + di);
+                t = dd.subtract(di).norm().getRe().compareTo(eps2) <= 0;
+                if ( t ) {
+                    break;
+                }
+            }
+            if ( ! t ) {
+		//assertTrue("|dd - di| < eps ", dd.subtract(di).norm().getRe().compareTo(eps2) <= 0);
+		fail("|dd - di| < eps ");
+            }
+        }
+    }
+
 }

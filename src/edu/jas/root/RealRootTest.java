@@ -197,7 +197,7 @@ public class RealRootTest extends TestCase {
 
     /**
      * Test real root isolation Wilkinson polynomials.
-     * 
+     * p = (x-0)*(x-1)*(x-2)*(x-3)*...*(x-n)
      */
     public void testRealRootIsolationWilkinson() {
         final int N = 10;
@@ -240,7 +240,7 @@ public class RealRootTest extends TestCase {
 
     /**
      * Test real root isolation Wilkinson polynomials inverse.
-     * 
+     * p = (x-1)*(x-1/2)*(x-1/3)*...*(x-1/n)
      */
     public void testRealRootIsolationWilkinsonInverse() {
         final int N = 9;
@@ -344,7 +344,7 @@ public class RealRootTest extends TestCase {
 
     /**
      * Test real root isolation and decimal refinement of Wilkinson polynomials.
-     * 
+     * p = (x-0)*(x-1)*(x-2)*(x-3)*...*(x-n)
      */
     public void testRealRootIsolationDecimalWilkinson() {
         final int N = 10;
@@ -393,7 +393,7 @@ public class RealRootTest extends TestCase {
 
     /**
      * Test real root isolation and decimal refinement of Wilkinson polynomials, inverse roots.
-     * 
+     * p = (x-1)*(x-1/2)*(x-1/3)*...*(x-1/n)
      */
     public void testRealRootIsolationDecimalWilkinsonInverse() {
         final int N = 10;
@@ -448,7 +448,7 @@ public class RealRootTest extends TestCase {
 
     /**
      * Test real root isolation and decimal refinement of Wilkinson polynomials, all roots.
-     * 
+     * p = (x-0)*(x-1)*(x-2)*(x-3)*...*(x-n)
      */
     public void testRealRootIsolationDecimalWilkinsonAll() {
         final int N = 10;
@@ -496,7 +496,7 @@ public class RealRootTest extends TestCase {
 
     /**
      * Test real root isolation and decimal refinement of Wilkinson polynomials, inverse roots, all roots.
-     * 
+     * p = (x-1)*(x-1/2)*(x-1/3)*...*(x-1/n)
      */
     public void testRealRootIsolationDecimalWilkinsonInverseAll() {
         final int N = 10;
