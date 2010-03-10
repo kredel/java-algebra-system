@@ -345,7 +345,7 @@ public class ComplexRootTest extends TestCase {
 
         a = dfac.random(kl, ll, el, q);
         Squarefree<Complex<BigRational>> engine = SquarefreeFactory
-	    .<Complex<BigRational>> getImplementation(cfac);
+            .<Complex<BigRational>> getImplementation(cfac);
         a = engine.squarefreePart(a);
 
         //a = dfac.univariate(0,2L).subtract(cfac.getONE());  // x^2 - 1
@@ -407,7 +407,7 @@ public class ComplexRootTest extends TestCase {
         a = dfac.random(kl, ll, el-1, q);
         //a = dfac.parse("( (x-1)^3 )");
         Squarefree<Complex<BigRational>> engine = SquarefreeFactory
-	    .<Complex<BigRational>> getImplementation(cfac);
+            .<Complex<BigRational>> getImplementation(cfac);
         //System.out.println("a = " + a);
         a = engine.squarefreePart(a);
         //System.out.println("a = " + a);
@@ -518,7 +518,7 @@ public class ComplexRootTest extends TestCase {
         //a = b.multiply(c).multiply(d);
         //System.out.println("a = " + a);
         Squarefree<Complex<BigRational>> engine = SquarefreeFactory
-	    .<Complex<BigRational>> getImplementation(cfac);
+            .<Complex<BigRational>> getImplementation(cfac);
         a = engine.squarefreePart(a);
         //System.out.println("a = " + a);
 
@@ -695,8 +695,8 @@ public class ComplexRootTest extends TestCase {
                 }
             }
             if ( ! t ) {
-		//assertTrue("|dd - di| < eps ", dd.subtract(di).norm().getRe().compareTo(eps2) <= 0);
-		fail("|dd - di| < eps ");
+                //assertTrue("|dd - di| < eps ", dd.subtract(di).norm().getRe().compareTo(eps2) <= 0);
+                fail("|dd - di| < eps ");
             }
         }
     }
