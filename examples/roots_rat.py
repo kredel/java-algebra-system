@@ -6,18 +6,17 @@
 from java.lang import System
 from java.lang import Integer
 
-from jas import Ring
-from jas import Ideal
+from jas import Ring, PolyRing
 from jas import terminate
 from jas import startLog
 
-from jas import QQ
-from jas import DD
+from jas import QQ, DD
 
 # polynomial examples: real roots over Q
 
 #r = Ring( "Rat(x) L" );
-r = Ring( "Q(x) L" );
+#r = Ring( "Q(x) L" );
+r = PolyRing(QQ(),"x",PolyRing.lex);
 
 print "Ring: " + str(r);
 print;
@@ -31,14 +30,13 @@ f2 = ( x - (1,2) ) * ( x - (1,3) ) * ( x - (1,4) ) * ( x - (1,5) ) * ( x - (1,6)
 
 f3 = ( x - (1,2**2) ) * ( x - (1,2**3) ) * ( x - (1,2**4) ) * ( x - (1,2**5) ) * ( x - (1,2**6) ) * ( x - (1,2**7) ) ;
 
-f = f1 * f2 * f3;
-#f = f1 * f2;
+#f = f1 * f2 * f3;
+f = f1 * f2;
 #f = f1 * f3;
 #f = f2 * f3;
-f = f1;
+#f = f3;
 
 #f = ( x**2 - 2 );
-
 
 print "f = ", f;
 print;
@@ -51,13 +49,13 @@ t = System.currentTimeMillis() - t;
 print "R = ", R;
 print "real roots time =", t, "milliseconds";
 
-eps = QQ(1,10) ** DD().elem.DEFAULT_PRECISION;
+eps = QQ(1,10) ** (DD().elem.DEFAULT_PRECISION-3);
 print "eps = ", eps;
 
 t = System.currentTimeMillis();
 R = r.realRoots(f,eps);
 t = System.currentTimeMillis() - t;
-print "R = ", R;
+print "R = ", [ str(r) for r in R ];
 print "real roots time =", t, "milliseconds";
 
 #startLog();

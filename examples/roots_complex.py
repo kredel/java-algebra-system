@@ -30,7 +30,7 @@ print;
 
 f1 = x**3 - 2;
 
-f2 = ( x - I ) * ( x + I );
+f2 = ( x - I ) * ( x + I ) * ( x - 2 * I ) * ( x + (1,2) * I );
 
 f3 = ( x**3 - 2 * I );
 
@@ -38,8 +38,7 @@ f3 = ( x**3 - 2 * I );
 #f = f1 * f2;
 #f = f1 * f3;
 #f = f2 * f3;
-f = f3;
-
+f = f2;
 
 print "f = ", f;
 print;
@@ -55,14 +54,14 @@ print "complex roots time =", t, "milliseconds";
 #terminate();
 #sys.exit();
 
-#eps = QQ(1,10) ** DD().elem.DEFAULT_PRECISION; # too big
-eps = QQ(1,10) ** 6;
+eps = QQ(1,10) ** (DD().elem.DEFAULT_PRECISION-3); # now not too big
+#eps = QQ(1,10) ** 45;
 print "eps = ", eps;
 
 t = System.currentTimeMillis();
 R = r.complexRoots(f,eps);
 t = System.currentTimeMillis() - t;
-print "R = ", R;
+print "R = ", [ str(r) for r in R ];
 print "complex root refinement time =", t, "milliseconds";
 
 #startLog();

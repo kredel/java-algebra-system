@@ -233,8 +233,10 @@ class Ring:
             if eps == None:
                 R = RealRootsSturm().realRoots( a );
             else:
-                R = RealRootsSturm().realRoots( a, eps );
-                R = [ r.toDecimal() for r in R ];
+##                 R = RealRootsSturm().realRoots( a, eps );
+##                 R = [ r.toDecimal() for r in R ];
+                R = RealRootsSturm().approximateRoots(a,eps);
+                R = [ RingElem(r) for r in R ];
             return R;
         except Exception, e:
             print "error " + str(e)
@@ -255,8 +257,10 @@ class Ring:
                 R = ComplexRootsSturm(a.ring.coFac).complexRoots( a );
                 #R = [ r.centerApprox() for r in R ];
             else:
-                R = ComplexRootsSturm(a.ring.coFac).complexRoots( a, eps );
-                R = [ r.centerApprox() for r in R ];
+##                 R = ComplexRootsSturm(a.ring.coFac).complexRoots( a, eps );
+##                 R = [ r.centerApprox() for r in R ];
+                R = ComplexRootsSturm(a.ring.coFac).approximateRoots( a, eps );
+                R = [ RingElem(r) for r in R ];
             return R;
         except Exception, e:
             print "error " + str(e)
