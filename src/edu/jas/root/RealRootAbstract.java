@@ -411,7 +411,7 @@ public abstract class RealRootAbstract<C extends RingElem<C>& Rational> implemen
                       throws NoConvergenceException {
         if (iv == null ) {
             throw new IllegalArgumentException("null interval not allowed");
-	}
+        }
         BigDecimal d = iv.toDecimal();
         //System.out.println("d = " + d);
         if (f == null || f.isZERO() || f.isConstant() || eps == null) {
@@ -430,7 +430,7 @@ public abstract class RealRootAbstract<C extends RingElem<C>& Rational> implemen
         //System.out.println("e     = " + e);
         //System.out.println("q     = " + q);
         BigDecimal dc = BigDecimal.ONE;
-	// polynomials with decimal coefficients
+        // polynomials with decimal coefficients
         GenPolynomialRing<BigDecimal> dfac = new GenPolynomialRing<BigDecimal>(dc,f.ring);
         GenPolynomial<BigDecimal> df = PolyUtil.<C> decimalFromRational(dfac,f);
         GenPolynomial<C> fp = PolyUtil.<C> baseDeriviative(f);
@@ -438,7 +438,9 @@ public abstract class RealRootAbstract<C extends RingElem<C>& Rational> implemen
 
         // Newton Raphson iteration: x_{n+1} = x_n - f(x_n)/f'(x_n)
         int i = 0;
-        while ( i++ <50 ) {
+        final int MITER = 50; 
+        int dir = 0;
+        while ( i++ < MITER ) {
             BigDecimal fx  = PolyUtil.<BigDecimal> evaluateMain(dc, df, d); // f(d)
             if ( fx.isZERO() ) {
                 return d;
@@ -456,8 +458,24 @@ public abstract class RealRootAbstract<C extends RingElem<C>& Rational> implemen
             while ( dx.compareTo(left) < 0 || dx.compareTo(right) > 0 ) { // dx < left: dx - left < 0
                                                                           // dx > right: dx - right > 0
                 //System.out.println("trying to leave interval");
-                if ( i++ > 50 ) { // dx > right: dx - right > 0
+                if ( i++ > MITER ) { // dx > right: dx - right > 0
                     throw new NoConvergenceException("no convergence after " + i + " steps");
+                }
+                if ( i > MITER/2 && dir == 0 ) { 
+                    BigDecimal sd = new BigDecimal( iv.randomPoint().getRational() );
+                    d = sd;
+                    x = sd.getZERO();
+                    logger.info("trying new random starting point " + d);
+                    i = 0;
+                    dir = 1;
+                }
+                if ( i > MITER/2 && dir == 1 ) { 
+                    BigDecimal sd = new BigDecimal( iv.randomPoint().getRational() );
+                    d = sd;
+                    x = sd.getZERO();
+                    logger.info("trying new random starting point " + d);
+                    //i = 0;
+                    dir = 2; // end
                 }
                 x = x.multiply(q); // x * 1/4
                 dx = d.subtract(x);
@@ -477,12 +495,24 @@ public abstract class RealRootAbstract<C extends RingElem<C>& Rational> implemen
      * @return a list of decimal approximations d such that |d-v| &lt; eps for f(v) = 0.
      */
     public List<BigDecimal> approximateRoots(GenPolynomial<C> f, C eps) 
-                            throws NoConvergenceException {
+                            /*throws NoConvergenceException*/ {
         List<Interval<C>> iv = realRoots(f);
         List<BigDecimal> roots = new ArrayList<BigDecimal>(iv.size());
         for ( Interval<C> i : iv ) {
-            BigDecimal r = approximateRoot(i, f, eps);
-            roots.add(r);
+            BigDecimal r = null; //approximateRoot(i, f, eps); roots.add(r);
+            while ( r == null ) {
+                try {
+                    r = approximateRoot(i,f,eps);
+                    roots.add(r);
+                } catch (NoConvergenceException e) {
+                    // fall back to exact algorithm
+                    //System.out.println("" + e);
+                    C len = i.length();
+                    len = len.divide( f.ring.coFac.fromInteger(1000) );
+                    i = refineInterval(i,f,len);
+                    logger.info("fall back rootRefinement = " + i);
+                }
+            }
         }
         return roots;
     }

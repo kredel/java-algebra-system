@@ -9,6 +9,7 @@ import edu.jas.arith.BigDecimal;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.Rational;
 import edu.jas.structure.RingElem;
+import edu.jas.structure.RingFactory;
 
 
 /**
@@ -121,6 +122,15 @@ public class Interval<C extends RingElem<C> & Rational > {
 
 
     /**
+     * BigRational Length.
+     * @return |left-right|;
+     */
+    public BigRational rationalLength() {
+        return length().getRational();
+    }
+
+
+    /**
      * BigDecimal representation of Interval.
      */
     public BigDecimal toDecimal() {
@@ -163,4 +173,27 @@ public class Interval<C extends RingElem<C> & Rational > {
         m = m.multiply(t);
         return m;
     }
+
+
+    /**
+     * Random point of interval.
+     * @return a random point contained in this interval.
+     */
+    public C randomPoint() {
+        C dr = right.subtract(left);
+        RingFactory<C> fac = (RingFactory<C>)dr.factory();
+        C r = fac.random(13);
+        r = r.abs();
+        if ( !r.isZERO() ) {
+            if ( r.compareTo( fac.getONE() ) > 0 ) {
+                r = r.inverse();
+            }
+        }
+        // 0 <= r <= 1
+        dr = dr.multiply(r);
+        C rv = left.sum(dr);
+        //System.out.println("rv   = " + new BigDecimal(rv.getRational()) );
+        return rv;
+    }
+
 }
