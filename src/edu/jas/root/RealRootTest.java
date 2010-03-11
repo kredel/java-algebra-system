@@ -451,7 +451,7 @@ public class RealRootTest extends TestCase {
      * p = (x-0)*(x-1)*(x-2)*(x-3)*...*(x-n)
      */
     public void testRealRootIsolationDecimalWilkinsonAll() {
-        final int N = 10;
+        final int N = 10; 
         d = dfac.getONE();
         e = dfac.univariate(0);
 
@@ -475,13 +475,9 @@ public class RealRootTest extends TestCase {
         //System.out.println("eps2 = " + eps2);
 
         List<BigDecimal> R = null;
-        try {
-            R = rr.approximateRoots(a,eps);
-            //System.out.println("R = " + R);
-            assertTrue("#roots = " + N + " ", R.size() == N);
-        } catch (NoConvergenceException e) {
-            fail(e.toString());
-        }
+        R = rr.approximateRoots(a,eps);
+        //System.out.println("R = " + R);
+        assertTrue("#roots = " + N + " ", R.size() == N);
 
         int i = 0;
         for (BigDecimal dd : R) {
@@ -529,13 +525,9 @@ public class RealRootTest extends TestCase {
         //System.out.println("eps2 = " + eps2);
 
         List<BigDecimal> R = null;
-        try {
-             R = rr.approximateRoots(a,eps);
-             //System.out.println("R = " + R);
-             assertTrue("#roots = " + (N - 1) + " ", R.size() == (N - 1));
-        } catch (NoConvergenceException e) {
-            fail(e.toString());
-        }
+        R = rr.approximateRoots(a,eps);
+        //System.out.println("R = " + R);
+        assertTrue("#roots = " + (N - 1) + " ", R.size() == (N - 1));
 
         int i = 0;
         for (BigDecimal dd : R) {
