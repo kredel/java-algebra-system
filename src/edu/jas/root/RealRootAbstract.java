@@ -494,8 +494,7 @@ public abstract class RealRootAbstract<C extends RingElem<C>& Rational> implemen
      * @param eps requested interval length.
      * @return a list of decimal approximations d such that |d-v| &lt; eps for f(v) = 0.
      */
-    public List<BigDecimal> approximateRoots(GenPolynomial<C> f, C eps) 
-                            /*throws NoConvergenceException*/ {
+    public List<BigDecimal> approximateRoots(GenPolynomial<C> f, C eps) {
         List<Interval<C>> iv = realRoots(f);
         List<BigDecimal> roots = new ArrayList<BigDecimal>(iv.size());
         for ( Interval<C> i : iv ) {
@@ -515,6 +514,112 @@ public abstract class RealRootAbstract<C extends RingElem<C>& Rational> implemen
             }
         }
         return roots;
+    }
+
+
+    /**
+     * Test if x is an approximate real root.
+     * @param x approximate real root.
+     * @param f univariate polynomial, non-zero.
+     * @param eps requested interval length.
+     * @return true if x is a decimal approximation of v with |d-v| &lt; eps, else false.
+     */
+    public boolean isApproximateRoot(BigDecimal x, GenPolynomial<C> f, C eps) {
+        if ( x == null ) {
+            throw new IllegalArgumentException("null root not allowed");
+        }
+        //System.out.println("x     = " + x);
+        if (f == null || f.isZERO() || f.isConstant() || eps == null) {
+            return true;
+        }
+        BigDecimal e = new BigDecimal(eps.getRational());
+        e = e.multiply( new BigDecimal( "1000" )); // relax
+        //System.out.println("e     = " + e);
+        BigDecimal dc = BigDecimal.ONE;
+        // polynomials with decimal coefficients
+        GenPolynomialRing<BigDecimal> dfac = new GenPolynomialRing<BigDecimal>(dc,f.ring);
+        GenPolynomial<BigDecimal> df = PolyUtil.<C> decimalFromRational(dfac,f);
+        GenPolynomial<C> fp = PolyUtil.<C> baseDeriviative(f);
+        GenPolynomial<BigDecimal> dfp = PolyUtil.<C> decimalFromRational(dfac,fp);
+        //
+        return isApproximateRoot(x,df,dfp,e);
+    }
+
+
+    /**
+     * Test if x is an approximate real root.
+     * @param x approximate real root.
+     * @param f univariate polynomial, non-zero.
+     * @param fp univariate polynomial, non-zero, deriviative of f.
+     * @param eps requested interval length.
+     * @return true if x is a decimal approximation of v with |d-v| &lt; eps, else false.
+     */
+    public boolean isApproximateRoot(BigDecimal x, GenPolynomial<BigDecimal> f, 
+                                     GenPolynomial<BigDecimal> fp, BigDecimal eps) {
+        if ( x == null ) {
+            throw new IllegalArgumentException("null root not allowed");
+        }
+        //System.out.println("x     = " + x);
+        if (f == null || f.isZERO() || f.isConstant() || eps == null) {
+            return true;
+        }
+        BigDecimal dc = BigDecimal.ONE; // only for clarity
+        // f(x)
+        BigDecimal fx  = PolyUtil.<BigDecimal> evaluateMain(dc, f, x);
+        //System.out.println("fx    = " + fx);
+        if ( fx.isZERO() ) {
+            return true;
+        }
+        // f'(x)
+        BigDecimal fpx = PolyUtil.<BigDecimal> evaluateMain(dc, fp, x); // f'(d)
+        //System.out.println("fpx   = " + fpx);
+        if ( fpx.isZERO() ) {
+            return false;
+        }
+        BigDecimal d = fx.divide(fpx);
+        if ( d.isZERO() ) {
+            return true;
+        }
+        if ( d.abs().compareTo(eps) <= 0 ) {
+            return true;
+        }
+        System.out.println("x     = " + x);
+        System.out.println("d     = " + d);
+        return false;
+    }
+
+
+    /**
+     * Test if each x in R is an approximate real root.
+     * @param R ist of approximate real roots.
+     * @param f univariate polynomial, non-zero.
+     * @param eps requested interval length.
+     * @return true if each x in R is a decimal approximation of v with |d-v| &lt; eps, else false.
+     */
+    public boolean isApproximateRoot(List<BigDecimal> R, GenPolynomial<C> f, C eps) {
+        if ( R == null ) {
+            throw new IllegalArgumentException("null root not allowed");
+        }
+        //System.out.println("R     = " + R);
+        if (f == null || f.isZERO() || f.isConstant() || eps == null) {
+            return true;
+        }
+        BigDecimal e = new BigDecimal(eps.getRational());
+        e = e.multiply( new BigDecimal( "1000" )); // relax
+        //System.out.println("e     = " + e);
+        BigDecimal dc = BigDecimal.ONE;
+        // polynomials with decimal coefficients
+        GenPolynomialRing<BigDecimal> dfac = new GenPolynomialRing<BigDecimal>(dc,f.ring);
+        GenPolynomial<BigDecimal> df = PolyUtil.<C> decimalFromRational(dfac,f);
+        GenPolynomial<C> fp = PolyUtil.<C> baseDeriviative(f);
+        GenPolynomial<BigDecimal> dfp = PolyUtil.<C> decimalFromRational(dfac,fp);
+        //
+        for ( BigDecimal x : R ) {
+            if ( ! isApproximateRoot(x,df,dfp,e) ) {
+                return false;
+            }
+        }
+        return true;
     }
 
 }

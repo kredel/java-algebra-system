@@ -486,7 +486,8 @@ public class RealRootTest extends TestCase {
             //System.out.println("di = " + di);
             assertTrue("|dd - di| < eps ", dd.subtract(di).abs().compareTo(eps2) <= 0);
         }
-
+        boolean t = rr.isApproximateRoot(R,a,eps);
+        assertTrue("some |a(dd)| < eps ", t);
     }
 
 
@@ -536,6 +537,8 @@ public class RealRootTest extends TestCase {
             //System.out.println("di = " + di);
             assertTrue("|dd - di| < eps ", dd.subtract(di).abs().compareTo(eps2) <= 0);
         }
+        boolean t = rr.isApproximateRoot(R,a,eps);
+        assertTrue("some |a(dd)| < eps ", t);
     }
 
 }
