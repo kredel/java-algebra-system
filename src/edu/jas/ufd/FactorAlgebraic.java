@@ -159,7 +159,7 @@ public class FactorAlgebraic<C extends GcdRingElem<C>> extends FactorAbsolute<Al
             // compute gcds of factors with polynomial
             GenPolynomial<AlgebraicNumber<C>> pni = engine.gcd(Ni, Pp);
             if (!pni.leadingBaseCoefficient().isONE()) {
-                System.out.println("gcd(Ni,Pp) not monic " + pni);
+                //System.out.println("gcd(Ni,Pp) not monic " + pni);
                 pni = pni.monic();
             }
             if (logger.isInfoEnabled()) {
