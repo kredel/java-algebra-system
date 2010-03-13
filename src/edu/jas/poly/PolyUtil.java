@@ -683,6 +683,38 @@ public class PolyUtil {
 
 
     /**
+     * To recursive representation. 
+     * Represent as polynomial in i+r variables with coefficients in i variables.
+     * Works for arbitrary term orders.
+     * @param <C> coefficient type.
+     * @param rfac recursive polynomial ring factory.
+     * @param A polynomial to be converted.
+     * @return Recursive represenations of this in the ring rfac.
+     */
+    public static <C extends RingElem<C>> 
+        GenPolynomial<GenPolynomial<C>> 
+        toRecursive( GenPolynomialRing<GenPolynomial<C>> rfac, 
+                     GenPolynomial<C> A ) {
+
+        GenPolynomial<GenPolynomial<C>> B = rfac.getZERO().clone();
+        if ( A.isZERO() ) {
+           return B;
+        }
+        int i = rfac.nvar;
+        GenPolynomial<C> zero = rfac.getZEROCoefficient();
+        GenPolynomial<C> one  = rfac.getONECoefficient();
+        Map<ExpVector,GenPolynomial<C>> Bv = B.val; //getMap();
+        for ( Monomial<C> m: A ) {
+            ExpVector e = m.e;
+            C a = m.c;
+            GenPolynomial<C> p = one.multiply(a);
+            Bv.put( e, p );
+        }
+        return B;
+    }
+
+
+    /**
      * GenPolynomial coefficient wise remainder.
      * @param <C> coefficient type.
      * @param P GenPolynomial.

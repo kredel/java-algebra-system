@@ -6,6 +6,7 @@ package edu.jas.application;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import junit.framework.Test;
@@ -133,7 +134,7 @@ public class IdealTest extends TestCase {
     /**
      * Test Ideal sum.
      */
-    public void testIdealSum() {
+    public void xtestIdealSum() {
 
         Ideal<BigRational> I;
         Ideal<BigRational> J;
@@ -250,7 +251,7 @@ public class IdealTest extends TestCase {
     /**
      * Test Ideal product.
      */
-    public void testIdealProduct() {
+    public void xtestIdealProduct() {
 
         Ideal<BigRational> I;
         Ideal<BigRational> J;
@@ -373,7 +374,7 @@ public class IdealTest extends TestCase {
     /**
      * Test Ideal quotient.
      */
-    public void testIdealQuotient() {
+    public void xtestIdealQuotient() {
 
         Ideal<BigRational> I;
         Ideal<BigRational> J;
@@ -487,7 +488,7 @@ public class IdealTest extends TestCase {
     /**
      * Test Ideal infinite quotient.
      */
-    public void testIdealInfiniteQuotient() {
+    public void xtestIdealInfiniteQuotient() {
 
         Ideal<BigRational> I;
         Ideal<BigRational> J;
@@ -567,7 +568,7 @@ public class IdealTest extends TestCase {
     /**
      * Test Ideal infinite quotient with Rabinowich trick.
      */
-    public void testIdealInfiniteQuotientRabi() {
+    public void xtestIdealInfiniteQuotientRabi() {
 
         Ideal<BigRational> I;
         Ideal<BigRational> J;
@@ -658,7 +659,7 @@ public class IdealTest extends TestCase {
     /**
      * Test Ideal radical membership.
      */
-    public void testIdealRadicalMember() {
+    public void xtestIdealRadicalMember() {
 
         Ideal<BigRational> I;
         Ideal<BigRational> J;
@@ -727,7 +728,7 @@ public class IdealTest extends TestCase {
     /**
      * Test Ideal common zeros.
      */
-    public void testIdealCommonZeros() {
+    public void xtestIdealCommonZeros() {
 
         Ideal<BigRational> I;
         L = new ArrayList<GenPolynomial<BigRational>>();
@@ -766,7 +767,7 @@ public class IdealTest extends TestCase {
     /**
      * Test Ideal dimension.
      */
-    public void testIdealDimension() {
+    public void xtestIdealDimension() {
 
         Ideal<BigRational> I;
         L = new ArrayList<GenPolynomial<BigRational>>();
@@ -833,7 +834,7 @@ public class IdealTest extends TestCase {
     /**
      * Test Ideal term order optimization.
      */
-    public void testIdealTopt() {
+    public void xtestIdealTopt() {
 
         Ideal<BigRational> I;
         Ideal<BigRational> J;
@@ -923,7 +924,7 @@ public class IdealTest extends TestCase {
     /**
      * Test elimination Ideals.
      */
-    public void testElimIdeal() {
+    public void xtestElimIdeal() {
 
         String[] vars = fac.getVars();
         //System.out.println("vars = " + Arrays.toString(vars));
@@ -978,6 +979,51 @@ public class IdealTest extends TestCase {
                 //System.out.println("J = " + J);
             }
         }
+    }
+
+
+    /**
+     * Test univariate polynomials in ideal.
+     */
+    public void testUnivPoly() {
+
+        //BigRational coeff = new BigRational(17, 1);
+        //TermOrder tol = new TermOrder( TermOrder.INVLEX );
+        //String[] vars = new String[] { "x", "y", "z" };
+        //fac = new GenPolynomialRing<BigRational>(coeff, rl, tol, vars);
+
+        String[] vars = fac.getVars();
+        System.out.println("vars = " + Arrays.toString(vars));
+        System.out.println("fac = " + fac);
+
+        Ideal<BigRational> I;
+
+        L = new ArrayList<GenPolynomial<BigRational>>();
+
+        a = fac.univariate(2, 3L); //fac.random(kl, ll, el, q );
+        b = fac.univariate(1, 2L); //fac.random(kl, ll, el, q );
+        c = fac.univariate(0, 1L); //fac.random(kl, ll, el, q );
+
+        if (a.isZERO() || b.isZERO() || c.isZERO()) {
+            return;
+        }
+
+        L.add(a);
+        L.add(b);
+        L.add(c);
+
+        I = new Ideal<BigRational>(fac, L);
+        //I.doGB();
+        assertTrue("not isZERO( I )", !I.isZERO());
+        assertTrue("isGB( I )", I.isGB());
+        System.out.println("I = " + I);
+
+	for ( int i = 0; i < 1; i++ ) { // rl
+            GenPolynomial<BigRational> u = I.constructUnivariate(rl-1-i);
+            System.out.println("u = " + u);
+            //assertTrue("I.contains(u) ", I.contains(u));
+	}
+
     }
 
 }
