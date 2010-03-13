@@ -1354,55 +1354,63 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
         System.out.println("rfac  = " + rfac.toScript());
 
         GenPolynomial<GenPolynomial<C>> P = rfac.getZERO();
-        System.out.println("P  = " + P);
+        //System.out.println("P  = " + P);
 	for ( int k = 0; k < ll; k++ ) {
             GenPolynomial<GenPolynomial<C>> Pp = rfac.univariate(i,k);
 	    GenPolynomial<C> cp = cpfac.univariate(cpfac.nvar-1-k);
             Pp = Pp.multiply(cp);
 	    P = P.sum(Pp);
 	}
-        System.out.println("P  = " + P);
+        //System.out.println("P  = " + P);
 
         GenPolynomial<C> X;
         GenPolynomial<C> XP;
         List<GenPolynomial<C>> ls;
         int z = -1;
         do {
+            System.out.println("ll  = " + ll);
             GenPolynomial<GenPolynomial<C>> Pp = rfac.univariate(i,ll);
 	    GenPolynomial<C> cp = cpfac.univariate(cpfac.nvar-1-ll);
             Pp = Pp.multiply(cp);
-            System.out.println("Pp = " + Pp);
+            //System.out.println("Pp = " + Pp);
 	    P = P.sum(Pp);
             System.out.println("P  = " + P);
 
-            X = pfac.univariate(i,ll);
+            X = pfac.univariate(i,ll+1);
             System.out.println("X  = " + X);
 
             XP = red.normalform(G,X);
             System.out.println("XP = " + XP);
 
             GenPolynomial<GenPolynomial<C>> XPp = PolyUtil.<C> toRecursive(rfac,XP);
-            System.out.println("XPp = " + XPp);
+            //System.out.println("XPp = " + XPp);
 
 	    XPp = XPp.sum(P);
             System.out.println("XPp = " + XPp);
 
 	    ls = new ArrayList<GenPolynomial<C>>(XPp.getMap().values());
-            System.out.println("ls = " + ls);
+            //System.out.println("ls = " + ls);
 
 	    ls = red.irreducibleSet(ls);
             System.out.println("ls = " + ls);
 
 	    Ideal<C> L = new Ideal<C>(cpfac,ls,true);
-            System.out.println("L = " + L);
+            //System.out.println("L = " + L);
 	    z = L.commonZeroTest();
             System.out.println("z = " + z);
-
             ll++;
-        } while ( z != 0 && ll <= 5 && !XP.isZERO() );
+	    if ( z != 0 ) {
+                cpfac = cpfac.extend(1); //new GenPolynomialRing<C>(cfac,ll+1,new TermOrder(TermOrder.INVLEX));
+                System.out.println("cpfac = " + cpfac.toScript());
+                rfac = new GenPolynomialRing<GenPolynomial<C>>(cpfac,pfac);
+                System.out.println("rfac  = " + rfac.toScript());
+		P = PolyUtil.<C> extendCoefficients(rfac,P,0,0L);
+                System.out.println("P = " + P);
+	    }
+        } while ( z != 0 ); // && ll <= 5 && !XP.isZERO()
 
         pol = ufac.univariate(0,ll);
-        System.out.println("pol = " + pol);
+        //System.out.println("pol = " + pol);
 	for ( GenPolynomial<C> pc : ls ) {
             ExpVector e = pc.leadingExpVector();
             if (e == null) {
@@ -1413,7 +1421,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
                 continue;
             }
 	    int vi = v[0];
-            System.out.println("vi = " + vi);
+            //System.out.println("vi = " + vi);
 	    C tc = pc.trailingBaseCoefficient();
 	    tc = tc.negate();
             System.out.println("tc = " + tc);
@@ -1422,8 +1430,8 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
 	    pi = pi.multiply(tc);
             System.out.println("pi = " + pi);
 	    pol = pol.sum(pi);
-            System.out.println("pol = " + pol);
 	}
+        System.out.println("pol = " + pol);
         return pol;
     }
 

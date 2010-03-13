@@ -987,11 +987,6 @@ public class IdealTest extends TestCase {
      */
     public void testUnivPoly() {
 
-        //BigRational coeff = new BigRational(17, 1);
-        //TermOrder tol = new TermOrder( TermOrder.INVLEX );
-        //String[] vars = new String[] { "x", "y", "z" };
-        //fac = new GenPolynomialRing<BigRational>(coeff, rl, tol, vars);
-
         String[] vars = fac.getVars();
         System.out.println("vars = " + Arrays.toString(vars));
         System.out.println("fac = " + fac);
@@ -1000,9 +995,11 @@ public class IdealTest extends TestCase {
 
         L = new ArrayList<GenPolynomial<BigRational>>();
 
-        a = fac.univariate(2, 3L); //fac.random(kl, ll, el, q );
-        b = fac.univariate(1, 2L); //fac.random(kl, ll, el, q );
+        a = fac.univariate(2, 3L).sum(fac.univariate(2, 2L)); //fac.random(kl, ll, el, q );
+        b = fac.univariate(1, 2L).sum(fac.univariate(1, 1L)); //fac.random(kl, ll, el, q );
         c = fac.univariate(0, 1L); //fac.random(kl, ll, el, q );
+
+	a = fac.parse("( x^3 + 34/55 x^2 + 1/9 x + 99 )");
 
         if (a.isZERO() || b.isZERO() || c.isZERO()) {
             return;
@@ -1018,10 +1015,12 @@ public class IdealTest extends TestCase {
         assertTrue("isGB( I )", I.isGB());
         System.out.println("I = " + I);
 
-	for ( int i = 0; i < 1; i++ ) { // rl
+	for ( int i = 0; i < rl; i++ ) { // rl
             GenPolynomial<BigRational> u = I.constructUnivariate(rl-1-i);
-            System.out.println("u = " + u);
-            //assertTrue("I.contains(u) ", I.contains(u));
+            //System.out.println("u = " + u);
+            GenPolynomial<BigRational> U = fac.parse( u.toString() );
+            System.out.println("U = " + U);
+            assertTrue("I.contains(U) ", I.contains(U));
 	}
 
     }

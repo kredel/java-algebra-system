@@ -683,6 +683,35 @@ public class PolyUtil {
 
 
     /**
+     * Extend coefficient variables. 
+     * Extend all coefficient ExpVectors by i elements and multiply by x_j^k.
+     * @param pfac extended polynomial ring factory (by i variables in the coefficients).
+     * @param j index of variable to be used for multiplication.
+     * @param k exponent for x_j.
+     * @return extended polynomial.
+     */
+    public static <C extends RingElem<C>>
+        GenPolynomial<GenPolynomial<C>> extendCoefficients(GenPolynomialRing<GenPolynomial<C>> pfac, 
+                                                           GenPolynomial<GenPolynomial<C>> A, int j, long k) {
+        GenPolynomial<GenPolynomial<C>> Cp = pfac.getZERO().clone();
+        if ( A.isZERO() ) { 
+           return Cp;
+        }
+        GenPolynomialRing<C> cfac = (GenPolynomialRing<C>)pfac.coFac;
+        GenPolynomialRing<C> acfac = (GenPolynomialRing<C>)A.ring.coFac;
+        int i = cfac.nvar - acfac.nvar;
+        Map<ExpVector,GenPolynomial<C>> CC = Cp.val; //getMap();
+        for ( Map.Entry<ExpVector,GenPolynomial<C>> y: A.val.entrySet() ) {
+            ExpVector e = y.getKey();
+            GenPolynomial<C> a = y.getValue();
+            GenPolynomial<C> f = a.extend(cfac,j,k);
+            CC.put( e, f );
+        }
+        return Cp;
+    }
+
+
+    /**
      * To recursive representation. 
      * Represent as polynomial in i+r variables with coefficients in i variables.
      * Works for arbitrary term orders.
