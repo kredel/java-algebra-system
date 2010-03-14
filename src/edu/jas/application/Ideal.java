@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -1202,6 +1203,52 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
 
 
     /**
+     * Univariate head term degrees.
+     * @return a list of the degrees of univariate head terms.
+     */
+    public List<Long> univariateDegrees() {
+        List<Long> ud = new ArrayList<Long>();
+        if (this.isZERO()) {
+            return ud;
+        }
+        if (!isGB) {
+            doGB();
+        }
+        if (this.isONE()) {
+            return ud;
+        }
+        if (this.list.ring.nvar <= 0) {
+            return ud;
+        }
+        //int uht = 0;
+        Map<Integer,Long> v = new TreeMap<Integer,Long>(); // for non reduced GBs
+        for (GenPolynomial<C> p : getList()) {
+            ExpVector e = p.leadingExpVector();
+            if (e == null) {
+                continue;
+            }
+            int[] u = e.dependencyOnVariables();
+            if (u == null) {
+                continue;
+            }
+            if (u.length == 1) {
+                //uht++;
+                Long d = v.get(u[0]);
+                if ( d == null ) {
+                    v.put(u[0],e.getVal(u[0]));
+                }
+            }
+        }
+        for ( int i = 0; i < this.list.ring.nvar; i++ ) {
+            Long d = v.get(i);
+            ud.add(d);
+        }
+        //Collections.reverse(ud);
+        return ud;
+    }
+
+
+    /**
      * Ideal dimension.
      * @return a dimension container (dim,maxIndep,list(maxIndep)).
      */
@@ -1321,46 +1368,55 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
      * @return univariate polynomial of minimal degree in variable i in ideal(G)
      */
     public GenPolynomial<C> constructUnivariate(int i) {
-	return constructUnivariate(i,getList());
+        return constructUnivariate(i,getList());
     }
 
 
     /**
      * Construct univariate polynomial of minimal degree in variable i in ideal(G).
      * @param i variable index.
-     * @param G list of polynomials, a Gr&ouml;bner base.
+     * @param G list of polynomials, a monic reduced Gr&ouml;bner base.
      * @return univariate polynomial of minimal degree in variable i in ideal(G)
      */
     public GenPolynomial<C> constructUnivariate(int i, List<GenPolynomial<C>> G) {
         if ( G == null || G.size() == 0 ) {
             throw new IllegalArgumentException("G may not be null or empty");
         }
-        System.out.println("i  = " + i);
+        //System.out.println("i  = " + i);
         GenPolynomialRing<C> pfac = G.get(0).ring;
-        System.out.println("pfac  = " + pfac.toScript());
-        int ll = 1;
+        //System.out.println("pfac  = " + pfac.toScript());
+
+        List<Long> ud = univariateDegrees();
+        //System.out.println("ud = " + ud);
+        int ll = 0;
+        Long di = ud.get(i);
+        if ( di != null ) {
+            ll = (int) (long)di;
+        } else {
+            throw new IllegalArgumentException("ideal(G) not zero dimensional");
+        }
         RingFactory<C> cfac = pfac.coFac;
 
-	String var = pfac.getVars()[pfac.nvar-1-i];
-        System.out.println("var  = " + var);
+        String var = pfac.getVars()[pfac.nvar-1-i];
+        //System.out.println("var  = " + var);
         GenPolynomialRing<C> ufac = new GenPolynomialRing<C>(cfac,1,new TermOrder(TermOrder.INVLEX),new String[]{ var });
-        System.out.println("ufac = " + ufac.toScript());
+        //System.out.println("ufac = " + ufac.toScript());
         GenPolynomial<C> pol = ufac.getZERO();
 
-        GenPolynomialRing<C> cpfac = new GenPolynomialRing<C>(cfac,ll+1,new TermOrder(TermOrder.INVLEX));
-        System.out.println("cpfac = " + cpfac.toScript());
+        GenPolynomialRing<C> cpfac = new GenPolynomialRing<C>(cfac,ll,new TermOrder(TermOrder.INVLEX));
+        //System.out.println("cpfac = " + cpfac.toScript());
 
         GenPolynomialRing<GenPolynomial<C>> rfac = new GenPolynomialRing<GenPolynomial<C>>(cpfac,pfac);
-        System.out.println("rfac  = " + rfac.toScript());
+        //System.out.println("rfac  = " + rfac.toScript());
 
         GenPolynomial<GenPolynomial<C>> P = rfac.getZERO();
         //System.out.println("P  = " + P);
-	for ( int k = 0; k < ll; k++ ) {
+        for ( int k = 0; k < ll; k++ ) {
             GenPolynomial<GenPolynomial<C>> Pp = rfac.univariate(i,k);
-	    GenPolynomial<C> cp = cpfac.univariate(cpfac.nvar-1-k);
+            GenPolynomial<C> cp = cpfac.univariate(cpfac.nvar-1-k);
             Pp = Pp.multiply(cp);
-	    P = P.sum(Pp);
-	}
+            P = P.sum(Pp);
+        }
         //System.out.println("P  = " + P);
 
         GenPolynomial<C> X;
@@ -1368,70 +1424,74 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
         List<GenPolynomial<C>> ls;
         int z = -1;
         do {
-            System.out.println("ll  = " + ll);
+            //System.out.println("ll  = " + ll);
             GenPolynomial<GenPolynomial<C>> Pp = rfac.univariate(i,ll);
-	    GenPolynomial<C> cp = cpfac.univariate(cpfac.nvar-1-ll);
+            GenPolynomial<C> cp = cpfac.univariate(cpfac.nvar-1-ll);
             Pp = Pp.multiply(cp);
             //System.out.println("Pp = " + Pp);
-	    P = P.sum(Pp);
-            System.out.println("P  = " + P);
+            P = P.sum(Pp);
+            //System.out.println("P  = " + P);
 
-            X = pfac.univariate(i,ll+1);
-            System.out.println("X  = " + X);
+            X = pfac.univariate(i,ll);
+            //System.out.println("X  = " + X);
 
             XP = red.normalform(G,X);
-            System.out.println("XP = " + XP);
+            //System.out.println("XP = " + XP);
 
             GenPolynomial<GenPolynomial<C>> XPp = PolyUtil.<C> toRecursive(rfac,XP);
             //System.out.println("XPp = " + XPp);
 
-	    XPp = XPp.sum(P);
-            System.out.println("XPp = " + XPp);
+            GenPolynomial<GenPolynomial<C>> XPs = XPp.sum(P);
+            //System.out.println("XPs = " + XPs);
 
-	    ls = new ArrayList<GenPolynomial<C>>(XPp.getMap().values());
+            ls = new ArrayList<GenPolynomial<C>>(XPs.getMap().values());
             //System.out.println("ls = " + ls);
 
-	    ls = red.irreducibleSet(ls);
-            System.out.println("ls = " + ls);
+            ls = red.irreducibleSet(ls);
+            //System.out.println("ls = " + ls);
 
-	    Ideal<C> L = new Ideal<C>(cpfac,ls,true);
+            Ideal<C> L = new Ideal<C>(cpfac,ls,true);
             //System.out.println("L = " + L);
-	    z = L.commonZeroTest();
-            System.out.println("z = " + z);
-            ll++;
-	    if ( z != 0 ) {
+            z = L.commonZeroTest();
+            //System.out.println("z = " + z);
+            if ( z != 0 ) {
+                ll++;
                 cpfac = cpfac.extend(1); //new GenPolynomialRing<C>(cfac,ll+1,new TermOrder(TermOrder.INVLEX));
-                System.out.println("cpfac = " + cpfac.toScript());
+                //System.out.println("cpfac = " + cpfac.toScript());
                 rfac = new GenPolynomialRing<GenPolynomial<C>>(cpfac,pfac);
-                System.out.println("rfac  = " + rfac.toScript());
-		P = PolyUtil.<C> extendCoefficients(rfac,P,0,0L);
-                System.out.println("P = " + P);
-	    }
+                //System.out.println("rfac  = " + rfac.toScript());
+                P = PolyUtil.<C> extendCoefficients(rfac,P,0,0L);
+                //System.out.println("P = " + P);
+                XPp = PolyUtil.<C> extendCoefficients(rfac,XPp,0,1L);
+                //System.out.println("XPp = " + XPp);
+                P = P.sum(XPp);
+                //System.out.println("P = " + P);
+            }
         } while ( z != 0 ); // && ll <= 5 && !XP.isZERO()
 
         pol = ufac.univariate(0,ll);
         //System.out.println("pol = " + pol);
-	for ( GenPolynomial<C> pc : ls ) {
+        for ( GenPolynomial<C> pc : ls ) {
             ExpVector e = pc.leadingExpVector();
             if (e == null) {
                 continue;
             }
             int[] v = e.dependencyOnVariables();
-            if (v == null) {
+            if (v == null || v.length == 0) {
                 continue;
             }
-	    int vi = v[0];
+            int vi = v[0];
             //System.out.println("vi = " + vi);
-	    C tc = pc.trailingBaseCoefficient();
-	    tc = tc.negate();
-            System.out.println("tc = " + tc);
+            C tc = pc.trailingBaseCoefficient();
+            tc = tc.negate();
+            //System.out.println("tc = " + tc);
 
             GenPolynomial<C> pi = ufac.univariate(0,ll-1-vi);
-	    pi = pi.multiply(tc);
-            System.out.println("pi = " + pi);
-	    pol = pol.sum(pi);
-	}
-        System.out.println("pol = " + pol);
+            pi = pi.multiply(tc);
+            //System.out.println("pi = " + pi);
+            pol = pol.sum(pi);
+        }
+        //System.out.println("pol = " + pol);
         return pol;
     }
 

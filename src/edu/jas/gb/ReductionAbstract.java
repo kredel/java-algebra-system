@@ -374,13 +374,18 @@ public abstract class ReductionAbstract<C extends RingElem<C>>
     /**
      * Irreducible set.
      * @param Pp polynomial list.
-     * @return a list P of polynomials which are in normalform wrt. P.
+     * @return a list P of monic polynomials which are in normalform wrt. P.
      */
     public List<GenPolynomial<C>> irreducibleSet(List<GenPolynomial<C>> Pp) {  
         ArrayList<GenPolynomial<C>> P = new ArrayList<GenPolynomial<C>>();
         for ( GenPolynomial<C> a : Pp ) {
             if ( a.length() != 0 ) {
                a = a.monic();
+               if ( a.isONE() ) {
+                   P.clear();
+                   P.add( a );
+                   return P;
+               }
                P.add( a );
             }
         }

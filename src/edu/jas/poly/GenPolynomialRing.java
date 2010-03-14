@@ -778,10 +778,7 @@ public class GenPolynomialRing<C extends RingElem<C> >
      */
     public GenPolynomialRing<C> extend(int i) {
         // add module variable names
-        String[] v = new String[ i ];
-        for ( int k = 0; k < i; k++ ) {
-            v[ k ] = "e" + (k+1);
-        }
+        String[] v = newVars("e",i);
         return extend(v);
     }
 
