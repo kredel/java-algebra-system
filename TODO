@@ -2,9 +2,19 @@ List of things to be resolved or accomplished:
 
 issues to consider:
 
-- check the 187 exceptions (170 runtime exceptions) that are thrown
-
 - implement parallel proxys for GB computation
+
+- implement power series composition and power
+
+- implement multivariate Hensel lifting for multivariate polynomial factorization
+
+- implement Berlekamp-Zassenhaus for modular factorization
+
+- implement AlgebraicNumber primitive element computation
+
+- implement prime ideal decomposition for zero-dimensional ideals
+
+- check the 187 exceptions (170 runtime exceptions) that are thrown
 
 - check for safe publication idiom in polynomial construction
 
@@ -20,35 +30,16 @@ issues to consider:
 
 - rework parallel GB algorithms
 
-- refactor method names for groovy operator overloading, make examples for usage
-
 - make final variables public (?)
-
-- implement a global variable name generator in edu.jas.kern
-  and use it in extend() and contract()
 
 - define divideAndRemainder in RingElem interface and implement
 - rename divideAndRemainder to quotientRemainder
 
 - make use of gcd in pseudo reduction, needs other coefficient type
 
-- implement power series composition and power
-
-- implement multivariate Hensel lifting for multivariate polynomial factorization
-
-- implement Berlekamp-Zassenhaus for modular factorization
-
 - implement matrices to vector
 
 - implement Boolean with RingElem interface (?)
-
-- implement AlgebraicNumber primitive element computation
-
-- implement ModLong for faster modular arithmetic
-
-- implement construction of univariate polynomials in zero-dimensional ideals
-
-- implement prime ideal decomposition for zero-dimensional ideals
 
 - check solvable polynomials with integral domain coefficients
 
@@ -56,9 +47,7 @@ issues to consider:
 
 - implement real roots with other methods, e.g. after Uspensky or Rolle
 
-- implement complex roots 
-
-- using git to publish the repository
+- refactor method names for groovy operator overloading, make examples for usage
 
 
 partially resolved and completed issues:
@@ -68,7 +57,6 @@ partially resolved and completed issues:
 - implement absolute polynomial factorization
 
 - implement univaiate and multivariate polynomial factorization
-  case prime 2 is still to do
 
 - implement power series
 
@@ -78,19 +66,19 @@ partially resolved and completed issues:
   clean structure of compareTo, signum and equals
   - is not possible
 
-- refactor ExpVector for different array element types
+- refactor ExpVector for different array element types, done
 
-- implement comprehensive GB
+- implement comprehensive GB, done
 
 - add product category to applications
 - implement direct products of ring elements
 
-- implement d- and e-reductions and d-/e-Groebner bases
+- implement d- and e-reductions and d-/e-Groebner bases, done
 
-- implement Groebner bases for regular rings
+- implement Groebner bases for regular rings, done
 
 - implement term order optimization from MAS, also for coefficients 
-  and solvable polynomials
+  and solvable polynomials, done
 
 - define power(n) in RingElem and implement in edu.jas.structure.Power 
   and classes, done
@@ -114,13 +102,26 @@ partially resolved and completed issues:
 
 - rework junit tests to stop failing in case of zero polynomials
 
-- add version information in jas jar-file names
+- add version information in jas jar-file names, done
 
 - develop modifiable polynomial constructor or put method and iterators
+
+- using git to publish the repository, done
 
 
 
 resolved and completed issues:
+
+- implement complex roots, done
+
+- implement ModLong for faster modular arithmetic, done
+
+- implement construction of univariate polynomials in zero-dimensional ideals
+  done
+
+- implement a global variable name generator in edu.jas.kern
+  and use it in extend() and contract()
+  done in GenPolynomialRing
 
 - implement RealAlgebraicNumber and RealAlgebraicNumberRing, done
 
