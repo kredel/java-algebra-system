@@ -27,6 +27,7 @@ import edu.jas.poly.PolynomialList;
 import edu.jas.poly.PolyUtil;
 import edu.jas.poly.TermOrder;
 import edu.jas.util.KsubSet;
+import edu.jas.util.ListUtil;
 import edu.jas.structure.Complex;
 import edu.jas.structure.ComplexRing;
 import edu.jas.structure.RingElem;
@@ -1075,9 +1076,9 @@ public class IdealTest extends TestCase {
         //b = fac.univariate(1, 2L).sum(fac.univariate(1, 1L)); //fac.random(kl, ll, el, q );
         //c = fac.univariate(0, 1L); //fac.random(kl, ll, el, q );
 
-        a = fac.parse("( x^3 + 34/55 x^2 + 1/9 x + 99 )");
-        b = fac.parse("( y - x )");
-        c = fac.parse("( z - x y )");
+        a = fac.parse("( x^3 - 27 )");
+        b = fac.parse("( y^2 - 9 )");
+        c = fac.parse("( z - 7 )");
 
         if (a.isZERO() || b.isZERO() || c.isZERO()) {
             return;
@@ -1093,9 +1094,16 @@ public class IdealTest extends TestCase {
         assertTrue("isGB( I )", I.isGB());
         System.out.println("I = " + I);
 
-        List<List<Complex<BigDecimal>>> roots = IdealTest.<BigRational,BigRational> complexRoots(I);
-        System.out.println("roots = " + roots + "\n");
+        BigRational eps = new BigRational(1,1000000); 
+	eps = eps.multiply(eps);
+	eps = eps.multiply(eps).multiply(eps);
 
+        List<List<Complex<BigDecimal>>> roots = IdealTest.<BigRational,BigRational> complexRoots(I, eps);
+        //System.out.println("roots = " + roots + "\n");
+	for ( List<Complex<BigDecimal>> r : roots ) {
+            System.out.println("r = " + r);
+	}
+        System.out.println();
         ComputerThreads.terminate();
     }
 
@@ -1105,14 +1113,12 @@ public class IdealTest extends TestCase {
      * @return list of coordinates of complex roots for ideal(G)
      */
     public static <C extends RingElem<C> & Rational, D extends GcdRingElem<D>> 
-      List<List<Complex<BigDecimal>>> complexRoots(Ideal<D> I) {
+      List<List<Complex<BigDecimal>>> complexRoots(Ideal<D> I, C eps) {
         List<GenPolynomial<D>> univs = I.constructUnivariate();
         List<List<Complex<BigDecimal>>> croots = new ArrayList<List<Complex<BigDecimal>>>();
         RingFactory<C> cf = (RingFactory<C>) I.list.ring.coFac;
         ComplexRing<C> cr = new ComplexRing<C>(cf);
         ComplexRootsAbstract<C> cra = new ComplexRootsSturm<C>(cr);
-        C eps = cf.fromInteger(1000000); 
-        eps = eps.inverse();
         List<GenPolynomial<Complex<C>>> cunivs = new ArrayList<GenPolynomial<Complex<C>>>();
         for ( GenPolynomial<D> p : univs ) {
             GenPolynomialRing<Complex<C>> pfac = new GenPolynomialRing<Complex<C>>(cr,p.ring);
@@ -1126,6 +1132,7 @@ public class IdealTest extends TestCase {
             System.out.println("cri = " + cri);
             croots.add(cri);
         }
+        croots = ListUtil.<Complex<BigDecimal>> tupleFromList( croots );
         return croots;
     }
 
