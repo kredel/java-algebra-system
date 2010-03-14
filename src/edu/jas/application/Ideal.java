@@ -1363,7 +1363,23 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
 
 
     /**
-     * Construct univariate polynomial of minimal degree in variable i in ideal(G).
+     * Construct univariate polynomials of minimal degree in all variables 
+     * in zero dimensional ideal(G).
+     * @return list of univariate polynomial of minimal degree in each variable in ideal(G)
+     */
+    public List<GenPolynomial<C>> constructUnivariate() {
+	List<GenPolynomial<C>> univs = new ArrayList<GenPolynomial<C>>();
+	for ( int i = list.ring.nvar-1; i >= 0; i-- ) {
+            GenPolynomial<C> u = constructUnivariate(i);
+	    univs.add(u);
+	}
+        return univs;
+    }
+
+
+    /**
+     * Construct univariate polynomial of minimal degree in variable i 
+     * in zero dimensional ideal(G).
      * @param i variable index.
      * @return univariate polynomial of minimal degree in variable i in ideal(G)
      */
@@ -1373,7 +1389,8 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
 
 
     /**
-     * Construct univariate polynomial of minimal degree in variable i in ideal(G).
+     * Construct univariate polynomial of minimal degree in variable i 
+     * in zero dimensional ideal(G).
      * @param i variable index.
      * @param G list of polynomials, a monic reduced Gr&ouml;bner base.
      * @return univariate polynomial of minimal degree in variable i in ideal(G)
