@@ -35,6 +35,8 @@ import edu.jas.structure.RingFactory;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.root.ComplexRootsSturm;
 import edu.jas.root.ComplexRootsAbstract;
+import edu.jas.root.RealRootsSturm;
+import edu.jas.root.RealRootAbstract;
 
 
 /**
@@ -1109,6 +1111,61 @@ public class IdealTest extends TestCase {
 
 
     /**
+     * Test real roots univariate polynomials in zero dim ideal.
+     */
+    public void testRealRoot() {
+        String[] vars;
+
+        BigRational coeff = new BigRational(17, 1);
+        to = new TermOrder( TermOrder.INVLEX);
+        vars = new String[] { "x", "y", "z" };
+        fac = new GenPolynomialRing<BigRational>(coeff, rl, to, vars);
+
+        vars = fac.getVars();
+        //System.out.println("vars = " + Arrays.toString(vars));
+        //System.out.println("fac = " + fac);
+
+        Ideal<BigRational> I;
+
+        L = new ArrayList<GenPolynomial<BigRational>>();
+
+        //a = fac.univariate(2, 3L).sum(fac.univariate(2, 2L)); //fac.random(kl, ll, el, q );
+        //b = fac.univariate(1, 2L).sum(fac.univariate(1, 1L)); //fac.random(kl, ll, el, q );
+        //c = fac.univariate(0, 1L); //fac.random(kl, ll, el, q );
+
+        a = fac.parse("( x^3 - 27 )");
+        b = fac.parse("( y^4 - x )");
+        c = fac.parse("( z^2 - x^2 )");
+
+        if (a.isZERO() || b.isZERO() || c.isZERO()) {
+            return;
+        }
+
+        L.add(a);
+        L.add(b);
+        L.add(c);
+
+        I = new Ideal<BigRational>(fac, L);
+        //I.doGB();
+        assertTrue("not isZERO( I )", !I.isZERO());
+        assertTrue("isGB( I )", I.isGB());
+        System.out.println("I = " + I);
+
+        BigRational eps = new BigRational(1,1000000); 
+	eps = eps.multiply(eps);
+	eps = eps.multiply(eps).multiply(eps);
+
+        List<List<BigDecimal>> roots = IdealTest.<BigRational,BigRational> realRoots(I, eps);
+        //System.out.println("roots = " + roots + "\n");
+	for ( List<BigDecimal> r : roots ) {
+            System.out.println("r = " + r);
+	}
+        System.out.println();
+        ComputerThreads.terminate();
+    }
+
+
+    /**
      * Construct superset of complex roots for zero dimensional ideal(G).
      * @return list of coordinates of complex roots for ideal(G)
      */
@@ -1134,6 +1191,26 @@ public class IdealTest extends TestCase {
         }
         croots = ListUtil.<Complex<BigDecimal>> tupleFromList( croots );
         return croots;
+    }
+
+
+    /**
+     * Construct superset of real roots for zero dimensional ideal(G).
+     * @return list of coordinates of real roots for ideal(G)
+     */
+    public static <C extends RingElem<C> & Rational, D extends GcdRingElem<D>> 
+      List<List<BigDecimal>> realRoots(Ideal<D> I, C eps) {
+        List<GenPolynomial<D>> univs = I.constructUnivariate();
+        List<List<BigDecimal>> roots = new ArrayList<List<BigDecimal>>();
+        RingFactory<C> cf = (RingFactory<C>) I.list.ring.coFac;
+        RealRootAbstract<C> rra = new RealRootsSturm<C>();
+        for ( int i = 0; i < I.list.ring.nvar; i++ ) {
+            List<BigDecimal> rri = rra.approximateRoots((GenPolynomial<C>)univs.get(i),eps);
+            //System.out.println("rri = " + rri);
+            roots.add(rri);
+        }
+        roots = ListUtil.<BigDecimal> tupleFromList( roots );
+        return roots;
     }
 
 }
