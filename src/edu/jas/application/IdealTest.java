@@ -1122,14 +1122,14 @@ public class IdealTest extends TestCase {
         List<GenPolynomial<Complex<C>>> cunivs = new ArrayList<GenPolynomial<Complex<C>>>();
         for ( GenPolynomial<D> p : univs ) {
             GenPolynomialRing<Complex<C>> pfac = new GenPolynomialRing<Complex<C>>(cr,p.ring);
-            System.out.println("pfac = " + pfac.toScript());
+            //System.out.println("pfac = " + pfac.toScript());
             GenPolynomial<Complex<C>> cp = PolyUtil.<C> toComplex(pfac,(GenPolynomial<C>) p);
             cunivs.add(cp);
-            System.out.println("cp = " + cp);
+            //System.out.println("cp = " + cp);
         }
         for ( int i = 0; i < I.list.ring.nvar; i++ ) {
             List<Complex<BigDecimal>> cri = cra.approximateRoots(cunivs.get(i),eps);
-            System.out.println("cri = " + cri);
+            //System.out.println("cri = " + cri);
             croots.add(cri);
         }
         croots = ListUtil.<Complex<BigDecimal>> tupleFromList( croots );
