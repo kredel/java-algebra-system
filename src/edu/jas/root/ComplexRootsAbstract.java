@@ -505,43 +505,55 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
         SortedMap<GenPolynomial<Complex<C>>, Long> sa = engine.squarefreeFactors(a);
         List<Complex<BigDecimal>> roots = new ArrayList<Complex<BigDecimal>>();
         for (GenPolynomial<Complex<C>> p : sa.keySet()) {
-            Complex<C> Mb = rootBound(p);
-            C M = Mb.getRe();
-            C M1 = M.sum(M.factory().fromInteger(1)); // asymmetric to origin
-            //System.out.println("M = " + M);
-            if (debug) {
-                logger.info("rootBound = " + M);
-            }
-            Complex<C>[] corner = (Complex<C>[]) new Complex[4];
-            corner[0] = new Complex<C>(cr, M1.negate(), M);           // nw
-            corner[1] = new Complex<C>(cr, M1.negate(), M1.negate()); // sw
-            corner[2] = new Complex<C>(cr, M, M1.negate());           // se
-            corner[3] = new Complex<C>(cr, M, M);                     // ne
-            Rectangle<C> rect = new Rectangle<C>(corner);
-            List<Rectangle<C>> rs = null;
-            try {
-                rs = complexRoots(rect, p);
-            } catch (InvalidBoundaryException e) {
-                throw new RuntimeException("this should never happen " + e);
-            }
-            List<Complex<BigDecimal>> rf = new ArrayList<Complex<BigDecimal>>(rs.size());
-            for ( Rectangle<C> r : rs ) {
-                Complex<BigDecimal> rr = null;
-                while ( rr == null ) {
-                    try {
-                        rr = approximateRoot(r,p,eps);
-                        rf.add(rr);
-                    } catch (NoConvergenceException e) {
-                        // fall back to exact algorithm
-                        //System.out.println("" + e);
-                        BigRational len = r.rationalLength();
-                        len = len.multiply( new BigRational(1,1000));
+            List<Complex<BigDecimal>> rf = null;
+            if ( p.degree(0) <= 1 ) {
+                Complex<C> tc = p.trailingBaseCoefficient();
+                tc = tc.negate();
+                BigDecimal rr = new BigDecimal( tc.getRe().getRational() );
+                BigDecimal ri = new BigDecimal( tc.getIm().getRational() );
+                ComplexRing<BigDecimal> crf = new ComplexRing<BigDecimal>(rr); 
+                Complex<BigDecimal> r = new Complex<BigDecimal>(crf,rr,ri); 
+                rf = new ArrayList<Complex<BigDecimal>>(1);
+                rf.add(r);
+            } else {
+                Complex<C> Mb = rootBound(p);
+                C M = Mb.getRe();
+                C M1 = M.sum(M.factory().fromInteger(1)); // asymmetric to origin
+                //System.out.println("M = " + M);
+                if (debug) {
+                    logger.info("rootBound = " + M);
+                }
+                Complex<C>[] corner = (Complex<C>[]) new Complex[4];
+                corner[0] = new Complex<C>(cr, M1.negate(), M);           // nw
+                corner[1] = new Complex<C>(cr, M1.negate(), M1.negate()); // sw
+                corner[2] = new Complex<C>(cr, M, M1.negate());           // se
+                corner[3] = new Complex<C>(cr, M, M);                     // ne
+                Rectangle<C> rect = new Rectangle<C>(corner);
+                List<Rectangle<C>> rs = null;
+                try {
+                    rs = complexRoots(rect, p);
+                } catch (InvalidBoundaryException e) {
+                    throw new RuntimeException("this should never happen " + e);
+                }
+                rf = new ArrayList<Complex<BigDecimal>>(rs.size());
+                for ( Rectangle<C> r : rs ) {
+                    Complex<BigDecimal> rr = null;
+                    while ( rr == null ) {
                         try {
-                            r = complexRootRefinement(r,p,len);
-                            logger.info("fall back rootRefinement = " + r);
-                            //System.out.println("len = " + len);
-                        } catch( InvalidBoundaryException ee ) {
-                            throw new RuntimeException("this should never happen " + ee);
+                            rr = approximateRoot(r,p,eps);
+                            rf.add(rr);
+                        } catch (NoConvergenceException e) {
+                            // fall back to exact algorithm
+                            //System.out.println("" + e);
+                            BigRational len = r.rationalLength();
+                            len = len.multiply( new BigRational(1,1000));
+                            try {
+                                r = complexRootRefinement(r,p,len);
+                                logger.info("fall back rootRefinement = " + r);
+                                //System.out.println("len = " + len);
+                            } catch( InvalidBoundaryException ee ) {
+                                throw new RuntimeException("this should never happen " + ee);
+                            }
                         }
                     }
                 }
