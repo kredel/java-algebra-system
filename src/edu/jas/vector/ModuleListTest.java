@@ -278,7 +278,7 @@ public static Test suite() {
      assertTrue("p2 == p2", p2.equals(p2) );
      assertEquals("p2.length", 4, p2.list.size() );
 
-     assertTrue("p == p2", p.equals(p2) );
+     assertTrue("p == p2", p.list.equals(p2.list) );
  }
 
 }

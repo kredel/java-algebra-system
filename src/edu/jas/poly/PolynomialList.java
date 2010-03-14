@@ -103,7 +103,7 @@ public class PolynomialList<C extends RingElem<C> >
            return false;
         }
         if ( ! ring.equals( pl.ring ) ) {
-            System.out.println("not same Ring");
+            System.out.println("not same Ring " + ring.toScript() + ", " + pl.ring.toScript());
             return false;
         }
         return ( compareTo(pl) == 0 );

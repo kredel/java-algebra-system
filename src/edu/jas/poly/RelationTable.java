@@ -92,7 +92,7 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
            return false;
         }
         if ( ! ring.equals( tab.ring ) ) {
-            System.out.println("not same Ring");
+            System.out.println("not same Ring " + ring.toScript() + ", " + tab.ring.toScript());
             return false;
         }
         for ( List<Integer> k: table.keySet() ) { 
