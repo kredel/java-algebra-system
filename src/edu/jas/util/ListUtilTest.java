@@ -134,6 +134,39 @@ public class ListUtilTest extends TestCase {
      assertEquals("plist == pnl ",plist,pnl);
  }
 
+
+/**
+ * Test tuple transpose.
+ * 
+ */
+ public void testTuple() {
+     ai = new BigInteger();
+     List<List<BigInteger>> tlist = new ArrayList<List<BigInteger>>();
+     int s1 = 4;
+     int s2 = 3;
+     int s = 1;
+     for ( int i = 0; i < s1; i++ ) {
+	 s *= s2;
+     }
+     //System.out.println("s = " + s);
+     for ( int i = 0; i < s1; i++ ) {
+         List<BigInteger> list = new ArrayList<BigInteger>();
+         for ( int j = 0; j < s2; j++ ) {
+             list.add( ai.random(7) );
+         }
+         tlist.add(list);
+     }
+     //System.out.println("tlist = " + tlist);
+
+     List<List<BigInteger>> ltuple = ListUtil.<BigInteger> tupleFromList(tlist);
+     //System.out.println("ltuple = " + ltuple);
+     assertTrue("#ltuple == " + s + " ",ltuple.size()==s);
+
+     for ( List<BigInteger> t : ltuple) {
+         assertTrue("#t == " + s1 + " ",t.size()==s1);
+     }
+ }
+
 }
 
 

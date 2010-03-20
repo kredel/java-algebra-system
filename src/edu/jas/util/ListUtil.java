@@ -67,12 +67,18 @@ public class ListUtil {
             return T;
         }
         if ( A.size() == 1 ) {
-            T.add( new ArrayList<C>( A.get(0) ) );
+            List<C> Ap = A.get(0);
+            for ( C a : Ap ) {
+               List<C> Tp = new ArrayList<C>(1);
+               Tp.add(a);
+               T.add( Tp );
+            }
             return T;
         }
         List<List<C>> Ap = new ArrayList<List<C>>( A );
         List<C> f = Ap.remove( 0 );
         List<List<C>> Tp = tupleFromList( Ap );
+        //System.out.println("Tp = " + Tp);
         for ( C a : f ) {
             for ( List<C> tp : Tp ) {
                 List<C> ts = new ArrayList<C>();
