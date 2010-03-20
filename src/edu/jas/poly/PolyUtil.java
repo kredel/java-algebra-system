@@ -1590,6 +1590,53 @@ public class PolyUtil {
 
 
     /**
+     * Evaluate all variables. 
+     * @param <C> coefficient type.
+     * @param cfac coefficient ring factory.
+     * @param dfac polynomial ring in n variables.
+     *        C[x_1, x_2, ..., x_n] factory.
+     * @param A polynomial to be evaluated.
+     * @param a = ( a_1, a_2, ..., a_n) a tuple of values to evaluate at.
+     * @return A( a_1, a_2, ..., a_n).
+     */
+    public static <C extends RingElem<C>> 
+        C
+        evaluateAll( RingFactory<C> cfac,
+                     GenPolynomialRing<C> dfac,
+                     GenPolynomial<C> A,
+                     List<C> a ) {
+        if ( A == null || A.isZERO() ) {
+           return cfac.getZERO();
+        }
+        if ( a == null || a.size() != dfac.nvar ) {
+           throw new RuntimeException("evaluate tuple size not equal to number of variables");
+        }
+        if ( dfac.nvar == 0 ) {
+            return A.trailingBaseCoefficient();
+        }
+        if ( dfac.nvar == 1 ) {
+            return evaluateMain(cfac,A,a.get(0));
+        }
+        C b = cfac.getZERO();
+        GenPolynomial<C> Ap = A;
+        for ( int k = 0; k < dfac.nvar-1; k++ ) {
+            C ap = a.get(k);
+            GenPolynomialRing<C> c1fac = new GenPolynomialRing<C>(cfac,1);
+            GenPolynomialRing<C> cnfac = new GenPolynomialRing<C>(cfac,dfac.nvar-1-k);
+            GenPolynomial<C> Bp = evaluateFirst(c1fac,cnfac,Ap,ap);
+            if ( Bp.isZERO() ) {
+                return b;
+            }
+            Ap = Bp;
+            //System.out.println("Ap = " + Ap);
+        }
+        C ap = a.get(dfac.nvar-1);
+        b = evaluateMain(cfac,Ap,ap);
+        return b;
+    }
+
+
+    /**
      * Substitute main variable. 
      * @param A univariate polynomial.
      * @param s polynomial for substitution.

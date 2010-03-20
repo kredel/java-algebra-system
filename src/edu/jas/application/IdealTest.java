@@ -1097,15 +1097,34 @@ public class IdealTest extends TestCase {
         System.out.println("I = " + I);
 
         BigRational eps = new BigRational(1,1000000); 
-	eps = eps.multiply(eps);
-	eps = eps.multiply(eps).multiply(eps);
+        eps = eps.multiply(eps);
+        eps = eps.multiply(eps).multiply(eps);
+        BigDecimal e = new BigDecimal(eps.getRational());
+        e = e.abs();
+
+        BigDecimal dc = BigDecimal.ONE;
+        GenPolynomialRing<BigDecimal> dfac = new GenPolynomialRing<BigDecimal>(dc,fac);
+        //System.out.println("dfac = " + dfac);
+        ComplexRing<BigDecimal> dcc = new ComplexRing<BigDecimal>(dc);
+        GenPolynomialRing<Complex<BigDecimal>> dcfac = new GenPolynomialRing<Complex<BigDecimal>>(dcc,dfac);
+        //System.out.println("dcfac = " + dcfac);
 
         List<List<Complex<BigDecimal>>> roots = IdealTest.<BigRational,BigRational> complexRoots(I, eps);
         //System.out.println("roots = " + roots + "\n");
-	for ( List<Complex<BigDecimal>> r : roots ) {
-            System.out.println("r = " + r);
-	}
-        System.out.println();
+        for ( List<Complex<BigDecimal>> r : roots ) {
+            //System.out.println("r = " + r);
+            for ( GenPolynomial<BigRational> p : I.getList() ) {
+                GenPolynomial<BigDecimal> dp = PolyUtil.<BigRational> decimalFromRational(dfac,p);
+                GenPolynomial<Complex<BigDecimal>> dpc = PolyUtil.<BigDecimal> toComplex(dcfac,dp);
+                //System.out.println("dpc = " + dpc);
+                Complex<BigDecimal> ev = PolyUtil.<Complex<BigDecimal>> evaluateAll(dcc,dcfac,dpc,r);
+                if ( ev.norm().getRe().compareTo(e) > 0 ) {
+                   System.out.println("ev = " + ev);
+                   fail("ev > eps : " + ev + " > " + e);
+                }
+            }
+        }
+        //System.out.println();
         ComputerThreads.terminate();
     }
 
@@ -1152,15 +1171,30 @@ public class IdealTest extends TestCase {
         System.out.println("I = " + I);
 
         BigRational eps = new BigRational(1,1000000); 
-	eps = eps.multiply(eps);
-	eps = eps.multiply(eps).multiply(eps);
+        eps = eps.multiply(eps);
+        eps = eps.multiply(eps).multiply(eps);
+        BigDecimal e = new BigDecimal(eps.getRational());
+        e = e.abs();
 
         List<List<BigDecimal>> roots = IdealTest.<BigRational,BigRational> realRoots(I, eps);
         //System.out.println("roots = " + roots + "\n");
-	for ( List<BigDecimal> r : roots ) {
-            System.out.println("r = " + r);
-	}
-        System.out.println();
+        // polynomials with decimal coefficients
+        BigDecimal dc = BigDecimal.ONE;
+        GenPolynomialRing<BigDecimal> dfac = new GenPolynomialRing<BigDecimal>(dc,fac);
+        //System.out.println("dfac = " + dfac);
+        for ( List<BigDecimal> r : roots ) {
+            //System.out.println("r = " + r);
+            for ( GenPolynomial<BigRational> p : I.getList() ) {
+                GenPolynomial<BigDecimal> dp = PolyUtil.<BigRational> decimalFromRational(dfac,p);
+                //System.out.println("dp = " + dp);
+                BigDecimal ev = PolyUtil.<BigDecimal> evaluateAll(dc,dfac,dp,r);
+                if ( ev.abs().compareTo(e) > 0 ) {
+                    System.out.println("ev = " + ev);
+                    fail("ev > eps : " + ev + " > " + e);
+                }
+            }
+        }
+        //System.out.println();
         ComputerThreads.terminate();
     }
 
@@ -1209,7 +1243,9 @@ public class IdealTest extends TestCase {
             //System.out.println("rri = " + rri);
             roots.add(rri);
         }
+        //System.out.println("roots-1 = " + roots);
         roots = ListUtil.<BigDecimal> tupleFromList( roots );
+        //System.out.println("roots-2 = " + roots);
         return roots;
     }
 

@@ -571,6 +571,79 @@ public class PolyUtilTest extends TestCase {
 
 
 /**
+ * Test evaluate all.
+ * 
+ */
+ public void testEvalAll() {
+     BigInteger cfac = new BigInteger();
+
+     List<BigInteger> Ev = new ArrayList<BigInteger>();
+     for ( int i = 0; i < rl; i ++ ) {
+         ei  = cfac.random(kl);
+         Ev.add(ei);
+     }
+     //System.out.println("Ev  = " + Ev);
+
+     BigInteger ae, be, ce, de;
+
+     GenPolynomialRing<BigInteger> fac;
+     fac = new GenPolynomialRing<BigInteger>(cfac,rl,to);
+     //System.out.println("fac  = " + fac);
+
+     a = fac.getZERO();
+     //System.out.println("a  = " + a);
+
+     ae = PolyUtil.<BigInteger>evaluateAll(cfac,dfac,a,Ev);
+     //System.out.println("ae   = " + ae);
+
+     assertTrue("isZERO( ae )", ae.isZERO() );
+
+     a = fac.getONE();
+     //System.out.println("a  = " + a);
+
+     ae = PolyUtil.<BigInteger>evaluateAll(cfac,dfac,a,Ev);
+     //System.out.println("ae   = " + ae);
+
+     assertTrue("isONE( ae )", ae.isONE() );
+
+     //a = fac.getONE();
+     a = fac.random(kl,ll,el,q);
+     //System.out.println("a  = " + a);
+     //b = fac.getONE();
+     b = fac.random(kl,ll,el,q);
+     //System.out.println("b  = " + b);
+
+     c = b.sum(a);
+     //System.out.println("c  = " + c);
+
+     ae = PolyUtil.<BigInteger>evaluateAll(cfac,dfac,a,Ev);
+     be = PolyUtil.<BigInteger>evaluateAll(cfac,dfac,b,Ev);
+     ce = PolyUtil.<BigInteger>evaluateAll(cfac,dfac,c,Ev);
+     //System.out.println("ae   = " + ae);
+     //System.out.println("be   = " + be);
+     //System.out.println("ce   = " + ce);
+
+     de = be.sum( ae );
+     //System.out.println("de   = " + de);
+
+     assertEquals("eval(a+b) == eval(a) + eval(b)", ce, de );
+
+     c = b.multiply(a);
+     //System.out.println("c  = " + c);
+
+     ce = PolyUtil.<BigInteger>evaluateAll(cfac,dfac,c,Ev);
+     //System.out.println("ae   = " + ae);
+     //System.out.println("be   = " + be);
+     //System.out.println("ce   = " + ce);
+
+     de = be.multiply( ae );
+     //System.out.println("de   = " + de);
+
+     assertEquals("eval(a*b) == eval(a) * eval(b)", ce, de );
+ }
+
+
+/**
  * Test interpolate univariate 1 polynomial.
  * 
  */

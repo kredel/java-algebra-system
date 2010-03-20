@@ -146,7 +146,7 @@ public class ListUtilTest extends TestCase {
      int s2 = 3;
      int s = 1;
      for ( int i = 0; i < s1; i++ ) {
-	 s *= s2;
+         s *= s2;
      }
      //System.out.println("s = " + s);
      for ( int i = 0; i < s1; i++ ) {
