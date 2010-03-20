@@ -21,11 +21,15 @@ import edu.jas.structure.RingFactory;
 import edu.jas.structure.RegularRingElem;
 import edu.jas.structure.Product;
 import edu.jas.structure.ProductRing;
+import edu.jas.structure.Complex;
+import edu.jas.structure.ComplexRing;
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
+import edu.jas.arith.Rational;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
+import edu.jas.arith.BigDecimal;
 import edu.jas.gb.GroebnerBase;
 import edu.jas.gb.GroebnerBaseSeq;
 
@@ -35,12 +39,19 @@ import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.PolynomialList;
+import edu.jas.poly.PolyUtil;
 
+import edu.jas.root.ComplexRootsSturm;
+import edu.jas.root.ComplexRootsAbstract;
+import edu.jas.root.RealRootsSturm;
+import edu.jas.root.RealRootAbstract;
+
+import edu.jas.util.ListUtil;
 
 
 /**
  * Polynomial utilities for applications,  
- * for example conversion ExpVector to Product.
+ * for example conversion ExpVector to Product or zero dimensional ideal root computation.
  * @param <C> coefficient type
  * @author Heinz Kredel
  */
@@ -620,6 +631,63 @@ public class PolyUtilApp<C extends RingElem<C> > {
         M = productSlice( L ); 
         String s = productSliceToString( M );
         return s;
+    }
+
+
+    /**
+     * Construct superset of complex roots for zero dimensional ideal(G).
+     * @return list of coordinates of complex roots for ideal(G)
+     */
+    public static <C extends RingElem<C> & Rational, D extends GcdRingElem<D>> 
+      List<List<Complex<BigDecimal>>> complexRoots(Ideal<D> I, C eps) {
+        List<GenPolynomial<D>> univs = I.constructUnivariate();
+        if ( logger.isInfoEnabled() ) {
+            logger.info("univs = " + univs);
+        }
+        List<List<Complex<BigDecimal>>> croots = new ArrayList<List<Complex<BigDecimal>>>();
+        RingFactory<C> cf = (RingFactory<C>) I.list.ring.coFac;
+        ComplexRing<C> cr = new ComplexRing<C>(cf);
+        ComplexRootsAbstract<C> cra = new ComplexRootsSturm<C>(cr);
+        List<GenPolynomial<Complex<C>>> cunivs = new ArrayList<GenPolynomial<Complex<C>>>();
+        for ( GenPolynomial<D> p : univs ) {
+            GenPolynomialRing<Complex<C>> pfac = new GenPolynomialRing<Complex<C>>(cr,p.ring);
+            //System.out.println("pfac = " + pfac.toScript());
+            GenPolynomial<Complex<C>> cp = PolyUtil.<C> toComplex(pfac,(GenPolynomial<C>) p);
+            cunivs.add(cp);
+            //System.out.println("cp = " + cp);
+        }
+        for ( int i = 0; i < I.list.ring.nvar; i++ ) {
+            List<Complex<BigDecimal>> cri = cra.approximateRoots(cunivs.get(i),eps);
+            //System.out.println("cri = " + cri);
+            croots.add(cri);
+        }
+        croots = ListUtil.<Complex<BigDecimal>> tupleFromList( croots );
+        return croots;
+    }
+
+
+    /**
+     * Construct superset of real roots for zero dimensional ideal(G).
+     * @return list of coordinates of real roots for ideal(G)
+     */
+    public static <C extends RingElem<C> & Rational, D extends GcdRingElem<D>> 
+      List<List<BigDecimal>> realRoots(Ideal<D> I, C eps) {
+        List<GenPolynomial<D>> univs = I.constructUnivariate();
+        if ( logger.isInfoEnabled() ) {
+            logger.info("univs = " + univs);
+        }
+        List<List<BigDecimal>> roots = new ArrayList<List<BigDecimal>>();
+        RingFactory<C> cf = (RingFactory<C>) I.list.ring.coFac;
+        RealRootAbstract<C> rra = new RealRootsSturm<C>();
+        for ( int i = 0; i < I.list.ring.nvar; i++ ) {
+            List<BigDecimal> rri = rra.approximateRoots((GenPolynomial<C>)univs.get(i),eps);
+            //System.out.println("rri = " + rri);
+            roots.add(rri);
+        }
+        //System.out.println("roots-1 = " + roots);
+        roots = ListUtil.<BigDecimal> tupleFromList( roots );
+        //System.out.println("roots-2 = " + roots);
+        return roots;
     }
 
 }

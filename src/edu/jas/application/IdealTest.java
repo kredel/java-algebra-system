@@ -1012,12 +1012,7 @@ public class IdealTest extends TestCase {
         //System.out.println("fac = " + fac);
 
         Ideal<BigRational> I;
-
         L = new ArrayList<GenPolynomial<BigRational>>();
-
-        //a = fac.univariate(2, 3L).sum(fac.univariate(2, 2L)); //fac.random(kl, ll, el, q );
-        //b = fac.univariate(1, 2L).sum(fac.univariate(1, 1L)); //fac.random(kl, ll, el, q );
-        //c = fac.univariate(0, 1L); //fac.random(kl, ll, el, q );
 
         a = fac.parse("( x^3 + 34/55 x^2 + 1/9 x + 99 )");
         b = fac.parse("( y^4 - x )");
@@ -1030,18 +1025,17 @@ public class IdealTest extends TestCase {
         L.add(a);
         L.add(b);
         L.add(c);
-
         I = new Ideal<BigRational>(fac, L);
         //I.doGB();
         assertTrue("not isZERO( I )", !I.isZERO());
         assertTrue("isGB( I )", I.isGB());
-        System.out.println("I = " + I);
+        //System.out.println("I = " + I);
 
         for ( int i = 0; i < rl; i++ ) { // rl
             GenPolynomial<BigRational> u = I.constructUnivariate(rl-1-i);
             //System.out.println("u = " + u);
             GenPolynomial<BigRational> U = fac.parse( u.toString() );
-            System.out.println("U = " + U + "\n");
+            //System.out.println("U = " + U + "\n");
             assertTrue("I.contains(U) ", I.contains(U));
         }
 
@@ -1049,7 +1043,7 @@ public class IdealTest extends TestCase {
         for ( GenPolynomial<BigRational> u : Us ) {
             //System.out.println("u = " + u);
             GenPolynomial<BigRational> U = fac.parse( u.toString() );
-            System.out.println("U = " + U + "\n");
+            //System.out.println("U = " + U + "\n");
             assertTrue("I.contains(U) ", I.contains(U));
         }
     }
@@ -1071,12 +1065,7 @@ public class IdealTest extends TestCase {
         //System.out.println("fac = " + fac);
 
         Ideal<BigRational> I;
-
         L = new ArrayList<GenPolynomial<BigRational>>();
-
-        //a = fac.univariate(2, 3L).sum(fac.univariate(2, 2L)); //fac.random(kl, ll, el, q );
-        //b = fac.univariate(1, 2L).sum(fac.univariate(1, 1L)); //fac.random(kl, ll, el, q );
-        //c = fac.univariate(0, 1L); //fac.random(kl, ll, el, q );
 
         a = fac.parse("( x^3 - 27 )");
         b = fac.parse("( y^2 - 9 )");
@@ -1089,18 +1078,17 @@ public class IdealTest extends TestCase {
         L.add(a);
         L.add(b);
         L.add(c);
-
         I = new Ideal<BigRational>(fac, L);
         //I.doGB();
         assertTrue("not isZERO( I )", !I.isZERO());
         assertTrue("isGB( I )", I.isGB());
-        System.out.println("I = " + I);
+        //System.out.println("I = " + I);
 
         BigRational eps = new BigRational(1,1000000); 
         eps = eps.multiply(eps);
         eps = eps.multiply(eps).multiply(eps);
         BigDecimal e = new BigDecimal(eps.getRational());
-        e = e.abs();
+        e = e.abs(); //.multiply(e); 
 
         BigDecimal dc = BigDecimal.ONE;
         GenPolynomialRing<BigDecimal> dfac = new GenPolynomialRing<BigDecimal>(dc,fac);
@@ -1109,18 +1097,18 @@ public class IdealTest extends TestCase {
         GenPolynomialRing<Complex<BigDecimal>> dcfac = new GenPolynomialRing<Complex<BigDecimal>>(dcc,dfac);
         //System.out.println("dcfac = " + dcfac);
 
-        List<List<Complex<BigDecimal>>> roots = IdealTest.<BigRational,BigRational> complexRoots(I, eps);
+        List<List<Complex<BigDecimal>>> roots = PolyUtilApp.<BigRational,BigRational> complexRoots(I, eps);
         //System.out.println("roots = " + roots + "\n");
-        for ( List<Complex<BigDecimal>> r : roots ) {
-            //System.out.println("r = " + r);
-            for ( GenPolynomial<BigRational> p : I.getList() ) {
-                GenPolynomial<BigDecimal> dp = PolyUtil.<BigRational> decimalFromRational(dfac,p);
-                GenPolynomial<Complex<BigDecimal>> dpc = PolyUtil.<BigDecimal> toComplex(dcfac,dp);
-                //System.out.println("dpc = " + dpc);
+        for ( GenPolynomial<BigRational> p : I.getList() ) {
+            GenPolynomial<BigDecimal> dp = PolyUtil.<BigRational> decimalFromRational(dfac,p);
+            GenPolynomial<Complex<BigDecimal>> dpc = PolyUtil.<BigDecimal> toComplex(dcfac,dp);
+            //System.out.println("dpc = " + dpc);
+            for ( List<Complex<BigDecimal>> r : roots ) {
+                //System.out.println("r = " + r);
                 Complex<BigDecimal> ev = PolyUtil.<Complex<BigDecimal>> evaluateAll(dcc,dcfac,dpc,r);
                 if ( ev.norm().getRe().compareTo(e) > 0 ) {
-                   System.out.println("ev = " + ev);
-                   fail("ev > eps : " + ev + " > " + e);
+                    System.out.println("ev = " + ev);
+                    fail("ev > eps : " + ev + " > " + e);
                 }
             }
         }
@@ -1145,12 +1133,7 @@ public class IdealTest extends TestCase {
         //System.out.println("fac = " + fac);
 
         Ideal<BigRational> I;
-
         L = new ArrayList<GenPolynomial<BigRational>>();
-
-        //a = fac.univariate(2, 3L).sum(fac.univariate(2, 2L)); //fac.random(kl, ll, el, q );
-        //b = fac.univariate(1, 2L).sum(fac.univariate(1, 1L)); //fac.random(kl, ll, el, q );
-        //c = fac.univariate(0, 1L); //fac.random(kl, ll, el, q );
 
         a = fac.parse("( x^3 - 27 )");
         b = fac.parse("( y^4 - x )");
@@ -1163,30 +1146,29 @@ public class IdealTest extends TestCase {
         L.add(a);
         L.add(b);
         L.add(c);
-
         I = new Ideal<BigRational>(fac, L);
         //I.doGB();
         assertTrue("not isZERO( I )", !I.isZERO());
         assertTrue("isGB( I )", I.isGB());
-        System.out.println("I = " + I);
+        //System.out.println("I = " + I);
 
         BigRational eps = new BigRational(1,1000000); 
         eps = eps.multiply(eps);
         eps = eps.multiply(eps).multiply(eps);
         BigDecimal e = new BigDecimal(eps.getRational());
-        e = e.abs();
+        e = e.abs(); //.multiply(e);
 
-        List<List<BigDecimal>> roots = IdealTest.<BigRational,BigRational> realRoots(I, eps);
+        List<List<BigDecimal>> roots = PolyUtilApp.<BigRational,BigRational> realRoots(I, eps);
         //System.out.println("roots = " + roots + "\n");
         // polynomials with decimal coefficients
         BigDecimal dc = BigDecimal.ONE;
         GenPolynomialRing<BigDecimal> dfac = new GenPolynomialRing<BigDecimal>(dc,fac);
         //System.out.println("dfac = " + dfac);
-        for ( List<BigDecimal> r : roots ) {
-            //System.out.println("r = " + r);
-            for ( GenPolynomial<BigRational> p : I.getList() ) {
-                GenPolynomial<BigDecimal> dp = PolyUtil.<BigRational> decimalFromRational(dfac,p);
-                //System.out.println("dp = " + dp);
+        for ( GenPolynomial<BigRational> p : I.getList() ) {
+            GenPolynomial<BigDecimal> dp = PolyUtil.<BigRational> decimalFromRational(dfac,p);
+            //System.out.println("dp = " + dp);
+            for ( List<BigDecimal> r : roots ) {
+                //System.out.println("r = " + r);
                 BigDecimal ev = PolyUtil.<BigDecimal> evaluateAll(dc,dfac,dp,r);
                 if ( ev.abs().compareTo(e) > 0 ) {
                     System.out.println("ev = " + ev);
@@ -1196,57 +1178,6 @@ public class IdealTest extends TestCase {
         }
         //System.out.println();
         ComputerThreads.terminate();
-    }
-
-
-    /**
-     * Construct superset of complex roots for zero dimensional ideal(G).
-     * @return list of coordinates of complex roots for ideal(G)
-     */
-    public static <C extends RingElem<C> & Rational, D extends GcdRingElem<D>> 
-      List<List<Complex<BigDecimal>>> complexRoots(Ideal<D> I, C eps) {
-        List<GenPolynomial<D>> univs = I.constructUnivariate();
-        List<List<Complex<BigDecimal>>> croots = new ArrayList<List<Complex<BigDecimal>>>();
-        RingFactory<C> cf = (RingFactory<C>) I.list.ring.coFac;
-        ComplexRing<C> cr = new ComplexRing<C>(cf);
-        ComplexRootsAbstract<C> cra = new ComplexRootsSturm<C>(cr);
-        List<GenPolynomial<Complex<C>>> cunivs = new ArrayList<GenPolynomial<Complex<C>>>();
-        for ( GenPolynomial<D> p : univs ) {
-            GenPolynomialRing<Complex<C>> pfac = new GenPolynomialRing<Complex<C>>(cr,p.ring);
-            //System.out.println("pfac = " + pfac.toScript());
-            GenPolynomial<Complex<C>> cp = PolyUtil.<C> toComplex(pfac,(GenPolynomial<C>) p);
-            cunivs.add(cp);
-            //System.out.println("cp = " + cp);
-        }
-        for ( int i = 0; i < I.list.ring.nvar; i++ ) {
-            List<Complex<BigDecimal>> cri = cra.approximateRoots(cunivs.get(i),eps);
-            //System.out.println("cri = " + cri);
-            croots.add(cri);
-        }
-        croots = ListUtil.<Complex<BigDecimal>> tupleFromList( croots );
-        return croots;
-    }
-
-
-    /**
-     * Construct superset of real roots for zero dimensional ideal(G).
-     * @return list of coordinates of real roots for ideal(G)
-     */
-    public static <C extends RingElem<C> & Rational, D extends GcdRingElem<D>> 
-      List<List<BigDecimal>> realRoots(Ideal<D> I, C eps) {
-        List<GenPolynomial<D>> univs = I.constructUnivariate();
-        List<List<BigDecimal>> roots = new ArrayList<List<BigDecimal>>();
-        RingFactory<C> cf = (RingFactory<C>) I.list.ring.coFac;
-        RealRootAbstract<C> rra = new RealRootsSturm<C>();
-        for ( int i = 0; i < I.list.ring.nvar; i++ ) {
-            List<BigDecimal> rri = rra.approximateRoots((GenPolynomial<C>)univs.get(i),eps);
-            //System.out.println("rri = " + rri);
-            roots.add(rri);
-        }
-        //System.out.println("roots-1 = " + roots);
-        roots = ListUtil.<BigDecimal> tupleFromList( roots );
-        //System.out.println("roots-2 = " + roots);
-        return roots;
     }
 
 }

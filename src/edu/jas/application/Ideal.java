@@ -1468,6 +1468,9 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
             pi = pi.multiply(tc);
             pol = pol.sum(pi);
         }
+        if ( logger.isInfoEnabled() ) {
+            logger.info("univ pol = " + pol);
+        }
         return pol;
     }
 
