@@ -266,7 +266,7 @@ replot
 #---------------------------------------
 
 #---------------------------------------
-pscript = """
+pscript_1d = """
 set grid 
 set term %s
 set output "%s.ps"
@@ -289,13 +289,13 @@ set origin 0,0.5
 ##set ylabel "milliseconds" 
 set ylabel "seconds" 
 # smooth acsplines
-plot "%s.po" using 1:($3/1000) title '%s computing time', "%s.po" using 1:( (%s/1000)/($1) ) title '%s ideal'
+plot "%s.po" using 2:($3/1000) title '%s computing time', "%s.po" using 2:( (%s/1000)/($5) ) title '%s ideal'
 
 #set size 0.95,0.45
 set origin 0,0
 set ylabel "speedup" 
 # smooth bezier
-plot "%s.po" using 1:4 title '%s speedup', "%s.po" using 1:(($1)/10) title '%s ideal'
+plot "%s.po" using 2:4 title '%s speedup', "%s.po" using 2:(($5)) title '%s ideal'
 
 #with linespoints 
 #with linespoints
@@ -303,8 +303,8 @@ plot "%s.po" using 1:4 title '%s speedup', "%s.po" using 1:(($1)/10) title '%s i
 unset multiplot
 pause mouse
 
-set terminal postscript
-replot
+#set terminal postscript
+#replot
 
 """
 #---------------------------------------
@@ -321,7 +321,8 @@ print "seq time = ", sqt;
 if xy:
     pscript = pscript_2d % ("x11",bname,bname,exam,bname,str(sqt),exam,bname,exam,bname,exam);
 else:
-    pscript = pscript % ("x11",bname,bname,exam,bname,str(sqt),exam,bname,exam,bname,exam);
+    pscript = pscript_1d % ("x11",bname,bname,exam,bname,str(sqt),exam,bname,exam,bname,exam);
+    pscriptp = pscript_1d % ("postscript",bname,bname,exam,bname,str(sqt),exam,bname,exam,bname,exam);
 
 p.write(pscript);
 p.close();
@@ -329,6 +330,13 @@ p.close();
 cmd = "gnuplot " + pname;
 print "cmd: " + cmd;
 os.system(cmd);
+
+if not xy:
+    p=open(pname,"w");
+    print p;
+    p.write(pscriptp);
+    p.close();
+    os.system(cmd);
 
 # convert to pdf, better use pstopdf
 #cmd = "ps2pdf " + psname;
