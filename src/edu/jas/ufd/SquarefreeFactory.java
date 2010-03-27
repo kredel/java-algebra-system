@@ -222,8 +222,8 @@ public class SquarefreeFactory {
                     t = 12;
                 }
                 if (ofac instanceof QuotientRing) {
-		    t = 13;
-		}
+                    t = 13;
+                }
                 break;
             }
             if (ofac instanceof QuotientRing) {

@@ -90,18 +90,18 @@ public class FactorQuotientTest extends TestCase {
 
     @Override
     protected void setUp() {
-	BigRational cfac = new BigRational(1);
-	TermOrder to = new TermOrder( TermOrder.INVLEX );
-	mfac = new GenPolynomialRing<BigRational>( cfac, rl, to );
-	efac = new QuotientRing<BigRational>( mfac );
+        BigRational cfac = new BigRational(1);
+        TermOrder to = new TermOrder( TermOrder.INVLEX );
+        mfac = new GenPolynomialRing<BigRational>( cfac, rl, to );
+        efac = new QuotientRing<BigRational>( mfac );
     }
 
 
     @Override
     protected void tearDown() {
-	//efac.terminate();
-	efac = null;
-	ComputerThreads.terminate();
+        //efac.terminate();
+        efac = null;
+        ComputerThreads.terminate();
     }
 
 
@@ -132,14 +132,14 @@ public class FactorQuotientTest extends TestCase {
         FactorAbstract<Quotient<BigRational>> engine = FactorFactory.getImplementation(efac);
         //System.out.println("engine = " + engine);
 
-	SortedMap<GenPolynomial<Quotient<BigRational>>,Long> sm = engine.factors(a);
+        SortedMap<GenPolynomial<Quotient<BigRational>>,Long> sm = engine.factors(a);
         //System.out.println("factors(a) = " + sm);
 
         assertTrue("#facs >= 1", sm.size() >= 1);
 
- 	boolean t = engine.isFactorization(a, sm);
- 	//System.out.println("t        = " + t);
- 	assertTrue("prod(factor(a)) = a", t);
+        boolean t = engine.isFactorization(a, sm);
+        //System.out.println("t        = " + t);
+        assertTrue("prod(factor(a)) = a", t);
     }
 
 }

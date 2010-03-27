@@ -166,27 +166,27 @@ public class FactorModularTest extends TestCase {
         GenPolynomialRing<ModInteger> pfac = new GenPolynomialRing<ModInteger>(cfac, 1, to, vars);
         FactorModular<ModInteger> fac = new FactorModular<ModInteger>(cfac);
 
-	int facs = 3;
-	GenPolynomial<ModInteger> a = pfac.parse("(x^12+5)");
-	a = a.monic();
-	//System.out.println("\na = " + a);
+        int facs = 3;
+        GenPolynomial<ModInteger> a = pfac.parse("(x^12+5)");
+        a = a.monic();
+        //System.out.println("\na = " + a);
 
-	SortedMap<GenPolynomial<ModInteger>, Long> sm = fac.baseFactors(a);
-	//System.out.println("sm = " + sm);
+        SortedMap<GenPolynomial<ModInteger>, Long> sm = fac.baseFactors(a);
+        //System.out.println("sm = " + sm);
 
-	if (sm.size() >= facs) {
-	    assertTrue("#facs < " + facs, sm.size() >= facs);
-	} else {
-	    long sf = 0;
-	    for (Long e : sm.values()) {
-		sf += e;
-	    }
-	    assertTrue("#facs < " + facs, sf >= facs);
-	}
+        if (sm.size() >= facs) {
+            assertTrue("#facs < " + facs, sm.size() >= facs);
+        } else {
+            long sf = 0;
+            for (Long e : sm.values()) {
+                sf += e;
+            }
+            assertTrue("#facs < " + facs, sf >= facs);
+        }
 
-	boolean t = fac.isFactorization(a, sm);
-	//System.out.println("t        = " + t);
-	assertTrue("prod(factor(a)) = a", t);
+        boolean t = fac.isFactorization(a, sm);
+        //System.out.println("t        = " + t);
+        assertTrue("prod(factor(a)) = a", t);
     }
 
 

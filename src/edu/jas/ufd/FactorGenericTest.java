@@ -122,16 +122,16 @@ public class FactorGenericTest extends TestCase {
 
         String[] var_x = new String[] { "x" };
         GenPolynomialRing<AlgebraicNumber<BigRational>> apfac 
-	    = new GenPolynomialRing<AlgebraicNumber<BigRational>>(a2fac, 1, to, var_x);
+            = new GenPolynomialRing<AlgebraicNumber<BigRational>>(a2fac, 1, to, var_x);
         //System.out.println("apfac  = " + apfac.toScript());
 
         QuotientRing<AlgebraicNumber<BigRational>> qfac 
-	    = new QuotientRing<AlgebraicNumber<BigRational>>(apfac);
+            = new QuotientRing<AlgebraicNumber<BigRational>>(apfac);
         //System.out.println("qfac   = " + qfac.toScript());
 
         String[] var_wx = new String[] { "wx" };
         GenPolynomialRing<Quotient<AlgebraicNumber<BigRational>>> pqfac 
-	    = new GenPolynomialRing<Quotient<AlgebraicNumber<BigRational>>>(qfac,1,to,var_wx);
+            = new GenPolynomialRing<Quotient<AlgebraicNumber<BigRational>>>(qfac,1,to,var_wx);
         //System.out.println("pqfac  = " + pqfac.toScript());
 
         GenPolynomial<Quotient<AlgebraicNumber<BigRational>>> wx = pqfac.parse(" wx^2 - { x } ") ;
@@ -143,7 +143,7 @@ public class FactorGenericTest extends TestCase {
 
         String[] var_y = new String[] { "y" };
         GenPolynomialRing<AlgebraicNumber<Quotient<AlgebraicNumber<BigRational>>>> apqfac 
-	    = new GenPolynomialRing<AlgebraicNumber<Quotient<AlgebraicNumber<BigRational>>>>(axfac,1,to,var_y);
+            = new GenPolynomialRing<AlgebraicNumber<Quotient<AlgebraicNumber<BigRational>>>>(axfac,1,to,var_y);
         //System.out.println("apqfac = " + apqfac.toScript());
 
         //  ( y^2 - x ) * ( y^2 - 2 ), need {} for recursive coefficients
@@ -159,9 +159,9 @@ public class FactorGenericTest extends TestCase {
 
         assertTrue("#facs >= 4", F.size() >= 4);
 
-	boolean t = engine.isFactorization(f, F);
-	//System.out.println("t        = " + t);
-	assertTrue("prod(factor(a)) = a", t);
+        boolean t = engine.isFactorization(f, F);
+        //System.out.println("t        = " + t);
+        assertTrue("prod(factor(a)) = a", t);
     }
 
 }

@@ -1367,11 +1367,11 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
      * @return list of univariate polynomial of minimal degree in each variable in ideal(G)
      */
     public List<GenPolynomial<C>> constructUnivariate() {
-	List<GenPolynomial<C>> univs = new ArrayList<GenPolynomial<C>>();
-	for ( int i = list.ring.nvar-1; i >= 0; i-- ) {
+        List<GenPolynomial<C>> univs = new ArrayList<GenPolynomial<C>>();
+        for ( int i = list.ring.nvar-1; i >= 0; i-- ) {
             GenPolynomial<C> u = constructUnivariate(i);
-	    univs.add(u);
-	}
+            univs.add(u);
+        }
         return univs;
     }
 
@@ -1389,9 +1389,9 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
 
     /**
      * Construct univariate polynomial of minimal degree in variable i 
-     * in zero dimensional ideal(G).
+     * of a zero dimensional ideal(G).
      * @param i variable index.
-     * @param G list of polynomials, a monic reduced Gr&ouml;bner base.
+     * @param G list of polynomials, a monic reduced Gr&ouml;bner base of a zero dimensional ideal.
      * @return univariate polynomial of minimal degree in variable i in ideal(G)
      */
     public GenPolynomial<C> constructUnivariate(int i, List<GenPolynomial<C>> G) {
@@ -1423,6 +1423,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
         }
         GenPolynomial<C> X;
         GenPolynomial<C> XP;
+        // solve system of linear equations for the coefficients of the univariate polynomial
         List<GenPolynomial<C>> ls;
         int z = -1;
         do {
@@ -1449,7 +1450,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
                 P = P.sum(XPp);
             }
         } while ( z != 0 ); // && ll <= 5 && !XP.isZERO()
-
+        // construct result polynomial
         pol = ufac.univariate(0,ll);
         for ( GenPolynomial<C> pc : ls ) {
             ExpVector e = pc.leadingExpVector();

@@ -121,7 +121,7 @@ public class Katsura {
            StringBuffer s = new StringBuffer();
            s.append(coeff);
            s.append("(");
-	   // for (int i = 0; i <= N; i++) {
+           // for (int i = 0; i <= N; i++) {
            for (int i = N; i >=0; i--) {
                s.append(variable(i));
                if (i > 0) {

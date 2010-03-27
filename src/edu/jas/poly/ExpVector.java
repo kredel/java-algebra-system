@@ -259,8 +259,8 @@ public abstract class ExpVector implements AbelianGroupElem<ExpVector>
             return toString();
         }
         if ( r == 0 ) {
-	    return s;
-	}
+            return s;
+        }
         long vi;
         for (int i = r-1; i > 0; i-- ) {
             vi = getVal( i );
