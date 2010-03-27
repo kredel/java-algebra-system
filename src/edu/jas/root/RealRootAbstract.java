@@ -402,10 +402,10 @@ public abstract class RealRootAbstract<C extends RingElem<C>& Rational> implemen
 
     /**
      * Approximate real root.
-     * @param iv root isolating interval with f(left) * f(right) &lt; 0.
+     * @param iv real root isolating interval with f(left) * f(right) &lt; 0.
      * @param f univariate polynomial, non-zero.
      * @param eps requested interval length.
-     * @return a decimal approximation d such that |d-v| &lt; eps, for f(v) = 0.
+     * @return a decimal approximation d such that |d-v| &lt; eps, for f(v) = 0, v real.
      */
     public BigDecimal approximateRoot(Interval<C> iv, GenPolynomial<C> f, C eps) 
                       throws NoConvergenceException {
@@ -413,7 +413,6 @@ public abstract class RealRootAbstract<C extends RingElem<C>& Rational> implemen
             throw new IllegalArgumentException("null interval not allowed");
         }
         BigDecimal d = iv.toDecimal();
-        //System.out.println("d = " + d);
         if (f == null || f.isZERO() || f.isConstant() || eps == null) {
             return d;
         }
@@ -428,7 +427,6 @@ public abstract class RealRootAbstract<C extends RingElem<C>& Rational> implemen
         //System.out.println("right = " + right);
         e = e.multiply(d); // relative error
         //System.out.println("e     = " + e);
-        //System.out.println("q     = " + q);
         BigDecimal dc = BigDecimal.ONE;
         // polynomials with decimal coefficients
         GenPolynomialRing<BigDecimal> dfac = new GenPolynomialRing<BigDecimal>(dc,f.ring);
@@ -492,7 +490,7 @@ public abstract class RealRootAbstract<C extends RingElem<C>& Rational> implemen
      * Approximate real roots.
      * @param f univariate polynomial, non-zero.
      * @param eps requested interval length.
-     * @return a list of decimal approximations d such that |d-v| &lt; eps for f(v) = 0.
+     * @return a list of decimal approximations d such that |d-v| &lt; eps for all real v with f(v) = 0.
      */
     public List<BigDecimal> approximateRoots(GenPolynomial<C> f, C eps) {
         List<Interval<C>> iv = realRoots(f);
@@ -522,19 +520,17 @@ public abstract class RealRootAbstract<C extends RingElem<C>& Rational> implemen
      * @param x approximate real root.
      * @param f univariate polynomial, non-zero.
      * @param eps requested interval length.
-     * @return true if x is a decimal approximation of v with |d-v| &lt; eps, else false.
+     * @return true if x is a decimal approximation of a real v with f(v) = 0 with |d-v| &lt; eps, else false.
      */
     public boolean isApproximateRoot(BigDecimal x, GenPolynomial<C> f, C eps) {
         if ( x == null ) {
             throw new IllegalArgumentException("null root not allowed");
         }
-        //System.out.println("x     = " + x);
         if (f == null || f.isZERO() || f.isConstant() || eps == null) {
             return true;
         }
         BigDecimal e = new BigDecimal(eps.getRational());
         e = e.multiply( new BigDecimal( "1000" )); // relax
-        //System.out.println("e     = " + e);
         BigDecimal dc = BigDecimal.ONE;
         // polynomials with decimal coefficients
         GenPolynomialRing<BigDecimal> dfac = new GenPolynomialRing<BigDecimal>(dc,f.ring);
@@ -552,14 +548,13 @@ public abstract class RealRootAbstract<C extends RingElem<C>& Rational> implemen
      * @param f univariate polynomial, non-zero.
      * @param fp univariate polynomial, non-zero, deriviative of f.
      * @param eps requested interval length.
-     * @return true if x is a decimal approximation of v with |d-v| &lt; eps, else false.
+     * @return true if x is a decimal approximation of a real v with f(v) = 0 with |d-v| &lt; eps, else false.
      */
     public boolean isApproximateRoot(BigDecimal x, GenPolynomial<BigDecimal> f, 
                                      GenPolynomial<BigDecimal> fp, BigDecimal eps) {
         if ( x == null ) {
             throw new IllegalArgumentException("null root not allowed");
         }
-        //System.out.println("x     = " + x);
         if (f == null || f.isZERO() || f.isConstant() || eps == null) {
             return true;
         }
@@ -594,26 +589,23 @@ public abstract class RealRootAbstract<C extends RingElem<C>& Rational> implemen
      * @param R ist of approximate real roots.
      * @param f univariate polynomial, non-zero.
      * @param eps requested interval length.
-     * @return true if each x in R is a decimal approximation of v with |d-v| &lt; eps, else false.
+     * @return true if each x in R is a decimal approximation of a real v with f(v) = 0 with |d-v| &lt; eps, else false.
      */
     public boolean isApproximateRoot(List<BigDecimal> R, GenPolynomial<C> f, C eps) {
         if ( R == null ) {
             throw new IllegalArgumentException("null root not allowed");
         }
-        //System.out.println("R     = " + R);
         if (f == null || f.isZERO() || f.isConstant() || eps == null) {
             return true;
         }
         BigDecimal e = new BigDecimal(eps.getRational());
         e = e.multiply( new BigDecimal( "1000" )); // relax
-        //System.out.println("e     = " + e);
         BigDecimal dc = BigDecimal.ONE;
         // polynomials with decimal coefficients
         GenPolynomialRing<BigDecimal> dfac = new GenPolynomialRing<BigDecimal>(dc,f.ring);
         GenPolynomial<BigDecimal> df = PolyUtil.<C> decimalFromRational(dfac,f);
         GenPolynomial<C> fp = PolyUtil.<C> baseDeriviative(f);
         GenPolynomial<BigDecimal> dfp = PolyUtil.<C> decimalFromRational(dfac,fp);
-        //
         for ( BigDecimal x : R ) {
             if ( ! isApproximateRoot(x,df,dfp,e) ) {
                 return false;

@@ -162,10 +162,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
         }
         Complex<C> eps = cr.fromInteger(1);
         eps = eps.divide(cr.fromInteger(1000)); // 1/1000
-        //System.out.println("eps = " + eps);
         BigRational length = len.multiply(len);
-        //System.out.println("length = " + length);
-
         Complex<C> delta = null;
         boolean work = true;
         while (work) {
@@ -189,9 +186,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
                     cp[2] = center;
                     cp[3] = new Complex<C>(cr, center.getRe(), cp[3].getIm());
                     Rectangle<C> nw = new Rectangle<C>(cp);
-                    //System.out.println("nw = " + nw); 
                     w = complexRootCount(nw, a);
-                    //System.out.println("#nwr = " + w); 
                     if (w == 1) {
                         root = nw;
                         delta = null;
@@ -204,7 +199,6 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
                     cp[2] = new Complex<C>(cr, center.getRe(), cp[2].getIm());
                     cp[3] = center;
                     Rectangle<C> sw = new Rectangle<C>(cp);
-                    //System.out.println("sw = " + sw); 
                     w = complexRootCount(sw, a);
                     //System.out.println("#swr = " + w); 
                     if (w == 1) {
@@ -219,7 +213,6 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
                     // cp[2] fix
                     cp[3] = new Complex<C>(cr, cp[3].getRe(), center.getIm());
                     Rectangle<C> se = new Rectangle<C>(cp);
-                    //System.out.println("se = " + se); 
                     w = complexRootCount(se, a);
                     //System.out.println("#ser = " + w); 
                     if (w == 1) {
@@ -234,7 +227,6 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
                     cp[2] = new Complex<C>(cr, cp[2].getRe(), center.getIm());
                     // cp[3] fix
                     Rectangle<C> ne = new Rectangle<C>(cp);
-                    //System.out.println("ne = " + ne); 
                     w = complexRootCount(ne, a);
                     //System.out.println("#ner = " + w); 
                     if (w == 1) {
@@ -253,7 +245,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
             } catch (InvalidBoundaryException e) {
                 // repeat with new center
                 delta = delta.sum(delta.multiply(eps)); // distort
-                System.out.println("new refine delta = " + toDecimal(delta));
+                //System.out.println("new refine delta = " + toDecimal(delta));
                 eps = eps.sum(eps.multiply(cr.getIMAG()));
             }
         }
@@ -276,7 +268,6 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
             Complex<C> Mb = rootBound(p);
             C M = Mb.getRe();
             C M1 = M.sum(M.factory().fromInteger(1)); // asymmetric to origin
-            //System.out.println("M = " + M);
             if (debug) {
                 logger.info("rootBound = " + M);
             }
@@ -314,14 +305,12 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
         C r = a.getRe();
         String s = r.toString();
         BigRational rs = new BigRational(s);
-        //System.out.println("s  = " + s);
         BigDecimal rd = new BigDecimal(rs);
-        //System.out.println("rd = " + rd);
         C i = a.getIm();
         s = i.toString();
         BigRational is = new BigRational(s);
-        //System.out.println("s  = " + s);
         BigDecimal id = new BigDecimal(is);
+        //System.out.println("rd = " + rd);
         //System.out.println("id = " + id);
         return rd.toString() + " i " + id.toString();
     }
@@ -332,7 +321,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
      * @param rt root isolating rectangle.
      * @param f univariate polynomial, non-zero.
      * @param eps requested interval length.
-     * @return a decimal approximation d such that |d-v| &lt; eps, for f(v) = 0.
+     * @return a decimal approximation d such that |d-v| &lt; eps, for f(v) = 0, v in rt.
      */
     public Complex<BigDecimal> approximateRoot(Rectangle<C> rt, GenPolynomial<Complex<C>> f, C eps) 
                                throws NoConvergenceException {
@@ -359,11 +348,8 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
 
         BigDecimal e = new BigDecimal(eps.getRational());
         Complex<BigDecimal> q = new Complex<BigDecimal>(cr, new BigDecimal("0.25") );
-        //System.out.println("ll = " + ll);
-        //System.out.println("ur = " + ur);
         e = e.multiply(d.norm().getRe()); // relative error
         //System.out.println("e  = " + e);
-        //System.out.println("q  = " + q);
 
         // polynomials with decimal coefficients
         GenPolynomialRing<Complex<BigDecimal>> dfac = new GenPolynomialRing<Complex<BigDecimal>>(cr,f.ring);
@@ -377,7 +363,6 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
         int dir = -1;
         while ( i++ < MITER ) {
             Complex<BigDecimal> fx  = PolyUtil.<Complex<BigDecimal>> evaluateMain(cr, df, d); // f(d)
-            //System.out.println("fx = " + fx);
             BigDecimal fs = fx.norm().getRe();
             //System.out.println("fs = " + fs);
             if ( fx.isZERO() ) {
@@ -419,7 +404,6 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
                     dx.getRe().compareTo(ur.getRe()) > 0 || 
                     dx.getIm().compareTo(ur.getIm()) > 0 ) { // dx < ll: dx - ll < 0
                                                              // dx > ur: dx - ur > 0
-                //System.out.println("trying to leave interval ");
                 if ( i++ > MITER ) { // dx > right: dx - right > 0
                     throw new NoConvergenceException("no convergence after " + i + " steps");
                 }
@@ -497,7 +481,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
      * List of decimal approximations of complex roots of complex polynomial.
      * @param a univariate complex polynomial.
      * @param eps length for refinement.
-     * @return list of complex decimal roots to desired precision.
+     * @return list of complex decimal root approximations to desired precision.
      */
     @SuppressWarnings("unchecked")
     public List<Complex<BigDecimal>> approximateRoots(GenPolynomial<Complex<C>> a, C eps) {
@@ -519,7 +503,6 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
                 Complex<C> Mb = rootBound(p);
                 C M = Mb.getRe();
                 C M1 = M.sum(M.factory().fromInteger(1)); // asymmetric to origin
-                //System.out.println("M = " + M);
                 if (debug) {
                     logger.info("rootBound = " + M);
                 }
@@ -544,7 +527,6 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
                             rf.add(rr);
                         } catch (NoConvergenceException e) {
                             // fall back to exact algorithm
-                            //System.out.println("" + e);
                             BigRational len = r.rationalLength();
                             len = len.multiply( new BigRational(1,1000));
                             try {
@@ -565,25 +547,5 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
         }
         return roots;
     }
-
-//     /*
-//      * Distance.
-//      * @param a complex number.
-//      * @param b complex number.
-//      * @return |a-b|. 
-//      */
-//     public C distance(Complex<C> a, Complex<C> b) { 
-//          Complex<C> d = a.subtract(b); 
-//          C r = d.norm().getRe(); 
-//          String s = r.toString(); 
-//          BigRational rs = new BigRational(s);
-//          //System.out.println("s = " + s); 
-//          BigDecimal rd = new BigDecimal(rs); 
-//          rd = Roots.sqrt(rd); 
-//          //System.out.println("rd = " + rd); 
-//          r = a.ring.ring.parse(rd.toString());
-//          //System.out.println("rd = " + rd + ", r = " + r); 
-//          return r; 
-//     }
 
 }
