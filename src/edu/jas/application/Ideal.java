@@ -7,7 +7,6 @@ package edu.jas.application;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -1250,14 +1249,14 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
 
     /**
      * Ideal dimension.
-     * @return a dimension container (dim,maxIndep,list(maxIndep)).
+     * @return a dimension container (dim,maxIndep,list(maxIndep),vars).
      */
-    public Dim dimension() {
+    public Dimension dimension() {
         int t = commonZeroTest();
         Set<Integer> S = new HashSet<Integer>();
         Set<Set<Integer>> M = new HashSet<Set<Integer>>();
         if (t <= 0) {
-            return new Dim(t, S, M, null);
+            return new Dimension(t, S, M, this.list.ring.getVars());
         }
         int d = 0;
         Set<Integer> U = new HashSet<Integer>();
@@ -1272,7 +1271,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
                 S = m;
             }
         }
-        return new Dim(d, S, M, this.list.ring.getVars());
+        return new Dimension(d, S, M, this.list.ring.getVars());
     }
 
 
@@ -1472,72 +1471,6 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
             logger.info("univ pol = " + pol);
         }
         return pol;
-    }
-
-
-    /**
-     * Container for dimension parameters.
-     */
-    public static class Dim implements Serializable {
-
-
-        public final int d;
-
-
-        public final Set<Integer> S;
-
-
-        public final Set<Set<Integer>> M;
-
-
-        public final String[] v;
-
-
-        public Dim(int d, Set<Integer> S, Set<Set<Integer>> M, String[] v) {
-            this.d = d;
-            this.S = S;
-            this.M = M;
-            this.v = v;
-        }
-
-
-        /**
-         * String representation of the ideal.
-         * @see java.lang.Object#toString()
-         */
-        @Override
-        public String toString() {
-            StringBuffer sb = new StringBuffer("Dimension( " + d + ", ");
-            if (v == null) {
-                sb.append("" + S + ", " + M + " )");
-                return sb.toString();
-            }
-            String[] s = new String[S.size()];
-            int j = 0;
-            for (Integer i : S) {
-                s[j] = v[i];
-                j++;
-            }
-            sb.append(Arrays.toString(s) + ", ");
-            sb.append("[ ");
-            boolean first = true;
-            for (Set<Integer> m : M) {
-                if (first) {
-                    first = false;
-                } else {
-                    sb.append(", ");
-                }
-                s = new String[m.size()];
-                j = 0;
-                for (Integer i : m) {
-                    s[j] = v[i];
-                    j++;
-                }
-                sb.append(Arrays.toString(s));
-            }
-            sb.append(" ] )");
-            return sb.toString();
-        }
     }
 
 }

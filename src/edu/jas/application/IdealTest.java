@@ -785,7 +785,7 @@ public class IdealTest extends TestCase {
 
         Ideal<BigRational> I;
         L = new ArrayList<GenPolynomial<BigRational>>();
-        Ideal.Dim dim;
+        Dimension dim;
 
         I = new Ideal<BigRational>(fac, L, true);
         assertEquals("dimension( I )", rl, I.dimension().d);
