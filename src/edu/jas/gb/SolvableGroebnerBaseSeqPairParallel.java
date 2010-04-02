@@ -19,21 +19,24 @@ import edu.jas.poly.GenSolvablePolynomialRing;
 
 import edu.jas.util.Terminator;
 import edu.jas.util.ThreadPool;
-//import edu.unima.ky.parallel.Semaphore;
 
 
 /**
  * Solvable Groebner Base parallel algorithm.
+ * Makes some effort to produce the same sequence of critical pairs 
+ * as in the sequential version.
+ * However already reduced pairs are not rereduced if new
+ * polynomials appear.
  * Implements a shared memory parallel version of Groebner bases.
  * Threads maintain pairlist.
  * @param <C> coefficient type
  * @author Heinz Kredel
  */
 
-public class SolvableGroebnerBaseParallel<C extends RingElem<C>>
+public class SolvableGroebnerBaseSeqPairParallel<C extends RingElem<C>>
              extends SolvableGroebnerBaseAbstract<C>  {
 
-    private static final Logger logger = Logger.getLogger(SolvableGroebnerBaseParallel.class);
+    private static final Logger logger = Logger.getLogger(SolvableGroebnerBaseSeqPairParallel.class);
     //private static final boolean debug = logger.isDebugEnabled();
 
 
@@ -52,7 +55,7 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>>
     /**
      * Constructor.
      */
-    public SolvableGroebnerBaseParallel() {
+    public SolvableGroebnerBaseSeqPairParallel() {
         this(2);
     }
 
@@ -61,7 +64,7 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>>
      * Constructor.
      * @param threads number of threads to use.
      */
-    public SolvableGroebnerBaseParallel(int threads) {
+    public SolvableGroebnerBaseSeqPairParallel(int threads) {
         this(threads, new ThreadPool(threads) );
     }
 
@@ -71,7 +74,7 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>>
      * @param threads number of threads to use.
      * @param pool ThreadPool to use.
      */
-    public SolvableGroebnerBaseParallel(int threads, ThreadPool pool) {
+    public SolvableGroebnerBaseSeqPairParallel(int threads, ThreadPool pool) {
         this(threads, pool, new SolvableReductionPar<C>() );
     }
 
@@ -81,7 +84,7 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>>
      * @param threads number of threads to use.
      * @param red parallelism aware reduction engine
      */
-    public SolvableGroebnerBaseParallel(int threads, SolvableReduction<C> red) {
+    public SolvableGroebnerBaseSeqPairParallel(int threads, SolvableReduction<C> red) {
         this(threads, new ThreadPool(threads), red );
     }
 
@@ -92,7 +95,7 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>>
      * @param pool ThreadPool to use.
      * @param sred parallelism aware reduction engine
      */
-    public SolvableGroebnerBaseParallel(int threads, ThreadPool pool, 
+    public SolvableGroebnerBaseSeqPairParallel(int threads, ThreadPool pool, 
                                         SolvableReduction<C> sred) {
         super( new ReductionSeq<C>(), sred);
         if ( ! (sred instanceof SolvableReductionPar) ) {
@@ -129,7 +132,7 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>>
                      List<GenSolvablePolynomial<C>> F ) {  
         GenSolvablePolynomial<C> p;
         List<GenSolvablePolynomial<C>> G = new ArrayList<GenSolvablePolynomial<C>>();
-        OrderedPairlist<C> pairlist = null; 
+        CriticalPairList<C> pairlist = null; 
         int l = F.size();
         ListIterator<GenSolvablePolynomial<C>> it = F.listIterator();
         while ( it.hasNext() ) { 
@@ -142,10 +145,7 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>>
                }
                G.add( p );
                if ( pairlist == null ) {
-                  pairlist = new OrderedPairlist<C>( modv, p.ring );
-                  if ( ! p.ring.coFac.isField() ) {
-                     throw new RuntimeException("coefficients not from a field");
-                  }
+                  pairlist = new CriticalPairList<C>( modv, p.ring );
                }
                // putOne not required
                pairlist.put( p );
@@ -158,9 +158,9 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>>
         }
 
         Terminator fin = new Terminator(threads);
-        LeftSolvableReducer<C> R;
+        LeftSolvableReducerSeqPair<C> R;
         for ( int i = 0; i < threads; i++ ) {
-            R = new LeftSolvableReducer<C>( fin, G, pairlist );
+            R = new LeftSolvableReducerSeqPair<C>( fin, G, pairlist );
             pool.addJob( R );
         }
         fin.waitDone();
@@ -232,13 +232,13 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>>
            return G;
         }
 
-        SolvableMiReducer<C>[] mirs = (SolvableMiReducer<C>[]) new SolvableMiReducer[ G.size() ];
+        SolvableMiReducerSeqPair<C>[] mirs = (SolvableMiReducerSeqPair<C>[]) new SolvableMiReducerSeqPair[ G.size() ];
         int i = 0;
         F = new ArrayList<GenSolvablePolynomial<C>>( G.size() );
         while ( G.size() > 0 ) {
             a = G.remove(0);
             // System.out.println("doing " + a.length());
-            mirs[i] = new SolvableMiReducer<C>( 
+            mirs[i] = new SolvableMiReducerSeqPair<C>( 
                                         (List<GenSolvablePolynomial<C>>)G.clone(), 
                                         (List<GenSolvablePolynomial<C>>)F.clone(), 
                                         a );
@@ -303,7 +303,7 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>>
         //System.out.println("F generated = " + F);
         List<GenSolvablePolynomial<C>> G 
             = new ArrayList<GenSolvablePolynomial<C>>();
-        OrderedPairlist<C> pairlist = null; 
+        CriticalPairList<C> pairlist = null; 
         int l = F.size();
         ListIterator<GenSolvablePolynomial<C>> it = F.listIterator();
         while ( it.hasNext() ) { 
@@ -316,10 +316,7 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>>
                }
                G.add( p );
                if ( pairlist == null ) {
-                  pairlist = new OrderedPairlist<C>( modv, p.ring );
-                  if ( ! p.ring.coFac.isField() ) {
-                     throw new RuntimeException("coefficients not from a field");
-                  }
+                  pairlist = new CriticalPairList<C>( modv, p.ring );
                }
                // putOne not required
                pairlist.put( p );
@@ -332,9 +329,9 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>>
            return G; // since no threads are activated
         }
         Terminator fin = new Terminator(threads);
-        TwosidedSolvableReducer<C> R;
+        TwosidedSolvableReducerSeqPair<C> R;
         for ( int i = 0; i < threads; i++ ) {
-            R = new TwosidedSolvableReducer<C>( fin, X, G, pairlist );
+            R = new TwosidedSolvableReducerSeqPair<C>( fin, X, G, pairlist );
             pool.addJob( R );
         }
         fin.waitDone();
@@ -355,17 +352,17 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>>
  * Reducing left worker threads.
  * @param <C> coefficient type
  */
-class LeftSolvableReducer<C extends RingElem<C>> implements Runnable {
+class LeftSolvableReducerSeqPair<C extends RingElem<C>> implements Runnable {
         private List<GenSolvablePolynomial<C>> G;
-        private OrderedPairlist<C> pairlist;
+        private CriticalPairList<C> pairlist;
         private Terminator pool;
         private SolvableReductionPar<C> sred;
-        private static final Logger logger = Logger.getLogger(LeftSolvableReducer.class);
+        private static final Logger logger = Logger.getLogger(LeftSolvableReducerSeqPair.class);
         private static final boolean debug = logger.isDebugEnabled();
 
-        LeftSolvableReducer(Terminator fin, 
-                            List<GenSolvablePolynomial<C>> G, 
-                            OrderedPairlist<C> L) {
+        LeftSolvableReducerSeqPair(Terminator fin, 
+                                   List<GenSolvablePolynomial<C>> G, 
+                                   CriticalPairList<C> L) {
             pool = fin;
             this.G = G;
             pairlist = L;
@@ -374,7 +371,7 @@ class LeftSolvableReducer<C extends RingElem<C>> implements Runnable {
 
 
         public void run() {
-           Pair<C> pair;
+           CriticalPair<C> pair;
            GenSolvablePolynomial<C> S;
            GenSolvablePolynomial<C> H;
            boolean set = false;
@@ -382,7 +379,7 @@ class LeftSolvableReducer<C extends RingElem<C>> implements Runnable {
            int sleeps = 0;
            while ( pairlist.hasNext() || pool.hasJobs() ) {
               while ( ! pairlist.hasNext() ) {
-                  //--pairlist.update();
+                  pairlist.update();
                   // wait
                   pool.beIdle(); set = true;
                   try {
@@ -406,9 +403,9 @@ class LeftSolvableReducer<C extends RingElem<C>> implements Runnable {
               if ( set ) {
                  pool.notIdle();
               }
-              pair = pairlist.removeNext();
+              pair = pairlist.getNext();
               if ( pair == null ) {
-		  //--pairlist.update();
+                 pairlist.update();
                  continue; 
               }
               if ( debug ) {
@@ -418,7 +415,7 @@ class LeftSolvableReducer<C extends RingElem<C>> implements Runnable {
               S = sred.leftSPolynomial( (GenSolvablePolynomial<C>)pair.pi, 
                                         (GenSolvablePolynomial<C>)pair.pj );
               if ( S.isZERO() ) {
-		  //--pairlist.record( pair, S );
+                 pairlist.record( pair, S );
                  continue;
               }
               if ( debug ) {
@@ -427,7 +424,7 @@ class LeftSolvableReducer<C extends RingElem<C>> implements Runnable {
               H = sred.leftNormalform( G, S ); //mod
               reduction++;
               if ( H.isZERO() ) {
-		  //--pairlist.record( pair, H );
+                 pairlist.record( pair, H );
                  continue;
               }
               if ( debug ) {
@@ -437,7 +434,7 @@ class LeftSolvableReducer<C extends RingElem<C>> implements Runnable {
               // System.out.println("H   = " + H);
               if ( H.isONE() ) { 
                  // pairlist.update( pair, H );
-                 pairlist.putOne(H); // not really required
+                 pairlist.putOne(); // not really required
                  synchronized (G) {
                      G.clear(); G.add( H );
                  }
@@ -450,8 +447,7 @@ class LeftSolvableReducer<C extends RingElem<C>> implements Runnable {
               synchronized (G) {
                      G.add( H );
               }
-              //--pairlist.update( pair, H );
-              pairlist.put( H );
+              pairlist.update( pair, H );
               //pairlist.record( pair, H );
               //pairlist.update();
            }
@@ -464,19 +460,19 @@ class LeftSolvableReducer<C extends RingElem<C>> implements Runnable {
  * Reducing twosided worker threads.
  * @param <C> coefficient type
  */
-class TwosidedSolvableReducer<C extends RingElem<C>> implements Runnable {
+class TwosidedSolvableReducerSeqPair<C extends RingElem<C>> implements Runnable {
         private List<GenSolvablePolynomial<C>> X;
         private List<GenSolvablePolynomial<C>> G;
-        private OrderedPairlist<C> pairlist;
+        private CriticalPairList<C> pairlist;
         private Terminator pool;
         private SolvableReductionPar<C> sred;
-        private static final Logger logger = Logger.getLogger(TwosidedSolvableReducer.class);
+        private static final Logger logger = Logger.getLogger(TwosidedSolvableReducerSeqPair.class);
         private static final boolean debug = logger.isDebugEnabled();
 
-        TwosidedSolvableReducer(Terminator fin, 
-                                List<GenSolvablePolynomial<C>> X,
-                                List<GenSolvablePolynomial<C>> G, 
-                                OrderedPairlist<C> L) {
+        TwosidedSolvableReducerSeqPair(Terminator fin, 
+                                       List<GenSolvablePolynomial<C>> X,
+                                       List<GenSolvablePolynomial<C>> G, 
+                                       CriticalPairList<C> L) {
             pool = fin;
             this.X = X;
             this.G = G;
@@ -487,7 +483,7 @@ class TwosidedSolvableReducer<C extends RingElem<C>> implements Runnable {
 
         public void run() {
            GenSolvablePolynomial<C> p, x, q;
-           Pair<C> pair;
+           CriticalPair<C> pair;
            GenSolvablePolynomial<C> S;
            GenSolvablePolynomial<C> H;
            boolean set = false;
@@ -495,7 +491,7 @@ class TwosidedSolvableReducer<C extends RingElem<C>> implements Runnable {
            int sleeps = 0;
            while ( pairlist.hasNext() || pool.hasJobs() ) {
               while ( ! pairlist.hasNext() ) {
-                  //--pairlist.update();
+                  pairlist.update();
                   // wait
                   pool.beIdle(); set = true;
                   try {
@@ -519,9 +515,9 @@ class TwosidedSolvableReducer<C extends RingElem<C>> implements Runnable {
               if ( set ) {
                  pool.notIdle();
               }
-              pair = pairlist.removeNext();
+              pair = pairlist.getNext();
               if ( pair == null ) {
-		  //--pairlist.update();
+                 pairlist.update();
                  continue; 
               }
               if ( debug ) {
@@ -531,7 +527,7 @@ class TwosidedSolvableReducer<C extends RingElem<C>> implements Runnable {
               S = sred.leftSPolynomial( (GenSolvablePolynomial<C>)pair.pi, 
                                         (GenSolvablePolynomial<C>)pair.pj );
               if ( S.isZERO() ) {
-		  //--pairlist.record( pair, S );
+                 pairlist.record( pair, S );
                  continue;
               }
               if ( debug ) {
@@ -540,7 +536,7 @@ class TwosidedSolvableReducer<C extends RingElem<C>> implements Runnable {
               H = sred.leftNormalform( G, S ); //mod
               reduction++;
               if ( H.isZERO() ) {
-		  //--pairlist.record( pair, H );
+                 pairlist.record( pair, H );
                  continue;
               }
               if ( debug ) {
@@ -550,7 +546,7 @@ class TwosidedSolvableReducer<C extends RingElem<C>> implements Runnable {
               // System.out.println("H   = " + H);
               if ( H.isONE() ) { 
                  // pairlist.update( pair, H );
-                 pairlist.putOne(H); // not really required
+                 pairlist.putOne(); // not really required
                  synchronized (G) {
                      G.clear(); G.add( H );
                  }
@@ -563,8 +559,7 @@ class TwosidedSolvableReducer<C extends RingElem<C>> implements Runnable {
               synchronized (G) {
                      G.add( H );
               }
-              //--pairlist.update( pair, H );
-              pairlist.put( H );
+              pairlist.update( pair, H );
               for ( int j = 0; j < X.size(); j++ ) {
                   x = X.get(j);
                   p = H.multiply( x );
@@ -594,19 +589,19 @@ class TwosidedSolvableReducer<C extends RingElem<C>> implements Runnable {
  * Reducing worker threads for minimal GB.
  * @param <C> coefficient type
  */
-class SolvableMiReducer<C extends RingElem<C>> implements Runnable {
+class SolvableMiReducerSeqPair<C extends RingElem<C>> implements Runnable {
         private List<GenSolvablePolynomial<C>> G;
         private List<GenSolvablePolynomial<C>> F;
         private GenSolvablePolynomial<C> S;
         private GenSolvablePolynomial<C> H;
         private SolvableReductionPar<C> sred;
         private Semaphore done = new Semaphore(0);
-        private static final Logger logger = Logger.getLogger(SolvableMiReducer.class);
+        private static final Logger logger = Logger.getLogger(SolvableMiReducerSeqPair.class);
         private static final boolean debug = logger.isDebugEnabled();
 
-        SolvableMiReducer(List<GenSolvablePolynomial<C>> G, 
-                          List<GenSolvablePolynomial<C>> F, 
-                          GenSolvablePolynomial<C> p) {
+        SolvableMiReducerSeqPair(List<GenSolvablePolynomial<C>> G, 
+                                 List<GenSolvablePolynomial<C>> F, 
+                                 GenSolvablePolynomial<C> p) {
             this.G = G;
             this.F = F;
             S = p;
