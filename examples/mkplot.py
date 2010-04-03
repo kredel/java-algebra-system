@@ -18,7 +18,9 @@ rpat = re.compile(r'OrderedPairlist\(size=0, #put=(\d+), #rem=(\d+)\)');
 r1pat = re.compile(r'pairlist #put = (\d+) #rem = (\d+)');
 res = {};
 pairs = None;
-xy = False;
+hybrid = False;
+dist = False;
+para = False;
 
 for fname in argv[1:]:
     dn = -1;
@@ -45,12 +47,12 @@ for fname in argv[1:]:
             continue;
         ma = hpat.search(line); # distributed hybrid results
         if ma:
-            print "d: ", line,
+            print "h: ", line,
             dn = int( ma.group(1) );
             pp = int( ma.group(2) );
-            tm = ma.group(3);
-            su = ma.group(4);
-            xy = True;
+            tm = long( ma.group(3) );
+            su = long( ma.group(4) );
+            hybrid = True;
             if not dn in res:
                 res[ dn ] = {};
             if pp in res[ dn ]:
@@ -59,6 +61,8 @@ for fname in argv[1:]:
                     if tx < tm: # minimum or maximum
                         tm = tx;
                         su = res[ dn ][ pp ][ 's' ]
+                        if 'p' in res[ dn ][ pp ] or 'r' in res[ dn ][ pp ]:
+                            pairs = ( res[ dn ][ pp ]['p'], res[ dn ][ pp ]['r'] );
             res[ dn ][ pp ] = { 't': tm, 's': su };
             if pairs != None:
                 res[ dn ][ pp ]['p'] = pairs[0];
@@ -70,8 +74,9 @@ for fname in argv[1:]:
             print "d: ", line,
             dn = int( ma.group(1) );
             pp = 1;
-            tm = ma.group(2);
-            su = ma.group(3);
+            tm = long( ma.group(2) );
+            su = long( ma.group(3) );
+            dist = True;
             if not dn in res:
                 res[ dn ] = {};
             if pp in res[ dn ]:
@@ -80,6 +85,8 @@ for fname in argv[1:]:
                     if tx < tm: # minimum or maximum
                         tm = tx;
                         su = res[ dn ][ pp ][ 's' ]
+                        if 'p' in res[ dn ][ pp ] or 'r' in res[ dn ][ pp ]:
+                            pairs = ( res[ dn ][ pp ]['p'], res[ dn ][ pp ]['r'] );
             res[ dn ][ pp ] = { 't': tm, 's': su };
             if pairs != None:
                 res[ dn ][ pp ]['p'] = pairs[0];
@@ -89,12 +96,13 @@ for fname in argv[1:]:
         ma = ppat.search(line); # parallel and sequential results
         if ma:
             print "p: ", line,
-            tm = ma.group(1);
+            tm = long( ma.group(1) );
             fm = fpat.search(fname);
             if fm:
                 print fname
                 dn = 1;
                 pp = int( fm.group(1) );
+                para = True;
             else:
                 if spat.search(fname):
                     dn = 0;
@@ -109,6 +117,8 @@ for fname in argv[1:]:
                     tx = res[ dn ][ pp ][ 't' ];
                     if tx < tm: # minimum or maximum
                         tm = tx;
+                        if 'p' in res[ dn ][ pp ] or 'r' in res[ dn ][ pp ]:
+                            pairs = ( res[ dn ][ pp ]['p'], res[ dn ][ pp ]['r'] );
             res[ dn ][ pp ] = { 't': tm, 's': '0' };
             if pairs != None:
                 res[ dn ][ pp ]['p'] = pairs[0];
@@ -123,15 +133,23 @@ ks.sort();
 print "ks = ", ks;
 
 for d in ks:
-    for p in res[d]:
-        print " " + str(d) + "," + str(p) + " & " + res[d][p]['t'] + " & " + res[d][p]['s'] 
+    rd = res[d].keys();
+    rd.sort();
+    for p in rd:
+        print " " + str(d) + "," + str(p) + " & " + str(res[d][p]['t']) + " & " + str(res[d][p]['s']) 
 
 s1 = ks[0];
 if s1 == 0:
-    p1 = res[1].keys()[0];
-    st = int( res[ 1 ][ p1 ]['t'] );
+    rxx = res.keys();
+    rxr = rxx[1];
+    rk = res[rxr].keys();
+    rk.sort();
+    p1 = rk[0];
+    st = int( res[ rxr ][ p1 ]['t'] );
 else:
-    p1 = res[s1].keys()[0];
+    rk = res[s1].keys();
+    rk.sort();
+    p1 = rk[0];
     st = int( res[ s1 ][ p1 ]['t'] );
 print "s1 = ", s1;
 print "p1 = ", p1;
@@ -141,7 +159,9 @@ speed = {};
 
 for k in ks:
     speed[k] = {};
-    for p in res[k]:
+    rk = res[k].keys();
+    rk.sort();
+    for p in rk:
         speed[k][p] = st / float(res[k][p]['t']); 
 print "speed = ", speed;
 
@@ -162,17 +182,19 @@ print "bname = " + bname;
 summary =   "\n% run = " + tag + "\n";
 summary += r"\begin{tabular}{|r|r|r|r|r|r|r|}" + "\n";
 summary += r"\hline" + "\n";
-summary += r"\#" + "nodes & ppn & time & startup & speedup & put & rem \n";
+summary += " nodes & ppn & time & startup & speedup & put & rem \n";
 summary += r"\\ \hline" + "\n";
 
 for d in ks:
-    for p in res[d]:
+    rd = res[d].keys();
+    rd.sort();
+    for p in rd:
         if res[d][p]['s'] != "0":
-            summary += " " + str(d) + " & " + str(p) + " & " + res[d][p]['t'] + " & " + res[d][p]['s'] + " & " + str(speed[d][p])[:4];
+            summary += " " + str(d) + " & " + str(p) + " & " + str(res[d][p]['t']) + " & " + str(res[d][p]['s']) + " & " + str(speed[d][p])[:4];
         else:
-            summary += " " + str(d) + " & " + str(p) + " & " + res[d][p]['t'] + " & " + " & " + str(speed[d][p])[:4];
+            summary += " " + str(d) + " & " + str(p) + " & " + str(res[d][p]['t']) + " & " + " & " + str(speed[d][p])[:4];
         if 'p' in res[d][p] and 'r' in res[d][p]:
-            summary += " & " + res[d][p]['p'] + " & " + res[d][p]['r'] + "\n"
+            summary += " & " + str(res[d][p]['p']) + " & " + str(res[d][p]['r']) + "\n"
         else:
             summary += " & " + " & " + "\n" 
         summary += r"\\ \hline" + "\n";
@@ -192,7 +214,9 @@ oname = bname+".po";
 o=open(oname,"w");
 ploting = "\n#nodes #ppn time speedup ideal\n";
 for k in ks:
-    for p in res[k]:
+    rk = res[k].keys();
+    rk.sort();
+    for p in rk:
         ideals = k*p;
         if ideals == 0:
             ideals = 1;
@@ -211,7 +235,7 @@ pscript_2d = """
 set grid 
 set term %s
 set output "%s.ps"
-set title "GBs of Katsuras example on a grid cluster" 
+set title "Groebner bases on a grid cluster" 
 set time
 set xlabel "number of nodes" 
 set ylabel "threads per node" 
@@ -270,9 +294,53 @@ pscript_1d = """
 set grid 
 set term %s
 set output "%s.ps"
-set title "GBs of Katsuras example on a grid cluster" 
+set title "Groebner bases on a grid cluster" 
 set time
-set xlabel "number of nodes/threads" 
+set xlabel "number of nodes" 
+
+#set xrange [0:8] 
+
+set xtics 1.0
+
+set data style lines
+
+set multiplot
+
+set size 0.95,0.5
+set origin 0,0.5
+#set origin 0,0
+
+##set ylabel "milliseconds" 
+set ylabel "seconds" 
+# smooth acsplines
+plot "%s.po" using 1:($3/1000) title '%s computing time', "%s.po" using 1:( (%s/1000)/($5) ) title '%s ideal'
+
+#set size 0.95,0.45
+set origin 0,0
+set ylabel "speedup" 
+# smooth bezier
+plot "%s.po" using 1:4 title '%s speedup', "%s.po" using 1:(($5)) title '%s ideal'
+
+#with linespoints 
+#with linespoints
+
+unset multiplot
+pause mouse
+
+#set terminal postscript
+#replot
+
+"""
+#---------------------------------------
+
+#---------------------------------------
+pscript_1p = """
+set grid 
+set term %s
+set output "%s.ps"
+set title "Groebner bases on a grid cluster" 
+set time
+set xlabel "number of threads" 
 
 #set xrange [0:8] 
 
@@ -318,11 +386,16 @@ print p;
 sqt = st;
 print "seq time = ", sqt;
 
-if xy:
+if hybrid:
     pscript = pscript_2d % ("x11",bname,bname,exam,bname,str(sqt),exam,bname,exam,bname,exam);
 else:
-    pscript = pscript_1d % ("x11",bname,bname,exam,bname,str(sqt),exam,bname,exam,bname,exam);
-    pscriptp = pscript_1d % ("postscript",bname,bname,exam,bname,str(sqt),exam,bname,exam,bname,exam);
+    if dist:
+        pscript = pscript_1d % ("x11",bname,bname,exam,bname,str(sqt),exam,bname,exam,bname,exam);
+        pscriptp = pscript_1d % ("postscript",bname,bname,exam,bname,str(sqt),exam,bname,exam,bname,exam);
+    else:
+        if para:
+            pscript = pscript_1p % ("x11",bname,bname,exam,bname,str(sqt),exam,bname,exam,bname,exam);
+            pscriptp = pscript_1p % ("postscript",bname,bname,exam,bname,str(sqt),exam,bname,exam,bname,exam);
 
 p.write(pscript);
 p.close();
@@ -331,7 +404,7 @@ cmd = "gnuplot " + pname;
 print "cmd: " + cmd;
 os.system(cmd);
 
-if not xy:
+if not hybrid:
     p=open(pname,"w");
     print p;
     p.write(pscriptp);
