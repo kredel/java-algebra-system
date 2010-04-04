@@ -19,7 +19,6 @@ import edu.jas.poly.GenSolvablePolynomialRing;
 
 import edu.jas.util.Terminator;
 import edu.jas.util.ThreadPool;
-//import edu.unima.ky.parallel.Semaphore;
 
 
 /**
@@ -382,7 +381,6 @@ class LeftSolvableReducer<C extends RingElem<C>> implements Runnable {
            int sleeps = 0;
            while ( pairlist.hasNext() || pool.hasJobs() ) {
               while ( ! pairlist.hasNext() ) {
-                  //--pairlist.update();
                   // wait
                   pool.beIdle(); set = true;
                   try {
@@ -408,7 +406,6 @@ class LeftSolvableReducer<C extends RingElem<C>> implements Runnable {
               }
               pair = pairlist.removeNext();
               if ( pair == null ) {
-		  //--pairlist.update();
                  continue; 
               }
               if ( debug ) {
@@ -418,7 +415,6 @@ class LeftSolvableReducer<C extends RingElem<C>> implements Runnable {
               S = sred.leftSPolynomial( (GenSolvablePolynomial<C>)pair.pi, 
                                         (GenSolvablePolynomial<C>)pair.pj );
               if ( S.isZERO() ) {
-		  //--pairlist.record( pair, S );
                  continue;
               }
               if ( debug ) {
@@ -427,7 +423,6 @@ class LeftSolvableReducer<C extends RingElem<C>> implements Runnable {
               H = sred.leftNormalform( G, S ); //mod
               reduction++;
               if ( H.isZERO() ) {
-		  //--pairlist.record( pair, H );
                  continue;
               }
               if ( debug ) {
@@ -436,7 +431,6 @@ class LeftSolvableReducer<C extends RingElem<C>> implements Runnable {
               H = (GenSolvablePolynomial<C>)H.monic();
               // System.out.println("H   = " + H);
               if ( H.isONE() ) { 
-                 // pairlist.update( pair, H );
                  pairlist.putOne(H); // not really required
                  synchronized (G) {
                      G.clear(); G.add( H );
@@ -450,10 +444,7 @@ class LeftSolvableReducer<C extends RingElem<C>> implements Runnable {
               synchronized (G) {
                      G.add( H );
               }
-              //--pairlist.update( pair, H );
               pairlist.put( H );
-              //pairlist.record( pair, H );
-              //pairlist.update();
            }
            logger.info( "terminated, done " + reduction + " reductions");
         }
@@ -495,7 +486,6 @@ class TwosidedSolvableReducer<C extends RingElem<C>> implements Runnable {
            int sleeps = 0;
            while ( pairlist.hasNext() || pool.hasJobs() ) {
               while ( ! pairlist.hasNext() ) {
-                  //--pairlist.update();
                   // wait
                   pool.beIdle(); set = true;
                   try {
@@ -521,7 +511,6 @@ class TwosidedSolvableReducer<C extends RingElem<C>> implements Runnable {
               }
               pair = pairlist.removeNext();
               if ( pair == null ) {
-		  //--pairlist.update();
                  continue; 
               }
               if ( debug ) {
@@ -531,7 +520,6 @@ class TwosidedSolvableReducer<C extends RingElem<C>> implements Runnable {
               S = sred.leftSPolynomial( (GenSolvablePolynomial<C>)pair.pi, 
                                         (GenSolvablePolynomial<C>)pair.pj );
               if ( S.isZERO() ) {
-		  //--pairlist.record( pair, S );
                  continue;
               }
               if ( debug ) {
@@ -540,7 +528,6 @@ class TwosidedSolvableReducer<C extends RingElem<C>> implements Runnable {
               H = sred.leftNormalform( G, S ); //mod
               reduction++;
               if ( H.isZERO() ) {
-		  //--pairlist.record( pair, H );
                  continue;
               }
               if ( debug ) {
@@ -549,7 +536,6 @@ class TwosidedSolvableReducer<C extends RingElem<C>> implements Runnable {
               H = (GenSolvablePolynomial<C>)H.monic();
               // System.out.println("H   = " + H);
               if ( H.isONE() ) { 
-                 // pairlist.update( pair, H );
                  pairlist.putOne(H); // not really required
                  synchronized (G) {
                      G.clear(); G.add( H );
@@ -563,7 +549,6 @@ class TwosidedSolvableReducer<C extends RingElem<C>> implements Runnable {
               synchronized (G) {
                      G.add( H );
               }
-              //--pairlist.update( pair, H );
               pairlist.put( H );
               for ( int j = 0; j < X.size(); j++ ) {
                   x = X.get(j);
