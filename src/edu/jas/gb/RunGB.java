@@ -20,7 +20,7 @@ import edu.jas.util.ExecutableServer;
 
 /**
  * Simple setup to run a GB example. <br />
- * Usage: RunGB [seq|par(+)|dist(1)(+)|disthyb|cli] &lt;file&gt;
+ * Usage: RunGB [seq(+)|par(+)|dist(1)(+)|disthyb|cli] &lt;file&gt;
  * #procs/#threadsPerNode [machinefile]
  * @author Heinz Kredel
  */
@@ -39,8 +39,8 @@ public class RunGB {
         BasicConfigurator.configure();
 
         String usage = "Usage: RunGB "
-                + "[ seq | seq+ | par | par+ | dist | dist1 | dist+ | dist1+ | disthyb1 | cli [port] ] "
-                + "<file> " + "#procs/#threadsPerNode " + "[machinefile]";
+            + "[ seq | seq+ | par | par+ | dist | dist1 | dist+ | dist1+ | disthyb1 | cli [port] ] "
+            + "<file> " + "#procs/#threadsPerNode " + "[machinefile]";
         if (args.length < 1) {
             System.out.println(usage);
             return;
@@ -49,14 +49,14 @@ public class RunGB {
         boolean pairseq = false;
         String kind = args[0];
         String[] allkinds = new String[] { "seq", "seq+", "par", "par+", "dist", "dist1", "dist+", "dist1+",
-                "disthyb1", "cli" };
+                                           "disthyb1", "cli" };
         boolean sup = false;
         for (int i = 0; i < allkinds.length; i++) {
             if (kind.equals(allkinds[i])) {
                 sup = true;
-            }
-            if (kind.indexOf("+") >= 0) {
-                pairseq = true;
+                if (kind.indexOf("+") >= 0) {
+                    pairseq = true;
+                }
             }
         }
         if (!sup) {
@@ -251,7 +251,7 @@ public class RunGB {
 
     @SuppressWarnings("unchecked")
     static void runMasterOnceHyb(PolynomialList S, int threads, int threadsPerNode, String mfile, int port,
-            boolean pairseq) {
+                                 boolean pairseq) {
         List L = S.list;
         List G = null;
         long t, t1;

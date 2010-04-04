@@ -16,22 +16,19 @@ import edu.jas.poly.GenPolynomialTokenizer;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.PolynomialList;
-import edu.jas.kern.ComputerThreads;
 
 
 /**
  * Simple setup to run a solvable GB example. <br />
- * Usage: RunSGB [seq|par] [irr|left|right|two] &lt;file&gt; #procs 
+ * Usage: RunSGB [seq|par|par+] [irr|left|right|two] &lt;file&gt; #procs 
  * @author Heinz Kredel
  */
-
-// Usage: RunSGB [seq|par|dist|cli] &lt;file&gt; #procs [machinefile]
 
 public class RunSGB {
 
     /**
      * main method to be called from commandline <br />
-     * Usage: RunSGB [seq|par] [irr|left|right|two] &lt;file&gt; #procs 
+     * Usage: RunSGB [seq|par|par+] [irr|left|right|two] &lt;file&gt; #procs 
      */
 
     public static void main( java.lang.String[] args ) {
@@ -39,7 +36,7 @@ public class RunSGB {
         BasicConfigurator.configure();
 
         String usage = "Usage: RunSGB "
-            + "[ seq | par ] "
+            + "[ seq | par | par+ ] "
             //        + "[ seq | par | dist | cli [port] ] "
             + "[ irr | left | right | two ] "
             + "<file> "
@@ -50,6 +47,7 @@ public class RunSGB {
             return;
         }
 
+        boolean pairseq = false;
         String kind = args[0];
         String[] allkinds = new String[] { "seq", "par", "par+"};
         // String[] allkinds = new String[] { "seq", "par", "dist", "cli"  };
@@ -57,6 +55,9 @@ public class RunSGB {
         for ( int i = 0; i < allkinds.length; i++ ) {
             if ( kind.equals( allkinds[i] ) ) {
                 sup = true;
+                if (kind.indexOf("+") >= 0) {
+                    pairseq = true;
+                }
             }
         }
         if ( ! sup ) {
@@ -65,7 +66,7 @@ public class RunSGB {
         }
         String[] allmeth = new String[] { "irr", "left", "right", "two"};
         String action = args[1];
-	sup = false;
+        sup = false;
         for ( int i = 0; i < allmeth.length; i++ ) {
             if ( action.equals( allmeth[i] ) ) {
                 sup = true;
@@ -93,6 +94,9 @@ public class RunSGB {
                 System.out.println(usage);
                 return;
             }
+            if ( threads < 1 ) {
+                threads = 1;
+            }
         }
 
         Reader problem = null;
@@ -114,14 +118,13 @@ public class RunSGB {
         }
         System.out.println("S =\n" + S); 
 
-        if ( kind.equals("seq") ) {
-            runSequential( S, action );
+        if ( kind.startsWith("seq") ) {
+            runSequential( S, action, pairseq );
         }
 
-        if ( kind.equals("par") ) {
-            runParallel( S, threads, action );
+        if ( kind.startsWith("par") ) {
+            runParallel( S, threads, action, pairseq );
         }
-	//ComputerThreads.terminate();
     }
 
 
@@ -131,13 +134,19 @@ public class RunSGB {
      * @param action what to to.
      */
     @SuppressWarnings("unchecked")
-    static void runSequential(PolynomialList S, String action) {
+    static void runSequential(PolynomialList S, String action, boolean pairseq) {
         List<GenSolvablePolynomial> L = S.list; 
         List<GenSolvablePolynomial> G = null;
         long t;
         SolvableReduction sred = new SolvableReductionSeq();
-        SolvableGroebnerBase sbb = new SolvableGroebnerBaseSeq();
-
+        SolvableGroebnerBase sbb = null;
+        if (pairseq) {
+            //sbb = new SolvableGroebnerBaseSeqPairSeq();
+	    System.out.println("SolvableGroebnerBaseSeqPairSeq not implemented using SolvableGroebnerBaseSeq");
+            sbb = new SolvableGroebnerBaseSeq();
+        } else {
+            sbb = new SolvableGroebnerBaseSeq();
+        }
         t = System.currentTimeMillis();
         System.out.println("\nSolvable GB [" + action + "] sequential ..."); 
         if ( action.equals("irr") ) {
@@ -160,6 +169,11 @@ public class RunSGB {
         System.out.println("G =\n" + S ); 
         System.out.println("G.size() = " + G.size() ); 
         t = System.currentTimeMillis() - t;
+        if (pairseq) {
+            System.out.print("seq+, ");
+        } else {
+            System.out.print("seq, ");
+        }
         System.out.println("time = " + t + " milliseconds" ); 
         System.out.println(""); 
     }
@@ -171,12 +185,18 @@ public class RunSGB {
      * @param action what to to.
      */
     @SuppressWarnings("unchecked")
-    static void runParallel(PolynomialList S, int threads, String action) {
+    static void runParallel(PolynomialList S, int threads, String action, boolean pairseq) {
         List<GenSolvablePolynomial> L = S.list; 
         List<GenSolvablePolynomial> G = null;
         long t;
         SolvableReduction sred = new SolvableReductionPar();
-        SolvableGroebnerBaseParallel sbb = new SolvableGroebnerBaseParallel(threads);
+        SolvableGroebnerBaseParallel sbb = null;
+        SolvableGroebnerBaseSeqPairParallel sbbs = null;
+        if (pairseq) {
+            sbbs = new SolvableGroebnerBaseSeqPairParallel(threads);
+        } else {
+            sbb = new SolvableGroebnerBaseParallel(threads);
+        }
 
         t = System.currentTimeMillis();
         System.out.println("\nSolvable GB [" + action + "] parallel " + threads + " threads ..."); 
@@ -184,29 +204,50 @@ public class RunSGB {
             G = sred.leftIrreducibleSet(L);
         }
         if ( action.equals("left") ) {
-            G = sbb.leftGB(L);
+            if (pairseq) {
+                G = sbbs.leftGB(L);
+	    } else {
+                G = sbb.leftGB(L);
+	    }
         }
         if ( action.equals("right") ) {
-            G = sbb.rightGB(L);
+            if (pairseq) {
+                G = sbbs.rightGB(L);
+	    } else {
+                G = sbb.rightGB(L);
+	    }
         }
         if ( action.equals("two") ) {
-            G = sbb.twosidedGB(L);
+            if (pairseq) {
+                G = sbbs.twosidedGB(L);
+	    } else {
+                G = sbb.twosidedGB(L);
+	    }
         }
         if ( G == null ) {
             System.out.println("unknown action = " + action + "\n"); 
             return;
         }
-	if ( G.size() > 0 ) {
+        if ( G.size() > 0 ) {
             S = new PolynomialList( G.get(0).ring, G );
-	} else {
+        } else {
             S = new PolynomialList( S.ring, G );
-	}
+        }
         System.out.println("G =\n" + S ); 
         System.out.println("G.size() = " + G.size() ); 
         t = System.currentTimeMillis() - t;
-        System.out.println("time = " + t + " milliseconds" ); 
+        if (pairseq) {
+            System.out.print("p+ ");
+        } else {
+            System.out.print("p ");
+        }
+        System.out.println("= " + threads + ", time = " + t + " milliseconds");
         System.out.println(""); 
-        sbb.terminate();
+        if (pairseq) {
+           sbbs.terminate();
+	} else {
+           sbb.terminate();
+	}
     }
 
 }
