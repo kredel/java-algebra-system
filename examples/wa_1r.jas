@@ -1,0 +1,18 @@
+# solvable polynomials, Weyl algebra A_1, right GB:
+Rat (a,b,x,y) L
+RelationTable
+(
+#( y^3 ), ( x ), ( x * y^3 - 3 y^2 ),
+#( y^2 ), ( x^2 ), ( x^2 * y^2 - 4 x * y + 2  ),
+#( y^2 ), ( x ), ( x * y^2 - 2 y ),
+#( y ), ( x^4 ), ( x^4 * y - 4 x^3 ),
+#( y ), ( x^3 ), ( x^3 * y - 3 x^2 ),
+#( y ), ( x^2 ), ( x^2 * y - 2 x ),
+( y ), ( x ), ( x * y - 1  )
+)
+
+(
+( y - 1/48 a^3 * x^2 + 1/12 a^2 * x - 1/2 a ),
+( b - 1/24 a^3 ), 
+( a^4 )
+)
