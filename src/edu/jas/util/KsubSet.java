@@ -168,7 +168,7 @@ class OneSubSetIterator<E> implements Iterator<List<E>> {
 
     /**
      * OneSubSetIterator constructor.
-     * @param S generating set.
+     * @param set generating set.
      */
     public OneSubSetIterator(List<E> set) {
         this.set = set;
@@ -228,7 +228,7 @@ class ZeroSubSetIterator<E> implements Iterator<List<E>> {
 
     /**
      * ZeroSubSetIterator constructor.
-     * @param S generating set (ignored).
+     * @param set generating set (ignored).
      */
     public ZeroSubSetIterator(List<E> set) {
         hasNext = true;
