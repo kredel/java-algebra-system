@@ -163,6 +163,9 @@ public class GroebnerBaseDistributed<C extends RingElem<C>> extends GroebnerBase
                 }
                 if (pairlist == null) {
                     pairlist = new OrderedPairlist<C>(modv, p.ring);
+                    if ( ! p.ring.coFac.isField() ) {
+                        throw new RuntimeException("coefficients not from a field");
+                    }
                 }
                 // theList not updated here
                 if (p.isONE()) {

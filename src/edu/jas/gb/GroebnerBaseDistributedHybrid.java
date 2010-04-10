@@ -220,6 +220,9 @@ public class GroebnerBaseDistributedHybrid<C extends RingElem<C>> extends Groebn
                 }
                 if (pairlist == null) {
                     pairlist = new OrderedPairlist<C>(modv, p.ring);
+                    if ( ! p.ring.coFac.isField() ) {
+                        throw new RuntimeException("coefficients not from a field");
+                    }
                 }
                 // theList not updated here
                 if (p.isONE()) {
