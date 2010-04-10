@@ -23,7 +23,7 @@
 JDK=/usr/java/latest/bin
 #JDK=/usr/lib/jvm/java-1.5.0-sun-1.5.0/bin
 
-JASPATH=$(HOME)/jas
+#JASPATH=$(HOME)/jas
 SVNREPO=/home/SUBVERSION
 LIBPATH=$(HOME)/java/lib
 JUNITPATH=$(LIBPATH)/junit.jar
@@ -73,7 +73,7 @@ cl=
 
 #.EXPORT_ALL_VARIABLES :
 
-DEFS=$(JASPATH)/arith:$(JASPATH)/poly:$(JASPATH)/ps:$(JASPATH)/vector:$(JASPATH)/gb:$(JASPATH)/ufd:$(JASPATH)/gbmod:$(JASPATH)/util:$(JASPATH)/application:$(JASPATH)/root
+#DEFS=$(JASPATH)/arith:$(JASPATH)/poly:$(JASPATH)/ps:$(JASPATH)/vector:$(JASPATH)/gb:$(JASPATH)/ufd:$(JASPATH)/gbmod:$(JASPATH)/util:$(JASPATH)/application:$(JASPATH)/root
 DOCCLASSES=$(JUNITPATH):$(LOG4JPATH):$(JOMPPATH)
 #:$(TNJPATH)
 DOCOPTS=-package
@@ -81,7 +81,8 @@ DOCOPTS=-package
 #DOCOPTS=-public -protected -package -author -version
 
 #MYCLASSPATH = .:$(DEFS):$(JUNITPATH):$(JOMPPATH)
-MYCLASSPATH = $(LOG4JPATH):.:$(DEFS):$(JUNITPATH):$(JOMPPATH):$(PYPATH)
+#MYCLASSPATH = $(LOG4JPATH):.:$(DEFS):$(JUNITPATH):$(JOMPPATH):$(PYPATH)
+MYCLASSPATH = $(LOG4JPATH):.:$(JUNITPATH):$(JOMPPATH):$(PYPATH)
 #:$(TNJPATH)
 
 JAVAC=$(JDK)/javac -classpath $(MYCLASSPATH) -d . -Xlint:unchecked
