@@ -205,21 +205,7 @@ public class FactorFactory {
                 //System.out.println("afac_o = " + ofac);
                 afac = (AlgebraicNumberRing) ofac;
                 ofac = afac.ring.coFac;
-                if (ofac instanceof BigRational) {
-                    t = 4;
-                }
-                if (ofac instanceof ModIntegerRing) {
-                    t = 5;
-                }
-                if (ofac instanceof AlgebraicNumberRing) {
-                    t = 6;
-                }
-                if (ofac instanceof ModLongRing) {
-                    t = 10;
-                }
-                if (ofac instanceof ComplexRing) {
-                    t = 12;
-                }
+                t = 4;
                 break;
             }
             if (ofac instanceof QuotientRing) {
@@ -255,7 +241,7 @@ public class FactorFactory {
         if (t == 11) {
             ufd = new FactorComplex(fac);
         }
-        if (t == 4 || t == 5 || t == 6 || t == 10 || t == 12) {
+        if (t == 4) {
             ufd = new FactorAlgebraic/*raw <C>*/(afac);
         }
         if (t == 7) {

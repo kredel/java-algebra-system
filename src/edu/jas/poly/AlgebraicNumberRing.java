@@ -80,7 +80,7 @@ public class AlgebraicNumberRing<C extends GcdRingElem<C> >
 
 
     /** Copy AlgebraicNumber element c.
-     * @param c
+     * @param c algebraic number to copy.
      * @return a copy of c.
      */
     public AlgebraicNumber<C> copy(AlgebraicNumber<C> c) {
@@ -155,12 +155,32 @@ public class AlgebraicNumberRing<C extends GcdRingElem<C> >
         if ( isField == 0 ) { 
            return false;
         }
-        //if ( modul.isProbablePrime(certainty) ) {
-        //   isField = 1;
-        //   return true;
-        //}
-        //isField = 0;
+        if ( ! ring.coFac.isField() ) {
+           isField = 0;
+           return false;
+        }
         return false;
+    }
+
+
+    /**
+     * Set field property of this ring.
+     * @param field true, if this ring is determined to be a field,
+                    false, if it is determined that it is not a field.
+     */
+    public void setField(boolean field) {
+        if ( isField > 0 && field ) { 
+           return;
+        }
+        if ( isField == 0 && ! field ) { 
+           return;
+        }
+        if ( field ) {
+           isField = 1;
+        } else {
+           isField = 0;
+	}
+        return;
     }
 
 

@@ -34,9 +34,19 @@
   The factorization of polynomials is partly experimental.
 </p>
 <p>
-  To choose the correct implementation always use the <code>*Factory</code> classes 
+  To choose the correct implementation always use the factory classes 
+  <code>GCDFactory</code>, <code>SquarefreeFactory</code> and <code>FactorFactory</code>
   with methods <code>getImplementation()</code> or <code>getProxy()</code>.
   These methods will take care of all possible (implemented) coefficient rings properties.
+  The polynomial coefficients must implement the <code>GcdRingElem</code> interface.
+  Greatest common divisor computation is completely generic and works for any 
+  implemented integral domain.
+  If special, optimized implementations exist they will be used.
+  Squarefree decomposition is also completely generic and works for any 
+  implemented integral domain. There are no special, optimized implementations.
+  Factorization is generic relative to the implemented ring constructions: algebraic field extensions 
+  and transcendent field extensions. Implemented base cases are modular coefficient, integer coefficients 
+  and rational number coefficients.
 </p>
 <p>
   The implementation follows 
@@ -44,7 +54,7 @@
   and Cohen <em>A Curse in Computational Algebraic Number Theory</em>.
   See also Kaltofen <em>Factorization of Polynomials</em> in Computing Supplement, 
   <em>Springer, 1982</em>,
-  Davenport &amp; Gianni &amp; Trager <em>Scratchpad's View of Algebra {II}: A Categorical View of Factorization</em>
+  Davenport &amp; Gianni &amp; Trager <em>Scratchpad's View of Algebra II: A Categorical View of Factorization</em>
   in <em>ISSAC'91</em>
   and the <a href="http://krum.rz.uni-mannheim.de/mas/src/" target="mas.src">ALDES/SAC2 code</a>
   as contained in <a href="http://krum.rz.uni-mannheim.de/mas/" target="mas">MAS</a>.
@@ -55,7 +65,7 @@
 <p>
 <!-- Created: Sun Mar  4 16:46:52 CET 2007 -->
 <!-- hhmts start -->
-Last modified: Sun Apr 11 20:03:34 CEST 2010
+Last modified: Sun Apr 11 21:03:36 CEST 2010
 <!-- hhmts end -->
 </p>
 <p>$Id$ 
