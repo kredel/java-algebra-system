@@ -14,6 +14,7 @@ import edu.jas.structure.GcdRingElem;
 
 /**
  * Greatest common divisor algorithm interface.
+ * @param <C> coefficient type
  * @author Heinz Kredel
  * @usage To create classes that implement this interface use the
  *        GreatestCommonDivisorFactory. It will select an appropriate
@@ -29,12 +30,11 @@ import edu.jas.structure.GcdRingElem;
  * 
  * <pre>
  * BigInteger cofac = new BigInteger();
- * GreatestCommonDivisor&lt;BigInteger&gt; engine = GCDFactory.&lt;BigInteger&gt; getImplementation(cofac);
+ * GreatestCommonDivisor&lt;BigInteger&gt; engine = GCDFactory.getImplementation(cofac);
  * c = engine.gcd(a, b);
  * </pre>
  * 
- * @see edu.jas.ufd.GCDFactory#getImplementation( edu.jas.structure.RingFactory
- *      f)
+ * @see edu.jas.ufd.GCDFactory#getImplementation
  */
 
 public interface GreatestCommonDivisor<C extends GcdRingElem<C>> extends Serializable {

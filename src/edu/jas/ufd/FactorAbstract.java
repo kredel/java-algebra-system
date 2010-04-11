@@ -32,7 +32,6 @@ import edu.jas.util.KsubSet;
  * convenience.
  * @param <C> coefficient type
  * @author Heinz Kredel
- * @usage
  * @see edu.jas.ufd.FactorFactory
  */
 

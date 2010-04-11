@@ -51,8 +51,6 @@ import edu.jas.structure.ComplexRing;
  * </pre>
  * 
  * @see edu.jas.ufd.Squarefree#squarefreeFactors(edu.jas.poly.GenPolynomial P)
- * @see edu.jas.ufd.SquarefreeAbstract#squarefreeFactors(edu.jas.poly.GenPolynomial
- *      P)
  */
 
 public class SquarefreeFactory {

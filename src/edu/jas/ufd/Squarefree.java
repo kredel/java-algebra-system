@@ -14,7 +14,32 @@ import edu.jas.structure.GcdRingElem;
 
 /**
  * Squarefree decomposition interface.
+ * @param <C> coefficient type
  * @author Heinz Kredel
+ * @usage To create objects that implement the <code>Squarefree</code>
+ *        interface use the <code>SquarefreeFactory</code>. It will select an
+ *        appropriate implementation based on the types of polynomial
+ *        coefficients C. To obtain an implementation use
+ *        <code>getImplementation()</code>, it returns an object of a class
+ *        which extends the <code>SquarefreeAbstract</code> class which
+ *        implements the <code>Squarefree</code> interface.
+ * 
+ * <pre>
+ * Squarefree&lt;CT&gt; engine;
+ * engine = SquarefreeFactory.&lt;CT&gt; getImplementation(cofac);
+ * c = engine.squarefreeFactors(a);
+ * </pre>
+ * 
+ * For example, if the coefficient type is BigInteger, the usage looks like
+ * 
+ * <pre>
+ * BigInteger cofac = new BigInteger();
+ * Squarefree&lt;BigInteger&gt; engine;
+ * engine = SquarefreeFactory.getImplementation(cofac);
+ * Sm = engine.sqaurefreeFactors(poly);
+ * </pre>
+ * 
+ * @see edu.jas.ufd.SquarefreeFactory#getImplementation
  */
 
 public interface Squarefree<C extends GcdRingElem<C>> {

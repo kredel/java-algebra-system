@@ -54,7 +54,6 @@ import edu.jas.structure.ComplexRing;
  * </pre>
  * 
  * @see edu.jas.ufd.Factorization#factors(edu.jas.poly.GenPolynomial P)
- * @see edu.jas.ufd.FactorAbstract#factors(edu.jas.poly.GenPolynomial P)
  */
 
 public class FactorFactory {

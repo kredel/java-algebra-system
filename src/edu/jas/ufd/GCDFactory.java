@@ -56,8 +56,8 @@ import edu.jas.structure.ModularRingFactory;
  * <pre>
  * BigInteger cofac = new BigInteger();
  * GreatestCommonDivisor&lt;BigInteger&gt; engine;
- * engine = GCDFactory.&lt;BigInteger&gt; getImplementation(cofac);
- * or engine = GCDFactory.&lt;BigInteger&gt; getProxy(cofac);
+ * engine = GCDFactory.getImplementation(cofac);
+ * or engine = GCDFactory.getProxy(cofac);
  * c = engine.gcd(a, b);
  * </pre>
  * 
