@@ -147,7 +147,7 @@ public class SquarefreeFactory {
                 fac.setField(false);
                 throw new RuntimeException("no integral domain " + fac.getClass().getName());
             }
-	}
+        }
     }
 
 
@@ -177,7 +177,7 @@ public class SquarefreeFactory {
      */
     public static <C extends GcdRingElem<C>> 
         SquarefreeAbstract<C> getImplementation(GenPolynomialRing<C> fac) {
-	return getImplementationPoly(fac);
+        return getImplementationPoly(fac);
     }
 
 
@@ -289,7 +289,6 @@ public class SquarefreeFactory {
             ufd = getImplementation( qfac );
         }
         if (t == 8) { // GenPolynomial
-            // want: 
             ufd = getImplementationPoly( pfac );
         }
         if (t == 9) { // other fields 
@@ -298,9 +297,9 @@ public class SquarefreeFactory {
             } else {
                 if ( isFinite(fac) ) { 
                    ufd = new SquarefreeFiniteFieldCharP/*raw*/(fac);
-		} else {
+                } else {
                    ufd = new SquarefreeInfiniteFieldCharP/*raw*/(fac);
-		}
+                }
             }
         }
         if (ufd == null) {
@@ -325,10 +324,10 @@ public class SquarefreeFactory {
         }
         // char p case
         List<C> gens = fac.generators();
-        System.out.println("gens = " + gens);
-	if ( gens.size() == 1 ) { // ??
-	    return true;
-	}
+        System.out.println("isFinite gens = " + gens);
+        if ( gens.size() == 1 ) { // ??
+            return true;
+        }
         return false;
     }
 

@@ -38,7 +38,8 @@
   <code>GCDFactory</code>, <code>SquarefreeFactory</code> and <code>FactorFactory</code>
   with methods <code>getImplementation()</code> or <code>getProxy()</code>.
   These methods will take care of all possible (implemented) coefficient rings properties.
-  The polynomial coefficients must implement the <code>GcdRingElem</code> interface.
+  The polynomial coefficients must implement the <code>GcdRingElem</code> interface and 
+  so must allow greatest common divisor computations.
   Greatest common divisor computation is completely generic and works for any 
   implemented integral domain.
   If special, optimized implementations exist they will be used.
@@ -65,7 +66,7 @@
 <p>
 <!-- Created: Sun Mar  4 16:46:52 CET 2007 -->
 <!-- hhmts start -->
-Last modified: Sun Apr 11 21:03:36 CEST 2010
+Last modified: Sun Apr 11 23:18:03 CEST 2010
 <!-- hhmts end -->
 </p>
 <p>$Id$ 
