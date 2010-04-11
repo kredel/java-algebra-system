@@ -76,9 +76,11 @@ public interface GreatestCommonDivisor<C extends GcdRingElem<C>> extends Seriali
 
     /**
      * GenPolynomial resultant.
+     * The input polynomials are considered as univariate polynomials in the main variable. 
      * @param P GenPolynomial.
      * @param S GenPolynomial.
      * @return res(P,S).
+     * @see edu.jas.ufd.GreatestCommonDivisorAbstract#recursiveResultant
      */
     public GenPolynomial<C> resultant(GenPolynomial<C> P, GenPolynomial<C> S);
 
