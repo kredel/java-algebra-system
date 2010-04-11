@@ -11,29 +11,41 @@
 
 <p>
   This package contains classes for polynomials rings as unique factorization domains.
-  Provided methods are e.g. greatest common divisors <code>gcd()</code>, 
-  primitive part <code>primitivePart()</code> or 
-  greatest squarefree factor <code>squarefreeFactor()</code>.
+  Provided methods with interface <code>GreatestCommonDivisor</code> 
+  are e.g. greatest common divisors <code>gcd()</code>, primitive part <code>primitivePart()</code>
+  or <code>coPrime()</code>.
   The different classes implement variants of polynomial remainder sequences (PRS) 
   and modular methods.
+  Interface <code>Squarefree</code> provides the greatest squarefree factor 
+  <code>squarefreeFactor()</code> and a complete squarefree decompostion can be obtained 
+  with method <code>squarefreeFactors()</code>.
   There is a <code>Factorization</code> interface with an 
   <code>FactorAbstract</code> class with common codes.
-  Factorization of univariate polynomials with several coefficient rings: 
+  Factorization of univariate polynomials exists for several coefficient rings: 
   modulo primes in class <code>FactorModular</code>,
   over integers in class <code>FactorInteger</code>,
-  over rational numbers in class <code>FactorRational</code> and
-  over algebraic numbers in class <code>FactorAlgebraic&lt;C&gt;</code> 
-  (where <code>C</code> can be <code>ModInteger</code> or <code>BigRational</code>).
+  over rational numbers in class <code>FactorRational</code>,
+  over algebraic numbers in class <code>FactorAlgebraic&lt;C&gt;</code> and 
+  over rational functions in class <code>FactorQuotient&lt;C&gt;</code> 
+  (where for the last two classes <code>C</code> can be any other ring for which the 
+  <code>FactorFactory. getImplementation</code> returns an implementation).
   Multivatiate polynomials are reduced to the univariate polynomials via Kronecker substitution 
-  and are therefore not very efficient.
-  The factorization of polynomials is still experimental.
+  and are therefore not very efficient at the moment.
+  The factorization of polynomials is partly experimental.
+</p>
+<p>
+  To choose the correct implementation always use the <code>*Factory</code> classes 
+  with methods <code>getImplementation()</code> or <code>getProxy()</code>.
+  These methods will take care of all possible (implemented) coefficient rings properties.
 </p>
 <p>
   The implementation follows 
   Geddes &amp; Czapor &amp; Labahn <em>Algorithms for Computer Algebra</em>
   and Cohen <em>A Curse in Computational Algebraic Number Theory</em>.
   See also Kaltofen <em>Factorization of Polynomials</em> in Computing Supplement, 
-  <em>Springer, 1982</em>
+  <em>Springer, 1982</em>,
+  Davenport &amp; Gianni &amp; Trager <em>Scratchpad's View of Algebra {II}: A Categorical View of Factorization</em>
+  in <em>ISSAC'91</em>
   and the <a href="http://krum.rz.uni-mannheim.de/mas/src/" target="mas.src">ALDES/SAC2 code</a>
   as contained in <a href="http://krum.rz.uni-mannheim.de/mas/" target="mas">MAS</a>.
 </p>
@@ -43,7 +55,7 @@
 <p>
 <!-- Created: Sun Mar  4 16:46:52 CET 2007 -->
 <!-- hhmts start -->
-Last modified: Sun Mar  1 19:23:37 CET 2009
+Last modified: Sun Apr 11 20:03:34 CEST 2010
 <!-- hhmts end -->
 </p>
 <p>$Id$ 
