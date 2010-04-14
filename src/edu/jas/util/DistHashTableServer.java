@@ -330,6 +330,7 @@ class DHTBroadcaster<K> extends Thread /*implements Runnable*/{
         //   return;
         //}
         tc = (DHTTransport<K, Object>) o;
+        K key = null;
         synchronized (theList) {
             //test
             //Object x = theList.get( tc.key );
@@ -337,7 +338,8 @@ class DHTBroadcaster<K> extends Thread /*implements Runnable*/{
             //   logger.info("theList duplicate key " + tc.key );
             //}
             try {
-                theList.put(tc.key(), tc);
+                key = tc.key();
+                theList.put(key, tc);
             } catch (IOException e) {
                 e.printStackTrace();
                 logger.warn("tc.key() not ok " + tc);
@@ -346,6 +348,7 @@ class DHTBroadcaster<K> extends Thread /*implements Runnable*/{
                 logger.warn("tc.key() not ok " + tc);
             }
         }
+        logger.info("sending key=" + key + " to " + bcaster.size() + " nodes");
         synchronized (bcaster) {
             Iterator<DHTBroadcaster<K>> it = bcaster.iterator();
             while (it.hasNext()) {
@@ -356,6 +359,7 @@ class DHTBroadcaster<K> extends Thread /*implements Runnable*/{
                     }
                     br.sendChannel(tc);
                 } catch (IOException e) {
+                    logger.info("bcaster, exception " + e);
                     try {
                         br.closeChannel();
                         while (br.isAlive()) {
@@ -400,9 +404,11 @@ class DHTBroadcaster<K> extends Thread /*implements Runnable*/{
                 }
             } catch (IOException e) {
                 goon = false;
+                logger.info("receive, exception " + e);
                 //e.printStackTrace();
             } catch (ClassNotFoundException e) {
                 goon = false;
+                logger.info("receive, exception " + e);
                 e.printStackTrace();
             }
         }
