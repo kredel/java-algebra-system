@@ -360,8 +360,8 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
         }
         List<GenSolvablePolynomial<C>> rG = leftGB( modv, rF );
         if ( true || debug ) {
-	    //PolynomialList<C> pl = new PolynomialList<C>(rring,rG);
-	    //logger.info("reversed GB = " + pl);
+            //PolynomialList<C> pl = new PolynomialList<C>(rring,rG);
+            //logger.info("reversed GB = " + pl);
             long t = System.currentTimeMillis();
             boolean isit = isLeftGB( rG );
             t = System.currentTimeMillis() - t;
@@ -376,8 +376,8 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
             }
         }
         if ( true || debug ) {
-	    //PolynomialList<C> pl = new PolynomialList<C>(ring,G);
-	    //logger.info("GB = " + pl);
+            //PolynomialList<C> pl = new PolynomialList<C>(ring,G);
+            //logger.info("GB = " + pl);
             long t = System.currentTimeMillis();
             boolean isit = isRightGB( G );
             t = System.currentTimeMillis() - t;

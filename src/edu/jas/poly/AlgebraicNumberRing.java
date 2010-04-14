@@ -179,7 +179,7 @@ public class AlgebraicNumberRing<C extends GcdRingElem<C> >
            isField = 1;
         } else {
            isField = 0;
-	}
+        }
         return;
     }
 
