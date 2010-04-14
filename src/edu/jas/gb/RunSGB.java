@@ -142,7 +142,7 @@ public class RunSGB {
         SolvableGroebnerBase sbb = null;
         if (pairseq) {
             //sbb = new SolvableGroebnerBaseSeqPairSeq();
-	    System.out.println("SolvableGroebnerBaseSeqPairSeq not implemented using SolvableGroebnerBaseSeq");
+            System.out.println("SolvableGroebnerBaseSeqPairSeq not implemented using SolvableGroebnerBaseSeq");
             sbb = new SolvableGroebnerBaseSeq();
         } else {
             sbb = new SolvableGroebnerBaseSeq();
@@ -206,23 +206,23 @@ public class RunSGB {
         if ( action.equals("left") ) {
             if (pairseq) {
                 G = sbbs.leftGB(L);
-	    } else {
+            } else {
                 G = sbb.leftGB(L);
-	    }
+            }
         }
         if ( action.equals("right") ) {
             if (pairseq) {
                 G = sbbs.rightGB(L);
-	    } else {
+            } else {
                 G = sbb.rightGB(L);
-	    }
+            }
         }
         if ( action.equals("two") ) {
             if (pairseq) {
                 G = sbbs.twosidedGB(L);
-	    } else {
+            } else {
                 G = sbb.twosidedGB(L);
-	    }
+            }
         }
         if ( G == null ) {
             System.out.println("unknown action = " + action + "\n"); 
@@ -245,9 +245,9 @@ public class RunSGB {
         System.out.println(""); 
         if (pairseq) {
            sbbs.terminate();
-	} else {
+        } else {
            sbb.terminate();
-	}
+        }
     }
 
 }

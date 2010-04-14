@@ -346,6 +346,9 @@ class DHTBroadcaster<K> extends Thread /*implements Runnable*/{
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
                 logger.warn("tc.key() not ok " + tc);
+            } catch (Exception e) {
+                e.printStackTrace();
+                logger.warn("tc.key() not ok " + tc);
             }
         }
         logger.info("sending key=" + key + " to " + bcaster.size() + " nodes");
@@ -371,6 +374,8 @@ class DHTBroadcaster<K> extends Thread /*implements Runnable*/{
                     }
                     it.remove( /*br*/); //ConcurrentModificationException
                     logger.debug("bcaster.remove() " + br);
+                } catch (Exception e) {
+                    logger.info("bcaster, exception " + e);
                 }
             }
         }
@@ -407,6 +412,10 @@ class DHTBroadcaster<K> extends Thread /*implements Runnable*/{
                 logger.info("receive, exception " + e);
                 //e.printStackTrace();
             } catch (ClassNotFoundException e) {
+                goon = false;
+                logger.info("receive, exception " + e);
+                e.printStackTrace();
+            } catch (Exception e) {
                 goon = false;
                 logger.info("receive, exception " + e);
                 e.printStackTrace();

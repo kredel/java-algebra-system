@@ -158,7 +158,10 @@ class GBClientHybrid<C extends RingElem<C>> implements RemoteExecutable {
         bbd = new GroebnerBaseDistributedHybrid<C>(1, threadsPerNode, null, port);
         try {
             bbd.clientPart(host);
-        } catch (IOException ignored) {
+        } catch (IOException e) {
+            System.out.println("clientPart, exception " + e);
+        } catch (Exception e) {
+            System.out.println("clientPart, exception " + e);
         }
         bbd.terminate();
     }

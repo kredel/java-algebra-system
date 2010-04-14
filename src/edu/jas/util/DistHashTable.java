@@ -264,6 +264,9 @@ public class DistHashTable<K, V> extends AbstractMap<K, V> /* implements Map<K,V
         } catch (IOException e) {
             logger.info("send, exception " + e);
             e.printStackTrace();
+        } catch (Exception e) {
+            logger.info("send, exception " + e);
+            e.printStackTrace();
         }
         return null;
     }
@@ -415,7 +418,7 @@ class DHTListener<K, V> extends Thread {
                     K key = tc.key();
                     if (key != null) {
                         logger.info("receive, put(key=" + key + ")");
-			V val = tc.value();
+                        V val = tc.value();
                         synchronized (theList) {
                             theList.put(key, val);
                             theList.notifyAll();
@@ -427,6 +430,10 @@ class DHTListener<K, V> extends Thread {
                 logger.info("receive, exception " + e);
                 //e.printStackTrace();
             } catch (ClassNotFoundException e) {
+                goon = false;
+                logger.info("receive, exception " + e);
+                e.printStackTrace();
+            } catch (Exception e) {
                 goon = false;
                 logger.info("receive, exception " + e);
                 e.printStackTrace();
