@@ -161,7 +161,7 @@ class DHTTransportMarshal<K, V> extends DHTTransport<K, V> {
     private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
         long t = System.currentTimeMillis();
         in.defaultReadObject();
-        t = System.currentTimeMillis() - t;
+        t = System.currentTimeMillis() - t; // not meaningful, includes waiting time
         synchronized( DHTTransport.class ) {
             drtime += t;
         }

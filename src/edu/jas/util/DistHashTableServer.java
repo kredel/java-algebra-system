@@ -219,7 +219,8 @@ public class DistHashTableServer<K> extends Thread {
         long dec = DHTTransport.dtime - dtime;
         long encr = DHTTransport.ertime - ertime;
         long decr = DHTTransport.drtime - drtime;
-        logger.info("DHT time: encode = " + enc + ", decode = " + dec + ", enc raw = " + encr + ", dec raw = " + decr + ", total = " + (enc+dec+encr+decr));
+        long drest = (encr*dec)/enc;
+        logger.info("DHT time: encode = " + enc + ", decode = " + dec + ", enc raw = " + encr + ", dec raw wait = " + decr + ", dec raw est = " + drest + ", sum est = " + (enc+dec+encr+drest)); // +decr not meaningful
         if (mythread == null) {
             return;
         }
@@ -341,14 +342,14 @@ class DHTBroadcaster<K> extends Thread /*implements Runnable*/{
                 key = tc.key();
                 theList.put(key, tc);
             } catch (IOException e) {
+                logger.warn("IO exception: tc.key() not ok " + tc);
                 e.printStackTrace();
-                logger.warn("tc.key() not ok " + tc);
             } catch (ClassNotFoundException e) {
+                logger.warn("CNF exception: tc.key() not ok " + tc);
                 e.printStackTrace();
-                logger.warn("tc.key() not ok " + tc);
             } catch (Exception e) {
+                logger.warn("exception:tc.key() not ok " + tc);
                 e.printStackTrace();
-                logger.warn("tc.key() not ok " + tc);
             }
         }
         logger.info("sending key=" + key + " to " + bcaster.size() + " nodes");
@@ -409,11 +410,11 @@ class DHTBroadcaster<K> extends Thread /*implements Runnable*/{
                 }
             } catch (IOException e) {
                 goon = false;
-                logger.info("receive, exception " + e);
+                logger.info("receive, IO exception " + e);
                 //e.printStackTrace();
             } catch (ClassNotFoundException e) {
                 goon = false;
-                logger.info("receive, exception " + e);
+                logger.info("receive, CNF exception " + e);
                 e.printStackTrace();
             } catch (Exception e) {
                 goon = false;

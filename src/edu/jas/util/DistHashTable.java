@@ -427,11 +427,11 @@ class DHTListener<K, V> extends Thread {
                 }
             } catch (IOException e) {
                 goon = false;
-                logger.info("receive, exception " + e);
+                logger.info("receive, IO exception " + e);
                 //e.printStackTrace();
             } catch (ClassNotFoundException e) {
                 goon = false;
-                logger.info("receive, exception " + e);
+                logger.info("receive, CNF exception " + e);
                 e.printStackTrace();
             } catch (Exception e) {
                 goon = false;
