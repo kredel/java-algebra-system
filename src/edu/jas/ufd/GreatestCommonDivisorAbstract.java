@@ -394,7 +394,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
      * @param P GenPolynomial.
      * @param S GenPolynomial.
      * @return res(P,S).
-     * @see edu.jas.ufd.GreatestCommonDivisorAbstract#recursiveResultant
+     * @see edu.jas.ufd.GreatestCommonDivisorSubres#recursiveResultant
      */
     public GenPolynomial<C> resultant(GenPolynomial<C> P, GenPolynomial<C> S) {
         if (S == null || S.isZERO()) {
