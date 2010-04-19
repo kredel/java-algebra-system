@@ -726,13 +726,13 @@ class HybridReducerReceiver<C extends RingElem<C>> extends Thread {
         GenPolynomial<C> H = null;
         int red = 0;
         int polIndex = -1;
-        Integer senderId; // obsolete
+        //Integer senderId; // obsolete
 
         // while more requests
         while (goon) {
             // receive request
             logger.debug("receive result");
-            senderId = null;
+            //senderId = null;
             Object rh = null;
             try {
                 rh = pairChannel.receive(resultTag);
@@ -766,12 +766,12 @@ class HybridReducerReceiver<C extends RingElem<C>> extends Thread {
                 goon = false;
                 //?? finner.initIdle(1);
                 break;
-            } else if (rh instanceof GBTransportMessPolyId) {
+            } else if (rh instanceof GBTransportMessPoly) {
                 // update pair list
                 red++;
-                GBTransportMessPolyId<C> mpi = (GBTransportMessPolyId<C>) rh;
+                GBTransportMessPoly<C> mpi = (GBTransportMessPoly<C>) rh;
                 H = mpi.pol;
-                senderId = mpi.threadId;
+                //senderId = mpi.threadId;
                 if (H != null) {
                     if (debug) {
                        logger.info("H = " + H.leadingExpVector());
@@ -800,8 +800,8 @@ class HybridReducerReceiver<C extends RingElem<C>> extends Thread {
             }
             // only after recording in pairlist !
             finner.initIdle(1);
-            if ( senderId != null ) { // send acknowledgement after recording
-                try {
+            // if ( senderId != null ) { // send acknowledgement after recording
+                try { 
                     //pairChannel.send(senderId, new GBTransportMess());
                     pairChannel.send(ackTag, new GBTransportMess());
                     logger.debug("send acknowledgement");
@@ -810,7 +810,7 @@ class HybridReducerReceiver<C extends RingElem<C>> extends Thread {
                     goon = false;
                     break;
                 }
-            }
+	    //}
         } // end while
         goon = false;
         logger.info("terminated, received " + red + " reductions");
@@ -834,8 +834,9 @@ class HybridReducerReceiver<C extends RingElem<C>> extends Thread {
 }
 
 
-/**
+/*
  * Distributed GB transport message for polynomial with threadId.
+ * @unused
  */
 
 class GBTransportMessPolyId<C extends RingElem<C>> extends GBTransportMessPoly<C> {
@@ -894,10 +895,10 @@ class HybridReducerClient<C extends RingElem<C>> implements Runnable {
     private final int threadsPerNode;
 
 
-    /**
+    /*
      * Identification number for this thread.
      */
-    public final Integer threadId; // obsolete
+    //public final Integer threadId; // obsolete
 
 
     /**
@@ -928,7 +929,7 @@ class HybridReducerClient<C extends RingElem<C>> implements Runnable {
     HybridReducerClient(int tpn, TaggedSocketChannel tc, Integer tid, DistHashTable<Integer, GenPolynomial<C>> dl) {
         this.threadsPerNode = tpn;
         pairChannel = tc;
-        threadId = 100 + tid; // keep distinct from other tags
+        //threadId = 100 + tid; // keep distinct from other tags
         theList = dl;
         red = new ReductionPar<C>();
     }
@@ -1054,13 +1055,13 @@ class HybridReducerClient<C extends RingElem<C>> implements Runnable {
                 logger.debug("send H polynomial = " + H);
             }
             try {
-                pairChannel.send(resultTag, new GBTransportMessPolyId<C>(H,threadId));
+                pairChannel.send(resultTag, new GBTransportMessPoly<C>(H)); //,threadId));
                 doEnd = true;
             } catch (IOException e) {
                 goon = false;
                 e.printStackTrace();
             }
-            logger.info("done send poly message with tag " + threadId + " of " + pp);
+            logger.info("done send poly message of " + pp);
             try {
                 //pp = pairChannel.receive(threadId);
                 pp = pairChannel.receive(ackTag);
