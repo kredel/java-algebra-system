@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.Set;
 
@@ -35,6 +36,8 @@ import edu.jas.structure.RingFactory;
 import edu.jas.structure.NotInvertibleException;
 import edu.jas.ufd.SquarefreeAbstract;
 import edu.jas.ufd.SquarefreeFactory;
+import edu.jas.ufd.FactorAbstract;
+import edu.jas.ufd.FactorFactory;
 
 
 /**
@@ -1472,6 +1475,41 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
             logger.info("univ pol = " + pol);
         }
         return pol;
+    }
+
+
+    /**
+     * Zero dimensional ideal decompostition.
+     * @param G list of polynomials, a monic reduced Gr&ouml;bner base of a zero dimensional ideal.
+     * @return intersection of ideals G_i with cup( ideal(G_i) ) = ideal (G)
+     */
+    public List<Ideal<C>> zeroDimDecomposition() {
+	List<Ideal<C>> dec = new ArrayList<Ideal<C>>();
+	dec.add(this);
+	if ( this.isONE() ) {
+	    return dec;
+	}
+	FactorAbstract<C> ufd = FactorFactory.<C> getImplementation(list.ring.coFac);
+
+        for ( int i = list.ring.nvar-1; i >= 0; i-- ) {
+            List<Ideal<C>> part = new ArrayList<Ideal<C>>();
+	    for ( Ideal<C> id : dec ) {
+                 GenPolynomial<C> u = id.constructUnivariate(i);
+		 SortedMap<GenPolynomial<C>,java.lang.Long> facs = ufd.baseFactors(u);
+		 if ( facs.size() == 1 && facs.get(facs.firstKey()) == 1L ) {
+		     part.add(id);
+		     continue;
+		 }
+		 for ( GenPolynomial<C> p : facs.keySet() ) {
+		     // make p multivariate
+		     Ideal<C> Ip = id.sum( p );
+		     part.add(Ip);
+		 }
+	    }
+            dec = part;
+            part = new ArrayList<Ideal<C>>();
+	}
+	return dec;
     }
 
 }
