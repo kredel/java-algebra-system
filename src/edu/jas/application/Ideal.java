@@ -1482,7 +1482,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
      * Zero dimensional ideal decompostition.
      * See algorithm DIRGZD of BGK 1984.
      * @param G list of polynomials, a monic reduced Gr&ouml;bner base of a zero dimensional ideal.
-     * @return intersection of ideals G_i with cup( ideal(G_i) ) = ideal (G)
+     * @return intersection of ideals G_i with ideal(G) subseteq cap_i( ideal(G_i) ) 
      */
     public List<IdealWithUniv<C>> zeroDimDecomposition() {
         List<IdealWithUniv<C>> dec = new ArrayList<IdealWithUniv<C>>();

@@ -636,6 +636,8 @@ public class PolyUtilApp<C extends RingElem<C> > {
 
     /**
      * Construct superset of complex roots for zero dimensional ideal(G).
+     * @param I zero dimensional ideal.
+     * @param eps desired precision.
      * @return list of coordinates of complex roots for ideal(G)
      */
     public static <C extends RingElem<C> & Rational, D extends GcdRingElem<D>> 
@@ -644,6 +646,18 @@ public class PolyUtilApp<C extends RingElem<C> > {
         if ( logger.isInfoEnabled() ) {
             logger.info("univs = " + univs);
         }
+	return complexRoots(I,univs,eps);
+    }
+
+    /**
+     * Construct superset of complex roots for zero dimensional ideal(G).
+     * @param I zero dimensional ideal.
+     * @param univs list of univariate polynomials.
+     * @param eps desired precision.
+     * @return list of coordinates of complex roots for ideal(G)
+     */
+    public static <C extends RingElem<C> & Rational, D extends GcdRingElem<D>> 
+      List<List<Complex<BigDecimal>>> complexRoots(Ideal<D> I, List<GenPolynomial<D>> univs, C eps) {
         List<List<Complex<BigDecimal>>> croots = new ArrayList<List<Complex<BigDecimal>>>();
         RingFactory<C> cf = (RingFactory<C>) I.list.ring.coFac;
         ComplexRing<C> cr = new ComplexRing<C>(cf);
@@ -667,7 +681,26 @@ public class PolyUtilApp<C extends RingElem<C> > {
 
 
     /**
+     * Construct superset of complex roots for zero dimensional ideal(G).
+     * @param Il list of zero dimensional ideals with univariate polynomials.
+     * @param eps desired precision.
+     * @return list of coordinates of complex roots for ideal(cap_i(G_i))
+     */
+    public static <C extends RingElem<C> & Rational, D extends GcdRingElem<D>> 
+      List<List<Complex<BigDecimal>>> complexRoots(List<IdealWithUniv<D>> Il, C eps) {
+        List<List<Complex<BigDecimal>>> croots = new ArrayList<List<Complex<BigDecimal>>>();
+	for ( IdealWithUniv<D> I : Il ) {
+	    List<List<Complex<BigDecimal>>> cr  = complexRoots(I.ideal,I.upolys,eps); 
+	    croots.addAll(cr);
+	}
+	return croots;
+    }
+
+
+    /**
      * Construct superset of real roots for zero dimensional ideal(G).
+     * @param I zero dimensional ideal.
+     * @param eps desired precision.
      * @return list of coordinates of real roots for ideal(G)
      */
     public static <C extends RingElem<C> & Rational, D extends GcdRingElem<D>> 
@@ -676,6 +709,19 @@ public class PolyUtilApp<C extends RingElem<C> > {
         if ( logger.isInfoEnabled() ) {
             logger.info("univs = " + univs);
         }
+	return realRoots(I,univs,eps);
+    }
+
+
+    /**
+     * Construct superset of real roots for zero dimensional ideal(G).
+     * @param I zero dimensional ideal.
+     * @param univs list of univariate polynomials.
+     * @param eps desired precision.
+     * @return list of coordinates of real roots for ideal(G)
+     */
+    public static <C extends RingElem<C> & Rational, D extends GcdRingElem<D>> 
+      List<List<BigDecimal>> realRoots(Ideal<D> I, List<GenPolynomial<D>>univs, C eps) {
         List<List<BigDecimal>> roots = new ArrayList<List<BigDecimal>>();
         RingFactory<C> cf = (RingFactory<C>) I.list.ring.coFac;
         RealRootAbstract<C> rra = new RealRootsSturm<C>();
@@ -689,5 +735,23 @@ public class PolyUtilApp<C extends RingElem<C> > {
         //System.out.println("roots-2 = " + roots);
         return roots;
     }
+
+
+    /**
+     * Construct superset of real roots for zero dimensional ideal(G).
+     * @param Il list of zero dimensional ideals with univariate polynomials.
+     * @param eps desired precision.
+     * @return list of coordinates of real roots for ideal(cap_i(G_i))
+     */
+    public static <C extends RingElem<C> & Rational, D extends GcdRingElem<D>> 
+      List<List<BigDecimal>> realRoots(List<IdealWithUniv<D>> Il, C eps) {
+        List<List<BigDecimal>> rroots = new ArrayList<List<BigDecimal>>();
+	for ( IdealWithUniv<D> I : Il ) {
+	    List<List<BigDecimal>> rr  = realRoots(I.ideal,I.upolys,eps); 
+	    rroots.addAll(rr);
+	}
+	return rroots;
+    }
+
 
 }
