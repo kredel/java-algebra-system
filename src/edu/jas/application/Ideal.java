@@ -1531,7 +1531,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
 
 
 /**
- * Container for Ideals together wir univariate polynomials.
+ * Container for Ideals together with univariate polynomials.
  * @author Heinz Kredel
  */
 class IdealWithUniv<C extends GcdRingElem<C>> implements Serializable {

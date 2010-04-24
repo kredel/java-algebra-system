@@ -4,6 +4,7 @@
 
 package edu.jas.application;
 
+import java.io.Serializable;
 import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
@@ -70,9 +71,9 @@ public class PolyUtilApp<C extends RingElem<C> > {
      * @return Product represenation of c X^e in the ring pfac.
      */
     public static <C extends RingElem<C>> 
-        Product<GenPolynomial<C>> 
-        toProduct( ProductRing<GenPolynomial<C>> pfac, 
-                   C c, ExpVector e ) {
+                             Product<GenPolynomial<C>> 
+                             toProduct( ProductRing<GenPolynomial<C>> pfac, 
+                                        C c, ExpVector e ) {
         SortedMap<Integer,GenPolynomial<C>> elem 
             = new TreeMap<Integer,GenPolynomial<C>>();
         for ( int i = 0; i < e.length(); i++ ) {
@@ -82,9 +83,9 @@ public class PolyUtilApp<C extends RingElem<C> > {
             long a = e.getVal(i);
             GenPolynomial<C> u;
             if ( a == 0 ) {
-               u = fac.getONE();
+                u = fac.getONE();
             } else {
-               u = fac.univariate(0,a);
+                u = fac.univariate(0,a);
             }
             u = u.multiply(c);
             elem.put( i, u );
@@ -101,12 +102,12 @@ public class PolyUtilApp<C extends RingElem<C> > {
      * @return Product represenation of the terms of A in the ring pfac.
      */
     public static <C extends RingElem<C>> 
-        Product<GenPolynomial<C>> 
-        toProduct( ProductRing<GenPolynomial<C>> pfac, 
-                   GenPolynomial<C> A ) {
+                             Product<GenPolynomial<C>> 
+                             toProduct( ProductRing<GenPolynomial<C>> pfac, 
+                                        GenPolynomial<C> A ) {
         Product<GenPolynomial<C>> P = pfac.getZERO();
         if ( A == null || A.isZERO() ) {
-           return P;
+            return P;
         }
         for ( Map.Entry<ExpVector,C> y: A.getMap().entrySet() ) {
             ExpVector e = y.getKey();
@@ -126,15 +127,15 @@ public class PolyUtilApp<C extends RingElem<C> > {
      * @return Product represenation of c in the ring pfac.
      */
     public static <C extends GcdRingElem<C>>
-        Product<C> 
-        toProductGen( ProductRing<C> pfac, C c) {
+                             Product<C> 
+                             toProductGen( ProductRing<C> pfac, C c) {
 
         SortedMap<Integer,C> elem = new TreeMap<Integer,C>();
         for ( int i = 0; i < pfac.length(); i++ ) {
             RingFactory<C> rfac = pfac.getFactory(i);
             C u = rfac.copy( c );
             if ( u != null && !u.isZERO() ) {
-               elem.put( i, u );
+                elem.put( i, u );
             }
         }
         return new Product<C>( pfac, elem );
@@ -149,13 +150,13 @@ public class PolyUtilApp<C extends RingElem<C> > {
      * @return Product represenation of A in the polynomial ring pfac.
      */
     public static <C extends GcdRingElem<C>>
-        GenPolynomial<Product<C>> 
-        toProductGen( GenPolynomialRing<Product<C>> pfac, 
-                      GenPolynomial<C> A) {
+                             GenPolynomial<Product<C>> 
+                             toProductGen( GenPolynomialRing<Product<C>> pfac, 
+                                           GenPolynomial<C> A) {
 
         GenPolynomial<Product<C>> P = pfac.getZERO().clone();
         if ( A == null || A.isZERO() ) {
-           return P;
+            return P;
         }
         RingFactory<Product<C>> rpfac = pfac.coFac;
         ProductRing<C> rfac = (ProductRing<C>) rpfac;
@@ -164,7 +165,7 @@ public class PolyUtilApp<C extends RingElem<C> > {
             C a = y.getValue();
             Product<C> p = toProductGen(rfac,a);
             if ( p != null && !p.isZERO() ) {
-               P.doPutToMap( e, p );
+                P.doPutToMap( e, p );
             }        
         }
         return P;
@@ -179,14 +180,14 @@ public class PolyUtilApp<C extends RingElem<C> > {
      * @return Product represenation of L in the polynomial ring pfac.
      */
     public static <C extends GcdRingElem<C>>
-        List<GenPolynomial<Product<C>>> 
-        toProductGen( GenPolynomialRing<Product<C>> pfac, 
-                      List<GenPolynomial<C>> L) {
+                             List<GenPolynomial<Product<C>>> 
+                             toProductGen( GenPolynomialRing<Product<C>> pfac, 
+                                           List<GenPolynomial<C>> L) {
 
         List<GenPolynomial<Product<C>>> 
             list = new ArrayList<GenPolynomial<Product<C>>>();
         if ( L == null || L.size() == 0 ) {
-           return list;
+            return list;
         }
         for ( GenPolynomial<C> a : L ) {
             GenPolynomial<Product<C>> b = toProductGen( pfac, a );
@@ -213,7 +214,7 @@ public class PolyUtilApp<C extends RingElem<C> > {
             ModIntegerRing fac = (ModIntegerRing) rfac;
             ModInteger u = fac.fromInteger( c.getVal() );
             if ( u != null && !u.isZERO() ) {
-               elem.put( i, u );
+                elem.put( i, u );
             }
         }
         return new Product<ModInteger>( pfac, elem );
@@ -233,7 +234,7 @@ public class PolyUtilApp<C extends RingElem<C> > {
 
         GenPolynomial<Product<ModInteger>> P = pfac.getZERO().clone();
         if ( A == null || A.isZERO() ) {
-           return P;
+            return P;
         }
         RingFactory<Product<ModInteger>> rpfac = pfac.coFac;
         ProductRing<ModInteger> fac = (ProductRing<ModInteger>)rpfac;
@@ -242,7 +243,7 @@ public class PolyUtilApp<C extends RingElem<C> > {
             BigInteger a = y.getValue();
             Product<ModInteger> p = toProduct(fac,a);
             if ( p != null && !p.isZERO() ) {
-               P.doPutToMap( e, p );
+                P.doPutToMap( e, p );
             }        
         }
         return P;
@@ -263,7 +264,7 @@ public class PolyUtilApp<C extends RingElem<C> > {
         List<GenPolynomial<Product<ModInteger>>> 
             list = new ArrayList<GenPolynomial<Product<ModInteger>>>();
         if ( L == null || L.size() == 0 ) {
-           return list;
+            return list;
         }
         for ( GenPolynomial<BigInteger> a : L ) {
             GenPolynomial<Product<ModInteger>> b = toProduct( pfac, a );
@@ -281,14 +282,14 @@ public class PolyUtilApp<C extends RingElem<C> > {
      * @return Product represenation of L in the polynomial ring pfac.
      */
     public static <C extends GcdRingElem<C>>
-        List<GenPolynomial<Product<Residue<C>>>> 
-        toProductRes( GenPolynomialRing<Product<Residue<C>>> pfac, 
-                      List<GenPolynomial<GenPolynomial<C>>> L) {
+                             List<GenPolynomial<Product<Residue<C>>>> 
+                             toProductRes( GenPolynomialRing<Product<Residue<C>>> pfac, 
+                                           List<GenPolynomial<GenPolynomial<C>>> L) {
 
         List<GenPolynomial<Product<Residue<C>>>> 
             list = new ArrayList<GenPolynomial<Product<Residue<C>>>>();
         if ( L == null || L.size() == 0 ) {
-           return list;
+            return list;
         }
         GenPolynomial<Product<Residue<C>>> b;
         for ( GenPolynomial<GenPolynomial<C>> a : L ) {
@@ -307,13 +308,13 @@ public class PolyUtilApp<C extends RingElem<C> > {
      * @return Product represenation of A in the polynomial ring pfac.
      */
     public static <C extends GcdRingElem<C>>
-        GenPolynomial<Product<Residue<C>>> 
-        toProductRes( GenPolynomialRing<Product<Residue<C>>> pfac, 
-                      GenPolynomial<GenPolynomial<C>> A) {
+                             GenPolynomial<Product<Residue<C>>> 
+                             toProductRes( GenPolynomialRing<Product<Residue<C>>> pfac, 
+                                           GenPolynomial<GenPolynomial<C>> A) {
 
         GenPolynomial<Product<Residue<C>>> P = pfac.getZERO().clone();
         if ( A == null || A.isZERO() ) {
-           return P;
+            return P;
         }
         RingFactory<Product<Residue<C>>> rpfac = pfac.coFac;
         ProductRing<Residue<C>> fac = (ProductRing<Residue<C>>)rpfac;
@@ -323,7 +324,7 @@ public class PolyUtilApp<C extends RingElem<C> > {
             GenPolynomial<C> a = y.getValue();
             p = toProductRes(fac,a);
             if ( p != null && !p.isZERO() ) {
-               P.doPutToMap( e, p );
+                P.doPutToMap( e, p );
             }        
         }
         return P;
@@ -338,18 +339,18 @@ public class PolyUtilApp<C extends RingElem<C> > {
      * @return Product represenation of c in the ring pfac.
      */
     public static <C extends GcdRingElem<C>>
-        Product<Residue<C>> 
-        toProductRes( ProductRing<Residue<C>> pfac, 
-                      GenPolynomial<C> c) {
+                             Product<Residue<C>> 
+                             toProductRes( ProductRing<Residue<C>> pfac, 
+                                           GenPolynomial<C> c) {
 
         SortedMap<Integer,Residue<C>> elem = new TreeMap<Integer,Residue<C>>();
         for ( int i = 0; i < pfac.length(); i++ ) {
             RingFactory<Residue<C>> rfac = pfac.getFactory(i);
             ResidueRing<C> fac = (ResidueRing<C>) rfac;
             Residue<C> u = new Residue<C>( fac, c );
-                //fac.fromInteger( c.getVal() );
+            //fac.fromInteger( c.getVal() );
             if ( u != null && !u.isZERO() ) {
-               elem.put( i, u );
+                elem.put( i, u );
             }
         }
         return new Product<Residue<C>>( pfac, elem );
@@ -363,13 +364,13 @@ public class PolyUtilApp<C extends RingElem<C> > {
      * @return Product residue represenation of CS.
      */
     public static <C extends GcdRingElem<C>>
-        List<GenPolynomial<Product<Residue<C>>>> 
-        toProductRes(List<ColoredSystem<C>> CS) {
+                             List<GenPolynomial<Product<Residue<C>>>> 
+                             toProductRes(List<ColoredSystem<C>> CS) {
 
         List<GenPolynomial<Product<Residue<C>>>> 
             list = new ArrayList<GenPolynomial<Product<Residue<C>>>>();
         if ( CS == null || CS.size() == 0 ) {
-           return list;
+            return list;
         }
         GenPolynomialRing<GenPolynomial<C>> pr = null; 
         List<RingFactory<Residue<C>>> rrl 
@@ -405,19 +406,19 @@ public class PolyUtilApp<C extends RingElem<C> > {
      * @return Represenation of L in the polynomial ring pfac.
      */
     public static <C extends GcdRingElem<C>>
-        List<GenPolynomial<Residue<C>>> 
-        toResidue( GenPolynomialRing<Residue<C>> pfac, 
-                   List<GenPolynomial<GenPolynomial<C>>> L) {
+                             List<GenPolynomial<Residue<C>>> 
+                             toResidue( GenPolynomialRing<Residue<C>> pfac, 
+                                        List<GenPolynomial<GenPolynomial<C>>> L) {
         List<GenPolynomial<Residue<C>>> 
             list = new ArrayList<GenPolynomial<Residue<C>>>();
         if ( L == null || L.size() == 0 ) {
-           return list;
+            return list;
         }
         GenPolynomial<Residue<C>> b;
         for ( GenPolynomial<GenPolynomial<C>> a : L ) {
             b = toResidue( pfac, a );
             if ( b != null && !b.isZERO() ) {
-               list.add( b );
+                list.add( b );
             }
         }
         return list;
@@ -431,12 +432,12 @@ public class PolyUtilApp<C extends RingElem<C> > {
      * @return Represenation of A in the polynomial ring pfac.
      */
     public static <C extends GcdRingElem<C>>
-        GenPolynomial<Residue<C>> 
-        toResidue( GenPolynomialRing<Residue<C>> pfac, 
-                   GenPolynomial<GenPolynomial<C>> A) {
+                             GenPolynomial<Residue<C>> 
+                             toResidue( GenPolynomialRing<Residue<C>> pfac, 
+                                        GenPolynomial<GenPolynomial<C>> A) {
         GenPolynomial<Residue<C>> P = pfac.getZERO().clone();
         if ( A == null || A.isZERO() ) {
-           return P;
+            return P;
         }
         RingFactory<Residue<C>> rpfac = pfac.coFac;
         ResidueRing<C> fac = (ResidueRing<C>)rpfac;
@@ -446,7 +447,7 @@ public class PolyUtilApp<C extends RingElem<C> > {
             GenPolynomial<C> a = y.getValue();
             p = new Residue<C>(fac,a);
             if ( p != null && !p.isZERO() ) {
-               P.doPutToMap( e, p );
+                P.doPutToMap( e, p );
             }
         }
         return P;
@@ -460,8 +461,8 @@ public class PolyUtilApp<C extends RingElem<C> > {
      * @return Slices represenation of L.
      */
     public static <C extends GcdRingElem<C>>
-        Map<Ideal<C>,PolynomialList<GenPolynomial<C>>>
-        productSlice( PolynomialList<Product<Residue<C>>> L ) {
+                             Map<Ideal<C>,PolynomialList<GenPolynomial<C>>>
+                             productSlice( PolynomialList<Product<Residue<C>>> L ) {
 
         Map<Ideal<C>,PolynomialList<GenPolynomial<C>>> map;
         RingFactory<Product<Residue<C>>> fpr = L.ring.coFac;
@@ -484,7 +485,7 @@ public class PolyUtilApp<C extends RingElem<C> > {
             spl = new PolynomialList<GenPolynomial<C>>(pfc,slist);
             PolynomialList<GenPolynomial<C>> d = map.get( id );
             if ( d != null ) {
-               throw new RuntimeException("ideal exists twice " + id);
+                throw new RuntimeException("ideal exists twice " + id);
             }
             map.put( id, spl );
         }
@@ -500,8 +501,8 @@ public class PolyUtilApp<C extends RingElem<C> > {
      * @return Slice of of L at i.
      */
     public static <C extends GcdRingElem<C>>
-        PolynomialList<GenPolynomial<C>>
-        productSlice( PolynomialList<Product<Residue<C>>> L, int i ) {
+                             PolynomialList<GenPolynomial<C>>
+                             productSlice( PolynomialList<Product<Residue<C>>> L, int i ) {
 
         RingFactory<Product<Residue<C>>> fpr = L.ring.coFac;
         ProductRing<Residue<C>> pr = (ProductRing<Residue<C>>)fpr;
@@ -530,25 +531,25 @@ public class PolyUtilApp<C extends RingElem<C> > {
      * @return Represenation of i-slice of L in the polynomial ring pfac.
      */
     public static <C extends GcdRingElem<C>>
-        List<GenPolynomial<GenPolynomial<C>>>
-        fromProduct( GenPolynomialRing<GenPolynomial<C>> pfac,
-                     List<GenPolynomial<Product<Residue<C>>>> L,
-                     int i ) {
+                             List<GenPolynomial<GenPolynomial<C>>>
+                             fromProduct( GenPolynomialRing<GenPolynomial<C>> pfac,
+                                          List<GenPolynomial<Product<Residue<C>>>> L,
+                                          int i ) {
 
         List<GenPolynomial<GenPolynomial<C>>> 
             list = new ArrayList<GenPolynomial<GenPolynomial<C>>>();
 
         if ( L == null || L.size() == 0 ) {
-           return list;
+            return list;
         }
         GenPolynomial<GenPolynomial<C>> b;
         for ( GenPolynomial<Product<Residue<C>>> a : L ) {
             b = fromProduct( pfac, a, i );
             if ( b != null && !b.isZERO() ) {
-               b = b.abs();
-               if ( ! list.contains( b ) ) {
-                  list.add( b );
-               }
+                b = b.abs();
+                if ( ! list.contains( b ) ) {
+                    list.add( b );
+                }
             }
         }
         return list;
@@ -564,14 +565,14 @@ public class PolyUtilApp<C extends RingElem<C> > {
      * @return Represenation of i-slice of P in the polynomial ring pfac.
      */
     public static <C extends GcdRingElem<C>>
-        GenPolynomial<GenPolynomial<C>>
-        fromProduct( GenPolynomialRing<GenPolynomial<C>> pfac,
-                     GenPolynomial<Product<Residue<C>>> P,
-                     int i ) {
+                             GenPolynomial<GenPolynomial<C>>
+                             fromProduct( GenPolynomialRing<GenPolynomial<C>> pfac,
+                                          GenPolynomial<Product<Residue<C>>> P,
+                                          int i ) {
 
         GenPolynomial<GenPolynomial<C>> b = pfac.getZERO().clone();
         if ( P == null || P.isZERO() ) {
-           return b;
+            return b;
         }
 
         for ( Map.Entry<ExpVector,Product<Residue<C>>> y: P.getMap().entrySet() ) {
@@ -579,10 +580,10 @@ public class PolyUtilApp<C extends RingElem<C> > {
             Product<Residue<C>> a = y.getValue();
             Residue<C> r = a.get(i);
             if ( r != null && !r.isZERO() ) {
-               GenPolynomial<C> p = r.val;
-               if ( p != null && !p.isZERO() ) {
-                  b.doPutToMap( e, p );
-               }        
+                GenPolynomial<C> p = r.val;
+                if ( p != null && !p.isZERO() ) {
+                    b.doPutToMap( e, p );
+                }        
             }
         }
         return b;
@@ -596,10 +597,10 @@ public class PolyUtilApp<C extends RingElem<C> > {
      * @return Product represenation of L in the polynomial ring pfac.
      */
     public static <C extends GcdRingElem<C>>
-        String
-        productSliceToString( Map<Ideal<C>,PolynomialList<GenPolynomial<C>>> L ) {
+      String
+      productSliceToString( Map<Ideal<C>,PolynomialList<GenPolynomial<C>>> L ) {
         Set<GenPolynomial<GenPolynomial<C>>> sl 
-           = new TreeSet<GenPolynomial<GenPolynomial<C>>>();
+            = new TreeSet<GenPolynomial<GenPolynomial<C>>>();
         PolynomialList<GenPolynomial<C>> pl = null;
         StringBuffer sb = new StringBuffer(); //"\nproductSlice ----------------- begin");
         for ( Ideal<C> id: L.keySet() ) {
@@ -626,7 +627,7 @@ public class PolyUtilApp<C extends RingElem<C> > {
      * @return string represenation of slices of L.
      */
     public static <C extends GcdRingElem<C>>
-        String productToString( PolynomialList<Product<Residue<C>>> L ) {
+      String productToString( PolynomialList<Product<Residue<C>>> L ) {
         Map<Ideal<C>,PolynomialList<GenPolynomial<C>>> M;
         M = productSlice( L ); 
         String s = productSliceToString( M );
@@ -646,7 +647,7 @@ public class PolyUtilApp<C extends RingElem<C> > {
         if ( logger.isInfoEnabled() ) {
             logger.info("univs = " + univs);
         }
-	return complexRoots(I,univs,eps);
+        return complexRoots(I,univs,eps);
     }
 
     /**
@@ -687,13 +688,31 @@ public class PolyUtilApp<C extends RingElem<C> > {
      * @return list of coordinates of complex roots for ideal(cap_i(G_i))
      */
     public static <C extends RingElem<C> & Rational, D extends GcdRingElem<D>> 
-      List<List<Complex<BigDecimal>>> complexRoots(List<IdealWithUniv<D>> Il, C eps) {
+      List<List<Complex<BigDecimal>>> complexRootTuples(List<IdealWithUniv<D>> Il, C eps) {
         List<List<Complex<BigDecimal>>> croots = new ArrayList<List<Complex<BigDecimal>>>();
-	for ( IdealWithUniv<D> I : Il ) {
-	    List<List<Complex<BigDecimal>>> cr  = complexRoots(I.ideal,I.upolys,eps); 
-	    croots.addAll(cr);
-	}
-	return croots;
+        for ( IdealWithUniv<D> I : Il ) {
+            List<List<Complex<BigDecimal>>> cr  = complexRoots(I.ideal,I.upolys,eps); 
+            croots.addAll(cr);
+        }
+        return croots;
+    }
+
+
+    /**
+     * Construct superset of complex roots for zero dimensional ideal(G).
+     * @param Il list of zero dimensional ideals with univariate polynomials.
+     * @param eps desired precision.
+     * @return list of ideals with coordinates of complex roots for ideal(cap_i(G_i))
+     */
+    public static <C extends RingElem<C> & Rational, D extends GcdRingElem<D>> 
+      List<IdealWithComplexRoots<D>> complexRoots(List<IdealWithUniv<D>> Il, C eps) {
+        List<IdealWithComplexRoots<D>> Ic = new ArrayList<IdealWithComplexRoots<D>>(Il.size());
+        for ( IdealWithUniv<D> I : Il ) {
+            List<List<Complex<BigDecimal>>> cr  = complexRoots(I.ideal,I.upolys,eps); 
+            IdealWithComplexRoots<D> ic = new IdealWithComplexRoots<D>(I,cr);
+            Ic.add(ic);
+        }
+        return Ic;
     }
 
 
@@ -709,7 +728,7 @@ public class PolyUtilApp<C extends RingElem<C> > {
         if ( logger.isInfoEnabled() ) {
             logger.info("univs = " + univs);
         }
-	return realRoots(I,univs,eps);
+        return realRoots(I,univs,eps);
     }
 
 
@@ -744,14 +763,231 @@ public class PolyUtilApp<C extends RingElem<C> > {
      * @return list of coordinates of real roots for ideal(cap_i(G_i))
      */
     public static <C extends RingElem<C> & Rational, D extends GcdRingElem<D>> 
-      List<List<BigDecimal>> realRoots(List<IdealWithUniv<D>> Il, C eps) {
+      List<List<BigDecimal>> realRootTuples(List<IdealWithUniv<D>> Il, C eps) {
         List<List<BigDecimal>> rroots = new ArrayList<List<BigDecimal>>();
-	for ( IdealWithUniv<D> I : Il ) {
-	    List<List<BigDecimal>> rr  = realRoots(I.ideal,I.upolys,eps); 
-	    rroots.addAll(rr);
-	}
-	return rroots;
+        for ( IdealWithUniv<D> I : Il ) {
+            List<List<BigDecimal>> rr  = realRoots(I.ideal,I.upolys,eps); 
+            rroots.addAll(rr);
+        }
+        return rroots;
     }
 
+
+    /**
+     * Construct superset of real roots for zero dimensional ideal(G).
+     * @param Il list of zero dimensional ideals with univariate polynomials.
+     * @param eps desired precision.
+     * @return list of ideals with coordinates of real roots for ideal(cap_i(G_i))
+     */
+    public static <C extends RingElem<C> & Rational, D extends GcdRingElem<D>> 
+      List<IdealWithRealRoots<D>> realRoots(List<IdealWithUniv<D>> Il, C eps) {
+        List<IdealWithRealRoots<D>> Ir = new ArrayList<IdealWithRealRoots<D>>(Il.size());
+        for ( IdealWithUniv<D> I : Il ) {
+            List<List<BigDecimal>> rr  = realRoots(I.ideal,I.upolys,eps); 
+            IdealWithRealRoots<D> ir = new IdealWithRealRoots<D>(I,rr);
+            Ir.add(ir);
+        }
+        return Ir;
+    }
+
+
+    /**
+     * Test for real roots of zero dimensional ideal(L).
+     * @param L list of polynomials.
+     * @param root list of real roots for ideal(G).
+     * @param eps desired precision.
+     * @return true if root is a list of coordinates of real roots for ideal(L)
+     */
+    public static 
+      boolean isRealRoots(List<GenPolynomial<BigDecimal>> L, List<List<BigDecimal>> roots, BigDecimal eps) {
+        if ( L == null || L.size() == 0 ) {
+            return true;
+        }
+        // polynomials with decimal coefficients
+        BigDecimal dc = BigDecimal.ONE;
+        GenPolynomialRing<BigDecimal> dfac = L.get(0).ring;
+        //System.out.println("dfac = " + dfac);
+        for ( GenPolynomial<BigDecimal> dp : L ) {
+            //System.out.println("dp = " + dp);
+            for ( List<BigDecimal> r : roots ) {
+                //System.out.println("r = " + r);
+                BigDecimal ev = PolyUtil.<BigDecimal> evaluateAll(dc,dfac,dp,r);
+                if ( ev.abs().compareTo(eps) > 0 ) {
+                    System.out.println("ev = " + ev);
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+
+    /**
+     * Test for complex roots of zero dimensional ideal(L).
+     * @param L list of polynomials.
+     * @param root list of real roots for ideal(G).
+     * @param eps desired precision.
+     * @return true if root is a list of coordinates of complex roots for ideal(L)
+     */
+    public static 
+      boolean isComplexRoots(List<GenPolynomial<Complex<BigDecimal>>> L, 
+                             List<List<Complex<BigDecimal>>> roots, BigDecimal eps) {
+        if ( L == null || L.size() == 0 ) {
+            return true;
+        }
+        // polynomials with decimal coefficients
+        BigDecimal dc = BigDecimal.ONE;
+        ComplexRing<BigDecimal> dcc = new ComplexRing<BigDecimal>(dc);
+        GenPolynomialRing<Complex<BigDecimal>> dfac = L.get(0).ring;
+        //System.out.println("dfac = " + dfac);
+        for ( GenPolynomial<Complex<BigDecimal>> dp : L ) {
+            //System.out.println("dp = " + dp);
+            for ( List<Complex<BigDecimal>> r : roots ) {
+                //System.out.println("r = " + r);
+                Complex<BigDecimal> ev = PolyUtil.<Complex<BigDecimal>> evaluateAll(dcc,dfac,dp,r);
+                if ( ev.norm().getRe().compareTo(eps) > 0 ) {
+                    System.out.println("ev = " + ev);
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+}
+
+
+/**
+ * Container for Ideals together with univariate polynomials and real roots.
+ * @author Heinz Kredel
+ */
+class IdealWithRealRoots<C extends GcdRingElem<C>> extends IdealWithUniv<C> implements Serializable {
+
+
+    /**
+     * The list of real roots.
+     */
+    public final List<List<BigDecimal>> rroots;
+
+
+    /**
+     * Constructor not for use.
+     */
+    protected IdealWithRealRoots() {
+        throw new IllegalArgumentException("do not use this constructor");
+    }
+
+
+    /**
+     * Constructor.
+     * @param id the ideal
+     * @param up the list of univaraite polynomials
+     * @param rr the list of real roots
+     */
+    protected IdealWithRealRoots(Ideal<C> id, List<GenPolynomial<C>> up, 
+                                 List<List<BigDecimal>> rr) {
+        super(id,up);
+        rroots = rr;
+    }
+
+
+    /**
+     * Constructor.
+     * @param iu the ideal with univariate polynomials
+     * @param rr the list of real roots
+     */
+    protected IdealWithRealRoots(IdealWithUniv<C> iu, List<List<BigDecimal>> rr) {
+        super(iu.ideal,iu.upolys);
+        rroots = rr;
+    }
+
+
+    /**
+     * String representation of the ideal.
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return super.toString() + "\nreal roots: " + rroots.toString();
+    }
+
+
+    /**
+     * Get a scripting compatible string representation.
+     * @return script compatible representation for this Element.
+     * @see edu.jas.structure.Element#toScript()
+     */
+    public String toScript() {
+        // Python case
+        return super.toScript() +  ",  " + rroots.toString();
+    }
+
+}
+
+
+/**
+ * Container for Ideals together with univariate polynomials and complex roots.
+ * @author Heinz Kredel
+ */
+class IdealWithComplexRoots<C extends GcdRingElem<C>> extends IdealWithUniv<C> implements Serializable {
+
+
+    /**
+     * The list of complex roots.
+     */
+    public final List<List<Complex<BigDecimal>>> croots;
+
+
+    /**
+     * Constructor not for use.
+     */
+    protected IdealWithComplexRoots() {
+        throw new IllegalArgumentException("do not use this constructor");
+    }
+
+
+    /**
+     * Constructor.
+     * @param id the ideal
+     * @param up the list of univaraite polynomials
+     * @param cr the list of complex roots
+     */
+    protected IdealWithComplexRoots(Ideal<C> id, List<GenPolynomial<C>> up, 
+                                    List<List<Complex<BigDecimal>>> cr) {
+        super(id,up);
+        croots = cr;
+    }
+
+
+    /**
+     * Constructor.
+     * @param iu the ideal with univariate polynomials
+     * @param cr the list of complex roots
+     */
+    protected IdealWithComplexRoots(IdealWithUniv<C> iu, List<List<Complex<BigDecimal>>> cr) {
+        super(iu.ideal,iu.upolys);
+        croots = cr;
+    }
+
+
+    /**
+     * String representation of the ideal.
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return super.toString() + "\ncomplex roots: " + croots.toString();
+    }
+
+
+    /**
+     * Get a scripting compatible string representation.
+     * @return script compatible representation for this Element.
+     * @see edu.jas.structure.Element#toScript()
+     */
+    public String toScript() {
+        // Python case
+        return super.toScript() +  ",  " + croots.toString();
+    }
 
 }

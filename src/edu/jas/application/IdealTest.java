@@ -142,6 +142,7 @@ public class IdealTest extends TestCase {
         a = b = c = d = e = null;
         fac = null;
         bb = null;
+        ComputerThreads.terminate();
     }
 
 
@@ -1113,7 +1114,6 @@ public class IdealTest extends TestCase {
             }
         }
         //System.out.println();
-        ComputerThreads.terminate();
     }
 
 
@@ -1177,7 +1177,6 @@ public class IdealTest extends TestCase {
             }
         }
         //System.out.println();
-        ComputerThreads.terminate();
     }
 
 
@@ -1220,7 +1219,146 @@ public class IdealTest extends TestCase {
         System.out.println("zd = " + zd);
 
         System.out.println();
-        ComputerThreads.terminate();
+    }
+
+
+    /**
+     * Test real roots univariate polynomials in zero dim ideal.
+     */
+    public void testIdealRealRoot() {
+        String[] vars;
+
+        BigRational coeff = new BigRational(17, 1);
+        to = new TermOrder( TermOrder.INVLEX);
+        vars = new String[] { "x", "y", "z" };
+        fac = new GenPolynomialRing<BigRational>(coeff, rl, to, vars);
+
+        vars = fac.getVars();
+        //System.out.println("vars = " + Arrays.toString(vars));
+        //System.out.println("fac = " + fac);
+
+        Ideal<BigRational> I;
+        L = new ArrayList<GenPolynomial<BigRational>>();
+
+        a = fac.parse("( x^3 - 27 )");
+        b = fac.parse("( y^4 - x )");
+        c = fac.parse("( z^2 - x^2 )");
+
+        if (a.isZERO() || b.isZERO() || c.isZERO()) {
+            return;
+        }
+
+        L.add(a);
+        L.add(b);
+        L.add(c);
+        I = new Ideal<BigRational>(fac, L);
+        //I.doGB();
+        assertTrue("not isZERO( I )", !I.isZERO());
+        assertTrue("isGB( I )", I.isGB());
+        //System.out.println("I = " + I);
+
+        List<IdealWithUniv<BigRational>> zd = I.zeroDimDecomposition();
+        System.out.println("zd = " + zd);
+
+        BigRational eps = new BigRational(1,1000000); 
+        eps = eps.multiply(eps);
+        eps = eps.multiply(eps).multiply(eps);
+        BigDecimal e = new BigDecimal(eps.getRational());
+        e = e.abs(); //.multiply(e);
+        BigDecimal dc = BigDecimal.ONE;
+
+        List<IdealWithRealRoots<BigRational>> roots = PolyUtilApp.<BigRational,BigRational> realRoots(zd, eps);
+        System.out.println("roots = " + roots + "\n");
+
+        for ( IdealWithRealRoots<BigRational> Ir : roots ) {
+            List<GenPolynomial<BigRational>> L = Ir.ideal.getList();
+            List<GenPolynomial<BigDecimal>> Ld = new ArrayList<GenPolynomial<BigDecimal>>( L.size() );
+
+            GenPolynomialRing<BigDecimal> dfac = new GenPolynomialRing<BigDecimal>(dc,Ir.ideal.list.ring);
+            //System.out.println("dfac = " + dfac);
+
+            for ( GenPolynomial<BigRational> p : L ) {
+                GenPolynomial<BigDecimal> dp = PolyUtil.<BigRational> decimalFromRational(dfac,p);
+                //System.out.println("dp = " + dp);
+                Ld.add(dp);
+            }
+            boolean t = PolyUtilApp.isRealRoots(Ld, Ir.rroots, e);
+            assertTrue("isRealRoots ", t);
+        }
+        //System.out.println();
+    }
+
+
+    /**
+     * Test complex roots univariate polynomials in zero dim ideal.
+     */
+    public void testIdealComplexRoot() {
+        String[] vars;
+
+        BigRational coeff = new BigRational(17, 1);
+        to = new TermOrder( TermOrder.INVLEX);
+        vars = new String[] { "x", "y", "z" };
+        fac = new GenPolynomialRing<BigRational>(coeff, rl, to, vars);
+
+        vars = fac.getVars();
+        //System.out.println("vars = " + Arrays.toString(vars));
+        //System.out.println("fac = " + fac);
+
+        Ideal<BigRational> I;
+        L = new ArrayList<GenPolynomial<BigRational>>();
+
+        a = fac.parse("( x^2 + 9 )");
+        b = fac.parse("( y^3 - x )");
+        c = fac.parse("( z^2 - x^2 )");
+
+        if (a.isZERO() || b.isZERO() || c.isZERO()) {
+            return;
+        }
+
+        L.add(a);
+        L.add(b);
+        L.add(c);
+        I = new Ideal<BigRational>(fac, L);
+        //I.doGB();
+        assertTrue("not isZERO( I )", !I.isZERO());
+        assertTrue("isGB( I )", I.isGB());
+        //System.out.println("I = " + I);
+
+        List<IdealWithUniv<BigRational>> zd = I.zeroDimDecomposition();
+        System.out.println("zd = " + zd);
+
+        BigRational eps = new BigRational(1,1000000); 
+        eps = eps.multiply(eps);
+        eps = eps.multiply(eps).multiply(eps);
+        BigDecimal e = new BigDecimal(eps.getRational());
+        e = e.abs(); //.multiply(e);
+
+        List<IdealWithComplexRoots<BigRational>> roots = PolyUtilApp.<BigRational,BigRational> complexRoots(zd, eps);
+        System.out.println("roots = " + roots + "\n");
+
+        ComplexRing<BigDecimal> dcc = new ComplexRing<BigDecimal>(e);
+        GenPolynomialRing<Complex<BigDecimal>> dcfac = new GenPolynomialRing<Complex<BigDecimal>>(dcc,fac);
+        //System.out.println("dcfac = " + dcfac);
+
+        for ( IdealWithComplexRoots<BigRational> Ic : roots ) {
+            List<GenPolynomial<BigRational>> L = Ic.ideal.getList();
+            List<GenPolynomial<Complex<BigDecimal>>> Ld = new ArrayList<GenPolynomial<Complex<BigDecimal>>>( L.size() );
+
+            GenPolynomialRing<BigDecimal> dfac = new GenPolynomialRing<BigDecimal>(e,Ic.ideal.list.ring);
+            //System.out.println("dfac = " + dfac);
+            for ( GenPolynomial<BigRational> p : L ) {
+                 GenPolynomial<BigDecimal> dp = PolyUtil.<BigRational> decimalFromRational(dfac,p);
+                 GenPolynomial<Complex<BigDecimal>> dpc = PolyUtil.<BigDecimal> toComplex(dcfac,dp);
+                 //System.out.println("dpc = " + dpc);
+                 Ld.add(dpc);
+            }
+            boolean t = PolyUtilApp.isComplexRoots(Ld, Ic.croots, e);
+            //assertTrue("isRealRoots ", t);
+            if ( ! t ) {
+                System.out.println("Warn: not all complex roots");
+            }
+        }
+        //System.out.println();
     }
 
 }
