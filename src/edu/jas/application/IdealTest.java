@@ -1216,7 +1216,7 @@ public class IdealTest extends TestCase {
         assertTrue("isGB( I )", I.isGB());
         System.out.println("I = " + I);
 
-        List<Ideal<BigRational>> zd = I.zeroDimDecomposition();
+        List<IdealWithUniv<BigRational>> zd = I.zeroDimDecomposition();
         System.out.println("zd = " + zd);
 
         System.out.println();

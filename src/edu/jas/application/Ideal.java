@@ -1480,36 +1480,112 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
 
     /**
      * Zero dimensional ideal decompostition.
+     * See algorithm DIRGZD of BGK 1984.
      * @param G list of polynomials, a monic reduced Gr&ouml;bner base of a zero dimensional ideal.
      * @return intersection of ideals G_i with cup( ideal(G_i) ) = ideal (G)
      */
-    public List<Ideal<C>> zeroDimDecomposition() {
-	List<Ideal<C>> dec = new ArrayList<Ideal<C>>();
-	dec.add(this);
-	if ( this.isONE() ) {
-	    return dec;
-	}
-	FactorAbstract<C> ufd = FactorFactory.<C> getImplementation(list.ring.coFac);
+    public List<IdealWithUniv<C>> zeroDimDecomposition() {
+        List<IdealWithUniv<C>> dec = new ArrayList<IdealWithUniv<C>>();
+        if ( this.isZERO() ) {
+            return dec;
+        }
+        IdealWithUniv<C> iwu = new IdealWithUniv<C>(this,new ArrayList<GenPolynomial<C>>());
+        dec.add(iwu);
+        if ( this.isONE() ) {
+            return dec;
+        }
+        FactorAbstract<C> ufd = FactorFactory.<C> getImplementation(list.ring.coFac);
 
         for ( int i = list.ring.nvar-1; i >= 0; i-- ) {
-            List<Ideal<C>> part = new ArrayList<Ideal<C>>();
-	    for ( Ideal<C> id : dec ) {
-                 GenPolynomial<C> u = id.constructUnivariate(i);
-		 SortedMap<GenPolynomial<C>,java.lang.Long> facs = ufd.baseFactors(u);
-		 if ( facs.size() == 1 && facs.get(facs.firstKey()) == 1L ) {
-		     part.add(id);
-		     continue;
-		 }
-		 for ( GenPolynomial<C> p : facs.keySet() ) {
-		     // make p multivariate
-		     Ideal<C> Ip = id.sum( p );
-		     part.add(Ip);
-		 }
-	    }
+            List<IdealWithUniv<C>> part = new ArrayList<IdealWithUniv<C>>();
+            for ( IdealWithUniv<C> id : dec ) {
+                 GenPolynomial<C> u = id.ideal.constructUnivariate(i);
+                 SortedMap<GenPolynomial<C>,java.lang.Long> facs = ufd.baseFactors(u);
+                 if ( facs.size() == 1 && facs.get(facs.firstKey()) == 1L ) {
+                     List<GenPolynomial<C>> iup = new ArrayList<GenPolynomial<C>>();
+                     iup.addAll(id.upolys);
+                     iup.add(u);
+                     IdealWithUniv<C> Ipu = new IdealWithUniv<C>(id.ideal,iup);
+                     part.add(Ipu);
+                     continue; // irreducible
+                 }
+                 for ( GenPolynomial<C> p : facs.keySet() ) {
+                     // make p multivariate
+                     GenPolynomial<C> pm = id.ideal.list.ring.parse( p.toString() );
+                     System.out.println("pm = " + pm);
+                     Ideal<C> Ip = id.ideal.sum( pm );
+                     List<GenPolynomial<C>> iup = new ArrayList<GenPolynomial<C>>();
+                     iup.addAll(id.upolys);
+                     iup.add(p);
+                     IdealWithUniv<C> Ipu = new IdealWithUniv<C>(Ip,iup);
+                     part.add(Ipu);
+                 }
+            }
             dec = part;
-            part = new ArrayList<Ideal<C>>();
-	}
-	return dec;
+            part = new ArrayList<IdealWithUniv<C>>();
+        }
+        return dec;
+    }
+
+}
+
+
+/**
+ * Container for Ideals together wir univariate polynomials.
+ * @author Heinz Kredel
+ */
+class IdealWithUniv<C extends GcdRingElem<C>> implements Serializable {
+
+
+    /**
+     * The ideal.
+     */
+    public final Ideal<C> ideal;
+
+
+    /**
+     * The list of univariate polynomials.
+     */
+    public final List<GenPolynomial<C>> upolys;
+
+
+    /**
+     * Constructor not for use.
+     */
+    protected IdealWithUniv() {
+        throw new IllegalArgumentException("do not use this constructor");
+    }
+
+
+    /**
+     * Constructor.
+     * @param id the ideal
+     * @param up the list of univaraite polynomials
+     */
+    protected IdealWithUniv(Ideal<C> id, List<GenPolynomial<C>> up) {
+        ideal = id;
+        upolys = up;
+    }
+
+
+    /**
+     * String representation of the ideal.
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return ideal.toString() + "\nunivariate polynomials: " + upolys.toString();
+    }
+
+
+    /**
+     * Get a scripting compatible string representation.
+     * @return script compatible representation for this Element.
+     * @see edu.jas.structure.Element#toScript()
+     */
+    public String toScript() {
+        // Python case
+        return ideal.toScript() +  ",  " + upolys.toString();
     }
 
 }
