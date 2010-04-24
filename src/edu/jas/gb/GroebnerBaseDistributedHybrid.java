@@ -834,42 +834,6 @@ class HybridReducerReceiver<C extends RingElem<C>> extends Thread {
 }
 
 
-/*
- * Distributed GB transport message for polynomial with threadId.
- * @unused
- */
-
-class GBTransportMessPolyId<C extends RingElem<C>> extends GBTransportMessPoly<C> {
-
-
-    /**
-     * The sender thread id.
-     */
-    public final Integer threadId;
-
-
-    /**
-     * GBTransportMessPolyId.
-     * @param p polynomial to be transfered.
-     * @param tid identificator for sending thread.
-     */
-    public GBTransportMessPolyId(GenPolynomial<C> p, Integer tid) {
-        super(p);
-        threadId = tid;
-    }
-
-
-    /**
-     * toString.
-     */
-    @Override
-    public String toString() {
-        return super.toString() + "[" + threadId + "]";
-    }
-
-}
-
-
 /**
  * Distributed clients reducing worker threads.
  */
