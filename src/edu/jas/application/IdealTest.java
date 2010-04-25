@@ -1098,7 +1098,7 @@ public class IdealTest extends TestCase {
         GenPolynomialRing<Complex<BigDecimal>> dcfac = new GenPolynomialRing<Complex<BigDecimal>>(dcc,dfac);
         //System.out.println("dcfac = " + dcfac);
 
-        List<List<Complex<BigDecimal>>> roots = PolyUtilApp.<BigRational,BigRational> complexRoots(I, eps);
+        List<List<Complex<BigDecimal>>> roots = PolyUtilApp.<BigRational,BigRational> complexRootTuples(I, eps);
         //System.out.println("roots = " + roots + "\n");
         for ( GenPolynomial<BigRational> p : I.getList() ) {
             GenPolynomial<BigDecimal> dp = PolyUtil.<BigRational> decimalFromRational(dfac,p);
@@ -1158,7 +1158,7 @@ public class IdealTest extends TestCase {
         BigDecimal e = new BigDecimal(eps.getRational());
         e = e.abs(); //.multiply(e);
 
-        List<List<BigDecimal>> roots = PolyUtilApp.<BigRational,BigRational> realRoots(I, eps);
+        List<List<BigDecimal>> roots = PolyUtilApp.<BigRational,BigRational> realRootTuples(I, eps);
         //System.out.println("roots = " + roots + "\n");
         // polynomials with decimal coefficients
         BigDecimal dc = BigDecimal.ONE;
@@ -1216,10 +1216,12 @@ public class IdealTest extends TestCase {
         //System.out.println("I = " + I);
 
         List<IdealWithUniv<BigRational>> zd = I.zeroDimDecomposition();
-        System.out.println("I = " + I);
-        System.out.println("zd = " + zd);
+        //System.out.println("I = " + I);
+        //System.out.println("zd = " + zd);
 
-        System.out.println();
+        boolean t = I.isZeroDimDecomposition(zd);
+        //System.out.println("t = " + t);
+	assertTrue("is decomposition ", t);
     }
 
 
@@ -1260,6 +1262,7 @@ public class IdealTest extends TestCase {
 
         List<IdealWithUniv<BigRational>> zd = I.zeroDimDecomposition();
         //System.out.println("zd = " + zd);
+	assertTrue("is decomposition ", I.isZeroDimDecomposition(zd));
 
         BigRational eps = new BigRational(1,1000000); 
         eps = eps.multiply(eps);
@@ -1326,6 +1329,7 @@ public class IdealTest extends TestCase {
 
         List<IdealWithUniv<BigRational>> zd = I.zeroDimDecomposition();
         //System.out.println("zd = " + zd);
+	assertTrue("is decomposition ", I.isZeroDimDecomposition(zd));
 
         BigRational eps = new BigRational(1,1000000); 
         eps = eps.multiply(eps);
@@ -1354,9 +1358,9 @@ public class IdealTest extends TestCase {
             }
             boolean t = PolyUtilApp.isComplexRoots(Ld, Ic.croots, e);
             if ( ! t ) {
-                System.out.println("Warn: not a complex root of the ideal");
+                //System.out.println("Warn: not a complex root of the ideal");
             } else {
-                assertTrue("isRealRoots ", t);
+                assertTrue("isComplexRoots ", t);
             }
         }
     }

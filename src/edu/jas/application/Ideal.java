@@ -1529,6 +1529,38 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
         return dec;
     }
 
+
+    /**
+     * Test for zero dimensional ideal decompostition.
+     * @param L intersection of ideals G_i with ideal(G) subseteq cap_i( ideal(G_i) )
+     * @return true if L is a zero dimensional decomposition of this, else false
+     */
+    public boolean isZeroDimDecomposition(List<IdealWithUniv<C>> L) {
+        // test if this is contained in the intersection
+        for ( IdealWithUniv<C> I : L ) {
+            boolean t = I.ideal.contains(this);
+            if ( ! t ) {
+                System.out.println("not contained " + this + " in " + I.ideal);
+                return false;
+            }
+        }
+        // test if all univariate polynomials are contained in the respective ideal
+        for ( IdealWithUniv<C> I : L ) {
+            GenPolynomialRing<C> mfac = I.ideal.list.ring;
+            int i = 0;
+            for ( GenPolynomial<C> p : I.upolys ) {
+                GenPolynomial<C> pm = p.extendUnivariate(mfac,i++);
+                //System.out.println("pm = " + pm + ", p = " + p);
+                boolean t = I.ideal.contains(pm);
+                if ( ! t ) {
+                    System.out.println("not contained " + pm + " in " + I.ideal);
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
 }
 
 

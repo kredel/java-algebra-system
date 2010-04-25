@@ -642,7 +642,7 @@ public class PolyUtilApp<C extends RingElem<C> > {
      * @return list of coordinates of complex roots for ideal(G)
      */
     public static <C extends RingElem<C> & Rational, D extends GcdRingElem<D>> 
-      List<List<Complex<BigDecimal>>> complexRoots(Ideal<D> I, C eps) {
+      List<List<Complex<BigDecimal>>> complexRootTuples(Ideal<D> I, C eps) {
         List<GenPolynomial<D>> univs = I.constructUnivariate();
         if ( logger.isInfoEnabled() ) {
             logger.info("univs = " + univs);
@@ -717,13 +717,26 @@ public class PolyUtilApp<C extends RingElem<C> > {
 
 
     /**
+     * Construct superset of complex roots for zero dimensional ideal(G).
+     * @param G list of polynomials of a of zero dimensional ideal.
+     * @param eps desired precision.
+     * @return list of ideals with coordinates of complex roots for ideal(G)
+     */
+    public static <C extends RingElem<C> & Rational, D extends GcdRingElem<D>> 
+      List<IdealWithComplexRoots<D>> complexRoots(Ideal<D> G, C eps) {
+        List<IdealWithUniv<D>> Il = G.zeroDimDecomposition();
+        return complexRoots(Il,eps);
+    }
+
+
+    /**
      * Construct superset of real roots for zero dimensional ideal(G).
      * @param I zero dimensional ideal.
      * @param eps desired precision.
      * @return list of coordinates of real roots for ideal(G)
      */
     public static <C extends RingElem<C> & Rational, D extends GcdRingElem<D>> 
-      List<List<BigDecimal>> realRoots(Ideal<D> I, C eps) {
+      List<List<BigDecimal>> realRootTuples(Ideal<D> I, C eps) {
         List<GenPolynomial<D>> univs = I.constructUnivariate();
         if ( logger.isInfoEnabled() ) {
             logger.info("univs = " + univs);
@@ -788,6 +801,19 @@ public class PolyUtilApp<C extends RingElem<C> > {
             Ir.add(ir);
         }
         return Ir;
+    }
+
+
+    /**
+     * Construct superset of real roots for zero dimensional ideal(G).
+     * @param G list of polynomials of a of zero dimensional ideal.
+     * @param eps desired precision.
+     * @return list of ideals with coordinates of real roots for ideal(G)
+     */
+    public static <C extends RingElem<C> & Rational, D extends GcdRingElem<D>> 
+      List<IdealWithRealRoots<D>> realRoots(Ideal<D> G, C eps) {
+        List<IdealWithUniv<D>> Il = G.zeroDimDecomposition();
+        return realRoots(Il,eps);
     }
 
 
