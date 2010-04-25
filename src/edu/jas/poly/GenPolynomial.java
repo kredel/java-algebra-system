@@ -1420,6 +1420,42 @@ public class GenPolynomial<C extends RingElem<C> >
 
 
     /**
+     * Extend univariate to multivariate polynomial.
+     * This is an univariate polynomial in variable i of the polynomial ring,
+     * it is extended to the given polynomial ring.
+     * @param pfac extended polynomial ring factory.
+     * @param i index of the variable of this polynomial in pfac.
+     * @return extended multivariate polynomial.
+     */
+    public GenPolynomial<C> extendUnivariate(GenPolynomialRing<C> pfac, int i) {
+        if ( i < 0 || pfac.nvar < i ) {
+           throw new IllegalArgumentException("index " + i +  "out of range " + pfac.nvar);
+        }
+        if ( ring.nvar != 1 ) {
+           throw new IllegalArgumentException("polynomial not univariate " + ring.nvar);
+        }
+        if ( this.isONE() ) {
+            return pfac.getONE();
+        }
+        int j = pfac.nvar - 1 - i;
+        GenPolynomial<C> Cp = pfac.getZERO().clone();
+        if ( this.isZERO() ) { 
+           return Cp;
+        }
+        Map<ExpVector,C> C = Cp.val; //getMap();
+        Map<ExpVector,C> A = val;
+        for ( Map.Entry<ExpVector,C> y: A.entrySet() ) {
+            ExpVector e = y.getKey();
+            long n = e.getVal(0);
+            C a = y.getValue();
+            ExpVector f = ExpVector.create(pfac.nvar,j,n);
+            C.put( f, a ); // assert not contained
+        }
+        return Cp;
+    }
+
+
+    /**
      * Reverse variables. Used e.g. in opposite rings.
      * @return polynomial with reversed variables.
      */

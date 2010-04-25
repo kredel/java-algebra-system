@@ -149,7 +149,7 @@ public class IdealTest extends TestCase {
     /**
      * Test Ideal sum.
      */
-    public void xtestIdealSum() {
+    public void testIdealSum() {
 
         Ideal<BigRational> I;
         Ideal<BigRational> J;
@@ -266,7 +266,7 @@ public class IdealTest extends TestCase {
     /**
      * Test Ideal product.
      */
-    public void xtestIdealProduct() {
+    public void testIdealProduct() {
 
         Ideal<BigRational> I;
         Ideal<BigRational> J;
@@ -389,7 +389,7 @@ public class IdealTest extends TestCase {
     /**
      * Test Ideal quotient.
      */
-    public void xtestIdealQuotient() {
+    public void testIdealQuotient() {
 
         Ideal<BigRational> I;
         Ideal<BigRational> J;
@@ -503,7 +503,7 @@ public class IdealTest extends TestCase {
     /**
      * Test Ideal infinite quotient.
      */
-    public void xtestIdealInfiniteQuotient() {
+    public void testIdealInfiniteQuotient() {
 
         Ideal<BigRational> I;
         Ideal<BigRational> J;
@@ -583,7 +583,7 @@ public class IdealTest extends TestCase {
     /**
      * Test Ideal infinite quotient with Rabinowich trick.
      */
-    public void xtestIdealInfiniteQuotientRabi() {
+    public void testIdealInfiniteQuotientRabi() {
 
         Ideal<BigRational> I;
         Ideal<BigRational> J;
@@ -674,7 +674,7 @@ public class IdealTest extends TestCase {
     /**
      * Test Ideal radical membership.
      */
-    public void xtestIdealRadicalMember() {
+    public void testIdealRadicalMember() {
 
         Ideal<BigRational> I;
         Ideal<BigRational> J;
@@ -743,7 +743,7 @@ public class IdealTest extends TestCase {
     /**
      * Test Ideal common zeros.
      */
-    public void xtestIdealCommonZeros() {
+    public void testIdealCommonZeros() {
 
         Ideal<BigRational> I;
         L = new ArrayList<GenPolynomial<BigRational>>();
@@ -782,7 +782,7 @@ public class IdealTest extends TestCase {
     /**
      * Test Ideal dimension.
      */
-    public void xtestIdealDimension() {
+    public void testIdealDimension() {
 
         Ideal<BigRational> I;
         L = new ArrayList<GenPolynomial<BigRational>>();
@@ -849,7 +849,7 @@ public class IdealTest extends TestCase {
     /**
      * Test Ideal term order optimization.
      */
-    public void xtestIdealTopt() {
+    public void testIdealTopt() {
 
         Ideal<BigRational> I;
         Ideal<BigRational> J;
@@ -939,7 +939,7 @@ public class IdealTest extends TestCase {
     /**
      * Test elimination Ideals.
      */
-    public void xtestElimIdeal() {
+    public void testElimIdeal() {
 
         String[] vars = fac.getVars();
         //System.out.println("vars = " + Arrays.toString(vars));
@@ -1000,7 +1000,7 @@ public class IdealTest extends TestCase {
     /**
      * Test univariate polynomials in ideal.
      */
-    public void xtestUnivPoly() {
+    public void testUnivPoly() {
         String[] vars;
 
         BigRational coeff = new BigRational(17, 1);
@@ -1053,7 +1053,7 @@ public class IdealTest extends TestCase {
     /**
      * Test complex roots univariate polynomials in zero dim ideal.
      */
-    public void xtestComplexRoot() {
+    public void testComplexRoot() {
         String[] vars;
 
         BigRational coeff = new BigRational(17, 1);
@@ -1120,7 +1120,7 @@ public class IdealTest extends TestCase {
     /**
      * Test real roots univariate polynomials in zero dim ideal.
      */
-    public void xtestRealRoot() {
+    public void testRealRoot() {
         String[] vars;
 
         BigRational coeff = new BigRational(17, 1);
@@ -1213,9 +1213,10 @@ public class IdealTest extends TestCase {
         //I.doGB();
         assertTrue("not isZERO( I )", !I.isZERO());
         assertTrue("isGB( I )", I.isGB());
-        System.out.println("I = " + I);
+        //System.out.println("I = " + I);
 
         List<IdealWithUniv<BigRational>> zd = I.zeroDimDecomposition();
+        System.out.println("I = " + I);
         System.out.println("zd = " + zd);
 
         System.out.println();
@@ -1258,7 +1259,7 @@ public class IdealTest extends TestCase {
         //System.out.println("I = " + I);
 
         List<IdealWithUniv<BigRational>> zd = I.zeroDimDecomposition();
-        System.out.println("zd = " + zd);
+        //System.out.println("zd = " + zd);
 
         BigRational eps = new BigRational(1,1000000); 
         eps = eps.multiply(eps);
@@ -1268,7 +1269,7 @@ public class IdealTest extends TestCase {
         BigDecimal dc = BigDecimal.ONE;
 
         List<IdealWithRealRoots<BigRational>> roots = PolyUtilApp.<BigRational,BigRational> realRoots(zd, eps);
-        System.out.println("roots = " + roots + "\n");
+        //System.out.println("roots = " + roots + "\n");
 
         for ( IdealWithRealRoots<BigRational> Ir : roots ) {
             List<GenPolynomial<BigRational>> L = Ir.ideal.getList();
@@ -1283,9 +1284,8 @@ public class IdealTest extends TestCase {
                 Ld.add(dp);
             }
             boolean t = PolyUtilApp.isRealRoots(Ld, Ir.rroots, e);
-            assertTrue("isRealRoots ", t);
+            assertTrue("isRealRoots ", t); // this example only
         }
-        //System.out.println();
     }
 
 
@@ -1325,7 +1325,7 @@ public class IdealTest extends TestCase {
         //System.out.println("I = " + I);
 
         List<IdealWithUniv<BigRational>> zd = I.zeroDimDecomposition();
-        System.out.println("zd = " + zd);
+        //System.out.println("zd = " + zd);
 
         BigRational eps = new BigRational(1,1000000); 
         eps = eps.multiply(eps);
@@ -1334,7 +1334,7 @@ public class IdealTest extends TestCase {
         e = e.abs(); //.multiply(e);
 
         List<IdealWithComplexRoots<BigRational>> roots = PolyUtilApp.<BigRational,BigRational> complexRoots(zd, eps);
-        System.out.println("roots = " + roots + "\n");
+        //System.out.println("roots = " + roots + "\n");
 
         ComplexRing<BigDecimal> dcc = new ComplexRing<BigDecimal>(e);
         GenPolynomialRing<Complex<BigDecimal>> dcfac = new GenPolynomialRing<Complex<BigDecimal>>(dcc,fac);
@@ -1353,12 +1353,12 @@ public class IdealTest extends TestCase {
                  Ld.add(dpc);
             }
             boolean t = PolyUtilApp.isComplexRoots(Ld, Ic.croots, e);
-            //assertTrue("isRealRoots ", t);
             if ( ! t ) {
-                System.out.println("Warn: not all complex roots");
+                System.out.println("Warn: not a complex root of the ideal");
+            } else {
+                assertTrue("isRealRoots ", t);
             }
         }
-        //System.out.println();
     }
 
 }

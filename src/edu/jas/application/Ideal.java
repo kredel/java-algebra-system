@@ -1495,7 +1495,6 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
             return dec;
         }
         FactorAbstract<C> ufd = FactorFactory.<C> getImplementation(list.ring.coFac);
-
         for ( int i = list.ring.nvar-1; i >= 0; i-- ) {
             List<IdealWithUniv<C>> part = new ArrayList<IdealWithUniv<C>>();
             for ( IdealWithUniv<C> id : dec ) {
@@ -1509,10 +1508,13 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
                      part.add(Ipu);
                      continue; // irreducible
                  }
+		 GenPolynomialRing<C> mfac = id.ideal.list.ring;
+		 int j = mfac.nvar - 1 - i;
                  for ( GenPolynomial<C> p : facs.keySet() ) {
                      // make p multivariate
-                     GenPolynomial<C> pm = id.ideal.list.ring.parse( p.toString() );
-                     System.out.println("pm = " + pm);
+                     GenPolynomial<C> pm = p.extendUnivariate(mfac,j);
+                                           // mfac.parse( p.toString() );
+                     //System.out.println("pm = " + pm);
                      Ideal<C> Ip = id.ideal.sum( pm );
                      List<GenPolynomial<C>> iup = new ArrayList<GenPolynomial<C>>();
                      iup.addAll(id.upolys);
