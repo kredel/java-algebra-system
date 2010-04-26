@@ -1577,9 +1577,9 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
         System.out.println("nfac = " + nfac);
         List<GenPolynomial<C>> elist = new ArrayList<GenPolynomial<C>>(list.list.size()+1);
         for ( GenPolynomial<C> p : getList() ) {
-            System.out.println("p = " + p);
+            //System.out.println("p = " + p);
             GenPolynomial<C> q = p.extendLower(nfac,0,0L);
-            System.out.println("q = "  + q);
+            //System.out.println("q = "  + q);
             elist.add(q);
         }
         Ideal<C> I = new Ideal<C>(nfac,elist,true);
@@ -1597,13 +1597,13 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
         int t = 0;
         do {
             t--;
-            System.out.println("t = " + t);
             // zp = z - ( xj - xi * t )
             GenPolynomial<C> zp  = z.subtract( xj.subtract( xi.multiply( nfac.fromInteger(t) ) ) );
+            zp =  zp.monic(); 
             System.out.println("zp = " + zp);
             Ip = I.sum(zp);
-            System.out.println("Ip = " + Ip);
-	    if ( t < -4 ) {
+            //System.out.println("Ip = " + Ip);
+	    if ( t < -400 ) {
 		return Ip;
 	    }
         } while ( ! Ip.isNormalPositionFor(i+1,j+1) ); 
@@ -1621,14 +1621,14 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
 	// called in extended ring!
         int ip = list.ring.nvar - 1 - i; 
         int jp = list.ring.nvar - 1 - j;
-        System.out.println("ip = " + ip);
-        System.out.println("jp = " + jp);
+        //System.out.println("ip = " + ip);
+        //System.out.println("jp = " + jp);
         boolean iOK = false;
         boolean jOK = false;
         for ( GenPolynomial<C> p : getList() ) {
             ExpVector e = p.leadingExpVector();
             int [] dov = e.dependencyOnVariables();
-	    System.out.println("dov = " + Arrays.toString(dov));
+	    //System.out.println("dov = " + Arrays.toString(dov));
             if ( dov.length == 0 ) {
                 throw new IllegalArgumentException("ideal dimension is not zero");
             }

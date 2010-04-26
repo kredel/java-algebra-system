@@ -1373,7 +1373,7 @@ public class IdealTest extends TestCase {
         String[] vars;
 
         BigRational coeff = new BigRational(17, 1);
-        to = new TermOrder( TermOrder.INVLEX);
+        to = new TermOrder(TermOrder.INVLEX);
         vars = new String[] { "x", "y", "z" };
         fac = new GenPolynomialRing<BigRational>(coeff, rl, to, vars);
 
@@ -1385,7 +1385,7 @@ public class IdealTest extends TestCase {
         L = new ArrayList<GenPolynomial<BigRational>>();
 
         a = fac.parse("( x^3 - 27 )");
-        b = fac.parse("( y^4 - x )");
+        b = fac.parse("( y^3 - x )");
         c = fac.parse("( z^2 - x^2 )");
 
         if (a.isZERO() || b.isZERO() || c.isZERO()) {
@@ -1408,12 +1408,20 @@ public class IdealTest extends TestCase {
         //System.out.println("t = " + t);
 	assertTrue("is normal position ", t);
 
+        List<IdealWithUniv<BigRational>> zd = Ip.zeroDimDecomposition();
+        //System.out.println("I = " + I);
+        System.out.println("zd = " + zd);
+
         Ideal<BigRational> Ipp = Ip.normalPositionFor(0,3);
         System.out.println("Ipp = " + Ipp);
 
         t = Ipp.isNormalPositionFor(0+1,3+1);
         //System.out.println("t = " + t);
 	assertTrue("is normal position ", t);
+
+        zd = Ipp.zeroDimDecomposition();
+        //System.out.println("I = " + I);
+        System.out.println("zd = " + zd);
     }
 
 }
