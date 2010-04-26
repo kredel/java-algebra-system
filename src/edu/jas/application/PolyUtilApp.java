@@ -820,7 +820,7 @@ public class PolyUtilApp<C extends RingElem<C> > {
     /**
      * Test for real roots of zero dimensional ideal(L).
      * @param L list of polynomials.
-     * @param root list of real roots for ideal(G).
+     * @param roots list of real roots for ideal(G).
      * @param eps desired precision.
      * @return true if root is a list of coordinates of real roots for ideal(L)
      */
@@ -851,7 +851,7 @@ public class PolyUtilApp<C extends RingElem<C> > {
     /**
      * Test for complex roots of zero dimensional ideal(L).
      * @param L list of polynomials.
-     * @param root list of real roots for ideal(G).
+     * @param roots list of real roots for ideal(G).
      * @param eps desired precision.
      * @return true if root is a list of coordinates of complex roots for ideal(L)
      */
