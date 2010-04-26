@@ -149,7 +149,7 @@ public class IdealTest extends TestCase {
     /**
      * Test Ideal sum.
      */
-    public void testIdealSum() {
+    public void xtestIdealSum() {
 
         Ideal<BigRational> I;
         Ideal<BigRational> J;
@@ -266,7 +266,7 @@ public class IdealTest extends TestCase {
     /**
      * Test Ideal product.
      */
-    public void testIdealProduct() {
+    public void xtestIdealProduct() {
 
         Ideal<BigRational> I;
         Ideal<BigRational> J;
@@ -389,7 +389,7 @@ public class IdealTest extends TestCase {
     /**
      * Test Ideal quotient.
      */
-    public void testIdealQuotient() {
+    public void xtestIdealQuotient() {
 
         Ideal<BigRational> I;
         Ideal<BigRational> J;
@@ -503,7 +503,7 @@ public class IdealTest extends TestCase {
     /**
      * Test Ideal infinite quotient.
      */
-    public void testIdealInfiniteQuotient() {
+    public void xtestIdealInfiniteQuotient() {
 
         Ideal<BigRational> I;
         Ideal<BigRational> J;
@@ -583,7 +583,7 @@ public class IdealTest extends TestCase {
     /**
      * Test Ideal infinite quotient with Rabinowich trick.
      */
-    public void testIdealInfiniteQuotientRabi() {
+    public void xtestIdealInfiniteQuotientRabi() {
 
         Ideal<BigRational> I;
         Ideal<BigRational> J;
@@ -674,7 +674,7 @@ public class IdealTest extends TestCase {
     /**
      * Test Ideal radical membership.
      */
-    public void testIdealRadicalMember() {
+    public void xtestIdealRadicalMember() {
 
         Ideal<BigRational> I;
         Ideal<BigRational> J;
@@ -743,7 +743,7 @@ public class IdealTest extends TestCase {
     /**
      * Test Ideal common zeros.
      */
-    public void testIdealCommonZeros() {
+    public void xtestIdealCommonZeros() {
 
         Ideal<BigRational> I;
         L = new ArrayList<GenPolynomial<BigRational>>();
@@ -782,7 +782,7 @@ public class IdealTest extends TestCase {
     /**
      * Test Ideal dimension.
      */
-    public void testIdealDimension() {
+    public void xtestIdealDimension() {
 
         Ideal<BigRational> I;
         L = new ArrayList<GenPolynomial<BigRational>>();
@@ -849,7 +849,7 @@ public class IdealTest extends TestCase {
     /**
      * Test Ideal term order optimization.
      */
-    public void testIdealTopt() {
+    public void xtestIdealTopt() {
 
         Ideal<BigRational> I;
         Ideal<BigRational> J;
@@ -939,7 +939,7 @@ public class IdealTest extends TestCase {
     /**
      * Test elimination Ideals.
      */
-    public void testElimIdeal() {
+    public void xtestElimIdeal() {
 
         String[] vars = fac.getVars();
         //System.out.println("vars = " + Arrays.toString(vars));
@@ -1000,7 +1000,7 @@ public class IdealTest extends TestCase {
     /**
      * Test univariate polynomials in ideal.
      */
-    public void testUnivPoly() {
+    public void xtestUnivPoly() {
         String[] vars;
 
         BigRational coeff = new BigRational(17, 1);
@@ -1053,7 +1053,7 @@ public class IdealTest extends TestCase {
     /**
      * Test complex roots univariate polynomials in zero dim ideal.
      */
-    public void testComplexRoot() {
+    public void xtestComplexRoot() {
         String[] vars;
 
         BigRational coeff = new BigRational(17, 1);
@@ -1120,7 +1120,7 @@ public class IdealTest extends TestCase {
     /**
      * Test real roots univariate polynomials in zero dim ideal.
      */
-    public void testRealRoot() {
+    public void xtestRealRoot() {
         String[] vars;
 
         BigRational coeff = new BigRational(17, 1);
@@ -1183,7 +1183,7 @@ public class IdealTest extends TestCase {
     /**
      * Test zero dimensional decomposition.
      */
-    public void testZeroDimDecomp() {
+    public void xtestZeroDimDecomp() {
         String[] vars;
 
         BigRational coeff = new BigRational(17, 1);
@@ -1228,7 +1228,7 @@ public class IdealTest extends TestCase {
     /**
      * Test real roots univariate polynomials in zero dim ideal.
      */
-    public void testIdealRealRoot() {
+    public void xtestIdealRealRoot() {
         String[] vars;
 
         BigRational coeff = new BigRational(17, 1);
@@ -1295,7 +1295,7 @@ public class IdealTest extends TestCase {
     /**
      * Test complex roots univariate polynomials in zero dim ideal.
      */
-    public void testIdealComplexRoot() {
+    public void xtestIdealComplexRoot() {
         String[] vars;
 
         BigRational coeff = new BigRational(17, 1);
@@ -1363,6 +1363,57 @@ public class IdealTest extends TestCase {
                 assertTrue("isComplexRoots ", t);
             }
         }
+    }
+
+
+    /**
+     * Test normal position.
+     */
+    public void testNormalPosition() {
+        String[] vars;
+
+        BigRational coeff = new BigRational(17, 1);
+        to = new TermOrder( TermOrder.INVLEX);
+        vars = new String[] { "x", "y", "z" };
+        fac = new GenPolynomialRing<BigRational>(coeff, rl, to, vars);
+
+        vars = fac.getVars();
+        //System.out.println("vars = " + Arrays.toString(vars));
+        //System.out.println("fac = " + fac);
+
+        Ideal<BigRational> I;
+        L = new ArrayList<GenPolynomial<BigRational>>();
+
+        a = fac.parse("( x^3 - 27 )");
+        b = fac.parse("( y^4 - x )");
+        c = fac.parse("( z^2 - x^2 )");
+
+        if (a.isZERO() || b.isZERO() || c.isZERO()) {
+            return;
+        }
+
+        L.add(a);
+        L.add(b);
+        L.add(c);
+        I = new Ideal<BigRational>(fac, L);
+        I.doGB();
+        assertTrue("not isZERO( I )", !I.isZERO());
+        assertTrue("isGB( I )", I.isGB());
+        System.out.println("I = " + I);
+
+        Ideal<BigRational> Ip = I.normalPositionFor(0,1);
+        System.out.println("Ip = " + Ip);
+
+        boolean t = Ip.isNormalPositionFor(0+1,1+1); // sic
+        //System.out.println("t = " + t);
+	assertTrue("is normal position ", t);
+
+        Ideal<BigRational> Ipp = Ip.normalPositionFor(0,3);
+        System.out.println("Ipp = " + Ipp);
+
+        t = Ipp.isNormalPositionFor(0+1,3+1);
+        //System.out.println("t = " + t);
+	assertTrue("is normal position ", t);
     }
 
 }

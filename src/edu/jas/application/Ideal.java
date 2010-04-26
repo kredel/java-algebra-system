@@ -7,6 +7,7 @@ package edu.jas.application;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -1508,8 +1509,8 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
                      part.add(Ipu);
                      continue; // irreducible
                  }
-		 GenPolynomialRing<C> mfac = id.ideal.list.ring;
-		 int j = mfac.nvar - 1 - i;
+                 GenPolynomialRing<C> mfac = id.ideal.list.ring;
+                 int j = mfac.nvar - 1 - i;
                  for ( GenPolynomial<C> p : facs.keySet() ) {
                      // make p multivariate
                      GenPolynomial<C> pm = p.extendUnivariate(mfac,j);
@@ -1559,6 +1560,96 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
             }
         }
         return true;
+    }
+
+
+    /**
+     * Compute normal position for variables i and j.
+     * @param i first variable index
+     * @param j second variable index
+     * @return this + (z - x_j - t x_i) in the ring C[z, x_1, ..., x_r]
+     */
+    public Ideal<C> normalPositionFor(int i, int j) {
+        // extend variables by one
+        GenPolynomialRing<C> ofac = list.ring;
+        System.out.println("ofac = " + ofac);
+        GenPolynomialRing<C> nfac = ofac.extendLower(1);
+        System.out.println("nfac = " + nfac);
+        List<GenPolynomial<C>> elist = new ArrayList<GenPolynomial<C>>(list.list.size()+1);
+        for ( GenPolynomial<C> p : getList() ) {
+            System.out.println("p = " + p);
+            GenPolynomial<C> q = p.extendLower(nfac,0,0L);
+            System.out.println("q = "  + q);
+            elist.add(q);
+        }
+        Ideal<C> I = new Ideal<C>(nfac,elist,true);
+        System.out.println("I = "  + I);
+        int ip = list.ring.nvar - 1 - i;
+        int jp = list.ring.nvar - 1 - j;
+        GenPolynomial<C> xi = nfac.univariate(ip);
+        GenPolynomial<C> xj = nfac.univariate(jp);
+        GenPolynomial<C> z  = nfac.univariate(nfac.nvar-1);
+        System.out.println("x_i = " + xi + ", i = " + i + ", ip = " + ip);
+        System.out.println("x_j = " + xj + ", j = " + j + ", jp = " + jp);
+        System.out.println("z = " + z);
+        // compute GBs until value of t is OK
+        Ideal<C> Ip;
+        int t = 0;
+        do {
+            t--;
+            System.out.println("t = " + t);
+            // zp = z - ( xj - xi * t )
+            GenPolynomial<C> zp  = z.subtract( xj.subtract( xi.multiply( nfac.fromInteger(t) ) ) );
+            System.out.println("zp = " + zp);
+            Ip = I.sum(zp);
+            System.out.println("Ip = " + Ip);
+	    if ( t < -4 ) {
+		return Ip;
+	    }
+        } while ( ! Ip.isNormalPositionFor(i+1,j+1) ); 
+        return Ip;
+    }
+
+
+    /**
+     * Test if this ideal is in normal position for variables i and j.
+     * @param i first variable index
+     * @param j second variable index
+     * @return true if this is in normal position with respect to i and j
+     */
+    public boolean isNormalPositionFor(int i, int j) {
+	// called in extended ring!
+        int ip = list.ring.nvar - 1 - i; 
+        int jp = list.ring.nvar - 1 - j;
+        System.out.println("ip = " + ip);
+        System.out.println("jp = " + jp);
+        boolean iOK = false;
+        boolean jOK = false;
+        for ( GenPolynomial<C> p : getList() ) {
+            ExpVector e = p.leadingExpVector();
+            int [] dov = e.dependencyOnVariables();
+	    System.out.println("dov = " + Arrays.toString(dov));
+            if ( dov.length == 0 ) {
+                throw new IllegalArgumentException("ideal dimension is not zero");
+            }
+            if ( dov[0] == ip ) {
+                if ( e.totalDeg() != 1 ) {
+                    return false;
+                } else {
+                    iOK = true;
+                }
+            } else if ( dov[0] == jp ) {
+                if ( e.totalDeg() != 1 ) {
+                    return false;
+                } else {
+                    jOK = true;
+                }
+            }
+            if ( iOK && jOK ) {
+                return true;
+            }
+        }
+        return iOK && jOK;
     }
 
 }
