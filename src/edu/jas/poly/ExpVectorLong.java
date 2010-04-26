@@ -182,6 +182,26 @@ public class ExpVectorLong extends ExpVector
 
 
     /**
+     * Extend lower variables. 
+     * Extend this by i lower elements and set val[j] to e.
+     * @param i number of elements to extend.
+     * @param j index of element to be set.
+     * @param e new exponent for val[j].
+     * @return extended exponent vector.
+     */
+    public ExpVectorLong extendLower(int i, int j, long e) {
+        long[] w = new long[ val.length + i ];
+        System.arraycopy(val,0,w,0,val.length);
+        if ( j >= i ) {
+           throw new RuntimeException("i "+i+" <= j "+j+" invalid");
+        }
+        w[ val.length + j ] = e;
+        return new ExpVectorLong( w );
+    }
+
+
+
+    /**
      * Contract variables. Used e.g. in module embedding.
      * Contract this to len elements.
      * @param i position of first element to be copied.

@@ -810,6 +810,43 @@ public class GenPolynomialRing<C extends RingElem<C> >
 
 
     /**
+     * Extend lower variables. 
+     * Extend number of variables by i.
+     * @param i number of variables to extend.
+     * @return extended polynomial ring factory.
+     */
+    public GenPolynomialRing<C> extendLower(int i) {
+        String[] v = newVars("e",i);
+        return extendLower(v);
+    }
+
+
+    /**
+     * Extend lower variables. 
+     * Extend number of variables by length(vn).
+     * @param vn names for extended lower variables.
+     * @return extended polynomial ring factory.
+     */
+    public GenPolynomialRing<C> extendLower(String[] vn) {
+        if ( vn == null || vars == null ) {
+            throw new RuntimeException("vn and vars may not be null");
+        }
+        int i = vn.length;
+        String[] v = new String[ vars.length + i ];
+        for ( int k = 0; k < vn.length; k++ ) {
+            v[ k ] = vn[k];
+        }
+        for ( int k = 0; k < vars.length; k++ ) {
+            v[ vn.length + k ] = vars[k];
+        }
+        TermOrder to = tord.extendLower(nvar,i);
+        GenPolynomialRing<C> pfac 
+            = new GenPolynomialRing<C>(coFac,nvar+i,to,v);
+        return pfac;
+    }
+
+
+    /**
      * Contract variables. Used e.g. in module embedding.
      * Contract number of variables by i.
      * @param i number of variables to remove.

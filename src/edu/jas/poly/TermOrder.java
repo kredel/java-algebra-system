@@ -1392,6 +1392,48 @@ public final class TermOrder implements Serializable {
 
 
     /**
+     * Extend lower variables. 
+     * Extend TermOrder by k elements.
+     * <b>Note:</b> todo distinguish TOP and POT orders.
+     * @param r current number of variables.
+     * @param k number of variables to extend.
+     * @return extended TermOrder.
+     */
+    public TermOrder extendLower(int r, int k) {
+        if ( weight != null ) {
+           long[][] w = new long[ weight.length ][];
+           for ( int i = 0; i < weight.length; i++ ) {
+               long[] wi = weight[i];
+               long max = 0;
+               // long min = Long.MAX_VALUE;
+               for ( int j = 0; j < wi.length; j++ ) {
+                   if ( wi[j] > max ) max = wi[j];
+                   //if ( wi[j] < min ) min = wi[j];
+               }
+               max++;
+               long[] wj = new long[ wi.length + k ];
+               for ( int j = 0; j < i; j++ ) {
+                   wj[ wi.length + j ] = max;
+               }
+               System.arraycopy(wi,0,wj,0,wi.length);
+               w[i] = wj;
+           }
+           return new TermOrder( w );
+        }
+        if ( evord2 != 0 ) {
+           if ( debug ) {
+              logger.warn("TermOrder is already extended");
+           }
+           return new TermOrder(evord,evord2,r+k,evend1);
+        }
+        //System.out.println("evord         = " + evord);
+        //System.out.println("DEFAULT_EVORD = " + DEFAULT_EVORD);
+        //System.out.println("tord          = " + this);
+        return new TermOrder(evord,evord,r+k,r); // ??? don't change to evord, cause REVITDG
+    }
+
+
+    /**
      * Contract variables. Used e.g. in module embedding.
      * Contract TermOrder to non split status.
      * @param k position of first element to be copied.

@@ -196,6 +196,17 @@ public abstract class ExpVector implements AbelianGroupElem<ExpVector>
 
 
     /**
+     * Extend lower variables. 
+     * Extend this by i lower elements and set val[j] to e.
+     * @param i number of elements to extend.
+     * @param j index of element to be set.
+     * @param e new exponent for val[j].
+     * @return extended exponent vector.
+     */
+    public abstract ExpVector extendLower(int i, int j, long e);
+
+
+    /**
      * Contract variables. Used e.g. in module embedding.
      * Contract this to len elements.
      * @param i position of first element to be copied.

@@ -1387,6 +1387,32 @@ public class GenPolynomial<C extends RingElem<C> >
 
 
     /**
+     * Extend lower variables. Used e.g. in module embedding.
+     * Extend all ExpVectors by i lower elements and multiply by x_j^k.
+     * @param pfac extended polynomial ring factory (by i variables).
+     * @param j index of variable to be used for multiplication.
+     * @param k exponent for x_j.
+     * @return extended polynomial.
+     */
+    public GenPolynomial<C> extendLower(GenPolynomialRing<C> pfac, int j, long k) {
+        GenPolynomial<C> Cp = pfac.getZERO().clone();
+        if ( this.isZERO() ) { 
+           return Cp;
+        }
+        int i = pfac.nvar - ring.nvar;
+        Map<ExpVector,C> C = Cp.val; //getMap();
+        Map<ExpVector,C> A = val;
+        for ( Map.Entry<ExpVector,C> y: A.entrySet() ) {
+            ExpVector e = y.getKey();
+            C a = y.getValue();
+            ExpVector f = e.extendLower(i,j,k);
+            C.put( f, a );
+        }
+        return Cp;
+    }
+
+
+    /**
      * Contract variables. Used e.g. in module embedding.
      * remove i elements of each ExpVector.
      * @param pfac contracted polynomial ring factory (by i variables).
