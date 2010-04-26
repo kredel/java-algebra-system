@@ -1404,16 +1404,16 @@ public final class TermOrder implements Serializable {
            long[][] w = new long[ weight.length ][];
            for ( int i = 0; i < weight.length; i++ ) {
                long[] wi = weight[i];
-               long max = 0;
-               // long min = Long.MAX_VALUE;
+               //long max = 0;
+               long min = Long.MAX_VALUE;
                for ( int j = 0; j < wi.length; j++ ) {
-                   if ( wi[j] > max ) max = wi[j];
-                   //if ( wi[j] < min ) min = wi[j];
+                   //if ( wi[j] > max ) max = wi[j];
+                   if ( wi[j] < min ) min = wi[j];
                }
-               max++;
+               //max++;
                long[] wj = new long[ wi.length + k ];
                for ( int j = 0; j < i; j++ ) {
-                   wj[ wi.length + j ] = max;
+                   wj[ wi.length + j ] = min;
                }
                System.arraycopy(wi,0,wj,0,wi.length);
                w[i] = wj;
@@ -1424,12 +1424,12 @@ public final class TermOrder implements Serializable {
            if ( debug ) {
               logger.warn("TermOrder is already extended");
            }
-           return new TermOrder(evord,evord2,r+k,evend1);
+           return new TermOrder(evord,evord2,r+k,evend1+k);
         }
         //System.out.println("evord         = " + evord);
         //System.out.println("DEFAULT_EVORD = " + DEFAULT_EVORD);
         //System.out.println("tord          = " + this);
-        return new TermOrder(evord,evord,r+k,r); // ??? don't change to evord, cause REVITDG
+        return new TermOrder(evord);
     }
 
 
