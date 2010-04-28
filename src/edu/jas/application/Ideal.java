@@ -1602,9 +1602,9 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
             System.out.println("zp = " + zp);
             Ip = I.sum(zp);
             //System.out.println("Ip = " + Ip);
-	    if ( t < -400 ) {
-		return Ip;
-	    }
+            if ( t < -400 ) {
+                return Ip;
+            }
         } while ( ! Ip.isNormalPositionFor(i+1,j+1) ); 
         return Ip;
     }
@@ -1617,7 +1617,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
      * @return true if this is in normal position with respect to i and j
      */
     public boolean isNormalPositionFor(int i, int j) {
-	// called in extended ring!
+        // called in extended ring!
         int ip = list.ring.nvar - 1 - i; 
         int jp = list.ring.nvar - 1 - j;
         //System.out.println("ip = " + ip);
@@ -1627,7 +1627,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
         for ( GenPolynomial<C> p : getList() ) {
             ExpVector e = p.leadingExpVector();
             int [] dov = e.dependencyOnVariables();
-	    //System.out.println("dov = " + Arrays.toString(dov));
+            //System.out.println("dov = " + Arrays.toString(dov));
             if ( dov.length == 0 ) {
                 throw new IllegalArgumentException("ideal dimension is not zero");
             }
@@ -1649,6 +1649,137 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
             }
         }
         return iOK && jOK;
+    }
+
+
+    /**
+     * Normal position index, separate more than 2 variables.
+     * @see mas.masring.DIPDEC0#DIGISR
+     * @return (i,j) for non-normal variables 
+     */
+    public int[] normalPositionIndex2Vars() {
+        int[] np = null;
+        int i = -1;
+        int j = -1;
+        for ( GenPolynomial<C> p : getList() ) {
+            ExpVector e = p.leadingExpVector();
+            int [] dov = e.dependencyOnVariables();
+            System.out.println("dov_head = " + Arrays.toString(dov));
+            if ( dov.length == 0 ) {
+                throw new IllegalArgumentException("ideal dimension is not zero");
+            }
+            // search bi-variate head terms
+            if ( dov.length >= 2 ) {
+                i = dov[0];
+                j = dov[1];
+                break;
+            }
+            int n = dov[0];
+            GenPolynomial<C> q = p.reductum();
+            e = q.degreeVector();
+            dov = e.dependencyOnVariables();
+            System.out.println("dov_red  = " + Arrays.toString(dov));
+            int k = Arrays.binarySearch(dov,n);
+            int len = 2;
+            if ( k >= 0 ) {
+                len = 3;
+            }
+            // search bi-variate reductas
+            if ( dov.length >= len ) {
+                switch(k) {
+                case 0: i = dov[1];
+                        j = dov[2];
+                        break;
+                case 1: i = dov[0];
+                        j = dov[2];
+                        break;
+                case 2: i = dov[0];
+                        j = dov[1];
+                        break;
+                default: i = dov[0];
+                         j = dov[1];
+                         break;
+                }
+                break;
+            }
+        }
+        if ( i < 0 || j < 0 ) {
+            return np;
+        }
+        // adjust index
+        i = list.ring.nvar - 1 - i; 
+        j = list.ring.nvar - 1 - j;
+        np = new int[] { j, i }; // reverse
+        System.out.println("np = " + Arrays.toString(np));
+        return np;
+    }
+
+
+    /**
+     * Normal position index, separate multiple univariate polynomials.
+     * @see mas.masring.DIPDEC0#DIGISM
+     * @return (i,j) for non-normal variables 
+     */
+    public int[] normalPositionIndexUnivars() {
+        int[] np = null; //new int[] { -1, -1 };
+        int i = -1;
+        int j = -1;
+        // search multiple univariate polynomials with degree &gt;= 2
+        for ( GenPolynomial<C> p : getList() ) {
+            ExpVector e = p.degreeVector();
+            int [] dov = e.dependencyOnVariables();
+            long t = e.totalDeg(); // lt(p) would be enough
+            System.out.println("dov_univ = " + Arrays.toString(dov));
+            if ( dov.length == 0 ) {
+                throw new IllegalArgumentException("ideal dimension is not zero");
+            }
+            if ( dov.length == 1 && t >= 2L ) {
+                if ( i == -1 ) {
+                    i = dov[0];
+                } else if ( j == -1 ) {
+                    j = dov[0];
+                    if ( i > j ) {
+                        int x = i;
+                        i = j;
+                        j = x;
+                    }
+                }
+            }
+            if ( i >= 0 && j >= 0 ) {
+                break;
+            }
+        }
+        if ( i < 0 || j < 0 ) {
+            // search polynomials with univariate head term and degree &gt;= 2
+            for ( GenPolynomial<C> p : getList() ) {
+                ExpVector e = p.leadingExpVector();
+                long t = e.totalDeg();
+                if ( t >= 2 ) {
+                    e = p.degreeVector();
+                    int [] dov = e.dependencyOnVariables();
+                    System.out.println("dov_univ2 = " + Arrays.toString(dov));
+                    if ( dov.length == 0 ) {
+                        throw new IllegalArgumentException("ideal dimension is not zero");
+                    }
+                    if ( dov.length >= 2 ) {
+                        i = dov[0];
+                        j = dov[1];
+                    }
+                }
+                if ( i >= 0 && j >= 0 ) {
+                    break;
+                }
+            }
+        }
+        if ( i < 0 || j < 0 ) {
+            return np;
+        }
+        // adjust index
+        i = list.ring.nvar - 1 - i; 
+        j = list.ring.nvar - 1 - j;
+        np = new int[] { j, i }; // reverse
+        System.out.println("np = " + Arrays.toString(np));
+        return np;
     }
 
 }

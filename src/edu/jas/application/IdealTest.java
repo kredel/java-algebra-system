@@ -1401,27 +1401,50 @@ public class IdealTest extends TestCase {
         assertTrue("isGB( I )", I.isGB());
         System.out.println("I = " + I);
 
-        Ideal<BigRational> Ip = I.normalPositionFor(0,1);
+	int[] np = I.normalPositionIndex2Vars();
+        //System.out.println("np = " + np);
+	if ( np == null ) {
+            np = I.normalPositionIndexUnivars();
+            //System.out.println("np = " + np);
+	}
+	if ( np == null ) {
+	    return;
+	}
+	int i = np[0];
+	int j = np[1];
+        Ideal<BigRational> Ip = I.normalPositionFor(i,j);
         System.out.println("Ip = " + Ip);
 
-        boolean t = Ip.isNormalPositionFor(0+1,1+1); // sic
+        boolean t = Ip.isNormalPositionFor(i+1,j+1); // sic
         //System.out.println("t = " + t);
 	assertTrue("is normal position ", t);
 
-        List<IdealWithUniv<BigRational>> zd = Ip.zeroDimDecomposition();
+        //List<IdealWithUniv<BigRational>> zd = Ip.zeroDimDecomposition();
         //System.out.println("I = " + I);
-        System.out.println("zd = " + zd);
+        //System.out.println("zd = " + zd);
 
-        Ideal<BigRational> Ipp = Ip.normalPositionFor(0,3);
+	np = Ip.normalPositionIndex2Vars();
+        //System.out.println("np = " + np);
+	if ( np == null ) {
+            np = Ip.normalPositionIndexUnivars();
+            //System.out.println("np = " + np);
+	}
+	if ( np == null ) {
+	    return;
+	}
+	i = np[0];
+	j = np[1];
+
+        Ideal<BigRational> Ipp = Ip.normalPositionFor(i,j);
         System.out.println("Ipp = " + Ipp);
 
-        t = Ipp.isNormalPositionFor(0+1,3+1);
+        t = Ipp.isNormalPositionFor(i+1,j+1);
         //System.out.println("t = " + t);
 	assertTrue("is normal position ", t);
 
-        zd = Ipp.zeroDimDecomposition();
+        //zd = Ipp.zeroDimDecomposition();
         //System.out.println("I = " + I);
-        System.out.println("zd = " + zd);
+        //System.out.println("zd = " + zd);
     }
 
 }
