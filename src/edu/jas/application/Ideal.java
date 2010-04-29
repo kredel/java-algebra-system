@@ -1480,6 +1480,79 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
 
 
     /**
+     * Zero dimensional radical decompostition.
+     * See Seidenbergs lemma 92, and BWK lemma 8.13.
+     * @return intersection of radical ideals G_i with ideal(this) subseteq cap_i( ideal(G_i) ) 
+     */
+    public List<IdealWithUniv<C>> zeroDimRadicalDecomposition() {
+        List<IdealWithUniv<C>> dec = new ArrayList<IdealWithUniv<C>>();
+        if ( this.isZERO() ) {
+            return dec;
+        }
+        IdealWithUniv<C> iwu = new IdealWithUniv<C>(this,new ArrayList<GenPolynomial<C>>());
+        dec.add(iwu);
+        if ( this.isONE() ) {
+            return dec;
+        }
+        for ( int i = list.ring.nvar-1; i >= 0; i-- ) {
+            List<IdealWithUniv<C>> part = new ArrayList<IdealWithUniv<C>>();
+            for ( IdealWithUniv<C> id : dec ) {
+                 GenPolynomial<C> u = id.ideal.constructUnivariate(i);
+                 SortedMap<GenPolynomial<C>,Long> facs = engine.baseSquarefreeFactors(u);
+                 if ( facs.size() == 1 && facs.get(facs.firstKey()) == 1L ) {
+                     List<GenPolynomial<C>> iup = new ArrayList<GenPolynomial<C>>();
+                     iup.addAll(id.upolys);
+                     iup.add(u);
+                     IdealWithUniv<C> Ipu = new IdealWithUniv<C>(id.ideal,iup);
+                     part.add(Ipu);
+                     continue; // irreducible
+                 }
+                 GenPolynomialRing<C> mfac = id.ideal.list.ring;
+                 int j = mfac.nvar - 1 - i;
+                 for ( GenPolynomial<C> p : facs.keySet() ) {
+                     // make p multivariate
+                     GenPolynomial<C> pm = p.extendUnivariate(mfac,j);
+                                           // mfac.parse( p.toString() );
+                     //System.out.println("pm = " + pm);
+                     Ideal<C> Ip = id.ideal.sum( pm );
+                     List<GenPolynomial<C>> iup = new ArrayList<GenPolynomial<C>>();
+                     iup.addAll(id.upolys);
+                     iup.add(p);
+                     IdealWithUniv<C> Ipu = new IdealWithUniv<C>(Ip,iup);
+                     part.add(Ipu);
+                 }
+            }
+            dec = part;
+            part = new ArrayList<IdealWithUniv<C>>();
+        }
+        return dec;
+    }
+
+
+    /**
+     * Test for Zero dimensional radical.
+     * See Seidenbergs lemma 92, and BWK lemma 8.13.
+     * @return true if this is an zero dimensional radical ideal, else false 
+     */
+    public boolean isZeroDimRadical() {
+        if ( this.isZERO() ) {
+            return false;
+        }
+        if ( this.isONE() ) {
+            return false; // not 0-dim
+        }
+        for ( int i = list.ring.nvar-1; i >= 0; i-- ) {
+            GenPolynomial<C> u = constructUnivariate(i);
+            boolean t = engine.isSquarefree(u);
+            if ( ! t ) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    /**
      * Zero dimensional ideal decompostition.
      * See algorithm DIRGZD of BGK 1984.
      * @return intersection of ideals G_i with ideal(this) subseteq cap_i( ideal(G_i) ) 
@@ -1499,7 +1572,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
             List<IdealWithUniv<C>> part = new ArrayList<IdealWithUniv<C>>();
             for ( IdealWithUniv<C> id : dec ) {
                  GenPolynomial<C> u = id.ideal.constructUnivariate(i);
-                 SortedMap<GenPolynomial<C>,java.lang.Long> facs = ufd.baseFactors(u);
+                 SortedMap<GenPolynomial<C>,Long> facs = ufd.baseFactors(u);
                  if ( facs.size() == 1 && facs.get(facs.firstKey()) == 1L ) {
                      List<GenPolynomial<C>> iup = new ArrayList<GenPolynomial<C>>();
                      iup.addAll(id.upolys);
@@ -1780,6 +1853,36 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
         np = new int[] { j, i }; // reverse
         System.out.println("np = " + Arrays.toString(np));
         return np;
+    }
+
+
+    /**
+     * Zero dimensional ideal decompostition for real roots.
+     * See algorithm mas.masring.DIPDEC0#DINTSR.
+     * @return intersection of ideals G_i with ideal(this) subseteq cap_i( ideal(G_i) ) 
+               and each G_i contains at most bi-variate polynomials 
+     */
+    public List<IdealWithUniv<C>> zeroDimRootDecomposition() {
+        List<IdealWithUniv<C>> dec = zeroDimDecomposition();
+        if ( this.isZERO() ) {
+            return dec;
+        }
+        if ( this.isONE() ) {
+            return dec;
+        }
+        List<IdealWithUniv<C>> rdec = new ArrayList<IdealWithUniv<C>>();
+	while ( dec.size() > 0 ) {
+	    IdealWithUniv<C> id = dec.remove(0);
+	    int[] ri = id.ideal.normalPositionIndex2Vars();
+	    if ( ri == null || ri.length != 2 ) {
+		rdec.add(id);
+	    } else {
+                Ideal<C> I = id.ideal.normalPositionFor(ri[0],ri[1]);
+                List<IdealWithUniv<C>> rd = I.zeroDimDecomposition();
+                dec.addAll(rd);
+	    }
+	}
+	return rdec;
     }
 
 }
