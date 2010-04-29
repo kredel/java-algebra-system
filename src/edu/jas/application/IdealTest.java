@@ -1453,7 +1453,7 @@ public class IdealTest extends TestCase {
     /**
      * Test 0-dim root decomposition.
      */
-    public void testRootDecomposition() {
+    public void xtestRootDecomposition() {
         String[] vars;
 
         BigRational coeff = new BigRational(17, 1);
@@ -1470,7 +1470,7 @@ public class IdealTest extends TestCase {
 
         a = fac.parse("( x^2 - 7 )");
         b = fac.parse("( y^2 - 5 )");
-        c = fac.parse("( z^2 - x * y )");
+        c = fac.parse("( z^3 - x * y )");
 
         if (a.isZERO() || b.isZERO() || c.isZERO()) {
             return;
@@ -1487,6 +1487,58 @@ public class IdealTest extends TestCase {
 
         List<IdealWithUniv<BigRational>> rzd = I.zeroDimRootDecomposition();
         System.out.println("rzd = " + rzd);
+
+    }
+
+
+    /**
+     * Test 0-dim prime decomposition.
+     */
+    public void testPrimeDecomposition() {
+        String[] vars;
+
+        BigRational coeff = new BigRational(17, 1);
+        to = new TermOrder(TermOrder.INVLEX);
+        vars = new String[] { "x", "y", "z" };
+        fac = new GenPolynomialRing<BigRational>(coeff, rl, to, vars);
+
+        vars = fac.getVars();
+        //System.out.println("vars = " + Arrays.toString(vars));
+        //System.out.println("fac = " + fac);
+
+        Ideal<BigRational> I;
+        L = new ArrayList<GenPolynomial<BigRational>>();
+
+        a = fac.parse("( x^2 - 5 )");
+        b = fac.parse("( y^2 - 5 )");
+        c = fac.parse("( z^3 - x )");
+
+        if (a.isZERO() || b.isZERO() || c.isZERO()) {
+            return;
+        }
+
+        L.add(a);
+        L.add(b);
+        L.add(c);
+        I = new Ideal<BigRational>(fac, L);
+        I.doGB();
+        assertTrue("not isZERO( I )", !I.isZERO());
+        assertTrue("isGB( I )", I.isGB());
+        System.out.println("I = " + I);
+
+        List<IdealWithUniv<BigRational>> pzd = I.zeroDimPrimeDecomposition();
+        System.out.println("pzd = " + pzd);
+
+        List<Ideal<BigRational>> ezd = new ArrayList<Ideal<BigRational>>(pzd.size());
+	for ( IdealWithUniv<BigRational> Ip : pzd ) {
+	    Ideal<BigRational> Is = Ip.ideal.eliminate( fac );
+            ezd.add(Is);
+	}
+        System.out.println("ezd = " + ezd);
+
+        //boolean t = I.isZeroDimDecomposition(pzd); adjust variables
+        //System.out.println("t = " + t);
+	//assertTrue("is decomposition ", t);
 
     }
 
