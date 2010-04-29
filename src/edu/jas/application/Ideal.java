@@ -1871,18 +1871,18 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
             return dec;
         }
         List<IdealWithUniv<C>> rdec = new ArrayList<IdealWithUniv<C>>();
-	while ( dec.size() > 0 ) {
-	    IdealWithUniv<C> id = dec.remove(0);
-	    int[] ri = id.ideal.normalPositionIndex2Vars();
-	    if ( ri == null || ri.length != 2 ) {
-		rdec.add(id);
-	    } else {
+        while ( dec.size() > 0 ) {
+            IdealWithUniv<C> id = dec.remove(0);
+            int[] ri = id.ideal.normalPositionIndex2Vars();
+            if ( ri == null || ri.length != 2 ) {
+                rdec.add(id);
+            } else {
                 Ideal<C> I = id.ideal.normalPositionFor(ri[0],ri[1]);
                 List<IdealWithUniv<C>> rd = I.zeroDimDecomposition();
                 dec.addAll(rd);
-	    }
-	}
-	return rdec;
+            }
+        }
+        return rdec;
     }
 
 
@@ -1901,18 +1901,49 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
             return dec;
         }
         List<IdealWithUniv<C>> rdec = new ArrayList<IdealWithUniv<C>>();
-	while ( dec.size() > 0 ) {
-	    IdealWithUniv<C> id = dec.remove(0);
-	    int[] ri = id.ideal.normalPositionIndexUnivars();
-	    if ( ri == null || ri.length != 2 ) {
-		rdec.add(id);
-	    } else {
+        while ( dec.size() > 0 ) {
+            IdealWithUniv<C> id = dec.remove(0);
+            int[] ri = id.ideal.normalPositionIndexUnivars();
+            if ( ri == null || ri.length != 2 ) {
+                rdec.add(id);
+            } else {
                 Ideal<C> I = id.ideal.normalPositionFor(ri[0],ri[1]);
                 List<IdealWithUniv<C>> rd = I.zeroDimDecomposition();
                 dec.addAll(rd);
-	    }
-	}
-	return rdec;
+            }
+        }
+        return rdec;
+    }
+
+
+    /**
+     * Zero dimensional ideal associated primary ideal.
+     * See algorithm mas.masring.DIPIDEAL#DIRLPI.
+     * @param P prime ideal associated to this
+     * @return primary ideal of this with respect to the associated pime ideal P
+     */
+    public Ideal<C> primaryIdeal(Ideal<C> P) {
+        Ideal<C> Qs = P;
+        Ideal<C> Q;
+        int e = 0;
+        do {
+            Q = Qs;
+            e++;
+            Qs = Q.product(P);
+        } while ( Qs.contains(this) );
+        boolean t;
+        Ideal<C> As;
+        do {
+            As = this.sum(Qs);
+            t = As.contains(Q);
+            if ( ! t ) {
+                Q = Qs;
+                e++;
+                Qs = Q.product(P);
+            }
+        } while ( ! t );
+	System.out.println("exponent = " + e);
+        return As;
     }
 
 }

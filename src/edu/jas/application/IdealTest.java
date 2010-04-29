@@ -1221,7 +1221,7 @@ public class IdealTest extends TestCase {
 
         boolean t = I.isZeroDimDecomposition(zd);
         //System.out.println("t = " + t);
-	assertTrue("is decomposition ", t);
+        assertTrue("is decomposition ", t);
     }
 
 
@@ -1262,7 +1262,7 @@ public class IdealTest extends TestCase {
 
         List<IdealWithUniv<BigRational>> zd = I.zeroDimDecomposition();
         //System.out.println("zd = " + zd);
-	assertTrue("is decomposition ", I.isZeroDimDecomposition(zd));
+        assertTrue("is decomposition ", I.isZeroDimDecomposition(zd));
 
         BigRational eps = new BigRational(1,1000000); 
         eps = eps.multiply(eps);
@@ -1329,7 +1329,7 @@ public class IdealTest extends TestCase {
 
         List<IdealWithUniv<BigRational>> zd = I.zeroDimDecomposition();
         //System.out.println("zd = " + zd);
-	assertTrue("is decomposition ", I.isZeroDimDecomposition(zd));
+        assertTrue("is decomposition ", I.isZeroDimDecomposition(zd));
 
         BigRational eps = new BigRational(1,1000000); 
         eps = eps.multiply(eps);
@@ -1401,48 +1401,48 @@ public class IdealTest extends TestCase {
         assertTrue("isGB( I )", I.isGB());
         System.out.println("I = " + I);
 
-	int[] np = I.normalPositionIndex2Vars();
+        int[] np = I.normalPositionIndex2Vars();
         //System.out.println("np = " + np);
-	if ( np == null ) {
+        if ( np == null ) {
             np = I.normalPositionIndexUnivars();
             //System.out.println("np = " + np);
-	}
-	if ( np == null ) {
-	    return;
-	}
-	int i = np[0];
-	int j = np[1];
+        }
+        if ( np == null ) {
+            return;
+        }
+        int i = np[0];
+        int j = np[1];
         Ideal<BigRational> Ip = I.normalPositionFor(i,j);
         System.out.println("Ip = " + Ip);
 
         boolean t = Ip.isNormalPositionFor(i+1,j+1); // sic
         //System.out.println("t = " + t);
-	assertTrue("is normal position ", t);
+        assertTrue("is normal position ", t);
 
         //List<IdealWithUniv<BigRational>> zd = Ip.zeroDimDecomposition();
         //System.out.println("I = " + I);
         //System.out.println("zd = " + zd);
 
-	np = Ip.normalPositionIndex2Vars();
+        np = Ip.normalPositionIndex2Vars();
         //System.out.println("np = " + np);
-	if ( np == null ) {
+        if ( np == null ) {
             np = Ip.normalPositionIndexUnivars();
             //System.out.println("np = " + np);
-	}
-	if ( np == null ) {
-	    return;
-	}
-	i = np[0];
-	j = np[1];
-	assertTrue("i == 0", i == 0);
-	assertTrue("j == 3", j == 3);
+        }
+        if ( np == null ) {
+            return;
+        }
+        i = np[0];
+        j = np[1];
+        assertTrue("i == 0", i == 0);
+        assertTrue("j == 3", j == 3);
 
         //Ideal<BigRational> Ipp = Ip.normalPositionFor(i,j);
         //System.out.println("Ipp = " + Ipp);
 
         //t = Ipp.isNormalPositionFor(i+1,j+1);
         //System.out.println("t = " + t);
-	//assertTrue("is normal position ", t);
+        //assertTrue("is normal position ", t);
 
         //zd = Ipp.zeroDimDecomposition();
         //System.out.println("I = " + I);
@@ -1509,7 +1509,7 @@ public class IdealTest extends TestCase {
         Ideal<BigRational> I;
         L = new ArrayList<GenPolynomial<BigRational>>();
 
-        a = fac.parse("( x^2 - 5 )");
+        a = fac.parse("( x^2 - 5 )^2 ");
         b = fac.parse("( y^2 - 5 )");
         c = fac.parse("( z^3 - x )");
 
@@ -1530,15 +1530,23 @@ public class IdealTest extends TestCase {
         System.out.println("pzd = " + pzd);
 
         List<Ideal<BigRational>> ezd = new ArrayList<Ideal<BigRational>>(pzd.size());
-	for ( IdealWithUniv<BigRational> Ip : pzd ) {
-	    Ideal<BigRational> Is = Ip.ideal.eliminate( fac );
+        List<Ideal<BigRational>> qzd = new ArrayList<Ideal<BigRational>>(pzd.size());
+        for ( IdealWithUniv<BigRational> Ip : pzd ) {
+            Ideal<BigRational> Is = Ip.ideal.eliminate( fac );
             ezd.add(Is);
-	}
+            Ideal<BigRational> Qs = I.primaryIdeal(Is);
+            //System.out.println("Qs = " + Qs);
+            qzd.add(Qs);
+        }
         System.out.println("ezd = " + ezd);
+        System.out.println("qzd = " + qzd);
+
+        System.out.println("intersection = " + qzd.get(0).intersect(qzd.get(1)));
+
 
         //boolean t = I.isZeroDimDecomposition(pzd); adjust variables
         //System.out.println("t = " + t);
-	//assertTrue("is decomposition ", t);
+        //assertTrue("is decomposition ", t);
 
     }
 
