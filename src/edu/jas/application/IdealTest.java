@@ -149,7 +149,7 @@ public class IdealTest extends TestCase {
     /**
      * Test Ideal sum.
      */
-    public void xtestIdealSum() {
+    public void testIdealSum() {
 
         Ideal<BigRational> I;
         Ideal<BigRational> J;
@@ -266,7 +266,7 @@ public class IdealTest extends TestCase {
     /**
      * Test Ideal product.
      */
-    public void xtestIdealProduct() {
+    public void testIdealProduct() {
 
         Ideal<BigRational> I;
         Ideal<BigRational> J;
@@ -389,7 +389,7 @@ public class IdealTest extends TestCase {
     /**
      * Test Ideal quotient.
      */
-    public void xtestIdealQuotient() {
+    public void testIdealQuotient() {
 
         Ideal<BigRational> I;
         Ideal<BigRational> J;
@@ -503,7 +503,7 @@ public class IdealTest extends TestCase {
     /**
      * Test Ideal infinite quotient.
      */
-    public void xtestIdealInfiniteQuotient() {
+    public void testIdealInfiniteQuotient() {
 
         Ideal<BigRational> I;
         Ideal<BigRational> J;
@@ -583,7 +583,7 @@ public class IdealTest extends TestCase {
     /**
      * Test Ideal infinite quotient with Rabinowich trick.
      */
-    public void xtestIdealInfiniteQuotientRabi() {
+    public void testIdealInfiniteQuotientRabi() {
 
         Ideal<BigRational> I;
         Ideal<BigRational> J;
@@ -674,7 +674,7 @@ public class IdealTest extends TestCase {
     /**
      * Test Ideal radical membership.
      */
-    public void xtestIdealRadicalMember() {
+    public void testIdealRadicalMember() {
 
         Ideal<BigRational> I;
         Ideal<BigRational> J;
@@ -743,7 +743,7 @@ public class IdealTest extends TestCase {
     /**
      * Test Ideal common zeros.
      */
-    public void xtestIdealCommonZeros() {
+    public void testIdealCommonZeros() {
 
         Ideal<BigRational> I;
         L = new ArrayList<GenPolynomial<BigRational>>();
@@ -782,7 +782,7 @@ public class IdealTest extends TestCase {
     /**
      * Test Ideal dimension.
      */
-    public void xtestIdealDimension() {
+    public void testIdealDimension() {
 
         Ideal<BigRational> I;
         L = new ArrayList<GenPolynomial<BigRational>>();
@@ -849,7 +849,7 @@ public class IdealTest extends TestCase {
     /**
      * Test Ideal term order optimization.
      */
-    public void xtestIdealTopt() {
+    public void testIdealTopt() {
 
         Ideal<BigRational> I;
         Ideal<BigRational> J;
@@ -939,7 +939,7 @@ public class IdealTest extends TestCase {
     /**
      * Test elimination Ideals.
      */
-    public void xtestElimIdeal() {
+    public void testElimIdeal() {
 
         String[] vars = fac.getVars();
         //System.out.println("vars = " + Arrays.toString(vars));
@@ -1000,7 +1000,7 @@ public class IdealTest extends TestCase {
     /**
      * Test univariate polynomials in ideal.
      */
-    public void xtestUnivPoly() {
+    public void testUnivPoly() {
         String[] vars;
 
         BigRational coeff = new BigRational(17, 1);
@@ -1053,7 +1053,7 @@ public class IdealTest extends TestCase {
     /**
      * Test complex roots univariate polynomials in zero dim ideal.
      */
-    public void xtestComplexRoot() {
+    public void testComplexRoot() {
         String[] vars;
 
         BigRational coeff = new BigRational(17, 1);
@@ -1120,7 +1120,7 @@ public class IdealTest extends TestCase {
     /**
      * Test real roots univariate polynomials in zero dim ideal.
      */
-    public void xtestRealRoot() {
+    public void testRealRoot() {
         String[] vars;
 
         BigRational coeff = new BigRational(17, 1);
@@ -1183,7 +1183,7 @@ public class IdealTest extends TestCase {
     /**
      * Test zero dimensional decomposition.
      */
-    public void xtestZeroDimDecomp() {
+    public void testZeroDimDecomp() {
         String[] vars;
 
         BigRational coeff = new BigRational(17, 1);
@@ -1228,7 +1228,7 @@ public class IdealTest extends TestCase {
     /**
      * Test real roots univariate polynomials in zero dim ideal.
      */
-    public void xtestIdealRealRoot() {
+    public void testIdealRealRoot() {
         String[] vars;
 
         BigRational coeff = new BigRational(17, 1);
@@ -1295,13 +1295,13 @@ public class IdealTest extends TestCase {
     /**
      * Test complex roots univariate polynomials in zero dim ideal.
      */
-    public void xtestIdealComplexRoot() {
+    public void testIdealComplexRoot() {
         String[] vars;
 
         BigRational coeff = new BigRational(17, 1);
         to = new TermOrder( TermOrder.INVLEX);
-        vars = new String[] { "x", "y", "z" };
-        fac = new GenPolynomialRing<BigRational>(coeff, rl, to, vars);
+        vars = new String[] { "x", "y" };
+        fac = new GenPolynomialRing<BigRational>(coeff, vars.length, to, vars);
 
         vars = fac.getVars();
         //System.out.println("vars = " + Arrays.toString(vars));
@@ -1311,7 +1311,7 @@ public class IdealTest extends TestCase {
         L = new ArrayList<GenPolynomial<BigRational>>();
 
         a = fac.parse("( x^2 + 9 )");
-        b = fac.parse("( y^3 - x )");
+        b = fac.parse("( y^2 - x )");
         c = fac.parse("( z^2 - x^2 )");
 
         if (a.isZERO() || b.isZERO() || c.isZERO()) {
@@ -1320,7 +1320,7 @@ public class IdealTest extends TestCase {
 
         L.add(a);
         L.add(b);
-        L.add(c);
+        //L.add(c);
         I = new Ideal<BigRational>(fac, L);
         //I.doGB();
         assertTrue("not isZERO( I )", !I.isZERO());
@@ -1332,7 +1332,7 @@ public class IdealTest extends TestCase {
         assertTrue("is decomposition ", I.isZeroDimDecomposition(zd));
 
         BigRational eps = new BigRational(1,1000000); 
-        eps = eps.multiply(eps);
+        //eps = eps.multiply(eps);
         eps = eps.multiply(eps).multiply(eps);
         BigDecimal e = new BigDecimal(eps.getRational());
         e = e.abs(); //.multiply(e);
@@ -1369,7 +1369,7 @@ public class IdealTest extends TestCase {
     /**
      * Test normal position.
      */
-    public void xtestNormalPosition() {
+    public void testNormalPosition() {
         String[] vars;
 
         BigRational coeff = new BigRational(17, 1);
@@ -1399,7 +1399,7 @@ public class IdealTest extends TestCase {
         I.doGB();
         assertTrue("not isZERO( I )", !I.isZERO());
         assertTrue("isGB( I )", I.isGB());
-        System.out.println("I = " + I);
+        //System.out.println("I = " + I);
 
         int[] np = I.normalPositionIndex2Vars();
         //System.out.println("np = " + np);
@@ -1413,15 +1413,11 @@ public class IdealTest extends TestCase {
         int i = np[0];
         int j = np[1];
         Ideal<BigRational> Ip = I.normalPositionFor(i,j);
-        System.out.println("Ip = " + Ip);
+        //System.out.println("Ip = " + Ip);
 
         boolean t = Ip.isNormalPositionFor(i+1,j+1); // sic
         //System.out.println("t = " + t);
         assertTrue("is normal position ", t);
-
-        //List<IdealWithUniv<BigRational>> zd = Ip.zeroDimDecomposition();
-        //System.out.println("I = " + I);
-        //System.out.println("zd = " + zd);
 
         np = Ip.normalPositionIndex2Vars();
         //System.out.println("np = " + np);
@@ -1436,24 +1432,13 @@ public class IdealTest extends TestCase {
         j = np[1];
         assertTrue("i == 0", i == 0);
         assertTrue("j == 3", j == 3);
-
-        //Ideal<BigRational> Ipp = Ip.normalPositionFor(i,j);
-        //System.out.println("Ipp = " + Ipp);
-
-        //t = Ipp.isNormalPositionFor(i+1,j+1);
-        //System.out.println("t = " + t);
-        //assertTrue("is normal position ", t);
-
-        //zd = Ipp.zeroDimDecomposition();
-        //System.out.println("I = " + I);
-        //System.out.println("zd = " + zd);
     }
 
 
     /**
      * Test 0-dim root decomposition.
      */
-    public void xtestRootDecomposition() {
+    public void testRootDecomposition() {
         String[] vars;
 
         BigRational coeff = new BigRational(17, 1);
@@ -1483,18 +1468,19 @@ public class IdealTest extends TestCase {
         I.doGB();
         assertTrue("not isZERO( I )", !I.isZERO());
         assertTrue("isGB( I )", I.isGB());
-        System.out.println("I = " + I);
+        //System.out.println("I = " + I);
 
         List<IdealWithUniv<BigRational>> rzd = I.zeroDimRootDecomposition();
-        System.out.println("rzd = " + rzd);
+        //System.out.println("rzd = " + rzd);
 
+        assertTrue("is contained in intersection ", I.isZeroDimDecomposition(rzd));
     }
 
 
     /**
      * Test 0-dim prime decomposition.
      */
-    public void xtestPrimeDecomposition() {
+    public void testPrimeDecomposition() {
         String[] vars;
 
         BigRational coeff = new BigRational(17, 1);
@@ -1524,32 +1510,13 @@ public class IdealTest extends TestCase {
         I.doGB();
         assertTrue("not isZERO( I )", !I.isZERO());
         assertTrue("isGB( I )", I.isGB());
-        System.out.println("I = " + I);
+        //System.out.println("I = " + I);
 
         List<IdealWithUniv<BigRational>> pzd = I.zeroDimPrimeDecomposition();
-        System.out.println("pzd = " + pzd);
+        //System.out.println("pzd = " + pzd);
+        //System.out.println("I   = " + I);
 
-        List<Ideal<BigRational>> ezd = new ArrayList<Ideal<BigRational>>(pzd.size());
-        List<Ideal<BigRational>> qzd = new ArrayList<Ideal<BigRational>>(pzd.size());
-        for ( IdealWithUniv<BigRational> Ip : pzd ) {
-            Ideal<BigRational> Is = Ip.ideal.eliminate( fac );
-            ezd.add(Is);
-            Ideal<BigRational> Qs = I.primaryIdeal(Is);
-            //System.out.println("Qs = " + Qs);
-            qzd.add(Qs);
-        }
-        Ideal<BigRational> Qs = qzd.get(0).intersect(qzd.get(1));
-        System.out.println("ezd = " + ezd);
-        System.out.println("qzd = " + qzd);
-        System.out.println("intersection = " + Qs);
-        System.out.println("I   = " + I);
-
-        assertTrue("is intersection ", I.equals(Qs));
-
-        //boolean t = I.isZeroDimDecomposition(pzd); adjust variables
-        //System.out.println("t = " + t);
-        //assertTrue("is decomposition ", t);
-
+        assertTrue("is contained in intersection ", I.isZeroDimDecomposition(pzd));
     }
 
 
@@ -1589,7 +1556,7 @@ public class IdealTest extends TestCase {
         //System.out.println("I = " + I);
 
         List<Ideal<BigRational>> qzd = I.zeroDimPrimaryDecomposition();
-        System.out.println("qzd = " + qzd);
+        //System.out.println("qzd = " + qzd);
         //System.out.println("I   = " + I);
 
         assertTrue("is intersection ", I.isZeroDimPrimaryDecomposition(qzd));
