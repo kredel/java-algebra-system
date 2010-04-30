@@ -1494,7 +1494,7 @@ public class IdealTest extends TestCase {
     /**
      * Test 0-dim prime decomposition.
      */
-    public void testPrimeDecomposition() {
+    public void xtestPrimeDecomposition() {
         String[] vars;
 
         BigRational coeff = new BigRational(17, 1);
@@ -1538,16 +1538,61 @@ public class IdealTest extends TestCase {
             //System.out.println("Qs = " + Qs);
             qzd.add(Qs);
         }
+        Ideal<BigRational> Qs = qzd.get(0).intersect(qzd.get(1));
         System.out.println("ezd = " + ezd);
         System.out.println("qzd = " + qzd);
+        System.out.println("intersection = " + Qs);
+        System.out.println("I   = " + I);
 
-        System.out.println("intersection = " + qzd.get(0).intersect(qzd.get(1)));
-
+        assertTrue("is intersection ", I.equals(Qs));
 
         //boolean t = I.isZeroDimDecomposition(pzd); adjust variables
         //System.out.println("t = " + t);
         //assertTrue("is decomposition ", t);
 
+    }
+
+
+    /**
+     * Test 0-dim primary decomposition.
+     */
+    public void testPrimaryDecomposition() {
+        String[] vars;
+
+        BigRational coeff = new BigRational(17, 1);
+        to = new TermOrder(TermOrder.INVLEX);
+        vars = new String[] { "x", "y", "z" };
+        fac = new GenPolynomialRing<BigRational>(coeff, rl, to, vars);
+
+        vars = fac.getVars();
+        //System.out.println("vars = " + Arrays.toString(vars));
+        //System.out.println("fac = " + fac);
+
+        Ideal<BigRational> I;
+        L = new ArrayList<GenPolynomial<BigRational>>();
+
+        a = fac.parse("( x^2 - 5 )^2 ");
+        b = fac.parse("( y^2 - 5 )");
+        c = fac.parse("( z^3 - x )");
+
+        if (a.isZERO() || b.isZERO() || c.isZERO()) {
+            return;
+        }
+
+        L.add(a);
+        L.add(b);
+        L.add(c);
+        I = new Ideal<BigRational>(fac, L);
+        I.doGB();
+        assertTrue("not isZERO( I )", !I.isZERO());
+        assertTrue("isGB( I )", I.isGB());
+        //System.out.println("I = " + I);
+
+        List<Ideal<BigRational>> qzd = I.zeroDimPrimaryDecomposition();
+        System.out.println("qzd = " + qzd);
+        //System.out.println("I   = " + I);
+
+        assertTrue("is intersection ", I.isZeroDimPrimaryDecomposition(qzd));
     }
 
 }

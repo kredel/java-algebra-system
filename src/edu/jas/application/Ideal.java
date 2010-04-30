@@ -1942,8 +1942,59 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
                 Qs = Q.product(P);
             }
         } while ( ! t );
-	System.out.println("exponent = " + e);
+        System.out.println("exponent = " + e);
         return As;
+    }
+
+
+    /**
+     * Zero dimensional ideal primary decompostition.
+     * @return intersection of primary ideals G_i with ideal(this) = cap_i( ideal(G_i) ) 
+     */
+    public List<Ideal<C>> zeroDimPrimaryDecomposition() {
+        List<Ideal<C>> dec = new ArrayList<Ideal<C>>();
+        if ( this.isZERO() ) {
+            return dec;
+        }
+        List<IdealWithUniv<C>> pdec = zeroDimPrimeDecomposition();
+        if ( this.isONE() ) {
+            dec.add(pdec.get(0).ideal);
+            return dec;
+        }
+        List<Ideal<C>> qdec = new ArrayList<Ideal<C>>();
+        for ( IdealWithUniv<C> Ip : pdec ) {
+            Ideal<C> Is = Ip.ideal.eliminate( list.ring );
+            Ideal<C> Qs = this.primaryIdeal(Is);
+            //System.out.println("Qs = " + Qs);
+            qdec.add(Qs);
+        }
+        return qdec;
+    }
+
+
+    /**
+     * Test for zero dimensional primary ideal decompostition.
+     * @param L list of primary ideals G_i
+     * @return true if ideal(this) == cap_i( ideal(G_i) ) 
+     */
+    public boolean isZeroDimPrimaryDecomposition(List<Ideal<C>> L) {
+        // test if this is contained in the intersection
+        for ( Ideal<C> I : L ) {
+            boolean t = I.contains(this);
+            if ( ! t ) {
+                System.out.println("not contained " + this + " in " + I);
+                return false;
+            }
+        }
+        Ideal<C> isec = null;
+        for ( Ideal<C> I : L ) {
+            if ( isec == null ) {
+                isec = I;
+            } else {
+                isec = isec.intersect(I);
+            }
+        }
+        return this.equals(isec);
     }
 
 }
