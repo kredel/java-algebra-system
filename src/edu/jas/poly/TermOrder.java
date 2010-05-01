@@ -17,8 +17,16 @@ import edu.jas.poly.ExpVector;
  * Term order class for ordered polynomials. 
  * Implements the most used term orders: 
  * graded, lexicographical, weight aray and block orders.
- * Does not implement orders by linear forms over Q[t].
+ * For the definitions see for example the articles 
+ * <a href="http://doi.acm.org/10.1145/43882.43887">Kredel, "Admissible term orderings used in computer algebra systems"</a> and
+ * <a href="http://doi.acm.org/10.1145/70936.70941">Sit, "Some comments on term-ordering in Gr&oumlbner basis computations"</a>.
+ * <b>Note: </b> the naming is not quite easy to understand: 
+ * in case of doubt use the term orders with "I" in the name, 
+ * like IGRLEX (the default) or INVLEX.
+ * Not all algorithms may work with all term orders, so watch your step.
+ * This class does not jet implement orders by linear forms over Q[t].
  * Objects of this class are immutable.
+ *
  * @author Heinz Kredel
  */
 
