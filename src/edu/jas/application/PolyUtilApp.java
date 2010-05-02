@@ -960,17 +960,19 @@ public class PolyUtilApp<C extends RingElem<C> > {
                  //System.out.println("ix = " + ix);
                  for ( RealAlgebraicNumber<D> rr : rra ) {
                      //System.out.println("rr.ring = " + rr.ring);
+                     GenPolynomial<D> pip2el = PolyUtil.<D> evaluateMain(ufac,pip2r,rr.ring.getRoot().left);
+                     GenPolynomial<D> pip2er = PolyUtil.<D> evaluateMain(ufac,pip2r,rr.ring.getRoot().right);
                      for ( List<RealAlgebraicNumber<D>> rx : ran ) {
                          //System.out.println("rx = " + rx);
                          RealAlgebraicRing<D> rar = rx.get(ix).ring;
                          //System.out.println("rar = " + rar);
-                         GenPolynomial<D> pip2e = PolyUtil.<D> evaluateMain(ufac,pip2r,rr.ring.getRoot().left);
-                         pip2e = convert(rar.algebraic.ring,pip2e);
+                         //GenPolynomial<D> pip2e = PolyUtil.<D> evaluateMain(ufac,pip2r,rr.ring.getRoot().left);
+                         GenPolynomial<D> pip2e = convert(rar.algebraic.ring,pip2el);
                          //System.out.println("pip2e = " + pip2e);
                          RealAlgebraicNumber<D> rel = new RealAlgebraicNumber<D>(rar,pip2e);
                          //System.out.println("rel = " + rel);
-                         pip2e = PolyUtil.<D> evaluateMain(ufac,pip2r,rr.ring.getRoot().right);
-                         pip2e = convert(rar.algebraic.ring,pip2e);
+                         //pip2e = PolyUtil.<D> evaluateMain(ufac,pip2r,rr.ring.getRoot().right);
+                         pip2e = convert(rar.algebraic.ring,pip2er);
                          //System.out.println("pip2e = " + pip2e);
                          RealAlgebraicNumber<D> rer = new RealAlgebraicNumber<D>(rar,pip2e);
                          //System.out.println("rer = " + rer);

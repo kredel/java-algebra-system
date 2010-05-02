@@ -1617,6 +1617,8 @@ public class IdealTest extends TestCase {
 		 }
 	     }
              System.out.println("");
+             System.out.println("iu = " + iu);
+             System.out.println("");
 	}
     }
 
