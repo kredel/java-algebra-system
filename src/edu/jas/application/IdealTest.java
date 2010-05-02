@@ -1605,20 +1605,19 @@ public class IdealTest extends TestCase {
         System.out.println("rzd = " + rzd);
         assertTrue("is contained in intersection ", I.isZeroDimDecomposition(rzd));
 
-	for ( IdealWithUniv<BigRational> iu : rzd ) {
-             IdealWithRealAlgebraicRoots<BigRational,BigRational> iur 
-		 = PolyUtilApp.<BigRational,BigRational> realAlgebraicRoots(iu);
-             System.out.println("iur = " + iur);
-             List<List<RealAlgebraicNumber<BigRational>>> ran = iur.ran;
-	     for ( List<RealAlgebraicNumber<BigRational>> rri : ran ) {
+        List<IdealWithRealAlgebraicRoots<BigRational,BigRational>> iur 
+		                        = PolyUtilApp.<BigRational,BigRational> realAlgebraicRoots(rzd);
+
+	for ( IdealWithRealAlgebraicRoots<BigRational,BigRational> iu : iur ) {
+             System.out.println("iu = " + iu);
+	     for ( List<RealAlgebraicNumber<BigRational>> rri : iu.ran ) {
                  System.out.println("\nreal root: ");
 		 for ( RealAlgebraicNumber<BigRational> rr : rri ) {
-		     System.out.println("rr = " + ( new BigDecimal(rr.magnitude()) ) + ", rr.ring = " + rr.ring);
+		     System.out.println("rr = " + ( new BigDecimal(rr.magnitude()) ) ); // + ", rr.ring = " + rr.ring);
 		 }
 	     }
              System.out.println("");
 	}
-
     }
 
 }

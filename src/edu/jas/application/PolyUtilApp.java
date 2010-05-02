@@ -896,20 +896,22 @@ public class PolyUtilApp<C extends RingElem<C> > {
         if ( I == null || I.ideal == null || I.ideal.isZERO() || I.upolys == null || I.upolys.size() == 0 ) {
             return new IdealWithRealAlgebraicRoots<C,D>(I,ran);
         }
-	GenPolynomialRing<D> fac = I.ideal.list.ring;
+        GenPolynomialRing<D> fac = I.ideal.list.ring;
         // case i == 0:
         GenPolynomial<D> p0 = I.upolys.get(0);
         GenPolynomial<D> p0p = selectWithVariable(I.ideal.list.list, fac.nvar-1 );
-	if ( p0p == null ) {
+        if ( p0p == null ) {
             throw new RuntimeException("no polynomial found in " + (fac.nvar-1) + " of  " + I.ideal);
-	}
-	System.out.println("p0  = " + p0);
-	System.out.println("p0p = " + p0p);
-	int[] dep0 = p0p.degreeVector().dependencyOnVariables();
-	System.out.println("dep0 = " + Arrays.toString(dep0));
-	if ( dep0.length != 1 ) {
+        }
+        //System.out.println("p0  = " + p0);
+        if ( logger.isInfoEnabled() ) {
+            logger.info("p0p = " + p0p);
+        }
+        int[] dep0 = p0p.degreeVector().dependencyOnVariables();
+        //System.out.println("dep0 = " + Arrays.toString(dep0));
+        if ( dep0.length != 1 ) {
             throw new RuntimeException("wrong number of variables " + Arrays.toString(dep0));
-	}
+        }
         List<RealAlgebraicNumber<D>> rra = RootFactory.<D> realAlgebraicNumbersIrred(p0);
         for ( RealAlgebraicNumber<D> rr : rra ) {
             List<RealAlgebraicNumber<D>> rl = new ArrayList<RealAlgebraicNumber<D>>();
@@ -923,68 +925,88 @@ public class PolyUtilApp<C extends RingElem<C> > {
              GenPolynomial<D> pip = selectWithVariable(I.ideal.list.list, fac.nvar-1-i );
              if ( pip == null ) {
                  throw new RuntimeException("no polynomial found in " + (fac.nvar-1-i) + " of  " + I.ideal);
-	     }
-             System.out.println("i   = " + i);
-             System.out.println("pi  = " + pi);
-	     System.out.println("pip = " + pip);
+             }
+             //System.out.println("i   = " + i);
+             //System.out.println("pi  = " + pi);
+             if ( logger.isInfoEnabled() ) {
+                 logger.info("pip = " + pip);
+             }
              int[] depi = pip.degreeVector().dependencyOnVariables();
-             System.out.println("depi = " + Arrays.toString(depi));
-	     if ( depi.length < 1 || depi.length > 2 ) {
-		 throw new RuntimeException("wrong number of variables " + Arrays.toString(depi));
-	     }
-             GenPolynomial<D> pip2 = null;
-             GenPolynomialRing<D> ufac = null;
-             GenPolynomial<GenPolynomial<D>> pip2r = null;
-	     int ix = -1;
-	     if ( depi.length > 1 ) {
-                 pip2 = removeUnusedVariables(pip);
-                 System.out.println("pip2 = " + pip2.ring);
-                 ufac = pip2.ring.contract(1);
-		 GenPolynomialRing<GenPolynomial<D>> rfac = new GenPolynomialRing<GenPolynomial<D>>(ufac,1);
-                 pip2r = PolyUtil.<D> recursive(rfac,pip2);
-		 ix = fac.nvar - 1 - depi[ depi.length-1 ];
-                 System.out.println("ix = " + ix);
-                 //GenPolynomial<D> pi0 = I.upolys.get(fac.nvar-1-ix);
-		 //rar = new RealAlgebraicRing<D>(pi0);
-	     }
+             //System.out.println("depi = " + Arrays.toString(depi));
+             if ( depi.length < 1 || depi.length > 2 ) {
+                 throw new RuntimeException("wrong number of variables " + Arrays.toString(depi));
+             }
              rra = RootFactory.<D> realAlgebraicNumbersIrred(pi);
-             for ( RealAlgebraicNumber<D> rr : rra ) {
-                 System.out.println("rr.ring = " + rr.ring);
-                 for ( List<RealAlgebraicNumber<D>> rx : ran ) {
-		     // select roots of the ideal I
-		     if ( depi.length == 1 ) {
-			 List<RealAlgebraicNumber<D>> ry = new ArrayList<RealAlgebraicNumber<D>>();
-			 ry.addAll(rx);
-			 ry.add(rr);
-			 rn.add(ry);
-		     } else {
+             if ( depi.length == 1 ) {
+                 // all combinations are roots of the ideal I
+                 for ( RealAlgebraicNumber<D> rr : rra ) {
+                     //System.out.println("rr.ring = " + rr.ring);
+                     for ( List<RealAlgebraicNumber<D>> rx : ran ) {
+                         //System.out.println("rx = " + rx);
+                         List<RealAlgebraicNumber<D>> ry = new ArrayList<RealAlgebraicNumber<D>>();
+                         ry.addAll(rx);
+                         ry.add(rr);
+                         rn.add(ry);
+                     }
+                 }
+             } else { // depi.length == 2
+                 // select roots of the ideal I
+                 GenPolynomial<D> pip2 = removeUnusedUpperVariables(pip);
+                 //System.out.println("pip2 = " + pip2.ring);
+                 GenPolynomialRing<D> ufac = ufac = pip2.ring.contract(1);
+                 GenPolynomialRing<GenPolynomial<D>> rfac = new GenPolynomialRing<GenPolynomial<D>>(ufac,1);
+                 GenPolynomial<GenPolynomial<D>> pip2r = PolyUtil.<D> recursive(rfac,pip2);
+                 int ix = fac.nvar - 1 - depi[ depi.length-1 ];
+                 //System.out.println("ix = " + ix);
+                 for ( RealAlgebraicNumber<D> rr : rra ) {
+                     //System.out.println("rr.ring = " + rr.ring);
+                     for ( List<RealAlgebraicNumber<D>> rx : ran ) {
+                         //System.out.println("rx = " + rx);
                          RealAlgebraicRing<D> rar = rx.get(ix).ring;
-			 GenPolynomial<D> pip2e = PolyUtil.<D> evaluateMain(ufac,pip2r,rr.ring.getRoot().left);
-                         pip2e = removeUnusedVariables(pip2e);
-                         System.out.println("pip2e = " + pip2e);
+                         //System.out.println("rar = " + rar);
+                         GenPolynomial<D> pip2e = PolyUtil.<D> evaluateMain(ufac,pip2r,rr.ring.getRoot().left);
+                         pip2e = convert(rar.algebraic.ring,pip2e);
+                         //System.out.println("pip2e = " + pip2e);
                          RealAlgebraicNumber<D> rel = new RealAlgebraicNumber<D>(rar,pip2e);
-                         System.out.println("rel = " + rel);
-			 pip2e = PolyUtil.<D> evaluateMain(ufac,pip2r,rr.ring.getRoot().right);
-                         pip2e = removeUnusedVariables(pip2e);
-                         System.out.println("pip2e = " + pip2e);
+                         //System.out.println("rel = " + rel);
+                         pip2e = PolyUtil.<D> evaluateMain(ufac,pip2r,rr.ring.getRoot().right);
+                         pip2e = convert(rar.algebraic.ring,pip2e);
+                         //System.out.println("pip2e = " + pip2e);
                          RealAlgebraicNumber<D> rer = new RealAlgebraicNumber<D>(rar,pip2e);
-                         System.out.println("rer = " + rer);
-			 int sl = rel.signum();
-			 int sr = rer.signum();
-                         System.out.println("sl = " + sl + ", sr = " + sr + ", sl*sr = " + (sl*sr));
-			 if ( sl*sr <= 0 ) {
-			     List<RealAlgebraicNumber<D>> ry = new ArrayList<RealAlgebraicNumber<D>>();
-			     ry.addAll(rx);
-			     ry.add(rr);
-			     rn.add(ry);
-			 }
-		     }
+                         //System.out.println("rer = " + rer);
+                         int sl = rel.signum();
+                         int sr = rer.signum();
+                         //System.out.println("sl = " + sl + ", sr = " + sr + ", sl*sr = " + (sl*sr));
+                         if ( sl*sr <= 0 ) {
+                             List<RealAlgebraicNumber<D>> ry = new ArrayList<RealAlgebraicNumber<D>>();
+                             ry.addAll(rx);
+                             ry.add(rr);
+                             rn.add(ry);
+                         }
+                     }
                  }
              }
              ran = rn;
         }
         IdealWithRealAlgebraicRoots<C,D> Ir = new IdealWithRealAlgebraicRoots<C,D>(I,ran);
         return Ir;
+    }
+
+
+    /**
+     * Construct real roots for zero dimensional ideal(G).
+     * @param I list of zero dimensional ideal with univariate irreducible polynomials.
+     * @return list of real algebraic roots for all ideal(I_i)
+     */
+    public static <C extends RingElem<C> & Rational, D extends GcdRingElem<D> & Rational> 
+      List<IdealWithRealAlgebraicRoots<C,D>> realAlgebraicRoots(List<IdealWithUniv<D>> I) {
+        List<IdealWithRealAlgebraicRoots<C,D>> lir = new ArrayList<IdealWithRealAlgebraicRoots<C,D>>(I.size());
+        for ( IdealWithUniv<D> iu : I ) {
+            IdealWithRealAlgebraicRoots<C,D> iur = PolyUtilApp.<C,D> realAlgebraicRoots(iu);
+            //System.out.println("iur = " + iur);
+            lir.add( iur );
+        }
+        return lir;
     }
 
 
@@ -1006,34 +1028,46 @@ public class PolyUtilApp<C extends RingElem<C> > {
 
 
     /**
-     * Remove all variables, which do not occur in polynomial.
+     * Remove all upper variables, which do not occur in polynomial.
      * @param p polynomial.
      * @return polynomial with removed variables
      */
     public static <C extends RingElem<C>> 
-      GenPolynomial<C> removeUnusedVariables(GenPolynomial<C> p) {
+      GenPolynomial<C> removeUnusedUpperVariables(GenPolynomial<C> p) {
         int[] dep = p.degreeVector().dependencyOnVariables();
         GenPolynomialRing<C> fac = p.ring;
-	if ( fac.nvar == dep.length ) { // all variables appear
+        if ( fac.nvar == dep.length ) { // all variables appear
             return p; 
-	}
-	int l = dep[0];
-	int r = dep[dep.length-1];
-	int n = l;
+        }
+        int l = dep[0];
+        int r = dep[dep.length-1];
+        int n = l;
         GenPolynomialRing<C> facr = fac.contract(n);
-	Map<ExpVector,GenPolynomial<C>> mpr = p.contract(facr);
-	if ( mpr.size() != 1 ) {
+        Map<ExpVector,GenPolynomial<C>> mpr = p.contract(facr);
+        if ( mpr.size() != 1 ) {
             throw new RuntimeException("this should not happen " + mpr);
-	}
-	GenPolynomial<C> pr = mpr.values().iterator().next();
-	n = fac.nvar-1-r;
-	if ( n == 0 ) {
-            System.out.println("pr = " + pr);
-	    return pr;
-	}
-
-        return pr; 
+        }
+        GenPolynomial<C> pr = mpr.values().iterator().next();
+        n = fac.nvar-1-r;
+        if ( n == 0 ) {
+            return pr;
+        } // else case not implemented
+        return pr;
     }    
+
+
+    /**
+     * Convert to a polynomial in given ring.
+     * @param fac result polynomial ring.
+     * @param p polynomial.
+     * @return polynomial in ring fac
+     * <b>Note: </b> if p can not be represented in fac then the results are unpredictable.
+     */
+    public static <C extends RingElem<C>> 
+      GenPolynomial<C> convert(GenPolynomialRing<C> fac, GenPolynomial<C> p) {
+        GenPolynomial<C> q = fac.parse( p.toString() );
+        return q;
+    }
 
 }
 
@@ -1089,7 +1123,29 @@ class IdealWithRealAlgebraicRoots<C extends RingElem<C> & Rational, D extends Gc
      */
     @Override
     public String toString() {
-        return super.toString() + "\nreal roots: " + ran.toString();
+        StringBuffer sb = new StringBuffer(super.toString() + "\nreal roots: ");
+        sb.append("[");
+        boolean f1 = true;
+        for ( List<RealAlgebraicNumber<D>> lr : ran ) {
+            if ( !f1 ) {
+                sb.append(", ");
+            } else {
+                f1 = false;
+            }
+            sb.append("[");
+            boolean f2 = true;
+            for ( RealAlgebraicNumber<D> rr : lr ) {
+                if ( !f2 ) {
+                    sb.append(", ");
+                } else {
+                    f2 = false;
+                }
+                 sb.append(rr.ring.toScript());
+            }
+            sb.append("]");
+        }
+        sb.append("]");
+        return sb.toString();
     }
 
 
