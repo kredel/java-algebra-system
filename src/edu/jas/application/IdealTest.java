@@ -1583,8 +1583,8 @@ public class IdealTest extends TestCase {
         Ideal<BigRational> I;
         L = new ArrayList<GenPolynomial<BigRational>>();
 
-        a = fac.parse("( x^2 - 7 )");
-        b = fac.parse("( y^2 - 5 )");
+        a = fac.parse("( x^2 - 5 )");
+        b = fac.parse("( y^2 - 7 )");
         c = fac.parse("( z^3 - x * y )");
 
         if (a.isZERO() || b.isZERO() || c.isZERO()) {
@@ -1613,9 +1613,10 @@ public class IdealTest extends TestCase {
 	     for ( List<RealAlgebraicNumber<BigRational>> rri : ran ) {
                  System.out.println("\nreal root: ");
 		 for ( RealAlgebraicNumber<BigRational> rr : rri ) {
-                      System.out.println("rr.ring = " + rr.ring);
+		     System.out.println("rr = " + ( new BigDecimal(rr.magnitude()) ) + ", rr.ring = " + rr.ring);
 		 }
 	     }
+             System.out.println("");
 	}
 
     }

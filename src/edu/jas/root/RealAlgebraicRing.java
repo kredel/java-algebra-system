@@ -105,6 +105,16 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> & Rational>
 
 
     /**
+     * Get the interval for the real root. <b>Note: </b> interval may
+     * shrink later.
+     * @return real root isolating interval
+     */
+    public synchronized Interval<C> getRoot() {
+       return root;
+    }
+
+
+    /**
      * Set a refined interval for the real root. <b>Note: </b> interval may
      * shrink eventually.
      * @param v interval.

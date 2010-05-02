@@ -5,6 +5,7 @@
 package edu.jas.application;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
@@ -895,8 +896,20 @@ public class PolyUtilApp<C extends RingElem<C> > {
         if ( I == null || I.ideal == null || I.ideal.isZERO() || I.upolys == null || I.upolys.size() == 0 ) {
             return new IdealWithRealAlgebraicRoots<C,D>(I,ran);
         }
+	GenPolynomialRing<D> fac = I.ideal.list.ring;
         // case i == 0:
         GenPolynomial<D> p0 = I.upolys.get(0);
+        GenPolynomial<D> p0p = selectWithVariable(I.ideal.list.list, fac.nvar-1 );
+	if ( p0p == null ) {
+            throw new RuntimeException("no polynomial found in " + (fac.nvar-1) + " of  " + I.ideal);
+	}
+	System.out.println("p0  = " + p0);
+	System.out.println("p0p = " + p0p);
+	int[] dep0 = p0p.degreeVector().dependencyOnVariables();
+	System.out.println("dep0 = " + Arrays.toString(dep0));
+	if ( dep0.length != 1 ) {
+            throw new RuntimeException("wrong number of variables " + Arrays.toString(dep0));
+	}
         List<RealAlgebraicNumber<D>> rra = RootFactory.<D> realAlgebraicNumbersIrred(p0);
         for ( RealAlgebraicNumber<D> rr : rra ) {
             List<RealAlgebraicNumber<D>> rl = new ArrayList<RealAlgebraicNumber<D>>();
@@ -907,15 +920,65 @@ public class PolyUtilApp<C extends RingElem<C> > {
         for ( int i = 1; i < I.upolys.size(); i++ ) {
              List<List<RealAlgebraicNumber<D>>> rn = new ArrayList<List<RealAlgebraicNumber<D>>>();
              GenPolynomial<D> pi = I.upolys.get(i);
+             GenPolynomial<D> pip = selectWithVariable(I.ideal.list.list, fac.nvar-1-i );
+             if ( pip == null ) {
+                 throw new RuntimeException("no polynomial found in " + (fac.nvar-1-i) + " of  " + I.ideal);
+	     }
+             System.out.println("i   = " + i);
+             System.out.println("pi  = " + pi);
+	     System.out.println("pip = " + pip);
+             int[] depi = pip.degreeVector().dependencyOnVariables();
+             System.out.println("depi = " + Arrays.toString(depi));
+	     if ( depi.length < 1 || depi.length > 2 ) {
+		 throw new RuntimeException("wrong number of variables " + Arrays.toString(depi));
+	     }
+             GenPolynomial<D> pip2 = null;
+             GenPolynomialRing<D> ufac = null;
+             GenPolynomial<GenPolynomial<D>> pip2r = null;
+	     int ix = -1;
+	     if ( depi.length > 1 ) {
+                 pip2 = removeUnusedVariables(pip);
+                 System.out.println("pip2 = " + pip2.ring);
+                 ufac = pip2.ring.contract(1);
+		 GenPolynomialRing<GenPolynomial<D>> rfac = new GenPolynomialRing<GenPolynomial<D>>(ufac,1);
+                 pip2r = PolyUtil.<D> recursive(rfac,pip2);
+		 ix = fac.nvar - 1 - depi[ depi.length-1 ];
+                 System.out.println("ix = " + ix);
+                 //GenPolynomial<D> pi0 = I.upolys.get(fac.nvar-1-ix);
+		 //rar = new RealAlgebraicRing<D>(pi0);
+	     }
              rra = RootFactory.<D> realAlgebraicNumbersIrred(pi);
              for ( RealAlgebraicNumber<D> rr : rra ) {
+                 System.out.println("rr.ring = " + rr.ring);
                  for ( List<RealAlgebraicNumber<D>> rx : ran ) {
 		     // select roots of the ideal I
-
-                     List<RealAlgebraicNumber<D>> ry = new ArrayList<RealAlgebraicNumber<D>>();
-                     ry.addAll(rx);
-                     ry.add(rr);
-                     rn.add(ry);
+		     if ( depi.length == 1 ) {
+			 List<RealAlgebraicNumber<D>> ry = new ArrayList<RealAlgebraicNumber<D>>();
+			 ry.addAll(rx);
+			 ry.add(rr);
+			 rn.add(ry);
+		     } else {
+                         RealAlgebraicRing<D> rar = rx.get(ix).ring;
+			 GenPolynomial<D> pip2e = PolyUtil.<D> evaluateMain(ufac,pip2r,rr.ring.getRoot().left);
+                         pip2e = removeUnusedVariables(pip2e);
+                         System.out.println("pip2e = " + pip2e);
+                         RealAlgebraicNumber<D> rel = new RealAlgebraicNumber<D>(rar,pip2e);
+                         System.out.println("rel = " + rel);
+			 pip2e = PolyUtil.<D> evaluateMain(ufac,pip2r,rr.ring.getRoot().right);
+                         pip2e = removeUnusedVariables(pip2e);
+                         System.out.println("pip2e = " + pip2e);
+                         RealAlgebraicNumber<D> rer = new RealAlgebraicNumber<D>(rar,pip2e);
+                         System.out.println("rer = " + rer);
+			 int sl = rel.signum();
+			 int sr = rer.signum();
+                         System.out.println("sl = " + sl + ", sr = " + sr + ", sl*sr = " + (sl*sr));
+			 if ( sl*sr <= 0 ) {
+			     List<RealAlgebraicNumber<D>> ry = new ArrayList<RealAlgebraicNumber<D>>();
+			     ry.addAll(rx);
+			     ry.add(rr);
+			     rn.add(ry);
+			 }
+		     }
                  }
              }
              ran = rn;
@@ -923,6 +986,54 @@ public class PolyUtilApp<C extends RingElem<C> > {
         IdealWithRealAlgebraicRoots<C,D> Ir = new IdealWithRealAlgebraicRoots<C,D>(I,ran);
         return Ir;
     }
+
+
+    /**
+     * Select polynomial with univariate leading term in variable i.
+     * @param i variable index.
+     * @return polynomial with head term in variable i
+     */
+    public static <C extends RingElem<C>> 
+      GenPolynomial<C> selectWithVariable(List<GenPolynomial<C>> P, int i) {
+        for ( GenPolynomial<C> p : P ) {
+            int[] dep = p.leadingExpVector().dependencyOnVariables();
+            if ( dep.length == 1 && dep[0] == i ) {
+                return p;
+            }
+        }
+        return null; // not found       
+    }    
+
+
+    /**
+     * Remove all variables, which do not occur in polynomial.
+     * @param p polynomial.
+     * @return polynomial with removed variables
+     */
+    public static <C extends RingElem<C>> 
+      GenPolynomial<C> removeUnusedVariables(GenPolynomial<C> p) {
+        int[] dep = p.degreeVector().dependencyOnVariables();
+        GenPolynomialRing<C> fac = p.ring;
+	if ( fac.nvar == dep.length ) { // all variables appear
+            return p; 
+	}
+	int l = dep[0];
+	int r = dep[dep.length-1];
+	int n = l;
+        GenPolynomialRing<C> facr = fac.contract(n);
+	Map<ExpVector,GenPolynomial<C>> mpr = p.contract(facr);
+	if ( mpr.size() != 1 ) {
+            throw new RuntimeException("this should not happen " + mpr);
+	}
+	GenPolynomial<C> pr = mpr.values().iterator().next();
+	n = fac.nvar-1-r;
+	if ( n == 0 ) {
+            System.out.println("pr = " + pr);
+	    return pr;
+	}
+
+        return pr; 
+    }    
 
 }
 
