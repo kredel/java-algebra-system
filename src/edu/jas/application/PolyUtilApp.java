@@ -46,6 +46,9 @@ import edu.jas.root.ComplexRootsSturm;
 import edu.jas.root.ComplexRootsAbstract;
 import edu.jas.root.RealRootsSturm;
 import edu.jas.root.RealRootAbstract;
+import edu.jas.root.RealAlgebraicNumber;
+import edu.jas.root.RealAlgebraicRing;
+import edu.jas.root.RootFactory;
 
 import edu.jas.util.ListUtil;
 
@@ -878,6 +881,115 @@ public class PolyUtilApp<C extends RingElem<C> > {
             }
         }
         return true;
+    }
+
+
+    /**
+     * Construct real roots for zero dimensional ideal(G).
+     * @param I zero dimensional ideal with univariate irreducible polynomials.
+     * @return list of real algebraic roots for ideal(G)
+     */
+    public static <C extends RingElem<C> & Rational, D extends GcdRingElem<D> & Rational> 
+      IdealWithRealAlgebraicRoots<C,D> realAlgebraicRoots(IdealWithUniv<D> I) {
+        List<List<RealAlgebraicNumber<D>>> ran = new ArrayList<List<RealAlgebraicNumber<D>>>();
+        if ( I == null || I.ideal == null || I.ideal.isZERO() || I.upolys == null || I.upolys.size() == 0 ) {
+            return new IdealWithRealAlgebraicRoots<C,D>(I,ran);
+        }
+        // case i == 0:
+        GenPolynomial<D> p0 = I.upolys.get(0);
+        List<RealAlgebraicNumber<D>> rra = RootFactory.<D> realAlgebraicNumbersIrred(p0);
+        for ( RealAlgebraicNumber<D> rr : rra ) {
+            List<RealAlgebraicNumber<D>> rl = new ArrayList<RealAlgebraicNumber<D>>();
+            rl.add(rr);
+            ran.add(rl);
+        }
+        // case i > 0:
+        for ( int i = 1; i < I.upolys.size(); i++ ) {
+             List<List<RealAlgebraicNumber<D>>> rn = new ArrayList<List<RealAlgebraicNumber<D>>>();
+             GenPolynomial<D> pi = I.upolys.get(i);
+             rra = RootFactory.<D> realAlgebraicNumbersIrred(pi);
+             for ( RealAlgebraicNumber<D> rr : rra ) {
+                 for ( List<RealAlgebraicNumber<D>> rx : ran ) {
+		     // select roots of the ideal I
+
+                     List<RealAlgebraicNumber<D>> ry = new ArrayList<RealAlgebraicNumber<D>>();
+                     ry.addAll(rx);
+                     ry.add(rr);
+                     rn.add(ry);
+                 }
+             }
+             ran = rn;
+        }
+        IdealWithRealAlgebraicRoots<C,D> Ir = new IdealWithRealAlgebraicRoots<C,D>(I,ran);
+        return Ir;
+    }
+
+}
+
+
+/**
+ * Container for Ideals together with univariate polynomials and real algebraic roots.
+ * @author Heinz Kredel
+ */
+class IdealWithRealAlgebraicRoots<C extends RingElem<C> & Rational, D extends GcdRingElem<D> & Rational> 
+               extends IdealWithUniv<D> implements Serializable {
+
+    /**
+     * The list of real algebraic roots.
+     */
+    public final List<List<RealAlgebraicNumber<D>>> ran;
+
+
+    /**
+     * Constructor not for use.
+     */
+    protected IdealWithRealAlgebraicRoots() {
+        throw new IllegalArgumentException("do not use this constructor");
+    }
+
+
+    /**
+     * Constructor.
+     * @param id the ideal
+     * @param up the list of univaraite polynomials
+     * @param rr the list of real algebraic roots
+     */
+    protected IdealWithRealAlgebraicRoots(Ideal<D> id, List<GenPolynomial<D>> up, 
+                                          List<List<RealAlgebraicNumber<D>>> rr) {
+        super(id,up);
+        ran = rr;
+    }
+
+
+    /**
+     * Constructor.
+     * @param iu the ideal with univariate polynomials
+     * @param rr the list of real algebraic roots
+     */
+    protected IdealWithRealAlgebraicRoots(IdealWithUniv<D> iu, List<List<RealAlgebraicNumber<D>>> rr) {
+        super(iu.ideal,iu.upolys);
+        ran = rr;
+    }
+
+
+    /**
+     * String representation of the ideal.
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return super.toString() + "\nreal roots: " + ran.toString();
+    }
+
+
+    /**
+     * Get a scripting compatible string representation.
+     * @return script compatible representation for this Element.
+     * @see edu.jas.structure.Element#toScript()
+     */
+    public String toScript() {
+        // Python case
+        return super.toScript() +  ",  " + ran.toString();
     }
 
 }
