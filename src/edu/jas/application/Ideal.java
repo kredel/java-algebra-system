@@ -1557,7 +1557,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
 
     /**
      * Zero dimensional ideal decompostition.
-     * See algorithm DIRGZD of BGK 1984.
+     * See algorithm DIRGZD of BGK 1986.
      * @return intersection of ideals G_i with ideal(this) subseteq cap_i( ideal(G_i) ) 
      */
     public List<IdealWithUniv<C>> zeroDimDecomposition() {
@@ -1762,7 +1762,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
 
     /**
      * Normal position index, separate more than 2 variables.
-     * @see mas.masring.DIPDEC0#DIGISR
+     * See also <a href="http://krum.rz.uni-mannheim.de/mas/src/masring/DIPDEC0.mi.html">mas.masring.DIPDEC0#DIGISR</a>
      * @return (i,j) for non-normal variables 
      */
     public int[] normalPositionIndex2Vars() {
@@ -1825,7 +1825,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
 
     /**
      * Normal position index, separate multiple univariate polynomials.
-     * @see mas.masring.DIPDEC0#DIGISM
+     * See also <a href="http://krum.rz.uni-mannheim.de/mas/src/masring/DIPDEC0.mi.html">mas.masring.DIPDEC0#DIGISM</a>
      * @return (i,j) for non-normal variables 
      */
     public int[] normalPositionIndexUnivars() {
