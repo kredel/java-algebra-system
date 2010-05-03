@@ -151,7 +151,7 @@ public class IdealTest extends TestCase {
     /**
      * Test Ideal sum.
      */
-    public void xtestIdealSum() {
+    public void testIdealSum() {
 
         Ideal<BigRational> I;
         Ideal<BigRational> J;
@@ -268,7 +268,7 @@ public class IdealTest extends TestCase {
     /**
      * Test Ideal product.
      */
-    public void xtestIdealProduct() {
+    public void testIdealProduct() {
 
         Ideal<BigRational> I;
         Ideal<BigRational> J;
@@ -391,7 +391,7 @@ public class IdealTest extends TestCase {
     /**
      * Test Ideal quotient.
      */
-    public void xtestIdealQuotient() {
+    public void testIdealQuotient() {
 
         Ideal<BigRational> I;
         Ideal<BigRational> J;
@@ -505,7 +505,7 @@ public class IdealTest extends TestCase {
     /**
      * Test Ideal infinite quotient.
      */
-    public void xtestIdealInfiniteQuotient() {
+    public void testIdealInfiniteQuotient() {
 
         Ideal<BigRational> I;
         Ideal<BigRational> J;
@@ -585,7 +585,7 @@ public class IdealTest extends TestCase {
     /**
      * Test Ideal infinite quotient with Rabinowich trick.
      */
-    public void xtestIdealInfiniteQuotientRabi() {
+    public void testIdealInfiniteQuotientRabi() {
 
         Ideal<BigRational> I;
         Ideal<BigRational> J;
@@ -676,7 +676,7 @@ public class IdealTest extends TestCase {
     /**
      * Test Ideal radical membership.
      */
-    public void xtestIdealRadicalMember() {
+    public void testIdealRadicalMember() {
 
         Ideal<BigRational> I;
         Ideal<BigRational> J;
@@ -745,7 +745,7 @@ public class IdealTest extends TestCase {
     /**
      * Test Ideal common zeros.
      */
-    public void xtestIdealCommonZeros() {
+    public void testIdealCommonZeros() {
 
         Ideal<BigRational> I;
         L = new ArrayList<GenPolynomial<BigRational>>();
@@ -784,7 +784,7 @@ public class IdealTest extends TestCase {
     /**
      * Test Ideal dimension.
      */
-    public void xtestIdealDimension() {
+    public void testIdealDimension() {
 
         Ideal<BigRational> I;
         L = new ArrayList<GenPolynomial<BigRational>>();
@@ -851,7 +851,7 @@ public class IdealTest extends TestCase {
     /**
      * Test Ideal term order optimization.
      */
-    public void xtestIdealTopt() {
+    public void testIdealTopt() {
 
         Ideal<BigRational> I;
         Ideal<BigRational> J;
@@ -941,7 +941,7 @@ public class IdealTest extends TestCase {
     /**
      * Test elimination Ideals.
      */
-    public void xtestElimIdeal() {
+    public void testElimIdeal() {
 
         String[] vars = fac.getVars();
         //System.out.println("vars = " + Arrays.toString(vars));
@@ -1002,7 +1002,7 @@ public class IdealTest extends TestCase {
     /**
      * Test univariate polynomials in ideal.
      */
-    public void xtestUnivPoly() {
+    public void testUnivPoly() {
         String[] vars;
 
         BigRational coeff = new BigRational(17, 1);
@@ -1055,7 +1055,7 @@ public class IdealTest extends TestCase {
     /**
      * Test complex roots univariate polynomials in zero dim ideal.
      */
-    public void xtestComplexRoot() {
+    public void testComplexRoot() {
         String[] vars;
 
         BigRational coeff = new BigRational(17, 1);
@@ -1122,7 +1122,7 @@ public class IdealTest extends TestCase {
     /**
      * Test real roots univariate polynomials in zero dim ideal.
      */
-    public void xtestRealRoot() {
+    public void testRealRoot() {
         String[] vars;
 
         BigRational coeff = new BigRational(17, 1);
@@ -1185,7 +1185,7 @@ public class IdealTest extends TestCase {
     /**
      * Test zero dimensional decomposition.
      */
-    public void xtestZeroDimDecomp() {
+    public void testZeroDimDecomp() {
         String[] vars;
 
         BigRational coeff = new BigRational(17, 1);
@@ -1230,7 +1230,7 @@ public class IdealTest extends TestCase {
     /**
      * Test real roots univariate polynomials in zero dim ideal.
      */
-    public void xtestIdealRealRoot() {
+    public void testIdealRealRoot() {
         String[] vars;
 
         BigRational coeff = new BigRational(17, 1);
@@ -1297,7 +1297,7 @@ public class IdealTest extends TestCase {
     /**
      * Test complex roots univariate polynomials in zero dim ideal.
      */
-    public void xtestIdealComplexRoot() {
+    public void testIdealComplexRoot() {
         String[] vars;
 
         BigRational coeff = new BigRational(17, 1);
@@ -1371,7 +1371,7 @@ public class IdealTest extends TestCase {
     /**
      * Test normal position.
      */
-    public void xtestNormalPosition() {
+    public void testNormalPosition() {
         String[] vars;
 
         BigRational coeff = new BigRational(17, 1);
@@ -1440,7 +1440,7 @@ public class IdealTest extends TestCase {
     /**
      * Test 0-dim root decomposition.
      */
-    public void xtestRootDecomposition() {
+    public void testRootDecomposition() {
         String[] vars;
 
         BigRational coeff = new BigRational(17, 1);
@@ -1482,7 +1482,7 @@ public class IdealTest extends TestCase {
     /**
      * Test 0-dim prime decomposition.
      */
-    public void xtestPrimeDecomposition() {
+    public void testPrimeDecomposition() {
         String[] vars;
 
         BigRational coeff = new BigRational(17, 1);
@@ -1525,7 +1525,7 @@ public class IdealTest extends TestCase {
     /**
      * Test 0-dim primary decomposition.
      */
-    public void xtestPrimaryDecomposition() {
+    public void testPrimaryDecomposition() {
         String[] vars;
 
         BigRational coeff = new BigRational(17, 1);
@@ -1600,20 +1600,21 @@ public class IdealTest extends TestCase {
         assertTrue("isGB( I )", I.isGB());
         //System.out.println("I = " + I);
 
-        //List<IdealWithUniv<BigRational>> rzd = I.zeroDimRootDecomposition();
-        //System.out.println("I = " + I);
-        //System.out.println("rzd = " + rzd);
-        //assertTrue("is contained in intersection ", I.isZeroDimDecomposition(rzd));
-
         List<IdealWithRealAlgebraicRoots<BigRational,BigRational>> iur;
         iur = PolyUtilApp.<BigRational,BigRational> realAlgebraicRoots(I);
 
+        List<IdealWithUniv<BigRational>> iul = new ArrayList<IdealWithUniv<BigRational>>();
 	for ( IdealWithRealAlgebraicRoots<BigRational,BigRational> iu : iur ) {
-	    System.out.println("iu = " + iu);
-            System.out.println("");
+	    iul.add( (IdealWithUniv<BigRational>) iu );
+	}
+        assertTrue("is contained in intersection ", I.isZeroDimDecomposition(iul));
+
+	for ( IdealWithRealAlgebraicRoots<BigRational,BigRational> iu : iur ) {
+	    //System.out.println("iu = " + iu);
+            //System.out.println("");
             List<List<BigDecimal>> rd = iu.decimalApproximation();
-            System.out.println("iu = " + iu);
-            System.out.println("");
+            //System.out.println("iu = " + iu);
+            //System.out.println("");
 	}
     }
 

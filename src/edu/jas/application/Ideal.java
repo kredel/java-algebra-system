@@ -42,8 +42,8 @@ import edu.jas.ufd.FactorFactory;
 
 
 /**
- * Ideal implements some methods for ideal arithmetic, for example intersection
- * and quotient.
+ * Ideal implements some methods for ideal arithmetic, for example intersection,
+ * quotient and zero dimensional ideal decomposition.
  * @author Heinz Kredel
  */
 public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Serializable, Cloneable {
