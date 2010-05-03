@@ -1070,6 +1070,20 @@ public class PolyUtilApp<C extends RingElem<C> > {
         return q;
     }
 
+
+    /**
+     * Construct exact set of real roots for zero dimensional ideal(G).
+     * @param I zero dimensional ideal.
+     * @return list of coordinates of real roots for ideal(G)
+     */
+    public static <C extends RingElem<C> & Rational, D extends GcdRingElem<D> & Rational> 
+      List<IdealWithRealAlgebraicRoots<C,D>> realAlgebraicRoots(Ideal<D> I) {
+        List<IdealWithUniv<D>> Ir = I.zeroDimRootDecomposition();
+        //System.out.println("Ir = " + Ir);
+	List<IdealWithRealAlgebraicRoots<C,D>> roots = PolyUtilApp.<C,D> realAlgebraicRoots(Ir);
+        return roots;
+    }
+
 }
 
 
@@ -1087,6 +1101,12 @@ class IdealWithRealAlgebraicRoots<C extends RingElem<C> & Rational, D extends Gc
 
 
     /**
+     * The list of decimal approximations of the real algebraic roots.
+     */
+    protected List<List<BigDecimal>> droots = null;
+
+
+    /**
      * Constructor not for use.
      */
     protected IdealWithRealAlgebraicRoots() {
@@ -1100,8 +1120,8 @@ class IdealWithRealAlgebraicRoots<C extends RingElem<C> & Rational, D extends Gc
      * @param up the list of univaraite polynomials
      * @param rr the list of real algebraic roots
      */
-    protected IdealWithRealAlgebraicRoots(Ideal<D> id, List<GenPolynomial<D>> up, 
-                                          List<List<RealAlgebraicNumber<D>>> rr) {
+    public IdealWithRealAlgebraicRoots(Ideal<D> id, List<GenPolynomial<D>> up, 
+                                       List<List<RealAlgebraicNumber<D>>> rr) {
         super(id,up);
         ran = rr;
     }
@@ -1112,7 +1132,7 @@ class IdealWithRealAlgebraicRoots<C extends RingElem<C> & Rational, D extends Gc
      * @param iu the ideal with univariate polynomials
      * @param rr the list of real algebraic roots
      */
-    protected IdealWithRealAlgebraicRoots(IdealWithUniv<D> iu, List<List<RealAlgebraicNumber<D>>> rr) {
+    public IdealWithRealAlgebraicRoots(IdealWithUniv<D> iu, List<List<RealAlgebraicNumber<D>>> rr) {
         super(iu.ideal,iu.upolys);
         ran = rr;
     }
@@ -1124,7 +1144,7 @@ class IdealWithRealAlgebraicRoots<C extends RingElem<C> & Rational, D extends Gc
      */
     @Override
     public String toString() {
-        StringBuffer sb = new StringBuffer(super.toString() + "\nreal roots: ");
+        StringBuffer sb = new StringBuffer(super.toString() + "\nreal roots:\n");
         sb.append("[");
         boolean f1 = true;
         for ( List<RealAlgebraicNumber<D>> lr : ran ) {
@@ -1146,6 +1166,13 @@ class IdealWithRealAlgebraicRoots<C extends RingElem<C> & Rational, D extends Gc
             sb.append("]");
         }
         sb.append("]");
+	if ( droots != null ) {
+            sb.append("\ndecimal real root approximation:\n");
+            for ( List<BigDecimal> d : droots ) {
+		sb.append(d.toString());
+                sb.append("\n");
+	    }
+	}
         return sb.toString();
     }
 
@@ -1158,6 +1185,27 @@ class IdealWithRealAlgebraicRoots<C extends RingElem<C> & Rational, D extends Gc
     public String toScript() {
         // Python case
         return super.toScript() +  ",  " + ran.toString();
+    }
+
+
+    /**
+     * Get decimal approximation of the real root tuples.
+     */
+    public synchronized List<List<BigDecimal>> decimalApproximation() {
+	if ( this.droots != null ) {
+	    return droots;
+	}
+	List<List<BigDecimal>> rroots = new ArrayList<List<BigDecimal>>();
+	for ( List<RealAlgebraicNumber<D>> rri : this.ran ) {
+            List<BigDecimal> r = new ArrayList<BigDecimal>();
+	    for ( RealAlgebraicNumber<D> rr : rri ) {
+                BigDecimal d = new BigDecimal(rr.magnitude());
+		r.add(d);
+	    }
+	    rroots.add(r);
+	}
+	droots = rroots;
+	return rroots;
     }
 
 }
@@ -1190,8 +1238,8 @@ class IdealWithRealRoots<C extends GcdRingElem<C>> extends IdealWithUniv<C> impl
      * @param up the list of univaraite polynomials
      * @param rr the list of real roots
      */
-    protected IdealWithRealRoots(Ideal<C> id, List<GenPolynomial<C>> up, 
-                                 List<List<BigDecimal>> rr) {
+    public IdealWithRealRoots(Ideal<C> id, List<GenPolynomial<C>> up, 
+                              List<List<BigDecimal>> rr) {
         super(id,up);
         rroots = rr;
     }
@@ -1202,7 +1250,7 @@ class IdealWithRealRoots<C extends GcdRingElem<C>> extends IdealWithUniv<C> impl
      * @param iu the ideal with univariate polynomials
      * @param rr the list of real roots
      */
-    protected IdealWithRealRoots(IdealWithUniv<C> iu, List<List<BigDecimal>> rr) {
+    public IdealWithRealRoots(IdealWithUniv<C> iu, List<List<BigDecimal>> rr) {
         super(iu.ideal,iu.upolys);
         rroots = rr;
     }
@@ -1258,8 +1306,8 @@ class IdealWithComplexRoots<C extends GcdRingElem<C>> extends IdealWithUniv<C> i
      * @param up the list of univaraite polynomials
      * @param cr the list of complex roots
      */
-    protected IdealWithComplexRoots(Ideal<C> id, List<GenPolynomial<C>> up, 
-                                    List<List<Complex<BigDecimal>>> cr) {
+    public IdealWithComplexRoots(Ideal<C> id, List<GenPolynomial<C>> up, 
+                                 List<List<Complex<BigDecimal>>> cr) {
         super(id,up);
         croots = cr;
     }
@@ -1270,7 +1318,7 @@ class IdealWithComplexRoots<C extends GcdRingElem<C>> extends IdealWithUniv<C> i
      * @param iu the ideal with univariate polynomials
      * @param cr the list of complex roots
      */
-    protected IdealWithComplexRoots(IdealWithUniv<C> iu, List<List<Complex<BigDecimal>>> cr) {
+    public IdealWithComplexRoots(IdealWithUniv<C> iu, List<List<Complex<BigDecimal>>> cr) {
         super(iu.ideal,iu.upolys);
         croots = cr;
     }

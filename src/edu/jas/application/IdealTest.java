@@ -1600,25 +1600,20 @@ public class IdealTest extends TestCase {
         assertTrue("isGB( I )", I.isGB());
         //System.out.println("I = " + I);
 
-        List<IdealWithUniv<BigRational>> rzd = I.zeroDimRootDecomposition();
-        System.out.println("I = " + I);
-        System.out.println("rzd = " + rzd);
-        assertTrue("is contained in intersection ", I.isZeroDimDecomposition(rzd));
+        //List<IdealWithUniv<BigRational>> rzd = I.zeroDimRootDecomposition();
+        //System.out.println("I = " + I);
+        //System.out.println("rzd = " + rzd);
+        //assertTrue("is contained in intersection ", I.isZeroDimDecomposition(rzd));
 
-        List<IdealWithRealAlgebraicRoots<BigRational,BigRational>> iur 
-		                        = PolyUtilApp.<BigRational,BigRational> realAlgebraicRoots(rzd);
+        List<IdealWithRealAlgebraicRoots<BigRational,BigRational>> iur;
+        iur = PolyUtilApp.<BigRational,BigRational> realAlgebraicRoots(I);
 
 	for ( IdealWithRealAlgebraicRoots<BigRational,BigRational> iu : iur ) {
-             System.out.println("iu = " + iu);
-	     for ( List<RealAlgebraicNumber<BigRational>> rri : iu.ran ) {
-                 System.out.println("\nreal root: ");
-		 for ( RealAlgebraicNumber<BigRational> rr : rri ) {
-		     System.out.println("rr = " + ( new BigDecimal(rr.magnitude()) ) ); // + ", rr.ring = " + rr.ring);
-		 }
-	     }
-             System.out.println("");
-             System.out.println("iu = " + iu);
-             System.out.println("");
+	    System.out.println("iu = " + iu);
+            System.out.println("");
+            List<List<BigDecimal>> rd = iu.decimalApproximation();
+            System.out.println("iu = " + iu);
+            System.out.println("");
 	}
     }
 
