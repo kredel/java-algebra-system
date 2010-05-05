@@ -2009,6 +2009,30 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
      * @return intersection of primary ideals G_i with ideal(this) = cap_i(
      *         ideal(G_i) )
      */
+    public List<Ideal<C>> zeroDimPrimeDecompositionElim(List<IdealWithUniv<C>> pdec) {
+        List<Ideal<C>> dec = new ArrayList<Ideal<C>>();
+        if (this.isZERO()) {
+            return dec;
+        }
+        if (this.isONE()) {
+            dec.add(pdec.get(0).ideal);
+            return dec;
+        }
+        List<Ideal<C>> qdec = new ArrayList<Ideal<C>>();
+        for (IdealWithUniv<C> Ip : pdec) {
+            Ideal<C> Is = Ip.ideal.eliminate(list.ring);
+            qdec.add(Is);
+        }
+        return qdec;
+    }
+
+
+    /**
+     * Zero dimensional ideal primary decompostition.
+     * @param pdeg list of prime ideals G_i
+     * @return intersection of primary ideals G_i with ideal(this) = cap_i(
+     *         ideal(G_i) )
+     */
     public List<Ideal<C>> zeroDimPrimaryDecomposition(List<IdealWithUniv<C>> pdec) {
         List<Ideal<C>> dec = new ArrayList<Ideal<C>>();
         if (this.isZERO()) {

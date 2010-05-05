@@ -302,6 +302,8 @@ class Ideal:
            self.list = pylist2arraylist(list,rec=1);
         self.pset = OrderedPolynomialList(ring.ring,self.list);
         self.roots = None;
+        self.prime = None;
+        self.primary = None;
 
     def __str__(self):
         '''Create a string representation.
@@ -483,6 +485,30 @@ class Ideal:
             for Dr in Ir.decimalApproximation():
                 print str(Dr);
             print;
+
+    def radicalDecomp(self):
+        '''Compute radical decomposition of 0-dim ideal.
+        '''
+        I = jas.application.Ideal(self.pset);
+        self.radical = I.zeroDimRadicalDecomposition();
+        return self.radical;
+
+    def primeDecomp(self):
+        '''Compute prime decomposition of 0-dim ideal.
+        '''
+        I = jas.application.Ideal(self.pset);
+        self.prime = I.zeroDimPrimeDecomposition();
+        self.primeelim = I.zeroDimPrimeDecompositionElim(self.prime);
+        return self.primeelim;
+
+    def primaryDecomp(self):
+        '''Compute primary decomposition of 0-dim ideal.
+        '''
+        I = jas.application.Ideal(self.pset);
+        if self.prime == None:
+            self.prime = I.zeroDimPrimeDecomposition();
+        self.primary = I.zeroDimPrimaryDecomposition(self.prime);
+        return self.primary;
 
     def toInteger(self):
         '''Convert rational coefficients to integer coefficients.
