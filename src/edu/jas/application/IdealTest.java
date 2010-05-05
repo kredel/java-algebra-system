@@ -6,7 +6,6 @@ package edu.jas.application;
 
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import junit.framework.Test;
@@ -15,30 +14,19 @@ import junit.framework.TestSuite;
 
 import org.apache.log4j.BasicConfigurator;
 
-import edu.jas.arith.BigRational;
-import edu.jas.arith.Rational;
 import edu.jas.arith.BigDecimal;
-import edu.jas.kern.ComputerThreads;
+import edu.jas.arith.BigRational;
 import edu.jas.gb.GroebnerBase;
 import edu.jas.gb.GroebnerBaseSeq;
+import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
-import edu.jas.poly.PolynomialList;
 import edu.jas.poly.PolyUtil;
+import edu.jas.poly.PolynomialList;
 import edu.jas.poly.TermOrder;
-import edu.jas.util.KsubSet;
-import edu.jas.util.ListUtil;
 import edu.jas.structure.Complex;
 import edu.jas.structure.ComplexRing;
-import edu.jas.structure.RingElem;
-import edu.jas.structure.RingFactory;
-import edu.jas.structure.GcdRingElem;
-import edu.jas.root.ComplexRootsSturm;
-import edu.jas.root.ComplexRootsAbstract;
-import edu.jas.root.RealRootsSturm;
-import edu.jas.root.RealRootAbstract;
-import edu.jas.root.RealAlgebraicNumber;
-import edu.jas.root.RealAlgebraicRing;
+import edu.jas.util.KsubSet;
 
 
 /**
@@ -1006,7 +994,7 @@ public class IdealTest extends TestCase {
         String[] vars;
 
         BigRational coeff = new BigRational(17, 1);
-        to = new TermOrder( TermOrder.INVLEX);
+        to = new TermOrder(TermOrder.INVLEX);
         vars = new String[] { "x", "y", "z" };
         fac = new GenPolynomialRing<BigRational>(coeff, rl, to, vars);
 
@@ -1034,18 +1022,18 @@ public class IdealTest extends TestCase {
         assertTrue("isGB( I )", I.isGB());
         //System.out.println("I = " + I);
 
-        for ( int i = 0; i < rl; i++ ) { // rl
-            GenPolynomial<BigRational> u = I.constructUnivariate(rl-1-i);
+        for (int i = 0; i < rl; i++) { // rl
+            GenPolynomial<BigRational> u = I.constructUnivariate(rl - 1 - i);
             //System.out.println("u = " + u);
-            GenPolynomial<BigRational> U = fac.parse( u.toString() );
+            GenPolynomial<BigRational> U = fac.parse(u.toString());
             //System.out.println("U = " + U + "\n");
             assertTrue("I.contains(U) ", I.contains(U));
         }
 
         List<GenPolynomial<BigRational>> Us = I.constructUnivariate();
-        for ( GenPolynomial<BigRational> u : Us ) {
+        for (GenPolynomial<BigRational> u : Us) {
             //System.out.println("u = " + u);
-            GenPolynomial<BigRational> U = fac.parse( u.toString() );
+            GenPolynomial<BigRational> U = fac.parse(u.toString());
             //System.out.println("U = " + U + "\n");
             assertTrue("I.contains(U) ", I.contains(U));
         }
@@ -1059,7 +1047,7 @@ public class IdealTest extends TestCase {
         String[] vars;
 
         BigRational coeff = new BigRational(17, 1);
-        to = new TermOrder( TermOrder.INVLEX);
+        to = new TermOrder(TermOrder.INVLEX);
         vars = new String[] { "x", "y", "z" };
         fac = new GenPolynomialRing<BigRational>(coeff, rl, to, vars);
 
@@ -1087,29 +1075,30 @@ public class IdealTest extends TestCase {
         assertTrue("isGB( I )", I.isGB());
         //System.out.println("I = " + I);
 
-        BigRational eps = new BigRational(1,1000000); 
+        BigRational eps = new BigRational(1, 1000000);
         eps = eps.multiply(eps);
         eps = eps.multiply(eps).multiply(eps);
         BigDecimal e = new BigDecimal(eps.getRational());
         e = e.abs(); //.multiply(e); 
 
         BigDecimal dc = BigDecimal.ONE;
-        GenPolynomialRing<BigDecimal> dfac = new GenPolynomialRing<BigDecimal>(dc,fac);
+        GenPolynomialRing<BigDecimal> dfac = new GenPolynomialRing<BigDecimal>(dc, fac);
         //System.out.println("dfac = " + dfac);
         ComplexRing<BigDecimal> dcc = new ComplexRing<BigDecimal>(dc);
-        GenPolynomialRing<Complex<BigDecimal>> dcfac = new GenPolynomialRing<Complex<BigDecimal>>(dcc,dfac);
+        GenPolynomialRing<Complex<BigDecimal>> dcfac = new GenPolynomialRing<Complex<BigDecimal>>(dcc, dfac);
         //System.out.println("dcfac = " + dcfac);
 
-        List<List<Complex<BigDecimal>>> roots = PolyUtilApp.<BigRational,BigRational> complexRootTuples(I, eps);
+        List<List<Complex<BigDecimal>>> roots = PolyUtilApp.<BigRational, BigRational> complexRootTuples(I,
+                eps);
         //System.out.println("roots = " + roots + "\n");
-        for ( GenPolynomial<BigRational> p : I.getList() ) {
-            GenPolynomial<BigDecimal> dp = PolyUtil.<BigRational> decimalFromRational(dfac,p);
-            GenPolynomial<Complex<BigDecimal>> dpc = PolyUtil.<BigDecimal> toComplex(dcfac,dp);
+        for (GenPolynomial<BigRational> p : I.getList()) {
+            GenPolynomial<BigDecimal> dp = PolyUtil.<BigRational> decimalFromRational(dfac, p);
+            GenPolynomial<Complex<BigDecimal>> dpc = PolyUtil.<BigDecimal> toComplex(dcfac, dp);
             //System.out.println("dpc = " + dpc);
-            for ( List<Complex<BigDecimal>> r : roots ) {
+            for (List<Complex<BigDecimal>> r : roots) {
                 //System.out.println("r = " + r);
-                Complex<BigDecimal> ev = PolyUtil.<Complex<BigDecimal>> evaluateAll(dcc,dcfac,dpc,r);
-                if ( ev.norm().getRe().compareTo(e) > 0 ) {
+                Complex<BigDecimal> ev = PolyUtil.<Complex<BigDecimal>> evaluateAll(dcc, dcfac, dpc, r);
+                if (ev.norm().getRe().compareTo(e) > 0) {
                     System.out.println("ev = " + ev);
                     fail("ev > eps : " + ev + " > " + e);
                 }
@@ -1126,7 +1115,7 @@ public class IdealTest extends TestCase {
         String[] vars;
 
         BigRational coeff = new BigRational(17, 1);
-        to = new TermOrder( TermOrder.INVLEX);
+        to = new TermOrder(TermOrder.INVLEX);
         vars = new String[] { "x", "y", "z" };
         fac = new GenPolynomialRing<BigRational>(coeff, rl, to, vars);
 
@@ -1154,25 +1143,25 @@ public class IdealTest extends TestCase {
         assertTrue("isGB( I )", I.isGB());
         //System.out.println("I = " + I);
 
-        BigRational eps = new BigRational(1,1000000); 
+        BigRational eps = new BigRational(1, 1000000);
         eps = eps.multiply(eps);
         eps = eps.multiply(eps).multiply(eps);
         BigDecimal e = new BigDecimal(eps.getRational());
         e = e.abs(); //.multiply(e);
 
-        List<List<BigDecimal>> roots = PolyUtilApp.<BigRational,BigRational> realRootTuples(I, eps);
+        List<List<BigDecimal>> roots = PolyUtilApp.<BigRational, BigRational> realRootTuples(I, eps);
         //System.out.println("roots = " + roots + "\n");
         // polynomials with decimal coefficients
         BigDecimal dc = BigDecimal.ONE;
-        GenPolynomialRing<BigDecimal> dfac = new GenPolynomialRing<BigDecimal>(dc,fac);
+        GenPolynomialRing<BigDecimal> dfac = new GenPolynomialRing<BigDecimal>(dc, fac);
         //System.out.println("dfac = " + dfac);
-        for ( GenPolynomial<BigRational> p : I.getList() ) {
-            GenPolynomial<BigDecimal> dp = PolyUtil.<BigRational> decimalFromRational(dfac,p);
+        for (GenPolynomial<BigRational> p : I.getList()) {
+            GenPolynomial<BigDecimal> dp = PolyUtil.<BigRational> decimalFromRational(dfac, p);
             //System.out.println("dp = " + dp);
-            for ( List<BigDecimal> r : roots ) {
+            for (List<BigDecimal> r : roots) {
                 //System.out.println("r = " + r);
-                BigDecimal ev = PolyUtil.<BigDecimal> evaluateAll(dc,dfac,dp,r);
-                if ( ev.abs().compareTo(e) > 0 ) {
+                BigDecimal ev = PolyUtil.<BigDecimal> evaluateAll(dc, dfac, dp, r);
+                if (ev.abs().compareTo(e) > 0) {
                     System.out.println("ev = " + ev);
                     fail("ev > eps : " + ev + " > " + e);
                 }
@@ -1189,7 +1178,7 @@ public class IdealTest extends TestCase {
         String[] vars;
 
         BigRational coeff = new BigRational(17, 1);
-        to = new TermOrder( TermOrder.INVLEX);
+        to = new TermOrder(TermOrder.INVLEX);
         vars = new String[] { "x", "y", "z" };
         fac = new GenPolynomialRing<BigRational>(coeff, rl, to, vars);
 
@@ -1234,7 +1223,7 @@ public class IdealTest extends TestCase {
         String[] vars;
 
         BigRational coeff = new BigRational(17, 1);
-        to = new TermOrder( TermOrder.INVLEX);
+        to = new TermOrder(TermOrder.INVLEX);
         vars = new String[] { "x", "y", "z" };
         fac = new GenPolynomialRing<BigRational>(coeff, rl, to, vars);
 
@@ -1266,25 +1255,26 @@ public class IdealTest extends TestCase {
         //System.out.println("zd = " + zd);
         assertTrue("is decomposition ", I.isZeroDimDecomposition(zd));
 
-        BigRational eps = new BigRational(1,1000000); 
+        BigRational eps = new BigRational(1, 1000000);
         eps = eps.multiply(eps);
         eps = eps.multiply(eps).multiply(eps);
         BigDecimal e = new BigDecimal(eps.getRational());
         e = e.abs(); //.multiply(e);
         BigDecimal dc = BigDecimal.ONE;
 
-        List<IdealWithRealRoots<BigRational>> roots = PolyUtilApp.<BigRational,BigRational> realRoots(zd, eps);
+        List<IdealWithRealRoots<BigRational>> roots = PolyUtilApp.<BigRational, BigRational> realRoots(zd,
+                eps);
         //System.out.println("roots = " + roots + "\n");
 
-        for ( IdealWithRealRoots<BigRational> Ir : roots ) {
+        for (IdealWithRealRoots<BigRational> Ir : roots) {
             List<GenPolynomial<BigRational>> L = Ir.ideal.getList();
-            List<GenPolynomial<BigDecimal>> Ld = new ArrayList<GenPolynomial<BigDecimal>>( L.size() );
+            List<GenPolynomial<BigDecimal>> Ld = new ArrayList<GenPolynomial<BigDecimal>>(L.size());
 
-            GenPolynomialRing<BigDecimal> dfac = new GenPolynomialRing<BigDecimal>(dc,Ir.ideal.list.ring);
+            GenPolynomialRing<BigDecimal> dfac = new GenPolynomialRing<BigDecimal>(dc, Ir.ideal.list.ring);
             //System.out.println("dfac = " + dfac);
 
-            for ( GenPolynomial<BigRational> p : L ) {
-                GenPolynomial<BigDecimal> dp = PolyUtil.<BigRational> decimalFromRational(dfac,p);
+            for (GenPolynomial<BigRational> p : L) {
+                GenPolynomial<BigDecimal> dp = PolyUtil.<BigRational> decimalFromRational(dfac, p);
                 //System.out.println("dp = " + dp);
                 Ld.add(dp);
             }
@@ -1301,7 +1291,7 @@ public class IdealTest extends TestCase {
         String[] vars;
 
         BigRational coeff = new BigRational(17, 1);
-        to = new TermOrder( TermOrder.INVLEX);
+        to = new TermOrder(TermOrder.INVLEX);
         vars = new String[] { "x", "y" };
         fac = new GenPolynomialRing<BigRational>(coeff, vars.length, to, vars);
 
@@ -1333,33 +1323,35 @@ public class IdealTest extends TestCase {
         //System.out.println("zd = " + zd);
         assertTrue("is decomposition ", I.isZeroDimDecomposition(zd));
 
-        BigRational eps = new BigRational(1,1000000); 
+        BigRational eps = new BigRational(1, 1000000);
         //eps = eps.multiply(eps);
         eps = eps.multiply(eps).multiply(eps);
         BigDecimal e = new BigDecimal(eps.getRational());
         e = e.abs(); //.multiply(e);
 
-        List<IdealWithComplexRoots<BigRational>> roots = PolyUtilApp.<BigRational,BigRational> complexRoots(zd, eps);
+        List<IdealWithComplexRoots<BigRational>> roots = PolyUtilApp.<BigRational, BigRational> complexRoots(
+                zd, eps);
         //System.out.println("roots = " + roots + "\n");
 
         ComplexRing<BigDecimal> dcc = new ComplexRing<BigDecimal>(e);
-        GenPolynomialRing<Complex<BigDecimal>> dcfac = new GenPolynomialRing<Complex<BigDecimal>>(dcc,fac);
+        GenPolynomialRing<Complex<BigDecimal>> dcfac = new GenPolynomialRing<Complex<BigDecimal>>(dcc, fac);
         //System.out.println("dcfac = " + dcfac);
 
-        for ( IdealWithComplexRoots<BigRational> Ic : roots ) {
+        for (IdealWithComplexRoots<BigRational> Ic : roots) {
             List<GenPolynomial<BigRational>> L = Ic.ideal.getList();
-            List<GenPolynomial<Complex<BigDecimal>>> Ld = new ArrayList<GenPolynomial<Complex<BigDecimal>>>( L.size() );
+            List<GenPolynomial<Complex<BigDecimal>>> Ld = new ArrayList<GenPolynomial<Complex<BigDecimal>>>(L
+                    .size());
 
-            GenPolynomialRing<BigDecimal> dfac = new GenPolynomialRing<BigDecimal>(e,Ic.ideal.list.ring);
+            GenPolynomialRing<BigDecimal> dfac = new GenPolynomialRing<BigDecimal>(e, Ic.ideal.list.ring);
             //System.out.println("dfac = " + dfac);
-            for ( GenPolynomial<BigRational> p : L ) {
-                 GenPolynomial<BigDecimal> dp = PolyUtil.<BigRational> decimalFromRational(dfac,p);
-                 GenPolynomial<Complex<BigDecimal>> dpc = PolyUtil.<BigDecimal> toComplex(dcfac,dp);
-                 //System.out.println("dpc = " + dpc);
-                 Ld.add(dpc);
+            for (GenPolynomial<BigRational> p : L) {
+                GenPolynomial<BigDecimal> dp = PolyUtil.<BigRational> decimalFromRational(dfac, p);
+                GenPolynomial<Complex<BigDecimal>> dpc = PolyUtil.<BigDecimal> toComplex(dcfac, dp);
+                //System.out.println("dpc = " + dpc);
+                Ld.add(dpc);
             }
             boolean t = PolyUtilApp.isComplexRoots(Ld, Ic.croots, e);
-            if ( ! t ) {
+            if (!t) {
                 //System.out.println("Warn: not a complex root of the ideal");
             } else {
                 assertTrue("isComplexRoots ", t);
@@ -1405,29 +1397,29 @@ public class IdealTest extends TestCase {
 
         int[] np = I.normalPositionIndex2Vars();
         //System.out.println("np = " + np);
-        if ( np == null ) {
+        if (np == null) {
             np = I.normalPositionIndexUnivars();
             //System.out.println("np = " + np);
         }
-        if ( np == null ) {
+        if (np == null) {
             return;
         }
         int i = np[0];
         int j = np[1];
-        Ideal<BigRational> Ip = I.normalPositionFor(i,j);
+        Ideal<BigRational> Ip = I.normalPositionFor(i, j);
         //System.out.println("Ip = " + Ip);
 
-        boolean t = Ip.isNormalPositionFor(i+1,j+1); // sic
+        boolean t = Ip.isNormalPositionFor(i + 1, j + 1); // sic
         //System.out.println("t = " + t);
         assertTrue("is normal position ", t);
 
         np = Ip.normalPositionIndex2Vars();
         //System.out.println("np = " + np);
-        if ( np == null ) {
+        if (np == null) {
             np = Ip.normalPositionIndexUnivars();
             //System.out.println("np = " + np);
         }
-        if ( np == null ) {
+        if (np == null) {
             return;
         }
         i = np[0];
@@ -1600,22 +1592,22 @@ public class IdealTest extends TestCase {
         assertTrue("isGB( I )", I.isGB());
         //System.out.println("I = " + I);
 
-        List<IdealWithRealAlgebraicRoots<BigRational,BigRational>> iur;
-        iur = PolyUtilApp.<BigRational,BigRational> realAlgebraicRoots(I);
+        List<IdealWithRealAlgebraicRoots<BigRational, BigRational>> iur;
+        iur = PolyUtilApp.<BigRational, BigRational> realAlgebraicRoots(I);
 
         List<IdealWithUniv<BigRational>> iul = new ArrayList<IdealWithUniv<BigRational>>();
-	for ( IdealWithRealAlgebraicRoots<BigRational,BigRational> iu : iur ) {
-	    iul.add( (IdealWithUniv<BigRational>) iu );
-	}
+        for (IdealWithRealAlgebraicRoots<BigRational, BigRational> iu : iur) {
+            iul.add((IdealWithUniv<BigRational>) iu);
+        }
         assertTrue("is contained in intersection ", I.isZeroDimDecomposition(iul));
 
-	for ( IdealWithRealAlgebraicRoots<BigRational,BigRational> iu : iur ) {
-	    //System.out.println("iu = " + iu);
+        for (IdealWithRealAlgebraicRoots<BigRational, BigRational> iu : iur) {
+            //System.out.println("iu = " + iu);
             //System.out.println("");
             List<List<BigDecimal>> rd = iu.decimalApproximation();
             //System.out.println("iu = " + iu);
             //System.out.println("");
-	}
+        }
     }
 
 }

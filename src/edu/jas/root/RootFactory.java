@@ -82,12 +82,12 @@ public class RootFactory {
       List<RealAlgebraicNumber<C>> realAlgebraicNumbersIrred(GenPolynomial<C> f) {
         RealRoots<C> rr = new RealRootsSturm<C>();
         List<RealAlgebraicNumber<C>> list = new ArrayList<RealAlgebraicNumber<C>>();
-	List<Interval<C>> iv = rr.realRoots(f);
-	for (Interval<C> I : iv) {
-	    RealAlgebraicRing<C> rar = new RealAlgebraicRing<C>(f, I, true);//field
-	    RealAlgebraicNumber<C> rn = rar.getGenerator();
-	    list.add(rn);
-	}
+        List<Interval<C>> iv = rr.realRoots(f);
+        for (Interval<C> I : iv) {
+            RealAlgebraicRing<C> rar = new RealAlgebraicRing<C>(f, I, true);//field
+            RealAlgebraicNumber<C> rn = rar.getGenerator();
+            list.add(rn);
+        }
         return list;
     }
 

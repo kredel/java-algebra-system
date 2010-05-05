@@ -4,30 +4,27 @@
 
 package edu.jas.application;
 
-import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.List;
-import java.util.ArrayList;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import edu.jas.arith.BigDecimal;
+import edu.jas.arith.Rational;
+import edu.jas.poly.GenPolynomial;
+import edu.jas.root.RealAlgebraicNumber;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingElem;
-import edu.jas.structure.RingFactory;
-import edu.jas.arith.Rational;
-import edu.jas.arith.BigDecimal;
-import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.GenPolynomialRing;
-import edu.jas.root.RealRootAbstract;
-import edu.jas.root.RealAlgebraicNumber;
-import edu.jas.root.RealAlgebraicRing;
 
 
 /**
- * Container for Ideals together with univariate polynomials and real algebraic roots.
+ * Container for Ideals together with univariate polynomials and real algebraic
+ * roots.
  * @author Heinz Kredel
  */
-public class IdealWithRealAlgebraicRoots<C extends RingElem<C> & Rational, D extends GcdRingElem<D> & Rational> 
-             extends IdealWithUniv<D> implements Serializable {
+public class IdealWithRealAlgebraicRoots<C extends RingElem<C> & Rational, D extends GcdRingElem<D> & Rational>
+        extends IdealWithUniv<D> implements Serializable {
+
 
     /**
      * The list of real algebraic roots.
@@ -55,9 +52,9 @@ public class IdealWithRealAlgebraicRoots<C extends RingElem<C> & Rational, D ext
      * @param up the list of univaraite polynomials
      * @param rr the list of real algebraic roots
      */
-    public IdealWithRealAlgebraicRoots(Ideal<D> id, List<GenPolynomial<D>> up, 
-                                       List<List<RealAlgebraicNumber<D>>> rr) {
-        super(id,up);
+    public IdealWithRealAlgebraicRoots(Ideal<D> id, List<GenPolynomial<D>> up,
+            List<List<RealAlgebraicNumber<D>>> rr) {
+        super(id, up);
         ran = rr;
     }
 
@@ -68,7 +65,7 @@ public class IdealWithRealAlgebraicRoots<C extends RingElem<C> & Rational, D ext
      * @param rr the list of real algebraic roots
      */
     public IdealWithRealAlgebraicRoots(IdealWithUniv<D> iu, List<List<RealAlgebraicNumber<D>>> rr) {
-        super(iu.ideal,iu.upolys);
+        super(iu.ideal, iu.upolys);
         ran = rr;
     }
 
@@ -82,32 +79,32 @@ public class IdealWithRealAlgebraicRoots<C extends RingElem<C> & Rational, D ext
         StringBuffer sb = new StringBuffer(super.toString() + "\nreal roots:\n");
         sb.append("[");
         boolean f1 = true;
-        for ( List<RealAlgebraicNumber<D>> lr : ran ) {
-            if ( !f1 ) {
+        for (List<RealAlgebraicNumber<D>> lr : ran) {
+            if (!f1) {
                 sb.append(", ");
             } else {
                 f1 = false;
             }
             sb.append("[");
             boolean f2 = true;
-            for ( RealAlgebraicNumber<D> rr : lr ) {
-                if ( !f2 ) {
+            for (RealAlgebraicNumber<D> rr : lr) {
+                if (!f2) {
                     sb.append(", ");
                 } else {
                     f2 = false;
                 }
-                 sb.append(rr.ring.toScript());
+                sb.append(rr.ring.toScript());
             }
             sb.append("]");
         }
         sb.append("]");
-	if ( droots != null ) {
+        if (droots != null) {
             sb.append("\ndecimal real root approximation:\n");
-            for ( List<BigDecimal> d : droots ) {
-		sb.append(d.toString());
+            for (List<BigDecimal> d : droots) {
+                sb.append(d.toString());
                 sb.append("\n");
-	    }
-	}
+            }
+        }
         return sb.toString();
     }
 
@@ -117,9 +114,10 @@ public class IdealWithRealAlgebraicRoots<C extends RingElem<C> & Rational, D ext
      * @return script compatible representation for this Element.
      * @see edu.jas.structure.Element#toScript()
      */
+    @Override
     public String toScript() {
         // Python case
-        return super.toScript() +  ",  " + ran.toString();
+        return super.toScript() + ",  " + ran.toString();
     }
 
 
@@ -127,20 +125,20 @@ public class IdealWithRealAlgebraicRoots<C extends RingElem<C> & Rational, D ext
      * Get decimal approximation of the real root tuples.
      */
     public synchronized List<List<BigDecimal>> decimalApproximation() {
-	if ( this.droots != null ) {
-	    return droots;
-	}
-	List<List<BigDecimal>> rroots = new ArrayList<List<BigDecimal>>();
-	for ( List<RealAlgebraicNumber<D>> rri : this.ran ) {
+        if (this.droots != null) {
+            return droots;
+        }
+        List<List<BigDecimal>> rroots = new ArrayList<List<BigDecimal>>();
+        for (List<RealAlgebraicNumber<D>> rri : this.ran) {
             List<BigDecimal> r = new ArrayList<BigDecimal>();
-	    for ( RealAlgebraicNumber<D> rr : rri ) {
+            for (RealAlgebraicNumber<D> rr : rri) {
                 BigDecimal d = new BigDecimal(rr.magnitude());
-		r.add(d);
-	    }
-	    rroots.add(r);
-	}
-	droots = rroots;
-	return rroots;
+                r.add(d);
+            }
+            rroots.add(r);
+        }
+        droots = rroots;
+        return rroots;
     }
 
 
@@ -148,8 +146,8 @@ public class IdealWithRealAlgebraicRoots<C extends RingElem<C> & Rational, D ext
      * compute decimal approximation of the real root tuples.
      */
     public void doDecimalApproximation() {
-	List<List<BigDecimal>> unused = decimalApproximation();
-	return;
+        List<List<BigDecimal>> unused = decimalApproximation();
+        return;
     }
 
 }

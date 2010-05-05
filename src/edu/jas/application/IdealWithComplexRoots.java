@@ -4,21 +4,14 @@
 
 package edu.jas.application;
 
-import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.List;
-import java.util.ArrayList;
 
-import edu.jas.structure.GcdRingElem;
-import edu.jas.structure.RingElem;
-import edu.jas.structure.RingFactory;
-import edu.jas.structure.Complex;
-import edu.jas.structure.ComplexRing;
-import edu.jas.arith.Rational;
+import java.io.Serializable;
+import java.util.List;
+
 import edu.jas.arith.BigDecimal;
 import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.GenPolynomialRing;
+import edu.jas.structure.Complex;
+import edu.jas.structure.GcdRingElem;
 
 
 /**
@@ -48,9 +41,8 @@ class IdealWithComplexRoots<C extends GcdRingElem<C>> extends IdealWithUniv<C> i
      * @param up the list of univaraite polynomials
      * @param cr the list of complex roots
      */
-    public IdealWithComplexRoots(Ideal<C> id, List<GenPolynomial<C>> up, 
-                                 List<List<Complex<BigDecimal>>> cr) {
-        super(id,up);
+    public IdealWithComplexRoots(Ideal<C> id, List<GenPolynomial<C>> up, List<List<Complex<BigDecimal>>> cr) {
+        super(id, up);
         croots = cr;
     }
 
@@ -61,7 +53,7 @@ class IdealWithComplexRoots<C extends GcdRingElem<C>> extends IdealWithUniv<C> i
      * @param cr the list of complex roots
      */
     public IdealWithComplexRoots(IdealWithUniv<C> iu, List<List<Complex<BigDecimal>>> cr) {
-        super(iu.ideal,iu.upolys);
+        super(iu.ideal, iu.upolys);
         croots = cr;
     }
 
@@ -81,9 +73,10 @@ class IdealWithComplexRoots<C extends GcdRingElem<C>> extends IdealWithUniv<C> i
      * @return script compatible representation for this Element.
      * @see edu.jas.structure.Element#toScript()
      */
+    @Override
     public String toScript() {
         // Python case
-        return super.toScript() +  ",  " + croots.toString();
+        return super.toScript() + ",  " + croots.toString();
     }
 
 }

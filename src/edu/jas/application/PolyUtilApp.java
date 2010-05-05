@@ -1077,7 +1077,7 @@ public class PolyUtilApp<C extends RingElem<C> > {
       List<IdealWithRealAlgebraicRoots<C,D>> realAlgebraicRoots(Ideal<D> I) {
         List<IdealWithUniv<D>> Ir = I.zeroDimRootDecomposition();
         //System.out.println("Ir = " + Ir);
-	List<IdealWithRealAlgebraicRoots<C,D>> roots = PolyUtilApp.<C,D> realAlgebraicRoots(Ir);
+        List<IdealWithRealAlgebraicRoots<C,D>> roots = PolyUtilApp.<C,D> realAlgebraicRoots(Ir);
         return roots;
     }
 

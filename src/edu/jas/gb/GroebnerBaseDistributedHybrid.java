@@ -810,7 +810,7 @@ class HybridReducerReceiver<C extends RingElem<C>> extends Thread {
                     goon = false;
                     break;
                 }
-	    //}
+            //}
         } // end while
         goon = false;
         logger.info("terminated, received " + red + " reductions");

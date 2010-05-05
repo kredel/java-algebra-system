@@ -4,17 +4,12 @@
 
 package edu.jas.application;
 
-import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.List;
-import java.util.ArrayList;
 
-import edu.jas.structure.GcdRingElem;
-import edu.jas.structure.RingElem;
-import edu.jas.structure.RingFactory;
+import java.io.Serializable;
+import java.util.List;
+
 import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.GenPolynomialRing;
+import edu.jas.structure.GcdRingElem;
 
 
 /**
@@ -72,7 +67,7 @@ public class IdealWithUniv<C extends GcdRingElem<C>> implements Serializable {
      */
     public String toScript() {
         // Python case
-        return ideal.toScript() +  ",  " + upolys.toString();
+        return ideal.toScript() + ",  " + upolys.toString();
     }
 
 }
