@@ -498,8 +498,8 @@ class Ideal:
         '''
         I = jas.application.Ideal(self.pset);
         self.prime = I.zeroDimPrimeDecomposition();
-        self.primeelim = I.zeroDimPrimeDecompositionElim(self.prime);
-        return self.primeelim;
+        self.prime = I.zeroDimElimination(self.prime);
+        return self.prime;
 
     def primaryDecomp(self):
         '''Compute primary decomposition of 0-dim ideal.

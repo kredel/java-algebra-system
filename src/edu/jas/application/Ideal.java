@@ -2004,24 +2004,30 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
 
 
     /**
-     * Zero dimensional ideal primary decompostition.
+     * Zero dimensional ideal elimination to original ring.
      * @param pdeg list of prime ideals G_i
-     * @return intersection of primary ideals G_i with ideal(this) = cap_i(
+     * @return intersection of prime ideals G_i in the ring of this with ideal(this) = cap_i(
      *         ideal(G_i) )
      */
-    public List<Ideal<C>> zeroDimPrimeDecompositionElim(List<IdealWithUniv<C>> pdec) {
-        List<Ideal<C>> dec = new ArrayList<Ideal<C>>();
+    public List<IdealWithUniv<C>> zeroDimElimination(List<IdealWithUniv<C>> pdec) {
+        List<IdealWithUniv<C>> dec = new ArrayList<IdealWithUniv<C>>();
         if (this.isZERO()) {
             return dec;
         }
         if (this.isONE()) {
-            dec.add(pdec.get(0).ideal);
+            dec.add(pdec.get(0));
             return dec;
         }
-        List<Ideal<C>> qdec = new ArrayList<Ideal<C>>();
+        List<IdealWithUniv<C>> qdec = new ArrayList<IdealWithUniv<C>>();
         for (IdealWithUniv<C> Ip : pdec) {
             Ideal<C> Is = Ip.ideal.eliminate(list.ring);
-            qdec.add(Is);
+            int k = Ip.upolys.size() - list.ring.nvar;
+            List<GenPolynomial<C>> up = new ArrayList<GenPolynomial<C>>();
+            for ( int i = 0; i < list.ring.nvar; i++ ) {
+		up.add( Ip.upolys.get(i+k) ); 
+	    }
+            IdealWithUniv<C> Ie = new IdealWithUniv<C>(Is,up);
+            qdec.add(Ie);
         }
         return qdec;
     }
