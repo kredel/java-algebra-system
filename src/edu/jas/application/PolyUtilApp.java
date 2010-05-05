@@ -970,11 +970,8 @@ public class PolyUtilApp<C extends RingElem<C> > {
                      for ( List<RealAlgebraicNumber<D>> rx : ran ) {
                          //System.out.println("rx = " + rx);
                          RealAlgebraicRing<D> rar = rx.get(ix).ring;
-                         //System.out.println("rar = " + rar);
                          RealAlgebraicNumber<D> rel = new RealAlgebraicNumber<D>(rar,pip2elc);
-                         //System.out.println("rel = " + rel);
                          RealAlgebraicNumber<D> rer = new RealAlgebraicNumber<D>(rar,pip2erc);
-                         //System.out.println("rer = " + rer);
                          int sl = rel.signum();
                          int sr = rer.signum();
                          //System.out.println("sl = " + sl + ", sr = " + sr + ", sl*sr = " + (sl*sr));
@@ -1082,130 +1079,6 @@ public class PolyUtilApp<C extends RingElem<C> > {
         //System.out.println("Ir = " + Ir);
 	List<IdealWithRealAlgebraicRoots<C,D>> roots = PolyUtilApp.<C,D> realAlgebraicRoots(Ir);
         return roots;
-    }
-
-}
-
-
-/**
- * Container for Ideals together with univariate polynomials and real algebraic roots.
- * @author Heinz Kredel
- */
-class IdealWithRealAlgebraicRoots<C extends RingElem<C> & Rational, D extends GcdRingElem<D> & Rational> 
-               extends IdealWithUniv<D> implements Serializable {
-
-    /**
-     * The list of real algebraic roots.
-     */
-    public final List<List<RealAlgebraicNumber<D>>> ran;
-
-
-    /**
-     * The list of decimal approximations of the real algebraic roots.
-     */
-    protected List<List<BigDecimal>> droots = null;
-
-
-    /**
-     * Constructor not for use.
-     */
-    protected IdealWithRealAlgebraicRoots() {
-        throw new IllegalArgumentException("do not use this constructor");
-    }
-
-
-    /**
-     * Constructor.
-     * @param id the ideal
-     * @param up the list of univaraite polynomials
-     * @param rr the list of real algebraic roots
-     */
-    public IdealWithRealAlgebraicRoots(Ideal<D> id, List<GenPolynomial<D>> up, 
-                                       List<List<RealAlgebraicNumber<D>>> rr) {
-        super(id,up);
-        ran = rr;
-    }
-
-
-    /**
-     * Constructor.
-     * @param iu the ideal with univariate polynomials
-     * @param rr the list of real algebraic roots
-     */
-    public IdealWithRealAlgebraicRoots(IdealWithUniv<D> iu, List<List<RealAlgebraicNumber<D>>> rr) {
-        super(iu.ideal,iu.upolys);
-        ran = rr;
-    }
-
-
-    /**
-     * String representation of the ideal.
-     * @see java.lang.Object#toString()
-     */
-    @Override
-    public String toString() {
-        StringBuffer sb = new StringBuffer(super.toString() + "\nreal roots:\n");
-        sb.append("[");
-        boolean f1 = true;
-        for ( List<RealAlgebraicNumber<D>> lr : ran ) {
-            if ( !f1 ) {
-                sb.append(", ");
-            } else {
-                f1 = false;
-            }
-            sb.append("[");
-            boolean f2 = true;
-            for ( RealAlgebraicNumber<D> rr : lr ) {
-                if ( !f2 ) {
-                    sb.append(", ");
-                } else {
-                    f2 = false;
-                }
-                 sb.append(rr.ring.toScript());
-            }
-            sb.append("]");
-        }
-        sb.append("]");
-	if ( droots != null ) {
-            sb.append("\ndecimal real root approximation:\n");
-            for ( List<BigDecimal> d : droots ) {
-		sb.append(d.toString());
-                sb.append("\n");
-	    }
-	}
-        return sb.toString();
-    }
-
-
-    /**
-     * Get a scripting compatible string representation.
-     * @return script compatible representation for this Element.
-     * @see edu.jas.structure.Element#toScript()
-     */
-    public String toScript() {
-        // Python case
-        return super.toScript() +  ",  " + ran.toString();
-    }
-
-
-    /**
-     * Get decimal approximation of the real root tuples.
-     */
-    public synchronized List<List<BigDecimal>> decimalApproximation() {
-	if ( this.droots != null ) {
-	    return droots;
-	}
-	List<List<BigDecimal>> rroots = new ArrayList<List<BigDecimal>>();
-	for ( List<RealAlgebraicNumber<D>> rri : this.ran ) {
-            List<BigDecimal> r = new ArrayList<BigDecimal>();
-	    for ( RealAlgebraicNumber<D> rr : rri ) {
-                BigDecimal d = new BigDecimal(rr.magnitude());
-		r.add(d);
-	    }
-	    rroots.add(r);
-	}
-	droots = rroots;
-	return rroots;
     }
 
 }
