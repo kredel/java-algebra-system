@@ -33,7 +33,7 @@ from edu.jas.vector      import OrderedModuleList, ModuleList, GenVector, GenVec
                                 GenMatrix, GenMatrixRing
 from edu.jas.application import ComprehensiveGroebnerBaseSeq, PolyUtilApp,\
                                 Residue, ResidueRing, Ideal, Quotient, QuotientRing,\
-                                Local, LocalRing 
+                                Local, LocalRing, IdealWithRealAlgebraicRoots
 from edu.jas.kern        import ComputerThreads
 from edu.jas.ufd         import GreatestCommonDivisor, PolyUfdUtil, GCDFactory,\
                                 FactorFactory, SquarefreeFactory
@@ -101,7 +101,7 @@ class Ring:
     def ideal(self,ringstr="",list=None):
         '''Create an ideal.
         '''
-        return Ideal(self,ringstr,list);
+        return Ideal(self,ringstr,list=list);
 
     def paramideal(self,ringstr="",list=None,gbsys=None):
         '''Create an ideal in a polynomial ring with parameter coefficients.
@@ -301,6 +301,7 @@ class Ideal:
         else:
            self.list = pylist2arraylist(list,rec=1);
         self.pset = OrderedPolynomialList(ring.ring,self.list);
+        self.roots = None;
 
     def __str__(self):
         '''Create a string representation.
@@ -459,6 +460,29 @@ class Ideal:
         o = TermOrderOptimization.optimizeTermOrder(p);
         r = Ring("",o.ring);
         return Ideal(r,"",o.list);
+
+    def realRoots(self):
+        '''Compute real roots of 0-dim ideal.
+        '''
+        I = jas.application.Ideal(self.pset);
+        self.roots = jas.application.PolyUtilApp.realAlgebraicRoots(I);
+        for R in self.roots:
+            R.doDecimalApproximation();
+        return self.roots;
+
+    def realRootsPrint(self):
+        '''Get decimap approximation of real roots of 0-dim ideal.
+        '''
+        if self.roots == None:
+            I = jas.application.Ideal(self.pset);
+            self.roots = jas.application.PolyUtilApp.realAlgebraicRoots(I);
+            for R in self.roots:
+                R.doDecimalApproximation();
+        D = [];
+        for Ir in self.roots:
+            for Dr in Ir.decimalApproximation():
+                print str(Dr);
+            print;
 
     def toInteger(self):
         '''Convert rational coefficients to integer coefficients.
