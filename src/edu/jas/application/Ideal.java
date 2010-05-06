@@ -1614,6 +1614,58 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
 
 
     /**
+     * Zero dimensional ideal decompostition extension. 
+     * @param upol list of univariate polynomials
+     * @return intersection of ideals G_i with ideal(this) subseteq cap_i(
+     *         ideal(G_i) )
+     */
+    public List<IdealWithUniv<C>> zeroDimDecompositionExtension(List<GenPolynomial<C>> upol) {
+        if ( upol == null || upol.size()+1 != list.ring.nvar ) {
+            throw new IllegalArgumentException("univariate polynomial list not correct " + upol);
+        }
+        List<IdealWithUniv<C>> dec = new ArrayList<IdealWithUniv<C>>();
+        if (this.isZERO()) {
+            return dec;
+        }
+        IdealWithUniv<C> iwu = new IdealWithUniv<C>(this, upol);
+        if (this.isONE()) {
+            dec.add(iwu);
+            return dec;
+        }
+        FactorAbstract<C> ufd = FactorFactory.<C> getImplementation(list.ring.coFac);
+        int i = list.ring.nvar - 1;
+        //IdealWithUniv<C> id = new IdealWithUniv<C>(this,upol);
+        GenPolynomial<C> u = this.constructUnivariate(i);
+        SortedMap<GenPolynomial<C>, Long> facs = ufd.baseFactors(u);
+        if (facs.size() == 1 && facs.get(facs.firstKey()) == 1L) {
+            List<GenPolynomial<C>> iup = new ArrayList<GenPolynomial<C>>();
+            iup.add(u); // new polynomial first
+            iup.addAll(upol);
+            IdealWithUniv<C> Ipu = new IdealWithUniv<C>(this, iup);
+            dec.add(Ipu);
+            return dec;
+        }
+        if (true) {
+            logger.info("irreducible facs = " + facs);
+        }
+        GenPolynomialRing<C> mfac = list.ring;
+        int j = mfac.nvar - 1 - i;
+        for (GenPolynomial<C> p : facs.keySet()) {
+            // make p multivariate
+            GenPolynomial<C> pm = p.extendUnivariate(mfac, j);
+            //System.out.println("pm = " + pm);
+            Ideal<C> Ip = this.sum(pm);
+            List<GenPolynomial<C>> iup = new ArrayList<GenPolynomial<C>>();
+            iup.add(p); // new polynomial first
+            iup.addAll(upol);
+            IdealWithUniv<C> Ipu = new IdealWithUniv<C>(Ip, iup);
+            dec.add(Ipu);
+        }
+        return dec;
+    }
+
+
+    /**
      * Test for zero dimensional ideal decompostition.
      * @param L intersection of ideals G_i with ideal(G) subseteq cap_i(
      *            ideal(G_i) )
@@ -1681,12 +1733,9 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
     public Ideal<C> normalPositionFor(int i, int j) {
         // extend variables by one
         GenPolynomialRing<C> ofac = list.ring;
-        //System.out.println("ofac = " + ofac);
         GenPolynomialRing<C> nfac = ofac.extendLower(1);
-        //System.out.println("nfac = " + nfac);
         List<GenPolynomial<C>> elist = new ArrayList<GenPolynomial<C>>(list.list.size() + 1);
         for (GenPolynomial<C> p : getList()) {
-            //System.out.println("p = " + p);
             GenPolynomial<C> q = p.extendLower(nfac, 0, 0L);
             //System.out.println("q = "  + q);
             elist.add(q);
@@ -1698,9 +1747,6 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
         GenPolynomial<C> xi = nfac.univariate(ip);
         GenPolynomial<C> xj = nfac.univariate(jp);
         GenPolynomial<C> z = nfac.univariate(nfac.nvar - 1);
-        //System.out.println("x_i = " + xi + ", i = " + i + ", ip = " + ip);
-        //System.out.println("x_j = " + xj + ", j = " + j + ", jp = " + jp);
-        //System.out.println("z = " + z);
         // compute GBs until value of t is OK
         Ideal<C> Ip;
         int t = 0;
@@ -1709,7 +1755,6 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
             // zp = z - ( xj - xi * t )
             GenPolynomial<C> zp = z.subtract(xj.subtract(xi.multiply(nfac.fromInteger(t))));
             zp = zp.monic();
-            //System.out.println("zp = " + zp);
             Ip = I.sum(zp);
             //System.out.println("Ip = " + Ip);
             if (t % 5 == 0) {
@@ -1733,8 +1778,6 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
         // called in extended ring!
         int ip = list.ring.nvar - 1 - i;
         int jp = list.ring.nvar - 1 - j;
-        //System.out.println("ip = " + ip);
-        //System.out.println("jp = " + jp);
         boolean iOK = false;
         boolean jOK = false;
         for (GenPolynomial<C> p : getList()) {
@@ -1923,7 +1966,9 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
                 rdec.add(id);
             } else {
                 Ideal<C> I = id.ideal.normalPositionFor(ri[0], ri[1]);
-                List<IdealWithUniv<C>> rd = I.zeroDimDecomposition();
+                //List<IdealWithUniv<C>> rd1 = I.zeroDimDecomposition();
+                List<IdealWithUniv<C>> rd = I.zeroDimDecompositionExtension(id.upolys);
+                //System.out.println("r_rd = " + rd);
                 dec.addAll(rd);
             }
         }
@@ -1953,7 +1998,9 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
                 rdec.add(id);
             } else {
                 Ideal<C> I = id.ideal.normalPositionFor(ri[0], ri[1]);
-                List<IdealWithUniv<C>> rd = I.zeroDimDecomposition();
+                //List<IdealWithUniv<C>> rd1 = I.zeroDimDecomposition();
+                List<IdealWithUniv<C>> rd = I.zeroDimDecompositionExtension(id.upolys);
+                //System.out.println("rd = " + rd);
                 dec.addAll(rd);
             }
         }
@@ -2024,8 +2071,8 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
             int k = Ip.upolys.size() - list.ring.nvar;
             List<GenPolynomial<C>> up = new ArrayList<GenPolynomial<C>>();
             for ( int i = 0; i < list.ring.nvar; i++ ) {
-		up.add( Ip.upolys.get(i+k) ); 
-	    }
+                up.add( Ip.upolys.get(i+k) ); 
+            }
             IdealWithUniv<C> Ie = new IdealWithUniv<C>(Is,up);
             qdec.add(Ie);
         }
