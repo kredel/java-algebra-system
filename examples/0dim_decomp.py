@@ -25,7 +25,7 @@ print;
 
 f1 = (x**2 - 5)**2;
 f2 = y**2 - x**2;
-f3 = z**3 - y;
+f3 = z**3 - y * x;
 
 print "f1 = ", f1;
 print "f2 = ", f2;
