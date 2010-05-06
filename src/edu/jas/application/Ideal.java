@@ -2052,7 +2052,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
 
     /**
      * Zero dimensional ideal elimination to original ring.
-     * @param pdeg list of prime ideals G_i
+     * @param pdec list of prime ideals G_i
      * @return intersection of prime ideals G_i in the ring of this with ideal(this) = cap_i(
      *         ideal(G_i) )
      */
@@ -2082,7 +2082,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
 
     /**
      * Zero dimensional ideal primary decompostition.
-     * @param pdeg list of prime ideals G_i
+     * @param pdec list of prime ideals G_i
      * @return intersection of primary ideals G_i with ideal(this) = cap_i(
      *         ideal(G_i) )
      */

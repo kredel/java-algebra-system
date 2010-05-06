@@ -473,7 +473,7 @@ class Ideal:
         return self.roots;
 
     def realRootsPrint(self):
-        '''Get decimap approximation of real roots of 0-dim ideal.
+        '''Print decimal approximation of real roots of 0-dim ideal.
         '''
         if self.roots == None:
             I = jas.application.Ideal(self.pset);

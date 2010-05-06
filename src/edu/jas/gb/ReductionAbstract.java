@@ -61,7 +61,7 @@ public abstract class ReductionAbstract<C extends RingElem<C>>
         }
         if ( debug ) {
            if ( ! Ap.ring.equals( Bp.ring ) ) { 
-              logger.error("rings not equal"); 
+              logger.error("rings not equal " + Ap.ring + ", " + Bp.ring); 
            }
         }
         Map.Entry<ExpVector,C> ma = Ap.leadingMonomial();
@@ -101,7 +101,7 @@ public abstract class ReductionAbstract<C extends RingElem<C>>
                     GenPolynomial<C> Ap, 
                     int j,
                     GenPolynomial<C> Bp) {  
-        if ( logger.isInfoEnabled() ) {
+        if ( debug ) {
             if ( Bp == null || Bp.isZERO() ) {
                 throw new RuntimeException("Spol B is zero");
             }
@@ -109,7 +109,7 @@ public abstract class ReductionAbstract<C extends RingElem<C>>
                 throw new RuntimeException("Spol A is zero");
             }
             if ( ! Ap.ring.equals( Bp.ring ) ) { 
-                logger.error("term orderings not equal"); 
+                logger.error("rings not equal " + Ap.ring + ", " + Bp.ring); 
             }
         }
         Map.Entry<ExpVector,C> ma = Ap.leadingMonomial();
@@ -189,7 +189,7 @@ public abstract class ReductionAbstract<C extends RingElem<C>>
                               ExpVector e) {  
         if ( logger.isInfoEnabled() ) {
            if ( ! A.ring.equals( B.ring ) ) { 
-              logger.error("rings equal"); 
+              logger.error("rings not equal " + A.ring + ", " + B.ring); 
            }
            if (   A instanceof GenSolvablePolynomial
                || B instanceof GenSolvablePolynomial ) {
