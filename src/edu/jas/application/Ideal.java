@@ -644,6 +644,9 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
         if (R == null) {
             throw new IllegalArgumentException("R may not be null");
         }
+        if ( list.ring.equals(R) ) {
+            return this;
+        }
         String[] ename = R.getVars();
         Ideal<C> I = eliminate(ename);
         return I.intersect(R);
@@ -670,77 +673,16 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
         GroebnerBasePartial<C> bbp = new GroebnerBasePartial<C>(bb, null);
         String[] rname = bbp.remainingVars(aname, ename);
         //System.out.println("rname = " + Arrays.toString(rname));
-
+        if ( rname.length == 0 ) {
+            return this;
+        }
         PolynomialList<C> Pl = bbp.elimPartialGB(getList(), rname, ename); // reversed!
         //System.out.println("Pl = " + Pl);
         if (debug) {
             logger.debug("elimnation GB = " + Pl);
         }
-        //Ideal<C> I = new Ideal<C>( E, G, true );
         Ideal<C> I = new Ideal<C>(Pl, true);
-        //System.out.println("elim, I = " + I);
-        return I; //.intersect(R);
-    }
-
-
-    /**
-     * Permutation of variables for elimination.
-     * @param aname variables for the full polynomial ring.
-     * @param ename variables for the elimination ring, subseteq aname.
-     * @return perm({vars \ ename},ename)
-     * @deprecated use the one in GroebnerBasePartial
-     */
-    @Deprecated
-    public List<Integer> getPermutation(String[] aname, String[] ename) {
-        if (aname == null || ename == null) {
-            throw new IllegalArgumentException("aname or ename may not be null");
-        }
-        List<Integer> perm = new ArrayList<Integer>(aname.length);
-        // add ename permutation
-        for (int i = 0; i < ename.length; i++) {
-            int j = indexOf(ename[i], aname);
-            if (j < 0) {
-                throw new IllegalArgumentException("ename not contained in aname");
-            }
-            perm.add(j);
-        }
-        //System.out.println("perm_low = " + perm);
-        // add aname \ ename permutation
-        for (int i = 0; i < aname.length; i++) {
-            if (!perm.contains(i)) {
-                perm.add(i);
-            }
-        }
-        //System.out.println("perm_all = " + perm);
-        // reverse permutation indices
-        int n1 = aname.length - 1;
-        List<Integer> perm1 = new ArrayList<Integer>(aname.length);
-        for (Integer k : perm) {
-            perm1.add(n1 - k);
-        }
-        perm = perm1;
-        //System.out.println("perm_inv = " + perm1);
-        Collections.reverse(perm);
-        //System.out.println("perm_rev = " + perm);
-        return perm;
-    }
-
-
-    /**
-     * Index of s in A.
-     * @param s search string
-     * @param A string array
-     * @return i if s == A[i] for some i, else -1.
-     * @deprecated use the one in GroebnerBasePartial
-     */
-    @Deprecated
-    public int indexOf(String s, String[] A) {
-        for (int i = 0; i < A.length; i++) {
-            if (s.equals(A[i])) {
-                return i;
-            }
-        }
-        return -1;
+        return I; 
     }
 
 
@@ -2099,7 +2041,6 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
         for (IdealWithUniv<C> Ip : pdec) {
             Ideal<C> Is = Ip.ideal.eliminate(list.ring);
             Ideal<C> Qs = this.primaryIdeal(Is);
-            //System.out.println("Qs = " + Qs);
             qdec.add(Qs);
         }
         return qdec;
