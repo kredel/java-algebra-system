@@ -1275,7 +1275,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
             if (v == null) {
                 continue;
             }
-            // System.out.println("v = " + Arrays.toString(v));
+            //System.out.println("v = " + Arrays.toString(v));
             if (S == null) { // revert indices
                 S = new HashSet<Integer>(H.size());
                 int r = e.length() - 1;
@@ -1988,6 +1988,9 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
      */
     public List<Ideal<C>> zeroDimPrimaryDecomposition() {
         List<IdealWithUniv<C>> pdec = zeroDimPrimeDecomposition();
+        if ( logger.isInfoEnabled() ) {
+           logger.info("prim decomp = " + pdec);
+        }
         return zeroDimPrimaryDecomposition(pdec);
     }
 
@@ -2009,7 +2012,22 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
         }
         List<IdealWithUniv<C>> qdec = new ArrayList<IdealWithUniv<C>>();
         for (IdealWithUniv<C> Ip : pdec) {
-            Ideal<C> Is = Ip.ideal.eliminate(list.ring);
+            //System.out.println("Ip = " + Ip);
+            List<GenPolynomial<C>> epol = new ArrayList<GenPolynomial<C>>();
+            epol.addAll( Ip.ideal.getList() );
+            GenPolynomialRing<C> mfac = Ip.ideal.list.ring;
+            int j = 0;
+            // add univariate polynomials for performance
+            for (GenPolynomial<C> p : Ip.upolys) {
+                GenPolynomial<C> pm = p.extendUnivariate(mfac, j++);
+                epol.add( pm ); 
+            }
+            Ideal<C> Ipp = new Ideal<C>( mfac, epol );
+            if ( logger.isInfoEnabled() ) {
+                logger.info("to eliminate = " + Ipp);
+            }
+            Ideal<C> Is = Ipp.eliminate(list.ring);
+            //System.out.println("Is = " + Is);
             int k = Ip.upolys.size() - list.ring.nvar;
             List<GenPolynomial<C>> up = new ArrayList<GenPolynomial<C>>();
             for ( int i = 0; i < list.ring.nvar; i++ ) {

@@ -527,9 +527,11 @@ public class GroebnerBasePartial<C extends GcdRingElem<C>> extends GroebnerBaseA
         if (cl == 0) { // non recursive case
             TermOrder to = pfac.tord;
             int ev = to.getEvord();
+            //ev = TermOrder.IGRLEX;
             TermOrder split = new TermOrder(ev, ev, pfac.nvar, evars.length);
             //System.out.println("split = " + split);
             pfac = new GenPolynomialRing<C>(pfac.coFac, pfac.nvar, split, pfac.getVars());
+            //System.out.println("pfac = " + pfac);
             List<GenPolynomial<C>> Fs = new ArrayList<GenPolynomial<C>>(ppolys.size());
             for (GenPolynomial<C> p : ppolys) {
                 Fs.add(pfac.copy(p));
@@ -553,7 +555,7 @@ public class GroebnerBasePartial<C extends GcdRingElem<C>> extends GroebnerBaseA
         }
 
         GenPolynomialRing<C> cfac = new GenPolynomialRing<C>(fac.coFac, cl, fac.tord, rvars);
-        System.out.println("cfac = " + cfac);
+        //System.out.println("cfac = " + cfac);
 
         TermOrder to = pfac.tord;
         int ev = to.getEvord();
@@ -563,19 +565,19 @@ public class GroebnerBasePartial<C extends GcdRingElem<C>> extends GroebnerBaseA
 
         GenPolynomialRing<GenPolynomial<C>> rfac = new GenPolynomialRing<GenPolynomial<C>>(cfac, pl, split,
                 uvars);
-        if (logger.isInfoEnabled()) {
-            logger.info("rfac = " + rfac);
-        }
-        System.out.println("rfac = " + rfac);
+        //System.out.println("rfac = " + rfac);
 
         List<GenPolynomial<GenPolynomial<C>>> Fr = PolyUtil.<C> recursive(rfac, ppolys);
-        System.out.println("Fr = " + Fr);
+        if (logger.isInfoEnabled()) {
+            logger.info("rfac = " + rfac);
+            logger.info("Fr   = " + Fr);
+        }
 
         if (true) {
             rbb = new GroebnerBasePseudoRecSeq<C>(cfac);
         }
         List<GenPolynomial<GenPolynomial<C>>> Gr = rbb.GB(Fr);
-        System.out.println("\nGr = " + Gr);
+        //System.out.println("\nGr = " + Gr);
 
         List<GenPolynomial<C>> G = PolyUtil.<C> distribute(pfac, Gr);
         //System.out.println("\nG = " + G);
