@@ -1406,17 +1406,17 @@ public class IdealTest extends TestCase {
         }
         int i = np[0];
         int j = np[1];
-        Ideal<BigRational> Ip = I.normalPositionFor(i, j);
+        IdealWithUniv<BigRational> Ip = I.normalPositionFor(i, j,null);
         //System.out.println("Ip = " + Ip);
 
-        boolean t = Ip.isNormalPositionFor(i + 1, j + 1); // sic
+        boolean t = Ip.ideal.isNormalPositionFor(i + 1, j + 1); // sic
         //System.out.println("t = " + t);
         assertTrue("is normal position ", t);
 
-        np = Ip.normalPositionIndex2Vars();
+        np = Ip.ideal.normalPositionIndex2Vars();
         //System.out.println("np = " + np);
         if (np == null) {
-            np = Ip.normalPositionIndexUnivars();
+            np = Ip.ideal.normalPositionIndexUnivars();
             //System.out.println("np = " + np);
         }
         if (np == null) {
@@ -1557,7 +1557,7 @@ public class IdealTest extends TestCase {
     }
 
 
-    /**
+    /** 
      * Test 0-dim root decomposition and real roots.
      */
     public void testRootDecompositionReal() {

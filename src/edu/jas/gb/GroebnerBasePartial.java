@@ -391,7 +391,6 @@ public class GroebnerBasePartial<C extends GcdRingElem<C>> extends GroebnerBaseA
         if (logger.isInfoEnabled()) {
             logger.info("pfac = " + pfac);
         }
-        //System.out.println("pfac = " + pfac);
         List<GenPolynomial<C>> ppolys = TermOrderOptimization.<C> permutation(perm, pfac, F);
         //System.out.println("ppolys = " + ppolys);
 
@@ -449,8 +448,6 @@ public class GroebnerBasePartial<C extends GcdRingElem<C>> extends GroebnerBaseA
         if (logger.isInfoEnabled()) {
             logger.info("pfac = " + pfac);
         }
-        // System.out.println("pfac = " + pfac);
-
         List<GenPolynomial<C>> ppolys = TermOrderOptimization.<C> permutation(perm, pfac, F);
         //System.out.println("ppolys = " + ppolys);
 
@@ -518,8 +515,6 @@ public class GroebnerBasePartial<C extends GcdRingElem<C>> extends GroebnerBaseA
         if (logger.isInfoEnabled()) {
             logger.info("pfac = " + pfac);
         }
-        //System.out.println("pfac = " + pfac);
-
         List<GenPolynomial<C>> ppolys = TermOrderOptimization.<C> permutation(perm, pfac, F);
         //System.out.println("ppolys = " + ppolys);
 
@@ -529,15 +524,20 @@ public class GroebnerBasePartial<C extends GcdRingElem<C>> extends GroebnerBaseA
             int ev = to.getEvord();
             //ev = TermOrder.IGRLEX;
             TermOrder split = new TermOrder(ev, ev, pfac.nvar, evars.length);
-            //System.out.println("split = " + split);
             pfac = new GenPolynomialRing<C>(pfac.coFac, pfac.nvar, split, pfac.getVars());
-            //System.out.println("pfac = " + pfac);
+            if (logger.isInfoEnabled()) {
+                //logger.info("split = " + split);
+                logger.info("pfac = " + pfac);
+            }
             List<GenPolynomial<C>> Fs = new ArrayList<GenPolynomial<C>>(ppolys.size());
             for (GenPolynomial<C> p : ppolys) {
                 Fs.add(pfac.copy(p));
             }
             List<GenPolynomial<C>> G = bb.GB(Fs);
             OptimizedPolynomialList<C> pgb = new OptimizedPolynomialList<C>(perm, pfac, G);
+            if (logger.isInfoEnabled()) {
+               logger.info("pgb = " + pgb);
+            }
             return pgb;
         } else {
             logger.info("not meaningful for elimination " + cl);
