@@ -24,8 +24,8 @@ print;
 [one,x,y,z] = r.gens();
 
 f1 = (x**2 - 5)**2;
-f2 = y**2 - 5;
-f3 = z**3 - y * x ;
+f2 = y**3 - x;
+f3 = z**4 - y * x;
 
 print "f1 = ", f1;
 print "f2 = ", f2;
@@ -40,11 +40,11 @@ print;
 startLog();
 
 t = System.currentTimeMillis();
-Q = F.primaryDecomp();
-t = System.currentTimeMillis() - t;
-print "Q = ", Q;
+P = F.primeDecomp();
+t1 = System.currentTimeMillis() - t;
+print "P = ", P;
 print;
-print "primary decomp time =", t, "milliseconds";
+print "prime decomp time =", t1, "milliseconds";
 print;
 
 print "F = ", F;
