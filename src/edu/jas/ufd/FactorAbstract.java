@@ -207,6 +207,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
                 if (trial.degree() > deg || trial.isConstant()) {
                     continue;
                 }
+                trial = trial.monic();
                 ti++;
                 if (ti % 1000 == 0) {
                     System.out.print("ti(" + ti + ") ");
@@ -239,6 +240,15 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
             logger.info("rest u = " + u);
             //System.out.println("rest u = " + u);
             factors.add(u);
+        }
+        if ( factors.size() > 1 ) {
+            List<GenPolynomial<C>> facs = new ArrayList<GenPolynomial<C>>();
+            System.out.println("factors = " + factors);
+            for ( GenPolynomial<C> p : factors ) {
+                List<GenPolynomial<C>> rfacs = factorsSquarefree(p); // recursion
+                facs.addAll(rfacs);
+            }
+            factors = facs;
         }
         if (factors.size() == 0) {
             logger.info("irred u = " + u);
