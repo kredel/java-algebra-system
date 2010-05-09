@@ -508,12 +508,19 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
                 GenSolvablePolynomial<C> p = (GenSolvablePolynomial<C>)jt.next();
                 ExpVector ec = e.contract(i,e.length()-i); 
                 ExpVector fc = f.contract(i,f.length()-i); 
+                if ( ec.isZERO() || fc.isZERO() ) {
+                    continue;
+                }
                 Map<ExpVector,GenPolynomial<C>> mc = p.contract(ring);
+                if ( mc.size() != 1 ) {
+                    continue;
+                }
                 GenSolvablePolynomial<C> pc = null;
                 for ( GenPolynomial<C> x : mc.values() ) {
                     if ( pc != null ) {
                        // should not happen 
-                       logger.info("p = " + p);
+                       logger.info("e = " + e + ", f = " + f + ", ec = " + ec + ", fc = " + fc);
+                       logger.info("p = " + p + ", mc = " + mc);
                        throw new RuntimeException("Map.size() != 1: " + mc.size());
                     }
                     pc = (GenSolvablePolynomial<C>)x;

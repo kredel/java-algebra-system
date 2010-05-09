@@ -5,6 +5,7 @@
 
 from jas import SolvableRing
 from jas import SolvableIdeal
+from jas import startLog, terminate
 
 from edu.jas.application import Ideal
 
@@ -65,6 +66,7 @@ ps = """
 )
 """;
 
+startLog();
 
 r1  = SolvableRing( rs1 );
 r1c = SolvableRing( rs1c );
