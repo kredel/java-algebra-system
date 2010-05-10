@@ -182,8 +182,8 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
             factors.add(P);
             return factors;
         }
-        //List<GenPolynomial<C>> klist = PolyUfdUtil.<C> backSubstituteKronecker(pfac, ulist, d);
-        //System.out.println("back(klist) = " + PolyUfdUtil.<C> backSubstituteKronecker(pfac, ulist, d));
+        //wrong: List<GenPolynomial<C>> kblist = PolyUfdUtil.<C> backSubstituteKronecker(pfac, ulist, d);
+        //System.out.println("back(klist) = " + kblist);
         if (logger.isInfoEnabled()) {
             logger.info("ulist = " + ulist);
             //System.out.println("ulist = " + ulist);
@@ -200,8 +200,8 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
             for (List<GenPolynomial<C>> flist : ps) {
                 //System.out.println("flist = " + flist);
                 GenPolynomial<C> utrial = ufac.getONE();
-                for (int k = 0; k < flist.size(); k++) {
-                    utrial = utrial.multiply(flist.get(k));
+                for (GenPolynomial<C> k : flist) {
+                    utrial = utrial.multiply(k);
                 }
                 GenPolynomial<C> trial = PolyUfdUtil.<C> backSubstituteKronecker(pfac, utrial, d);
                 if (trial.degree() > deg || trial.isConstant()) {
@@ -249,6 +249,77 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
                 facs.addAll(rfacs);
             }
             factors = facs;
+        }
+        if (factors.size() == 0) {
+            logger.info("irred u = " + u);
+            //System.out.println("irred u = " + u);
+            factors.add(P);
+        }
+        return factors;
+    }
+
+
+    /**
+     *
+     */
+    private List<GenPolynomial<C>> searchFactorsSquarefree(GenPolynomialRing<C> pfac, int d, 
+                                                           List<GenPolynomial<C>> ulist, GenPolynomial<C> P) {
+        List<GenPolynomial<C>> factors = new ArrayList<GenPolynomial<C>>();
+        int dl = ulist.size() - 1; //(ulist.size() + 1) / 2;
+        //System.out.println("dl = " + dl);
+        int ti = 0;
+        GenPolynomial<C> u = P;
+        long deg = (u.degree() + 1L) / 2L; // max deg
+        //System.out.println("deg = " + deg);
+        for (int j = 1; j <= dl; j++) {
+            KsubSet<GenPolynomial<C>> ps = new KsubSet<GenPolynomial<C>>(ulist, j);
+            for (List<GenPolynomial<C>> flist : ps) {
+                //System.out.println("flist = " + flist);
+                GenPolynomial<C> utrial = null;
+                for (GenPolynomial<C> k : flist) {
+		    if ( utrial == null ) {
+			utrial = k;
+		    } else {
+                        utrial = utrial.multiply(k);
+		    }
+                }
+                GenPolynomial<C> trial = PolyUfdUtil.<C> backSubstituteKronecker(pfac, utrial, d);
+                if (trial.degree() > deg || trial.isConstant()) {
+                    continue;
+                }
+                trial = trial.monic();
+                ti++;
+                if (ti % 1000 == 0) {
+                    System.out.print("ti(" + ti + ") ");
+                    if (ti % 10000 == 0) {
+                        System.out.println("\ndl   = " + dl + ", deg(u) = " + deg);
+                        System.out.println("ulist = " + ulist);
+                        //System.out.println("kr    = " + kr);
+                        System.out.println("u     = " + u);
+                    }
+                }
+                GenPolynomial<C> rem = PolyUtil.<C> basePseudoRemainder(u, trial);
+                //System.out.println(" rem = " + rem);
+                if (rem.isZERO()) {
+                    logger.info("trial = " + trial);
+                    //System.out.println("trial = " + trial);
+                    factors.add(trial);
+                    u = PolyUtil.<C> basePseudoDivide(u, trial); //u = u.divide( trial );
+                    if (ulist.removeAll(flist)) {
+                        //System.out.println("new ulist = " + ulist);
+                        dl = (ulist.size() + 1) / 2;
+                        j = 0; // since j++
+                        break;
+                    } else {
+                        logger.error("error removing flist from ulist = " + ulist);
+                    }
+                }
+            }
+        }
+        if (!u.isONE() && !u.equals(P)) {
+            logger.info("rest u = " + u);
+            //System.out.println("rest u = " + u);
+            factors.add(u);
         }
         if (factors.size() == 0) {
             logger.info("irred u = " + u);
