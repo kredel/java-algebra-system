@@ -1255,9 +1255,15 @@ public class HenselUtil {
             B.set(j+1,bb);
             lift.set(j,S.get(1));
             //System.out.println("B("+(j+1)+") = " + B.get(j+1));
+            if ( debug ) {
+                logger.info("lift("+j+") = " + lift.get(j));
+            }
         }
         //System.out.println("liftb = " + lift);
         lift.set(r-1,b);
+        if ( debug ) {
+            logger.info("lift("+(r-1)+") = " + b);
+        }
         //System.out.println("B("+(r-1)+") = " + B.get(r-1) + " : " +  B.get(r-1).ring.coFac + ", b = " +  b + " : " +  b.ring.coFac);
         //System.out.println("B = " + B);
         //System.out.println("liftb = " + lift);
