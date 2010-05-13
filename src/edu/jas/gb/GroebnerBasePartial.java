@@ -334,7 +334,7 @@ public class GroebnerBasePartial<C extends GcdRingElem<C>> extends GroebnerBaseA
      * @param pvars names for main variables, pvars subseteq vars.
      * @return remaining vars = (vars \ pvars).
      */
-    public String[] remainingVars(String[] vars, String[] pvars) {
+    public static String[] remainingVars(String[] vars, String[] pvars) {
         if (vars == null || pvars == null) {
             throw new IllegalArgumentException("no variable names found");
         }

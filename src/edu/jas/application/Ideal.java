@@ -39,6 +39,9 @@ import edu.jas.ufd.SquarefreeAbstract;
 import edu.jas.ufd.SquarefreeFactory;
 import edu.jas.ufd.FactorAbstract;
 import edu.jas.ufd.FactorFactory;
+import edu.jas.ufd.PolyUfdUtil;
+import edu.jas.ufd.GCDFactory;
+import edu.jas.ufd.GreatestCommonDivisor;
 
 
 /**
@@ -2137,6 +2140,86 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
             }
         }
         return this.contains(isec);
+    }
+
+
+    /**
+     * Ideal extension.
+     * @param vars list of variables for a polynomial ring for extension
+     * @return ideal G, with coefficients in QuotientRing(GenPolynomialRing<C>(vars))
+     */
+    public Ideal<Quotient<C>> extension(String[] vars) {
+        GenPolynomialRing<C> fac = getRing();
+        GenPolynomialRing<C> efac = new GenPolynomialRing<C>(fac.coFac,vars.length,vars);
+        Ideal<Quotient<C>> ext = extension(efac);
+        return ext;
+    }
+
+
+    /**
+     * Ideal extension.
+     * @param efac polynomial ring for extension
+     * @return ideal G, with coefficients in QuotientRing(efac)
+     */
+    public Ideal<Quotient<C>> extension(GenPolynomialRing<C> efac) {
+        QuotientRing<C> qfac = new QuotientRing<C>(efac);
+        Ideal<Quotient<C>> ext = extension(qfac);
+        return ext;
+    }
+
+
+    /**
+     * Ideal extension.
+     * @param qfac quotient polynomial ring for extension
+     * @return ideal G, with coefficients in qfac
+     */
+    public Ideal<Quotient<C>> extension(QuotientRing<C> qfac) {
+        GenPolynomialRing<C> fac = getRing();
+        GenPolynomialRing<C> efac = qfac.ring;
+        String[] rvars = GroebnerBasePartial.remainingVars( fac.getVars(), efac.getVars() );
+
+        GroebnerBasePartial<C> bbp = new GroebnerBasePartial<C>();
+        OptimizedPolynomialList<C> pgb = bbp.partialGB(getList(),rvars);
+
+        GenPolynomialRing<GenPolynomial<C>> rfac = new GenPolynomialRing<GenPolynomial<C>>(efac,rvars.length,rvars);
+        List<GenPolynomial<C>> list = pgb.list;
+        List<GenPolynomial<GenPolynomial<C>>> rpgb = PolyUtil.<C> recursive(rfac,list);
+
+        GenPolynomialRing<Quotient<C>> qpfac = new GenPolynomialRing<Quotient<C>>(qfac,rvars.length,rvars);
+        List<GenPolynomial<Quotient<C>>> qpgb = PolyUfdUtil.<C> quotientFromIntegralCoefficients(qpfac,rpgb);
+
+        Ideal<Quotient<C>> ext = new Ideal<Quotient<C>>(qpfac,qpgb);
+        return ext;
+    }
+
+
+    /**
+     * Ideal contraction.
+     * @param eideal extension ideal of this.
+     * @return contraction ideal of eideal
+     */
+    public Ideal<C> contraction(Ideal<Quotient<C>> eideal) {
+        List<GenPolynomial<Quotient<C>>> qgb = eideal.getList();
+        QuotientRing<C> qfac = (QuotientRing<C>) eideal.getRing().coFac;
+        GenPolynomialRing<GenPolynomial<C>> rfac = new GenPolynomialRing<GenPolynomial<C>>(qfac.ring,eideal.getRing());
+        List<GenPolynomial<GenPolynomial<C>>> cgb = PolyUfdUtil.<C> integralFromQuotientCoefficients(rfac,qgb);
+
+        GenPolynomialRing<C> dfac = qfac.ring.extend(eideal.getRing().getVars());
+        List<GenPolynomial<C>> dgb = PolyUtil.<C> distribute(dfac,cgb);
+
+        GreatestCommonDivisor<C> ufd = GCDFactory.getImplementation(qfac.ring.coFac);
+        // compute ideal quotient
+        GenPolynomial<C> f = null;
+        for ( GenPolynomial<GenPolynomial<C>> p : cgb ) {
+            if ( f == null ) {
+                f = p.leadingBaseCoefficient();
+            } else {
+                f = ufd.lcm(f,p.leadingBaseCoefficient());
+            }
+        }
+        Ideal<C> cont = new Ideal<C>(dfac,dgb);
+        cont = cont.infiniteQuotientRab(f);
+        return cont;
     }
 
 }
