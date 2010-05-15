@@ -2231,7 +2231,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
      * @return contraction ideal of eideal in this polynomial ring
      */
     public Ideal<C> permContraction(Ideal<Quotient<C>> eideal) {
-	return Ideal.<C> permutation(getRing(),contraction(eideal));
+	return Ideal.<C> permutation( getRing(), Ideal.<C> contraction(eideal) );
     }
 
 
