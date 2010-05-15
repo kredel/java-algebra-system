@@ -2231,7 +2231,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
      * @return contraction ideal of eideal in this polynomial ring
      */
     public Ideal<C> permContraction(Ideal<Quotient<C>> eideal) {
-	return Ideal.<C> permContraction(getRing(),eideal);
+	return Ideal.<C> permutation(getRing(),contraction(eideal));
     }
 
 
@@ -2278,15 +2278,13 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
 
 
     /**
-     * Ideal contraction and permutation.
+     * Ideal permutation.
      * @param oring polynomial ring to which variables are back permuted.
-     * @param eideal extension ideal of this.
-     * @return contraction ideal of eideal in polynomial ring oring
+     * @param cont ideal to be permuted
+     * @return permutation of cont in polynomial ring oring
      */
     public static <C extends GcdRingElem<C>> 
-      Ideal<C> permContraction(GenPolynomialRing<C> oring, Ideal<Quotient<C>> eideal) {
-        // contract without permutation
-        Ideal<C> cont = contraction(eideal);
+      Ideal<C> permutation(GenPolynomialRing<C> oring, Ideal<C> cont) {
         GenPolynomialRing<C> dfac = cont.getRing();
         // back permutation of variables
         String[] ovars = oring.getVars(); //getRing().getVars(); // this must have the old variables
