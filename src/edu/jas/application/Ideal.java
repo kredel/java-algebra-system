@@ -2226,22 +2226,21 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
 
 
     /**
-     * Ideal contraction.
+     * Ideal contraction and permutation.
      * @param eideal extension ideal of this.
-     * @return contraction ideal of eideal
+     * @return contraction ideal of eideal in this polynomial ring
      */
-    public Ideal<C> contraction(Ideal<Quotient<C>> eideal) {
-	return Ideal.<C> contraction(getRing(),eideal);
+    public Ideal<C> permContraction(Ideal<Quotient<C>> eideal) {
+	return Ideal.<C> permContraction(getRing(),eideal);
     }
 
 
     /**
      * Ideal contraction.
      * @param eideal extension ideal of this.
-     * @return contraction ideal of eideal
+     * @return contraction ideal of eideal in distributed polynomial ring
      */
-    public static <C extends GcdRingElem<C>> 
-      Ideal<C> contraction(GenPolynomialRing<C> oring, Ideal<Quotient<C>> eideal) {
+    public static <C extends GcdRingElem<C>> Ideal<C> contraction(Ideal<Quotient<C>> eideal) {
         List<GenPolynomial<Quotient<C>>> qgb = eideal.getList();
         QuotientRing<C> qfac = (QuotientRing<C>) eideal.getRing().coFac;
         GenPolynomialRing<GenPolynomial<C>> rfac = new GenPolynomialRing<GenPolynomial<C>>(qfac.ring,eideal.getRing());
@@ -2274,17 +2273,29 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
         f = sqf.squarefreePart(f);
         System.out.println("f = " + f);
         cont = cont.infiniteQuotientRab(f);
+        return cont;
+    }
 
+
+    /**
+     * Ideal contraction and permutation.
+     * @param oring polynomial ring to which variables are back permuted.
+     * @param eideal extension ideal of this.
+     * @return contraction ideal of eideal in polynomial ring oring
+     */
+    public static <C extends GcdRingElem<C>> 
+      Ideal<C> permContraction(GenPolynomialRing<C> oring, Ideal<Quotient<C>> eideal) {
+        // contract without permutation
+        Ideal<C> cont = contraction(eideal);
+        GenPolynomialRing<C> dfac = cont.getRing();
         // back permutation of variables
         String[] ovars = oring.getVars(); //getRing().getVars(); // this must have the old variables
         System.out.println("ovars = " + Arrays.toString(ovars));
         String[] dvars = dfac.getVars();
         System.out.println("dvars = " + Arrays.toString(dvars));
-
         if ( ! Arrays.equals(ovars,dvars) ) {
             List<Integer> perm = GroebnerBasePartial.getPermutation(dvars,ovars);
             System.out.println("perm  = " + perm);
-
             GenPolynomialRing<C> pfac = TermOrderOptimization.<C> permutation(perm, cont.getRing());
             if (logger.isInfoEnabled()) {
                 logger.info("pfac = " + pfac);

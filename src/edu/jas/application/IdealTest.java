@@ -1659,7 +1659,7 @@ public class IdealTest extends TestCase {
         System.out.println("Ext = " + Ext);
         System.out.println("I   = " + I);
 
-        Ideal<BigRational> Con = I.contraction( Ext );
+        Ideal<BigRational> Con = I.permContraction( Ext );
         System.out.println("Con = " + Con);
         System.out.println("I   = " + I);
 
