@@ -1639,7 +1639,7 @@ public class IdealTest extends TestCase {
 
         a = fac.parse("( x y ) ");
         b = fac.parse("( x z ) ");
-        c = fac.parse("0");
+        //c = fac.parse("0");
 
         if (a.isZERO() || b.isZERO() ) {
             return;
@@ -1647,14 +1647,15 @@ public class IdealTest extends TestCase {
 
         L.add(a);
         L.add(b);
-        L.add(c);
+        //L.add(c);
         I = new Ideal<BigRational>(fac, L);
         I.doGB();
         assertTrue("not isZERO( I )", !I.isZERO());
         assertTrue("isGB( I )", I.isGB());
         System.out.println("I = " + I);
 
-        Ideal<Quotient<BigRational>> Ext = I.extension( new String[] { "x" } );
+        //Ideal<Quotient<BigRational>> Ext = I.extension( new String[] { "x" } );
+        Ideal<Quotient<BigRational>> Ext = I.extension( new String[] { "y", "z" } );
         System.out.println("Ext = " + Ext);
         System.out.println("I   = " + I);
 

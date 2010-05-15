@@ -130,7 +130,7 @@ public class GroebnerBasePartial<C extends GcdRingElem<C>> extends GroebnerBaseA
      * @return permutation for vars, such that perm(vars) == pvars ... (vars \
      *         pvars).
      */
-    public List<Integer> partialPermutation(String[] vars, String[] pvars) {
+    public static List<Integer> partialPermutation(String[] vars, String[] pvars) {
         return partialPermutation(vars, pvars, null);
         //no: return getPermutation(vars,pvars);
     }
@@ -142,7 +142,7 @@ public class GroebnerBasePartial<C extends GcdRingElem<C>> extends GroebnerBaseA
      * @param ename variables for the elimination ring, subseteq aname.
      * @return perm({vars \ ename},ename)
      */
-    public List<Integer> getPermutation(String[] aname, String[] ename) {
+    public static List<Integer> getPermutation(String[] aname, String[] ename) {
         if (aname == null || ename == null) {
             throw new IllegalArgumentException("aname or ename may not be null");
         }
@@ -183,7 +183,7 @@ public class GroebnerBasePartial<C extends GcdRingElem<C>> extends GroebnerBaseA
      * @param A string array
      * @return i if s == A[i] for some i, else -1.
      */
-    public int indexOf(String s, String[] A) {
+    public static int indexOf(String s, String[] A) {
         for (int i = 0; i < A.length; i++) {
             if (s.equals(A[i])) {
                 return i;
@@ -203,7 +203,7 @@ public class GroebnerBasePartial<C extends GcdRingElem<C>> extends GroebnerBaseA
      * @return permutation for vars, such that perm(vars) == (pvars, {vars \
      *         pvars}).
      */
-    public List<Integer> partialPermutation(String[] vars, String[] pvars, String[] rvars) {
+    public static List<Integer> partialPermutation(String[] vars, String[] pvars, String[] rvars) {
         if (vars == null || pvars == null) {
             throw new IllegalArgumentException("no variable names found");
         }
@@ -305,7 +305,8 @@ public class GroebnerBasePartial<C extends GcdRingElem<C>> extends GroebnerBaseA
      * @return permutation for vars, such that perm(vars) == (evars,pvars, {vars \
      *         {evars,pvars}}.
      */
-    public List<Integer> partialPermutation(String[] vars, String[] evars, String[] pvars, String[] rvars) {
+    public static List<Integer> 
+      partialPermutation(String[] vars, String[] evars, String[] pvars, String[] rvars) {
         if (vars == null || evars == null || pvars == null) {
             throw new IllegalArgumentException("not all variable names given");
         }

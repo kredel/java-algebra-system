@@ -786,7 +786,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
      * @return ideal(this : h<sup>s</sup>), a Groebner base
      */
     public Ideal<C> infiniteQuotientRab(GenPolynomial<C> h) {
-        if (h == null) { // == (0)
+        if (h == null||h.isZERO()) { // == (0)
             return getONE();
         }
         if (h.isONE()) {
@@ -2231,6 +2231,17 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
      * @return contraction ideal of eideal
      */
     public Ideal<C> contraction(Ideal<Quotient<C>> eideal) {
+	return Ideal.<C> contraction(getRing(),eideal);
+    }
+
+
+    /**
+     * Ideal contraction.
+     * @param eideal extension ideal of this.
+     * @return contraction ideal of eideal
+     */
+    public static <C extends GcdRingElem<C>> 
+      Ideal<C> contraction(GenPolynomialRing<C> oring, Ideal<Quotient<C>> eideal) {
         List<GenPolynomial<Quotient<C>>> qgb = eideal.getList();
         QuotientRing<C> qfac = (QuotientRing<C>) eideal.getRing().coFac;
         GenPolynomialRing<GenPolynomial<C>> rfac = new GenPolynomialRing<GenPolynomial<C>>(qfac.ring,eideal.getRing());
@@ -2259,9 +2270,32 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
             logger.info("contraction f = " + f);
             logger.info("cont = " + cont);
         }
-        f = engine.squarefreePart(f);
+        SquarefreeAbstract<C> sqf = SquarefreeFactory.getImplementation(dfac.coFac);
+        f = sqf.squarefreePart(f);
         System.out.println("f = " + f);
         cont = cont.infiniteQuotientRab(f);
+
+        // back permutation of variables
+        String[] ovars = oring.getVars(); //getRing().getVars(); // this must have the old variables
+        System.out.println("ovars = " + Arrays.toString(ovars));
+        String[] dvars = dfac.getVars();
+        System.out.println("dvars = " + Arrays.toString(dvars));
+
+        if ( ! Arrays.equals(ovars,dvars) ) {
+            List<Integer> perm = GroebnerBasePartial.getPermutation(dvars,ovars);
+            System.out.println("perm  = " + perm);
+
+            GenPolynomialRing<C> pfac = TermOrderOptimization.<C> permutation(perm, cont.getRing());
+            if (logger.isInfoEnabled()) {
+                logger.info("pfac = " + pfac);
+            }
+            List<GenPolynomial<C>> ppolys = TermOrderOptimization.<C> permutation(perm, pfac, cont.getList());
+            System.out.println("ppolys = " + ppolys);
+            cont = new Ideal<C>(pfac,ppolys);
+            if ( logger.isInfoEnabled() ) {
+                logger.info("perm cont = " + cont);
+            }
+        }
         return cont;
     }
 
