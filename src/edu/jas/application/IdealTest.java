@@ -1654,16 +1654,16 @@ public class IdealTest extends TestCase {
         assertTrue("isGB( I )", I.isGB());
         System.out.println("I = " + I);
 
-        Ideal<Quotient<BigRational>> Ext = I.extension( new String[] { "x" } );
+        IdealWithUniv<Quotient<BigRational>> Ext = I.extension( new String[] { "x" } );
         //Ideal<Quotient<BigRational>> Ext = I.extension( new String[] { "y", "z" } );
         System.out.println("Ext = " + Ext);
         System.out.println("I   = " + I);
 
-        Ideal<BigRational> Con = I.permContraction( Ext );
+        IdealWithUniv<BigRational> Con = I.permContraction( Ext.ideal );
         System.out.println("Con = " + Con);
         System.out.println("I   = " + I);
 
-        assertTrue("I subseteq Con(Ext(I)) ", Con.contains(I));
+        assertTrue("I subseteq Con(Ext(I)) ", Con.ideal.contains(I));
     }
 
 
@@ -1691,11 +1691,12 @@ public class IdealTest extends TestCase {
 
         //a = fac.parse("( x^2 + 2 x y z + z^4 ) ");
         //b = fac.parse("( y z - z^2 ) ");
-        //c = fac.parse("0");
 
-        a = fac.parse("( y + x y^2 ) ");
-        b = fac.parse("( x z + x^2 y ) ");
-        //c = fac.parse("0");
+        //a = fac.parse("( y + x y^2 ) ");
+        //b = fac.parse("( x z + x^2 y ) ");
+
+        a = fac.parse("( x y ) ");
+        b = fac.parse("( x z ) ");
 
         if (a.isZERO() || b.isZERO() ) {
             return;
