@@ -1614,7 +1614,7 @@ public class IdealTest extends TestCase {
     /**
      * Test extension-contraction.
      */
-    public void testExtCont() {
+    public void xtestExtCont() {
         String[] vars;
 
         BigRational coeff = new BigRational(17, 1);
@@ -1637,8 +1637,8 @@ public class IdealTest extends TestCase {
         //b = fac.parse("( y z - z^2 ) ");
         //c = fac.parse("0");
 
-        a = fac.parse("( x y ) ");
-        b = fac.parse("( x z ) ");
+        a = fac.parse("( y + x y^2 ) ");
+        b = fac.parse("( x z + x^2 y ) ");
         //c = fac.parse("0");
 
         if (a.isZERO() || b.isZERO() ) {
@@ -1654,8 +1654,8 @@ public class IdealTest extends TestCase {
         assertTrue("isGB( I )", I.isGB());
         System.out.println("I = " + I);
 
-        //Ideal<Quotient<BigRational>> Ext = I.extension( new String[] { "x" } );
-        Ideal<Quotient<BigRational>> Ext = I.extension( new String[] { "y", "z" } );
+        Ideal<Quotient<BigRational>> Ext = I.extension( new String[] { "x" } );
+        //Ideal<Quotient<BigRational>> Ext = I.extension( new String[] { "y", "z" } );
         System.out.println("Ext = " + Ext);
         System.out.println("I   = " + I);
 
@@ -1664,6 +1664,68 @@ public class IdealTest extends TestCase {
         System.out.println("I   = " + I);
 
         assertTrue("I subseteq Con(Ext(I)) ", Con.contains(I));
+    }
+
+
+    /**
+     * Test prime ideal decomposition.
+     */
+    public void testPrimeDecomp() {
+        String[] vars;
+
+        BigRational coeff = new BigRational(17, 1);
+        to = new TermOrder(); //TermOrder.INVLEX);
+        vars = new String[] { "x", "y", "z" };
+        fac = new GenPolynomialRing<BigRational>(coeff, rl, to, vars);
+
+        vars = fac.getVars();
+        //System.out.println("vars = " + Arrays.toString(vars));
+        //System.out.println("fac = " + fac);
+
+        Ideal<BigRational> I;
+        L = new ArrayList<GenPolynomial<BigRational>>();
+
+        //a = fac.parse("( y^2 - 5 ) x ");
+        //b = fac.parse("( y^2 - 5 ) x ");
+        //c = fac.parse("( x z^3 - 3 )");
+
+        //a = fac.parse("( x^2 + 2 x y z + z^4 ) ");
+        //b = fac.parse("( y z - z^2 ) ");
+        //c = fac.parse("0");
+
+        a = fac.parse("( y + x y^2 ) ");
+        b = fac.parse("( x z + x^2 y ) ");
+        //c = fac.parse("0");
+
+        if (a.isZERO() || b.isZERO() ) {
+            return;
+        }
+
+        L.add(a);
+        L.add(b);
+        //L.add(c);
+        I = new Ideal<BigRational>(fac, L);
+        I.doGB();
+        assertTrue("not isZERO( I )", !I.isZERO());
+        assertTrue("isGB( I )", I.isGB());
+        System.out.println("I = " + I);
+
+        List<IdealWithUniv<BigRational>> pdec = I.primeDecomposition();
+        System.out.println("pdec = " + pdec);
+        System.out.println("I    = " + I);
+
+        assertTrue("I subseteq cup G_i ", I.isDecomposition(pdec));
+
+        List<Ideal<BigRational>> dec = new ArrayList<Ideal<BigRational>>(pdec.size());
+        for ( IdealWithUniv<BigRational> pu : pdec ) {
+            dec.add( pu.ideal );
+        }
+        Ideal<BigRational> Ii = I.intersect(dec);
+        System.out.println("Ii   = " + Ii);
+        System.out.println("I    = " + I);
+
+        // not always:
+        assertTrue("I == Ii ", I.equals(Ii));
     }
 
 }
