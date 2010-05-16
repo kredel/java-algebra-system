@@ -847,6 +847,43 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
 
 
     /**
+     * Infinite quotient exponent. 
+     * @param h polynomial
+     * @param Q quotient this : f^\infinity
+     * @return s with Q = this : h<sup>s</sup>
+     */
+    public int infiniteQuotientExponent(GenPolynomial<C> h, Ideal<C> Q) {
+        int s = 0;
+        if (h == null) { // == 0
+            return s;
+        }
+        if (h.isZERO()||h.isONE()) {
+            return s;
+        }
+        if (this.isZERO()||this.isONE()) {
+            return s;
+        }
+        //see below: if (this.contains(Q)) {
+        //    return s;
+        //}
+        GenPolynomial<C> p = getRing().getONE();
+        for ( GenPolynomial<C> q : Q.getList() ) {
+            if (this.contains(q)) {
+                continue;
+            }
+            System.out.println("q = " + q + ", p = " + p + ", s = " + s);
+            GenPolynomial<C> qp = q.multiply(p);
+            while ( ! this.contains(qp) ) {
+                p = p.multiply(h);
+                s++;
+                qp = q.multiply(p);
+            }
+        }
+        return s;
+    }
+
+
+    /**
      * Infinite quotient. Generators for the infinite ideal quotient.
      * @param h polynomial
      * @return ideal(this : h<sup>s</sup>), a Groebner base
@@ -1980,9 +2017,9 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
             if (ri == null || ri.length != 2) {
                 rdec.add(id);
             } else {
-                IdealWithUniv<C> I = id.ideal.normalPositionFor(ri[0], ri[1],id.ogens);
+                IdealWithUniv<C> I = id.ideal.normalPositionFor(ri[0], ri[1],id.others);
                 //List<IdealWithUniv<C>> rd1 = I.zeroDimDecomposition();
-                List<IdealWithUniv<C>> rd = I.ideal.zeroDimDecompositionExtension(id.upolys,I.ogens);
+                List<IdealWithUniv<C>> rd = I.ideal.zeroDimDecompositionExtension(id.upolys,I.others);
                 //System.out.println("r_rd = " + rd);
                 dec.addAll(rd);
             }
@@ -2012,9 +2049,9 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
             if (ri == null || ri.length != 2) {
                 rdec.add(id);
             } else {
-                IdealWithUniv<C> I = id.ideal.normalPositionFor(ri[0], ri[1],id.ogens);
+                IdealWithUniv<C> I = id.ideal.normalPositionFor(ri[0], ri[1],id.others);
                 //List<IdealWithUniv<C>> rd1 = I.zeroDimDecomposition();
-                List<IdealWithUniv<C>> rd = I.ideal.zeroDimDecompositionExtension(id.upolys,I.ogens);
+                List<IdealWithUniv<C>> rd = I.ideal.zeroDimDecompositionExtension(id.upolys,I.others);
                 //System.out.println("rd = " + rd);
                 dec.addAll(rd);
             }
@@ -2098,7 +2135,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
                 }
             }
             // add other generators for performance
-            epol.addAll(Ip.ogens);
+            epol.addAll(Ip.others);
             Ideal<C> Ipp = new Ideal<C>( mfac, epol );
             // logger.info("eliminate_1 = " + Ipp);
             TermOrder to = null;
@@ -2278,7 +2315,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
         System.out.println("rfac = " + rfac);
         System.out.println("dfac = " + dfac);
 
-        // compute ideal quotient by f
+        // compute f and ideal quotient by f
         GreatestCommonDivisor<C> ufd = GCDFactory.getImplementation(qfac.ring.coFac);
         GenPolynomial<C> f = null; // qfac.ring.getONE();
         for ( GenPolynomial<GenPolynomial<C>> p : cgb ) {
@@ -2288,9 +2325,14 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
                 f = ufd.lcm(f,p.leadingBaseCoefficient()); 
             }
         }
+        Ideal<C> cont = new Ideal<C>(dfac,dgb);
+        List<GenPolynomial<C>> opol = new ArrayList<GenPolynomial<C>>();
+        if ( f.isONE() ) {
+            IdealWithUniv<C> cf = new IdealWithUniv<C>(cont,new ArrayList<GenPolynomial<C>>(),opol);
+            return cf;
+        }
         GenPolynomial<GenPolynomial<C>> fp = rfac.getONE().multiply(f);
         f = PolyUtil.<C> distribute(dfac,fp);
-        Ideal<C> cont = new Ideal<C>(dfac,dgb);
         if ( logger.isInfoEnabled() ) {
             logger.info("contraction f = " + f);
             logger.info("cont = " + cont);
@@ -2298,10 +2340,9 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
         SquarefreeAbstract<C> sqf = SquarefreeFactory.getImplementation(dfac.coFac);
         f = sqf.squarefreePart(f);
         System.out.println("f = " + f);
-        cont = cont.infiniteQuotientRab(f);
-        List<GenPolynomial<C>> opol = new ArrayList<GenPolynomial<C>>();
-	opol.add(f);
-        IdealWithUniv<C> cf = new IdealWithUniv<C>(cont,new ArrayList<GenPolynomial<C>>(),opol);
+        Ideal<C> Q = cont.infiniteQuotientRab(f);
+        opol.add(f);
+        IdealWithUniv<C> cf = new IdealWithUniv<C>(Q,new ArrayList<GenPolynomial<C>>(),opol);
         return cf;
     }
 
@@ -2336,7 +2377,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
         if ( logger.isInfoEnabled() ) {
             logger.info("perm cont = " + cont);
         }
-        List<GenPolynomial<C>> opolys = TermOrderOptimization.<C> permutation(perm, pfac, Cont.ogens);
+        List<GenPolynomial<C>> opolys = TermOrderOptimization.<C> permutation(perm, pfac, Cont.others);
         System.out.println("opolys = " + opolys);
         Cont = new IdealWithUniv<C>(cont,new ArrayList<GenPolynomial<C>>(),opolys);
         return Cont;
@@ -2409,9 +2450,9 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
         if ( this.contains(cont.ideal) ) {
             return dec;
         }
-        //Ideal<C> quot = quotient(cont);
+        //Ideal<C> quot = quotient(cont); // test only
         //System.out.println("quot = " + quot);
-        List<GenPolynomial<C>> ql = cont.ogens;
+        List<GenPolynomial<C>> ql = cont.others;
         if ( ql.size() == 0 ) { // should not happen
             return dec;
         }
@@ -2421,9 +2462,12 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
         if ( f.isONE() ) { 
             return dec;
         }
+        int s = this.infiniteQuotientExponent(f,cont.ideal);
+        System.out.println("exponent f = " + s);
+        //System.out.println("exponent this = " + this);
         Ideal<C> T = sum(f);
         System.out.println("T = " + T);
-	// recursion:
+        // recursion:
         List<IdealWithUniv<C>> Tdec = T.primeDecomposition();
         System.out.println("Tdec = " + Tdec);
         dec.addAll(Tdec);
