@@ -1674,7 +1674,7 @@ public class IdealTest extends TestCase {
         String[] vars;
 
         BigRational coeff = new BigRational(17, 1);
-        to = new TermOrder(); //TermOrder.INVLEX);
+        to = new TermOrder(TermOrder.INVLEX);
         vars = new String[] { "x", "y", "z" };
         fac = new GenPolynomialRing<BigRational>(coeff, rl, to, vars);
 
@@ -1695,8 +1695,11 @@ public class IdealTest extends TestCase {
         //a = fac.parse("( y + x y^2 ) ");
         //b = fac.parse("( x z + x^2 y ) ");
 
-        a = fac.parse("( x y ) ");
-        b = fac.parse("( x z ) ");
+        a = fac.parse("( z^2 - x ) ");
+        b = fac.parse("( y^2 - x ) ");
+
+        //a = fac.parse("( x y ) ");
+        //b = fac.parse("( x z ) ");
 
         if (a.isZERO() || b.isZERO() ) {
             return;
@@ -1713,7 +1716,7 @@ public class IdealTest extends TestCase {
 
         List<IdealWithUniv<BigRational>> pdec = I.primeDecomposition();
         System.out.println("pdec = " + pdec);
-        System.out.println("I    = " + I);
+        //System.out.println("I    = " + I);
 
         assertTrue("I subseteq cup G_i ", I.isDecomposition(pdec));
 
@@ -1722,8 +1725,8 @@ public class IdealTest extends TestCase {
             dec.add( pu.ideal );
         }
         Ideal<BigRational> Ii = I.intersect(dec);
-        System.out.println("Ii   = " + Ii);
-        System.out.println("I    = " + I);
+        //System.out.println("Ii   = " + Ii);
+        //System.out.println("I    = " + I);
 
         // not always:
         assertTrue("I == Ii ", I.equals(Ii));
