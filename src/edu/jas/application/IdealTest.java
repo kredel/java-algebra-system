@@ -1659,7 +1659,7 @@ public class IdealTest extends TestCase {
         System.out.println("Ext = " + Ext);
         System.out.println("I   = " + I);
 
-        IdealWithUniv<BigRational> Con = I.permContraction( Ext.ideal );
+        IdealWithUniv<BigRational> Con = I.permContraction( Ext );
         System.out.println("Con = " + Con);
         System.out.println("I   = " + I);
 
@@ -1794,7 +1794,7 @@ public class IdealTest extends TestCase {
         System.out.println("Ii   = " + Ii);
         System.out.println("I    = " + I);
 
-        //assertTrue("I == Ii ", I.equals(Ii));
+        assertTrue("Ii.contains(I) ", Ii.contains(I));
     }
 
 }
