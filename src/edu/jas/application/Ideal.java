@@ -2453,6 +2453,21 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
 
 
     /**
+     * Ideal radical.
+     * @return the radical ideal of this
+     */
+    public Ideal<C> radical() {
+        List<IdealWithUniv<C>> rdec = radicalDecomposition();
+        List<Ideal<C>> dec = new ArrayList<Ideal<C>>(rdec.size());
+        for ( IdealWithUniv<C> ru : rdec ) {
+            dec.add( ru.ideal );
+        }
+        Ideal<C> R = intersect(dec);
+        return R;
+    }
+
+
+    /**
      * Ideal radical decompostition. 
      * @return intersection of ideals G_i with ideal(this) subseteq cap_i(
      *         ideal(G_i) ) and each G_i is a radical ideal

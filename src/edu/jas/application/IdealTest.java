@@ -1670,7 +1670,7 @@ public class IdealTest extends TestCase {
     /**
      * Test prime ideal decomposition.
      */
-    public void xtestPrimeDecomp() {
+    public void testPrimeDecomp() {
         String[] vars;
 
         BigRational coeff = new BigRational(17, 1);
@@ -1736,7 +1736,7 @@ public class IdealTest extends TestCase {
     /**
      * Test radical ideal decomposition.
      */
-    public void xtestRadicalDecomp() {
+    public void testRadicalDecomp() {
         String[] vars;
 
         BigRational coeff = new BigRational(17, 1);
