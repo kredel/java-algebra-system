@@ -39,6 +39,15 @@ public class ComputerThreads {
 
 
     /**
+      * Flag for thread usage.  
+      * <b>Note:</b> Only introduced because
+      * Google app engine does not support threads.
+      * @see edu.jas.ufd.GCDFactory#getProxy
+      */
+    public static boolean NO_THREADS = false;
+
+
+    /**
       * Number of processors.
       */
     public static final int N_CPUS = Runtime.getRuntime().availableProcessors();

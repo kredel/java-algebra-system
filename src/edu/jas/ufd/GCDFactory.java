@@ -17,6 +17,7 @@ import edu.jas.arith.ModLongRing;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.structure.ModularRingFactory;
+import edu.jas.kern.ComputerThreads;
 
 
 /**
@@ -249,9 +250,14 @@ public class GCDFactory {
      * Determine suitable proxy for gcd algorithms, other cases.
      * @param fac RingFactory<C>.
      * @return gcd algorithm implementation.
+     * <b>Note:</b> This method contains a hack for Google app engine to not use threads.
+     * @see edu.jas.kern.ComputerThreads#NO_THREADS
      */
     @SuppressWarnings("unchecked")
     public static <C extends GcdRingElem<C>> GreatestCommonDivisorAbstract<C> getProxy(RingFactory<C> fac) {
+        if ( ComputerThreads.NO_THREADS ) { // hack for Google app engine
+           return GCDFactory.<C> getImplementation(fac);
+        }
         GreatestCommonDivisorAbstract/*raw type<C>*/ufd;
         logger.debug("fac = " + fac.getClass().getName());
         int t = 0;
