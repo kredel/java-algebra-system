@@ -1670,7 +1670,7 @@ public class IdealTest extends TestCase {
     /**
      * Test prime ideal decomposition.
      */
-    public void testPrimeDecomp() {
+    public void xtestPrimeDecomp() {
         String[] vars;
 
         BigRational coeff = new BigRational(17, 1);
@@ -1736,7 +1736,7 @@ public class IdealTest extends TestCase {
     /**
      * Test radical ideal decomposition.
      */
-    public void testRadicalDecomp() {
+    public void xtestRadicalDecomp() {
         String[] vars;
 
         BigRational coeff = new BigRational(17, 1);
@@ -1791,10 +1791,15 @@ public class IdealTest extends TestCase {
             dec.add( ru.ideal );
         }
         Ideal<BigRational> Ii = I.intersect(dec);
-        System.out.println("Ii   = " + Ii);
-        System.out.println("I    = " + I);
+        //System.out.println("Ii   = " + Ii);
+        //System.out.println("I    = " + I);
 
         assertTrue("Ii.contains(I) ", Ii.contains(I));
+
+        //Ii = I.radical();
+        //System.out.println("Ii   = " + Ii);
+        //System.out.println("I    = " + I);
+        //assertTrue("Ii.contains(I) ", Ii.contains(I));
     }
 
 
@@ -1829,8 +1834,8 @@ public class IdealTest extends TestCase {
         a = fac.parse("( x z^2 - 1 )^2 ");
         b = fac.parse("( y^2 - x ) ");
 
-        //a = fac.parse("( x y ) ");
-        //b = fac.parse("( x z ) ");
+        //a = fac.parse("( x^2 y ) ");
+        //b = fac.parse("( x z^3 ) ");
 
         if (a.isZERO() || b.isZERO() ) {
             return;
@@ -1845,22 +1850,22 @@ public class IdealTest extends TestCase {
         assertTrue("isGB( I )", I.isGB());
         System.out.println("I = " + I);
 
-        List<IdealWithUniv<BigRational>> pdec = I.primeDecomposition();
-        System.out.println("pdec = " + pdec);
-        //System.out.println("I    = " + I);
-
-        assertTrue("I subseteq cup G_i ", I.isDecomposition(pdec));
-
-        List<Ideal<BigRational>> dec = new ArrayList<Ideal<BigRational>>(pdec.size());
-        for ( IdealWithUniv<BigRational> pu : pdec ) {
-            dec.add( pu.ideal );
-        }
-        Ideal<BigRational> Ii = I.intersect(dec);
-        System.out.println("Ii   = " + Ii);
+        List<Ideal<BigRational>> qdec = I.primaryDecomposition();
+        System.out.println("qdec = " + qdec);
         System.out.println("I    = " + I);
 
+//         List<Ideal<BigRational>> dec = new ArrayList<Ideal<BigRational>>(qdec.size());
+//         for ( IdealWithUniv<BigRational> ru : qdec ) {
+//             dec.add( ru.ideal );
+//         }
+//         assertTrue("I subseteq cup G_i ", I.isDecomposition(dec));
+
+        Ideal<BigRational> Ii = I.intersect(qdec);
+        //System.out.println("Ii   = " + Ii);
+        //System.out.println("I    = " + I);
+
         // not always:
-        //assertTrue("Ii == Ii ", I.equals(Ii));
+        assertTrue("Ii == Ii ", I.equals(Ii));
     }
 
 }
