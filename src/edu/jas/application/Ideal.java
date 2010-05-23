@@ -553,6 +553,28 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
 
 
     /**
+     * Summation. Generators for the sum of this ideal and a list of polynomials. Note: if this ideal is a
+     * Groebner base, a Groebner base is returned.
+     * @param L list of polynomials
+     * @return ideal(this+L)
+     */
+    public Ideal<C> sum(List<GenPolynomial<C>> L) {
+        if (L == null || L.isEmpty()) {
+            return this;
+        }
+        int s = getList().size() + L.size();
+        List<GenPolynomial<C>> c = new ArrayList<GenPolynomial<C>>(s);
+        c.addAll(getList());
+        c.addAll(L);
+        Ideal<C> I = new Ideal<C>(getRing(), c, false);
+        if (isGB) {
+            I.doGB();
+        }
+        return I;
+    }
+
+
+    /**
      * Product. Generators for the product of ideals. Note: if both ideals are
      * Groebner bases, a Groebner base is returned.
      * @param B ideal
@@ -2045,13 +2067,23 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
             if ( Ip.ideal.getRing().nvar == getRing().nvar ) { // no field extension
                 dec.add(Ip);
             } else { // remove field extension
-                Ideal<C> Is = Ip.ideal.eliminate(getRing());
+                // add other generators for performance
+                Ideal<C> Id = Ip.ideal;
+                if ( Ip.others != null ) {
+                    System.out.println("adding Ip.others = " + Ip.others);
+                    List<GenPolynomial<C>> pp = new ArrayList<GenPolynomial<C>>();
+                    pp.addAll(Id.getList());
+                    pp.addAll(Ip.others);
+                    Id = new Ideal<C>(Id.getRing(),pp);
+                    //Ip = epol.addAll(Ip.others);
+                }
+                Ideal<C> Is = Id.eliminate(getRing());
                 //System.out.println("Is = " + Is);
                 int s = Ip.upolys.size()-getRing().nvar; // skip field ext univariate polys
                 List<GenPolynomial<C>> upol = Ip.upolys.subList(s,Ip.upolys.size());
                 IdealWithUniv<C> Iu = new IdealWithUniv<C>(Is,upol); 
                 //,Ip.others); ignored 
-                //System.out.println("Iu = " + Iu);
+                //System.out.println("ignored Ip.others = " + Ip.others);
                 dec.add(Iu);
             }
         }
@@ -2167,7 +2199,9 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
                 }
             }
             // add other generators for performance
-            epol.addAll(Ip.others);
+            if ( Ip.others != null ) {
+                epol.addAll(Ip.others);
+            }
             Ideal<C> Ipp = new Ideal<C>( mfac, epol );
             // logger.info("eliminate_1 = " + Ipp);
             TermOrder to = null;
