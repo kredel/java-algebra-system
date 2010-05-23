@@ -498,7 +498,7 @@ class Ideal:
         '''
         I = jas.application.Ideal(self.pset);
         self.prime = I.zeroDimPrimeDecomposition();
-        self.prime = I.zeroDimElimination(self.prime);
+##         self.prime = I.zeroDimElimination(self.prime);
         return self.prime;
 
     def primaryDecomp(self):
@@ -507,7 +507,7 @@ class Ideal:
         I = jas.application.Ideal(self.pset);
         if self.prime == None:
             self.prime = I.zeroDimPrimeDecomposition();
-            self.prime = I.zeroDimElimination(self.prime);
+##             self.prime = I.zeroDimElimination(self.prime);
         self.primary = I.zeroDimPrimaryDecomposition(self.prime);
         return self.primary;
 
