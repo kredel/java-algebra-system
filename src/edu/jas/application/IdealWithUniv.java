@@ -32,7 +32,7 @@ public class IdealWithUniv<C extends GcdRingElem<C>> implements Serializable {
 
 
     /**
-     * The list of other useful polynomials, e.g. generators or inifinite quotients.
+     * The list of other useful polynomials, e.g. generators or infinite quotients.
      */
     public final List<GenPolynomial<C>> others;
 

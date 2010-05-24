@@ -1562,6 +1562,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
         for (int i = list.ring.nvar - 1; i >= 0; i--) {
             List<IdealWithUniv<C>> part = new ArrayList<IdealWithUniv<C>>();
             for (IdealWithUniv<C> id : dec) {
+                //System.out.println("id = " + id + ", i = " + i);
                 GenPolynomial<C> u = id.ideal.constructUnivariate(i);
                 SortedMap<GenPolynomial<C>, Long> facs = engine.baseSquarefreeFactors(u);
                 if (facs.size() == 1 && facs.get(facs.firstKey()) == 1L) {
@@ -1581,12 +1582,15 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
                     // make p multivariate
                     GenPolynomial<C> pm = p.extendUnivariate(mfac, j);
                     // mfac.parse( p.toString() );
-                    //System.out.println("pm = " + pm);
+                    //stem.out.println("pm = " + pm);
                     Ideal<C> Ip = id.ideal.sum(pm);
                     List<GenPolynomial<C>> iup = new ArrayList<GenPolynomial<C>>();
                     iup.addAll(id.upolys);
                     iup.add(p);
                     IdealWithUniv<C> Ipu = new IdealWithUniv<C>(Ip, iup);
+                    if (debug) {
+                       logger.info("ideal with squarefree facs = " + Ipu);
+                    }
                     part.add(Ipu);
                 }
             }
