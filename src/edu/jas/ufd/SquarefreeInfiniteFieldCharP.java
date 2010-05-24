@@ -147,7 +147,7 @@ public class SquarefreeInfiniteFieldCharP<C extends GcdRingElem<C>> extends Squa
         Long cl = c.longValue();
         for (Quotient<C> p : sf.keySet()) {
             //System.out.println("p = " + p);
-            if (p.isConstant()) {
+            if (p.isConstant()) { // todo: check for non-constants in coefficients
                 continue;
             }
             Long e = sf.get(p);
@@ -166,11 +166,6 @@ public class SquarefreeInfiniteFieldCharP<C extends GcdRingElem<C>> extends Squa
         if (k == null) {
             k = 1L; //return null;
         }
-//         Long kc = k;
-//         if (k >= cl) {
-//             kc = k / cl;
-//         }
-//         System.out.println("cl = " + cl + ", k = " + k + ", kc = " + kc);
         // now c divides all exponents of non constant elements
         Quotient<C> rp = P.ring.getONE();
         for (Quotient<C> q : sf.keySet()) {

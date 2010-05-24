@@ -1628,7 +1628,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
     /**
      * Zero dimensional ideal decompostition. See algorithm DIRGZD of BGK 1986.
      * @return intersection of ideals G_i with ideal(this) subseteq cap_i(
-     *         ideal(G_i) )
+     *         ideal(G_i) ) and each ideal G_i has irreducible univariate polynomials
      */
     public List<IdealWithUniv<C>> zeroDimDecomposition() {
         List<IdealWithUniv<C>> dec = new ArrayList<IdealWithUniv<C>>();
@@ -2605,7 +2605,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
     /**
      * Ideal irreducible decompostition. 
      * @return intersection of ideals G_i with ideal(this) subseteq cap_i(
-     *         ideal(G_i) ) and each G_i consists of irreducible polynomials ideal
+     *         ideal(G_i) ) and each G_i is an ideal with irreducible univariate polynomials
      */
     public List<IdealWithUniv<C>> decomposition() {
         // check dimension
