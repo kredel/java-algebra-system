@@ -1549,11 +1549,11 @@ public class IdealTest extends TestCase {
         assertTrue("isGB( I )", I.isGB());
         //System.out.println("I = " + I);
 
-        List<Ideal<BigRational>> qzd = I.zeroDimPrimaryDecomposition();
+        List<PrimaryComponent<BigRational>> qzd = I.zeroDimPrimaryDecomposition();
         //System.out.println("qzd = " + qzd);
         //System.out.println("I   = " + I);
 
-        assertTrue("is intersection ", I.isZeroDimPrimaryDecomposition(qzd));
+        assertTrue("is intersection ", I.isPrimaryDecomposition(qzd));
     }
 
 
@@ -1850,22 +1850,22 @@ public class IdealTest extends TestCase {
         assertTrue("isGB( I )", I.isGB());
         System.out.println("I = " + I);
 
-        List<Ideal<BigRational>> qdec = I.primaryDecomposition();
+        List<PrimaryComponent<BigRational>> qdec = I.primaryDecomposition();
         System.out.println("qdec = " + qdec);
         System.out.println("I    = " + I);
 
-//         List<Ideal<BigRational>> dec = new ArrayList<Ideal<BigRational>>(qdec.size());
-//         for ( IdealWithUniv<BigRational> ru : qdec ) {
-//             dec.add( ru.ideal );
-//         }
-//         assertTrue("I subseteq cup G_i ", I.isDecomposition(dec));
+        List<Ideal<BigRational>> dec = new ArrayList<Ideal<BigRational>>(qdec.size());
+        for ( PrimaryComponent<BigRational> ru : qdec ) {
+            dec.add( ru.primary );
+        }
+        assertTrue("I eq cup G_i ", I.isPrimaryDecomposition(qdec));
 
-        Ideal<BigRational> Ii = I.intersect(qdec);
+        //Ideal<BigRational> Ii = I.intersect(dec);
         //System.out.println("Ii   = " + Ii);
         //System.out.println("I    = " + I);
 
-        // not always:
-        assertTrue("Ii == Ii ", I.equals(Ii));
+        // testet in isDecomposition:
+        //assertTrue("Ii == Ii ", I.equals(Ii));
     }
 
 }
