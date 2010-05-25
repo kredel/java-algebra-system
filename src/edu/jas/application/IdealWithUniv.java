@@ -32,7 +32,8 @@ public class IdealWithUniv<C extends GcdRingElem<C>> implements Serializable {
 
 
     /**
-     * The list of other useful polynomials, e.g. generators or infinite quotients.
+     * The list of other useful polynomials, e.g. generators or infinite
+     * quotients.
      */
     public final List<GenPolynomial<C>> others;
 
@@ -51,7 +52,7 @@ public class IdealWithUniv<C extends GcdRingElem<C>> implements Serializable {
      * @param up the list of univariate polynomials
      */
     protected IdealWithUniv(Ideal<C> id, List<GenPolynomial<C>> up) {
-        this(id,up,null);
+        this(id, up, null);
     }
 
 
@@ -75,7 +76,7 @@ public class IdealWithUniv<C extends GcdRingElem<C>> implements Serializable {
     @Override
     public String toString() {
         String s = ideal.toString() + "\nunivariate polynomials:\n" + upolys.toString();
-        if ( others == null ) {
+        if (others == null) {
             return s;
         } else {
             return s + "\nother polynomials:\n" + others.toString();
@@ -91,7 +92,7 @@ public class IdealWithUniv<C extends GcdRingElem<C>> implements Serializable {
     public String toScript() {
         // Python case
         String s = ideal.toScript() + ",  " + upolys.toString();
-        if ( others == null ) {
+        if (others == null) {
             return s;
         } else {
             return s + ", " + others.toString();

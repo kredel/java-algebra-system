@@ -49,7 +49,7 @@ public class PrimaryComponent<C extends GcdRingElem<C>> implements Serializable 
      * @param p the prime ideal.
      */
     protected PrimaryComponent(Ideal<C> q, IdealWithUniv<C> p) {
-        this(q,p,-1);
+        this(q, p, -1);
     }
 
 
@@ -91,7 +91,7 @@ public class PrimaryComponent<C extends GcdRingElem<C>> implements Serializable 
     @Override
     public String toString() {
         String s = "\nprimary:\n" + primary.toString() + "\nprime:\n" + prime.toString();
-        if ( exponent < 0 ) {
+        if (exponent < 0) {
             return s;
         } else {
             return s + "\nexponent:\n" + exponent;
@@ -107,7 +107,7 @@ public class PrimaryComponent<C extends GcdRingElem<C>> implements Serializable 
     public String toScript() {
         // Python case
         String s = primary.toScript() + ",  " + prime.toString();
-        if ( exponent < 0 ) {
+        if (exponent < 0) {
             return s;
         } else {
             return s + ", " + exponent;
