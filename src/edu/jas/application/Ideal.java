@@ -1750,13 +1750,14 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
                 return false;
             }
         }
+        // add lower variables if L contains ideals from field extensions
         GenPolynomialRing<C> ofac = list.ring;
         int r = ofac.nvar;
         int rp = L.get(0).ideal.list.ring.nvar;
         int d = rp - r;
         //System.out.println("d = " + d);
         Ideal<C> Id = this;
-        if (d > 0) { // add lower variables
+        if (d > 0) { 
             GenPolynomialRing<C> nfac = ofac.extendLower(d);
             //System.out.println("nfac = " + nfac);
             List<GenPolynomial<C>> elist = new ArrayList<GenPolynomial<C>>(list.list.size());
@@ -1768,7 +1769,6 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
             }
             Id = new Ideal<C>(nfac, elist, isGB, isTopt);
         }
-
         // test if this is contained in the intersection
         for (IdealWithUniv<C> I : L) {
             boolean t = I.ideal.contains(Id);
@@ -1778,6 +1778,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
             }
         }
         // test if all univariate polynomials are contained in the respective ideal
+        //List<GenPolynomial<C>> upprod = new ArrayList<GenPolynomial<C>>(rp);
         for (IdealWithUniv<C> I : L) {
             GenPolynomialRing<C> mfac = I.ideal.list.ring;
             int i = 0;
@@ -1895,8 +1896,8 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
 
 
     /**
-     * Normal position index, separate for polynomials with more than 2 variables. See also <a
-     * href="http://krum.rz.uni-mannheim.de/mas/src/masring/DIPDEC0.mi.html">mas.masring.DIPDEC0#DIGISR</a>
+     * Normal position index, separate for polynomials with more than 2 variables. See also 
+     * <a href="http://krum.rz.uni-mannheim.de/mas/src/masring/DIPDEC0.mi.html">mas.masring.DIPDEC0#DIGISR</a>
      * @return (i,j) for non-normal variables
      */
     public int[] normalPositionIndex2Vars() {
@@ -1963,8 +1964,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
 
     /**
      * Normal position index, separate multiple univariate polynomials. See also
-     * <a
-     * href="http://krum.rz.uni-mannheim.de/mas/src/masring/DIPDEC0.mi.html">mas.masring.DIPDEC0#DIGISM</a>
+     * <a href="http://krum.rz.uni-mannheim.de/mas/src/masring/DIPDEC0.mi.html">mas.masring.DIPDEC0#DIGISM</a>
      * @return (i,j) for non-normal variables
      */
     public int[] normalPositionIndexUnivars() {
@@ -2054,7 +2054,6 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
                 rdec.add(id);
             } else {
                 IdealWithUniv<C> I = id.ideal.normalPositionFor(ri[0], ri[1], id.others);
-                //List<IdealWithUniv<C>> rd1 = I.zeroDimDecomposition();
                 List<IdealWithUniv<C>> rd = I.ideal.zeroDimDecompositionExtension(id.upolys, I.others);
                 //System.out.println("r_rd = " + rd);
                 dec.addAll(rd);
@@ -2122,7 +2121,6 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
                 rdec.add(id);
             } else {
                 IdealWithUniv<C> I = id.ideal.normalPositionFor(ri[0], ri[1], id.others);
-                //List<IdealWithUniv<C>> rd1 = I.zeroDimDecomposition();
                 List<IdealWithUniv<C>> rd = I.ideal.zeroDimDecompositionExtension(id.upolys, I.others);
                 //System.out.println("rd = " + rd);
                 dec.addAll(rd);
@@ -2216,8 +2214,8 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
             if (mfac.tord.getEvord() != TermOrder.IGRLEX) {
                 List<GenPolynomial<C>> epols = new ArrayList<GenPolynomial<C>>();
                 to = new TermOrder(TermOrder.IGRLEX);
-                GenPolynomialRing<C> smfac = new GenPolynomialRing<C>(mfac.coFac, mfac.nvar, to, mfac
-                        .getVars());
+                GenPolynomialRing<C> smfac 
+                   = new GenPolynomialRing<C>(mfac.coFac, mfac.nvar, to, mfac.getVars());
                 for (GenPolynomial<C> p : epol) {
                     GenPolynomial<C> pm = smfac.copy(p);
                     epols.add(pm.monic());
