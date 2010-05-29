@@ -201,7 +201,7 @@ public class GCDFactory {
 
     /**
      * Determine suitable implementation of gcd algorithms, other cases.
-     * @param fac RingFactory<C>.
+     * @param fac RingFactory&lt;C&gt;.
      * @return gcd algorithm implementation.
      */
     @SuppressWarnings("unchecked")
@@ -248,7 +248,7 @@ public class GCDFactory {
 
     /**
      * Determine suitable proxy for gcd algorithms, other cases.
-     * @param fac RingFactory<C>.
+     * @param fac RingFactory&lt;C&gt;.
      * @return gcd algorithm implementation.
      * <b>Note:</b> This method contains a hack for Google app engine to not use threads.
      * @see edu.jas.kern.ComputerThreads#NO_THREADS
