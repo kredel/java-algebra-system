@@ -34,7 +34,8 @@ The library contains at the moment of the following
 <dt>edu.jas.arith:</dt>
 <dd>
   contains classes for arithmetic in the basic coefficient rings like
-  <code>BigRational</code>, <code>BigInteger</code> or
+  <code>BigRational</code>, <code>BigInteger</code>,
+  <code>ModInteger</code>, <code>BigDecimal</code> or
   <code>BigComplex</code>.
 </dd>
 <dt>edu.jas.poly:</dt>
@@ -74,9 +75,11 @@ The library contains at the moment of the following
 <dd>
   contains classes with applications of Groebner bases such as ideal
   intersections and ideal quotients implemented in <code>Ideal</code>
-  or <code>SolvableIdeal</code>.  Latest additions are comprehensive
-  Groebner bases for polynomial rings over parameter rings in class
-  <code>ComprehensiveGroebnerBaseSeq</code>.
+  or <code>SolvableIdeal</code>. Comprehensive Groebner bases for
+  polynomial rings over parameter rings are contained in class
+  <code>ComprehensiveGroebnerBaseSeq</code>.  Latest additions are
+  zero and arbitrary dimensional radical-, irreducible-, prime- and
+  primary-decomposition implemented in class <code>Ideal</code>.
 </dd>
 <dt>edu.jas.ufd:</dt>
 <dd>
@@ -100,6 +103,15 @@ The library contains at the moment of the following
   The package further contains an implementation for real algebraic numbers 
   <code>RealAlgebraicNumber</code> with a corresponding factory
   <code>RealAlgebraicRing</code>.
+  For complex root isolation there are <code>ComplexRoots</code> interface,
+  <code>ComplexRootsAbstract</code> and <code>ComplexRootsSturm</code> classes.
+  The implementation provides an exact infallible method which follows
+  the numeric method of Wilf.  It uses Sturm sequences following the
+  Routh-Hurwitz Method to count the number of complex roots within a
+  rectangle in the complex plane.
+  There is also an implementation for complex algebraic numbers 
+  <code>ComplexAlgebraicNumber</code> with a corresponding factory
+  <code>ComplexAlgebraicRing</code>.
 </dd>
 <dt>edu.jas.ps:</dt>
 <dd>
@@ -116,8 +128,8 @@ The library contains at the moment of the following
 <dd>
   contains further utilities for parallel and distributed computations
   like <code>ThreadPool</code>, <code>DistThreadPool</code> or
-  <code>DistHashTable</code> (part of this package has become obsolete
-  with JDK 1.5).
+  <code>DistHashTable</code>. Part of this package has become obsolete
+  with JDK 1.5.
 </dd>
 </dl>
 
@@ -385,7 +397,7 @@ the class edu.jas.gb.RunGB. E.g. <br />
 <p>
 <!-- Created: Sat Mar 19 21:44:14 CET 2005 -->
 <!-- hhmts start -->
-Last modified: Mon Mar  8 21:44:45 CET 2010
+Last modified: Fri May 28 21:28:33 CEST 2010
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
