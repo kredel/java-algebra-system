@@ -18,6 +18,8 @@ import edu.jas.structure.RingElem;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.structure.ModularRingFactory;
+import edu.jas.structure.Product;
+import edu.jas.structure.ProductRing;
 import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
@@ -102,7 +104,6 @@ public class GBFactory {
     }
 
 
-
     /**
      * Determine suitable implementation of GB algorithms, case BigInteger.
      * @param fac BigInteger.
@@ -162,11 +163,28 @@ public class GBFactory {
 
 
     /**
+     * Determine suitable implementation of GB algorithms, case regular rings.
+     * @param fac RegularRing.
+     * @return GB algorithm implementation.
+     */
+    public static <C extends RingElem<C>>  
+      GroebnerBaseAbstract<Product<C>> getImplementation(ProductRing<C> fac) {
+        GroebnerBaseAbstract<Product<C>> bba;
+        if (fac.onlyFields()) {
+            bba = new RGroebnerBaseSeq<Product<C>>();
+        } else {
+            bba = new RGroebnerBasePseudoSeq<Product<C>>(fac);
+        }
+        return bba;
+    }
+
+
+    /**
      * Determine suitable implementation of GB algorithms, other cases.
      * @param fac RingFactory&lt;C&gt;.
      * @return GB algorithm implementation.
      */
-    @SuppressWarnings("unchecked")
+    //@SuppressWarnings("unchecked")
     public static <C extends GcdRingElem<C>>  // interface RingElem not sufficient 
       GroebnerBaseAbstract<C> getImplementation(RingFactory<C> fac) {
         logger.debug("fac = " + fac.getClass().getName());
@@ -179,9 +197,16 @@ public class GBFactory {
             GroebnerBaseAbstract<GenPolynomial<C>> bbr 
                 = new GroebnerBasePseudoRecSeq<C>( (GenPolynomialRing<C>) ofac);
             bba = (GroebnerBaseAbstract) bbr;
+        } else if ( ofac instanceof ProductRing ) {
+	    ProductRing pfac = (ProductRing) ofac;
+            if (pfac.onlyFields()) {
+               bba = new RGroebnerBaseSeq<Product<C>>();
+            } else {
+               bba = new RGroebnerBasePseudoSeq<Product<C>>(pfac);
+            }
         } else {
             bba = new GroebnerBasePseudoSeq<C>(fac);
-        }
+	}
         logger.debug("bba = " + bba.getClass().getName());
         return (GroebnerBaseAbstract<C>)bba;
     }

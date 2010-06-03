@@ -272,6 +272,24 @@ public class ProductRing<C extends RingElem<C> >
 
 
     /**
+     * Query if this ring consists only of fields.
+     * @return true or false.
+     */
+    public boolean onlyFields() {
+        if ( nCopies != 0 ) {
+            return ring.isField();
+        } else {
+           for ( RingFactory<C> f : ringList ) {
+               if ( ! f.isField() ) {
+                  return false;
+               }
+           }
+        }
+        return true;
+    }
+
+
+    /**
      * Characteristic of this ring.
      * @return minimal characteristic of ring component.
      */
