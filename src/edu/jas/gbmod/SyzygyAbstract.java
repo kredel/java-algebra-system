@@ -74,8 +74,8 @@ public class SyzygyAbstract<C extends RingElem<C>>
     public SyzygyAbstract() {
         red = new ReductionSeq<C>();
         blas = new BasicLinAlg<C>();
-        //gb = new GroebnerBaseSeqPairSeq<C>();
-        gb = new GroebnerBaseSeq<C>();
+        gb = new GroebnerBaseSeqPairSeq<C>();
+        //gb = new GroebnerBaseSeq<C>();
         //gb = GBFactory.getImplementation( missing ); // not possible
     }
 
