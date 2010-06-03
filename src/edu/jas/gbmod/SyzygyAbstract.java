@@ -14,6 +14,7 @@ import java.io.Serializable;
 import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
+//import edu.jas.structure.RingFactory;
 
 import edu.jas.gb.ExtendedGB;
 import edu.jas.gb.GroebnerBase;
@@ -21,6 +22,7 @@ import edu.jas.gb.GroebnerBaseSeq;
 import edu.jas.gb.GroebnerBaseSeqPairSeq;
 import edu.jas.gb.Reduction;
 import edu.jas.gb.ReductionSeq;
+import edu.jas.gb.GBFactory;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolynomialList;
@@ -72,7 +74,9 @@ public class SyzygyAbstract<C extends RingElem<C>>
     public SyzygyAbstract() {
         red = new ReductionSeq<C>();
         blas = new BasicLinAlg<C>();
-        gb = new GroebnerBaseSeqPairSeq<C>();
+        //gb = new GroebnerBaseSeqPairSeq<C>();
+        gb = new GroebnerBaseSeq<C>();
+        //gb = GBFactory.getImplementation( missing ); // not possible
     }
 
 
@@ -320,7 +324,8 @@ public class SyzygyAbstract<C extends RingElem<C>>
         List<GenPolynomial<C>> G;
         PolynomialList<C> Gl;
 
-        G = (new GroebnerBaseSeq<C>()).GB( F.list );
+        //G = (new GroebnerBaseSeq<C>()).GB( F.list );
+        G = gb.GB( F.list );
         Z = zeroRelations( G );
         Gl = new PolynomialList<C>(F.ring, G);
         Zm = new ModuleList<C>(F.ring, Z);
@@ -406,7 +411,6 @@ public class SyzygyAbstract<C extends RingElem<C>>
             return zeroRelations( modv, F );
         }
         final int lenf = F.size(); 
-        //GroebnerBaseSeqPairSeq<C> gb = new GroebnerBaseSeqPairSeq<C>();
         ExtendedGB<C> exgb = gb.extGB( F );
         if ( debug ) {
            logger.debug("exgb = " + exgb);

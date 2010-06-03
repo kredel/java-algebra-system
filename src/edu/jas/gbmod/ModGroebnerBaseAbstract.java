@@ -12,9 +12,9 @@ import edu.jas.structure.RingElem;
 
 import edu.jas.gb.GroebnerBase;
 import edu.jas.gb.GroebnerBaseSeq;
+import edu.jas.gb.GBFactory;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.PolynomialList;
-
 
 import edu.jas.vector.ModuleList;
 

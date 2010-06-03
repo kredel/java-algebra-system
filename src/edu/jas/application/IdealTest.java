@@ -17,7 +17,7 @@ import org.apache.log4j.BasicConfigurator;
 import edu.jas.arith.BigDecimal;
 import edu.jas.arith.BigRational;
 import edu.jas.gb.GroebnerBase;
-import edu.jas.gb.GroebnerBaseSeq;
+import edu.jas.gb.GBFactory;
 import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
@@ -122,7 +122,8 @@ public class IdealTest extends TestCase {
         to = new TermOrder( /*TermOrder.INVLEX*/);
         String[] vars = new String[] { "x", "y", "z" };
         fac = new GenPolynomialRing<BigRational>(coeff, rl, to, vars);
-        bb = new GroebnerBaseSeq<BigRational>();
+        //bb = new GroebnerBaseSeq<BigRational>();
+        bb = GBFactory.getImplementation(coeff);
         a = b = c = d = e = null;
     }
 

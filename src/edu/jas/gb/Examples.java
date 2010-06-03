@@ -87,7 +87,8 @@ public class Examples {
         polynomials.add(p2);
         polynomials.add(p3);
            
-        GroebnerBase<Residue<ModInteger>> gb = new GroebnerBasePseudoSeq<Residue<ModInteger>>(ring);
+        //GroebnerBase<Residue<ModInteger>> gb = new GroebnerBasePseudoSeq<Residue<ModInteger>>(ring);
+        GroebnerBase<Residue<ModInteger>> gb = GBFactory.getImplementation(ring);
         List<GenPolynomial<Residue<ModInteger>>> G = gb.GB(polynomials);
         
         System.out.println(G);
@@ -154,7 +155,9 @@ public class Examples {
         polynomials.add(mv2v2);
         polynomials.add(mv1v1);
            
-        GroebnerBase<Residue<ModInteger>> gb = new GroebnerBasePseudoSeq<Residue<ModInteger>>(ring);
+        //GroebnerBase<Residue<ModInteger>> gb = new GroebnerBasePseudoSeq<Residue<ModInteger>>(ring);
+        GroebnerBase<Residue<ModInteger>> gb = GBFactory.getImplementation(ring);
+
         List<GenPolynomial<Residue<ModInteger>>> G = gb.GB(polynomials);
         
         System.out.println(G);
@@ -205,7 +208,9 @@ public class Examples {
 
         polynomials.addAll(fieldPolynomials);
 
-        GroebnerBase<ModInteger> gb = new GroebnerBaseSeq<ModInteger>();
+        //GroebnerBase<ModInteger> gb = new GroebnerBaseSeq<ModInteger>();
+        GroebnerBase<ModInteger> gb = GBFactory.getImplementation(z2);
+
         List<GenPolynomial<ModInteger>> G = gb.GB(polynomials);
         
         System.out.println(G);

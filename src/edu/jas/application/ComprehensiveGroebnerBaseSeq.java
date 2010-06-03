@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 
 import edu.jas.gb.GroebnerBase;
 import edu.jas.gb.GroebnerBasePseudoSeq;
+import edu.jas.gb.GBFactory;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
@@ -249,7 +250,8 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
             ResidueRing<C> r = new ResidueRing<C>(id);
             GenPolynomialRing<Residue<C>> rf = new GenPolynomialRing<Residue<C>>(r, cf);
             List<GenPolynomial<Residue<C>>> list = PolyUtilApp.<C> toResidue(rf, F);
-            GroebnerBase<Residue<C>> bb = new GroebnerBasePseudoSeq<Residue<C>>(r);
+            //GroebnerBase<Residue<C>> bb = new GroebnerBasePseudoSeq<Residue<C>>(r);
+            GroebnerBase<Residue<C>> bb = GBFactory.getImplementation(r);
             boolean t = bb.isGB(list);
             if (!t) {
                 System.out.println("test condition = " + cs.condition);
@@ -287,7 +289,8 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         GenPolynomialRing<Residue<C>> rf = new GenPolynomialRing<Residue<C>>(r, cf);
         List<GenPolynomial<Residue<C>>> list = PolyUtilApp.<C> toResidue(rf, F);
         logger.info("random residue = " + r.ideal.getList());
-        GroebnerBase<Residue<C>> bb = new GroebnerBasePseudoSeq<Residue<C>>(r);
+        //GroebnerBase<Residue<C>> bb = new GroebnerBasePseudoSeq<Residue<C>>(r);
+        GroebnerBase<Residue<C>> bb = GBFactory.getImplementation(r);
         boolean t = bb.isGB(list);
         if (!t) {
             System.out.println("no GB for residue coefficients = " + list);
