@@ -20,6 +20,7 @@ import edu.jas.structure.RingFactory;
 import edu.jas.structure.ModularRingFactory;
 import edu.jas.structure.Product;
 import edu.jas.structure.ProductRing;
+//import edu.jas.structure.RegularRingElem;
 import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
@@ -198,7 +199,7 @@ public class GBFactory {
                 = new GroebnerBasePseudoRecSeq<C>( (GenPolynomialRing<C>) ofac);
             bba = (GroebnerBaseAbstract) bbr;
         } else if ( ofac instanceof ProductRing ) {
-	    ProductRing pfac = (ProductRing) ofac;
+            ProductRing pfac = (ProductRing) ofac;
             if (pfac.onlyFields()) {
                bba = new RGroebnerBaseSeq<Product<C>>();
             } else {
@@ -206,7 +207,7 @@ public class GBFactory {
             }
         } else {
             bba = new GroebnerBasePseudoSeq<C>(fac);
-	}
+        }
         logger.debug("bba = " + bba.getClass().getName());
         return (GroebnerBaseAbstract<C>)bba;
     }
