@@ -1131,7 +1131,32 @@ public class PolyUtilApp<C extends RingElem<C> > {
 	    }
             System.out.println("cs = " + cs);
 	}
+        Map<ExpVector,GenPolynomial<C>> mas = as.reductum().contract(efac);
+	System.out.println("mas = " + mas);
+	if ( mas.size() == 1 ) {
+            for ( Map.Entry<ExpVector,GenPolynomial<C>> m : mas.entrySet() ) {
+		if ( m.getKey().isZERO() ) { 
+                    as = m.getValue();
+		}
+	    }
+            System.out.println("as = " + as);
+	}
+        Map<ExpVector,GenPolynomial<C>> mbs = bs.reductum().contract(efac);
+	System.out.println("mbs = " + mbs);
+	if ( mbs.size() == 1 ) {
+            for ( Map.Entry<ExpVector,GenPolynomial<C>> m : mbs.entrySet() ) {
+		if ( m.getKey().isZERO() ) { 
+                    bs = m.getValue();
+		}
+	    }
+            System.out.println("bs = " + bs);
+	}
         c = new AlgebraicNumberRing<C>(cs);
+        AlgebraicNumber<C> ab = new AlgebraicNumber<C>(c,as);  
+        AlgebraicNumber<C> bb = new AlgebraicNumber<C>(c,bs);  
+        System.out.println("ab = " + ab);
+        System.out.println("bb = " + bb);
+        
 	return c;
     }
 

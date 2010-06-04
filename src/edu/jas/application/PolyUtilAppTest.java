@@ -180,14 +180,17 @@ public class PolyUtilAppTest extends TestCase {
  * 
  */
  public void testPrimitiveElement() {
+     String[] va = new String[] { "alpha" };
+     String[] vb = new String[] { "beta" };
      GenPolynomialRing<BigRational> ufac;
-     ufac = new GenPolynomialRing<BigRational>(new BigRational(1),1);
+     ufac = new GenPolynomialRing<BigRational>(new BigRational(1),1,va);
 
      GenPolynomial<BigRational> m;
      m = ufac.univariate(0,2);
      m = m.subtract( ufac.fromInteger(2) );
      System.out.println("m = " + m);
 
+     ufac = new GenPolynomialRing<BigRational>(new BigRational(1),1,vb);
      GenPolynomial<BigRational> n;
      n = ufac.univariate(0,2);
      n = n.subtract( ufac.fromInteger(3) );
@@ -204,9 +207,6 @@ public class PolyUtilAppTest extends TestCase {
      AlgebraicNumberRing<BigRational> cfac;
      cfac = PolyUtilApp.<BigRational>primitiveElement(afac,bfac);
      System.out.println("cfac = " + cfac);
-
-
-
  }
 
 }
