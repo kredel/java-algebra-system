@@ -42,6 +42,7 @@ import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.PolynomialList;
 import edu.jas.poly.PolyUtil;
+import edu.jas.poly.TermOrder;
 
 import edu.jas.root.ComplexRootsSturm;
 import edu.jas.root.ComplexRootsAbstract;
@@ -1079,6 +1080,59 @@ public class PolyUtilApp<C extends RingElem<C> > {
         //System.out.println("Ir = " + Ir);
         List<IdealWithRealAlgebraicRoots<C,D>> roots = PolyUtilApp.<C,D> realAlgebraicRoots(Ir);
         return roots;
+    }
+
+
+    /**
+     * Construct primitive element for double field extension.
+     * @param a algebraic number ring
+     * @param b algebraic number ring
+     * @return algebraic number ring c, with Q(c) = Q(a,b)
+     */
+    public static <C extends GcdRingElem<C>> 
+      AlgebraicNumberRing<C> primitiveElement(AlgebraicNumberRing<C> a, AlgebraicNumberRing<C> b) {
+	AlgebraicNumberRing<C> c = null;
+	GenPolynomial<C> ap = a.modul;
+	GenPolynomial<C> bp = b.modul;
+        String[] av = ap.ring.getVars();
+        String[] bv = bp.ring.getVars();
+        String[] cv = new String[2];
+        cv[0] = av[0];
+        cv[1] = bv[0];
+        TermOrder to = new TermOrder(TermOrder.INVLEX);
+	GenPolynomialRing<C> cfac = new GenPolynomialRing<C>(ap.ring.coFac,2,to,cv);
+	GenPolynomial<C> as = ap.extendUnivariate(cfac,0);
+	GenPolynomial<C> bs = bp.extendUnivariate(cfac,1);
+	List<GenPolynomial<C>> L = new ArrayList<GenPolynomial<C>>(2);
+        L.add(as);
+	L.add(bs);
+	List<GenPolynomial<C>> Op = new ArrayList<GenPolynomial<C>>();
+	Ideal<C> id = new Ideal<C>(cfac,L);
+	System.out.println("id = " + id);
+	IdealWithUniv<C> iu = id.normalPositionFor(0,1,Op);
+	System.out.println("iu = " + iu);
+	List<GenPolynomial<C>> Np = iu.ideal.getList();
+	as = Np.get(0);
+	bs = Np.get(1);
+	GenPolynomial<C> cs = Np.get(2);
+	System.out.println("as = " + as);
+	System.out.println("bs = " + bs);
+	System.out.println("cs = " + cs);
+        String[] ev = new String[] { cs.ring.getVars()[0] };
+	GenPolynomialRing<C> efac = new GenPolynomialRing<C>(ap.ring.coFac,1,to,ev);
+	System.out.println("efac = " + efac);
+        Map<ExpVector,GenPolynomial<C>> ms = cs.contract(efac);
+	System.out.println("ms = " + ms);
+	if ( ms.size() == 1 ) {
+            for ( Map.Entry<ExpVector,GenPolynomial<C>> m : ms.entrySet() ) {
+		if ( m.getKey().isZERO() ) { 
+                    cs = m.getValue();
+		}
+	    }
+            System.out.println("cs = " + cs);
+	}
+        c = new AlgebraicNumberRing<C>(cs);
+	return c;
     }
 
 }

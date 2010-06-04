@@ -174,4 +174,39 @@ public class PolyUtilAppTest extends TestCase {
      assertTrue("!isONE( cp )", !cp.isONE() );
  }
 
+
+/**
+ * Test primitive element.
+ * 
+ */
+ public void testPrimitiveElement() {
+     GenPolynomialRing<BigRational> ufac;
+     ufac = new GenPolynomialRing<BigRational>(new BigRational(1),1);
+
+     GenPolynomial<BigRational> m;
+     m = ufac.univariate(0,2);
+     m = m.subtract( ufac.fromInteger(2) );
+     System.out.println("m = " + m);
+
+     GenPolynomial<BigRational> n;
+     n = ufac.univariate(0,2);
+     n = n.subtract( ufac.fromInteger(3) );
+     System.out.println("n = " + n);
+
+     AlgebraicNumberRing<BigRational> afac;
+     afac = new AlgebraicNumberRing<BigRational>(m);
+     System.out.println("afac = " + afac);
+
+     AlgebraicNumberRing<BigRational> bfac;
+     bfac = new AlgebraicNumberRing<BigRational>(n);
+     System.out.println("bfac = " + bfac);
+
+     AlgebraicNumberRing<BigRational> cfac;
+     cfac = PolyUtilApp.<BigRational>primitiveElement(afac,bfac);
+     System.out.println("cfac = " + cfac);
+
+
+
+ }
+
 }
