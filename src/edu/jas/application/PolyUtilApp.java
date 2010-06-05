@@ -1085,79 +1085,84 @@ public class PolyUtilApp<C extends RingElem<C> > {
 
     /**
      * Construct primitive element for double field extension.
-     * @param a algebraic number ring
-     * @param b algebraic number ring
-     * @return algebraic number ring c, with Q(c) = Q(a,b)
+     * @param a algebraic number ring with squarefree monic minimal polynomial
+     * @param b algebraic number ring with squarefree monic minimal polynomial
+     * @return primitive element container with algebraic number ring c, with Q(c) = Q(a,b)
      */
     public static <C extends GcdRingElem<C>> 
-      AlgebraicNumberRing<C> primitiveElement(AlgebraicNumberRing<C> a, AlgebraicNumberRing<C> b) {
-	AlgebraicNumberRing<C> c = null;
-	GenPolynomial<C> ap = a.modul;
-	GenPolynomial<C> bp = b.modul;
-        String[] av = ap.ring.getVars();
-        String[] bv = bp.ring.getVars();
+      PrimitiveElement<C> primitiveElement(AlgebraicNumberRing<C> a, AlgebraicNumberRing<C> b) {
+        GenPolynomial<C> ap = a.modul;
+        GenPolynomial<C> bp = b.modul;
+
+        // setup bivariate polynomial ring
         String[] cv = new String[2];
-        cv[0] = av[0];
-        cv[1] = bv[0];
+        cv[0] = ap.ring.getVars()[0];
+        cv[1] = bp.ring.getVars()[0];
         TermOrder to = new TermOrder(TermOrder.INVLEX);
-	GenPolynomialRing<C> cfac = new GenPolynomialRing<C>(ap.ring.coFac,2,to,cv);
-	GenPolynomial<C> as = ap.extendUnivariate(cfac,0);
-	GenPolynomial<C> bs = bp.extendUnivariate(cfac,1);
-	List<GenPolynomial<C>> L = new ArrayList<GenPolynomial<C>>(2);
+        GenPolynomialRing<C> cfac = new GenPolynomialRing<C>(ap.ring.coFac,2,to,cv);
+        GenPolynomial<C> as = ap.extendUnivariate(cfac,0);
+        GenPolynomial<C> bs = bp.extendUnivariate(cfac,1);
+        List<GenPolynomial<C>> L = new ArrayList<GenPolynomial<C>>(2);
         L.add(as);
-	L.add(bs);
-	List<GenPolynomial<C>> Op = new ArrayList<GenPolynomial<C>>();
-	Ideal<C> id = new Ideal<C>(cfac,L);
-	System.out.println("id = " + id);
-	IdealWithUniv<C> iu = id.normalPositionFor(0,1,Op);
-	System.out.println("iu = " + iu);
-	List<GenPolynomial<C>> Np = iu.ideal.getList();
-	as = Np.get(0);
-	bs = Np.get(1);
-	GenPolynomial<C> cs = Np.get(2);
-	System.out.println("as = " + as);
-	System.out.println("bs = " + bs);
-	System.out.println("cs = " + cs);
+        L.add(bs);
+        List<GenPolynomial<C>> Op = new ArrayList<GenPolynomial<C>>();
+
+        Ideal<C> id = new Ideal<C>(cfac,L);
+        //System.out.println("id = " + id);
+        IdealWithUniv<C> iu = id.normalPositionFor(0,1,Op);
+        //System.out.println("iu = " + iu);
+
+        // extract result polynomials
+        List<GenPolynomial<C>> Np = iu.ideal.getList();
+        as = Np.get(0);
+        bs = Np.get(1);
+        GenPolynomial<C> cs = Np.get(2);
+        //System.out.println("as = " + as);
+        //System.out.println("bs = " + bs);
+        //System.out.println("cs = " + cs);
         String[] ev = new String[] { cs.ring.getVars()[0] };
-	GenPolynomialRing<C> efac = new GenPolynomialRing<C>(ap.ring.coFac,1,to,ev);
-	System.out.println("efac = " + efac);
+        GenPolynomialRing<C> efac = new GenPolynomialRing<C>(ap.ring.coFac,1,to,ev);
+        //System.out.println("efac = " + efac);
         Map<ExpVector,GenPolynomial<C>> ms = cs.contract(efac);
-	System.out.println("ms = " + ms);
-	if ( ms.size() == 1 ) {
-            for ( Map.Entry<ExpVector,GenPolynomial<C>> m : ms.entrySet() ) {
-		if ( m.getKey().isZERO() ) { 
-                    cs = m.getValue();
-		}
-	    }
-            System.out.println("cs = " + cs);
-	}
+        //System.out.println("ms = " + ms);
+        for ( Map.Entry<ExpVector,GenPolynomial<C>> m : ms.entrySet() ) {
+            if ( m.getKey().isZERO() ) { 
+                cs = m.getValue();
+            } else {
+                throw new RuntimeException("wrong contraction " + ms + ", pol =  " + cs);
+            }
+        }
+        //System.out.println("cs = " + cs);
         Map<ExpVector,GenPolynomial<C>> mas = as.reductum().contract(efac);
-	System.out.println("mas = " + mas);
-	if ( mas.size() == 1 ) {
-            for ( Map.Entry<ExpVector,GenPolynomial<C>> m : mas.entrySet() ) {
-		if ( m.getKey().isZERO() ) { 
-                    as = m.getValue();
-		}
-	    }
-            System.out.println("as = " + as);
-	}
+        //System.out.println("mas = " + mas);
+        for ( Map.Entry<ExpVector,GenPolynomial<C>> m : mas.entrySet() ) {
+            if ( m.getKey().isZERO() ) { 
+                as = m.getValue();
+            } else {
+                throw new RuntimeException("wrong contraction " + mas + ", pol =  " + as);
+            }
+        }
+        //System.out.println("as = " + as);
         Map<ExpVector,GenPolynomial<C>> mbs = bs.reductum().contract(efac);
-	System.out.println("mbs = " + mbs);
-	if ( mbs.size() == 1 ) {
-            for ( Map.Entry<ExpVector,GenPolynomial<C>> m : mbs.entrySet() ) {
-		if ( m.getKey().isZERO() ) { 
-                    bs = m.getValue();
-		}
-	    }
-            System.out.println("bs = " + bs);
-	}
-        c = new AlgebraicNumberRing<C>(cs);
+        //System.out.println("mbs = " + mbs);
+        for ( Map.Entry<ExpVector,GenPolynomial<C>> m : mbs.entrySet() ) {
+            if ( m.getKey().isZERO() ) { 
+                bs = m.getValue();
+            } else {
+                throw new RuntimeException("wrong contraction " + mbs + ", pol =  " + bs);
+            }
+        }
+        //System.out.println("bs = " + bs);
+        AlgebraicNumberRing<C> c = new AlgebraicNumberRing<C>(cs);
         AlgebraicNumber<C> ab = new AlgebraicNumber<C>(c,as);  
         AlgebraicNumber<C> bb = new AlgebraicNumber<C>(c,bs);  
-        System.out.println("ab = " + ab);
-        System.out.println("bb = " + bb);
-        
-	return c;
+        //System.out.println("ab = " + ab);
+        //System.out.println("bb = " + bb);
+        PrimitiveElement<C> pe = new PrimitiveElement<C>(c,ab,bb,a,b);
+        if ( logger.isInfoEnabled() ) {
+            logger.info("primitive element = " + c);
+        }
+        return pe;
     }
 
 }
