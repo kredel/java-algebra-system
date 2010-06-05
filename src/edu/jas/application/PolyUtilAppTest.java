@@ -195,20 +195,57 @@ public class PolyUtilAppTest extends TestCase {
 
         ufac = new GenPolynomialRing<BigRational>(new BigRational(1),1,vb);
         GenPolynomial<BigRational> n;
-        n = ufac.univariate(0,5);
+        n = ufac.univariate(0,2);
         n = n.subtract( ufac.fromInteger(3) );
         //System.out.println("n = " + n);
 
         AlgebraicNumberRing<BigRational> afac;
         afac = new AlgebraicNumberRing<BigRational>(m);
-        System.out.println("afac = " + afac);
+        //System.out.println("afac = " + afac);
 
         AlgebraicNumberRing<BigRational> bfac;
         bfac = new AlgebraicNumberRing<BigRational>(n);
-        System.out.println("bfac = " + bfac);
+        //System.out.println("bfac = " + bfac);
 
         PrimitiveElement<BigRational> pe;
         pe = PolyUtilApp.<BigRational>primitiveElement(afac,bfac);
+        System.out.println("pe = " + pe);
+    }
+
+
+    /**
+     * Test primitive element of extension tower.
+     * 
+     */
+    public void testPrimitiveElementTower() {
+        String[] va = new String[] { "alpha" };
+        String[] vb = new String[] { "beta" };
+        GenPolynomialRing<BigRational> ufac;
+        ufac = new GenPolynomialRing<BigRational>(new BigRational(1),1,va);
+
+        GenPolynomial<BigRational> m;
+        m = ufac.univariate(0,3);
+        m = m.subtract( ufac.fromInteger(2) );
+        System.out.println("m = " + m);
+
+        AlgebraicNumberRing<BigRational> afac;
+        afac = new AlgebraicNumberRing<BigRational>(m);
+        System.out.println("afac = " + afac);
+
+        GenPolynomialRing<AlgebraicNumber<BigRational>> aufac;
+        aufac = new GenPolynomialRing<AlgebraicNumber<BigRational>>(afac,1,vb);
+
+        GenPolynomial<AlgebraicNumber<BigRational>> n;
+        n = aufac.univariate(0,2);
+        n = n.subtract( aufac.getONE().multiply( afac.getGenerator() ) );
+        System.out.println("n = " + n);
+
+        AlgebraicNumberRing<AlgebraicNumber<BigRational>> bfac;
+        bfac = new AlgebraicNumberRing<AlgebraicNumber<BigRational>>(n);
+        System.out.println("bfac = " + bfac);
+
+        PrimitiveElement<BigRational> pe;
+        pe = PolyUtilApp.<BigRational>primitiveElement(bfac);
         System.out.println("pe = " + pe);
     }
 

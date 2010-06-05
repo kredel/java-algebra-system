@@ -1114,8 +1114,8 @@ public class PolyUtilApp<C extends RingElem<C> > {
 
         // extract result polynomials
         List<GenPolynomial<C>> Np = iu.ideal.getList();
-        as = Np.get(0);
-        bs = Np.get(1);
+        as = Np.get(1);
+        bs = Np.get(0);
         GenPolynomial<C> cs = Np.get(2);
         //System.out.println("as = " + as);
         //System.out.println("bs = " + bs);
@@ -1161,6 +1161,105 @@ public class PolyUtilApp<C extends RingElem<C> > {
         PrimitiveElement<C> pe = new PrimitiveElement<C>(c,ab,bb,a,b);
         if ( logger.isInfoEnabled() ) {
             logger.info("primitive element = " + c);
+        }
+        return pe;
+    }
+
+
+    /**
+     * Construct primitive element for double field extension.
+     * @param b algebraic number ring with squarefree monic minimal polynomial over Q(a)
+     * @return primitive element container with algebraic number ring c, with Q(c) = Q(a)(b)
+     */
+    public static <C extends GcdRingElem<C>> 
+      PrimitiveElement<C> primitiveElement(AlgebraicNumberRing<AlgebraicNumber<C>> b) {
+        GenPolynomial<AlgebraicNumber<C>> bp = b.modul;
+        AlgebraicNumberRing<C> a = (AlgebraicNumberRing<C>) b.ring.coFac;
+        GenPolynomial<C> ap = a.modul;
+        System.out.println("ap = " + ap);
+        System.out.println("bp = " + bp);
+
+        // setup bivariate polynomial ring
+        String[] cv = new String[2];
+        cv[0] = ap.ring.getVars()[0];
+        cv[1] = bp.ring.getVars()[0];
+        TermOrder to = new TermOrder(TermOrder.INVLEX);
+        GenPolynomialRing<C> cfac = new GenPolynomialRing<C>(ap.ring.coFac,2,to,cv);
+        GenPolynomialRing<GenPolynomial<C>> rfac = new GenPolynomialRing<GenPolynomial<C>>(a.ring,1,bp.ring.getVars());
+        GenPolynomial<C> as = ap.extendUnivariate(cfac,0);
+        GenPolynomial<GenPolynomial<C>> bss = PolyUtil.<C> fromAlgebraicCoefficients(rfac,bp);
+        GenPolynomial<C> bs = PolyUtil.<C> distribute(cfac,bss);
+        System.out.println("as = " + as);
+        System.out.println("bs = " + bs);
+        List<GenPolynomial<C>> L = new ArrayList<GenPolynomial<C>>(2);
+        L.add(as);
+        L.add(bs);
+        List<GenPolynomial<C>> Op = new ArrayList<GenPolynomial<C>>();
+
+        Ideal<C> id = new Ideal<C>(cfac,L);
+        System.out.println("id = " + id);
+        IdealWithUniv<C> iu = id.normalPositionFor(0,1,Op);
+        System.out.println("iu = " + iu);
+
+        // extract result polynomials
+        List<GenPolynomial<C>> Np = iu.ideal.getList();
+        as = Np.get(1);
+        bs = Np.get(0);
+        GenPolynomial<C> cs = Np.get(2);
+        System.out.println("as = " + as);
+        System.out.println("bs = " + bs);
+        System.out.println("cs = " + cs);
+        String[] ev = new String[] { cs.ring.getVars()[0] };
+        GenPolynomialRing<C> efac = new GenPolynomialRing<C>(ap.ring.coFac,1,to,ev);
+        System.out.println("efac = " + efac);
+        Map<ExpVector,GenPolynomial<C>> ms = cs.contract(efac);
+        //System.out.println("ms = " + ms);
+        for ( Map.Entry<ExpVector,GenPolynomial<C>> m : ms.entrySet() ) {
+            if ( m.getKey().isZERO() ) { 
+                cs = m.getValue();
+            } else {
+                throw new RuntimeException("wrong contraction " + ms + ", pol =  " + cs);
+            }
+        }
+        System.out.println("cs = " + cs);
+        Map<ExpVector,GenPolynomial<C>> mas = as.reductum().contract(efac);
+        //System.out.println("mas = " + mas);
+        for ( Map.Entry<ExpVector,GenPolynomial<C>> m : mas.entrySet() ) {
+            if ( m.getKey().isZERO() ) { 
+                as = m.getValue();
+            } else {
+                throw new RuntimeException("wrong contraction " + mas + ", pol =  " + as);
+            }
+        }
+        System.out.println("as = " + as);
+        Map<ExpVector,GenPolynomial<C>> mbs = bs.reductum().contract(efac);
+        //System.out.println("mbs = " + mbs);
+        for ( Map.Entry<ExpVector,GenPolynomial<C>> m : mbs.entrySet() ) {
+            if ( m.getKey().isZERO() ) { 
+                bs = m.getValue();
+            } else {
+                throw new RuntimeException("wrong contraction " + mbs + ", pol =  " + bs);
+            }
+        }
+        System.out.println("bs = " + bs);
+
+        AlgebraicNumberRing<C> c = new AlgebraicNumberRing<C>(cs);
+        AlgebraicNumber<C> ab = new AlgebraicNumber<C>(c,as);  
+        System.out.println("ab = " + ab);
+
+        GenPolynomialRing<AlgebraicNumber<C>> br = new GenPolynomialRing<AlgebraicNumber<C>>(a,efac);
+        System.out.println("br = " + br);
+        GenPolynomial<AlgebraicNumber<C>> bsa = PolyUtil.<C> convertToAlgebraicCoefficients(br,bs);
+        System.out.println("bsa = " + bsa);
+
+        AlgebraicNumber<C> bb = new AlgebraicNumber<C>(c,bs);  
+        System.out.println("bb = " + bb);
+        AlgebraicNumberRing<AlgebraicNumber<C>> bbr = new AlgebraicNumberRing<AlgebraicNumber<C>>(bsa);  
+        System.out.println("bbr = " + bbr);
+
+        PrimitiveElement<C> pe = new PrimitiveElement<C>(c,ab,bb); // bbr) //,a,b);
+        if ( logger.isInfoEnabled() ) {
+            logger.info("primitive element = " + pe);
         }
         return pe;
     }
