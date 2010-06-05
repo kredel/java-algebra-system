@@ -1137,7 +1137,7 @@ public class PolyUtilApp<C extends RingElem<C> > {
         //System.out.println("mas = " + mas);
         for ( Map.Entry<ExpVector,GenPolynomial<C>> m : mas.entrySet() ) {
             if ( m.getKey().isZERO() ) { 
-                as = m.getValue();
+                as = m.getValue().negate();
             } else {
                 throw new RuntimeException("wrong contraction " + mas + ", pol =  " + as);
             }
@@ -1147,7 +1147,7 @@ public class PolyUtilApp<C extends RingElem<C> > {
         //System.out.println("mbs = " + mbs);
         for ( Map.Entry<ExpVector,GenPolynomial<C>> m : mbs.entrySet() ) {
             if ( m.getKey().isZERO() ) { 
-                bs = m.getValue();
+                bs = m.getValue().negate();
             } else {
                 throw new RuntimeException("wrong contraction " + mbs + ", pol =  " + bs);
             }
@@ -1226,7 +1226,7 @@ public class PolyUtilApp<C extends RingElem<C> > {
         //System.out.println("mas = " + mas);
         for ( Map.Entry<ExpVector,GenPolynomial<C>> m : mas.entrySet() ) {
             if ( m.getKey().isZERO() ) { 
-                as = m.getValue();
+                as = m.getValue().negate();
             } else {
                 throw new RuntimeException("wrong contraction " + mas + ", pol =  " + as);
             }
@@ -1236,7 +1236,7 @@ public class PolyUtilApp<C extends RingElem<C> > {
         //System.out.println("mbs = " + mbs);
         for ( Map.Entry<ExpVector,GenPolynomial<C>> m : mbs.entrySet() ) {
             if ( m.getKey().isZERO() ) { 
-                bs = m.getValue();
+                bs = m.getValue().negate();
             } else {
                 throw new RuntimeException("wrong contraction " + mbs + ", pol =  " + bs);
             }
@@ -1244,20 +1244,21 @@ public class PolyUtilApp<C extends RingElem<C> > {
         System.out.println("bs = " + bs);
 
         AlgebraicNumberRing<C> c = new AlgebraicNumberRing<C>(cs);
+        System.out.println("c = " + c);
         AlgebraicNumber<C> ab = new AlgebraicNumber<C>(c,as);  
         System.out.println("ab = " + ab);
 
-        GenPolynomialRing<AlgebraicNumber<C>> br = new GenPolynomialRing<AlgebraicNumber<C>>(a,efac);
-        System.out.println("br = " + br);
-        GenPolynomial<AlgebraicNumber<C>> bsa = PolyUtil.<C> convertToAlgebraicCoefficients(br,bs);
-        System.out.println("bsa = " + bsa);
+//         GenPolynomialRing<AlgebraicNumber<C>> br = new GenPolynomialRing<AlgebraicNumber<C>>(c,efac);
+//         System.out.println("br = " + br);
+//         GenPolynomial<AlgebraicNumber<C>> bsa = PolyUtil.<C> convertToAlgebraicCoefficients(br,bs);
+//         System.out.println("bsa = " + bsa);
 
         AlgebraicNumber<C> bb = new AlgebraicNumber<C>(c,bs);  
         System.out.println("bb = " + bb);
-        AlgebraicNumberRing<AlgebraicNumber<C>> bbr = new AlgebraicNumberRing<AlgebraicNumber<C>>(bsa);  
-        System.out.println("bbr = " + bbr);
+//         AlgebraicNumberRing<AlgebraicNumber<C>> bbr = new AlgebraicNumberRing<AlgebraicNumber<C>>(bsa);  
+//         System.out.println("bbr = " + bbr);
 
-        PrimitiveElement<C> pe = new PrimitiveElement<C>(c,ab,bb); // bbr) //,a,b);
+        PrimitiveElement<C> pe = new PrimitiveElement<C>(c,ab,bb); // (c,bbr,b) //,a,b);
         if ( logger.isInfoEnabled() ) {
             logger.info("primitive element = " + pe);
         }

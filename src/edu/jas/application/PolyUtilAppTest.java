@@ -16,6 +16,7 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
+import edu.jas.poly.PolyUtil;
 
 import edu.jas.structure.Product;
 import edu.jas.structure.ProductRing;
@@ -185,31 +186,64 @@ public class PolyUtilAppTest extends TestCase {
     public void testPrimitiveElement() {
         String[] va = new String[] { "alpha" };
         String[] vb = new String[] { "beta" };
-        GenPolynomialRing<BigRational> ufac;
-        ufac = new GenPolynomialRing<BigRational>(new BigRational(1),1,va);
+        GenPolynomialRing<BigRational> aufac, bufac;
 
+        // x^3 - 2
+        aufac = new GenPolynomialRing<BigRational>(new BigRational(1),1,va);
         GenPolynomial<BigRational> m;
-        m = ufac.univariate(0,3);
-        m = m.subtract( ufac.fromInteger(2) );
+        m = aufac.univariate(0,3);
+        m = m.subtract( aufac.fromInteger(2) );
         //System.out.println("m = " + m);
 
-        ufac = new GenPolynomialRing<BigRational>(new BigRational(1),1,vb);
+        // x^2 - 3
+        bufac = new GenPolynomialRing<BigRational>(new BigRational(1),1,vb);
         GenPolynomial<BigRational> n;
-        n = ufac.univariate(0,2);
-        n = n.subtract( ufac.fromInteger(3) );
+        n = bufac.univariate(0,2);
+        n = n.subtract( bufac.fromInteger(3) );
         //System.out.println("n = " + n);
 
-        AlgebraicNumberRing<BigRational> afac;
-        afac = new AlgebraicNumberRing<BigRational>(m);
+        AlgebraicNumberRing<BigRational> afac = new AlgebraicNumberRing<BigRational>(m);
         //System.out.println("afac = " + afac);
 
-        AlgebraicNumberRing<BigRational> bfac;
-        bfac = new AlgebraicNumberRing<BigRational>(n);
+        AlgebraicNumberRing<BigRational> bfac = new AlgebraicNumberRing<BigRational>(n);
         //System.out.println("bfac = " + bfac);
 
         PrimitiveElement<BigRational> pe;
         pe = PolyUtilApp.<BigRational>primitiveElement(afac,bfac);
-        System.out.println("pe = " + pe);
+        //System.out.println("pe = " + pe);
+        AlgebraicNumberRing<BigRational> cfac = pe.primitiveElem;
+
+        AlgebraicNumber<BigRational> a = afac.getGenerator();
+        AlgebraicNumber<BigRational> b = bfac.getGenerator();
+        GenPolynomial<BigRational> ap = a.val;
+        GenPolynomial<BigRational> bp = b.val;
+
+        // convert to primitive element field
+        GenPolynomialRing<AlgebraicNumber<BigRational>> ar 
+           = new GenPolynomialRing<AlgebraicNumber<BigRational>>(cfac,aufac);
+        GenPolynomial<AlgebraicNumber<BigRational>> aps 
+           = PolyUtil.<BigRational> convertToAlgebraicCoefficients(ar,ap);
+        AlgebraicNumber<BigRational> as
+           = PolyUtil.<AlgebraicNumber<BigRational>> evaluateMain(cfac,aps,pe.A);
+        //System.out.println("ar  = " + ar.toScript());
+        //System.out.println("aps = " + aps);
+        //System.out.println("as  = " + as);
+
+        // convert to primitive element field
+        GenPolynomialRing<AlgebraicNumber<BigRational>> br 
+           = new GenPolynomialRing<AlgebraicNumber<BigRational>>(cfac,bufac);
+        GenPolynomial<AlgebraicNumber<BigRational>> bps 
+           = PolyUtil.<BigRational> convertToAlgebraicCoefficients(br,bp);
+        AlgebraicNumber<BigRational> bs
+           = PolyUtil.<AlgebraicNumber<BigRational>> evaluateMain(cfac,bps,pe.B);
+        //System.out.println("br  = " + br.toScript());
+        //System.out.println("bps = " + bps);
+        //System.out.println("bs  = " + bs);
+
+        // test alpha+beta == gamma
+        AlgebraicNumber<BigRational> cs = as.sum(bs);
+        //System.out.println("cs  = " + cs);
+        assertEquals("alpha+beta == gamma", cs, cfac.getGenerator());
     }
 
 
@@ -217,7 +251,7 @@ public class PolyUtilAppTest extends TestCase {
      * Test primitive element of extension tower.
      * 
      */
-    public void testPrimitiveElementTower() {
+    public void xtestPrimitiveElementTower() {
         String[] va = new String[] { "alpha" };
         String[] vb = new String[] { "beta" };
         GenPolynomialRing<BigRational> ufac;
