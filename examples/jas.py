@@ -487,21 +487,21 @@ class Ideal:
             print;
 
     def radicalDecomp(self):
-        '''Compute radical decomposition of 0-dim ideal.
+        '''Compute radical decomposition of this ideal.
         '''
         I = jas.application.Ideal(self.pset);
         self.radical = I.radicalDecomposition();
         return self.radical;
 
     def primeDecomp(self):
-        '''Compute prime decomposition of 0-dim ideal.
+        '''Compute prime decomposition of this ideal.
         '''
         I = jas.application.Ideal(self.pset);
         self.prime = I.primeDecomposition();
         return self.prime;
 
     def primaryDecomp(self):
-        '''Compute primary decomposition of 0-dim ideal.
+        '''Compute primary decomposition of this ideal.
         '''
         I = jas.application.Ideal(self.pset);
 ##         if self.prime == None:
