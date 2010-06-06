@@ -54,7 +54,7 @@ import edu.jas.poly.GenPolynomialRing;
  * c = engine.GB(A);
  * </pre>
  * 
- * @see edu.jas.gb.GroebnerBase#GB( List<edu.jas.poly.GenPolynomial> P)
+ * @see edu.jas.gb.GroebnerBase#GB(java.util.List P)
  */
 
 public class GBFactory {
