@@ -215,32 +215,34 @@ public class PolyUtilAppTest extends TestCase {
 
         AlgebraicNumber<BigRational> a = afac.getGenerator();
         AlgebraicNumber<BigRational> b = bfac.getGenerator();
-        GenPolynomial<BigRational> ap = a.val;
-        GenPolynomial<BigRational> bp = b.val;
 
         // convert to primitive element field
-        GenPolynomialRing<AlgebraicNumber<BigRational>> ar 
-           = new GenPolynomialRing<AlgebraicNumber<BigRational>>(cfac,aufac);
-        GenPolynomial<AlgebraicNumber<BigRational>> aps 
-           = PolyUtil.<BigRational> convertToAlgebraicCoefficients(ar,ap);
-        AlgebraicNumber<BigRational> as
-           = PolyUtil.<AlgebraicNumber<BigRational>> evaluateMain(cfac,aps,pe.A);
-        //System.out.println("ar  = " + ar.toScript());
-        //System.out.println("aps = " + aps);
-        //System.out.println("as  = " + as);
+        AlgebraicNumber<BigRational> as = PolyUtilApp.<BigRational> convertToPrimitiveElem(cfac,pe.A,a);
+        AlgebraicNumber<BigRational> bs = PolyUtilApp.<BigRational> convertToPrimitiveElem(cfac,pe.B,b);
 
         // convert to primitive element field
-        GenPolynomialRing<AlgebraicNumber<BigRational>> br 
-           = new GenPolynomialRing<AlgebraicNumber<BigRational>>(cfac,bufac);
-        GenPolynomial<AlgebraicNumber<BigRational>> bps 
-           = PolyUtil.<BigRational> convertToAlgebraicCoefficients(br,bp);
-        AlgebraicNumber<BigRational> bs
-           = PolyUtil.<AlgebraicNumber<BigRational>> evaluateMain(cfac,bps,pe.B);
-        //System.out.println("br  = " + br.toScript());
-        //System.out.println("bps = " + bps);
-        //System.out.println("bs  = " + bs);
+//         GenPolynomialRing<AlgebraicNumber<BigRational>> ar 
+//            = new GenPolynomialRing<AlgebraicNumber<BigRational>>(cfac,aufac);
+//         GenPolynomial<AlgebraicNumber<BigRational>> aps 
+//            = PolyUtil.<BigRational> convertToAlgebraicCoefficients(ar,ap);
+//         AlgebraicNumber<BigRational> as
+//            = PolyUtil.<AlgebraicNumber<BigRational>> evaluateMain(cfac,aps,pe.A);
+//         System.out.println("ar  = " + ar.toScript());
+//         System.out.println("aps = " + aps);
+//         System.out.println("as  = " + as);
+//         System.out.println("ass = " + ass);
+//         GenPolynomialRing<AlgebraicNumber<BigRational>> br 
+//            = new GenPolynomialRing<AlgebraicNumber<BigRational>>(cfac,bufac);
+//         GenPolynomial<AlgebraicNumber<BigRational>> bps 
+//            = PolyUtil.<BigRational> convertToAlgebraicCoefficients(br,bp);
+//         AlgebraicNumber<BigRational> bs
+//            = PolyUtil.<AlgebraicNumber<BigRational>> evaluateMain(cfac,bps,pe.B);
+//         System.out.println("br  = " + br.toScript());
+//         System.out.println("bps = " + bps);
+//         System.out.println("bs  = " + bs);
+//         System.out.println("bss = " + bss);
 
-        // test alpha+beta == gamma
+        // test alpha+(t)beta == gamma
         AlgebraicNumber<BigRational> cs = as.sum(bs);
         //System.out.println("cs  = " + cs);
         assertEquals("alpha+beta == gamma", cs, cfac.getGenerator());
@@ -251,7 +253,7 @@ public class PolyUtilAppTest extends TestCase {
      * Test primitive element of extension tower.
      * 
      */
-    public void xtestPrimitiveElementTower() {
+    public void testPrimitiveElementTower() {
         String[] va = new String[] { "alpha" };
         String[] vb = new String[] { "beta" };
         GenPolynomialRing<BigRational> ufac;
@@ -260,11 +262,11 @@ public class PolyUtilAppTest extends TestCase {
         GenPolynomial<BigRational> m;
         m = ufac.univariate(0,3);
         m = m.subtract( ufac.fromInteger(2) );
-        System.out.println("m = " + m);
+        //System.out.println("m = " + m);
 
         AlgebraicNumberRing<BigRational> afac;
         afac = new AlgebraicNumberRing<BigRational>(m);
-        System.out.println("afac = " + afac);
+        //System.out.println("afac = " + afac);
 
         GenPolynomialRing<AlgebraicNumber<BigRational>> aufac;
         aufac = new GenPolynomialRing<AlgebraicNumber<BigRational>>(afac,1,vb);
@@ -272,15 +274,42 @@ public class PolyUtilAppTest extends TestCase {
         GenPolynomial<AlgebraicNumber<BigRational>> n;
         n = aufac.univariate(0,2);
         n = n.subtract( aufac.getONE().multiply( afac.getGenerator() ) );
-        System.out.println("n = " + n);
+        //System.out.println("n = " + n);
 
         AlgebraicNumberRing<AlgebraicNumber<BigRational>> bfac;
         bfac = new AlgebraicNumberRing<AlgebraicNumber<BigRational>>(n);
-        System.out.println("bfac = " + bfac);
+        //System.out.println("bfac = " + bfac);
 
         PrimitiveElement<BigRational> pe;
         pe = PolyUtilApp.<BigRational>primitiveElement(bfac);
-        System.out.println("pe = " + pe);
+        //System.out.println("pe = " + pe);
+        AlgebraicNumberRing<BigRational> cfac = pe.primitiveElem;
+
+        AlgebraicNumber<BigRational> a = afac.getGenerator();
+        AlgebraicNumber<AlgebraicNumber<BigRational>> b = bfac.getGenerator();
+        //System.out.println("a  = " + a);
+        //System.out.println("b  = " + b);
+
+        // convert to primitive element ring
+        AlgebraicNumber<BigRational> as = PolyUtilApp.<BigRational> convertToPrimitiveElem(cfac,pe.A,a);
+        //System.out.println("as = " + as);
+        AlgebraicNumber<BigRational> bs = PolyUtilApp.<BigRational> convertToPrimitiveElem(cfac,pe.A,pe.B,b);
+        //System.out.println("bs  = " + bs);
+
+//         GenPolynomial<AlgebraicNumber<BigRational>> bps  
+// 	    = PolyUtilApp.<BigRational> convertToPrimitiveElem(cfac,pe.A,b.val);
+//         AlgebraicNumber<BigRational> bss 
+//            = PolyUtil.<AlgebraicNumber<BigRational>> evaluateMain(cfac,bps,pe.B);
+//         System.out.println("bps = " + bps);
+//         System.out.println("bps.r = " + bps.ring);
+//         System.out.println("B.r   = " + pe.B.ring);
+//         System.out.println("bss = " + bss);
+ 
+        // test alpha+(t)beta == gamma
+        AlgebraicNumber<BigRational> cs = as.sum(bs);
+        //System.out.println("cs  = " + cs);
+        assertEquals("alpha+beta == gamma", cs, cfac.getGenerator());
+
     }
 
 }
