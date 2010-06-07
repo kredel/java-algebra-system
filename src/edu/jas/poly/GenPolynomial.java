@@ -1414,7 +1414,7 @@ public class GenPolynomial<C extends RingElem<C> >
 
     /**
      * Contract variables. Used e.g. in module embedding.
-     * remove i elements of each ExpVector.
+     * Remove i elements of each ExpVector.
      * @param pfac contracted polynomial ring factory (by i variables).
      * @return Map of exponents and contracted polynomials.
      * <b>Note:</b> could return SortedMap
@@ -1442,6 +1442,26 @@ public class GenPolynomial<C extends RingElem<C> >
             B.put( f, p );
         }
         return B;
+    }
+
+
+    /**
+     * Contract variables to coefficient polynomial. 
+     * Remove i elements of each ExpVector, removed elements must be zero.
+     * @param pfac contracted polynomial ring factory (by i variables).
+     * @return contracted coefficient polynomial.
+     */
+    public GenPolynomial<C> contractCoeff(GenPolynomialRing<C> pfac) {
+        Map<ExpVector,GenPolynomial<C>> ms = contract(pfac);
+        GenPolynomial<C> c = pfac.getZERO();
+        for ( Map.Entry<ExpVector,GenPolynomial<C>> m : ms.entrySet() ) {
+            if ( m.getKey().isZERO() ) { 
+                c = m.getValue();
+            } else {
+                throw new RuntimeException("wrong coefficient contraction " + m + ", pol =  " + c);
+            }
+        }
+        return c;
     }
 
 

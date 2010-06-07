@@ -1124,41 +1124,17 @@ public class PolyUtilApp<C extends RingElem<C> > {
         String[] ev = new String[] { cs.ring.getVars()[0] };
         GenPolynomialRing<C> efac = new GenPolynomialRing<C>(ap.ring.coFac,1,to,ev);
         //System.out.println("efac = " + efac);
-        Map<ExpVector,GenPolynomial<C>> ms = cs.contract(efac);
-        //System.out.println("ms = " + ms);
-        for ( Map.Entry<ExpVector,GenPolynomial<C>> m : ms.entrySet() ) {
-            if ( m.getKey().isZERO() ) { 
-                cs = m.getValue();
-            } else {
-                throw new RuntimeException("wrong contraction " + ms + ", pol =  " + cs);
-            }
-        }
+        cs = cs.contractCoeff(efac);
         //System.out.println("cs = " + cs);
-        Map<ExpVector,GenPolynomial<C>> mas = as.reductum().contract(efac);
-        //System.out.println("mas = " + mas);
-        for ( Map.Entry<ExpVector,GenPolynomial<C>> m : mas.entrySet() ) {
-            if ( m.getKey().isZERO() ) { 
-                as = m.getValue().negate();
-            } else {
-                throw new RuntimeException("wrong contraction " + mas + ", pol =  " + as);
-            }
-        }
+        as = as.reductum().contractCoeff(efac);
+	as = as.negate();
         //System.out.println("as = " + as);
-        Map<ExpVector,GenPolynomial<C>> mbs = bs.reductum().contract(efac);
-        //System.out.println("mbs = " + mbs);
-        for ( Map.Entry<ExpVector,GenPolynomial<C>> m : mbs.entrySet() ) {
-            if ( m.getKey().isZERO() ) { 
-                bs = m.getValue().negate();
-            } else {
-                throw new RuntimeException("wrong contraction " + mbs + ", pol =  " + bs);
-            }
-        }
+        bs = bs.reductum().contractCoeff(efac);
+	bs = bs.negate();
         //System.out.println("bs = " + bs);
         AlgebraicNumberRing<C> c = new AlgebraicNumberRing<C>(cs);
         AlgebraicNumber<C> ab = new AlgebraicNumber<C>(c,as);  
         AlgebraicNumber<C> bb = new AlgebraicNumber<C>(c,bs);  
-        //System.out.println("ab = " + ab);
-        //System.out.println("bb = " + bb);
         PrimitiveElement<C> pe = new PrimitiveElement<C>(c,ab,bb,a,b);
         if ( logger.isInfoEnabled() ) {
             logger.info("primitive element = " + c);
@@ -1195,7 +1171,6 @@ public class PolyUtilApp<C extends RingElem<C> > {
     public static <C extends GcdRingElem<C>> 
       GenPolynomial<AlgebraicNumber<C>> convertToPrimitiveElem(AlgebraicNumberRing<C> cfac, 
                                         AlgebraicNumber<C> A, GenPolynomial<AlgebraicNumber<C>> a) {
-
         GenPolynomialRing<AlgebraicNumber<C>> cr = new GenPolynomialRing<AlgebraicNumber<C>>(cfac,a.ring);
         return PolyUtil.<AlgebraicNumber<C>,AlgebraicNumber<C>> map(cr,a,new CoeffConvertAlg<C>(cfac,A) );
     }
@@ -1205,13 +1180,12 @@ public class PolyUtilApp<C extends RingElem<C> > {
      * Convert to primitive element ring.
      * @param cfac primitive element ring.
      * @param A algebraic number representing the generating element of a in the new ring.
-     * @param a algebraic number to convert.
+     * @param a recursive algebraic number to convert.
      * @return a converted to the primitive element ring
      */
     public static <C extends GcdRingElem<C>> 
       AlgebraicNumber<C> convertToPrimitiveElem(AlgebraicNumberRing<C> cfac, 
                          AlgebraicNumber<C> A, AlgebraicNumber<C> B, AlgebraicNumber<AlgebraicNumber<C>> a) {
-
         GenPolynomial<AlgebraicNumber<C>> aps = PolyUtilApp.<C> convertToPrimitiveElem(cfac,A,a.val);
         AlgebraicNumber<C> ac = PolyUtil.<AlgebraicNumber<C>> evaluateMain(cfac,aps,B);
 	return ac;
@@ -1228,8 +1202,8 @@ public class PolyUtilApp<C extends RingElem<C> > {
         GenPolynomial<AlgebraicNumber<C>> bp = b.modul;
         AlgebraicNumberRing<C> a = (AlgebraicNumberRing<C>) b.ring.coFac;
         GenPolynomial<C> ap = a.modul;
-//         System.out.println("ap = " + ap);
-//         System.out.println("bp = " + bp);
+        //System.out.println("ap = " + ap);
+        //System.out.println("bp = " + bp);
 
         // setup bivariate polynomial ring
         String[] cv = new String[2];
@@ -1259,54 +1233,45 @@ public class PolyUtilApp<C extends RingElem<C> > {
         as = Np.get(1);
         bs = Np.get(0);
         GenPolynomial<C> cs = Np.get(2);
-//         System.out.println("as = " + as);
-//         System.out.println("bs = " + bs);
-//         System.out.println("cs = " + cs);
+        //System.out.println("as = " + as);
+        //System.out.println("bs = " + bs);
+        //System.out.println("cs = " + cs);
         String[] ev = new String[] { cs.ring.getVars()[0] };
         GenPolynomialRing<C> efac = new GenPolynomialRing<C>(ap.ring.coFac,1,to,ev);
-//        System.out.println("efac = " + efac);
-        Map<ExpVector,GenPolynomial<C>> ms = cs.contract(efac);
-        //System.out.println("ms = " + ms);
-        for ( Map.Entry<ExpVector,GenPolynomial<C>> m : ms.entrySet() ) {
-            if ( m.getKey().isZERO() ) { 
-                cs = m.getValue();
-            } else {
-                throw new RuntimeException("wrong contraction " + ms + ", pol =  " + cs);
-            }
-        }
-//         System.out.println("cs = " + cs);
-        Map<ExpVector,GenPolynomial<C>> mas = as.reductum().contract(efac);
-        //System.out.println("mas = " + mas);
-        for ( Map.Entry<ExpVector,GenPolynomial<C>> m : mas.entrySet() ) {
-            if ( m.getKey().isZERO() ) { 
-                as = m.getValue().negate();
-            } else {
-                throw new RuntimeException("wrong contraction " + mas + ", pol =  " + as);
-            }
-        }
-//         System.out.println("as = " + as);
-        Map<ExpVector,GenPolynomial<C>> mbs = bs.reductum().contract(efac);
-        //System.out.println("mbs = " + mbs);
-        for ( Map.Entry<ExpVector,GenPolynomial<C>> m : mbs.entrySet() ) {
-            if ( m.getKey().isZERO() ) { 
-                bs = m.getValue().negate();
-            } else {
-                throw new RuntimeException("wrong contraction " + mbs + ", pol =  " + bs);
-            }
-        }
-//         System.out.println("bs = " + bs);
-
+        // System.out.println("efac = " + efac);
+        cs = cs.contractCoeff(efac);
+        // System.out.println("cs = " + cs);
+        as = as.reductum().contractCoeff(efac);
+	as = as.negate();
+        // System.out.println("as = " + as);
+        bs = bs.reductum().contractCoeff(efac);
+	bs = bs.negate();
+        //System.out.println("bs = " + bs);
         AlgebraicNumberRing<C> c = new AlgebraicNumberRing<C>(cs);
         AlgebraicNumber<C> ab = new AlgebraicNumber<C>(c,as);  
         AlgebraicNumber<C> bb = new AlgebraicNumber<C>(c,bs);  
-//        System.out.println("c = " + c);
-//        System.out.println("ab = " + ab);
-//        System.out.println("bb = " + bb);
         PrimitiveElement<C> pe = new PrimitiveElement<C>(c,ab,bb); // missing ,a,b);
         if ( logger.isInfoEnabled() ) {
             logger.info("primitive element = " + pe);
         }
         return pe;
+    }
+
+
+    /**
+     * Convert to primitive element ring.
+     * @param cfac primitive element ring.
+     * @param A algebraic number representing the generating element of a in the new ring.
+     * @param a polynomial with recursive algebraic number coefficients to convert.
+     * @return a converted to the primitive element ring
+     */
+    public static <C extends GcdRingElem<C>> 
+      GenPolynomial<AlgebraicNumber<C>> convertToPrimitiveElem(AlgebraicNumberRing<C> cfac, 
+                                                 AlgebraicNumber<C> A, AlgebraicNumber<C> B, 
+                                                 GenPolynomial<AlgebraicNumber<AlgebraicNumber<C>>> a) {
+        GenPolynomialRing<AlgebraicNumber<C>> cr = new GenPolynomialRing<AlgebraicNumber<C>>(cfac,a.ring);
+        return PolyUtil.<AlgebraicNumber<AlgebraicNumber<C>>,AlgebraicNumber<C>> 
+                         map(cr,a, new CoeffRecConvertAlg<C>(cfac,A,B) );
     }
 
 }
@@ -1334,6 +1299,35 @@ class CoeffConvertAlg<C extends GcdRingElem<C>>
             return afac.getZERO();
         } else {
             return PolyUtilApp.<C> convertToPrimitiveElem(afac,A,c);
+        }
+    }
+}
+
+
+/**
+ * Coefficient recursive to convert algebriac functor.
+ */
+class CoeffRecConvertAlg<C extends GcdRingElem<C>> 
+                     implements UnaryFunctor<AlgebraicNumber<AlgebraicNumber<C>>,AlgebraicNumber<C>> {
+
+    final protected AlgebraicNumberRing<C> afac;
+    final protected AlgebraicNumber<C> A;
+    final protected AlgebraicNumber<C> B;
+
+    public CoeffRecConvertAlg(AlgebraicNumberRing<C> fac, AlgebraicNumber<C> a, AlgebraicNumber<C> b) {
+        if ( fac == null || a == null || b == null) {
+            throw new IllegalArgumentException("fac, a and b must not be null");
+        }
+        afac = fac;
+        A = a;
+        B = b;
+    }
+
+    public AlgebraicNumber<C> eval(AlgebraicNumber<AlgebraicNumber<C>> c) {
+        if ( c == null ) {
+            return afac.getZERO();
+        } else {
+            return PolyUtilApp.<C> convertToPrimitiveElem(afac,A,B,c);
         }
     }
 }
