@@ -274,6 +274,27 @@ public class PolyUtilAppTest extends TestCase {
         AlgebraicNumber<BigRational> cs = as.sum(bs);
         //System.out.println("cs  = " + cs);
         assertEquals("alpha+beta == gamma", cs, cfac.getGenerator());
+
+        // test for polynomials, too simple
+        String[] vx = new String[] { "x" };
+        GenPolynomialRing<AlgebraicNumber<BigRational>> rafac
+	    = new GenPolynomialRing<AlgebraicNumber<BigRational>>(afac,1,vx);
+        GenPolynomialRing<AlgebraicNumber<AlgebraicNumber<BigRational>>> rbfac
+	    = new GenPolynomialRing<AlgebraicNumber<AlgebraicNumber<BigRational>>>(bfac,1,vx);
+        GenPolynomial<AlgebraicNumber<BigRational>> ap = rafac.getGenerators().get(0).multiply(a);
+        GenPolynomial<AlgebraicNumber<AlgebraicNumber<BigRational>>> bp = rbfac.getGenerators().get(0).multiply(b);
+
+        GenPolynomial<AlgebraicNumber<BigRational>> asp 
+           = PolyUtilApp.<BigRational> convertToPrimitiveElem(cfac,pe.A,ap);
+        GenPolynomial<AlgebraicNumber<BigRational>> bsp 
+           = PolyUtilApp.<BigRational> convertToPrimitiveElem(cfac,pe.A,pe.B,bp);
+        //System.out.println("asp = " + asp);
+        //System.out.println("bsp = " + bsp);
+
+        // test alpha+(t)beta == gamma
+        GenPolynomial<AlgebraicNumber<BigRational>> csp = asp.sum(bsp);
+        //System.out.println("csp = " + csp);
+        assertEquals("alpha+beta == gamma", csp.leadingBaseCoefficient(), cfac.getGenerator());
     }
 
 }
