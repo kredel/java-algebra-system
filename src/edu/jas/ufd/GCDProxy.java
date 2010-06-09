@@ -51,18 +51,6 @@ public class GCDProxy<C extends GcdRingElem<C>> extends GreatestCommonDivisorAbs
 
 
     /**
-     * Thread pool size.
-     */
-    protected static final int anzahl = 3;
-
-
-    /*
-      * Thread poll intervall.
-      */
-    protected static final int dauer = 5;
-
-
-    /**
      * Proxy constructor.
      */
     public GCDProxy(GreatestCommonDivisorAbstract<C> e1, GreatestCommonDivisorAbstract<C> e2) {
