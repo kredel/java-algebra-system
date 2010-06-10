@@ -158,6 +158,34 @@ public class ThreadPool {
 
 
    /**
+    * Cancels the threads.
+    */
+    public int cancel() {
+        int s = jobstack.size();
+        if ( hasJobs() ) {
+            logger.info("jobs canceled: " + jobstack);
+            jobstack.clear();
+        }
+        int re = 0;
+        for (int i = 0; i < workers.length; i++) {
+            try { 
+                while ( workers[i].isAlive() ) {
+                        re++;
+                        workers[i].interrupt(); 
+                        if ( re > 3 * workers.length ) {
+                            break;
+                        }
+                        workers[i].join(100);
+                }
+            } catch (InterruptedException e) { 
+                Thread.currentThread().interrupt();
+            }
+        }
+        return s;
+    }
+
+
+   /**
     * adds a job to the workpile.
     * @param job
     */

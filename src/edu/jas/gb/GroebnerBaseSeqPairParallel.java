@@ -119,6 +119,18 @@ public class GroebnerBaseSeqPairParallel<C extends RingElem<C>>
 
 
     /**
+     * Cancel ThreadPool.
+     */
+    public int cancel() {
+        if ( pool == null ) {
+           return 0;
+        }
+        int s = pool.cancel();
+        return s;
+    }
+
+
+    /**
      * Parallel Groebner base using sequential pair order class.
      * Slaves maintain pairlist.
      * @param modv number of module variables.
@@ -162,6 +174,9 @@ public class GroebnerBaseSeqPairParallel<C extends RingElem<C>>
             pool.addJob( R );
         }
         fin.waitDone();
+        if ( Thread.currentThread().isInterrupted() ) {
+            throw new RuntimeException("interrupt before minimalGB");
+        }
         logger.debug("#parallel list = "+G.size());
         G = minimalGB(G);
         // not in this context // pool.terminate();
@@ -179,7 +194,7 @@ public class GroebnerBaseSeqPairParallel<C extends RingElem<C>>
      * @return minimalGB(F) a minimal Groebner base of Fp.
      */
     @Override
-     public List<GenPolynomial<C>> 
+    public List<GenPolynomial<C>> 
         minimalGB(List<GenPolynomial<C>> Fp) {  
         GenPolynomial<C> a;
         ArrayList<GenPolynomial<C>> G;
@@ -262,18 +277,27 @@ public class GroebnerBaseSeqPairParallel<C extends RingElem<C>>
 class ReducerSeqPair<C extends RingElem<C>> implements Runnable {
     private List<GenPolynomial<C>> G;
     private CriticalPairList<C> pairlist;
-    private Terminator pool;
+    private Terminator fin;
     private ReductionPar<C> red;
     private static final Logger logger = Logger.getLogger(ReducerSeqPair.class);
 
     ReducerSeqPair(Terminator fin, 
                    List<GenPolynomial<C>> G, 
                    CriticalPairList<C> L) {
-        pool = fin;
+        this.fin = fin;
         this.G = G;
         pairlist = L;
         red = new ReductionPar<C>();
     } 
+
+
+    /**
+     * to string
+     */
+    @Override
+    public String toString() {
+        return "ReducerSeqPair";
+    }
 
 
     public void run() {
@@ -283,11 +307,11 @@ class ReducerSeqPair<C extends RingElem<C>> implements Runnable {
         boolean set = false;
         int reduction = 0;
         int sleeps = 0;
-        while ( pairlist.hasNext() || pool.hasJobs() ) {
+        while ( pairlist.hasNext() || fin.hasJobs() ) {
             while ( ! pairlist.hasNext() ) {
                 pairlist.update();
                 // wait
-                pool.beIdle(); set = true;
+                fin.beIdle(); set = true;
                 try {
                     sleeps++;
                     if ( sleeps % 10 == 0 ) {
@@ -299,17 +323,20 @@ class ReducerSeqPair<C extends RingElem<C>> implements Runnable {
                 } catch (InterruptedException e) {
                     break;
                 }
-                if ( ! pool.hasJobs() ) {
+                if ( ! fin.hasJobs() ) {
                     break;
                 }
             }
-            if ( ! pairlist.hasNext() && ! pool.hasJobs() ) {
+            if ( ! pairlist.hasNext() && ! fin.hasJobs() ) {
                 break;
             }
             if ( set ) {
-                pool.notIdle(); set = false;
+                fin.notIdle(); set = false;
             }
             pair = pairlist.getNext();
+            if ( Thread.currentThread().isInterrupted() ) {
+                throw new RuntimeException("interrupt after getNext");
+            }
             if ( pair == null ) {
                 pairlist.update();
                 continue; 
@@ -343,7 +370,7 @@ class ReducerSeqPair<C extends RingElem<C>> implements Runnable {
                 synchronized (G) {
                     G.clear(); G.add( H );
                 }
-                pool.allIdle();
+                fin.allIdle();
                 return;
             }
             if ( logger.isDebugEnabled() ) {
@@ -385,12 +412,22 @@ class MiReducerSeqPair<C extends RingElem<C>> implements Runnable {
 
 
     /**
+     * to string
+     */
+    @Override
+    public String toString() {
+        return "MiReducerSeqpair";
+    }
+
+
+    /**
      * getNF. Blocks until the normal form is computed.
      * @return the computed normal form.
      */
     public GenPolynomial<C> getNF() {
         try { done.acquire(); //done.P();
         } catch (InterruptedException e) { 
+            throw new RuntimeException("interrupt in getNF");
         }
         return H;
     }

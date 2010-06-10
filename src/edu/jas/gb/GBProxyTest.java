@@ -81,16 +81,19 @@ public class GBProxyTest extends TestCase {
     int el = 3;
     float q = 0.2f; //0.4f
 
-    GroebnerBaseParallel<BigRational> bbp;
+    //GroebnerBaseParallel<BigRational> bbp;
+    GroebnerBaseSeqPairParallel<BigRational> bbp;
 
     protected void setUp() {
         BigRational coeff = new BigRational(9);
         fac = new GenPolynomialRing<BigRational>(coeff,rl);
         a = b = c = d = e = null;
-        GroebnerBaseAbstract<BigRational> bbs = new GroebnerBaseSeqPairSeq<BigRational>();
+        //GroebnerBaseAbstract<BigRational> bbs = new GroebnerBaseSeqPairSeq<BigRational>();
+        GroebnerBaseAbstract<BigRational> bbs = new GroebnerBaseSeq<BigRational>();
         int nt = ComputerThreads.N_CPUS;
         System.out.println("nt = " + nt);
-        bbp = new GroebnerBaseParallel<BigRational>(nt);
+        //bbp = new GroebnerBaseParallel<BigRational>(nt);
+        bbp = new GroebnerBaseSeqPairParallel<BigRational>(nt);
         bb = new GBProxy<BigRational>(bbs,bbp);
     }
 
@@ -98,7 +101,8 @@ public class GBProxyTest extends TestCase {
         a = b = c = d = e = null;
         fac = null;
         bb = null;
-        bbp.terminate();
+        //bbp.terminate();
+        int s = bbp.cancel();
         ComputerThreads.terminate();
     }
 

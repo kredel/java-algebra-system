@@ -115,6 +115,18 @@ public class GroebnerBaseParallel<C extends RingElem<C>>
 
 
     /**
+     * Cancel ThreadPool.
+     */
+    public int cancel() {
+        if ( pool == null ) {
+           return 0;
+        }
+        int s = pool.cancel();
+        return s;
+    }
+
+
+    /**
      * Parallel Groebner base using pairlist class.
      * @param modv number of module variables.
      * @param F polynomial list.
@@ -157,6 +169,9 @@ public class GroebnerBaseParallel<C extends RingElem<C>>
             pool.addJob( R );
         }
         fin.waitDone();
+        if ( Thread.currentThread().isInterrupted() ) {
+            throw new RuntimeException("interrupt before minimalGB");
+        }
         logger.debug("#parallel list = "+G.size());
         G = minimalGB(G);
         // not in this context // pool.terminate();
@@ -255,18 +270,27 @@ public class GroebnerBaseParallel<C extends RingElem<C>>
 class Reducer<C extends RingElem<C>> implements Runnable {
     private List<GenPolynomial<C>> G;
     private OrderedPairlist<C> pairlist;
-    private Terminator pool;
+    private Terminator fin;
     private ReductionPar<C> red;
     private static final Logger logger = Logger.getLogger(Reducer.class);
 
     Reducer(Terminator fin, 
             List<GenPolynomial<C>> G, 
             OrderedPairlist<C> L) {
-        pool = fin;
+        this.fin = fin;
         this.G = G;
         pairlist = L;
         red = new ReductionPar<C>();
     } 
+
+
+    /**
+     * to string
+     */
+    @Override
+    public String toString() {
+        return "Reducer";
+    }
 
 
     public void run() {
@@ -278,10 +302,10 @@ class Reducer<C extends RingElem<C>> implements Runnable {
         boolean set = false;
         int reduction = 0;
         int sleeps = 0;
-        while ( pairlist.hasNext() || pool.hasJobs() ) {
+        while ( pairlist.hasNext() || fin.hasJobs() ) {
             while ( ! pairlist.hasNext() ) {
                 // wait
-                pool.beIdle(); set = true;
+                fin.beIdle(); set = true;
                 try {
                     sleeps++;
                     if ( sleeps % 10 == 0 ) {
@@ -293,18 +317,21 @@ class Reducer<C extends RingElem<C>> implements Runnable {
                 } catch (InterruptedException e) {
                     break;
                 }
-                if ( ! pool.hasJobs() ) {
+                if ( ! fin.hasJobs() ) {
                     break;
                 }
             }
-            if ( ! pairlist.hasNext() && ! pool.hasJobs() ) {
+            if ( ! pairlist.hasNext() && ! fin.hasJobs() ) {
                 break;
             }
             if ( set ) {
-                pool.notIdle(); set = false;
+                fin.notIdle(); set = false;
             }
 
             pair = pairlist.removeNext();
+            if ( Thread.currentThread().isInterrupted() ) {
+                throw new RuntimeException("interrupt after removeNext");
+            }
             if ( pair == null ) {
                 continue; 
             }
@@ -342,7 +369,7 @@ class Reducer<C extends RingElem<C>> implements Runnable {
                 synchronized (G) {
                     G.clear(); G.add( H );
                 }
-                pool.allIdle();
+                fin.allIdle();
                 return;
             }
             if ( logger.isDebugEnabled() ) {
@@ -382,12 +409,22 @@ class MiReducer<C extends RingElem<C>> implements Runnable {
 
 
     /**
+     * to string
+     */
+    @Override
+    public String toString() {
+        return "MiReducer";
+    }
+
+
+    /**
      * getNF. Blocks until the normal form is computed.
      * @return the computed normal form.
      */
     public GenPolynomial<C> getNF() {
         try { done.acquire(); //done.P();
         } catch (InterruptedException e) { 
+            throw new RuntimeException("interrupt in getNF");
         }
         return H;
     }
