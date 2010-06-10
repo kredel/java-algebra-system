@@ -307,7 +307,7 @@ class ReducerSeqPair<C extends RingElem<C>> implements Runnable {
                 break;
             }
             if ( set ) {
-                pool.notIdle();
+                pool.notIdle(); set = false;
             }
             pair = pairlist.getNext();
             if ( pair == null ) {
