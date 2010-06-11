@@ -72,6 +72,25 @@ public class GBProxy<C extends GcdRingElem<C>> extends GroebnerBaseAbstract<C> {
 
 
     /**
+     * Cleanup and terminate ThreadPool.
+     */
+    public void terminate() {
+        e1.terminate();
+        e2.terminate();
+    }
+
+
+    /**
+     * Cancel ThreadPool.
+     */
+    public int cancel() {
+        int s = e1.cancel();
+        s += e2.cancel();
+        return s;
+    }
+
+
+    /**
      * Groebner base.
      * @param modv module variable number.
      * @param F polynomial list.

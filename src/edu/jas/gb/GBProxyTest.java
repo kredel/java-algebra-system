@@ -67,7 +67,7 @@ public class GBProxyTest extends TestCase {
     PolynomialList<BigRational> F;
     List<GenPolynomial<BigRational>> G;
 
-    GroebnerBase<BigRational> bb;
+    GroebnerBaseAbstract<BigRational> bb;
 
     GenPolynomial<BigRational> a;
     GenPolynomial<BigRational> b;
@@ -81,29 +81,25 @@ public class GBProxyTest extends TestCase {
     int el = 3;
     float q = 0.2f; //0.4f
 
-    //GroebnerBaseParallel<BigRational> bbp;
-    GroebnerBaseSeqPairParallel<BigRational> bbp;
-
     protected void setUp() {
         BigRational coeff = new BigRational(9);
         fac = new GenPolynomialRing<BigRational>(coeff,rl);
         a = b = c = d = e = null;
-        //GroebnerBaseAbstract<BigRational> bbs = new GroebnerBaseSeqPairSeq<BigRational>();
         GroebnerBaseAbstract<BigRational> bbs = new GroebnerBaseSeq<BigRational>();
+        //GroebnerBaseAbstract<BigRational> bbs = new GroebnerBaseSeqPairSeq<BigRational>();
         int nt = ComputerThreads.N_CPUS;
         System.out.println("nt = " + nt);
-        //bbp = new GroebnerBaseParallel<BigRational>(nt);
-        bbp = new GroebnerBaseSeqPairParallel<BigRational>(nt);
+        GroebnerBaseAbstract<BigRational> bbp = new GroebnerBaseParallel<BigRational>(nt);
+        //GroebnerBaseAbstract<BigRational> bbp = new GroebnerBaseSeqPairParallel<BigRational>(nt);
         bb = new GBProxy<BigRational>(bbs,bbp);
     }
 
     protected void tearDown() {
+        int s = bb.cancel();
+        ComputerThreads.terminate();
         a = b = c = d = e = null;
         fac = null;
         bb = null;
-        //bbp.terminate();
-        int s = bbp.cancel();
-        ComputerThreads.terminate();
     }
 
 

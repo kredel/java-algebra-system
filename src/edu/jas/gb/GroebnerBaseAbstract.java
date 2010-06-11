@@ -246,6 +246,23 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>>
         return true;
     }
 
+
+    /**
+     * Cleanup and terminate ThreadPool.
+     */
+    public void terminate() {
+        logger.info("terminate not implemented");
+    }
+
+
+    /**
+     * Cancel ThreadPool.
+     */
+    public int cancel() {
+        logger.info("cancel not implemented");
+        return 0;
+    }
+
 }
 
 

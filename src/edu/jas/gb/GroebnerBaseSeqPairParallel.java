@@ -436,9 +436,14 @@ class MiReducerSeqPair<C extends RingElem<C>> implements Runnable {
         if ( logger.isDebugEnabled() ) {
             logger.debug("ht(S) = " + S.leadingExpVector() );
         }
-        H = red.normalform( G, H ); //mod
-        H = red.normalform( F, H ); //mod
-        done.release(); //done.V();
+        try { 
+            H = red.normalform( G, H ); //mod
+            H = red.normalform( F, H ); //mod
+            done.release(); //done.V();
+        } catch (RuntimeException e) { 
+            Thread.currentThread().interrupt();
+            //throw new RuntimeException("interrupt in getNF");
+        }
         if ( logger.isDebugEnabled() ) {
             logger.debug("ht(H) = " + H.leadingExpVector() );
         }
