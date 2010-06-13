@@ -324,4 +324,28 @@ public class GBFactoryTest extends TestCase {
         assertTrue("bba product " + bb, bb instanceof RGroebnerBasePseudoSeq);
     }
 
+
+    /**
+     * Test get proxy implementation.
+     * 
+     */
+    public void testProxy() {
+        BigRational b = new BigRational();
+        GroebnerBaseAbstract<BigRational> bba;
+
+        bba = GBFactory.getProxy(b);
+        //System.out.println("bba = " + bba);
+        assertTrue("bba field " + bba, bba instanceof GBProxy);
+        bba.terminate();
+
+
+        ModIntegerRing m = new ModIntegerRing(2*3);
+        GroebnerBaseAbstract<ModInteger> bbm;
+
+        bbm = GBFactory.getProxy(m);
+        //System.out.println("bba = " + bba);
+        assertTrue("bbm ! field " + bbm, ! (bbm instanceof GBProxy) );
+        bbm.terminate();
+    }
+
 }

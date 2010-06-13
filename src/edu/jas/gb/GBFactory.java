@@ -212,5 +212,43 @@ public class GBFactory {
         return (GroebnerBaseAbstract<C>)bba;
     }
 
+
+    /**
+     * Determine suitable concurrent implementation of GB algorithms if possible.
+     * @param fac RingFactory&lt;C&gt;.
+     * @return GB proxy algorithm implementation.
+     */
+    //@SuppressWarnings("unchecked")
+    public static <C extends GcdRingElem<C>>  // interface RingElem not sufficient 
+      GroebnerBaseAbstract<C> getProxy(RingFactory<C> fac) {
+        logger.debug("fac = " + fac.getClass().getName());
+        if (fac.isField()) {
+            if ( ComputerThreads.NO_THREADS ) {
+                return new GroebnerBaseSeq<C>();
+            }
+            GroebnerBaseAbstract<C> e1 = new GroebnerBaseSeq<C>();
+            GroebnerBaseAbstract<C> e2 = new GroebnerBaseParallel<C>(ComputerThreads.N_CPUS);
+            return new GBProxy<C>(e1,e2);
+        }
+        GroebnerBaseAbstract bba = null;
+        Object ofac = fac;
+        if ( ofac instanceof GenPolynomialRing ) {
+            GroebnerBaseAbstract<GenPolynomial<C>> bbr 
+                = new GroebnerBasePseudoRecSeq<C>( (GenPolynomialRing<C>) ofac);
+            bba = (GroebnerBaseAbstract) bbr;
+        } else if ( ofac instanceof ProductRing ) {
+            ProductRing pfac = (ProductRing) ofac;
+            if (pfac.onlyFields()) {
+               bba = new RGroebnerBaseSeq<Product<C>>();
+            } else {
+               bba = new RGroebnerBasePseudoSeq<Product<C>>(pfac);
+            }
+        } else {
+            bba = new GroebnerBasePseudoSeq<C>(fac);
+        }
+        logger.debug("bba = " + bba.getClass().getName());
+        return (GroebnerBaseAbstract<C>)bba;
+    }
+
 }
 
