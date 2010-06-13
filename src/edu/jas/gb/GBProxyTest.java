@@ -88,7 +88,7 @@ public class GBProxyTest extends TestCase {
         GroebnerBaseAbstract<BigRational> bbs = new GroebnerBaseSeq<BigRational>();
         //GroebnerBaseAbstract<BigRational> bbs = new GroebnerBaseSeqPairSeq<BigRational>();
         int nt = ComputerThreads.N_CPUS;
-        System.out.println("nt = " + nt);
+        //System.out.println("nt = " + nt);
         //GroebnerBaseAbstract<BigRational> bbp = new GroebnerBaseParallel<BigRational>(nt);
         GroebnerBaseAbstract<BigRational> bbp = new GroebnerBaseSeqPairParallel<BigRational>(nt);
         bb = new GBProxy<BigRational>(bbs,bbp);
@@ -153,6 +153,7 @@ public class GBProxyTest extends TestCase {
         assertTrue("isGB( { a, b, c, d, e } )", bb.isGB(L) );
     }
 
+
     /**
      * Test Trinks7 GBase.
      * 
@@ -167,7 +168,7 @@ public class GBProxyTest extends TestCase {
             + "( - 9 W + 15 T P + 20 S Z ), "
             + "( P W + 2 T Z - 11 B**3 ), "
             + "( 99 W - 11 B S + 3 B**2 ), "
-//            + "( B**2 + 33/50 B + 2673/10000 ) "
+            + "( B**2 + 33/50 B + 2673/10000 ) "
             + ") ";
         Reader source = new StringReader( exam );
         GenPolynomialTokenizer parser
