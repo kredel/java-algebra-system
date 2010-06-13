@@ -30,7 +30,7 @@ public class GBProxy<C extends GcdRingElem<C>> extends GroebnerBaseAbstract<C> {
     private static final Logger logger = Logger.getLogger(GBProxy.class);
 
 
-    private final boolean debug = logger.isInfoEnabled(); //logger.isInfoEnabled();
+    private final boolean debug = logger.isDebugEnabled(); //logger.isInfoEnabled();
 
 
     /**
@@ -114,12 +114,12 @@ public class GBProxy<C extends GcdRingElem<C>> extends GroebnerBaseAbstract<C> {
                     }
                     return G;
                 } catch (PreemptingException e) {
-                    throw new RuntimeException("GBProxy e1 pre " + e);
+                    throw new RuntimeException("GBProxy e1 preempted " + e);
                     //return P.ring.getONE();
                 } catch (Exception e) {
                     //e.printStackTrace();
                     logger.info("GBProxy e1 " + e);
-                    logger.info("GBProxy F = " + F);
+                    logger.info("Exception GBProxy F = " + F);
                     throw new RuntimeException("GBProxy e1 " + e);
                     //return P.ring.getONE();
                 }
@@ -135,12 +135,12 @@ public class GBProxy<C extends GcdRingElem<C>> extends GroebnerBaseAbstract<C> {
                     }
                     return G;
                 } catch (PreemptingException e) {
-                    throw new RuntimeException("GBProxy e2 pre " + e);
+                    throw new RuntimeException("GBProxy e2 preempted " + e);
                     //return P.ring.getONE();
                 } catch (Exception e) {
                     //e.printStackTrace();
                     logger.info("GBProxy e2 " + e);
-                    logger.info("GBProxy F = " + F);
+                    logger.info("Exception GBProxy F = " + F);
                     throw new RuntimeException("GBProxy e2 " + e);
                     //return P.ring.getONE();
                 }

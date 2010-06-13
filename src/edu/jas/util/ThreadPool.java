@@ -178,13 +178,14 @@ public class ThreadPool {
             try { 
                 while ( workers[i].isAlive() ) {
                     synchronized (this) {
+                        shutdown = true;
                         notifyAll(); // for getJob
                         workers[i].interrupt(); 
                     }
                     re++;
-                    if ( re > 3 * workers.length ) {
-                        break; // give up
-                    }
+                    //if ( re > 3 * workers.length ) {
+                    //    break; // give up
+                    //}
                     workers[i].join(100);
                 }
             } catch (InterruptedException e) { 
@@ -239,7 +240,7 @@ public class ThreadPool {
             return true;
         }
         for (int i = 0; i < workers.length; i++) {
-            if ( workers[i].working ) {
+            if ( workers[i].isWorking ) {
                 return true;
             }
         }
@@ -254,14 +255,20 @@ public class ThreadPool {
      */
     public boolean hasJobs(int n) {
         int j = jobstack.size();
-        if ( j > 0 && ( j + workers.length > n ) ) return true;
+        if ( j > 0 && ( j + workers.length > n ) ) { 
+            return true;
+        }
         // if j > 0 no worker should be idle
         // ( ( j > 0 && ( j+workers.length > n ) ) || ( j > n )
         int x = 0;
         for (int i=0; i < workers.length; i++) {
-            if ( workers[i].working ) x++;
+            if ( workers[i].isWorking ) {
+                x++;
+            }
         }
-        if ( (j + x) > n ) return true;
+        if ( (j + x) > n ) {
+            return true;
+        }
         return false;
     }
 
@@ -278,7 +285,7 @@ class PoolThread extends Thread {
     private static final Logger logger = Logger.getLogger(ThreadPool.class);
     private static boolean debug = logger.isDebugEnabled();
 
-    volatile boolean working = false;
+    volatile boolean isWorking = false;
 
 
     /**
@@ -311,9 +318,9 @@ class PoolThread extends Thread {
                     logger.info( "working" );
                 }
                 t = System.currentTimeMillis();
-                working = true;
+                isWorking = true;
                 job.run(); 
-                working = false;
+                isWorking = false;
                 time += System.currentTimeMillis() - t;
                 done++;
                 if ( debug ) {
@@ -322,10 +329,10 @@ class PoolThread extends Thread {
             } catch (InterruptedException e) { 
                 Thread.currentThread().interrupt();
                 running = false; 
-                working = false;
+                isWorking = false;
             }
         }
-        working = false;
+        isWorking = false;
         logger.info( "terminated, done " + done + " jobs in " 
                      + time + " milliseconds");
     }

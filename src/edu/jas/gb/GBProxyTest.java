@@ -89,8 +89,8 @@ public class GBProxyTest extends TestCase {
         //GroebnerBaseAbstract<BigRational> bbs = new GroebnerBaseSeqPairSeq<BigRational>();
         int nt = ComputerThreads.N_CPUS;
         System.out.println("nt = " + nt);
-        GroebnerBaseAbstract<BigRational> bbp = new GroebnerBaseParallel<BigRational>(nt);
-        //GroebnerBaseAbstract<BigRational> bbp = new GroebnerBaseSeqPairParallel<BigRational>(nt);
+        //GroebnerBaseAbstract<BigRational> bbp = new GroebnerBaseParallel<BigRational>(nt);
+        GroebnerBaseAbstract<BigRational> bbp = new GroebnerBaseSeqPairParallel<BigRational>(nt);
         bb = new GBProxy<BigRational>(bbs,bbp);
     }
 
@@ -107,7 +107,7 @@ public class GBProxyTest extends TestCase {
      * Test GBase.
      * 
      */
-    public void xtestGBase() {
+    public void testGBase() {
 
         L = new ArrayList<GenPolynomial<BigRational>>();
 
@@ -182,8 +182,8 @@ public class GBProxyTest extends TestCase {
         //System.out.println("F = " + F);
 
         G = bb.GB(F.list);
-        assertTrue("isGB( GB(Trinks7) )", bb.isGB(G) );
         assertEquals("#GB(Trinks7) == 6", 6, G.size() );
+        assertTrue("isGB( GB(Trinks7) ) " + G, bb.isGB(G) );
         PolynomialList<BigRational> trinks 
             = new PolynomialList<BigRational>(F.ring,G);
         //System.out.println("G = " + trinks);
