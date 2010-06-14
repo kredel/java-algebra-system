@@ -191,7 +191,7 @@ public class Residue<C extends RingElem<C> >
 
     /** Residue comparison.  
      * @param b Residue.
-     * @return sign(this-b).
+     * @return sign(this-b), 0 means that this and b are equivalent in this residue class ring.
      */
     public int compareTo(Residue<C> b) {
         C v = b.val;
@@ -204,6 +204,7 @@ public class Residue<C extends RingElem<C> >
 
     /** Comparison with any other object.
      * @see java.lang.Object#equals(java.lang.Object)
+     * @return true means that this and b are equivalent in this residue class ring.
      */
     @SuppressWarnings("unchecked") // not jet working
     @Override

@@ -449,8 +449,9 @@ public final class BigInteger implements GcdRingElem<BigInteger>,
 
 
     /** BigInteger compute quotient and remainder.
+     * Throws an exception, if S == 0.
      * @param S BigInteger.
-     * @return BigInteger[] { q, r } with q = this/S and r = rem(this,S).
+     * @return BigInteger[] { q, r } with this = q S + r and 0 &le; r &lt; |S|.
      */
     public BigInteger[] divideAndRemainder(BigInteger S) {
         BigInteger[] qr = new BigInteger[2];
@@ -462,12 +463,13 @@ public final class BigInteger implements GcdRingElem<BigInteger>,
 
 
     /**
-       Integer quotient and remainder.  A and B are integers, B ne 0.  Q is
-       the quotient, integral part of A/B, and R is the remainder A-B*Q.
-       * @param A BigInteger.
-       * @param B BigInteger.
-       * @return BigInteger[] { q, r } with q = A/B and r = rem(A,B).
-       */
+     * Integer quotient and remainder.  A and B are integers, B ne 0.  Q is
+     * the quotient, integral part of A/B, and R is the remainder A-B*Q.
+     * Throws an exception, if B == 0.
+     * @param A BigInteger.
+     * @param B BigInteger.
+     * @return BigInteger[] { q, r } with A = q B + r and 0 &le; r &lt; |B|
+     */
     public static BigInteger[] IQR(BigInteger A, BigInteger B) {
         if ( A == null ) return null;
         return A.divideAndRemainder(B);
