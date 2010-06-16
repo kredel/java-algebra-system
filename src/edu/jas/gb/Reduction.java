@@ -173,7 +173,7 @@ public interface Reduction<C extends RingElem<C>>
     /**
      * Irreducible set.
      * @param Pp polynomial list.
-     * @return a list P of polynomials which are in normalform wrt. P.
+     * @return a list P of polynomials which are in normalform wrt. P and with ideal(Pp) = ideal(P).
      */
     public List<GenPolynomial<C>> irreducibleSet(List<GenPolynomial<C>> Pp);
 

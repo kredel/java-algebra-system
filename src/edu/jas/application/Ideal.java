@@ -354,7 +354,8 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
 
 
     /**
-     * Test if ONE ideal.
+     * Test if ONE is contained in the ideal.
+     * To test for a proper ideal use <code>! id.isONE()</code>.
      * @return true, if this is the 1 ideal, else false
      */
     public boolean isONE() {
@@ -606,6 +607,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
 
     /**
      * Intersection. Generators for the intersection of ideals.
+     * Using an iterative algorithm.
      * @param Bl list of ideals
      * @return ideal(cap_i B_i), a Groebner base
      */
