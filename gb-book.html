@@ -261,7 +261,8 @@ not implemented
 <td>8.1&nbsp;<code>PREDEC</code></td>
 <td><a href="doc/api/edu/jas/application/Ideal.html#zeroDimDecomposition()" target="classFrame"><code>application.Ideal.zeroDimDecomposition</code></a>
 </td>
-<td>
+<td>univariate polynomials of minimal degree in the ideal are irreducible 
+and not a power of an irreducible polynomial as specified in <code>PREDEC</code>
 </td>
 </tr>
 
@@ -269,7 +270,7 @@ not implemented
 <td>8.2&nbsp;<code>ZRADICALTEST</code></td>
 <td><a href="doc/api/edu/jas/application/Ideal.html#isZeroDimRadical()" target="classFrame"><code>application.Ideal.isZeroDimRadical</code></a>
 </td>
-<td>
+<td>will also work in characteritsic p &gt; 0
 </td>
 </tr>
 
@@ -277,7 +278,8 @@ not implemented
 <td>8.3&nbsp;<code>ZRADICAL</code></td>
 <td><a href="doc/api/edu/jas/application/Ideal.html#radical()" target="classFrame"><code>application.Ideal.radical</code></a>
 </td>
-<td>containted as special case
+<td><code>ZRADICAL</code> is containted as special case,
+see also <a href="doc/api/edu/jas/application/Ideal.html#zeroDimRadicalDecomposition()" target="classFrame"><code>application.Ideal.zeroDimRadicalDecomposition</code></a>
 </td>
 </tr>
 
@@ -285,7 +287,7 @@ not implemented
 <td>8.4&nbsp;<code>NORMPRIMDEC</code></td>
 <td><a href="doc/api/edu/jas/application/Ideal.html#zeroDimPrimaryDecomposition()" target="classFrame"><code>application.Ideal.zeroDimPrimaryDecomposition</code></a>
 </td>
-<td>contains all preprocessing steps, see ZPRIMDEC
+<td>contains all preprocessing steps, see <code>ZPRIMDEC</code>
 </td>
 </tr>
 
@@ -293,7 +295,7 @@ not implemented
 <td>8.5&nbsp;<code>NORMPOS</code></td>
 <td><a href="doc/api/edu/jas/application/Ideal.html#normalPositionFor(int,%20int,%20java.util.List)" target="classFrame"><code>application.Ideal.normalPositionFor</code></a>
 </td>
-<td>one step of NORMPOS
+<td>one step of <code>NORMPOS</code> as explained for the modified algorithm on page 383ff
 </td>
 </tr>
 
@@ -301,7 +303,7 @@ not implemented
 <td>8.6&nbsp;<code>ZPRIMDEC</code></td>
 <td><a href="doc/api/edu/jas/application/Ideal.html#zeroDimPrimaryDecomposition()" target="classFrame"><code>application.Ideal.zeroDimPrimaryDecomposition</code></a>
 </td>
-<td>
+<td>returns a list of <code>PrimaryComponent</code> containers
 </td>
 </tr>
 
@@ -309,7 +311,9 @@ not implemented
 <td>8.7&nbsp;<code>CONT</code></td>
 <td><a href="doc/api/edu/jas/application/Ideal.html#contraction(edu.jas.application.IdealWithUniv)" target="classFrame"><code>application.Ideal.contraction</code></a>
 </td>
-<td>
+<td>more complicated since the permutation of variables must be considered also,
+see <a href="doc/api/edu/jas/application/Ideal.html#permContraction(edu.jas.application.IdealWithUniv)" target="classFrame"><code>application.Ideal.permContraction</code></a>,
+the polynomial <code>f</code> is returned in the <code>IdealWithUniv</code> container
 </td>
 </tr>
 
@@ -317,7 +321,8 @@ not implemented
 <td>8.8&nbsp;<code>EXTCONT</code></td>
 <td><a href="doc/api/edu/jas/application/Ideal.html#extension(java.lang.String[])" target="classFrame"><code>application.Ideal.extension</code></a>
 </td>
-<td>only EXT, combination not implemented explicitly
+<td>only <code>EXT</code>, the combination <code>EXTCONT</code> is not implemented explicitly, 
+the polynomial <code>f</code> is returned in the <code>IdealWithUniv</code> container
 </td>
 </tr>
 
@@ -325,7 +330,7 @@ not implemented
 <td>8.9&nbsp;<code>RADICAL</code></td>
 <td><a href="doc/api/edu/jas/application/Ideal.html#radical()" target="classFrame"><code>application.Ideal.radical</code></a>
 </td>
-<td>
+<td>for ideals with arbitrary dimension
 </td>
 </tr>
 
@@ -333,7 +338,7 @@ not implemented
 <td>8.10&nbsp;<code>PRIMDEC</code></td>
 <td><a href="doc/api/edu/jas/application/Ideal.html#primaryDecomposition()" target="classFrame"><code>application.Ideal.primaryDecomposition</code></a>
 </td>
-<td>
+<td>for ideals with arbitrary dimension
 </td>
 </tr>
 
@@ -358,22 +363,38 @@ not implemented
 </tr>
 
 <tr>
-<td>8.13&nbsp;<code>ISOLATE</code>, 8.14&nbsp;<code>ISOREC</code>, 8.15&nbsp;<code>ISOREFINE</code></td>
+<td>8.13&nbsp;<code>ISOLATE</code></td>
 <td>
-<a href="doc/api/edu/jas/root/RealRoots.html#realRoots(edu.jas.poly.GenPolynomial)" target="classFrame"><code>root.RealRoots.realRoots</code></a>,
+<a href="doc/api/edu/jas/root/RealRoots.html#realRoots(edu.jas.poly.GenPolynomial)" target="classFrame"><code>root.RealRoots.realRoots</code></a>
+</td>
+<td>could also be used for real root isolations not using Sturm sequences
+</td>
+</tr>
+
+<tr>
+<td>8.14&nbsp;<code>ISOREC</code></td>
+<td>
 <a href="doc/api/edu/jas/root/RealRootsSturm.html#realRoots(edu.jas.root.Interval,%20java.util.List)" target="classFrame"><code>root.RealRootsSturm.realRoots</code></a>
-and 
+</td>
+<td>interval bi-section until a root is isolated
+</td>
+</tr>
+
+<tr>
+<td>8.15&nbsp;<code>ISOREFINE</code></td>
+<td>
 <a href="doc/api/edu/jas/root/RealRoots.html#refineInterval(edu.jas.root.Interval,%20edu.jas.poly.GenPolynomial,%20C)" target="classFrame"><code>root.RealRoots.refineInterval</code></a>
 </td>
-<td>
+<td>also for real root isolations not using Sturm sequences
 </td>
 </tr>
 
 <tr>
 <td>8.16&nbsp;<code>SQUEEZE</code></td>
-<td><a href="doc/api/edu/jas/root/RealRoots.html#realMagnitude(edu.jas.root.Interval,%20edu.jas.poly.GenPolynomial,%20edu.jas.poly.GenPolynomial,%20C)" target="classFrame"><code>root.RealRoots.realMagnitude</code></a>
+<td><a href="doc/api/edu/jas/root/RealRoots.html#invariantMagnitudeInterval(edu.jas.root.Interval,%20edu.jas.poly.GenPolynomial,%20edu.jas.poly.GenPolynomial,%20C)" target="classFrame"><code>root.RealRoots.invariantMagnitudeInterval</code></a>
 </td>
-<td>
+<td>see also 
+<a href="doc/api/edu/jas/root/RealRoots.html#realMagnitude(edu.jas.root.Interval,%20edu.jas.poly.GenPolynomial,%20edu.jas.poly.GenPolynomial,%20C)" target="classFrame"><code>root.RealRoots.realMagnitude</code></a>
 </td>
 </tr>
 
@@ -480,7 +501,7 @@ and
 <p>
 <!-- Created: Sun May 23 13:14:59 CEST 2010 -->
 <!-- hhmts start -->
-Last modified: Thu Jun 17 00:05:47 CEST 2010
+Last modified: Thu Jun 17 23:09:17 CEST 2010
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
