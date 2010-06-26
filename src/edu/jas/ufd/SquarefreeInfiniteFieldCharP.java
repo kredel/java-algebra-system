@@ -50,10 +50,10 @@ public class SquarefreeInfiniteFieldCharP<C extends GcdRingElem<C>> extends Squa
      */
     public SquarefreeInfiniteFieldCharP(RingFactory<Quotient<C>> fac) {
         super(fac);
-        //         isFinite() predicate not yet present
-        //         if ( fac.isFinite() ) {
-        //             throw new IllegalArgumentException("fac must be in-finite"); 
-        //         }
+        // isFinite() predicate now present
+        if ( fac.isFinite() ) {
+            throw new IllegalArgumentException("fac must be in-finite"); 
+        }
         QuotientRing<C> qfac = (QuotientRing<C>) fac;
         GenPolynomialRing<C> rfac = qfac.ring;
         rengine = new SquarefreeFiniteFieldCharP<C>(rfac.coFac);

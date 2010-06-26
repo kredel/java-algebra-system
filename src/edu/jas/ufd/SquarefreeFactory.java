@@ -197,11 +197,12 @@ public class SquarefreeFactory {
                 return new SquarefreeRingChar0<C>(fac.coFac);
             }
         } else {
-            if ( isFinite(fac.coFac) ) { 
+            if ( fac.coFac.isFinite() ) { 
                 return new SquarefreeFiniteFieldCharP<C>(fac.coFac);
             } else {
                 throw new RuntimeException("no squarefree factorization " + fac.coFac);
-                //return new SquarefreeInfiniteFieldCharP<C>(fac.coFac);
+                //QuotientRing<C> qf = (QuotientRing<C>) fac.coFac;
+                //return new SquarefreeInfiniteFieldCharP<C>(qf);
             }
         }
     }
@@ -295,7 +296,7 @@ public class SquarefreeFactory {
             if (fac.characteristic().signum() == 0) {
                 ufd = new SquarefreeFieldChar0/*raw*/(fac);
             } else {
-                if ( isFinite(fac) ) { 
+                if ( fac.isFinite() ) { 
                    ufd = new SquarefreeFiniteFieldCharP/*raw*/(fac);
                 } else {
                    ufd = new SquarefreeInfiniteFieldCharP/*raw*/(fac);
@@ -312,12 +313,11 @@ public class SquarefreeFactory {
     }
 
 
-    /**
+    /*
      * Test if the ring is finite.
      * @param <C> coefficient type
      * @param fac RingFactory&lt;C&gt;.
      * @return true, if the ring is finite, else false.
-     */
     protected static <C extends RingElem<C>> boolean isFinite(RingFactory<C> fac) {
         if ( fac.characteristic().signum() == 0 ) {
             return false;
@@ -330,5 +330,6 @@ public class SquarefreeFactory {
         }
         return false;
     }
+     */
 
 }
