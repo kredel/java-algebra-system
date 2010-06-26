@@ -127,6 +127,16 @@ public class AlgebraicNumberRing<C extends GcdRingElem<C> >
 
     
     /**
+     * Is this structure finite or infinite.
+     * @return true if this structure is finite, else false.
+     * @see edu.jas.structure.ElemFactory#isFinite()
+     */
+    public boolean isFinite() {
+        return ring.coFac.isFinite();
+    }
+
+
+    /**
      * Query if this ring is commutative.
      * @return true if this ring is commutative, else false.
      */

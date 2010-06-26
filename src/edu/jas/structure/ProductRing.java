@@ -123,6 +123,26 @@ public class ProductRing<C extends RingElem<C> >
     }
 
 
+    /**
+     * Is this structure finite or infinite.
+     * @return true if this structure is finite, else false.
+     * @see edu.jas.structure.ElemFactory#isFinite()
+     */
+    public boolean isFinite() {
+        if ( nCopies != 0 ) {
+           return ring.isFinite();
+        } else {
+           for ( RingFactory<C> f : ringList ) {
+               boolean b = f.isFinite();
+               if ( !b ) {
+                   return false;
+               }
+           }
+           return true;
+        }
+    }
+
+
     /** Copy Product element c.
      * @param c
      * @return a copy of c.

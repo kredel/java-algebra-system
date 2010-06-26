@@ -27,6 +27,13 @@ public interface ElemFactory<C extends Element<C>> extends Serializable {
 
 
     /**
+     * Is this structure finite or infinite.
+     * @return true if this structure is finite, else false.
+     */
+    public boolean isFinite();
+
+
+    /**
      * Get the Element for a.
      * @param a long
      * @return element corresponding to a.

@@ -735,6 +735,16 @@ public class GenPolynomialRing<C extends RingElem<C> >
 
 
     /**
+     * Is this structure finite or infinite.
+     * @return true if this structure is finite, else false.
+     * @see edu.jas.structure.ElemFactory#isFinite()
+     */
+    public boolean isFinite() {
+        return (nvar == 0) && coFac.isFinite();
+    }
+
+
+    /**
      * Generate list of univariate polynomials in all variables.
      * @return List(X_1,...,X_n) a list of univariate polynomials.
      */

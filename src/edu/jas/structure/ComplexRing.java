@@ -62,6 +62,16 @@ public class ComplexRing<C extends RingElem<C> >
     }
 
 
+    /**
+     * Is this structure finite or infinite.
+     * @return true if this structure is finite, else false.
+     * @see edu.jas.structure.ElemFactory#isFinite()
+     */
+    public boolean isFinite() {
+        return ring.isFinite();
+    }
+
+
     /** Copy Complex element c.
      * @param c Complex&lt;C&gt;.
      * @return a copy of c.

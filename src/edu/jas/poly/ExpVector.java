@@ -146,6 +146,17 @@ public abstract class ExpVector implements AbelianGroupElem<ExpVector>
     }
 
 
+    /**
+     * Is this structure finite or infinite.
+     * @return true if this structure is finite, else false.
+     * @see edu.jas.structure.ElemFactory#isFinite()
+     * <b>Note: </b> returns true because of finite set of values in each index.
+     */
+    public boolean isFinite() {
+        return true;
+    }
+
+
     /** Clone this.
      * @see java.lang.Object#clone()
      */

@@ -208,6 +208,17 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>,
     }
 
 
+    /**
+     * Is this structure finite or infinite.
+     * @return true if this structure is finite, else false.
+     * @see edu.jas.structure.ElemFactory#isFinite()
+     * <b>Note: </b> is actually finite but returns false.
+     */
+    public boolean isFinite() {
+        return false;
+    }
+
+
     /** Clone this.
      * @see java.lang.Object#clone()
      */

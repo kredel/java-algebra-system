@@ -126,6 +126,16 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> & Rational>
 
 
     /**
+     * Is this structure finite or infinite.
+     * @return true if this structure is finite, else false.
+     * @see edu.jas.structure.ElemFactory#isFinite()
+     */
+    public boolean isFinite() {
+        return algebraic.isFinite();
+    }
+
+
+    /**
      * Copy RealAlgebraicNumber element c.
      * @param c
      * @return a copy of c.

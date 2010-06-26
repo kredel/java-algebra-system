@@ -186,6 +186,16 @@ public final class ModIntegerRing implements ModularRingFactory<ModInteger> {
 
 
     /**
+     * Is this structure finite or infinite.
+     * @return true if this structure is finite, else false.
+     * @see edu.jas.structure.ElemFactory#isFinite()
+     */
+    public boolean isFinite() {
+        return true;
+    }
+
+
+    /**
      * Query if this ring is commutative.
      * @return true.
      */

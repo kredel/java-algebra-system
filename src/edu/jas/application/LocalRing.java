@@ -71,6 +71,16 @@ public class LocalRing<C extends GcdRingElem<C> >
     }
 
 
+    /**
+     * Is this structure finite or infinite.
+     * @return true if this structure is finite, else false.
+     * @see edu.jas.structure.ElemFactory#isFinite()
+     */
+    public boolean isFinite() {
+        return false;
+    }
+
+
     /** Copy Local element c.
      * @param c
      * @return a copy of c.

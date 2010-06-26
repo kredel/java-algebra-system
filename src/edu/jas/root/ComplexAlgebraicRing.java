@@ -117,6 +117,16 @@ implements RingFactory<ComplexAlgebraicNumber<C>> {
 
 
     /**
+     * Is this structure finite or infinite.
+     * @return true if this structure is finite, else false.
+     * @see edu.jas.structure.ElemFactory#isFinite()
+     */
+    public boolean isFinite() {
+        return algebraic.isFinite();
+    }
+
+
+    /**
      * Copy ComplexAlgebraicNumber element c.
      * @param c
      * @return a copy of c.

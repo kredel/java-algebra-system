@@ -42,6 +42,16 @@ public class QuotientRing<C extends RingElem<C> >
     }
 
 
+    /**
+     * Is this structure finite or infinite.
+     * @return true if this structure is finite, else false.
+     * @see edu.jas.structure.ElemFactory#isFinite()
+     */
+    public boolean isFinite() {
+        return ring.isFinite();
+    }
+
+
     /** Copy Quotient element c.
      * @param c
      * @return a copy of c.

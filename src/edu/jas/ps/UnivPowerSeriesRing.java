@@ -277,6 +277,16 @@ public class UnivPowerSeriesRing<C extends RingElem<C>> implements RingFactory<U
 
 
     /**
+     * Is this structure finite or infinite.
+     * @return true if this structure is finite, else false.
+     * @see edu.jas.structure.ElemFactory#isFinite()
+     */
+    public boolean isFinite() {
+        return false;
+    }
+
+
+    /**
      * Get the power series of the exponential function.
      * @return exp(x) as UnivPowerSeries<C>.
      */

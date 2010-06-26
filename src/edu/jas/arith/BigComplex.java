@@ -138,6 +138,16 @@ public final class BigComplex implements StarRingElem<BigComplex>,
     }
 
 
+    /**
+     * Is this structure finite or infinite.
+     * @return true if this structure is finite, else false.
+     * @see edu.jas.structure.ElemFactory#isFinite()
+     */
+    public boolean isFinite() {
+        return false;
+    }
+
+
     /** Clone this.
      * @see java.lang.Object#clone()
      */

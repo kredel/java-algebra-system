@@ -27,7 +27,7 @@ public class ResidueRing<C extends RingElem<C> >
     //private boolean debug = logger.isDebugEnabled();
 
 
-    /** Ring elemsnt for reduction. 
+    /** Ring element for reduction. 
      */
     protected final C modul;
 
@@ -59,6 +59,17 @@ public class ResidueRing<C extends RingElem<C> >
            m = m.negate();
         }
         modul = m; 
+    }
+
+
+    /**
+     * Is this structure finite or infinite.
+     * @return true if this structure is finite, else false.
+     * @see edu.jas.structure.ElemFactory#isFinite()
+     */
+    public boolean isFinite() {
+        throw new RuntimeException("not implemented");
+        //return ring.isFinite();
     }
 
 
