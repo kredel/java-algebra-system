@@ -195,6 +195,15 @@ public class AlgebraicNumberRing<C extends GcdRingElem<C> >
 
 
     /**
+     * Get the internal field indicator.
+     * @return internal field indicator.
+     */
+    public int getField() {
+        return isField;
+    }
+
+
+    /**
      * Characteristic of this ring.
      * @return characteristic of this ring.
      */

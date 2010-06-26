@@ -369,6 +369,28 @@ public class PolyUfdUtil {
 
 
     /**
+     * Ensure that the field property is determined.
+     * Checks if modul is irreducible and modifies the algebraic number ring. 
+     * @param afac algebraic number ring.
+     */
+    public static <C extends GcdRingElem<C>> 
+      void ensureFieldProperty(AlgebraicNumberRing<C> afac) {
+        if ( afac.getField() != -1 ) {
+           return;
+        }
+        if ( !afac.ring.coFac.isField() ) {
+           afac.setField(false);
+        }
+        Factorization<C> mf = FactorFactory.<C>getImplementation(afac.ring);
+        if ( mf.isIrreducible(afac.modul) ) {
+           afac.setField(true);
+        } else {
+           afac.setField(false);
+        }
+    }
+
+
+    /**
      * Kronecker substitution. Substitute x_i by x**d**(i-1) to construct a
      * univariate polynomial.
      * @param A polynomial to be converted.

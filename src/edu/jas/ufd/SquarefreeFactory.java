@@ -122,6 +122,7 @@ public class SquarefreeFactory {
      */
     public static <C extends GcdRingElem<C>> 
       SquarefreeAbstract<AlgebraicNumber<C>> getImplementation(AlgebraicNumberRing<C> fac) {
+        PolyUfdUtil.<C> ensureFieldProperty(fac);
         if ( fac.isField() ) {
             if (fac.characteristic().signum() == 0) {
                 return new SquarefreeFieldChar0<AlgebraicNumber<C>>(fac);
@@ -134,30 +135,8 @@ public class SquarefreeFactory {
                 }
             }
         } else {
-            //logger.warn("not checked if " + fac.toScript() + " is an integral domain");
-            if ( !fac.ring.coFac.isField() ) {
-                fac.setField(false);
-                throw new RuntimeException("coefficients no integral domain " 
-                                          + fac.ring.coFac.getClass().getName());
-            }
-            // check if modul is irreducible, code should not be here
-            Factorization<C> mf = FactorFactory.<C>getImplementation(fac.ring);
-            if ( mf.isIrreducible(fac.modul) ) {
-                fac.setField(true);
-                if (fac.characteristic().signum() == 0) {
-                    return new SquarefreeRingChar0<AlgebraicNumber<C>>(fac);
-                } else {
-                    if ( fac.isFinite() ) {
-                        return new SquarefreeFiniteFieldCharP<AlgebraicNumber<C>>(fac);
-                    } else {
-                        throw new RuntimeException("algebraic extension of infinite not implemented" 
-                                                  + fac.getClass().getName());
-                    }
-                }
-            } else {
-                fac.setField(false);
-                throw new RuntimeException("no integral domain " + fac.getClass().getName());
-            }
+            throw new RuntimeException("eventually no integral domain " 
+                                      + fac.getClass().getName());
         }
     }
 
