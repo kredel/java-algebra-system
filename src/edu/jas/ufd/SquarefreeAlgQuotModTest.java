@@ -212,8 +212,8 @@ public class SquarefreeAlgQuotModTest extends TestCase {
 
         dfac = new GenPolynomialRing<AlgebraicNumber<Quotient<ModInteger>>>(afac, 1, to, rvars);
 
-        a = dfac.random(kl + 1, ll, el + 1, q);
-        b = dfac.random(kl + 1, ll, el + 1, q);
+        a = dfac.random(kl + 1, ll - 1, el + 0, q);
+        b = dfac.random(kl + 0, ll, el + 1, q);
         c = dfac.random(kl, ll, el, q);
         System.out.println("a  = " + a);
         System.out.println("b  = " + b);
@@ -247,16 +247,16 @@ public class SquarefreeAlgQuotModTest extends TestCase {
      * Test base squarefree factors.
      * 
      */
-    public void xtestBaseSquarefreeFactors() {
+    public void testBaseSquarefreeFactors() {
 
         dfac = new GenPolynomialRing<AlgebraicNumber<Quotient<ModInteger>>>(afac, 1, to, rvars);
 
-        a = dfac.random(kl + 1, ll, el + 2, q);
-        b = dfac.random(kl + 1, ll, el + 2, q);
-        c = dfac.random(kl, ll, el + 1, q);
-        //System.out.println("a  = " + a);
-        //System.out.println("b  = " + b);
-        //System.out.println("c  = " + c);
+        a = dfac.random(kl + 1, ll - 1, el + 0, q);
+        b = dfac.random(kl + 0, ll, el + 1, q);
+        c = dfac.random(kl, ll, el + 0, q);
+        System.out.println("a  = " + a);
+        System.out.println("b  = " + b);
+        System.out.println("c  = " + c);
 
         if (a.isZERO() || b.isZERO() || c.isZERO()) {
             // skip for this turn
@@ -265,11 +265,11 @@ public class SquarefreeAlgQuotModTest extends TestCase {
 
         // a a b b b c
         d = a.multiply(a).multiply(b).multiply(b).multiply(b).multiply(c);
-        //System.out.println("d  = " + d);
+        System.out.println("d  = " + d);
 
         SortedMap<GenPolynomial<AlgebraicNumber<Quotient<ModInteger>>>, Long> sfactors;
         sfactors = asqf.baseSquarefreeFactors(d);
-        //System.out.println("sfactors = " + sfactors);
+        System.out.println("sfactors = " + sfactors);
 
         assertTrue("isFactorization(d,sfactors) ", asqf.isFactorization(d, sfactors));
     }

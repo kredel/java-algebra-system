@@ -198,7 +198,7 @@ public class SquarefreeFactory {
                     saq = new SquarefreeInfiniteFieldCharP<C>(qf);
                 } else if ( ocfac instanceof AlgebraicNumberRing ) {
                     AlgebraicNumberRing<C> af = (AlgebraicNumberRing<C>) ocfac;
-                    //not ok: saq = new SquarefreeInfiniteFieldCharP<C>(af);
+                    saq = new SquarefreeInfiniteAlgebraicFieldCharP<C>(af);
                 }
                 if ( saq == null ) {
                    throw new RuntimeException("no squarefree factorization " + fac.coFac);

@@ -10,8 +10,6 @@ import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 
-import edu.jas.application.Quotient;
-import edu.jas.application.QuotientRing;
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.ExpVector;
@@ -62,7 +60,7 @@ public class SquarefreeInfiniteAlgebraicFieldCharP<C extends GcdRingElem<C>>
     }
 
 
-    /* --------- quotient char-th roots --------------------- */
+    /* --------- algebraic number char-th roots --------------------- */
 
 
     /**
@@ -128,7 +126,7 @@ public class SquarefreeInfiniteAlgebraicFieldCharP<C extends GcdRingElem<C>>
             return null;
         }
         if ( logger.isInfoEnabled() ) {
-            logger.info("sf,quot = " + sf);
+            logger.info("sf,algeb = " + sf);
         }
         // better: test if sf.size() == 2 // no, since num and den factors 
         Long k = null;
