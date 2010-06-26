@@ -121,27 +121,38 @@ public class SquarefreeFactory {
      * @return squarefree factorization algorithm implementation.
      */
     public static <C extends GcdRingElem<C>> 
-        SquarefreeAbstract<AlgebraicNumber<C>> getImplementation(AlgebraicNumberRing<C> fac) {
+      SquarefreeAbstract<AlgebraicNumber<C>> getImplementation(AlgebraicNumberRing<C> fac) {
         if ( fac.isField() ) {
             if (fac.characteristic().signum() == 0) {
                 return new SquarefreeFieldChar0<AlgebraicNumber<C>>(fac);
             } else {
-                return new SquarefreeFiniteFieldCharP<AlgebraicNumber<C>>(fac);
+                if ( fac.isFinite() ) {
+                    return new SquarefreeFiniteFieldCharP<AlgebraicNumber<C>>(fac);
+                } else {
+                    throw new RuntimeException("algebraic extension of infinite not implemented" 
+                                              + fac.getClass().getName());
+                }
             }
         } else {
             //logger.warn("not checked if " + fac.toScript() + " is an integral domain");
             if ( !fac.ring.coFac.isField() ) {
                 fac.setField(false);
-                throw new RuntimeException("no integral domain " + fac.ring.coFac.getClass().getName());
+                throw new RuntimeException("coefficients no integral domain " 
+                                          + fac.ring.coFac.getClass().getName());
             }
+            // check if modul is irreducible, code should not be here
             Factorization<C> mf = FactorFactory.<C>getImplementation(fac.ring);
             if ( mf.isIrreducible(fac.modul) ) {
+                fac.setField(true);
                 if (fac.characteristic().signum() == 0) {
-                    fac.setField(true);
                     return new SquarefreeRingChar0<AlgebraicNumber<C>>(fac);
                 } else {
-                    fac.setField(true);
-                    return new SquarefreeFiniteFieldCharP<AlgebraicNumber<C>>(fac);
+                    if ( fac.isFinite() ) {
+                        return new SquarefreeFiniteFieldCharP<AlgebraicNumber<C>>(fac);
+                    } else {
+                        throw new RuntimeException("algebraic extension of infinite not implemented" 
+                                                  + fac.getClass().getName());
+                    }
                 }
             } else {
                 fac.setField(false);
@@ -200,9 +211,20 @@ public class SquarefreeFactory {
             if ( fac.coFac.isFinite() ) { 
                 return new SquarefreeFiniteFieldCharP<C>(fac.coFac);
             } else {
-                throw new RuntimeException("no squarefree factorization " + fac.coFac);
-                //QuotientRing<C> qf = (QuotientRing<C>) fac.coFac;
-                //return new SquarefreeInfiniteFieldCharP<C>(qf);
+                Object ocfac = fac.coFac;
+                SquarefreeAbstract saq = null;
+                if ( ocfac instanceof QuotientRing ) {
+                    QuotientRing<C> qf = (QuotientRing<C>) ocfac;
+                    saq = new SquarefreeInfiniteFieldCharP<C>(qf);
+                } else if ( ocfac instanceof AlgebraicNumberRing ) {
+                    AlgebraicNumberRing<C> af = (AlgebraicNumberRing<C>) ocfac;
+                    //not ok: saq = new SquarefreeInfiniteFieldCharP<C>(af);
+                }
+                if ( saq == null ) {
+                   throw new RuntimeException("no squarefree factorization " + fac.coFac);
+                }
+                SquarefreeAbstract<C> sa = (SquarefreeAbstract<C>) saq;
+                return sa;
             }
         }
     }
@@ -217,7 +239,7 @@ public class SquarefreeFactory {
      */
     @SuppressWarnings("unchecked")
     public static <C extends GcdRingElem<C>> 
-        SquarefreeAbstract<C> getImplementation(RingFactory<C> fac) {
+      SquarefreeAbstract<C> getImplementation(RingFactory<C> fac) {
         //logger.info("fac = " + fac.getClass().getName());
         //System.out.println("fac_o = " + fac.getClass().getName());
         int t = 0;
@@ -267,8 +289,11 @@ public class SquarefreeFactory {
                 //System.out.println("fac_field = " + fac);
                 t = 9;
                 break;
+            } else {
+                t = 11;
+                break;
             }
-            break;
+            //break;
         }
         //System.out.println("ft = " + t);
         if (t == 1) { // BigInteger
@@ -303,6 +328,12 @@ public class SquarefreeFactory {
                 }
             }
         }
+        if (t == 11) { // other rings 
+            if (fac.characteristic().signum() == 0) {
+                ufd = new SquarefreeRingChar0/*raw*/(fac);
+            }
+            // else fail
+        }
         if (ufd == null) {
             throw new RuntimeException("no squarefree factorization implementation for "
                     + fac.getClass().getName());
@@ -311,25 +342,5 @@ public class SquarefreeFactory {
         //System.out.println("ufd = " + ufd);
         return (SquarefreeAbstract<C>) ufd;
     }
-
-
-    /*
-     * Test if the ring is finite.
-     * @param <C> coefficient type
-     * @param fac RingFactory&lt;C&gt;.
-     * @return true, if the ring is finite, else false.
-    protected static <C extends RingElem<C>> boolean isFinite(RingFactory<C> fac) {
-        if ( fac.characteristic().signum() == 0 ) {
-            return false;
-        }
-        // char p case
-        List<C> gens = fac.generators();
-        System.out.println("isFinite gens = " + gens);
-        if ( gens.size() == 1 ) { // ??
-            return true;
-        }
-        return false;
-    }
-     */
 
 }
