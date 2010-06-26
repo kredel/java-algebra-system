@@ -96,7 +96,7 @@
 
 
 <target name="usage" >
-  <echo message="ant &lt;name&gt; cl='cmd'"  />
+  <echo message="ant &lt;name&gt; -Drun=class"  />
   <echo message="basedir = ${basedir}"  />
   <echo message="libs = ${libs}"  />
   <!--echoproperties /-->
@@ -106,6 +106,7 @@
   <javac srcdir="${src}" destdir="${build}"
          debug="on" debuglevel="lines,source"
          classpath="${cp}" 
+         includeantruntime="false"
   />
 </target>
 
@@ -114,12 +115,23 @@
          debug="on" debuglevel="lines,source"
          classpath="${cp}"
          listfiles="true"
+         includeantruntime="false"
   >
   <compilerarg value="-Xlint:unchecked" />
   </javac>
 <!--     listfiles="true"
          includes="**/*.java" 
 -->
+</target>
+
+<target name="recomp5" depends="distclean" >
+  <javac srcdir="${src}" destdir="${build}"
+         debug="on" debuglevel="lines,source"
+         classpath="${cp}" 
+         source="1.5" 
+         target="1.5" 
+         includeantruntime="false"
+  />
 </target>
 
 <target name="doc" >
@@ -186,6 +198,12 @@
          classpath="${cp}" 
          fork="yes" />
   <java  classname="edu.jas.poly.RatGBaseTest" 
+         classpath="${cp}" 
+         fork="yes" />
+</target>
+
+<target name="run" depends="compile" >
+  <java  classname="${run}" 
          classpath="${cp}" 
          fork="yes" />
 </target>
@@ -345,3 +363,5 @@
 </target>
 
 </project>
+
+
