@@ -65,8 +65,6 @@ public class SyzygyTest extends TestCase {
      return suite;
    }
 
-   int port = 4711;
-   String host = "localhost";
 
    GenPolynomialRing<BigRational> fac;
 
@@ -107,9 +105,8 @@ public class SyzygyTest extends TestCase {
        tord = new TermOrder();
        fac = new GenPolynomialRing<BigRational>(coeff,rl,tord);
 
-       //bb = new GroebnerBaseSeq<BigRational>();
        bb = GBFactory.getImplementation(coeff);
-       mbb = new ModGroebnerBaseAbstract<BigRational>();
+       mbb = new ModGroebnerBaseAbstract<BigRational>(coeff);
        sz = new SyzygyAbstract<BigRational>();
 
        a = b = c = d = e = null;

@@ -60,9 +60,6 @@ public class ModGroebnerBaseTest extends TestCase {
      return suite;
    }
 
-   int port = 4711;
-   String host = "localhost";
-
    GenPolynomialRing<BigRational> fac;
 
    PolynomialList<BigRational> F;
@@ -93,7 +90,7 @@ public class ModGroebnerBaseTest extends TestCase {
        BigRational coeff = new BigRational(9);
        tord = new TermOrder();
        fac = new GenPolynomialRing<BigRational>(coeff,rl,tord);
-       mbb = new ModGroebnerBaseAbstract<BigRational>();
+       mbb = new ModGroebnerBaseAbstract<BigRational>(coeff);
        a = b = c = d = e = null;
 
        do {

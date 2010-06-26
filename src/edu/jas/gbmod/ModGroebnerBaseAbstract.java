@@ -8,7 +8,8 @@ import java.util.List;
 
 //import org.apache.log4j.Logger;
 
-import edu.jas.structure.RingElem;
+import edu.jas.structure.RingFactory;
+import edu.jas.structure.GcdRingElem;
 
 import edu.jas.gb.GroebnerBase;
 import edu.jas.gb.GroebnerBaseSeq;
@@ -25,7 +26,7 @@ import edu.jas.vector.ModuleList;
  * @author Heinz Kredel
  */
 
-public class ModGroebnerBaseAbstract<C extends RingElem<C>> 
+public class ModGroebnerBaseAbstract<C extends GcdRingElem<C>> 
        implements ModGroebnerBase<C> {
 
     //private static final Logger logger = Logger.getLogger(ModGroebnerBase.class);
@@ -41,9 +42,16 @@ public class ModGroebnerBaseAbstract<C extends RingElem<C>>
  * Constructor.
  */
     public ModGroebnerBaseAbstract() {
-        bb = new GroebnerBaseSeq<C>();
+        bb = GBFactory.getImplementation();
     }
 
+
+/**
+ * Constructor.
+ */
+    public ModGroebnerBaseAbstract(RingFactory<C> cf) {
+        bb = GBFactory.getImplementation(cf);
+    }
 
 
 /**

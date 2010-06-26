@@ -33,13 +33,13 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>>
     /**
      * Reduction engine.
      */
-    protected Reduction<C> red;
+    public final Reduction<C> red;
 
 
     /**
      * linear algebra engine.
      */
-    BasicLinAlg<C> blas;
+    public final BasicLinAlg<C> blas;
 
 
     /**

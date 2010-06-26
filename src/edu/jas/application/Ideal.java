@@ -20,7 +20,9 @@ import org.apache.log4j.Logger;
 import edu.jas.gb.ExtendedGB;
 import edu.jas.gb.GroebnerBaseAbstract;
 import edu.jas.gb.GroebnerBasePartial;
+import edu.jas.gb.GroebnerBaseSeq;
 import edu.jas.gb.GroebnerBaseSeqPairSeq;
+import edu.jas.gb.GBFactory;
 import edu.jas.gb.Reduction;
 import edu.jas.gb.ReductionSeq;
 import edu.jas.poly.ExpVector;
@@ -168,7 +170,8 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
      * @param gb true if list is known to be a Groebner Base, else false
      */
     public Ideal(PolynomialList<C> list, boolean gb) {
-        this(list, gb, new GroebnerBaseSeqPairSeq<C>(), new ReductionSeq<C>());
+        //this(list, gb, new GroebnerBaseSeqPairSeq<C>(), new ReductionSeq<C>());
+        this(list, gb, GBFactory.getImplementation(list.ring.coFac) );
     }
 
 
@@ -179,7 +182,8 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
      * @param topt true if term order is optimized, else false
      */
     public Ideal(PolynomialList<C> list, boolean gb, boolean topt) {
-        this(list, gb, topt, new GroebnerBaseSeqPairSeq<C>(), new ReductionSeq<C>());
+        //this(list, gb, topt, new GroebnerBaseSeqPairSeq<C>(), new ReductionSeq<C>());
+        this(list, gb, topt, GBFactory.getImplementation(list.ring.coFac) );
     }
 
 
@@ -199,12 +203,35 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
      * Constructor.
      * @param list polynomial list
      * @param gb true if list is known to be a Groebner Base, else false
+     * @param bb Groebner Base engine
+     */
+    public Ideal(PolynomialList<C> list, boolean gb, GroebnerBaseAbstract<C> bb) {
+        this(list, gb, false, bb, bb.red);
+    }
+
+
+    /**
+     * Constructor.
+     * @param list polynomial list
+     * @param gb true if list is known to be a Groebner Base, else false
+     * @param topt true if term order is optimized, else false
+     * @param bb Groebner Base engine
+     */
+    public Ideal(PolynomialList<C> list, boolean gb, boolean topt, GroebnerBaseAbstract<C> bb) {
+        this(list, gb, topt, bb, bb.red);
+    }
+
+
+    /**
+     * Constructor.
+     * @param list polynomial list
+     * @param gb true if list is known to be a Groebner Base, else false
      * @param topt true if term order is optimized, else false
      * @param bb Groebner Base engine
      * @param red Reduction engine
      */
-    public Ideal(PolynomialList<C> list, boolean gb, boolean topt, GroebnerBaseAbstract<C> bb,
-            Reduction<C> red) {
+    public Ideal(PolynomialList<C> list, boolean gb, boolean topt, 
+                 GroebnerBaseAbstract<C> bb, Reduction<C> red) {
         if (list == null || list.list == null) {
             throw new IllegalArgumentException("list and list.list may not be null");
         }

@@ -14,6 +14,7 @@ import java.io.Serializable;
 import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
+import edu.jas.structure.GcdRingElem;
 //import edu.jas.structure.RingFactory;
 
 import edu.jas.gb.ExtendedGB;
@@ -43,7 +44,7 @@ import edu.jas.vector.BasicLinAlg;
  * @author Heinz Kredel
  */
 
-public class SyzygyAbstract<C extends RingElem<C>> 
+public class SyzygyAbstract<C extends GcdRingElem<C>> 
              implements Syzygy<C> {
 
     private static final Logger logger = Logger.getLogger(SyzygyAbstract.class);
@@ -63,20 +64,14 @@ public class SyzygyAbstract<C extends RingElem<C>>
 
 
     /**
-     * Groebner base engine.
-     */
-    protected GroebnerBase<C> gb;
-
-
-    /**
      * Constructor.
      */
     public SyzygyAbstract() {
         red = new ReductionSeq<C>();
         blas = new BasicLinAlg<C>();
-        gb = new GroebnerBaseSeqPairSeq<C>();
+        //gb = new GroebnerBaseSeqPairSeq<C>();
         //gb = new GroebnerBaseSeq<C>();
-        //gb = GBFactory.getImplementation( missing ); // not possible
+        //gb = GBFactory. getImplementation(); 
     }
 
 
@@ -164,7 +159,7 @@ public class SyzygyAbstract<C extends RingElem<C>>
                 if ( ! h.isZERO() ) {
                     throw new RuntimeException("Syzygy no GB");
                 }
-                if ( logger.isDebugEnabled() ) {
+                if ( debug ) {
                     logger.info("row = " + row.size());
                 }
                 Z.add( row );
@@ -297,7 +292,7 @@ public class SyzygyAbstract<C extends RingElem<C>>
         ModuleList<C> MM = M;
         ModuleList<C> GM;
         ModuleList<C> Z;
-        ModGroebnerBase<C> mbb = new ModGroebnerBaseAbstract<C>();
+        ModGroebnerBase<C> mbb = new ModGroebnerBaseAbstract<C>(M.ring.coFac);
         while (true) {
           GM = mbb.GB(MM);
           Z = zeroRelations(GM);
@@ -324,7 +319,7 @@ public class SyzygyAbstract<C extends RingElem<C>>
         List<GenPolynomial<C>> G;
         PolynomialList<C> Gl;
 
-        //G = (new GroebnerBaseSeq<C>()).GB( F.list );
+        GroebnerBase<C> gb = GBFactory.getImplementation( F.ring.coFac ); 
         G = gb.GB( F.list );
         Z = zeroRelations( G );
         Gl = new PolynomialList<C>(F.ring, G);
@@ -370,7 +365,7 @@ public class SyzygyAbstract<C extends RingElem<C>>
         ModuleList<C> MM = M;
         ModuleList<C> GM = null;
         ModuleList<C> Z;
-        //ModGroebnerBase<C> mbb = new ModGroebnerBaseAbstract<C>();
+        //ModGroebnerBase<C> mbb = new ModGroebnerBaseAbstract<C>(M.ring.coFac);
         while (true) {
           //GM = mbb.GB(MM);
           Z = zeroRelationsArbitrary(MM);
@@ -410,13 +405,14 @@ public class SyzygyAbstract<C extends RingElem<C>>
         if ( F.size() <= 1 ) {
             return zeroRelations( modv, F );
         }
+        GroebnerBase<C> gb = GBFactory.getImplementation( F.get(0).ring.coFac ); 
         final int lenf = F.size(); 
         ExtendedGB<C> exgb = gb.extGB( F );
         if ( debug ) {
            logger.debug("exgb = " + exgb);
-        }
-        if ( ! gb.isReductionMatrix(exgb) ) {
-           logger.error("is reduction matrix ? false");
+           if ( ! gb.isReductionMatrix(exgb) ) {
+              logger.error("is reduction matrix ? false");
+           }
         }
         List<GenPolynomial<C>> G = exgb.G;
         List<List<GenPolynomial<C>>> G2F = exgb.G2F;
@@ -427,9 +423,9 @@ public class SyzygyAbstract<C extends RingElem<C>>
         ModuleList<C> S = new ModuleList<C>( ring, sg );
         if ( debug ) {
            logger.debug("syz = " + S);
-        }
-        if ( ! isZeroRelation(sg,G) ) {
-           logger.error("is syzygy ? false");
+           if ( ! isZeroRelation(sg,G) ) {
+              logger.error("is syzygy ? false");
+           }
         }
         List<List<GenPolynomial<C>>> sf;
         sf = new ArrayList<List<GenPolynomial<C>>>( sg.size() );
@@ -531,18 +527,15 @@ public class SyzygyAbstract<C extends RingElem<C>>
             }
             i++;
         }
-        ModuleList<C> M2L = new ModuleList<C>( ring, M2 );
         if ( debug ) {
+           ModuleList<C> M2L = new ModuleList<C>( ring, M2 );
            logger.debug("syz M2L = " + M2L);
-        }
-
-        if ( debug ) {
            ModuleList<C> SF = new ModuleList<C>( ring, sf );
            logger.debug("syz sf = " + SF);
            logger.debug("#syz " + sflen + ", " + sf.size());
-        }
-        if ( ! isZeroRelation(sf,F) ) {
-           logger.error("is syz sf ? false");
+           if ( ! isZeroRelation(sf,F) ) {
+              logger.error("is syz sf ? false");
+           }
         }
         return sf;
     }
