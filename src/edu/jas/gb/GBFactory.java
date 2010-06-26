@@ -74,6 +74,18 @@ public class GBFactory {
 
 
     /**
+     * Determine suitable implementation of GB algorithms, no factory case.
+     * @return GB algorithm implementation for field coefficients.
+     */
+    public static <C extends GcdRingElem<C>>
+      GroebnerBaseAbstract<C> getImplementation() {
+        logger.warn("no coefficent factory given, assuming field coeffcients");
+        GroebnerBaseAbstract<C> bba = new GroebnerBaseSeq<C>();
+        return bba;
+    }
+
+
+    /**
      * Determine suitable implementation of GB algorithms, case ModLong.
      * @param fac ModLongRing.
      * @return GB algorithm implementation.
