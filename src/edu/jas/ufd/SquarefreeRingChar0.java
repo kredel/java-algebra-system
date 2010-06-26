@@ -40,12 +40,6 @@ public class SquarefreeRingChar0<C extends GcdRingElem<C>> extends SquarefreeAbs
     protected final RingFactory<C> coFac;
 
 
-    /*
-     * GCD engine for ring of characteristic 0 base coefficients.
-     */
-    //protected final GreatestCommonDivisorAbstract<C> engine;
-
-
     /**
      * Constructor.
      */
@@ -58,8 +52,6 @@ public class SquarefreeRingChar0<C extends GcdRingElem<C>> extends SquarefreeAbs
             throw new IllegalArgumentException("characterisic(fac) must be zero");
         }
         coFac = fac;
-        //engine = GCDFactory.<C>getImplementation( fac );
-        //engine = GCDFactory.<C> getProxy(fac);
     }
 
 

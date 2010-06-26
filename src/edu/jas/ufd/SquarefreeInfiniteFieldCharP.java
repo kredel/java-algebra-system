@@ -42,8 +42,6 @@ public class SquarefreeInfiniteFieldCharP<C extends GcdRingElem<C>> extends Squa
     protected final SquarefreeFiniteFieldCharP<C> rengine;
 
 
-    //protected final SquarefreeInfiniteRingCharP<C> rengine;
-
 
     /**
      * Constructor.

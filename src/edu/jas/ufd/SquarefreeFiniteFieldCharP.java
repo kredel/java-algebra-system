@@ -39,13 +39,10 @@ public class SquarefreeFiniteFieldCharP<C extends GcdRingElem<C>> extends Square
      */
     public SquarefreeFiniteFieldCharP(RingFactory<C> fac) {
         super(fac);
-        //         isFinite() predicate not yet present
-        //         if ( !fac.isFinite() ) {
-        //             throw new IllegalArgumentException("fac must be finite"); 
-        //         }
-        //         if ( !fac.isField() ) {
-        //             throw new IllegalArgumentException("fac must be a field"); 
-        //         }
+        // isFinite() predicate now present
+        if ( !fac.isFinite() ) {
+            throw new IllegalArgumentException("fac must be finite"); 
+        }
     }
 
 

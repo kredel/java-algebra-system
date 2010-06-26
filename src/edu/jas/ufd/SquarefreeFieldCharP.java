@@ -61,22 +61,12 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
     protected final QuotientRing<C> qCoFac;
 
 
-    /*
-     * GCD engine for finite field of characteristic p base coefficients.
-     */
-    //protected final GreatestCommonDivisorAbstract<C> engine;
-
-
     /**
      * Constructor.
      */
     @SuppressWarnings("unchecked")
     public SquarefreeFieldCharP(RingFactory<C> fac) {
         super( GCDFactory.<C> getProxy(fac) );
-        //         isFinite() predicate not yet present
-        //         if ( !fac.isFinite() ) {
-        //             throw new IllegalArgumentException("fac must be finite"); 
-        //         }
         if (!fac.isField()) {
             throw new IllegalArgumentException("fac must be a field");
         }
@@ -84,8 +74,6 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
             throw new IllegalArgumentException("characterisic(fac) must be non-zero");
         }
         coFac = fac;
-        //engine = GCDFactory.<C>getImplementation( fac );
-        //engine = GCDFactory.<C> getProxy(fac);
         Object oFac = (Object) coFac;
         if (oFac instanceof AlgebraicNumberRing) {
             aCoFac = (AlgebraicNumberRing<C>) oFac; // <C> is not correct
