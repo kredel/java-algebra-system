@@ -106,13 +106,13 @@ public class GroebnerBaseDistributed<C extends RingElem<C>> extends GroebnerBase
      * @param port server port to use.
      */
     public GroebnerBaseDistributed(int threads, ThreadPool pool, int port) {
+        super( new ReductionPar<C>() );
         if (threads < 1) {
             threads = 1;
         }
         this.threads = threads;
         this.pool = pool;
         this.port = port;
-        red = new ReductionPar<C>();
     }
 
 

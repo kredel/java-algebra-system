@@ -161,6 +161,7 @@ public class GroebnerBaseDistributedHybrid<C extends RingElem<C>> extends Groebn
      * @param port server port to use.
      */
     public GroebnerBaseDistributedHybrid(int threads, int threadsPerNode, ThreadPool pool, int port) {
+        super( new ReductionPar<C>() );
         if (threads < 1) {
             threads = 1;
         }
@@ -168,7 +169,6 @@ public class GroebnerBaseDistributedHybrid<C extends RingElem<C>> extends Groebn
         this.threadsPerNode = threadsPerNode;
         this.pool = pool;
         this.port = port;
-        red = new ReductionPar<C>();
         //logger.info("generated pool: " + pool);
     }
 
