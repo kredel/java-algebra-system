@@ -130,8 +130,9 @@ public class SquarefreeFactory {
                 if ( fac.isFinite() ) {
                     return new SquarefreeFiniteFieldCharP<AlgebraicNumber<C>>(fac);
                 } else {
-                    throw new RuntimeException("algebraic extension of infinite not implemented" 
-                                              + fac.getClass().getName());
+                    return new SquarefreeInfiniteAlgebraicFieldCharP<C>(fac);
+                    //throw new RuntimeException("algebraic extension of infinite not implemented" 
+                    //                          + fac.getClass().getName());
                 }
             }
         } else {
