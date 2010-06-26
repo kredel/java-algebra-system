@@ -380,6 +380,7 @@ public class PolyUfdUtil {
         }
         if ( !afac.ring.coFac.isField() ) {
            afac.setField(false);
+           return;
         }
         Factorization<C> mf = FactorFactory.<C>getImplementation(afac.ring);
         if ( mf.isIrreducible(afac.modul) ) {

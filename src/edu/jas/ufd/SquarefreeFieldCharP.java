@@ -28,7 +28,7 @@ import edu.jas.structure.RingFactory;
  * @author Heinz Kredel
  */
 
-public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends SquarefreeAbstract<C> /*implements Squarefree<C>*/{
+public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends SquarefreeAbstract<C> {
 
 
     private static final Logger logger = Logger.getLogger(SquarefreeFieldCharP.class);
@@ -444,9 +444,7 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
 
 
     /**
-     * GenPolynomial char-th root main variable. Base coefficient type must be
-     * finite field, that is ModInteger or AlgebraicNumber&lt;ModInteger&gt;
-     * etc.
+     * GenPolynomial char-th root univariate polynomial. 
      * @param P GenPolynomial.
      * @return char-th_rootOf(P), or null if no char-th root.
      */
@@ -454,11 +452,10 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
 
 
     /**
-     * GenPolynomial char-th root main variable.
+     * GenPolynomial char-th root univariate polynomial with polynomial coefficients.
      * @param P recursive univariate GenPolynomial.
      * @return char-th_rootOf(P), or null if P is no char-th root.
      */
-    // param <C> base coefficient type must be ModInteger.
     public abstract GenPolynomial<GenPolynomial<C>> recursiveUnivariateRootCharacteristic(
             GenPolynomial<GenPolynomial<C>> P);
 

@@ -25,7 +25,7 @@ import edu.jas.structure.RingFactory;
  * @author Heinz Kredel
  */
 
-public class SquarefreeFieldChar0<C extends GcdRingElem<C>> extends SquarefreeAbstract<C> /*implements Squarefree<C>*/{
+public class SquarefreeFieldChar0<C extends GcdRingElem<C>> extends SquarefreeAbstract<C> {
 
 
     private static final Logger logger = Logger.getLogger(SquarefreeFieldChar0.class);
