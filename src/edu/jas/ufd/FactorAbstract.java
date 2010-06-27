@@ -312,10 +312,10 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
             P = P.divide(c); // make primitive or monic
         }
         if (logger.isInfoEnabled()) {
-            logger.info("squarefree facs P = " + P);
+            logger.info("base facs for P = " + P);
         }
         SortedMap<GenPolynomial<C>, Long> facs = sengine.baseSquarefreeFactors(P);
-        if (logger.isInfoEnabled() && facs.size() > 1) {
+        if (logger.isInfoEnabled() && ( facs.size() > 1 || facs.get(facs.firstKey()) > 1 ) ) {
             logger.info("squarefree facs   = " + facs);
             //System.out.println("sfacs   = " + facs);
             //boolean tt = isFactorization(P,facs);
@@ -421,7 +421,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
             logger.info("squarefree mfacs P = " + P);
         }
         SortedMap<GenPolynomial<C>, Long> facs = sengine.squarefreeFactors(P);
-        if (logger.isInfoEnabled() && facs.size() > 1) {
+        if (logger.isInfoEnabled() && ( facs.size() > 1 || facs.get(facs.firstKey()) > 1 )) {
             logger.info("squarefree mfacs   = " + facs);
             //System.out.println("facs   = " + facs);
         }

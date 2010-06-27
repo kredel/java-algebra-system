@@ -1939,7 +1939,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
             int[] dov = e.dependencyOnVariables();
             //System.out.println("dov_head = " + Arrays.toString(dov));
             if (dov.length == 0) {
-                throw new IllegalArgumentException("ideal dimension is not zero");
+                throw new IllegalArgumentException("ideal dimension is not zero " + p);
             }
             // search bi-variate head terms
             if (dov.length >= 2) {
