@@ -16,7 +16,6 @@ import org.apache.log4j.BasicConfigurator;
  * TimeStatus tests with JUnit. 
  * @author Heinz Kredel
  */
-
 public class TimeStatusTest extends TestCase {
 
     /**
@@ -113,10 +112,10 @@ public class TimeStatusTest extends TestCase {
         } catch (InterruptedException e) {
             fail("test4 interrupt");
         }
-
     }
 
 }
+
 
 class TSCallTest implements Callable<Boolean> {
 

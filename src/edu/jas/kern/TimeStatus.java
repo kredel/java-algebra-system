@@ -107,13 +107,10 @@ public class TimeStatus {
      * test if time has exceeded and throw an exception if so.
      * @param msg the message to be send with the exception.
      */
-    public static synchronized void checkTime(String msg) {
+    public static void checkTime(String msg) {
         if ( ! allowTime ) {
             return;
         }
-        //System.out.println("ctm = " + System.currentTimeMillis());
-        //System.out.println("st  = " + startTime);
-        //System.out.println("lt  = " + limitTime);
         if ( limitTime == Long.MAX_VALUE ) {
             return;
         }
@@ -134,8 +131,7 @@ public class TimeStatus {
         if ( msg == null ) {
             msg = "";
         }
-        throw new TimeExceededException(msg + " over time = " 
-                                        + (System.currentTimeMillis() - startTime - limitTime));
+        throw new TimeExceededException(msg + " over time = " + tt);
     }
 
 }
