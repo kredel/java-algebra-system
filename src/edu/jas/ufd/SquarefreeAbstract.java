@@ -516,4 +516,58 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
         return t;
     }
 
+
+    /**
+     * Coefficients greatest squarefree divisor.
+     * @param P coefficient.
+     * @return squarefree part of P.
+     */
+    public C squarefreePart(C P) {
+        if (P == null) {
+            return null;
+        }
+        // just for the moment:
+        C s = null;
+        SortedMap<C, Long> factors = squarefreeFactors(P);
+        //logger.info("sqfPart,factors = " + factors);
+        System.out.println("sqfPart,factors = " + factors);
+        for (C sp : factors.keySet()) {
+            if ( s == null ) {
+                s = sp;
+            } else {
+                s = s.multiply(sp);
+            }
+        }
+        return s;
+    }
+
+
+    /**
+     * Coefficients squarefree factorization.
+     * @param P coefficient.
+     * @return [p_1 -> e_1, ..., p_k -> e_k] with P = prod_{i=1,...,k} p_i^{e_i}
+     *         and p_i squarefree.
+     */
+    public abstract SortedMap<C, Long> squarefreeFactors(C P); 
+    /* not possible:
+    {
+        if (P == null) {
+            return null;
+        }
+        SortedMap<C, Long> factors = new TreeMap<C, Long>();
+        SquarefreeAbstract<C> reng = SquarefreeFactory.getImplementation((RingFactory<C>) P.factory());
+            System.out.println("fcp,reng = " + reng);
+            SortedMap<C, Long> rfactors = reng.squarefreeFactors(P);
+            for (C c : rfactors.keySet()) {
+                if (!c.isONE()) {
+                    C cr = (C) (Object) c;
+                    Long rk = rfactors.get(c);
+                    factors.put(cr, rk);
+                }
+            }
+
+        return factors;
+    }
+    */
+
 }

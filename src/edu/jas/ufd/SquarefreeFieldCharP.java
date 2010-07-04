@@ -13,11 +13,13 @@ import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 
+import edu.jas.application.Quotient;
 import edu.jas.application.QuotientRing;
 import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
+import edu.jas.poly.AlgebraicNumber;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.Power;
 import edu.jas.structure.RingFactory;
@@ -35,6 +37,12 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
 
 
     private final boolean debug = logger.isDebugEnabled();
+
+
+    /**
+     * GCD engine for characteristic p base coefficients.
+     */
+    protected final SquarefreeAbstract<C> rengine;
 
 
     /**
@@ -77,13 +85,17 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
         Object oFac = (Object) coFac;
         if (oFac instanceof AlgebraicNumberRing) {
             aCoFac = (AlgebraicNumberRing<C>) oFac; // <C> is not correct
+            rengine = (SquarefreeAbstract) SquarefreeFactory.getImplementation(aCoFac.ring);
+            qCoFac = null;
         } else {
             aCoFac = null;
-        }
-        if (oFac instanceof QuotientRing) {
-            qCoFac = (QuotientRing<C>) oFac; // <C> is not correct
-        } else {
-            qCoFac = null;
+            if (oFac instanceof QuotientRing) {
+                qCoFac = (QuotientRing<C>) oFac; // <C> is not correct
+                rengine = (SquarefreeAbstract) SquarefreeFactory.getImplementation(qCoFac.ring);
+            } else {
+                qCoFac = null;
+                rengine = null; //(SquarefreeAbstract) SquarefreeFactory.getImplementation(oFac);
+            }
         }
     }
 
@@ -135,20 +147,46 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
         if (A == null || A.isZERO()) {
             return sfactors;
         }
+        GenPolynomialRing<C> pfac = A.ring;
         if (A.isConstant()) {
-            sfactors.put(A, 1L);
+            C coeff = A.leadingBaseCoefficient();
+            //System.out.println("coeff = " + coeff + " @ " + coeff.factory());
+            SortedMap<C, Long> rfactors = squarefreeFactors(coeff);
+            System.out.println("rfactors,const = " + rfactors);
+            if ( rfactors != null && rfactors.size() > 0) {
+                for (C c : rfactors.keySet()) {
+                    if (!c.isONE()) {
+                        GenPolynomial<C> cr = pfac.getONE().multiply( c );
+                        Long rk = rfactors.get(c);
+                        sfactors.put(cr, rk);
+                    }
+                }
+            } else {
+                sfactors.put(A, 1L);
+            }
             return sfactors;
         }
-        GenPolynomialRing<C> pfac = A.ring;
         if (pfac.nvar > 1) {
             throw new RuntimeException(this.getClass().getName() + " only for univariate polynomials");
         }
         C ldbcf = A.leadingBaseCoefficient();
         if (!ldbcf.isONE()) {
             A = A.divide(ldbcf);
-            GenPolynomial<C> f1 = pfac.getONE().multiply(ldbcf);
-            //System.out.println("gcda sqf f1 = " + f1);
-            sfactors.put(f1, 1L);
+            SortedMap<C, Long> rfactors = squarefreeFactors(ldbcf);
+            System.out.println("rfactors,ldbcf = " + rfactors);
+            if ( rfactors != null && rfactors.size() > 0) {
+                for (C c : rfactors.keySet()) {
+                    if (!c.isONE()) {
+                        GenPolynomial<C> cr = pfac.getONE().multiply( c );
+                        Long rk = rfactors.get(c);
+                        sfactors.put(cr, rk);
+                    }
+                }
+            } else {
+                GenPolynomial<C> f1 = pfac.getONE().multiply(ldbcf);
+                //System.out.println("gcda sqf f1 = " + f1);
+                sfactors.put(f1, 1L);
+            }
             ldbcf = pfac.coFac.getONE();
         }
         GenPolynomial<C> T0 = A;
@@ -160,6 +198,7 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
         long mp = 0L;
         boolean init = true;
         while (true) {
+            System.out.println("T0 = " + T0);
             if (init) {
                 if (T0.isConstant() || T0.isZERO()) {
                     break;
@@ -172,6 +211,7 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
                 //System.out.println("iTp = " + Tp);
                 //System.out.println("iT  = " + T);
                 //System.out.println("iV  = " + V);
+                //System.out.println("const(iV)  = " + V.isConstant());
                 k = 0L;
                 mp = 0L;
                 init = false;
@@ -180,10 +220,11 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
                 mp = pfac.characteristic().longValue(); // assert != 0
                 //T0 = PolyUtil.<C> baseModRoot(T,mp);
                 T0 = baseRootCharacteristic(T);
-                if (T0 == null) {
-                    break;
-                }
                 logger.info("char root: T0 = " + T0 + ", T = " + T);
+                if (T0 == null) {
+                    //break;
+                    T0 = pfac.getZERO();
+                }
                 e = e * mp;
                 init = true;
                 continue;
@@ -221,6 +262,7 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
         //             //System.out.println("gcda sqf f1e = " + f1);
         //             sfactors.put(f1,e1);
         //         }
+        logger.info("exit char root: T0 = " + T0 + ", T = " + T);
         return sfactors;
     }
 
@@ -339,11 +381,12 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
                 T0 = recursiveUnivariateRootCharacteristic(T);
                 logger.info("char root: T0r = " + T0 + ", Tr = " + T);
                 if (T0 == null) {
-                    break;
+                    //break;
+                    T0 = pfac.getZERO();
                 }
                 e = e * mp;
                 init = true;
-                continue;
+                //continue;
             }
             k++;
             if (mp != 0L && k % mp == 0L) {
@@ -368,6 +411,7 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
                 sfactors.put(z, (e * k));
             }
         }
+        logger.info("exit char root: T0 = " + T0 + ", T = " + T);
         return sfactors;
     }
 
@@ -437,6 +481,59 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
             sfactors.put(D, i);
         }
         return sfactors;
+    }
+
+
+    /**
+     * Coefficient squarefree factorization.
+     * @param coeff coefficient.
+     * @return [p_1 -> e_1, ..., p_k -> e_k] with P = prod_{i=1,...,k} p_i^{e_i}
+     *         and p_i squarefree.
+     */
+    @Override
+    public SortedMap<C, Long> squarefreeFactors(C coeff) {
+        if (coeff == null) {
+            return null;
+        }
+        SortedMap<C, Long> factors = new TreeMap<C, Long>();
+        if ( aCoFac != null ) {
+            AlgebraicNumber<C> an = (AlgebraicNumber<C>) (Object) coeff; 
+            RingFactory<C> cf = (RingFactory<C>) coeff.factory();
+            if ( cf.isFinite() ) {
+                SquarefreeFiniteFieldCharP<C> reng = (SquarefreeFiniteFieldCharP)SquarefreeFactory.getImplementation((RingFactory<C>) coeff.factory());
+                System.out.println("fcp,reng = " + reng);
+                SortedMap<C, Long> rfactors = reng.rootCharacteristic(coeff); // ??
+                System.out.println("rfactors,finite = " + rfactors);
+                factors.putAll(rfactors);
+                return factors;
+            } else {
+                SquarefreeInfiniteAlgebraicFieldCharP<C> reng = (SquarefreeInfiniteAlgebraicFieldCharP)SquarefreeFactory.getImplementation((RingFactory<C>) coeff.factory());
+                System.out.println("fcp,reng = " + reng);
+                SortedMap<AlgebraicNumber<C>, Long> rfactors = reng.squarefreeFactors(an);
+                System.out.println("rfactors,infinite,algeb = " + rfactors);
+                for (AlgebraicNumber<C> c : rfactors.keySet()) {
+                    if (!c.isONE()) {
+                        C cr = (C) (Object) c;
+                        Long rk = rfactors.get(c);
+                        factors.put(cr, rk);
+                    }
+                }
+            }
+        } else if ( qCoFac != null ) {
+            Quotient<C> q = (Quotient<C>) (Object) coeff; 
+            SquarefreeInfiniteFieldCharP<C> reng = (SquarefreeInfiniteFieldCharP)SquarefreeFactory.getImplementation((RingFactory<C>) coeff.factory());
+            System.out.println("fcp,reng = " + reng);
+            SortedMap<Quotient<C>, Long> rfactors = reng.squarefreeFactors(q);
+                System.out.println("rfactors,infinite = " + rfactors);
+            for (Quotient<C> c : rfactors.keySet()) {
+                if (!c.isONE()) {
+                    C cr = (C) (Object) c;
+                    Long rk = rfactors.get(c);
+                    factors.put(cr, rk);
+                }
+            }
+        }
+        return factors;
     }
 
 

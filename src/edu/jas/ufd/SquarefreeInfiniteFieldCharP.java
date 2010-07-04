@@ -266,6 +266,7 @@ public class SquarefreeInfiniteFieldCharP<C extends GcdRingElem<C>> extends Squa
         long mp = rf.characteristic().longValue();
         GenPolynomial<Quotient<C>> d = pfac.getZERO().clone();
         for (Monomial<Quotient<C>> m : P) {
+            //System.out.println("m = " + m);
             ExpVector f = m.e;
             long fl = f.getVal(0);
             if (fl % mp != 0) {
