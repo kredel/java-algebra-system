@@ -15,10 +15,9 @@ import junit.framework.TestSuite;
 //import org.apache.log4j.BasicConfigurator;
 //import org.apache.log4j.Logger;
 
-import edu.jas.arith.BigRational;
-
 //import edu.jas.structure.RingElem;
-
+import edu.jas.arith.BigRational;
+import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 
@@ -99,6 +98,7 @@ public class LocalTest extends TestCase {
        fac = null;
        id = null;
        mfac = null;
+       ComputerThreads.terminate();
    }
 
 
