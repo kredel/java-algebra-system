@@ -424,9 +424,14 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
             logger.info("squarefree mfacs P = " + P);
         }
         SortedMap<GenPolynomial<C>, Long> facs = sengine.squarefreeFactors(P);
-        if (logger.isInfoEnabled() && ( facs.size() > 1 || facs.get(facs.firstKey()) > 1 )) {
-            logger.info("squarefree mfacs   = " + facs);
-            //System.out.println("facs   = " + facs);
+        if (logger.isInfoEnabled() ) {
+            if ( facs.size() > 1 ) {
+                logger.info("squarefree mfacs   = " + facs);
+	    } else if ( facs.size() == 1 && facs.get(facs.firstKey()) > 1L ) {
+                logger.info("squarefree mfacs   = " + facs);
+	    } else {
+                logger.warn("squarefree mfacs empty = " + facs);
+	    }
         }
         for (GenPolynomial<C> g : facs.keySet()) {
             Long d = facs.get(g);
