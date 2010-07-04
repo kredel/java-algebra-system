@@ -14,6 +14,7 @@ import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 
+import edu.jas.kern.TimeStatus;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
@@ -160,6 +161,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
         }
         if (kr.degree(0) > 100) {
             logger.warn("Kronecker substitution has to high degree");
+            TimeStatus.checkTime("degree > 100");
         }
 
         // factor Kronecker polynomial
@@ -211,6 +213,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
                 ti++;
                 if (ti % 1000 == 0) {
                     System.out.print("ti(" + ti + ") ");
+                    TimeStatus.checkTime(ti + " % 1000 == 0");
                     if (ti % 10000 == 0) {
                         System.out.println("\ndl   = " + dl + ", deg(u) = " + deg);
                         System.out.println("ulist = " + ulist);

@@ -1495,6 +1495,10 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
             throw new IllegalArgumentException("G may not be null or empty");
         }
         List<Long> ud = univariateDegrees();
+	if ( ud == null || ud.size() <= i ) {
+            //logger.info("univ pol, ud = " + ud);
+            throw new IllegalArgumentException("ideal(G) not zero dimensional " + ud);
+	}
         int ll = 0;
         Long di = ud.get(i);
         if (di != null) {
