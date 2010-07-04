@@ -375,4 +375,15 @@ public class SquarefreeRingChar0<C extends GcdRingElem<C>> extends SquarefreeAbs
         return sfactors;
     }
 
+
+    /**
+     * Coefficients squarefree factorization.
+     * @param P coefficient.
+     * @return [p_1 -> e_1, ..., p_k -> e_k] with P = prod_{i=1,...,k} p_i^{e_i}
+     *         and p_i squarefree.
+     */
+    public SortedMap<C, Long> squarefreeFactors(C P) {
+	throw new RuntimeException("method not implemented");
+    }
+
 }
