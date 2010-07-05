@@ -396,7 +396,7 @@ public final class BigQuaternion implements StarRingElem<BigQuaternion>,
      * @return script compatible representation for this Element.
      * @see edu.jas.structure.Element#toScript()
      */
-    @Override
+    //JAVA6only: @Override
     public String toScript() {
         // Python case
         StringBuffer s = new StringBuffer();
@@ -454,7 +454,7 @@ public final class BigQuaternion implements StarRingElem<BigQuaternion>,
      * @return script compatible representation for this ElemFactory.
      * @see edu.jas.structure.Element#toScriptFactory()
      */
-    @Override
+    //JAVA6only: @Override
     public String toScriptFactory() {
         // Python case
         return "Quat()";
@@ -558,7 +558,7 @@ public final class BigQuaternion implements StarRingElem<BigQuaternion>,
      * @param b BigQuaternion.
      * @return 0 if b is equal to this, 1 if this is greater b and -1 else.
      */
-    @Override
+    //JAVA6only: @Override
     public int compareTo(BigQuaternion b) {
         int s = re.compareTo(b.re);
         if ( s != 0 ) {

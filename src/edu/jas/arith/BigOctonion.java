@@ -307,7 +307,7 @@ public final class BigOctonion implements StarRingElem<BigOctonion>,
      * @return script compatible representation for this Element.
      * @see edu.jas.structure.Element#toScript()
      */
-    @Override
+    //JAVA6only: @Override
     public String toScript() {
         // Python case
         boolean i = oi.isZERO();
@@ -337,7 +337,7 @@ public final class BigOctonion implements StarRingElem<BigOctonion>,
      * @return script compatible representation for this ElemFactory.
      * @see edu.jas.structure.Element#toScriptFactory()
      */
-    @Override
+    //JAVA6only: @Override
     public String toScriptFactory() {
         // Python case
         return "Oct()";
@@ -431,7 +431,7 @@ public final class BigOctonion implements StarRingElem<BigOctonion>,
      * @param b BigOctonion.
      * @return 0 if b is equal to this, 1 if this is greater b and -1 else.
      */
-    @Override
+    //JAVA6only: @Override
     public int compareTo(BigOctonion b) {
         int s = or.compareTo( b.or );
         if ( s != 0 ) {

@@ -96,7 +96,7 @@ public class GBProxy<C extends GcdRingElem<C>> extends GroebnerBaseAbstract<C> {
      * @param F polynomial list.
      * @return GB(F) a Groebner base of F.
      */
-    @Override
+    //JAVA6only: @Override
     public List<GenPolynomial<C>> GB( final int modv, final List<GenPolynomial<C>> F ) {
         if (F == null || F.isEmpty()) {
             return F;

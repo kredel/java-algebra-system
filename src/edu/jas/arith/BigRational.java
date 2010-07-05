@@ -274,7 +274,7 @@ public final class BigRational implements GcdRingElem<BigRational>,
      * @return script compatible representation for this Element.
      * @see edu.jas.structure.Element#toScript()
      */
-    @Override
+    //JAVA6only: @Override
     public String toScript() {
         // Python case: (num,den) or num 
         // was (num,) 
@@ -296,7 +296,7 @@ public final class BigRational implements GcdRingElem<BigRational>,
      * @return script compatible representation for this ElemFactory.
      * @see edu.jas.structure.Element#toScriptFactory()
      */
-    @Override
+    //JAVA6only: @Override
     public String toScriptFactory() {
         // Python case
         return "QQ()";
@@ -490,6 +490,7 @@ public final class BigRational implements GcdRingElem<BigRational>,
      * @param S BigRational.
      * @return SIGN(this-S).
      */
+    //JAVA6only: @Override
     public int compareTo(BigRational S) {
         BigInteger J2Y;
         BigInteger J3Y;

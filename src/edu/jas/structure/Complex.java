@@ -181,7 +181,7 @@ public class Complex<C extends RingElem<C>> implements StarRingElem<Complex<C>>,
      * @return script compatible representation for this Element.
      * @see edu.jas.structure.Element#toScript()
      */
-    @Override
+    //JAVA6only: @Override
     public String toScript() {
         // Python case
         StringBuffer s = new StringBuffer();
@@ -209,7 +209,7 @@ public class Complex<C extends RingElem<C>> implements StarRingElem<Complex<C>>,
      * @return script compatible representation for this ElemFactory.
      * @see edu.jas.structure.Element#toScriptFactory()
      */
-    @Override
+    //JAVA6only: @Override
     public String toScriptFactory() {
         // Python case
         return ring.toScript();
@@ -302,7 +302,7 @@ public class Complex<C extends RingElem<C>> implements StarRingElem<Complex<C>>,
      * @return 0 if this is equal to b; 1 if re > b.re, or re == b.re and im >
      *         b.im; -1 if re < b.re, or re == b.re and im < b.im
      */
-    @Override
+    //JAVA6only: @Override
     public int compareTo(Complex<C> b) {
         int s = re.compareTo(b.re);
         if (s != 0) {

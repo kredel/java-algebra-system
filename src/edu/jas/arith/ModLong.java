@@ -211,7 +211,7 @@ public final class ModLong implements GcdRingElem<ModLong>, Modular {
      * @return script compatible representation for this Element.
      * @see edu.jas.structure.Element#toScript()
      */
-    @Override
+    //JAVA6only: @Override
     public String toScript() {
         // Python case
         return toString();
@@ -223,7 +223,7 @@ public final class ModLong implements GcdRingElem<ModLong>, Modular {
      * @return script compatible representation for this ElemFactory.
      * @see edu.jas.structure.Element#toScriptFactory()
      */
-    @Override
+    //JAVA6only: @Override
     public String toScriptFactory() {
         // Python case
         return factory().toScript();
@@ -235,6 +235,7 @@ public final class ModLong implements GcdRingElem<ModLong>, Modular {
      * @param b ModLong.
      * @return sign(this-b).
      */
+    //JAVA6only: @Override 
     public int compareTo(ModLong b) {
         long v = b.val;
         if (ring != b.ring) {

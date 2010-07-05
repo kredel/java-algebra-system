@@ -194,7 +194,7 @@ public class Product<C extends RingElem<C> >
      * @return script compatible representation for this Element.
      * @see edu.jas.structure.Element#toScript()
      */
-    @Override
+    //JAVA6only: @Override
     public String toScript() {
         // Python case
         StringBuffer s = new StringBuffer("( ");
@@ -225,7 +225,7 @@ public class Product<C extends RingElem<C> >
      * @return script compatible representation for this ElemFactory.
      * @see edu.jas.structure.Element#toScriptFactory()
      */
-    @Override
+    //JAVA6only: @Override
     public String toScriptFactory() {
         // Python case
         return factory().toScript();
@@ -236,6 +236,7 @@ public class Product<C extends RingElem<C> >
      * @param b Product.
      * @return sign(this-b).
      */
+    //JAVA6only: @Override
     public int compareTo(Product<C> b) {
         if ( ! ring.equals( b.ring ) ) {
            throw new RuntimeException("rings not comparable " + this);

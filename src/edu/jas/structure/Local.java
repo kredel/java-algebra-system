@@ -209,7 +209,7 @@ public class Local<C extends RingElem<C> >
      * @return script compatible representation for this Element.
      * @see edu.jas.structure.Element#toScript()
      */
-    @Override
+    //JAVA6only: @Override
     public String toScript() {
         // Python case
         return "Local( " + num.toScript() 
@@ -221,7 +221,7 @@ public class Local<C extends RingElem<C> >
      * @return script compatible representation for this ElemFactory.
      * @see edu.jas.structure.Element#toScriptFactory()
      */
-    @Override
+    //JAVA6only: @Override
     public String toScriptFactory() {
         // Python case
         return factory().toScript();
@@ -232,6 +232,7 @@ public class Local<C extends RingElem<C> >
      * @param b Local.
      * @return sign(this-b).
      */
+    //JAVA6only: @Override
     public int compareTo(Local<C> b) {
         if ( b == null || b.isZERO() ) {
             return this.signum();

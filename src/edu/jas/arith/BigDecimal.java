@@ -365,7 +365,7 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>,
      * @return script compatible representation for this Element.
      * @see edu.jas.structure.Element#toScript()
      */
-    @Override
+    //JAVA6only: @Override
     public String toScript() {
         // Python case
         return toString();
@@ -376,7 +376,7 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>,
      * @return script compatible representation for this ElemFactory.
      * @see edu.jas.structure.Element#toScriptFactory()
      */
-    @Override
+    //JAVA6only: @Override
     public String toScriptFactory() {
         // Python case
         return "DD()";
@@ -390,6 +390,7 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>,
                1 if this > b,
               -1 if this < b.
     */
+    //JAVA6only: @Override
     public int compareTo(BigDecimal b) {
         //return val.compareTo( b.val );
         java.math.BigDecimal s = val.subtract( b.val, context );

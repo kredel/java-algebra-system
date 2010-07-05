@@ -82,7 +82,7 @@ public class GenVector<C extends RingElem<C> >
      * @return script compatible representation for this Element.
      * @see edu.jas.structure.Element#toScript()
      */
-    @Override
+    //JAVA6only: @Override
     public String toScript() {
         // Python case
         StringBuffer s = new StringBuffer();
@@ -105,7 +105,7 @@ public class GenVector<C extends RingElem<C> >
      * @return script compatible representation for this ElemFactory.
      * @see edu.jas.structure.Element#toScriptFactory()
      */
-    @Override
+    //JAVA6only: @Override
     public String toScriptFactory() {
         // Python case
         return factory().toScript();
@@ -176,6 +176,7 @@ public class GenVector<C extends RingElem<C> >
      * @param b other
      * @return 1 if (this &lt; b), 0 if (this == b) or -1 if (this &gt; b).
      */
+    //JAVA6only: @Override
     public int compareTo(GenVector<C> b) {
         if ( ! modul.equals(b.modul) ) {
             return -1;

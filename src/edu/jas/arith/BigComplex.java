@@ -291,7 +291,7 @@ public final class BigComplex implements StarRingElem<BigComplex>,
      * @return script compatible representation for this Element.
      * @see edu.jas.structure.Element#toScript()
      */
-    @Override
+    //JAVA6only: @Override
     public String toScript() {
         // Python case: re or re+im*i 
         // was (re,im) or (re,) 
@@ -338,7 +338,7 @@ public final class BigComplex implements StarRingElem<BigComplex>,
      * @return script compatible representation for this ElemFactory.
      * @see edu.jas.structure.Element#toScriptFactory()
      */
-    @Override
+    //JAVA6only: @Override
     public String toScriptFactory() {
         // Python case
         return "CC()";
@@ -432,7 +432,7 @@ public final class BigComplex implements StarRingElem<BigComplex>,
      *         1 if re > b.re, or re == b.re and im > b.im;
      *        -1 if re < b.re, or re == b.re and im < b.im
      */
-    @Override
+    //JAVA6only: @Override
     public int compareTo(BigComplex b) {
         int s = re.compareTo( b.re );
         if ( s != 0 ) { 

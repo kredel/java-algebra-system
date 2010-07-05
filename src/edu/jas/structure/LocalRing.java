@@ -184,7 +184,7 @@ public class LocalRing<C extends RingElem<C> >
      * @return script compatible representation for this ElemFactory.
      * @see edu.jas.structure.ElemFactory#toScript()
      */
-    @Override
+    //JAVA6only: @Override
     public String toScript() {
         // Python case
         return "LocalRing(" + ideal.toScript() + ")";

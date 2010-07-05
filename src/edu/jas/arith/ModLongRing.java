@@ -337,7 +337,7 @@ public final class ModLongRing implements ModularRingFactory<ModLong> {
      * @return script compatible representation for this ElemFactory.
      * @see edu.jas.structure.ElemFactory#toScript()
      */
-    @Override
+    //JAVA6only: @Override
     public String toScript() {
         // Python case
         return "ZL(" + modul + ")";

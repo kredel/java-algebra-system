@@ -172,7 +172,7 @@ public class ComplexRing<C extends RingElem<C> >
      * @return script compatible representation for this Element.
      * @see edu.jas.structure.Element#toScript()
      */
-    @Override
+    //JAVA6only: @Override
     public String toScript() {
         // Python case
         StringBuffer s = new StringBuffer();

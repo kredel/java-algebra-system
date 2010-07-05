@@ -139,7 +139,7 @@ public class GenMatrixRing<C extends RingElem<C>> implements AlgebraFactory<GenM
      * @return script compatible representation for this ElemFactory.
      * @see edu.jas.structure.ElemFactory#toScript()
      */
-    @Override
+    //JAVA6only: @Override
     public String toScript() {
         // Python case
         StringBuffer s = new StringBuffer("Mat(");

@@ -272,7 +272,7 @@ public final class BigInteger implements GcdRingElem<BigInteger>,
      * @return script compatible representation for this Element.
      * @see edu.jas.structure.Element#toScript()
      */
-    @Override
+    //JAVA6only: @Override
     public String toScript() {
         // Python case
         return toString();
@@ -283,7 +283,7 @@ public final class BigInteger implements GcdRingElem<BigInteger>,
      * @return script compatible representation for this ElemFactory.
      * @see edu.jas.structure.Element#toScriptFactory()
      */
-    @Override
+    //JAVA6only: @Override
     public String toScriptFactory() {
         // Python case
         return "ZZ()";
@@ -296,6 +296,7 @@ public final class BigInteger implements GcdRingElem<BigInteger>,
      1 if this > b,
      -1 if this < b.
     */
+    //JAVA6only: @Override
     public int compareTo(BigInteger b) {
         return val.compareTo( b.val );
     }
