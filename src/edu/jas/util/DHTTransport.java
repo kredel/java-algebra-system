@@ -89,10 +89,10 @@ public abstract class DHTTransport<K, V> implements Serializable {
 class DHTTransportMarshal<K, V> extends DHTTransport<K, V> {
 
 
-    protected final MarshalledObject<K> key;
+    protected final MarshalledObject/*<K>*/ key;
 
 
-    protected final MarshalledObject<V> value;
+    protected final MarshalledObject/*<V>*/ value;
 
 
     /**
@@ -102,8 +102,8 @@ class DHTTransportMarshal<K, V> extends DHTTransport<K, V> {
      */
     public DHTTransportMarshal(K key, V value) throws IOException {
         long t = System.currentTimeMillis();
-        this.key = new MarshalledObject<K>(key);
-        this.value = new MarshalledObject<V>(value);
+        this.key = new MarshalledObject/*<K>*/(key);
+        this.value = new MarshalledObject/*<V>*/(value);
         t = System.currentTimeMillis() - t;
         synchronized( DHTTransport.class ) {
             etime += t;
@@ -117,7 +117,7 @@ class DHTTransportMarshal<K, V> extends DHTTransport<K, V> {
      */
     public K key() throws IOException, ClassNotFoundException {
         long t = System.currentTimeMillis();
-        K k = this.key.get();
+        K k = (K) this.key.get();
         t = System.currentTimeMillis() - t;
         synchronized( DHTTransport.class ) {
             dtime += t;
@@ -131,7 +131,7 @@ class DHTTransportMarshal<K, V> extends DHTTransport<K, V> {
      */
     public V value() throws IOException, ClassNotFoundException {
         long t = System.currentTimeMillis();
-        V v = this.value.get();
+        V v = (V) this.value.get();
         t = System.currentTimeMillis() - t;
         synchronized( DHTTransport.class ) {
             dtime += t;

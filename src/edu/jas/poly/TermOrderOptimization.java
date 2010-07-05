@@ -230,14 +230,15 @@ public class TermOrderOptimization {
      * @param P permutation.
      * @return P(a).
      */
+    @SuppressWarnings("unchecked") 
     public static <T>
        T[]
        arrayPermutation( List<Integer> P, T[] a ) {
         if ( a == null || a.length <= 1 ) {
            return a;
         }
-        //T[] b = (T[]) new Object[a.length];    // jdk 1.5, does not work
-        T[] b = Arrays.<T>copyOf( a, a.length ); // jdk 1.6, works
+        T[] b = (T[]) new Object[a.length];    // jdk 1.5 
+        //T[] b = Arrays.<T>copyOf( a, a.length ); // jdk 1.6, works
         int j = 0;
         for ( Integer i : P ) {
             b[j] = a[ (int)i ];

@@ -6,7 +6,7 @@ package edu.jas.root;
 
 
 import java.util.ArrayList;
-import java.util.Arrays;
+//import java.util.Arrays;
 import java.util.List;
 import java.util.SortedMap;
 
@@ -24,6 +24,7 @@ import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.ufd.Squarefree;
 import edu.jas.ufd.SquarefreeFactory;
+import edu.jas.util.ArrayUtil;
 
 
 /**
@@ -180,7 +181,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
                         logger.info("new center = " + center);
                     }
 
-                    Complex<C>[] cp = Arrays.<Complex<C>> copyOf(root.corners, 4);
+                    Complex<C>[] cp = ArrayUtil.<Complex<C>> copyOf(root.corners, 4);
                     // cp[0] fix
                     cp[1] = new Complex<C>(cr, cp[1].getRe(), center.getIm());
                     cp[2] = center;
@@ -193,7 +194,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
                         continue;
                     }
 
-                    cp = Arrays.<Complex<C>> copyOf(root.corners, 4);
+                    cp = ArrayUtil.<Complex<C>> copyOf(root.corners, 4);
                     cp[0] = new Complex<C>(cr, cp[0].getRe(), center.getIm());
                     // cp[1] fix
                     cp[2] = new Complex<C>(cr, center.getRe(), cp[2].getIm());
@@ -207,7 +208,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
                         continue;
                     }
 
-                    cp = Arrays.<Complex<C>> copyOf(root.corners, 4);
+                    cp = ArrayUtil.<Complex<C>> copyOf(root.corners, 4);
                     cp[0] = center;
                     cp[1] = new Complex<C>(cr, center.getRe(), cp[1].getIm());
                     // cp[2] fix
@@ -221,7 +222,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
                         continue;
                     }
 
-                    cp = Arrays.<Complex<C>> copyOf(root.corners, 4);
+                    cp = ArrayUtil.<Complex<C>> copyOf(root.corners, 4);
                     cp[0] = new Complex<C>(cr, center.getRe(), cp[0].getIm());
                     cp[1] = center;
                     cp[2] = new Complex<C>(cr, cp[2].getRe(), center.getIm());
