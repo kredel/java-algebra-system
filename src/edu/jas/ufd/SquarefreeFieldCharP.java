@@ -198,7 +198,7 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
         long mp = 0L;
         boolean init = true;
         while (true) {
-            System.out.println("T0 = " + T0);
+            //System.out.println("T0 = " + T0);
             if (init) {
                 if (T0.isConstant() || T0.isZERO()) {
                     break;

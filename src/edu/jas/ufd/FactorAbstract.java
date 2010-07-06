@@ -318,7 +318,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
             logger.info("base facs for P = " + P);
         }
         SortedMap<GenPolynomial<C>, Long> facs = sengine.baseSquarefreeFactors(P);
-        if (logger.isInfoEnabled() && ( facs.size() > 1 || facs.get(facs.firstKey()) > 1 ) ) {
+        if (logger.isInfoEnabled() && ( facs.size() > 1 || ( facs.size() == 1 && facs.get(facs.firstKey()) > 1 ) ) ) {
             logger.info("squarefree facs   = " + facs);
             //System.out.println("sfacs   = " + facs);
             //boolean tt = isFactorization(P,facs);

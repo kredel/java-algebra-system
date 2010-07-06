@@ -583,6 +583,20 @@ public class GenPolynomial<C extends RingElem<C> >
 
 
     /**
+     * Coefficient.
+     * @param e exponent.
+     * @return coefficient for given exponent.
+     */
+    public C coefficient(ExpVector e) {
+        C c = val.get(e);
+        if ( c == null ) {
+            c = ring.coFac.getZERO();
+        }
+        return c; 
+    }
+
+
+    /**
      * Reductum.
      * @return this - leading monomial.
      */
