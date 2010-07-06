@@ -40,7 +40,7 @@ public class SquarefreeAlgQuotModTest extends TestCase {
      * main.
      */
     public static void main(String[] args) {
-        BasicConfigurator.configure();
+        //BasicConfigurator.configure();
         junit.textui.TestRunner.run(suite());
         ComputerThreads.terminate();
     }
@@ -186,9 +186,9 @@ public class SquarefreeAlgQuotModTest extends TestCase {
         asqf = new SquarefreeInfiniteAlgebraicFieldCharP<Quotient<ModInteger>>(afac);
 
         SquarefreeAbstract<AlgebraicNumber<Quotient<ModInteger>>> sqff = SquarefreeFactory.getImplementation(afac);
-        System.out.println("sqf  = " + sqf);
-        System.out.println("sqff = " + sqff);
-        //assertEquals("sqf == sqff ", sqf.getClass(), sqff.getClass());
+        //System.out.println("sqf  = " + sqf);
+        //System.out.println("sqff = " + sqff);
+        assertEquals("asqf == sqff ", asqf.getClass(), sqff.getClass());
 
         a = b = c = d = e = null;
         ar = br = cr = dr = er = null;
@@ -207,12 +207,12 @@ public class SquarefreeAlgQuotModTest extends TestCase {
      * Test base squarefree.
      * 
      */
-    public void ytestBaseSquarefree() {
+    public void testBaseSquarefree() {
         //System.out.println("\nbase:");
 
         dfac = new GenPolynomialRing<AlgebraicNumber<Quotient<ModInteger>>>(afac, 1, to, rvars);
 
-        a = dfac.random(kl + 1, ll - 1, el + 0, q);
+        a = dfac.random(kl + 0, ll - 1, el + 0, q);
         b = dfac.random(kl + 0, ll, el + 1, q);
         c = dfac.random(kl, ll, el, q);
         //System.out.println("a  = " + a);
@@ -247,11 +247,11 @@ public class SquarefreeAlgQuotModTest extends TestCase {
      * Test base squarefree factors.
      * 
      */
-    public void ytestBaseSquarefreeFactors() {
+    public void testBaseSquarefreeFactors() {
 
         dfac = new GenPolynomialRing<AlgebraicNumber<Quotient<ModInteger>>>(afac, 1, to, rvars);
 
-        a = dfac.random(kl + 1, ll - 1, el + 0, q);
+        a = dfac.random(kl + 0, ll - 1, el + 0, q);
         b = dfac.random(kl + 0, ll, el + 1, q);
         c = dfac.random(kl, ll, el + 0, q);
         System.out.println("a  = " + a);
@@ -461,7 +461,7 @@ public class SquarefreeAlgQuotModTest extends TestCase {
      * Test base squarefree with char-th root.
      * 
      */
-    public void xtestBaseSquarefreeCharRoot() {
+    public void testBaseSquarefreeCharRoot() {
         //System.out.println("\nbase CharRoot:");
 
         long p = fac.characteristic().longValue();
@@ -469,9 +469,9 @@ public class SquarefreeAlgQuotModTest extends TestCase {
         //dfac = new GenPolynomialRing<ModInteger>(fac,1,to,rvars);
         dfac = new GenPolynomialRing<AlgebraicNumber<Quotient<ModInteger>>>(afac, 1, to, rvars);
 
-        a = dfac.random(kl + 1, ll + 1, el + 2, q).monic();
-        b = dfac.random(kl, ll + 1, el + 2, q).monic();
-        c = dfac.random(kl + 1, ll, el, q).monic();
+        a = dfac.random(kl + 0, ll + 0, el + 1, q).monic();
+        b = dfac.random(kl, ll + 1, el + 1, q).monic();
+        c = dfac.random(kl + 0, ll, el, q).monic();
 
         if (a.isZERO() || b.isZERO() || c.isZERO() || a.isConstant() || b.isConstant()) {
             // skip for this turn
@@ -506,15 +506,15 @@ public class SquarefreeAlgQuotModTest extends TestCase {
      * Test base squarefree factors with char-th root.
      * 
      */
-    public void xtestBaseSquarefreeFactorsCharRoot() {
+    public void testBaseSquarefreeFactorsCharRoot() {
 
         long p = fac.characteristic().longValue();
 
         //dfac = new GenPolynomialRing<ModInteger>(fac,1,to,rvars);
         dfac = new GenPolynomialRing<AlgebraicNumber<Quotient<ModInteger>>>(afac, 1, to, rvars);
 
-        a = dfac.random(kl, ll + 1, el + 3, q).monic();
-        b = dfac.random(kl, ll + 1, el + 3, q).monic();
+        a = dfac.random(kl, ll + 1, el + 1, q).monic();
+        b = dfac.random(kl, ll + 1, el + 2, q).monic();
         c = dfac.random(kl, ll, el + 2, q).monic();
 
         if (a.isZERO() || b.isZERO() || c.isZERO() || a.isConstant() || b.isConstant()) {
@@ -544,7 +544,7 @@ public class SquarefreeAlgQuotModTest extends TestCase {
      * Test recursive squarefree with char-th root.
      * 
      */
-    public void testRecursiveSquarefreeCharRoot() {
+    public void xtestRecursiveSquarefreeCharRoot() {
         //System.out.println("\nrecursive CharRoot:");
 
         long p = fac.characteristic().longValue();
@@ -592,7 +592,7 @@ public class SquarefreeAlgQuotModTest extends TestCase {
      * Test recursive squarefree factors with char-th root.
      * 
      */
-    public void testRecursiveSquarefreeFactorsCharRoot() {
+    public void xtestRecursiveSquarefreeFactorsCharRoot() {
 
         long p = fac.characteristic().longValue();
 
