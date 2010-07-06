@@ -83,20 +83,6 @@
     and the <a href="svn_change.log" target="top">Subversion change log</a>.
     </p>
 </li>
-<!--li><p>Old versions of the JAS jar-file (do not use, only for history): 
-    <br />
-    <a href="../jas.j16/jas.jar">jas.jar</a> first version for JDK 1.6. 
-    <br />
-    <a href="../jas.j15/jas.jar">jas.jar</a> last version for JDK 1.5. 
-    <br />
-    <a href="../jas.j14/jas.jar">jas.jar</a> last version for JDK 1.4. 
-    <br />
-    For the old versions you also need the library
-    <a href="../lib/tnj.jar">lib/tnj.jar</a> 
-    (for Thread and Network Programming).
-    You most likely do not have it and you must download it.
-    </p>
-</li-->
 </ul>
 
 
@@ -110,6 +96,12 @@
 <li><p>If you want to develop with JAS, then extract the 
      jar-file in a new directory
      <code>jar -xvf jas-[version]-src.jar</code>
+    </p>
+</li>
+<li><p>JAS is currently developed for Java 6 (Sun JDK 1.6 and OpenJDK 1.6).
+    It will compile also under Java 5 (Sun JDK 1.5), but some (concurrency) classes may 
+    not work under the Java Virtual Machine (JVM) of JRE-1.5. It seems best to disable 
+    automatic parallel computation then (see edu.jas.kern.ComputerThreads.NO_THREADS).
     </p>
 </li>
 <li><p>Among the extracted files, there is an Ant build script
@@ -339,7 +331,7 @@ public class mytests {
 <p>
 <!-- Created: Sat Mar 19 21:44:14 CET 2005 -->
 <!-- hhmts start -->
-Last modified: Sat Dec  5 16:03:16 CET 2009
+Last modified: Tue Jul  6 17:39:23 CEST 2010
 <!-- hhmts end -->
 </p>
 <!--p align="right" >

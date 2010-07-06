@@ -22,11 +22,23 @@
 
 <dl>
 
-<dl>
+<dt>2010, July, 8 </dt> 
+<dd> 
+ Downgraded for Java 5 language and run-time system for use with systems relying on 
+ older Java versions, for example MathPiper and GeoGebra.
+ New class <code>edu.jas.kern.TimeStatus</code> to provide user feedback for 
+ long running tasks via method <code>checkTime()</code>.
+ Implemented some missing <code>extGB()</code> methods. <code>GBFactory</code> for 
+ the selection of appropriate Gr&ouml;bner base implementations.
+ New method <code>isFinite()</code> for all <code>ElemFactory</code>s and usage 
+ in <code>SquarefreeFactory</code>.  Added some missing parts for the factorization 
+ in polynomial rings of characteristic p &gt; 0 and ideal decomposition.
+</dd>
+
 <dt>2010, June, 18 </dt> 
 <dd> 
  Factory for Gr&ouml;bner base algorithm implementations in class <code>GBFactory</code>.
- New <code>GBProxy</code> like <code>GCDProxy</code> to run a sequantial and a parallel 
+ New <code>GBProxy</code> like <code>GCDProxy</code> to run a sequential and a parallel 
  Gr&ouml;bner base computation concurrently.
  Primitive element computation via <code>normalPositionFor()</code> in
  methods <code>primitiveElement()</code> together with several
@@ -1917,7 +1929,7 @@ CPU TIME (ms) END
 <p>
 <!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
 <!-- hhmts start -->
-Last modified: Sun Jun 13 13:31:55 CEST 2010
+Last modified: Tue Jul  6 17:41:59 CEST 2010
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
