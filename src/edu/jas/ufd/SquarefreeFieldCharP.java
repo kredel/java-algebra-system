@@ -152,7 +152,7 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
             C coeff = A.leadingBaseCoefficient();
             //System.out.println("coeff = " + coeff + " @ " + coeff.factory());
             SortedMap<C, Long> rfactors = squarefreeFactors(coeff);
-            System.out.println("rfactors,const = " + rfactors);
+            //System.out.println("rfactors,const = " + rfactors);
             if ( rfactors != null && rfactors.size() > 0) {
                 for (C c : rfactors.keySet()) {
                     if (!c.isONE()) {
@@ -173,7 +173,7 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
         if (!ldbcf.isONE()) {
             A = A.divide(ldbcf);
             SortedMap<C, Long> rfactors = squarefreeFactors(ldbcf);
-            System.out.println("rfactors,ldbcf = " + rfactors);
+            //System.out.println("rfactors,ldbcf = " + rfactors);
             if ( rfactors != null && rfactors.size() > 0) {
                 for (C c : rfactors.keySet()) {
                     if (!c.isONE()) {
