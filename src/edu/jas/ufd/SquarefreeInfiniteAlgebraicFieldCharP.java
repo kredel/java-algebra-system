@@ -25,6 +25,8 @@ import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.Power;
 import edu.jas.structure.RingFactory;
 import edu.jas.application.Ideal;
+import edu.jas.application.Quotient;
+import edu.jas.application.QuotientRing;
 
 
 /**
@@ -147,28 +149,71 @@ public class SquarefreeInfiniteAlgebraicFieldCharP<C extends GcdRingElem<C>>
         }
         GenPolynomial<AlgebraicNumber<C>> cpp = Power.<GenPolynomial<AlgebraicNumber<C>>>positivePower(cp,c);
         if ( logger.isInfoEnabled() ) {
+            logger.info("cp   = " + cp);
             logger.info("cp^p = " + cpp);
             logger.info("P    = " + P);
         }
         GenPolynomialRing<C> ppfac = new GenPolynomialRing<C>(apfac.coFac,pfac);
         List<GenPolynomial<C>> gl = new ArrayList<GenPolynomial<C>>();
-        for (Monomial<AlgebraicNumber<C>> m : cpp) {
-            ExpVector f = m.e;
-            AlgebraicNumber<C> a = m.c;
-            //System.out.println("m = " + m);
-            GenPolynomial<C> ap = a.val;
-            GenPolynomial<C> g = ppfac.getZERO();
-            for ( Monomial<C> ma : ap ) {
-                ExpVector e = ma.e;
-                C cc = ma.c;
-                C pc = P.val.coefficient(e);
-                GenPolynomial<C> r = new GenPolynomial<C>(ppfac,cc,f);
-                r = r.subtract(pc);
-                //System.out.println("r = " + r);
-                gl.add(r);
+        System.out.println("deg = " + deg + ", c = " + c.longValue());
+        if ( deg == c.longValue() && afac.modul.length() == 2 ) {
+            for (Monomial<AlgebraicNumber<C>> m : cpp) {
+                ExpVector f = m.e;
+                AlgebraicNumber<C> a = m.c;
+                //System.out.println("a  = " + a + " : " + a.toScriptFactory());
+                GenPolynomial<C> ap = a.val;
+                for ( Monomial<C> ma : ap ) {
+                    ExpVector e = ma.e;
+                    C cc = ma.c;
+                    C pc = P.val.coefficient(e);
+                    C cc1 = ((RingFactory<C>)pc.factory()).getONE();
+                    C pc1 = ((RingFactory<C>)pc.factory()).getZERO();
+                    //System.out.println("cc = " + cc + ", e = " + e);
+                    //System.out.println("pc = " + pc + " : " + cc.toScriptFactory());
+                    if ( cc instanceof AlgebraicNumber && pc instanceof AlgebraicNumber ) {
+                        throw new RuntimeException("case multiple algebraic extensions not implemented");
+                    } else if ( cc instanceof Quotient && pc instanceof Quotient ) {
+                        Quotient<C> ccp = (Quotient<C>) (Object) cc;
+                        Quotient<C> pcp = (Quotient<C>) (Object) pc;
+                        if ( pcp.isConstant() ) { 
+                            //logger.error("finite field not allowed here " + afac.toScript());
+                            throw new RuntimeException("finite field not allowed here " + afac.toScript());
+                        }
+                        //C dc = cc.divide(pc);
+                        Quotient<C> dcp = ccp.divide(pcp);
+                        if ( dcp.isConstant() ) { // not possible: dc.isConstant() 
+                            //System.out.println("dcp = " + dcp + " : " + cc.toScriptFactory()); //  + ", dc = " + dc);
+                            //if ( dcp.num.isConstant() ) 
+                            cc1 = cc;
+                            pc1 = pc;
+                        }
+                        GenPolynomial<C> r = new GenPolynomial<C>(ppfac,cc1,f);
+                        r = r.subtract(pc1);
+                        //System.out.println("r = " + r);
+                        gl.add(r);
+                    }
+                }
             }
+        } else {
+            for (Monomial<AlgebraicNumber<C>> m : cpp) {
+                ExpVector f = m.e;
+                AlgebraicNumber<C> a = m.c;
+                //System.out.println("m = " + m);
+                GenPolynomial<C> ap = a.val;
+                for ( Monomial<C> ma : ap ) {
+                    ExpVector e = ma.e;
+                    C cc = ma.c;
+                    C pc = P.val.coefficient(e);
+                    GenPolynomial<C> r = new GenPolynomial<C>(ppfac,cc,f);
+                    r = r.subtract(pc);
+                    //System.out.println("r = " + r);
+                    gl.add(r);
+                }
+            }
+        }    
+        if ( logger.isInfoEnabled() ) {
+            logger.info("equations = " + gl);
         }
-        //System.out.println("gl = " + gl);
         // solve system of equations and construct result
         Reduction<C> red = new ReductionSeq<C>();
         gl = red.irreducibleSet(gl);
