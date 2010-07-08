@@ -38,7 +38,11 @@ print "ax    = " + str(ax);
 print "wx    = " + str(wx);
 print;
 
-rootx = wx**3 - ax;
+#rootx = wx**5 - 2; # not working
+#rootx = wx**5 - 1/ax;
+#rootx = wx**5 - ax;
+#rootx = wx**5 - ( ax**2 + 3 * ax );
+rootx = wx**5 - ( ax**2 + 3 / ax );
 print "rootx = " + str(rootx);
 Q2x = AN(rootx,field=True);
 print "Q2x   = " + str(Q2x.factory());
@@ -64,9 +68,10 @@ print;
 
 #f = ( y**2 - x );
 
-#f = ( y**2 - ( wx**2 + wx + 2 ) );
+f = ( y**2 - ( wx ) );
+#f = ( y**2 - ( 1 / wx ) );
 
-f = ( y**2 - ( wx**2 + wx + 2 ) + z**2 + y * wx );
+#f = ( y**2 - ( wx**2 + wx + 2 ) + z**2 + y * wx );
 #f = wx**3;
 print "f = ", f;
 print;
