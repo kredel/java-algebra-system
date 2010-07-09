@@ -78,6 +78,7 @@ public class FactorQuotient<C extends GcdRingElem<C>> extends FactorAbstract<Quo
         if (P == null) {
             throw new RuntimeException(this.getClass().getName() + " P == null");
         }
+        //System.out.println("factorsSquarefree, P = " + P);
         List<GenPolynomial<Quotient<C>>> factors = new ArrayList<GenPolynomial<Quotient<C>>>();
         if (P.isZERO()) {
             return factors;

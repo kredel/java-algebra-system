@@ -1598,7 +1598,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
                 //System.out.println("id = " + id + ", i = " + i);
                 GenPolynomial<C> u = id.ideal.constructUnivariate(i);
                 SortedMap<GenPolynomial<C>, Long> facs = engine.baseSquarefreeFactors(u);
-                if (facs.size() == 1 && facs.get(facs.firstKey()) == 1L) {
+                if (facs == null || facs.size() == 0 || (facs.size() == 1 && facs.get(facs.firstKey()) == 1L)) {
                     List<GenPolynomial<C>> iup = new ArrayList<GenPolynomial<C>>();
                     iup.addAll(id.upolys);
                     iup.add(u);
@@ -1681,7 +1681,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
             for (IdealWithUniv<C> id : dec) {
                 GenPolynomial<C> u = id.ideal.constructUnivariate(i);
                 SortedMap<GenPolynomial<C>, Long> facs = ufd.baseFactors(u);
-                if (facs.size() == 1 && facs.get(facs.firstKey()) == 1L) {
+                if (facs == null || facs.size() == 0 || (facs.size() == 1 && facs.get(facs.firstKey()) == 1L)) {
                     List<GenPolynomial<C>> iup = new ArrayList<GenPolynomial<C>>();
                     iup.addAll(id.upolys);
                     iup.add(u);
@@ -1876,8 +1876,12 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
             zp = zp.monic();
             Ip = I.sum(zp);
             //System.out.println("Ip = " + Ip);
-            if (-t % 5 == 0) {
+            if (-t % 4 == 0) {
                 logger.info("normal position, t = " + t);
+                logger.info("normal position, GB = " + Ip);
+                if ( t < -100 ) {
+                    throw new RuntimeException("normal position not reachable");
+		}
             }
         } while (!Ip.isNormalPositionFor(i + 1, j + 1));
         if (debug) {
