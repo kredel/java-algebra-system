@@ -95,12 +95,13 @@ public class GroebnerBaseSeq<C extends RingElem<C>>
         GenPolynomial<C> H;
         while ( pairlist.hasNext() ) {
               pair = pairlist.removeNext();
+              //logger.debug("pair = " + pair);
               if ( pair == null ) {
                   continue; 
               }
               pi = pair.pi; 
               pj = pair.pj; 
-              if ( false && logger.isDebugEnabled() ) {
+              if ( /*false &&*/ debug ) {
                  logger.debug("pi    = " + pi );
                  logger.debug("pj    = " + pj );
               }
@@ -110,8 +111,8 @@ public class GroebnerBaseSeq<C extends RingElem<C>>
                  pair.setZero();
                  continue;
               }
-              if ( logger.isDebugEnabled() ) {
-                 logger.debug("ht(S) = " + S.leadingExpVector() );
+              if ( debug ) {
+		  logger.debug("ht(S) = " + S.leadingExpVector() );
               }
 
               H = red.normalform( G, S );
@@ -119,8 +120,8 @@ public class GroebnerBaseSeq<C extends RingElem<C>>
                  pair.setZero();
                  continue;
               }
-              if ( logger.isDebugEnabled() ) {
-                 logger.debug("ht(H) = " + H.leadingExpVector() );
+              if ( debug ) {
+		  logger.debug("ht(H) = " + H.leadingExpVector() );
               }
 
               H = H.monic();
@@ -128,8 +129,8 @@ public class GroebnerBaseSeq<C extends RingElem<C>>
                   G.clear(); G.add( H );
                   return G; // since no threads are activated
               }
-              if ( logger.isDebugEnabled() ) {
-                 logger.debug("H = " + H );
+              if ( debug ) {
+                 logger.info("H = " + H );
               }
               if ( H.length() > 0 ) {
                  l++;

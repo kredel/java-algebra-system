@@ -57,7 +57,7 @@ public class GenPolynomial<C extends RingElem<C> >
 
 
     private static final Logger logger = Logger.getLogger(GenPolynomial.class);
-    private static final boolean debug = logger.isDebugEnabled();
+    private final boolean debug = logger.isDebugEnabled();
 
 
     // protected GenPolynomial() { ring = null; val = null; } // don't use
