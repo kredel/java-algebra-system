@@ -172,4 +172,20 @@ public class ComputerThreads {
         //workpile = null;
     }
 
+
+    /**
+     * Set no thread usage.
+     */
+    public static synchronized void setNoThreads() {
+        NO_THREADS = true;
+    }
+
+
+    /**
+     * Set thread usage.
+     */
+    public static synchronized void setThreads() {
+        NO_THREADS = false;
+    }
+
 }

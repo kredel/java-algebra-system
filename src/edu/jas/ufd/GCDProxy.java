@@ -74,7 +74,7 @@ public class GCDProxy<C extends GcdRingElem<C>> extends GreatestCommonDivisorAbs
 
 
     /**
-     * Univariate GenPolynomial greatest comon divisor. Uses pseudoRemainder for
+     * Univariate GenPolynomial greatest common divisor. Uses pseudoRemainder for
      * remainder.
      * @param P univariate GenPolynomial.
      * @param S univariate GenPolynomial.
@@ -82,7 +82,11 @@ public class GCDProxy<C extends GcdRingElem<C>> extends GreatestCommonDivisorAbs
      */
     @Override
     public GenPolynomial<C> baseGcd(final GenPolynomial<C> P, final GenPolynomial<C> S) {
-        //throw new RuntimeException("baseGcd not implemented");
+        if ( debug ) {
+            if ( ComputerThreads.NO_THREADS ) {
+                throw new RuntimeException("this should not happen");
+            }
+        }
         if (S == null || S.isZERO()) {
             return P;
         }
@@ -156,7 +160,7 @@ public class GCDProxy<C extends GcdRingElem<C>> extends GreatestCommonDivisorAbs
 
 
     /**
-     * Univariate GenPolynomial recursive greatest comon divisor. Uses
+     * Univariate GenPolynomial recursive greatest common divisor. Uses
      * pseudoRemainder for remainder.
      * @param P univariate recursive GenPolynomial.
      * @param S univariate recursive GenPolynomial.
@@ -165,7 +169,11 @@ public class GCDProxy<C extends GcdRingElem<C>> extends GreatestCommonDivisorAbs
     @Override
     public GenPolynomial<GenPolynomial<C>> recursiveUnivariateGcd(final GenPolynomial<GenPolynomial<C>> P,
             final GenPolynomial<GenPolynomial<C>> S) {
-        // throw new RuntimeException("recursiveGcd not implemented");
+        if ( debug ) {
+            if ( ComputerThreads.NO_THREADS ) {
+                throw new RuntimeException("this should not happen");
+            }
+        }
         if (S == null || S.isZERO()) {
             return P;
         }
@@ -238,13 +246,18 @@ public class GCDProxy<C extends GcdRingElem<C>> extends GreatestCommonDivisorAbs
 
 
     /**
-     * GenPolynomial greatest comon divisor. Main entry driver method.
+     * GenPolynomial greatest common divisor. Main entry driver method.
      * @param P GenPolynomial.
      * @param S GenPolynomial.
      * @return gcd(P,S).
      */
     @Override
     public GenPolynomial<C> gcd(final GenPolynomial<C> P, final GenPolynomial<C> S) {
+        if ( debug ) {
+            if ( ComputerThreads.NO_THREADS ) {
+                throw new RuntimeException("this should not happen");
+            }
+        }
         if (S == null || S.isZERO()) {
             return P;
         }

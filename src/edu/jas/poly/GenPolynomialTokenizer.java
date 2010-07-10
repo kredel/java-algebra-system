@@ -393,7 +393,7 @@ public class GenPolynomialTokenizer  {
                 if ( letter(first) ) {
                     ix = indexVar( tok.sval );
                     if ( ix < 0 ) {
-                        logger.error("Unkonown varibable " + tok.sval); 
+                        logger.error("Unknown varibable " + tok.sval); 
                         done = true;
                         break;
                     }
