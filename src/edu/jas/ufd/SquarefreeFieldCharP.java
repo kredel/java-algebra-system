@@ -138,7 +138,7 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
     /**
      * GenPolynomial polynomial squarefree factorization.
      * @param A GenPolynomial.
-     * @return [p_1 -> e_1, ..., p_k -> e_k] with P = prod_{i=1,...,k} p_i^{e_i}
+     * @return [p_1 -&gt; e_1, ..., p_k -&gt; e_k] with P = prod_{i=1,...,k} p_i^{e_i}
      *         and p_i squarefree.
      */
     @Override
@@ -299,7 +299,7 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
     /**
      * GenPolynomial recursive univariate polynomial squarefree factorization.
      * @param P recursive univariate GenPolynomial.
-     * @return [p_1 -> e_1, ..., p_k -> e_k] with P = prod_{i=1,...,k} p_i^{e_i}
+     * @return [p_1 -&gt; e_1, ..., p_k -&gt; e_k] with P = prod_{i=1,...,k} p_i^{e_i}
      *         and p_i squarefree.
      */
     @Override
@@ -452,7 +452,7 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
     /**
      * GenPolynomial squarefree factorization.
      * @param P GenPolynomial.
-     * @return [p_1 -> e_1, ..., p_k -> e_k] with P = prod_{i=1,...,k} p_i^{e_i}
+     * @return [p_1 -&gt; e_1, ..., p_k -&gt; e_k] with P = prod_{i=1,...,k} p_i^{e_i}
      *         and p_i squarefree.
      */
     @Override
@@ -487,7 +487,7 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
     /**
      * Coefficient squarefree factorization.
      * @param coeff coefficient.
-     * @return [p_1 -> e_1, ..., p_k -> e_k] with P = prod_{i=1,...,k} p_i^{e_i}
+     * @return [p_1 -&gt; e_1, ..., p_k -&gt; e_k] with P = prod_{i=1,...,k} p_i^{e_i}
      *         and p_i squarefree.
      */
     @Override

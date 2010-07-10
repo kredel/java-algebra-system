@@ -1594,6 +1594,9 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
         if (this.isONE()) {
             return dec;
         }
+        if ( list.ring.coFac.characteristic().signum() > 0 && ! list.ring.coFac.isFinite() ) {
+            logger.warn("radical only for char 0 or finite coefficient rings, but found " + list.ring.coFac.toScript());
+        }
         for (int i = list.ring.nvar - 1; i >= 0; i--) {
             List<IdealWithUniv<C>> part = new ArrayList<IdealWithUniv<C>>();
             for (IdealWithUniv<C> id : dec) {
@@ -1647,6 +1650,9 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
         }
         if (this.isONE()) {
             return false; // not 0-dim
+        }
+        if ( list.ring.coFac.characteristic().signum() > 0 && ! list.ring.coFac.isFinite() ) {
+            logger.warn("radical only for char 0 or finite coefficient rings, but found " + list.ring.coFac.toScript());
         }
         for (int i = list.ring.nvar - 1; i >= 0; i--) {
             GenPolynomial<C> u = constructUnivariate(i);
@@ -1892,7 +1898,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
                             fac = pfac.ring.coFac;
                         } else {
                             throw new RuntimeException("field elements exhausted, need algebraic extension of base ring");
-			}
+                        }
                         braces++;
                         System.out.println("fac = " + fac.toScript());
                     }
@@ -2621,6 +2627,9 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
         if (this.isZERO()) {
             return dec;
         }
+        if ( list.ring.coFac.characteristic().signum() > 0 && ! list.ring.coFac.isFinite() ) {
+            logger.warn("radical only for char 0 or finite coefficient rings, but found " + list.ring.coFac.toScript());
+        }
         Dimension dim = dimension();
         if (logger.isInfoEnabled()) {
             logger.info("dimension = " + dim);
@@ -2787,8 +2796,8 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
             return dec;
         }
         if (logger.isInfoEnabled()) {
-            logger.info("radical decomp ext-cont fx = " + fx);
-            logger.info("recursion radical decomp T = " + T);
+            logger.info("irred decomp ext-cont fx = " + fx);
+            logger.info("recursion irred decomp T = " + T);
         }
         // recursion:
         List<IdealWithUniv<C>> Tdec = T.decomposition();
@@ -2887,8 +2896,8 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
             return dec;
         }
         if (logger.isInfoEnabled()) {
-            logger.info("radical decomp ext-cont fx = " + fx);
-            logger.info("recursion radical decomp T = " + T);
+            logger.info("prime decomp ext-cont fx = " + fx);
+            logger.info("recursion prime decomp T = " + T);
         }
         // recursion:
         List<IdealWithUniv<C>> Tdec = T.primeDecomposition();
@@ -3066,8 +3075,8 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
             return dec;
         }
         if (logger.isInfoEnabled()) {
-            logger.info("radical decomp ext-cont fx = " + fx);
-            logger.info("recursion radical decomp T = " + T);
+            logger.info("primmary decomp ext-cont fx = " + fx);
+            logger.info("recursion primary decomp T = " + T);
         }
         // recursion:
         List<PrimaryComponent<C>> Tdec = T.primaryDecomposition();

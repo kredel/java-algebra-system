@@ -52,7 +52,7 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
     /**
      * GenPolynomial polynomial squarefree factorization.
      * @param A GenPolynomial.
-     * @return [p_1 -> e_1, ..., p_k -> e_k] with P = prod_{i=1,...,k} p_i^{e_i}
+     * @return [p_1 -&gt; e_1, ..., p_k -&gt; e_k] with P = prod_{i=1,...,k} p_i^{e_i}
      *         and p_i squarefree.
      */
     public abstract SortedMap<GenPolynomial<C>, Long> baseSquarefreeFactors(GenPolynomial<C> A);
@@ -70,7 +70,7 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
     /**
      * GenPolynomial recursive univariate polynomial squarefree factorization.
      * @param P recursive univariate GenPolynomial.
-     * @return [p_1 -> e_1, ..., p_k -> e_k] with P = prod_{i=1,...,k} p_i^{e_i}
+     * @return [p_1 -&gt; e_1, ..., p_k -&gt; e_k] with P = prod_{i=1,...,k} p_i^{e_i}
      *         and p_i squarefree.
      */
     public abstract SortedMap<GenPolynomial<GenPolynomial<C>>, Long> recursiveUnivariateSquarefreeFactors(
@@ -140,7 +140,7 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
     /**
      * GenPolynomial squarefree factorization.
      * @param P GenPolynomial.
-     * @return [p_1 -> e_1, ..., p_k -> e_k] with P = prod_{i=1,...,k} p_i^{e_i}
+     * @return [p_1 -&gt; e_1, ..., p_k -&gt; e_k] with P = prod_{i=1,...,k} p_i^{e_i}
      *         and p_i squarefree.
      */
     public abstract SortedMap<GenPolynomial<C>, Long> squarefreeFactors(GenPolynomial<C> P);
@@ -349,7 +349,7 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
     /**
      * GenPolynomial recursive polynomial squarefree factorization.
      * @param P recursive GenPolynomial.
-     * @return [p_1 -> e_1, ..., p_k -> e_k] with P = prod_{i=1,...,k} p_i^{e_i}
+     * @return [p_1 -&gt; e_1, ..., p_k -&gt; e_k] with P = prod_{i=1,...,k} p_i^{e_i}
      *         and p_i squarefree.
      */
     public SortedMap<GenPolynomial<GenPolynomial<C>>, Long> recursiveSquarefreeFactors(
@@ -383,7 +383,7 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
     /**
      * Univariate GenPolynomial partial fraction decomposition. 
      * @param A univariate GenPolynomial.
-     * @param D sorted map [d_1 -> e_1, ..., d_k -> e_k] with d_i squarefree.
+     * @param D sorted map [d_1 -&gt; e_1, ..., d_k -&gt; e_k] with d_i squarefree.
      * @return [ [Ai0, Ai1,..., Aie_i], i=0,...,k ] with A/prod(D) = A0 + sum( sum ( Aij/di^j ) ) with deg(Aij) < deg(di).
      */
     public List<List<GenPolynomial<C>>> basePartialFraction(GenPolynomial<C> A, SortedMap<GenPolynomial<C>,Long> D) {
@@ -439,7 +439,7 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
     /**
      * Test for Univariate GenPolynomial partial fraction decomposition. 
      * @param A univariate GenPolynomial.
-     * @param D sorted map [d_1 -> e_1, ..., d_k -> e_k] with d_i squarefree.
+     * @param D sorted map [d_1 -&gt; e_1, ..., d_k -&gt; e_k] with d_i squarefree.
      * @param F a list of lists [ [Ai0, Ai1,..., Aie_i], i=0,...,k ] 
      * @return true, if A/prod(D) = A0 + sum( sum ( Aij/di^j ) ),
                else false.
@@ -545,7 +545,7 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
     /**
      * Coefficients squarefree factorization.
      * @param P coefficient.
-     * @return [p_1 -> e_1, ..., p_k -> e_k] with P = prod_{i=1,...,k} p_i^{e_i}
+     * @return [p_1 -&gt; e_1, ..., p_k -&gt; e_k] with P = prod_{i=1,...,k} p_i^{e_i}
      *         and p_i squarefree.
      */
     public abstract SortedMap<C, Long> squarefreeFactors(C P); 
