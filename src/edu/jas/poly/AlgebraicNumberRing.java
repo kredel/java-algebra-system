@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.io.Reader;
 
+import org.apache.log4j.Logger;
+
 //import edu.jas.structure.RingElem;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
@@ -41,6 +43,10 @@ public class AlgebraicNumberRing<C extends GcdRingElem<C> >
     /** Indicator if this ring is a field
      */
     protected int isField = -1; // initially unknown
+
+
+    private static final Logger logger = Logger.getLogger(AlgebraicNumberRing.class);
+    //  private final boolean debug = logger.isDebugEnabled();
 
 
     /** The constructor creates a AlgebraicNumber factory object 
@@ -216,6 +222,45 @@ public class AlgebraicNumberRing<C extends GcdRingElem<C> >
      * @param a BigInteger.
      * @return a AlgebraicNumber.
      */
+    public AlgebraicNumber<C> fillFromInteger(java.math.BigInteger a) {
+        if ( characteristic().signum() == 0 ) {
+            return new AlgebraicNumber<C>( this, ring.fromInteger(a) );
+        }
+        java.math.BigInteger p = characteristic();
+        java.math.BigInteger b = a;
+        GenPolynomial<C> v = ring.getZERO();
+        GenPolynomial<C> x = ring.univariate(0,1L);
+        GenPolynomial<C> t = ring.getONE();
+        do {
+            java.math.BigInteger[] qr = b.divideAndRemainder( p );
+            java.math.BigInteger q = qr[0];
+            java.math.BigInteger r = qr[1];
+            //System.out.println("q = " + q + ", r = " +r);
+            GenPolynomial<C> rp = ring.fromInteger(r);
+            v = v.sum( t.multiply(rp) );
+            t = t.multiply(x);
+            b = q;            
+        } while ( ! b.equals(java.math.BigInteger.ZERO) );
+        logger.info("v("+a+") = " + v);
+        //RuntimeException e = new RuntimeException("hihihi");
+        //e.printStackTrace();
+        return new AlgebraicNumber<C>( this, v );
+    }
+
+
+    /** Get a AlgebraicNumber element from a long value.
+     * @param a long.
+     * @return a AlgebraicNumber.
+     */
+    public AlgebraicNumber<C> fillFromInteger(long a) {
+        return fillFromInteger( new java.math.BigInteger(""+a) );
+    }
+
+
+    /** Get a AlgebraicNumber element from a BigInteger value.
+     * @param a BigInteger.
+     * @return a AlgebraicNumber.
+     */
     public AlgebraicNumber<C> fromInteger(java.math.BigInteger a) {
         return new AlgebraicNumber<C>( this, ring.fromInteger(a) );
     }
@@ -227,6 +272,9 @@ public class AlgebraicNumberRing<C extends GcdRingElem<C> >
      */
     public AlgebraicNumber<C> fromInteger(long a) {
         return new AlgebraicNumber<C>( this, ring.fromInteger(a) );
+//         if ( characteristic().signum() == 0 ) {
+//         }
+//         return fromInteger( new java.math.BigInteger(""+a) );
     }
     
 

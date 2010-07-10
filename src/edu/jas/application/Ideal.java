@@ -33,6 +33,8 @@ import edu.jas.poly.PolyUtil;
 import edu.jas.poly.PolynomialList;
 import edu.jas.poly.TermOrder;
 import edu.jas.poly.TermOrderOptimization;
+import edu.jas.poly.AlgebraicNumber;
+import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.NotInvertibleException;
 import edu.jas.structure.Power;
@@ -1495,10 +1497,10 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
             throw new IllegalArgumentException("G may not be null or empty");
         }
         List<Long> ud = univariateDegrees();
-	if ( ud == null || ud.size() <= i ) {
+        if ( ud == null || ud.size() <= i ) {
             //logger.info("univ pol, ud = " + ud);
             throw new IllegalArgumentException("ideal(G) not zero dimensional " + ud);
-	}
+        }
         int ll = 0;
         Long di = ud.get(i);
         if (di != null) {
@@ -1868,20 +1870,61 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
         // compute GBs until value of t is OK
         Ideal<C> Ip;
         GenPolynomial<C> zp;
+        AlgebraicNumberRing<C> afac = null;
+        String obr = "";
+        String cbr = "";
         int t = 0;
         do {
             t--;
             // zp = z - ( xj - xi * t )
-            zp = z.subtract(xj.subtract(xi.multiply(nfac.fromInteger(t))));
+            GenPolynomial<C> tn;
+            if ( afac == null ) {
+                tn = nfac.fromInteger(t);
+                if ( tn.isZERO() ) {
+                    RingFactory<C> fac = nfac.coFac;
+                    int braces = 2;
+                    while ( ! ( fac instanceof AlgebraicNumberRing ) ) {
+                        if ( fac instanceof GenPolynomialRing ) {
+                            GenPolynomialRing<C> pfac = (GenPolynomialRing) (Object) fac;
+                            fac = pfac.coFac;
+                        } else if ( fac instanceof QuotientRing ) {
+                            QuotientRing<C> pfac = (QuotientRing) (Object) fac;
+                            fac = pfac.ring.coFac;
+                        } else {
+                            throw new RuntimeException("field elements exhausted, need algebraic extension of base ring");
+			}
+                        braces++;
+                        System.out.println("fac = " + fac.toScript());
+                    }
+                    for ( int ii = 0; ii < braces; ii++ ) {
+                        obr += "{ ";
+                        cbr += " }";
+                    }
+                    afac = (AlgebraicNumberRing) (Object) fac;
+                    AlgebraicNumber<C> an = afac.fillFromInteger(t);
+                    System.out.println("an = " + an);
+                    tn = nfac.parse( obr + an.toString() + cbr );
+                    System.out.println("tn = " + tn);
+                }
+            } else {
+                AlgebraicNumber<C> an = afac.fillFromInteger(t);
+                System.out.println("an = " + an);
+                tn = nfac.parse( obr + an.toString() + cbr );
+                System.out.println("tn = " + tn);
+            }
+            if ( tn.isZERO() ) {
+                throw new RuntimeException("field elements exhausted, normal position not reachable");
+            }
+            zp = z.subtract(xj.subtract(xi.multiply(tn)));
             zp = zp.monic();
             Ip = I.sum(zp);
             //System.out.println("Ip = " + Ip);
             if (-t % 4 == 0) {
                 logger.info("normal position, t = " + t);
                 logger.info("normal position, GB = " + Ip);
-                if ( t < -100 ) {
+                if ( t < -550 ) {
                     throw new RuntimeException("normal position not reachable");
-		}
+                }
             }
         } while (!Ip.isNormalPositionFor(i + 1, j + 1));
         if (debug) {
@@ -2448,11 +2491,11 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
         //System.out.println("qfac = " + qfac);
         //System.out.println("rfac = " + rfac);
         //System.out.println("dfac = " + dfac);
-	// convert polynomials
+        // convert polynomials
         List<GenPolynomial<GenPolynomial<C>>> cgb = PolyUfdUtil.<C> integralFromQuotientCoefficients(rfac,qgb);
         List<GenPolynomial<C>> dgb = PolyUtil.<C> distribute(dfac, cgb);
         Ideal<C> cont = new Ideal<C>(dfac, dgb);
-	// convert other polynomials
+        // convert other polynomials
         List<GenPolynomial<C>> opols = new ArrayList<GenPolynomial<C>>();
         if (eid.others != null && eid.others.size() > 0) {
             List<GenPolynomial<GenPolynomial<C>>> orpol 
@@ -2460,17 +2503,17 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
             List<GenPolynomial<C>> opol = PolyUtil.<C> distribute(dfac, orpol);
             opols.addAll(opol);
         }
-	// convert univariate polynomials
+        // convert univariate polynomials
         List<GenPolynomial<C>> upols = new ArrayList<GenPolynomial<C>>(0);
         int i = 0;
         for (GenPolynomial<Quotient<C>> p : eid.upolys) {
-	    GenPolynomial<Quotient<C>> pm = p.extendUnivariate(eideal.getRing(), i++);
+            GenPolynomial<Quotient<C>> pm = p.extendUnivariate(eideal.getRing(), i++);
             //System.out.println("pm = " + pm + ", p = " + p);
             GenPolynomial<GenPolynomial<C>> urpol = PolyUfdUtil.<C> integralFromQuotientCoefficients(rfac, pm);
             GenPolynomial<C> upol = PolyUtil.<C> distribute(dfac, urpol);
             upols.add(upol);
             //System.out.println("upol = " + upol);
-	}
+        }
         // compute f 
         GreatestCommonDivisor<C> ufd = GCDFactory.getImplementation(qfac.ring.coFac);
         GenPolynomial<C> f = null; // qfac.ring.getONE();
