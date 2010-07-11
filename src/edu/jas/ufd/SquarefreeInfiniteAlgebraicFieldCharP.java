@@ -155,8 +155,8 @@ public class SquarefreeInfiniteAlgebraicFieldCharP<C extends GcdRingElem<C>>
         }
         GenPolynomialRing<C> ppfac = new GenPolynomialRing<C>(apfac.coFac,pfac);
         List<GenPolynomial<C>> gl = new ArrayList<GenPolynomial<C>>();
-        System.out.println("deg = " + deg + ", c = " + c.longValue());
         if ( deg == c.longValue() && afac.modul.length() == 2 ) {
+            logger.info("deg(" + deg + ") == char_p(" + c.longValue()+")");
             for (Monomial<AlgebraicNumber<C>> m : cpp) {
                 ExpVector f = m.e;
                 AlgebraicNumber<C> a = m.c;

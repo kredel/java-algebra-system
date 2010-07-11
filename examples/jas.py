@@ -60,6 +60,13 @@ def terminate():
     '''
     ComputerThreads.terminate();
 
+def noThreads():
+    '''Turn off automatic parallel threads usage.
+    '''
+    print "nt = ", ComputerThreads.NO_THREADS;
+    ComputerThreads.setNoThreads(); #NO_THREADS = #0; #1; #True;
+    print "nt = ", ComputerThreads.NO_THREADS;
+
 
 class Ring:
     '''Represents a JAS polynomial ring: GenPolynomialRing.
@@ -1568,7 +1575,7 @@ def Oct(ro=BigQuaternion(),io=BigQuaternion()):
     return RingElem(c);
 
 
-def AN(m,z=0,field=False):
+def AN(m,z=0,field=False,pr=None):
     '''Create JAS AlgebraicNumber as ring element.
     '''
     if isinstance(m,RingElem):
