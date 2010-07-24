@@ -40,7 +40,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
 
 
     private static final Logger logger = Logger.getLogger(GenSolvablePolynomial.class);
-    private final boolean debug = logger.isDebugEnabled();
+    private final boolean debug = false; //logger.isDebugEnabled();
 
 
     /**
@@ -113,7 +113,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
         if ( this.isZERO() ) {
            return this;
         }
-     assert (ring.nvar == Bp.ring.nvar);
+        assert (ring.nvar == Bp.ring.nvar);
         if ( debug ) {
            logger.debug("ring = " + ring);
         }

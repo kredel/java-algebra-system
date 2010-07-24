@@ -262,7 +262,12 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
            update(ExpVector e, ExpVector f, GenSolvablePolynomial<C> p) {
         if ( debug ) {
             //System.out.println("new relation = " + e + " .*. " + f + " = " + p);
-            logger.info("new relation = " + e + " .*. " + f + " = " + p);
+            if ( p != null && p.ring.vars != null ) {
+               logger.info("new relation = " + e.toString(p.ring.vars) + " .*. " + f.toString(p.ring.vars) + " = " + p);
+               //logger.info("existing relations = " + toString(p.ring.vars));
+	    } else {
+               logger.info("new relation = " + e + " .*. " + f + " = " + p);
+	    }
         }
         if ( p == null || e == null || f == null ) {
            throw new IllegalArgumentException("RelationTable update e|f|p == null");
@@ -310,19 +315,21 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
         }
         Object o;
         int index = -1;
-        for ( ListIterator it = part.listIterator(); it.hasNext(); ) {
-            ExpVectorPair look = (ExpVectorPair)it.next();
-            o = it.next(); // skip poly
-            if ( look.isMultiple( evp ) ) {
-                index = it.nextIndex(); 
-                // last index of or first index of: break
-            }
+        synchronized(part) { // with lookup()
+	    for ( ListIterator it = part.listIterator(); it.hasNext(); ) {
+		ExpVectorPair look = (ExpVectorPair)it.next();
+		o = it.next(); // skip poly
+		if ( look.isMultiple( evp ) ) {
+		    index = it.nextIndex(); 
+		    // last index of or first index of: break
+		}
+	    }
+	    if ( index < 0 ) {
+		index = 0;
+	    }
+	    part.add( index, evp );
+	    part.add( index+1, p );
         }
-        if ( index < 0 ) {
-           index = 0;
-        }
-        part.add( index, evp );
-        part.add( index+1, p );
         // table.put( key, part ); // required??
     }
 
@@ -392,23 +399,33 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
         ExpVector fp = null;
         ExpVectorPair look = null;
         GenSolvablePolynomial<C> p = null;
-        for ( Iterator it = part.iterator(); it.hasNext(); ) {
-            look = (ExpVectorPair)it.next();
-            p = (GenSolvablePolynomial<C>)it.next();
-            if ( evp.isMultiple( look ) ) {
-                ep = e.subtract( look.getFirst() );
-                fp = f.subtract( look.getSecond() );
-                if ( ep.isZERO() ) {
-                    ep = null;
+        synchronized(part) { // with update()
+            for ( Iterator it = part.iterator(); it.hasNext(); ) {
+                look = (ExpVectorPair)it.next();
+                p = (GenSolvablePolynomial<C>)it.next();
+                if ( evp.isMultiple( look ) ) {
+                    ep = e.subtract( look.getFirst() );
+                    fp = f.subtract( look.getSecond() );
+                    if ( ep.isZERO() ) {
+                        ep = null;
+                    }
+                    if ( fp.isZERO() ) {
+                        fp = null;
+                    }
+		    if ( false && debug ) {
+			if ( p != null && p.ring.vars != null ) {
+			    logger.info("found relation = " + e.toString(p.ring.vars) + " .*. " + f.toString(p.ring.vars) + " = " + p);
+			} else {
+			    logger.info("found relation = " + e + " .*. " + f + " = " + p);
+			}
+		    }
+                    return new TableRelation<C>(ep,fp,p);
                 }
-                if ( fp.isZERO() ) {
-                    fp = null;
-                }
-                return new TableRelation<C>(ep,fp,p);
             }
         }
         // unreacheable code!
-        return new TableRelation<C>(ep,fp,p);
+        //return new TableRelation<C>(ep,fp,p);
+        throw new RuntimeException("no entry found in relation table for " + evp);
     }
 
 
