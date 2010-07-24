@@ -401,7 +401,7 @@ class LeftSolvableReducerSeqPair<C extends RingElem<C>> implements Runnable {
                  break;
               }
               if ( set ) {
-                 pool.notIdle();
+                 pool.notIdle(); set = false;
               }
               pair = pairlist.getNext();
               if ( pair == null ) {
@@ -513,7 +513,7 @@ class TwosidedSolvableReducerSeqPair<C extends RingElem<C>> implements Runnable 
                  break;
               }
               if ( set ) {
-                 pool.notIdle();
+                 pool.notIdle(); set = false;
               }
               pair = pairlist.getNext();
               if ( pair == null ) {
