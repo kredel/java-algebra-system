@@ -3,15 +3,18 @@
 # $Id$
 #
 
+import sys;
+
 from jas import SolvableRing
 from jas import SolvableIdeal
+from jas import startLog, terminate
 
 
 # WA_32 example
 
 rs = """
 # solvable polynomials, Weyl algebra A_3,2:
-Rat(a,b,e1,e2,e3) L
+Rat(a,b,e1,e2,e3) G
 RelationTable
 (
  ( e3 ), ( e1 ), ( e1 e3 - e1 ),
@@ -36,6 +39,8 @@ f = SolvableIdeal( r, ps );
 print "SolvableIdeal: " + str(f);
 print;
 
+startLog();
+
 rg = f.leftGB();
 print "seq left GB:", rg;
 print;
@@ -48,7 +53,9 @@ else:
    print "is not left GB";
 
 
-rg = f.parLeftGB(2); # 2 threads
+threads = 2;
+
+rg = f.parLeftGB(threads); # 2 threads
 print "par left GB:", rg;
 print;
 
@@ -57,7 +64,7 @@ if rg.isLeftGB():
 else:
    print "is not left GB";
 
-
+#sys.exit(); 
 
 rg = f.twosidedGB();
 print "seq twosided GB:", rg;
@@ -79,7 +86,7 @@ else:
    print "is not twosided GB";
 
 
-rg = f.parTwosidedGB(2);
+rg = f.parTwosidedGB(threads);
 print "par twosided GB:", rg;
 print;
 
@@ -108,3 +115,5 @@ if rg.isRightGB():
    print "is right GB";
 else:
    print "is not right GB";
+
+terminate();
