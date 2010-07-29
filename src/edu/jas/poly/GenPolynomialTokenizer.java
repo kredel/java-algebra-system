@@ -316,15 +316,17 @@ public class GenPolynomialTokenizer  {
                 tt = tok.nextToken();
                 //System.out.println("tt = " + tt );
                 while ( tt != '_' ) {
-                    //cf.append( " " );
                     if ( tok.sval != null ) {
-                        cf.append( " " + tok.sval );
+                        if ( cf.length() > 0 && cf.charAt(cf.length()-1) != '.' ) {
+                            cf.append( " " );
+                        }
+                        cf.append( tok.sval ); // " " +  
                     } else {
                         cf.append( (char)tt );
                     }
                     tt = tok.nextToken();
                 }
-                //System.out.println("coeff = " + cf.toString() );
+                //System.out.println("coeff_ = " + cf.toString() );
                 r = (RingElem)fac.parse( cf.toString() );
                 //System.out.println("r = " + r );
                 if (debug) logger.debug("coeff " + r);
@@ -340,7 +342,6 @@ public class GenPolynomialTokenizer  {
                 do {
                     tt = tok.nextToken();
                     //System.out.println("token { = " + ((char)tt) + ", " + tt + ", level = " + level);
-                    //cf.append( " " );
                     if ( tt == '{' ) {
                         level++;
                     }
@@ -351,12 +352,15 @@ public class GenPolynomialTokenizer  {
                         }
                     }
                     if ( tok.sval != null ) {
-                        rf.append( " " + tok.sval );
+                        if ( rf.length() > 0 && rf.charAt(rf.length()-1) != '.' ) {
+                            rf.append( " " );
+                        }
+                        rf.append( tok.sval ); // " " + 
                     } else {
                         rf.append( (char)tt );
                     }
                 } while ( level >= 0 ); // || tt != '}' 
-                //System.out.println("coeff = " + rf.toString() );
+                //System.out.println("coeff{} = " + rf.toString() );
                 r = (RingElem)fac.parse( rf.toString() );
                 if (debug) logger.debug("coeff " + r);
                 ie = nextExponent();
@@ -375,6 +379,7 @@ public class GenPolynomialTokenizer  {
                 // read coefficient
                 first = tok.sval.charAt(0);
                 if ( digit(first) ) {
+                    //System.out.println("coeff 0 = " + tok.sval );
                     r = (RingElem)fac.parse( tok.sval );
                     //System.out.println("r = " + r.toScriptFactory());
                     ie = nextExponent();
@@ -1343,7 +1348,7 @@ public class GenPolynomialTokenizer  {
 
     // must also allow +/- // does not work with tokenizer
     @SuppressWarnings("unused")
-	private boolean number(char x) {
+    private boolean number(char x) {
         return digit(x) || x == '-' || x == '+';
     }
 

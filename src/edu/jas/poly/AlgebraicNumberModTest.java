@@ -173,9 +173,11 @@ public class AlgebraicNumberModTest extends TestCase {
  */
  public void testMultiplication() {
      a = fac.random(ll);
-     assertTrue("not isZERO( a )", !a.isZERO() );
-
      b = fac.random(ll);
+     if ( a.isZERO() || b.isZERO() ) {
+         return;
+     }
+     assertTrue("not isZERO( a )", !a.isZERO() );
      assertTrue("not isZERO( b )", !b.isZERO() );
 
      c = b.multiply(a);
