@@ -303,7 +303,7 @@ class Ideal:
         self.ring = ring;
         if list == None:
            sr = StringReader( polystr );
-           tok = GenPolynomialTokenizer(ring.pset.ring,sr);
+           tok = GenPolynomialTokenizer(ring.ring,sr);
            self.list = tok.nextPolynomialList();
         else:
            self.list = pylist2arraylist(list,rec=1);
@@ -560,7 +560,7 @@ class ParamIdeal:
         self.ring = ring;
         if list == None and polystr != None:
            sr = StringReader( polystr );
-           tok = GenPolynomialTokenizer(ring.pset.ring,sr);
+           tok = GenPolynomialTokenizer(ring.ring,sr);
            self.list = tok.nextPolynomialList();
         else:
            self.list = pylist2arraylist(list,rec=1);
