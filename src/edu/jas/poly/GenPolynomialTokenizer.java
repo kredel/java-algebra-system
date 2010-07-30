@@ -380,7 +380,24 @@ public class GenPolynomialTokenizer  {
                 first = tok.sval.charAt(0);
                 if ( digit(first) ) {
                     //System.out.println("coeff 0 = " + tok.sval );
-                    r = (RingElem)fac.parse( tok.sval );
+                    StringBuffer df = new StringBuffer();
+                    df.append( tok.sval );
+                    tt = tok.nextToken();
+                    if ( tt == '.' ) { 
+                        tt = tok.nextToken();
+                        if (debug) logger.debug("tt,dot = " + tok);
+                        if ( tok.sval != null ) {
+                            df.append("."); 
+                            df.append( tok.sval );
+                        } else {
+                            tok.pushBack();
+                            tok.pushBack();
+                        }
+                    } else {
+                        tok.pushBack();
+                    }
+                    r = (RingElem)fac.parse( df.toString() );
+                    if (debug) logger.debug("coeff " + r);
                     //System.out.println("r = " + r.toScriptFactory());
                     ie = nextExponent();
                     if (debug) logger.debug("ie " + ie);
