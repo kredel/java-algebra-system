@@ -25,6 +25,7 @@ import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigComplex;
+import edu.jas.arith.BigDecimal;
 import edu.jas.arith.BigQuaternion;
 
 import edu.jas.poly.GenPolynomial;
@@ -64,14 +65,14 @@ public class GenPolynomialTokenizer  {
     private RingFactory                                fac;
     //private RingFactory<AlgebraicNumber<BigRational>> anfac;
     //private RingFactory<AlgebraicNumber<ModInteger>>  gffac;
-    private static enum coeffType { BigRat, BigInt, ModInt, BigC, BigQ, 
+    private static enum coeffType { BigRat, BigInt, ModInt, BigC, BigQ, BigD, 
             ANrat, ANmod, RatFunc, ModFunc, IntFunc };
     private coeffType parsedCoeff = coeffType.BigRat;
 
 
     private GenPolynomialRing                pfac;
     private static enum polyType { PolBigRat, PolBigInt, PolModInt, PolBigC, 
-            PolBigQ, PolANrat, PolANmod, 
+            PolBigD, PolBigQ, PolANrat, PolANmod, 
             PolRatFunc, PolModFunc, PolIntFunc };
     private polyType parsedPoly = polyType.PolBigRat;
 
@@ -192,6 +193,10 @@ public class GenPolynomialTokenizer  {
             pfac  = new GenPolynomialRing<BigQuaternion>(fac,nvars,tord,vars);
             parsedPoly = polyType.PolBigQ;
             break;
+        case BigD: 
+            pfac  = new GenPolynomialRing<BigDecimal>(fac,nvars,tord,vars);
+            parsedPoly = polyType.PolBigD;
+            break;
         case RatFunc: 
             pfac  = new GenPolynomialRing<Quotient<BigInteger>>(fac,nvars,tord,vars);
             parsedPoly = polyType.PolRatFunc;
@@ -241,6 +246,10 @@ public class GenPolynomialTokenizer  {
         case BigQ: 
             spfac  = new GenSolvablePolynomialRing<BigQuaternion>(fac,nvars,tord,vars);
             parsedPoly = polyType.PolBigQ;
+            break;
+        case BigD: 
+            spfac  = new GenSolvablePolynomialRing<BigDecimal>(fac,nvars,tord,vars);
+            parsedPoly = polyType.PolBigD;
             break;
         case RatFunc: 
             spfac  = new GenSolvablePolynomialRing<Quotient<BigInteger>>(fac,nvars,tord,vars);
@@ -312,6 +321,7 @@ public class GenPolynomialTokenizer  {
             if ( tt == StreamTokenizer.TT_EOF ) break;
             switch ( tt ) {
             case '_': 
+                logger.warn("use of underscore _ ... _ is deprecated, use braces { ... } instead ");
                 StringBuffer cf = new StringBuffer();
                 tt = tok.nextToken();
                 //System.out.println("tt = " + tt );
@@ -595,7 +605,7 @@ public class GenPolynomialTokenizer  {
     /**
      * parsing method for coefficient ring.
      * syntax: Rat | Q | Int | Z | Mod modul | Complex 
-     *         | C | Quat 
+     *         | C | D | Quat 
      *         | AN[ (var) ( poly ) | AN[ modul (var) ( poly ) ]
      *         | RatFunc (var_list) | ModFunc modul (var_list) | IntFunc (var_list) 
      * @return the next coefficient factory.
@@ -615,6 +625,10 @@ public class GenPolynomialTokenizer  {
             if ( tok.sval.equalsIgnoreCase("Rat") ) {
                 coeff = new BigRational(0);
                 ct = coeffType.BigRat;
+            }
+            if ( tok.sval.equalsIgnoreCase("D") ) {
+                coeff = new BigDecimal(0);
+                ct = coeffType.BigD;
             }
             if ( tok.sval.equalsIgnoreCase("Z") ) {
                 coeff = new BigInteger(0);
