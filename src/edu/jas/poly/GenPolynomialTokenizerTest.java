@@ -777,7 +777,8 @@ public void testBigRationalGeneric() {
                  + "( 1^3 ), "
                  + "( 0^3 ), "
                  + "( { 3/4 }^2 - 6/8^2 ), "
-                 + "( { 1 }^2 x + x^3 + 1/3 y z - x^3 ) "
+                 + "( { 1 }^2 x + x^3 + 1/3 y z - x^3 ), "
+                 + "( 1.0001 - 0.0001 + { 0.25 }**2 - 1/4^2 ) "
                  + " )";
      source = new StringReader( exam );
      parser = new GenPolynomialTokenizer( source );
@@ -791,7 +792,7 @@ public void testBigRationalGeneric() {
      }
      //System.out.println("f = " + f);
      assertTrue("f != null", f.list != null);
-     assertTrue("length( f ) = 4", f.list.size() == 4);
+     assertTrue("length( f ) = 5", f.list.size() == 5);
 
      BigRational fac = new BigRational(0);
      TermOrder tord = new TermOrder(TermOrder.INVLEX);
@@ -816,6 +817,10 @@ public void testBigRationalGeneric() {
      GenPolynomial<BigRational> d = f.list.get(3);
      //System.out.println("d = " + d);
      assertEquals("f.get(3).length() == 2", 2, d.length() );
+
+     GenPolynomial<BigRational> e = f.list.get(4);
+     //System.out.println("e = " + e);
+     assertTrue("isONE( f.get(4) )", e.isONE() );
  }
 
 }
