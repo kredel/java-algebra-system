@@ -10,8 +10,8 @@ rsan = """
 AN[ (i) (i^2 + 1) ] (Y,X,x,y) G
 RelationTable
 (
- ( y ), ( x ), ( _i_ x y )
- ( X ), ( Y ), ( _i_ Y X )
+ ( y ), ( x ), ( {i} x y )
+ ( X ), ( Y ), ( {i} Y X )
 )
 """;
 
@@ -24,7 +24,8 @@ RelationTable
 )
 """;
 
-r = SolvableModule( rsc );
+#r = SolvableModule( rsc );
+r = SolvableModule( rsan );
 print "SolvableModule: " + str(r);
 print;
 
