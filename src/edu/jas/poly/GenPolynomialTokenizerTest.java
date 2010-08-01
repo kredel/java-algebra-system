@@ -697,10 +697,10 @@ public class GenPolynomialTokenizerTest extends TestCase {
 
     /**
      * Test algebraic number polynomial.
-     * 
+     * <b>Note: </b> Sysntax no more supported.
      */
     @SuppressWarnings("unchecked")
-    public void testAlgebraicNumber() {
+    public void removedTestAlgebraicNumber() {
         String exam = "AN[ (i) ( i^2 + 1 ) ] (x,y,z) L "  
             + "( "
             + "( 1 ), "
@@ -759,10 +759,10 @@ public class GenPolynomialTokenizerTest extends TestCase {
 
     /**
      * Test Galois field coefficient polynomial.
-     * 
+     * <b>Note: </b> Sysntax no more supported.
      */
     @SuppressWarnings("unchecked")
-    public void testGaloisField() {
+    public void removedTestGaloisField() {
         String exam = "AN[ 19 (i) ( i^2 + 1 ) ] (x,y,z) L "  
             + "( "
             + "( 20 ), "

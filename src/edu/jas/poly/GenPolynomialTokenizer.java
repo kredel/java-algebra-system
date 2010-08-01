@@ -320,31 +320,31 @@ public class GenPolynomialTokenizer  {
             // read coefficient, monic monomial and polynomial
             if ( tt == StreamTokenizer.TT_EOF ) break;
             switch ( tt ) {
-            case '_': 
-                logger.warn("use of underscore _ ... _ is deprecated, use braces { ... } instead ");
-                StringBuffer cf = new StringBuffer();
-                tt = tok.nextToken();
-                //System.out.println("tt = " + tt );
-                while ( tt != '_' ) {
-                    if ( tok.sval != null ) {
-                        if ( cf.length() > 0 && cf.charAt(cf.length()-1) != '.' ) {
-                            cf.append( " " );
-                        }
-                        cf.append( tok.sval ); // " " +  
-                    } else {
-                        cf.append( (char)tt );
-                    }
-                    tt = tok.nextToken();
-                }
-                //System.out.println("coeff_ = " + cf.toString() );
-                r = (RingElem)fac.parse( cf.toString() );
-                //System.out.println("r = " + r );
-                if (debug) logger.debug("coeff " + r);
-                b = b.multiply(r,leer); 
-                tt = tok.nextToken();
-                if (debug) logger.debug("tt,digit = " + tok);
-                //no break;
-                break;
+//             case '_': 
+//                 logger.warn("use of underscore _ ... _ is deprecated, use braces { ... } instead ");
+//                 StringBuffer cf = new StringBuffer();
+//                 tt = tok.nextToken();
+//                 //System.out.println("tt = " + tt );
+//                 while ( tt != '_' ) {
+//                     if ( tok.sval != null ) {
+//                         if ( cf.length() > 0 && cf.charAt(cf.length()-1) != '.' ) {
+//                             cf.append( " " );
+//                         }
+//                         cf.append( tok.sval ); // " " +  
+//                     } else {
+//                         cf.append( (char)tt );
+//                     }
+//                     tt = tok.nextToken();
+//                 }
+//                 //System.out.println("coeff_ = " + cf.toString() );
+//                 r = (RingElem)fac.parse( cf.toString() );
+//                 //System.out.println("r = " + r );
+//                 if (debug) logger.debug("coeff " + r);
+//                 b = b.multiply(r,leer); 
+//                 tt = tok.nextToken();
+//                 if (debug) logger.debug("tt,digit = " + tok);
+//                 //no break;
+//                 break;
 
             case '{': 
                 StringBuffer rf = new StringBuffer();
