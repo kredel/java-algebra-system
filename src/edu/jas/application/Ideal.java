@@ -765,7 +765,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
      * @param ename variables for the elimination ring.
      * @return ideal(this) in K[ename,{vars \ ename}])
      */
-    public Ideal<C> eliminate(String[] ename) {
+    public Ideal<C> eliminate(String... ename) {
         //System.out.println("ename = " + Arrays.toString(ename));
         if (ename == null) {
             throw new IllegalArgumentException("ename may not be null");
@@ -2394,7 +2394,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
      * @param vars list of variables for a polynomial ring for extension
      * @return ideal G, with coefficients in QuotientRing(GenPolynomialRing<C>(vars))
      */
-    public IdealWithUniv<Quotient<C>> extension(String[] vars) {
+    public IdealWithUniv<Quotient<C>> extension(String... vars) {
         GenPolynomialRing<C> fac = getRing();
         GenPolynomialRing<C> efac = new GenPolynomialRing<C>(fac.coFac, vars.length, fac.tord, vars);
         IdealWithUniv<Quotient<C>> ext = extension(efac);
