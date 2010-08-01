@@ -57,6 +57,7 @@ print "ax    = " + str(ax);
 print "wx    = " + str(wx);
 print;
 
+#rootx = wx**5 - ax;
 rootx = wx**2 - ax;
 print "rootx = " + str(rootx);
 Q2x = AN(rootx,field=True);
@@ -80,8 +81,9 @@ print "wx    = " + str(wx);
 print "y     = " + str(y);
 print;
 
+#f = ( y**5 - x ) * ( y**2 - 2 );
 f = ( y**2 - x ) * ( y**2 - 2 );
-#f = ( y**2 - x )**2 * ( y**2 - 2 )**3;
+#f = ( y**2 - x )**5 * ( y**2 - 2 )**3;
 #f = ( y**4 - x * 2 );
 #f = ( y**7 - x * 2 );
 #f = ( y**2 - 2 );
