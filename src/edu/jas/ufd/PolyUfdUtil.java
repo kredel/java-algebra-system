@@ -299,7 +299,7 @@ public class PolyUfdUtil {
         }
         // convert to Q(alpha)[x]
         GenPolynomial<AlgebraicNumber<C>> B = PolyUtil.<C> convertToAlgebraicCoefficients(pfac, A);
-        // setup x _+_ k alpha for back substitution
+        // setup x .+. k alpha for back substitution
         GenPolynomial<AlgebraicNumber<C>> x = pfac.univariate(0);
         AlgebraicNumberRing<C> afac = (AlgebraicNumberRing<C>) pfac.coFac;
         AlgebraicNumber<C> alpha = afac.getGenerator();

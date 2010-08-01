@@ -1384,7 +1384,7 @@ public class HenselUtil {
      * Modular extended Euclidean relation lifting test. 
      * @param A list of GenPolynomials
      * @param S = [s_0,...,s_{n-1}] list of GenPolynomial
-     * @return true if prod_{0,...,n-1} s_i * B _i = 1 mod p^e, with B_i = prod_{i!=j} A_j, else false.
+     * @return true if prod_{0,...,n-1} s_i * B_i = 1 mod p^e, with B_i = prod_{i!=j} A_j, else false.
      */
     public static <MOD extends GcdRingElem<MOD> & Modular> 
       boolean isExtendedEuclideanLift(List<GenPolynomial<MOD>> A, List<GenPolynomial<MOD>> S) {
