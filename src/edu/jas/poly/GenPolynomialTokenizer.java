@@ -151,6 +151,7 @@ public class GenPolynomialTokenizer  {
         tok.wordChars('0','9');
         tok.wordChars('a', 'z');
         tok.wordChars('A', 'Z');
+        tok.wordChars('_', '_'); // for subscripts x_i
         tok.wordChars('/', '/'); // wg. rational numbers
         tok.wordChars(128 + 32, 255);
         tok.whitespaceChars(0, ' ');
