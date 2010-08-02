@@ -209,7 +209,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
                 if (trial.degree() > deg || trial.isConstant()) {
                     continue;
                 }
-		trial = trial.monic();
+                trial = trial.monic();
                 ti++;
                 if (ti % 1000 == 0) {
                     System.out.print("ti(" + ti + ") ");
@@ -239,7 +239,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
                         dl = (ulist.size() + 1) / 2;
                         j = 0; // since j++
                         break;
-		    //} else {
+                    //} else {
                     //    logger.error("error removing flist from ulist = " + ulist);
                     }
                 }
@@ -260,12 +260,12 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
 
 
     private static <T> List<T> removeOnce(List<T> a, List<T> b) {
-	List<T> res = new ArrayList<T>();
-	res.addAll(a);
-	for ( T e : b ) {
-	    boolean t = res.remove(e);
-	}
-	return res;
+        List<T> res = new ArrayList<T>();
+        res.addAll(a);
+        for ( T e : b ) {
+            boolean t = res.remove(e);
+        }
+        return res;
     }
 
 
@@ -321,7 +321,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
         if ( facs == null || facs.size() == 0 ) {
             facs = new TreeMap<GenPolynomial<C>, Long>();
             facs.put(P,1L);
-	}
+        }
         if (logger.isInfoEnabled() && ( facs.size() > 1 || ( facs.size() == 1 && facs.get(facs.firstKey()) > 1 ) ) ) {
             logger.info("squarefree facs   = " + facs);
             //System.out.println("sfacs   = " + facs);
@@ -335,18 +335,24 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
                 g = g.monic(); // how can this happen?
                 logger.warn("squarefree facs mon = " + g);
             }
-            List<GenPolynomial<C>> sfacs = baseFactorsSquarefree(g);
-            if (debug) {
-                logger.info("factors of squarefree = " + sfacs);
-                //System.out.println("sfacs   = " + sfacs);
-            }
-            for (GenPolynomial<C> h : sfacs) {
-                Long j = factors.get(h); // evtl. constants
-                if (j != null) {
-                    k += j;
+            if ( g.degree(0) <= 1 ) {
+                if ( ! g.isONE() ) {
+                    factors.put(g, k);
                 }
-                if ( ! h.isONE() ) {
-                    factors.put(h, k);
+            } else {
+                List<GenPolynomial<C>> sfacs = baseFactorsSquarefree(g);
+                if (debug) {
+                    logger.info("factors of squarefree = " + sfacs);
+                    //System.out.println("sfacs   = " + sfacs);
+                }
+                for (GenPolynomial<C> h : sfacs) {
+                    Long j = factors.get(h); // evtl. constants
+                    if (j != null) {
+                        k += j;
+                    }
+                    if ( ! h.isONE() ) {
+                        factors.put(h, k);
+                    }
                 }
             }
         }
@@ -431,15 +437,15 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
         if ( facs == null || facs.size() == 0 ) {
             facs = new TreeMap<GenPolynomial<C>, Long>();
             facs.put(P,1L);
-	}
+        }
         if (logger.isInfoEnabled() ) {
             if ( facs.size() > 1 ) {
                 logger.info("squarefree mfacs   = " + facs);
-	    } else if ( facs.size() == 1 && facs.get(facs.firstKey()) > 1L ) {
+            } else if ( facs.size() == 1 && facs.get(facs.firstKey()) > 1L ) {
                 logger.info("squarefree mfacs   = " + facs);
-	    } else {
+            } else {
                 logger.warn("squarefree mfacs empty = " + facs);
-	    }
+            }
         }
         for (GenPolynomial<C> g : facs.keySet()) {
             Long d = facs.get(g);

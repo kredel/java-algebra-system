@@ -28,6 +28,7 @@ print "ea   = " + str(ea);
 print "aa   = " + str(aa);
 print;
 
+#!#roota = aa**prime + 2;
 roota = aa**2 + 2;
 print "roota = " + str(roota);
 Q3a = AN(roota,field=True);
@@ -87,8 +88,8 @@ print;
 startLog();
 
 t = System.currentTimeMillis();
-#R = F.radicalDecomp();
-R = F.primeDecomp();
+R = F.radicalDecomp();
+#R = F.primeDecomp();
 t = System.currentTimeMillis() - t;
 print "R = ", R;
 print;

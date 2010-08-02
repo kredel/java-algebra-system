@@ -1595,7 +1595,9 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
             return dec;
         }
         if ( list.ring.coFac.characteristic().signum() > 0 && ! list.ring.coFac.isFinite() ) {
-            logger.warn("radical only for char 0 or finite coefficient rings, but found " + list.ring.coFac.toScript());
+            logger.warn("must use prime decomposition for char p and infinite coefficient rings, found " 
+                        + list.ring.coFac.toScript());
+            return zeroDimPrimeDecomposition();
         }
         for (int i = list.ring.nvar - 1; i >= 0; i--) {
             List<IdealWithUniv<C>> part = new ArrayList<IdealWithUniv<C>>();
@@ -2628,7 +2630,10 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
             return dec;
         }
         if ( list.ring.coFac.characteristic().signum() > 0 && ! list.ring.coFac.isFinite() ) {
-            logger.warn("radical only for char 0 or finite coefficient rings, but found " + list.ring.coFac.toScript());
+            // must not be the case at this point
+            logger.warn("must use prime decomposition for char p and infinite coefficient rings, found " 
+                        + list.ring.coFac.toScript());
+            return primeDecomposition();
         }
         Dimension dim = dimension();
         if (logger.isInfoEnabled()) {
