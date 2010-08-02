@@ -116,7 +116,8 @@ public class ComputerThreads {
     public static synchronized ExecutorService getPool() {
         if ( pool == null ) {
             // workpile = new ArrayBlockingQueue<Runnable>(Q_CAPACITY);
-            pool = Executors.newFixedThreadPool(N_THREADS);
+//            pool = Executors.newFixedThreadPool(N_THREADS);
+            pool = Executors.newCachedThreadPool();
 //             pool = new ThreadPoolExecutor(N_CPUS, N_THREADS,
 //                                           100L, TimeUnit.MILLISECONDS,
 //                                           workpile, REH);
