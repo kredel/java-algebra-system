@@ -1908,15 +1908,15 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
                     }
                     afac = (AlgebraicNumberRing) (Object) fac;
                     AlgebraicNumber<C> an = afac.fillFromInteger(t);
-                    System.out.println("an = " + an);
+                    //System.out.println("an = " + an);
                     tn = nfac.parse( obr + an.toString() + cbr );
-                    System.out.println("tn = " + tn);
+                    //System.out.println("tn = " + tn);
                 }
             } else {
                 AlgebraicNumber<C> an = afac.fillFromInteger(t);
-                System.out.println("an = " + an);
+                //System.out.println("an = " + an);
                 tn = nfac.parse( obr + an.toString() + cbr );
-                System.out.println("tn = " + tn);
+                //System.out.println("tn = " + tn);
             }
             if ( tn.isZERO() ) {
                 throw new RuntimeException("field elements exhausted, normal position not reachable");

@@ -241,10 +241,11 @@ public class AlgebraicNumberRing<C extends GcdRingElem<C> >
             t = t.multiply(x);
             b = q;            
         } while ( ! b.equals(java.math.BigInteger.ZERO) );
-        logger.info("v("+a+") = " + v);
+        AlgebraicNumber<C> an = new AlgebraicNumber<C>( this, v );
+        logger.info("fill("+a+") = " + v + ", mod: " + an);
         //RuntimeException e = new RuntimeException("hihihi");
         //e.printStackTrace();
-        return new AlgebraicNumber<C>( this, v );
+        return an;
     }
 
 
