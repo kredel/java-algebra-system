@@ -186,9 +186,13 @@ public class LocalTest extends TestCase {
  public void testMultiplication() {
 
      a = fac.random(kl,ll,el,q);
-     assertTrue("not isZERO( a )", !a.isZERO() );
 
      b = fac.random(kl,ll,el,q);
+
+     if ( a.isZERO() || b.isZERO() ) {
+         return;
+     }
+     assertTrue("not isZERO( a )", !a.isZERO() );
      assertTrue("not isZERO( b )", !b.isZERO() );
 
      c = b.multiply(a);
