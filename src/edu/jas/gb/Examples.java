@@ -6,19 +6,26 @@ package edu.jas.gb;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.io.Reader;
+import java.io.StringReader;
+import java.io.IOException;
 
 import org.apache.log4j.BasicConfigurator;
 
 import edu.jas.application.Ideal;
 import edu.jas.application.Residue;
 import edu.jas.application.ResidueRing;
+import edu.jas.arith.BigRational;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
 import edu.jas.gb.GroebnerBase;
 import edu.jas.gb.GroebnerBasePseudoSeq;
+import edu.jas.gb.GBFactory;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.TermOrder;
+import edu.jas.poly.PolynomialList;
+import edu.jas.poly.GenPolynomialTokenizer;
 
 
 /**
@@ -34,9 +41,10 @@ public class Examples {
      */
     public static void main(String[] args) {
         BasicConfigurator.configure();
-        example1();
-        example2();
-        example3();
+        //example1();
+        //example2();
+        //example3();
+        exampleGB();
     }
 
 
@@ -214,7 +222,111 @@ public class Examples {
         List<GenPolynomial<ModInteger>> G = gb.GB(polynomials);
         
         System.out.println(G);
-        
+    }
+
+     
+    /**
+     * Example GBase.
+     * 
+     */
+    @SuppressWarnings("unchecked") 
+    static public void exampleGB1() {
+        BigRational coeff = new BigRational();
+        GroebnerBase<BigRational> gb = GBFactory.<BigRational>getImplementation(coeff);
+
+        String exam = "(x1,x2,y) G "
+            + "( "  
+            + "( x1 + x2 - 10 ), ( 2 x1 - x2 + 4 ) "
+            + ") ";
+        Reader source = new StringReader( exam );
+        GenPolynomialTokenizer parser = new GenPolynomialTokenizer( source );
+        PolynomialList<BigRational> F = null;
+
+        try {
+            F = (PolynomialList<BigRational>) parser.nextPolynomialSet();
+        } catch(ClassCastException e) {
+            e.printStackTrace();
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("F = " + F);
+
+        List<GenPolynomial<BigRational>> G = gb.GB(F.list);
+
+        PolynomialList<BigRational> trinks = new PolynomialList<BigRational>(F.ring,G);
+        System.out.println("G = " + trinks);
+    }
+
+
+    /**
+     * Example GBase.
+     * 
+     */
+    @SuppressWarnings("unchecked") 
+    static public void exampleGB() {
+        BigRational coeff = new BigRational();
+        GroebnerBase<BigRational> gb = GBFactory.<BigRational>getImplementation(coeff);
+
+        String exam = "(x,y) G "
+            + "( "  
+            + "( y - ( x^2 - 1 ) ) "
+            + ") ";
+        Reader source = new StringReader( exam );
+        GenPolynomialTokenizer parser = new GenPolynomialTokenizer( source );
+        PolynomialList<BigRational> F = null;
+
+        try {
+            F = (PolynomialList<BigRational>) parser.nextPolynomialSet();
+        } catch(ClassCastException e) {
+            e.printStackTrace();
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("F = " + F);
+
+        List<GenPolynomial<BigRational>> G = gb.GB(F.list);
+
+        PolynomialList<BigRational> trinks = new PolynomialList<BigRational>(F.ring,G);
+        System.out.println("G = " + trinks);
+    }
+
+
+    /**
+     * Example Trinks GBase.
+     * 
+     */
+    @SuppressWarnings("unchecked") 
+    static public void exampleGBTrinks() {
+        BigRational coeff = new BigRational();
+        GroebnerBase<BigRational> bb = GBFactory.getImplementation(coeff);
+
+        String exam = "(B,S,T,Z,P,W) L "
+            + "( "  
+            + "( 45 P + 35 S - 165 B - 36 ), " 
+            + "( 35 P + 40 Z + 25 T - 27 S ), "
+            + "( 15 W + 25 S P + 30 Z - 18 T - 165 B**2 ), "
+            + "( - 9 W + 15 T P + 20 S Z ), "
+            + "( P W + 2 T Z - 11 B**3 ), "
+            + "( 99 W - 11 B S + 3 B**2 ), "
+            + "( B**2 + 33/50 B + 2673/10000 ) "
+            + ") ";
+        Reader source = new StringReader( exam );
+        GenPolynomialTokenizer parser = new GenPolynomialTokenizer( source );
+        PolynomialList<BigRational> F = null;
+
+        try {
+            F = (PolynomialList<BigRational>) parser.nextPolynomialSet();
+        } catch(ClassCastException e) {
+            e.printStackTrace();
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("F = " + F);
+
+        List<GenPolynomial<BigRational>> G = bb.GB(F.list);
+
+        PolynomialList<BigRational> trinks = new PolynomialList<BigRational>(F.ring,G);
+        System.out.println("G = " + trinks);
     }
         
 }

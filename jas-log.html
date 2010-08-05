@@ -22,6 +22,22 @@
 
 <dl>
 
+<dt>2010, August, 8 </dt> 
+<dd> 
+ Improved the polynomial parser to accept rational numbers denoted
+ with decimal points and to accept <code>BigDecimal</code>
+ coefficients. Removed the use of the underscore for algebriac number
+ coefficients in the polynomial parser. Now every recursive call of
+ <code>parse()</code> from a ring factory is triggered by braces which
+ can be nested to any depth.  Fixed synchronization bug in solvable
+ polynomial relation tables and a parallelization bug in parallel
+ solvable polynomial Gr&ouml;bner base computation.  Added remaining
+ parts for the factorization in polynomial rings of characteristic p
+ &gt; 0.  Changed the script rpresentaton of <code>AN</code>
+ (<code>AlgebraicNumber</code>s). Use of unbounded thread pools to
+ avoid dead-locks. 
+</dd>
+
 <dt>2010, July, 8 </dt> 
 <dd> 
  Downgraded for Java 5 language and run-time system for use with systems relying on 
@@ -1929,7 +1945,7 @@ CPU TIME (ms) END
 <p>
 <!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
 <!-- hhmts start -->
-Last modified: Tue Jul  6 17:41:59 CEST 2010
+Last modified: Thu Aug  5 23:11:26 CEST 2010
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
