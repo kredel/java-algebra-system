@@ -91,7 +91,13 @@
 <ul>
 <li><p>Add the JAS jar-file and the other required jar-files 
      to the classpath. Start using it in your applications.
+     For example
     </p>
+<pre>
+javac -classpath log4j.jar:junit.jar:jas.jar:. -d . src/edu/jas/gb/Examples.java
+
+java  -classpath log4j.jar:junit.jar:jas.jar:.      edu.jas.gb.Examples
+</pre>
 </li>
 <li><p>If you want to develop with JAS, then extract the 
      jar-file in a new directory
@@ -331,7 +337,7 @@ public class mytests {
 <p>
 <!-- Created: Sat Mar 19 21:44:14 CET 2005 -->
 <!-- hhmts start -->
-Last modified: Tue Jul  6 17:39:23 CEST 2010
+Last modified: Thu Aug  5 23:43:42 CEST 2010
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
