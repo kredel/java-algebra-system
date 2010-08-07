@@ -4,9 +4,10 @@
 
 package edu.jas.util;
 
-import java.util.List;
+
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 
 
 /**
@@ -16,10 +17,12 @@ import java.util.LinkedList;
 public class KsubSet<E> implements Iterable<List<E>> {
 
 
-    /** 
+    /**
      * data structure.
      */
-    public final List<E> set;
+    public final List<E> set; // Iterable<E> also ok
+
+
     public final int k;
 
 
@@ -29,11 +32,11 @@ public class KsubSet<E> implements Iterable<List<E>> {
      * @param k size of subsets.
      */
     public KsubSet(List<E> set, int k) {
-        if ( set == null ) {
+        if (set == null) {
             throw new IllegalArgumentException("null set not allowed");
         }
         this.set = set;
-        if ( k < 0 || k > set.size() ) {
+        if (k < 0 || k > set.size()) {
             throw new IllegalArgumentException("k out of range");
         }
         this.k = k;
@@ -45,13 +48,13 @@ public class KsubSet<E> implements Iterable<List<E>> {
      * @return an iterator.
      */
     public Iterator<List<E>> iterator() {
-        if ( k == 0 ) {
+        if (k == 0) {
             return new ZeroSubSetIterator<E>(set);
         }
-        if ( k == 1 ) {
+        if (k == 1) {
             return new OneSubSetIterator<E>(set);
         }
-        return new KsubSetIterator<E>(set,k);
+        return new KsubSetIterator<E>(set, k);
     }
 
 }
@@ -64,15 +67,25 @@ public class KsubSet<E> implements Iterable<List<E>> {
 class KsubSetIterator<E> implements Iterator<List<E>> {
 
 
-    /** 
+    /**
      * data structure.
      */
     public final List<E> set;
+
+
     public final int k;
+
+
     final List<E> rest;
+
+
     private E current;
+
+
     private Iterator<List<E>> recIter;
-    private Iterator<E> iter;
+
+
+    private final Iterator<E> iter;
 
 
     /**
@@ -81,11 +94,11 @@ class KsubSetIterator<E> implements Iterator<List<E>> {
      * @param k subset size.
      */
     public KsubSetIterator(List<E> set, int k) {
-        if ( set == null || set.size() == 0 ) {
+        if (set == null || set.size() == 0) {
             throw new IllegalArgumentException("null or empty set not allowed");
         }
         this.set = set;
-        if ( k < 2 || k > set.size() ) {
+        if (k < 2 || k > set.size()) {
             throw new IllegalArgumentException("k out of range");
         }
         this.k = k;
@@ -95,45 +108,45 @@ class KsubSetIterator<E> implements Iterator<List<E>> {
         rest = new LinkedList<E>(set);
         rest.remove(0);
         //System.out.println("rest = " + rest);
-        if ( k == 2 ) {
-           recIter = new OneSubSetIterator<E>( rest ); 
+        if (k == 2) {
+            recIter = new OneSubSetIterator<E>(rest);
         } else {
-           recIter = new KsubSetIterator<E>( rest, k-1 ); 
+            recIter = new KsubSetIterator<E>(rest, k - 1);
         }
     }
 
 
-    /** 
+    /**
      * Test for availability of a next subset.
      * @return true if the iteration has more subsets, else false.
      */
     public boolean hasNext() {
-        return recIter.hasNext() || ( iter.hasNext() && rest.size() >= k ) ;
+        return recIter.hasNext() || (iter.hasNext() && rest.size() >= k);
     }
 
 
-    /** 
+    /**
      * Get next subset.
      * @return next subset.
      */
     public List<E> next() {
-        if ( recIter.hasNext() ) {
-            List<E> next = new LinkedList<E>( recIter.next() );
-            next.add( 0, current );
+        if (recIter.hasNext()) {
+            List<E> next = new LinkedList<E>(recIter.next());
+            next.add(0, current);
             return next;
         }
-        if ( iter.hasNext() ) {
+        if (iter.hasNext()) {
             current = iter.next();
             //System.out.println("current = " + current);
             rest.remove(0);
             //System.out.println("rest = " + rest);
-            if ( rest.size() < k-1 ) {
+            if (rest.size() < k - 1) {
                 throw new RuntimeException("invalid call of next()");
             }
-            if ( k == 2 ) {
-                recIter = new OneSubSetIterator<E>( rest ); 
+            if (k == 2) {
+                recIter = new OneSubSetIterator<E>(rest);
             } else {
-                recIter = new KsubSetIterator<E>( rest, k-1 ); 
+                recIter = new KsubSetIterator<E>(rest, k - 1);
             }
             return this.next(); // retry
         } else {
@@ -142,7 +155,7 @@ class KsubSetIterator<E> implements Iterator<List<E>> {
     }
 
 
-    /** 
+    /**
      * Remove the last subset returned from underlying set if allowed.
      */
     public void remove() {
@@ -159,10 +172,12 @@ class KsubSetIterator<E> implements Iterator<List<E>> {
 class OneSubSetIterator<E> implements Iterator<List<E>> {
 
 
-    /** 
+    /**
      * data structure.
      */
     public final List<E> set;
+
+
     private Iterator<E> iter;
 
 
@@ -172,7 +187,7 @@ class OneSubSetIterator<E> implements Iterator<List<E>> {
      */
     public OneSubSetIterator(List<E> set) {
         this.set = set;
-        if ( set == null || set.size() == 0 ) {
+        if (set == null || set.size() == 0) {
             iter = null;
             return;
         }
@@ -180,30 +195,30 @@ class OneSubSetIterator<E> implements Iterator<List<E>> {
     }
 
 
-    /** 
+    /**
      * Test for availability of a next subset.
      * @return true if the iteration has more subsets, else false.
      */
     public boolean hasNext() {
-        if ( iter == null ) {
+        if (iter == null) {
             return false;
         }
         return iter.hasNext();
     }
 
 
-    /** 
+    /**
      * Get next subset.
      * @return next subset.
      */
     public List<E> next() {
         List<E> next = new LinkedList<E>();
-        next.add( iter.next() );
+        next.add(iter.next());
         return next;
     }
 
 
-    /** 
+    /**
      * Remove the last subset returned from underlying set if allowed.
      */
     public void remove() {
@@ -220,7 +235,7 @@ class OneSubSetIterator<E> implements Iterator<List<E>> {
 class ZeroSubSetIterator<E> implements Iterator<List<E>> {
 
 
-    /** 
+    /**
      * data structure.
      */
     private boolean hasNext;
@@ -235,7 +250,7 @@ class ZeroSubSetIterator<E> implements Iterator<List<E>> {
     }
 
 
-    /** 
+    /**
      * Test for availability of a next subset.
      * @return true if the iteration has more subsets, else false.
      */
@@ -244,7 +259,7 @@ class ZeroSubSetIterator<E> implements Iterator<List<E>> {
     }
 
 
-    /** 
+    /**
      * Get next subset.
      * @return next subset.
      */
@@ -255,7 +270,7 @@ class ZeroSubSetIterator<E> implements Iterator<List<E>> {
     }
 
 
-    /** 
+    /**
      * Remove the last subset returned from underlying set if allowed.
      */
     public void remove() {
