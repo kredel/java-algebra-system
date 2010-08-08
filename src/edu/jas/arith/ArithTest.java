@@ -879,10 +879,11 @@ public class ArithTest extends TestCase {
      a = BigInteger.ONE;
 
      b = a.random(47).abs();
+     //System.out.println("\nb          = " + b);
+     //System.out.println("bitsize(b) = " + b.val.bitLength());
      for ( int n = 2; n < 8; n++ ) {
          d = Roots.root(b,n);
-         //System.out.println("b          = " + b);
-         //System.out.println(n+"-th root       = " + d);
+         //System.out.println(n+"-th root  = " + d);
          e = Power.positivePower(d,n);
          //System.out.println("root^"+n+"     = " + e);
          assertTrue("root^"+n+" <= a "+(b.subtract(e)), e.compareTo(b) <= 0);
@@ -901,10 +902,11 @@ public class ArithTest extends TestCase {
      BigDecimal a, b, c, d, e, f;
      a = BigDecimal.ONE;
 
-     b = a.random(37).abs();
+     b = a.random(7).abs();
+     //System.out.println("\nb          = " + b);
+     //System.out.println("ulp(b)     = " + b.val.ulp());
      for ( int n = 1; n < 8; n++ ) {
          d = Roots.root(b,n);
-         //System.out.println("b         = " + b);
          //System.out.println(n+"-th root = " + d);
          e = Power.positivePower(d,n);
          //System.out.println("root^"+n+"    = " + e);

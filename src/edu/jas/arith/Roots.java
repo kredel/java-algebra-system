@@ -41,33 +41,28 @@ public class Roots {
             throw new RuntimeException("negative root not defined");
         }
         if ( A == null || A.isZERO() || A.isONE() ) {
-           return A;
+            return A;
         }
         // ensure enough precision
-        int s = A.val.bitLength();
+        int s = A.val.bitLength() + 2;
         MathContext mc = new MathContext( s ); 
         //System.out.println("mc = " + mc);
-        // newton iteration
         BigDecimal Ap = new BigDecimal( A.val, mc );
         //System.out.println("Ap = " + Ap);
-        BigDecimal N = new BigDecimal( n, mc ); 
-        BigDecimal ninv = new BigDecimal( 1.0/n, mc ); 
-        BigDecimal nsub = BigDecimal.ONE.subtract( ninv ); 
-        BigDecimal P, R1, R = Ap.multiply(ninv); // initial guess
-        BigDecimal d;
-        while ( true ) {
-            P = Power.positivePower( R, n-1 );
-            R1 = Ap.divide( P.multiply(N) ); 
-            R1 = R.multiply( nsub ).sum( R1 );
-            d = R.subtract(R1).abs();
-            R = R1;
-            if ( d.compareTo(BigDecimal.ONE) <= 0 ) {
-                //System.out.println("d  = " + d);
+        BigDecimal Ar = root(Ap,n);
+        //System.out.println("Ar = " + Ar);
+        java.math.BigInteger RP = Ar.val.toBigInteger(); 
+        BigInteger R = new BigInteger(RP);
+        while (true) {
+            BigInteger P = Power.positivePower( R, n );
+            //System.out.println("P = " + P);
+            if ( A.compareTo(P) >= 0 ) {
                 break;
+            } else {
+                R = R.subtract( BigInteger.ONE );
             }
-        }
-        java.math.BigInteger RP = R.val.toBigInteger(); 
-        return new BigInteger(RP);
+        } 
+        return R;
     }
 
 
@@ -79,30 +74,29 @@ public class Roots {
      */
     public static BigInteger sqrt(BigInteger A) {
         if ( A == null || A.isZERO() || A.isONE() ) {
-           return A;
+            return A;
         }
         // ensure enough precision
-        int s = A.val.bitLength();
+        int s = A.val.bitLength() + 2;
         MathContext mc = new MathContext( s ); 
         //System.out.println("mc = " + mc);
         // newton iteration
         BigDecimal Ap = new BigDecimal( A.val, mc );
         //System.out.println("Ap = " + Ap);
-        BigDecimal ninv = new BigDecimal( 0.5, mc ); 
-        BigDecimal R1, R = Ap.multiply(ninv); // initial guess
-        BigDecimal d;
-        while ( true ) {
-            R1 = R.sum( Ap.divide( R ) );
-            R1 = R1.multiply(ninv); // div n
-            d = R.subtract(R1).abs();
-            R = R1;
-            if ( d.compareTo(BigDecimal.ONE) <= 0 ) {
-                //System.out.println("d  = " + d);
+        BigDecimal Ar = sqrt(Ap);
+        //System.out.println("Ar = " + Ar);
+        java.math.BigInteger RP = Ar.val.toBigInteger(); 
+        BigInteger R = new BigInteger(RP);
+        while (true) {
+            BigInteger P = R.multiply(R);
+            //System.out.println("P = " + P);
+            if ( A.compareTo(P) >= 0 ) {
                 break;
+            } else {
+                R = R.subtract( BigInteger.ONE );
             }
-        }
-        java.math.BigInteger RP = R.val.toBigInteger(); 
-        return new BigInteger(RP);
+        } 
+        return R;
     }
 
 
@@ -114,7 +108,7 @@ public class Roots {
      */
     public static BigInteger sqrtInt(BigInteger A) {
         if ( A == null || A.isZERO() || A.isONE() ) {
-           return A;
+            return A;
         }
         int s = A.signum();
         if ( s < 0 ) {
@@ -168,11 +162,12 @@ public class Roots {
      */
     public static BigDecimal sqrt(BigDecimal A) {
         if ( A == null || A.isZERO() || A.isONE() ) {
-           return A;
+            return A;
         }
         // for small A use root of inverse
-        if ( A.compareTo( BigDecimal.ONE ) < 0 ) {
+        if ( A.val.compareTo( BigDecimal.ONE.val ) < 0 ) {
             BigDecimal Ap = A.inverse();
+            //System.out.println("A.inverse() = " + Ap);
             Ap = sqrt(Ap);
             return Ap.inverse();
         }
@@ -187,7 +182,7 @@ public class Roots {
             R1 = R1.multiply(ninv); // div n
             d = R.subtract(R1).abs();
             R = R1;
-            if ( d.compareTo(BigDecimal.ONE) <= 0 ) {
+            if ( d.val.compareTo(BigDecimal.ONE.val) <= 0 ) {
                 //System.out.println("d  = " + d);
                 break;
             }
@@ -213,11 +208,12 @@ public class Roots {
             throw new RuntimeException("negative root not defined");
         }
         if ( A == null || A.isZERO() || A.isONE() ) {
-           return A;
+            return A;
         }
         // for small A use root of inverse
-        if ( A.compareTo( BigDecimal.ONE ) <= 0 ) {
+        if ( A.val.compareTo( BigDecimal.ONE.val ) < 0 ) {
             BigDecimal Ap = A.inverse();
+            //System.out.println("A.inverse() = " + Ap);
             Ap = root(Ap,n);
             return Ap.inverse();
         }
@@ -229,6 +225,8 @@ public class Roots {
         BigDecimal ninv = new BigDecimal( 1.0/n, mc ); 
         BigDecimal nsub = new BigDecimal( 1.0, mc ); // because of precision
         nsub = nsub.subtract( ninv ); 
+        //BigDecimal half = BigDecimal.ONE.sum(BigDecimal.ONE).inverse();
+        BigDecimal half = new BigDecimal( BigDecimal.ONE.val.divide(BigDecimal.ONE.val.TEN) );
         BigDecimal P, R1, R = Ap.multiply(ninv); // initial guess
         BigDecimal d;
         while ( true ) {
@@ -237,11 +235,13 @@ public class Roots {
             R1 = R.multiply( nsub ).sum( R1 );
             d = R.subtract(R1).abs();
             R = R1;
-            //System.out.println("d  = " + d);
-            if ( d.compareTo( BigDecimal.ONE ) <= 0 ) {
-                //System.out.println("d  = " + d);
+            //if ( d.compareTo( BigDecimal.ONE ) <= 0 ) {
+            //    System.out.println("d  = " + d);
+            if ( d.val.compareTo( half.val ) <= 0 ) {
+                //System.out.println("d.val  = " + d.val);
                 break;
             }
+            //}
         }
         return R;
     }
