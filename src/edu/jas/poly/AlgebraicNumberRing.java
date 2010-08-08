@@ -7,16 +7,20 @@ package edu.jas.poly;
 import java.util.Random;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.io.Reader;
 
 import org.apache.log4j.Logger;
 
+import edu.jas.arith.BigInteger;
 //import edu.jas.structure.RingElem;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.PolyUtil;
+
+import edu.jas.util.CartesianProduct;
 
 
 /**
@@ -27,7 +31,7 @@ import edu.jas.poly.PolyUtil;
  */
 
 public class AlgebraicNumberRing<C extends GcdRingElem<C> > 
-              implements RingFactory< AlgebraicNumber<C> >  {
+    implements RingFactory< AlgebraicNumber<C> >, Iterable<AlgebraicNumber<C>>  {
 
 
     /** Ring part of the factory data structure. 
@@ -166,14 +170,14 @@ public class AlgebraicNumberRing<C extends GcdRingElem<C> >
      */
     public boolean isField() {
         if ( isField > 0 ) { 
-           return true;
+            return true;
         }
         if ( isField == 0 ) { 
-           return false;
+            return false;
         }
         if ( ! ring.coFac.isField() ) {
-           isField = 0;
-           return false;
+            isField = 0;
+            return false;
         }
         return false;
     }
@@ -182,19 +186,19 @@ public class AlgebraicNumberRing<C extends GcdRingElem<C> >
     /**
      * Set field property of this ring.
      * @param field true, if this ring is determined to be a field,
-                    false, if it is determined that it is not a field.
-     */
+     false, if it is determined that it is not a field.
+    */
     public void setField(boolean field) {
         if ( isField > 0 && field ) { 
-           return;
+            return;
         }
         if ( isField == 0 && ! field ) { 
-           return;
+            return;
         }
         if ( field ) {
-           isField = 1;
+            isField = 1;
         } else {
-           isField = 0;
+            isField = 0;
         }
         return;
     }
@@ -273,9 +277,9 @@ public class AlgebraicNumberRing<C extends GcdRingElem<C> >
      */
     public AlgebraicNumber<C> fromInteger(long a) {
         return new AlgebraicNumber<C>( this, ring.fromInteger(a) );
-//         if ( characteristic().signum() == 0 ) {
-//         }
-//         return fromInteger( new java.math.BigInteger(""+a) );
+        //         if ( characteristic().signum() == 0 ) {
+        //         }
+        //         return fromInteger( new java.math.BigInteger(""+a) );
     }
     
 
@@ -285,9 +289,9 @@ public class AlgebraicNumberRing<C extends GcdRingElem<C> >
     @Override
     public String toString() {
         return "AlgebraicNumberRing[ " 
-              + modul.toString() + " | isField="
-              + isField + " :: "
-              + ring.toString() + " ]";
+            + modul.toString() + " | isField="
+            + isField + " :: "
+            + ring.toString() + " ]";
     }
 
 
@@ -308,7 +312,7 @@ public class AlgebraicNumberRing<C extends GcdRingElem<C> >
      */
     @Override
     @SuppressWarnings("unchecked") // not jet working
-    public boolean equals(Object b) {
+        public boolean equals(Object b) {
         if ( ! ( b instanceof AlgebraicNumberRing ) ) {
             return false;
         }
@@ -383,20 +387,20 @@ public class AlgebraicNumberRing<C extends GcdRingElem<C> >
      * @return S, with S mod c.modul == c and S mod a.modul == a. 
      */
     public AlgebraicNumber<C>
-           chineseRemainder(AlgebraicNumber<C> c, 
-                            AlgebraicNumber<C> ci, 
-                            AlgebraicNumber<C> a) {
+        chineseRemainder(AlgebraicNumber<C> c, 
+                         AlgebraicNumber<C> ci, 
+                         AlgebraicNumber<C> a) {
         if ( true ) { // debug
             if ( c.ring.modul.compareTo( a.ring.modul ) < 1 ) {
-               System.out.println("AlgebraicNumber error " + c + ", " + a);
-           }
+                System.out.println("AlgebraicNumber error " + c + ", " + a);
+            }
         }
         AlgebraicNumber<C> b = new AlgebraicNumber<C>( a.ring, c.val ); 
-                              // c mod a.modul
-                              // c( tbcf(a.modul) ) if deg(a.modul)==1
+        // c mod a.modul
+        // c( tbcf(a.modul) ) if deg(a.modul)==1
         AlgebraicNumber<C> d = a.subtract( b ); // a-c mod a.modul
         if ( d.isZERO() ) {
-           return new AlgebraicNumber<C>( this, c.val );
+            return new AlgebraicNumber<C>( this, c.val );
         }
         b = d.multiply( ci ); // b = (a-c)*ci mod a.modul
         // (c.modul*b)+c mod this.modul = c mod c.modul = 
@@ -419,16 +423,16 @@ public class AlgebraicNumberRing<C extends GcdRingElem<C> >
      * @return S, with S(c) == c and S(A) == a.
      */
     public AlgebraicNumber<C>
-           interpolate(AlgebraicNumber<C> c, 
-                       C ci, 
-                       C am,
-                       C a) {
+        interpolate(AlgebraicNumber<C> c, 
+                    C ci, 
+                    C am,
+                    C a) {
         C b = PolyUtil.<C>evaluateMain( ring.coFac /*a*/, c.val, am ); 
-                              // c mod a.modul
-                              // c( tbcf(a.modul) ) if deg(a.modul)==1
+        // c mod a.modul
+        // c( tbcf(a.modul) ) if deg(a.modul)==1
         C d = a.subtract( b ); // a-c mod a.modul
         if ( d.isZERO() ) {
-           return new AlgebraicNumber<C>( this, c.val );
+            return new AlgebraicNumber<C>( this, c.val );
         }
         b = d.multiply( ci ); // b = (a-c)*ci mod a.modul
         // (c.modul*b)+c mod this.modul = c mod c.modul = 
@@ -448,8 +452,8 @@ public class AlgebraicNumberRing<C extends GcdRingElem<C> >
         int depth = 1;
         RingFactory<C> cf = arr.ring.coFac;
         if ( cf instanceof AlgebraicNumberRing ) {
-             arr = (AlgebraicNumberRing<C>) (Object) cf;
-             depth += arr.depth();
+            arr = (AlgebraicNumberRing<C>) (Object) cf;
+            depth += arr.depth();
         }
         return depth;
     }
@@ -473,15 +477,117 @@ public class AlgebraicNumberRing<C extends GcdRingElem<C> >
         AlgebraicNumberRing<C> arr = this;
         RingFactory<C> cf = arr.ring.coFac;
         if ( cf instanceof AlgebraicNumberRing ) {
-             arr = (AlgebraicNumberRing<C>) (Object) cf;
-             if ( degree == 0L ) {
-                 degree = arr.totalExtensionDegree();
-             } else {
-                 degree *= arr.totalExtensionDegree();
-             }
+            arr = (AlgebraicNumberRing<C>) (Object) cf;
+            if ( degree == 0L ) {
+                degree = arr.totalExtensionDegree();
+            } else {
+                degree *= arr.totalExtensionDegree();
+            }
         }
         return degree;
     }
 
+
+    /** Get a AlgebraicNumber iterator.
+     * <b>Note: </b> Only for finite field coefficients. 
+     * @return a iterator over all algebraic numbers in this ring.
+     */
+    public Iterator<AlgebraicNumber<C>> iterator() {
+        return new AlgebraicNumberIterator<C>(this);
+    }
+
+}
+
+
+/**
+ * Algebraic number iterator.
+ * @author Heinz Kredel
+ */
+class AlgebraicNumberIterator<C extends GcdRingElem<C>> implements Iterator<AlgebraicNumber<C>> {
+
+
+    /**
+     * data structure.
+     */
+    final List<List<C>> comps;
+    final Iterator<List<C>> iter;
+    final List<GenPolynomial<C>> powers;
+    final AlgebraicNumberRing<C> aring;
+
+    private static final Logger logger = Logger.getLogger(AlgebraicNumberIterator.class);
+    //  private final boolean debug = logger.isDebugEnabled();
+
+
+    /**
+     * CartesianProduct iterator constructor.
+     * @param comps components of the cartesian product.
+     */
+    public AlgebraicNumberIterator(AlgebraicNumberRing<C> aring) {
+        RingFactory<C> cf = aring.ring.coFac;
+        if ( cf.characteristic().signum() == 0 || !cf.isFinite() ) {
+            throw new IllegalArgumentException("only for finite field coefficients implemented");
+        }
+        this.aring = aring;
+        BigInteger P = new BigInteger( cf.characteristic() );
+        long p = P.getVal().longValue();
+        long d = aring.modul.degree(0);
+        //System.out.println("p = " + p + ", d = " + d);
+        if ( p > 100L || d > 10L ) {
+            logger.warn("characteristic " + p + "or degree " + d + " eventually too big");
+        }
+        comps = new ArrayList<List<C>>((int)d);
+        List<C> elems = new ArrayList<C>((int)p);
+        for ( long i = 0L; i < p; i++ ) {
+            elems.add( cf.fromInteger(i) );
+        }
+        //System.out.println("elems = " + elems);
+        for ( long j = 0L; j < d; j++ ) {
+            comps.add(elems);
+        }
+        CartesianProduct<C> tuples = new CartesianProduct<C>(comps);
+        iter = tuples.iterator();
+        powers = new ArrayList<GenPolynomial<C>>( (int)d );
+        for ( long j = d-1; j >= 0L; j-- ) {
+            powers.add( aring.ring.univariate(0,j) );
+        }
+        //System.out.println("powers = " + powers);
+    }
+
+
+    /**
+     * Test for availability of a next tuple.
+     * @return true if the iteration has more tuples, else false.
+     */
+    public boolean hasNext() {
+        return iter.hasNext();
+    }
+
+
+    /**
+     * Get next tuple.
+     * @return next tuple.
+     */
+    public AlgebraicNumber<C> next() {
+        List<C> coeffs = iter.next();
+        //System.out.println("coeffs = " + coeffs);
+        GenPolynomial<C> pol = aring.ring.getZERO();
+        int i = 0;
+        for ( GenPolynomial<C> f : powers ) {
+            C c = coeffs.get(i++);
+            if ( c.isZERO() ) {
+		continue;
+	    }
+            pol = pol.sum( f.multiply(c) );
+        }
+        return new AlgebraicNumber<C>(aring,pol);
+    }
+
+
+    /**
+     * Remove a tuple if allowed.
+     */
+    public void remove() {
+        throw new UnsupportedOperationException("cannnot remove tuples");
+    }
 
 }
