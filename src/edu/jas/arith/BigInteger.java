@@ -8,6 +8,7 @@ import java.util.Random;
 import java.io.Reader;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
@@ -24,7 +25,7 @@ import edu.jas.util.StringUtil;
  */
 
 public final class BigInteger implements GcdRingElem<BigInteger>, 
-                                         RingFactory<BigInteger> {
+                                         RingFactory<BigInteger>, Iterable<BigInteger> {
 
     /** The data structure. 
       */
@@ -645,6 +646,69 @@ public final class BigInteger implements GcdRingElem<BigInteger>,
      */
     public BigInteger parse(Reader r) {
         return parse( StringUtil.nextString(r) );
+    }
+
+
+    /** Get a BigInteger iterator.
+     * @return a iterator over all integers.
+     */
+    public Iterator<BigInteger> iterator() {
+        return new BigIntegerIterator();
+    }
+
+}
+
+
+/**
+ * Big integer iterator.
+ * @author Heinz Kredel
+ */
+class BigIntegerIterator implements Iterator<BigInteger> {
+
+
+    /**
+     * data structure.
+     */
+    java.math.BigInteger curr;
+
+
+    /**
+     * BigInteger iterator constructor.
+     */
+    public BigIntegerIterator() {
+        curr = java.math.BigInteger.ZERO;
+    }
+
+
+    /**
+     * Test for availability of a next element.
+     * @return true if the iteration has more elements, else false.
+     */
+    public boolean hasNext() {
+        return true; 
+    }
+
+
+    /**
+     * Get next integer.
+     * @return next integer.
+     */
+    public BigInteger next() {
+        BigInteger i = new BigInteger(curr);
+        if ( curr.signum() > 0 ) {
+            curr = curr.negate();
+        } else {
+            curr = curr.negate().add( java.math.BigInteger.ONE );
+        }
+        return i;
+    }
+
+
+    /**
+     * Remove an element if allowed.
+     */
+    public void remove() {
+        throw new UnsupportedOperationException("cannnot remove elements");
     }
 
 }
