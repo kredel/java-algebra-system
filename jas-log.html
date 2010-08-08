@@ -26,16 +26,16 @@
 <dd> 
  Improved the polynomial parser to accept rational numbers denoted
  with decimal points and to accept <code>BigDecimal</code>
- coefficients. Removed the use of the underscore for algebriac number
+ coefficients. Removed the use of the underscore for algebraic number
  coefficients in the polynomial parser. Now every recursive call of
  <code>parse()</code> from a ring factory is triggered by braces which
- can be nested to any depth.  Fixed synchronization bug in solvable
+ can be nested to any depth. Fixed synchronization bug in solvable
  polynomial relation tables and a parallelization bug in parallel
- solvable polynomial Gr&ouml;bner base computation.  Added remaining
- parts for the factorization in polynomial rings of characteristic p
- &gt; 0.  Changed the script rpresentaton of <code>AN</code>
- (<code>AlgebraicNumber</code>s). Use of unbounded thread pools to
- avoid dead-locks. 
+ solvable polynomial Gr&ouml;bner base computation. Use of unbounded
+ thread pools to avoid dead-locks. Added remaining parts for the
+ square-free decomposition in polynomial rings of characteristic p
+ &gt; 0.  Changed the script representation of <code>AN</code>
+ (<code>AlgebraicNumber</code>s).
 </dd>
 
 <dt>2010, July, 8 </dt> 
@@ -1945,7 +1945,7 @@ CPU TIME (ms) END
 <p>
 <!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
 <!-- hhmts start -->
-Last modified: Thu Aug  5 23:11:26 CEST 2010
+Last modified: Sun Aug  8 12:14:22 CEST 2010
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
