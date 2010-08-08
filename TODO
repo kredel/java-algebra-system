@@ -4,15 +4,11 @@ issues to consider:
 
 - implement parallel proxys for GB computation
 
-- implement power series composition and power
-
 - implement multivariate Hensel lifting for multivariate polynomial factorization
 
 - implement Berlekamp-Zassenhaus for modular factorization
 
-- implement AlgebraicNumber primitive element computation
-
-- implement prime ideal decomposition for zero-dimensional ideals
+- implement power series composition and power
 
 - check the 187 exceptions (170 runtime exceptions) that are thrown
 
@@ -51,6 +47,12 @@ issues to consider:
 
 
 partially resolved and completed issues:
+
+- implement AlgebraicNumber primitive element computation
+
+- implement prime and primary ideal decomposition for non-zero-dimensional ideals
+
+- implement prime and primary ideal decomposition for zero-dimensional ideals
 
 - implement squarefree decomposition over fields of characteristic p
 

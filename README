@@ -6,7 +6,7 @@ Version 2.3, January 2009
 
 by Heinz Kredel, University of Mannheim, kredel at rz.uni-mannheim.de
 
-Copyright (c) 2005-2009 by Heinz Kredel.
+Copyright (c) 2005-2010 by Heinz Kredel.
 
 Programms released under GPL or LGPL, see COPYING.jas or COPYING.lgpl.jas.
 
@@ -14,9 +14,11 @@ Programms released under GPL or LGPL, see COPYING.jas or COPYING.lgpl.jas.
 Requirements
 ------------
 
-A Java JDK 1.6 or newer.
+A Java JDK 1.6 or newer, JDK 1.5 now also possible.
 
 Documentation see index.html.
+
+Required libraries are log4j.jar (from Apache Log4j) and junit.jar (from Junit) 
 
 
 Usage
@@ -24,22 +26,29 @@ Usage
 
 javac -cp {other_jar_files}:jas-<version>-bin.jar:.  <your sample code>
 
-javac -cp {other_jar_files}:jas-<version>-bin.jar:.  <your sample class>
+java  -cp {other_jar_files}:jas-<version>-bin.jar:.  <your sample class>
 
 or
 
 jython examples/<some input file> 
 
 
-Versions and Jar files
+Versions and jar files
 ----------------------
 
-JAS is distributed in 4 Jar files:
+JAS is distributed in 3 jar files:
 
-jas-<version>-bin.jar: the Java class files 
-jas-<version>-src.jar: the java source code
-jas-<version>-doc.jar: the Java doc and epydoc files
-jas-meditor.jar:       the interface to meditor
+jas-<version>-bin.jar:    the Java class files 
+jas-<version>-src.jar:    the java source code
+jas-<version>-doc.jar:    the Java doc and epydoc files
+
+optional jar files:
+
+jas-meditor.jar:          the interface to meditor
+jas-jython.jar:           an interface for Java scripting
+mylog.jar:                a substitute for log4j to use Java logging
+jlinalg_adapter.jar:      an adaptor to parts of JLinAlg
+commons-math_adapter.jar: an adaptor to parts of Apache commons.math
 
 
 The version is specified by a two digit major.minor number
