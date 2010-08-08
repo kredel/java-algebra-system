@@ -28,7 +28,7 @@ public final class BigInteger implements GcdRingElem<BigInteger>,
                                          RingFactory<BigInteger>, Iterable<BigInteger> {
 
     /** The data structure. 
-      */
+     */
     protected final java.math.BigInteger val;
 
 
@@ -38,13 +38,13 @@ public final class BigInteger implements GcdRingElem<BigInteger>,
     /** The constant 0.
      */
     public final static BigInteger ZERO 
-                 = new BigInteger( java.math.BigInteger.ZERO );
+        = new BigInteger( java.math.BigInteger.ZERO );
 
 
     /** The constant 1.
      */
     public final static BigInteger ONE 
-                 = new BigInteger( java.math.BigInteger.ONE );
+        = new BigInteger( java.math.BigInteger.ONE );
 
 
     /**
@@ -318,7 +318,7 @@ public final class BigInteger implements GcdRingElem<BigInteger>,
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
-     public boolean equals(Object b) {
+    public boolean equals(Object b) {
         if ( ! ( b instanceof BigInteger ) ) {
             return false;
         }
@@ -331,7 +331,7 @@ public final class BigInteger implements GcdRingElem<BigInteger>,
      * @see java.lang.Object#hashCode()
      */
     @Override
-     public int hashCode() {
+    public int hashCode() {
         return val.hashCode();
     }
 
@@ -649,11 +649,28 @@ public final class BigInteger implements GcdRingElem<BigInteger>,
     }
 
 
+    private boolean nonNegative = true;
+
+
+    /** Set the iteration algorithm to all elements.
+     */
+    public void setAllIterator() {
+        nonNegative = false;
+    }
+
+
+    /** Set the iteration algorithm to non-negative elements.
+     */
+    public void setNonNegativeIterator() {
+        nonNegative = true;
+    }
+
+
     /** Get a BigInteger iterator.
      * @return a iterator over all integers.
      */
     public Iterator<BigInteger> iterator() {
-        return new BigIntegerIterator();
+        return new BigIntegerIterator(nonNegative);
     }
 
 }
@@ -672,11 +689,23 @@ class BigIntegerIterator implements Iterator<BigInteger> {
     java.math.BigInteger curr;
 
 
+    final boolean nonNegative;
+
+
     /**
      * BigInteger iterator constructor.
      */
     public BigIntegerIterator() {
+        this(false);
+    }
+
+
+    /**
+     * BigInteger iterator constructor.
+     */
+    public BigIntegerIterator(boolean nn) {
         curr = java.math.BigInteger.ZERO;
+        nonNegative = nn;
     }
 
 
@@ -695,7 +724,9 @@ class BigIntegerIterator implements Iterator<BigInteger> {
      */
     public BigInteger next() {
         BigInteger i = new BigInteger(curr);
-        if ( curr.signum() > 0 ) {
+        if ( nonNegative ) {
+            curr = curr.add( java.math.BigInteger.ONE );
+        } else if ( curr.signum() > 0 && ! nonNegative ) {
             curr = curr.negate();
         } else {
             curr = curr.negate().add( java.math.BigInteger.ONE );
@@ -710,5 +741,4 @@ class BigIntegerIterator implements Iterator<BigInteger> {
     public void remove() {
         throw new UnsupportedOperationException("cannnot remove elements");
     }
-
 }

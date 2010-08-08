@@ -4,6 +4,9 @@
 
 package edu.jas.arith;
 
+
+import java.util.Iterator;
+
 //import edu.jas.arith.BigInteger;
 
 import junit.framework.Test;
@@ -220,8 +223,10 @@ public class BigIntegerTest extends TestCase {
      */
     public void testIterator() {
         int t = 0;
+        BigInteger bi = new BigInteger();
+        bi.setAllIterator();
         BigInteger j = null, ten = null;
-        for ( BigInteger i : BigInteger.ONE ) {
+        for ( BigInteger i : bi ) {
             t++;
             //System.out.println("i = " + i);
             if ( t >= 20 ) {
@@ -230,6 +235,29 @@ public class BigIntegerTest extends TestCase {
             }
         }
         ten = new BigInteger(10);
+        assertTrue("j == 10 ", j.equals(ten) );
+    }
+
+
+    /**
+     * Test non-negative iterator.
+     */
+    public void testNNIterator() {
+        int t = 0;
+        BigInteger bi = new BigInteger();
+        bi.setNonNegativeIterator();
+        BigInteger j = null, ten = null;
+        Iterator<BigInteger> iter = bi.iterator();
+        while ( iter.hasNext() ) {
+            BigInteger i = iter.next();
+            t++;
+            //System.out.println("i = " + i);
+            if ( t > 20 ) {
+                j = i;
+                break;
+            }
+        }
+        ten = new BigInteger(20);
         assertTrue("j == 10 ", j.equals(ten) );
     }
 
