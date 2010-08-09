@@ -424,7 +424,7 @@ public class GenPolynomialTokenizer  {
                 // read monomial 
                 first = tok.sval.charAt(0);
                 if ( letter(first) ) {
-                    ix = indexVar( tok.sval );
+                    ix = leer.indexVar(tok.sval,vars); //indexVar( tok.sval );
                     if ( ix < 0 ) {
                         logger.error("Unknown varibable " + tok.sval); 
                         done = true;
@@ -1394,14 +1394,14 @@ public class GenPolynomialTokenizer  {
     }
 
 
-    private int indexVar(String x) {
-        for ( int i = 0; i < vars.length; i++ ) { 
-            if ( x.equals( vars[i] ) ) { 
-                return vars.length-i-1;
-            }
-        }
-        return -1; // not found
-    }
+//     private int indexVar(String x) {
+//         for ( int i = 0; i < vars.length; i++ ) { 
+//             if ( x.equals( vars[i] ) ) { 
+//                 return vars.length-i-1;
+//             }
+//         }
+//         return -1; // not found
+//     }
 
 
     // unused

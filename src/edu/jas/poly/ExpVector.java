@@ -375,6 +375,40 @@ public abstract class ExpVector implements AbelianGroupElem<ExpVector>
     }
 
 
+    /** Get the variable name at index.
+     * @param idx index of the variable
+     * @param vars array of names of variables
+     * @return name of variable at the given index.
+     */
+    public String indexVarName(int idx, String...vars) {
+        return vars[length()-idx-1];
+    }
+
+
+    /** Get the array index of a variable at index.
+     * @param idx index of the variable
+     * @return array index of the variable.
+     */
+    public int varIndex(int idx) {
+        return length()-idx-1;
+    }
+
+
+    /** Get the index of a variable.
+     * @param x variable name to be searched.
+     * @param vars array of names of variables
+     * @return index of x in vars.
+     */
+    public int indexVar(String x, String...vars) {
+        for ( int i = 0; i < length(); i++ ) { 
+            if ( x.equals( vars[i] ) ) { 
+                return length()-i-1;
+            }
+        }
+        return -1; // not found
+    }
+
+
     /** Comparison with any other object.
      * @see java.lang.Object#equals(java.lang.Object)
      */
