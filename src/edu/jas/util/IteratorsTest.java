@@ -7,6 +7,8 @@ package edu.jas.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -64,7 +66,7 @@ public class IteratorsTest extends TestCase {
      */
     public void testCartesianProduct() {
         BigInteger ai = new BigInteger();
-        int s1 = 4;
+        int s1 = 5;
         int s2 = 3;
         int s = 1;
         for (int i = 0; i < s1; i++) {
@@ -75,7 +77,7 @@ public class IteratorsTest extends TestCase {
         for (int i = 0; i < s1; i++) {
             List<BigInteger> list = new ArrayList<BigInteger>(s2);
             for (int j = 0; j < s2; j++) {
-                list.add(ai.random(7));
+                list.add(ai.fromInteger(j));
             }
             tlist.add(list);
         }
@@ -142,6 +144,60 @@ public class IteratorsTest extends TestCase {
             }
         }
         assertTrue("#tuple == " + s + " == " + t + " ", t == s);
+    }
+
+
+    /**
+     * Test infinite cartesian product.
+     * 
+     */
+    public void testInfiniteCartesianProduct() {
+        BigInteger ai = new BigInteger();
+        ai.setNonNegativeIterator();
+        int s1 = 2;
+        //System.out.println("s = " + s);
+        List<Iterable<BigInteger>> tlist = new ArrayList<Iterable<BigInteger>>(s1);
+        for (int i = 0; i < s1; i++) {
+            tlist.add(ai);
+        }
+        System.out.println("tlist = " + tlist);
+        Set<List<BigInteger>> set = new HashSet<List<BigInteger>>();
+        int t = 0;
+        for (List<BigInteger> tuple : new CartesianProductInfinite<BigInteger>(tlist)) {
+            t++;
+            System.out.println("tuple = " + tuple);
+            assertTrue("|tuple| == " + s1 + " ", s1 == tuple.size());
+            set.add(tuple);
+            if ( t > 125 ) {
+                break;
+            }
+        }
+        assertTrue("#tuple == " + t + " == " + set.size() + " ", t == set.size());
+
+        int s2 = 5;
+        int s = 1;
+        for (int i = 0; i < s1; i++) {
+            s *= s2;
+        }
+        //System.out.println("s = " + s);
+        List<List<BigInteger>> ftlist = new ArrayList<List<BigInteger>>(s1);
+        for (int i = 0; i < s1; i++) {
+            List<BigInteger> list = new ArrayList<BigInteger>(s2);
+            for (int j = 0; j < s2; j++) {
+                list.add(ai.fromInteger(j));
+            }
+            ftlist.add(list);
+        }
+        //System.out.println("tlist = " + tlist);
+        int r = 0;
+        for (List<BigInteger> tuple : new CartesianProduct<BigInteger>(ftlist)) {
+            r++;
+            if ( set.contains(tuple) ) {
+                continue;
+            }
+            System.out.println("tuple not in set = " + tuple);
+            //assertTrue("tuple not in set " + tuple, false);
+        }
     }
 
 }
