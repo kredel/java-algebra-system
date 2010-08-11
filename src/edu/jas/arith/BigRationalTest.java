@@ -247,4 +247,28 @@ public class BigRationalTest extends TestCase {
         assertTrue("j == 10 ", j.equals(elem) );
     }
 
+
+    /**
+     * Test non-negative unique iterator.
+     */
+    public void testUniqueNNIterator() {
+        int t = 0;
+        BigRational bi = new BigRational();
+        bi.setNonNegativeIterator();
+        //bi.setAllIterator();
+        BigRational j = null, elem = null;
+        Iterator<BigRational> iter = bi.uniqueIterator();
+        while ( iter.hasNext() ) {
+            BigRational i = iter.next();
+            t++;
+            //System.out.println("i = " + i);
+            if ( t >= 20 ) {
+                j = i;
+                break;
+            }
+        }
+        elem = new BigRational(5,3);
+        assertTrue("j == 10 ", j.equals(elem) );
+    }
+
 }

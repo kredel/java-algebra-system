@@ -9,6 +9,8 @@ import java.util.Random;
 import java.io.Reader;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Collections;
 
@@ -1002,10 +1004,18 @@ public final class BigRational implements GcdRingElem<BigRational>,
 
 
     /** Get a BigInteger iterator.
-     * @return a iterator over all integers.
+     * @return a iterator over all rationals.
      */
     public Iterator<BigRational> iterator() {
         return new BigRationalIterator(nonNegative);
+    }
+
+
+    /** Get a BigInteger iterator with no duplicates.
+     * @return a iterator over all rationals without duplicates.
+     */
+    public Iterator<BigRational> uniqueIterator() {
+        return new BigRationalUniqueIterator( new BigRationalIterator(nonNegative) );
     }
 
 }
@@ -1073,12 +1083,12 @@ class BigRationalIterator implements Iterator<BigRational> {
         curr = edu.jas.arith.BigRational.ZERO;
         level = 0;
         den = new edu.jas.arith.BigInteger(); // ZERO
-	num = edu.jas.arith.BigInteger.ONE.clone();
-	if ( nn ) {
-	    den.setNonNegativeIterator();
-	} else {
-	    den.setAllIterator();
-	}
+        num = edu.jas.arith.BigInteger.ONE.clone();
+        if ( nn ) {
+            den.setNonNegativeIterator();
+        } else {
+            den.setAllIterator();
+        }
         num.setNonNegativeIterator();
         denit = den.iterator();
         numit = num.iterator();
@@ -1108,26 +1118,26 @@ class BigRationalIterator implements Iterator<BigRational> {
      */
     public BigRational next() {
         BigRational r = curr;
-	if ( denlistit.hasNext() && numlistit.hasNext() ) {
+        if ( denlistit.hasNext() && numlistit.hasNext() ) {
            BigInteger d = denlistit.next().val;
            BigInteger n = numlistit.next().val;
            //System.out.println(d + "/-/" + n);
            curr = BigRational.reduction(d,n);
            return r;
-	}
+        }
         level++;
-	if ( level % 2 == 1 ) {
+        if ( level % 2 == 1 ) {
             Collections.reverse(denlist);
-	} else {
+        } else {
             Collections.reverse(numlist);
-	}
+        }
         denlist.add( denit.next() );
         numlist.add( numit.next() );
-	if ( level % 2 == 0 ) {
+        if ( level % 2 == 0 ) {
             Collections.reverse(denlist);
-	} else {
+        } else {
             Collections.reverse(numlist);
-	}
+        }
         //System.out.println("denlist = " + denlist);
         //System.out.println("numlist = " + numlist);
         denlistit = denlist.iterator();
@@ -1136,6 +1146,75 @@ class BigRationalIterator implements Iterator<BigRational> {
         BigInteger n = numlistit.next().val;
         //System.out.println(d + "/+/" + n);
         curr = BigRational.reduction(d,n);
+        return r;
+    }
+
+
+    /**
+     * Remove an element if allowed.
+     */
+    public void remove() {
+        throw new UnsupportedOperationException("cannnot remove elements");
+    }
+}
+
+
+/**
+ * Big rational unique iterator.
+ * Uses Cantors diagonal enumeration, produces all distinct elements.
+ * @author Heinz Kredel
+ */
+class BigRationalUniqueIterator implements Iterator<BigRational> {
+
+
+    /**
+     * data structure.
+     */
+    final Set<BigRational> unique;
+
+
+    final Iterator<BigRational> ratit;
+
+
+    /**
+     * BigRational iterator constructor.
+     */
+    public BigRationalUniqueIterator() {
+        this( BigRational.ONE.iterator() );
+    }
+
+
+    /**
+     * BigRational iterator constructor.
+     * @param nn, true for indicator for a non-negative 
+     *            iterator, fall for an all iterator 
+     */
+    public BigRationalUniqueIterator(Iterator<BigRational> rit) {
+        ratit = rit;
+        unique = new HashSet<BigRational>();
+    }
+
+
+    /**
+     * Test for availability of a next element.
+     * @return true if the iteration has more elements, else false.
+     */
+    public boolean hasNext() {
+        return ratit.hasNext(); 
+    }
+
+
+    /**
+     * Get next rational.
+     * @return next rational.
+     */
+    public BigRational next() {
+        BigRational r = ratit.next();
+        while ( unique.contains(r) ) {
+            //System.out.println("duplicate " + r);
+            r = ratit.next();
+        }
+        unique.add(r);
         return r;
     }
 
