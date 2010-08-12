@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.Iterator;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -148,10 +149,10 @@ public class IteratorsTest extends TestCase {
 
 
     /**
-     * Test infinite cartesian product.
+     * Test infinite cartesian 2 product.
      * 
      */
-    public void testInfiniteCartesianProduct() {
+    public void testInfiniteCartesianTwoProduct() {
         BigInteger ai = new BigInteger();
         ai.setNonNegativeIterator();
         int s1 = 2;
@@ -160,12 +161,12 @@ public class IteratorsTest extends TestCase {
         for (int i = 0; i < s1; i++) {
             tlist.add(ai);
         }
-        System.out.println("tlist = " + tlist);
+        //System.out.println("tlist = " + tlist);
         Set<List<BigInteger>> set = new HashSet<List<BigInteger>>();
         int t = 0;
         for (List<BigInteger> tuple : new CartesianProductInfinite<BigInteger>(tlist)) {
             t++;
-            System.out.println("tuple = " + tuple);
+            //System.out.println("tuple = " + tuple);
             assertTrue("|tuple| == " + s1 + " ", s1 == tuple.size());
             set.add(tuple);
             if ( t > 125 ) {
@@ -195,9 +196,72 @@ public class IteratorsTest extends TestCase {
             if ( set.contains(tuple) ) {
                 continue;
             }
-            System.out.println("tuple not in set = " + tuple);
+            //System.out.println("tuple not in set = " + tuple);
+            assertTrue("tuple not in set " + tuple, false);
+        }
+    }
+
+
+    /**
+     * Test infinite cartesian product.
+     * 
+     */
+    public void testInfiniteCartesianProduct() {
+        BigInteger ai = new BigInteger();
+        ai.setNonNegativeIterator();
+        int s1 = 4;
+        //System.out.println("s1 = " + s1);
+        List<Iterable<BigInteger>> tlist = new ArrayList<Iterable<BigInteger>>(s1);
+        for (int i = 0; i < s1; i++) {
+            tlist.add(ai);
+        }
+        System.out.println("tlist = " + tlist);
+        Set<List<BigInteger>> set = new HashSet<List<BigInteger>>();
+
+        int s2 = 5;
+        int s = 1;
+        for (int i = 0; i < s1; i++) {
+            s *= s2;
+        }
+        //System.out.println("s = " + s);
+        List<List<BigInteger>> ftlist = new ArrayList<List<BigInteger>>(s1);
+        for (int i = 0; i < s1; i++) {
+            List<BigInteger> list = new ArrayList<BigInteger>(s2);
+            for (int j = 0; j < s2; j++) {
+                list.add(ai.fromInteger(j));
+            }
+            ftlist.add(list);
+        }
+        //System.out.println("tlist = " + tlist);
+        int r = 0;
+        for (List<BigInteger> tuple : new CartesianProduct<BigInteger>(ftlist)) {
+            r++;
+            set.add(tuple); 
+            //System.out.println("tuple not in set = " + tuple);
             //assertTrue("tuple not in set " + tuple, false);
         }
+        //System.out.println("set = " + set.size());
+        //System.out.println("set = " + r);
+
+        int t = 0;
+        int h = 0;
+        Iterable<List<BigInteger>> ib = new CartesianProductInfinite<BigInteger>(tlist);
+        Iterator<List<BigInteger>> iter = ib.iterator();
+        while ( iter.hasNext() ) {
+            List<BigInteger> tuple = iter.next();
+            t++;
+            //System.out.println("tuple = " + tuple);
+            //assertTrue("|tuple| == " + s1 + " ", s1 == tuple.size());
+            if ( set.contains(tuple) ) {
+                h++;
+            }
+            if ( h >= r ) {
+                break;
+            }
+        }
+        System.out.println("#tuple = " + t + ", #set = " + r);
+        //assertTrue("#tuple == " + t + " == " + set.size() + " ", t == set.size());
+
     }
 
 }
