@@ -44,7 +44,7 @@ public class CartesianProductInfinite<E> implements Iterable<List<E>> {
         if ( comps.size() == 1 ) {
             return new CartesianOneProductInfiniteIterator<E>(comps.get(0));
         } 
-        if ( comps.size() == 2 ) {
+        if ( comps.size() == 2 ) { // this part is not realy required
             return new CartesianTwoProductInfiniteIterator<E>(comps.get(0),comps.get(1));
         }
         int n = comps.size();
@@ -67,9 +67,6 @@ class CartesianOneProductInfiniteIterator<E> implements Iterator<List<E>> {
     /**
      * data structure.
      */
-    final Iterable<E> comps;
-
-
     final Iterator<E> compit;
 
 
@@ -81,7 +78,6 @@ class CartesianOneProductInfiniteIterator<E> implements Iterator<List<E>> {
         if (comps == null) {
             throw new IllegalArgumentException("null comps not allowed");
         }
-        this.comps = comps;
         compit = comps.iterator();
     }
 
@@ -155,9 +151,9 @@ class CartesianTwoProductInfiniteIterator<E> implements Iterator<List<E>> {
         if (comps0 == null || comps1 == null) {
             throw new IllegalArgumentException("null comps not allowed");
         }
-        current = new ArrayList<E>(2);
         empty = false;
         level = 0;
+        current = new ArrayList<E>(2);
 
         compit0 = comps0.iterator();
         E e = compit0.next();
@@ -174,8 +170,7 @@ class CartesianTwoProductInfiniteIterator<E> implements Iterator<List<E>> {
         fincomps1.add(e); 
         fincompit1 = fincomps1.iterator();
         d = fincompit1.next(); // remove current
-
-        System.out.println("current   = " + current);
+        //System.out.println("current   = " + current);
     }
 
 
@@ -196,7 +191,7 @@ class CartesianTwoProductInfiniteIterator<E> implements Iterator<List<E>> {
         if (empty) {
             throw new RuntimeException("invalid call of next()");
         }
-        List<E> res = new ArrayList<E>(current);
+        List<E> res = current; // new ArrayList<E>(current); // copy
         if ( fincompit0.hasNext() && fincompit1.hasNext() ) {
             E e0 = fincompit0.next();
             E e1 = fincompit1.next();
@@ -299,8 +294,7 @@ class CartesianTwoProductInfiniteIteratorList<E> implements Iterator<List<E>> {
         fincomps1.add(e); 
         fincompit1 = fincomps1.iterator();
         d = fincompit1.next(); // remove current
-
-        System.out.println("current   = " + current);
+        //System.out.println("current   = " + current);
     }
 
 
@@ -321,7 +315,7 @@ class CartesianTwoProductInfiniteIteratorList<E> implements Iterator<List<E>> {
         if (empty) {
             throw new RuntimeException("invalid call of next()");
         }
-        List<E> res = new ArrayList<E>(current);
+        List<E> res = current; // new ArrayList<E>(current);
         if ( fincompit0.hasNext() && fincompit1.hasNext() ) {
             List<E> e0 = fincompit0.next();
             List<E> e1 = fincompit1.next();

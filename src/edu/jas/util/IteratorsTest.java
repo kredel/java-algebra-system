@@ -193,11 +193,11 @@ public class IteratorsTest extends TestCase {
         int r = 0;
         for (List<BigInteger> tuple : new CartesianProduct<BigInteger>(ftlist)) {
             r++;
-            if ( set.contains(tuple) ) {
+            if ( set.contains(tuple) ) { // depends on 125
                 continue;
             }
             //System.out.println("tuple not in set = " + tuple);
-            assertTrue("tuple not in set " + tuple, false);
+            fail("tuple not in set " + tuple);
         }
     }
 
@@ -215,7 +215,7 @@ public class IteratorsTest extends TestCase {
         for (int i = 0; i < s1; i++) {
             tlist.add(ai);
         }
-        System.out.println("tlist = " + tlist);
+        //System.out.println("tlist = " + tlist);
         Set<List<BigInteger>> set = new HashSet<List<BigInteger>>();
 
         int s2 = 5;
@@ -237,8 +237,6 @@ public class IteratorsTest extends TestCase {
         for (List<BigInteger> tuple : new CartesianProduct<BigInteger>(ftlist)) {
             r++;
             set.add(tuple); 
-            //System.out.println("tuple not in set = " + tuple);
-            //assertTrue("tuple not in set " + tuple, false);
         }
         //System.out.println("set = " + set.size());
         //System.out.println("set = " + r);
@@ -258,10 +256,9 @@ public class IteratorsTest extends TestCase {
             if ( h >= r ) {
                 break;
             }
+            assertTrue("#tuple <= 3281 " + t, t <= 3281);
         }
-        System.out.println("#tuple = " + t + ", #set = " + r);
-        //assertTrue("#tuple == " + t + " == " + set.size() + " ", t == set.size());
-
+        //System.out.println("#tuple = " + t + ", #set = " + r);
     }
 
 }
