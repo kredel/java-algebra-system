@@ -44,9 +44,9 @@ public class CartesianProductInfinite<E> implements Iterable<List<E>> {
         if ( comps.size() == 1 ) {
             return new CartesianOneProductInfiniteIterator<E>(comps.get(0));
         } 
-        if ( comps.size() == 2 ) { // this part is not realy required
-            return new CartesianTwoProductInfiniteIterator<E>(comps.get(0),comps.get(1));
-        }
+//         if ( comps.size() == 2 ) { // this part is not realy required
+//             return new CartesianTwoProductInfiniteIterator<E>(comps.get(0),comps.get(1));
+//         }
         int n = comps.size();
         int k = n / 2 + n % 2; // ceiling
         Iterable<List<E>> c0 = new CartesianProductInfinite<E>( comps.subList(0,k) );
