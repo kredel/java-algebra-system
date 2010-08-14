@@ -1121,7 +1121,7 @@ class BigRationalIterator implements Iterator<BigRational> {
         if ( denlistit.hasNext() && numlistit.hasNext() ) {
            BigInteger d = denlistit.next().val;
            BigInteger n = numlistit.next().val;
-           //System.out.println(d + "/-/" + n);
+           //System.out.println(d + "//" + n);
            curr = BigRational.reduction(d,n);
            return r;
         }
@@ -1144,7 +1144,7 @@ class BigRationalIterator implements Iterator<BigRational> {
         numlistit = numlist.iterator();
         BigInteger d = denlistit.next().val;
         BigInteger n = numlistit.next().val;
-        //System.out.println(d + "/+/" + n);
+        //System.out.println(d + "//" + n);
         curr = BigRational.reduction(d,n);
         return r;
     }

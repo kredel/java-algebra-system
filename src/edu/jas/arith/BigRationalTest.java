@@ -7,8 +7,6 @@ package edu.jas.arith;
 
 import java.util.Iterator;
 
-//import edu.jas.arith.BigRational;
-
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
