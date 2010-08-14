@@ -43,8 +43,7 @@ public class TermOrderOptimization {
      * @return degree matrix.
      */
     public static <C extends RingElem<C>> 
-        List<GenPolynomial<BigInteger>> 
-        degreeMatrix( GenPolynomial<C> A ) {
+        List<GenPolynomial<BigInteger>> degreeMatrix( GenPolynomial<C> A ) {
 
         List<GenPolynomial<BigInteger>> dem = null;
         if ( A == null ) {
@@ -79,8 +78,7 @@ public class TermOrderOptimization {
      * @return degree matrix + e.
      */
     public static 
-       List<GenPolynomial<BigInteger>> 
-       expVectorAdd(List<GenPolynomial<BigInteger>> dm, ExpVector e) {
+       List<GenPolynomial<BigInteger>> expVectorAdd(List<GenPolynomial<BigInteger>> dm, ExpVector e) {
        for ( int i = 0; i < dm.size() && i < e.length(); i++ ) {
            GenPolynomial<BigInteger> p = dm.get(i);
            long u = e.getVal(i);
@@ -98,8 +96,7 @@ public class TermOrderOptimization {
      * @return degree matrix for the coeficients.
      */
     public static <C extends RingElem<C>> 
-        List<GenPolynomial<BigInteger>> 
-        degreeMatrixOfCoefficients( GenPolynomial<GenPolynomial<C>> A ) {
+        List<GenPolynomial<BigInteger>> degreeMatrixOfCoefficients( GenPolynomial<GenPolynomial<C>> A ) {
         if ( A == null ) {
            throw new IllegalArgumentException("polynomial must not be null");
         }
@@ -113,8 +110,7 @@ public class TermOrderOptimization {
      * @return degree matrix.
      */
     public static <C extends RingElem<C>> 
-       List<GenPolynomial<BigInteger>> 
-       degreeMatrix( Collection<GenPolynomial<C>> L ) {
+       List<GenPolynomial<BigInteger>> degreeMatrix( Collection<GenPolynomial<C>> L ) {
        if ( L == null ) {
           throw new IllegalArgumentException("list must be non null");
        }
@@ -165,8 +161,7 @@ public class TermOrderOptimization {
      * @return optimal permutation for D.
      */
     public static 
-       List<Integer> 
-       optimalPermutation( List<GenPolynomial<BigInteger>> D ) {
+       List<Integer> optimalPermutation( List<GenPolynomial<BigInteger>> D ) {
        if ( D == null ) {
           throw new IllegalArgumentException("list must be non null");
        }
@@ -210,8 +205,7 @@ public class TermOrderOptimization {
      * @return P(L).
      */
     public static <T> 
-       List<T> 
-       listPermutation( List<Integer> P, List<T> L ) {
+        List<T> listPermutation( List<Integer> P, List<T> L ) {
         if ( L == null || L.size() <= 1 ) {
            return L;
         }
@@ -232,8 +226,7 @@ public class TermOrderOptimization {
      */
     @SuppressWarnings("unchecked") 
     public static <T>
-       T[]
-       arrayPermutation( List<Integer> P, T[] a ) {
+        T[] arrayPermutation( List<Integer> P, T[] a ) {
         if ( a == null || a.length <= 1 ) {
            return a;
         }
@@ -255,8 +248,7 @@ public class TermOrderOptimization {
      * @return P(a).
      */
     public static
-       String[]
-       stringArrayPermutation( List<Integer> P, String[] a ) {
+        String[] stringArrayPermutation( List<Integer> P, String[] a ) {
         if ( a == null || a.length <= 1 ) {
            return a;
         }
@@ -278,8 +270,7 @@ public class TermOrderOptimization {
      * @return P(a).
      */
     public static 
-       long[]
-       longArrayPermutation( List<Integer> P, long[] a ) {
+        long[] longArrayPermutation( List<Integer> P, long[] a ) {
         if ( a == null || a.length <= 1 ) {
            return a;
         }
@@ -300,8 +291,7 @@ public class TermOrderOptimization {
      * @return P(e).
      */
     public static
-       ExpVector
-       permutation( List<Integer> P, ExpVector e ) {
+        ExpVector permutation( List<Integer> P, ExpVector e ) {
         if ( e == null ) {
            return e;
         }
@@ -319,8 +309,7 @@ public class TermOrderOptimization {
      * @return P(A).
      */
     public static <C extends RingElem<C>> 
-       GenPolynomial<C> 
-       permutation( List<Integer> P, GenPolynomialRing<C> R, GenPolynomial<C> A ) {
+        GenPolynomial<C> permutation( List<Integer> P, GenPolynomialRing<C> R, GenPolynomial<C> A ) {
         if ( A == null ) {
            return A;
         }
@@ -346,8 +335,8 @@ public class TermOrderOptimization {
      * @return P(L).
      */
     public static <C extends RingElem<C>> 
-       List<GenPolynomial<C>> 
-       permutation( List<Integer> P, GenPolynomialRing<C> R, List<GenPolynomial<C>> L ) {
+      List<GenPolynomial<C>> 
+      permutation( List<Integer> P, GenPolynomialRing<C> R, List<GenPolynomial<C>> L ) {
         if ( L == null || L.size() == 0 ) {
            return L;
         }
@@ -433,7 +422,9 @@ public class TermOrderOptimization {
         GenPolynomialRing<C> S;
         TermOrder tord = R.tord;
         if ( tord.getEvord2() != 0 ) {
-           throw new IllegalArgumentException("split term orders not permutable");
+            //throw new IllegalArgumentException("split term orders not permutable");
+            logger.warn("split term orders not permutable, resetting to base term order");
+            tord = new TermOrder( tord.getEvord() );
         }
         long[][] weight = tord.getWeight();
         if ( weight != null ) {
@@ -485,8 +476,7 @@ public class TermOrderOptimization {
      * @return optimized polynomial list.
      */
     public static <C extends RingElem<C>> 
-       OptimizedPolynomialList<C>
-       optimizeTermOrder( PolynomialList<C> P ) {
+       OptimizedPolynomialList<C> optimizeTermOrder( PolynomialList<C> P ) {
        if ( P == null ) {
           return null;
        }
