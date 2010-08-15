@@ -267,4 +267,44 @@ public class IteratorsTest extends TestCase {
         //System.out.println("#tuple = " + t + ", #set = " + r);
     }
 
+
+    /**
+     * Test Long iterator.
+     * 
+     */
+    public void testLong() {
+        LongIterable li = new LongIterable();
+        li.setNonNegativeIterator();
+        long s = 0L;
+        long t = 0L;
+        for ( Long i : li ) {
+            //System.out.println("i = " + i);
+            s = i;
+            assertTrue("t == i", t == i );
+            t++;
+            if ( t > 1000L ) { //% 100000000L == 0L ) {
+	        //System.out.println("i = " + i);
+                break;
+ 	    }
+	}
+        //System.out.println("t = " + t);
+        assertTrue("i == 1000", s == 1000L );
+
+        li.setAllIterator();
+        s = 0L;
+        t = 0L;
+        for ( Long i : li ) {
+            //System.out.println("i = " + i);
+            s = i;
+            //assertTrue("t == i", t == i );
+            t++;
+            if ( t >= 1000L ) { //% 100000000L == 0L ) {
+	        //System.out.println("i = " + i);
+                break;
+ 	    }
+	}
+        //System.out.println("t = " + t);
+        assertTrue("i == 500", s == 500L );
+    }
+
 }

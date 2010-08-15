@@ -702,6 +702,7 @@ class BigIntegerIterator implements Iterator<BigInteger> {
 
     /**
      * BigInteger iterator constructor.
+     * @param nn true for an iterator over non-negative longs, false for all elements iterator.
      */
     public BigIntegerIterator(boolean nn) {
         curr = java.math.BigInteger.ZERO;

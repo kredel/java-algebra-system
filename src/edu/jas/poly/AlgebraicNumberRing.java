@@ -490,7 +490,7 @@ public class AlgebraicNumberRing<C extends GcdRingElem<C> >
 
 
     /** Get a AlgebraicNumber iterator.
-     * <b>Note: </b> Only for finite field coefficients. 
+     * <b>Note: </b> Only for finite field coefficients or fields which are iterable. 
      * @return a iterator over all algebraic numbers in this ring.
      */
     public Iterator<AlgebraicNumber<C>> iterator() {
