@@ -986,7 +986,10 @@ public final class BigRational implements GcdRingElem<BigRational>,
     }
 
 
-   private boolean nonNegative = true;
+    private boolean nonNegative = true;
+
+
+    private boolean duplicates = true;
 
 
     /** Set the iteration algorithm to all elements.
@@ -1003,11 +1006,29 @@ public final class BigRational implements GcdRingElem<BigRational>,
     }
 
 
+    /** Set the iteration algorithm to no duplicate elements.
+     */
+    public void setNoDuplicatesIterator() {
+        duplicates = false; 
+    }
+
+
+    /** Set the iteration algorithm to allow duplicate elements.
+     */
+    public void setDuplicatesIterator() {
+        duplicates = true;
+    }
+
+
     /** Get a BigInteger iterator.
      * @return a iterator over all rationals.
      */
     public Iterator<BigRational> iterator() {
-        return new BigRationalIterator(nonNegative);
+        if ( duplicates ) {
+           return new BigRationalIterator(nonNegative);
+        } else {
+           return new BigRationalUniqueIterator( new BigRationalIterator(nonNegative) );
+        }
     }
 
 

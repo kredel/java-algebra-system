@@ -21,6 +21,7 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.PolyUtil;
 
 import edu.jas.util.CartesianProduct;
+import edu.jas.util.CartesianProductInfinite;
 
 
 /**
@@ -509,7 +510,6 @@ class AlgebraicNumberIterator<C extends GcdRingElem<C>> implements Iterator<Alge
     /**
      * data structure.
      */
-    final List<List<C>> comps;
     final Iterator<List<C>> iter;
     final List<GenPolynomial<C>> powers;
     final AlgebraicNumberRing<C> aring;
@@ -524,18 +524,35 @@ class AlgebraicNumberIterator<C extends GcdRingElem<C>> implements Iterator<Alge
      */
     public AlgebraicNumberIterator(AlgebraicNumberRing<C> aring) {
         RingFactory<C> cf = aring.ring.coFac;
-        if ( cf.characteristic().signum() == 0 || !cf.isFinite() ) {
-            throw new IllegalArgumentException("only for finite field coefficients implemented");
-        }
         this.aring = aring;
+        long d = aring.modul.degree(0);
+        //System.out.println("d = " + d);
+        powers = new ArrayList<GenPolynomial<C>>( (int)d );
+        for ( long j = d-1; j >= 0L; j-- ) {
+            powers.add( aring.ring.univariate(0,j) );
+        }
+        //System.out.println("powers = " + powers);
+        if ( cf.characteristic().signum() == 0 || !cf.isFinite() ) {
+            if ( cf instanceof Iterable ) {
+                Iterable<C> cfi = (Iterable<C>)cf;
+                List<Iterable<C>> comps = new ArrayList<Iterable<C>>((int)d);
+                for ( long j = 0L; j < d; j++ ) {
+                     comps.add(cfi);
+                }  
+                CartesianProductInfinite<C> tuples = new CartesianProductInfinite<C>(comps);
+                iter = tuples.iterator();
+                return;
+            } else {
+                throw new IllegalArgumentException("only for finite field coefficients or iterable fields implemented");
+            }
+        }
         BigInteger P = new BigInteger( cf.characteristic() );
         long p = P.getVal().longValue();
-        long d = aring.modul.degree(0);
-        //System.out.println("p = " + p + ", d = " + d);
+        //System.out.println("p = " + p);
         if ( p > 100L || d > 10L ) {
             logger.warn("characteristic " + p + "or degree " + d + " eventually too big");
         }
-        comps = new ArrayList<List<C>>((int)d);
+        List<List<C>> comps = new ArrayList<List<C>>((int)d);
         List<C> elems = new ArrayList<C>((int)p);
         for ( long i = 0L; i < p; i++ ) {
             elems.add( cf.fromInteger(i) );
@@ -546,11 +563,6 @@ class AlgebraicNumberIterator<C extends GcdRingElem<C>> implements Iterator<Alge
         }
         CartesianProduct<C> tuples = new CartesianProduct<C>(comps);
         iter = tuples.iterator();
-        powers = new ArrayList<GenPolynomial<C>>( (int)d );
-        for ( long j = d-1; j >= 0L; j-- ) {
-            powers.add( aring.ring.univariate(0,j) );
-        }
-        //System.out.println("powers = " + powers);
     }
 
 
@@ -575,8 +587,8 @@ class AlgebraicNumberIterator<C extends GcdRingElem<C>> implements Iterator<Alge
         for ( GenPolynomial<C> f : powers ) {
             C c = coeffs.get(i++);
             if ( c.isZERO() ) {
-		continue;
-	    }
+                continue;
+            }
             pol = pol.sum( f.multiply(c) );
         }
         return new AlgebraicNumber<C>(aring,pol);
