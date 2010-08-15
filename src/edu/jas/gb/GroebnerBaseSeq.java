@@ -140,10 +140,7 @@ public class GroebnerBaseSeq<C extends RingElem<C>>
         }
         logger.debug("#sequential list = "+G.size());
         G = minimalGB(G);
-        logger.info("pairlist #put = " + pairlist.putCount() 
-                  + " #rem = " + pairlist.remCount()
-                    // + " #total = " + pairlist.pairCount()
-                   );
+        logger.info("" + pairlist); 
         return G;
     }
 
@@ -354,10 +351,7 @@ public class GroebnerBaseSeq<C extends RingElem<C>>
         G = exgb.G;
         G2F = exgb.G2F;
         logger.debug("#sequential list = " + G.size());
-        logger.info("pairlist #put = " + pairlist.putCount() 
-                  + " #rem = " + pairlist.remCount()
-                    // + " #total = " + pairlist.pairCount()
-                   );
+        logger.info("" + pairlist); 
         // setup matrices F and F2G
         for ( GenPolynomial<C> f : F ) {
             row = new ArrayList<GenPolynomial<C>>( G.size() );

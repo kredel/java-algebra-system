@@ -93,9 +93,11 @@ public class CriticalPairList<C extends RingElem<C> > {
     public String toString() {
         StringBuffer s = new StringBuffer("CriticalPairlist(");
         //s.append("polys="+P.size());
-        s.append("size="+pairlist.size());
-        s.append(", #put="+putCount);
+        s.append("#put="+putCount);
         s.append(", #rem="+remCount);
+        if ( pairlist.size() != 0 ) {
+           s.append(", size="+pairlist.size());
+        }
         s.append(")");
         return s.toString();
     }

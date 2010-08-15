@@ -232,9 +232,7 @@ public class GroebnerBaseDistributed<C extends RingElem<C>> extends GroebnerBase
         theList.terminate();
         logger.info("dls.terminate()");
         dls.terminate();
-        logger.info("pairlist #put = " + pairlist.putCount() + " #rem = " + pairlist.remCount()
-        //+ " #total = " + pairlist.pairCount()
-                );
+        logger.info("" + pairlist); 
         return G;
     }
 

@@ -175,10 +175,7 @@ public class GroebnerBaseParallel<C extends RingElem<C>>
         logger.debug("#parallel list = "+G.size());
         G = minimalGB(G);
         // not in this context // pool.terminate();
-        logger.info("pairlist #put = " + pairlist.putCount() 
-                    + " #rem = " + pairlist.remCount()
-                    //+ " #total = " + pairlist.pairCount()
-                    );
+        logger.info("" + pairlist); 
         return G;
     }
 

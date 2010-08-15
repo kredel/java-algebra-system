@@ -11,6 +11,9 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.BasicConfigurator;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -35,13 +38,12 @@ import edu.jas.poly.PolyUtil;
 
 public class DGroebnerBaseSeqTest extends TestCase {
 
-    //private static final Logger logger = Logger.getLogger(DGroebnerBaseSeqTest.class);
 
 /**
  * main
  */
    public static void main (String[] args) {
-       //BasicConfigurator.configure();
+       BasicConfigurator.configure();
        junit.textui.TestRunner.run( suite() );
    }
 

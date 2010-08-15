@@ -49,12 +49,29 @@ public class OrderedDPairlist<C extends RingElem<C> >
 
 
     /**
+     * toString.
+     */
+    @Override
+    public String toString() {
+        StringBuffer s = new StringBuffer("OrderedDPairlist(");
+        //s.append("polys="+P.size());
+        s.append("#put="+putCount);
+        s.append(", #rem="+remCount);
+        if ( pairlist.size() != 0 ) {
+           s.append(", size="+pairlist.size());
+        }
+        s.append(")");
+        return s.toString();
+    }
+
+
+    /**
      * Remove the next required pair from the pairlist and reduction matrix.
      * Appy the criterions 3 and 4 to see if the S-polynomial is required.
      * @return the next pair if one exists, otherwise null.
      */
     @Override
-     public synchronized Pair<C> removeNext() { 
+    public synchronized Pair<C> removeNext() { 
        if ( oneInGB ) {
           return null;
        }
@@ -116,7 +133,7 @@ public class OrderedDPairlist<C extends RingElem<C> >
      * @return true if the S-polynomial(i,j) is required.
      */
     @Override
-     public boolean criterion3(int i, int j, ExpVector eij) {  
+    public boolean criterion3(int i, int j, ExpVector eij) {  
         // assert i < j;
         boolean s;
         s = red.get( j ).get(i); 
