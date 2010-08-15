@@ -32,6 +32,7 @@ import edu.jas.kern.PrettyPrint;
 import edu.jas.kern.PreemptStatus;
 
 import edu.jas.arith.ModIntegerRing;
+import edu.jas.arith.ModLongRing;
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.TermOrder;
@@ -1062,7 +1063,6 @@ class GenPolynomialIterator<C extends RingElem<C> > implements Iterator<GenPolyn
         for (int i = 0; i < ring.nvar; i++) {
             tlist.add(li);
         }
-        //System.out.println("tlist = " + tlist);
         CartesianProductInfinite<Long> ei = new CartesianProductInfinite<Long>(tlist);
         eviter = ei.iterator();
         RingFactory<C> cf = ring.coFac;
@@ -1070,7 +1070,8 @@ class GenPolynomialIterator<C extends RingElem<C> > implements Iterator<GenPolyn
         if ( cf instanceof Iterable ) {
             Iterable<C> cfi = (Iterable<C>)cf;
             //coeffiter.add( cfi );
-        } else if ( cf.isFinite() ) {
+            throw new IllegalArgumentException("only for finite field coefficients implemented");
+        } else if ( cf.isFinite() && ( ((Object)cf) instanceof ModIntegerRing || ((Object)cf) instanceof ModLongRing ) ) { 
             long p = cf.characteristic().longValue();
             List<C> elems = new ArrayList<C>((int)p);
             for ( long i = 0L; i < p; i++ ) {
@@ -1086,7 +1087,7 @@ class GenPolynomialIterator<C extends RingElem<C> > implements Iterator<GenPolyn
         ExpVector e = ExpVector.create( eviter.next() );
         powers.add(e);
         //System.out.println("new e = " + e);
-        System.out.println("powers = " + powers);
+        //System.out.println("powers = " + powers);
         List<C> c = itercoeff.next();
         //System.out.println("coeffs = " + c);
         current = new GenPolynomial<C>(ring,c.get(0),e);
@@ -1110,12 +1111,17 @@ class GenPolynomialIterator<C extends RingElem<C> > implements Iterator<GenPolyn
         GenPolynomial<C> res = current;
         if ( ! itercoeff.hasNext() ) {
             ExpVector e = ExpVector.create( eviter.next() );
-            powers.add(0,e);
+            powers.add(0,e); // add new ev at beginning
             //System.out.println("new e = " + e);
-            System.out.println("powers = " + powers);
-            coeffiter.add( new ArrayList<C>(coeffiter.get(coeffiter.size()-1)));
-            if ( coeffiter.size() == 2 ) {
-                coeffiter.get(0).remove(0);
+            //System.out.println("powers = " + powers);
+            if ( coeffiter.size() == 1 ) {
+                //coeffiter.add( new ArrayList<C>(coeffiter.get(coeffiter.size()-1)));
+                coeffiter.add( new ArrayList<C>(coeffiter.get(0)));
+                coeffiter.get(0).remove(0); // shorten first list
+            } else {
+                //coeffiter.add( new ArrayList<C>(coeffiter.get(coeffiter.size()-1)));
+                //coeffiter.add( coeffiter.get(coeffiter.size()-1) );
+                coeffiter.add( coeffiter.get(1) );
             }
             CartesianProduct<C> tuples = new CartesianProduct<C>(coeffiter);
             itercoeff = tuples.iterator();
