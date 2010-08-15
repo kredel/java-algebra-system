@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.TreeSet;
 import java.util.Iterator;
 
 import junit.framework.Test;
@@ -16,6 +17,8 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import edu.jas.arith.BigInteger;
+import edu.jas.poly.ExpVector;
+import edu.jas.poly.TermOrder;
 
 
 /**
@@ -305,6 +308,43 @@ public class IteratorsTest extends TestCase {
 	}
         //System.out.println("t = " + t);
         assertTrue("i == 500", s == 500L );
+    }
+
+
+    /**
+     * Test ExpVector iterator.
+     * 
+     */
+    public void testExpVector() {
+        int n = 5;
+        LongIterable li = new LongIterable();
+        li.setNonNegativeIterator();
+
+        List<Iterable<Long>> tlist = new ArrayList<Iterable<Long>>(n);
+        for (int i = 0; i < n; i++) {
+            tlist.add(li);
+        }
+        //System.out.println("tlist = " + tlist);
+
+        Set<ExpVector> set = new TreeSet<ExpVector>( (new TermOrder()).getDescendComparator() );
+
+        Iterable<List<Long>> ib = new CartesianProductInfinite<Long>(tlist);
+
+        long t = 0L;
+        for ( List<Long> i : ib ) {
+            //System.out.println("i = " + i);
+            ExpVector e = ExpVector.create(i);
+            //System.out.println("e = " + e);
+            assertFalse("e in set", set.contains(e) );
+            set.add(e);
+            t++;
+            if ( t > 100L ) { 
+	        //System.out.println("i = " + i);
+                break;
+ 	    }
+	}
+        //System.out.println("set = " + set);
+        assertTrue("#set", set.size() == t );
     }
 
 }

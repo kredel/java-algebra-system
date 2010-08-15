@@ -7,6 +7,7 @@ package edu.jas.poly;
 import java.util.Random;
 import java.util.Vector;
 //import java.io.Serializable;
+import java.util.Collection;
 
 import edu.jas.structure.AbelianGroupElem;
 import edu.jas.structure.AbelianGroupFactory;
@@ -132,6 +133,21 @@ public abstract class ExpVector implements AbelianGroupElem<ExpVector>
         case BYTE:  return new ExpVectorByte(s);
         default:    return new ExpVectorInteger(s);
         }
+    }
+
+
+    /**
+     * Factory constructor for ExpVector.
+     * Sets val.
+     * @param v collection of exponents.
+     */
+    public static ExpVector create(Collection<Long> v) {
+        long[] w = new long[ v.size() ];
+        int i = 0;
+        for ( Long k : v ) {
+            w[i++] = k;
+        }
+        return create(w);
     }
 
 
