@@ -87,6 +87,21 @@ public class CriticalPairList<C extends RingElem<C> > {
 
 
     /**
+     * toString.
+     */
+    @Override
+    public String toString() {
+        StringBuffer s = new StringBuffer("CriticalPairlist(");
+        //s.append("polys="+P.size());
+        s.append("size="+pairlist.size());
+        s.append(", #put="+putCount);
+        s.append(", #rem="+remCount);
+        s.append(")");
+        return s.toString();
+    }
+
+
+    /**
      * Put a polynomial to the pairlist and reduction matrix.
      * @param p polynomial.
      * @return the index of the added polynomial.

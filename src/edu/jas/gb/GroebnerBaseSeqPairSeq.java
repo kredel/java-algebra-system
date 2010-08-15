@@ -136,10 +136,7 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>>
         }
         logger.debug("#sequential list = "+G.size());
         G = minimalGB(G);
-        logger.info("pairlist #put = " + pairlist.putCount() 
-                  + " #rem = " + pairlist.remCount()
-                    // + " #total = " + pairlist.pairCount()
-                   );
+        logger.info("" + pairlist); 
         return G;
     }
 

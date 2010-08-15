@@ -274,10 +274,7 @@ public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>>
         theList.terminate();
         logger.info("dls.terminate()");
         dls.terminate();
-        logger.info("pairlist #put = " + pairlist.putCount() 
-                  + " #rem = " + pairlist.remCount()
-                    //+ " #total = " + pairlist.pairCount()
-                   );
+        logger.info("" + pairlist); 
         return G;
     }
 
