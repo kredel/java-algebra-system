@@ -17,7 +17,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.HashSet;
+import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 
@@ -35,6 +38,9 @@ import edu.jas.poly.TermOrder;
 import edu.jas.poly.ExpVector;
 
 import edu.jas.application.QuotientRing;
+import edu.jas.util.CartesianProductInfinite;
+import edu.jas.util.CartesianProduct;
+import edu.jas.util.LongIterable;
 
 
 /**
@@ -46,7 +52,7 @@ import edu.jas.application.QuotientRing;
  */
 
 public class GenPolynomialRing<C extends RingElem<C> > 
-             implements RingFactory< GenPolynomial<C> >, Cloneable {
+             implements RingFactory< GenPolynomial<C> >, Cloneable, Iterable<GenPolynomial<C>> {
 
 
     /** The factory for the coefficients. 
@@ -1011,4 +1017,133 @@ public class GenPolynomialRing<C extends RingElem<C> >
         }
     }
 
+
+    /** Get a GenPolynomial iterator.
+     * @return a iterator over all polynomials.
+     */
+    public Iterator<GenPolynomial<C>> iterator() {
+        return new GenPolynomialIterator<C>(this);
+    }
+
+}
+
+
+/**
+ * Polynomial iterator.
+ * @author Heinz Kredel
+ */
+class GenPolynomialIterator<C extends RingElem<C> > implements Iterator<GenPolynomial<C>> {
+
+
+    /**
+     * data structure.
+     */
+    final GenPolynomialRing<C> ring;
+
+    final Iterator<List<Long>> eviter;
+
+    final List<ExpVector> powers;
+
+    final List<List<C>> coeffiter;
+
+    Iterator<List<C>> itercoeff;
+
+    GenPolynomial<C> current;
+
+
+    /**
+     * Polynomial iterator constructor.
+     */
+    public GenPolynomialIterator(GenPolynomialRing<C> fac) {
+        ring = fac;
+        LongIterable li = new LongIterable();
+        li.setNonNegativeIterator();
+        List<Iterable<Long>> tlist = new ArrayList<Iterable<Long>>(ring.nvar);
+        for (int i = 0; i < ring.nvar; i++) {
+            tlist.add(li);
+        }
+        //System.out.println("tlist = " + tlist);
+        CartesianProductInfinite<Long> ei = new CartesianProductInfinite<Long>(tlist);
+        eviter = ei.iterator();
+        RingFactory<C> cf = ring.coFac;
+        coeffiter = new ArrayList<List<C>>();
+        if ( cf instanceof Iterable ) {
+            Iterable<C> cfi = (Iterable<C>)cf;
+            //coeffiter.add( cfi );
+        } else if ( cf.isFinite() ) {
+            long p = cf.characteristic().longValue();
+            List<C> elems = new ArrayList<C>((int)p);
+            for ( long i = 0L; i < p; i++ ) {
+                elems.add( cf.fromInteger(i) );
+            }
+            coeffiter.add( elems );
+        } else {
+            throw new IllegalArgumentException("only for finite field coefficients or iterable fields implemented");
+        }
+        CartesianProduct<C> tuples = new CartesianProduct<C>(coeffiter);
+        itercoeff = tuples.iterator();
+        powers = new ArrayList<ExpVector>();
+        ExpVector e = ExpVector.create( eviter.next() );
+        powers.add(e);
+        //System.out.println("new e = " + e);
+        System.out.println("powers = " + powers);
+        List<C> c = itercoeff.next();
+        //System.out.println("coeffs = " + c);
+        current = new GenPolynomial<C>(ring,c.get(0),e);
+    }
+
+
+    /**
+     * Test for availability of a next element.
+     * @return true if the iteration has more elements, else false.
+     */
+    public boolean hasNext() {
+        return true; 
+    }
+
+
+    /**
+     * Get next polynomial.
+     * @return next polynomial.
+     */
+    public GenPolynomial<C> next() {
+        GenPolynomial<C> res = current;
+        if ( ! itercoeff.hasNext() ) {
+            ExpVector e = ExpVector.create( eviter.next() );
+            powers.add(0,e);
+            //System.out.println("new e = " + e);
+            System.out.println("powers = " + powers);
+            coeffiter.add( new ArrayList<C>(coeffiter.get(coeffiter.size()-1)));
+            if ( coeffiter.size() == 2 ) {
+                coeffiter.get(0).remove(0);
+            }
+            CartesianProduct<C> tuples = new CartesianProduct<C>(coeffiter);
+            itercoeff = tuples.iterator();
+        }
+        List<C> coeffs = itercoeff.next();
+        //System.out.println("coeffs = " + coeffs);
+        GenPolynomial<C> pol = ring.getZERO().clone();
+        int i = 0;
+        for ( ExpVector f : powers ) {
+            C c = coeffs.get(i++);
+            if ( c.isZERO() ) {
+                continue;
+            }
+            if ( pol.getMap().get(f) != null ) {
+                System.out.println("error f in pol = " + f + ", " + pol.getMap().get(f));
+                throw new RuntimeException("wrong iterator");
+            }
+            pol.doPutToMap( f, c );
+        }
+        current = pol;
+        return res;
+    }
+
+
+    /**
+     * Remove an element if allowed.
+     */
+    public void remove() {
+        throw new UnsupportedOperationException("cannnot remove elements");
+    }
 }

@@ -13,6 +13,7 @@ import java.util.Collections;
 
 /**
  * Cartesian product of infinite components with iterator.
+ * Works also for finite iterables.
  * @author Heinz Kredel
  */
 public class CartesianProductInfinite<E> implements Iterable<List<E>> {
@@ -206,8 +207,13 @@ class CartesianTwoProductInfiniteIterator<E> implements Iterator<List<E>> {
         } else {
             Collections.reverse(fincomps1);
         }
-        fincomps0.add( compit0.next() );
-        fincomps1.add( compit1.next() );
+        if ( compit0.hasNext() && compit1.hasNext() ) {
+            fincomps0.add( compit0.next() );
+            fincomps1.add( compit1.next() );
+	} else { 
+            empty = true;
+            return res;
+	}
         if ( level % 2 == 0 ) {
             Collections.reverse(fincomps0);
         } else {
@@ -330,8 +336,13 @@ class CartesianTwoProductInfiniteIteratorList<E> implements Iterator<List<E>> {
         } else {
             Collections.reverse(fincomps1);
         }
-        fincomps0.add( compit0.next() );
-        fincomps1.add( compit1.next() );
+        if ( compit0.hasNext() && compit1.hasNext() ) {
+            fincomps0.add( compit0.next() );
+            fincomps1.add( compit1.next() );
+	} else { 
+            empty = true;
+            return res;
+	}
         if ( level % 2 == 0 ) {
             Collections.reverse(fincomps0);
         } else {

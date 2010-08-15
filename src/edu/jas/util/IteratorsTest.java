@@ -17,8 +17,12 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import edu.jas.arith.BigInteger;
+import edu.jas.arith.ModInteger;
+import edu.jas.arith.ModIntegerRing;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.TermOrder;
+import edu.jas.poly.GenPolynomialRing;
+import edu.jas.poly.GenPolynomial;
 
 
 /**
@@ -339,6 +343,37 @@ public class IteratorsTest extends TestCase {
             set.add(e);
             t++;
             if ( t > 100L ) { 
+	        //System.out.println("i = " + i);
+                break;
+ 	    }
+	}
+        //System.out.println("set = " + set);
+        assertTrue("#set", set.size() == t );
+    }
+
+
+    /**
+     * Test GenPolynomial iterator.
+     * 
+     */
+    public void testGenPolynomial() {
+        ModIntegerRing mi = new ModIntegerRing(5,true);
+        int n = 3;
+        GenPolynomialRing<ModInteger> ring = new GenPolynomialRing<ModInteger>(mi,n);
+
+        Set<GenPolynomial<ModInteger>> set = new TreeSet<GenPolynomial<ModInteger>>();
+
+        long t = 0;
+        for ( GenPolynomial<ModInteger> p : ring ) {
+            //System.out.println("p = " + p);
+            if ( set.contains(p) ) {
+                System.out.println("p = " + p);
+                System.out.println("set = " + set);
+                assertFalse("p in set ", true );
+	    }
+            set.add(p);
+	    t++;
+            if ( t > 650L ) { 
 	        //System.out.println("i = " + i);
                 break;
  	    }
