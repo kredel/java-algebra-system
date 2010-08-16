@@ -414,7 +414,7 @@ class ModIntegerIterator implements Iterator<ModInteger> {
      * Test for availability of a next element.
      * @return true if the iteration has more elements, else false.
      */
-    public boolean hasNext() {
+    public synchronized boolean hasNext() {
         return curr.compareTo(ring.modul) < 0; 
     }
 
@@ -423,7 +423,7 @@ class ModIntegerIterator implements Iterator<ModInteger> {
      * Get next integer.
      * @return next integer.
      */
-    public ModInteger next() {
+    public synchronized ModInteger next() {
         ModInteger i = new ModInteger(ring,curr);
         curr = curr.add( java.math.BigInteger.ONE );
         return i;

@@ -723,7 +723,7 @@ class BigIntegerIterator implements Iterator<BigInteger> {
      * Get next integer.
      * @return next integer.
      */
-    public BigInteger next() {
+    public synchronized BigInteger next() {
         BigInteger i = new BigInteger(curr);
         if ( nonNegative ) {
             curr = curr.add( java.math.BigInteger.ONE );

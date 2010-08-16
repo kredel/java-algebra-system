@@ -1107,7 +1107,7 @@ class GenPolynomialIterator<C extends RingElem<C> > implements Iterator<GenPolyn
      * Get next polynomial.
      * @return next polynomial.
      */
-    public GenPolynomial<C> next() {
+    public synchronized GenPolynomial<C> next() {
         GenPolynomial<C> res = current;
         if ( ! itercoeff.hasNext() ) {
             ExpVector e = ExpVector.create( eviter.next() );

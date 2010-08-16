@@ -479,7 +479,7 @@ class ModLongIterator implements Iterator<ModLong> {
      * Test for availability of a next element.
      * @return true if the iteration has more elements, else false.
      */
-    public boolean hasNext() {
+    public synchronized boolean hasNext() {
         return curr < ring.modul; 
     }
 
@@ -488,7 +488,7 @@ class ModLongIterator implements Iterator<ModLong> {
      * Get next integer.
      * @return next integer.
      */
-    public ModLong next() {
+    public synchronized ModLong next() {
         ModLong i = new ModLong(ring,curr);
         curr++;
         return i;

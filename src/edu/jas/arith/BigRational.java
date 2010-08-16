@@ -1115,7 +1115,7 @@ class BigRationalIterator implements Iterator<BigRational> {
         numit = num.iterator();
         denlist = new ArrayList<edu.jas.arith.BigInteger>();
         numlist = new ArrayList<edu.jas.arith.BigInteger>();
-        edu.jas.arith.BigInteger unused = denit.next();
+        edu.jas.arith.BigInteger unused = denit.next(); // skip zero denominator
         unused = numit.next();
         denlist.add( denit.next() );
         numlist.add( numit.next() );
@@ -1137,7 +1137,7 @@ class BigRationalIterator implements Iterator<BigRational> {
      * Get next rational.
      * @return next rational.
      */
-    public BigRational next() {
+    public synchronized BigRational next() {
         BigRational r = curr;
         if ( denlistit.hasNext() && numlistit.hasNext() ) {
            BigInteger d = denlistit.next().val;
@@ -1220,7 +1220,7 @@ class BigRationalUniqueIterator implements Iterator<BigRational> {
      * Test for availability of a next element.
      * @return true if the iteration has more elements, else false.
      */
-    public boolean hasNext() {
+    public synchronized boolean hasNext() {
         return ratit.hasNext(); 
     }
 
@@ -1229,7 +1229,7 @@ class BigRationalUniqueIterator implements Iterator<BigRational> {
      * Get next rational.
      * @return next rational.
      */
-    public BigRational next() {
+    public synchronized BigRational next() {
         BigRational r = ratit.next();
         while ( unique.contains(r) ) {
             //System.out.println("duplicate " + r);
