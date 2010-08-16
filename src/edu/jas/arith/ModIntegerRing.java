@@ -8,6 +8,7 @@ import java.util.Random;
 import java.io.Reader;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 //import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
@@ -23,7 +24,7 @@ import edu.jas.util.StringUtil;
  * @author Heinz Kredel
  */
 
-public final class ModIntegerRing implements ModularRingFactory<ModInteger> {
+public final class ModIntegerRing implements ModularRingFactory<ModInteger>, Iterable<ModInteger> {
 
 
     /** Module part of the factory data structure. 
@@ -372,4 +373,67 @@ public final class ModIntegerRing implements ModularRingFactory<ModInteger> {
         return fromInteger( s );
     }
 
+
+    /** Get a ModInteger iterator.
+     * @return a iterator over all modular integers in this ring.
+     */
+    public Iterator<ModInteger> iterator() {
+        return new ModIntegerIterator(this);
+    }
+
+}
+
+
+/**
+ * Modular integer iterator.
+ * @author Heinz Kredel
+ */
+class ModIntegerIterator implements Iterator<ModInteger> {
+
+
+    /**
+     * data structure.
+     */
+    java.math.BigInteger curr;
+
+
+    final ModIntegerRing ring;
+
+
+    /**
+     * ModInteger iterator constructor.
+     * @param fac modular integer factory;
+     */
+    public ModIntegerIterator(ModIntegerRing fac) {
+        curr = java.math.BigInteger.ZERO;
+        ring = fac;
+    }
+
+
+    /**
+     * Test for availability of a next element.
+     * @return true if the iteration has more elements, else false.
+     */
+    public boolean hasNext() {
+        return curr.compareTo(ring.modul) < 0; 
+    }
+
+
+    /**
+     * Get next integer.
+     * @return next integer.
+     */
+    public ModInteger next() {
+        ModInteger i = new ModInteger(ring,curr);
+        curr = curr.add( java.math.BigInteger.ONE );
+        return i;
+    }
+
+
+    /**
+     * Remove an element if allowed.
+     */
+    public void remove() {
+        throw new UnsupportedOperationException("cannnot remove elements");
+    }
 }

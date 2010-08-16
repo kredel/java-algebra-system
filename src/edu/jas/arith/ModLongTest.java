@@ -359,4 +359,20 @@ public class ModLongTest extends TestCase {
         assertEquals("C == D ", C, D);
     }
 
+
+    /**
+     * Test iterator.
+     */
+    public void testIterator() {
+        int m = 5*2;
+        zm = new ModLongRing(m);
+        ModLong j = null;
+        for ( ModLong i : zm ) {
+            //System.out.println("i = " + i);
+            j = i;
+        }
+        ModLong end = new ModLong(zm,m-1);
+        assertTrue("j == m-1 ", j.equals(end) );
+    }
+
 }
