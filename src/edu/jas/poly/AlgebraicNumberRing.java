@@ -511,8 +511,13 @@ class AlgebraicNumberIterator<C extends GcdRingElem<C>> implements Iterator<Alge
      * data structure.
      */
     final Iterator<List<C>> iter;
+
+
     final List<GenPolynomial<C>> powers;
+
+
     final AlgebraicNumberRing<C> aring;
+
 
     private static final Logger logger = Logger.getLogger(AlgebraicNumberIterator.class);
     //  private final boolean debug = logger.isDebugEnabled();
@@ -532,37 +537,21 @@ class AlgebraicNumberIterator<C extends GcdRingElem<C>> implements Iterator<Alge
             powers.add( aring.ring.univariate(0,j) );
         }
         //System.out.println("powers = " + powers);
-        if ( cf.characteristic().signum() == 0 || !cf.isFinite() ) {
-            if ( cf instanceof Iterable ) {
-                Iterable<C> cfi = (Iterable<C>)cf;
-                List<Iterable<C>> comps = new ArrayList<Iterable<C>>((int)d);
-                for ( long j = 0L; j < d; j++ ) {
-                     comps.add(cfi);
-                }  
-                CartesianProductInfinite<C> tuples = new CartesianProductInfinite<C>(comps);
-                iter = tuples.iterator();
-                return;
-            } else {
-                throw new IllegalArgumentException("only for finite field coefficients or iterable fields implemented");
-            }
+        if ( ! (cf instanceof Iterable) ) {
+            throw new IllegalArgumentException("only for iterable coefficients implemented");
         }
-        BigInteger P = new BigInteger( cf.characteristic() );
-        long p = P.getVal().longValue();
-        //System.out.println("p = " + p);
-        if ( p > 100L || d > 10L ) {
-            logger.warn("characteristic " + p + "or degree " + d + " eventually too big");
-        }
-        List<List<C>> comps = new ArrayList<List<C>>((int)d);
-        List<C> elems = new ArrayList<C>((int)p);
-        for ( long i = 0L; i < p; i++ ) {
-            elems.add( cf.fromInteger(i) );
-        }
-        //System.out.println("elems = " + elems);
+        List<Iterable<C>> comps = new ArrayList<Iterable<C>>((int)d);
+        Iterable<C> cfi = (Iterable<C>)cf;
         for ( long j = 0L; j < d; j++ ) {
-            comps.add(elems);
+            comps.add(cfi);
+        }  
+        if ( cf.isFinite() ) {
+            CartesianProduct<C> tuples = new CartesianProduct<C>(comps);
+            iter = tuples.iterator();
+        } else {
+            CartesianProductInfinite<C> tuples = new CartesianProductInfinite<C>(comps);
+            iter = tuples.iterator();
         }
-        CartesianProduct<C> tuples = new CartesianProduct<C>(comps);
-        iter = tuples.iterator();
     }
 
 

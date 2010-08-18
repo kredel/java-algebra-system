@@ -1045,7 +1045,7 @@ class GenPolynomialIterator<C extends RingElem<C> > implements Iterator<GenPolyn
 
     final List<ExpVector> powers;
 
-    final List<List<C>> coeffiter;
+    final List<Iterable<C>> coeffiter;
 
     Iterator<List<C>> itercoeff;
 
@@ -1066,20 +1066,12 @@ class GenPolynomialIterator<C extends RingElem<C> > implements Iterator<GenPolyn
         CartesianProductInfinite<Long> ei = new CartesianProductInfinite<Long>(tlist);
         eviter = ei.iterator();
         RingFactory<C> cf = ring.coFac;
-        coeffiter = new ArrayList<List<C>>();
-        if ( cf instanceof Iterable ) {
+        coeffiter = new ArrayList<Iterable<C>>();
+        if ( cf instanceof Iterable && cf.isFinite() ) {
             Iterable<C> cfi = (Iterable<C>)cf;
-            //coeffiter.add( cfi );
-            throw new IllegalArgumentException("only for finite field coefficients implemented");
-        } else if ( cf.isFinite() && ( ((Object)cf) instanceof ModIntegerRing || ((Object)cf) instanceof ModLongRing ) ) { 
-            long p = cf.characteristic().longValue();
-            List<C> elems = new ArrayList<C>((int)p);
-            for ( long i = 0L; i < p; i++ ) {
-                elems.add( cf.fromInteger(i) );
-            }
-            coeffiter.add( elems );
+            coeffiter.add( cfi );
         } else {
-            throw new IllegalArgumentException("only for finite field coefficients or iterable fields implemented");
+            throw new IllegalArgumentException("only for finite iterable coefficients implemented");
         }
         CartesianProduct<C> tuples = new CartesianProduct<C>(coeffiter);
         itercoeff = tuples.iterator();
@@ -1114,19 +1106,14 @@ class GenPolynomialIterator<C extends RingElem<C> > implements Iterator<GenPolyn
             powers.add(0,e); // add new ev at beginning
             //System.out.println("new e = " + e);
             //System.out.println("powers = " + powers);
-            if ( coeffiter.size() == 1 ) {
-                //coeffiter.add( new ArrayList<C>(coeffiter.get(coeffiter.size()-1)));
-                coeffiter.add( new ArrayList<C>(coeffiter.get(0)));
-                coeffiter.get(0).remove(0); // shorten first list
-            } else {
-                //coeffiter.add( new ArrayList<C>(coeffiter.get(coeffiter.size()-1)));
-                //coeffiter.add( coeffiter.get(coeffiter.size()-1) );
-                coeffiter.add( coeffiter.get(1) );
-            }
+            coeffiter.add( coeffiter.get(0) ); // try to shorten frist iterator by one element
             CartesianProduct<C> tuples = new CartesianProduct<C>(coeffiter);
             itercoeff = tuples.iterator();
         }
         List<C> coeffs = itercoeff.next();
+	while ( coeffs.get(0).isZERO() ) {
+	    coeffs = itercoeff.next(); // skip tuples with zero in first component
+	}
         //System.out.println("coeffs = " + coeffs);
         GenPolynomial<C> pol = ring.getZERO().clone();
         int i = 0;
