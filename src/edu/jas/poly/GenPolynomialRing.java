@@ -1106,14 +1106,26 @@ class GenPolynomialIterator<C extends RingElem<C> > implements Iterator<GenPolyn
             powers.add(0,e); // add new ev at beginning
             //System.out.println("new e = " + e);
             //System.out.println("powers = " + powers);
-            coeffiter.add( coeffiter.get(0) ); // try to shorten frist iterator by one element
+            if ( coeffiter.size() == 1 ) { // shorten frist iterator by one element
+                coeffiter.add( coeffiter.get(0) ); 
+                Iterable<C> it = coeffiter.get(0);
+                List<C> elms = new ArrayList<C>();
+                for ( C elm : it ) { // must be finite here
+                    elms.add(elm);
+                }
+                elms.remove(0);
+                coeffiter.set(0,elms);
+            } else {
+                coeffiter.add( coeffiter.get(1) ); 
+            }
             CartesianProduct<C> tuples = new CartesianProduct<C>(coeffiter);
             itercoeff = tuples.iterator();
         }
         List<C> coeffs = itercoeff.next();
-	while ( coeffs.get(0).isZERO() ) {
-	    coeffs = itercoeff.next(); // skip tuples with zero in first component
-	}
+//      while ( coeffs.get(0).isZERO() ) {
+//             System.out.println(" skip zero ");
+//          coeffs = itercoeff.next(); // skip tuples with zero in first component
+//      }
         //System.out.println("coeffs = " + coeffs);
         GenPolynomial<C> pol = ring.getZERO().clone();
         int i = 0;
