@@ -147,7 +147,11 @@ public final class BigRational implements GcdRingElem<BigRational>,
                 den = BigInteger.ONE;
                 return;
             } else {
-                n = new BigInteger( s.substring(0,i) );
+                if ( s.charAt(0) == '-' ) { // case -0.11111
+                    n = new BigInteger( s.substring(1,i) );
+                } else {
+                    n = new BigInteger( s.substring(0,i) );
+                }
                 BigRational r = new BigRational(n);
                 d = new BigInteger( s.substring( i+1, s.length() ) );
                 int j = s.length() - i - 1;
@@ -159,7 +163,11 @@ public final class BigRational implements GcdRingElem<BigRational>,
                 BigRational f = new BigRational(d);
                 f = f.multiply(z);
                 r = r.sum(f);
-                num = r.num;
+                if ( s.charAt(0) == '-' ) {
+                    num = r.num.negate();
+                } else {
+                    num = r.num;
+                }
                 den = r.den;
             }
         } else {

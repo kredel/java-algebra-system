@@ -118,6 +118,12 @@ public class BigRationalTest extends TestCase {
         a = new BigRational( s );
         t = a.toString(9);
         assertEquals("decimalConstr = b " + t,s,t);
+
+        s = "-0.000033333";
+        a = new BigRational( s );
+        t = a.toString(9);
+        assertEquals("decimalConstr = b " + t,s,t);
+        //System.out.println("a = " + a);
     }
 
 
