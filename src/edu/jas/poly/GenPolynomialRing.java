@@ -380,7 +380,7 @@ public class GenPolynomialRing<C extends RingElem<C> >
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
-    @SuppressWarnings("unchecked") // not jet working
+    @SuppressWarnings("unchecked") 
     public boolean equals( Object other ) { 
         if ( ! (other instanceof GenPolynomialRing) ) {
             return false;
@@ -1023,7 +1023,13 @@ public class GenPolynomialRing<C extends RingElem<C> >
      * @return a iterator over all polynomials.
      */
     public Iterator<GenPolynomial<C>> iterator() {
-        return new GenPolynomialIterator<C>(this);
+        if ( coFac.isFinite() ) {
+            return new GenPolynomialIterator<C>(this);
+        } else {
+            logger.warn("ring of coefficients " + coFac + " is infinite, constructing iterator only over monomials");
+            return new GenPolynomialMonomialIterator<C>(this);
+            //throw new IllegalArgumentException("only for finite iterable coefficients implemented");
+        }
     }
 
 }
@@ -1110,7 +1116,7 @@ class GenPolynomialIterator<C extends RingElem<C> > implements Iterator<GenPolyn
                 coeffiter.add( coeffiter.get(0) ); 
                 Iterable<C> it = coeffiter.get(0);
                 List<C> elms = new ArrayList<C>();
-                for ( C elm : it ) { // must be finite here
+                for ( C elm : it ) { 
                     elms.add(elm);
                 }
                 elms.remove(0);
@@ -1141,6 +1147,105 @@ class GenPolynomialIterator<C extends RingElem<C> > implements Iterator<GenPolyn
             pol.doPutToMap( f, c );
         }
         current = pol;
+        return res;
+    }
+
+
+    /**
+     * Remove an element if allowed.
+     */
+    public void remove() {
+        throw new UnsupportedOperationException("cannnot remove elements");
+    }
+}
+
+
+/**
+ * Polynomial monomial iterator.
+ * @author Heinz Kredel
+ */
+class GenPolynomialMonomialIterator<C extends RingElem<C> > implements Iterator<GenPolynomial<C>> {
+
+
+    /**
+     * data structure.
+     */
+    final GenPolynomialRing<C> ring;
+
+    final Iterator<List> iter;
+
+    GenPolynomial<C> current;
+
+
+    /**
+     * Polynomial iterator constructor.
+     */
+    @SuppressWarnings("unchecked") 
+    public GenPolynomialMonomialIterator(GenPolynomialRing<C> fac) {
+        ring = fac;
+        LongIterable li = new LongIterable();
+        li.setNonNegativeIterator();
+        List<Iterable<Long>> tlist = new ArrayList<Iterable<Long>>(ring.nvar);
+        for (int i = 0; i < ring.nvar; i++) {
+            tlist.add(li);
+        }
+        CartesianProductInfinite<Long> ei = new CartesianProductInfinite<Long>(tlist);
+        Iterator<List<Long>> eviter = ei.iterator();
+
+        RingFactory<C> cf = ring.coFac;
+	Iterable<C> coeffiter;
+        if ( cf instanceof Iterable && !cf.isFinite() ) {
+            Iterable<C> cfi = (Iterable<C>)cf;
+            coeffiter = cfi;
+        } else {
+            throw new IllegalArgumentException("only for infinite iterable coefficients implemented");
+        }
+
+        // Cantor iterator for exponents and coeffcients
+        List<Iterable> eci = new ArrayList<Iterable>(2); // no type parameter
+        eci.add(ei);
+        eci.add(coeffiter);
+        CartesianProductInfinite ecp = new CartesianProductInfinite(eci);
+        iter = ecp.iterator();
+
+        List ec = iter.next();
+        List<Long> ecl = (List<Long>)ec.get(0);
+        C c = (C)ec.get(1); // zero
+	ExpVector e = ExpVector.create(ecl);
+        //System.out.println("exp    = " + e);
+        //System.out.println("coeffs = " + c);
+        current = new GenPolynomial<C>(ring,c,e);
+    }
+
+
+    /**
+     * Test for availability of a next element.
+     * @return true if the iteration has more elements, else false.
+     */
+    public boolean hasNext() {
+        return true; 
+    }
+
+
+    /**
+     * Get next polynomial.
+     * @return next polynomial.
+     */
+    public synchronized GenPolynomial<C> next() {
+        GenPolynomial<C> res = current;
+
+        List ec = iter.next();
+        C c = (C)ec.get(1);
+        while ( c.isZERO() ) { // zero already done in first next
+	    ec = iter.next();
+            c = (C)ec.get(1);
+	}
+        List<Long> ecl = (List<Long>)ec.get(0);
+	ExpVector e = ExpVector.create(ecl);
+        //System.out.println("exp    = " + e);
+        //System.out.println("coeffs = " + c);
+        current = new GenPolynomial<C>(ring,c,e);
+
         return res;
     }
 

@@ -81,7 +81,7 @@ public class IteratorsTest extends TestCase {
             s *= s2;
         }
         //System.out.println("s = " + s);
-        List<List<BigInteger>> tlist = new ArrayList<List<BigInteger>>(s1);
+        List<Iterable<BigInteger>> tlist = new ArrayList<Iterable<BigInteger>>(s1);
         for (int i = 0; i < s1; i++) {
             List<BigInteger> list = new ArrayList<BigInteger>(s2);
             for (int j = 0; j < s2; j++) {
@@ -177,7 +177,7 @@ public class IteratorsTest extends TestCase {
             s *= s2;
         }
         //System.out.println("s = " + s);
-        List<List<BigInteger>> ftlist = new ArrayList<List<BigInteger>>(s1);
+        List<Iterable<BigInteger>> ftlist = new ArrayList<Iterable<BigInteger>>(s1);
         for (int i = 0; i < s1; i++) {
             List<BigInteger> list = new ArrayList<BigInteger>(s2);
             for (int j = 0; j < s2; j++) {
@@ -237,7 +237,7 @@ public class IteratorsTest extends TestCase {
             s *= s2;
         }
         //System.out.println("s = " + s);
-        List<List<BigInteger>> ftlist = new ArrayList<List<BigInteger>>(s1);
+        List<Iterable<BigInteger>> ftlist = new ArrayList<Iterable<BigInteger>>(s1);
         for (int i = 0; i < s1; i++) {
             List<BigInteger> list = new ArrayList<BigInteger>(s2);
             for (int j = 0; j < s2; j++) {
@@ -369,6 +369,37 @@ public class IteratorsTest extends TestCase {
             if ( set.contains(p) ) {
                 System.out.println("p = " + p);
                 System.out.println("set = " + set);
+                assertFalse("p in set ", true );
+	    }
+            set.add(p);
+	    t++;
+            if ( t > 650L ) { 
+	        //System.out.println("i = " + i);
+                break;
+ 	    }
+	}
+        //System.out.println("set = " + set);
+        assertTrue("#set", set.size() == t );
+    }
+
+
+    /**
+     * Test GenPolynomial monomial iterator.
+     * 
+     */
+    public void testGenPolynomialMonomial() {
+        BigInteger bi = new BigInteger(1);
+        int n = 3;
+        GenPolynomialRing<BigInteger> ring = new GenPolynomialRing<BigInteger>(bi,n);
+
+        Set<GenPolynomial<BigInteger>> set = new TreeSet<GenPolynomial<BigInteger>>();
+
+        long t = 0;
+        for ( GenPolynomial<BigInteger> p : ring ) {
+            //System.out.println("p = " + p);
+            if ( set.contains(p) ) {
+                System.out.println("p = " + p);
+                //System.out.println("set = " + set);
                 assertFalse("p in set ", true );
 	    }
             set.add(p);
