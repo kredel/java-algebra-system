@@ -47,6 +47,7 @@ public class SocketChannelTest extends TestCase {
        host = "localhost";
        port = 4711;
        cf = new ChannelFactory(port);       
+       cf.init();
        try {
         sc1 = cf.getChannel(host,port);
         sc2 = cf.getChannel();

@@ -75,6 +75,7 @@ public class DistHashTableServer<K> extends Thread {
      */
     public DistHashTableServer(ChannelFactory cf) {
         this.cf = cf;
+        cf.init();
         servers = new ArrayList<DHTBroadcaster<K>>();
         theList = new TreeMap<K, DHTTransport>();
         etime = DHTTransport.etime;

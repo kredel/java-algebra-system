@@ -69,6 +69,7 @@ public class DistHashTable<K, V> extends AbstractMap<K, V> /* implements Map<K,V
      */
     public DistHashTable(ChannelFactory cf, String host, int port) {
         this.cf = cf;
+        cf.init();
         try {
             channel = cf.getChannel(host, port);
         } catch (IOException e) {

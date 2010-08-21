@@ -28,7 +28,7 @@ public class TaggedSocketChannel extends Thread {
     private static final Logger logger = Logger.getLogger(TaggedSocketChannel.class);
 
 
-    private static final boolean debug = true || logger.isDebugEnabled();
+    private static final boolean debug = logger.isDebugEnabled();
 
 
     /**
@@ -69,10 +69,20 @@ public class TaggedSocketChannel extends Thread {
         sc = s;
         blockedCount = new AtomicInteger(0);
         queues = new HashMap<Integer, BlockingQueue>();
+    }
+
+
+    /**
+     * thread initialization and start.
+     */
+    public void init() {
         synchronized (queues) {
-            this.start();
-            isRunning = true;
+            if ( ! isRunning ) {
+                this.start();
+                isRunning = true;
+            }
         }
+        logger.info("TaggedSocketChannel at " + sc);
     }
 
 
@@ -123,7 +133,7 @@ public class TaggedSocketChannel extends Thread {
                     //tq = new LinkedBlockingQueue();
                     //queues.put(tag, tq);
                     try {
-                        logger.info("receive wait, tag = " + tag);
+                        logger.debug("receive wait, tag = " + tag);
                         i = blockedCount.incrementAndGet();
                         queues.wait();
                     } catch (InterruptedException e) {
@@ -189,9 +199,11 @@ public class TaggedSocketChannel extends Thread {
      */
     public int messages() {
         int m = 0;
-        for ( BlockingQueue tq : queues.values() ) {
-            m += tq.size();
-        }
+        synchronized (queues) {
+            for ( BlockingQueue tq : queues.values() ) {
+                m += tq.size();
+            }
+	}
         return m;
     }
 
@@ -240,7 +252,7 @@ public class TaggedSocketChannel extends Thread {
                     tq.put(tm.msg);
                 } else if ( r instanceof Exception ){
                     if (debug) {
-                        logger.info("exception " + r);
+                        logger.debug("exception " + r);
                     }
                     synchronized (queues) { // deliver to all queues
                         isRunning = false;
@@ -250,7 +262,7 @@ public class TaggedSocketChannel extends Thread {
                                 q.put(r);
                             }
                             if (bc > 0) {
-                                logger.info("put exception to queue, blockedCount = " + bc);
+                                logger.debug("put exception to queue, blockedCount = " + bc);
                             }
                         }
                         queues.notifyAll();
@@ -258,7 +270,7 @@ public class TaggedSocketChannel extends Thread {
                     //return;
                 } else {
                     if (debug) {
-                        logger.info("no tagged message and no exception " + r);
+                        logger.debug("no tagged message and no exception " + r);
                     }
                     synchronized (queues) { // deliver to all queues
                         isRunning = false;
@@ -274,7 +286,7 @@ public class TaggedSocketChannel extends Thread {
                                 q.put(e);
                             }
                             if (bc > 0) {
-                                logger.info("put '" + e.toString() + "' to queue, blockedCount = " + bc);
+                                logger.debug("put '" + e.toString() + "' to queue, blockedCount = " + bc);
                             }
                         }
                         queues.notifyAll();
@@ -293,7 +305,7 @@ public class TaggedSocketChannel extends Thread {
                 // unfug Thread.currentThread().interrupt();
                 //logger.debug("ChannelFactory IE terminating");
                 if (debug) {
-                    logger.info("exception " + e);
+                    logger.debug("exception " + e);
                 }
                 synchronized (queues) { // deliver to all queues
                     isRunning = false;
@@ -304,7 +316,7 @@ public class TaggedSocketChannel extends Thread {
                                 q.put(e);
                             }
                             if (bc > 0) {
-                                logger.info("put interrupted to queue, blockCount = " + bc);
+                                logger.debug("put interrupted to queue, blockCount = " + bc);
                             }
                         } catch (InterruptedException ignored) {
                         }
@@ -324,7 +336,7 @@ public class TaggedSocketChannel extends Thread {
                             q.put(e);
                         }
                         if (bc > 0) {
-                            logger.info("put terminating via interrupt to queue, blockCount = " + bc);
+                            logger.debug("put terminating via interrupt to queue, blockCount = " + bc);
                         }
                     } catch (InterruptedException ignored) {
                     }
@@ -368,7 +380,7 @@ public class TaggedSocketChannel extends Thread {
                 } catch (InterruptedException ignored) {
                 }
                 if ( bc > 0 ) {
-                    logger.info("put IO-end to queue for tag " + tq.getKey() + ", blockCount = " + bc);
+                    logger.debug("put IO-end to queue for tag " + tq.getKey() + ", blockCount = " + bc);
                 }
             }
             queues.notifyAll();

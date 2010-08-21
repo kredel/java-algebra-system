@@ -61,6 +61,7 @@ public class DistributedList /* implements List not jet */ {
      */
     public DistributedList(ChannelFactory cf,String host,int port) {
         this.cf = cf;
+        cf.init();
         try {
             channel = cf.getChannel(host,port);
         } catch (IOException e) {

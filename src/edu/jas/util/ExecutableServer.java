@@ -87,6 +87,7 @@ public class ExecutableServer extends Thread {
      */
     public ExecutableServer(ChannelFactory cf) {
         this.cf = cf;
+        cf.init();
         servers = new ArrayList<Executor>();
     }
 

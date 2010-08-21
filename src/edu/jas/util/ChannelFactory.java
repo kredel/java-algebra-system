@@ -60,9 +60,23 @@ public class ChannelFactory extends Thread {
 
 
     /**
-     * is local server running.
+     * is local server up and running.
      */
     private volatile boolean srvrun = false;
+
+
+    /**
+     * is thread started.
+     */
+    private volatile boolean srvstart = false;
+
+
+    /**
+     * Constructs a ChannelFactory on the DEFAULT_PORT.
+     */
+    public ChannelFactory() {
+        this(DEFAULT_PORT);
+    }
 
 
     /**
@@ -79,8 +93,8 @@ public class ChannelFactory extends Thread {
         }
         try {
             srv = new ServerSocket(port);
-            this.start();
-            logger.info("server started on port " + port);
+            //this.start(); moved to init and getChannel
+            logger.info("server bound to port " + port);
         } catch (BindException e) {
             srv = null;
             logger.warn("server not started, port used " + port);
@@ -103,10 +117,14 @@ public class ChannelFactory extends Thread {
 
 
     /**
-     * Constructs a ChannelFactory on the DEFAULT_PORT.
+     * thread initialization and start.
      */
-    public ChannelFactory() {
-        this(DEFAULT_PORT);
+    public void init() {
+        if (srv != null && ! srvstart  ) {
+            this.start();
+            srvstart = true;
+            logger.info("ChannelFactory at " + srv);
+        }
     }
 
 
@@ -119,6 +137,8 @@ public class ChannelFactory extends Thread {
             if (srvrun) {
                 throw new IllegalArgumentException("dont call when no server listens");
             }
+        } else if ( ! srvstart  ) {
+            init();
         }
         return buf.take();
     }
@@ -186,7 +206,7 @@ public class ChannelFactory extends Thread {
                 buf.put(c);
             } catch (IOException e) {
                 //logger.debug("ChannelFactory IO terminating");
-          srvrun = false;
+                srvrun = false;
                 return;
             } catch (InterruptedException e) {
                 // unfug Thread.currentThread().interrupt();
@@ -202,11 +222,15 @@ public class ChannelFactory extends Thread {
      * Terminate the Channel Factory
      */
     public void terminate() {
+        if ( ! srvstart ) {
+            logger.debug("server not started");
+            return; 
+        }
         this.interrupt();
         try {
             if (srv != null) {
                 srv.close();
-          srvrun = false;
+                srvrun = false;
             }
             this.interrupt();
             while (!buf.isEmpty()) {

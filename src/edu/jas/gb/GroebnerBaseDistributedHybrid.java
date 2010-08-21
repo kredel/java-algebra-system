@@ -194,6 +194,7 @@ public class GroebnerBaseDistributedHybrid<C extends RingElem<C>> extends Groebn
         long t = System.currentTimeMillis();
         final int DL_PORT = port + 100;
         ChannelFactory cf = new ChannelFactory(port);
+        cf.init();
         DistHashTableServer<Integer> dls = new DistHashTableServer<Integer>(DL_PORT);
         dls.init();
         logger.debug("dist-list server running");
@@ -308,8 +309,10 @@ public class GroebnerBaseDistributedHybrid<C extends RingElem<C>> extends Groebn
     public void clientPart(String host) throws IOException {
 
         ChannelFactory cf = new ChannelFactory(port + 10); // != port for localhost
+        cf.init();
         SocketChannel channel = cf.getChannel(host, port);
         TaggedSocketChannel pairChannel = new TaggedSocketChannel(channel);
+        pairChannel.init();
 
         if (debug) {
             logger.info("clientPart pairChannel   = " + pairChannel);
@@ -508,6 +511,7 @@ class HybridReducerServer<C extends RingElem<C>> implements Runnable {
         try {
             channel = cf.getChannel();
             pairChannel = new TaggedSocketChannel(channel);
+            pairChannel.init();
         } catch (InterruptedException e) {
             logger.debug("get pair channel interrupted");
             e.printStackTrace();

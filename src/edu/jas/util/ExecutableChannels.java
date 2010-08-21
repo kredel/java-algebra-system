@@ -57,6 +57,7 @@ public class ExecutableChannels {
      */
     protected ExecutableChannels() {
         cf = new ChannelFactory();
+        cf.init();
     }
 
 

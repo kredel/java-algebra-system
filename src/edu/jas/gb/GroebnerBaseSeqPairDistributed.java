@@ -181,6 +181,7 @@ public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>>
 
         final int DL_PORT = port + 100;
         ChannelFactory cf = new ChannelFactory(port);
+        cf.init();
         DistHashTableServer<Integer> dls = new DistHashTableServer<Integer>(DL_PORT);
         dls.init();
         logger.debug("dist-list server running");
@@ -288,6 +289,7 @@ public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>>
                           throws IOException {  
 
         ChannelFactory cf = new ChannelFactory(port+10); // != port for localhost
+        cf.init();
         SocketChannel pairChannel = cf.getChannel(host,port);
 
         final int DL_PORT = port + 100;

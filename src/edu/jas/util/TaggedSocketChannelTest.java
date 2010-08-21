@@ -49,11 +49,14 @@ public class TaggedSocketChannelTest extends TestCase {
         host = "localhost";
         port = 4711;
         cf = new ChannelFactory(port);       
+        cf.init();
         try {
             sc1 = cf.getChannel(host,port);
             sc2 = cf.getChannel();
             tsc1 = new TaggedSocketChannel(sc1);
+            tsc1.init();
             tsc2 = new TaggedSocketChannel(sc2);
+            tsc2.init();
         } catch(IOException e) {
             fail("IOException"+e);
         } catch (InterruptedException e) {
@@ -79,7 +82,7 @@ public class TaggedSocketChannelTest extends TestCase {
    }
 
 
-   public void xtestTaggedSocketChannel1() {
+   public void testTaggedSocketChannel1() {
        Object o = new IllegalArgumentException("leer");
        Integer err = new Integer(-1);
        try {
@@ -102,7 +105,7 @@ public class TaggedSocketChannelTest extends TestCase {
    }
 
 
-   public void xtestTaggedSocketChannel2() {
+   public void testTaggedSocketChannel2() {
        Object o = new Integer(0);
        try {
            tsc1.send(tag1,o);
@@ -117,7 +120,7 @@ public class TaggedSocketChannelTest extends TestCase {
    }
 
 
-   public void xtestTaggedSocketChannel3() {
+   public void testTaggedSocketChannel3() {
        Object o = new Integer(0);
        try {
            tsc1.send(tag1,o);
@@ -134,7 +137,7 @@ public class TaggedSocketChannelTest extends TestCase {
    }
 
 
-   public void xtestTaggedSocketChannel4() {
+   public void testTaggedSocketChannel4() {
        int n = 10;
        Object o;
        try {
@@ -160,7 +163,7 @@ public class TaggedSocketChannelTest extends TestCase {
    }
 
 
-   public void xtestTaggedSocketChannel5() {
+   public void testTaggedSocketChannel5() {
        int n = 10;
        String msg = "Hello_";
        Integer o;

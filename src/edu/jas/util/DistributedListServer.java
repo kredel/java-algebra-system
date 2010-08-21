@@ -64,6 +64,7 @@ public class DistributedListServer extends Thread {
     public DistributedListServer(ChannelFactory cf) {
         listElem = new Counter(0);
         this.cf = cf;
+        cf.init();
         servers = new ArrayList<Broadcaster>();
         theList = new TreeMap<Counter,Object>();
     }

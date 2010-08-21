@@ -109,7 +109,7 @@ class LongIterator implements Iterator<Long> {
         Long res = new Long(current);
         if ( nonNegative ) {
             current++;
-        } else if ( current > 0 ) {
+        } else if ( current > 0L ) {
             current = -current;
         } else {
             current = -current;
