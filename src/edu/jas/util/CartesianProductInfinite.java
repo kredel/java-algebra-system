@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Collections;
+import java.util.NoSuchElementException;
 
 
 /**
@@ -190,7 +191,7 @@ class CartesianTwoProductInfiniteIterator<E> implements Iterator<List<E>> {
      */
     public synchronized List<E> next() {
         if (empty) {
-            throw new RuntimeException("invalid call of next()");
+            throw new NoSuchElementException("invalid call of next()");
         }
         List<E> res = current; // new ArrayList<E>(current); // copy
         if ( fincompit0.hasNext() && fincompit1.hasNext() ) {
@@ -319,7 +320,7 @@ class CartesianTwoProductInfiniteIteratorList<E> implements Iterator<List<E>> {
      */
     public synchronized List<E> next() {
         if (empty) {
-            throw new RuntimeException("invalid call of next()");
+            throw new NoSuchElementException("invalid call of next()");
         }
         List<E> res = current; // new ArrayList<E>(current);
         if ( fincompit0.hasNext() && fincompit1.hasNext() ) {

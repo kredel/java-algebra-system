@@ -86,13 +86,13 @@ public class GenMatrixRing<C extends RingElem<C>> implements AlgebraFactory<GenM
     @SuppressWarnings("unchecked")
     public GenMatrixRing(RingFactory<C> b, int r, int c, int s) {
         if (b == null) {
-            throw new RuntimeException("RingFactory is null");
+            throw new IllegalArgumentException("RingFactory is null");
         }
         if (r < 1) {
-            throw new RuntimeException("rows < 1 " + r);
+            throw new IllegalArgumentException("rows < 1 " + r);
         }
         if (c < 1) {
-            throw new RuntimeException("cols < 1 " + c);
+            throw new IllegalArgumentException("cols < 1 " + c);
         }
         coFac = b;
         rows = r;
@@ -294,10 +294,10 @@ public class GenMatrixRing<C extends RingElem<C>> implements AlgebraFactory<GenM
      */
     public GenMatrixRing<C> product(GenMatrixRing<C> other) {
         if (cols != other.rows) {
-            throw new RuntimeException("invalid dimensions in product");
+            throw new IllegalArgumentException("invalid dimensions in product");
         }
         if (!coFac.equals(other.coFac)) {
-            throw new RuntimeException("invalid coefficients in product");
+            throw new IllegalArgumentException("invalid coefficients in product");
         }
         if (rows == other.rows && cols == other.cols) {
             return this;
@@ -337,7 +337,7 @@ public class GenMatrixRing<C extends RingElem<C>> implements AlgebraFactory<GenM
             return ZERO;
         }
         if (om.size() > rows) {
-            throw new RuntimeException("size v > rows " + rows + " < " + om);
+            throw new IllegalArgumentException("size v > rows " + om + " > " + rows);
         }
         ArrayList<ArrayList<C>> m = new ArrayList<ArrayList<C>>(rows);
         for (int i = 0; i < rows; i++) {
@@ -347,7 +347,7 @@ public class GenMatrixRing<C extends RingElem<C>> implements AlgebraFactory<GenM
                 v = ZERO.matrix.get(0);
             } else {
                 if (ov.size() > cols) {
-                    throw new RuntimeException("size v > cols " + cols + " < " + ov);
+                    throw new IllegalArgumentException("size v > cols " + ov + " > " + cols);
                 }
                 v = new ArrayList<C>(cols);
                 v.addAll(ov);
@@ -544,8 +544,6 @@ public class GenMatrixRing<C extends RingElem<C>> implements AlgebraFactory<GenM
             }
         } while (i >= 0);
         return new GenMatrix<C>(this, mat);
-        //throw new RuntimeException("parse not jet implemented");
-        //return ZERO;
     }
 
 
@@ -555,8 +553,6 @@ public class GenMatrixRing<C extends RingElem<C>> implements AlgebraFactory<GenM
     public GenMatrix<C> parse(Reader r) {
         String s = StringUtil.nextPairedString(r, '[', ']');
         return parse(s);
-        //throw new RuntimeException("parse not jet implemented");
-        //return ZERO;
     }
 
 }

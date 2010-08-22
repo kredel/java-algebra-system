@@ -141,9 +141,8 @@ public class DistThreadPool /*extends ThreadPool*/ {
         try {
             ec = new ExecutableChannels( this.mfile );
         } catch (FileNotFoundException e) {
-            // ec = null;
             e.printStackTrace();
-            throw new RuntimeException("DistThreadPool " +e);
+            throw new IllegalArgumentException("DistThreadPool " + e);
         }
         if ( debug ) {
             logger.debug("ExecutableChannels = " + ec);
@@ -152,7 +151,7 @@ public class DistThreadPool /*extends ThreadPool*/ {
             ec.open(threads);
         } catch (IOException e) {
             e.printStackTrace();
-            throw new RuntimeException("DistThreadPool " +e);
+            throw new IllegalArgumentException("DistThreadPool " + e);
         }
         if ( debug ) {
             logger.debug("ExecutableChannels = " + ec);

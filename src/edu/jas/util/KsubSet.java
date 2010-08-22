@@ -8,6 +8,7 @@ package edu.jas.util;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 
 /**
@@ -141,7 +142,7 @@ class KsubSetIterator<E> implements Iterator<List<E>> {
             rest.remove(0);
             //System.out.println("rest = " + rest);
             if (rest.size() < k - 1) {
-                throw new RuntimeException("invalid call of next()");
+                throw new NoSuchElementException("invalid call of next()");
             }
             if (k == 2) {
                 recIter = new OneSubSetIterator<E>(rest);
@@ -150,7 +151,7 @@ class KsubSetIterator<E> implements Iterator<List<E>> {
             }
             return this.next(); // retry
         } else {
-            throw new RuntimeException("invalid call of next()");
+            throw new NoSuchElementException("invalid call of next()");
         }
     }
 

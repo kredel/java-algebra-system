@@ -61,7 +61,7 @@ public class GenMatrix<C extends RingElem<C> >
      */
     public GenMatrix(GenMatrixRing< C > r, ArrayList<ArrayList<C>> m) {
         if ( r == null || m == null ) {
-            throw new RuntimeException("Empty r or m not allowed, r = " + r + ", m = " +m);
+            throw new IllegalArgumentException("Empty r or m not allowed, r = " + r + ", m = " +m);
         }
         ring = r;
         matrix = m;
@@ -645,8 +645,7 @@ public class GenMatrix<C extends RingElem<C> >
      * @return this / S.
      */
     public GenMatrix<C> divide(GenMatrix<C> S) {
-        throw new RuntimeException("divide not jet implemented");
-        //return ZERO;
+        throw new UnsupportedOperationException("divide not jet implemented");
     }
 
 
@@ -656,8 +655,7 @@ public class GenMatrix<C extends RingElem<C> >
      * @return this - (this / S) * S.
      */
     public GenMatrix<C> remainder(GenMatrix<C> S) {
-        throw new RuntimeException("remainder not implemented");
-        //return ZERO;
+        throw new UnsupportedOperationException("remainder not implemented");
     }
 
 
@@ -666,8 +664,7 @@ public class GenMatrix<C extends RingElem<C> >
      * @return x with this * x = 1, if it exists.
      */
     public GenMatrix<C> inverse() {
-        throw new RuntimeException("inverse not jet implemented");
-        //return ZERO;
+        throw new UnsupportedOperationException("inverse not jet implemented");
     }
 
 
@@ -677,8 +674,7 @@ public class GenMatrix<C extends RingElem<C> >
      * @return gcd(this,b).
      */
     public GenMatrix<C> gcd(GenMatrix<C> b) {
-        throw new RuntimeException("gcd not implemented");
-        //return ZERO;
+        throw new UnsupportedOperationException("gcd not implemented");
     }
 
 
@@ -688,8 +684,7 @@ public class GenMatrix<C extends RingElem<C> >
      * @return [ gcd(this,b), c1, c2 ] with c1*this + c2*b = gcd(this,b).
      */
     public GenMatrix<C>[] egcd(GenMatrix<C> b) {
-        throw new RuntimeException("egcd not implemented");
-        //return ZERO;
+        throw new UnsupportedOperationException("egcd not implemented");
     }
 
 }

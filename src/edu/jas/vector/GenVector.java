@@ -45,7 +45,7 @@ public class GenVector<C extends RingElem<C> >
      */
     public GenVector(GenVectorModul< C > m, List<C> v) {
         if ( m == null || v == null ) {
-            throw new RuntimeException("Empty m or v not allowed, m = " + m + ", v = " +v);
+            throw new IllegalArgumentException("Empty m or v not allowed, m = " + m + ", v = " +v);
         }
         modul = m;
         val = v;

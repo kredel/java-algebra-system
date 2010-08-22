@@ -6,6 +6,7 @@ package edu.jas.util;
 
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 
 /**
@@ -104,7 +105,7 @@ class LongIterator implements Iterator<Long> {
      */
     public synchronized Long next() {
         if (empty) {
-            throw new RuntimeException("invalid call of next()");
+            throw new NoSuchElementException("invalid call of next()");
         }
         Long res = new Long(current);
         if ( nonNegative ) {

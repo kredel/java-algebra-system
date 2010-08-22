@@ -8,6 +8,7 @@ package edu.jas.util;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 
 /**
@@ -133,7 +134,7 @@ class CartesianProductIterator<E> implements Iterator<List<E>> {
      */
     public synchronized List<E> next() {
         if (empty) {
-            throw new RuntimeException("invalid call of next()");
+            throw new NoSuchElementException("invalid call of next()");
         }
         List<E> res = new ArrayList<E>(current);
         // search iterator which hasNext
