@@ -158,7 +158,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
             if (w != 1) {
                 System.out.println("#root = " + w);
                 System.out.println("root = " + root);
-                throw new RuntimeException("no initial isolating rectangle " + rect);
+                throw new ArithmeticException("no initial isolating rectangle " + rect);
             }
         }
         Complex<C> eps = cr.fromInteger(1);
@@ -244,7 +244,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
                         System.out.println("#root = " + w);
                         System.out.println("root = " + root);
                     }
-                    throw new RuntimeException("no isolating rectangle " + rect);
+                    throw new ArithmeticException("no isolating rectangle " + rect);
                 }
                 work = false;
             } catch (InvalidBoundaryException e) {

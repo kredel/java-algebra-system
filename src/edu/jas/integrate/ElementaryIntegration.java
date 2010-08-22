@@ -101,7 +101,7 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
      */
     public Integral<C> integrate(GenPolynomial<C> a, GenPolynomial<C> d) {
         if (d == null || a == null || d.isZERO()) {
-            throw new RuntimeException("zero or null not allowed");
+            throw new IllegalArgumentException("zero or null not allowed");
         }
         if (a.isZERO()) {
             return new Integral<C>(a, d, a);
@@ -112,10 +112,10 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
         }
         GenPolynomialRing<C> pfac = d.ring;
         if (pfac.nvar > 1) {
-            throw new RuntimeException("only for univariate polynomials " + pfac);
+            throw new IllegalArgumentException("only for univariate polynomials " + pfac);
         }
         if (!pfac.coFac.isField()) {
-            throw new RuntimeException("only for field coefficients " + pfac);
+            throw new IllegalArgumentException("only for field coefficients " + pfac);
         }
 
         GenPolynomial<C>[] qr = PolyUtil.<C> basePseudoQuotientRemainder(a, d);
@@ -168,10 +168,10 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
      */
     public List<GenPolynomial<C>>[] integrateHermite(GenPolynomial<C> a, GenPolynomial<C> d) {
         if (d == null || d.isZERO()) {
-            throw new RuntimeException("d == null or d == 0");
+            throw new IllegalArgumentException("d == null or d == 0");
         }
         if (a == null || a.isZERO()) {
-            throw new RuntimeException("a == null or a == 0");
+            throw new IllegalArgumentException("a == null or a == 0");
         }
 
         // get squarefree decomposition
@@ -239,18 +239,18 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
      */
     public LogIntegral<C> integrateLogPart(GenPolynomial<C> A, GenPolynomial<C> P) {
         if (P == null || P.isZERO()) {
-            throw new RuntimeException(" P == null or P == 0");
+            throw new IllegalArgumentException(" P == null or P == 0");
         }
         if (A == null || A.isZERO()) {
-            throw new RuntimeException(" A == null or A == 0");
+            throw new IllegalArgumentException(" A == null or A == 0");
         }
         //System.out.println("\nP_base_algeb_part = " + P);
         GenPolynomialRing<C> pfac = P.ring; // K[x]
         if (pfac.nvar > 1) {
-            throw new RuntimeException("only for univariate polynomials " + pfac);
+            throw new IllegalArgumentException("only for univariate polynomials " + pfac);
         }
         if (!pfac.coFac.isField()) {
-            throw new RuntimeException("only for field coefficients " + pfac);
+            throw new IllegalArgumentException("only for field coefficients " + pfac);
         }
         List<C> cfactors = new ArrayList<C>();
         List<GenPolynomial<C>> cdenom = new ArrayList<GenPolynomial<C>>();
@@ -301,15 +301,15 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
      */
     public LogIntegral<C> integrateLogPartIrreducible(GenPolynomial<C> A, GenPolynomial<C> P) {
         if (P == null || P.isZERO()) {
-            throw new RuntimeException("P == null or P == 0");
+            throw new IllegalArgumentException("P == null or P == 0");
         }
         //System.out.println("\nP_base_algeb_part = " + P);
         GenPolynomialRing<C> pfac = P.ring; // K[x]
         if (pfac.nvar > 1) {
-            throw new RuntimeException("only for univariate polynomials " + pfac);
+            throw new IllegalArgumentException("only for univariate polynomials " + pfac);
         }
         if (!pfac.coFac.isField()) {
-            throw new RuntimeException("only for field coefficients " + pfac);
+            throw new IllegalArgumentException("only for field coefficients " + pfac);
         }
         List<C> cfactors = new ArrayList<C>();
         List<GenPolynomial<C>> cdenom = new ArrayList<GenPolynomial<C>>();
@@ -421,7 +421,7 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
                         .<AlgebraicNumber<C>> basePseudoQuotientRemainder(Pa, Ga);
                 GenPolynomial<AlgebraicNumber<C>> Qa = qra[0];
                 if (!qra[1].isZERO()) {
-                    throw new RuntimeException("remainder not zero");
+                    throw new ArithmeticException("remainder not zero");
                 }
                 //System.out.println("Qa = " + Qa);
                 afactors.add(a.negate());
