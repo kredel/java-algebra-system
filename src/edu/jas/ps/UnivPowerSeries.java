@@ -56,7 +56,7 @@ public class UnivPowerSeries<C extends RingElem<C>> implements RingElem<UnivPowe
      * Private constructor.
      */
     private UnivPowerSeries() {
-        throw new RuntimeException("do not use no-argument constructor");
+        throw new IllegalArgumentException("do not use no-argument constructor");
     }
 
 
@@ -102,7 +102,6 @@ public class UnivPowerSeries<C extends RingElem<C>> implements RingElem<UnivPowe
      */
     @Override
     public UnivPowerSeries<C> clone() {
-        //return ring.copy(this);
         return new UnivPowerSeries<C>(ring, lazyCoeffs);
     }
 
@@ -345,7 +344,7 @@ public class UnivPowerSeries<C extends RingElem<C>> implements RingElem<UnivPowe
             public C generate(int i) {
                 C c;
                 if (i > 0) {
-                    c = get((i - 1));
+                    c = get(i - 1);
                 }
                 c = null;
                 do {
@@ -442,7 +441,6 @@ public class UnivPowerSeries<C extends RingElem<C>> implements RingElem<UnivPowe
         } else {
             return this;
         }
-        // return map( new Abs<C>() );
     }
 
 
@@ -496,7 +494,7 @@ public class UnivPowerSeries<C extends RingElem<C>> implements RingElem<UnivPowe
      */
     public int setTruncate(int t) {
         if (t < 0) {
-            throw new RuntimeException("negative truncate not allowed");
+            throw new IllegalArgumentException("negative truncate not allowed");
         }
         int ot = truncate;
         truncate = t;
@@ -670,7 +668,7 @@ public class UnivPowerSeries<C extends RingElem<C>> implements RingElem<UnivPowe
             return ring.getZERO();
         }
         if (!ps.coefficient(n).isUnit()) {
-            throw new RuntimeException("division by non unit coefficient " + ps.coefficient(n) + ", n = " + n);
+            throw new ArithmeticException("division by non unit coefficient " + ps.coefficient(n) + ", n = " + n);
         }
         // now m >= n
         UnivPowerSeries<C> st, sps, q, sq;
@@ -776,7 +774,7 @@ public class UnivPowerSeries<C extends RingElem<C>> implements RingElem<UnivPowe
      */
     //SuppressWarnings("unchecked")
     public UnivPowerSeries<C>[] egcd(UnivPowerSeries<C> S) {
-        throw new RuntimeException("egcd for power series not implemented");
+        throw new UnsupportedOperationException("egcd for power series not implemented");
     }
 
 }

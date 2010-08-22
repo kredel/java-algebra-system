@@ -79,10 +79,7 @@ public class UnivPowerSeriesRing<C extends RingElem<C>> implements RingFactory<U
      * No argument constructor.
      */
     private UnivPowerSeriesRing() {
-        throw new RuntimeException("do not use no-argument constructor");
-        //coFac = null;
-        //ONE = null;
-        //ZERO = null;
+        throw new IllegalArgumentException("do not use no-argument constructor");
     }
 
 
@@ -426,13 +423,10 @@ public class UnivPowerSeriesRing<C extends RingElem<C>> implements RingFactory<U
             return ONE;
         }
         if (a.ring.nvar != 1) {
-            throw new RuntimeException("only for univariate polynomials");
+            throw new IllegalArgumentException("only for univariate polynomials");
         }
         HashMap<Integer, C> cache = new HashMap<Integer, C>(a.length());
-        //Iterator<Monomial<C>> it = a.monomialIterator();
         for (Monomial<C> m : a) {
-            //while ( it.hasNext() ) {
-            //Monomial<C> m = it.next();
             long e = m.exponent().getVal(0);
             cache.put((int) e, m.coefficient());
         }
@@ -530,7 +524,7 @@ public class UnivPowerSeriesRing<C extends RingElem<C>> implements RingFactory<U
      * @return power series from s.
      */
     public UnivPowerSeries<C> parse(String s) {
-        throw new RuntimeException("parse for power series not implemented");
+        throw new UnsupportedOperationException("parse for power series not implemented");
     }
 
 
@@ -540,7 +534,7 @@ public class UnivPowerSeriesRing<C extends RingElem<C>> implements RingFactory<U
      * @return next power series from r.
      */
     public UnivPowerSeries<C> parse(Reader r) {
-        throw new RuntimeException("parse for power series not implemented");
+        throw new UnsupportedOperationException("parse for power series not implemented");
     }
 
 }
