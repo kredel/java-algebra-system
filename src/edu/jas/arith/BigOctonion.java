@@ -631,7 +631,7 @@ public final class BigOctonion implements StarRingElem<BigOctonion>,
      */
     public BigOctonion remainder(BigOctonion S) {
         if ( S.isZERO() ) {
-            throw new RuntimeException("division by zero");
+            throw new ArithmeticException("division by zero");
         }
         return ZERO;
     }

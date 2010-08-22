@@ -517,7 +517,7 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>,
      * @return gcd(this,S).
      */
     public BigDecimal gcd(BigDecimal S) {
-     throw new RuntimeException("BigDecimal.gcd() not implemented");
+     throw new UnsupportedOperationException("BigDecimal.gcd() not implemented");
         //return new BigDecimal( val.gcd( S.val ) );
     }
 
@@ -528,7 +528,7 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>,
      * @return [ gcd(this,S), a, b ] with a*this + b*S = gcd(this,S).
      */
     public BigDecimal[] egcd(BigDecimal S) {
-     throw new RuntimeException("BigDecimal.egcd() not implemented");
+     throw new UnsupportedOperationException("BigDecimal.egcd() not implemented");
     }
 
 

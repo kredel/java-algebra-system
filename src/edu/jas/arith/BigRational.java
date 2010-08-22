@@ -781,7 +781,7 @@ public final class BigRational implements GcdRingElem<BigRational>,
      */
     public BigRational remainder(BigRational S) {
         if ( S.isZERO() ) {
-            throw new RuntimeException("division by zero");
+            throw new ArithmeticException("division by zero");
         }
         return ZERO;
     }

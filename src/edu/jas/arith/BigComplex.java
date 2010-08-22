@@ -629,7 +629,7 @@ public final class BigComplex implements StarRingElem<BigComplex>,
      */
     public BigComplex remainder(BigComplex S) {
         if ( S.isZERO() ) {
-           throw new RuntimeException("division by zero");
+           throw new ArithmeticException("division by zero");
         }
         return ZERO;
     }

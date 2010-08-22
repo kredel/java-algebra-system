@@ -804,7 +804,7 @@ public final class BigQuaternion implements StarRingElem<BigQuaternion>,
      */
     public BigQuaternion remainder(BigQuaternion S) {
         if ( S.isZERO() ) {
-            throw new RuntimeException("division by zero");
+            throw new ArithmeticException("division by zero");
         }
         return ZERO;
     }

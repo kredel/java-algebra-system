@@ -38,7 +38,7 @@ public class Roots {
             return sqrt(A);
         }
         if ( n < 1 ) {
-            throw new RuntimeException("negative root not defined");
+            throw new IllegalArgumentException("negative root not defined");
         }
         if ( A == null || A.isZERO() || A.isONE() ) {
             return A;
@@ -112,7 +112,7 @@ public class Roots {
         }
         int s = A.signum();
         if ( s < 0 ) {
-            throw new RuntimeException("root of negative not defined");
+            throw new ArithmeticException("root of negative not defined");
         }
         if ( s == 0 ) {
             return A;
@@ -205,7 +205,7 @@ public class Roots {
             return sqrt(A);
         }
         if ( n < 1 ) {
-            throw new RuntimeException("negative root not defined");
+            throw new IllegalArgumentException("negative root not defined");
         }
         if ( A == null || A.isZERO() || A.isONE() ) {
             return A;

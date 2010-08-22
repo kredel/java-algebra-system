@@ -106,7 +106,7 @@ public final class ModLongRing implements ModularRingFactory<ModLong>, Iterable<
         this(m.longValue());
         if (MAX_LONG.compareTo(m) <= 0) { // m >= max
             System.out.println("modul to large for long " + m + ",max=" + MAX_LONG);
-            throw new RuntimeException("modul to large for long " + m);
+            throw new IllegalArgumentException("modul to large for long " + m);
         }
     }
 
@@ -121,7 +121,7 @@ public final class ModLongRing implements ModularRingFactory<ModLong>, Iterable<
         this(m.longValue(), isField);
         if (MAX_LONG.compareTo(m) <= 0) { // m >= max
             System.out.println("modul to large for long " + m + ",max=" + MAX_LONG);
-            throw new RuntimeException("modul to large for long " + m);
+            throw new IllegalArgumentException("modul to large for long " + m);
         }
     }
 

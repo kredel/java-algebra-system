@@ -391,8 +391,8 @@ public final class ModInteger implements GcdRingElem<ModInteger>, Modular {
      */
     public ModInteger remainder(ModInteger S) {
         if ( S == null || S.isZERO()) {
-           throw new RuntimeException(this.getClass().getName()
-                                      + " division by zero");
+           throw new ArithmeticException(this.getClass().getName()
+                                         + " division by zero");
         }
         if ( S.isONE()) {
            return ring.getZERO();

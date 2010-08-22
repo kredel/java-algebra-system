@@ -294,7 +294,7 @@ public final class PrimeList implements Iterable<java.math.BigInteger> {
                 return true;
             }
             public void remove() {
-                throw new RuntimeException("remove not implemented");
+                throw new UnsupportedOperationException("remove not implemented");
             }
             public java.math.BigInteger next() {
                 index++;
