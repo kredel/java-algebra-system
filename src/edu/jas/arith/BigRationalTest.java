@@ -109,6 +109,11 @@ public class BigRationalTest extends TestCase {
         b = new BigRational( "3/2" );
         assertEquals("decimalConstr = b ",a,b);
 
+        s = "-1.500000000";
+        a = new BigRational( s );
+        b = new BigRational( "-3/2" );
+        assertEquals("decimalConstr = b ",a,b);
+
         s = "0.750000000";
         a = new BigRational( s );
         b = new BigRational( "3/4" );
