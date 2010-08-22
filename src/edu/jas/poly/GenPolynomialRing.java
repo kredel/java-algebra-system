@@ -808,7 +808,7 @@ public class GenPolynomialRing<C extends RingElem<C> >
      */
     public GenPolynomialRing<C> extend(String[] vn) {
         if ( vn == null || vars == null ) {
-            throw new RuntimeException("vn and vars may not be null");
+            throw new IllegalArgumentException("vn and vars may not be null");
         }
         int i = vn.length;
         String[] v = new String[ vars.length + i ];
@@ -846,7 +846,7 @@ public class GenPolynomialRing<C extends RingElem<C> >
      */
     public GenPolynomialRing<C> extendLower(String[] vn) {
         if ( vn == null || vars == null ) {
-            throw new RuntimeException("vn and vars may not be null");
+            throw new IllegalArgumentException("vn and vars may not be null");
         }
         int i = vn.length;
         String[] v = new String[ vars.length + i ];
@@ -1140,9 +1140,9 @@ class GenPolynomialIterator<C extends RingElem<C> > implements Iterator<GenPolyn
             if ( c.isZERO() ) {
                 continue;
             }
-            if ( pol.getMap().get(f) != null ) {
+            if ( pol.val.get(f) != null ) {
                 System.out.println("error f in pol = " + f + ", " + pol.getMap().get(f));
-                throw new RuntimeException("wrong iterator");
+                throw new RuntimeException("error in iterator");
             }
             pol.doPutToMap( f, c );
         }

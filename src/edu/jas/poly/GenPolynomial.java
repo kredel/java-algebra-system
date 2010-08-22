@@ -160,7 +160,7 @@ public class GenPolynomial<C extends RingElem<C> >
      * @return val as unmodifiable SortedMap.
      */
     public SortedMap<ExpVector,C> getMap() { 
-     // return val;
+        // return val;
         return Collections.<ExpVector,C>unmodifiableSortedMap(val); 
     }
 
@@ -1058,8 +1058,8 @@ public class GenPolynomial<C extends RingElem<C> >
      */
     public GenPolynomial<C> divide(C s) {
         if ( s == null || s.isZERO() ) {
-           throw new RuntimeException(this.getClass().getName()
-                                      + " division by zero");
+           throw new ArithmeticException(this.getClass().getName()
+                                         + " division by zero");
         }
         if ( this.isZERO() ) {
             return this;
@@ -1076,12 +1076,12 @@ public class GenPolynomial<C extends RingElem<C> >
                 C x = c1.remainder(s);
                 if ( !x.isZERO() ) {
                    System.out.println("divide x = " + x);
-                   throw new RuntimeException(this.getClass().getName()
-                                + " no exact division: " + c1 + "/" + s);
+                   throw new ArithmeticException(this.getClass().getName()
+                                 + " no exact division: " + c1 + "/" + s);
                 }
             }
             if ( c.isZERO() ) {
-               throw new RuntimeException(this.getClass().getName()
+               throw new ArithmeticException(this.getClass().getName()
                                 + " no exact division: " + c1 + "/" + s + ", in " + this);
             }
             pv.put( e, c ); // or m1.setValue( c )
@@ -1103,12 +1103,12 @@ public class GenPolynomial<C extends RingElem<C> >
     @SuppressWarnings("unchecked")
     public GenPolynomial<C>[] divideAndRemainder(GenPolynomial<C> S) {
         if ( S == null || S.isZERO() ) {
-            throw new RuntimeException(this.getClass().getName()
-                                       + " division by zero");
+            throw new ArithmeticException(this.getClass().getName()
+                                        + " division by zero");
         }
         C c = S.leadingBaseCoefficient();
         if ( ! c.isUnit() ) {
-           throw new RuntimeException(this.getClass().getName()
+           throw new ArithmeticException(this.getClass().getName()
                                        + " lbcf not invertible " + c);
         }
         C ci = c.inverse();
@@ -1162,13 +1162,13 @@ public class GenPolynomial<C extends RingElem<C> >
      */
     public GenPolynomial<C> remainder(GenPolynomial<C> S) {
         if ( S == null || S.isZERO() ) {
-           throw new RuntimeException(this.getClass().getName()
-                                      + " division by zero");
+           throw new ArithmeticException(this.getClass().getName()
+                                       + " division by zero");
         }
         C c = S.leadingBaseCoefficient();
         if ( ! c.isUnit() ) {
-           throw new RuntimeException(this.getClass().getName()
-                                      + " lbc not invertible " + c);
+           throw new ArithmeticException(this.getClass().getName()
+                                       + " lbc not invertible " + c);
         }
         C ci = c.inverse();
         assert (ring.nvar == S.ring.nvar);
@@ -1206,8 +1206,8 @@ public class GenPolynomial<C extends RingElem<C> >
             return S;
         }
         if ( ring.nvar != 1 ) {
-           throw new RuntimeException(this.getClass().getName()
-                                  + " not univariate polynomials" + ring);
+           throw new IllegalArgumentException(this.getClass().getName()
+                                            + " not univariate polynomials" + ring);
         }
         GenPolynomial<C> x;
         GenPolynomial<C> q = this;
@@ -1246,8 +1246,8 @@ public class GenPolynomial<C extends RingElem<C> >
             return ret;
         }
         if ( ring.nvar != 1 ) {
-           throw new RuntimeException(this.getClass().getName()
-                                      + " not univariate polynomials" + ring);
+           throw new IllegalArgumentException(this.getClass().getName()
+                                            + " not univariate polynomials" + ring);
         }
         GenPolynomial<C>[] qr;
         GenPolynomial<C> q = this; 
@@ -1305,8 +1305,8 @@ public class GenPolynomial<C extends RingElem<C> >
             return ret;
         }
         if ( ring.nvar != 1 ) {
-           throw new RuntimeException(this.getClass().getName()
-                                      + " not univariate polynomials" + ring);
+           throw new IllegalArgumentException(this.getClass().getName()
+                                            + " not univariate polynomials" + ring);
         }
         GenPolynomial<C>[] qr;
         GenPolynomial<C> q = this; 

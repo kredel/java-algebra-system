@@ -174,7 +174,7 @@ public class ExpVectorLong extends ExpVector
         long[] w = new long[ val.length + i ];
         System.arraycopy(val,0,w,i,val.length);
         if ( j >= i ) {
-           throw new RuntimeException("i "+i+" <= j "+j+" invalid");
+           throw new IllegalArgumentException("i "+i+" <= j "+j+" invalid");
         }
         w[j] = e;
         return new ExpVectorLong( w );
@@ -193,7 +193,7 @@ public class ExpVectorLong extends ExpVector
         long[] w = new long[ val.length + i ];
         System.arraycopy(val,0,w,0,val.length);
         if ( j >= i ) {
-           throw new RuntimeException("i "+i+" <= j "+j+" invalid");
+           throw new IllegalArgumentException("i "+i+" <= j "+j+" invalid");
         }
         w[ val.length + j ] = e;
         return new ExpVectorLong( w );
@@ -210,7 +210,7 @@ public class ExpVectorLong extends ExpVector
      */
     public ExpVectorLong contract(int i, int len) {
         if ( i+len > val.length ) {
-           throw new RuntimeException("len "+len+" > val.len "+val.length);
+           throw new IllegalArgumentException("len "+len+" > val.len "+val.length);
         }
         long[] w = new long[ len ];
         System.arraycopy(val,i,w,0,len);

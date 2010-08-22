@@ -343,12 +343,12 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
      */
     public void update(GenPolynomial<C> E, GenPolynomial<C> F, GenSolvablePolynomial<C> p) {
         if ( E.isZERO() || F.isZERO() ) {
-            throw new RuntimeException("polynomials may not be zero: " + E + ", " + F);
+            throw new IllegalArgumentException("polynomials may not be zero: " + E + ", " + F);
         }
         C ce = E.leadingBaseCoefficient();
         C cf = F.leadingBaseCoefficient();
         if ( ! ce.isONE() || ! cf.isONE() ) {
-            throw new RuntimeException("lbcf of polynomials must be one: " + ce + ", " + cf);
+            throw new IllegalArgumentException("lbcf of polynomials must be one: " + ce + ", " + cf);
         }
         ExpVector e = E.leadingExpVector();
         ExpVector f = F.leadingExpVector();
@@ -365,10 +365,10 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
      */
     public void update(GenPolynomial<C> E, GenPolynomial<C> F, GenPolynomial<C> p) {
         if ( p.isZERO() ) {
-            throw new RuntimeException("polynomial may not be zero: " + p);
+            throw new IllegalArgumentException("polynomial may not be zero: " + p);
         }
         if ( p.isONE() ) {
-            throw new RuntimeException("product of polynomials may not be one: " + p);
+            throw new IllegalArgumentException("product of polynomials may not be one: " + p);
         }
         GenSolvablePolynomial<C> sp = new GenSolvablePolynomial<C>(ring,p.val);
         update(E,F,sp);
@@ -424,7 +424,6 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
             }
         }
         // unreacheable code!
-        //return new TableRelation<C>(ep,fp,p);
         throw new RuntimeException("no entry found in relation table for " + evp);
     }
 

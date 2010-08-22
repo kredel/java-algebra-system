@@ -340,8 +340,8 @@ public class AlgebraicNumber<C extends GcdRingElem<C>>
      */
     public AlgebraicNumber<C> remainder(AlgebraicNumber<C> S) {
         if ( S == null || S.isZERO()) {
-           throw new RuntimeException(this.getClass().getName()
-                                      + " division by zero");
+           throw new ArithmeticException(this.getClass().getName()
+                                         + " division by zero");
         }
         if ( S.isONE()) {
            return ring.getZERO();

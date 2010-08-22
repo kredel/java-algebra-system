@@ -237,7 +237,7 @@ public class ExpVectorInteger extends ExpVector
         int[] w = new int[ val.length + i ];
         System.arraycopy(val,0,w,i,val.length);
         if ( j >= i ) {
-           throw new RuntimeException("i "+i+" <= j "+j+" invalid");
+           throw new IllegalArgumentException("i "+i+" <= j "+j+" invalid");
         }
         if ( e >= maxInt || e <= minInt) {
            throw new IllegalArgumentException("exponent to large: "+e);
@@ -259,7 +259,7 @@ public class ExpVectorInteger extends ExpVector
         int[] w = new int[ val.length + i ];
         System.arraycopy(val,0,w,0,val.length);
         if ( j >= i ) {
-           throw new RuntimeException("i "+i+" <= j "+j+" invalid");
+           throw new IllegalArgumentException("i "+i+" <= j "+j+" invalid");
         }
         w[ val.length + j ] = (int)e;
         return new ExpVectorInteger( w );
@@ -275,7 +275,7 @@ public class ExpVectorInteger extends ExpVector
      */
     public ExpVectorInteger contract(int i, int len) {
         if ( i+len > val.length ) {
-           throw new RuntimeException("len "+len+" > val.len "+val.length);
+           throw new IllegalArgumentException("len "+len+" > val.len "+val.length);
         }
         int[] w = new int[ len ];
         System.arraycopy(val,i,w,0,len);

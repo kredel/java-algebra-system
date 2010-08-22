@@ -261,7 +261,7 @@ public class PolynomialList<C extends RingElem<C> >
                     int[] dov = e.dependencyOnVariables();
                     int ix = 0;
                     if ( dov.length > 1 ) {
-                       throw new RuntimeException("wrong dependencyOnVariables " + e);
+                       throw new IllegalArgumentException("wrong dependencyOnVariables " + e);
                     } else if ( dov.length == 1 )  {
                        ix = dov[0];
                     }
@@ -293,7 +293,7 @@ public class PolynomialList<C extends RingElem<C> >
         GenSolvablePolynomial<C> s;
         for ( GenPolynomial<C> p: list ) {
             if ( ! (p instanceof GenSolvablePolynomial) ) {
-               throw new RuntimeException("no solvable polynomial "+p);
+               throw new IllegalArgumentException("no solvable polynomial "+p);
             }
             s = (GenSolvablePolynomial<C>) p;
             slist.add( s );

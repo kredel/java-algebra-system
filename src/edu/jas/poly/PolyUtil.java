@@ -755,8 +755,8 @@ public class PolyUtil {
            GenPolynomial<C> baseRemainderPoly( GenPolynomial<C> P, 
                                                C s ) {
         if ( s == null || s.isZERO() ) {
-            throw new RuntimeException(P.getClass().getName()
-                                       + " division by zero");
+            throw new ArithmeticException(P.getClass().getName()
+                                        + " division by zero");
         }
         GenPolynomial<C> h = P.ring.getZERO().clone();
         Map<ExpVector,C> hm = h.val; //getMap();
@@ -783,8 +783,8 @@ public class PolyUtil {
            GenPolynomial<C> basePseudoRemainder( GenPolynomial<C> P, 
                                                  GenPolynomial<C> S ) {
         if ( S == null || S.isZERO() ) {
-            throw new RuntimeException(P.getClass().getName()
-                                       + " division by zero");
+            throw new ArithmeticException(P.getClass().getName()
+                                        + " division by zero");
         }
         if ( P.isZERO() ) {
             return P;
@@ -831,8 +831,8 @@ public class PolyUtil {
            GenPolynomial<C> basePseudoDivide( GenPolynomial<C> P, 
                                               GenPolynomial<C> S ) {
         if ( S == null || S.isZERO() ) {
-            throw new RuntimeException(P.getClass().getName()
-                                       + " division by zero");
+            throw new ArithmeticException(P.getClass().getName()
+                                        + " division by zero");
         }
         if ( S.ring.nvar != 1 ) {
            // ok if exact division
@@ -887,8 +887,8 @@ public class PolyUtil {
         GenPolynomial<C>[] basePseudoQuotientRemainder( GenPolynomial<C> P, 
                                                         GenPolynomial<C> S ) {
         if ( S == null || S.isZERO() ) {
-            throw new RuntimeException(P.getClass().getName()
-                                       + " division by zero");
+            throw new ArithmeticException(P.getClass().getName()
+                                        + " division by zero");
         }
         if ( S.ring.nvar != 1 ) {
            // ok if exact division
@@ -950,8 +950,8 @@ public class PolyUtil {
            recursiveDivide( GenPolynomial<GenPolynomial<C>> P, 
                             GenPolynomial<C> s ) {
         if ( s == null || s.isZERO() ) {
-            throw new RuntimeException(P.getClass().getName()
-                                       + " division by zero " + P + ", " + s);
+            throw new ArithmeticException(P.getClass().getName()
+                                        + " division by zero " + P + ", " + s);
         }
         if ( P.isZERO() ) {
             return P;
@@ -991,8 +991,8 @@ public class PolyUtil {
            GenPolynomial<GenPolynomial<C>> 
            baseRecursiveDivide( GenPolynomial<GenPolynomial<C>> P, C s ) {
         if ( s == null || s.isZERO() ) {
-            throw new RuntimeException(P.getClass().getName()
-                                       + " division by zero " + P + ", " + s);
+            throw new ArithmeticException(P.getClass().getName()
+                                        + " division by zero " + P + ", " + s);
         }
         if ( P.isZERO() ) {
             return P;
@@ -1033,8 +1033,8 @@ public class PolyUtil {
            recursivePseudoRemainder( GenPolynomial<GenPolynomial<C>> P, 
                                      GenPolynomial<GenPolynomial<C>> S) {
         if ( S == null || S.isZERO() ) {
-            throw new RuntimeException(P.getClass().getName()
-                                       + " division by zero");
+            throw new ArithmeticException(P.getClass().getName()
+                                        + " division by zero");
         }
         if ( P == null || P.isZERO() ) {
             return P;
@@ -1082,8 +1082,8 @@ public class PolyUtil {
            recursivePseudoDivide( GenPolynomial<GenPolynomial<C>> P, 
                                   GenPolynomial<GenPolynomial<C>> S) {
         if ( S == null || S.isZERO() ) {
-            throw new RuntimeException(P.getClass().getName()
-                                       + " division by zero");
+            throw new ArithmeticException(P.getClass().getName()
+                                        + " division by zero");
         }
         if ( S.ring.nvar != 1 ) {
            // ok if exact division
@@ -1140,7 +1140,7 @@ public class PolyUtil {
            coefficientPseudoDivide( GenPolynomial<GenPolynomial<C>> P, 
                                     GenPolynomial<C> s) {
         if ( s == null || s.isZERO() ) {
-           throw new RuntimeException(" division by zero");
+           throw new ArithmeticException(" division by zero");
         }
         if ( P.isZERO() ) {
             return P;
@@ -1155,12 +1155,12 @@ public class PolyUtil {
                 GenPolynomial<C> x = c1.remainder(s);
                 if ( !x.isZERO() ) {
                    System.out.println("divide x = " + x);
-                   throw new RuntimeException(" no exact division: " + c1 + "/" + s);
+                   throw new ArithmeticException(" no exact division: " + c1 + "/" + s);
                 }
             }
             if ( c.isZERO() ) {
                System.out.println(" no exact division: " + c1 + "/" + s);
-               //throw new RuntimeException(" no exact division: " + c1 + "/" + s);
+               //throw new ArithmeticException(" no exact division: " + c1 + "/" + s);
             } else {
                pv.put( e, c ); // or m1.setValue( c )
             }
@@ -1181,7 +1181,7 @@ public class PolyUtil {
     public static <C extends RingElem<C>>
            GenPolynomial<C> coefficientBasePseudoDivide( GenPolynomial<C> P, C s) {
         if ( s == null || s.isZERO() ) {
-           throw new RuntimeException(" division by zero");
+           throw new ArithmeticException(" division by zero");
         }
         if ( P.isZERO() ) {
             return P;
@@ -1196,12 +1196,12 @@ public class PolyUtil {
                 C x = c1.remainder(s);
                 if ( !x.isZERO() ) {
                    System.out.println("divide x = " + x);
-                   throw new RuntimeException(" no exact division: " + c1 + "/" + s);
+                   throw new ArithmeticException(" no exact division: " + c1 + "/" + s);
                 }
             }
             if ( c.isZERO() ) {
                System.out.println(" no exact division: " + c1 + "/" + s);
-               //throw new RuntimeException(" no exact division: " + c1 + "/" + s);
+               //throw new ArithmeticException(" no exact division: " + c1 + "/" + s);
             } else {
                pv.put( e, c ); // or m1.setValue( c )
             }
@@ -1225,7 +1225,7 @@ public class PolyUtil {
         GenPolynomialRing<C> pfac = P.ring;
         if ( pfac.nvar > 1 ) { 
            // baseContent not possible by return type
-           throw new RuntimeException(P.getClass().getName()
+           throw new IllegalArgumentException(P.getClass().getName()
                      + " only for univariate polynomials");
         }
         RingFactory<C> rf = pfac.coFac;
@@ -1263,7 +1263,7 @@ public class PolyUtil {
         GenPolynomialRing<C> pfac = P.ring;
         if ( pfac.nvar > 1 ) { 
            // baseContent not possible by return type
-           throw new RuntimeException(P.getClass().getName()
+           throw new IllegalArgumentException(P.getClass().getName()
                      + " only for univariate polynomials");
         }
         RingFactory<C> rf = pfac.coFac;
@@ -1300,7 +1300,7 @@ public class PolyUtil {
         GenPolynomialRing<GenPolynomial<C>> pfac = P.ring;
         if ( pfac.nvar > 1 ) { 
            // baseContent not possible by return type
-           throw new RuntimeException(P.getClass().getName()
+           throw new IllegalArgumentException(P.getClass().getName()
                      + " only for univariate polynomials");
         }
         GenPolynomialRing<C> pr = (GenPolynomialRing<C>)pfac.coFac;
@@ -1371,7 +1371,7 @@ public class PolyUtil {
            return cfac.getZERO();
         }
         if ( A.ring.nvar != 1 ) { // todo assert
-           throw new RuntimeException("evaluateMain no univariate polynomial");
+           throw new IllegalArgumentException("evaluateMain no univariate polynomial");
         }
         if ( a == null || a.isZERO() ) {
            return A.trailingBaseCoefficient();
@@ -1417,7 +1417,7 @@ public class PolyUtil {
            return cfac.getZERO();
         }
         if ( A.ring.nvar != 1 ) { // todo assert
-           throw new RuntimeException("evaluateMain no univariate polynomial");
+           throw new IllegalArgumentException("evaluateMain no univariate polynomial");
         }
         if ( a == null || a.isZERO() ) {
            return A.trailingBaseCoefficient();
@@ -1491,7 +1491,7 @@ public class PolyUtil {
                   GenPolynomial<C> A,
                   C a ) {
         if ( rfac.nvar != 1 ) { // todo assert
-           throw new RuntimeException("evaluate coefficient ring not univariate");
+           throw new IllegalArgumentException("evaluate coefficient ring not univariate");
         }
         if ( A == null || A.isZERO() ) {
            return cfac.getZERO();
@@ -1609,7 +1609,7 @@ public class PolyUtil {
            return cfac.getZERO();
         }
         if ( a == null || a.size() != dfac.nvar ) {
-           throw new RuntimeException("evaluate tuple size not equal to number of variables");
+           throw new IllegalArgumentException("evaluate tuple size not equal to number of variables");
         }
         if ( dfac.nvar == 0 ) {
             return A.trailingBaseCoefficient();
@@ -1661,7 +1661,7 @@ public class PolyUtil {
         }
         GenPolynomialRing<C> fac = f.ring;
         if (fac.nvar > 1 || t.ring.nvar > 1) {
-            throw new RuntimeException("only for univariate polynomials");
+            throw new IllegalArgumentException("only for univariate polynomials");
         }
         if (f.isZERO() || f.isConstant()) {
             return f;
@@ -1703,7 +1703,7 @@ public class PolyUtil {
         }
         GenPolynomialRing<C> fac = f.ring;
         if (fac.nvar > 1) {
-            throw new RuntimeException("only for univariate polynomials");
+            throw new IllegalArgumentException("only for univariate polynomials");
         }
         if (f.isZERO() || f.isConstant()) {
             return f;

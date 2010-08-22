@@ -537,7 +537,7 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
     }
 
 
-    /**
+    /*
      * Generate list of univariate polynomials in all variables with given exponent.
      * @param modv number of module variables.
      * @param e the exponent of the variables.
