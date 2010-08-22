@@ -11,23 +11,23 @@ import junit.framework.TestSuite;
 
 import org.apache.log4j.BasicConfigurator;
 
+
 /**
  * ThreadPool tests with JUnit. 
  * @author Akitoshi Yoshida
  * @author Heinz Kredel
  */
-
 public class ThreadPoolTest extends TestCase {
 
-    static final int JOBS = 10; // number of jobs to start
 
 /**
  * main.
  */
    public static void main (String[] args) {
-          BasicConfigurator.configure();
-          junit.textui.TestRunner.run( suite() );
+       BasicConfigurator.configure();
+       junit.textui.TestRunner.run( suite() );
    }
+
 
 /**
  * Constructs a <CODE>ThreadPoolTest</CODE> object.
@@ -37,6 +37,7 @@ public class ThreadPoolTest extends TestCase {
           super(name);
    }
 
+
 /**
  */ 
  public static Test suite() {
@@ -44,11 +45,16 @@ public class ThreadPoolTest extends TestCase {
      return suite;
    }
 
+
+   static final int JOBS = 10; // number of jobs to start
+
+
    private ThreadPool p1;
 
 
    protected void setUp() {
    }
+
 
    protected void tearDown() {
      p1.terminate();
@@ -63,22 +69,27 @@ public class ThreadPoolTest extends TestCase {
      assertTrue( "not empty pool ", p1.getNumber() == 0 );
    }
 
+
 /**
  * Tests if the created ThreadPool is non empty.
  */
  public void testThreadPool2() {
      p1 = new ThreadPool(1);
+     //p1.init();
      assertTrue( "# empty pool ", p1.getNumber() == 1 );
      p1.terminate();
 
      p1 = new ThreadPool();
+     //p1.init();
      assertTrue( "# empty pool ", p1.getNumber() == ThreadPool.DEFAULT_SIZE );
      p1.terminate();
 
      p1 = new ThreadPool(10);
+     //p1.init();
      assertTrue( "# empty pool ", p1.getNumber() == 10 );
      p1.terminate();
    }
+
 
 /**
  * Tests if the created ThreadPool has no jobs.
@@ -89,6 +100,7 @@ public class ThreadPoolTest extends TestCase {
      assertFalse( "more than 0 jobs ", p1.hasJobs(0) );
      p1.terminate();
  }
+
 
 /**
  * Tests if the created ThreadPool has jobs.
@@ -111,6 +123,7 @@ public class ThreadPoolTest extends TestCase {
  */
  public void testThreadPool5() {
      p1 = new ThreadPool();
+     //p1.init();
      assertFalse( "no jobs ", p1.hasJobs() );
      for (int i = 0; i < JOBS*p1.getNumber(); i++ ) {
          p1.addJob( new SlowWorker() );
@@ -129,6 +142,7 @@ public class ThreadPoolTest extends TestCase {
      assertTrue( "FIFO strategy ", 
           p1.getStrategy() == StrategyEnumeration.LIFO );
    }
+
 
 /**
  * Tests if the created ThreadPool has jobs and correct strategy.
@@ -162,7 +176,7 @@ class FastWorker implements Runnable {
 class SlowWorker implements Runnable {
     public void run() { 
         try {
-            Thread.sleep(100);
+            Thread.sleep(10);
         } catch (InterruptedException e ) {
         }
     }

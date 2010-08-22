@@ -26,6 +26,12 @@ public class ThreadPool {
 
 
     /**
+     * Number of threads to use.
+     */
+    final int size;
+
+
+    /**
      * Array of workers.
      */
     protected PoolThread[] workers;
@@ -95,20 +101,28 @@ public class ThreadPool {
      * @param size of the pool.
      */ 
     public ThreadPool(StrategyEnumeration strategy, int size) {
+        this.size = size;
         this.strategy = strategy;
         jobstack = new LinkedList<Runnable>(); // ok for all strategies ?
-        workers = new PoolThread[size];
-        for (int i = 0; i < workers.length; i++) {
-            workers[i] = new PoolThread(this);
-            workers[i].start();
+        workers = new PoolThread[0];
+    }
+
+
+    /**
+     * thread initialization and start.
+     */
+    public void init() {
+        if ( workers == null || workers.length == 0 ) {
+            workers = new PoolThread[size];
+            for (int i = 0; i < workers.length; i++) {
+                workers[i] = new PoolThread(this);
+                workers[i].start();
+            }
+            logger.info("size = " + size + ", strategy = " + strategy);
         }
-        logger.info("size = " + size + ", strategy = " + strategy);
-        if ( debug ) {
+        if ( false ) { // debug
             Thread.currentThread().dumpStack();
         }
-        //         if ( size == 1 ) {
-        //             throw new RuntimeException("pool with one thread?");
-        //         }
     }
 
 
@@ -126,6 +140,9 @@ public class ThreadPool {
      * number of worker threads.
      */
     public int getNumber() {
+        if ( workers == null || workers.length < size ) {
+            init(); // start threads
+        }
         return workers.length; // not null
     }
 
@@ -201,6 +218,9 @@ public class ThreadPool {
      * @param job
      */
     public synchronized void addJob(Runnable job) {
+        if ( workers == null || workers.length < size ) {
+            init(); // start threads
+        }
         jobstack.addLast(job);
         logger.debug("adding job" );
         if (idleworkers > 0) {
@@ -221,7 +241,7 @@ public class ThreadPool {
             idleworkers--;
             if ( shutdown ) {
                 throw new InterruptedException("shutdown in getJob");
-	    }
+            }
         }
         // is expressed using strategy enumeration
         if (strategy == StrategyEnumeration.LIFO) { 

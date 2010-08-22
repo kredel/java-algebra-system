@@ -21,15 +21,15 @@ import org.apache.log4j.BasicConfigurator;
 
 public class DistThreadPoolTest extends TestCase {
 
-    static final int JOBS = 10; // number of jobs to start
 
 /**
  * main.
  */
    public static void main (String[] args) {
-          BasicConfigurator.configure();
-          junit.textui.TestRunner.run( suite() );
+       BasicConfigurator.configure();
+       junit.textui.TestRunner.run( suite() );
    }
+
 
 /**
  * Constructs a <CODE>DistThreadPoolTest</CODE> object.
@@ -52,15 +52,21 @@ public class DistThreadPoolTest extends TestCase {
    private static final int port = ChannelFactory.DEFAULT_PORT;
    //private static final String mfile = "machines.test";
 
+
    private ExecutableServer es;
 
+
    private DistThreadPool pool;
+
+
+   static final int JOBS = 10; // number of jobs to start
 
 
    protected void setUp() {
      es = new ExecutableServer(port);
      es.init();
    }
+
 
    protected void tearDown() {
      pool.terminate();
@@ -177,13 +183,14 @@ class DistFastWorker implements RemoteExecutable {
     }
 }
 
+
 /**
  * Utility class for DistThreadPool Test.
  */
 class DistSlowWorker implements RemoteExecutable {
     public void run() { 
         try {
-            Thread.sleep(100);
+            Thread.sleep(10);
         } catch (InterruptedException e ) {
         }
     }

@@ -53,7 +53,7 @@ public class DistThreadPool /*extends ThreadPool*/ {
     /**
      * Array of workers.
      */
-    protected final DistPoolThread[] workers;
+    protected DistPoolThread[] workers;
 
 
     /**
@@ -157,12 +157,22 @@ public class DistThreadPool /*extends ThreadPool*/ {
         if ( debug ) {
             logger.debug("ExecutableChannels = " + ec);
         }
-        workers = new DistPoolThread[threads];
-        for (int i = 0; i < workers.length; i++) {
-            workers[i] = new DistPoolThread(this,ec,i);
-            workers[i].start();
+        workers = new DistPoolThread[0];
+    }
+
+
+    /**
+     * thread initialization and start.
+     */
+    public void init() {
+        if ( workers == null || workers.length == 0 ) {
+            workers = new DistPoolThread[threads];
+            for (int i = 0; i < workers.length; i++) {
+                workers[i] = new DistPoolThread(this,ec,i);
+                workers[i].start();
+            }
+            logger.info("size = " + threads + ", strategy = " + strategy);
         }
-        logger.info("strategy = " + strategy);
     }
 
 
@@ -170,6 +180,9 @@ public class DistThreadPool /*extends ThreadPool*/ {
      * number of worker threads.
      */
     public int getNumber() {
+        if ( workers == null || workers.length < threads ) {
+            init(); // start threads
+        }
         return workers.length; // not null
     }
 
@@ -254,6 +267,9 @@ public class DistThreadPool /*extends ThreadPool*/ {
      * @param job
      */
     public synchronized void addJob(Runnable job) {
+        if ( workers == null || workers.length < threads ) {
+            init(); // start threads
+        }
         jobstack.addLast(job);
         logger.debug("adding job" );
         if (idleworkers > 0) {

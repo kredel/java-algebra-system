@@ -236,10 +236,13 @@ public class ChannelFactory extends Thread {
             while (!buf.isEmpty()) {
                 logger.debug("closing unused SocketChannel");
                 //((SocketChannel)buf.get()).close();
-                buf.take().close();
+                SocketChannel c  = buf.poll();
+                if ( c != null ) {
+                    c.close();
+                }
             }
         } catch (IOException e) {
-        } catch (InterruptedException e) {
+	    //} catch (InterruptedException e) {
             // Thread.currentThread().interrupt();
         }
         try {
