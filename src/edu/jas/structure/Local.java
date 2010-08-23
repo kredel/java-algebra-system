@@ -88,7 +88,7 @@ public class Local<C extends RingElem<C> >
     @SuppressWarnings("unchecked")
     protected Local(LocalRing<C> r, C n, C d, boolean isred) {
         if ( d == null || d.isZERO() ) {
-           throw new RuntimeException("denominator may not be zero");
+           throw new IllegalArgumentException("denominator may not be zero");
         }
         ring = r;
         if ( d.signum() < 0 ) {
@@ -102,7 +102,7 @@ public class Local<C extends RingElem<C> >
         }
         C p = d.remainder( ring.ideal );
         if ( p == null || p.isZERO() ) {
-           throw new RuntimeException("denominator may not be in ideal");
+           throw new IllegalArgumentException("denominator may not be in ideal");
         }
         // must reduce to lowest terms
         if ( n instanceof GcdRingElem && d instanceof GcdRingElem ) {
@@ -355,7 +355,7 @@ public class Local<C extends RingElem<C> >
         if ( isUnit() ) {
            return new Local<C>( ring, den, num, true );
         }
-        throw new RuntimeException("element not invertible " + this);
+        throw new ArithmeticException("element not invertible " + this);
     }
 
 
@@ -365,12 +365,12 @@ public class Local<C extends RingElem<C> >
      */
     public Local<C> remainder(Local<C> S) {
         if ( num.isZERO() ) {
-           throw new RuntimeException("element not invertible " + this);
+           throw new ArithmeticException("element not invertible " + this);
         }
         if ( S.isUnit() ) {
            return ring.getZERO(); 
         } else {
-           throw new RuntimeException("remainder not implemented" + S);
+           throw new UnsupportedOperationException("remainder not implemented" + S);
         }
     }
 
@@ -400,23 +400,23 @@ public class Local<C extends RingElem<C> >
 
     /**
      * Greatest common divisor.
-     * <b>Note: </b>Not implemented, throws RuntimeException.
+     * <b>Note: </b>Not implemented, throws UnsupportedOperationException.
      * @param b other element.
      * @return gcd(this,b).
      */
     public Local<C> gcd(Local<C> b) {
-        throw new RuntimeException("gcd not implemented " + this.getClass().getName());
+        throw new UnsupportedOperationException("gcd not implemented " + this.getClass().getName());
     }
 
 
     /**
      * Extended greatest common divisor.
-     * <b>Note: </b>Not implemented, throws RuntimeException.
+     * <b>Note: </b>Not implemented, throws UnsupportedOperationException.
      * @param b other element.
      * @return [ gcd(this,b), c1, c2 ] with c1*this + c2*b = gcd(this,b).
      */
     public Local<C>[] egcd(Local<C> b) {
-        throw new RuntimeException("egcd not implemented " + this.getClass().getName());
+        throw new UnsupportedOperationException("egcd not implemented " + this.getClass().getName());
     }
 
 }

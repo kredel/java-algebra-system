@@ -239,7 +239,7 @@ public class Product<C extends RingElem<C> >
     //JAVA6only: @Override
     public int compareTo(Product<C> b) {
         if ( ! ring.equals( b.ring ) ) {
-           throw new RuntimeException("rings not comparable " + this);
+           throw new IllegalArgumentException("rings not comparable " + this);
         }
         SortedMap<Integer,C> v = b.val;
         Iterator<Map.Entry<Integer,C>> ti = val.entrySet().iterator();

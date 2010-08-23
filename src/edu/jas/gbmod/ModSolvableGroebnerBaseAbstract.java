@@ -234,7 +234,7 @@ public class ModSolvableGroebnerBaseAbstract<C extends RingElem<C>>
         if ( modv == 0 ) {
            return sbb.rightGB(modv,F);
         }
-        throw new RuntimeException("modv != 0 not jet implemented");
+        throw new UnsupportedOperationException("modv != 0 not jet implemented");
         // return sbb.rightGB(modv,F);
     }
 

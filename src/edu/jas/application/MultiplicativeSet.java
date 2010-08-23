@@ -59,7 +59,7 @@ public class MultiplicativeSet<C extends GcdRingElem<C>> implements Serializable
     public MultiplicativeSet(GenPolynomialRing<C> ring) {
         this(ring, new ArrayList<GenPolynomial<C>>());
         if (ring == null) {
-            throw new RuntimeException("only for non null rings");
+            throw new IllegalArgumentException("only for non null rings");
         }
     }
 
@@ -71,7 +71,7 @@ public class MultiplicativeSet<C extends GcdRingElem<C>> implements Serializable
      */
     protected MultiplicativeSet(GenPolynomialRing<C> ring, List<GenPolynomial<C>> ms) {
         if (ms == null || ring == null) {
-            throw new RuntimeException("only for non null parts");
+            throw new IllegalArgumentException("only for non null parts");
         }
         this.ring = ring;
         mset = ms;

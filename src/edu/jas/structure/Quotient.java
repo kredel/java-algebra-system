@@ -83,7 +83,7 @@ public class Quotient<C extends RingElem<C> >
                        C n, C d,
                        boolean isred) {
         if ( d == null || d.isZERO() ) {
-           throw new RuntimeException("denominator may not be zero");
+           throw new IllegalArgumentException("denominator may not be zero");
         }
         ring = r;
         if ( d.signum() < 0 ) {
@@ -336,7 +336,7 @@ public class Quotient<C extends RingElem<C> >
      */
     public Quotient<C> remainder(Quotient<C> S) {
         if ( num.isZERO() ) {
-           throw new RuntimeException("element not invertible " + this);
+           throw new ArithmeticException("element not invertible " + this);
         }
         return ring.getZERO();
     }
@@ -376,23 +376,23 @@ public class Quotient<C extends RingElem<C> >
 
     /**
      * Greatest common divisor.
-     * <b>Note: </b>Not implemented, throws RuntimeException.
+     * <b>Note: </b>Not implemented, throws UnsupportedOperationException.
      * @param b other element.
      * @return gcd(this,b).
      */
     public Quotient<C> gcd(Quotient<C> b) {
-        throw new RuntimeException("gcd not implemented " + this.getClass().getName());
+        throw new UnsupportedOperationException("gcd not implemented " + this.getClass().getName());
     }
 
 
     /**
      * Extended greatest common divisor.
-     * <b>Note: </b>Not implemented, throws RuntimeException.
+     * <b>Note: </b>Not implemented, throws UnsupportedOperationException.
      * @param b other element.
      * @return [ gcd(this,b), c1, c2 ] with c1*this + c2*b = gcd(this,b).
      */
     public Quotient<C>[] egcd(Quotient<C> b) {
-        throw new RuntimeException("egcd not implemented " + this.getClass().getName());
+        throw new UnsupportedOperationException("egcd not implemented " + this.getClass().getName());
     }
 
 }

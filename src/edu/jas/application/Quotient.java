@@ -91,7 +91,7 @@ public class Quotient<C extends GcdRingElem<C>> implements GcdRingElem<Quotient<
      */
     protected Quotient(QuotientRing<C> r, GenPolynomial<C> n, GenPolynomial<C> d, boolean isred) {
         if (d == null || d.isZERO()) {
-            throw new RuntimeException("denominator may not be zero");
+            throw new IllegalArgumentException("denominator may not be zero");
         }
         ring = r;
         if (d.signum() < 0) {
@@ -418,7 +418,7 @@ public class Quotient<C extends GcdRingElem<C>> implements GcdRingElem<Quotient<
      */
     public Quotient<C> remainder(Quotient<C> S) {
         if (num.isZERO()) {
-            throw new RuntimeException("element not invertible " + this);
+            throw new ArithmeticException("element not invertible " + this);
         }
         return ring.getZERO();
     }

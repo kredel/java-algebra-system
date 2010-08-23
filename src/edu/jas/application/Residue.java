@@ -361,11 +361,11 @@ public class Residue<C extends GcdRingElem<C> >
 
     /**
      * Extended greatest common divisor.
-     * <b>Note: </b>Not implemented, throws RuntimeException.
+     * <b>Note: </b>Not implemented, throws UnsupportedOperationException.
      * @param b other element.
      * @return [ gcd(this,b), c1, c2 ] with c1*this + c2*b = gcd(this,b).
      */
     public Residue<C>[] egcd(Residue<C> b) {
-        throw new RuntimeException("egcd not implemented " + this.getClass().getName());
+        throw new UnsupportedOperationException("egcd not implemented " + this.getClass().getName());
     }
 }

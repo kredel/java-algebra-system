@@ -63,7 +63,7 @@ public class Condition<C extends GcdRingElem<C>> implements Serializable {
     public Condition(GenPolynomialRing<C> ring) {
         this(new Ideal<C>(ring),new MultiplicativeSetSquarefree<C>(ring));
         if (ring == null) {
-            throw new RuntimeException("only for non null rings");
+            throw new IllegalArgumentException("only for non null rings");
         }
     }
 
@@ -94,7 +94,7 @@ public class Condition<C extends GcdRingElem<C>> implements Serializable {
      */
     public Condition(Ideal<C> z, MultiplicativeSet<C> nz) {
         if (z == null || nz == null) {
-            throw new RuntimeException("only for non null condition parts");
+            throw new IllegalArgumentException("only for non null condition parts");
         }
         zero = z;
         nonZero = nz;

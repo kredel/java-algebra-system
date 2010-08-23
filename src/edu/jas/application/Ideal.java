@@ -1142,10 +1142,10 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
      */
     public GenPolynomial<C> inverse(GenPolynomial<C> h) {
         if (h == null || h.isZERO()) {
-            throw new RuntimeException(" zero not invertible");
+            throw new IllegalArgumentException("zero not invertible");
         }
         if (this.isZERO()) {
-            throw new NotInvertibleException(" zero ideal");
+            throw new NotInvertibleException("zero ideal");
         }
         List<GenPolynomial<C>> F = new ArrayList<GenPolynomial<C>>(1 + list.list.size());
         F.add(h);
@@ -1852,7 +1852,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
         // extend variables by one
         GenPolynomialRing<C> ofac = list.ring;
         if (ofac.tord.getEvord() != TermOrder.INVLEX) {
-            throw new RuntimeException("invalid term order for normalPosition " + ofac.tord);
+            throw new IllegalArgumentException("invalid term order for normalPosition " + ofac.tord);
         }
         GenPolynomialRing<C> nfac = ofac.extendLower(1);
         List<GenPolynomial<C>> elist = new ArrayList<GenPolynomial<C>>(list.list.size() + 1);
@@ -1901,7 +1901,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
                             QuotientRing<C> pfac = (QuotientRing) (Object) fac;
                             fac = pfac.ring.coFac;
                         } else {
-                            throw new RuntimeException("field elements exhausted, need algebraic extension of base ring");
+                            throw new ArithmeticException("field elements exhausted, need algebraic extension of base ring");
                         }
                         braces++;
                     }
@@ -1925,7 +1925,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
                 }
             } else {
                 if ( !aiter.hasNext() ) {
-                    throw new RuntimeException("field elements exhausted, normal position not reachable");
+                    throw new ArithmeticException("field elements exhausted, normal position not reachable");
                 }
                 AlgebraicNumber<C> an = aiter.next();
                 //System.out.println("an,iter = " + an);
@@ -1933,7 +1933,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
                 //System.out.println("tn = " + tn);
             }
             if ( tn.isZERO() ) {
-                throw new RuntimeException("field elements exhausted, normal position not reachable");
+                throw new ArithmeticException("field elements exhausted, normal position not reachable");
             }
             zp = z.subtract(xj.subtract(xi.multiply(tn)));
             zp = zp.monic();

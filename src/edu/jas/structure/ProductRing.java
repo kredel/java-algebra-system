@@ -84,8 +84,8 @@ public class ProductRing<C extends RingElem<C> >
            if ( 0 <= i && i < nCopies ) {
               return ring;
            }
-           throw new RuntimeException("index out of bound " 
-                                     + this.getClass().getName());
+           throw new IllegalArgumentException("index out of bound " 
+                                            + this.getClass().getName());
         } else {
            return ringList.get(i);
         }
@@ -100,7 +100,7 @@ public class ProductRing<C extends RingElem<C> >
            if ( ring.equals(rf) ) {
               nCopies++;
            }
-           throw new RuntimeException("wrong RingFactory: " + rf);
+           throw new IllegalArgumentException("wrong RingFactory: " + rf);
         } else {
            ringList.add(rf);
         }
@@ -212,7 +212,7 @@ public class ProductRing<C extends RingElem<C> >
      */
     public Product<C> getAtomic(int i) {
         if ( i < 0 || i >= length() ) {
-           throw new RuntimeException("index out of bounds " + i);
+           throw new IllegalArgumentException("index out of bounds " + i);
         }
         SortedMap<Integer,C> elem = new TreeMap<Integer,C>();
         if ( nCopies != 0 ) {

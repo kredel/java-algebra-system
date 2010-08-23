@@ -97,7 +97,7 @@ public class Local<C extends GcdRingElem<C> >
                     GenPolynomial<C> n, GenPolynomial<C> d,
                     boolean isred) {
         if ( d == null || d.isZERO() ) {
-           throw new RuntimeException("denominator may not be zero");
+           throw new IllegalArgumentException("denominator may not be zero");
         }
         ring = r;
         if ( d.signum() < 0 ) {
@@ -111,7 +111,7 @@ public class Local<C extends GcdRingElem<C> >
         }
         GenPolynomial<C> p = ring.ideal.normalform( d );
         if ( p == null || p.isZERO() ) {
-           throw new RuntimeException("denominator may not be in ideal");
+           throw new IllegalArgumentException("denominator may not be in ideal");
         }
         //d = p; cant do this
         // must reduce to lowest terms
@@ -144,19 +144,6 @@ public class Local<C extends GcdRingElem<C> >
      */
     protected GenPolynomial<C> lcm(GenPolynomial<C> n, GenPolynomial<C> d) {
         GenPolynomial<C> lcm = ring.engine.lcm(n,d);
-        //* Just for fun, is not efficient.
-        //List<GenPolynomial<C>> list;
-        //list = new ArrayList<GenPolynomial<C>>( 1 );
-        //list.add( n );
-        //Ideal<C> N = new Ideal<C>( ring.ring, list, true );
-        //list = new ArrayList<GenPolynomial<C>>( 1 );
-        //list.add( d );
-        //Ideal<C> D = new Ideal<C>( ring.ring, list, true );
-        //Ideal<C> L = N.intersect( D );
-        //if ( L.list.list.size() != 1 ) {
-        //   throw new RuntimeException("lcm not uniqe");
-        //}
-        //GenPolynomial<C> lcm = L.list.list.get(0);
         return lcm;
     }
 
@@ -180,9 +167,6 @@ public class Local<C extends GcdRingElem<C> >
         if ( d.isONE() ) {
            return d;
         }
-        //GenPolynomial<C> p = n.multiply(d);
-        //GenPolynomial<C> lcm = lcm(n,d);
-        //GenPolynomial<C> gcd = p.divide(lcm);
         GenPolynomial<C> gcd = ring.engine.gcd(n,d);
         return gcd;
     }
@@ -420,7 +404,7 @@ public class Local<C extends GcdRingElem<C> >
         if ( isUnit() ) {
            return new Local<C>( ring, den, num, true );
         }
-        throw new RuntimeException("element not invertible " + this);
+        throw new ArithmeticException("element not invertible " + this);
     }
 
 
@@ -430,12 +414,12 @@ public class Local<C extends GcdRingElem<C> >
      */
     public Local<C> remainder(Local<C> S) {
         if ( num.isZERO() ) {
-           throw new RuntimeException("element not invertible " + this);
+           throw new ArithmeticException("element not invertible " + this);
         }
         if ( S.isUnit() ) {
            return ring.getZERO(); 
         } else {
-           throw new RuntimeException("remainder not implemented" + S);
+           throw new UnsupportedOperationException("remainder not implemented" + S);
         }
     }
 
@@ -487,19 +471,18 @@ public class Local<C extends GcdRingElem<C> >
         GenPolynomial<C> x = ring.engine.gcd( num, b.num );
         GenPolynomial<C> y = ring.engine.gcd( den, b.den );
         return new Local<C>( ring, x, y, true );
-        // * <b>Note: </b>Not implemented, throws RuntimeException.
-        // throw new RuntimeException("gcd not implemented " + this.getClass().getName());
+        // throw new UnsupportedOperationException("gcd not implemented " + this.getClass().getName());
     }
 
 
     /**
      * Extended greatest common divisor.
-     * <b>Note: </b>Not implemented, throws RuntimeException.
+     * <b>Note: </b>Not implemented, throws UnsupportedOperationException.
      * @param b other element.
      * @return [ gcd(this,b), c1, c2 ] with c1*this + c2*b = gcd(this,b).
      */
     public Local<C>[] egcd(Local<C> b) {
-        throw new RuntimeException("egcd not implemented " + this.getClass().getName());
+        throw new UnsupportedOperationException("egcd not implemented " + this.getClass().getName());
     }
 
 }

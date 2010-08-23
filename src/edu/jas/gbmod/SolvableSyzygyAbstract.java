@@ -129,7 +129,7 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
 
                 h = sred.leftNormalform( row, F, s );
                 if ( ! h.isZERO() ) {
-                    throw new RuntimeException("Syzygy no leftGB");
+                    throw new ArithmeticException("Syzygy no leftGB");
                 }
                 if ( logger.isDebugEnabled() ) {
                     logger.info("row = " + row);

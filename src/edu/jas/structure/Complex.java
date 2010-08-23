@@ -515,7 +515,7 @@ public class Complex<C extends RingElem<C>> implements StarRingElem<Complex<C>>,
             BigDecimal qid = new BigDecimal(qc.getIm());
             System.out.println("qrd  = " + qrd);
             System.out.println("qid  = " + qid);
-            throw new RuntimeException("QR norm not decreasing " + Rp + ", " + Rp.norm());
+            throw new ArithmeticException("QR norm not decreasing " + Rp + ", " + Rp.norm());
         }
         ret[0] = Sp;
         ret[1] = Rp;

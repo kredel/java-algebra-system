@@ -59,11 +59,11 @@ public class LocalRing<C extends GcdRingElem<C> >
      */
     public LocalRing(Ideal<C> i) {
         if ( i == null ) {
-           throw new RuntimeException("ideal may not be null");
+           throw new IllegalArgumentException("ideal may not be null");
         }
         ideal = i.GB(); // cheap if isGB
         if ( ideal.isONE() ) {
-           throw new RuntimeException("ideal may not be 1");
+           throw new IllegalArgumentException("ideal may not be 1");
         }
         ring = ideal.list.ring;
         //engine = GCDFactory.<C>getImplementation( ring.coFac );
