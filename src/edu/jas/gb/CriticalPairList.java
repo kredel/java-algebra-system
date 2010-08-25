@@ -68,7 +68,7 @@ public class CriticalPairList<C extends RingElem<C> > {
     public CriticalPairList(int m, GenPolynomialRing<C> r) {
         ring = r;
         if ( m < 0 || ring.nvar < m ) {
-           throw new RuntimeException("moduleVars > nvars");
+           throw new IllegalArgumentException("moduleVars > nvars");
         }
         moduleVars = m;
         P = new ArrayList<GenPolynomial<C>>();

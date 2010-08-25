@@ -248,7 +248,7 @@ public class EReductionSeq<C extends RingElem<C>> extends DReductionSeq<C> imple
         if (Ap == null || Ap.isZERO()) {
             return Ap;
         }
-        throw new RuntimeException("not jet implemented");
+        throw new UnsupportedOperationException("not jet implemented");
         /*
         int l = Pp.size();
         GenPolynomial<C>[] P = new GenPolynomial[l];

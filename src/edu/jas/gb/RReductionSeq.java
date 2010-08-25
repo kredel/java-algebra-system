@@ -358,7 +358,6 @@ public class RReductionSeq<C extends RegularRingElem<C>> extends ReductionAbstra
         if (Ap == null || Ap.isZERO()) {
             return Ap;
         }
-        //throw new RuntimeException("not jet implemented");
         int l;
         GenPolynomial<C>[] P;
         synchronized (Pp) {

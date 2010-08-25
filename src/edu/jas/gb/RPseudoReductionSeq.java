@@ -110,7 +110,7 @@ public class RPseudoReductionSeq<C extends RegularRingElem<C>> extends RReductio
                         if (a.remainder(c).isZERO()) { //c.isUnit() ) {
                             a = a.divide(c);
                             if (a.isZERO()) {
-                                throw new RuntimeException("a.isZERO()");
+                                throw new ArithmeticException("a.isZERO()");
                             }
                         } else {
                             c = c.fillOne();
@@ -216,7 +216,7 @@ public class RPseudoReductionSeq<C extends RegularRingElem<C>> extends RReductio
                         if (a.remainder(c).isZERO()) { //c.isUnit() ) {
                             a = a.divide(c);
                             if (a.isZERO()) {
-                                throw new RuntimeException("a.isZERO()");
+                                throw new ArithmeticException("a.isZERO()");
                             }
                         } else {
                             c = c.fillOne();
@@ -267,7 +267,6 @@ public class RPseudoReductionSeq<C extends RegularRingElem<C>> extends RReductio
         if (Ap == null || Ap.isZERO()) {
             return Ap;
         }
-        //throw new RuntimeException("not jet implemented");
         int l;
         GenPolynomial<C>[] P;
         synchronized (Pp) {
@@ -322,7 +321,7 @@ public class RPseudoReductionSeq<C extends RegularRingElem<C>> extends RReductio
                         if (b.isZERO()) {
                             a = a.divide(c);
                             if (a.isZERO()) {
-                                throw new RuntimeException("a.isZERO()");
+                                throw new ArithmeticException("a.isZERO()");
                             }
                         } else {
                             c = c.fillOne();

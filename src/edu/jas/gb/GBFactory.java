@@ -144,7 +144,7 @@ public class GBFactory {
         case dgb: bba = new DGroebnerBaseSeq<BigInteger>();
             break;
         default:
-            throw new RuntimeException("algorithm not available " + a);
+            throw new IllegalArgumentException("algorithm not available " + a);
         }
         return bba;
     }

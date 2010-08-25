@@ -103,10 +103,10 @@ public abstract class ReductionAbstract<C extends RingElem<C>>
                     GenPolynomial<C> Bp) {  
         if ( debug ) {
             if ( Bp == null || Bp.isZERO() ) {
-                throw new RuntimeException("Spol B is zero");
+                throw new ArithmeticException("Spol B is zero");
             }
             if ( Ap == null || Ap.isZERO() ) {
-                throw new RuntimeException("Spol A is zero");
+                throw new ArithmeticException("Spol A is zero");
             }
             if ( ! Ap.ring.equals( Bp.ring ) ) { 
                 logger.error("rings not equal " + Ap.ring + ", " + Bp.ring); 

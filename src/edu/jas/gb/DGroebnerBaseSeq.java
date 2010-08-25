@@ -110,7 +110,6 @@ public class DGroebnerBaseSeq<C extends RingElem<C>>
     public List<GenPolynomial<C>> 
              GB( int modv, 
                  List<GenPolynomial<C>> F ) {  
-        //throw new RuntimeException("not jet implemented");
         GenPolynomial<C> p;
         List<GenPolynomial<C>> G = new ArrayList<GenPolynomial<C>>();
         OrderedDPairlist<C> pairlist = null; 

@@ -83,7 +83,7 @@ public class CriticalPair<C extends RingElem<C> >
      */
     public void setInReduction() {
         if ( inReduction ) {
-           throw new RuntimeException("already in reduction " + this);
+           throw new IllegalStateException("already in reduction " + this);
         }
         inReduction = true;
     }
@@ -113,7 +113,7 @@ public class CriticalPair<C extends RingElem<C> >
      */
     public void setReductum(GenPolynomial<C> r) {
         if ( r == null ) {
-           throw new RuntimeException("reduction null not allowed " + this);
+           throw new IllegalArgumentException("reduction null not allowed " + this);
         }
         inReduction = false;
         reductum = r;

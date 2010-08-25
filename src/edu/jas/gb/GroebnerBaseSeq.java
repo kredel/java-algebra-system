@@ -75,7 +75,7 @@ public class GroebnerBaseSeq<C extends RingElem<C>>
                if ( pairlist == null ) {
                   pairlist = new OrderedPairlist<C>( modv, p.ring );
                   if ( ! p.ring.coFac.isField() ) {
-                     throw new RuntimeException("coefficients not from a field");
+                     throw new IllegalArgumentException("coefficients not from a field");
                   }
                }
                // putOne not required

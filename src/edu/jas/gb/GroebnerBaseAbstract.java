@@ -138,8 +138,8 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>>
     public ExtendedGB<C> 
            extGB( int modv, 
                   List<GenPolynomial<C>> F ) {
-        throw new RuntimeException("extGB not implemented in " 
-                                   + this.getClass().getSimpleName());
+        throw new UnsupportedOperationException("extGB not implemented in " 
+                                              + this.getClass().getSimpleName());
     }
 
 

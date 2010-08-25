@@ -313,7 +313,7 @@ public class DReductionSeq<C extends RingElem<C>> extends ReductionAbstract<C> i
      */
     public GenPolynomial<C> GPolynomial(List<GenPolynomial<C>> S, int i, GenPolynomial<C> Ap, int j,
             GenPolynomial<C> Bp) {
-        throw new RuntimeException("not jet implemented");
+        throw new UnsupportedOperationException("not jet implemented");
     }
 
 
@@ -406,7 +406,7 @@ public class DReductionSeq<C extends RingElem<C>> extends ReductionAbstract<C> i
         if (Ap == null || Ap.isZERO()) {
             return Ap;
         }
-        throw new RuntimeException("not jet implemented");
+        throw new UnsupportedOperationException("not jet implemented");
         /*
         int l = Pp.size();
         GenPolynomial<C>[] P = new GenPolynomial[l];

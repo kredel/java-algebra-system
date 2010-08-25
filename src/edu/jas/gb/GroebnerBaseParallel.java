@@ -151,6 +151,9 @@ public class GroebnerBaseParallel<C extends RingElem<C>>
                 G.add( p );
                 if ( pairlist == null ) {
                     pairlist = new OrderedPairlist<C>( modv, p.ring );
+                    if ( ! p.ring.coFac.isField() ) {
+                        throw new IllegalArgumentException("coefficients not from a field");
+                    }
                 }
                 // putOne not required
                 pairlist.put( p );

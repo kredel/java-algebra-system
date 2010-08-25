@@ -51,7 +51,7 @@ public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
            return Ap;
         }
         if ( ! Ap.ring.coFac.isField() ) {
-           throw new RuntimeException("coefficients not from a field");
+           throw new IllegalArgumentException("coefficients not from a field");
         }
         Map.Entry<ExpVector,C> m;
         int l;
@@ -133,7 +133,7 @@ public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
             return Ap;
         }
         if ( ! Ap.ring.coFac.isField() ) {
-           throw new RuntimeException("coefficients not from a field");
+           throw new IllegalArgumentException("coefficients not from a field");
         }
         int l = Pp.size();
         GenPolynomial<C>[] P = new GenPolynomial[l];

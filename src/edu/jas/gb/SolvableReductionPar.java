@@ -126,7 +126,7 @@ public class SolvableReductionPar<C extends RingElem<C>>
            leftNormalform(List<GenSolvablePolynomial<C>> row,
                           List<GenSolvablePolynomial<C>> Pp, 
                           GenSolvablePolynomial<C> Ap) {  
-        throw new RuntimeException("normalform with recording not implemented");
+        throw new UnsupportedOperationException("normalform with recording not implemented");
     }
 
 

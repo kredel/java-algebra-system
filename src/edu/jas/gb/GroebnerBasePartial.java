@@ -227,7 +227,7 @@ public class GroebnerBasePartial<C extends GcdRingElem<C>> extends GroebnerBaseA
             return getPermutation(vars, rvars);
         } else if (true) {
             logger.info("not implemented for " + variables + " != " + pvariables + " cup " + rvariables);
-            throw new RuntimeException("not implemented");
+            throw new UnsupportedOperationException("not implemented");
         }
         if (!variables.containsAll(pvariables) || !variables.containsAll(rvariables)) {
             throw new IllegalArgumentException("partial variables not contained in all variables ");

@@ -143,7 +143,7 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>>
                if ( pairlist == null ) {
                   pairlist = new OrderedPairlist<C>( modv, p.ring );
                   if ( ! p.ring.coFac.isField() ) {
-                     throw new RuntimeException("coefficients not from a field");
+                     throw new IllegalArgumentException("coefficients not from a field");
                   }
                }
                // putOne not required
@@ -264,7 +264,7 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>>
     public SolvableExtendedGB<C> 
            extLeftGB( int modv, 
                       List<GenSolvablePolynomial<C>> F ) {
-        throw new RuntimeException("parallel extLeftGB not implemented");
+        throw new UnsupportedOperationException("parallel extLeftGB not implemented");
     }
 
 
@@ -317,7 +317,7 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>>
                if ( pairlist == null ) {
                   pairlist = new OrderedPairlist<C>( modv, p.ring );
                   if ( ! p.ring.coFac.isField() ) {
-                     throw new RuntimeException("coefficients not from a field");
+                     throw new IllegalArgumentException("coefficients not from a field");
                   }
                }
                // putOne not required
