@@ -224,7 +224,7 @@ public class FactorFactory {
         }
         //System.out.println("ft = " + t);
         if (t == 0) {
-            throw new RuntimeException("no factorization implementation for " + fac.getClass().getName());
+            throw new IllegalArgumentException("no factorization implementation for " + fac.getClass().getName());
         }
         if (t == 1) {
             ufd = new FactorInteger();

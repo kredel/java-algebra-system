@@ -55,7 +55,7 @@ public class FactorRational extends FactorAbsolute<BigRational> {
     @Override
     public List<GenPolynomial<BigRational>> baseFactorsSquarefree(GenPolynomial<BigRational> P) {
         if (P == null) {
-            throw new RuntimeException(this.getClass().getName() + " P == null");
+            throw new IllegalArgumentException(this.getClass().getName() + " P == null");
         }
         List<GenPolynomial<BigRational>> factors = new ArrayList<GenPolynomial<BigRational>>();
         if (P.isZERO()) {
@@ -67,7 +67,7 @@ public class FactorRational extends FactorAbsolute<BigRational> {
         }
         GenPolynomialRing<BigRational> pfac = P.ring;
         if (pfac.nvar > 1) {
-            throw new RuntimeException(this.getClass().getName() + " only for univariate polynomials");
+            throw new IllegalArgumentException(this.getClass().getName() + " only for univariate polynomials");
         }
         GenPolynomial<BigRational> Pr = P;
         BigRational ldcf = P.leadingBaseCoefficient();

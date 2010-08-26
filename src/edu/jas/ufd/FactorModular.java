@@ -69,7 +69,7 @@ public class FactorModular<MOD extends GcdRingElem<MOD> & Modular> extends Facto
      */
     public SortedMap<Long, GenPolynomial<MOD>> baseDistinctDegreeFactors(GenPolynomial<MOD> P) {
         if (P == null) {
-            throw new RuntimeException(this.getClass().getName() + " P != null");
+            throw new IllegalArgumentException(this.getClass().getName() + " P != null");
         }
         SortedMap<Long, GenPolynomial<MOD>> facs = new TreeMap<Long, GenPolynomial<MOD>>();
         if (P.isZERO()) {
@@ -77,7 +77,7 @@ public class FactorModular<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         }
         GenPolynomialRing<MOD> pfac = P.ring;
         if (pfac.nvar > 1) {
-            throw new RuntimeException(this.getClass().getName() + " only for univariate polynomials");
+            throw new IllegalArgumentException(this.getClass().getName() + " only for univariate polynomials");
         }
         ModularRingFactory<MOD> mr = (ModularRingFactory<MOD>) pfac.coFac;
         java.math.BigInteger m = mr.getIntegerModul().getVal();
@@ -115,7 +115,7 @@ public class FactorModular<MOD extends GcdRingElem<MOD> & Modular> extends Facto
      */
     public List<GenPolynomial<MOD>> baseEqualDegreeFactors(GenPolynomial<MOD> P, long deg) {
         if (P == null) {
-            throw new RuntimeException(this.getClass().getName() + " P != null");
+            throw new IllegalArgumentException(this.getClass().getName() + " P != null");
         }
         List<GenPolynomial<MOD>> facs = new ArrayList<GenPolynomial<MOD>>();
         if (P.isZERO()) {
@@ -123,7 +123,7 @@ public class FactorModular<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         }
         GenPolynomialRing<MOD> pfac = P.ring;
         if (pfac.nvar > 1) {
-            throw new RuntimeException(this.getClass().getName() + " only for univariate polynomials");
+            throw new IllegalArgumentException(this.getClass().getName() + " only for univariate polynomials");
         }
         if (P.degree(0) == deg) {
             facs.add(P);
@@ -189,7 +189,7 @@ public class FactorModular<MOD extends GcdRingElem<MOD> & Modular> extends Facto
     @Override
     public List<GenPolynomial<MOD>> baseFactorsSquarefree(GenPolynomial<MOD> P) {
         if (P == null) {
-            throw new RuntimeException(this.getClass().getName() + " P == null");
+            throw new IllegalArgumentException(this.getClass().getName() + " P == null");
         }
         List<GenPolynomial<MOD>> factors = new ArrayList<GenPolynomial<MOD>>();
         if (P.isZERO()) {
@@ -201,10 +201,10 @@ public class FactorModular<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         }
         GenPolynomialRing<MOD> pfac = P.ring;
         if (pfac.nvar > 1) {
-            throw new RuntimeException(this.getClass().getName() + " only for univariate polynomials");
+            throw new IllegalArgumentException(this.getClass().getName() + " only for univariate polynomials");
         }
         if (!P.leadingBaseCoefficient().isONE()) {
-            throw new RuntimeException("ldcf(P) != 1: " + P);
+            throw new IllegalArgumentException("ldcf(P) != 1: " + P);
         }
         SortedMap<Long, GenPolynomial<MOD>> dfacs = baseDistinctDegreeFactors(P);
         if ( debug ) {

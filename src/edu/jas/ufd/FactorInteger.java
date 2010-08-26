@@ -86,7 +86,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
     @Override
     public List<GenPolynomial<BigInteger>> baseFactorsSquarefree(GenPolynomial<BigInteger> P) {
         if (P == null) {
-            throw new RuntimeException(this.getClass().getName() + " P == null");
+            throw new IllegalArgumentException(this.getClass().getName() + " P == null");
         }
         List<GenPolynomial<BigInteger>> factors = new ArrayList<GenPolynomial<BigInteger>>();
         if (P.isZERO()) {
@@ -98,7 +98,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         }
         GenPolynomialRing<BigInteger> pfac = P.ring;
         if (pfac.nvar > 1) {
-            throw new RuntimeException(this.getClass().getName() + " only for univariate polynomials");
+            throw new IllegalArgumentException(this.getClass().getName() + " only for univariate polynomials");
         }
         if (P.degree(0) <= 1L) {
             factors.add(P);
@@ -152,7 +152,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 //System.out.println("next run ++++++++++++++++++++++++++++++++++");
                 if (++i >= pn) {
                     logger.error("prime list exhausted, pn = " + pn);
-                    throw new RuntimeException("prime list exhausted");
+                    throw new ArithmeticException("prime list exhausted");
                 }
                 if ( ModLongRing.MAX_LONG.compareTo( p ) > 0 ) {
                     cofac = (ModularRingFactory) new ModLongRing(p, true);
@@ -370,11 +370,11 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                                                        List<GenPolynomial<MOD>> F, BitSet D) {
         //System.out.println("*** monic factor combination ***");
         if (C == null || C.isZERO() || F == null || F.size() == 0) {
-            throw new RuntimeException("C must be nonzero and F must be nonempty");
+            throw new IllegalArgumentException("C must be nonzero and F must be nonempty");
         }
         GenPolynomialRing<BigInteger> pfac = C.ring;
         if (pfac.nvar != 1) { // todo assert
-            throw new RuntimeException("polynomial ring not univariate");
+            throw new IllegalArgumentException("polynomial ring not univariate");
         }
         List<GenPolynomial<BigInteger>> factors = new ArrayList<GenPolynomial<BigInteger>>(F.size());
         List<GenPolynomial<MOD>> mlist = F;
@@ -499,11 +499,11 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                                                           List<GenPolynomial<MOD>> F, BitSet D) {
         //System.out.println("*** non monic factor combination ***");
         if (C == null || C.isZERO() || F == null || F.size() == 0) {
-            throw new RuntimeException("C must be nonzero and F must be nonempty");
+            throw new IllegalArgumentException("C must be nonzero and F must be nonempty");
         }
         GenPolynomialRing<BigInteger> pfac = C.ring;
         if (pfac.nvar != 1) { // todo assert
-            throw new RuntimeException("polynomial ring not univariate");
+            throw new IllegalArgumentException("polynomial ring not univariate");
         }
         List<GenPolynomial<BigInteger>> factors = new ArrayList<GenPolynomial<BigInteger>>(F.size());
         List<GenPolynomial<MOD>> mlist = F;
