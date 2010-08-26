@@ -2,17 +2,9 @@ List of things to be resolved or accomplished:
 
 issues to consider:
 
-- implement parallel proxys for GB computation
-
 - implement multivariate Hensel lifting for multivariate polynomial factorization
 
 - implement Berlekamp-Zassenhaus for modular factorization
-
-- implement power series composition and power
-
-- check the 187 exceptions (170 runtime exceptions) that are thrown
-
-- check for safe publication idiom in polynomial construction
 
 - make hashCode to reuse computed value --> not immutable
 
@@ -24,12 +16,17 @@ issues to consider:
 
 - refactor from BasicLinAlg to GenMatrix and GenVector 
 
+- implement parallel proxys for GB computation
+
 - rework parallel GB algorithms
+
+- implement univariate power series composition and power
+
+- implement multivariate power series 
 
 - make final variables public (?)
 
-- define divideAndRemainder in RingElem interface and implement
-- rename divideAndRemainder to quotientRemainder
+- define quotientRemainder in RingElem interface (?)
 
 - make use of gcd in pseudo reduction, needs other coefficient type
 
@@ -41,18 +38,24 @@ issues to consider:
 
 - refactor the Quotient class to edu.jas.ufd package
 
-- implement real roots with other methods, e.g. after Uspensky or Rolle
+- implement real and complex roots with other methods, e.g. after Uspensky or Rolle
 
 - refactor method names for groovy operator overloading, make examples for usage
 
 
+
 partially resolved and completed issues:
 
-- implement AlgebraicNumber primitive element computation
+- check the 693 exceptions (including 473 runtime exceptions) that are thrown, 
+  reduce number of runtime exceptions
 
-- implement prime and primary ideal decomposition for non-zero-dimensional ideals
+- check for safe publication in constructors, check wrt. the (new) Java memory model
 
-- implement prime and primary ideal decomposition for zero-dimensional ideals
+- implement AlgebraicNumber primitive element computation, done
+
+- implement prime and primary ideal decomposition for non-zero-dimensional ideals, done
+
+- implement prime and primary ideal decomposition for zero-dimensional ideals, done
 
 - implement squarefree decomposition over fields of characteristic p
 
@@ -68,22 +71,13 @@ partially resolved and completed issues:
   clean structure of compareTo, signum and equals
   - is not possible
 
-- refactor ExpVector for different array element types, done
+- rename divideAndRemainder to quotientRemainder
 
-- implement comprehensive GB, done
+- define power(n) in RingElem (not done) and implement in edu.jas.structure.Power 
+  and classes, done
 
 - add product category to applications
 - implement direct products of ring elements
-
-- implement d- and e-reductions and d-/e-Groebner bases, done
-
-- implement Groebner bases for regular rings, done
-
-- implement term order optimization from MAS, also for coefficients 
-  and solvable polynomials, done
-
-- define power(n) in RingElem and implement in edu.jas.structure.Power 
-  and classes, done
 
 - define FieldElem and Field factory interfaces and use them for GB coefficients
 
@@ -97,14 +91,7 @@ partially resolved and completed issues:
 - add assertions to check for number of polynomial variables and term order,
   nvar in GenPolynomial and GenSolvablePolynomial done
 
-- make examples with rational function field coefficients, 
-  e.g. Raksanyi example
-
-- incorporate gcd() in the Quotient class in edu.jas.application
-
 - rework junit tests to stop failing in case of zero polynomials
-
-- add version information in jas jar-file names, done
 
 - develop modifiable polynomial constructor or put method and iterators
 
@@ -113,6 +100,15 @@ partially resolved and completed issues:
 
 
 resolved and completed issues:
+
+- implement d- and e-reductions and d-/e-Groebner bases, done
+
+- implement Groebner bases for regular rings, done
+
+- implement comprehensive GB, done
+
+- implement term order optimization from MAS, also for coefficients 
+  and solvable polynomials, done
 
 - implement complex roots, done
 
@@ -141,7 +137,14 @@ resolved and completed issues:
 
 - rename getval() to getVal() in ExpVector, done
 
+- refactor ExpVector for different array element types, done
+
+- incorporate gcd() in the Quotient class in edu.jas.application
+
 - implement BigDecimal with RingElem interface, done
+
+- make examples with rational function field coefficients, 
+  e.g. Raksanyi example
 
 - replace thread-and-network-programming algorithms with 
   util.concurrent, done
@@ -149,6 +152,8 @@ resolved and completed issues:
 - implement multivariate polynomial greatest common divisors, done
 
 - add methods to GenPolynomialRing to construct x_i polynomials, done
+
+- add version information in jas jar-file names, done
 
 - split RingFactory to ElemFactory, done
 
