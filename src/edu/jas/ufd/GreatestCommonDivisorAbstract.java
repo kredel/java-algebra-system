@@ -49,7 +49,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
      */
     public C baseContent(GenPolynomial<C> P) {
         if (P == null) {
-            throw new RuntimeException(this.getClass().getName() + " P != null");
+            throw new IllegalArgumentException(this.getClass().getName() + " P != null");
         }
         if (P.isZERO()) {
             return P.ring.getZEROCoefficient();
@@ -79,7 +79,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
      */
     public GenPolynomial<C> basePrimitivePart(GenPolynomial<C> P) {
         if (P == null) {
-            throw new RuntimeException(this.getClass().getName() + " P != null");
+            throw new IllegalArgumentException(this.getClass().getName() + " P != null");
         }
         if (P.isZERO()) {
             return P;
@@ -92,7 +92,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         if (debug) {
             GenPolynomial<C> p = pp.multiply(d);
             if (!p.equals(P)) {
-                throw new RuntimeException("pp(p)*cont(p) != p: ");
+                throw new ArithmeticException("pp(p)*cont(p) != p: ");
             }
         }
         return pp;
@@ -116,7 +116,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
      */
     public GenPolynomial<C> recursiveContent(GenPolynomial<GenPolynomial<C>> P) {
         if (P == null) {
-            throw new RuntimeException(this.getClass().getName() + " P != null");
+            throw new IllegalArgumentException(this.getClass().getName() + " P != null");
         }
         if (P.isZERO()) {
             return P.ring.getZEROCoefficient();
@@ -143,7 +143,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
      */
     public GenPolynomial<GenPolynomial<C>> recursivePrimitivePart(GenPolynomial<GenPolynomial<C>> P) {
         if (P == null) {
-            throw new RuntimeException(this.getClass().getName() + " P != null");
+            throw new IllegalArgumentException(this.getClass().getName() + " P != null");
         }
         if (P.isZERO()) {
             return P;
@@ -164,7 +164,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
      */
     public C baseRecursiveContent(GenPolynomial<GenPolynomial<C>> P) {
         if (P == null) {
-            throw new RuntimeException(this.getClass().getName() + " P != null");
+            throw new IllegalArgumentException(this.getClass().getName() + " P != null");
         }
         if (P.isZERO()) {
             GenPolynomialRing<C> cf = (GenPolynomialRing<C>) P.ring.coFac;
@@ -196,7 +196,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
      */
     public GenPolynomial<GenPolynomial<C>> baseRecursivePrimitivePart(GenPolynomial<GenPolynomial<C>> P) {
         if (P == null) {
-            throw new RuntimeException(this.getClass().getName() + " P != null");
+            throw new IllegalArgumentException(this.getClass().getName() + " P != null");
         }
         if (P.isZERO()) {
             return P;
@@ -260,12 +260,12 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
      */
     public GenPolynomial<C> content(GenPolynomial<C> P) {
         if (P == null) {
-            throw new RuntimeException(this.getClass().getName() + " P != null");
+            throw new IllegalArgumentException(this.getClass().getName() + " P != null");
         }
         GenPolynomialRing<C> pfac = P.ring;
         if (pfac.nvar <= 1) {
             // baseContent not possible by return type
-            throw new RuntimeException(this.getClass().getName()
+            throw new IllegalArgumentException(this.getClass().getName()
                     + " use baseContent for univariate polynomials");
 
         }
@@ -285,7 +285,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
      */
     public GenPolynomial<C> primitivePart(GenPolynomial<C> P) {
         if (P == null) {
-            throw new RuntimeException(this.getClass().getName() + " P != null");
+            throw new IllegalArgumentException(this.getClass().getName() + " P != null");
         }
         if (P.isZERO()) {
             return P;
@@ -313,7 +313,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
      */
     public GenPolynomial<C> divide(GenPolynomial<C> a, C b) {
         if (b == null || b.isZERO()) {
-            throw new RuntimeException(this.getClass().getName() + " division by zero");
+            throw new IllegalArgumentException(this.getClass().getName() + " division by zero");
 
         }
         if (a == null || a.isZERO()) {
@@ -663,7 +663,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
             return ret;
         }
         if ( P.ring.nvar != 1 ) {
-             throw new RuntimeException(this.getClass().getName()
+             throw new IllegalArgumentException(this.getClass().getName()
                                       + " not univariate polynomials " + P.ring);
         }
         GenPolynomial<C> q = P; 
@@ -706,7 +706,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         GenPolynomial<C> g = egcd[0];
         GenPolynomial<C>[] qr = PolyUtil.<C> basePseudoQuotientRemainder(c, g);
         if ( !qr[1].isZERO() ) {
-            throw new RuntimeException("not solvable, r = " + qr[1] + ", c = " + c + ", g = " + g);
+            throw new ArithmeticException("not solvable, r = " + qr[1] + ", c = " + c + ", g = " + g);
         }
         GenPolynomial<C> q = qr[0];
         GenPolynomial<C> a = egcd[1].multiply(q);
@@ -732,7 +732,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
             System.out.println("a  = " + a);
             System.out.println("b  = " + b);
             System.out.println("y  = " + y);
-            throw new RuntimeException("not diophant, x = " + y.subtract(c));
+            throw new ArithmeticException("not diophant, x = " + y.subtract(c));
         }
 
         return ret;

@@ -77,7 +77,7 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>> extends SquarefreeAb
         }
         GenPolynomialRing<C> pfac = P.ring;
         if (pfac.nvar > 1) {
-            throw new RuntimeException(this.getClass().getName() + " only for univariate polynomials");
+            throw new IllegalArgumentException(this.getClass().getName() + " only for univariate polynomials");
         }
         GenPolynomial<C> pp = P.monic();
         if (pp.isConstant()) {
@@ -112,7 +112,7 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>> extends SquarefreeAb
         }
         GenPolynomialRing<C> pfac = A.ring;
         if (pfac.nvar > 1) {
-            throw new RuntimeException(this.getClass().getName() + " only for univariate polynomials");
+            throw new IllegalArgumentException(this.getClass().getName() + " only for univariate polynomials");
         }
         C ldbcf = A.leadingBaseCoefficient();
         if (!ldbcf.isONE()) {
@@ -191,7 +191,7 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>> extends SquarefreeAb
         }
         GenPolynomialRing<GenPolynomial<C>> pfac = P.ring;
         if (pfac.nvar > 1) {
-            throw new RuntimeException(this.getClass().getName() + " only for multivariate polynomials");
+            throw new IllegalArgumentException(this.getClass().getName() + " only for multivariate polynomials");
         }
         GenPolynomialRing<C> cfac = (GenPolynomialRing<C>) pfac.coFac;
         // squarefree content
@@ -238,7 +238,7 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>> extends SquarefreeAb
         GenPolynomialRing<GenPolynomial<C>> pfac = P.ring;
         if (pfac.nvar > 1) {
             // recursiveContent not possible by return type
-            throw new RuntimeException(this.getClass().getName() + " only for univariate polynomials");
+            throw new IllegalArgumentException(this.getClass().getName() + " only for univariate polynomials");
         }
         // if base coefficient ring is a field, make monic
         GenPolynomialRing<C> cfac = (GenPolynomialRing<C>) pfac.coFac;
@@ -332,7 +332,7 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>> extends SquarefreeAb
     @Override
     public GenPolynomial<C> squarefreePart(GenPolynomial<C> P) {
         if (P == null) {
-            throw new RuntimeException(this.getClass().getName() + " P != null");
+            throw new IllegalArgumentException(this.getClass().getName() + " P != null");
         }
         if (P.isZERO()) {
             return P;
@@ -364,7 +364,7 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>> extends SquarefreeAb
     @Override
     public SortedMap<GenPolynomial<C>, Long> squarefreeFactors(GenPolynomial<C> P) {
         if (P == null) {
-            throw new RuntimeException(this.getClass().getName() + " P != null");
+            throw new IllegalArgumentException(this.getClass().getName() + " P != null");
         }
         GenPolynomialRing<C> pfac = P.ring;
         if (pfac.nvar <= 1) {
@@ -397,7 +397,7 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>> extends SquarefreeAb
      *         and p_i squarefree.
      */
     public SortedMap<C, Long> squarefreeFactors(C P) {
-	throw new RuntimeException("method not implemented");
+	throw new UnsupportedOperationException("method not implemented");
     }
 
 }

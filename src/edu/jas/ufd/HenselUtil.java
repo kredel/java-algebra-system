@@ -77,11 +77,11 @@ public class HenselUtil {
             return new HenselApprox<MOD>(C,C,A,B);
         }
         if (A == null || A.isZERO() || B == null || B.isZERO()) {
-            throw new RuntimeException("A and B must be nonzero");
+            throw new IllegalArgumentException("A and B must be nonzero");
         }
         GenPolynomialRing<BigInteger> fac = C.ring;
         if (fac.nvar != 1) { // todo assert
-            throw new RuntimeException("polynomial ring not univariate");
+            throw new IllegalArgumentException("polynomial ring not univariate");
         }
         // setup factories
         GenPolynomialRing<MOD> pfac = A.ring;
@@ -236,11 +236,11 @@ public class HenselUtil {
             return new HenselApprox<MOD>(C,C,A,B);
         }
         if (A == null || A.isZERO() || B == null || B.isZERO()) {
-            throw new RuntimeException("A and B must be nonzero");
+            throw new IllegalArgumentException("A and B must be nonzero");
         }
         GenPolynomialRing<BigInteger> fac = C.ring;
         if (fac.nvar != 1) { // todo assert
-            throw new RuntimeException("polynomial ring not univariate");
+            throw new IllegalArgumentException("polynomial ring not univariate");
         }
         // one Hensel step on part polynomials
         GenPolynomial<MOD>[] gst = A.egcd(B);
@@ -277,11 +277,11 @@ public class HenselUtil {
             return new HenselApprox<MOD>(C,C,A,B);
         }
         if (A == null || A.isZERO() || B == null || B.isZERO()) {
-            throw new RuntimeException("A and B must be nonzero");
+            throw new IllegalArgumentException("A and B must be nonzero");
         }
         GenPolynomialRing<BigInteger> fac = C.ring;
         if (fac.nvar != 1) { // todo assert
-            throw new RuntimeException("polynomial ring not univariate");
+            throw new IllegalArgumentException("polynomial ring not univariate");
         }
         // setup factories
         GenPolynomialRing<MOD> pfac = A.ring;
@@ -502,11 +502,11 @@ public class HenselUtil {
             return new HenselApprox<MOD>(C,C,A,B);
         }
         if (A == null || A.isZERO() || B == null || B.isZERO()) {
-            throw new RuntimeException("A and B must be nonzero");
+            throw new IllegalArgumentException("A and B must be nonzero");
         }
         GenPolynomialRing<BigInteger> fac = C.ring;
         if (fac.nvar != 1) { // todo assert
-            throw new RuntimeException("polynomial ring not univariate");
+            throw new IllegalArgumentException("polynomial ring not univariate");
         }
         // one Hensel step on part polynomials
         GenPolynomial<MOD>[] gst = A.egcd(B);
@@ -536,14 +536,14 @@ public class HenselUtil {
       HenselApprox<MOD> liftHenselQuadraticFac(GenPolynomial<BigInteger> C, BigInteger M,
                                                GenPolynomial<MOD> A, GenPolynomial<MOD> B) throws NoLiftingException {
         if (C == null || C.isZERO()) {
-            throw new RuntimeException("C must be nonzero");
+            throw new IllegalArgumentException("C must be nonzero");
         }
         if (A == null || A.isZERO() || B == null || B.isZERO()) {
-            throw new RuntimeException("A and B must be nonzero");
+            throw new IllegalArgumentException("A and B must be nonzero");
         }
         GenPolynomialRing<BigInteger> fac = C.ring;
         if (fac.nvar != 1) { // todo assert
-            throw new RuntimeException("polynomial ring not univariate");
+            throw new IllegalArgumentException("polynomial ring not univariate");
         }
         // one Hensel step on part polynomials
         GenPolynomial<MOD>[] gst = A.egcd(B);
@@ -579,14 +579,14 @@ public class HenselUtil {
         //System.out.println("*** version for factorization *** ");
         GenPolynomial<BigInteger>[] AB = (GenPolynomial<BigInteger>[]) new GenPolynomial[2];
         if (C == null || C.isZERO()) {
-            throw new RuntimeException("C must be nonzero");
+            throw new IllegalArgumentException("C must be nonzero");
         }
         if (A == null || A.isZERO() || B == null || B.isZERO()) {
-            throw new RuntimeException("A and B must be nonzero");
+            throw new IllegalArgumentException("A and B must be nonzero");
         }
         GenPolynomialRing<BigInteger> fac = C.ring;
         if (fac.nvar != 1) { // todo assert
-            throw new RuntimeException("polynomial ring not univariate");
+            throw new IllegalArgumentException("polynomial ring not univariate");
         }
         // setup factories
         GenPolynomialRing<MOD> pfac = A.ring;
@@ -635,7 +635,7 @@ public class HenselUtil {
         if (ci.isZERO()) {
             System.out.println("c =  " + c);
             System.out.println("P =  " + P);
-            throw new RuntimeException("c mod p == 0 not meaningful");
+            throw new ArithmeticException("c mod p == 0 not meaningful");
         }
         // mod p
         A = A.multiply(ci);
@@ -1007,11 +1007,11 @@ public class HenselUtil {
     public static <MOD extends GcdRingElem<MOD> & Modular>
       GenPolynomial<MOD>[] liftExtendedEuclideanP2k(GenPolynomial<MOD> A, GenPolynomial<MOD> B, long k) throws NoLiftingException {
         if (A == null || A.isZERO() || B == null || B.isZERO()) {
-            throw new RuntimeException("A and B must be nonzero");
+            throw new IllegalArgumentException("A and B must be nonzero");
         }
         GenPolynomialRing<MOD> fac = A.ring;
         if (fac.nvar != 1) { // todo assert
-            throw new RuntimeException("polynomial ring not univariate");
+            throw new IllegalArgumentException("polynomial ring not univariate");
         }
         // start with extended Euclid mod p
         GenPolynomial<MOD>[] gst = A.egcd(B);
@@ -1116,11 +1116,11 @@ public class HenselUtil {
     public static <MOD extends GcdRingElem<MOD> & Modular>
       GenPolynomial<MOD>[] liftExtendedEuclidean(GenPolynomial<MOD> A, GenPolynomial<MOD> B, long k) throws NoLiftingException {
         if (A == null || A.isZERO() || B == null || B.isZERO()) {
-            throw new RuntimeException("A and B must be nonzero");
+            throw new IllegalArgumentException("A and B must be nonzero");
         }
         GenPolynomialRing<MOD> fac = A.ring;
         if (fac.nvar != 1) { // todo assert
-            throw new RuntimeException("polynomial ring not univariate");
+            throw new IllegalArgumentException("polynomial ring not univariate");
         }
         // start with extended Euclidean relation mod p
         GenPolynomial<MOD>[] gst = A.egcd(B);
@@ -1214,11 +1214,11 @@ public class HenselUtil {
     public static <MOD extends GcdRingElem<MOD> & Modular>
       List<GenPolynomial<MOD>> liftExtendedEuclidean(List<GenPolynomial<MOD>> A, long k) throws NoLiftingException {
         if (A == null || A.size() == 0) {
-            throw new RuntimeException("A must be non null and non empty");
+            throw new IllegalArgumentException("A must be non null and non empty");
         }
         GenPolynomialRing<MOD> fac = A.get(0).ring;
         if (fac.nvar != 1) { // todo assert
-            throw new RuntimeException("polynomial ring not univariate");
+            throw new IllegalArgumentException("polynomial ring not univariate");
         }
         GenPolynomial<MOD> zero = fac.getZERO();
         int r = A.size();
@@ -1286,7 +1286,7 @@ public class HenselUtil {
         List<GenPolynomial<MOD>> sol = new ArrayList<GenPolynomial<MOD>>();
         GenPolynomialRing<MOD> fac = A.ring;
         if (fac.nvar != 1) { // todo assert
-            throw new RuntimeException("polynomial ring not univariate");
+            throw new IllegalArgumentException("polynomial ring not univariate");
         }
         //System.out.println("C = " + C);
         GenPolynomial<MOD> zero = fac.getZERO();
@@ -1341,7 +1341,7 @@ public class HenselUtil {
         List<GenPolynomial<MOD>> sol = new ArrayList<GenPolynomial<MOD>>();
         GenPolynomialRing<MOD> fac = A.ring;
         if (fac.nvar != 1) { // todo assert
-            throw new RuntimeException("polynomial ring not univariate");
+            throw new IllegalArgumentException("polynomial ring not univariate");
         }
         GenPolynomialRing<BigInteger> ifac = new GenPolynomialRing<BigInteger>(new BigInteger(),fac);
         GenPolynomial<MOD>[] lee = liftExtendedEuclidean(B,A,k);
@@ -1436,11 +1436,11 @@ public class HenselUtil {
     public static <MOD extends GcdRingElem<MOD> & Modular>
       List<GenPolynomial<MOD>> liftHenselMonic(GenPolynomial<BigInteger> C, List<GenPolynomial<MOD>> F, long k) throws NoLiftingException {
         if (C == null || C.isZERO() || F == null || F.size() == 0) {
-            throw new RuntimeException("C must be nonzero and F must be nonempty");
+            throw new IllegalArgumentException("C must be nonzero and F must be nonempty");
         }
         GenPolynomialRing<BigInteger> fac = C.ring;
         if (fac.nvar != 1) { // todo assert
-            throw new RuntimeException("polynomial ring not univariate");
+            throw new IllegalArgumentException("polynomial ring not univariate");
         }
         List<GenPolynomial<MOD>> lift = new ArrayList<GenPolynomial<MOD>>(F.size());
         GenPolynomialRing<MOD> pfac = F.get(0).ring;

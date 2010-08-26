@@ -174,7 +174,7 @@ public class GreatestCommonDivisorModEval <MOD extends GcdRingElem<MOD> & Modula
             if (++i >= en) {
                 logger.error("elements of Z_p exhausted, en = " + en);
                 return mufd.gcd(P, S);
-                //throw new RuntimeException("prime list exhausted");
+                //throw new ArithmeticException("prime list exhausted");
             }
             // map normalization factor
             MOD nf = PolyUtil.<MOD> evaluateMain(cofac, cc, d);

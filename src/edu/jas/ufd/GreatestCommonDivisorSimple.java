@@ -44,7 +44,7 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
             return S;
         }
         if (P.ring.nvar > 1) {
-            throw new RuntimeException(this.getClass().getName() + " no univariate polynomial");
+            throw new IllegalArgumentException(this.getClass().getName() + " no univariate polynomial");
         }
         boolean field = P.ring.coFac.isField();
         long e = P.degree(0);
@@ -117,7 +117,7 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
             return S;
         }
         if (P.ring.nvar > 1) {
-            throw new RuntimeException(this.getClass().getName() + " no univariate polynomial");
+            throw new IllegalArgumentException(this.getClass().getName() + " no univariate polynomial");
         }
         boolean field = P.leadingBaseCoefficient().ring.coFac.isField();
         long e = P.degree(0);

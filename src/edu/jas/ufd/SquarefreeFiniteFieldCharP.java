@@ -57,7 +57,7 @@ public class SquarefreeFiniteFieldCharP<C extends GcdRingElem<C>> extends Square
      */
     public SortedMap<C, Long> rootCharacteristic(C p) {
         if (p == null) {
-            throw new RuntimeException(this.getClass().getName() + " p == null");
+            throw new IllegalArgumentException(this.getClass().getName() + " p == null");
         }
         // already checked in constructor:
         //java.math.BigInteger c = p.factory().characteristic();
@@ -103,7 +103,7 @@ public class SquarefreeFiniteFieldCharP<C extends GcdRingElem<C>> extends Square
             return r;
         }
         if (qCoFac != null) {
-            throw new RuntimeException("case QuotientRing not yet implemented");
+            throw new UnsupportedOperationException("case QuotientRing not yet implemented");
         }
         return r;
     }
@@ -118,7 +118,7 @@ public class SquarefreeFiniteFieldCharP<C extends GcdRingElem<C>> extends Square
      */
     public SortedMap<GenPolynomial<C>, Long> rootCharacteristic(GenPolynomial<C> P) {
         if (P == null) {
-            throw new RuntimeException(this.getClass().getName() + " P == null");
+            throw new IllegalArgumentException(this.getClass().getName() + " P == null");
         }
         java.math.BigInteger c = P.ring.characteristic();
         if (c.signum() == 0) {
@@ -205,12 +205,12 @@ public class SquarefreeFiniteFieldCharP<C extends GcdRingElem<C>> extends Square
         GenPolynomialRing<C> pfac = P.ring;
         if (pfac.nvar > 1) {
             // basePthRoot not possible by return type
-            throw new RuntimeException(P.getClass().getName() + " only for univariate polynomials");
+            throw new IllegalArgumentException(P.getClass().getName() + " only for univariate polynomials");
         }
         RingFactory<C> rf = pfac.coFac;
         if (rf.characteristic().signum() != 1) {
             // basePthRoot not possible
-            throw new RuntimeException(P.getClass().getName() + " only for char p > 0 " + rf);
+            throw new IllegalArgumentException(P.getClass().getName() + " only for char p > 0 " + rf);
         }
         long mp = rf.characteristic().longValue();
         GenPolynomial<C> d = pfac.getZERO().clone();
@@ -244,12 +244,12 @@ public class SquarefreeFiniteFieldCharP<C extends GcdRingElem<C>> extends Square
         GenPolynomialRing<GenPolynomial<C>> pfac = P.ring;
         if (pfac.nvar > 1) {
             // basePthRoot not possible by return type
-            throw new RuntimeException(P.getClass().getName() + " only for univariate polynomials");
+            throw new IllegalArgumentException(P.getClass().getName() + " only for univariate polynomials");
         }
         RingFactory<GenPolynomial<C>> rf = pfac.coFac;
         if (rf.characteristic().signum() != 1) {
             // basePthRoot not possible
-            throw new RuntimeException(P.getClass().getName() + " only for char p > 0 " + rf);
+            throw new IllegalArgumentException(P.getClass().getName() + " only for char p > 0 " + rf);
         }
         long mp = rf.characteristic().longValue();
         GenPolynomial<GenPolynomial<C>> d = pfac.getZERO().clone();

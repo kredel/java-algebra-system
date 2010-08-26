@@ -77,7 +77,7 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
             return S;
         }
         if (P.ring.nvar > 1) {
-            throw new RuntimeException(this.getClass().getName() + " no univariate polynomial");
+            throw new IllegalArgumentException(this.getClass().getName() + " no univariate polynomial");
         }
         GenPolynomialRing<BigInteger> fac = P.ring;
         long e = P.degree(0);
@@ -145,7 +145,7 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
                 logger.error("prime list exhausted, pn = " + pn);
                 logger.info("primes = " + primes);
                 return super.baseGcd(P, S);
-                //throw new RuntimeException("prime list exhausted");
+                //throw new ArithmeticException("prime list exhausted");
             }
             // initialize coefficient factory and map normalization factor
             //cofac = new ModIntegerRing(p, true);

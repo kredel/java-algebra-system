@@ -195,7 +195,7 @@ public class GreatestCommonDivisorModular<MOD extends GcdRingElem<MOD> & Modular
             if (++i >= pn) {
                 logger.error("prime list exhausted, pn = " + pn);
                 return iufd.gcd(P, S);
-                //throw new RuntimeException("prime list exhausted");
+                //throw new ArithmeticException("prime list exhausted");
             }
             // initialize coefficient factory and map normalization factor
             if ( ModLongRing.MAX_LONG.compareTo( p ) > 0 ) {

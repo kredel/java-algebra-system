@@ -40,7 +40,7 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C>> extends Great
      */
     public GenPolynomial<C> basePseudoRemainder(GenPolynomial<C> P, GenPolynomial<C> S) {
         if (S == null || S.isZERO()) {
-            throw new RuntimeException(this.getClass().getName() + " division by zero");
+            throw new ArithmeticException(this.getClass().getName() + " division by zero");
         }
         if (P.isZERO()) {
             return P;
@@ -91,7 +91,7 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C>> extends Great
             return S;
         }
         if (P.ring.nvar > 1) {
-            throw new RuntimeException(this.getClass().getName() + " no univariate polynomial");
+            throw new IllegalArgumentException(this.getClass().getName() + " no univariate polynomial");
         }
         long e = P.degree(0);
         long f = S.degree(0);
@@ -158,7 +158,7 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C>> extends Great
     public GenPolynomial<GenPolynomial<C>> recursivePseudoRemainder(GenPolynomial<GenPolynomial<C>> P,
             GenPolynomial<GenPolynomial<C>> S) {
         if (S == null || S.isZERO()) {
-            throw new RuntimeException(this.getClass().getName() + " division by zero");
+            throw new ArithmeticException(this.getClass().getName() + " division by zero");
         }
         if (P == null || P.isZERO()) {
             return P;
@@ -210,7 +210,7 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C>> extends Great
             return S;
         }
         if (P.ring.nvar > 1) {
-            throw new RuntimeException(this.getClass().getName() + " no univariate polynomial");
+            throw new IllegalArgumentException(this.getClass().getName() + " no univariate polynomial");
         }
         long e = P.degree(0);
         long f = S.degree(0);
@@ -279,7 +279,7 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C>> extends Great
             return P;
         }
         if (P.ring.nvar > 1) {
-            throw new RuntimeException(this.getClass().getName() + " no univariate polynomial");
+            throw new IllegalArgumentException(this.getClass().getName() + " no univariate polynomial");
         }
         long e = P.degree(0);
         long f = S.degree(0);
@@ -353,7 +353,7 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C>> extends Great
             return P;
         }
         if (P.ring.nvar > 1) {
-            throw new RuntimeException(this.getClass().getName() + " no univariate polynomial");
+            throw new IllegalArgumentException(this.getClass().getName() + " no univariate polynomial");
         }
         long e = P.degree(0);
         long f = S.degree(0);

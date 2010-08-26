@@ -136,7 +136,7 @@ public class SquarefreeFactory {
                 }
             }
         } else {
-            throw new RuntimeException("eventually no integral domain " 
+            throw new ArithmeticException("eventually no integral domain " 
                                       + fac.getClass().getName());
         }
     }
@@ -201,7 +201,7 @@ public class SquarefreeFactory {
                     saq = new SquarefreeInfiniteAlgebraicFieldCharP<C>(af);
                 }
                 if ( saq == null ) {
-                   throw new RuntimeException("no squarefree factorization " + fac.coFac);
+                   throw new IllegalArgumentException("no squarefree factorization " + fac.coFac);
                 }
                 SquarefreeAbstract<C> sa = (SquarefreeAbstract<C>) saq;
                 return sa;
@@ -315,7 +315,7 @@ public class SquarefreeFactory {
             // else fail
         }
         if (ufd == null) {
-            throw new RuntimeException("no squarefree factorization implementation for "
+            throw new IllegalArgumentException("no squarefree factorization implementation for "
                     + fac.getClass().getName());
         }
         logger.debug("ufd = " + ufd);

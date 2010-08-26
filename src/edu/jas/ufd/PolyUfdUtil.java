@@ -323,7 +323,7 @@ public class PolyUfdUtil {
         }
         GenPolynomialRing<AlgebraicNumber<C>> pfac = A.ring; // Q(alpha)[x]
         if (pfac.nvar > 1) {
-            throw new RuntimeException("only for univariate polynomials");
+            throw new IllegalArgumentException("only for univariate polynomials");
         }
         AlgebraicNumberRing<C> afac = (AlgebraicNumberRing<C>) pfac.coFac;
         GenPolynomial<C> agen = afac.modul;

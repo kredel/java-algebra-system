@@ -44,7 +44,7 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C>> extends
             return S;
         }
         if (P.ring.nvar > 1) {
-            throw new RuntimeException(this.getClass().getName() + " no univariate polynomial");
+            throw new IllegalArgumentException(this.getClass().getName() + " no univariate polynomial");
         }
         long e = P.degree(0);
         long f = S.degree(0);
@@ -100,7 +100,7 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C>> extends
             return S;
         }
         if (P.ring.nvar > 1) {
-            throw new RuntimeException(this.getClass().getName() + " no univariate polynomial");
+            throw new IllegalArgumentException(this.getClass().getName() + " no univariate polynomial");
         }
         long e = P.degree(0);
         long f = S.degree(0);
