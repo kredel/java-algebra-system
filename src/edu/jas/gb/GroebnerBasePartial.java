@@ -22,9 +22,9 @@ import edu.jas.structure.RingFactory;
 
 
 /**
- * Partial Groebner Bases for subsets of variables. Let <code>pvars</code> be
- * a subset of variables <code>vars</code> of the polynomial ring K[vars].
- * Methods compute Groebner bases with coefficients from K[vars \ pvars] in the
+ * Partial Groebner Bases for subsets of variables. Let <code>pvars</code> be a
+ * subset of variables <code>vars</code> of the polynomial ring K[vars]. Methods
+ * compute Groebner bases with coefficients from K[vars \ pvars] in the
  * polynomial ring K[vars \ pvars][pvars].
  * @param <C> coefficient type
  * @author Heinz Kredel
@@ -302,11 +302,11 @@ public class GroebnerBasePartial<C extends GcdRingElem<C>> extends GroebnerBaseA
      * @param pvars names for main variables, pvars subseteq vars.
      * @param rvars names for remaining variables, rvars eq {vars \ { evars,
      *            pvars } }.
-     * @return permutation for vars, such that perm(vars) == (evars,pvars, {vars \
-     *         {evars,pvars}}.
+     * @return permutation for vars, such that perm(vars) == (evars,pvars, {vars
+     *         \ {evars,pvars}}.
      */
-    public static List<Integer> 
-      partialPermutation(String[] vars, String[] evars, String[] pvars, String[] rvars) {
+    public static List<Integer> partialPermutation(String[] vars, String[] evars, String[] pvars,
+            String[] rvars) {
         if (vars == null || evars == null || pvars == null) {
             throw new IllegalArgumentException("not all variable names given");
         }
@@ -374,7 +374,7 @@ public class GroebnerBasePartial<C extends GcdRingElem<C>> extends GroebnerBaseA
      * @return a container for a partial Groebner base of F wrt pvars.
      */
     public OptimizedPolynomialList<GenPolynomial<C>> partialGBrec(List<GenPolynomial<C>> F, String[] pvars) {
-        if (F == null && F.isEmpty()) {
+        if (F == null || F.isEmpty()) {
             throw new IllegalArgumentException("empty F not allowed");
         }
         GenPolynomialRing<C> fac = F.get(0).ring;
@@ -432,7 +432,7 @@ public class GroebnerBasePartial<C extends GcdRingElem<C>> extends GroebnerBaseA
      * @return a container for a partial Groebner base of F wrt pvars.
      */
     public OptimizedPolynomialList<C> partialGB(List<GenPolynomial<C>> F, String[] pvars) {
-        if (F == null && F.isEmpty()) {
+        if (F == null || F.isEmpty()) {
             throw new IllegalArgumentException("empty F not allowed");
         }
         GenPolynomialRing<C> fac = F.get(0).ring;
@@ -500,7 +500,7 @@ public class GroebnerBasePartial<C extends GcdRingElem<C>> extends GroebnerBaseA
      * @return a container for a partial Groebner base of F wrt (pvars,evars).
      */
     public OptimizedPolynomialList<C> elimPartialGB(List<GenPolynomial<C>> F, String[] evars, String[] pvars) {
-        if (F == null && F.isEmpty()) {
+        if (F == null || F.isEmpty()) {
             throw new IllegalArgumentException("empty F not allowed");
         }
         GenPolynomialRing<C> fac = F.get(0).ring;
@@ -537,7 +537,7 @@ public class GroebnerBasePartial<C extends GcdRingElem<C>> extends GroebnerBaseA
             List<GenPolynomial<C>> G = bb.GB(Fs);
             OptimizedPolynomialList<C> pgb = new OptimizedPolynomialList<C>(perm, pfac, G);
             if (logger.isInfoEnabled()) {
-               logger.info("pgb = " + pgb);
+                logger.info("pgb = " + pgb);
             }
             return pgb;
         } else {
