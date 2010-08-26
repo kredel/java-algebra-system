@@ -426,7 +426,7 @@ class LeftSolvableReducer<C extends RingElem<C>> implements Runnable {
                  continue;
               }
               if ( debug ) {
-		  logger.debug("ht(H) = " + H.leadingExpVector());
+                  logger.debug("ht(H) = " + H.leadingExpVector());
               }
               H = (GenSolvablePolynomial<C>)H.monic();
               // System.out.println("H   = " + H);
@@ -531,7 +531,7 @@ class TwosidedSolvableReducer<C extends RingElem<C>> implements Runnable {
                  continue;
               }
               if ( debug ) {
-		  logger.debug("ht(H) = " + H.leadingExpVector());
+                  logger.debug("ht(H) = " + H.leadingExpVector());
               }
               H = (GenSolvablePolynomial<C>)H.monic();
               // System.out.println("H   = " + H);

@@ -211,10 +211,10 @@ class CartesianTwoProductInfiniteIterator<E> implements Iterator<List<E>> {
         if ( compit0.hasNext() && compit1.hasNext() ) {
             fincomps0.add( compit0.next() );
             fincomps1.add( compit1.next() );
-	} else { 
+        } else { 
             empty = true;
             return res;
-	}
+        }
         if ( level % 2 == 0 ) {
             Collections.reverse(fincomps0);
         } else {
@@ -340,10 +340,10 @@ class CartesianTwoProductInfiniteIteratorList<E> implements Iterator<List<E>> {
         if ( compit0.hasNext() && compit1.hasNext() ) {
             fincomps0.add( compit0.next() );
             fincomps1.add( compit1.next() );
-	} else { 
+        } else { 
             empty = true;
             return res;
-	}
+        }
         if ( level % 2 == 0 ) {
             Collections.reverse(fincomps0);
         } else {

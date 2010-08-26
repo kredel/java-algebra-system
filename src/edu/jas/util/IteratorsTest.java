@@ -290,10 +290,10 @@ public class IteratorsTest extends TestCase {
             assertTrue("t == i", t == i );
             t++;
             if ( t > 1000L ) { //% 100000000L == 0L ) {
-	        //System.out.println("i = " + i);
+                //System.out.println("i = " + i);
                 break;
- 	    }
-	}
+            }
+        }
         //System.out.println("t = " + t);
         assertTrue("i == 1000", s == 1000L );
 
@@ -306,10 +306,10 @@ public class IteratorsTest extends TestCase {
             //assertTrue("t == i", t == i );
             t++;
             if ( t >= 1000L ) { //% 100000000L == 0L ) {
-	        //System.out.println("i = " + i);
+                //System.out.println("i = " + i);
                 break;
- 	    }
-	}
+            }
+        }
         //System.out.println("t = " + t);
         assertTrue("i == 500", s == 500L );
     }
@@ -343,10 +343,10 @@ public class IteratorsTest extends TestCase {
             set.add(e);
             t++;
             if ( t > 100L ) { 
-	        //System.out.println("i = " + i);
+                //System.out.println("i = " + i);
                 break;
- 	    }
-	}
+            }
+        }
         //System.out.println("set = " + set);
         assertTrue("#set", set.size() == t );
     }
@@ -370,14 +370,14 @@ public class IteratorsTest extends TestCase {
                 System.out.println("p = " + p);
                 System.out.println("set = " + set);
                 assertFalse("p in set ", true );
-	    }
+            }
             set.add(p);
-	    t++;
+            t++;
             if ( t > 650L ) { 
-	        //System.out.println("i = " + i);
+                //System.out.println("i = " + i);
                 break;
- 	    }
-	}
+            }
+        }
         //System.out.println("set = " + set);
         assertTrue("#set", set.size() == t );
     }
@@ -401,14 +401,14 @@ public class IteratorsTest extends TestCase {
                 System.out.println("p = " + p);
                 //System.out.println("set = " + set);
                 assertFalse("p in set ", true );
-	    }
+            }
             set.add(p);
-	    t++;
+            t++;
             if ( t > 650L ) { 
-	        //System.out.println("i = " + i);
+                //System.out.println("i = " + i);
                 break;
- 	    }
-	}
+            }
+        }
         //System.out.println("set = " + set);
         assertTrue("#set", set.size() == t );
     }

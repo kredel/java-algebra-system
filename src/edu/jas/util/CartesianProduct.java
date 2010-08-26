@@ -62,8 +62,8 @@ public class CartesianProduct<E> implements Iterable<List<E>> {
     static <E> List<Iterable<E>> listToIterable(List<List<E>> comp) {
         List<Iterable<E>> iter = new ArrayList<Iterable<E>>( comp.size() );
         for ( List<E> list : comp ) {
-	    iter.add( list );
-	}
+            iter.add( list );
+        }
         return iter;
     }
 

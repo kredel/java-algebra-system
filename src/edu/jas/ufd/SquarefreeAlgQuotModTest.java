@@ -441,7 +441,7 @@ public class SquarefreeAlgQuotModTest extends TestCase {
             num++;
         }
 
-	// a a b b b c
+        // a a b b b c
         d = a.multiply(a).multiply(b).multiply(b).multiply(b).multiply(c);
         //System.out.println("d  = " + d);
 

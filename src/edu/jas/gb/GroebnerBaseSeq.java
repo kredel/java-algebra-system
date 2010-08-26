@@ -112,7 +112,7 @@ public class GroebnerBaseSeq<C extends RingElem<C>>
                  continue;
               }
               if ( debug ) {
-		  logger.debug("ht(S) = " + S.leadingExpVector() );
+                  logger.debug("ht(S) = " + S.leadingExpVector() );
               }
 
               H = red.normalform( G, S );
@@ -121,7 +121,7 @@ public class GroebnerBaseSeq<C extends RingElem<C>>
                  continue;
               }
               if ( debug ) {
-		  logger.debug("ht(H) = " + H.leadingExpVector() );
+                  logger.debug("ht(H) = " + H.leadingExpVector() );
               }
 
               H = H.monic();

@@ -82,7 +82,7 @@ public class IdealWithUniv<C extends GcdRingElem<C>> implements Serializable {
     @Override
     public String toString() {
         String s = ideal.toString();
-	if ( upolys != null ) 
+        if ( upolys != null ) 
              s += "\nunivariate polynomials:\n" + upolys.toString();
         if (others == null) {
             return s;

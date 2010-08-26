@@ -394,7 +394,7 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>,
     public int compareTo(BigDecimal b) {
         if ( false ) {
            return val.compareTo( b.val );
-	}
+        }
         java.math.BigDecimal s = val.subtract( b.val, context );
         java.math.BigDecimal u1 = val.ulp();
         java.math.BigDecimal u2 = b.val.ulp();

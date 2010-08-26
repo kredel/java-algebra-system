@@ -242,7 +242,7 @@ public class ChannelFactory extends Thread {
                 }
             }
         } catch (IOException e) {
-	    //} catch (InterruptedException e) {
+            //} catch (InterruptedException e) {
             // Thread.currentThread().interrupt();
         }
         try {

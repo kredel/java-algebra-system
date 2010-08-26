@@ -265,9 +265,9 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
             if ( p != null && p.ring.vars != null ) {
                logger.info("new relation = " + e.toString(p.ring.vars) + " .*. " + f.toString(p.ring.vars) + " = " + p);
                //logger.info("existing relations = " + toString(p.ring.vars));
-	    } else {
+            } else {
                logger.info("new relation = " + e + " .*. " + f + " = " + p);
-	    }
+            }
         }
         if ( p == null || e == null || f == null ) {
            throw new IllegalArgumentException("RelationTable update e|f|p == null");
@@ -316,19 +316,19 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
         Object o;
         int index = -1;
         synchronized(part) { // with lookup()
-	    for ( ListIterator it = part.listIterator(); it.hasNext(); ) {
-		ExpVectorPair look = (ExpVectorPair)it.next();
-		o = it.next(); // skip poly
-		if ( look.isMultiple( evp ) ) {
-		    index = it.nextIndex(); 
-		    // last index of or first index of: break
-		}
-	    }
-	    if ( index < 0 ) {
-		index = 0;
-	    }
-	    part.add( index, evp );
-	    part.add( index+1, p );
+            for ( ListIterator it = part.listIterator(); it.hasNext(); ) {
+                ExpVectorPair look = (ExpVectorPair)it.next();
+                o = it.next(); // skip poly
+                if ( look.isMultiple( evp ) ) {
+                    index = it.nextIndex(); 
+                    // last index of or first index of: break
+                }
+            }
+            if ( index < 0 ) {
+                index = 0;
+            }
+            part.add( index, evp );
+            part.add( index+1, p );
         }
         // table.put( key, part ); // required??
     }
@@ -412,13 +412,13 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
                     if ( fp.isZERO() ) {
                         fp = null;
                     }
-		    if ( false && debug ) {
-			if ( p != null && p.ring.vars != null ) {
-			    logger.info("found relation = " + e.toString(p.ring.vars) + " .*. " + f.toString(p.ring.vars) + " = " + p);
-			} else {
-			    logger.info("found relation = " + e + " .*. " + f + " = " + p);
-			}
-		    }
+                    if ( false && debug ) {
+                        if ( p != null && p.ring.vars != null ) {
+                            logger.info("found relation = " + e.toString(p.ring.vars) + " .*. " + f.toString(p.ring.vars) + " = " + p);
+                        } else {
+                            logger.info("found relation = " + e + " .*. " + f + " = " + p);
+                        }
+                    }
                     return new TableRelation<C>(ep,fp,p);
                 }
             }

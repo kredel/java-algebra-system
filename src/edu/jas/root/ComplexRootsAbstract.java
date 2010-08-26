@@ -182,7 +182,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
                     }
 
                     Complex<C>[] cp = (Complex<C>[]) ArrayUtil.copyOfComplex(root.corners, 4);
-			//ArrayUtil.<Complex<C>> copyOf(root.corners, 4);
+                        //ArrayUtil.<Complex<C>> copyOf(root.corners, 4);
                     // cp[0] fix
                     cp[1] = new Complex<C>(cr, cp[1].getRe(), center.getIm());
                     cp[2] = center;

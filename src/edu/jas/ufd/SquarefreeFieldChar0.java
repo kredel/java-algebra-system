@@ -397,7 +397,7 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>> extends SquarefreeAb
      *         and p_i squarefree.
      */
     public SortedMap<C, Long> squarefreeFactors(C P) {
-	throw new UnsupportedOperationException("method not implemented");
+        throw new UnsupportedOperationException("method not implemented");
     }
 
 }
