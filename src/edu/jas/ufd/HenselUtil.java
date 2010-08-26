@@ -561,7 +561,7 @@ public class HenselUtil {
             GenPolynomial<BigInteger> C, BigInteger M, GenPolynomial<MOD> A, GenPolynomial<MOD> B,
             GenPolynomial<MOD> S, GenPolynomial<MOD> T) throws NoLiftingException {
         //System.out.println("*** version for factorization *** ");
-        GenPolynomial<BigInteger>[] AB = (GenPolynomial<BigInteger>[]) new GenPolynomial[2];
+        GenPolynomial<BigInteger>[] AB = new GenPolynomial[2];
         if (C == null || C.isZERO()) {
             throw new IllegalArgumentException("C must be nonzero");
         }

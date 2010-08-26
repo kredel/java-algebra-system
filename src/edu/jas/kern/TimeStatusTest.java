@@ -4,6 +4,7 @@
 
 package edu.jas.kern;
 
+
 import java.util.concurrent.Callable;
 
 import junit.framework.Test;
@@ -12,19 +13,22 @@ import junit.framework.TestSuite;
 
 import org.apache.log4j.BasicConfigurator;
 
+
 /**
- * TimeStatus tests with JUnit. 
+ * TimeStatus tests with JUnit.
  * @author Heinz Kredel
  */
 public class TimeStatusTest extends TestCase {
 
+
     /**
      * main.
      */
-    public static void main (String[] args) {
+    public static void main(String[] args) {
         BasicConfigurator.configure();
-        junit.textui.TestRunner.run( suite() );
+        junit.textui.TestRunner.run(suite());
     }
+
 
     /**
      * Constructs a <CODE>TimeStatusTest</CODE> object.
@@ -36,17 +40,19 @@ public class TimeStatusTest extends TestCase {
 
 
     /*
-     */ 
+     */
     public static Test suite() {
-        TestSuite suite= new TestSuite(TimeStatusTest.class);
+        TestSuite suite = new TestSuite(TimeStatusTest.class);
         return suite;
     }
 
 
+    @Override
     protected void setUp() {
     }
 
 
+    @Override
     protected void tearDown() {
         TimeStatus.setNotActive();
         TimeStatus.setLimit(Long.MAX_VALUE);
@@ -59,19 +65,19 @@ public class TimeStatusTest extends TestCase {
      */
     public void testCheckTime() {
         TimeStatus.setActive();
-        assertTrue( "is active ", TimeStatus.isActive());
+        assertTrue("is active ", TimeStatus.isActive());
         TimeStatus.restart();
         try {
             TimeStatus.checkTime("test1");
             // succeed
-	} catch (TimeExceededException e) {
+        } catch (TimeExceededException e) {
             fail("test1 " + e);
-	}
+        }
 
         TimeStatus.setLimit(0L);
-        assertTrue( "is active ", TimeStatus.isActive());
+        assertTrue("is active ", TimeStatus.isActive());
         try {
-            Thread.currentThread().sleep(10);
+            Thread.sleep(10);
             TimeStatus.checkTime("test2");
             fail("test2 checkTime");
         } catch (TimeExceededException e) {
@@ -82,18 +88,18 @@ public class TimeStatusTest extends TestCase {
     }
 
 
-   /**
+    /**
      * Tests call back.
      */
     public void testCallBack() {
         TimeStatus.setActive();
         TimeStatus.restart();
         TimeStatus.setLimit(0L);
-        TimeStatus.setCallBack( new TSCallMock(true) );
-        assertTrue( "is active ", TimeStatus.isActive());
+        TimeStatus.setCallBack(new TSCallMock(true));
+        assertTrue("is active ", TimeStatus.isActive());
 
         try {
-            Thread.currentThread().sleep(10);
+            Thread.sleep(10);
             TimeStatus.checkTime("test3");
             // succeed
         } catch (TimeExceededException e) {
@@ -102,9 +108,9 @@ public class TimeStatusTest extends TestCase {
             fail("test3 interrupt");
         }
 
-        TimeStatus.setCallBack( new TSCallMock(false) );
+        TimeStatus.setCallBack(new TSCallMock(false));
         try {
-            Thread.currentThread().sleep(10);
+            Thread.sleep(10);
             TimeStatus.checkTime("test4");
             fail("test4 checkTime");
         } catch (TimeExceededException e) {
@@ -119,11 +125,14 @@ public class TimeStatusTest extends TestCase {
 
 class TSCallMock implements Callable<Boolean> {
 
+
     boolean flag = true;
+
 
     public TSCallMock(boolean b) {
         flag = b;
     }
+
 
     public Boolean call() {
         return flag;

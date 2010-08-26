@@ -27,8 +27,7 @@ import edu.jas.ufd.GreatestCommonDivisorAbstract;
  * @author Heinz Kredel
  */
 
-public class RGroebnerBasePseudoSeq<C extends RegularRingElem<C>> extends
-        RGroebnerBaseSeq<C> {
+public class RGroebnerBasePseudoSeq<C extends RegularRingElem<C>> extends RGroebnerBaseSeq<C> {
 
 
     private static final Logger logger = Logger.getLogger(RGroebnerBasePseudoSeq.class);
@@ -74,7 +73,7 @@ public class RGroebnerBasePseudoSeq<C extends RegularRingElem<C>> extends
         super(red);
         this.red = red;
         cofac = rf;
-        engine = (GreatestCommonDivisorAbstract<C>) GCDFactory.<C> getImplementation(rf);
+        engine = GCDFactory.<C> getImplementation(rf);
         // not used: engine =
         // (GreatestCommonDivisorAbstract<C>)GCDFactory.<C>getProxy( rf );
     }
@@ -195,8 +194,7 @@ public class RGroebnerBasePseudoSeq<C extends RegularRingElem<C>> extends
         logger.debug("#sequential list = " + G.size());
         G = minimalGB(G);
         // G = red.irreducibleSet(G); // not correct since not boolean closed
-        logger.info("pairlist #put = " + pairlist.putCount() + " #rem = "
-                + pairlist.remCount()
+        logger.info("pairlist #put = " + pairlist.putCount() + " #rem = " + pairlist.remCount()
         // + " #total = " + pairlist.pairCount()
                 );
         return G;
@@ -407,8 +405,8 @@ public class RGroebnerBasePseudoSeq<C extends RegularRingElem<C>> extends
                 }
                 continue;
             }
-            System.out.println("minGB not bc: a = " + a + "\n BC(a) = "
-                    + red.booleanClosure(a) + ", BR(a) = " + red.booleanRemainder(a));
+            System.out.println("minGB not bc: a = " + a + "\n BC(a) = " + red.booleanClosure(a)
+                    + ", BR(a) = " + red.booleanRemainder(a));
             bcH = red.reducedBooleanClosure(G, a);
             if (bcH.size() > 1) {
                 System.out.println("minGB not bc: bcH size = " + bcH.size());

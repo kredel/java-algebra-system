@@ -239,7 +239,7 @@ public class GCDFactory {
             }
         }
         logger.debug("ufd = " + ufd);
-        return (GreatestCommonDivisorAbstract<C>) ufd;
+        return ufd;
     }
 
 
@@ -294,7 +294,7 @@ public class GCDFactory {
             }
         }
         logger.debug("ufd = " + ufd);
-        return (GCDProxy<C>) ufd;
+        return ufd;
     }
 
 }

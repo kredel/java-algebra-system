@@ -5,15 +5,13 @@
 package edu.jas.root;
 
 
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-
-import org.apache.log4j.BasicConfigurator;
 
 import edu.jas.arith.BigDecimal;
 import edu.jas.arith.BigRational;
@@ -249,7 +247,7 @@ public class ComplexRootTest extends TestCase {
         BigRational eps = new BigRational(1, 1000);
         //System.out.println("eps = " + eps);
 
-        Complex<BigRational>[] corner = (Complex<BigRational>[]) new Complex[4];
+        Complex<BigRational>[] corner = new Complex[4];
 
         corner[0] = new Complex<BigRational>(cfac, M.negate(), M); // nw
         corner[1] = new Complex<BigRational>(cfac, M.negate(), M.negate()); // sw
@@ -314,7 +312,7 @@ public class ComplexRootTest extends TestCase {
         BigRational M = Mb.getRe();
         //System.out.println("M = " + M);
 
-        Complex<BigRational>[] corner = (Complex<BigRational>[]) new Complex[4];
+        Complex<BigRational>[] corner = new Complex[4];
 
         corner[0] = new Complex<BigRational>(cfac, M.negate(), M); // nw
         corner[1] = new Complex<BigRational>(cfac, M.negate(), M.negate()); // sw
@@ -345,7 +343,7 @@ public class ComplexRootTest extends TestCase {
 
         a = dfac.random(kl, ll, el, q);
         Squarefree<Complex<BigRational>> engine = SquarefreeFactory
-            .<Complex<BigRational>> getImplementation(cfac);
+                .<Complex<BigRational>> getImplementation(cfac);
         a = engine.squarefreePart(a);
 
         //a = dfac.univariate(0,2L).subtract(cfac.getONE());  // x^2 - 1
@@ -358,7 +356,7 @@ public class ComplexRootTest extends TestCase {
         BigRational M = Mb.getRe();
         //System.out.println("M = " + M);
 
-        Complex<BigRational>[] corner = (Complex<BigRational>[]) new Complex[4];
+        Complex<BigRational>[] corner = new Complex[4];
 
         corner[0] = new Complex<BigRational>(cfac, M.negate(), M); // nw
         corner[1] = new Complex<BigRational>(cfac, M.negate(), M.negate()); // sw
@@ -404,10 +402,10 @@ public class ComplexRootTest extends TestCase {
     public void testComplexRootRefinement() {
         ComplexRootsAbstract<BigRational> cr = new ComplexRootsSturm<BigRational>(cfac);
 
-        a = dfac.random(kl, ll, el-1, q);
+        a = dfac.random(kl, ll, el - 1, q);
         //a = dfac.parse("( (x-1)^3 )");
         Squarefree<Complex<BigRational>> engine = SquarefreeFactory
-            .<Complex<BigRational>> getImplementation(cfac);
+                .<Complex<BigRational>> getImplementation(cfac);
         //System.out.println("a = " + a);
         a = engine.squarefreePart(a);
         //System.out.println("a = " + a);
@@ -438,7 +436,7 @@ public class ComplexRootTest extends TestCase {
     public void testComplexRootRefinementFull() {
         ComplexRootsAbstract<BigRational> cr = new ComplexRootsSturm<BigRational>(cfac);
 
-        a = dfac.random(kl, ll, el-1, q);
+        a = dfac.random(kl, ll, el - 1, q);
         //a = dfac.parse("( (x-1)^3 )");
         //a = dfac.parse("( x^4-2 )");
         //System.out.println("a = " + a);
@@ -476,7 +474,7 @@ public class ComplexRootTest extends TestCase {
         BigRational zero = new BigRational();
         BigRational one = new BigRational(1);
 
-        Complex<BigRational>[] corner = (Complex<BigRational>[]) new Complex[4];
+        Complex<BigRational>[] corner = new Complex[4];
 
         corner[0] = new Complex<BigRational>(cfac, M.negate(), M); // nw
         corner[1] = new Complex<BigRational>(cfac, M.negate(), zero); // sw
@@ -518,7 +516,7 @@ public class ComplexRootTest extends TestCase {
         //a = b.multiply(c).multiply(d);
         //System.out.println("a = " + a);
         Squarefree<Complex<BigRational>> engine = SquarefreeFactory
-            .<Complex<BigRational>> getImplementation(cfac);
+                .<Complex<BigRational>> getImplementation(cfac);
         a = engine.squarefreePart(a);
         //System.out.println("a = " + a);
 
@@ -575,7 +573,7 @@ public class ComplexRootTest extends TestCase {
         //System.out.println("eps1 = " + eps1);
         //System.out.println("eps2 = " + eps2);
 
-        List<Complex<BigDecimal>> roots = cr.approximateRoots(a,eps);
+        List<Complex<BigDecimal>> roots = cr.approximateRoots(a, eps);
         //System.out.println("a = " + a);
         //System.out.println("roots = " + roots);
         //now always true: 
@@ -584,8 +582,8 @@ public class ComplexRootTest extends TestCase {
 
 
     /**
-     * Test complex root approximation full algorithm with Wilkinson polynomials.
-     * p = (x-i0)*(x-i1)*(x-i2)*(x-i3*...*(x-in)
+     * Test complex root approximation full algorithm with Wilkinson
+     * polynomials. p = (x-i0)*(x-i1)*(x-i2)*(x-i3*...*(x-in)
      */
     public void testComplexRootApproximationWilkinsonFull() {
         final int N = 4;
@@ -602,7 +600,7 @@ public class ComplexRootTest extends TestCase {
         a = d;
         for (int i = 0; i < N; i++) {
             cc = cf.fromInteger(i).multiply(I);
-            Rn.add( cc );
+            Rn.add(cc);
             c = dfac.fromInteger(i).multiply(Ir);
             b = e.subtract(c);
             a = a.multiply(b);
@@ -620,7 +618,7 @@ public class ComplexRootTest extends TestCase {
         //System.out.println("eps1 = " + eps1);
         //System.out.println("eps2 = " + eps2);
 
-        List<Complex<BigDecimal>> roots = cr.approximateRoots(a,eps);
+        List<Complex<BigDecimal>> roots = cr.approximateRoots(a, eps);
         //System.out.println("a = " + a);
         //System.out.println("roots = " + roots);
         //now always true: 
@@ -637,8 +635,8 @@ public class ComplexRootTest extends TestCase {
 
 
     /**
-     * Test complex root approximation full algorithm with Wilkinson polynomials, inverse roots.
-     * p = (x-1/i1)*(x-1/i2)*(x-1/i3*...*(x-1/in)
+     * Test complex root approximation full algorithm with Wilkinson
+     * polynomials, inverse roots. p = (x-1/i1)*(x-1/i2)*(x-1/i3*...*(x-1/in)
      * 
      */
     public void testComplexRootApproximationWilkinsonInverseFull() {
@@ -657,7 +655,7 @@ public class ComplexRootTest extends TestCase {
         for (int i = 1; i < N; i++) {
             cc = cf.fromInteger(i).multiply(I);
             cc = cc.inverse();
-            Rn.add( cc );
+            Rn.add(cc);
             c = dfac.fromInteger(i).multiply(Ir);
             c = d.divide(c);
             b = e.subtract(c);
@@ -676,7 +674,7 @@ public class ComplexRootTest extends TestCase {
         //System.out.println("eps1 = " + eps1);
         //System.out.println("eps2 = " + eps2);
 
-        List<Complex<BigDecimal>> roots = cr.approximateRoots(a,eps);
+        List<Complex<BigDecimal>> roots = cr.approximateRoots(a, eps);
         //System.out.println("a = " + a);
         //System.out.println("roots = " + roots);
         //now always true: 
@@ -690,11 +688,11 @@ public class ComplexRootTest extends TestCase {
             for (Complex<BigDecimal> di : Rn) {
                 //System.out.println("di = " + di);
                 t = dd.subtract(di).norm().getRe().compareTo(eps2) <= 0;
-                if ( t ) {
+                if (t) {
                     break;
                 }
             }
-            if ( ! t ) {
+            if (!t) {
                 //assertTrue("|dd - di| < eps ", dd.subtract(di).norm().getRe().compareTo(eps2) <= 0);
                 fail("|dd - di| < eps ");
             }

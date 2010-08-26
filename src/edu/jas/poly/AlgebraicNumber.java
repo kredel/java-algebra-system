@@ -154,9 +154,8 @@ public class AlgebraicNumber<C extends GcdRingElem<C>> implements GcdRingElem<Al
     public String toString() {
         if (PrettyPrint.isTrue()) {
             return val.toString(ring.ring.vars);
-        } else {
-            return "AlgebraicNumber[ " + val.toString() + " ]";
         }
+        return "AlgebraicNumber[ " + val.toString() + " ]";
     }
 
 

@@ -223,7 +223,7 @@ public class GBFactory {
             bba = new GroebnerBasePseudoSeq<C>(fac);
         }
         logger.debug("bba = " + bba.getClass().getName());
-        return (GroebnerBaseAbstract<C>) bba;
+        return bba;
     }
 
 
@@ -262,7 +262,7 @@ public class GBFactory {
             bba = new GroebnerBasePseudoSeq<C>(fac);
         }
         logger.debug("bba = " + bba.getClass().getName());
-        return (GroebnerBaseAbstract<C>) bba;
+        return bba;
     }
 
 }

@@ -4,6 +4,7 @@
 
 package edu.jas.gb;
 
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -15,35 +16,32 @@ import org.apache.log4j.Logger;
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
-
 import edu.jas.structure.RingElem;
-
+import edu.jas.util.ChannelFactory;
 import edu.jas.util.DistHashTable;
 import edu.jas.util.DistHashTableServer;
+import edu.jas.util.SocketChannel;
 import edu.jas.util.Terminator;
 import edu.jas.util.ThreadPool;
-import edu.jas.util.ChannelFactory;
-import edu.jas.util.SocketChannel;
 
-//import edu.unima.ky.parallel.ChannelFactory;
-//import edu.unima.ky.parallel.Semaphore;
-//import edu.unima.ky.parallel.SocketChannel;
+
+// import edu.unima.ky.parallel.ChannelFactory;
+// import edu.unima.ky.parallel.Semaphore;
+// import edu.unima.ky.parallel.SocketChannel;
 
 
 /**
- * Groebner Base distributed algorithm.
- * Implements a distributed memory parallel version of Groebner bases.
- * Using pairlist class, distributed tasks do reduction.
- * Makes some effort to produce the same sequence of critical pairs 
- * as in the sequential version.
- * However already reduced pairs are not rereduced if new
- * polynomials appear.
+ * Groebner Base distributed algorithm. Implements a distributed memory parallel
+ * version of Groebner bases. Using pairlist class, distributed tasks do
+ * reduction. Makes some effort to produce the same sequence of critical pairs
+ * as in the sequential version. However already reduced pairs are not rereduced
+ * if new polynomials appear.
  * @param <C> coefficient type
  * @author Heinz Kredel
  */
 
-public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>> 
-       extends GroebnerBaseAbstract<C>  {
+public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>> extends GroebnerBaseAbstract<C> {
+
 
     private static final Logger logger = Logger.getLogger(GroebnerBaseSeqPairDistributed.class);
 
@@ -82,7 +80,7 @@ public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>>
      * Constructor.
      */
     public GroebnerBaseSeqPairDistributed() {
-        this( DEFAULT_THREADS, DEFAULT_PORT );
+        this(DEFAULT_THREADS, DEFAULT_PORT);
     }
 
 
@@ -91,7 +89,7 @@ public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>>
      * @param threads number of threads to use.
      */
     public GroebnerBaseSeqPairDistributed(int threads) {
-        this(threads, new ThreadPool(threads), DEFAULT_PORT );
+        this(threads, new ThreadPool(threads), DEFAULT_PORT);
     }
 
 
@@ -101,7 +99,7 @@ public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>>
      * @param red parallelism aware reduction engine
      */
     public GroebnerBaseSeqPairDistributed(int threads, Reduction<C> red) {
-        this(threads, new ThreadPool(threads), DEFAULT_PORT, red );
+        this(threads, new ThreadPool(threads), DEFAULT_PORT, red);
     }
 
 
@@ -112,7 +110,7 @@ public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>>
      * @param red parallelism aware reduction engine
      */
     public GroebnerBaseSeqPairDistributed(int threads, int port, Reduction<C> red) {
-        this(threads, new ThreadPool(threads), port, red );
+        this(threads, new ThreadPool(threads), port, red);
     }
 
 
@@ -122,7 +120,7 @@ public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>>
      * @param port server port to use.
      */
     public GroebnerBaseSeqPairDistributed(int threads, int port) {
-        this(threads, new ThreadPool(threads), port );
+        this(threads, new ThreadPool(threads), port);
     }
 
 
@@ -133,7 +131,7 @@ public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>>
      * @param port server port to use.
      */
     public GroebnerBaseSeqPairDistributed(int threads, ThreadPool pool, int port) {
-        this( threads, pool, port, new ReductionPar<C>() );
+        this(threads, pool, port, new ReductionPar<C>());
     }
 
 
@@ -144,14 +142,13 @@ public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>>
      * @param port server port to use.
      * @param red parallelism aware reduction engine
      */
-    public GroebnerBaseSeqPairDistributed(int threads, ThreadPool pool, 
-                                          int port, Reduction<C> red) {
+    public GroebnerBaseSeqPairDistributed(int threads, ThreadPool pool, int port, Reduction<C> red) {
         super(red);
-        if ( ! (red instanceof ReductionPar) ) {
-           logger.warn("parallel GB should use parallel aware reduction");
+        if (!(red instanceof ReductionPar)) {
+            logger.warn("parallel GB should use parallel aware reduction");
         }
-        if ( threads < 1 ) {
-           threads = 1;
+        if (threads < 1) {
+            threads = 1;
         }
         this.threads = threads;
         this.pool = pool;
@@ -162,22 +159,22 @@ public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>>
     /**
      * Cleanup and terminate ThreadPool.
      */
+    @Override
     public void terminate() {
-        if ( pool == null ) {
-           return;
+        if (pool == null) {
+            return;
         }
         pool.terminate();
     }
 
 
     /**
-     * Distributed Groebner base.
-     * Slaves maintain pairlist.
+     * Distributed Groebner base. Slaves maintain pairlist.
      * @param modv number of module variables.
      * @param F polynomial list.
      * @return GB(F) a Groebner base of F or null, if a IOException occurs.
      */
-    public List<GenPolynomial<C>> GB( int modv, List<GenPolynomial<C>> F ) {  
+    public List<GenPolynomial<C>> GB(int modv, List<GenPolynomial<C>> F) {
 
         final int DL_PORT = port + 100;
         ChannelFactory cf = new ChannelFactory(port);
@@ -188,39 +185,39 @@ public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>>
 
         GenPolynomial<C> p;
         List<GenPolynomial<C>> G = new ArrayList<GenPolynomial<C>>();
-        CriticalPairList<C> pairlist = null; 
+        CriticalPairList<C> pairlist = null;
         boolean oneInGB = false;
         int l = F.size();
         int unused;
         ListIterator<GenPolynomial<C>> it = F.listIterator();
-        while ( it.hasNext() ) { 
+        while (it.hasNext()) {
             p = it.next();
-            if ( p.length() > 0 ) {
-               p = p.monic();
-               if ( p.isONE() ) {
-                  oneInGB = true;
-                  G.clear(); 
-                  G.add( p );
-                  //return G; must signal termination to others
-               }
-               if ( ! oneInGB ) {
-                  G.add( p );
-               }
-               if ( pairlist == null ) {
-                  pairlist = new CriticalPairList<C>( modv, p.ring );
-               }
-               // theList not updated here
-               if ( p.isONE() ) {
-                   unused = pairlist.putOne();
-               } else {
-                   unused = pairlist.put( p );
-               }
+            if (p.length() > 0) {
+                p = p.monic();
+                if (p.isONE()) {
+                    oneInGB = true;
+                    G.clear();
+                    G.add(p);
+                    //return G; must signal termination to others
+                }
+                if (!oneInGB) {
+                    G.add(p);
+                }
+                if (pairlist == null) {
+                    pairlist = new CriticalPairList<C>(modv, p.ring);
+                }
+                // theList not updated here
+                if (p.isONE()) {
+                    unused = pairlist.putOne();
+                } else {
+                    unused = pairlist.put(p);
+                }
             } else {
-               l--;
+                l--;
             }
         }
-        if ( l <= 1 ) {
-           //return G; must signal termination to others
+        if (l <= 1) {
+            //return G; must signal termination to others
         }
 
         logger.debug("looking for clients");
@@ -228,21 +225,22 @@ public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>>
         // now in DL, uses resend for late clients
         //while ( dls.size() < threads ) { sleep(); }
 
-        DistHashTable<Integer,GenPolynomial<C>> theList = new DistHashTable<Integer,GenPolynomial<C>>( "localhost", DL_PORT );
+        DistHashTable<Integer, GenPolynomial<C>> theList = new DistHashTable<Integer, GenPolynomial<C>>(
+                "localhost", DL_PORT);
         ArrayList<GenPolynomial<C>> al = pairlist.getList();
-        for ( int i = 0; i < al.size(); i++ ) {
+        for (int i = 0; i < al.size(); i++) {
             // no wait required
-            GenPolynomial<C> nn = theList.put( new Integer(i), al.get(i) );
-         if ( nn != null ) {
+            GenPolynomial<C> nn = theList.put(new Integer(i), al.get(i));
+            if (nn != null) {
                 logger.info("double polynomials " + i + ", nn = " + nn + ", al(i) = " + al.get(i));
-         }
+            }
         }
 
         Terminator fin = new Terminator(threads);
         ReducerServerSeqPair<C> R;
-        for ( int i = 0; i < threads; i++ ) {
-              R = new ReducerServerSeqPair<C>( fin, cf, theList, G, pairlist );
-              pool.addJob( R );
+        for (int i = 0; i < threads; i++) {
+            R = new ReducerServerSeqPair<C>(fin, cf, theList, G, pairlist);
+            pool.addJob(R);
         }
         logger.debug("main loop waiting");
         fin.waitDone();
@@ -252,12 +250,11 @@ public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>>
         // G = (ArrayList)theList.values();
         G = pairlist.getList();
         //logger.debug("#pairlist list = "+G.size());
-        if ( ps != G.size() ) {
-           logger.error("#distributed list = "+theList.size() 
-                      + " #pairlist list = "+G.size() );
+        if (ps != G.size()) {
+            logger.error("#distributed list = " + theList.size() + " #pairlist list = " + G.size());
         }
         long time = System.currentTimeMillis();
-        List<GenPolynomial<C>> Gp; 
+        List<GenPolynomial<C>> Gp;
         Gp = minimalGB(G); // not jet distributed but threaded
         time = System.currentTimeMillis() - time;
         logger.info("parallel gbmi = " + time);
@@ -275,27 +272,27 @@ public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>>
         theList.terminate();
         logger.info("dls.terminate()");
         dls.terminate();
-        logger.info("" + pairlist); 
+        logger.info("" + pairlist);
         return G;
     }
 
-  
+
     /**
      * GB distributed client.
      * @param host the server runns on.
      * @throws IOException
      */
-    public void clientPart(String host) 
-                          throws IOException {  
+    public void clientPart(String host) throws IOException {
 
-        ChannelFactory cf = new ChannelFactory(port+10); // != port for localhost
+        ChannelFactory cf = new ChannelFactory(port + 10); // != port for localhost
         cf.init();
-        SocketChannel pairChannel = cf.getChannel(host,port);
+        SocketChannel pairChannel = cf.getChannel(host, port);
 
         final int DL_PORT = port + 100;
-        DistHashTable<Integer,GenPolynomial<C>> theList = new DistHashTable<Integer,GenPolynomial<C>>(host, DL_PORT );
+        DistHashTable<Integer, GenPolynomial<C>> theList = new DistHashTable<Integer, GenPolynomial<C>>(host,
+                DL_PORT);
 
-        ReducerClientSeqPair<C> R = new ReducerClientSeqPair<C>(pairChannel,theList);
+        ReducerClientSeqPair<C> R = new ReducerClientSeqPair<C>(pairChannel, theList);
         R.run();
 
         pairChannel.close();
@@ -311,82 +308,79 @@ public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>>
      * @return a reduced Groebner base of Fp.
      */
     @Override
-     public List<GenPolynomial<C>> 
-                minimalGB(List<GenPolynomial<C>> Fp) {  
+    public List<GenPolynomial<C>> minimalGB(List<GenPolynomial<C>> Fp) {
         GenPolynomial<C> a;
         ArrayList<GenPolynomial<C>> G;
-        G = new ArrayList<GenPolynomial<C>>( Fp.size() );
+        G = new ArrayList<GenPolynomial<C>>(Fp.size());
         ListIterator<GenPolynomial<C>> it = Fp.listIterator();
-        while ( it.hasNext() ) { 
+        while (it.hasNext()) {
             a = it.next();
-            if ( a.length() != 0 ) { // always true
-               // already monic  a = a.monic();
-               G.add( a );
+            if (a.length() != 0) { // always true
+                // already monic  a = a.monic();
+                G.add(a);
             }
         }
-        if ( G.size() <= 1 ) {
-           return G;
+        if (G.size() <= 1) {
+            return G;
         }
 
-        ExpVector e;        
-        ExpVector f;        
+        ExpVector e;
+        ExpVector f;
         GenPolynomial<C> p;
         ArrayList<GenPolynomial<C>> F;
-        F = new ArrayList<GenPolynomial<C>>( G.size() );
+        F = new ArrayList<GenPolynomial<C>>(G.size());
         boolean mt;
 
-        while ( G.size() > 0 ) {
+        while (G.size() > 0) {
             a = G.remove(0);
             e = a.leadingExpVector();
 
             it = G.listIterator();
             mt = false;
-            while ( it.hasNext() && ! mt ) {
-               p = it.next();
-               f = p.leadingExpVector();
-               mt =  e.multipleOf( f );
+            while (it.hasNext() && !mt) {
+                p = it.next();
+                f = p.leadingExpVector();
+                mt = e.multipleOf(f);
             }
             it = F.listIterator();
-            while ( it.hasNext() && ! mt ) {
-               p = it.next();
-               f = p.leadingExpVector();
-               mt =  e.multipleOf( f );
+            while (it.hasNext() && !mt) {
+                p = it.next();
+                f = p.leadingExpVector();
+                mt = e.multipleOf(f);
             }
-            if ( ! mt ) {
-                F.add( a );
+            if (!mt) {
+                F.add(a);
             } else {
                 // System.out.println("dropped " + a.length());
             }
         }
         G = F;
-        if ( G.size() <= 1 ) {
-           return G;
+        if (G.size() <= 1) {
+            return G;
         }
 
-        MiReducerServerSeqPair<C>[] mirs = (MiReducerServerSeqPair<C>[]) new MiReducerServerSeqPair[ G.size() ];
+        MiReducerServerSeqPair<C>[] mirs = (MiReducerServerSeqPair<C>[]) new MiReducerServerSeqPair[G.size()];
         int i = 0;
-        F = new ArrayList<GenPolynomial<C>>( G.size() );
-        while ( G.size() > 0 ) {
+        F = new ArrayList<GenPolynomial<C>>(G.size());
+        while (G.size() > 0) {
             a = G.remove(0);
             // System.out.println("doing " + a.length());
-            mirs[i] = new MiReducerServerSeqPair<C>((List<GenPolynomial<C>>)G.clone(), 
-                                                    (List<GenPolynomial<C>>)F.clone(), 
-                                                     a );
-            pool.addJob( mirs[i] );
+            mirs[i] = new MiReducerServerSeqPair<C>((List<GenPolynomial<C>>) G.clone(),
+                    (List<GenPolynomial<C>>) F.clone(), a);
+            pool.addJob(mirs[i]);
             i++;
-            F.add( a );
+            F.add(a);
         }
         G = F;
-        F = new ArrayList<GenPolynomial<C>>( G.size() );
-        for ( i = 0; i < mirs.length; i++ ) {
+        F = new ArrayList<GenPolynomial<C>>(G.size());
+        for (i = 0; i < mirs.length; i++) {
             a = mirs[i].getNF();
-            F.add( a );
+            F.add(a);
         }
         return F;
     }
 
 }
-
 
 
 /**
@@ -395,220 +389,230 @@ public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>>
  */
 
 class ReducerServerSeqPair<C extends RingElem<C>> implements Runnable {
-      private Terminator pool;
-      private ChannelFactory cf;
-      private SocketChannel pairChannel;
-      private DistHashTable<Integer,GenPolynomial<C>> theList;
-      //private List<GenPolynomial<C>> G;
-      private CriticalPairList<C> pairlist;
-      private static final Logger logger = Logger.getLogger(ReducerServerSeqPair.class);
 
 
-      ReducerServerSeqPair(Terminator fin, 
-                    ChannelFactory cf, 
-                    DistHashTable<Integer,GenPolynomial<C>> dl, 
-                    List<GenPolynomial<C>> G, 
-                    CriticalPairList<C> L) {
-            pool = fin;
-            this.cf = cf;
-            theList = dl;
-            //this.G = G;
-            pairlist = L;
-      } 
+    private final Terminator pool;
 
 
-      public void run() {
-           logger.debug("reducer server running");
-           try {
-                pairChannel = cf.getChannel();
-           } catch (InterruptedException e) {
-                logger.debug("get pair channel interrupted");
+    private final ChannelFactory cf;
+
+
+    private SocketChannel pairChannel;
+
+
+    private final DistHashTable<Integer, GenPolynomial<C>> theList;
+
+
+    //private List<GenPolynomial<C>> G;
+    private final CriticalPairList<C> pairlist;
+
+
+    private static final Logger logger = Logger.getLogger(ReducerServerSeqPair.class);
+
+
+    ReducerServerSeqPair(Terminator fin, ChannelFactory cf, DistHashTable<Integer, GenPolynomial<C>> dl,
+            List<GenPolynomial<C>> G, CriticalPairList<C> L) {
+        pool = fin;
+        this.cf = cf;
+        theList = dl;
+        //this.G = G;
+        pairlist = L;
+    }
+
+
+    public void run() {
+        logger.debug("reducer server running");
+        try {
+            pairChannel = cf.getChannel();
+        } catch (InterruptedException e) {
+            logger.debug("get pair channel interrupted");
+            e.printStackTrace();
+            return;
+        }
+        if (logger.isDebugEnabled()) {
+            logger.debug("pairChannel = " + pairChannel);
+        }
+        CriticalPair<C> pair;
+        //GenPolynomial<C> pi;
+        //GenPolynomial<C> pj;
+        //GenPolynomial<C> S;
+        GenPolynomial<C> H = null;
+        boolean set = false;
+        boolean goon = true;
+        int polIndex = -1;
+        int red = 0;
+        int sleeps = 0;
+
+        // while more requests
+        while (goon) {
+            // receive request
+            logger.debug("receive request");
+            Object req = null;
+            try {
+                req = pairChannel.receive();
+            } catch (IOException e) {
+                goon = false;
                 e.printStackTrace();
-                return;
-           } 
-           if ( logger.isDebugEnabled() ) {
-              logger.debug("pairChannel = "+pairChannel);
-           }
-           CriticalPair<C> pair;
-           //GenPolynomial<C> pi;
-           //GenPolynomial<C> pj;
-           //GenPolynomial<C> S;
-           GenPolynomial<C> H = null;
-           boolean set = false;
-           boolean goon = true;
-           int polIndex = -1;
-           int red = 0;
-           int sleeps = 0;
+            } catch (ClassNotFoundException e) {
+                goon = false;
+                e.printStackTrace();
+            }
+            //logger.debug("received request, req = " + req);
+            if (req == null) {
+                goon = false;
+                break;
+            }
+            if (!(req instanceof GBSPTransportMessReq)) {
+                goon = false;
+                break;
+            }
 
-           // while more requests
-           while ( goon ) {
-               // receive request
-               logger.debug("receive request");
-               Object req = null;
-               try {
-                   req = pairChannel.receive();
-               } catch (IOException e) {
-                   goon = false;
-                   e.printStackTrace();
-               } catch (ClassNotFoundException e) {
-                   goon = false;
-                   e.printStackTrace();
-               }
-               //logger.debug("received request, req = " + req);
-               if ( req == null ) { 
-                  goon = false;
-                  break;
-               }
-               if ( ! (req instanceof GBSPTransportMessReq ) ) {
-                  goon = false;
-                  break;
-               }
+            // find pair
+            if (logger.isDebugEnabled()) {
+                logger.debug("find pair");
+                logger
+                        .debug("pool.hasJobs() " + pool.hasJobs() + " pairlist.hasNext() "
+                                + pairlist.hasNext());
+            }
+            while (!pairlist.hasNext()) { // wait
+                pairlist.update();
+                if (!set) {
+                    pool.beIdle();
+                    set = true;
+                }
+                if (!pool.hasJobs() && !pairlist.hasNext()) {
+                    goon = false;
+                    break;
+                }
+                try {
+                    sleeps++;
+                    if (sleeps % 10 == 0) {
+                        logger.info(" reducer is sleeping");
+                    }
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    goon = false;
+                    break;
+                }
+            }
+            if (!pairlist.hasNext() && !pool.hasJobs()) {
+                goon = false;
+                break; //continue; //break?
+            }
+            if (set) {
+                set = false;
+                pool.notIdle();
+            }
 
-               // find pair
-               if ( logger.isDebugEnabled() ) {
-                  logger.debug("find pair");
-                  logger.debug("pool.hasJobs() " + pool.hasJobs()
-                             + " pairlist.hasNext() " + pairlist.hasNext());
-               }
-               while ( ! pairlist.hasNext() ) { // wait
-                     pairlist.update();
-                     if ( ! set ) {
-                        pool.beIdle(); 
-                        set = true;
-                     }
-                     if ( ! pool.hasJobs() && ! pairlist.hasNext() ) {
-                        goon = false;
-                        break;
-                     }
-                     try {
-                         sleeps++;
-                         if ( sleeps % 10 == 0 ) {
-                            logger.info(" reducer is sleeping");
-                         }
-                         Thread.sleep(100);
-                     } catch (InterruptedException e) {
-                         goon = false;
-                         break;
-                     }
-               }
-               if ( ! pairlist.hasNext() && ! pool.hasJobs() ) {
-                  goon = false;
-                  break; //continue; //break?
-               }
-               if ( set ) {
-                  set = false;
-                  pool.notIdle();
-               }
-
-               pair = pairlist.getNext();
-               /*
-                * send pair to client, receive H
-                */
-               if ( logger.isDebugEnabled() ) {
-                  logger.debug("send pair = " + pair );
-                  logger.info("theList keys " + theList.keySet());
-               }
-               if ( logger.isDebugEnabled() ) {
-                  logger.info("inWork " + pairlist.inWork() );
-               }
-               GBSPTransportMess msg = null;
-               if ( pair != null ) {
-                  msg = new GBSPTransportMessPairIndex( pair );
-               } else {
-                  msg = new GBSPTransportMess(); //End();
-                  // goon ?= false;
-               }
-               try {
-                   pairChannel.send( msg );
-               } catch (IOException e) {
-                   e.printStackTrace();
-                   goon = false;
-                   break;
-               }
-               // use idle time to update pairlist
-               pairlist.update();
-               //logger.debug("#distributed list = "+theList.size());
-               //logger.debug("receive H polynomial");
-               Object rh = null;
-               try {
-                   rh = pairChannel.receive();
-               } catch (IOException e) {
-                   e.printStackTrace();
-                   goon = false;
-                   break;
-               } catch (ClassNotFoundException e) {
-                   e.printStackTrace();
-                   goon = false;
-                   break;
-               }
-               if ( logger.isDebugEnabled() ) {
-                  logger.info("received H polynomial rh = " + rh);
-               }
-               if ( rh == null ) {
-                  if ( pair != null ) {
-                     polIndex = pairlist.record( pair, null );
-                     //pair.setZero();
-                  }
-                  pairlist.update();
-               } else if ( rh instanceof GBSPTransportMessPoly ) {
-                  // update pair list
-                  red++;
-                  H = ((GBSPTransportMessPoly<C>)rh).pol;
-                  //logger.info("H = " + H);
-                  if ( H == null ) {
-                     if ( pair != null ) {
-                        polIndex = pairlist.record( pair, H );
+            pair = pairlist.getNext();
+            /*
+             * send pair to client, receive H
+             */
+            if (logger.isDebugEnabled()) {
+                logger.debug("send pair = " + pair);
+                logger.info("theList keys " + theList.keySet());
+            }
+            if (logger.isDebugEnabled()) {
+                logger.info("inWork " + pairlist.inWork());
+            }
+            GBSPTransportMess msg = null;
+            if (pair != null) {
+                msg = new GBSPTransportMessPairIndex(pair);
+            } else {
+                msg = new GBSPTransportMess(); //End();
+                // goon ?= false;
+            }
+            try {
+                pairChannel.send(msg);
+            } catch (IOException e) {
+                e.printStackTrace();
+                goon = false;
+                break;
+            }
+            // use idle time to update pairlist
+            pairlist.update();
+            //logger.debug("#distributed list = "+theList.size());
+            //logger.debug("receive H polynomial");
+            Object rh = null;
+            try {
+                rh = pairChannel.receive();
+            } catch (IOException e) {
+                e.printStackTrace();
+                goon = false;
+                break;
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+                goon = false;
+                break;
+            }
+            if (logger.isDebugEnabled()) {
+                logger.info("received H polynomial rh = " + rh);
+            }
+            if (rh == null) {
+                if (pair != null) {
+                    polIndex = pairlist.record(pair, null);
+                    //pair.setZero();
+                }
+                pairlist.update();
+            } else if (rh instanceof GBSPTransportMessPoly) {
+                // update pair list
+                red++;
+                H = ((GBSPTransportMessPoly<C>) rh).pol;
+                //logger.info("H = " + H);
+                if (H == null) {
+                    if (pair != null) {
+                        polIndex = pairlist.record(pair, H);
                         //pair.setZero();
-                     }
-                     pairlist.update();
-                  } else {
-                     if ( H.isZERO() ) {
-                        polIndex = pairlist.record( pair, H );
+                    }
+                    pairlist.update();
+                } else {
+                    if (H.isZERO()) {
+                        polIndex = pairlist.record(pair, H);
                         //pair.setZero();
-                     } else {
-                        if ( H.isONE() ) {
-                           // pool.allIdle();
-                           pairlist.putOne();
-                           theList.put( new Integer(0), H );
-                           goon = false;
-                           //break;
+                    } else {
+                        if (H.isONE()) {
+                            // pool.allIdle();
+                            pairlist.putOne();
+                            theList.put(new Integer(0), H);
+                            goon = false;
+                            //break;
                         } else {
-                           polIndex = pairlist.record( pair, H );
-                           // not correct:
-                           // polIndex = pairlist.getList().size(); 
-                           // pairlist.update();
-                           // polIndex = pairlist.put( H );
-                           // use putWait ? but still not all distributed
-                           theList.put( new Integer(polIndex), H );
+                            polIndex = pairlist.record(pair, H);
+                            // not correct:
+                            // polIndex = pairlist.getList().size(); 
+                            // pairlist.update();
+                            // polIndex = pairlist.put( H );
+                            // use putWait ? but still not all distributed
+                            theList.put(new Integer(polIndex), H);
                         }
-                     }
-                  }
-               } else {
-                  if ( pair != null ) {
-                     polIndex = pairlist.record( pair, null );
-                     //pair.setZero();
-                  }
-                  if ( logger.isDebugEnabled() ) {
-                     logger.debug("invalid message " + rh);
-                  }
-               }
-           }
-           logger.info("terminated, done " + red + " reductions");
+                    }
+                }
+            } else {
+                if (pair != null) {
+                    polIndex = pairlist.record(pair, null);
+                    //pair.setZero();
+                }
+                if (logger.isDebugEnabled()) {
+                    logger.debug("invalid message " + rh);
+                }
+            }
+        }
+        logger.info("terminated, done " + red + " reductions");
 
-           /*
-            * send end mark to client
-            */
-           logger.debug("send end" );
-           try {
-               pairChannel.send( new GBSPTransportMessEnd() );
-           } catch (IOException e) {
-               if ( logger.isDebugEnabled() ) {
-                  e.printStackTrace();
-               }
-           }
-           pool.beIdle();
-           pairChannel.close();
-      }
+        /*
+         * send end mark to client
+         */
+        logger.debug("send end");
+        try {
+            pairChannel.send(new GBSPTransportMessEnd());
+        } catch (IOException e) {
+            if (logger.isDebugEnabled()) {
+                e.printStackTrace();
+            }
+        }
+        pool.beIdle();
+        pairChannel.close();
+    }
 
 }
 
@@ -619,11 +623,12 @@ class ReducerServerSeqPair<C extends RingElem<C>> implements Runnable {
 
 class GBSPTransportMess implements Serializable {
 
+
     /**
      * toString.
      */
     @Override
-     public String toString() {
+    public String toString() {
         return "" + this.getClass().getName();
     }
 }
@@ -634,6 +639,8 @@ class GBSPTransportMess implements Serializable {
  */
 
 class GBSPTransportMessReq extends GBSPTransportMess {
+
+
     public GBSPTransportMessReq() {
     }
 }
@@ -644,9 +651,12 @@ class GBSPTransportMessReq extends GBSPTransportMess {
  */
 
 class GBSPTransportMessEnd extends GBSPTransportMess {
+
+
     public GBSPTransportMessEnd() {
     }
 }
+
 
 /**
  * Distributed GB transport message for polynomial.
@@ -654,10 +664,12 @@ class GBSPTransportMessEnd extends GBSPTransportMess {
 
 class GBSPTransportMessPoly<C extends RingElem<C>> extends GBSPTransportMess {
 
+
     /**
      * The polynomial for transport.
      */
     public final GenPolynomial<C> pol;
+
 
     /**
      * GBSPTransportMessPoly.
@@ -667,11 +679,12 @@ class GBSPTransportMessPoly<C extends RingElem<C>> extends GBSPTransportMess {
         this.pol = p;
     }
 
+
     /**
      * toString.
      */
     @Override
-     public String toString() {
+    public String toString() {
         return super.toString() + "( " + pol + " )";
     }
 }
@@ -682,7 +695,10 @@ class GBSPTransportMessPoly<C extends RingElem<C>> extends GBSPTransportMess {
  */
 
 class GBSPTransportMessPair<C extends RingElem<C>> extends GBSPTransportMess {
+
+
     public final CriticalPair<C> pair;
+
 
     /**
      * GBSPTransportMessPair.
@@ -692,11 +708,12 @@ class GBSPTransportMessPair<C extends RingElem<C>> extends GBSPTransportMess {
         this.pair = p;
     }
 
+
     /**
      * toString.
      */
     @Override
-     public String toString() {
+    public String toString() {
         return super.toString() + "( " + pair + " )";
     }
 }
@@ -707,20 +724,26 @@ class GBSPTransportMessPair<C extends RingElem<C>> extends GBSPTransportMess {
  */
 
 class GBSPTransportMessPairIndex extends GBSPTransportMess {
+
+
     public final Integer i;
+
+
     public final Integer j;
+
 
     /**
      * GBSPTransportMessPairIndex.
      * @param p pair for transport.
      */
     public GBSPTransportMessPairIndex(CriticalPair p) {
-        if ( p == null ) {
+        if (p == null) {
             throw new NullPointerException("pair may not be null");
         }
-        this.i = new Integer( p.i );
-        this.j = new Integer( p.j );
+        this.i = new Integer(p.i);
+        this.j = new Integer(p.j);
     }
+
 
     /**
      * GBSPTransportMessPairIndex.
@@ -732,6 +755,7 @@ class GBSPTransportMessPairIndex extends GBSPTransportMess {
         this.j = new Integer(j);
     }
 
+
     /**
      * GBSPTransportMessPairIndex.
      * @param i first index.
@@ -742,12 +766,13 @@ class GBSPTransportMessPairIndex extends GBSPTransportMess {
         this.j = j;
     }
 
+
     /**
      * toString.
      */
     @Override
-     public String toString() {
-        return super.toString() + "( " + i + "," +j + " )";
+    public String toString() {
+        return super.toString() + "( " + i + "," + j + " )";
     }
 }
 
@@ -758,254 +783,289 @@ class GBSPTransportMessPairIndex extends GBSPTransportMess {
 
 class ReducerClientSeqPair<C extends RingElem<C>> implements Runnable {
 
-      private SocketChannel pairChannel;
-      private DistHashTable<Integer,GenPolynomial<C>> theList;
-      private ReductionPar<C> red;
 
-      private static final Logger logger = Logger.getLogger(ReducerClientSeqPair.class);
+    private final SocketChannel pairChannel;
 
-      ReducerClientSeqPair(SocketChannel pc, DistHashTable<Integer,GenPolynomial<C>> dl) {
-             pairChannel = pc;
-             theList = dl;
-             red = new ReductionPar<C>();
-      } 
 
-      public void run() {
-           if ( logger.isDebugEnabled() ) {
-              logger.debug("pairChannel = " + pairChannel + "reducer client running");
-           }
-           CriticalPair<C> pair = null;
-           GenPolynomial<C> pi;
-           GenPolynomial<C> pj;
-           GenPolynomial<C> S;
-           GenPolynomial<C> H = null;
-           //boolean set = false;
-           boolean goon = true;
-           int reduction = 0;
-           //int sleeps = 0;
-           Integer pix;
-           Integer pjx;
+    private final DistHashTable<Integer, GenPolynomial<C>> theList;
 
-           while ( goon ) {
-               /* protocol:
-                * request pair, process pair, send result
-                */
-               // pair = (Pair) pairlist.removeNext();
 
-               Object req = new GBSPTransportMessReq();
-               if ( logger.isDebugEnabled() ) {
-                  logger.debug("send request = "+req);
-               }
-               try {
-                    pairChannel.send( req );
-               } catch (IOException e) {
-                   goon = false;
-                   e.printStackTrace();
-                   break;
-               }
-               if ( logger.isDebugEnabled() ) {
-                  logger.debug("receive pair, goon = "+goon);
-               }
-               Object pp = null;
-               try {
-                   pp = pairChannel.receive();
-               } catch (IOException e) {
-                   goon = false;
-                   if ( logger.isDebugEnabled() ) {
-                      e.printStackTrace();
-                   }
-                   break;
-               } catch (ClassNotFoundException e) {
-                   goon = false;
-                   e.printStackTrace();
-               }
-               if ( logger.isDebugEnabled() ) {
-                  logger.info("received pair = " + pp);
-               }
-               H = null;
-               if ( pp == null ) { // should not happen
-                  //logger.debug("received pair = " + pp);
-                  continue;
-               }
-               if ( pp instanceof GBSPTransportMessEnd ) {
-                  goon = false;
-                  continue;
-               }
-               if ( pp instanceof GBSPTransportMessPair 
-                  || pp instanceof GBSPTransportMessPairIndex ) {
-                  pi = pj = null;
-                  if ( pp instanceof GBSPTransportMessPair ) {
-                     pair = ((GBSPTransportMessPair<C>)pp).pair;
-                     if ( pair != null ) {
-                        pi = pair.pi; 
-                        pj = pair.pj; 
+    private final ReductionPar<C> red;
+
+
+    private static final Logger logger = Logger.getLogger(ReducerClientSeqPair.class);
+
+
+    ReducerClientSeqPair(SocketChannel pc, DistHashTable<Integer, GenPolynomial<C>> dl) {
+        pairChannel = pc;
+        theList = dl;
+        red = new ReductionPar<C>();
+    }
+
+
+    public void run() {
+        if (logger.isDebugEnabled()) {
+            logger.debug("pairChannel = " + pairChannel + "reducer client running");
+        }
+        CriticalPair<C> pair = null;
+        GenPolynomial<C> pi;
+        GenPolynomial<C> pj;
+        GenPolynomial<C> S;
+        GenPolynomial<C> H = null;
+        //boolean set = false;
+        boolean goon = true;
+        int reduction = 0;
+        //int sleeps = 0;
+        Integer pix;
+        Integer pjx;
+
+        while (goon) {
+            /* protocol:
+             * request pair, process pair, send result
+             */
+            // pair = (Pair) pairlist.removeNext();
+            Object req = new GBSPTransportMessReq();
+            if (logger.isDebugEnabled()) {
+                logger.debug("send request = " + req);
+            }
+            try {
+                pairChannel.send(req);
+            } catch (IOException e) {
+                goon = false;
+                e.printStackTrace();
+                break;
+            }
+            if (logger.isDebugEnabled()) {
+                logger.debug("receive pair, goon = " + goon);
+            }
+            Object pp = null;
+            try {
+                pp = pairChannel.receive();
+            } catch (IOException e) {
+                goon = false;
+                if (logger.isDebugEnabled()) {
+                    e.printStackTrace();
+                }
+                break;
+            } catch (ClassNotFoundException e) {
+                goon = false;
+                e.printStackTrace();
+            }
+            if (logger.isDebugEnabled()) {
+                logger.info("received pair = " + pp);
+            }
+            H = null;
+            if (pp == null) { // should not happen
+                //logger.debug("received pair = " + pp);
+                continue;
+            }
+            if (pp instanceof GBSPTransportMessEnd) {
+                goon = false;
+                continue;
+            }
+            if (pp instanceof GBSPTransportMessPair || pp instanceof GBSPTransportMessPairIndex) {
+                pi = pj = null;
+                if (pp instanceof GBSPTransportMessPair) {
+                    pair = ((GBSPTransportMessPair<C>) pp).pair;
+                    if (pair != null) {
+                        pi = pair.pi;
+                        pj = pair.pj;
                         //logger.debug("pair: pix = " + pair.i 
                         //               + ", pjx = " + pair.j);
-                     }
-                  }
-                  if ( pp instanceof GBSPTransportMessPairIndex ) {
-                     pix = ((GBSPTransportMessPairIndex)pp).i;
-                     pjx = ((GBSPTransportMessPairIndex)pp).j;
-                     //logger.info("waiting for pix = " + pix); 
-                     pi = (GenPolynomial<C>)theList.getWait( pix );
-                     //logger.info("waiting for pjx = " + pjx); 
-                     pj = (GenPolynomial<C>)theList.getWait( pjx );
-                     //logger.info("pix = " + pix + ", pjx = " +pjx);
-                  }
+                    }
+                }
+                if (pp instanceof GBSPTransportMessPairIndex) {
+                    pix = ((GBSPTransportMessPairIndex) pp).i;
+                    pjx = ((GBSPTransportMessPairIndex) pp).j;
+                    //logger.info("waiting for pix = " + pix); 
+                    pi = theList.getWait(pix);
+                    //logger.info("waiting for pjx = " + pjx); 
+                    pj = theList.getWait(pjx);
+                    //logger.info("pix = " + pix + ", pjx = " +pjx);
+                }
 
-                  if ( logger.isDebugEnabled() ) {
-                     logger.info("pi = " + pi.leadingExpVector() + 
-                               ", pj = " + pj.leadingExpVector());
-                  }
-                  if ( pi != null && pj != null ) {
-                      S = red.SPolynomial( pi, pj );
-                      //System.out.println("S   = " + S);
-                      if ( S.isZERO() ) {
-                         // pair.setZero(); does not work in dist
-                         H = S;
-                      } else {
-                         if ( logger.isDebugEnabled() ) {
-                            logger.debug("ht(S) = " + S.leadingExpVector() );
-                         }
-                         H = red.normalform( theList, S );
-                         reduction++;
-                         if ( H.isZERO() ) {
+                if (logger.isDebugEnabled()) {
+                    logger.info("pi = " + pi.leadingExpVector() + ", pj = " + pj.leadingExpVector());
+                }
+                if (pi != null && pj != null) {
+                    S = red.SPolynomial(pi, pj);
+                    //System.out.println("S   = " + S);
+                    if (S.isZERO()) {
+                        // pair.setZero(); does not work in dist
+                        H = S;
+                    } else {
+                        if (logger.isDebugEnabled()) {
+                            logger.debug("ht(S) = " + S.leadingExpVector());
+                        }
+                        H = red.normalform(theList, S);
+                        reduction++;
+                        if (H.isZERO()) {
                             // pair.setZero(); does not work in dist
-                         } else {
+                        } else {
                             H = H.monic();
-                            if ( logger.isDebugEnabled() ) {
-                               logger.info("ht(H) = " + H.leadingExpVector() );
+                            if (logger.isDebugEnabled()) {
+                                logger.info("ht(H) = " + H.leadingExpVector());
                             }
-                         }
-                      }
-                   }
-               } else {
-                   if ( logger.isDebugEnabled() ) {
-                      logger.debug("invalid message = " + pp);
-                   }
-                   try {
-                       Thread.sleep(100);
-                   } catch (InterruptedException e) {
-                       e.printStackTrace();
-                   }
-               }
+                        }
+                    }
+                }
+            } else {
+                if (logger.isDebugEnabled()) {
+                    logger.debug("invalid message = " + pp);
+                }
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
 
-               // send H or must send null
-               //logger.debug("#distributed list = "+theList.size());
-               if ( logger.isDebugEnabled() ) {
-                  logger.info("send H polynomial = " + H);
-               }
-               try {
-                   pairChannel.send( new GBSPTransportMessPoly<C>( H ) );
-               } catch (IOException e) {
-                   goon = false;
-                   e.printStackTrace();
-                   break;
-               }
-           }
-           logger.info( "terminated, done " + reduction + " reductions");
-           pairChannel.close();
-      }
+            // send H or must send null
+            //logger.debug("#distributed list = "+theList.size());
+            if (logger.isDebugEnabled()) {
+                logger.info("send H polynomial = " + H);
+            }
+            try {
+                pairChannel.send(new GBSPTransportMessPoly<C>(H));
+            } catch (IOException e) {
+                goon = false;
+                e.printStackTrace();
+                break;
+            }
+        }
+        logger.info("terminated, done " + reduction + " reductions");
+        pairChannel.close();
+    }
 }
 
 
 /**
- * Distributed server reducing worker threads for minimal GB
- * Not jet distributed but threaded.
+ * Distributed server reducing worker threads for minimal GB Not jet distributed
+ * but threaded.
  */
 
 class MiReducerServerSeqPair<C extends RingElem<C>> implements Runnable {
-        private List<GenPolynomial<C>> G;
-        private List<GenPolynomial<C>> F;
-        private GenPolynomial<C> S;
-        private GenPolynomial<C> H;
-        private Semaphore done = new Semaphore(0);
-        private Reduction<C> red;
-        private static final Logger logger = Logger.getLogger(MiReducerServerSeqPair.class);
 
-      MiReducerServerSeqPair( List<GenPolynomial<C>> G, 
-                       List<GenPolynomial<C>> F, 
-                       GenPolynomial<C> p) {
-            this.G = G;
-            this.F = F;
-            S = p;
-            H = S;
-            red = new ReductionPar<C>();
-      } 
 
-      /**
-       * getNF. Blocks until the normal form is computed.
-       * @return the computed normal form.
-       */
-      public GenPolynomial<C> getNF() {
-          try { done.acquire(); //done.P();
-            } catch (InterruptedException e) { }
-            return H;
-      }
+    private final List<GenPolynomial<C>> G;
 
-      public void run() {
-            if ( logger.isDebugEnabled() ) {
-                 logger.debug("ht(S) = " + S.leadingExpVector() );
-            }
-            H = red.normalform( G, H ); //mod
-            H = red.normalform( F, H ); //mod
-            done.release(); //done.V();
-            if ( logger.isDebugEnabled() ) {
-                 logger.debug("ht(H) = " + H.leadingExpVector() );
-            }
-            // H = H.monic();
-      }
+
+    private final List<GenPolynomial<C>> F;
+
+
+    private final GenPolynomial<C> S;
+
+
+    private GenPolynomial<C> H;
+
+
+    private final Semaphore done = new Semaphore(0);
+
+
+    private final Reduction<C> red;
+
+
+    private static final Logger logger = Logger.getLogger(MiReducerServerSeqPair.class);
+
+
+    MiReducerServerSeqPair(List<GenPolynomial<C>> G, List<GenPolynomial<C>> F, GenPolynomial<C> p) {
+        this.G = G;
+        this.F = F;
+        S = p;
+        H = S;
+        red = new ReductionPar<C>();
+    }
+
+
+    /**
+     * getNF. Blocks until the normal form is computed.
+     * @return the computed normal form.
+     */
+    public GenPolynomial<C> getNF() {
+        try {
+            done.acquire(); //done.P();
+        } catch (InterruptedException e) {
+        }
+        return H;
+    }
+
+
+    public void run() {
+        if (logger.isDebugEnabled()) {
+            logger.debug("ht(S) = " + S.leadingExpVector());
+        }
+        H = red.normalform(G, H); //mod
+        H = red.normalform(F, H); //mod
+        done.release(); //done.V();
+        if (logger.isDebugEnabled()) {
+            logger.debug("ht(H) = " + H.leadingExpVector());
+        }
+        // H = H.monic();
+    }
 }
 
 
 /**
- * Distributed clients reducing worker threads for minimal GB.
- * Not jet used.
+ * Distributed clients reducing worker threads for minimal GB. Not jet used.
  */
 
 class MiReducerClientSeqPair<C extends RingElem<C>> implements Runnable {
-        private List<GenPolynomial<C>> G;
-        private List<GenPolynomial<C>> F;
-        private GenPolynomial<C> S;
-        private GenPolynomial<C> H;
-        private Reduction<C> red;
-        private Semaphore done = new Semaphore(0);
-        private static final Logger logger = Logger.getLogger(MiReducerClientSeqPair.class);
 
-      MiReducerClientSeqPair( List<GenPolynomial<C>> G, 
-                       List<GenPolynomial<C>> F, 
-                       GenPolynomial<C> p) {
-            this.G = G;
-            this.F = F;
-            S = p;
-            H = S;
-            red = new ReductionPar<C>();
-      } 
 
-      /**
-       * getNF. Blocks until the normal form is computed.
-       * @return the computed normal form.
-       */
-      public GenPolynomial<C> getNF() {
-          try { 
-              done.acquire(); //done.P();
-          } catch (InterruptedException u) { 
-              Thread.currentThread().interrupt();
-          }
-          return H;
-      }
+    private final List<GenPolynomial<C>> G;
 
-      public void run() {
-            if ( logger.isDebugEnabled() ) {
-                 logger.debug("ht(S) = " + S.leadingExpVector() );
-            }
-            H = red.normalform( G, H ); //mod
-            H = red.normalform( F, H ); //mod
-            done.release(); //done.V();
-            if ( logger.isDebugEnabled() ) {
-                 logger.debug("ht(H) = " + H.leadingExpVector() );
-            }
-            // H = H.monic();
-      }
+
+    private final List<GenPolynomial<C>> F;
+
+
+    private final GenPolynomial<C> S;
+
+
+    private GenPolynomial<C> H;
+
+
+    private final Reduction<C> red;
+
+
+    private final Semaphore done = new Semaphore(0);
+
+
+    private static final Logger logger = Logger.getLogger(MiReducerClientSeqPair.class);
+
+
+    MiReducerClientSeqPair(List<GenPolynomial<C>> G, List<GenPolynomial<C>> F, GenPolynomial<C> p) {
+        this.G = G;
+        this.F = F;
+        S = p;
+        H = S;
+        red = new ReductionPar<C>();
+    }
+
+
+    /**
+     * getNF. Blocks until the normal form is computed.
+     * @return the computed normal form.
+     */
+    public GenPolynomial<C> getNF() {
+        try {
+            done.acquire(); //done.P();
+        } catch (InterruptedException u) {
+            Thread.currentThread().interrupt();
+        }
+        return H;
+    }
+
+
+    public void run() {
+        if (logger.isDebugEnabled()) {
+            logger.debug("ht(S) = " + S.leadingExpVector());
+        }
+        H = red.normalform(G, H); //mod
+        H = red.normalform(F, H); //mod
+        done.release(); //done.V();
+        if (logger.isDebugEnabled()) {
+            logger.debug("ht(H) = " + H.leadingExpVector());
+        }
+        // H = H.monic();
+    }
 }
-

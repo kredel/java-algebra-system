@@ -47,8 +47,14 @@ public class DistHashTableServer<K> extends Thread {
 
 
     private long etime;
+
+
     private long dtime;
+
+
     private long ertime;
+
+
     private long drtime;
 
 
@@ -220,8 +226,10 @@ public class DistHashTableServer<K> extends Thread {
         long dec = DHTTransport.dtime - dtime;
         long encr = DHTTransport.ertime - ertime;
         long decr = DHTTransport.drtime - drtime;
-        long drest = (encr*dec)/(enc+1);
-        logger.info("DHT time: encode = " + enc + ", decode = " + dec + ", enc raw = " + encr + ", dec raw wait = " + decr + ", dec raw est = " + drest + ", sum est = " + (enc+dec+encr+drest)); // +decr not meaningful
+        long drest = (encr * dec) / (enc + 1);
+        logger.info("DHT time: encode = " + enc + ", decode = " + dec + ", enc raw = " + encr
+                + ", dec raw wait = " + decr + ", dec raw est = " + drest + ", sum est = "
+                + (enc + dec + encr + drest)); // +decr not meaningful
         if (mythread == null) {
             return;
         }

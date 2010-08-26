@@ -218,15 +218,15 @@ public class GroebnerBasePartTest extends TestCase {
         String[] vars = new String[] { "B", "S", "T", "Z", "P", "W" };
         String[] pvars = new String[] { "P", "Z", "T", "W" };
         String[] rvars = new String[] { "S", "B" };
-        List<Integer> perm1 = bbp.partialPermutation(vars, pvars);
+        List<Integer> perm1 = GroebnerBasePartial.partialPermutation(vars, pvars);
         //System.out.println("perm1 = " + perm1);
 
-        List<Integer> perm2 = bbp.partialPermutation(vars, pvars, null);
+        List<Integer> perm2 = GroebnerBasePartial.partialPermutation(vars, pvars, null);
         //System.out.println("perm2 = " + perm2);
 
         assertEquals("perm1 == perm2 ", perm1, perm2);
 
-        List<Integer> perm3 = bbp.partialPermutation(vars, pvars, rvars);
+        List<Integer> perm3 = GroebnerBasePartial.partialPermutation(vars, pvars, rvars);
         //System.out.println("perm3 = " + perm3);
         assertFalse("perm1 != perm3 ", perm1.equals(perm3));
     }
@@ -241,17 +241,17 @@ public class GroebnerBasePartTest extends TestCase {
         String[] evars = new String[] { "P", "Z" };
         String[] pvars = new String[] { "T", "W" };
         String[] rvars = new String[] { "B", "S" };
-        List<Integer> perm1 = bbp.partialPermutation(vars, evars, pvars, rvars);
+        List<Integer> perm1 = GroebnerBasePartial.partialPermutation(vars, evars, pvars, rvars);
         System.out.println("perm1 = " + perm1);
 
-        List<Integer> perm2 = bbp.partialPermutation(vars, evars, pvars, null);
+        List<Integer> perm2 = GroebnerBasePartial.partialPermutation(vars, evars, pvars, null);
         System.out.println("perm2 = " + perm2);
 
         assertEquals("perm1 == perm2 ", perm1, perm2);
 
         rvars = new String[] { "S", "B" };
 
-        List<Integer> perm3 = bbp.partialPermutation(vars, evars, pvars, rvars);
+        List<Integer> perm3 = GroebnerBasePartial.partialPermutation(vars, evars, pvars, rvars);
         System.out.println("perm3 = " + perm3);
         assertFalse("perm1 != perm3 ", perm1.equals(perm3));
     }
@@ -362,12 +362,12 @@ public class GroebnerBasePartTest extends TestCase {
                     evars[j] = ev.get(j);
                 }
                 //System.out.println("evars = " + Arrays.toString(evars));
-                String[] rvars = bbp.remainingVars(vars, evars);
+                String[] rvars = GroebnerBasePartial.remainingVars(vars, evars);
                 //System.out.println("rvars = " + Arrays.toString(rvars));
 
-                List<Integer> perm1 = bbp.partialPermutation(vars, evars);
+                List<Integer> perm1 = GroebnerBasePartial.partialPermutation(vars, evars);
                 //System.out.println("perm1 = " + perm1);
-                List<Integer> perm2 = bbp.getPermutation(vars, rvars);
+                List<Integer> perm2 = GroebnerBasePartial.getPermutation(vars, rvars);
                 //System.out.println("perm2 = " + perm2); 
                 assertEquals("perm1 == perm2 " + Arrays.toString(evars), perm1, perm2);
 

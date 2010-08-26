@@ -76,8 +76,7 @@ public class GroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
      * @param rf coefficient ring factory. <b>Note:</b> red must be an instance
      *            of PseudoReductionSeq.
      */
-    public GroebnerBasePseudoRecSeq(PseudoReduction<GenPolynomial<C>> red,
-            RingFactory<GenPolynomial<C>> rf) {
+    public GroebnerBasePseudoRecSeq(PseudoReduction<GenPolynomial<C>> red, RingFactory<GenPolynomial<C>> rf) {
         super(red);
         this.red = red;
         cofac = rf;
@@ -85,7 +84,7 @@ public class GroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
         baseCofac = rp.coFac;
         //engine = (GreatestCommonDivisorAbstract<C>)GCDFactory.<C>getImplementation( baseCofac );
         //not used: 
-        engine = (GreatestCommonDivisorAbstract<C>) GCDFactory.<C> getProxy(baseCofac);
+        engine = GCDFactory.<C> getProxy(baseCofac);
     }
 
 
@@ -96,8 +95,7 @@ public class GroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
      * @return GB(F) a Groebner base of F.
      */
     //@Override
-    public List<GenPolynomial<GenPolynomial<C>>> GB(int modv,
-            List<GenPolynomial<GenPolynomial<C>>> F) {
+    public List<GenPolynomial<GenPolynomial<C>>> GB(int modv, List<GenPolynomial<GenPolynomial<C>>> F) {
         GenPolynomial<GenPolynomial<C>> p;
         List<GenPolynomial<GenPolynomial<C>>> G = new ArrayList<GenPolynomial<GenPolynomial<C>>>();
         OrderedPairlist<GenPolynomial<C>> pairlist = null;
@@ -179,8 +177,7 @@ public class GroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
         }
         logger.debug("#sequential list = " + G.size());
         G = minimalGB(G);
-        logger.info("pairlist #put = " + pairlist.putCount() + " #rem = "
-                + pairlist.remCount()
+        logger.info("pairlist #put = " + pairlist.putCount() + " #rem = " + pairlist.remCount()
         // + " #total = " + pairlist.pairCount()
                 );
         return G;
@@ -193,14 +190,12 @@ public class GroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
      * @return a reduced Groebner base of Gp.
      */
     @Override
-    public List<GenPolynomial<GenPolynomial<C>>> minimalGB(
-            List<GenPolynomial<GenPolynomial<C>>> Gp) {
+    public List<GenPolynomial<GenPolynomial<C>>> minimalGB(List<GenPolynomial<GenPolynomial<C>>> Gp) {
         if (Gp == null || Gp.size() <= 1) {
             return Gp;
         }
         // remove zero polynomials
-        List<GenPolynomial<GenPolynomial<C>>> G = new ArrayList<GenPolynomial<GenPolynomial<C>>>(
-                Gp.size());
+        List<GenPolynomial<GenPolynomial<C>>> G = new ArrayList<GenPolynomial<GenPolynomial<C>>>(Gp.size());
         for (GenPolynomial<GenPolynomial<C>> a : Gp) {
             if (a != null && !a.isZERO()) { // always true in GB()
                 // already positive a = a.abs();
