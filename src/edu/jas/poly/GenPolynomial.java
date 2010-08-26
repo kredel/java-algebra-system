@@ -1163,7 +1163,7 @@ public class GenPolynomial<C extends RingElem<C> >
      * @see edu.jas.poly.PolyUtil#basePseudoRemainder(edu.jas.poly.GenPolynomial,edu.jas.poly.GenPolynomial).
      */
     public GenPolynomial<C> divide(GenPolynomial<C> S) {
-        return divideAndRemainder(S)[0];
+        return quotientRemainder(S)[0];
     }
 
 
@@ -1275,7 +1275,7 @@ public class GenPolynomial<C extends RingElem<C> >
         GenPolynomial<C> x1;
         GenPolynomial<C> x2;
         while ( !r.isZERO() ) {
-            qr = q.divideAndRemainder(r);
+            qr = q.quotientRemainder(r);
             q = qr[0];
             x1 = c1.subtract( q.multiply(d1) );
             x2 = c2.subtract( q.multiply(d2) );
@@ -1332,7 +1332,7 @@ public class GenPolynomial<C extends RingElem<C> >
         GenPolynomial<C> x1;
         GenPolynomial<C> x2;
         while ( !r.isZERO() ) {
-            qr = q.divideAndRemainder(r);
+            qr = q.quotientRemainder(r);
             q = qr[0];
             x1 = c1.subtract( q.multiply(d1) );
             c1 = d1; 

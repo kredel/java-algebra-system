@@ -434,7 +434,7 @@ public class Complex<C extends RingElem<C>> implements StarRingElem<Complex<C>>,
         if (ring.isField()) {
             return ring.getZERO();
         } else {
-            return divideAndRemainder(S)[1];
+            return quotientRemainder(S)[1];
         }
     }
 
@@ -448,7 +448,7 @@ public class Complex<C extends RingElem<C>> implements StarRingElem<Complex<C>>,
         if (ring.isField()) {
             return this.multiply(B.inverse());
         } else {
-            return divideAndRemainder(B)[0];
+            return quotientRemainder(B)[0];
         }
     }
 
@@ -561,7 +561,7 @@ public class Complex<C extends RingElem<C>> implements StarRingElem<Complex<C>>,
             if (debug) {
                 logger.info("norm(b), a, b = " + b.norm() + ", " + a + ", " + b);
             }
-            Complex<C>[] qr = a.divideAndRemainder(b);
+            Complex<C>[] qr = a.quotientRemainder(b);
             if (qr[0].isZERO()) {
                 System.out.println("a = " + a);
             }
@@ -614,7 +614,7 @@ public class Complex<C extends RingElem<C>> implements StarRingElem<Complex<C>>,
             if (debug) {
                 logger.info("norm(r), q, r = " + r.norm() + ", " + q + ", " + r);
             }
-            qr = q.divideAndRemainder(r);
+            qr = q.quotientRemainder(r);
             q = qr[0];
             x1 = c1.subtract(q.multiply(d1));
             x2 = c2.subtract(q.multiply(d2));

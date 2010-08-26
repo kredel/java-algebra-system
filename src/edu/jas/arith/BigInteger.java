@@ -497,7 +497,7 @@ public final class BigInteger implements GcdRingElem<BigInteger>,
      */
     public static BigInteger[] IQR(BigInteger A, BigInteger B) {
         if ( A == null ) return null;
-        return A.divideAndRemainder(B);
+        return A.quotientRemainder(B);
     }
 
 
@@ -539,7 +539,7 @@ public final class BigInteger implements GcdRingElem<BigInteger>,
         BigInteger x1;
         BigInteger x2;
         while ( !r.isZERO() ) {
-            qr = q.divideAndRemainder(r);
+            qr = q.quotientRemainder(r);
             q = qr[0];
             x1 = c1.subtract( q.multiply(d1) );
             x2 = c2.subtract( q.multiply(d2) );

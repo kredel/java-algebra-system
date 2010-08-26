@@ -158,7 +158,7 @@ public class MultiplicativeSet<C extends GcdRingElem<C>> implements Serializable
             }
             GenPolynomial<C> q, r;
             do {
-                GenPolynomial<C>[] qr = d.divideAndRemainder(n);
+                GenPolynomial<C>[] qr = d.quotientRemainder(n);
                 q = qr[0];
                 r = qr[1];
                 // System.out.println("q = " + q + ", r = " + r + ", d = " + d +
@@ -269,7 +269,7 @@ public class MultiplicativeSet<C extends GcdRingElem<C>> implements Serializable
             }
             GenPolynomial<C> q, r;
             do {
-                GenPolynomial<C>[] qr = c.divideAndRemainder(n);
+                GenPolynomial<C>[] qr = c.quotientRemainder(n);
                 q = qr[0];
                 r = qr[1];
                 if (r != null && !r.isZERO()) {

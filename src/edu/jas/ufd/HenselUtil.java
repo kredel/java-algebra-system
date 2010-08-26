@@ -162,7 +162,7 @@ public class HenselUtil {
             Ap = S.multiply(Ep); // S,T ++ T,S
             Bp = T.multiply(Ep);
             GenPolynomial<MOD>[] QR;
-            QR = Ap.divideAndRemainder(B);
+            QR = Ap.quotientRemainder(B);
             GenPolynomial<MOD> Qp;
             GenPolynomial<MOD> Rp;
             Qp = QR[0];
@@ -375,7 +375,7 @@ public class HenselUtil {
             Bp = Tp.multiply(Ep);
             GenPolynomial<MOD>[] QR;
             //logger.info("Ap = " + Ap + ", Bp = " + Bp + ", fac(Ap) = " + Ap.ring);
-            QR = Ap.divideAndRemainder(Bq);
+            QR = Ap.quotientRemainder(Bq);
             GenPolynomial<MOD> Qp;
             GenPolynomial<MOD> Rp;
             Qp = QR[0];
@@ -410,7 +410,7 @@ public class HenselUtil {
             // construct approximation mod q
             Ap = Sp.multiply(Ep); // S,T ++ T,S
             Bp = Tp.multiply(Ep);
-            QR = Bp.divideAndRemainder(Aq); // Ai == A mod p ?
+            QR = Bp.quotientRemainder(Aq); // Ai == A mod p ?
             Qp = QR[0];
             Rp = QR[1];
             B1p = Rp;
@@ -737,7 +737,7 @@ public class HenselUtil {
             Ap = Sp.multiply(Emp); // S,T ++ T,S 
             Bp = Tp.multiply(Emp);
             GenPolynomial<MOD>[] QR = null;
-            QR = Ap.divideAndRemainder(Bq); // Bq !
+            QR = Ap.quotientRemainder(Bq); // Bq !
             GenPolynomial<MOD> Qp = QR[0];
             GenPolynomial<MOD> Rp = QR[1];
             A1p = Rp;
@@ -786,7 +786,7 @@ public class HenselUtil {
             // construct approximation mod p
             Ap = Sp.multiply(Emp); // S,T ++ T,S // Ep Eqp
             Bp = Tp.multiply(Emp); // Ep Eqp
-            QR = Bp.divideAndRemainder(Aq); // Ap Aq ! // Ai == A mod p ?
+            QR = Bp.quotientRemainder(Aq); // Ap Aq ! // Ai == A mod p ?
             Qp = QR[0];
             Rp = QR[1];
             B1p = Rp;
@@ -865,7 +865,7 @@ public class HenselUtil {
         // remove normalization if possible
         BigInteger ai = ufd.baseContent(Ai);
         Ai = Ai.divide(ai); // Ai=pp(Ai)
-        BigInteger[] qr = c.divideAndRemainder(ai);
+        BigInteger[] qr = c.quotientRemainder(ai);
         BigInteger bi = null;
         boolean exact = true;
         if (qr[1].isZERO()) {
@@ -1053,7 +1053,7 @@ public class HenselUtil {
             //System.out.println("s = " + s + ": " + s.ring.coFac);
             //System.out.println("t = " + t + ": " + t.ring.coFac);
 
-            GenPolynomial<MOD>[] QR = s.divideAndRemainder(B);
+            GenPolynomial<MOD>[] QR = s.quotientRemainder(B);
             GenPolynomial<MOD> q = QR[0];
             s = QR[1];
             t = t.sum(q.multiply(A));
@@ -1166,7 +1166,7 @@ public class HenselUtil {
             //System.out.println("s = " + s + ": " + s.ring.coFac);
             //System.out.println("t = " + t + ": " + t.ring.coFac);
 
-            GenPolynomial<MOD>[] QR = s.divideAndRemainder(B); // watch for ordering 
+            GenPolynomial<MOD>[] QR = s.quotientRemainder(B); // watch for ordering 
             GenPolynomial<MOD> q = QR[0];
             s = QR[1];
             t = t.sum(q.multiply(A));
@@ -1354,14 +1354,14 @@ public class HenselUtil {
 //      this is the wrong sequence:
 //         GenPolynomial<MOD> xe = fac.univariate(0,e);
 //         GenPolynomial<MOD> q = s1.multiply(xe);
-//         GenPolynomial<MOD>[] QR = q.divideAndRemainder(B);
+//         GenPolynomial<MOD>[] QR = q.quotientRemainder(B);
 //         q = QR[0];
 //         GenPolynomial<MOD> r1 = QR[1];
 //         GenPolynomial<MOD> r2 = s2.multiply(xe).sum( q.multiply(A) );
 
         GenPolynomial<MOD> xe = fac.univariate(0,e);
         GenPolynomial<MOD> q = s1.multiply(xe);
-        GenPolynomial<MOD>[] QR = q.divideAndRemainder(A);
+        GenPolynomial<MOD>[] QR = q.quotientRemainder(A);
         q = QR[0];
         GenPolynomial<MOD> r1 = QR[1];
         GenPolynomial<MOD> r2 = s2.multiply(xe).sum( q.multiply(B) );

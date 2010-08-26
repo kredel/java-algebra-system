@@ -364,7 +364,7 @@ public class GenGcdPolynomial<C extends GcdRingElem<C> >
      */
     @Override
      public GenPolynomial<C> divide(GenPolynomial<C> S) {
-        return divideAndRemainder(S)[0];
+        return quotientRemainder(S)[0];
     }
 
 
@@ -478,7 +478,7 @@ public class GenGcdPolynomial<C extends GcdRingElem<C> >
         GenPolynomial<C> x1;
         GenPolynomial<C> x2;
         while ( !r.isZERO() ) {
-            qr = q.divideAndRemainder(r);
+            qr = q.quotientRemainder(r);
             q = qr[0];
             x1 = c1.subtract( q.multiply(d1) );
             x2 = c2.subtract( q.multiply(d2) );
