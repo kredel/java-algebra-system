@@ -459,7 +459,7 @@ public class Complex<C extends RingElem<C>> implements StarRingElem<Complex<C>>,
      * @return Complex[] { q, r } with q = this/S and r = rem(this,S).
      */
     @SuppressWarnings("unchecked")
-    public Complex<C>[] divideAndRemainder(Complex<C> S) {
+    public Complex<C>[] quotientRemainder(Complex<C> S) {
         Complex<C>[] ret = (Complex<C>[]) new Complex[2];
         C n = S.norm().re;
         Complex<C> Sp = this.multiply(S.conjugate()); // == this*inv(S)*n
@@ -522,6 +522,17 @@ public class Complex<C extends RingElem<C>> implements StarRingElem<Complex<C>>,
         return ret;
     }
 
+
+    /**
+     * Complex number quotient and remainder.
+     * @param S Complex.
+     * @return Complex[] { q, r } with q = this/S and r = rem(this,S).
+     * @deprecated use quotientRemainder()
+     */
+    @Deprecated
+    public Complex<C>[] divideAndRemainder(Complex<C> S) {
+        return quotientRemainder(S);
+    }
 
     /**
      * Complex number greatest common divisor.

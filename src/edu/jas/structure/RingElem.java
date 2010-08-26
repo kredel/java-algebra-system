@@ -16,6 +16,14 @@ package edu.jas.structure;
 public interface RingElem<C extends RingElem<C>> 
                  extends AbelianGroupElem<C>, MonoidElem<C> {
 
+
+//     /** Quotient and remainder.
+//      * @param b other element.
+//      * @return C[] { q, r } with this = q b + r and 0 &le; r &lt; |b|.
+//      */
+//     public C[] quotientRemainder(C b);
+
+
     /**
      * Greatest common divisor.
      * @param b other element.

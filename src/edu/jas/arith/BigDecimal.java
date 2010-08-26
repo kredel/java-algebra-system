@@ -503,12 +503,23 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>,
      * @param S BigDecimal.
      * @return BigDecimal[] { q, r } with q = this/S and r = rem(this,S).
      */
-    public BigDecimal[] divideAndRemainder(BigDecimal S) {
+    public BigDecimal[] quotientRemainder(BigDecimal S) {
         BigDecimal[] qr = new BigDecimal[2];
         java.math.BigDecimal[] C = val.divideAndRemainder( S.val, context );
         qr[0] = new BigDecimal( C[0] );
         qr[1] = new BigDecimal( C[1] );
         return qr;
+    }
+
+
+    /** BigDecimal compute quotient and remainder.
+     * @param S BigDecimal.
+     * @return BigDecimal[] { q, r } with q = this/S and r = rem(this,S).
+     * @deprecated use quotientRemainder()
+     */
+    @Deprecated 
+    public BigDecimal[] divideAndRemainder(BigDecimal S) {
+        return quotientRemainder(S);
     }
 
 

@@ -294,7 +294,7 @@ public class GenGcdPolynomial<C extends GcdRingElem<C> >
      * @see edu.jas.poly.PolyUtil#basePseudoRemainder(edu.jas.poly.GenPolynomial,edu.jas.poly.GenPolynomial).
      */
     @Override
-     public GenPolynomial<C>[] divideAndRemainder(GenPolynomial<C> S) {
+    public GenPolynomial<C>[] quotientRemainder(GenPolynomial<C> S) {
         if ( S == null || S.isZERO() ) {
             throw new ArithmeticException(this.getClass().getName()
                                        + " division by zero");
@@ -334,6 +334,22 @@ public class GenGcdPolynomial<C extends GcdRingElem<C> >
         ret[0] = q;
         ret[1] = r;
         return ret;
+    }
+
+
+    /**
+     * GenPolynomial division with remainder.
+     * Fails, if exact division by leading base coefficient is not possible.
+     * Meaningful only for univariate polynomials over fields, but works 
+     * in any case.
+     * @param S nonzero GenPolynomial with invertible leading coefficient.
+     * @return [ quotient , remainder ] with this = quotient * S + remainder.
+     * @see edu.jas.poly.PolyUtil#basePseudoRemainder(edu.jas.poly.GenPolynomial,edu.jas.poly.GenPolynomial).
+     * @deprecated use quotientRemainder()
+     */
+    @Deprecated 
+    public GenPolynomial<C>[] divideAndRemainder(GenPolynomial<C> S) {
+        return quotientRemainder(S);
     }
 
 

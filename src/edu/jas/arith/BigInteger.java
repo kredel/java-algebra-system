@@ -465,12 +465,25 @@ public final class BigInteger implements GcdRingElem<BigInteger>,
      * @param S BigInteger.
      * @return BigInteger[] { q, r } with this = q S + r and 0 &le; r &lt; |S|.
      */
-    public BigInteger[] divideAndRemainder(BigInteger S) {
+    //@Override
+    public BigInteger[] quotientRemainder(BigInteger S) {
         BigInteger[] qr = new BigInteger[2];
         java.math.BigInteger[] C = val.divideAndRemainder( S.val );
         qr[0] = new BigInteger( C[0] );
         qr[1] = new BigInteger( C[1] );
         return qr;
+    }
+
+
+    /** BigInteger compute quotient and remainder.
+     * Throws an exception, if S == 0.
+     * @param S BigInteger.
+     * @return BigInteger[] { q, r } with this = q S + r and 0 &le; r &lt; |S|.
+     * @deprecated use quotientRemainder()
+     */
+    @Deprecated 
+    public BigInteger[] divideAndRemainder(BigInteger S) {
+        return quotientRemainder(S);
     }
 
 
