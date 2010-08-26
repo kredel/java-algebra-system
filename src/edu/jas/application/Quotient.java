@@ -7,14 +7,9 @@ package edu.jas.application;
 
 import org.apache.log4j.Logger;
 
-import edu.jas.poly.GenPolynomial;
-
 import edu.jas.kern.PrettyPrint;
-
-import edu.jas.structure.RingElem;
-import edu.jas.structure.RingFactory;
+import edu.jas.poly.GenPolynomial;
 import edu.jas.structure.GcdRingElem;
-import edu.jas.structure.NotInvertibleException;
 
 
 /**
@@ -112,10 +107,10 @@ public class Quotient<C extends GcdRingElem<C>> implements GcdRingElem<Quotient<
             }
         }
         C lc = d.leadingBaseCoefficient();
-        if ( !lc.isONE() && lc.isUnit() ) {
+        if (!lc.isONE() && lc.isUnit()) {
             lc = lc.inverse();
-            n  = n.multiply(lc);
-            d  = d.multiply(lc);
+            n = n.multiply(lc);
+            d = d.multiply(lc);
         }
         num = n;
         den = d;
@@ -176,7 +171,8 @@ public class Quotient<C extends GcdRingElem<C>> implements GcdRingElem<Quotient<
     }
 
 
-    /** Is Qoutient a constant. 
+    /**
+     * Is Qoutient a constant.
      * @return true, if this has constant numerator and denominator, else false.
      */
     public boolean isConstant() {
@@ -202,14 +198,15 @@ public class Quotient<C extends GcdRingElem<C>> implements GcdRingElem<Quotient<
     }
 
 
-    /** Get a scripting compatible string representation.
+    /**
+     * Get a scripting compatible string representation.
      * @return script compatible representation for this Element.
      * @see edu.jas.structure.Element#toScript()
      */
     //JAVA6only: @Override
     public String toScript() {
         // Python case
-        if ( den.isONE() ) {
+        if (den.isONE()) {
             return num.toScript();
         } else {
             return num.toScript() + " / " + den.toScript();
@@ -217,7 +214,8 @@ public class Quotient<C extends GcdRingElem<C>> implements GcdRingElem<Quotient<
     }
 
 
-    /** Get a scripting compatible string representation of the factory.
+    /**
+     * Get a scripting compatible string representation of the factory.
      * @return script compatible representation for this ElemFactory.
      * @see edu.jas.structure.Element#toScriptFactory()
      */
@@ -548,7 +546,7 @@ public class Quotient<C extends GcdRingElem<C>> implements GcdRingElem<Quotient<
 
 
     /**
-     * Greatest common divisor. 
+     * Greatest common divisor.
      * @param b other element.
      * @return gcd(this,b).
      */
@@ -564,7 +562,7 @@ public class Quotient<C extends GcdRingElem<C>> implements GcdRingElem<Quotient<
 
 
     /**
-     * Extended greatest common divisor. 
+     * Extended greatest common divisor.
      * @param b other element.
      * @return [ gcd(this,b), c1, c2 ] with c1*this + c2*b = gcd(this,b).
      */

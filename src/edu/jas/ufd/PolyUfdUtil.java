@@ -14,27 +14,17 @@ import org.apache.log4j.Logger;
 
 import edu.jas.application.Quotient;
 import edu.jas.application.QuotientRing;
-
 import edu.jas.arith.BigInteger;
-import edu.jas.arith.Modular;
-import edu.jas.arith.ModInteger;
-import edu.jas.arith.ModIntegerRing;
-import edu.jas.arith.ModLong;
-import edu.jas.arith.ModLongRing;
-
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
-
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
-import edu.jas.structure.ModularRingFactory;
 import edu.jas.structure.UnaryFunctor;
-
 import edu.jas.util.ListUtil;
 
 
@@ -369,24 +359,23 @@ public class PolyUfdUtil {
 
 
     /**
-     * Ensure that the field property is determined.
-     * Checks if modul is irreducible and modifies the algebraic number ring. 
+     * Ensure that the field property is determined. Checks if modul is
+     * irreducible and modifies the algebraic number ring.
      * @param afac algebraic number ring.
      */
-    public static <C extends GcdRingElem<C>> 
-      void ensureFieldProperty(AlgebraicNumberRing<C> afac) {
-        if ( afac.getField() != -1 ) {
-           return;
+    public static <C extends GcdRingElem<C>> void ensureFieldProperty(AlgebraicNumberRing<C> afac) {
+        if (afac.getField() != -1) {
+            return;
         }
-        if ( !afac.ring.coFac.isField() ) {
-           afac.setField(false);
-           return;
+        if (!afac.ring.coFac.isField()) {
+            afac.setField(false);
+            return;
         }
-        Factorization<C> mf = FactorFactory.<C>getImplementation(afac.ring);
-        if ( mf.isIrreducible(afac.modul) ) {
-           afac.setField(true);
+        Factorization<C> mf = FactorFactory.<C> getImplementation(afac.ring);
+        if (mf.isIrreducible(afac.modul)) {
+            afac.setField(true);
         } else {
-           afac.setField(false);
+            afac.setField(false);
         }
     }
 

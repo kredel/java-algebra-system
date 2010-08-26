@@ -11,9 +11,8 @@ import java.util.Set;
 
 import edu.jas.arith.Rational;
 import edu.jas.poly.GenPolynomial;
-import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.Complex;
-import edu.jas.structure.ComplexRing;
+import edu.jas.structure.GcdRingElem;
 import edu.jas.ufd.FactorAbstract;
 import edu.jas.ufd.FactorFactory;
 import edu.jas.ufd.SquarefreeAbstract;
@@ -32,8 +31,8 @@ public class RootFactory {
      * @param f univariate polynomial.
      * @return a list of different real algebraic numbers.
      */
-    public static <C extends GcdRingElem<C> & Rational> 
-      List<RealAlgebraicNumber<C>> realAlgebraicNumbers(GenPolynomial<C> f) {
+    public static <C extends GcdRingElem<C> & Rational> List<RealAlgebraicNumber<C>> realAlgebraicNumbers(
+            GenPolynomial<C> f) {
         RealRoots<C> rr = new RealRootsSturm<C>();
         SquarefreeAbstract<C> engine = SquarefreeFactory.<C> getImplementation(f.ring.coFac);
         Set<GenPolynomial<C>> S = engine.squarefreeFactors(f).keySet();
@@ -55,8 +54,8 @@ public class RootFactory {
      * @param f univariate polynomial.
      * @return a list of different real algebraic numbers from a field.
      */
-    public static <C extends GcdRingElem<C> & Rational> 
-      List<RealAlgebraicNumber<C>> realAlgebraicNumbersField(GenPolynomial<C> f) {
+    public static <C extends GcdRingElem<C> & Rational> List<RealAlgebraicNumber<C>> realAlgebraicNumbersField(
+            GenPolynomial<C> f) {
         RealRoots<C> rr = new RealRootsSturm<C>();
         FactorAbstract<C> engine = FactorFactory.<C> getImplementation(f.ring.coFac);
         Set<GenPolynomial<C>> S = engine.baseFactors(f).keySet();
@@ -78,8 +77,8 @@ public class RootFactory {
      * @param f univariate irreducible polynomial.
      * @return a list of different real algebraic numbers from a field.
      */
-    public static <C extends GcdRingElem<C> & Rational> 
-      List<RealAlgebraicNumber<C>> realAlgebraicNumbersIrred(GenPolynomial<C> f) {
+    public static <C extends GcdRingElem<C> & Rational> List<RealAlgebraicNumber<C>> realAlgebraicNumbersIrred(
+            GenPolynomial<C> f) {
         RealRoots<C> rr = new RealRootsSturm<C>();
         List<RealAlgebraicNumber<C>> list = new ArrayList<RealAlgebraicNumber<C>>();
         List<Interval<C>> iv = rr.realRoots(f);
@@ -97,10 +96,11 @@ public class RootFactory {
      * @param f univariate polynomial.
      * @return a list of different complex algebraic numbers.
      */
-    public static <C extends GcdRingElem<C> & Rational> 
-      List<ComplexAlgebraicNumber<C>> complexAlgebraicNumbers(GenPolynomial<Complex<C>> f) {
-        ComplexRoots<C> cr = new ComplexRootsSturm<C>( f.ring.coFac );
-        SquarefreeAbstract<Complex<C>> engine = SquarefreeFactory.<Complex<C>> getImplementation(f.ring.coFac);
+    public static <C extends GcdRingElem<C> & Rational> List<ComplexAlgebraicNumber<C>> complexAlgebraicNumbers(
+            GenPolynomial<Complex<C>> f) {
+        ComplexRoots<C> cr = new ComplexRootsSturm<C>(f.ring.coFac);
+        SquarefreeAbstract<Complex<C>> engine = SquarefreeFactory
+                .<Complex<C>> getImplementation(f.ring.coFac);
         Set<GenPolynomial<Complex<C>>> S = engine.squarefreeFactors(f).keySet();
         List<ComplexAlgebraicNumber<C>> list = new ArrayList<ComplexAlgebraicNumber<C>>();
         for (GenPolynomial<Complex<C>> sp : S) {

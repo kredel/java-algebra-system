@@ -8,8 +8,8 @@ package edu.jas.ufd;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.SortedMap;
-import java.util.TreeMap;
 import java.util.SortedSet;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
@@ -19,18 +19,16 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.structure.GcdRingElem;
-import edu.jas.structure.Power;
 import edu.jas.structure.RingFactory;
 import edu.jas.util.KsubSet;
 
 
 /**
  * Abstract factorization algorithms class. This class contains implementations
- * of all methods of the <code>Factorization</code> interface, except the
- * method for factorization of a squarefree polynomial. The methods to obtain
+ * of all methods of the <code>Factorization</code> interface, except the method
+ * for factorization of a squarefree polynomial. The methods to obtain
  * squarefree polynomials delegate the computation to the
- * <code>GreatestCommonDivisor</code> classes and are included for
- * convenience.
+ * <code>GreatestCommonDivisor</code> classes and are included for convenience.
  * @param <C> coefficient type
  * @author Heinz Kredel
  * @see edu.jas.ufd.FactorFactory
@@ -154,7 +152,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
         long d = P.degree() + 1L;
         GenPolynomial<C> kr = PolyUfdUtil.<C> substituteKronecker(P, d);
         GenPolynomialRing<C> ufac = kr.ring;
-        ufac.setVars( ufac.newVars( "zz" ) ); // side effects 
+        ufac.setVars(ufac.newVars("zz")); // side effects 
         if (debug) {
             logger.info("subs(P,d=" + d + ") = " + kr);
             //System.out.println("subs(P,d=" + d + ") = " + kr);
@@ -228,19 +226,19 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
                     //System.out.println("trial = " + trial);
                     factors.add(trial);
                     u = PolyUtil.<C> basePseudoDivide(u, trial); //u = u.divide( trial );
-                    if ( u.isConstant() ) {
-                        j = dl+1;
+                    if (u.isConstant()) {
+                        j = dl + 1;
                         break;
                     }
                     //if (ulist.removeAll(flist)) {
-                    ulist = removeOnce(ulist,flist);
-                    if ( ulist != null ) {
+                    ulist = removeOnce(ulist, flist);
+                    if (ulist != null) {
                         //System.out.println("new ulist = " + ulist);
                         dl = (ulist.size() + 1) / 2;
                         j = 0; // since j++
                         break;
-                    //} else {
-                    //    logger.error("error removing flist from ulist = " + ulist);
+                        //} else {
+                        //    logger.error("error removing flist from ulist = " + ulist);
                     }
                 }
             }
@@ -262,7 +260,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
     private static <T> List<T> removeOnce(List<T> a, List<T> b) {
         List<T> res = new ArrayList<T>();
         res.addAll(a);
-        for ( T e : b ) {
+        for (T e : b) {
             boolean t = res.remove(e);
         }
         return res;
@@ -318,11 +316,12 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
             logger.info("base facs for P = " + P);
         }
         SortedMap<GenPolynomial<C>, Long> facs = sengine.baseSquarefreeFactors(P);
-        if ( facs == null || facs.size() == 0 ) {
+        if (facs == null || facs.size() == 0) {
             facs = new TreeMap<GenPolynomial<C>, Long>();
-            facs.put(P,1L);
+            facs.put(P, 1L);
         }
-        if (logger.isInfoEnabled() && ( facs.size() > 1 || ( facs.size() == 1 && facs.get(facs.firstKey()) > 1 ) ) ) {
+        if (logger.isInfoEnabled()
+                && (facs.size() > 1 || (facs.size() == 1 && facs.get(facs.firstKey()) > 1))) {
             logger.info("squarefree facs   = " + facs);
             //System.out.println("sfacs   = " + facs);
             //boolean tt = isFactorization(P,facs);
@@ -335,8 +334,8 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
                 g = g.monic(); // how can this happen?
                 logger.warn("squarefree facs mon = " + g);
             }
-            if ( g.degree(0) <= 1 ) {
-                if ( ! g.isONE() ) {
+            if (g.degree(0) <= 1) {
+                if (!g.isONE()) {
                     factors.put(g, k);
                 }
             } else {
@@ -350,7 +349,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
                     if (j != null) {
                         k += j;
                     }
-                    if ( ! h.isONE() ) {
+                    if (!h.isONE()) {
                         factors.put(h, k);
                     }
                 }
@@ -383,16 +382,16 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
     /**
      * GenPolynomial list factorization ignoring multiplicities.
      * @param L list of GenPolynomials.
-     * @return [p_1, ..., p_k] with p = prod_{i=1,...,k} p_i**{e_i} for some
-     *         e_i for all p in L.
+     * @return [p_1, ..., p_k] with p = prod_{i=1,...,k} p_i**{e_i} for some e_i
+     *         for all p in L.
      */
     public List<GenPolynomial<C>> factorsRadical(List<GenPolynomial<C>> L) {
         SortedSet<GenPolynomial<C>> facs = new TreeSet<GenPolynomial<C>>();
-        for ( GenPolynomial<C> p : L ) {
+        for (GenPolynomial<C> p : L) {
             List<GenPolynomial<C>> fs = factorsRadical(p);
             facs.addAll(fs);
         }
-        return new ArrayList<GenPolynomial<C>>( facs );
+        return new ArrayList<GenPolynomial<C>>(facs);
     }
 
 
@@ -434,14 +433,14 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
             logger.info("squarefree mfacs P = " + P);
         }
         SortedMap<GenPolynomial<C>, Long> facs = sengine.squarefreeFactors(P);
-        if ( facs == null || facs.size() == 0 ) {
+        if (facs == null || facs.size() == 0) {
             facs = new TreeMap<GenPolynomial<C>, Long>();
-            facs.put(P,1L);
+            facs.put(P, 1L);
         }
-        if (logger.isInfoEnabled() ) {
-            if ( facs.size() > 1 ) {
+        if (logger.isInfoEnabled()) {
+            if (facs.size() > 1) {
                 logger.info("squarefree mfacs   = " + facs);
-            } else if ( facs.size() == 1 && facs.get(facs.firstKey()) > 1L ) {
+            } else if (facs.size() == 1 && facs.get(facs.firstKey()) > 1L) {
                 logger.info("squarefree mfacs   = " + facs);
             } else {
                 logger.warn("squarefree mfacs empty = " + facs);
@@ -519,7 +518,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
      * @return true if P = prod_{i=1,...,r} p_i, else false.
      */
     public boolean isFactorization(GenPolynomial<C> P, List<GenPolynomial<C>> F) {
-        return sengine.isFactorization(P,F);
+        return sengine.isFactorization(P, F);
         // test irreducible
     }
 
@@ -531,7 +530,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
      * @return true if P = prod_{i=1,...,k} p_i**e_i , else false.
      */
     public boolean isFactorization(GenPolynomial<C> P, SortedMap<GenPolynomial<C>, Long> F) {
-        return sengine.isFactorization(P,F);
+        return sengine.isFactorization(P, F);
         // test irreducible
     }
 
@@ -544,7 +543,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
      */
     public boolean isRecursiveFactorization(GenPolynomial<GenPolynomial<C>> P,
             SortedMap<GenPolynomial<GenPolynomial<C>>, Long> F) {
-        return sengine.isRecursiveFactorization(P,F);
+        return sengine.isRecursiveFactorization(P, F);
         // test irreducible
     }
 

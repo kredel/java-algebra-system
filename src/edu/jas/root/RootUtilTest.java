@@ -6,7 +6,6 @@ package edu.jas.root;
 
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import junit.framework.Test;
@@ -19,11 +18,11 @@ import edu.jas.arith.Roots;
 import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
-import edu.jas.poly.TermOrder;
 import edu.jas.poly.PolyUtil;
-import edu.jas.structure.Power;
+import edu.jas.poly.TermOrder;
 import edu.jas.structure.Complex;
 import edu.jas.structure.ComplexRing;
+import edu.jas.structure.Power;
 
 
 /**
@@ -200,20 +199,21 @@ public class RootUtilTest extends TestCase {
         //a = a.multiply( dfac.univariate(0) );
         //System.out.println("a = " + a);
 
-        List<RealAlgebraicNumber<BigRational>> lrn = RootFactory.<BigRational> realAlgebraicNumbers(a); 
+        List<RealAlgebraicNumber<BigRational>> lrn = RootFactory.<BigRational> realAlgebraicNumbers(a);
         //System.out.println("lrn = " + lrn);
         assertTrue("#roots >= 0 ", lrn.size() >= 0);
 
-        if ( true ) return;
+        if (true)
+            return;
 
-        for ( RealAlgebraicNumber<BigRational> ra : lrn ) {
+        for (RealAlgebraicNumber<BigRational> ra : lrn) {
             //System.out.println("ra = " + ra.toScript() + " in " + ra.toScriptFactory());
         }
 
-        lrn = RootFactory.<BigRational> realAlgebraicNumbersField(a); 
+        lrn = RootFactory.<BigRational> realAlgebraicNumbersField(a);
         //System.out.println("lrn = " + lrn);
 
-        for ( RealAlgebraicNumber<BigRational> ra : lrn ) {
+        for (RealAlgebraicNumber<BigRational> ra : lrn) {
             //System.out.println("ra = " + ra.toScript() + " in " + ra.toScriptFactory());
         }
     }
@@ -228,22 +228,24 @@ public class RootUtilTest extends TestCase {
         //a = a.multiply( dfac.univariate(0) );
         //System.out.println("a = " + a);
 
-        ComplexRing<BigRational> cf = new ComplexRing<BigRational>( new BigRational() );
-        GenPolynomialRing<Complex<BigRational>> cfac = new GenPolynomialRing<Complex<BigRational>>(cf,dfac);
+        ComplexRing<BigRational> cf = new ComplexRing<BigRational>(new BigRational());
+        GenPolynomialRing<Complex<BigRational>> cfac = new GenPolynomialRing<Complex<BigRational>>(cf, dfac);
 
-        GenPolynomial<Complex<BigRational>> ca = PolyUtil.<BigRational> toComplex(cfac,a);
+        GenPolynomial<Complex<BigRational>> ca = PolyUtil.<BigRational> toComplex(cfac, a);
         //System.out.println("ca = " + ca);
 
-        List<ComplexAlgebraicNumber<BigRational>> lcn = RootFactory.<BigRational> complexAlgebraicNumbers(ca); 
+        List<ComplexAlgebraicNumber<BigRational>> lcn = RootFactory.<BigRational> complexAlgebraicNumbers(ca);
         //System.out.println("lcn = " + lcn);
         assertTrue("#roots == deg(a) ", lcn.size() == a.degree(0));
 
-        if ( true ) return;
+        if (true)
+            return;
 
-        for ( ComplexAlgebraicNumber<BigRational> car : lcn ) {
+        for (ComplexAlgebraicNumber<BigRational> car : lcn) {
             //System.out.println("car = " + car.toScript() + " in " + car.toScriptFactory());
             //System.out.println("car = " + car.ring.root);
-            System.out.println("car = " + car.ring.root.centerApprox() + ", " + (Roots.sqrt(new BigDecimal(car.ring.root.rationalLength()))) + ", " + car.ring.root);
+            System.out.println("car = " + car.ring.root.centerApprox() + ", "
+                    + (Roots.sqrt(new BigDecimal(car.ring.root.rationalLength()))) + ", " + car.ring.root);
         }
     }
 }

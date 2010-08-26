@@ -5,7 +5,6 @@
 package edu.jas.poly;
 
 
-import edu.jas.structure.RingFactory;
 import edu.jas.kern.PrettyPrint;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.NotInvertibleException;
@@ -17,8 +16,7 @@ import edu.jas.structure.NotInvertibleException;
  * @author Heinz Kredel
  */
 
-public class AlgebraicNumber<C extends GcdRingElem<C>> 
-             implements GcdRingElem<AlgebraicNumber<C>> {
+public class AlgebraicNumber<C extends GcdRingElem<C>> implements GcdRingElem<AlgebraicNumber<C>> {
 
 
     /**
@@ -162,7 +160,8 @@ public class AlgebraicNumber<C extends GcdRingElem<C>>
     }
 
 
-    /** Get a scripting compatible string representation.
+    /**
+     * Get a scripting compatible string representation.
      * @return script compatible representation for this Element.
      * @see edu.jas.structure.Element#toScript()
      */
@@ -173,7 +172,8 @@ public class AlgebraicNumber<C extends GcdRingElem<C>>
     }
 
 
-    /** Get a scripting compatible string representation of the factory.
+    /**
+     * Get a scripting compatible string representation of the factory.
      * @return script compatible representation for this ElemFactory.
      * @see edu.jas.structure.Element#toScriptFactory()
      */
@@ -192,10 +192,10 @@ public class AlgebraicNumber<C extends GcdRingElem<C>>
     //JAVA6only: @Override
     public int compareTo(AlgebraicNumber<C> b) {
         int s = 0;
-        if ( ring.modul != b.ring.modul ) { // avoid compareTo if possible
-           s = ring.modul.compareTo( b.ring.modul );
+        if (ring.modul != b.ring.modul) { // avoid compareTo if possible
+            s = ring.modul.compareTo(b.ring.modul);
         }
-        if ( s != 0 ) {
+        if (s != 0) {
             return s;
         }
         return val.compareTo(b.val);
@@ -221,7 +221,7 @@ public class AlgebraicNumber<C extends GcdRingElem<C>>
         if (a == null) {
             return false;
         }
-        if ( !ring.equals( a.ring ) ) {
+        if (!ring.equals(a.ring)) {
             return false;
         }
         return (0 == compareTo(a));
@@ -328,7 +328,8 @@ public class AlgebraicNumber<C extends GcdRingElem<C>>
         try {
             return new AlgebraicNumber<C>(ring, val.modInverse(ring.modul));
         } catch (NotInvertibleException e) {
-            throw new NotInvertibleException("val = " + val + ", modul = " + ring.modul + ", gcd = " + val.gcd(ring.modul));
+            throw new NotInvertibleException("val = " + val + ", modul = " + ring.modul + ", gcd = "
+                    + val.gcd(ring.modul));
         }
     }
 
@@ -339,15 +340,14 @@ public class AlgebraicNumber<C extends GcdRingElem<C>>
      * @return this - (this/S)*S.
      */
     public AlgebraicNumber<C> remainder(AlgebraicNumber<C> S) {
-        if ( S == null || S.isZERO()) {
-           throw new ArithmeticException(this.getClass().getName()
-                                         + " division by zero");
+        if (S == null || S.isZERO()) {
+            throw new ArithmeticException(this.getClass().getName() + " division by zero");
         }
-        if ( S.isONE()) {
-           return ring.getZERO();
+        if (S.isONE()) {
+            return ring.getZERO();
         }
-        if ( S.isUnit() ) {
-           return ring.getZERO();
+        if (S.isUnit()) {
+            return ring.getZERO();
         }
         GenPolynomial<C> x = val.remainder(S.val);
         return new AlgebraicNumber<C>(ring, x);

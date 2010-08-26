@@ -17,12 +17,11 @@ import edu.jas.arith.ModLong;
 import edu.jas.arith.ModLongRing;
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
-import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
-import edu.jas.structure.GcdRingElem;
-import edu.jas.structure.RingFactory;
 import edu.jas.structure.Complex;
 import edu.jas.structure.ComplexRing;
+import edu.jas.structure.GcdRingElem;
+import edu.jas.structure.RingFactory;
 
 
 /**
@@ -37,16 +36,16 @@ import edu.jas.structure.ComplexRing;
  *        which extends the <code>FactorAbstract</code> class which implements
  *        the <code>Factorization</code> interface.
  * 
- * <pre>
+ *        <pre>
  * Factorization&lt;CT&gt; engine;
  * engine = FactorFactory.&lt;CT&gt; getImplementation(cofac);
  * c = engine.factors(a);
  * </pre>
  * 
- * For example, if the coefficient type is BigInteger, the usage looks
+ *        For example, if the coefficient type is BigInteger, the usage looks
  *        like
  * 
- * <pre>
+ *        <pre>
  * BigInteger cofac = new BigInteger();
  * Factorization&lt;BigInteger&gt; engine;
  * engine = FactorFactory.getImplementation(cofac);
@@ -120,8 +119,8 @@ public class FactorFactory {
      * @param <C> coefficient type, e.g. BigRational, ModInteger.
      * @return factorization algorithm implementation.
      */
-    public static <C extends GcdRingElem<C>> 
-        FactorAbstract<AlgebraicNumber<C>> getImplementation(AlgebraicNumberRing<C> fac) {
+    public static <C extends GcdRingElem<C>> FactorAbstract<AlgebraicNumber<C>> getImplementation(
+            AlgebraicNumberRing<C> fac) {
         return new FactorAlgebraic<C>(fac);
     }
 
@@ -133,8 +132,7 @@ public class FactorFactory {
      * @param <C> coefficient type, e.g. BigRational, ModInteger.
      * @return factorization algorithm implementation.
      */
-    public static <C extends GcdRingElem<C>> 
-        FactorAbstract<Complex<C>> getImplementation(ComplexRing<C> fac) {
+    public static <C extends GcdRingElem<C>> FactorAbstract<Complex<C>> getImplementation(ComplexRing<C> fac) {
         return new FactorComplex<C>(fac);
     }
 
@@ -224,7 +222,8 @@ public class FactorFactory {
         }
         //System.out.println("ft = " + t);
         if (t == 0) {
-            throw new IllegalArgumentException("no factorization implementation for " + fac.getClass().getName());
+            throw new IllegalArgumentException("no factorization implementation for "
+                    + fac.getClass().getName());
         }
         if (t == 1) {
             ufd = new FactorInteger();

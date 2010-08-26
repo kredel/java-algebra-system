@@ -4,29 +4,26 @@
 
 package edu.jas.poly;
 
-import java.util.Random;
-import java.util.Vector;
-//import java.io.Serializable;
 
-import edu.jas.structure.AbelianGroupElem;
+import java.util.Vector;
 
 
 /**
- * ExpVectorLong implements exponent vectors for polynomials using 
- * arrays of long as storage unit.
- * This class is used by ExpVector internally, there is no need to use this class directly.
+ * ExpVectorLong implements exponent vectors for polynomials using arrays of
+ * long as storage unit. This class is used by ExpVector internally, there is no
+ * need to use this class directly.
  * @see ExpVector
  * @author Heinz Kredel
  */
 
-public class ExpVectorLong extends ExpVector 
-                   /*implements AbelianGroupElem<ExpVectorLong>*/ {
+public class ExpVectorLong extends ExpVector
+/*implements AbelianGroupElem<ExpVectorLong>*/{
 
 
     /**
      * The data structure is an array of longs.
      */
-    /*package*/ final long[] val;
+    /*package*/final long[] val;
 
 
     /**
@@ -34,31 +31,29 @@ public class ExpVectorLong extends ExpVector
      * @param n length of exponent vector.
      */
     public ExpVectorLong(int n) {
-        this( new long[n] );
+        this(new long[n]);
     }
 
-    
+
     /**
-     * Constructor for ExpVector.
-     * Sets exponent i to e.
+     * Constructor for ExpVector. Sets exponent i to e.
      * @param n length of exponent vector.
      * @param i index of exponent to be set.
      * @param e exponent to be set.
      */
     public ExpVectorLong(int n, int i, long e) {
-        this( new long[n] );
+        this(new long[n]);
         val[i] = e;
     }
 
 
     /**
-     * Constructor for ExpVector.
-     * Sets val.
+     * Constructor for ExpVector. Sets val.
      * @param v internal representation array.
      */
     public ExpVectorLong(long[] v) {
         super();
-        if ( v == null ) {
+        if (v == null) {
             throw new IllegalArgumentException("null val not allowed");
         }
         val = v;
@@ -66,9 +61,8 @@ public class ExpVectorLong extends ExpVector
 
 
     /**
-     * Constructor for ExpVector.
-     * Converts a String representation to an ExpVector.
-     * Accepted format = (1,2,3,4,5,6,7).
+     * Constructor for ExpVector. Converts a String representation to an
+     * ExpVector. Accepted format = (1,2,3,4,5,6,7).
      * @param s String representation.
      */
     public ExpVectorLong(String s) throws NumberFormatException {
@@ -77,144 +71,151 @@ public class ExpVectorLong extends ExpVector
         Vector<Long> exps = new Vector<Long>();
         s = s.trim();
         int b = s.indexOf('(');
-        int e = s.indexOf(')',b+1);
+        int e = s.indexOf(')', b + 1);
         String teil;
         int k;
         long a;
-        if ( b >= 0 && e >= 0 ) {
+        if (b >= 0 && e >= 0) {
             b++;
-            while ( ( k = s.indexOf(',',b) ) >= 0 ) {
-                teil = s.substring(b,k);
-                a = Long.parseLong( teil );
-                exps.add( new Long( a ) ); 
+            while ((k = s.indexOf(',', b)) >= 0) {
+                teil = s.substring(b, k);
+                a = Long.parseLong(teil);
+                exps.add(new Long(a));
                 b = k + 1;
             }
-            if ( b <= e ) {
-                teil = s.substring(b,e);
-                a = Long.parseLong( teil );
-                exps.add( new Long( a ) ); 
+            if (b <= e) {
+                teil = s.substring(b, e);
+                a = Long.parseLong(teil);
+                exps.add(new Long(a));
             }
             int length = exps.size();
-            val = new long[ length ];
-            for ( int j = 0; j < length; j++ ) {
+            val = new long[length];
+            for (int j = 0; j < length; j++) {
                 val[j] = exps.elementAt(j).longValue();
             }
         } else {
-        // not implemented
-        val = null;
-        // length = -1;
-        //Vector names = new Vector();
-        //vars = s;
+            // not implemented
+            val = null;
+            // length = -1;
+            //Vector names = new Vector();
+            //vars = s;
         }
     }
 
 
-    /** Clone this.
+    /**
+     * Clone this.
      * @see java.lang.Object#clone()
      */
     @Override
     public ExpVectorLong clone() {
-        long[] w = new long[ val.length ];
-        System.arraycopy(val,0,w,0,val.length);
-        return new ExpVectorLong( w );
+        long[] w = new long[val.length];
+        System.arraycopy(val, 0, w, 0, val.length);
+        return new ExpVectorLong(w);
     }
 
 
     /**
-     * Get the exponent vector. 
+     * Get the exponent vector.
      * @return val.
      */
-    /*package*/ long[] getVal() {
+    @Override
+    /*package*/long[] getVal() {
         return val;
-    } 
+    }
 
 
     /**
-     * Get the exponent at position i. 
+     * Get the exponent at position i.
      * @param i position.
      * @return val[i].
      */
+    @Override
     public long getVal(int i) {
         return val[i];
-    } 
+    }
 
 
     /**
-     * Set the exponent at position i to e. 
+     * Set the exponent at position i to e.
      * @param i
      * @param e
      * @return old val[i].
      */
+    @Override
     protected long setVal(int i, long e) {
         long x = val[i];
         val[i] = e;
         hash = 0; // beware of race condition
         return x;
-    } 
+    }
 
 
     /**
-     * Get the length of this exponent vector. 
+     * Get the length of this exponent vector.
      * @return val.length.
      */
+    @Override
     public int length() {
-        return val.length; 
-    } 
+        return val.length;
+    }
 
 
     /**
-     * Extend variables. Used e.g. in module embedding.
-     * Extend this by i elements and set val[j] to e.
+     * Extend variables. Used e.g. in module embedding. Extend this by i
+     * elements and set val[j] to e.
      * @param i number of elements to extend.
      * @param j index of element to be set.
      * @param e new exponent for val[j].
      * @return extended exponent vector.
      */
+    @Override
     public ExpVectorLong extend(int i, int j, long e) {
-        long[] w = new long[ val.length + i ];
-        System.arraycopy(val,0,w,i,val.length);
-        if ( j >= i ) {
-           throw new IllegalArgumentException("i "+i+" <= j "+j+" invalid");
+        long[] w = new long[val.length + i];
+        System.arraycopy(val, 0, w, i, val.length);
+        if (j >= i) {
+            throw new IllegalArgumentException("i " + i + " <= j " + j + " invalid");
         }
         w[j] = e;
-        return new ExpVectorLong( w );
+        return new ExpVectorLong(w);
     }
 
 
     /**
-     * Extend lower variables. 
-     * Extend this by i lower elements and set val[j] to e.
+     * Extend lower variables. Extend this by i lower elements and set val[j] to
+     * e.
      * @param i number of elements to extend.
      * @param j index of element to be set.
      * @param e new exponent for val[j].
      * @return extended exponent vector.
      */
+    @Override
     public ExpVectorLong extendLower(int i, int j, long e) {
-        long[] w = new long[ val.length + i ];
-        System.arraycopy(val,0,w,0,val.length);
-        if ( j >= i ) {
-           throw new IllegalArgumentException("i "+i+" <= j "+j+" invalid");
+        long[] w = new long[val.length + i];
+        System.arraycopy(val, 0, w, 0, val.length);
+        if (j >= i) {
+            throw new IllegalArgumentException("i " + i + " <= j " + j + " invalid");
         }
-        w[ val.length + j ] = e;
-        return new ExpVectorLong( w );
+        w[val.length + j] = e;
+        return new ExpVectorLong(w);
     }
 
 
-
     /**
-     * Contract variables. Used e.g. in module embedding.
-     * Contract this to len elements.
+     * Contract variables. Used e.g. in module embedding. Contract this to len
+     * elements.
      * @param i position of first element to be copied.
      * @param len new length.
      * @return contracted exponent vector.
      */
+    @Override
     public ExpVectorLong contract(int i, int len) {
-        if ( i+len > val.length ) {
-           throw new IllegalArgumentException("len "+len+" > val.len "+val.length);
+        if (i + len > val.length) {
+            throw new IllegalArgumentException("len " + len + " > val.len " + val.length);
         }
-        long[] w = new long[ len ];
-        System.arraycopy(val,i,w,0,len);
-        return new ExpVectorLong( w );
+        long[] w = new long[len];
+        System.arraycopy(val, i, w, 0, len);
+        return new ExpVectorLong(w);
     }
 
 
@@ -222,77 +223,81 @@ public class ExpVectorLong extends ExpVector
      * Reverse variables. Used e.g. in opposite rings.
      * @return reversed exponent vector.
      */
+    @Override
     public ExpVectorLong reverse() {
-        long[] w = new long[ val.length ];
-        for ( int i = 0; i < val.length; i++ ) {
-            w[i] = val[ val.length - 1 - i ];
+        long[] w = new long[val.length];
+        for (int i = 0; i < val.length; i++) {
+            w[i] = val[val.length - 1 - i];
         }
-        return new ExpVectorLong( w );
+        return new ExpVectorLong(w);
     }
 
 
     /**
-     * Reverse j variables. Used e.g. in opposite rings.
-     * Reverses the first j-1 variables, the rest is unchanged.
+     * Reverse j variables. Used e.g. in opposite rings. Reverses the first j-1
+     * variables, the rest is unchanged.
      * @param j index of first variable not reversed.
      * @return reversed exponent vector.
      */
+    @Override
     public ExpVectorLong reverse(int j) {
-        if ( j <= 0 || j > val.length ) {
-           return this;
+        if (j <= 0 || j > val.length) {
+            return this;
         }
-        long[] w = new long[ val.length ];
-        for ( int i = 0; i < j; i++ ) {
-            w[i] = val[ j - 1 - i ];
+        long[] w = new long[val.length];
+        for (int i = 0; i < j; i++) {
+            w[i] = val[j - 1 - i];
         }
         // copy rest
-        for ( int i = j; i < val.length; i++ ) {
-            w[i] = val[ i ];
+        for (int i = j; i < val.length; i++) {
+            w[i] = val[i];
         }
-        return new ExpVectorLong( w );
+        return new ExpVectorLong(w);
     }
 
 
     /**
-     * Combine with ExpVector. 
-     * Combine this with the other ExpVector V.
+     * Combine with ExpVector. Combine this with the other ExpVector V.
      * @param V the other exponent vector.
      * @return combined exponent vector.
      */
-    public ExpVectorLong combine( ExpVector V ) {
-        if ( V == null || V.length() == 0 ) {
+    @Override
+    public ExpVectorLong combine(ExpVector V) {
+        if (V == null || V.length() == 0) {
             return this;
         }
-        ExpVectorLong Vl = (ExpVectorLong)V;
-        if ( val.length == 0 ) {
+        ExpVectorLong Vl = (ExpVectorLong) V;
+        if (val.length == 0) {
             return Vl;
         }
-        long[] w = new long[ val.length + Vl.val.length ];
-        System.arraycopy(val,0,w,0,val.length);
-        System.arraycopy(Vl.val,0,w,val.length,Vl.val.length);
-        return new ExpVectorLong( w );
+        long[] w = new long[val.length + Vl.val.length];
+        System.arraycopy(val, 0, w, 0, val.length);
+        System.arraycopy(Vl.val, 0, w, val.length, Vl.val.length);
+        return new ExpVectorLong(w);
     }
 
 
-    /** Get the string representation.
+    /**
+     * Get the string representation.
      * @see java.lang.Object#toString()
      */
     @Override
     public String toString() {
-        return super.toString()+":long";
+        return super.toString() + ":long";
     }
 
 
-    /** Comparison with any other object.
+    /**
+     * Comparison with any other object.
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
-    public boolean equals( Object B ) { 
-        if ( ! (B instanceof ExpVectorLong) ) {
+    public boolean equals(Object B) {
+        if (!(B instanceof ExpVectorLong)) {
             return false;
         }
-        ExpVectorLong b = (ExpVectorLong)B;
-        int t = this.invLexCompareTo( b );
+        ExpVectorLong b = (ExpVectorLong) B;
+        int t = this.invLexCompareTo(b);
         //System.out.println("equals: this = " + this + " B = " + B + " t = " + t);
         return (0 == t);
     }
@@ -302,17 +307,18 @@ public class ExpVectorLong extends ExpVector
      * ExpVector absolute value.
      * @return abs(this).
      */
+    @Override
     public ExpVectorLong abs() {
-        long[] u = val; 
+        long[] u = val;
         long[] w = new long[u.length];
-        for (int i = 0; i < u.length; i++ ) {
-            if ( u[i] >= 0L ) {
-               w[i] = u[i];
+        for (int i = 0; i < u.length; i++) {
+            if (u[i] >= 0L) {
+                w[i] = u[i];
             } else {
-               w[i] = - u[i];
+                w[i] = -u[i];
             }
         }
-        return new ExpVectorLong( w );
+        return new ExpVectorLong(w);
         //return EVABS(this);
     }
 
@@ -321,14 +327,15 @@ public class ExpVectorLong extends ExpVector
      * ExpVector negate.
      * @return -this.
      */
-    public ExpVectorLong negate( ) {
-        long[] u = val; 
+    @Override
+    public ExpVectorLong negate() {
+        long[] u = val;
         long[] w = new long[u.length];
-        for (int i = 0; i < u.length; i++ ) {
-            w[i] = - u[i];
+        for (int i = 0; i < u.length; i++) {
+            w[i] = -u[i];
         }
-        return new ExpVectorLong( w );
-     // return EVNEG(this);
+        return new ExpVectorLong(w);
+        // return EVNEG(this);
     }
 
 
@@ -337,46 +344,47 @@ public class ExpVectorLong extends ExpVector
      * @param V
      * @return this+V.
      */
-    public ExpVectorLong sum( ExpVector V ) {
-        long[] u = val; 
-        long[] v = ((ExpVectorLong)V).val;
+    @Override
+    public ExpVectorLong sum(ExpVector V) {
+        long[] u = val;
+        long[] v = ((ExpVectorLong) V).val;
         long[] w = new long[u.length];
-        for (int i = 0; i < u.length; i++ ) {
+        for (int i = 0; i < u.length; i++) {
             w[i] = u[i] + v[i];
         }
-        return new ExpVectorLong( w );
-     // return EVSUM(this, V);
+        return new ExpVectorLong(w);
+        // return EVSUM(this, V);
     }
 
 
     /**
-     * ExpVector subtract.
-     * Result may have negative entries.
+     * ExpVector subtract. Result may have negative entries.
      * @param V
      * @return this-V.
      */
-    public ExpVectorLong subtract( ExpVector V ) {
-        long[] u = val; 
-        long[] v = ((ExpVectorLong)V).val;
+    @Override
+    public ExpVectorLong subtract(ExpVector V) {
+        long[] u = val;
+        long[] v = ((ExpVectorLong) V).val;
         long[] w = new long[u.length];
-        for (int i = 0; i < u.length; i++ ) { 
+        for (int i = 0; i < u.length; i++) {
             w[i] = u[i] - v[i];
         }
-        return new ExpVectorLong( w );
+        return new ExpVectorLong(w);
         //return EVDIF(this, V);
     }
 
 
     /**
-     * ExpVector substitution.
-     * Clone and set exponent to d at position i.
+     * ExpVector substitution. Clone and set exponent to d at position i.
      * @param i position.
      * @param d new exponent.
      * @return substituted ExpVector.
      */
-    public ExpVectorLong subst( int i, long d ) {
-        ExpVectorLong V = (ExpVectorLong)this.clone();
-        long e = V.setVal( i, d );
+    @Override
+    public ExpVectorLong subst(int i, long d) {
+        ExpVectorLong V = (ExpVectorLong) this.clone();
+        long e = V.setVal(i, d);
         return V;
         //return EVSU(this, i, d);
     }
@@ -384,17 +392,18 @@ public class ExpVectorLong extends ExpVector
 
     /**
      * ExpVector signum.
-     * @return 0 if this is zero, -1 if some entry is negative, 
-     *  1 if no entry is negative and at least one entry is positive.
+     * @return 0 if this is zero, -1 if some entry is negative, 1 if no entry is
+     *         negative and at least one entry is positive.
      */
+    @Override
     public int signum() {
         int t = 0;
-        long[] u = val; 
-        for (int i = 0; i < u.length; i++ ) {
-            if ( u[i] < 0 ) {
+        long[] u = val;
+        for (int i = 0; i < u.length; i++) {
+            if (u[i] < 0) {
                 return -1;
             }
-            if ( u[i] > 0 ) {
+            if (u[i] > 0) {
                 t = 1;
             }
         }
@@ -407,10 +416,11 @@ public class ExpVectorLong extends ExpVector
      * ExpVector total degree.
      * @return sum of all exponents.
      */
+    @Override
     public long totalDeg() {
         long t = 0;
         long[] u = val; // U.val;
-        for (int i = 0; i < u.length; i++ ) {
+        for (int i = 0; i < u.length; i++) {
             t += u[i];
         }
         return t;
@@ -422,12 +432,13 @@ public class ExpVectorLong extends ExpVector
      * ExpVector maximal degree.
      * @return maximal exponent.
      */
+    @Override
     public long maxDeg() {
         long t = 0;
-        long[] u = val; 
-        for (int i = 0; i < u.length; i++ ) {
-            if ( u[i] > t ) {
-               t = u[i];
+        long[] u = val;
+        for (int i = 0; i < u.length; i++) {
+            if (u[i] > t) {
+                t = u[i];
             }
         }
         return t;
@@ -440,20 +451,21 @@ public class ExpVectorLong extends ExpVector
      * @param w weights.
      * @return weighted sum of all exponents.
      */
-    public long weightDeg( long[][] w ) {
-        if ( w == null || w.length == 0 ) { 
+    @Override
+    public long weightDeg(long[][] w) {
+        if (w == null || w.length == 0) {
             return totalDeg(); // assume weight 1 
         }
         long t = 0;
-        long[] u = val; 
-        for ( int j = 0; j < w.length; j++ ) {
+        long[] u = val;
+        for (int j = 0; j < w.length; j++) {
             long[] wj = w[j];
-            for (int i = 0; i < u.length; i++ ) {
+            for (int i = 0; i < u.length; i++) {
                 t += wj[i] * u[i];
             }
         }
         return t;
-     //return EVWDEG( w, this );
+        //return EVWDEG( w, this );
     }
 
 
@@ -462,14 +474,15 @@ public class ExpVectorLong extends ExpVector
      * @param V
      * @return component wise maximum of this and V.
      */
-    public ExpVectorLong lcm( ExpVector V ) {
-        long[] u = val; 
-        long[] v = ((ExpVectorLong)V).val;
+    @Override
+    public ExpVectorLong lcm(ExpVector V) {
+        long[] u = val;
+        long[] v = ((ExpVectorLong) V).val;
         long[] w = new long[u.length];
-        for (int i = 0; i < u.length; i++ ) {
-            w[i] = ( u[i] >= v[i] ? u[i] : v[i] );
+        for (int i = 0; i < u.length; i++) {
+            w[i] = (u[i] >= v[i] ? u[i] : v[i]);
         }
-        return new ExpVectorLong( w );
+        return new ExpVectorLong(w);
         //return EVLCM(this, V);
     }
 
@@ -479,14 +492,15 @@ public class ExpVectorLong extends ExpVector
      * @param V
      * @return component wise minimum of this and V.
      */
-    public ExpVectorLong gcd( ExpVector V ) {
-        long[] u = val; 
-        long[] v = ((ExpVectorLong)V).val;
+    @Override
+    public ExpVectorLong gcd(ExpVector V) {
+        long[] u = val;
+        long[] v = ((ExpVectorLong) V).val;
         long[] w = new long[u.length];
-        for (int i = 0; i < u.length; i++ ) {
-            w[i] = ( u[i] <= v[i] ? u[i] : v[i] );
+        for (int i = 0; i < u.length; i++) {
+            w[i] = (u[i] <= v[i] ? u[i] : v[i]);
         }
-        return new ExpVectorLong( w );
+        return new ExpVectorLong(w);
         //return EVGCD(this, V);
     }
 
@@ -495,22 +509,24 @@ public class ExpVectorLong extends ExpVector
      * ExpVector dependency on variables.
      * @return array of indices where val has positive exponents.
      */
+    @Override
     public int[] dependencyOnVariables() {
         long[] u = val;
         int l = 0;
-        for (int i = 0; i < u.length; i++ ) {
-            if ( u[i] > 0 ) {
+        for (int i = 0; i < u.length; i++) {
+            if (u[i] > 0) {
                 l++;
             }
         }
-        int[] dep = new int[ l ];
-        if ( l == 0 ) {
+        int[] dep = new int[l];
+        if (l == 0) {
             return dep;
         }
         int j = 0;
-        for (int i = 0; i < u.length; i++ ) {
-            if ( u[i] > 0 ) {
-                dep[j] = i; j++;
+        for (int i = 0; i < u.length; i++) {
+            if (u[i] > 0) {
+                dep[j] = i;
+                j++;
             }
         }
         return dep;
@@ -518,17 +534,18 @@ public class ExpVectorLong extends ExpVector
 
 
     /**
-     * ExpVector multiple test.
-     * Test if this is component wise greater or equal to V.
+     * ExpVector multiple test. Test if this is component wise greater or equal
+     * to V.
      * @param V
      * @return true if this is a multiple of V, else false.
      */
-    public boolean multipleOf( ExpVector V ) {
-        long[] u = val; 
-        long[] v = ((ExpVectorLong)V).val;
+    @Override
+    public boolean multipleOf(ExpVector V) {
+        long[] u = val;
+        long[] v = ((ExpVectorLong) V).val;
         boolean t = true;
-        for (int i = 0; i < u.length; i++ ) {
-            if ( u[i] < v[i] ) { 
+        for (int i = 0; i < u.length; i++) {
+            if (u[i] < v[i]) {
                 return false;
             }
         }
@@ -543,7 +560,7 @@ public class ExpVectorLong extends ExpVector
      * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
      */
     //@Override
-    public int compareTo( ExpVectorLong V ) {
+    public int compareTo(ExpVectorLong V) {
         return this.invLexCompareTo(V);
     }
 
@@ -553,13 +570,16 @@ public class ExpVectorLong extends ExpVector
      * @param V
      * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
      */
-    public int invLexCompareTo( ExpVector V ) {
-        long[] u = val; 
-        long[] v = ((ExpVectorLong)V).val;
+    @Override
+    public int invLexCompareTo(ExpVector V) {
+        long[] u = val;
+        long[] v = ((ExpVectorLong) V).val;
         int t = 0;
-        for (int i = 0; i < u.length; i++ ) {
-            if ( u[i] > v[i] ) return 1;
-            if ( u[i] < v[i] ) return -1;
+        for (int i = 0; i < u.length; i++) {
+            if (u[i] > v[i])
+                return 1;
+            if (u[i] < v[i])
+                return -1;
         }
         return t;
         //return EVILCP(this, V);
@@ -573,13 +593,16 @@ public class ExpVectorLong extends ExpVector
      * @param end
      * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
      */
-    public int invLexCompareTo( ExpVector V, int begin, int end  ) {
-        long[] u = val; 
-        long[] v = ((ExpVectorLong)V).val;
+    @Override
+    public int invLexCompareTo(ExpVector V, int begin, int end) {
+        long[] u = val;
+        long[] v = ((ExpVectorLong) V).val;
         int t = 0;
-        for (int i = begin; i < end; i++ ) {
-            if ( u[i] > v[i] ) return 1;
-            if ( u[i] < v[i] ) return -1;
+        for (int i = begin; i < end; i++) {
+            if (u[i] > v[i])
+                return 1;
+            if (u[i] < v[i])
+                return -1;
         }
         return t;
         //return EVILCP(this, V, begin, end);
@@ -591,33 +614,36 @@ public class ExpVectorLong extends ExpVector
      * @param V
      * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
      */
-    public int invGradCompareTo( ExpVector V ) {
-        long[] u = val; 
-        long[] v = ((ExpVectorLong)V).val;
+    @Override
+    public int invGradCompareTo(ExpVector V) {
+        long[] u = val;
+        long[] v = ((ExpVectorLong) V).val;
         int t = 0;
         int i;
-        for ( i = 0; i < u.length; i++ ) {
-            if ( u[i] > v[i] ) { 
-                t = 1; break; 
+        for (i = 0; i < u.length; i++) {
+            if (u[i] > v[i]) {
+                t = 1;
+                break;
             }
-            if ( u[i] < v[i] ) { 
-                t = -1; break; 
+            if (u[i] < v[i]) {
+                t = -1;
+                break;
             }
         }
-        if ( t == 0 ) { 
+        if (t == 0) {
             return t;
         }
-        long up = 0; 
-        long vp = 0; 
-        for (int j = i; j < u.length; j++ ) {
-            up += u[j]; 
-            vp += v[j]; 
+        long up = 0;
+        long vp = 0;
+        for (int j = i; j < u.length; j++) {
+            up += u[j];
+            vp += v[j];
         }
-        if ( up > vp ) { 
-            t = 1; 
-        } else { 
-            if ( up < vp ) { 
-                t = -1; 
+        if (up > vp) {
+            t = 1;
+        } else {
+            if (up < vp) {
+                t = -1;
             }
         }
         return t;
@@ -632,33 +658,36 @@ public class ExpVectorLong extends ExpVector
      * @param end
      * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
      */
-    public int invGradCompareTo( ExpVector V, int begin, int end ) {
-        long[] u = val; 
-        long[] v = ((ExpVectorLong)V).val;
+    @Override
+    public int invGradCompareTo(ExpVector V, int begin, int end) {
+        long[] u = val;
+        long[] v = ((ExpVectorLong) V).val;
         int t = 0;
         int i;
-        for ( i = begin; i < end; i++ ) {
-            if ( u[i] > v[i] ) { 
-                t = 1; break; 
+        for (i = begin; i < end; i++) {
+            if (u[i] > v[i]) {
+                t = 1;
+                break;
             }
-            if ( u[i] < v[i] ) { 
-                t = -1; break; 
+            if (u[i] < v[i]) {
+                t = -1;
+                break;
             }
         }
-        if ( t == 0 ) {
+        if (t == 0) {
             return t;
         }
-        long up = 0; 
-        long vp = 0; 
-        for (int j = i; j < end; j++ ) {
-            up += u[j]; 
-            vp += v[j]; 
+        long up = 0;
+        long vp = 0;
+        for (int j = i; j < end; j++) {
+            up += u[j];
+            vp += v[j];
         }
-        if ( up > vp ) { 
-            t = 1; 
-        } else { 
-            if ( up < vp ) { 
-                t = -1; 
+        if (up > vp) {
+            t = 1;
+        } else {
+            if (up < vp) {
+                t = -1;
             }
         }
         return t;
@@ -671,13 +700,16 @@ public class ExpVectorLong extends ExpVector
      * @param V
      * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
      */
-    public int revInvLexCompareTo( ExpVector V ) {
-        long[] u = val; 
-        long[] v = ((ExpVectorLong)V).val;
+    @Override
+    public int revInvLexCompareTo(ExpVector V) {
+        long[] u = val;
+        long[] v = ((ExpVectorLong) V).val;
         int t = 0;
-        for (int i = u.length-1; i >= 0; i-- ) {
-            if ( u[i] > v[i] ) return 1;
-            if ( u[i] < v[i] ) return -1;
+        for (int i = u.length - 1; i >= 0; i--) {
+            if (u[i] > v[i])
+                return 1;
+            if (u[i] < v[i])
+                return -1;
         }
         return t;
         //return EVRILCP(this, V);
@@ -691,13 +723,16 @@ public class ExpVectorLong extends ExpVector
      * @param end
      * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
      */
-    public int revInvLexCompareTo( ExpVector V, int begin, int end ) {
-        long[] u = val; 
-        long[] v = ((ExpVectorLong)V).val;
+    @Override
+    public int revInvLexCompareTo(ExpVector V, int begin, int end) {
+        long[] u = val;
+        long[] v = ((ExpVectorLong) V).val;
         int t = 0;
-        for (int i = end-1; i >= begin; i-- ) {
-            if ( u[i] > v[i] ) return 1;
-            if ( u[i] < v[i] ) return -1;
+        for (int i = end - 1; i >= begin; i--) {
+            if (u[i] > v[i])
+                return 1;
+            if (u[i] < v[i])
+                return -1;
         }
         return t;
         //return EVRILCP(this, V, begin, end);
@@ -709,33 +744,36 @@ public class ExpVectorLong extends ExpVector
      * @param V
      * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
      */
-    public int revInvGradCompareTo( ExpVector V ) {
-        long[] u = val; 
-        long[] v = ((ExpVectorLong)V).val;
+    @Override
+    public int revInvGradCompareTo(ExpVector V) {
+        long[] u = val;
+        long[] v = ((ExpVectorLong) V).val;
         int t = 0;
         int i;
-        for ( i = u.length-1; i >= 0; i-- ) {
-            if ( u[i] > v[i] ) { 
-                t = 1; break; 
+        for (i = u.length - 1; i >= 0; i--) {
+            if (u[i] > v[i]) {
+                t = 1;
+                break;
             }
-            if ( u[i] < v[i] ) { 
-                t = -1; break; 
+            if (u[i] < v[i]) {
+                t = -1;
+                break;
             }
         }
-        if ( t == 0 ) { 
+        if (t == 0) {
             return t;
         }
-        long up = 0; 
-        long vp = 0; 
-        for (int j = i; j >= 0; j-- ) {
-            up += u[j]; 
-            vp += v[j]; 
+        long up = 0;
+        long vp = 0;
+        for (int j = i; j >= 0; j--) {
+            up += u[j];
+            vp += v[j];
         }
-        if ( up > vp ) { 
-            t = 1; 
-        } else { 
-            if ( up < vp ) { 
-                t = -1; 
+        if (up > vp) {
+            t = 1;
+        } else {
+            if (up < vp) {
+                t = -1;
             }
         }
         return t;
@@ -750,33 +788,36 @@ public class ExpVectorLong extends ExpVector
      * @param end
      * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
      */
-    public int revInvGradCompareTo( ExpVector V, int begin, int end ) {
-        long[] u = val; 
-        long[] v = ((ExpVectorLong)V).val;
+    @Override
+    public int revInvGradCompareTo(ExpVector V, int begin, int end) {
+        long[] u = val;
+        long[] v = ((ExpVectorLong) V).val;
         int t = 0;
         int i;
-        for ( i = end-1; i >= begin; i-- ) {
-            if ( u[i] > v[i] ) { 
-                t = 1; break; 
+        for (i = end - 1; i >= begin; i--) {
+            if (u[i] > v[i]) {
+                t = 1;
+                break;
             }
-            if ( u[i] < v[i] ) { 
-                t = -1; break; 
+            if (u[i] < v[i]) {
+                t = -1;
+                break;
             }
         }
-        if ( t == 0 ) {
+        if (t == 0) {
             return t;
         }
-        long up = 0; 
-        long vp = 0; 
-        for (int j = i; j >= begin; j-- ) {
-            up += u[j]; 
-            vp += v[j]; 
+        long up = 0;
+        long vp = 0;
+        for (int j = i; j >= begin; j--) {
+            up += u[j];
+            vp += v[j];
         }
-        if ( up > vp ) { 
-            t = 1; 
-        } else { 
-            if ( up < vp ) { 
-                t = -1; 
+        if (up > vp) {
+            t = 1;
+        } else {
+            if (up < vp) {
+                t = -1;
             }
         }
         return t;
@@ -790,33 +831,36 @@ public class ExpVectorLong extends ExpVector
      * @param V
      * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
      */
-    public int invWeightCompareTo( long[][] w, ExpVector V ) {
-        long[] u = val; 
-        long[] v = ((ExpVectorLong)V).val;
+    @Override
+    public int invWeightCompareTo(long[][] w, ExpVector V) {
+        long[] u = val;
+        long[] v = ((ExpVectorLong) V).val;
         int t = 0;
         int i;
-        for ( i = 0; i < u.length; i++ ) {
-            if ( u[i] > v[i] ) { 
-                t = 1; break; 
+        for (i = 0; i < u.length; i++) {
+            if (u[i] > v[i]) {
+                t = 1;
+                break;
             }
-            if ( u[i] < v[i] ) { 
-                t = -1; break; 
+            if (u[i] < v[i]) {
+                t = -1;
+                break;
             }
         }
-        if ( t == 0 ) {
+        if (t == 0) {
             return t;
         }
-        for ( int k = 0; k < w.length; k++ ) {
+        for (int k = 0; k < w.length; k++) {
             long[] wk = w[k];
-            long up = 0; 
-            long vp = 0; 
-            for (int j = i; j < u.length; j++ ) {
-                up += wk[j] * u[j]; 
-                vp += wk[j] * v[j]; 
+            long up = 0;
+            long vp = 0;
+            for (int j = i; j < u.length; j++) {
+                up += wk[j] * u[j];
+                vp += wk[j] * v[j];
             }
-            if ( up > vp ) { 
+            if (up > vp) {
                 return 1;
-            } else if ( up < vp ) { 
+            } else if (up < vp) {
                 return -1;
             }
         }
@@ -833,33 +877,36 @@ public class ExpVectorLong extends ExpVector
      * @param end
      * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
      */
-    public int invWeightCompareTo( long[][] w, ExpVector V, int begin, int end ) {
-        long[] u = val; 
-        long[] v = ((ExpVectorLong)V).val;
+    @Override
+    public int invWeightCompareTo(long[][] w, ExpVector V, int begin, int end) {
+        long[] u = val;
+        long[] v = ((ExpVectorLong) V).val;
         int t = 0;
         int i;
-        for ( i = begin; i < end; i++ ) {
-            if ( u[i] > v[i] ) { 
-                t = 1; break; 
+        for (i = begin; i < end; i++) {
+            if (u[i] > v[i]) {
+                t = 1;
+                break;
             }
-            if ( u[i] < v[i] ) { 
-                t = -1; break; 
+            if (u[i] < v[i]) {
+                t = -1;
+                break;
             }
         }
-        if ( t == 0 ) {
+        if (t == 0) {
             return t;
         }
-        for ( int k = 0; k < w.length; k++ ) {
+        for (int k = 0; k < w.length; k++) {
             long[] wk = w[k];
-            long up = 0; 
-            long vp = 0; 
-            for (int j = i; j < end; j++ ) {
-                up += wk[j] * u[j]; 
-                vp += wk[j] * v[j]; 
+            long up = 0;
+            long vp = 0;
+            for (int j = i; j < end; j++) {
+                up += wk[j] * u[j];
+                vp += wk[j] * v[j];
             }
-            if ( up > vp ) { 
+            if (up > vp) {
                 return 1;
-            } else if ( up < vp ) { 
+            } else if (up < vp) {
                 return -1;
             }
         }

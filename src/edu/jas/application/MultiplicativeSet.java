@@ -6,28 +6,18 @@ package edu.jas.application;
 
 
 import java.io.Serializable;
-
-import java.util.List;
 import java.util.ArrayList;
-//import java.util.Arrays;
-import java.util.Map;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import edu.jas.structure.GcdRingElem;
-
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
-import edu.jas.poly.ExpVector;
-
-import edu.jas.ufd.Squarefree;
-import edu.jas.ufd.SquarefreeAbstract;
-import edu.jas.ufd.SquarefreeFactory;
+import edu.jas.structure.GcdRingElem;
 
 
 /**
- * Multiplicative set of polynomials.
- * a, b in M implies a*b in M, 1 in M.
+ * Multiplicative set of polynomials. a, b in M implies a*b in M, 1 in M.
  * @param <C> coefficient type
  * @author Heinz Kredel.
  */
@@ -65,7 +55,7 @@ public class MultiplicativeSet<C extends GcdRingElem<C>> implements Serializable
 
 
     /**
-     * MultiplicativeSet constructor. 
+     * MultiplicativeSet constructor.
      * @param ring polynomial ring factory for coefficients.
      * @param ms a list of non-zero polynomials.
      */
@@ -141,10 +131,10 @@ public class MultiplicativeSet<C extends GcdRingElem<C>> implements Serializable
      * @return true, if c = prod_{m in mset} m, else false
      */
     public boolean contains(GenPolynomial<C> c) {
-        if (c == null || c.isZERO()) { 
+        if (c == null || c.isZERO()) {
             return false;
         }
-        if (c.isConstant()) { 
+        if (c.isConstant()) {
             return true;
         }
         if (mset.size() == 0) {
@@ -195,30 +185,30 @@ public class MultiplicativeSet<C extends GcdRingElem<C>> implements Serializable
 
 
     /**
-     * Add polynomial to mset. 
+     * Add polynomial to mset.
      * @param cc polynomial to be added to mset.
-     * @return new multiplicative set.
-     * <b>Note:</b> must be overridden in sub-classes.
+     * @return new multiplicative set. <b>Note:</b> must be overridden in
+     *         sub-classes.
      */
     public MultiplicativeSet<C> add(GenPolynomial<C> cc) {
-        if (cc == null || cc.isZERO() || cc.isConstant()) { 
+        if (cc == null || cc.isZERO() || cc.isConstant()) {
             return this;
         }
-        if ( ring.coFac.isField() ) {
+        if (ring.coFac.isField()) {
             cc = cc.monic();
         }
         List<GenPolynomial<C>> list;
-        if (mset.size() == 0) { 
-            list =new ArrayList<GenPolynomial<C>>(1);
+        if (mset.size() == 0) {
+            list = new ArrayList<GenPolynomial<C>>(1);
             list.add(cc);
-            return new MultiplicativeSet<C>(ring,list);
+            return new MultiplicativeSet<C>(ring, list);
         }
         GenPolynomial<C> c = removeFactors(cc);
-        if ( c.isConstant() ) { 
+        if (c.isConstant()) {
             logger.info("skipped unit or constant = " + c);
             return this;
         }
-        if ( ring.coFac.isField() ) {
+        if (ring.coFac.isField()) {
             c = c.monic();
         }
         if (mset.size() == 0) {
@@ -228,22 +218,22 @@ public class MultiplicativeSet<C extends GcdRingElem<C>> implements Serializable
         }
         list = new ArrayList<GenPolynomial<C>>(mset);
         list.add(c);
-        return new MultiplicativeSet<C>(ring,list);
+        return new MultiplicativeSet<C>(ring, list);
     }
 
 
     /**
-     * Replace polynomial list of mset. 
+     * Replace polynomial list of mset.
      * @param L polynomial list to replace mset.
-     * @return new multiplicative set.
-     * <b>Note:</b> must be overridden in sub-classes.
+     * @return new multiplicative set. <b>Note:</b> must be overridden in
+     *         sub-classes.
      */
     public MultiplicativeSet<C> replace(List<GenPolynomial<C>> L) {
         MultiplicativeSet<C> ms = new MultiplicativeSet<C>(ring);
-        if (L == null || L.size() == 0) { 
+        if (L == null || L.size() == 0) {
             return ms;
         }
-        for ( GenPolynomial<C> p : L ) {
+        for (GenPolynomial<C> p : L) {
             ms = ms.add(p);
         }
         return ms;
@@ -251,15 +241,15 @@ public class MultiplicativeSet<C extends GcdRingElem<C>> implements Serializable
 
 
     /**
-     * Remove factors by mset factors division. 
+     * Remove factors by mset factors division.
      * @param cc polynomial to be removed factors from mset.
      * @return quotient polynomial.
      */
     public GenPolynomial<C> removeFactors(GenPolynomial<C> cc) {
-        if (cc == null || cc.isZERO() || cc.isConstant()) { 
+        if (cc == null || cc.isZERO() || cc.isConstant()) {
             return cc;
         }
-        if (mset.size() == 0) { 
+        if (mset.size() == 0) {
             return cc;
         }
         GenPolynomial<C> c = cc;
@@ -286,12 +276,12 @@ public class MultiplicativeSet<C extends GcdRingElem<C>> implements Serializable
 
 
     /**
-     * Remove factors by mset factors division. 
+     * Remove factors by mset factors division.
      * @param L list of polynomial to be removed factors from mset.
      * @return quotient polynomial list.
      */
     public List<GenPolynomial<C>> removeFactors(List<GenPolynomial<C>> L) {
-        if (L == null || L.size() == 0) { 
+        if (L == null || L.size() == 0) {
             return L;
         }
         if (mset.size() == 0) {

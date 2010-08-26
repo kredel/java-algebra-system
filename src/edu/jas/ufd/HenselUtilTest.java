@@ -7,19 +7,12 @@ package edu.jas.ufd;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.SortedMap;
-import java.util.SortedSet;
-import java.util.TreeSet;
-import java.util.Collections;
-
-import org.apache.log4j.BasicConfigurator;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import edu.jas.arith.BigInteger;
-import edu.jas.arith.Modular;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
 import edu.jas.kern.ComputerThreads;
@@ -28,10 +21,7 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.poly.TermOrder;
-import edu.jas.structure.Power;
-import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.ModularRingFactory;
-import edu.jas.util.KsubSet;
 
 
 /**
@@ -279,8 +269,8 @@ public class HenselUtilTest extends TestCase {
                 //assertEquals("lift(b mod p) = b",b,b1);
 
                 assertEquals("lift(a b mod p) = a b", c, c1);
-            } catch ( NoLiftingException e ) {
-                fail(""+e);
+            } catch (NoLiftingException e) {
+                fail("" + e);
             }
         }
     }
@@ -364,14 +354,14 @@ public class HenselUtilTest extends TestCase {
             //System.out.println("tp    = " + tp);
 
             long tq = System.currentTimeMillis();
-            try { 
-                lift = HenselUtil.<ModInteger>liftHensel(c, mi, ap, bp);
+            try {
+                lift = HenselUtil.<ModInteger> liftHensel(c, mi, ap, bp);
                 tq = System.currentTimeMillis() - tq;
                 a1 = lift.A;
                 b1 = lift.B;
                 c1 = a1.multiply(b1);
                 assertEquals("lift(a b mod p) = a b", c, c1);
-            } catch ( NoLiftingException e ) {
+            } catch (NoLiftingException e) {
                 // ok no fail(""+e);
             }
 
@@ -481,7 +471,7 @@ public class HenselUtilTest extends TestCase {
 
             long tq = System.currentTimeMillis();
             try {
-                lift = HenselUtil.<ModInteger>liftHenselQuadratic(c, mi, ap, bp, sp, tp);
+                lift = HenselUtil.<ModInteger> liftHenselQuadratic(c, mi, ap, bp, sp, tp);
                 tq = System.currentTimeMillis() - tq;
                 a1 = lift.A;
                 b1 = lift.B;
@@ -496,14 +486,14 @@ public class HenselUtilTest extends TestCase {
                 //assertEquals("lift(b mod p) = b",b,b1);
 
                 assertEquals("lift(a b mod p) = a b", c, c1);
-            } catch ( NoLiftingException e ) {
-                fail(""+e);
+            } catch (NoLiftingException e) {
+                fail("" + e);
             }
 
             if (false) {
                 long t = System.currentTimeMillis();
                 try {
-                    lift = HenselUtil.<ModInteger>liftHensel(c, mi, ap, bp, sp, tp);
+                    lift = HenselUtil.<ModInteger> liftHensel(c, mi, ap, bp, sp, tp);
                     t = System.currentTimeMillis() - t;
                     a1 = lift.A;
                     b1 = lift.B;
@@ -519,8 +509,8 @@ public class HenselUtilTest extends TestCase {
                     //assertEquals("lift(a mod p) = a",a,a1);
                     //assertEquals("lift(b mod p) = b",b,b1);
                     assertEquals("lift(a b mod p) = a b", c, c1);
-                } catch ( NoLiftingException e ) {
-                    fail(""+e);
+                } catch (NoLiftingException e) {
+                    fail("" + e);
                 }
                 System.out.println("\nquadratic Hensel time = " + tq);
                 System.out.println("linear    Hensel time = " + t);
@@ -608,14 +598,14 @@ public class HenselUtilTest extends TestCase {
             //System.out.println("tp    = " + tp);
 
             long tq = System.currentTimeMillis();
-            try { 
-                lift = HenselUtil.<ModInteger>liftHenselQuadratic(c, mi, ap, bp);
+            try {
+                lift = HenselUtil.<ModInteger> liftHenselQuadratic(c, mi, ap, bp);
                 tq = System.currentTimeMillis() - tq;
                 a1 = lift.A;
                 b1 = lift.B;
                 c1 = a1.multiply(b1);
                 assertEquals("lift(a b mod p) = a b", c, c1);
-            } catch ( NoLiftingException e ) {
+            } catch (NoLiftingException e) {
                 //ok no fail(""+e);
             }
 
@@ -646,7 +636,8 @@ public class HenselUtilTest extends TestCase {
         //BigInteger mi = m;
 
         ModIntegerRing pm = new ModIntegerRing(p, true);
-        GenPolynomialRing<ModInteger> mfac = new GenPolynomialRing<ModInteger>(pm, 1, to, new String[] { "x" });
+        GenPolynomialRing<ModInteger> mfac = new GenPolynomialRing<ModInteger>(pm, 1, to,
+                new String[] { "x" });
 
         dfac = new GenPolynomialRing<BigInteger>(m, mfac);
         GreatestCommonDivisorAbstract<BigInteger> ufd = GCDFactory.getProxy(m);
@@ -662,11 +653,11 @@ public class HenselUtilTest extends TestCase {
         for (int i = 1; i < 2; i++) { // 70 better for quadratic
             a = dfac.random(kl + 3 * i, ll + 1, el + 1, q).abs();
             b = dfac.random(kl + 3 * i, ll + 1, el + 5, q).abs();
-            d = ufd.baseGcd(a,b);
+            d = ufd.baseGcd(a, b);
             //System.out.println("d   = " + d);
-            if ( !d.isONE() ) {
-                a = PolyUtil.<BigInteger>basePseudoDivide(a,d);
-                b = PolyUtil.<BigInteger>basePseudoDivide(b,d);
+            if (!d.isONE()) {
+                a = PolyUtil.<BigInteger> basePseudoDivide(a, d);
+                b = PolyUtil.<BigInteger> basePseudoDivide(b, d);
             }
             if (a.degree(0) < 1 || b.degree(0) < 2) {
                 continue;
@@ -681,7 +672,7 @@ public class HenselUtilTest extends TestCase {
             }
             dp = ap.gcd(bp);
             //System.out.println("dp  = " + dp);
-            if ( !dp.isONE() ) {
+            if (!dp.isONE()) {
                 continue;
             }
             c = a.multiply(b);
@@ -720,16 +711,18 @@ public class HenselUtilTest extends TestCase {
             //System.out.println("cp  = " + cp);
 
             long tq = System.currentTimeMillis();
-            try { 
-                lift = HenselUtil.<ModInteger>liftExtendedEuclidean(ap,bp,k);
+            try {
+                lift = HenselUtil.<ModInteger> liftExtendedEuclidean(ap, bp, k);
                 tq = System.currentTimeMillis() - tq;
                 s = lift[0];
                 t = lift[1];
                 ModularRingFactory<ModInteger> mcfac = (ModularRingFactory<ModInteger>) s.ring.coFac;
                 GenPolynomialRing<ModInteger> mfac1 = new GenPolynomialRing<ModInteger>(mcfac, mfac);
                 //System.out.println("\nmcfac  = " + mcfac);
-                ap = PolyUtil.fromIntegerCoefficients(mfac1, PolyUtil.integerFromModularCoefficients(dfac, ap));
-                bp = PolyUtil.fromIntegerCoefficients(mfac1, PolyUtil.integerFromModularCoefficients(dfac, bp));
+                ap = PolyUtil.fromIntegerCoefficients(mfac1, PolyUtil
+                        .integerFromModularCoefficients(dfac, ap));
+                bp = PolyUtil.fromIntegerCoefficients(mfac1, PolyUtil
+                        .integerFromModularCoefficients(dfac, bp));
                 cp = s.multiply(ap).sum(t.multiply(bp));
                 //System.out.println("s   = " + s);
                 //System.out.println("t   = " + t);
@@ -738,8 +731,8 @@ public class HenselUtilTest extends TestCase {
                 //System.out.println("cp  = " + cp);
 
                 assertTrue("lift(s a + t b mod p^k) = 1: " + cp, cp.isONE());
-            } catch ( NoLiftingException e ) {
-                fail(""+e);
+            } catch (NoLiftingException e) {
+                fail("" + e);
             }
             //System.out.println("time = " + tq);
         }
@@ -760,7 +753,8 @@ public class HenselUtilTest extends TestCase {
 
         // BigInteger mi = m;
         ModIntegerRing pm = new ModIntegerRing(p, true);
-        GenPolynomialRing<ModInteger> mfac = new GenPolynomialRing<ModInteger>(pm, 1, to, new String[] { "x" });
+        GenPolynomialRing<ModInteger> mfac = new GenPolynomialRing<ModInteger>(pm, 1, to,
+                new String[] { "x" });
 
         dfac = new GenPolynomialRing<BigInteger>(m, mfac);
         GreatestCommonDivisorAbstract<BigInteger> ufd = GCDFactory.getProxy(m);
@@ -779,11 +773,11 @@ public class HenselUtilTest extends TestCase {
             //a = dfac.parse("(x - 1)");
             b = dfac.random(kl + 3 * i, ll + 5, el + 5, q).abs();
             //b = dfac.parse("(x - 2)");
-            e = ufd.baseGcd(a,b);
+            e = ufd.baseGcd(a, b);
             //System.out.println("e   = " + e);
-            if ( !e.isONE() ) {
-                a = PolyUtil.<BigInteger>basePseudoDivide(a,e);
-                b = PolyUtil.<BigInteger>basePseudoDivide(b,e);
+            if (!e.isONE()) {
+                a = PolyUtil.<BigInteger> basePseudoDivide(a, e);
+                b = PolyUtil.<BigInteger> basePseudoDivide(b, e);
             }
             if (a.degree(0) < 1 || b.degree(0) < 1) {
                 continue;
@@ -798,22 +792,22 @@ public class HenselUtilTest extends TestCase {
             }
             ep = ap.gcd(bp);
             //System.out.println("ep  = " + ep);
-            if ( !ep.isONE() ) {
+            if (!ep.isONE()) {
                 continue;
             }
             d = dfac.random(kl + 3 * i, ll + 5, el + 4, q).abs();
             //d = dfac.parse("(x - 3)");
-            e = ufd.baseGcd(a,d);
+            e = ufd.baseGcd(a, d);
             //System.out.println("e   = " + e);
-            if ( !e.isONE() ) {
-                a = PolyUtil.<BigInteger>basePseudoDivide(a,e);
-                d = PolyUtil.<BigInteger>basePseudoDivide(d,e);
+            if (!e.isONE()) {
+                a = PolyUtil.<BigInteger> basePseudoDivide(a, e);
+                d = PolyUtil.<BigInteger> basePseudoDivide(d, e);
             }
-            e = ufd.baseGcd(b,d);
+            e = ufd.baseGcd(b, d);
             //System.out.println("e   = " + e);
-            if ( !e.isONE() ) {
-                b = PolyUtil.<BigInteger>basePseudoDivide(b,e);
-                d = PolyUtil.<BigInteger>basePseudoDivide(d,e);
+            if (!e.isONE()) {
+                b = PolyUtil.<BigInteger> basePseudoDivide(b, e);
+                d = PolyUtil.<BigInteger> basePseudoDivide(d, e);
             }
             if (d.degree(0) < 1) {
                 continue;
@@ -877,35 +871,37 @@ public class HenselUtilTest extends TestCase {
             //System.out.println("A2 = " + A2);
 
             long tq = System.currentTimeMillis();
-            try { 
+            try {
                 A2.add(ap);
                 A2.add(bp);
-                GenPolynomial<ModInteger>[] L = HenselUtil.<ModInteger>liftExtendedEuclidean(ap,bp,k);
+                GenPolynomial<ModInteger>[] L = HenselUtil.<ModInteger> liftExtendedEuclidean(ap, bp, k);
                 //System.out.println("lift(a,b) = " + L[0] + ", " + L[1] + "\n");
 
-                lift = HenselUtil.<ModInteger>liftExtendedEuclidean(A,k);
+                lift = HenselUtil.<ModInteger> liftExtendedEuclidean(A, k);
                 tq = System.currentTimeMillis() - tq;
 
                 //System.out.println("");
                 //System.out.println("lift(a,b) = " + L[0] + ", " + L[1] );
                 //System.out.println("lift = " + lift);
 
-                As = PolyUtil.fromIntegerCoefficients(mfac, PolyUtil.integerFromModularCoefficients(dfac, lift));
+                As = PolyUtil.fromIntegerCoefficients(mfac, PolyUtil.integerFromModularCoefficients(dfac,
+                        lift));
                 //System.out.println("As   = " + As);
 
-                boolean il = HenselUtil.<ModInteger>isExtendedEuclideanLift(A,As);
+                boolean il = HenselUtil.<ModInteger> isExtendedEuclideanLift(A, As);
                 //System.out.println("islift = " + il);
                 assertTrue("lift(s0,s1,s2) mod p^k) = 1: ", il);
 
-                As2.add( L[1] );
-                As2.add( L[0] );
-                As2 = PolyUtil.fromIntegerCoefficients(mfac, PolyUtil.integerFromModularCoefficients(dfac, As2));
+                As2.add(L[1]);
+                As2.add(L[0]);
+                As2 = PolyUtil.fromIntegerCoefficients(mfac, PolyUtil.integerFromModularCoefficients(dfac,
+                        As2));
                 //System.out.println("As2   = " + As2);
 
-                il = HenselUtil.<ModInteger>isExtendedEuclideanLift(A2,As2);
+                il = HenselUtil.<ModInteger> isExtendedEuclideanLift(A2, As2);
                 //System.out.println("islift = " + il);
                 assertTrue("lift(s a + t b mod p^k) = 1: ", il);
-            } catch ( NoLiftingException e ) {
+            } catch (NoLiftingException e) {
                 // ok fail(""+e);
             }
             //System.out.println("time = " + tq);
@@ -928,7 +924,8 @@ public class HenselUtilTest extends TestCase {
 
         // BigInteger mi = m;
         ModIntegerRing pm = new ModIntegerRing(p, true);
-        GenPolynomialRing<ModInteger> mfac = new GenPolynomialRing<ModInteger>(pm, 1, to, new String[] { "x" });
+        GenPolynomialRing<ModInteger> mfac = new GenPolynomialRing<ModInteger>(pm, 1, to,
+                new String[] { "x" });
 
         dfac = new GenPolynomialRing<BigInteger>(m, mfac);
         GreatestCommonDivisorAbstract<BigInteger> ufd = GCDFactory.getProxy(m);
@@ -960,11 +957,11 @@ public class HenselUtilTest extends TestCase {
                 ExpVector e = b.leadingExpVector();
                 b.doPutToMap(e, one);
             }
-            e = ufd.baseGcd(a,b);
+            e = ufd.baseGcd(a, b);
             //System.out.println("e   = " + e);
-            if ( !e.isONE() ) {
-                a = PolyUtil.<BigInteger>basePseudoDivide(a,e);
-                b = PolyUtil.<BigInteger>basePseudoDivide(b,e);
+            if (!e.isONE()) {
+                a = PolyUtil.<BigInteger> basePseudoDivide(a, e);
+                b = PolyUtil.<BigInteger> basePseudoDivide(b, e);
             }
             if (a.degree(0) < 1) {
                 a = dfac.parse("(x^3 + 20 x^2 - 313131)");
@@ -982,7 +979,7 @@ public class HenselUtilTest extends TestCase {
             }
             ep = ap.gcd(bp);
             //System.out.println("ep  = " + ep);
-            if ( !ep.isONE() ) {
+            if (!ep.isONE()) {
                 continue;
             }
             d = dfac.random(kl + 30 * i, ll + 5, el + 4, q).abs();
@@ -991,17 +988,17 @@ public class HenselUtilTest extends TestCase {
                 ExpVector e = d.leadingExpVector();
                 d.doPutToMap(e, one);
             }
-            e = ufd.baseGcd(a,d);
+            e = ufd.baseGcd(a, d);
             //System.out.println("e   = " + e);
-            if ( !e.isONE() ) {
-                a = PolyUtil.<BigInteger>basePseudoDivide(a,e);
-                d = PolyUtil.<BigInteger>basePseudoDivide(d,e);
+            if (!e.isONE()) {
+                a = PolyUtil.<BigInteger> basePseudoDivide(a, e);
+                d = PolyUtil.<BigInteger> basePseudoDivide(d, e);
             }
-            e = ufd.baseGcd(b,d);
+            e = ufd.baseGcd(b, d);
             //System.out.println("e   = " + e);
-            if ( !e.isONE() ) {
-                b = PolyUtil.<BigInteger>basePseudoDivide(b,e);
-                d = PolyUtil.<BigInteger>basePseudoDivide(d,e);
+            if (!e.isONE()) {
+                b = PolyUtil.<BigInteger> basePseudoDivide(b, e);
+                d = PolyUtil.<BigInteger> basePseudoDivide(d, e);
             }
             if (d.degree(0) < 1) {
                 d = dfac.parse("(x^2 + 22 x - 33)");
@@ -1073,8 +1070,8 @@ public class HenselUtilTest extends TestCase {
             //System.out.println("A  = " + A);
 
             long tq = System.currentTimeMillis();
-            try { 
-                lift = HenselUtil.<ModInteger>liftHenselMonic(c,A,k);
+            try {
+                lift = HenselUtil.<ModInteger> liftHenselMonic(c, A, k);
                 tq = System.currentTimeMillis() - tq;
 
                 //System.out.println("\nk  = " + k);
@@ -1100,7 +1097,7 @@ public class HenselUtilTest extends TestCase {
                 //System.out.println("L1*L2 = " + L.get(0).multiply(L.get(1)));
                 //System.out.println("L3*L4 = " + L.get(2).multiply(L.get(3)));
 
-            } catch ( NoLiftingException e ) {
+            } catch (NoLiftingException e) {
                 // ok fail(""+e);
             }
             //System.out.println("time = " + tq);

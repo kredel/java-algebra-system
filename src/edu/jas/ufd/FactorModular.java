@@ -15,23 +15,20 @@ import java.util.TreeSet;
 import org.apache.log4j.Logger;
 
 import edu.jas.arith.BigInteger;
-import edu.jas.arith.ModInteger;
-import edu.jas.arith.ModIntegerRing;
-import edu.jas.arith.ModLong;
 import edu.jas.arith.ModLongRing;
 import edu.jas.arith.Modular;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
-import edu.jas.structure.Power;
 import edu.jas.structure.GcdRingElem;
-import edu.jas.structure.RingFactory;
 import edu.jas.structure.ModularRingFactory;
+import edu.jas.structure.Power;
+import edu.jas.structure.RingFactory;
 
 
 /**
- * Modular coefficients factorization algorithms.
- * This class implements factorization methods for polynomials over (prime) modular integers.
+ * Modular coefficients factorization algorithms. This class implements
+ * factorization methods for polynomials over (prime) modular integers.
  * @author Heinz Kredel
  */
 
@@ -45,15 +42,15 @@ public class FactorModular<MOD extends GcdRingElem<MOD> & Modular> extends Facto
 
 
     /**
-     * No argument constructor, do not use. 
+     * No argument constructor, do not use.
      */
     private FactorModular() {
-        this( (RingFactory<MOD>) (Object) new ModLongRing(13,true) ); // hack, 13 unimportant
+        this((RingFactory<MOD>) (Object) new ModLongRing(13, true)); // hack, 13 unimportant
     }
 
 
     /**
-     * Constructor. 
+     * Constructor.
      * @param cfac coefficient ring factory.
      */
     public FactorModular(RingFactory<MOD> cfac) {
@@ -64,8 +61,8 @@ public class FactorModular<MOD extends GcdRingElem<MOD> & Modular> extends Facto
     /**
      * GenPolynomial base distinct degree factorization.
      * @param P squarefree and monic GenPolynomial.
-     * @return [e_1 -&gt; p_1, ..., e_k -&gt; p_k] with P = prod_{i=1,...,k} p_i and
-     *         p_i has only irreducible factors of degree e_i.
+     * @return [e_1 -&gt; p_1, ..., e_k -&gt; p_k] with P = prod_{i=1,...,k} p_i
+     *         and p_i has only irreducible factors of degree e_i.
      */
     public SortedMap<Long, GenPolynomial<MOD>> baseDistinctDegreeFactors(GenPolynomial<MOD> P) {
         if (P == null) {
@@ -138,7 +135,7 @@ public class FactorModular<MOD extends GcdRingElem<MOD> & Modular> extends Facto
             //throw new RuntimeException(this.getClass().getName() + " case p = 2 not implemented");
         }
         GenPolynomial<MOD> one = pfac.getONE();
-        GenPolynomial<MOD> t = pfac.univariate(0,1L);
+        GenPolynomial<MOD> t = pfac.univariate(0, 1L);
         GenPolynomial<MOD> r;
         GenPolynomial<MOD> h;
         GenPolynomial<MOD> f = P;
@@ -153,13 +150,13 @@ public class FactorModular<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         //System.out.println("d = " + d);
         d = d.shiftRight(1); // divide by 2
         do {
-            if ( p2 ) {
+            if (p2) {
                 h = t;
-                for ( int i = 1; i < degi; i++ ) {
-                    h = t.sum( h.multiply(h) );
+                for (int i = 1; i < degi; i++) {
+                    h = t.sum(h.multiply(h));
                     h = h.remainder(f);
                 }
-                t = t.multiply( pfac.univariate(0,2L) );
+                t = t.multiply(pfac.univariate(0, 2L));
                 //System.out.println("h = " + h);
             } else {
                 r = pfac.random(17, degi, 2 * degi, 1.0f);
@@ -207,21 +204,21 @@ public class FactorModular<MOD extends GcdRingElem<MOD> & Modular> extends Facto
             throw new IllegalArgumentException("ldcf(P) != 1: " + P);
         }
         SortedMap<Long, GenPolynomial<MOD>> dfacs = baseDistinctDegreeFactors(P);
-        if ( debug ) {
+        if (debug) {
             logger.info("dfacs    = " + dfacs);
             //System.out.println("dfacs    = " + dfacs);
         }
         for (Long e : dfacs.keySet()) {
             GenPolynomial<MOD> f = dfacs.get(e);
             List<GenPolynomial<MOD>> efacs = baseEqualDegreeFactors(f, e);
-            if ( debug ) {
-               logger.info("efacs " + e + "   = " + efacs);
-               //System.out.println("efacs " + e + "   = " + efacs);
+            if (debug) {
+                logger.info("efacs " + e + "   = " + efacs);
+                //System.out.println("efacs " + e + "   = " + efacs);
             }
             factors.addAll(efacs);
         }
         //System.out.println("factors  = " + factors);
-        factors = PolyUtil.<MOD>monic(factors);
+        factors = PolyUtil.<MOD> monic(factors);
         SortedSet<GenPolynomial<MOD>> ss = new TreeSet<GenPolynomial<MOD>>(factors);
         //System.out.println("sorted   = " + ss);
         factors.clear();

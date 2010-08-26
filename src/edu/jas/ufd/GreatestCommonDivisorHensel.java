@@ -8,11 +8,9 @@ package edu.jas.ufd;
 import org.apache.log4j.Logger;
 
 import edu.jas.arith.BigInteger;
-import edu.jas.arith.Modular;
-import edu.jas.arith.ModLong;
-import edu.jas.arith.ModLongRing;
-import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
+import edu.jas.arith.ModLongRing;
+import edu.jas.arith.Modular;
 import edu.jas.arith.PrimeList;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
@@ -28,8 +26,8 @@ import edu.jas.structure.ModularRingFactory;
  * @author Heinz Kredel
  */
 
-public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
-        extends GreatestCommonDivisorSubres<BigInteger> {
+public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular> extends
+        GreatestCommonDivisorSubres<BigInteger> {
 
 
     private static final Logger logger = Logger.getLogger(GreatestCommonDivisorHensel.class);
@@ -149,7 +147,7 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
             }
             // initialize coefficient factory and map normalization factor
             //cofac = new ModIntegerRing(p, true);
-            if ( ModLongRing.MAX_LONG.compareTo( p ) > 0 ) {
+            if (ModLongRing.MAX_LONG.compareTo(p) > 0) {
                 cofac = (ModularRingFactory) new ModLongRing(p, true);
             } else {
                 cofac = (ModularRingFactory) new ModIntegerRing(p, true);
@@ -225,12 +223,12 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
                 System.out.println("cn  = " + cn);
             }
             try {
-                if (quadratic) { 
+                if (quadratic) {
                     lift = HenselUtil.liftHenselQuadratic(crq, cn, cm, cmf, sm, tm);
                 } else {
                     lift = HenselUtil.liftHensel(crq, cn, cm, cmf, sm, tm);
                 }
-            } catch(NoLiftingException nle) {
+            } catch (NoLiftingException nle) {
                 logger.info("giving up on Hensel gcd reverting to Subres gcd " + nle);
                 return super.baseGcd(P, S);
             }

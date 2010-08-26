@@ -6,31 +6,18 @@ package edu.jas.ufd;
 
 
 import java.util.SortedMap;
-import java.util.List;
-
-import org.apache.log4j.BasicConfigurator;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import edu.jas.application.Quotient;
-import edu.jas.application.QuotientRing;
-import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
-import edu.jas.arith.Modular;
-import edu.jas.arith.ModLong;
-import edu.jas.arith.ModLongRing;
-import edu.jas.arith.ModInteger;
-import edu.jas.arith.ModIntegerRing;
-import edu.jas.arith.PrimeList;
 import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.TermOrder;
-import edu.jas.structure.GcdRingElem;
 
 
 /**

@@ -6,29 +6,24 @@ package edu.jas.application;
 
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.log4j.Logger;
 
-import edu.jas.gb.GroebnerBase;
-import edu.jas.gb.GroebnerBasePseudoSeq;
 import edu.jas.gb.GBFactory;
+import edu.jas.gb.GroebnerBase;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
-
-import edu.jas.ufd.SquarefreeFactory;
-import edu.jas.ufd.Squarefree;
 import edu.jas.ufd.SquarefreeAbstract;
+import edu.jas.ufd.SquarefreeFactory;
 
 
 /**
- * Comprehensive Groebner Base sequential algorithm. Implements faithful comprehensive
- * Groebner bases via Groebner systems and CGB test.
+ * Comprehensive Groebner Base sequential algorithm. Implements faithful
+ * comprehensive Groebner bases via Groebner systems and CGB test.
  * @param <C> coefficient type
  * @author Heinz Kredel
  */
@@ -37,16 +32,14 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
 /* extends GroebnerBaseAbstract<GenPolynomial<C>> */{
 
 
-    private static final Logger logger = Logger
-            .getLogger(ComprehensiveGroebnerBaseSeq.class);
+    private static final Logger logger = Logger.getLogger(ComprehensiveGroebnerBaseSeq.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();
 
 
     /**
-     * Squarefree for coefficient content and primitive
-     * parts.
+     * Squarefree for coefficient content and primitive parts.
      */
     protected final SquarefreeAbstract<C> engine;
 
@@ -90,7 +83,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         cofac = rf;
         // selection for C but used for R:
         //engine e = GCDFactory.<C> getImplementation(cofac);
-        engine = SquarefreeFactory.<C>getImplementation(rf);
+        engine = SquarefreeFactory.<C> getImplementation(rf);
     }
 
 
@@ -318,14 +311,15 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
      */
     // @Override
     public boolean isCGB(GroebnerSystem<C> F) {
-        return isGB( F.getCGB() );
+        return isGB(F.getCGB());
     }
 
 
     /**
      * Comprehensive-Groebner system and base test.
      * @param F Groebner system.
-     * @return true, if F is a Comprehensive-Groebner system and base, else false.
+     * @return true, if F is a Comprehensive-Groebner system and base, else
+     *         false.
      */
     // @Override
     public boolean isGB(GroebnerSystem<C> F) {
@@ -346,7 +340,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         }
         List<ColoredSystem<C>> CSp = new ArrayList<ColoredSystem<C>>();
         if (F.size() == 0) {
-            return new GroebnerSystem<C>( CSp );
+            return new GroebnerSystem<C>(CSp);
         }
         // extract coefficient factory
         GenPolynomial<GenPolynomial<C>> f = F.get(0);
@@ -384,11 +378,9 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         while (CSs.size() > 0) {
             cs = CSs.get(0); // remove(0);
             si++;
-            logger.info("poped GBsys number    " + si + " with condition = "
-                    + cs.condition);
-            logger.info("poped GBsys (remaining " + (CSs.size() - 1)
-                    + ") with pairlist  = " + cs.pairlist);
-            if ( !cs.isDetermined() ) {
+            logger.info("poped GBsys number    " + si + " with condition = " + cs.condition);
+            logger.info("poped GBsys (remaining " + (CSs.size() - 1) + ") with pairlist  = " + cs.pairlist);
+            if (!cs.isDetermined()) {
                 cs = cs.reDetermine();
             }
             pairlist = cs.pairlist;
@@ -452,16 +444,16 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
                     logger.info("#new systems       = " + ncs.size());
                     int yi = CSs.size();
                     for (ColoredSystem<C> x : ncs) {
-                        if ( !x.isDetermined() ) {
+                        if (!x.isDetermined()) {
                             x = x.reDetermine();
                         }
                         CSs = x.addToList(CSs);
                     }
-                    logger.info("#new systems added = " + (CSs.size()-yi));
+                    logger.info("#new systems added = " + (CSs.size() - yi));
                 }
             }
             // all s-pols reduce to zero in this branch
-            if ( !cs.isDetermined() ) {
+            if (!cs.isDetermined()) {
                 cs = cs.reDetermine();
             }
             CSb.add(cs);
@@ -472,12 +464,12 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         CSh = new ArrayList<ColoredSystem<C>>();
         for (ColoredSystem<C> x : CSb) {
             // System.out.println("G = " + x.list );
-            if ( !x.isDetermined() ) {
+            if (!x.isDetermined()) {
                 x = x.reDetermine();
             }
             cs = minimalGB(x);
             // System.out.println("min(G) = " + cs.list );
-            if ( !cs.isDetermined() ) {
+            if (!cs.isDetermined()) {
                 cs = cs.reDetermine();
             }
             // cs = new ColoredSystem<C>( x.condition, G, x.pairlist );
@@ -486,7 +478,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
             logger.info(x.pairlist.toString());
         }
         CSb = new ArrayList<ColoredSystem<C>>(CSh);
-        return new GroebnerSystem<C>( CSb );
+        return new GroebnerSystem<C>(CSb);
     }
 
 
@@ -498,8 +490,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
      * @return list of colored systems, the conditions extending the condition
      *         of cs.
      */
-    public List<ColoredSystem<C>> determineAddPairs(ColoredSystem<C> cs,
-                                                    ColorPolynomial<C> A) {
+    public List<ColoredSystem<C>> determineAddPairs(ColoredSystem<C> cs, ColorPolynomial<C> A) {
         List<ColoredSystem<C>> NCS = new ArrayList<ColoredSystem<C>>();
         if (A == null || A.isZERO()) {
             // NCS.add( cs );
@@ -507,7 +498,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         }
         List<ColorPolynomial<C>> S = cs.list;
         Condition<C> cond = cs.condition; // .clone(); done in Condition
-                                            // itself
+        // itself
         OrderedCPairlist<C> pl = cs.pairlist;
 
         List<ColorPolynomial<C>> Sp;
@@ -527,10 +518,10 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
                 OrderedCPairlist<C> PL = pl.clone();
                 NS = new ColoredSystem<C>(cnd, Sp, PL);
                 try {
-                    if ( !NS.isDetermined() ) {
+                    if (!NS.isDetermined()) {
                         NS = NS.reDetermine();
                     }
-                } catch(RuntimeException e) {
+                } catch (RuntimeException e) {
                     System.out.println("Contradiction in NS_0 = " + NS);
                     //e.printStackTrace();
                     continue;
@@ -549,10 +540,10 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
             PL.put(nz);
             NS = new ColoredSystem<C>(cnd, Sp, PL);
             try {
-                if ( !NS.isDetermined() ) {
+                if (!NS.isDetermined()) {
                     NS = NS.reDetermine();
                 }
-            } catch(RuntimeException e) {
+            } catch (RuntimeException e) {
                 System.out.println("Contradiction in NS = " + NS);
                 //e.printStackTrace();
                 continue;
@@ -616,7 +607,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
             // System.out.println("check " + b);
             if (false) {
                 if (a.red.leadingBaseCoefficient().isConstant()) { // dont drop
-                                                                    // these
+                    // these
                     F.add(a);
                     continue;
                 }

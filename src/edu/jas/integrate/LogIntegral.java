@@ -11,15 +11,12 @@ import java.util.List;
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.GenPolynomialRing;
-import edu.jas.poly.PolynomialList;
 import edu.jas.structure.GcdRingElem;
 
 
 /**
- * Container for the logarithmic part of a rational function integral.
- * num/den = sum( a_i ( der(d_i) / d_i ) )
- * integrate(num/den) = sum( a_i log ( d_i ) )
+ * Container for the logarithmic part of a rational function integral. num/den =
+ * sum( a_i ( der(d_i) / d_i ) ) integrate(num/den) = sum( a_i log ( d_i ) )
  * @author Heinz Kredel
  * @param <C> coefficient type
  */
@@ -28,7 +25,8 @@ public class LogIntegral<C extends GcdRingElem<C>> implements Serializable {
 
 
     /**
-     * Original numerator polynomial with coefficients from C and deg(num) &lt; deg(den).
+     * Original numerator polynomial with coefficients from C and deg(num) &lt;
+     * deg(den).
      */
     public final GenPolynomial<C> num;
 
@@ -40,25 +38,26 @@ public class LogIntegral<C extends GcdRingElem<C>> implements Serializable {
 
 
     /**
-     * List of numbers from C. 
+     * List of numbers from C.
      */
     public final List<C> cfactors;
 
 
     /**
-     * List of linear factors of the denominator with coefficients from C. 
+     * List of linear factors of the denominator with coefficients from C.
      */
     public final List<GenPolynomial<C>> cdenom;
 
 
     /**
-     * List of algebraic numbers of an algebraic field extension over C. 
+     * List of algebraic numbers of an algebraic field extension over C.
      */
     public final List<AlgebraicNumber<C>> afactors;
 
 
     /**
-     * List of factors of the denominator with coefficients from an AlgebraicNumberRing&lt;C&gt;. 
+     * List of factors of the denominator with coefficients from an
+     * AlgebraicNumberRing&lt;C&gt;.
      */
     public final List<GenPolynomial<AlgebraicNumber<C>>> adenom;
 
@@ -70,14 +69,11 @@ public class LogIntegral<C extends GcdRingElem<C>> implements Serializable {
      * @param cf list of elements a_i.
      * @param cd list of linear factors d_i of d.
      * @param af list of algebraic elements a_i.
-     * @param ad list of irreducible factors d_i of d with algebraic coefficients.
-     * n/d = sum( a_i ( der(d_i) / d_i ) )
+     * @param ad list of irreducible factors d_i of d with algebraic
+     *            coefficients. n/d = sum( a_i ( der(d_i) / d_i ) )
      */
-    public LogIntegral(GenPolynomial<C> n, GenPolynomial<C> d, 
-            List<C> cf,
-            List<GenPolynomial<C>> cd,
-            List<AlgebraicNumber<C>> af,
-            List<GenPolynomial<AlgebraicNumber<C>>> ad) {
+    public LogIntegral(GenPolynomial<C> n, GenPolynomial<C> d, List<C> cf, List<GenPolynomial<C>> cd,
+            List<AlgebraicNumber<C>> af, List<GenPolynomial<AlgebraicNumber<C>>> ad) {
         num = n;
         den = d;
         cfactors = cf;
@@ -94,39 +90,39 @@ public class LogIntegral<C extends GcdRingElem<C>> implements Serializable {
     @Override
     public String toString() {
         StringBuffer sb = new StringBuffer();
-//         sb.append("(" + num.toString() + ")");
-//         sb.append(" / ");
-//         sb.append("(" + den.toString() + ")");
-//         sb.append(" =\n");
+        //         sb.append("(" + num.toString() + ")");
+        //         sb.append(" / ");
+        //         sb.append("(" + den.toString() + ")");
+        //         sb.append(" =\n");
         boolean first = true;
-        for (int i = 0; i < cfactors.size(); i++ ) {
+        for (int i = 0; i < cfactors.size(); i++) {
             C cp = cfactors.get(i);
             if (first) {
                 first = false;
             } else {
                 sb.append(" + ");
             }
-            sb.append("("+cp.toString()+")");
+            sb.append("(" + cp.toString() + ")");
             GenPolynomial<C> p = cdenom.get(i);
-            sb.append(" log( "+p.toString()+")");
+            sb.append(" log( " + p.toString() + ")");
         }
-        if ( !first && afactors.size() > 0 ) {
+        if (!first && afactors.size() > 0) {
             sb.append(" + ");
         }
         first = true;
-        for (int i = 0; i < afactors.size(); i++ ) {
+        for (int i = 0; i < afactors.size(); i++) {
             if (first) {
                 first = false;
             } else {
                 sb.append(" + ");
             }
-            AlgebraicNumber<C> ap =  afactors.get(i);
+            AlgebraicNumber<C> ap = afactors.get(i);
             AlgebraicNumberRing<C> ar = ap.factory();
             //sb.append(" ## over " + ap.factory() + "\n");
             GenPolynomial<AlgebraicNumber<C>> p = adenom.get(i);
-            if ( p.degree(0) < ar.modul.degree(0) && ar.modul.degree(0) > 2 ) {
-                sb.append("sum_("+ar.getGenerator()+ " in ");
-                sb.append("rootOf(" + ar.modul  +") ) ");
+            if (p.degree(0) < ar.modul.degree(0) && ar.modul.degree(0) > 2) {
+                sb.append("sum_(" + ar.getGenerator() + " in ");
+                sb.append("rootOf(" + ar.modul + ") ) ");
             } else {
                 //sb.append("sum_("+ar+") ");
             }
@@ -157,7 +153,7 @@ public class LogIntegral<C extends GcdRingElem<C>> implements Serializable {
             }
             sb.append(cp.toString());
         }
-        if ( !first) {
+        if (!first) {
             sb.append(" linear denominators: ");
         }
         first = true;
@@ -169,7 +165,7 @@ public class LogIntegral<C extends GcdRingElem<C>> implements Serializable {
             }
             sb.append(cp.toString());
         }
-        if ( !first) {
+        if (!first) {
             sb.append("; ");
         }
         first = true;
@@ -182,7 +178,7 @@ public class LogIntegral<C extends GcdRingElem<C>> implements Serializable {
             sb.append(ap.toString());
             sb.append(" ## over " + ap.factory() + "\n");
         }
-        if ( !first) {
+        if (!first) {
             sb.append(" denominators: ");
         }
         first = true;
@@ -220,7 +216,7 @@ public class LogIntegral<C extends GcdRingElem<C>> implements Serializable {
             }
             sb.append(cp.toScript());
         }
-        if ( !first) {
+        if (!first) {
             sb.append(" linear denominators: ");
         }
         first = true;
@@ -232,7 +228,7 @@ public class LogIntegral<C extends GcdRingElem<C>> implements Serializable {
             }
             sb.append(cp.toScript());
         }
-        if ( !first) {
+        if (!first) {
             sb.append(", ");
         }
         first = true;
@@ -294,19 +290,19 @@ public class LogIntegral<C extends GcdRingElem<C>> implements Serializable {
             return false;
         }
         boolean t = num.equals(a.num) && den.equals(a.den);
-        if ( ! t ) {
+        if (!t) {
             return t;
         }
         t = cfactors.equals(a.cfactors);
-        if ( ! t ) {
+        if (!t) {
             return t;
         }
         t = cdenom.equals(a.cdenom);
-        if ( ! t ) {
+        if (!t) {
             return t;
         }
         t = afactors.equals(a.afactors);
-        if ( ! t ) {
+        if (!t) {
             return t;
         }
         t = adenom.equals(a.adenom);

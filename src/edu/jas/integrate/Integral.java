@@ -6,21 +6,17 @@ package edu.jas.integrate;
 
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
-import edu.jas.poly.AlgebraicNumber;
-import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.GenPolynomialRing;
-import edu.jas.poly.PolynomialList;
 import edu.jas.structure.GcdRingElem;
-import edu.jas.ufd.PartialFraction;
 
 
 /**
  * Container for a rational function integral, polynomial version.
- * integral(num/den) = pol + sum_rat( rat_i/rat_{i+1} ) + sum_log( a_i log ( d_i ) )
+ * integral(num/den) = pol + sum_rat( rat_i/rat_{i+1} ) + sum_log( a_i log ( d_i
+ * ) )
  * @author Heinz Kredel
  * @param <C> coefficient type
  */
@@ -41,7 +37,7 @@ public class Integral<C extends GcdRingElem<C>> implements Serializable {
 
 
     /**
-     * Integral of the polynomial part. 
+     * Integral of the polynomial part.
      */
     public final GenPolynomial<C> pol;
 
@@ -62,12 +58,22 @@ public class Integral<C extends GcdRingElem<C>> implements Serializable {
      * Constructor.
      * @param n numerator GenPolynomial over C.
      * @param d denominator GenPolynomial over C.
-     * @param p integral of polynomial part.
-     * n/d = 
+     * @param p integral of polynomial part. n/d =
      */
-    public Integral(GenPolynomial<C> n, GenPolynomial<C> d,
-            GenPolynomial<C> p) {
-        this(n,d,p, new ArrayList<GenPolynomial<C>>() );
+    public Integral(GenPolynomial<C> n, GenPolynomial<C> d, GenPolynomial<C> p) {
+        this(n, d, p, new ArrayList<GenPolynomial<C>>());
+    }
+
+
+    /**
+     * Constructor.
+     * @param n numerator GenPolynomial over C.
+     * @param d denominator GenPolynomial over C.
+     * @param p integral of polynomial part.
+     * @param rat list of rational integrals. n/d =
+     */
+    public Integral(GenPolynomial<C> n, GenPolynomial<C> d, GenPolynomial<C> p, List<GenPolynomial<C>> rat) {
+        this(n, d, p, rat, new ArrayList<LogIntegral<C>>());
     }
 
 
@@ -77,27 +83,9 @@ public class Integral<C extends GcdRingElem<C>> implements Serializable {
      * @param d denominator GenPolynomial over C.
      * @param p integral of polynomial part.
      * @param rat list of rational integrals.
-     * n/d = 
+     * @param log list of logarithmic part. n/d =
      */
-    public Integral(GenPolynomial<C> n, GenPolynomial<C> d,
-            GenPolynomial<C> p, 
-            List<GenPolynomial<C>> rat) {
-        this(n,d,p,rat, new ArrayList<LogIntegral<C>>() );
-    }
-
-
-    /**
-     * Constructor.
-     * @param n numerator GenPolynomial over C.
-     * @param d denominator GenPolynomial over C.
-     * @param p integral of polynomial part.
-     * @param rat list of rational integrals.
-     * @param log list of logarithmic part.
-     * n/d = 
-     */
-    public Integral(GenPolynomial<C> n, GenPolynomial<C> d,
-            GenPolynomial<C> p, 
-            List<GenPolynomial<C>> rat,
+    public Integral(GenPolynomial<C> n, GenPolynomial<C> d, GenPolynomial<C> p, List<GenPolynomial<C>> rat,
             List<LogIntegral<C>> log) {
         num = n;
         den = d;
@@ -114,42 +102,42 @@ public class Integral<C extends GcdRingElem<C>> implements Serializable {
     @Override
     public String toString() {
         StringBuffer sb = new StringBuffer();
-        sb.append("integral( (" + num.toString() );
+        sb.append("integral( (" + num.toString());
         sb.append(") / (");
         sb.append(den.toString() + ") )");
         sb.append(" =\n");
-        if ( ! pol.isZERO() ) {
+        if (!pol.isZERO()) {
             sb.append(pol.toString());
         }
         boolean first = true;
-        if ( rational.size() != 0 ) {
-            if ( ! pol.isZERO() ) {
-               sb.append(" + ");
+        if (rational.size() != 0) {
+            if (!pol.isZERO()) {
+                sb.append(" + ");
             }
-            for ( int i = 0; i < rational.size(); i++ ) {
-               if ( first ) {
-                   first = false;
-               } else {
-                   sb.append(" + ");
-               }
-               sb.append("("+ rational.get(i++)+")/(");
-               sb.append(rational.get(i)+")");
+            for (int i = 0; i < rational.size(); i++) {
+                if (first) {
+                    first = false;
+                } else {
+                    sb.append(" + ");
+                }
+                sb.append("(" + rational.get(i++) + ")/(");
+                sb.append(rational.get(i) + ")");
             }
         }
-        if ( logarithm.size() != 0 ) {
-            if ( !pol.isZERO() || rational.size() != 0 ) {
-              sb.append(" + ");
-           }
-           first = true;
-           for ( LogIntegral<C> pf : logarithm ) {
-               if ( first ) {
-                   first = false;
-               } else {
-                   sb.append(" + ");
-               }
-               sb.append(pf);
-           }
-           sb.append("\n");
+        if (logarithm.size() != 0) {
+            if (!pol.isZERO() || rational.size() != 0) {
+                sb.append(" + ");
+            }
+            first = true;
+            for (LogIntegral<C> pf : logarithm) {
+                if (first) {
+                    first = false;
+                } else {
+                    sb.append(" + ");
+                }
+                sb.append(pf);
+            }
+            sb.append("\n");
         }
         return sb.toString();
     }

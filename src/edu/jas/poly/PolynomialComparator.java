@@ -4,14 +4,11 @@
 
 package edu.jas.poly;
 
+
 import java.io.Serializable;
 import java.util.Comparator;
 
 import edu.jas.structure.RingElem;
-
-import edu.jas.poly.ExpVector;
-import edu.jas.poly.TermOrder;
-import edu.jas.poly.GenPolynomial;
 
 
 /**
@@ -19,19 +16,22 @@ import edu.jas.poly.GenPolynomial;
  * @param <C> coefficient type
  * @author Heinz Kredel.
  */
-public class PolynomialComparator<C extends RingElem<C> > 
-             implements Serializable, Comparator<GenPolynomial<C>> {
+public class PolynomialComparator<C extends RingElem<C>> implements Serializable,
+        Comparator<GenPolynomial<C>> {
 
 
     public final TermOrder tord;
+
+
     public final boolean reverse;
+
 
     /**
      * Constructor.
      * @param t TermOrder.
      * @param reverse flag if reverse ordering is requested.
      */
-    public PolynomialComparator(TermOrder t, boolean reverse){
+    public PolynomialComparator(TermOrder t, boolean reverse) {
         tord = t;
         this.reverse = reverse;
     }
@@ -45,9 +45,9 @@ public class PolynomialComparator<C extends RingElem<C> >
      */
     public int compare(GenPolynomial<C> p1, GenPolynomial<C> p2) {
         // check if p1.tord = p2.tord = tord ?
-        int s = p1.compareTo( p2 );
+        int s = p1.compareTo(p2);
         //System.out.println("p1.compareTo(p2) = " + s);
-        if ( reverse ) {
+        if (reverse) {
             return -s;
         } else {
             return s;
@@ -60,17 +60,18 @@ public class PolynomialComparator<C extends RingElem<C> >
      * @param o other object.
      * @return true if this = o, else false.
      */
+    @Override
     public boolean equals(Object o) {
         PolynomialComparator pc = null;
         try {
             pc = (PolynomialComparator) o;
-        } catch ( ClassCastException ignored ) {
+        } catch (ClassCastException ignored) {
             return false;
         }
-        if ( pc == null ) {
+        if (pc == null) {
             return false;
         }
-        return tord.equals( pc.tord );
+        return tord.equals(pc.tord);
     }
 
 

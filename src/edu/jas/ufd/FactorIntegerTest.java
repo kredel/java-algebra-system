@@ -6,32 +6,18 @@ package edu.jas.ufd;
 
 
 import java.util.SortedMap;
-import java.util.List;
-
-import org.apache.log4j.BasicConfigurator;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import edu.jas.application.Quotient;
-import edu.jas.application.QuotientRing;
 import edu.jas.arith.BigInteger;
-import edu.jas.arith.BigRational;
-import edu.jas.arith.Modular;
-import edu.jas.arith.ModLong;
-import edu.jas.arith.ModLongRing;
 import edu.jas.arith.ModInteger;
-import edu.jas.arith.ModIntegerRing;
-import edu.jas.arith.PrimeList;
 import edu.jas.kern.ComputerThreads;
-import edu.jas.poly.AlgebraicNumber;
-import edu.jas.poly.AlgebraicNumberRing;
+import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.TermOrder;
-import edu.jas.poly.ExpVector;
-import edu.jas.structure.GcdRingElem;
 
 
 /**
@@ -111,7 +97,8 @@ public class FactorIntegerTest extends TestCase {
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(4);
         BigInteger one = cfac.getONE();
-        GenPolynomialRing<BigInteger> pfac = new GenPolynomialRing<BigInteger>(cfac, 1, to, new String[] { "x" });
+        GenPolynomialRing<BigInteger> pfac = new GenPolynomialRing<BigInteger>(cfac, 1, to,
+                new String[] { "x" });
         FactorAbstract<BigInteger> fac = new FactorInteger<ModInteger>();
 
         for (int i = 1; i < 3; i++) {
@@ -241,12 +228,13 @@ public class FactorIntegerTest extends TestCase {
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(4);
         BigInteger one = cfac.getONE();
-        GenPolynomialRing<BigInteger> pfac = new GenPolynomialRing<BigInteger>(cfac, 1, to, new String[] { "x" });
+        GenPolynomialRing<BigInteger> pfac = new GenPolynomialRing<BigInteger>(cfac, 1, to,
+                new String[] { "x" });
         FactorAbstract<BigInteger> fac = new FactorInteger<ModInteger>();
 
         for (int i = 1; i < 2; i++) {
             int facs = 0;
-            GenPolynomial<BigInteger> a = pfac.random(kl,ll*(i+1),el*(i+1),q);
+            GenPolynomial<BigInteger> a = pfac.random(kl, ll * (i + 1), el * (i + 1), q);
             a = pfac.parse("( x^8 - 40 x^6 + 352 x^4 - 960 x^2 + 576 )"); // Swinnerton-Dyer example
             if (a.isConstant()) {
                 continue;
