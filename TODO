@@ -38,7 +38,9 @@ issues to consider:
 
 - refactor the Quotient class to edu.jas.ufd package
 
-- implement real and complex roots with other methods, e.g. after Uspensky or Rolle
+- implement real roots with other methods, e.g. after Uspensky or Rolle
+
+- implement complex roots with other methods, e.g. after Collins and Krandick
 
 - refactor method names for groovy operator overloading, make examples for usage
 
