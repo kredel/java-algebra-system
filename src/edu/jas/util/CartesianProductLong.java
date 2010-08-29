@@ -13,6 +13,7 @@ import java.util.NoSuchElementException;
 
 /**
  * Cartesian product for Long with iterator.
+ * Similar to CartesianProduct but returns only tuples of given total degree.
  * @author Heinz Kredel
  */
 public class CartesianProductLong implements Iterable<List<Long>> {
@@ -53,7 +54,8 @@ public class CartesianProductLong implements Iterable<List<Long>> {
 
 
 /**
- * Cartesian product iterator.
+ * Cartesian product iterator for Longs.
+ * Similar to CartesianProductIterator but returns only tuples of given total degree.
  * @author Heinz Kredel
  */
 class CartesianProductLongIterator implements Iterator<List<Long>> {
@@ -93,6 +95,10 @@ class CartesianProductLongIterator implements Iterator<List<Long>> {
         empty = false;
         for (LongIterable ci : comps) {
             LongIterator it = (LongIterator) ci.iterator();
+            if ( it.getUpperBound() < this.upperBound ) {
+                throw new IllegalArgumentException("each iterator (" + it.getUpperBound() 
+                                              + ") must be able to reach total upper bound " + upperBound);
+            }
             if (!it.hasNext()) {
                 empty = true;
                 current.clear();
@@ -114,10 +120,9 @@ class CartesianProductLongIterator implements Iterator<List<Long>> {
             current.set(current.size()-1,d);
         }
         if ( totalDegree(current) != upperBound ) {
-            System.out.println("current = " + current);
             empty = true;
             current.clear();
-	}
+        }
         //System.out.println("current = " + current);
     }
 
@@ -140,7 +145,7 @@ class CartesianProductLongIterator implements Iterator<List<Long>> {
             throw new NoSuchElementException("invalid call of next()");
         }
         List<Long> res = new ArrayList<Long>(current);
-        int waist = 0;
+        //int waist = 0;
         while ( true ) {
             // search iterator which hasNext
             int i = compit.size() - 1;
@@ -187,7 +192,7 @@ class CartesianProductLongIterator implements Iterator<List<Long>> {
             }
             //System.out.println("current = " + current + ", td = " + td);
             if ( td > upperBound ) {
-                waist++;
+                //waist++;
                 continue;
             }
             // adjust last component to total degree
@@ -205,7 +210,7 @@ class CartesianProductLongIterator implements Iterator<List<Long>> {
                 //System.out.println("inner waist = " + waist);
                 return res;
             }
-            waist++;
+            //waist++;
             // continue search
         }
         //return res;

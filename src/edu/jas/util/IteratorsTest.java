@@ -428,7 +428,7 @@ public class IteratorsTest extends TestCase {
         Map<Long,Set<ExpVector>> degset = new TreeMap<Long,Set<ExpVector>>();
 
         long t = 0L;
-        for ( long k = 0; k < 16; k++ ) {
+        for ( long k = 0; k < 14; k++ ) {
             LongIterable li = new LongIterable();
             li.setNonNegativeIterator();
             li.setUpperBound(k);
@@ -437,6 +437,9 @@ public class IteratorsTest extends TestCase {
                 tlist.add(li); // can reuse li
             }
             long kdeg = k;
+            //if ( kdeg > 5 ) { // kdeg < k ok but kdeg > k not allowed
+            //    kdeg -= 2;
+            //}
             Iterable<List<Long>> ib = new CartesianProductLong(tlist,kdeg);
             //System.out.println("kdeg = " + kdeg);
             for ( List<Long> i : ib ) {
@@ -468,6 +471,33 @@ public class IteratorsTest extends TestCase {
             //System.out.println("#es = " + es.size() + ", deg = " + es.iterator().next().totalDeg());
         }
         assertTrue("#set", set.size() == t );
+    }
+
+
+    /**
+     * Test total degree ExpVector iterator.
+     * 
+     */
+    public void testTotalDegExpVectorIterator() {
+        int n = 4;
+
+        Set<ExpVector> set = new TreeSet<ExpVector>( (new TermOrder()).getDescendComparator() );
+ 
+        ExpVectorIterable eiter = new ExpVectorIterable(n);
+        //ExpVectorIterable eiter = new ExpVectorIterable(n,5);
+        //ExpVectorIterable eiter = new ExpVectorIterable(n,true,5);
+        long t = 0; 
+        for ( ExpVector e : eiter ) {
+            //System.out.println("e = " + e + ", deg = " + e.totalDeg());
+            t++;
+            if ( t > 500L ) { 
+                //System.out.println("i = " + i);
+                break;
+            }
+            assertFalse("e in set", set.contains(e) );
+            set.add(e);
+        }
+
     }
 
 }

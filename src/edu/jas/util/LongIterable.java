@@ -45,6 +45,14 @@ public class LongIterable implements Iterable<Long> {
     }
 
 
+    /** Get the upper bound for the iterator.
+     * @return the upper bound for the iterator elements. 
+     */
+    public long getUpperBound() {
+        return upperBound;
+    }
+
+
     /** Set the iteration algorithm to all elements.
      */
     public void setAllIterator() {
@@ -97,6 +105,14 @@ class LongIterator implements Iterator<Long> {
      */
     public void setUpperBound(long ub) {
         upperBound = ub;
+    }
+
+
+    /** Get the upper bound for the iterator.
+     * @return the upper bound for the iterator elements. 
+     */
+    public long getUpperBound() {
+        return upperBound;
     }
 
 
