@@ -11,6 +11,8 @@ import java.util.Set;
 import java.util.HashSet;
 import java.util.TreeSet;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.TreeMap;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -410,6 +412,61 @@ public class IteratorsTest extends TestCase {
             }
         }
         //System.out.println("set = " + set);
+        assertTrue("#set", set.size() == t );
+    }
+
+
+    /**
+     * Test total degree ExpVector iterator.
+     * 
+     */
+    public void testTotalDegExpVector() {
+        int n = 4;
+
+        Set<ExpVector> set = new TreeSet<ExpVector>( (new TermOrder()).getDescendComparator() );
+
+        Map<Long,Set<ExpVector>> degset = new TreeMap<Long,Set<ExpVector>>();
+
+        long t = 0L;
+        for ( long k = 0; k < 16; k++ ) {
+            LongIterable li = new LongIterable();
+            li.setNonNegativeIterator();
+            li.setUpperBound(k);
+            List<LongIterable> tlist = new ArrayList<LongIterable>(n);
+            for (int i = 0; i < n; i++) {
+                tlist.add(li); // can reuse li
+            }
+            long kdeg = k;
+            Iterable<List<Long>> ib = new CartesianProductLong(tlist,kdeg);
+            //System.out.println("kdeg = " + kdeg);
+            for ( List<Long> i : ib ) {
+                //System.out.println("i = " + i);
+                ExpVector e = ExpVector.create(i);
+                long tdeg = e.totalDeg();
+                //System.out.println("e = " + e + ", deg = " + tdeg);
+                assertTrue("tdeg == k", tdeg == kdeg );
+                Set<ExpVector> es = degset.get(tdeg);
+                if ( es == null ) {
+                    es = new TreeSet<ExpVector>( (new TermOrder()).getDescendComparator() );
+                    degset.put(tdeg,es);
+                }
+                es.add(e);
+                //assertFalse("e in set", set.contains(e) );
+                set.add(e);
+                t++;
+                if ( t > 500000L ) { 
+                    //System.out.println("i = " + i);
+                    break;
+                }
+            }
+        }
+        //System.out.println("waste = " + w + ", of " + t);
+        //System.out.println("set = " + set);
+        //System.out.println("degset = " + degset);
+        for ( Set<ExpVector> es : degset.values() ) {
+            //System.out.println("#es = " + es.size() + ", es = " + es);
+            //System.out.println("#es = " + es.size() + ", deg = " + es.iterator().next().totalDeg());
+        }
         assertTrue("#set", set.size() == t );
     }
 

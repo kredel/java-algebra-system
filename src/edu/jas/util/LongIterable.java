@@ -16,6 +16,12 @@ import java.util.NoSuchElementException;
 public class LongIterable implements Iterable<Long> {
 
 
+    private boolean nonNegative = true;
+
+
+    private long upperBound = Long.MAX_VALUE;
+
+
     /**
      * Constructor.
      */
@@ -23,7 +29,20 @@ public class LongIterable implements Iterable<Long> {
     }
 
 
-    private boolean nonNegative = true;
+    /**
+     * Constructor.
+     */
+    public LongIterable(long ub) {
+        upperBound = ub;
+    }
+
+
+    /** Set the upper bound for the iterator.
+     * @param ub an upper bound for the iterator elements. 
+     */
+    public void setUpperBound(long ub) {
+        upperBound = ub;
+    }
 
 
     /** Set the iteration algorithm to all elements.
@@ -45,7 +64,7 @@ public class LongIterable implements Iterable<Long> {
      * @return an iterator.
      */
     public Iterator<Long> iterator() {
-        return new LongIterator(nonNegative);
+        return new LongIterator(nonNegative,upperBound);
     }
 
 }
@@ -70,23 +89,37 @@ class LongIterator implements Iterator<Long> {
     final boolean nonNegative;
 
 
+    protected long upperBound;
+
+
+    /** Set the upper bound for the iterator.
+     * @param ub an upper bound for the iterator elements. 
+     */
+    public void setUpperBound(long ub) {
+        upperBound = ub;
+    }
+
+
     /**
      * Long iterator constructor.
      */
     public LongIterator() {
-        this(false);
+        this(false,Long.MAX_VALUE);
     }
 
 
     /**
      * Long iterator constructor.
      * @param nn true for an iterator over non-negative longs, false for all elements iterator.
+     * @param ub an upper bound for the entrys.
      */
-    public LongIterator(boolean nn) {
+    public LongIterator(boolean nn, long ub) {
         current = 0L;
         //System.out.println("current = " + current);
         empty = false;
         nonNegative = nn;
+        upperBound = ub;
+        //System.out.println("upperBound = " + upperBound);
     }
 
 
@@ -116,7 +149,7 @@ class LongIterator implements Iterator<Long> {
             current = -current;
             current++;
         }
-        if ( current == Long.MAX_VALUE ) {
+        if ( current > upperBound ) {
             empty = true;
         }
         return res;
