@@ -56,7 +56,7 @@ public class ExpVectorIterable implements Iterable<ExpVector> {
                   false, if only elements of exact upper bund are to be processed.
      * @param ub upper bound for the components.
      */
-    protected ExpVectorIterable(int nv, boolean all, long ub) {
+    public ExpVectorIterable(int nv, boolean all, long ub) {
         upperBound = ub;
         infinite = all;
         nvar = nv;
@@ -103,6 +103,15 @@ class ExpVectorIterator implements Iterator<ExpVector> {
     ExpVector current;
 
 
+    Iterator<List<Long>> liter;
+
+
+    protected int totalDegree;
+
+
+    protected boolean empty;
+
+
     final long upperBound;
 
 
@@ -110,16 +119,6 @@ class ExpVectorIterator implements Iterator<ExpVector> {
 
 
     final int nvar;
-
-
-    Iterator<List<Long>> liter;
-
-
-    protected long totalDegree;
-
-
-    protected boolean empty;
-
 
 
     /**
@@ -149,32 +148,33 @@ class ExpVectorIterator implements Iterator<ExpVector> {
      * @param ub an upper bound for the entrys.
      */
     protected ExpVectorIterator(int nv, boolean inf, long ub) {
-        nvar = nv;
-        infinite = inf;
+        infinite = inf; 
         upperBound = ub;
         if (upperBound < 0L) {
             throw new IllegalArgumentException("negative upper bound not allowed");
         }
-        long totalDegree = 0L;
+        totalDegree = 0;
         if ( !infinite ) {
-            totalDegree = upperBound;
+            totalDegree = (int)upperBound;
         }
+        //System.out.println("totalDegree = " + totalDegree + ", upperBound = " + upperBound);
         LongIterable li = new LongIterable();
         li.setNonNegativeIterator();
         li.setUpperBound(totalDegree);
-        List<LongIterable> tlist = new ArrayList<LongIterable>(nvar);
-        for (int i = 0; i < nvar; i++) {
+        List<LongIterable> tlist = new ArrayList<LongIterable>(nv);
+        for (int i = 0; i < nv; i++) {
             tlist.add(li); // can reuse li
         }
         Iterable<List<Long>> ib = new CartesianProductLong(tlist,totalDegree);
         liter = ib.iterator();
         empty = (totalDegree > upperBound) || !liter.hasNext();
-        current = ExpVector.create(nvar);
+        current = ExpVector.create(nv);
         if ( !empty ) {
             List<Long> el = liter.next();
             current = ExpVector.create(el);
             //System.out.println("current = " + current);
         }
+        nvar = nv;
     }
 
 
@@ -183,7 +183,7 @@ class ExpVectorIterator implements Iterator<ExpVector> {
      * @return true if the iteration has more ExpVectors, else false.
      */
     public synchronized boolean hasNext() {
-        return liter.hasNext() || !empty;
+        return !empty;
     }
 
 
@@ -197,16 +197,15 @@ class ExpVectorIterator implements Iterator<ExpVector> {
             List<Long> el = liter.next();
             current = ExpVector.create(el);
             //System.out.println("current, liter = " + current);
-            if ( !liter.hasNext() ) {
-                if ( totalDegree >= upperBound || !infinite ) {
-                    empty = true;
-                }
-            }
+            return res;
+        } 
+        if ( totalDegree >= upperBound ) {
+            empty = true;
             return res;
         }
         totalDegree++;
-        //System.out.println("totalDegree = " + totalDegree);
-        if ( totalDegree > upperBound ) {
+        //System.out.println("totalDegree,b = " + totalDegree);
+        if ( totalDegree >= upperBound && !infinite ) {
             throw new NoSuchElementException("invalid call of next()");
         }
         LongIterable li = new LongIterable();
@@ -220,7 +219,6 @@ class ExpVectorIterator implements Iterator<ExpVector> {
         liter = ib.iterator();
         List<Long> el = liter.next();
         current = ExpVector.create(el);
-        //System.out.println("current, tdeg = " + current);
         return res;
     }
 

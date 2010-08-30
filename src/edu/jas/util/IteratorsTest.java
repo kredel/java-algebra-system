@@ -478,14 +478,62 @@ public class IteratorsTest extends TestCase {
      * Test total degree ExpVector iterator.
      * 
      */
-    public void testTotalDegExpVectorIterator() {
+    public void testTotalDegExpVectorIteratorInf() {
         int n = 4;
 
         Set<ExpVector> set = new TreeSet<ExpVector>( (new TermOrder()).getDescendComparator() );
  
         ExpVectorIterable eiter = new ExpVectorIterable(n);
-        //ExpVectorIterable eiter = new ExpVectorIterable(n,5);
-        //ExpVectorIterable eiter = new ExpVectorIterable(n,true,5);
+        long t = 0; 
+        for ( ExpVector e : eiter ) {
+            //System.out.println("e = " + e + ", deg = " + e.totalDeg());
+            t++;
+            if ( t > 500L ) { 
+                //System.out.println("i = " + i);
+                break;
+            }
+            assertFalse("e in set", set.contains(e) );
+            set.add(e);
+        }
+
+    }
+
+
+    /**
+     * Test total degree ExpVector iterator.
+     * 
+     */
+    public void testTotalDegExpVectorIteratorFin() {
+        int n = 4;
+
+        Set<ExpVector> set = new TreeSet<ExpVector>( (new TermOrder()).getDescendComparator() );
+ 
+        ExpVectorIterable eiter = new ExpVectorIterable(n,5);
+        long t = 0; 
+        for ( ExpVector e : eiter ) {
+            //System.out.println("e = " + e + ", deg = " + e.totalDeg());
+            t++;
+            if ( t > 500L ) { 
+                //System.out.println("i = " + i);
+                break;
+            }
+            assertFalse("e in set", set.contains(e) );
+            set.add(e);
+        }
+
+    }
+
+
+    /**
+     * Test total degree ExpVector iterator.
+     * 
+     */
+    public void testTotalDegExpVectorIteratorAllFin() {
+        int n = 4;
+
+        Set<ExpVector> set = new TreeSet<ExpVector>( (new TermOrder()).getDescendComparator() );
+ 
+        ExpVectorIterable eiter = new ExpVectorIterable(n,true,5);
         long t = 0; 
         for ( ExpVector e : eiter ) {
             //System.out.println("e = " + e + ", deg = " + e.totalDeg());
