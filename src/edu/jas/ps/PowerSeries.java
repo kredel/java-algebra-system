@@ -53,7 +53,7 @@ public interface PowerSeries<C extends RingElem<C>> {
      * @param k shift index.
      * @return new power series with coefficient(i) = old.coefficient(i+k).
      */
-    public UnivPowerSeries<C> shift(int k);
+    public PowerSeries<C> shift(int k);
 
 
     /**

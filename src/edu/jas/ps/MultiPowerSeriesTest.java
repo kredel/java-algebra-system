@@ -49,22 +49,22 @@ public class MultiPowerSeriesTest extends TestCase {
     }
 
 
-    //MultiPowerSeriesRing<BigRational> fac;
+    MultiVarPowerSeriesRing<BigRational> fac;
 
 
-    //MultiPowerSeries<BigRational> a;
+    MultiVarPowerSeries<BigRational> a;
 
 
-    //MultiPowerSeries<BigRational> b;
+    MultiVarPowerSeries<BigRational> b;
 
 
-    //MultiPowerSeries<BigRational> c;
+    MultiVarPowerSeries<BigRational> c;
 
 
-    //MultiPowerSeries<BigRational> d;
+    MultiVarPowerSeries<BigRational> d;
 
 
-    //MultiPowerSeries<BigRational> e;
+    MultiVarPowerSeries<BigRational> e;
 
 
     int rl = 2;
@@ -78,15 +78,17 @@ public class MultiPowerSeriesTest extends TestCase {
 
     @Override
     protected void setUp() {
-        //a = b = c = d = e = null;
-        //fac = new MultiPowerSeriesRing<BigRational>(new BigRational(1));
+        a = b = c = d = e = null;
+        fac = new MultiVarPowerSeriesRing<BigRational>(new BigRational(1),rl);
+        System.out.println("fac = " + fac);
+        System.out.println("fac = " + fac.toScript());
     }
 
 
     @Override
     protected void tearDown() {
-        //a = b = c = d = e = null;
-        //fac = null;
+        a = b = c = d = e = null;
+        fac = null;
     }
 
 
@@ -129,8 +131,8 @@ public class MultiPowerSeriesTest extends TestCase {
             //System.out.println("c = " + c + ", e = " + e);
             assertTrue("isZERO( c )", c.isZERO());
         }
-        System.out.println("coeffCache = " + zeros.coeffCache);
-        System.out.println("zeroCache  = " + zeros.zeroCache);
+        //System.out.println("coeffCache = " + zeros.coeffCache);
+        //System.out.println("zeroCache  = " + zeros.zeroCache);
         assertTrue("coeffCache is one element", zeros.coeffCache.size() == (m+1));
 
         for ( ExpVector e : eiter ) {
@@ -138,8 +140,8 @@ public class MultiPowerSeriesTest extends TestCase {
             //System.out.println("c = " + c + ", e = " + e);
             assertTrue("isONE( c )", c.isONE());
         }
-        System.out.println("coeffCache = " + ones.coeffCache);
-        System.out.println("zeroCache  = " + ones.zeroCache);
+        //System.out.println("coeffCache = " + ones.coeffCache);
+        //System.out.println("zeroCache  = " + ones.zeroCache);
         assertTrue("zeroCache is empty", ones.zeroCache.isEmpty());
 
         for ( int i = 0; i <= m; i++ ) {
@@ -149,9 +151,9 @@ public class MultiPowerSeriesTest extends TestCase {
             //System.out.println("d = " + d + ", i = " + i);
             assertTrue("c.equals(d) ", c.equals(d));
         }
-        System.out.println("coeffCache = " + ones.coeffCache);
-        System.out.println("zeroCache  = " + ones.zeroCache);
-        System.out.println("homCheck   = " + ones.homCheck);
+        //System.out.println("coeffCache = " + ones.coeffCache);
+        //System.out.println("zeroCache  = " + ones.zeroCache);
+        //System.out.println("homCheck   = " + ones.homCheck);
         //System.out.println("homCheck   = " + ones.homCheck.length());
         assertTrue("zeroCache is empty", ones.zeroCache.isEmpty());
         assertTrue("#coeffCache = " + m, ones.coeffCache.size()==(m+1));
@@ -162,13 +164,65 @@ public class MultiPowerSeriesTest extends TestCase {
             //System.out.println("c = " + c + ", i = " + i);
             assertTrue("c==0 || deg(c)==1 ", c.isZERO() || c.degree() == 1L );
         }
-        System.out.println("coeffCache = " + vars.coeffCache);
-        System.out.println("zeroCache  = " + vars.zeroCache);
-        System.out.println("homCheck   = " + vars.homCheck);
+        //System.out.println("coeffCache = " + vars.coeffCache);
+        //System.out.println("zeroCache  = " + vars.zeroCache);
+        //System.out.println("homCheck   = " + vars.homCheck);
         //System.out.println("homCheck   = " + vars.homCheck.length());
         assertTrue("zeroCache is not empty", !vars.zeroCache.isEmpty());
         assertTrue("#coeffCache = " + m, vars.coeffCache.size()==(m+1));
         assertTrue("#homCheck = " + m, vars.homCheck.length()==(m+1));
+    }
+
+
+    /**
+     * Test constructor and toString.
+     * 
+     */
+    public void testConstruction() {
+        c = fac.getONE();
+        System.out.println("c = " + c);
+        assertTrue("isZERO( c )", !c.isZERO());
+        assertTrue("isONE( c )", c.isONE());
+
+        d = fac.getZERO();
+        System.out.println("d = " + d);
+        assertTrue("isZERO( d )", d.isZERO());
+        assertTrue("isONE( d )", !d.isONE());
+    }
+
+
+    /**
+     * Test random polynomial.
+     */
+    public void testRandom() {
+        for (int i = 0; i < 5; i++) {
+            a = fac.random(i + 2);
+            System.out.println("a = " + a);
+            assertTrue(" not isZERO( a" + i + " )", !a.isZERO());
+            assertTrue(" not isONE( a" + i + " )", !a.isONE());
+        }
+    }
+
+
+    /**
+     * Test addition.
+     * 
+     */
+    public void testAddition() {
+        a = fac.random(kl);
+        b = fac.random(kl);
+
+        c = a.sum(b);
+        d = b.sum(a);
+        assertEquals("a+b = b+a", c, d);
+
+        d = c.subtract(b);
+        assertEquals("a+b-b = a", a, d);
+
+        c = fac.random(kl);
+        d = a.sum(b.sum(c));
+        e = a.sum(b).sum(c);
+        assertEquals("a+(b+c) = (a+b)+c", d, e);
     }
 
 }

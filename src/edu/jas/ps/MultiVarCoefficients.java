@@ -53,6 +53,15 @@ public abstract class MultiVarCoefficients<C extends RingElem<C>> {
 
     /**
      * Public constructor.
+     * @param pf multivriat power series ring factory.
+     */
+    public MultiVarCoefficients(MultiVarPowerSeriesRing<C> pf) {
+        this(pf.polyRing(), new HashMap<Long,GenPolynomial<C>>(), new HashSet<ExpVector>() );
+    }
+
+
+    /**
+     * Public constructor.
      * @param pf polynomial ring factory.
      */
     public MultiVarCoefficients(GenPolynomialRing<C> pf) {
