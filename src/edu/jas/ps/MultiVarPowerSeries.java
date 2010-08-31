@@ -30,7 +30,7 @@ import edu.jas.util.ExpVectorIterable;
  * @author Heinz Kredel
  */
 
-public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<MultiVarPowerSeries<C>> /*, PowerSeries<C>*/ {
+public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<MultiVarPowerSeries<C>> {
 
 
     /**
@@ -79,6 +79,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
     /*package*/MultiVarPowerSeries(MultiVarPowerSeriesRing<C> ring) {
         this.ring = ring;
         this.lazyCoeffs = null;
+        this.truncate = ring.truncate;
     }
 
 
@@ -158,10 +159,8 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
                 }
                 if (i.isZERO()) {
                     //skip; sb.append(" ");
-                } else if (i.maxDeg()==1L) {
-                    sb.append(vars[0]);
                 } else {
-                    sb.append(vars[0] + "^" + i);
+                    sb.append(i.toString(vars));
                 }
                 //sb.append(c.toString() + ", ");
             }
@@ -170,7 +169,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
         if (sb.length() == 0) {
             sb.append("0");
         }
-        sb.append(" + BigO(" + ring.varsToString() + "^" + truncate + ")");
+        sb.append(" + BigO( (" + ring.varsToString() + ")^" + truncate + " )");
         //sb.append("...");
         return sb.toString();
     }
@@ -208,10 +207,8 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
                 }
                 if (i.isZERO()) {
                     //skip; sb.append(" ");
-                } else if (i.maxDeg()==1L) {
-                    sb.append(vars[0]);
                 } else {
-                    sb.append(vars[0] + "**" + i);
+                    sb.append( i.toScript(vars) );
                 }
                 //sb.append(c.toString() + ", ");
             }
@@ -260,6 +257,19 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
             throw new IllegalArgumentException("null cache not allowed");
         }
         return lazyCoeffs.getHomPart(tdeg);
+    }
+
+
+    /**
+     * Get a GenPolynomial&lt;C&gt; from this.
+     * @return a GenPolynomial&lt;C&gt; from this up to truncate homogeneous parts.
+     */
+    public GenPolynomial<C> asPolynomial() {
+        GenPolynomial<C> p = homogeneousPart(0L);
+        for ( int i = 1; i <= truncate; i++ ) {
+            p = p.sum( homogeneousPart(i) );
+        }
+        return p;
     }
 
 
@@ -350,7 +360,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
             throw new IllegalArgumentException("null ExpVector not allowed");
         }
         if ( k.signum() == 0 ) {
-	    return this;
+            return this;
         }
         return new MultiVarPowerSeries<C>(ring, new MultiVarCoefficients<C>(ring) {
             @Override
@@ -407,11 +417,11 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
                 c = null;
                 do {
                     if ( pos.hasNext() ) {
-			ExpVector e = pos.next();
+                        ExpVector e = pos.next();
                         c = coefficient(e); 
-		    } else {
-			break;
-		    }
+                    } else {
+                        break;
+                    }
                 } while (!sel.select(c));
                 return c;
             }
@@ -837,10 +847,14 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
                     return c;
                 }
                 long d = i.getVal(r);
-                ExpVector e = i.subst(r,d-1);
-                C v = coefficient(e);
-                v = v.divide(ring.coFac.fromInteger(d));
-                return v;
+                if ( d > 0 ) {
+                    ExpVector e = i.subst(r,d-1);
+                    C v = coefficient(e);
+                    v = v.divide(ring.coFac.fromInteger(d));
+                    return v;
+                } else {
+                    return ring.coFac.getZERO();
+                }
             }
         });
     }

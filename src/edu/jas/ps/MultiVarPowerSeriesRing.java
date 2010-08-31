@@ -167,9 +167,9 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
      * @return fix point wrt map.
      */
     // Cannot be a static method because a power series ring is required.
-    public MultiVarPowerSeries<C> fixPoint(PowerSeriesMap<C> map) {
+    public MultiVarPowerSeries<C> fixPoint(MultiVarPowerSeriesMap<C> map) {
         MultiVarPowerSeries<C> ps1 = new MultiVarPowerSeries<C>(this);
-        MultiVarPowerSeries<C> ps2 = null; //map.map(ps1);
+        MultiVarPowerSeries<C> ps2 = map.map(ps1);
         ps1.lazyCoeffs = ps2.lazyCoeffs;
         return ps2;
     }
@@ -300,7 +300,9 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
             });
             gens.add(g);
         }
-        //gens.add(ONE.shift(1));
+        for ( int i = 0; i < nvar; i++ ) {
+            gens.add(ONE.shift(1,i));
+        }
         return gens;
     }
 
@@ -315,15 +317,76 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
     }
 
 
-    /*
-     * Solve an ordinary differential equation. y' = f(y) with y(0) = c.
+    /**
+     * Get the power series of the exponential function.
+     * @param r variable for the direction.
+     * @return exp(x_r) as MultiVarPowerSeries<C>.
+     */
+    public MultiVarPowerSeries<C> getEXP(final int r) {
+        return fixPoint(new MultiVarPowerSeriesMap<C>() {
+
+            public MultiVarPowerSeries<C> map(MultiVarPowerSeries<C> e) {
+                return e.integrate(coFac.getONE(),r);
+            }
+        });
+    }
+
+
+    /**
+     * Get the power series of the sinus function.
+     * @param r variable for the direction.
+     * @return sin(x_r) as MultiVarPowerSeries<C>.
+     */
+    public MultiVarPowerSeries<C> getSIN(final int r) {
+        return fixPoint(new MultiVarPowerSeriesMap<C>() {
+
+            public MultiVarPowerSeries<C> map(MultiVarPowerSeries<C> s) {
+                return s.negate().integrate(coFac.getONE(),r).integrate(coFac.getZERO(),r);
+            }
+        });
+    }
+
+
+    /**
+     * Get the power series of the cosinus function.
+     * @param r variable for the direction.
+     * @return cos(x_r) as MultiVarPowerSeries<C>.
+     */
+    public MultiVarPowerSeries<C> getCOS(final int r) {
+        return fixPoint(new MultiVarPowerSeriesMap<C>() {
+
+            public MultiVarPowerSeries<C> map(MultiVarPowerSeries<C> c) {
+                return c.negate().integrate(coFac.getZERO(),r).integrate(coFac.getONE(),r);
+            }
+        });
+    }
+
+
+    /**
+     * Get the power series of the tangens function.
+     * @param r variable for the direction.
+     * @return tan(x_r) as MultiVarPowerSeries<C>.
+     */
+    public MultiVarPowerSeries<C> getTAN(final int r) {
+        return fixPoint(new MultiVarPowerSeriesMap<C>() {
+
+            public MultiVarPowerSeries<C> map(MultiVarPowerSeries<C> t) {
+                return t.multiply(t).sum(getONE()).integrate(coFac.getZERO(),r);
+            }
+        });
+    }
+
+
+    /**
+     * Solve an partial differential equation. y_r' = f(y_r) with y_r(0) = c.
      * @param f a MultiVarPowerSeries<C>.
      * @param c integration constant.
+     * @param r variable for the direction.
      * @return f.integrate(c).
-    public MultiVarPowerSeries<C> solveODE(final MultiVarPowerSeries<C> f, final C c) {
-        return f.integrate(c);
-    }
      */
+    public MultiVarPowerSeries<C> solvePDE(MultiVarPowerSeries<C> f, C c, int r) {
+        return f.integrate(c,r);
+    }
 
 
     /**
@@ -367,8 +430,17 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
      * @param a long.
      * @return a MultiVarPowerSeries&lt;C&gt;.
      */
-    public MultiVarPowerSeries<C> fromInteger(long a) {
-        return ONE.multiply(coFac.fromInteger(a));
+    public MultiVarPowerSeries<C> fromInteger(final long a) {
+        return new MultiVarPowerSeries<C>(this, new MultiVarCoefficients<C>(this) {
+                @Override
+                public C generate(ExpVector i) {
+                    if (i.isZERO()) {
+                        return coFac.fromInteger(a);
+                    } else {
+                        return coFac.getZERO();
+                    }
+                }
+            });
     }
 
 
@@ -377,8 +449,17 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
      * @param a BigInteger.
      * @return a MultiVarPowerSeries&lt;C&gt;.
      */
-    public MultiVarPowerSeries<C> fromInteger(java.math.BigInteger a) {
-        return ONE.multiply(coFac.fromInteger(a));
+    public MultiVarPowerSeries<C> fromInteger(final java.math.BigInteger a) {
+        return new MultiVarPowerSeries<C>(this, new MultiVarCoefficients<C>(this) {
+                @Override
+                public C generate(ExpVector i) {
+                    if (i.isZERO()) {
+                        return coFac.fromInteger(a);
+                    } else {
+                        return coFac.getZERO();
+                    }
+                }
+            });
     }
 
 
@@ -423,6 +504,40 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
                 return coFac.getZERO();
             }
         });
+    }
+
+
+    /**
+     * Get a MultiVarPowerSeries&lt;C&gt; from a univariate power series.
+     * @param ps UnivPowerSeries&lt;C&gt;.
+     * @param r variable for the direction.
+     * @return a MultiVarPowerSeries&lt;C&gt;.
+     */
+    public MultiVarPowerSeries<C> fromPowerSeries(final UnivPowerSeries<C> ps, final int r) {
+        if (ps == null) {
+            return ZERO;
+        }
+        return new MultiVarPowerSeries<C>(this, new MultiVarCoefficients<C>(this) {
+                @Override
+                public C generate(ExpVector i) {
+                    if ( i.isZERO() ) {
+                        return ps.coefficient(0);
+                    }
+                    int[] dep = i.dependencyOnVariables();
+                    if ( dep.length != 1 ) {
+                        return coFac.getZERO();
+                    }
+                    if ( dep[0] != r ) {
+                        return coFac.getZERO();
+                    }
+                    int j = (int)i.getVal(r);
+                    if ( j > 0 ) {
+                        return ps.coefficient(j);
+                    } else {
+                        return coFac.getZERO();
+                    }
+                }
+            });
     }
 
 

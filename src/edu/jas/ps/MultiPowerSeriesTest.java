@@ -179,6 +179,9 @@ public class MultiPowerSeriesTest extends TestCase {
      * 
      */
     public void testConstruction() {
+        //System.out.println("fac = " + fac);
+        //System.out.println("fac = " + fac.toScript());
+
         c = fac.getONE();
         //System.out.println("c = " + c);
         assertTrue("isZERO( c )", !c.isZERO());
@@ -387,4 +390,36 @@ public class MultiPowerSeriesTest extends TestCase {
         d = c.multiply(a);
         assertEquals("b/a * a == b ", d, b);
     }
+
+
+    /**
+     * Test fix point constructions.
+     * 
+     */
+    public void testFixpoints() {
+        int r = 0;
+        UnivPowerSeriesRing<BigRational> ufac = new UnivPowerSeriesRing<BigRational>(fac.coFac,fac.vars[r]);
+	UnivPowerSeries<BigRational> exp = ufac.getEXP();
+        //System.out.println("exp = " + exp);
+
+        a = fac.fromPowerSeries(exp,0);
+        b = fac.fromPowerSeries(exp,1);
+        //System.out.println("a = " + a);
+        //System.out.println("b = " + b);
+
+        c = fac.getEXP(0);
+        d = fac.getEXP(1);
+        //System.out.println("c = " + c);
+        //System.out.println("d = " + d);
+        assertEquals("a == c ", a, c);
+        assertEquals("b == d ", b, d);
+
+        e = d.differentiate(0);
+        //System.out.println("e = " + e);
+        assertTrue("isZERO( e )", e.isZERO());
+        e = d.differentiate(1);
+        //System.out.println("e = " + e);
+        assertEquals("e == d ", d, e);
+    }
+
 }

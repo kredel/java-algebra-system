@@ -24,7 +24,7 @@ import edu.jas.structure.UnaryFunctor;
  * @author Heinz Kredel
  */
 
-public class UnivPowerSeries<C extends RingElem<C>> implements RingElem<UnivPowerSeries<C>>, PowerSeries<C> {
+public class UnivPowerSeries<C extends RingElem<C>> implements RingElem<UnivPowerSeries<C>> {
 
 
     /**
@@ -380,7 +380,7 @@ public class UnivPowerSeries<C extends RingElem<C>> implements RingElem<UnivPowe
      * @return new power series.
      */
     public <C2 extends RingElem<C2>> UnivPowerSeries<C> zip(final BinaryFunctor<? super C, ? super C2, C> f,
-            final PowerSeries<C2> ps) {
+            final UnivPowerSeries<C2> ps) {
         return new UnivPowerSeries<C>(ring, new Coefficients<C>() {
 
 
@@ -713,7 +713,6 @@ public class UnivPowerSeries<C extends RingElem<C>> implements RingElem<UnivPowe
     public UnivPowerSeries<C> differentiate() {
         return new UnivPowerSeries<C>(ring, new Coefficients<C>() {
 
-
             @Override
             public C generate(int i) {
                 C v = coefficient(i + 1);
@@ -731,7 +730,6 @@ public class UnivPowerSeries<C extends RingElem<C>> implements RingElem<UnivPowe
      */
     public UnivPowerSeries<C> integrate(final C c) {
         return new UnivPowerSeries<C>(ring, new Coefficients<C>() {
-
 
             @Override
             public C generate(int i) {
