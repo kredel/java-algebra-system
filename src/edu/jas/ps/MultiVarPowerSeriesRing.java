@@ -50,12 +50,6 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
 
 
     /**
-     * Default variable name.
-     */
-    //public final static String[] DEFAULT_NAMES = new String[] { "x" };
-
-
-    /**
      * Zero ExpVector.
      */
     public final ExpVector EVZERO;
@@ -148,7 +142,7 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
             GenPolynomialRing.addVars(vars);
         }
         EVZERO = ExpVector.create(nvar);
-        this.ONE = new MultiVarPowerSeries<C>(this, new MultiVarCoefficients<C>(this) {
+        ONE = new MultiVarPowerSeries<C>(this, new MultiVarCoefficients<C>(this) {
             @Override
             public C generate(ExpVector i) {
                 if (i.isZERO()) {
@@ -158,7 +152,7 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
                 }
             }
         });
-        this.ZERO = new MultiVarPowerSeries<C>(this, new MultiVarCoefficients<C>(this) {
+        ZERO = new MultiVarPowerSeries<C>(this, new MultiVarCoefficients<C>(this) {
             @Override
             public C generate(ExpVector i) {
                 return coFac.getZERO();
