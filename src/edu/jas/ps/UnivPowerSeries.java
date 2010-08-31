@@ -639,8 +639,7 @@ public class UnivPowerSeries<C extends RingElem<C>> implements RingElem<UnivPowe
                 }
                 C c = null; //fac.getZERO();
                 for (int k = 0; k < i; k++) {
-                    C m = get(k); // cached value
-                    m = coefficient(i - k).multiply(m);
+                    C m = get(k).multiply(coefficient(i - k));
                     if (c == null) {
                         c = m;
                     } else {

@@ -73,15 +73,15 @@ public class MultiPowerSeriesTest extends TestCase {
     int kl = 10;
 
 
-    float q = 0.5f;
+    float q = 0.3f;
 
 
     @Override
     protected void setUp() {
         a = b = c = d = e = null;
         fac = new MultiVarPowerSeriesRing<BigRational>(new BigRational(1),rl);
-        System.out.println("fac = " + fac);
-        System.out.println("fac = " + fac.toScript());
+        //System.out.println("fac = " + fac);
+        //System.out.println("fac = " + fac.toScript());
     }
 
 
@@ -145,9 +145,9 @@ public class MultiPowerSeriesTest extends TestCase {
         assertTrue("zeroCache is empty", ones.zeroCache.isEmpty());
 
         for ( int i = 0; i <= m; i++ ) {
-            GenPolynomial<BigRational> c = ones.homPart(i);
+            GenPolynomial<BigRational> c = ones.getHomPart(i);
             //System.out.println("c = " + c + ", i = " + i);
-            GenPolynomial<BigRational> d = ones.homPart(i);
+            GenPolynomial<BigRational> d = ones.getHomPart(i);
             //System.out.println("d = " + d + ", i = " + i);
             assertTrue("c.equals(d) ", c.equals(d));
         }
@@ -160,7 +160,7 @@ public class MultiPowerSeriesTest extends TestCase {
         assertTrue("#homCheck = " + m, ones.homCheck.length()==(m+1));
 
         for ( int i = 0; i <= m; i++ ) {
-            GenPolynomial<BigRational> c = vars.homPart(i);
+            GenPolynomial<BigRational> c = vars.getHomPart(i);
             //System.out.println("c = " + c + ", i = " + i);
             assertTrue("c==0 || deg(c)==1 ", c.isZERO() || c.degree() == 1L );
         }
@@ -180,12 +180,12 @@ public class MultiPowerSeriesTest extends TestCase {
      */
     public void testConstruction() {
         c = fac.getONE();
-        System.out.println("c = " + c);
+        //System.out.println("c = " + c);
         assertTrue("isZERO( c )", !c.isZERO());
         assertTrue("isONE( c )", c.isONE());
 
         d = fac.getZERO();
-        System.out.println("d = " + d);
+        //System.out.println("d = " + d);
         assertTrue("isZERO( d )", d.isZERO());
         assertTrue("isONE( d )", !d.isONE());
     }
@@ -197,10 +197,84 @@ public class MultiPowerSeriesTest extends TestCase {
     public void testRandom() {
         for (int i = 0; i < 5; i++) {
             a = fac.random(i + 2);
-            System.out.println("a = " + a);
+            //System.out.println("a = " + a);
             assertTrue(" not isZERO( a" + i + " )", !a.isZERO());
             assertTrue(" not isONE( a" + i + " )", !a.isONE());
         }
+    }
+
+
+    /**
+     * Test MultiVarCoefficients in power series.
+     * 
+     */
+    public void testCoefficientsInPS() {
+
+        MultiVarCoefficients<BigRational> zeros = new MultiVarCoefficients<BigRational>(fac) {
+            @Override
+            public BigRational generate(ExpVector i) {
+                return pfac.coFac.getZERO();
+            }
+        };
+        MultiVarCoefficients<BigRational> ones = new MultiVarCoefficients<BigRational>(fac) {
+            @Override
+            public BigRational generate(ExpVector i) {
+                return pfac.coFac.getONE();
+            }
+        };
+        MultiVarCoefficients<BigRational> vars = new MultiVarCoefficients<BigRational>(fac) {
+            @Override
+            public BigRational generate(ExpVector i) {
+                int[] v = i.dependencyOnVariables();
+                if ( v.length == 1 && i.getVal(v[0]) == 1L) {
+                    return pfac.coFac.getONE();
+                } else {
+                    return pfac.coFac.getZERO();
+                }
+            }
+        };
+
+        a = new MultiVarPowerSeries<BigRational>(fac,zeros);
+        b = new MultiVarPowerSeries<BigRational>(fac,ones);
+        c = new MultiVarPowerSeries<BigRational>(fac,vars);
+
+        int m = 5;
+        ExpVectorIterable eiter = new ExpVectorIterable(rl,true,m);
+        for ( ExpVector e : eiter ) {
+            BigRational r = a.coefficient(e);
+            //System.out.println("r = " + r + ", e = " + e);
+            assertTrue("isZERO( r )", r.isZERO());
+        }
+        //System.out.println("#a = " + a.lazyCoeffs.coeffCache);
+        assertTrue("coeffCache is one element", a.lazyCoeffs.coeffCache.size() == (m+1));
+        assertTrue("isZERO( a )", a.isZERO()); // after previous
+
+        for ( ExpVector e : eiter ) {
+            BigRational r = b.coefficient(e);
+            //System.out.println("r = " + r + ", e = " + e);
+            assertTrue("isONE( r )", r.isONE());
+        }
+        assertTrue("zeroCache is empty", b.lazyCoeffs.zeroCache.isEmpty());
+
+        for ( int i = 0; i <= m; i++ ) {
+            GenPolynomial<BigRational> p = b.homogeneousPart(i);
+            //System.out.println("p = " + p + ", i = " + i);
+            GenPolynomial<BigRational> q = b.homogeneousPart(i);
+            //System.out.println("q = " + q + ", i = " + i);
+            assertTrue("p.equals(q) ", p.equals(q));
+        }
+        assertTrue("zeroCache is empty", b.lazyCoeffs.zeroCache.isEmpty());
+        assertTrue("#coeffCache = " + m, b.lazyCoeffs.coeffCache.size()==(m+1));
+        assertTrue("#homCheck = " + m, b.lazyCoeffs.homCheck.length()==(m+1));
+
+        for ( int i = 0; i <= m; i++ ) {
+            GenPolynomial<BigRational> p = c.homogeneousPart(i);
+            //System.out.println("p = " + p + ", i = " + i);
+            assertTrue("p==0 || deg(p)==1 ", p.isZERO() || p.degree() == 1L );
+        }
+        assertTrue("zeroCache is not empty", !c.lazyCoeffs.zeroCache.isEmpty());
+        assertTrue("#coeffCache = " + m, c.lazyCoeffs.coeffCache.size()==(m+1));
+        assertTrue("#homCheck = " + m, c.lazyCoeffs.homCheck.length()==(m+1));
     }
 
 
@@ -225,4 +299,92 @@ public class MultiPowerSeriesTest extends TestCase {
         assertEquals("a+(b+c) = (a+b)+c", d, e);
     }
 
+    /**
+     * Test multiplication.
+     * 
+     */
+    public void testMultiplication() {
+        a = fac.random(kl);
+        b = fac.random(kl);
+
+        if ( a.isZERO() || b.isZERO() ) {
+            return;
+        }
+        assertTrue("not isZERO( a )", !a.isZERO());
+        assertTrue("not isZERO( b )", !b.isZERO());
+
+        c = b.multiply(a);
+        d = a.multiply(b);
+        assertTrue("not isZERO( c )", !c.isZERO());
+        assertTrue("not isZERO( d )", !d.isZERO());
+
+        //System.out.println("a = " + a);
+        //System.out.println("b = " + b);
+        e = d.subtract(c);
+        assertTrue("isZERO( a*b-b*a ) " + e, e.isZERO());
+
+        assertTrue("a*b = b*a", c.equals(d));
+        assertEquals("a*b = b*a", c, d);
+
+        c = fac.random(kl);
+        //System.out.println("c = " + c);
+        d = a.multiply(b.multiply(c));
+        e = (a.multiply(b)).multiply(c);
+        //System.out.println("d = " + d);
+        //System.out.println("e = " + e);
+        //System.out.println("d-e = " + d.subtract(c) );
+
+        assertEquals("a(bc) = (ab)c", d, e);
+        assertTrue("a(bc) = (ab)c", d.equals(e));
+    }
+
+
+    /**
+     * Test distributive law.
+     * 
+     */
+    public void testDistributive() {
+        a = fac.random(kl, q);
+        b = fac.random(kl, q);
+        c = fac.random(kl, q);
+
+        d = a.multiply(b.sum(c));
+        e = a.multiply(b).sum(a.multiply(c));
+
+        assertEquals("a(b+c) = ab+ac", d, e);
+    }
+
+
+    /**
+     * Test inverse.
+     * 
+     */
+    public void testInverse() {
+        a = fac.getONE();
+        assertTrue("not isZERO( a )", !a.isZERO());
+        assertTrue("isUnit( a )", a.isUnit());
+        //System.out.println("a = " + a);
+
+        b = a.inverse();
+        c = a.multiply(b);
+        assertTrue("isONE( c )", c.isONE());
+        //System.out.println("b = " + b);
+        //System.out.println("c = " + c);
+
+        a = fac.random(kl);
+        if ( !a.isUnit() ) {
+            a = fac.fromInteger(23); //return;
+        }
+        //System.out.println("a = " + a);
+        b = a.inverse();
+        c = a.multiply(b);
+        assertTrue("isONE( c )", c.isONE());
+        //System.out.println("b = " + b);
+        //System.out.println("c = " + c);
+
+        b = fac.random(kl);
+        c = b.divide(a);
+        d = c.multiply(a);
+        assertEquals("b/a * a == b ", d, b);
+    }
 }

@@ -53,7 +53,7 @@ public abstract class MultiVarCoefficients<C extends RingElem<C>> {
 
     /**
      * Public constructor.
-     * @param pf multivriat power series ring factory.
+     * @param pf multivariate power series ring factory.
      */
     public MultiVarCoefficients(MultiVarPowerSeriesRing<C> pf) {
         this(pf.polyRing(), new HashMap<Long,GenPolynomial<C>>(), new HashSet<ExpVector>() );
@@ -80,7 +80,7 @@ public abstract class MultiVarCoefficients<C extends RingElem<C>> {
 
 
     /**
-     * Public constructor with pre-filled cache.
+     * Public constructor with pre-filled caches.
      * @param pf polynomial ring factory.
      * @param cache pre-filled coefficient cache.
      * @param zeros pre-filled zero coefficient cache.
@@ -130,7 +130,7 @@ public abstract class MultiVarCoefficients<C extends RingElem<C>> {
      * @param tdeg requested degree.
      * @return polynomial part of given degree.
      */
-    public GenPolynomial<C> homPart(long tdeg) {
+    public GenPolynomial<C> getHomPart(long tdeg) {
         if ( coeffCache == null ) {
             throw new IllegalArgumentException("null cache not allowed");
         }

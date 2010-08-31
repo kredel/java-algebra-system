@@ -147,7 +147,7 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
             }
             GenPolynomialRing.addVars(vars);
         }
-	EVZERO = ExpVector.create(nvar);
+        EVZERO = ExpVector.create(nvar);
         this.ONE = new MultiVarPowerSeries<C>(this, new MultiVarCoefficients<C>(this) {
             @Override
             public C generate(ExpVector i) {
@@ -261,7 +261,7 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
     @Override
     public int hashCode() {
         int h = 0;
-        h = (Arrays.hashCode(vars) << 27);
+        h = (Arrays.hashCode(vars) << 23);
         h += truncate;
         return h;
     }
@@ -418,7 +418,7 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
             if ( p == null ) {
                 p = pfac.getZERO().clone();
                 cache.put(t, p);
-	    }
+            }
             p.doPutToMap(e,m.coefficient());
         }
 
