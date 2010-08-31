@@ -19,7 +19,7 @@ from edu.jas.poly        import GenPolynomial, GenPolynomialRing,\
                                 TermOrderOptimization, TermOrder, PolynomialList,\
                                 AlgebraicNumber, AlgebraicNumberRing
 from edu.jas.ps          import UnivPowerSeries, UnivPowerSeriesRing,\
-                                PowerSeriesMap, Coefficients  
+                                UnivPowerSeriesMap, Coefficients  
 from edu.jas.gb          import DGroebnerBaseSeq, EGroebnerBaseSeq,\
                                 GroebnerBaseDistributed, GBDist, GroebnerBaseParallel,\
                                 GroebnerBaseSeq, GroebnerBaseSeqPairSeq,\
@@ -1284,7 +1284,7 @@ class SeriesRing:
     def fixPoint(self,psmap):
         '''Create a power series as fixed point of the given mapping.
 
-        psmap must implement the PowerSeriesMap interface.
+        psmap must implement the UnivPowerSeriesMap interface.
         '''
         ps = self.ring.fixPoint( psmap );
         return RingElem( ps );

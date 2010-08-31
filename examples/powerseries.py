@@ -12,7 +12,7 @@ from jas import SeriesRing
 from jas import startLog
 
 from edu.jas.ps import Coefficients
-from edu.jas.ps import PowerSeriesMap
+from edu.jas.ps import UnivPowerSeriesMap
 
 # example for power series
 #
@@ -200,7 +200,7 @@ print "ps7:", ps7;
 print;
 
 
-class cosmap( PowerSeriesMap ):
+class cosmap( UnivPowerSeriesMap ):
     def __init__(self,cofac):
         self.coFac = cofac;
     def map(self,ps):
