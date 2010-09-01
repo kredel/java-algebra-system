@@ -254,7 +254,6 @@ public class UnivPowerSeries<C extends RingElem<C>> implements RingElem<UnivPowe
     public UnivPowerSeries<C> reductum() {
         return new UnivPowerSeries<C>(ring, new Coefficients<C>() {
 
-
             @Override
             public C generate(int i) {
                 return coefficient(i + 1);
@@ -270,7 +269,6 @@ public class UnivPowerSeries<C extends RingElem<C>> implements RingElem<UnivPowe
      */
     public UnivPowerSeries<C> prepend(final C h) {
         return new UnivPowerSeries<C>(ring, new Coefficients<C>() {
-
 
             @Override
             public C generate(int i) {
@@ -292,7 +290,6 @@ public class UnivPowerSeries<C extends RingElem<C>> implements RingElem<UnivPowe
     public UnivPowerSeries<C> shift(final int k) {
         return new UnivPowerSeries<C>(ring, new Coefficients<C>() {
 
-
             @Override
             public C generate(int i) {
                 if (i - k < 0) {
@@ -312,7 +309,6 @@ public class UnivPowerSeries<C extends RingElem<C>> implements RingElem<UnivPowe
      */
     public UnivPowerSeries<C> select(final Selector<? super C> sel) {
         return new UnivPowerSeries<C>(ring, new Coefficients<C>() {
-
 
             @Override
             public C generate(int i) {
@@ -336,9 +332,7 @@ public class UnivPowerSeries<C extends RingElem<C>> implements RingElem<UnivPowe
     public UnivPowerSeries<C> shiftSelect(final Selector<? super C> sel) {
         return new UnivPowerSeries<C>(ring, new Coefficients<C>() {
 
-
             int pos = 0;
-
 
             @Override
             public C generate(int i) {
@@ -346,7 +340,6 @@ public class UnivPowerSeries<C extends RingElem<C>> implements RingElem<UnivPowe
                 if (i > 0) {
                     c = get(i - 1);
                 }
-                c = null;
                 do {
                     c = coefficient(pos++);
                 } while (!sel.select(c));
@@ -363,7 +356,6 @@ public class UnivPowerSeries<C extends RingElem<C>> implements RingElem<UnivPowe
      */
     public UnivPowerSeries<C> map(final UnaryFunctor<? super C, C> f) {
         return new UnivPowerSeries<C>(ring, new Coefficients<C>() {
-
 
             @Override
             public C generate(int i) {
@@ -382,7 +374,6 @@ public class UnivPowerSeries<C extends RingElem<C>> implements RingElem<UnivPowe
     public <C2 extends RingElem<C2>> UnivPowerSeries<C> zip(final BinaryFunctor<? super C, ? super C2, C> f,
             final UnivPowerSeries<C2> ps) {
         return new UnivPowerSeries<C>(ring, new Coefficients<C>() {
-
 
             @Override
             public C generate(int i) {
@@ -579,7 +570,7 @@ public class UnivPowerSeries<C extends RingElem<C>> implements RingElem<UnivPowe
     @Override
     public int hashCode() {
         int h = 0;
-        //h = ( ring.hashCode() << 27 );
+        //h = ( ring.hashCode() << 23 );
         //h += val.hashCode();
         for (int i = 0; i <= truncate; i++) {
             h += coefficient(i).hashCode();
@@ -605,7 +596,6 @@ public class UnivPowerSeries<C extends RingElem<C>> implements RingElem<UnivPowe
     public UnivPowerSeries<C> multiply(final UnivPowerSeries<C> ps) {
         return new UnivPowerSeries<C>(ring, new Coefficients<C>() {
 
-
             @Override
             public C generate(int i) {
                 C c = null; //fac.getZERO();
@@ -629,7 +619,6 @@ public class UnivPowerSeries<C extends RingElem<C>> implements RingElem<UnivPowe
      */
     public UnivPowerSeries<C> inverse() {
         return new UnivPowerSeries<C>(ring, new Coefficients<C>() {
-
 
             @Override
             public C generate(int i) {
@@ -785,7 +774,6 @@ public class UnivPowerSeries<C extends RingElem<C>> implements RingElem<UnivPowe
  */
 class Sum<C extends RingElem<C>> implements BinaryFunctor<C, C, C> {
 
-
     public C eval(C c1, C c2) {
         return c1.sum(c2);
     }
@@ -796,7 +784,6 @@ class Sum<C extends RingElem<C>> implements BinaryFunctor<C, C, C> {
  * Internal subtraction functor.
  */
 class Subtract<C extends RingElem<C>> implements BinaryFunctor<C, C, C> {
-
 
     public C eval(C c1, C c2) {
         return c1.subtract(c2);
@@ -809,14 +796,11 @@ class Subtract<C extends RingElem<C>> implements BinaryFunctor<C, C, C> {
  */
 class Multiply<C extends RingElem<C>> implements UnaryFunctor<C, C> {
 
-
     C x;
-
 
     public Multiply(C x) {
         this.x = x;
     }
-
 
     public C eval(C c) {
         return c.multiply(x);
@@ -828,7 +812,6 @@ class Multiply<C extends RingElem<C>> implements UnaryFunctor<C, C> {
  * Internal negation functor.
  */
 class Negate<C extends RingElem<C>> implements UnaryFunctor<C, C> {
-
 
     public C eval(C c) {
         return c.negate();

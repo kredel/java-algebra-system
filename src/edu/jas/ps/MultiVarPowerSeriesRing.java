@@ -115,7 +115,7 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
     /**
      * Constructor.
      * @param coFac coefficient ring factory.
-     * @param name of the variable.
+     * @param names of the variables.
      */
     public MultiVarPowerSeriesRing(RingFactory<C> coFac, String[] names) {
         this(coFac, names.length, DEFAULT_TRUNCATE, names);
@@ -126,7 +126,7 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
      * Constructor.
      * @param cofac coefficient ring factory.
      * @param truncate index of truncation.
-     * @param name of the variable.
+     * @param names of the variables.
      */
     public MultiVarPowerSeriesRing(RingFactory<C> cofac, int nv, int truncate, String[] names) {
         this.coFac = cofac;

@@ -31,7 +31,7 @@ public class CartesianProductLong implements Iterable<List<Long>> {
     /**
      * CartesianProduct constructor.
      * @param comps components of the cartesian product.
-     * @param un an upper bound for the total degree of the elements.
+     * @param ub an upper bound for the total degree of the elements.
      */
     public CartesianProductLong(List<LongIterable> comps, long ub) {
         if (comps == null) {

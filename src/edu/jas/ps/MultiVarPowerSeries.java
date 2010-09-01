@@ -414,8 +414,8 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
                     ExpVector x = i.subst(deps[0],i.getVal(deps[0])-1L);
                     c = get(x);
                 }
-                c = null;
                 do {
+                    c = null;
                     if ( pos.hasNext() ) {
                         ExpVector e = pos.next();
                         c = coefficient(e); 
@@ -423,6 +423,9 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
                         break;
                     }
                 } while (!sel.select(c));
+                if ( c == null ) { // not correct because not known
+                    c = ring.coFac.getZERO();
+                }
                 return c;
             }
         });
@@ -900,7 +903,6 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
  */
 class MultiVarSum<C extends RingElem<C>> implements BinaryFunctor<C, C, C> {
 
-
     public C eval(C c1, C c2) {
         return c1.sum(c2);
     }
@@ -911,7 +913,6 @@ class MultiVarSum<C extends RingElem<C>> implements BinaryFunctor<C, C, C> {
  * Internal subtraction functor.
  */
 class MultiVarSubtract<C extends RingElem<C>> implements BinaryFunctor<C, C, C> {
-
 
     public C eval(C c1, C c2) {
         return c1.subtract(c2);
@@ -924,14 +925,11 @@ class MultiVarSubtract<C extends RingElem<C>> implements BinaryFunctor<C, C, C> 
  */
 class MultiVarMultiply<C extends RingElem<C>> implements UnaryFunctor<C, C> {
 
-
     C x;
-
 
     public MultiVarMultiply(C x) {
         this.x = x;
     }
-
 
     public C eval(C c) {
         return c.multiply(x);
@@ -943,7 +941,6 @@ class MultiVarMultiply<C extends RingElem<C>> implements UnaryFunctor<C, C> {
  * Internal negation functor.
  */
 class MultiVarNegate<C extends RingElem<C>> implements UnaryFunctor<C, C> {
-
 
     public C eval(C c) {
         return c.negate();
