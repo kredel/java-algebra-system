@@ -95,6 +95,15 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
 
     /**
      * Constructor.
+     * @param fac polynomial ring factory.
+     */
+    public MultiVarPowerSeriesRing(GenPolynomialRing<C> fac) {
+        this(fac.coFac,fac.nvar,fac.getVars());
+    }
+
+
+    /**
+     * Constructor.
      * @param coFac coefficient ring factory.
      */
     public MultiVarPowerSeriesRing(RingFactory<C> coFac, int nv) {
@@ -119,6 +128,17 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
      */
     public MultiVarPowerSeriesRing(RingFactory<C> coFac, String[] names) {
         this(coFac, names.length, DEFAULT_TRUNCATE, names);
+    }
+
+
+    /**
+     * Constructor.
+     * @param cofac coefficient ring factory.
+     * @param nv number of variables.
+     * @param names of the variables.
+     */
+    public MultiVarPowerSeriesRing(RingFactory<C> cofac, int nv, String[] names) {
+        this(cofac, nv, DEFAULT_TRUNCATE, names);
     }
 
 

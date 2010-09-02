@@ -339,6 +339,18 @@ public class MultiPowerSeriesTest extends TestCase {
 
         assertEquals("a(bc) = (ab)c", d, e);
         assertTrue("a(bc) = (ab)c", d.equals(e));
+
+        ExpVector ev = ExpVector.random(rl,5,0.8f);
+        BigRational br = fac.coFac.random(5);
+
+        b = a.shift(ev).multiply(br);
+        c = a.multiply(ev,br);
+        assertEquals("(a ev) br = a (ev,br)", b, c);
+        //System.out.println("a  = " + a);
+        //System.out.println("ev = " + ev);
+        //System.out.println("br = " + br);
+        //System.out.println("b  = " + b);
+        //System.out.println("c  = " + c);
     }
 
 

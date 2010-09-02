@@ -294,7 +294,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
         return new MultiVarPowerSeries<C>(ring, new MultiVarCoefficients<C>(ring) {
             @Override
             public C generate(ExpVector i) {
-                ExpVector e = i.subst(r,i.getVal(r)+1) ;   
+                ExpVector e = i.subst(r,i.getVal(r)+1);
                 return coefficient(e);
             }
         });
@@ -352,6 +352,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
 
     /**
      * Shift coefficients.
+     * Multiply by exponent vector.
      * @param k shift ExpVector.
      * @return new power series with coefficient(i) = old.coefficient(i-k).
      */
@@ -370,6 +371,36 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
                     return ring.coFac.getZERO();
                 } else {
                     return coefficient(d);
+                }
+            }
+        });
+    }
+
+
+    /**
+     * Multiply by exponent vector and coefficient.
+     * @param k shift ExpVector.
+     * @param c coefficient multiplier.
+     * @return new power series with coefficient(i) = old.coefficient(i-k)*c.
+     */
+    public MultiVarPowerSeries<C> multiply(final ExpVector k, final C c) {
+        if ( k == null ) {
+            throw new IllegalArgumentException("null ExpVector not allowed");
+        }
+        if ( k.signum() == 0 ) {
+            return this.multiply(c);
+        }
+        if ( c.signum() == 0 ) {
+            return ring.getZERO();
+        }
+        return new MultiVarPowerSeries<C>(ring, new MultiVarCoefficients<C>(ring) {
+            @Override
+            public C generate(ExpVector i) {
+                ExpVector d = i.subtract(k);
+                if (d.signum() < 0) {
+                    return ring.coFac.getZERO();
+                } else {
+                    return coefficient(d).multiply(c);
                 }
             }
         });
@@ -470,7 +501,12 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
      * @return this + ps.
      */
     public MultiVarPowerSeries<C> sum(MultiVarPowerSeries<C> ps) {
-        return zip(new MultiVarSum<C>(), ps);
+        return zip(new BinaryFunctor<C, C, C>() {
+                       @Override
+                       public C eval(C c1, C c2) {
+			   return c1.sum(c2);
+                       }
+                   },ps);
     }
 
 
@@ -480,17 +516,27 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
      * @return this - ps.
      */
     public MultiVarPowerSeries<C> subtract(MultiVarPowerSeries<C> ps) {
-        return zip(new MultiVarSubtract<C>(), ps);
+        return zip(new BinaryFunctor<C, C, C>() {
+                       @Override
+                       public C eval(C c1, C c2) {
+			   return c1.subtract(c2);
+                       }
+                   },ps);
     }
 
 
     /**
      * Multiply by coefficient.
-     * @param c coefficient.
-     * @return this * c.
+     * @param a coefficient.
+     * @return this * a.
      */
-    public MultiVarPowerSeries<C> multiply(C c) {
-        return map(new MultiVarMultiply<C>(c));
+    public MultiVarPowerSeries<C> multiply(final C a) {
+        return map(new UnaryFunctor<C, C>() {
+                       @Override
+                       public C eval(C c) {
+			   return c.multiply(a);
+                       }
+                   });
     }
 
 
@@ -499,7 +545,12 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
      * @return - this.
      */
     public MultiVarPowerSeries<C> negate() {
-        return map(new MultiVarNegate<C>());
+        return map(new UnaryFunctor<C, C>() {
+                       @Override
+                       public C eval(C c) {
+                              return c.negate();
+                       }
+                   });
     }
 
 
@@ -893,57 +944,3 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
     }
 
 }
-
-
-/* arithmetic method functors */
-
-
-/**
- * Internal summation functor.
- */
-class MultiVarSum<C extends RingElem<C>> implements BinaryFunctor<C, C, C> {
-
-    public C eval(C c1, C c2) {
-        return c1.sum(c2);
-    }
-}
-
-
-/**
- * Internal subtraction functor.
- */
-class MultiVarSubtract<C extends RingElem<C>> implements BinaryFunctor<C, C, C> {
-
-    public C eval(C c1, C c2) {
-        return c1.subtract(c2);
-    }
-}
-
-
-/**
- * Internal scalar multiplication functor.
- */
-class MultiVarMultiply<C extends RingElem<C>> implements UnaryFunctor<C, C> {
-
-    C x;
-
-    public MultiVarMultiply(C x) {
-        this.x = x;
-    }
-
-    public C eval(C c) {
-        return c.multiply(x);
-    }
-}
-
-
-/**
- * Internal negation functor.
- */
-class MultiVarNegate<C extends RingElem<C>> implements UnaryFunctor<C, C> {
-
-    public C eval(C c) {
-        return c.negate();
-    }
-}
-
