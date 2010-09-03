@@ -506,9 +506,11 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
         }
         GenPolynomialRing<C> pfac = polyRing();
         HashMap<Long, GenPolynomial<C>> cache = new HashMap<Long, GenPolynomial<C>>();
+        int mt = 0;
         for (Monomial<C> m : a) {
             ExpVector e = m.exponent();
             long t = e.totalDeg();
+            mt = Math.max(mt,(int)t);
             GenPolynomial<C> p = cache.get(t);
             if ( p == null ) {
                 p = pfac.getZERO().clone();
@@ -516,6 +518,7 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
             }
             p.doPutToMap(e,m.coefficient());
         }
+        mt++;
 
         return new MultiVarPowerSeries<C>(this, new MultiVarCoefficients<C>(pfac,cache) {
             @Override
@@ -523,7 +526,7 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
                 // cached coefficients returned by get
                 return coFac.getZERO();
             }
-        });
+        },mt);
     }
 
 

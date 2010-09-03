@@ -89,13 +89,24 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
      * @param lazyCoeffs generating function for coefficients.
      */
     public MultiVarPowerSeries(MultiVarPowerSeriesRing<C> ring, MultiVarCoefficients<C> lazyCoeffs) {
+        this(ring,lazyCoeffs,ring.truncate);
+    }
+
+
+    /**
+     * Constructor.
+     * @param ring power series ring.
+     * @param lazyCoeffs generating function for coefficients.
+     * @param trunc truncate parameter for this power series.
+     */
+    public MultiVarPowerSeries(MultiVarPowerSeriesRing<C> ring, MultiVarCoefficients<C> lazyCoeffs, int trunc) {
         if (lazyCoeffs == null || ring == null) {
             throw new IllegalArgumentException("null not allowed: ring = " + ring + ", lazyCoeffs = "
                     + lazyCoeffs);
         }
         this.ring = ring;
         this.lazyCoeffs = lazyCoeffs;
-        this.truncate = ring.truncate;
+        this.truncate = trunc;
     }
 
 
@@ -531,6 +542,12 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
      * @return this * a.
      */
     public MultiVarPowerSeries<C> multiply(final C a) {
+        if ( a.isZERO() ) {
+            return ring.getZERO();
+	}
+        if ( a.isONE() ) {
+            return this;
+	}
         return map(new UnaryFunctor<C, C>() {
                        @Override
                        public C eval(C c) {
@@ -863,7 +880,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
 
 
     /**
-     * Differentiate.
+     * Differentiate with respect to variable r.
      * @param r variable for the direction.
      * @return differentiate(this).
      */
@@ -885,7 +902,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
 
 
     /**
-     * Integrate with given constant.
+     * Integrate with respect to variable r and with given constant.
      * @param c integration constant.
      * @param r variable for the direction.
      * @return integrate(this).
