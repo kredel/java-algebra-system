@@ -338,6 +338,30 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
 
 
     /**
+     * Truncate.
+     * @return truncate index of power series.
+     */
+    public int truncate() {
+        return truncate;
+    }
+
+
+    /**
+     * Set truncate.
+     * @param t new truncate index.
+     * @return old truncate index of power series.
+     */
+    public int setTruncate(int t) {
+        if (t < 0) {
+            throw new IllegalArgumentException("negative truncate not allowed");
+        }
+        int ot = truncate;
+        truncate = t;
+        return ot;
+    }
+
+
+    /**
      * Get the power series of the exponential function.
      * @param r variable for the direction.
      * @return exp(x_r) as MultiVarPowerSeries<C>.

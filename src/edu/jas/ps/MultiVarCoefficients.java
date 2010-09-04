@@ -101,7 +101,7 @@ public abstract class MultiVarCoefficients<C extends RingElem<C>> {
     public C get(ExpVector index) {
         if ( index.signum() < 0 ) { // better assert
             throw new IllegalArgumentException("negative signum not allowed " + index);
-	}
+        }
         if ( coeffCache == null ) {
             return generate( index );
         }
