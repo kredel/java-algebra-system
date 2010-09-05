@@ -62,6 +62,53 @@ public class StandardBaseSeq<C extends RingElem<C>>
 
 
     /**
+     * Standard base test.
+     * @param F polynomial list.
+     * @return true, if F is a Standard base, else false.
+     */
+    public boolean isSTD(List<MultiVarPowerSeries<C>> F) {  
+        return isSTD(0,F);
+    }
+
+
+    /**
+     * Standard base test.
+     * @param modv module variable number.
+     * @param F polynomial list.
+     * @return true, if F is a Standard base, else false.
+     */
+    public boolean isSTD(int modv, List<MultiVarPowerSeries<C>> F) {  
+        if ( F == null ) {
+           return true;
+        }
+        MultiVarPowerSeries<C> pi, pj, s, h;
+        for ( int i = 0; i < F.size(); i++ ) {
+            pi = F.get(i);
+            for ( int j = i+1; j < F.size(); j++ ) {
+                pj = F.get(j);
+                if ( ! red.moduleCriterion( modv, pi, pj ) ) {
+                   continue;
+                }
+//                 if ( ! red.criterion4( pi, pj ) ) { 
+//                    continue;
+//                 }
+                s = red.SPolynomial( pi, pj );
+                if ( s.isZERO() ) {
+                   continue;
+                }
+                h = red.normalform( F, s );
+                if ( ! h.isZERO() ) {
+                   System.out.println("pi = " + pi + ", pj = " + pj);
+                   System.out.println("s  = " + s  + ", h = " + h);
+                   return false;
+                }
+            }
+        }
+        return true;
+    }
+
+
+    /**
      * Standard base using pairlist class.
      * @param F polynomial list.
      * @return STD(F) a Standard base of F.
@@ -160,8 +207,56 @@ public class StandardBaseSeq<C extends RingElem<C>>
               }
         }
         logger.debug("#sequential list = "+G.size());
-        //G = minimalGB(G);
+        G = minimalSTD(G);
         logger.info("" + pairlist); 
+        return G;
+    }
+
+
+    /**
+     * Minimal ordered Standard basis.
+     * @param Gp a Groebner base.
+     * @return a minimal Groebner base of Gp, not auto reduced.
+     */
+    public List<MultiVarPowerSeries<C>> minimalSTD(List<MultiVarPowerSeries<C>> Gp) {  
+        if ( Gp == null || Gp.size() <= 1 ) {
+            return Gp;
+        }
+        // remove zero polynomials
+        List<MultiVarPowerSeries<C>> G
+            = new ArrayList<MultiVarPowerSeries<C>>( Gp.size() );
+        for ( MultiVarPowerSeries<C> a : Gp ) { 
+            if ( a != null && !a.isZERO() ) { // always true in GB()
+                // make positive a = a.abs(); ?
+		a = a.monic();
+                G.add( a );
+            }
+        }
+        if ( G.size() <= 1 ) {
+           return G;
+        }
+        // remove top reducible polynomials
+        MultiVarPowerSeries<C> a;
+        List<MultiVarPowerSeries<C>> F = new ArrayList<MultiVarPowerSeries<C>>( G.size() );
+        while ( G.size() > 0 ) {
+            a = G.remove(0);
+            if ( red.isTopReducible(G,a) || red.isTopReducible(F,a) ) {
+               // drop polynomial 
+               if ( debug ) {
+                  System.out.println("dropped " + a);
+                  List<MultiVarPowerSeries<C>> ff = new ArrayList<MultiVarPowerSeries<C>>( G );
+                  ff.addAll(F);
+                  a = red.normalform( ff, a );
+                  if ( !a.isZERO() ) {
+                     System.out.println("error, nf(a) " + a);
+                  }
+               }
+            } else {
+                F.add(a);
+            }
+        }
+        G = F;
+        // polynomials not reduced
         return G;
     }
 

@@ -357,6 +357,8 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
         }
         int ot = truncate;
         truncate = t;
+        ONE.setTruncate(t);
+        ZERO.setTruncate(t);
         return ot;
     }
 

@@ -43,6 +43,25 @@ public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
     /**
      * Module criterium.
      * @param modv number of module variables.
+     * @param A polynomial.
+     * @param B polynomial.
+     * @return true if the module S-polynomial(i,j) is required.
+     */
+    public boolean moduleCriterion(int modv, 
+                                   MultiVarPowerSeries<C> A, 
+                                   MultiVarPowerSeries<C> B) {  
+        if ( modv == 0 ) {
+            return true;
+        }
+        ExpVector ei = A.orderExpVector();
+        ExpVector ej = B.orderExpVector();
+        return moduleCriterion(modv,ei,ej);
+    }
+
+
+    /**
+     * Module criterium.
+     * @param modv number of module variables.
      * @param ei ExpVector.
      * @param ej ExpVector.
      * @return true if the module S-polynomial(i,j) is required.
@@ -262,6 +281,34 @@ public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
             } 
         }
         return false;
+    }
+
+
+    /**
+     * Ideal containment. Test if each b in B is contained in ideal. Note:
+     * this is eventually modified to become a Groebner Base.
+     * @param S standard base.
+     * @param B list of polynomials
+     * @return true, if each b in B is contained in ideal(S), else false
+     */
+    public boolean contains(List<MultiVarPowerSeries<C>> S, List<MultiVarPowerSeries<C>> B) {
+        if (B == null || B.size() == 0) {
+            return true;
+        }
+        if (S == null || S.size() == 0) {
+            return true;
+        }
+        for (MultiVarPowerSeries<C> b : B) {
+            if (b == null) {
+                continue;
+            }
+            MultiVarPowerSeries<C> z = normalform(S, b);
+            if (!z.isZERO()) {
+                System.out.println("contains nf(b) != 0: " + b);
+                return false;
+            }
+        }
+        return true;
     }
 
 }
