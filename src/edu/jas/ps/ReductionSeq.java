@@ -1,0 +1,267 @@
+/*
+ * $Id$
+ */
+
+package edu.jas.ps;
+
+
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+
+import org.apache.log4j.Logger;
+
+import edu.jas.poly.ExpVector;
+//import edu.jas.poly.GenPolynomial;
+//import edu.jas.poly.GenPolynomialRing;
+import edu.jas.structure.RingElem;
+import edu.jas.structure.RingFactory;
+
+
+/**
+ * Multivariate power series reduction sequential use algorithm.
+ * Implements Mora normalform.
+ * @param <C> coefficient type
+ * @author Heinz Kredel
+ */
+
+public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
+                             /*extends ReductionAbstract<C>*/ {
+
+
+    private static final Logger logger = Logger.getLogger(ReductionSeq.class);
+    private boolean debug = logger.isDebugEnabled();
+
+
+    /**
+     * Constructor.
+     */
+    public ReductionSeq() {
+    }
+
+
+    /**
+     * Module criterium.
+     * @param modv number of module variables.
+     * @param ei ExpVector.
+     * @param ej ExpVector.
+     * @return true if the module S-polynomial(i,j) is required.
+     */
+    public boolean moduleCriterion(int modv, ExpVector ei, ExpVector ej) {  
+        if ( modv == 0 ) {
+            return true;
+        }
+        if ( ei.invLexCompareTo( ej, 0, modv ) != 0 ) {
+           return false; // skip pair
+        }
+        return true;
+    }
+
+
+    /**
+     * GB criterium 4.
+     * Use only for commutative polynomial rings.
+     * @param A polynomial.
+     * @param B polynomial.
+     * @param e = lcm(ht(A),ht(B))
+     * @return true if the S-polynomial(i,j) is required, else false.
+     */
+    public boolean criterion4(MultiVarPowerSeries<C> A, 
+                              MultiVarPowerSeries<C> B, 
+                              ExpVector e) {  
+        if ( logger.isInfoEnabled() ) {
+           if ( ! A.ring.equals( B.ring ) ) { 
+              logger.error("rings not equal " + A.ring + ", " + B.ring); 
+           }
+           if ( ! A.ring.isCommutative() ) {
+              logger.error("GBCriterion4 not applicabable to SolvablePolynomials"); 
+              return true;
+           }
+        }
+        ExpVector ei = A.orderExpVector();
+        ExpVector ej = B.orderExpVector();
+        ExpVector g = ei.sum(ej);
+        // boolean t =  g == e ;
+        ExpVector h = g.subtract(e);
+        int s = h.signum();
+        return ! ( s == 0 );
+    }
+
+
+    /**
+     * S-Polynomial.
+     * @param A polynomial.
+     * @param B polynomial.
+     * @return spol(A,B) the S-polynomial of A and B.
+     */
+    public MultiVarPowerSeries<C> 
+           SPolynomial(MultiVarPowerSeries<C> A, 
+                       MultiVarPowerSeries<C> B) {  
+        if ( B == null /*|| B.isZERO()*/ ) {
+           if ( A == null ) {
+              return B;
+           } 
+           return A.ring.getZERO(); 
+        }
+        if ( A == null /*|| A.isZERO()*/ ) {
+           return B.ring.getZERO(); 
+        }
+        if ( debug ) {
+           if ( ! A.ring.equals( B.ring ) ) { 
+              logger.error("rings not equal " + A.ring + ", " + B.ring); 
+           }
+        }
+        Map.Entry<ExpVector,C> ma = A.orderMonomial();
+        Map.Entry<ExpVector,C> mb = B.orderMonomial();
+
+        ExpVector e = ma.getKey();
+        ExpVector f = mb.getKey();
+
+        ExpVector g  = e.lcm(f);
+        ExpVector e1 = g.subtract(e);
+        ExpVector f1 = g.subtract(f);
+
+        C a = ma.getValue();
+        C b = mb.getValue();
+
+        MultiVarPowerSeries<C> Ap = A.multiply( b, e1 );
+        MultiVarPowerSeries<C> Bp = B.multiply( a, f1 );
+        MultiVarPowerSeries<C> C = Ap.subtract(Bp);
+        return C;
+    }
+
+
+    /**
+     * Top normalform with Mora's algorithm.
+     * @param Ap polynomial.
+     * @param Pp polynomial list.
+     * @return top-nf(Ap) with respect to Pp.
+     */
+    //@SuppressWarnings("unchecked") 
+    public MultiVarPowerSeries<C> normalform(List<MultiVarPowerSeries<C>> Pp, 
+                                             MultiVarPowerSeries<C> Ap) {  
+        if ( Pp == null || Pp.isEmpty() ) {
+            return Ap;
+        }
+        if ( Ap == null ) {
+            return Ap;
+        }
+        if ( ! Ap.ring.coFac.isField() ) {
+            throw new IllegalArgumentException("coefficients not from a field");
+        }
+        int l;
+        MultiVarPowerSeries<C>[] P;
+        synchronized (Pp) {
+            l = Pp.size();
+            P = new MultiVarPowerSeries[l];
+            for ( int i = 0; i < Pp.size(); i++ ) {
+                P[i] = Pp.get(i);
+            }
+        }
+        ArrayList<ExpVector> htl = new ArrayList<ExpVector>( l );
+        ArrayList<C> lbc = new ArrayList<C>( l ); 
+        ArrayList<MultiVarPowerSeries<C>> p = new ArrayList<MultiVarPowerSeries<C>>( l );
+        ArrayList<Long> ecart = new ArrayList<Long>( l ); 
+        Map.Entry<ExpVector,C> m;
+        int i; 
+        int j = 0;
+        for ( i = 0; i < l; i++ ) { 
+            m = P[i].orderMonomial();
+            //System.out.println("m_i = " + m);
+            if ( m != null ) { 
+                p.add(P[i]);
+                //System.out.println("e = " + m.getKey().toString(Ap.ring.vars));
+                htl.add(m.getKey());
+                lbc.add(m.getValue());
+                ecart.add( P[i].ecart() );
+                j++;
+            }
+        }
+        l = j;
+        MultiVarPowerSeries<C> R = Ap.ring.getZERO();
+        //System.out.println("R = " + R);
+        MultiVarPowerSeries<C> S = Ap;
+        m = S.orderMonomial();
+        while ( true ) { 
+            //System.out.println("m = " + m);
+            //System.out.println("S = " + S);
+            if ( m == null ) {
+                R = R.sum( S );
+                return R;
+            }
+            if ( S.isZERO() ) {
+                 return R;
+	    }
+            ExpVector e = m.getKey();
+            if ( debug ) {
+                logger.debug("e = " + e.toString(Ap.ring.vars));
+	    }
+            if ( e.totalDeg() > S.truncate() ) {
+                throw new RuntimeException("not convergent, deg = " + e.totalDeg() + " > " + S.truncate());
+            }
+            // search ps with ht(ps) | ht(S)
+            List<Integer> li = new ArrayList<Integer>();
+            for ( i = 0; i < l; i++ ) {
+                if ( e.multipleOf( htl.get(i) ) ) {
+                    //System.out.println("m = " + m);
+                    li.add(i);
+                }
+            }
+            if ( li.size() == 0 ) { 
+                R = R.sum( S );
+                return R;
+            }  
+            //System.out.println("li = " + li);
+            // select ps with smallest ecart
+            long mi = Long.MAX_VALUE;
+            for ( int k = 0; k < li.size(); k++ ) {
+                int ki = li.get(k);
+                long x = ecart.get(ki); //p.get( ki ).ecart();
+                if ( x < mi ) { // first or last?
+                    mi = x;
+                    i = ki;
+                }
+            }
+            //System.out.println("i = " + i + ", p_i = " + p.get(i));
+            long si = S.ecart();
+            if ( mi > si ) {
+                //System.out.println("ecart_i = " + mi + ", ecart_S = " + si + ", S+ = " + S);
+                p.add(S);
+                htl.add(m.getKey());
+                lbc.add(m.getValue());
+                ecart.add( si );
+                l++;
+            }
+            e = e.subtract( htl.get(i) );
+            C a = m.getValue().divide( lbc.get(i) );
+            MultiVarPowerSeries<C> Q = p.get(i).multiply( a, e );
+            S = S.subtract( Q );
+            m = S.orderMonomial();
+        }
+    }
+
+
+    /**
+     * Is top reducible.
+     * @param A polynomial.
+     * @param P polynomial list.
+     * @return true if A is top reducible with respect to P.
+     */
+    public boolean isTopReducible(List<MultiVarPowerSeries<C>> P, 
+                                  MultiVarPowerSeries<C> A) {  
+        if ( P == null || P.isEmpty() ) {
+            return false;
+        }
+        if ( A == null ) {
+            return false;
+        }
+        ExpVector e = A.orderExpVector();
+        for ( MultiVarPowerSeries<C> p : P ) {
+            if ( e.multipleOf( p.orderExpVector() ) ) {
+                return true;
+            } 
+        }
+        return false;
+    }
+
+}

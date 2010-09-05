@@ -53,7 +53,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
     /**
      * Truncation of computations.
      */
-    private int truncate = 7;
+    private int truncate;
 
 
     /**
@@ -184,7 +184,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
         if (sb.length() == 0) {
             sb.append("0");
         }
-        sb.append(" + BigO( (" + ring.varsToString() + ")^" + truncate + " )");
+        sb.append(" + BigO( (" + ring.varsToString() + ")^" + truncate + "(" + ring.truncate + ") )");
         //sb.append("...");
         //System.out.println("cache2 = " + s.lazyCoeffs.coeffCache);
         return sb.toString();
@@ -557,6 +557,29 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
                        @Override
                        public C eval(C c) {
                            return c.multiply(a);
+                       }
+                   });
+    }
+
+
+    /**
+     * Monic.
+     * @return 1/orderCoeff() * this.
+     */
+    public MultiVarPowerSeries<C> monic() {
+        ExpVector e = orderExpVector();
+        C a = coefficient(e);
+        if ( a.isONE() ) {
+            return this;
+        }
+        if ( a.isZERO() ) { // sic
+            return this;
+        }
+        final C b = a.inverse();
+        return map(new UnaryFunctor<C, C>() {
+                       @Override
+                       public C eval(C c) {
+                           return b.multiply(c);
                        }
                    });
     }

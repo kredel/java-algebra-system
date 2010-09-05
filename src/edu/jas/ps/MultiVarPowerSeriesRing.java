@@ -543,6 +543,9 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
             p.doPutToMap(e,m.coefficient());
         }
         mt++;
+        if ( mt > truncate() ) {
+	    setTruncate(mt);
+	}
 
         return new MultiVarPowerSeries<C>(this, new MultiVarCoefficients<C>(pfac,cache) {
             @Override
