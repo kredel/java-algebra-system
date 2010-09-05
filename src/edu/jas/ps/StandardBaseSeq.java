@@ -12,10 +12,6 @@ import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
 
-//import edu.jas.poly.ExpVector;
-//import edu.jas.poly.GenPolynomial;
-//import edu.jas.poly.GenPolynomialRing;
-
 import edu.jas.ps.ReductionSeq;
 import edu.jas.ps.Pair;
 import edu.jas.ps.OrderedPairlist;
@@ -31,7 +27,7 @@ import edu.jas.ps.MultiVarPowerSeriesRing;
  */
 
 public class StandardBaseSeq<C extends RingElem<C>> 
-				       /*extends StandardBaseAbstract<C>*/  {
+                                       /*extends StandardBaseAbstract<C>*/  {
 
     private static final Logger logger = Logger.getLogger(StandardBaseSeq.class);
     private final boolean debug = logger.isDebugEnabled();
@@ -48,7 +44,7 @@ public class StandardBaseSeq<C extends RingElem<C>>
      */
     public StandardBaseSeq() {
         //super();
-	this( new ReductionSeq<C>() );
+        this( new ReductionSeq<C>() );
     }
 
 
@@ -63,7 +59,7 @@ public class StandardBaseSeq<C extends RingElem<C>>
 
     /**
      * Standard base test.
-     * @param F polynomial list.
+     * @param F power series list.
      * @return true, if F is a Standard base, else false.
      */
     public boolean isSTD(List<MultiVarPowerSeries<C>> F) {  
@@ -74,7 +70,7 @@ public class StandardBaseSeq<C extends RingElem<C>>
     /**
      * Standard base test.
      * @param modv module variable number.
-     * @param F polynomial list.
+     * @param F power series list.
      * @return true, if F is a Standard base, else false.
      */
     public boolean isSTD(int modv, List<MultiVarPowerSeries<C>> F) {  
@@ -110,7 +106,7 @@ public class StandardBaseSeq<C extends RingElem<C>>
 
     /**
      * Standard base using pairlist class.
-     * @param F polynomial list.
+     * @param F power series list.
      * @return STD(F) a Standard base of F.
      */
     public List<MultiVarPowerSeries<C>> STD( List<MultiVarPowerSeries<C>> F ) {  
@@ -122,7 +118,7 @@ public class StandardBaseSeq<C extends RingElem<C>>
     /**
      * Standard base using pairlist class.
      * @param modv module variable number.
-     * @param F polynomial list.
+     * @param F power series list.
      * @return STD(F) a Standard base of F.
      */
     public List<MultiVarPowerSeries<C>> STD( int modv, List<MultiVarPowerSeries<C>> F ) {  
@@ -134,7 +130,7 @@ public class StandardBaseSeq<C extends RingElem<C>>
         while ( it.hasNext() ) { 
             p = it.next();
             if ( p.truncate() > 0 ) {
-		//p = p.monic();
+                //p = p.monic();
                if ( p.isONE() ) {
                   G.clear(); G.add( p );
                   return G; // since no threads are activated
@@ -222,26 +218,26 @@ public class StandardBaseSeq<C extends RingElem<C>>
         if ( Gp == null || Gp.size() <= 1 ) {
             return Gp;
         }
-        // remove zero polynomials
+        // remove zero power series
         List<MultiVarPowerSeries<C>> G
             = new ArrayList<MultiVarPowerSeries<C>>( Gp.size() );
         for ( MultiVarPowerSeries<C> a : Gp ) { 
             if ( a != null && !a.isZERO() ) { // always true in GB()
                 // make positive a = a.abs(); ?
-		a = a.monic();
+                a = a.monic();
                 G.add( a );
             }
         }
         if ( G.size() <= 1 ) {
            return G;
         }
-        // remove top reducible polynomials
+        // remove top reducible power series
         MultiVarPowerSeries<C> a;
         List<MultiVarPowerSeries<C>> F = new ArrayList<MultiVarPowerSeries<C>>( G.size() );
         while ( G.size() > 0 ) {
             a = G.remove(0);
             if ( red.isTopReducible(G,a) || red.isTopReducible(F,a) ) {
-               // drop polynomial 
+               // drop power series 
                if ( debug ) {
                   System.out.println("dropped " + a);
                   List<MultiVarPowerSeries<C>> ff = new ArrayList<MultiVarPowerSeries<C>>( G );
@@ -256,7 +252,7 @@ public class StandardBaseSeq<C extends RingElem<C>>
             }
         }
         G = F;
-        // polynomials not reduced
+        // power series not reduced
         return G;
     }
 

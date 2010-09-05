@@ -15,9 +15,6 @@ import java.util.TreeMap;
 import org.apache.log4j.Logger;
 
 import edu.jas.poly.ExpVector;
-import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.GenPolynomialRing;
-//import edu.jas.poly.GenSolvablePolynomialRing;
 
 import edu.jas.ps.MultiVarPowerSeries;
 import edu.jas.ps.MultiVarPowerSeriesRing;
@@ -49,7 +46,7 @@ public class OrderedPairlist<C extends RingElem<C> > {
 
     /**
      * Constructor for OrderedPairlist.
-     * @param r polynomial factory.
+     * @param r power series factory.
      */
     public OrderedPairlist(MultiVarPowerSeriesRing<C> r) {
         this(0,r);
@@ -59,14 +56,14 @@ public class OrderedPairlist<C extends RingElem<C> > {
     /**
      * Constructor for OrderedPairlist.
      * @param m number of module variables.
-     * @param r polynomial factory.
+     * @param r power series factory.
      */
     public OrderedPairlist(int m, MultiVarPowerSeriesRing<C> r) {
          moduleVars = m;
          ring = r;
          P = new ArrayList<MultiVarPowerSeries<C>>();
          pairlist = new TreeMap<ExpVector,LinkedList<Pair<C>>>( 
-			        ring.polyRing().tord.getAscendComparator() );
+                                ring.polyRing().tord.getAscendComparator() );
          //pairlist = new TreeMap( to.getSugarComparator() );
          red = new ArrayList<BitSet>();
          putCount = 0;
@@ -93,9 +90,9 @@ public class OrderedPairlist<C extends RingElem<C> > {
 
 
     /**
-     * Put one Polynomial to the pairlist and reduction matrix.
-     * @param p polynomial.
-     * @return the index of the added polynomial.
+     * Put one power Series to the pairlist and reduction matrix.
+     * @param p power series.
+     * @return the index of the added power series.
      */
     public synchronized int put(MultiVarPowerSeries<C> p) { 
            putCount++;
@@ -151,7 +148,7 @@ public class OrderedPairlist<C extends RingElem<C> > {
 
     /**
      * Remove the next required pair from the pairlist and reduction matrix.
-     * Appy the criterions 3 and 4 to see if the S-polynomial is required.
+     * Appy the criterions 3 and 4 to see if the S-power-series is required.
      * @return the next pair if one exists, otherwise null.
      */
     public synchronized Pair<C> removeNext() { 
@@ -211,8 +208,8 @@ public class OrderedPairlist<C extends RingElem<C> > {
 
 
     /**
-     * Get the list of polynomials.
-     * @return the polynomial list.
+     * Get the list of power seriess.
+     * @return the power series list.
      */
     public List<MultiVarPowerSeries<C>> getList() { 
           return P;
@@ -220,7 +217,7 @@ public class OrderedPairlist<C extends RingElem<C> > {
 
 
     /**
-     * Get the number of polynomials put to the pairlist.
+     * Get the number of power series put to the pairlist.
      * @return the number of calls to put.
      */
     public int putCount() { 
@@ -238,9 +235,9 @@ public class OrderedPairlist<C extends RingElem<C> > {
 
 
     /**
-     * Put to ONE-Polynomial to the pairlist.
-     * @param one polynomial. (no more required)
-     * @return the index of the last polynomial.
+     * Put to ONE-power-series to the pairlist.
+     * @param one power series. (no more required)
+     * @return the index of the last power series.
      */
     public synchronized int putOne(MultiVarPowerSeries<C> one) { 
         putCount++;
@@ -261,7 +258,7 @@ public class OrderedPairlist<C extends RingElem<C> > {
 
     /**
      * GB criterium 3.
-     * @return true if the S-polynomial(i,j) is required.
+     * @return true if the S-power-series(i,j) is required.
      */
     public boolean criterion3(int i, int j, ExpVector eij) {  
         // assert i < j;
@@ -302,4 +299,3 @@ public class OrderedPairlist<C extends RingElem<C> > {
         return true;
     }
 }
-

@@ -713,11 +713,16 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
         ExpVector e = orderExpVector();
         long d = e.totalDeg();
         long hd = d; 
-        for (ExpVector i : new ExpVectorIterable(ring.nvar,true,truncate)) {
-            if ( !coefficient(i).isZERO() ) {
-                hd = i.totalDeg();
-	    }
-	}
+//      for (ExpVector i : new ExpVectorIterable(ring.nvar,true,truncate)) {
+//          if ( !coefficient(i).isZERO() ) {
+//              hd = i.totalDeg();
+//          }
+//      }
+        for (long i = d+1L; i <= truncate; i++) {
+            if ( ! homogeneousPart(i).isZERO() ) {
+                hd = i;
+            }
+        }
         //System.out.println("d = " + d + ", hd = " + hd + ", coeffCache = " + lazyCoeffs.coeffCache + ", this = " + this);
         return hd - d;
     }

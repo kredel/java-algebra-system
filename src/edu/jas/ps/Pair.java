@@ -31,8 +31,8 @@ public class Pair<C extends RingElem<C> >
 
     /**
      * Pair constructor.
-     * @param a polynomial i.
-     * @param b polynomial j.
+     * @param a power series i.
+     * @param b power series j.
      * @param i first index.
      * @param j second index.
      */
@@ -81,7 +81,7 @@ public class Pair<C extends RingElem<C> >
 
     /**
      * Set zero reduction.
-     * The S-polynomial of this Pair was reduced to zero.
+     * The S-power-series of this Pair was reduced to zero.
      */
     public void setZero() {
         toZero = true;
@@ -90,7 +90,7 @@ public class Pair<C extends RingElem<C> >
 
     /**
      * Is reduced to zero.
-     * @return true if the S-polynomial of this Pair was reduced to zero, else false.
+     * @return true if the S-power-series of this Pair was reduced to zero, else false.
      */
     public boolean isZero() {
         return toZero;

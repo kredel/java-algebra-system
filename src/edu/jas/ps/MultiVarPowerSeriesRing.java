@@ -546,8 +546,8 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
         }
         mt++;
         if ( mt > truncate() ) {
-	    setTruncate(mt);
-	}
+            setTruncate(mt);
+        }
 
         return new MultiVarPowerSeries<C>(this, new MultiVarCoefficients<C>(pfac,cache) {
             @Override

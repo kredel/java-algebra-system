@@ -242,7 +242,7 @@ public class MultiExamples {
         List<MultiVarPowerSeries<BigRational>> S = tm.STD(L);
         for ( MultiVarPowerSeries<BigRational> ps : S ) {
              System.out.println("ps = " + ps);
-	}
+        }
         System.out.println("\nS = " + S);
 
         boolean s = tm.isSTD(S);

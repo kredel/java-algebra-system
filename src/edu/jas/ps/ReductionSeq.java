@@ -12,8 +12,7 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import edu.jas.poly.ExpVector;
-//import edu.jas.poly.GenPolynomial;
-//import edu.jas.poly.GenPolynomialRing;
+
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
 
@@ -43,9 +42,9 @@ public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
     /**
      * Module criterium.
      * @param modv number of module variables.
-     * @param A polynomial.
-     * @param B polynomial.
-     * @return true if the module S-polynomial(i,j) is required.
+     * @param A power series.
+     * @param B power series.
+     * @return true if the module S-power-series(i,j) is required.
      */
     public boolean moduleCriterion(int modv, 
                                    MultiVarPowerSeries<C> A, 
@@ -64,7 +63,7 @@ public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
      * @param modv number of module variables.
      * @param ei ExpVector.
      * @param ej ExpVector.
-     * @return true if the module S-polynomial(i,j) is required.
+     * @return true if the module S-power-series(i,j) is required.
      */
     public boolean moduleCriterion(int modv, ExpVector ei, ExpVector ej) {  
         if ( modv == 0 ) {
@@ -79,11 +78,11 @@ public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
 
     /**
      * GB criterium 4.
-     * Use only for commutative polynomial rings.
-     * @param A polynomial.
-     * @param B polynomial.
+     * Use only for commutative power series rings.
+     * @param A power series.
+     * @param B power series.
      * @param e = lcm(ht(A),ht(B))
-     * @return true if the S-polynomial(i,j) is required, else false.
+     * @return true if the S-power-series(i,j) is required, else false.
      */
     public boolean criterion4(MultiVarPowerSeries<C> A, 
                               MultiVarPowerSeries<C> B, 
@@ -93,7 +92,7 @@ public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
               logger.error("rings not equal " + A.ring + ", " + B.ring); 
            }
            if ( ! A.ring.isCommutative() ) {
-              logger.error("GBCriterion4 not applicabable to SolvablePolynomials"); 
+              logger.error("GBCriterion4 not applicabable to non-commutative power series"); 
               return true;
            }
         }
@@ -108,10 +107,10 @@ public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
 
 
     /**
-     * S-Polynomial.
-     * @param A polynomial.
-     * @param B polynomial.
-     * @return spol(A,B) the S-polynomial of A and B.
+     * S-Power-series, S-polynomial.
+     * @param A power series.
+     * @param B power series.
+     * @return spol(A,B) the S-power-series of A and B.
      */
     public MultiVarPowerSeries<C> 
            SPolynomial(MultiVarPowerSeries<C> A, 
@@ -152,8 +151,8 @@ public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
 
     /**
      * Top normalform with Mora's algorithm.
-     * @param Ap polynomial.
-     * @param Pp polynomial list.
+     * @param Ap power series.
+     * @param Pp power series list.
      * @return top-nf(Ap) with respect to Pp.
      */
     //@SuppressWarnings("unchecked") 
@@ -210,11 +209,11 @@ public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
             }
             if ( S.isZERO() ) {
                  return R;
-	    }
+            }
             ExpVector e = m.getKey();
             if ( debug ) {
                 logger.debug("e = " + e.toString(Ap.ring.vars));
-	    }
+            }
             if ( e.totalDeg() > S.truncate() ) {
                 throw new RuntimeException("not convergent, deg = " + e.totalDeg() + " > " + S.truncate());
             }
@@ -262,8 +261,8 @@ public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
 
     /**
      * Is top reducible.
-     * @param A polynomial.
-     * @param P polynomial list.
+     * @param A power series.
+     * @param P power series list.
      * @return true if A is top reducible with respect to P.
      */
     public boolean isTopReducible(List<MultiVarPowerSeries<C>> P, 
@@ -288,7 +287,7 @@ public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
      * Ideal containment. Test if each b in B is contained in ideal. Note:
      * this is eventually modified to become a Groebner Base.
      * @param S standard base.
-     * @param B list of polynomials
+     * @param B list of power series
      * @return true, if each b in B is contained in ideal(S), else false
      */
     public boolean contains(List<MultiVarPowerSeries<C>> S, List<MultiVarPowerSeries<C>> B) {
