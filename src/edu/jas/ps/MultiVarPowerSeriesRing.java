@@ -13,10 +13,10 @@ import java.util.List;
 import java.util.Random;
 
 import edu.jas.kern.PrettyPrint;
+import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.Monomial;
-import edu.jas.poly.ExpVector;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
 
@@ -98,7 +98,7 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
      * @param fac polynomial ring factory.
      */
     public MultiVarPowerSeriesRing(GenPolynomialRing<C> fac) {
-        this(fac.coFac,fac.nvar,fac.getVars());
+        this(fac.coFac, fac.nvar, fac.getVars());
     }
 
 
@@ -163,6 +163,8 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
         }
         EVZERO = ExpVector.create(nvar);
         ONE = new MultiVarPowerSeries<C>(this, new MultiVarCoefficients<C>(this) {
+
+
             @Override
             public C generate(ExpVector i) {
                 if (i.isZERO()) {
@@ -173,6 +175,8 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
             }
         });
         ZERO = new MultiVarPowerSeries<C>(this, new MultiVarCoefficients<C>(this) {
+
+
             @Override
             public C generate(ExpVector i) {
                 return coFac.getZERO();
@@ -226,6 +230,7 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
         return s;
     }
 
+
     /**
      * Get a scripting compatible string representation.
      * @return script compatible representation for this ElemFactory.
@@ -261,7 +266,7 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
             a = (MultiVarPowerSeriesRing<C>) B;
         } catch (ClassCastException ignored) {
         }
-        if (Arrays.equals(vars,a.vars)) {
+        if (Arrays.equals(vars, a.vars)) {
             return true;
         }
         return false;
@@ -309,6 +314,8 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
         List<MultiVarPowerSeries<C>> gens = new ArrayList<MultiVarPowerSeries<C>>(rgens.size());
         for (final C cg : rgens) {
             MultiVarPowerSeries<C> g = new MultiVarPowerSeries<C>(this, new MultiVarCoefficients<C>(this) {
+
+
                 @Override
                 public C generate(ExpVector i) {
                     if (i.isZERO()) {
@@ -320,8 +327,8 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
             });
             gens.add(g);
         }
-        for ( int i = 0; i < nvar; i++ ) {
-            gens.add(ONE.shift(1,i));
+        for (int i = 0; i < nvar; i++) {
+            gens.add(ONE.shift(1, i));
         }
         return gens;
     }
@@ -371,8 +378,9 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
     public MultiVarPowerSeries<C> getEXP(final int r) {
         return fixPoint(new MultiVarPowerSeriesMap<C>() {
 
+
             public MultiVarPowerSeries<C> map(MultiVarPowerSeries<C> e) {
-                return e.integrate(coFac.getONE(),r);
+                return e.integrate(coFac.getONE(), r);
             }
         });
     }
@@ -386,8 +394,9 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
     public MultiVarPowerSeries<C> getSIN(final int r) {
         return fixPoint(new MultiVarPowerSeriesMap<C>() {
 
+
             public MultiVarPowerSeries<C> map(MultiVarPowerSeries<C> s) {
-                return s.negate().integrate(coFac.getONE(),r).integrate(coFac.getZERO(),r);
+                return s.negate().integrate(coFac.getONE(), r).integrate(coFac.getZERO(), r);
             }
         });
     }
@@ -401,8 +410,9 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
     public MultiVarPowerSeries<C> getCOS(final int r) {
         return fixPoint(new MultiVarPowerSeriesMap<C>() {
 
+
             public MultiVarPowerSeries<C> map(MultiVarPowerSeries<C> c) {
-                return c.negate().integrate(coFac.getZERO(),r).integrate(coFac.getONE(),r);
+                return c.negate().integrate(coFac.getZERO(), r).integrate(coFac.getONE(), r);
             }
         });
     }
@@ -416,8 +426,9 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
     public MultiVarPowerSeries<C> getTAN(final int r) {
         return fixPoint(new MultiVarPowerSeriesMap<C>() {
 
+
             public MultiVarPowerSeries<C> map(MultiVarPowerSeries<C> t) {
-                return t.multiply(t).sum(getONE()).integrate(coFac.getZERO(),r);
+                return t.multiply(t).sum(getONE()).integrate(coFac.getZERO(), r);
             }
         });
     }
@@ -431,7 +442,7 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
      * @return f.integrate(c).
      */
     public MultiVarPowerSeries<C> solvePDE(MultiVarPowerSeries<C> f, C c, int r) {
-        return f.integrate(c,r);
+        return f.integrate(c, r);
     }
 
 
@@ -478,34 +489,39 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
      */
     public MultiVarPowerSeries<C> fromInteger(final long a) {
         return new MultiVarPowerSeries<C>(this, new MultiVarCoefficients<C>(this) {
-                @Override
-                public C generate(ExpVector i) {
-                    if (i.isZERO()) {
-                        return coFac.fromInteger(a);
-                    } else {
-                        return coFac.getZERO();
-                    }
+
+
+            @Override
+            public C generate(ExpVector i) {
+                if (i.isZERO()) {
+                    return coFac.fromInteger(a);
+                } else {
+                    return coFac.getZERO();
                 }
-            });
+            }
+        });
     }
 
 
     /**
-     * Get a (constant) MultiVarPowerSeries&lt;C&gt; from a java.math.BigInteger.
+     * Get a (constant) MultiVarPowerSeries&lt;C&gt; from a
+     * java.math.BigInteger.
      * @param a BigInteger.
      * @return a MultiVarPowerSeries&lt;C&gt;.
      */
     public MultiVarPowerSeries<C> fromInteger(final java.math.BigInteger a) {
         return new MultiVarPowerSeries<C>(this, new MultiVarCoefficients<C>(this) {
-                @Override
-                public C generate(ExpVector i) {
-                    if (i.isZERO()) {
-                        return coFac.fromInteger(a);
-                    } else {
-                        return coFac.getZERO();
-                    }
+
+
+            @Override
+            public C generate(ExpVector i) {
+                if (i.isZERO()) {
+                    return coFac.fromInteger(a);
+                } else {
+                    return coFac.getZERO();
                 }
-            });
+            }
+        });
     }
 
 
@@ -514,7 +530,7 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
      * @return GenPolynomialRing&lt;C&gt;.
      */
     public GenPolynomialRing<C> polyRing() {
-        return new GenPolynomialRing<C>(coFac,nvar,vars);
+        return new GenPolynomialRing<C>(coFac, nvar, vars);
     }
 
 
@@ -536,26 +552,28 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
         for (Monomial<C> m : a) {
             ExpVector e = m.exponent();
             long t = e.totalDeg();
-            mt = Math.max(mt,(int)t);
+            mt = Math.max(mt, (int) t);
             GenPolynomial<C> p = cache.get(t);
-            if ( p == null ) {
+            if (p == null) {
                 p = pfac.getZERO().clone();
                 cache.put(t, p);
             }
-            p.doPutToMap(e,m.coefficient());
+            p.doPutToMap(e, m.coefficient());
         }
         mt++;
-        if ( mt > truncate() ) {
+        if (mt > truncate()) {
             setTruncate(mt);
         }
 
-        return new MultiVarPowerSeries<C>(this, new MultiVarCoefficients<C>(pfac,cache) {
+        return new MultiVarPowerSeries<C>(this, new MultiVarCoefficients<C>(pfac, cache) {
+
+
             @Override
             public C generate(ExpVector e) {
                 // cached coefficients returned by get
                 return coFac.getZERO();
             }
-        },mt);
+        }, mt);
     }
 
 
@@ -570,26 +588,28 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
             return ZERO;
         }
         return new MultiVarPowerSeries<C>(this, new MultiVarCoefficients<C>(this) {
-                @Override
-                public C generate(ExpVector i) {
-                    if ( i.isZERO() ) {
-                        return ps.coefficient(0);
-                    }
-                    int[] dep = i.dependencyOnVariables();
-                    if ( dep.length != 1 ) {
-                        return coFac.getZERO();
-                    }
-                    if ( dep[0] != r ) {
-                        return coFac.getZERO();
-                    }
-                    int j = (int)i.getVal(r);
-                    if ( j > 0 ) {
-                        return ps.coefficient(j);
-                    } else {
-                        return coFac.getZERO();
-                    }
+
+
+            @Override
+            public C generate(ExpVector i) {
+                if (i.isZERO()) {
+                    return ps.coefficient(0);
                 }
-            });
+                int[] dep = i.dependencyOnVariables();
+                if (dep.length != 1) {
+                    return coFac.getZERO();
+                }
+                if (dep[0] != r) {
+                    return coFac.getZERO();
+                }
+                int j = (int) i.getVal(r);
+                if (j > 0) {
+                    return ps.coefficient(j);
+                } else {
+                    return coFac.getZERO();
+                }
+            }
+        });
     }
 
 
@@ -643,6 +663,8 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
      */
     public MultiVarPowerSeries<C> random(final int k, final float d, final Random rnd) {
         return new MultiVarPowerSeries<C>(this, new MultiVarCoefficients<C>(this) {
+
+
             @Override
             public C generate(ExpVector i) {
                 // cached coefficients returned by get

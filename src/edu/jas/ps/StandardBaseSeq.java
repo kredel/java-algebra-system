@@ -4,6 +4,7 @@
 
 package edu.jas.ps;
 
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
@@ -12,24 +13,20 @@ import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
 
-import edu.jas.ps.ReductionSeq;
-import edu.jas.ps.Pair;
-import edu.jas.ps.OrderedPairlist;
-import edu.jas.ps.MultiVarPowerSeries;
-import edu.jas.ps.MultiVarPowerSeriesRing;
-
 
 /**
- * Dtandard Base sequential algorithm.
- * Implements Standard bases and GB test.
+ * Dtandard Base sequential algorithm. Implements Standard bases and GB test.
  * @param <C> coefficient type
  * @author Heinz Kredel
  */
 
-public class StandardBaseSeq<C extends RingElem<C>> 
-                                       /*extends StandardBaseAbstract<C>*/  {
+public class StandardBaseSeq<C extends RingElem<C>>
+/*extends StandardBaseAbstract<C>*/{
+
 
     private static final Logger logger = Logger.getLogger(StandardBaseSeq.class);
+
+
     private final boolean debug = logger.isDebugEnabled();
 
 
@@ -44,7 +41,7 @@ public class StandardBaseSeq<C extends RingElem<C>>
      */
     public StandardBaseSeq() {
         //super();
-        this( new ReductionSeq<C>() );
+        this(new ReductionSeq<C>());
     }
 
 
@@ -62,8 +59,8 @@ public class StandardBaseSeq<C extends RingElem<C>>
      * @param F power series list.
      * @return true, if F is a Standard base, else false.
      */
-    public boolean isSTD(List<MultiVarPowerSeries<C>> F) {  
-        return isSTD(0,F);
+    public boolean isSTD(List<MultiVarPowerSeries<C>> F) {
+        return isSTD(0, F);
     }
 
 
@@ -73,30 +70,30 @@ public class StandardBaseSeq<C extends RingElem<C>>
      * @param F power series list.
      * @return true, if F is a Standard base, else false.
      */
-    public boolean isSTD(int modv, List<MultiVarPowerSeries<C>> F) {  
-        if ( F == null ) {
-           return true;
+    public boolean isSTD(int modv, List<MultiVarPowerSeries<C>> F) {
+        if (F == null) {
+            return true;
         }
         MultiVarPowerSeries<C> pi, pj, s, h;
-        for ( int i = 0; i < F.size(); i++ ) {
+        for (int i = 0; i < F.size(); i++) {
             pi = F.get(i);
-            for ( int j = i+1; j < F.size(); j++ ) {
+            for (int j = i + 1; j < F.size(); j++) {
                 pj = F.get(j);
-                if ( ! red.moduleCriterion( modv, pi, pj ) ) {
-                   continue;
+                if (!red.moduleCriterion(modv, pi, pj)) {
+                    continue;
                 }
-//                 if ( ! red.criterion4( pi, pj ) ) { 
-//                    continue;
-//                 }
-                s = red.SPolynomial( pi, pj );
-                if ( s.isZERO() ) {
-                   continue;
+                //                 if ( ! red.criterion4( pi, pj ) ) { 
+                //                    continue;
+                //                 }
+                s = red.SPolynomial(pi, pj);
+                if (s.isZERO()) {
+                    continue;
                 }
-                h = red.normalform( F, s );
-                if ( ! h.isZERO() ) {
-                   System.out.println("pi = " + pi + ", pj = " + pj);
-                   System.out.println("s  = " + s  + ", h = " + h);
-                   return false;
+                h = red.normalform(F, s);
+                if (!h.isZERO()) {
+                    System.out.println("pi = " + pi + ", pj = " + pj);
+                    System.out.println("s  = " + s + ", h = " + h);
+                    return false;
                 }
             }
         }
@@ -109,10 +106,9 @@ public class StandardBaseSeq<C extends RingElem<C>>
      * @param F power series list.
      * @return STD(F) a Standard base of F.
      */
-    public List<MultiVarPowerSeries<C>> STD( List<MultiVarPowerSeries<C>> F ) {  
-        return STD(0,F);
+    public List<MultiVarPowerSeries<C>> STD(List<MultiVarPowerSeries<C>> F) {
+        return STD(0, F);
     }
-
 
 
     /**
@@ -121,35 +117,36 @@ public class StandardBaseSeq<C extends RingElem<C>>
      * @param F power series list.
      * @return STD(F) a Standard base of F.
      */
-    public List<MultiVarPowerSeries<C>> STD( int modv, List<MultiVarPowerSeries<C>> F ) {  
+    public List<MultiVarPowerSeries<C>> STD(int modv, List<MultiVarPowerSeries<C>> F) {
         MultiVarPowerSeries<C> p;
         List<MultiVarPowerSeries<C>> G = new ArrayList<MultiVarPowerSeries<C>>();
-        OrderedPairlist<C> pairlist = null; 
+        OrderedPairlist<C> pairlist = null;
         int l = F.size();
         ListIterator<MultiVarPowerSeries<C>> it = F.listIterator();
-        while ( it.hasNext() ) { 
+        while (it.hasNext()) {
             p = it.next();
-            if ( p.truncate() > 0 ) {
+            if (p.truncate() > 0) {
                 //p = p.monic();
-               if ( p.isONE() ) {
-                  G.clear(); G.add( p );
-                  return G; // since no threads are activated
-               }
-               G.add( p );
-               if ( pairlist == null ) {
-                  pairlist = new OrderedPairlist<C>( modv, p.ring );
-                  if ( ! p.ring.coFac.isField() ) {
-                     throw new IllegalArgumentException("coefficients not from a field");
-                  }
-               }
-               // putOne not required
-               pairlist.put( p );
-            } else { 
-               l--;
+                if (p.isONE()) {
+                    G.clear();
+                    G.add(p);
+                    return G; // since no threads are activated
+                }
+                G.add(p);
+                if (pairlist == null) {
+                    pairlist = new OrderedPairlist<C>(modv, p.ring);
+                    if (!p.ring.coFac.isField()) {
+                        throw new IllegalArgumentException("coefficients not from a field");
+                    }
+                }
+                // putOne not required
+                pairlist.put(p);
+            } else {
+                l--;
             }
         }
-        if ( l <= 1 ) {
-           return G; // since no threads are activated
+        if (l <= 1) {
+            return G; // since no threads are activated
         }
 
         Pair<C> pair;
@@ -157,54 +154,55 @@ public class StandardBaseSeq<C extends RingElem<C>>
         MultiVarPowerSeries<C> pj;
         MultiVarPowerSeries<C> S;
         MultiVarPowerSeries<C> H;
-        while ( pairlist.hasNext() ) {
-              pair = pairlist.removeNext();
-              //logger.debug("pair = " + pair);
-              if ( pair == null ) {
-                  continue; 
-              }
-              pi = pair.pi; 
-              pj = pair.pj; 
-              if ( /*false &&*/ debug ) {
-                 logger.debug("pi    = " + pi );
-                 logger.debug("pj    = " + pj );
-              }
+        while (pairlist.hasNext()) {
+            pair = pairlist.removeNext();
+            //logger.debug("pair = " + pair);
+            if (pair == null) {
+                continue;
+            }
+            pi = pair.pi;
+            pj = pair.pj;
+            if ( /*false &&*/debug) {
+                logger.debug("pi    = " + pi);
+                logger.debug("pj    = " + pj);
+            }
 
-              S = red.SPolynomial( pi, pj );
-              if ( S.isZERO() ) {
-                 pair.setZero();
-                 continue;
-              }
-              if ( logger.isInfoEnabled() ) {
-                  logger.info("ht(S) = " + S.orderExpVector() );
-              }
+            S = red.SPolynomial(pi, pj);
+            if (S.isZERO()) {
+                pair.setZero();
+                continue;
+            }
+            if (logger.isInfoEnabled()) {
+                logger.info("ht(S) = " + S.orderExpVector());
+            }
 
-              H = red.normalform( G, S );
-              if ( H.isZERO() ) {
-                 pair.setZero();
-                 continue;
-              }
-              if ( logger.isInfoEnabled() ) {
-                  logger.info("ht(H) = " + H.orderExpVector() );
-              }
+            H = red.normalform(G, S);
+            if (H.isZERO()) {
+                pair.setZero();
+                continue;
+            }
+            if (logger.isInfoEnabled()) {
+                logger.info("ht(H) = " + H.orderExpVector());
+            }
 
-              //H = H.monic();
-              if ( H.isONE() ) {
-                  G.clear(); G.add( H );
-                  return G; // since no threads are activated
-              }
-              if ( logger.isInfoEnabled() ) {
-                 logger.info("H = " + H );
-              }
-              if ( ! H.isZERO() ) {
-                 l++;
-                 G.add( H );
-                 pairlist.put( H );
-              }
+            //H = H.monic();
+            if (H.isONE()) {
+                G.clear();
+                G.add(H);
+                return G; // since no threads are activated
+            }
+            if (logger.isInfoEnabled()) {
+                logger.info("H = " + H);
+            }
+            if (!H.isZERO()) {
+                l++;
+                G.add(H);
+                pairlist.put(H);
+            }
         }
-        logger.debug("#sequential list = "+G.size());
+        logger.debug("#sequential list = " + G.size());
         G = minimalSTD(G);
-        logger.info("" + pairlist); 
+        logger.info("" + pairlist);
         return G;
     }
 
@@ -214,39 +212,38 @@ public class StandardBaseSeq<C extends RingElem<C>>
      * @param Gp a Groebner base.
      * @return a minimal Groebner base of Gp, not auto reduced.
      */
-    public List<MultiVarPowerSeries<C>> minimalSTD(List<MultiVarPowerSeries<C>> Gp) {  
-        if ( Gp == null || Gp.size() <= 1 ) {
+    public List<MultiVarPowerSeries<C>> minimalSTD(List<MultiVarPowerSeries<C>> Gp) {
+        if (Gp == null || Gp.size() <= 1) {
             return Gp;
         }
         // remove zero power series
-        List<MultiVarPowerSeries<C>> G
-            = new ArrayList<MultiVarPowerSeries<C>>( Gp.size() );
-        for ( MultiVarPowerSeries<C> a : Gp ) { 
-            if ( a != null && !a.isZERO() ) { // always true in GB()
+        List<MultiVarPowerSeries<C>> G = new ArrayList<MultiVarPowerSeries<C>>(Gp.size());
+        for (MultiVarPowerSeries<C> a : Gp) {
+            if (a != null && !a.isZERO()) { // always true in GB()
                 // make positive a = a.abs(); ?
                 a = a.monic();
-                G.add( a );
+                G.add(a);
             }
         }
-        if ( G.size() <= 1 ) {
-           return G;
+        if (G.size() <= 1) {
+            return G;
         }
         // remove top reducible power series
         MultiVarPowerSeries<C> a;
-        List<MultiVarPowerSeries<C>> F = new ArrayList<MultiVarPowerSeries<C>>( G.size() );
-        while ( G.size() > 0 ) {
+        List<MultiVarPowerSeries<C>> F = new ArrayList<MultiVarPowerSeries<C>>(G.size());
+        while (G.size() > 0) {
             a = G.remove(0);
-            if ( red.isTopReducible(G,a) || red.isTopReducible(F,a) ) {
-               // drop power series 
-               if ( debug ) {
-                  System.out.println("dropped " + a);
-                  List<MultiVarPowerSeries<C>> ff = new ArrayList<MultiVarPowerSeries<C>>( G );
-                  ff.addAll(F);
-                  a = red.normalform( ff, a );
-                  if ( !a.isZERO() ) {
-                     System.out.println("error, nf(a) " + a);
-                  }
-               }
+            if (red.isTopReducible(G, a) || red.isTopReducible(F, a)) {
+                // drop power series 
+                if (debug) {
+                    System.out.println("dropped " + a);
+                    List<MultiVarPowerSeries<C>> ff = new ArrayList<MultiVarPowerSeries<C>>(G);
+                    ff.addAll(F);
+                    a = red.normalform(ff, a);
+                    if (!a.isZERO()) {
+                        System.out.println("error, nf(a) " + a);
+                    }
+                }
             } else {
                 F.add(a);
             }

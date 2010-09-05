@@ -9,8 +9,8 @@ import edu.jas.structure.RingElem;
 
 
 /**
- * Multivariate power series map interface.
- * Defines method for mapping of power series.
+ * Multivariate power series map interface. Defines method for mapping of power
+ * series.
  * @param <C> ring element type
  * @author Heinz Kredel
  */

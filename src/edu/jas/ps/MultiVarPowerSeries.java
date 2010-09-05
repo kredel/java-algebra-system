@@ -4,16 +4,13 @@
 
 package edu.jas.ps;
 
+
+import java.util.AbstractMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.AbstractMap;
-import java.util.Set;
-import java.util.TreeSet;
 
-import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.GenPolynomialRing;
-import edu.jas.poly.Monomial;
 import edu.jas.poly.ExpVector;
+import edu.jas.poly.GenPolynomial;
 import edu.jas.structure.BinaryFunctor;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.Selector;
@@ -22,14 +19,14 @@ import edu.jas.util.ExpVectorIterable;
 
 
 /**
- * Multivariate power series implementation. Uses inner classes and lazy evaluated
- * generating function for coefficients. All ring element methods use lazy
- * evaluation except where noted otherwise. Eager evaluated methods are
- * <code>toString()</code>, <code>compareTo()</code>,
- * <code>equals()</code>, <code>evaluate()</code>, or methods which use the
- * <code>order()</code> or <code>orderExpVector()</code> methods, like <code>signum()</code>,
- * <code>abs()</code>, <code>divide()</code>, <code>remainder()</code>
- * and <code>gcd()</code>.
+ * Multivariate power series implementation. Uses inner classes and lazy
+ * evaluated generating function for coefficients. All ring element methods use
+ * lazy evaluation except where noted otherwise. Eager evaluated methods are
+ * <code>toString()</code>, <code>compareTo()</code>, <code>equals()</code>,
+ * <code>evaluate()</code>, or methods which use the <code>order()</code> or
+ * <code>orderExpVector()</code> methods, like <code>signum()</code>,
+ * <code>abs()</code>, <code>divide()</code>, <code>remainder()</code> and
+ * <code>gcd()</code>.
  * @param <C> ring element type
  * @author Heinz Kredel
  */
@@ -93,7 +90,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
      * @param lazyCoeffs generating function for coefficients.
      */
     public MultiVarPowerSeries(MultiVarPowerSeriesRing<C> ring, MultiVarCoefficients<C> lazyCoeffs) {
-        this(ring,lazyCoeffs,ring.truncate);
+        this(ring, lazyCoeffs, ring.truncate);
     }
 
 
@@ -153,7 +150,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
         MultiVarPowerSeries<C> s = this;
         String[] vars = ring.vars;
         //System.out.println("cache1 = " + s.lazyCoeffs.coeffCache);
-        for (ExpVector i : new ExpVectorIterable(ring.nvar,true,truncate)) {
+        for (ExpVector i : new ExpVectorIterable(ring.nvar, true, truncate)) {
             C c = s.coefficient(i);
             //System.out.println("i = " + i + ", c = " +c);
             int si = c.signum();
@@ -168,7 +165,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
                 }
                 if (!c.isONE() || i.isZERO()) {
                     sb.append(c.toString());
-                    if ( !i.isZERO() ) {
+                    if (!i.isZERO()) {
                         sb.append(" * ");
                     }
                 }
@@ -203,7 +200,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
         MultiVarPowerSeries<C> s = this;
         String[] vars = ring.vars;
         //System.out.println("cache = " + s.coeffCache);
-        for (ExpVector i : new ExpVectorIterable(ring.nvar,true,truncate)) {
+        for (ExpVector i : new ExpVectorIterable(ring.nvar, true, truncate)) {
             C c = s.coefficient(i);
             int si = c.signum();
             if (si != 0) {
@@ -224,7 +221,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
                 if (i.isZERO()) {
                     //skip; sb.append(" ");
                 } else {
-                    sb.append( i.toScript(vars) );
+                    sb.append(i.toScript(vars));
                 }
                 //sb.append(c.toString() + ", ");
             }
@@ -269,7 +266,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
      * @return polynomial part of given degree.
      */
     public GenPolynomial<C> homogeneousPart(long tdeg) {
-        if ( lazyCoeffs == null ) {
+        if (lazyCoeffs == null) {
             throw new IllegalArgumentException("null cache not allowed");
         }
         return lazyCoeffs.getHomPart(tdeg);
@@ -278,12 +275,13 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
 
     /**
      * Get a GenPolynomial&lt;C&gt; from this.
-     * @return a GenPolynomial&lt;C&gt; from this up to truncate homogeneous parts.
+     * @return a GenPolynomial&lt;C&gt; from this up to truncate homogeneous
+     *         parts.
      */
     public GenPolynomial<C> asPolynomial() {
         GenPolynomial<C> p = homogeneousPart(0L);
-        for ( int i = 1; i <= truncate; i++ ) {
-            p = p.sum( homogeneousPart(i) );
+        for (int i = 1; i <= truncate; i++) {
+            p = p.sum(homogeneousPart(i));
         }
         return p;
     }
@@ -304,13 +302,15 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
      * @return this - leading monomial in the direcrion of r.
      */
     public MultiVarPowerSeries<C> reductum(final int r) {
-        if ( r < 0 || ring.nvar < r ) {
+        if (r < 0 || ring.nvar < r) {
             throw new IllegalArgumentException("variable index out of bound");
         }
         return new MultiVarPowerSeries<C>(ring, new MultiVarCoefficients<C>(ring) {
+
+
             @Override
             public C generate(ExpVector i) {
-                ExpVector e = i.subst(r,i.getVal(r)+1);
+                ExpVector e = i.subst(r, i.getVal(r) + 1);
                 return coefficient(e);
             }
         });
@@ -324,16 +324,18 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
      * @return new power series.
      */
     public MultiVarPowerSeries<C> prepend(final C h, final int r) {
-        if ( r < 0 || ring.nvar < r ) {
+        if (r < 0 || ring.nvar < r) {
             throw new IllegalArgumentException("variable index out of bound");
         }
         return new MultiVarPowerSeries<C>(ring, new MultiVarCoefficients<C>(ring) {
+
+
             @Override
             public C generate(ExpVector i) {
-                if ( i.isZERO()) {
+                if (i.isZERO()) {
                     return h;
                 } else {
-                    ExpVector e = i.subst(r,i.getVal(r)+1) ;   
+                    ExpVector e = i.subst(r, i.getVal(r) + 1);
                     return coefficient(e);
                 }
             }
@@ -348,17 +350,19 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
      * @return new power series with coefficient(i) = old.coefficient(i-k).
      */
     public MultiVarPowerSeries<C> shift(final int k, final int r) {
-        if ( r < 0 || ring.nvar < r ) {
+        if (r < 0 || ring.nvar < r) {
             throw new IllegalArgumentException("variable index out of bound");
         }
         return new MultiVarPowerSeries<C>(ring, new MultiVarCoefficients<C>(ring) {
+
+
             @Override
             public C generate(ExpVector i) {
                 long d = i.getVal(r);
                 if (d - k < 0) {
                     return ring.coFac.getZERO();
                 } else {
-                    ExpVector e = i.subst(r,i.getVal(r) - k) ;   
+                    ExpVector e = i.subst(r, i.getVal(r) - k);
                     return coefficient(e);
                 }
             }
@@ -367,19 +371,20 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
 
 
     /**
-     * Shift coefficients.
-     * Multiply by exponent vector.
+     * Shift coefficients. Multiply by exponent vector.
      * @param k shift ExpVector.
      * @return new power series with coefficient(i) = old.coefficient(i-k).
      */
     public MultiVarPowerSeries<C> shift(final ExpVector k) {
-        if ( k == null ) {
+        if (k == null) {
             throw new IllegalArgumentException("null ExpVector not allowed");
         }
-        if ( k.signum() == 0 ) {
+        if (k.signum() == 0) {
             return this;
         }
         return new MultiVarPowerSeries<C>(ring, new MultiVarCoefficients<C>(ring) {
+
+
             @Override
             public C generate(ExpVector i) {
                 ExpVector d = i.subtract(k);
@@ -400,16 +405,18 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
      * @return new power series with coefficient(i) = old.coefficient(i-k)*c.
      */
     public MultiVarPowerSeries<C> multiply(final C c, final ExpVector k) {
-        if ( k == null ) {
+        if (k == null) {
             throw new IllegalArgumentException("null ExpVector not allowed");
         }
-        if ( k.signum() == 0 ) {
+        if (k.signum() == 0) {
             return this.multiply(c);
         }
-        if ( c.signum() == 0 ) {
+        if (c.signum() == 0) {
             return ring.getZERO();
         }
         return new MultiVarPowerSeries<C>(ring, new MultiVarCoefficients<C>(ring) {
+
+
             @Override
             public C generate(ExpVector i) {
                 ExpVector d = i.subtract(k);
@@ -430,6 +437,8 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
      */
     public MultiVarPowerSeries<C> select(final Selector<? super C> sel) {
         return new MultiVarPowerSeries<C>(ring, new MultiVarCoefficients<C>(ring) {
+
+
             @Override
             public C generate(ExpVector i) {
                 C c = coefficient(i);
@@ -451,26 +460,32 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
      */
     public MultiVarPowerSeries<C> shiftSelect(final Selector<? super C> sel) {
         return new MultiVarPowerSeries<C>(ring, new MultiVarCoefficients<C>(ring) {
-            ExpVectorIterable ib = new ExpVectorIterable(ring.nvar,true,truncate);
+
+
+            ExpVectorIterable ib = new ExpVectorIterable(ring.nvar, true, truncate);
+
+
             Iterator<ExpVector> pos = ib.iterator();
+
+
             @Override
             public C generate(ExpVector i) {
                 C c;
                 if (i.signum() > 0) {
                     int[] deps = i.dependencyOnVariables();
-                    ExpVector x = i.subst(deps[0],i.getVal(deps[0])-1L);
+                    ExpVector x = i.subst(deps[0], i.getVal(deps[0]) - 1L);
                     c = get(x);
                 }
                 do {
                     c = null;
-                    if ( pos.hasNext() ) {
+                    if (pos.hasNext()) {
                         ExpVector e = pos.next();
-                        c = coefficient(e); 
+                        c = coefficient(e);
                     } else {
                         break;
                     }
                 } while (!sel.select(c));
-                if ( c == null ) { // not correct because not known
+                if (c == null) { // not correct because not known
                     c = ring.coFac.getZERO();
                 }
                 return c;
@@ -486,6 +501,8 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
      */
     public MultiVarPowerSeries<C> map(final UnaryFunctor<? super C, C> f) {
         return new MultiVarPowerSeries<C>(ring, new MultiVarCoefficients<C>(ring) {
+
+
             @Override
             public C generate(ExpVector i) {
                 return f.eval(coefficient(i));
@@ -500,9 +517,11 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
      * @param ps other power series.
      * @return new power series.
      */
-    public <C2 extends RingElem<C2>> MultiVarPowerSeries<C> zip(final BinaryFunctor<? super C, ? super C2, C> f,
-            final MultiVarPowerSeries<C2> ps) {
+    public <C2 extends RingElem<C2>> MultiVarPowerSeries<C> zip(
+            final BinaryFunctor<? super C, ? super C2, C> f, final MultiVarPowerSeries<C2> ps) {
         return new MultiVarPowerSeries<C>(ring, new MultiVarCoefficients<C>(ring) {
+
+
             @Override
             public C generate(ExpVector i) {
                 return f.eval(coefficient(i), ps.coefficient(i));
@@ -518,11 +537,13 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
      */
     public MultiVarPowerSeries<C> sum(MultiVarPowerSeries<C> ps) {
         return zip(new BinaryFunctor<C, C, C>() {
-                       @Override
-                       public C eval(C c1, C c2) {
-                           return c1.sum(c2);
-                       }
-                   },ps);
+
+
+            @Override
+            public C eval(C c1, C c2) {
+                return c1.sum(c2);
+            }
+        }, ps);
     }
 
 
@@ -533,11 +554,13 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
      */
     public MultiVarPowerSeries<C> subtract(MultiVarPowerSeries<C> ps) {
         return zip(new BinaryFunctor<C, C, C>() {
-                       @Override
-                       public C eval(C c1, C c2) {
-                           return c1.subtract(c2);
-                       }
-                   },ps);
+
+
+            @Override
+            public C eval(C c1, C c2) {
+                return c1.subtract(c2);
+            }
+        }, ps);
     }
 
 
@@ -547,18 +570,20 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
      * @return this * a.
      */
     public MultiVarPowerSeries<C> multiply(final C a) {
-        if ( a.isZERO() ) {
+        if (a.isZERO()) {
             return ring.getZERO();
         }
-        if ( a.isONE() ) {
+        if (a.isONE()) {
             return this;
         }
         return map(new UnaryFunctor<C, C>() {
-                       @Override
-                       public C eval(C c) {
-                           return c.multiply(a);
-                       }
-                   });
+
+
+            @Override
+            public C eval(C c) {
+                return c.multiply(a);
+            }
+        });
     }
 
 
@@ -569,19 +594,21 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
     public MultiVarPowerSeries<C> monic() {
         ExpVector e = orderExpVector();
         C a = coefficient(e);
-        if ( a.isONE() ) {
+        if (a.isONE()) {
             return this;
         }
-        if ( a.isZERO() ) { // sic
+        if (a.isZERO()) { // sic
             return this;
         }
         final C b = a.inverse();
         return map(new UnaryFunctor<C, C>() {
-                       @Override
-                       public C eval(C c) {
-                           return b.multiply(c);
-                       }
-                   });
+
+
+            @Override
+            public C eval(C c) {
+                return b.multiply(c);
+            }
+        });
     }
 
 
@@ -591,11 +618,13 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
      */
     public MultiVarPowerSeries<C> negate() {
         return map(new UnaryFunctor<C, C>() {
-                       @Override
-                       public C eval(C c) {
-                              return c.negate();
-                       }
-                   });
+
+
+            @Override
+            public C eval(C c) {
+                return c.negate();
+            }
+        });
     }
 
 
@@ -617,10 +646,11 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
      * @return ps(c).
      */
     public C evaluate(C e) {
-        if (true) throw new UnsupportedOperationException("not implemented");
+        if (true)
+            throw new UnsupportedOperationException("not implemented");
         C v = coefficient(ring.EVZERO);
         C p = e;
-        for (ExpVector i : new ExpVectorIterable(ring.nvar,true,truncate)) {
+        for (ExpVector i : new ExpVectorIterable(ring.nvar, true, truncate)) {
             C c = coefficient(i).multiply(p);
             v = v.sum(c);
             p = p.multiply(e);
@@ -637,7 +667,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
         if (order < 0) { // compute it
             int ord = -1;
             ExpVector x = null;
-            for (ExpVector i : new ExpVectorIterable(ring.nvar,true,truncate)) {
+            for (ExpVector i : new ExpVectorIterable(ring.nvar, true, truncate)) {
                 ord++;
                 if (!coefficient(i).isZERO()) {
                     order = ord;
@@ -647,8 +677,8 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
                 x = i;
             }
             order = truncate + 1;
-            if ( x != null ) {
-                evorder = x.subst(0,x.getVal(0)+1L);
+            if (x != null) {
+                evorder = x.subst(0, x.getVal(0) + 1L);
             } else {
                 evorder = ring.EVZERO;
             }
@@ -698,7 +728,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
     public Map.Entry<ExpVector, C> orderMonomial() {
         ExpVector e = orderExpVector();
         //System.out.println("orderExpVector = " + e);
-        return new AbstractMap.SimpleImmutableEntry<ExpVector, C>(e,coefficient(e));
+        return new AbstractMap.SimpleImmutableEntry<ExpVector, C>(e, coefficient(e));
     }
 
 
@@ -712,14 +742,14 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
         boolean b = this.isZERO();
         ExpVector e = orderExpVector();
         long d = e.totalDeg();
-        long hd = d; 
-//      for (ExpVector i : new ExpVectorIterable(ring.nvar,true,truncate)) {
-//          if ( !coefficient(i).isZERO() ) {
-//              hd = i.totalDeg();
-//          }
-//      }
-        for (long i = d+1L; i <= truncate; i++) {
-            if ( ! homogeneousPart(i).isZERO() ) {
+        long hd = d;
+        //      for (ExpVector i : new ExpVectorIterable(ring.nvar,true,truncate)) {
+        //          if ( !coefficient(i).isZERO() ) {
+        //              hd = i.totalDeg();
+        //          }
+        //      }
+        for (long i = d + 1L; i <= truncate; i++) {
+            if (!homogeneousPart(i).isZERO()) {
                 hd = i;
             }
         }
@@ -734,7 +764,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
      */
     public int signum() {
         int i = order(); // ensure evorder is defined
-        if ( evorder != null ) {
+        if (evorder != null) {
             return coefficient(evorder).signum();
         } else {
             return 0;
@@ -754,13 +784,13 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
         int s = 0;
         //System.out.println("coeffCache_c1 = " + lazyCoeffs.coeffCache);
         //System.out.println("coeffCache_c2 = " + ps.lazyCoeffs.coeffCache);
-        for (ExpVector i : new ExpVectorIterable(ring.nvar,true,truncate)) { // no pos
+        for (ExpVector i : new ExpVectorIterable(ring.nvar, true, truncate)) { // no pos
             s = coefficient(i).compareTo(ps.coefficient(i));
-            if ( s != 0 ) {
+            if (s != 0) {
                 //System.out.println("i = " + i + ", coeff = " + coefficient(i) + ", ps.coeff = " + ps.coefficient(i));
                 return s;
             }
-        } 
+        }
         return s;
     }
 
@@ -817,7 +847,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
         int h = 0;
         //h = ( ring.hashCode() << 23 );
         //h += val.hashCode();
-        for (ExpVector i : new ExpVectorIterable(ring.nvar,true,truncate)) {
+        for (ExpVector i : new ExpVectorIterable(ring.nvar, true, truncate)) {
             // h += i.hashCode(); h = ( h << 23);
             h += coefficient(i).hashCode();
             h = (h << 23);
@@ -842,6 +872,8 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
     public MultiVarPowerSeries<C> multiply(final MultiVarPowerSeries<C> ps) {
         //final MultiVarPowerSeries<C> ps1 = this; // method name was ambiguous in generate
         return new MultiVarPowerSeries<C>(ring, new MultiVarCoefficients<C>(ring) {
+
+
             @Override
             public C generate(ExpVector e) {
                 long tdeg = e.totalDeg();
@@ -855,8 +887,8 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
                         p = p.sum(m);
                     }
                 }
-                coeffCache.put( tdeg, p ); // overwrite
-                C c = p.coefficient( e );
+                coeffCache.put(tdeg, p); // overwrite
+                C c = p.coefficient(e);
                 return c;
             }
         });
@@ -869,6 +901,8 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
      */
     public MultiVarPowerSeries<C> inverse() {
         return new MultiVarPowerSeries<C>(ring, new MultiVarCoefficients<C>(ring) {
+
+
             @Override
             public C generate(ExpVector e) {
                 long tdeg = e.totalDeg();
@@ -887,8 +921,8 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
                 }
                 p = p.multiply(d.negate());
                 //System.out.println("tdeg = " + tdeg + ", p = " + p);
-                coeffCache.put( tdeg, p ); // overwrite
-                C c = p.coefficient( e );
+                coeffCache.put(tdeg, p); // overwrite
+                C c = p.coefficient(e);
                 return c;
             }
         });
@@ -911,8 +945,8 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
         ExpVector em = orderExpVector();
         ExpVector en = ps.orderExpVector();
         if (!ps.coefficient(en).isUnit()) {
-            throw new ArithmeticException("division by non unit coefficient " + ps.coefficient(ps.evorder) 
-                                        + ", evorder = " + ps.evorder);
+            throw new ArithmeticException("division by non unit coefficient " + ps.coefficient(ps.evorder)
+                    + ", evorder = " + ps.evorder);
         }
         // now m >= n
         MultiVarPowerSeries<C> st, sps, q, sq;
@@ -953,14 +987,16 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
      * @return differentiate(this).
      */
     public MultiVarPowerSeries<C> differentiate(final int r) {
-        if ( r < 0 || ring.nvar < r ) {
+        if (r < 0 || ring.nvar < r) {
             throw new IllegalArgumentException("variable index out of bound");
         }
         return new MultiVarPowerSeries<C>(ring, new MultiVarCoefficients<C>(ring) {
+
+
             @Override
             public C generate(ExpVector i) {
                 long d = i.getVal(r);
-                ExpVector e = i.subst(r,d+1);
+                ExpVector e = i.subst(r, d + 1);
                 C v = coefficient(e);
                 v = v.multiply(ring.coFac.fromInteger(d + 1));
                 return v;
@@ -976,18 +1012,20 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
      * @return integrate(this).
      */
     public MultiVarPowerSeries<C> integrate(final C c, final int r) {
-        if ( r < 0 || ring.nvar < r ) {
+        if (r < 0 || ring.nvar < r) {
             throw new IllegalArgumentException("variable index out of bound");
         }
         return new MultiVarPowerSeries<C>(ring, new MultiVarCoefficients<C>(ring) {
+
+
             @Override
             public C generate(ExpVector i) {
                 if (i.isZERO()) {
                     return c;
                 }
                 long d = i.getVal(r);
-                if ( d > 0 ) {
-                    ExpVector e = i.subst(r,d-1);
+                if (d > 0) {
+                    ExpVector e = i.subst(r, d - 1);
                     C v = coefficient(e);
                     v = v.divide(ring.coFac.fromInteger(d));
                     return v;

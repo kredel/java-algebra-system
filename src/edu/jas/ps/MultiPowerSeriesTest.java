@@ -79,7 +79,7 @@ public class MultiPowerSeriesTest extends TestCase {
     @Override
     protected void setUp() {
         a = b = c = d = e = null;
-        fac = new MultiVarPowerSeriesRing<BigRational>(new BigRational(1),rl);
+        fac = new MultiVarPowerSeriesRing<BigRational>(new BigRational(1), rl);
         //System.out.println("fac = " + fac);
         //System.out.println("fac = " + fac.toScript());
     }
@@ -98,25 +98,31 @@ public class MultiPowerSeriesTest extends TestCase {
      */
     public void testCoefficients() {
         BigRational cf = new BigRational(0);
-        GenPolynomialRing<BigRational> pring = new GenPolynomialRing<BigRational>(cf,rl);
+        GenPolynomialRing<BigRational> pring = new GenPolynomialRing<BigRational>(cf, rl);
 
         MultiVarCoefficients<BigRational> zeros = new MultiVarCoefficients<BigRational>(pring) {
+
+
             @Override
             public BigRational generate(ExpVector i) {
                 return pfac.coFac.getZERO();
             }
         };
         MultiVarCoefficients<BigRational> ones = new MultiVarCoefficients<BigRational>(pring) {
+
+
             @Override
             public BigRational generate(ExpVector i) {
                 return pfac.coFac.getONE();
             }
         };
         MultiVarCoefficients<BigRational> vars = new MultiVarCoefficients<BigRational>(pring) {
+
+
             @Override
             public BigRational generate(ExpVector i) {
                 int[] v = i.dependencyOnVariables();
-                if ( v.length == 1 && i.getVal(v[0]) == 1L) {
+                if (v.length == 1 && i.getVal(v[0]) == 1L) {
                     return pfac.coFac.getONE();
                 } else {
                     return pfac.coFac.getZERO();
@@ -125,17 +131,17 @@ public class MultiPowerSeriesTest extends TestCase {
         };
 
         int m = 5;
-        ExpVectorIterable eiter = new ExpVectorIterable(rl,true,m);
-        for ( ExpVector e : eiter ) {
+        ExpVectorIterable eiter = new ExpVectorIterable(rl, true, m);
+        for (ExpVector e : eiter) {
             BigRational c = zeros.get(e);
             //System.out.println("c = " + c + ", e = " + e);
             assertTrue("isZERO( c )", c.isZERO());
         }
         //System.out.println("coeffCache = " + zeros.coeffCache);
         //System.out.println("zeroCache  = " + zeros.zeroCache);
-        assertTrue("coeffCache is one element", zeros.coeffCache.size() == (m+1));
+        assertTrue("coeffCache is one element", zeros.coeffCache.size() == (m + 1));
 
-        for ( ExpVector e : eiter ) {
+        for (ExpVector e : eiter) {
             BigRational c = ones.get(e);
             //System.out.println("c = " + c + ", e = " + e);
             assertTrue("isONE( c )", c.isONE());
@@ -144,7 +150,7 @@ public class MultiPowerSeriesTest extends TestCase {
         //System.out.println("zeroCache  = " + ones.zeroCache);
         assertTrue("zeroCache is empty", ones.zeroCache.isEmpty());
 
-        for ( int i = 0; i <= m; i++ ) {
+        for (int i = 0; i <= m; i++) {
             GenPolynomial<BigRational> c = ones.getHomPart(i);
             //System.out.println("c = " + c + ", i = " + i);
             GenPolynomial<BigRational> d = ones.getHomPart(i);
@@ -156,21 +162,21 @@ public class MultiPowerSeriesTest extends TestCase {
         //System.out.println("homCheck   = " + ones.homCheck);
         //System.out.println("homCheck   = " + ones.homCheck.length());
         assertTrue("zeroCache is empty", ones.zeroCache.isEmpty());
-        assertTrue("#coeffCache = " + m, ones.coeffCache.size()==(m+1));
-        assertTrue("#homCheck = " + m, ones.homCheck.length()==(m+1));
+        assertTrue("#coeffCache = " + m, ones.coeffCache.size() == (m + 1));
+        assertTrue("#homCheck = " + m, ones.homCheck.length() == (m + 1));
 
-        for ( int i = 0; i <= m; i++ ) {
+        for (int i = 0; i <= m; i++) {
             GenPolynomial<BigRational> c = vars.getHomPart(i);
             //System.out.println("c = " + c + ", i = " + i);
-            assertTrue("c==0 || deg(c)==1 ", c.isZERO() || c.degree() == 1L );
+            assertTrue("c==0 || deg(c)==1 ", c.isZERO() || c.degree() == 1L);
         }
         //System.out.println("coeffCache = " + vars.coeffCache);
         //System.out.println("zeroCache  = " + vars.zeroCache);
         //System.out.println("homCheck   = " + vars.homCheck);
         //System.out.println("homCheck   = " + vars.homCheck.length());
         assertTrue("zeroCache is not empty", !vars.zeroCache.isEmpty());
-        assertTrue("#coeffCache = " + m, vars.coeffCache.size()==(m+1));
-        assertTrue("#homCheck = " + m, vars.homCheck.length()==(m+1));
+        assertTrue("#coeffCache = " + m, vars.coeffCache.size() == (m + 1));
+        assertTrue("#homCheck = " + m, vars.homCheck.length() == (m + 1));
     }
 
 
@@ -214,22 +220,28 @@ public class MultiPowerSeriesTest extends TestCase {
     public void testCoefficientsInPS() {
 
         MultiVarCoefficients<BigRational> zeros = new MultiVarCoefficients<BigRational>(fac) {
+
+
             @Override
             public BigRational generate(ExpVector i) {
                 return pfac.coFac.getZERO();
             }
         };
         MultiVarCoefficients<BigRational> ones = new MultiVarCoefficients<BigRational>(fac) {
+
+
             @Override
             public BigRational generate(ExpVector i) {
                 return pfac.coFac.getONE();
             }
         };
         MultiVarCoefficients<BigRational> vars = new MultiVarCoefficients<BigRational>(fac) {
+
+
             @Override
             public BigRational generate(ExpVector i) {
                 int[] v = i.dependencyOnVariables();
-                if ( v.length == 1 && i.getVal(v[0]) == 1L) {
+                if (v.length == 1 && i.getVal(v[0]) == 1L) {
                     return pfac.coFac.getONE();
                 } else {
                     return pfac.coFac.getZERO();
@@ -237,29 +249,29 @@ public class MultiPowerSeriesTest extends TestCase {
             }
         };
 
-        a = new MultiVarPowerSeries<BigRational>(fac,zeros);
-        b = new MultiVarPowerSeries<BigRational>(fac,ones);
-        c = new MultiVarPowerSeries<BigRational>(fac,vars);
+        a = new MultiVarPowerSeries<BigRational>(fac, zeros);
+        b = new MultiVarPowerSeries<BigRational>(fac, ones);
+        c = new MultiVarPowerSeries<BigRational>(fac, vars);
 
         int m = 5;
-        ExpVectorIterable eiter = new ExpVectorIterable(rl,true,m);
-        for ( ExpVector e : eiter ) {
+        ExpVectorIterable eiter = new ExpVectorIterable(rl, true, m);
+        for (ExpVector e : eiter) {
             BigRational r = a.coefficient(e);
             //System.out.println("r = " + r + ", e = " + e);
             assertTrue("isZERO( r )", r.isZERO());
         }
         //System.out.println("#a = " + a.lazyCoeffs.coeffCache);
-        assertTrue("coeffCache is one element", a.lazyCoeffs.coeffCache.size() == (m+1));
+        assertTrue("coeffCache is one element", a.lazyCoeffs.coeffCache.size() == (m + 1));
         assertTrue("isZERO( a )", a.isZERO()); // after previous
 
-        for ( ExpVector e : eiter ) {
+        for (ExpVector e : eiter) {
             BigRational r = b.coefficient(e);
             //System.out.println("r = " + r + ", e = " + e);
             assertTrue("isONE( r )", r.isONE());
         }
         assertTrue("zeroCache is empty", b.lazyCoeffs.zeroCache.isEmpty());
 
-        for ( int i = 0; i <= m; i++ ) {
+        for (int i = 0; i <= m; i++) {
             GenPolynomial<BigRational> p = b.homogeneousPart(i);
             //System.out.println("p = " + p + ", i = " + i);
             GenPolynomial<BigRational> q = b.homogeneousPart(i);
@@ -267,17 +279,17 @@ public class MultiPowerSeriesTest extends TestCase {
             assertTrue("p.equals(q) ", p.equals(q));
         }
         assertTrue("zeroCache is empty", b.lazyCoeffs.zeroCache.isEmpty());
-        assertTrue("#coeffCache = " + m, b.lazyCoeffs.coeffCache.size()==(m+1));
-        assertTrue("#homCheck = " + m, b.lazyCoeffs.homCheck.length()==(m+1));
+        assertTrue("#coeffCache = " + m, b.lazyCoeffs.coeffCache.size() == (m + 1));
+        assertTrue("#homCheck = " + m, b.lazyCoeffs.homCheck.length() == (m + 1));
 
-        for ( int i = 0; i <= m; i++ ) {
+        for (int i = 0; i <= m; i++) {
             GenPolynomial<BigRational> p = c.homogeneousPart(i);
             //System.out.println("p = " + p + ", i = " + i);
-            assertTrue("p==0 || deg(p)==1 ", p.isZERO() || p.degree() == 1L );
+            assertTrue("p==0 || deg(p)==1 ", p.isZERO() || p.degree() == 1L);
         }
         assertTrue("zeroCache is not empty", !c.lazyCoeffs.zeroCache.isEmpty());
-        assertTrue("#coeffCache = " + m, c.lazyCoeffs.coeffCache.size()==(m+1));
-        assertTrue("#homCheck = " + m, c.lazyCoeffs.homCheck.length()==(m+1));
+        assertTrue("#coeffCache = " + m, c.lazyCoeffs.coeffCache.size() == (m + 1));
+        assertTrue("#homCheck = " + m, c.lazyCoeffs.homCheck.length() == (m + 1));
     }
 
 
@@ -302,6 +314,7 @@ public class MultiPowerSeriesTest extends TestCase {
         assertEquals("a+(b+c) = (a+b)+c", d, e);
     }
 
+
     /**
      * Test multiplication.
      * 
@@ -310,7 +323,7 @@ public class MultiPowerSeriesTest extends TestCase {
         a = fac.random(kl);
         b = fac.random(kl);
 
-        if ( a.isZERO() || b.isZERO() ) {
+        if (a.isZERO() || b.isZERO()) {
             return;
         }
         assertTrue("not isZERO( a )", !a.isZERO());
@@ -340,11 +353,11 @@ public class MultiPowerSeriesTest extends TestCase {
         assertEquals("a(bc) = (ab)c", d, e);
         assertTrue("a(bc) = (ab)c", d.equals(e));
 
-        ExpVector ev = ExpVector.random(rl,5,0.8f);
+        ExpVector ev = ExpVector.random(rl, 5, 0.8f);
         BigRational br = fac.coFac.random(5);
 
         b = a.shift(ev).multiply(br);
-        c = a.multiply(ev,br);
+        c = a.multiply(br, ev);
         assertEquals("(a ev) br = a (ev,br)", b, c);
         //System.out.println("a  = " + a);
         //System.out.println("ev = " + ev);
@@ -387,7 +400,7 @@ public class MultiPowerSeriesTest extends TestCase {
         //System.out.println("c = " + c);
 
         a = fac.random(kl);
-        if ( !a.isUnit() ) {
+        if (!a.isUnit()) {
             a = fac.fromInteger(23); //return;
         }
         //System.out.println("a = " + a);
@@ -410,12 +423,12 @@ public class MultiPowerSeriesTest extends TestCase {
      */
     public void testFixpoints() {
         int r = 0;
-        UnivPowerSeriesRing<BigRational> ufac = new UnivPowerSeriesRing<BigRational>(fac.coFac,fac.vars[r]);
-	UnivPowerSeries<BigRational> exp = ufac.getEXP();
+        UnivPowerSeriesRing<BigRational> ufac = new UnivPowerSeriesRing<BigRational>(fac.coFac, fac.vars[r]);
+        UnivPowerSeries<BigRational> exp = ufac.getEXP();
         //System.out.println("exp = " + exp);
 
-        a = fac.fromPowerSeries(exp,0);
-        b = fac.fromPowerSeries(exp,1);
+        a = fac.fromPowerSeries(exp, 0);
+        b = fac.fromPowerSeries(exp, 1);
         //System.out.println("a = " + a);
         //System.out.println("b = " + b);
 

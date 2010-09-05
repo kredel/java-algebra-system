@@ -124,6 +124,7 @@ public class UnivPowerSeriesRing<C extends RingElem<C>> implements RingFactory<U
         this.var = name;
         this.ONE = new UnivPowerSeries<C>(this, new Coefficients<C>() {
 
+
             @Override
             public C generate(int i) {
                 if (i == 0) {
@@ -134,6 +135,7 @@ public class UnivPowerSeriesRing<C extends RingElem<C>> implements RingFactory<U
             }
         });
         this.ZERO = new UnivPowerSeries<C>(this, new Coefficients<C>() {
+
 
             @Override
             public C generate(int i) {
@@ -254,6 +256,7 @@ public class UnivPowerSeriesRing<C extends RingElem<C>> implements RingFactory<U
         for (final C cg : rgens) {
             UnivPowerSeries<C> g = new UnivPowerSeries<C>(this, new Coefficients<C>() {
 
+
                 @Override
                 public C generate(int i) {
                     if (i == 0) {
@@ -287,6 +290,7 @@ public class UnivPowerSeriesRing<C extends RingElem<C>> implements RingFactory<U
     public UnivPowerSeries<C> getEXP() {
         return fixPoint(new UnivPowerSeriesMap<C>() {
 
+
             public UnivPowerSeries<C> map(UnivPowerSeries<C> e) {
                 return e.integrate(coFac.getONE());
             }
@@ -300,6 +304,7 @@ public class UnivPowerSeriesRing<C extends RingElem<C>> implements RingFactory<U
      */
     public UnivPowerSeries<C> getSIN() {
         return fixPoint(new UnivPowerSeriesMap<C>() {
+
 
             public UnivPowerSeries<C> map(UnivPowerSeries<C> s) {
                 return s.negate().integrate(coFac.getONE()).integrate(coFac.getZERO());
@@ -315,6 +320,7 @@ public class UnivPowerSeriesRing<C extends RingElem<C>> implements RingFactory<U
     public UnivPowerSeries<C> getCOS() {
         return fixPoint(new UnivPowerSeriesMap<C>() {
 
+
             public UnivPowerSeries<C> map(UnivPowerSeries<C> c) {
                 return c.negate().integrate(coFac.getZERO()).integrate(coFac.getONE());
             }
@@ -328,6 +334,7 @@ public class UnivPowerSeriesRing<C extends RingElem<C>> implements RingFactory<U
      */
     public UnivPowerSeries<C> getTAN() {
         return fixPoint(new UnivPowerSeriesMap<C>() {
+
 
             public UnivPowerSeries<C> map(UnivPowerSeries<C> t) {
                 return t.multiply(t).sum(getONE()).integrate(coFac.getZERO());
@@ -424,6 +431,8 @@ public class UnivPowerSeriesRing<C extends RingElem<C>> implements RingFactory<U
             cache.put((int) e, m.coefficient());
         }
         return new UnivPowerSeries<C>(this, new Coefficients<C>(cache) {
+
+
             @Override
             public C generate(int i) {
                 // cached coefficients returned by get
@@ -483,6 +492,7 @@ public class UnivPowerSeriesRing<C extends RingElem<C>> implements RingFactory<U
      */
     public UnivPowerSeries<C> random(final int k, final float d, final Random rnd) {
         return new UnivPowerSeries<C>(this, new Coefficients<C>() {
+
 
             @Override
             public C generate(int i) {

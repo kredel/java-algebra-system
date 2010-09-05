@@ -5,24 +5,14 @@
 package edu.jas.ps;
 
 
-import java.util.List;
 import java.util.ArrayList;
-import java.util.Map;
+import java.util.List;
 
 import org.apache.log4j.BasicConfigurator;
 
-import edu.jas.arith.BigComplex;
-import edu.jas.arith.BigDecimal;
-import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
-import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
-import edu.jas.structure.BinaryFunctor;
-import edu.jas.structure.RingElem;
-import edu.jas.structure.RingFactory;
-import edu.jas.structure.Selector;
-import edu.jas.structure.UnaryFunctor;
 
 
 /**
@@ -47,7 +37,7 @@ public class MultiExamples {
     public static void example1() {
         BigRational br = new BigRational(1);
         String[] vars = new String[] { "x", "y" };
-        GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(br,vars);
+        GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(br, vars);
         System.out.println("pfac = " + pfac.toScript());
 
         GenPolynomial<BigRational> a = pfac.parse("x^2  + x y");
@@ -72,7 +62,7 @@ public class MultiExamples {
         L.add(bp);
         ReductionSeq<BigRational> red = new ReductionSeq<BigRational>();
 
-        MultiVarPowerSeries<BigRational> dp = red.normalform(L,cp);
+        MultiVarPowerSeries<BigRational> dp = red.normalform(L, cp);
         System.out.println("dp = " + dp);
     }
 
@@ -80,7 +70,7 @@ public class MultiExamples {
     public static void example2() {
         BigRational br = new BigRational(1);
         String[] vars = new String[] { "x", "y" };
-        GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(br,vars);
+        GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(br, vars);
         System.out.println("pfac = " + pfac.toScript());
 
         GenPolynomial<BigRational> a = pfac.parse("x - x y");
@@ -105,7 +95,7 @@ public class MultiExamples {
         L.add(bp);
         ReductionSeq<BigRational> red = new ReductionSeq<BigRational>();
 
-        MultiVarPowerSeries<BigRational> dp = red.normalform(L,cp);
+        MultiVarPowerSeries<BigRational> dp = red.normalform(L, cp);
         System.out.println("dp = " + dp);
     }
 
@@ -113,7 +103,7 @@ public class MultiExamples {
     public static void example3() {
         BigRational br = new BigRational(1);
         String[] vars = new String[] { "x", "y", "z" };
-        GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(br,vars);
+        GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(br, vars);
         System.out.println("pfac = " + pfac.toScript());
 
         GenPolynomial<BigRational> a = pfac.parse("x");
@@ -138,7 +128,7 @@ public class MultiExamples {
         L.add(bp);
         ReductionSeq<BigRational> red = new ReductionSeq<BigRational>();
 
-        MultiVarPowerSeries<BigRational> dp = red.normalform(L,cp);
+        MultiVarPowerSeries<BigRational> dp = red.normalform(L, cp);
         System.out.println("dp = " + dp);
     }
 
@@ -146,7 +136,7 @@ public class MultiExamples {
     public static void example4() {
         BigRational br = new BigRational(1);
         String[] vars = new String[] { "x" };
-        GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(br,vars);
+        GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(br, vars);
         System.out.println("pfac = " + pfac.toScript());
 
         GenPolynomial<BigRational> a = pfac.parse("x + x^3 + x^5");
@@ -167,7 +157,7 @@ public class MultiExamples {
         L.add(ap);
         ReductionSeq<BigRational> red = new ReductionSeq<BigRational>();
 
-        MultiVarPowerSeries<BigRational> dp = red.normalform(L,cp);
+        MultiVarPowerSeries<BigRational> dp = red.normalform(L, cp);
         System.out.println("dp = " + dp);
     }
 
@@ -175,7 +165,7 @@ public class MultiExamples {
     public static void example5() {
         BigRational br = new BigRational(1);
         String[] vars = new String[] { "x", "y" };
-        GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(br,vars);
+        GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(br, vars);
         System.out.println("pfac = " + pfac.toScript());
 
         GenPolynomial<BigRational> a = pfac.parse("");
@@ -204,7 +194,7 @@ public class MultiExamples {
         L.add(bp);
         ReductionSeq<BigRational> red = new ReductionSeq<BigRational>();
 
-        MultiVarPowerSeries<BigRational> dp = red.normalform(L,cp);
+        MultiVarPowerSeries<BigRational> dp = red.normalform(L, cp);
         System.out.println("dp = " + dp);
     }
 
@@ -212,7 +202,7 @@ public class MultiExamples {
     public static void example6() {
         BigRational br = new BigRational(1);
         String[] vars = new String[] { "x", "y", "z" };
-        GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(br,vars);
+        GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(br, vars);
         System.out.println("pfac = " + pfac.toScript());
 
         GenPolynomial<BigRational> a = pfac.parse("x^5 - x y^6 + z^7");
@@ -240,8 +230,8 @@ public class MultiExamples {
         StandardBaseSeq<BigRational> tm = new StandardBaseSeq<BigRational>();
 
         List<MultiVarPowerSeries<BigRational>> S = tm.STD(L);
-        for ( MultiVarPowerSeries<BigRational> ps : S ) {
-             System.out.println("ps = " + ps);
+        for (MultiVarPowerSeries<BigRational> ps : S) {
+            System.out.println("ps = " + ps);
         }
         System.out.println("\nS = " + S);
 
@@ -249,7 +239,7 @@ public class MultiExamples {
         System.out.println("\nisSTD = " + s);
 
         ReductionSeq<BigRational> red = new ReductionSeq<BigRational>();
-        s = red.contains(S,L);
+        s = red.contains(S, L);
         System.out.println("\nS contains L = " + s);
     }
 
