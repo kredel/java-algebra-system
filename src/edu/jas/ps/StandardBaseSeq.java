@@ -173,7 +173,7 @@ public class StandardBaseSeq<C extends RingElem<C>>
                 continue;
             }
             if (logger.isInfoEnabled()) {
-                logger.info("ht(S) = " + S.orderExpVector());
+                logger.info("ht(S) = " + S.orderExpVector().toString(S.ring.vars));
             }
 
             H = red.normalform(G, S);
@@ -182,7 +182,7 @@ public class StandardBaseSeq<C extends RingElem<C>>
                 continue;
             }
             if (logger.isInfoEnabled()) {
-                logger.info("ht(H) = " + H.orderExpVector());
+                logger.info("ht(H) = " + H.orderExpVector().toString(S.ring.vars));
             }
 
             //H = H.monic();

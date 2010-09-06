@@ -275,8 +275,7 @@ public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
 
 
     /**
-     * Ideal containment. Test if each b in B is contained in ideal. Note: this
-     * is eventually modified to become a Groebner Base.
+     * Ideal containment. Test if each b in B is contained in ideal S. 
      * @param S standard base.
      * @param B list of power series
      * @return true, if each b in B is contained in ideal(S), else false

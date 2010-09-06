@@ -573,7 +573,7 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
                 // cached coefficients returned by get
                 return coFac.getZERO();
             }
-        }, mt);
+        });
     }
 
 

@@ -108,6 +108,9 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
         this.ring = ring;
         this.lazyCoeffs = lazyCoeffs;
         this.truncate = trunc;
+        if ( trunc > ring.truncate ) {
+            //System.out.println("trunc = " + trunc + ", ring.trunc = " + ring.truncate);// + ", this = " + toString());
+	}
     }
 
 
@@ -353,6 +356,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
         if (r < 0 || ring.nvar < r) {
             throw new IllegalArgumentException("variable index out of bound");
         }
+        int nt = truncate; // + k;
         return new MultiVarPowerSeries<C>(ring, new MultiVarCoefficients<C>(ring) {
 
 
@@ -382,6 +386,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
         if (k.signum() == 0) {
             return this;
         }
+        int nt = truncate; // + (int)k.totalDeg();
         return new MultiVarPowerSeries<C>(ring, new MultiVarCoefficients<C>(ring) {
 
 
@@ -394,7 +399,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
                     return coefficient(d);
                 }
             }
-        });
+	},nt);
     }
 
 
@@ -414,6 +419,8 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
         if (c.signum() == 0) {
             return ring.getZERO();
         }
+        int nt = truncate; // + (int)k.totalDeg();
+        //System.out.println("nt = " + nt + ", truncate = " + truncate + ", tdeg = " + k.totalDeg());
         return new MultiVarPowerSeries<C>(ring, new MultiVarCoefficients<C>(ring) {
 
 
@@ -426,7 +433,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
                     return coefficient(d).multiply(c);
                 }
             }
-        });
+        },nt);
     }
 
 
@@ -517,8 +524,11 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
      * @param ps other power series.
      * @return new power series.
      */
-    public <C2 extends RingElem<C2>> MultiVarPowerSeries<C> zip(
-            final BinaryFunctor<? super C, ? super C2, C> f, final MultiVarPowerSeries<C2> ps) {
+    public MultiVarPowerSeries<C> zip(final BinaryFunctor<? super C, ? super C, C> f, 
+                                      final MultiVarPowerSeries<C> ps) {
+        int m = truncate();
+        int n = ps.truncate();
+        int pos = (m > n) ? m : n;
         return new MultiVarPowerSeries<C>(ring, new MultiVarCoefficients<C>(ring) {
 
 
@@ -526,7 +536,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
             public C generate(ExpVector i) {
                 return f.eval(coefficient(i), ps.coefficient(i));
             }
-        });
+        },m);
     }
 
 
@@ -727,7 +737,6 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
      */
     public Map.Entry<ExpVector, C> orderMonomial() {
         ExpVector e = orderExpVector();
-        //System.out.println("orderExpVector = " + e);
         return new AbstractMap.SimpleImmutableEntry<ExpVector, C>(e, coefficient(e));
     }
 
@@ -737,17 +746,10 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
      * @return ecart.
      */
     public long ecart() {
-        //System.out.println("coeffCache = " + lazyCoeffs.coeffCache + ", this = " + this);
-        //String s = this.toString();
         boolean b = this.isZERO();
         ExpVector e = orderExpVector();
         long d = e.totalDeg();
         long hd = d;
-        //      for (ExpVector i : new ExpVectorIterable(ring.nvar,true,truncate)) {
-        //          if ( !coefficient(i).isZERO() ) {
-        //              hd = i.totalDeg();
-        //          }
-        //      }
         for (long i = d + 1L; i <= truncate; i++) {
             if (!homogeneousPart(i).isZERO()) {
                 hd = i;
@@ -773,18 +775,18 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
 
 
     /**
-     * Compare to. <b>Note: </b> compare only up to truncate.
+     * Compare to. <b>Note: </b> compare only up to max(truncates).
      * @return sign of first non zero coefficient of this-ps.
      */
     //JAVA6only: @Override
     public int compareTo(MultiVarPowerSeries<C> ps) {
-        int m = order();
-        int n = ps.order();
-        int pos = (m <= n) ? m : n;
+        int m = truncate();
+        int n = ps.truncate();
+        int pos = (m < n) ? m : n;
         int s = 0;
         //System.out.println("coeffCache_c1 = " + lazyCoeffs.coeffCache);
         //System.out.println("coeffCache_c2 = " + ps.lazyCoeffs.coeffCache);
-        for (ExpVector i : new ExpVectorIterable(ring.nvar, true, truncate)) { // no pos
+        for (ExpVector i : new ExpVectorIterable(ring.nvar, true, pos)) { 
             s = coefficient(i).compareTo(ps.coefficient(i));
             if (s != 0) {
                 //System.out.println("i = " + i + ", coeff = " + coefficient(i) + ", ps.coeff = " + ps.coefficient(i));
@@ -871,6 +873,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
      */
     public MultiVarPowerSeries<C> multiply(final MultiVarPowerSeries<C> ps) {
         //final MultiVarPowerSeries<C> ps1 = this; // method name was ambiguous in generate
+        int nt = truncate() + ps.truncate();
         return new MultiVarPowerSeries<C>(ring, new MultiVarCoefficients<C>(ring) {
 
 
@@ -891,7 +894,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
                 C c = p.coefficient(e);
                 return c;
             }
-        });
+        },nt);
     }
 
 
@@ -1015,6 +1018,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
         if (r < 0 || ring.nvar < r) {
             throw new IllegalArgumentException("variable index out of bound");
         }
+        int nt = truncate; // + 1;
         return new MultiVarPowerSeries<C>(ring, new MultiVarCoefficients<C>(ring) {
 
 
@@ -1033,7 +1037,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
                     return ring.coFac.getZERO();
                 }
             }
-        });
+        },nt);
     }
 
 
