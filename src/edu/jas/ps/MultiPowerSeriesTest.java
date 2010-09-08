@@ -5,6 +5,8 @@
 package edu.jas.ps;
 
 
+import java.util.Map;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -447,4 +449,51 @@ public class MultiPowerSeriesTest extends TestCase {
         assertEquals("e == d ", d, e);
     }
 
+
+    /**
+     * Test reduction.
+     * 
+     */
+    public void testReduction() {
+        a = fac.random(kl);
+        //System.out.println("a = " + a);
+
+        Map.Entry<ExpVector, BigRational> m = a.orderMonomial();
+        //System.out.println("m = " + m);
+        ExpVector k = m.getKey();
+        BigRational br = m.getValue();
+
+        b = fac.getONE().multiply(br,k);
+        //System.out.println("b = " + b);
+
+        c = a.reductum();
+        //System.out.println("c = " + c);
+
+        d = c.sum(b);
+        //System.out.println("d = " + d);
+        assertEquals("a = red(a)+1*lm(a) ", a, d);
+
+        e = c.sum(br,k);
+        //System.out.println("e = " + e);
+        assertEquals("a = red(a)+lm(a) ", a, e);
+
+        e = a.subtract(br,k);
+        //System.out.println("e = " + e);
+        assertEquals("a - lm(a) = red(a) ", c, e);
+
+        b = fac.random(kl);
+        //System.out.println("b = " + b);
+
+        c = a.sum(b);
+        //System.out.println("c = " + c);
+
+        d = a.sum(b.lazyCoeffs);
+        //System.out.println("d = " + d);
+
+//         while ( !c.isZERO() ) {
+//             c = c.reductum();
+//             //System.out.println("c = " + c);
+//      }
+//         assertTrue("red^n(a) == 0 ", c.isZERO());
+    }
 }

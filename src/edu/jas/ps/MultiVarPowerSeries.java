@@ -8,6 +8,11 @@ package edu.jas.ps;
 import java.util.AbstractMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.HashMap;
+import java.util.TreeMap;
+import java.util.SortedMap;
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
@@ -110,7 +115,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
         this.truncate = trunc;
         if ( trunc > ring.truncate ) {
             //System.out.println("trunc = " + trunc + ", ring.trunc = " + ring.truncate);// + ", this = " + toString());
-	}
+        }
     }
 
 
@@ -375,6 +380,35 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
 
 
     /**
+     * Reductum.
+     * @return this - leading monomial.
+     */
+    public MultiVarPowerSeries<C> reductum() {
+        Map.Entry<ExpVector, C> m = orderMonomial();
+        ExpVector e = m.getKey();
+        long d = e.totalDeg();
+        MultiVarCoefficients<C> mc = lazyCoeffs;
+        HashMap<Long, GenPolynomial<C>> cc = new HashMap<Long, GenPolynomial<C>>(mc.coeffCache);
+        GenPolynomial<C> p = cc.get(d);
+        if ( p != null && !p.isZERO() ) {
+            p = p.subtract(m.getValue(),e); // p contains this term after orderMonomial()
+            cc.put(d,p);
+        }
+        HashSet<ExpVector> z = new HashSet<ExpVector>(mc.zeroCache);
+        z.add(e);
+        //System.out.println("z = " + z);
+
+        return new MultiVarPowerSeries<C>(ring, 
+                   new MultiVarCoefficients<C>(mc.pfac,cc,z,mc.homCheck) {
+            @Override
+            public C generate(ExpVector i) {
+                return coefficient(i);
+            }
+        });
+    }
+
+
+    /**
      * Shift coefficients. Multiply by exponent vector.
      * @param k shift ExpVector.
      * @return new power series with coefficient(i) = old.coefficient(i-k).
@@ -399,7 +433,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
                     return coefficient(d);
                 }
             }
-	},nt);
+        },nt);
     }
 
 
@@ -434,6 +468,127 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
                 }
             }
         },nt);
+    }
+
+
+    /**
+     * Sum exponent vector and coefficient.
+     * @param k ExpVector.
+     * @param c coefficient.
+     * @return this + ONE.multiply(c,k).
+     */
+    public MultiVarPowerSeries<C> sum(final C c, final ExpVector k) {
+        if (k == null) {
+            throw new IllegalArgumentException("null ExpVector not allowed");
+        }
+        if (c.signum() == 0) {
+            return this;
+        }
+        long d = k.totalDeg();
+        MultiVarCoefficients<C> mc = lazyCoeffs;
+        HashMap<Long, GenPolynomial<C>> cc = new HashMap<Long, GenPolynomial<C>>(mc.coeffCache);
+        GenPolynomial<C> p = cc.get(d);
+        if ( p == null ) {
+            p = mc.pfac.getZERO();
+        }
+        p = p.sum(c,k); 
+        //System.out.println("p = " + p);
+        cc.put(d,p);
+        HashSet<ExpVector> z = new HashSet<ExpVector>(mc.zeroCache);
+        //System.out.println("z = " + z);
+        C x = p.coefficient(k);
+        if ( x.isZERO() ) {
+            z.add(k);
+        }
+
+        return new MultiVarPowerSeries<C>(ring, 
+                   new MultiVarCoefficients<C>(mc.pfac,cc,z,mc.homCheck) {
+            @Override
+            public C generate(ExpVector i) {
+                return coefficient(i);
+            }
+        });
+    }
+
+
+    /**
+     * Subtract exponent vector and coefficient.
+     * @param k ExpVector.
+     * @param c coefficient.
+     * @return this - ONE.multiply(c,k).
+     */
+    public MultiVarPowerSeries<C> subtract(final C c, final ExpVector k) {
+        if (k == null) {
+            throw new IllegalArgumentException("null ExpVector not allowed");
+        }
+        if (c.signum() == 0) {
+            return this;
+        }
+        long d = k.totalDeg();
+        MultiVarCoefficients<C> mc = lazyCoeffs;
+        HashMap<Long, GenPolynomial<C>> cc = new HashMap<Long, GenPolynomial<C>>(mc.coeffCache);
+        GenPolynomial<C> p = cc.get(d);
+        if ( p == null ) {
+            p = mc.pfac.getZERO();
+        }
+        p = p.subtract(c,k); 
+        cc.put(d,p);
+        HashSet<ExpVector> z = new HashSet<ExpVector>(mc.zeroCache);
+        //System.out.println("z = " + z);
+        C x = p.coefficient(k);
+        if ( x.isZERO() ) {
+            z.add(k);
+        }
+        return new MultiVarPowerSeries<C>(ring, 
+                   new MultiVarCoefficients<C>(mc.pfac,cc,z,mc.homCheck) {
+            @Override
+            public C generate(ExpVector i) {
+                return coefficient(i);
+            }
+        });
+    }
+
+
+    /**
+     * Sum exponent vector and coefficient.
+     * @param mvc cached coefficients.
+     * @return this + mvc.
+     */
+    public MultiVarPowerSeries<C> sum(MultiVarCoefficients<C> mvc) {
+        MultiVarCoefficients<C> mc = lazyCoeffs;
+        TreeMap<Long, GenPolynomial<C>> cc = new TreeMap<Long, GenPolynomial<C>>(mc.coeffCache);
+        TreeMap<Long, GenPolynomial<C>> ccv = new TreeMap<Long, GenPolynomial<C>>(mvc.coeffCache);
+        long d1 = ( cc.size() > 0  ? cc.lastKey() : 0 );
+        long d2 = ( ccv.size() > 0 ? ccv.lastKey() : 0 );
+        HashSet<ExpVector> z = new HashSet<ExpVector>(mc.zeroCache);
+        z.addAll(mvc.zeroCache);
+        long d = Math.max(d1,d2);
+        for ( long i = 0; i < d; i++ ) {
+            GenPolynomial<C> p1 = cc.get(i);
+            GenPolynomial<C> p2 = mvc.coeffCache.get(i);
+            if ( p1 == null ) {
+                p1 = mc.pfac.getZERO();
+            }
+            if ( p2 == null ) {
+                p2 = mc.pfac.getZERO();
+            }
+            GenPolynomial<C> p = p1.sum(p2);
+            //System.out.println("p = " + p);
+            cc.put(i,p);
+            Set<ExpVector> ev = new HashSet<ExpVector>(p1.getMap().keySet());
+            ev.addAll(p2.getMap().keySet());
+            ev.removeAll(p.getMap().keySet());
+            z.addAll(ev);
+        }
+        //System.out.println("z = " + z);
+
+        return new MultiVarPowerSeries<C>(ring, 
+                                          new MultiVarCoefficients<C>(mc.pfac,new HashMap<Long, GenPolynomial<C>>(cc),z) {
+            @Override
+            public C generate(ExpVector i) {
+                return coefficient(i);
+            }
+        });
     }
 
 

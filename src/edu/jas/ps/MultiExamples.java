@@ -30,9 +30,11 @@ public class MultiExamples {
         //example3();
         //example4();
         //example5();
-        example6();
+        //example6();
         //example7();
         //example8();
+        //example9();
+        example10();
     }
 
 
@@ -308,6 +310,101 @@ public class MultiExamples {
         //L.add(cp);
         System.out.println("\nL = " + L);
 
+        StandardBaseSeq<BigRational> tm = new StandardBaseSeq<BigRational>();
+
+        List<MultiVarPowerSeries<BigRational>> S = tm.STD(L);
+        for (MultiVarPowerSeries<BigRational> ps : S) {
+            System.out.println("ps = " + ps);
+        }
+        System.out.println("\nS = " + S);
+
+        boolean s = tm.isSTD(S);
+        System.out.println("\nisSTD = " + s);
+
+        ReductionSeq<BigRational> red = new ReductionSeq<BigRational>();
+        s = red.contains(S, L);
+        System.out.println("S contains L = " + s);
+    }
+
+
+   public static void example9() {
+        BigRational br = new BigRational(1);
+        String[] vars = new String[] { "x", "y", "z" };
+        GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(br, vars);
+        System.out.println("pfac = " + pfac.toScript());
+
+        GenPolynomial<BigRational> a = pfac.parse("x z - y z - y^2 z");
+        GenPolynomial<BigRational> b = pfac.parse("x z - y z + y^2 z");
+        GenPolynomial<BigRational> c = pfac.parse("z + y^2 z");
+        System.out.println("a = " + a);
+        System.out.println("b = " + b);
+        System.out.println("c = " + c);
+
+        MultiVarPowerSeriesRing<BigRational> fac = new MultiVarPowerSeriesRing<BigRational>(pfac);
+        fac.setTruncate(11);
+        System.out.println("fac = " + fac.toScript());
+
+        MultiVarPowerSeries<BigRational> ap = fac.fromPolynomial(a);
+        MultiVarPowerSeries<BigRational> bp = fac.fromPolynomial(b);
+        MultiVarPowerSeries<BigRational> cp = fac.fromPolynomial(c);
+        System.out.println("ap = " + ap);
+        System.out.println("bp = " + bp);
+        System.out.println("cp = " + cp);
+
+        List<MultiVarPowerSeries<BigRational>> L = new ArrayList<MultiVarPowerSeries<BigRational>>();
+        L.add(ap);
+        L.add(bp);
+        L.add(cp);
+        StandardBaseSeq<BigRational> tm = new StandardBaseSeq<BigRational>();
+
+        List<MultiVarPowerSeries<BigRational>> S = tm.STD(L);
+        for (MultiVarPowerSeries<BigRational> ps : S) {
+            System.out.println("ps = " + ps);
+        }
+        System.out.println("\nS = " + S);
+
+        boolean s = tm.isSTD(S);
+        System.out.println("\nisSTD = " + s);
+
+        ReductionSeq<BigRational> red = new ReductionSeq<BigRational>();
+        s = red.contains(S, L);
+        System.out.println("S contains L = " + s);
+    }
+
+
+   public static void example10() {
+        BigRational br = new BigRational(1);
+        String[] vars = new String[] { "x", "y", "z" };
+        GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(br, vars);
+        System.out.println("pfac = " + pfac.toScript());
+
+        GenPolynomial<BigRational> a = pfac.parse("x^2 z^2 - y^6");
+        GenPolynomial<BigRational> b = pfac.parse("x y z^2 + y^4 z - x^5 z - x^4 y^3");
+        GenPolynomial<BigRational> c = pfac.parse("x z - y^3 + x^2 z - x y^3");
+        GenPolynomial<BigRational> d = pfac.parse("y z + x y z - x^4 - x^5");
+        System.out.println("a = " + a);
+        System.out.println("b = " + b);
+        System.out.println("c = " + c);
+        System.out.println("d = " + d);
+
+        MultiVarPowerSeriesRing<BigRational> fac = new MultiVarPowerSeriesRing<BigRational>(pfac);
+        fac.setTruncate(9);
+        System.out.println("fac = " + fac.toScript());
+
+        MultiVarPowerSeries<BigRational> ap = fac.fromPolynomial(a);
+        MultiVarPowerSeries<BigRational> bp = fac.fromPolynomial(b);
+        MultiVarPowerSeries<BigRational> cp = fac.fromPolynomial(c);
+        MultiVarPowerSeries<BigRational> dp = fac.fromPolynomial(d);
+        System.out.println("ap = " + ap);
+        System.out.println("bp = " + bp);
+        System.out.println("cp = " + cp);
+        System.out.println("dp = " + dp);
+
+        List<MultiVarPowerSeries<BigRational>> L = new ArrayList<MultiVarPowerSeries<BigRational>>();
+        L.add(ap);
+        L.add(bp);
+        L.add(cp);
+        L.add(dp);
         StandardBaseSeq<BigRational> tm = new StandardBaseSeq<BigRational>();
 
         List<MultiVarPowerSeries<BigRational>> S = tm.STD(L);
