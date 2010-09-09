@@ -482,6 +482,7 @@ public class MultiPowerSeriesTest extends TestCase {
         assertEquals("a - lm(a) = red(a) ", c, e);
 
         b = fac.random(kl);
+        String s = b.toString(); // generate and cache some coefficients
         //System.out.println("b = " + b);
 
         c = a.sum(b);

@@ -419,6 +419,13 @@ public class MultiExamples {
         ReductionSeq<BigRational> red = new ReductionSeq<BigRational>();
         s = red.contains(S, L);
         System.out.println("S contains L = " + s);
+
+        List<MultiVarPowerSeries<BigRational>> R = red.totalNormalform(S);
+        System.out.println("R = " + R);
+        s = red.contains(R, L);
+        System.out.println("R contains L = " + s);
+        s = red.contains(R, S);
+        System.out.println("R contains S = " + s);
     }
 
 }

@@ -12,6 +12,8 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import edu.jas.poly.ExpVector;
+import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.GenPolynomialRing;
 import edu.jas.structure.RingElem;
 
 
@@ -252,6 +254,71 @@ public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
 
 
     /**
+     * Total reduced normalform with Mora's algorithm.
+     * @param A power series.
+     * @param P power series list.
+     * @return total-nf(A) with respect to P.
+     */
+    public MultiVarPowerSeries<C> totalNormalform(List<MultiVarPowerSeries<C>> P, MultiVarPowerSeries<C> A) {
+        if (P == null || P.isEmpty()) {
+            return A;
+        }
+        if (A == null) {
+            return A;
+        }
+	MultiVarPowerSeries<C> R = normalform(P,A);
+        if ( R.isZERO() ) {
+            return R;
+	}
+        MultiVarCoefficients<C> Rc = new MultiVarCoefficients<C>(A.ring) {
+            @Override
+            public C generate(ExpVector i) { // will not be used
+                return pfac.coFac.getZERO();
+            }
+        };
+	GenPolynomialRing<C> pfac = A.lazyCoeffs.pfac;
+        while ( !R.isZERO() ) {
+              Map.Entry<ExpVector, C> m = R.orderMonomial();
+              R = R.reductum();
+              ExpVector e = m.getKey();
+              long t = e.totalDeg();
+              GenPolynomial<C> p = Rc.coeffCache.get(t);
+              if ( p == null ) {
+                  p = pfac.getZERO();
+	      }
+              p = p.sum(m.getValue(),e);
+              Rc.coeffCache.put(t,p); 
+              // zeros need never update
+
+              R = normalform(P,R);
+	}
+        R = R.sum(Rc);
+        return R;
+    }
+
+
+    /**
+     * Total reduced normalform with Mora's algorithm.
+     * @param P power series list.
+     * @return total-nf(p) for p with respect to P\{p}.
+     */
+    public List<MultiVarPowerSeries<C>> totalNormalform(List<MultiVarPowerSeries<C>> P) {
+        if (P == null || P.isEmpty()) {
+            return P;
+        }
+        List<MultiVarPowerSeries<C>> R = new ArrayList<MultiVarPowerSeries<C>>(P.size());
+        List<MultiVarPowerSeries<C>> S = new ArrayList<MultiVarPowerSeries<C>>(P);
+        for ( MultiVarPowerSeries<C> a : P ) {
+            S.remove(a);
+	    MultiVarPowerSeries<C> b = totalNormalform(S,a);
+            S.add(a);
+            R.add(b);
+	}
+        return R;
+    }
+
+
+    /**
      * Is top reducible.
      * @param A power series.
      * @param P power series list.
@@ -293,7 +360,7 @@ public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
             }
             MultiVarPowerSeries<C> z = normalform(S, b);
             if (!z.isZERO()) {
-                System.out.println("contains nf(b) != 0: " + b);
+                System.out.println("contains nf(b) != 0: " + b + ", z = " + z);
                 return false;
             }
         }
