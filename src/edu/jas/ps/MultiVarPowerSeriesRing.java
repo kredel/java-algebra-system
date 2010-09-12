@@ -329,7 +329,7 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
             gens.add(g);
         }
         for (int i = 0; i < nvar; i++) {
-            gens.add(ONE.shift(1, i));
+            gens.add(ONE.shift(1, nvar-1-i));
         }
         return gens;
     }

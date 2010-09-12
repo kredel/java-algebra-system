@@ -19,7 +19,9 @@ from edu.jas.poly        import GenPolynomial, GenPolynomialRing,\
                                 TermOrderOptimization, TermOrder, PolynomialList,\
                                 AlgebraicNumber, AlgebraicNumberRing
 from edu.jas.ps          import UnivPowerSeries, UnivPowerSeriesRing,\
-                                UnivPowerSeriesMap, Coefficients  
+                                UnivPowerSeriesMap, Coefficients, \
+                                MultiVarPowerSeries, MultiVarPowerSeriesRing,\
+                                MultiVarPowerSeriesMap, MultiVarCoefficients
 from edu.jas.gb          import DGroebnerBaseSeq, EGroebnerBaseSeq,\
                                 GroebnerBaseDistributed, GBDist, GroebnerBaseParallel,\
                                 GroebnerBaseSeq, GroebnerBaseSeqPairSeq,\
@@ -1254,7 +1256,7 @@ class SolvableSubModule:
 class SeriesRing:
     '''Represents a JAS power series ring: UnivPowerSeriesRing.
 
-    Methods for power series arithmetic.
+    Methods for univariate power series arithmetic.
     '''
 
     def __init__(self,ringstr="",truncate=None,ring=None,cofac=None,name="z"):
@@ -1344,6 +1346,125 @@ class SeriesRing:
             ps = UnivPowerSeries( self.ring, coeff(self.ring.coFac) );
         else:
             ps = UnivPowerSeries( self.ring, clazz );
+        return RingElem( ps );
+
+    def fixPoint(self,psmap):
+        '''Create a power series as fixed point of the given mapping.
+
+        psmap must implement the UnivPowerSeriesMap interface.
+        '''
+        ps = self.ring.fixPoint( psmap );
+        return RingElem( ps );
+
+    def gcd(self,a,b):
+        '''Compute the greatest common divisor of a and b.
+        '''
+        if isinstance(a,RingElem):
+            a = a.elem;
+        if isinstance(b,RingElem):
+            b = b.elem;
+        return RingElem( a.gcd(b) );
+
+    def fromPoly(self,a):
+        '''Convert a GenPolynomial to a power series.
+        '''
+        if isinstance(a,RingElem):
+            a = a.elem;
+        return RingElem( self.ring.fromPolynomial(a) );
+
+
+class MultiSeriesRing:
+    '''Represents a JAS power series ring: MultiVarPowerSeriesRing.
+
+    Methods for multivariate power series arithmetic.
+    '''
+
+    def __init__(self,ringstr="",truncate=None,ring=None,cofac=None,names=None):
+        '''Ring constructor.
+        '''
+        if ring == None:
+            if len(ringstr) > 0:
+                sr = StringReader( ringstr );
+                tok = GenPolynomialTokenizer(sr);
+                pset = tok.nextPolynomialSet();
+                ring = pset.ring;
+                names = ring.vars;
+                cofac = ring.coFac;
+            if isinstance(cofac,RingElem):
+                cofac = cofac.elem;
+            if truncate == None:
+                self.ring = MultiVarPowerSeriesRing(cofac,names);
+            else:
+                self.ring = MultiVarPowerSeriesRing(cofac,len(names),truncate,names);
+        else:
+           self.ring = ring;
+
+    def __str__(self):
+        '''Create a string representation.
+        '''
+        return str(self.ring.toScript());
+
+    def gens(self):
+        '''Get the generators of the power series ring.
+        '''
+        L = self.ring.generators();
+        N = [ RingElem(e) for e in L ];
+        return N;
+
+    def one(self):
+        '''Get the one of the power series ring.
+        '''
+        return RingElem( self.ring.getONE() );
+
+    def zero(self):
+        '''Get the zero of the power series ring.
+        '''
+        return RingElem( self.ring.getZERO() );
+
+    def random(self,n):
+        '''Get a random power series.
+        '''
+        return RingElem( self.ring.random(n) );
+
+    def exp(self,r):
+        '''Get the exponential power series, var r.
+        '''
+        return RingElem( self.ring.getEXP(r) );
+
+    def sin(self,r):
+        '''Get the sinus power series, var r.
+        '''
+        return RingElem( self.ring.getSIN(r) );
+
+    def cos(self,r):
+        '''Get the cosinus power series, var r.
+        '''
+        return RingElem( self.ring.getCOS(r) );
+
+    def tan(self,r):
+        '''Get the tangens power series, var r.
+        '''
+        return RingElem( self.ring.getTAN(r) );
+
+    def create(self,ifunc=None,jfunc=None,clazz=None):
+        '''Create a power series with given generating function.
+
+        ifunc(int i) must return a value which is used in RingFactory.fromInteger().
+        jfunc(int i) must return a value of type ring.coFac.
+        clazz must implement the Coefficients abstract class.
+        '''
+        class coeff( MultiVarCoefficients ):
+            def __init__(self,cofac):
+                self.coFac = cofac;
+            def generate(self,i):
+                if jfunc == None:
+                    return self.coFac.fromInteger( ifunc(i) );
+                else:
+                    return jfunc(i);
+        if clazz == None:
+            ps = MultiVarPowerSeries( self.ring, coeff(self.ring) );
+        else:
+            ps = MultiVarPowerSeries( self.ring, clazz );
         return RingElem( ps );
 
     def fixPoint(self,psmap):
@@ -1816,7 +1937,7 @@ def RR(flist,n=1,r=0):
 
 
 def PS(cofac,name,f=None,truncate=None):
-    '''Create JAS UnivariatePowerSeries as ring element.
+    '''Create JAS UnivPowerSeries as ring element.
     '''
     cf = cofac;
     if isinstance(cofac,RingElem):
@@ -1842,6 +1963,36 @@ def PS(cofac,name,f=None,truncate=None):
                 #print "a = " + str(a);
                 return a;
         r = UnivPowerSeries(ps,coeff(cofac));
+    return RingElem(r);
+
+
+def MPS(cofac,names,f=None,truncate=None):
+    '''Create JAS MultiVarPowerSeries as ring element.
+    '''
+    cf = cofac;
+    if isinstance(cofac,RingElem):
+        cf = cofac.elem.factory();
+    if isinstance(cofac,Ring):
+        cf = cofac.ring;
+    if isinstance(truncate,RingElem):
+        truncate = truncate.elem;
+    if truncate == None:
+        ps = MultiVarPowerSeriesRing(cf,names);
+    else:
+        ps = MultiVarPowerSeriesRing(cf,names,truncate);
+    if f == None:
+        r = ps.getZERO();
+    else:
+        class coeff( MultiVarCoefficients ):
+            def __init__(self,cofac):
+                self.coFac = cofac;
+            def generate(self,i):
+                a = f(i);
+                if isinstance(a,RingElem):
+                    a = a.elem;
+                #print "a = " + str(a);
+                return a;
+        r = MultiVarPowerSeries(ps,coeff(cofac));
     return RingElem(r);
 
 
